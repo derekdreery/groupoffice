@@ -1,0 +1,110 @@
+<?php
+require_once($GO_LANGUAGE->get_fallback_language_file('cms'));
+
+$strType = "Type";
+$strModified = "Modifié";
+$strSize = "Taille";
+$fbRefresh = "rafraîchir";
+$fbProperties = "propriétés";
+$fbNewFolder = "nouveau dossier";
+$fbDelete = "supprimer";
+$fbCut = "couper";
+$fbPaste = "coller";
+$fbCopy = "copier";
+$fbFiletypes = "type de fichiers";
+$fbPath = "Chemin";
+$fbFolders = "Dossiers";
+$fbNoSelect = "Vous n'avez pas choisi d'élément. Cliquez sur un icône près du nom pour en choisir un.";
+$fbConfirmDelete = "Confirmer la suppression";
+$fbGeneral = "Général";
+$fbConfirmOverwrite = "Confirmer l'écrasement";
+$strOverwritePrefix = "Etes vous certain(e) de vouloir écraser ";
+$strOverwriteSuffix = "?";
+$fbDescription = "Description";
+$fbLocation = "Emplacement";
+$fbUpload = "télécharger";
+$fbUpload_text = "Choisissez le fichier à charger sur le serveur";
+$fbUpload_nofile = "aucun fichier reçu.";
+$fbFolderExists = "Le dossier existe déjà.";
+$fbFolder = "Dossier";
+$fbSelect = "Choisissez le fichier...";
+$fbNoFile = "Le fichier que vous avez essayé de charger est trop gros. La taille maximale transferable est fixée à : ";
+$fbPleaseWait = "Merci de patienter. Envoi des données...";
+$fbFilename = "Nom de fichier";
+$fbUpLevel = "Niveau supérieur";
+$fbItems = "élément(s)";
+$fbFolderSize = "Taille du dossier";
+$fbMaxUploadSize = "Taille maximale";
+$ml_file_too_big = "Le fichier que vous avez essayé d'attacher est trop gros, la taille maximale pour les attachements est fixée à : ";
+$cmdSearch = "Recherche";
+$fbNameExists = "Le nom existe déjà.";
+$fbThis = 'ceci';
+$fbFiles = 'Fichiers';
+$fs_no_multi_select = 'Vous ne pouvez pas sélectionner plus d\'un élément avec cette option';
+$cms_untitled = 'Sans titre';
+$cms_insert_file = 'Insérer un fichier';
+$cms_preview = 'Prévisualiser';
+$cms_keywords = 'mots clés';
+$cms_priority = 'Priorité';
+$cms_hide_folder = 'Cacher ce dossier sur le site';
+$cms_theme = 'Thème';
+$cms_use_go_auth = 'Utiliser l\'autentification de Group-Office sur ce site';
+$cms_search_files_prefix = 'Les fichiers HTML qui contiennent ce mot';
+$cms_search_files_suffix = 'sont automatiquement sélectionnés. Cliquez sur \'Ok\' pour enregistrer cette sélection.';
+$cms_new_site = 'Nouveau site';
+$cms_search_files = 'rechercher des fichiers';
+$cms_subscribe = 'souscrire';
+$cms_sites = 'site(s)';
+$cms_style = 'Style';
+$cms_insert_file_url = 'Insérer une URL';
+$cms_templates = 'modèles';
+$cms_files = 'fichiers';
+$cms_items = 'élément(s)';
+$cms_header = 'Entête';
+$cms_footer = 'Pied';
+$cms_new_theme = 'nouveau thème';
+$cms_themes = 'thème(s)';
+$cms_themes_menu = 'thèmes';
+$cms_all_sites = 'tous les sites';
+$cms_your_sites = 'vos sites';
+$cms_cmd_new_site = 'nouveau site';
+$cms_template_items = 'modèle(s)';
+$cms_new_template_item = 'nouveau modèle';
+$cms_found_one = '1 fichier trouvé';
+$cms_found = 'fichiers trouvés';
+$cms_empty = 'Cette section est vide et probablement en cours de maintenance.';
+$cms_new_page = 'nouvelle page';
+$cms_search_words = 'mots recherchés';
+$cms_no_themes = 'Vous n\'avez pas encore de thème. Commencez par en créer un.';
+$cms_edit_search_words = 'éditer les mots recherchés';
+$cms_id = 'Identifiant du site';
+
+$cms_cleanup = 'Nettoyage';
+$cms_settings = 'Réglages';
+$cms_site_exists = 'Un site avec ce nom existe déjà';
+$cms_main_template = 'Principal';
+$cms_confirm_close = 'Les changements ne seront pas enregistrés, êtes vous certain(e) ?';
+$cms_additional_style = 'Style qui est caché de cet éditeur';
+$cms_restrict_editor = 'Restreindre l\'éditeur aux styles prédéfinis';
+$cms_enable_publish = 'Permettre la publication du site en local';
+
+$cms_path_not_writable = 'Le chemin que vous avez entré est invalide ou n\'est pas accessible en écriture pour Group-Office.';
+$cms_publish = 'Publication';
+$cms_path_already_used = 'Le chemin entré est déjà utilisé par un autre site.';
+$cms_site_offline = 'Ce site est actuellement déconnecté';
+
+$cms_disable_publish = 'Déconnecter le site';
+$cms_publish_dynamic = 'Publication dynamique';
+$cms_publish_static = 'Publication statique';
+
+//rajouté
+$fbEmailFile = "envoyer le fichier par email";
+
+//2.05
+$cms_sendmail_error = 'Votre message n\'a pu être envoyé. SVP, essayer encore.';
+$cms_sendmail_success = 'Merci. Votre message a été envoyé.';
+$cms_message = 'Message';
+$cms_subject = 'Sujet';
+$cms_domain = 'Domain';
+$cms_replace_filenames = 'Remplacer le nom de fichier';
+?>
