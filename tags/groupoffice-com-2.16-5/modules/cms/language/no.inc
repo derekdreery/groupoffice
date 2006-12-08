@@ -1,0 +1,98 @@
+<?php
+require_once($GO_LANGUAGE->get_fallback_language_file('cms'));
+
+$strType = "Type";
+$strModified = "Modifisert";
+$strSize = "Størrelse";
+$fbRefresh = "oppfrisk";
+$fbProperties = "properties";
+$fbNewFolder = "ny folder";
+$fbDelete = "slett";
+$fbCut = "kutt";
+$fbPaste = "sett inn";
+$fbCopy = "kopier";
+$fbFiletypes = "filtyper";
+$fbPath = "Path";
+$fbFolders = "Foldere";
+$fbNoSelect = "Du har ikke valgt et emne. Klikk på et ikon ved siden av navnet for valg av emne..";
+$fbConfirmDelete = "Bekreft slett";
+$fbGeneral = "Generellt";
+$fbConfirmOverwrite = "Bekreft overskriving";
+$strOverwritePrefix = "Er du sikker på at du vil skrive over ";
+$strOverwriteSuffix = "?";
+$fbDescription = "Beskrivelse";
+$fbLocation = "Lokasjon";
+$fbUpload = "last opp";
+$fbUpload_text = "Velg fil for opplasting";
+$fbUpload_nofile = "Ingen fil ble mottatt.";
+$fbFolderExists = "Folderen eksisterer allerede.";
+$fbEmailFile = "e-post fil";
+$fbFolder = "Foldder";
+$fbSelect = "Velg fil...";
+$fbNoFile = "Du har ikke valgt noen filer.<br /> Maksimum størrelse på fil er satt til: ";
+$fbPleaseWait = "Vennligst vent, sender filen...";
+$fbFilename = "Filnavn";
+$fbUpLevel = "level up";
+$fbItems = "emne(r)";
+$fbFolderSize = "Størrelse på folder";
+$fbMaxUploadSize = "Maksimum størrelse";
+$ml_file_too_big = "Filen du prøvde å laste opp var for stor.<br /> Maksimum størrelse på fil er satt til: ";
+$cmdSearch = "Søk";
+$fbNameExists = "Navnet eksisterer allerede";
+$fbThis = 'denne';
+$fbFiles = 'Filer';
+$fs_no_multi_select = 'Du kan ikke velge mer enn en av gangen under dette valget';
+$cms_untitled = 'Untitled';
+$cms_insert_file = 'Sett inn fil';
+$cms_preview = 'Forhånds titt';
+$cms_keywords = 'Nøkkelord';
+$cms_priority = 'Prioritet';
+$cms_hide_folder = 'Gjem denne folderen på websidene';
+$cms_theme = 'Tema';
+$cms_use_go_auth = 'Bruk Group-Office autentisering på denne websiden';
+$cms_search_files_prefix = 'HTML filene som inneholder ordet';
+$cms_search_files_suffix = 'er automatisk valgt. Klikk på \''.$cmdOk.'\' for å lagre dette valget.';
+$cms_new_site = 'Ny webside';
+$cms_search_files = 'Filsøk';
+$cms_subscribe = 'Abboner';
+$cms_sites = 'Side(r)';
+$cms_style = 'Stil';
+$cms_insert_file_url = 'Sett inn URL';
+$cms_templates = 'maler';
+$cms_files = 'filer';
+$cms_items = 'emne(r)';
+$cms_header = 'Hode';
+$cms_footer = 'Fot';
+$cms_new_theme = 'nytt tema';
+$cms_themes = 'tema(er)';
+$cms_themes_menu = 'temaer';
+$cms_all_sites = 'alle sider';
+$cms_your_sites = 'dine sider';
+$cms_cmd_new_site = 'ny side';
+$cms_template_items = 'mal(er)';
+$cms_new_template_item = 'ny mal';
+
+$cms_found_one = '1 fil funnet';
+$cms_found = 'filer funnet';
+$cms_empty = 'Denne seksjonen er tom og er sannsynligvis under vedlikehold.';
+$cms_new_page = 'ny side';
+
+$cms_cleanup = 'Rens opp';
+$cms_settings = 'Configurasjon';
+$cms_site_exists = 'En side med det navnet eksisterer allerede';
+$cms_main_template = 'Hoved';
+$cms_confirm_close = 'Endringene vil gå tapt, er du helt sikker?';
+$cms_additional_style = 'Stil som er skjult fra editoren';
+$cms_restrict_editor = 'Editor kan kun bruk predefinerte stiler';
+$cms_enable_publish = 'Klargjør publisering for lokal webside';
+
+$cms_path_not_writable = 'Stien du skrev er ikke gyldig eller ikke skrivbar for Group-Office.';
+$cms_publish = 'Publiserer';
+$cms_path_already_used = 'Stien du har skrevet er allerede i bruk av en annen webside.';
+$cms_site_offline = 'Denne websiden er fortiden ikke aktivisert';
+
+$cms_disable_publish = 'Deaktiviser websiden';
+$cms_publish_dynamic = 'Publiser dynamisk';
+$cms_publish_static = 'Publiser statisk';
+
+?>

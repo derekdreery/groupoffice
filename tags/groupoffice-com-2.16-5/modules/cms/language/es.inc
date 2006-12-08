@@ -1,0 +1,157 @@
+<?php
+require_once($GO_LANGUAGE->get_fallback_language_file('cms'));
+
+$strType = "Tipo";
+$strModified = "Modificado";
+$strSize = "Tamaño";
+$fbRefresh = "Refrescar";
+$fbProperties = "Propiedades";
+$fbNewFolder = "Nueva carpeta";
+$fbDelete = "Eliminar";
+$fbCut = "Cortar";
+$fbPaste = "Pegar";
+$fbCopy = "Copiar";
+$fbFiletypes = "Tipos de ficheros";
+$fbPath = "Ruta";
+$fbFolders = "Carpetas";
+$fbNoSelect = "No ha seleccionado ningún elemento. Haga click en el icono del nombre para seleccionar el elemento.";
+$fbConfirmDelete = "Confirme el borrado";
+$fbGeneral = "General";
+$fbConfirmOverwrite = "Confirme la sobreescritura";
+$strOverwritePrefix = "¿Está seguro de querer sobreescribir ";
+$strOverwriteSuffix = "?";
+$fbDescription = "Descripción";
+$fbLocation = "Lugar";
+$fbUpload = "Cargar";
+$fbUpload_text = "Seleccione un fichero para cargar";
+$fbUpload_nofile = "No se ha recibido ningún fichero.";
+$fbFolderExists = "La carpeta ya existe.";
+$fbFolder = "Carpeta";
+$fbSelect = "Seleccionar fichero...";
+$fbNoFile = "El fichero que ha escogido para cargar es demasiado grande.<br /> El tamaño máximo de un fichero transferible es: ";
+$fbPleaseWait = "Espere por favor. Se están enviando los datos...";
+$fbFilename = "Nombre del fichero";
+$fbUpLevel = "Subir un nivel";
+$fbItems = "elemento(s)";
+$fbFolderSize = "Tamaño de la carpeta";
+$fbMaxUploadSize = "Tamaño máximo";
+$ml_file_too_big = "El fichero que ha escogido para adjuntar es demasiado grande, el tamaño máximo para ficheros adjuntos es: ";
+$cmdSearch = "Buscar";
+$fbNameExists = "El nombre ya existe.";
+$fbThis = 'este';
+$fbFiles = 'Ficheros';
+$fs_no_multi_select = 'No puede seleccionar más de un elemento con esta opción';
+$cms_untitled = 'Sin título';
+$cms_insert_file = 'Insertar el fichero';
+$cms_preview = 'Previsualizar';
+$cms_keywords = 'Palabras clave';
+$cms_priority = 'Prioridad';
+$cms_hide_folder = 'Oculta esta carpeta en el sitio';
+$cms_theme = 'Tema';
+$cms_use_go_auth = 'Usar la autentificación de Group-Office en este sitio';
+$cms_search_files_prefix = 'Los ficheros HTML que contienen esta palabra';
+$cms_search_files_suffix = 'son automáticamente seleccionados. Haga click en \'Aceptar\' para guardar esta selección.';
+$cms_new_site = 'Nuevo sitio';
+$cms_search_files = 'Buscar ficheros';
+$cms_subscribe = 'Subscribir';
+$cms_sites = 'sitio(s)';
+$cms_style = 'Estilo';
+$cms_insert_file_url = 'Insertar URL';
+$cms_templates = 'Plantillas';
+$cms_files = 'Ficheros';
+$cms_items = 'elementos(s)';
+$cms_header = 'Cabecera';
+$cms_footer = 'Pie de página';
+$cms_new_theme = 'Nuevo tema';
+$cms_themes = 'tema(s)';
+$cms_themes_menu = 'Temas';
+
+$cms_your_sites = 'Sus sitios';
+$cms_cmd_new_site = 'Nuevo sitio';
+$cms_template_items = 'plantilla(s)';
+$cms_new_template_item = 'Nueva plantilla';
+$cms_found_one = '1 fichero encontrado';
+$cms_found = 'ficheros encontrados';
+$cms_empty = 'Esta sección está vacía y probablemente bajo mantenimiento.';
+$cms_new_page = 'Nueva página';
+$cms_search_words = 'Buscar palabras';
+$cms_edit_search_words = 'editar la búsqueda de palabras';
+$cms_id = 'ID del sitio';
+
+$cms_cleanup = 'Limpiar&nbsp;HTML';
+$cms_settings = 'Parámetros';
+$cms_site_exists = 'Ya existe un sitio con este nombre';
+
+$cms_confirm_close = 'Los cambios se perderán, ¿está seguro?';
+
+$cms_restrict_editor = 'Restringir el editor a los estilos predefinidos';
+$cms_enable_publish = 'Activa la publicación local del sitio web';
+
+$cms_path_not_writable = 'La ruta introducida no es correcta o Group-Office no tiene permisos para escribir.';
+$cms_publish = 'Publicar';
+$cms_path_already_used = 'La ruta introducida está ya siendo usada por otro sitio web.';
+$cms_site_offline = 'Este sitio está actualmente puesto fuera de línea';
+
+$cms_disable_publish = 'Poner el sitio fuera de línea';
+$cms_publish_dynamic = 'Pulicación dinámica';
+$cms_publish_static = 'Publicación estática';
+
+//2.05
+$cms_sendmail_error = 'Su mensaje no se ha podido enviar. Por favor, inténtelo de nuevo.';
+$cms_sendmail_success = 'Gracias. Su mensaje ha sido enviado.';
+$cms_message = 'Mensaje';
+$cms_subject = 'Asunto';
+$cms_domain = 'Dominio';
+$cms_replace_filenames = 'Substituir nombres de fichero';
+
+//2.06
+$cms_multipage_display = 'Contemplar todas las páginas de las carpetas i las primeras páginas de las subcarpetas';
+$cms_hot_item = 'Ver esta página en los elementos preferidos';
+$cms_normal_display = 'Ver la primera página de esta carpeta';
+
+$cms_display_type = 'Cuando un visitante abre una carpeta en esta página web:';
+$cms_read_more = 'Leer más';
+$cms_additional_style = 'Estilo para el editor';
+
+//2.11
+$cms_activate_frontpage = 'Activa la página principal de este tema';
+$cms_main_template = 'Plantilla principal'; //Changed string
+$cms_frontpage_template = 'Plantilla de la página principal';
+$cms_websites = 'Sitios de web'; 
+$cms_insert_component = 'Insertar componente';
+
+$cms_languages = 'Idiomas';
+$cms_new_language = 'Nuevo idioma';
+$cms_default = 'Por defecto';
+$cms_title = 'Título';
+$cms_language = 'Idioma';
+$cms_image = 'Imagen';
+$cms_no_image_selected = 'No se ha seleccionado ninguna imagen';
+$cms_selected_image = 'Imagen seleccionada';
+$cms_no_image = 'Sin imagen';
+
+$cms_multipage = 'Totaliza los elementos en esta carpeta';
+
+$cms_no_themes = 'Todavía no tiene ningún tema. Debe crear un tema primero. Necesita privilegios de administrador para crear temas.'; //changed string
+
+$cms_select_local = 'Seleccionar el fichero local';
+$cms_webmaster = 'Correo&nbsp;electrónico;&nbsp;del&nbsp;Webmaster';
+
+$cms_allow_properties = 'Permitir a otros modificar las propiedades del sitio.';
+$cms_multilingual = 'Usar múltiples idiomas con este sitio';
+
+//2.12
+$cms_search_words_overview = 'Resumen de las palabras clave';
+$cms_no_occurences = 'La palabra clave no se encuentra en las páginas de este sitio.';
+$cms_there_are_results_for_multiple = 'Hay %s resultados para \'%s\'';
+$cms_there_are_results_for_single = 'Hay 1 resultado para \'%s\'';
+
+$cms_print_style = 'Imprimir estilos';
+
+$cms_search = 'Buscar';
+$cms_login = 'Entrada';
+
+//2.14
+$cms_searchengine_info = 'Información sobre el motor de búsqueda';
+$cms_autogenerate_searchengine_info = 'Genera automáticamente información sobre el motor de búsqueda (Recomendado)';
+?>

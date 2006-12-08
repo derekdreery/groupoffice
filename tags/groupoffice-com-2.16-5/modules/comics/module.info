@@ -1,0 +1,9 @@
+<?php
+$module['comics']['description'] = 'Displays a daily comic of Garfield';
+$module['comics']['version'] = '1.0';
+$module['comics']['release_date'] = '2004-04-05';
+$module['comics']['status'] = 'Alpha';
+$module['comics']['authors'][] = array('name'=>'Markus Schabel', 'email'=>'markus.schabel@tgm.ac.at');
+$module['comics']['sort_order'] = '130';
+?>
+	
