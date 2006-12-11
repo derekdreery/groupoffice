@@ -14,6 +14,8 @@
 //load Group-Office
 require_once("../../Group-Office.php");
 
+load_basic_controls();
+
 //authenticate the user
 $GO_SECURITY->authenticate();
 
