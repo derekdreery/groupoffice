@@ -376,9 +376,9 @@ class cms_site extends cms {
 					$auth_source_key = isset($_REQUEST['auth_source_key']) ? $_REQUEST['auth_source_key'] : $cookie_key;
 
 					$select = new select('auth_source_key', $auth_source_key);
-					for($i=0;$i<count($auth_sources); $i++)
+					for($i=0;$i<count($GLOBALS['auth_sources']); $i++)
 					{
-						$select->add_value($i, $auth_sources[$i]['name']);
+						$select->add_value($i, $GLOBALS['auth_sources'][$i]['name']);
 					}
 
 					$cell->innerHTML .= '@'.$select->get_html();
