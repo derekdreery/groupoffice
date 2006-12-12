@@ -1,0 +1,122 @@
+<?php
+require_once($GO_LANGUAGE->get_fallback_language_file('projects'));
+
+$pm_invalid_period = 'Hai inserito l\'ora del periodo non valida';
+$pm_add_hours_success = 'L\'evento è stato inserito con successo';
+//$pm_already_booked = 'Hai già impegni in questo periodo';
+$pm_new_entry = 'Nuovo inserimento';
+$pm_fees = 'Tariffe';
+$pm_new_fee = 'Nuova tariffa';
+$pm_users = 'Utenti';
+$pm_materials = 'Materiali';
+$pm_new_material = 'Nuovo materiale';
+$pm_project_data = 'Dati progetto da';
+//$pm_load= 'Rapporti';
+//$pm_enter_data = 'Inserisci dati';
+$pm_value = 'Valore';
+$pm_too_old = 'Non ti è permesso inserire date più vecchie di una settimana';
+
+$pm_employee = 'Impiegato';
+$pm_project = 'Progetto';
+$pm_starttime = 'Ora inizio';
+$pm_endtime = 'Ora fine';
+$pm_breaktime = 'Pausa';
+$pm_this_week = 'Inserimenti della settimana';
+$pm_no_projects = 'Non hai nessun progetto';
+$pm_hours = 'Ore';
+$pm_total_hours = 'Totale numero di ore';
+$pm_client = 'Clienti';
+$pm_created_at = 'Creato il';
+
+$pm_show_all = 'Mostra tutto';
+$pm_show_period = 'Mostra dal';
+$pm_to = 'al';
+$pm_show_month = 'Mostra mese';
+
+$pm_total_hours_days = 'Totale numero di ore/giorni';
+$pm_projects_count = 'progetto/i';
+$pm_show_data = 'Mostra data';
+$pm_new_project = 'Nuovo progetto';
+$pm_other_contacts = 'Altri contatti';
+$pm_no_contacts = 'Non hai contatti che possono fungere da cliente per questo progetto. E` necessario crearne uno prima.';
+
+//translation required for 1.1
+$pm_unit_value = 'Valore unità';
+$pm_units = 'Unità';
+$pm_mins = 'minuti';
+$pm_no_fees = 'Nessuna spesa è stata creata. Solo un utente con privilegi di amministratore può creare delle spese.';
+$pm_fee = 'Spese';
+$pm_no_contact = 'Nessuno';
+$pm_load_period= 'Periodo';
+$pm_load_type= 'Carica dati per';
+$pm_total_fee = 'Totale spese';
+$pm_total_days = 'Totale giorni';
+$pm_total_units = 'Totale unità';
+$pm_summary = 'Sommario';
+
+$pm_this_entry = 'questa prenotazione';
+$pm_entry = 'prenota';
+
+
+$pm_timer_started_at = 'Timer avviato alle';
+$pm_start_timer = 'Avvia timer';
+$pm_stop_timer = 'Ferma timer';
+
+$pm_start_date = 'Data inizio';
+$pm_end_date = 'Data termine';
+$pm_responsible = 'Responsabile';
+$pm_status = 'Stato';
+
+
+//$pm_status_values[-1] = 'Proposti';
+//$pm_status_values[0] = 'In corso';
+//$pm_status_values[101] = 'Completati';
+$pm_status_values[1] = 'Proposta';
+$pm_status_values[2] = 'Sviluppo';
+$pm_status_values[3] = 'In attesa';
+$pm_status_values[4] = 'Concluso';
+$pm_status_values[5] = 'Pagato';
+
+$pm_filter = 'Filtro';
+$pm_project_exists = 'Un progetto con questo nome esiste già';
+
+$pm_alert = 'Questo progetto è scaduto';
+
+$pm_budget = 'Budget';
+$pm_probability = 'Probabilità';
+$pm_yours_only = 'Solo i miei';
+$pm_description = 'Descrizione';
+
+
+$pm_no_projects = 'Nessun progetto trovato.';
+
+//2.08
+$pm_projects = 'Progetti';
+
+//2.12
+$pm_select_project = 'Selezionare un progetto';
+$pm_already_booked = 'Sei già impegnato in questo periodo. Seleziona %s per modificare l\'impegno'; //changed value. Search above
+$pm_here = 'qui';
+$pm_load = 'Visualizza ore'; //chnaged. Search above
+
+$pm_edit_data = 'Modifica ore di lavoro';
+$pm_enter_data = 'Inserisci ore di lavoro';//changed, search above
+
+//2.14
+$pm_templates = 'Modelli';
+$pm_template = 'Modello';
+$pm_new_template = 'Nuovo modello';
+$pm_no_templates = 'Nessun modello trovato';
+
+$pm_template_offset = 'Inizio attività';
+$pm_template_after = 'dopo il nuovo progetto inizia alle';
+
+
+$pm_new_template_event = 'Nuova attività';
+$pm_duration = 'Durata';
+
+$pm_no_template_events = 'Attività non trovata';
+$pm_no_template = 'Non usare modelli';
+
+$pm_put_events_in = 'metti le attività in';
+?>

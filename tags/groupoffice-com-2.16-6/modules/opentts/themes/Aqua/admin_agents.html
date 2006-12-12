@@ -1,0 +1,150 @@
+<script LANGUAGE="JavaScript">
+<!--
+dest_groups= new Array(
+        $array_groups
+)
+
+function fillSelectFromArray(selectCtrl, itemArray, goodPrompt, badPrompt, defaultItem) {
+        var i, j;
+        var prompt;
+
+        // empty existing items
+        for (i = selectCtrl.options.length; i >= 0; i--) {
+                selectCtrl.options[i] = null; 
+        }
+        prompt = (itemArray != null) ? goodPrompt : badPrompt;
+        if (prompt == null) {
+                j = 0;
+        } else {                
+                selectCtrl.options[0] = new Option(prompt);
+                j = 1;
+        }
+        if (itemArray != null) {
+                // add new items
+                for (i = 0; i < itemArray.length; i++) {
+                        selectCtrl.options[j] = new Option(itemArray[i][0]);
+                        if (itemArray[i][1] != null) {
+                                selectCtrl.options[j].value = itemArray[i][1]; 
+                        }
+                        j++;
+                }
+                // select first item (prompt) for sub list
+                selectCtrl.options[0].selected = true;
+        }
+}
+
+
+function makeStringFromSelect(selectCtrl) {
+	var i;
+	var j = 0;
+	var outlist = "";
+
+	for (i = 0; i < selectCtrl.options.length; i++) {
+		if (j > 0) {
+			outlist = outlist + ", ";
+		}
+		outlist = outlist + selectCtrl.options[i].value;
+		j++;
+	}
+	return outlist;
+}
+
+function addItems(fromCtrl, toCtrl) {
+	var i;
+	var j;
+	var itemexists;
+	var nextitem;
+
+	// step through all items in fromCtrl
+	for (i = 0; i < fromCtrl.options.length; i++) {
+		if (fromCtrl.options[i].selected) {
+			// search toCtrl to see if duplicate
+			j = 0;
+			itemexists = false;
+			while ((j < toCtrl.options.length) && (!(itemexists))) {
+				if (toCtrl.options[j].value == fromCtrl.options[i].value) {
+					itemexists = true;
+					alert(fromCtrl.options[i].value + " found!");
+				}
+				j++;
+			}
+			if (!(itemexists)) {
+				// add the item
+				nextitem = toCtrl.options.length;
+				toCtrl.options[nextitem] = new Option(fromCtrl.options[i].text);
+				toCtrl.options[nextitem].value = fromCtrl.options[i].value;
+			}
+		}
+	}
+}
+
+function removeItems(fromCtrl) {
+	var i = 0;
+	var j;
+	var k = 0;
+
+	while (i < (fromCtrl.options.length - k)) {
+		if (fromCtrl.options[i].selected) {
+			// remove the item
+			for (j = i; j < (fromCtrl.options.length - 1); j++) {
+				fromCtrl.options[j].text = fromCtrl.options[j+1].text;
+				fromCtrl.options[j].value = fromCtrl.options[j+1].value;
+				fromCtrl.options[j].selected = fromCtrl.options[j+1].selected;
+			}
+			k++;
+		} else {
+			i++;
+		}
+	}
+	for (i = 0; i < k; i++) {
+		fromCtrl.options[fromCtrl.options.length - 1] = null;
+	}
+}
+//-->
+</SCRIPT>
+
+
+<form NAME="main" ACTION="admin.php?admin_tabtable=$admin_tabtable&func=update_agents" METHOD="POST">
+<input TYPE="HIDDEN" NAME="Sel">
+
+<table BORDER=0 CELLPADDING=0 CELLSPACING=0>
+<tr>
+<td VALIGN="TOP">
+&nbsp;
+</td><td VALIGN="TOP">
+&nbsp;
+</td>
+<td VALIGN="TOP">
+<select  NAME="dest_group" SIZE="1"  onChange="fillSelectFromArray(this.form.SelItems, ((this.selectedIndex == -1) ? null : dest_groups[this.selectedIndex-1]));">
+        <option VALUE="-1" selected>Select group</option>
+        $options_groups
+</select>
+</td>
+</tr><tr>
+<td VALIGN="TOP">
+$strUser
+</td><td VALIGN="TOP">
+&nbsp;
+</td>
+<td VALIGN="TOP">
+$strGroups
+</td>
+</tr><tr>
+<td VALIGN="TOP">
+<select MULTIPLE NAME="AvailItems" SIZE="$total_actions">
+	$options_actions
+</select>
+</td>
+<td ALIGN="CENTER">
+$button_left<br><br>$button_right<br>
+<br>
+$button_submit
+</td>
+<td VALIGN="TOP">
+<select MULTIPLE NAME="SelItems" SIZE="$total_actions">
+</select>
+</td>
+</tr>
+</table>
+<br><br>
+</form>
