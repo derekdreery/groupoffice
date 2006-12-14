@@ -1,0 +1,14 @@
+.NewMail{
+	background-color: #96c0e4;
+}
+.JustViewed{
+	font-weight: bold;
+}
+.SelectedNewMail {
+	background-color: #CCFFFF;
+}
+
+.headerTable {
+	border: 1px solid black;
+	background-color: #F6F7F2;
+}

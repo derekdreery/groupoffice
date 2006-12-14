@@ -1,0 +1,9 @@
+<?php
+$module['example']['description'] = 'This module is for developers and provides examples '.
+			'of common used functions in Group-Office.';
+$module['example']['version'] = '1.0';
+$module['example']['release_date'] = '2004-04-05';
+$module['example']['status'] = 'Stable';
+$module['example']['authors'][] = array('name'=>'Merijn Schering', 'email'=>'mschering@intermesh.nl');
+?>
+	

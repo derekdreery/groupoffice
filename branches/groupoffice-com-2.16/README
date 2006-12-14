@@ -1,0 +1,30 @@
+Thank you for installing Group-Office!
+
+INSTALLATION
+To install Group-Office open a browser and go to the URL where you put the 
+Group-Office files and follow instructions. 
+
+UPGRADING
+Take following steps:
+1. Backup your database
+2. Move away your old source files.
+3. Put the new files at the right location.
+4. If exists copy your old config.php to the new files.
+5. Launch your browser and go to install/install.php or install/upgrade.php to do it really 
+		quick.
+
+!!! READ THE RELEASE NOTES !!!
+
+
+SYSTEM REQUIREMENTS
+-Linux (Others might work but I never tested it) 
+-PHP4 compiled with:
+	-IMAP extension for e-mail module and IMAP authentication
+	-iconv extension for e-mail module
+	-MySQL extension
+-MySQL 3.* or up
+
+Good luck!
+
+Merijn Schering
+Intermesh

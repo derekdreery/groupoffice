@@ -1,0 +1,1382 @@
+<html>
+<head>
+<title>Group Office User Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head>
+
+<body leftmargin="25" topmargin="25" marginwidth="20" marginheight="20">
+<div align="center"><strong>Group Office End User Documentation <br>
+  by Casey Ruark </strong></div>
+<p><strong>PREFACE:</strong></p>
+<p>Welcome to Group Office. The latest version is 1.12, if you are currently using 
+  a previous version you should either upgrade or ask your administrator to upgrade 
+  for you.</p>
+<p><strong>OVERVIEW:</strong></p>
+<p>Group Office is a group-ware suite written in PHP, by Merijn Schering. It is 
+  meant to be an on-line collaboration engine for large and small businesses. 
+  It boasts an easy to use interface with a powerful and extensive list of features. 
+  These feature include E-mail, Project Management, Scheduling, Address Book, 
+  Web Site Management, and on-line personal file manager. Group Office can be 
+  installed on a SSL secured server, for added security. It integrates with local 
+  mail servers using IMAP and POP3 as well as remote servers. Overall, this is 
+  the ultimate group-ware suite for any business.</p>
+<p><font size="5"><strong><em><u><a name="top"></a>CONTENTS:</u></em></strong></font></p>
+<p><font size="5"><em><strong><a name="top3"></a>Administrators guide: Getting 
+  Started </strong></em></font></p>
+<p><br>
+  <a href="#admin1">-Installation</a><br>
+  <a href="#admin2">-Adding Users</a><br>
+  <a href="#admin3">-Adding Modules</a><br>
+  <a href="#admin4">-Using Groups</a><br>
+  <a href="#admin5">-Removing Users</a><br>
+  <a href="#admin6">-Editing user information</a></p>
+<p><font size="5"><strong><em><a name="top1"></a>Configuration</em></strong></font></p>
+<p><br>
+  <a href="#pref1">1. Preferences</a><br>
+  <a href="#pref2">2. Using Groups</a><br>
+  <a href="#pref3">3. Managing your information</a><br>
+  <a href="#pref4">4. Privacy</a><br>
+  <a href="#pref5">5. Security</a></p>
+<p><font size="5"><strong><em><a name="top"></a>Applications</em></strong></font></p>
+<p><a href="#app1" target="_self"><br>
+  1. Getting Started</a><br>
+  <a href="#app2">2. Logging in</a><br>
+  <a href="#app3">3. Start Page</a><br>
+  <a href="#app4">4 . Setting up E-mail Accounts</a><br>
+  <a href="#app5">5 . Address and Contacts</a><br>
+  <a href="#app6">6 . File Management</a><br>
+  <a href="#app7">7 . Using Menus</a><br>
+  <a href="#app8">8 . Using the Search Feature</a><br>
+  <a href="#app9">9 . Using the Scheduler</a><br>
+  <a href="#app10">10. Project Management</a><br>
+  <a href="#app11">11. Website Management</a><br>
+  <a href="#app12">12. Summary</a></p>
+<p><font size="5"><strong><em><a name="top2"></a>Using Other Menus</em></strong></font></p>
+<p><br>
+  <a href="#om1">1. Bookmarks</a><br>
+  <a href="#om2">2. Help </a><br>
+  <a href="#om3">3. Logout</a></p>
+<hr>
+<p align="center"> <strong><em><font size="5">Administrators Guide </font></em></strong></p>
+<p>This section is intended for administrators of Group Office, Apache, and MySql. 
+  It is not intended for the end user. </p>
+<p><strong><font size="4"><a name="admin1"></a>-Installation<br>
+  </font></strong><br>
+  <strong>To install Group Office, you will need to meet a couple of requirements. 
+  These are:</strong></p>
+<p>Linux Operating System<br>
+  Apache Web Server - 1.3x or 2.0x<br>
+  MySql database Server<br>
+  PHP 4.3.x</p>
+<p>Most linux distributions come with Apache and MySql installed by default. If 
+  the do not, you can build them by visiting their web sites.</p>
+<p>Apache :<a href="http://www.apache.org"> http://www.apache.org</a><br>
+  MySql : <a href="http://www.MySql.com">http://www.MySql.com</a><br>
+  PHP : <a href="http://www.php.net">http://www.php.net</a></p>
+<p>Steps to installing Group Office:</p>
+<p><font size="4"><strong>Pre-installation TASKS</strong></font></p>
+<p><br>
+  <strong>1. Extracting the files and moving them so they are viewable from your 
+  web server.</strong></p>
+<p>Extract groupoffice-1.1x.tar.gz and move it into you site root.</p>
+<p>tar -xvzf groupoffice-1.1x.tar.gz<br>
+  mv groupoffice-1.1x/ /var/www/htdocs (or whatever your site root is)</p>
+<p><strong>2. Editing PHP.INI</strong></p>
+<p>Locate your php.ini file and do the following:<br>
+  Set register_globals to ON</p>
+<p>Set magic_quotes_gpc to ON ( Reason: try to put quotation marks around an item 
+  and you'll generate a SQL error)</p>
+<p>Make sure that sendmail or postfix is set up properly for your platform.</p>
+<p><strong><font size="4">NOTE: The Group Office Installer now handles the SQL 
+  dumps, you need only to create a database and user. The instructions below are 
+  intended for pre-1.1 users. </font></strong></p>
+<p><strong>3. Setting up the database</strong></p>
+<p>You must first set up a database, before you can proceed with installation.<br>
+  command line = mysqladmin -uyourusername -p create groupoffice<br>
+  It is also recommend that you set up a groupoffice user for MySql. <br>
+  Call the user &quot;groupoffice&quot;<br>
+  OK, now assuming that you have set up your database, created a user with the 
+  proper permissions, and verified that mysql is running ( ps -e and look for 
+  mysqld ) ( if you couldn't complete any of the steps above, it might have been 
+  due to the fact that you don't having SQL running, or you have a non-standard 
+  configuration.</p>
+<p>Now you need to dump a couple of files into your database. <br>
+  Browse to the groupoffice-1.0x/lib/sql directory and dump groupoffice.sql and 
+  optionally filetypes.sql into the groupoffice database. ( mysql -username -p 
+  &lt; groupoffice.sql groupoffice and mysql -uyourname -p &lt; filetypes.sql 
+  groupoffice ) <br>
+  OK! Now your database is ready to go. </p>
+<p><strong>Final Steps</strong></p>
+<p><br>
+  You need to modify the files in the group office directory for the initial install 
+  as follows: <br>
+  (These instructions are from the developer, I recommend following them EXACTLY)</p>
+<p>Create a folder that the web server can write to and is not open <br>
+  to the public (eg. '/home/groupoffice'). This folder should be owned<br>
+  by the web server user. Keep in mind there the disk space you need for the users.</p>
+<p><strong>ONLY WHEN USING SYSTEM ACCOUNTS</strong></p>
+<p> Make sure Sudo is installed (http://www.courtesan.com/sudo/) <br>
+  copy 'lib/sudoers' to '/etc/sudoers' and chmod 0440 and chown root:root <br>
+  (or modify this file manually when already using sudo).<br>
+  Keep in mind that the web server can now:<br>
+  - add/remove users<br>
+  - change passwords<br>
+  - reboot and halt the machine</p>
+<p><strong>ONLY WHEN USING SAMBA ACCOUNTS</strong></p>
+<p> Make sure Expect is installed (http://expect.nist.gov/) <br>
+  copy 'lib/auto_smbadduser.exp' and lib/auto_smbpasswd.exp' to folder '/usr/sbin'.<br>
+  chmod 0440 and chown root:root both of these files.</p>
+<p> Configure '/etc/php.ini' for file uploads and set register_globals=on and 
+  magic_quotes_gpc=on!<br>
+  Usually this is already the case.</p>
+<p> The install script must be able to write to the folder where 'Group-Office.tpl' 
+  <br>
+  is located (Only for installation, chmod 777 [Group-Office directory]).</p>
+<p> Start a browser, open the page: 'install.php' And follow instructions.</p>
+<p> Set the permissions to all Group-Office files to '755' <br>
+  <em><strong>(chmod -R 755 [Group-Office directory])</strong></em><br>
+  Set the owner of the folder as a different user than the webserver owner/group<br>
+  <strong><em>(chown -R casey:users [Group-Office directory])</em></strong></p>
+<p>You will then proceed to login as administrator and begin to setup your work 
+  environment.</p>
+<p><font size="4"><strong><em>Update!</em></strong></font> The new installer has 
+  become very self explanatory, the install documentation is targeted for pre-1.1 
+  users. The new installer has instructions and steps built in to it. If you have 
+  any questions about the new installer, you may e-mail me, and I will include 
+  your question in the FAQ which will be compiled shortly.</p>
+<p><a href="#top3">Top</a></p>
+<p><font size="4"><strong><a name="admin2"></a>Adding Users</strong></font></p>
+<p><br>
+  Adding Users to Group Office, click on users in the administrator menu.<br>
+  To add users, a good practice is to write down or print out a list of employees 
+  who are using Group Office, and assign user names and passwords to each person. 
+  They can always change their password after the account is set up. To save myself 
+  some time, I usually exclude filling out anything else except user name, password, 
+  and email address. In Group Office 1.12, authorization is automated, it is no 
+  longer an entry to be made. Previous versions should be upgraded for ease of 
+  use and less confusion with authorization.</p>
+<p><a href="#top3">Top</a></p>
+<p><font size="4"><strong><a name="admin3"></a>Adding Modules, Menus, and Pre-installed 
+  Bookmarks</strong></font></p>
+<p><br>
+  To add modules, click on the configuration tab under the administrator menu, 
+  select modules, and click OK. For users, you can select modules for the users 
+  at the time of initial user setup. To remove or add modules after a user is 
+  setup, you can click on users, click the user of whom you want to add/remove 
+  modules from, and check or un check the modules to be added/removed. </p>
+<p>To add bookmarks, click on the configuration tab under the administrator menu, 
+  and select bookmarks. You will notice that two bookmarks have been set, and 
+  you may add or remove bookmarks in which each user will have in this area. Menus 
+  are configured in the same manner as modules. Simply check the menus that you 
+  wish to appear for your users, and they will appear in your first login as a 
+  user. </p>
+<p>Date formats are another feature that can be configured. Data formats are set 
+  using the PHP functions. You should browse to http://php.net for a list of these 
+  functions. </p>
+<p><a href="#top3">Top</a></p>
+<p><strong><font size="4"><a name="admin4"></a>Using Groups</font></strong></p>
+<p><br>
+  Groups are a good way to classify people in a large company. As the administrator, 
+  it is a good idea to create groups using the user groups menu under the configuration 
+  menu. This way, the groups that a person is added to is set by an administrator 
+  for extra security. Groups in Group Office work differently than groups in a 
+  *nix operating system. If a user creates a group, only he/she has permissions 
+  to add or remove users to and from that group. In this sense, the owner of the 
+  group acts as an administrator in some form. To resolve conflicts with users, 
+  it might be a good idea as the administrator (as in login=administrator) to 
+  create groups for users that cannot be changed. This will protect your users 
+  if the happen to drop someone out of their group or add some one that does not 
+  belong. The only way that an administrator can delete edit a group created by 
+  a user is to login as that user, and then proceed to make necessary changes 
+  to the group. File ownerships acts in the same manner in which a user, rather 
+  than the administrator, has to authorize viewing/modifying of files. ( Thanks 
+  to Mark for the last two paragraphs! )</p>
+<p><a href="#top3">Top</a></p>
+<p></p>
+<p><font size="4"><strong><a name="admin5"></a>Removing Users</strong></font></p>
+<p>To remove users, click on the users menu in the administrator menu. Click on 
+  the X next to the user you want to delete. </p>
+<p><a href="#top3">Top</a></p>
+<p><font size="4"><strong><a name="admin6"></a>Editing User Information</strong></font></p>
+<p><br>
+  Editing user information is very helpful especially when you need to reset a 
+  forgotten password! <br>
+  ( As a system administrator, you know that this happens very frequently! ) Group 
+  Office makes this easy to do! Simply click on the users menu under the administrator 
+  menu, and click on the user who needs a password reset. </p>
+<p><a href="#top3">Top</a></p>
+<p align="center"></p>
+<p>&nbsp; </p>
+<hr>
+<p></p>
+<p align="center"><font size="5"><strong><em>Configuration</em></strong></font></p>
+<p><br>
+  <strong><font size="4"><a name="pref1"></a>1. Preferences</font></strong></p>
+<p><br>
+  This section covers basic preferences of Group Office. Highlight the configuration 
+  menu with your cursor and click on preferences. Here you can set up your choice 
+  of languages, colors, separators and date/time display format. To switch to 
+  another theme, click on the drop down menu next to Theme: and select a theme 
+  that suits your needs. Remember, themes will only stay the same on your computer, 
+  when you go to a different computer, you will have the default theme selected 
+  again. Themes are on a per browser basis. If you are using Group Office for 
+  <br>
+  e-mail, don't de-select the part about using the Group Office mail client unless 
+  your administrator has told you otherwise. </p>
+<p><a href="#top1">Top</a></p>
+<p><font size="4"><strong><a name="pref2"></a>2. Using Groups</strong></font></p>
+<p><br>
+  Groups are a great way of handling a large amount of contacts that can be broken 
+  down into sections. Working with groups is easy to do, efficient, and a time 
+  saver. To add a group you will go to User Groups under the Configuration menu. 
+  To add a group you will click on add and this will bring you to another section. 
+  In this section you will type in the name of the group, and check off the selected 
+  members of this group. To remove a group, you can simply click on the X next 
+  to the name of the group that you want to delete. To edit the group, click on 
+  the group name, and add/remove any member that you want from the group. As the 
+  owner of the group, no other member can modify your group.</p>
+<p><a href="#top1">Top</a></p>
+<p><br>
+  <strong><font size="4"><a name="pref3"></a>3. Managing your information</font></strong></p>
+<p><br>
+  To manage your personal information, highlight configuration and click on Your 
+  Account. This will allow you to edit any details about yourself. You will notice 
+  for options to choose from above the information tab. These options are Security 
+  / Privacy / Statistics. We will discuss the security and privacy tabs in the 
+  next sections. Statistics however is a way to view when your account was created, 
+  the last time you logged in, and how many times you logged in. This is a good 
+  way to see if anyone has been in your account without your knowledge. If your 
+  computer was being repaired on Tuesday, and you remember logging in once, but 
+  the statistics show that you have logged in 10 times, than it might be time 
+  to talk to your administrator(s) and change your password.</p>
+<p><a href="#top1">Top</a></p>
+<p><strong><font size="4"><br>
+  <a name="pref4"></a>4. Privacy</font></strong></p>
+<p><br>
+  Let's face it, there's always that guy in the office that you don't want to 
+  have anything to do with. He's always listening in on your conversations and 
+  stealing your ideas. Personally, you don't want him knowing about your schedule, 
+  files, projects, contacts, etc. because he will steal them. So what do you do? 
+  Make yourself invisible! To do this, simply make sure that you are in more than 
+  one group, other than his, and un check his name from the list of people that 
+  are &quot;allowed&quot; to know that you exist in Group Office. You want to 
+  be very specific with this feature, because it is easy to make yourself invisible 
+  to everyone. To be completely safe, you can create your own group called &quot;Everyone 
+  else but that guy&quot; and add everyone to the group except him. Than you would 
+  simply make yourself visible to everyone but him, and since you own the group, 
+  he cannot add himself to it. If the creepy guy at work is your systems administrator, 
+  you will have a bigger problem altogether! The privacy tab in Group Office 1.12 
+  and higher now contains a place for your authorization of other users. You may 
+  select the users in which authorization is granted to, and also select groups 
+  to authorize. This has been implemented for ease of use and security purposes.</p>
+<p><a href="#top1">Top</a></p>
+<p><br>
+  <strong><font size="4"><a name="pref5"></a>5. Security</font></strong></p>
+<p><br>
+  In this section, you can do the following : </p>
+<p>Change your password<br>
+  Change you secret question/answer</p>
+<p>It is a good idea to change these every so often. Remember weak passwords are 
+  easily figured out. Although it may be easier to remember a password such as 
+  your birthday, it is not a good idea to have this as a password. Your secret 
+  answer/question should be something that only you, and well maybe your wife/husband 
+  if you trust them, should know.</p>
+<p><a href="#top1">Top</a></p>
+<p align="center"></p>
+<hr>
+<p align="center"></p>
+<p align="center"><em><strong><font size="5">Using other menus</font></strong></em></p>
+<p><br>
+  The following sections cover the core applications and basics on how to get 
+  started using Group Office. This next section covers the rest of the menus, 
+  which can help you navigate quicker, find information about the program, request 
+  support, and logging out.</p>
+<p><font size="4"><strong><a name="om1"></a>1. Using Bookmarks</strong></font></p>
+<p><br>
+  Bookmarks are a great way of getting around the web. If you use Internet Explorer, 
+  they are called Favorites. In Group Office you can have your own set of bookmarks/favorites 
+  within the application, and also to external sites. To add a bookmark, highlight 
+  the bookmarks section and click on &quot;Add Bookmark&quot;. This will invoke 
+  a menu which will allow you to type in a name for the bookmark, and the URL 
+  (web page) of the bookmark. You can also select &quot;Use the current page&quot; 
+  for the convenience of adding the page you are on, for example, if you are on 
+  the create a new appointment page, and you frequently use this page, you will 
+  navigate to that page, click on &quot;use the current page&quot; and click OK. 
+  There is a check box at the bottom which will allow you to open it in a new 
+  window. This is recommended for all sites outside of Group Office. I prefer 
+  to open all of my Group Office links (new events, adding contacts, etc.) in 
+  the same window, so I un check the box. </p>
+<p><br>
+  To modify your bookmarks, you can click on the &quot;Modify Bookmarks&quot; 
+  menu and this will direct you to another screen which lists all of your bookmarks. 
+  From here you can either delete the bookmarks by clicking on the X next to the 
+  bookmark you want to delete, or modify the bookmark by clicking on the bookmark 
+  name, followed by entering the modified data.</p>
+<p><a href="#top2">Top</a></p>
+<p><strong><font size="4"><br>
+  <a name="om2"></a>2. Help</font></strong></p>
+<p><br>
+  In the help section, you will be able to:</p>
+<p>Email technical support for help<br>
+  Read the license agreement and developers of Group Office</p>
+<p>To get technical support click on the &quot;Support&quot; button, and send 
+  an email regarding your question with specifics on the topic that you need help 
+  on. To read about Group Office, click on &quot;About&quot;. This will tell you 
+  about Group Office and the GPL license. </p>
+<p><a href="#top2">Top</a></p>
+<p><br>
+  <font size="4"><strong><a name="om3"></a>3. Logging Out</strong></font></p>
+<p>Logging out is imperative! I cannot stress enough how important it is to log 
+  out when you are done with your session. To logout of Group Office, simply click 
+  the logout button. Logging out is the best way to prevent someone from viewing 
+  you information and changing your settings. I would advise logging out even 
+  if you will only be away from the computer for 10 minutes. </p>
+<p><a href="#top2">Top</a></p>
+<p>&nbsp;</p>
+<p align="center"><hr></p>
+<div align="center"><em><strong><font size="5">Applications</font></strong></em> 
+</div>
+<p><br>
+  <a name="app1"></a><font size="4"><strong>1. Getting Started</strong></font></p>
+<p><br>
+  Welcome to Group Office. Let's start from the beginning. If you have an administrator, 
+  you will have to ask him to make an account for you and any other members that 
+  will be using Group Office. If a new employee is added to your company and will 
+  be using Group Office, please ask your administrator to create the account and 
+  let him/her know what modules to enable for the new user. Remember, it is important 
+  to assess the integrity of your employees, if a person is new to the company, 
+  you may want to limit their permissions to certain schedulers and projects. 
+</p>
+<p><a href="#top">Top </a></p>
+<p><a name="app2"></a><strong><font size="4">2.</font></strong> <font size="4"><strong>Logging 
+  in</strong></font></p>
+<p><br>
+  When you get to your Group Office URL, (web page) you will be asked for your 
+  login and password. Enter the appropriate values and proceed to the welcome 
+  page. If you are getting an error message upon login, please write down what 
+  the error message says and contact your administrator. If it says wrong user 
+  name or password, you probably made a typo. Remember to make sure that CAPS 
+  LOCK is off and if you are using the numerical keypad, that NUM LOCK is set 
+  to on. These are common errors that can cause an incorrect login.</p>
+<p><a href="#top">Top</a></p>
+<p><a name="app3"></a><font size="4"><strong>3. Start Page</strong></font></p>
+<p><br>
+  After you have logged in, you will get to the Start Page. This is the start 
+  of your Group-Office session. You will see icons on the screen with a text description 
+  underneath of them. Click on the appropriate icon of the feature that you want 
+  to use. To get to these applications, you can also use the menus on the top 
+  bar. The APPLICATIONS section contains all features available for use. </p>
+<p><a href="#top">Top</a></p>
+<p><strong><font size="4"><a name="app4"></a>4. Setting up e-mail accounts</font></strong></p>
+<p><br>
+  To set up an e-mail account in Group-Office, click on the e-mail icon on the 
+  start page, or select it from the applications menu. Unless an account has been 
+  set up for you, you will see that there is no account yet. You will then proceed 
+  to go to the ACCOUNTS page by clicking on the ACCOUNTS icon. When you click 
+  this, you will be directed to a page with a number of options that read as follows:</p>
+<p>Accounts.../..Add<br>
+  You don't have any E-mail accounts configured.</p>
+<p>To add your account(s), click on the add page. By default, the client will 
+  display the name and <br>
+  e-mail address you specified upon sign up. If your e-mail has changed, or you 
+  are setting up a different account, change the e-mail to your address that you 
+  want to use. The next tab asks what kind of server you will use. For most ISP's 
+  in the US, POP3 is the default. You will then need to enter your host name ie. 
+  mail.comcast.net/notls ( /notls is used in situations where the mail server 
+  lacks a valid Security Certificate) / incoming.verizon.net and your username 
+  and password. Your username is usually just the name/e-mail address, ie cruark@comcast.net 
+  my username would be &quot;casey&quot;. If you are having trouble with any of 
+  these settings, you can always contact your administrator.</p>
+<p><a href="#top">Top</a></p>
+<p><br>
+  <font size="4"><strong><a name="app5"></a>5. Address Book</strong></font></p>
+<p><br>
+  The address book is what you will use from your e-mail account to quickly mail 
+  to people. If you already have an address book in another program, for example 
+  Outlook Express, Outlook, or Balsa, you may export your address book to CSV 
+  (comma separated values). As of yet, this is the only supported format for importing 
+  messages. Most mail clients support this type of export. After you have exported 
+  the file(s), (remember when you are exporting files, put it somewhere that you 
+  will remember, so it's easy to find) go into Group Office Email and click on 
+  the IMPORT button. This will bring you to a dialog that will ask you to browse 
+  for the file. Click on the browse button and select the file you want to import. 
+  After the file is selected, click on OK and wait until the process has completed. 
+  IMPORTANT!!! Do not do anything else until the import is complete, this will 
+  cancel the import. Large address books can take a while to import.</p>
+<p><strong>-Adding Contacts:</strong></p>
+<p><br>
+  To add contacts, click on the add button and fill in all of the proper information 
+  followed by clicking on the OK button. </p>
+<p><strong>-Selecting members to e-mail to:</strong></p>
+<p><br>
+  Click on the members tab and select the members to add to your address book. 
+  After you have made your selection, click on &quot;Add selected users to contacts&quot; 
+  or if you have groups already set up, you may use the drop down menu to add 
+  these members to an already created group.</p>
+<p><strong>-Working with Groups</strong></p>
+<p><br>
+  To add a group, click on the groups button and add a group of your choice. Using 
+  groups is helpful when you want to send a message to a large number of people. 
+  Working with groups is very efficient for newsletters and announcements. Once 
+  you have created a group, you can add members to your group by clicking on the 
+  CONTACTS button and move contacts to and from groups. To remove a group, go 
+  to the groups section and click the X next to the group you want to delete and 
+  confirm removal.</p>
+<p><strong>-Viewing your contacts</strong></p>
+<p><br>
+  To view all of your contacts, click on the contacts button. This will show you 
+  all of the contacts that you have, and the groups they are in. To expand a group, 
+  you must click the plus tab.</p>
+<p><strong>-Exporting your contacts</strong></p>
+<p><br>
+  To export your Group-Office address book, click on the export icon and select 
+  your method of CSV. In most cases, the default is just fine unless a specific 
+  client needs CSV to be in a particular format. Click on OK and you will be prompted 
+  to save the file. You can then import this list in to your local mail client.</p>
+<p><a href="#top">Top</a></p>
+<p></p>
+<p><font size="4"><strong><a name="app6"></a>6. File Management</strong></font></p>
+<p><br>
+  The file manager is useful for on-line storage of documents and other important 
+  files. The file manager feature is much like using your local file manager ie. 
+  Windows Explorer, Nautilus, &amp; Konquerer. </p>
+<p><strong>-Uploading files</strong></p>
+<p><br>
+  To put files on the server, click the upload button. In this section, you will 
+  be asked to browse for local files. Select the files that you want to put on 
+  the server and click on the OK button. Remember, there is a file size limit 
+  on files to be uploaded, if the file(s) selected exceed the limit on uploads, 
+  the file(s) will not be put on the server. </p>
+<p><strong>-Creating new folders</strong></p>
+<p><br>
+  To create a new folder, click on the new folder tab, and name your new folder. 
+</p>
+<p><strong>-Switching between folders</strong></p>
+<p><br>
+  To switch between folders, you must click on the folder in which you want to 
+  browse. When you are in this folder, when you click the upload tab, files will 
+  be placed into that folder. </p>
+<p><strong>-Deleting files and folders</strong></p>
+<p><br>
+  To delete a file, click on the box next to the file, and click on the delete 
+  icon. You can also select multiple files by checking the boxes next to them, 
+  and click on delete. You can also remove folders this way by doing the procedure 
+  described above. Folders do not need to be empty to remove them, so be careful 
+  when you erase an entire folder.</p>
+<p><br>
+  <strong>-Folder Properties</strong></p>
+<p><br>
+  Folder properties show information about a folder. To view the properties of 
+  a folder, check the box next to the folder and then proceed to click the properties 
+  icon. The properties of a folder will tell you detailed information about the 
+  folder selected. You will notice a tab on the bottom of the properties page 
+  that says &quot;activate sharing&quot;. If you click this tab followed by clicking 
+  on the OK tab, two new tabs will appear at the top of the properties dialog 
+  box. They are labeled &quot;Read Permissions&quot; and &quot;Write Permissions&quot;. 
+  This is an introduction to the next section on File Sharing.</p>
+<p></p>
+<p><strong>-File Sharing</strong></p>
+<p><br>
+  OK, you now have the properties dialog opened with your two new tabs. When you 
+  go to the Read Permissions tab, you will see a number of users and groups. Select 
+  the users and groups that you want to be able to allow other members to view. 
+  The selected people will have permission only to read the files, but not to 
+  delete or modify the files on the server.<br>
+  To give users write permissions, you will follow the same format that you followed 
+  for Read permissions. You can allow people to read and not write, or you can 
+  allow people to do both. WARNING! People who have write permissions will be 
+  able to modify or delete all or any file(s) in your shared folder. </p>
+<p><br>
+  <strong>NOTE</strong>: When you share a folder, you are sharing all files and 
+  folders within your shared folder, unless you manually specify this. For example 
+  the Folder &quot;Casey&quot; is shared and it contains 18 files and two folders 
+  containing 22 files a piece. All of these will be available to other users. 
+  When you make a shared folder, it is good practice to consider who will be viewing 
+  it and what you want to share and not share. Personal Documents and letters 
+  should not be placed in a Shared Folder or sub-folder of a shared folder.</p>
+<p><br>
+  To manage your shares, click on the sharing icon. From here you can remove any 
+  existing shares. This will not remove any of the files in them, it will only 
+  remove the rights of any other member to view your shared folder(s).</p>
+<p><strong>- Using the search feature</strong></p>
+<p><br>
+  Let's say you have a lot of files uploaded, and you cannot locate one. The file 
+  search feature is a great way to track down files. To invoke a search, simply 
+  click on the search icon, and proceed to the search dialog. There you can type 
+  in a keyword to search through your files if you remember the name of it. If 
+  you remember the time when you uploaded the files, you can search by date. Simply 
+  click on the box(es) next to modified after and/or modified before.</p>
+<p><strong>- Using refresh</strong></p>
+<p><br>
+  If you have uploaded files, and the do not yet appear in your folder(s), you 
+  can click the refresh button. If it takes a while, you may just be using a slow 
+  connection, and/or the web server on the other end is experiencing a lot of 
+  traffic.</p>
+<p><a href="#top">Top</a></p>
+<p><font size="4"><strong><a name="app7"></a>7. Working with menus</strong></font></p>
+<p><br>
+  You will notice, below the header of each page, a menu tool bar. These include 
+  Application, preferences logout, etc.. The menus are there to navigate to the 
+  desired page of your choice. To use the menus, place your mouse over the desired 
+  section to invoke a drop down menu. Then, move your mouse down to the desired 
+  application and single click on it. For example, if I am in the scheduler section 
+  and have completed scheduling, and now I want to add a contact to my address 
+  book, I simply mouse over the applications section and click on Address Book, 
+  it's that simple.</p>
+<p><a href="#top">Top</a></p>
+<p><strong><font size="4"><a name="app8"></a>8. Using the SEARCH function.</font></strong></p>
+<p><br>
+  If you want to do a quick web search while you are in the Group Office application, 
+  you can mouse over applications and click on search. Type in a word of your 
+  choice, and click on &quot;search&quot;. This will open up a new window to search 
+  google.com. This is very useful for finding an answer to a question without 
+  having to navigation</p>
+<p><a href="#top">Top</a></p>
+<p></p>
+<p><font size="4"><strong><a name="app9"></a>9. Using the scheduler</strong></font> </p>
+<p><br>
+  The scheduler is a powerful way to do your online scheduling. It is a very practical 
+  and logical way of planning for an event. To get to the scheduler you can click 
+  on the scheduler icon on the start page, or select it from the applications 
+  menu. </p>
+<p><strong>- Adding new schedulers </strong></p>
+<p>By default, you only have one scheduler. You can add another scheduler by clicking 
+  the schedulers icon. This will bring you to a section which shows what schedulers 
+  you have and the option to add another scheduler. Click on &quot;add&quot;, 
+  and type the name of the new scheduler in followed by click on the OK button.</p>
+<p><strong>- Sharing and Modifying Schedulers</strong></p>
+<p>Now that you have added a scheduler, you may want other users to be able to 
+  read your scheduler and/or add/remove from your scheduler. </p>
+<p>Example: You have created a schedule named &quot;project1&quot; and you want 
+  some members to write to this, and others only;, to have read permissions. From 
+  start to finish:</p>
+<p><br>
+  1. Click on schedulers.</p>
+<p>2. Click on the pencil icon next to the scheduler name that you want to share. 
+</p>
+<p>3. This will bring up a new dialog which will allow you to modify values of 
+  your scheduler(s)</p>
+<p>4. Click on permissions .</p>
+<p><br>
+  5. This will invoke a new window to pop up.</p>
+<p>6. The first one will allow read permissions to the scheduler.</p>
+<p>7. For instance, if we want Judy and Matt to read the scheduler, we click on 
+  their names, and click apply.</p>
+<p>8. Now we want Matt to be able to write to the schedule, but not Judy.</p>
+<p>9. Click on &quot;Write Permissions&quot; and select Matt, but not Judy.</p>
+<p><br>
+  10. If you have a large number of people that you want to view the schedulers, 
+  please read the section on Using Groups. </p>
+<p><br>
+  <strong>-Subscribing to shared schedulers.</strong></p>
+<p>To subscribe to a scheduler that has been shared, what you will do is click 
+  on the schedulers icon, ( the same thing you did to add a scheduler ) and check 
+  off the boxes of the schedulers that you are currently not subscribed to. You 
+  will then click on OK. Below is a real life example.</p>
+<p>Your Co-worker, Danielle, has decided she wants you to share her schedule entitled 
+  &quot;Pet Care Meetings&quot;, so she has given you read and write permissions. 
+  This does not mean that you are subscribed to the scheduler. You need to add 
+  it to your list of schedulers. When you click on the schedulers icon, you will 
+  see that now you have a &quot;Pet Care Meetings&quot; scheduler in your list 
+  of schedulers, that is because Danielle has allowed you to add and view her 
+  scheduler.</p>
+<p><br>
+  <strong>-Creating new appointments.</strong></p>
+<p>You can create a new appointment either by clicking on &quot;New Event&quot; 
+  or clicking on the day of the appointment at the top of the scheduler, and then 
+  clicking on the item that you want the event to start at.</p>
+<p><br>
+  We'll start with the first method, clicking on New Event. Here are step by step 
+  instructions of adding a new event using this method.</p>
+<p><br>
+  1. First, click on New Event.</p>
+<p><br>
+  2. This will bring up a section for adding events.</p>
+<p>3. The first box, invitees, will allow you to invite other people to view this 
+  event. </p>
+<p>4. You may manually type in their names, or click on the book/invitees button 
+  to invoke a window which will allow you to point and click on the invitees you 
+  wish to include.</p>
+<p>5. In the title box, type in a descriptive word about your event, for instance: 
+  &quot;Meeting with boss&quot;.</p>
+<p><br>
+  6. In the description box, type in a brief description about your event, for 
+  instance: &quot; Meet with boss to discuss financial planning of the Internet 
+  Assessment Corporation&quot;.</p>
+<p><br>
+  7. Next, you will click on how frequent you want the event to occur. If this 
+  happens daily, click on the &quot;Daily&quot; button so that &quot;Daily&quot; 
+  is checked off. You can choose any occurrences of this.</p>
+<p><br>
+  8. If you have clicked, &quot;Once&quot;, you will proceed to the next to select 
+  the time frame that the event will take place in, using the drop down menus. 
+  The cycle section will be grayed out since this event will only be occurring 
+  once. If you are doing a one time only event ignore lines 10-12.</p>
+<p><br>
+  9. If you have chosen a recurring event, the first menu will be grayed out, 
+  except for the time in which it occurs. </p>
+<p>10. Choose the time in which this event occurs, and then the period in which 
+  this event will repeat. For example, if this event occurs daily, and we want 
+  it to occur for a week, we choose the time frame within the week that the event 
+  should occur.</p>
+<p>Subsection- RECURRING EVENTS</p>
+<p><br>
+  11. Next you will choose which day the event should start on. Lets say your 
+  event begins on a Thursday and occurs on a weekly basis, it is an event that 
+  occurs on Thursday every week. You will click on the weekly button, and then 
+  you will click on the &quot;TH&quot; box. </p>
+<p><br>
+  The only time when the choice of FIRST, SECOND, THIRD, or FOURTH of a day will 
+  occur is when you have selected monthly by day.</p>
+<p>12. If you want an unlimited amount of time, or a never ending date, click 
+  on the &quot;No Ending Date&quot; box. This will tell Group Office that the 
+  event goes on forever. This is good for meetings or events that are part of 
+  your schedule that will never change.</p>
+<p><br>
+  End Subsection</p>
+<p><br>
+  13. Next, type in the location where this event will occur. Feel free to type 
+  anything in this box. It is good practice to type in the address for members 
+  that may not know where the exact location is.</p>
+<p>14. Next you will be asked where to inherit permissions from. This pertains 
+  to scheduler specific permissions. For example, if you wanted to use your personal 
+  read/write permissions, you would select &quot;inherit permissions from (your 
+  scheduler name)&quot;. If you don't want to inherit any permissions, you can 
+  simply select &quot;don't inherit&quot; and the permissions of the current scheduler 
+  will be applied.</p>
+<p><br>
+  15. Finally, you are asked where to place the event. You can place it in one 
+  or all of your schedulers by checking the boxes of the schedulers that you want 
+  the event to go in to. Click the &quot;OK&quot; button, and you will be redirected 
+  to a window in which you can view your appointment.</p>
+<p><br>
+  The other method is to click on a date on the calendar, which is on the left 
+  hand side of the screen. This will bring you to a view of events for that day 
+  only. Let's say you want to schedule an event for 9:00 am. You will click on 
+  the time, 9:00, and that will bring you to the screen in which you can add an 
+  event for that specific day and time. It is a shortcut to having to select the 
+  start date/time for your scheduler.</p>
+<p></p>
+<p><br>
+  <strong>-Using views</strong></p>
+<p>Views are a way of viewing your schedules in sections. To view your daily events 
+  click on &quot;Day View&quot;, weekly events, click on &quot;Week View&quot;, 
+  and finally, to view all events, click on &quot;List Events&quot;. This is a 
+  great way to break down your schedule so that you can categorize your scheduled 
+  events. The default view is Week View.</p>
+<p><br>
+  <strong>-Navigation and changing schedulers</strong></p>
+<p>With many schedulers, it can seem quite difficult to sort through them. Group 
+  Office was designed for easy scheduler management to avoid the confusion that 
+  other group-ware suites offer. You will notice, in the left hand side of your 
+  screen, a calendar. Above the calendar, you have Month and Year drop down boxes. 
+  Above these boxes is where all of the schedulers are listed. To select a different 
+  scheduler, click on the drop down box where the schedulers are listed. This 
+  will bring you to the events for the selected scheduler.</p>
+<p>Group Office has a great way of navigating the scheduler section. They are 
+  all very logical ways of browsing your events. You can select any month/year 
+  in the drop down boxes in your scheduler, and then proceed to click on a day/week 
+  in the calendar below, and you will be directed to that time frame in your current 
+  scheduler. You can also use the tabs at the top when your are in Week View to 
+  scroll the weeks forward or backwards. Viewing days is as simple as clicking 
+  on them, this will automatically redirect you to the tasks for that day. To 
+  view events in weeks, click on the corresponding week, located to the left of 
+  the calendar, and this will bring you to a weekly view.</p>
+<p><br>
+  <strong>-Deleting or editing scheduled events</strong></p>
+<p>We all make mistakes, luckily, Group Office will allow you to correct your 
+  mistakes. For instance: </p>
+<p>I made an appointment for 9:30 am, but it was supposed to be for 12:00. I was 
+  in a hurry when I posted it to my schedule. Looking back, I realized my mistake 
+  and needed to correct it. Here's what I did...</p>
+<p><br>
+  To edit this mistake, you will click on the pencil icon, next to the event which 
+  needs to be corrected. This will invoke a dialog with your appointment already 
+  filled in, all you need to do is edit the time on it. Change the time/date/ 
+  and/or content to whatever you need to. </p>
+<p>As a habit, I like to go through and delete any canceled appointments/plans. 
+  This is very easily done in Group Office. Simply find the event that you don't 
+  want, and click on the X next to it. Group Office will give you a number of 
+  choices on whether you want to delete it from the current scheduler, entirely 
+  ( meaning from ALL schedulers! ), and cancel ( if you clicked the X by mistake 
+  ). This function provides a quick, yet safe way to remove appointments.</p>
+<p><br>
+  <strong>-Scheduling Holidays</strong></p>
+<p>Adding holidays to your scheduler(s) is a new feature implemented in Group-Office. 
+  Holidays can be added to any scheduler in which a user has write permissions. 
+  Holidays cannot be added, removed or modified by any member who does not have 
+  specific write permissions for a particular scheduler. </p>
+<p><a href="#top">Top</a><br>
+  <br>
+  <strong><font size="4"><a name="app10"></a>10. Project Management</font></strong></p>
+<p><br>
+  Project management is a great way to manage your time and services. It has matured 
+  greatly since the early releases of Group Office. It now allows you to keep 
+  track of many different services, including billing. To start, you must ask 
+  yourself the following questions: &quot;What am I offering? What are my rates? 
+  How do I begin?&quot; I always like to start with fees, but others may feel 
+  that setting up the project should come first. I will cover all topics of project 
+  management; since this is a newer feature, I may not cover it as thoroughly 
+  as would be desired, so all suggestions are welcome and will be included. In 
+  order for a user to be able to use project management, the administrator must 
+  grant write permissions to that user.<br>
+  <strong><br>
+  - </strong> <strong>Note to Administrators</strong></p>
+<p> To activate write permissions on project management, go to the administration 
+  tab. Now select the module projects and proceed to select the &quot;write permissions&quot; 
+  tab. Select the users which desire write permissions. These users will now be 
+  able to add fees, as well as the ability to book hours and load hours from other 
+  users. This is a necessity if users desire to take part in project management.</p>
+<p><strong>-Setting up fees</strong></p>
+<p>To begin setting up fees, first select Projects from the menu, and then select 
+  the fees tab on the top right hand corner. You will see the text New Fee at 
+  the top, and will click on it. Fees are set up using minutes, usually I bill 
+  by the hour, so 60 minutes is what I set my time at. Others may bill by the 
+  half hour, so you would then select 30 minutes. Give your fee a descriptive 
+  name, and then proceed to set your rate. You will be able to apply this rate 
+  to various projects, and can also create secondary rates if desired. For example, 
+  if consulting costs $50.00 per hour, and programming costs $100.00 per hour, 
+  you would want to set up another rate for it. </p>
+<p><strong>-Setting up clients</strong></p>
+<p>This is not done directly in Project Management, your clients will be available 
+  through your contacts list or address book. They are added this way to better 
+  integrate the way that projects and services are handled. It would be wise to 
+  set up the customers you intend to consult before creating your project.</p>
+<p><strong>-Starting the Project</strong></p>
+<p>To begin, you will click on Projects while on the Project Management application. 
+  You will click on new project. This will take you to a screen in which you can 
+  name your project, select your client, and comment on the details of your project. 
+  This will be the ground upon which you will build your new projects. With many 
+  projects, descriptive names and comments can help a great deal.</p>
+<p><strong>-Entering the data</strong></p>
+<p>We have our fees, and our project, so now it is time to build the project. 
+  The way that has been implemented in Group Office is highly structured and organized 
+  for easy time tracking, and accurate billing. No need to grab your calculator, 
+  Group Office will do the math! To begin, click on Enter Data. This will bring 
+  you to a screen in which you can enter your hours, break times, apply rates 
+  and fees, and select which projects to work on. To enter data, select the employee 
+  ( usually the creator of the project, which in most cases is yourself! ), select 
+  the client, select which fee you will be using for that specific client, select 
+  your date, enter your times, and add any comments is desired. An example would 
+  be as follows:<br>
+  <font color="#FF0000">Employee: Casey<br>
+  Client: Dr. Mark<br>
+  Fee: Computer Consulting $75.00/60 min<br>
+  Starting Time: 9:30<br>
+  Ending Time: 14:30<br>
+  OR<br>
+  Units Value: 60<br>
+  Units: 5<br>
+  Comments: Set up small network using Clark Connect as Router/New File Server 
+  to replace Linksys Router.<br>
+  Units are the same as minutes. 60 minutes x 2 = 120 minutes or 2 hours. </font></p>
+<p>The calendar located to your left is an easy way to set the date on which you 
+  are working on. All you have to do is click on the date on which you desire 
+  to enter your hours. After you have entered data, you should see a summary of 
+  what was entered. Below that, Group Office will display a summary of your logged 
+  hours, and the monetary values for those hours according to the fee that you 
+  selected. </p>
+<p><strong>-Viewing your data</strong></p>
+<p>To view your data, Group Office has implemented a well refined search tool 
+  specifically for project management. Click on Load Data. This will give the 
+  option to display data in various ways, such as by employee, client, and project. 
+  Data can also be searched by day, week, blocks of days, months, and all. To 
+  see all projects from the employee Joe, you will select Joe from the employee 
+  section by click the button to the left, and selecting the appropriate name. 
+  If we wanted to view all work done for client &quot;X&quot;, the client button 
+  would be checked, and client X would be selected. To view all of the work done 
+  between the second and fourth weeks of July, you would use the Show >From feature, 
+  and select the appropriate days.<br>
+</p>
+<p><a href="#top">Top</a></p>
+<p><font size="4"><strong><a name="app11"></a>11. Website Management</strong></font></p>
+<p>Web site management is a new feature implemented into Group Office as of version 
+  1.1. This documentation is not that of the author's, but that of Merijn, the 
+  developer and project creator. More will be added to this section in the upcoming 
+  months.<br>
+  <br>
+  <strong>Website management for Group-Office - Creating templates</strong><br>
+  <strong>Introduction</strong></p>
+<p>The first thing to note is that only users with write permissions for the websites 
+  module can create themes. Creating themes requires knowledge of HTML and you 
+  need to learn the Group-Office tags that are specified later in this document.</p>
+<p><strong>This document is targeted for people who know HTML.</strong></p>
+<p> </p>
+<p><strong>Understanding the tree structure</strong></p>
+<p>The documents in the website management module are organized in a tree structure 
+  like a filesytem. Every folder stands for a new chapter or button. The way a 
+  site behaves on the structure depends on the template. You need to practice 
+  on creating templates to get satisfying results.</p>
+<p> </p>
+<p><strong>Creating a HTML document</strong></p>
+<p>The best way to create a theme is to create a HTML document using your own 
+  favorite HTML editor and make it look like the way you want your site to look.</p>
+<p>It is recommended that you use a CSS stylesheet.</p>
+<p> </p>
+<p><strong>Inserting the data in the theme</strong></p>
+<p>When you are finished with your web page you can start inserting the data into 
+  Group-Office.</p>
+<p>After logging in to Group-Office select &#8216;websites&#8217; from the applications 
+  menu.</p>
+<p>Select the &#8220;themes&#8221; tab. If you don&#8217;t see the themes tab 
+  then you don&#8217;t have write permissions for the websites module. After selecting 
+  the tab click on &#8220;new theme&#8221;. Enter a name and paste the stylesheet 
+  classes in the style text area and click on &#8216;save&#8217;. Two new tabs 
+  named &#8216;templates&#8217; and &#8216;files&#8217; will appear.</p>
+<p>Go to the &#8216;files&#8217; tab and upload all files that are required for 
+  your theme. Like a logo or icons.</p>
+<p>After all files have been added open the &#8216;templates&#8217; tab. First 
+  you create a main template. This template will contain all other templates and 
+  user submitted data.</p>
+<p>You need to divide the HTML file in templates. </p>
+<p> </p>
+<p>On the next page you see the main template of the Group-Office homepage and 
+  the Intermesh site.</p>
+<table width="89%" height="800" border="0">
+  <tr> 
+    <td height="800" align="left" valign="top" bgcolor="#CCCCCC"> <p align="left">&lt;!-- 
+        start main --&gt;<br>
+        &lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; width=&quot;700&quot; 
+        height=&quot;100%&quot; align=&quot;center&quot; class=&quot;content&quot;&gt;<br>
+        &lt;tr heigth=&quot;60&quot;&gt;<br>
+        &lt;td colspan=&quot;2&quot;&gt;&lt;a href=&quot;http://www.intermesh.nl&quot; 
+        target=&quot;_blank&quot;&gt;&lt;img src=&quot;http://www.intermesh.nl/groupoffice/modules/cms/template_file.php?template_file_id=14&quot; 
+        border=&quot;0&quot;&gt;&lt;/a&gt;&lt;/td&gt;<br>
+        &lt;/tr&gt;<br>
+        &lt;tr height=&quot;20&quot;&gt;<br>
+        &lt;td width=&quot;10&quot; class=&quot;folder&quot;&gt; &lt;/td&gt;<br>
+        &lt;td class=&quot;folder&quot;&gt;<br>
+        &lt;home text=&quot;welcome&quot; class=&quot;folder&quot; active_class=&quot;active_folder&quot; 
+        template=&quot;folder&quot; active_template=&quot;folder&quot; /&gt;<br>
+        &lt;rootfolders class=&quot;folder&quot; active_class=&quot;active_folder&quot; 
+        template=&quot;folders&quot; item_template=&quot;folder&quot; active_item_template=&quot;folder&quot; 
+        /&gt;<br>
+        &lt;login text=&quot;login&quot; class=&quot;folder&quot; active_class=&quot;active_folder&quot; 
+        template=&quot;folder&quot; active_template=&quot;folder&quot; /&gt;<br>
+        &lt;/td&gt;<br>
+        &lt;/tr&gt;<br>
+        &lt;tr height=&quot;100%&quot;&gt;<br>
+        &lt;td colspan=&quot;2&quot; valign=&quot;top&quot;&gt;<br>
+        &lt;table border=&quot;0&quot; cellpadding=&quot;15&quot; cellspacing=&quot;0&quot; 
+        width=&quot;100%&quot;&gt;<br>
+        &lt;tr&gt;<br>
+        &lt;td valign=&quot;top&quot;&gt;<br>
+        &lt;table border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; 
+        width=&quot;100%&quot;&gt;<br>
+        &lt;tr&gt;<br>
+        &lt;td valign=&quot;top&quot; width=&quot;50%&quot;&gt;<br>
+        &lt;files class=&quot;file&quot; template=&quot;files&quot; active_class=&quot;active_file&quot; 
+        item_template=&quot;file&quot; active_item_template=&quot;active_file&quot; 
+        print_single=&quot;false&quot; /&gt;<br>
+        &lt;/td&gt;<br>
+        &lt;td valign=&quot;top&quot; width=&quot;50%&quot;&gt;<br>
+        &lt;folders class=&quot;subfolder&quot; template=&quot;files&quot; item_template=&quot;subfolder&quot; 
+        print_rootfolders=&quot;false&quot; /&gt; &lt;back text=&quot;terug&quot; 
+        class=&quot;subfolder&quot; template=&quot;back&quot; print_rootfolders=&quot;false&quot; 
+        /&gt;<br>
+        &lt;/td&gt;<br>
+        &lt;/tr&gt;<br>
+        &lt;/table&gt;<br>
+        &lt;table border=&quot;0&quot;&gt;<br>
+        &lt;tr&gt;<br>
+        &lt;td&gt;<br>
+        &lt;content /&gt;<br>
+        &lt;/td&gt;<br>
+        &lt;/tr&gt;<br>
+        &lt;/table&gt;<br>
+        &lt;/td&gt;<br>
+        &lt;/tr&gt;<br>
+        &lt;/table&gt;<br>
+        &lt;/td&gt;<br>
+        &lt;/tr&gt;<br>
+        &lt;tr&gt;<br>
+        &lt;td height=&quot;25&quot; class=&quot;copyright&quot; align=&quot;center&quot; 
+        colspan=&quot;2&quot;&gt;Copyright Intermesh 2003&lt;/td&gt;<br>
+        &lt;/tr&gt;<br>
+        &lt;/table&gt;<br>
+        &lt;!-- end main --&gt;</p></td>
+  </tr>
+</table>
+<p>The &lt;content /&gt; tag will be replace by the files from the tree structure 
+  in the main template&#8217;s case.</p>
+<p>As you can see the main template contains certain tags that are not HTML tags 
+  like:</p>
+<table width="83%" border="0">
+  <tr>
+    <td bgcolor="#CCCCCC">
+<p>&lt;folders class=&quot;subfolder&quot; template=&quot;files&quot; item_template=&quot;subfolder&quot;print_rootfolders=&quot;false&quot; 
+        /&gt;</p>
+      </td>
+  </tr>
+</table>
+<p></p>
+<p> </p>
+<p>This tag will be replaced by all the folders of the current level. The folders 
+  will use the template named &#8220;files&#8221; and each folder listed will 
+  use the template &#8221;subfolder&#8221;.</p>
+<p> </p>
+<p>For this to work properly we will need to create the two templates &#8220;files&#8221; 
+  and &#8220;subfolder&#8221;:</p>
+<table width="83%" height="220" border="0">
+  <tr>
+    <td bgcolor="#CCCCCC">
+<p>&lt;!-- start files --&gt;<br>
+        &lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;<br>
+        &lt;tr&gt;<br>
+        &lt;td&gt;<br>
+        &lt;table border=&quot;0&quot;&gt;<br>
+        &lt;content /&gt;<br>
+        &lt;/table&gt;<br>
+        &lt;/td&gt;<br>
+        &lt;/tr&gt;<br>
+        &lt;/table&gt;&lt;br /&gt;<br>
+        &lt;!-- end files --&gt;</p>
+      </td>
+  </tr>
+</table>
+<p></p>
+<table width="83%" height="179" border="0" bgcolor="#CCCCCC">
+  <tr>
+    <td height="175">
+<p>&lt;!-- start subfolder header --&gt;<br>
+        &lt;tr&gt;<br>
+        &lt;td&gt;&lt;img src=&quot;http://cp47433-a.dbsch1.nb.home.nl/groupoffice/modules/cms/template_file.php?template_file_id=19&quot; 
+        border=&quot;0&quot; align=&quot;absmiddle&quot; /&gt;&lt;/td&gt;<br>
+        &lt;td nowrap&gt;<br>
+        &lt;content /&gt;<br>
+        &lt;/td&gt;<br>
+        &lt;/tr&gt;<br>
+        &lt;!-- end subfolder header --&gt;</p>
+      </td>
+  </tr>
+</table>
+<p></p>
+<p> </p>
+<p> </p>
+<p>You will need to practice on creating templates to get a satisfying result 
+  but this should get you started. On the next page you will find a table of tags 
+  and attributes you can use.</p>
+<h3><span lang=EN-GB>Tags that can be used in templates</span></h3>
+<p class=MsoNormal><span lang=EN-GB>&nbsp;</span></p>
+<table border=1 cellpadding=0 cellspacing=0 bordercolor="#000000" class=MsoTableGrid
+ style='border-collapse:collapse;border:none'>
+  <tr> 
+    <td width=128 valign=top style='width:96.2pt;border:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><b><span lang=EN-GB>Tagname</span></b></p></td>
+    <td width=152 valign=top style='width:114.05pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><b><span lang=EN-GB>Description</span></b></p></td>
+    <td width=170 valign=top style='width:127.55pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><b><span lang=EN-GB>Attributes</span></b></p></td>
+    <td width=140 valign=top style='width:105.0pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><b><span lang=EN-GB>May 
+        be used in</span></b></p></td>
+  </tr>
+  <tr> 
+    <td width=128 valign=top style='width:96.2pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>home</span></p></td>
+    <td width=152 valign=top style='width:114.05pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>prints a button 
+        to the root level of the tree.</span></p></td>
+    <td width=170 valign=top style='width:127.55pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>template,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>active_template,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>text,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>class,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>active_class</span></p></td>
+    <td width=140 valign=top style='width:105.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>Any template</span></p></td>
+  </tr>
+  <tr> 
+    <td width=128 valign=top style='width:96.2pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>path</span></p></td>
+    <td width=152 valign=top style='width:114.05pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>prints current 
+        working path</span></p></td>
+    <td width=170 valign=top style='width:127.55pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>template,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>item_template,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>active_item_template,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>class</span></p></td>
+    <td width=140 valign=top style='width:105.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>Any template</span></p></td>
+  </tr>
+  <tr> 
+    <td width=128 valign=top style='width:96.2pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>files</span></p></td>
+    <td width=152 valign=top style='width:114.05pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>prints all 
+        the files from the current directory</span></p></td>
+    <td width=170 valign=top style='width:127.55pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>template,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>item_template,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>active_item_template,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>class,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>print_single</span></p></td>
+    <td width=140 valign=top style='width:105.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>Any template</span></p></td>
+  </tr>
+  <tr> 
+    <td width=128 valign=top style='width:96.2pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>folders</span></p></td>
+    <td width=152 valign=top style='width:114.05pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>prints all 
+        the folders from the current directory</span></p></td>
+    <td width=170 valign=top style='width:127.55pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>template,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>item_template,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>class</span></p>
+      <p class=MsoNormal><span lang=EN-GB>print_rootfolders</span></p></td>
+    <td width=140 valign=top style='width:105.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>Any template</span></p></td>
+  </tr>
+  <tr> 
+    <td width=128 valign=top style='width:96.2pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>rootfolders</span></p></td>
+    <td width=152 valign=top style='width:114.05pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>prints all 
+        the folders from the root directory</span></p></td>
+    <td width=170 valign=top style='width:127.55pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>template,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>item_template,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>class</span></p>
+      <p class=MsoNormal><span lang=EN-GB>&nbsp;</span></p></td>
+    <td width=140 valign=top style='width:105.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>Any template</span></p></td>
+  </tr>
+  <tr> 
+    <td width=128 valign=top style='width:96.2pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>icon</span></p></td>
+    <td width=152 valign=top style='width:114.05pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>prints the 
+        associated filetype icon</span></p></td>
+    <td width=170 valign=top style='width:127.55pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>&nbsp;</span></p></td>
+    <td width=140 valign=top style='width:105.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>Only in templates 
+        that are used only in the files tag</span></p></td>
+  </tr>
+  <tr> 
+    <td width=128 valign=top style='width:96.2pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>search</span></p></td>
+    <td width=152 valign=top style='width:114.05pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>Places a link 
+        to the search page that will display all the predefined search words.</span></p></td>
+    <td width=170 valign=top style='width:127.55pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>text,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>template,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>class</span></p></td>
+    <td width=140 valign=top style='width:105.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>Any template</span></p></td>
+  </tr>
+  <tr> 
+    <td width=128 valign=top style='width:96.2pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>login</span></p></td>
+    <td width=152 valign=top style='width:114.05pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>Places a the 
+        link to the Group-Office login page.</span></p></td>
+    <td width=170 valign=top style='width:127.55pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>text,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>template,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>class</span></p></td>
+    <td width=140 valign=top style='width:105.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>Any template</span></p></td>
+  </tr>
+  <tr> 
+    <td width=128 valign=top style='width:96.2pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>back</span></p></td>
+    <td width=152 valign=top style='width:114.05pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>Places a link 
+        to the higher level in the folder tree.</span></p></td>
+    <td width=170 valign=top style='width:127.55pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>template,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>text,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>class,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>print_rootfolders</span></p></td>
+    <td width=140 valign=top style='width:105.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>Any template</span></p></td>
+  </tr>
+  <tr> 
+    <td width=128 valign=top style='width:96.2pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>content</span></p></td>
+    <td width=152 valign=top style='width:114.05pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>This tag will 
+        display the content of the item.</span></p></td>
+    <td width=170 valign=top style='width:127.55pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>&nbsp;</span></p></td>
+    <td width=140 valign=top style='width:105.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>Any template</span></p></td>
+  </tr>
+</table>
+<p class=MsoNormal><span lang=EN-GB>&nbsp;</span></p>
+<b><i><span lang=EN-GB style='font-size:13.0pt;font-family:Arial'><br
+clear=all style='page-break-before:always'>
+</span></i></b> 
+<h3>Attributes that can be used in the tags system</h3>
+<p class=MsoNormal>&nbsp;</p>
+<table border=1 cellpadding=0 cellspacing=0 bordercolor="#333333" class=MsoTableGrid
+ style='border-collapse:collapse;border:none'>
+  <tr> 
+    <td width=146 valign=top style='width:109.75pt;border:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><b><span lang=EN-GB>Attribute 
+        name</span></b></p></td>
+    <td width=146 valign=top style='width:109.75pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><b><span lang=EN-GB>Description</span></b></p></td>
+    <td width=146 valign=top style='width:109.75pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><b><span lang=EN-GB>Input 
+        type</span></b></p></td>
+    <td width=146 valign=top style='width:109.75pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><b><span lang=EN-GB>Maybe 
+        used in</span></b></p></td>
+  </tr>
+  <tr> 
+    <td width=146 valign=top style='width:109.75pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>text</span></p></td>
+    <td width=146 valign=top style='width:109.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>Text to display 
+        on site.</span></p></td>
+    <td width=146 valign=top style='width:109.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>string</span></p></td>
+    <td width=146 valign=top style='width:109.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>login,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>search,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>home</span></p></td>
+  </tr>
+  <tr> 
+    <td width=146 valign=top style='width:109.75pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>class</span></p></td>
+    <td width=146 valign=top style='width:109.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>The CSS class 
+        name to use</span></p></td>
+    <td width=146 valign=top style='width:109.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>string</span></p></td>
+    <td width=146 valign=top style='width:109.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>All tags</span></p></td>
+  </tr>
+  <tr> 
+    <td width=146 valign=top style='width:109.75pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>active_class</span></p></td>
+    <td width=146 valign=top style='width:109.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>The CSS class 
+        name to use when an item is active</span></p></td>
+    <td width=146 valign=top style='width:109.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>&nbsp;</span></p></td>
+    <td width=146 valign=top style='width:109.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>home,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>path,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>files,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>rootfolders,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>search,</span></p></td>
+  </tr>
+  <tr> 
+    <td width=146 valign=top style='width:109.75pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>template</span></p></td>
+    <td width=146 valign=top style='width:109.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>The name of 
+        the template to use</span></p></td>
+    <td width=146 valign=top style='width:109.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>string</span></p></td>
+    <td width=146 valign=top style='width:109.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>home,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>path,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>files,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>folders,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>rootfolders,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>search,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>login</span></p></td>
+  </tr>
+  <tr> 
+    <td width=146 valign=top style='width:109.75pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>active_template</span></p></td>
+    <td width=146 valign=top style='width:109.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>The name of 
+        the template to use when an item is active.</span></p></td>
+    <td width=146 valign=top style='width:109.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>string</span></p></td>
+    <td width=146 valign=top style='width:109.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>path,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>files,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>search,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>rootfolders</span></p></td>
+  </tr>
+  <tr> 
+    <td width=146 valign=top style='width:109.75pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>item_template</span></p></td>
+    <td width=146 valign=top style='width:109.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>The name of 
+        the template to use for items</span></p></td>
+    <td width=146 valign=top style='width:109.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>string</span></p></td>
+    <td width=146 valign=top style='width:109.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>path,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>files,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>folders,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>rootfolders</span></p></td>
+  </tr>
+  <tr> 
+    <td width=146 valign=top style='width:109.75pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>active_item_template</span></p></td>
+    <td width=146 valign=top style='width:109.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>The name of 
+        the template to use when an item is active.</span></p></td>
+    <td width=146 valign=top style='width:109.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>string</span></p></td>
+    <td width=146 valign=top style='width:109.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>path,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>files,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>search</span></p></td>
+  </tr>
+  <tr> 
+    <td width=146 valign=top style='width:109.75pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>print_rootfolders</span></p></td>
+    <td width=146 valign=top style='width:109.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>print the 
+        root folders or link to the root folders</span></p></td>
+    <td width=146 valign=top style='width:109.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>bool</span></p></td>
+    <td width=146 valign=top style='width:109.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>folders,</span></p>
+      <p class=MsoNormal><span lang=EN-GB>back</span></p></td>
+  </tr>
+  <tr> 
+    <td width=146 valign=top style='width:109.75pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>print_single</span></p></td>
+    <td width=146 valign=top style='width:109.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>print an item 
+        even if there is just one file. (The file will be displayed by default 
+        so a link might be unnecessary).</span></p></td>
+    <td width=146 valign=top style='width:109.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>bool</span></p></td>
+    <td width=146 valign=top style='width:109.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'> <p class=MsoNormal><span lang=EN-GB>files</span></p></td>
+  </tr>
+</table>
+<p class=MsoNormal><span lang=EN-GB>&nbsp;</span></p>
+<p class=MsoNormal><span lang=EN-GB>Tags should be formatted like this: &lt;tagname 
+  attribute_name=”attribute_value” /&gt;</span></p>
+<b><span lang=EN-GB style='font-size:13.0pt;font-family:Arial'><br clear=all
+style='page-break-before:always'>
+</span></b> 
+<h3><span lang=EN-GB>Publishing the website</span></h3>
+<p class=MsoNormal><span lang=EN-GB>To publish a website you need to create a 
+  file named ‘index.php’ in the folder where you want the site to be accessible. 
+  The file should contain the following:</span></p>
+<p class=MsoNormal><span lang=EN-GB style='font-family:"Courier New"'>&nbsp;</span></p>
+<p class=MsoNormal><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New"'>&lt;?php</span></p>
+<p class=MsoNormal><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New"'>//set 
+  the site id</span></p>
+<p class=MsoNormal><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New"'>$site_id=1; 
+  //replace this with your site’s id</span></p>
+<p class=MsoNormal><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New"'>&nbsp;</span></p>
+<p class=MsoNormal><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New"'>//load 
+  Group-Office</span></p>
+<p class=MsoNormal><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New"'>require('/var/www/html/groupoffice/Group-Office.php');</span></p>
+<p class=MsoNormal><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New"'>&nbsp;</span></p>
+<p class=MsoNormal><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New"'>//get 
+  them cms module</span></p>
+<p class=MsoNormal><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New"'>if 
+  ($cms_module = $GO_MODULES-&gt;get_module('cms'))</span></p>
+<p class=MsoNormal><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New"'>{</span></p>
+<p class=MsoNormal><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New"'>      
+  //require the site viewer</span></p>
+<p class=MsoNormal><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New"'>      
+  require($GO_CONFIG-&gt;root_path.$cms_module['path'].'view.inc');</span></p>
+<p class=MsoNormal><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New"'>}else</span></p>
+<p class=MsoNormal><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New"'>{</span></p>
+<p class=MsoNormal><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New"'>      
+  die('Failed to get Content Management Module');</span></p>
+<p class=MsoNormal><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New"'>}</span></p>
+<p class=MsoNormal><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New"'>?&gt;</span></p>
+<p class=MsoNormal><span lang=EN-GB>&nbsp;</span></p>
+<p class=MsoNormal><span lang=EN-GB>You need to replace the site_id variable with 
+  your site’s id. You can find the idea by clicking on the pencil next to the 
+  site at the ‘your sites’ tab. and you should provide the valid path to Group-Office.php 
+  to the require() function.</span></p>
+<p class=MsoNormal><b><span lang=EN-GB>Good luck!</span></b></p>
+<p class=MsoNormal><span lang=EN-GB>Merijn Schering</span></p>
+<p><a href="#top">Top</a></p>
+<p><br>
+  <font size="4"><strong><a name="app12" id="app12"></a>12. Summary</strong></font></p>
+<p><br>
+  Group Office is a great application server for small and large businesses. Any 
+  questions on the usage of Group Office can be found in this manual. If you cannot 
+  find them in this manual, please send an email to <a href="mailto:cruark@comcast.net">cruark@comcast.net</a> 
+  and I will be glad to answer any questions, and also add your suggestions into 
+  the documentation. Group Office is stable, secure, and reliable. We hope that 
+  you will enjoy using this application. Thank you for your support. </p>
+<p><a href="#top">Top</a></p>
+<p align="center">&nbsp;
+<hr>
+<p>&nbsp;</p>
+<p align="center"><br>
+  <font size="5"><strong><em>Closing</em></strong></font></p>
+<p>Group Office makes it easy for for the systems administrator to manage and 
+  create users. It contains powerful tools for creating a solid and structured 
+  application environment. The instructions in this manual should get you started 
+  on becoming familiar with the Group Office application administration. A lot 
+  can be learned by setting up a couple of demo accounts and using them with a 
+  couple of friends. This will give you some time to make mistakes and revelations! 
+  I strongly recommend trying a demo office before going through with implementing 
+  it in your workplace. Group Office is constantly being developed, many additions 
+  have been made since the initial release. Any questions or problems pertaining 
+  to administration that is not covered in this manual will be answered by e-mailing 
+  <a href="mailto:cruark@comcast.net">cruark@comcast.net</a>. Suggestions on improving 
+  the manual are always welcome. Please read the documentation before sending 
+  e-mail.</p>
+</body>
+</html>

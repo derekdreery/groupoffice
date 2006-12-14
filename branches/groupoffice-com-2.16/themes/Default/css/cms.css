@@ -1,0 +1,33 @@
+.redStatus, a.redStatus {
+	color: red;
+}
+
+.greenStatus, a.greenStatus{
+	color: green;
+}
+
+.readMore {
+	color: #22437f;
+	font-style: italic;
+}
+
+.cmsProperties
+{
+	border: 1px solid #666666;
+	background-color: #F6F7F2;
+	font-family: arial, helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: normal;
+	color: #000000;
+}
+
+.cmsProperties th {
+  background-color: #22437f;
+  font-size: 14px;
+	padding: 2px;
+  font-weight: bold;
+  color: #FFFFFF;
+  border: 0px;
+  border-bottom: 1px solid #666666;
+  text-align: left;
+}
