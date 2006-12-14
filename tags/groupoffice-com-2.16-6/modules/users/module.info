@@ -1,9 +1,0 @@
-<?php
-$module['users']['description'] = 'The default SQL based user management module';
-$module['users']['version'] = '1.2';
-$module['users']['release_date'] = '2006-09-21';
-$module['users']['status'] = 'Stable';
-$module['users']['authors'][] = array('name'=>'Merijn Schering', 'email'=>'mschering@intermesh.nl');
-$module['users']['admin_menu'] = true;
-$module['users']['sort_order'] = 110;
-?>
