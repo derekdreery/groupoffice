@@ -84,9 +84,10 @@ if ( $GO_CONFIG->auth_sources != '' ) {
   $auth_sources = array();
 }
 
-if(isset($GO_AUTH_SOURCE_KEY) && isset( $auth_sources[$GO_AUTH_SOURCE_KEY]))
+if(isset($_REQUEST['auth_source_key']) && isset( $auth_sources[$_REQUEST['auth_source_key']]))
 {
-	$_SESSION['auth_source'] = $auth_sources[$GO_AUTH_SOURCE_KEY];	
+	SetCookie("GO_AUTH_SOURCE_KEY", $_REQUEST['auth_source_key'], time()+3600*24*30,"/",'',0);
+	$_SESSION['auth_source'] = $_COOKIE['GO_AUTH_SOURCE_KEY'] = $_REQUEST['auth_source_key'];
 }elseif(!isset($_SESSION['auth_source']))
 {
 	if(isset($GO_SYNC))

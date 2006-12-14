@@ -11,7 +11,7 @@ option) any later version.
 */
 
 
-$GO_AUTH_SOURCE_KEY = isset($_REQUEST['auth_source_key']) ? $_REQUEST['auth_source_key'] : 0;
+
 
 require_once("Group-Office.php");
 
@@ -106,12 +106,6 @@ if ( $_SERVER['REQUEST_METHOD'] == "POST" || (isset($_COOKIE['GO_UN'])
 	{
 		$feedback = "<p class=\"Error\">".$login_missing_field."</p>";
 	} else {
-		if(isset($_REQUEST['auth_source_key']))
-		{
-			SetCookie("GO_AUTH_SOURCE_KEY",
-			$_REQUEST['auth_source_key'], time()+3600*24*30,"/",'',0);
-			$_COOKIE['GO_AUTH_SOURCE_KEY'] = $_REQUEST['auth_source_key'];
-		}
 
 		//attempt login using security class inherited from index.php
 		//$params = isset( $auth_sources[$auth_source]) ?  $auth_sources[$auth_source] : false;

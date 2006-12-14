@@ -546,14 +546,14 @@ class sql_users extends base_users
 
 			foreach($user_groups as $group_id)
 			{
-				if($group_id > 0 && $group_id != $GO_CONFIG->group_everyone)
+				if($group_id > 0 && $group_id != $GO_CONFIG->group_everyone && !$GO_GROUPS->is_in_group($user['id'], $group_id))
 				{
 					$GO_GROUPS->add_user_to_group($user['id'], $group_id);
 				}
 			}
 			foreach($visible_user_groups as $group_id)
 			{
-				if($group_id > 0)
+				if($group_id > 0 && !$GO_SECURITY->group_in_acl($group_id, $user['acl_id']))
 				{
 					$GO_SECURITY->add_group_to_acl($group_id, $user['acl_id']);
 				}
@@ -561,7 +561,7 @@ class sql_users extends base_users
 
 			foreach($modules_read as $module_name)
 			{
-				if($module = $GO_MODULES->get_module($module_name))
+				if($module = $GO_MODULES->get_module($module_name) && !$GO_SECURITY->user_in_acl($user['id'], $module['acl_read']))
 				{
 					$GO_SECURITY->add_user_to_acl($user['id'], $module['acl_read']);
 				}
@@ -569,7 +569,7 @@ class sql_users extends base_users
 
 			foreach($modules_write as $module_name)
 			{
-				if($module = $GO_MODULES->get_module($module_name))
+				if($module = $GO_MODULES->get_module($module_name) && !$GO_SECURITY->user_in_acl($user['id'], $module['acl_write']))
 				{
 					$GO_SECURITY->add_user_to_acl($user['id'], $module['acl_write']);
 				}
@@ -577,7 +577,10 @@ class sql_users extends base_users
 
 			foreach($acl as $acl_id)
 			{
-				$GO_SECURITY->add_user_to_acl($user['id'], $acl_id);
+				if(!$GO_SECURITY->user_in_acl($user['id'], $acl_id))
+				{
+					$GO_SECURITY->add_user_to_acl($user['id'], $acl_id);
+				}
 			}
 			
 			
