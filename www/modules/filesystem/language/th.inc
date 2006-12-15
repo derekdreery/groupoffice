@@ -1,0 +1,74 @@
+<?php
+//Uncomment this line in new translations!
+//require_once($GO_LANGUAGE->get_fallback_language_file('filesystem'));
+
+$strLookIn = 'ดูใน';
+$strType = "ชนิด";
+$strModified = "ปรับปรุง";
+$strCreated = "สร้าง";
+$strAccessed = "เชื่อมต่อ";
+$strSize = "ขนาด";
+$fbRefresh = "รีเฟรช";
+$fbProperties = "คุณสมบัติ";
+$fbNewFolder = "สร้างกล่องใหม่";
+$fbDelete = "ลบ";
+$fbCut = "ตัด";
+$fbPaste = "วาง";
+$fbCopy = "คัดลอก";
+$fbFiletypes = "ชนิดของไฟลล์";
+$fbSharing = "แชริ่ง";
+$fbShares = "แชร์โฟล์เดอร์";
+$fbShare = "แชร์โฟล์เดอร์";
+$fbPath = "พาธ";
+$fbFolders = "โฟเดอร์";
+$fbNoSelect = "คุณไม่สามารถเลือกอุปกรณ์ได้คลิกที่รูปถัดไปเพื่อเลือกชื่อและอุปกรณ์.";
+$fbConfirmDelete = "ยืนยันการลบ";
+$fbWritePermissions = "การเขียนข้อมูลถูกปฏิเสฐ";
+$fbReadPermissions = "การอ่านข้อมูลถูกปฏิเสฐ";
+$fbGeneral = "ทั่วไป";
+$fbConfirmOverwrite = "ยืนยันการเขียนทับ";
+$strOverwritePrefix = "คุณแน่ใจที่ต้องการจะเขียนทับ";
+$strOverwriteSuffix = "?";
+$fbDescription = "คำบรรยาย";
+$fbLocation = "ตำแหน่ง";
+$fbUpload = "อัพโหลด";
+$fbUpload_text = "เลือกชนิดที่ต้องการอัพโหลด";
+$fbUpload_nofile = "ไม่มีไฟลล์ที่ใช้รับ.";
+$fbVersions = "เวอร์ชัน";
+$fbDelete_version = "คุณแน่ใจที่ต้องการจะลบเวอร์ชันนี้?";
+$fbFolderExists = "กล่องนี้มีชื่อซ้ำ";
+$fbEmailFile = "ไฟลล์อีเมลล์";
+$fbFolder = "กล่อง";
+$fbSelect = "เลือกไฟลล์";
+$fbNoFile = "ไฟล์ที่คุณต้องการอัพโหลดอาจมีพื้นที่มากเกินไป.<br />ขนาดไฟล์สูงที่สุดคือ :";
+$fbPleaseWait = "โปรดคอย..กำลังส่งข้อมูล";
+$fbFilename = "ชื่อไฟล์";
+$fbUpLevel = "เลื่อนระดับขึ้น";
+$fbItems = "อุปกรณ์/ชิ้นส่วน";
+$fbFolderSize = "ขนาดของโฟลเดอร์";
+$fbMaxUploadSize = "ขนาดสูงสุด";
+$ml_file_too_big = "ไฟล์ที่คุฯแนบนั้นมีขนาดใหญ่เกินไป, ขนาดไฟล์สูงสุดที่สามารถแนบได้ : ";
+$cmdSearch = "Search";
+$fbNoRightToOverwrite = "ชื่อไฟล์ซ้ำคุณต้องการที่จะทับชื่อไฟล์นี้หรือไม่.";
+$fbSaveFile = "บันทึกไฟล์เป็น...";
+$fbNameExists = "ชื่อโฟลเดอร์นี้ซ้ำ.";
+$fbThis = 'นี้';
+$fbFiles = 'ไฟล์';
+$fs_activate_sharing = 'เปิดการอนุญาติให้แชร์';
+$fs_calculate_folder_size = 'คำณวนขนาดของโฟล์เดอ';
+$fs_no_multi_select = 'คุณไม่สามารถเลือกได้มากกว่า 1 ชิ้นในอุปกรณ์นี้';
+$fs_search = 'ค้นหา';
+$search_title = "ค้นหาทั้งไฟล์และโฟล์เดอ";
+$fs_keyword = 'คำค้นหา';
+$fs_enter_keyword = 'โปรดใส่คำที่คุณต้องการค้นหา';
+$fs_modified_before = 'ปรับปรุงก่อน';
+$fs_modified_after = 'ปรับปรุงหลัง';
+
+//translation required
+$fb_compress='บีบข้อมูล';
+$fb_decompress='คลายข้อมูล';
+$fb_failed_to_create = 'การบีบข้อมูลล้มเหลว';
+$fb_failed_to_extract = 'การคลายข้อมูลล้มเหลว';
+$fb_compression_type = 'บีบข้อมูล';
+$fbFreeQuotaSpace = 'เนื้อที่ที่เหลือในไดเร็กทอรี่';
+?>

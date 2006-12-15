@@ -1,0 +1,208 @@
+<?php
+require_once($GO_LANGUAGE->get_fallback_language_file('email'));
+
+$ml_from = "Des de";
+$ml_to = "A";
+$ml_send = "Envia";
+$ml_attach = "Adjunta";
+$ml_attachments = "Fitxers adjunts";
+$ml_attachment = "Fitxer adjunt";
+$ml_high = "Alta";
+$ml_normal = "Normal";
+$ml_low = "Baixa";
+$ml_priority = "Prioritat";
+$ml_subject = "Assumpte";
+$ml_filename = "Nom del fitxer";
+$ml_total_size = "Mida total";
+$ml_size = "Mida";
+$ml_to_empty = "No heu especificat cap destinatari.";
+$ml_print = "Imprimeix";
+$fbNoSelect = "No heu seleccionat cap missatge";
+$ml_inbox = 'Safata d\'entrada';
+$ml_properties = 'Propietats';
+$ml_add_account = "Afegeix un compte";
+$em_new_folder = "Nova carpeta";
+$ml_your_accounts = "Els vostres comptes de correu electrònic";
+$ml_no_accounts = "No teniu cap compte definit de correu electrònic.";
+$ml_original_follows = "----- Missatge Original -----";
+$ml_welcome = "Benvingut al correu electrònic de Group-Office";
+$ml_text = "Feu clic a comptes per afegir un compte de correu.";
+$ml_accounts = "Comptes";
+$ml_compose = "Redacta";
+$ml_delete = "Suprimeix";
+$ml_refresh = "Refresca";
+$ml_reply = "Respon";
+$ml_forward = "Reenvia";
+$ml_reply_all = "Respon a tots";
+$ml_delete_message = "Esteu segurs que voleu suprimir aquest missatge de manera definitiva?";
+$ml_no_subject = "Sense assumpte";
+$ml_no_reciepent = "Destinataris no divulgats";
+$ml_online_files = "Fitxers en línia";
+$ml_send_error = "Ha fallat l'enviament del missatge.";
+$ml_attach_forget = "Heu seleccionat un fitxer però no l'heu adjuntat.";
+$ml_messages = "missatge(s)";
+$ml_message = 'aquest missatge';
+$ml_messages2 = 'missatges';
+$ml_new = "nou";
+$ml_delete_mailbox = "Esteu segurs que voleu suprimir els missatges seleccionats de manera definitiva?";
+$contact_profile = "Perfil del contacte";
+$ml_add_contact = "Afegeix el remitent a contactes";
+$strHost = "Servidor";
+$strDefault = "Per defecte";
+$ml_edit_account = "Edita el compte";
+$ml_new_account = "Nou compte";
+$ml_no_messages = "No hi ha missatges en aquesta carpeta.";
+$ml_file_too_big = "El fitxer que heu provat d'adjuntar és massa gran, la mida màxima permesa pels fitxers adjunts és de: ";
+$fbNoRightToOverwrite = "El fitxer ja existeix i no teniu permís per sobreescriure-hi.";
+$ml_save_attachment = "Desa el fitxer adjunt a Group-Office.";
+$ml_folders = "Carpetes";
+$ml_select_folder = "Seleccioneu la carpeta on Group-Office pot emmagatzemar els missatges enviats o entreu un nom per crear una carpeta";
+$ml_connect_failed = "Ha fallat la connexió al servidor de correu:";
+$ml_at_port = "al port";
+$ml_solve_error = 'Feu clic a \'Comptes\' per corregir els paràmetres del vostre compte o feu clic a \'Refresca\' per obrir el vostre compte per defecte.';
+$ml_sent_items = "Elements enviats";
+$ml_spam = "Correu brossa";
+$ml_use = "Fés servir";
+$ml_synchronise = "sincronitza";
+$ml_move_mail = "Mou els missatges seleccionats a la carpeta...";
+$ml_filters = "Filtres";
+$ml_move_to = "mou el missatge cap a la carpeta:";
+$ml_email_is = "Si l'adreça electrònica del remitent conté:";
+$ml_to_is = "Si el camp del destinatari conté:";
+$ml_cc_is = "Si el camp Cc conté:";
+$ml_subject_is = "Si l'assumpte conté:";
+$ml_new_filter = "Nou filtre:";
+$ml_field = "Camp";
+$ml_contains = "Conté";
+$ml_folder = "Carpeta";
+$ml_no_folders = "No podeu crear filtres perque no teniu cap carpeta.";
+$ml_unwanted = "Feu clic aquí si el correu electrònic del remitent no és desitjat";
+$fbFolderSize = "Mida de la carpeta";
+$ml_move_up = "Augmenta la prioritat";
+$ml_delete_filter = "Esteu segurs que voleu suprimir aquest filtre?";
+$ml_high_priority = "Aquest missatge té prioritat alta!";
+$ml_low_priority = "Aquest missatge té prioritat baixa.";
+$ml_block = "Bloca el remitent";
+$ml_sent_items_fail = "El missatge ha estat enviat però hi ha hagut un error mentre es creava el missatge a la vostre carpeta d'enviats. Comproveu el vostre compte IMAP.";
+$fbProperties = "Propietats";
+$ml_notification = "Demana una confirmació de recepció";
+$ml_ask_notify = "El remitent d'aquest missatge ha demanat la vostra confirmació de recepció. Voleu enviar-li aquesta confirmació?";
+$ml_displayed = "El següent correu electrònic ha estat mostrat a ";
+$ml_notify = "Confirmació de lectura";
+$ml_delete_filter1 = "Suprimeix filtre";
+$ml_html_message_attached = "Els missatges HTML originals són adjuntats";
+$ml_no_folders = 'No teniu cap carpeta per filtrar';
+$ml_no_filters = 'No teniu cap filtre.';
+$ml_host = 'Servidor';
+$ml_port = 'Port';
+$ml_type = 'Tipus';
+$ml_servertype = 'Tipus de servidor';
+$ml_format = 'Format';
+$ml_loose_changes = 'Els canvis es perdran. N\'esteu segurs?';
+$ml_markread = "Marca&nbsp;com&nbsp;a&nbsp;llegit";
+$ml_markunread = "Marca&nbsp;com&nbsp;a&nbsp;no&nbsp;llegit";
+$ml_root_mailbox = "Carpeta arrel";
+$ml_inside = "dins";
+$ml_no_mailbox = "Això no és una safata. Aquesta carpeta no pot tenir missatges.";
+$ml_signature = 'Signatura';
+$ml_root = 'Carpeta arrel';
+$ml_disable_accounts = 'Desactiva la gestió del compte';
+$ml_trash = 'Paperera';
+$ml_disable = 'Desactiva';
+$ml_confirm_empty_mailbox = 'Esteu segurs que voleu buidar aquesta carpeta?';
+$ml_empty_mailbox = 'Buida&nbsp;la&nbsp;carpeta';
+$ml_you_have = 'Teniu';
+$ml_new_mail_single = 'un nou correu electrònic.';
+$ml_new_mail_multiple = 'nous correus electrònics.';
+$ml_auto_check = 'Comprova si hi ha nous missatges automàticament.';
+//1.98
+$ml_no_contacts_in_mailing_group = 'No hi ha contactes al grup de llistes de correus que heu seleccionat. Si us plau, afegiu primer contactes a aquest grup.';
+$ml_attention= 'Atenció';
+
+//2.02
+$ml_autocheck_disabled = ' no s\'ha pogut connectar. La comprovació automàtica de nous missatges per aquest compte s\'ha desactivat.';
+$ml_mark = 'Marca missatges...';
+$ml_flag = 'senyalat';
+$ml_clearflag = 'no senyalat';
+$ml_expand_all = 'Expandeix totes les carpetes';
+$ml_collapse_all = 'Redueix totes les carpetes';
+
+//2.05
+$ml_search = 'Cerca';
+$ml_answered = 'Respost';
+$ml_doesnt_matter = 'Tant és';
+$ml_body = 'Cos';
+$ml_before = 'És més antic que';
+$ml_since = 'És més nou que';
+$ml_select_one_criteria = 'Si us plau, seleccioneu o entreu al menys un criteri de cerca.';
+
+//2.06
+$ml_appointment = 'Aquest missatge conté una cita. Voleu veure aquesta cita en el calendari?';
+$ml_mails_were_sent = 'els missatges han estat enviats';
+$ml_novalidate_cert = 'No validis el certificat';
+$ml_appointment_vcf = 'Aquest missatge conté una adreça de contacte. Voleu veure aquesta adreça en la llibreta d\'adreces?';
+
+
+//2.08 
+$ml_add_senders = 'Pregunta si es volen afegir remitents desconeguts a la llibreta d\'adreces per defecte';
+$ml_text_format = 'Text net';
+$ml_html_format_is = 'HTML (Si el navegador suporta edició en HTML)';
+$ml_html_format = 'Format HTML';
+$ml_always_ask_notification = 'Demana sempre al destinatari la notificació de lectura del missatge';
+$ml_ask_add_sender = 'L\'adreça del remitent %s que pertany a %s no hi és a la vostra llibreta d\'adreces. Voleu afegir aquesta persona a la vostra llibreta d\'adreces ara?';
+
+$ml_edit_filter = 'Edita el filtre';
+$ml_choose_action = 'Si us plau trieu una acció:';
+$ml_search_criteria = 'Criteri de cerca';
+$ml_sender = 'Remitent';
+$ml_reciever = 'Destinatari';
+$ml_cc_reciever = 'CC-Destinatari';
+
+//2.10
+$ml_empty_trash = 'Buida&nbsp;la&nbsp;paperera';
+//2.11
+$ml_drafts = 'Esborranys';
+$ml_save_draft_error = 'Ha fallat mentre es desava l\'esborrany. Si us plau, comproveu les propietats del vostre compte.';
+$ml_search_sender = 'Cerca altres correus electrònics d\'aquest remitent';
+
+$ml_no_attachments = 'No hi ha fitxers adjunts';
+$ml_search_active = 'La funció de cerca és activa. No es mostren tots els missatges d\'aquesta carpeta. Feu clic aquí per finalitzar la cerca';
+$ml_local_files = 'Fitxers locals';
+$ml_please_close_attachments = 'Si us plau, tanqueu la finestra dels fitxers adjunts primer i assegureu-vos que les transferències dels fitxers s\'han completat';
+
+$ml_please_wait = 'Espereu si us plau...';
+$ml_max_attachment_size = 'Mida màxima del fitxer adjunt';
+$ml_select = 'Selecciona el fitxer';
+$ml_multiple_files = 'Múltiples fitxers';
+
+//2.12
+$ml_reenter_password = 'Per raons de seguretat haureu d\'entrar un altre cop la contrassenya per aquest compte de correu electrònic.';
+
+$ml_attachments_added = 'fitxers adjunts';
+$ml_attachment_added = 'fitxer adjunt';
+
+//2.13
+$ml_download_zipped_attachments = 'Arxiu ZIP de tots els fitxers adjunts';
+$ml_fullscreen = 'Mostra&nbsp;a&nbsp;pantalla&nbsp;completa';
+$ml_nofullscreen = 'Tanca&nbsp;:la&nbsp;pantalla&nbsp;completa';
+
+$ml_confirm_empty_trash = 'Esteu segurs que voleu buidar la paperera?';
+
+$ml_seen = 'Llegit';
+
+
+$ml_charset = 'Codificació de caràcters';
+
+//2.14
+$ml_no_reciever_add = "No afegeixis";
+$ml_add_recievers = "Afegeix destinataris desconeguts a";//changed string from 2.06
+
+$ml_automatic_reply = 'Activa la resposta automàtica';
+
+$ml_set_default = 'Posa per defecte';
+
+$ml_used_of = 'usat per';
+
+$ml_folder_not_available = 'no podeu crear carpetes amb comptes de tipus POP-3';
+
+?>

@@ -1,0 +1,121 @@
+<script LANGUAGE="JavaScript">
+<!--
+function makeStringFromSelect(selectCtrl) {
+	var i;
+	var j = 0;
+	var outlist = "";
+
+	for (i = 0; i < selectCtrl.options.length; i++) {
+		if (j > 0) {
+			outlist = outlist + ", ";
+		}
+		outlist = outlist + selectCtrl.options[i].value + "=>" + selectCtrl.options[i].text;
+		j++;
+	}
+	return outlist;
+}
+
+function addItems(fromCtrlText,fromCtrlValue, toCtrl) {
+	var i;
+	var j;
+	var itemexists;
+	var nextitem;
+
+	// step through all items in fromCtrl
+	// search toCtrl to see if duplicate
+	j = 0;
+	itemexists = false;
+	while ((j < toCtrl.options.length) && (!(itemexists))) {
+		if (toCtrl.options[j].value == fromCtrlValue.value) {
+					itemexists = true;
+					alert(fromCtrl.value + " found!");
+		}
+		j++;
+	}
+	if (!(itemexists)) {
+				// add the item
+				nextitem = toCtrl.options.length;
+				toCtrl.options[nextitem] = new Option(fromCtrlText.value);
+				toCtrl.options[nextitem].value = fromCtrlValue.value;
+	}
+}
+
+function addItemToTextBox(fromCtrl, toCtrlValue,toCtrlText) {
+        var i;
+        var j;
+        var itemexists;
+        var nextitem;
+
+        // step through all items in fromCtrl
+        // search toCtrl to see if duplicate
+        j = 0;
+        itemexists = false;
+        while ((j < fromCtrl.options.length) && (!(itemexists))) {
+                if (fromCtrl.options[j].selected == true) {
+                                        itemexists = true;
+                                // add the item
+                                toCtrlValue.value=fromCtrl.options[j].value
+				toCtrlText.value=fromCtrl.options[j].text;
+                	}
+			j++
+        }
+}
+
+
+
+function removeItems(fromCtrl) {
+	var i = 0;
+	var j;
+	var k = 0;
+
+	while (i < (fromCtrl.options.length - k)) {
+		if (fromCtrl.options[i].selected) {
+			// remove the item
+			for (j = i; j < (fromCtrl.options.length - 1); j++) {
+				fromCtrl.options[j].text = fromCtrl.options[j+1].text;
+				fromCtrl.options[j].value = fromCtrl.options[j+1].value;
+				fromCtrl.options[j].selected = fromCtrl.options[j+1].selected;
+			}
+			k++;
+		} else {
+			i++;
+		}
+	}
+	for (i = 0; i < k; i++) {
+		fromCtrl.options[fromCtrl.options.length - 1] = null;
+	}
+}
+//-->
+</SCRIPT>
+
+</head>
+
+<form NAME="main" ACTION="admin.php?func=update_priorities" METHOD="POST">
+<input TYPE="HIDDEN" NAME="Sel">
+
+<table BORDER=0 CELLPADDING=0 CELLSPACING=0>
+<tr>
+<td VALIGN="TOP">
+Available Items:<br>
+<input name=AvailValue type=text value=""><br>
+<input name=AvailItems type=text value="">
+</td>
+<td ALIGN="CENTER">
+&nbsp;<input TYPE="BUTTON" NAME="AddBtn" VALUE="&nbsp;&nbsp;&nbsp;&nbsp;>>&nbsp;&nbsp;&nbsp;&nbsp;" OnClick="addItems(this.form.AvailItems,this.form.AvailValue, this.form.SelItems); ">&nbsp;<br>
+<br>
+&nbsp;<input TYPE="BUTTON" NAME="RemoveBtn" VALUE="&nbsp;&nbsp;&nbsp;&nbsp;<<&nbsp;&nbsp;&nbsp;&nbsp;" OnClick="addItemToTextBox(this.form.SelItems,this.form.AvailValue,this.form.AvailItems);removeItems(this.form.SelItems);">&nbsp;<br>
+</td>
+<td VALIGN="TOP">
+Selected Items:<br>
+
+<select  NAME="SelItems" SIZE="5" OnChange="addItemToTextBox(this.form.SelItems,this.form.AvailValue,this.form.AvailItems);">
+$options_priorities
+
+</select>
+</td>
+</tr>
+</table>
+<br><br>
+<input TYPE="BUTTON" VALUE="Submit" OnClick="this.form.Sel.value = makeStringFromSelect(this.form.SelItems); this.form.submit();">
+
+</form>

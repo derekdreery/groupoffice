@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="work report" company="Jerusalem College of Engineering" manager="Meir Michanie" phase="" project-start="{$start_project_date}" mrproject-version="2" calendar="1">
+  <properties>
+    <property name="cost" type="cost" owner="resource" label="Cost" description="standard cost for a resource"/>
+  </properties>
+  <phases/>
+  <calendars>
+    <day-types>
+      <day-type id="0" name="Working" description="A default working day"/>
+      <day-type id="1" name="Nonworking" description="A default non working day"/>
+      <day-type id="2" name="Use base" description="Use day from base calendar"/>
+    </day-types>
+    <calendar id="1" name="Default">
+      <default-week mon="0" tue="0" wed="0" thu="0" fri="1" sat="1" sun="0"/>
+      <overridden-day-types>
+        <overridden-day-type id="0">
+          <interval start="0800" end="1200"/>
+          <interval start="1300" end="1700"/>
+        </overridden-day-type>
+      </overridden-day-types>
+      <days/>
+    </calendar>
+  </calendars>
+  <tasks>
+	$response_row
+  </tasks>
+  <resource-groups/>
+  <resources>
+	$response_resources_row
+  </resources>
+  <allocations>
+	$response_allocation_row
+  </allocations>
+</project>
+
