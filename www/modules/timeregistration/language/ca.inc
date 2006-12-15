@@ -82,7 +82,8 @@ $pm_description = 'Descripció';
 
 $pm_no_projects = 'No s\'ha trobat cap projecte.';
 
-//2.08
+
+//2.08
 $pm_projects = 'Projectes';
 //2.12
 $pm_select_project = 'Si us plau, seleccioneu un projecte';
