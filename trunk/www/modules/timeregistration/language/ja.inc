@@ -83,7 +83,8 @@ $pm_description = '説明';
 
 $pm_no_projects = 'プロジェクトはありません。';
 
-//2.08
+
+//2.08
 $pm_projects = 'プロジェクト';
 //2.12
 $pm_select_project = 'プロジェクトを選択してください。';
