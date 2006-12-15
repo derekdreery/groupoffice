@@ -1,0 +1,331 @@
+<?php
+require_once($GO_LANGUAGE->get_fallback_base_language_file('common'));
+$htmldirection='ltr';
+$charset = 'UTF-8';
+//main language menu file register login and other non logged in pages
+//common
+$cmdLogin = "Entrada";
+$cmdSave = "Desa";
+$cmdBack = "Endarrera";
+$cmdCancel = "Cancel·la";
+$cmdClose = "Tanca";
+$cmdOk = "D'acord";
+$cmdDelete = "Suprimeix";
+$cmdNext = "Següent";
+$cmdPrevious = "Anterior";
+$cmdContinue = "Continua";
+$cmdUpdate = "Sincronitza";
+$cmdApply = "Aplica";
+$cmdYes = "Si";
+$cmdNo = "No";
+$cmdAdd = 'Afageix';
+$cmdEdit = 'Edita';
+$cmdInvertSelection = 'Inverteix la selecció';
+
+$strEdit = "Edita";
+$strThis = 'això';
+$strItems = 'elements';
+$strDescription = 'Descripció';
+
+$strName = "Nom";
+$strUser = "Usuari";
+$strUsername = "Usuari";
+$strPassword = "Contrassenya";
+$strAuthcode = "Codi d'\autorització";
+$strCountry = "País";
+$strState = "Estat";
+$strCity = "Ciutat";
+$strZip = "ZIP/Codi postal";
+$strAddress = "Adreça";
+$strEmail = "Correu electrònic";
+$strPhone = "Telèfon";
+$strWorkphone = "Telèfon de la feina";
+$strCellular = "Mòbil";
+$strCompany = "Empresa";
+$strDepartment = "Departament";
+$strFunction = "Càrrec";
+$strQuestion = "Pregunta secreta";
+$strAnswer = "Resposta";
+$strFax = "Fax";
+$strWorkFax = "Fax de la feina";
+$strHomepage = "Pàgina web";
+$strWorkAddress = "Adreça de la feina";
+$strWorkZip = "Codi postal de la feina";
+$strWorkCountry = "País de la feina";
+$strWorkState = "Estat de la feina";
+$strWorkCity = "Ciutat de la feina";
+$strPhoto = "Fotografia";
+$strComments = "Comentaris";
+$strProperties = 'Propietats';
+$strDeleteItem = "Suprimeix";
+$strDate = "Data";
+$strSaveSuccess = "Dades desades correctament";
+$strSaveError = "Hi ha hagut un error mentre es desaven les dades.";
+$strDataError = "Hi ha hagut un error mentre es llegien les dades.";
+$strDeleteError = "No s'han pogut suprimir les dades.";
+$strAclError = "Error en el control d\'accés";
+$strDateError = "Heu introduït una data incorrecta";
+$strAccessDenied = "Accés denegat";
+$AccessDenied_text = "No teniu permís per veure aquesta secció o realitzar aquesta acció.<br />Un altre usuari ha restringit l\'accés a la informació que heu demanat.";
+$invalid_chars = "Els següents caràcters no són permesos";
+$strGroups = "Grups";
+$strOwner = "Propietari";
+$strDeletePrefix = "Esteu segurs de voler suprimir ";
+$strDeleteSuffix = "?";
+//menu
+$menu_logout = "Desconnecta";
+$menu_applications = "Aplicacions";
+$menu_help = "Ajuda";
+$menu_about = "Quant a";
+$menu_documentation = "Documentació";
+$menu_configuration = "Configuració";
+$menu_groups = "Gestiona groups d\'usuaris";
+$menu_accounts = "Modifica les propietats del vostre compte";
+$menu_preferences = "Ajusta les preferències personals";
+$menu_search_discussions = "Discusions";
+$menu_search_files = "Fitxers&nbsp;i&nbsp;carpetes";
+$menu_search_web = "La&nbsp;web";
+$menu_filetypes = "Tipus de fitxers";
+$menu_discussions = "Taulell%nbsp;de&nbsp;discusions";
+
+$menu_users = "Gestiona usuaris";
+$menu_new = "Nou";
+$menu_message = "Missatge";
+$menu_contact = "Contacte";
+$menu_event = "Cita";
+$menu_bookmark = "Adreça d'interès";
+$menu_topics = "Temes";
+$menu_support = "Suport";
+$menu_projects = "Projectes";
+$menu_sysinfo = "Mostra informació del sistema";
+$menu_admin = 'Menu de l\'administrador';
+$menu_modules = 'Afegeix/Suprimeix mòduls';
+$menu_manual = 'Manual';
+
+//class validate
+$error_required = "No heu especificat el camp obligatori de sota.";
+$error_match_auth = "Els codis d\'autorització no coincideixen.";
+$error_match_pass = "Les contrassenyes no coincideixen.";
+$error_min_length = "Caràcters mínims del camp de sota:";
+$error_max_length = "Caràcters màxims del camp de sota:";
+$error_email = "L\'adreça de correu electrònic especificada és incorrecta.";
+$error_email_exists = "L\'adreça de correu electrònic que heu introduït ja existeix.";
+$error_username_exists = "Ho sento, el nom d\'usuari que heu introduït ja existeix. Si us plau, trieu-ne un altre.";
+$errors_in_form = "Hi han hagut errors al formulari. Si us plau, corregiu-los i proveu-ho un altre cop.";
+$error_missing_field = "No heu emplenat tots els camps obligatoris.";
+
+//acl control
+$acl_control_auth_groups = "Grups autoritzats";
+$acl_control_auth_users = "Usuaris autoritzats";
+$acl_control_no_contacts = "No teniu cap contacte per seleccionar.<br /> Feu servir la Llibreta d\'Adreces per afegir-ne de nous.";
+
+$strShowProfile = "Mostra el perfil";
+$strShowGroup = "Mostra els membres de group";
+$strProcessingTime = "El procés d\'aquesta pàgina ha trigat ";
+$strLoggedInAs = "Entrat com a ";
+$strAt = " el ";
+$strEmailTo = "Envia un correu electrònic a: ";
+$strProtectedUser = "Usuari protegit";
+
+$http_not_found = "Document inexistent";
+$http_not_found_text = "El document demanat no existeix. Comproveu bé l\'adreça URL.";
+$http_error = "Error intern del servidor";
+$http_bad_request = "Petició no vàlida";
+$strAddContact = "Afageix a contactes";
+
+$strReadRights = "Llegeix permisos";
+$strWriteRights = "Escriu permisos";
+$strPermissions = 'permisos';
+
+$days[0]="Dg";
+$days[1]="Dl";
+$days[2]="Dm";
+$days[3]="Dc";
+$days[4]="Dj";
+$days[5]="Dv";
+$days[6]="Ds";
+
+$months[0]="Gener";
+$months[1]="Febrer";
+$months[2]="Març";
+$months[3]="Abril";
+$months[4]="Maig";
+$months[5]="Juny";
+$months[6]="Juliol";
+$months[7]="Agost";
+$months[8]="Setembre";
+$months[9]="Octubre";
+$months[10]="Novembre";
+$months[11]="Desembre";
+
+$full_days[0] = "Diumenge";
+$full_days[1] = "Dilluns";
+$full_days[2] = "Dimarts";
+$full_days[3] = "Dimecres";
+$full_days[4] = "Dijous";
+$full_days[5]= "Divendres";
+$full_days[6] = "Dissabte";
+$strLoadTime = 'Generat en';
+$strDescription = 'Descripció';
+
+
+
+$lang_modules['addressbook'] = "Llibreta d'adreces";
+$cmdShowAll = 'Mostra tot';
+$cmdSearch = 'Cerca';
+
+//translation required
+$cmdYesToAll = 'Si a tot';
+$cmdNoToAll = 'No a tot';
+
+$short_months[0]="Gen";
+$short_months[1]="Feb";
+$short_months[2]="Mar";
+$short_months[3]="Abr";
+$short_months[4]="Mai";
+$short_months[5]="Jun";
+$short_months[6]="Jul";
+$short_months[7]="Ago";
+$short_months[8]="Set";
+$short_months[9]="Oct";
+$short_months[10]="Nov";
+$short_months[11]="Des";
+
+$strToday = 'Avui';
+
+$cmdPrint = 'Imprimeix';
+$strFirstName = 'Nom';
+$strLastName = 'Cognoms';
+$strInitials = 'Inicials';
+$strSex = 'Sexe';
+$strBirthday = 'Data de naixement';
+$strSexes['M'] = 'Home';
+$strSexes['F'] = 'Dona';
+
+$strTitle = 'Títol';
+$strBeginning = 'Inici';
+$strMiddleName = 'Segón&nbsp;nom';
+$sir_madam['M'] = 'Sr.';
+$sir_madam['F'] = 'Sra.';
+$strModifiedAt = 'Modificat el';
+$strCreatedAt = 'Creat el';
+
+$htmlarea_language_name = 'ca';
+$strLocalization = 'Localització';
+
+
+//look up the language in controls/jscalendar/lang
+$jscalendar_language_name = 'calendar-ca.js';
+
+
+//2.01 translations
+
+//look up language in 'classes/phpmailer/language'
+$php_mailer_lang = 'ca';
+$strEmailFail = 'No s\'ha pogut enviar el correu electrònic.';
+
+//for people that want to use ktmlarea
+$ktml_language = 'catalan';
+
+$ml_host_unreachable = ' inassolible. La comprovació automàtica de correu electrònic està desactivada.';
+$strRegion = 'Regió';
+
+//2.05
+$cmdReset = 'Reinicia';
+$strMyName = 'El meu nom';
+
+//2.06
+$strDeleteRow = 'Esteu segurs que voleu suprimir aquesta fila?';
+$strAddressNo = 'número';
+$strWorkAddressNo = 'número de la feina';
+
+$strPostAddress = 'Adreça postal';
+$strPostAddressNo = 'Número postal';
+$strPostCity = 'Ciutat postal';
+$strPostState = 'Estat postal';
+$strPostCountry = 'País postal';
+$strPostZip = 'Codi postal';
+$strVisitAddress = 'Adreça per visites';
+$strPostAddress = 'Adreça postal';
+
+
+
+//modules
+$lang_modules['scheduler'] = 'Planificador';
+$lang_modules['calendar'] = "Calendari";
+$lang_modules['filesystem'] = 'Fitxers';
+$lang_modules['email'] = 'Correu electrònic';
+$lang_modules['projects'] = 'Projectes';
+$lang_modules['search'] = 'Cerca';
+$lang_modules['contacts'] = "Llibreta d'adreces";
+$lang_modules['cms'] = "Llocs Web";
+$lang_modules['notes'] = "Notes";
+$lang_modules['bookmarks'] = "Adreces d'interès";
+$lang_modules['summary'] = "Sumari";
+$lang_modules['todos'] = "Feines";
+$lang_modules['opentts'] = "Helpdesk";
+$lang_modules['products'] = "Software shop";
+
+$cmdVcard = 'vCard';
+
+//2.07
+$strNotEnoughLicenses = 'No teniu prou llicències per fer servir aquesta secció de'.
+												' Group-Office. Contacteu sales@intermesh.nl si voleu '.
+												'comprar més llicències.';
+												
+//2.08
+$alphabet = 'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z';
+									
+$strContact = 'Contacte';
+$strRelatedTo = 'Relacionat amb';
+$strProject = 'Projecte';
+
+$strNewProject = 'Nou projecte';
+$strNewEvent = 'Nova cita';
+$strNewTodo = 'Nova feina';
+$strNewNote = 'Nova nota';
+
+$strActivities = 'Activitats';
+$strFile = 'Fitxer';
+
+//2.10
+$cmdCopy = 'Copia';
+$strProjects = 'Projectes';
+$strFiles = 'Fitxers';
+$cmdSaveNew = 'Desa i Fes-ne nou';
+$strAvailability = 'Disponibilitat';
+$strCheckAvailabilityFor = 'Comprova disponibilitat per';
+$cmdPleaseSelect = 'Si us plau seleccioneu...';
+
+//2.11
+$strNewEmail = 'Nou correu electrònic';
+$strConsistencyCheck = "Comprova consistència";
+$strSearchAll = 'Tots els camps';
+$sync_download_clients = 'Descarrega clients de sincronització';
+
+//2.12
+$strNoData = 'No s\'han trobat dades';
+//2.13
+$strSynchronization = 'Sincronització';
+$strSnooze = 'Recorda-ho més tard';
+$strDismiss = 'Descarta';
+
+//2.14
+$strUpload = 'Envia fitxer';
+$cmdInsert = 'Inserta';
+$strText = 'Text';
+$strType = 'Tipus';
+
+$strNoItemSelected = 'No heu selecionat cap element';
+$strSelectedItem = 'l\'element seleccionat';
+
+$strKeyword = 'Paraula clau';
+
+$strNoActivities = 'No hi ha activitats per aquest element';
+
+$strCopy = 'Còpia'; //not a verb
+
+//2.15
+$strBank = 'Banc';
+$strBankNo = 'Número de banc';
+?>
