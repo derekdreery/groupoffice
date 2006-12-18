@@ -344,10 +344,6 @@ if ($GO_MODULES->modules['calendar'] && $GO_MODULES->modules['calendar']['read_p
 			$end_time += $timezone_offset;
 			
 
-			$link = $GO_SECURITY->has_permission($GO_SECURITY->user_id,$cal->f('acl_write')) ? 
-				$GO_MODULES->modules['calendar']['url'].'event.php' : 
-				$GO_MODULES->modules['calendar']['url'].'show_event.php';
-
 			$title = '';
 			$date_format = '';
 			
@@ -400,7 +396,7 @@ if ($GO_MODULES->modules['calendar'] && $GO_MODULES->modules['calendar']['read_p
 			$div->set_attribute('class', 'summary_icon');
 			$div->set_attribute('style', 'background-color: #'.$cal->f('background'));
 								
-			$link = new hyperlink('javascript:goto_url(\''.$link.'?event_id='.$cal->f('id').'\');', 
+			$link = new hyperlink('javascript:goto_url(\''.$GO_MODULES->modules['calendar']['url'].'event.php?event_id='.$cal->f('id').'\');', 
 				$div->get_html().date($date_format, $start_time).'&nbsp;'.
 				htmlspecialchars($cal->f('name')));
 			$link->set_tooltip(new tooltip($title, $cal->f('name')));					
