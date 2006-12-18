@@ -33,7 +33,7 @@ function buildTree($rootNode, $parent_folder_id=0)
 	$email->get_subscribed($account['id'], $parent_folder_id);
 	while($email->next_record())
 	{
-		if ($pos = strrpos($email->f('name'), $email->f('delimiter')))
+		if ($pos = strrpos($email->f('name'), $email->f('delimiter')) && $email->f('delimiter') != '')
 		{
 			$folder_name = substr($email->f('name'),$pos+1);
 		}else
