@@ -7,6 +7,7 @@ FCKConfig.ImageUpload=false;
 FCKConfig.FlashUpload =false;
 FCKConfig.UseBROnCarriageReturn=false;
 FCKConfig.IEForceVScroll=true;
+FCKConfig.TabSpaces=4;
 
 FCKConfig.ToolbarSets["email"] = [
 	['Source','DocProps','-'],
