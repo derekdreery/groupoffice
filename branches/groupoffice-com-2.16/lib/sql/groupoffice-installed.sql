@@ -3,11 +3,11 @@
 -- http://www.phpmyadmin.net
 -- 
 -- Host: localhost
--- Generatie Tijd: 14 Dec 2006 om 11:56
+-- Generatie Tijd: 19 Dec 2006 om 15:31
 -- Server versie: 5.0.24
 -- PHP Versie: 5.1.6
 -- 
--- Database: `test216`
+-- Database: `go2166`
 -- 
 
 -- --------------------------------------------------------
@@ -580,6 +580,21 @@ CREATE TABLE `cal_holidays` (
 -- Gegevens worden uitgevoerd voor tabel `cal_holidays`
 -- 
 
+INSERT INTO `cal_holidays` (`id`, `user_id`, `date`, `name`, `region`) VALUES (31, 1, 1136070000, 'Nieuwjaar', 'nl'),
+(32, 1, 1139871600, 'Valentijnsdag', 'nl'),
+(33, 1, 1144965600, 'Goede vrijdag', 'nl'),
+(34, 1, 1145138400, '1e Paasdag', 'nl'),
+(35, 1, 1145224800, '2e Paasdag', 'nl'),
+(36, 1, 1146348000, 'Koninginnedag', 'nl'),
+(37, 1, 1146780000, 'Bevrijdingsdag', 'nl'),
+(38, 1, 1148508000, 'Hemelvaartsdag', 'nl'),
+(39, 1, 1149372000, '1e pinksterdag', 'nl'),
+(40, 1, 1149458400, '2e pinksterdag', 'nl'),
+(41, 1, 1159912800, 'Wereld dierendag', 'nl'),
+(42, 1, 1163199600, 'Sint Maarten', 'nl'),
+(43, 1, 1167001200, '1e kerstdag', 'nl'),
+(44, 1, 1167087600, '2e kerstdag', 'nl'),
+(45, 1, 1167519600, 'Oudjaarsavond', 'nl');
 
 -- --------------------------------------------------------
 
@@ -1261,7 +1276,7 @@ INSERT INTO `db_sequence` (`seq_name`, `nextid`) VALUES ('acl_items', 60),
 ('users', 3),
 ('groups', 2),
 ('cal_calendars', 4),
-('cal_holidays', 30),
+('cal_holidays', 45),
 ('cms_templates', 1),
 ('cms_template_items', 1),
 ('cms_folders', 2),
@@ -1272,10 +1287,12 @@ INSERT INTO `db_sequence` (`seq_name`, `nextid`) VALUES ('acl_items', 60),
 ('sync_devices', 3),
 ('ab_companies', 7),
 ('ab_contacts', 4),
-('links', 4),
+('links', 5),
 ('pmProjects', 2),
 ('pmFees', 1),
-('pmHours', 2);
+('pmHours', 2),
+('fs_statuses', 3),
+('fs_status_history', 1);
 
 -- --------------------------------------------------------
 
@@ -1402,6 +1419,7 @@ DROP TABLE IF EXISTS `fs_links`;
 CREATE TABLE `fs_links` (
   `link_id` int(11) NOT NULL default '0',
   `path` varchar(255) NOT NULL default '',
+  `status_id` int(11) NOT NULL,
   PRIMARY KEY  (`link_id`),
   KEY `path` (`path`)
 ) TYPE=MyISAM;
@@ -1421,6 +1439,7 @@ DROP TABLE IF EXISTS `fs_settings`;
 CREATE TABLE `fs_settings` (
   `user_id` int(11) NOT NULL,
   `notify` enum('0','1') NOT NULL,
+  `open_properties` enum('0','1') NOT NULL,
   PRIMARY KEY  (`user_id`)
 ) TYPE=MyISAM;
 
@@ -1428,6 +1447,7 @@ CREATE TABLE `fs_settings` (
 -- Gegevens worden uitgevoerd voor tabel `fs_settings`
 -- 
 
+INSERT INTO `fs_settings` (`user_id`, `notify`, `open_properties`) VALUES (1, '0', '0');
 
 -- --------------------------------------------------------
 
@@ -1455,6 +1475,50 @@ CREATE TABLE `fs_shares` (
 -- 
 
 INSERT INTO `fs_shares` (`user_id`, `link_id`, `path`, `type`, `acl_read`, `acl_write`) VALUES (1, NULL, '/var/www/groupoffice/local/cms/sites/1', 'site', 35, 34);
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabel structuur voor tabel `fs_status_history`
+-- 
+
+DROP TABLE IF EXISTS `fs_status_history`;
+CREATE TABLE `fs_status_history` (
+  `id` int(11) NOT NULL,
+  `link_id` int(11) NOT NULL,
+  `status_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `ctime` int(11) NOT NULL,
+  `comments` text NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `link_id` (`link_id`)
+) TYPE=MyISAM;
+
+-- 
+-- Gegevens worden uitgevoerd voor tabel `fs_status_history`
+-- 
+
+INSERT INTO `fs_status_history` (`id`, `link_id`, `status_id`, `user_id`, `ctime`, `comments`) VALUES (1, 5, 2, 1, 1166535060, '');
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabel structuur voor tabel `fs_statuses`
+-- 
+
+DROP TABLE IF EXISTS `fs_statuses`;
+CREATE TABLE `fs_statuses` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  PRIMARY KEY  (`id`)
+) TYPE=MyISAM;
+
+-- 
+-- Gegevens worden uitgevoerd voor tabel `fs_statuses`
+-- 
+
+INSERT INTO `fs_statuses` (`id`, `name`) VALUES (2, 'Waiting for approval'),
+(3, 'Approved');
 
 -- --------------------------------------------------------
 
@@ -1577,7 +1641,7 @@ INSERT INTO `modules` (`id`, `version`, `path`, `sort_order`, `admin_menu`, `acl
 ('addressbook', '2.3', '', 20, '0', 4, 5),
 ('calendar', '3.0', '', 40, '0', 6, 7),
 ('email', '2.1', '', 30, '0', 8, 9),
-('filesystem', '1.6', '', 70, '0', 10, 11),
+('filesystem', '1.7', '', 70, '0', 10, 11),
 ('groups', '1.0', '', 120, '1', 12, 13),
 ('cms', '2.6', '', 90, '0', 14, 15),
 ('phpsysinfo', '1.0', '', 140, '1', 16, 17),
@@ -2328,7 +2392,7 @@ CREATE TABLE `users` (
 -- Gegevens worden uitgevoerd voor tabel `users`
 -- 
 
-INSERT INTO `users` (`id`, `username`, `password`, `enabled`, `authcode`, `first_name`, `middle_name`, `last_name`, `initials`, `title`, `sex`, `birthday`, `email`, `company`, `department`, `function`, `home_phone`, `work_phone`, `fax`, `cellular`, `country`, `state`, `city`, `zip`, `address`, `address_no`, `homepage`, `work_address`, `work_address_no`, `work_zip`, `work_country`, `work_state`, `work_city`, `work_fax`, `acl_id`, `date_format`, `date_seperator`, `time_format`, `thousands_seperator`, `decimal_seperator`, `currency`, `mail_client`, `logins`, `lastlogin`, `registration_time`, `max_rows_list`, `timezone`, `DST`, `start_module`, `language`, `theme`, `first_weekday`, `sort_name`, `use_checkbox_select`, `country_id`, `work_country_id`, `bank`, `bank_no`, `link_id`) VALUES (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', '1', 'jmvnqxuf', 'Group-Office', '', 'Admin', '', '', 'M', '0000-00-00', 'webmaster@example.com', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 3, 'dmY', '-', 'G:i', ',', '.', 'EUR', 1, 16, 1164784214, 1159517603, 15, 1, '1', 'summary', 'en', 'Professional', 1, 'first_name', '0', 0, 0, '', '', 0);
+INSERT INTO `users` (`id`, `username`, `password`, `enabled`, `authcode`, `first_name`, `middle_name`, `last_name`, `initials`, `title`, `sex`, `birthday`, `email`, `company`, `department`, `function`, `home_phone`, `work_phone`, `fax`, `cellular`, `country`, `state`, `city`, `zip`, `address`, `address_no`, `homepage`, `work_address`, `work_address_no`, `work_zip`, `work_country`, `work_state`, `work_city`, `work_fax`, `acl_id`, `date_format`, `date_seperator`, `time_format`, `thousands_seperator`, `decimal_seperator`, `currency`, `mail_client`, `logins`, `lastlogin`, `registration_time`, `max_rows_list`, `timezone`, `DST`, `start_module`, `language`, `theme`, `first_weekday`, `sort_name`, `use_checkbox_select`, `country_id`, `work_country_id`, `bank`, `bank_no`, `link_id`) VALUES (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', '1', 'jmvnqxuf', 'Group-Office', '', 'Admin', '', '', 'M', '0000-00-00', 'webmaster@example.com', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 3, 'dmY', '-', 'G:i', ',', '.', 'EUR', 1, 19, 1166534991, 1159517603, 15, 1, '1', 'summary', 'nl', 'Default', 1, 'first_name', '0', 0, 0, '', '', 0);
 
 -- --------------------------------------------------------
 
