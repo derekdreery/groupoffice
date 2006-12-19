@@ -1,12 +1,16 @@
 <?php
 require('../../Group-Office.php');
 
+//name of the module. No spaces or strange characters.
 $module = 'shipping';
+
+//Short name of the module. The prefix of the database tables.
 $prefix = 'sh';
 
-
+//Tables to create an interface for
 $tables[] = array('name'=>'sh_destinations', 'friendly_single'=>'destination', 'friendly_multiple'=>'destinations', 'select_fields'=>array());
 
+//Add some fields that have a pulldown menu.
 $select_fields['destination_id']=array('class'=>$module, 'function'=>'get_destinations();','value'=>'id','text'=>'name');
 $tables[] = array('name'=>'sh_jobs', 'friendly_single'=>'job', 'friendly_multiple'=>'jobs', 'select_fields'=>$select_fields);
 
@@ -51,7 +55,7 @@ $class_file=
 /**
  * @copyright Intermesh 2006
  * @author Merijn Schering <mschering@intermesh.nl>
- * @version $Revision: 1.91 $ $Date: 2006/12/05 11:37:30 $
+ * @version $Revision: 1.00 $ $Date: 2006/12/05 11:37:30 $
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -75,7 +79,7 @@ $index_file =
 /**
  * @copyright Intermesh 2006
  * @author Merijn Schering <mschering@intermesh.nl>
- * @version $Revision: 1.91 $ $Date: 2006/12/05 11:37:30 $
+ * @version $Revision: 1.00 $ $Date: 2006/12/05 11:37:30 $
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -83,18 +87,26 @@ $index_file =
  * option) any later version.
  */
  
-require(\'../../Group-Office.php\');
+//Initialize Group-Office framework
+require_once(\'../../Group-Office.php\');
 
+//Load commonly used controls
 load_basic_controls();
 
+//Authenticate the user for the framework
 $GO_SECURITY->authenticate();
-$GO_MODULES->authenticate(\''.$module.'\');
 
-require($GO_MODULES->modules[\''.$module.'\'][\'class_path\'].\''.$module.'.class.inc\');
-$'.$module.' = new '.$module.'();
+//Authenticate the user for the module
+$GO_MODULES->authenticate(\''.$module_id.'\');
 
-require_once($GO_LANGUAGE->get_language_file(\''.$module.'\'));
+//Get the language variables
+require_once($GO_LANGUAGE->get_language_file(\''.$module_id.'\'));
 
+//Require the module class
+require_once($GO_MODULES->class_path.\''.$class_name.'.class.inc\');
+$'.$class_name.' = new '.$class_name.'();
+
+//Declare variables
 $task = isset($_REQUEST[\'task\']) ? $_REQUEST[\'task\'] : \'\';
 $link_back=$_SERVER[\'PHP_SELF\'];
 
