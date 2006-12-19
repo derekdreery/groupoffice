@@ -323,13 +323,16 @@ insert_class_functions($module_dir.'classes/'.$module_id.'.class.inc',$class_fun
 
 	$index_page = '<?php
 /**
- * @copyright Copyright Intermesh 2006
- * @version $Revision: 1.4 $ $Date: 2006/12/06 16:01:33 $
- * 
- * @author 
-   
+ * @copyright Intermesh 2006
+ * @author Merijn Schering <mschering@intermesh.nl>
+ * @version $Revision: 1.00 $ $Date: 2006/12/05 11:37:30 $
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  */
-
+ 
 //Initialize Group-Office framework
 require_once(\'../../Group-Office.php\');
 
@@ -541,13 +544,16 @@ file_put_contents($filename, $include_file);
 
 	$item_page = '<?php
 /**
- * @copyright Copyright Intermesh 2006
- * @version $Revision: 1.4 $ $Date: 2006/12/06 16:01:33 $
- * 
- * @author 
-   
+ * @copyright Intermesh 2006
+ * @author Merijn Schering <mschering@intermesh.nl>
+ * @version $Revision: 1.00 $ $Date: 2006/12/05 11:37:30 $
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  */
-
+ 
 //Initialize Group-Office framework
 require_once(\'../../Group-Office.php\');
 

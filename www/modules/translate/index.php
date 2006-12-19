@@ -29,11 +29,14 @@ $task=isset($_POST['task']) ? smart_addslashes($_POST['task']) : '';
 
 if($task=='download')
 {
-	$dir = $GO_CONFIG->local_path.'translate/'.$dest_lang.'/';
-	mkdir_recursive($dir);
+	
+	$file = $GO_CONFIG->local_path.'translate/translations-'.$dest_lang.'-'.$GO_CONFIG->version.'.tar.gz';
+	
+	mkdir_recursive(dirname($file));
 	chdir($GO_CONFIG->file_storage_path.'translate/');
-	exec($GO_CONFIG->cmd_tar.' -czf "'.$dir.'translations-'.$dest_lang.'-'.$GO_CONFIG->version.'.tar.gz" "'.$dest_lang.'"');
-	header('Location: '.$GO_CONFIG->local_url.'translate/'.$dest_lang.'/translations-'.$dest_lang.'-'.$GO_CONFIG->version.'.tar.gz');
+
+	exec($GO_CONFIG->cmd_tar.' -czf "'.$file.'" "'.$dest_lang.'"');
+	header('Location: '.$GO_CONFIG->local_url.'translate/translations-'.$dest_lang.'-'.$GO_CONFIG->version.'.tar.gz');
 	exit();
 }elseif($task=='email')
 {
@@ -42,12 +45,13 @@ if($task=='download')
 	$email = new email();
 
 
-	$dir = $GO_CONFIG->local_path.'translate/'.$dest_lang.'./';
-	$file=$dir.'translations-'.$dest_lang.'-'.$GO_CONFIG->version.'.tar.gz';
-	mkdir_recursive($dir);
+	$file = $GO_CONFIG->local_path.'translate/translations-'.$dest_lang.'-'.$GO_CONFIG->version.'.tar.gz';
 	
-	chdir($GO_CONFIG->file_storage_path);
+	mkdir_recursive(dirname($file));
+	chdir($GO_CONFIG->file_storage_path.'translate/');
+
 	exec($GO_CONFIG->cmd_tar.' -czf "'.$file.'" "'.$dest_lang.'"');
+	
 	$email->register_attachment($file, basename($file), filesize($file), mime_content_type($file));
 
 
