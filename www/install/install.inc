@@ -48,7 +48,6 @@ array(
 'sync_auth_source_key',
 'mime_types_file',
 'file_storage_path',
-'create_mode',
 'max_file_size',
 'user_quota',
 'dav_switch',
