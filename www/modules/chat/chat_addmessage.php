@@ -28,4 +28,3 @@
       query("insert into chat_messages (id, date, username, color, message, chatroom, private) values (".(($CONNECTION == "pgsql")?("nextval('chat_messages_sequence')"):("''")).", $now, '$username', $color, '$message', $chatroomid, 0)");
     }
   }
-?>

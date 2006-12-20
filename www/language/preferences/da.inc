@@ -23,4 +23,3 @@ $pref_first_weekday = 'Første ugedag';
 
 //2.05
 $adjust_to_dst = 'Tag automatisk højde for sommertid';
-?>

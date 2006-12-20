@@ -79,5 +79,3 @@ function saveURL($page)
   return $SaveBase . urlencode($page);
 }
 }
-
-?>

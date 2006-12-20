@@ -13,4 +13,3 @@ $pref_currency = 'Myntenhet';
 $pref_region_code = 'Region';
 $pref_max_rows_list = 'Maks antall linjer tillatt i listene';
 $pref_unlimited = 'Ingen grense';
-?>

@@ -241,4 +241,3 @@ $strLoadTime = 'Gerado dentro de';
 $strDescription = 'Descri&ccedil;&atilde;o';
 $strTitle = 'T&iacute;tulo';
 $lang_modules['cms'] = "web sites";
-?>

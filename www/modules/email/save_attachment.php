@@ -98,4 +98,3 @@ $GO_CONFIG->window_mode = 'popup';
 $mode = 'save';
 $module = $GO_MODULES->get_module('filesystem');
 require_once($module['path'].'index.php');
-?>

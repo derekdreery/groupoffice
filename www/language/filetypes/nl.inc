@@ -47,4 +47,3 @@ $filetypes['fla']='Macromedia Flash bronbestand';
 $filetypes['xlt']='Microsoft Excel spreadsheet';
 $filetypes['ai']='Adobe Illustrator bestand';
 $filetypes['eml']='E-mail bericht';
-?>

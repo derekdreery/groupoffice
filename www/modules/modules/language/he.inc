@@ -31,5 +31,3 @@ $cmdInstall = 'התקן';
 $cmdUninstall = 'הסר';
 $strConfirmUninstallPrefix = 'האם אתה בטוח שאתה רוצה להסיר';
 $strConfirmUninstallSuffix = '?';
-
-?>

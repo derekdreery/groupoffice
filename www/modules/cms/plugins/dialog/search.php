@@ -33,4 +33,3 @@ window.close();
 </script>
 <?php
 require_once ($GO_THEME->theme_path."footer.inc");
-?>

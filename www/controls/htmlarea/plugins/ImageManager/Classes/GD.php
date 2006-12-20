@@ -500,4 +500,3 @@ Class Image_Transform_Driver_GD extends Image_Transform
     }
 
 } // End class ImageGD
-?>

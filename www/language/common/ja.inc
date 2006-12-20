@@ -349,4 +349,3 @@ $strLinks = 'リンク';
 $strUnlinkPrefix = 'リンクを取り消してもよろしいですか ';
 $strUnlinkSuffix = '?';
 $cmdUnlink = '非リンク';
-?>

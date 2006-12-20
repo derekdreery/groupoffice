@@ -49,5 +49,3 @@ $pref_use_checkbox_select = 'Sélectionne plusieurs lignes sans utiliser la touc
 
 //2.15
 $pref_date_seperator = 'Séparateur de date';
-
-?>

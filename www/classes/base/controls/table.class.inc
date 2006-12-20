@@ -276,4 +276,3 @@ class table_heading extends html_element
 		$this->name = $this->innerHTML = $name;
 	}
 }
-?>

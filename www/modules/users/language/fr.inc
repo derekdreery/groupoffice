@@ -115,5 +115,3 @@ $users_enabled = 'Compte valide';
 
 $admin_groups_visible = 'L\'utilisateur est visible dans les groupes suivants';
 $admin_look_feel = 'Look & feel';
-
-?>

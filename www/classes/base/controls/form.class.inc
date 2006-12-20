@@ -38,4 +38,3 @@ class form extends html_element
 		$this->set_attribute('action', $action);	
 	}
 }
-?>

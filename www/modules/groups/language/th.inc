@@ -22,4 +22,3 @@ $groups_users_in_select = "เลือกรายชื่อผู้ใช�
 //translation required
 $groups_new_group = 'กลุ่มใหม่';
 $groups_members = 'สมาชิก';
-?>

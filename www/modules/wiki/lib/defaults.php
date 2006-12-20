@@ -293,4 +293,3 @@ $SaveMacroEngine = array(
                      'parse_define_sisterwiki',
                      'parse_define_links'
                    );
-?>

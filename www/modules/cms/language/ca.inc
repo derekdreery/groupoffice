@@ -154,4 +154,3 @@ $cms_login = 'Entrada';
 //2.14
 $cms_searchengine_info = 'Informació del motor de cerca';
 $cms_autogenerate_searchengine_info = 'Genera automàticament informació sobre el motor de cerca (Recomenat)';
-?>

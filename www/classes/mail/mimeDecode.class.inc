@@ -834,4 +834,3 @@ class Mail_mimeDecode
     }
 
 } // End of class
-?>

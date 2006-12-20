@@ -137,5 +137,3 @@ else                                    // Display main menu for admin.
                                           ACTION_BLockUnblockHosts) .
                                  html_newline()));
 }
-
-?>

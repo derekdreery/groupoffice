@@ -87,4 +87,3 @@ switch($task)
 		$tabstrip->innerHTML .= get_acl($user['acl_id'], false);
 	break;
 }
-?>

@@ -228,4 +228,3 @@ $ab_search_on_users = 'Buscar en';
 $ab_users_count_single='usuario';
 $ab_users_count_multiple='usuarios';
 $ab_no_users='No se han encontrado usuarios';
-?>

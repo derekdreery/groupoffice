@@ -43,4 +43,3 @@ if (!file_exists($GO_CONFIG->root_path.'doc'.$GO_CONFIG->slash.$GO_LANGUAGE->lan
 {
   header('Location: '.$GO_CONFIG->host.'doc'.'/'.$GO_LANGUAGE->language['language_file'].'.pdf');
 }
-?>

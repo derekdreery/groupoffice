@@ -65,6 +65,3 @@ class projects_monthview extends calendar_monthview
 		}
 	}		
 }
-
-
-?>

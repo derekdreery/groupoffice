@@ -340,4 +340,3 @@ $cal_field_types['checkbox'] = 'チェックボックス';
 $cal_field_types['text'] = 'テキスト';
 $cal_field_types['textarea'] = 'テキスト領域';
 $cal_field_types['date'] = '日付領域';
-?>

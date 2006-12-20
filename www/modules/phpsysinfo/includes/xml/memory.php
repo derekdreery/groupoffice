@@ -82,5 +82,3 @@ function html_memory () {
 
     return $_text;
 }
-
-?>

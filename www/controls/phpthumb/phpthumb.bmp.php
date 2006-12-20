@@ -870,5 +870,3 @@ class phpthumb_bmp {
 	}
 
 }
-
-?>

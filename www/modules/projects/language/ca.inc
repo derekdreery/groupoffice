@@ -114,4 +114,3 @@ $pm_put_events_in = 'posa els per-fer a dins';
 
 //2.15
 $pm_shift_events = 'Trasllada les notes i feines associades quan canvio la data d\'inici del projecte';
-?>

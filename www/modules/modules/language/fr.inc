@@ -41,4 +41,3 @@ $cmdInstall = 'Installer';
 $cmdUninstall = 'Désinstaller';
 $strConfirmUninstallPrefix = 'Etes-vous sure de vouloir désinstaller ';
 $strConfirmUninstallSuffix = '?';
-?>

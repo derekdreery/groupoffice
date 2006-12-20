@@ -106,4 +106,3 @@ $users_enabled = 'Account abilitato';
 
 $admin_groups_visible = 'L\'utente e\' visibile per i seguenti gruppi';
 $admin_look_feel = 'Aspetto';
-?>

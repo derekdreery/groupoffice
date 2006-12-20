@@ -50,4 +50,3 @@ if ($site['acl_read'] == 0 || $GO_SECURITY->has_permission($GO_SECURITY->user_id
   header('Location: '.$GO_CONFIG->host.'error_docs/401.php');
   exit();
 }
-?>

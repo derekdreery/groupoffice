@@ -364,4 +364,3 @@ $cmdSettings = 'Settings';
 $strTableConfig = 'Table configuration';
 
 $strMonthText = 'Month text';
-?>

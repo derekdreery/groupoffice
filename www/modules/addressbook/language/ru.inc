@@ -226,5 +226,3 @@ $ab_search_for_keyword = 'для';
 
 $ab_search_in = 'Посик в'; //changed
 $ab_search_on_users = 'Поиск на';
-
-?>

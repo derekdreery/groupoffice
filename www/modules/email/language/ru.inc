@@ -143,4 +143,3 @@ $ml_appointment = 'This message contains an appointment. Do you want to view thi
 $ml_mails_were_sent = 'mail messages sent';
 $ml_novalidate_cert = 'Не правильный сертификат';
 $ml_appointment_vcf = 'Это сообщение содержит контактный адрес. Вы хотите добавить его в Вашу адресную книгу?';
-?>

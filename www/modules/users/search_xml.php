@@ -65,4 +65,3 @@ while($GO_USERS->next_record(MYSQL_ASSOC))
 	echo '</user>';
 }
 echo '</users>';
-?>

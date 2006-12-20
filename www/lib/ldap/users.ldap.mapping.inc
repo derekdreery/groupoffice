@@ -88,4 +88,3 @@ $users_ldap_mapping = array(
 	  'sort_name'	=> 'gosortname',
 	  'enabled'	=> 'accountstatus'
 );
-?>

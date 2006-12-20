@@ -216,4 +216,3 @@ $ml_confirm_empty_mailbox = 'Are you sure you want to empty the folder \'%s\'?';
 
 //2.16
 $em_source = 'Message source';
-?>

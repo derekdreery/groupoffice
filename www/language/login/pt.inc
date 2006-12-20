@@ -11,4 +11,3 @@ $login_missing_field = "Voc&ecirc; n&atilde;o introduziu o seu nome de utilizado
 $login_bad_login = "Utilizador ou senha errada";
 $login_remind = "Mantenha-me entrado at&eacute; eu indicar que quero sair e teclar 'disconex&atilde;o'.";
 $login_language = 'Idioma';
-?>

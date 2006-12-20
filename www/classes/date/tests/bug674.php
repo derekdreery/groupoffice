@@ -47,5 +47,3 @@ foreach ($dates as $d) {
 if (!$error) {
     echo "Bug 674: OK\n";
 }
-
-?>

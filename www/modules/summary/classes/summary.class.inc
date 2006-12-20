@@ -105,4 +105,3 @@ class summary extends db
 		$this->query($sql);
 	}
 }
-?>

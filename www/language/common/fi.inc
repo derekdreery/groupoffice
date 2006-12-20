@@ -341,5 +341,3 @@ $strMinute = 'Minuutti';
 
 $strTwelveHourFormat = '12 tuntia muoto';
 $strTwentyfourHourFormat = '24 tuntia muoto';
-
-?>

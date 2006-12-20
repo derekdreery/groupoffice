@@ -96,4 +96,3 @@ if($root_folder = $cms->get_folder($site['root_folder_id']))
 
 
 echo $tv->getTreeview();
-?>

@@ -1856,4 +1856,3 @@ switch($task)
 	print_foot();
 	break;
 }
-?>

@@ -25,4 +25,3 @@ $no_file = 'Fil';
 $no_show_all = 'Vis alle';
 $no_show_own = 'Vis egne';
 $no_show_responsible = 'Vis ansvarlige';
-?>

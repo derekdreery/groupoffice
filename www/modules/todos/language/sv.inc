@@ -58,4 +58,3 @@ $sc_start_later = 'Felaktig uppgift!! Starttiden är senare än sluttiden.';
 
 $td_count_single = 'uppgift';
 $td_count_multiple = 'uppgifter';
-?>

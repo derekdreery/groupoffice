@@ -14,4 +14,3 @@ $login_missing_field = "לא מילית שם משתמש וסיסמה .";
 $login_bad_login = "שם משתמש או סיסמה שגויים";
 $login_remind = "השאר אותי בפנים עד שאני אבקש";
 $login_language = 'שפה';
-?>

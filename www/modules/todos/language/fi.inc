@@ -58,4 +58,3 @@ $sc_start_later = 'Väärin syötetty!! Aloitus ajankohta on loppu ajankohdan j�
 
 $td_count_single = 'tehtävä';
 $td_count_multiple = 'tehtävät';
-?>

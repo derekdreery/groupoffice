@@ -160,4 +160,3 @@ if (isset($feedback))
 }
 
 $form->add_html_element($datatable);
-?>

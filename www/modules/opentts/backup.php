@@ -62,5 +62,3 @@ echo "snapshot <a href=\"snapshots/$name$hlpdsk_prefix.$tts_version.tarz\">$name
 }else{
 echo "ups";
 }
-
-?>

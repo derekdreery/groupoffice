@@ -62,5 +62,3 @@ function isSystemModerator($password) {
  if ($_SESSION['chat_admin'] == 1) return 1;
  return 0; 
 }
-
-?>

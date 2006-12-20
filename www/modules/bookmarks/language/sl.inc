@@ -24,4 +24,3 @@ $bm_copy_read_permissions = 'Kopiraj bralni dostop na zaznamke';
 $bm_copy_write_permissions = 'Kopiraj pisalni dostop na zaznamke';
 
 $bm_move_to_catagory = 'Premakni izbrane zaznamke v kategorijo...';
-?>

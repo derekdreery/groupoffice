@@ -6,4 +6,3 @@
     query("delete from chat_chatrooms where id=$chatroomid");
   }
   echo "done";
-?>

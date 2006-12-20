@@ -3,4 +3,3 @@
 
 chdir('..');
 require_once('action/admin.php');
-?>

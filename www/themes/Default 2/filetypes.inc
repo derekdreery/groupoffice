@@ -19,4 +19,3 @@ $filetypes['vcf'] = 'filetypes/vcard.png';
 $filetypes['wav'] = $filetypes['ogg'] = $filetypes['mp3'] = 'filetypes/sound.png';
 $filetypes['mpg'] = $filetypes['mpeg'] = $filetypes['avi'] = $filetypes['wmv'] = $filetypes['wmf'] = 'filetypes/video.png';
 $filetypes['eml'] = 'mail.png'
-?>

@@ -481,4 +481,3 @@ class GO_MODULES extends db {
 		}
 	}
 }
-?>

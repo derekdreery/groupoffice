@@ -20,4 +20,3 @@ $sum_private = 'Yksityinen';
 $sum_today = 'Tänään';
 $sum_tommorow = 'Huomenna';
 $sum_unfinished = 'Kesken';
-?>

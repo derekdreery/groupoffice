@@ -68,4 +68,3 @@ if(!$event = $cal->get_event($event_id))
 }
 echo $div->get_html();
 require_once($GO_THEME->theme_path.'footer.inc');
-?>

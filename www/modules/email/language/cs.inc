@@ -182,4 +182,3 @@ $ml_reenter_password = 'Z bezpečnostních důvodů je třeba znovu zadat heslo 
 /////// extra string for my extension - used ?
 $ml_sent_ok = 'Mail byl odeslan.';
 $ml_sent_ok_not_stored = 'Mail byl odeslan, ale neni definovana slozka pro odchozi maily.\nNastavte ji v dialogu slozky.';
-?>

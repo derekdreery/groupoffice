@@ -183,4 +183,3 @@ class event_tooltip extends tooltip
 		$this->tooltip($title, $caption);
 	}	
 }
-?>

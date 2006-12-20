@@ -25,4 +25,3 @@ $no_file = 'ファイル';
 $no_show_all = 'すべて表示';
 $no_show_own = '自分のを表示';
 $no_show_responsible = '重要なものを表示';
-?>

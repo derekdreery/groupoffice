@@ -18,4 +18,3 @@ $sum_private = 'Privato';
 //2.10
 $sum_today = 'Oggi';
 $sum_tommorow = 'Domani';
-?>

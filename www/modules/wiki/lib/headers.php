@@ -21,4 +21,3 @@ function gen_headers($timestamp)
 //  header("Cache-Control: no-cache, must-revalidate");
 //  header("Pragma: no-cache");
 }
-?>

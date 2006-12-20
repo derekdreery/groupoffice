@@ -13,4 +13,3 @@ $sync_last_calendar_sync = 'Senaste kalender synchronisering';
 $sync_last_addressbook_sync = 'Senaste adressboks synchronisering';
 
 $sync_never = 'Aldrig';
-?>

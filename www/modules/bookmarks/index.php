@@ -318,4 +318,3 @@ function confirm_delete()
 </script>
 <?php
 require_once($GO_THEME->theme_path."footer.inc");
-?>

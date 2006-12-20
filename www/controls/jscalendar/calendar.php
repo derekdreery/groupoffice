@@ -115,5 +115,3 @@ class DHTML_Calendar {
         return $attrstr;
     }
 };
-
-?>

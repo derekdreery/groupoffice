@@ -33,4 +33,3 @@ $strConfirmUninstallSuffix = '?';
 $mod_available = 'โมดูลที่ใช้งานได้';
 $mod_installed = 'ติดตั้งโมดูล';
 $mod_sort_order = 'จัดเรียงตาม';
-?>

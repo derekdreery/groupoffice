@@ -73,5 +73,3 @@ function html2html_element($html)
     }
 
 }
-
-?>

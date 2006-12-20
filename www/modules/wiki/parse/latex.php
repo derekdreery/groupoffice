@@ -283,4 +283,3 @@ function latex_rate_entry($address)
 {
   return '<dd>' . $address . "</dd>\n";
 }
-?>

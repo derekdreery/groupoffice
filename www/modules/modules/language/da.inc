@@ -29,5 +29,3 @@ $cmdInstall = 'Installer';
 $cmdUninstall = 'Afinstaller';
 $strConfirmUninstallPrefix = 'Ønsker du at afinstallere';
 $strConfirmUninstallSuffix = '?';
-
-?>

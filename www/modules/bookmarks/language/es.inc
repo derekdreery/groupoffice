@@ -23,4 +23,3 @@ $bm_copy_read_permissions = 'Copiar los permisos de lectura a favoritos';
 $bm_copy_write_permissions = 'Copiar los permisos de escritura a favoritos';
 
 $bm_move_to_catagory = 'Mover los favoritos seleccionados a la categoría...';
-?>

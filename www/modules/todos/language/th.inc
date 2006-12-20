@@ -59,5 +59,3 @@ $sc_start_later = 'Bad input!! The starting time is later then the ending time.'
 
 $td_count_single = 'งาน';
 $td_count_multiple = 'งาน';
-
-?>

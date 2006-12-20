@@ -894,4 +894,3 @@ class projects extends db
 		$this->query("DELETE FROM pm_settings WHERE user_id='$user_id'");
 	}
 }
-?>

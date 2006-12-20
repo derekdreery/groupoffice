@@ -72,4 +72,3 @@ $ac_auth_text = 'Entrez l\'adresse mail de l\'utilisateur dont vous souhaitez vo
 $ac_accept = 'Accepter';
 $ac_decline = 'Refuser';
 $ac_salutation = 'Cher(e)';
-?>

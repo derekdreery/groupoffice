@@ -223,4 +223,3 @@ $ab_import_vcf_file_ok = 'Nalo¾ena datoteka je v redu. Prosim, kliknite na \'V r
 $ab_import_failed = 'Uvoz spodletel.';
 //modified string:
 $contacts_import_text = "Izberi CSV datoteko in klikni na 'V redu'";
-?>

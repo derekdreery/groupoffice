@@ -72,4 +72,3 @@ while($file = array_shift($_FILES))
 	}
 
 }
-?>

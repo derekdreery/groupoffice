@@ -406,4 +406,3 @@ echo $content;
 endwhile;
 
 }
-?>

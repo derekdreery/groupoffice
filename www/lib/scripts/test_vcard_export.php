@@ -16,4 +16,3 @@ if ($content = $vcard->_get_file_content('vcard.vcf')) {
 */
 $vcard->export_contact(2);
 echo nl2br($vcard->vcf);
-?>

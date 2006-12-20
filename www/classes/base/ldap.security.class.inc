@@ -162,4 +162,3 @@ class ldap_security extends base_security {
 */
   }
 }
-?>

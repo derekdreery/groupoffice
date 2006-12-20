@@ -25,4 +25,3 @@ $groups_members = 'メンバー';
 
 //2.13
 $lang_modules['groups'] = 'ユーザグループ';
-?>

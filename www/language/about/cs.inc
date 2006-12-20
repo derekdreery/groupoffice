@@ -8,4 +8,3 @@ $about_support = 'Máte následující možnosti pro získání podpory';
 $about_pro_support = 'Profesionální podpora Intermesh';
 $about_com_support = 'Podpora pro komunitní verzi';
 $about_help_files = 'Nápověda';
-?>

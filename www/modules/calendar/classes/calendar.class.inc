@@ -3032,4 +3032,3 @@ class calendar extends db
 		return $event;
 	}
 }
-?>

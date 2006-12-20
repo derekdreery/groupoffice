@@ -34,4 +34,3 @@ $groups_users_in_select = "Choisissez les utilisateurs que vous souhaitez ajoute
 
 $groups_new_group = 'Nouveau groupe';
 $groups_members = 'Membres';
-?>

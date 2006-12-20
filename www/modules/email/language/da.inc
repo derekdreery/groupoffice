@@ -144,4 +144,3 @@ $ml_mails_were_sent = 'e-mail beskeder sendt';
 $ml_novalidate_cert = 'Valider ikke certifikat';
 $ml_appointment_vcf = 'Denne besked indeholder en kontaktperson adresse. Ønsker du at vise adressen i adressebogen?';
 $ml_add_recievers = "Tilføj ukendte modtagere til standard adressebogen";
-?>

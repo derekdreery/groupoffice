@@ -7,4 +7,3 @@ $about_support = 'Für eine Unterstützung stehen folgende Optionen zur Verfügu
 $about_pro_support = 'Professionelle Unterstützung';
 $about_com_support = 'Unterstützung durch die Community';
 $about_help_files = 'Hilfe Dateien';
-?>

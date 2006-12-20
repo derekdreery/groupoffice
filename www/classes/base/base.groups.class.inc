@@ -360,4 +360,3 @@ class base_groups extends db {
 		return false;
 	}
 }
-?>

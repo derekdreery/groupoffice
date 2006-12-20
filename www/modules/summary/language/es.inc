@@ -19,4 +19,3 @@ $sum_private = 'Privado';
 $sum_today = 'Hoy';
 $sum_tommorow = 'Mañana';
 $sum_unfinished = 'Pendiente de finalizar';
-?>

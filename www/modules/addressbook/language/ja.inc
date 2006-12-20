@@ -229,4 +229,3 @@ $ab_search_on_users = '検索ユーザ';
 $ab_users_count_single='ユーザ';
 $ab_users_count_multiple='ユーザ';
 $ab_no_users='ユーザは見つかりませんでした';
-?>

@@ -490,4 +490,3 @@ class db {
   	return false;
   }
 }
-?>

@@ -212,5 +212,3 @@ class Frame_Tree {
     return $frame;
   }
 }
-
-?>

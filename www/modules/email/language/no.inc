@@ -121,5 +121,3 @@ $ml_signature = 'Signatur';
 $ml_root = 'Hoved e-postboks';
 $ml_disable_accounts = 'Konto vedlikehold';
 $ml_trash = 'Slett';
-
-?>

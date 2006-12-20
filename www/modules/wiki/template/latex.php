@@ -56,4 +56,3 @@ function template_view($page, $latex)
 
 <?php
 }
-?>

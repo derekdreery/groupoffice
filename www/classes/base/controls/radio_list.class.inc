@@ -117,4 +117,3 @@ class radio_list
     echo $this->get_option( $value, $text, $disabled, $attributes );
   }
 }
-?>

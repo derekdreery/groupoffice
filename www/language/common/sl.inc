@@ -247,4 +247,3 @@ $lang_modules['notes'] = "Zapiski";
 $lang_modules['bookmarks'] = "Zaznamki";
 $lang_modules['summary'] = "Povzetek";
 $lang_modules['todos'] = "Opravila";
-?>

@@ -70,4 +70,3 @@ class color_selector extends html_element
 	return $return;
   }
 }
-?>

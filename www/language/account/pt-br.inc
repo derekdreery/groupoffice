@@ -56,4 +56,3 @@ $ac_auth_text = 'Digite o endereço de correio eletrônico do usuário que você
 $ac_accept = 'Concordo';
 $ac_decline = 'não concordo';
 $ac_salutation = 'Prezado(a)';
-?>

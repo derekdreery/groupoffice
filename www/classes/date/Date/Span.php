@@ -934,5 +934,3 @@ class go_date_Span {
         return $s;
     }
 }
-
-?>

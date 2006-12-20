@@ -11,4 +11,3 @@ $login_missing_field = "Du glemte å sette inn brukernavn eller adgangskode.";
 $login_bad_login = "Feil brukernavn eller adgangskode";
 $login_remind = "La meg være innlogget inntil jeg klikker på 'Logg ut'.";
 $login_language = 'Velg språk';
-?>

@@ -23,4 +23,3 @@ require_once($GO_THEME->theme_path."simple_header.inc");
 </table>
 <?php
 require_once($GO_THEME->theme_path."simple_footer.inc");
-?>

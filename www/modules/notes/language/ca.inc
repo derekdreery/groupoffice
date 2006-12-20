@@ -24,4 +24,3 @@ $no_file = 'Fitxer';
 $no_show_all = 'Mostra totes';
 $no_show_own = 'Mostra les pròpies';
 $no_show_responsible = 'Mostra responsables';
-?>

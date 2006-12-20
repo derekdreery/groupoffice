@@ -21,4 +21,3 @@ function action_preview()
                          'nextver'   => $nextver,
                          'archive'   => $archive));
 }
-?>

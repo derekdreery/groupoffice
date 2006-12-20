@@ -36,5 +36,3 @@ function parseText($text, $parsers, $object_name)
 
   return $result . $line;
 }
-
-?>

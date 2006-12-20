@@ -32,4 +32,3 @@ class admin extends db
     return $this->query($sql);
   }
 }
-?>

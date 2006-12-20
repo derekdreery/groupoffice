@@ -270,4 +270,3 @@ if ($print)
 {
 	echo "\n<script type=\"text/javascript\">\nwindow.print();\n</script>\n";
 }
-?>

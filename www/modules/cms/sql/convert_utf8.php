@@ -13,4 +13,3 @@ while($db->next_record())
 	$sql = "UPDATE cms_files SET content='".addslashes($content)."' WHERE id=".$db->f('id');
 	$db2->query($sql);
 }
-?>

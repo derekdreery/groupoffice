@@ -116,4 +116,3 @@ $ml_inside = "em";
 //translation required
 $ml_no_mailbox = "This is not a mailbox. This folder cannot contain messages.";
 $ml_signature = 'Signature';
-?>

@@ -113,4 +113,3 @@ $cms_normal_display = 'Display the first page of this folder';
 $cms_display_type = 'When a visitor opens a folder on this web page:';
 $cms_read_more = 'Read more';
 $cms_additional_style = 'Style that is used in the editor';
-?>

@@ -72,4 +72,3 @@ if(isset($GO_MODULES->modules['filesystem']))
 	}
 }
 echo 'done<br />';
-?>

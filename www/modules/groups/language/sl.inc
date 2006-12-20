@@ -22,4 +22,3 @@ $groups_users_in_select = "Izberite uporabnike, ki jih �elite dodati v to skup
 //translation required
 $groups_new_group = 'Nova skupina';
 $groups_members = '�lani';
-?>

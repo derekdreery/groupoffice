@@ -79,4 +79,3 @@ else
 	if($default)
 		header('Location: '.$default);
 }
-?>

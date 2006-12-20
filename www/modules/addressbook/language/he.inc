@@ -206,4 +206,3 @@ $ab_import_vcf_file_ok = "המסמך שטאנתה נראה בסדר. נא לחץ
 $ab_import_failed = 'יבאו נכשל';
 //modified string:
 $contacts_import_text = "בחר הקובץ המכיל נתונים ליבאו ולחץ של ,אשור,.";
-?>

@@ -29,4 +29,3 @@ $filetypes['ics'] = 'Kalender information';
 $filetypes['vcf'] = 'Kontakt information';
 $filetypes['wav'] = $filetypes['ogg'] = $filetypes['mp3'] = $filetypes['wma'] = 'Ljud fil';
 $filetypes['mpg'] = $filetypes['mpeg'] = $filetypes['avi'] = $filetypes['wmv'] = $filetypes['wmf'] = 'Video klipp';
-?>

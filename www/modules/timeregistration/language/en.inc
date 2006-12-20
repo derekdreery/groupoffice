@@ -150,4 +150,3 @@ $pm_template_exists = 'A template with this name already exists';
 $pm_link_calendar= 'Put days in a calendar';
 
 $pm_days='Days';
-?>

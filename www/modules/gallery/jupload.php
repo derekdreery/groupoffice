@@ -37,4 +37,3 @@ while($file = array_shift($_FILES))
 		move_uploaded_file($file['tmp_name'], $tmp_dir.basename($file['name']));
 	}
 }
-?>

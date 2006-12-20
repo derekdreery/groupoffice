@@ -277,4 +277,3 @@ $cal_no_views = 'Inga vyer hittade';
 $cal_my_cals = 'Mina kalendrar';
 
 $cal_event_colors_override = 'Använd manuella färger för händelser';
-?>

@@ -124,4 +124,3 @@ $users_enabled = 'Conta ativada';
 
 $admin_groups_visible = 'O usuário é visivel nos seguintes grupos de usuário';
 $admin_look_feel = 'Aparência';
-?>

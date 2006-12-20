@@ -263,4 +263,3 @@ class dynamic_tabstrip extends table
   	return false;
   }
 }
-?>

@@ -52,4 +52,3 @@ class Agents{
                 return array_search("$uname",$this->a_agents);
         }
 }
-?>

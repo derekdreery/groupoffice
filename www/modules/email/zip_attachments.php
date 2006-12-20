@@ -38,4 +38,3 @@ if ($browser['name'] == 'MSIE')
 }
 header('Content-Transfer-Encoding: binary');
 echo $email->get_zip_of_attachments($_REQUEST['account_id'],$_REQUEST['uid'], $_REQUEST['mailbox']);
-?>

@@ -696,4 +696,3 @@ function confirm_empty_folder(account_id, folder, message)
 </script>
 <?php
 require($GO_THEME->theme_path.'footer.inc');
-?>

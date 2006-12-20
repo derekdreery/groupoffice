@@ -902,4 +902,3 @@ if ($_SERVER['REQUEST_METHOD'] != "POST" && $tp_plugin && $template_id == 0 &&
 	require_once("compose.inc");
 }
 require_once($GO_THEME->theme_path."footer.inc");
-?>

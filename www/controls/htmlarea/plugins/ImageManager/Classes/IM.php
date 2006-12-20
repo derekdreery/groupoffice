@@ -232,4 +232,3 @@ Class Image_Transform_Driver_IM extends Image_Transform
     }
 
 } // End class ImageIM
-?>

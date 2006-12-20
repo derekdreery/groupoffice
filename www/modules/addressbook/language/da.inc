@@ -208,4 +208,3 @@ $contacts_import_text = "Vælg en fil der skal importeres og klik på 'Ok'";
 
 //2.06
 $ab_select_mailing_groups = 'Vælg postgrupperne som kontaktpersonen tilhører';
-?>

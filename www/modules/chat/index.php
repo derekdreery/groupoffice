@@ -41,4 +41,3 @@ echo '</td></table>'."\n";
 
 
 require_once( $GO_THEME->theme_path."footer.inc" );
-?>

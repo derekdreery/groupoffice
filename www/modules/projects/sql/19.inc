@@ -15,4 +15,3 @@ while($db1->next_record())
 		$db2->query($sql);
 	}
 }
-?>

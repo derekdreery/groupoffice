@@ -243,4 +243,3 @@ class GO_LANGUAGE {
 		return false;
 	}
 }
-?>

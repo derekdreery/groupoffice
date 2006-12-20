@@ -63,4 +63,3 @@ if($go_mod->get_module('todos'))
 		echo 'Adding '.$event['name'].' to '.$calendar_id.'<br />';
 	}
 }
-?>

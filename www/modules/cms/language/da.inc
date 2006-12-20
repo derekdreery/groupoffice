@@ -114,4 +114,3 @@ $cms_normal_display = 'Vis den første side af mappen';
 $cms_display_type = 'Når en besøgende åbner en mappe på denne hjemmeside:';
 $cms_read_more = 'Læs mere';
 $cms_additional_style = 'Stil der bruges i editoren';
-?>

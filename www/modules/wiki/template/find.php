@@ -30,4 +30,3 @@ function template_find($args)
                                  'timestamp' => '',
                                  'nosearch'  => 0));
 }
-?>

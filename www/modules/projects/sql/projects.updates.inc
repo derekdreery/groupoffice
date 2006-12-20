@@ -97,4 +97,3 @@ $updates[11][] ="ALTER TABLE `pm_settings` ADD `registration_method` ENUM( 'endt
 ADD `unit_value` INT NOT NULL;";
 $updates[10][] = "ALTER TABLE `pmProjects` ADD `company_id` INT NOT NULL AFTER `contact_id` ,
 ADD `project_id` INT NOT NULL AFTER `company_id`;";
-?>

@@ -27,4 +27,3 @@ $login_lost_password_failed = 'Anteeksi, sähköpostiosoite \'%s\' ei ole rekist
 //2.14
 $login_fullscreen = $GO_CONFIG->title.' on avannut koko näytön sinulle automaattiseti. Voit sulkea ikkunan tai käynnistää Group-Office uudetaan.';
 $login_start = 'Käynnistä uudelleen';
-?>

@@ -184,4 +184,3 @@ function template_common_epilogue($args)
 //  header("Content-Length: $size");
 //  ob_end_flush();
 }
-?>

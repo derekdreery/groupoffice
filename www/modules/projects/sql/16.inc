@@ -17,4 +17,3 @@ while($db1->next_record())
 	$sql = "UPDATE pmFees SET acl_id=".$acl_id." WHERE id=".$db1->f('id');
 	$db2->query($sql);
 }
-?>

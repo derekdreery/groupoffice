@@ -409,6 +409,4 @@ class Template {
       function haltmsg($msg) {
         printf("<b>Template Error:</b> %s<br>\n", $msg);
       } 
-    } 
-
-?>
+    }

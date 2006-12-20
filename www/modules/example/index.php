@@ -218,4 +218,3 @@ $tabtable->print_foot();
 //Always require the footer file after you're done outputting to the 
 //client and you have included the header.inc file.
 require_once($GO_THEME->theme_path."footer.inc");
-?>

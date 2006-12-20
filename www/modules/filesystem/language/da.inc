@@ -73,4 +73,3 @@ $fb_failed_to_create = 'Kunne ikke oprette arkiv.';
 $fb_failed_to_extract = 'Kunne ikke pakke ud';
 $fb_compression_type = 'Komprimering';
 $fbFreeQuotaSpace = 'Ledig plads i din mappe';
-?>

@@ -16,4 +16,3 @@ $sum_private='Privé';
 $sum_today='Vandaag';
 $sum_tommorow='Morgen';
 $sum_unfinished='Onvoltooid';
-?>

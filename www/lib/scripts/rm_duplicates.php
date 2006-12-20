@@ -88,4 +88,3 @@ while($db->next_record())
 	}
 }
 echo 'Deleted '.$counter.' duplicate events';
-?>

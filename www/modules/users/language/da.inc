@@ -92,4 +92,3 @@ $admin_manage = 'Administrer';
 
 $admin_groups = 'Brugergrupper';
 $admin_groups_user = 'Bruger er medlem af følgende brugergrupper';
-?>

@@ -25,4 +25,3 @@ function action_view()
                       'archive'   => $version != '',
                       'version'   => $pg->version));
 }
-?>

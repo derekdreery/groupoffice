@@ -19,4 +19,3 @@ $sum_private = 'ส่วนตัว';
 //2.10
 $sum_today = 'วันนี้';
 $sum_tommorow = 'พรุ่งนี้';
-?>

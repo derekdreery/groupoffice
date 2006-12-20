@@ -183,4 +183,3 @@ class gallery extends db {
 		return $this->query("DELETE FROM ig_galleries WHERE id='$gallery_id'");
 	}
 }
-?>

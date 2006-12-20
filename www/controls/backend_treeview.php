@@ -18,4 +18,3 @@ if(isset($_GET['expand_id']))
 {
 	$_SESSION[$_GET['treeview_id']]->setClosed(smart_stripslashes($_GET['collapse_id']));
 }
-?>

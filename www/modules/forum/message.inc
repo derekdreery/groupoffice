@@ -44,4 +44,4 @@
 </td>	
 </tr>
 </table>
-<?php if ($tree != '') echo '<span class="msg_responses">'.$frm_responses.'</td></tr>'; ?>
+<?php if ($tree != '') echo '<span class="msg_responses">'.$frm_responses.'</td></tr>';

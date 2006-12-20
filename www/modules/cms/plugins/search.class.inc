@@ -137,4 +137,3 @@ class cms_search {
 		return $form->get_html();
 	}
 }
-?>

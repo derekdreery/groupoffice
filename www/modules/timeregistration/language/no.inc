@@ -51,4 +51,3 @@ $pm_total_fee = 'Totalt beløp';
 $pm_total_days = 'Totalt antall dager';
 $pm_total_units = 'Totalt antall enheter';
 $pm_summary = 'Summering';
-?>

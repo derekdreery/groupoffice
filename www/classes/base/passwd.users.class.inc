@@ -232,4 +232,3 @@ class passwd_users extends sql_users
 		return true;		
 	}
 }
-?>

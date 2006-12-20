@@ -119,4 +119,3 @@ $form->add_html_element($datatable);
 echo $form->get_html();
 
 require_once($GO_THEME->theme_path."footer.inc");
-?>

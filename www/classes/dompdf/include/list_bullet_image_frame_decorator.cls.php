@@ -142,5 +142,3 @@ class List_Bullet_Image_Frame_Decorator extends Frame_Decorator {
   }
   
 }
-
-?>

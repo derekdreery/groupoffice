@@ -58,4 +58,3 @@ ora de finalización.';
 
 $td_count_single = 'por-hacer';
 $td_count_multiple = 'por-haceres';
-?>

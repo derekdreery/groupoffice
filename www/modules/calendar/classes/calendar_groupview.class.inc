@@ -360,4 +360,3 @@ class calendar_groupview extends table
 		return parent::get_html().$javascript;
 	}	
 }
-?>

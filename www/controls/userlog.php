@@ -26,4 +26,3 @@ header('Content-Type: text/plain');
 header('Content-Disposition: inline; filename="'.$filename.'"');
 
 echo file_get_contents($path);
-?>

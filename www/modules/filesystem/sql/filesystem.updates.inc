@@ -48,4 +48,3 @@ $updates[11][] = "UPDATE `fsShares` SET TYPE = 'filesystem';";
 $updates[11][] = "ALTER TABLE `fsShares` ADD INDEX ( `type` );";
 
 $updates[10][] = "DROP TABLE `fs_settings`";
-?>

@@ -42,4 +42,3 @@ require_once($GO_THEME->theme_path."header.inc");
 
 <?php
 require_once($GO_THEME->theme_path."footer.inc");
-?>

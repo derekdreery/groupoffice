@@ -7,4 +7,3 @@ $search_web = "Google検索!";
 $search_text = "検索語句を入力:";
 $search_files = "Group-Officeのファイルやフォルダを選択";
 $cmdSearch = "検索";
-?>

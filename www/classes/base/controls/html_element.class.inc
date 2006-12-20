@@ -95,4 +95,3 @@ class html_element
 		return $this->outerHTML;
 	}
 }
-?>

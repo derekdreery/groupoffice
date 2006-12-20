@@ -210,4 +210,3 @@ class filesystem_treeview extends html_element
 		return $rootNode;	
 	}
 }
-?>

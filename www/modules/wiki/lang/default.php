@@ -125,5 +125,3 @@ define('TMPL_ChangesLastAuthor', 'Changes by last author:');
 define('TMPL_Prefs', 'Preferences');
 define('TMPL_Previewing', 'Previewing');
 define('TMPL_Preview', 'Preview');
-
-?>

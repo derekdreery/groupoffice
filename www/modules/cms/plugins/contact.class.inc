@@ -157,4 +157,3 @@ class cms_contact {
 
 	}
 }
-?>

@@ -1989,4 +1989,3 @@ function encodeBASE64($string) {
 		}
 		return utf8_encode(@imap_utf7_decode($input));	
 	}
-?>

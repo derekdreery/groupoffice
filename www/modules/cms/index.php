@@ -132,4 +132,3 @@ if ($cms->get_authorized_templates($GO_SECURITY->user_id) == 0)
 }
 echo $form->get_html();
 require_once($GO_THEME->theme_path."footer.inc");
-?>

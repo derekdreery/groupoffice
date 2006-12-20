@@ -66,4 +66,3 @@ class project_tooltip extends tooltip
 		$this->tooltip($title, $project_name);
 	}	
 }
-?>

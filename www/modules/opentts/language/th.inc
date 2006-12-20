@@ -76,5 +76,3 @@ $cmdSearch='ค้นหา';
 $tts_lang_actions='กระทำ';
 $tts_lang_text_field='ค่าในช่องตัวอักษร';
 $tts_lang_numeric_field='ค่าในช่องหมายเลข';
-
-?>

@@ -18,4 +18,3 @@ $ft_please_wait = "...נא להמתין בזמן העלאת האייקון";
 $ft_properties = "מאפיינים";
 $ft_filename = "שם הקובץ";
 $ft_current_icon = "אייקון נוכחי";
-?>

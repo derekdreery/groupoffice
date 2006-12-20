@@ -58,4 +58,3 @@ $ac_auth_text = 'Enter the e-mail address from the user who\'s account you want 
 $ac_accept = 'ยอมรับ';
 $ac_decline = 'ไม่ยอมรับ';
 $ac_salutation = 'Dear';
-?>

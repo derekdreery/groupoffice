@@ -467,4 +467,3 @@ class ldap {
 	$this->Error);
   }
 }
-?>

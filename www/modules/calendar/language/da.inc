@@ -217,4 +217,3 @@ $sc_all_day_events = 'alle dag hændelser';
 $sc_all_day_event = 'alle dag hændelse';
 $sc_usual_events = 'hændelser';
 $sc_usual_event = 'hændelse';
-?>

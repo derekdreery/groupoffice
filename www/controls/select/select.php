@@ -722,4 +722,3 @@ function select_search_addressbook(addressbook_id)
 </script>
 <?php
 require_once($GO_THEME->theme_path."footer.inc");
-?>

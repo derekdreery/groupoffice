@@ -185,4 +185,3 @@ if (!isset($updates[$old_version]))
 	install_required_modules();
 	echo 'Database updated to version '.$new_go_version.$line_break;
 }
-?>

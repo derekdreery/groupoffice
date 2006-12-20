@@ -37,4 +37,3 @@ $filetypes['swf'] = 'Macromedia Flash ムービー';
 $filetypes['fla'] = 'Macromedia Flash ドキュメント (ソース)';
 $filetypes['xls'] = $filetypes['xlt'] = 'Microsoft Excel 形式';
 $filetypes['ai'] = 'Adobe Illustrator ファイル';
-?>

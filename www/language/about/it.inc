@@ -9,4 +9,3 @@ $about_support = 'Hai le seguenbi possibilità per ottenere supporto';
 $about_pro_support = 'Supporto Professional';
 $about_com_support = 'Supporto Community';
 $about_help_files = 'File di Aiuto';
-?>

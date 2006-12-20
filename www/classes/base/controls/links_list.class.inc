@@ -146,4 +146,3 @@ class links_list extends html_element
 		return $this->innerHTML;
 	}
 }
-?>

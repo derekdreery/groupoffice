@@ -52,4 +52,3 @@ class textarea extends html_element
 		return $html;
 	}
 }
-?>

@@ -90,4 +90,3 @@ $fs_inssufficient_diskspace = 'Talletus tilaa ei ole tarpeeksi';
 $fs_open_containing_folder = 'Avaa sisältävä kansio';
 $fs_file_put_in='Tiedosto "%s" noudettu "%s"';
 $fs_new_file_uploaded = 'Uusi tiedosto noudettu: %s';
-?>

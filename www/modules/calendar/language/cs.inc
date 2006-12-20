@@ -244,4 +244,3 @@ $cal_default_reminder = 'Standardní budík';
 
 // extra
 $sc_months = 'měsíce';
-?>

@@ -358,4 +358,3 @@ class sql_groups extends base_groups
     }
   }
 }
-?>

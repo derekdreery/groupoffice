@@ -30,5 +30,3 @@ $cmdInstall = 'Namesti';
 $cmdUninstall = 'Odstrani';
 $strConfirmUninstallPrefix = 'Ali ste prepri�ani, da �elite odstranit';
 $strConfirmUninstallSuffix = '?';
-
-?>

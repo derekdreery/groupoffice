@@ -1732,5 +1732,3 @@ class go_date_Calc
     } // end func dateSeason
 
 } // end class go_date_Calc
-
-?>

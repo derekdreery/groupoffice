@@ -58,4 +58,3 @@ $sc_start_later = 'Eingabefehler!! Die Startzeit liegt hinter der Endezeit.';
 
 $td_count_single = 'Aufgabe';
 $td_count_multiple = 'Aufgaben';
-?>

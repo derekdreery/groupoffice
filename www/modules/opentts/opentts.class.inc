@@ -31,4 +31,3 @@ class go_opentts extends db
 			}			
         }
 }
-?>

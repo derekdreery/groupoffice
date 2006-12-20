@@ -24,4 +24,3 @@ $bm_copy_read_permissions = 'Kopiera läsrättigheter till bokmärken';
 $bm_copy_write_permissions = 'Kopiera skrivrättigheter till bokmärken';
 
 $bm_move_to_catagory = 'Flytta valda bokmärken till kategori...';
-?>

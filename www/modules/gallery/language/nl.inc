@@ -14,4 +14,3 @@ $ig_upload='Foto\'s toevoegen';
 $ig_select_gallery='Selecteer fotoalbum';
 $ig_maxrows='Maximum aantal rijen';
 $ig_uploaded_by='Geplaatst door';
-?>

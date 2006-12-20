@@ -56,4 +56,3 @@ $ac_auth_text = "輸入電郵地址，這個電郵地址是你/妳想看到的使用者賬號的電郵地址";
 $ac_accept = "接受";
 $ac_decline = "拒絕";
 $ac_salutation = "親愛的先生/小姐";
-?>

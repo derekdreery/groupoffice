@@ -288,5 +288,3 @@ $lang_modules['addressbook'] = "Addressebok";
 $cmdShowAll = 'Vis alle';
 
 $cmdSearch = 'Søk';
-
-?>

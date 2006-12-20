@@ -323,5 +323,3 @@ function notify_change($ticket_id,$message){
 		Email::Email("$name","$issuer_email","$agent_email", "$reply_msg_subject", "$reply_msg_body");
 	}
 }
-
-?>

@@ -311,4 +311,3 @@ require_once( $GO_THEME->theme_path."footer.inc" );
 
 // We're finished and able to close the connection to the newsserver,
 $nntp->close();
-?>

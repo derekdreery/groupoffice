@@ -22,4 +22,3 @@ $groups_users_in_select = "��ܧA/�p�Q�s�W��o�s�ժ��ϥΪ�
 //translation required
 $groups_new_group = '�s�W�s��';
 $groups_members = '����';
-?>

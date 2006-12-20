@@ -29,4 +29,3 @@ if ($notes_module && $notes_module['read_permission'])
 	echo '</td></tr></table>';
 
 }
-?>

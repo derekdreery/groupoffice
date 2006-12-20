@@ -24,4 +24,3 @@ if(!$cms_site = new cms_site())
 
 header('Content-Type: text/html; charset='.$charset);
 echo $cms_site->generate_page();
-?>

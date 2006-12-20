@@ -673,5 +673,3 @@ class ImageManager
 		return $errors;
 	}
 }
-
-?>

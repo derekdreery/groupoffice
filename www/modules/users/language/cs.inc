@@ -96,4 +96,3 @@ Uživatelské jméno: %username%
 Pro přihlášení klikněte na odkaz uvedný níže:
 
 registration_mail_body;
-?>

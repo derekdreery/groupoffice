@@ -656,4 +656,3 @@ class calendar_view extends table
 		return parent::get_html().$javascript;		
 	}
 }
-?>

@@ -14,4 +14,3 @@ $ft_please_wait = "Vennligst cvnt mens ikonet overføres...";
 $ft_properties = "Egenskaper";
 $ft_filename = "Filnavn";
 $ft_current_icon = "Aktuellt ikon";
-?>

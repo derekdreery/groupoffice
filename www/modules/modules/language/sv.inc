@@ -34,4 +34,3 @@ $strConfirmUninstallSuffix = '?';
 $mod_available = 'Tillgängliga moduler';
 $mod_installed = 'Installerade moduler';
 $mod_sort_order = 'Sorterings ordning';
-?>

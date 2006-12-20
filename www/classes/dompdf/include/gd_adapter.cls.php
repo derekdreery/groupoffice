@@ -726,4 +726,3 @@ class GD_Adapter implements Canvas {
   
   
 }
-?>

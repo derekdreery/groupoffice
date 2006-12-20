@@ -23,4 +23,3 @@ $bm_copy_read_permissions = 'Copy read permissions to bookmarks';
 $bm_copy_write_permissions = 'Copy write permissions to bookmarks';
 
 $bm_move_to_catagory = 'Move selected bookmarks to category...';
-?>

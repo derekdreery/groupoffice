@@ -37,4 +37,3 @@ $updates[11][] = "ALTER TABLE `em_settings` ADD `request_notification` ENUM( '0'
 
 $updates[10][] = "ALTER TABLE `emAccounts` ADD `use_ssl` ENUM( '0', '1' ) NOT NULL AFTER `port`;";
 $updates[10][] = "ALTER TABLE `emAccounts` ADD `novalidate_cert` ENUM( '0', '1' ) NOT NULL AFTER `use_ssl`;";
-?>

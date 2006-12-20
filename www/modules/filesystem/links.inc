@@ -88,4 +88,3 @@ if(count($links))
 	$this->delete_tasks .= $datatable->get_task_var().'.value="delete";';
 	$this->unlink_tasks .= $datatable->get_task_var().'.value="unlink";';
 }
-?>

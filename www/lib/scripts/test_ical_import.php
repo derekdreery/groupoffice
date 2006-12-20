@@ -21,4 +21,3 @@ while($object = array_shift($vcalendar[0]['objects']))
 		var_dump($event);
 	}
 }
-?>

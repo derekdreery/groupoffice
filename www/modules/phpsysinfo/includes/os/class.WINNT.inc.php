@@ -293,6 +293,4 @@ class sysinfo {
     {
        return 'xp.gif';
     } 
-} 
-
-?>
+}

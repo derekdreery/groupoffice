@@ -239,4 +239,3 @@ $ab_select_mailing_group = 'Wähle die Benutzergruppe an die du das Mailing send
 
 //2.16
 $ab_id = 'Nr.';
-?>

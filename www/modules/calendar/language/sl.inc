@@ -232,4 +232,3 @@ $cal_views = 'Pogledi';
 $sc_view_exists = 'Pogled s tem imenom ¾e obstaja';
 $cal_new_view = 'Nov pogled';
 $cal_event_calendars = 'Koledar(ji)';
-?>

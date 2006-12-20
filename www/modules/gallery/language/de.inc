@@ -14,4 +14,3 @@ $ig_gallery = 'Galerie';
 $ig_no_file = 'Es wurde keine Datei empfangen. Sie haben entweder keine Datei ausgewählt, oder die gewählten Dateien sind zu groß.';
 
 $ig_upload = 'Bilder hinzufügen';
-?>

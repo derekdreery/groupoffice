@@ -155,4 +155,3 @@ $cms_login = 'Kirjoittaudu';
 //2.14
 $cms_searchengine_info = 'Hakukonetiedot';
 $cms_autogenerate_searchengine_info = 'Luo automaattisesti hakukonetiedot (Suositus)';
-?>

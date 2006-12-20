@@ -1190,4 +1190,3 @@ class vcard_property {
 		return $array;
 	}
 }
-?>

@@ -22,5 +22,4 @@ if(count($el->rows))
 	
 	$this->delete_tasks .= $el->get_task_var().'.value="delete";';
 	$this->unlink_tasks .= $el->get_task_var().'.value="unlink";';
-}				
-?>
+}

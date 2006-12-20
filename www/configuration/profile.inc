@@ -435,4 +435,3 @@ if ($_SESSION['GO_SESSION']['first_name'] == '' || $_SESSION['GO_SESSION']['last
 }
 $button = new button($cmdSave, "javascript:_save('save_profile')");
 $tabstrip->add_html_element($button);
-?>

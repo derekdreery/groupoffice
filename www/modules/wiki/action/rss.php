@@ -56,5 +56,3 @@ function action_rss()
   template_rss(array('itemseq'  => $itemseq,
                      'itemdesc' => $itemdesc));
 }
-
-?>

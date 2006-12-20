@@ -58,4 +58,3 @@ $ac_auth_text = 'アカウント情報を閲覧したいユーザのE-mailアド
 $ac_accept = '受ける';
 $ac_decline = '辞退する';
 $ac_salutation = 'Dear';
-?>

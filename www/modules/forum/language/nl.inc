@@ -80,4 +80,3 @@ $frm_choose_sep='Enter the CSV file separator';
 $frm_import_string='Please organize your CSV fields like this :<br /> Date, Time, Topic, Body, Field1, Field2, Field3';
 $frm_entries_added='entries have been added';
 $frm_entry_added='entry has been added';
-?>

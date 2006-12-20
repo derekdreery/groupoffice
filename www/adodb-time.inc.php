@@ -1282,6 +1282,3 @@ global $ADODB_DATE_LOCALE;
 	$ret = adodb_date($fmtdate, $ts, $is_gmt);
 	return $ret;
 }
-
-
-?>

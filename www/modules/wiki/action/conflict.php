@@ -20,4 +20,3 @@ function action_conflict()
                           'timestamp' => $pg->time,
                           'nextver'   => $pg->version + 1));
 }
-?>

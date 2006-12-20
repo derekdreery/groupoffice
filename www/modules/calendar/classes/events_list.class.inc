@@ -239,4 +239,3 @@ class events_list extends datatable
 		}		
 	}
 }
-?>

@@ -24,4 +24,3 @@ $no_file = 'Datei';
 $no_show_all = 'Alle Notizen';
 $no_show_own = 'Eigene Notizen';
 $no_show_responsible = 'Eigene Zuständigkeit';
-?>

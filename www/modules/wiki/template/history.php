@@ -52,4 +52,3 @@ function template_history($args)
                                  'timestamp' => '',
                                  'nosearch'  => 0));
 }
-?>

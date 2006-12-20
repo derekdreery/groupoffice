@@ -28,4 +28,3 @@ $pref_name_order = 'Ordena noms per';
 
 //2.14
 $pref_use_checkbox_select = 'Selecciona múltiples files sense fer servir la tecla CTRL';
-?>

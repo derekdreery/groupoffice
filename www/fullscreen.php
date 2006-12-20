@@ -12,4 +12,3 @@ $button = new button($login_start, "openPopup('groupoffice', '".$GO_CONFIG->host
 echo $button->get_html();
 
 require_once($GO_CONFIG->root_path.'login_screens/'.$GO_CONFIG->login_screen.'/login_footer.inc');
-?>

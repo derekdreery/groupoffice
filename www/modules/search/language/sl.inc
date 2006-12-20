@@ -12,4 +12,3 @@ $cmdSearch = "Iskanje";
 $cmdSearch = "Iskanje";
 $cmdSearch = "Iskanje";
 $cmdSearch = "Iskanje";
-?>

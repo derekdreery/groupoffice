@@ -26,4 +26,3 @@ $adjust_to_dst = 'Automaticky upravovat hodiny podle letního času';
 
 //2.08
 $pref_name_order = 'Řadit jména podle';
-?>

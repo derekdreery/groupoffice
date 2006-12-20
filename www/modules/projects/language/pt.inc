@@ -52,5 +52,3 @@ $pm_total_fee = 'Taxa total';
 $pm_total_days = 'Dias totais';
 $pm_total_units = 'Unidades totais';
 $pm_summary = 'Sum&aacute;rio';
-
-?>

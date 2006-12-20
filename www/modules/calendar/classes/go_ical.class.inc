@@ -645,4 +645,3 @@ class go_ical extends calendar
 		return implode("\n", $lines)."\n";
 	}
 }
-?>

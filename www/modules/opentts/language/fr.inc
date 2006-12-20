@@ -75,5 +75,3 @@ $cmdSearch='Rechercher';
 $tts_lang_actions='Actions';
 $tts_lang_text_field='Valeur du champ texte:';
 $tts_lang_numeric_field='Valeur du champ numérique:';
-
-?>

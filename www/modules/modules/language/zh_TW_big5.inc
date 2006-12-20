@@ -15,4 +15,3 @@ $admin_start_module = '�C���ϥ�Group-Office���}�l�b';
 $admin_menus = "���";
 $admin_formats = "��n榡";
 $admin_date_formats_text = '�ϥ�<a class="normal" target="_blank" href="http://www.php.net/manual/en/function.date.php">PHP�榡</a> �s�W��n榡�δy�z�A��T�w.';
-?>

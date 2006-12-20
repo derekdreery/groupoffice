@@ -15,4 +15,3 @@ $admin_start_module = '��������� Group-Office �';
 $admin_menus = "����";
 $admin_formats = "���� ������";
 $admin_date_formats_text = '�������� ���� ��������� � <a class="normal" target="_blank" href="http://www.php.net/manual/en/function.date.php">PHP format</a> � �������� � ��������� Ok.';
-?>

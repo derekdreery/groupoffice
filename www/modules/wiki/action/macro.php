@@ -14,4 +14,3 @@ function action_macro()
     print $ViewMacroEngine[$macro]($parms);
   }
 }
-?>

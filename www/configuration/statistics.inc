@@ -31,4 +31,3 @@ option) any later version.
 <?php
 echo '<br />';
 $button = new button($cmdClose, "javascript:document.location='".$return_to ."'");
-?>

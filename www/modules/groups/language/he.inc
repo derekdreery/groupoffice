@@ -22,4 +22,3 @@ $groups_users_in_select = "בחר את המשתמשים שברצונך להוס�
 //translation required
 $groups_new_group = 'קבוצה חדשה';
 $groups_members = 'חברים';
-?>

@@ -22,5 +22,3 @@ $no_file = '檔案';
 $no_show_all = '顯示所有';
 $no_show_own = '顯示自己的';
 $no_show_responsible = '顯示負責人';
-
-?>

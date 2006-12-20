@@ -650,4 +650,3 @@ class timeregistration extends db
 		$this->query("DELETE FROM tr_settings WHERE user_id='$user_id'");
 	}
 }
-?>

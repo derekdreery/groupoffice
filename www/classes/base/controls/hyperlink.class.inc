@@ -54,4 +54,3 @@ class hyperlink extends html_element
 		return $html;
 	}
 }
-?>

@@ -37,4 +37,3 @@ $mod_sort_order = 'Lajittelu järjestys';
 
 //2.13
 $lang_modules['modules'] = 'Moduulit';
-?>

@@ -37,4 +37,3 @@ $mod_sort_order = 'Сортировать заказы(?)';
 
 //2.13
 $lang_modules['modules'] = 'Модули';
-?>

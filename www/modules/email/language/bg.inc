@@ -119,4 +119,3 @@ $ml_signature = 'Подпис';
 $ml_root = 'Root mailbox';
 $ml_disable_accounts = 'Забрани account management';
 $ml_trash = 'Кош';
-?>

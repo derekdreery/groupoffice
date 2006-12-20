@@ -141,4 +141,3 @@ $pm_result = 'Ergebnis';
 $pm_customer='Kunde';
 
 $pm_book_rights = 'Zugang buchen';
-?>

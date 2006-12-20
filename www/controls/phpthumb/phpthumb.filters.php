@@ -1262,5 +1262,3 @@ class phpthumb_filters {
 		return false;
 	}
 }
-
-?>

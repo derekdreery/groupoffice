@@ -10,4 +10,3 @@ if($pl->count>0)
 	$this->delete_tasks .= $pl->get_task_var().'.value="delete";';			
 	$this->unlink_tasks .= $pl->get_task_var().'.value="unlink";';
 }
-?>

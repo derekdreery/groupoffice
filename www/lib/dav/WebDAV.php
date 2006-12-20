@@ -167,4 +167,3 @@ if( $data['action']=="DELETE" ) {
 
 //Closing logentry...
 closelog();
-?>

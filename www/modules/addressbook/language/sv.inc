@@ -219,4 +219,3 @@ $ab_search_sender = 'Sök e-post';
 $ab_contact_exists = 'Denna kontakt existerar redan. Klicka %s för att visa den existerande kontakten.';
 $ab_company_exists = 'Detta företag existerar redan. Klicka %s för att visa det existerande företaget.';
 $ab_here = 'här';
-?>

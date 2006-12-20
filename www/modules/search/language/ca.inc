@@ -6,4 +6,3 @@ $search_web = "Cerca la Web amb Google!";
 $search_text = "Introduïu paraula/es clau o frase:";
 $search_files = "Cerca fitxer i carpetes a Group-Office.";
 $cmdSearch = "Cerca";
-?>

@@ -42,4 +42,3 @@ background-color:#f1f1f1;
   	echo $template['style'];
   }  
 }
-?>

@@ -44,5 +44,3 @@ function action_prefs()
   else
     { template_prefs(); }
 }
-
-?>

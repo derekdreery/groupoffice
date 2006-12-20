@@ -178,4 +178,3 @@ eval("\$content=stripslashes(\"$file\");");
 echo "<center>$content</center>";
 }
 $tabtable->print_foot();
- ?>

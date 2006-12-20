@@ -13,4 +13,3 @@ $login_missing_field = "Du glemte at udfylde brugernavn eller adgangskode.";
 $login_bad_login = "Forkert brugernavn eller adgangskode";
 $login_remind = "Lad mig være logget ind indtil jeg klikker på 'Log ud'.";
 $login_language = 'Sprog';
-?>

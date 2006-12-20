@@ -548,4 +548,3 @@ class ldap_users extends base_users {
 		return $acl_id;
 	}
 }
-?>

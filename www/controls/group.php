@@ -48,4 +48,3 @@ echo $button->get_html();
 echo '</td></tr>';
 echo "</table></td></tr></table>";
 require_once($GO_THEME->theme_path."footer.inc");
-?>

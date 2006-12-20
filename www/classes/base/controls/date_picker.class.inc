@@ -171,4 +171,3 @@ function convert_date_format($php_date_format)
 
 
 }
-?>

@@ -581,4 +581,3 @@ class ical2array
 		$this->object = array();
 	}
 }
-?>

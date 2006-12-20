@@ -71,6 +71,3 @@ $cmdSearch='Buscar';
 $tts_lang_actions='Acciones';
 $tts_lang_text_field='Campo numerico';
 $tts_lang_numeric_field='Campo de texto';
-
-
-?>

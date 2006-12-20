@@ -248,4 +248,3 @@ class projects_list extends datatable
       smart_addslashes($show_projects).'\')';
 	 }
 }
-?>

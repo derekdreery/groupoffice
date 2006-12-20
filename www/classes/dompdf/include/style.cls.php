@@ -1619,4 +1619,3 @@ class Style {
                                $this->_props), true);
   }
 }
-?>

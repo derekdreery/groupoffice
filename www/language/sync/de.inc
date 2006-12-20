@@ -16,4 +16,3 @@ $sync_never = 'Niemals';
 
 //2.15
 $sync_last_todos_sync = 'Letze Syncronisation der Aufgaben';
-?>

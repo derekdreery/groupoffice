@@ -120,4 +120,3 @@ $table->add_row($row);
 $form->add_html_element($table);
 echo $form->get_html();
 require($GO_THEME->theme_path.'footer.inc');
-?>

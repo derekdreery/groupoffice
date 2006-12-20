@@ -178,4 +178,3 @@ class notes extends db
     $this->query("DELETE FROM no_settings WHERE user_id='$user_id'");
   }
 }
-?>

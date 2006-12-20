@@ -37,4 +37,3 @@ $mod_sort_order = '並び替え';
 
 //2.13
 $lang_modules['modules'] = 'モジュール';
-?>

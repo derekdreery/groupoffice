@@ -21,4 +21,3 @@ $ig_select_gallery = 'Select gallery';
 $ig_maxrows = 'Maximum rows';
 
 $ig_uploaded_by = 'Uploaded by';
-?>

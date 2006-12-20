@@ -299,6 +299,4 @@ class bsd_common {
     $result = $distro;
     return($result);               
   }
-} 
-
-?>
+}

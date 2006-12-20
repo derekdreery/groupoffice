@@ -9,4 +9,3 @@ $updates[10][] = "ALTER TABLE `no_notes` DROP `catagory_id`,DROP `res_user_id`;"
 $updates[10][] = "ALTER TABLE `no_notes` ADD `company_id` INT NOT NULL AFTER `contact_id`;";
 $updates[10][] = "ALTER TABLE `no_notes` DROP `acl_read`,DROP `acl_write`;";
 $updates[10][] = "ALTER TABLE `no_settings` DROP `show_notes`";
-?>

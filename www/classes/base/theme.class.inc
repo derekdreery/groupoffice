@@ -183,4 +183,3 @@ class GO_THEME
 		return $login_screens;
 	}
 }
-?>

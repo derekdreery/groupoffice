@@ -19,5 +19,4 @@ $PHPMAILER_LANG["data_not_accepted"] = 'SMTP-virhe: data on virheellinen.';
 $PHPMAILER_LANG["connect_host"] = 'SMTP-virhe: yhteys palvelimeen ei onnistu.'; 
 $PHPMAILER_LANG["file_access"] = 'Seuraavaan tiedostoon ei ole oikeuksia: '; 
 $PHPMAILER_LANG["file_open"] = 'Tiedostovirhe: Ei voida avata tiedostoa: '; 
-$PHPMAILER_LANG["encoding"] = 'Tuntematon koodaustyyppi: '; 
-?>
+$PHPMAILER_LANG["encoding"] = 'Tuntematon koodaustyyppi: ';

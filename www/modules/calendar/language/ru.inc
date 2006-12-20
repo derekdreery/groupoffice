@@ -242,4 +242,3 @@ $cal_no_reminder = 'Не напоминать';
 $cal_refresh_rate = 'Частота обновления';
 $sc_seconds = 'seconds (Leave empty for no refresh)';
 $cal_default_reminder = 'Напоминание по умолчанию';
-?>

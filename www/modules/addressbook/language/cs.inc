@@ -219,4 +219,3 @@ $ab_search_sender = 'Hledat e-mail';
 $ab_contact_exists = 'Kontakt už patrně existuje. Klikněte na %s pro přechod na existujícího kontaktu nebo klikněte \'Ok\' nebo \'Použít\' pro uložení nového kontaktu.';
 $ab_company_exists = 'Firma už patrně existuje. Klikněte na %s pro přechod na existující firmu nebo klikněte \'Ok\' nebo \'Použít\' pro uložení nové firmy.';
 $ab_here = 'zde';
-?>

@@ -221,6 +221,4 @@ class sysinfo extends bsd_common {
     return($result);
   }
 
-} 
-
-?>
+}

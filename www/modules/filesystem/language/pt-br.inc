@@ -94,4 +94,3 @@ $fs_download = 'Baixar';
 $fs_view = 'Vista';
 
 $fs_notify = 'Enviar um e-mail se alguém carregar um novo arquivo';
-?>

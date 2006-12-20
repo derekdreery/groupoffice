@@ -166,4 +166,3 @@ function html_mbvoltage() {
 
   return $_text;  
 };
-?>

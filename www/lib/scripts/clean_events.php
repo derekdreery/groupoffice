@@ -47,4 +47,3 @@ while($db->next_record())
 {
 	$cal->delete_event($db->f('id'));
 }
-?>

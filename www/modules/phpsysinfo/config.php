@@ -52,5 +52,3 @@ $sensor_program = "";
 // show mount point
 // true = display  false = do not display
 $show_mount_point = true;
-
-?>

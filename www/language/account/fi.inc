@@ -58,4 +58,3 @@ $ac_auth_text = 'Kirjoita näkyväksi halumasi tilin käyttäjän sähköpostios
 $ac_accept = 'Hyväksy';
 $ac_decline = 'Kieltäydy';
 $ac_salutation = 'Hyvä';
-?>

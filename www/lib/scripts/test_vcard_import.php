@@ -17,4 +17,3 @@ if ($content = $vcard->_get_file_content('vcard.vcf')) {
 $record = $vcard->vcf_to_go(file_get_contents('vcard.vcf'));
 
 var_dump($record);
-?>

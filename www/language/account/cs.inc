@@ -58,4 +58,3 @@ $ac_auth_text = 'Zadejte e-mailovou adresu uživatele, jehož účet chcete zpř
 $ac_accept = 'přijmout';
 $ac_decline = 'odepřít';
 $ac_salutation = 'Vážení';
-?>

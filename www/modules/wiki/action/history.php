@@ -61,4 +61,3 @@ function action_history()
                          'history' => $text,
                          'diff'    => diff_parse($diff)));
 }
-?>

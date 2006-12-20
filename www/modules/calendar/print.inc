@@ -88,4 +88,3 @@ if($get_view)
 }
 $pdf->auto_print(true);
 $pdf->Output();
-?>

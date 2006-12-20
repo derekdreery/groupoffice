@@ -169,4 +169,3 @@ $table->add_row($row);
 $tabstrip->add_html_element($table);
 
 $tabstrip->add_html_element(new button($cmdSave, "javascript:_save('save_notations')"));
-?>

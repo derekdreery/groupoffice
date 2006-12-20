@@ -37,4 +37,3 @@ if ($file = $cms->get_template_file($_REQUEST['template_file_id']))
   echo $file['content']; 
   exit();
 }
-?>

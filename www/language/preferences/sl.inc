@@ -23,4 +23,3 @@ $pref_first_weekday = 'Prvi dan v tednu';
 
 //2.05
 $adjust_to_dst = 'Samodejno prilagodi èas v Daylight Savings Time';
-?>

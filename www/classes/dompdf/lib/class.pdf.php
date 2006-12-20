@@ -4968,5 +4968,3 @@ class  Cpdf {
   }
 }
 // end of class
-
-?>

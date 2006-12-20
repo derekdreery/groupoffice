@@ -56,4 +56,3 @@ $ac_auth_text = 'Inserisci l\'indirizzo e-mail dell\'account che vuoi rendere vi
 $ac_accept = 'Accetta';
 $ac_decline = 'Rifiuta';
 $ac_salutation = 'Caro/a';
-?>

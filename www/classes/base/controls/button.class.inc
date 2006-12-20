@@ -96,4 +96,3 @@ class button extends input
   	return parent::get_html();
   }
 }
-?>

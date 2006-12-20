@@ -252,4 +252,3 @@ $ab_select_mailing_group = 'Selecione o grupo que você quer enviar';
 
 //2.16
 $ab_id = 'não.';
-?>

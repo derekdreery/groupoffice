@@ -91,4 +91,3 @@ $admin_manage = 'บริหาร';
 
 $admin_groups = 'กลุ่มผู้ใช้';
 $admin_groups_user = 'User is member of the following user groups';
-?>

@@ -53,4 +53,3 @@ while($db1->next_record())
 	$new_multipage = $db1->f('multipage') == '1' ? '0' : '1';
 	$db2->query("UPDATE cms_folders SET multipage='$new_multipage' WHERE id='".$db1->f('id')."'");
 }
-?>

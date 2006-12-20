@@ -473,4 +473,3 @@ class db{
   	return false;
   }
 }
-?>

@@ -154,4 +154,3 @@ $IMConfig['thumbnail_height'] = 96;
   Image Editor temporary filename prefix.
 */
 $IMConfig['tmp_prefix'] = '.editor_';
-?>

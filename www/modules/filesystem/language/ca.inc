@@ -84,4 +84,3 @@ $fs_users = 'Usuaris';
 $fs_personal = 'Personal';
 
 $fs_inssufficient_diskspace = 'Espai de disc insuficient';
-?>

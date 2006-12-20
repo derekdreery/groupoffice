@@ -773,4 +773,3 @@ function activate_linking(goto_url)
 </script>
 <?php
 require_once ($GO_THEME->theme_path."footer.inc");
-?>

@@ -26,4 +26,3 @@ $no_file = 'קובץ';
 $no_show_all = 'הראה הכל';
 $no_show_own = 'הראה משלך';
 $no_show_responsible = 'הראה אחראי';
-?>

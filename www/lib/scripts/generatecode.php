@@ -719,4 +719,3 @@ require_once($GO_THEME->theme_path.\'footer.inc\');
 }
 
 //generate_code('sh', 'shipping','shipping','sh_jobs','job','jobs');
-?>

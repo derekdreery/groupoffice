@@ -117,4 +117,3 @@ $pm_put_events_in = 'todoを設定';
 $pm_shift_events = 'プロジェクト開始日を変更したら関係するアポイントとタスクを移動する';
 
 $pm_relate_to_self = 'プロジェクトは関係していません';
-?>

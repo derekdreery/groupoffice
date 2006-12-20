@@ -60,4 +60,3 @@ function add_to_category($page, $catlist)
     }
   }
 }
-?>

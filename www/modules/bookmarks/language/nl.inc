@@ -18,4 +18,3 @@ $bm_and_all_contents='en alle inhoud';
 $bm_copy_read_permissions='Kopiëer leesrechten naar bladwijzers';
 $bm_copy_write_permissions='Kopiëer schrijfrechten naar bladwijzers';
 $bm_move_to_catagory='Verplaats geselecteerde bladwijzers naar categorie...';
-?>

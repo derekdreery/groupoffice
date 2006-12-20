@@ -78,4 +78,3 @@ $contacts_colors['blue'] = 'Azul';
 $contacts_colors['pink'] = 'Rosa';
 $contacts_colors['orange'] = 'Laranga';
 $contacts_colors['brown'] = 'Castanho';
-?>

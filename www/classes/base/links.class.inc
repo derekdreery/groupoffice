@@ -195,4 +195,3 @@ class GO_LINKS extends db
 		return $links;
 	}
 }
-?>

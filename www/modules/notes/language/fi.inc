@@ -25,4 +25,3 @@ $no_file = 'Tiedosto';
 $no_show_all = 'Näytä kaikki';
 $no_show_own = 'Näytä omat';
 $no_show_responsible = 'Näytä vastuullinen';
-?>

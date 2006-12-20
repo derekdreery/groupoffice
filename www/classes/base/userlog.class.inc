@@ -46,4 +46,3 @@ class userlog{
 		fclose($this->handle);
 	}
 }
-?>

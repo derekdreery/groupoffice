@@ -110,5 +110,4 @@ $table->add_row($row);
 
 echo $table->get_html();
 
-require_once($GO_THEME->theme_path."footer.inc"); 
-?>
+require_once($GO_THEME->theme_path."footer.inc");

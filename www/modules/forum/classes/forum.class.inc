@@ -1113,4 +1113,3 @@
             return rmdir($dirname);
         }
 	}
-?>

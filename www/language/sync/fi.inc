@@ -13,4 +13,3 @@ $sync_last_calendar_sync = 'Edellinen kalenteri synkronointi';
 $sync_last_addressbook_sync = 'Edellinen osoitekirja synkronointi';
 
 $sync_never = 'Ei koskaan';
-?>

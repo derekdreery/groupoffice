@@ -474,5 +474,3 @@ class Attribute_Translator {
   }
 
 }
-
-?>

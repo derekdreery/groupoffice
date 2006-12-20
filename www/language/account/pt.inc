@@ -36,4 +36,3 @@ $ac_max_diskspace = "Espa&ccedil;o de disco m&aacute;ximo ";
 $ac_available_diskspace = "Espa&ccedil;o de disco dispon&iacute;vel ";
 $ac_used_diskspace = "Espa&ccedil;o de disco usado";
 $ac_used = "usado";
-?>

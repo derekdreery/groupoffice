@@ -128,4 +128,3 @@ $cal_forever = 'ตลอดไป';
 //2.09
 $cal_merged_overview = 'Merged overview';
 $cal_own_availability = 'Own availability';
-?>

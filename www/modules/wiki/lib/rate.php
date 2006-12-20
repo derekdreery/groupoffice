@@ -110,4 +110,3 @@ function rateBlockRemove($db, $address)
 
   $db->query("DELETE FROM $RtTbl WHERE ip='$address'");
 }
-?>

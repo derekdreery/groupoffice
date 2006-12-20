@@ -137,4 +137,3 @@ for($row=0;$row<$rows;$row++)
 	$pdf->print_body_row($print_events, $events_count, $hour_of_day);
   }
 }
-?>

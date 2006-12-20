@@ -15,4 +15,3 @@ function action_style()
   header("Content-Length: $size");
   ob_end_flush();
 }
-?>

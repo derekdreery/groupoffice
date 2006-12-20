@@ -44,5 +44,3 @@ function diff_parse($text)
 
   return parseText($text, $DiffEngine, '');
 }
-
-?>

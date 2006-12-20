@@ -24,4 +24,3 @@ $no_file = 'Fichero';
 $no_show_all = 'Ver todas';
 $no_show_own = 'Ver las propias';
 $no_show_responsible = 'Ver responsables';
-?>

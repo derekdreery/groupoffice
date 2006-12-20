@@ -57,4 +57,3 @@ $ac_auth_text = 'Indtast e-mail adressen for brugeren hvis konto du ønsker at g
 $ac_accept = 'Godkend';
 $ac_decline = 'Afslå';
 $ac_salutation = 'Kære';
-?>

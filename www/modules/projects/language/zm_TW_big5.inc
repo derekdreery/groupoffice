@@ -82,5 +82,3 @@ $pm_probability = '可能性';
 $pm_yours_only = '你/妳自己';
 $pm_description = '描述';
 $pm_no_projects = '找不到任何專案';
-
-?>

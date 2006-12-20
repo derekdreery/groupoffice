@@ -84,4 +84,3 @@ class statusbar
   	return $this->get_html();
   }
 }
-?>

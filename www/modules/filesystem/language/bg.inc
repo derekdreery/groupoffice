@@ -62,4 +62,3 @@ $fs_keyword = 'Ключова дума';
 $fs_enter_keyword = 'Моля въведете ключова дума';
 $fs_modified_before = 'Модифицирана преди';
 $fs_modified_after = 'Модифицирана след';
-?>

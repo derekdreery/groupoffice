@@ -7,4 +7,3 @@ $about_support = 'Disposeu de les següents opcions per rebre suport';
 $about_pro_support = 'Suport Professional';
 $about_com_support = 'Suport de la Comunitat';
 $about_help_files = 'Fitxers d\'ajuda';
-?>

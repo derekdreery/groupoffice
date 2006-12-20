@@ -321,5 +321,3 @@ function HtmlParser_ForURL ($url) {
     fclose ($fp);
     return new HtmlParser ($content);
 }
-
-?>

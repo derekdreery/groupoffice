@@ -26,4 +26,3 @@ $login_lost_password_failed = 'Siacenti, l\'indirizzo e-mail \'%s\' non è regis
 //2.14
 $login_fullscreen = $GO_CONFIG->title.' è stato aperto a schermo pieno automaticamente. Puoi chiudere questa finestra oppure avviare Group-Office nuovamente.';
 $login_start = 'Avvia nuovamente';
-?>

@@ -98,4 +98,3 @@ $GO_HEADER['head'] = $datatable->get_header();
 require_once($GO_THEME->theme_path."header.inc");
 echo $form->get_html();
 require_once($GO_THEME->theme_path."footer.inc");
-?>

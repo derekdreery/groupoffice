@@ -524,4 +524,3 @@ echo $form->get_html();
 
 <?php
 require_once ($GO_THEME->theme_path."footer.inc");
-?>

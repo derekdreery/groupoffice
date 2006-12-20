@@ -118,4 +118,3 @@ if ($email_module && $email_module['read_permission'])
 		}
 	}
 }
-?>

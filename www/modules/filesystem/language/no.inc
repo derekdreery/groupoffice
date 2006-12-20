@@ -62,4 +62,3 @@ $fs_keyword = 'Nøkkelord';
 $fs_enter_keyword = 'Sett inn nøkkelord';
 $fs_modified_before = 'Endret før';
 $fs_modified_after = 'Endret etter';
-?>

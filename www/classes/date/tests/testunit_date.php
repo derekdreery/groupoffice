@@ -275,5 +275,3 @@ $suite = new PHPUnit_TestSuite("Date_Test");
 $result = PHPUnit::run($suite);
 // prints the tests
 echo $result->toString();
-
-?>

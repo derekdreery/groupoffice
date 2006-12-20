@@ -95,5 +95,3 @@ $pm_load= 'Просмотр часов'; //chnaged. Search above
 
 $pm_edit_data = 'Редактирование рабочих часов';
 $pm_enter_data = 'Введите рабочие часы';//changed, search above
-
-?>

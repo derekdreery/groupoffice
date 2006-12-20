@@ -204,5 +204,3 @@ $ml_set_default = 'Poner por defecto';
 $ml_used_of = 'usado por';
 
 $ml_folder_not_available = 'no puede crear carpetas con cuentas de tipo POP-3';
-
-?>

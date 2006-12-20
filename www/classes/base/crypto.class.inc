@@ -96,4 +96,3 @@ class GO_CRYPTO
     return $this->decrypt_md5($base64($url($text)),$cryptokey,$this->time);
   }
 }
-?>

@@ -200,4 +200,3 @@ class filesystem_list extends datatable
 		return parent::get_html();
 	}
 }
-?>

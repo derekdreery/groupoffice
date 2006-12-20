@@ -32,4 +32,3 @@ class passwd_security extends sql_security {
 		$this->sql_security();
 	}
 }
-?>

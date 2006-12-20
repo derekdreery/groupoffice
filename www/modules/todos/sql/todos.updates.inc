@@ -10,4 +10,3 @@ $updates[10][] = "CREATE TABLE `td_reminders` (
   KEY `user_id` (`user_id`),
   KEY `remind_time` (`remind_time`)
 ) TYPE=MyISAM;";
-?>

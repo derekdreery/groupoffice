@@ -151,4 +151,3 @@ class notes_list extends datatable
 		</script>';
 	}
 }
-?>

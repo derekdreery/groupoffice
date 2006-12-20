@@ -270,5 +270,3 @@ $cal_mo_to_su = 'da lunedì a domenica';
 
 $cal_batchcalendars = 'Crea calendari per tutti gli utenti';
 $cal_create_all_calendars = 'Crea calendari per tutti gli utenti o autorizza il gruppo';
-
-?>

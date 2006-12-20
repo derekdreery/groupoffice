@@ -184,6 +184,3 @@ $ab_search_in = '之內';
 $ab_search_on = '之外';
 $ab_search_keyword = '搜尋關鍵字';
 $ab_wildcard = '(使用 \'%\' 當作百搭字符)';
-
-
-?>

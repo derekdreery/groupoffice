@@ -7,4 +7,3 @@ $search_web = "Haku netistä Googlella!";
 $search_text = "Syötä avainsana(t) tai hakulause:";
 $search_files = "Hae tiedostoja ja kansioita Group-Officessa.";
 $cmdSearch = "Haku";
-?>

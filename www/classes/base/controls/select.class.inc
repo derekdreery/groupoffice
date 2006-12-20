@@ -268,4 +268,3 @@ class select extends html_element
 		return $this->outerHTML;
 	}
 }
-?>

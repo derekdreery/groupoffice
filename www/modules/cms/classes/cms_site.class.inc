@@ -2453,4 +2453,3 @@ class cms_site extends cms {
 		return $content;
 	}
 }
-?>

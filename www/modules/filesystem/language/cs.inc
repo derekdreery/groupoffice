@@ -78,4 +78,3 @@ $fs_new_doc = 'Nový dokument';
 $fs_cleanup = 'Vyčistit HTML';
 $fbMultipleFiles = 'Více souborů';
 $fbSelect = "Zvolte soubor"; //changed
-?>

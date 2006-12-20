@@ -33,4 +33,3 @@ class passwd_groups extends sql_groups
     $this->sql_groups();    
   }
 }
-?>

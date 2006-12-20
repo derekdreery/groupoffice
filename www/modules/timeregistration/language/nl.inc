@@ -106,4 +106,3 @@ $pm_book_rights='Registratie toegang';
 $pm_template_exists='Er bestaat al een sjabloon met deze naam';
 $pm_link_calendar='Stop dagen in een agenda';
 $pm_days='Dagen';
-?>

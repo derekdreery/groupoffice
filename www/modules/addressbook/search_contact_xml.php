@@ -61,4 +61,3 @@ while($ab->next_record(MYSQL_ASSOC))
 	echo '</contact>';
 }
 echo '</contacts>';
-?>

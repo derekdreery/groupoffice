@@ -872,4 +872,3 @@ class Stylesheet {
     return $str;
   }
 }
-?>

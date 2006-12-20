@@ -214,4 +214,3 @@ class cms_users {
 		return '<script type="text/javascript">function show_user(user_id){document.users_form.user_id.value=user_id;document.users_form.submit();}</script>'.$form->get_html();
 	}
 }
-?>

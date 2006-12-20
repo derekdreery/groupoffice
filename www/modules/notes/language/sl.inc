@@ -25,4 +25,3 @@ $no_file = 'Datoteka';
 $no_show_all = 'Prika¾i vse';
 $no_show_own = 'Poka¾i lastne';
 $no_show_responsible = 'Poka¾i odgovornega';
-?>

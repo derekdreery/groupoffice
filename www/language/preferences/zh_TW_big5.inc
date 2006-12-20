@@ -17,4 +17,3 @@ $pref_timezone = '時區';
 
 $pref_time_format = "時間格式";
 $pref_startmodule = '開始在模組';
-?>

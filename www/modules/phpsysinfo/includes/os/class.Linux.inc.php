@@ -521,6 +521,4 @@ class sysinfo {
    return $result;
   }
 
-} 
-
-?>
+}

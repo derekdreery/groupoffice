@@ -72,4 +72,3 @@ class List_Bullet_Frame_Decorator extends Frame_Decorator {
   
   //........................................................................
 }
-?>

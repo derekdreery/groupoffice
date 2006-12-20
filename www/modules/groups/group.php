@@ -279,4 +279,3 @@ function return_to_group()
 </script>
 <?php
 require_once ($GO_THEME->theme_path."footer.inc");
-?>

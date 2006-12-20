@@ -133,4 +133,3 @@ function select_color(id, form_name, element_name, color)
 </script>
 <?php
 require_once($GO_THEME->theme_path."footer.inc");
-?>

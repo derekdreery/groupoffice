@@ -28,4 +28,3 @@ $pref_name_order = 'Ordina i nomi per';
 
 //2.14
 $pref_use_checkbox_select = 'Selezione multipla delle righe senza l\'uso del tasto CTRL';
-?>

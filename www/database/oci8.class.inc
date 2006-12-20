@@ -365,4 +365,3 @@ class db {
   	return false;
   }
 }
-?>

@@ -379,4 +379,3 @@ class calendar_monthview extends table
 		return parent::get_html().$javascript;		
 	}
 }
-?>

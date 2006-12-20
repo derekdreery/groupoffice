@@ -61,4 +61,3 @@ if($file_type == 'csv') {
 
 $tabstrip->add_html_element(new button($cmdOk, "javascript:document.forms[0].task.value='export';document.forms[0].submit();javascript:document.forms[0].task.value='';"));
 $tabstrip->add_html_element(new button($cmdClose, "javascript:document.location='".$return_to."'"));
-?>

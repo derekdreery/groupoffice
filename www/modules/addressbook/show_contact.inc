@@ -197,4 +197,3 @@ if($popup)
 {
 	$tabstrip->add_html_element(new button($cmdClose, "javascript:document.location='".$return_to."'"));
 }
-?>

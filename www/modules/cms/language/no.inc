@@ -94,5 +94,3 @@ $cms_site_offline = 'Denne websiden er fortiden ikke aktivisert';
 $cms_disable_publish = 'Deaktiviser websiden';
 $cms_publish_dynamic = 'Publiser dynamisk';
 $cms_publish_static = 'Publiser statisk';
-
-?>

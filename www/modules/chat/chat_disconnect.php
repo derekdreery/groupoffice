@@ -7,4 +7,3 @@
     query("delete from chat_chatrooms where fromuser=".($userid)."");
   }
   echo "done";
-?>

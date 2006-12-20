@@ -426,4 +426,3 @@ class XFPDF extends FPDF
 	$this->state=1;
   }
 }
-?>

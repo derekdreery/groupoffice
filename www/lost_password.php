@@ -69,4 +69,3 @@ if(file_exists($GO_CONFIG->root_path.'login_screens/'.$GO_CONFIG->login_screen.'
 {
 	require_once($GO_CONFIG->root_path.'login_screens/'.$GO_CONFIG->login_screen.'/login_footer.inc');
 }
-?>

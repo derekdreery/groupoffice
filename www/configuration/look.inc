@@ -85,4 +85,3 @@ $div->add_html_element(new checkbox('use_checkbox_select','use_checkbox_select',
 $tabstrip->add_html_element($div);
 
 $tabstrip->add_html_element(new button($cmdSave, "javascript:_save('save_look')"));
-?>

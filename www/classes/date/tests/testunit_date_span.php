@@ -175,5 +175,3 @@ $suite = new PHPUnit_TestSuite("Date_SpanTest");
 $result = PHPUnit::run($suite);
 // prints the tests
 echo $result->toString();
-
-?>

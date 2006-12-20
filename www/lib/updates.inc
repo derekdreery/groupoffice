@@ -698,4 +698,3 @@ $updates[195][] = "ALTER TABLE `emAccounts` CHANGE `password` `password` VARCHAR
 OLDER VERSIONS NOT SUPPORTED BY THIS INSTALLER. DOWNLOAD 1.95 IF YOU WANT TO
 UPGRADE FROM AN OLDER VERSION THEN 1.95.
 *******************************************************************************/
-?>

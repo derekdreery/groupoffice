@@ -60,4 +60,3 @@ $db2->query('ALTER TABLE `cms_sites` DROP `name` ,
 DROP `description` ,
 DROP `root_folder_id`,
 DROP `keywords` ;');
-?>

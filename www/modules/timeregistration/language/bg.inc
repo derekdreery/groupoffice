@@ -52,5 +52,3 @@ $pm_total_fee = 'Обща тарифа';
 $pm_total_days = 'Общо дни';
 $pm_total_units = 'Общо единици';
 $pm_summary = 'Бележки';
-
-?>
