@@ -84,7 +84,7 @@ switch($task)
 		
 		$tabstrip->add_html_element($hyperlink);
 		$tabstrip->add_html_element($p);
-		$tabstrip->innerHTML .= get_acl($user['acl_id'], false);
+		$tabstrip->innerHTML .= get_acl($user['acl_id'], false);
 	break;
 }
 ?>
