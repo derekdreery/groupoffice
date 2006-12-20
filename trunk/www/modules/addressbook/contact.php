@@ -401,7 +401,7 @@ elseif ($contact_id == 0 || $task == 'save') {
 	
 	if(!isset($contact['company_id']))
 	{
-		$contact['company_id'] = isset ($_POST['company_id']) ? $_POST['company_id'] : 0;
+		$contact['company_id'] = isset ($_REQUEST['company_id']) ? $_REQUEST['company_id'] : 0;
 	}
 }
 
