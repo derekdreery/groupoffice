@@ -50,5 +50,3 @@ echo Search::show_search();
 $tabtable->print_foot();
 
 ?>
-
-

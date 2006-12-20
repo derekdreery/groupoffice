@@ -42,5 +42,3 @@ echo "<center><font class=content>". Opentts::cat_status_stat()."</center>";
 }
 $tabtable->print_foot();
 ?>
-
-	

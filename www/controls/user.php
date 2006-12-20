@@ -228,4 +228,3 @@ $tabtable->print_head(htmlspecialchars($return_to));
 $tabtable->print_foot();
 require_once($GO_THEME->theme_path."footer.inc");
 ?>
-

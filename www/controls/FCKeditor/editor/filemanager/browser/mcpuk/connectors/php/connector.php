@@ -191,4 +191,4 @@ function outputHeaders() {
 	// HTTP/1.0
 	header("Pragma: no-cache");
 }
-?> 
+?>

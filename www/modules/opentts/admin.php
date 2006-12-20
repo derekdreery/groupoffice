@@ -337,5 +337,3 @@ function mod_globals($mod_varname,$mod_definition,$mod_action){
 	Opentts::mod_globals($mod_varname,$mod_definition,$mod_action);
 }
 ?>
-
-	

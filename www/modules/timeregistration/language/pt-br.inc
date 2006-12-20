@@ -140,4 +140,3 @@ $pm_customer='Cliente';
 $pm_book_rights = 'Acesso ao livro';
 
 ?>
-

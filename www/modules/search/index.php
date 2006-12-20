@@ -56,4 +56,3 @@ document.forms[0].q.focus();
 <?php
 require_once($GO_THEME->theme_path."footer.inc");
 ?>
-

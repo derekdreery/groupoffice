@@ -36,5 +36,3 @@ $tabtable->print_head();
 Opentts::welcome();
 $tabtable->print_foot();
 ?>
-
-	
