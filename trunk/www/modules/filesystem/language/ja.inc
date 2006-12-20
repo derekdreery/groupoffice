@@ -91,4 +91,3 @@ $fs_open_containing_folder = '含まれるフォルダを開く';
 $fs_file_put_in=' "%s" のファイルは "%s" としてアップロードされました';
 $fs_new_file_uploaded = '新規ファイルアップロード: %s';
 ?>
-

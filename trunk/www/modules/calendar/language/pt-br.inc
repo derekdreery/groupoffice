@@ -383,4 +383,3 @@ $cal_weekday = 'Dia da semana';
 $cal_background_color = 'Cor de fundo';
 $cal_background = 'Fundo';
 ?>
-
