@@ -6,4 +6,3 @@ function foot(){
 }
 
 foot();
-

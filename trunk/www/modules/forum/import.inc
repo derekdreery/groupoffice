@@ -80,4 +80,3 @@ function upload()
 	</td>
 </tr>
 </table>
-
