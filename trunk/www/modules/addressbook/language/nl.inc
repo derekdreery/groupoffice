@@ -177,4 +177,3 @@ $ab_file='Bestand';
 $ab_template_uploaded='Document is opgeslagen';
 $ab_select_mailing_group='Selecteer de groep waar u de mailing naar toe wilt verzenden.';
 $ab_id='nr.';
-?>

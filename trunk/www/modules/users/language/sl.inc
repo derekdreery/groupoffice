@@ -102,4 +102,3 @@ $admin_manage = 'Upravljaj';
 
 $admin_groups = 'Uporabni¹ke skupine';
 $admin_groups_user = 'Uporabnik je èlan naslednjih skupin';
-?>

@@ -9,4 +9,3 @@ if(isset($fatal_error))
 {
 	echo '<p style="font-family: Arial, Helvetica;font-size: 12px;">Passed, Group-Office should run on this machine</p>';
 }
-?>

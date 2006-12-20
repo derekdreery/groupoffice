@@ -19,4 +19,3 @@ while($db->next_record())
 		$db2->query($sql);
 	}
 }
-?>

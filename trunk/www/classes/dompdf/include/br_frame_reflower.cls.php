@@ -58,4 +58,3 @@ class BR_Frame_Reflower extends Frame_Reflower {
     $p->add_line();
   }
 }
-?>

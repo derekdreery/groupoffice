@@ -52,4 +52,3 @@ function template_rss($args)
 </rdf:RDF>
 <?php
 }
-?>

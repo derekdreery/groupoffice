@@ -58,4 +58,3 @@ $sc_start_later = 'Špatné zadání!! Konec je dříve než začátek.';
 
 $td_count_single = 'úkol';
 $td_count_multiple = 'úkoly';
-?>

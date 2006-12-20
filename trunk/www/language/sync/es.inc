@@ -12,4 +12,3 @@ $sync_last_calendar_sync = 'Última sincronización de calendario';
 $sync_last_addressbook_sync = 'Última sincronización de libreta de direcciones';
 
 $sync_never = 'Nunca';
-?>

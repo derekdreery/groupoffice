@@ -473,4 +473,3 @@ $tabtable->print_foot();
 
 <?php
 	require($GO_THEME->theme_path."footer.inc");
-?>

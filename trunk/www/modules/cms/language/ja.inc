@@ -155,4 +155,3 @@ $cms_login = 'ログイン';
 //2.14
 $cms_searchengine_info = 'サーチエンジン情報';
 $cms_autogenerate_searchengine_info = '自動的にサーチエンジン情報が生成する (推奨)';
-?>

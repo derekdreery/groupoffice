@@ -101,4 +101,3 @@ Lösenord: %password%
 Klicka på länken nedan för att logga in:
 
 registration_mail_body;
-?>

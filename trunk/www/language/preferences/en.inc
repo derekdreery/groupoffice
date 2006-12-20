@@ -32,4 +32,3 @@ $pref_use_checkbox_select = 'Multiselect rows without using the CTRL key';
 
 //2.15
 $pref_date_seperator = 'Date seperator';
-?>

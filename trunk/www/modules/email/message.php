@@ -521,4 +521,3 @@ if (isset ($ask_to_add)) {
 
 }
 require_once ($GO_THEME->theme_path."footer.inc");
-?>

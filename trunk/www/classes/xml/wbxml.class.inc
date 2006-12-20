@@ -113,4 +113,3 @@ class wbxml
 		return $xml;	
 	}
 }
-?>

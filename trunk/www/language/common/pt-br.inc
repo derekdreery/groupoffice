@@ -440,4 +440,3 @@ $strNoItems = 'Nenhum item encontrado';
 $cmdExport = 'Exportar';
 $error_username = 'Nome de usuário inválido. Somente estes caracteres são permitidos: a-z, 0-9,- pt _';
 $cmdSettings = 'Configurações';
-?>

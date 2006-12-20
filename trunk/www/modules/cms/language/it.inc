@@ -162,5 +162,3 @@ $cms_login = 'Login';
 //2.14
 $cms_searchengine_info = 'Informazioni motore di ricerca';
 $cms_autogenerate_searchengine_info = 'Genera informazioni per il motore di ricerca automaticamente (Raccomandato)';
-
-?>

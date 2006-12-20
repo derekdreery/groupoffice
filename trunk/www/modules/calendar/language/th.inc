@@ -225,4 +225,3 @@ $cal_forever = 'ตลอดไป';
 //2.09
 $cal_merged_overview = 'รวมคำอธิบาย';
 $cal_own_availability = 'เวลาที่ว่าง';
-?>

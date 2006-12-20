@@ -24,4 +24,3 @@ $no_file = 'Arquivo';
 $no_show_all = 'Exibir todas';
 $no_show_own = 'Exibir somente as minhas';
 $no_show_responsible = 'Exibir Responsável';
-?>

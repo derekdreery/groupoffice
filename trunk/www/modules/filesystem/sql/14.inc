@@ -214,4 +214,3 @@ while($db1->next_record())
 	$GO_LINKS->delete_link($db1->f('link_id'));
 	//$db2->query("UPDATE fs_shares SET link_id='' WHERE path='".addslashes($dest_name)."'");
 }
-?>

@@ -59,4 +59,3 @@ if (!isset($filename))
 		echo $ical->export_event($_REQUEST['event_id']);
 	}
 }
-?>

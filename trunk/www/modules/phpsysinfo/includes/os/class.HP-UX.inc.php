@@ -418,6 +418,4 @@ class sysinfo {
     $result = 'xp.gif';
     return($result);
   }
-} 
-
-?>
+}

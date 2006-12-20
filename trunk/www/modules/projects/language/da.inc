@@ -83,4 +83,3 @@ $pm_yours_only = 'Dig selv';
 $pm_description = 'Beskrivelse';
 
 $pm_no_projects = 'Ingen projekter fundet.';
-?>

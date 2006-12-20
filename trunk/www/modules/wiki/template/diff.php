@@ -35,4 +35,3 @@ function template_diff($args)
                                  'timestamp' => $args['timestamp'],
                                  'nosearch'  => 0));
 }
-?>

@@ -119,4 +119,3 @@ echo "<script language=\"Javascript\" type=\"text/javascript\">
 
 ";
 $tabtable->print_foot();
-?>

@@ -151,5 +151,3 @@ foreach($tables as $table)
 }
 
 echo "Module generated\n";
-
-?>

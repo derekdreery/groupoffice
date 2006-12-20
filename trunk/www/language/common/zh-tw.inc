@@ -274,4 +274,3 @@ $cmdVcard = 'vCard';
 $strNotEnoughLicenses = 'You don\'t have enough licenses to use this section of'.
 												' Group-Office. Contact sales@intermesh.nl if you want '.
 												'to purchase additional licenses.';
-?>

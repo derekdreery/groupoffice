@@ -83,4 +83,3 @@ $registration_mail_body=<<<registration_mail_body
 Íàòèñíåòå íà âðúçêàòà ïî-äîëó çà äà âëåçåòå:
 
 registration_mail_body;
-?>

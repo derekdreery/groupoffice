@@ -56,4 +56,3 @@ while($db1->next_record())
 	echo 'Updating event '.$db1->f('name').' with id: '.$event['id'].'<br />';
 	$cal->update_event($event);
 }
-?>

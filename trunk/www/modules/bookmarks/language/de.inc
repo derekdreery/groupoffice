@@ -23,4 +23,3 @@ $bm_copy_read_permissions = 'Kopiere Leseberechtigungen zum Lesezeichen';
 $bm_copy_write_permissions = 'Kopiere Schreibberechtigungen zum Lesezeichen';
 
 $bm_move_to_catagory = 'Verschiebe ausgewählte Lesezeichen in Kategorie';
-?>

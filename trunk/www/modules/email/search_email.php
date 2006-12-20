@@ -53,4 +53,3 @@ if(count($addresses)<10)
 	}
 	echo '</addressses>';
 }
-?>

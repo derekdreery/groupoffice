@@ -11,4 +11,3 @@ $pref_look = "Estilo";
 $pref_notations = "Nota&ccedil;&otilde;es";
 $pref_currency = 'Moeda';
 $pref_region_code = 'Regi&atilde;o';
-?>

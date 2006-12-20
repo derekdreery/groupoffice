@@ -48,4 +48,3 @@ $cal_no_todos='Geen taken gevonden';
 $sc_start_later='Ongeldige invoer! De starttijd is later dan de eindtijd';
 $td_count_single='Taak';
 $td_count_multiple='taken';
-?>

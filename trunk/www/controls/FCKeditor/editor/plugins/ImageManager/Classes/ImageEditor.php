@@ -442,5 +442,3 @@ class ImageEditor
 			Return -1;
 	}
 }
-
-?>

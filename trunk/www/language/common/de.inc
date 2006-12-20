@@ -363,4 +363,3 @@ $cmdExport = 'Exportieren';
 $error_username = 'Ungültiger Benutzername. Erlaubte Schriftzeichen: a-z, 0-9,- en _';
 
 $cmdSettings = 'Einstellungen';
-?>

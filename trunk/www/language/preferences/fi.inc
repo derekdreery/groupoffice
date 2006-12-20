@@ -32,5 +32,3 @@ $pref_use_checkbox_select = 'Rivien monivalinta k채ytt채m채tt채 CTRL n채pp채int�
 
 //2.15
 $pref_date_seperator = 'P채iv채ys erotin';
-
-?>

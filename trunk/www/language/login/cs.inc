@@ -22,4 +22,3 @@ $login_lost_password_mail_body = "Požadujete nové heslo pro e-mail %s.\nVaše 
 $login_new_password = 'Nové heslo';
 $login_lost_password_success = 'Nové heslo bylo zaslána na %s';
 $login_lost_password_failed = 'Litujeme, e-mailová adresa \'%s\' není v systému registrovaná.';
-?>

@@ -102,4 +102,3 @@ while($db->next_record())
 	}
 }*/
 echo 'All Done<br />';
-?>

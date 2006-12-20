@@ -47,5 +47,3 @@ while($db1->next_record())
 	
 	$cal->query("UPDATE cal_views SET acl_read='$acl_read', acl_write='$acl_write' WHERE id=".$db1->f('id'));
 }
-
-?>

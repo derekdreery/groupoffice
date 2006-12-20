@@ -138,5 +138,3 @@ $frm_choose_sep = 'Inserisci il separatore del file CSV';
 $frm_import_string = 'Organizza i campi del tuo file CSV come questi :<br /> Data, Ora, Argomento, Corpo, Field1, Field2, Field3';
 $frm_entries_added = 'elementi sono stati aggiunti';
 $frm_entry_added = 'elemento è stato aggiunto';
-
-?>

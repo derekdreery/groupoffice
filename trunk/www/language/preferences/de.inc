@@ -31,4 +31,3 @@ $pref_use_checkbox_select = 'Mehrfachselektion ohne Verwendung der Taste STRG';
 
 //2.15
 $pref_date_seperator = 'Trennzeichen bei Datum';
-?>

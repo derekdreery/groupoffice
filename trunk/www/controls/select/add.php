@@ -100,4 +100,3 @@ if($_POST['multiselect'] == 'true')
 	</html>
 	<?php
 }
-?>

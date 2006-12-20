@@ -206,5 +206,3 @@ $ml_used_of = 'använt av';
 
 $ml_folder_not_available = 'Du kan inte skapa extra mappar med POP3 konton'
 ;
-
-?>

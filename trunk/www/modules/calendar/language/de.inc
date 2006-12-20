@@ -390,4 +390,3 @@ $cal_background_colors = 'Hintergrundfarben';
 $cal_weekday = 'Wochentag';
 $cal_background_color='Hintergrundfarbe';
 $cal_background = 'Hintergrund';
-?>

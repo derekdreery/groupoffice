@@ -243,5 +243,3 @@ $input_holidays['fix']['pt-br']['12-10'] = 'Nossa Sr.a Aparecida - Padroeira do 
 $input_holidays['fix']['pt-br']['02-11'] = 'Finados';
 $input_holidays['fix']['pt-br']['15-11'] = 'Proclamação da República';
 $input_holidays['fix']['pt-br']['25-12'] = 'Natal';
-
-?>

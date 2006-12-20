@@ -26,5 +26,3 @@ $adjust_to_dst = 'Automatically adjust time to Daylight Savings Time';
 
 //2.08
 $pref_name_order = 'Сортировать имена по';
-
-?>

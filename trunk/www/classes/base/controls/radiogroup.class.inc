@@ -117,4 +117,3 @@ class radiobutton extends input
 		$this->set_attribute('id', $id);
 	}
 }
-?>

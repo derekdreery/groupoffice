@@ -34,4 +34,3 @@ while($file = array_shift($_FILES))
 			$file['type']);
     }	
 }
-?>

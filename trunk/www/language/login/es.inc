@@ -26,4 +26,3 @@ $login_lost_password_failed = 'Lo siento, la dirección de correo electrónico \
 //2.14
 $login_fullscreen = $GO_CONFIG->title.' ha sido abierta en pantalla completa automáticamente. Puede cerrar esta ventana o iniciar Group-Office de nuevo.';
 $login_start = 'Iniciar de nuevo';
-?>

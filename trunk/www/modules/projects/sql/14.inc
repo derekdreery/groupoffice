@@ -16,4 +16,3 @@ while($db1->next_record())
 		$fs->move($old_path, $new_path);			
 	}
 }
-?>

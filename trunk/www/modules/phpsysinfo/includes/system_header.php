@@ -71,5 +71,3 @@ if (file_exists(APP_ROOT . "/templates/$template/images/$template" . "_backgroun
 } else {
   echo "<body dir=$text_dir>";
 }
-
-?>

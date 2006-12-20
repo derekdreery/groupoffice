@@ -22,4 +22,3 @@ $groups_users_in_select = "Vælg de brugere du vil tilføje til gruppen:";
 //translation required
 $groups_new_group = 'Ny gruppe';
 $groups_members = 'Medlemmer';
-?>

@@ -50,4 +50,3 @@ if (!isset($filename))
 		echo $vcard->vcf;
 	}
 }
-?>

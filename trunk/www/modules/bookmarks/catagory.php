@@ -232,4 +232,3 @@ $tabtable->print_foot();
 echo '</form>';
 //require the footer file
 require_once($GO_THEME->theme_path.'footer.inc');
-?>

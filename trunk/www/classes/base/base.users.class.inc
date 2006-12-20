@@ -657,4 +657,3 @@ class base_users extends db
 		return $password;
 	}
 }
-?>

@@ -529,4 +529,4 @@ execution:</p>
 <p>For more complete documentation of the Canvas API, see the <a
 href="http://www.digitaljunkies.ca/dompdf/doc/">API documentation</a>.</p>
 
-<?php include("foot.inc"); ?>
+<?php include("foot.inc");

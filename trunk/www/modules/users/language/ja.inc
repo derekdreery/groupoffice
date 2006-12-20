@@ -109,4 +109,3 @@ $users_enabled = 'アカウント有効';
 
 $admin_groups_visible = 'このユーザは以下のユーザグループに閲覧可能';
 $admin_look_feel = 'ルックアンドフィール';
-?>

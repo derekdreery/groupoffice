@@ -35,4 +35,3 @@ foreach($valids as $year => $months){
 if (!$failed_test_data) {
 	echo "Bug #727, pass 1: OK\n";
 }
-?>

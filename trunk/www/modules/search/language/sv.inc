@@ -7,4 +7,3 @@ $search_web = "Sök på webben med google";
 $search_text = "Ange en sökfras och tryck på 'Sök'.";
 $search_files = "Sök efter filer och kataloger i Group-Office.";
 $cmdSearch = "Sök";
-?>

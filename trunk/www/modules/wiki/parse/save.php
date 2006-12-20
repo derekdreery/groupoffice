@@ -95,4 +95,3 @@ function parse_define_sisterwiki($text)
 
   return $text;
 }
-?>

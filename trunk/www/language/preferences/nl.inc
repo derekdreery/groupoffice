@@ -21,4 +21,3 @@ $adjust_to_dst='Tijd automatisch aan zomertijd aanpassen';
 $pref_name_order='Sorteer namen op';
 $pref_use_checkbox_select='Selecteer meervoudig zonder de CTRL toets te gebruiken';
 $pref_date_seperator='Schedingsteken datum';
-?>

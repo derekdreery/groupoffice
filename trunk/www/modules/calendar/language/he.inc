@@ -211,4 +211,3 @@ $cal_event_calendars = 'יומנים';
 //2.06
 $cal_view_merged = 'מוזג';
 $cal_view_emerged = 'הופיע';
-?>

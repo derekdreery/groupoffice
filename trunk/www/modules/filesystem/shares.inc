@@ -57,4 +57,3 @@ echo $button->get_html();
 </table>
 <?php
 $tabtable->print_foot();
-?>

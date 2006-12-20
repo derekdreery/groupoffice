@@ -28,4 +28,3 @@ if($com_list->count>0)
 	$this->delete_tasks .= $com_list->get_task_var().'.value="delete";';
 	$this->unlink_tasks .= $com_list->get_task_var().'.value="unlink";';
 }
-?>

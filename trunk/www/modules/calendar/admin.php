@@ -470,4 +470,3 @@ function apply_holidays(holidays_count)
 <?php
 }
 require_once($GO_THEME->theme_path."footer.inc");
-?>

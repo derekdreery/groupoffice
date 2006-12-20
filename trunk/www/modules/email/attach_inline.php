@@ -94,4 +94,3 @@ if ($attachments_size < $GO_CONFIG->max_attachment_size)
 	</html>
 <?php
 }
-?>

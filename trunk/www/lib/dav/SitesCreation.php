@@ -26,5 +26,3 @@ $namelist = array_unique($namelist);
 
 foreach( $namelist as $user )
   $GO_DAV->check_login($user);
-
-?>

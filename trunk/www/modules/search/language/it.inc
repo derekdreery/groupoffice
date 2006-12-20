@@ -6,4 +6,3 @@ $search_web = "Cerca nel web con google";
 $search_text = "Inserisci una frase e seleziona 'Cerca'.";
 $search_files = "Cerca tra documenti e cartelle in Group-Office.";
 $cmdSearch = "Cerca";
-?>

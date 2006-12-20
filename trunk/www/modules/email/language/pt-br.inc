@@ -227,4 +227,3 @@ $ml_confirm_empty_mailbox = 'Você tem certeza que quer esvaziar a pasta \'%s\'?
 
 //2.16
 $em_source = 'Fonte da mensagem';
-?>

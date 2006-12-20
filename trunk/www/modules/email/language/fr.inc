@@ -164,5 +164,3 @@ $ml_empty_trash = 'Vider la poubelle';
 
 // LCCY
 $ml_raw = 'Affichage format brut';
-
-?>

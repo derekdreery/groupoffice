@@ -119,4 +119,3 @@ $pm_no_template_events = 'Attività non trovata';
 $pm_no_template = 'Non usare modelli';
 
 $pm_put_events_in = 'metti le attività in';
-?>

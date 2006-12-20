@@ -15,4 +15,3 @@ $sum_no_announcements = 'Ingen nyheder';
 $sum_due_time = 'Vis nyhed indtil';
 $sum_new_announcement = 'Opret nyhed';
 $sum_private = 'Privat';
-?>

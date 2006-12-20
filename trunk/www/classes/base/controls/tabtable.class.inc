@@ -208,4 +208,3 @@ class tabtable
     echo '</td></tr></table>';
   }
 }
-?>

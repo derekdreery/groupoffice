@@ -39,4 +39,3 @@ require_once( $GO_THEME->theme_path."footer.inc" );
 
 // That's it, we've printed what the user wanted to do and can now exit.
 // Maybe that would be the correct place to close database connections...
-?>

@@ -1439,4 +1439,3 @@ class cms extends db
 		$this->query("DELETE FROM cms_settings WHERE user_id='$user_id'");
 	}
 }
-?>

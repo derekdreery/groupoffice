@@ -44,5 +44,3 @@ $filetypes['ics'] = 'Календарная информация';
 $filetypes['vcf'] = 'Контактная информация';
 $filetypes['wav'] = $filetypes['ogg'] = $filetypes['mp3'] = $filetypes['wma'] = 'Звуковой файл';
 $filetypes['mpg'] = $filetypes['mpeg'] = $filetypes['avi'] = $filetypes['wmv'] = $filetypes['wmf'] = 'Видео файл';
-
-?>

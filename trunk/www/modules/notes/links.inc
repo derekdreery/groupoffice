@@ -12,4 +12,3 @@ if($nl->count>0)
 	$this->delete_tasks .= $nl->get_task_var().'.value="delete";';
 	$this->unlink_tasks .= $nl->get_task_var().'.value="unlink";';
 }
-?>

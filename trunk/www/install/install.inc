@@ -183,4 +183,3 @@ function install_required_modules()
 		}
 	}
 }
-?>

@@ -252,4 +252,3 @@ class email_auth extends base_auth
 		}
 	}	
 }
-?>

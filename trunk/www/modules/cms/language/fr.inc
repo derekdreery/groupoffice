@@ -107,4 +107,3 @@ $cms_message = 'Message';
 $cms_subject = 'Sujet';
 $cms_domain = 'Domain';
 $cms_replace_filenames = 'Remplacer le nom de fichier';
-?>

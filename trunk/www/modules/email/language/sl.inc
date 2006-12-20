@@ -151,4 +151,3 @@ $ml_body = 'Telo';
 $ml_before = 'Starej¹e kot';
 $ml_since = 'Novej¹e kot';
 $ml_select_one_criteria = 'Prosim, izberite ali vnesite vsaj en iskalni kriterij.';
-?>

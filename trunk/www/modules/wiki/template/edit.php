@@ -60,4 +60,3 @@ function template_edit($args)
                                  'timestamp' => $args['timestamp'],
                                  'nosearch'  => 0));
 }
-?>

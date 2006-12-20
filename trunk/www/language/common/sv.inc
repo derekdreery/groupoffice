@@ -306,4 +306,3 @@ $sync_download_clients = 'Ladda ner synchronisationsklienter';
 
 //2.12
 $strNoData = 'Inga data hittades';
-?>

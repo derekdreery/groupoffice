@@ -15,4 +15,3 @@ $ft_please_wait = "請等待，正在上載圖示...";
 $ft_properties = "內容";
 $ft_filename = "檔案名稱";
 $ft_current_icon = "當前圖示";
-?>

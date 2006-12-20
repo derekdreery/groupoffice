@@ -201,4 +201,3 @@ class translate extends db
 
 	}
 }
-?>

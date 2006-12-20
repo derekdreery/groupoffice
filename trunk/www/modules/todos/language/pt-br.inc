@@ -58,4 +58,3 @@ $sc_start_later = 'Entrada errada!! A hora de inicio está maior do que a hora d
 
 $td_count_single = 'a fazer';
 $td_count_multiple = 'a fazere\'s';
-?>

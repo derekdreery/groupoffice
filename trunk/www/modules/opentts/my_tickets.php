@@ -92,5 +92,3 @@ if (isset($_SESSION['filter']) and $_SESSION['filter']==1){
 echo Search::printdb();
 
 $tabtable->print_foot();
-
-?>

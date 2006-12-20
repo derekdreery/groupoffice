@@ -11,4 +11,3 @@ $login_missing_field = "你/妳沒有輸入使用者名稱或密碼";
 $login_bad_login = "使用者名稱或密碼錯誤";
 $login_remind = "保持登入狀態直到我按「登出」鈕。";
 $login_language = '語系';
-?>

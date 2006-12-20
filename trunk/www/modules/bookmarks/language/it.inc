@@ -23,5 +23,3 @@ $bm_copy_read_permissions = 'Copia i permessi di lettura nei segnalibri';
 $bm_copy_write_permissions = 'Copia i permessi di scrittura nei segnalibri';
 
 $bm_move_to_catagory = 'Sposta i segnalibri selezionati nella categoria...';
-
-?>

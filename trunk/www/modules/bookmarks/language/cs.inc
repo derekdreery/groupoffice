@@ -24,4 +24,3 @@ $bm_copy_read_permissions = 'Kopírovat práva ke čtení do odkazů';
 $bm_copy_write_permissions = 'Kopírovat práva k zápisu do odkazů';
 
 $bm_move_to_catagory = 'Přesunout zvolené odkazy do kategorie...';
-?>

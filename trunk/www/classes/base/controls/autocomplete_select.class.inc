@@ -156,4 +156,3 @@ class autocomplete_select
 		return $input2->get_html().$input->get_html().$div->get_html();
 	}
 }
-?>

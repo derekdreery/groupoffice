@@ -69,5 +69,3 @@ function html_network () {
 
     return $_text;
 }
-
-?>

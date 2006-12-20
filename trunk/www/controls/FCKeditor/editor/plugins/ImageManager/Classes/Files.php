@@ -211,5 +211,3 @@ class Files
 			return sprintf('%01.2f',$size/(1024.0*1024)).' Mb';	
 	}
 }
-
-?>

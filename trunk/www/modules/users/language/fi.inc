@@ -109,4 +109,3 @@ $users_enabled = 'Tili käytössä';
 
 $admin_groups_visible = 'Käyttäjä näkyy seuraaville käyttäjä ryhmille';
 $admin_look_feel = 'Ulkoasu';
-?>

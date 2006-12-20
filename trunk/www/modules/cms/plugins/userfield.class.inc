@@ -42,4 +42,3 @@ class cms_userfield {
 		return '';
 	}
 }
-?>

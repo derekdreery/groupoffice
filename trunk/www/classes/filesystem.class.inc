@@ -1205,4 +1205,3 @@ class filesystem extends db
 		$this->query("DELETE FROM fs_settings WHERE user_id='$user_id'");
 	}
 }
-?>

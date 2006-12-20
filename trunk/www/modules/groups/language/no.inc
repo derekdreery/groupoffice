@@ -19,4 +19,3 @@ $groups_users_in_select = "Velg de brukere du vil legge til gruppen:";
 
 $groups_new_group = 'Ny gruppe';
 $groups_members = 'Medlemmer';
-?>

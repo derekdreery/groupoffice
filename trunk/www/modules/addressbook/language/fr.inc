@@ -203,4 +203,3 @@ $ab_import_vcf_file_ok = 'L\'envoie u fichier c\'est bien passé. Cliquer sur \'
 $ab_import_failed = 'Importation défaillante';
 //modified string:
 $contacts_import_text = "Sélectionné le fichier avec vos information pour être importer cliquer sur 'Ok'";
-?>

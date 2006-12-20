@@ -83,4 +83,3 @@ $pm_yours_only = 'בעצמך';
 $pm_description = 'תיאור';
 
 $pm_no_projects = 'לא נמצא אף פרוייקט';
-?>

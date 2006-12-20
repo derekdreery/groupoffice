@@ -79,6 +79,3 @@ $register_thanks = '<h2>Tusen takk</h2>. Ditt abbonement vil bli behandlet snare
 $register_accept = 'Legg til brukere';
 $register_addressbook = 'Legg til adressebok';
 $register_title = 'Abboner';
-
-
-?>

@@ -25,4 +25,3 @@ $groups_members = 'Jäsenet';
 
 //2.13
 $lang_modules['groups'] = 'Käyttäjä ryhmät';
-?>

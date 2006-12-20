@@ -13,4 +13,3 @@ $sync_last_calendar_sync = 'Ultima sincronizzazione calendiario';
 $sync_last_addressbook_sync = 'Ultima sincronizzazione rubrica';
 
 $sync_never = 'Mai';
-?>

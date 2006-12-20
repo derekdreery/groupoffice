@@ -94,4 +94,3 @@ $admin_manage = 'מודול';
 
 $admin_groups = 'קבוצות משתמשים';
 $admin_groups_user = 'המשתמש רשום בקבוצות הבאות:';
-?>

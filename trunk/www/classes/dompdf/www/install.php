@@ -168,4 +168,4 @@ load_font.php, however it's usage is the same (see the last example above).</p>
 
 
 
-<?php include("foot.inc");?>
+<?php include("foot.inc");

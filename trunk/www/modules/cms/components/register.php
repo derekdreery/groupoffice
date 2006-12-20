@@ -570,4 +570,3 @@ $button = new button($cmdReset, 'javascript:document.forms[0].reset()');
 </table>
 <?php
 require_once($GO_THEME->theme_path."footer.inc");
-?>

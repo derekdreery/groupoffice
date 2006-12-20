@@ -6261,5 +6261,3 @@ EOD;
   $xPath->replaceChildByData('/AAA[1]/BB[2]', '"Some new text"');
   echo $xPath->exportAsHtml();
 }
-
-?>

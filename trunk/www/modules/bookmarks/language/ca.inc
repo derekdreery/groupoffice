@@ -23,4 +23,3 @@ $bm_copy_read_permissions = 'Copia els permisos de lectura a les adreces d\'inte
 $bm_copy_write_permissions = 'Copia els permisos d\'escriptura a les adreces d\'interès';
 
 $bm_move_to_catagory = 'Mou les adreces d\'interès seleccionades a la categoria...';
-?>

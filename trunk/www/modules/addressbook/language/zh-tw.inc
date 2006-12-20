@@ -206,5 +206,3 @@ $contacts_import_text = "Select a file containing data to be imported and click 
 
 //2.06
 $ab_select_mailing_groups = 'Select the mailing groups where this contact belongs to';
-
-?>

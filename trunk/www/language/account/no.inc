@@ -55,5 +55,3 @@ $ac_auth_text = 'Skriv e-post adressen til den brukers konto du ønsker å gjøre s
 
 $ac_accept = 'Aksepter';
 $ac_decline = 'Avslå';
-
-?>

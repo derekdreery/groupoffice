@@ -86,4 +86,3 @@ registration_mail_body;
 $reg_language = '»yšt';
 
 $reg_theme = '§GŽº¥DÃD';
-?>

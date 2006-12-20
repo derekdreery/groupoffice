@@ -23,4 +23,3 @@ $login_lost_password_mail_body = "Du har begärt ett nytt lösenord för %s. Din
 $login_new_password = 'Nytt lösenord';
 $login_lost_password_success = 'Ett nytt lösenord har skickats till %s';
 $login_lost_password_failed = 'Ledsen, men e-post adressen \'%s\' finns inte registrerad här.';
-?>

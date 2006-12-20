@@ -103,4 +103,3 @@ $form->add_html_element(new button($cmdClose, "javascript:document.location='ind
 echo $form->get_html();
 
 require_once($GO_THEME->theme_path."footer.inc");
-?>

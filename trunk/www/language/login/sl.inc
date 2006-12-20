@@ -12,4 +12,3 @@ $login_missing_field = "Niste vnesli uporabni¹kega imena in gesla.";
 $login_bad_login = "Napaèno uporabni¹ko ime ali geslo";
 $login_remind = "Obdr¾i me prijavljenega, dokler ne kliknem na gumb odjava.";
 $login_language = 'Jezik';
-?>

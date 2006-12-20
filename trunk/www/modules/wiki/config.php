@@ -99,5 +99,3 @@ define('TemplateDir', 'template');
 //   and block others from accessing the wiki.
 // If $AdminEnabled is set to 0, administrator control will be disallowed.
 $AdminEnabled = 0;
-
-?>

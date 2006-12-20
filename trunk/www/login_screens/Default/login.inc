@@ -167,4 +167,3 @@ function set_language(dropbox)
 </form>
 <?php
 require_once($GO_CONFIG->root_path.'login_screens/'.$GO_CONFIG->login_screen.'/login_footer.inc');
-?>

@@ -312,5 +312,3 @@ $strNoData = 'Данные не найдены';
 $strSynchronization = 'Синхронизация';
 $strSnooze = 'Snooze';
 $strDismiss = 'Dismiss';
-
-?>

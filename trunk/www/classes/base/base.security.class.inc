@@ -636,4 +636,3 @@ class base_security extends db
 	function has_permission($user_id, $acl_id) {
 		 return false;
 	}
-?>

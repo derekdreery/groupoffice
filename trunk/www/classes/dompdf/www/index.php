@@ -103,4 +103,4 @@ relevant sections of the source.  If you add some features, or fix
 some bugs, please send me a patch and I'll include your changes in the main
 distribution.</p>
 
-<?php include("foot.inc"); ?>
+<?php include("foot.inc");

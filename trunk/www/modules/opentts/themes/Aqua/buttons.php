@@ -28,4 +28,3 @@ function show_hidden(){
 	$returntd .= "<input type=checkbox name=\"show_hidden\" $hidden_check onClick='document.form_hidden.submit()'><img src=\"images/blank.png\" border=\"0\" height=\"32\" width=\"1\" valign=center><br>$helpdesk_show_hidden</form></td>";
 	return $returntd;
 }
-?>

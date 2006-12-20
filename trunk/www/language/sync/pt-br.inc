@@ -16,4 +16,3 @@ $sync_never = 'Nunca';
 
 //2.15
 $sync_last_todos_sync = 'Ultima pendência sincronizada';
-?>

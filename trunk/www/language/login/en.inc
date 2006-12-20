@@ -32,4 +32,3 @@ $login_to = 'Login to %s';
 $login_no_account = 'Not registered yet?';
 $login_register = 'Click here to register at %s';
 $login_no_account_text = 'To login to our system you need to register once. You need to make up a username and password that you can use to login each time.';
-?>

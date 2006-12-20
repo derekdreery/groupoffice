@@ -185,5 +185,4 @@ if(isset($cms_site) && $cms_site)
 }else
 {
   require($GO_THEME->theme_path."footer.inc");
-}  
-?>
+}

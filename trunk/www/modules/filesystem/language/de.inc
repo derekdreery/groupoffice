@@ -101,4 +101,3 @@ $fs_download = 'Download';
 $fs_view = 'Ansicht';
 
 $fs_notify = 'Sende mir eine E-Mail wenn jemand eine neue Datei hochläd';
-?>

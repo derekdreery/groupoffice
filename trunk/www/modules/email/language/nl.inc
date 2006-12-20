@@ -180,4 +180,3 @@ $ml_show_preview='Toon voorbeeldweergave wanneer ik een bericht selecteer';
 $ml_show_headers='Toon berichtkoppen';
 $ml_confirm_empty_mailbox='Weet u zeker dat u de map \'%s\' wilt leegmaken?';
 $em_source='Bron van bericht';
-?>

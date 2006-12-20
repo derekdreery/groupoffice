@@ -137,5 +137,4 @@ while($GO_USERS->next_record())
 		}
 	}	
 }
-umask($old);      
-?>
+umask($old);

@@ -21,5 +21,3 @@ $rtl_dir="ltr";
 $charset="windows-1255";
 $hlpdsk_theme="Aqua";
 $classes_dir="opentts";
-
-?>

@@ -18,4 +18,3 @@
   }
 
   query("delete from chat_messages where date<".(time() - 120)."");
-?>

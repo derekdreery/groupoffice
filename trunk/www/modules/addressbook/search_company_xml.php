@@ -58,4 +58,3 @@ while($ab->next_record(MYSQL_ASSOC))
 	echo '</company>';
 }
 echo '</companies>';
-?>

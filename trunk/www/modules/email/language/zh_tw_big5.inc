@@ -127,5 +127,3 @@ $ml_auto_check = '自動檢查這個帳號的新郵件';
 //1.98
 $ml_no_contacts_in_mailing_group = '你/妳所選擇的郵寄群組內沒有任何聯絡人，請先在郵寄群組內新增聯絡人';
 $ml_attention= '注意';
-
-?>

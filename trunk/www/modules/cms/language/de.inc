@@ -175,4 +175,3 @@ $cms_comments_text = 'Am Ende jeder Seite können Kommentare zur Homepage abgege
 $cms_comments_login = 'Sie müssen angemeldet sein, um Kommentare zu schreiben.';
 $cms_add_comment = 'Kommentar hinzufügen';
 $cms_comments_missing_field = 'Sie müssen sowohl einen Namen als auch einen Kommentar eingeben.';
-?>

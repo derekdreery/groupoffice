@@ -38,4 +38,3 @@ $filetypes['xls'] = $filetypes['xlt'] = 'Microsoft Excel Tabelle';
 $filetypes['ai'] = 'Adobe Illustrator Datei';
 
 $filetypes['eml'] = 'E-Mailnachricht';
-?>

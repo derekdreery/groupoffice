@@ -19,4 +19,3 @@ $db->query("ALTER TABLE `cal_events` DROP `acl_read` , DROP `acl_write` ;");
 $db->query("OPTIMIZE TABLE `acl` , `acl_items`");
 
 echo $counter.' entries removed<br />';
-?>

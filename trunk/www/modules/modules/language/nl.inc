@@ -29,4 +29,3 @@ $mod_available='Beschikbare modules';
 $mod_installed='Geïnstalleerde modules';
 $mod_sort_order='Sortering';
 $lang_modules['modules']='Modules';
-?>

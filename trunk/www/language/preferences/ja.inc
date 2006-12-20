@@ -32,4 +32,3 @@ $pref_use_checkbox_select = 'コントロールキーを使わずに列を複数
 
 //2.15
 $pref_date_seperator = '日付の分け方';
-?>

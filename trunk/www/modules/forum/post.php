@@ -152,5 +152,3 @@ require('post.inc');
 $tabtable->print_foot();
 
 require($GO_THEME->theme_path."footer.inc");
-
-?>

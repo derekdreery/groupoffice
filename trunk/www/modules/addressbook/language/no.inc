@@ -89,5 +89,3 @@ $ab_addressbook = 'Adressebok';
 $contacts_select_single = 'Klikk på en kontakt for velge denne personen';
 
 $ab_group_exists = 'En adressebok med dette navnet eksisterer allerede';
-
-?>

@@ -502,4 +502,3 @@ class acl extends html_element{
 		}
 	}
 }
-?>

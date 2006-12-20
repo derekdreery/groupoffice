@@ -227,4 +227,3 @@ function paste_url(url, field)
 </script>
 <?php
 require_once($GO_THEME->theme_path."footer.inc");
-?>

@@ -26,4 +26,3 @@ $login_lost_password_failed = 'Ho sento, l\'adreça de correu electrònic \'%s\'
 //2.14
 $login_fullscreen = $GO_CONFIG->title.' ha estat obert a pantalla completa per vostè automàticament. Podeu tancar la finestra o engegar Group-Office un altre cop.';
 $login_start = 'Torna a començar';
-?>

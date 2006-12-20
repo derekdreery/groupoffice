@@ -108,4 +108,3 @@ $users_enabled = 'Compte activat';
 
 $admin_groups_visible = 'L\'usuari és visible pels següents grups d\'usuaris';
 $admin_look_feel = 'Aparença';
-?>

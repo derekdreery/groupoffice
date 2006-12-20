@@ -15,4 +15,3 @@ $sum_no_announcements = 'Ni najdenih naznanil';
 $sum_due_time = 'Poka¾i dokler';
 $sum_new_announcement = 'Novo naznanilo';
 $sum_private = 'Zasebno';
-?>

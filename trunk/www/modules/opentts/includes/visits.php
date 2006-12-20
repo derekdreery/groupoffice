@@ -23,4 +23,3 @@ if (!isset($HTTP_COOKIE_VARS["tts_LastVisitTemp"])) {
 // set cookie.
 
 setcookie("tts_LastVisitTemp", $temptime ,$expiredate2, $cookiepath, $cookiedomain, $cookiesecure);
-?>

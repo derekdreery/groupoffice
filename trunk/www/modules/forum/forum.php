@@ -240,4 +240,3 @@ $tabtable->print_foot();
 //client and you have included the header.inc file.
 echo '</form>';
 require($GO_THEME->theme_path."footer.inc");
-?>

@@ -70,4 +70,3 @@ $fb_failed_to_create = '建立壓縮檔失敗';
 $fb_failed_to_extract = '解壓失敗';
 $fb_compression_type = '壓縮';
 $fbFreeQuotaSpace = 'Free Space in your Directory';
-?>

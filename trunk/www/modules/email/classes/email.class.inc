@@ -891,4 +891,3 @@ class email extends db
 
     }
 }
-?>

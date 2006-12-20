@@ -218,6 +218,4 @@ function html_hardware () {
   $_text .= '</table>';
 
   return $_text;
-} 
-
-?>
+}

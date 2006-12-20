@@ -85,4 +85,3 @@ $pm_description = 'Opis';
 
 $pm_no_projects = 'Nimate nobenih projektov';
 $pm_no_projects = 'Ni najdenih projektov.';
-?>

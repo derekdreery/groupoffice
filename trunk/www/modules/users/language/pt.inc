@@ -62,4 +62,3 @@ $ml_sent_items = "Artigos enviados";
 $ml_spam = "Spam";
 $ac_samba_user = "Utilizador tem acesso ao servidor de ficheiros e imprimação.";
 $ml_email_only = "Requerido somente quando voc&ecirc; n&atilde;o cr&iacute;a um endere&ccedil;o de E-mail";
-?>

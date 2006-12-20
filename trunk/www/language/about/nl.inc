@@ -6,4 +6,3 @@ $about_support='U heeft de volgende opties om ondersteuning te krijgen';
 $about_pro_support='Professionele ondersteuning';
 $about_com_support='Community ondersteuning';
 $about_help_files='Help documenten';
-?>

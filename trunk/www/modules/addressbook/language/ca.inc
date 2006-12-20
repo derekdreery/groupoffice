@@ -228,4 +228,3 @@ $ab_search_on_users = 'Cerca a';
 $ab_users_count_single='usuari';
 $ab_users_count_multiple='usuaris';
 $ab_no_users='No s\'han trobat usuaris';
-?>

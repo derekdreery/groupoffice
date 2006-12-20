@@ -154,4 +154,3 @@ echo $tv->getTreeview();
 echo '</form>';
 
 require($GO_THEME->theme_path.'footer.inc');
-?>

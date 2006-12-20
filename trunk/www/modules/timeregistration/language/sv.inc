@@ -94,4 +94,3 @@ $pm_load= 'Visa timmar'; //chnaged. Search above
 
 $pm_edit_data = 'Ändra arbetstimmar';
 $pm_enter_data = 'Lägg till arbetstimmar';//changed, search above
-?>

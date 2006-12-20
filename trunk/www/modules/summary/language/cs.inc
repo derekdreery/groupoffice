@@ -19,4 +19,3 @@ $sum_private = 'Soukromé';
 //2.10
 $sum_today = 'Dnes';
 $sum_tommorow = 'Zítra';
-?>

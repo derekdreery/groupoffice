@@ -25,4 +25,3 @@ $login_to='Inloggen bij %s';
 $login_no_account='Nog niet geregisteerd?';
 $login_register='Klik hier om te registreren bij %s';
 $login_no_account_text='Om in te loggen moet u zich eenmalig registreren. U moet een gebruikersnaam en wachtwoord bedenken waarmee u in kunt loggen op het systeem.';
-?>

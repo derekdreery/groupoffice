@@ -42,4 +42,3 @@ $tabstrip->add_html_element($cb);
 $tabstrip->innerHTML .= '<br />';
 
 $tabstrip->add_html_element(new button($cmdSave, "javascript:_save('save_filesystem_settings');"));
-?>

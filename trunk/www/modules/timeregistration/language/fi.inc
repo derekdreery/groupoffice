@@ -118,4 +118,3 @@ $pm_shift_events = 'Siirrä liittyvät tapaamiset ja tehtävät kun projektin al
 
 $pm_project_agenda = 'Projektiaikataulu';
 $pm_relate_to_self = 'Projekti ei voi viitata itseensä';
-?>

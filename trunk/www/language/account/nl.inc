@@ -49,4 +49,3 @@ $ac_auth_text='Voer het e-mail adres in van de gebruiker die u zichtbaar wilt ma
 $ac_accept='Accepteren';
 $ac_decline='Weigeren';
 $ac_salutation='Geachte';
-?>

@@ -151,4 +151,3 @@ $div->add_html_element(new checkbox('email_reminders','email_reminders','1', $ca
 $tabstrip->add_html_element($div);
 
 $tabstrip->add_html_element(new button($cmdSave, "javascript:_save('save_calendar_settings');"));
-?>

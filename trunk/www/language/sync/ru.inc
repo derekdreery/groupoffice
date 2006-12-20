@@ -13,4 +13,3 @@ $sync_last_calendar_sync = 'Последняя синхронизация календаря';
 $sync_last_addressbook_sync = 'Последняя синхронизация адресной книги';
 
 $sync_never = 'Новое';
-?>

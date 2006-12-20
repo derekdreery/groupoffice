@@ -233,4 +233,3 @@ class base_auth extends db
 		return false;
 	}
 }
-?>

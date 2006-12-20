@@ -25,4 +25,3 @@ $no_file = 'Файл';
 $no_show_all = 'Показать все';
 $no_show_own = 'Только свои';
 $no_show_responsible = 'Show responsible';
-?>

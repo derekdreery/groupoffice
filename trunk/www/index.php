@@ -191,4 +191,3 @@ if ( $_SERVER['REQUEST_METHOD'] == "POST" || (isset($_COOKIE['GO_UN'])
 }
 load_basic_controls();
 require_once('login_screens/'.$GO_CONFIG->login_screen.'/login.inc');
-?>

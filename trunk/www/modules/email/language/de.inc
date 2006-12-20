@@ -224,4 +224,3 @@ $ml_confirm_empty_mailbox = 'Wollen sie wirklich den Ordner \'%s\' leeren?';
 
 //2.16
 $em_source = 'Quelltext der Nachricht';
-?>

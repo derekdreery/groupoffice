@@ -20,4 +20,3 @@ $sum_private = 'Privat';
 $sum_today = 'I dag';
 $sum_tommorow = 'I morgon';
 $sum_unfinished = 'I dag';
-?>

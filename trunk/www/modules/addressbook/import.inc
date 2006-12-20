@@ -44,4 +44,3 @@ $tabstrip->add_html_element(new button($cmdClose, "javascript:document.location=
 $div = new html_element('div');
 $div->set_attribute('class','Success');
 $tabstrip->add_html_element($div);
-?>

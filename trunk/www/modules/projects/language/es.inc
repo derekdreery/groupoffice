@@ -114,4 +114,3 @@ $pm_put_events_in = 'poner por-hacer en';
 
 //2.15
 $pm_shift_events = 'Trasladar las notas y tareas asociadas cuando se cambie la fecha de inicio del proyecto';
-?>

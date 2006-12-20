@@ -24,4 +24,3 @@ $bm_copy_read_permissions = 'Kopioi lukuoikeus suosikkeihin';
 $bm_copy_write_permissions = 'Kopioi kirjoitusoikeus suosikkeihin';
 
 $bm_move_to_catagory = 'Siirrä valittu suosikki sivu kategoriaan...';
-?>

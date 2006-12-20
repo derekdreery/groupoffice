@@ -39,4 +39,3 @@ if(!isset($_SERVER['HTTP_REFERER']) || !eregi('cms', $_SERVER['HTTP_REFERER']))
 }
 
 require_once('view.inc');
-?>

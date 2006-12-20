@@ -45,4 +45,3 @@ function template_save($args)
 	'nosearch'  => 0));
 
 }
-?>

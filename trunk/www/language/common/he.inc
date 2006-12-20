@@ -252,4 +252,3 @@ $lang_modules['bookmarks'] = "סימניות";
 $lang_modules['summary'] = "סיכום";
 $lang_modules['todos'] = "פעוליות";
 $lang_modules['opentts'] = "תמיכה";
-?>

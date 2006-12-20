@@ -288,4 +288,3 @@ $lang_modules['addressbook'] = "Адресна книга";
 $cmdShowAll = 'Покажи всичко';
 
 $cmdSearch = 'Търся';
-?>

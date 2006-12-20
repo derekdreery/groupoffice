@@ -33,4 +33,3 @@ class WikiDB
     return mysql_fetch_row($qid);
   }
 }
-?>

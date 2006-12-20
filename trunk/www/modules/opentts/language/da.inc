@@ -75,5 +75,3 @@ $cmdSearch='Søg';
 $tts_lang_actions='Handlinger';
 $tts_lang_text_field='Værdi for tekstfelt';
 $tts_lang_numeric_field='Numerisk felt værdi';
-
-?>

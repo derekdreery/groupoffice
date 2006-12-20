@@ -36,4 +36,3 @@ $mod_sort_order = 'Ordem de exibição';
 
 //2.13
 $lang_modules['modules'] = 'Módulos';
-?>

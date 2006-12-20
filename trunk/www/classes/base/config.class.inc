@@ -996,4 +996,3 @@ class GO_CONFIG
     return $this->db->query("DELETE FROM settings WHERE name='$name'");
   }
 }
-?>

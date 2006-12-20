@@ -263,4 +263,3 @@ switch ($task)
 echo '</form>';
 
 require_once($GO_THEME->theme_path."footer.inc");
-?>

@@ -66,4 +66,3 @@ function template_preview($args)
                                  'timestamp' => $args['timestamp'],
                                  'nosearch'  => 0));
 }
-?>

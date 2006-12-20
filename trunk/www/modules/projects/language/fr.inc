@@ -83,4 +83,3 @@ $pm_yours_only = 'Vous-même';
 $pm_description = 'Description';
 
 $pm_no_projects = 'Aucuns projets trouvés.';
-?>

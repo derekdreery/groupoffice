@@ -29,4 +29,3 @@ function template_admin($args)
                                  'timestamp' => '',
                                  'nosearch'  => 1));
 }
-?>

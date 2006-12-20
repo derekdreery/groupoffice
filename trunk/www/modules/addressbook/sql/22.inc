@@ -46,4 +46,3 @@ if(file_exists($GO_MODULES->modules['addressbook']['path'].'templates/classes/te
 		}
 	}
 }
-?>

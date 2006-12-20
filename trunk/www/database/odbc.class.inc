@@ -623,4 +623,3 @@ The function halt()s if a lock cannot be obtained.
   	return false;
   }
 }
-?>

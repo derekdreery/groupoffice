@@ -163,5 +163,3 @@ $sc_holidays_no_file_prefix = "這假期不能產生，因為檔案包含之假期資料";
 $sc_holidays_no_file_suffix = "的語系不存在或是空的";
 
 $sc_no_events = "找不到時件";
-
-?>

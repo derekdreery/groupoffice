@@ -20,4 +20,3 @@ $sum_private = 'Private';
 $sum_today = 'Today';
 $sum_tommorow = 'Tomorrow';
 $sum_unfinished = 'Unfinished';
-?>

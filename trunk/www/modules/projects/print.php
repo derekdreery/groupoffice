@@ -39,4 +39,3 @@ require_once("load.inc");
 echo $container->get_html();
 echo "\n<script type=\"text/javascript\">\nwindow.print();\n</script>\n";
 require_once($GO_THEME->theme_path."footer.inc");
-?>

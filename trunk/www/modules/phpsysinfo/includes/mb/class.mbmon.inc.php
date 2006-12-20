@@ -86,5 +86,3 @@ class mbinfo {
     return $results;
   }
 }
-
-?>

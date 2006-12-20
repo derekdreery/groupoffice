@@ -1224,4 +1224,3 @@ class go_date
 
 //
 // END
-?>

@@ -224,4 +224,3 @@ class autocomplete extends html_element
 		return $this->get_header().parent::get_html();
 	}
 }
-?>

@@ -79,5 +79,3 @@ $fs_new_doc = 'Новый документ';
 $fs_cleanup = 'Очистить HTML';
 $fbMultipleFiles = 'Multiple files';
 $fbSelect = "Выбранный файл"; //changed
-
-?>

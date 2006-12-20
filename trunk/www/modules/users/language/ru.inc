@@ -116,5 +116,3 @@ $registration_mail_subject = "äÏÂÒÏ ÐÏÖÁÌÏ×ÁÔØ × %groupoffice_ti
 $registration_title = "òÅÇÉÓÔÒÁÃÉÑ × %groupoffice_title%"; //changed string
 
 $lang_modules['users'] = 'ðÏÌØÚÏ×ÁÔÅÌÉ';
-
-?>

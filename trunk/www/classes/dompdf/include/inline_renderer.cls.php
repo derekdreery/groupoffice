@@ -180,4 +180,3 @@ class Inline_Renderer extends Abstract_Renderer {
     }
   }
 }
-?>

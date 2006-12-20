@@ -316,4 +316,3 @@ document.note_form.name.focus();
 </script>
 <?php
 require_once($GO_THEME->theme_path."footer.inc");
-?>

@@ -8,4 +8,3 @@ $about_support = 'You have the following options to obtain support';
 $about_pro_support = 'Professional support';
 $about_com_support = 'Community support';
 $about_help_files = 'Help files';
-?>

@@ -333,4 +333,3 @@ $cal_add_admin = 'Lisää Järjestelmänhoitaja';
 $cal_scale='Skaala';
 
 $cal_show_completed = 'Näytä valmiit tehtävät';
-?>

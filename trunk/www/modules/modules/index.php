@@ -102,4 +102,3 @@ require_once ('modules.inc');
 echo '</form>';
 
 require_once ($GO_THEME->theme_path."footer.inc");
-?>

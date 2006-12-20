@@ -447,7 +447,3 @@ $strMoreColors='Plus de couleurs';
 
 $strNoItems = 'Aucun élément trouvé';
 $cmdExport = 'Exporter';
-
-
-
-?>

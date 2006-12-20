@@ -116,4 +116,3 @@ if(isset($feedback))
 }
 echo $form->get_html();
 require($GO_THEME->theme_path.'footer.inc');
-?>

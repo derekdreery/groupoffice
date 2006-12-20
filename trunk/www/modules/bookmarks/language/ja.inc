@@ -24,4 +24,3 @@ $bm_copy_read_permissions = 'ブックマークに読込権限をコピーする
 $bm_copy_write_permissions = 'ブックマークに書込権限をコピーする';
 
 $bm_move_to_catagory = '選択されたカテゴリは移動しました・・・';
-?>

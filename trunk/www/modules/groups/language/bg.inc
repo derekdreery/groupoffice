@@ -25,4 +25,3 @@ $groups_members = 'Членове';
 
 //2.13
 $lang_modules['groups'] = 'Потребителски групи';
-?>

@@ -127,4 +127,3 @@ class checkbox extends html_element
     }
   }
 }
-?>

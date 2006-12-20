@@ -61,4 +61,3 @@ $sc_start_later = 'Inserimento errato!! L\'ora iniziale è posteriore all\'ora f
 
 $td_count_single = 'attività';
 $td_count_multiple = 'attività';
-?>

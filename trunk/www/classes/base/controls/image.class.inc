@@ -41,4 +41,3 @@ class image extends html_element
 		}
 	}
 }
-?>

@@ -97,4 +97,3 @@ $cms_site_offline = 'Този сайт вече е изклучен';
 $cms_disable_publish = 'Изключи сайта';
 $cms_publish_dynamic = 'Публикувай динамично';
 $cms_publish_static = 'Публикувай статично';
-?>

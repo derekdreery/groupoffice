@@ -72,4 +72,3 @@ class user_autocomplete
 		return $this->autocomplete->get_html();		
 	}
 }
-?>

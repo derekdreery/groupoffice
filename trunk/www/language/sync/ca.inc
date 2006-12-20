@@ -12,4 +12,3 @@ $sync_last_calendar_sync = 'Darrera sincronització de calendari';
 $sync_last_addressbook_sync = 'Darrera sincronització de llibreta d\'adreces';
 
 $sync_never = 'Mai';
-?>

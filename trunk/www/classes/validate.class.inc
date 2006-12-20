@@ -140,4 +140,3 @@ class validate
                 return true;
         }
 }
-?>

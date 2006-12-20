@@ -62,4 +62,3 @@ $gui->getSuitesFromDir( dirname(__FILE__).'/classes/base', '^.*\.test\.php$' );
 $gui->show();
 
 echo "</body>";
-?>

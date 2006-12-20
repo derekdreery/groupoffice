@@ -57,4 +57,3 @@ $ac_auth_text = 'Introduïu l\'adreça de correu electrònic del compte d\'usuar
 $ac_accept = 'Accepta';
 $ac_decline = 'Rebutja';
 $ac_salutation = 'Benvolgut/da';
-?>

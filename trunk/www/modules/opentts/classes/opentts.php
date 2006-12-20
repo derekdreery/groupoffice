@@ -321,4 +321,3 @@ and {$prefix}{$hlpdsk_prefix}_tickets.t_status={$prefix}{$hlpdsk_prefix}_status.
 		return $response;
 	}
 }
-?>

@@ -96,5 +96,3 @@ $text['s_label']        = 'Label';
 $text['degree_mark']    = '&amp;ordm;C';
 $text['voltage_mark']   = 'V';
 $text['rpm_mark']       = 'RPM';
-
-?>

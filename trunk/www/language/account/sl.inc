@@ -59,4 +59,3 @@ $ac_auth_text = 'Vnesite e-po¹tni naslov uporabnika, èigar raèun ¾elite videti.'
 $ac_accept = 'Potrdi';
 $ac_decline = 'Zavrni';
 $ac_salutation = 'Dragi';
-?>

@@ -51,5 +51,3 @@ $filetypes['swf'] = 'Filmato Macromedia Flash';
 $filetypes['fla'] = 'Documento Macromedia Flash (Sorgente)';
 $filetypes['xls'] = $filetypes['xlt'] = 'Foglio elettronico Microsoft Excel';
 $filetypes['ai'] = 'Documento Adobe Illustrator';
-
-?>

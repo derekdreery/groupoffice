@@ -93,5 +93,3 @@ $fs_download = 'Téléchargement';
 $fs_view = 'Vue';
 
 $fs_notify = 'Envoyer un e-mail si quelqu\'un expédie un nouveau fichier';
-
-?>

@@ -70,4 +70,4 @@ $fb_decompress='חלץ';
 $fb_failed_to_create = 'נכשל ליצור קובץ ארכיב.';
 $fb_failed_to_extract = 'נכשל בחילוץ';
 $fb_compression_type = 'דחיסה';
-$fbFreeQuotaSpace = 'נפח פנוי בתיקייה';?>
+$fbFreeQuotaSpace = 'נפח פנוי בתיקייה';

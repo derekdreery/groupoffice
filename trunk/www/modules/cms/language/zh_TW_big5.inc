@@ -97,5 +97,3 @@ $cms_site_offline = '這個站台現正離線';
 $cms_disable_publish = '將站台離線';
 $cms_publish_dynamic = '動態公佈';
 $cms_publish_static = '靜態公佈';
-
-?>

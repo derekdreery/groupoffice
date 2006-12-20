@@ -250,4 +250,3 @@ class Tts_sql{
 	return $content;
 	}
 }
-?>

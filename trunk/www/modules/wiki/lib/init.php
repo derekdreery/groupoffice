@@ -71,5 +71,3 @@ $UserName = $user['first_name']." ".$user['last_name'];
 // Commented since headers are written from Group-Office framework
 //if($Charset != '')
 //  { header("Content-Type: text/html; charset=$Charset"); }
-
-?>

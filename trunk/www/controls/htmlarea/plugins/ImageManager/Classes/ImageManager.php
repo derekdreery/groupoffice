@@ -613,5 +613,3 @@ class ImageManager
 		}
 	}
 }
-
-?>

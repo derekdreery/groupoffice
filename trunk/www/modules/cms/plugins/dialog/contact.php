@@ -122,4 +122,3 @@ function insertGallery(gallery_id)
 </script>
 <?php
 require_once ($GO_THEME->theme_path."footer.inc");
-?>

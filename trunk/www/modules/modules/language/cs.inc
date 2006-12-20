@@ -34,4 +34,3 @@ $strConfirmUninstallSuffix = '?';
 $mod_available = 'Dostupné moduly';
 $mod_installed = 'Nainstalované moduly';
 $mod_sort_order = 'Pořadí řazení';
-?>

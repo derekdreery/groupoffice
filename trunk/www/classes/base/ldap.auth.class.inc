@@ -182,4 +182,3 @@ class ldap_auth extends base_auth
 		return $user_id;
 	}
 }
-?>

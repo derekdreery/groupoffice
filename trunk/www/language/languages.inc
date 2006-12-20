@@ -247,5 +247,3 @@ $languages['fi']['language_file'] = 'fi';
 $languages['fi']['thousands_seperator'] = ' ';
 $languages['fi']['timezone'] = 2;
 $languages['fi']['DST'] = 1;
-
-?>

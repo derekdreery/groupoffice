@@ -27,4 +27,3 @@ $autodata[] = $autodata_option;
 $autodata_option['text'] = 'Group-Office URL';
 $autodata_option['value'] = '%full_url%';
 $autodata[] = $autodata_option;
-?>

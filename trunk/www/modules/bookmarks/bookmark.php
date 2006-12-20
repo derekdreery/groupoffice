@@ -206,4 +206,3 @@ switch ($tabtable->get_active_tab_id()) {
 <?php
 $tabtable->print_foot();
 require_once ($GO_THEME->theme_path."footer.inc");
-?>

@@ -94,4 +94,3 @@ $pm_load= 'Zobrazit hodiny'; //chnaged. Search above
 
 $pm_edit_data = 'Editace odpracovaných hodin';
 $pm_enter_data = 'Zadání odpracovaných hodin';//changed, search above
-?>

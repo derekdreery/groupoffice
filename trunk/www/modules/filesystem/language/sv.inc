@@ -78,4 +78,3 @@ $fs_new_doc = 'Nytt dokument';
 $fs_cleanup = 'Rensa upp HTML';
 $fbMultipleFiles = 'Multipla filer';
 $fbSelect = "Välj fil"; //changed
-?>

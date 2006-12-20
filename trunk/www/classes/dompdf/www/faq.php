@@ -305,4 +305,4 @@ using margins:</p>
 <a href="#FAQ">[back to top]</a>
 <div class="divider1" style="background-position: 884px 0%">&nbsp;</div>
 
-</div> <?php include "foot.inc" ?>
+</div> <?php include "foot.inc"

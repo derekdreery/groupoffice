@@ -202,4 +202,3 @@ class ldap_groups extends base_groups
       return false;
   }
 }
-?>

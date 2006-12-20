@@ -88,4 +88,3 @@ class htmleditor extends FCKeditor
 			return false ;
 	}
 }
-?>

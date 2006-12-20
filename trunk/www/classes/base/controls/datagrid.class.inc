@@ -324,4 +324,3 @@ class datagrid extends db
 		}
   }
 }
-?>

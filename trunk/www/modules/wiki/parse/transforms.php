@@ -699,4 +699,3 @@ function parse_table($text)
 
   return $text;
 }
-?>

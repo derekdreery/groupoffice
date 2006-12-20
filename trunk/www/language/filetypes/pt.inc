@@ -15,4 +15,3 @@ $ft_please_wait = "Por favor aguarde durante a fase de envio deste &iacute;cone.
 $ft_properties = "Propriedades";
 $ft_filename = "Nome de Ficheiro";
 $ft_current_icon = "&Iacute;cone atual";
-?>

@@ -164,4 +164,3 @@ echo '</table>';
 $tabtable->print_foot();
 
 require_once($GO_THEME->theme_path."footer.inc");
-?>

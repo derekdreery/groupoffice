@@ -15,4 +15,3 @@ $admin_start_module = 'Start Group-Office i';
 $admin_menus = "menyer";
 $admin_formats = "datoformater";
 $admin_date_formats_text = 'Tilf�y datoformater i <a class="normal" target="_blank" href="http://www.php.net/manual/en/function.date.php">PHP format</a> med en beskrivelse og klikk p� Ok.';
-?>

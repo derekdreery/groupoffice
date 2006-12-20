@@ -58,4 +58,3 @@ d\'acabament.';
 
 $td_count_single = 'per-fer';
 $td_count_multiple = 'per-fers';
-?>

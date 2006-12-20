@@ -25,4 +25,3 @@ while($db1->next_record())
 	$sql = "UPDATE cms_languages SET template_item_id='".$db1->f('main_template_item_id')."' WHERE site_id='".$db1->f('site_id')."'";
 	$db2->query($sql);
 }
-?>

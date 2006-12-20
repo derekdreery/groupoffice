@@ -447,4 +447,3 @@ function view_macro_reflist($args)
 {
   return parse_elements(new_entity(array("reflist", $args)));
 }
-?>

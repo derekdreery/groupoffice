@@ -15,6 +15,3 @@ class Email{
 			return FALSE;
 	}
 }
-	
-		
-?>

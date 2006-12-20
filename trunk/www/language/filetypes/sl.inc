@@ -16,4 +16,3 @@ $ft_please_wait = "Prosim, poèakajte med nalaganjem ikone...";
 $ft_properties = "Lastnosti";
 $ft_filename = "Ime datoteke";
 $ft_current_icon = "Trenutna ikona";
-?>

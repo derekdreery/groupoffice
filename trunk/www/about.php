@@ -59,4 +59,3 @@ if(file_exists('LICENSE.GPL'))
 </table>
 <?php
 require_once($GO_THEME->theme_path."footer.inc");
-?>

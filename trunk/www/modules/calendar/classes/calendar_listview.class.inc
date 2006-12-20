@@ -445,4 +445,3 @@ class calendar_listview extends table
 		return parent::get_html().$javascript;		
 	}
 }
-?>

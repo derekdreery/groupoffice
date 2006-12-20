@@ -43,4 +43,3 @@ if($failed_test_19788 || $failed_test_data){
 } else {
     echo "Bug #19788: OK\n";
 }
-?>

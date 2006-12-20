@@ -13,4 +13,3 @@ $updates[11][]="INSERT INTO `settings` VALUES (0, 'registration_confirmation_sub
 
 $updates[10][]="ALTER TABLE `users` ADD `address_no` VARCHAR( 10 ) NOT NULL AFTER `address` ;";
 $updates[10][]="ALTER TABLE `users` ADD `work_address_no` VARCHAR( 10 ) NOT NULL AFTER `work_address` ;";
-?>

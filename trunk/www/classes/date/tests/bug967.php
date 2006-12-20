@@ -11,4 +11,3 @@ $tz = Date_TimeZone::getDefault();
 if ($tz->id!=$_DATE_TIMEZONE_DEFAULT && $tz->id!='EST') {
     echo "setDefault Failed\n";
 }
-?>

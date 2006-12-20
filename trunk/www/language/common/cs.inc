@@ -308,4 +308,3 @@ $sync_download_clients = 'Stažení klienta pro synchronizaci';
 $strNoData = 'Nabyla nalezena žádná data';
 //2.13
 $strSynchronization = 'Synchronizace';
-?>

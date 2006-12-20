@@ -62,5 +62,3 @@ function html_vitals () {
 
     return $_text;
 }
-
-?>

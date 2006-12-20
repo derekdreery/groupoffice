@@ -24,4 +24,3 @@ function action_find()
   template_find(array('find'  => $find,
                       'pages' => $text));
 }
-?>

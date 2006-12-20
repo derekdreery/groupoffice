@@ -481,5 +481,3 @@ class Ticket{
 
 
 }
-
-?>

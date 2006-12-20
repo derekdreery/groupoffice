@@ -22,4 +22,3 @@ if(!is_dir($GO_CONFIG->file_storage_path.'users/'))
 {
 	echo '<b>Warning:</b> Unable to move the user data into a subdirectory \'users\'. Please do this manually.<br />';
 }
-?>

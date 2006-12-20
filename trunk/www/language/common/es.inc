@@ -328,4 +328,3 @@ $strCopy = 'Copia'; //not a verb
 //2.15
 $strBank = 'Banco';
 $strBankNo = 'Número de banco';
-?>

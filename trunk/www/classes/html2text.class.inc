@@ -328,5 +328,3 @@ class html2text
     }
 
 }
-
-?>

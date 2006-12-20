@@ -444,4 +444,3 @@ $strKeyword = 'Parola chiave';
 $strNoActivities = 'Nessuna attivita per questo elemento';
 
 $strCopy = 'Copia'; //not a verb
-?>

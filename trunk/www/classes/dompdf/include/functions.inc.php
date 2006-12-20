@@ -392,6 +392,3 @@ function mark_memusage($location) {
   if ( isset($memusage) )
     $memusage[$location] = memory_get_usage();
 }
-
-
-?>

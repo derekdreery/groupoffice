@@ -46,4 +46,3 @@ $tabstrip->add_html_element($table);
 
 $button = new button($cmdSave, "javascript:_save('change_password')");
 $tabstrip->add_html_element($button);
-?>

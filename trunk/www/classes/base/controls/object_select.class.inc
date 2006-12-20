@@ -266,4 +266,3 @@ class object_select
 		echo $this->get_field($width);
 	}
 }
-?>

@@ -76,6 +76,3 @@ $cmdSearch='Pretraži';
 $tts_lang_actions='Actions';
 $tts_lang_text_field='Text field value';
 $tts_lang_numeric_field='Numeric field value';
-
-
-?>

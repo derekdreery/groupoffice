@@ -25,4 +25,3 @@ function action_diff()
                       'editable'  => $p2->mutable,
                       'timestamp' => $p2->time));
 }
-?>

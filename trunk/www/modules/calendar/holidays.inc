@@ -265,4 +265,3 @@ if(count($regions) == 0)
 		break;
 	}
 }
-?>

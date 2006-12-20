@@ -155,4 +155,3 @@ $cms_message = 'Sporoèilo';
 $cms_subject = 'Zadeva';
 $cms_domain = 'Domena';
 $cms_replace_filenames = 'Zamenjaj imena datotek';
-?>

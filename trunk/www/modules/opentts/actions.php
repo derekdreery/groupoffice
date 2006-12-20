@@ -40,6 +40,3 @@ $action[34]="set_complete";
 $action[35]="change_complete";
 $action[36]="change_description";
 $action[37]="take_ownership";
-
-
-?>

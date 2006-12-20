@@ -19,4 +19,3 @@ $groups_users_in_select='Selecteer de gebruikers die u wilt toevoegen aan deze g
 $groups_new_group='Nieuwe groep';
 $groups_members='Leden';
 $lang_modules['groups']='Gebruikersgroepen';
-?>

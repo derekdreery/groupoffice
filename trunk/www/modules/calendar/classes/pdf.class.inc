@@ -269,4 +269,3 @@ class pdf extends XFPDF
 	$this->SetFillColor($bg_color['R'],$bg_color['G'],$bg_color['B']);
   }
 }
-?>

@@ -22,4 +22,3 @@ $groups_members = 'Mitglieder';
 
 //2.13
 $lang_modules['groups'] = 'Gruppen';
-?>

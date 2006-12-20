@@ -29,4 +29,3 @@ function action_edit()
                       'nextver'   => $pg->version + 1,
                       'archive'   => $archive));
 }
-?>

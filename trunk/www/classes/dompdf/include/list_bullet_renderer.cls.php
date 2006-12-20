@@ -101,4 +101,3 @@ class List_Bullet_Renderer extends Abstract_Renderer {
     }
   }
 }
-?>

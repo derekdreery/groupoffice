@@ -36,4 +36,3 @@ $filetypes['swf'] = 'Pel·lícula en Macromedia Flash';
 $filetypes['fla'] = 'Document (font) en Macromedia Flash';
 $filetypes['xls'] = $filetypes['xlt'] = 'Full de càlcul de Microsoft Excel';
 $filetypes['ai'] = 'Fitxer d\'Adobe Illustrator';
-?>

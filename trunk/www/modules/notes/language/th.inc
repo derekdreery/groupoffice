@@ -25,4 +25,3 @@ $no_file = 'ไฟลล์';
 $no_show_all = 'แสดงทั้งหมด';
 $no_show_own = 'แสดงส่วนตัว';
 $no_show_responsible = 'แสดงผลที่มีการตอบ';
-?>

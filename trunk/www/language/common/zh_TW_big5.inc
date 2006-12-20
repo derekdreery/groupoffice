@@ -352,5 +352,3 @@ $lang_modules['bookmarks'] = "╝яер";
 //look up language in 'classes/phpmailer/language'
 $php_mailer_lang = 'en';
 $strEmailFail = 'Failed sending the e-mail.';
-
-?>

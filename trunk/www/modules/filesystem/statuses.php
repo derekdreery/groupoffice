@@ -51,4 +51,3 @@ echo '</form>';
 
 <?php
 require_once($GO_THEME->theme_path."footer.inc");
-?>

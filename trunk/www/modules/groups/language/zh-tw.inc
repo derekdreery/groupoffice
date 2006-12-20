@@ -21,4 +21,3 @@ $groups_users_in_select = "選擇你/妳想新增到這群組的使用者：";
 //translation required
 $groups_new_group = '新增群組';
 $groups_members = '成員';
-?>

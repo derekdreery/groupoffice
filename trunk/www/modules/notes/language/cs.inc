@@ -25,4 +25,3 @@ $no_file = 'Soubor';
 $no_show_all = 'Zobrazit všechny';
 $no_show_own = 'Zobrazit vlastní';
 $no_show_responsible = 'Zobrazit přidělené';
-?>

@@ -50,4 +50,3 @@ if ($mail->open($account['host'], $account['type'],$account['port'],$account['us
 {
 	echo $strDataError;
 }
-?>

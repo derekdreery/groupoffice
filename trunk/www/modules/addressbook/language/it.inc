@@ -233,4 +233,3 @@ $ab_search_on_users = 'Cerca';
 $ab_users_count_single='utente';
 $ab_users_count_multiple='utenti';
 $ab_no_users='Utenti non trovati';
-?>

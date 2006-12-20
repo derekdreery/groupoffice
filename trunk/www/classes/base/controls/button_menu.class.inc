@@ -62,4 +62,3 @@ class button_menu extends table
 	}
 	
 }
-?>

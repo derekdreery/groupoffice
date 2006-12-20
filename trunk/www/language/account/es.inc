@@ -57,4 +57,3 @@ $ac_auth_text = 'Introduzca la dirección de correo electrónico del usuario que
 $ac_accept = 'Aceptar';
 $ac_decline = 'Rechazar';
 $ac_salutation = 'Estimado/a';
-?>

@@ -58,4 +58,3 @@ $sc_start_later = 'Bad input!! The starting time is later then the ending time.'
 
 $td_count_single = 'todo';
 $td_count_multiple = 'todo\'s';
-?>

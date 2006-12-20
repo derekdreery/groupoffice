@@ -123,4 +123,3 @@ $fb_failed_to_create = 'Napaka pri ustvarjanju arhiva.';
 $fb_failed_to_extract = 'Napaka pri raz¹irjenju';
 $fb_compression_type = 'Stiskanje';
 $fbFreeQuotaSpace = 'Prosti disk v va¹em imeniku';
-?>

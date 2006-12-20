@@ -108,4 +108,3 @@ $users_enabled = 'Cuenta activada';
 
 $admin_groups_visible = 'El usuario es visible para los siguientes grupos de usuarios';
 $admin_look_feel = 'Apariencia';
-?>

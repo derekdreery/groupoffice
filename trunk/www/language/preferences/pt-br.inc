@@ -31,4 +31,3 @@ $pref_use_checkbox_select = 'Selecione multiplas linhas utilizando a tecla CTRL'
 
 //2.15
 $pref_date_seperator = 'Separador de data';
-?>

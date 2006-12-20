@@ -58,4 +58,3 @@ class input extends html_element
 		return $html;
 	}
 }
-?>

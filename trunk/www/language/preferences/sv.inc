@@ -26,4 +26,3 @@ $adjust_to_dst = 'Automatsikt justera tiden för sommartid';
 
 //2.08
 $pref_name_order = 'Sortera namn efter';
-?>

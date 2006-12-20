@@ -96,4 +96,4 @@ foreach ( array_keys(CPDF_Adapter::$PAPER_SIZES) as $size )
 based browser and are having difficulties loading the sample output, try
 saving it to a file first.)</p>
 
-<?php include("foot.inc"); ?>
+<?php include("foot.inc");

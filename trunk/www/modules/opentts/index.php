@@ -35,4 +35,3 @@ $tabtable = new tabtable('index_tabtable', $helpdesk_title_start , '100%', '400'
 $tabtable->print_head();
 Opentts::welcome();
 $tabtable->print_foot();
-?>

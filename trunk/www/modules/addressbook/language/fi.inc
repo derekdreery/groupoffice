@@ -230,4 +230,3 @@ $ab_search_on_users = 'Hae käyttäjistä';
 $ab_users_count_single='käyttäjä';
 $ab_users_count_multiple='käyttäjät';
 $ab_no_users='Käyttäjiä ei löytynyt';
-?>

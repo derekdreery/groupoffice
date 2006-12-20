@@ -75,4 +75,3 @@ if (!function_exists('mime_content_type'))
 			return mime_content_type_by_extension(get_extension($path));
 	}
 }
-?>

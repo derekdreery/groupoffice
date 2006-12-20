@@ -6,4 +6,3 @@ $db1 = new db();
 $group['name'] = 'Calendars';
 $group['acl_write'] = $GO_SECURITY->get_new_acl();
 $cal->add_group($group);
-?>

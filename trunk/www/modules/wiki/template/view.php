@@ -38,4 +38,3 @@ function template_view($args)
                                  'timestamp' => $args['timestamp'],
                                  'nosearch'  => 0));
 }
-?>

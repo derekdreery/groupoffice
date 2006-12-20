@@ -82,4 +82,3 @@ $DisplayEngine = array(
   $newtext = backslashit($parseText);
   template_view($page, $newtext);
 }
-?>

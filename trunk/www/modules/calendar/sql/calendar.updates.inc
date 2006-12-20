@@ -139,4 +139,3 @@ $updates[11][] = "ALTER TABLE `cal_events` ADD `company_id` INT NOT NULL AFTER `
 ADD `project_id` INT NOT NULL AFTER `company_id`;";
 
 $updates[10][] = "ALTER TABLE `cal_settings` ADD `merged_view` ENUM( '0', '1' ) NOT NULL ;";
-?>

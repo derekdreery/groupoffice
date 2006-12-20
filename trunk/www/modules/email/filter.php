@@ -169,4 +169,3 @@ if (isset($feedback)) echo $feedback;
 <?php
 $tabtable->print_foot();
 require_once($GO_THEME->theme_path.'footer.inc');
-?>

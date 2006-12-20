@@ -101,6 +101,4 @@ function format_bytesize ($kbytes, $dec_places = 2) {
     $result .= $spacer . $text['kb'];
   } 
   return $result;
-} 
-
-?>
+}

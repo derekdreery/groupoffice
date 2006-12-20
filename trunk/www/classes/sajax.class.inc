@@ -232,4 +232,3 @@ if (!isset($SAJAX_INCLUDED)) {
 	
 	$SAJAX_INCLUDED = 1;
 }
-?>

@@ -13,4 +13,3 @@ $sync_last_calendar_sync = 'カレンダ同期の最終更新';
 $sync_last_addressbook_sync = 'アドレス帳同期の最終更新';
 
 $sync_never = 'しない';
-?>

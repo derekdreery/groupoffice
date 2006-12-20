@@ -84,6 +84,4 @@ class sysinfo extends bsd_common {
     $result = 'FreeBSD.gif';
     return($result);
   }
-} 
-
-?>
+}

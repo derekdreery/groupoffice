@@ -18,4 +18,3 @@ $GO_CONFIG->window_mode = 'popup';
 $target_frame = '_self';
 $treeview=false;
 require_once($GO_MODULES->modules['filesystem']['path'].'index.php');
-?>

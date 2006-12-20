@@ -56,4 +56,3 @@ class highlight
 	} //end func process
 
 } // end class
-?>

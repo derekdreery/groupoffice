@@ -216,4 +216,3 @@ $sc_all_day_events = 'all day events';
 $sc_all_day_event = 'all day event';
 $sc_usual_events = 'events';
 $sc_usual_event = 'event';
-?>

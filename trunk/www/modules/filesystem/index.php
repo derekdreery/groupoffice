@@ -645,4 +645,3 @@ echo $form->get_html();
 
 umask($old_umask);
 require_once ($GO_THEME->theme_path.'footer.inc');
-?>

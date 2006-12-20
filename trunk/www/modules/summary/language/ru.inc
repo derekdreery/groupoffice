@@ -19,5 +19,3 @@ $sum_private = 'Частное';
 //2.10
 $sum_today = 'Сегодня';
 $sum_tommorow = 'Завтра';
-
-?>

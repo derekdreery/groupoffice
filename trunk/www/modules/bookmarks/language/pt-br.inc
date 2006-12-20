@@ -23,4 +23,3 @@ $bm_copy_read_permissions = 'Permissão para ler';
 $bm_copy_write_permissions = 'Permissão para alterar';
 
 $bm_move_to_catagory = 'Mover favorito selecinado para a categoria...';
-?>

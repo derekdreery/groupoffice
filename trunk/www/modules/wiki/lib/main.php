@@ -115,4 +115,3 @@ if(!empty($ActionList[$action]))
 
 // Expire old versions, etc.
 $pagestore->maintain();
-?>

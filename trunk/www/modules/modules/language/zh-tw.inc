@@ -28,5 +28,3 @@ $cmdInstall = '安裝';
 $cmdUninstall = '移除';
 $strConfirmUninstallPrefix = '你確定要移除';
 $strConfirmUninstallSuffix = '?';
-
-?>

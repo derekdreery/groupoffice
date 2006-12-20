@@ -39,4 +39,3 @@ if($GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
 {
 	echo 'Please log in as administrator to use this script';
 }
-?>

@@ -50,4 +50,3 @@ if (!isset($_SESSION['GO_SESSION']['autocomplete_cache_file']) || !file_exists($
 	go_log(LOG_DEBUG, 'Generated cache file');
 }
 echo file_get_contents($_SESSION['GO_SESSION']['autocomplete_cache_file']);
-?>

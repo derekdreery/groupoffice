@@ -58,4 +58,3 @@ $sc_start_later = 'Mauvaise entrée! La date de fin précède la date de début.
 
 $td_count_single = 'tâche';
 $td_count_multiple = 'tâches';
-?>

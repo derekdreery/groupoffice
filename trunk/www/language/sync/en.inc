@@ -22,4 +22,3 @@ $sync_log='Sync log';
 $sync_max_days_old = 'Sync events not older then';
 $sync_days = 'days';
 $sync_delete_old_events='Delete events from the client that are older then the time above';
-?>

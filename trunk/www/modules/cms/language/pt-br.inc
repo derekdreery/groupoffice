@@ -102,4 +102,3 @@ $cms_message = 'Mensagem';
 $cms_subject = 'Assunto';
 $cms_domain = 'Dom&iacute;nio';
 $cms_replace_filenames = 'Renomear arquivos';
-?>

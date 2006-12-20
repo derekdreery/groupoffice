@@ -208,5 +208,3 @@ $ml_folder_not_available = 'et voi luoda ylimääräisiä kansioita POP-3 tileil
 
 //2.15
 $ml_mark_as_read='Merkitse suodatetut tiedostot luetuiksi';
-
-?>

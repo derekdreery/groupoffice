@@ -224,4 +224,3 @@ $ml_no_reciever_add = "Non aggiungere";
 $ml_add_recievers = "Aggiungi destinatari sconosciuti in ";//changed string from 2.06
 
 $ml_automatic_reply = 'Attiva risposta automatica';
-?>

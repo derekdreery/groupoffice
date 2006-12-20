@@ -23,5 +23,3 @@ $login_lost_password_mail_body = "You requested a new password for %s. Your new 
 $login_new_password = 'Новый пароль';
 $login_lost_password_success = 'Новый пароль выслан на %s';
 $login_lost_password_failed = 'Извините, этот e-mail адрес \'%s\' не зарегистрирован в системе.';
-
-?>

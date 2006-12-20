@@ -558,4 +558,3 @@ class datatable extends table
 		return $links;
 	}
 }
-?>

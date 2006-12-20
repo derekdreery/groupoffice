@@ -280,4 +280,3 @@ if ($cms->get_authorized_templates($GO_SECURITY->user_id) == 0)
 $tabtable->print_foot();
 echo '</form>';
 require_once($GO_THEME->theme_path."footer.inc");
-?>

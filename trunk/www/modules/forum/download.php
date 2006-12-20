@@ -34,5 +34,3 @@ while (!feof($fd)) {
 	print fread($fd, 32768);
 }
 fclose($fd);
-
-?>

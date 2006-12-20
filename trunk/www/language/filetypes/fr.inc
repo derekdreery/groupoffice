@@ -29,4 +29,3 @@ $ft_please_wait = "Patientez pendant que l'icone est téléchargé..";
 $ft_properties = "Propriétés";
 $ft_filename = "Nom de fichier";
 $ft_current_icon = "Icone en cours";
-?>

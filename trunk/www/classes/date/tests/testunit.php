@@ -31,4 +31,3 @@ require_once 'PHPUnit.php';
 require_once 'testunit_date.php';
 require_once 'testunit_date_span.php';
 echo "</pre>";
-?>

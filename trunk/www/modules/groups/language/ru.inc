@@ -25,4 +25,3 @@ $groups_members = 'õÞÁÓÔÎÉËÏ×';
 
 //2.13
 $lang_modules['groups'] = 'çÒÕÐÐÙ ÐÏÌØÚÏ×ÁÔÅÌÅÊ';
-?>

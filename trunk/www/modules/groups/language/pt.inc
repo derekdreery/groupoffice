@@ -17,4 +17,3 @@ $groups_everyone = "Este grupo &eacute; um grupo especial e contem todos os util
 $groups_users_in1 = "utilizador(es) no grupo";
 $groups_no_users = "N&atilde;o existem utilizadores neste grupo.";
 $groups_users_in_select = "Selecione os utilizadores que quer adicionar a este grupo:";
-?>

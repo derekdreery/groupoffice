@@ -58,4 +58,3 @@ $ac_auth_text = 'Skriv in e-post adressen till användaren vars konto du vill g�
 $ac_accept = 'Acceptera';
 $ac_decline = 'Avböj';
 $ac_salutation = 'Kära';
-?>

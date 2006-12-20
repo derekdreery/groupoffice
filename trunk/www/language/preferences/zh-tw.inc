@@ -22,4 +22,3 @@ $pref_first_weekday = '一個星期的第一天';
 
 //2.05
 $adjust_to_dst = '自動調整日光節約時間';
-?>

@@ -91,5 +91,3 @@ $admin_manage = '管理';
 
 $admin_groups = '使用者群組';
 $admin_groups_user = '這個使用者是下列群組的一員';
-
-?>

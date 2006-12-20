@@ -129,4 +129,3 @@ class filesystem_view extends table
 		return $rootNode;	
 	}
 }
-?>

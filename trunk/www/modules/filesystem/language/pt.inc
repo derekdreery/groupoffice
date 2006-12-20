@@ -62,4 +62,3 @@ $fs_keyword = 'Keyword';
 $fs_enter_keyword = 'Por favor encorpore uma palavra ou frase tipo keyword';
 $fs_modified_before = 'Modificado antes de';
 $fs_modified_after = 'Modificado depois de';
-?>

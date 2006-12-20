@@ -81,5 +81,3 @@ while (strlen($a) && $conn_id) {
   $a = substr($a, 0, strlen($a)-1);
 //  echo "\n";
 }
-
-?>

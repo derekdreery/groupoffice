@@ -171,4 +171,3 @@ if ( $GO_CONFIG->log ) {
 
 
 define('GO_LOADED', true);
-?>

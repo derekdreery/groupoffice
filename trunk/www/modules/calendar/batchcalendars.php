@@ -148,4 +148,3 @@ function save_calendar(close_me)
 </script>
 <?php
 require_once($GO_THEME->theme_path.'footer.inc');
-?>

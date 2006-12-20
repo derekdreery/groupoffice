@@ -700,4 +700,3 @@ class cms_account {
 		return $form->get_html();
 	}
 }
-?>

@@ -174,4 +174,3 @@ $filetype["current"]="application/OCTET-STREAM";
 $filetype["ics"]="application/OCTET-STREAM";
 $filetype["cleaned"]="application/OCTET-STREAM";
 $filetype["bin"]="application/OCTET-STREAM";
-?>

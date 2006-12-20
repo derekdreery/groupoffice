@@ -104,4 +104,3 @@ $pm_customer='Opdrachtgever';
 $pm_book_rights='Registratie toegang';
 $pm_template_exists='Er bestaat al een sjabloon met deze naam';
 $pm_link_calendar='Stop gewerkte uren in een agenda';
-?>

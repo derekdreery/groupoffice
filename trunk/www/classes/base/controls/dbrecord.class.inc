@@ -148,4 +148,3 @@ class dbrecord extends db
 		return $element;
 	}
 }
-?>

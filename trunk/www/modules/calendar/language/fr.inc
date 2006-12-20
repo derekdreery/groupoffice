@@ -385,5 +385,3 @@ $cal_background_colors = 'Couleurs de disponibilité';
 $cal_weekday = 'Jour de semaine';
 $cal_background_color='Couleur de disponibilité';
 $cal_background = 'Disponibilité';
-
-?>

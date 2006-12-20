@@ -25,4 +25,3 @@ $no_file = 'File';
 $no_show_all = 'Visa alla';
 $no_show_own = 'Visa egna';
 $no_show_responsible = 'Visa ansvariga';
-?>

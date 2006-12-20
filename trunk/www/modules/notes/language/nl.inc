@@ -22,4 +22,3 @@ $no_file='Bestand';
 $no_show_all='Toon alles';
 $no_show_own='Toon uw eigen';
 $no_show_responsible='Toon uw verantwoordelijke';
-?>

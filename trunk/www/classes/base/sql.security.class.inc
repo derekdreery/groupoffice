@@ -116,4 +116,3 @@ class sql_security extends base_security {
 		return false;
 	}
 }
-?>

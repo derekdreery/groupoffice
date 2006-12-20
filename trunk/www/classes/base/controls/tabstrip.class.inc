@@ -275,4 +275,3 @@ class tabstrip extends table
   	return false;
   }
 }
-?>

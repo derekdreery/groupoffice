@@ -26,4 +26,3 @@ include("classes/sql.php");
 include("classes/modules.php");
 include("themes/Aqua/header.php");
 if (!class_exists('Email')) include("classes/email.php");
-?>

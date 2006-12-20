@@ -26,4 +26,3 @@ $form->add_html_element(new acl($acl_id, 'acl_form'));
 echo $form->get_html();
 
 require_once($GO_THEME->theme_path."footer.inc");
-?>

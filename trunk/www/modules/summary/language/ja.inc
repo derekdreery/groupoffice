@@ -20,4 +20,3 @@ $sum_private = 'プライベート';
 $sum_today = '本日';
 $sum_tommorow = '明日';
 $sum_unfinished = '未終了';
-?>

@@ -91,4 +91,3 @@ while($db1->next_record())
 		echo 'Creating note link to type '.$remote_link_type.'<br />';
 	}
 }
-?>

@@ -15,4 +15,3 @@ $pref_region_code = 'Регион';
 //translation required
 $pref_max_rows_list = 'Максимум редове на страница';
 $pref_unlimited = 'Неограничен';
-?>

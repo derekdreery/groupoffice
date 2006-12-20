@@ -56,4 +56,3 @@ class tooltip
       '<link href="'.$GO_THEME->theme_url.'css/overlib.css" type="text/css" rel="stylesheet" />';
   }
 }
-?>

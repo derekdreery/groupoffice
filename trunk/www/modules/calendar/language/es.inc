@@ -275,4 +275,3 @@ $cal_no_views = 'No se ha encontrado ninguna vista';
 $cal_my_cals = 'Mis calendarios';
 
 $cal_event_colors_override = 'Usar los colores manualmente definidos para las citas';
-?>

@@ -275,4 +275,3 @@ $cal_no_views = 'No s\'ha trobat cap vista';
 $cal_my_cals = 'Els meus calendaris';
 
 $cal_event_colors_override = 'Fés servir els colors manualment definits per les cites';
-?>

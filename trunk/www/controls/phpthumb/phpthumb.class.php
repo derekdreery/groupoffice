@@ -3539,5 +3539,3 @@ class phpthumb {
 	}
 
 }
-
-?>

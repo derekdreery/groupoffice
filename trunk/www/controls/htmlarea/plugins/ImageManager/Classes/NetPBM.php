@@ -254,4 +254,3 @@ Class Image_Transform_Driver_NetPBM extends Image_Transform
 
 
 } // End class NetPBM
-?>

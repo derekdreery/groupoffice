@@ -566,4 +566,3 @@ Class Image_Transform
         return null; //PEAR::raiseError("No gamma method exists", true);
     }
 }
-?>

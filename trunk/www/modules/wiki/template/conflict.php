@@ -72,4 +72,3 @@ function template_conflict($args)
                                  'timestamp' => $args['timestamp'],
                                  'nosearch'  => 0));
 }
-?>

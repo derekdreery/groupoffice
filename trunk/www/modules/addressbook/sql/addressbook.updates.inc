@@ -72,4 +72,3 @@ $updates[10][] = "ALTER TABLE `ab_companies` ADD `post_address` VARCHAR( 100 ) N
 		"ADD `post_state` VARCHAR( 50 ) NOT NULL AFTER `post_city` ,".
 		"ADD `post_country` VARCHAR( 50 ) NOT NULL AFTER `post_state` ,".
 		"ADD `post_zip` VARCHAR( 10 ) NOT NULL AFTER `post_country`;";
-?>

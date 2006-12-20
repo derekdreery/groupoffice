@@ -74,4 +74,3 @@ function action_save()
   $pagestore->unlock();                 // End "transaction".
 
 }
-?>

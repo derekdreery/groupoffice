@@ -289,4 +289,3 @@ $strFiles = 'ไฟล์';
 $cmdSaveNew = 'บันทึก & ใหม่';
 $strAvailability = 'ให้บริการ';
 $strCheckAvailabilityFor = 'เช็คการให้บริการสำหรับ';
-?>

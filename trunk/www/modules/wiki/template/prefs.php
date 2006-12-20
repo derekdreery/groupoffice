@@ -80,4 +80,3 @@ function template_prefs()
                                  'timestamp' => '',
                                  'nosearch'  => 1));
 }
-?>

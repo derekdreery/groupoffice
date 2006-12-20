@@ -51,4 +51,3 @@ $filetypes['xls'] = 'Microsoft Excel spreadsheet';
 $filetypes['xlt'] = 'Microsoft Excel spreadsheet';
 $filetypes['ai'] = 'Adobe Illustrator file';
 $filetypes['eml'] = 'E-mail message';
-?>

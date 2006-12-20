@@ -197,4 +197,3 @@ class cms_gallery {
 		return $form->get_html();
 	}
 }
-?>

@@ -151,4 +151,3 @@ $cms_print_style = 'Skriv ut stilar';
 
 $cms_search = 'Sök';
 $cms_login = 'Logga in';
-?>

@@ -120,6 +120,3 @@ class Thumbnail
 		$this->driver->free();
 	}
 }
-
-
-?>

@@ -20,4 +20,3 @@ $PHPMAILER_LANG["connect_host"] = 'SMTP ошибка: SMTP-Host недоступен.';
 $PHPMAILER_LANG["file_access"] = 'В доступе к следующему файлу было отказано: ';
 $PHPMAILER_LANG["file_open"] = 'Не могу открыть файл: ';
 $PHPMAILER_LANG["encoding"] = 'Неизвестный формат кодировки: ';
-?>

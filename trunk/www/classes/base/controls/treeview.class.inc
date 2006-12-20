@@ -445,4 +445,3 @@ class treenode
   	return $node.'</div>';
   }
 }
-?>

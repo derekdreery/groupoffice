@@ -77,5 +77,3 @@ $cms_found = 'ficheiros encontrados';
 $cms_empty = 'Esta se&ccedil;&atilde;o est&aacute; vazia e provavelmente sob 
   manuten&ccedil;&atilde;o';
 $cms_new_page = 'p&aacute;gina nova';
-
-?>

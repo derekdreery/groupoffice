@@ -87,4 +87,3 @@ $fs_no_status_history='Geen status historie';
 $fs_no_status='Geen';
 $fs_file_updated='Bestamd %s gewijzigd';
 $fs_open_properties='Open eigenschappen wanneer er op een bestand dubbel geklikt wordt';
-?>

@@ -382,4 +382,3 @@ echo '<input type="hidden" name="return_to" value="'.htmlspecialchars($return_to
 </table>
 <?php
 require_once($GO_THEME->theme_path.'footer.inc');
-?>

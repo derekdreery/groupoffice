@@ -40,5 +40,3 @@ $login_lost_password_failed = 'Désolé, l\'adresse e-mail  \'%s\' n\'est pas en
 //2.14
 $login_fullscreen = $GO_CONFIG->title.' a été ouvert automatiquement plein-écran pour vous. Vous pouvez fermer cette fenêtre ou relancer Group-Office une nouvelle fois.';
 $login_start = 'Relancer à nouveau';
-
-?>
