@@ -19,6 +19,8 @@
   * 
  * @access public
  */
+
+$user_id = isset($user_id) ? $user_id : $GO_SECURITY->user_id;
  
 require_once($GO_LANGUAGE->get_language_file('calendar'));
 require_once($GO_MODULES->modules['calendar']['class_path']."calendar.class.inc");
@@ -26,6 +28,7 @@ $cal = new calendar();
 
 if($task == 'save_calendar_settings')
 {
+	$cal_settings['user_id']=$user_id;
 	$reminder_value = isset($_POST['reminder_value']) ? $_POST['reminder_value'] : '0';
 	$reminder_multiplier = isset($_POST['reminder_multiplier']) ? $_POST['reminder_multiplier'] : '60';
 	$cal_settings['reminder'] = $reminder_value * $reminder_multiplier;
@@ -39,7 +42,7 @@ if($task == 'save_calendar_settings')
 	$cal->update_settings($cal_settings);
 }else
 {
-	$cal_settings = $cal->get_settings($GO_SECURITY->user_id);
+	$cal_settings = $cal->get_settings($user_id);
 }
 
 $table = new table();

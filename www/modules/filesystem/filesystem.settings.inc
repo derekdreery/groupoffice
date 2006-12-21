@@ -19,19 +19,23 @@
   * 
  * @access public
  */
- 
+
+
+$user_id = isset($user_id) ? $user_id : $GO_SECURITY->user_id;
+
 require_once($GO_LANGUAGE->get_language_file('filesystem'));
 require_once($GO_CONFIG->class_path."filesystem.class.inc");
 $fs = new filesystem();
 
 if($task == 'save_filesystem_settings')
 {
+	$fs_settings['user_id']=$user_id; 
 	$fs_settings['notify'] =  isset($_POST['notify']) ? '1' : '0';	
 	$fs_settings['open_properties'] =  isset($_POST['open_properties']) ? '1' : '0';	
 	$fs->update_settings($fs_settings);
 }else
 {
-	$fs_settings = $fs->get_settings($GO_SECURITY->user_id);
+	$fs_settings = $fs->get_settings($user_id);
 }
 
 $cb = new checkbox('notify','notify','1', $fs_notify, $fs_settings['notify']);
