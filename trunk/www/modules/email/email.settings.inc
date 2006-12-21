@@ -13,9 +13,11 @@ require_once($GO_LANGUAGE->get_language_file('email'));
 require_once($GO_MODULES->modules['email']['class_path']."email.class.inc");
 $email = new email();
 
+$user_id = isset($user_id) ? $user_id : $GO_SECURITY->user_id;
+
 if($task == 'save_email_settings')
 {
-	$settings['user_id'] = $GO_SECURITY->user_id;
+	$settings['user_id'] = $user_id;
 	$settings['send_format'] = isset($_POST['send_format']) ? $_POST['send_format'] : '0';
 	$settings['add_recievers'] = isset($_POST['add_recievers']) ? $_POST['add_recievers'] : '0';
 	$settings['add_senders'] = isset($_POST['add_senders']) ? $_POST['add_senders'] : '0';
@@ -30,12 +32,15 @@ if($task == 'save_email_settings')
 	$email->update_settings($settings);
 }
 
-$settings = $email->get_settings($GO_SECURITY->user_id);
+$settings = $email->get_settings($user_id);
 
 $table = new table();
 
 if (isset($GO_MODULES->modules['addressbook']) && $GO_MODULES->modules['addressbook']['read_permission'])
 { 	
+	require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc');
+	$ab = new addressbook();
+	
 	if ($ab->get_user_addressbooks($GO_SECURITY->user_id) == 0)
 	{
 		$ab->get_addressbook();
@@ -140,18 +145,19 @@ if($_SESSION['auth_source']['user_manager'] == 'passwd')
 
 $tabstrip->add_html_element($table);
 $tabstrip->add_html_element(new button($cmdSave, "javascript:_save('save_email_settings');"));
-?>
+
+$tabstrip->innerHTML .= '
 <script type="text/javascript">
 function toggle_table(visible)
 {
-	var table = get_object('vacation_table');
+	var table = get_object(\'vacation_table\');
 	if(visible)
 	{	
-		table.style.display='';
+		table.style.display=\'\';
 		document.forms[0].vacation_subject.focus();
 	}else
 	{
-		table.style.display='none';
+		table.style.display=\'none\';
 	}
 }
-</script>
+</script>';

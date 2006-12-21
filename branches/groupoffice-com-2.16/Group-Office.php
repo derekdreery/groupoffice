@@ -87,7 +87,8 @@ if ( $GO_CONFIG->auth_sources != '' ) {
 if(isset($_REQUEST['auth_source_key']) && isset( $auth_sources[$_REQUEST['auth_source_key']]))
 {
 	SetCookie("GO_AUTH_SOURCE_KEY", $_REQUEST['auth_source_key'], time()+3600*24*30,"/",'',0);
-	$_SESSION['auth_source'] = $_COOKIE['GO_AUTH_SOURCE_KEY'] = $_REQUEST['auth_source_key'];
+	$_COOKIE['GO_AUTH_SOURCE_KEY'] = $_REQUEST['auth_source_key'];
+	$_SESSION['auth_source'] = $auth_sources[$_REQUEST['auth_source_key']];
 }elseif(!isset($_SESSION['auth_source']))
 {
 	if(isset($GO_SYNC))
@@ -165,9 +166,6 @@ if ( $GO_CONFIG->log ) {
   define_syslog_variables();
   openlog('[Group-Office]['.date('Ymd G:i').']['.$username.']', LOG_PERROR, LOG_LOCAL0);
 }
-
-
-
 
 
 define('GO_LOADED', true);
