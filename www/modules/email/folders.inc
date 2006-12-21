@@ -230,8 +230,8 @@ if($account['type'] == 'pop3')
 				}
 				
 				
-				$closedFolderNode = $checkbox.'<img src="'.$GO_THEME->images['folderclosed'].'" border="0" height="22" width="24" align="middle" />';				
-				$openedFolderNode = $checkbox.'<img src="'.$GO_THEME->images['folderopen'].'" border="0" height="22" width="24" align="middle" />';
+				$closedFolderNode = $checkbox.'<img src="'.$GO_THEME->images['folderclosed'].'" border="0" height="22" width="24" align="absmiddle" />';				
+				$openedFolderNode = $checkbox.'<img src="'.$GO_THEME->images['folderopen'].'" border="0" height="22" width="24" align="absmiddle" />';
 				
 				$node = '';
 				if ($edit_name == $email->f('name'))
