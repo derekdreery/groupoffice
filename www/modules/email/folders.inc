@@ -205,7 +205,8 @@ if($account['type'] == 'pop3')
 			
 			while($email->next_record())
 			{				
-				if ($pos = strrpos($email->f('name'), $email->f('delimiter')) && $email->f('delimiter') != '')
+				$pos = strrpos($email->f('name'), $email->f('delimiter'));
+				if ($pos && $email->f('delimiter') != '')
 				{
 					$folder_name = substr($email->f('name'),$pos+1);
 				}else
@@ -234,8 +235,9 @@ if($account['type'] == 'pop3')
 				
 				$node = '';
 				if ($edit_name == $email->f('name'))
-				{					
-					if ($pos = strrpos($email->f('name'), $email->f('delimiter')) && $email->f('delimiter') != '')
+				{			
+					$pos = strrpos($email->f('name'), $email->f('delimiter'));		
+					if ($pos && $email->f('delimiter') != '')
 					{
 						$location = substr($email->f('name'),0,$pos+1);
 					}else
