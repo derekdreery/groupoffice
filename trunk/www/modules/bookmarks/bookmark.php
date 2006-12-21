@@ -143,6 +143,7 @@ switch ($tabtable->get_active_tab_id()) {
       <?php
 
 		if ($bookmarks->get_catagories($GO_SECURITY->user_id, true)) {
+			load_control('dropbox');
 			$dropbox = new dropbox();
 			$dropbox->add_value('0', $bm_catagory_other);
 			while ($bookmarks->next_record()) {
