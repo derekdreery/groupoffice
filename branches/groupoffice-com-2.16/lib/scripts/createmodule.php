@@ -97,14 +97,14 @@ load_basic_controls();
 $GO_SECURITY->authenticate();
 
 //Authenticate the user for the module
-$GO_MODULES->authenticate(\''.$module_id.'\');
+$GO_MODULES->authenticate(\''.$module.'\');
 
 //Get the language variables
-require_once($GO_LANGUAGE->get_language_file(\''.$module_id.'\'));
+require_once($GO_LANGUAGE->get_language_file(\''.$module.'\'));
 
 //Require the module class
-require_once($GO_MODULES->class_path.\''.$class_name.'.class.inc\');
-$'.$class_name.' = new '.$class_name.'();
+require_once($GO_MODULES->class_path.\''.$module.'.class.inc\');
+$'.$module.' = new '.$module.'();
 
 //Declare variables
 $task = isset($_REQUEST[\'task\']) ? $_REQUEST[\'task\'] : \'\';

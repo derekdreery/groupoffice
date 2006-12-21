@@ -62,8 +62,11 @@ function dbfield_to_control($prefix, $friendly_single, $field, $select_fields=ar
 		'$row->add_cell(new table_cell($strOwner.\':\'));'."\n".
 		'$row->add_cell(new table_cell($user_autocomplete->get_html()));'."\n".
 		'$table->add_row($row);'."\n\n";
-	}else {
-
+	}elseif($field['Field']=='ctime' || $field['Field']=='mtime') 
+	{
+		return '';
+	}else 
+	{
 		switch($type)
 		{
 
@@ -131,6 +134,12 @@ function dbfield_to_control($prefix, $friendly_single, $field, $select_fields=ar
 function dbfield_to_handler($friendly_single, $field)
 {
 	//echo $field['Type'];
+	
+	if($field['Field']=='ctime' || $field['Field']=='mtime')
+	{
+		return '';
+	}
+	
 	if($field['Type']=='enum(\'0\',\'1\')')
 	{
 		return '$'.$friendly_single.'[\''.$field['Field'].'\']=isset($_POST[\''.$field['Field'].'\']) ? \'1\' : \'0\';'."\n";
@@ -168,6 +177,29 @@ function my_strrpos($haystack, $needle)
 	return $index;
 }
 
+function get_var_name($prefix, $field)
+{
+	switch($field)
+	{
+		case'user_id':
+			return '$strOwner';
+		break;
+		
+		case 'ctime':
+			return '$strCreatedAt';
+		break;
+		
+		case 'mtime':
+			return '$strModifiedAt';
+		break;
+		
+		default:
+			return '$'.$prefix.'_'.$field;
+		break;
+		
+	}
+}
+
 function generate_code($prefix, $module_id, $class_name, $table, $friendly_single, $friendly_multiple, $select_fields)
 {
 	global $GO_CONFIG;
@@ -175,12 +207,24 @@ function generate_code($prefix, $module_id, $class_name, $table, $friendly_singl
 	$module_dir = $GO_CONFIG->root_path.'modules/'.$module_id.'/';
 
 	$fields=array();
+	
+	$ctime_field=false;
+	$mtime_field=false;
 
 	$db = new db();
 	$db->query('SHOW FIELDS FROM '.$table);
 	while($db->next_record())
 	{
 		$fields[] = $db->Record;
+		
+		if($db->f('Field')=='ctime')
+		{
+			$ctime_field=true;
+		}
+		if($db->f('Field')=='mtime')
+		{
+			$mtime_field=true;
+		}
 	}
 
 
@@ -191,9 +235,9 @@ function generate_code($prefix, $module_id, $class_name, $table, $friendly_singl
 
 	foreach($fields as $field)
 	{
-		if($field['Field']!='id')
+		if($field['Field']!='id' && $field['Field']!='user_id' && $field['Field']!='ctime' && $field['Field']!='mtime')
 		{
-			$lang_vars .= '$'.$prefix.'_'.$field['Field']."='".var_to_lang($field['Field'])."';\n";
+			$lang_vars .= get_var_name($prefix,$field['Field'])."='".var_to_lang($field['Field'])."';\n";
 		}
 	}
 
@@ -215,6 +259,30 @@ function generate_code($prefix, $module_id, $class_name, $table, $friendly_singl
 	function add_'.$friendly_single.'($'.$friendly_single.')
 	{
 		$'.$friendly_single.'[\'id\']=$this->nextid(\''.$table.'\');
+		';
+	if($ctime_field && $mtime_field)
+	{
+		$class_functions.= '
+		$'.$friendly_single.'[\'ctime\']=$'.$friendly_single.'[\'mtime\']=get_gmt_time();
+		';
+	}else {
+		if($ctime_field)
+		{
+			$class_functions.= '
+		$'.$friendly_single.'[\'ctime\']=get_gmt_time();
+		';
+		}
+		
+		if($mtime_field)
+		{
+			$class_functions.= '
+		$'.$friendly_single.'[\'mtime\']=get_gmt_time();
+		';
+		}
+	}
+	
+	$class_functions.= '	
+	
 		if($this->insert_row(\''.$table.'\', $'.$friendly_single.'))
 		{
 			return $'.$friendly_single.'[\'id\'];
@@ -233,6 +301,15 @@ function generate_code($prefix, $module_id, $class_name, $table, $friendly_singl
 	
 	function update_'.$friendly_single.'($'.$friendly_single.')
 	{
+		';
+		if($mtime_field)
+		{
+			$class_functions.= '
+		$'.$friendly_single.'[\'mtime\']=get_gmt_time();
+			';
+		}
+		
+		$class_functions.= '
 		return $this->update_row(\''.$table.'\', \'id\', $'.$friendly_single.');
 	}
 	
@@ -389,7 +466,7 @@ $form->add_html_element($menu);
 	{
 		if($field['Field']!='id')
 		{
-			$index_page .= '$th = new table_heading($'.$prefix.'_'.$field['Field'].', \''.$field['Field'].'\');'.
+			$index_page .= '$th = new table_heading('.get_var_name($prefix,$field['Field']).', \''.$field['Field'].'\');'.
 				"\n".
 				'$datatable->add_column($th);'.
 				"\n";
@@ -482,19 +559,22 @@ $form->add_html_element($menu);
 	{
 		if($field['Field']!='id')
 		{
-			$include_file .= '$th = new table_heading($'.$prefix.'_'.$field['Field'].', \''.$field['Field'].'\');'.
+			$include_file .= '$th = new table_heading('.get_var_name($prefix,$field['Field']).', \''.$field['Field'].'\');'.
 				"\n".
 				'$datatable->add_column($th);'.
 				"\n";
 		}
 	}
 
-	$include_file .= '$count = $'.$class_name.'->get_'.$friendly_multiple.'($datatable->start, $datatable->offset, $datatable->sort_index, $datatable->sql_sort_order);';
 	$include_file .= "\n";
+	$include_file .= '$count = $'.$class_name.'->get_'.$friendly_multiple.'($datatable->start, $datatable->offset, $datatable->sort_index, $datatable->sql_sort_order);';
+	$include_file .= "\n\n";
+	
+	$include_file .= 'if($count){'."\n";
 
-	$include_file .= 'while($'.$class_name.'->next_record()){'."\n".
-	"\t".'$row = new table_row($'.$class_name.'->f(\'id\'));'.
-	"\t".'$row->set_attribute(\'ondblclick\',"javascript:document.location=\''.$friendly_single.'.php?'.$friendly_single.'_id=".$'.$class_name.'->f(\'id\')."&return_to=".urlencode($link_back)."\';");'."\n";
+	$include_file .= "\t".'while($'.$class_name.'->next_record()){'."\n".
+	"\t\t".'$row = new table_row($'.$class_name.'->f(\'id\'));'."\n".
+	"\t\t".'$row->set_attribute(\'ondblclick\',"javascript:document.location=\''.$friendly_single.'.php?'.$friendly_single.'_id=".$'.$class_name.'->f(\'id\')."&return_to=".urlencode($link_back)."\';");'."\n";
 		
 
 
@@ -502,29 +582,42 @@ $form->add_html_element($menu);
 	{
 		if($field['Field']!='id')
 		{
-
 			if($field['Field']=='user_id')
 			{
-				$include_file .= '$cell = new table_cell(show_profile($'.$class_name.'->f(\''.$field['Field'].'\')));';
-			}else {
+				$include_file .= "\t\t".'$cell = new table_cell(show_profile($'.$class_name.'->f(\''.$field['Field'].'\')));';
+			}elseif($field['Field']=='ctime' || $field['Field']=='mtime')
+			{
+				$include_file .= "\t\t".'$cell = new table_cell(get_timestamp($'.$class_name.'->f(\''.$field['Field'].'\')));';
+			}else 
+			{
 				$type = parse_field_type($field['Type']);
 				if($type['type']=='enum' && $type['value']=="'0','1'")
 				{
-					$include_file .= '$value=$'.$class_name.'->f(\''.$field['Field'].'\')==\'1\' ? $cmdYes : $cmdNo;'."\n";
-					$include_file .= '$cell = new table_cell($value);';
+					$include_file .= "\t\t".'$value=$'.$class_name.'->f(\''.$field['Field'].'\')==\'1\' ? $cmdYes : $cmdNo;'."\n";
+					$include_file .= "\t\t".'$cell = new table_cell($value);';
 				}else {
-					$include_file .= '$cell = new table_cell($'.$class_name.'->f(\''.$field['Field'].'\'));';
+					$include_file .= "\t\t".'$cell = new table_cell($'.$class_name.'->f(\''.$field['Field'].'\'));';
 				}
 			}
 
 			$include_file .= "\n";
-			$include_file .= '$row->add_cell($cell);';
+			$include_file .= "\t\t".'$row->add_cell($cell);';
 			$include_file .= "\n";
 		}
 	}
-	$include_file .= '$datatable->add_row($row);';
+	$include_file .= "\t\t".'$datatable->add_row($row);';
 	$include_file .= "\n";
-	$include_file .= "}\n";
+	$include_file .= "\t}\n";
+	
+	$include_file .= '}else {'."\n".
+		"\t".'$row = new table_row();'."\n".
+		"\t".'$cell = new table_cell($strNoItems);'."\n".
+		"\t".'$cell->set_attribute(\'colspan\',\'99\');'."\n".
+		"\t".'$row->add_cell($cell);'."\n".
+		"\t".'$datatable->add_row($row);'."\n".
+		"}\n";
+
+
 
 	$include_file .= '$tabstrip->add_html_element($datatable);';
 	$include_file .= "\n?>";
