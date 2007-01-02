@@ -23,7 +23,7 @@ if (isset ($GO_MODULES->modules['calendar']) && $GO_MODULES->modules['calendar']
 	$em_table->set_attribute('style', 'border:0px;margin-top:10px;');
 	
 	$img = new image('calendar');
-	$img->set_attribute('style', 'border:0px;margin-right:10px;width:32px;height:32px');
+	$img->set_attribute('style', 'border:0px;margin-right:10px;');
 	
 	$em_cell = new table_cell();
 	$em_cell->set_attribute('valign','top');
@@ -119,7 +119,7 @@ if (isset ($GO_MODULES->modules['calendar']) && $GO_MODULES->modules['calendar']
 	$em_table->set_attribute('style', 'border:0px;margin-top:10px;');
 	
 	$img = new image('todos');
-	$img->set_attribute('style', 'border:0px;margin-right:10px;width:32px;height:32px');
+	$img->set_attribute('style', 'border:0px;margin-right:10px;');
 	
 	$em_cell = new table_cell();
 	$em_cell->set_attribute('valign','top');

@@ -76,15 +76,9 @@ if((count($_SESSION['cut_files'] ) + count($_SESSION['cut_folders']) + count($_S
 echo '<td class="ModuleIcons">';
 echo '<a class="small" target="_blank" href="view.php?site_id='.$_SESSION['site_id'].'&folder_id='.$folder_id.'" title="'.$cms_preview.' \''.$site['domain'].'\'"><img src="'.$GO_THEME->images['magnifier_big'].'" border="0" /><br />'.$cms_preview.'</a></td>';
 
-if($site['user_id'] == $GO_SECURITY->user_id || $site['allow_properties'] == '1' || $site['multilingual'] == '1')
-{
-	echo '<td class="ModuleIcons">';
-	echo '<a class="small" href="site.php?site_id='.$_SESSION['site_id'].'&return_to='.rawurlencode($GO_MODULES->url.'browse.php?folder_id='.$folder_id).'"><img src="'.$GO_THEME->images['cms_settings'].'" border="0" height="32" width="32" /><br />'.$cms_settings.'</a></td>';
-}else
-{
-	echo '<td class="ModuleIcons">';
-	echo '<a class="small" href="language.php?language_id='.$_SESSION['language_id'].'&return_to='.rawurlencode($GO_MODULES->url.'browse.php?folder_id='.$folder_id).'"><img src="'.$GO_THEME->images['cms_settings'].'" border="0" height="32" width="32" /><br />'.$cms_settings.'</a></td>';
-}
+echo '<td class="ModuleIcons">';
+echo '<a class="small" href="site.php?site_id='.$_SESSION['site_id'].'&return_to='.rawurlencode($GO_MODULES->url.'browse.php?folder_id='.$folder_id).'"><img src="'.$GO_THEME->images['cms_settings'].'" border="0" height="32" width="32" /><br />'.$cms_settings.'</a></td>';
+
 
 echo '<td class="ModuleIcons">';
 echo '<a class="small" href="index.php"><img src="'.$GO_THEME->images['exit'].'" border="0" height="32" width="32" /><br />'.$cmdClose.'</a></td>';

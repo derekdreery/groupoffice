@@ -77,7 +77,7 @@ if ($email_module && $email_module['read_permission'])
 			$em_table->set_attribute('style', 'border:0px;margin-top:10px;');
 			
 			$img = new image('email');
-			$img->set_attribute('style', 'border:0px;margin-right:10px;width:32px;height:32px');
+			$img->set_attribute('style', 'border:0px;margin-right:10px;');
 			
 			$em_cell = new table_cell();
 			$em_cell->set_attribute('valign','top');
