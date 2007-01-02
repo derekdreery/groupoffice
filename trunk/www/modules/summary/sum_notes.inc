@@ -6,7 +6,7 @@ if ($notes_module && $notes_module['read_permission'])
 	$notes = new notes();
 
 	echo 	'<table border="0" style="margin-top: 10px"><tr><td valign="top">'.
-			'<img style="margin-right: 10px;" width="32" height="32" src="'.$GO_THEME->images['notes'].
+			'<img style="margin-right: 10px;" src="'.$GO_THEME->images['notes'].
 			'" border="0" /></td><td>'.
 			'<h2><a href="'.$notes_module['url'].'">'.
 			$lang_modules['notes'].'</a></h2></td></tr><tr><td></td><td>';

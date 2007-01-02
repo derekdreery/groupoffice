@@ -46,7 +46,7 @@ class button_menu extends table
 	function add_button($image_id, $text, $href, $attributes=array())
 	{
 		$image = new image($image_id);		
-		$image->set_attribute('style', 'width:32px;height:32px;border:0px;');
+		$image->set_attribute('style', 'border:0px;');
 		$hyperlink = new hyperlink($href, $image->get_html().'<br />'.$text);
 		$hyperlink->attributes=array_merge($hyperlink->attributes,$attributes);
 		$cell = new table_cell($hyperlink->get_html());
