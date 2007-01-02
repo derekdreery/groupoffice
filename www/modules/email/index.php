@@ -129,14 +129,14 @@ function composer(action)
 			
 			echo '<table border="0" cellspacing="0" cellpadding="0"><tr>';
 			echo '<td class="ModuleIcons">';
-			echo "<a href=\"javascript:composer('');\"><img src=\"".$GO_THEME->images['compose']."\" border=\"0\" height=\"32\" width=\"32\" /><br />".$ml_compose."</a></td>\n";		
+			echo "<a href=\"javascript:composer('');\"><img src=\"".$GO_THEME->images['compose']."\" border=\"0\" /><br />".$ml_compose."</a></td>\n";		
 			echo '<td class="ModuleIcons">';
-			echo '<a href="javascript:search_messages();"><img src="'.$GO_THEME->images['ml_search'].'" border="0" height="32" width="32" /><br />'.$ml_search.'</a></td>';
+			echo '<a href="javascript:search_messages();"><img src="'.$GO_THEME->images['ml_search'].'" border="0" /><br />'.$ml_search.'</a></td>';
 			
 			echo '<td class="ModuleIcons">';
-			echo '<a href="javascript:document.location=\'index.php?account_id=\'+messages.document.forms[0].account_id.value+\'&mailbox=INBOX&refresh=true\';"><img src="'.$GO_THEME->images['em_refresh'].'" border="0" height="32" width="32" /><br />'.$ml_refresh.'</a></td>';			
+			echo '<a href="javascript:document.location=\'index.php?account_id=\'+messages.document.forms[0].account_id.value+\'&mailbox=INBOX&refresh=true\';"><img src="'.$GO_THEME->images['em_refresh'].'" border="0" /><br />'.$ml_refresh.'</a></td>';			
 			echo '<td class="ModuleIcons">';
-			echo '<a href="javascript:window.messages.confirm_delete();"><img src="'.$GO_THEME->images['delete_big'].'" border="0" height="32" width="32" /><br />'.$ml_delete.'</a></td>';					
+			echo '<a href="javascript:window.messages.confirm_delete();"><img src="'.$GO_THEME->images['delete_big'].'" border="0" /><br />'.$ml_delete.'</a></td>';					
 			
 						
 			echo '<td id="accountButtons">';
@@ -148,17 +148,17 @@ function composer(action)
 						
 			if (!$disable_accounts) {
 				echo '<td class="ModuleIcons">';
-				echo '<a href="accounts.php?return_to='.urlencode($link_back).'"><img src="'.$GO_THEME->images['accounts'].'" border="0" height="32" width="32" /><br />'.$ml_accounts.'</a></td>';
+				echo '<a href="accounts.php?return_to='.urlencode($link_back).'"><img src="'.$GO_THEME->images['accounts'].'" border="0" /><br />'.$ml_accounts.'</a></td>';
 			} else {
 				echo '<td class="ModuleIcons">';
-				echo '<a href="account.php?account_id='.$account['id'].'&return_to='.urlencode($link_back).'"><img src="'.$GO_THEME->images['accounts'].'" border="0" height="32" width="32" /><br />'.$ml_edit_account.'</a></td>';
+				echo '<a href="account.php?account_id='.$account['id'].'&return_to='.urlencode($link_back).'"><img src="'.$GO_THEME->images['accounts'].'" border="0" /><br />'.$ml_edit_account.'</a></td>';
 			}		
 			echo '<td class="ModuleIcons">';
-				echo '<a href="javascript:document.location=\'account.php?account_id=\'+messages.document.forms[0].account_id.value+\'&account_tab=folders&return_to='.urlencode($link_back).'\';"><img src="'.$GO_THEME->images['folders'].'" border="0" height="32" width="32" /><br />'.$ml_folders.'</a></td>';
+				echo '<a href="javascript:document.location=\'account.php?account_id=\'+messages.document.forms[0].account_id.value+\'&account_tab=folders&return_to='.urlencode($link_back).'\';"><img src="'.$GO_THEME->images['folders'].'" border="0" /><br />'.$ml_folders.'</a></td>';
 		
 			if ($GO_MODULES->write_permission) {
 				echo '<td class="ModuleIcons">';
-				echo '<a href="configuration.php?return_to='.urlencode($link_back).'"><img src="'.$GO_THEME->images['em_settings_admin'].'" border="0" height="32" width="32" /><br />'.$menu_configuration.'</a></td>';
+				echo '<a href="configuration.php?return_to='.urlencode($link_back).'"><img src="'.$GO_THEME->images['em_settings_admin'].'" border="0" /><br />'.$menu_configuration.'</a></td>';
 			}
 			
 			echo '</td></tr></table>';	
@@ -171,37 +171,37 @@ function composer(action)
 			
 			
 			echo '<td class="ModuleIcons">';
-			echo "<a href=\"javascript:composer('reply');\"><img src=\"".$GO_THEME->images['reply']."\" border=\"0\" height=\"32\" width=\"32\" /><br />".$ml_reply."</a></td>\n";
+			echo "<a href=\"javascript:composer('reply');\"><img src=\"".$GO_THEME->images['reply']."\" border=\"0\" /><br />".$ml_reply."</a></td>\n";
 			echo '<td class="ModuleIcons">';
-			echo "<a href=\"javascript:composer('reply_all');\"><img src=\"".$GO_THEME->images['reply_all']."\" border=\"0\" height=\"32\" width=\"32\" /><br />".$ml_reply_all."</a></td>\n";
+			echo "<a href=\"javascript:composer('reply_all');\"><img src=\"".$GO_THEME->images['reply_all']."\" border=\"0\" /><br />".$ml_reply_all."</a></td>\n";
 			echo '<td class="ModuleIcons">';
-			echo "<a href=\"javascript:composer('forward');\"><img src=\"".$GO_THEME->images['forward']."\" border=\"0\" height=\"32\" width=\"32\" /><br />".$ml_forward."</a></td>\n";
+			echo "<a href=\"javascript:composer('forward');\"><img src=\"".$GO_THEME->images['forward']."\" border=\"0\" /><br />".$ml_forward."</a></td>\n";
 			//echo '<td class="ModuleIcons">';
-			//echo "<a href=\"javascript:popup('properties.php?account_id='+message.document.forms[0].account_id.value+'&uid='+message.document.forms[0].uid.value+'&mailbox='+message.document.forms[0].mailbox.value,'450','500')\"><img src=\"".$GO_THEME->images['properties']."\" border=\"0\" height=\"32\" width=\"32\" /><br />".$fbProperties."</a></td>\n";
+			//echo "<a href=\"javascript:popup('properties.php?account_id='+message.document.forms[0].account_id.value+'&uid='+message.document.forms[0].uid.value+'&mailbox='+message.document.forms[0].mailbox.value,'450','500')\"><img src=\"".$GO_THEME->images['properties']."\" border=\"0\" /><br />".$fbProperties."</a></td>\n";
 			
 			echo '<td class="ModuleIcons">';
-			echo '<a href="javascript:print_message();"><img src="'.$GO_THEME->images['print'].'" border="0" height="32" width="32" /><br />'.$ml_print.'</a></td>';
+			echo '<a href="javascript:print_message();"><img src="'.$GO_THEME->images['print'].'" border="0" /><br />'.$ml_print.'</a></td>';
 			
 			if(file_exists($GO_MODULES->modules['email']['path'].'save_message.php') && isset($GO_MODULES->modules['filesystem']) && $GO_MODULES->modules['filesystem']['read_permission'])
 			{
 				echo '<td class="ModuleIcons">';
-				echo '<a href="javascript:save_message();"><img src="'.$GO_THEME->images['save_big'].'" border="0" height="32" width="32" /><br />'.$cmdSave.'</a></td>';
+				echo '<a href="javascript:save_message();"><img src="'.$GO_THEME->images['save_big'].'" border="0" /><br />'.$cmdSave.'</a></td>';
 			}
 			
 			
 			echo '<td class="ModuleIcons" id="previous_button" style="display:none">';
-			echo '<a href="javascript:window.message.previous_message();"><img src="'.$GO_THEME->images['previous'].'" border="0" height="32" width="32" /><br />'.$cmdPrevious.'</a></td>';		
+			echo '<a href="javascript:window.message.previous_message();"><img src="'.$GO_THEME->images['previous'].'" border="0" /><br />'.$cmdPrevious.'</a></td>';		
 			
 			echo '<td class="ModuleIcons" id="next_button" style="display:none">';
-			echo '<a href="javascript:window.message.next_message();"><img src="'.$GO_THEME->images['next'].'" border="0" height="32" width="32" /><br />'.$cmdNext.'</a></td>';		
+			echo '<a href="javascript:window.message.next_message();"><img src="'.$GO_THEME->images['next'].'" border="0" /><br />'.$cmdNext.'</a></td>';		
 			
 			echo '<td class="ModuleIcons" id="fsButton">';
 			if($em_settings['show_preview']=='1')
 			{
-				echo '<a href="javascript:close_message_frame();"><img src="'.$GO_THEME->images['close'].'" border="0" height="32" width="32" /><br />'.$cmdClose.'</a></td>';			
+				echo '<a href="javascript:close_message_frame();"><img src="'.$GO_THEME->images['close'].'" border="0" /><br />'.$cmdClose.'</a></td>';			
 			}else
 			{
-				echo '<a href="javascript:close_message_frame_for_delete();"><img src="'.$GO_THEME->images['close'].'" border="0" height="32" width="32" /><br />'.$cmdClose.'</a></td>';			
+				echo '<a href="javascript:close_message_frame_for_delete();"><img src="'.$GO_THEME->images['close'].'" border="0" /><br />'.$cmdClose.'</a></td>';			
 				
 			}
 			

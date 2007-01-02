@@ -26,7 +26,7 @@ require_once ($GO_MODULES->class_path."email.class.inc");
 $mail = new imap();
 $email = new email();
 $GO_HEADER['nomessages'] = true;
-$GO_HEADER['head'] = tooltip::get_header();
+$GO_HEADER['head'] = overlib::get_header();
 
 require_once ($GO_LANGUAGE->get_language_file('email'));
 
@@ -273,6 +273,8 @@ $to = htmlspecialchars($to, ENT_QUOTES);
 if (strlen($to) > 200) {
 	$short_to = cut_string($to, 200);
 	$long_to = $to;
+	
+
 	
 	
 	echo '<a href="#" '.$overlib->print_overlib($long_to).'>'.$short_to.'</a>';
