@@ -133,7 +133,7 @@ class cms_gallery {
 		$cell->set_attribute('colspan', '99');
 		$cell->set_attribute('style','text-align:center;padding-top:10px;');
 
-		if($offset>0)
+		if($offset>0 && $count > $offset)
 		{
 			$number_of_pages = ceil($count/$offset);
 			$page = $start/$offset;
