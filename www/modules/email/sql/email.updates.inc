@@ -1,17 +1,16 @@
 <?php
 $updates[22] = array();
 $updates[21][] = "CREATE TABLE `em_links` (
-`link_id` INT NOT NULL ,
-`account_id` INT NOT NULL ,
-`mailbox` VARCHAR( 255 ) NOT NULL ,
-`uid` VARCHAR( 50 ) NOT NULL ,
-`from` VARCHAR( 255 ) NOT NULL ,
-`to` TEXT NOT NULL ,
-`subject` VARCHAR( 255 ) NOT NULL ,
-`time` INT NOT NULL ,
-PRIMARY KEY ( `link_id` ) ,
-INDEX ( `account_id` )
-) TYPE = MYISAM ;";
+  `link_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `from` varchar(255) NOT NULL,
+  `to` text NOT NULL,
+  `subject` varchar(255) NOT NULL,
+  `time` int(11) NOT NULL,
+  `path` varchar(255) NOT NULL,
+  PRIMARY KEY  (`link_id`),
+  KEY `account_id` (`user_id`)
+) ;";
 
 $updates[20][] = "ALTER TABLE `em_settings` DROP `sort_field` , DROP `sort_order` ;";
 $updates[20][] = "ALTER TABLE `em_settings` ADD `show_preview` ENUM( '0', '1' ) DEFAULT '1' NOT NULL ;";
