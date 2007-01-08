@@ -96,6 +96,11 @@ function save_message()
 	popup('save_message.php?account_id='+message.document.forms[0].account_id.value+'&uid='+message.document.forms[0].uid.value+'&mailbox='+message.document.forms[0].mailbox.value+'&filename='+escape(message.document.forms[0].subject.value)+'.eml');
 }
 
+function link_message()
+{
+	popup('link_message.php?account_id='+message.document.forms[0].account_id.value+'&uid='+message.document.forms[0].uid.value+'&mailbox='+message.document.forms[0].mailbox.value);	
+}
+
 function composer(action)
 {
 	if(action != '')
@@ -188,6 +193,12 @@ function composer(action)
 				echo '<a href="javascript:save_message();"><img src="'.$GO_THEME->images['save_big'].'" border="0" /><br />'.$cmdSave.'</a></td>';
 			}
 			
+			if(file_exists($GO_CONFIG->control_path.'mimeviewer/mimeviewer.php'))
+			{
+				echo '<td class="ModuleIcons">';
+				echo '<a href="javascript:link_message();"><img src="'.$GO_THEME->images['link'].'" border="0" /><br />'.$strCreateLink.'</a></td>';
+			}
+			
 			
 			echo '<td class="ModuleIcons" id="previous_button" style="display:none">';
 			echo '<a href="javascript:window.message.previous_message();"><img src="'.$GO_THEME->images['previous'].'" border="0" /><br />'.$cmdPrevious.'</a></td>';		
@@ -215,7 +226,7 @@ function composer(action)
 		<iframe id="treeviewFrame" marginheight="0" marginwidth="0" vspace="0" frameborder="0" style="width:100%;height:100%;" src="blank.html" name="treeview"></iframe>
 	</td>
 	<td style="width:75%;height:100%" id="messagesTD">
-		<iframe marginheight="0" marginwidth="0" vspace="0" frameborder="0" height="50%" style="width:100%;height:50%;" src="messages.php?account_id=<?php echo $account['id']; ?>&mailbox=<?php echo urlencode($mailbox); ?>" name="messages" id="messages"></iframe>
+		<iframe marginheight="0" marginwidth="0" vspace="0" frameborder="0" height="50%" style="width:100%;height:50%;" src="messages.php?account_id=<?php echo $account['id']; ?>&mailbox=<?php echo urlencode($mailbox); if(isset($_REQUEST['uid'])) echo '&uid='.$_REQUEST['uid']; ?>" name="messages" id="messages"></iframe>
 		<br />
 		<iframe marginheight="0" marginwidth="0" vspace="0" frameborder="0" height="50%" style="width:100%;height:50%;" width:100%; src="blank.html" name="message" id="message"></iframe>
 	</td>
