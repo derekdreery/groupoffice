@@ -15,6 +15,19 @@
 -- 
 -- Tabel structuur voor tabel `emAccounts`
 -- 
+DROP TABLE IF EXISTS `em_links`;
+CREATE TABLE `em_links` (
+`link_id` INT NOT NULL ,
+`account_id` INT NOT NULL ,
+`mailbox` VARCHAR( 255 ) NOT NULL ,
+`uid` VARCHAR( 50 ) NOT NULL ,
+`from` VARCHAR( 255 ) NOT NULL ,
+`to` TEXT NOT NULL ,
+`subject` VARCHAR( 255 ) NOT NULL ,
+`time` INT NOT NULL ,
+PRIMARY KEY ( `link_id` ) ,
+INDEX ( `account_id` )
+) TYPE = MYISAM;
 
 DROP TABLE IF EXISTS `emAccounts`;
 CREATE TABLE `emAccounts` (

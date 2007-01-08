@@ -27,6 +27,47 @@ class email extends db
 		$result = $this->query($sql);
 		return $this->num_rows($result);
 	}
+	
+	
+	function link_message($message)
+	{
+		global $GO_LINKS;
+		
+		$message['link_id']=$GO_LINKS->get_link_id();
+		$this->insert_row('em_links',$message);
+		return $message['link_id'];
+	}
+	
+	function get_linked_message($account_id, $uid)
+	{
+		$sql = "SELECT * FROM em_links WHERE account_id=$account_id AND uid='$uid'";
+		$this->query($sql);
+		if($this->next_record())
+		{
+			return $this->Record;
+		}
+		return false;
+	}
+	
+	
+	function get_linked_messages($links, $sort_index='time', $sort_order='ASC',$start=0,$offset=0)
+	{
+		if(!count($links))
+		{
+			return 0;
+		}
+		$sql = "SELECT * FROM em_links WHERE link_id IN (".implode(',',$links).") ORDER BY `$sort_index` $sort_order";
+		$this->query($sql);
+		$count = $this->num_rows();
+		
+		if($offset>0)
+		{
+			$sql .= " LIMIT $start,$offset";
+			$this->query($sql);
+		}	
+				
+		return $count;		
+	}
 
 	function set_sorting($user_id, $sort_field, $sort_order)
 	{

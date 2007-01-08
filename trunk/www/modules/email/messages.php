@@ -632,6 +632,9 @@ $form->add_html_element($datatable);
 echo $form->get_html();
 ?>
 <script type="text/javascript">	
+
+
+
 function confirm_delete()
 {
 	document.forms[0].form_action.value='delete';
@@ -654,7 +657,16 @@ function initializeDocument()
 	if(!$refresh_treeview) echo '}';
 	?>
 	parent.update_toolbar(false);
-	parent.message.location.replace('blank.html');
+	
+	<?php
+	if(isset($_REQUEST['uid']))
+	{
+		echo 'parent.message.location="message.php?account_id='.$account['id'].'&uid='.$_REQUEST['uid'].'&mailbox='.urlencode($mailbox).'&sort_index='.$datatable->sort_index.'&sort_ascending='.$datatable->sort_ascending.'";parent.toggle_navigation(false);';
+	}else {
+		echo 'parent.message.location.replace(\'blank.html\');';
+	}
+	?>
+	
 }
 var last_selected= 0;
 var start_point = 0;
