@@ -97,7 +97,7 @@ if(!is_dir($fv->path))
 		$menu->add_button(
 		'magnifier_big',
 		$fs_view,
-		'mimeviewer.php?path='.$urlencoded_path,array('target'=>'_blank'));
+		$GO_CONFIG->control_url.'mimeviewer/mimeviewer.php?path='.$urlencoded_path,array('target'=>'_blank'));
 	}
 
 	if (isset($GO_MODULES->modules['email']) && $GO_MODULES->modules['email']['read_permission']) {

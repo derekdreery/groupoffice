@@ -80,7 +80,7 @@ if ($account && $mail->open($account['host'], $account['type'], $account['port']
 		require($GO_THEME->theme_path.'footer.inc');
 		exit();
 	}
-	$subject = !empty ($content["subject"]) ? enc_utf8($content["subject"]) : $ml_no_subject;
+	$subject = !empty ($content["subject"]) ? $content["subject"] : $ml_no_subject;
 
 } else {
 	require_once ($GO_THEME->theme_path.'header.inc');
