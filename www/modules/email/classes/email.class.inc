@@ -38,15 +38,10 @@ class email extends db
 		return $message['link_id'];
 	}
 	
-	function get_linked_message($account_id, $uid)
+	function delete_linked_message($link_id)
 	{
-		$sql = "SELECT * FROM em_links WHERE account_id=$account_id AND uid='$uid'";
-		$this->query($sql);
-		if($this->next_record())
-		{
-			return $this->Record;
-		}
-		return false;
+		$sql ="DELETE FROM em_links WHERE link_id=$link_id";
+		return $this->query($sql);
 	}
 	
 	
