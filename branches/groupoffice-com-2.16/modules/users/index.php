@@ -128,7 +128,7 @@ while ($GO_USERS->next_record())
 	$name = format_name($GO_USERS->f('last_name'),$GO_USERS->f('first_name'),$GO_USERS->f('middle_name'));
 
 	$row = new table_row($GO_USERS->f('id'));
-	$row->set_attribute('ondblclick', "document.location='user.php?user_id=".$GO_USERS->f("id")."'");
+	$row->set_attribute('ondblclick', "document.location='user.php?user_id=".$GO_USERS->f("id")."&return_to=".urlencode($_SERVER['PHP_SELF'])."'");
 	if($GO_USERS->f('enabled') == '0')
 	{
 		$row->set_attribute('class', 'Error');
