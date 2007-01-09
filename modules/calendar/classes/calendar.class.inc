@@ -1488,6 +1488,10 @@ class calendar extends db
 
 	function get_next_recurrence_time($event_id, $gmt_time=0, $event='')
 	{
+
+
+
+		//echo date('Ymd G:i', $gmt_time);
 		if ($event == '')
 		{
 			if(!$event = $this->get_event($event_id))
@@ -1507,7 +1511,9 @@ class calendar extends db
 		}
 
 		$event_tzo = $event['timezone'];
-		if ($event['DST'] > 0 && date('I', $event['start_time']) != 0) {
+		//Daily event going into other dst zone fail
+		//if ($event['DST'] > 0 && date('I', $event['start_time']) != 0) {
+		if ($event['DST'] > 0 && date('I', $gmt_time) != 0) {
 			$event_tzo += $event['DST'];
 		}
 		$event = $this->shift_days_to_local($event, $event_tzo);
@@ -1517,7 +1523,7 @@ class calendar extends db
 		$event['start_time'] += $event_tzo;
 		$gmt_time += $event_tzo;
 
-
+		//echo ' -> '.date('Ymd G:i', $gmt_time).'<br />';
 
 
 		if ($event['repeat_forever'] == '0' && ($event['repeat_end_time'] < $gmt_time && $event['repeat_type'] != REPEAT_NONE))
@@ -1638,6 +1644,9 @@ class calendar extends db
 
 
 				$occurence_time = mktime($event['start_hour'], $event['start_min'], 0, $month, $day, $year);
+
+				//echo date('Ymd G:i', $occurence_time).'<br>';
+
 				$new_tzo = get_timezone_offset($occurence_time);
 				$diff = ($original_tzo-$new_tzo)*3600;
 				$occurence_time += $diff;
@@ -1909,7 +1918,7 @@ class calendar extends db
 		$events = $events ? '1' : '0';
 
 		$sql  = "SELECT DISTINCT cal_events.*";
-		
+
 		$sql .=   " FROM cal_events";
 
 		if ($view_id > 0)
@@ -2049,8 +2058,8 @@ class calendar extends db
 	{
 		$this->events = array();
 		$this->events_sort=array();
-		
-						
+
+
 		if($count = $this->get_events($show_todos, $show_events, $completed, $calendar_id,
 		$view_id,
 		$user_id,
@@ -2058,19 +2067,19 @@ class calendar extends db
 		$interval_start_time,
 		$interval_end_time))
 		{
-			
+
 			while($this->next_record())
 			{
-				
+
 				$this->calculate_event($this->Record,
 				$interval_start_time,
 				$interval_end_time,
 				$with_calendars);
-				
+
 			}
-		}	
+		}
 		//return $this->events;
-		
+
 		asort($this->events_sort);
 		$sorted_events=array();
 		foreach($this->events_sort as $key=>$value)
@@ -2105,19 +2114,29 @@ class calendar extends db
 		$calculated_event['original_end_time'] = $event['end_time'];
 		$calculated_event['original_repeat_end_time'] = $event['repeat_end_time'];
 
+
 		/*$exceptions=array();
 
 		$cal->get_exceptions($event['id']);
 		while($cal->next_record())
 		{
-			$exceptions[]=$this->f('time');
+		$exceptions[]=$this->f('time');
 		}*/
 
+		//echo 'Ik ga presenteren '.date('Ymd G:i', $interval_start_time).' tot '.date('Ymd G:i', $interval_end_time).'<br>';
 
+
+
+
+		//echo 'Gevraagd eerst volgende keer na '.date('Ymd G:i', $interval_start_time-$duration);
 
 		if($calculated_event['start_time'] = $this->get_next_recurrence_time(0, $interval_start_time-$duration, $event))
 		{
-			$calculated_event['end_time'] = $calculated_event['start_time']+$duration;
+
+			$calculated_event['end_time'] = $calculated_event['start_time']+$duration;			
+			
+			//echo 'Gevonden '.date('Ymd G:i', $calculated_event['start_time']).' tot '.date('Ymd G:i', $calculated_event['end_time']).' <br />';
+
 			//echo date('Ymd G:i', $calculated_event['start_time']).' '.date('Ymd G:i', $calculated_event['end_time'])." ".$calculated_event['name']."<br><hr /><br />";
 			$loops = 0;
 
@@ -2126,6 +2145,7 @@ class calendar extends db
 				$loops++;
 				if(!$cal->is_exception($calculated_event['id'],$calculated_event['start_time']))
 				{
+					//echo 'Ik voeg toe '.date('Ymd G:i', $calculated_event['start_time']).'<br />';
 					$this->events[] = $calculated_event;
 					//echo date('Ymd G:i', $interval_start_time).' '.date('Ymd G:i', $calculated_event['start_time']).' '.date('Ymd G:i', $calculated_event['end_time'])." ".$calculated_event['name']."<br><hr /><br />";
 					//$timezone_offset = get_timezone_offset($calculated_event['original_start_time'])*3600;
@@ -2135,7 +2155,7 @@ class calendar extends db
 				if($loops==100)
 				{
 					global $GO_MODULES;
-					//echo '<a href="'.$GO_MODULES->modules['calendar']['url'].'event.php?event_id='.$calculated_event['id'].
+					echo '<a href="'.$GO_MODULES->modules['calendar']['url'].'event.php?event_id='.$calculated_event['id'].
 					'>Warning: event looped 1000 times '.
 					date('Ymd G:i', $calculated_event['start_time']).'  '.
 					$calculated_event['name'].' event_id='.$calculated_event['id'].'</a><br>';
@@ -2145,9 +2165,15 @@ class calendar extends db
 				$calculated_event['original_start_time'] = $event['start_time'];
 				$calculated_event['original_end_time'] = $event['end_time'];
 				$calculated_event['original_repeat_end_time'] = $event['repeat_end_time'];
+
+				//echo 'Gevraagd eerst volgende keer na '.date('Ymd G:i', $calculated_event['start_time']);
+
 				if($calculated_event['start_time'] = $this->get_next_recurrence_time(0, $calculated_event['start_time'], $event))
 				{
+
 					$calculated_event['end_time'] = $calculated_event['start_time']+$duration;
+
+					//echo 'Gevonden '.date('Ymd G:i', $calculated_event['start_time']).' tot '.date('Ymd G:i', $calculated_event['end_time']).' <br />';
 				}else
 				{
 					$calculated_event['end_time'] = 0;
