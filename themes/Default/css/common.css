@@ -276,7 +276,7 @@ a.HeaderBar:hover {
 	
 }
 
-.go_table th {
+.go_table th, .go_table th td {
 	background-color: #22437f;
 	font-size: 12px;
 	padding: 2px;
@@ -311,10 +311,6 @@ a.HeaderBar:hover {
 	white-space:nowrap;
 }
 
-.go_table th td{
-	vertical-align: middle;
-	border:0px;
-}
 
 .selectedRow{
 	background-color: #96c0e4;
