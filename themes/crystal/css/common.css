@@ -458,6 +458,7 @@ a.small_underline, a.small_underline:visited, a.small_underline:active{
 		background-color: #666666;
         font-size: 12px;
 		padding: 2px;
+		padding-right:7px;
 		margin: 0px;
         font-weight: bold;
         color: #FFFFFF;
@@ -479,10 +480,12 @@ a.small_underline, a.small_underline:visited, a.small_underline:active{
 	border: 0px;
 	border-bottom: 1px solid #666666;	
 	margin: 0px;
-	padding: 0px;
+	padding-left: 0px;
+	padding-right: 7px;
 	padding-top:0px;
 	padding-bottom:0px;
 	vertical-align: top;
+	white-space:nowrap;
 }
 
 .go_table th td{
