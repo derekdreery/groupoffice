@@ -1,5 +1,5 @@
 <?php
-require_once($GO_LANGUAGE->get_fallback_base_language_file('users'));
+require_once($GO_LANGUAGE->get_fallback_language_file('users'));
 
 $strLogins = "Entradas";
 $strRegistrationDate = "Fecha de registro";

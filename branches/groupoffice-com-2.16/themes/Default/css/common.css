@@ -284,7 +284,8 @@ a.HeaderBar:hover {
 	color: #FFFFFF;
 	white-space: nowrap;
 	text-align: left;
-	border:0px;        
+	border:0px;    
+	white-space:nowrap;
 }
 
 .go_table th a:link, .go_table th a:visited, .go_table th a:active {
@@ -298,13 +299,18 @@ a.HeaderBar:hover {
 
 .go_table td {
 	border: 0px;
-	border-bottom: 1px solid #666666;	
+	border-bottom: 1px solid #666666;
 	margin: 0px;
 	padding: 2px;
 	padding-top:0px;
 	padding-bottom:0px;
 	vertical-align: top;
 	height:15px;
+}
+
+.go_table th td{
+	vertical-align: middle;
+	border:0px;
 }
 
 .selectedRow{
