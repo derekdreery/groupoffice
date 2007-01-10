@@ -284,6 +284,7 @@ a.HeaderBar:hover {
 	cursor: default;
 	width:100%;
 	margin-top:5px;
+	white-space:nowrap;
 }
 
 .go_table th {
@@ -296,6 +297,11 @@ a.HeaderBar:hover {
         white-space: nowrap;
         text-align: left;
         border:0px;        
+}
+
+.go_table th td{
+	vertical-align: middle;
+	border:0px;
 }
 
 .go_table th a:link, .go_table th a:visited, .go_table th a:active {

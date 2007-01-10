@@ -451,6 +451,7 @@ a.small_underline, a.small_underline:visited, a.small_underline:active{
 	cursor: default;
 	width:100%;
 	margin-top:5px;
+	white-space:nowrap;
 }
 
 .go_table th {
@@ -483,6 +484,12 @@ a.small_underline, a.small_underline:visited, a.small_underline:active{
 	padding-bottom:0px;
 	vertical-align: top;
 }
+
+.go_table th td{
+	vertical-align: middle;
+	border:0px;
+}
+
 
 .selectedRow{
 	background-color: #FFFFCC;
