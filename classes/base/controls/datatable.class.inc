@@ -342,6 +342,7 @@ class datatable extends table
 
 		$select_all_checkbox = new input('checkbox', 'dummy');
 		$select_all_checkbox->set_attribute('class','');
+	
 		$select_all_checkbox->set_attribute('onclick',"javascript:table_select_all('".$this->form_name."','".$this->attributes['id']."',this.checked)");
 		
 			
@@ -375,9 +376,8 @@ class datatable extends table
 				$headings .= '>';
 				
 				if(!isset($checkbox_added) && $this->multiselect)
-				{
-					$checkbox_added = true;
-					$headings .= $select_all_checkbox->get_html();
+				{					
+					$headings .= '<table cellpadding="0" cellspacing="0"><tr><td>'.$select_all_checkbox->get_html().'</td><td>';
 				}
 				
 				if($heading->sort_name !== '')
@@ -402,6 +402,14 @@ class datatable extends table
 				{
 					$headings .= $heading->name;
 				}
+				
+				if(!isset($checkbox_added) && $this->multiselect)
+				{
+					$checkbox_added = true;
+					$headings .= '</td></tr></table>';
+				}
+				
+				
 				$headings .= '</th>'.$this->lb;
 			}
 		}
