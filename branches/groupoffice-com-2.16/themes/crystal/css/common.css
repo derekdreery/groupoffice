@@ -454,7 +454,7 @@ a.small_underline, a.small_underline:visited, a.small_underline:active{
 	white-space:nowrap;
 }
 
-.go_table th {
+.go_table th, .go_table th td {
 		background-color: #666666;
         font-size: 12px;
 		padding: 2px;
@@ -488,10 +488,6 @@ a.small_underline, a.small_underline:visited, a.small_underline:active{
 	white-space:nowrap;
 }
 
-.go_table th td{
-	vertical-align: middle;
-	border:0px;
-}
 
 
 .selectedRow{
