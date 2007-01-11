@@ -621,7 +621,7 @@ class GO_CONFIG
    * @var     string
    * @access  public
    */
-  var $cmd_tar = '/usr/bin/tar';
+  var $cmd_tar = '/bin/tar';
 
    /**
    * Command to set system passwords. Used by passwd.users.class.inc.

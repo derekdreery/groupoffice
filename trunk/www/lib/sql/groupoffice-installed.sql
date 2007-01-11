@@ -3,11 +3,11 @@
 -- http://www.phpmyadmin.net
 -- 
 -- Host: localhost
--- Generatie Tijd: 19 Dec 2006 om 15:31
+-- Generatie Tijd: 11 Jan 2007 om 09:16
 -- Server versie: 5.0.24
 -- PHP Versie: 5.1.6
 -- 
--- Database: `go2166`
+-- Database: `216_8`
 -- 
 
 -- --------------------------------------------------------
