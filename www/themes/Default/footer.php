@@ -24,11 +24,16 @@ $adminmodules = false;
 			$modules = $GO_MODULES->get_modules_with_locations($getadmin);
 			while ( $module = array_shift( $modules ) )
 			{
+				
 			  if ( $adminmodules ||
 			       ( $GO_SECURITY->has_permission( $GO_SECURITY->user_id, $module['acl_read'] ) ||
 			         $GO_SECURITY->has_permission( $GO_SECURITY->user_id, $module['acl_write'] ) ||
 			         $GO_SECURITY->has_admin_permission( $GO_SECURITY->user_id ) ) ) {
+			         	
+			    $GO_THEME->load_module_theme($module['id']);
 			    $GO_THEME->images[$module['id']] = isset($GO_THEME->images[$module['id']]) ? $GO_THEME->images[$module['id']] : $GO_THEME->images['unknown'];
+			    
+			    
 			    
 			    //require language file to obtain module name in the right language
 			    $language_file = $GO_LANGUAGE->get_language_file($module['id']);
