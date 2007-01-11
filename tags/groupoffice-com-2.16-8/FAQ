@@ -1,0 +1,90 @@
+GROUP-OFFICE FAQ
+
+1. Why don't I see any modules like, email filesystem or scheduler?	
+	You have to log in as an administrator and add them manually in the menu: administrator->modules
+	Then select the modules you wish to use.
+	
+2. Can I upload big files?
+	Yes you can. But some changes to php.ini are required for this:
+	
+	post_max_size = ??M
+	file_uploads = On
+	upload_max_filesize = ??M
+	
+	for apache's module config: conf.d/php.conf:
+	
+	limit_request_body = ?? 
+	
+	Also if the upload is taking a long time you should set the connection timeout from your webserver 
+	to a higher value. For apache (httpd.conf):
+	
+	Timeout ???
+	
+	Also check for Proxy server limits
+	
+	
+3. Why can't I connect to IMAP or POP-3 servers?
+	With some distro's (Redhat) you should add: '/notls' after the local_email_host property
+	in Group-Office.php for local e-mail. For external mail servers you should put it behind
+	the hostname part when you add an account.
+
+4. Can I create folders and filters with POP-3 servers?
+	No you can't. Multiple folders and filters are only supported with IMAP servers.
+	
+5. Why do I get errors when I put single quotes in my input?
+	You have disabled magic_quotes_gpc in 'php.ini'
+
+6. How can I browse the Group-Office files with samba or ftp?
+	Load install.php in a browser and change the create mode to '0777' if you understand what you are doing.
+	 
+7. Why do I get this error when i use the e-mail module?
+   'Error: the imap extension for PHP is not installed' or 
+   'Fatal error: Call to undefined function: imap_utf7_encode() in ../classes/imap.class.inc on line 33'
+   	
+   	You didn't compile imap in PHP this is required for both IMAP and POP3.
+
+8. Why do I instantly get an access denied error when I open the file manager?
+	Becasue the home directories from the users are not writable for the webserver. The home directories are located
+	in the path you entered where Group-Office should store files. The default setting is /home/groupoffice.
+	The directory groupoffice should be owned by the webserver user and the directory home should be 
+	accessible (executable).
+
+9. I have set up Group-Office to create Samba users. But how can I set up the samba shares?
+	
+	Set up a share like below and each user will have access to it's private files. NOte that the Group-Office
+	permissions don't work with Samba. 
+	BEWARE OF THE 777 FILE PERMISSIONS! They are needed so the webserver can read and write to them as well.
+	
+	[groupoffice]
+	   comment = Group-Office Home directory
+	   writable = yes
+	   valid users = %U
+	   path = /usr/groupoffice/%U
+	   force create mode = 0777
+	   directory mode = 0777
+
+10. After installation I can't change the ownership of Group-Office.php and it won't start. What can I do?
+	You can donwload Group-Office.php with FTP, delete it from the server and upload it back.
+	
+11. Why do I have to logon twice?
+	Logon to the same domain you entered in Group-Office.php
+	If you set the host in Group-Office.php to eg. 123.123.123.123 and you type www.example.com in the browser
+	you will have to logon twice. This is because after the first login the server creates a session for ip 123.123.123.123. 
+	Group-Office redirects you to the startpage with url http://www.example.com/. There's no valid session for this url yet.
+	
+12. Why can' t I connect to Cyrus? It gives me a cross-realm error.
+	Try these settings:
+		allowplaintext:yes;
+		sasl_mech_list: PLAIN
+		sasl_minimum_layer:0
+
+13. I've put my config file in /etc/Group-Office/../.... But when I access Group-Office
+	with different URL's it sometimes doesn't find the config file.
+	
+	You need to set: "UseCanonicalName On" in httpd.conf of apache. This way
+	it always uses the same name.
+
+14. Where can I store my contributions
+https://kjm-server.de/svn/group-office-contrib 
+			
+			
