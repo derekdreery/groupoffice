@@ -423,8 +423,7 @@ a.small_underline, a.small_underline:visited, a.small_underline:active{
 	margin-top:5px;
 	white-space:nowrap;
 }
-
-.go_table th {
+.go_table th, .go_table th td {
 		background-color: #666666;
         font-size: 12px;
 		padding: 2px;
@@ -437,10 +436,7 @@ a.small_underline, a.small_underline:visited, a.small_underline:active{
         border:0px;        
 }
 
-.go_table th td{
-	vertical-align: middle;
-	border:0px;
-}
+
 
 .go_table th a:link, .go_table th a:visited, .go_table th a:active {
 	font-size: 12px;
