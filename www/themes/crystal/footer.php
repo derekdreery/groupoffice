@@ -28,6 +28,8 @@ $adminmodules = false;
 			       ( $GO_SECURITY->has_permission( $GO_SECURITY->user_id, $module['acl_read'] ) ||
 			         $GO_SECURITY->has_permission( $GO_SECURITY->user_id, $module['acl_write'] ) ||
 			         $GO_SECURITY->has_admin_permission( $GO_SECURITY->user_id ) ) ) {
+			         	
+			    $GO_THEME->load_module_theme($module['id']);
 			    $GO_THEME->images[$module['id']] = isset($GO_THEME->images[$module['id']]) ? $GO_THEME->images[$module['id']] : $GO_THEME->images['unknown'];
 			    
 			    //require language file to obtain module name in the right language
