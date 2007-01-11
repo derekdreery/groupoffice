@@ -27,7 +27,7 @@ class GO_THEME
 	* @access  public
 	*/
 	var $theme;
-	
+
 	/**
 	* The URL to the images of a theme
 	*
@@ -35,7 +35,7 @@ class GO_THEME
 	* @access  public
 	*/
 	var $image_url;
-	
+
 	/**
 	* The full filesystem path to a theme
 	*
@@ -43,7 +43,7 @@ class GO_THEME
 	* @access  public
 	*/
 	var $theme_path;
-	
+
 	/**
 	* The relative URL to a theme
 	*
@@ -51,14 +51,14 @@ class GO_THEME
 	* @access  public
 	*/
 	var $theme_url;
-	
+
 	/**
 	* The images of a theme
 	*
 	* @var     array
 	* @access  public
 	*/
-	
+
 	var $images = array();
 	/**
 	* The sound files of a theme
@@ -67,7 +67,7 @@ class GO_THEME
 	* @access  public
 	*/
 	var $sounds = array();
-	
+
 	/**
 	* The filetype images of a theme
 	*
@@ -86,9 +86,9 @@ class GO_THEME
 	{
 		global $GO_CONFIG;
 
-		$_SESSION['GO_SESSION']['theme'] = 
-			isset($_SESSION['GO_SESSION']['theme']) ? 
-				$_SESSION['GO_SESSION']['theme'] : $GO_CONFIG->theme;
+		$_SESSION['GO_SESSION']['theme'] =
+		isset($_SESSION['GO_SESSION']['theme']) ?
+		$_SESSION['GO_SESSION']['theme'] : $GO_CONFIG->theme;
 
 		if ($_SESSION['GO_SESSION']['theme'] != '' && file_exists($GO_CONFIG->theme_path.$_SESSION['GO_SESSION']['theme']))
 		{
@@ -102,10 +102,10 @@ class GO_THEME
 		$this->theme_path = $GO_CONFIG->theme_path.$this->theme.$GO_CONFIG->slash;
 		$this->theme_url = $GO_CONFIG->theme_url.$this->theme.'/';
 		$this->image_url = $this->theme_url.'images/';
-		
+
 
 		require($this->theme_path.'images.inc');
-	
+
 		foreach($images as $key => $value)
 		{
 			$this->images[$key] = $this->image_url.$value;
@@ -121,14 +121,56 @@ class GO_THEME
 			$this->sounds[$key] = $this->theme_url.'sounds/'.$value;
 		}
 	}
-	
+
+	function load_module_theme($module_id)
+	{
+		global $GO_MODULES;
+
+		$file = $GO_MODULES->modules[$module_id]['path'].'themes/'.$this->theme.'/images.inc';
+		$image_url =  $GO_MODULES->modules[$module_id]['url'].'themes/'.$this->theme.'/images/';
+		if(!file_exists($file))
+		{
+			$file = $GO_MODULES->modules[$module_id]['path'].'themes/Default/images.inc';
+			$image_url =  $GO_MODULES->modules[$module_id]['url'].'themes/Default/images/';
+		}
+
+		if(file_exists($file))
+		{
+			require($file);
+			foreach($images as $key => $value)
+			{
+				$this->images[$key] = $image_url.$value;
+			}
+		}
+	}
+
 	function get_stylesheet($module_id)
 	{
+		global $GO_MODULES;
+		
+		$file = $GO_MODULES->modules[$module_id]['path'].'themes/'.$this->theme.'/style.css';	
+		$url = $GO_MODULES->modules[$module_id]['url'].'themes/'.$this->theme.'/style.css';	
+		if(!file_exists($file))
+		{
+			$file = $GO_MODULES->modules[$module_id]['path'].'themes/Default/style.css';	
+			$url = $GO_MODULES->modules[$module_id]['url'].'themes/Default/style.css';	
+			if(!file_exists($file))
+			{
+				$file = $this->theme_path.'css/'.$module_id.'.css';	
+				$url = $this->theme_url.'css/'.$module_id.'.css';	
+				
+				if(!file_exists($file))
+				{
+					return '';
+				}
+			}
+		}
+		
 		$link = new html_element('link');
-		$link->set_attribute('href', $this->theme_url.'css/'.$module_id.'.css');
+		$link->set_attribute('href', $url);
 		$link->set_attribute('type', 'text/css');
 		$link->set_attribute('rel', 'stylesheet');
-		
+
 		return $link->get_html();
 	}
 
@@ -141,22 +183,22 @@ class GO_THEME
 	function get_themes()
 	{
 		global $GO_CONFIG;
-		
+
 		$theme_dir=opendir($GO_CONFIG->theme_path);
 		while ($file=readdir($theme_dir))
 		{
-			if (is_dir($GO_CONFIG->theme_path.$file) && 
-				file_exists($GO_CONFIG->theme_path.$file.'/images.inc') &&
-				file_exists($GO_CONFIG->theme_path.$file.'/filetypes.inc') &&
-				file_exists($GO_CONFIG->theme_path.$file.'/sounds.inc'))
+			if (is_dir($GO_CONFIG->theme_path.$file) &&
+			file_exists($GO_CONFIG->theme_path.$file.'/images.inc') &&
+			file_exists($GO_CONFIG->theme_path.$file.'/filetypes.inc') &&
+			file_exists($GO_CONFIG->theme_path.$file.'/sounds.inc'))
 			{
-				  $themes[] = $file;
+				$themes[] = $file;
 			}
 		}
 		closedir($theme_dir);
 		return $themes;
 	}
-	
+
 	/**
 	*	Gets the login screens
 	*
@@ -166,17 +208,17 @@ class GO_THEME
 	function get_login_screens()
 	{
 		global $GO_CONFIG;
-				
+
 		$path_to_login_screens = $GO_CONFIG->root_path.'login_screens/';
 		$dir=opendir($path_to_login_screens);
 		while ($file=readdir($dir))
 		{
-			if (is_dir($path_to_login_screens.$file) && 
-				file_exists($path_to_login_screens.$file.'/login_header.inc') &&
-				file_exists($path_to_login_screens.$file.'/login.inc') &&
-				file_exists($path_to_login_screens.$file.'/login_footer.inc'))
+			if (is_dir($path_to_login_screens.$file) &&
+			file_exists($path_to_login_screens.$file.'/login_header.inc') &&
+			file_exists($path_to_login_screens.$file.'/login.inc') &&
+			file_exists($path_to_login_screens.$file.'/login_footer.inc'))
 			{
-				  $login_screens[] = $file;
+				$login_screens[] = $file;
 			}
 		}
 		closedir($dir);
