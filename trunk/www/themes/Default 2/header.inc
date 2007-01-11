@@ -11,9 +11,10 @@ header('Content-Type: text/html; charset='.$charset);
 <link rel="shortcut icon" href="<?php echo $GO_CONFIG->host; ?>lib/favicon.ico" />
 <link href="<?php echo $GO_THEME->theme_url.'css/common.css'; ?>" rel="stylesheet" type="text/css" />
 <?php
-if(file_exists($GO_THEME->theme_path.'css/'.$GO_MODULES->id.'.css'))
+if(!empty($GO_MODULES->id))
 {
-	echo '<link href="'.$GO_THEME->theme_url.'css/'.$GO_MODULES->id.'.css" type="text/css" rel="stylesheet" />';
+	$GO_THEME->load_module_theme($GO_MODULES->id);
+	echo $GO_THEME->get_stylesheet($GO_MODULES->id);
 }
 ?>
 <title>
