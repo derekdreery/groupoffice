@@ -27,6 +27,7 @@ if(file_exists('LICENSE.GPL'))
 {
   $license = 'LICENSE.PRO';
 }
+
 ?>
 <table border="0" cellspacing="0" cellpadding="10">
 <tr>

@@ -1,4 +1,9 @@
 <?php
+
+// LANG: "fr", ENCODING: UTF-8
+// Author: L. Jullien
+// 15 Jan 2007
+
 require_once($GO_LANGUAGE->get_fallback_language_file('bookmarks'));
 
 $bm_save_title = "Enregistrer le favoris";
@@ -12,14 +17,12 @@ $bm_private = 'Privé';
 $bm_catagory_other = 'Autre';
 $bm_add_bookmark = 'Nouveau Favori';
 $bm_add_catagory = 'Nouvelle Catégorie';
-$bm_no_bookmarks_in_catagory = 'Aucuns favoris trouvés dans cette catégorie';
+$bm_no_bookmarks_in_catagory = 'Aucun favoris trouvé dans cette catégorie';
 $bm_catagory = 'Catégorie';
-$bm_no_select = 'Aucun favoris sélectionnés';
-
+$bm_no_select = 'Aucun favoris sélectionné';
 $bm_bookmarks = 'favoris';
-$bm_and_all_contents = 'et tous le contenu';
-
+$bm_and_all_contents = 'et tout le contenu';
 $bm_copy_read_permissions = 'Copier les permissions de lecture vers les favoris';
 $bm_copy_write_permissions = 'Copier les permissions d\'écriture vers les favoris';
-
 $bm_move_to_catagory = 'Déplacer les favoris sélectionnés vers la catégorie...';
+?>

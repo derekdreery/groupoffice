@@ -1,17 +1,8 @@
 <?php
 
 // LANG: "fr", ENCODING: UTF-8
-// Author: A. Kermorvant : armek@akserver.dyndns.org
-// 24 Oct 2004
-
-// FOR TRANSLATORS:
-//
-//   1. PLEASE PUT YOUR CONTACT INFO IN THE ABOVE LINE
-//      (at least a valid email address)
-//
-//   2. PLEASE TRY TO USE UTF-8 FOR ENCODING;
-//      (if this is not possible, please include a comment
-//       that states what encoding is necessary.)
+// Author: L. Jullien
+// 15 Jan 2007
 
 require_once($GO_LANGUAGE->get_fallback_language_file('modules'));
 
@@ -30,14 +21,23 @@ $admin_menus = "Menus";
 $admin_formats = "formats des dates";
 $admin_date_formats_text = 'Ajouter les formats des dates dans <a class="normal" target="_blank" href="http://www.php.net/manual/en/function.date.php">les formats PHP</a> avec une description et cliquez sur Ok.';
 
-$strAuthors = 'Autheur(s)';
+//2.05
+$strAuthors = 'Auteur(s)';
 $strVersion = 'Version';
 $strReleaseDate = 'Date de validation';
 $strDescription = 'Description';
-$strStatus = 'Status';
+$strStatus = 'Statut';
 $strNoModuleInfo = 'Pas de module d\'information disponible.';
-
 $cmdInstall = 'Installer';
 $cmdUninstall = 'Désinstaller';
-$strConfirmUninstallPrefix = 'Etes-vous sure de vouloir désinstaller ';
+$strConfirmUninstallPrefix = 'Etes-vous sûr de vouloir désinstaller ce module ?';
 $strConfirmUninstallSuffix = '?';
+
+//2.08
+$mod_available = 'Modules disponibles';
+$mod_installed = 'Modules installés';
+$mod_sort_order = 'Trier';
+
+//2.13
+$lang_modules['modules'] = 'Modules';
+?>
