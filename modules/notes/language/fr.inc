@@ -1,4 +1,9 @@
 <?php
+
+// LANG: "fr", ENCODING: UTF-8
+// Author: L. Jullien
+// 15 Jan 2007
+
 require_once($GO_LANGUAGE->get_fallback_language_file('notes'));
 
 $no_notes_count_single = 'note';
@@ -16,11 +21,10 @@ $no_catagories_count_single = 'Catégorie';
 $no_none = 'Aucun';
 $no_responsible = 'Responsable';
 $no_due_date = 'Date d\'expiration';
-
 $no_project = 'Projet';
 $no_contact = 'Contact';
 $no_file = 'Fichier';
-
-$no_show_all = 'Montrez tous';
-$no_show_own = 'Montrez les miennes'; //show own
-$no_show_responsible = 'Montrez par responsable ';
+$no_show_all = 'Montrer toutes les notes';
+$no_show_own = 'Montrer mes notes'; //show own
+$no_show_responsible = 'Montrer par responsable';
+?>

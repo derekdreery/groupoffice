@@ -48,7 +48,7 @@ Calendar._SDN = new Array
 // full month names
 Calendar._MN = new Array
 ("Janvier",
- "Fvrier",
+ "Fevrier",
  "Mars",
  "Avril",
  "Mai",
