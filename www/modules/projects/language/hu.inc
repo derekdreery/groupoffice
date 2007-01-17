@@ -1,6 +1,7 @@
 <?php
 //Translated with Group-Office translate module
 require_once($GO_LANGUAGE->get_fallback_language_file('projects'));
+$pm_agenda='Projektnaptár';
 $pm_invalid_period='Érvénytelen időintervallumot adott meg';
 $pm_add_hours_success='A bevitt adatok sikeresen lementve';
 $pm_new_entry='Új bejegyzés ekkor';

@@ -1908,7 +1908,7 @@ class cms_site extends cms {
 							}
 						}
 
-						$file_count = $cms->get_files($this->folder_id, 'priority', 'ASC');
+						$file_count = $this->get_files($this->folder_id, 'priority', 'ASC');
 
 						$files = $this->get_authorized_files($this->folder_id, $GO_SECURITY->user_id);
 

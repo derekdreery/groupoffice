@@ -166,12 +166,7 @@ class GO_THEME
 			}
 		}
 		
-		$link = new html_element('link');
-		$link->set_attribute('href', $url);
-		$link->set_attribute('type', 'text/css');
-		$link->set_attribute('rel', 'stylesheet');
-
-		return $link->get_html();
+		return '<link href="'.$url.'" type="text/css" rel="stylesheet" />';
 	}
 
 	/**

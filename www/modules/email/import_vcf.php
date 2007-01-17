@@ -11,6 +11,8 @@
  */
 
 require_once("../../Group-Office.php");
+
+load_basic_controls();
 $GO_SECURITY->authenticate();
 $GO_MODULES->authenticate('email');
 
