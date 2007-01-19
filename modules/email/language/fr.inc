@@ -56,7 +56,7 @@ $strHost = "Hôte";
 $strDefault = "Défaut";
 $ml_edit_account = "Editer le compte";
 $ml_new_account = "Nouveau compte";
-$ml_no_messages = "Il n'y a pas de messages dans ce dossier.";
+$ml_no_messages = "Il n'y a pas de message dans ce dossier.";
 $ml_file_too_big = "Le fichier que vous avez essayé de joindre est trop gros, la taille maximale pour les fichier joints est de : ";
 $fbNoRightToOverwrite = "Le fichier existe déjà et vous n'avez pas les permissions pour l'écraser.";
 $ml_save_attachment = "Enregistrer les pièces jointes dans Group-Office.";
@@ -66,7 +66,7 @@ $ml_connect_failed = "Impossible de se connecter au serveur de messagerie :";
 $ml_at_port = "sur le port";
 $ml_solve_error = 'Cliquez sur \'Comptes\' pour corriger les réglages de votre compte ou cliquez sur \'Rafraîchir\' pour ouvrir votre compte par défaut.';
 $ml_sent_items = "Eléments envoyés";
-$ml_spam = "Couriers indésirables";
+$ml_spam = "Courriers indésirables";
 $ml_use = "Utilisation";
 $ml_synchronise = "Synchroniser";
 $ml_move_mail = "Déplacer les messages sélectionnés vers le dossier...";
@@ -127,7 +127,7 @@ $ml_no_contacts_in_mailing_group = 'Il n\'y a aucun contact dans la liste de dis
 $ml_attention= 'Attention';
 
 //2.02
-$ml_autocheck_disabled = ' n\'a pas pu être atteint. Le contrôle automatique des e-mails pour ce compte est désactivé.';
+$ml_autocheck_disabled = ' n\'a pas pu être atteint. Le contrôle automatique des emails pour ce compte est désactivé.';
 $ml_mark = 'Messages marqué...';
 $ml_flag = 'Important';
 $ml_clearflag = 'Normal';
@@ -179,7 +179,7 @@ $ml_local_files = 'Fichier local';
 $ml_please_close_attachments = 'Veuillez fermer la fenêtre des pièces jointes et vous assurez que le transfert de fichier est terminé';
 $ml_please_wait = 'Veuillez patienter...';
 $ml_max_attachment_size = 'Taille maximum des pièces jointes';
-$ml_select = 'Sélectionner un fichier';
+$ml_select = 'Sélectionnez un fichier';
 $ml_multiple_files = 'Fichiers multiples';
 
 //2.12
@@ -207,7 +207,7 @@ $ml_folder_not_available = 'vous ne pouvez pas créer de comptes POP-3 suppléme
 $ml_mark_as_read='Marquer les messages filtrés comme lu';
 $ml_get_message_error_title = 'Erreur pendant la récupération des messages';
 $ml_get_message_error_text = 'Impossible de récupérer les messages depuis le serveur... Veuillez cliquer sur \'Rafraichir\'.';
-$ml_spamtag = 'Etiquette de Spam';
+$ml_spamtag = 'Etiquette pour les courriers indésirables';
 $ml_confirm_no_subject = 'Vous n\'avez pas renseigné d\'objet pour ce message. Voulez-vous quand même l\'envoyer ?';
 $ml_show_preview = 'Afficher une prévisualisation quand je sélectionne un message';
 $ml_show_headers = 'Propriètés du message';
