@@ -253,14 +253,14 @@ if ($mailing_group_id > 0 && $mailing_group = $tp->get_mailing_group($mailing_gr
 	  <td colspan="2">
 	  <?php
 	  $autocomplete = new email_autocomplete(
-	'mail_bcc',
-	'mail_bcc',
-	$mail_bcc,
-	'sendform'
-	);
+	  'mail_bcc',
+	  'mail_bcc',
+	  $mail_bcc,
+	  'sendform'
+	  );
 
-	$autocomplete->set_attribute('style','width:100%;height:46px;');
-	echo $autocomplete->get_html();
+	  $autocomplete->set_attribute('style','width:100%;height:46px;');
+	  echo $autocomplete->get_html();
 	  ?>
 	  </tr>
 	  
@@ -562,6 +562,23 @@ function open_attachments()
 }
 
 
+function smart_focus()
+{
+if(document.sendform.mail_to.value!='')
+{
+	var oEditor = FCKeditorAPI.GetInstance('mail_body') ;
+
+	//try
+	//{
+		//oEditor.MakeEditable();
+	//}
+	//catch (e) {}
+	oEditor.Focus();
+}else
+{
+	document.sendform.mail_to.focus();
+}
+}
 function close_attachments()
 {
 	if(eval(attach_popup))

@@ -179,6 +179,7 @@ switch($task)
 		$event['location'] = smart_addslashes(trim($_POST['location']));
 		$event['permissions'] = isset($_POST['permissions']) ? $_POST['permissions'] : '1';
 
+		$event['busy']=isset($_POST['busy']) ? '1' : '0';
 		$event['timezone'] = $_SESSION['GO_SESSION']['timezone'];
 		$event['DST'] = $_SESSION['GO_SESSION']['DST'];
 		$event['reminder'] = isset($_POST['reminder_multiplier']) ? $_POST['reminder_multiplier'] * $_POST['reminder_value'] : 0;
@@ -310,7 +311,7 @@ switch($task)
 			$custom_fields=isset($_POST['custom_fields']) ? array_map('smart_addslashes', $_POST['custom_fields']) : array();
 			$event['custom_fields'] = $cal->group_values_to_xml($custom_fields, $calendar['group_id']);
 
-			if($event['todo'] == '1' || isset($_POST['ignore_conflicts']))
+			if($event['busy']=='0' || $event['todo'] == '1' || isset($_POST['ignore_conflicts']))
 			{
 				$conflicts = array();
 			}else
@@ -322,6 +323,7 @@ switch($task)
 				}
 
 				$conflicts = $cal->get_conflicts($event['start_time'], $event['end_time'], $calendars, $_POST['to']);
+				//var_dump($conflicts);
 				unset($conflicts[$event_id]);
 			}
 
@@ -1115,6 +1117,12 @@ if ($task != 'save_event' && $task != 'change_event' && ($event_id > 0 || isset 
 
 	$event['repeat_type'] = isset ($_POST['repeat_type']) ? $_POST['repeat_type'] : REPEAT_NONE;
 	$event['all_day_event'] = isset ($_POST['all_day_event']) ? $_POST['all_day_event'] : '0';
+	if($task=='save_event' && !isset($_POST['busy']))
+	{
+		$event['busy']='0';
+	}else {
+		$event['busy']='1';
+	}
 	if($task == 'save_event' || $task == 'change_event')
 	{
 		$event['repeat_forever'] = isset ($_POST['repeat_forever']) ? $_POST['repeat_forever'] : '0';
@@ -1435,6 +1443,9 @@ if($task == 'availability')
 	$checkbox = new checkbox('all_day_event', 'all_day_event', '1', $sc_notime, $all_day_event);
 	$checkbox->set_attribute('onclick', 'javascript:disable_time();');
 	$subrow->add_cell(new table_cell($checkbox->get_html()));
+	
+	
+	
 	$subtable->add_row($subrow);
 
 	$row->add_cell(new table_cell($subtable->get_html()));
@@ -1556,7 +1567,9 @@ if($task == 'availability')
 			$row->add_cell(new table_cell($subtable->get_html()));
 		}else
 		{
-			$row->add_cell(new table_cell($event_select->get_html().$todo_select->get_html()));
+			$checkbox = new checkbox('busy', 'busy', '1', $cal_show_busy, ($event['busy'] == '1'));
+			
+			$row->add_cell(new table_cell($event_select->get_html().$checkbox->get_html()));
 		}
 		$table->add_row($row);
 	}

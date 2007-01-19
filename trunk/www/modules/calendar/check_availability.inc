@@ -1,20 +1,20 @@
 <?php
 /*
-   Copyright SoftSys 2004
-   Author: Georg Lorenz <georg@lonux.de>
-   Version: 1.0 Release date: 29 October 2004
+Copyright SoftSys 2004
+Author: Georg Lorenz <georg@lonux.de>
+Version: 1.0 Release date: 29 October 2004
 
-   This program is free software; you can redistribute it and/or modify it
-   under the terms of the GNU General Public License as published by the
-   Free Software Foundation; either version 2 of the License, or (at your
-   option) any later version.
- */
- 
- if(!isset($_POST['task']))
- {
- 	$_POST['task'] = 'availability';
- }
- 
+This program is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation; either version 2 of the License, or (at your
+option) any later version.
+*/
+
+if(!isset($_POST['task']))
+{
+	$_POST['task'] = 'availability';
+}
+
 if(!isset($_POST['calendars']))
 {
 	if(isset($_REQUEST['view_id']) && $_REQUEST['view_id'] > 0)
@@ -22,7 +22,7 @@ if(!isset($_POST['calendars']))
 		$view_calendars = $cal->get_view_calendars($_REQUEST['view_id']);
 		foreach($view_calendars as $view_calendar)
 		{
-				$_POST['calendars'][]=$view_calendar['id'];
+			$_POST['calendars'][]=$view_calendar['id'];
 		}
 	}else
 	{
@@ -38,8 +38,8 @@ $_POST['end_min'] = isset($_POST['end_min']) ? $_POST['end_min'] : $min;
 $_POST['start_hour'] = isset($_POST['start_hour']) ? $_POST['start_hour'] : $hour;
 $_POST['start_min'] = isset($_POST['start_min']) ? $_POST['start_min'] : $min;
 
- 
- 
+
+
 function set_availability($availability, $from_hour, $to_hour, $event='', $current_date_time=0)
 {
 	if($event['all_day_event'] == '1')
@@ -54,12 +54,12 @@ function set_availability($availability, $from_hour, $to_hour, $event='', $curre
 	}else
 	{
 		$date = getdate($current_date_time);
-		
+
 		$timezone_offset = get_timezone_offset($event['start_time'])*3600;
 		$event['start_time'] += $timezone_offset;
 		$timezone_offset = get_timezone_offset($event['end_time'])*3600;
 		$event['end_time'] += $timezone_offset;
-		
+
 		$event_start = getdate($event['start_time']);
 		$event_end = getdate($event['end_time']);
 		if($event_start['mday'] == $date['mday'] && $event_start['mon'] == $date['mon'] && $event_start['year'] == $date['year'])
@@ -190,7 +190,7 @@ if(isset($_POST['day']))
 	$new_time = mktime(0, 0, 0,$_POST['month'], $_POST['day'], $_POST['year']);
 }else
 {
-	$new_time = date_to_unixtime($event['start_date']);	
+	$new_time = date_to_unixtime($event['start_date']);
 }
 
 $start_date = date($_SESSION['GO_SESSION']['date_format'], $new_time);
@@ -235,7 +235,7 @@ for($hour=$from_hour;$hour<=$to_hour;$hour++)
 
 
 $user_profile = $GO_USERS->get_user($GO_SECURITY->user_id);
-$tmp_participants = empty($participants) ? $user_profile['email'] : $user_profile['email'].','.$participants;		
+$tmp_participants = empty($participants) ? $user_profile['email'] : $user_profile['email'].','.$participants;
 
 $participants_array = $RFC822->explode_address_list($tmp_participants);
 
@@ -245,23 +245,23 @@ for($i=0;$i<sizeof($participants_array);$i++)
 	{
 		$id = 0;
 
-    if($member_profile = $GO_USERS->get_user_by_email(smart_addslashes($participants_array[$i])))
-    {
+		if($member_profile = $GO_USERS->get_user_by_email(smart_addslashes($participants_array[$i])))
+		{
 			$id = $member_profile["id"];
 
 			$member_events = false;
 			if($id)
 			{
-				$member_events = $cal->get_events_in_array(0, 0, $id, 
-							$interval_start_time, $interval_end_time);
+				$member_events = $cal->get_events_in_array(0, 0, $id,
+				$interval_start_time, $interval_end_time,false,false,true,false,false,true);
 			}
-			
+
 			$row = new table_row();
-			
+
 			$img = new image('user_small');
 			$img->set_attribute('style','border:0px;height:16px;width:16px;margin-right:5px;');
-			$img->set_attribute('align','absmiddle');					
-			
+			$img->set_attribute('align','absmiddle');
+
 
 			if($i == 0)
 			{
@@ -273,14 +273,14 @@ for($i=0;$i<sizeof($participants_array);$i++)
 			$th->set_attribute('class','caption');
 			$th->set_attribute('style','white-space:nowrap');
 			$row->add_cell($th);
-			
+
 			$cell = new table_cell();
 			$cell->set_attribute('style','width:100%');
 
 
 			$subtable = new table();
 			$subtable->set_attribute('style','width:100%');
-			
+
 			$subrow = new table_row();
 
 			for($hour=$from_hour;$hour<=$to_hour;$hour++)
@@ -290,59 +290,59 @@ for($i=0;$i<sizeof($participants_array);$i++)
 					$availability_member[$hour][$min] = true;
 				}
 				$tooltip = $hour.':00';
-				
+
 				$link = new hyperlink('javascript:goto_event(\''.$hour.'\',\''.($hour+1).'\',\'00\');', $hour);
 				$link->set_attribute('class','hour');
-				
+
 				$subcell = new table_cell($link->get_html());
 				$subcell->set_attribute('class','hour');
 				$subcell->set_attribute('colspan','4');
 				$subcell->set_tooltip(new tooltip($tooltip, $cal_own_availability, 'WRAP'));
-				
-				$subrow->add_cell($subcell);									
+
+				$subrow->add_cell($subcell);
 			}
-			$subtable->add_row($subrow);			
-			
+			$subtable->add_row($subrow);
+
 			while ($member_event = array_shift($member_events))
 			{
 				$availability_member = set_availability($availability_member, $from_hour, $to_hour,$member_event, $new_time);
 			}
 
-			$subrow = new table_row();		
-			
+			$subrow = new table_row();
+
 			for($hour=$from_hour;$hour<=$to_hour;$hour++)
 			{
 				for($min=0;$min<=45;$min+=15)
 				{
 					$minute = strlen($min) == 1 ? '0'.$min : $min;
 					$tooltip = $hour.':'.$minute;
-					
-					$subcell = new table_cell('&nbsp;&nbsp;&nbsp;');													
+
+					$subcell = new table_cell('&nbsp;&nbsp;&nbsp;');
 					$subcell->set_tooltip(new tooltip($tooltip, $cal_own_availability, 'WRAP'));
 					if($availability_member[$hour][$min])
 					{
 						$subcell->set_attribute('class','available');
-						
+
 						$link = new hyperlink('javascript:goto_event(\''.$hour.'\',\''.($hour+1).'\',\''.$min.'\');', '&nbsp;&nbsp;&nbsp;');
 						$link->set_attribute('class','hour');
 						$subcell->innerHTML = $link->get_html();
 					}else
 					{
 						$subcell->set_attribute('class','unavailable');
-					}							
+					}
 					$availability_merged[$hour][$min] = !$availability_member[$hour][$min] ? $availability_member[$hour][$min]: $availability_merged[$hour][$min];
 					$subrow->add_cell($subcell);
-				}						
+				}
 			}
 			$subtable->add_row($subrow);
-			
-			
+
+
 			$cell->add_html_element($subtable);
 			$row->add_cell($cell);
 			$availability_table->add_row($row);
 		}
 	}
-}		
+}
 
 
 
@@ -376,7 +376,7 @@ if(count($resources))
 function add_calendars($calendars)
 {
 	global $availability_table, $cal, $to_hour, $from_hour, $interval_start_time, $interval_end_time, $current_cal, $availability_merged, $new_time, $day, $month,$year;
-	
+
 	foreach($calendars as $cal_id)
 	{
 		$calendar= $cal->get_calendar($cal_id);
@@ -389,43 +389,43 @@ function add_calendars($calendars)
 			}
 		}
 
-		$cal_events = $cal->get_events_in_array($calendar['id'], 0, 0, 
-					$interval_start_time, $interval_end_time);
-					
+		$cal_events = $cal->get_events_in_array($calendar['id'], 0, 0,
+		$interval_start_time, $interval_end_time,false,false,true,false,false,true);
+
 		$row = new table_row();
-				
+
 		$img = new image('calendar_small');
 		$img->set_attribute('style','border:0px;height:16px;width:16px;margin-right:5px;');
-		$img->set_attribute('align','absmiddle');					
+		$img->set_attribute('align','absmiddle');
 
 		$th = new table_heading($img->get_html().$calendar['name']);
 		$th->set_attribute('style','white-space:nowrap');
 		$th->set_attribute('class','caption');
 		$row->add_cell($th);
-		
+
 		$cell = new table_cell();
 		$cell->set_attribute('style','width:100%');
 
 
 		$subtable = new table();
 		$subtable->set_attribute('style','width:100%');
-		
+
 		$subrow = new table_row();
-		
-		
+
+
 
 		for($hour=$from_hour;$hour<=$to_hour;$hour++)
 		{
 			$tooltip = $hour.':00';
-			
+
 			$link = new hyperlink('javascript:goto_event_single_calendar('.$calendar['id'].', \''.$hour.'\',\''.($hour+1).'\',\'00\');', $hour);
 			$link->set_attribute('class','hour');
-			
+
 			$subcell = new table_cell($link->get_html());
 			$subcell->set_attribute('class','hour');
 			$subcell->set_attribute('colspan','4');
 			$subcell->set_tooltip(new tooltip($tooltip, $calendar['name'], 'WRAP'));
-			
+
 			$subrow->add_cell($subcell);
 		}
 		$subtable->add_row($subrow);
@@ -434,9 +434,9 @@ function add_calendars($calendars)
 		{
 			$availability_cal = set_availability($availability_cal, $from_hour, $to_hour, $cal_event, $new_time);
 		}
-		
-		$subrow = new table_row();		
-		
+
+		$subrow = new table_row();
+
 		$background_colors=array();
 		$cal->get_calendar_backgrounds($calendar['id']);
 		while($cal->next_record())
@@ -455,36 +455,36 @@ function add_calendars($calendars)
 			{
 				$minute = strlen($min) == 1 ? '0'.$min : $min;
 				$tooltip = $hour.':'.$minute;
-					
-				$subcell = new table_cell('&nbsp;&nbsp;&nbsp;');													
+
+				$subcell = new table_cell('&nbsp;&nbsp;&nbsp;');
 				$subcell->set_tooltip(new tooltip($tooltip, $calendar['name'], 'WRAP'));
 				//echo $year.$month.$day.' '.$hour.':'.$min.'<br>';
-				
+
 				$time = mktime($hour, $min, 0, $month, $day, $year);
 				//echo date('Ymd G:i', $time).'<br>';
 				if(isset($background_colors[date('wGi', $time)]))
 				{
 					$subcell->set_attribute('style','background-color:#'.$background_colors[date('wGi', $time)]);
 				}
-				
+
 				if($availability_cal[$hour][$min])
 				{
 					$subcell->set_attribute('class','available');
-					
+
 					$link = new hyperlink('javascript:goto_event_single_calendar('.$calendar['id'].',\''.$hour.'\',\''.($hour+1).'\',\''.$min.'\');', '&nbsp;&nbsp;&nbsp;');
 					$link->set_attribute('class','hour');
 					$subcell->innerHTML = $link->get_html();
 				}else
 				{
 					$subcell->set_attribute('class','unavailable');
-				}						
-				$availability_merged[$hour][$min] = !$availability_cal[$hour][$min] ? $availability_cal[$hour][$min] : $availability_merged[$hour][$min];						
-				$subrow->add_cell($subcell);							
+				}
+				$availability_merged[$hour][$min] = !$availability_cal[$hour][$min] ? $availability_cal[$hour][$min] : $availability_merged[$hour][$min];
+				$subrow->add_cell($subcell);
 			}
 		}
 		$subtable->add_row($subrow);
-				
-				
+
+
 		$cell->add_html_element($subtable);
 		$row->add_cell($cell);
 		$availability_table->add_row($row);
@@ -501,69 +501,69 @@ if((count($participants_array) + count($calendars)+count($resources))>1)
 	$availability_table->add_row($row);
 
 	$row = new table_row();
-					
+
 	$img = new image('users_small');
 	$img->set_attribute('style','border:0px;height:16px;width:16px;margin-right:5px;');
-	$img->set_attribute('align','absmiddle');					
+	$img->set_attribute('align','absmiddle');
 
 	$th = new table_heading($img->get_html().$cal_merged_overview);
 	$th->set_attribute('style','white-space:nowrap');
 	$th->set_attribute('class','caption');
 	$row->add_cell($th);
-	
+
 	$cell = new table_cell();
 	$cell->set_attribute('style','width:100%');
 
 
 	$subtable = new table();
 	$subtable->set_attribute('style','width:100%');
-	
+
 	$subrow = new table_row();
-	
+
 	for($hour=$from_hour;$hour<=$to_hour;$hour++)
 	{
 		$tooltip = $hour.':00';
-		
+
 		$link = new hyperlink('javascript:goto_event(\''.$hour.'\',\''.($hour+1).'\',\'00\');', $hour);
 		$link->set_attribute('class','hour');
-		
+
 		$subcell = new table_cell($link->get_html());
 		$subcell->set_attribute('class','hour');
 		$subcell->set_attribute('colspan','4');
 		$subcell->set_tooltip(new tooltip($tooltip, $cal_merged_overview, 'WRAP'));
-		
+
 		$subrow->add_cell($subcell);
 	}
 	$subtable->add_row($subrow);
-	
+
 	$subrow = new table_row();
-			
+
 	foreach($availability_merged as $hour => $value)
 	{
-		$tooltip = $hour.':00';		
+		$tooltip = $hour.':00';
 		for($min=0;$min<=45;$min+=15)
 		{
 			$minute = strlen($min) == 1 ? '0'.$min : $min;
 			$tooltip = $hour.':'.$minute;
-			
-			$subcell = new table_cell('&nbsp;&nbsp;&nbsp;');													
+
+			$subcell = new table_cell('&nbsp;&nbsp;&nbsp;');
 			$subcell->set_tooltip(new tooltip($tooltip,$cal_merged_overview, 'WRAP'));
 			if($value[$min])
 			{
 				$subcell->set_attribute('class','available');
-				
+
 				$link = new hyperlink('javascript:goto_event(\''.$hour.'\',\''.($hour+1).'\',\''.$min.'\');', '&nbsp;&nbsp;&nbsp;');
 				$link->set_attribute('class','hour');
 				$subcell->innerHTML = $link->get_html();
 			}else
 			{
 				$subcell->set_attribute('class','unavailable');
-			}												
-			$subrow->add_cell($subcell);			
+			}
+			$subrow->add_cell($subcell);
 		}
 	}
-	$subtable->add_row($subrow);					
-	
+	$subtable->add_row($subrow);
+
 	$cell->add_html_element($subtable);
 	$row->add_cell($cell);
 	$availability_table->add_row($row);
@@ -612,16 +612,16 @@ if($cal->get_backgrounds())
 	$h3 = new html_element('h3',htmlspecialchars($cal_background_colors));
 	$h3->set_attribute('style', 'margin-top:10px');
 	$form->add_html_element($h3);
-	
+
 	while($cal->next_record())
 	{
-		
+
 		$div = new html_element('div', '&nbsp;');
 		$div->set_attribute('class', 'summary_icon');
-		$div->set_attribute('style', 'background-color: #'.$cal->f('color'));		
+		$div->set_attribute('style', 'background-color: #'.$cal->f('color'));
 		$legendItem =new html_element('div', $div->get_html().' '.htmlspecialchars($cal->f('name')));
 		$legendItem->set_attribute('style','margin-bottom:3px;');
-		$form->add_html_element($legendItem);			
+		$form->add_html_element($legendItem);
 	}
 }
 
@@ -630,20 +630,20 @@ $form->add_html_element(new button($cmdBack,"javascript:document.event_form.task
 
 ?>
 <script type="text/javascript" language="javascript">
- function date_picker(calendar) {
-      // Beware that this function is called even if the end-user only
-      // changed the month/year.  In order to determine if a date was
-      // clicked you can use the dateClicked property of the calendar:
-      if (calendar.dateClicked) {
-	// OK, a date was clicked, redirect to /yyyy/mm/dd/index.php
-	var y = calendar.date.getFullYear();
-	var m = calendar.date.getMonth()+1;     // integer, 0..11
-	var d = calendar.date.getDate();      // integer, 1..31
-	
-	goto_date(d,m,y);	
-      }
-    };
-    
+function date_picker(calendar) {
+	// Beware that this function is called even if the end-user only
+	// changed the month/year.  In order to determine if a date was
+	// clicked you can use the dateClicked property of the calendar:
+	if (calendar.dateClicked) {
+		// OK, a date was clicked, redirect to /yyyy/mm/dd/index.php
+		var y = calendar.date.getFullYear();
+		var m = calendar.date.getMonth()+1;     // integer, 0..11
+		var d = calendar.date.getDate();      // integer, 1..31
+
+		goto_date(d,m,y);
+	}
+};
+
 function goto_date(day, month, year)
 {
 	document.event_form.task.value='availability';
