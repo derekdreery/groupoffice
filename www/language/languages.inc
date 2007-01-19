@@ -167,7 +167,7 @@ $languages['pt-br']['first_weekday'] = 1;
 $languages['es'] = $europe_default;
 $languages['es'] = $languages['pt-br'];
 $languages['es']['language_file'] = 'es';
-$languages['es']['description'] = 'port-test';
+$languages['es']['description'] = 'Spanish';
 
 
 $languages['ca'] = $europe_default;
