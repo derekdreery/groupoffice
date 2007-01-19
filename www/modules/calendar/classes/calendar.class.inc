@@ -1912,7 +1912,7 @@ class calendar extends db
 
 	function get_events($todos, $events, $completed, $calendar_id=0, $view_id=0, $user_id=0, $links=false, $interval_start=0,
 	$interval_end=0, $sort_field='start_time',
-	$sort_order='ASC', $start=0, $offset=0)
+	$sort_order='ASC', $start=0, $offset=0, $only_busy_events=false)
 	{
 		$todos = $todos ? '1' : '0';
 		$events = $events ? '1' : '0';
@@ -1941,6 +1941,20 @@ class calendar extends db
 			$sql .= " WHERE todo='$todos' ";
 			$where=true;
 		}
+		
+		if($only_busy_events)
+		{
+			if($where)
+			{
+				$sql .= " AND ";
+			}else
+			{
+				$sql .= " WHERE ";
+				$where=true;
+			}
+			$sql .= "busy='1'";
+		}
+		
 
 		if(!$completed && $todos=='1')
 		{
@@ -2054,7 +2068,7 @@ class calendar extends db
 	}
 
 	function get_events_in_array($calendar_id, $view_id, $user_id,
-	$interval_start_time, $interval_end_time, $show_todos=false, $completed=false, $show_events=true, $links=false, $with_calendars=false)
+	$interval_start_time, $interval_end_time, $show_todos=false, $completed=false, $show_events=true, $links=false, $with_calendars=false,$only_busy_events=false)
 	{
 		$this->events = array();
 		$this->events_sort=array();
@@ -2065,7 +2079,7 @@ class calendar extends db
 		$user_id,
 		$links,
 		$interval_start_time,
-		$interval_end_time))
+		$interval_end_time,'start_time','ASC',0,0,$only_busy_events))
 		{
 
 			while($this->next_record())
@@ -2913,7 +2927,7 @@ class calendar extends db
 					if($id)
 					{
 						$member_events = $this->get_events_in_array(0, 0, $id,
-						$start_time, $end_time);
+						$start_time, $end_time,false,false,true,false,false,true);
 						foreach($member_events as $event)
 						{
 							$conflicts[$event['id']]=$event;
@@ -2926,7 +2940,7 @@ class calendar extends db
 		foreach($calendars as $calendar_id)
 		{
 			$cal_events = $this->get_events_in_array($calendar_id, 0, 0,
-			$start_time, $end_time);
+			$start_time, $end_time,false,false,true,false,false,true);
 			foreach($cal_events as $event)
 			{
 				$conflicts[$event['id']]=$event;
