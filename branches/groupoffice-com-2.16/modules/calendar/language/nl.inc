@@ -268,3 +268,4 @@ $cal_background_colors='Achtergrond kleuren';
 $cal_weekday='Weekdag';
 $cal_background_color='Achtergrond kleur';
 $cal_background='Achtergrond';
+$cal_show_busy='Toon als bezet';
