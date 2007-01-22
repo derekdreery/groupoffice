@@ -1107,7 +1107,7 @@ class cms_site extends cms {
 					$row->add_cell(new table_cell($GLOBALS['strWorkAddress'].$end));
 					$input = new input('text','work_address', $user['work_address']);
 					$input->set_attribute('style','width:230px');
-					$input->set_attribute('maxlength','50');
+					$input->set_attribute('maxlength','100');
 
 					$input1 = new input('text','work_address_no', $user['work_address_no']);
 					$input1->set_attribute('style','width:47px');
@@ -1139,7 +1139,7 @@ class cms_site extends cms {
 					$row->add_cell(new table_cell($GLOBALS['strWorkState'].$end));
 					$input = new input('text','work_state', $user['work_state']);
 					$input->set_attribute('style','width:280px');
-					$input->set_attribute('maxlength','30');
+					$input->set_attribute('maxlength','50');
 					$row->add_cell(new table_cell($input->get_html()));
 					$table->add_row($row);
 
@@ -1199,7 +1199,7 @@ class cms_site extends cms {
 					$row->add_cell(new table_cell($GLOBALS['strHomepage'].$end));
 					$input = new input('text','homepage', $user['homepage']);
 					$input->set_attribute('style','width:280px');
-					$input->set_attribute('maxlength','20');
+					$input->set_attribute('maxlength','100');
 					$row->add_cell(new table_cell($input->get_html()));
 					$table->add_row($row);
 				}
