@@ -150,7 +150,7 @@ switch($task)
 		}
 		$GO_LINKS->activate_linking($link_id, 1, $link_event['name'], $link_back);
 
-		header('Location: '.$GO_CONFIG->host.'link.php');
+		header('Location: '.$GO_CONFIG->host.'link.php?link_id='.$link_id.'&link_type=1&return_to='.$link_back);
 		exit();
 		break;
 
@@ -1244,7 +1244,7 @@ if($task == 'availability')
 	$table->set_attribute('style','width:100%');
 
 	$row = new table_row();
-	$cell = new table_cell($strName.'*:');
+	$cell = new table_cell($cal_subject.'*:');
 	$cell->set_attribute('style','width:200px;');
 	$row->add_cell($cell);
 	$input = new input('text','name',$event['name']);

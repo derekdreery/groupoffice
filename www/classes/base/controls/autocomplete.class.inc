@@ -160,7 +160,7 @@ class autocomplete extends html_element
 	}
 	
 
-	function autocomplete($id='autocomplete', $textarea=false, $text_name, $text_value, 
+	function autocomplete($id='autocomplete', $textarea=false, $text_input_name, $text_input_value, 
 		$form_name, $xml_source, $xml_root_element, $xml_fields, $overwrite_values=true, $submit_on_enter=false)
 	{
 		
@@ -178,13 +178,13 @@ class autocomplete extends html_element
 		
 		if($textarea)
 		{
-			$this->text_input = new textarea($text_name,$text_value);
+			$this->text_input = new textarea($text_input_name,$text_input_value);
 		}else {
-			$this->text_input = new input('text',$text_name,$text_value,false);
+			$this->text_input = new input('text',$text_input_name,$text_input_value,false);
 			$this->text_input->set_attribute('autocomplete', 'off');
 		}
 		$this->text_input->set_attribute('onfocus', 'this.select();');
-		$this->text_input->set_attribute('onchange', 'YAHOO.'.$this->attributes['id'].'.ACXml.changed();');
+		//$this->text_input->set_attribute('onchange', 'YAHOO.'.$this->attributes['id'].'.ACXml.changed();');
 		$this->text_input->set_attribute('id',$id.'_text_input');
 		$this->text_input->set_attribute('class','autocomplete_input');
 

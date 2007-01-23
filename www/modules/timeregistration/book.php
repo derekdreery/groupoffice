@@ -152,7 +152,7 @@ if($booking_id > 0 && $booking = $projects->get_booking($booking_id))
 	$pm_user_id = $booking['user_id'];
 	$project_id = $booking['project_id'];
 	$local_start_time = $booking['start_time']+(get_timezone_offset($booking['start_time'])*3600);
-	$local_end_time = $booking['end_time']+(get_timezone_offset($booking['start_time'])*3600);
+	$local_end_time = $booking['end_time']+(get_timezone_offset($booking['start_time'])*3600)-1;
 
 
 

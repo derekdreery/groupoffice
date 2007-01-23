@@ -297,7 +297,8 @@ a.HeaderBar:hover {
         color: #FFFFFF;
         white-space: nowrap;
         text-align: left;
-        border:0px;        
+        border:0px;       
+        vertical-align:middle;   
 }
 
 .go_table th a:link, .go_table th a:visited, .go_table th a:active {
@@ -317,7 +318,6 @@ a.HeaderBar:hover {
 	padding-right: 7px;
 	padding-top:0px;
 	padding-bottom:0px;
-	vertical-align: top;
 	white-space:nowrap;
 }
 

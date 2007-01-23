@@ -254,7 +254,7 @@ if ($task=='load')
 		{
 			
 			$local_start_time = date($_SESSION['GO_SESSION']['date_format'], gmt_to_local_time($projects->f('start_time')));
-			$local_end_time = date($_SESSION['GO_SESSION']['date_format'], gmt_to_local_time($projects->f('end_time')));
+			$local_end_time = date($_SESSION['GO_SESSION']['date_format'], gmt_to_local_time($projects->f('end_time')-1));
 					
 			$seconds = ($projects->f('end_time') - $projects->f('start_time'));
 

@@ -286,7 +286,8 @@ a.HeaderBar:hover {
 	color: #FFFFFF;
 	white-space: nowrap;
 	text-align: left;
-	border:0px;        
+	border:0px;      
+	vertical-align:middle;    
 }
 
 
@@ -309,7 +310,6 @@ a.HeaderBar:hover {
 	padding-right: 7px;
 	padding-top:0px;
 	padding-bottom:0px;
-	vertical-align: top;
 	white-space:nowrap;
 }
 

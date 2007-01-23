@@ -24,6 +24,7 @@ load_basic_controls();
 //get the local times
 $local_time = get_time();
 
+$calendar_id = isset($_REQUEST['calendar_id']) ? $_REQUEST['calendar_id'] : 0;
 $event_id = isset($_REQUEST['event_id']) ? $_REQUEST['event_id'] : 0;
 $gmt_start_time = isset($_REQUEST['gmt_start_time']) ? $_REQUEST['gmt_start_time'] : 0;
 $task = isset($_POST['task']) ? $_POST['task'] : '';
@@ -43,21 +44,43 @@ $tabstrip = new tabstrip('event_tabstrip', $cal_event);
 $tabstrip->set_return_to($return_to);
 $tabstrip->set_attribute('style','width:100%');
 
-$tabstrip->innerHTML = $cal->event_to_html($event);
+
+
+$table = new table();
+$table->set_attribute('style','width:100%');
+
+$row = new table_row();
+$cell = new table_cell($cal->event_to_html($event));
+$cell->set_attribute('style','vertical-align:top');
+
+$cell->add_html_element(new button($cmdClose, "javascript:document.location='$return_to';"));
+if($event['write_permission'])
+{
+	$cell->add_html_element(new button($cmdEdit, "javascript:document.location='event.php?gmt_start_time=".$gmt_start_time."&event_id=".$event_id."&return_to=".urlencode($return_to)."';"));	
+}
+if($event['write_permission'] || ($cal->event_is_subscribed($event_id, $calendar_id) && $GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_write'])))
+{
+	$cell->add_html_element(new button($cmdDelete,
+		"document.location='delete_event.php?event_id=$event_id&calendar_id=".
+		$calendar_id."&return_to=".urlencode($link_back)."';"));
+}
+
+$row->add_cell($cell);
+
+
+$cell = new table_cell();
+$cell->set_attribute('style','vertical-align:top');
+
 
 load_control('links_list');
 $links_list = new links_list($event['link_id'], 'event_form', $link_back);
-$GO_HEADER['head'] .= $links_list->get_header();
-$tabstrip->add_html_element($links_list);
+$GO_HEADER['head'] = $links_list->get_header();
+$cell->add_html_element($links_list);
 
-$tabstrip->add_html_element(new button($cmdClose, "javascript:document.location='$return_to';"));
-if($event['write_permission'])
-{
-	$tabstrip->add_html_element(new button($cmdEdit, "javascript:document.location='event.php?gmt_start_time=".$gmt_start_time."&event_id=".$event_id."&return_to=".urlencode($return_to)."';"));
-}
+$row->add_cell($cell);
 
-
-
+$table->add_row($row);
+$tabstrip->add_html_element($table);
 
 $form->add_html_element($tabstrip);
 

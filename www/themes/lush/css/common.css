@@ -433,7 +433,8 @@ a.small_underline, a.small_underline:visited, a.small_underline:active{
         color: #FFFFFF;
         white-space: nowrap;
         text-align: left;
-        border:0px;        
+        border:0px;      
+        vertical-align:middle;    
 }
 
 
@@ -459,7 +460,7 @@ a.small_underline, a.small_underline:visited, a.small_underline:active{
 	padding-right: 7px;
 	padding-top:0px;
 	padding-bottom:0px;
-	vertical-align: top;
+	
 	white-space:nowrap;
 }
 
