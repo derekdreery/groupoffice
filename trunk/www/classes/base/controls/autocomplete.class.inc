@@ -97,6 +97,7 @@ class autocomplete extends html_element
 					oAutoComp = new YAHOO.widget.AutoComplete("'.$this->text_input->attributes['id'].'","'.$this->container->attributes['id'].'", oACDS);
 					oAutoComp.queryDelay=0.5;
 					oAutoComp.autoHighlight = true;
+					oAutoComp.maxResultsDisplayed=10;
 					
 					oAutoComp.formatResult = function(oResultItem, sQuery) {					
 						return oResultItem[0];

@@ -29,26 +29,28 @@ class global_autocomplete
 	var $name;
 	
 	
-	function global_autocomplete($name, $link_id=0, $link_type=0, $link_text='', $form_name='0', $xml_fields=null)
+	function global_autocomplete($name, $form_name='0', $xml_fields=null)
 	{
 		global $GO_CONFIG;
 		
 		$this->name=$name;
 	
 		if(!isset($xml_fields))
-			$xml_fields=array('show'=>'name','link_id'=>$name.'[link_id]','link_type'=>$name.'[link_type]');	
+			$xml_fields=array('show'=>'object_name','link_id'=>$name.'[link_id]','link_type'=>$name.'[link_type]');	
 
 		$this->autocomplete  = new autocomplete(
 		'global_autocomplete',
 		false,
-		'name',
+		'object_name',
 		'',
 		$form_name,
 		$GO_CONFIG->control_url.'global_search_xml.php',
 		'results',
 		$xml_fields,
-		true
+		false
 		);
+		
+		//$this->autocomplete ->add_bound_hidden_value('user_id', 0,'index.php');
 	}
 	function get_html()
 	{		
