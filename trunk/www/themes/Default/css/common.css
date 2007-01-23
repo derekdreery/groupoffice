@@ -275,6 +275,17 @@ a.HeaderBar:hover {
 	margin-top:5px;	
 }
 
+.go_table td {
+	border: 0px;
+	border-bottom: 1px solid #666666;	
+	margin: 0px;
+	padding-left: 0px;
+	padding-right: 7px;
+	padding-top:0px;
+	padding-bottom:0px;
+	white-space:nowrap;
+}
+
 .go_table th, .go_table th td {
 	background-color: #22437f;
 	font-size: 12px;
@@ -285,7 +296,8 @@ a.HeaderBar:hover {
 	color: #FFFFFF;
 	white-space: nowrap;
 	text-align: left;
-	border:0px;    
+	border:0px; 
+	vertical-align:middle;   
 	
 }
 
@@ -297,17 +309,7 @@ a.HeaderBar:hover {
 .go_table th a:hover{
 	text-decoration: underline;
 }
-.go_table td {
-	border: 0px;
-	border-bottom: 1px solid #666666;	
-	margin: 0px;
-	padding-left: 0px;
-	padding-right: 7px;
-	padding-top:0px;
-	padding-bottom:0px;
-	vertical-align: top;
-	white-space:nowrap;
-}
+
 
 
 .selectedRow{

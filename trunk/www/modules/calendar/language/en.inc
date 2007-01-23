@@ -385,3 +385,5 @@ $cal_background_color='Background color';
 $cal_background = 'Background';
 
 $cal_show_busy='Show as busy';
+
+$cal_subject='Subject';

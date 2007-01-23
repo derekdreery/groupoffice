@@ -9,21 +9,16 @@ under the terms of the GNU General Public License as published by the
 Free Software Foundation; either version 2 of the License, or (at your
 option) any later version.
 */
-require_once("../../Group-Office.php");
+require_once("../Group-Office.php");
 $GO_SECURITY->authenticate();
 $GO_MODULES->authenticate('search');
 require_once($GO_LANGUAGE->get_language_file('search'));
-load_basic_controls();
 
-$form = new form('search_form');
+$query='%'.smart_addslashes($_REQUEST['query']).'%';
 
-load_control('global_autocomplete');
-
-$ac = new global_autocomplete('object');
-
-$form->add_html_element($ac);
+require_once($GO_CONFIG->class_path.'/base/search.class.inc');
+$search = new search();
 
 
-require($GO_THEME->theme_path.'header.inc');
-echo $form->get_html();
-require($GO_THEME->theme_path.'footer.inc');
+header('Content-Type: text/xml; charset: UTF-8');
+echo $search->global_search($GO_SECURITY->user_id, $query, $start=0, $offset=10);

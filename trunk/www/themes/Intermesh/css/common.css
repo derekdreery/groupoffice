@@ -427,6 +427,7 @@ a.small_underline, a.small_underline:visited, a.small_underline:active{
 	width:100%;
 	margin-top:5px;
 	white-space:nowrap;
+	
 }
 .go_table th, .go_table th td {
 		background-color: #01619B;
@@ -438,7 +439,8 @@ a.small_underline, a.small_underline:visited, a.small_underline:active{
         color: #FFFFFF;
         white-space: nowrap;
         text-align: left;
-        border:0px;        
+        border:0px;       
+        vertical-align:middle;   
 }
 
 
@@ -460,7 +462,6 @@ a.small_underline, a.small_underline:visited, a.small_underline:active{
 	padding-right: 7px;
 	padding-top:0px;
 	padding-bottom:0px;
-	vertical-align: top;
 	white-space:nowrap;
 }
 

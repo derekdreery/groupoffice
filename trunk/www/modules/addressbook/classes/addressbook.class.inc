@@ -480,6 +480,34 @@ popup.focus();
 		
 		$this->query($sql);
 	}
+	
+	function global_search($user_id,$query,$start=0, $offset=0)
+	{
+		global $GO_MODULES, $GO_LANGUAGE;
+		
+		require($GO_LANGUAGE->get_language_file('addressbook'));
+		
+		$this->search_contacts($user_id, $query,'',0,0,$start, $offset);
+		$xml='';
+		while($this->next_record())
+		{
+			$name = htmlspecialchars(format_name($this->f('last_name'),$this->f('first_name'),$this->f('middle_name')));
+			$show = htmlspecialchars($ab_contact).': '.$name;		
+			$xml .= '<result><link_type>2</link_type><show>'.$show.'</show><name>'.$name.'</name><description></description><url>'.$GO_MODULES->modules['addressbook']['url'].'contact.php?contact_id='.$this->f('id').'</url></result>';
+		}
+		
+		
+		$this->search_companies($user_id, $query,'',0,$start, $offset);
+		
+		while($this->next_record())
+		{
+			$show = htmlspecialchars($GLOBALS['strCompany']).': '.htmlspecialchars($this->f('name'));		
+			$xml .= '<result><link_type>3</link_type><show>'.$show.'</show><name>'.htmlspecialchars($this->f('name')).'</name><description></description><url>'.$GO_MODULES->modules['addressbook']['url'].'company.php?company_id='.$this->f('id').'</url></result>';
+		}
+		return $xml;
+	}
+	
+	
 				
 
 	function search_contacts($user_id, $query, $field = 'last_name', $addressbook_id = 0, $mtime = 0, $start=0, $offset=0, $require_email=false, $sort_index='name', $sort_order='ASC') {
