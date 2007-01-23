@@ -14,6 +14,8 @@ require_once("../../Group-Office.php");
 $GO_SECURITY->authenticate();
 $GO_MODULES->authenticate('email');
 
+load_basic_controls();
+
 if($_SERVER['REQUEST_METHOD'] == 'POST')
 {
 	require_once($GO_CONFIG->class_path."mail/imap.class.inc");

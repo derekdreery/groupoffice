@@ -1125,14 +1125,14 @@ class PHPMailer
             $cid         = $this->attachment[$i][7];
             
             $mime[] = sprintf("--%s%s", $this->boundary[1], $this->LE);
-            $mime[] = sprintf("Content-Type: %s; name=\"%s\"%s", $type, $name, $this->LE);
+            $mime[] = sprintf("Content-Type: %s; name=\"%s\"%s", $type, $this->EncodeHeader($name), $this->LE);
             $mime[] = sprintf("Content-Transfer-Encoding: %s%s", $encoding, $this->LE);
 
             if($disposition == "inline")
                 $mime[] = sprintf("Content-ID: <%s>%s", $cid, $this->LE);
 
             $mime[] = sprintf("Content-Disposition: %s; filename=\"%s\"%s", 
-                              $disposition, $name, $this->LE.$this->LE);
+                              $disposition, $this->EncodeHeader($name), $this->LE.$this->LE);
 
             // Encode as string attachment
             if($bString)
