@@ -21,4 +21,4 @@ $search = new search();
 
 
 header('Content-Type: text/xml; charset: UTF-8');
-echo $search->global_search($GO_SECURITY->user_id, $query, $start=0, $offset=10);
+echo $search->global_search($GO_SECURITY->user_id, $query, 0,0);

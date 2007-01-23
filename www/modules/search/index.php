@@ -19,7 +19,7 @@ $form = new form('search_form');
 
 load_control('global_autocomplete');
 
-$ac = new global_autocomplete('object');
+$ac = new global_autocomplete('object','search_form');
 
 $form->add_html_element($ac);
 
