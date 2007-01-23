@@ -468,7 +468,7 @@ class calendar_view extends table
 										$this->events[$current_time][$n]['start_time']).' '.
 										$this->events[$current_time][$n]['name'], 30, false);
 										
-									$link = 'event.php?event_id='.$this->events[$current_time][$n]['id'].
+									$link = 'show_event.php?event_id='.$this->events[$current_time][$n]['id'].
 										'&gmt_start_time='.local_to_gmt_time($this->events[$current_time][$n]['start_time']).
 										'&return_to='.urlencode($this->return_to);
 									

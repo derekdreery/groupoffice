@@ -49,7 +49,7 @@ class links_list extends html_element
 		
 		if(empty($this->innerHTML))
 		{
-			$this->add_html_element(new html_element('p', $GLOBALS['strNoActivities']));
+			//$this->add_html_element(new html_element('p', $GLOBALS['strNoActivities']));
 		}
 		
 		$this->innerHTML .= 
