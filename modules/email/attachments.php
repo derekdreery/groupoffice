@@ -77,7 +77,7 @@ switch($task)
 				{
 					$tmp_file = $GO_CONFIG->tmpdir.md5(uniqid(time()));
 					move_uploaded_file($_FILES['file']['tmp_name'][$n], $tmp_file);
-					$email->register_attachment($tmp_file, $_FILES['file']['name'][$n], $_FILES['file']['size'][$n], $_FILES['file']['type'][$n]);
+					$email->register_attachment($tmp_file, smart_stripslashes($_FILES['file']['name'][$n]), $_FILES['file']['size'][$n], $_FILES['file']['type'][$n]);
 				}else
 				{
 					$feedback =  '<p class="Error">1'.$ml_file_too_big.
