@@ -334,7 +334,7 @@ switch($tabstrip->get_active_tab_id())
 			$table->add_row($row);
 			
 	
-			$tabstrip->add_html_element($table);
+			//$tabstrip->add_html_element($table);
 			
 			
 			
@@ -391,6 +391,7 @@ switch($tabstrip->get_active_tab_id())
 					
 					
 				}
+				
 				$tabstrip->add_html_element($status_table);
 			}else
 			{
@@ -399,10 +400,14 @@ switch($tabstrip->get_active_tab_id())
 				$status_cell->set_attribute('colspan','99');
 				$status_row->add_cell($status_cell);
 				$status_table->add_row($status_row);
-				//$tabstrip->add_html_element($table);
+
 			}
+			$tabstrip->add_html_element($table);
+		}else
+		{
+			$tabstrip->add_html_element($table);
 		}
-		//$tabstrip->add_html_element($table);
+		
 
 		if ($write_perms)
 		{

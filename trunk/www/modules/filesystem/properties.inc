@@ -92,12 +92,12 @@ if(!is_dir($fv->path))
 		'edit.php?path='.$urlencoded_path);
 	}
 
-	if(eregi('eml', $extension) && file_exists($GO_CONFIG->control_path.'mimeviewer/mimeviewer.php'))
+	if(eregi('eml', $extension) && file_exists($GO_MODULES->modules['filesystem']['path'].'mimeviewer.php'))
 	{
 		$menu->add_button(
 		'magnifier_big',
 		$fs_view,
-		$GO_CONFIG->control_url.'mimeviewer/mimeviewer.php?path='.$urlencoded_path,array('target'=>'_blank'));
+		'mimeviewer.php?path='.$urlencoded_path,array('target'=>'_blank'));
 	}
 
 	if (isset($GO_MODULES->modules['email']) && $GO_MODULES->modules['email']['read_permission']) {
@@ -334,7 +334,7 @@ switch($tabstrip->get_active_tab_id())
 			$table->add_row($row);
 			
 	
-			$tabstrip->add_html_element($table);
+			//$tabstrip->add_html_element($table);
 			
 			
 			
@@ -391,6 +391,7 @@ switch($tabstrip->get_active_tab_id())
 					
 					
 				}
+				
 				$tabstrip->add_html_element($status_table);
 			}else
 			{
@@ -399,10 +400,14 @@ switch($tabstrip->get_active_tab_id())
 				$status_cell->set_attribute('colspan','99');
 				$status_row->add_cell($status_cell);
 				$status_table->add_row($status_row);
-				//$tabstrip->add_html_element($table);
+
 			}
+			$tabstrip->add_html_element($table);
+		}else
+		{
+			$tabstrip->add_html_element($table);
 		}
-		//$tabstrip->add_html_element($table);
+		
 
 		if ($write_perms)
 		{
