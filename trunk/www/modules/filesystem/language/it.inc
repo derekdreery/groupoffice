@@ -75,4 +75,16 @@ $fs_confirm_unshare='Sei sicuro di voler eliminare tutti i permessi di questa ca
 $fs_users='Utenti';
 $fs_personal='Personale';
 $fs_inssufficient_diskspace='Spazio su disco insufficiente';
+$fs_open_containing_folder='Apri la cartella principale';
+$fs_file_put_in='Il file "%s" &egrave; caricato verso "%s"';
+$fs_new_file_uploaded='Nuovo file caricato: %s';
+$fs_download='Scarica';
+$fs_view='Vedi';
+$fs_notify='Manda una e-mail se qualcuno carica un nuovo file';
+$fs_status='Stato';
+$fs_author='Autore';
+$fs_no_status_history='Nessun registro sugli stati';
+$fs_no_status='Nessuno';
+$fs_file_updated='Il file %s &egrave; stato modificato';
+$fs_open_properties='Apri la fiinestra di propriet&agrave; quando un file riceve un doppio click';
 ?>
