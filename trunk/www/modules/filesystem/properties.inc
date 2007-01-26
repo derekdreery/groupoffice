@@ -391,10 +391,11 @@ switch($tabstrip->get_active_tab_id())
 					
 					
 				}
-				
+				$tabstrip->add_html_element($table);
 				$tabstrip->add_html_element($status_table);
 			}else
 			{
+				$tabstrip->add_html_element($table);
 				$status_row = new table_row();
 				$status_cell = new table_cell($fs_no_status_history);
 				$status_cell->set_attribute('colspan','99');
@@ -402,7 +403,7 @@ switch($tabstrip->get_active_tab_id())
 				$status_table->add_row($status_row);
 
 			}
-			$tabstrip->add_html_element($table);
+			
 		}else
 		{
 			$tabstrip->add_html_element($table);
