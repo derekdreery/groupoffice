@@ -154,13 +154,20 @@ class go_ical extends calendar
 	function format_line($name_part, $value_part)
 	{
 		global $charset;
+
+
 		$value_part = str_replace("\r\n","\n", $value_part);
+
+		if(!strpos($value_part, "\n"))
+		{
+			return array($name_part.';CHARSET='.$charset.":".$value_part);
+		}
 		$qp_value_part = quoted_printable_encode($value_part);		
 		
 		if($value_part != $qp_value_part)
 		{
 			$name_part .= ';ENCODING=QUOTED-PRINTABLE;CHARSET='.$charset.":=\n";
-//			$qp_value_part = ' '.str_replace("\n", "\n ", $qp_value_part);
+			$qp_value_part = ' '.str_replace("\n", "\n ", $qp_value_part);
 			$qp_value_part = str_replace('=0A', "=0D=0A", $qp_value_part)."\n";
 			
 			return explode("\n", $name_part.$qp_value_part);
@@ -321,7 +328,7 @@ class go_ical extends calendar
 						if ($event['repeat_forever'] == '0')
 						{
 							//$line .= ' '.date($this->datetime_format, $event['repeat_end_time']-86400).'Z';
-							$line .= ' '.date($this->datetime_format, $event['repeat_end_time']-86400).'Z';
+							$line .= ' '.date($this->datetime_format, $event['repeat_end_time']).'Z';
 						}else
 						{
 							$line .= ' #0';

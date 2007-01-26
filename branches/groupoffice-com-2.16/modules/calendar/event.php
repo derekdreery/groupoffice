@@ -255,7 +255,7 @@ switch($task)
 
 			$event['repeat_type'] = $_POST['repeat_type'];
 			if ($event['repeat_type'] != REPEAT_NONE) {
-				$event['repeat_end_time'] = isset ($_POST['repeat_forever']) ? '0' : server_to_gmt_time(date_to_unixtime($_POST['repeat_end_date']))+86400;
+				$event['repeat_end_time'] = isset ($_POST['repeat_forever']) ? '0' : local_to_gmt_time(date_to_unixtime($_POST['repeat_end_date'].' '.$end_hour.':'.$end_min));
 			} else {
 				$event['repeat_end_time'] = 0;
 			}
@@ -938,7 +938,8 @@ if ($task != 'save_event' && $task != 'change_event' && ($event_id > 0 || isset 
 
 	if ($event['repeat_type'] != REPEAT_NONE) {
 		if ($event['repeat_forever'] == '0') {
-			$event['repeat_end_date'] = date($_SESSION['GO_SESSION']['date_format'], gmt_to_local_time($event['repeat_end_time']-86400));
+			//$event['repeat_end_date'] = date($_SESSION['GO_SESSION']['date_format'], gmt_to_local_time($event['repeat_end_time']-86400));
+			$event['repeat_end_date'] = date($_SESSION['GO_SESSION']['date_format'], gmt_to_local_time($event['repeat_end_time']));
 		} else {
 			$event['repeat_end_date'] = date($_SESSION['GO_SESSION']['date_format'], $event['end_time']);
 		}

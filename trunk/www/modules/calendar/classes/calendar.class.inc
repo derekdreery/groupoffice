@@ -27,8 +27,7 @@ define('EVERYBODY_WRITE', '2');
 define('PRIVATE_EVENT', '3');
 define('CUSTOM', '4');
 
-
-require_once($GLOBALS['GO_CONFIG']->class_path.'xml/xml.class.inc');
+require_once($GO_CONFIG->class_path.'xml/xml.class.inc');
 
 class calendar extends db
 {
@@ -137,7 +136,7 @@ class calendar extends db
 
 		$table = new table();
 		$row = new table_row();
-		$row->add_cell(new table_cell($cal_subject.':'));
+		$row->add_cell(new table_cell($GLOBALS['strName'].':'));
 		$row->add_cell(new table_cell($event['name']));
 		$table->add_row($row);
 
@@ -148,7 +147,14 @@ class calendar extends db
 		$row->add_cell(new table_cell($cal_statuses[$status['name']]));
 		$table->add_row($row);
 
-		
+		if (!empty($event['description'])) {
+			$row = new table_row();
+			$cell = new table_cell($GLOBALS['strDescription'].':');
+			$cell->set_attribute('valign','top');
+			$row->add_cell($cell);
+			$row->add_cell(new table_cell(text_to_html($event['description'])));
+			$table->add_row($row);
+		}
 
 		if (!empty($event['location'])) {
 			$row = new table_row();
@@ -178,12 +184,6 @@ class calendar extends db
 			$event_datetime_format = $_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'].' '.$gmt_string;
 		}
 		//$event_time_format = $_SESSION['GO_SESSION']['time_format'].' '.$gmt_string;
-		
-		$row = new table_row();
-		$cell = new table_cell('&nbsp;');
-		$cell->set_attribute('colspan','2');
-		$row->add_cell($cell);
-		$table->add_row($row);
 
 		$row = new table_row();
 		$row->add_cell(new table_cell($sc_start_at.':'));
@@ -358,12 +358,6 @@ class calendar extends db
 			$row->add_cell($cell);
 			$table->add_row($row);
 		}
-		
-		$row = new table_row();
-		$cell = new table_cell('&nbsp;');
-		$cell->set_attribute('colspan','2');
-		$row->add_cell($cell);
-		$table->add_row($row);
 
 		if(!empty($event['custom_fields']))
 		{
@@ -396,44 +390,8 @@ class calendar extends db
 					}
 					$table->add_row($row);
 				}
-				
-				$row = new table_row();
-				$cell = new table_cell('&nbsp;');
-				$cell->set_attribute('colspan','2');
-				$row->add_cell($cell);
-				$table->add_row($row);
 			}
 		}
-		
-		
-		$calendars=array();
-		$this->get_calendars_from_event($event['id']);
-		while($this->next_record())
-		{
-			$calendars[]=$this->f('name');
-		}
-		
-		$row = new table_row();
-		$cell = new table_cell($cal_event_calendars.':');
-		$cell->set_attribute('valign','top');
-		$row->add_cell($cell);
-		$row->add_cell(new table_cell(implode(', ', $calendars)));
-		$table->add_row($row);
-		
-		
-		
-		if (!empty($event['description'])) {
-			$row = new table_row();
-			$cell = new table_cell($GLOBALS['strDescription'].':');
-			$cell->set_attribute('valign','top');
-			$row->add_cell($cell);
-			$row->add_cell(new table_cell(text_to_html($event['description'])));
-			$table->add_row($row);
-		}
-		
-		
-		
-		
 		return $table->get_html();
 	}
 
@@ -1871,30 +1829,6 @@ class calendar extends db
 			break;
 		}
 	}
-	
-	
-	function global_search($user_id,$query,$start=0, $offset=0)
-	{
-		global $GO_MODULES, $GO_LANGUAGE;
-		
-		require($GO_LANGUAGE->get_language_file('calendar'));
-		
-		$this->search_events($user_id, 0,0,$query,0,0,'start_time', 'ASC', $start, $offset);
-		$xml='';
-		while($this->next_record())
-		{
-			if($this->f('todo')=='1')
-			{
-				$show = $cal_todo.': '.$this->f('name');
-			}else {
-				$show = $cal_event.': '.$this->f('name');
-			}
-			$xml .= '<result><show>'.htmlspecialchars($show).'</show><link_type>1</link_type><name>'.htmlspecialchars($this->f('name')).'</name><description>'.htmlspecialchars($this->f('description')).'</description><url>'.$GO_MODULES->modules['calendar']['url'].'event.php?event_id='.$this->f('id').'</url></result>';
-		}
-		return $xml;
-	}
-	
-	
 
 	function search_events($user_id, $calendar_id=0, $view_id=0, $query, $start_time, $end_time, $sort_field='start_time',
 	$sort_order='ASC', $start, $offset)
@@ -1919,19 +1853,9 @@ class calendar extends db
 		"INNER JOIN cal_events_calendars ON cal_events.id=cal_events_calendars.event_id ".
 		"WHERE ";
 
-		if($view_id>0 || $calendar_id==0)
+		if($view_id>0)
 		{
-			if($view_id>0)
-			{
-				$calendars = $this->get_view_calendars($view_id);
-			}else {
-				$calendars = array();
-				$this->get_authorized_calendars($user_id);
-				while($this->next_record())
-				{
-					$calendars[] = $this->f('id');
-				}
-			}
+			$calendars = $this->get_view_calendars($view_id);
 
 			if(!count($calendars))
 			{
@@ -1988,7 +1912,7 @@ class calendar extends db
 
 	function get_events($todos, $events, $completed, $calendar_id=0, $view_id=0, $user_id=0, $links=false, $interval_start=0,
 	$interval_end=0, $sort_field='start_time',
-	$sort_order='ASC', $start=0, $offset=0, $only_busy_events=false)
+	$sort_order='ASC', $start=0, $offset=0)
 	{
 		$todos = $todos ? '1' : '0';
 		$events = $events ? '1' : '0';
@@ -2017,20 +1941,6 @@ class calendar extends db
 			$sql .= " WHERE todo='$todos' ";
 			$where=true;
 		}
-		
-		if($only_busy_events)
-		{
-			if($where)
-			{
-				$sql .= " AND ";
-			}else
-			{
-				$sql .= " WHERE ";
-				$where=true;
-			}
-			$sql .= "busy='1'";
-		}
-		
 
 		if(!$completed && $todos=='1')
 		{
@@ -2144,7 +2054,7 @@ class calendar extends db
 	}
 
 	function get_events_in_array($calendar_id, $view_id, $user_id,
-	$interval_start_time, $interval_end_time, $show_todos=false, $completed=false, $show_events=true, $links=false, $with_calendars=false,$only_busy_events=false)
+	$interval_start_time, $interval_end_time, $show_todos=false, $completed=false, $show_events=true, $links=false, $with_calendars=false)
 	{
 		$this->events = array();
 		$this->events_sort=array();
@@ -2155,7 +2065,7 @@ class calendar extends db
 		$user_id,
 		$links,
 		$interval_start_time,
-		$interval_end_time,'start_time','ASC',0,0,$only_busy_events))
+		$interval_end_time))
 		{
 
 			while($this->next_record())
@@ -2630,6 +2540,9 @@ class calendar extends db
 		{
 			$timezone_id = isset($object['COMPLETED']['params']['TZID']) ? $object['COMPLETED']['params']['TZID'] : '';
 			$event['completion_time'] = $this->ical2array->parse_date($object['COMPLETED']['value'], $timezone_id);
+		}elseif($event['status_id']==11)
+		{
+			$event['completion_time']=get_gmt_time();
 		}else
 		{
 			$event['completion_time']=0;
@@ -3003,7 +2916,7 @@ class calendar extends db
 					if($id)
 					{
 						$member_events = $this->get_events_in_array(0, 0, $id,
-						$start_time, $end_time,false,false,true,false,false,true);
+						$start_time, $end_time);
 						foreach($member_events as $event)
 						{
 							$conflicts[$event['id']]=$event;
@@ -3016,7 +2929,7 @@ class calendar extends db
 		foreach($calendars as $calendar_id)
 		{
 			$cal_events = $this->get_events_in_array($calendar_id, 0, 0,
-			$start_time, $end_time,false,false,true,false,false,true);
+			$start_time, $end_time);
 			foreach($cal_events as $event)
 			{
 				$conflicts[$event['id']]=$event;
