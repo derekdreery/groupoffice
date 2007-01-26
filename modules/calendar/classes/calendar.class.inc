@@ -2540,6 +2540,9 @@ class calendar extends db
 		{
 			$timezone_id = isset($object['COMPLETED']['params']['TZID']) ? $object['COMPLETED']['params']['TZID'] : '';
 			$event['completion_time'] = $this->ical2array->parse_date($object['COMPLETED']['value'], $timezone_id);
+		}elseif($event['status_id']==11)
+		{
+			$event['completion_time']=get_gmt_time();
 		}else
 		{
 			$event['completion_time']=0;
