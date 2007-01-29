@@ -357,10 +357,8 @@ switch($task)
 				} else {
 
 					$event['user_id']=$GO_SECURITY->user_id;
-					if($link = $GO_LINKS->get_active_link())
-					{
-						$event['link_id'] = $GO_LINKS->get_link_id();
-					}
+					
+					$event['link_id'] = $GO_LINKS->get_link_id();
 
 					if (!$event_id = $cal->add_event($event)) {
 						$feedback = $strSaveError;
@@ -1174,7 +1172,14 @@ $GO_HEADER['head'] .= color_selector::get_header();
 if($event_id>0)
 {
 	load_control('links_list');
-	$links_list = new links_list($event['link_id'], 'event_form', $link_back);
+	
+	$ll_link_back =$link_back;
+	if(!strstr($ll_link_back, 'event_strip'))
+	{
+		$ll_link_back=add_params_to_url($link_back, 'event_strip=links');		
+	}
+	
+	$links_list = new links_list($event['link_id'], 'event_form', $ll_link_back);
 	$GO_HEADER['head'] .= $links_list->get_header();
 }
 
@@ -2206,6 +2211,11 @@ if($task == 'availability')
 			'delete_big',
 			$cmdDelete,
 			$links_list->get_delete_handler());
+			
+			$menu->add_button(
+			'upload',
+			$cmdAttachFile,
+			$GO_CONFIG->control_url.'link_upload.php?path=events/'.$event_id.'&link_id='.$event['link_id'].'&link_type=1');
 
 			$form->add_html_element($menu);
 

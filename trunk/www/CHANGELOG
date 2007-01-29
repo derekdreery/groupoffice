@@ -1,4 +1,4 @@
-TODO
+TODO for 2.17
 ?Show/hide statuses in project list with checkboxes
 ?secure flag in imap_open
 ?Aliases for e-mail accounts
@@ -7,17 +7,11 @@ TODO
 *Remember header setting in e-mail message
 *Read addressbook for template fields after entering a name in the to field
 *map van e-mail gecomprimeerd opslaan
+*Select columns to display in tables
+*global search
+*link email
+*Better auto add contacts in mail
 
--Shipping module
--Dynamish Pulldown menu
--Automatisch toevoegen contacten verbeteren
--Koppelen met autocomplete
--Email koppellen
--Webshop meertalig
--Coderen van GO orders nieuwe webshop
--Billing module docs
--Backup knop
--Verschil tussen decodering email bericht en lijst?
 
 CHANGELOG
 

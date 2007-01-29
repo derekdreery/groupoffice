@@ -364,3 +364,6 @@ $cmdSettings = 'Settings';
 $strTableConfig = 'Table configuration';
 
 $strMonthText = 'Month text';
+
+$cmdUpload='Upload';
+$cmdAttachFile='Attach file';
