@@ -4,7 +4,7 @@ require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 $fs = new filesystem();
 $fs2 = new filesystem();
 
-$datatable = new datatable('filesystem_links');
+$datatable = new datatable('filesystem_links',false, $form_name);
 $datatable->set_attribute('style','margin-bottom:20px;');
 
 if($datatable->task == 'delete')
@@ -37,6 +37,7 @@ if(count($links))
 	$datatable->add_column(new table_heading($strType));
 	$datatable->add_column(new table_heading($strSize));
 	$datatable->add_column(new table_heading($GLOBALS['strDate']));
+	$datatable->add_column(new table_heading('&nbsp;'));
 	
 	$fs->get_linked_items($links);
 	while($fs->next_record())
@@ -63,9 +64,13 @@ if(count($links))
 			$row->add_cell(new table_cell(get_timestamp(get_time(filemtime($fs->f('path'))))));
 		}else
 		{
-			$row->set_attribute('ondblclick', "javascript:document.location='".
+			/*$row->set_attribute('ondblclick', "javascript:document.location='".
 				$GO_MODULES->modules['filesystem']['url'].'index.php?task=properties&path='.
-				urlencode($fs->f('path'))."&return_to=".urlencode($return_to)."';");
+				urlencode($fs->f('path'))."&return_to=".urlencode($return_to)."';");*/
+			
+			$row->set_attribute('ondblclick', "javascript:document.location='".
+				$GO_MODULES->modules['filesystem']['url'].'download.php?path='.
+				urlencode($fs->f('path'))."';");
 			
 			$extension = get_extension($filename);	
 			
@@ -77,6 +82,18 @@ if(count($links))
 			$row->add_cell(new table_cell(get_filetype_description($extension)));
 			$row->add_cell(new table_cell(format_size(filesize($fs->f('path')))));
 			$row->add_cell(new table_cell(get_timestamp(get_time(filemtime($fs->f('path'))))));
+			
+			
+			$img = new image('properties_small');
+			$img->set_attribute('style','border:0px');
+			
+			$link = new hyperlink($GO_MODULES->modules['filesystem']['url'].'index.php?task=properties&path='.
+				urlencode($fs->f('path'))."&return_to=".urlencode($return_to), $img->get_html(), $GLOBALS['strProperties']);
+			$cell = new table_cell($link->get_html());
+			$cell->set_attribute('style','text-align:right');
+			
+			$row->add_cell($cell);	
+			
 		}
 		$datatable->add_row($row);
 	}

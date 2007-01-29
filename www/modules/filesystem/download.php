@@ -22,6 +22,11 @@ $path = smart_stripslashes($_REQUEST['path']);
 
 $mode = isset($_REQUEST['mode'])  ? $_REQUEST['mode'] : 'download';
 
+if(!$fs->is_sub_dir($path,$GO_CONFIG->file_storage_path))
+{
+	exit('Forbidden');
+}
+
 if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_permission($GO_SECURITY->user_id, $path))
 {
 	$filename = basename($path);

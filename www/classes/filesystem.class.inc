@@ -316,17 +316,24 @@ class filesystem extends db
    */
 	function is_sub_dir($sub_path, $parent_path)
 	{
-		if (strpos($sub_path, $parent_path) === false)
+		/*if (strpos($sub_path, $parent_path) === false)
 		{
 			return false;
 		}else
 		{
+			echo $sub_path.' -> '.$parent_path;
 			if (substr($sub_path, strlen($parent_path), 1) != '/')
 			{
 				return false;
 			}
-		}
-		return true;
+		}*/
+		
+		if(strpos($sub_path, $parent_path)===0)
+			return true;
+		else 
+			return false;
+		
+		
 	}
 
 
@@ -575,7 +582,7 @@ class filesystem extends db
 	{
 		global $GO_CONFIG;
 
-		if ($this->disable_go_permissions || $this->is_owner($user_id, $path) || $path == $GO_CONFIG->file_storage_path)
+		if (!$this->is_sub_dir($path,$GO_CONFIG->file_storage_path.'users/') || $this->disable_go_permissions || $this->is_owner($user_id, $path) || $path == $GO_CONFIG->file_storage_path)
 		{
 			return is_readable($path);
 		}else
@@ -599,7 +606,9 @@ class filesystem extends db
 
 	function has_write_permission($user_id, $path)
 	{
-		if ($this->disable_go_permissions || $this->is_owner($user_id, $path))
+		global $GO_CONFIG;
+		
+		if (!$this->is_sub_dir($path,$GO_CONFIG->file_storage_path.'users/') || $this->disable_go_permissions || $this->is_owner($user_id, $path))
 		{
 			return is_writable($path);
 		}else
@@ -612,7 +621,7 @@ class filesystem extends db
 					return is_writable($path);
 				}
 			}
-			global $GO_CONFIG;
+
 			if (strpos($path, $GO_CONFIG->tmpdir) === 0)
 			{
 				return is_writable($path);

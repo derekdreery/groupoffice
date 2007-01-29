@@ -93,6 +93,10 @@ class filesystem_list extends datatable
 		$this->add_column(new table_heading($strType));
 		$this->add_column(new table_heading($strSize));
 		$this->add_column(new table_heading($GLOBALS['strDate']));
+		if($fs_settings['open_properties']=='0')
+		{
+			$this->add_column(new table_heading('&nbsp;'));	
+		}
 
 		$folders = $fs->get_folders($this->path);
 		$files = $fs->get_files($this->path);
@@ -124,6 +128,17 @@ class filesystem_list extends datatable
 			$row->add_cell(new table_cell($fbFolder));
 			$row->add_cell(new table_cell('-'));
 			$row->add_cell(new table_cell(date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], get_time($folder['mtime']))));
+			if($fs_settings['open_properties']=='0')
+			{
+				$img = new image('properties_small');
+				$img->set_attribute('style','border:0px');
+				
+				$link = new hyperlink($GO_MODULES->modules['filesystem']['url'].'index.php?task=properties&path='.urlencode($folder['path']), $img->get_html(), $GLOBALS['strProperties']);
+				$cell = new table_cell($link->get_html());
+				$cell->set_attribute('style','text-align:right');
+				
+				$row->add_cell($cell);	
+			}
 			$this->add_row($row);
 		}
 
@@ -174,6 +189,18 @@ class filesystem_list extends datatable
 			$row->add_cell(new table_cell(get_filetype_description($extension)));
 			$row->add_cell(new table_cell($file['size'],format_size($file['size'])));
 			$row->add_cell(new table_cell(date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], get_time($file['mtime']))));
+			
+			if($fs_settings['open_properties']=='0')
+			{
+				$img = new image('properties_small');
+				$img->set_attribute('style','border:0px');
+				
+				$link = new hyperlink($GO_MODULES->modules['filesystem']['url'].'index.php?task=properties&path='.urlencode($file['path']), $img->get_html(), $GLOBALS['strProperties']);
+				$cell = new table_cell($link->get_html());
+				$cell->set_attribute('style','text-align:right');
+				
+				$row->add_cell($cell);	
+			}
 			$this->add_row($row);
 		}
 
