@@ -119,15 +119,19 @@ class GO_LINKS extends db
 	
 	function delete_link($link_id1, $link_id2=0)
 	{		
-		if($link_id2==0)
+		if($link_id1>0)
 		{
-			$sql = "DELETE FROM links WHERE link_id1=$link_id1 OR link_id2=$link_id1;";
-		}else
-		{
-			$sql = "DELETE FROM links WHERE (link_id1=$link_id1 AND link_id2=$link_id2) OR (link_id2=$link_id1 AND link_id1=$link_id2);";
+			if($link_id2==0)
+			{
+				$sql = "DELETE FROM links WHERE link_id1=$link_id1 OR link_id2=$link_id1;";
+			}else
+			{
+				$sql = "DELETE FROM links WHERE (link_id1=$link_id1 AND link_id2=$link_id2) OR (link_id2=$link_id1 AND link_id1=$link_id2);";
+			}
+		
+			return $this->query($sql);
 		}
-
-		return $this->query($sql);
+		return false;
 	}
 	
 	function has_links($link_id)

@@ -128,7 +128,6 @@ if($task == 'accept')
 		$body .= $cal->event_to_html($event);
 
 		$subject = sprintf($cal_your_resource_declined_mail_subject, $calendar['name']);
-
 		$user = $GO_USERS->get_user($event['user_id']);
 		sendmail($user['email'], $_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name'], $subject, $body, '3', 'text/HTML');
 	}
@@ -2215,7 +2214,7 @@ if($task == 'availability')
 			$menu->add_button(
 			'upload',
 			$cmdAttachFile,
-			$GO_CONFIG->control_url.'link_upload.php?path=events/'.$event_id.'&link_id='.$event['link_id'].'&link_type=1');
+			$GO_MODULES->modules['filesystem']['url'].'link_upload.php?path=events/'.$event_id.'&link_id='.$event['link_id'].'&link_type=1&return_to='.urlencode($link_back));
 
 			$form->add_html_element($menu);
 

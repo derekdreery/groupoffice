@@ -279,3 +279,5 @@ $error_username='Ongeldige gebruiksnaam. Gebruik alleen de volgende karakters zi
 $cmdSettings='Instellingen';
 $strTableConfig='Tabel instellingen';
 $strMonthText='Maand tekst';
+$cmdUpload='Uploaden';
+$cmdAttachFile='Bestand bijvoegen';
