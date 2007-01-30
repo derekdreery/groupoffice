@@ -20,7 +20,7 @@ class search extends db {
 	{
 		global $GO_MODULES;
 		
-		$xml = '<?xml version="1.0" ?>'."\n<results>";
+		$last_sync_time = $this->get_last_sync_time($user_id);
 		
 		foreach($GO_MODULES->modules as $module)
 		{
@@ -29,14 +29,51 @@ class search extends db {
 				require($module['class_path'].$module['id'].'.class.inc');
 				$class = new $module['id'];
 				
-				if(method_exists($class, 'global_search'))
+				if(method_exists($class, 'global_search_sync'))
 				{
-					$xml .= $class->global_search($user_id, $query, $start, $offset);
+					$class->global_search_sync($user_id, $last_sync_time);
 				}
 			}
 		}
-
-		return $xml.'</results>';	
+		$this->update_last_sync_time($user_id, get_gmt_time());
+		
+		$sql = "SELECT * FROM se_cache WHERE user_id=$user_id AND keywords LIKE '$query' ORDER BY name ASC";
+		$count = $this->query($sql);
+		
+		if($offset>0)
+		{
+			$sql .= " LIMIT $start,$offset";
+			$this->query($sql);
+		}
+		
+		
+		
+		return $count;
+		
+	}
+	
+	function get_last_sync_time($user_id)
+	{
+		$sql = "SELECT last_sync_time FROM se_last_sync_times WHERE user_id=$user_id";
+		$this->query($sql);
+		if($this->next_record())
+		{
+			return $this->f('last_sync_time');
+		}else {
+			$lst['user_id']=$user_id;
+			$lst['last_sync_time']=0;
+			$this->insert_row('se_last_sync_times',$lst);
+			
+			return 0;
+		}
+	}
+	
+	function update_last_sync_time($user_id)
+	{
+		$lst['user_id']=$user_id;
+		$lst['last_sync_time']=get_gmt_time();
+		
+		$this->update_row('se_last_sync_times','user_id',$lst);
 	}
 }
 ?>
