@@ -481,30 +481,89 @@ popup.focus();
 		$this->query($sql);
 	}
 	
-	function global_search($user_id,$query,$start=0, $offset=0)
+	function global_search_sync($user_id,$last_sync_time=0)
 	{
 		global $GO_MODULES, $GO_LANGUAGE;
 		
 		require($GO_LANGUAGE->get_language_file('addressbook'));
 		
-		$this->search_contacts($user_id, $query,'',0,0,$start, $offset);
-		$xml='';
+		$sql = "SELECT * FROM ab_contacts ";
+		$user_ab = $this->get_user_addressbook_ids($user_id);
+		if(count($user_ab) > 1)
+		{
+			$sql .= "WHERE ab_contacts.addressbook_id IN (".implode(",",$user_ab).") AND ";
+		}elseif(count($user_ab)==1)
+		{
+			$sql .= "WHERE ab_contacts.addressbook_id=".$user_ab[0]." AND ";
+		}else
+		{
+			return false;
+		}
+		
+		$sql .= "mtime>$last_sync_time AND ctime>$last_sync_time";
+
+		$this->query($sql);
+		
+		$db = new db();
 		while($this->next_record())
 		{
-			$name = htmlspecialchars(format_name($this->f('last_name'),$this->f('first_name'),$this->f('middle_name')));
-			$show = htmlspecialchars($ab_contact).': '.$name;		
-			$xml .= '<result><link_type>2</link_type><show>'.$show.'</show><name>'.$name.'</name><description></description><url>'.$GO_MODULES->modules['addressbook']['url'].'contact.php?contact_id='.$this->f('id').'</url></result>';
+			$cache['table']='ab_contacts';
+			$cache['id']=$this->f('id');
+			$cache['user_id']=$user_id;
+			$cache['name'] = addslashes(format_name($this->f('last_name'),$this->f('first_name'),$this->f('middle_name')));
+			$cache['link_id'] = $this->f('link_id');
+			$cache['link_type']=2;
+			$cache['description']='';
+			$cache['url']=$GO_MODULES->modules['addressbook']['url'].'contact.php?contact_id='.$this->f('id');
+			$cahce['type']='Contact';
+			$cache['keywords']=addslashes(record_to_keywords($this->Record));
+			if($this->f('ctime'))
+			{
+				$db->insert_row('se_cache',$cache);
+			}else {
+				$db->update_row('se_cache',array('user_id','link_id'), $cache);
+			}			
 		}
 		
 		
-		$this->search_companies($user_id, $query,'',0,$start, $offset);
+		$sql = "SELECT * FROM ab_companies ";
+
+		if(count($user_ab) > 1)
+		{
+			$sql .= "WHERE ab_companies.addressbook_id IN (".implode(",",$user_ab).") AND ";
+		}elseif(count($user_ab)==1)
+		{
+			$sql .= "WHERE ab_companies.addressbook_id=".$user_ab[0]." AND ";
+		}else
+		{
+			return false;
+		}
 		
+		$sql .= "mtime>$last_sync_time AND ctime>$last_sync_time";
+
+		$this->query($sql);
+		
+		$db = new db();
 		while($this->next_record())
 		{
-			$show = htmlspecialchars($GLOBALS['strCompany']).': '.htmlspecialchars($this->f('name'));		
-			$xml .= '<result><link_type>3</link_type><show>'.$show.'</show><name>'.htmlspecialchars($this->f('name')).'</name><description></description><url>'.$GO_MODULES->modules['addressbook']['url'].'company.php?company_id='.$this->f('id').'</url></result>';
+			$cache['table']='ab_companies';
+			$cache['id']=$this->f('id');
+			$cache['user_id']=$user_id;
+			$cache['name'] = addslashes($this->f('name'));
+			$cache['link_id'] = $this->f('link_id');
+			$cache['link_type']=2;
+			$cache['description']='';
+			$cache['url']=$GO_MODULES->modules['addressbook']['url'].'company.php?company_id='.$this->f('id');
+			$cache['type']='Company';			
+			$cache['keywords']=addslashes(record_to_keywords($this->Record));
+			
+			if($this->f('ctime')>$last_sync_time)
+			{
+				$db->insert_row('se_cache',$cache);
+			}else {
+				$db->update_row('se_cache',array('user_id','link_id'), $cache);
+			}			
 		}
-		return $xml;
 	}
 	
 	
@@ -549,64 +608,65 @@ popup.focus();
 			}
 		}
 		
-		
-		if(!is_array($field))
+		if($query!='')
 		{
-			$fields=array();
-			if($field == '')
+			if(!is_array($field))
 			{
-				$fields_sql = "SHOW FIELDS FROM ab_contacts";
-				$this->query($fields_sql);
-				while($this->next_record())
+				$fields=array();
+				if($field == '')
 				{
-					if(eregi('varchar', $this->f('Type')))
-					{
-						$fields[]='ab_contacts.'.$this->f('Field');
-					}
-				}
-				if(isset($GO_MODULES->modules['custom_fields']) && $GO_MODULES->modules['custom_fields']['read_permission'])
-				{
-					$fields_sql = "SHOW FIELDS FROM cf_2";
+					$fields_sql = "SHOW FIELDS FROM ab_contacts";
 					$this->query($fields_sql);
-					while ($this->next_record()) {
-						$fields[]='cf_2.'.$this->f('Field');
+					while($this->next_record())
+					{
+						if(eregi('varchar', $this->f('Type')))
+						{
+							$fields[]='ab_contacts.'.$this->f('Field');
+						}
 					}
-					
+					if(isset($GO_MODULES->modules['custom_fields']) && $GO_MODULES->modules['custom_fields']['read_permission'])
+					{
+						$fields_sql = "SHOW FIELDS FROM cf_2";
+						$this->query($fields_sql);
+						while ($this->next_record()) {
+							$fields[]='cf_2.'.$this->f('Field');
+						}
+						
+					}
+				}else {
+					$fields[]=$field;
 				}
 			}else {
-				$fields[]=$field;
-			}
-		}else {
-			$fields=$field;
-		}
-		
-		foreach($fields as $field)
-		{
-			if(count($fields)>1)
-			{
-				if(isset($first))
-				{
-					$sql .= ' OR ';
-				}else
-				{
-					$first = true;
-					$sql .= '(';
-				}				
+				$fields=$field;
 			}
 			
-			if($field=='name')
+			foreach($fields as $field)
 			{
-				$sql .= "CONCAT(first_name,middle_name,last_name) LIKE '".str_replace(' ','%', $query)."' ";
-			}else
-			{
-				$sql .= "$field LIKE '$query' ";
+				if(count($fields)>1)
+				{
+					if(isset($first))
+					{
+						$sql .= ' OR ';
+					}else
+					{
+						$first = true;
+						$sql .= '(';
+					}				
+				}
+				
+				if($field=='name')
+				{
+					$sql .= "CONCAT(first_name,middle_name,last_name) LIKE '".str_replace(' ','%', $query)."' ";
+				}else
+				{
+					$sql .= "$field LIKE '$query' ";
+				}
 			}
+			if(count($fields)>1)
+			{
+				$sql .= ')';
+			}	
 		}
-		if(count($fields)>1)
-		{
-			$sql .= ')';
-		}	
-		
 		
 
 		if($require_email)

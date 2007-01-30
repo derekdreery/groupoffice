@@ -33,6 +33,20 @@
  }
 */
  
+ function record_to_keywords($record)
+ {
+ 	$keywords=array();
+ 	
+ 	foreach($record as $field)
+ 	{
+ 		if(!empty($field) && !is_numeric($field) && !in_array($field,$keywords))
+ 		{
+ 			$keywords[]=$field;			
+ 		}
+ 	}
+ 	return implode(',',$keywords);
+ }
+ 
  function load_control($name)
  {
  	global $GO_CONFIG; 

@@ -5,7 +5,32 @@ Update queries for each version from 1.95
 From version 2.06 and up put module updates in the module's sql directory!
 
 */
-$updates[218] = array();
+$updates[219] = array();
+
+$updates[218][]="
+CREATE TABLE `se_cache` (
+  `link_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `table` varchar(50) NOT NULL,
+  `id` int(11) NOT NULL,
+  `module` varchar(50) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `url` varchar(100) NOT NULL,
+  `link_type` int(11) NOT NULL,
+  `type` varchar(20) NOT NULL,
+  `keywords` text NOT NULL,
+  PRIMARY KEY  (`link_id`,`user_id`),
+  KEY `name` (`name`)
+) TYPE=MyISAM;";
+
+$updates[218][]="
+CREATE TABLE `se_last_sync_times` (
+  `user_id` int(11) NOT NULL,
+  `last_sync_time` int(11) NOT NULL,
+  PRIMARY KEY  (`user_id`)
+) TYPE=MyISAM;
+";
 
 $updates[217][]="UPDATE ab_contacts SET email2 = '' WHERE email = email2;";
 $updates[217][]="UPDATE ab_contacts SET email3 = '' WHERE email = email3;";
