@@ -1,10 +1,10 @@
 <?php
 if(isset($_POST['archive_files']))
 {
-	$files = $_POST['archive_files'];
+	$files = array_map('smart_stripslashes', $_POST['archive_files']);
 }elseif(isset($_POST['fs_list']['selected']))
 {
-	$files = $_POST['fs_list']['selected'];
+	$files = array_map('smart_stripslashes', $_POST['fs_list']['selected']);
 }else
 {
 	$files = array();
@@ -66,5 +66,5 @@ $tabstrip->add_html_element(new button($cmdCancel, "javascript:document.forms[0]
 $form->add_html_element($tabstrip);
 ?>
 <script type="text/javascript">
-
+document.forms[0].namer.focus();
 </script>
