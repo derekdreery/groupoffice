@@ -315,11 +315,11 @@ switch ($task) {
 
 				if (isset ($_POST['name'])) {
 
-					$file = $fs->get_file($fv->path);
+					$file = $fs->get_file(addslashes($fv->path));
 
 					$name = trim(smart_stripslashes($_POST['name']));
 
-					if($_POST['status_id']!=$file['status_id'] || !empty($_POST['comments']))
+					if(isset($_POST['status_id']) && ($_POST['status_id']!=$file['status_id'] || !empty($_POST['comments'])))
 					{
 						$fs->change_status($file['link_id'],smart_addslashes($_POST['status_id']), smart_addslashes($_POST['comments']));
 
@@ -439,7 +439,7 @@ switch ($task) {
 				$task = 'create_archive';
 			} else {
 				while ($file = array_shift($_POST['archive_files'])) {
-					$archive_files[] = str_replace($fv->path.'/', '', $file);
+					$archive_files[] = str_replace($fv->path.'/', '', smart_stripslashes($file));
 				}
 
 				chdir($fv->path);

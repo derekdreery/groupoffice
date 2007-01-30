@@ -120,7 +120,7 @@ class datatable extends table
 		}
 		
 		$this->task = isset($_POST[$this->attributes['id']]['task']) ? $_POST[$this->attributes['id']]['task'] : '';
-		$this->selected = isset($_POST[$this->attributes['id']]['selected']) ? $_POST[$this->attributes['id']]['selected'] : array();
+		$this->selected = isset($_POST[$this->attributes['id']]['selected']) ? array_map('smart_stripslashes',$_POST[$this->attributes['id']]['selected']) : array();
 		
 		
 	}
