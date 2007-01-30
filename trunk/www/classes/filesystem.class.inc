@@ -686,8 +686,9 @@ class filesystem extends db
 						{
 							$this->update_share($source_path, $destination_path);
 						}
-
-						if($link['link_id'] = $this->get_link_id_by_path(addslashes($source_path)))
+						
+						$link['link_id'] = $this->get_link_id_by_path(addslashes($source_path));
+						if($link['link_id'])
 						{
 							$link['path'] = addslashes($destination_path);
 
@@ -716,7 +717,8 @@ class filesystem extends db
 							$this->update_share($child['path'], $destination_path.'/'.$child['name']);
 						}
 
-						if($link['link_id'] = $this->get_link_id_by_path(addslashes($source_path)))
+						$link['link_id'] = $this->get_link_id_by_path(addslashes($source_path));
+						if($link['link_id'])
 						{
 							$link['path'] = addslashes($destination_path);
 							$this->update_row('fs_links', 'link_id', $link);
@@ -845,7 +847,7 @@ class filesystem extends db
 	{
 		$path = dirname($path).'/'.basename($path);
 
-		$sql = "SELECT link_id FROM fs_links WHERE path='".addslashes($path)."'";
+		$sql = "SELECT link_id FROM fs_links WHERE path='".$path."'";
 		$this->query($sql);
 		if($this->next_record())
 		{

@@ -40,7 +40,7 @@ if($prop_task == 'mail')
 	}
 
 	$form->innerHTML .= '<script type="text/javascript" language="javascript">';
-	$form->innerHTML .= 'popup("'.$email_module['url'].'send.php?email_file=true","'.$GO_CONFIG->composer_width.'","'.$GO_CONFIG->composer_height.'");';
+	$form->innerHTML .= 'popup("'.$GO_MODULES->modules['email']['url'].'send.php?email_file=true","'.$GO_CONFIG->composer_width.'","'.$GO_CONFIG->composer_height.'");';
 	$form->innerHTML .= '</script>';
 
 }
@@ -208,19 +208,19 @@ switch($tabstrip->get_active_tab_id())
 		$table->add_row($row);
 
 		$row = new table_row();
-		$row->add_cell(new table_cell($strType));
+		$row->add_cell(new table_cell($strType.':'));
 
 		if (is_dir($fv->path))
 		{
 			$img = new image('folder');
 			$img->set_attribute('style','width:16px;height:16px;border:0;margin-right:5px;');
-			$img->set_attribute('align','middle');
+			$img->set_attribute('align','absmiddle');
 			$cell = new table_cell($img->get_html().$fbFolder);
 		}else
 		{
 			$img = new image('',get_filetype_image($extension));
 			$img->set_attribute('style','width:16px;height:16px;border:0;margin-right:5px;');
-			$img->set_attribute('align','middle');
+			$img->set_attribute('align','absmiddle');
 			$cell = new table_cell($img->get_html().get_filetype_description($extension).'&nbsp;('.mime_content_type($fv->path).')');
 		}
 		$cell->set_attribute('valign','top');
@@ -228,7 +228,7 @@ switch($tabstrip->get_active_tab_id())
 		$table->add_row($row);
 
 		$row = new table_row();
-		$row->add_cell(new table_cell($strSize));
+		$row->add_cell(new table_cell($strSize.':'));
 
 		if (is_dir($fv->path) && !isset($_REQUEST['calc_size']))
 		{
@@ -295,44 +295,63 @@ switch($tabstrip->get_active_tab_id())
 		
 		if (!is_dir($fv->path))
 		{
-			$file = $fs->get_file($fv->path);	
-	
-			$row = new table_row();
-			$row->add_cell(new table_cell($fs_status.':'));
-	
-			$select = new select('status_id', $file['status_id']);
-			$select->set_attribute('onchange','javascript:set_text(this.value);');
-			$fs->get_statuses();
-			$select->add_value(0, $fs_no_status);
-			while($fs->next_record())
+			$file = $fs->get_file(addslashes($fv->path));	
+			
+			if($write_perms)
 			{
-				$select->add_value($fs->f('id'), $fs->f('name'));
+	
+				$row = new table_row();
+				$row->add_cell(new table_cell($fs_status.':'));
+		
+				$select = new select('status_id', $file['status_id']);
+				//$select->set_attribute('onchange','javascript:set_text(this.value);');
+				$fs->get_statuses();
+				$select->add_value(0, $fs_no_status);
+				while($fs->next_record())
+				{
+					$select->add_value($fs->f('id'), $fs->f('name'));
+				}
+				$cell = new table_cell($select->get_html());
+				
+				if($GO_MODULES->write_permission)
+				{
+					$img = new image('edit');
+					$img->set_attribute('align','absmiddle');
+					$img->set_attribute('style','border:0px;margin-left:5px;');
+	
+					$link = new hyperlink('javascript:popup(\'statuses.php\', \'300\', \'300\');',$img->get_html(), $strEdit);
+	
+					$cell->add_html_element($link);
+				}
+				$row->add_cell($cell);
+				$table->add_row($row);
+				
+				$row = new table_row();
+				$cell = new table_cell($strComments.':');
+				$cell->set_attribute('style','vertical-align:top');
+				$row->add_cell($cell);
+				
+				$textarea = new textarea('comments','');
+				$textarea->set_attribute('style','width:300px;height:80px;');
+				$row->add_cell(new table_cell($textarea->get_html()));
+				$table->add_row($row);
+			}else {
+				$row = new table_row();
+				$row->add_cell(new table_cell($fs_status.':'));
+		
+				if($file['status_id']>0)
+				{
+					$status_name=$fs->get_status_name($file['status_id']);
+				}
+				if(empty($status_name))
+				{				
+					$status_name=$fs_no_status;
+				}
+				$cell = new table_cell($status_name);
+				
+				$row->add_cell($cell);
+				$table->add_row($row);
 			}
-			$cell = new table_cell($select->get_html());
-			
-			if($GO_MODULES->write_permission)
-			{
-				$img = new image('edit');
-				$img->set_attribute('align','absmiddle');
-				$img->set_attribute('style','border:0px;margin-left:5px;');
-
-				$link = new hyperlink('javascript:popup(\'statuses.php\', \'300\', \'300\');',$img->get_html(), $strEdit);
-
-				$cell->add_html_element($link);
-			}
-			$row->add_cell($cell);
-			$table->add_row($row);
-			
-			$row = new table_row();
-			$cell = new table_cell($strComments.':');
-			$cell->set_attribute('style','vertical-align:top');
-			$row->add_cell($cell);
-			
-			$textarea = new textarea('comments','');
-			$textarea->set_attribute('style','width:300px;height:80px;');
-			$row->add_cell(new table_cell($textarea->get_html()));
-			$table->add_row($row);
-			
 	
 			//$tabstrip->add_html_element($table);
 			

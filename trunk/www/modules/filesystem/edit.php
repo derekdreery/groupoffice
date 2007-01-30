@@ -129,7 +129,7 @@ $row = new table_row();
 
 $menu = new button_menu();
 $menu->add_button('save_big', $cmdSave, "javascript:document.editor_form.task.value='save';document.editor_form.submit();");
-$menu->add_button('close', $cmdClose, "javascript:confirm_close('".$GO_MODULES->url."index.php?task=properties&path=".urlencode($path)."')");
+$menu->add_button('close', $cmdClose, "javascript:confirm_close('".$GO_MODULES->url."index.php?task=properties&path=".urlencode(addslashes($path))."')");
 $row->add_cell(new table_cell($menu->get_html()));
 $table->add_row($row);
 
