@@ -55,39 +55,39 @@ if(!empty($_SESSION['search']['query']))
 	$datatable->add_column(new table_heading($strName,'name'));
 	$datatable->add_column(new table_heading($strType,'type'));
 	$datatable->add_column(new table_heading($strDescription,'description'));
-	
+
 	$datatable->multiselect=($multiselect=='true');
-	
-	
+
+
 	$GO_HEADER['head']=$datatable->get_header();
-	
+
 	$query='%'.addslashes($_SESSION['search']['query']).'%';
 
 	require_once($GO_CONFIG->class_path.'/base/search.class.inc');
 	$search = new search();
 	$count = $search->global_search($GO_SECURITY->user_id, $query,$datatable->start, $datatable->offset, $datatable->sort_index, $datatable->sql_sort_order);
-	
+
 	$datatable->set_pagination($count);
-	
+
 	$form->add_html_element(new html_element('p', $count.' '.$search_results));
-	
+
 	if($count>0)
 	{
 
 		while($search->next_record())
 		{
 			$row = new table_row($search->f('link_id'));
-			$row->add_cell(new table_cell($search->f('name')));		
+			$row->add_cell(new table_cell($search->f('name')));
 			$row->add_cell(new table_cell($search->f('type')));
 			$row->add_cell(new table_cell($search->f('description')));
-			
+
 			if(empty($handler))
 			{
 				$row->set_attribute('ondblclick', "javascript:document.location='".add_params_to_url($search->f('url'),'return_to='.urlencode($link_back))."';");
 			}else {
 				$row->set_attribute('ondblclick', 'javascript:submit_to_handler();');
 			}
-			
+
 			$datatable->add_row($row);
 		}
 	}else {
@@ -97,20 +97,16 @@ if(!empty($_SESSION['search']['query']))
 		$row->add_cell($cell);
 		$datatable->add_row($row);
 	}
-	
+
 	$form->add_html_element($datatable);
-}
 
-if($multiselect=='true')
-{
-	$button = new button($cmdOk, 'javascript:submit_to_handler();');
-	$form->add_html_element($button);
-}
 
-if(!empty($handler))
-{
-	$button = new button($cmdClose, 'javascript:window.close();');
-	$form->add_html_element($button);
+	if($multiselect=='true')
+	{
+		$button = new button($cmdOk, 'javascript:submit_to_handler();');
+		$form->add_html_element($button);
+	}
+
 }
 
 
