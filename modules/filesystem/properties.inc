@@ -92,12 +92,12 @@ if(!is_dir($fv->path))
 		'edit.php?path='.$urlencoded_path);
 	}
 
-	if(eregi('eml', $extension) && file_exists($GO_MODULES->modules['filesystem']['path'].'mimeviewer.php'))
+	if(eregi('eml', $extension) && file_exists($GO_CONFIG->control_path.'mimeviewer/mimeviewer.php'))
 	{
 		$menu->add_button(
 		'magnifier_big',
 		$fs_view,
-		'mimeviewer.php?path='.$urlencoded_path,array('target'=>'_blank'));
+		$GO_CONFIG->control_url.'mimeviewer/mimeviewer.php?path='.$urlencoded_path,array('target'=>'_blank'));
 	}
 
 	if (isset($GO_MODULES->modules['email']) && $GO_MODULES->modules['email']['read_permission']) {
