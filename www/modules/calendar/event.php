@@ -138,39 +138,6 @@ if($task == 'accept')
 
 switch($task)
 {
-	case 'activate_linking':
-		$link_event = $cal->get_event($event_id);
-		$link_id = $link_event['link_id'];
-		if(empty($link_event['link_id']))
-		{
-			$update_event['id'] = $event_id;
-			$update_event['link_id'] = $link_id = $GO_LINKS->get_link_id();
-			$cal->update_event($update_event);
-		}
-		$GO_LINKS->activate_linking($link_id, 1, $link_event['name'], $link_back);
-
-		header('Location: '.$GO_CONFIG->host.'link.php?link_id='.$link_id.'&link_type=1&return_to='.$link_back);
-		exit();
-		break;
-
-	case 'create_link':
-		if($link = $GO_LINKS->get_active_link())
-		{
-			$link_event = $cal->get_event($event_id);
-			$link_id = $link_event['link_id'];
-			if(empty($link_event['link_id']))
-			{
-				$update_event['id'] = $event_id;
-				$update_event['link_id'] = $link_id = $GO_LINKS->get_link_id();
-				$cal->update_event($update_event);
-			}
-			$GO_LINKS->add_link($link['id'], $link['type'], $link_id, 1);
-			$GO_LINKS->deactivate_linking();
-			header('Location: '.$link['return_to']);
-			exit();
-		}
-		break;
-
 	case 'save_event':
 		$is_resource=false;
 		$event['name'] = smart_addslashes(trim($_POST['name']));
@@ -795,14 +762,6 @@ switch($task)
 					}
 				}
 
-
-
-				if(isset($link) && $link)
-				{
-					$GO_LINKS->add_link($link['id'], $link['type'], $event['link_id'], 1);
-					$GO_LINKS->deactivate_linking();
-
-				}
 
 				$send_invitation = false;
 				if ($_POST['close'] == 'true') {
@@ -2190,7 +2149,7 @@ if($task == 'availability')
 		{
 			$menu = new button_menu();
 
-			if($GO_LINKS->linking_is_active())
+			/*if($GO_LINKS->linking_is_active())
 			{
 				if($GO_LINKS->get_active_link())
 				{
@@ -2200,7 +2159,10 @@ if($task == 'availability')
 			{
 				$menu->add_button('link', $strCreateLink, "javascript:document.event_form.task.value='activate_linking';document.event_form.submit();");
 			}
-
+			*/
+			
+			$menu->add_button('link', $strCreateLink, $GO_LINKS->search_link($event['link_id'], 1, 'opener.document.location=\''.$ll_link_back.'\';'));
+			
 			$menu->add_button(
 			'unlink',
 			$cmdUnlink,
@@ -2214,7 +2176,7 @@ if($task == 'availability')
 			$menu->add_button(
 			'upload',
 			$cmdAttachFile,
-			$GO_MODULES->modules['filesystem']['url'].'link_upload.php?path=events/'.$event_id.'&link_id='.$event['link_id'].'&link_type=1&return_to='.urlencode($link_back));
+			$GO_MODULES->modules['filesystem']['url'].'link_upload.php?path=events/'.$event_id.'&link_id='.$event['link_id'].'&link_type=1&return_to='.urlencode($ll_link_back));
 
 			$form->add_html_element($menu);
 
@@ -2565,17 +2527,7 @@ function disable_completion_time(value)
 	document.event_form.completion_min.disabled=disabled;
 }
 
-function create_link()
-{
-	document.event_form.task.value='create_link';
-	document.event_form.submit();
-}
-function activate_linking(goto_url)
-{
-	document.event_form.goto_url.value=goto_url;
-	document.event_form.task.value='activate_linking';
-	document.event_form.submit();
-}
+
 
 
 </script>

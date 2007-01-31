@@ -449,14 +449,14 @@ popup.focus();
 		}
 		return false;
 	}
-	
+
 	function search_email($user_id, $query)
 	{
-		
+
 		$query = str_replace(' ','%', $query);
-		
+
 		$sql = "SELECT DISTINCT ab_contacts.first_name, ab_contacts.middle_name, ab_contacts.last_name, ab_contacts.email, ab_contacts.email2, ab_contacts.email3 FROM ab_contacts WHERE ";
-		
+
 		$user_ab = $this->get_user_addressbook_ids($user_id);
 		if(count($user_ab) > 1)
 		{
@@ -469,24 +469,24 @@ popup.focus();
 			return false;
 		}
 		$sql .= "(CONCAT(first_name,middle_name,last_name) LIKE '".$query."' OR email LIKE '$query' OR email2 LIKE '$query' OR email3 LIKE '$query')";
-		
+
 		if ($_SESSION['GO_SESSION']['sort_name'] == 'first_name') {
 			$sort_index = 'ab_contacts.first_name ASC, ab_contacts.last_name';
 		} else {
 			$sort_index = 'ab_contacts.last_name ASC, ab_contacts.first_name';
 		}
-		
+
 		$sql .= " ORDER BY $sort_index ASC LIMIT 0,10";
-		
+
 		$this->query($sql);
 	}
-	
+
 	function global_search_sync($user_id,$last_sync_time=0)
 	{
 		global $GO_MODULES, $GO_LANGUAGE;
-		
+
 		require($GO_LANGUAGE->get_language_file('addressbook'));
-		
+
 		$sql = "SELECT * FROM ab_contacts ";
 		$user_ab = $this->get_user_addressbook_ids($user_id);
 		if(count($user_ab) > 1)
@@ -499,11 +499,11 @@ popup.focus();
 		{
 			return false;
 		}
-		
+
 		$sql .= "mtime>$last_sync_time AND ctime>$last_sync_time";
 
 		$this->query($sql);
-		
+
 		$db = new db();
 		while($this->next_record())
 		{
@@ -515,17 +515,17 @@ popup.focus();
 			$cache['link_type']=2;
 			$cache['description']='';
 			$cache['url']=$GO_MODULES->modules['addressbook']['url'].'contact.php?contact_id='.$this->f('id');
-			$cahce['type']='Contact';
+			$cache['type']=$ab_contact;
 			$cache['keywords']=addslashes(record_to_keywords($this->Record));
 			if($this->f('ctime'))
 			{
 				$db->insert_row('se_cache',$cache);
 			}else {
 				$db->update_row('se_cache',array('user_id','link_id'), $cache);
-			}			
+			}
 		}
-		
-		
+
+
 		$sql = "SELECT * FROM ab_companies ";
 
 		if(count($user_ab) > 1)
@@ -538,11 +538,11 @@ popup.focus();
 		{
 			return false;
 		}
-		
+
 		$sql .= "mtime>$last_sync_time AND ctime>$last_sync_time";
 
 		$this->query($sql);
-		
+
 		$db = new db();
 		while($this->next_record())
 		{
@@ -554,20 +554,20 @@ popup.focus();
 			$cache['link_type']=2;
 			$cache['description']='';
 			$cache['url']=$GO_MODULES->modules['addressbook']['url'].'company.php?company_id='.$this->f('id');
-			$cache['type']='Company';			
+			$cache['type']=$ab_company;
 			$cache['keywords']=addslashes(record_to_keywords($this->Record));
-			
+
 			if($this->f('ctime')>$last_sync_time)
 			{
 				$db->insert_row('se_cache',$cache);
 			}else {
 				$db->update_row('se_cache',array('user_id','link_id'), $cache);
-			}			
+			}
 		}
 	}
-	
-	
-				
+
+
+
 
 	function search_contacts($user_id, $query, $field = 'last_name', $addressbook_id = 0, $mtime = 0, $start=0, $offset=0, $require_email=false, $sort_index='name', $sort_order='ASC') {
 		global $GO_MODULES;
@@ -607,7 +607,7 @@ popup.focus();
 				return false;
 			}
 		}
-		
+
 		if($query!='')
 		{
 			if(!is_array($field))
@@ -631,7 +631,7 @@ popup.focus();
 						while ($this->next_record()) {
 							$fields[]='cf_2.'.$this->f('Field');
 						}
-						
+
 					}
 				}else {
 					$fields[]=$field;
@@ -639,7 +639,7 @@ popup.focus();
 			}else {
 				$fields=$field;
 			}
-			
+
 			foreach($fields as $field)
 			{
 				if(count($fields)>1)
@@ -651,9 +651,9 @@ popup.focus();
 					{
 						$first = true;
 						$sql .= '(';
-					}				
+					}
 				}
-				
+
 				if($field=='name')
 				{
 					$sql .= "CONCAT(first_name,middle_name,last_name) LIKE '".str_replace(' ','%', $query)."' ";
@@ -665,9 +665,9 @@ popup.focus();
 			if(count($fields)>1)
 			{
 				$sql .= ')';
-			}	
+			}
 		}
-		
+
 
 		if($require_email)
 		{
@@ -998,7 +998,15 @@ popup.focus();
 
 	function delete_contact($contact_id) {
 
-		global $GO_CONFIG;
+		global $GO_CONFIG,$GO_LINKS;
+
+		$contact=$this->get_contact($contact_id);
+
+		$GO_LINKS->delete_link($contact['link_id']);
+
+		require($GO_CONFIG->class_path.'filesystem.class.inc');
+		$fs = new filesystem();
+		$fs->delete($GO_CONFIG->file_storage_path.'contacts/'.$contact_id.'/');
 
 		$sql1 = "DELETE FROM tp_mailing_contacts WHERE contact_id='$contact_id'";
 
@@ -1204,7 +1212,15 @@ popup.focus();
 	}
 
 	function delete_company($company_id) {
-		global $GO_CONFIG;
+		global $GO_CONFIG, $GO_LINKS;
+		
+		$company=$this->get_contact($company_id);
+
+		$GO_LINKS->delete_link($company['link_id']);
+
+		require($GO_CONFIG->class_path.'filesystem.class.inc');
+		$fs = new filesystem();
+		$fs->delete($GO_CONFIG->file_storage_path.'companies/'.$company_id.'/');
 
 		$sql = "DELETE FROM ab_companies WHERE id='$company_id'";
 		if ($this->query($sql)) {

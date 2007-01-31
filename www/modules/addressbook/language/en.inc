@@ -240,3 +240,6 @@ $ab_select_mailing_group = 'Select the group you want to send your mailing to';
 
 //2.16
 $ab_id = 'no.';
+
+$ab_contact ='Contact';
+$ab_company ='Company';

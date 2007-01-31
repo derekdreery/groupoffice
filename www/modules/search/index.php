@@ -32,7 +32,12 @@ if(isset($_POST['query']))
 }
 $task=isset($_POST['task']) ? smart_stripslashes($_POST['task']) : '';
 
+$form->add_html_element(new html_element('h1', $search_global));
+$form->add_html_element(new html_element('p',$search_text));
+
 $input = new input('text','query',$_SESSION['search']['query']);
+$input->set_attribute('onfocus','this.select();');
+$input->set_attribute('autocomplete','off');
 $form->add_html_element($input);
 
 $button = new button($cmdSearch,'javascript:document.search_form.submit();');
@@ -41,29 +46,55 @@ $form->add_html_element($button);
 
 $link_back = $GO_MODULES->modules['search']['url'];
 
+
 if(!empty($_SESSION['search']['query']))
 {
+	load_control('datatable');
+	$datatable = new datatable('search_table',false, 'search_form');
+	$datatable->add_column(new table_heading($strName,'name'));
+	$datatable->add_column(new table_heading($strType,'type'));
+	$datatable->add_column(new table_heading($strDescription,'description'));
+	
+	
+	$GO_HEADER['head']=$datatable->get_header();
+	
 	$query='%'.addslashes($_SESSION['search']['query']).'%';
 
 	require_once($GO_CONFIG->class_path.'/base/search.class.inc');
 	$search = new search();
-	$search->global_search($GO_SECURITY->user_id, $query,0,0);
-
-	while($search->next_record())
+	$count = $search->global_search($GO_SECURITY->user_id, $query,$datatable->start, $datatable->offset, $datatable->sort_index, $datatable->sql_sort_order);
+	
+	$datatable->set_pagination($count);
+	
+	$form->add_html_element(new html_element('p', $count.' '.$search_results));
+	
+	if($count>0)
 	{
-		$div = new html_element('div');
-		$link = new hyperlink(add_params_to_url($search->f('url'),'return_to='.urlencode($link_back)), $search->f('name'));
-		$link->set_attribute('class','normal');
-		$div->add_html_element($link);		
-		$div->innerHTML .= '<br />'.$strType.': '.$search->f('type');
-		$div->set_attribute('style', 'margin-top:20px;');
-		
-		$form->add_html_element($div);
+
+		while($search->next_record())
+		{
+			$row = new table_row($search->f('link_id'));
+			$row->add_cell(new table_cell($search->f('name')));		
+			$row->add_cell(new table_cell($search->f('type')));
+			$row->add_cell(new table_cell($search->f('description')));
+			
+			$row->set_attribute('ondblclick', "javascript:document.location='".add_params_to_url($search->f('url'),'return_to='.urlencode($link_back))."';");
+			
+			$datatable->add_row($row);
+		}
+	}else {
+		$row = new table_row();
+		$cell = new table_cell($strNoItems);
+		$cell->set_attribute('colspan','99');
+		$row->add_cell($cell);
+		$datatable->add_row($row);
 	}
+	
+	$form->add_html_element($datatable);
 }
 
 
-
+$GO_HEADER['body_arguments']='onload="document.search_form.query.select();"';
 require($GO_THEME->theme_path.'header.inc');
 echo $form->get_html();
 

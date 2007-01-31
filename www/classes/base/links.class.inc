@@ -97,6 +97,13 @@ class GO_LINKS extends db
 		}
 	}
 	
+	function search_link($link_id, $link_type, $opener_action='')
+	{
+		global $GO_CONFIG;
+		
+		return "javascript:popup('".$GO_CONFIG->control_url."select/global_select.php?multiselect=true&handler=".base64_encode($GO_CONFIG->control_url.'/select/link.php?link_id='.$link_id.'&link_type='.$link_type.'&opener_action='.base64_encode($opener_action))."','600','400');";
+	}
+	
 	function add_link($id1, $type1, $id2, $type2)
 	{
 		$link['link_id1'] = $id1;

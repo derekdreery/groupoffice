@@ -112,7 +112,7 @@ class tabstrip extends table
 
 	function get_tab_handler_for_function($varname)
 	{
-		return 'change_tab_'.$this->id.'('.$varname.');';
+		return 'change_tab_'.$this->id.'(\''.addslashes($varname).'\');';
 	}
 
 	function get_html()
