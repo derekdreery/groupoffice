@@ -231,8 +231,7 @@ switch ($task) {
 						}
 					}
 				}
-				$link = $GO_LINKS->get_active_link();
-
+		
 				while ($file = smart_stripslashes(array_shift($_SESSION['cut_files']))) {
 					$new_path = $fv->path.'/'.basename($file);
 					if (!$fs->has_write_permission($GO_SECURITY->user_id, $fv->path)) {
@@ -247,12 +246,8 @@ switch ($task) {
 									$task = 'upload';
 									$feedback = $fs_inssufficient_diskspace;
 								}else
-								{
-									if($link)
-									{
-										$file_link_id = $fs->get_link_id($new_path);
-										$GO_LINKS->add_link($link['id'], $link['type'], $file_link_id, 6);
-									}
+								{									
+									$file_link_id = $fs->get_link_id($new_path);								
 								}
 							}
 						}else{
@@ -269,24 +264,14 @@ switch ($task) {
 							$feedback = $fs_inssufficient_diskspace;
 						}else
 						{
-							if($link)
-							{
-								$file_link_id = $fs->get_link_id($new_path);
-								$GO_LINKS->add_link($link['id'], $link['type'], $file_link_id, 6);
-							}
+							$file_link_id = $fs->get_link_id($new_path);
 						}
 					}
 				}
 				if(!isset($feedback)  && isset($_REQUEST['return_to']) && $task != 'overwrite')
 				{
-					if($link)
-					{
-						$GO_LINKS->deactivate_linking();
-						header('Location: '.$link['return_to']);
-					}else
-					{
-						header('Location: '.$_REQUEST['return_to']);
-					}
+					header('Location: '.$_REQUEST['return_to']);
+				
 					exit();
 				}
 

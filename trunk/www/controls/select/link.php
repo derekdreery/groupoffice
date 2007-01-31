@@ -19,76 +19,26 @@ $charset = isset($charset) ? $charset : 'UTF-8';
 header('Content-Type: text/html; charset='.$charset);
 
 
-$values = isset($_POST['select_table']['selected']) ? $_POST['select_table']['selected'] : array();
+$values = isset($_POST['search_table']['selected']) ? $_POST['search_table']['selected'] : array();
+
+$link_type=smart_stripslashes($_REQUEST['link_type']);
+$link_id=smart_stripslashes($_REQUEST['link_id']);
+$opener_action=smart_stripslashes($_REQUEST['opener_action']);
 
 
+require_once($GO_CONFIG->class_path.'/base/search.class.inc');
+$search = new search();
 
-if($link = $GO_LINKS->get_active_link())
+foreach($values as $selected_link_id)
 {
-	foreach($values as $item_id)
-	{	
-		switch($_REQUEST['search_type'])
-		{		
-			case 'contact':
-				require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc');
-				$ab = new addressbook();
-				
-				$link_contact = $ab->get_contact($item_id);
-				$link_id = $link_contact['link_id'];
-				if(empty($link_contact['link_id']))
-				{
-					$update_contact['id'] = $item_id;
-					$update_contact['link_id'] = $link_id = $GO_LINKS->get_link_id();
-					$ab->update_contact($update_contact);
-				}
-				$link_type=2;
-			break;
-			
-			case 'company':
-				require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc');
-				$ab = new addressbook();
-				
-				$link_company = $ab->get_company($item_id);
-				$link_id = $link_company['link_id'];
-				if(empty($link_company['link_id']))
-				{
-					$update_company['id'] = $item_id;
-					$update_company['link_id'] = $link_id = $GO_LINKS->get_link_id();
-					$ab->update_company($update_company);
-				}
-				$link_type=3;
-			break;
-			
-			case 'project':
-				require_once($GO_MODULES->modules['projects']['class_path'].'projects.class.inc');
-				$projects = new projects();
-				
-				$link_project = $projects->get_project($item_id);
-				$link_id = $link_project['link_id'];
-				if(empty($link_project['link_id']))
-				{
-					$update_project['id'] = $item_id;
-					$update_project['link_id'] = $link_id = $GO_LINKS->get_link_id();
-					$projects->_update_project($update_project);
-				}
-				$link_type=5;
-			break;
-			
-			case 'file':	
-				require_once($GO_CONFIG->class_path.'filesystem.class.inc');
-				$fs = new filesystem();
-				
-				$link_id = $fs->get_link_id($item_id);
-				$link_type=6;
-			break;
-		}
-		$GO_LINKS->add_link($link['id'], $link['type'], $link_id, $link_type);
-	}
-	$GO_LINKS->deactivate_linking();
+	$search_result = $search->get_search_result($GO_SECURITY->user_id, $selected_link_id);
 	
+	$GO_LINKS->add_link($search_result['link_id'], $search_result['link_type'], $link_id, $link_type);
 }
+
+
 ?>
 <html>
-<body onload="javascript:opener.document.location='<?php echo $link['return_to']; ?>';window.close();">
+<body onload="javascript:<?php if(!empty($opener_action)) echo base64_decode($opener_action); ?>window.close();">
 </body>
 </html>

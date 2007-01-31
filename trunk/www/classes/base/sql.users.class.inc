@@ -561,7 +561,8 @@ class sql_users extends base_users
 
 			foreach($modules_read as $module_name)
 			{
-				if($module = $GO_MODULES->get_module($module_name) && !$GO_SECURITY->user_in_acl($user['id'], $module['acl_read']))
+				$module = $GO_MODULES->get_module($module_name);
+				if($module && !$GO_SECURITY->user_in_acl($user['id'], $module['acl_read']))
 				{
 					$GO_SECURITY->add_user_to_acl($user['id'], $module['acl_read']);
 				}
@@ -569,7 +570,8 @@ class sql_users extends base_users
 
 			foreach($modules_write as $module_name)
 			{
-				if($module = $GO_MODULES->get_module($module_name) && !$GO_SECURITY->user_in_acl($user['id'], $module['acl_write']))
+				$module = $GO_MODULES->get_module($module_name);
+				if($module && !$GO_SECURITY->user_in_acl($user['id'], $module['acl_write']))
 				{
 					$GO_SECURITY->add_user_to_acl($user['id'], $module['acl_write']);
 				}

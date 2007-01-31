@@ -215,7 +215,7 @@ class projects extends db
 
 	function delete_project($project_id)
 	{
-		global $GO_SECURITY, $GO_CONFIG;
+		global $GO_SECURITY, $GO_CONFIG, $GO_LINKS;
 
 		if($project = $this->get_project($project_id))
 		{
@@ -227,6 +227,13 @@ class projects extends db
 				$cal = new calendar();
 				$cal->delete_calendar($project['calendar_id']);
 			}
+			
+		
+			$GO_LINKS->delete_link($project['link_id']);
+			
+			require($GO_CONFIG->class_path.'filesystem.class.inc');
+			$fs = new filesystem();
+			$fs->delete($GO_CONFIG->file_storage_path.'projects/'.$project_id.'/');
 			
 			
 			

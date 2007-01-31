@@ -43,37 +43,7 @@ $return_to = isset ($_REQUEST['return_to']) ? $_REQUEST['return_to'] : $_SERVER[
 $link_back = (isset ($_REQUEST['link_back']) && $_REQUEST['link_back'] != '') ? $_REQUEST['link_back'] : $_SERVER['REQUEST_URI'];
 
 switch ($task) {
-	case 'activate_linking':
-		$link_project = $projects->get_project($project_id);
-		if(empty($link_project['link_id']))
-		{
-			$update_project['id'] = $project_id;
-			$update_project['link_id'] = $link_project['link_id'] = $GO_LINKS->get_link_id();
-			$projects->update_project($update_project);
-		}
 
-		$GO_LINKS->activate_linking($link_project['link_id'], 5, $link_project['name'], $link_back);
-		header('Location: '.$GO_CONFIG->host.'link.php');
-		exit();
-		break;
-
-	case 'create_link':
-		if($link = $GO_LINKS->get_active_link())
-		{
-			$link_project = $projects->get_project($project_id);
-			$link_id = $link_project['link_id'];
-			if(empty($link_project['link_id']))
-			{
-				$update_project['id'] = $project_id;
-				$update_project['link_id'] = $link_id = $GO_LINKS->get_link_id();
-				$projects->update_project($update_project);
-			}
-			$GO_LINKS->add_link($link['id'], $link['type'], $link_id, 5);
-			$GO_LINKS->deactivate_linking();
-			header('Location: '.$link['return_to']);
-			exit();
-		}
-		break;
 	case 'save_project' :
 		//translate the given date stamp to unix time
 		$project['start_date'] = date_to_unixtime($_POST['start_date']);
@@ -154,11 +124,7 @@ switch ($task) {
 				if ($project['acl_read'] > 0 && $project['acl_write'] > 0) {
 
 					$project['user_id'] = $GO_SECURITY->user_id;
-
-					if($link = $GO_LINKS->get_active_link())
-					{
-						$project['link_id'] = $GO_LINKS->get_link_id();
-					}
+					$project['link_id'] = $GO_LINKS->get_link_id();
 
 					if ($GO_SECURITY->add_user_to_acl($GO_SECURITY->user_id, $project['acl_write'])) {
 						if (!$project_id = $projects->add_project($project)) {
@@ -173,11 +139,7 @@ switch ($task) {
 								$projects->apply_template($_POST['template_id'], $project_id, $_POST['calendar_id']);
 							}
 
-							if(isset($link) && $link)
-							{
-								$GO_LINKS->add_link($link['id'], $link['type'], $project['link_id'], 5);
-								$GO_LINKS->deactivate_linking();
-							}
+					
 							if ($_POST['close'] == 'true') {
 								header('Location: '.$return_to);
 								exit ();
@@ -222,12 +184,6 @@ $pm_settings = $projects->get_settings($GO_SECURITY->user_id);
 if ($project_id > 0) {
 	$project = $projects->get_project($project_id);
 
-	if(empty($project['link_id']))
-	{
-		$update_project['id'] = $project_id;
-		$update_project['link_id'] = $project['link_id'] = $GO_LINKS->get_link_id();
-		$projects->update_project($update_project);
-	}
 
 	$project_name = ($project['description'] == '') ? $project['name'] : $project['name'].' ('.$project['description'].')';
 
@@ -337,16 +293,8 @@ if ($project_id > 0) {
 	}
 
 
-	if($GO_LINKS->linking_is_active())
-	{
-		if($GO_LINKS->get_active_link())
-		{
-			$menu->add_button('link', $strCreateLink, "javascript:document.projects_form.task.value='create_link';document.projects_form.submit();");
-		}
-	}else
-	{
-		$menu->add_button('link', $strCreateLink, "javascript:document.projects_form.task.value='activate_linking';document.projects_form.submit();");
-	}
+	$menu->add_button('link', $strCreateLink, $GO_LINKS->search_link($project['link_id'], 5, 'opener.document.location=\''.add_params_to_url($link_back,'project_tabstrip_'.$project_id.'=links').'\';'));
+
 
 	if($write_permissions)
 	{
@@ -368,6 +316,12 @@ if ($project_id > 0) {
 			$cmdPrint,
 			'javascript:popup(\'print_projects.php?type=tl&project_id='.$project_id.'\');');*/
 		}
+		
+		$menu->add_button(
+			'upload',
+			$cmdAttachFile,
+			$GO_MODULES->modules['filesystem']['url'].'link_upload.php?path=projects/'.$project_id.'&link_id='.$project['link_id'].'&link_type=5&return_to='.urlencode($link_back));
+
 	}
 
 
@@ -764,12 +718,6 @@ function _save(task, close)
 	document.projects_form.submit();
 }
 
-function activate_linking(goto_url)
-{
-	document.projects_form.goto_url.value=goto_url;
-	document.projects_form.task.value='activate_linking';
-	document.projects_form.submit();
-}
 </script>
 <?php
 require_once ($GO_THEME->theme_path."footer.inc");

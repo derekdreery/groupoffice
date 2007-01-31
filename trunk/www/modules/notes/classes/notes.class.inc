@@ -94,6 +94,13 @@ class notes extends db
 
   function delete_note($note_id)
   {
+  	global $GO_LINKS;
+  	
+  	$note=$this->get_note($note_id);
+  	
+  	$GO_LINKS->delete_link($note['link_id']);
+  	 	
+  	
     $sql = "DELETE FROM no_notes WHERE id='$note_id'";
     return $this->query($sql);
   }

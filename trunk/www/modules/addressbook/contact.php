@@ -74,38 +74,7 @@ if (!empty ($vcf_file)) {
 $require = 'edit_contact.inc';
 
 switch ($task) {
-	case 'activate_linking':
-		$link_contact = $ab->get_contact($contact_id);
-		$link_id = $link_contact['link_id'];
-		if(empty($link_contact['link_id']))
-		{
-			$update_contact['id'] = $contact_id;
-			$update_contact['link_id'] = $link_id = $GO_LINKS->get_link_id();
-			$ab->update_contact($update_contact);
-		}
 
-		$GO_LINKS->activate_linking($link_id, 2, format_name($link_contact['last_name'], $link_contact['first_name'], $link_contact['middle_name']), $link_back);
-		header('Location: '.$GO_CONFIG->host.'link.php');
-		exit();
-	break;
-	
-	case 'create_link':
-		if($link = $GO_LINKS->get_active_link())
-		{
-			$link_contact = $ab->get_contact($contact_id);
-			$link_id = $link_contact['link_id'];
-			if(empty($link_contact['link_id']))
-			{
-				$update_contact['id'] = $contact_id;
-				$update_contact['link_id'] = $link_id = $GO_LINKS->get_link_id();
-				$ab->update_contact($update_contact);
-			}
-			$GO_LINKS->add_link($link['id'], $link['type'], $link_id, 2);
-			$GO_LINKS->deactivate_linking();
-			header('Location: '.$link['return_to']);
-			exit();
-		}
-	break;
 	
 	case 'save' :
 	
@@ -196,21 +165,14 @@ switch ($task) {
 				$ignore = true;
 			} else {
 				
-				$contact['user_id'] = $GO_SECURITY->user_id;
-				
-				if($link = $GO_LINKS->get_active_link())
-				{
-					$contact['link_id'] = $GO_LINKS->get_link_id();				
-				}
+				$contact['user_id'] = $GO_SECURITY->user_id;				
+				$contact['link_id'] = $GO_LINKS->get_link_id();				
+
 				
 				if ($contact_id = $ab->add_contact($contact)) {
 					$link_back .= '&contact_id='.$contact_id;
 					
-					if(isset($link) && $link)
-					{
-						$GO_LINKS->add_link($link['id'], $link['type'], $contact['link_id'], 2);
-						$GO_LINKS->deactivate_linking();					
-					}
+		
 					
 					if ($_POST['close'] == 'true') {
 						if ($popup) {
@@ -506,13 +468,13 @@ if ($contact_id > 0) {
 		}
 	}
 	
-	if($GO_LINKS->get_active_link())
+	$ll_link_back =$link_back;
+	if(!strstr($ll_link_back, 'event_strip'))
 	{
-		$menu->add_button('link', $strCreateLink, "javascript:document.contact_form.task.value='create_link';document.contact_form.submit();");
-	}else
-	{
-		$menu->add_button('link', $strCreateLink, "javascript:activate_linking('');");
+		$ll_link_back=add_params_to_url($link_back,'contact_tabstrip_'.$contact_id.'=links');		
 	}
+	
+	$menu->add_button('link', $strCreateLink, $GO_LINKS->search_link($contact['link_id'], 2, 'opener.document.location=\''.$ll_link_back.'\';'));
 	
 	if($tabstrip->get_active_tab_id() == 'links')
 	{
@@ -531,6 +493,12 @@ if ($contact_id > 0) {
 			$cmdDelete, 
 			$links_list->get_delete_handler());
 	}
+	
+	$menu->add_button(
+			'upload',
+			$cmdAttachFile,
+			$GO_MODULES->modules['filesystem']['url'].'link_upload.php?path=contacts/'.$contact_id.'&link_id='.$contact['link_id'].'&link_type=2&return_to='.urlencode($ll_link_back));
+
 
 }
 

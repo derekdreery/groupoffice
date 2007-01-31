@@ -119,13 +119,8 @@ if($tabstrip->get_active_tab_id()=='links')
 	$links_list->get_unlink_handler());
 }
 
-if($GO_LINKS->get_active_link())
-{
-	$menu->add_button('link', $strCreateLink, "javascript:document.forms[0].prop_task.value='create_link';document.forms[0].submit();");
-}else
-{
-	$menu->add_button('link', $strCreateLink, "javascript:activate_linking('');");
-}
+
+$menu->add_button('link', $strCreateLink, $GO_LINKS->search_link($link_id, 6, 'opener.'.$tabstrip->get_tab_handler_for_function('links')));
 $form->add_html_element($menu);
 
 

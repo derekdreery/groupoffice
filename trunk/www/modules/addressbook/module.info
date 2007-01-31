@@ -6,6 +6,6 @@ $module['addressbook']['release_date'] = '2006-02-15';
 $module['addressbook']['status'] = 'Stable';
 $module['addressbook']['authors'][] = array('name'=>'Merijn Schering', 'email'=>'mschering@intermesh.nl');
 $module['addressbook']['sort_order'] = 20;
-$module['addressbook']['linkable_items'][] = array('url'=>'contact.php', 'language'=>'ab_new_contact', 'button'=>'add_contact');
-$module['addressbook']['linkable_items'][] = array('url'=>'company.php', 'language'=>'ab_new_company', 'button'=>'ab_add_company');
+$module['addressbook']['linkable_items'][] = array('url'=>'contact.php', 'language'=>'ab_new_contact', 'button'=>'add_contact', 'link_type'=>2);
+$module['addressbook']['linkable_items'][] = array('url'=>'company.php', 'language'=>'ab_new_company', 'button'=>'ab_add_company', 'link_type'=>3);
 ?>

@@ -76,39 +76,7 @@ if($ab_settings['addressbook_id'] != $addressbook_id)
 
 //save
 switch ($task) {
-	case 'activate_linking':
-		$link_company = $ab->get_company($company_id);
-		$link_id = $link_company['link_id'];
-		if(empty($link_company['link_id']))
-		{
-			$update_company['id'] = $company_id;
-			$update_company['link_id'] = $link_id = $GO_LINKS->get_link_id();
-			$ab->update_company($update_company);
-		}
-		
-		$GO_LINKS->activate_linking($link_id, 3, $link_company['name'], $link_back);
-		
-		header('Location: '.$GO_CONFIG->host.'link.php');
-		exit();
-	break;
-	
-	case 'create_link':
-		if($link = $GO_LINKS->get_active_link())
-		{
-			$link_company = $ab->get_company($company_id);
-			$link_id = $link_company['link_id'];
-			if(empty($link_company['link_id']))
-			{
-				$update_company['id'] = $company_id;
-				$update_company['link_id'] = $link_id = $GO_LINKS->get_link_id();
-				$ab->update_company($update_company);
-			}
-			$GO_LINKS->add_link($link['id'], $link['type'], $link_id, 3);
-			$GO_LINKS->deactivate_linking();
-			header('Location: '.$link['return_to']);
-			exit();
-		}
-	break;
+
 	
 	case 'save_company' :
 		$company['name'] = isset ($_REQUEST['name']) ? smart_addslashes($_REQUEST['name']) : '';
@@ -193,18 +161,13 @@ switch ($task) {
 				$ignore = true;
 				
 			} else {
-				if($link = $GO_LINKS->get_active_link())
-				{
-					$company['link_id'] = $GO_LINKS->get_link_id();				
-				}
+	
+				$company['link_id'] = $GO_LINKS->get_link_id();				
+				
 				
 				if ($company_id = $ab->add_company($company)) {
 				
-					if(isset($link) && $link)
-					{
-						$GO_LINKS->add_link($link['id'], $link['type'], $company['link_id'], 3);
-						$GO_LINKS->deactivate_linking();					
-					}
+			
 
 					if ($_POST['close'] == 'true') {
 						if ($popup) {
@@ -434,14 +397,7 @@ if ($company_id > 0) {
 	{	
 		$tabstrip->add_tab('links', $strLinks);
 		
-
-		if($GO_LINKS->get_active_link())
-		{
-			$menu->add_button('link', $strCreateLink, "javascript:document.company_form.task.value='create_link';document.company_form.submit();");
-		}else
-		{
-			$menu->add_button('link', $strCreateLink, "javascript:document.company_form.task.value='activate_linking';document.company_form.submit();");
-		}
+		$menu->add_button('link', $strCreateLink, $GO_LINKS->search_link($company['link_id'], 3, 'opener.document.location=\''.add_params_to_url($link_back,'active_tab=links').'\';'));
 		
 		if($tabstrip->get_active_tab_id() == 'links')
 		{
@@ -529,12 +485,7 @@ switch ($active_tab_id) {
 		break;
 
 	case 'custom_fields' :
-			if(empty($company['link_id']))
-			{
-			  $update_company['id'] = $company_id;
-			  $update_company['link_id'] = $company['link_id'] = $GO_LINKS->get_link_id();
-			  $ab->update_company($update_company);
-			}
+
 
 			$form->add_html_element(new input('hidden', 'link_id', $company['link_id']));
 			if($cf_table = $cf->get_fields_table($tabstrip->get_active_tab_id(), $company['link_id']))
@@ -583,12 +534,7 @@ function _save(task, close)
 	document.company_form.close.value = close;
 	document.company_form.submit();
 }
-function activate_linking(goto_url)
-{
-	document.company_form.goto_url.value=goto_url;
-	document.company_form.task.value='activate_linking';
-	document.company_form.submit();
-}
+
 </script>
 <?php
 require_once ($GO_THEME->theme_path."footer.inc");

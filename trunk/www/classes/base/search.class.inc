@@ -16,7 +16,7 @@ class search extends db {
 		$this->db();
 	}
 	
-	function global_search($user_id, $query, $start, $offset)
+	function global_search($user_id, $query, $start, $offset, $sort_index='name', $sort_order='ASC')
 	{
 		global $GO_MODULES;
 		
@@ -37,8 +37,10 @@ class search extends db {
 		}
 		$this->update_last_sync_time($user_id, get_gmt_time());
 		
-		$sql = "SELECT * FROM se_cache WHERE user_id=$user_id AND keywords LIKE '$query' ORDER BY name ASC";
-		$count = $this->query($sql);
+		$sql = "SELECT * FROM se_cache WHERE user_id=$user_id AND keywords LIKE '$query' ORDER BY $sort_index $sort_order";
+
+		$this->query($sql);
+		$count =$this->num_rows();
 		
 		if($offset>0)
 		{
@@ -50,6 +52,17 @@ class search extends db {
 		
 		return $count;
 		
+	}
+	
+	function get_search_result($user_id, $link_id)
+	{
+		$sql = "SELECT * FROM se_cache WHERE user_id=$user_id AND link_id=$link_id";
+		$this->query($sql);
+		if($this->next_record())
+		{
+			return $this->Record;
+		}
+		return false;
 	}
 	
 	function get_last_sync_time($user_id)
