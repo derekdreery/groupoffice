@@ -516,8 +516,8 @@ popup.focus();
 			$cache['description']='';
 			$cache['url']=$GO_MODULES->modules['addressbook']['url'].'contact.php?contact_id='.$this->f('id');
 			$cache['type']=$ab_contact;
-			$cache['keywords']=addslashes(record_to_keywords($this->Record));
-			if($this->f('ctime'))
+			$cache['keywords']=addslashes(record_to_keywords($this->Record)).','.$ab_contact;
+			if($this->f('ctime')>$last_sync_time)
 			{
 				$db->insert_row('se_cache',$cache);
 			}else {
@@ -555,7 +555,7 @@ popup.focus();
 			$cache['description']='';
 			$cache['url']=$GO_MODULES->modules['addressbook']['url'].'company.php?company_id='.$this->f('id');
 			$cache['type']=$ab_company;
-			$cache['keywords']=addslashes(record_to_keywords($this->Record));
+			$cache['keywords']=addslashes(record_to_keywords($this->Record)).','.$ab_contact;
 
 			if($this->f('ctime')>$last_sync_time)
 			{
@@ -1004,7 +1004,7 @@ popup.focus();
 
 		$GO_LINKS->delete_link($contact['link_id']);
 
-		require($GO_CONFIG->class_path.'filesystem.class.inc');
+		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 		$fs = new filesystem();
 		$fs->delete($GO_CONFIG->file_storage_path.'contacts/'.$contact_id.'/');
 

@@ -84,7 +84,46 @@ class filesystem extends db
 		$this->db();
 		$this->disable_go_permissions = $disable_go_permissions;
 	}
+
+	function global_search_sync($user_id,$last_sync_time=0)
+	{
+		global $GO_MODULES, $GO_LANGUAGE;
+
+		require($GO_LANGUAGE->get_language_file('filesystem'));
+
+		$sql = "SELECT * FROM fs_links WHERE mtime>$last_sync_time AND ctime>$last_sync_time";
+
+		$this->query($sql);
+		
+		$fs = new filesystem();
+
+		$db = new db();
+		while($this->next_record())
+		{
 	
+			if($fs->has_read_permission($user_id, addslashes($this->f('path'))))
+			{
+				$cache['table']='fs_links';
+				$cache['id']=0;
+				$cache['user_id']=$user_id;
+				$cache['name'] = addslashes(basename($this->f('path')));
+				$cache['link_id'] = $this->f('link_id');
+				$cache['link_type']=6;
+				$cache['description']='';
+				$cache['url']=$GO_MODULES->modules['filesystem']['url'].'index.php?task=properties&path='.urlencode(addslashes($this->f('path')));
+				$cache['type']=$fs_file;
+				$cache['keywords']=$cache['name'].','.$cache['type'];
+				
+				if($this->f('ctime')>$last_sync_time)
+				{
+					$db->insert_row('se_cache',$cache);
+				}else {
+					$db->update_row('se_cache',array('user_id','link_id'), $cache);
+				}
+			}
+		}
+	}
+
 	function get_status_history($link_id)
 	{
 		$sql = "SELECT fs_status_history.*, fs_statuses.name AS status_name FROM ".
@@ -105,36 +144,36 @@ class filesystem extends db
 		}
 		return false;
 	}
-	
+
 	function get_statuses()
 	{
 		$sql = "SELECT * FROM fs_statuses";
 		$this->query($sql);
 		return $this->num_rows();
 	}
-	
+
 	function change_status($link_id, $status_id, $comments)
 	{
 		global $GO_SECURITY;
 		$link['link_id']=$link_id;
 		$link['status_id']=$status_id;
-		
+
 		$this->update_row('fs_links','link_id',$link);
-		
+
 		$status['id']=$this->nextid('fs_status_history');
 		$status['link_id']=$link_id;
 		$status['status_id']=$status_id;
 		$status['ctime']=get_gmt_time();
 		$status['user_id']=$GO_SECURITY->user_id;
 		$status['comments']=$comments;
-		
+
 		$this->insert_row('fs_status_history',$status);
 	}
 
 	function get_users_in_share($path)
 	{
 		global $GO_SECURITY;
-		
+
 		$users=array();
 		$share= $this->find_share($path);
 		if($share)
@@ -151,8 +190,8 @@ class filesystem extends db
 		}
 		return $users;
 	}
-	
-	
+
+
 
 	function is_viewable_in_browser($path)
 	{
@@ -208,13 +247,14 @@ class filesystem extends db
 
 			$file['path'] = $path;
 			$file['link_id'] = $GO_LINKS->get_link_id();
+			$file['ctime']=$file['mtime']=get_gmt_time();
 
 			$this->insert_row('fs_links', $file);
 
 			return $file['link_id'];
 		}
 	}
-	
+
 	function get_file($path)
 	{
 		$sql = "SELECT * FROM fs_links WHERE path='$path';";
@@ -282,7 +322,7 @@ class filesystem extends db
 						{
 							$line = ereg_replace("  "," ", $line);
 						}
-	
+
 						$numbers = explode(" ", $line);
 						foreach($numbers as $number)
 						{
@@ -296,7 +336,7 @@ class filesystem extends db
 									return $arr;
 								}
 							}
-						}						
+						}
 					}
 				}
 			}
@@ -318,22 +358,22 @@ class filesystem extends db
 	{
 		/*if (strpos($sub_path, $parent_path) === false)
 		{
-			return false;
+		return false;
 		}else
 		{
-			echo $sub_path.' -> '.$parent_path;
-			if (substr($sub_path, strlen($parent_path), 1) != '/')
-			{
-				return false;
-			}
+		echo $sub_path.' -> '.$parent_path;
+		if (substr($sub_path, strlen($parent_path), 1) != '/')
+		{
+		return false;
+		}
 		}*/
-		
+
 		if(strpos($sub_path, $parent_path)===0)
-			return true;
-		else 
-			return false;
-		
-		
+		return true;
+		else
+		return false;
+
+
 	}
 
 
@@ -582,7 +622,7 @@ class filesystem extends db
 	{
 		global $GO_CONFIG;
 
-		if (!$this->is_sub_dir($path,$GO_CONFIG->file_storage_path.'users/') || $this->disable_go_permissions || $this->is_owner($user_id, $path) || $path == $GO_CONFIG->file_storage_path)
+		if ($this->disable_go_permissions || $this->is_owner($user_id, $path) || $path == $GO_CONFIG->file_storage_path)
 		{
 			return is_readable($path);
 		}else
@@ -607,8 +647,8 @@ class filesystem extends db
 	function has_write_permission($user_id, $path)
 	{
 		global $GO_CONFIG;
-		
-		if (!$this->is_sub_dir($path,$GO_CONFIG->file_storage_path.'users/') || $this->disable_go_permissions || $this->is_owner($user_id, $path))
+
+		if ($this->disable_go_permissions || $this->is_owner($user_id, $path))
 		{
 			return is_writable($path);
 		}else
@@ -686,11 +726,12 @@ class filesystem extends db
 						{
 							$this->update_share($source_path, $destination_path);
 						}
-						
+
 						$link['link_id'] = $this->get_link_id_by_path(addslashes($source_path));
 						if($link['link_id'])
 						{
 							$link['path'] = addslashes($destination_path);
+							$link['mtime']=get_gmt_time();
 
 							$this->update_row('fs_links', 'link_id', $link);
 						}
@@ -721,6 +762,7 @@ class filesystem extends db
 						if($link['link_id'])
 						{
 							$link['path'] = addslashes($destination_path);
+							$link['mtime']=get_gmt_time();
 							$this->update_row('fs_links', 'link_id', $link);
 						}
 					}
@@ -741,6 +783,7 @@ class filesystem extends db
 				if($link['link_id'] = $this->get_link_id_by_path(addslashes($source_path)))
 				{
 					$link['path'] = addslashes($destination_path);
+					$link['mtime']=get_gmt_time();
 					$this->update_row('fs_links', 'link_id', $link);
 				}
 
@@ -855,7 +898,7 @@ class filesystem extends db
 		}
 		return false;
 	}
-	
+
 
 
 	function delete($path)
@@ -915,15 +958,15 @@ class filesystem extends db
 			}
 		}else
 		{
-			
+
 			if ($this->disable_go_permissions ||
 			$this->has_write_permission($GO_SECURITY->user_id, $path))
 			{
 				global $GO_LINKS;
-				
+
 				$link_id = $this->get_link_id_by_path(addslashes($path));
 				$GO_LINKS->delete_link($link_id);
-			
+
 				return @unlink($path);
 			}else
 			{

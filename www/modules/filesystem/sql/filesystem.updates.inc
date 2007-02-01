@@ -1,5 +1,8 @@
 <?php
-$updates[17] = array();
+$updates[18] = array();
+
+
+$updates[17][] = "ALTER TABLE `fs_links` ADD `ctime` INT NOT NULL , ADD `mtime` INT NOT NULL ;";
 
 $updates[16][] = "ALTER TABLE `fs_settings` ADD `open_properties` ENUM( '0', '1' ) NOT NULL ;";
 $updates[16][] = "ALTER TABLE `fs_links` ADD `status_id` INT NOT NULL ;";

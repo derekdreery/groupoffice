@@ -102,3 +102,6 @@ $fs_no_status_history='No status history';
 $fs_no_status='None';
 $fs_file_updated='File %s modified';
 $fs_open_properties='Open properties window when a file is double clicked';
+
+
+$fs_file='File';

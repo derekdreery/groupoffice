@@ -25,3 +25,5 @@ $no_file = 'File';
 $no_show_all = 'Show all';
 $no_show_own = 'Show own';
 $no_show_responsible = 'Show responsible';
+
+$no_note='Note';
