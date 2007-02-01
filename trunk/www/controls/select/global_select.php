@@ -45,7 +45,8 @@ $button = new button($cmdSearch,'javascript:document.search_form.submit();');
 $button->set_attribute('style','margin:0px;width:100px;');
 $form->add_html_element($button);
 
-$link_back = $GO_MODULES->modules['search']['url'];
+$link_back = $_SERVER['PHP_SELF'];
+
 
 
 if(!empty($_SESSION['search']['query']))
@@ -54,14 +55,14 @@ if(!empty($_SESSION['search']['query']))
 	$datatable = new datatable('global_select_table',false, 'search_form');
 	$datatable->add_column(new table_heading($strName,'name'));
 	$datatable->add_column(new table_heading($strType,'type'));
-	$datatable->add_column(new table_heading($strDescription,'description'));
+	//$datatable->add_column(new table_heading($strDescription,'description'));
 
 	$datatable->multiselect=($multiselect=='true');
 
 
 	$GO_HEADER['head']=$datatable->get_header();
 
-	$query='%'.addslashes(str_replace(' ', '%', $_SESSION['search']['query'])).'%';
+	$query=addslashes($_SESSION['search']['query']);
 
 	require_once($GO_CONFIG->class_path.'/base/search.class.inc');
 	$search = new search();
@@ -81,7 +82,7 @@ if(!empty($_SESSION['search']['query']))
 			$row = new table_row($search->f('link_id'));
 			$row->add_cell(new table_cell($search->f('name')));
 			$row->add_cell(new table_cell($search->f('type')));
-			$row->add_cell(new table_cell($search->f('description')));
+			//$row->add_cell(new table_cell($search->f('description')));
 
 			if(empty($handler))
 			{

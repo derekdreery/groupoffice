@@ -45,7 +45,7 @@ class global_autocomplete
 		'',
 		$form_name,
 		$GO_CONFIG->control_url.'global_search_xml.php',
-		'results',
+		'result',
 		$xml_fields,
 		false
 		);

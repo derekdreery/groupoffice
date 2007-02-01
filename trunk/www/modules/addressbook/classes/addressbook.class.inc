@@ -551,7 +551,7 @@ popup.focus();
 			$cache['user_id']=$user_id;
 			$cache['name'] = addslashes($this->f('name'));
 			$cache['link_id'] = $this->f('link_id');
-			$cache['link_type']=2;
+			$cache['link_type']=3;
 			$cache['description']='';
 			$cache['url']=$GO_MODULES->modules['addressbook']['url'].'company.php?company_id='.$this->f('id');
 			$cache['type']=$ab_company;

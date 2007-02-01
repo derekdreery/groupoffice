@@ -11,14 +11,28 @@ option) any later version.
 */
 require_once("../Group-Office.php");
 $GO_SECURITY->authenticate();
-$GO_MODULES->authenticate('search');
-require_once($GO_LANGUAGE->get_language_file('search'));
 
-$query='%'.smart_addslashes($_REQUEST['query']).'%';
+$query=smart_addslashes($_REQUEST['query']);
 
 require_once($GO_CONFIG->class_path.'/base/search.class.inc');
 $search = new search();
 
 
 header('Content-Type: text/xml; charset: UTF-8');
-echo $search->global_search($GO_SECURITY->user_id, $query, 0,0);
+
+$search->global_search($GO_SECURITY->user_id, $query,0, 10);
+
+echo '<?xml version="1.0" ?>'."\n";
+
+echo '<results>';
+while($search->next_record(MYSQL_ASSOC))
+{
+	echo '<result>';
+	echo '<show>('.htmlspecialchars($search->f('type')).') '.$search->f('name').'</show>';
+	foreach($search->Record as $key=>$value)
+	{
+		echo '<'.$key.'>'.htmlspecialchars($value).'</'.$key.'>';
+	}
+	echo '</result>';
+}
+echo '</results>';
