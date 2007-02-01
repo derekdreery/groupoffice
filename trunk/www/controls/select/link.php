@@ -19,7 +19,7 @@ $charset = isset($charset) ? $charset : 'UTF-8';
 header('Content-Type: text/html; charset='.$charset);
 
 
-$values = isset($_POST['search_table']['selected']) ? $_POST['search_table']['selected'] : array();
+$values = isset($_POST['global_select_table']['selected']) ? $_POST['global_select_table']['selected'] : array();
 
 $link_type=smart_stripslashes($_REQUEST['link_type']);
 $link_id=smart_stripslashes($_REQUEST['link_id']);

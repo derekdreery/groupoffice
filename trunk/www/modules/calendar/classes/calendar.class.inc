@@ -41,6 +41,51 @@ class calendar extends db
 	{
 		$this->db();
 	}
+	
+	function global_search_sync($user_id,$last_sync_time=0)
+	{
+		global $GO_MODULES, $GO_LANGUAGE;
+
+		require($GO_LANGUAGE->get_language_file('calendar'));
+
+		$sql  = "SELECT DISTINCT cal_events.* FROM cal_events ".
+		"INNER JOIN cal_events_calendars ON cal_events.id=cal_events_calendars.event_id ".
+		"WHERE ";
+
+
+		$calendars = array();
+		$this->get_authorized_calendars($user_id);
+		while($this->next_record())
+		{
+			$calendars[] = $this->f('id');
+		}
+		
+		$sql .= "cal_events_calendars.calendar_id IN (".implode(',', $calendars).")  AND mtime>$last_sync_time AND ctime>$last_sync_time";
+
+
+		$this->query($sql);
+
+		$db = new db();
+		while($this->next_record())
+		{
+			$cache['table']='cal_events';
+			$cache['id']=$this->f('id');
+			$cache['user_id']=$user_id;
+			$cache['name'] = addslashes($this->f('name'));
+			$cache['link_id'] = $this->f('link_id');
+			$cache['link_type']=1;
+			$cache['description']=addslashes($this->f('description'));
+			$cache['url']=$GO_MODULES->modules['calendar']['url'].'event.php?event_id='.$this->f('id');
+			$cache['type']=$this->f('todo')=='1' ? $cal_todo : $cal_event;
+			$cache['keywords']=addslashes(record_to_keywords($this->Record)).','.$cache['type'];
+			if($this->f('ctime')>$last_sync_time)
+			{
+				$db->insert_row('se_cache',$cache);
+			}else {
+				$db->update_row('se_cache',array('user_id','link_id'), $cache);
+			}
+		}
+	}
 
 	function get_backgrounds()
 	{
@@ -1873,26 +1918,7 @@ class calendar extends db
 	}
 	
 	
-	function global_search($user_id,$query,$start=0, $offset=0)
-	{
-		global $GO_MODULES, $GO_LANGUAGE;
-		
-		require($GO_LANGUAGE->get_language_file('calendar'));
-		
-		$this->search_events($user_id, 0,0,$query,0,0,'start_time', 'ASC', $start, $offset);
-		$xml='';
-		while($this->next_record())
-		{
-			if($this->f('todo')=='1')
-			{
-				$show = $cal_todo.': '.$this->f('name');
-			}else {
-				$show = $cal_event.': '.$this->f('name');
-			}
-			$xml .= '<result><show>'.htmlspecialchars($show).'</show><link_type>1</link_type><name>'.htmlspecialchars($this->f('name')).'</name><description>'.htmlspecialchars($this->f('description')).'</description><url>'.$GO_MODULES->modules['calendar']['url'].'event.php?event_id='.$this->f('id').'</url></result>';
-		}
-		return $xml;
-	}
+
 	
 	
 
@@ -2462,7 +2488,7 @@ class calendar extends db
 			global $GO_LINKS, $GO_CONFIG;
 			$GO_LINKS->delete_link($event['link_id']);
 			
-			require($GO_CONFIG->class_path.'filesystem.class.inc');
+			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 			$fs = new filesystem();
 			$fs->delete($GO_CONFIG->file_storage_path.'events/'.$event_id.'/');
 		

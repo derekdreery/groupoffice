@@ -51,7 +51,7 @@ $link_back = $GO_MODULES->modules['search']['url'];
 if(!empty($_SESSION['search']['query']))
 {
 	load_control('datatable');
-	$datatable = new datatable('search_table',false, 'search_form');
+	$datatable = new datatable('global_select_table',false, 'search_form');
 	$datatable->add_column(new table_heading($strName,'name'));
 	$datatable->add_column(new table_heading($strType,'type'));
 	$datatable->add_column(new table_heading($strDescription,'description'));
@@ -61,10 +61,12 @@ if(!empty($_SESSION['search']['query']))
 
 	$GO_HEADER['head']=$datatable->get_header();
 
-	$query='%'.addslashes($_SESSION['search']['query']).'%';
+	$query='%'.addslashes(str_replace(' ', '%', $_SESSION['search']['query'])).'%';
 
 	require_once($GO_CONFIG->class_path.'/base/search.class.inc');
 	$search = new search();
+	
+	//$search->reset();
 	$count = $search->global_search($GO_SECURITY->user_id, $query,$datatable->start, $datatable->offset, $datatable->sort_index, $datatable->sql_sort_order);
 
 	$datatable->set_pagination($count);

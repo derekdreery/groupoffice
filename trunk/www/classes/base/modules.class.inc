@@ -267,7 +267,7 @@ class GO_MODULES extends db {
 
 		$sql = "SELECT * FROM modules WHERE id='".addslashes($module_id)."'";
 		$this->query($sql);
-		if ( $this->next_record() ) {
+		if ( $this->next_record(MYSQL_ASSOC) ) {
 			$this->Record['full_url'] =
 			$GO_CONFIG->full_url.'modules/'.$module_id.'/';
 			$this->Record['url'] =
@@ -422,7 +422,7 @@ class GO_MODULES extends db {
 
 		$modules = array();
 		$this->get_modules($admin_menu);
-		while ( $this->next_record() ) {
+		while ( $this->next_record(MYSQL_ASSOC) ) {
 			$this->Record['full_url'] =
 			$GO_CONFIG->full_url.'modules/'.$this->f('id').'/';
 			$this->Record['url'] =

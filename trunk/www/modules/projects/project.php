@@ -69,23 +69,23 @@ switch ($task) {
 				}else
 				{
 					$old_project = $projects->get_project($project_id);
-					
+
 					if(isset($_POST['link_calendar']) && $old_project['calendar_id']==0)
 					{
 						require($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc');
 						$cal = new calendar();
 						$project['calendar_id'] = $cal->add_calendar($GO_SECURITY->user_id, $project['name'], 8,20);
-						
-						
+
+
 						$projects->get_hours(0,0,0,$project_id);
-						
+
 						while($projects->next_record())
-						{						
+						{
 							$projects->add_booking_to_calendar($projects->Record, $project['calendar_id']);
 						}
-				
-						
-						
+
+
+
 					}elseif(!isset($_POST['link_calendar']) && $old_project['calendar_id']>0)
 					{
 						require($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc');
@@ -93,7 +93,7 @@ switch ($task) {
 						$cal->delete_calendar($old_project['calendar_id']);
 						$project['calendar_id']=0;
 					}
-					
+
 					if (!$projects->update_project($project, isset($_POST['shift_events']))) {
 
 						$feedback = $strSaveError;
@@ -139,7 +139,7 @@ switch ($task) {
 								$projects->apply_template($_POST['template_id'], $project_id, $_POST['calendar_id']);
 							}
 
-					
+
 							if ($_POST['close'] == 'true') {
 								header('Location: '.$return_to);
 								exit ();
@@ -182,6 +182,9 @@ $link_back = $_SERVER['PHP_SELF'].'?project_id='.$project_id.'&return_to='.urlen
 $pm_settings = $projects->get_settings($GO_SECURITY->user_id);
 
 if ($project_id > 0) {
+
+
+
 	$project = $projects->get_project($project_id);
 
 
@@ -316,11 +319,23 @@ if ($project_id > 0) {
 			$cmdPrint,
 			'javascript:popup(\'print_projects.php?type=tl&project_id='.$project_id.'\');');*/
 		}
-		
+
 		$menu->add_button(
-			'upload',
-			$cmdAttachFile,
-			$GO_MODULES->modules['filesystem']['url'].'link_upload.php?path=projects/'.$project_id.'&link_id='.$project['link_id'].'&link_type=5&return_to='.urlencode($link_back));
+		'upload',
+		$cmdAttachFile,
+		$GO_MODULES->modules['filesystem']['url'].'link_upload.php?path=projects/'.$project_id.'&link_id='.$project['link_id'].'&link_type=5&return_to='.urlencode($link_back));
+
+		//create project directory with same permissions as project
+		if(!file_exists($GO_CONFIG->file_storage_path.'projects/'.$project_id))
+		{
+			mkdir_recursive($GO_CONFIG->file_storage_path.'projects/'.$project_id);
+		}
+		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+		$fs = new filesystem();
+		if(!$fs->find_share($GO_CONFIG->file_storage_path.'projects/'.$project_id))
+		{
+			$fs->add_share($project['user_id'], $GO_CONFIG->file_storage_path.'projects/'.$project_id,'project',$project['acl_read'], $project['acl_write']);
+		}
 
 	}
 

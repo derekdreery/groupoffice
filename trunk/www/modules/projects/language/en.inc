@@ -146,3 +146,5 @@ $pm_book_rights = 'Book access';
 $pm_template_exists = 'A template with this name already exists';
 
 $pm_link_calendar= 'Put working hours in a calendar';
+
+$pm_project='Project';
