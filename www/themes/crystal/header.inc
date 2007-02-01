@@ -39,39 +39,5 @@ echo '<body dir="'.$htmldirection.'" ';
 if (isset($GO_HEADER['body_arguments'])) echo ' '.$GO_HEADER['body_arguments'];
 echo '><div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>';
 
-$active_link = $GO_LINKS->get_active_link();
-if($active_link && !isset($GO_HEADER['nomessages']))
-{	
-	$img = new image('info');
-	$img->set_attribute('align','middle');
-	$img->set_attribute('style','margin:5px;');
-	
-	$table = new table();
-	$table->set_attribute('class','ErrorBox');
-	$table->set_attribute('id','active_link_div');
-	$row = new table_row();	
-	$row->add_cell(new table_cell($img->get_html()));
-	$row->add_cell(new table_cell(sprintf($strLinkText, $_SESSION['GO_SESSION']['link_description'])));
-	$table->add_row($row);
-	
-	$row = new table_row();
-	$button = new button($strCancelLink, 'parent.checker.location=\''.$GO_CONFIG->host.'checker.php?task=deactivate_linking\';document.location=\''.$active_link['return_to'].'\';');
-	$button->set_attribute('style','margin:0px;');
-	$cell = new table_cell($button->get_html());
-	
-	
-	$link =  "javascript:popup('".$GO_CONFIG->control_url."select/select.php?".
-		"search_type=contact&multiselect=true&GO_HANDLER=".base64_encode($GO_CONFIG->control_url."select/link.php")."&pass_value=id&".
-		"handler_base64_encoded=true&require_email_address=false".
-		"&show_contacts=true&show_companies=true&show_projects=true".
-		"&show_files=true','620','400');";
-
-	$button = new button ($cmdSearch, $link);
-	$cell->add_html_element($button);
-	$cell->set_attribute('colspan','2');
-	$row->add_cell($cell);	
-	$table->add_row($row);	
-	echo $table->get_html();	
-}
 ?>
 <!--Einde header-->

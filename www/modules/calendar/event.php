@@ -329,6 +329,12 @@ switch($task)
 					if (!$event_id = $cal->add_event($event)) {
 						$feedback = $strSaveError;
 					} else {
+						
+						if(isset($_POST['link']['link_id']) && $_POST['link']['link_id']>0)
+						{
+							$GO_LINKS->add_link($_POST['link']['link_id'],$_POST['link']['link_type'], $event['link_id'], 1);
+						}
+						
 						$link_back = add_params_to_url($link_back, 'event_id='.$event_id);
 
 						if(isset($_REQUEST['create_exception']) && $_REQUEST['exception_event_id'] > 0)
@@ -1209,7 +1215,7 @@ if($task == 'availability')
 
 	$row = new table_row();
 	$cell = new table_cell($cal_subject.'*:');
-	$cell->set_attribute('style','width:200px;');
+	$cell->set_attribute('style','width:250px;');
 	$row->add_cell($cell);
 	$input = new input('text','name',$event['name']);
 	$input->set_attribute('maxlength','50');
@@ -1240,6 +1246,22 @@ if($task == 'availability')
 		$subtable->add_row($subrow);
 
 		$row->add_cell(new table_cell($subtable->get_html()));
+		$table->add_row($row);
+	}else {
+		load_control('select_link');
+		
+		$link_id=isset($_REQUEST['link_id']) ? $_REQUEST['link_id'] : 0;
+		$link_type=isset($_REQUEST['link_type']) ? $_REQUEST['link_type'] : 0;
+		$link_text=isset($_REQUEST['link_text']) ? $_REQUEST['link_text'] : 0;
+		$sl = new select_link('link',$link_type,$link_id,$link_text,'event_form');
+		
+		$row = new table_row();
+		$cell = new table_cell($sl->get_link($strCreateLink)->get_html().':');
+		$cell->set_attribute('style','width:250px;white-space:nowrap');
+		$row->add_cell($cell);		
+		$cell = new table_cell($sl->get_field('100%')->get_html());
+		$cell->set_attribute('style','width:100%;');
+		$row->add_cell($cell);
 		$table->add_row($row);
 	}
 
@@ -1285,10 +1307,11 @@ if($task == 'availability')
 			$img->set_attribute('style','border:0px;width:16px;height:16px;margin-right: 5px;');
 			$img->set_attribute('align','absmiddle');
 
-			$hyperlink = new hyperlink($ab->select_contacts('document.event_form.to', $GO_CONFIG->control_url.'select/add.php'), $img->get_html().$sc_participants.':');
+			$hyperlink = new hyperlink($ab->select_contacts('document.event_form.to', $GO_CONFIG->control_url.'select/add.php'), $img->get_html().$sc_participants);
 			$hyperlink->set_attribute('class','normal');
 
 			$cell->add_html_element($hyperlink);
+			$cell->innerHTML .= ':';
 		}else
 		{
 			$cell->innerHTML .= $sc_participants.':';

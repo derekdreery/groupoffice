@@ -78,6 +78,10 @@ switch ($task) {
 				$feedback = $strSaveError;
 			}else
 			{
+				if(isset($_POST['link']['link_id']) && $_POST['link']['link_id']>0)
+				{
+					$GO_LINKS->add_link($_POST['link']['link_id'],$_POST['link']['link_type'], $note['link_id'], 4);
+				}
 
 				if ($_POST['close'] == 'true')
 				{
@@ -165,19 +169,19 @@ if($note_id>0)
 	if($tabstrip->get_active_tab_id() == 'links' && $write_permission)
 	{
 		load_control('links_list');
-		
+
 		$links_list = new links_list($note['link_id'], 'note_form', $link_back);
 		$GO_HEADER['head'] = $links_list->get_header();
-		
+
 		$menu->add_button(
-			'unlink', 
-			$cmdUnlink, 
-			$links_list->get_unlink_handler());		
-		
+		'unlink',
+		$cmdUnlink,
+		$links_list->get_unlink_handler());
+
 		$menu->add_button(
-			'delete_big', 
-			$cmdDelete, 
-			$links_list->get_delete_handler());
+		'delete_big',
+		$cmdDelete,
+		$links_list->get_delete_handler());
 	}
 
 	$form->add_html_element($menu);
@@ -214,11 +218,32 @@ switch($tabstrip->get_active_tab_id())
 		}
 		$table->add_row($row);
 
-		$row = new table_row();
-		$row->add_cell(new table_cell($strOwner));
-		$row->add_cell(new table_cell(show_profile($user_id, '', 'normal', $link_back)));
-		$table->add_row($row);
+		if($note_id>0)
+		{
+			$row = new table_row();
+			$row->add_cell(new table_cell($strOwner.':'));
+			$row->add_cell(new table_cell(show_profile($user_id, '', 'normal', $link_back)));
 
+		}else {
+			load_control('select_link');
+
+			$link_id=isset($_REQUEST['link_id']) ? $_REQUEST['link_id'] : 0;
+			$link_type=isset($_REQUEST['link_type']) ? $_REQUEST['link_type'] : 0;
+			$link_text=isset($_REQUEST['link_text']) ? $_REQUEST['link_text'] : 0;
+			$sl = new select_link('link',$link_type,$link_id,$link_text,'note_form');
+
+			$row = new table_row();
+			$cell = new table_cell($sl->get_link($strCreateLink)->get_html().':');
+			$cell->set_attribute('style','width:250px;white-space:nowrap');
+			$row->add_cell($cell);
+			$cell = new table_cell($sl->get_field('100%')->get_html());
+			$cell->set_attribute('style','width:250px;');
+			$row->add_cell($cell);
+			$table->add_row($row);
+		}
+		$table->add_row($row);
+		
+		
 		$maincell->add_html_element($table);
 		$mainrow->add_cell($maincell);
 

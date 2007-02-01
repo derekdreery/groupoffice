@@ -49,7 +49,7 @@ switch ($task) {
 		$project['start_date'] = date_to_unixtime($_POST['start_date']);
 		$project['end_date'] = date_to_unixtime($_POST['end_date']);
 		$project['name'] = smart_addslashes(trim($_POST['name']));
-		$project['customer'] = smart_addslashes(trim($_POST['customer']));
+		$project['customer'] = smart_addslashes(trim($_POST['link']['text']));
 		$project['description'] = smart_addslashes($_POST['description']);
 		$project['comments'] =smart_addslashes($_POST['comments']);
 		$project['status'] =$_POST['status'];
@@ -98,6 +98,10 @@ switch ($task) {
 
 						$feedback = $strSaveError;
 					} else {
+						if(isset($_POST['link']['link_id']) && $_POST['link']['link_id']>0)
+						{
+							$GO_LINKS->add_link($_POST['link']['link_id'],$_POST['link']['link_type'], $project['link_id'], 5);
+						}
 						if ($_POST['close'] == 'true') {
 							header('Location: '.$return_to);
 							exit ();
@@ -133,6 +137,11 @@ switch ($task) {
 							$GO_SECURITY->delete_acl($project['acl_write']);
 							$feedback = $strSaveError;
 						} else {
+							
+							if(isset($_POST['link']['link_id']) && $_POST['link']['link_id']>0)
+							{
+								$GO_LINKS->add_link($_POST['link']['link_id'],$_POST['link']['link_type'], $project['link_id'], 5);
+							}
 
 							if(isset($_POST['template_id']) && $_POST['template_id'] > 0)
 							{
@@ -411,6 +420,7 @@ switch ($tabstrip->get_active_tab_id()) {
 			}
 
 			$table = new table();
+			$table->set_attribute('style','width:100%');
 
 			if(
 			isset($GO_MODULES->modules['calendar']) &&
@@ -462,7 +472,10 @@ switch ($tabstrip->get_active_tab_id()) {
 				$input = new input('text', 'name', $project['name']);
 				$input->set_attribute('maxlength','50');
 				$input->set_attribute('style','width:250px;');
-				$row->add_cell(new table_cell($input->get_html()));
+				
+				$cell = new table_cell($input->get_html());
+				$cell->set_attribute('style','width:100%');
+				$row->add_cell($cell);
 			} else {
 				$row->add_cell(new table_cell(htmlspecialchars($project['name'])));
 			}
@@ -470,14 +483,34 @@ switch ($tabstrip->get_active_tab_id()) {
 			$table->add_row($row);
 			$row = new table_row();
 
-			$row->add_cell(new table_cell($pm_customer.':*'));
+			
 
 			if ($write_permissions) {
 				$input = new input('text', 'customer', $project['customer']);
 				$input->set_attribute('maxlength','50');
 				$input->set_attribute('style','width:250px;');
 				$row->add_cell(new table_cell($input->get_html()));
+				
+				load_control('select_link');
+				
+				
+				$link_id=isset($_REQUEST['link_id']) ? $_REQUEST['link_id'] : 0;
+				$link_type=isset($_REQUEST['link_type']) ? $_REQUEST['link_type'] : 0;
+				$link_text=isset($_REQUEST['link_text']) ? $_REQUEST['link_text'] : 0;
+				$sl = new select_link('link',$link_type,$link_id,$project['customer'],'projects_form');
+	
+				$row = new table_row();
+				$cell = new table_cell($sl->get_link($pm_customer)->get_html().':');
+				$cell->set_attribute('style','width:250px;white-space:nowrap');
+				$row->add_cell($cell);
+				$cell = new table_cell($sl->get_field('250px')->get_html());
+				$cell->set_attribute('style','width:250px;');
+				$row->add_cell($cell);
+				
+				
+				
 			} else {
+				$row->add_cell(new table_cell($pm_customer.':'));
 				$row->add_cell(new table_cell(htmlspecialchars($project['customer'])));
 			}
 
@@ -512,6 +545,7 @@ switch ($tabstrip->get_active_tab_id()) {
 					$shift_check = new checkbox('shift_events','shift_events', '1', $pm_shift_events);
 					$cell->add_html_element($shift_check);
 				}
+				
 
 				$row->add_cell($cell);
 				$table->add_row($row);

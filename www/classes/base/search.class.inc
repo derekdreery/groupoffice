@@ -39,7 +39,24 @@ class search extends db {
 		}
 		
 		
-		$sql = "SELECT * FROM se_cache WHERE user_id=$user_id AND keywords LIKE '$query' ORDER BY $sort_index $sort_order";
+		$sql = "SELECT * FROM se_cache WHERE user_id=$user_id AND";
+		
+		$keywords = explode(' ', $query);
+			
+		if(count($keywords)>1)
+		{
+			foreach($keywords as $keyword)
+			{				
+				$sql_keywords[] = "keywords LIKE '%$keyword%'";
+			}
+					
+			
+			$sql .= ' ('.implode(' AND ', $sql_keywords).') ';
+		}else {
+			$sql .= " keywords LIKE '%$query%'";
+		}
+		
+		$sql .="ORDER BY $sort_index $sort_order";
 
 		$this->query($sql);
 		$count =$this->num_rows();

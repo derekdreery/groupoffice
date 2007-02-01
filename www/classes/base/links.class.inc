@@ -65,37 +65,6 @@ class GO_LINKS extends db
 		return $this->nextid('links');
 	}
 	
-	function activate_linking($link_id, $link_type, $description='', $return_to='')
-	{
-		$_SESSION['GO_SESSION']['link_type']=$link_type;
-		$_SESSION['GO_SESSION']['link_id']=$link_id;		
-		$_SESSION['GO_SESSION']['link_description']=$description;		
-		$_SESSION['GO_SESSION']['link_return_to']= empty($return_to) ? $_SERVER['REQUEST_URI'] : $return_to;
-	}
-	
-	function deactivate_linking()
-	{
-		unset($_SESSION['GO_SESSION']['link_description'],$_SESSION['GO_SESSION']['link_type'], $_SESSION['GO_SESSION']['link_id']);
-	}
-	
-	function linking_is_active()
-	{
-		return isset($_SESSION['GO_SESSION']['link_id']);
-	}
-	
-	function get_active_link()
-	{
-		if(isset($_SESSION['GO_SESSION']['link_id']))
-		{
-			$link['id']=$_SESSION['GO_SESSION']['link_id'];
-			$link['type']=$_SESSION['GO_SESSION']['link_type'];
-			$link['return_to']=$_SESSION['GO_SESSION']['link_return_to'];
-			return $link;
-		}else
-		{
-			return false;
-		}
-	}
 	
 	function search_link($link_id, $link_type, $opener_action='')
 	{

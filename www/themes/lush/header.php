@@ -16,26 +16,64 @@ header('Content-Type: text/html; charset='.$charset);
 <link href="<?php echo $GO_THEME->theme_url.'css/common.css'; ?>" rel="stylesheet" type="text/css" />
 <link rel="shortcut icon" href="<?php echo $GO_CONFIG->host; ?>lib/favicon.ico" />
 </head>
-<body style="padding:0px;margin:0px;" dir="<?php echo $htmldirection; ?>">
+<body style="padding:0px;margin:0px;" dir="<?php echo $htmldirection; ?>" onblur="document.search_form.reset();">
 <table border="0" cellpadding="0" cellspacing="0" width="100%" height="23">
 <tr>
-	<td class="HeaderBar" align="right">
-			<a class="HeaderBar" href="<?php echo $GO_CONFIG->host; ?>configuration/" target="main">
-			<img src="<?php echo $GO_THEME->images['configuration']; ?>" width="16" height="16" border="0" align="absmiddle" />
-			<?php echo $menu_configuration; ?>
-			</a>
-
-      <a class="HeaderBar" href="javascript:popup('<?php echo $GO_CONFIG->host; ?>doc/index.php', 750, 500);" target="main">
-				<img src="<?php echo $GO_THEME->images['help']; ?>" width="16" height="16" border="0" align="absmiddle" />
-				<?php echo $menu_help; ?>
-      </a>
-
-			<a class="HeaderBar" href="<?php echo $GO_CONFIG->host; ?>index.php?task=logout" target="_parent">
-			<img src="<?php echo $GO_THEME->images['logout']; ?>" width="16" height="16" border="0" align="absmiddle" />
-			<?php echo $menu_logout; ?>
-			</a>
-
+	<td class="HeaderBar" style="color:black;text-align:left;padding-left:5px;vertical-align:top;padding-top:4px;">
+	<?php echo $strLoggedInAs.' '.htmlspecialchars($_SESSION['GO_SESSION']['name']); ?>
 	</td>
+    <td class="HeaderBar" style="padding-top:2px;">
+    
+    <?php
+    load_basic_controls();
+    $form = new form('search_form','post',$GO_CONFIG->control_url.'/select/global_select.php');
+    $form->set_attribute('style','margin:0px;');
+    $form->set_attribute('target','main');
+    $input = new input('text','query',$cmdSearch.'...');
+    $input->set_attribute('onfocus',"javascript:this.value='';");
+    // $input->set_attribute('onblur',"javascript:this.value='".$cmdSearch."...';");
+    $input->set_attribute('style','background-color:#ADC7B5;border:1px solid black;padding-left:1px;');
+
+    $img = new image('magnifier');
+    $img->set_attribute('style','border:0px;margin-right:3px;');
+    $img->set_attribute('align','absmiddle');
+
+    $form->add_html_element($img);
+    $form->add_html_element($input);
+
+    $img = new image('configuration');
+    $img->set_attribute('style','border:0px;margin-right:3px;');
+    $img->set_attribute('align','absmiddle');
+
+    $link = new hyperlink($GO_CONFIG->host.'configuration/',$img->get_html().$menu_configuration);
+    $link->set_attribute('target','main');
+    $link->set_attribute('class','HeaderBar');
+
+    $form->add_html_element($link);
+
+    $img = new image('help');
+    $img->set_attribute('style','border:0px;margin-right:3px;');
+    $img->set_attribute('align','absmiddle');
+
+    $link = new hyperlink($GO_CONFIG->host.'doc/index.php',$img->get_html().$menu_help);
+    $link->set_attribute('target','main');
+    $link->set_attribute('class','HeaderBar');
+
+    $form->add_html_element($link);
+
+    $img = new image('logout');
+    $img->set_attribute('style','border:0px;margin-right:3px;');
+    $img->set_attribute('align','absmiddle');
+
+    $link = new hyperlink($GO_CONFIG->host.'index.php?task=logout',$img->get_html().$menu_logout);
+    $link->set_attribute('target','main');
+    $link->set_attribute('class','HeaderBar');
+
+    $form->add_html_element($link);
+
+    echo $form->get_html();
+    ?>
+    </td>
 </tr>
 </table>
 </body>
