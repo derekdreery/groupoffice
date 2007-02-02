@@ -2,14 +2,14 @@ TODO for 2.17
 ?Show/hide statuses in project list with checkboxes
 ?secure flag in imap_open
 ?Aliases for e-mail accounts
-?Move module theme items to module dir
-*Modular select dialog.
+-Move module theme items to module dir
+-Modular select dialog (Done with global search).
 *Remember header setting in e-mail message
 *Read addressbook for template fields after entering a name in the to field
 *map van e-mail gecomprimeerd opslaan
 *Select columns to display in tables
-*global search
-*link email
+-global search
+-link email (Pro only)
 *Better auto add contacts in mail
 *Birthday events
 
