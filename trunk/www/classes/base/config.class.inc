@@ -58,7 +58,7 @@ class GO_CONFIG
    * @var     string
    * @access  public
    */
-  var $db_version = '218';
+  var $db_version = '219';
 
 	/**
    * The Group-Office release number

@@ -15,6 +15,36 @@
 -- 
 -- Tabel structuur voor tabel `acl`
 -- 
+DROP TABLE IF EXISTS `se_cache`;
+CREATE TABLE `se_cache` (
+  `link_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `table` varchar(50) NOT NULL,
+  `id` int(11) NOT NULL,
+  `module` varchar(50) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `url` varchar(100) NOT NULL,
+  `link_type` int(11) NOT NULL,
+  `type` varchar(20) NOT NULL,
+  `keywords` text NOT NULL,
+  PRIMARY KEY  (`link_id`,`user_id`),
+  KEY `name` (`name`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabel structuur voor tabel `se_last_sync_times`
+-- 
+
+DROP TABLE IF EXISTS `se_last_sync_times`;
+CREATE TABLE `se_last_sync_times` (
+  `user_id` int(11) NOT NULL,
+  `module` varchar(50) NOT NULL,
+  `last_sync_time` int(11) NOT NULL,
+  PRIMARY KEY  (`user_id`,`module`)
+) TYPE=MyISAM;
 
 DROP TABLE IF EXISTS `acl`;
 CREATE TABLE `acl` (
