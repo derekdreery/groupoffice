@@ -1,0 +1,12 @@
+.redStatus, a.redStatus {
+	color: red;
+}
+
+.greenStatus, a.greenStatus{
+	color: green;
+}
+
+.readMore {
+	color: #22437f;
+	font-style: italic;
+}
