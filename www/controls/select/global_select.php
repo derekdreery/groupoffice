@@ -12,7 +12,6 @@ option) any later version.
 require_once("../../Group-Office.php");
 $GO_SECURITY->authenticate();
 
-require_once($GO_LANGUAGE->get_language_file('search'));
 load_basic_controls();
 
 $handler=isset($_REQUEST['handler']) ? smart_stripslashes($_REQUEST['handler']) : '';
@@ -34,7 +33,7 @@ if(isset($_POST['query']))
 
 
 $form->add_html_element(new html_element('h1', $search_global));
-$form->add_html_element(new html_element('p',$search_text));
+$form->add_html_element(new html_element('p',$search_text.':'));
 
 $input = new input('text','query',$_SESSION['search']['query']);
 $input->set_attribute('onfocus','this.select();');
@@ -72,7 +71,12 @@ if(!empty($_SESSION['search']['query']))
 
 	$datatable->set_pagination($count);
 
-	$form->add_html_element(new html_element('p', $count.' '.$search_results));
+	if($count==1)
+	{
+		$form->add_html_element(new html_element('p', $count.' '.$search_result));
+	}else {
+		$form->add_html_element(new html_element('p', $count.' '.$search_results));
+	}
 
 	if($count>0)
 	{

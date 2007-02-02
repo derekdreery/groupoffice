@@ -1252,7 +1252,7 @@ if($task == 'availability')
 		
 		$link_id=isset($_REQUEST['link_id']) ? $_REQUEST['link_id'] : 0;
 		$link_type=isset($_REQUEST['link_type']) ? $_REQUEST['link_type'] : 0;
-		$link_text=isset($_REQUEST['link_text']) ? $_REQUEST['link_text'] : 0;
+		$link_text=isset($_REQUEST['link_text']) ? $_REQUEST['link_text'] : '';
 		$sl = new select_link('link',$link_type,$link_id,$link_text,'event_form');
 		
 		$row = new table_row();

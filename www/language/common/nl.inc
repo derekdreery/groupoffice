@@ -281,3 +281,7 @@ $strTableConfig='Tabel instellingen';
 $strMonthText='Maand tekst';
 $cmdUpload='Uploaden';
 $cmdAttachFile='Bestand bijvoegen';
+$search_text = 'Voer zoekterm in';
+$search_global='Group-Office doorzoeken';
+$search_result='resultaat';
+$search_results='resultaten';

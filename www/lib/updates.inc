@@ -29,8 +29,7 @@ CREATE TABLE `se_last_sync_times` (
   `user_id` int(11) NOT NULL,
   `module` varchar(50) NOT NULL,
   `last_sync_time` int(11) NOT NULL,
-  PRIMARY KEY  (`user_id`),
-  KEY `module` (`module`)
+  PRIMARY KEY  (`user_id`,`module`)
 ) TYPE=MyISAM;
 ";
 

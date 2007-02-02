@@ -418,6 +418,20 @@ if ($company_id > 0) {
 		
 		
 	}
+	
+	if (isset($GO_MODULES->modules['notes']) && $GO_MODULES->modules['notes']['read_permission'])
+	{
+		$menu->add_button('ab_notes', $strNewNote, $GO_MODULES->modules['notes']['url'].'note.php?link_id='.$company['link_id'].'&link_type=3&link_text='.urlencode('('.$ab_company.') '.$company['name']).'&return_to='.urlencode($link_back));
+	}  
+	if (isset($GO_MODULES->modules['calendar']) && $GO_MODULES->modules['calendar']['read_permission'])
+	{
+		$menu->add_button('cal_compose', $strNewEvent, $GO_MODULES->modules['calendar']['url'].'event.php?link_id='.$company['link_id'].'&link_type=3&link_text='.urlencode('('.$ab_company.') '.$company['name']).'&return_to='.urlencode($link_back));
+	}  
+	if (isset($GO_MODULES->modules['todos']) && $GO_MODULES->modules['todos']['read_permission'])
+	{
+		$menu->add_button('todos_new', $strNewTodo, $GO_MODULES->modules['calendar']['url'].'event.php?todo=1&link_id='.$company['link_id'].'&link_type=3&link_text='.urlencode('('.$ab_company.') '.$company['name']).'&return_to='.urlencode($link_back));
+	}  
+	
 	if($tabstrip->get_active_tab_id() == 'contacts')
 	{
 		load_control('datatable');

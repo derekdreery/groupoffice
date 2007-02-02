@@ -500,6 +500,19 @@ if ($contact_id > 0) {
 			$GO_MODULES->modules['filesystem']['url'].'link_upload.php?path=contacts/'.$contact_id.'&link_id='.$contact['link_id'].'&link_type=2&return_to='.urlencode($ll_link_back));
 
 
+			
+	if (isset($GO_MODULES->modules['notes']) && $GO_MODULES->modules['notes']['read_permission'])
+	{
+		$menu->add_button('ab_notes', $strNewNote, $GO_MODULES->modules['notes']['url'].'note.php?link_id='.$contact['link_id'].'&link_type=2&link_text='.urlencode('('.$ab_contact.') '.format_name($contact['last_name'],$contact['first_name'], $contact['middle_name'])).'&return_to='.urlencode($link_back));
+	}  
+	if (isset($GO_MODULES->modules['calendar']) && $GO_MODULES->modules['calendar']['read_permission'])
+	{
+		$menu->add_button('cal_compose', $strNewEvent, $GO_MODULES->modules['calendar']['url'].'event.php?link_id='.$contact['link_id'].'&link_type=2&link_text='.urlencode('('.$ab_contact.') '.format_name($contact['last_name'],$contact['first_name'], $contact['middle_name'])).'&return_to='.urlencode($link_back));
+	}  
+	if (isset($GO_MODULES->modules['todos']) && $GO_MODULES->modules['todos']['read_permission'])
+	{
+		$menu->add_button('todos_new', $strNewTodo, $GO_MODULES->modules['calendar']['url'].'event.php?todo=1&link_id='.$contact['link_id'].'&link_type=2&link_text='.urlencode('('.$ab_contact.') '.format_name($contact['last_name'],$contact['first_name'], $contact['middle_name'])).'&return_to='.urlencode($link_back));
+	}  
 }
 
 

@@ -496,7 +496,7 @@ switch ($tabstrip->get_active_tab_id()) {
 				
 				$link_id=isset($_REQUEST['link_id']) ? $_REQUEST['link_id'] : 0;
 				$link_type=isset($_REQUEST['link_type']) ? $_REQUEST['link_type'] : 0;
-				$link_text=isset($_REQUEST['link_text']) ? $_REQUEST['link_text'] : 0;
+				$link_text=isset($_REQUEST['link_text']) ? $_REQUEST['link_text'] : '';
 				$sl = new select_link('link',$link_type,$link_id,$project['customer'],'projects_form');
 	
 				$row = new table_row();
