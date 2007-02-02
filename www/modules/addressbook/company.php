@@ -77,57 +77,57 @@ if($ab_settings['addressbook_id'] != $addressbook_id)
 //save
 switch ($task) {
 
-	
+
 	case 'save_company' :
 		$company['name'] = isset ($_REQUEST['name']) ? smart_addslashes($_REQUEST['name']) : '';
-	$company['address'] = isset ($_REQUEST['address']) ? smart_addslashes($_REQUEST['address']) : '';
-	$company['address_no'] = isset ($_REQUEST['address_no']) ? smart_addslashes($_REQUEST['address_no']) : '';
-	$company['zip'] = isset ($_REQUEST['zip']) ? smart_addslashes($_REQUEST['zip']) : '';
-	$company['city'] = isset ($_REQUEST['city']) ? smart_addslashes($_REQUEST['city']) : '';
+		$company['address'] = isset ($_REQUEST['address']) ? smart_addslashes($_REQUEST['address']) : '';
+		$company['address_no'] = isset ($_REQUEST['address_no']) ? smart_addslashes($_REQUEST['address_no']) : '';
+		$company['zip'] = isset ($_REQUEST['zip']) ? smart_addslashes($_REQUEST['zip']) : '';
+		$company['city'] = isset ($_REQUEST['city']) ? smart_addslashes($_REQUEST['city']) : '';
 
-	if ($company['zip'] != '' && $company['address'] == '' && $company['city'] == '' && $addressinfo = $ab->get_addressinfo($company['zip'])) {
-		$company['address'] = $addressinfo['street'];
-		$company['city'] = $addressinfo['city'];
-	}
+		if ($company['zip'] != '' && $company['address'] == '' && $company['city'] == '' && $addressinfo = $ab->get_addressinfo($company['zip'])) {
+			$company['address'] = $addressinfo['street'];
+			$company['city'] = $addressinfo['city'];
+		}
 
-	$company['state'] = isset ($_REQUEST['state']) ? smart_addslashes($_REQUEST['state']) : '';
-	$company['country'] = isset ($_REQUEST['country']) ? smart_addslashes($_REQUEST['country']) : '';
+		$company['state'] = isset ($_REQUEST['state']) ? smart_addslashes($_REQUEST['state']) : '';
+		$company['country'] = isset ($_REQUEST['country']) ? smart_addslashes($_REQUEST['country']) : '';
 
-	$company['post_address'] = 
-		(isset ($_REQUEST['post_address'])  && !empty($_REQUEST['post_address'])) ? 
+		$company['post_address'] =
+		(isset ($_REQUEST['post_address'])  && !empty($_REQUEST['post_address'])) ?
 		smart_addslashes($_REQUEST['post_address']) : $company['address'];
-		
-	$company['post_address_no'] = 
-		(isset($_REQUEST['post_address_no']) && !empty($_REQUEST['post_address_no'])) ? 
+
+		$company['post_address_no'] =
+		(isset($_REQUEST['post_address_no']) && !empty($_REQUEST['post_address_no'])) ?
 		smart_addslashes($_REQUEST['post_address_no']) :  $company['address_no'];
-		
-	$company['post_zip'] = 
-		(isset ($_REQUEST['post_zip']) && !empty($_REQUEST['post_zip'])) 
-		 ? smart_addslashes($_REQUEST['post_zip']) : $company['zip'];
-		 
-	$company['post_city'] = 
+
+		$company['post_zip'] =
+		(isset ($_REQUEST['post_zip']) && !empty($_REQUEST['post_zip']))
+		? smart_addslashes($_REQUEST['post_zip']) : $company['zip'];
+
+		$company['post_city'] =
 		(isset ($_REQUEST['post_city']) && !empty($_REQUEST['post_city']))
-			 ? smart_addslashes($_REQUEST['post_city']) : $company['city'];
+		? smart_addslashes($_REQUEST['post_city']) : $company['city'];
 
-	if ($company['post_zip'] != '' && $company['post_address'] == '' && $company['post_city'] == '' && $addressinfo = $ab->get_addressinfo($company['post_zip'])) {
-		$company['post_address'] = $addressinfo['street'];
-		$company['post_city'] = $addressinfo['city'];
-	}
+		if ($company['post_zip'] != '' && $company['post_address'] == '' && $company['post_city'] == '' && $addressinfo = $ab->get_addressinfo($company['post_zip'])) {
+			$company['post_address'] = $addressinfo['street'];
+			$company['post_city'] = $addressinfo['city'];
+		}
 
-	$company['post_state'] = 
+		$company['post_state'] =
 		( isset ($_REQUEST['post_state']) && !empty($_REQUEST['post_state']))
-		 ? smart_addslashes($_REQUEST['post_state']) : $company['state'];
-		 
-	$company['post_country'] = 
-		(isset($_REQUEST['post_country']) && !empty($_REQUEST['post_country']))
-	 ? smart_addslashes($_REQUEST['post_country']) : $company['country'];
+		? smart_addslashes($_REQUEST['post_state']) : $company['state'];
 
-	$company['email'] = isset ($_REQUEST['email']) ? smart_addslashes($_REQUEST['email']) : '';	
-	$company['phone'] = isset ($_REQUEST['phone']) ? smart_addslashes($_REQUEST['phone']) : '';
-	$company['fax'] = isset ($_REQUEST['fax']) ? smart_addslashes($_REQUEST['fax']) : '';
-	$company['homepage'] = isset ($_REQUEST['homepage']) ? smart_addslashes($_REQUEST['homepage']) : '';
-	$company['bank_no'] = isset ($_REQUEST['bank_no']) ? smart_addslashes($_REQUEST['bank_no']) : '';
-	$company['vat_no'] = isset ($_REQUEST['vat_no']) ? smart_addslashes($_REQUEST['vat_no']) : '';
+		$company['post_country'] =
+		(isset($_REQUEST['post_country']) && !empty($_REQUEST['post_country']))
+		? smart_addslashes($_REQUEST['post_country']) : $company['country'];
+
+		$company['email'] = isset ($_REQUEST['email']) ? smart_addslashes($_REQUEST['email']) : '';
+		$company['phone'] = isset ($_REQUEST['phone']) ? smart_addslashes($_REQUEST['phone']) : '';
+		$company['fax'] = isset ($_REQUEST['fax']) ? smart_addslashes($_REQUEST['fax']) : '';
+		$company['homepage'] = isset ($_REQUEST['homepage']) ? smart_addslashes($_REQUEST['homepage']) : '';
+		$company['bank_no'] = isset ($_REQUEST['bank_no']) ? smart_addslashes($_REQUEST['bank_no']) : '';
+		$company['vat_no'] = isset ($_REQUEST['vat_no']) ? smart_addslashes($_REQUEST['vat_no']) : '';
 
 		if ($_REQUEST['homepage']  != '' && !eregi('http', $_REQUEST['homepage'])) {
 			$company['homepage'] = 'http://'.smart_addslashes($_REQUEST['homepage']);
@@ -157,22 +157,22 @@ switch ($task) {
 			}elseif (!isset($_POST['ignore']) && $existing_company_id = $ab->check_company($GO_SECURITY->user_id, $company)) {
 				$link = '<a href="company.php?return_to='.urlencode($return_to).'&company_id='.$existing_company_id.'">'.$ab_here.'</a>';
 				$feedback = sprintf($ab_contact_exists, $link);
-				
+
 				$ignore = true;
-				
+
 			} else {
-	
-				$company['link_id'] = $GO_LINKS->get_link_id();				
-				
-				
+
+				$company['link_id'] = $GO_LINKS->get_link_id();
+
+
 				if ($company_id = $ab->add_company($company)) {
-				
-			
+
+
 
 					if ($_POST['close'] == 'true') {
 						if ($popup) {
 							echo '<script type="text/javascript">'.
-								 'window.close();</script>';
+							'window.close();</script>';
 						} else {
 							if (isset ($_REQUEST['return_company_id'])) {
 								$return_to = add_params_to_url($return_to, 'company_id='.$_REQUEST['company_id']);
@@ -189,29 +189,29 @@ switch ($task) {
 		}
 		break;
 
-		case 'save_custom_fields':
-			require_once($GO_MODULES->modules['custom_fields']['class_path'].'custom_fields.class.inc');
-			$cf = new custom_fields();			
-			
-			$cf->save_fields($_POST['company_tabstrip_'.$company_id], $_POST['link_id']);
-		
-			if ($_POST['close'] == 'true') {
-				if ($popup) {
-					echo '<script type="text/javascript">window.close()</script>';
-				} else {
-					if (isset ($_REQUEST['return_company_id'])) {
-						$return_to = add_params_to_url($return_to, 'company_id='.$_REQUEST['company_id']);
-					}
-					if($return_to != 'javascript:window.close();')
-					{
-						header('Location: '.$return_to);
-					}else
-					{
-						echo '<script type="text/javascript">'.
-						 'window.close();</script>';
-					}
+	case 'save_custom_fields':
+		require_once($GO_MODULES->modules['custom_fields']['class_path'].'custom_fields.class.inc');
+		$cf = new custom_fields();
+
+		$cf->save_fields($_POST['company_tabstrip_'.$company_id], $_POST['link_id']);
+
+		if ($_POST['close'] == 'true') {
+			if ($popup) {
+				echo '<script type="text/javascript">window.close()</script>';
+			} else {
+				if (isset ($_REQUEST['return_company_id'])) {
+					$return_to = add_params_to_url($return_to, 'company_id='.$_REQUEST['company_id']);
 				}
-				exit();
+				if($return_to != 'javascript:window.close();')
+				{
+					header('Location: '.$return_to);
+				}else
+				{
+					echo '<script type="text/javascript">'.
+					'window.close();</script>';
+				}
+			}
+			exit();
 		}
 		break;
 
@@ -239,7 +239,7 @@ if ($company_id > 0 && $company = $ab->get_company($company_id)) {
 	if (!$write_permission = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $company['acl_write'])) {
 		$read_permission = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $company['acl_read']);
 	}
-		$tabstrip = new tabstrip('company_tabstrip_'.$company_id, $strCompany.' '.$ab_id.': '.$company_id, '120', 'company_form', 'vertical');
+	$tabstrip = new tabstrip('company_tabstrip_'.$company_id, $strCompany.' '.$ab_id.': '.$company_id, '120', 'company_form', 'vertical');
 
 	$tabstrip->add_tab('profile', $ab_company_properties);
 	if ($templates_plugin) {
@@ -256,7 +256,7 @@ if ($company_id > 0 && $company = $ab->get_company($company_id)) {
 	{
 		require_once($GO_MODULES->modules['custom_fields']['class_path'].'custom_fields.class.inc');
 		$cf = new custom_fields();
-		
+
 		if($cf->get_authorized_categories(3, $GO_SECURITY->user_id))
 		{
 			while($cf->next_record())
@@ -267,8 +267,8 @@ if ($company_id > 0 && $company = $ab->get_company($company_id)) {
 	}
 } else {
 	$tabstrip = new tabstrip('company_tabstrip_'.$company_id, $ab_new_company, '120', 'company_form', 'vertical');
-	
-	
+
+
 	$write_permission = true;
 	$read_permission = true;
 }
@@ -320,38 +320,38 @@ if ($company_id == 0 || $task == 'save_company') {
 
 	$company['state'] = isset ($_REQUEST['state']) ? smart_stripslashes($_REQUEST['state']) : '';
 	$company['country'] = isset ($_REQUEST['country']) ? smart_stripslashes($_REQUEST['country']) : '';
-	$company['post_address'] = 
-		(isset ($_REQUEST['post_address'])  && !empty($_REQUEST['post_address'])) ? 
-		smart_stripslashes($_REQUEST['post_address']) : $company['address'];
-		
-	$company['post_address_no'] = 
-		(isset($_REQUEST['post_address_no']) && !empty($_REQUEST['post_address_no'])) ? 
-		smart_stripslashes($_REQUEST['post_address_no']) :  $company['address_no'];
-		
-	$company['post_zip'] = 
-		(isset ($_REQUEST['post_zip']) && !empty($_REQUEST['post_zip'])) 
-		 ? smart_stripslashes($_REQUEST['post_zip']) : $company['zip'];
-		 
-	$company['post_city'] = 
-		(isset ($_REQUEST['post_city']) && !empty($_REQUEST['post_city']))
-			 ? smart_stripslashes($_REQUEST['post_city']) : $company['city'];
+	$company['post_address'] =
+	(isset ($_REQUEST['post_address'])  && !empty($_REQUEST['post_address'])) ?
+	smart_stripslashes($_REQUEST['post_address']) : $company['address'];
+
+	$company['post_address_no'] =
+	(isset($_REQUEST['post_address_no']) && !empty($_REQUEST['post_address_no'])) ?
+	smart_stripslashes($_REQUEST['post_address_no']) :  $company['address_no'];
+
+	$company['post_zip'] =
+	(isset ($_REQUEST['post_zip']) && !empty($_REQUEST['post_zip']))
+	? smart_stripslashes($_REQUEST['post_zip']) : $company['zip'];
+
+	$company['post_city'] =
+	(isset ($_REQUEST['post_city']) && !empty($_REQUEST['post_city']))
+	? smart_stripslashes($_REQUEST['post_city']) : $company['city'];
 
 	if ($company['post_zip'] != '' && $company['post_address'] == '' && $company['post_city'] == '' && $addressinfo = $ab->get_addressinfo($company['post_zip'])) {
 		$company['post_address'] = $addressinfo['street'];
 		$company['post_city'] = $addressinfo['city'];
 	}
-	
-	$company['post_state'] = 
-		( isset ($_REQUEST['post_state']) && !empty($_REQUEST['post_state']))
-		 ? smart_stripslashes($_REQUEST['post_state']) : $company['state'];
-		 
-	$company['post_country'] = 
-		(isset($_REQUEST['post_country']) && !empty($_REQUEST['post_country']))
-	 ? smart_stripslashes($_REQUEST['post_country']) : $company['country'];
-	
+
+	$company['post_state'] =
+	( isset ($_REQUEST['post_state']) && !empty($_REQUEST['post_state']))
+	? smart_stripslashes($_REQUEST['post_state']) : $company['state'];
+
+	$company['post_country'] =
+	(isset($_REQUEST['post_country']) && !empty($_REQUEST['post_country']))
+	? smart_stripslashes($_REQUEST['post_country']) : $company['country'];
+
 
 	$company['email'] = isset ($_REQUEST['email']) ? smart_stripslashes($_REQUEST['email']) : '';
-	
+
 	$company['phone'] = isset ($_REQUEST['phone']) ? smart_stripslashes($_REQUEST['phone']) : '';
 	$company['fax'] = isset ($_REQUEST['fax']) ? smart_stripslashes($_REQUEST['fax']) : '';
 	$company['homepage'] = isset ($_REQUEST['homepage']) ? smart_stripslashes($_REQUEST['homepage']) : '';
@@ -360,86 +360,113 @@ if ($company_id == 0 || $task == 'save_company') {
 }
 $GO_HEADER['head'] = '';
 if ($company_id > 0) {
-	
-	
-	$menu = new button_menu();
-	
 
-	
-		
-	if ($company['email'] != '') 
+
+	$menu = new button_menu();
+
+
+
+
+	if ($company['email'] != '')
 	{
 		$full_email = '"'.$company['name'].'" <'.$company['email'].'>';
-			
-		$menu->add_button('ab_email', $ab_send_message, get_mail_to_href(addslashes($full_email), 0, $company_id));		
-		
+
+		$menu->add_button('ab_email', $ab_send_message, get_mail_to_href(addslashes($full_email), 0, $company_id));
+
 		if (isset ($GO_MODULES->modules['email']) && $GO_MODULES->modules['email']['read_permission']) {
-				$menu->add_button('ml_search', $ab_search_sender, 
-					$GO_MODULES->modules['email']['url'].'index.php?task=set_search_query&from='.$company['email'].'&return_to='.urlencode($link_back));	
+			$menu->add_button('ml_search', $ab_search_sender,
+			$GO_MODULES->modules['email']['url'].'index.php?task=set_search_query&from='.$company['email'].'&return_to='.urlencode($link_back));
 		}
 	}
-	
-	if ($templates_plugin) 
+
+	if ($templates_plugin)
 	{
-		if ($tp->has_oo_templates($GO_SECURITY->user_id)) 
+		if ($tp->has_oo_templates($GO_SECURITY->user_id))
 		{
-			$menu->add_button('new_letter', $ab_oo_doc, 
-				"javascript:popup('".$GO_MODULES->url.'templates/download_oo_template.php?company_id='.$company_id."','','');");	
+			$menu->add_button('new_letter', $ab_oo_doc,
+			"javascript:popup('".$GO_MODULES->url.'templates/download_oo_template.php?company_id='.$company_id."','','');");
 		}
 
-		if ($company['email'] != '' && $tp->get_mailing_groups($GO_SECURITY->user_id) && $write_permission) 
+		if ($company['email'] != '' && $tp->get_mailing_groups($GO_SECURITY->user_id) && $write_permission)
 		{
 			$tabstrip->add_tab('mailings', $ab_mailings);
 		}
 	}
 
-	if ($write_permission) 
-	{	
+	if ($write_permission)
+	{
 		$tabstrip->add_tab('links', $strLinks);
-		
-		$menu->add_button('link', $strCreateLink, $GO_LINKS->search_link($company['link_id'], 3, 'opener.document.location=\''.add_params_to_url($link_back,'active_tab=links').'\';'));
-		
+
+
+		$ll_link_back =$link_back;
+		if(!strstr($ll_link_back, 'event_strip'))
+		{
+			$ll_link_back=add_params_to_url($link_back,'active_tab=links');
+		}
+
+		$menu->add_button('link', $strCreateLink, $GO_LINKS->search_link($company['link_id'], 3, 'opener.document.location=\''.$ll_link_back.'\';'));
+
 		if($tabstrip->get_active_tab_id() == 'links')
 		{
 			load_control('links_list');
-			$links_list = new links_list($company['link_id'], 'company_form', $link_back);
+			$links_list = new links_list($company['link_id'], 'company_form', $ll_link_back);
 			$GO_HEADER['head'] .= $links_list->get_header();
 
 			$menu->add_button(
-				'unlink', 
-				$cmdUnlink, 
-				$links_list->get_unlink_handler());		
-						
+			'unlink',
+			$cmdUnlink,
+			$links_list->get_unlink_handler());
+
 			$menu->add_button(
-				'delete_big', 
-				$cmdDelete, 
-				$links_list->get_delete_handler());
+			'delete_big',
+			$cmdDelete,
+			$links_list->get_delete_handler());
 		}
-		
-		
+
+
 	}
-	
+
+	$menu->add_button(
+	'upload',
+	$cmdAttachFile,
+	$GO_MODULES->modules['filesystem']['url'].'link_upload.php?path=companies/'.$company_id.'&link_id='.$company['link_id'].'&link_type=3&return_to='.urlencode($ll_link_back));
+
+
+
+	//create contact directory with same permissions as project
+	if(!file_exists($GO_CONFIG->file_storage_path.'companies/'.$company_id))
+	{
+		mkdir_recursive($GO_CONFIG->file_storage_path.'companies/'.$company_id);
+	}
+	require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+	$fs = new filesystem();
+	if(!$fs->find_share($GO_CONFIG->file_storage_path.'companies/'.$company_id))
+	{
+		$fs->add_share($addressbook['user_id'], $GO_CONFIG->file_storage_path.'companies/'.$contact_id,'company',$addressbook['acl_read'], $addressbook['acl_write']);
+	}
+
+
 	if (isset($GO_MODULES->modules['notes']) && $GO_MODULES->modules['notes']['read_permission'])
 	{
 		$menu->add_button('ab_notes', $strNewNote, $GO_MODULES->modules['notes']['url'].'note.php?link_id='.$company['link_id'].'&link_type=3&link_text='.urlencode('('.$ab_company.') '.$company['name']).'&return_to='.urlencode($link_back));
-	}  
+	}
 	if (isset($GO_MODULES->modules['calendar']) && $GO_MODULES->modules['calendar']['read_permission'])
 	{
 		$menu->add_button('cal_compose', $strNewEvent, $GO_MODULES->modules['calendar']['url'].'event.php?link_id='.$company['link_id'].'&link_type=3&link_text='.urlencode('('.$ab_company.') '.$company['name']).'&return_to='.urlencode($link_back));
-	}  
+	}
 	if (isset($GO_MODULES->modules['todos']) && $GO_MODULES->modules['todos']['read_permission'])
 	{
 		$menu->add_button('todos_new', $strNewTodo, $GO_MODULES->modules['calendar']['url'].'event.php?todo=1&link_id='.$company['link_id'].'&link_type=3&link_text='.urlencode('('.$ab_company.') '.$company['name']).'&return_to='.urlencode($link_back));
-	}  
-	
+	}
+
 	if($tabstrip->get_active_tab_id() == 'contacts')
 	{
 		load_control('datatable');
 		$datatable = new datatable('contacts_table', false, 'company_form');
 		$datatable->set_attribute('style','width:100%');
-		
+
 		$GO_HEADER['head'] = $datatable->get_header();
-		
+
 		if($datatable->task == 'delete')
 		{
 			foreach($datatable->selected as $contact_id)
@@ -449,24 +476,24 @@ if ($company_id > 0) {
 				$ab->update_contact($contact);
 			}
 		}
-		
+
 		$empl_menu = new button_menu();
 
-		if ($write_permission) 
-		{	
-			$empl_menu->add_button('add_contact', 	$ab_add_new, 
-				$GO_MODULES->url.'contact.php?company_id='.$company_id.
-				'&addressbook_id='.$addressbook_id.'&return_to='.
-				rawurlencode($link_back));
-				
-			$empl_menu->add_button('addressbook', 	$ab_add_existing, 
-				$ab->select_contacts('', $GO_MODULES->url.
-					'add_employees.php?company_id='.$company_id, 'true', 'false', 'false', 'true', 'false','false', 'id'));
-					
-			$empl_menu->add_button('delete_big', 	$cmdDelete, 
-				$datatable->get_delete_handler());				
-			
-		}		
+		if ($write_permission)
+		{
+			$empl_menu->add_button('add_contact', 	$ab_add_new,
+			$GO_MODULES->url.'contact.php?company_id='.$company_id.
+			'&addressbook_id='.$addressbook_id.'&return_to='.
+			rawurlencode($link_back));
+
+			$empl_menu->add_button('addressbook', 	$ab_add_existing,
+			$ab->select_contacts('', $GO_MODULES->url.
+			'add_employees.php?company_id='.$company_id, 'true', 'false', 'false', 'true', 'false','false', 'id'));
+
+			$empl_menu->add_button('delete_big', 	$cmdDelete,
+			$datatable->get_delete_handler());
+
+		}
 
 		$form->add_html_element($empl_menu);
 	}else
@@ -501,17 +528,17 @@ switch ($active_tab_id) {
 	case 'custom_fields' :
 
 
-			$form->add_html_element(new input('hidden', 'link_id', $company['link_id']));
-			if($cf_table = $cf->get_fields_table($tabstrip->get_active_tab_id(), $company['link_id']))
-			{
-				$tabstrip->add_html_element($cf_table);
-				
-				if ($write_permission) {
-					$tabstrip->add_html_element(new button($cmdOk, "javascript:_save('save_custom_fields', 'true');"));
-					$tabstrip->add_html_element(new button($cmdApply, "javascript:_save('save_custom_fields', 'false')"));				
-				}			
+		$form->add_html_element(new input('hidden', 'link_id', $company['link_id']));
+		if($cf_table = $cf->get_fields_table($tabstrip->get_active_tab_id(), $company['link_id']))
+		{
+			$tabstrip->add_html_element($cf_table);
+
+			if ($write_permission) {
+				$tabstrip->add_html_element(new button($cmdOk, "javascript:_save('save_custom_fields', 'true');"));
+				$tabstrip->add_html_element(new button($cmdApply, "javascript:_save('save_custom_fields', 'false')"));
 			}
-			$tabstrip->add_html_element(new button($cmdClose, "javascript:document.location='".$return_to."';"));
+		}
+		$tabstrip->add_html_element(new button($cmdClose, "javascript:document.location='".$return_to."';"));
 		break;
 
 	case 'contacts' :

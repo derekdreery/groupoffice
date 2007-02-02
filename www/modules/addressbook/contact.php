@@ -499,8 +499,18 @@ if ($contact_id > 0) {
 			$cmdAttachFile,
 			$GO_MODULES->modules['filesystem']['url'].'link_upload.php?path=contacts/'.$contact_id.'&link_id='.$contact['link_id'].'&link_type=2&return_to='.urlencode($ll_link_back));
 
-
-			
+	//create contact directory with same permissions as project
+	if(!file_exists($GO_CONFIG->file_storage_path.'contacts/'.$contact_id))
+	{
+		mkdir_recursive($GO_CONFIG->file_storage_path.'contacts/'.$contact_id);
+	}
+	require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+	$fs = new filesystem();
+	if(!$fs->find_share($GO_CONFIG->file_storage_path.'contacts/'.$contact_id))
+	{
+		$fs->add_share($addressbook['user_id'], $GO_CONFIG->file_storage_path.'contacts/'.$contact_id,'contact',$addressbook['acl_read'], $addressbook['acl_write']);
+	}
+		
 	if (isset($GO_MODULES->modules['notes']) && $GO_MODULES->modules['notes']['read_permission'])
 	{
 		$menu->add_button('ab_notes', $strNewNote, $GO_MODULES->modules['notes']['url'].'note.php?link_id='.$contact['link_id'].'&link_type=2&link_text='.urlencode('('.$ab_contact.') '.format_name($contact['last_name'],$contact['first_name'], $contact['middle_name'])).'&return_to='.urlencode($link_back));
