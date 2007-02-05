@@ -404,7 +404,7 @@ class ldap_users extends base_users {
 					$entry['uidnumber'][0] : null;
 
 				// Fetch the acl_id of this email address.
-				$row['key'] = $this->getOrCreateAclId( $mail, $uidnumber );
+				$row[$key] = $this->getOrCreateAclId( $mail, $uidnumber );
 
 				// Proceed with the next key.
 				continue;
