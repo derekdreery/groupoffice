@@ -196,17 +196,24 @@ if ($mailing_group_id > 0 && $mailing_group = $tp->get_mailing_group($mailing_gr
       /*<textarea onfocus="document.onkeypress = kH;" onkeydown="actb_checkkey(event);" onkeyup="actb_tocomplete(this,event,autocomplete_contacts);" onblur="actb_removedisp(this);document.onkeypress='';" class="textbox" type="text" name="mail_to" style="width:100%;height:46px;"><?php echo (isset($mail_to) ? htmlspecialchars($mail_to) : ''); ?></textarea>
       */
 
-      require($GO_MODULES->modules['email']['class_path'].'email_autocomplete.class.inc');
+      if(isset($GO_MODULES->modules['addressbook']) && $GO_MODULES->modules['addressbook']['read_permission'])
+      {
+      	require($GO_MODULES->modules['addressbook']['class_path'].'email_autocomplete.class.inc');
 
-      $autocomplete = new email_autocomplete(
-      'mail_to',
-      'mail_to',
-      $mail_to,
-      'sendform'
-      );
+      	$autocomplete = new email_autocomplete(
+      	'mail_to',
+      	'mail_to',
+      	$mail_to,
+      	'sendform'
+      	);
 
-      $autocomplete->set_attribute('style','width:100%;height:46px;z-index:9001');
-      echo $autocomplete->get_html();
+      	$autocomplete->set_attribute('style','width:100%;height:46px;z-index:9001');
+      	echo $autocomplete->get_html();
+      }else {
+      	$textarea=new textarea('mail_to', $mail_to);
+      	$textarea->set_attribute('style','width:100%;height:46px;z-index:9001');
+      	echo $textarea->get_html();
+      }
       ?>
       </td>
       </tr>
@@ -225,15 +232,23 @@ if ($mailing_group_id > 0 && $mailing_group = $tp->get_mailing_group($mailing_gr
 	</td>
 	<td colspan="2">	
 	<?php
-	$autocomplete = new email_autocomplete(
-	'mail_cc',
-	'mail_cc',
-	$mail_cc,
-	'sendform'
-	);
+	if(isset($GO_MODULES->modules['addressbook']) && $GO_MODULES->modules['addressbook']['read_permission'])
+	{
+		$autocomplete = new email_autocomplete(
+		'mail_cc',
+		'mail_cc',
+		$mail_cc,
+		'sendform'
+		);
 
-	$autocomplete->set_attribute('style','width:100%;height:46px;z-index:9000');
-	echo $autocomplete->get_html();
+		$autocomplete->set_attribute('style','width:100%;height:46px;z-index:9000');
+		echo $autocomplete->get_html();
+	}else {
+		$textarea=new textarea('mail_to', $mail_to);
+		$textarea->set_attribute('style','width:100%;height:46px;z-index:9001');
+		echo $textarea->get_html();
+	}
+
   ?>
 	</td>
 	</tr>
@@ -252,15 +267,22 @@ if ($mailing_group_id > 0 && $mailing_group = $tp->get_mailing_group($mailing_gr
 	  </td>
 	  <td colspan="2">
 	  <?php
-	  $autocomplete = new email_autocomplete(
-	'mail_bcc',
-	'mail_bcc',
-	$mail_bcc,
-	'sendform'
-	);
+	  if(isset($GO_MODULES->modules['addressbook']) && $GO_MODULES->modules['addressbook']['read_permission'])
+	  {
+	  	$autocomplete = new email_autocomplete(
+	  	'mail_bcc',
+	  	'mail_bcc',
+	  	$mail_bcc,
+	  	'sendform'
+	  	);
 
-	$autocomplete->set_attribute('style','width:100%;height:46px;');
-	echo $autocomplete->get_html();
+	  	$autocomplete->set_attribute('style','width:100%;height:46px;z-index:9000');
+	  	echo $autocomplete->get_html();
+	  }else {
+	  	$textarea=new textarea('mail_to', $mail_to);
+	  	$textarea->set_attribute('style','width:100%;height:46px;z-index:9001');
+	  	echo $textarea->get_html();
+	  }
 	  ?>
 	  </tr>
 	  
@@ -562,6 +584,26 @@ function open_attachments()
 }
 
 
+<<<<<<< .working
+=======
+function smart_focus()
+{
+	if(document.sendform.mail_to.value!='')
+	{
+		var oEditor = FCKeditorAPI.GetInstance('mail_body') ;
+
+		//try
+		//{
+		//oEditor.MakeEditable();
+		//}
+		//catch (e) {}
+		oEditor.Focus();
+	}else
+	{
+		document.sendform.mail_to.focus();
+	}
+}
+>>>>>>> .merge-right.r118
 function close_attachments()
 {
 	if(eval(attach_popup))
