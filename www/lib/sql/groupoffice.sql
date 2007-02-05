@@ -24,7 +24,7 @@ CREATE TABLE `se_cache` (
   `module` varchar(50) NOT NULL,
   `name` varchar(100) NOT NULL,
   `description` varchar(255) NOT NULL,
-  `url` varchar(100) NOT NULL,
+  `url` varchar(255) NOT NULL,
   `link_type` int(11) NOT NULL,
   `type` varchar(20) NOT NULL,
   `keywords` text NOT NULL,
