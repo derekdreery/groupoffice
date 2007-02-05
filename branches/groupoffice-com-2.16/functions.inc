@@ -1448,12 +1448,7 @@ function convert_links($html)
 	$html = str_replace("\r", '', $html);
 	$html = str_replace("\n",' ', $html);
 	
-	if ($GO_MODULES->modules['email'] && $GO_MODULES->modules['email']['read_permission']) {
-		$html = preg_replace("/(href=([\"']?)mailto:)([\w\.\-]+)(@)([\w\.\-\"]+)\b/i", 
-			"href=\"javascript:top.main.popup('".$GO_MODULES->modules['email'] ['url'].
-			"send.php?mail_to=$3$4$5','".$GO_CONFIG->composer_width."','".
-			$GO_CONFIG->composer_height."')\" class=\"blue\"", $html);
-	}
+	
 	//$html = preg_replace("/\b((href=([\"']?)http(s?):\/\/))([\w\.\?\=\&]+)([\/\w+\.\?\=\&\:\~]+)([\"']?)/i",
 	//	"target=$3_blank$3 class=$3blue$3 href=$3http$4://$5$6$7", $html);
 
@@ -1462,6 +1457,20 @@ function convert_links($html)
 
 	$regexp="/<a.+?href=([\"']?)".str_replace('/','\\/', $GO_CONFIG->full_url)."(.+?)>/i";
 	$html = preg_replace($regexp, "<a target=$1main$1 class=$1blue$1 href=$1".$GO_CONFIG->host."$2$3>", $html);
+	
+	
+	if ($GO_MODULES->modules['email'] && $GO_MODULES->modules['email']['read_permission']) {
+		/*$html = preg_replace("/(href=([\"']?)mailto:)([\w\.\-]+)(@)([\w\.\-\"]+)\b/i", 
+			"href=\"javascript:top.main.popup('".$GO_MODULES->modules['email'] ['url'].
+			"send.php?mail_to=$3$4$5','".$GO_CONFIG->composer_width."','".
+			$GO_CONFIG->composer_height."')\" class=\"blue\"", $html);
+			*/
+			
+		$regexp="/<a.+?href=([\"']?)mailto:([\w\.\-]+)(@)([\w\.\-]+)(.+?)>/i";
+		$html = preg_replace($regexp, '<a class="blue" href="javascript:top.main.popup(\''.$GO_MODULES->modules['email']['url'].
+			"send.php?mail_to=$2$3$4','".$GO_CONFIG->composer_width."','".
+			$GO_CONFIG->composer_height."');\">", $html);
+	}
 	
 	return $html;
 }
