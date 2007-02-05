@@ -64,7 +64,6 @@ header('Content-Type: text/html; charset='.$charset);
     $img->set_attribute('align','absmiddle');
 
     $link = new hyperlink($GO_CONFIG->host.'index.php?task=logout',$img->get_html().$menu_logout);
-    $link->set_attribute('target','main');
     $link->set_attribute('class','HeaderBar');
 
     $form->add_html_element($link);
