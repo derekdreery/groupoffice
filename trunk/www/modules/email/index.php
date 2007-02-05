@@ -76,6 +76,7 @@ $disable_accounts = ($GO_CONFIG->get_setting('em_disable_accounts') == 'true') ?
 $page_title = $lang_modules['email'];
 
 $GO_HEADER['head'] = '<script type="text/javascript" src="'.$GO_MODULES->url.'email.js"></script>';
+$GO_HEADER['head'] .= '<script type="text/javascript" src="'.$GO_CONFIG->host.'javascript/base64.js"></script>';
 
 
 require_once ($GO_THEME->theme_path."header.inc");
@@ -98,7 +99,7 @@ function save_message()
 
 function link_message()
 {
-	popup('link_message.php?account_id='+message.document.forms[0].account_id.value+'&uid='+message.document.forms[0].uid.value+'&mailbox='+message.document.forms[0].mailbox.value);	
+	popup('<?php echo $GO_CONFIG->control_url; ?>select/global_select.php?multiselect=true&handler='+Base64.encode('<?php echo $GO_MODULES->url; ?>link_message.php?account_id='+message.document.forms[0].account_id.value+'&uid='+message.document.forms[0].uid.value+'&mailbox='+message.document.forms[0].mailbox.value),'600','400');	
 }
 
 function composer(action)
