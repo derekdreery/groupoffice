@@ -118,7 +118,7 @@ class email_autocomplete extends html_element
 		global $GO_MODULES;
 		
 		$this->form_name=$form_name;
-		$this->xml_source=$GO_MODULES->modules['email']['url'].'search_email.php';
+		$this->xml_source=$GO_MODULES->modules['addressbook']['url'].'search_email_xml.php';
 		$this->xml_fields=array('full_email'=>'','name'=>'','email'=>'');
 		$this->xml_root_element='contact';
 		
