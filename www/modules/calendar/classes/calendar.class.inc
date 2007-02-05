@@ -1844,9 +1844,11 @@ class calendar extends db
 
 				for($m=$month;$m<=($month+$event['repeat_every']);$m+=$event['repeat_every'])
 				{
+					//echo $m.'<br>';
 					for($d=0;$d<31;$d++)
 					{
-						$occurence_time = mktime($event['start_hour'], $event['start_min'], 0, $m, $day+$d, $year);
+						//$occurence_time = mktime($event['start_hour'], $event['start_min'], 0, $m, $day+$d, $year);
+						$occurence_time = mktime($event['start_hour'], $event['start_min'], 0, $m, $d, $year);
 						$new_tzo = get_timezone_offset($occurence_time);
 						$diff = ($original_tzo-$new_tzo)*3600;
 						$occurence_time += $diff;
