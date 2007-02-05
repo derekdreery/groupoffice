@@ -627,6 +627,23 @@ class filesystem extends db
 			return is_readable($path);
 		}else
 		{
+			//not really elegant solution for calendar file permissions but it works
+			global $GO_MODULES;			
+			if(isset($GO_MODULES->modules['calendar']) && $GO_MODULES->modules['calendar']['read_permission'] && strpos($path, $GO_CONFIG->file_storage_path.'events')===0)
+			{
+				require_once($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc');
+				$cal = new calendar();
+		
+				$event_id=basename(dirname($path));
+				$event = $cal->get_event($event_id);
+				if(!$event)
+				{
+					return false;
+				}else {
+					return $cal->has_read_permission($user_id, $event, true);	
+				}				
+			}
+			
 			if ($share = $this->find_share($path))
 			{
 				global $GO_SECURITY;
@@ -653,6 +670,23 @@ class filesystem extends db
 			return is_writable($path);
 		}else
 		{
+			//not really elegant solution for calendar file permissions but it works
+			global $GO_MODULES;			
+			if(isset($GO_MODULES->modules['calendar']) && $GO_MODULES->modules['calendar']['read_permission'] && strpos($path, $GO_CONFIG->file_storage_path.'events')===0)
+			{
+				require_once($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc');
+				$cal = new calendar();
+				
+				$event_id=basename(dirname($path));
+				$event = $cal->get_event($event_id);
+				if(!$event)
+				{
+					return false;
+				}else {
+					return $cal->has_write_permission($user_id, $event);	
+				}				
+			}
+			
 			global $GO_SECURITY;
 			if ($share = $this->find_share($path))
 			{
