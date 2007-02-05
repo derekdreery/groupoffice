@@ -1,15 +1,8 @@
 <?php
-$updates[30]=array();
+$updates[31]=array();
 
-ALTER TABLE `cal_events` ADD `busy` ENUM( '0', '1' ) NOT NULL ;
-update cal_events set busy='1';
-
-
-select link_id,count(*) as n
- from cal_events
-group by link_id
-having  n > 1
-
+$updates[30][] = "ALTER TABLE `cal_events` ADD `busy` ENUM( '0', '1' ) NOT NULL ;";
+$updates[30][] = "update cal_events set busy='1';";
 $updates[29][] = "TRUNCATE TABLE `cal_holidays` ";
 $updates[29][] = "ALTER TABLE `cal_holidays` ADD INDEX ( `user_id` ) ";
 $updates[29][] = "ALTER TABLE `cal_holidays` DROP calendar_id";
