@@ -329,21 +329,24 @@ if ($project_id > 0) {
 			'javascript:popup(\'print_projects.php?type=tl&project_id='.$project_id.'\');');*/
 		}
 
-		$menu->add_button(
-		'upload',
-		$cmdAttachFile,
-		$GO_MODULES->modules['filesystem']['url'].'link_upload.php?path=projects/'.$project_id.'&link_id='.$project['link_id'].'&link_type=5&return_to='.urlencode($link_back));
-
-		//create project directory with same permissions as project
-		if(!file_exists($GO_CONFIG->file_storage_path.'projects/'.$project_id))
+		if(isset($GO_MODULES->modules['filesystem']) && $GO_MODULES->modules['filesystem']['read_permission'])
 		{
-			mkdir_recursive($GO_CONFIG->file_storage_path.'projects/'.$project_id);
-		}
-		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
-		$fs = new filesystem();
-		if(!$fs->find_share($GO_CONFIG->file_storage_path.'projects/'.$project_id))
-		{
-			$fs->add_share($project['user_id'], $GO_CONFIG->file_storage_path.'projects/'.$project_id,'project',$project['acl_read'], $project['acl_write']);
+			$menu->add_button(
+			'upload',
+			$cmdAttachFile,
+			$GO_MODULES->modules['filesystem']['url'].'link_upload.php?path=projects/'.$project_id.'&link_id='.$project['link_id'].'&link_type=5&return_to='.urlencode($link_back));
+	
+			//create project directory with same permissions as project
+			if(!file_exists($GO_CONFIG->file_storage_path.'projects/'.$project_id))
+			{
+				mkdir_recursive($GO_CONFIG->file_storage_path.'projects/'.$project_id);
+			}
+			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+			$fs = new filesystem();
+			if(!$fs->find_share($GO_CONFIG->file_storage_path.'projects/'.$project_id))
+			{
+				$fs->add_share($project['user_id'], $GO_CONFIG->file_storage_path.'projects/'.$project_id,'project',$project['acl_read'], $project['acl_write']);
+			}
 		}
 
 	}
