@@ -128,6 +128,7 @@ if($task == 'accept')
 		$body .= $cal->event_to_html($event);
 
 		$subject = sprintf($cal_your_resource_declined_mail_subject, $calendar['name']);
+
 		$user = $GO_USERS->get_user($event['user_id']);
 		sendmail($user['email'], $_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name'], $subject, $body, '3', 'text/HTML');
 	}
@@ -138,6 +139,39 @@ if($task == 'accept')
 
 switch($task)
 {
+	case 'activate_linking':
+		$link_event = $cal->get_event($event_id);
+		$link_id = $link_event['link_id'];
+		if(empty($link_event['link_id']))
+		{
+			$update_event['id'] = $event_id;
+			$update_event['link_id'] = $link_id = $GO_LINKS->get_link_id();
+			$cal->update_event($update_event);
+		}
+		$GO_LINKS->activate_linking($link_id, 1, $link_event['name'], $link_back);
+
+		header('Location: '.$GO_CONFIG->host.'link.php');
+		exit();
+		break;
+
+	case 'create_link':
+		if($link = $GO_LINKS->get_active_link())
+		{
+			$link_event = $cal->get_event($event_id);
+			$link_id = $link_event['link_id'];
+			if(empty($link_event['link_id']))
+			{
+				$update_event['id'] = $event_id;
+				$update_event['link_id'] = $link_id = $GO_LINKS->get_link_id();
+				$cal->update_event($update_event);
+			}
+			$GO_LINKS->add_link($link['id'], $link['type'], $link_id, 1);
+			$GO_LINKS->deactivate_linking();
+			header('Location: '.$link['return_to']);
+			exit();
+		}
+		break;
+
 	case 'save_event':
 		$is_resource=false;
 		$event['name'] = smart_addslashes(trim($_POST['name']));
@@ -145,7 +179,6 @@ switch($task)
 		$event['location'] = smart_addslashes(trim($_POST['location']));
 		$event['permissions'] = isset($_POST['permissions']) ? $_POST['permissions'] : '1';
 
-		$event['busy']=isset($_POST['busy']) ? '1' : '0';
 		$event['timezone'] = $_SESSION['GO_SESSION']['timezone'];
 		$event['DST'] = $_SESSION['GO_SESSION']['DST'];
 		$event['reminder'] = isset($_POST['reminder_multiplier']) ? $_POST['reminder_multiplier'] * $_POST['reminder_value'] : 0;
@@ -222,7 +255,7 @@ switch($task)
 
 			$event['repeat_type'] = $_POST['repeat_type'];
 			if ($event['repeat_type'] != REPEAT_NONE) {
-				 $event['repeat_end_time'] = isset ($_POST['repeat_forever']) ? '0' : local_to_gmt_time(date_to_unixtime($_POST['repeat_end_date'].' '.$end_hour.':'.$end_min));
+				$event['repeat_end_time'] = isset ($_POST['repeat_forever']) ? '0' : local_to_gmt_time(date_to_unixtime($_POST['repeat_end_date'].' '.$end_hour.':'.$end_min));
 			} else {
 				$event['repeat_end_time'] = 0;
 			}
@@ -277,7 +310,7 @@ switch($task)
 			$custom_fields=isset($_POST['custom_fields']) ? array_map('smart_addslashes', $_POST['custom_fields']) : array();
 			$event['custom_fields'] = $cal->group_values_to_xml($custom_fields, $calendar['group_id']);
 
-			if($event['busy']=='0' || $event['todo'] == '1' || isset($_POST['ignore_conflicts']))
+			if($event['todo'] == '1' || isset($_POST['ignore_conflicts']))
 			{
 				$conflicts = array();
 			}else
@@ -289,7 +322,6 @@ switch($task)
 				}
 
 				$conflicts = $cal->get_conflicts($event['start_time'], $event['end_time'], $calendars, $_POST['to']);
-				//var_dump($conflicts);
 				unset($conflicts[$event_id]);
 			}
 
@@ -323,18 +355,14 @@ switch($task)
 				} else {
 
 					$event['user_id']=$GO_SECURITY->user_id;
-					
-					$event['link_id'] = $GO_LINKS->get_link_id();
+					if($link = $GO_LINKS->get_active_link())
+					{
+						$event['link_id'] = $GO_LINKS->get_link_id();
+					}
 
 					if (!$event_id = $cal->add_event($event)) {
 						$feedback = $strSaveError;
 					} else {
-						
-						if(isset($_POST['link']['link_id']) && $_POST['link']['link_id']>0)
-						{
-							$GO_LINKS->add_link($_POST['link']['link_id'],$_POST['link']['link_type'], $event['link_id'], 1);
-						}
-						
 						$link_back = add_params_to_url($link_back, 'event_id='.$event_id);
 
 						if(isset($_REQUEST['create_exception']) && $_REQUEST['exception_event_id'] > 0)
@@ -769,6 +797,14 @@ switch($task)
 				}
 
 
+
+				if(isset($link) && $link)
+				{
+					$GO_LINKS->add_link($link['id'], $link['type'], $event['link_id'], 1);
+					$GO_LINKS->deactivate_linking();
+
+				}
+
 				$send_invitation = false;
 				if ($_POST['close'] == 'true') {
 					header('Location: '.$return_to);
@@ -903,7 +939,7 @@ if ($task != 'save_event' && $task != 'change_event' && ($event_id > 0 || isset 
 	if ($event['repeat_type'] != REPEAT_NONE) {
 		if ($event['repeat_forever'] == '0') {
 			//$event['repeat_end_date'] = date($_SESSION['GO_SESSION']['date_format'], gmt_to_local_time($event['repeat_end_time']-86400));
-            $event['repeat_end_date'] = date($_SESSION['GO_SESSION']['date_format'], gmt_to_local_time($event['repeat_end_time']));
+			$event['repeat_end_date'] = date($_SESSION['GO_SESSION']['date_format'], gmt_to_local_time($event['repeat_end_time']));
 		} else {
 			$event['repeat_end_date'] = date($_SESSION['GO_SESSION']['date_format'], $event['end_time']);
 		}
@@ -1080,12 +1116,6 @@ if ($task != 'save_event' && $task != 'change_event' && ($event_id > 0 || isset 
 
 	$event['repeat_type'] = isset ($_POST['repeat_type']) ? $_POST['repeat_type'] : REPEAT_NONE;
 	$event['all_day_event'] = isset ($_POST['all_day_event']) ? $_POST['all_day_event'] : '0';
-	if($task=='save_event' && !isset($_POST['busy']))
-	{
-		$event['busy']='0';
-	}else {
-		$event['busy']='1';
-	}
 	if($task == 'save_event' || $task == 'change_event')
 	{
 		$event['repeat_forever'] = isset ($_POST['repeat_forever']) ? $_POST['repeat_forever'] : '0';
@@ -1136,14 +1166,7 @@ $GO_HEADER['head'] .= color_selector::get_header();
 if($event_id>0)
 {
 	load_control('links_list');
-	
-	$ll_link_back =$link_back;
-	if(!strstr($ll_link_back, 'event_strip'))
-	{
-		$ll_link_back=add_params_to_url($link_back, 'event_strip=links');		
-	}
-	
-	$links_list = new links_list($event['link_id'], 'event_form', $ll_link_back);
+	$links_list = new links_list($event['link_id'], 'event_form', $link_back);
 	$GO_HEADER['head'] .= $links_list->get_header();
 }
 
@@ -1214,8 +1237,8 @@ if($task == 'availability')
 	$table->set_attribute('style','width:100%');
 
 	$row = new table_row();
-	$cell = new table_cell($cal_subject.'*:');
-	$cell->set_attribute('style','width:250px;');
+	$cell = new table_cell($strName.'*:');
+	$cell->set_attribute('style','width:200px;');
 	$row->add_cell($cell);
 	$input = new input('text','name',$event['name']);
 	$input->set_attribute('maxlength','50');
@@ -1246,22 +1269,6 @@ if($task == 'availability')
 		$subtable->add_row($subrow);
 
 		$row->add_cell(new table_cell($subtable->get_html()));
-		$table->add_row($row);
-	}else {
-		load_control('select_link');
-		
-		$link_id=isset($_REQUEST['link_id']) ? $_REQUEST['link_id'] : 0;
-		$link_type=isset($_REQUEST['link_type']) ? $_REQUEST['link_type'] : 0;
-		$link_text=isset($_REQUEST['link_text']) ? $_REQUEST['link_text'] : '';
-		$sl = new select_link('link',$link_type,$link_id,$link_text,'event_form');
-		
-		$row = new table_row();
-		$cell = new table_cell($sl->get_link($strCreateLink)->get_html().':');
-		$cell->set_attribute('style','width:250px;white-space:nowrap');
-		$row->add_cell($cell);		
-		$cell = new table_cell($sl->get_field('100%')->get_html());
-		$cell->set_attribute('style','width:100%;');
-		$row->add_cell($cell);
 		$table->add_row($row);
 	}
 
@@ -1319,11 +1326,11 @@ if($task == 'availability')
 			require($GO_MODULES->modules['addressbook']['class_path'].'email_autocomplete.class.inc');
 
 			$autocomplete = new email_autocomplete(
-					'to',
-					'to',
-					$event['to'],
-					'0'
-					);
+			'to',
+			'to',
+			$event['to'],
+			'0'
+			);
 
 			$autocomplete->set_attribute('style','width:100%;height:50px');
 
@@ -1337,17 +1344,19 @@ if($task == 'availability')
 			$cell->innerHTML .= $sc_participants.':';
 			$row->add_cell($cell);
 			$cell = new table_cell();
-
+			
 			$textarea = new textarea('to', $event['to']);
 			$textarea->set_attribute('style','width:100%;height:50px');
 			$cell->add_html_element($textarea);
 			$row->add_cell($cell);
 		}
-		$table->add_row($row);	
+
+		$table->add_row($row);
+		
 		if ($event_id > 0) {
 			$row = new table_row();
 			$row->add_cell(new table_cell());
-
+			
 			$checkbox =new checkbox('send_invitation', 'send_invitation', 'true', $cal_resend_invitation, $send_invitation);
 			$row->add_cell(new table_cell($checkbox->get_html()));
 			$table->add_row($row);
@@ -1437,9 +1446,6 @@ if($task == 'availability')
 	$checkbox = new checkbox('all_day_event', 'all_day_event', '1', $sc_notime, $all_day_event);
 	$checkbox->set_attribute('onclick', 'javascript:disable_time();');
 	$subrow->add_cell(new table_cell($checkbox->get_html()));
-	
-	
-	
 	$subtable->add_row($subrow);
 
 	$row->add_cell(new table_cell($subtable->get_html()));
@@ -1561,9 +1567,7 @@ if($task == 'availability')
 			$row->add_cell(new table_cell($subtable->get_html()));
 		}else
 		{
-			$checkbox = new checkbox('busy', 'busy', '1', $cal_show_busy, ($event['busy'] == '1'));
-			
-			$row->add_cell(new table_cell($event_select->get_html().$checkbox->get_html()));
+			$row->add_cell(new table_cell($event_select->get_html().$todo_select->get_html()));
 		}
 		$table->add_row($row);
 	}
@@ -2179,7 +2183,7 @@ if($task == 'availability')
 		{
 			$menu = new button_menu();
 
-			/*if($GO_LINKS->linking_is_active())
+			if($GO_LINKS->linking_is_active())
 			{
 				if($GO_LINKS->get_active_link())
 				{
@@ -2189,10 +2193,7 @@ if($task == 'availability')
 			{
 				$menu->add_button('link', $strCreateLink, "javascript:document.event_form.task.value='activate_linking';document.event_form.submit();");
 			}
-			*/
-			
-			$menu->add_button('link', $strCreateLink, $GO_LINKS->search_link($event['link_id'], 1, 'opener.document.location=\''.$ll_link_back.'\';'));
-			
+
 			$menu->add_button(
 			'unlink',
 			$cmdUnlink,
@@ -2202,11 +2203,6 @@ if($task == 'availability')
 			'delete_big',
 			$cmdDelete,
 			$links_list->get_delete_handler());
-			
-			$menu->add_button(
-			'upload',
-			$cmdAttachFile,
-			$GO_MODULES->modules['filesystem']['url'].'link_upload.php?path=events/'.$event_id.'&link_id='.$event['link_id'].'&link_type=1&return_to='.urlencode($ll_link_back));
 
 			$form->add_html_element($menu);
 
@@ -2557,7 +2553,17 @@ function disable_completion_time(value)
 	document.event_form.completion_min.disabled=disabled;
 }
 
-
+function create_link()
+{
+	document.event_form.task.value='create_link';
+	document.event_form.submit();
+}
+function activate_linking(goto_url)
+{
+	document.event_form.goto_url.value=goto_url;
+	document.event_form.task.value='activate_linking';
+	document.event_form.submit();
+}
 
 
 </script>
