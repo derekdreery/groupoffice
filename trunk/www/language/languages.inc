@@ -247,3 +247,9 @@ $languages['fi']['language_file'] = 'fi';
 $languages['fi']['thousands_seperator'] = ' ';
 $languages['fi']['timezone'] = 2;
 $languages['fi']['DST'] = 1;
+
+$languages['hu'] = $europe_default;
+$languages['hu']['description'] = 'Hungarian';
+$languages['hu']['language_file'] = 'hu';
+$languages['hu']['timezone'] = 1;
+$languages['hu']['DST'] = 1;
