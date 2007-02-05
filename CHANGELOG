@@ -1,26 +1,41 @@
-TODO
+TODO for 2.17
 ?Show/hide statuses in project list with checkboxes
 ?secure flag in imap_open
 ?Aliases for e-mail accounts
-?Move module theme items to module dir
-*Modular select dialog.
+-Move module theme items to module dir
+-Modular select dialog (Done with global search).
 *Remember header setting in e-mail message
 *Read addressbook for template fields after entering a name in the to field
 *map van e-mail gecomprimeerd opslaan
+*Select columns to display in tables
+-global search
+-link email (Pro only)
+*Better auto add contacts in mail
+*Birthday events
 *Configure which calendars show on summary screen
 
--Shipping module
--Dynamish Pulldown menu
--Automatisch toevoegen contacten verbeteren
--Koppelen met autocomplete
--Email koppellen
--Webshop meertalig
--Coderen van GO orders nieuwe webshop
--Billing module docs
--Backup knop
--Verschil tussen decodering email bericht en lijst?
 
 CHANGELOG
+
+2006/02/05 Version 2.16-10
+
+Bug fixes:
+-Files with quotes went wrong in filesystem
+-Missing image for adding users
+-html chars in pulldown of email module
+-Allow duplicate email addresses with differt names in autocomplete
+-Sync recurrence 1 day minus bug
+-Double file properties bug
+-E-mail attachment character encoding
+-Email addresses character encoding
+-Double frame on user profile close
+
+Languages updated:
+-Spanish
+-French
+-Catalan
+-Hungarian
+-Italian
 
 2006/11/29 Version 2.16-4
 -Translation module

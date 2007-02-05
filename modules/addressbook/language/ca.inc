@@ -1,230 +1,180 @@
 <?php
+//Translated with Group-Office translate module
 require_once($GO_LANGUAGE->get_fallback_language_file('addressbook'));
-
-//contacts
-$contacts_title = "Llibreta d'adreces";
-$contacts_no_contacts = "No s'han trobat contactes.";
-$contacts_members = "Membres";
-$contacts_contacts = "Contactes";
-$contacts_add = "Nou contacte";
-$contacts_groups = "Grups";
-$contacts_other = "Altres contactes";
-$contacts_move_to_group = "Mou els contactes seleccionats al grup...";
-$groups_no_groups = "No teniu cap grup";
-$contacts_group = "Grup";
-$contacts_empty_group = "Fés servir la llista combo per moure contactes cap aquest grup.";
-$contacts_this_group = 'aquest grup';
-
-$add_contacts_text = "Introduiu l'adreça de correu electrònic i el codi d'autorització als membres i feu clic a 'D'acord'";
-$add_contacts_success = "Usuari afegit correctament";
-$add_contacts_wrong = "Correu electrònic o codi d'autorització incorrectes.";
-$add_personal_text = "Feu clic a 'Desa' per afegir el contacte.  Els camps marcats amb un '*' són obligatoris.";
-$contacts_select = "Seleccioneu els contactes per afegir i feu clic a 'D'acord'.";
-$contacts_select_title = "Contactes";
-$contact_profile = "Perfil";
-$user_profile = "Perfil de l'usuari";
-$contacts_authorise = "Autorització";
-$contacts_add_member = "Afegeix aquest membre als vostres contactes";
-$strConfirmSynchronise = "Això actualitzará aquest contacte amb dades que l'usuari ha entrat ell mateix. Els vostres canvis manuals es perdran. Esteu segurs de voler continuar?";
-$contacts_import = "Importa";
-$contacts_export = "Exporta";
-$contacts_export_text = "Seleccioneu el tipus de CSV que voldrieu crear.";
-$contacts_delete = "Suprimeix";
-
-$contacts_import_text_group = "Seleccioneu un grup i el fitxer CSV. Feu clic a 'D'acord'.";
-$fbNoFile = "No s'ha rebut cap fitxer";
-$fbPleaseWait = "Si us plau, espereu mentre es carrega el fitxer...";
-
-$strNotIncluded = "No l'importis";
-$contacts_import_feedback = "Les següents columnes han estat trobades al vostre fitxer CSV.<br />";
-$contacts_import_feedback .= "Seleccioneu el grup que voleu importar o crear automàticament els grups basats en el fitxer.<br />";
-$contacts_import_feedback .= " Feu coincidir les columnes de Group-Office amb les columnes del fitxer i assegureu-vos que heu seleccionat dues vegades la mateixa columna.";
-$contacts_separator = "Els valors són separats per";
-$contacts_no_separator = "No heu introduït cap caràcter separador.";
-$fbFilename = "Nom de fitxer";
-$contacts_import_title = "Importa Llibreta d'adreces";
-$contacts_import_success = "Fitxer importat correctament";
-$contacts_import_double = "Heu seleccionat una més columnes dues vegades. Corregiu-ho i torneu-ho a provar.";
-//changed:
-$contacts_import_noname = 'Heu de seleccionar els camps \'Nom\' i \'Cognoms\' ';
-$contacts_import_incompatible = "Format de fitxer incompatible.<br /><br />Un fitxer CSV és un fitxer amb els valors separats per punts o comes.";
-$strMember = "Membre";
-$contact_exist_warning = "<b>Nota:</b> Aquest usuari ja hi és a la vostra llista de contactes.";
-$contacts_add_to_group = "Afegeix els usuaris seleccionats a contactes en el grup...";
-$contacts_add_to = "Afegeix els usuaris seleccionats a contactes";
-$contacts_add_user = "afegeix";
-$contacts_edit = "Edita";
-$contacts_no_select = "No heu seleccionat res";
-$contacts_this_contact = "aquest contacte";
-
-$contacts_seperator_text = 'Valors separats per';
-$contacts_quote = 'Valors tancats per';
-$contacts_clrf = 'Línies acabades per';
-$contacts_auto_group = 'Crea grups automàticament des del fitxer';
-$contacts_import_to_group = 'Importa al grup';
-
-$contacts_search = 'Cerca';
-$cmdSearch = 'Cerca';
-$contacts_search_text = "Feu clic a una lletra o entreu una frase de cerca i feu clic a 'cerca'. Podeu fer servir '*' com a caràcter comodí.";
-$contacts_results = 'resultats';
-$contacts_result = 'resultat';
-
-
-$contacts_color = 'Color';
-
-$contacts_colors['black'] = 'Negre';
-$contacts_colors['red'] = 'Vermell';
-$contacts_colors['green'] = 'Verd';
-$contacts_colors['blue'] = 'Blau';
-$contacts_colors['pink'] = 'Rosa';
-$contacts_colors['orange'] = 'Taronja';
-$contacts_colors['brown'] = 'Marró';
-
-$ab_addressbooks = 'Llibreta d\'adreces';
-$ab_owner = 'Propietari';
-$ab_subscribed = 'Subscrit';
-$ab_new_ab = 'Nova llibreta d\'adreces';
-$ab_addressbook_exists = 'Ja existeix una llibreta d\'adreces amb aquest nom';
-$ab_addressbook = 'Llibreta d\'adreces';
-$ab_no_addressbook = 'Sense llibreta d\'adreces';
-$contacts_select_single = 'Feu clic al contacte per seleccionar aquesta persona';
-
-$ab_group_exists = 'Ja existeix una llibreta d\'adreces amb aquest nom';
-$ab_group_on_file = 'Agrupa els contactes basats en el fitxer';
-$ab_default = 'Per defecte';
-
-//translation required
-$ab_edit_contact = 'Feu clic a \'D\'acord\' per desar els canvis. Els camps marcats amb un \'*\' són obligatoris';
-$ab_group_on_file = 'Agrupa els contactes basats en el fitxer';
-$ab_default = 'Per defecte';
-$ab_browse = 'Navega';
-$ab_comment = 'Comenta';
-
-$ab_contact = 'Contacte';
-$ab_send_message = 'Nou correu electrònic';
-$ab_new_event = 'Nova cita';
-
-$ab_templates = 'Plantilles';
-$ab_your_templates = 'Les teves';
-$ab_all_templates = 'Tots/es';
-
-$template_type[0] = 'Correu electrònic';
-$template_type[1] = 'OpenOffice.Org';
-$ab_type = 'Tipus';
-$ab_template_exists = 'Ja existeix una plantilla amb aquest nom.';
-
-$sir_madam['M'] = 'Senyor';
-$sir_madam['F'] = 'Senyora';
-
-$ab_upload_oo = 'Carrega la plantilla OpenOffice.org';
-$ab_upload_nofile = 'Error mentre s\'enviava el fitxer.';
-
-$ab_oo_doc = 'Document de text';
-$ab_select_template = 'Seleccioneu la plantilla per aquest document:';
-$ab_add_field_data = 'Podeu fer servir els següents valors en el vostre document:';
-$ab_datafield = 'Camp de dades';
-
-$ab_no_template = 'Sense plantilla';
-$ab_new_note = 'Nota';
-
-$ab_events = 'Cites';
-
-$ab_new_contact = 'Nou&nbsp;contacte';
-$ab_new_company = 'Nova&nbsp;empresa';
-$ab_companies = 'Empreses';
-$ab_company_properties = 'Perfil&nbsp;de&nbsp;l\'&nbsp;empresa';
-$ab_bank_no = 'Número&nbsp;de&nbsp;banc';
-$ab_companies_count_single = 'empresa';
-$ab_companies_count = 'empreses';
-$ab_no_companies = 'No s\'han trobat empreses';
-$ab_no_company = 'Sense empresa';
-
-$ab_import_type = 'Importa';
-$ab_no_company_found = 'No s\'han trobat empreses';
-$ab_search_company = 'Cerca empresa';
-$ab_edit_company = 'Canvia el perfil de l\'empresa';
-$ab_new_group = 'Nou grup';
-$ab_export_type = 'Exporta';
-
-$ab_custom_fields = 'Camps&nbsp;de&nbsp;dades&nbsp;extra';
-$ab_field_size = 'Mida';
-
-$ab_new_field = 'Nou camp de dades';
-$ab_invalid_field_size = 'Mida incorrecta. Trieu un valor entre 10 i 255.';
-$ab_field_exists = 'Ja existeix un camp amb aquest nom.';
-
-$ab_employees = 'Empleats';
-$ab_no_employees = 'No s\'han trobat empleats';
-
-$ab_employee_count_single = 'empleat';
-$ab_employee_count_multiple = 'empleats';
-$ab_vat_no = 'Número de VAT';
-
-$ab_add_new = 'Afegeix-ne un de nou';
-$ab_add_existing = 'Afegeix-ne un d\'existent';
-
-$ab_access = 'Accés';
-//1.98
-$ab_mailings = 'Llista de correus';
-$ab_mailing_groups = 'Grup de llistes de correus';
-$ab_no_mailing_groups = 'No s\'ha trobat cap grup de llistes de correus';
-$ab_no_templates = 'No s\'han trobat plantilles';
-$ab_mailing_group_exists = 'Ja existeix un grup de llistes de correus amb aquest nom.';
-$ab_contacts_count_single = 'contacte';
-$ab_contacts_count_multiple = 'contactes';
-$ab_new_mailing = 'Nova llista de correus';
-$ab_all_your_addressbooks = 'totes les vostres llibretes d\'adreces';
-
-$ab_search_for = 'Cerca';
-$ab_search_on = 'a';
-$ab_search_keyword = 'cerca frase';
-$ab_wildcard = '(Feu servir \'%\' com a comodí)';
-
-//2.03
-$ab_copy_read_acl = 'Copia els permisos de lectura a contactes i empreses';
-$ab_copy_write_acl = 'Copia els permisos d\'escriptura a contactes i empreses';
-
-$ab_catagory_exists = 'Ja existeix una categoria amb aquest nom.';
-$ab_add_catagory = 'Afegeix una categoria';
-$ab_add_field = 'Afegeix un camp';
-$ab_catagory = 'Categoria';
-
-//2.04
-$ab_todos = 'Per-fer';
-
-
-//2.05
-$ab_download = 'Descarrega';
-$ab_download_template = 'Feu clic al botó \'Descarrega\' per descarregar i editar la plantilla al vostre ordinador.';
-$ab_upload = 'Carrega';
-//modified string:
-$ab_upload_oo_text = 'Quan hàgiu acabat d\'editar la vostra plantilla amb OpenOffice.org, haurieu de transferir-la cap a Group-Office. Seleccioneu el fitxer i feu clic a \'Carrega\' per transferir la vostra plantilla.';
-$ab_file_type = 'Tipus de fitxer';
-$ab_import_vcf_file_ok = 'El fitxer carregat sembla ser correcte. Si us plau, feu clic a \'D\'acord\' per associar-lo a la llibreta d\'adreces.';
-$ab_import_failed = 'Ha fallat la importació.';
-//modified string:
-$contacts_import_text = "Seleccioneu el fitxer que conté les dades per importar i feu clic a 'D'acord'";
-
-//2.06
-$ab_select_mailing_groups = 'Seleccioneu el grup de llistes de correus d\'on pertany aquest contacte';
-
-//2.11
-$ab_move_to_ab = 'Mou els contactes seleccionats a la llibreta d\'adreces...';
-$ab_move_com_to_ab = 'Mou les empreses seleccionades a la llibreta d\'adreces...';
-
-//2.12
-$ab_search_sender = 'Cerca correu electrònic';
-
-$ab_contact_exists = 'Aquest contacte ja sembla que existeixi. Feu clic %s per anar al contacte existent or feu clic a \'D\'acord\' o \'Aplica\' un altre cop per desar igualment aquest contacte.';
-$ab_company_exists = 'Aquesta empresa ja sembla que existeixi. Feu clic %s per anar a l\'empresa existent or feu clic a \'D\'acord\' o \'Aplica\' un altre cop per desar igualment aquesta empresa.';
-$ab_here = 'aquí';
-
-//2.13
-$ab_search_for_keyword = 'per';
-
-$ab_search_in = 'Cerca dins'; //changed
-$ab_search_on_users = 'Cerca a';
-
+$contacts_title='Llibreta d\'adreces';
+$contacts_no_contacts='No s\'han trobat contactes.';
+$contacts_members='Membres';
+$contacts_contacts='Contactes';
+$contacts_add='Nou contacte';
+$contacts_groups='Grups';
+$contacts_other='Altres contactes';
+$contacts_move_to_group='Mou els contactes seleccionats al grup...';
+$groups_no_groups='No teniu cap grup';
+$contacts_group='Grup';
+$contacts_empty_group='Fés servir la llista combo per moure contactes cap aquest grup.';
+$contacts_this_group='aquest grup';
+$add_contacts_text='Introduïu l\'adreça de correu electrònic i el codi d\'autorització als membres i feu clic a \'D\'acord\'';
+$add_contacts_success='Usuari afegit correctament';
+$add_contacts_wrong='Correu electrònic o codi d\'autorització incorrectes.';
+$add_personal_text='Feu clic a \'Desa\' per afegir el contacte.  Els camps marcats amb un \'*\' són obligatoris.';
+$contacts_select='Seleccioneu els contactes per afegir i feu clic a \'D\'acord\'.';
+$contacts_select_title='Contactes';
+$contact_profile='Perfil';
+$user_profile='Perfil de l\'usuari';
+$contacts_authorise='Autorització';
+$contacts_add_member='Afegir aquest membre als vostres contactes';
+$strConfirmSynchronise='Això actualitzará aquest contacte amb dades que l\'usuari ha entrat ell mateix. Els vostres canvis manuals es perdran. Esteu segurs de voler continuar?';
+$contacts_import='Importa';
+$contacts_export='Exporta';
+$contacts_export_text='Seleccioneu el tipus de CSV que voldrieu crear.';
+$contacts_delete='Suprimeix';
+$contacts_import_text_group='Seleccioneu un grup i el fitxer CSV. Feu clic a \'D\'acord\'.';
+$fbNoFile='No s\'ha rebut cap fitxer';
+$fbPleaseWait='Si us plau, espereu mentre es carrega el fitxer...';
+$strNotIncluded='No l\'importis';
+$contacts_import_feedback='Les següents columnes han estat trobades al vostre fitxer CSV.<br />';
+$contacts_import_feedback .=' Feu coincidir les columnes de Group-Office amb les columnes del fitxer i assegureu-vos que heu seleccionat dues vegades la mateixa columna.';
+$contacts_separator='Els valors són separats per';
+$contacts_no_separator='No heu introduït cap caràcter separador.';
+$fbFilename='Nom de fitxer';
+$contacts_import_title='Importa Llibreta d\'adreces';
+$contacts_import_success='Fitxer importat correctament';
+$contacts_import_double='Heu seleccionat una més columnes dues vegades. Corregiu-ho i torneu-ho a provar.';
+$contacts_import_noname='Heu de seleccionar els camps \'Nom\' i \'Cognoms\' ';
+$contacts_import_incompatible='Format de fitxer incompatible.<br /><br />Un fitxer CSV és un fitxer amb els valors separats per punts o comes.';
+$strMember='Membre';
+$contact_exist_warning='<b>Nota:</b> Aquest usuari ja hi és a la vostra llista de contactes.';
+$contacts_add_to_group='Afegeix els usuaris seleccionats a contactes en el grup...';
+$contacts_add_to='Afegeix els usuaris seleccionats a contactes';
+$contacts_add_user='afegeix';
+$contacts_edit='Edita';
+$contacts_no_select='No heu seleccionat res';
+$contacts_this_contact='aquest contacte';
+$contacts_seperator_text='Valors separats per';
+$contacts_quote='Valors tancats per';
+$contacts_clrf='Línies acabades per';
+$contacts_auto_group='Crea grups automàticament des del fitxer';
+$contacts_import_to_group='Importa al grup';
+$contacts_search='Cerca';
+$cmdSearch='Cerca';
+$contacts_search_text='Feu clic a una lletra o entreu una frase de cerca i feu clic a \'cerca\'. Podeu fer servir \'*\' com a caràcter comodí.';
+$contacts_results='resultats';
+$contacts_result='resultat';
+$contacts_color='Color';
+$contacts_colors['black']='Negre';
+$contacts_colors['red']='Vermell';
+$contacts_colors['green']='Verd';
+$contacts_colors['blue']='Blau';
+$contacts_colors['pink']='Rosa';
+$contacts_colors['orange']='Taronja';
+$contacts_colors['brown']='Marró';
+$ab_addressbooks='Llibreta d\'adreces';
+$ab_owner='Propietari';
+$ab_subscribed='Subscrit';
+$ab_new_ab='Nova llibreta d\'adreces';
+$ab_addressbook_exists='Ja existeix una llibreta d\'adreces amb aquest nom';
+$ab_addressbook='Llibreta d\'adreces';
+$ab_no_addressbook='Sense llibreta d\'adreces';
+$contacts_select_single='Feu clic al contacte per seleccionar aquesta persona';
+$ab_group_exists='Ja existeix una llibreta d\'adreces amb aquest nom';
+$ab_group_on_file='Agrupa els contactes basats en el fitxer';
+$ab_default='Per defecte';
+$ab_edit_contact='Feu clic a \'D\'acord\' per desar els canvis. Els camps marcats amb un \'*\' són obligatoris';
+$ab_browse='Navega';
+$ab_comment='Comentari';
+$ab_contact='Contacte';
+$ab_send_message='Nou correu electrònic';
+$ab_new_event='Nova cita';
+$ab_templates='Plantilles';
+$ab_your_templates='Les teves';
+$ab_all_templates='Tots/es';
+$template_type[0]='Correu electrònic';
+$template_type[1]='OpenOffice.Org';
+$ab_type='Tipus';
+$ab_template_exists='Ja existeix una plantilla amb aquest nom.';
+$sir_madam['M']='Senyor';
+$sir_madam['F']='Senyora';
+$ab_upload_oo='Carrega la plantilla OpenOffice.org';
+$ab_upload_nofile='Error mentre s\'enviava el fitxer.';
+$ab_oo_doc='Document de text';
+$ab_select_template='Seleccioneu la plantilla per aquest document:';
+$ab_add_field_data='Podeu fer servir els següents valors en el vostre document:';
+$ab_datafield='Camp de dades';
+$ab_no_template='Sense plantilla';
+$ab_new_note='Nota';
+$ab_events='Cites';
+$ab_new_contact='Nou&nbsp;contacte';
+$ab_new_company='Nova&nbsp;empresa';
+$ab_companies='Empreses';
+$ab_company_properties='Perfil&nbsp;de&nbsp;l\'&nbsp;empresa';
+$ab_bank_no='Número&nbsp;de&nbsp;banc';
+$ab_companies_count_single='empresa';
+$ab_companies_count='empreses';
+$ab_no_companies='No s\'han trobat empreses';
+$ab_no_company='Sense empresa';
+$ab_import_type='Importa';
+$ab_no_company_found='No s\'han trobat empreses';
+$ab_search_company='Cerca empresa';
+$ab_edit_company='Canvia el perfil de l\'empresa';
+$ab_new_group='Nou grup';
+$ab_export_type='Exporta';
+$ab_custom_fields='Camps&nbsp;de&nbsp;dades&nbsp;extra';
+$ab_field_size='Mida';
+$ab_new_field='Nou camp de dades';
+$ab_invalid_field_size='Mida incorrecta. Trieu un valor entre 10 i 255.';
+$ab_field_exists='Ja existeix un camp amb aquest nom.';
+$ab_employees='Empleats';
+$ab_no_employees='No s\'han trobat empleats';
+$ab_employee_count_single='empleat';
+$ab_employee_count_multiple='empleats';
+$ab_vat_no='NIF/CIF';
+$ab_add_new='Afegeix-ne un de nou';
+$ab_add_existing='Afegeix-ne un d\'existent';
+$ab_access='Accés';
+$ab_mailings='Llista de correus';
+$ab_mailing_groups='Grup de llistes de correus';
+$ab_no_mailing_groups='No s\'ha trobat cap grup de llistes de correus';
+$ab_no_templates='No s\'han trobat plantilles';
+$ab_mailing_group_exists='Ja existeix un grup de llistes de correus amb aquest nom.';
+$ab_contacts_count_single='contacte';
+$ab_contacts_count_multiple='contactes';
+$ab_new_mailing='Nova llista de correus';
+$ab_all_your_addressbooks='totes les vostres llibretes d\'adreces';
+$ab_search_for='Cerca';
+$ab_search_on='a';
+$ab_search_keyword='cerca frase';
+$ab_wildcard='(Feu servir \'%\' com a comodí)';
+$ab_copy_read_acl='Copia els permisos de lectura a contactes i empreses';
+$ab_copy_write_acl='Copia els permisos d\'escriptura a contactes i empreses';
+$ab_catagory_exists='Ja existeix una categoria amb aquest nom.';
+$ab_add_catagory='Afegeix una categoria';
+$ab_add_field='Afegeix un camp';
+$ab_catagory='Categoria';
+$ab_todos='Per-fer';
+$ab_download='Descarrega';
+$ab_download_template='Feu clic al botó \'Descarrega\' per descarregar i editar la plantilla al vostre ordinador.';
+$ab_upload='Carrega';
+$ab_upload_oo_text='Quan hàgiu acabat d\'editar la vostra plantilla amb OpenOffice.org, haurieu de transferir-la cap a Group-Office. Seleccioneu el fitxer i feu clic a \'Carrega\' per transferir la vostra plantilla.';
+$ab_file_type='Tipus de fitxer';
+$ab_import_vcf_file_ok='El fitxer carregat sembla ser correcte. Si us plau, feu clic a \'D\'acord\' per associar-lo a la llibreta d\'adreces.';
+$ab_import_failed='Ha fallat la importació.';
+$contacts_import_text='Seleccioneu el fitxer que conté les dades per importar i feu clic a \'D\'acord\'';
+$ab_select_mailing_groups='Seleccioneu el grup de llistes de correus d\'on pertany aquest contacte';
+$ab_move_to_ab='Mou els contactes seleccionats a la llibreta d\'adreces...';
+$ab_move_com_to_ab='Mou les empreses seleccionades a la llibreta d\'adreces...';
+$ab_search_sender='Cerca correu electrònic';
+$ab_contact_exists='Aquest contacte ja sembla que existeixi. Feu clic %s per anar al contacte existent or feu clic a \'D\'acord\' o \'Aplica\' un altre cop per desar igualment aquest contacte.';
+$ab_company_exists='Aquesta empresa ja sembla que existeixi. Feu clic %s per anar a l\'empresa existent or feu clic a \'D\'acord\' o \'Aplica\' un altre cop per desar igualment aquesta empresa.';
+$ab_here='aquí';
+$ab_search_for_keyword='per';
+$ab_search_in='Cerca dins';
 $ab_users_count_single='usuari';
 $ab_users_count_multiple='usuaris';
 $ab_no_users='No s\'han trobat usuaris';
+$ab_select_addressbook='Seleccioneu una llibreta d\'adreces';
+$ab_move='Mou';
+$ab_file='Fitxer';
+$ab_template_uploaded='El document s\'ha desat';
+$ab_select_mailing_group='Seleccioneu el grup al qual voleu enviar el missatge';
+$ab_id='núm.';
+?>
