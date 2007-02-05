@@ -1,8 +1,0 @@
-<?php
-$module['forum']['description'] = 'Module Forum servant à la communication au sein de l\'entreprise à travers un système de questions/réponses où l\'on peut y joindre des fichiers en tous genres';
-$module['forum']['version'] = '0.85';
-$module['forum']['release_date'] = '2005-01-26';
-$module['forum']['status'] = 'Stable';
-$module['forum']['authors'][] = array('name'=>'RUSSO Bruno', 'email'=>'bruno@lccy.net');
-?>
-	
