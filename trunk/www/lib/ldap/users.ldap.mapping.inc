@@ -65,7 +65,6 @@ $users_ldap_mapping = array(
 	  'work_state'	=> 'st',
 	  'work_city'	=> 'l',
 	  'work_fax'	=> 'facsimiletelephonenumber',
-	  'photo'	=> 'jpegphoto',
 	  'acl_id'	=> 'goAclID',
 	  'date_format'	=> 'godateformat',
 	  'time_format'	=> 'gotimeformat',
