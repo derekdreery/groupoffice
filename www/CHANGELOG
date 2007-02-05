@@ -17,6 +17,26 @@ TODO for 2.17
 
 CHANGELOG
 
+2006/02/05 Version 2.16-10
+
+Bug fixes:
+-Files with quotes went wrong in filesystem
+-Missing image for adding users
+-html chars in pulldown of email module
+-Allow duplicate email addresses with differt names in autocomplete
+-Sync recurrence 1 day minus bug
+-Double file properties bug
+-E-mail attachment character encoding
+-Email addresses character encoding
+-Double frame on user profile close
+
+Languages updated:
+-Spanish
+-French
+-Catalan
+-Hungarian
+-Italian
+
 2006/11/29 Version 2.16-4
 -Translation module
 -Speed optimizations
