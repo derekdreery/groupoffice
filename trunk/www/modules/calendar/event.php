@@ -2204,12 +2204,15 @@ if($task == 'availability')
 			'delete_big',
 			$cmdDelete,
 			$links_list->get_delete_handler());
-
-			$menu->add_button(
-			'upload',
-			$cmdAttachFile,
-			$GO_MODULES->modules['filesystem']['url'].'link_upload.php?path=events/'.$event_id.'&link_id='.$event['link_id'].'&link_type=1&return_to='.urlencode($ll_link_back));
-
+			
+			if(isset($GO_MODULES->modules['filesystem']) && $GO_MODULES->modules['filesystem']['read_permission'])
+			{
+				$menu->add_button(
+				'upload',
+				$cmdAttachFile,
+				$GO_MODULES->modules['filesystem']['url'].'link_upload.php?path=events/'.$event_id.'&link_id='.$event['link_id'].'&link_type=1&return_to='.urlencode($ll_link_back));
+			}
+			
 			$form->add_html_element($menu);
 
 

@@ -426,23 +426,26 @@ if ($company_id > 0) {
 
 	}
 
-	$menu->add_button(
-	'upload',
-	$cmdAttachFile,
-	$GO_MODULES->modules['filesystem']['url'].'link_upload.php?path=companies/'.$company_id.'&link_id='.$company['link_id'].'&link_type=3&return_to='.urlencode($ll_link_back));
-
-
-
-	//create contact directory with same permissions as project
-	if(!file_exists($GO_CONFIG->file_storage_path.'companies/'.$company_id))
+	if(isset($GO_MODULES->modules['filesystem']) && $GO_MODULES->modules['filesystem']['read_permission'])
 	{
-		mkdir_recursive($GO_CONFIG->file_storage_path.'companies/'.$company_id);
-	}
-	require_once($GO_CONFIG->class_path.'filesystem.class.inc');
-	$fs = new filesystem();
-	if(!$fs->find_share($GO_CONFIG->file_storage_path.'companies/'.$company_id))
-	{
-		$fs->add_share($addressbook['user_id'], $GO_CONFIG->file_storage_path.'companies/'.$contact_id,'company',$addressbook['acl_read'], $addressbook['acl_write']);
+		$menu->add_button(
+		'upload',
+		$cmdAttachFile,
+		$GO_MODULES->modules['filesystem']['url'].'link_upload.php?path=companies/'.$company_id.'&link_id='.$company['link_id'].'&link_type=3&return_to='.urlencode($ll_link_back));
+
+
+
+		//create contact directory with same permissions as project
+		if(!file_exists($GO_CONFIG->file_storage_path.'companies/'.$company_id))
+		{
+			mkdir_recursive($GO_CONFIG->file_storage_path.'companies/'.$company_id);
+		}
+		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+		$fs = new filesystem();
+		if(!$fs->find_share($GO_CONFIG->file_storage_path.'companies/'.$company_id))
+		{
+			$fs->add_share($addressbook['user_id'], $GO_CONFIG->file_storage_path.'companies/'.$contact_id,'company',$addressbook['acl_read'], $addressbook['acl_write']);
+		}
 	}
 
 

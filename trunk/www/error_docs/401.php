@@ -1,6 +1,7 @@
 <?php
 require_once("../Group-Office.php");
 $page_title=$strAccessDenied;
+load_basic_controls();
 require_once($GO_THEME->theme_path."header.inc");
 ?>
 <table cellpadding="10" class="ErrorBox">

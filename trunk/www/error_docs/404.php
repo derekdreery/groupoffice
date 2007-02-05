@@ -1,7 +1,8 @@
 <?php
 require_once("../Group-Office.php");
+load_basic_controls();
 $page_title=$http_not_found;
-require_once($GO_THEME->theme_path."simple_header.inc");
+require_once($GO_THEME->theme_path."header.inc");
 ?>
 <table border="0" class="TableInside" cellpadding="10">
 <tr>
@@ -22,4 +23,4 @@ require_once($GO_THEME->theme_path."simple_header.inc");
 </tr>
 </table>
 <?php
-require_once($GO_THEME->theme_path."simple_footer.inc");
+require_once($GO_THEME->theme_path."footer.inc");
