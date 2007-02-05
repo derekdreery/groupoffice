@@ -2779,8 +2779,13 @@ class calendar extends db
 						}
 					}elseif(isset($rrule['COUNT']))
 					{
-						//TODO figure out end time
-						$event['repeat_forever'] = 1;
+						//figure out end time later when event data is complete
+						$event['repeat_forever'] = 1;	
+						$event_count = intval($rrule['COUNT']);
+						if($event_count==0)
+						{
+							unset($event_count);							
+						}
 					}else
 					{
 						$event['repeat_forever'] = 1;
@@ -2922,6 +2927,21 @@ class calendar extends db
 					{
 						$event['exceptions'][] = $exception_time;
 					}
+				}
+			}
+			
+			//figure out end time of event
+			if(isset($event_count))
+			{				
+				$event['repeat_forever']='1';
+				for($i=0;$i<$event_count;$i++)
+				{
+					$event['repeat_end_time']=$this->get_next_recurrence_time(0, $event['start_time'], $event);
+				}
+				if($event['repeat_end_time']>0)
+				{
+					$event['repeat_end_time']+=$event['end_time']-$event['start_time'];
+					$event['repeat_forever']='0';
 				}
 			}
 
