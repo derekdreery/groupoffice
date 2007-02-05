@@ -51,6 +51,7 @@ $auth_sources[] =
 	'name' => 'Intermesh LDAP server',
 	'user_manager' => 'sql',
 	'groups' => array('Intermesh'),
+	'visible_groups' => array('Everyone'),
 	'modules_read' => array('email', 'filesystem', 'addressbook', 'calendar', 'bookmarks', 'notes', 'summary'),
 	'modules_write' => array(),
 	'host' => 'ldap.intermesh.nl',
