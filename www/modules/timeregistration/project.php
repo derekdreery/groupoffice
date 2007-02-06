@@ -204,7 +204,7 @@ if ($project_id > 0) {
 		require_once($GO_MODULES->modules['custom_fields']['class_path'].'custom_fields.class.inc');
 		$cf = new custom_fields();
 
-		if($cf->get_authorized_categories(5, $GO_SECURITY->user_id))
+		if($cf->get_authorized_categories(10, $GO_SECURITY->user_id))
 		{
 			while($cf->next_record())
 			{
@@ -273,7 +273,7 @@ if ($project_id > 0) {
 	}
 
 
-	$menu->add_button('link', $strCreateLink, $GO_LINKS->search_link($project['link_id'], 8, 'opener.document.location=\''.add_params_to_url($link_back,'project_tabstrip_'.$project_id.'=links').'\';'));
+	$menu->add_button('link', $strCreateLink, $GO_LINKS->search_link($project['link_id'], 10, 'opener.document.location=\''.add_params_to_url($link_back,'project_tabstrip_'.$project_id.'=links').'\';'));
 
 	if($write_permissions)
 	{

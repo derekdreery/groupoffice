@@ -20,7 +20,10 @@ if($GO_MODULES->get_module('notes'))
 {
 	$tables[]='no_notes';	
 }
-
+if($GO_MODULES->get_module('users'))
+{
+	$tables[]='users';	
+}
 
 foreach($tables as $table)
 {

@@ -42,8 +42,9 @@
  * 5=pmProjects
  * 6=folders & files
  * 7=bs_orders
- * 8=tr_projects
+ * 8=users
  * 9=em_links
+ * 10=timeregistration
  * 
  * @package Framework
  * @subpackage GO_LINKS

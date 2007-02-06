@@ -399,7 +399,7 @@ if ($company_id > 0) {
 
 
 		$ll_link_back =$link_back;
-		if(!strstr($ll_link_back, 'event_strip'))
+		if(!strstr($ll_link_back, 'active_tab'))
 		{
 			$ll_link_back=add_params_to_url($link_back,'active_tab=links');
 		}

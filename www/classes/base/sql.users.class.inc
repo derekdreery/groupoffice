@@ -81,6 +81,7 @@ class sql_users extends base_users
    * 
    * @return array
    */
+	
 	function search($query, $field, $user_id=0, $start=0, $offset=0, $sort="name", $sort_direction='ASC')
 	{
 		global $GO_MODULES;
@@ -89,10 +90,10 @@ class sql_users extends base_users
 		{
 			if(!isset($_SESSION['GO_SESSION']['sort_name']) || $_SESSION['GO_SESSION']['sort_name'] == 'first_name')
 			{
-				$sort = 'first_name ASC, last_name ';
+				$sort = 'first_name '.$sort_direction.', last_name ';
 			}else
 			{
-				$sort = 'last_name ASC, first_name ';
+				$sort = 'last_name '.$sort_direction.', first_name ';
 			}
 		}
 
@@ -195,6 +196,23 @@ class sql_users extends base_users
 		}
 
 		return $count;
+	}
+	
+	function get_linked_users($user_id, $link_id)
+	{
+		global $GO_LINKS;
+		$links = $GO_LINKS->get_links($link_id, 8);
+		
+		if(count($links))
+		{
+			$sql = "SELECT users.* FROM users  INNER JOIN acl ON users.acl_id = acl.acl_id ".
+				"LEFT JOIN users_groups ON acl.group_id = users_groups.group_id WHERE (acl.user_id=$user_id ".
+				"OR users_groups.user_id=$user_id) AND link_id IN (".implode(',',$links).") ORDER BY last_name ASC, first_name ASC";
+			
+			$this->query($sql);
+			return $this->num_rows();
+		}
+		return 0;
 	}
 
 	function authorize($requesting_user_id, $authcode, $accepting_user_id)
@@ -428,6 +446,7 @@ class sql_users extends base_users
 
 	function update_profile($user)
 	{
+		$user['mtime']=get_gmt_time();
 		if($this->update_row('users', 'id', $user))
 		{
 			if($user['id'] == $_SESSION['GO_SESSION']['user_id'])
