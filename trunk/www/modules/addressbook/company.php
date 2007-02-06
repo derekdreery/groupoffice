@@ -236,6 +236,7 @@ if (!empty ($vcf_file)) {
 //check permissions
 if ($company_id > 0 && $company = $ab->get_company($company_id)) {
 	$addressbook_id = isset($_REQUEST['addressbook_id']) ? $_REQUEST['addressbook_id'] : $company['addressbook_id'];
+	$addressbook=$ab->get_addressbook($addressbook_id);
 	if (!$write_permission = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $company['acl_write'])) {
 		$read_permission = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $company['acl_read']);
 	}
@@ -444,7 +445,7 @@ if ($company_id > 0) {
 		$fs = new filesystem();
 		if(!$fs->find_share($GO_CONFIG->file_storage_path.'companies/'.$company_id))
 		{
-			$fs->add_share($addressbook['user_id'], $GO_CONFIG->file_storage_path.'companies/'.$contact_id,'company',$addressbook['acl_read'], $addressbook['acl_write']);
+			$fs->add_share($addressbook['user_id'], $GO_CONFIG->file_storage_path.'companies/'.$company_id,'company',$addressbook['acl_read'], $addressbook['acl_write']);
 		}
 	}
 

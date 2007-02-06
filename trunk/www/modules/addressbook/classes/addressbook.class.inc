@@ -969,6 +969,11 @@ popup.focus();
 		if (isset($contact['sex']) && $contact['sex'] == '') {
 			$contact['sex'] = 'M';
 		}
+		
+		if(empty($contact['link_id']))
+		{
+			$contact['link_id']=$GLOBALS['GO_LINKS']->get_link_id();
+		}
 		$contact['id'] = $this->nextid("ab_contacts");
 
 		if ($contact['id']  > 0) {
