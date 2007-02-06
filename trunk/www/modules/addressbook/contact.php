@@ -304,6 +304,7 @@ if ($contact_id > 0) {
 	}
 	$birthday = $contact['birthday'] > 0 ? db_date_to_date($contact['birthday']) : '';
 	$addressbook_id = isset ($_REQUEST['addressbook_id']) ? $_REQUEST['addressbook_id'] : $contact['addressbook_id'];
+	$addressbook=$ab->get_addressbook($addressbook_id);
 }
 
 if (isset ($_REQUEST['user_id']) && $_REQUEST['user_id'] > 0) {
@@ -323,6 +324,8 @@ if (isset ($_REQUEST['user_id']) && $_REQUEST['user_id'] > 0) {
 	$contact['company_id'] = $ab->get_company_id_by_name($contact['company'], $addressbook_id );
 	$birthday = $contact['birthday'] > 0 ? db_date_to_date($contact['birthday']) : '';
 	$require = 'edit_contact.inc';
+	
+	
 	//}elseif (($contact_id == 0 || $task != '') && $task != 'save_custom_fields')
 }
 elseif ($contact_id == 0 || $task == 'save') {

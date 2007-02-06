@@ -27,6 +27,8 @@ $return_to = (isset($_REQUEST['return_to']) && $_REQUEST['return_to'] != '') ? $
 
 $task = isset($_POST['task']) ? $_POST['task'] : '';
 
+$GO_HEADER['head']='';
+
 switch($task)
 {
 	case 'save_profile':
@@ -146,7 +148,8 @@ switch($task)
 				$user_groups = $GO_GROUPS->groupnames_to_ids(array_map('trim',explode(',',$GO_CONFIG->register_user_groups)));
 				$visible_user_groups = $GO_GROUPS->groupnames_to_ids(array_map('trim',explode(',',$GO_CONFIG->register_visible_user_groups)));
 
-
+				$user['link_id']= $GO_LINKS->get_link_id();
+				
 				if ($user_id = $GO_USERS->add_user($user, $user_groups, $visible_user_groups, $modules_read, $modules_write	))
 				{
 					if($user['enabled']=='1')
@@ -211,7 +214,7 @@ switch($task)
 		break;
 }
 
-
+$link_back = $_SERVER['PHP_SELF'].'?user_id='.$user_id.'&return_to='.urlencode($return_to);
 
 
 $form = new form('user_form');
@@ -237,6 +240,14 @@ if($user_id>0)
 	$tabstrip->set_return_to($return_to);
 
 	$tabstrip->add_tab('profile', $user_profile);
+	
+	
+	
+	$tabstrip->add_tab('links', $strLinks);
+
+
+	
+	
 	$tabstrip->add_tab('permissions', $strPermissions);
 	$tabstrip->add_tab('password', $admin_password);
 	$tabstrip->add_tab('info', $ac_login_info);
@@ -267,6 +278,59 @@ if($user_id>0)
 			$tabstrip->add_tab($settings_include, $module_name);
 		}
 	}
+	
+	
+	
+	$ll_link_back =$link_back;
+	if(!strstr($ll_link_back, 'user_tabstrip'))
+	{
+		$ll_link_back=add_params_to_url($link_back,'user_tabstrip=links');
+	}
+	
+	$menu = new button_menu();
+	$menu->add_button('link', $strCreateLink, $GO_LINKS->search_link($user['link_id'], 8, 'opener.document.location=\''.$ll_link_back.'\';'));
+
+	if($tabstrip->get_active_tab_id() == 'links')
+	{
+		load_control('links_list');
+		$links_list = new links_list($user['link_id'], 'user_form', $ll_link_back);
+		$GO_HEADER['head'] .= $links_list->get_header();
+
+		$menu->add_button(
+		'unlink',
+		$cmdUnlink,
+		$links_list->get_unlink_handler());
+
+		$menu->add_button(
+		'delete_big',
+		$cmdDelete,
+		$links_list->get_delete_handler());
+	}
+	
+	if(isset($GO_MODULES->modules['filesystem']) && $GO_MODULES->modules['filesystem']['read_permission'])
+	{
+		$menu->add_button(
+		'upload',
+		$cmdAttachFile,
+		$GO_MODULES->modules['filesystem']['url'].'link_upload.php?path=users/'.$user_id.'&link_id='.$user['link_id'].'&link_type=8&return_to='.urlencode($ll_link_back));
+
+
+
+		//create contact directory with same permissions as project
+		if(!file_exists($GO_CONFIG->file_storage_path.'users/'.$user_id))
+		{
+			mkdir_recursive($GO_CONFIG->file_storage_path.'users/'.$user_id);
+		}
+		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+		$fs = new filesystem();
+		if(!$fs->find_share($GO_CONFIG->file_storage_path.'users/'.$user_id))
+		{
+			$fs->add_share(1, $GO_CONFIG->file_storage_path.'users/'.$user_id,'user',$GO_MODULES->modules['users']['acl_read'], $GO_MODULES->modules['users']['acl_write']);
+		}
+	}
+
+	
+	$form->add_html_element($menu);
 
 
 }else {
@@ -333,6 +397,10 @@ if(file_exists($active_tab_id))
 
 	switch($active_tab_id)
 	{
+		case 'links' :
+			$tabstrip->add_html_element($links_list);
+		break;
+		
 		case 'custom_fields' :
 			$GO_HEADER['head'] = date_picker::get_header();
 

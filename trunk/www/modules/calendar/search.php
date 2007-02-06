@@ -99,7 +99,7 @@ if($task == 'search')
 {
 	$now = get_gmt_time();
 	
-	$datatable = new datatable('search_table');
+	$datatable = new datatable('event_search_table');
 	$datatable->set_attribute('style','width:100%');
 
 	if($datatable->task == 'delete')
