@@ -27,7 +27,7 @@ class user_autocomplete
 {
 	var $autocomplete;
 	
-	function user_autocomplete($name, $user_id, $form_name='0', $link_back=null, $xml_fields=null)
+	function user_autocomplete($name, $user_id, $form_name='0', $link_back=null, $xml_fields=null, $overwrite_values=false, $submit_on_enter=false)
 	{
 		global $GO_USERS, $GO_MODULES;
 		
@@ -54,7 +54,7 @@ class user_autocomplete
 		}
 
 		$this->autocomplete  = new autocomplete(
-		'user_id',
+		$name,
 		false,
 		'user_name',
 		$user_name,
@@ -62,9 +62,10 @@ class user_autocomplete
 		$GO_MODULES->modules['users']['url'].'search_xml.php',
 		'user',
 		$xml_fields,
-		false
+		$overwrite_values,
+		$submit_on_enter
 		);
-		$this->autocomplete ->add_bound_hidden_value('user_id', $user_id,$lookup_url);
+		$this->autocomplete ->add_bound_hidden_value($name, $user_id,$lookup_url);
 
 	}
 	function get_html()

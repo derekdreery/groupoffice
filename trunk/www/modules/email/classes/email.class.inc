@@ -15,7 +15,7 @@ class email extends db
 	var $last_error;
 	var $mail;
 
-	function get_accounts($user_id=0)
+	function get_accounts($user_id=0, $start=0, $offset=0)
 	{
 		$sql = "SELECT * FROM emAccounts";
 		
@@ -23,9 +23,17 @@ class email extends db
 		{
 			$sql .= " WHERE user_id='$user_id'";
 		}
-		$sql .= " ORDER BY standard DESC";
-		$result = $this->query($sql);
-		return $this->num_rows($result);
+		$sql .= " ORDER BY email ASC, standard DESC";		
+		
+		$this->query($sql);
+		$count =  $this->num_rows();
+		
+		if($offset>0)
+		{
+			$sql .= "LIMIT $start, $offset";
+			$this->query($sql);
+		}
+		return $count;
 	}
 	
 	
@@ -219,7 +227,7 @@ class email extends db
 		return $this->update_row('emAccounts', 'id', $account);
 	}
 
-	function update_account($account_id, $type, $host, $port, $use_ssl, $novalidate_cert, $mbroot, $username, $password, $name, $email, $signature, $auto_check=0)
+	function update_account($account_id, $type, $host, $port, $use_ssl, $novalidate_cert, $mbroot, $username, $password, $name, $email, $signature, $auto_check=0, $user_id=0)
 	{
 		global $GO_CONFIG;
 
@@ -236,8 +244,13 @@ class email extends db
 			", use_ssl='$use_ssl', novalidate_cert='$novalidate_cert'".
 			", mbroot='$mbroot', username='$username', password='".$password."',".
 			" name='$name', email='$email'".
-			", signature='$signature', auto_check='$auto_check' WHERE ".
-			"id='$account_id'";
+			", signature='$signature', auto_check='$auto_check'";
+			if($user_id>0)
+			{
+				$sql .=", user_id=$user_id";
+			}
+			
+			$sql .=" WHERE id='$account_id'";
 
 			if ($this->query($sql))
 			{
@@ -316,7 +329,7 @@ class email extends db
 	{
 		$default = $this->is_default_account($id);
 
-		$sql = "DELETE FROM emAccounts WHERE id='$id' AND user_id='$user_id'";
+		$sql = "DELETE FROM emAccounts WHERE id='$id'";
 		if ($this->query($sql))
 		{
 			$sql = "DELETE FROM emFolders WHERE account_id='$id'";

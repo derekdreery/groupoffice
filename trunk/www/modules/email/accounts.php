@@ -69,30 +69,39 @@ $menu->add_button('em_refresh', $ml_set_default, 'javascript:document.forms[\''.
 $menu->add_button('close', $cmdClose, htmlspecialchars($return_to));
 
 
-$datatable->add_column(new table_heading($strHost));
 $datatable->add_column(new table_heading($strEmail));
+
+if($GO_MODULES->write_permission)
+{
+	$datatable->add_column(new table_heading($strOwner));
+	$count = $email->get_accounts();
+}else {
+	$count = $email->get_accounts($GO_SECURITY->user_id);
+}
+$datatable->set_pagination($count);
+
+
+$datatable->add_column(new table_heading($strHost));
 $datatable->add_column(new table_heading($strDefault));
 
-$count = $email->get_accounts($GO_SECURITY->user_id);
 
-if ($count > 0) {
-
-
-    $count = $email->get_accounts($GO_SECURITY->user_id);
+if ($count > 0) {   
 
     while ($email->next_record()) {
 
         $row = new table_row($email->f('id'));
 
         $row->set_attribute('ondblclick', "javascript:document.location='account.php?account_id=".$email->f('id')."&return_to=".urlencode($link_back)."'");
-       
-
-        $row->add_cell(new table_cell($email->f('host')));
+         
         $row->add_cell(new table_cell($email->f('email')));
-        
+        if($GO_MODULES->write_permission)
+		{
+			$row->add_cell(new table_cell(show_profile($email->f('user_id'))));
+		}
+        $row->add_cell(new table_cell($email->f('host')));
         $cell = new table_cell();
         
-        if($email->f('standard') == '1')
+        if($email->f('standard') == '1' && $email->f('user_id')==$GO_SECURITY->user_id)
         {
         	$img = new image('ok');
         	$cell->add_html_element($img);

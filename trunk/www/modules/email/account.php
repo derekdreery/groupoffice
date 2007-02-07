@@ -146,6 +146,8 @@ switch ($task)
 	{
 		$use_ssl = isset($_REQUEST['use_ssl']) ? '1' : '0';
 		$novalidate_cert = isset($_REQUEST['novalidate_cert']) ? '1' : '0';
+		
+		
 
 		/*$sent = $_POST['type'] == 'pop3' ? '' : smart_addslashes($_POST['sent']);
 		$trash = $_POST['type'] == 'pop3' ? '' : smart_addslashes($_POST['trash']);
@@ -154,6 +156,8 @@ switch ($task)
 		$auto_check = isset($_POST['auto_check']) ? '1' : '0';
 		if ($account_id > 0)
 		{
+			$account_user_id=isset($_REQUEST['account_user_id']) ? smart_stripslashes($_REQUEST['account_user_id']) : 0;
+			
 			if(!$email->update_account($account_id, $_POST['type'],
 			smart_addslashes($_POST['host']),
 			$_POST['port'], $use_ssl, $novalidate_cert, 
@@ -163,7 +167,7 @@ switch ($task)
 			smart_addslashes($_POST['name']),
 			smart_addslashes($_POST['mail_address']),
 			smart_addslashes($_POST['signature']),
-			$auto_check))
+			$auto_check,$account_user_id))
 			{
 				$feedback = '<p class="Error">'.$ml_connect_failed.' \''.$_POST['host'].
 				'\' '.$ml_at_port.': '.$_POST['port'].'</p>';
@@ -178,7 +182,9 @@ switch ($task)
 			}
 		}else
 		{
-			if(!$account_id = $email->add_account($GO_SECURITY->user_id, 
+			$account_user_id=isset($_REQUEST['account_user_id']) ? smart_stripslashes($_REQUEST['account_user_id']) : $GO_SECURITY->user_id;
+			
+			if(!$account_id = $email->add_account($account_user_id, 
 			$_POST['type'],
 			smart_addslashes($_POST['host']),
 			$_POST['port'], 
@@ -244,7 +250,7 @@ if(isset($goto_folders))
 
 if($tabstrip->get_active_tab_id() == 'properties')
 {
-	$GO_HEADER['body_arguments'] = 'onkeypress="executeOnEnter(\'document.forms[0].save_account()"';
+	//$GO_HEADER['body_arguments'] = 'onkeypress="executeOnEnter(\'document.forms[0].save_account()\');"';
 }elseif($tabstrip->get_active_tab_id() == 'filters')
 {
 	load_control('datatable');
