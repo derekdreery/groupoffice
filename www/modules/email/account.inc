@@ -1,8 +1,8 @@
 <?php
 if ($account && $task != 'save_account')
 {
-	
-	if ($account['user_id'] != $GO_SECURITY->user_id)
+
+	if (!$GO_MODULES->modules['email']['write_permission'] && $account['user_id'] != $GO_SECURITY->user_id)
 	{
 		require_once($GO_CONFIG->root_path."error_docs/403.inc");
 		require_once($GO_THEME->theme_path."footer.inc");
@@ -22,6 +22,7 @@ if ($account && $task != 'save_account')
 	$auto_check = $account['auto_check'] == '1' ? true : false;
 	$use_ssl = $account['use_ssl'] == '1' ? true : false;
 	$novalidate_cert = $account['novalidate_cert'] == '1' ? true : false;
+	$account_user_id=$account['user_id'];
 }else
 {
 	$page_title=$ml_new_account;
@@ -42,6 +43,7 @@ if ($account && $task != 'save_account')
 	$auto_check = isset($_REQUEST['auto_check']) ? true : false;
 	$use_ssl = isset($_REQUEST['use_ssl']) ? true : false;
 	$novalidate_cert = isset($_REQUEST['novalidate_cert']) ? true : false;
+	$account_user_id=isset($_REQUEST['account_user_id']) ? smart_stripslashes($_REQUEST['account_user_id']) : $GO_SECURITY->user_id;
 }
 
 
@@ -55,6 +57,27 @@ if(isset($feedback))
 }
 
 $table = new table();
+
+if($GO_MODULES->modules['email']['write_permission'])
+{
+	$row = new table_row();
+	$row->add_cell(new table_cell($strOwner.':'));
+	
+	load_control('user_autocomplete');
+	$xml_fields=array(
+		'name'=>'name',
+		'id'=>'account_user_id',
+		'email'=>'mail_address',
+		'username'=>'email_user'
+		);
+	
+	
+	
+	$ac = new user_autocomplete('account_user_id', $account_user_id, 'email_client',$link_back,$xml_fields,true);
+	
+	$row->add_cell(new table_cell($ac->get_html()));
+	$table->add_row($row);
+}
 
 $row = new table_row();
 $row->add_cell(new table_cell($strName.':'));
@@ -89,28 +112,28 @@ if ($disable_accounts)
 	$cell->set_attribute('colspan','2');
 	$row->add_cell($cell);
 	$table->add_row($row);
-	
+
 	$row = new table_row();
 	$row->add_cell(new table_cell($ml_type.':'));
-	
+
 	$cell = new table_cell();
 	$select = new select('type',$type);
 	$select->set_attribute('onchange','javascript:change_port();');
-  $select->add_value('pop3','POP3');
-  $select->add_value('imap','IMAP');
-  $cell->add_html_element($select);
-  
-  
-  $checkbox = new checkbox('use_ssl', 'use_ssl', '1', 'SSL', $use_ssl, false);
-  $checkbox->set_attribute('onclick','javascript:change_port()');
-  $cell->add_html_element($checkbox);
-  
-  $checkbox = new checkbox('novalidate_cert','novalidate_cert', '1', $ml_novalidate_cert, $novalidate_cert);
-  $cell->add_html_element($checkbox);
-   
+	$select->add_value('pop3','POP3');
+	$select->add_value('imap','IMAP');
+	$cell->add_html_element($select);
+
+
+	$checkbox = new checkbox('use_ssl', 'use_ssl', '1', 'SSL', $use_ssl, false);
+	$checkbox->set_attribute('onclick','javascript:change_port()');
+	$cell->add_html_element($checkbox);
+
+	$checkbox = new checkbox('novalidate_cert','novalidate_cert', '1', $ml_novalidate_cert, $novalidate_cert);
+	$cell->add_html_element($checkbox);
+
 	$row->add_cell($cell);
 	$table->add_row($row);
-	
+
 	$row = new table_row();
 	$row->add_cell(new table_cell($ml_port.':'));
 	$input = new input('text','port',$port);
@@ -118,7 +141,7 @@ if ($disable_accounts)
 	$input->set_attribute('style','width:300px');
 	$row->add_cell(new table_cell($input->get_html()));
 	$table->add_row($row);
-	
+
 	$row = new table_row();
 	$row->add_cell(new table_cell($ml_host.':'));
 	$input = new input('text','host',$host);
@@ -126,25 +149,25 @@ if ($disable_accounts)
 	$input->set_attribute('style','width:300px');
 	$row->add_cell(new table_cell($input->get_html()));
 	$table->add_row($row);
-    
+
 	$row = new table_row();
 	$row->add_cell(new table_cell($ml_root.':'));
 	$input = new input('text','mbroot',$mbroot);
 	$input->set_attribute('maxlength','100');
-	$input->set_attribute('style','width:300px');	
+	$input->set_attribute('style','width:300px');
 	if ($type  == 'pop3')
 	{
 		$input->set_attribute('disabled','true');
-	}	
+	}
 	$row->add_cell(new table_cell($input->get_html()));
 	$table->add_row($row);
-	
+
 	$row = new table_row();
 	$cell = new table_cell('&nbsp;');
 	$cell->set_attribute('colspan','2');
 	$row->add_cell($cell);
 	$table->add_row($row);
-	
+
 	$row = new table_row();
 	$row->add_cell(new table_cell($strUsername.':'));
 	$input = new input('text','email_user',$user);
@@ -162,7 +185,7 @@ if ($disable_accounts)
 	$input->set_attribute('style','width:300px');
 	$row->add_cell(new table_cell($input->get_html()));
 	$table->add_row($row);
-	
+
 	$row = new table_row();
 	$cell = new table_cell('&nbsp;');
 	$cell->set_attribute('colspan','2');
