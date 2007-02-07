@@ -2665,7 +2665,7 @@ class calendar extends db
 		{
 			$timezone_id = isset($object['COMPLETED']['params']['TZID']) ? $object['COMPLETED']['params']['TZID'] : '';
 			$event['completion_time'] = $this->ical2array->parse_date($object['COMPLETED']['value'], $timezone_id);
-		}elseif($event['status_id']==11)
+		}elseif(isset($event['status_id']) && $event['status_id']==11)
 		{
 			$event['completion_time']=get_gmt_time();
 		}else
@@ -2928,6 +2928,16 @@ class calendar extends db
 						$event['exceptions'][] = $exception_time;
 					}
 				}
+			}
+			
+			if(!isset($event['timezone']))
+			{
+				$event['timezone']=$_SESSION['GO_SESSION']['timezone'];
+			}
+	
+			if(!isset($event['DST']))
+			{
+				$event['DST']=$_SESSION['GO_SESSION']['DST'];
 			}
 			
 			//figure out end time of event
