@@ -351,9 +351,10 @@ switch($tabstrip->get_active_tab_id())
 				
 				$row->add_cell($cell);
 				$table->add_row($row);
+				
 			}
 	
-			//$tabstrip->add_html_element($table);
+			
 			
 			
 			
@@ -410,7 +411,7 @@ switch($tabstrip->get_active_tab_id())
 					
 					
 				}
-				
+				$tabstrip->add_html_element($table);
 				$tabstrip->add_html_element($status_table);
 			}else
 			{
