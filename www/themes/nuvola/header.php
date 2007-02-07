@@ -68,6 +68,7 @@ header('Content-Type: text/html; charset='.$charset);
 
     $link = new hyperlink($GO_CONFIG->host.'index.php?task=logout',$img->get_html().$menu_logout);
     $link->set_attribute('class','HeaderBar');
+    $link->set_attribute('target','_top');
 
     $form->add_html_element($link);
 
