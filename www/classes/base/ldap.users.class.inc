@@ -390,89 +390,26 @@ class ldap_users extends base_users {
 			}
 
 			/*
-			 * If the ldapkey is goAclID (which means that the key is acl_id) we
-			 * have to fetch (or create) the acl_id of the current account. The
-			 * access list ID of an account is identified by the email address.
-			 * When there is no access list ID present, a new has to be created,
-			 * and the user should be set as owner of this ID.
+			 * Check if this is already a new mapping - if the data type is not
+			 * a string, we can savely assume that it is a ldap_user_mapping
+			 * object, so we can directly execute the generic method.
 			 */
-			if ( $key == 'acl_id' ) {
-				// Get email address and uidnumber of the processed entry.
-				$mail = isset( $entry['mail'][0] ) ?
-					$entry['mail'][0] : null;
-				$uidnumber = isset( $entry['uidnumber'][0] ) ?
-					$entry['uidnumber'][0] : null;
-
-				// Fetch the acl_id of this email address.
-				$row[$key] = $this->getOrCreateAclId( $mail, $uidnumber );
-
-				// Proceed with the next key.
-				continue;
-			}
-
-			/*
-			 * The accountstatus is either active or deactivated. This has to be
-			 * converted in a boolean flag, which indicates the account status.
-			 */
-			if ( $key == 'enabled' ) {
-				$value = ( $entry[$ldapkey][0] == 'active' ) ? 1 : 0;
-				$row[$key] = $value;
-				continue;
-			}
-
-			/*
-			 * If the ldapkey is 'uid', we have to fetch the user's name from
-			 * the entry. This can either be stored inside the LDAP-DN, or in
-			 * the 'uid' attribute. We only read the DN, if there is more than
-			 * one 'uid' attribute, otherwise we use this attribute.
-			 */
-			if ( $key == 'username' ) {
-				if ( $entry['uid']['count'] > 1 ) {
-					$dn = $entry['dn'];
-					$dn = substr( $dn, 0, strpos( $dn, ',' ) );
-					$value = substr( $dn, strpos( $dn, '=' ) + 1 );
-				} else {
-					$value = utf8_decode( $entry['uid'][0] );
+			if ( !is_string( $ldapkey ) ) {
+				if ( $ldapkey->isFunction() ) {
+					$myMethod = $ldapkey->value;
+					$row[$key] = $myMethod( $entry );
+					continue;
 				}
-				if ( !$value ) {
-					$value = '';
+				if ( $ldapkey->isConstant() ) {
+					$row[$key] = $ldapkey->value;
+					continue;
 				}
-				$row[$key] = $value;
-				continue;
+				if ( $ldapkey->isDirect() ) {
+					$row[$key] = utf8_decode($entry[$ldapkey->value][0]);
+					continue;
+				}
 			}
-			/*
-			 * The following keys identify how some values are displayed in
-			 * Group-Office. We fill them with default values, because we have
-			 * no idea, where these things can be stored in an directory.
-			 */
-			if ( $key == 'first_weekday' ) {
-				$row[$key] = '1';
-				continue;
-			}
-			if ( $key == 'date_format' ) {
-				$row[$key] = 'd-m-Y';
-				continue;
-			}
-			if ( $key == 'time_format' ) {
-				$row[$key] = 'G:i';
-				continue;
-			}
-			if ( $key == 'date_seperator' ) {
-				$row[$key] = '-';
-				continue;
-			}
-			if ( $key == 'decimal_seperator' ) {
-				$row[$key] = ',';
-				continue;
-			}
-			if ( $key == 'thousands_seperator' ) {
-				$row[$key] = '.';
-				continue;
-			}
-			if ( $key == 'sort_name' ) {
-				$row[$key] = '';
-				continue;
-			}
+
 			/*
 			 * All other ldapkeys have no special meaning, so we can directly
 			 * fetch them from the entry, and use them as values. If the
