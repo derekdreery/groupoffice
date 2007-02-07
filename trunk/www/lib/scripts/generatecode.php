@@ -536,6 +536,7 @@ require_once($GO_THEME->theme_path.\'footer.inc\');
 
 load_control(\'datatable\');
 $datatable = new datatable(\''.$table.'_table\');
+$datatable->allow_configuration=true;
 $GO_HEADER[\'head\']=$datatable->get_header();
 		
 if($datatable->task==\'delete\')
@@ -741,8 +742,6 @@ if ($'.$friendly_single.'_id > 0)
 		if($field['Field']!='id')
 		{
 
-			if($field['Field']=='user_id')
-			{
 				if($field['Field']=='user_id')
 				{
 					$item_page .= '			$'.$friendly_single.'[\''.$field['Field'].'\']=isset($_POST[\''.$field['Field'].'\']) ? smart_stripslashes(trim($_POST[\''.$field['Field'].'\']))  : $GO_SECURITY->user_id;';
@@ -750,7 +749,7 @@ if ($'.$friendly_single.'_id > 0)
 					$item_page .= '			$'.$friendly_single.'[\''.$field['Field'].'\']=isset($_POST[\''.$field['Field'].'\']) ? smart_stripslashes(trim($_POST[\''.$field['Field'].'\']))  : \'\';';
 					$item_page .= "\n";
 				}
-			}
+			
 		}
 	}
 	$item_page .= '
@@ -759,7 +758,7 @@ if ($'.$friendly_single.'_id > 0)
 //Create tabstrip control 
 $tabstrip = new tabstrip(\''.$friendly_single.'_tabstrip\', $'.$prefix.'_'.$friendly_single.');
 $tabstrip->set_attribute(\'style\',\'width:100%\');
-$tabstrip->set_return_to("'.$return_to.'");
+$tabstrip->set_return_to($return_to);
 
 		
 //If there\'s feedback display it
