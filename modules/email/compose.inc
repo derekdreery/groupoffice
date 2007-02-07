@@ -583,27 +583,6 @@ function open_attachments()
 	attach_popup.focus();
 }
 
-
-<<<<<<< .working
-=======
-function smart_focus()
-{
-	if(document.sendform.mail_to.value!='')
-	{
-		var oEditor = FCKeditorAPI.GetInstance('mail_body') ;
-
-		//try
-		//{
-		//oEditor.MakeEditable();
-		//}
-		//catch (e) {}
-		oEditor.Focus();
-	}else
-	{
-		document.sendform.mail_to.focus();
-	}
-}
->>>>>>> .merge-right.r118
 function close_attachments()
 {
 	if(eval(attach_popup))
