@@ -99,7 +99,7 @@ class summary extends db
 		}
 	}
 
-	function delete_user($user_id)
+	function __on_user_delete($user_id)
 	{
 		$sql = "DELETE FROM sum_announcements WHERE user_id='$user_id'";
 		$this->query($sql);

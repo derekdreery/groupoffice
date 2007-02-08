@@ -29,10 +29,10 @@ class search extends db {
 				require($module['class_path'].$module['id'].'.class.inc');
 				$class = new $module['id'];
 				
-				if(method_exists($class, 'global_search_sync'))
+				if(method_exists($class, '__on_search'))
 				{
 					$last_sync_time = $this->get_last_sync_time($user_id, $module['id']);
-					$class->global_search_sync($user_id, $last_sync_time);
+					$class->__on_search($user_id, $last_sync_time);
 					$this->update_last_sync_time($user_id, $module['id'], get_gmt_time());
 				}				
 			}			

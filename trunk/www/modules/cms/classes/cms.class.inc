@@ -1420,7 +1420,7 @@ class cms extends db
 		return $important_words;	
 	}
 
-	function delete_user($user_id)
+	function __on_user_delete($user_id)
 	{
 		$cms = new cms();
 		$sql = "SELECT id FROM cms_sites WHERE user_id='$user_id'";

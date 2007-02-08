@@ -85,44 +85,7 @@ class filesystem extends db
 		$this->disable_go_permissions = $disable_go_permissions;
 	}
 
-	function global_search_sync($user_id,$last_sync_time=0)
-	{
-		global $GO_MODULES, $GO_LANGUAGE;
-
-		require($GO_LANGUAGE->get_language_file('filesystem'));
-
-		$sql = "SELECT * FROM fs_links WHERE mtime>$last_sync_time AND ctime>$last_sync_time";
-
-		$this->query($sql);
-		
-		$fs = new filesystem();
-
-		$db = new db();
-		while($this->next_record())
-		{
 	
-			if($fs->has_read_permission($user_id, addslashes($this->f('path'))))
-			{
-				$cache['table']='fs_links';
-				$cache['id']=0;
-				$cache['user_id']=$user_id;
-				$cache['name'] = addslashes(basename($this->f('path')));
-				$cache['link_id'] = $this->f('link_id');
-				$cache['link_type']=6;
-				$cache['description']='';
-				$cache['url']=$GO_MODULES->modules['filesystem']['url'].'index.php?task=properties&path='.urlencode(addslashes($this->f('path')));
-				$cache['type']=$fs_file;
-				$cache['keywords']=$cache['name'].','.$cache['type'];
-				
-				if($this->f('ctime')>$last_sync_time)
-				{
-					$db->insert_row('se_cache',$cache);
-				}else {
-					$db->update_row('se_cache',array('user_id','link_id'), $cache);
-				}
-			}
-		}
-	}
 
 	function get_status_history($link_id)
 	{
@@ -1290,7 +1253,7 @@ class filesystem extends db
 		}
 		return $this->search_results;
 	}
-	function delete_user($user_id)
+	function __on_delete_user($user_id)
 	{
 		$fs = new filesystem();
 		$this->get_shares($user_id);
@@ -1299,5 +1262,44 @@ class filesystem extends db
 			$fs->delete_share($this->f('path'));
 		}
 		$this->query("DELETE FROM fs_settings WHERE user_id='$user_id'");
+	}
+	
+	function __on_search($user_id,$last_sync_time=0)
+	{
+		global $GO_MODULES, $GO_LANGUAGE;
+
+		require($GO_LANGUAGE->get_language_file('filesystem'));
+
+		$sql = "SELECT * FROM fs_links WHERE mtime>$last_sync_time AND ctime>$last_sync_time";
+
+		$this->query($sql);
+		
+		$fs = new filesystem();
+
+		$db = new db();
+		while($this->next_record())
+		{
+	
+			if($fs->has_read_permission($user_id, addslashes($this->f('path'))))
+			{
+				$cache['table']='fs_links';
+				$cache['id']=0;
+				$cache['user_id']=$user_id;
+				$cache['name'] = addslashes(basename($this->f('path')));
+				$cache['link_id'] = $this->f('link_id');
+				$cache['link_type']=6;
+				$cache['description']='';
+				$cache['url']=$GO_MODULES->modules['filesystem']['url'].'index.php?task=properties&path='.urlencode(addslashes($this->f('path')));
+				$cache['type']=$fs_file;
+				$cache['keywords']=$cache['name'].','.$cache['type'];
+				
+				if($this->f('ctime')>$last_sync_time)
+				{
+					$db->insert_row('se_cache',$cache);
+				}else {
+					$db->update_row('se_cache',array('user_id','link_id'), $cache);
+				}
+			}
+		}
 	}
 }

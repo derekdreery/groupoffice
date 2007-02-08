@@ -646,18 +646,18 @@ class sql_users extends base_users
 					{
 						require_once($module['class_path'].$module['id'].'.class.inc');
 						$module_object = new $module['id'];
-						if(method_exists($module_object, 'delete_user'))
+						if(method_exists($module_object, '__on_user_delete'))
 						{
 							$module_object->delete_user($user_id);
 						}
 					}
 					
-					if($module['id']=='filesystem')
+					/*if($module['id']=='filesystem')
 					{
 						require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 						$fs = new filesystem();
 						$fs->delete_user($user_id);
-					}
+					}*/
 				}
 
 				$GO_GROUPS->delete_user($user_id);

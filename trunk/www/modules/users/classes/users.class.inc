@@ -27,7 +27,7 @@
 
 class users extends db
 {
-	function global_search_sync($user_id,$last_sync_time=0)
+	function __on_search($user_id,$last_sync_time=0)
 	{
 		global $GO_MODULES, $GO_LANGUAGE, $GO_USERS;
 

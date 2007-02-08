@@ -481,90 +481,7 @@ popup.focus();
 		$this->query($sql);
 	}
 
-	function global_search_sync($user_id,$last_sync_time=0)
-	{
-		global $GO_MODULES, $GO_LANGUAGE;
-
-		require($GO_LANGUAGE->get_language_file('addressbook'));
-
-		$sql = "SELECT * FROM ab_contacts ";
-		$user_ab = $this->get_user_addressbook_ids($user_id);
-		if(count($user_ab) > 1)
-		{
-			$sql .= "WHERE ab_contacts.addressbook_id IN (".implode(",",$user_ab).") AND ";
-		}elseif(count($user_ab)==1)
-		{
-			$sql .= "WHERE ab_contacts.addressbook_id=".$user_ab[0]." AND ";
-		}else
-		{
-			return false;
-		}
-
-		$sql .= "mtime>$last_sync_time AND ctime>$last_sync_time";
-
-		$this->query($sql);
-
-		$db = new db();
-		while($this->next_record())
-		{
-			$cache['table']='ab_contacts';
-			$cache['id']=$this->f('id');
-			$cache['user_id']=$user_id;
-			$cache['name'] = addslashes(format_name($this->f('last_name'),$this->f('first_name'),$this->f('middle_name')));
-			$cache['link_id'] = $this->f('link_id');
-			$cache['link_type']=2;
-			$cache['description']='';
-			$cache['url']=$GO_MODULES->modules['addressbook']['url'].'contact.php?contact_id='.$this->f('id');
-			$cache['type']=$ab_contact;
-			$cache['keywords']=addslashes(record_to_keywords($this->Record)).','.$ab_contact;
-			if($this->f('ctime')>$last_sync_time)
-			{
-				$db->insert_row('se_cache',$cache);
-			}else {
-				$db->update_row('se_cache',array('user_id','link_id'), $cache);
-			}
-		}
-
-
-		$sql = "SELECT * FROM ab_companies ";
-
-		if(count($user_ab) > 1)
-		{
-			$sql .= "WHERE ab_companies.addressbook_id IN (".implode(",",$user_ab).") AND ";
-		}elseif(count($user_ab)==1)
-		{
-			$sql .= "WHERE ab_companies.addressbook_id=".$user_ab[0]." AND ";
-		}else
-		{
-			return false;
-		}
-
-		$sql .= "mtime>$last_sync_time AND ctime>$last_sync_time";
-
-		$this->query($sql);
-
-		$db = new db();
-		while($this->next_record())
-		{
-			$cache['table']='ab_companies';
-			$cache['id']=$this->f('id');
-			$cache['user_id']=$user_id;
-			$cache['name'] = addslashes($this->f('name'));
-			$cache['link_id'] = $this->f('link_id');
-			$cache['link_type']=3;
-			$cache['description']='';
-			$cache['url']=$GO_MODULES->modules['addressbook']['url'].'company.php?company_id='.$this->f('id');
-			$cache['type']=$ab_company;
-			$cache['keywords']=addslashes(record_to_keywords($this->Record)).','.$ab_contact;
-
-			if($this->f('ctime')>$last_sync_time)
-			{
-				$db->insert_row('se_cache',$cache);
-			}else {
-				$db->update_row('se_cache',array('user_id','link_id'), $cache);
-			}
-		}
-	}
+	
 
 
 
@@ -1233,29 +1150,7 @@ popup.focus();
 		}
 	}
 
-	function delete_user($user_id) {
-		$sql = "UPDATE ab_contacts SET source_id='0' WHERE source_id='$user_id'";
-		$this->query($sql);
-
-		$ab = new addressbook();
-
-		$sql = "SELECT id FROM ab_addressbooks WHERE user_id='$user_id'";
-		$this->query($sql);
-		while ($this->next_record()) {
-			$ab->delete_addressbook($this->f('id'));
-		}
-
-		$this->query("DELETE FROM ab_settings WHERE user_id='$user_id'");
-
-		global $GO_MODULES;
-
-		if($plugin = $GO_MODULES->get_plugin('templates','addressbook'))
-		{
-			require_once($plugin['class_path'].'templates.class.inc');
-			$tp = new templates();
-			$tp->delete_user($user_id);
-		}
-	}
+	
 
 	function consistencycheck($fixit = false) {
 		global $GO_USERS, $GO_SECURITY;
@@ -1302,6 +1197,119 @@ popup.focus();
 			if (!($GO_USERS->get_user($this->f('user_id')))) {
 				echo "owner of ".$this->f('id')."does not exist (".$this->f('user_id').")<br>";
 			}
+		}
+	}
+	
+	
+	
+	
+	function __on_search($user_id,$last_sync_time=0)
+	{
+		global $GO_MODULES, $GO_LANGUAGE;
+
+		require($GO_LANGUAGE->get_language_file('addressbook'));
+
+		$sql = "SELECT * FROM ab_contacts ";
+		$user_ab = $this->get_user_addressbook_ids($user_id);
+		if(count($user_ab) > 1)
+		{
+			$sql .= "WHERE ab_contacts.addressbook_id IN (".implode(",",$user_ab).") AND ";
+		}elseif(count($user_ab)==1)
+		{
+			$sql .= "WHERE ab_contacts.addressbook_id=".$user_ab[0]." AND ";
+		}else
+		{
+			return false;
+		}
+
+		$sql .= "mtime>$last_sync_time AND ctime>$last_sync_time";
+
+		$this->query($sql);
+
+		$db = new db();
+		while($this->next_record())
+		{
+			$cache['table']='ab_contacts';
+			$cache['id']=$this->f('id');
+			$cache['user_id']=$user_id;
+			$cache['name'] = addslashes(format_name($this->f('last_name'),$this->f('first_name'),$this->f('middle_name')));
+			$cache['link_id'] = $this->f('link_id');
+			$cache['link_type']=2;
+			$cache['description']='';
+			$cache['url']=$GO_MODULES->modules['addressbook']['url'].'contact.php?contact_id='.$this->f('id');
+			$cache['type']=$ab_contact;
+			$cache['keywords']=addslashes(record_to_keywords($this->Record)).','.$ab_contact;
+			if($this->f('ctime')>$last_sync_time)
+			{
+				$db->insert_row('se_cache',$cache);
+			}else {
+				$db->update_row('se_cache',array('user_id','link_id'), $cache);
+			}
+		}
+
+
+		$sql = "SELECT * FROM ab_companies ";
+
+		if(count($user_ab) > 1)
+		{
+			$sql .= "WHERE ab_companies.addressbook_id IN (".implode(",",$user_ab).") AND ";
+		}elseif(count($user_ab)==1)
+		{
+			$sql .= "WHERE ab_companies.addressbook_id=".$user_ab[0]." AND ";
+		}else
+		{
+			return false;
+		}
+
+		$sql .= "mtime>$last_sync_time AND ctime>$last_sync_time";
+
+		$this->query($sql);
+
+		$db = new db();
+		while($this->next_record())
+		{
+			$cache['table']='ab_companies';
+			$cache['id']=$this->f('id');
+			$cache['user_id']=$user_id;
+			$cache['name'] = addslashes($this->f('name'));
+			$cache['link_id'] = $this->f('link_id');
+			$cache['link_type']=3;
+			$cache['description']='';
+			$cache['url']=$GO_MODULES->modules['addressbook']['url'].'company.php?company_id='.$this->f('id');
+			$cache['type']=$ab_company;
+			$cache['keywords']=addslashes(record_to_keywords($this->Record)).','.$ab_contact;
+
+			if($this->f('ctime')>$last_sync_time)
+			{
+				$db->insert_row('se_cache',$cache);
+			}else {
+				$db->update_row('se_cache',array('user_id','link_id'), $cache);
+			}
+		}
+	}
+	
+	
+	function __on_user_delete($user_id) {
+		$sql = "UPDATE ab_contacts SET source_id='0' WHERE source_id='$user_id'";
+		$this->query($sql);
+
+		$ab = new addressbook();
+
+		$sql = "SELECT id FROM ab_addressbooks WHERE user_id='$user_id'";
+		$this->query($sql);
+		while ($this->next_record()) {
+			$ab->delete_addressbook($this->f('id'));
+		}
+
+		$this->query("DELETE FROM ab_settings WHERE user_id='$user_id'");
+
+		global $GO_MODULES;
+
+		if($plugin = $GO_MODULES->get_plugin('templates','addressbook'))
+		{
+			require_once($plugin['class_path'].'templates.class.inc');
+			$tp = new templates();
+			$tp->delete_user($user_id);
 		}
 	}
 }

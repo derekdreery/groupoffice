@@ -42,50 +42,7 @@ class calendar extends db
 		$this->db();
 	}
 	
-	function global_search_sync($user_id,$last_sync_time=0)
-	{
-		global $GO_MODULES, $GO_LANGUAGE;
-
-		require($GO_LANGUAGE->get_language_file('calendar'));
-
-		$sql  = "SELECT DISTINCT cal_events.* FROM cal_events ".
-		"INNER JOIN cal_events_calendars ON cal_events.id=cal_events_calendars.event_id ".
-		"WHERE ";
-
-
-		$calendars = array();
-		$this->get_authorized_calendars($user_id);
-		while($this->next_record())
-		{
-			$calendars[] = $this->f('id');
-		}
-		
-		$sql .= "cal_events_calendars.calendar_id IN (".implode(',', $calendars).")  AND mtime>$last_sync_time AND ctime>$last_sync_time";
-
-
-		$this->query($sql);
-
-		$db = new db();
-		while($this->next_record())
-		{
-			$cache['table']='cal_events';
-			$cache['id']=$this->f('id');
-			$cache['user_id']=$user_id;
-			$cache['name'] = addslashes($this->f('name'));
-			$cache['link_id'] = $this->f('link_id');
-			$cache['link_type']=1;
-			$cache['description']=addslashes($this->f('description'));
-			$cache['url']=$GO_MODULES->modules['calendar']['url'].'event.php?event_id='.$this->f('id');
-			$cache['type']=$this->f('todo')=='1' ? $cal_todo : $cal_event;
-			$cache['keywords']=addslashes(record_to_keywords($this->Record)).','.$cache['type'];
-			if($this->f('ctime')>$last_sync_time)
-			{
-				$db->insert_row('se_cache',$cache);
-			}else {
-				$db->update_row('se_cache',array('user_id','link_id'), $cache);
-			}
-		}
-	}
+	
 
 	function get_backgrounds()
 	{
@@ -2538,32 +2495,7 @@ class calendar extends db
 		return $this->num_rows();
 	}
 
-	function delete_user($user_id)
-	{
-		$delete = new calendar();
-		$sql = "SELECT * FROM cal_calendars WHERE user_id='$user_id'";
-		$this->query($sql);
-		while($this->next_record())
-		{
-			$delete->delete_calendar($this->f('id'));
-		}
-
-		$sql = "SELECT * FROM cal_events WHERE user_id='$user_id'";
-		$this->query($sql);
-
-		while($this->next_record())
-		{
-			$delete->delete_event($this->f('id'));
-		}
-
-		$this->get_user_views($user_id);
-
-		while($this->next_record())
-		{
-			$delete->delete_view($this->f('id'));
-		}
-		$this->query("DELETE FROM cal_settings WHERE user_id='$user_id'");
-	}
+	
 
 	function get_view_color($view_id, $event_id)
 	{
@@ -3214,5 +3146,78 @@ class calendar extends db
 			$event['sat'] = $sat;
 		}
 		return $event;
+	}
+	
+	
+	function __on_user_delete($user_id)
+	{
+		$delete = new calendar();
+		$sql = "SELECT * FROM cal_calendars WHERE user_id='$user_id'";
+		$this->query($sql);
+		while($this->next_record())
+		{
+			$delete->delete_calendar($this->f('id'));
+		}
+
+		$sql = "SELECT * FROM cal_events WHERE user_id='$user_id'";
+		$this->query($sql);
+
+		while($this->next_record())
+		{
+			$delete->delete_event($this->f('id'));
+		}
+
+		$this->get_user_views($user_id);
+
+		while($this->next_record())
+		{
+			$delete->delete_view($this->f('id'));
+		}
+		$this->query("DELETE FROM cal_settings WHERE user_id='$user_id'");
+	}
+	
+	function __on_search($user_id,$last_sync_time=0)
+	{
+		global $GO_MODULES, $GO_LANGUAGE;
+
+		require($GO_LANGUAGE->get_language_file('calendar'));
+
+		$sql  = "SELECT DISTINCT cal_events.* FROM cal_events ".
+		"INNER JOIN cal_events_calendars ON cal_events.id=cal_events_calendars.event_id ".
+		"WHERE ";
+
+
+		$calendars = array();
+		$this->get_authorized_calendars($user_id);
+		while($this->next_record())
+		{
+			$calendars[] = $this->f('id');
+		}
+		
+		$sql .= "cal_events_calendars.calendar_id IN (".implode(',', $calendars).")  AND mtime>$last_sync_time AND ctime>$last_sync_time";
+
+
+		$this->query($sql);
+
+		$db = new db();
+		while($this->next_record())
+		{
+			$cache['table']='cal_events';
+			$cache['id']=$this->f('id');
+			$cache['user_id']=$user_id;
+			$cache['name'] = addslashes($this->f('name'));
+			$cache['link_id'] = $this->f('link_id');
+			$cache['link_type']=1;
+			$cache['description']=addslashes($this->f('description'));
+			$cache['url']=$GO_MODULES->modules['calendar']['url'].'event.php?event_id='.$this->f('id');
+			$cache['type']=$this->f('todo')=='1' ? $cal_todo : $cal_event;
+			$cache['keywords']=addslashes(record_to_keywords($this->Record)).','.$cache['type'];
+			if($this->f('ctime')>$last_sync_time)
+			{
+				$db->insert_row('se_cache',$cache);
+			}else {
+				$db->update_row('se_cache',array('user_id','link_id'), $cache);
+			}
+		}
 	}
 }
