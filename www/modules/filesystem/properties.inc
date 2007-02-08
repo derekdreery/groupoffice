@@ -268,7 +268,7 @@ switch($tabstrip->get_active_tab_id())
 			$row->add_cell($cell);
 			$table->add_row($row);
 
-			$disabled = ($fs->is_owner($GO_SECURITY->user_id, $fv->path)) ? false : true;
+			$disabled = ($fs->is_owner($GO_SECURITY->user_id, $fv->path) || $GO_MODULES->write_permission) ? false : true;
 
 
 			$checkbox = new checkbox('share_folder', 'share_folder', $fv->path, $fs_activate_sharing, $share, $disabled);

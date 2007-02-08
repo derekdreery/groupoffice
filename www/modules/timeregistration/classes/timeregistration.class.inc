@@ -638,7 +638,7 @@ class timeregistration extends db
 
 	
 
-	function delete_user($user_id)
+	function __on_user_delete($user_id)
 	{
 		$projects = new projects();
 		$this->get_user_projects($user_id);

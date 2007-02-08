@@ -137,37 +137,7 @@ class notes extends db
 	}
 	
 	
-	function global_search_sync($user_id,$last_sync_time=0)
-	{
-		global $GO_MODULES, $GO_LANGUAGE;
-
-		require($GO_LANGUAGE->get_language_file('notes'));
-
-		$sql = "SELECT * FROM no_notes WHERE user_id='$user_id' AND mtime>$last_sync_time AND ctime>$last_sync_time";
-
-		$this->query($sql);
-
-		$db = new db();
-		while($this->next_record())
-		{
-			$cache['table']='no_notes';
-			$cache['id']=$this->f('id');
-			$cache['user_id']=$user_id;
-			$cache['name'] = addslashes($this->f('name'));
-			$cache['link_id'] = $this->f('link_id');
-			$cache['link_type']=4;
-			$cache['description']=addslashes($this->f('description'));
-			$cache['url']=$GO_MODULES->modules['notes']['url'].'note.php?note_id='.$this->f('id');
-			$cache['type']=$no_note;
-			$cache['keywords']=addslashes(record_to_keywords($this->Record)).','.$cache['type'];
-			if($this->f('ctime')>$last_sync_time)
-			{
-				$db->insert_row('se_cache',$cache);
-			}else {
-				$db->update_row('se_cache',array('user_id','link_id'), $cache);
-			}
-		}
-	}
+	
 
 	function get_notes($user_id=0, $links=false,
 	$sort='name', $direction='ASC', $start=0,
@@ -210,11 +180,43 @@ class notes extends db
 		return $count;
 	}
 
-	function delete_user($user_id)
+	function __on_delete_user($user_id)
 	{
 		$sql = "DELETE FROM no_notes WHERE user_id='$user_id'";
 		$this->query($sql);
 
 		$this->query("DELETE FROM no_settings WHERE user_id='$user_id'");
+	}
+	
+	function __on_search($user_id,$last_sync_time=0)
+	{
+		global $GO_MODULES, $GO_LANGUAGE;
+
+		require($GO_LANGUAGE->get_language_file('notes'));
+
+		$sql = "SELECT * FROM no_notes WHERE user_id='$user_id' AND mtime>$last_sync_time AND ctime>$last_sync_time";
+
+		$this->query($sql);
+
+		$db = new db();
+		while($this->next_record())
+		{
+			$cache['table']='no_notes';
+			$cache['id']=$this->f('id');
+			$cache['user_id']=$user_id;
+			$cache['name'] = addslashes($this->f('name'));
+			$cache['link_id'] = $this->f('link_id');
+			$cache['link_type']=4;
+			$cache['description']=addslashes($this->f('description'));
+			$cache['url']=$GO_MODULES->modules['notes']['url'].'note.php?note_id='.$this->f('id');
+			$cache['type']=$no_note;
+			$cache['keywords']=addslashes(record_to_keywords($this->Record)).','.$cache['type'];
+			if($this->f('ctime')>$last_sync_time)
+			{
+				$db->insert_row('se_cache',$cache);
+			}else {
+				$db->update_row('se_cache',array('user_id','link_id'), $cache);
+			}
+		}
 	}
 }

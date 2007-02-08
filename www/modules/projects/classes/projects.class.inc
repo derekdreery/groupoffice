@@ -17,41 +17,7 @@ class projects extends db
 		$this->db();
 	}
 	
-	function global_search_sync($user_id,$last_sync_time=0)
-	{
-		global $GO_MODULES, $GO_LANGUAGE;
-
-		require($GO_LANGUAGE->get_language_file('projects'));
-
-		$sql = "SELECT DISTINCT pmProjects.* FROM pmProjects ".
-		"INNER JOIN acl ON (pmProjects.acl_read = acl.acl_id OR pmProjects.acl_write = acl.acl_id OR pmProjects.acl_book=acl.acl_id) ".
-		"LEFT JOIN users_groups ON (acl.group_id = users_groups.group_id) WHERE ((".
-		"users_groups.user_id = ".$user_id.") OR (".
-		"acl.user_id = ".$user_id.")) AND mtime>$last_sync_time AND ctime>$last_sync_time";
-
-		$this->query($sql);
-
-		$db = new db();
-		while($this->next_record())
-		{
-			$cache['table']='pmProjects';
-			$cache['id']=$this->f('id');
-			$cache['user_id']=$user_id;
-			$cache['name'] = addslashes($this->f('name'));
-			$cache['link_id'] = $this->f('link_id');
-			$cache['link_type']=5;
-			$cache['description']=addslashes($this->f('description'));
-			$cache['url']=$GO_MODULES->modules['projects']['url'].'project.php?project_id='.$this->f('id');
-			$cache['type']=$pm_project;
-			$cache['keywords']=addslashes(record_to_keywords($this->Record)).','.$pm_project;
-			if($this->f('ctime')>$last_sync_time)
-			{
-				$db->insert_row('se_cache',$cache);
-			}else {
-				$db->update_row('se_cache',array('user_id','link_id'), $cache);
-			}
-		}
-	}
+	
 
 	function get_project_users()
 	{
@@ -925,7 +891,7 @@ class projects extends db
 		return false;
 	}
 
-	function delete_user($user_id)
+	function __on_user_delete($user_id)
 	{
 		$projects = new projects();
 		$this->get_user_projects($user_id);
@@ -935,5 +901,41 @@ class projects extends db
 		}
 
 		$this->query("DELETE FROM pm_settings WHERE user_id='$user_id'");
+	}
+	
+	function __on_search($user_id,$last_sync_time=0)
+	{
+		global $GO_MODULES, $GO_LANGUAGE;
+
+		require($GO_LANGUAGE->get_language_file('projects'));
+
+		$sql = "SELECT DISTINCT pmProjects.* FROM pmProjects ".
+		"INNER JOIN acl ON (pmProjects.acl_read = acl.acl_id OR pmProjects.acl_write = acl.acl_id OR pmProjects.acl_book=acl.acl_id) ".
+		"LEFT JOIN users_groups ON (acl.group_id = users_groups.group_id) WHERE ((".
+		"users_groups.user_id = ".$user_id.") OR (".
+		"acl.user_id = ".$user_id.")) AND mtime>$last_sync_time AND ctime>$last_sync_time";
+
+		$this->query($sql);
+
+		$db = new db();
+		while($this->next_record())
+		{
+			$cache['table']='pmProjects';
+			$cache['id']=$this->f('id');
+			$cache['user_id']=$user_id;
+			$cache['name'] = addslashes($this->f('name'));
+			$cache['link_id'] = $this->f('link_id');
+			$cache['link_type']=5;
+			$cache['description']=addslashes($this->f('description'));
+			$cache['url']=$GO_MODULES->modules['projects']['url'].'project.php?project_id='.$this->f('id');
+			$cache['type']=$pm_project;
+			$cache['keywords']=addslashes(record_to_keywords($this->Record)).','.$pm_project;
+			if($this->f('ctime')>$last_sync_time)
+			{
+				$db->insert_row('se_cache',$cache);
+			}else {
+				$db->update_row('se_cache',array('user_id','link_id'), $cache);
+			}
+		}
 	}
 }

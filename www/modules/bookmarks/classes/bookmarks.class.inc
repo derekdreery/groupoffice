@@ -205,7 +205,7 @@ class bookmarks extends db
 		return false;
 	}
 
-	function delete_user($user_id)
+	function __on_user_delete($user_id)
 	{
 		$this->get_user_bookmarks($user_id);
 		$del = new bookmarks();
