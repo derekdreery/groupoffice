@@ -648,7 +648,7 @@ class sql_users extends base_users
 						$module_object = new $module['id'];
 						if(method_exists($module_object, '__on_user_delete'))
 						{
-							$module_object->delete_user($user_id);
+							$module_object->__on_user_delete($user_id);
 						}
 					}
 					
@@ -660,13 +660,13 @@ class sql_users extends base_users
 					}*/
 				}
 
-				$GO_GROUPS->delete_user($user_id);
+				$GO_GROUPS->__on_user_delete($user_id);
 
 				if(file_exists($GO_CONFIG->root_path.'sync/classes/syncml.class.inc'))
 				{
 					require_once($GO_CONFIG->root_path.'sync/classes/syncml.class.inc');
 					$sync_settings = new syncml_settings();
-					$sync_settings->delete_user($user_id);
+					$sync_settings->__on_user_delete($user_id);
 				}
 				
 				$sql = "DELETE FROM acl WHERE user_id=$user_id;";
