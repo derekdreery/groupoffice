@@ -343,7 +343,7 @@ class sql_groups extends base_groups
 	* @return bool		True on success
 	*/
 	
-  function delete_user($user_id)
+  function __on_user_delete($user_id)
   {
   	global $go_groups_class;
   	

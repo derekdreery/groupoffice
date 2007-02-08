@@ -353,9 +353,9 @@ class base_groups extends db {
 	 * @return Boolean to indicate if the removal of groups and memberships
 	 * has been successful.
 	 */
-	function delete_user( $user_id ) {
+	function __on_user_delete( $user_id ) {
 		trigger_error(
-			'delete_user() is an abstract method.',
+			'__on_user_delete() is an abstract method.',
 			E_USER_ERROR );
 		return false;
 	}
