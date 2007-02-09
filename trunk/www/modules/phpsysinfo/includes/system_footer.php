@@ -77,8 +77,4 @@ if (!$hide_picklist) {
   echo "\n\n<br>";
 } 
 
-echo "\n<hr>\n" . $text['created'];
 
-echo '<a href="http://phpsysinfo.sourceforge.net">&nbsp;phpSysInfo-' . $VERSION . '</a> ' . strftime ($text['gen_time'], time());
-
-echo "\n<br>\n</body>\n</html>\n";

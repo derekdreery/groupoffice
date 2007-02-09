@@ -1,6 +1,5 @@
 
 <table border="0" style="font-family: Arial, Helvetica;font-size:12px;">
-<tr><td colspan="2"><b>Configuration tests</b></td></tr>
 <tr>
 	<td>Server software:</td>
 	<td><?php echo $_SERVER['SERVER_SOFTWARE']; ?></td>
@@ -140,6 +139,73 @@
 	{
 		//$fatal_error = true;
 		echo '<span style="color: red;">Warning: register_globals is enabled in php.ini. We recently made Group-Office compatible with this setting. This is still in a testing stage.</span>';
+	}else
+	{
+		echo 'Ok';
+	}
+	?>
+	</td>
+</tr>
+<tr>
+	<td valign="top">Error logging:</td>
+	<td>
+	<?php	
+
+	if(ini_get('log_errors')!='1')
+	{
+		//$fatal_error = true;
+		echo '<span style="color: red;">Warning: PHP error logging is disabled in php.ini. It\'s recommended that this feature is enabled.</span>';
+	}else
+	{
+		echo 'Ok';
+	}
+	?>
+	</td>
+</tr>
+<tr>
+	<td valign="top">libwbxml:</td>
+	<td>
+	<?php	
+	$wbxml2xml = whereis('wbxml2xml') ? whereis('wbxml2xml') : '/usr/bin/wbxml2xml';
+	$xml2wbxml = whereis('xml2wbxml') ? whereis('xml2wbxml') : '/usr/bin/xml2wbxml';;
+	if(!is_executable($wbxml2xml) || !is_executable($xml2wbxml))
+	{
+		//$fatal_error = true;
+		echo '<span style="color: red;">Warning: libwbxml2 is not installed. Synchronization will not work!</span>';
+	}else
+	{
+		echo 'Ok';
+	}
+	?>
+	</td>
+</tr>
+<tr>
+	<td valign="top">TAR Compression:</td>
+	<td>
+	<?php	
+	$tar = whereis('tar') ? whereis('tar') : '/bin/tar';
+	
+	if(!is_executable($tar))
+	{
+		//$fatal_error = true;
+		echo '<span style="color: red;">Warning: tar is not installed or not executable.</span>';
+	}else
+	{
+		echo 'Ok';
+	}
+	?>
+	</td>
+</tr>
+<tr>
+	<td valign="top">ZIP Compression:</td>
+	<td>
+	<?php	
+	$zip = whereis('zip') ? whereis('zip') : '/usr/bin/zip';
+	
+	if(!is_executable($zip))
+	{
+		//$fatal_error = true;
+		echo '<span style="color: red;">Warning: zip is not installed or not executable.</span>';
 	}else
 	{
 		echo 'Ok';

@@ -674,6 +674,23 @@ class GO_CONFIG
    */
   var $quota_protouser = '';
   
+  
+  /**
+   * Command to convert xml to wbxml
+   *
+   * @var     string
+   * @access  public
+   */
+  var $cmd_xml2wbxml = '/usr/bin/xml2wbxml';
+  
+  /**
+   * Command to convert wbxml to xml
+   *
+   * @var     string
+   * @access  public
+   */
+  var $cmd_wbxml2xml = '/usr/bin/wbxml2xml';
+  
  /**
 	* Automatically popup Group-Office in a screen without the brwoser
 	* toolbars

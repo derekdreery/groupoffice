@@ -222,6 +222,10 @@ if ($template == 'xml') {
   // parse our the template
   $tpl->pparse('out', 'form'); 
   // finally our print our footer
+  
+ 
+  
+  
   if (PHPGROUPWARE == 1) {
     $phpgw->common->phpgw_footer();
   } else {
@@ -230,6 +234,18 @@ if ($template == 'xml') {
   
   if(isset($GO_CONFIG))
 	{
+		load_basic_controls();
+		
+		require($GO_LANGUAGE->get_language_file('phpsysinfo'));
+		$tabstrip = new tabstrip('tests_tabstrip',$si_tests);
+		$tabstrip->set_attribute('style','width:100%');
+		echo $tabstrip->get_html();
+		require('../../install/install.inc');
+		require('../../install/test.inc');
+		
+		
+		echo '<br /><a class="normal" href="../../install/install.php">'.$si_edit_conf.'</a><br /><br />';
+		
 		require_once($GO_THEME->theme_path.'footer.inc');
 	}
 
