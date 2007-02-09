@@ -72,6 +72,8 @@ array(
 'cmd_quota',
 'cmd_alias',
 'cmd_edquota',
+'cmd_wbxml2xml',
+'cmd_xml2wbxml',
 'quota_protouser',
 'force_fullscreen',
 'logout_url',
@@ -124,6 +126,21 @@ function save_config($config)
 	}else
 	{
 		return fclose($fp);
+	}
+}
+
+function whereis($cmd)
+{
+	exec('whereis '.$cmd, $return);
+	
+	if(isset($return[0]))
+	{
+		$locations = explode(' ', $return[0]);
+		if(isset($locations[1]))
+		{
+			return $locations[1];
+		}
+		return false;
 	}
 }
 

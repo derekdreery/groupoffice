@@ -61,12 +61,14 @@ class wbxml
 	*/
 	function to_xml($wbxml)
 	{		
+		global $GO_CONFIG;
+		
 		//create temp file
 		$fp = fopen($this->wbxmlfile, 'w+');
 		fwrite($fp, $wbxml);
 		fclose($fp);
 		//convert temp file
-		exec('wbxml2xml -o '.$this->xmlfile.' '.$this->wbxmlfile);
+		exec($GO_CONFIG->cmd_wbxml2xml.' -o '.$this->xmlfile.' '.$this->wbxmlfile);
 		
 		if(!file_exists($this->xmlfile))
 		{
@@ -92,12 +94,14 @@ class wbxml
 	*/
 	function to_wbxml($xml)
 	{
-			//create temp file
+		global $GO_CONFIG;
+		
+		//create temp file
 		$fp = fopen($this->xmlfile, 'w+');
 		fwrite($fp, $xml);
 		fclose($fp);
 		//convert temp file
-		exec('xml2wbxml -v 1.2 -o '.$this->wbxmlfile.' '.$this->xmlfile);
+		exec($GO_CONFIG->cmd_xml2wbxml.' -v 1.2 -o '.$this->wbxmlfile.' '.$this->xmlfile);
 		if(!file_exists($this->wbxmlfile))
 		{
 			go_log(LOG_DEBUG, 'Fatal error: xml2wbxml conversion failed');

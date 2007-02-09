@@ -114,33 +114,37 @@ if ($script_path == '')
 $config_location1 = '/etc/Group-Office/'.$_SERVER['SERVER_NAME'].str_replace($_SERVER['DOCUMENT_ROOT'],'', $GO_CONFIG->root_path).'config.php';
 $config_location2 = $GO_CONFIG->root_path.'config.php';
 
-if(!file_exists($CONFIG_FILE))
+if($task !='test')
 {
-	print_head();
-	echo 'The configuration file does not exist. You must create a writable configuration file at one of the following locations:<br />';
-	echo '<ol><li>'.$config_location1.'</li>';
-	echo '<li>'.$config_location2.'</li></ol></i></font>';
-	echo 'The first location is more secure because the sensitive information is kept outside the document root but it does require root privileges on this machine.<br />The second advantage is that you will be able to seperate the source from the configuration. This can be very usefull with multiple installations on one machine.';
-	echo ' If you choose this location then you have to make sure that in Apache\'s httpd.conf the following is set:<br /><br />';
-	echo '<font color="#003399">';
-	echo '<i>UseCanonicalName On</i></font><br />';
-	echo 'This is to make sure it always finds your configuration file at the correct location.';
-	echo '<br /><br /><font color="#003399">';
-	echo '<i>$ touch config.php (Or FTP an empty config.php to the server)<br />';
-	echo '$ chmod 666 config.php</i></font><br /><br /><div style="text-align: right;"><input type="submit" value="Continue" /></div>';
-	print_foot();
-	exit();
-}elseif (!is_writable($CONFIG_FILE))
-{
-	print_head();
-	echo 'The configuration file \''.$CONFIG_FILE.'\' exists but is not writable. If you wish to make changes then you have to make \''.$CONFIG_FILE.'\' writable during the configuration process.';
-	echo '<br /><br />Correct this and refresh this page.';
-	echo '<br /><br /><font color="#003399"><i>$ chmod 666 '.$CONFIG_FILE.'<br /></i></font>'.
-	'<br /><br /><div style="text-align: right;"><input type="submit" value="Continue" /></div>';
-	print_foot();
-	exit();
+	if(!file_exists($CONFIG_FILE))
+	{
+		print_head();
+		echo '<input type="hidden" name="task" value="license" />';
+		echo 'The configuration file does not exist. You must create a writable configuration file at one of the following locations:<br />';
+		echo '<ol><li>'.$config_location1.'</li>';
+		echo '<li>'.$config_location2.'</li></ol></i></font>';
+		echo 'The first location is more secure because the sensitive information is kept outside the document root but it does require root privileges on this machine.<br />The second advantage is that you will be able to seperate the source from the configuration. This can be very usefull with multiple installations on one machine.';
+		echo ' If you choose this location then you have to make sure that in Apache\'s httpd.conf the following is set:<br /><br />';
+		echo '<font color="#003399">';
+		echo '<i>UseCanonicalName On</i></font><br />';
+		echo 'This is to make sure it always finds your configuration file at the correct location.';
+		echo '<br /><br /><font color="#003399">';
+		echo '<i>$ touch config.php (Or FTP an empty config.php to the server)<br />';
+		echo '$ chmod 666 config.php</i></font><br /><br /><div style="text-align: right;"><input type="submit" value="Continue" /></div>';
+		print_foot();
+		exit();
+	}elseif (!is_writable($CONFIG_FILE))
+	{
+		print_head();
+		echo '<input type="hidden" name="task" value="license" />';
+		echo 'The configuration file \''.$CONFIG_FILE.'\' exists but is not writable. If you wish to make changes then you have to make \''.$CONFIG_FILE.'\' writable during the configuration process.';
+		echo '<br /><br />Correct this and refresh this page.';
+		echo '<br /><br /><font color="#003399"><i>$ chmod 666 '.$CONFIG_FILE.'<br /></i></font>'.
+		'<br /><br /><div style="text-align: right;"><input type="submit" value="Continue" /></div>';
+		print_foot();
+		exit();
+	}
 }
-
 
 $key = array_search($task, $tasks);
 $nexttask = isset($tasks[$key+1]) ? $tasks[$key+1] : 'completed';
@@ -278,7 +282,7 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 
 			if (substr($_POST['userdir'], -1) != '/') $_POST['userdir'] = $_POST['userdir'].'/';
 			$GO_CONFIG->file_storage_path=smart_stripslashes($_POST['userdir']);
-			$GO_CONFIG->create_mode=smart_stripslashes($_POST['create_mode']);
+			//$GO_CONFIG->create_mode=smart_stripslashes($_POST['create_mode']);
 			$GO_CONFIG->max_file_size=smart_stripslashes($_POST['max_file_size']);
 
 			if (substr($_POST['local_path'], -1) != '/') $_POST['local_path'] = $_POST['local_path'].'/';
@@ -289,6 +293,22 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 
 			if (substr($tmpdir, -1) != '/') $tmpdir = $tmpdir.'/';
 			$GO_CONFIG->tmpdir=$tmpdir;
+			
+			
+			//autodetect helper program locations
+			
+			$GO_CONFIG->cmd_zip = whereis('zip') ? whereis('zip') : '/usr/bin/zip';
+			$GO_CONFIG->cmd_unzip = whereis('unzip') ? whereis('unzip') : '/usr/bin/unzip';
+			$GO_CONFIG->cmd_tar = whereis('tar') ? whereis('tar') : '/bin/tar';
+			$GO_CONFIG->cmd_chpasswd = whereis('chpasswd') ? whereis('chpasswd') : '/usr/sbin/chpasswd';
+			$GO_CONFIG->cmd_sudo = whereis('sudo') ? whereis('sudo') : '/usr/bin/sudo';
+			$GO_CONFIG->cmd_xml2wbxml = whereis('xml2wbxml') ? whereis('xml2wbxml') : '/usr/bin/xml2wbxml';
+			$GO_CONFIG->cmd_wbxml2xml = whereis('wbxml2xml') ? whereis('wbxml2xml') : '/usr/bin/wbxml2xml';
+			
+		
+
+			
+			
 
 			if (save_config($GO_CONFIG) && !isset($feedback))
 			{
@@ -999,11 +1019,7 @@ switch($task)
 		(Current PHP configuration allows <?php echo $max_ini; ?> bytes)
 		</td>
 		</tr>
-		<tr>
-		<td>
-		Create mode:
-		</td>
-		<td>
+		
 		<?php
 
 
@@ -1014,9 +1030,7 @@ switch($task)
 		}
 
 	?>
-		<input type="text" size="4" name="create_mode" value="<?php echo $GO_CONFIG->create_mode; ?>" />
-		</td>
-		</tr>		
+			
 		<tr>
 			<td colspan="2">
 			<br /><br />
@@ -1070,6 +1084,7 @@ switch($task)
 		print_foot();
 		exit();
 		break;
+
 
 
 	case 'theme':
