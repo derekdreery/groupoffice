@@ -197,3 +197,5 @@ $cms_login_template_item = 'Login template';
 $cms_default_go_login='Default Group-Office login box';
 
 $cms_userfield = 'User datafield';
+$cms_fckeditor_styles='Selectable styles';
+$cms_fckeditor_help='Click here for documentation';

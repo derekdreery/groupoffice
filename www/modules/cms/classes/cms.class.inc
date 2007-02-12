@@ -20,6 +20,57 @@ class cms extends db
 		$this->db();
 	}
 	
+	function get_styles($style)
+	{
+		$styles = array();
+		$style_name = '';
+		$in_style = false;
+
+		$style = str_replace("\r", '', $style);
+		$style = str_replace("\n", '', $style);
+		$style = str_replace(' ', '', $style);
+		for ($i=0; $i<strlen($style); $i++)
+		{
+			$char = $style[$i];
+
+			if ($char == '{' || $char == ',')
+			{
+				$in_style = false;
+				if (trim($style_name) != '')
+				{
+					$styles[] = $style_name;
+				}
+				$style_name = '';
+			}elseif($char == '.')
+			{
+				if ($style_name != '')
+				{
+					$style_name = '';
+					$in_style = false;
+				}else
+				{
+					$in_style = true;
+				}
+			}elseif($char == ':')
+			{
+				$style_name = '';
+				$in_style = false;
+			}elseif($char == '}')
+			{
+				$in_style = false;
+				$style_name = '';
+			}else
+			{
+				if ($in_style)
+				{
+					$style_name .= $char;
+				}
+			}
+		}
+
+		return $styles;
+	}
+	
 	function get_plugins()
 	{
 		global $GO_MODULES, $GO_CONFIG;

@@ -1,5 +1,7 @@
 <?php
-$updates[26] = array();
+$updates[27] = array();
+
+$updates[26][] = "ALTER TABLE `cms_templates` ADD `fckeditor_styles` TEXT NOT NULL ;";
 
 $updates[25][] = "ALTER TABLE `cms_templates` ADD `login_template_item_id` INT NOT NULL ;";
 

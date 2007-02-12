@@ -4,8 +4,8 @@ $module['cms']['description'] = 'With the websites module everybody can manage a
 'First you create or select a template and you can easily edit'.
 'you web pages with the HTML editor from Group-Office or your'.
 'favorite text editor.';
-$module['cms']['version'] = '2.6';
-$module['cms']['release_date'] = '2006-09-19';
+$module['cms']['version'] = '2.7';
+$module['cms']['release_date'] = '2007-02-12';
 $module['cms']['status'] = 'Stable';
 $module['cms']['authors'][] = array('name'=>'Merijn Schering', 'email'=>'mschering@intermesh.nl');
 $module['cms']['sort_order'] = '90';

@@ -128,6 +128,13 @@ switch($task)
 		
 		$cms->update_template($template);
 	break;
+	
+	case 'save_fckeditor_styles':
+		$template['id'] = $template_id;
+		$template['fckeditor_styles'] = smart_addslashes($_POST['fckeditor_styles']);
+		
+		$cms->update_template($template);
+	break;
 }
 
 if ($template_id > 0)
@@ -156,6 +163,7 @@ if ($template_id > 0)
 	$tabstrip->add_tab('properties', $strProperties);
 	$tabstrip->add_tab('style', $cms_style);
 	$tabstrip->add_tab('additional_style', $cms_additional_style);
+	$tabstrip->add_tab('fckeditor_styles', $cms_fckeditor_styles);
 	$tabstrip->add_tab('print_style', $cms_print_style);
 	$tabstrip->add_tab('template_items', $cms_templates);
 	$tabstrip->add_tab('template_files', $cms_files);
@@ -323,6 +331,44 @@ switch($tabstrip->get_active_tab_id())
 		$cell->set_attribute('colspan','2');
 		$cell->add_html_element(new button($cmdOk, "javascript:save('save_additional_style', 'true');"));
 		$cell->add_html_element(new button($cmdSave, "javascript:save('save_additional_style', 'false');"));
+		$cell->add_html_element(new button($cmdClose, "javascript:document.location='".$return_to."';"));
+		$row->add_cell($cell);
+		$table->add_row($row);
+		$tabstrip->add_html_element($table);
+	break;
+	
+	
+	case 'fckeditor_styles':
+	
+
+		$table = new table();
+		$table->set_attribute('style', 'width:100%;height:100%');
+		
+		$row = new table_row();
+		$cell = new table_cell();
+		$link = new hyperlink('http://wiki.fckeditor.net/Developer%27s_Guide/Configuration/Styles', $cms_fckeditor_help);
+		$link->set_attribute('class','normal');
+		$link->set_attribute('target','_blank');
+		$cell->add_html_element($link);
+		$row->add_cell($cell);
+		$table->add_row($row);
+		
+		
+		$row = new table_row();		
+		
+		$textarea = new textarea('fckeditor_styles', $template['fckeditor_styles']);
+		$textarea->set_attribute('style', 'width:100%;height:100%');
+		$cell = new table_cell($textarea->get_html());
+		$cell->set_attribute('style', 'width:100%;height:100%');
+		$row->add_cell($cell);
+		
+		$table->add_row($row);
+		
+		$row = new table_row();
+		$cell = new table_cell();
+		$cell->set_attribute('colspan','2');
+		$cell->add_html_element(new button($cmdOk, "javascript:save('save_fckeditor_styles', 'true');"));
+		$cell->add_html_element(new button($cmdSave, "javascript:save('save_fckeditor_styles', 'false');"));
 		$cell->add_html_element(new button($cmdClose, "javascript:document.location='".$return_to."';"));
 		$row->add_cell($cell);
 		$table->add_row($row);
