@@ -110,9 +110,11 @@ CREATE TABLE `cms_templates` (
   `acl_read` int(11) NOT NULL default '0',
   `acl_write` int(11) NOT NULL default '0',
   `doctype` text NOT NULL,
-  `login_template_item_id` int(11) NOT NULL,
+  `login_template_item_id` int(11) NOT NULL default '0',
+  `fckeditor_styles` text NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
 ) TYPE=MyISAM;
+
 
 

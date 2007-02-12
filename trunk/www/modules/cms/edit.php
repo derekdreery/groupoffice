@@ -303,9 +303,15 @@ $table->add_row($row);
 $htmleditor = new htmleditor('content');
 $htmleditor->setImagePath('cms/'.$_SESSION['site_id'].'/images/');
 $htmleditor->SetConfig('CustomConfigurationsPath', $GO_MODULES->url.'fckconfig.js');
+$htmleditor->SetConfig('StylesXmlPath', $GO_MODULES->url.'fckstyles.php?template_id='.$site['template_id']);
 $htmleditor->SetConfig('EditorAreaCSS', $GO_MODULES->url.'stylesheet.php?template_id='.$site['template_id'].'&editor=true');
 $htmleditor->Value		=  $file['content'];
-$htmleditor->ToolbarSet='cms';
+if($template['restrict_editor']=='1')
+{
+	$htmleditor->ToolbarSet='cms_restricted';
+}else {
+	$htmleditor->ToolbarSet='cms';
+}
 
 $htmleditor->SetConfig('LinkBrowser',true);
 $htmleditor->SetConfig('LinkBrowserURL', $GO_MODULES->modules['cms']['url'].'select.php');

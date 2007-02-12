@@ -153,3 +153,5 @@ $cms_commentsform='Reactie formulier';
 $cms_login_template_item='Inlogsjabloon';
 $cms_default_go_login='Standaard Group-Office inlogscherm';
 $cms_userfield='Gebruikers dataveld';
+$cms_fckeditor_styles='Te selecteren stijl';
+$cms_fckeditor_help='Klik hier voor documentatie';

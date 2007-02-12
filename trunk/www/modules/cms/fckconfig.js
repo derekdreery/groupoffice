@@ -19,7 +19,19 @@ FCKConfig.ToolbarSets["cms"] = [
 	['Link','Unlink','Anchor'],
 	['ImageManager', 'Table','Rule','SpecialChar','PageBreak','UniversalKey'],
 	'/',
-	['FontFormat','FontName','FontSize'],
+	['Style','FontFormat','FontName','FontSize'],
 	['TextColor','BGColor']
 ] ;
+
+FCKConfig.ToolbarSets["cms_restricted"] = [
+	['Source','DocProps','-','Templates'],
+	['Cut','Copy','Paste','PasteText','PasteWord','-','Print','SpellCheck'],
+	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
+	['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
+	['OrderedList','UnorderedList','-','Outdent','Indent'],
+	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
+	['Link','Unlink','Anchor'],
+	['ImageManager', 'Table','Rule','SpecialChar','PageBreak','UniversalKey', 'Style','FontFormat']
+] ;
+
 FCKConfig.Plugins.Add( 'ImageManager');
