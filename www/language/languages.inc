@@ -253,3 +253,9 @@ $languages['hu']['description'] = 'Hungarian';
 $languages['hu']['language_file'] = 'hu';
 $languages['hu']['timezone'] = 1;
 $languages['hu']['DST'] = 1;
+
+$languages['tr'] = $europe_default;
+$languages['tr']['description'] = 'Turkish';
+$languages['tr']['language_file'] = 'tr';
+$languages['tr']['timezone'] = 1;
+$languages['tr']['DST'] = 1;

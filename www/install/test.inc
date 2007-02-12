@@ -86,7 +86,21 @@
 	<?php
 	if(ini_get('safe_mode') == '1')
 	{
-		echo '<span style="color: red;">Warning: Safe mode is enabled. This may cause trouble with the filesystem module. If you can please set safe_mode=Off in php.ini.</span>';
+		echo '<span style="color: red;">Warning: Safe mode is enabled. This may cause trouble with the filesystem module and Synchronization. If you can please set safe_mode=Off in php.ini.</span>';
+	}else
+	{
+		echo 'Ok';		
+	}
+	?>
+	</td>
+</tr>
+<tr>
+	<td valign="top">Open base_dir:</td>
+	<td>
+	<?php
+	if(!empty(ini_get('open_basedir')))
+	{
+		echo '<span style="color: red;">Warning: open_basedir is enabled. This may cause trouble with the filesystem module and Synchronization.</span>';
 	}else
 	{
 		echo 'Ok';		
