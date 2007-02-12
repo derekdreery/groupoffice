@@ -2,10 +2,9 @@
 
 // Calendar ES (spanish) language
 // Author: Mihai Bazon, <mihai_bazon@yahoo.com>
-// Encoding: utf-8
-// Updater: Jordi Sanfeliu <jordi@fibranet.com on 2006-01-30
 // Updater: Servilio Afre Puentes <servilios@yahoo.com>
 // Updated: 2004-06-03
+// Encoding: utf-8
 // Distributed under the same terms as the calendar itself.
 
 // For translators: please use UTF-8 if possible.  We strongly believe that
@@ -91,8 +90,8 @@ Calendar._TT["ABOUT"] =
 "Distribuido bajo licencia GNU LGPL. Visite http://gnu.org/licenses/lgpl.html para más detalles." +
 "\n\n" +
 "Selección de fecha:\n" +
-"- Use los botones \xab y \xbb para seleccionar el año\n" +
-"- Use los botones " + String.fromCharCode(0x2039) + " y " + String.fromCharCode(0x203a) + " para seleccionar el mes\n" +
+"- Use los botones \xab, \xbb para seleccionar el año\n" +
+"- Use los botones " + String.fromCharCode(0x2039) + ", " + String.fromCharCode(0x203a) + " para seleccionar el mes\n" +
 "- Mantenga pulsado el ratón en cualquiera de estos botones para una selección rápida.";
 Calendar._TT["ABOUT_TIME"] = "\n\n" +
 "Selección de hora:\n" +
@@ -111,7 +110,7 @@ Calendar._TT["PART_TODAY"] = " (hoy)";
 
 // the following is to inform that "%s" is to be the first day of week
 // %s will be replaced with the day name.
-Calendar._TT["DAY_FIRST"] = "Hacer %s el primer día de la semana";
+Calendar._TT["DAY_FIRST"] = "Hacer %s primer día de la semana";
 
 // This may be locale-dependent.  It specifies the week-end days, as an array
 // of comma-separated numbers.  The numbers are from 0 to 6: 0 means Sunday, 1
