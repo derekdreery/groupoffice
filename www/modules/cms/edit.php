@@ -242,14 +242,16 @@ if (isset ($feedback))
 
 $tabstrip = new tabstrip('cms_properties', $fbProperties, 160);
 $tabstrip->set_attribute('style','width:100%;height:100%');
+
+
 if($file['acl']>0 || $file['hot_item']=='1')
 {
-	$tabstrip->add_tab('properties', $fbProperties, $table);
-	
 	if($cms->get_comments($file_id))
 	{
+		$tabstrip->add_tab('properties', $fbProperties, $table);
 		$tabstrip->add_tab('comments', $cms_comments);
 	}
+	
 	
 	if($file['hot_item']=='1')
 	{
@@ -260,6 +262,10 @@ if($file['acl']>0 || $file['hot_item']=='1')
 		$aclspan = new html_element('span', get_acl($file['acl']));
 		$tabstrip->add_tab('acl', $strPermissions);	
 	}
+}elseif($cms->get_comments($file_id))
+{
+	$tabstrip->add_tab('properties', $fbProperties, $table);
+	$tabstrip->add_tab('comments', $cms_comments);
 }
 
 $menu = new button_menu();
@@ -278,7 +284,7 @@ if($tabstrip->get_active_tab_id()=='properties' || $tabstrip->get_active_tab_id(
 	$menu->add_button('save_big', $cmdSave, "javascript:_save('save_hot_item_text');");
 }elseif($tabstrip->get_active_tab_id()=='comments')
 {
-	
+	load_control('datatable');
 	$datatable = new datatable('cms_comments');
 	
 	if($datatable->task=='delete')
