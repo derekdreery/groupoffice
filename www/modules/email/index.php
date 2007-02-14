@@ -101,6 +101,21 @@ function link_message()
 {
 	popup('<?php echo $GO_CONFIG->control_url; ?>select/global_select.php?multiselect=true&handler='+Base64.encode('<?php echo $GO_MODULES->url; ?>link_message.php?account_id='+message.document.forms[0].account_id.value+'&uid='+message.document.forms[0].uid.value+'&mailbox='+message.document.forms[0].mailbox.value),'600','400');	
 }
+function link_messages()
+{
+	var count = messages.table_count_selected('email_form','messages_table');
+	
+	if(count==0)
+	{
+		alert('<?php echo addslashes($strNoItemSelected); ;?>');
+	}else
+	{
+		openPopup('link_messages', 'about:blank','600','400', 'yes');
+		messages.document.forms[0].target='link_messages';
+		messages.document.forms[0].action='prepare_message_link_handler.php';
+		messages.document.forms[0].submit();
+	}
+}
 
 function composer(action)
 {
@@ -143,6 +158,12 @@ function composer(action)
 			echo '<a href="javascript:document.location=\'index.php?account_id=\'+messages.document.forms[0].account_id.value+\'&mailbox=INBOX&refresh=true\';"><img src="'.$GO_THEME->images['em_refresh'].'" border="0" /><br />'.$ml_refresh.'</a></td>';			
 			echo '<td class="ModuleIcons">';
 			echo '<a href="javascript:window.messages.confirm_delete();"><img src="'.$GO_THEME->images['delete_big'].'" border="0" /><br />'.$ml_delete.'</a></td>';					
+			
+			if(file_exists($GO_CONFIG->control_path.'mimeviewer/mimeviewer.php'))
+			{
+				echo '<td class="ModuleIcons">';
+				echo '<a href="javascript:link_messages();"><img src="'.$GO_THEME->images['link'].'" border="0" /><br />'.$strCreateLink.'</a></td>';
+			}
 			
 						
 			echo '<td id="accountButtons">';
@@ -194,11 +215,7 @@ function composer(action)
 				echo '<a href="javascript:save_message();"><img src="'.$GO_THEME->images['save_big'].'" border="0" /><br />'.$cmdSave.'</a></td>';
 			}
 			
-			if(file_exists($GO_CONFIG->control_path.'mimeviewer/mimeviewer.php'))
-			{
-				echo '<td class="ModuleIcons">';
-				echo '<a href="javascript:link_message();"><img src="'.$GO_THEME->images['link'].'" border="0" /><br />'.$strCreateLink.'</a></td>';
-			}
+			
 			
 			
 			echo '<td class="ModuleIcons" id="previous_button" style="display:none">';
