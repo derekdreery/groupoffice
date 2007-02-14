@@ -1,6 +1,7 @@
 <h1 style="font-family: Arial, Helvetica;font-size: 18px;">Group-Office test script</h1>
 <?php
-require('test.inc');
+require(dirname(__FILE__).'/install.inc');
+require(dirname(__FILE__).'/test.inc');
 
 if(isset($fatal_error))
 {
