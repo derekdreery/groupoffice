@@ -25,6 +25,12 @@ if($GO_MODULES->get_module('users'))
 	$tables[]='users';	
 }
 
+if($GO_MODULES->get_module('shipping'))
+{
+	$tables[]='sh_jobs';	
+	$tables[]='sh_packages';	
+}
+
 foreach($tables as $table)
 {
 	$sql = "SELECT id FROM $table WHERE link_id=0 OR ISNULL(link_id)";

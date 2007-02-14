@@ -35,7 +35,7 @@ header('Content-Type: text/html; charset='.$charset);
     $form->set_attribute('target','main');
     $input = new input('text','query',$cmdSearch.'...');
     $input->set_attribute('onfocus',"javascript:this.value='';");
-    // $input->set_attribute('onblur',"javascript:this.value='".$cmdSearch."...';");
+    $input->set_attribute('onblur',"javascript:document.search_form.reset();");
     $input->set_attribute('style','background-color:#22437f;border:1px solid white;color:white;padding-left:1px;');
 
     $img = new image('magnifier');
