@@ -98,7 +98,7 @@
 	<td valign="top">Open base_dir:</td>
 	<td>
 	<?php
-	if(!empty(ini_get('open_basedir')))
+	if(ini_get('open_basedir')!='')
 	{
 		echo '<span style="color: red;">Warning: open_basedir is enabled. This may cause trouble with the filesystem module and Synchronization.</span>';
 	}else
