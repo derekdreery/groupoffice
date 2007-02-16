@@ -54,6 +54,7 @@ if(!empty($_SESSION['search']['query']))
 	$datatable = new datatable('global_select_table',false, 'search_form');
 	$datatable->add_column(new table_heading($strName,'name'));
 	$datatable->add_column(new table_heading($strType,'type'));
+	$datatable->add_column(new table_heading($strModifiedAt,'mtime'));
 	//$datatable->add_column(new table_heading($strDescription,'description'));
 
 	$datatable->multiselect=($multiselect=='true');
@@ -86,6 +87,7 @@ if(!empty($_SESSION['search']['query']))
 			$row = new table_row($search->f('link_id'));
 			$row->add_cell(new table_cell($search->f('name')));
 			$row->add_cell(new table_cell($search->f('type')));
+			$row->add_cell(new table_cell(get_timestamp($search->f('mtime')));
 			//$row->add_cell(new table_cell($search->f('description')));
 
 			if(empty($handler))
