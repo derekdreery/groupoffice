@@ -87,7 +87,7 @@ if(!empty($_SESSION['search']['query']))
 			$row = new table_row($search->f('link_id'));
 			$row->add_cell(new table_cell($search->f('name')));
 			$row->add_cell(new table_cell($search->f('type')));
-			$row->add_cell(new table_cell(get_timestamp($search->f('mtime')));
+			$row->add_cell(new table_cell(get_timestamp($search->f('mtime'))));
 			//$row->add_cell(new table_cell($search->f('description')));
 
 			if(empty($handler))

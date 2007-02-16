@@ -1270,7 +1270,7 @@ class filesystem extends db
 
 		require($GO_LANGUAGE->get_language_file('filesystem'));
 
-		$sql = "SELECT * FROM fs_links WHERE mtime>$last_sync_time AND ctime>$last_sync_time";
+		$sql = "SELECT * FROM fs_links WHERE mtime>$last_sync_time";
 
 		$this->query($sql);
 		
@@ -1292,7 +1292,7 @@ class filesystem extends db
 				$cache['url']=$GO_MODULES->modules['filesystem']['url'].'index.php?task=properties&path='.urlencode(addslashes($this->f('path')));
 				$cache['type']=$fs_file;
 				$cache['keywords']=$cache['name'].','.$cache['type'];
-				
+				$cache['mtime']=$this->f('mtime');
 				if($this->f('ctime')>$last_sync_time)
 				{
 					$db->insert_row('se_cache',$cache);
