@@ -35,7 +35,7 @@ class users extends db
 		
 		$sql = "SELECT DISTINCT users.*  FROM users  INNER JOIN acl ON users.acl_id = acl.acl_id ".
 			"LEFT JOIN users_groups ON acl.group_id = users_groups.group_id WHERE (acl.user_id=$user_id ".
-			"OR users_groups.user_id=$user_id) AND mtime>$last_sync_time AND registration_time>$last_sync_time";
+			"OR users_groups.user_id=$user_id) AND mtime>$last_sync_time";
 
 		$this->query($sql);
 
@@ -52,6 +52,8 @@ class users extends db
 			$cache['url']=$GO_MODULES->modules['users']['url'].'user.php?user_id='.$this->f('id');
 			$cache['type']=$GLOBALS['strUser'];
 			$cache['keywords']=addslashes(record_to_keywords($this->Record)).','.$cache['type'];
+			$cache['mtime']=$this->f('mtime');
+			
 			if($this->f('registration_time')>$last_sync_time)
 			{
 				$db->insert_row('se_cache',$cache);

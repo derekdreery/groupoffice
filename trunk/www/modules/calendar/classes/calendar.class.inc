@@ -1373,6 +1373,12 @@ class calendar extends db
 		{
 			$event['status_id'] = $event['todo'] == '1' ? 6 : 1;
 		}
+		
+		if(!isset($event['link_id']))
+		{
+			global $GO_LINKS;
+			$event['link_id'] = $GO_LINKS->get_link_id();
+		}
 
 		$event['id'] = $this->nextid("cal_events");
 
@@ -3194,7 +3200,7 @@ class calendar extends db
 			$calendars[] = $this->f('id');
 		}
 		
-		$sql .= "cal_events_calendars.calendar_id IN (".implode(',', $calendars).")  AND mtime>$last_sync_time AND ctime>$last_sync_time";
+		$sql .= "cal_events_calendars.calendar_id IN (".implode(',', $calendars).")  AND mtime>$last_sync_time";
 
 
 		$this->query($sql);
@@ -3212,6 +3218,8 @@ class calendar extends db
 			$cache['url']=$GO_MODULES->modules['calendar']['url'].'event.php?event_id='.$this->f('id');
 			$cache['type']=$this->f('todo')=='1' ? $cal_todo : $cal_event;
 			$cache['keywords']=addslashes(record_to_keywords($this->Record)).','.$cache['type'];
+			$cache['mtime']=$this->f('mtime');
+			
 			if($this->f('ctime')>$last_sync_time)
 			{
 				$db->insert_row('se_cache',$cache);

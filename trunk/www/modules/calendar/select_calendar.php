@@ -43,7 +43,7 @@ $catNode->childnodesNotLoaded=true;
 
 if($catNode->open)
 {
-	if($cal->get_user_calendars($GO_SECURITY->user_id))
+	if($cal->get_user_calendars($GO_SECURITY->user_id,0))
 	{
 		while($cal->next_record())
 		{
@@ -94,13 +94,13 @@ if($resourceNode->open)
 			{
 				while($cal->next_record())
 				{
-					if($cal->f('user_id') != $GO_SECURITY->user_id)
-					{
+					//if($cal->f('user_id') != $GO_SECURITY->user_id)
+					//{
 						$link = new hyperlink('javascript:select_calendar('.$cal->f('id').');', $cal->f('name'));
 						$link->set_attribute('class','normal');
 						$calNode = new treenode($tv, 'cal_calendars_'.$cal->f('id'), $link->get_html());
 						$catNode->addNode($calNode);
-					}
+					//}
 				}
 			}					
 		}

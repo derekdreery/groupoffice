@@ -1222,7 +1222,7 @@ popup.focus();
 			return false;
 		}
 
-		$sql .= "mtime>$last_sync_time AND ctime>$last_sync_time";
+		$sql .= "mtime>$last_sync_time";
 
 		$this->query($sql);
 
@@ -1239,6 +1239,7 @@ popup.focus();
 			$cache['url']=$GO_MODULES->modules['addressbook']['url'].'contact.php?contact_id='.$this->f('id');
 			$cache['type']=$ab_contact;
 			$cache['keywords']=addslashes(record_to_keywords($this->Record)).','.$ab_contact;
+			$cache['mtime']=$this->f('mtime');
 			if($this->f('ctime')>$last_sync_time)
 			{
 				$db->insert_row('se_cache',$cache);
@@ -1261,7 +1262,7 @@ popup.focus();
 			return false;
 		}
 
-		$sql .= "mtime>$last_sync_time AND ctime>$last_sync_time";
+		$sql .= "mtime>$last_sync_time";
 
 		$this->query($sql);
 
@@ -1278,7 +1279,8 @@ popup.focus();
 			$cache['url']=$GO_MODULES->modules['addressbook']['url'].'company.php?company_id='.$this->f('id');
 			$cache['type']=$ab_company;
 			$cache['keywords']=addslashes(record_to_keywords($this->Record)).','.$ab_contact;
-
+			$cache['mtime']=$this->f('mtime');
+			
 			if($this->f('ctime')>$last_sync_time)
 			{
 				$db->insert_row('se_cache',$cache);
