@@ -913,7 +913,7 @@ class projects extends db
 		"INNER JOIN acl ON (pmProjects.acl_read = acl.acl_id OR pmProjects.acl_write = acl.acl_id OR pmProjects.acl_book=acl.acl_id) ".
 		"LEFT JOIN users_groups ON (acl.group_id = users_groups.group_id) WHERE ((".
 		"users_groups.user_id = ".$user_id.") OR (".
-		"acl.user_id = ".$user_id.")) AND mtime>$last_sync_time AND ctime>$last_sync_time";
+		"acl.user_id = ".$user_id.")) AND mtime>$last_sync_time";
 
 		$this->query($sql);
 
@@ -930,6 +930,8 @@ class projects extends db
 			$cache['url']=$GO_MODULES->modules['projects']['url'].'project.php?project_id='.$this->f('id');
 			$cache['type']=$pm_project;
 			$cache['keywords']=addslashes(record_to_keywords($this->Record)).','.$pm_project;
+			$cache['mtime']=$this->f('mtime');
+			
 			if($this->f('ctime')>$last_sync_time)
 			{
 				$db->insert_row('se_cache',$cache);

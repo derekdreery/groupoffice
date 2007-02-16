@@ -194,7 +194,7 @@ class notes extends db
 
 		require($GO_LANGUAGE->get_language_file('notes'));
 
-		$sql = "SELECT * FROM no_notes WHERE user_id='$user_id' AND mtime>$last_sync_time AND ctime>$last_sync_time";
+		$sql = "SELECT * FROM no_notes WHERE user_id='$user_id' AND mtime>$last_sync_time";
 
 		$this->query($sql);
 
@@ -211,6 +211,7 @@ class notes extends db
 			$cache['url']=$GO_MODULES->modules['notes']['url'].'note.php?note_id='.$this->f('id');
 			$cache['type']=$no_note;
 			$cache['keywords']=addslashes(record_to_keywords($this->Record)).','.$cache['type'];
+			$cache['mtime']=$this->f('mtime');
 			if($this->f('ctime')>$last_sync_time)
 			{
 				$db->insert_row('se_cache',$cache);
