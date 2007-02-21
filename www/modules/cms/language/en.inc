@@ -199,3 +199,7 @@ $cms_default_go_login='Default Group-Office login box';
 $cms_userfield = 'User datafield';
 $cms_fckeditor_styles='Selectable styles';
 $cms_fckeditor_help='Click here for documentation';
+
+$cms_add_contact_success_title='Thank you!';
+$cms_add_contact_success_text='You are subscribed to our newsletter!';
+$cms_add_contact_email_subject='New contact added to mailing';

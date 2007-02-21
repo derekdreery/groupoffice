@@ -246,9 +246,9 @@ $tabstrip->set_attribute('style','width:100%;height:100%');
 
 if($file['acl']>0 || $file['hot_item']=='1')
 {
+	$tabstrip->add_tab('properties', $fbProperties, $table);
 	if($cms->get_comments($file_id))
-	{
-		$tabstrip->add_tab('properties', $fbProperties, $table);
+	{		
 		$tabstrip->add_tab('comments', $cms_comments);
 	}
 	

@@ -2018,6 +2018,21 @@ class cms_site extends cms {
 		}
 		return $files;
 	}
+	
+	function get_active_levels(){
+		
+		$levels=array();
+		
+		$folder_id=$this->folder_id;
+		do{
+			$levels[]=$folder_id;
+			$folder = $this->get_folder($folder_id);			
+			$folder_id=$folder['parent_id'];
+		}while($folder['parent_id']>0);	
+		
+		return array_reverse($levels);
+	}
+	
 
 	function print_items($attributes) {
 		global $GO_CONFIG, $extension, $GO_SECURITY;
@@ -2031,6 +2046,12 @@ class cms_site extends cms {
 		$print_root_only = isset ($attributes['print_root_only']) ? $attributes['print_root_only'] : 'false';
 		$print_root = isset ($attributes['print_root']) ? $attributes['print_root'] : 'true';
 		$menu = isset ($attributes['menu']) ? $attributes['menu'] : '';
+		$level = isset ($attributes['level']) ? $attributes['level'] : null;
+		
+		if($print_root_only=='true')
+		{
+			$level=0;
+		}
 
 		$return = '';
 		$template = $this->get_template_item_by_name($this->site['template_id'], $template_name);
@@ -2042,13 +2063,19 @@ class cms_site extends cms {
 			$items = $this->get_authorized_items($folder_id, $GO_SECURITY->user_id, true);
 		}else
 		{
-			if ($print_root_only == 'false') {
-				if ($print_root == 'false' && $this->folder_id == $this->site['root_folder_id']) {
+			if(isset($level))
+			{
+				$levels=$this->get_active_levels();
+				
+				if(!isset($levels[$level]))
+				{
 					return '';
-				}
+				}else {
+					$items = $this->get_authorized_items($levels[$level], $GO_SECURITY->user_id, true);
+				}			
+				
+			}else {
 				$items = $this->get_authorized_items($this->folder_id, $GO_SECURITY->user_id, true);
-			} else {
-				$items = $this->get_authorized_items($this->site['root_folder_id'], $GO_SECURITY->user_id, true);
 			}
 		}
 		$count = count($items);
