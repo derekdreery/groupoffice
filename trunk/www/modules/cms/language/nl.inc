@@ -155,3 +155,6 @@ $cms_default_go_login='Standaard Group-Office inlogscherm';
 $cms_userfield='Gebruikers dataveld';
 $cms_fckeditor_styles='Te selecteren stijl';
 $cms_fckeditor_help='Klik hier voor documentatie';
+$cms_add_contact_success_title='Dank u wel!';
+$cms_add_contact_success_text='U zult vanaf nu onze nieuwsbrief ontvangen!';
+$cms_add_contact_email_subject='Nieuw contactpersoon toegevoegd mailing';
