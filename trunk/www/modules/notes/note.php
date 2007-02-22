@@ -233,7 +233,8 @@ switch($tabstrip->get_active_tab_id())
 			$sl = new select_link('link',$link_type,$link_id,$link_text,'note_form');
 
 			$row = new table_row();
-			$cell = new table_cell($sl->get_link($strCreateLink)->get_html().':');
+			$link = $sl->get_link($strCreateLink);
+			$cell = new table_cell($link->get_html().':');
 			$cell->set_attribute('style','width:250px;white-space:nowrap');
 			$row->add_cell($cell);
 			$cell = new table_cell($sl->get_field('100%')->get_html());
