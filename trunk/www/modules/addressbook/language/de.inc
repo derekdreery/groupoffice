@@ -1,241 +1,180 @@
 <?php
+//Translated with Group-Office translate module
 require_once($GO_LANGUAGE->get_fallback_language_file('addressbook'));
-
-//contacts
-$contacts_title = "Adressbuch";
-$contacts_no_contacts = "Keine Kontakte vorhanden.";
-$contacts_members = "Mitglieder";
-$contacts_contacts = "Kontakte";
-$contacts_add = "Neuer Kontakt";
-$contacts_groups = "Gruppen";
-$contacts_other = "Sonstige Kontakte";
-$contacts_move_to_group = "Verschiebe ausgewählte Kontakte in die Gruppe...";
-$groups_no_groups = "Es existieren keine Gruppen";
-$contacts_group = "Gruppe";
-$contacts_empty_group = "Bitte die Dropdown-Box benutzen, um selektierte Kontakte in eine Gruppe zu verschieben.";
-$contacts_this_group = 'Diese Gruppe';
-
-$add_contacts_text = "Bitte die Email und den Authorisierungscode eines Mitglieds eingeben und auf 'ok' klicken";
-$add_contacts_success = "Benutzer erfolgreich hinzugefügt";
-$add_contacts_wrong = "Entweder die Email-Adresse oder der Authorisierungscode ist falsch.";
-$add_personal_text = "Bitte klicken Sie auf 'ok', um den Kontakt hinzuzufügen. Die mit * gekennzeichneten Felder müssen ausgefüllt werden.";
-$contacts_select = "Kontakte auswählen und auf 'ok' klicken.";
-$contacts_select_title = "Kontakte";
-$contact_profile = "Kontaktprofil";
-$user_profile = "Benutzerprofil";
-$contacts_authorise = "Authorisierung";
-$contacts_add_member = "Dieses Mitglied in das Kontaktverzeichnis aufnehmen";
-$strConfirmSynchronise = "Hiermit werden die Kontaktdaten mit den Benutzerdaten abgeglichen. Dabei werden Ihre manuellen Eintragungen verloren gehen. Möchten Sie fortfahren?";
-$contacts_import = "Import";
-$contacts_export = "Export";
-$contacts_export_text = "Bitte den gewünschten CSV-Typ auswählen.";
-$contacts_delete = "Löschen";
-
-$contacts_import_text_group = "Bitte eine Gruppe und die CSV-Datei auswählen. Anschließend auf 'ok' klicken.";
-$fbNoFile = "Keine Datei empfangen";
-$fbPleaseWait = "Bitte warten Sie solange die Datei hochgeladen wird...";
-
-$strNotIncluded = "Nicht importieren";
-$contacts_import_feedback = "Die nachfolgenden Spalten existieren in Ihrer CSV-Datei.<br />";
-$contacts_import_feedback .= "Bitte eine Zielgruppe für den Import auswählen. Andernfalls werden auf Grundlage der Spalten der Datei die Gruppen automatisch erzeugt.<br />";
-$contacts_import_feedback .= " Ordnen Sie den Group-Office Spalten die korrespondierenden Spalten aus der zu importierenden Datei zu. Achten Sie bitte darauf, dass Sie die Spalten eindeutig zuordnen.";
-$contacts_separator = "Die Spalten sind getrennt mit";
-$contacts_no_separator = "Sie haben kein Trennzeichen angegeben.";
-$fbFilename = "Dateiname";
-$contacts_import_title = "Adressbuch importieren";
-$contacts_import_success = "Datei erfolgreich importiert";
-$contacts_import_double = "Sie haben mindestens eine Spalte nicht eindeutig zugeordnet. Bitte korrigieren und erneut versuchen.";
-//changed:
-$contacts_import_noname = 'Sie müssen den Feldnamen auswählen';
-$contacts_import_incompatible = "Das Dateiformat ist inkompatibel.<br /><br />Die Spaltenwerte einer CSV-Datei werden in der Regel mit Semikolons getrennt.";
-$strMember = "Mitglied";
-$contact_exist_warning = "<b>Hinweis:</b> Dieser Benutzer existiert bereits in Ihrer Kontaktliste.";
-$contacts_add_to_group = "Ausgewählte Benutzer direkt einer Gruppe zuordnen...";
-$contacts_add_to = "Ausgewählte Benutzer der Kontaktliste hinzufügen";
-$contacts_add_user = "Neu";
-$contacts_edit = "Bearbeiten";
-$contacts_no_select = "Sie haben keine Auswahl getroffen";
-$contacts_this_contact = "Diesen Kontakt";
-
-$contacts_seperator_text = 'Trennzeichen';
-$contacts_quote = 'Spaltenwerte umschließen mit';
-$contacts_clrf = 'Zeilenabschlusszeichen';
-$contacts_auto_group = 'Gruppen aus der Datei automatisch erzeugen';
-$contacts_import_to_group = 'Importiere in die Gruppe';
-
-$contacts_search = 'Suchen';
-$cmdSearch = 'Suchen';
-$contacts_search_text = "Suchbegriff eingeben und auf 'suchen' klicken. Das Zeichen * kann als wildcard benutzt werden.";
-$contacts_result = 'Ergebnis';
-$contacts_results = 'Ergebnisse';
-
-
-$contacts_color = 'Farbe';
-
-$contacts_colors['black'] = 'Schwarz';
-$contacts_colors['red'] = 'Rot';
-$contacts_colors['green'] = 'Grün';
-$contacts_colors['blue'] = 'Blau';
-$contacts_colors['pink'] = 'Pink';
-$contacts_colors['orange'] = 'Orange';
-$contacts_colors['brown'] = 'Braun';
-
-$ab_addressbooks = 'Adressbücher';
-$ab_owner = 'Eigentümer';
-$ab_subscribed = 'Abonniert';
-$ab_new_ab = 'Neues Adressbuch';
-$ab_addressbook_exists = 'Ein Adressbuch mit diesem Namen ist bereits vorhanden';
-$ab_addressbook = 'Adressbuch';
-$ab_no_addressbook = 'Kein Adressbuch';
-$contacts_select_single = 'Zum Auswählen bitte auf einen Kontakt klicken';
-
-$ab_group_exists = 'Eine Gruppe mit diesem Namen ist bereits vorhanden';
-$ab_group_on_file = 'Gruppenkontakte basieren auf Datei';
-$ab_default = 'Standard';
-
-//translation required
-$ab_edit_contact = 'Zum Speichern auf \'ok\' klicken. Mit * gekennzeichnete Felder müssen ausgefüllt werden.';
-$ab_group_on_file = 'Gruppen-Kontakte basierend auf einer Datei';
-$ab_default = 'Standard';
-$ab_browse = 'Browse';
-$ab_comment = 'Kommentar';
-
-$ab_contact = 'Kontakt';
-$ab_send_message = 'Email';
-$ab_new_event = 'Termin';
-
-$ab_templates = 'Vorlage';
-$ab_your_templates = 'Eigene';
-$ab_all_templates = 'Alle';
-
-$template_type[0] = 'Email';
-$template_type[1] = 'OpenOffice.org';
-$ab_type = 'Typ';
-$ab_template_esists = 'Eine Vorlage mit diesem Namen ist bereits vorhanden.';
-
-$sir_madam['M'] = 'Sehr geehrter Herr';
-$sir_madam['F'] = 'Sehr geehrte Frau';
-
-$ab_upload_oo = 'OpenOffice.org Vorlage hochladen';
-$ab_upload_nofile = 'Fehler bei der Dateiübertragung aufgetreten.';
-
-$ab_oo_doc = 'Textdokument';
-$ab_select_template = 'Bitte eine Vorlage für dieses Dokument wählen:';
-$ab_add_field_data = 'Folgende Werte können im Dokument verwendet werden:';
-$ab_datafield = 'Datenfeld';
-
-$ab_no_template = 'Keine Vorlage';
-$ab_new_note = 'Notiz';
-
-$ab_events = 'Termine';
-
-$ab_new_contact = 'Neuer&nbsp;Kontakt';
-$ab_new_company = 'Neue&nbsp;Firma';
-$ab_companies = 'Firmen';
-$ab_company_properties = 'Firmenprofil';
-$ab_bank_no = 'Bankverbindung';
-$ab_companies_count_single = 'Firma';
-$ab_companies_count = 'Firmen';
-$ab_no_companies = 'Keine Firmen vorhanden';
-$ab_no_company = 'Keine Firma';
-
-$ab_import_type = 'Importieren';
-$ab_no_company_found = 'Keine Firma gefunden';
-$ab_search_company = 'Firma suchen';
-$ab_edit_company = 'Firmenprofil bearbeiten';
-$ab_new_group = 'Neue Gruppe';
-$ab_export_type = 'Export';
-
-$ab_custom_fields = 'Weitere&nbsp;Datenfelder';
-$ab_field_size = 'Grösse';
-
-$ab_new_field = 'Neues Datenfeld';
-$ab_invalid_field_size = 'Ungültige Eingabe. Es dürfen lediglich 10 bis 255 Zeichen eingegeben werden.';
-$ab_field_exists = 'Ein Feld mit diesem Namen ist bereits vorhanden.';
-
-$ab_employees = 'Mitarbeiter';
-$ab_no_employees = 'Keine Mitarbeiter gefunden';
-
-$ab_employee_count_single = 'Mitarbeiter';
-$ab_employee_count_multiple = 'Mitarbeiter';
-$ab_vat_no = 'Steuernummer';
-
-$ab_add_new = 'neuen hinzufügen';
-$ab_add_existing = 'vorhand. hinzufügen';
-
-$ab_access = 'Zugriff';
-//1.98
-$ab_mailings = 'Mailings';
-$ab_mailing_groups = 'Mailing-Gruppen';
-$ab_no_mailing_groups = 'Keine Mailing-Gruppen vorhanden';
-$ab_no_templates = 'Keine Vorlagen vorhanden';
-$ab_mailing_group_exists = 'Eine Mailing-Gruppe mit diesem Namen ist bereits vorhanden.';
-$ab_contacts_count_single = 'Kontakt';
-$ab_contacts_count_multiple = 'Kontakte';
-$ab_new_mailing = 'Neues Mailing';
-$ab_all_your_addressbooks = 'allen Adressbüchern';
-
-$ab_search_for = 'Suche in';
-$ab_search_in = 'in';
-$ab_search_keyword = 'Suchbegriff';
-$ab_wildcard = '(Benutze \'%\' als Platzhalter)';
-
-//2.03
-$ab_copy_read_acl = 'Kopiere Leseberechtigungen zu Kontakten und Firmen';
-$ab_copy_write_acl = 'Kopiere Schreibberechtigungen zu Kontakten und Firmen';
-
-$ab_catagory_exists = 'Eine Kategorie mit diesem Namen existiert bereits';
-$ab_add_catagory = 'Kategorie hinzufügen';
-$ab_add_field = 'Feld hinzufügen';
-$ab_catagory = 'Kategorie';
-
-//2.04
-$ab_todos = 'Aufgaben';
-
-
-//2.05
-$ab_download = 'Herunterladen';
-$ab_download_template = 'Auf \'Herunterladen\' klicken, um eine Vorlage auf Ihrem PC bearbeiten zu können.';
-$ab_upload = 'Hochladen';
-//modified string:
-$ab_upload_oo_text = 'Sobald Sie mit der Bearbeitung der OpenOffice.org-Vorlage fertig sind, sollten Sie diese wieder zu Group-Office hochladen. Zum Hochladen Datei auswählen und auf \'Hochladen\' klicken.';
-$ab_file_type = 'Dateityp';
-$ab_import_vcf_file_ok = 'Die hochgeladene Datei scheint in Ordnung zu sein. <br />Bitte bestätigen Sie mit \'Ok\', um den Inhalt der Datei in das Adressbuch zu übernehmen.';
-$ab_import_failed = 'Der Import ist fehlgeschlagen.';
-//modified string:
-$contacts_import_text = "Bitte die zu importierende Datei auswählen, und mit 'Ok' bestätigen.";
-
-//2.06
-$ab_select_mailing_groups = 'Bitte eine Mailing-Gruppe für diesen Kontakt auswählen';
-
-//2.11
-$ab_move_to_ab = 'Verschiebe selektierte Kontakte ins Adressbuch...';
-$ab_move_com_to_ab = 'Verschiebe selektierte Firmen ins Adressbuch...';
-
-//2.12
-$ab_search_sender = 'Emails suchen';
-
-$ab_contact_exists = 'Dieser Kontakt scheint bereits vorhanden zu sein. Bitte %s klicken, um diesen Kontakt anzusehen. Anderenfalls auf \'Ok\' oder \'Übernehmen\' klicken, um diesen Kontakt trotz allem zu speichern.';
-$ab_company_exists = 'Diese Firma scheint bereits vorhanden zu sein. Bitte %s klicken, um diese Firma anzusehen. Anderenfalls auf \'Ok\' oder \'Übernehmen\' klicken, um diese Firma trotz allem zu speichern.';
-$ab_here = 'hier';
-
-//2.13
-$ab_search_for_keyword = 'nach';
-
-$ab_search_in = 'Suche in'; //changed
-$ab_search_on_users = 'Suche nach';
-
+$contacts_title='Adressbuch';
+$contacts_no_contacts='Keine Kontakte vorhanden.';
+$contacts_members='Mitglieder';
+$contacts_contacts='Kontakte';
+$contacts_add='Neuer Kontakt';
+$contacts_groups='Gruppen';
+$contacts_other='Sonstige Kontakte';
+$contacts_move_to_group='Verschiebe ausgewählte Kontakte in die Gruppe...';
+$groups_no_groups='Es existieren keine Gruppen';
+$contacts_group='Gruppe';
+$contacts_empty_group='Bitte die Dropdown-Box benutzen, um selektierte Kontakte in eine Gruppe zu verschieben.';
+$contacts_this_group='Diese Gruppe';
+$add_contacts_text='Bitte die Email und den Authorisierungscode eines Mitglieds eingeben und auf \'ok\' klicken';
+$add_contacts_success='Benutzer erfolgreich hinzugefügt';
+$add_contacts_wrong='Entweder die Email-Adresse oder der Authorisierungscode ist falsch.';
+$add_personal_text='Bitte klicken Sie auf \'ok\', um den Kontakt hinzuzufügen. Die mit * gekennzeichneten Felder müssen ausgefüllt werden.';
+$contacts_select='Kontakte auswählen und auf \'ok\' klicken.';
+$contacts_select_title='Kontakte';
+$contact_profile='Kontaktprofil';
+$user_profile='Benutzerprofil';
+$contacts_authorise='Authorisierung';
+$contacts_add_member='Dieses Mitglied in das Kontaktverzeichnis aufnehmen';
+$strConfirmSynchronise='Hiermit werden die Kontaktdaten mit den Benutzerdaten abgeglichen. Dabei werden Ihre manuellen Eintragungen verloren gehen. Möchten Sie fortfahren?';
+$contacts_import='Import';
+$contacts_export='Export';
+$contacts_export_text='Bitte den gewünschten CSV-Typ auswählen.';
+$contacts_delete='Löschen';
+$contacts_import_text_group='Bitte eine Gruppe und die CSV-Datei auswählen. Anschließend auf \'ok\' klicken.';
+$fbNoFile='Keine Datei empfangen';
+$fbPleaseWait='Bitte warten Sie solange die Datei hochgeladen wird...';
+$strNotIncluded='Nicht importieren';
+$contacts_import_feedback='Die nachfolgenden Spalten existieren in Ihrer CSV-Datei.<br />';
+$contacts_import_feedback .=' Ordnen Sie den Group-Office Spalten die korrespondierenden Spalten aus der zu importierenden Datei zu. Achten Sie bitte darauf, dass Sie die Spalten eindeutig zuordnen.';
+$contacts_separator='Die Spalten sind getrennt mit';
+$contacts_no_separator='Sie haben kein Trennzeichen angegeben.';
+$fbFilename='Dateiname';
+$contacts_import_title='Adressbuch importieren';
+$contacts_import_success='Datei erfolgreich importiert';
+$contacts_import_double='Sie haben mindestens eine Spalte nicht eindeutig zugeordnet. Bitte korrigieren und erneut versuchen.';
+$contacts_import_noname='Sie müssen den Feldnamen auswählen';
+$contacts_import_incompatible='Das Dateiformat ist inkompatibel.<br /><br />Die Spaltenwerte einer CSV-Datei werden in der Regel mit Semikolons getrennt.';
+$strMember='Mitglied';
+$contact_exist_warning='<b>Hinweis:</b> Dieser Benutzer existiert bereits in Ihrer Kontaktliste.';
+$contacts_add_to_group='Ausgewählte Benutzer direkt einer Gruppe zuordnen...';
+$contacts_add_to='Ausgewählte Benutzer der Kontaktliste hinzufügen';
+$contacts_add_user='Neu';
+$contacts_edit='Bearbeiten';
+$contacts_no_select='Sie haben keine Auswahl getroffen';
+$contacts_this_contact='Diesen Kontakt';
+$contacts_seperator_text='Trennzeichen';
+$contacts_quote='Spaltenwerte umschließen mit';
+$contacts_clrf='Zeilenabschlusszeichen';
+$contacts_auto_group='Gruppen aus der Datei automatisch erzeugen';
+$contacts_import_to_group='Importiere in die Gruppe';
+$contacts_search='Suchen';
+$cmdSearch='Suchen';
+$contacts_search_text='Suchbegriff eingeben und auf \'suchen\' klicken. Das Zeichen * kann als wildcard benutzt werden.';
+$contacts_results='Ergebnisse';
+$contacts_result='Ergebnis';
+$contacts_color='Farbe';
+$contacts_colors['black']='Schwarz';
+$contacts_colors['red']='Rot';
+$contacts_colors['green']='Grün';
+$contacts_colors['blue']='Blau';
+$contacts_colors['pink']='Pink';
+$contacts_colors['orange']='Orange';
+$contacts_colors['brown']='Braun';
+$ab_addressbooks='Adressbücher';
+$ab_owner='Eigentümer';
+$ab_subscribed='Abonniert';
+$ab_new_ab='Neues Adressbuch';
+$ab_addressbook_exists='Ein Adressbuch mit diesem Namen ist bereits vorhanden';
+$ab_addressbook='Adressbuch';
+$ab_no_addressbook='Kein Adressbuch';
+$contacts_select_single='Zum Auswählen bitte auf einen Kontakt klicken';
+$ab_group_exists='Eine Gruppe mit diesem Namen ist bereits vorhanden';
+$ab_group_on_file='Gruppen-Kontakte basierend auf einer Datei';
+$ab_default='Standard';
+$ab_edit_contact='Zum Speichern auf \'ok\' klicken. Mit * gekennzeichnete Felder müssen ausgefüllt werden.';
+$ab_browse='Browse';
+$ab_comment='Kommentar';
+$ab_contact='Kontakt';
+$ab_send_message='Email';
+$ab_new_event='Termin';
+$ab_templates='Vorlage';
+$ab_your_templates='Eigene';
+$ab_all_templates='Alle';
+$template_type[0]='Email';
+$template_type[1]='OpenOffice.org';
+$ab_type='Typ';
+$ab_template_exists='Eine Vorlage mit diesem Namen existiert bereits.';
+$sir_madam['M']='Sehr geehrter Herr';
+$sir_madam['F']='Sehr geehrte Frau';
+$ab_upload_oo='OpenOffice.org Vorlage hochladen';
+$ab_upload_nofile='Fehler bei der Dateiübertragung aufgetreten.';
+$ab_oo_doc='Textdokument';
+$ab_select_template='Bitte eine Vorlage für dieses Dokument wählen:';
+$ab_add_field_data='Folgende Werte können im Dokument verwendet werden:';
+$ab_datafield='Datenfeld';
+$ab_no_template='Keine Vorlage';
+$ab_new_note='Notiz';
+$ab_events='Termine';
+$ab_new_contact='Neuer&nbsp;Kontakt';
+$ab_new_company='Neue&nbsp;Firma';
+$ab_companies='Firmen';
+$ab_company_properties='Firmenprofil';
+$ab_bank_no='Bankverbindung';
+$ab_companies_count_single='Firma';
+$ab_companies_count='Firmen';
+$ab_no_companies='Keine Firmen vorhanden';
+$ab_no_company='Keine Firma';
+$ab_import_type='Importieren';
+$ab_no_company_found='Keine Firma gefunden';
+$ab_search_company='Firma suchen';
+$ab_edit_company='Firmenprofil bearbeiten';
+$ab_new_group='Neue Gruppe';
+$ab_export_type='Export';
+$ab_custom_fields='Weitere&nbsp;Datenfelder';
+$ab_field_size='Grösse';
+$ab_new_field='Neues Datenfeld';
+$ab_invalid_field_size='Ungültige Eingabe. Es dürfen lediglich 10 bis 255 Zeichen eingegeben werden.';
+$ab_field_exists='Ein Feld mit diesem Namen ist bereits vorhanden.';
+$ab_employees='Mitarbeiter';
+$ab_no_employees='Keine Mitarbeiter gefunden';
+$ab_employee_count_single='Mitarbeiter';
+$ab_employee_count_multiple='Mitarbeiter';
+$ab_vat_no='Steuernummer';
+$ab_add_new='neuen hinzufügen';
+$ab_add_existing='vorhand. hinzufügen';
+$ab_access='Zugriff';
+$ab_mailings='Mailings';
+$ab_mailing_groups='Mailing-Gruppen';
+$ab_no_mailing_groups='Keine Mailing-Gruppen vorhanden';
+$ab_no_templates='Keine Vorlagen vorhanden';
+$ab_mailing_group_exists='Eine Mailing-Gruppe mit diesem Namen ist bereits vorhanden.';
+$ab_contacts_count_single='Kontakt';
+$ab_contacts_count_multiple='Kontakte';
+$ab_new_mailing='Neues Mailing';
+$ab_all_your_addressbooks='allen Adressbüchern';
+$ab_search_for='Suche in';
+$ab_search_on='in';
+$ab_search_keyword='Suchbegriff';
+$ab_wildcard='(Benutze \'%\' als Platzhalter)';
+$ab_copy_read_acl='Kopiere Leseberechtigungen zu Kontakten und Firmen';
+$ab_copy_write_acl='Kopiere Schreibberechtigungen zu Kontakten und Firmen';
+$ab_catagory_exists='Eine Kategorie mit diesem Namen existiert bereits';
+$ab_add_catagory='Kategorie hinzufügen';
+$ab_add_field='Feld hinzufügen';
+$ab_catagory='Kategorie';
+$ab_todos='Aufgaben';
+$ab_download='Herunterladen';
+$ab_download_template='Auf \'Herunterladen\' klicken, um eine Vorlage auf Ihrem PC bearbeiten zu können.';
+$ab_upload='Hochladen';
+$ab_upload_oo_text='Sobald Sie mit der Bearbeitung der OpenOffice.org-Vorlage fertig sind, sollten Sie diese wieder zu Group-Office hochladen. Zum Hochladen Datei auswählen und auf \'Hochladen\' klicken.';
+$ab_file_type='Dateityp';
+$ab_import_vcf_file_ok='Die hochgeladene Datei scheint in Ordnung zu sein. <br />Bitte bestätigen Sie mit \'Ok\', um den Inhalt der Datei in das Adressbuch zu übernehmen.';
+$ab_import_failed='Der Import ist fehlgeschlagen.';
+$contacts_import_text='Bitte die zu importierende Datei auswählen, und mit \'Ok\' bestätigen.';
+$ab_select_mailing_groups='Bitte eine Mailing-Gruppe für diesen Kontakt auswählen';
+$ab_move_to_ab='Verschiebe selektierte Kontakte ins Adressbuch...';
+$ab_move_com_to_ab='Verschiebe selektierte Firmen ins Adressbuch...';
+$ab_search_sender='Emails suchen';
+$ab_contact_exists='Dieser Kontakt scheint bereits vorhanden zu sein. Bitte %s klicken, um diesen Kontakt anzusehen. Anderenfalls auf \'Ok\' oder \'Übernehmen\' klicken, um diesen Kontakt trotz allem zu speichern.';
+$ab_company_exists='Diese Firma scheint bereits vorhanden zu sein. Bitte %s klicken, um diese Firma anzusehen. Anderenfalls auf \'Ok\' oder \'Übernehmen\' klicken, um diese Firma trotz allem zu speichern.';
+$ab_here='hier';
+$ab_search_for_keyword='nach';
+$ab_search_in='Suche in';
 $ab_users_count_single='Benutzer';
 $ab_users_count_multiple='Benutzer';
 $ab_no_users='Keine Benutzer gefunden';
-
-//2.15
-$ab_select_addressbook = 'Addressbuch auswählen';
-$ab_move = 'Verschieben';
+$ab_select_addressbook='Addressbuch auswählen';
+$ab_move='Verschieben';
 $ab_file='Datei';
-
-$ab_template_uploaded = 'Dokument wurde gespeichert';
-$ab_select_mailing_group = 'Wähle die Benutzergruppe an die du das Mailing senden willst';
-
-//2.16
-$ab_id = 'Nr.';
+$ab_template_uploaded='Dokument wurde gespeichert';
+$ab_select_mailing_group='Wähle die Benutzergruppe an die du das Mailing senden willst';
+$ab_id='Nr.';
+?>
