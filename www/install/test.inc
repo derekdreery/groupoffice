@@ -227,4 +227,27 @@
 	?>
 	</td>
 </tr>
+<tr>
+	<td colspan="2">
+	<br />
+	<b>Use this information for your Group-Office Professional license:</b>
+	</td>
+</tr>
+
+<tr>
+	<td valign="top">Server name:</td>
+	<td>
+	<?php	
+	echo $_SERVER['SERVER_NAME'];
+	?>
+	</td>
+</tr>
+<tr>
+	<td valign="top">Server IP:</td>
+	<td>
+	<?php	
+	echo  gethostbyname($_SERVER['SERVER_NAME']);
+	?>
+	</td>
+</tr>
 </table>
