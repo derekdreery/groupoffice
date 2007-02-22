@@ -131,8 +131,7 @@ class tabstrip extends table
 
 		$tab_count = count($this->tabs);
 
-		if ($tab_count > 0)
-		{
+		
 			$this->innerHTML .= '
 	<script type="text/javascript">
 	function change_tab_'.$this->id.'(activetab)
@@ -143,7 +142,7 @@ class tabstrip extends table
 	}
   </script>
 	';
-		}
+		
 		$this->add_html_element(new input('hidden', $this->id, $this->value, false));
 		$this->add_html_element(new input('hidden', $this->id.'_[submitted]', 'false', false));
 

@@ -216,3 +216,6 @@ $ml_confirm_empty_mailbox = 'Are you sure you want to empty the folder \'%s\'?';
 
 //2.16
 $em_source = 'Message source';
+$ml_messages_linked = 'The selected messages are linked';
+$ml_handle_originals='What do you want to do with the original messages?';
+$ml_keep='Keep';

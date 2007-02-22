@@ -2085,7 +2085,11 @@ class cms_site extends cms {
 				$extension = $item['extension'];
 
 				$item_template = ($this->file_id == $item['id']) ? $item_template_active : $item_template_passive;
-				$_class = ($this->file_id == $item['id']) ? $active_class : $class;
+				
+				
+				$_class = ($this->file_id == $item['id']) ? $active_class : $class;	
+				
+				
 
 				$name = strip_extension($item['name']);
 				$title = $item['title'] == '' ? $name : $item['title'];
@@ -2103,7 +2107,18 @@ class cms_site extends cms {
 			} else {
 				$extension = '';
 				$item_template = ($this->folder_id == $item['id']) ? $item_template_active : $item_template_passive;
-				$_class = ($this->folder_id == $item['id']) ? $active_class : $class;
+				
+				if(isset($level))
+				{
+					if(isset($levels[$level+1]) && $item['id']==$levels[$level+1])
+					{
+						$_class = $active_class;
+					}else {
+						$_class = $class;
+					}
+				}else {
+					$_class = ($this->folder_id == $item['id']) ? $active_class : $class;
+				}
 
 				if ($menu != '') {
 					$menu_id = 'goMenuID_'.$item['id'];
