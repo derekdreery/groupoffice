@@ -927,7 +927,7 @@ popup.focus();
 		$GO_LINKS->delete_link($contact['link_id']);
 
 		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
-		$fs = new filesystem();
+		$fs = new filesystem(true);
 		$fs->delete($GO_CONFIG->file_storage_path.'contacts/'.$contact_id.'/');
 
 		$sql1 = "DELETE FROM tp_mailing_contacts WHERE contact_id='$contact_id'";
@@ -1141,7 +1141,7 @@ popup.focus();
 		$GO_LINKS->delete_link($company['link_id']);
 
 		require($GO_CONFIG->class_path.'filesystem.class.inc');
-		$fs = new filesystem();
+		$fs = new filesystem(true);
 		$fs->delete($GO_CONFIG->file_storage_path.'companies/'.$company_id.'/');
 
 		$sql = "DELETE FROM ab_companies WHERE id='$company_id'";

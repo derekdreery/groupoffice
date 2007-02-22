@@ -24,7 +24,7 @@ class search extends db {
 				
 		foreach($GO_MODULES->modules as $module)
 		{
-			if($module['id'] != 'search' && file_exists($module['class_path'].$module['id'].'.class.inc'))
+			if($module['read_permission'] && $module['id'] != 'search' && file_exists($module['class_path'].$module['id'].'.class.inc'))
 			{
 				require($module['class_path'].$module['id'].'.class.inc');
 				$class = new $module['id'];

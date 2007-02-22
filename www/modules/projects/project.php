@@ -503,7 +503,8 @@ switch ($tabstrip->get_active_tab_id()) {
 				$sl = new select_link('link',$link_type,$link_id,$project['customer'],'projects_form');
 	
 				$row = new table_row();
-				$cell = new table_cell($sl->get_link($pm_customer)->get_html().':');
+				$link = $sl->get_link($pm_customer);
+				$cell = new table_cell($link->get_html().':');
 				$cell->set_attribute('style','width:250px;white-space:nowrap');
 				$row->add_cell($cell);
 				$cell = new table_cell($sl->get_field('250px')->get_html());
