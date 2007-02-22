@@ -507,7 +507,8 @@ switch ($tabstrip->get_active_tab_id()) {
 				$cell = new table_cell($link->get_html().':');
 				$cell->set_attribute('style','width:250px;white-space:nowrap');
 				$row->add_cell($cell);
-				$cell = new table_cell($sl->get_field('250px')->get_html());
+				$field=$sl->get_field('250px');
+				$cell = new table_cell($field->get_html());
 				$cell->set_attribute('style','width:250px;');
 				$row->add_cell($cell);
 				

@@ -23,6 +23,11 @@ if($GO_MODULES->get_module('users'))
 	$tables[]='users';	
 }
 
+if($GO_MODULES->get_module('billing'))
+{
+	$tables[]='bs_orders';	
+}
+
 if($GO_MODULES->get_module('shipping'))
 {
 	$tables[]='sh_jobs';	
