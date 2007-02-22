@@ -22,8 +22,11 @@ class email extends db
 		if($user_id > 0)
 		{
 			$sql .= " WHERE user_id='$user_id'";
+			$sql .= " ORDER BY standard DESC";			
+		}else {
+			$sql .= " ORDER BY email ASC, standard DESC";
 		}
-		$sql .= " ORDER BY email ASC, standard DESC";
+		
 
 		$this->query($sql);
 		$count =  $this->num_rows();

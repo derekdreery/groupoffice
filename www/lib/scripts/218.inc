@@ -1,6 +1,4 @@
 <?php
-
-$db = new db();
 $db2 = new db();
 
 if($GO_MODULES->get_module('addressbook'))
