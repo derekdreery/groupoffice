@@ -62,7 +62,7 @@ if(count($addresses)<10)
 		$rfc_email = $RFC822->write_address($name, $GO_USERS->f('email'));
 		if(!in_array($rfc_email,$addresses))
 		{			
-			echo '<contact><full_email>'.htmlspecialchars($rcf_email).'</full_email><name>'.htmlspecialchars($name).'</name><email>'.htmlspecialchars($GO_USERS->f('email')).'</email></contact>';
+			echo '<contact><full_email>'.htmlspecialchars($rfc_email).'</full_email><name>'.htmlspecialchars($name).'</name><email>'.htmlspecialchars($GO_USERS->f('email')).'</email></contact>';
 		}
 	}
 	echo '</addressses>';

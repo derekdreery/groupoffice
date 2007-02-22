@@ -1260,7 +1260,8 @@ if($task == 'availability')
 		$cell = new table_cell($link->get_html().':');
 		$cell->set_attribute('style','width:250px;white-space:nowrap');
 		$row->add_cell($cell);
-		$cell = new table_cell($sl->get_field('100%')->get_html());
+		$field=$sl->get_field('100%');
+		$cell = new table_cell($field->get_html());	
 		$cell->set_attribute('style','width:100%;');
 		$row->add_cell($cell);
 		$table->add_row($row);
