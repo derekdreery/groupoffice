@@ -21,7 +21,7 @@ function check_fields($required_fields)
 
 	foreach($required_fields as $field)
 	{
-		if(empty($_POST[$field]))
+		if(!empty($field) && empty($_POST[$field]))
 		{
 			return false;
 		}
