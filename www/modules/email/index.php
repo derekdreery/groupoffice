@@ -111,9 +111,13 @@ function link_messages()
 	}else
 	{
 		openPopup('link_messages', 'about:blank','600','400', 'yes');
+		var old_target = messages.document.forms[0].target;
 		messages.document.forms[0].target='link_messages';
+		var old_action=messages.document.forms[0].action;
 		messages.document.forms[0].action='prepare_message_link_handler.php';
 		messages.document.forms[0].submit();
+		messages.document.forms[0].target=old_target;
+		messages.document.forms[0].action=old_action;
 	}
 }
 
