@@ -36,83 +36,92 @@ if (!$event)
 switch($task)
 {
 	case 'delete':
-	if ($event['write_permission'])
-	{
-		if(isset($_POST['exception_time']))
+		if ($event['write_permission'])
 		{
-			$exception['event_id'] = $event_id;
-			$exception['time'] = $_POST['exception_time'];
-			
-			$update_event['id']=$event_id;
-			$cal->update_event($update_event);
-			
-			$cal->add_exception($exception);
-		}else
-		{
-			if($resource_group_id = $cal->get_resource_group_id_by_event_id($event['id']))
+			if(isset($_POST['exception_time']))
 			{
-				$cal->get_resource_group_admins($resource_group_id);
-				while($cal->next_record())
-				{
-					if($cal->f('user_id') != $GO_SECURITY->user_id)
-					{
-            	$subject = sprintf($cal_resource_deleted_mail_subject, $event['name']);
-							$body = $cal->event_to_html($event);
-              $user = $GO_USERS->get_user($cal->f('user_id'));
-              sendmail($user['email'], $_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name'], $subject, $body , '3', 'text/HTML');
-					}
-				}
-				
-			}	
-			$cal->delete_event($event_id);
-	
-			$cal2 = new calendar();
-			$cal2->get_event_resources($event_id);
-			while($cal2->next_record())
+				$exception['event_id'] = $event_id;
+				$exception['time'] = $_POST['exception_time'];
+
+				$update_event['id']=$event_id;
+				$cal->update_event($update_event);
+
+				$cal->add_exception($exception);
+			}else
 			{
-				if($resource_group_id = $cal->get_resource_group_id_by_event_id($cal2->f('id')))
+				if($resource_group_id = $cal->get_resource_group_id_by_event_id($event['id']))
 				{
+					$subject = sprintf($cal_resource_deleted_mail_subject, $event['name']);
+					$body = $cal->event_to_html($event);
 					$cal->get_resource_group_admins($resource_group_id);
 					while($cal->next_record())
 					{
 						if($cal->f('user_id') != $GO_SECURITY->user_id)
-        	  {	
-							$subject = sprintf($cal_resource_deleted_mail_subject, $cal2->f('name'));
-							$body = $cal->event_to_html($cal2->Record);
+						{
+							
 							$user = $GO_USERS->get_user($cal->f('user_id'));
-							sendmail($user['email'], $_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name'], $subject, $body, '3', 'text/HTML');
+							sendmail($user['email'], $_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name'], $subject, $body , '3', 'text/HTML');
 						}
 					}
 
 				}
-				$cal->delete_event($cal2->f('id'));
+				
+				$cal->delete_event($event_id);
+				
+				$cal2 = new calendar();
+				$cal2->get_event_resources($event_id);
+				while($cal2->next_record())
+				{
+					//echo 'Resource booking name: '.$cal2->f('name').'<br>';
+					if($resource_group_id = $cal->get_resource_group_id_by_event_id($cal2->f('id')))
+					{
+						//echo 'Resource group ID: '.$resource_group_id.'<br>';
+						$subject = sprintf($cal_resource_deleted_mail_subject, $cal2->f('name'));
+						$body = $cal->event_to_html($cal2->Record);
+						$cal->get_resource_group_admins($resource_group_id);
+						while($cal->next_record())
+						{
+							//echo 'Admin ID: '.$cal->f('user_id').'<br>';
+							if($cal->f('user_id') != $GO_SECURITY->user_id)
+							{
+								
+								$user = $GO_USERS->get_user($cal->f('user_id'));
+								//var_dump($user);
+								
+								sendmail($user['email'], $_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name'], $subject, $body, '3', 'text/HTML');
+							}
+						}
+
+					}
+					$cal->delete_event($cal2->f('id'));
+
+				}
+				
 
 			}
-
 		}
-	}
 
-	header('Location: '.$GO_MODULES->modules['calendar']['url']);
-	exit();
-	break;
+		header('Location: '.$GO_MODULES->modules['calendar']['url']);
+		exit();
+		break;
 
 	case 'unsubscribe':
-	if($calendar = $cal->get_calendar($calendar_id))
-	{
-		if ($cal->event_is_subscribed($event_id, $calendar_id) && $GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_write']))
+		if($calendar = $cal->get_calendar($calendar_id))
 		{
-			if ($cal->get_event_subscribtions($event_id) < 2)
+			if ($cal->event_is_subscribed($event_id, $calendar_id) && $GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_write']))
 			{
-				$cal->delete_event($event_id);
-			}else
-			{
-				$cal->unsubscribe_event($event_id, $calendar_id);
+				if ($cal->get_event_subscribtions($event_id) < 2)
+				{
+					$cal->delete_event($event_id);
+				}else
+				{
+					$cal->unsubscribe_event($event_id, $calendar_id);
+				}
 			}
 		}
-	}
-	header('Location: '.$GO_MODULES->modules['calendar']['url']);
-	exit();
-	break;
+		header('Location: '.$GO_MODULES->modules['calendar']['url']);
+		exit();
+		break;
 
 }
 
@@ -145,7 +154,7 @@ if(isset($_REQUEST['exception_time']))
 <tr>
 <td>
 <?php 
-echo $strDeletePrefix." '".$event['name']."' ".$strDeleteSuffix; 
+echo $strDeletePrefix." '".$event['name']."' ".$strDeleteSuffix;
 ?></td>
 </tr>
 <tr>

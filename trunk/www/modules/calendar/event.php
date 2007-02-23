@@ -326,7 +326,7 @@ switch($task)
 
 					$event['link_id'] = $GO_LINKS->get_link_id();
 
-					if (!$event_id = $cal->add_event($event)) {
+					if (!$event_id = $event['id'] = $cal->add_event($event)) {
 						$feedback = $strSaveError;
 					} else {
 
@@ -505,7 +505,7 @@ switch($task)
 
 								$resource['background']=$resource['status_id']==2 ? 'CCFFCC' : 'FF6666';
 
-								$resource_id = $cal->add_event($resource);
+								$resource_id = $resource['id'] = $cal->add_event($resource);
 
 								$cal->subscribe_event($resource_id, $writable_resource_id);
 								if($admin_count)
@@ -533,7 +533,26 @@ switch($task)
 							$resource['custom_fields'] = stripslashes($resource['custom_fields']);
 						}elseif($existing_resource)
 						{
+							
+							
+							if($resource_group_id = $cal->get_resource_group_id_by_event_id($existing_resource['id']))
+							{
+								$subject = sprintf($cal_resource_deleted_mail_subject, $existing_resource['name']);
+								$body = $cal->event_to_html($existing_resource);
+								
+								$cal->get_resource_group_admins($resource_group_id);
+								while($cal->next_record())
+								{
+									if($cal->f('user_id') != $GO_SECURITY->user_id)
+									{							
+										$user = $GO_USERS->get_user($cal->f('user_id'));
+										sendmail($user['email'], $_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name'], $subject, $body , '3', 'text/HTML');
+									}
+								}
+			
+							}
 							$cal->delete_event($existing_resource['id']);
+							
 						}
 					}
 				}
@@ -2257,6 +2276,7 @@ if($task == 'availability')
 			{
 				$group_admin=true;
 			}
+			
 			if($group_admin)
 			{
 				if($event['status_id']!=2)
