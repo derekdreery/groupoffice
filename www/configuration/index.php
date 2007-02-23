@@ -20,7 +20,7 @@ function check_fields($required_fields, $disabled_user_fields)
 {
 	foreach($required_fields as $field)
 	{
-		if(empty($_POST[$field]) && !in_array($field, $disabled_user_fields))
+		if(!empty($field) && empty($_POST[$field]) && !in_array($field, $disabled_user_fields))
 		{
 			return false;
 		}
