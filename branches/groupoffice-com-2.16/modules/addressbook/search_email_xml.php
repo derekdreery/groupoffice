@@ -22,32 +22,32 @@ $addresses=array();
 while($ab->next_record(MYSQL_ASSOC))
 {
 	$name = format_name($ab->f('last_name'),$ab->f('first_name'),$ab->f('middle_name'),'first_name');
-	$rcf_email =$RFC822->write_address($name, $ab->f('email'));
+	$rfc_email =$RFC822->write_address($name, $ab->f('email'));
 	if($ab->f('email')!='')
 	{
-		$rcf_email =$RFC822->write_address($name, $ab->f('email'));
-		if( !in_array($rcf_email, $addresses))
+		$rfc_email =$RFC822->write_address($name, $ab->f('email'));
+		if( !in_array($rfc_email, $addresses))
 		{
-			$addresses[]=$rcf_email;
-			echo '<contact><full_email>'.htmlspecialchars($rcf_email).'</full_email><name>'.htmlspecialchars($name).'</name><email>'.htmlspecialchars($ab->f('email')).'</email></contact>';
+			$addresses[]=$rfc_email;
+			echo '<contact><full_email>'.htmlspecialchars($rfc_email).'</full_email><name>'.htmlspecialchars($name).'</name><email>'.htmlspecialchars($ab->f('email')).'</email></contact>';
 		}
 	}	
 	if($ab->f('email2')!='')
 	{
-		$rcf_email =$RFC822->write_address($name, $ab->f('email2'));
-		if( !in_array($rcf_email, $addresses))
+		$rfc_email =$RFC822->write_address($name, $ab->f('email2'));
+		if( !in_array($rfc_email, $addresses))
 		{
-			$addresses[]=$rcf_email;
-			echo '<contact><full_email>'.htmlspecialchars($rcf_email).'</full_email><name>'.htmlspecialchars($name).'</name><email>'.htmlspecialchars($ab->f('email2')).'</email></contact>';
+			$addresses[]=$rfc_email;
+			echo '<contact><full_email>'.htmlspecialchars($rfc_email).'</full_email><name>'.htmlspecialchars($name).'</name><email>'.htmlspecialchars($ab->f('email2')).'</email></contact>';
 		}
 	}	
 	if($ab->f('email3')!='')
 	{
-		$rcf_email =$RFC822->write_address($name, $ab->f('email3'));
-		if( !in_array($rcf_email, $addresses))
+		$rfc_email =$RFC822->write_address($name, $ab->f('email3'));
+		if( !in_array($rfc_email, $addresses))
 		{
-			$addresses[]=$rcf_email;
-			echo '<contact><full_email>'.htmlspecialchars($rcf_email).'</full_email><name>'.htmlspecialchars($name).'</name><email>'.htmlspecialchars($ab->f('email3')).'</email></contact>';
+			$addresses[]=$rfc_email;
+			echo '<contact><full_email>'.htmlspecialchars($rfc_email).'</full_email><name>'.htmlspecialchars($name).'</name><email>'.htmlspecialchars($ab->f('email3')).'</email></contact>';
 		}
 	}	
 }
@@ -64,6 +64,6 @@ if(count($addresses)<10)
 		{			
 			echo '<contact><full_email>'.htmlspecialchars($rfc_email).'</full_email><name>'.htmlspecialchars($name).'</name><email>'.htmlspecialchars($GO_USERS->f('email')).'</email></contact>';
 		}
-	}
-	echo '</addressses>';
+	}	
 }
+echo '</addressses>';
