@@ -2346,7 +2346,7 @@ class calendar extends db
 
 	function has_write_permission($user_id, $event)
 	{
-		global $GO_SECURITY;
+		global $GO_SECURITY, $GO_MODULES;
 
 		if($user_id==0)
 		{
