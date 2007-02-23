@@ -251,3 +251,4 @@ $images['cancel'] = 'buttons/cancel.png';
 $images['gallery'] = 'buttons/gallery.png';
 $images['translate'] = 'buttons/locale.png';
 $images['timeregistration'] = 'buttons/xclock.png';
+$images['properties_small']='buttons/edit.png';
