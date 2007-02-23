@@ -446,6 +446,7 @@ class timeregistration extends db
 
 	function delete_hours($hours_id)
 	{
+		global $GO_MODULES;
 		$booking = $this->get_booking($hours_id);
 		if($booking['event_id']>0)
 		{
