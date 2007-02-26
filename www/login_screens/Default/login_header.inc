@@ -1,6 +1,15 @@
 <?php
 $charset = isset($charset) ? $charset : 'UTF-8';
 header('Content-Type: text/html; charset='.$charset);
+
+if(file_exists($GO_CONFIG->root_path.'LICENSE.PRO'))
+{
+	$img = $GO_CONFIG->host.'login_screens/'.$GO_CONFIG->login_screen.'/GOPRO.gif';
+	$link = 'Intermesh Group-Office Professional';
+}else {
+	$img = $GO_CONFIG->host.'login_screens/'.$GO_CONFIG->login_screen.'/GOCOM.gif';
+	$link = 'Intermesh Group-Office Community';
+}
 ?>
 <html>
 <head>

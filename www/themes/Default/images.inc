@@ -4,7 +4,12 @@
 $images['apache_logo']		= 'apache_logo.gif';
 $images['attach']		= 'attach.gif';
 $images['colors']		= 'colors.gif';
-$images['go_header']		= 'GOCOM.gif';
+if(file_exists($GO_CONFIG->root_path.'LICENSE.PRO'))
+{
+	$images['go_header']		= 'GOPRO.gif';
+}else {
+	$images['go_header']		= 'GOCOM.gif';	
+}
 $images['google']		= 'google.gif';
 $images['high_priority']	= 'high_priority.gif';
 $images['info']			= 'info.png';
