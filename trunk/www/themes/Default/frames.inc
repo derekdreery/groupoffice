@@ -16,8 +16,7 @@ document.onmouseover=hidestatus
 document.onmouseout=hidestatus
 </script>
 </head>
-<frameset rows="0, 23,100%, 60" frameborder="0" framespacing="0">
-<frame name="checker" src="<?php echo $GO_CONFIG->host; ?>checker.php" scrolling="no" noresize>
+<frameset rows="26,100%, 60" frameborder="0" framespacing="0">
 <frame name="header" src="<?php echo $GO_THEME->theme_url; ?>header.php" scrolling="no" noresize>
 <frame name="main" src="<?php echo $link; ?>" noresize>
 <frame name="footer" src="<?php echo $GO_THEME->theme_url; ?>footer.php" scrolling="no" noresize>

@@ -321,7 +321,9 @@ if($template['restrict_editor']=='1')
 
 $htmleditor->SetConfig('LinkBrowser',true);
 $htmleditor->SetConfig('LinkBrowserURL', $GO_MODULES->modules['cms']['url'].'select.php');
-
+$htmleditor->SetConfig('FlashBrowser',true);
+$htmleditor->SetConfig('FlashBrowserURL', $GO_MODULES->modules['cms']['url'].'select_file.php?path='.urlencode($GO_CONFIG->local_path.'cms/sites/'.$site['id'].'/'));
+		
 
 
 $editor_table = new table();
@@ -446,6 +448,8 @@ switch($tabstrip->get_active_tab_id())
 		
 		$htmleditor->SetConfig('LinkBrowser',true);
 		$htmleditor->SetConfig('LinkBrowserURL', $GO_MODULES->modules['cms']['url'].'select.php');
+		$htmleditor->SetConfig('FlashBrowser',true);
+		$htmleditor->SetConfig('FlashBrowserURL', $GO_MODULES->modules['cms']['url'].'select_file.php?path='.urlencode($GO_CONFIG->local_path.'cms/'.$site['id'].'/'));
 		
 		$tabstrip->innerHTML .= $htmleditor->CreateHtml();
 		

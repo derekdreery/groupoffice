@@ -67,7 +67,7 @@ if ( isset( $GO_INCLUDES ) ) {
 //require_once($GO_CONFIG->class_path.'base/controls.class.inc');
 
 //setting session save path is required for some server configuration
-session_save_path($GO_CONFIG->tmpdir);
+//session_save_path($GO_CONFIG->tmpdir);
 
 //start session
 session_start();

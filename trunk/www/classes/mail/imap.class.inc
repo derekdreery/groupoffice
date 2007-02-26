@@ -385,7 +385,7 @@ class imap {
 	* @access public
 	* @return array The E-mail message elements
 	*/
-	function next_message() {
+	function next_message($examine_header=false) {
 		if (!isset ($this->messages)) {
 			die('Call get_messages() first');
 		}
@@ -413,23 +413,51 @@ class imap {
 			//$this->message['new'] = (($overview->recent==1 || $overview->seen==0) && $this->is_imap()) ? true : false;
 			$this->message['new'] = ($overview->seen == 0 && $this->is_imap()) ? true : false;
 
-			$headerinfo = imap_headerinfo($this->conn, imap_msgno($this->conn,$overview->uid));
-			$this->message['udate'] = $headerinfo->udate;
 			
-			if (isset ($headerinfo->to)) {
-				$tmp = $headerinfo->to;
-
-				for ($x = 0; $x < count($tmp); $x ++) {
-					$email = '';
-					if (isset ($tmp[$x]->mailbox)) {
-						$host = isset ($tmp[$x]->host) ? '@'.$tmp[$x]->host : '';
-						$email = $tmp[$x]->mailbox.$host;
+			if($examine_header)
+			{
+				//much slower but people want the attachment icon!
+				$this->message["attachments"]=false;
+				$header = imap_fetchheader($this->conn, imap_msgno($this->conn,$overview->uid));
+				$this->message["priority"] = $this->get_header_value('X-Priority:', $header);		
+				$RFC822 = new RFC822();
+				$this->message["to"] = $RFC822->explode_address_list(enc_utf8($this->get_header_value('To:', $header)));
+				
+				$content_type = $this->get_header_value('Content-Type:', $header);
+				if (!empty($content_type) && eregi("([^/]*)/([^ ;\n\t]*)", $content_type, $regs)) {
+					$mtype = strtolower($regs[1]);
+					$stype = strtolower($regs[2]);
+				}else
+				{
+					$mtype = '';
+					$stype = '';
+				}
+				if ($mtype != 'text' && $stype != 'alternative' && $stype != 'related' && !empty($mtype) && !empty($stype))
+				{
+					$this->message["attachments"] = true;
+				}
+			}else {
+				$headerinfo = imap_headerinfo($this->conn, imap_msgno($this->conn,$overview->uid));
+				$this->message['udate'] = $headerinfo->udate;
+				
+				if (isset ($headerinfo->to)) {
+					$tmp = $headerinfo->to;
+	
+					for ($x = 0; $x < count($tmp); $x ++) {
+						$email = '';
+						if (isset ($tmp[$x]->mailbox)) {
+							$host = isset ($tmp[$x]->host) ? '@'.$tmp[$x]->host : '';
+							$email = $tmp[$x]->mailbox.$host;
+						}
+						$personal = isset ($tmp[$x]->personal) ? enc_utf8($tmp[$x]->personal) : '';
+						$this->message['to'][$x] = $this->RFC822->write_address($personal, $email);
 					}
-					$personal = isset ($tmp[$x]->personal) ? enc_utf8($tmp[$x]->personal) : '';
-					$this->message['to'][$x] = $this->RFC822->write_address($personal, $email);
 				}
 			}
-			$this->message['udate'] = $headerinfo->udate;
+			
+			
+			
+		
 
 			return $this->message;
 		} else {

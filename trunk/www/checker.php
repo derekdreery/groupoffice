@@ -51,81 +51,43 @@ if ($calendar_module && $GO_MODULES->modules['calendar']['read_permission'])
 $task = isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
 
 
-$_SESSION['notified_new_mail'] = isset($_SESSION['notified_new_mail']) ? $_SESSION['notified_new_mail'] : 0;
-$_SESSION['new_mail'] = 0;
+$_SESSION['GO_SESSION']['email_module']['notified'] = isset($_SESSION['GO_SESSION']['email_module']['notified']) ? $_SESSION['GO_SESSION']['email_module']['notified'] : 0;
+$_SESSION['GO_SESSION']['email_module']['new'] = 0;
 $remind_email = false;
-if(($_SESSION['GO_SESSION']['start_module'] != 'summary' && $_SESSION['GO_SESSION']['start_module'] != 'email')
-|| isset($_REQUEST['initiated']))
-{
+//if(($_SESSION['GO_SESSION']['start_module'] != 'summary' && $_SESSION['GO_SESSION']['start_module'] != 'email')
+//|| isset($_REQUEST['initiated']))
+//{
 	//check for email
 	if (isset($GO_MODULES->modules['email']) && $GO_MODULES->modules['email']['read_permission'])
 	{
 		require_once($GO_MODULES->modules['email']['class_path'].'email.class.inc');
 		require_once($GO_CONFIG->class_path.'mail/imap.class.inc');
 		$imap = new imap();
-		$email1 = new email();
-		$email2 = new email();
+		$email = new email();
 
-		$email1->get_accounts($GO_SECURITY->user_id);
-
-		while($email1->next_record())
+		if(!isset($_SESSION['GO_SESSION']['email_module']['cached']) || isset($_REQUEST['refresh']))
 		{
-			if ($email1->f('auto_check') == '1')
-			{
-				$account = $email1->Record;
-
-				if ($imap->open($account['host'], $account['type'],$account['port'],$account['username'],$account['password'], '', 0, $account['use_ssl'], $account['novalidate_cert']))
-				{
-					if ($account['type'] == 'imap')
-					{
-						if($status = $imap->status('INBOX'))
-						{
-							if ($status->unseen > 0)
-							{
-								$_SESSION['new_mail'] += $status->unseen;
-							}
-						}
-						$email2->get_subscribed($email1->f('id'));
-						while($email2->next_record())
-						{
-							if($email2->f('name') != 'INBOX')
-							{
-								if($status = $imap->status($email2->f('name')))
-								{
-									if ($status->unseen > 0)
-									{
-										$_SESSION['new_mail'] += $status->unseen;
-									}
-								}
-							}
-						}
-					}else
-					{
-						$status = $imap->status('INBOX');
-						$_SESSION['unseen_in_mailbox'][$account['id']] = $status->unseen;
-						$_SESSION['new_mail'] += $status->unseen;
-					}
-				}else
-				{
-					$email2->disable_auto_check($account['id']);
-					echo '<script language="javascript" type="text/javascript">alert("'.$account['host'].' '.$ml_host_unreachable.'");</script>';
-				}
-			}
+			$email->cache_accounts($GO_SECURITY->user_id);
+			$_SESSION['GO_SESSION']['email_module']['cached']=true;
+		}else {
+			$email->cache_accounts($GO_SECURITY->user_id,true);
 		}
+		
+		 $_SESSION['GO_SESSION']['email_module']['new']=$email->get_total_unseen($GO_SECURITY->user_id);
 
-		if ($_SESSION['new_mail'] > 0 && $_SESSION['new_mail'] > $_SESSION['notified_new_mail'])
+
+		if ($_SESSION['GO_SESSION']['email_module']['new'] > 0 && $_SESSION['GO_SESSION']['email_module']['new'] > $_SESSION['GO_SESSION']['email_module']['notified'])
 		{
+			$_SESSION['GO_SESSION']['email_module']['notified']=$_SESSION['GO_SESSION']['email_module']['new'];
 			$remind_email = true;
-			$height += 120;
-		}
-		if($_SESSION['notified_new_mail'] >  $_SESSION['new_mail'])
+		}elseif($_SESSION['GO_SESSION']['email_module']['notified'] >  $_SESSION['GO_SESSION']['email_module']['new'])
 		{
-			$_SESSION['notified_new_mail'] =  $_SESSION['new_mail'];
+			$_SESSION['GO_SESSION']['email_module']['notified'] =  $_SESSION['GO_SESSION']['email_module']['new'];
 		}
 	}
-}
+//}
 
-if ($remind_events ||  $remind_email)
+if ($remind_events)
 {
 	if($height > 600) $height = 600;
 
@@ -134,7 +96,23 @@ if ($remind_events ||  $remind_email)
 	'</script>';
 }
 ?>
-<link rel="shortcut icon" href="<?php echo $GO_CONFIG->host; ?>lib/favicon.ico" />
+<link href="<?php echo $GO_THEME->theme_url.'css/checker.css'; ?>" rel="stylesheet" type="text/css" />
 </head>
-<body></body>
+<body>
+<?php
+
+echo '<a href="'.$GO_MODULES->modules['email']['url'].'" target="main"><img src="'.$GO_THEME->images['mail'].'" border="0" align="absmiddle" /> '.$_SESSION['GO_SESSION']['email_module']['new'].'</a>';
+
+if($remind_email)
+{
+	echo '<br /><br /><br /><object width="0" height="0">'.
+		'<param name="movie" value="'.$GO_THEME->sounds['reminder'].'">'.
+		'<param name="loop" value="false">'.
+		'<embed src="'.$GO_THEME->sounds['reminder'].'" loop="false" width="1" height="1">'.
+		'</embed>'.
+		'</object>';
+}	
+?>
+
+</body>
 </html>

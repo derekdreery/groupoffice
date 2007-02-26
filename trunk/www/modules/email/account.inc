@@ -19,7 +19,7 @@ if ($account && $task != 'save_account')
 	$pass = $account['password'];
 	$signature = $account["signature"];
 	$mbroot = utf7_imap_decode($account["mbroot"]);
-	$auto_check = $account['auto_check'] == '1' ? true : false;
+	$examine_headers = $account['examine_headers'] == '1' ? true : false;
 	$use_ssl = $account['use_ssl'] == '1' ? true : false;
 	$novalidate_cert = $account['novalidate_cert'] == '1' ? true : false;
 	$account_user_id=$account['user_id'];
@@ -40,7 +40,7 @@ if ($account && $task != 'save_account')
 	$pass = isset($_REQUEST['email_pass']) ? smart_stripslashes($_REQUEST['email_pass']) : '';
 	$signature = isset($_REQUEST['signature']) ? smart_stripslashes($_REQUEST['signature']) : '';
 	$mbroot = isset($_REQUEST['mbroot']) ? smart_stripslashes($_REQUEST['mbroot']) : '';
-	$auto_check = isset($_REQUEST['auto_check']) ? true : false;
+	$examine_headers = isset($_REQUEST['examine_headers']) ? true : false;
 	$use_ssl = isset($_REQUEST['use_ssl']) ? true : false;
 	$novalidate_cert = isset($_REQUEST['novalidate_cert']) ? true : false;
 	$account_user_id=isset($_REQUEST['account_user_id']) ? smart_stripslashes($_REQUEST['account_user_id']) : $GO_SECURITY->user_id;
@@ -201,7 +201,7 @@ $row->add_cell(new table_cell($textarea->get_html()));
 $table->add_row($row);
 
 $row = new table_row();
-$checkbox = new checkbox('auto_check','auto_check', '1', $ml_auto_check, $auto_check);
+$checkbox = new checkbox('examine_headers','examine_headers', '1', $ml_examine_headers, $examine_headers);
 $cell = new table_cell($checkbox->get_html());
 $cell->set_attribute('colspan','2');
 $row->add_cell($cell);

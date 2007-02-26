@@ -355,7 +355,7 @@ class GO_CONFIG
    * @var     string
    * @access  public
    */
-  var $refresh_rate = '60';
+  var $refresh_rate = '120';
 
   /**
    * The login screen to display
