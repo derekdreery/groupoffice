@@ -190,4 +190,9 @@ if ( $_SERVER['REQUEST_METHOD'] == "POST" || (isset($_COOKIE['GO_UN'])
 	}
 }
 load_basic_controls();
-require_once('login_screens/'.$GO_CONFIG->login_screen.'/login.inc');
+if(file_exists($GO_CONFIG->root_path.'login_screens/'.$GO_CONFIG->login_screen))
+{
+	require_once($GO_CONFIG->root_path.'login_screens/'.$GO_CONFIG->login_screen.'/login.inc');
+}else {
+	require_once($GO_CONFIG->root_path.'login_screens/Default/login.inc');
+}

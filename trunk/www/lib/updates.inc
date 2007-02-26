@@ -5,8 +5,9 @@ Update queries for each version from 1.95
 From version 2.06 and up put module updates in the module's sql directory!
 
 */
-$updates[219] = array();
+$updates[220] = array();
 
+$updates[219][]="update users set theme='Default' where theme like 'Professional%';";
 $updates[218][]="ALTER TABLE `users` ADD `mtime` INT NOT NULL ;";
 $updates[218][]="UPDATE users SET mtime=registration_time";
 
