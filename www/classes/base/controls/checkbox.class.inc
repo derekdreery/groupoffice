@@ -28,8 +28,8 @@ require_once($GO_CONFIG->class_path.'base/controls/html_element.class.inc');
 
 class checkbox extends html_element
 {
-  var $text;
-  /**
+	var $text;
+	/**
    * Draw a new checkbox.
    * 
    * If you supply a name for this checkbox, it will be directly printed
@@ -45,39 +45,40 @@ class checkbox extends html_element
    *
    * @return void
    */
-  function checkbox($id='', $name='', $value='', $text='', $checked=false, $disabled=false)
-  {
-    $this->tagname = 'input';
+	function checkbox($id='', $name='', $value='', $text='', $checked=false, $disabled=false)
+	{
+		$this->tagname = 'input';
 		$this->set_linebreak("\n");
 
-    $this->set_attribute('type', 'checkbox');
-    //$this->set_attribute('class', 'textbox');
+		$this->set_attribute('type', 'checkbox');
+		//$this->set_attribute('class', 'textbox');
+		$this->set_attribute('style','margin:0px;padding:0px;margin-right:3px');
 		$this->set_attribute('name', $name);
 		if(empty($id))
 		{
 			$id = uniqid(time());
 		}
-    $this->set_attribute('id', $id);
+		$this->set_attribute('id', $id);
 		$this->set_attribute('value', $value);
-    if($disabled)
-    {
-      $this->set_attribute('disabled', 'disabled');
-    }
-    if($checked)
-    {
-      $this->set_attribute('checked', 'checked');
-    }
+		if($disabled)
+		{
+			$this->set_attribute('disabled', 'disabled');
+		}
+		if($checked)
+		{
+			$this->set_attribute('checked', 'checked');
+		}
 
-    $this->text=$text;
+		$this->text=$text;
 
-  }
+	}
 
-  function get_click_handler()
-  {
-    return "javascript:check_checkbox('".$this->attributes['id']."');";
-  }
+	function get_click_handler()
+	{
+		return "javascript:check_checkbox('".$this->attributes['id']."');";
+	}
 
-  /**
+	/**
    * Create a checkbox.
    *
    * This function returns a string that can be used to print a button on the
@@ -94,36 +95,24 @@ class checkbox extends html_element
    * 
    * @return string
    */
-  function get_html()
-  {
-    if ( $this->text != '' ) {
-    	$table= new table();
-    	$table->set_attribute('class','normalTable');
-    	$table->set_attribute('cellpadding','0');
-    	$table->set_attribute('cellspacing','0');
-    	$table->set_attribute('style','display:inline');
-    	
-    	$textcell = new table_cell($this->text);
-    	
-      if ( isset($this->attributes['disabled']) ) {
-        $textcell->set_attribute('style','color:#7d7d7d;cursor:default;');        
-      } else {
-        $textcell->set_attribute('onclick', $this->get_click_handler());
-        $textcell->set_attribute('style','cursor:default;');   
-      }
-      
-      $row = new table_row();
-      $cb_cell = new table_cell(parent::get_html());
-      $cb_cell->set_attribute('valign','top');
-      $row->add_cell($cb_cell);
-      $row->add_cell($textcell);
-      
-      $table->add_row($row);
+	function get_html()
+	{
+		if ( $this->text != '' ) {
+			
+			$div = new html_element('div', $this->text);
+			
 
-      return $table->get_html();
-    }else
-    {
-      return parent::get_html();
-    }
-  }
+			if ( isset($this->attributes['disabled']) ) {
+				$div->set_attribute('style','display:inline;vertical-align:top;color:#7d7d7d;cursor:default;');
+			} else {
+				$div->set_attribute('onclick', $this->get_click_handler());
+				$div->set_attribute('style','display:inline;vertical-align:top;cursor:default;');
+			}
+			
+			return parent::get_html().$div->get_html();
+		}else
+		{
+			return parent::get_html();
+		}
+	}
 }

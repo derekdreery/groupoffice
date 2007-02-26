@@ -111,7 +111,7 @@ class email extends db
 		}
 	}
 
-	function add_account($user_id, $type, $host, $port, $use_ssl, $novalidate_cert, $mbroot, $username, $password, $name, $email, $signature, $auto_check=0)
+	function add_account($user_id, $type, $host, $port, $use_ssl, $novalidate_cert, $mbroot, $username, $password, $name, $email, $signature, $examine_headers=0)
 	{
 		global $GO_CONFIG, $GO_LANGUAGE;
 
@@ -205,7 +205,7 @@ class email extends db
 				$account['name']=$name;
 				$account['email']=$email;
 				$account['signature']=$signature;
-				$account['auto_check']=$auto_check;
+				$account['auto_check']=$examine_headers;
 
 
 				if(!$this->insert_row('emAccounts', $account))
@@ -220,17 +220,13 @@ class email extends db
 		}
 	}
 
-	function disable_auto_check($account_id)
-	{
-		return $this->query("UPDATE emAccounts SET auto_check='0' WHERE id='$account_id'");
-	}
 
 	function _update_account($account)
 	{
 		return $this->update_row('emAccounts', 'id', $account);
 	}
 
-	function update_account($account_id, $type, $host, $port, $use_ssl, $novalidate_cert, $mbroot, $username, $password, $name, $email, $signature, $auto_check=0, $user_id=0)
+	function update_account($account_id, $type, $host, $port, $use_ssl, $novalidate_cert, $mbroot, $username, $password, $name, $email, $signature, $examine_headers=0, $user_id=0)
 	{
 		global $GO_CONFIG;
 
@@ -247,7 +243,7 @@ class email extends db
 			", use_ssl='$use_ssl', novalidate_cert='$novalidate_cert'".
 			", mbroot='$mbroot', username='$username', password='".$password."',".
 			" name='$name', email='$email'".
-			", signature='$signature', auto_check='$auto_check'";
+			", signature='$signature', examine_headers='$examine_headers'";
 			if($user_id>0)
 			{
 				$sql .=", user_id=$user_id";
@@ -373,6 +369,14 @@ class email extends db
 		}
 		$sql .= " ORDER BY sort_order ASC, name ASC";
 
+		$this->query($sql);
+		return $this->num_rows();
+	}
+	
+	function get_auto_check_folders($account_id)
+	{
+		$sql = "SELECT * FROM emFolders WHERE account_id='$account_id'".
+		" AND (auto_check='1' OR name='INBOX')";
 		$this->query($sql);
 		return $this->num_rows();
 	}
@@ -594,7 +598,7 @@ class email extends db
 		return $this->query($sql);
 	}
 
-	function cache_accounts($user_id)
+	function cache_accounts($user_id, $auto_check_only=false)
 	{
 
 		if($this->get_accounts($user_id))
@@ -603,12 +607,12 @@ class email extends db
 
 			while($this->next_record())
 			{
-				$email->cache_account_status($this->Record);
+				$email->cache_account_status($this->Record,$auto_check_only);
 			}
 		}
 	}
 
-	function cache_account_status($account)
+	function cache_account_status($account,$auto_check_only=false)
 	{
 		$mail = new imap();
 		$email = new email();
@@ -627,19 +631,45 @@ class email extends db
 			return false;
 		}
 
-		$this->get_folders($account['id']);
+		if($auto_check_only)
+		{
+			$this->get_auto_check_folders($account['id']);
+		}else {
+			$this->get_subscribed($account['id']);
+		}
 
 		while($this->next_record())
 		{
 			$folder['id'] = $this->f('id');
 			if($status = $mail->status($this->f('name'), SA_ALL))
 			{
-				$folder['msgcount'] = $status->messages;
-				$folder['unseen'] = $status->unseen;
+				$update=false;
+				if($status->messages!=$this->f('msgcount'))
+				{
+					$folder['msgcount'] = $status->messages;
+					$update=true;
+				}
+				if($status->unseen!=$this->f('unseen'))
+				{
+					$folder['unseen'] = $status->unseen;
+					$update=true;
+				}
+				if($update)
+				{
+					$email->__update_folder($folder);
+				}
 			}
-			$email->__update_folder($folder);
+			
 		}
 		$mail->close();
+	}
+	
+	function get_total_unseen($user_id)
+	{
+		$sql = "SELECT SUM(unseen) FROM emFolders INNER JOIN emAccounts ON emFolders.account_id=emAccounts.id WHERE user_id='$user_id'";
+		$this->query($sql);
+		$this->next_record();
+		return $this->f(0);
 	}
 
 

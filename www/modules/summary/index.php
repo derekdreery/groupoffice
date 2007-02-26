@@ -85,6 +85,7 @@ $cell->set_attribute('colspan','99');
 
 $menu = new button_menu();
 
+
 if(isset($GO_MODULES->modules['email']) && $GO_MODULES->modules['email']['read_permission'])
 {
 	require_once($GO_MODULES->modules['email']['class_path'].'email.class.inc');
@@ -120,7 +121,7 @@ $cell = new table_cell();
 $cell->set_attribute('style','border: 1px solid black;border-left:0;');
 $cell->set_attribute('valign','top');
 	  
-require_once('sum_email.inc');
+//require_once('sum_email.inc');
 require_once('sum_calendar.inc');
 
 $cell->innerHTML .= '&nbsp;';

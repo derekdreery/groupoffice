@@ -93,9 +93,9 @@ if ($account && $mail->open($account['host'], $account['type'], $account['port']
 //update notified mail state
 if ($content["new"] == '1')
 {
-	if($account['auto_check'] == '1') {
-		$_SESSION['notified_new_mail'] -= 1;
-	}
+	$_SESSION['GO_SESSION']['email_module']['new'] -= 1;
+	$_SESSION['GO_SESSION']['email_module']['notified'] -= 1;
+
 	if($em_folder = $email->get_folder($account_id, $mailbox))
 	{
 		$em_folder['unseen']--;

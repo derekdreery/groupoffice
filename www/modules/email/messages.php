@@ -26,6 +26,7 @@ $mail = new imap();
 $email = new email();
 
 
+
 $account_id = isset ($_REQUEST['account_id']) ? $_REQUEST['account_id'] : 0;
 $task = isset ($_REQUEST['task']) ? $_REQUEST['task'] : '';
 $uid = isset ($_REQUEST['uid']) ? $_REQUEST['uid'] : 0;
@@ -116,6 +117,7 @@ if(isset($_GET['mailbox']))
 }
 
 $th = new table_heading();
+$th->set_attribute('style','width:16px');
 $datatable->add_column($th);
 
 if ($show == "from")
@@ -126,6 +128,7 @@ if ($show == "from")
 	$datatable->add_column(new table_heading($ml_to, SORTTO));
 }
 $th = new table_heading();
+$th->set_attribute('style','width:0px;');
 $datatable->add_column($th);
 
 $datatable->add_column(new table_heading($ml_subject, SORTSUBJECT));
@@ -240,7 +243,7 @@ if ($msg_count > 0)
 	}
 	$mail->get_messages($datatable->start, $datatable->offset);
 	$row_count = 0;
-	while($mail->next_message($get_to_addresses))
+	while($mail->next_message($account['examine_headers']=='1'))
 	{
 
 		$row = new table_row($mail->f('uid'));
@@ -372,19 +375,13 @@ if ($msg_count > 0)
 			$to = htmlspecialchars($to, ENT_QUOTES);
 			$short_to = cut_string($to, 50);
 		}
-		if ($mail->f('flagged') == '1')
-		{
-			$flag = new image('flag');
-			$flag->set_attribute('style', 'border:0px;width:16px;height:16px;margin-right:3px;');
-			$flag->set_attribute('valign', 'middle');
-			$flag = $flag->get_html();
-		}else
-		{
-			$flag = '&nbsp;';
-		}
+		
 		$row->set_tooltip(new tooltip(htmlspecialchars($mail->f('from'))."&nbsp;&lt;".htmlspecialchars($mail->f("sender"))."&gt;<br />".htmlspecialchars($subject), '', 'ol_width=300'));
 
-		$row->add_cell(new table_cell($img->get_html()));
+		$cell = new table_cell($img->get_html());
+		$cell->set_attribute('style','width:16px;');
+		$row->add_cell($cell);
+		
 
 		if ($show=="from")
 		{
@@ -405,7 +402,45 @@ if ($msg_count > 0)
 			$row->add_cell($cell);
 		}
 
-		$cell = new table_cell($flag);
+		$cell = new table_cell();
+		
+		
+		if($mail->f('attachments'))
+		{
+			$img = new image('links_small');
+			$img->set_attribute('style', 'border:0px;');
+			$img->set_attribute('valign', 'absmiddle');
+			$cell->add_html_element($img);
+		}
+		
+		if($mail->f('priority')!='')
+		{
+			if($mail->f('priority') < 3)
+			{
+				$img = new image('high_priority');
+				$img->set_attribute('style', 'border:0px;');
+				$img->set_attribute('valign', 'absmiddle');
+				$cell->add_html_element($img);
+			}
+
+			if($mail->f('priority') > 3)
+			{
+				$img = new image('low_priority');
+				$img->set_attribute('style', 'border:0px;');
+				$img->set_attribute('valign', 'absmiddle');
+				$cell->add_html_element($img);
+			}
+		}
+		
+		if ($mail->f('flagged') == '1')
+		{
+			$img = new image('flag');
+			$img->set_attribute('style', 'border:0px;width:16px;height:16px;');
+			$img->set_attribute('valign', 'absmiddle');
+			$cell->add_html_element($img);
+		}
+		
+		
 		$cell->set_attribute('style','width:10px;');
 		$row->add_cell($cell);
 
