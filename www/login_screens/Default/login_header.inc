@@ -34,7 +34,7 @@ if($GO_CONFIG->force_fullscreen && basename($_SERVER['PHP_SELF']) != 'fullscreen
 	<table id="header" border="0">
 	<tr>
 	<td id="header-logo">
-	<a href="http://www.group-office.com" target="_blank" title="Group-Office homepage"><img src="<?php echo $GO_CONFIG->host; ?>login_screens/<?php echo $GO_CONFIG->login_screen; ?>/GOCOM.gif" border="0" align="absmiddle" /></a>
+	<a href="http://www.group-office.com" target="_blank" title="Group-Office homepage"><img src="<?php echo $img; ?>" border="0" align="absmiddle" /></a>
 	</td>
 	</tr>
 	<tr>

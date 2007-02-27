@@ -103,7 +103,7 @@ if ($remind_events)
 
 echo '<a href="'.$GO_MODULES->modules['email']['url'].'" target="main"><img src="'.$GO_THEME->images['mail'].'" border="0" align="absmiddle" /> '.$_SESSION['GO_SESSION']['email_module']['new'].'</a>';
 
-if($remind_email)
+if($remind_email && isset($_REQUEST['initiated']))
 {
 	echo '<br /><br /><br /><object width="0" height="0">'.
 		'<param name="movie" value="'.$GO_THEME->sounds['reminder'].'">'.
