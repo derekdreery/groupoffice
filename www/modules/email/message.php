@@ -388,7 +388,10 @@ for ($i = 0; $i < count($parts); $i ++) {
 			if ($content["new"] == 1) {
 				echo '<script type="text/javascript">'.$link.'</script>';
 			}
-
+		}elseif($extension == 'dat')
+		{
+			$target = '_self';
+			$link = "tnef.php?account_id=".$account['id']."&mailbox=".urlencode($mailbox)."&uid=".$uid."&part=".$parts[$i]["number"]."&transfer=".$parts[$i]["transfer"]."&mime=".$parts[$i]["mime"]."&filename=".urlencode($parts[$i]["name"]);			
 		} else {
 			$target = '_top';
 			$link = "attachment.php?account_id=".$account['id']."&mailbox=".urlencode($mailbox)."&uid=".$uid."&part=".$parts[$i]["number"]."&transfer=".$parts[$i]["transfer"]."&mime=".$parts[$i]["mime"]."&filename=".urlencode($parts[$i]["name"]);

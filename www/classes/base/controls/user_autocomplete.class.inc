@@ -50,6 +50,8 @@ class user_autocomplete
 		{
 			$lookup_url = $GO_MODULES->modules['users']['url'].'user.php?return_to='.urlencode($link_back).'&user_id=';
 		}else {
+			global $GO_CONFIG;
+			
 			$lookup_url = $GO_CONFIG->control_url.'user.php?return_to='.urlencode($link_back).'&id=';
 		}
 

@@ -941,6 +941,7 @@ class email extends db
 		exec('rm -Rf '.$tmpdir);
 		return $data;
 	}
+	
 
 	function get_default_account_id($user_id)
 	{

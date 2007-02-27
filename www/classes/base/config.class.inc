@@ -691,6 +691,14 @@ class GO_CONFIG
    */
   var $cmd_wbxml2xml = '/usr/bin/wbxml2xml';
   
+  /**
+   * Command to unpack winmail.dat files
+   *
+   * @var     string
+   * @access  public
+   */
+  var $cmd_tnef = '/usr/bin/tnef';
+  
  /**
 	* Automatically popup Group-Office in a screen without the brwoser
 	* toolbars
