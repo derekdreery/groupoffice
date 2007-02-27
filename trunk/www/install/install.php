@@ -304,6 +304,7 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 			$GO_CONFIG->cmd_sudo = whereis('sudo') ? whereis('sudo') : '/usr/bin/sudo';
 			$GO_CONFIG->cmd_xml2wbxml = whereis('xml2wbxml') ? whereis('xml2wbxml') : '/usr/bin/xml2wbxml';
 			$GO_CONFIG->cmd_wbxml2xml = whereis('wbxml2xml') ? whereis('wbxml2xml') : '/usr/bin/wbxml2xml';
+			$GO_CONFIG->cmd_tnef = whereis('tnef') ? whereis('tnef') : '/usr/bin/tnef';
 			
 		
 

@@ -74,6 +74,7 @@ array(
 'cmd_edquota',
 'cmd_wbxml2xml',
 'cmd_xml2wbxml',
+'cmd_tnef',
 'quota_protouser',
 'force_fullscreen',
 'logout_url',

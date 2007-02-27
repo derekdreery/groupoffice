@@ -228,6 +228,23 @@
 	</td>
 </tr>
 <tr>
+	<td valign="top">TNEF:</td>
+	<td>
+	<?php	
+	$tnef = whereis('tnef') ? whereis('tnef') : '/usr/bin/tnef';
+	
+	if(!is_executable($tnef))
+	{
+		//$fatal_error = true;
+		echo '<span style="color: red;">Warning: tnef is not installed or not executable. you can\'t view winmail.dat attachments in the email module.</span>';
+	}else
+	{
+		echo 'Ok';
+	}
+	?>
+	</td>
+</tr>
+<tr>
 	<td colspan="2">
 	<br />
 	<b>Use this information for your Group-Office Professional license:</b>
