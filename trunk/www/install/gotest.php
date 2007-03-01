@@ -1,4 +1,19 @@
 <?php
+/**
+ * @copyright Intermesh 2007
+ * @author Merijn Schering <mschering@intermesh.nl>
+ * @version $Revision: 1.218 $ $Date: 2007/11/28 10:42:42 $
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ * 
+ * Group-Office system requirements test script
+ * 
+ */
+
+
 function return_bytes($val) {
    $val = trim($val);
    $last = strtolower($val{strlen($val)-1});
