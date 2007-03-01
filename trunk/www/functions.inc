@@ -223,7 +223,7 @@ function mkdir_recursive($path) {
     $dirs_to_create[] = $path;
     if(dirname($path) == $path)
     {
-     	exit('Failed to create '.var_export($dirs_to_create, true));
+     	exit('Failed to create folder(s) '.var_export($dirs_to_create, true));
     }
     $path = dirname($path);
   }
