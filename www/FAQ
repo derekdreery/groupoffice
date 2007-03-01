@@ -30,9 +30,6 @@ GROUP-OFFICE FAQ
 
 4. Can I create folders and filters with POP-3 servers?
 	No you can't. Multiple folders and filters are only supported with IMAP servers.
-	
-5. Why do I get errors when I put single quotes in my input?
-	You have disabled magic_quotes_gpc in 'php.ini'
 
 6. How can I browse the Group-Office files with samba or ftp?
 	Load install.php in a browser and change the create mode to '0777' if you understand what you are doing.
