@@ -773,7 +773,7 @@ class calendar extends db
 				$event['todo'] = '0';
 			}
 
-
+			$event=array_map('addslashes',$event);
 			if($new_event_id = $this->add_event($event))
 			{
 				$cal = new calendar();
@@ -2935,8 +2935,11 @@ class calendar extends db
 			{
 				if($event = $this->get_event_from_ical_object($object))
 				{
-					$event = array_map('addslashes', $event);
+					$exceptions=$event['exceptions'];
+					unset($event['exceptions']);
+					$event = array_map('addslashes', $event);						
 					$event = array_map('trim', $event);
+					$event['exceptions']=$exceptions;
 
 					if ($event_id = $this->add_event($event))
 					{
@@ -2972,8 +2975,11 @@ class calendar extends db
 					if($event = $this->get_event_from_ical_object($object))
 					{
 
-						$event = array_map('addslashes', $event);
+						$exceptions=$event['exceptions'];
+						unset($event['exceptions']);
+						$event = array_map('addslashes', $event);						
 						$event = array_map('trim', $event);
+						$event['exceptions']=$exceptions;
 
 						if ($event_id = $this->add_event($event))
 						{
