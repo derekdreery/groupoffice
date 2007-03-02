@@ -2882,9 +2882,11 @@ class calendar extends db
 			if(isset($event_count))
 			{				
 				$event['repeat_forever']='1';
-				for($i=0;$i<$event_count;$i++)
+				$start_time=$event['start_time'];
+				for($i=1;$i<$event_count;$i++)
 				{
-					$event['repeat_end_time']=$this->get_next_recurrence_time(0, $event['start_time'], $event);
+					$event['repeat_end_time']=$start_time=$this->get_next_recurrence_time(0, $start_time, $event);
+
 				}
 				if($event['repeat_end_time']>0)
 				{
@@ -2935,7 +2937,7 @@ class calendar extends db
 			{
 				if($event = $this->get_event_from_ical_object($object))
 				{
-					$exceptions=$event['exceptions'];
+					$exceptions=isset($event['exceptions']) ? $event['exceptions'] : array();
 					unset($event['exceptions']);
 					$event = array_map('addslashes', $event);						
 					$event = array_map('trim', $event);
@@ -2974,8 +2976,8 @@ class calendar extends db
 				{
 					if($event = $this->get_event_from_ical_object($object))
 					{
-
-						$exceptions=$event['exceptions'];
+						
+						$exceptions=isset($event['exceptions']) ? $event['exceptions'] : array();
 						unset($event['exceptions']);
 						$event = array_map('addslashes', $event);						
 						$event = array_map('trim', $event);
