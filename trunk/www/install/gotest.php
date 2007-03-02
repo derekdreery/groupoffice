@@ -13,6 +13,39 @@
  * 
  */
 
+/**
+* Format a size to a human readable format.
+* 
+* @param	int $size The size in bytes
+* @param	int $decimals Number of decimals to display
+* @access public
+* @return string
+*/
+
+function format_size($size, $decimals = 1) {
+	switch ($size) {
+		case ($size > 1073741824) :
+			$size = number_format($size / 1073741824, $decimals, '.', ' ');
+			$size .= " GB";
+			break;
+
+		case ($size > 1048576) :
+			$size = number_format($size / 1048576, $decimals, '.', ' ');
+			$size .= " MB";
+			break;
+
+		case ($size > 1024) :
+			$size = number_format($size / 1024, $decimals, '.', ' ');
+			$size .= " KB";
+			break;
+
+		default :
+			number_format($size, $decimals, '.', ' ');
+			$size .= " bytes";
+			break;
+	}
+	return $size;
+}
 
 function return_bytes($val) {
    $val = trim($val);
