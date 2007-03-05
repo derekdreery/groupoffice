@@ -5,9 +5,9 @@ header('Content-Type: text/html; charset='.$charset);
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset; ?>">
+<script language="javascript" type="text/javascript" src="<?php echo $GO_CONFIG->host; ?>javascript/common.js"></script>
 <?php if (isset($GO_HEADER['head'])) echo $GO_HEADER['head']; ?>
 <?php require($GO_CONFIG->control_path.'fixpng.inc'); ?>
-<script language="javascript" type="text/javascript" src="<?php echo $GO_CONFIG->host; ?>javascript/common.js"></script>
 <link rel="shortcut icon" href="<?php echo $GO_CONFIG->host; ?>lib/favicon.ico" />
 <link href="<?php echo $GO_THEME->theme_url.'css/common.css'; ?>" rel="stylesheet" type="text/css" />
 <?php

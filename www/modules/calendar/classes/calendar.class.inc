@@ -1161,6 +1161,7 @@ class calendar extends db
 				return $this->Record;
 			}else
 			{
+				
 				return $this->get_calendar();
 			}
 		}else

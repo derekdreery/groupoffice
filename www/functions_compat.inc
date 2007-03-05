@@ -39,6 +39,20 @@ if(!function_exists('file_get_contents')) {
        return !$file ? false : implode('', $file);
    }
 }
+
+
+if(!function_exists('file_put_contents')) {
+	function file_put_contents($n,$d) {
+		$f=@fopen($n,"w");
+		if (!$f) {
+			return false;
+		} else {
+			fwrite($f,$d);
+			fclose($f);
+			return true;
+		}
+	}
+}
  
  
 if(!function_exists('html_entity_decode'))
