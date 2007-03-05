@@ -348,6 +348,19 @@ if ($project_id > 0) {
 				$fs->add_share($project['user_id'], $GO_CONFIG->file_storage_path.'projects/'.$project_id,'project',$project['acl_read'], $project['acl_write']);
 			}
 		}
+		
+		if (isset($GO_MODULES->modules['notes']) && $GO_MODULES->modules['notes']['read_permission'])
+		{
+			$menu->add_button('ab_notes', $strNewNote, $GO_MODULES->modules['notes']['url'].'note.php?link_id='.$project['link_id'].'&link_type=5&link_text='.urlencode('('.$strProject.') '.$project['name']).'&return_to='.urlencode($link_back));
+		}
+		if (isset($GO_MODULES->modules['calendar']) && $GO_MODULES->modules['calendar']['read_permission'])
+		{
+			$menu->add_button('cal_compose', $strNewEvent, $GO_MODULES->modules['calendar']['url'].'event.php?link_id='.$project['link_id'].'&link_type=5&link_text='.urlencode('('.$strProject.') '.$project['name']).'&return_to='.urlencode($link_back));
+		}
+		if (isset($GO_MODULES->modules['todos']) && $GO_MODULES->modules['todos']['read_permission'])
+		{
+			$menu->add_button('todos_new', $strNewTodo, $GO_MODULES->modules['calendar']['url'].'event.php?todo=1&link_id='.$project['link_id'].'&link_type=5&link_text='.urlencode('('.$strProject.') '.$project['name']).'&return_to='.urlencode($link_back));
+		}
 
 	}
 
