@@ -99,14 +99,16 @@ class checkbox extends html_element
 	{
 		if ( $this->text != '' ) {
 			
-			$div = new html_element('div', $this->text);
 			
+			
+			$div = new html_element('div', $this->text);
+			$div->set_attribute('onselectstart', 'return false;');
 
 			if ( isset($this->attributes['disabled']) ) {
-				$div->set_attribute('style','display:inline;vertical-align:top;color:#7d7d7d;cursor:default;');
+				$div->set_attribute('style','display:inline;vertical-align:top;color:#7d7d7d;cursor:default;margin-right:5px;-moz-user-select:none');
 			} else {
 				$div->set_attribute('onclick', $this->get_click_handler());
-				$div->set_attribute('style','display:inline;vertical-align:top;cursor:default;');
+				$div->set_attribute('style','display:inline;vertical-align:top;cursor:default;margin-right:5px;-moz-user-select:none');
 			}
 			
 			return parent::get_html().$div->get_html();

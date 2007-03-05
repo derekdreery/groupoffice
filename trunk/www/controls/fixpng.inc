@@ -14,8 +14,8 @@ function fixPNG()
 		}
 	}
 }
-agt = navigator.userAgent.toLowerCase();
-if((agt.indexOf("msie") != -1) && (agt.indexOf("opera") == -1))
+
+if(BrowserDetect.browser=='Explorer' && BrowserDetect.version>5 && BrowserDetect.version<7)
 {
 	window.attachEvent("onload", fixPNG);
 }

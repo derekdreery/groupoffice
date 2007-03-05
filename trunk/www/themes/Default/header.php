@@ -7,20 +7,16 @@ header('Content-Type: text/html; charset='.$charset);
 ?>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset; ?>">
-  <script language="javascript" type="text/javascript" src="<?php echo $GO_CONFIG->host; ?>javascript/common.js"></script>
-  <?php require($GO_CONFIG->control_path.'fixpng.inc'); ?>
-  <title><?php echo $GO_CONFIG->title; ?></title>
-  <link href="<?php echo $GO_THEME->theme_url.'css/common.css'; ?>" rel="stylesheet" type="text/css" />
-  <link rel="shortcut icon" href="<?php echo $GO_CONFIG->host; ?>lib/favicon.ico" />  
-
+<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset; ?>">
+<link href="<?php echo $GO_THEME->theme_url.'css/common.css'; ?>" rel="stylesheet" type="text/css" />
+<script language="javascript" type="text/javascript" src="<?php echo $GO_CONFIG->host; ?>javascript/common.js"></script>
+<?php require($GO_CONFIG->control_path.'fixpng.inc'); ?>
+<title><?php echo $GO_CONFIG->title; ?></title>
+<link rel="shortcut icon" href="<?php echo $GO_CONFIG->host; ?>lib/favicon.ico" />  
 </head>
 <body style="padding:0px;margin:0px;" dir="<?php echo $htmldirection; ?>" onblur="document.search_form.reset();">
 <?php
 load_basic_controls();
-
-
-
 
 $form = new form('search_form','post',$GO_CONFIG->control_url.'/select/global_select.php');
 $form->set_attribute('target','main');
