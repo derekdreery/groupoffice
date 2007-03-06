@@ -572,6 +572,8 @@ $menu->add_button(\'delete_big\',$cmdDelete, $datatable->get_delete_handler());
 	$include_file .= "\n";
 	$include_file .= '$count = $'.$class_name.'->get_'.$friendly_multiple.'($datatable->start, $datatable->offset, $datatable->sort_index, $datatable->sql_sort_order);';
 	$include_file .= "\n\n";
+	
+	$invlude_file .= "$datatable->set_pagination($count);\n\n";
 
 	$include_file .= 'if($count){'."\n";
 

@@ -44,6 +44,11 @@ switch ($task) {
 				}
 				if (!$GO_MODULES->add_module($module_id, $_REQUEST['version'], $acl_read, $acl_write, $_REQUEST['sort_order'], $admin_menu)) {
 					$feedback = '<p class="Error">'.$strSaveError.'</p>';
+				}else {
+					if(file_exists($GO_CONFIG->root_path.'modules'.$GO_CONFIG->slash.$module_id.$GO_CONFIG->slash.'sql/install.inc'))
+					{
+						require($GO_CONFIG->root_path.'modules'.$GO_CONFIG->slash.$module_id.$GO_CONFIG->slash.'sql/install.inc');
+					}
 				}
 				$GO_MODULES->load_modules();
 			} else {
