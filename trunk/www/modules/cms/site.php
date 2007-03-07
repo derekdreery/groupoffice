@@ -69,7 +69,8 @@ switch($task)
 									$domain,
 									$webmaster,
 									$_POST['template_id'],
-									$_POST['start_file_id']))
+									$_POST['start_file_id'],
+									$_POST['language']))
 						{
 							$feedback = $strSaveError;
 						}else
@@ -105,7 +106,8 @@ switch($task)
 								$domain,
 								$webmaster,
 								$acl_write,
-								$_POST['template_id']))
+								$_POST['template_id'],
+								$_POST['language']))
 					{
 						if($_POST['close'] == 'true')
 						{
@@ -162,12 +164,14 @@ if($site_id>0 && $task != 'save_site')
 	$domain = $site['domain'];
 	$webmaster = $site['webmaster'];
 	$start_file_id  = $site['start_file_id'];
+	$language  = $site['language'];
 }else
 {
 	$template_id = isset($_POST['template_id']) ? $_POST['template_id'] : '0';
 	$domain = isset($_POST['domain']) ? $cms->prepare_domain(smart_addslashes(trim($_POST['domain']))) : '';
 	$webmaster = isset($_POST['webmaster']) ? smart_addslashes($_POST['webmaster']) : '';
 	$start_file_id  = isset($_POST['start_file_id']) ? smart_addslashes($_POST['start_file_id']) : '0';
+	$language  = isset($_POST['language']) ? smart_addslashes($_POST['language']) : $_SESSION['GO_SESSION']['language'];
 }
 
 
@@ -225,6 +229,20 @@ switch($tabstrip->get_active_tab_id())
 		$cell = new table_cell($input->get_html());
 		$row->add_cell($cell);
 		$table->add_row($row);
+		
+		$row = new table_row();
+		$row->add_cell(new table_cell($cms_language.':'));
+		
+		$select = new select('language', $language);
+		$languages = $GO_LANGUAGE->get_languages();
+		foreach($languages as $language)
+		{
+			$select->add_value($language['code'], $language['description']);
+		}
+		$row->add_cell(new table_cell($select->get_html()));
+		$table->add_row($row);
+		
+		$row = new table_row();
 		
 		$row = new table_row();		
 		$cell = new table_cell($cms_theme.':*');

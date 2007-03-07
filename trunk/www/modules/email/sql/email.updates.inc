@@ -3,7 +3,7 @@ $updates[23] = array();
 
 $updates[22][] = "ALTER TABLE `emFolders` ADD `auto_check` ENUM( '0', '1' ) NOT NULL ;";
 $updates[22][] = "ALTER TABLE `emAccounts` CHANGE `auto_check` `examine_headers` ENUM( '0', '1' ) NOT NULL";
-$updates[22][] = "UPDATE emAccounts SET examine_headers = '1' WHERE host LIKE '%localhost%'";
+//$updates[22][] = "UPDATE emAccounts SET examine_headers = '1' WHERE host LIKE '%localhost%'";
 
 $updates[21][] = "CREATE TABLE `em_links` (
   `link_id` int(11) NOT NULL,
