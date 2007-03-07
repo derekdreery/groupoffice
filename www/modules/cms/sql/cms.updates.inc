@@ -1,5 +1,8 @@
 <?php
-$updates[27] = array();
+$updates[28] = array();
+
+$updates[27][] = "ALTER TABLE `cms_sites` ADD `language` CHAR( 10 ) NOT NULL ;";
+$updates[27][] = "UPDATE `cms_sites` SET language='nl';";
 
 $updates[26][] = "ALTER TABLE `cms_templates` ADD `fckeditor_styles` TEXT NOT NULL ;";
 

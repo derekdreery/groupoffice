@@ -114,6 +114,8 @@ class cms_site extends cms {
 		}
 		//$_SESSION['GO_SESSION']['cms']['return_to']=$_SERVER['REQUEST_URI'];
 		$_SESSION['GO_SESSION']['cms']['return_to']=$this->get_uri();
+		
+		$GLOBALS['GO_LANGUAGE']->set_language($site['language']);
 
 
 	}
