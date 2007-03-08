@@ -81,6 +81,12 @@ class filesystem extends db
    */
 	function filesystem($disable_go_permissions=false)
 	{
+		global $GO_MODULES;
+		if(!isset($GO_MODULES->modules['filesystem']))
+		{
+			$disable_go_permissions=true;
+		}
+		
 		$this->db();
 		$this->disable_go_permissions = $disable_go_permissions;
 	}

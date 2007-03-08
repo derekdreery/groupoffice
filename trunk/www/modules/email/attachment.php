@@ -40,7 +40,7 @@ if ($mail->open($account['host'], $account['type'],$account['port'],$account['us
 		header('Pragma: public');
 	}else
 	{
-		header('Content-Type: '.$_REQUEST['mime']);
+		header('Content-Type: application/download');
 		header('Pragma: no-cache');
 		header('Content-Disposition: attachment; filename="'.$filename.'"');
 	}
