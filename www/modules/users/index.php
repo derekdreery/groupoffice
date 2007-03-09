@@ -52,7 +52,7 @@ require_once($GO_THEME->theme_path."header.inc");
 $form = new form('users_form');
 
 $table = new datatable('users');
-$table->allow_configuration=true;
+$table->allow_configuration();
 $table->set_attribute('width','100%');
 
 if($table->task == 'delete')

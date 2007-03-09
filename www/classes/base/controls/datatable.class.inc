@@ -123,6 +123,21 @@ class datatable extends table
 		$this->selected = isset($_POST[$this->attributes['id']]['selected']) ? array_map('smart_stripslashes',$_POST[$this->attributes['id']]['selected']) : array();
 
 
+		
+	}
+	
+	function allow_configuration()
+	{
+		$this->allow_configuration=true;
+		
+		global $GO_CONFIG;
+		$this->enabled_columns = $GO_CONFIG->get_setting('enabled_columns_'.$this->attributes['id']);
+		if(!$this->enabled_columns)
+		{
+			$this->enabled_columns = array(0,1,2,3,4,5,6);
+		}else {
+			$this->enabled_columns = explode(',', $this->enabled_columns);
+		}	
 	}
 
 	function enable_select()
@@ -284,17 +299,7 @@ class datatable extends table
 	function get_html()
 	{
 
-		if($this->allow_configuration)
-		{
-			global $GO_CONFIG;
-			$this->enabled_columns = $GO_CONFIG->get_setting('enabled_columns_'.$this->attributes['id']);
-			if(!$this->enabled_columns)
-			{
-				$this->enabled_columns = array(0,1,2,3,4,5,6);
-			}else {
-				$this->enabled_columns = explode(',', $this->enabled_columns);
-			}
-		}
+		
 
 		if($this->remind_selected)
 		{

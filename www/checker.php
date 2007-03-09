@@ -101,7 +101,10 @@ if ($remind_events)
 <body>
 <?php
 
-echo '<a href="'.$GO_MODULES->modules['email']['url'].'" target="main"><img src="'.$GO_THEME->images['mail'].'" border="0" align="absmiddle" /> '.$_SESSION['GO_SESSION']['email_module']['new'].'</a>';
+if (isset($GO_MODULES->modules['email']) && $GO_MODULES->modules['email']['read_permission'])
+{
+	echo '<a href="'.$GO_MODULES->modules['email']['url'].'" target="main"><img src="'.$GO_THEME->images['mail'].'" border="0" align="absmiddle" /> '.$_SESSION['GO_SESSION']['email_module']['new'].'</a>';
+}
 
 if($remind_email && isset($_REQUEST['initiated']))
 {

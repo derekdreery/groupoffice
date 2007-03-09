@@ -373,3 +373,4 @@ $search_text = 'Enter search phrase';
 $search_global='Search Group-Office';
 $search_results='results';
 $search_result='result';
+$strTime='Time';
