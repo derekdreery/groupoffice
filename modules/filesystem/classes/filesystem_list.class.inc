@@ -123,7 +123,7 @@ class filesystem_list extends datatable
 			$row->add_cell($cell);
 			$row->add_cell(new table_cell($fbFolder));
 			$row->add_cell(new table_cell('-'));
-			$row->add_cell(new table_cell(date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], get_time($folder['mtime']))));
+			$row->add_cell(new table_cell($folder['mtime'], date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], get_time($folder['mtime']))));
 			$this->add_row($row);
 		}
 
@@ -173,7 +173,7 @@ class filesystem_list extends datatable
 			$row->add_cell($cell);
 			$row->add_cell(new table_cell(get_filetype_description($extension)));
 			$row->add_cell(new table_cell($file['size'],format_size($file['size'])));
-			$row->add_cell(new table_cell(date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], get_time($file['mtime']))));
+			$row->add_cell(new table_cell($file['mtime'], date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], get_time($file['mtime']))));
 			$this->add_row($row);
 		}
 
