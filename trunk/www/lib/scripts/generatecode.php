@@ -536,7 +536,7 @@ require_once($GO_THEME->theme_path.\'footer.inc\');
 
 load_control(\'datatable\');
 $datatable = new datatable(\''.$table.'_table\');
-$datatable->allow_configuration=true;
+$datatable->allow_configuration();
 $GO_HEADER[\'head\']=$datatable->get_header();
 		
 if($datatable->task==\'delete\')

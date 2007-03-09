@@ -4,7 +4,7 @@ global $GO_USERS, $GO_SECURITY;
 require($GO_LANGUAGE->get_language_file('users'));
 
 $table = new datatable('links_users_table');
-$table->allow_configuration=true;
+$table->allow_configuration();
 $table->set_attribute('width','100%');
 
 if($table->task == 'delete')
