@@ -130,7 +130,9 @@ if($task !='test')
 		echo 'This is to make sure it always finds your configuration file at the correct location.';
 		echo '<br /><br /><font color="#003399">';
 		echo '<i>$ touch config.php (Or FTP an empty config.php to the server)<br />';
-		echo '$ chmod 666 config.php</i></font><br /><br /><div style="text-align: right;"><input type="submit" value="Continue" /></div>';
+		echo '$ chmod 666 config.php</i></font>';
+		echo '<br /><br />If it does exist and you still see this message then it might be that safe_mode is enabled and the config.php is owned by another user then the Group-Office files.';		
+		echo '<br /><br /><div style="text-align: right;"><input type="submit" value="Continue" /></div>';
 		print_foot();
 		exit();
 	}elseif (!is_writable($CONFIG_FILE))

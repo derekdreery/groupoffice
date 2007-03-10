@@ -175,7 +175,7 @@ class event_tooltip extends tooltip
 			
 			
 			if ($event['description'] != '') {
-				$title .= "<br /><br />". text_to_html(htmlspecialchars($event['description']));
+				$title .= "<br /><br />". text_to_html($event['description']);
 			}
 			$caption = htmlspecialchars($event['name']);
 		}
