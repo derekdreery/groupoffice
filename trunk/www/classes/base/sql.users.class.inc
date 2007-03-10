@@ -537,6 +537,11 @@ class sql_users extends base_users
 		$user['timezone'] = $GO_CONFIG->default_timezone;
 		$user['DST'] = $GO_CONFIG->default_dst;
 
+		if(empty($user['link_id']))
+		{
+			global $GO_LINKS;
+			$user['link_id']= $GO_LINKS->get_link_id();
+		}
 		$user['theme'] = isset($user['theme']) ? $user['theme'] : $GO_CONFIG->theme;
 
 		if (empty($user['id'])){

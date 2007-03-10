@@ -57,7 +57,7 @@ class datatable extends table
 
 	var $multiselect = true;
 
-	var $enabled_columns;
+	var $enabled_columns=array();
 
 	var $allow_configuration=false;
 

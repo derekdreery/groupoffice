@@ -105,18 +105,30 @@ class cms_comments {
 			$table->set_attribute('class','comments');
 			
 			$row = new table_row();
-			$row->add_cell(new table_cell($GLOBALS['strName'].':'));
+			
+			$cell = new table_cell($GLOBALS['strName'].':');
+			$cell->set_attribute('style','white-space:nowrap');
+			$row->add_cell($cell);
+			
 			$name = $GO_SECURITY->logged_in() ? $_SESSION['GO_SESSION']['name'] : '';
 			$input = new input('text', 'name', $name);
 			$input->set_attribute('style', 'width:100%;');
-			$row->add_cell(new table_cell($input->get_html()));
+			$cell=new table_cell($input->get_html());
+			$cell->set_attribute('style','width:100%');
+			$row->add_cell($cell);
 			$table->add_row($row);
 			
 			$row = new table_row();
-			$row->add_cell(new table_cell($GLOBALS['strComments'].':'));
+	
+			$cell = new table_cell($GLOBALS['strComments'].':');
+			$cell->set_attribute('style','white-space:nowrap;vertical-align:top');
+			$row->add_cell($cell);
+			
 			$textarea = new textarea('comments', '');
 			$textarea->set_attribute('style', 'width:100%;height:80px;');
-			$row->add_cell(new table_cell($textarea->get_html()));
+			$cell=new table_cell($textarea->get_html());
+			$cell->set_attribute('style','width:100%');
+			$row->add_cell($cell);
 			$table->add_row($row);
 			
 			
