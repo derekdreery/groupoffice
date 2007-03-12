@@ -66,10 +66,14 @@ foreach($fields as $field)
 	
 	$key=$field[0];
 	$name=base64_decode($field[1]);
-	
-	$checkbox = new checkbox($key, 'fields[]',$key, $name, in_array($key, $enabled_columns));
-	$row->add_cell(new table_cell($checkbox->get_html()));
-
+	if(empty($name))
+	{
+		$input = new input('hidden','fields[]', $key);
+		$form->add_html_element($input);	
+	}else {
+		$checkbox = new checkbox($key, 'fields[]',$key, $name, in_array($key, $enabled_columns));
+		$row->add_cell(new table_cell($checkbox->get_html()));
+	}
 	if(count($row->cells)==2)
 	{
 		$table->add_row($row);
