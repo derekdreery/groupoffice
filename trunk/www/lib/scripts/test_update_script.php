@@ -1,6 +1,6 @@
 <?php
 
-
+$db = new db();
 
 $module = 'filesystem';
 $version= '16';

@@ -203,3 +203,6 @@ $cms_fckeditor_help='Click here for documentation';
 $cms_add_contact_success_title='Thank you!';
 $cms_add_contact_success_text='You are subscribed to our newsletter!';
 $cms_add_contact_email_subject='New contact added to mailing';
+
+
+$cms_new_comment_subject = 'New comment placed in %s';

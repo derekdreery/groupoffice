@@ -184,3 +184,4 @@ $ml_messages_linked = 'De geselecteerde berichten zijn gekoppeld';
 $ml_handle_originals='Wat wilt u met de orginele berichten doen?';
 $ml_keep='Bewaren';
 $ml_examine_headers='Toon paperclip wanneer een bericht bijlagen bevat en toon de prioriteit van een bericht. Waarschuwing! Dit vertraagt het tonen van de lijst van berichten.';
+$ml_show_attachments='Toon bijlagen en prioriteiten (trager)';

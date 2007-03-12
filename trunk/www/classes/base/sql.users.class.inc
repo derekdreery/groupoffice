@@ -561,7 +561,7 @@ class sql_users extends base_users
 		}
 		$user['authcode'] = $this->random_password();
 
-		$user['registration_time'] = get_gmt_time();
+		$user['registration_time'] = $user['mtime']=get_gmt_time();
 
 		if ($user['id'] > 0 && $this->insert_row('users', $user))
 		{

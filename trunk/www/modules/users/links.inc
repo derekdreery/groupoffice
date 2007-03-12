@@ -27,7 +27,7 @@ $table->set_attribute('style','width:100%;margin-bottom:20px;margin-top:0px;');
 
 $count = $GO_USERS->get_linked_users($GO_SECURITY->user_id, $link_id);
 
-$table->set_pagination($count);
+//$table->set_pagination($count);
 
 if($count>0)
 {
@@ -65,7 +65,7 @@ if($count>0)
 		$name = format_name($GO_USERS->f('last_name'),$GO_USERS->f('first_name'),$GO_USERS->f('middle_name'));
 
 		$row = new table_row($GO_USERS->f('id'));
-		$row->set_attribute('ondblclick', "document.location='user.php?user_id=".$GO_USERS->f("id")."&return_to=".urlencode($return_to)."'");
+		$row->set_attribute('ondblclick', "document.location='".$GO_MODULES->modules['users']['url']."user.php?user_id=".$GO_USERS->f("id")."&return_to=".urlencode($return_to)."'");
 		if($GO_USERS->f('enabled') == '0')
 		{
 			$row->set_attribute('class', 'Error');

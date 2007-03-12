@@ -32,7 +32,7 @@ class cms_comments {
 	
 	function get_html()
 	{
-		global $GO_LANGUAGE, $GO_SECURITY;
+		global $GO_LANGUAGE, $GO_SECURITY, $GO_CONFIG;
 		
 		$form = new form('comments_form');
 		$form->add_html_element(new input('hidden','user_id', '', false));
@@ -57,6 +57,28 @@ class cms_comments {
 				$feedback = $cms_comments_missing_field;	
 			}else {								
 				$this->cms_site->add_comment($comment);
+				
+				if(!empty($this->attributes['email']))
+				{
+					$file = $this->cms_site->get_file($this->cms_site->file_id);
+					
+					$subject = sprintf($cms_new_comment_subject, strip_extension($file['name']));
+					
+					
+					$body = $GLOBALS['strName'].': '.stripslashes($comment['name'])."\n\n".
+						stripslashes($comment['comments'])."\n\n";
+						
+					if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']!='off')			
+					{
+						$body .= 'https://';
+					}else {
+						$body .= 'http://';
+					}
+					$body .= $_SERVER['HTTP_HOST'].$this->cms_site->create_url($file['folder_id'], $file['id']);
+					
+					sendmail($this->attributes['email'],$GO_CONFIG->webmaster_email,$GO_CONFIG->title,$subject,$body);
+				}
+				
 			}
 		}
 		

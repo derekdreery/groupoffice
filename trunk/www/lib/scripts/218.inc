@@ -34,6 +34,11 @@ if($GO_MODULES->get_module('shipping'))
 	$tables[]='sh_packages';	
 }
 
+if($GO_MODULES->get_module('updateserver'))
+{
+	$tables[]='us_licenses';		
+}
+
 foreach($tables as $table)
 {
 	$sql = "SELECT id FROM $table WHERE link_id=0 OR ISNULL(link_id)";
