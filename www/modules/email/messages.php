@@ -243,7 +243,7 @@ if ($msg_count > 0)
 	}
 	$mail->get_messages($datatable->start, $datatable->offset);
 	$row_count = 0;
-	while($mail->next_message($account['examine_headers']=='1'))
+	while($mail->next_message(($account['examine_headers']=='1' || isset($_POST['examine_headers']))))
 	{
 
 		$row = new table_row($mail->f('uid'));
@@ -584,6 +584,15 @@ if(eregi('localhost', $account['host']) && $quota = $fs->get_quota($account['use
 	$st_table->add_row($tr);
 
 	$cell->add_html_element($st_table);
+}
+
+
+if($account['examine_headers']!='1')
+{
+	$checkbox=new checkbox('examine_headers', 'examine_headers', '1' , $ml_show_attachments, isset($_POST['examine_headers']));
+	$checkbox->set_attribute('onclick','javascript:document.email_form.submit();');
+	
+	$cell->add_html_element($checkbox);;
 }
 
 

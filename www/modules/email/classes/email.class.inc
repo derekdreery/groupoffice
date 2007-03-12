@@ -205,7 +205,7 @@ class email extends db
 				$account['name']=$name;
 				$account['email']=$email;
 				$account['signature']=$signature;
-				$account['auto_check']=$examine_headers;
+				$account['examine_headers']=$examine_headers;
 
 
 				if(!$this->insert_row('emAccounts', $account))
@@ -690,17 +690,11 @@ class email extends db
 		{
 			return false;
 		}
+		
+			
+		$subscribed =  $mail->get_subscribed('', true);
+		$mailboxes =  $mail->get_mailboxes('');
 
-		if(!$subscribed =  $mail->get_subscribed('', true))
-		{
-			return false;
-		}
-
-
-		if(!$mailboxes =  $mail->get_mailboxes(''))
-		{
-			return false;
-		}
 
 		$mailbox_names = array();
 
@@ -713,6 +707,7 @@ class email extends db
 			$folder['name'] = $mailbox['name'];
 
 			$folder['subscribed']=in_array($mailbox['name'], $subscribed);
+			//$folder['subscribed']='1';
 			$folder['delimiter'] = $mailbox['delimiter'];
 			if($status = $mail->status($mailbox['name'], SA_ALL))
 			{

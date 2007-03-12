@@ -220,3 +220,4 @@ $ml_messages_linked = 'The selected messages are linked';
 $ml_handle_originals='What do you want to do with the original messages?';
 $ml_keep='Keep';
 $ml_examine_headers='Show paperclip when a message has attachments and the message priority in messages listing. Warning! This slows down the viewing of the message list.';
+$ml_show_attachments='Show attachments and priorities (slower)';
