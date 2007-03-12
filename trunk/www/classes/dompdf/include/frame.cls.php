@@ -166,7 +166,16 @@ class Frame {
 
     $this->_decorator = null;
 
-    $this->set_id( uniqid(rand()) );
+    //$this->set_id( uniqid(rand()) );
+    if(!isset($GLOBALS['dompdfuniqueid']))
+    {
+    	$GLOBALS['dompdfuniqueid']=1;
+    }else 
+    {
+    	$GLOBALS['dompdfuniqueid']++;
+    }
+
+    $this->set_id('frm_'.$GLOBALS['dompdfuniqueid']);
   }
 
   /**
