@@ -111,6 +111,32 @@ $row->add_cell(new table_cell($input->get_html()));
 $table->add_row($row);
 
 
+
+if($company_id=='0' && isset($GO_MODULES->modules['custom_fields']))
+{
+	require_once($GO_MODULES->modules['custom_fields']['class_path'].'custom_fields.class.inc');
+	$cf = new custom_fields();	
+	$cf2=new custom_fields();
+	
+	$cf2->get_authorized_categories(3,$GO_SECURITY->user_id);
+	
+	while($cf2->next_record())
+	{
+		
+		$row =new table_row();
+		$cell = new table_cell('<br /><b>'.$cf2->f('name').'</b>');
+		$cell->set_attribute('colspan','2');
+		$row->add_cell($cell);
+		$table->add_row($row);
+		
+		if($cf_table = $cf->get_fields_table($cf2->f('id')))
+		{
+			$table->rows=array_merge($table->rows, $cf_table->rows);							
+		}
+	}
+}
+
+
 $cell = new table_cell($table->get_html());
 $cell->set_attribute('valign','top');
 $mainrow->add_cell($cell);

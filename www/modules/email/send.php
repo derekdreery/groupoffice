@@ -50,6 +50,21 @@ if (!$ab_module || !$ab_module['read_permission'])
 	$ab = new addressbook();
 }
 
+function close()
+{
+	if(count($_SESSION['GO_SESSION']['email_module']['unknown_reciepents'])>0)
+	{
+		header('Location: add_unknown_reciepents.php');	
+	}else {
+		global $GO_THEME, $GO_CONFIG;
+		require_once($GO_THEME->theme_path.'header.inc');
+		echo "<script type=\"text/javascript\">\r\nwindow.close();\r\n</script>\r\n";
+		require_once($GO_THEME->theme_path.'footer.inc');
+	}
+	exit();
+					
+}
+
 
 $mail_subject = isset($_REQUEST['mail_subject']) ? smart_stripslashes($_REQUEST['mail_subject']) : '';
 $mail_body = isset($_REQUEST['mail_body']) ? smart_stripslashes($_REQUEST['mail_body']) : '';
@@ -110,9 +125,11 @@ function add_unknown_reciepent($email, $name, $addressbook_id)
 		$contact['middle_name'] = addslashes($name_arr['middle']);
 		$contact['last_name'] = addslashes($name_arr['last']);
 		$contact['email'] = addslashes($email);		
-		$ab->add_contact($contact);
+		//$ab->add_contact($contact);
+		$_SESSION['GO_SESSION']['email_module']['unknown_reciepents'][]=$contact;
 	}
 }
+
 if($sendaction == 'save_draft')
 {
 	$save_draft = true;
@@ -208,6 +225,8 @@ switch ($sendaction)
 				}
 			}
 		}
+		$_SESSION['GO_SESSION']['email_module']['unknown_reciepents']=array();
+		
 		$mail_to_array = $RFC822->parse_address_list($mail_to);
 		foreach ($mail_to_array as $to_address)
 		{     	
@@ -343,10 +362,7 @@ switch ($sendaction)
 								}
 
 								$imap_stream->close();
-								require_once($GO_THEME->theme_path."header.inc");
-								echo "<script type=\"text/javascript\">\r\nwindow.close();\r\n</script>\r\n";
-								require_once($GO_THEME->theme_path."footer.inc");
-								exit();
+								close();
 							}
 						}
 						require_once($GO_THEME->theme_path."header.inc");
@@ -355,17 +371,11 @@ switch ($sendaction)
 						exit();
 					}else
 					{
-						require_once($GO_THEME->theme_path."header.inc");
-						echo "<script type=\"text/javascript\">\r\nwindow.close();\r\n</script>\r\n";
-						require_once($GO_THEME->theme_path.'footer.inc');
-						exit();
+						close();
 					}
 				}else
 				{
-					require_once($GO_THEME->theme_path.'header.inc');
-					echo "<script type=\"text/javascript\">\r\nwindow.close();\r\n</script>\r\n";
-					require_once($GO_THEME->theme_path.'footer.inc');
-					exit();
+					close();
 				}
 			}
 		}
