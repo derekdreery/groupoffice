@@ -71,6 +71,11 @@ if (!empty ($vcf_file)) {
 	}
 }
 
+if(isset($_REQUEST['feedback']))
+{
+	$feedback=smart_stripslashes($_REQUEST['feedback']);
+}
+
 $require = 'edit_contact.inc';
 
 switch ($task) {
@@ -171,6 +176,23 @@ switch ($task) {
 				
 				if ($contact_id = $ab->add_contact($contact)) {
 					$link_back .= '&contact_id='.$contact_id;
+					
+					
+					if(isset($GO_MODULES->modules['custom_fields']))
+					{
+						
+						require_once($GO_MODULES->modules['custom_fields']['class_path'].'custom_fields.class.inc');
+						$cf = new custom_fields();			
+						$cf2 = new custom_fields();
+						
+						$cf->insert_cf_row(2, $contact['link_id']);
+				
+						$cf2->get_authorized_categories(2, $GO_SECURITY->user_id);
+						while($cf2->next_record())
+						{
+							$cf->save_fields($cf2->f('id'), $contact['link_id']);
+						}
+					}
 					
 		
 					

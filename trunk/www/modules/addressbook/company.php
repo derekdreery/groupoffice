@@ -166,6 +166,23 @@ switch ($task) {
 
 
 				if ($company_id = $ab->add_company($company)) {
+					
+					
+					if(isset($GO_MODULES->modules['custom_fields']))
+					{
+						
+						require_once($GO_MODULES->modules['custom_fields']['class_path'].'custom_fields.class.inc');
+						$cf = new custom_fields();			
+						$cf2 = new custom_fields();
+						
+						$cf->insert_cf_row(3, $contact['link_id']);
+				
+						$cf2->get_authorized_categories(2, $GO_SECURITY->user_id);
+						while($cf2->next_record())
+						{
+							$cf->save_fields($cf2->f('id'), $contact['link_id']);
+						}
+					}
 
 
 

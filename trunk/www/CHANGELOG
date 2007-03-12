@@ -10,7 +10,7 @@ TODO for 2.17
 *Select columns to display in tables
 -global search
 -link email (Pro only)
-*Better auto add contacts in mail
+-Better auto add contacts in mail
 *Birthday events
 *Configure which calendars show on summary screen
 -TNEF (Winmail.dat) support
