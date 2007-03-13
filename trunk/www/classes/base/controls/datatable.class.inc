@@ -331,7 +331,7 @@ class datatable extends table
 		$table .= $this->get_rows();
 		if(isset($this->footer))
 		{
-			//$table .= $this->footer->get_html();
+			$table .= $this->footer->get_html();
 		}
 		$table .= $this->get_pagination();
 
@@ -379,7 +379,7 @@ class datatable extends table
 			
 			if(empty($heading->sort_name) && $this->autosort)
 			{
-				$heading->sort_name = $key;
+				$heading->sort_name = $column_index;
 			}
 
 			$headings .= '<th';
