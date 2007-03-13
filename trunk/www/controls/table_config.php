@@ -100,7 +100,8 @@ foreach($fields as $field)
 		$row = new table_row();	
 	}	
 }
-if(count($row->cells)==1)
+
+if(count($row->cells)>0)
 {
 	$table->add_row($row);
 }

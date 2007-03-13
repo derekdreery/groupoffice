@@ -65,7 +65,7 @@ $remind_email = false;
 		$imap = new imap();
 		$email = new email();
 
-		if(!isset($_SESSION['GO_SESSION']['email_module']['cached']) || isset($_REQUEST['refresh']))
+		if(!isset($_SESSION['GO_SESSION']['email_module']['cached']))
 		{
 			$email->cache_accounts($GO_SECURITY->user_id);
 			$_SESSION['GO_SESSION']['email_module']['cached']=true;
