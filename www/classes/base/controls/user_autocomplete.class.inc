@@ -29,7 +29,7 @@ class user_autocomplete
 	
 	function user_autocomplete($name, $user_id, $form_name='0', $link_back=null, $xml_fields=null, $overwrite_values=false, $submit_on_enter=false)
 	{
-		global $GO_USERS, $GO_MODULES;
+		global $GO_USERS, $GO_MODULES, $GO_SECURITY;
 		
 	
 		if(!isset($xml_fields))
@@ -49,10 +49,12 @@ class user_autocomplete
 		if($GO_MODULES->modules['users']['read_permission'])
 		{
 			$lookup_url = $GO_MODULES->modules['users']['url'].'user.php?return_to='.urlencode($link_back).'&user_id=';
-		}else {
+		}elseif($GO_SECURITY->has_permission($GO_SECURITY->user_id, $user['acl_id'])){
 			global $GO_CONFIG;
 			
 			$lookup_url = $GO_CONFIG->control_url.'user.php?return_to='.urlencode($link_back).'&id=';
+		}else {
+			$lookup_url='';
 		}
 
 		$this->autocomplete  = new autocomplete(
@@ -67,7 +69,7 @@ class user_autocomplete
 		$overwrite_values,
 		$submit_on_enter
 		);
-		$this->autocomplete ->add_bound_hidden_value($name, $user_id,$lookup_url);
+		$this->autocomplete->add_bound_hidden_value($name, $user_id, $lookup_url);
 
 	}
 	function get_html()

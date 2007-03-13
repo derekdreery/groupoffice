@@ -230,6 +230,10 @@ class table_row extends html_element
 			{		
 				
 				$count++;
+				if(!isset($this->cells[$column_index]))
+				{
+					break;
+				}
 				$cell = $this->cells[$column_index];
 				unset($this->cells[$column_index]);
 			
