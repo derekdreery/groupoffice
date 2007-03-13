@@ -53,6 +53,8 @@ require_once($GO_CONFIG->class_path.'base/controls/html_element.class.inc');
 	
 	function add_row($row)
 	{
+		$row->table= &$this;
+		
 		if($this->hover_effect)
 		{
 			$row->set_attribute('onmouseover','javascript:table_glow_row(this);');
@@ -119,6 +121,7 @@ class table_row extends html_element
 	var $cells = array();
 	var $table;
 	var $selected = false;
+	var $ignore_configuration=false;
 	
 	/*
 	* Constructor.
@@ -129,7 +132,7 @@ class table_row extends html_element
 	*	 @return void
 	*/
 	
-	function table_row($id='', $value= '')
+	function table_row($id='', $value= '', $ignore_configuration=false)
 	{
 		if($value == '')
 		{
@@ -145,6 +148,7 @@ class table_row extends html_element
 		{
 			$this->set_attribute('id', $id);
 		}
+		$this->ignore_configuration=$ignore_configuration;
 	}
 	
 	function set_selected()
@@ -204,7 +208,7 @@ class table_row extends html_element
 		//foreach($this->cells as $cell)
 		$key=0;
 		$cells=array();
-		if(isset($this->table) && $this->table->allow_configuration)
+		/*if(isset($this->table) && $this->table->allow_configuration)
 		{
 			while($cell = array_shift($this->cells))
 			{			
@@ -215,22 +219,40 @@ class table_row extends html_element
 				$key++;
 			}
 			$this->cells=&$cells;
-		}
+		}*/
 		
-		while($cell = array_shift($this->cells))
+		if(isset($this->table->enabled_columns) && !$this->ignore_configuration)
 		{
-			if(count($this->cells)==0 && isset($this->table) && $this->table->allow_configuration)			
-			{
-				if(isset($cell->attributes['colspan']))
+			//var_dump($this->cells);
+			$cellcount = count($this->table->enabled_columns);
+			$count=0;
+			foreach($this->table->enabled_columns as $column_index)
+			{		
+				
+				$count++;
+				$cell = $this->cells[$column_index];
+				unset($this->cells[$column_index]);
+			
+				if($count==$cellcount && isset($this->table) && $this->table->allow_configuration)			
 				{
-					$cell->attributes['colspan']++;
-				}else {
-					$cell->attributes['colspan']=2;
-				}
+					if(isset($cell->attributes['colspan']))
+					{
+						$cell->attributes['colspan']++;
+					}else {
+						$cell->attributes['colspan']=2;
+					}
+				}	
+				$row .= $cell->get_html();	
+					
 			}	
-			$row .= $cell->get_html();			
-		}		
-		$row .= '</tr>'.$this->lb;		
+			
+		}else {
+			while($cell=array_shift($this->cells))	
+			{				
+				$row .= $cell->get_html();				
+			}			
+		}
+		$row .= '</tr>'.$this->lb;
 		return $row;
 	}
 }
@@ -266,13 +288,19 @@ class table_heading extends html_element
 {
 	var $sort_name = '';
 	var $name = '';
+	var $config_name = '';
 	
-	function table_heading($name='', $sort_name='')
+	function table_heading($name='', $sort_name='', $config_name='')
 	{
+		if(empty($config_name))
+		{
+			$config_name=$name;
+		}
 		$this->tagname = 'th';
 		$this->set_linebreak("\n");
 		
 		$this->sort_name = $sort_name;
 		$this->name = $this->innerHTML = $name;
+		$this->config_name = $config_name;
 	}
 }

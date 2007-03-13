@@ -492,6 +492,7 @@ if ($msg_count == 0)
 	if ($email_folder['attributes']&LATT_NOSELECT)
 	{
 		$row = new table_row();
+		$row->ignore_configuration=true;
 		$cell = new table_cell($ml_no_mailbox);
 		$cell->set_attribute('colspan','99');
 		$cell->set_attribute('style','height:18px;');
@@ -500,6 +501,7 @@ if ($msg_count == 0)
 	}else
 	{
 		$row = new table_row();
+		$row->ignore_configuration=true;
 		$cell = new table_cell($ml_no_messages);
 		$cell->set_attribute('colspan','99');
 		$cell->set_attribute('style','height:18px;');

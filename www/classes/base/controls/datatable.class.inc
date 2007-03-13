@@ -221,6 +221,7 @@ class datatable extends table
 
 	function add_footer($row)
 	{
+		$row->ignore_configuration=true;
 		$this->footer = $row;
 	}
 
@@ -330,7 +331,7 @@ class datatable extends table
 		$table .= $this->get_rows();
 		if(isset($this->footer))
 		{
-			$table .= $this->footer->get_html();
+			//$table .= $this->footer->get_html();
 		}
 		$table .= $this->get_pagination();
 
@@ -363,67 +364,74 @@ class datatable extends table
 
 		$available_columns=array();
 		$headings = '';
+
 		foreach($this->headings as $key=>$heading)
-		{
-			$available_columns[]=$key.':'.base64_encode($heading->name);
-
-			if(!$this->allow_configuration || in_array($key, $this->enabled_columns))
+		{			
+			$available_columns[]=$key.':'.base64_encode($heading->config_name);
+			if(!$this->allow_configuration)
 			{
-				if(empty($heading->sort_name) && $this->autosort)
+				$this->enabled_columns[]=$key;
+			}
+		}
+		foreach($this->enabled_columns as $column_index)
+		{
+			$heading = $this->headings[$column_index];
+			
+			if(empty($heading->sort_name) && $this->autosort)
+			{
+				$heading->sort_name = $key;
+			}
+
+			$headings .= '<th';
+			foreach($heading->attributes as $name=>$value)
+			{
+				$headings .= ' '.$name.'="'.$value.'"';
+			}
+			$headings .= '>';
+
+			if(empty($heading->name) && !isset($checkbox_added) && $this->multiselect)
+			{
+				$checkbox_added=true;
+				$headings .= $select_all_checkbox->get_html();
+			}else {
+
+
+				if(!isset($checkbox_added) && $this->multiselect)
 				{
-					$heading->sort_name = $key;
+					$headings .= '<table cellpadding="0" cellspacing="0"><tr><td>'.$select_all_checkbox->get_html().'</td><td>';
 				}
 
-				$headings .= '<th';
-				foreach($heading->attributes as $name=>$value)
+				if($heading->sort_name !== '')
 				{
-					$headings .= ' '.$name.'="'.$value.'"';
-				}
-				$headings .= '>';
-
-				if(empty($heading->name) && !isset($checkbox_added) && $this->multiselect)
-				{
-					$checkbox_added=true;
-					$headings .= $select_all_checkbox->get_html();
-				}else {
-
-
-					if(!isset($checkbox_added) && $this->multiselect)
+					$headings .= '<a href="javascript:table_sort(\''.$this->form_name.'\',\''.$this->attributes['id'].'\',\''.$heading->sort_name.'\',';
+					if(($this->sort_ascending))
 					{
-						$headings .= '<table cellpadding="0" cellspacing="0"><tr><td>'.$select_all_checkbox->get_html().'</td><td>';
-					}
-
-					if($heading->sort_name !== '')
-					{
-						$headings .= '<a href="javascript:table_sort(\''.$this->form_name.'\',\''.$this->attributes['id'].'\',\''.$heading->sort_name.'\',';
-						if(($this->sort_ascending))
-						{
-							$headings .= '0';
-						}else
-						{
-							$headings .= '1';
-						}
-						$headings .= ');">'.$heading->name;
-
-						if($heading->sort_name == $this->sort_index)
-						{
-							$headings .= $image->get_html();
-						}
-
-						$headings .= '</a>';
+						$headings .= '0';
 					}else
 					{
-						$headings .= $heading->name;
+						$headings .= '1';
+					}
+					$headings .= ');">'.$heading->name;
+
+					if($heading->sort_name == $this->sort_index)
+					{
+						$headings .= $image->get_html();
 					}
 
-					if(!isset($checkbox_added) && $this->multiselect)
-					{
-						$checkbox_added = true;
-						$headings .= '</td></tr></table>';
-					}
+					$headings .= '</a>';
+				}else
+				{
+					$headings .= $heading->name;
 				}
-				$headings .= '</th>'.$this->lb;
+
+				if(!isset($checkbox_added) && $this->multiselect)
+				{
+					$checkbox_added = true;
+					$headings .= '</td></tr></table>';
+				}
 			}
+			$headings .= '</th>'.$this->lb;
+			
 		}
 		if(!empty($headings))
 		{
