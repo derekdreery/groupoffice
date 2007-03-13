@@ -589,13 +589,7 @@ if(eregi('localhost', $account['host']) && $quota = $fs->get_quota($account['use
 }
 
 
-if($account['examine_headers']!='1')
-{
-	$checkbox=new checkbox('examine_headers', 'examine_headers', '1' , $ml_show_attachments, isset($_POST['examine_headers']));
-	$checkbox->set_attribute('onclick','javascript:document.email_form.submit();');
-	
-	$cell->add_html_element($checkbox);;
-}
+
 
 
 $row->add_cell($cell);
@@ -633,7 +627,17 @@ $row = new table_row();
 
 $cell = new table_cell();
 $cell->set_attribute('style', 'text-align:right;white-space: nowrap');
-$cell->set_attribute('colspan', '2');
+if($account['examine_headers']!='1')
+{
+	$checkbox=new checkbox('examine_headers', 'examine_headers', '1' , $ml_show_attachments, isset($_POST['examine_headers']));
+	$checkbox->set_attribute('style','margin-left:2px;');
+	$checkbox->set_attribute('onclick','javascript:document.email_form.submit();');
+	
+	$row->add_cell(new table_cell($checkbox->get_html()));
+}else {
+	$cell->set_attribute('colspan', '2');	
+}
+
 
 if ($account['type'] == "imap")
 {
