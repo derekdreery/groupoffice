@@ -25,8 +25,16 @@ $task = isset($_POST['task']) ? $_POST['task'] : '';
 
 if($task == 'save')
 {
-	$fields = isset($_POST['fields']) ? $_POST['fields'] : array();
-	$enabled_columns = implode(',', $fields);
+	//$fields = isset($_POST['fields']) ? $_POST['fields'] : array();
+	foreach($_POST['fields'] as $key=>$sort_order)
+	{
+		if($sort_order>0)
+		{
+			$fields[$sort_order]=$key;
+		}		
+	}
+	ksort($fields);
+	$enabled_columns=implode(',',$fields);
 	
 	$GO_CONFIG->save_setting('enabled_columns_'.$table_id, $enabled_columns);
 	
@@ -54,6 +62,9 @@ $form->add_html_element(new input('hidden', 'available_columns', $available_colu
 $tabstrip = new tabstrip('table_config', $strTableConfig);
 $tabstrip->set_attribute('style','width:100%');
 
+$p = new html_element('p',$table_config_text);
+$tabstrip->add_html_element($p);
+
 $table = new table();
 
 $row = new table_row();
@@ -66,15 +77,24 @@ foreach($fields as $field)
 	
 	$key=$field[0];
 	$name=base64_decode($field[1]);
-	if(empty($name))
+	
+	$sort_order = array_search($key,$enabled_columns);
+	if($sort_order!==false)
 	{
-		$input = new input('hidden','fields[]', $key);
-		$form->add_html_element($input);	
-	}else {
-		$checkbox = new checkbox($key, 'fields[]',$key, $name, in_array($key, $enabled_columns));
-		$row->add_cell(new table_cell($checkbox->get_html()));
+		$sort_order++;
 	}
-	if(count($row->cells)==2)
+	
+	$input = new input('text','fields['.$key.']',format_number($sort_order,0));
+	$input->set_attribute('onblur', "javascript:this.value=number_format(this.value, 0, '".$_SESSION['GO_SESSION']['decimal_seperator']."', '".$_SESSION['GO_SESSION']['thousands_seperator']."');calculate_form();");
+	$input->set_attribute('onfocus','this.select();');
+	$input->set_attribute('style','width:30px;text-align:right;');
+	$cell = new table_cell($input->get_html());
+	$row->add_cell($cell);
+
+	$row->add_cell(new table_cell($name));
+	$row->add_cell(new table_cell('&nbsp;&nbsp;'));
+
+	if(count($row->cells)==6)
 	{
 		$table->add_row($row);
 		$row = new table_row();	

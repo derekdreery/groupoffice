@@ -374,3 +374,4 @@ $search_global='Search Group-Office';
 $search_results='results';
 $search_result='result';
 $strTime='Time';
+$table_config_text='Enter a number in front of the columns that you want to view. The columns will be sorted by the number you enter.';

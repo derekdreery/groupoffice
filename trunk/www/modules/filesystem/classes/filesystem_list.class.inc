@@ -218,6 +218,7 @@ class filesystem_list extends datatable
 		{
 			if($this->return_zero)
 			{
+				$row->ignore_configuration=true;
 				$this->add_row($row);
 			}else
 			{
