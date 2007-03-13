@@ -101,45 +101,45 @@ class ldap_groups extends base_groups
 			// We have to fetch the username of the given user, which can be
 			// used to fetch the groups where the user is member.
 			$GO_LDAP->search( '(uidNumber='.$user_id.')',
-						$GO_LDAP->PeopleDN, array( 'uid' ) );
-					// When the search returned more or less than one entry, something
-					// wrong happend, so we do not proceed.
-					if ( $GO_LDAP->num_entries() != 1 ) {
-					return false;
-					}
-					$entries = $GO_LDAP->get_entries();
-					$uid = $entries[0]['uid'][0];
-					// We create a new search filter, which contains the user.
-					$ldapfilter = '(&(memberUid='.$uid.')'.$ldapfilter.')';
-							}
+			$GO_LDAP->PeopleDN, array( 'uid' ) );
+			// When the search returned more or less than one entry, something
+			// wrong happend, so we do not proceed.
+			if ( $GO_LDAP->num_entries() != 1 ) {
+				return false;
+			}
+			$entries = $GO_LDAP->get_entries();
+			$uid = $entries[0]['uid'][0];
+			// We create a new search filter, which contains the user.
+			$ldapfilter = '(&(memberUid='.$uid.')'.$ldapfilter.')';
+		}
 
-							// Now we can search for the groups that match the given filter.
-							$GO_LDAP->search( $ldapfilter, $GO_LDAP->GroupsDN );
-							// Check if we got some results
-							if ( !$GO_LDAP->num_entries() ) {
-							return false;
-							}
-							// We got some valid results, so we convert them, and return the
-							// number of groups we got.
-							$entries = $GO_LDAP->get_entries();
-							$profile = new profiles();
+		// Now we can search for the groups that match the given filter.
+		$GO_LDAP->search( $ldapfilter, $GO_LDAP->GroupsDN );
+		// Check if we got some results
+		if ( !$GO_LDAP->num_entries() ) {
+			return false;
+		}
+		// We got some valid results, so we convert them, and return the
+		// number of groups we got.
+		$entries = $GO_LDAP->get_entries();
+		$profile = new profiles();
 
-							// TODO this block should be moved to it's own method, because it is
-							// implemented multiple times.
-							// Each group has to be converted to a SQL style record. There records
-							// are stored in the grouplist attribute, and the index is used to
-							// iterate over multiple groups using the next_record() method.
-							$this->grouplist = array();
-							for ( $i=0; $i<$entries['count']; $i++ ) {
-								// Convert the current group.
-								// TODO The profiles class should be removed and the functionality
-								// should be included in this class.
-								$this->grouplist[] = $profile->convert_group_profile_ldap( $entries[$i] );
-							}
-							$this->grouplist_index = 0;
+		// TODO this block should be moved to it's own method, because it is
+		// implemented multiple times.
+		// Each group has to be converted to a SQL style record. There records
+		// are stored in the grouplist attribute, and the index is used to
+		// iterate over multiple groups using the next_record() method.
+		$this->grouplist = array();
+		for ( $i=0; $i<$entries['count']; $i++ ) {
+			// Convert the current group.
+			// TODO The profiles class should be removed and the functionality
+			// should be included in this class.
+			$this->grouplist[] = $profile->convert_group_profile_ldap( $entries[$i] );
+		}
+		$this->grouplist_index = 0;
 
-							// Finally we can return the number of groups we have fetched.
-							return count( $this->grouplist );
+		// Finally we can return the number of groups we have fetched.
+		return count( $this->grouplist );
 	}
 
 	function get_group_by_name($name)
@@ -179,7 +179,7 @@ class ldap_groups extends base_groups
 
 		// Search for the user - we need the username and not the ID.
 		$GO_LDAP->search( 'uidNumber='.$user_id,
-				$GO_LDAP->PeopleDN, array( 'uid' ) );
+		$GO_LDAP->PeopleDN, array( 'uid' ) );
 		// We only should proceed when we were able to find exactly one user.
 		if ( $GO_LDAP->num_entries() != 1 ) {
 			return false;
@@ -192,7 +192,7 @@ class ldap_groups extends base_groups
 		// do not need to fetch any attributes, we just need to know if there
 		// is a group that matches the given LDAP filter.
 		$GO_LDAP->search( '(&(gidNumber='.$group_id.')(memberUid='.$uid.'))',
-				$GO_LDAP->GroupsDN, array() );
+		$GO_LDAP->GroupsDN, array() );
 		// When we found exactly one entry, we can assume that the user is
 		// member of the group.
 		if ( $GO_LDAP->num_entries() == 1 ) {
@@ -215,8 +215,8 @@ class ldap_groups extends base_groups
 		//TODO Its not nice, but necessary to get the users from the group ...
 		// ... maybe its possible to join the two things?!
 		for ( $i=0; $i<$this->is_in_group["count"]; $i++ ) {
-			$this->grouplist[] = $GO_USERS->get_user_by_username( 
-					$this->is_in_group[$i] );
+			$this->grouplist[] = $GO_USERS->get_user_by_username(
+			$this->is_in_group[$i] );
 		}
 
 		$this->grouplist_index = 0;
@@ -231,6 +231,6 @@ class ldap_groups extends base_groups
 			$this->Record = $this->grouplist[$this->grouplist_index++];
 			return $this->Record;
 		} else
-			return false;
+		return false;
 	}
 }
