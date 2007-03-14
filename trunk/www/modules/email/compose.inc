@@ -108,7 +108,7 @@ if ($sendaction == 'load_template') {
 
 		//get the addressbook language file
 		require_once ($GO_LANGUAGE->get_language_file('addressbook'));
-		if ($mailing_group_id == 0) {
+		if ($report_id == 0) {
 			if ($company_id > 0) {
 				$template_body = $tp->replace_company_data_fields($template_body, $company_id);
 			} else {
@@ -156,10 +156,18 @@ if ($count > 1) {
 elseif ($count > 0) {
 	echo '<input type="hidden" name="mail_from" value="'.$ids[0].'" />';
 }
+if($report_id > 0)
+{
+	require($GO_MODULES->modules['reports']['class_path'].'reports.class.inc');
+	$reports = new reports();
+}
 
-if ($mailing_group_id > 0 && $mailing_group = $tp->get_mailing_group($mailing_group_id)) {
-	echo '<input type="hidden" name="mailing_group_id" value="'.$mailing_group_id.'" />';
-	echo '<tr><td>'.$ml_to.': </td><td>'.$mailing_group['name'].'</td></tr>';
+if ($report_id > 0 && $report = $reports->get_report($report_id)) {
+	
+	require($GO_LANGUAGE->get_language_file('reports'));
+	
+	echo '<input type="hidden" name="report_id" value="'.$report_id.'" />';
+	echo '<tr><td>'.$ml_to.': </td><td>'.$re_report.': '.$report['name'].'</td></tr>';
 } else {
 ?>
     <tr>
@@ -291,7 +299,7 @@ if ($mailing_group_id > 0 && $mailing_group = $tp->get_mailing_group($mailing_gr
 	  	
 	  <?php
 
-} //endif mailing_group_id
+} //endif report_id
 ?>
 <tr>
 <td ><?php echo $ml_subject ?> : </td>
@@ -511,10 +519,10 @@ function send()
 
 		}
 		<?php
-		if ($mailing_group_id == 0) {
+		if ($report_id == 0) {
 			echo 'if (validate()){';
 		} else {
-			echo "document.sendform.action = '".$tp_plugin['url']."send_to_mailing_group.php';";
+			echo "document.sendform.action = '".$GO_MODULES->modules['reports']['url']."emailing.php';";
 		}
 		?>
 		if(document.sendform.mail_subject.value!='' || confirm("<?php echo addslashes(htmlspecialchars($ml_confirm_no_subject)); ?>"))
@@ -527,7 +535,7 @@ function send()
 			?>
 			document.sendform.submit();
 		}
-		<?php if ($mailing_group_id == 0) echo '}'; ?>
+		<?php if ($report_id == 0) echo '}'; ?>
 	}
 
 }
