@@ -64,7 +64,8 @@ function close()
 	exit();
 					
 }
-
+//send to contacts in a report?
+$report_id = isset($_REQUEST['report_id']) ? $_REQUEST['report_id'] : 0;
 
 $mail_subject = isset($_REQUEST['mail_subject']) ? smart_stripslashes($_REQUEST['mail_subject']) : '';
 $mail_body = isset($_REQUEST['mail_body']) ? smart_stripslashes($_REQUEST['mail_body']) : '';
@@ -87,8 +88,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
 {
 	$notification_check = $em_settings['request_notification'];
 }
-
-$mailing_group_id = isset($_REQUEST['mailing_group_id']) ? $_REQUEST['mailing_group_id'] : 0;
 
 
 $htmleditor = new htmleditor('mail_body') ;
@@ -389,17 +388,7 @@ $contact_id = isset($_REQUEST['contact_id']) ? $_REQUEST['contact_id'] : 0;
 $company_id = isset($_REQUEST['company_id']) ? $_REQUEST['company_id'] : 0;
 
 
-if($mailing_group_id > 0 && $tp->get_contacts_from_mailing_group($mailing_group_id) == 0 && $tp->get_companies_from_mailing_group($mailing_group_id) == 0 && $tp->get_users_from_mailing_group($mailing_group_id) == 0)
-{
-	require_once($GO_THEME->theme_path."header.inc");
-	$tabtable = new tabstrip('templates_tabstrip', $ml_attention);
-	$tabstrip->set_attribute('style','width:100%');
-	$tabstrip->add_html_element(new html_element('p', $ml_no_contacts_in_mailing_group));
-	$tabstrip->add_html_element(new button($cmdClose, "javascript:window.close();"));
-	echo $tabstrip->get_html();
-	require_once($GO_THEME->theme_path."footer.inc");
-	exit();
-}
+
 
 if ($tp_plugin)
 {
@@ -434,7 +423,7 @@ if ($_SERVER['REQUEST_METHOD'] != "POST" && $tp_plugin && $template_id == 0 &&
 	echo '<input type="hidden" name="contact_id" value="'.$contact_id.'" />';
 	echo '<input type="hidden" name="company_id" value="'.$company_id.'" />';
 	echo '<input type="hidden" name="template_id" />';
-	echo '<input type="hidden" name="mailing_group_id" value="'.$mailing_group_id.'" />';
+	echo '<input type="hidden" name="report_id" value="'.$report_id.'" />';
 	echo '<input type="hidden" name="sendaction" value="load_template" />';
 	if($notification_check)
 	{
