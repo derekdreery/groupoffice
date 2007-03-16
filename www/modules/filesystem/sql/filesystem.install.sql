@@ -56,8 +56,7 @@ CREATE TABLE `fs_shares` (
   PRIMARY KEY  (`path`),
   KEY `user_id` (`user_id`),
   KEY `type` (`type`),
-  KEY `link_id` (`link_id`),
-  KEY `link_id_2` (`link_id`)
+  KEY `link_id` (`link_id`)
 ) TYPE=MyISAM;
 
 -- --------------------------------------------------------
