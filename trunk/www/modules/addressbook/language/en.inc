@@ -245,7 +245,7 @@ $ab_contact ='Contact';
 $ab_company ='Company';
 
 $ab_edit_selected = 'Edit selected';
-$ab_edit_selected_warning = 'Warning! You are editing %s %s. The entered values will all be updated! Blank fields will be ignored.';
+$ab_edit_selected_warning = 'Warning! You are editing %s %s. They will all be updated with these modifications. Blank fields will be ignored.';
 $ab_contacts='contacts';
 $ab_companies='companies';
 $ab_users='users';
