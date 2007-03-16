@@ -5,7 +5,6 @@ FCKConfig.LinkUpload=false;
 FCKConfig.ImageBrowser=false;
 FCKConfig.ImageUpload=false;
 FCKConfig.FlashUpload =false;
-FCKConfig.UseBROnCarriageReturn=true;
 FCKConfig.IEForceVScroll=true;
 FCKConfig.FullPage = true;
 
@@ -17,7 +16,7 @@ FCKConfig.ToolbarSets["Users"] = [
 	['OrderedList','UnorderedList','-','Outdent','Indent'],
 	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
 	['Link','Unlink','Anchor'],
-	['Table','Rule','SpecialChar','UniversalKey'],
+	['Table','Rule','SpecialChar'],
 	'/',
 	['FontFormat','FontName','FontSize'],
 	['TextColor','BGColor'],['go_autodata']
