@@ -100,7 +100,12 @@ class GO_LINKS extends db
 		{
 			if($link_id2==0)
 			{
+				//delete entire link and search cache
 				$sql = "DELETE FROM links WHERE link_id1=$link_id1 OR link_id2=$link_id1;";
+				$this->query($sql);
+				$sql = "DELETE FROM se_cache WHERE link_id=$link_id1";
+				return $this->query($sql);
+				
 			}else
 			{
 				$sql = "DELETE FROM links WHERE (link_id1=$link_id1 AND link_id2=$link_id2) OR (link_id2=$link_id1 AND link_id1=$link_id2);";
