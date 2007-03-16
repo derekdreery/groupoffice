@@ -204,7 +204,7 @@ $strSexes['F'] = 'Female';
 
 $strTitle = 'Title';
 $strBeginning = 'Beginning';
-$strMiddleName = 'Middle&nbsp;name';
+$strMiddleName = 'Middle name';
 $sir_madam['M'] = 'Mr.';
 $sir_madam['F'] = 'Ms.';
 $strModifiedAt = 'Modified at';
@@ -375,3 +375,5 @@ $search_results='results';
 $search_result='result';
 $strTime='Time';
 $table_config_text='Enter a number in front of the columns that you want to view. The columns will be sorted by the number you enter.';
+
+

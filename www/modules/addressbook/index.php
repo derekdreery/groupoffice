@@ -85,7 +85,8 @@ if ($tp_plugin )
 if ($post_action != 'members' && $post_action != 'addressbooks')
 {
 	$menu->add_button('delete_big',$cmdDelete, "javascript:document.addressbook_form.task.value='".$task."';".$datatable->get_delete_handler());
-	$menu->add_button('cut',$ab_move, "javascript:move_items();");
+	//$menu->add_button('cut',$ab_move, "javascript:move_items();");
+	
 }
 
 $form = new form('addressbook_form');
@@ -93,7 +94,10 @@ $form->add_html_element(new input('hidden', 'task', $task,false));
 $form->add_html_element(new input('hidden', 'post_action', $post_action));
 $form->add_html_element(new input('hidden', 'addressbook_id', $addressbook_id));
 $form->add_html_element(new input('hidden', 'move_addressbook_id', 0, false));
-$form->add_html_element($menu);
+
+
+
+
 
 switch($post_action)
 {
@@ -102,9 +106,17 @@ switch($post_action)
 		break;
 
 	case 'browse':
+		
+		$edit_file='edit_contacts.php';
+		$ids_array='contacts_table';
 		require_once('classes/contacts_list.class.inc');
+		
+		$menu->add_button('enter_data_big',$ab_edit_selected, "javascript:edit_items();");
+		$form->add_html_element($menu);
 
-		$con_list = new contacts_list('contacts_table', $addressbook_id, false, true, '0', $link_back);
+		$datatable = new contacts_list('contacts_table', $addressbook_id, false, true, '0', $link_back);
+		
+		$ids_array='contacts_table';
 		if ($task == 'move_to_addressbook')
 		{
 			$move_ab = $ab->get_addressbook($_POST['move_addressbook_id']);
@@ -138,8 +150,14 @@ switch($post_action)
 
 	case 'companies':
 
+		$edit_file='edit_companies.php';
+		$ids_array='companies_table';
+		
+		$menu->add_button('enter_data_big',$ab_edit_selected, "javascript:edit_items();");
+		$form->add_html_element($menu);
+		
 		require_once('classes/companies_list.class.inc');
-		$com_list = new companies_list('companies_table', $addressbook_id, false, true, '0', $link_back);
+		$datatable = new companies_list('companies_table', $addressbook_id, false, true, '0', $link_back);
 
 		if ($task == 'move_to_addressbook')
 		{
@@ -169,14 +187,20 @@ switch($post_action)
 		$p->set_attribute('style','margin-bottom:2px;margin-top:2px;');
 		$form->add_html_element($p);
 
-		$form->add_html_element($com_list);
+		//$form->add_html_element($com_list);
 		break;
 
 	default:
+		$ids_array='addressbook_table';
+		
+		
+		
 		require_once('search.inc');
 		break;
 }
 
+
+$form->add_html_element($datatable);
 echo $form->get_html();
 ?>
 <script type="text/javascript">
@@ -208,6 +232,19 @@ function move_items()
 	}else
 	{
 		popup('select_addressbook.php?callback=move_to_addressbook','300','400');
+	}
+}
+
+function edit_items()
+{
+	var count = <?php echo $datatable->get_count_selected_handler(); ?>;
+	if(count==0)
+	{
+		alert("<?php echo htmlentities($strNoItemSelected); ?>");
+	}else
+	{
+		document.forms[0].action='<?php echo $edit_file; ?>?id_array=<?php echo $ids_array; ?>';
+		document.forms[0].submit();
 	}
 }
 </script>
