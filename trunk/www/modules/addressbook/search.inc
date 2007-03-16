@@ -35,6 +35,7 @@ if(isset($_POST['move_addressbook_id']) && $_POST['move_addressbook_id']>0)
 		switch($tabstrip->value)
 		{
 			case 'contact':
+				
 				foreach($datatable->selected as $contact_id)
 				{
 					$ab->move_contact_to_addressbook($contact_id, $_POST['move_addressbook_id']);
@@ -42,6 +43,7 @@ if(isset($_POST['move_addressbook_id']) && $_POST['move_addressbook_id']>0)
 			break;
 			
 			case 'company':
+				
 				foreach($datatable->selected as $company_id)
 				{
 					$ab->move_company_to_addressbook($company_id, $_POST['move_addressbook_id']);
@@ -122,6 +124,10 @@ switch ($ab_settings['search_type'])
 {
 	case 'company':
 		
+		$edit_file='edit_companies.php';
+		$menu->add_button('enter_data_big',$ab_edit_selected, "javascript:edit_items();");
+		
+		
 		$search_fields->add_value('', $strSearchAll);
 		$search_fields->add_value('ab_companies.id', $ab_id);
 		$search_fields->add_value('ab_companies.name', $strName);
@@ -168,6 +174,9 @@ switch ($ab_settings['search_type'])
 	break;
 
 	case 'user':
+		
+		//$edit_file=$GO_MODULES->modules['users']['url'].'edit_users.php';
+		
 		$search_fields->value = $ab_settings['search_users_field'];
 		$search_fields->add_value('', $strSearchAll);			
 		$search_fields->add_value('users.first_name', $strFirstName);
@@ -213,6 +222,11 @@ switch ($ab_settings['search_type'])
 	break;
 	
 	default:
+		
+		$edit_file='edit_contacts.php';
+		$menu->add_button('enter_data_big',$ab_edit_selected, "javascript:edit_items();");
+		$form->add_html_element($menu);
+		
 		$search_fields->add_value('', $strSearchAll);
 		$search_fields->add_value('ab_contacts.id', $ab_id);
 		$search_fields->add_value('ab_contacts.first_name', $strFirstName);
@@ -258,6 +272,8 @@ switch ($ab_settings['search_type'])
 		$search_fields->value=$ab_settings['search_contacts_field'];
 	break;
 }
+
+$form->add_html_element($menu);
 
 $ab->update_settings($ab_settings);
 
@@ -496,7 +512,7 @@ switch($ab_settings['search_type'])
 	break;
 }
 
-$form->add_html_element($datatable);
+
 ?>
 <script type="text/javascript">
 function _search()

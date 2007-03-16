@@ -106,6 +106,10 @@ BrowserDetect.init();
 
 function number_format(number, decimals, decimal_seperator, thousands_seperator)
 {
+	if(number=='')
+	{
+		return '';
+	}
 	var internal_number = number.replace(thousands_seperator, "");
 	internal_number = internal_number.replace(decimal_seperator, ".");
 	var numberFloat = parseFloat(internal_number);
