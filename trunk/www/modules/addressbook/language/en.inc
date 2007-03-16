@@ -249,3 +249,4 @@ $ab_edit_selected_warning = 'Warning! You are editing %s %s. They will all be up
 $ab_contacts='contacts';
 $ab_companies='companies';
 $ab_users='users';
+$ab_dontchange='Don\'t change';
