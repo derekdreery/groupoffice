@@ -3,11 +3,11 @@
 -- http://www.phpmyadmin.net
 -- 
 -- Host: localhost
--- Generatie Tijd: 16 Nov 2006 om 15:47
+-- Generatie Tijd: 16 Mar 2007 om 16:55
 -- Server versie: 5.0.24
 -- PHP Versie: 5.1.6
 -- 
--- Database: `go2164`
+-- Database: `imfoss_nl`
 -- 
 
 -- --------------------------------------------------------
@@ -15,36 +15,6 @@
 -- 
 -- Tabel structuur voor tabel `acl`
 -- 
-DROP TABLE IF EXISTS `se_cache`;
-CREATE TABLE `se_cache` (
-  `link_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `table` varchar(50) NOT NULL,
-  `id` int(11) NOT NULL,
-  `module` varchar(50) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `description` varchar(255) NOT NULL,
-  `url` varchar(255) NOT NULL,
-  `link_type` int(11) NOT NULL,
-  `type` varchar(20) NOT NULL,
-  `keywords` text NOT NULL,
-  PRIMARY KEY  (`link_id`,`user_id`),
-  KEY `name` (`name`)
-) TYPE=MyISAM;
-
--- --------------------------------------------------------
-
--- 
--- Tabel structuur voor tabel `se_last_sync_times`
--- 
-
-DROP TABLE IF EXISTS `se_last_sync_times`;
-CREATE TABLE `se_last_sync_times` (
-  `user_id` int(11) NOT NULL,
-  `module` varchar(50) NOT NULL,
-  `last_sync_time` int(11) NOT NULL,
-  PRIMARY KEY  (`user_id`,`module`)
-) TYPE=MyISAM;
 
 DROP TABLE IF EXISTS `acl`;
 CREATE TABLE `acl` (
@@ -149,6 +119,44 @@ CREATE TABLE `modules` (
 -- --------------------------------------------------------
 
 -- 
+-- Tabel structuur voor tabel `se_cache`
+-- 
+
+DROP TABLE IF EXISTS `se_cache`;
+CREATE TABLE `se_cache` (
+  `link_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `table` varchar(50) NOT NULL,
+  `id` int(11) NOT NULL,
+  `module` varchar(50) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `link_type` int(11) NOT NULL,
+  `type` varchar(20) NOT NULL,
+  `keywords` text NOT NULL,
+  `mtime` int(11) NOT NULL,
+  PRIMARY KEY  (`link_id`,`user_id`),
+  KEY `name` (`name`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabel structuur voor tabel `se_last_sync_times`
+-- 
+
+DROP TABLE IF EXISTS `se_last_sync_times`;
+CREATE TABLE `se_last_sync_times` (
+  `user_id` int(11) NOT NULL,
+  `module` varchar(50) NOT NULL,
+  `last_sync_time` int(11) NOT NULL,
+  PRIMARY KEY  (`user_id`,`module`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
 -- Tabel structuur voor tabel `settings`
 -- 
 
@@ -170,7 +178,7 @@ DROP TABLE IF EXISTS `sync_contacts_maps`;
 CREATE TABLE `sync_contacts_maps` (
   `device_id` int(11) NOT NULL default '0',
   `contact_id` int(11) NOT NULL default '0',
-  `remote_id` char(64) NOT NULL default '',
+  `remote_id` varchar(255) NOT NULL,
   PRIMARY KEY  (`device_id`,`contact_id`,`remote_id`)
 ) TYPE=MyISAM;
 
@@ -186,22 +194,6 @@ CREATE TABLE `sync_contacts_syncs` (
   `local_last_anchor` int(11) NOT NULL default '0',
   `remote_last_anchor` char(32) NOT NULL default '',
   PRIMARY KEY  (`device_id`)
-) TYPE=MyISAM;
-
--- --------------------------------------------------------
-
--- 
--- Tabel structuur voor tabel `sync_datastores`
--- 
-
-DROP TABLE IF EXISTS `sync_datastores`;
-CREATE TABLE `sync_datastores` (
-  `id` int(11) NOT NULL default '0',
-  `device_id` int(11) NOT NULL default '0',
-  `uri` varchar(100) NOT NULL default '',
-  `ctype` varchar(50) NOT NULL default '',
-  `ctype_version` varchar(10) NOT NULL default '',
-  PRIMARY KEY  (`id`)
 ) TYPE=MyISAM;
 
 -- --------------------------------------------------------
@@ -231,7 +223,7 @@ DROP TABLE IF EXISTS `sync_events_maps`;
 CREATE TABLE `sync_events_maps` (
   `device_id` int(11) NOT NULL default '0',
   `event_id` int(11) NOT NULL default '0',
-  `remote_id` char(64) NOT NULL default '',
+  `remote_id` varchar(255) NOT NULL,
   `todo` enum('0','1') NOT NULL,
   PRIMARY KEY  (`device_id`,`event_id`,`remote_id`)
 ) TYPE=MyISAM;
@@ -266,6 +258,20 @@ CREATE TABLE `sync_settings` (
   `max_days_old` tinyint(4) NOT NULL,
   `delete_old_events` enum('0','1') NOT NULL,
   PRIMARY KEY  (`user_id`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabel structuur voor tabel `sync_todos_maps`
+-- 
+
+DROP TABLE IF EXISTS `sync_todos_maps`;
+CREATE TABLE `sync_todos_maps` (
+  `device_id` int(11) NOT NULL default '0',
+  `event_id` int(11) NOT NULL default '0',
+  `remote_id` char(64) NOT NULL default '',
+  PRIMARY KEY  (`device_id`,`event_id`,`remote_id`)
 ) TYPE=MyISAM;
 
 -- --------------------------------------------------------
@@ -315,10 +321,10 @@ CREATE TABLE `users` (
   `city` varchar(50) NOT NULL default '',
   `zip` varchar(10) NOT NULL default '',
   `address` varchar(100) NOT NULL default '',
-  `address_no` varchar(10) NOT NULL,
+  `address_no` varchar(10) NOT NULL default '',
   `homepage` varchar(100) NOT NULL default '',
   `work_address` varchar(100) NOT NULL default '',
-  `work_address_no` varchar(10) NOT NULL,
+  `work_address_no` varchar(10) NOT NULL default '',
   `work_zip` varchar(10) NOT NULL default '',
   `work_country` varchar(50) NOT NULL default '',
   `work_state` varchar(50) NOT NULL default '',
@@ -330,7 +336,7 @@ CREATE TABLE `users` (
   `time_format` varchar(10) NOT NULL default '',
   `thousands_seperator` char(1) NOT NULL default '.',
   `decimal_seperator` char(1) NOT NULL default ',',
-  `currency` char(3) NOT NULL default 'EUR',
+  `currency` char(3) NOT NULL default '€',
   `mail_client` tinyint(4) NOT NULL default '1',
   `logins` int(11) NOT NULL default '0',
   `lastlogin` int(11) NOT NULL default '0',
@@ -348,10 +354,10 @@ CREATE TABLE `users` (
   `work_country_id` int(11) NOT NULL default '0',
   `bank` varchar(50) NOT NULL default '',
   `bank_no` varchar(50) NOT NULL default '',
-  `link_id` int(11) NOT NULL,
+  `link_id` int(11) NOT NULL default '0',
+  `mtime` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
-  KEY `link_id` (`link_id`),
-  KEY `link_id_2` (`link_id`)
+  KEY `link_id` (`link_id`)
 ) TYPE=MyISAM;
 
 -- --------------------------------------------------------

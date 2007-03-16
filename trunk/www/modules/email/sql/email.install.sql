@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 2.6.4-pl1-Debian-1ubuntu1.1
+-- version 2.8.2-Debian-0.2
 -- http://www.phpmyadmin.net
 -- 
 -- Host: localhost
--- Generatie Tijd: 01 Mei 2006 om 16:32
--- Server versie: 4.0.24
--- PHP Versie: 5.0.5-2ubuntu1.2
+-- Generatie Tijd: 16 Mar 2007 om 16:45
+-- Server versie: 5.0.24
+-- PHP Versie: 5.1.6
 -- 
 -- Database: `imfoss_nl`
 -- 
@@ -15,18 +15,6 @@
 -- 
 -- Tabel structuur voor tabel `emAccounts`
 -- 
-DROP TABLE IF EXISTS `em_links`;
-CREATE TABLE `em_links` (
-  `link_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `from` varchar(255) NOT NULL,
-  `to` text NOT NULL,
-  `subject` varchar(255) NOT NULL,
-  `time` int(11) NOT NULL,
-  `path` varchar(255) NOT NULL,
-  PRIMARY KEY  (`link_id`),
-  KEY `account_id` (`user_id`)
-) ;
 
 DROP TABLE IF EXISTS `emAccounts`;
 CREATE TABLE `emAccounts` (
@@ -49,7 +37,7 @@ CREATE TABLE `emAccounts` (
   `trash` varchar(100) NOT NULL default '',
   `spam` varchar(100) NOT NULL default '',
   `spamtag` varchar(20) NOT NULL default '',
-  `auto_check` enum('0','1') NOT NULL default '0',
+  `examine_headers` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
 ) TYPE=MyISAM;
@@ -90,9 +78,29 @@ CREATE TABLE `emFolders` (
   `sort_order` tinyint(4) NOT NULL default '0',
   `msgcount` int(11) NOT NULL default '0',
   `unseen` int(11) NOT NULL default '0',
+  `auto_check` enum('0','1') NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `account_id` (`account_id`),
   KEY `parent_id` (`parent_id`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabel structuur voor tabel `em_links`
+-- 
+
+DROP TABLE IF EXISTS `em_links`;
+CREATE TABLE `em_links` (
+  `link_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `from` varchar(255) NOT NULL,
+  `to` text NOT NULL,
+  `subject` varchar(255) NOT NULL,
+  `time` int(11) NOT NULL,
+  `path` varchar(255) NOT NULL,
+  PRIMARY KEY  (`link_id`),
+  KEY `account_id` (`user_id`)
 ) TYPE=MyISAM;
 
 -- --------------------------------------------------------
