@@ -5,7 +5,6 @@ FCKConfig.LinkUpload=false;
 FCKConfig.ImageBrowser=false;
 FCKConfig.ImageUpload=false;
 FCKConfig.FlashUpload =false;
-FCKConfig.UseBROnCarriageReturn=false;
 FCKConfig.IEForceVScroll=true;
 FCKConfig.TabSpaces=4;
 
@@ -17,7 +16,7 @@ FCKConfig.ToolbarSets["email"] = [
 	['OrderedList','UnorderedList','-','Outdent','Indent'],
 	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
 	['Link','Unlink','Anchor'],
-	['Image','Table','Rule','SpecialChar','PageBreak','UniversalKey'],
+	['Image','Table','Rule','SpecialChar','PageBreak'],
 	'/',
 	['FontFormat','FontName','FontSize'],
 	['TextColor','BGColor']

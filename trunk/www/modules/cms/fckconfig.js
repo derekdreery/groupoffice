@@ -5,7 +5,6 @@ FCKConfig.LinkUpload=false;
 FCKConfig.ImageBrowser=false;
 FCKConfig.ImageUpload=false;
 FCKConfig.FlashUpload =false;
-FCKConfig.UseBROnCarriageReturn=true;
 FCKConfig.IEForceVScroll=true;
 FCKConfig.TabSpaces=4;
 
@@ -17,7 +16,7 @@ FCKConfig.ToolbarSets["cms"] = [
 	['OrderedList','UnorderedList','-','Outdent','Indent'],
 	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
 	['Link','Unlink','Anchor'],
-	['ImageManager', 'Flash', 'Table','Rule','SpecialChar','PageBreak','UniversalKey'],
+	['ImageManager', 'Flash', 'Table','Rule','SpecialChar','PageBreak'],
 	'/',
 	['Style','FontFormat','FontName','FontSize'],
 	['TextColor','BGColor']
@@ -31,7 +30,7 @@ FCKConfig.ToolbarSets["cms_restricted"] = [
 	['OrderedList','UnorderedList','-','Outdent','Indent'],
 	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
 	['Link', 'Unlink','Anchor'],
-	['ImageManager','Flash','Table','Rule','SpecialChar','PageBreak','UniversalKey', 'Style','FontFormat']
+	['ImageManager','Flash','Table','Rule','SpecialChar','PageBreak', 'Style','FontFormat']
 ] ;
 
 FCKConfig.Plugins.Add( 'ImageManager');

@@ -135,10 +135,8 @@ $table->add_row($row);
 
 $htmleditor = new htmleditor('content');
 $htmleditor->Value		= $content;
-$htmleditor->ToolbarSet='email';
+//$htmleditor->ToolbarSet='Default';
 
-$htmleditor->SetConfig('ImageBrowser',true);
-$htmleditor->SetConfig('ImageBrowserURL', $GO_MODULES->modules['cms']['url'].'select_image.php');
 
 $row = new table_row();
 $cell = new table_cell($htmleditor->CreateHtml());
