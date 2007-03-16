@@ -1,8 +1,8 @@
 <?php
 $module['addressbook']['description'] = 'A very fast and feature rich addressbook for '.
 								'Group-Office. It is integrated in other modules as well';
-$module['addressbook']['version'] = '2.3';
-$module['addressbook']['release_date'] = '2006-02-15';
+$module['addressbook']['version'] = '2.4';
+$module['addressbook']['release_date'] = '2007-03-16';
 $module['addressbook']['status'] = 'Stable';
 $module['addressbook']['authors'][] = array('name'=>'Merijn Schering', 'email'=>'mschering@intermesh.nl');
 $module['addressbook']['sort_order'] = 20;
