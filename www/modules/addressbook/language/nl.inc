@@ -184,3 +184,4 @@ $ab_edit_selected_warning = 'Waarschuwing! U bent bezig %s %s te bewerken. Al de
 $ab_contacts='contactpersonen';
 $ab_companies='bedrijven';
 $ab_users='gebruikers';
+$ab_dontchange='Niet wijzigen';
