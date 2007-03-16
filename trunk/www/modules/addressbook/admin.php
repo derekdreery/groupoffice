@@ -70,7 +70,7 @@ $tabstrip->set_return_to(htmlspecialchars($return_to));
 
 $tabstrip->add_tab('addressbooks', $ab_addressbooks);
 $tabstrip->add_tab('templates', $ab_templates);
-$tabstrip->add_tab('mailings', $ab_mailings);
+//$tabstrip->add_tab('mailings', $ab_mailings);
 
 switch($tabstrip->get_active_tab_id())
 {
@@ -87,17 +87,6 @@ switch($tabstrip->get_active_tab_id())
 		}
 	break;
 
-	case 'mailings':
-		  
-		$tp_plugin = $GO_MODULES->get_plugin('templates');
-		if (!$tp_plugin)
-		{
-			$tabstrip->add_html_element(new html_element('p', $strProOnly));
-		}else
-		{
-			require($tp_plugin['path'].'mailings.inc');
-		}
-	break;
 		
 	default:
 
