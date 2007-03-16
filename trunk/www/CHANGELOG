@@ -7,13 +7,16 @@ TODO for 2.17
 *Remember header setting in e-mail message
 *Read addressbook for template fields after entering a name in the to field
 *map van e-mail gecomprimeerd opslaan
-*Select columns to display in tables
+-Select and sort columns to display in tables
 -global search
 -link email (Pro only)
 -Better auto add contacts in mail
 *Birthday events
 *Configure which calendars show on summary screen
 -TNEF (Winmail.dat) support
+-Reports module to show different queries on addressbook. Can also be used to send
+ mailings with MS Office, Open-Office and the GO e-mail client. Replaces old mailing 
+ system (Pro only)
 
 
 CHANGELOG

@@ -11,6 +11,7 @@ $adminmodules = false;
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset; ?>">
+<script language="javascript" type="text/javascript" src="<?php echo $GO_CONFIG->host; ?>javascript/common.js"></script>
  <link href="<?php echo $GO_THEME->theme_url.'css/common.css'; ?>" rel="stylesheet" type="text/css" />
  <script language="javascript" type="text/javascript" src="<?php echo $GO_CONFIG->host; ?>javascript/pngfix.js"></script>
 </head>
