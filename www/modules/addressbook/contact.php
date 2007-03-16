@@ -111,6 +111,7 @@ switch ($task) {
 		if($contact['company_id']==0 && !empty($_POST['company_name'])) {
 			$company['name'] = smart_addslashes($_POST['company_name']);
 			$company['addressbook_id']=$contact['addressbook_id'];
+			$company['link_id']=$GO_LINKS->get_link_id();
 			$contact['company_id'] = $_POST['company_id'] = $ab->add_company($company);
 		}
 
