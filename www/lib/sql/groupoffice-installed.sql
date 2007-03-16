@@ -3,11 +3,11 @@
 -- http://www.phpmyadmin.net
 -- 
 -- Host: localhost
--- Generatie Tijd: 11 Jan 2007 om 09:16
+-- Generatie Tijd: 16 Mar 2007 om 16:58
 -- Server versie: 5.0.24
 -- PHP Versie: 5.1.6
 -- 
--- Database: `216_8`
+-- Database: `go21701`
 -- 
 
 -- --------------------------------------------------------
@@ -15,36 +15,6 @@
 -- 
 -- Tabel structuur voor tabel `ab_addressbooks`
 -- 
-DROP TABLE IF EXISTS `se_cache`;
-CREATE TABLE `se_cache` (
-  `link_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `table` varchar(50) NOT NULL,
-  `id` int(11) NOT NULL,
-  `module` varchar(50) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `description` varchar(255) NOT NULL,
-  `url` varchar(255) NOT NULL,
-  `link_type` int(11) NOT NULL,
-  `type` varchar(20) NOT NULL,
-  `keywords` text NOT NULL,
-  PRIMARY KEY  (`link_id`,`user_id`),
-  KEY `name` (`name`)
-) TYPE=MyISAM;
-
--- --------------------------------------------------------
-
--- 
--- Tabel structuur voor tabel `se_last_sync_times`
--- 
-
-DROP TABLE IF EXISTS `se_last_sync_times`;
-CREATE TABLE `se_last_sync_times` (
-  `user_id` int(11) NOT NULL,
-  `module` varchar(50) NOT NULL,
-  `last_sync_time` int(11) NOT NULL,
-  PRIMARY KEY  (`user_id`,`module`)
-) TYPE=MyISAM;
 
 DROP TABLE IF EXISTS `ab_addressbooks`;
 CREATE TABLE `ab_addressbooks` (
@@ -55,7 +25,7 @@ CREATE TABLE `ab_addressbooks` (
   `acl_write` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `ab_addressbooks`
@@ -100,14 +70,14 @@ CREATE TABLE `ab_companies` (
   PRIMARY KEY  (`id`),
   KEY `addressbook_id` (`addressbook_id`),
   KEY `link_id` (`link_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `ab_companies`
 -- 
 
-INSERT INTO `ab_companies` (`id`, `link_id`, `user_id`, `addressbook_id`, `name`, `address`, `address_no`, `zip`, `city`, `state`, `country`, `post_address`, `post_address_no`, `post_city`, `post_state`, `post_country`, `post_zip`, `phone`, `fax`, `email`, `homepage`, `bank_no`, `vat_no`, `ctime`, `mtime`) VALUES (6, NULL, 1, 1, 'Intermesh', 'Reitchscheweg', '37', '5231MN', 'Den Bosch', 'Noord-Brabant', 'Nederland', 'Wethouder Schuurmanslaan', '361', 'Den Bosch', 'Noord-Brabant', 'Nederland', '5231MN', '+31619864268', '+31619864268', 'info@intermesh.nl', 'http://', '12345.12344', 'NL212313215', 1163337736, 1163337805),
-(7, NULL, 1, 1, 'Intermesh Directie', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 1163342395, 1163342395);
+INSERT INTO `ab_companies` (`id`, `link_id`, `user_id`, `addressbook_id`, `name`, `address`, `address_no`, `zip`, `city`, `state`, `country`, `post_address`, `post_address_no`, `post_city`, `post_state`, `post_country`, `post_zip`, `phone`, `fax`, `email`, `homepage`, `bank_no`, `vat_no`, `ctime`, `mtime`) VALUES (6, 6, 1, 1, 'Intermesh', 'Reitchscheweg', '37', '5231MN', 'Den Bosch', 'Noord-Brabant', 'Nederland', 'Wethouder Schuurmanslaan', '361', 'Den Bosch', 'Noord-Brabant', 'Nederland', '5231MN', '+31619864268', '+31619864268', 'info@intermesh.nl', 'http://', '12345.12344', 'NL212313215', 1163337736, 1163337805),
+(7, 7, 1, 1, 'Intermesh Directie', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 1163342395, 1163342395);
 
 -- --------------------------------------------------------
 
@@ -154,7 +124,7 @@ CREATE TABLE `ab_contacts` (
   PRIMARY KEY  (`id`),
   KEY `user_id` (`addressbook_id`),
   KEY `link_id` (`link_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `ab_contacts`
@@ -177,7 +147,7 @@ CREATE TABLE `ab_settings` (
   `search_addressbook_id` int(11) NOT NULL default '0',
   `addressbook_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`user_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `ab_settings`
@@ -201,7 +171,7 @@ CREATE TABLE `ab_zipcodes` (
   `country` varchar(100) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `zip` (`zip`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `ab_zipcodes`
@@ -220,7 +190,7 @@ CREATE TABLE `acl` (
   `user_id` int(11) NOT NULL default '0',
   `group_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`acl_id`,`user_id`,`group_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `acl`
@@ -323,7 +293,7 @@ CREATE TABLE `acl_items` (
   `user_id` int(11) NOT NULL default '0',
   `description` varchar(50) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `acl_items`
@@ -390,7 +360,7 @@ CREATE TABLE `cal_backgrounds` (
   `color` char(6) NOT NULL,
   `name` varchar(100) NOT NULL,
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_backgrounds`
@@ -413,7 +383,7 @@ CREATE TABLE `cal_calendar_backgrounds` (
   `end_time` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `calendar_id` (`calendar_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_calendar_backgrounds`
@@ -441,7 +411,7 @@ CREATE TABLE `cal_calendars` (
   PRIMARY KEY  (`id`),
   KEY `group_id` (`group_id`),
   KEY `group_id_2` (`group_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_calendars`
@@ -494,6 +464,7 @@ CREATE TABLE `cal_events` (
   `custom_fields` text NOT NULL,
   `timezone` float NOT NULL default '0',
   `DST` enum('0','1') NOT NULL default '0',
+  `busy` enum('0','1') NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `start_time` (`start_time`),
   KEY `end_time` (`end_time`),
@@ -504,7 +475,7 @@ CREATE TABLE `cal_events` (
   KEY `link_id` (`link_id`),
   KEY `link_id_2` (`link_id`),
   KEY `status_id` (`status_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_events`
@@ -523,7 +494,7 @@ CREATE TABLE `cal_events_calendars` (
   `event_id` int(11) NOT NULL default '0',
   `sid` char(32) NOT NULL default '',
   KEY `calendar_id` (`calendar_id`,`event_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_events_calendars`
@@ -543,7 +514,7 @@ CREATE TABLE `cal_exceptions` (
   `time` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `event_id` (`event_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_exceptions`
@@ -561,7 +532,7 @@ CREATE TABLE `cal_group_admins` (
   `group_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`group_id`,`user_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_group_admins`
@@ -581,7 +552,7 @@ CREATE TABLE `cal_groups` (
   `custom_fields` text NOT NULL,
   `acl_write` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_groups`
@@ -604,7 +575,7 @@ CREATE TABLE `cal_holidays` (
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`),
   KEY `user_id_2` (`user_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_holidays`
@@ -642,7 +613,7 @@ CREATE TABLE `cal_participants` (
   `status` enum('0','1','2') NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `id` (`id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_participants`
@@ -667,7 +638,7 @@ CREATE TABLE `cal_reminders` (
   KEY `remind_time_2` (`remind_time`),
   KEY `email_sent` (`email_sent`),
   KEY `email_sent_2` (`email_sent`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_reminders`
@@ -698,7 +669,7 @@ CREATE TABLE `cal_settings` (
   `email_changes` enum('0','1') NOT NULL default '1',
   `email_reminders` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`user_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_settings`
@@ -719,7 +690,7 @@ CREATE TABLE `cal_statuses` (
   `name` varchar(50) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `type` (`type`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_statuses`
@@ -757,7 +728,7 @@ CREATE TABLE `cal_views` (
   `acl_write` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_views`
@@ -776,7 +747,7 @@ CREATE TABLE `cal_views_calendars` (
   `calendar_id` int(11) NOT NULL default '0',
   `background` char(6) NOT NULL default 'CCFFCC',
   PRIMARY KEY  (`view_id`,`calendar_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_views_calendars`
@@ -799,7 +770,7 @@ CREATE TABLE `cms_comments` (
   `ctime` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `file_id` (`file_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cms_comments`
@@ -836,7 +807,7 @@ CREATE TABLE `cms_files` (
   KEY `folder_id` (`folder_id`),
   FULLTEXT KEY `name` (`name`),
   FULLTEXT KEY `content` (`content`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cms_files`
@@ -869,7 +840,7 @@ CREATE TABLE `cms_folders` (
   `acl` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `parent_id` (`parent_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cms_folders`
@@ -890,7 +861,7 @@ CREATE TABLE `cms_galleries` (
   `site_id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cms_galleries`
@@ -918,7 +889,7 @@ CREATE TABLE `cms_languages` (
   `language_code` char(2) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `site_id` (`site_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cms_languages`
@@ -937,7 +908,7 @@ CREATE TABLE `cms_settings` (
   `sort_field` varchar(20) NOT NULL default '',
   `sort_order` varchar(20) NOT NULL default '',
   PRIMARY KEY  (`user_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cms_settings`
@@ -964,14 +935,15 @@ CREATE TABLE `cms_sites` (
   `template_id` int(11) NOT NULL default '0',
   `root_folder_id` int(11) NOT NULL default '0',
   `start_file_id` int(11) NOT NULL,
+  `language` char(10) NOT NULL,
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cms_sites`
 -- 
 
-INSERT INTO `cms_sites` (`id`, `user_id`, `acl_write`, `allow_properties`, `domain`, `webmaster`, `publish_style`, `publish_path`, `template_id`, `root_folder_id`, `start_file_id`) VALUES (1, 1, 34, '0', 'www.example.com', 'webmaster@example.com', '0', '', 1, 1, 0);
+INSERT INTO `cms_sites` (`id`, `user_id`, `acl_write`, `allow_properties`, `domain`, `webmaster`, `publish_style`, `publish_path`, `template_id`, `root_folder_id`, `start_file_id`, `language`) VALUES (1, 1, 34, '0', 'www.example.com', 'webmaster@example.com', '0', '', 1, 1, 0, 'nl');
 
 -- --------------------------------------------------------
 
@@ -989,7 +961,7 @@ CREATE TABLE `cms_template_items` (
   PRIMARY KEY  (`id`),
   KEY `template_id` (`template_id`),
   KEY `page` (`page`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cms_template_items`
@@ -1019,14 +991,13 @@ CREATE TABLE `cms_templates` (
   `fckeditor_styles` text NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
-) TYPE=MyISAM;
-
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cms_templates`
 -- 
 
-INSERT INTO `cms_templates` (`id`, `user_id`, `name`, `style`, `additional_style`, `print_style`, `restrict_editor`, `acl_read`, `acl_write`, `doctype`, `login_template_item_id`) VALUES (1, 1, 'Example theme', '.error{\r\ncolor:red;\r\n}\r\n.login{\r\nfont-style:italic;\r\n}\r\n\r\n.logout{\r\nfont-weight:bold;\r\n}\r\n\r\n#start image gallery styles\r\na.ig_pagination:link,a.ig_pagination:visited,a.ig_pagination:active{\r\nfont-size:14px;\r\ncolor:black;\r\nmargin:14px;\r\n}\r\n\r\na.ig_pagination:hover{\r\nfont-size:14px;\r\ncolor:red;\r\n}\r\n\r\n\r\na.ig_paginationActive:link,a.ig_paginationActive:visited,a.ig_paginationActive:active{\r\nfont-size:14px;\r\ncolor:black;\r\nmargin:14px;\r\nfont-weight:bold;\r\n}\r\n\r\na.ig_paginationActive:hover{\r\nfont-size:14px;\r\ncolor:red;\r\n}\r\n\r\n\r\n.ig_paginationDisabled{\r\nfont-size:14px;\r\ncolor:#cccccc;\r\nmargin:14px;\r\n}\r\n\r\n.ig_thumb_description{\r\n\r\nfont-weight:bold;\r\nfont-size:10px;\r\ndisplay:block;\r\n}\r\n#end image gallery styles\r\n\r\n#start comments plugin styles\r\n.add_comment_error{\r\nfont-weight:bold;\r\ncolor:red;\r\n}\r\n.add_comment_title{\r\nmargin-top:20px;\r\nmargin-bottom:3px;\r\n}\r\ntable.comments{\r\nwidth:100%;\r\n}\r\n\r\ntable.comments td{\r\nvertical-align:top;\r\n}\r\n\r\n.comment{\r\ndisplay:block;\r\nmargin-top:20px;\r\n}\r\n\r\nspan.comments_input{\r\nwidth:100%;\r\ntext-align:right;\r\ndisplay:block;\r\n}\r\ninput.comments_input{\r\nwidth:100px;\r\n}\r\n\r\nh1.comments{\r\nmargin-top:20px;\r\nmargin-bottom:3px;\r\nborder-top:1px solid black;\r\npadding-top:20px;\r\nwidth:100%;\r\n}\r\n.comment_name{\r\nfont-weight:bold;\r\ndisplay:block;\r\nwidth:100%;\r\n}\r\n\r\n.comment_date{\r\nfont-style:italic;\r\ntext-align:right;\r\ndisplay:block;\r\nwidth:100%;\r\nfont-size:10px;\r\n}\r\n\r\n#end comments plugin styles\r\n\r\nbody{\r\nmargin:0px;\r\npadding:0px;\r\nfont-family: Sans-serif, Arial;\r\nfont-size:11px;\r\nheight:100%;\r\ncolor:#666666;\r\n}\r\n\r\ntd{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:12px;\r\nheight:100%;\r\ncolor:#666666;\r\n}\r\n\r\nhtml{\r\nheight:100%;\r\n}\r\n\r\nh1{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:14px;\r\nfont-weight:bold;\r\ncolor: black;\r\nmargin-top:8px;\r\nmargin-bottom:3px;\r\n}\r\nh2{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:12px;\r\nfont-weight:bold;\r\ncolor: black;\r\nmargin-top:8px;\r\nmargin-bottom:3px;\r\n}\r\nh3{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:11px;\r\nfont-weight:bold;\r\nmargin-top:8px;\r\nmargin-bottom:0px;\r\ncolor: black;\r\n}\r\n\r\nhr{\r\nborder-top-width: 0px;\r\nborder-left-width: 0px;\r\nborder-bottom: #16336e 2px solid;\r\nborder-right-width: 0px;\r\nmargin: 0px;\r\nwidth: 100%;\r\n}\r\n\r\na:link, a:visited, a:active{\r\ncolor: #16336e;\r\nfont-size:12px;\r\nfont-family: Arial, Sans-serif;\r\ntext-decoration: none;\r\n}\r\na:hover {\r\ncolor: #3a3a3a;\r\ntext-decoration: underline;\r\n}\r\n\r\n#banners{\r\ntext-align: center;\r\nposition:absolute;\r\nbottom: 0px;\r\nwidth: 800px;\r\nheight:80px;\r\nvertical-align:middle;\r\n}\r\n\r\n.newstd{\r\nvertical-align:top;\r\nwidth:200px;\r\nborder-left:1px #16336e dashed;\r\npadding-left:10px;\r\n\r\n}\r\n.contenttd{\r\nvertical-align:top;\r\nwidth:450px;\r\nheight:100%;\r\nfont-size:12px;\r\npadding-left:10px;\r\npadding-right:10px;\r\noverflow:scroll;\r\n}\r\n\r\n.menutd{\r\nvertical-align:top;\r\nwidth:150px;\r\nborder-right:1px #16336e dashed;\r\nheight:100%;\r\n}\r\n\r\n.maintable{\r\nborder:0px;\r\nheight:100%;\r\nwidth:800px;\r\nmargin:auto;\r\n}\r\n\r\n\r\n.treeview, .treeview div{\r\nmargin-left:8px;\r\n}\r\n\r\n.treeview a:link,.treeview  a:visited,.treeview a:active{\r\nfont-weight: bold;\r\n	font-size:12px;\r\ndisplay: block;\r\ncolor: #3a3a3a;\r\npadding:3px;\r\npadding-right:0;\r\n}\r\n\r\n.treeview a:hover{\r\ncolor:#d67527;\r\ntext-decoration:none;\r\n}\r\n\r\n.treeview div a:link,.treeview div  a:visited,.treeview div a:active{\r\nfont-weight: normal;\r\n	font-size:11px;\r\ndisplay: block;\r\ncolor: #3a3a3a;\r\npadding:2px;\r\npadding-right:0;\r\nborder:0px;\r\n}\r\n\r\n.treeview div a:hover{\r\ncolor: #16336e;\r\ntext-decoration:none;\r\n}\r\n\r\n\r\n.treeview div a.menu_active:link,\r\n.treeview div a.menu_active:visited,\r\n.treeview div a.menu_active:active{\r\nfont-weight: normal;\r\nfont-style:italic;\r\nfont-size:11px;\r\ndisplay: block;\r\ncolor: #16336e;\r\npadding:2px;\r\npadding-right:0;\r\n}\r\n\r\n\r\n.treeview div div a.menu_active:link,\r\n.treeview div div a.menu_active:visited,\r\n.treeview div div a.menu_active:active{\r\nfont-style: italic;\r\nfont-size:11px;\r\ndisplay: block;\r\ncolor: #16336e;\r\npadding:2px;\r\npadding-right:0;\r\n}\r\n\r\n\r\n.treeview div a.menu_active:hover{\r\ncolor: #d67527;\r\ntext-decoration:none;\r\n}\r\n\r\n\r\na.menu:link,a.menu:visited,a.menu:active{\r\nfont-weight: bold;\r\n	font-size:12px;\r\ndisplay: block;\r\ncolor: #3a3a3a;\r\npadding:3px;\r\npadding-left:11px;\r\npadding-right:0;\r\n}\r\n\r\na.menu:hover{\r\ncolor:#d67527;\r\ntext-decoration:none;\r\n}', 'body{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:11px;\r\nheight:100%;\r\ncolor:#666666;\r\n}\r\n\r\ntd{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:10px;\r\nheight:100%;\r\ncolor:#666666;\r\n}\r\n\r\nhtml{\r\nheight:100%;\r\n}\r\n\r\nh1{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:14px;\r\nfont-weight:bold;\r\ncolor: black;\r\nmargin-top:8px;\r\nmargin-bottom:3px;\r\n}\r\nh2{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:12px;\r\nfont-weight:bold;\r\ncolor: black;\r\nmargin-top:8px;\r\nmargin-bottom:3px;\r\n}\r\nh3{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:11px;\r\nfont-weight:bold;\r\nmargin-top:8px;\r\nmargin-bottom:0px;\r\ncolor: black;\r\n}\r\n\r\nhr{\r\nborder-top-width: 0px;\r\nborder-left-width: 0px;\r\nborder-bottom: #199781 2px solid;\r\nborder-right-width: 0px;\r\nmargin: 0px;\r\nwidth: 100%;\r\n}\r\n\r\na:link, a:visited, a:active{\r\ncolor: #199781;\r\nfont-size:11px;\r\nfont-family: Arial, Sans-serif;\r\ntext-decoration: none;\r\n}\r\na:hover {\r\ncolor: #3a3a3a;\r\ntext-decoration: underline;\r\n}\r\n\r\n', '', '0', 32, 33, '<?xml version="1.0" encoding="UTF-8"?>\r\n<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">', 1);
+INSERT INTO `cms_templates` (`id`, `user_id`, `name`, `style`, `additional_style`, `print_style`, `restrict_editor`, `acl_read`, `acl_write`, `doctype`, `login_template_item_id`, `fckeditor_styles`) VALUES (1, 1, 'Example theme', '.error{\r\ncolor:red;\r\n}\r\n.login{\r\nfont-style:italic;\r\n}\r\n\r\n.logout{\r\nfont-weight:bold;\r\n}\r\n\r\n#start image gallery styles\r\na.ig_pagination:link,a.ig_pagination:visited,a.ig_pagination:active{\r\nfont-size:14px;\r\ncolor:black;\r\nmargin:14px;\r\n}\r\n\r\na.ig_pagination:hover{\r\nfont-size:14px;\r\ncolor:red;\r\n}\r\n\r\n\r\na.ig_paginationActive:link,a.ig_paginationActive:visited,a.ig_paginationActive:active{\r\nfont-size:14px;\r\ncolor:black;\r\nmargin:14px;\r\nfont-weight:bold;\r\n}\r\n\r\na.ig_paginationActive:hover{\r\nfont-size:14px;\r\ncolor:red;\r\n}\r\n\r\n\r\n.ig_paginationDisabled{\r\nfont-size:14px;\r\ncolor:#cccccc;\r\nmargin:14px;\r\n}\r\n\r\n.ig_thumb_description{\r\n\r\nfont-weight:bold;\r\nfont-size:10px;\r\ndisplay:block;\r\n}\r\n#end image gallery styles\r\n\r\n#start comments plugin styles\r\n.add_comment_error{\r\nfont-weight:bold;\r\ncolor:red;\r\n}\r\n.add_comment_title{\r\nmargin-top:20px;\r\nmargin-bottom:3px;\r\n}\r\ntable.comments{\r\nwidth:100%;\r\n}\r\n\r\ntable.comments td{\r\nvertical-align:top;\r\n}\r\n\r\n.comment{\r\ndisplay:block;\r\nmargin-top:20px;\r\n}\r\n\r\nspan.comments_input{\r\nwidth:100%;\r\ntext-align:right;\r\ndisplay:block;\r\n}\r\ninput.comments_input{\r\nwidth:100px;\r\n}\r\n\r\nh1.comments{\r\nmargin-top:20px;\r\nmargin-bottom:3px;\r\nborder-top:1px solid black;\r\npadding-top:20px;\r\nwidth:100%;\r\n}\r\n.comment_name{\r\nfont-weight:bold;\r\ndisplay:block;\r\nwidth:100%;\r\n}\r\n\r\n.comment_date{\r\nfont-style:italic;\r\ntext-align:right;\r\ndisplay:block;\r\nwidth:100%;\r\nfont-size:10px;\r\n}\r\n\r\n#end comments plugin styles\r\n\r\nbody{\r\nmargin:0px;\r\npadding:0px;\r\nfont-family: Sans-serif, Arial;\r\nfont-size:11px;\r\nheight:100%;\r\ncolor:#666666;\r\n}\r\n\r\ntd{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:12px;\r\nheight:100%;\r\ncolor:#666666;\r\n}\r\n\r\nhtml{\r\nheight:100%;\r\n}\r\n\r\nh1{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:14px;\r\nfont-weight:bold;\r\ncolor: black;\r\nmargin-top:8px;\r\nmargin-bottom:3px;\r\n}\r\nh2{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:12px;\r\nfont-weight:bold;\r\ncolor: black;\r\nmargin-top:8px;\r\nmargin-bottom:3px;\r\n}\r\nh3{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:11px;\r\nfont-weight:bold;\r\nmargin-top:8px;\r\nmargin-bottom:0px;\r\ncolor: black;\r\n}\r\n\r\nhr{\r\nborder-top-width: 0px;\r\nborder-left-width: 0px;\r\nborder-bottom: #16336e 2px solid;\r\nborder-right-width: 0px;\r\nmargin: 0px;\r\nwidth: 100%;\r\n}\r\n\r\na:link, a:visited, a:active{\r\ncolor: #16336e;\r\nfont-size:12px;\r\nfont-family: Arial, Sans-serif;\r\ntext-decoration: none;\r\n}\r\na:hover {\r\ncolor: #3a3a3a;\r\ntext-decoration: underline;\r\n}\r\n\r\n#banners{\r\ntext-align: center;\r\nposition:absolute;\r\nbottom: 0px;\r\nwidth: 800px;\r\nheight:80px;\r\nvertical-align:middle;\r\n}\r\n\r\n.newstd{\r\nvertical-align:top;\r\nwidth:200px;\r\nborder-left:1px #16336e dashed;\r\npadding-left:10px;\r\n\r\n}\r\n.contenttd{\r\nvertical-align:top;\r\nwidth:450px;\r\nheight:100%;\r\nfont-size:12px;\r\npadding-left:10px;\r\npadding-right:10px;\r\noverflow:scroll;\r\n}\r\n\r\n.menutd{\r\nvertical-align:top;\r\nwidth:150px;\r\nborder-right:1px #16336e dashed;\r\nheight:100%;\r\n}\r\n\r\n.maintable{\r\nborder:0px;\r\nheight:100%;\r\nwidth:800px;\r\nmargin:auto;\r\n}\r\n\r\n\r\n.treeview, .treeview div{\r\nmargin-left:8px;\r\n}\r\n\r\n.treeview a:link,.treeview  a:visited,.treeview a:active{\r\nfont-weight: bold;\r\n	font-size:12px;\r\ndisplay: block;\r\ncolor: #3a3a3a;\r\npadding:3px;\r\npadding-right:0;\r\n}\r\n\r\n.treeview a:hover{\r\ncolor:#d67527;\r\ntext-decoration:none;\r\n}\r\n\r\n.treeview div a:link,.treeview div  a:visited,.treeview div a:active{\r\nfont-weight: normal;\r\n	font-size:11px;\r\ndisplay: block;\r\ncolor: #3a3a3a;\r\npadding:2px;\r\npadding-right:0;\r\nborder:0px;\r\n}\r\n\r\n.treeview div a:hover{\r\ncolor: #16336e;\r\ntext-decoration:none;\r\n}\r\n\r\n\r\n.treeview div a.menu_active:link,\r\n.treeview div a.menu_active:visited,\r\n.treeview div a.menu_active:active{\r\nfont-weight: normal;\r\nfont-style:italic;\r\nfont-size:11px;\r\ndisplay: block;\r\ncolor: #16336e;\r\npadding:2px;\r\npadding-right:0;\r\n}\r\n\r\n\r\n.treeview div div a.menu_active:link,\r\n.treeview div div a.menu_active:visited,\r\n.treeview div div a.menu_active:active{\r\nfont-style: italic;\r\nfont-size:11px;\r\ndisplay: block;\r\ncolor: #16336e;\r\npadding:2px;\r\npadding-right:0;\r\n}\r\n\r\n\r\n.treeview div a.menu_active:hover{\r\ncolor: #d67527;\r\ntext-decoration:none;\r\n}\r\n\r\n\r\na.menu:link,a.menu:visited,a.menu:active{\r\nfont-weight: bold;\r\n	font-size:12px;\r\ndisplay: block;\r\ncolor: #3a3a3a;\r\npadding:3px;\r\npadding-left:11px;\r\npadding-right:0;\r\n}\r\n\r\na.menu:hover{\r\ncolor:#d67527;\r\ntext-decoration:none;\r\n}', 'body{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:11px;\r\nheight:100%;\r\ncolor:#666666;\r\n}\r\n\r\ntd{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:10px;\r\nheight:100%;\r\ncolor:#666666;\r\n}\r\n\r\nhtml{\r\nheight:100%;\r\n}\r\n\r\nh1{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:14px;\r\nfont-weight:bold;\r\ncolor: black;\r\nmargin-top:8px;\r\nmargin-bottom:3px;\r\n}\r\nh2{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:12px;\r\nfont-weight:bold;\r\ncolor: black;\r\nmargin-top:8px;\r\nmargin-bottom:3px;\r\n}\r\nh3{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:11px;\r\nfont-weight:bold;\r\nmargin-top:8px;\r\nmargin-bottom:0px;\r\ncolor: black;\r\n}\r\n\r\nhr{\r\nborder-top-width: 0px;\r\nborder-left-width: 0px;\r\nborder-bottom: #199781 2px solid;\r\nborder-right-width: 0px;\r\nmargin: 0px;\r\nwidth: 100%;\r\n}\r\n\r\na:link, a:visited, a:active{\r\ncolor: #199781;\r\nfont-size:11px;\r\nfont-family: Arial, Sans-serif;\r\ntext-decoration: none;\r\n}\r\na:hover {\r\ncolor: #3a3a3a;\r\ntext-decoration: underline;\r\n}\r\n\r\n', '', '0', 32, 33, '<?xml version="1.0" encoding="UTF-8"?>\r\n<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">', 1, '');
 
 -- --------------------------------------------------------
 
@@ -1041,7 +1012,7 @@ CREATE TABLE `countries` (
   `iso_code_2` char(2) NOT NULL default '',
   `iso_code_3` char(3) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `countries`
@@ -1298,7 +1269,7 @@ CREATE TABLE `db_sequence` (
   `seq_name` varchar(50) NOT NULL default '',
   `nextid` int(11) NOT NULL default '0',
   PRIMARY KEY  (`seq_name`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `db_sequence`
@@ -1319,7 +1290,7 @@ INSERT INTO `db_sequence` (`seq_name`, `nextid`) VALUES ('acl_items', 60),
 ('sync_devices', 3),
 ('ab_companies', 7),
 ('ab_contacts', 4),
-('links', 5),
+('links', 8),
 ('pmProjects', 2),
 ('pmFees', 1),
 ('pmHours', 2),
@@ -1353,10 +1324,10 @@ CREATE TABLE `emAccounts` (
   `trash` varchar(100) NOT NULL default '',
   `spam` varchar(100) NOT NULL default '',
   `spamtag` varchar(20) NOT NULL default '',
-  `auto_check` enum('0','1') NOT NULL default '0',
+  `examine_headers` enum('0','1') NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `emAccounts`
@@ -1379,7 +1350,7 @@ CREATE TABLE `emFilters` (
   `priority` int(11) NOT NULL default '0',
   `mark_as_read` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `emFilters`
@@ -1404,13 +1375,38 @@ CREATE TABLE `emFolders` (
   `sort_order` tinyint(4) NOT NULL default '0',
   `msgcount` int(11) NOT NULL default '0',
   `unseen` int(11) NOT NULL default '0',
+  `auto_check` enum('0','1') NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `account_id` (`account_id`),
   KEY `parent_id` (`parent_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `emFolders`
+-- 
+
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabel structuur voor tabel `em_links`
+-- 
+
+DROP TABLE IF EXISTS `em_links`;
+CREATE TABLE `em_links` (
+  `link_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `from` varchar(255) NOT NULL,
+  `to` text NOT NULL,
+  `subject` varchar(255) NOT NULL,
+  `time` int(11) NOT NULL,
+  `path` varchar(255) NOT NULL,
+  PRIMARY KEY  (`link_id`),
+  KEY `account_id` (`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- 
+-- Gegevens worden uitgevoerd voor tabel `em_links`
 -- 
 
 
@@ -1433,7 +1429,7 @@ CREATE TABLE `em_settings` (
   `vacation_text` text NOT NULL,
   `show_preview` enum('0','1') NOT NULL default '1',
   PRIMARY KEY  (`user_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `em_settings`
@@ -1452,9 +1448,11 @@ CREATE TABLE `fs_links` (
   `link_id` int(11) NOT NULL default '0',
   `path` varchar(255) NOT NULL default '',
   `status_id` int(11) NOT NULL,
+  `ctime` int(11) NOT NULL,
+  `mtime` int(11) NOT NULL,
   PRIMARY KEY  (`link_id`),
   KEY `path` (`path`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `fs_links`
@@ -1473,7 +1471,7 @@ CREATE TABLE `fs_settings` (
   `notify` enum('0','1') NOT NULL,
   `open_properties` enum('0','1') NOT NULL,
   PRIMARY KEY  (`user_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `fs_settings`
@@ -1500,7 +1498,7 @@ CREATE TABLE `fs_shares` (
   KEY `type` (`type`),
   KEY `link_id` (`link_id`),
   KEY `link_id_2` (`link_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `fs_shares`
@@ -1524,7 +1522,7 @@ CREATE TABLE `fs_status_history` (
   `comments` text NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `link_id` (`link_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `fs_status_history`
@@ -1543,7 +1541,7 @@ CREATE TABLE `fs_statuses` (
   `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `fs_statuses`
@@ -1564,7 +1562,7 @@ CREATE TABLE `groups` (
   `name` varchar(50) NOT NULL default '',
   `user_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `groups`
@@ -1592,7 +1590,7 @@ CREATE TABLE `ig_galleries` (
   `acl_read` int(11) NOT NULL,
   `acl_write` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `ig_galleries`
@@ -1617,7 +1615,7 @@ CREATE TABLE `ig_images` (
   `height` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `site_id` (`gallery_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `ig_images`
@@ -1640,7 +1638,7 @@ CREATE TABLE `links` (
   KEY `type2` (`type2`),
   KEY `link_id1` (`link_id1`),
   KEY `link_id2` (`link_id2`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `links`
@@ -1663,19 +1661,19 @@ CREATE TABLE `modules` (
   `acl_read` int(11) NOT NULL default '0',
   `acl_write` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `modules`
 -- 
 
 INSERT INTO `modules` (`id`, `version`, `path`, `sort_order`, `admin_menu`, `acl_read`, `acl_write`) VALUES ('modules', '1.0', '', 130, '1', 1, 2),
-('addressbook', '2.3', '', 20, '0', 4, 5),
-('calendar', '3.0', '', 40, '0', 6, 7),
-('email', '2.1', '', 30, '0', 8, 9),
-('filesystem', '1.7', '', 70, '0', 10, 11),
+('addressbook', '2.4', '', 20, '0', 4, 5),
+('calendar', '3.1', '', 40, '0', 6, 7),
+('email', '2.3', '', 30, '0', 8, 9),
+('filesystem', '1.8', '', 70, '0', 10, 11),
 ('groups', '1.0', '', 120, '1', 12, 13),
-('cms', '2.6', '', 90, '0', 14, 15),
+('cms', '2.8', '', 90, '0', 14, 15),
 ('phpsysinfo', '1.0', '', 140, '1', 16, 17),
 ('projects', '2.2', '', 80, '0', 18, 19),
 ('summary', '1.0', '', 10, '0', 20, 21),
@@ -1706,7 +1704,7 @@ CREATE TABLE `no_notes` (
   KEY `user_id` (`user_id`),
   KEY `file_path` (`file_path`),
   KEY `link_id` (`link_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `no_notes`
@@ -1725,7 +1723,7 @@ CREATE TABLE `no_settings` (
   `sort_field` varchar(20) NOT NULL default '',
   `sort_order` varchar(20) NOT NULL default '',
   PRIMARY KEY  (`user_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `no_settings`
@@ -1747,7 +1745,7 @@ CREATE TABLE `pmFees` (
   `time` int(11) NOT NULL default '0',
   `acl_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `pmFees`
@@ -1777,7 +1775,7 @@ CREATE TABLE `pmHours` (
   `int_fee_value` double NOT NULL default '0',
   `event_id` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `pmHours`
@@ -1820,7 +1818,7 @@ CREATE TABLE `pmProjects` (
   KEY `contact_id` (`contact_id`),
   KEY `user_id` (`user_id`),
   KEY `link_id` (`link_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `pmProjects`
@@ -1838,7 +1836,7 @@ CREATE TABLE `pmStatuses` (
   `id` int(11) NOT NULL default '0',
   `name` varchar(50) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `pmStatuses`
@@ -1862,7 +1860,7 @@ CREATE TABLE `pmTimers` (
   `start_time` int(11) NOT NULL default '0',
   `project_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`user_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `pmTimers`
@@ -1881,7 +1879,7 @@ CREATE TABLE `pm_settings` (
   `show_projects` tinyint(4) NOT NULL default '0',
   `fee_id` int(11) NOT NULL,
   PRIMARY KEY  (`user_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `pm_settings`
@@ -1907,7 +1905,7 @@ CREATE TABLE `pm_template_events` (
   `reminder` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `template_id` (`template_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `pm_template_events`
@@ -1928,10 +1926,57 @@ CREATE TABLE `pm_templates` (
   `acl_read` int(11) NOT NULL default '0',
   `acl_write` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `pm_templates`
+-- 
+
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabel structuur voor tabel `se_cache`
+-- 
+
+DROP TABLE IF EXISTS `se_cache`;
+CREATE TABLE `se_cache` (
+  `link_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `table` varchar(50) NOT NULL,
+  `id` int(11) NOT NULL,
+  `module` varchar(50) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `link_type` int(11) NOT NULL,
+  `type` varchar(20) NOT NULL,
+  `keywords` text NOT NULL,
+  PRIMARY KEY  (`link_id`,`user_id`),
+  KEY `name` (`name`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- 
+-- Gegevens worden uitgevoerd voor tabel `se_cache`
+-- 
+
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabel structuur voor tabel `se_last_sync_times`
+-- 
+
+DROP TABLE IF EXISTS `se_last_sync_times`;
+CREATE TABLE `se_last_sync_times` (
+  `user_id` int(11) NOT NULL,
+  `module` varchar(50) NOT NULL,
+  `last_sync_time` int(11) NOT NULL,
+  PRIMARY KEY  (`user_id`,`module`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- 
+-- Gegevens worden uitgevoerd voor tabel `se_last_sync_times`
 -- 
 
 
@@ -1947,7 +1992,7 @@ CREATE TABLE `settings` (
   `name` varchar(50) NOT NULL default '',
   `value` text NOT NULL,
   PRIMARY KEY  (`user_id`,`name`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `settings`
@@ -1957,7 +2002,7 @@ INSERT INTO `settings` (`user_id`, `name`, `value`) VALUES (0, 'registration_unc
 (0, 'registration_confirmation', '<html>\r\n    <head>\r\n    </head>\r\n    <body>\r\n        <font size="3" face="Verdana">Dear&nbsp;%beginning%&nbsp;%middle_name%%last_name%,<br />\r\n        <br />\r\n        Welcome to Group-Office! You can login at:<br />\r\n        <br />\r\n        %full_url%<br />\r\n        <br />\r\n        With:<br />\r\n        <br />\r\n        Username: %username%<br />\r\n        Password: %password%<br />\r\n        <br />\r\n        With kind regards,<br />\r\n        <br />\r\n        The Group-Office administrator</font>\r\n    </body>\r\n</html>'),
 (0, 'registration_unconfirmed', '<html>\r\n    <head>\r\n    </head>\r\n    <body>\r\n        <font size="3" face="Verdana">Dear&nbsp;%beginning% %middle_name%%last_name%,<br />\r\n        <br />\r\n        Thank you for your registration at Group-Office. You can login when an administrator activates your account. You will recieve an e-mail with login instructions at that time.<br />\r\n        <br />\r\n        With kind regards,<br />\r\n        <br />\r\n        The Group-Office administrator</font>\r\n    </body>\r\n</html>'),
 (0, 'registration_confirmation_subject', 'Welcome to Group-Office!'),
-(0, 'version', '218'),
+(0, 'version', '221'),
 (0, 'enabled_columns_users', '0,1,2,3,4,5'),
 (1, 'sort_index_users', 'lastlogin'),
 (1, 'sort_asc_users', '0'),
@@ -1986,7 +2031,7 @@ CREATE TABLE `sum_announcements` (
   `content` text NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `due_time` (`due_time`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `sum_announcements`
@@ -2003,9 +2048,9 @@ DROP TABLE IF EXISTS `sync_contacts_maps`;
 CREATE TABLE `sync_contacts_maps` (
   `device_id` int(11) NOT NULL default '0',
   `contact_id` int(11) NOT NULL default '0',
-  `remote_id` char(64) NOT NULL default '',
+  `remote_id` varchar(255) NOT NULL,
   PRIMARY KEY  (`device_id`,`contact_id`,`remote_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `sync_contacts_maps`
@@ -2024,7 +2069,7 @@ CREATE TABLE `sync_contacts_syncs` (
   `local_last_anchor` int(11) NOT NULL default '0',
   `remote_last_anchor` char(32) NOT NULL default '',
   PRIMARY KEY  (`device_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `sync_contacts_syncs`
@@ -2045,7 +2090,7 @@ CREATE TABLE `sync_datastores` (
   `ctype` varchar(50) NOT NULL default '',
   `ctype_version` varchar(10) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `sync_datastores`
@@ -2067,7 +2112,7 @@ CREATE TABLE `sync_devices` (
   `user_id` int(11) NOT NULL default '0',
   `uri` varchar(128) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `sync_devices`
@@ -2084,10 +2129,10 @@ DROP TABLE IF EXISTS `sync_events_maps`;
 CREATE TABLE `sync_events_maps` (
   `device_id` int(11) NOT NULL default '0',
   `event_id` int(11) NOT NULL default '0',
-  `remote_id` char(64) NOT NULL default '',
+  `remote_id` varchar(255) NOT NULL,
   `todo` enum('0','1') NOT NULL,
   PRIMARY KEY  (`device_id`,`event_id`,`remote_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `sync_events_maps`
@@ -2106,7 +2151,7 @@ CREATE TABLE `sync_events_syncs` (
   `local_last_anchor` int(11) NOT NULL default '0',
   `remote_last_anchor` char(32) NOT NULL default '',
   PRIMARY KEY  (`device_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `sync_events_syncs`
@@ -2129,7 +2174,7 @@ CREATE TABLE `sync_settings` (
   `max_days_old` tinyint(4) NOT NULL,
   `delete_old_events` enum('0','1') NOT NULL,
   PRIMARY KEY  (`user_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `sync_settings`
@@ -2149,7 +2194,7 @@ CREATE TABLE `sync_todos_syncs` (
   `local_last_anchor` int(11) NOT NULL default '0',
   `remote_last_anchor` char(32) NOT NULL default '',
   PRIMARY KEY  (`device_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `sync_todos_syncs`
@@ -2169,7 +2214,7 @@ CREATE TABLE `td_reminders` (
   `remind_time` int(11) NOT NULL default '0',
   KEY `user_id` (`user_id`),
   KEY `remind_time` (`remind_time`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `td_reminders`
@@ -2188,7 +2233,7 @@ CREATE TABLE `td_settings` (
   `sort_field` varchar(20) NOT NULL default '',
   `sort_order` varchar(20) NOT NULL default '',
   PRIMARY KEY  (`user_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `td_settings`
@@ -2226,7 +2271,7 @@ CREATE TABLE `td_todos` (
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`,`res_user_id`),
   KEY `remind_time` (`reminder`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `td_todos`
@@ -2244,7 +2289,7 @@ CREATE TABLE `tp_mailing_companies` (
   `group_id` int(11) NOT NULL default '0',
   `company_id` int(11) NOT NULL default '0',
   KEY `group_id` (`group_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `tp_mailing_companies`
@@ -2262,7 +2307,7 @@ CREATE TABLE `tp_mailing_contacts` (
   `group_id` int(11) NOT NULL default '0',
   `contact_id` int(11) NOT NULL default '0',
   KEY `group_id` (`group_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `tp_mailing_contacts`
@@ -2283,7 +2328,7 @@ CREATE TABLE `tp_mailing_groups` (
   `acl_write` int(11) NOT NULL default '0',
   `name` varchar(50) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `tp_mailing_groups`
@@ -2301,7 +2346,7 @@ CREATE TABLE `tp_mailing_users` (
   `group_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   KEY `group_id` (`group_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `tp_mailing_users`
@@ -2323,7 +2368,7 @@ CREATE TABLE `tp_templates` (
   `acl_read` int(11) NOT NULL default '0',
   `acl_write` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `tp_templates`
@@ -2341,7 +2386,7 @@ CREATE TABLE `tp_templates_content` (
   `id` int(11) NOT NULL default '0',
   `content` longblob NOT NULL,
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `tp_templates_content`
@@ -2415,16 +2460,17 @@ CREATE TABLE `users` (
   `bank` varchar(50) NOT NULL default '',
   `bank_no` varchar(50) NOT NULL default '',
   `link_id` int(11) NOT NULL,
+  `mtime` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `link_id` (`link_id`),
   KEY `link_id_2` (`link_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `users`
 -- 
 
-INSERT INTO `users` (`id`, `username`, `password`, `enabled`, `authcode`, `first_name`, `middle_name`, `last_name`, `initials`, `title`, `sex`, `birthday`, `email`, `company`, `department`, `function`, `home_phone`, `work_phone`, `fax`, `cellular`, `country`, `state`, `city`, `zip`, `address`, `address_no`, `homepage`, `work_address`, `work_address_no`, `work_zip`, `work_country`, `work_state`, `work_city`, `work_fax`, `acl_id`, `date_format`, `date_seperator`, `time_format`, `thousands_seperator`, `decimal_seperator`, `currency`, `mail_client`, `logins`, `lastlogin`, `registration_time`, `max_rows_list`, `timezone`, `DST`, `start_module`, `language`, `theme`, `first_weekday`, `sort_name`, `use_checkbox_select`, `country_id`, `work_country_id`, `bank`, `bank_no`, `link_id`) VALUES (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', '1', 'jmvnqxuf', 'Group-Office', '', 'Admin', '', '', 'M', '0000-00-00', 'webmaster@example.com', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 3, 'dmY', '-', 'G:i', ',', '.', 'EUR', 1, 19, 1166534991, 1159517603, 15, 1, '1', 'summary', 'nl', 'Default', 1, 'first_name', '0', 0, 0, '', '', 0);
+INSERT INTO `users` (`id`, `username`, `password`, `enabled`, `authcode`, `first_name`, `middle_name`, `last_name`, `initials`, `title`, `sex`, `birthday`, `email`, `company`, `department`, `function`, `home_phone`, `work_phone`, `fax`, `cellular`, `country`, `state`, `city`, `zip`, `address`, `address_no`, `homepage`, `work_address`, `work_address_no`, `work_zip`, `work_country`, `work_state`, `work_city`, `work_fax`, `acl_id`, `date_format`, `date_seperator`, `time_format`, `thousands_seperator`, `decimal_seperator`, `currency`, `mail_client`, `logins`, `lastlogin`, `registration_time`, `max_rows_list`, `timezone`, `DST`, `start_module`, `language`, `theme`, `first_weekday`, `sort_name`, `use_checkbox_select`, `country_id`, `work_country_id`, `bank`, `bank_no`, `link_id`, `mtime`) VALUES (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', '1', 'jmvnqxuf', 'Group-Office', '', 'Admin', '', '', 'M', '0000-00-00', 'webmaster@example.com', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 3, 'dmY', '-', 'G:i', ',', '.', 'EUR', 1, 20, 1174057056, 1159517603, 15, 1, '1', 'summary', 'nl', 'Default', 1, 'first_name', '0', 0, 0, '', '', 8, 1159517603);
 
 -- --------------------------------------------------------
 
@@ -2437,7 +2483,7 @@ CREATE TABLE `users_groups` (
   `group_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`group_id`,`user_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `users_groups`
