@@ -33,6 +33,33 @@
  }
 */
  
+ function trim_lines($text)
+ { 	
+ 	go_log(LOG_DEBUG, $text);
+ 	str_replace("\r\n","\n", $text);
+ 	
+ 	$trimmed='';
+ 	
+ 	$lines = explode("\n", $text);
+ 	foreach($lines as $line)
+ 	{
+ 		if($trimmed=='')
+ 		{
+ 			$trimmed .= $line."\n";
+ 		}elseif(empty($line))
+ 		{
+ 			$trimmed .= "\n";
+ 		}elseif($line[0]!=' ')
+ 		{
+ 			return $text;
+ 		}else{
+ 			$trimmed .= substr($line,1)."\n";
+ 		}
+ 	}
+ 	
+ 	return $trimmed; 	
+ }
+ 
  function record_to_keywords($record)
  {
  	$keywords=array();
