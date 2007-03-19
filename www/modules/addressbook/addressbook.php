@@ -240,7 +240,7 @@ switch($tabstrip->get_active_tab_id())
 		if($GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
 		{
 			load_control('user_autocomplete');
-			$user_autocomplete=new user_autocomplete('user_id',$addressbook['user_id'],'0',$link_back);			
+			$user_autocomplete=new user_autocomplete('user_id',$user_id,'0',$link_back);			
 			
 			$row = new table_row();
 			$row->add_cell(new table_cell($strOwner.':'));
