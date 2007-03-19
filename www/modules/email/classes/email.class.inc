@@ -106,7 +106,21 @@ class email extends db
 			return $this->Record;
 		}else
 		{
-			$this->query("INSERT INTO em_settings (user_id, send_format, add_recievers, add_senders, request_notification, charset) VALUES ('$user_id', 'text/HTML', '0', '0', '0', 'UTF-8')");
+			global $GO_MODULES;
+			
+			$addressbook_id=0;
+			if(isset($GO_MODULES->modules['addressbook']) && $GO_MODULES->modules['addressbook']['read_permission'])
+			{
+				require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc');
+				$ab = new addressbook();
+				
+				if($addressbook=$ab->get_addressbook())
+				{
+					$addressbook_id=$addressbook['id'];
+				}
+			}
+			
+			$this->query("INSERT INTO em_settings (user_id, send_format, add_recievers, add_senders, request_notification, charset, beep, auto_check) VALUES ('$user_id', 'text/HTML', $addressbook_id, '0', '0', 'UTF-8','1','1')");
 			return $this->get_settings($user_id);
 		}
 	}

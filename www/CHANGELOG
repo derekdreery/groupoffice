@@ -17,6 +17,14 @@ TODO for 2.17
 -Reports module to show different queries on addressbook. Can also be used to send
  mailings with MS Office, Open-Office and the GO e-mail client. Replaces old mailing 
  system (Pro only)
+-New e-mail counter always in top menu bar and beep can be disabled when new mail 
+ arrives
+-Option to show attachment paperclips and priorities in e-mail client. Slows it down when
+ enabled!
+-Don't create a personal addressbook by default for everyone.
+-Edit multiple contacts at once
+-Show month name on top of calendar print
+*HTML notes
 
 
 CHANGELOG

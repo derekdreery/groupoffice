@@ -1,5 +1,8 @@
 <?php
-$updates[23] = array();
+$updates[24] = array();
+
+$updates[23][] = "ALTER TABLE `em_settings` ADD `beep` ENUM( '0', '1' ) NOT NULL ,
+ADD `auto_check` ENUM( '0', '1' ) NOT NULL ;";
 
 $updates[22][] = "ALTER TABLE `emFolders` ADD `auto_check` ENUM( '0', '1' ) NOT NULL ;";
 $updates[22][] = "ALTER TABLE `emAccounts` CHANGE `auto_check` `examine_headers` ENUM( '0', '1' ) NOT NULL";

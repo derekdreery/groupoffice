@@ -195,7 +195,7 @@ switch($tabstrip->get_active_tab_id())
 			mkdir_recursive($template_file_path);	
 			$fs->add_share($template['user_id'], $template_file_path, 'template', $template['acl_read'], $template['acl_write']);
 		}
-		require($GO_MODULES->modules['filesystem']['class_path'].'filesystem_list.class.inc');
+		require_once($GO_MODULES->modules['filesystem']['class_path'].'filesystem_list.class.inc');
 
 
 		$fl = new filesystem_list('cms_templatefiles_list', $template_file_path);

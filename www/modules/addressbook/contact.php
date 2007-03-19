@@ -473,9 +473,9 @@ if ($contact_id > 0) {
 				"javascript:popup('".$GO_MODULES->url.'templates/download_oo_template.php?contact_id='.$contact_id."','','');");	
 		}
 
-		if ($contact['email'] != '' && $tp->get_mailing_groups($GO_SECURITY->user_id) && $write_permission) {
+		/*if ($contact['email'] != '' && $tp->get_mailing_groups($GO_SECURITY->user_id) && $write_permission) {
 			$tabstrip->add_tab('mailings', $ab_mailings);
-		}
+		}*/
 	}
 
 

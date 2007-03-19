@@ -64,25 +64,31 @@ $remind_email = false;
 		require_once($GO_CONFIG->class_path.'mail/imap.class.inc');
 		$imap = new imap();
 		$email = new email();
-
-		if(!isset($_SESSION['GO_SESSION']['email_module']['cached']))
-		{
-			$email->cache_accounts($GO_SECURITY->user_id);
-			$_SESSION['GO_SESSION']['email_module']['cached']=true;
-		}else {
-			$email->cache_accounts($GO_SECURITY->user_id,true);
-		}
 		
-		 $_SESSION['GO_SESSION']['email_module']['new']=$email->get_total_unseen($GO_SECURITY->user_id);
-
-
-		if ($_SESSION['GO_SESSION']['email_module']['new'] > 0 && $_SESSION['GO_SESSION']['email_module']['new'] > $_SESSION['GO_SESSION']['email_module']['notified'])
+		$settings = $email->get_settings($GO_SECURITY->user_id);
+		
+		if($settings['auto_check']=='1')
 		{
-			$_SESSION['GO_SESSION']['email_module']['notified']=$_SESSION['GO_SESSION']['email_module']['new'];
-			$remind_email = true;
-		}elseif($_SESSION['GO_SESSION']['email_module']['notified'] >  $_SESSION['GO_SESSION']['email_module']['new'])
-		{
-			$_SESSION['GO_SESSION']['email_module']['notified'] =  $_SESSION['GO_SESSION']['email_module']['new'];
+
+			if(!isset($_SESSION['GO_SESSION']['email_module']['cached']))
+			{
+				$email->cache_accounts($GO_SECURITY->user_id);
+				$_SESSION['GO_SESSION']['email_module']['cached']=true;
+			}else {
+				$email->cache_accounts($GO_SECURITY->user_id,true);
+			}
+			
+			 $_SESSION['GO_SESSION']['email_module']['new']=$email->get_total_unseen($GO_SECURITY->user_id);
+	
+	
+			if ($_SESSION['GO_SESSION']['email_module']['new'] > 0 && $_SESSION['GO_SESSION']['email_module']['new'] > $_SESSION['GO_SESSION']['email_module']['notified'])
+			{
+				$_SESSION['GO_SESSION']['email_module']['notified']=$_SESSION['GO_SESSION']['email_module']['new'];
+				$remind_email = true;
+			}elseif($_SESSION['GO_SESSION']['email_module']['notified'] >  $_SESSION['GO_SESSION']['email_module']['new'])
+			{
+				$_SESSION['GO_SESSION']['email_module']['notified'] =  $_SESSION['GO_SESSION']['email_module']['new'];
+			}
 		}
 	}
 //}
@@ -101,13 +107,15 @@ if ($remind_events)
 <body>
 <?php
 
-if (isset($GO_MODULES->modules['email']) && $GO_MODULES->modules['email']['read_permission'])
+if (isset($GO_MODULES->modules['email']) && $GO_MODULES->modules['email']['read_permission'] && $_SESSION['GO_SESSION']['email_module']['new']>0)
 {
 	echo '<a href="'.$GO_MODULES->modules['email']['url'].'" target="main"><img src="'.$GO_THEME->images['mail'].'" border="0" align="absmiddle" /> '.$_SESSION['GO_SESSION']['email_module']['new'].'</a>';
 }
 
-if($remind_email && isset($_REQUEST['initiated']))
+if($remind_email && isset($_REQUEST['initiated']) && $settings['beep']=='1')
 {
+
+
 	echo '<br /><br /><br /><object width="0" height="0">'.
 		'<param name="movie" value="'.$GO_THEME->sounds['reminder'].'">'.
 		'<param name="loop" value="false">'.
