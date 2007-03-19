@@ -121,5 +121,7 @@ CREATE TABLE `em_settings` (
   `vacation_subject` varchar(100) NOT NULL default '',
   `vacation_text` text NOT NULL,
   `show_preview` enum('0','1') NOT NULL default '1',
+  `beep` enum('0','1') NOT NULL,
+  `auto_check` enum('0','1') NOT NULL,
   PRIMARY KEY  (`user_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM ;
