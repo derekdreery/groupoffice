@@ -25,7 +25,7 @@ CREATE TABLE `ab_addressbooks` (
   `acl_write` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `ab_addressbooks`
@@ -70,7 +70,7 @@ CREATE TABLE `ab_companies` (
   PRIMARY KEY  (`id`),
   KEY `addressbook_id` (`addressbook_id`),
   KEY `link_id` (`link_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `ab_companies`
@@ -124,7 +124,7 @@ CREATE TABLE `ab_contacts` (
   PRIMARY KEY  (`id`),
   KEY `user_id` (`addressbook_id`),
   KEY `link_id` (`link_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `ab_contacts`
@@ -147,7 +147,7 @@ CREATE TABLE `ab_settings` (
   `search_addressbook_id` int(11) NOT NULL default '0',
   `addressbook_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `ab_settings`
@@ -171,7 +171,7 @@ CREATE TABLE `ab_zipcodes` (
   `country` varchar(100) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `zip` (`zip`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `ab_zipcodes`
@@ -190,7 +190,7 @@ CREATE TABLE `acl` (
   `user_id` int(11) NOT NULL default '0',
   `group_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`acl_id`,`user_id`,`group_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `acl`
@@ -293,7 +293,7 @@ CREATE TABLE `acl_items` (
   `user_id` int(11) NOT NULL default '0',
   `description` varchar(50) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `acl_items`
@@ -360,7 +360,7 @@ CREATE TABLE `cal_backgrounds` (
   `color` char(6) NOT NULL,
   `name` varchar(100) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_backgrounds`
@@ -383,7 +383,7 @@ CREATE TABLE `cal_calendar_backgrounds` (
   `end_time` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `calendar_id` (`calendar_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_calendar_backgrounds`
@@ -411,7 +411,7 @@ CREATE TABLE `cal_calendars` (
   PRIMARY KEY  (`id`),
   KEY `group_id` (`group_id`),
   KEY `group_id_2` (`group_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_calendars`
@@ -475,7 +475,7 @@ CREATE TABLE `cal_events` (
   KEY `link_id` (`link_id`),
   KEY `link_id_2` (`link_id`),
   KEY `status_id` (`status_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_events`
@@ -494,7 +494,7 @@ CREATE TABLE `cal_events_calendars` (
   `event_id` int(11) NOT NULL default '0',
   `sid` char(32) NOT NULL default '',
   KEY `calendar_id` (`calendar_id`,`event_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_events_calendars`
@@ -514,7 +514,7 @@ CREATE TABLE `cal_exceptions` (
   `time` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `event_id` (`event_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_exceptions`
@@ -532,7 +532,7 @@ CREATE TABLE `cal_group_admins` (
   `group_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`group_id`,`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_group_admins`
@@ -552,7 +552,7 @@ CREATE TABLE `cal_groups` (
   `custom_fields` text NOT NULL,
   `acl_write` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_groups`
@@ -575,7 +575,7 @@ CREATE TABLE `cal_holidays` (
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`),
   KEY `user_id_2` (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_holidays`
@@ -613,7 +613,7 @@ CREATE TABLE `cal_participants` (
   `status` enum('0','1','2') NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `id` (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_participants`
@@ -638,7 +638,7 @@ CREATE TABLE `cal_reminders` (
   KEY `remind_time_2` (`remind_time`),
   KEY `email_sent` (`email_sent`),
   KEY `email_sent_2` (`email_sent`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_reminders`
@@ -669,7 +669,7 @@ CREATE TABLE `cal_settings` (
   `email_changes` enum('0','1') NOT NULL default '1',
   `email_reminders` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_settings`
@@ -690,7 +690,7 @@ CREATE TABLE `cal_statuses` (
   `name` varchar(50) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `type` (`type`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_statuses`
@@ -728,7 +728,7 @@ CREATE TABLE `cal_views` (
   `acl_write` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_views`
@@ -747,7 +747,7 @@ CREATE TABLE `cal_views_calendars` (
   `calendar_id` int(11) NOT NULL default '0',
   `background` char(6) NOT NULL default 'CCFFCC',
   PRIMARY KEY  (`view_id`,`calendar_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_views_calendars`
@@ -770,7 +770,7 @@ CREATE TABLE `cms_comments` (
   `ctime` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `file_id` (`file_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cms_comments`
@@ -807,7 +807,7 @@ CREATE TABLE `cms_files` (
   KEY `folder_id` (`folder_id`),
   FULLTEXT KEY `name` (`name`),
   FULLTEXT KEY `content` (`content`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cms_files`
@@ -840,7 +840,7 @@ CREATE TABLE `cms_folders` (
   `acl` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `parent_id` (`parent_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cms_folders`
@@ -861,7 +861,7 @@ CREATE TABLE `cms_galleries` (
   `site_id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cms_galleries`
@@ -889,7 +889,7 @@ CREATE TABLE `cms_languages` (
   `language_code` char(2) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `site_id` (`site_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cms_languages`
@@ -908,7 +908,7 @@ CREATE TABLE `cms_settings` (
   `sort_field` varchar(20) NOT NULL default '',
   `sort_order` varchar(20) NOT NULL default '',
   PRIMARY KEY  (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cms_settings`
@@ -937,7 +937,7 @@ CREATE TABLE `cms_sites` (
   `start_file_id` int(11) NOT NULL,
   `language` char(10) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cms_sites`
@@ -961,7 +961,7 @@ CREATE TABLE `cms_template_items` (
   PRIMARY KEY  (`id`),
   KEY `template_id` (`template_id`),
   KEY `page` (`page`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cms_template_items`
@@ -991,7 +991,7 @@ CREATE TABLE `cms_templates` (
   `fckeditor_styles` text NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cms_templates`
@@ -1012,7 +1012,7 @@ CREATE TABLE `countries` (
   `iso_code_2` char(2) NOT NULL default '',
   `iso_code_3` char(3) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `countries`
@@ -1269,7 +1269,7 @@ CREATE TABLE `db_sequence` (
   `seq_name` varchar(50) NOT NULL default '',
   `nextid` int(11) NOT NULL default '0',
   PRIMARY KEY  (`seq_name`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `db_sequence`
@@ -1327,7 +1327,7 @@ CREATE TABLE `emAccounts` (
   `examine_headers` enum('0','1') NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `emAccounts`
@@ -1350,7 +1350,7 @@ CREATE TABLE `emFilters` (
   `priority` int(11) NOT NULL default '0',
   `mark_as_read` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `emFilters`
@@ -1379,7 +1379,7 @@ CREATE TABLE `emFolders` (
   PRIMARY KEY  (`id`),
   KEY `account_id` (`account_id`),
   KEY `parent_id` (`parent_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `emFolders`
@@ -1403,7 +1403,7 @@ CREATE TABLE `em_links` (
   `path` varchar(255) NOT NULL,
   PRIMARY KEY  (`link_id`),
   KEY `account_id` (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `em_links`
@@ -1428,14 +1428,16 @@ CREATE TABLE `em_settings` (
   `vacation_subject` varchar(100) NOT NULL default '',
   `vacation_text` text NOT NULL,
   `show_preview` enum('0','1') NOT NULL default '1',
+  `beep` enum('0','1') NOT NULL,
+  `auto_check` enum('0','1') NOT NULL,
   PRIMARY KEY  (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `em_settings`
 -- 
 
-INSERT INTO `em_settings` (`user_id`, `send_format`, `add_recievers`, `add_senders`, `request_notification`, `charset`, `enable_vacation`, `vacation_subject`, `vacation_text`, `show_preview`) VALUES (1, 'text/HTML', 0, 0, '0', 'UTF-8', '0', '', '', '1');
+INSERT INTO `em_settings` (`user_id`, `send_format`, `add_recievers`, `add_senders`, `request_notification`, `charset`, `enable_vacation`, `vacation_subject`, `vacation_text`, `show_preview`, `beep`, `auto_check`) VALUES (1, 'text/HTML', 0, 0, '0', 'UTF-8', '0', '', '', '1','1','1');
 
 -- --------------------------------------------------------
 
@@ -1452,7 +1454,7 @@ CREATE TABLE `fs_links` (
   `mtime` int(11) NOT NULL,
   PRIMARY KEY  (`link_id`),
   KEY `path` (`path`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `fs_links`
@@ -1471,7 +1473,7 @@ CREATE TABLE `fs_settings` (
   `notify` enum('0','1') NOT NULL,
   `open_properties` enum('0','1') NOT NULL,
   PRIMARY KEY  (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `fs_settings`
@@ -1498,7 +1500,7 @@ CREATE TABLE `fs_shares` (
   KEY `type` (`type`),
   KEY `link_id` (`link_id`),
   KEY `link_id_2` (`link_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `fs_shares`
@@ -1522,7 +1524,7 @@ CREATE TABLE `fs_status_history` (
   `comments` text NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `link_id` (`link_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `fs_status_history`
@@ -1541,7 +1543,7 @@ CREATE TABLE `fs_statuses` (
   `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `fs_statuses`
@@ -1562,7 +1564,7 @@ CREATE TABLE `groups` (
   `name` varchar(50) NOT NULL default '',
   `user_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `groups`
@@ -1590,7 +1592,7 @@ CREATE TABLE `ig_galleries` (
   `acl_read` int(11) NOT NULL,
   `acl_write` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `ig_galleries`
@@ -1615,7 +1617,7 @@ CREATE TABLE `ig_images` (
   `height` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `site_id` (`gallery_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `ig_images`
@@ -1638,7 +1640,7 @@ CREATE TABLE `links` (
   KEY `type2` (`type2`),
   KEY `link_id1` (`link_id1`),
   KEY `link_id2` (`link_id2`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `links`
@@ -1661,7 +1663,7 @@ CREATE TABLE `modules` (
   `acl_read` int(11) NOT NULL default '0',
   `acl_write` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `modules`
@@ -1704,7 +1706,7 @@ CREATE TABLE `no_notes` (
   KEY `user_id` (`user_id`),
   KEY `file_path` (`file_path`),
   KEY `link_id` (`link_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `no_notes`
@@ -1723,7 +1725,7 @@ CREATE TABLE `no_settings` (
   `sort_field` varchar(20) NOT NULL default '',
   `sort_order` varchar(20) NOT NULL default '',
   PRIMARY KEY  (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `no_settings`
@@ -1745,7 +1747,7 @@ CREATE TABLE `pmFees` (
   `time` int(11) NOT NULL default '0',
   `acl_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `pmFees`
@@ -1775,7 +1777,7 @@ CREATE TABLE `pmHours` (
   `int_fee_value` double NOT NULL default '0',
   `event_id` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `pmHours`
@@ -1818,7 +1820,7 @@ CREATE TABLE `pmProjects` (
   KEY `contact_id` (`contact_id`),
   KEY `user_id` (`user_id`),
   KEY `link_id` (`link_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `pmProjects`
@@ -1836,7 +1838,7 @@ CREATE TABLE `pmStatuses` (
   `id` int(11) NOT NULL default '0',
   `name` varchar(50) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `pmStatuses`
@@ -1860,7 +1862,7 @@ CREATE TABLE `pmTimers` (
   `start_time` int(11) NOT NULL default '0',
   `project_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `pmTimers`
@@ -1879,7 +1881,7 @@ CREATE TABLE `pm_settings` (
   `show_projects` tinyint(4) NOT NULL default '0',
   `fee_id` int(11) NOT NULL,
   PRIMARY KEY  (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `pm_settings`
@@ -1905,7 +1907,7 @@ CREATE TABLE `pm_template_events` (
   `reminder` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `template_id` (`template_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `pm_template_events`
@@ -1926,7 +1928,7 @@ CREATE TABLE `pm_templates` (
   `acl_read` int(11) NOT NULL default '0',
   `acl_write` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `pm_templates`
@@ -1954,7 +1956,7 @@ CREATE TABLE `se_cache` (
   `keywords` text NOT NULL,
   PRIMARY KEY  (`link_id`,`user_id`),
   KEY `name` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `se_cache`
@@ -1973,7 +1975,7 @@ CREATE TABLE `se_last_sync_times` (
   `module` varchar(50) NOT NULL,
   `last_sync_time` int(11) NOT NULL,
   PRIMARY KEY  (`user_id`,`module`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `se_last_sync_times`
@@ -1992,7 +1994,7 @@ CREATE TABLE `settings` (
   `name` varchar(50) NOT NULL default '',
   `value` text NOT NULL,
   PRIMARY KEY  (`user_id`,`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `settings`
@@ -2031,7 +2033,7 @@ CREATE TABLE `sum_announcements` (
   `content` text NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `due_time` (`due_time`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `sum_announcements`
@@ -2050,7 +2052,7 @@ CREATE TABLE `sync_contacts_maps` (
   `contact_id` int(11) NOT NULL default '0',
   `remote_id` varchar(255) NOT NULL,
   PRIMARY KEY  (`device_id`,`contact_id`,`remote_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `sync_contacts_maps`
@@ -2069,7 +2071,7 @@ CREATE TABLE `sync_contacts_syncs` (
   `local_last_anchor` int(11) NOT NULL default '0',
   `remote_last_anchor` char(32) NOT NULL default '',
   PRIMARY KEY  (`device_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `sync_contacts_syncs`
@@ -2090,7 +2092,7 @@ CREATE TABLE `sync_datastores` (
   `ctype` varchar(50) NOT NULL default '',
   `ctype_version` varchar(10) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `sync_datastores`
@@ -2112,7 +2114,7 @@ CREATE TABLE `sync_devices` (
   `user_id` int(11) NOT NULL default '0',
   `uri` varchar(128) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `sync_devices`
@@ -2132,7 +2134,7 @@ CREATE TABLE `sync_events_maps` (
   `remote_id` varchar(255) NOT NULL,
   `todo` enum('0','1') NOT NULL,
   PRIMARY KEY  (`device_id`,`event_id`,`remote_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `sync_events_maps`
@@ -2151,7 +2153,7 @@ CREATE TABLE `sync_events_syncs` (
   `local_last_anchor` int(11) NOT NULL default '0',
   `remote_last_anchor` char(32) NOT NULL default '',
   PRIMARY KEY  (`device_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `sync_events_syncs`
@@ -2174,7 +2176,7 @@ CREATE TABLE `sync_settings` (
   `max_days_old` tinyint(4) NOT NULL,
   `delete_old_events` enum('0','1') NOT NULL,
   PRIMARY KEY  (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `sync_settings`
@@ -2194,7 +2196,7 @@ CREATE TABLE `sync_todos_syncs` (
   `local_last_anchor` int(11) NOT NULL default '0',
   `remote_last_anchor` char(32) NOT NULL default '',
   PRIMARY KEY  (`device_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `sync_todos_syncs`
@@ -2214,7 +2216,7 @@ CREATE TABLE `td_reminders` (
   `remind_time` int(11) NOT NULL default '0',
   KEY `user_id` (`user_id`),
   KEY `remind_time` (`remind_time`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `td_reminders`
@@ -2233,7 +2235,7 @@ CREATE TABLE `td_settings` (
   `sort_field` varchar(20) NOT NULL default '',
   `sort_order` varchar(20) NOT NULL default '',
   PRIMARY KEY  (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `td_settings`
@@ -2271,7 +2273,7 @@ CREATE TABLE `td_todos` (
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`,`res_user_id`),
   KEY `remind_time` (`reminder`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `td_todos`
@@ -2289,7 +2291,7 @@ CREATE TABLE `tp_mailing_companies` (
   `group_id` int(11) NOT NULL default '0',
   `company_id` int(11) NOT NULL default '0',
   KEY `group_id` (`group_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `tp_mailing_companies`
@@ -2307,7 +2309,7 @@ CREATE TABLE `tp_mailing_contacts` (
   `group_id` int(11) NOT NULL default '0',
   `contact_id` int(11) NOT NULL default '0',
   KEY `group_id` (`group_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `tp_mailing_contacts`
@@ -2328,7 +2330,7 @@ CREATE TABLE `tp_mailing_groups` (
   `acl_write` int(11) NOT NULL default '0',
   `name` varchar(50) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `tp_mailing_groups`
@@ -2346,7 +2348,7 @@ CREATE TABLE `tp_mailing_users` (
   `group_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   KEY `group_id` (`group_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `tp_mailing_users`
@@ -2368,7 +2370,7 @@ CREATE TABLE `tp_templates` (
   `acl_read` int(11) NOT NULL default '0',
   `acl_write` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `tp_templates`
@@ -2386,7 +2388,7 @@ CREATE TABLE `tp_templates_content` (
   `id` int(11) NOT NULL default '0',
   `content` longblob NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `tp_templates_content`
@@ -2464,7 +2466,7 @@ CREATE TABLE `users` (
   PRIMARY KEY  (`id`),
   KEY `link_id` (`link_id`),
   KEY `link_id_2` (`link_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `users`
@@ -2483,7 +2485,7 @@ CREATE TABLE `users_groups` (
   `group_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`group_id`,`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `users_groups`
