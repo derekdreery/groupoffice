@@ -140,7 +140,7 @@ switch($post_action)
 		$p->set_attribute('style','margin-bottom:2px;margin-top:2px;');
 		$form->add_html_element($p);
 
-		$form->add_html_element($con_list);
+		//$form->add_html_element($datatable);
 		break;
 
 	case 'companies':

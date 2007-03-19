@@ -1,6 +1,6 @@
 <?php
 
-$GO_MODULES22=new GO_MODULES();
+$GO_MODULES2=new GO_MODULES();
 
 if(file_exists($GO_CONFIG->root_path.'LICENSE.PRO'))
 {

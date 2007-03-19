@@ -114,6 +114,8 @@ if ($task == 'import') {
 
 							if ($company_name != '') {
 								$contact['company_id'] = $ab->get_company_id_by_name($company_name, $_POST['addressbook_id']);
+							}else {
+								$contact['company_id']=0;
 							}
 							$contact['addressbook_id'] = $_POST['addressbook_id'];
 							$ab->add_contact($contact);
