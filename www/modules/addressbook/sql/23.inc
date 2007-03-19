@@ -1,32 +1,34 @@
 <?php
 
+$GO_MODULES22=new GO_MODULES();
+
 if(file_exists($GO_CONFIG->root_path.'LICENSE.PRO'))
 {
-	if(!isset($GO_MODULES->modules['custom_fields']))
+	if(!isset($GO_MODULES22->modules['custom_fields']))
 	{
 		$module_id='custom_fields';
 		$acl_read = $GO_SECURITY->get_new_acl('Module read: '.$module_id, 0);
 		$acl_write = $GO_SECURITY->get_new_acl('Module write: '.$module_id, 0);		
-		$module_info = $GO_MODULES->get_module_info($module_id);
-		$GO_MODULES->add_module($module_id, $module_info['version'], $acl_read, $acl_write, $module_info['sort_order'], true);
+		$module_info = $GO_MODULES2->get_module_info($module_id);
+		$GO_MODULES2->add_module($module_id, $module_info['version'], $acl_read, $acl_write, $module_info['sort_order'], true);
 	}
 	
-	if(!isset($GO_MODULES->modules['reports']))
+	if(!isset($GO_MODULES2->modules['reports']))
 	{
 		$module_id='reports';
 		$acl_read = $GO_SECURITY->get_new_acl('Module read: '.$module_id, 0);
 		$acl_write = $GO_SECURITY->get_new_acl('Module write: '.$module_id, 0);		
-		$module_info = $GO_MODULES->get_module_info($module_id);
-		$GO_MODULES->add_module($module_id, $module_info['version'], $acl_read, $acl_write, $module_info['sort_order'], false);
+		$module_info = $GO_MODULES2->get_module_info($module_id);
+		$GO_MODULES2->add_module($module_id, $module_info['version'], $acl_read, $acl_write, $module_info['sort_order'], false);
 	}
-	$GO_MODULES->load_modules();
+	$GO_MODULES2->load_modules();
 	
 	require($GO_LANGUAGE->get_language_file('reports'));
 	
-	require($GO_MODULES->modules['custom_fields']['class_path'].'custom_fields.class.inc');
+	require($GO_MODULES2->modules['custom_fields']['class_path'].'custom_fields.class.inc');
 	$cf = new custom_fields();
 	
-	require($GO_MODULES->modules['reports']['class_path'].'reports.class.inc');
+	require($GO_MODULES2->modules['reports']['class_path'].'reports.class.inc');
 	$reports = new reports();
 	
 	$db2 = new db();
