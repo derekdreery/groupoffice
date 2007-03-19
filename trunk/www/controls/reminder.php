@@ -50,57 +50,6 @@ $form = new form('reminder_form');
 $form->add_html_element(new input('hidden', 'task','',false));
 $form->add_html_element(new input('hidden', 'event_id','',false));
 
-if ($GO_MODULES->modules['email'] && $GO_MODULES->modules['email']['read_permission'] &&
-$_SESSION['new_mail'] > $_SESSION['notified_new_mail'])
-{
-	$stay_open = true;
-	require_once($GO_LANGUAGE->get_language_file('email'));
-
-	$em_table = new table();
-	$em_table->set_attribute('style', 'border:0px;margin-top:10px;');
-	
-	$img = new image('email');
-	$img->set_attribute('style', 'border:0px;margin-right:10px;width:32px;height:32px');
-	
-	$em_cell = new table_cell();
-	$em_cell->set_attribute('valign','top');
-	$em_cell->add_html_element($img);
-	
-	$em_row = new table_row();
-	$em_row->add_cell($em_cell);
-	
-	$link = new hyperlink("javascript:goto_url('".$GO_MODULES->modules['email']['url']."');", $lang_modules['email']);
-	
-	$h2 = new html_element('h2',$link->get_html());
-	$em_row->add_cell(new table_cell($h2->get_html()));
-	$em_table->add_row($em_row);
-	
-	$em_row = new table_row();
-	$em_row->add_cell(new table_cell('&nbsp;'));		
-	
-	$link = new hyperlink("javascript:goto_url('".$GO_MODULES->modules['email']['url']."');",'');
-
-	switch($_SESSION['new_mail'])
-	{
-		case 0:
-			$link->innerHTML = $ml_no_new_mail;
-		break;
-		case 1:
-			$link->innerHTML = $ml_you_have.' <b>'.$_SESSION['new_mail'].'</b> '.$ml_new_mail_single;
-		break;
-		
-		default:
-			$link->innerHTML = $ml_you_have.' <b>'.$_SESSION['new_mail'].'</b> '.$ml_new_mail_multiple;
-		break;
-	}
-	$_SESSION['notified_new_mail'] = $_SESSION['new_mail'];
-	$em_row->add_cell(new table_cell($link->get_html()));	
-	$em_table->add_row($em_row);
-	
-	$form->add_html_element($em_table);
-
-	$_SESSION['notified_new_mail'] = $_SESSION['new_mail'];
-}
 
 if ($GO_MODULES->modules['calendar'] && $GO_MODULES->modules['calendar']['read_permission'])
 {

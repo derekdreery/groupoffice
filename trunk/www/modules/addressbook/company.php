@@ -260,12 +260,12 @@ if ($company_id > 0 && $company = $ab->get_company($company_id)) {
 	$tabstrip = new tabstrip('company_tabstrip_'.$company_id, $strCompany.' '.$ab_id.': '.$company_id, '120', 'company_form', 'vertical');
 
 	$tabstrip->add_tab('profile', $ab_company_properties);
-	if ($templates_plugin) {
+	/*if ($templates_plugin) {
 
 		if ($company['email'] != '' && $tp->get_mailing_groups($GO_SECURITY->user_id) && $write_permission) {
 			$tabstrip->add_tab('mailings', $ab_mailings);
 		}
-	}
+	}*/
 
 	$tabstrip->add_tab('contacts', $ab_employees);
 	$tabstrip->add_tab('links', $strLinks);

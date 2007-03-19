@@ -24,7 +24,7 @@ class translate extends db
 	{
 		global $GO_CONFIG, $GO_CONFIG;
 
-		require($GO_CONFIG->class_path.'filesystem.class.inc');
+		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 		$fs = new filesystem(true);
 
 		$folders = $fs->get_folders_sorted($GO_CONFIG->root_path.'language');

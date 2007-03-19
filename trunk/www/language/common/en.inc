@@ -369,7 +369,7 @@ $cmdUpload='Upload';
 $cmdAttachFile='Attach file';
 
 
-$search_text = 'Enter search phrase';
+$search_text = '<b>Tip:</b> Include the the type (contact, company, project etc.) of the item you are looking for in the search phrase if you get too many results';
 $search_global='Search Group-Office';
 $search_results='results';
 $search_result='result';

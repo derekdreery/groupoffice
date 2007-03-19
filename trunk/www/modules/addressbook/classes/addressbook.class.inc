@@ -339,8 +339,10 @@ popup.focus();
 		{
 			global $GO_SECURITY, $GO_USERS;
 
-			$sql = "SELECT * FROM ab_addressbooks WHERE user_id=".$GO_SECURITY->user_id;
-			$this->query($sql);
+			//$sql = "SELECT * FROM ab_addressbooks WHERE user_id=".$GO_SECURITY->user_id;
+			//$this->query($sql);
+			
+			$this->get_writable_addressbooks($GO_SECURITY->user_id);
 
 			if($this->next_record())
 			{
@@ -1140,7 +1142,7 @@ popup.focus();
 
 		$GO_LINKS->delete_link($company['link_id']);
 
-		require($GO_CONFIG->class_path.'filesystem.class.inc');
+		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 		$fs = new filesystem(true);
 		$fs->delete($GO_CONFIG->file_storage_path.'companies/'.$company_id.'/');
 

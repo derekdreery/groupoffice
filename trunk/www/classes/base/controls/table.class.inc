@@ -53,7 +53,7 @@ require_once($GO_CONFIG->class_path.'base/controls/html_element.class.inc');
 	
 	function add_row($row)
 	{
-		$row->table= &$this;
+		//$row->table= &$this;
 		
 		if($this->hover_effect)
 		{

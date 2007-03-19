@@ -222,3 +222,6 @@ $ml_keep='Keep';
 $ml_examine_headers='Show paperclip when a message has attachments and the message priority in messages listing. Warning! This slows down the viewing of the message list.';
 $ml_show_attachments='Show attachments and priorities (slower)';
 $ml_unknown_reciepent='The reciepent is unknown. Please complete the reciepent\'s profile.';
+
+$ml_auto_check='Check if there are new messages automatically';
+$ml_beep='Beep on new e-mail';

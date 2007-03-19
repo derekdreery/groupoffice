@@ -401,16 +401,30 @@ if(!$print)
 	$row->add_cell($cell);
 }else
 {
+	
+	
+	
 	if($view_id > 0)
 	{
 		$calendars = $cal->get_view_calendars($view_id);
 		$view = $cal->get_view($view_id);
-		$form->add_html_element(new html_element('h1', $view['name']));
+		$h1 = new html_element('h1', $view['name']);
+		
 	}else
 	{
 		$calendar = $cal->get_calendar($calendar_id);
-		$form->add_html_element(new html_element('h1', $calendar['name']));
+		$h1 = new html_element('h1', $calendar['name']);
 	}
+	
+	if($cal_settings['show_days'] == '31')
+	{
+		
+		$h1 ->innerHTML .= ' - '.$months[$cal_view->clicked_month-1].', '.$cal_view->clicked_year;
+		
+	}
+	
+	$form->add_html_element($h1);
+	
 	$table = new table();
 	$table->set_attribute('style','width:100%');
 	$row = new table_row();

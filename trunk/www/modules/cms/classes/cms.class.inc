@@ -77,7 +77,7 @@ class cms extends db
 		
 		$plugins = array();
 		
-		require($GO_CONFIG->class_path.'filesystem.class.inc');
+		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 		$fs = new filesystem();
 		
 		$files = $fs->get_files($GO_MODULES->modules['cms']['path'].'plugins');
