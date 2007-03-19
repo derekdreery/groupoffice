@@ -2541,7 +2541,7 @@ class calendar extends db
 
 		if(isset($object['DESCRIPTION']['params']['ENCODING']) && $object['DESCRIPTION']['params']['ENCODING'] == 'QUOTED-PRINTABLE')
 		{
-			$event['description'] = quoted_printable_decode($event['description']);
+			$event['description'] = trim_lines(quoted_printable_decode(trim_lines($event['description'])));
 		}
 		$event['location'] = isset($object['LOCATION']['value']) ? trim($object['LOCATION']['value']) : '';
 		if(isset($object['LOCATION']['params']['ENCODING']) && $object['LOCATION']['params']['ENCODING'] == 'QUOTED-PRINTABLE')
@@ -2662,7 +2662,9 @@ class calendar extends db
 
 			//for Nokia. It doesn't send all day event in any way. If the local times are equal and the
 			//time is 0:00 hour then this is probably an all day event.
-			if(date('G', gmt_to_local_time($event['start_time']))==0 && ($event['end_time'] == $event['start_time'] || date('G', gmt_to_local_time($event['end_time']))==23))
+			
+			
+			if(date('G', gmt_to_local_time($event['start_time']))==0 && ($event['end_time'] == $event['start_time'] || date('G', gmt_to_local_time($event['end_time']))==23 || date('G', gmt_to_local_time($event['end_time']))==0))
 			{
 				$event['all_day_event'] = '1';
 				//$event['start_time'] = gmt_to_local_time($event['start_time']);

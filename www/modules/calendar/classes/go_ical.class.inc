@@ -167,7 +167,7 @@ class go_ical extends calendar
 		if($value_part != $qp_value_part)
 		{
 			$name_part .= ';ENCODING=QUOTED-PRINTABLE;CHARSET='.$charset.":=\n";
-			$qp_value_part = ' '.str_replace("\n", "\n ", $qp_value_part);
+			//$qp_value_part = ' '.str_replace("\n", "\n ", $qp_value_part);
 			$qp_value_part = str_replace('=0A', "=0D=0A", $qp_value_part)."\n";
 			
 			return explode("\n", $name_part.$qp_value_part);
@@ -237,7 +237,8 @@ class go_ical extends calendar
 			{
 				$line = "DTEND:";				
 			}
-			$line .= date($this->datetime_format, $event['end_time']+$timezone_offset+59);
+			//was 59 before nexthaus
+			$line .= date($this->datetime_format, $event['end_time']+$timezone_offset+60);
 			if(!$this->local_times) $line .= "Z";
 			$lines[] = $line;
 			
