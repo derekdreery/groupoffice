@@ -29,8 +29,8 @@ class cms_site extends cms {
 
 	var $return_to;
 	
-	var $previous_file_id=null;
-	var $next_file_id=null;
+	var $previous_file=null;
+	var $next_file=null;
 
 	var $tags = array (
 	'php', //important as first tag so it can produce tags that will be processed
@@ -1787,11 +1787,11 @@ class cms_site extends cms {
 			{
 				if(isset($files[$i-1]))
 				{
-					$this->previous_file_id=$files[$i-1]['id'];
+					$this->previous_file=$files[$i-1];
 				}
 				if(isset($files[$i+1]))
 				{
-					$this->next_file_id=$files[$i+1]['id'];
+					$this->next_file=$files[$i+1];
 				}
 				break;				
 			}
@@ -1803,20 +1803,20 @@ class cms_site extends cms {
 	function print_nextfile($attributes) {
 		$template_name = isset ($attributes['template']) ? $attributes['template'] : '';
 		$class = isset ($attributes['class']) ? $attributes['class'] : '';
-		$text = isset ($attributes['text']) ? $attributes['text'] : '';
-		$print_rootfolders = isset ($attributes['print_rootfolders']) ? $attributes['print_rootfolders'] : 'true';
-
+		
 		$nextpage = '';
 		$template = $this->get_template_item_by_name($this->site['template_id'], $template_name);
 		
-		if(!isset($this->next_file_id))
+		if(!isset($this->next_file))
 		{
 			$this->get_next_previous_files();
 		}
 
-		if ($this->next_file_id>0) {
+		if (is_array($this->next_file)) {
 			
-			$nextpage = '<a class="'.$class.'" href="'.$this->create_url($this->folder_id, $this->next_file_id).'">'.$text.'</a>';
+			$text = isset ($attributes['text']) ? $attributes['text'] : strip_extension($this->next_file['name']);
+			
+			$nextpage = '<a class="'.$class.'" href="'.$this->create_url($this->folder_id, $this->next_file['id']).'">'.$text.'</a>';
 			if ($template) {
 				$template_content = $this->parse_template($template['content']);
 				$nextpage = str_replace($this->get_tag('content', $template_content), $nextpage, $template_content);
@@ -1827,20 +1827,21 @@ class cms_site extends cms {
 	
 	function print_previousfile($attributes) {
 		$template_name = isset ($attributes['template']) ? $attributes['template'] : '';
-		$class = isset ($attributes['class']) ? $attributes['class'] : '';
-		$text = isset ($attributes['text']) ? $attributes['text'] : '';
-		$print_rootfolders = isset ($attributes['print_rootfolders']) ? $attributes['print_rootfolders'] : 'true';
-
+		$class = isset ($attributes['class']) ? $attributes['class'] : '';		
+		
 		$previouspage = '';
 		$template = $this->get_template_item_by_name($this->site['template_id'], $template_name);
 		
-		if(!isset($this->previous_file_id))
+		if(!isset($this->previous_file))
 		{
 			$this->get_next_previous_files();
 		}
 
-		if ($this->previous_file_id>0) {
-			$previouspage = '<a class="'.$class.'" href="'.$this->create_url($this->folder_id, $this->previous_file_id).'">'.$text.'</a>';
+		if (is_array($this->previous_file)) {
+			
+			$text = isset ($attributes['text']) ? $attributes['text'] : strip_extension($this->previous_file['name']);
+			
+			$previouspage = '<a class="'.$class.'" href="'.$this->create_url($this->folder_id, $this->previous_file['id']).'">'.$text.'</a>';
 			if ($template) {
 				$template_content = $this->parse_template($template['content']);
 				$previouspage = str_replace($this->get_tag('content', $template_content), $previouspage, $template_content);
