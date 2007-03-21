@@ -122,7 +122,12 @@ class cms_search {
 				$keywords = explode(' ', $this->query);
 				foreach($keywords as $keyword)
 				{				
-					$description=preg_replace("#\b(".$keyword.")\b#si",'<span style="font-style:italic; font-weight:bold">\\0</span>',$description);
+					$description=preg_replace("#(".$keyword.")#si",'<span style="font-style:italic; font-weight:bold">\\0</span>',$description);
+					$keyword2 = htmlspecialchars($keyword);
+					if($keyword!=$keyword2)
+					{
+						$description=preg_replace("#(".$keyword2.")#si",'<span style="font-style:italic; font-weight:bold">\\0</span>',$description);
+					}
 				}
 
 				//$description = str_replace(htmlspecialchars($this->query), '<span style="font-style:italic; font-weight:bold">'.htmlspecialchars($this->query).'</span>', $description);

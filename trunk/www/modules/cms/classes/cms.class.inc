@@ -1079,23 +1079,30 @@ class cms extends db
 		{
 			$sql .= ")";
 		}
-
+*/
 		
-		$sql = "SELECT * FROM cms_files WHERE (extension='html' OR extension='htm') AND folder_id='$folder_id' AND (content LIKE '".$search_word."'";
-
-		$search_word2 = htmlspecialchars($search_word);
-		if($search_word2 != $search_word)
+		$sql = "SELECT * FROM cms_files WHERE (extension='html' OR extension='htm') AND folder_id='$folder_id'";
+		
+		$allkeywords=array();
+		$keywords= explode(' ', $search_word);
+		foreach($keywords as $keyword)
 		{
-		$sql .= " OR content LIKE '".$search_word2."')";
-		}else
+			
+			$keyword2 = htmlspecialchars($keyword);
+			$sql_str='content LIKE \'%'.$keyword.'%\'';
+			if($keyword2 != $keyword)
+			{
+				$sql_str='('.$sql_str.' OR content LIKE \'%'.$keyword2.'%\')';
+			}
+			$allkeywords[]=$sql_str;
+		}
+		
+		if(count($allkeywords))
 		{
-		$sql .= ")";
-		}*/
-		
-		$sql = "SELECT * FROM cms_files WHERE folder_id='$folder_id' AND MATCH (content) AGAINST ('".$search_word."');";
+			$sql .= ' AND '.implode(' AND ',$allkeywords);
+		}
+	
 
-		
-		//echo $sql;
 		$this->query($sql);
 
 		while ($this->next_record())
