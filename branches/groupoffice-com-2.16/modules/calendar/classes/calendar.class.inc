@@ -2612,12 +2612,14 @@ class calendar extends db
 				$event['end_time'] = $event['start_time']+86340;
 			}
 
-			if(isset($object['CLASS']['value']))
-			{
-				if($object['CLASS']['value'] == 'PRIVATE')
-				{
-					$event['permissions'] = PRIVATE_EVENT;
-				}
+			if(isset($object['CLASS']['value']) && $object['CLASS']['value'] == 'PRIVATE')
+			{	
+				$event['permissions'] = PRIVATE_EVENT;				
+			}else {
+				global $GO_SECURITY;
+				
+				$cal_settings = $this->get_settings($GO_SECURITY->user_id);
+				$event['permissions'] = $cal_settings['permissions'];
 			}
 
 
