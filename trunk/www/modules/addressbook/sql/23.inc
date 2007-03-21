@@ -4,7 +4,7 @@ $GO_MODULES2=new GO_MODULES();
 
 if(file_exists($GO_CONFIG->root_path.'LICENSE.PRO'))
 {
-	if(!isset($GO_MODULES22->modules['custom_fields']))
+	if(!isset($GO_MODULES->modules['custom_fields']))
 	{
 		$module_id='custom_fields';
 		$acl_read = $GO_SECURITY->get_new_acl('Module read: '.$module_id, 0);
@@ -13,7 +13,7 @@ if(file_exists($GO_CONFIG->root_path.'LICENSE.PRO'))
 		$GO_MODULES2->add_module($module_id, $module_info['version'], $acl_read, $acl_write, $module_info['sort_order'], true);
 	}
 	
-	if(!isset($GO_MODULES2->modules['reports']))
+	if(!isset($GO_MODULES->modules['reports']))
 	{
 		$module_id='reports';
 		$acl_read = $GO_SECURITY->get_new_acl('Module read: '.$module_id, 0);
