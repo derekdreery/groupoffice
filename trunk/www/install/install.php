@@ -1848,16 +1848,20 @@ switch($task)
 	from the server and upload it back to the server. This way you change the ownership to your account.
 	<br />
 	<br /> 
-	When you are done log in to Group-Office with the administrator account:<br />
+	If this is a fresh install you can login with the default administrator account:<br />
 	<br />
 	<b>Username: admin<br />
 	Password: admin</b>
 	<br /><br />
+	Don't use this account for regular use!
+	<br />
+	Read this to get started with Group-Office: <a href="http://docs.group-office.com/index.php?folder_id=53&file_id=0" target="_blank">http://docs.group-office.com/index.php?folder_id=53&file_id=0</a>
 	<ul>
 	<li>Navigate to the menu: Administrator menu -> Modules and install the modules you wish to use.</li>
 	<li>Navigate to the menu: Administrator menu -> User groups and create user groups.</li>
 	<li>Navigate to the menu: Administrator menu -> Users users to add new users.</li>
 	</ul>
+	<br />
 	<br />
 	You can also configure external authentication servers such as an IMAP, POP-3 or LDAP server.
 	Take a look at 'auth_sources.dist' for more information about this.

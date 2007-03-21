@@ -137,7 +137,7 @@ function composer(action)
 	
 	x = (screen.availWidth - width) / 2;
 	y = (screen.availHeight - height) / 2;
-	centered =',width=' + width + ',height=' + height + ',left=' + x + ',top=' + y + ',scrollbars=no,resizable=yes,status=yes';
+	centered =',width=' + width + ',height=' + height + ',left=' + x + ',top=' + y + ',scrollbars=yes,resizable=yes,status=yes';
 
 	var popup = window.open(url, '_blank', centered);
   if (!popup.opener) popup.opener = self;
