@@ -71,8 +71,6 @@ if ($task == 'set_search_query' || !isset ($_SESSION['email_search_query'])) {
 	$_SESSION['email_search_query'] = $mail->build_search_query($subject, $from, $to, $cc, $body, $before, $since, $before, $since, $flagged, $answered);
 }
 
-$disable_accounts = ($GO_CONFIG->get_setting('em_disable_accounts') == 'true') ? true : false;
-
 $page_title = $lang_modules['email'];
 
 $GO_HEADER['head'] = '<script type="text/javascript" src="'.$GO_MODULES->url.'email.js"></script>';
@@ -177,7 +175,7 @@ function composer(action)
 			
 
 						
-			if (!$disable_accounts) {
+			if ($GO_MODULES->write_permission) {
 				echo '<td class="ModuleIcons">';
 				echo '<a href="accounts.php?return_to='.urlencode($link_back).'"><img src="'.$GO_THEME->images['accounts'].'" border="0" /><br />'.$ml_accounts.'</a></td>';
 			} else {
@@ -186,11 +184,7 @@ function composer(action)
 			}		
 			echo '<td class="ModuleIcons">';
 				echo '<a href="javascript:document.location=\'account.php?account_id=\'+messages.document.forms[0].account_id.value+\'&account_tab=folders&return_to='.urlencode($link_back).'\';"><img src="'.$GO_THEME->images['folders'].'" border="0" /><br />'.$ml_folders.'</a></td>';
-		
-			if ($GO_MODULES->write_permission) {
-				echo '<td class="ModuleIcons">';
-				echo '<a href="configuration.php?return_to='.urlencode($link_back).'"><img src="'.$GO_THEME->images['em_settings_admin'].'" border="0" /><br />'.$menu_configuration.'</a></td>';
-			}
+
 			
 			echo '</td></tr></table>';	
 			

@@ -296,13 +296,16 @@ if ($msg_count > 0)
 						{
 							if (stristr($field, $filters[$i]["keyword"]) !== false)
 							{
-								$messages[] = $mail->f("uid");
+								$messages = array($mail->f("uid"));
+								
 								if($filter['mark_as_read'])
 								{
-									$mail->set_message_flag($mailbox, $messages, "\\Seen");
+									$ret = $mail->set_message_flag($mailbox, $messages, "\\Seen");
 								}
+								
 								if ($mail->move($filters[$i]["folder"], $messages))
 								{
+									
 									$continue = true;
 									$refresh = true;
 									break;
@@ -314,10 +317,11 @@ if ($msg_count > 0)
 							{
 								if (stristr($field[$x], $filters[$i]["keyword"]))
 								{
-									$messages[] = $mail->f("uid");
+									$messages = array($mail->f("uid"));
+					
 									if($filter['mark_as_read'])
 									{
-										$mail->set_message_flag($mailbox, $messages, "\\Seen");
+										$ret = $mail->set_message_flag($mailbox, $messages, "\\Seen");
 									}
 									if ($mail->move($filters[$i]["folder"], $messages))
 									{

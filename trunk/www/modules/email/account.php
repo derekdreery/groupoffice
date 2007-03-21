@@ -33,13 +33,7 @@ $_REQUEST['return_to'] : $_SERVER['HTTP_REFERER'];
 $link_back = (isset($_REQUEST['link_back']) && $_REQUEST['link_back'] != '') ?
 $_REQUEST['link_back'] : $_SERVER['REQUEST_URI'];
 
-$disable_accounts = ($GO_CONFIG->get_setting('em_disable_accounts') == 'true') ?
-true : false;
-
 if(isset($_REQUEST['feedback'])) $feedback = $_REQUEST['feedback'];
-
-
-
 
 //delete accounts if requested
 switch ($task)
