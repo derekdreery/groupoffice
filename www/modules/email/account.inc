@@ -97,7 +97,7 @@ $table->add_row($row);
 
 
 
-if ($disable_accounts)
+if (!$GO_MODULES->write_permission)
 {
 	$form->add_html_element(new input('hidden','host',$host));
 	$form->add_html_element(new input('hidden','mbroot',$mbroot));

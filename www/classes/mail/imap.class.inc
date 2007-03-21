@@ -395,7 +395,7 @@ class imap {
 			$this->message["uid"] = $overview->uid;
 			$this->message["msgno"] = $overview->msgno;
 
-			//$this->message["udate"] = strtotime(str_replace('CEST', '', $overview->date));
+			$this->message['udate'] = strtotime($overview->date);
 			$this->message["date"] = $overview->date;
 			$this->message['subject'] = isset ($overview->subject) ? enc_utf8($overview->subject) : '';
 
@@ -416,6 +416,7 @@ class imap {
 			
 			if($examine_header)
 			{
+				
 				//much slower but people want the attachment icon!
 				$this->message["attachments"]=false;
 				$header = imap_fetchheader($this->conn, imap_msgno($this->conn,$overview->uid));
@@ -438,7 +439,7 @@ class imap {
 				}
 			}else {
 				$headerinfo = imap_headerinfo($this->conn, imap_msgno($this->conn,$overview->uid));
-				$this->message['udate'] = $headerinfo->udate;
+				//$this->message['udate'] = $headerinfo->udate;
 				
 				if (isset ($headerinfo->to)) {
 					$tmp = $headerinfo->to;
@@ -510,8 +511,8 @@ class imap {
 			
 			
 			
-			$this->message['udate'] = $headerinfo->udate;
-			//$this->message["udate"] = strtotime(str_replace('CEST', '', $headerinfo->date));
+			//$this->message['udate'] = $headerinfo->udate;
+			$this->message["udate"] = strtotime($headerinfo->date);
 
 			$this->message['new'] = ($headerinfo->Unseen == 'U' && $this->is_imap()) ? true : false;
 

@@ -13,7 +13,7 @@ option) any later version.
 require_once("../../Group-Office.php");
 
 $GO_SECURITY->authenticate();
-$GO_MODULES->authenticate('email');
+$GO_MODULES->authenticate('email',true);
 
 load_basic_controls();
 load_control('datatable');
