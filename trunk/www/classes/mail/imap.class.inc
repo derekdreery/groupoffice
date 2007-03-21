@@ -395,7 +395,7 @@ class imap {
 			$this->message["uid"] = $overview->uid;
 			$this->message["msgno"] = $overview->msgno;
 
-			$this->message['udate'] = strtotime($overview->date);
+			//$this->message['udate'] = strtotime($overview->date);
 			$this->message["date"] = $overview->date;
 			$this->message['subject'] = isset ($overview->subject) ? enc_utf8($overview->subject) : '';
 
@@ -412,6 +412,24 @@ class imap {
 			$this->message["answered"] = $overview->answered;
 			//$this->message['new'] = (($overview->recent==1 || $overview->seen==0) && $this->is_imap()) ? true : false;
 			$this->message['new'] = ($overview->seen == 0 && $this->is_imap()) ? true : false;
+			
+			
+			$headerinfo = imap_headerinfo($this->conn, imap_msgno($this->conn,$overview->uid));
+			$this->message['udate'] = $headerinfo->udate;
+			
+			if (isset ($headerinfo->to)) {
+				$tmp = $headerinfo->to;
+
+				for ($x = 0; $x < count($tmp); $x ++) {
+					$email = '';
+					if (isset ($tmp[$x]->mailbox)) {
+						$host = isset ($tmp[$x]->host) ? '@'.$tmp[$x]->host : '';
+						$email = $tmp[$x]->mailbox.$host;
+					}
+					$personal = isset ($tmp[$x]->personal) ? enc_utf8($tmp[$x]->personal) : '';
+					$this->message['to'][$x] = $this->RFC822->write_address($personal, $email);
+				}
+			}
 
 			
 			if($examine_header)
@@ -421,8 +439,8 @@ class imap {
 				$this->message["attachments"]=false;
 				$header = imap_fetchheader($this->conn, imap_msgno($this->conn,$overview->uid));
 				$this->message["priority"] = $this->get_header_value('X-Priority:', $header);		
-				$RFC822 = new RFC822();
-				$this->message["to"] = $RFC822->explode_address_list(enc_utf8($this->get_header_value('To:', $header)));
+				/*$RFC822 = new RFC822();
+				$this->message["to"] = $RFC822->explode_address_list(enc_utf8($this->get_header_value('To:', $header)));*/
 				
 				$content_type = $this->get_header_value('Content-Type:', $header);
 				if (!empty($content_type) && eregi("([^/]*)/([^ ;\n\t]*)", $content_type, $regs)) {
@@ -437,25 +455,7 @@ class imap {
 				{
 					$this->message["attachments"] = true;
 				}
-			}else {
-				$headerinfo = imap_headerinfo($this->conn, imap_msgno($this->conn,$overview->uid));
-				//$this->message['udate'] = $headerinfo->udate;
-				
-				if (isset ($headerinfo->to)) {
-					$tmp = $headerinfo->to;
-	
-					for ($x = 0; $x < count($tmp); $x ++) {
-						$email = '';
-						if (isset ($tmp[$x]->mailbox)) {
-							$host = isset ($tmp[$x]->host) ? '@'.$tmp[$x]->host : '';
-							$email = $tmp[$x]->mailbox.$host;
-						}
-						$personal = isset ($tmp[$x]->personal) ? enc_utf8($tmp[$x]->personal) : '';
-						$this->message['to'][$x] = $this->RFC822->write_address($personal, $email);
-					}
-				}
 			}
-			
 			
 			
 		

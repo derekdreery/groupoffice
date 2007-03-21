@@ -57,10 +57,8 @@ if($post_action == 'search')
 	$GO_HEADER['body_arguments'] = 'onload="document.forms[0].query.focus()" onkeypress="executeOnEnter(event, \'_search()\');"';
 }
 
-//Create table for search results already so we can add the delete handler to the button menu.
-$datatable = new datatable('addressbook_table');
-$datatable->set_attribute('width','100%');
-$GO_HEADER['head'] = $datatable->get_header();
+
+$GO_HEADER['head'] = datatable::get_header();
 
 require_once($GO_THEME->theme_path."header.inc");
 
@@ -77,12 +75,6 @@ $menu->add_button('ab_add_company', $ab_new_company, 'company.php?addressbook_id
 $menu->add_button('ab_addressbooks', $strAdministrate, 'admin.php?return_to='.urlencode($link_back));
 
 
-if ($post_action != 'members' && $post_action != 'addressbooks')
-{
-	$menu->add_button('delete_big',$cmdDelete, "javascript:document.addressbook_form.task.value='".$task."';".$datatable->get_delete_handler());
-	//$menu->add_button('cut',$ab_move, "javascript:move_items();");
-	
-}
 
 $form = new form('addressbook_form');
 $form->add_html_element(new input('hidden', 'task', $task,false));
