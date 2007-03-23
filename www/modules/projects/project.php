@@ -253,8 +253,14 @@ $tabstrip->set_attribute('style','width:100%');
 $tabstrip->set_return_to(htmlspecialchars($return_to));
 
 if ($project_id == 0 || $task == 'save_project') {
-	$write_permissions = true;
-	$read_permissions = true;
+	$write_permissions = $GO_MODULES->write_permission;
+	$read_permissions = $GO_MODULES->write_permission;
+	
+	if(!$GO_MODULES->write_permission)
+	{
+		header('Location: '.$GO_CONFIG->host.'error_docs/403.php');
+		exit ();
+	}
 
 	$project['name'] = isset ($_POST['name']) ? smart_stripslashes($_POST['name']) : '';
 	$project['customer'] = isset ($_POST['customer']) ? smart_stripslashes($_POST['customer']) : '';
