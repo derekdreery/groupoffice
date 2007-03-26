@@ -2215,12 +2215,12 @@ class calendar extends db
 
 	function has_read_permission($user_id, $event, $check_write_permission=true)
 	{
-		global $GO_SECURITY;
+		global $GO_MODULES;
 
 		if($user_id==0)
 		{
 			return false;
-		}elseif($event['user_id']==$user_id || $GO_SECURITY->has_admin_permission($user_id))
+		}elseif($event['user_id']==$user_id || $GO_MODULES->modules['calendar']['write_permission'])
 		{
 			return true;
 		}elseif($event['permissions']==PRIVATE_EVENT)
@@ -2267,12 +2267,12 @@ class calendar extends db
 
 	function has_write_permission($user_id, $event)
 	{
-		global $GO_SECURITY;
+		global $GO_MODULES;
 
 		if($user_id==0)
 		{
 			return false;
-		}elseif($event['user_id']==$user_id || $GO_SECURITY->has_admin_permission($user_id))
+		}elseif($event['user_id']==$user_id || $GO_MODULES->modules['calendar']['write_permission'])
 		{
 			return true;
 		}else
