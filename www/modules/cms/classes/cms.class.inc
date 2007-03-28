@@ -294,7 +294,7 @@ class cms extends db
 
 
 	//functions for personal sites
-	function add_site($user_id,  $domain, $webmaster, $acl_write, $template_id,$language)
+	function add_site($user_id,  $name, $domain, $webmaster, $acl_write, $template_id,$language)
 	{
 		$template_item_id=0;
 		$this->get_template_items($template_id, true);
@@ -310,8 +310,8 @@ class cms extends db
 			$site_id = $this->nextid('cms_sites');
 			if ($site_id > 0)
 			{
-				if($this->query("INSERT INTO cms_sites (id, user_id, domain, webmaster,   acl_write, template_id,root_folder_id,language)  ".
-				"VALUES ('$site_id', '$user_id', '$domain', '$webmaster', ".
+				if($this->query("INSERT INTO cms_sites (id, user_id, name,domain, webmaster,   acl_write, template_id,root_folder_id,language)  ".
+				"VALUES ('$site_id', '$user_id', '$name','$domain', '$webmaster', ".
 				" '$acl_write', $template_id, $root_folder_id, $language)"))
 				{
 					return $site_id;
@@ -339,10 +339,11 @@ class cms extends db
 		return false;
 	}
 
-	function update_site($site_id,$domain, $webmaster, $template_id, $start_file_id,$language)
+	function update_site($site_id,$name,$domain, $webmaster, $template_id, $start_file_id,$language)
 	{
 		$domain = $this->prepare_domain($domain);
 		return $this->query("UPDATE cms_sites SET domain='$domain', ".
+			"name='$name', ".
 			"webmaster='$webmaster', ".
 			"template_id=$template_id, ".
 			"start_file_id='$start_file_id', ".
