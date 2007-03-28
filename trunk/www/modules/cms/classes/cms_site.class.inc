@@ -453,6 +453,14 @@ class cms_site extends cms {
 				$login_task = isset($_REQUEST['login_task']) ? $_REQUEST['login_task'] : '';
 				$goto_url = isset($_REQUEST['goto_url']) ? smart_stripslashes($_REQUEST['goto_url']) : $_SERVER['PHP_SELF'];
 				$return_to = isset($_REQUEST['return_to']) ? $_REQUEST['return_to'] : $_SERVER['HTTP_REFERER'];
+				
+				if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']!='off')			
+				{
+					$full_goto_url .= 'https://';
+				}else {
+					$full_goto_url .= 'http://';
+				}
+				$full_goto_url .= $_SERVER['HTTP_HOST'].$goto_url;
 
 				$form = new form('login_form');
 				$form->add_html_element(new input('hidden','login_task', 'send_password', false));
@@ -476,7 +484,7 @@ class cms_site extends cms {
 						$new_password = $GO_USERS->random_password();
 						$GO_USERS->update_password($user['id'],$new_password);
 
-						$mail_body = sprintf($login_lost_password_mail_body, $GO_CONFIG->title, $GO_CONFIG->full_url, $user['username'],$new_password);
+						$mail_body = sprintf($login_lost_password_mail_body, $this->site['name'], $full_goto_url, $user['username'],$new_password);
 
 						sendmail(smart_stripslashes($_POST['email']),
 						$GO_CONFIG->webmaster_email,
@@ -1628,8 +1636,22 @@ class cms_site extends cms {
 		return '';
 	}
 
-	function create_url($folder_id, $file_id = 0) {
-		return $_SERVER['PHP_SELF'].'?folder_id='.$folder_id.'&amp;file_id='.$file_id;
+	function create_url($folder_id, $file_id = 0, $full=false) {
+		
+		$url = '';
+		if($full)
+		{
+			if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']!='off')			
+			{
+				$url .= 'https://';
+			}else {
+				$url .= 'http://';
+			}
+			$url .= $_SERVER['HTTP_HOST'];
+		}
+		
+		$url .=  $_SERVER['PHP_SELF'].'?folder_id='.$folder_id.'&amp;file_id='.$file_id;
+		return $url;
 	}
 
 	function print_icon() {

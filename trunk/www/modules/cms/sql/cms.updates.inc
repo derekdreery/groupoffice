@@ -1,5 +1,7 @@
 <?php
-$updates[28] = array();
+$updates[29] = array();
+
+$updates[28][] = "ALTER TABLE `cms_sites` ADD `name` VARCHAR( 100 ) NOT NULL ;";
 
 $updates[27][] = "ALTER TABLE `cms_sites` ADD `language` CHAR( 10 ) NOT NULL ;";
 $updates[27][] = "UPDATE `cms_sites` SET language='nl';";

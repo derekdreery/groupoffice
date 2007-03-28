@@ -593,7 +593,7 @@ class base_users extends db
 	 * 
 	 * @return string
 	 */
-	function random_password( $characters_allow = 'a-z,1-9', $characters_disallow = 'i,o', $password_length = 8, $repeat = 0 ) {
+	function random_password( $characters_allow = 'a-z,1-9', $characters_disallow = 'i,o', $password_length = 4, $repeat = 0 ) {
 		// Generate array of allowable characters.
 		$characters_allow = explode(',', $characters_allow);
 	

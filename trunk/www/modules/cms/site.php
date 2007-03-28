@@ -42,10 +42,10 @@ $link_back = $_SERVER['PHP_SELF'].'?site_id='.$site_id.$sites.'&return_to='.urle
 switch($task)
 {
 	case 'save_site':
-	
+		$name=smart_addslashes($_POST['name']);
 		$domain = $cms->prepare_domain(smart_addslashes(trim($_POST['domain'])));
 		$webmaster = isset($_POST['webmaster']) ? smart_addslashes($_POST['webmaster']) : '';
-		if ($domain == '' || $webmaster == '')
+		if ($domain == '' || $webmaster == '' || $name=='')
 		{
 			$feedback= $error_missing_field;
 		}else
@@ -66,6 +66,7 @@ switch($task)
 						
 						if (!$cms->update_site(
 									$site_id,
+									$name,
 									$domain,
 									$webmaster,
 									$_POST['template_id'],
@@ -103,6 +104,7 @@ switch($task)
 
 					if($site_id = $cms->add_site(
 								$GO_SECURITY->user_id,
+								$name,
 								$domain,
 								$webmaster,
 								$acl_write,
@@ -165,8 +167,10 @@ if($site_id>0 && $task != 'save_site')
 	$webmaster = $site['webmaster'];
 	$start_file_id  = $site['start_file_id'];
 	$language  = $site['language'];
+	$name  = $site['name'];
 }else
 {
+	$name = isset($_POST['name']) ? $_POST['name'] : '';
 	$template_id = isset($_POST['template_id']) ? $_POST['template_id'] : '0';
 	$domain = isset($_POST['domain']) ? $cms->prepare_domain(smart_addslashes(trim($_POST['domain']))) : '';
 	$webmaster = isset($_POST['webmaster']) ? smart_addslashes($_POST['webmaster']) : '';
@@ -211,6 +215,15 @@ switch($tabstrip->get_active_tab_id())
 			
 			$table->add_row($row);
 		}
+		
+		$row = new table_row();		
+		$cell = new table_cell($strName.':*');
+		$row->add_cell($cell);		
+		$input = new input('text', 'name', $name);
+		$input->set_attribute('style', 'width:250px;');
+		$cell = new table_cell($input->get_html());
+		$row->add_cell($cell);
+		$table->add_row($row);
 		
 		$row = new table_row();		
 		$cell = new table_cell($cms_domain.':*');

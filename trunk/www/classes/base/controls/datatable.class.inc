@@ -123,13 +123,13 @@ class datatable extends table
 		$this->selected = isset($_POST[$this->attributes['id']]['selected']) ? array_map('smart_stripslashes',$_POST[$this->attributes['id']]['selected']) : array();
 
 
-		
+
 	}
-	
+
 	function allow_configuration()
 	{
 		$this->allow_configuration=true;
-		
+
 		global $GO_CONFIG;
 		$this->enabled_columns = $GO_CONFIG->get_setting('enabled_columns_'.$this->attributes['id']);
 		if(!$this->enabled_columns)
@@ -137,7 +137,7 @@ class datatable extends table
 			$this->enabled_columns = array(0,1,2,3,4,5,6);
 		}else {
 			$this->enabled_columns = explode(',', $this->enabled_columns);
-		}	
+		}
 	}
 
 	function enable_select()
@@ -181,6 +181,10 @@ class datatable extends table
 	function set_pagination($total_rows)
 	{
 		$this->total_rows = $total_rows;
+		if($this->start>$this->total_rows)
+		{
+			$this->start=0;
+		}
 	}
 
 	function add_column($heading)
@@ -300,7 +304,7 @@ class datatable extends table
 	function get_html()
 	{
 
-		
+
 
 		if($this->remind_selected)
 		{
@@ -366,72 +370,77 @@ class datatable extends table
 		$headings = '';
 
 		foreach($this->headings as $key=>$heading)
-		{			
+		{
 			$available_columns[]=$key.':'.base64_encode($heading->config_name);
 			if(!$this->allow_configuration)
 			{
 				$this->enabled_columns[]=$key;
 			}
 		}
-		foreach($this->enabled_columns as $column_index)
+		$enabled_columns=$this->enabled_columns;
+		$this->enabled_columns=array();
+		foreach($enabled_columns as $column_index)
 		{
-			$heading = $this->headings[$column_index];
-			
-			if(empty($heading->sort_name) && $this->autosort)
+			if(isset($this->headings[$column_index]))
 			{
-				$heading->sort_name = $column_index;
-			}
+				$this->enabled_columns[]=$column_index;
+				$heading = $this->headings[$column_index];
 
-			$headings .= '<th';
-			foreach($heading->attributes as $name=>$value)
-			{
-				$headings .= ' '.$name.'="'.$value.'"';
-			}
-			$headings .= '>';
-
-			if(empty($heading->name) && !isset($checkbox_added) && $this->multiselect)
-			{
-				$checkbox_added=true;
-				$headings .= $select_all_checkbox->get_html();
-			}else {
-
-
-				if(!isset($checkbox_added) && $this->multiselect)
+				if(empty($heading->sort_name) && $this->autosort)
 				{
-					$headings .= '<table cellpadding="0" cellspacing="0"><tr><td>'.$select_all_checkbox->get_html().'</td><td>';
+					$heading->sort_name = $column_index;
 				}
 
-				if($heading->sort_name !== '')
+				$headings .= '<th';
+				foreach($heading->attributes as $name=>$value)
 				{
-					$headings .= '<a href="javascript:table_sort(\''.$this->form_name.'\',\''.$this->attributes['id'].'\',\''.$heading->sort_name.'\',';
-					if(($this->sort_ascending))
+					$headings .= ' '.$name.'="'.$value.'"';
+				}
+				$headings .= '>';
+
+				if(empty($heading->name) && !isset($checkbox_added) && $this->multiselect)
+				{
+					$checkbox_added=true;
+					$headings .= $select_all_checkbox->get_html();
+				}else {
+
+
+					if(!isset($checkbox_added) && $this->multiselect)
 					{
-						$headings .= '0';
+						$headings .= '<table cellpadding="0" cellspacing="0"><tr><td>'.$select_all_checkbox->get_html().'</td><td>';
+					}
+
+					if($heading->sort_name !== '')
+					{
+						$headings .= '<a href="javascript:table_sort(\''.$this->form_name.'\',\''.$this->attributes['id'].'\',\''.$heading->sort_name.'\',';
+						if(($this->sort_ascending))
+						{
+							$headings .= '0';
+						}else
+						{
+							$headings .= '1';
+						}
+						$headings .= ');">'.$heading->name;
+
+						if($heading->sort_name == $this->sort_index)
+						{
+							$headings .= $image->get_html();
+						}
+
+						$headings .= '</a>';
 					}else
 					{
-						$headings .= '1';
+						$headings .= $heading->name;
 					}
-					$headings .= ');">'.$heading->name;
 
-					if($heading->sort_name == $this->sort_index)
+					if(!isset($checkbox_added) && $this->multiselect)
 					{
-						$headings .= $image->get_html();
+						$checkbox_added = true;
+						$headings .= '</td></tr></table>';
 					}
-
-					$headings .= '</a>';
-				}else
-				{
-					$headings .= $heading->name;
 				}
-
-				if(!isset($checkbox_added) && $this->multiselect)
-				{
-					$checkbox_added = true;
-					$headings .= '</td></tr></table>';
-				}
+				$headings .= '</th>'.$this->lb;
 			}
-			$headings .= '</th>'.$this->lb;
-			
 		}
 		if(!empty($headings))
 		{

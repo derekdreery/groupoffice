@@ -139,7 +139,8 @@ CREATE TABLE `cms_sites` (
   `template_id` int(11) NOT NULL default '0',
   `root_folder_id` int(11) NOT NULL default '0',
   `start_file_id` int(11) NOT NULL default '0',
-  `language` char(10) NOT NULL,
+  `language` varchar(10) NOT NULL default '',
+  `name` varchar(100) NOT NULL,
   PRIMARY KEY  (`id`)
 ) TYPE=MyISAM;
 
