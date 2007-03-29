@@ -618,11 +618,14 @@ popup.focus();
 
 		$query = str_replace('*', '%', $query);
 
-		$sql = "SELECT ab_companies.* FROM ab_companies ";
+		
 
-		if(isset($GO_MODULES->modules['custom_fields']) && $GO_MODULES->modules['custom_fields']['read_permission'])
+		if(isset($GO_MODULES->modules['custom_fields']))
 		{
-			$sql .= "LEFT JOIN cf_3 ON cf_3.link_id=ab_companies.link_id ";
+			$sql = "SELECT ab_companies.*, cf_3.* FROM ab_companies ".
+				"LEFT JOIN cf_3 ON cf_3.link_id=ab_companies.link_id ";
+		}else {
+			$sql = "SELECT ab_companies.*, cf_3.* FROM ab_companies ";
 		}
 
 		if ($addressbook_id > 0) {
@@ -683,7 +686,7 @@ popup.focus();
 			$sql .= " AND ab_companies.email != ''";
 		}
 
-		$sql .= "ORDER BY $sort_index $sort_order";
+		echo $sql .= "ORDER BY $sort_index $sort_order";
 
 		$this->query($sql);
 		$count = $this->num_rows();
