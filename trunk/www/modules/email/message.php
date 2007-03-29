@@ -50,6 +50,13 @@ $part = isset ($_REQUEST['part']) ? $_REQUEST['part'] : '';
 $query = isset ($_REQUEST['query']) ? $_REQUEST['query'] : '';
 $account = $email->get_account($account_id);
 
+if($account['user_id']!=$GO_SECURITY->user_id)
+{
+	header('Location: '.$GO_CONFIG->host.'/error_docs/403.php');
+	exit();
+}
+
+
 if ($account && $mail->open($account['host'], $account['type'], $account['port'], $account['username'], $account['password'], $mailbox, 0, $account['use_ssl'], $account['novalidate_cert'])) {
 	if ($task == 'move_mail') {
 		$messages = array ($uid);
