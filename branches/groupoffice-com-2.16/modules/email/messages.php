@@ -65,6 +65,11 @@ if (!$account = $email->get_account($account_id)) {
 	$account = $email->get_account(0);
 }
 if ($account) {
+	if($account['user_id']!=$GO_SECURITY->user_id)
+	{
+		header('Location: '.$GO_CONFIG->host.'/error_docs/403.php');
+		exit();
+	}
 	if (!$mail->open($account['host'], $account['type'], $account['port'], $account['username'], $account['password'], $mailbox, 0, $account['use_ssl'], $account['novalidate_cert'])) {
 		$GO_HEADER['body_arguments'] = 'onload="parent.treeview.location.href=\'treeview.php\';"';
 		require($GO_THEME->theme_path.'header.inc');
