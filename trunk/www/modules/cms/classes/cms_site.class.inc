@@ -2367,7 +2367,7 @@ class cms_site extends cms {
 
 		$path = isset ($attributes['path']) ? $attributes['path'] : '';
 
-		if ($resolved_path = $this->resolve_url($path, $this->site['id'])) {
+		if ($resolved_path = $this->resolve_url($path, $this->site['root_folder_id'])) {
 			if ($resolved_path['file_id'] > 0) {
 				$file = $this->get_file($resolved_path['file_id']);
 				$content = $this->parse_template($file['content']);
