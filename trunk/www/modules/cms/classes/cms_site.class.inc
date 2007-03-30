@@ -2185,6 +2185,7 @@ class cms_site extends cms {
 		$item_class = isset ($attributes['item_class']) ? $attributes['item_class'] : '';
 		$active_item_class = isset ($attributes['item_active_class']) ? $attributes['item_active_class'] : $item_class;
 		$menu = isset ($attributes['menu']) ? $attributes['menu'] : '';
+		$expanded = isset ($attributes['expanded']) ? ($attributes['expanded']=='true') : false;
 
 
 		if($folder_id==0)
@@ -2249,7 +2250,7 @@ class cms_site extends cms {
 					$return .= $link;
 				}
 
-				if($this->is_in_path($item['id'],$this->folder_id))
+				if($expanded || $this->is_in_path($item['id'],$this->folder_id))
 				{
 					$return .= $this->print_treeview($attributes, $tag, $item['id']);
 				}
