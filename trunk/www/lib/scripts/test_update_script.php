@@ -1,10 +1,10 @@
 <?php
-
+require('../../Group-Office.php');
 $db = new db();
 
-$module = 'filesystem';
-$version= '16';
+$module = 'addressbook';
+$version= '23';
 
-require('../../Group-Office.php');
-require('218.inc');
-//require('../../modules/'.$module.'/sql/'.$version.'.inc');
+
+//require('218.inc');
+require('../../modules/'.$module.'/sql/'.$version.'.inc');
