@@ -178,7 +178,7 @@ switch($post_action)
 		break;
 
 	default:
-		$ids_array='addressbook_table';
+		
 		
 		
 		
@@ -230,7 +230,7 @@ function edit_items()
 		alert("<?php echo htmlentities($strNoItemSelected); ?>");
 	}else
 	{
-		document.forms[0].action='<?php echo $edit_file; ?>?id_array=<?php echo $ids_array; ?>';
+		document.forms[0].action='<?php echo $edit_file; ?>?id_array=<?php echo $datatable->attributes['id']; ?>';
 		document.forms[0].submit();
 	}
 }
