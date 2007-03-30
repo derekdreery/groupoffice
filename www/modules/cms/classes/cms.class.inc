@@ -312,7 +312,7 @@ class cms extends db
 			{
 				if($this->query("INSERT INTO cms_sites (id, user_id, name,domain, webmaster,   acl_write, template_id,root_folder_id,language)  ".
 				"VALUES ('$site_id', '$user_id', '$name','$domain', '$webmaster', ".
-				" '$acl_write', $template_id, $root_folder_id, $language)"))
+				" '$acl_write', $template_id, $root_folder_id, '$language')"))
 				{
 					return $site_id;
 				}
