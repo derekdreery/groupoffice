@@ -11,8 +11,8 @@ if(count($_SESSION['GO_SESSION']['email_module']['unknown_reciepents']) > 0)
 	require($GO_LANGUAGE->get_language_file('email'));
 	//var_dump($_SESSION['GO_SESSION']['email_module']['unknown_reciepents']);
 	$return_to=$_SERVER['PHP_SELF'];
-	//$contact = array_shift($_SESSION['GO_SESSION']['email_module']['unknown_reciepents']);
-	$contact=$_SESSION['GO_SESSION']['email_module']['unknown_reciepents'][0];
+	$contact = array_shift($_SESSION['GO_SESSION']['email_module']['unknown_reciepents']);
+	//$contact=$_SESSION['GO_SESSION']['email_module']['unknown_reciepents'][0];
 
 	$url = $GO_MODULES->modules['addressbook']['url'].'contact.php';
 	$url = add_params_to_url($url, 'feedback='.urlencode($ml_unknown_reciepent));
