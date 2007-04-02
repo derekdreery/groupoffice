@@ -706,7 +706,7 @@ popup.focus();
 			$sql .= " AND ab_companies.email != ''";
 		}
 
-		echo $sql .= "ORDER BY $sort_index $sort_order";
+		$sql .= "ORDER BY $sort_index $sort_order";
 
 		$this->query($sql);
 		$count = $this->num_rows();
