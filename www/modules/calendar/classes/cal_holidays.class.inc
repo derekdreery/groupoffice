@@ -125,7 +125,7 @@ class holidays extends db
 
 		$this->query($sql);
 		if ($this->next_record())
-			return true;
+			return $this->Record;
 		else
 			return false;
 	}
