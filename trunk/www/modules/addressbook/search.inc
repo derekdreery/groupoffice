@@ -63,23 +63,6 @@ if(isset($_POST['move_addressbook_id']) && $_POST['move_addressbook_id']>0)
 
 
 
-if (isset($feedback))
-{
-	$p = new html_element('p', $feedback);
-	$p->set_attribute('class','Error');
-	$tabstrip->add_html_element($p);
-}
-
-$h2 = new html_element('h1');
-$alphabet = explode(',',$alphabet);
-for($i=0;$i<count($alphabet);$i++)
-{
-	$hyperlink = new hyperlink("javascript:letter_click('".$alphabet[$i]."')",$alphabet[$i]);
-	$hyperlink->set_attribute('style', 'margin-right:10px;');
-	$h2->add_html_element($hyperlink);
-}
-
-$tabstrip->add_html_element($h2);
 
 $table = new table();
 
@@ -291,6 +274,26 @@ switch ($ab_settings['search_type'])
 		$search_fields->value=$ab_settings['search_contacts_field'];
 		break;
 }
+if(isset($feedback))
+{
+	$p = new html_element('p',$feedback);
+	$p->set_attribute('class','error');
+	$tabstrip->add_html_element($p);
+}
+
+
+$h2 = new html_element('h1');
+$alphabet = explode(',',$alphabet);
+for($i=0;$i<count($alphabet);$i++)
+{
+	$hyperlink = new hyperlink("javascript:letter_click('".$alphabet[$i]."')",$alphabet[$i]);
+	$hyperlink->set_attribute('style', 'margin-right:10px;');
+	$h2->add_html_element($hyperlink);
+}
+
+$tabstrip->add_html_element($h2);
+
+
 
 $form->add_html_element($menu);
 

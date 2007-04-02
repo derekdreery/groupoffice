@@ -317,6 +317,21 @@ class sql_users extends base_users
 		}
 		return false;
 	}
+	
+	function get_authorized_user_by_email($user_id, $email)
+	{
+		$sql = "SELECT DISTINCT users.* FROM users ".
+		"INNER JOIN acl ON users.acl_id= acl.acl_id ".
+		"LEFT JOIN users_groups ON (acl.group_id = users_groups.group_id) ".
+		"WHERE (users_groups.user_id=".$user_id." OR ".
+		"acl.user_id = ".$user_id.") AND email='$email'";
+		$this->query($sql);
+		if ($this->next_record(MYSQL_ASSOC))
+		{
+			return $this->Record;
+		}
+		return false;
+	}
 
 	function check_password($password)
 	{

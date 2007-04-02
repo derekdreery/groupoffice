@@ -108,7 +108,7 @@ $attachments_size = 0;
 
 function add_unknown_reciepent($email, $name, $addressbook_id)
 {
-	global $GO_SECURITY, $ab;
+	global $GO_SECURITY, $GO_USERS, $ab;
 
 	$name_arr = split_name($name);
 
@@ -117,7 +117,9 @@ function add_unknown_reciepent($email, $name, $addressbook_id)
 		$name_arr['first'] = $email;
 	}
 
-	if (!$ab->get_contact_by_email(addslashes($email),$GO_SECURITY->user_id))
+	
+
+	if (!$ab->get_contact_by_email(addslashes($email),$GO_SECURITY->user_id) && !$GO_USERS->get_authorized_user_by_email($GO_SECURITY->user_id, addslashes($email)))
 	{
 		$contact['addressbook_id'] = $addressbook_id;
 		$contact['first_name'] = addslashes($name_arr['first']);

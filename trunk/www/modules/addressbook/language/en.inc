@@ -250,3 +250,8 @@ $ab_contacts='contacts';
 $ab_companies='companies';
 $ab_users='users';
 $ab_dontchange='Don\'t change';
+
+$ab_select_unknown_recipient='The recipient %s is unkown. The e-mail address might belong to a contact listed below. Click on a the contact\'s name to add it to it, add a new contact or ignore the e-mail address.';
+$ab_ignore='Ignore';
+
+$ab_check_info='The e-mail address has been entered in the contact profile. Click at \'Ok\' to save it.';

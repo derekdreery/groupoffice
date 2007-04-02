@@ -37,7 +37,7 @@ $ml_forward = "Forward";
 $ml_reply_all = "Reply all";
 $ml_delete_message = "Are you sure you want to delete this message permanently?";
 $ml_no_subject = "No subject";
-$ml_no_reciepent = "Undisclosed reciepent";
+$ml_no_reciepent = "Undisclosed recipient";
 $ml_online_files = "Online files";
 $ml_send_error = "Failed sending the mail.";
 $ml_attach_forget = "You have selected a file but you didn't attach it.";
@@ -221,7 +221,7 @@ $ml_handle_originals='What do you want to do with the original messages?';
 $ml_keep='Keep';
 $ml_examine_headers='Show paperclip when a message has attachments and the message priority in messages listing. Warning! This slows down the viewing of the message list.';
 $ml_show_attachments='Show attachments and priorities (slower)';
-$ml_unknown_reciepent='The reciepent is unknown. Please complete the reciepent\'s profile.';
+$ml_unknown_reciepent='The recipient is unknown. Please complete the recipient\'s profile.';
 
 $ml_auto_check='Check if there are new messages automatically';
 $ml_beep='Beep on new e-mail';
