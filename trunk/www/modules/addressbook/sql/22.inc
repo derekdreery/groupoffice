@@ -10,7 +10,7 @@
 */
 $db1 = new db();
 $db2 = new db();
-var_dump($GO_MODULES->modules);
+//var_dump($GO_MODULES->modules);
 require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc');
 $ab = new addressbook();
 
