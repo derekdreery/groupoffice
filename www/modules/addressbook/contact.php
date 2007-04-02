@@ -328,6 +328,19 @@ if ($contact_id > 0) {
 	$birthday = $contact['birthday'] > 0 ? db_date_to_date($contact['birthday']) : '';
 	$addressbook_id = isset ($_REQUEST['addressbook_id']) ? $_REQUEST['addressbook_id'] : $contact['addressbook_id'];
 	$addressbook=$ab->get_addressbook($addressbook_id);
+	
+	if(isset($_REQUEST['email']))
+	{
+		$contact['email']=smart_stripslashes($_REQUEST['email']);
+	}
+	if(isset($_REQUEST['email2']))
+	{
+		$contact['email2']=smart_stripslashes($_REQUEST['email2']);
+	}
+	if(isset($_REQUEST['email3']))
+	{
+		$contact['email3']=smart_stripslashes($_REQUEST['email3']);
+	}
 }
 
 if (isset ($_REQUEST['user_id']) && $_REQUEST['user_id'] > 0) {

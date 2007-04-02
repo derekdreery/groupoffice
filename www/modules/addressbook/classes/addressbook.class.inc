@@ -385,6 +385,21 @@ popup.focus();
 		}
 		return $_SESSION['GO_SESSION'][$user_id]['authorized_addressbooks'];
 	}
+	
+	function get_writable_addressbook_ids($user_id)
+	{
+		if(!isset($_SESSION['GO_SESSION'][$user_id]['writable_addressbooks']))
+		{
+			$_SESSION['GO_SESSION'][$user_id]['writable_addressbooks'] = array();
+			$this->get_writable_addressbooks($user_id);
+			while($this->next_record())
+			{
+				$_SESSION['GO_SESSION'][$user_id]['writable_addressbooks'][] = $this->f('id');
+			}
+		}
+		return $_SESSION['GO_SESSION'][$user_id]['writable_addressbooks'];
+	}
+
 
 	function check_contact($user_id, $contact) {
 
@@ -488,7 +503,7 @@ popup.focus();
 
 
 
-	function search_contacts($user_id, $query, $field = 'last_name', $addressbook_id = 0, $mtime = 0, $start=0, $offset=0, $require_email=false, $sort_index='name', $sort_order='ASC') {
+	function search_contacts($user_id, $query, $field = 'last_name', $addressbook_id = 0, $mtime = 0, $start=0, $offset=0, $require_email=false, $sort_index='name', $sort_order='ASC', $writable_only=false) {
 		global $GO_MODULES;
 		$query = str_replace('*', '%', $query);
 
@@ -514,7 +529,12 @@ popup.focus();
 			$sql .= "WHERE ab_contacts.addressbook_id='$addressbook_id' AND ";
 		} else {
 
-			$user_ab = $this->get_user_addressbook_ids($user_id);
+			if($writable_only)
+			{
+				$user_ab = $this->get_writable_addressbook_ids($user_id);
+			}else {
+				$user_ab = $this->get_user_addressbook_ids($user_id);
+			}
 			if(count($user_ab) > 1)
 			{
 				$sql .= "WHERE ab_contacts.addressbook_id IN (".implode(",",$user_ab).") AND ";

@@ -185,3 +185,8 @@ $ab_contacts='contactpersonen';
 $ab_companies='bedrijven';
 $ab_users='gebruikers';
 $ab_dontchange='Niet wijzigen';
+
+$ab_select_unknown_recipient='De geaddresseerde %s is onbekend. Het e-mail adres zou bij een van de onderstaande contact personen kunnen horen. Klik op een contactpersoon om het e-mail adres eraan toe te voegen, maak een nieuw contactpersoon of negeer het e-mail adres.';
+$ab_ignore='Negeren';
+
+$ab_check_info='Het e-mail adres is ingevuld bij het profiel. Klik op \'Ok\' om het op te slaan.';
