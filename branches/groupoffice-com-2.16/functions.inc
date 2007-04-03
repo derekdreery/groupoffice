@@ -871,7 +871,7 @@ function get_mail_to_href($email='', $contact_id = 0, $company_id = 0)
 	
 	if (isset($GO_MODULES->modules['email']) && $GO_MODULES->modules['email']['read_permission']) {
 		return "javascript:openPopup('_blank', '".$GO_MODULES->modules['email']['url'].
-			"send.php?mail_to=".htmlentities($email, ENT_QUOTES)."&contact_id=".
+			"send.php?mail_to=".htmlspecialchars($email, ENT_QUOTES)."&contact_id=".
 			$contact_id."&company_id=".$company_id."','".
 			$GO_CONFIG->composer_width."','".$GO_CONFIG->composer_height."','no')";	
 	}else
