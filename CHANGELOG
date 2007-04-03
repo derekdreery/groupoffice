@@ -1,5 +1,12 @@
 CHANGELOG
-2006/03/08 Version 2.16-12
+2007/04/03 Version 2.16-13
+-Security issue: A logged in user could read another user's e-mail with some tricks
+-Saved e-mails couldn't be read (Pro version)
+-Calendar admins always have access to events
+-Updated Catalan language
+
+
+2007/03/08 Version 2.16-12
 -Fixed mailto links in e-mail
 -Don't set session.save_path because PHP garbage collection doesnt work then 
  anymore. This resulted in a lot of session files in the tmp dir at some distro's
@@ -10,10 +17,10 @@ Language updates:
 -German language update
 -Added Turkish language
 
-2006/02/05 Version 2.16-11
+2007/02/05 Version 2.16-11
 -Fixed some corrupt files
 
-2006/02/05 Version 2.16-10
+2007/02/05 Version 2.16-10
 
 Bug fixes:
 -Files with quotes went wrong in filesystem
