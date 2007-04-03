@@ -18,7 +18,7 @@ $table = new table();
 
 $row = new table_row();
 $row->add_cell(new table_cell($strFirstName.'*:'));
-$input = new input('text','first_name',$user['first_name']);
+$input = new input('text','first_name',$user['first_name'],true,true);
 if(in_array('first_name', $disabled_user_fields))
 {
 	$input->set_attribute('disabled', 'true');
@@ -43,7 +43,7 @@ $table->add_row($row);
 
 $row = new table_row();
 $row->add_cell(new table_cell($strLastName.'*:'));
-$input = new input('text','last_name', $user['last_name']);
+$input = new input('text','last_name', $user['last_name'],true,true);
 if(in_array('last_name', $disabled_user_fields))
 {
 	$input->set_attribute('disabled', 'true');
@@ -54,9 +54,16 @@ $row->add_cell(new table_cell($input->get_html()));
 $table->add_row($row);
 
 $row = new table_row();
-$end=in_array('inititals_title',$required_fields)? '*:' : ':';
+if(in_array('inititals_title',$required_fields))
+{
+	$required=true;
+	$end='*:';
+}else {
+	$end=':';
+	$required=false;
+}
 $row->add_cell(new table_cell($GLOBALS['strTitle'].' / '.$GLOBALS['strInitials'].$end));
-$input1 = new input('text','title', $user['title']);
+$input1 = new input('text','title', $user['title'],true, $required);
 $input1->set_attribute('style','width:135px');
 $input1->set_attribute('maxlength','12');
 if(in_array('title', $disabled_user_fields))
@@ -67,7 +74,7 @@ if(in_array('title', $disabled_user_fields))
 $span = new html_element('span', ' / ');
 $span->set_attribute('style', 'width: 20px;text-align:center;');
 
-$input2 = new input('text','initials', $user['initials']);
+$input2 = new input('text','initials', $user['initials'],true,$required);
 $input2->set_attribute('style','width:135px');
 $input2->set_attribute('maxlength','50');
 if(in_array('initials', $disabled_user_fields))
@@ -81,13 +88,21 @@ $table->add_row($row);
 
 $row = new table_row();
 
-$end=in_array('sex',$required_fields)? '*:' : ':';
+
+if(in_array('sex',$required_fields))
+{
+	$required=true;
+	$end='*:';
+}else {
+	$end=':';
+	$required=false;
+}
 $row->add_cell(new table_cell($strSex.$end));
 if(!in_array('sex', $disabled_user_fields))
 {
 	$radiogroup = new radiogroup('sex', $user['sex']);
-	$male_button = new radiobutton('sex_m', 'M');
-	$female_button = new radiobutton('sex_f', 'F');
+	$male_button = new radiobutton('sex_m', 'M', $required);
+	$female_button = new radiobutton('sex_f', 'F', $required);
 	
 	$row->add_cell(new table_cell($radiogroup->get_option($male_button, $strSexes['M']).$radiogroup->get_option($female_button, $strSexes['F'])));
 	$table->add_row($row);
@@ -98,7 +113,14 @@ if(!in_array('sex', $disabled_user_fields))
 
 
 $row = new table_row();
-$end=in_array('birthday',$required_fields)? '*:' : ':';
+if(in_array('birthday',$required_fields))
+{
+	$required=true;
+	$end='*:';
+}else {
+	$end=':';
+	$required=false;
+}
 $row->add_cell(new table_cell($strBirthday.$end));
 if(in_array('birthday', $disabled_user_fields))
 {
@@ -109,9 +131,16 @@ if(in_array('birthday', $disabled_user_fields))
 $table->add_row($row);
 
 $row = new table_row();
-$end=in_array('address',$required_fields)? '*:' : ':';
-$row->add_cell(new table_cell($strAddress.$end));
-$input = new input('text','address', $user['address']);
+if(in_array('address',$required_fields))
+{
+	$required=true;
+	$end='*:';
+}else {
+	$end=':';
+	$required=false;
+}
+$row->add_cell(new table_cell($strAddressAndNo.$end));
+$input = new input('text','address', $user['address'], true, $required);
 $input->set_attribute('style','width:230px');
 $input->set_attribute('maxlength','50');
 if(in_array('address', $disabled_user_fields))
@@ -119,7 +148,7 @@ if(in_array('address', $disabled_user_fields))
 	$input->set_attribute('disabled', 'true');
 }
 
-$input1 = new input('text','address_no', $user['address_no']);
+$input1 = new input('text','address_no', $user['address_no'], true, $required);
 $input1->set_attribute('style','width:47px');
 $input1->set_attribute('maxlength','10');
 
@@ -131,9 +160,16 @@ $row->add_cell(new table_cell($input->get_html().$input1->get_html()));
 $table->add_row($row);
 
 $row = new table_row();
-$end=in_array('zip',$required_fields)? '*:' : ':';
+if(in_array('zip',$required_fields))
+{
+	$required=true;
+	$end='*:';
+}else {
+	$end=':';
+	$required=false;
+}
 $row->add_cell(new table_cell($strZip.$end));
-$input = new input('text','zip', $user['zip']);
+$input = new input('text','zip', $user['zip'], true, $required);
 $input->set_attribute('style','width:280px');
 $input->set_attribute('maxlength','20');
 if(in_array('zip', $disabled_user_fields))
@@ -144,9 +180,16 @@ $row->add_cell(new table_cell($input->get_html()));
 $table->add_row($row);
 
 $row = new table_row();
-$end=in_array('city',$required_fields)? '*:' : ':';
+if(in_array('city',$required_fields))
+{
+	$required=true;
+	$end='*:';
+}else {
+	$end=':';
+	$required=false;
+}
 $row->add_cell(new table_cell($strCity.$end));
-$input = new input('text','city', $user['city']);
+$input = new input('text','city', $user['city'], true, $required);
 $input->set_attribute('style','width:280px');
 $input->set_attribute('maxlength','50');
 if(in_array('city', $disabled_user_fields))
@@ -157,9 +200,16 @@ $row->add_cell(new table_cell($input->get_html()));
 $table->add_row($row);
 
 $row = new table_row();
-$end=in_array('state',$required_fields)? '*:' : ':';
+if(in_array('state',$required_fields))
+{
+	$required=true;
+	$end='*:';
+}else {
+	$end=':';
+	$required=false;
+}
 $row->add_cell(new table_cell($strState.$end));
-$input = new input('text','state', $user['state']);
+$input = new input('text','state', $user['state'], true, $required);
 $input->set_attribute('style','width:280px');
 $input->set_attribute('maxlength','30');
 if(in_array('state', $disabled_user_fields))
@@ -170,9 +220,16 @@ $row->add_cell(new table_cell($input->get_html()));
 $table->add_row($row);
 
 $row = new table_row();
-$end=in_array('country_id',$required_fields)? '*:' : ':';
+if(in_array('country_id',$required_fields))
+{
+	$required=true;
+	$end='*:';
+}else {
+	$end=':';
+	$required=false;
+}
 $row->add_cell(new table_cell($strCountry.$end));
-$select = new select('country_id', $user['country_id']);
+$select = new select('country_id', $user['country_id'],false, $required);
 $select->add_value('0', $cmdPleaseSelect);
 $GO_USERS->get_countries();
 while($GO_USERS->next_record())
@@ -188,9 +245,16 @@ $table->add_row($row);
 
 
 $row = new table_row();
-$end=in_array('email',$required_fields)? '*:' : ':';
+if(in_array('email',$required_fields))
+{
+	$required=true;
+	$end='*:';
+}else {
+	$end=':';
+	$required=false;
+}
 $row->add_cell(new table_cell($strEmail.'*'));
-$input = new input('text','email', $user['email']);
+$input = new input('text','email', $user['email'], true, $required);
 $input->set_attribute('style','width:280px');
 $input->set_attribute('maxlength','50');
 if(in_array('email', $disabled_user_fields))
@@ -202,9 +266,16 @@ $table->add_row($row);
 
 
 $row = new table_row();
-$end=in_array('home_phone',$required_fields)? '*:' : ':';
+if(in_array('home_phone',$required_fields))
+{
+	$required=true;
+	$end='*:';
+}else {
+	$end=':';
+	$required=false;
+};
 $row->add_cell(new table_cell($strPhone.$end));
-$input = new input('text','home_phone', $user['home_phone']);
+$input = new input('text','home_phone', $user['home_phone'], true, $required);
 $input->set_attribute('style','width:280px');
 $input->set_attribute('maxlength','20');
 if(in_array('home_phone', $disabled_user_fields))
@@ -215,9 +286,16 @@ $row->add_cell(new table_cell($input->get_html()));
 $table->add_row($row);
 
 $row = new table_row();
-$end=in_array('fax',$required_fields)? '*:' : ':';
+if(in_array('fax',$required_fields))
+{
+	$required=true;
+	$end='*:';
+}else {
+	$end=':';
+	$required=false;
+}
 $row->add_cell(new table_cell($strFax.$end));
-$input = new input('text','fax', $user['fax']);
+$input = new input('text','fax', $user['fax'], true, $required);
 $input->set_attribute('style','width:280px');
 $input->set_attribute('maxlength','20');
 if(in_array('fax', $disabled_user_fields))
@@ -228,9 +306,16 @@ $row->add_cell(new table_cell($input->get_html()));
 $table->add_row($row);
 
 $row = new table_row();
-$end=in_array('cellular',$required_fields)? '*:' : ':';
+if(in_array('cellular',$required_fields))
+{
+	$required=true;
+	$end='*:';
+}else {
+	$end=':';
+	$required=false;
+}
 $row->add_cell(new table_cell($strCellular.$end));
-$input = new input('text','cellular', $user['cellular']);
+$input = new input('text','cellular', $user['cellular'], true, $required);
 $input->set_attribute('style','width:280px');
 $input->set_attribute('maxlength','20');
 if(in_array('cellular', $disabled_user_fields))
@@ -248,9 +333,16 @@ $mainrow->add_cell($cell);
 $table = new table();
 
 $row = new table_row();
-$end=in_array('company',$required_fields)? '*:' : ':';
+if(in_array('company',$required_fields))
+{
+	$required=true;
+	$end='*:';
+}else {
+	$end=':';
+	$required=false;
+}
 $row->add_cell(new table_cell($strCompany.$end));
-$input = new input('text','company', $user['company']);
+$input = new input('text','company', $user['company'], true, $required);
 $input->set_attribute('style','width:280px');
 $input->set_attribute('maxlength','50');
 if(in_array('company', $disabled_user_fields))
@@ -261,9 +353,16 @@ $row->add_cell(new table_cell($input->get_html()));
 $table->add_row($row);
 
 $row = new table_row();
-$end=in_array('department',$required_fields)? '*:' : ':';
+if(in_array('department',$required_fields))
+{
+	$required=true;
+	$end='*:';
+}else {
+	$end=':';
+	$required=false;
+}
 $row->add_cell(new table_cell($strDepartment.$end));
-$input = new input('text','department', $user['department']);
+$input = new input('text','department', $user['department'], true, $required);
 $input->set_attribute('style','width:280px');
 $input->set_attribute('maxlength','50');
 if(in_array('department', $disabled_user_fields))
@@ -274,9 +373,16 @@ $row->add_cell(new table_cell($input->get_html()));
 $table->add_row($row);
 
 $row = new table_row();
-$end=in_array('function',$required_fields)? '*:' : ':';
+if(in_array('function',$required_fields))
+{
+	$required=true;
+	$end='*:';
+}else {
+	$end=':';
+	$required=false;
+};
 $row->add_cell(new table_cell($strFunction.$end));
-$input = new input('text','function', $user['function']);
+$input = new input('text','function', $user['function'], true, $required);
 $input->set_attribute('style','width:280px');
 $input->set_attribute('maxlength','50');
 if(in_array('function', $disabled_user_fields))
@@ -293,16 +399,23 @@ $row->add_cell($cell);
 $table->add_row($row);
 
 $row = new table_row();
-$end=in_array('work_address',$required_fields)? '*:' : ':';
+if(in_array('work_address',$required_fields))
+{
+	$required=true;
+	$end='*:';
+}else {
+	$end=':';
+	$required=false;
+}
 $row->add_cell(new table_cell($strAddress.$end));
-$input = new input('text','work_address', $user['work_address']);
+$input = new input('text','work_address', $user['work_address'], true, $required);
 $input->set_attribute('style','width:230px');
 $input->set_attribute('maxlength','50');
 if(in_array('work_address', $disabled_user_fields))
 {
 	$input->set_attribute('disabled', 'true');
 }
-$input1 = new input('text','work_address_no', $user['work_address_no']);
+$input1 = new input('text','work_address_no', $user['work_address_no'], true, $required);
 $input1->set_attribute('style','width:47px');
 $input1->set_attribute('maxlength','10');
 
@@ -315,9 +428,16 @@ $table->add_row($row);
 
 
 $row = new table_row();
-$end=in_array('work_zip',$required_fields)? '*:' : ':';
+if(in_array('work_zip',$required_fields))
+{
+	$required=true;
+	$end='*:';
+}else {
+	$end=':';
+	$required=false;
+}
 $row->add_cell(new table_cell($strZip.$end));
-$input = new input('text','work_zip', $user['work_zip']);
+$input = new input('text','work_zip', $user['work_zip'], true, $required);
 $input->set_attribute('style','width:280px');
 $input->set_attribute('maxlength','20');
 if(in_array('work_zip', $disabled_user_fields))
@@ -328,9 +448,16 @@ $row->add_cell(new table_cell($input->get_html()));
 $table->add_row($row);
 
 $row = new table_row();
-$end=in_array('work_city',$required_fields)? '*:' : ':';
+if(in_array('work_city',$required_fields))
+{
+	$required=true;
+	$end='*:';
+}else {
+	$end=':';
+	$required=false;
+}
 $row->add_cell(new table_cell($strCity.$end));
-$input = new input('text','work_city', $user['work_city']);
+$input = new input('text','work_city', $user['work_city'], true, $required);
 $input->set_attribute('style','width:280px');
 $input->set_attribute('maxlength','50');
 if(in_array('work_city', $disabled_user_fields))
@@ -341,9 +468,16 @@ $row->add_cell(new table_cell($input->get_html()));
 $table->add_row($row);
 
 $row = new table_row();
-$end=in_array('work_state',$required_fields)? '*:' : ':';
+if(in_array('work_state',$required_fields))
+{
+	$required=true;
+	$end='*:';
+}else {
+	$end=':';
+	$required=false;
+}
 $row->add_cell(new table_cell($strState.$end));
-$input = new input('text','work_state', $user['work_state']);
+$input = new input('text','work_state', $user['work_state'], true, $required);
 $input->set_attribute('style','width:280px');
 $input->set_attribute('maxlength','30');
 if(in_array('work_state', $disabled_user_fields))
@@ -355,10 +489,17 @@ $table->add_row($row);
 
 $row = new table_row();
 
-$end=in_array('work_country_id',$required_fields)? '*:' : ':';
+if(in_array('work_country_id',$required_fields))
+{
+	$required=true;
+	$end='*:';
+}else {
+	$end=':';
+	$required=false;
+}
 $row->add_cell(new table_cell($strCountry.$end));
 
-$select = new select('work_country_id', $user['work_country_id']);
+$select = new select('work_country_id', $user['work_country_id'],false,$required);
 $select->add_value('0', $cmdPleaseSelect);
 $GO_USERS->get_countries();
 while($GO_USERS->next_record())
@@ -379,9 +520,16 @@ $row->add_cell($cell);
 $table->add_row($row);
 
 $row = new table_row();
-$end=in_array('work_phone',$required_fields)? '*:' : ':';
+if(in_array('work_phone',$required_fields))
+{
+	$required=true;
+	$end='*:';
+}else {
+	$end=':';
+	$required=false;
+}
 $row->add_cell(new table_cell($strPhone.$end));
-$input = new input('text','work_phone', $user['work_phone']);
+$input = new input('text','work_phone', $user['work_phone'], true, $required);
 $input->set_attribute('style','width:280px');
 $input->set_attribute('maxlength','20');
 if(in_array('work_phone', $disabled_user_fields))
@@ -394,9 +542,16 @@ $table->add_row($row);
 
 
 $row = new table_row();
-$end=in_array('work_fax',$required_fields)? '*:' : ':';
+if(in_array('work_fax',$required_fields))
+{
+	$required=true;
+	$end='*:';
+}else {
+	$end=':';
+	$required=false;
+}
 $row->add_cell(new table_cell($strFax.$end));
-$input = new input('text','work_fax', $user['work_fax']);
+$input = new input('text','work_fax', $user['work_fax'], true, $required);
 $input->set_attribute('style','width:280px');
 $input->set_attribute('maxlength','20');
 if(in_array('work_fax', $disabled_user_fields))
@@ -407,9 +562,16 @@ $row->add_cell(new table_cell($input->get_html()));
 $table->add_row($row);
 
 $row = new table_row();
-$end=in_array('homepage',$required_fields)? '*:' : ':';
+if(in_array('homepage',$required_fields))
+{
+	$required=true;
+	$end='*:';
+}else {
+	$end=':';
+	$required=false;
+}
 $row->add_cell(new table_cell($strHomepage.$end));
-$input = new input('text','homepage', $user['homepage']);
+$input = new input('text','homepage', $user['homepage'], true, $required);
 $input->set_attribute('style','width:280px');
 $input->set_attribute('maxlength','20');
 if(in_array('homepage', $disabled_user_fields))

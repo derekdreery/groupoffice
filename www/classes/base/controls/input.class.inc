@@ -25,8 +25,11 @@ require_once($GO_CONFIG->class_path.'base/controls/html_element.class.inc');
 
 class input extends html_element
 {
-	function input($type, $name, $value='', $remind_value=true)
+	var $required=false;
+	
+	function input($type, $name, $value='', $remind_value=true, $required=false)
 	{
+		$this->required=$required;
 		$this->tagname = 'input';
 		$this->set_linebreak("\n");
 		
@@ -38,6 +41,11 @@ class input extends html_element
 		}else
 		{
 			$this->set_attribute('value', htmlspecialchars($value));
+		}
+
+		if($this->required && isset($_POST[$name]) && empty($_POST[$name]))
+		{
+			$this->set_attribute('class','textbox_error');
 		}
 	}
 	

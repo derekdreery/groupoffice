@@ -110,9 +110,9 @@ class radiogroup extends html_element
 
 class radiobutton extends input
 {
-	function radiobutton($id, $value)
+	function radiobutton($id, $value, $required=false)
 	{
-		$this->input('radio', '', $value, false);
+		$this->input('radio', '', $value, false,$required);
 		$this->set_attribute('class','');
 		$this->set_attribute('id', $id);
 	}
