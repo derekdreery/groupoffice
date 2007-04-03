@@ -10,9 +10,10 @@ require_once ($GO_CONFIG->class_path."mail/RFC822.class.inc");
 
 $RFC822 = new RFC822();
 
-header('Content-Type: text/xml; charset: UTF-8');
 
-echo "<?xml version=\"1.0\" ?>\r\n";
+header('Content-Type: text/xml; charset=UTF-8');
+
+echo "<?xml version=\"1.0\" charset=\"UTF-8\" ?>\r\n";
 echo '<addressses>';
 $ab = new addressbook();
 $ab->search_email($GO_SECURITY->user_id, '%'.smart_addslashes($_REQUEST['query']).'%');

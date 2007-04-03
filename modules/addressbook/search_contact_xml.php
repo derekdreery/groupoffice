@@ -41,9 +41,10 @@ while($forms->next_record(MYSQL_ASSOC))
 
 echo $doc->saveXML();*/
 
-header('Content-Type: text/xml; charset: UTF-8');
 
-echo "<?xml version=\"1.0\" ?>\r\n";
+header('Content-Type: text/xml; charset=UTF-8');
+
+echo "<?xml version=\"1.0\" charset=\"UTF-8\" ?>\r\n";
 echo '<contacts>';
 $ab = new addressbook();
 $ab->search_contacts($GO_SECURITY->user_id, '%'.smart_addslashes($_REQUEST['query']).'%','name',0,0,0,10);
