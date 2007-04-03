@@ -407,7 +407,7 @@ if(in_array('work_address',$required_fields))
 	$end=':';
 	$required=false;
 }
-$row->add_cell(new table_cell($strAddress.$end));
+$row->add_cell(new table_cell($strAddressAndNo.$end));
 $input = new input('text','work_address', $user['work_address'], true, $required);
 $input->set_attribute('style','width:230px');
 $input->set_attribute('maxlength','50');
