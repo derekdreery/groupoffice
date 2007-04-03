@@ -288,3 +288,4 @@ $search_results='resultaten';
 $strTime='Tijd';
 $table_config_text='Voer een nummer in voor de kolommen die u wilt weergeven. De kolommen worden gesorteerd op het nummer dat u ingeeft.';
 $strMoveUp='Verplaats één plaats naar boven';
+$strAddressAndNo='Adres / Nr.';

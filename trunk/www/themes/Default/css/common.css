@@ -398,6 +398,13 @@ border-bottom: 1px solid #f8f8f8;
 border-right: 1px solid #f8f8f8;
 }
 
+.textbox_error{
+font-family: arial,verdana,sans-serif;
+font-size: 12px;
+border: 1px solid red;
+background-color:#ffd1d1;
+}
+
 .button{
 background-color: #22437f;
 border-style: solid;

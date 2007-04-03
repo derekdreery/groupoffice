@@ -53,9 +53,13 @@ class select extends html_element
 	var $optgroup;
 
 	var $multiple;
+	
+	var $required;
 
-	function select($name, $value='', $multiple=false)
+	function select($name, $value='', $multiple=false, $required=false)
 	{
+		$this->required=$required;
+		
 		$this->lb = "\n";
 
 		$this->name = $name;
@@ -68,6 +72,11 @@ class select extends html_element
 		}else
 		{
 			$this->value=$value;
+		}
+		
+		if($this->required && isset($_POST[$name]) && empty($_POST[$name]))
+		{
+			$this->set_attribute('class','textbox_error');
 		}
 
 	}

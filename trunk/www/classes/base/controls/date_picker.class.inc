@@ -44,7 +44,7 @@ class date_picker
 		echo  $this->get_date_picker($name, $date_format, $set_date, $flat_div_id, $flat_callbackfunction, $arguments, $disabled);
 	}
 
-	function date_picker($name, $date_format, $set_date='', $flat_div_id='', $flat_callbackfunction='', $arguments='', $disabled=false)
+	function date_picker($name, $date_format, $set_date='', $flat_div_id='', $flat_callbackfunction='', $arguments='', $disabled=false, $required=false)
 	{
 		$str_return='';
 		//dirty hack for mysql default date
@@ -57,10 +57,17 @@ class date_picker
 			$arguments .= ' disabled';
 		}
 		$date_format = $this->convert_date_format($date_format);
+		
+		if($required && isset($_POST[$name]) && empty($_POST[$name]))
+		{
+			$class='textbox_error';
+		}else {
+			$class='textbox';
+		}
 
 		if ($flat_div_id == '')
 		{
-			$str_return.='<input size="10" onfocus="this.select();" class="textbox" type="text" id="'.$name.'_input" name="'.$name.'" value="'.$set_date.'" '.$arguments.' />'.
+			$str_return.='<input size="10" onfocus="this.select();" class="'.$class.'" type="text" id="'.$name.'_input" name="'.$name.'" value="'.$set_date.'" '.$arguments.' />'.
 			'<input type="button" name="'.$name.'_button" id="'.$name.'_button" value="..."';
 			if ($disabled)
 			{
