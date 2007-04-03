@@ -12,7 +12,7 @@ $sync_last_addressbook_sync='Darrera sincronització de llibreta d\'adreces';
 $sync_never='Mai';
 $sync_last_todos_sync='Sincronització de darreres tasques';
 $sync_log='Registre de sincronització';
-$sync_max_days_old='Sincronitzar events no més antics de';
+$sync_max_days_old='Sincronitza events no més antics de';
 $sync_days='dies';
-$sync_delete_old_events='Esborrar events del client que siguin més vells que la data indicada aquí al damunt';
+$sync_delete_old_events='Suprimeix events del client que siguin més vells que la data indicada aquí al damunt';
 ?>

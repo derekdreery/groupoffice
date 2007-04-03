@@ -102,5 +102,5 @@ $pm_result='Resultat';
 $pm_customer='Client';
 $pm_book_rights='Drets de reserva';
 $pm_template_exists='Ja existeix una plantilla amb aquest nom';
-$pm_link_calendar='Posar les hores de feina en un calendari';
+$pm_link_calendar='Posa les hores de feina a un calendari';
 ?>

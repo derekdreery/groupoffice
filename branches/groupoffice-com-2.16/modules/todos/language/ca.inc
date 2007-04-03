@@ -45,7 +45,7 @@ $cal_before_task_due='Abans que la feina s\'acabi';
 $cal_responsible='Responsable';
 $cal_due_at='Pel';
 $cal_no_todos='No s\'ha trobat cap feina';
-$sc_start_later='Entrada incorrecte! L\'hora d\'inici és superior a l\'hora d\'acabament.';
+$sc_start_later='Entrada incorrecta! L\'hora d\'inici és superior a l\'hora d\'acabament.';
 $td_count_single='per-fer';
 $td_count_multiple='per-fers';
 ?>
