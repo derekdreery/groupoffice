@@ -4,7 +4,7 @@ require_once($GO_LANGUAGE->get_fallback_language_file('groups'));
 $groups_title='Grups d\'usuaris';
 $groups_tab='Grups';
 $groups_saved='Paràmetres desats.';
-$groups_text='Feu clic en un grup per veure les seves propietats.';
+$groups_text='Feu clic a un grup per veure les seves propietats.';
 $groups_users_in='Usuaris en el grup ';
 $groups_no_contacts='No teniu cap membre per seleccionar a contactes.<br /> Feu servir la Llibreta d\'adreces per afegir membres als vostres contactes.';
 $add_group_text='Introduïu un nom i feu clic a \'D\'acord\' per afegir un nou grup.';
