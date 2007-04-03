@@ -22,7 +22,8 @@
  * @access public
  */
 
-require($GO_CONFIG->control_path.'FCKeditor/fckeditor.php');
+
+require_once($GO_CONFIG->control_path.'FCKeditor/fckeditor.php');
 
 class htmleditor extends FCKeditor
 {
@@ -33,7 +34,10 @@ class htmleditor extends FCKeditor
 	{
 		global $GO_CONFIG;
 		
-		$this->FCKeditor($name);
+		$this->InstanceName	= $name ;
+		$this->ToolbarSet	= 'Default';
+		
+		$this->Config		= array() ;
 		$this->Config=array('CustomConfigurationsPath'=>$GO_CONFIG->control_url.'FCKeditor/go_fckconfig.js', 'LinkUpload','false');
 		$this->BasePath	= $GO_CONFIG->control_url.'FCKeditor/';
 		$this->Value		= $value;
