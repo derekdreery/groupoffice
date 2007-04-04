@@ -378,4 +378,4 @@ $table_config_text='Enter a number in front of the columns that you want to view
 $strMoveUp='Move up one row';
 
 $strAddressAndNo='Address / No.';
-
+$strWorkAddressAndNo='Workaddress / No.';
