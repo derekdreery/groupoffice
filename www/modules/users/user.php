@@ -736,7 +736,7 @@ if(file_exists($active_tab_id))
 			{
 				$row = new table_row();
 				$row->add_cell(new table_cell($strUsername.'*:'));
-				$input = new input('text','username',$user['username']);
+				$input = new input('text','username',$user['username'],true,true);
 				$input->set_attribute('style','width:280px');
 				$input->set_attribute('maxlength','50');
 				$row->add_cell(new table_cell($input->get_html()));
@@ -745,14 +745,14 @@ if(file_exists($active_tab_id))
 
 				$row = new table_row('passrow1');
 				$row->add_cell(new table_cell($admin_password.':'));
-				$input = new input('password', 'pass1', '',false);
+				$input = new input('password', 'pass1', '',false,true);
 				$input->set_attribute('style','width:280px');
 				$row->add_cell(new table_cell($input->get_html()));
 				$table->add_row($row);
 
 				$row = new table_row('passrow2');
 				$row->add_cell(new table_cell($admin_confirm_password.':'));
-				$input = new input('password', 'pass2', '',false);
+				$input = new input('password', 'pass2', '',false,true);
 				$input->set_attribute('style','width:280px');
 				$row->add_cell(new table_cell($input->get_html()));
 				$table->add_row($row);
@@ -770,7 +770,7 @@ if(file_exists($active_tab_id))
 
 			$row = new table_row();
 			$row->add_cell(new table_cell($strFirstName.'*:'));
-			$input = new input('text','first_name',$user['first_name']);
+			$input = new input('text','first_name',$user['first_name'],true,true);
 			$input->set_attribute('style','width:280px');
 			$input->set_attribute('maxlength','50');
 			$row->add_cell(new table_cell($input->get_html()));
@@ -787,7 +787,7 @@ if(file_exists($active_tab_id))
 
 			$row = new table_row();
 			$row->add_cell(new table_cell($strLastName.'*:'));
-			$input = new input('text','last_name', $user['last_name']);
+			$input = new input('text','last_name', $user['last_name'],true,true);
 			$input->set_attribute('style','width:280px');
 			$input->set_attribute('maxlength','50');
 			$row->add_cell(new table_cell($input->get_html()));
@@ -877,7 +877,7 @@ if(file_exists($active_tab_id))
 
 			$row = new table_row();
 			$row->add_cell(new table_cell($strEmail.'*'));
-			$input = new input('text','email', $user['email']);
+			$input = new input('text','email', $user['email'],true,true);
 			$input->set_attribute('style','width:280px');
 			$input->set_attribute('maxlength','50');
 			$row->add_cell(new table_cell($input->get_html()));
