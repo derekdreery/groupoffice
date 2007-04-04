@@ -28,7 +28,7 @@ class cms_site extends cms {
 	var $cms_module;
 
 	var $return_to;
-	
+
 	var $previous_file=null;
 	var $next_file=null;
 
@@ -114,7 +114,7 @@ class cms_site extends cms {
 		}
 		//$_SESSION['GO_SESSION']['cms']['return_to']=$_SERVER['REQUEST_URI'];
 		$_SESSION['GO_SESSION']['cms']['return_to']=$this->get_uri();
-		
+
 		$GLOBALS['GO_LANGUAGE']->set_language($this->site['language']);
 
 
@@ -136,7 +136,7 @@ class cms_site extends cms {
 	function find_page($folder_id)
 	{
 		global $GO_SECURITY;
-		
+
 		if($folder_id==0)
 		{
 			$folder_id=$this->site['root_folder_id'];
@@ -154,7 +154,7 @@ class cms_site extends cms {
 				}
 			}
 		}
-		
+
 		foreach($files as $file)
 		{
 			if (eregi('htm', $file['extension'])) {
@@ -314,7 +314,7 @@ class cms_site extends cms {
 				{
 					$h2=new html_element('h2', $login_no_account);
 					$form->add_html_element($h2);
-					
+
 					$p = new html_element('p', $login_no_account_text);
 					$form->add_html_element($p);
 
@@ -453,8 +453,8 @@ class cms_site extends cms {
 				$login_task = isset($_REQUEST['login_task']) ? $_REQUEST['login_task'] : '';
 				$goto_url = isset($_REQUEST['goto_url']) ? smart_stripslashes($_REQUEST['goto_url']) : $_SERVER['PHP_SELF'];
 				$return_to = isset($_REQUEST['return_to']) ? $_REQUEST['return_to'] : $_SERVER['HTTP_REFERER'];
-				
-				if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']!='off')			
+
+				if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']!='off')
 				{
 					$full_goto_url .= 'https://';
 				}else {
@@ -469,7 +469,7 @@ class cms_site extends cms {
 				$form->add_html_element(new input('hidden','return_to', $return_to));
 				$form->add_html_element(new input('hidden','file_id', $this->file_id));
 				$form->add_html_element(new input('hidden','folder_id', $this->folder_id));
-				
+
 				if($login_task == 'send_password')
 				{
 					global $GO_USERS;
@@ -581,7 +581,7 @@ class cms_site extends cms {
 				$form->add_html_element(new input('hidden','return_to', $return_to));
 				$form->add_html_element(new input('hidden','file_id', $this->file_id));
 				$form->add_html_element(new input('hidden','folder_id', $this->folder_id));
-				
+
 				$modules_read = array_map('trim', explode(',',$GO_CONFIG->register_modules_read));
 				$modules_write = array_map('trim', explode(',',$GO_CONFIG->register_modules_write));
 
@@ -699,7 +699,7 @@ class cms_site extends cms {
 				$required_fields[]='email';
 				$required_fields[]='first_name';
 				$required_fields[]='last_name';
-				
+
 				if ($login_task == "register")
 				{
 
@@ -803,16 +803,16 @@ class cms_site extends cms {
 
 							$link = "javascript:document.login_form.task.value='login';document.login_form.submit();";
 							if($user['enabled']=='1')
-							{								
+							{
 								$h1 = new html_element('h1',  sprintf($registration_self_success,$GO_CONFIG->title));
 								$form->add_html_element($h1);
 								$p = new html_element('p',  $registration_self_success_text);
 								$form->add_html_element($p);
-								
-								
+
+
 								if($GLOBALS['GO_AUTH']->login($user['username'], $user['password'], $_SESSION['auth_source']))
-								{						
-										$link = "javascript:document.location='$goto_url'";
+								{
+									$link = "javascript:document.location='$goto_url'";
 								}
 							}else {
 								$p = new html_element('p',  $registration_success_activate);
@@ -859,7 +859,7 @@ class cms_site extends cms {
 
 
 				$row->add_cell(new table_cell($GLOBALS['strFirstName'].'*:'));
-				$input = new input('text','first_name',$user['first_name']);
+				$input = new input('text','first_name',$user['first_name'],true,true);
 				$input->set_attribute('style','width:280px');
 				$input->set_attribute('maxlength','50');
 				$row->add_cell(new table_cell($input->get_html()));
@@ -876,7 +876,7 @@ class cms_site extends cms {
 
 				$row = new table_row();
 				$row->add_cell(new table_cell($GLOBALS['strLastName'].'*:'));
-				$input = new input('text','last_name', $user['last_name']);
+				$input = new input('text','last_name', $user['last_name'],true,true);
 				$input->set_attribute('style','width:280px');
 				$input->set_attribute('maxlength','50');
 				$row->add_cell(new table_cell($input->get_html()));
@@ -889,17 +889,24 @@ class cms_site extends cms {
 					$row = new table_row();
 
 
-					$end=in_array('inititals_title',$required_fields)? '*:' : ':';
+					if(in_array('inititals_title',$required_fields))
+					{
+						$required=true;
+						$end='*:';
+					}else {
+						$end=':';
+						$required=false;
+					}
 					$row->add_cell(new table_cell($GLOBALS['strTitle'].' / '.$GLOBALS['strInitials'].$end));
 
-					$input1 = new input('text','title', $user['title']);
+					$input1 = new input('text','title', $user['title'],true,$required);
 					$input1->set_attribute('style','width:135px');
 					$input1->set_attribute('maxlength','12');
 
 					$span = new html_element('span', ' / ');
 					$span->set_attribute('style', 'width: 20px;text-align:center;');
 
-					$input2 = new input('text','initials', $user['initials']);
+					$input2 = new input('text','initials', $user['initials'],true,$required);
 					$input2->set_attribute('style','width:135px');
 					$input2->set_attribute('maxlength','50');
 
@@ -912,11 +919,18 @@ class cms_site extends cms {
 				if(in_array('sex',$fields))
 				{
 					$row = new table_row();
-					$end=in_array('sex',$required_fields)? '*:' : ':';
+					if(in_array('sex',$required_fields))
+					{
+						$required=true;
+						$end='*:';
+					}else {
+						$end=':';
+						$required=false;
+					}
 					$row->add_cell(new table_cell($GLOBALS['strSex'].$end));
 					$radiogroup = new radiogroup('sex', $user['sex']);
-					$male_button = new radiobutton('sex_m', 'M');
-					$female_button = new radiobutton('sex_f', 'F');
+					$male_button = new radiobutton('sex_m', 'M',$required);
+					$female_button = new radiobutton('sex_f', 'F',$required);
 
 					$row->add_cell(new table_cell($radiogroup->get_option($male_button, $GLOBALS['strSexes']['M']).$radiogroup->get_option($female_button, $GLOBALS['strSexes']['F'])));
 					$table->add_row($row);
@@ -924,7 +938,14 @@ class cms_site extends cms {
 
 				if(in_array('birthday',$fields))
 				{
-					$end=in_array('birthday',$required_fields)? '*:' : ':';
+					if(in_array('birthday',$required_fields))
+					{
+						$required=true;
+						$end='*:';
+					}else {
+						$end=':';
+						$required=false;
+					}
 					$row = new table_row();
 					$row->add_cell(new table_cell($GLOBALS['strBirthday'].$end));
 					$row->add_cell(new table_cell($birthday_picker->get_html()));
@@ -933,7 +954,7 @@ class cms_site extends cms {
 
 				$row = new table_row();
 				$row->add_cell(new table_cell($GLOBALS['strEmail'].'*:'));
-				$input = new input('text','email', $user['email']);
+				$input = new input('text','email', $user['email'],true,true);
 				$input->set_attribute('style','width:280px');
 				$input->set_attribute('maxlength','50');
 				$row->add_cell(new table_cell($input->get_html()));
@@ -947,52 +968,87 @@ class cms_site extends cms {
 
 				if(in_array('address',$fields))
 				{
-					$end=in_array('address',$required_fields)? '*:' : ':';
+					if(in_array('address',$required_fields))
+					{
+						$required=true;
+						$end='*:';
+					}else {
+						$end=':';
+						$required=false;
+					}
 
 					$row = new table_row();
-					$row->add_cell(new table_cell($GLOBALS['strAddress'].$end));
+					$row->add_cell(new table_cell($GLOBALS['strAddressAndNo'].$end));
 					$input = new input('text','address', $user['address']);
 					$input->set_attribute('style','width:230px');
 					$input->set_attribute('maxlength','50');
 
-					$input1 = new input('text','address_no', $user['address_no']);
+					$input1 = new input('text','address_no', $user['address_no'],true,$required);
 					$input1->set_attribute('style','width:47px');
 					$input1->set_attribute('maxlength','10');
 
 					$row->add_cell(new table_cell($input->get_html().$input1->get_html()));
 					$table->add_row($row);
 
-					$end=in_array('zip',$required_fields)? '*:' : ':';
+					if(in_array('zip',$required_fields))
+					{
+						$required=true;
+						$end='*:';
+					}else {
+						$end=':';
+						$required=false;
+					}
 					$row = new table_row();
 					$row->add_cell(new table_cell($GLOBALS['strZip'].$end));
-					$input = new input('text','zip', $user['zip']);
+					$input = new input('text','zip', $user['zip'],true,$required);
 					$input->set_attribute('style','width:280px');
 					$input->set_attribute('maxlength','20');
 					$row->add_cell(new table_cell($input->get_html()));
 					$table->add_row($row);
 
-					$end=in_array('city',$required_fields)? '*:' : ':';
+					if(in_array('city',$required_fields))
+					{
+						$required=true;
+						$end='*:';
+					}else {
+						$end=':';
+						$required=false;
+					}
 					$row = new table_row();
 					$row->add_cell(new table_cell($GLOBALS['strCity'].$end));
-					$input = new input('text','city', $user['city']);
+					$input = new input('text','city', $user['city'],true,$required);
 					$input->set_attribute('style','width:280px');
 					$input->set_attribute('maxlength','50');
 					$row->add_cell(new table_cell($input->get_html()));
 					$table->add_row($row);
 
-					$end=in_array('state',$required_fields)? '*:' : ':';
+					if(in_array('state',$required_fields))
+					{
+						$required=true;
+						$end='*:';
+					}else {
+						$end=':';
+						$required=false;
+					}
 					$row = new table_row();
 					$row->add_cell(new table_cell($GLOBALS['strState'].$end));
-					$input = new input('text','state', $user['state']);
+					$input = new input('text','state', $user['state'],true,$required);
 					$input->set_attribute('style','width:280px');
 					$input->set_attribute('maxlength','30');
 					$row->add_cell(new table_cell($input->get_html()));
 					$table->add_row($row);
 
-					$end=in_array('country_id',$required_fields)? '*:' : ':';
+					if(in_array('country_id',$required_fields))
+					{
+						$required=true;
+						$end='*:';
+					}else {
+						$end=':';
+						$required=false;
+					}
 					$row = new table_row();
 					$row->add_cell(new table_cell($GLOBALS['strCountry'].$end));
-					$select = new select('country_id', $user['country_id']);
+					$select = new select('country_id', $user['country_id'],false,$required);
 					$select->add_value('0', $GLOBALS['cmdPleaseSelect']);
 					$GO_USERS->get_countries();
 					while($GO_USERS->next_record())
@@ -1012,10 +1068,17 @@ class cms_site extends cms {
 				$break=false;
 				if(in_array('home_phone',$fields))
 				{
-					$end=in_array('home_phone',$required_fields)? '*:' : ':';
+					if(in_array('home_phone',$required_fields))
+					{
+						$required=true;
+						$end='*:';
+					}else {
+						$end=':';
+						$required=false;
+					}
 					$row = new table_row();
 					$row->add_cell(new table_cell($GLOBALS['strPhone'].$end));
-					$input = new input('text','home_phone', $user['home_phone']);
+					$input = new input('text','home_phone', $user['home_phone'],true,$required);
 					$input->set_attribute('style','width:280px');
 					$input->set_attribute('maxlength','20');
 					$row->add_cell(new table_cell($input->get_html()));
@@ -1025,10 +1088,17 @@ class cms_site extends cms {
 
 				if(in_array('fax',$fields))
 				{
-					$end=in_array('fax',$required_fields)? '*:' : ':';
+					if(in_array('fax',$required_fields))
+					{
+						$required=true;
+						$end='*:';
+					}else {
+						$end=':';
+						$required=false;
+					}
 					$row = new table_row();
 					$row->add_cell(new table_cell($GLOBALS['strFax'].$end));
-					$input = new input('text','fax', $user['fax']);
+					$input = new input('text','fax', $user['fax'],true,$required);
 					$input->set_attribute('style','width:280px');
 					$input->set_attribute('maxlength','20');
 					$row->add_cell(new table_cell($input->get_html()));
@@ -1037,10 +1107,17 @@ class cms_site extends cms {
 				}
 				if(in_array('cellular',$fields))
 				{
-					$end=in_array('cellular',$required_fields)? '*:' : ':';
+					if(in_array('cellular',$required_fields))
+					{
+						$required=true;
+						$end='*:';
+					}else {
+						$end=':';
+						$required=false;
+					}
 					$row = new table_row();
 					$row->add_cell(new table_cell($GLOBALS['strCellular'].$end));
-					$input = new input('text','cellular', $user['cellular']);
+					$input = new input('text','cellular', $user['cellular'],true,$required);
 					$input->set_attribute('style','width:280px');
 					$input->set_attribute('maxlength','20');
 					$row->add_cell(new table_cell($input->get_html()));
@@ -1063,10 +1140,17 @@ class cms_site extends cms {
 				$break = false;
 				if(in_array('company',$fields))
 				{
-					$end=in_array('company',$required_fields)? '*:' : ':';
+					if(in_array('company',$required_fields))
+					{
+						$required=true;
+						$end='*:';
+					}else {
+						$end=':';
+						$required=false;
+					}
 					$row = new table_row();
 					$row->add_cell(new table_cell($GLOBALS['strCompany'].$end));
-					$input = new input('text','company', $user['company']);
+					$input = new input('text','company', $user['company'],true,$required);
 					$input->set_attribute('style','width:280px');
 					$input->set_attribute('maxlength','50');
 					$row->add_cell(new table_cell($input->get_html()));
@@ -1076,10 +1160,17 @@ class cms_site extends cms {
 
 				if(in_array('department',$fields))
 				{
-					$end=in_array('department',$required_fields)? '*:' : ':';
+					if(in_array('department',$required_fields))
+					{
+						$required=true;
+						$end='*:';
+					}else {
+						$end=':';
+						$required=false;
+					}
 					$row = new table_row();
 					$row->add_cell(new table_cell($GLOBALS['strDepartment'].$end));
-					$input = new input('text','department', $user['department']);
+					$input = new input('text','department', $user['department'],true,$required);
 					$input->set_attribute('style','width:280px');
 					$input->set_attribute('maxlength','50');
 					$row->add_cell(new table_cell($input->get_html()));
@@ -1089,10 +1180,17 @@ class cms_site extends cms {
 
 				if(in_array('function',$fields))
 				{
-					$end=in_array('function',$required_fields)? '*:' : ':';
+					if(in_array('function',$required_fields))
+					{
+						$required=true;
+						$end='*:';
+					}else {
+						$end=':';
+						$required=false;
+					}
 					$row = new table_row();
 					$row->add_cell(new table_cell($GLOBALS['strFunction'].$end));
-					$input = new input('text','function', $user['function']);
+					$input = new input('text','function', $user['function'],true,$required);
 					$input->set_attribute('style','width:280px');
 					$input->set_attribute('maxlength','50');
 					$row->add_cell(new table_cell($input->get_html()));
@@ -1112,53 +1210,88 @@ class cms_site extends cms {
 				if(in_array('work_address',$fields))
 				{
 					$break=true;
-					$end=in_array('work_address',$required_fields)? '*:' : ':';
+					if(in_array('work_address',$required_fields))
+					{
+						$required=true;
+						$end='*:';
+					}else {
+						$end=':';
+						$required=false;
+					}
 					$row = new table_row();
-					$row->add_cell(new table_cell($GLOBALS['strWorkAddress'].$end));
-					$input = new input('text','work_address', $user['work_address']);
+					$row->add_cell(new table_cell($GLOBALS['strWorkAddressAndNo'].$end));
+					$input = new input('text','work_address', $user['work_address'],true,$required);
 					$input->set_attribute('style','width:230px');
 					$input->set_attribute('maxlength','100');
 
-					$input1 = new input('text','work_address_no', $user['work_address_no']);
+					$input1 = new input('text','work_address_no', $user['work_address_no'],true,$required);
 					$input1->set_attribute('style','width:47px');
 					$input1->set_attribute('maxlength','10');
 
 					$row->add_cell(new table_cell($input->get_html().$input1->get_html()));
 					$table->add_row($row);
 
-					$end=in_array('work_zip',$required_fields)? '*:' : ':';
+					if(in_array('work_zip',$required_fields))
+					{
+						$required=true;
+						$end='*:';
+					}else {
+						$end=':';
+						$required=false;
+					}
 					$row = new table_row();
 					$row->add_cell(new table_cell($GLOBALS['strWorkZip'].$end));
-					$input = new input('text','work_zip', $user['work_zip']);
+					$input = new input('text','work_zip', $user['work_zip'],true,$required);
 					$input->set_attribute('style','width:280px');
 					$input->set_attribute('maxlength','20');
 					$row->add_cell(new table_cell($input->get_html()));
 					$table->add_row($row);
 
-					$end=in_array('work_city',$required_fields)? '*:' : ':';
+					if(in_array('work_city',$required_fields))
+					{
+						$required=true;
+						$end='*:';
+					}else {
+						$end=':';
+						$required=false;
+					}
 					$row = new table_row();
 					$row->add_cell(new table_cell($GLOBALS['strWorkCity'].$end));
-					$input = new input('text','work_city', $user['work_city']);
+					$input = new input('text','work_city', $user['work_city'],true,$required);
 					$input->set_attribute('style','width:280px');
 					$input->set_attribute('maxlength','50');
 					$row->add_cell(new table_cell($input->get_html()));
 					$table->add_row($row);
 
-					$end=in_array('work_state',$required_fields)? '*:' : ':';
+					if(in_array('work_state',$required_fields))
+					{
+						$required=true;
+						$end='*:';
+					}else {
+						$end=':';
+						$required=false;
+					}
 					$row = new table_row();
 					$row->add_cell(new table_cell($GLOBALS['strWorkState'].$end));
-					$input = new input('text','work_state', $user['work_state']);
+					$input = new input('text','work_state', $user['work_state'],true,$required);
 					$input->set_attribute('style','width:280px');
 					$input->set_attribute('maxlength','50');
 					$row->add_cell(new table_cell($input->get_html()));
 					$table->add_row($row);
 
-					$end=in_array('inititals_title',$required_fields)? '*:' : ':';
+					if(in_array('work_country_id',$required_fields))
+					{
+						$required=true;
+						$end='*:';
+					}else {
+						$end=':';
+						$required=false;
+					}
 					$row = new table_row();
 					$row->add_cell(new table_cell($GLOBALS['strCountry'].$end));
 
 
-					$select = new select('work_country_id', $user['work_country_id']);
+					$select = new select('work_country_id', $user['work_country_id'],false,$required);
 					$select->add_value('0', $GLOBALS['cmdPleaseSelect']);
 					$GO_USERS->get_countries();
 					while($GO_USERS->next_record())
@@ -1178,10 +1311,17 @@ class cms_site extends cms {
 				if(in_array('work_phone',$fields))
 				{
 					$break=true;
-					$end=in_array('work_phone',$required_fields)? '*:' : ':';
+					if(in_array('work_phone',$required_fields))
+					{
+						$required=true;
+						$end='*:';
+					}else {
+						$end=':';
+						$required=false;
+					}
 					$row = new table_row();
 					$row->add_cell(new table_cell($GLOBALS['strWorkphone'].$end));
-					$input = new input('text','work_phone', $user['work_phone']);
+					$input = new input('text','work_phone', $user['work_phone'],true,$required);
 					$input->set_attribute('style','width:280px');
 					$input->set_attribute('maxlength','20');
 					$row->add_cell(new table_cell($input->get_html()));
@@ -1191,10 +1331,17 @@ class cms_site extends cms {
 				if(in_array('work_fax',$fields))
 				{
 					$break=true;
-					$end=in_array('work_fax',$required_fields)? '*:' : ':';
+					if(in_array('work_fax',$required_fields))
+					{
+						$required=true;
+						$end='*:';
+					}else {
+						$end=':';
+						$required=false;
+					}
 					$row = new table_row();
 					$row->add_cell(new table_cell($GLOBALS['strWorkFax'].$end));
-					$input = new input('text','work_fax', $user['work_fax']);
+					$input = new input('text','work_fax', $user['work_fax'],true,$required);
 					$input->set_attribute('style','width:280px');
 					$input->set_attribute('maxlength','20');
 					$row->add_cell(new table_cell($input->get_html()));
@@ -1204,10 +1351,17 @@ class cms_site extends cms {
 				if(in_array('homepage',$fields))
 				{
 					$break=true;
-					$end=in_array('homepage',$required_fields)? '*:' : ':';
+					if(in_array('homepage',$required_fields))
+					{
+						$required=true;
+						$end='*:';
+					}else {
+						$end=':';
+						$required=false;
+					}
 					$row = new table_row();
 					$row->add_cell(new table_cell($GLOBALS['strHomepage'].$end));
-					$input = new input('text','homepage', $user['homepage']);
+					$input = new input('text','homepage', $user['homepage'],true,$required);
 					$input->set_attribute('style','width:280px');
 					$input->set_attribute('maxlength','100');
 					$row->add_cell(new table_cell($input->get_html()));
@@ -1226,7 +1380,7 @@ class cms_site extends cms {
 				}
 				$row = new table_row();
 				$row->add_cell(new table_cell($GLOBALS['strUsername'].'*:'));
-				$input = new input('text', 'username');
+				$input = new input('text', 'username',$user['username'],true,true);
 				$input->set_attribute('style','width:200px');
 				$row->add_cell(new table_cell($input->get_html()));
 				$table->add_row($row);
@@ -1235,14 +1389,14 @@ class cms_site extends cms {
 				{
 					$row = new table_row();
 					$row->add_cell(new table_cell($admin_password.'*:'));
-					$input = new input('password', 'pass1');
+					$input = new input('password', 'pass1','',true,true);
 					$input->set_attribute('style','width:200px');
 					$row->add_cell(new table_cell($input->get_html()));
 					$table->add_row($row);
 
 					$row = new table_row();
 					$row->add_cell(new table_cell($admin_confirm_password.'*:'));
-					$input = new input('password', 'pass2');
+					$input = new input('password', 'pass2','',true,true);
 					$input->set_attribute('style','width:200px');
 					$row->add_cell(new table_cell($input->get_html()));
 					$table->add_row($row);
@@ -1637,11 +1791,11 @@ class cms_site extends cms {
 	}
 
 	function create_url($folder_id, $file_id = 0, $full=false) {
-		
+
 		$url = '';
 		if($full)
 		{
-			if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']!='off')			
+			if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']!='off')
 			{
 				$url .= 'https://';
 			}else {
@@ -1649,7 +1803,7 @@ class cms_site extends cms {
 			}
 			$url .= $_SERVER['HTTP_HOST'];
 		}
-		
+
 		$url .=  $_SERVER['PHP_SELF'].'?folder_id='.$folder_id.'&amp;file_id='.$file_id;
 		return $url;
 	}
@@ -1794,15 +1948,15 @@ class cms_site extends cms {
 		}
 		return $back;
 	}
-	
+
 	function get_next_previous_files()
 	{
 		global $GO_SECURITY;
-		
+
 		$this->previous_file_id=0;
 		$this->next_file_id=0;
 
-		$files = $this->get_authorized_files($this->folder_id, $GO_SECURITY->user_id);		
+		$files = $this->get_authorized_files($this->folder_id, $GO_SECURITY->user_id);
 		for($i=0;$i<count($files);$i++)
 		{
 			if($files[$i]['id']==$this->file_id)
@@ -1815,29 +1969,29 @@ class cms_site extends cms {
 				{
 					$this->next_file=$files[$i+1];
 				}
-				break;				
+				break;
 			}
-	
+
 		}
 	}
-	
-	
+
+
 	function print_nextfile($attributes) {
 		$template_name = isset ($attributes['template']) ? $attributes['template'] : '';
 		$class = isset ($attributes['class']) ? $attributes['class'] : '';
-		
+
 		$nextpage = '';
 		$template = $this->get_template_item_by_name($this->site['template_id'], $template_name);
-		
+
 		if(!isset($this->next_file))
 		{
 			$this->get_next_previous_files();
 		}
 
 		if (is_array($this->next_file)) {
-			
+
 			$text = isset ($attributes['text']) ? $attributes['text'] : strip_extension($this->next_file['name']);
-			
+
 			$nextpage = '<a class="'.$class.'" href="'.$this->create_url($this->folder_id, $this->next_file['id']).'">'.$text.'</a>';
 			if ($template) {
 				$template_content = $this->parse_template($template['content']);
@@ -1846,23 +2000,23 @@ class cms_site extends cms {
 		}
 		return $nextpage;
 	}
-	
+
 	function print_previousfile($attributes) {
 		$template_name = isset ($attributes['template']) ? $attributes['template'] : '';
-		$class = isset ($attributes['class']) ? $attributes['class'] : '';		
-		
+		$class = isset ($attributes['class']) ? $attributes['class'] : '';
+
 		$previouspage = '';
 		$template = $this->get_template_item_by_name($this->site['template_id'], $template_name);
-		
+
 		if(!isset($this->previous_file))
 		{
 			$this->get_next_previous_files();
 		}
 
 		if (is_array($this->previous_file)) {
-			
+
 			$text = isset ($attributes['text']) ? $attributes['text'] : strip_extension($this->previous_file['name']);
-			
+
 			$previouspage = '<a class="'.$class.'" href="'.$this->create_url($this->folder_id, $this->previous_file['id']).'">'.$text.'</a>';
 			if ($template) {
 				$template_content = $this->parse_template($template['content']);
@@ -2043,21 +2197,21 @@ class cms_site extends cms {
 		}
 		return $files;
 	}
-	
+
 	function get_active_levels(){
-		
+
 		$levels=array();
-		
+
 		$folder_id=$this->folder_id;
 		do{
 			$levels[]=$folder_id;
-			$folder = $this->get_folder($folder_id);			
+			$folder = $this->get_folder($folder_id);
 			$folder_id=$folder['parent_id'];
-		}while($folder['parent_id']>0);	
-		
+		}while($folder['parent_id']>0);
+
 		return array_reverse($levels);
 	}
-	
+
 
 	function print_items($attributes) {
 		global $GO_CONFIG, $extension, $GO_SECURITY;
@@ -2072,7 +2226,7 @@ class cms_site extends cms {
 		$print_root = isset ($attributes['print_root']) ? $attributes['print_root'] : 'true';
 		$menu = isset ($attributes['menu']) ? $attributes['menu'] : '';
 		$level = isset ($attributes['level']) ? $attributes['level'] : null;
-		
+
 		if($print_root_only=='true')
 		{
 			$level=0;
@@ -2091,14 +2245,14 @@ class cms_site extends cms {
 			if(isset($level))
 			{
 				$levels=$this->get_active_levels();
-				
+
 				if(!isset($levels[$level]))
 				{
 					return '';
 				}else {
 					$items = $this->get_authorized_items($levels[$level], $GO_SECURITY->user_id, true);
-				}			
-				
+				}
+
 			}else {
 				$items = $this->get_authorized_items($this->folder_id, $GO_SECURITY->user_id, true);
 			}
@@ -2110,11 +2264,11 @@ class cms_site extends cms {
 				$extension = $item['extension'];
 
 				$item_template = ($this->file_id == $item['id']) ? $item_template_active : $item_template_passive;
-				
-				
-				$_class = ($this->file_id == $item['id']) ? $active_class : $class;	
-				
-				
+
+
+				$_class = ($this->file_id == $item['id']) ? $active_class : $class;
+
+
 
 				$name = strip_extension($item['name']);
 				$title = $item['title'] == '' ? $name : $item['title'];
@@ -2132,7 +2286,7 @@ class cms_site extends cms {
 			} else {
 				$extension = '';
 				$item_template = ($this->folder_id == $item['id']) ? $item_template_active : $item_template_passive;
-				
+
 				if(isset($level))
 				{
 					if(isset($levels[$level+1]) && $item['id']==$levels[$level+1])
