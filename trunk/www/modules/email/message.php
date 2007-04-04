@@ -447,7 +447,7 @@ for ($i=0;$i<sizeof($parts);$i++)
 	$mime = strtolower($parts[$i]["mime"]);
 
 	//if (($mime == "text/html") || ($mime == "text/plain") || ($mime == "text/enriched"))
-	if (($mime == "text/html") || ($mime == "text/plain") || ($mime == "text/enriched") || $mime == "unknown/unknown")
+	if ($parts[$i]["name"] == '' && ($mime == "text/html" || $mime == "text/plain" || $mime == "text/enriched" || $mime == "unknown/unknown"))
 	{
 		//$mail_charset = $parts[$i]['charset'];
 
