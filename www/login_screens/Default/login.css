@@ -1,3 +1,4 @@
+
 body {
 	background-color: #f1f1f1;
 	font-family: arial, helvetica, sans-serif;
@@ -64,10 +65,18 @@ a.lost_password:hover {
 }
 
 .textbox{
+font-family: arial,verdana,sans-serif;
+font-size: 12px;
+border: 1px solid #666666;
+border-bottom: 1px solid #f8f8f8;
+border-right: 1px solid #f8f8f8;
+}
 
-	font-family: arial, helvetica, sans-serif;
-	font-size: 12px;
-	color: #000000;
+.textbox_error{
+font-family: arial,verdana,sans-serif;
+font-size: 12px;
+border: 1px solid red;
+background-color:#ffd1d1;
 }
 
 .button{

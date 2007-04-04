@@ -979,7 +979,7 @@ class cms_site extends cms {
 
 					$row = new table_row();
 					$row->add_cell(new table_cell($GLOBALS['strAddressAndNo'].$end));
-					$input = new input('text','address', $user['address']);
+					$input = new input('text','address', $user['address'],true,$required);
 					$input->set_attribute('style','width:230px');
 					$input->set_attribute('maxlength','50');
 
