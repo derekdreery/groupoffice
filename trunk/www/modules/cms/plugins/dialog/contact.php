@@ -30,13 +30,13 @@ $task = isset($_REQUEST['task']) ? smart_stripslashes($_REQUEST['task']) : '';
 
 if($task=='insert')
 {	
-	$email_to = smart_stripslashes($_POST['email_to']);
+	$email_to = smart_stripslashes($_POST['email']);
 	$height = number_to_phpnumber(smart_stripslashes($_POST['height']));
 	
 	require_once($GO_MODULES->path.'plugins/contact.class.inc');
-	$cms_contact = new cms_contact();
+	$cms_contact = new cms_contact(array());
 	
-	if(validate_email($email_to))
+	if(!validate_email($email_to))
 	{
 		$feedback = $GLOBALS['error_email'];
 	}else {
