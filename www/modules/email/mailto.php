@@ -22,6 +22,15 @@ $qs=str_replace('?subject','&subject', $qs);
 parse_str($qs, $vars);
 //var_dump($vars);
 
+if(!isset($vars['mail_to']))
+	$vars['mail_to']='';
+	
+if(!isset($vars['subject']))
+	$vars['subject']='';
+	
+if(!isset($vars['body']))
+	$vars['body']='';
+
 $GO_HEADER['body_arguments'] = 'onload="javascript:composer(\''.smart_stripslashes($vars['mail_to']).'\',\''.smart_stripslashes($vars['subject']).'\',\''.smart_stripslashes($vars['body']).'\');"';
 
 
