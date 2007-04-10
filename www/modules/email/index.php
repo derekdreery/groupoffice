@@ -77,6 +77,18 @@ $GO_HEADER['head'] = '<script type="text/javascript" src="'.$GO_MODULES->url.'em
 $GO_HEADER['head'] .= '<script type="text/javascript" src="'.$GO_CONFIG->host.'javascript/base64.js"></script>';
 
 
+if(isset($_REQUEST['mail_to']))
+{
+	$qs=str_replace('mailto:','', $_SERVER['QUERY_STRING']);
+	$qs=str_replace('?subject','&subject', $qs);
+
+	parse_str($qs, $vars);
+	//var_dump($vars);
+
+	$GO_HEADER['body_arguments'] = 'onload="javascript:composer(\'\',\''.smart_stripslashes($vars['mail_to']).'\',\''.smart_stripslashes($vars['subject']).'\',\''.smart_stripslashes($vars['body']).'\')"';
+}
+
+
 require_once ($GO_THEME->theme_path."header.inc");
 ?>
 <script type="text/javascript">
@@ -119,8 +131,21 @@ function link_messages()
 	}
 }
 
-function composer(action)
+function composer(action,mail_to,subject,body)
 {
+	if(typeof(mail_to) == "undefined")
+	{
+		mail_to='';
+	}
+	if(typeof(subject) == "undefined")
+	{
+		subject='';
+	}
+	if(typeof(body) == "undefined")
+	{
+		body='';
+	}
+	
 	if(action != '')
 	{
 		var url = 'send.php?mail_from='+message.document.forms[0].account_id.value+
@@ -130,6 +155,8 @@ function composer(action)
 	{
 		var url = 'send.php?mail_from='+messages.document.forms[0].account_id.value;
 	}
+	
+	url += '&mail_to='+mail_to+'&mail_subject='+subject+'&mail_body='+escape(body);
 	
 	var height='<?php echo $GO_CONFIG->composer_height; ?>';
 	var width='<?php echo $GO_CONFIG->composer_width; ?>';
