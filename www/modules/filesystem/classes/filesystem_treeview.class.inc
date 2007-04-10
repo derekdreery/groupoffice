@@ -59,8 +59,9 @@ class filesystem_treeview extends html_element
 		foreach ($fs->get_my_shares() as $sharer)
 		{
 			$GO_USERS->get_user($sharer);
+			
 
-			if ($GO_USERS->f('id') != $GO_SECURITY->user_id)
+			if ($GO_USERS->f('id')>0 && $GO_USERS->f('id') != $GO_SECURITY->user_id)
 			{
 				$middle_name = $GO_USERS->f('middle_name') == '' ? '' : $GO_USERS->f('middle_name').' ';
 				$user['name'] = htmlspecialchars($GO_USERS->f('first_name').' '.$middle_name.$GO_USERS->f('last_name'));
