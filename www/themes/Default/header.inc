@@ -26,6 +26,7 @@ if (isset($page_title))
 }
 
 echo '</title>';
+
 if(isset($GO_HEADER['auto_refresh']))
 {	
 	$GO_HEADER['auto_refresh']['interval'] = isset($GO_HEADER['auto_refresh']['interval']) ? $GO_HEADER['auto_refresh']['interval'] : $GO_CONFIG->refresh_rate;
