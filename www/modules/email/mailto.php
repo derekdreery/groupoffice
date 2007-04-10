@@ -30,7 +30,6 @@ require_once ($GO_THEME->theme_path."header.inc");
 
 require_once ($GO_LANGUAGE->get_language_file('email'));
 
-$ml_mail_to='A composer window should have been opened for you because you clicked on the e-mail address %s.';
 
 $p = new html_element('p', sprintf($ml_mail_to, $vars['mail_to']));
 echo $p->get_html();

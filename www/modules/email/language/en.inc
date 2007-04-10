@@ -225,3 +225,6 @@ $ml_unknown_reciepent='The recipient is unknown. Please complete the recipient\'
 
 $ml_auto_check='Check if there are new messages automatically';
 $ml_beep='Beep on new e-mail';
+
+//2.17
+$ml_mail_to='A composer window should have been opened for you because you clicked on the e-mail address %s.';

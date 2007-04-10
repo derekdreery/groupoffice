@@ -188,3 +188,5 @@ $ml_show_attachments='Toon bijlagen en prioriteiten (langzamer)';
 $ml_unknown_reciepent='De ontvanger is onbekend. Vul gegevens in a.u.b.';
 $ml_auto_check='Controleer automatisch of er nieuwe berichten zijn';
 $ml_beep='Maak geluid als er nieuwe e-mail is';
+//2.17
+$ml_mail_to='Een venster om een e-mail te schrijven is voor u geopend omdat u op het e-mail adres \'%s\' hebt geklikt.';
