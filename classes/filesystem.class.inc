@@ -316,17 +316,18 @@ class filesystem extends db
    */
 	function is_sub_dir($sub_path, $parent_path)
 	{
-		if (strpos($sub_path, $parent_path) === false)
+		if(substr($sub_path,-1,1)!='/')
 		{
-			return false;
+			$sub_path+='/';
+		}
+
+		if(strpos($sub_path, $parent_path)===0)
+		{
+			return true;
 		}else
 		{
-			if (substr($sub_path, strlen($parent_path), 1) != '/')
-			{
-				return false;
-			}
+			return false;
 		}
-		return true;
 	}
 
 
