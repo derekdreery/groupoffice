@@ -404,10 +404,26 @@ class filesystem extends db
    * @access public
    * @return int Number of shares found, 
    */
-	function get_shares($user_id)
+	function get_shares($user_id, $type='filesystem')
 	{
 		//ORDER BY PATH important so higher order shares come first
-		$sql = "SELECT * FROM fs_shares WHERE user_id='$user_id' AND type='filesystem' ORDER BY path ASC";
+		$sql = "SELECT * FROM fs_shares WHERE user_id='$user_id' AND type='".$type."' ORDER BY path ASC";
+		$this->query($sql);
+		return $this->num_rows();
+	}
+	
+	/**
+   * Get the shares owned by a user.
+   *
+   * @param int $user_id Group-Office user ID
+   *
+   * @access public
+   * @return int Number of shares found, 
+   */
+	function get_all_shares($user_id)
+	{
+		//ORDER BY PATH important so higher order shares come first
+		$sql = "SELECT * FROM fs_shares WHERE user_id='$user_id' ORDER BY path ASC";
 		$this->query($sql);
 		return $this->num_rows();
 	}
@@ -1262,7 +1278,7 @@ class filesystem extends db
 	function __on_delete_user($user_id)
 	{
 		$fs = new filesystem();
-		$this->get_shares($user_id);
+		$this->get_all_shares($user_id);
 		while($this->next_record())
 		{
 			$fs->delete_share($this->f('path'));
