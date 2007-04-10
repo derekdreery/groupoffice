@@ -50,7 +50,7 @@ if (isset($feedback))
   $container->add_html_element($p);
 }
 
-if ($project_id== 0 && $ab_module)
+if ($project_id== 0 && isset($GO_MODULES->modules['addressbook']) && $GO_MODULES->modules['addressbook']['read_permission'])
 {
 	$load_id = isset($_POST['load_id']['value']) ? $_POST['load_id']['value'] : '0';
 	$load_type = isset($_POST['load_id']['type']) ? $_POST['load_id']['type'] : 'contact';
@@ -68,8 +68,11 @@ if (!$print)
 	
 	$table = new table();
 
-	if ($project_id ==0 && $ab_module)
+	if ($project_id ==0 && isset($GO_MODULES->modules['addressbook']) && $GO_MODULES->modules['addressbook']['read_permission'])
 	{
+		require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc');
+		$ab = new addressbook();
+		
 		load_control('object_select');
 		$select = new object_select($load_type, 'projects_form', 'load_id', $load_id, array('contact','company','project'));
 		
