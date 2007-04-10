@@ -25,6 +25,13 @@ if($GO_CONFIG->force_fullscreen && basename($_SERVER['PHP_SELF']) != 'fullscreen
 	echo '<script type="text/javascript">if(window.name != "groupoffice"){openPopup("groupoffice", document.location,"","");document.location="fullscreen.php";}</script>';
 
 }
+
+echo '<script type="text/javascript">
+if (self != top)
+{
+	parent.location=document.location;
+}
+</script>';
 ?>
 </head>
 <body dir="<?php echo $htmldirection; ?>"  onkeypress="executeOnEnter(event, 'document.login_form.submit();')">
