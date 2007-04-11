@@ -190,3 +190,5 @@ $ml_auto_check='Controleer automatisch of er nieuwe berichten zijn';
 $ml_beep='Maak geluid als er nieuwe e-mail is';
 //2.17
 $ml_mail_to='Een venster om een e-mail te schrijven is voor u geopend omdat u op het e-mail adres \'%s\' hebt geklikt.';
+$ml_windows_mail = 'Wanneer u Group-Office als uw standaard e-mail programma in Microsoft Windows wilt gebruiken moet u een bestand in het register laden. Download het register bestand en voer het uit. Daarna kunt u Group-Office als standaard e-mail programma selecteren in Windows bij: Configuratie scherm -> Internet opties -> Programma\'s';
+$ml_download_reg='Download register bestand';
