@@ -160,7 +160,23 @@ if($_SESSION['auth_source']['user_manager'] == 'passwd')
 	
 }
 
+
+
+
+
 $tabstrip->add_html_element($table);
+
+
+$p = new html_element('p', $ml_windows_mail);
+$p->set_attribute('style','margin-top:10px;margin-bottom:5px;');
+$link = new hyperlink($GO_MODULES->modules['email']['url'].'register_email.php', $ml_download_reg);
+$link->set_attribute('class','normal');
+
+$tabstrip->add_html_element($p);
+$tabstrip->add_html_element($link);
+$tabstrip->innerHTML .= '<br /><br />';
+
+
 $tabstrip->add_html_element(new button($cmdSave, "javascript:_save('save_email_settings');"));
 
 $tabstrip->innerHTML .= '
