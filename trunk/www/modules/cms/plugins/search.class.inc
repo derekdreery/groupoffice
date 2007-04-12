@@ -52,7 +52,7 @@ class cms_search {
 		
 		$query = addslashes($this->query);
 		
-		if($task == 'search')
+		if($task == 'search' && !empty($query))
 		{
 			$cms = new cms();
 		
