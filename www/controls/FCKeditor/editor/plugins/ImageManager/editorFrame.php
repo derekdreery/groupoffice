@@ -40,6 +40,7 @@ var currentImageFile = "<?php if(count($imageInfo)>0) echo rawurlencode($imageIn
 
 <?php if ($editor->isFileSaved() == 1) { ?>
 	alert(i18n('File saved.'));
+	parent.opener.location.reload();
 <?php } else if ($editor->isFileSaved() == -1) { ?>
 	alert(i18n('File was not saved.'));
 <?php } ?>

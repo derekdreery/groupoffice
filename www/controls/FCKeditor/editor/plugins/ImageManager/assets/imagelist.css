@@ -1,8 +1,8 @@
 body { margin: 0; padding: 0; }
-.block { height: 98px; width: 98px; border: 1px solid threedface; text-align: center; behavior: url(assets/hover.htc ); }
+.block { height: 98px; width: 98px; border: 1px solid threedface; text-align: center;}
 .block a img { border: 0 none; }
 .block:hover, .block.hover{ background-color: #ffc; }
-.edit { font-size: 9pt; font-family: "MS Sans Serif", Geneva, sans-serif; padding-top: 3px;}
+.edit { font-size: 10px; font-family: "MS Sans Serif", Geneva, sans-serif; padding-top: 3px;}
 .edit a { border: 1px solid white; padding: 3px; }
 .edit a:hover { border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight; background-color: #ffc; }
 .edit a img { border: 0 none; vertical-align: bottom; }

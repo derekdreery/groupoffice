@@ -52,12 +52,12 @@ function drawFiles($list, &$manager)
 
 	foreach($list as $entry => $file) 
 	{ ?>
-		<td><table width="100" cellpadding="0" cellspacing="0"><tr><td class="block">
+		<table width="100" cellpadding="0" cellspacing="0" style="display:inline"><tr><td class="block">
 		<a href="javascript:;" onclick="selectImage('<?php echo $file['relative'];?>', '<?php echo $entry; ?>', <?php echo $file['image'][0];?>, <?php echo $file['image'][1]; ?>);"title="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>"><img src="<?php echo $manager->getThumbnail($file['relative']); ?>" alt="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>"/></a>
 		</td></tr><tr><td class="edit">
 			<a href="images.php?dir=<?php echo $relative; ?>&amp;delf=<?php echo rawurlencode($file['relative']);?>" title="Trash" onclick="return confirmDeleteFile('<?php echo $entry; ?>');"><img src="img/edit_trash.gif" height="15" width="15" alt="Trash"/></a><a href="javascript:;" title="Edit" onclick="editImage('<?php echo rawurlencode($file['relative']);?>');"><img src="img/edit_pencil.gif" height="15" width="15" alt="Edit"/></a>
 		<?php if($file['image']){ echo $file['image'][0].'x'.$file['image'][1]; } else echo $entry;?>
-		</td></tr></table></td> 
+		</td></tr></table>
 	  <?php 
 	}//foreach
 }//function drawFiles
@@ -72,14 +72,14 @@ function drawDirs($list, &$manager)
 
 	foreach($list as $path => $dir) 
 	{ ?>
-		<td><table width="100" cellpadding="0" cellspacing="0"><tr><td class="block">
+		<table width="100" cellpadding="0" cellspacing="0" style="display:inline"><tr><td class="block">
 		<a href="images.php?dir=<?php echo rawurlencode($path); ?>" onclick="updateDir('<?php echo $path; ?>')" title="<?php echo $dir['entry']; ?>"><img src="img/folder.gif" height="80" width="80" alt="<?php echo $dir['entry']; ?>" /></a>
 		</td></tr><tr>
 		<td class="edit">
 			<a href="images.php?dir=<?php echo $relative; ?>&amp;deld=<?php echo rawurlencode($path); ?>" title="Trash" onclick="return confirmDeleteDir('<?php echo $dir['entry']; ?>', <?php echo $dir['count']; ?>);"><img src="img/edit_trash.gif" height="15" width="15" alt="Trash"/></a>
 			<?php echo $dir['entry']; ?>
 		</td>
-		</tr></table></td>
+		</tr></table>
 	  <?php 
 	} //foreach
 }//function drawDirs
@@ -194,12 +194,10 @@ function drawErrorBase(&$manager)
 <body>
 <?php if ($manager->isValidBase() == false) { drawErrorBase($manager); } 
 	elseif(count($list[0]) > 0 || count($list[1]) > 0) { ?>
-<table>
-	<tr>
+
 	<?php drawDirs($list[0], $manager); ?>
 	<?php drawFiles($list[1], $manager); ?>
-	</tr>
-</table>
+
 <?php } else { drawNoResults(); } ?>
 </body>
 </html>
