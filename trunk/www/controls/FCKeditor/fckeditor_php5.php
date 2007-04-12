@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /*
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
  * Copyright (C) 2003-2007 Frederico Caldeira Knabben
@@ -57,7 +57,7 @@ class FCKeditor
 	{
 		$HtmlValue = htmlspecialchars( $this->Value ) ;
 
-		$Html = '<div style="height:100;">' ;
+		$Html = '<div style="height:100%">' ;
 
 		if ( $this->IsCompatible() )
 		{

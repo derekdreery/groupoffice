@@ -16,7 +16,7 @@ FCKConfig.ToolbarSets["template"] = [
 	['OrderedList','UnorderedList','-','Outdent','Indent'],
 	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
 	['Link','Unlink','Anchor'],
-	['Image', 'Table','Rule','SpecialChar','PageBreak','UniversalKey'],
+	['Image', 'Table','Rule','SpecialChar','PageBreak'],
 	'/',
 	['FontFormat','FontName','FontSize'],
 	['TextColor','BGColor'],['go_autodata']
@@ -30,7 +30,7 @@ FCKConfig.ToolbarSets["ImageManager"] = [
 	['OrderedList','UnorderedList','-','Outdent','Indent'],
 	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
 	['Link','Unlink','Anchor'],
-	['ImageManager', 'Table','Rule','SpecialChar','PageBreak','UniversalKey'],
+	['ImageManager', 'Table','Rule','SpecialChar','PageBreak'],
 	'/',
 	['FontFormat','FontName','FontSize'],
 	['TextColor','BGColor'],['go_autodata']
@@ -44,7 +44,7 @@ FCKConfig.ToolbarSets["email"] = [
 	['OrderedList','UnorderedList','-','Outdent','Indent'],
 	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
 	['Link','Unlink','Anchor'],
-	['Image','Table','Rule','SpecialChar','PageBreak','UniversalKey'],
+	['Image','Table','Rule','SpecialChar','PageBreak'],
 	'/',
 	['FontFormat','FontName','FontSize'],
 	['TextColor','BGColor']

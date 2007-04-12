@@ -1,4 +1,4 @@
-﻿<cfcomponent output="false" displayname="FCKeditor" hint="Create an instance of the FCKeditor.">
+<cfcomponent output="false" displayname="FCKeditor" hint="Create an instance of the FCKeditor.">
 <!---
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
  * Copyright (C) 2003-2007 Frederico Caldeira Knabben
