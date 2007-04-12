@@ -1533,6 +1533,11 @@ class calendar extends db
 	{
 		return $this->query("DELETE FROM cal_reminders WHERE user_id='$user_id' AND event_id='$event_id'");
 	}
+	
+	function delete_reminders($user_id)
+	{
+		return $this->query("DELETE FROM cal_reminders WHERE user_id='$user_id'");
+	}
 	/*
 	returns next starting time of an event in GMT timezone
 	*/
