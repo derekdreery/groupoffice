@@ -68,8 +68,8 @@ $img = new image('help');
 $img->set_attribute('style','border:0px;margin-right:3px;');
 $img->set_attribute('align','absmiddle');
 
-$link = new hyperlink($GO_CONFIG->host.'doc/index.php',$img->get_html().$menu_help);
-$link->set_attribute('target','main');
+$link = new hyperlink($GO_CONFIG->host.'help.php',$img->get_html().$menu_help);
+$link->set_attribute('target','_blank');
 
 $cell->add_html_element($link);
 

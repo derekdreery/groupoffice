@@ -387,3 +387,4 @@ $cal_background = 'Background';
 $cal_show_busy='Show as busy';
 
 $cal_subject='Subject';
+$cal_dismiss_all = 'Dismiss all';
