@@ -489,4 +489,21 @@ class db {
   	}
   	return false;
   }
+   
+  function replace_row($table, $fields)
+  {
+  	foreach($fields as $key => $value)
+  	{
+  		$field_names[] = $key;
+  		$field_values[] = $value;
+  	}
+  	if(isset($field_names))
+  	{
+  		$sql = "REPLACE INTO `$table` (`".implode('`,`', $field_names)."`) VALUES ".
+  					"('".implode("','", $field_values)."')";
+  					
+	  	return $this->query($sql);
+  	}
+  	return false;
+  }
 }
