@@ -2370,13 +2370,7 @@ class cms_site extends cms {
 			{
 				$folder_id = $start_folder_id;
 			}
-		}
-
-		
-		
-		
-		
-		
+		}	
 		
 		
 		$folder = $this->get_folder($folder_id);
