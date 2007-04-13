@@ -5,8 +5,10 @@ FCKConfig.LinkUpload=false;
 FCKConfig.ImageBrowser=false;
 FCKConfig.ImageUpload=false;
 FCKConfig.FlashUpload =false;
-FCKConfig.UseBROnCarriageReturn=true;
 FCKConfig.IEForceVScroll=true;
+
+FCKConfig.EnterMode = 'br' ;			// p | div | br
+FCKConfig.ShiftEnterMode = 'br' ;	// p | div | br
 
 FCKConfig.ToolbarSets["template"] = [
 	['Source','DocProps','-','Templates'],
