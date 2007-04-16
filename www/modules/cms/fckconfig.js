@@ -19,7 +19,8 @@ FCKConfig.ToolbarSets["cms"] = [
 	['ImageManager', 'Flash', 'Table','Rule','SpecialChar','PageBreak'],
 	'/',
 	['Style','FontFormat','FontName','FontSize'],
-	['TextColor','BGColor']
+	['TextColor','BGColor'],
+	['FitWindow']
 ] ;
 
 FCKConfig.ToolbarSets["cms_restricted"] = [
@@ -30,7 +31,8 @@ FCKConfig.ToolbarSets["cms_restricted"] = [
 	['OrderedList','UnorderedList','-','Outdent','Indent'],
 	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
 	['Link', 'Unlink','Anchor'],
-	['ImageManager','Flash','Table','Rule','SpecialChar','PageBreak', 'Style','FontFormat']
+	['ImageManager','Flash','Table','Rule','SpecialChar','PageBreak', 'Style','FontFormat'],
+	['FitWindow']
 ] ;
 
 FCKConfig.Plugins.Add( 'ImageManager');

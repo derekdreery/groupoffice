@@ -21,7 +21,8 @@ FCKConfig.ToolbarSets["template"] = [
 	['Image', 'Table','Rule','SpecialChar','PageBreak'],
 	'/',
 	['FontFormat','FontName','FontSize'],
-	['TextColor','BGColor'],['go_autodata']
+	['TextColor','BGColor'],['go_autodata'],
+	['FitWindow']
 ] ;
 
 FCKConfig.ToolbarSets["ImageManager"] = [
@@ -35,7 +36,8 @@ FCKConfig.ToolbarSets["ImageManager"] = [
 	['ImageManager', 'Table','Rule','SpecialChar','PageBreak'],
 	'/',
 	['FontFormat','FontName','FontSize'],
-	['TextColor','BGColor'],['go_autodata']
+	['TextColor','BGColor'],['go_autodata'],
+	['FitWindow']
 ] ;
 
 FCKConfig.ToolbarSets["email"] = [
@@ -49,7 +51,8 @@ FCKConfig.ToolbarSets["email"] = [
 	['Image','Table','Rule','SpecialChar','PageBreak'],
 	'/',
 	['FontFormat','FontName','FontSize'],
-	['TextColor','BGColor']
+	['TextColor','BGColor'],
+	['FitWindow']
 ] ;
 
 
