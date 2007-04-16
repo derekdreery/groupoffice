@@ -190,3 +190,4 @@ $ab_select_unknown_recipient='De geaddresseerde %s is onbekend. Het e-mail adres
 $ab_ignore='Negeren';
 
 $ab_check_info='Het e-mail adres is ingevuld bij het profiel. Klik op \'Ok\' om het op te slaan.';
+$ab_reset='Reset';
