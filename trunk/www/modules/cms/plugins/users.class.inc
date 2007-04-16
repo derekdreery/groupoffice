@@ -34,7 +34,7 @@ class cms_users {
 	
 	function get_html()
 	{
-		global $GO_USERS;
+		global $GO_USERS, $GO_CONFIG, $GO_SECURITY;
 		
 		$form = new form('users_form');
 		$form->add_html_element(new input('hidden','user_id', '', false));
@@ -183,25 +183,28 @@ class cms_users {
 				
 				while($GO_USERS->next_record())
 				{		
-					$row = new table_row();
-					
-					$link = new hyperlink('javascript:show_user('.$GO_USERS->f('id').');', htmlspecialchars(format_name($GO_USERS->f('last_name'), $GO_USERS->f('first_name'), $GO_USERS->f('middle_name'), 'first_name')));
-					
-					$cell = new table_cell($link->get_html());
-					$row->add_cell($cell);
-					
-					$country_text = '';
-					$go_users = new $GLOBALS['go_users_class'];
-					
-					if($country = $go_users->get_country($GO_USERS->f('country_id')))
+					if($GO_SECURITY->group_in_acl($GO_CONFIG->group_everyone, $GO_USERS->f('acl_id')))
 					{
-						$country_text=$country['name'];
-					}			
-					$row->add_cell(new table_cell(htmlspecialchars($GO_USERS->f('company'))));
-					$row->add_cell(new table_cell($country_text));
-					$row->add_cell(new table_cell(htmlspecialchars($GO_USERS->f('city'))));
-					
-					$datatable->add_row($row);			
+						$row = new table_row();
+						
+						$link = new hyperlink('javascript:show_user('.$GO_USERS->f('id').');', htmlspecialchars(format_name($GO_USERS->f('last_name'), $GO_USERS->f('first_name'), $GO_USERS->f('middle_name'), 'first_name')));
+						
+						$cell = new table_cell($link->get_html());
+						$row->add_cell($cell);
+						
+						$country_text = '';
+						$go_users = new $GLOBALS['go_users_class'];
+						
+						if($country = $go_users->get_country($GO_USERS->f('country_id')))
+						{
+							$country_text=$country['name'];
+						}			
+						$row->add_cell(new table_cell(htmlspecialchars($GO_USERS->f('company'))));
+						$row->add_cell(new table_cell($country_text));
+						$row->add_cell(new table_cell(htmlspecialchars($GO_USERS->f('city'))));
+						
+						$datatable->add_row($row);			
+					}
 				}
 				$form->add_html_element($datatable);
 				

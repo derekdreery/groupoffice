@@ -170,7 +170,7 @@ class cms_account {
 			{
 				$user['homepage'] = isset($_POST['homepage']) ? smart_addslashes($_POST["homepage"]) : '';
 			}
-
+			$user['link_id']=$_POST['link_id'];
 
 			if (!$this->check_fields($required_fields))
 			{
@@ -188,8 +188,27 @@ class cms_account {
 				}else
 				{
 					$GO_USERS->update_user($user);
+					
+					
+					if(isset($GO_MODULES->modules['custom_fields']))
+					{
+						
+						require_once($GO_MODULES->modules['custom_fields']['class_path'].'custom_fields.class.inc');
+						$cf = new custom_fields();			
+						$cf2 = new custom_fields();
+						
+					
+						$cf2->get_authorized_categories(8, $GO_SECURITY->user_id);
+						while($cf2->next_record())
+						{
+							$cf->save_fields($cf2->f('id'), $user['link_id']);
+						}
+					}
 				}
 			}
+			
+			
+			
 			$user=array_map('stripslashes', $user);
 		}else {
 			$user = $GO_USERS->get_user($GO_SECURITY->user_id);
@@ -688,8 +707,34 @@ class cms_account {
 			$row->add_cell(new table_cell($input->get_html()));
 			$table->add_row($row);
 		}
+		
+		
+		if(isset($GO_MODULES->modules['custom_fields']))
+		{
+			require_once($GO_MODULES->modules['custom_fields']['class_path'].'custom_fields.class.inc');
+			$cf = new custom_fields();	
+			$cf2=new custom_fields();
+			
+			$cf2->get_authorized_categories(8,$GO_SECURITY->user_id);
+			
+			while($cf2->next_record())
+			{
+				
+				$row =new table_row();
+				$cell = new table_cell('<br /><b>'.$cf2->f('name').'</b>');
+				$cell->set_attribute('colspan','2');
+				$row->add_cell($cell);
+				$table->add_row($row);
+				
+				if($cf_table = $cf->get_fields_table($cf2->f('id'),$user['link_id'],$disabled_user_fields))
+				{
+					$table->rows=array_merge($table->rows, $cf_table->rows);							
+				}
+			}
+		}
 
 		$form->add_html_element($table);
+		$form->add_html_element(new input('hidden','link_id',$user['link_id']));
 
 
 		$input = new input('button','cmdSave',$GLOBALS['cmdSave']);

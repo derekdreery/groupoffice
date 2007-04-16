@@ -27,6 +27,35 @@ class input extends html_element
 {
 	var $required=false;
 	
+	function get_post_value($name)
+	{
+		$name = str_replace(']','', $name);
+		$var_names = explode('[',$name);
+
+		for($i=0;$i<count($var_names);$i++)
+		{
+			if(isset($tmp))
+			{
+				if(!isset($tmp[$var_names[$i]]))
+				{
+					return false;
+				}
+				$tmp=$tmp[$var_names[$i]];
+			}elseif(isset($_POST[$var_names[$i]])) {
+				$tmp =$_POST[$var_names[$i]];
+			}else {
+				return false;
+			}
+		}
+
+		if(isset($tmp))
+		{
+			return $tmp;
+		}else {
+			return false;
+		}
+	}
+	
 	function input($type, $name, $value='', $remind_value=true, $required=false)
 	{
 		$this->required=$required;
@@ -35,9 +64,9 @@ class input extends html_element
 		
 		$this->set_attribute('type', $type);
 		$this->set_attribute('name', $name);
-		if($remind_value && isset($_POST[$name]))
+		if($remind_value && $post_value = $this->get_post_value($name))
 		{
-			$this->set_attribute('value', htmlspecialchars(smart_stripslashes($_POST[$name])));
+			$this->set_attribute('value', htmlspecialchars(smart_stripslashes($post_value)));
 		}else
 		{
 			$this->set_attribute('value', htmlspecialchars($value));
