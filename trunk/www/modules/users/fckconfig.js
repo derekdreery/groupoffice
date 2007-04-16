@@ -19,7 +19,8 @@ FCKConfig.ToolbarSets["Users"] = [
 	['Table','Rule','SpecialChar'],
 	'/',
 	['FontFormat','FontName','FontSize'],
-	['TextColor','BGColor'],['go_autodata']
+	['TextColor','BGColor'],['go_autodata'],
+	['FitWindow']
 ] ;
 
 var FCKInsertHTMLCommand = function()

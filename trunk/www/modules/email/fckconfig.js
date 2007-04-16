@@ -19,5 +19,6 @@ FCKConfig.ToolbarSets["email"] = [
 	['Image','Table','Rule','SpecialChar','PageBreak'],
 	'/',
 	['FontFormat','FontName','FontSize'],
-	['TextColor','BGColor']
+	['TextColor','BGColor'],
+	['FitWindow']
 ] ;
