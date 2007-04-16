@@ -343,7 +343,7 @@ $table->add_row($row);
 
 $tabstrip->add_html_element($table);
 $tabstrip->add_html_element(new button($cmdSearch, 'javascript:_search();'));
-
+$tabstrip->add_html_element(new button($ab_reset, 'javascript:_reset();'));
 
 
 $form->add_html_element($tabstrip);
@@ -686,6 +686,16 @@ function _search()
 {
 	<?php echo $datatable->set_page_one(); ?>
 	document.forms[0].task.value='search';
+	document.forms[0].submit();
+}
+
+function _reset()
+{
+	<?php echo $datatable->set_page_one(); ?>
+	document.forms[0].task.value='search';
+	document.forms[0].search_field.value='';
+	document.forms[0].query.value='';
+	
 	document.forms[0].submit();
 }
 

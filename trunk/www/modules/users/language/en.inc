@@ -112,3 +112,4 @@ $admin_password_changed = 'Password changed succesfully';
 
 $registration_self_success = 'Welcome to %s!';
 $registration_self_success_text = 'Your account was successfully created. You can now login using your username and password.';
+$us_reset='Reset';

@@ -255,3 +255,4 @@ $ab_select_unknown_recipient='The recipient %s is unkown. The e-mail address mig
 $ab_ignore='Ignore';
 
 $ab_check_info='The e-mail address has been entered in the contact profile. Click at \'Ok\' to save it.';
+$ab_reset='Reset';

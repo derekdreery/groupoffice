@@ -215,6 +215,7 @@ $input->set_attribute('style', 'width:300px;');
 
 $form->add_html_element($input);
 $form->add_html_element(new button($cmdSearch, 'javascript:search()'));
+$form->add_html_element(new button($us_reset, 'javascript:_reset();'));
 
 
 $div = new html_element('div', $count.' '.$strUsers);
@@ -239,6 +240,14 @@ function search()
 	<?php echo $table->set_page_one(); ?>
 	document.forms[0].submit();
 }
+function _reset()
+{
+	<?php echo $table->set_page_one(); ?>
+	document.forms[0].search_field.value='';
+	document.forms[0].query.value='';	
+	document.forms[0].submit();
+}
+
 </script>
 <?php
 require_once($GO_THEME->theme_path."footer.inc");
