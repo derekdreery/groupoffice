@@ -659,6 +659,24 @@ class cms extends db
 		}
 		return false;
 	}
+	
+	function reset_priorities($folder_id)
+	{
+		$items = $this->get_items($folder_id);
+		$newpriority=0;
+		foreach($items as $item)
+		{			
+			$update_item['id']=$item['id'];
+			$update_item['priority']=$newpriority;
+			if (isset ($item['extension'])) {
+				$this->update_row('cms_files','id',$update_item);
+			}else {
+				$this->update_row('cms_folders','id',$update_item);
+			}
+			$newpriority++;
+		}
+		
+	}
 
 	function get_next_priority($folder_id)
 	{
@@ -709,6 +727,28 @@ class cms extends db
 			}
 		}
 	}
+	
+	function move_folder_top($folder_id)
+	{
+		$update_folder['id']=$folder_id;
+		$update_folder['priority']=-1;
+		$this->update_row('cms_folders','id',$update_folder);
+		
+		$folder = $this->get_folder($folder_id);
+		$this->reset_priorities($folder['parent_id']);
+	}
+	
+	function move_file_top($file_id)
+	{
+		$update_file['id']=$file_id;
+		$update_file['priority']=-1;
+		$this->update_row('cms_files','id',$update_file);
+		
+		$file = $this->get_file($file_id);
+		$this->reset_priorities($file['folder_id']);
+	}
+	
+	
 	function move_file_up($file_id)
 	{
 		if($file = $this->get_file($file_id))

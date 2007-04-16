@@ -26,6 +26,8 @@ $GO_MODULES->authenticate('cms');
 require_once($GO_MODULES->class_path.'cms.class.inc');
 $cms = new cms();
 
+$GO_THEME->load_module_theme('cms');
+
 //get the language file
 require_once($GO_LANGUAGE->get_language_file('cms'));
 if(isset($_REQUEST['site_id']))
@@ -73,6 +75,8 @@ if($datatable->task == 'delete')
 			$cms->delete_folder(substr($item_id,1));
 		}
 	}
+	
+	$cms->reset_priorities($folder_id);
 }
 
 //what to do before output

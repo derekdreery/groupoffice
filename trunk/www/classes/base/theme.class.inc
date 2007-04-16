@@ -132,6 +132,7 @@ class GO_THEME
 		{
 			$file = $GO_MODULES->modules[$module_id]['path'].'themes/Default/images.inc';
 			$image_url =  $GO_MODULES->modules[$module_id]['url'].'themes/Default/images/';
+			
 		}
 
 		if(file_exists($file))
@@ -147,25 +148,25 @@ class GO_THEME
 	function get_stylesheet($module_id)
 	{
 		global $GO_MODULES;
-		
-		$file = $GO_MODULES->modules[$module_id]['path'].'themes/'.$this->theme.'/style.css';	
-		$url = $GO_MODULES->modules[$module_id]['url'].'themes/'.$this->theme.'/style.css';	
+
+		$file = $GO_MODULES->modules[$module_id]['path'].'themes/'.$this->theme.'/style.css';
+		$url = $GO_MODULES->modules[$module_id]['url'].'themes/'.$this->theme.'/style.css';
 		if(!file_exists($file))
 		{
-			$file = $GO_MODULES->modules[$module_id]['path'].'themes/Default/style.css';	
-			$url = $GO_MODULES->modules[$module_id]['url'].'themes/Default/style.css';	
+			$file = $GO_MODULES->modules[$module_id]['path'].'themes/Default/style.css';
+			$url = $GO_MODULES->modules[$module_id]['url'].'themes/Default/style.css';
 			if(!file_exists($file))
 			{
-				$file = $this->theme_path.'css/'.$module_id.'.css';	
-				$url = $this->theme_url.'css/'.$module_id.'.css';	
-				
+				$file = $this->theme_path.'css/'.$module_id.'.css';
+				$url = $this->theme_url.'css/'.$module_id.'.css';
+
 				if(!file_exists($file))
 				{
 					return '';
 				}
 			}
 		}
-		
+
 		return '<link href="'.$url.'" type="text/css" rel="stylesheet" />';
 	}
 
