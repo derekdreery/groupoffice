@@ -24,6 +24,8 @@ $form = new form('tools_form');
 
 $form->add_html_element(new html_element('h1', $lang_modules['tools']));
 
+$form->add_html_element(new html_element('p', 'Warning! Use this tools at own risk. Intermesh is not liable to you for ANY damages. Please read the GPL license included with the software.'));
+
 $table = new table();
 
 $row = new table_row();
@@ -40,7 +42,19 @@ $table->add_row($row);
 
 $row = new table_row();
 $row->add_cell(new table_cell('Import users'));
-$button = new button($cmdRun, "javascript:document.location='create_db_scheme.php';");
+$button = new button($cmdRun, "javascript:document.location='importusers.php';");
+$row->add_cell(new table_cell($button->get_html()));
+$table->add_row($row);
+
+$row = new table_row();
+$row->add_cell(new table_cell('Remove duplicate events and contacts'));
+$button = new button($cmdRun, "javascript:document.location='rm_duplicates.php';");
+$row->add_cell(new table_cell($button->get_html()));
+$table->add_row($row);
+
+$row = new table_row();
+$row->add_cell(new table_cell('Execute database query'));
+$button = new button($cmdRun, "javascript:document.location='query.php';");
 $row->add_cell(new table_cell($button->get_html()));
 $table->add_row($row);
 /*
