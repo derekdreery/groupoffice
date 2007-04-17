@@ -43,6 +43,7 @@ switch($task)
 	case 'save_properties':
 		$template['name'] = trim(smart_addslashes($_POST['name']));
 		$template['doctype'] = trim(smart_addslashes($_POST['doctype']));
+		$template['head'] = trim(smart_addslashes($_POST['head']));
 		$template['restrict_editor'] = isset($_POST['restrict_editor']) ? '1' : '0';
 		
 		if ($template['name'] == '')
@@ -523,11 +524,13 @@ switch($tabstrip->get_active_tab_id())
 			$restrict_check = (isset($template) && $template['restrict_editor'] == '1') ? true : false;
 			$name = $template['name'];
 			$doctype = $template['doctype'];
+			$head=$template['head'];
 		}else
 		{
 			$restrict_check = isset($_POST['restrict_editor']) ? true : false;
 			$name = isset($_POST['name']) ? smart_stripslashes($_POST['name']) : '';		
 			$doctype = isset($_POST['doctype']) ? smart_stripslashes($_POST['doctype']) : '';
+			$head = isset($_POST['head']) ? smart_stripslashes($_POST['head']) : '';
 		}
 		
 		$table = new table();
@@ -541,6 +544,13 @@ switch($tabstrip->get_active_tab_id())
 		$row = new table_row();
 		$row->add_cell(new table_cell('DOCTYPE:'));
 		$textarea = new textarea('doctype', $doctype);
+		$textarea->set_attribute('style', 'width:600px;height:100px;');
+		$row->add_cell(new table_cell($textarea->get_html()));
+		$table->add_row($row);
+		
+		$row = new table_row();
+		$row->add_cell(new table_cell('HEAD:'));
+		$textarea = new textarea('head', $head);
 		$textarea->set_attribute('style', 'width:600px;height:100px;');
 		$row->add_cell(new table_cell($textarea->get_html()));
 		$table->add_row($row);

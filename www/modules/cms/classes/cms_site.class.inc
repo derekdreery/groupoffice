@@ -188,6 +188,8 @@ class cms_site extends cms {
 		'<link href="'.$this->cms_module['url'].'stylesheet.php?print=true&amp;template_id='.$this->site['template_id'].'" rel="stylesheet" type="text/css" media="print" />'."\r\n";
 
 		$header .= $header_arguments;
+		
+		$header .= $this->template['head'];
 
 		$header .= '<script type="text/javascript" src="'.$GO_CONFIG->host.'javascript/common.js"></script>'."\r\n".
 		'</head>'."\r\n".

@@ -1,5 +1,7 @@
 <?php
-$updates[29] = array();
+$updates[30] = array();
+
+$updates[29][] = "ALTER TABLE `cms_templates` ADD `head` TEXT NOT NULL ;";
 
 $updates[28][] = "ALTER TABLE `cms_sites` ADD `name` VARCHAR( 100 ) NOT NULL ;";
 
