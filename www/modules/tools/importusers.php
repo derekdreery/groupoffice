@@ -346,18 +346,20 @@ if(isset($_SESSION['csvfile']) && $task == 'match')
 
 	require_once($GO_THEME->theme_path."header.inc");
 	echo $error;
+	$button = new button($cmdClose, 'javascript:document.location=\'index.php\';');
+	echo $button->get_html();
 	require_once($GO_THEME->theme_path."footer.inc");
 	exit();
 
 }else {
 
-	$form->add_html_element(new html_element('h2','File:'));
+	$form->add_html_element(new html_element('h2','Select CSV File:'));
 
 	$form->set_attribute('enctype','multipart/form-data');
 
 	$form->add_html_element(new input('file','csvfile',''));
 	$form->add_html_element(new button($cmdOk, 'javascript:document.forms[0].submit();'));
-
+	$form->add_html_element(new button($cmdClose, 'javascript:document.location=\'index.php\';'));
 }
 
 
