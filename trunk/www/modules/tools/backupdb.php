@@ -12,7 +12,7 @@
 
 require_once("../../Group-Office.php");
 $GO_SECURITY->authenticate();
-$GO_MODULES->authenticate('tools',true);
+$GO_MODULES->authenticate('tools');
 require_once($GO_LANGUAGE->get_language_file('tools'));
 
 header('Content-Disposition: attachment; filename="groupoffice-dbbackup-'.date('YmdGi').'.sql"');
