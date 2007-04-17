@@ -12,7 +12,7 @@
 
 require_once("../../Group-Office.php");
 $GO_SECURITY->authenticate();
-$GO_MODULES->authenticate('tools',true);
+$GO_MODULES->authenticate('tools');
 require_once($GO_LANGUAGE->get_language_file('tools'));
 
 load_basic_controls();
@@ -39,11 +39,17 @@ $row->add_cell(new table_cell($button->get_html()));
 $table->add_row($row);
 
 $row = new table_row();
+$row->add_cell(new table_cell('Import users'));
+$button = new button($cmdRun, "javascript:document.location='create_db_scheme.php';");
+$row->add_cell(new table_cell($button->get_html()));
+$table->add_row($row);
+/*
+$row = new table_row();
 $row->add_cell(new table_cell('Show db scheme'));
 $button = new button($cmdRun, "javascript:document.location='create_db_scheme.php';");
 $row->add_cell(new table_cell($button->get_html()));
 $table->add_row($row);
-
+*/
 $form->add_html_element($table);
 
 require_once($GO_THEME->theme_path."header.inc");

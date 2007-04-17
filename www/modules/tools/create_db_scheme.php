@@ -31,7 +31,7 @@
 
 require_once("../../Group-Office.php");
 $GO_SECURITY->authenticate();
-$GO_MODULES->authenticate('tools',true);
+$GO_MODULES->authenticate('tools');
 
 require($GO_THEME->theme_path.'header.inc');
 
