@@ -2592,10 +2592,13 @@ class calendar extends db
 		{
 			$timezone_id = isset($object['DTEND']['params']['TZID']) ? $object['DTEND']['params']['TZID'] : '';
 			$event['end_time'] = $this->ical2array->parse_date($object['DTEND']['value'],  $timezone_id);
+			//echo 'End:'.date('Ymd G:i', $event['end_time']).'<br />';
 		}elseif(isset($object['DURATION']['value']))
 		{
 			$duration = $this->ical2array->parse_date($object['DURATION']['value']);
 			$event['end_time'] = $event['start_time']+$duration;
+			
+			
 		}elseif(isset($object['DUE']['value']))
 		{
 			$timezone_id = isset($object['DUE']['params']['TZID']) ? $object['DUE']['params']['TZID'] : '';
@@ -2678,8 +2681,21 @@ class calendar extends db
 			if($event['all_day_event'])
 			{
 				//TODO DST!
-				$event['end_time'] = $event['start_time']+86340;
+				//$event['end_time'] = $event['end_time']+86340;
+				//dont do this for symbian
+				
+				//calc duration in days:
+				$duration = $event['end_time']-$event['start_time'];
+				$duration_days = ceil($duration/86400);
+				
+				$year = adodb_date('Y', $event['start_time']);
+				$month = adodb_date('n', $event['start_time']);
+				$day = adodb_date('j', $event['start_time']);
+				$event['end_time'] = local_to_gmt_time(adodb_mktime(0,-1,0,$month, $day+$duration_days+1, $year));
+				
 			}
+			
+			
 
 			if(isset($object['CLASS']['value']) && $object['CLASS']['value'] == 'PRIVATE')
 			{	
