@@ -24,7 +24,7 @@ CREATE TABLE `pmFees` (
   `time` int(11) NOT NULL default '0',
   `acl_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+);
 
 -- --------------------------------------------------------
 
@@ -47,7 +47,7 @@ CREATE TABLE `pmHours` (
   `int_fee_value` double NOT NULL default '0',
   `event_id` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+);
 
 -- --------------------------------------------------------
 
@@ -84,7 +84,7 @@ CREATE TABLE `pmProjects` (
   KEY `contact_id` (`contact_id`),
   KEY `user_id` (`user_id`),
   KEY `link_id` (`link_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+);
 
 -- --------------------------------------------------------
 
@@ -96,7 +96,7 @@ CREATE TABLE `pmStatuses` (
   `id` int(11) NOT NULL default '0',
   `name` varchar(50) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+);
 
 -- --------------------------------------------------------
 
@@ -109,7 +109,7 @@ CREATE TABLE `pmTimers` (
   `start_time` int(11) NOT NULL default '0',
   `project_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+);
 
 -- --------------------------------------------------------
 
@@ -122,7 +122,7 @@ CREATE TABLE `pm_settings` (
   `show_projects` tinyint(4) NOT NULL default '0',
   `fee_id` int(11) NOT NULL,
   PRIMARY KEY  (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+);
 
 -- --------------------------------------------------------
 
@@ -141,7 +141,7 @@ CREATE TABLE `pm_template_events` (
   `reminder` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `template_id` (`template_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+);
 
 -- --------------------------------------------------------
 
@@ -156,7 +156,7 @@ CREATE TABLE `pm_templates` (
   `acl_read` int(11) NOT NULL default '0',
   `acl_write` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+);
 
 
 
