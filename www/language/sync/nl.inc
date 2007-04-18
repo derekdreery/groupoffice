@@ -15,3 +15,4 @@ $sync_log='Sync log';
 $sync_max_days_old='Sync afspraken niet ouder dan';
 $sync_days='dagen';
 $sync_delete_old_events='Verwijder afspraken op de client die ouder zijn dan de hierboven aangegeven tijd';
+$sync_click_to_verify='Klik om te testen';

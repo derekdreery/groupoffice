@@ -650,9 +650,9 @@ class vcard extends addressbook {
 									break;
 								case "BDAY" :
 				
-									//if (intval($property->values[0]) > 0) {
+									if (intval($property->values[0]) > 0) {
 										$lines[] = $property->name.DELIM_COLON.$property->values[0];
-									//}
+									}
 									break;
 								default :
 									if (!empty ($property->values[0])) {
