@@ -112,7 +112,7 @@ FCKConfig.ToolbarSets["Basic"] = [
 	['Bold','Italic','-','OrderedList','UnorderedList','-','Link','Unlink','-','About']
 ] ;
 
-FCKConfig.EnterMode = 'br' ;			// p | div | br
+FCKConfig.EnterMode = 'div' ;			// p | div | br
 FCKConfig.ShiftEnterMode = 'br' ;	// p | div | br
 
 FCKConfig.Keystrokes = [
