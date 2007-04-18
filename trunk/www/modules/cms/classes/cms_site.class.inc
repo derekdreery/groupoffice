@@ -1441,7 +1441,9 @@ class cms_site extends cms {
 					}
 				}
 
-				if($this->file_id==0)
+				$folder = $this->get_folder($this->folder_id);
+				
+				if($this->file_id==0 && $folder['multipage']=='0')
 				{
 					$this->file_id = $this->find_page($this->folder_id);
 				}
@@ -1461,6 +1463,7 @@ class cms_site extends cms {
 					if($file['folder_id'] != $this->folder_id)
 					{
 						$this->folder_id = $file['folder_id'];
+						$folder = $this->get_folder($this->folder_id);
 					}
 
 					if (!eregi('htm', $file['extension'])) {
@@ -1536,13 +1539,13 @@ class cms_site extends cms {
 
 				$page = $this->generate_header($this->template['doctype'], $file['title'], $file['keywords'], $file['description'],date_picker::get_header());
 
-				if($this->task == 'multipage_display')
+				if($this->task == 'multipage_display' && $this->file_id==0)
 				{
 
 					$content = '';
-					if ($this->file_id > 0) {
+					/*if ($this->file_id > 0) {
 						$content .= $file['content'];
-					}
+					}*/
 
 					$template = $this->get_template_item_by_name($this->site['template_id'], $template);
 					if ($template) {
