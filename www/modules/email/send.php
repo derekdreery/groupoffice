@@ -68,7 +68,7 @@ function close()
 $report_id = isset($_REQUEST['report_id']) ? $_REQUEST['report_id'] : 0;
 
 $mail_subject = isset($_REQUEST['mail_subject']) ? smart_stripslashes($_REQUEST['mail_subject']) : '';
-$mail_body = isset($_REQUEST['mail_body']) ? smart_stripslashes($_REQUEST['mail_body']) : '';
+$mail_body = isset($_REQUEST['mail_body']) ? smart_stripslashes($_REQUEST['mail_body']) : '<font face="Arial"><br /></font>';
 $mail_from = isset($_REQUEST['mail_from']) ? $_REQUEST['mail_from'] : 0;
 $mail_to = isset($_REQUEST['mail_to']) ? smart_stripslashes($_REQUEST['mail_to']) : '';
 $mail_cc = isset($_REQUEST['mail_cc']) ? smart_stripslashes($_REQUEST['mail_cc']) : '';
