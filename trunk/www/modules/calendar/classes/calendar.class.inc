@@ -2810,7 +2810,7 @@ class calendar extends db
 										$event['sat'] = 1;
 										break;
 
-									case 'SUN':
+									case 'SU':
 										$event['sun'] = 1;
 										break;
 								}
