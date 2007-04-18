@@ -169,7 +169,38 @@ while($db->next_record())
 	echo 'Optimizing: '.$db->f(0).'<br />';
 	$db2->query('OPTIMIZE TABLE `'.$db->f(0).'`');	
 }
-echo 'Done<br />';
+echo 'Done<br /><br />';
+
+
+echo 'Clearing search cache<br />';
+
+$db->query('TRUNCATE TABLE se_cache');
+$db->query('TRUNCATE TABLE se_last_sync_times');
+
+echo 'Done<br /><br />';
+
+if(isset($GO_MODULES->modules['cms']))
+{
+	echo 'Checking CMS folder permissions<br />';
+	require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+	$fs = new filesystem();
+			
+	require($GO_MODULES->modules['cms']['class_path'].'cms.class.inc');
+	$cms = new cms();
+	$cms->get_templates();
+	while($cms->next_record())
+	{
+		$template_file_path = $GO_CONFIG->local_path.'cms/templates/'.$cms->f('id').'/';		
+		if(is_dir($template_file_path) && !$fs->find_share($template_file_path))
+		{			
+			$fs->add_share($cms->f('user_id'), $template_file_path, 'template', $cms->f('acl_read'), $cms->f('acl_write'));
+			echo 'Adding share for '.$template_file_path.'<br />';
+		}
+	}
+	echo 'Done<br /><br />';
+}
+
+echo 'All Done!<br />';
 
 load_basic_controls();
 $button = new button($cmdClose, "javascript:document.location='index.php';");
