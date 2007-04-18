@@ -22,7 +22,7 @@ $path = smart_stripslashes($_REQUEST['path']);
 
 $mode = isset($_REQUEST['mode'])  ? $_REQUEST['mode'] : 'download';
 
-if(!$fs->is_sub_dir(dirname($path),$GO_CONFIG->file_storage_path))
+if(!$fs->is_sub_dir(dirname($path),$GO_CONFIG->file_storage_path) && !$fs->is_sub_dir(dirname($path),$GO_CONFIG->local_path))
 {
 	exit('Forbidden');
 }
