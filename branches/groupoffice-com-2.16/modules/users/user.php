@@ -357,6 +357,7 @@ if(file_exists($active_tab_id))
 		case 'notations':
 			if($task=='save')
 			{
+				$user=array();
 				$user['id'] = $user_id;
 				$user['language'] = smart_addslashes($_POST['language']);
 				$user['DST'] =isset($_POST['DST']) ? '1' : '0';
