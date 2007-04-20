@@ -428,6 +428,7 @@ if(file_exists($active_tab_id))
 		case 'notations':
 			if($task=='save')
 			{
+				$user=array();
 				$user['id'] = $user_id;
 				$user['language'] = smart_addslashes($_POST['language']);
 				$user['DST'] =isset($_POST['DST']) ? '1' : '0';
@@ -610,15 +611,18 @@ if(file_exists($active_tab_id))
 
 			if($task=='save')
 			{
+				$user=array();
 				$user['id'] = $user_id;
 				$user['max_rows_list'] = smart_addslashes($_POST['max_rows_list']);
 				$user['start_module'] = smart_addslashes($_POST['start_module']);
 				$user['sort_name'] =	smart_addslashes($_POST['sort_name']);
 				$user['theme'] = smart_addslashes($_POST['theme']);
 				$user['use_checkbox_select'] = isset($_POST['use_checkbox_select']) ? '1' : '0';
+				
+				$GO_USERS->update_profile($user);
 			}
 
-			$GO_USERS->update_profile($user);
+			
 
 			$table = new table();
 
