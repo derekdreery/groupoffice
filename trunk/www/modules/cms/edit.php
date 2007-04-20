@@ -104,7 +104,7 @@ switch($task)
 					$cms->update_file(
 						$file_id, 
 						$name, 
-						smart_addslashes($content), 
+						$content, 
 						$auto_meta, 
 						$title, 
 						$description, 
