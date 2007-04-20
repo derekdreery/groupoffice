@@ -75,6 +75,11 @@ switch ($cms_settings['sort_field'])
 
 $tv = new treeview('cms_treeview');
 
+if(isset($_REQUEST['folder_id']))
+{
+	$tv->setOpen($_REQUEST['folder_id']);
+}
+
 //end of treeview code
 
 
