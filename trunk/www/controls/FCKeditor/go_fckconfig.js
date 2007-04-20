@@ -7,8 +7,6 @@ FCKConfig.ImageUpload=false;
 FCKConfig.FlashUpload =false;
 FCKConfig.IEForceVScroll=true;
 
-FCKConfig.EnterMode = 'p' ;			// p | div | br
-FCKConfig.ShiftEnterMode = 'br' ;	// p | div | br
 
 FCKConfig.ToolbarSets["template"] = [
 	['Source','DocProps','-','Templates'],
