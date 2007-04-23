@@ -918,9 +918,9 @@ class filesystem extends db
 	{
 		$path = dirname($path).'/'.basename($path);
 
-		global $GO_SECURITY;
+		global $GO_SECURITY, $GO_MODULES;
 
-		if($link_id = $this->get_link_id_by_path(addslashes($path)))
+		if(isset($GO_MODULES->modules['filesystem']) && $link_id = $this->get_link_id_by_path(addslashes($path)))
 		{
 			$this->query("DELETE FROM fs_links WHERE link_id='$link_id'");
 			global $GO_LINKS;

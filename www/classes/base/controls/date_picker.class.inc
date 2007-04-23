@@ -25,6 +25,14 @@
 class date_picker
 {
 	var $outerHTML;
+	var $name;
+	var $date_format;
+	var $set_date;
+	var $flat_div_id;
+	var $flat_callbackfunction;
+	var $arguments;
+	var $disabled;
+	var $required;
 
 	function get_header()
 	{
@@ -46,30 +54,43 @@ class date_picker
 
 	function date_picker($name, $date_format, $set_date='', $flat_div_id='', $flat_callbackfunction='', $arguments='', $disabled=false, $required=false)
 	{
+		$this->name=$name;
+		$this->date_format=$this->convert_date_format($this->date_format);
+		$this->set_date=$set_date;
+		$this->flat_div_id=$flat_div_id;
+		$this->flat_callbackfunction=$flat_callbackfunction;
+		$this->arguments=$arguments;
+		$this->disabled=$disabled;
+		$this->required=$required;
+		
+		
+	}
+
+	function get_html()
+	{
 		$str_return='';
 		//dirty hack for mysql default date
-		if ($set_date == '00-00-0000')
+		if ($this->set_date == '00-00-0000')
 		{
-			$set_date = '';
+			$this->set_date = '';
 		}
-		if ($disabled)
+		if ($this->disabled)
 		{
-			$arguments .= ' disabled';
+			$this->arguments .= ' disabled';
 		}
-		$date_format = $this->convert_date_format($date_format);
-		
-		if($required && isset($_POST[$name]) && empty($_POST[$name]))
+
+		if($this->required && isset($_POST[$this->name]) && empty($_POST[$this->name]))
 		{
 			$class='textbox_error';
 		}else {
 			$class='textbox';
 		}
 
-		if ($flat_div_id == '')
+		if ($this->flat_div_id == '')
 		{
-			$str_return.='<input size="10" onfocus="this.select();" class="'.$class.'" type="text" id="'.$name.'_input" name="'.$name.'" value="'.$set_date.'" '.$arguments.' />'.
-			'<input type="button" name="'.$name.'_button" id="'.$name.'_button" value="..."';
-			if ($disabled)
+			$str_return.='<input size="10" onfocus="this.select();" class="'.$class.'" type="text" id="'.$this->name.'_input" name="'.$this->name.'" value="'.$this->set_date.'" '.$this->arguments.' />'.
+			'<input type="button" name="'.$this->name.'_button" id="'.$this->name.'_button" value="..."';
+			if ($this->disabled)
 			{
 				$str_return.=' disabled';
 			}
@@ -83,28 +104,23 @@ class date_picker
 	  {
 	  electric: false,
 firstDay  : '.$first_weekday.',
-inputField  : "'.$name.'_input",
-ifFormat    : "'.$date_format.'",';
+inputField  : "'.$this->name.'_input",
+ifFormat    : "'.$this->date_format.'",';
 
-		if ($set_date != '')
+		if ($this->set_date != '')
 		{
-			$str_return.='date :  "'.str_replace('-','/',$set_date).'",';
+			$str_return.='date :  "'.str_replace('-','/',$this->set_date).'",';
 		}
 
-		if ($flat_div_id != '')
+		if ($this->flat_div_id != '')
 		{
-			$str_return.='flat : "'.$flat_div_id.'", flatCallback : '.$flat_callbackfunction;
+			$str_return.='flat : "'.$this->flat_div_id.'", flatCallback : '.$this->flat_callbackfunction;
 		}else
 		{
-			$str_return.='button      : "'.$name.'_button"';
+			$str_return.='button      : "'.$this->name.'_button"';
 		}
 		$str_return.='});</script>';
-		$this->outerHTML = $str_return;
-	}
-
-	function get_html()
-	{
-		return $this->outerHTML;
+		return $str_return;
 	}
 
 	function convert_date_format($php_date_format)
