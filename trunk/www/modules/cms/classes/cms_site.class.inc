@@ -2347,7 +2347,7 @@ class cms_site extends cms {
 		$active_item_class = isset ($attributes['item_active_class']) ? $attributes['item_active_class'] : $item_class;
 		$menu = isset ($attributes['menu']) ? $attributes['menu'] : '';
 		$expanded = isset ($attributes['expanded']) ? ($attributes['expanded']=='true') : false;
-
+		$level = isset ($attributes['level']) ? $attributes['level'] : null;
 
 		if($folder_id==0)
 		{
@@ -2362,9 +2362,24 @@ class cms_site extends cms {
 
 		if($folder_id==0)
 		{
-			$folder_id = $start_folder_id;
-		}
-
+			if(isset($level))
+			{
+				$levels=$this->get_active_levels();
+	
+				if(!isset($levels[$level]))
+				{
+					return '';
+				}else {
+					$folder_id=$levels[$level];
+				}
+	
+			}else
+			{
+				$folder_id = $start_folder_id;
+			}
+		}	
+		
+		
 		$folder = $this->get_folder($folder_id);
 
 		if($folder['multipage']=='1')
@@ -2373,6 +2388,7 @@ class cms_site extends cms {
 		}else {
 			$items = $this->get_authorized_items($folder_id, $GO_SECURITY->user_id, true);
 		}
+		
 
 
 		$count = count($items);
