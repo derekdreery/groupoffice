@@ -31,6 +31,7 @@ if ($parent_path = dirname($fv->path)) {
 		$menu->add_button('uplvl_big', $fbUpLevel, $fv->fsl->get_folder_handler($parent_path));		
 	}
 }
+
 $menu->add_button('properties', $fbProperties, "javascript:properties('".htmlspecialchars(addslashes($fs_no_multi_select))."');");		
 
 

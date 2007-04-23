@@ -268,16 +268,16 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 		case 'userdir':
 			$tmpdir=smart_stripslashes($_POST['tmpdir']);
 
-			if (!is_writable($_POST['userdir']))
+			if (!is__writable($_POST['userdir']))
 			{
 				$feedback = '<font color="red">The path you entered is not writable.<br />Please correct this and try again.</font>';
 			}elseif($_POST['max_file_size'] > return_bytes(ini_get('upload_max_filesize')))
 			{
 				$feedback = '<font color="red">You entered a greater upload size then the PHP configuration allows.<br />Please correct this and try again.</font>';
-			}elseif (!is_writable($_POST['local_path']))
+			}elseif (!is__writable($_POST['local_path']))
 			{
 				$feedback = '<font color="red">The local path you entered is not writable.<br />Please correct this and try again.</font>';
-			}elseif (!is_writable($tmpdir))
+			}elseif (!is__writable($tmpdir))
 			{
 				$feedback = '<font color="red">The path you entered is not writable.<br />Please correct this and try again.</font>';
 			}

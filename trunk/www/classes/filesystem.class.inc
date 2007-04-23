@@ -580,6 +580,10 @@ class filesystem extends db
 	function find_share($path)
 	{
 		$path = dirname($path).'/'.basename($path);
+	
+		$this->count++;
+		if($this->count==10)
+			exit();
 		if ($share = $this->get_share($path))
 		{
 			return $share;
@@ -587,7 +591,8 @@ class filesystem extends db
 		{
 			global $GO_CONFIG;
 			$parent = dirname($path);
-			if ($parent == '' || $parent == $GO_CONFIG->slash)
+	
+			if ($parent == '' || $parent == '/' || $parent=='C:\\' || $parent =='.')
 			{
 				return false;
 			}else
