@@ -141,7 +141,9 @@ while ($GO_USERS->next_record())
 	number_format($GO_USERS->f("logins"), 0,
 	$_SESSION['GO_SESSION']['decimal_seperator'],
 	$_SESSION['GO_SESSION']['thousands_seperator'])));
-	$row->add_cell(new table_cell(get_timestamp($GO_USERS->f("lastlogin"))));
+	
+	$last_login = $GO_USERS->f("lastlogin")>0 ? get_timestamp($GO_USERS->f("lastlogin")) : $us_never;
+	$row->add_cell(new table_cell($last_login));
 	$row->add_cell(new table_cell(get_timestamp($GO_USERS->f("registration_time"))));
 
 
