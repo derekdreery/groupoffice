@@ -948,7 +948,7 @@ class GO_CONFIG
 		$this->log=true;
 	}
 	
-	$this->set_help_url('');
+	
   }
   
   function set_help_url($url)

@@ -12,6 +12,8 @@
 
 require_once("../Group-Office.php");
 
+$GO_CONFIG->set_help_url($config_help_url);
+
 load_basic_controls();
 load_control('tooltip');
 load_control('date_picker');
