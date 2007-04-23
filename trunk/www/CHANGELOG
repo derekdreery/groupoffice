@@ -15,6 +15,7 @@ Version 2.17-alpha
 -Modular select dialog (Done with global search).
 -Select and sort columns to display in tables
 -global search
+-Easier linking with global search
 -link email (Pro only)
 -Better auto add contacts in mail
 -TNEF (Winmail.dat) support
@@ -28,6 +29,14 @@ Version 2.17-alpha
 -Don't create a personal addressbook by default for everyone.
 -Edit multiple contacts at once
 -Show month name on top of calendar print
+-Adminstrative tools: check database, backup database, users import
+*SMTP server per e-mail account
+*Restrict SMTP servers for mailing lists
+$Help button leads to right page at docs.group-office.com
+
+*Test reports export
+*Create mailing lists easily with reports and custom fields
+*Test new syncserver with different syncmodes
 
 
 
