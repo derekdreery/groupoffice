@@ -73,3 +73,4 @@ $admin_password_changed='Wachtwoord succesvol veranderd';
 $registration_self_success='Welkom bij %s!';
 $registration_self_success_text='Uw account is succesvol aangemaakt. U kunt nu inloggen met uw gebruikersnaam en wachtwoord.';
 $us_reset='Reset';
+$us_never='Nooit';
