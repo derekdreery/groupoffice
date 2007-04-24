@@ -1442,8 +1442,8 @@ class cms_site extends cms {
 				}
 
 				$folder = $this->get_folder($this->folder_id);
-				
-				if($this->file_id==0 && $folder['multipage']=='0')
+		
+				if($this->file_id==0 && $folder['multipage']!='1')
 				{
 					$this->file_id = $this->find_page($this->folder_id);
 				}
