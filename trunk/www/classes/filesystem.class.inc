@@ -980,10 +980,12 @@ class filesystem extends db
 			if ($this->disable_go_permissions ||
 			$this->has_write_permission($GO_SECURITY->user_id, $path))
 			{
+			
 				global $GO_LINKS;
-
-				$link_id = $this->get_link_id_by_path(addslashes($path));
-				$GO_LINKS->delete_link($link_id);
+				if(isset($GO_MODULES->modules['filesystem']) && $link_id = $this->get_link_id_by_path(addslashes($path)))
+				{				
+					$GO_LINKS->delete_link($link_id);
+				}
 
 				return @unlink($path);
 			}else
