@@ -42,6 +42,8 @@ class cms_gallery {
 		$form = new form('gallery_form');
 		$form->add_html_element(new input('hidden','task', 'gallery'));
 		$form->add_html_element(new input('hidden', 'start['.$this->attributes['gallery_id'].']', $start, false));
+		$form->add_html_element(new input('hidden','file_id', $this->cms_site->file_id));
+		$form->add_html_element(new input('hidden','folder_id', $this->cms_site->folder_id));
 		
 		$task = isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
 		
