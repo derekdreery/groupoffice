@@ -477,7 +477,9 @@ $form->add_html_element($menu);
 	}
 
 	$index_page .= '$count = $'.$class_name.'->get_'.$friendly_multiple.'($datatable->start, $datatable->offset, $datatable->sort_index, $datatable->sql_sort_order);';
-	$index_page .= "\n";
+	$index_page .= "\n\n";
+	$index_page .= '$datatable->set_pagination($count);';
+	$index_page .= "\n\n";
 
 	$index_page .= 'while($'.$class_name.'->next_record()){'."\n".
 	'$row = new table_row($'.$class_name.'->f(\'id\'));
