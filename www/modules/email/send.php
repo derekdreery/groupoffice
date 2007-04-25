@@ -417,7 +417,7 @@ if ($_SERVER['REQUEST_METHOD'] != "POST" && $tp_plugin && $template_id == 0 &&
 	}
 
 	echo '<input type="hidden" name="mail_subject" value="'.$mail_subject.'" />';
-	echo '<input type="hidden" name="mail_body" value="'.smart_stripslashes($mail_body, true).'" />';
+	echo '<input type="hidden" name="mail_body" value="'.htmlspecialchars(smart_stripslashes($mail_body, true)).'" />';
 	echo '<input type="hidden" name="mail_to" value="'.htmlspecialchars($mail_to,ENT_QUOTES).'" />';
 	echo '<input type="hidden" name="mail_cc" value="'.$mail_cc.'" />';
 	echo '<input type="hidden" name="mail_bcc" value="'.$mail_bcc.'" />';
