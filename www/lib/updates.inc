@@ -5,7 +5,9 @@ Update queries for each version from 1.95
 From version 2.06 and up put module updates in the module's sql directory!
 
 */
-$updates[221] = array();
+$updates[222] = array();
+
+$updates[221][]="ALTER TABLE `users` CHANGE `last_name` `last_name` VARCHAR( 100 ) NOT NULL";
 
 $updates[220][]="ALTER TABLE `sync_contacts_maps` CHANGE `remote_id` `remote_id` VARCHAR( 255 ) NOT NULL";
 $updates[220][]="ALTER TABLE `sync_events_maps` CHANGE `remote_id` `remote_id` VARCHAR( 255 ) NOT NULL";
