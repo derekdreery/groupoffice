@@ -189,7 +189,7 @@ if ($login_task == "register")
 	}elseif($GO_USERS->get_user_by_username($user['username']))
 	{
 		$feedback = $GLOBALS['error_username_exists'];
-	}elseif($GO_USERS->email_exists($user['email']))
+	}elseif(!$GO_CONFIG->allow_duplicate_email && $GO_USERS->email_exists($user['email']))
 	{
 		$feedback = $GLOBALS['error_email_exists'];
 	}elseif($GO_CONFIG->auto_activate_accounts && $pass1 != $pass2)

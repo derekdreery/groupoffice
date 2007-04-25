@@ -20,6 +20,7 @@ array(
 'allow_themes',
 'allow_password_change',
 'allow_registration',
+'allow_duplicate_email',
 'auto_activate_accounts',
 'notify_admin_of_registration',
 'registration_fields',

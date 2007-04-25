@@ -70,7 +70,7 @@ switch($task)
 		$user['id'] = $user_id;
 
 
-		$existing_email_user = $GO_USERS->get_user_by_email($user['email']);
+		$existing_email_user = $GO_CONFIG->allow_duplicate_email ? false : $GO_USERS->get_user_by_email($user['email']);
 		if($user['id'] == 0)
 		{
 			$user['username'] = smart_addslashes(trim($_POST['username']));
