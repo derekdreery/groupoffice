@@ -311,11 +311,16 @@ class sql_users extends base_users
 		$email = get_email_from_string($email);
 		$sql = "SELECT * FROM users WHERE email='$email'";
 		$this->query($sql);
-		if ($this->next_record(MYSQL_ASSOC))
+		
+		//return false if there is more then one result
+		if($this->num_rows()!=1)
+		{
+			return false;
+		}elseif ($this->next_record(MYSQL_ASSOC))
 		{
 			return $this->Record;
 		}
-		return false;
+		
 	}
 	
 	function get_authorized_user_by_email($user_id, $email)
@@ -525,9 +530,12 @@ class sql_users extends base_users
 		// email address is used as key for the acl_id, no two users may have the
 		// same address. It also should not be possible to have multiple users
 		// with the same name...
-		$this->query( "SELECT id FROM users WHERE	email='".$user['email']."' OR username='".$user['username']."'" );
-		if ( $this->num_rows() > 0 ) {
-			return false;
+		if(!$GO_CONFIG->allow_duplicate_email)
+		{
+			$this->query( "SELECT id FROM users WHERE	email='".$user['email']."' OR username='".$user['username']."'" );
+			if ( $this->num_rows() > 0 ) {
+				return false;
+			}
 		}
 
 		//if local_code is empty try HTTP_ACCEPT_LANGUAGE

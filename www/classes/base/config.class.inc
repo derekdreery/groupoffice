@@ -238,6 +238,13 @@ class GO_CONFIG
    */
   var $required_registration_fields = 'company,address';
   
+   /**
+   * Allow e-mail address more then once
+   *
+   * @var     bool
+   * @access  public
+   */
+  var $allow_duplicate_email = false;
   
   /**
    * Activate self regstered accounts?

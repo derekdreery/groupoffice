@@ -554,7 +554,7 @@ class cms_site extends cms {
 
 			case 'register':
 
-				global $GO_USERS, $GO_GROUPS, $GO_MODULES;
+				global $GO_USERS, $GO_GROUPS, $GO_MODULES, $GO_CONFIG;
 
 				function check_fields($required_fields)
 				{
@@ -730,7 +730,7 @@ class cms_site extends cms {
 					}elseif($GO_USERS->get_user_by_username($user['username']))
 					{
 						$feedback = $GLOBALS['error_username_exists'];
-					}elseif($GO_USERS->email_exists($user['email']))
+					}elseif(!$GO_CONFIG->allow_duplicate_email && $GO_USERS->email_exists($user['email']))
 					{
 						$feedback = $GLOBALS['error_email_exists'];
 					}elseif($GO_CONFIG->auto_activate_accounts && $pass1 != $pass2)
