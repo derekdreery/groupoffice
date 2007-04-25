@@ -100,11 +100,11 @@ ini_set('session.cookie_lifetime','0');
 
 
 //get the path of this script
-$script_path = __FILE__;
+$script_path = str_replace('\\','/',__FILE__);
 if ($script_path == '')
 {
 	print_head();
-	echo '<b>Fatal error:</b> Could not get the path of the this script. The server variable \'SCRIPT_FILENAME\' and \'PATH_TRANSLATED\' are not set.';
+	echo '<b>Fatal error:</b> Could not get the path of the this script. The server variable \'__FILE__\' is not set.';
 	echo '<br /><br />Correct this and refresh this page. If you are not able to correct this try the manual installation described in the file \'INSTALL\'';
 	print_foot();
 	exit();
