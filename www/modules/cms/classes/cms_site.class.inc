@@ -882,7 +882,7 @@ class cms_site extends cms {
 				$row->add_cell(new table_cell($GLOBALS['strLastName'].'*:'));
 				$input = new input('text','last_name', $user['last_name'],true,true);
 				$input->set_attribute('style','width:280px');
-				$input->set_attribute('maxlength','50');
+				$input->set_attribute('maxlength','100');
 				$row->add_cell(new table_cell($input->get_html()));
 				$table->add_row($row);
 
