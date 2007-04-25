@@ -889,9 +889,9 @@ class GO_CONFIG
   	{
   		//Detect some default values for installation if root_path is not set yet
   		//$this->root_path = str_replace('classes/base/config.class.inc','',__FILE__);
-  		$this->root_path = dirname(dirname(dirname(__FILE__))).$this->slash;
-  		$this->host = dirname(dirname($_SERVER['PHP_SELF'])).$this->slash;  		
-  		$this->full_url = 'http://'.$_SERVER['SERVER_NAME'].$this->host;
+  		$this->root_path = str_replace('\\','/',dirname(dirname(dirname(__FILE__)))).'/';
+  		$this->host = dirname(dirname($_SERVER['PHP_SELF'])).'/';  		
+  		$this->full_url = 'http://'.$_SERVER['SERVER_NAME'].'/';
   		
   		$this->local_path = $this->root_path.'local/';
   		$this->local_url = $this->host.'local/';
@@ -915,10 +915,10 @@ class GO_CONFIG
   	} 	
   	  	
     // path to classes
-    $this->class_path = $this->root_path.$this->class_path.$this->slash;
+    $this->class_path = $this->root_path.$this->class_path.'/';
     
     // path to themes
-    $this->theme_path = $this->root_path.$this->theme_path.$this->slash;
+    $this->theme_path = $this->root_path.$this->theme_path.'/';
     
     // URL to themes
     $this->theme_url = $this->host.$this->theme_url.'/';
@@ -930,7 +930,7 @@ class GO_CONFIG
     $this->control_url = $this->host.$this->control_url.'/';
 
     // path to modules
-    $this->module_path = $this->root_path.$this->module_path.$this->slash;
+    $this->module_path = $this->root_path.$this->module_path.'/';
 
     // url to user configuration apps
     $this->configuration_url = $this->host.$this->configuration_url.'/';
