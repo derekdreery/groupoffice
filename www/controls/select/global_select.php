@@ -25,9 +25,9 @@ $form->add_html_element(new input('hidden','multiselect',$multiselect));
 
 if(isset($_POST['query']))
 {
-	$_SESSION['search']['query']=smart_stripslashes($_POST['query']);
+	$_SESSION['global_search']['query']=smart_stripslashes($_POST['query']);
 }else {
-	$_SESSION['search']['query'] = isset($_SESSION['search']['query']) ? $_SESSION['search']['query'] : '';
+	$_SESSION['global_search']['query'] = isset($_SESSION['global_search']['query']) ? $_SESSION['global_search']['query'] : '';
 }
 
 
@@ -35,7 +35,7 @@ if(isset($_POST['query']))
 $form->add_html_element(new html_element('h1', $search_global));
 $form->add_html_element(new html_element('p',$search_text.':'));
 
-$input = new input('text','query',$_SESSION['search']['query']);
+$input = new input('text','query',$_SESSION['global_search']['query']);
 $input->set_attribute('onfocus','this.select();');
 $input->set_attribute('autocomplete','off');
 $form->add_html_element($input);
@@ -48,7 +48,7 @@ $link_back = $_SERVER['PHP_SELF'];
 
 
 
-if(!empty($_SESSION['search']['query']))
+if(!empty($_SESSION['global_search']['query']))
 {
 	load_control('datatable');
 	$datatable = new datatable('global_select_table',false, 'search_form');
@@ -62,7 +62,7 @@ if(!empty($_SESSION['search']['query']))
 
 	$GO_HEADER['head']=$datatable->get_header();
 
-	$query=addslashes($_SESSION['search']['query']);
+	$query=addslashes($_SESSION['global_search']['query']);
 
 	require_once($GO_CONFIG->class_path.'/base/search.class.inc');
 	$search = new search();
