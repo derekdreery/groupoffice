@@ -47,15 +47,11 @@ class date_picker
 		return $headers;
 	}
 
-	function print_date_picker($name, $date_format, $set_date='', $flat_div_id='', $flat_callbackfunction='', $arguments='', $disabled=false)
-	{
-		echo  $this->get_date_picker($name, $date_format, $set_date, $flat_div_id, $flat_callbackfunction, $arguments, $disabled);
-	}
 
 	function date_picker($name, $date_format, $set_date='', $flat_div_id='', $flat_callbackfunction='', $arguments='', $disabled=false, $required=false)
 	{
 		$this->name=$name;
-		$this->date_format=$this->convert_date_format($this->date_format);
+		$this->date_format=$this->convert_date_format($date_format);
 		$this->set_date=$set_date;
 		$this->flat_div_id=$flat_div_id;
 		$this->flat_callbackfunction=$flat_callbackfunction;
