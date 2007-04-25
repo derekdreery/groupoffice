@@ -592,7 +592,7 @@ class filesystem extends db
 			global $GO_CONFIG;
 			$parent = dirname($path);
 	
-			if ($parent == '' || $parent == '/' || $parent=='C:\\' || $parent =='.')
+			if ($parent == '' || $parent == '/' || substr($parent,1)==':\\' || $parent =='.')
 			{
 				return false;
 			}else

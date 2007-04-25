@@ -901,7 +901,7 @@ class GO_CONFIG
   			$this->mime_types_file = '/etc/mime.types';
   		}else
   		{
-  			$this->mime_types_file = $this->root_path.'/lib/mime.types';
+  			$this->mime_types_file = $this->root_path.'lib/mime.types';
   		}
   	}
   	
