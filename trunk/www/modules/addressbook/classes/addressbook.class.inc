@@ -645,7 +645,7 @@ popup.focus();
 			$sql = "SELECT ab_companies.*, cf_3.* FROM ab_companies ".
 				"LEFT JOIN cf_3 ON cf_3.link_id=ab_companies.link_id ";
 		}else {
-			$sql = "SELECT ab_companies.*, cf_3.* FROM ab_companies ";
+			$sql = "SELECT ab_companies.* FROM ab_companies ";
 		}
 
 		if ($addressbook_id > 0) {
@@ -1303,7 +1303,7 @@ popup.focus();
 			$cache['description']='';
 			$cache['url']=$GO_MODULES->modules['addressbook']['url'].'company.php?company_id='.$this->f('id');
 			$cache['type']=$ab_company;
-			$cache['keywords']=addslashes(record_to_keywords($this->Record)).','.$ab_contact;
+			$cache['keywords']=addslashes(record_to_keywords($this->Record)).','.$ab_company;
 			$cache['mtime']=$this->f('mtime');
 			
 			if($this->f('ctime')>$last_sync_time)
