@@ -29,9 +29,12 @@ if(!isset($_POST['calendars']))
 		$_POST['calendars'][]=$calendar_id;
 	}
 }
-$_POST['day'] = isset($_POST['day']) ? $_POST['day'] : $day;
-$_POST['month'] = isset($_POST['month']) ? $_POST['month'] : $month;
-$_POST['year'] = isset($_POST['year']) ? $_POST['year'] : $year;
+
+/*
+$day = isset($_POST['day']) ? $_POST['day'] : $day;
+$month = isset($_POST['month']) ? $_POST['month'] : $month;
+$year = isset($_POST['year']) ? $_POST['year'] : $year;
+*/
 
 $_POST['end_hour'] = isset($_POST['end_hour']) ? $_POST['end_hour'] : $hour;
 $_POST['end_min'] = isset($_POST['end_min']) ? $_POST['end_min'] : $min;
