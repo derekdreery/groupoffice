@@ -2,10 +2,12 @@
 class cms_gallery {
 
 	var $attributes;
+	var $cms_site;
 	
 	function cms_gallery($attributes, &$cms_site)
 	{	
-		$this->attributes = $attributes;		
+		$this->attributes = $attributes;	
+		$this->cms_site=$cms_site;	
 	}
 	
 	function has_permission()

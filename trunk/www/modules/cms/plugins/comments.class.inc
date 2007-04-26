@@ -134,7 +134,7 @@ class cms_comments {
 			
 			$name = $GO_SECURITY->logged_in() ? $_SESSION['GO_SESSION']['name'] : '';
 			$input = new input('text', 'name', $name);
-			$input->set_attribute('style', 'width:100%;');
+			$input->set_attribute('style', 'width:99%;');
 			$cell=new table_cell($input->get_html());
 			$cell->set_attribute('style','width:100%');
 			$row->add_cell($cell);
@@ -147,7 +147,7 @@ class cms_comments {
 			$row->add_cell($cell);
 			
 			$textarea = new textarea('comments', '');
-			$textarea->set_attribute('style', 'width:100%;height:80px;');
+			$textarea->set_attribute('style', 'width:99%;height:80px;');
 			$cell=new table_cell($textarea->get_html());
 			$cell->set_attribute('style','width:100%');
 			$row->add_cell($cell);
