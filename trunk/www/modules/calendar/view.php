@@ -110,7 +110,7 @@ if ($view_id > 0)
 	$view['start_hour'] = isset($_POST['view_start_hour']) ? $_POST['view_start_hour'] : '07';
 	$view['end_hour'] = isset($_POST['view_end_hour']) ? $_POST['view_end_hour'] : '20';
 	$view['name'] = isset($_POST['name']) ? smart_stripslashes($_POST['name']) : '';
-	$view['event_colors_override'] = isset($_POST['name']) ? '1' : '0';
+	$view['event_colors_override'] = isset($_POST['event_colors_override']) ? '1' : '0';
 	$view['time_interval'] = isset($_REQUEST['time_interval']) ? smart_stripslashes($_REQUEST['time_interval']) : '1800';
 	$title = $cal_new_view;
 }
@@ -191,6 +191,8 @@ switch($tabstrip->get_active_tab_id())
 	$cell->set_attribute('colspan','2');
 	$row->add_cell($cell);
 	$table->add_row($row);
+	
+	
 	
 	$tabstrip->add_html_element($table);
 	
