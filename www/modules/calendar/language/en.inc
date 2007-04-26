@@ -388,3 +388,4 @@ $cal_show_busy='Show as busy';
 
 $cal_subject='Subject';
 $cal_dismiss_all = 'Dismiss all';
+$cal_schedule_group='Schedule events for everyone in the view by default. (Otherwise it will only select your default calendar)';

@@ -849,8 +849,8 @@ class calendar extends db
 
 		if ($view_id > 0)
 		{
-			$sql = "INSERT INTO cal_views (id, user_id, name, start_hour, end_hour, event_colors_override, time_interval, acl_read, acl_write) ".
-			"VALUES ('$view_id', '$user_id', '$name', '$start_hour', '$end_hour', '$event_colors_override', '$time_interval', '$acl_read', '$acl_write')";
+			$sql = "INSERT INTO cal_views (id, user_id, name, start_hour, end_hour, event_colors_override, time_interval,acl_read, acl_write) ".
+			"VALUES ('$view_id', '$user_id', '$name', '$start_hour', '$end_hour', '$event_colors_override', '$time_interval','$acl_read', '$acl_write')";
 			$this->query($sql);
 			return $view_id;
 		}
@@ -863,7 +863,7 @@ class calendar extends db
 		"end_hour='$end_hour', event_colors_override='$event_colors_override', time_interval='$time_interval' WHERE id='$view_id'";
 		return $this->query($sql);
 	}
-
+	
 	function delete_view($view_id)
 	{
 		if($this->query("DELETE FROM cal_views_calendars WHERE view_id='$view_id'"))

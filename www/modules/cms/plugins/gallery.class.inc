@@ -102,7 +102,7 @@ class cms_gallery {
 			$user = $GO_USERS->get_user($ig->f('user_id'));
 			$name = format_name($user['last_name'], $user['first_name'], $user['middle_name'], 'first_name');
 			
-			$link = new hyperlink("javascript:popup('".$url."','".($ig->f('width')+30)."','".($ig->f('height')+40)."');",$thumb->get_html(), $ig_uploaded_by.' '.$name);		
+			$link = new hyperlink("javascript:popup('".$url."','".($ig->f('width')+50)."','".($ig->f('height')+70)."');",$thumb->get_html(), $ig_uploaded_by.' '.$name);		
 			$cell->add_html_element($link);
 		
 			if($ig->f('description')!='')
