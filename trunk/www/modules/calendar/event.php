@@ -1027,19 +1027,16 @@ if ($task != 'save_event' && $task != 'change_event' && ($event_id > 0 || isset 
 	}else
 	{
 		$event['calendars'] = array();
-		if(isset($_REQUEST['view_id']) && $_REQUEST['view_id'] > 0 && $view = $cal->get_view($_REQUEST['view_id']))
-		{			
+		if(isset($_REQUEST['view_id']) && $_REQUEST['view_id'] > 0)
+		{
 			$view_calendars = $cal->get_view_calendars($_REQUEST['view_id']);
 			foreach($view_calendars as $view_calendar)
 			{
-				if($view['schedule_group']=='1' || $view_calendar['user_id']==$GO_SECURITY->user_id)
-				{
-					$event['calendars'][] = $view_calendar['id'];
-					if($view['schedule_group']=='0')
-					{
-						break;
-					}
-				}
+				//if($view_calendar['user_id']==$GO_SECURITY->user_id)
+				//{
+				$event['calendars'][] = $view_calendar['id'];
+				//break;
+				//}
 			}
 		}
 	}
