@@ -175,12 +175,12 @@ switch ($task) {
 						$cf = new custom_fields();			
 						$cf2 = new custom_fields();
 						
-						$cf->insert_cf_row(3, $contact['link_id']);
+						$cf->insert_cf_row(3, $company['link_id']);
 				
 						$cf2->get_authorized_categories(2, $GO_SECURITY->user_id);
 						while($cf2->next_record())
 						{
-							$cf->save_fields($cf2->f('id'), $contact['link_id']);
+							$cf->save_fields($cf2->f('id'), $company['link_id']);
 						}
 					}
 
