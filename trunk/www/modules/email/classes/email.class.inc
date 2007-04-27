@@ -390,7 +390,7 @@ class email extends db
 	function get_auto_check_folders($account_id)
 	{
 		$sql = "SELECT * FROM emFolders WHERE account_id='$account_id'".
-		" AND (auto_check='1' OR name='INBOX')";
+		" AND (auto_check='1' OR name='INBOX') ORDER BY sort_order ASC, name ASC";
 		$this->query($sql);
 		return $this->num_rows();
 	}
