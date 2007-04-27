@@ -1,0 +1,8 @@
+<?php
+$module['updateclient']['description'] = 'Module to update Group-Office to new versions. It connects to the Intermesh update server and automatically downloads and installs the new versions.';
+$module['updateclient']['version'] = '1.0';
+$module['updateclient']['release_date'] = '2007-04-12';
+$module['updateclient']['status'] = 'Stable';
+$module['updateclient']['authors'][] = array('name'=>'Merijn Schering', 'email'=>'mschering@intermesh.nl');
+$module['updateclient']['admin_menu'] = true;
+$module['updateclient']['sort_order'] = 120;
