@@ -1,4 +1,7 @@
 CHANGELOG
+2007/04/27 Version 2.16-14
+-Added update client
+
 2007/04/03 Version 2.16-13
 -Security issue: A logged in user could read another user's e-mail with some tricks
 -Saved e-mails couldn't be read (Pro version)
