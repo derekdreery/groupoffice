@@ -124,19 +124,20 @@ class GO_THEME
 
 	function load_module_theme($module_id)
 	{
-		global $GO_MODULES;
+		global $GO_CONFIG;
 
-		$file = $GO_MODULES->modules[$module_id]['path'].'themes/'.$this->theme.'/images.inc';
-		$image_url =  $GO_MODULES->modules[$module_id]['url'].'themes/'.$this->theme.'/images/';
+		$file = $GO_CONFIG->root_path.'modules/'.$module_id.'/themes/'.$this->theme.'/images.inc';
+		$image_url =  $GO_CONFIG->host.'modules/'.$module_id.'/themes/'.$this->theme.'/images/';
 		if(!file_exists($file))
 		{
-			$file = $GO_MODULES->modules[$module_id]['path'].'themes/Default/images.inc';
-			$image_url =  $GO_MODULES->modules[$module_id]['url'].'themes/Default/images/';
+			$file = $GO_CONFIG->root_path.'modules/'.$module_id.'/themes/Default/images.inc';
+			$image_url =  $GO_CONFIG->host.'modules/'.$module_id.'/themes/Default/images/';
 			
 		}
 
 		if(file_exists($file))
 		{
+			
 			require($file);
 			foreach($images as $key => $value)
 			{
