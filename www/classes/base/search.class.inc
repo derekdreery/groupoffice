@@ -28,9 +28,9 @@ class search extends db {
 			{
 				require($module['class_path'].$module['id'].'.class.inc');
 				$class = new $module['id'];
-				
+			
 				if(method_exists($class, '__on_search'))
-				{
+				{					
 					$last_sync_time = $this->get_last_sync_time($user_id, $module['id']);
 					$class->__on_search($user_id, $last_sync_time);
 					$this->update_last_sync_time($user_id, $module['id'], get_gmt_time());
@@ -56,7 +56,7 @@ class search extends db {
 			$sql .= " keywords LIKE '%$query%'";
 		}
 		
-		$sql .="ORDER BY $sort_index $sort_order";
+		$sql .=" ORDER BY $sort_index $sort_order";
 
 		$this->query($sql);
 		$count =$this->num_rows();
