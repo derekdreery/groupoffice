@@ -1303,7 +1303,7 @@ popup.focus();
 			$cache['description']='';
 			$cache['url']=$GO_MODULES->modules['addressbook']['url'].'company.php?company_id='.$this->f('id');
 			$cache['type']=$ab_company;
-			$cache['keywords']=addslashes(record_to_keywords($this->Record)).','.$ab_company;
+			$cache['keywords']=addslashes(record_to_keywords($this->Record)).','.$cache['type'];
 			$cache['mtime']=$this->f('mtime');
 			
 			if($this->f('ctime')>$last_sync_time)
