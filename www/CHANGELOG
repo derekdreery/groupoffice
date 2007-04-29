@@ -8,6 +8,10 @@ TODO
 *Birthday events
 *Configure which calendars show on summary screen
 *HTML notes
+?callto:// links
+?vacation autoreply with sudo instead of cronjob
+
+
 
 
 Version 2.17-alpha
