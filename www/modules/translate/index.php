@@ -216,8 +216,13 @@ if(!empty($dest_lang))
 
 			$form->add_html_element(new input('hidden', 'names[]', $name));
 
-			$input = new input('text', 'values[]', $value);
-			$input->set_attribute('style','width:100%');
+			$input = new textarea('values[]', $value);
+			
+			$exploded =explode("\n",$value);
+			$lines = count($exploded);
+			$height = 18+(($lines-1)*18);
+			
+			$input->set_attribute('style','width:100%;height:'.$height.'px');
 			$input->set_attribute('onfocus','this.select();');
 			$input->set_attribute('autocomplete','off');
 

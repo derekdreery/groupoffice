@@ -140,11 +140,12 @@ class translate extends db
 				//$end = strpos($line, ';');
 
 
-				$value = trim(substr($line,$ispos+1));
-				//$value = trim(substr($line,$ispos+2,-1));
+				$value = trim(substr($line,$ispos+2,-1));
+				$value = str_replace('\\n',"\n",$value);
+				$value = stripslashes($value);
 
-
-				$vars[$name]=stripslashes(substr($value,1,-1));
+				
+				$vars[$name]=$value;
 				//$vars[$name]=stripslashes($value);
 			}
 		}
@@ -185,7 +186,15 @@ class translate extends db
 		{
 			if(!empty($value))
 			{
-				$line = '$'.$name.'=\''.$value.'\';'."\n";
+				
+				$value = str_replace("\r\n","\n",$value);
+				
+				if(strpos($value,"\n"))
+				{
+					$line = '$'.$name.'="'.str_replace("\n",'\n',stripslashes($value)).'";'."\n";
+				}else {
+					$line = '$'.$name.'=\''.str_replace("\n",'\n',$value).'\';'."\n";
+				}
 				fputs($fp, $line);
 			}
 		}
