@@ -1,0 +1,14 @@
+<tr>
+   <td align=center bgcolor=$color>$change_color_start  $change_color_stop</td>
+<td align=center nowrap  bgcolor=$color><a href="showline.php?Ticket_Number=$ticket_number"> $ticket_number </a></td>
+               <td bgcolor=$color align=center><A HREF="my_tickets.php?field=t_status&submit=filter&strtosearch=$t_status">$status_name</A></td>
+<td align=center bgcolor=$color><A HREF="my_tickets.php?field=t_priority&submit=filter&strtosearch=$t_priority">$priority_name</A></td>
+<td align=center bgcolor=$color><A HREF="my_tickets.php?field=t_from&submit=filter&strtosearch=$t_from">$issuer_name</a></td>
+               <td bgcolor=$color><a href="showline.php?Ticket_Number=$ticket_number">$t_subject</a></td>
+               <td align=center bgcolor=$color><A HREF="my_tickets.php?field=t_assigned&submit=filter&strtosearch=$t_assigned">$t_assigned_name</A></td>
+               <td align=center bgcolor=$color><A HREF="my_tickets.php?field=t_category&submit=filter&strtosearch=$t_category">$category_name</A></td>
+               <td align=center bgcolor=$color>$due_color_start $print_due_date  $due_color_stop</td>
+               <td align=center bgcolor=$color>$due_color_start $print_end_date  $due_color_stop</td>
+               <td align=center bgcolor=$color>$due_color_start $print_complete  $due_color_stop</td>
+               <td align=center bgcolor=$color><A HREF="my_tickets.php?field=project_id&submit=filter&strtosearch=$project_id">$project_name</A></td>
+</tr>

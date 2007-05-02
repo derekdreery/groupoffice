@@ -1,0 +1,7 @@
+<?php
+$module['news']['description'] = 'NNTP client for Group-Office';
+$module['news']['version'] = '1.0';
+$module['news']['release_date'] = '2004-04-05';
+$module['news']['status'] = 'Alpha';
+$module['news']['authors'][] = array('name'=>'Markus Schabel', 'email'=>'markus.schabel@tgm.ac.at');
+?>
