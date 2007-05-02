@@ -1,6 +1,9 @@
 CHANGELOG
-2007/04/27 Version 2.16-14
+2007/05/02 Version 2.16-14
 -Added update client
+-Fixed problem with quotes in e-mail names
+-Don't encode language files for translating
+-Small bug with newlines and translate module
 
 2007/04/03 Version 2.16-13
 -Security issue: A logged in user could read another user's e-mail with some tricks
