@@ -33,30 +33,30 @@ if(file_exists($GO_CONFIG->root_path.'LICENSE.PRO'))
 	
 	$db2 = new db();
 	
-	$category=$cf->get_category_by_name(2, 'Mailings');
+	$category=$cf->get_category_by_name(2, $re_newsletters);
 	if(!$category)
 	{
-		$category['name']='Mailings';
+		$category['name']=$re_newsletters;
 		$category['type'] = 2;
 		$category['acl_id'] = $GO_SECURITY->get_new_acl();	
 		$category['id']=$cf->add_category($category);
 	}
 	$contacts_category_id=$category['id'];
 	
-	$category=$cf->get_category_by_name(3, 'Mailings');
+	$category=$cf->get_category_by_name(3, $re_newsletters);
 	if(!$category)
 	{
-		$category['name']='Mailings';
+		$category['name']=$re_newsletters;
 		$category['type'] = 3;
 		$category['acl_id'] = $GO_SECURITY->get_new_acl();	
 		$category['id']=$cf->add_category($category);
 	}
 	$companies_category_id=$category['id'];
 	
-	$category=$cf->get_category_by_name(8, 'Mailings');
+	$category=$cf->get_category_by_name(8, $re_newsletters);
 	if(!$category)
 	{
-		$category['name']='Mailings';
+		$category['name']=$re_newsletters;
 		$category['type'] = 8;
 		$category['acl_id'] = $GO_SECURITY->get_new_acl();	
 		$category['id']=$cf->add_category($category);
