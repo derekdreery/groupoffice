@@ -15,6 +15,8 @@ $GO_SECURITY->authenticate();
 $GO_MODULES->authenticate('addressbook');
 require_once ($GO_LANGUAGE->get_language_file('addressbook'));
 
+$GO_CONFIG->set_help_url($ab_help_url);
+
 load_basic_controls();
 load_control('date_picker');
 load_control('tooltip');

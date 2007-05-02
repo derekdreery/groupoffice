@@ -230,3 +230,5 @@ $ml_beep='Beep on new e-mail';
 $ml_mail_to='A composer window should have been opened for you because you clicked on the e-mail address %s.';
 $ml_windows_mail = 'If you want to use Group-Office as your default e-mail client in Microsoft Windows then you need to load a register file. After loading the register file you can select Group-Office as your default e-mail client in Windows at Control Panel -> Internet options -> Programs';
 $ml_download_reg='Download register file';
+
+$ml_help_url='http://docs.group-office.com/index.php?folder_id=57&file_id=0';

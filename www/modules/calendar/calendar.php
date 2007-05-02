@@ -22,6 +22,8 @@ load_control('color_selector');
 require_once($GO_MODULES->path.'classes/calendar.class.inc');
 $cal = new calendar();
 
+$GO_CONFIG->set_help_url($cal_help_url);
+
 $date = isset($_REQUEST['date']) ? $_REQUEST['date'] : getdate();
 $year = isset($_POST['year']) ? $_POST['year'] : $date["year"];
 $month = isset($_POST['month']) ? $_POST['month'] : $date["mon"];

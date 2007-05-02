@@ -21,6 +21,8 @@ require_once($GO_LANGUAGE->get_language_file('summary'));
 require_once($GO_MODULES->class_path."summary.class.inc");
 $summary = new summary();
 
+$GO_CONFIG->set_help_url($sum_help_url);
+
 $ab_module = isset($GO_MODULES->modules['addressbook']) ? $GO_MODULES->modules['addressbook'] : false;
 if ($ab_module && $ab_module['read_permission'])
 {

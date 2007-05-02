@@ -58,3 +58,5 @@ $sc_start_later = 'Bad input!! The starting time is later then the ending time.'
 
 $td_count_single = 'todo';
 $td_count_multiple = 'todo\'s';
+
+$td_help_url='http://docs.group-office.com/index.php?folder_id=49&file_id=217';

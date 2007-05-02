@@ -16,6 +16,8 @@ require_once ("../../Group-Office.php");
 $GO_SECURITY->authenticate();
 $GO_MODULES->authenticate('email');
 
+
+
 load_basic_controls();
 load_control('tooltip');
 load_control('overlib');
@@ -29,6 +31,8 @@ $GO_HEADER['nomessages'] = true;
 $GO_HEADER['head'] = overlib::get_header();
 
 require_once ($GO_LANGUAGE->get_language_file('email'));
+
+$GO_CONFIG->set_help_url($ml_help_url);
 
 $em_settings = $email->get_settings($GO_SECURITY->user_id);
 

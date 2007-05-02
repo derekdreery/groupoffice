@@ -18,6 +18,8 @@ $GO_SECURITY->authenticate();
 $GO_MODULES->authenticate('projects');
 require_once ($GO_LANGUAGE->get_language_file('projects'));
 
+$GO_CONFIG->set_help_url($pm_help_url);
+
 load_basic_controls();
 load_control('date_picker');
 load_control('tooltip');

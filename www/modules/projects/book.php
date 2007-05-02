@@ -23,6 +23,8 @@ load_control('object_select');
 
 require_once ($GO_LANGUAGE->get_language_file('projects'));
 
+$GO_CONFIG->set_help_url($pm_help_url);
+
 //check for the addressbook module
 $ab_module = isset ($GO_MODULES->modules['addressbook']) ? $GO_MODULES->modules['addressbook'] : false;
 if ($ab_module && $ab_module['read_permission']) {

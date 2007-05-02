@@ -10,11 +10,12 @@ TODO
 *HTML notes
 ?callto:// links
 ?vacation autoreply with sudo instead of cronjob
+*SMTP server per e-mail account
+*Restrict SMTP servers for mailing lists
 
 
-
-
-Version 2.17-alpha
+2007/05/02 Version 2.17-unstable-1
+-Full support for Microsoft Windows
 -Move module theme items to module dir
 -Modular select dialog (Done with global search).
 -Select and sort columns to display in tables
@@ -34,17 +35,19 @@ Version 2.17-alpha
 -Edit multiple contacts at once
 -Show month name on top of calendar print
 -Adminstrative tools: check database, backup database, users import
-*SMTP server per e-mail account
-*Restrict SMTP servers for mailing lists
-$Help button leads to right page at docs.group-office.com
-
-*Test reports export
-*Create mailing lists easily with reports and custom fields
-*Test new syncserver with different syncmodes
+-Help button leads to right page at docs.group-office.com
+-Table configuration which allows you to reorder and select the columns you want in tables
 
 
 
 CHANGELOG
+2007/05/02 Version 2.16-14
+-Added update client
+-Fixed problem with quotes in e-mail names
+-Don't encode language files for translating
+-Small bug with newlines and translate module
+
+
 2007/04/03 Version 2.16-13
 -Security issue: A logged in user could read another user's e-mail with some tricks
 -Saved e-mails couldn't be read (Pro version)

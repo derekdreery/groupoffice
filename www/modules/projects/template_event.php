@@ -21,6 +21,8 @@ $GO_MODULES->authenticate('projects');
 require_once ($GO_LANGUAGE->get_language_file('projects'));
 require_once ($GO_LANGUAGE->get_language_file('calendar'));
 
+$GO_CONFIG->set_help_url($pm_help_url);
+
 
 $page_title = $lang_modules['projects'];
 require_once ($GO_MODULES->class_path."projects.class.inc");
