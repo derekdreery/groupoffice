@@ -1,13 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 2.8.2-Debian-0.2
+-- version 2.9.1.1-Debian-2ubuntu1
 -- http://www.phpmyadmin.net
 -- 
 -- Host: localhost
--- Generatie Tijd: 16 Mar 2007 om 16:58
--- Server versie: 5.0.24
--- PHP Versie: 5.1.6
+-- Generatie Tijd: 02 Mei 2007 om 15:42
+-- Server versie: 5.0.38
+-- PHP Versie: 5.2.1
 -- 
--- Database: `go21701`
+-- Database: `217unstable1`
 -- 
 
 -- --------------------------------------------------------
@@ -25,13 +25,14 @@ CREATE TABLE `ab_addressbooks` (
   `acl_write` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `ab_addressbooks`
 -- 
 
-INSERT INTO `ab_addressbooks` (`id`, `user_id`, `name`, `acl_read`, `acl_write`) VALUES (1, 1, 'Admin, Group-Office', 36, 37),
+INSERT INTO `ab_addressbooks` (`id`, `user_id`, `name`, `acl_read`, `acl_write`) VALUES 
+(1, 1, 'Admin, Group-Office', 36, 37),
 (4, 1, 'test', 52, 53);
 
 -- --------------------------------------------------------
@@ -70,13 +71,14 @@ CREATE TABLE `ab_companies` (
   PRIMARY KEY  (`id`),
   KEY `addressbook_id` (`addressbook_id`),
   KEY `link_id` (`link_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `ab_companies`
 -- 
 
-INSERT INTO `ab_companies` (`id`, `link_id`, `user_id`, `addressbook_id`, `name`, `address`, `address_no`, `zip`, `city`, `state`, `country`, `post_address`, `post_address_no`, `post_city`, `post_state`, `post_country`, `post_zip`, `phone`, `fax`, `email`, `homepage`, `bank_no`, `vat_no`, `ctime`, `mtime`) VALUES (6, 6, 1, 1, 'Intermesh', 'Reitchscheweg', '37', '5231MN', 'Den Bosch', 'Noord-Brabant', 'Nederland', 'Wethouder Schuurmanslaan', '361', 'Den Bosch', 'Noord-Brabant', 'Nederland', '5231MN', '+31619864268', '+31619864268', 'info@intermesh.nl', 'http://', '12345.12344', 'NL212313215', 1163337736, 1163337805),
+INSERT INTO `ab_companies` (`id`, `link_id`, `user_id`, `addressbook_id`, `name`, `address`, `address_no`, `zip`, `city`, `state`, `country`, `post_address`, `post_address_no`, `post_city`, `post_state`, `post_country`, `post_zip`, `phone`, `fax`, `email`, `homepage`, `bank_no`, `vat_no`, `ctime`, `mtime`) VALUES 
+(6, 6, 1, 1, 'Intermesh', 'Reitchscheweg', '37', '5231MN', 'Den Bosch', 'Noord-Brabant', 'Nederland', 'Wethouder Schuurmanslaan', '361', 'Den Bosch', 'Noord-Brabant', 'Nederland', '5231MN', '+31619864268', '+31619864268', 'info@intermesh.nl', 'http://', '12345.12344', 'NL212313215', 1163337736, 1163337805),
 (7, 7, 1, 1, 'Intermesh Directie', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 1163342395, 1163342395);
 
 -- --------------------------------------------------------
@@ -124,7 +126,7 @@ CREATE TABLE `ab_contacts` (
   PRIMARY KEY  (`id`),
   KEY `user_id` (`addressbook_id`),
   KEY `link_id` (`link_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `ab_contacts`
@@ -147,13 +149,14 @@ CREATE TABLE `ab_settings` (
   `search_addressbook_id` int(11) NOT NULL default '0',
   `addressbook_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`user_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `ab_settings`
 -- 
 
-INSERT INTO `ab_settings` (`user_id`, `search_type`, `search_contacts_field`, `search_companies_field`, `search_users_field`, `search_addressbook_id`, `addressbook_id`) VALUES (1, 'contact', '', '', '', 1, 1);
+INSERT INTO `ab_settings` (`user_id`, `search_type`, `search_contacts_field`, `search_companies_field`, `search_users_field`, `search_addressbook_id`, `addressbook_id`) VALUES 
+(1, 'contact', '', '', '', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -171,7 +174,7 @@ CREATE TABLE `ab_zipcodes` (
   `country` varchar(100) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `zip` (`zip`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `ab_zipcodes`
@@ -190,13 +193,14 @@ CREATE TABLE `acl` (
   `user_id` int(11) NOT NULL default '0',
   `group_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`acl_id`,`user_id`,`group_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `acl`
 -- 
 
-INSERT INTO `acl` (`acl_id`, `user_id`, `group_id`) VALUES (1, 0, 1),
+INSERT INTO `acl` (`acl_id`, `user_id`, `group_id`) VALUES 
+(1, 0, 1),
 (2, 0, 1),
 (3, 0, 1),
 (3, 0, 2),
@@ -293,13 +297,14 @@ CREATE TABLE `acl_items` (
   `user_id` int(11) NOT NULL default '0',
   `description` varchar(50) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `acl_items`
 -- 
 
-INSERT INTO `acl_items` (`id`, `user_id`, `description`) VALUES (1, 0, 'Module read: modules'),
+INSERT INTO `acl_items` (`id`, `user_id`, `description`) VALUES 
+(1, 0, 'Module read: modules'),
 (2, 0, 'Module write: modules'),
 (3, 1, 'webmaster@example.com'),
 (4, 0, 'Module read: addressbook'),
@@ -360,7 +365,7 @@ CREATE TABLE `cal_backgrounds` (
   `color` char(6) NOT NULL,
   `name` varchar(100) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_backgrounds`
@@ -383,7 +388,7 @@ CREATE TABLE `cal_calendar_backgrounds` (
   `end_time` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `calendar_id` (`calendar_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_calendar_backgrounds`
@@ -411,13 +416,14 @@ CREATE TABLE `cal_calendars` (
   PRIMARY KEY  (`id`),
   KEY `group_id` (`group_id`),
   KEY `group_id_2` (`group_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_calendars`
 -- 
 
-INSERT INTO `cal_calendars` (`id`, `group_id`, `user_id`, `acl_read`, `acl_write`, `name`, `start_hour`, `end_hour`, `background`, `time_interval`) VALUES (1, 0, 1, 30, 31, 'Admin, Group-Office', 7, 20, 'FFFFCC', 1800),
+INSERT INTO `cal_calendars` (`id`, `group_id`, `user_id`, `acl_read`, `acl_write`, `name`, `start_hour`, `end_hour`, `background`, `time_interval`) VALUES 
+(1, 0, 1, 30, 31, 'Admin, Group-Office', 7, 20, 'FFFFCC', 1800),
 (4, 0, 1, 56, 57, 'Test', 8, 20, 'FFFFCC', 1800);
 
 -- --------------------------------------------------------
@@ -475,7 +481,7 @@ CREATE TABLE `cal_events` (
   KEY `link_id` (`link_id`),
   KEY `link_id_2` (`link_id`),
   KEY `status_id` (`status_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_events`
@@ -494,7 +500,7 @@ CREATE TABLE `cal_events_calendars` (
   `event_id` int(11) NOT NULL default '0',
   `sid` char(32) NOT NULL default '',
   KEY `calendar_id` (`calendar_id`,`event_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_events_calendars`
@@ -514,7 +520,7 @@ CREATE TABLE `cal_exceptions` (
   `time` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `event_id` (`event_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_exceptions`
@@ -532,7 +538,7 @@ CREATE TABLE `cal_group_admins` (
   `group_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`group_id`,`user_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_group_admins`
@@ -552,7 +558,7 @@ CREATE TABLE `cal_groups` (
   `custom_fields` text NOT NULL,
   `acl_write` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_groups`
@@ -575,13 +581,14 @@ CREATE TABLE `cal_holidays` (
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`),
   KEY `user_id_2` (`user_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_holidays`
 -- 
 
-INSERT INTO `cal_holidays` (`id`, `user_id`, `date`, `name`, `region`) VALUES (31, 1, 1136070000, 'Nieuwjaar', 'nl'),
+INSERT INTO `cal_holidays` (`id`, `user_id`, `date`, `name`, `region`) VALUES 
+(31, 1, 1136070000, 'Nieuwjaar', 'nl'),
 (32, 1, 1139871600, 'Valentijnsdag', 'nl'),
 (33, 1, 1144965600, 'Goede vrijdag', 'nl'),
 (34, 1, 1145138400, '1e Paasdag', 'nl'),
@@ -613,7 +620,7 @@ CREATE TABLE `cal_participants` (
   `status` enum('0','1','2') NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `id` (`id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_participants`
@@ -638,7 +645,7 @@ CREATE TABLE `cal_reminders` (
   KEY `remind_time_2` (`remind_time`),
   KEY `email_sent` (`email_sent`),
   KEY `email_sent_2` (`email_sent`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_reminders`
@@ -669,13 +676,14 @@ CREATE TABLE `cal_settings` (
   `email_changes` enum('0','1') NOT NULL default '1',
   `email_reminders` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`user_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_settings`
 -- 
 
-INSERT INTO `cal_settings` (`user_id`, `default_cal_id`, `default_view_id`, `show_days`, `merged_view`, `reminder`, `refresh_rate`, `permissions`, `show_todos`, `weekview`, `show_completed`, `view_type`, `check_conflicts`, `email_changes`, `email_reminders`) VALUES (1, 1, 0, 0, '0', 0, '', 0, '0', '7', '0', 'grid', '1', '1', '0');
+INSERT INTO `cal_settings` (`user_id`, `default_cal_id`, `default_view_id`, `show_days`, `merged_view`, `reminder`, `refresh_rate`, `permissions`, `show_todos`, `weekview`, `show_completed`, `view_type`, `check_conflicts`, `email_changes`, `email_reminders`) VALUES 
+(1, 1, 0, 0, '0', 0, '', 0, '0', '7', '0', 'grid', '1', '1', '0');
 
 -- --------------------------------------------------------
 
@@ -690,13 +698,14 @@ CREATE TABLE `cal_statuses` (
   `name` varchar(50) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `type` (`type`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_statuses`
 -- 
 
-INSERT INTO `cal_statuses` (`id`, `type`, `name`) VALUES (1, 'VEVENT', 'NEEDS-ACTION'),
+INSERT INTO `cal_statuses` (`id`, `type`, `name`) VALUES 
+(1, 'VEVENT', 'NEEDS-ACTION'),
 (2, 'VEVENT', 'ACCEPTED'),
 (3, 'VEVENT', 'DECLINED'),
 (4, 'VEVENT', 'TENTATIVE'),
@@ -728,7 +737,7 @@ CREATE TABLE `cal_views` (
   `acl_write` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_views`
@@ -747,7 +756,7 @@ CREATE TABLE `cal_views_calendars` (
   `calendar_id` int(11) NOT NULL default '0',
   `background` char(6) NOT NULL default 'CCFFCC',
   PRIMARY KEY  (`view_id`,`calendar_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cal_views_calendars`
@@ -770,13 +779,14 @@ CREATE TABLE `cms_comments` (
   `ctime` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `file_id` (`file_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cms_comments`
 -- 
 
-INSERT INTO `cms_comments` (`id`, `file_id`, `user_id`, `name`, `comments`, `ctime`) VALUES (2, 4, 1, 'Group-Office Admin', 'This is an example comment on this page.\r\nCustomers can easily repond to your articles with this plugin.', 1159524166);
+INSERT INTO `cms_comments` (`id`, `file_id`, `user_id`, `name`, `comments`, `ctime`) VALUES 
+(2, 4, 1, 'Group-Office Admin', 'This is an example comment on this page.\r\nCustomers can easily repond to your articles with this plugin.', 1159524166);
 
 -- --------------------------------------------------------
 
@@ -807,13 +817,14 @@ CREATE TABLE `cms_files` (
   KEY `folder_id` (`folder_id`),
   FULLTEXT KEY `name` (`name`),
   FULLTEXT KEY `content` (`content`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cms_files`
 -- 
 
-INSERT INTO `cms_files` (`id`, `folder_id`, `extension`, `size`, `ctime`, `mtime`, `name`, `content`, `auto_meta`, `title`, `description`, `keywords`, `priority`, `hot_item`, `hot_item_text`, `template_item_id`, `acl`) VALUES (1, 1, 'html', 230, 1159522480, 1159522489, 'Welcome.html', '<h1>Welcome to the Group-Office CMS</h1>\r\nWelcome to the Group-Office content management system. This is just an example page to show how this module works.<br />\r\nThe system is extremely flexible and easy to use for the end user!', '1', 'Welcome to the Group-Office CMS', 'welcome group-office cms', 'welcome, group-office, cms', 1, '0', '', 1, 0),
+INSERT INTO `cms_files` (`id`, `folder_id`, `extension`, `size`, `ctime`, `mtime`, `name`, `content`, `auto_meta`, `title`, `description`, `keywords`, `priority`, `hot_item`, `hot_item_text`, `template_item_id`, `acl`) VALUES 
+(1, 1, 'html', 230, 1159522480, 1159522489, 'Welcome.html', '<h1>Welcome to the Group-Office CMS</h1>\r\nWelcome to the Group-Office content management system. This is just an example page to show how this module works.<br />\r\nThe system is extremely flexible and easy to use for the end user!', '1', 'Welcome to the Group-Office CMS', 'welcome group-office cms', 'welcome, group-office, cms', 1, '0', '', 1, 0),
 (2, 1, 'html', 1279, 1159522623, 1159522715, 'CMS sites.html', '<h1>Sites that run on GO CMS</h1>\r\nTo show you what the system can do the following sites use the Group-Office CMS:<br />\r\n<br />\r\n<a href="http://www.pedulianak.com/">http://www.pedulianak.com</a><br />\r\n<a target="_blank" href="http://www.ish-web.org/">http://www.ish-web.org</a><br />\r\n<span style="font-weight: bold;"></span><a href="http://www.firmpeople.nl/" target="_blank">http://www.firmpeople.n</a><br />\r\n<a target="_blank" href="http://www.nvvh.com/">http://www.nvvh.com</a><span style="font-weight: bold;"><strong></strong></span><a href="http://www.firmpeople.nl/" target="_blank">l</a><br />\r\n<a href="http://www.group-office.com/" target="_blank">http://www.group-office.com</a><br />\r\n<a href="http://www.intermesh.nl/" target="_blank">http://www.intermesh.nl</a><br />\r\n<a href="http://www.online-ingredients.com/" target="_blank">http://www.online-ingredients.com</a><br />\r\n<a href="http://www.technicaltrader.nl/">http://www.technicaltrader.nl</a><br />\r\n<a href="http://www.foss-it.nl/" target="_blank">http://www.foss-it.nl</a><br />\r\n<br />\r\nDo you want your own CMS but don''t know how to create a template? Contact Intermesh to build one for you!<br />\r\n<a href="http://www.intermesh.nl/" target="_blank"></a>', '1', 'Sites that run on GO CMS', 'go cms', 'go, cms', 2, '0', '', 1, 0),
 (3, 1, 'html', 169, 1159522780, 1161259796, 'Contact.html', '<h1>Contact</h1>\r\nUse the form below to contact. It''s a plugin for the GO CMS!<br />\r\n<br />\r\n<cms:plugin plugin_id="contact" height="150">Contact form</cms:plugin>', '1', 'Contact', 'contact', 'contact', 3, '0', '', 1, 0),
 (4, 2, 'html', 613, 1159523334, 1161259885, 'GO CMS is improved.html', '<h1>GO CMS is improved!</h1>\r\nThe new CMS module has a lot of new features!<br />\r\nLike the new plugin system to add things like:<br />\r\n<ol>\r\n    <li>Photo galleries</li>\r\n    <li>Contact forms</li>\r\n    <li>A comments form for visitors to respond to the page (See this page)</li>\r\n</ol>\r\nAlso authentication on every page or folder is possible.<br />\r\n<strong><br />\r\n</strong>\r\n<h2><strong>Respond to this page</strong></h2>\r\nYou can repond to this page by filling in the form at the bottom of this page.<br />\r\n<br />\r\n<cms:plugin allow_unregistered="false" plugin_id="comments">Comments form</cms:plugin>', '1', 'GO CMS is improved! - respond', 'go cms improved respond', 'go, cms, improved, respond', 1, '1', '', 1, 0),
@@ -840,13 +851,14 @@ CREATE TABLE `cms_folders` (
   `acl` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `parent_id` (`parent_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cms_folders`
 -- 
 
-INSERT INTO `cms_folders` (`id`, `parent_id`, `ctime`, `mtime`, `name`, `disabled`, `priority`, `multipage`, `template_item_id`, `acl`) VALUES (1, 0, 1159522197, 1159522197, 'www.example.com', '0', 1, NULL, 1, 0),
+INSERT INTO `cms_folders` (`id`, `parent_id`, `ctime`, `mtime`, `name`, `disabled`, `priority`, `multipage`, `template_item_id`, `acl`) VALUES 
+(1, 0, 1159522197, 1159522197, 'www.example.com', '0', 1, NULL, 1, 0),
 (2, 1, 1159523293, 1159523910, 'News', '0', 4, '0', 1, 0);
 
 -- --------------------------------------------------------
@@ -861,7 +873,7 @@ CREATE TABLE `cms_galleries` (
   `site_id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cms_galleries`
@@ -889,7 +901,7 @@ CREATE TABLE `cms_languages` (
   `language_code` char(2) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `site_id` (`site_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cms_languages`
@@ -908,13 +920,14 @@ CREATE TABLE `cms_settings` (
   `sort_field` varchar(20) NOT NULL default '',
   `sort_order` varchar(20) NOT NULL default '',
   PRIMARY KEY  (`user_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cms_settings`
 -- 
 
-INSERT INTO `cms_settings` (`user_id`, `sort_field`, `sort_order`) VALUES (1, 'cms_files.priority', 'ASC');
+INSERT INTO `cms_settings` (`user_id`, `sort_field`, `sort_order`) VALUES 
+(1, 'cms_files.priority', 'ASC');
 
 -- --------------------------------------------------------
 
@@ -936,14 +949,16 @@ CREATE TABLE `cms_sites` (
   `root_folder_id` int(11) NOT NULL default '0',
   `start_file_id` int(11) NOT NULL,
   `language` char(10) NOT NULL,
+  `name` varchar(100) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cms_sites`
 -- 
 
-INSERT INTO `cms_sites` (`id`, `user_id`, `acl_write`, `allow_properties`, `domain`, `webmaster`, `publish_style`, `publish_path`, `template_id`, `root_folder_id`, `start_file_id`, `language`) VALUES (1, 1, 34, '0', 'www.example.com', 'webmaster@example.com', '0', '', 1, 1, 0, 'nl');
+INSERT INTO `cms_sites` (`id`, `user_id`, `acl_write`, `allow_properties`, `domain`, `webmaster`, `publish_style`, `publish_path`, `template_id`, `root_folder_id`, `start_file_id`, `language`, `name`) VALUES 
+(1, 1, 34, '0', 'www.example.com', 'webmaster@example.com', '0', '', 1, 1, 0, 'nl', '');
 
 -- --------------------------------------------------------
 
@@ -961,13 +976,14 @@ CREATE TABLE `cms_template_items` (
   PRIMARY KEY  (`id`),
   KEY `template_id` (`template_id`),
   KEY `page` (`page`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cms_template_items`
 -- 
 
-INSERT INTO `cms_template_items` (`id`, `template_id`, `name`, `content`, `page`) VALUES (1, 1, 'Main', '<table class="maintable" align="center" cellpadding="0" cellspacing="0">\r\n<tr>\r\n	<td colspan="3" style="width:100%px;height:60px;vertical-align:top;">\r\n	<img src="/groupoffice/themes/Default/images/GOCOM.gif" style="border:0px;margin-top:10px;" />\r\n	</td>\r\n</tr>\r\n<tr>\r\n<td style="height:22px;background-color:#f1f1f1;border-top:2px solid #16336e;border-bottom:1px #16336e dashed;padding-right:5px;" align="right" colspan="3">\r\n<php>\r\nif($GLOBALS[''GO_SECURITY'']->logged_in())\r\n{\r\necho ''Logged in as ''.$_SESSION[''GO_SESSION''][''name''].'' - <logout class="logout" text="logout" goto_url="index.php" />'';\r\n}else\r\n{\r\necho ''<login class="login" goto_url="groupoffice/" text="login &gt; &gt" />'';\r\n}\r\n</php>\r\n	</td>\r\n</tr>\r\n\r\n<tr>\r\n	<td class="menutd">\r\n<treeview class="treeview" item_active_class="menu_active" />\r\n<php>\r\nif($GLOBALS[''GO_SECURITY'']->logged_in())\r\n{\r\nif($GLOBALS[''GO_SECURITY'']->has_permission($GLOBALS[''GO_SECURITY'']->user_id, $GLOBALS[''cms_site'']->site[''acl_write'']))\r\n{\r\necho ''<admin class="menu" text="Admin" />'';\r\n}\r\n}\r\n</php>\r\n	</td>\r\n	<td class="contenttd">\r\n	<content read_more_text="read&nbsp;more&nbsp;>>" max_length="100"  />\r\n	</td>\r\n	<td class="newstd">\r\n	<h1 style="margin-bottom:0px;">News</h1>\r\n	<hr />\r\n<hot_items read_more_text="read&nbsp;more&nbsp;>>" read_more_class="readmore" print_title="true" max_length="100" title_class="news_title" class="news" />\r\n\r\n	</td>\r\n</tr>\r\n</table>', '1');
+INSERT INTO `cms_template_items` (`id`, `template_id`, `name`, `content`, `page`) VALUES 
+(1, 1, 'Main', '<table class="maintable" align="center" cellpadding="0" cellspacing="0">\r\n<tr>\r\n	<td colspan="3" style="width:100%px;height:60px;vertical-align:top;">\r\n	<img src="/groupoffice/themes/Default/images/GOCOM.gif" style="border:0px;margin-top:10px;" />\r\n	</td>\r\n</tr>\r\n<tr>\r\n<td style="height:22px;background-color:#f1f1f1;border-top:2px solid #16336e;border-bottom:1px #16336e dashed;padding-right:5px;" align="right" colspan="3">\r\n<php>\r\nif($GLOBALS[''GO_SECURITY'']->logged_in())\r\n{\r\necho ''Logged in as ''.$_SESSION[''GO_SESSION''][''name''].'' - <logout class="logout" text="logout" goto_url="index.php" />'';\r\n}else\r\n{\r\necho ''<login class="login" goto_url="groupoffice/" text="login &gt; &gt" />'';\r\n}\r\n</php>\r\n	</td>\r\n</tr>\r\n\r\n<tr>\r\n	<td class="menutd">\r\n<treeview class="treeview" item_active_class="menu_active" />\r\n<php>\r\nif($GLOBALS[''GO_SECURITY'']->logged_in())\r\n{\r\nif($GLOBALS[''GO_SECURITY'']->has_permission($GLOBALS[''GO_SECURITY'']->user_id, $GLOBALS[''cms_site'']->site[''acl_write'']))\r\n{\r\necho ''<admin class="menu" text="Admin" />'';\r\n}\r\n}\r\n</php>\r\n	</td>\r\n	<td class="contenttd">\r\n	<content read_more_text="read&nbsp;more&nbsp;>>" max_length="100"  />\r\n	</td>\r\n	<td class="newstd">\r\n	<h1 style="margin-bottom:0px;">News</h1>\r\n	<hr />\r\n<hot_items read_more_text="read&nbsp;more&nbsp;>>" read_more_class="readmore" print_title="true" max_length="100" title_class="news_title" class="news" />\r\n\r\n	</td>\r\n</tr>\r\n</table>', '1');
 
 -- --------------------------------------------------------
 
@@ -989,15 +1005,17 @@ CREATE TABLE `cms_templates` (
   `doctype` text NOT NULL,
   `login_template_item_id` int(11) NOT NULL default '0',
   `fckeditor_styles` text NOT NULL,
+  `head` text NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `cms_templates`
 -- 
 
-INSERT INTO `cms_templates` (`id`, `user_id`, `name`, `style`, `additional_style`, `print_style`, `restrict_editor`, `acl_read`, `acl_write`, `doctype`, `login_template_item_id`, `fckeditor_styles`) VALUES (1, 1, 'Example theme', '.error{\r\ncolor:red;\r\n}\r\n.login{\r\nfont-style:italic;\r\n}\r\n\r\n.logout{\r\nfont-weight:bold;\r\n}\r\n\r\n#start image gallery styles\r\na.ig_pagination:link,a.ig_pagination:visited,a.ig_pagination:active{\r\nfont-size:14px;\r\ncolor:black;\r\nmargin:14px;\r\n}\r\n\r\na.ig_pagination:hover{\r\nfont-size:14px;\r\ncolor:red;\r\n}\r\n\r\n\r\na.ig_paginationActive:link,a.ig_paginationActive:visited,a.ig_paginationActive:active{\r\nfont-size:14px;\r\ncolor:black;\r\nmargin:14px;\r\nfont-weight:bold;\r\n}\r\n\r\na.ig_paginationActive:hover{\r\nfont-size:14px;\r\ncolor:red;\r\n}\r\n\r\n\r\n.ig_paginationDisabled{\r\nfont-size:14px;\r\ncolor:#cccccc;\r\nmargin:14px;\r\n}\r\n\r\n.ig_thumb_description{\r\n\r\nfont-weight:bold;\r\nfont-size:10px;\r\ndisplay:block;\r\n}\r\n#end image gallery styles\r\n\r\n#start comments plugin styles\r\n.add_comment_error{\r\nfont-weight:bold;\r\ncolor:red;\r\n}\r\n.add_comment_title{\r\nmargin-top:20px;\r\nmargin-bottom:3px;\r\n}\r\ntable.comments{\r\nwidth:100%;\r\n}\r\n\r\ntable.comments td{\r\nvertical-align:top;\r\n}\r\n\r\n.comment{\r\ndisplay:block;\r\nmargin-top:20px;\r\n}\r\n\r\nspan.comments_input{\r\nwidth:100%;\r\ntext-align:right;\r\ndisplay:block;\r\n}\r\ninput.comments_input{\r\nwidth:100px;\r\n}\r\n\r\nh1.comments{\r\nmargin-top:20px;\r\nmargin-bottom:3px;\r\nborder-top:1px solid black;\r\npadding-top:20px;\r\nwidth:100%;\r\n}\r\n.comment_name{\r\nfont-weight:bold;\r\ndisplay:block;\r\nwidth:100%;\r\n}\r\n\r\n.comment_date{\r\nfont-style:italic;\r\ntext-align:right;\r\ndisplay:block;\r\nwidth:100%;\r\nfont-size:10px;\r\n}\r\n\r\n#end comments plugin styles\r\n\r\nbody{\r\nmargin:0px;\r\npadding:0px;\r\nfont-family: Sans-serif, Arial;\r\nfont-size:11px;\r\nheight:100%;\r\ncolor:#666666;\r\n}\r\n\r\ntd{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:12px;\r\nheight:100%;\r\ncolor:#666666;\r\n}\r\n\r\nhtml{\r\nheight:100%;\r\n}\r\n\r\nh1{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:14px;\r\nfont-weight:bold;\r\ncolor: black;\r\nmargin-top:8px;\r\nmargin-bottom:3px;\r\n}\r\nh2{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:12px;\r\nfont-weight:bold;\r\ncolor: black;\r\nmargin-top:8px;\r\nmargin-bottom:3px;\r\n}\r\nh3{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:11px;\r\nfont-weight:bold;\r\nmargin-top:8px;\r\nmargin-bottom:0px;\r\ncolor: black;\r\n}\r\n\r\nhr{\r\nborder-top-width: 0px;\r\nborder-left-width: 0px;\r\nborder-bottom: #16336e 2px solid;\r\nborder-right-width: 0px;\r\nmargin: 0px;\r\nwidth: 100%;\r\n}\r\n\r\na:link, a:visited, a:active{\r\ncolor: #16336e;\r\nfont-size:12px;\r\nfont-family: Arial, Sans-serif;\r\ntext-decoration: none;\r\n}\r\na:hover {\r\ncolor: #3a3a3a;\r\ntext-decoration: underline;\r\n}\r\n\r\n#banners{\r\ntext-align: center;\r\nposition:absolute;\r\nbottom: 0px;\r\nwidth: 800px;\r\nheight:80px;\r\nvertical-align:middle;\r\n}\r\n\r\n.newstd{\r\nvertical-align:top;\r\nwidth:200px;\r\nborder-left:1px #16336e dashed;\r\npadding-left:10px;\r\n\r\n}\r\n.contenttd{\r\nvertical-align:top;\r\nwidth:450px;\r\nheight:100%;\r\nfont-size:12px;\r\npadding-left:10px;\r\npadding-right:10px;\r\noverflow:scroll;\r\n}\r\n\r\n.menutd{\r\nvertical-align:top;\r\nwidth:150px;\r\nborder-right:1px #16336e dashed;\r\nheight:100%;\r\n}\r\n\r\n.maintable{\r\nborder:0px;\r\nheight:100%;\r\nwidth:800px;\r\nmargin:auto;\r\n}\r\n\r\n\r\n.treeview, .treeview div{\r\nmargin-left:8px;\r\n}\r\n\r\n.treeview a:link,.treeview  a:visited,.treeview a:active{\r\nfont-weight: bold;\r\n	font-size:12px;\r\ndisplay: block;\r\ncolor: #3a3a3a;\r\npadding:3px;\r\npadding-right:0;\r\n}\r\n\r\n.treeview a:hover{\r\ncolor:#d67527;\r\ntext-decoration:none;\r\n}\r\n\r\n.treeview div a:link,.treeview div  a:visited,.treeview div a:active{\r\nfont-weight: normal;\r\n	font-size:11px;\r\ndisplay: block;\r\ncolor: #3a3a3a;\r\npadding:2px;\r\npadding-right:0;\r\nborder:0px;\r\n}\r\n\r\n.treeview div a:hover{\r\ncolor: #16336e;\r\ntext-decoration:none;\r\n}\r\n\r\n\r\n.treeview div a.menu_active:link,\r\n.treeview div a.menu_active:visited,\r\n.treeview div a.menu_active:active{\r\nfont-weight: normal;\r\nfont-style:italic;\r\nfont-size:11px;\r\ndisplay: block;\r\ncolor: #16336e;\r\npadding:2px;\r\npadding-right:0;\r\n}\r\n\r\n\r\n.treeview div div a.menu_active:link,\r\n.treeview div div a.menu_active:visited,\r\n.treeview div div a.menu_active:active{\r\nfont-style: italic;\r\nfont-size:11px;\r\ndisplay: block;\r\ncolor: #16336e;\r\npadding:2px;\r\npadding-right:0;\r\n}\r\n\r\n\r\n.treeview div a.menu_active:hover{\r\ncolor: #d67527;\r\ntext-decoration:none;\r\n}\r\n\r\n\r\na.menu:link,a.menu:visited,a.menu:active{\r\nfont-weight: bold;\r\n	font-size:12px;\r\ndisplay: block;\r\ncolor: #3a3a3a;\r\npadding:3px;\r\npadding-left:11px;\r\npadding-right:0;\r\n}\r\n\r\na.menu:hover{\r\ncolor:#d67527;\r\ntext-decoration:none;\r\n}', 'body{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:11px;\r\nheight:100%;\r\ncolor:#666666;\r\n}\r\n\r\ntd{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:10px;\r\nheight:100%;\r\ncolor:#666666;\r\n}\r\n\r\nhtml{\r\nheight:100%;\r\n}\r\n\r\nh1{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:14px;\r\nfont-weight:bold;\r\ncolor: black;\r\nmargin-top:8px;\r\nmargin-bottom:3px;\r\n}\r\nh2{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:12px;\r\nfont-weight:bold;\r\ncolor: black;\r\nmargin-top:8px;\r\nmargin-bottom:3px;\r\n}\r\nh3{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:11px;\r\nfont-weight:bold;\r\nmargin-top:8px;\r\nmargin-bottom:0px;\r\ncolor: black;\r\n}\r\n\r\nhr{\r\nborder-top-width: 0px;\r\nborder-left-width: 0px;\r\nborder-bottom: #199781 2px solid;\r\nborder-right-width: 0px;\r\nmargin: 0px;\r\nwidth: 100%;\r\n}\r\n\r\na:link, a:visited, a:active{\r\ncolor: #199781;\r\nfont-size:11px;\r\nfont-family: Arial, Sans-serif;\r\ntext-decoration: none;\r\n}\r\na:hover {\r\ncolor: #3a3a3a;\r\ntext-decoration: underline;\r\n}\r\n\r\n', '', '0', 32, 33, '<?xml version="1.0" encoding="UTF-8"?>\r\n<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">', 1, '');
+INSERT INTO `cms_templates` (`id`, `user_id`, `name`, `style`, `additional_style`, `print_style`, `restrict_editor`, `acl_read`, `acl_write`, `doctype`, `login_template_item_id`, `fckeditor_styles`, `head`) VALUES 
+(1, 1, 'Example theme', '.error{\r\ncolor:red;\r\n}\r\n.login{\r\nfont-style:italic;\r\n}\r\n\r\n.logout{\r\nfont-weight:bold;\r\n}\r\n\r\n#start image gallery styles\r\na.ig_pagination:link,a.ig_pagination:visited,a.ig_pagination:active{\r\nfont-size:14px;\r\ncolor:black;\r\nmargin:14px;\r\n}\r\n\r\na.ig_pagination:hover{\r\nfont-size:14px;\r\ncolor:red;\r\n}\r\n\r\n\r\na.ig_paginationActive:link,a.ig_paginationActive:visited,a.ig_paginationActive:active{\r\nfont-size:14px;\r\ncolor:black;\r\nmargin:14px;\r\nfont-weight:bold;\r\n}\r\n\r\na.ig_paginationActive:hover{\r\nfont-size:14px;\r\ncolor:red;\r\n}\r\n\r\n\r\n.ig_paginationDisabled{\r\nfont-size:14px;\r\ncolor:#cccccc;\r\nmargin:14px;\r\n}\r\n\r\n.ig_thumb_description{\r\n\r\nfont-weight:bold;\r\nfont-size:10px;\r\ndisplay:block;\r\n}\r\n#end image gallery styles\r\n\r\n#start comments plugin styles\r\n.add_comment_error{\r\nfont-weight:bold;\r\ncolor:red;\r\n}\r\n.add_comment_title{\r\nmargin-top:20px;\r\nmargin-bottom:3px;\r\n}\r\ntable.comments{\r\nwidth:100%;\r\n}\r\n\r\ntable.comments td{\r\nvertical-align:top;\r\n}\r\n\r\n.comment{\r\ndisplay:block;\r\nmargin-top:20px;\r\n}\r\n\r\nspan.comments_input{\r\nwidth:100%;\r\ntext-align:right;\r\ndisplay:block;\r\n}\r\ninput.comments_input{\r\nwidth:100px;\r\n}\r\n\r\nh1.comments{\r\nmargin-top:20px;\r\nmargin-bottom:3px;\r\nborder-top:1px solid black;\r\npadding-top:20px;\r\nwidth:100%;\r\n}\r\n.comment_name{\r\nfont-weight:bold;\r\ndisplay:block;\r\nwidth:100%;\r\n}\r\n\r\n.comment_date{\r\nfont-style:italic;\r\ntext-align:right;\r\ndisplay:block;\r\nwidth:100%;\r\nfont-size:10px;\r\n}\r\n\r\n#end comments plugin styles\r\n\r\nbody{\r\nmargin:0px;\r\npadding:0px;\r\nfont-family: Sans-serif, Arial;\r\nfont-size:11px;\r\nheight:100%;\r\ncolor:#666666;\r\n}\r\n\r\ntd{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:12px;\r\nheight:100%;\r\ncolor:#666666;\r\n}\r\n\r\nhtml{\r\nheight:100%;\r\n}\r\n\r\nh1{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:14px;\r\nfont-weight:bold;\r\ncolor: black;\r\nmargin-top:8px;\r\nmargin-bottom:3px;\r\n}\r\nh2{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:12px;\r\nfont-weight:bold;\r\ncolor: black;\r\nmargin-top:8px;\r\nmargin-bottom:3px;\r\n}\r\nh3{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:11px;\r\nfont-weight:bold;\r\nmargin-top:8px;\r\nmargin-bottom:0px;\r\ncolor: black;\r\n}\r\n\r\nhr{\r\nborder-top-width: 0px;\r\nborder-left-width: 0px;\r\nborder-bottom: #16336e 2px solid;\r\nborder-right-width: 0px;\r\nmargin: 0px;\r\nwidth: 100%;\r\n}\r\n\r\na:link, a:visited, a:active{\r\ncolor: #16336e;\r\nfont-size:12px;\r\nfont-family: Arial, Sans-serif;\r\ntext-decoration: none;\r\n}\r\na:hover {\r\ncolor: #3a3a3a;\r\ntext-decoration: underline;\r\n}\r\n\r\n#banners{\r\ntext-align: center;\r\nposition:absolute;\r\nbottom: 0px;\r\nwidth: 800px;\r\nheight:80px;\r\nvertical-align:middle;\r\n}\r\n\r\n.newstd{\r\nvertical-align:top;\r\nwidth:200px;\r\nborder-left:1px #16336e dashed;\r\npadding-left:10px;\r\n\r\n}\r\n.contenttd{\r\nvertical-align:top;\r\nwidth:450px;\r\nheight:100%;\r\nfont-size:12px;\r\npadding-left:10px;\r\npadding-right:10px;\r\noverflow:scroll;\r\n}\r\n\r\n.menutd{\r\nvertical-align:top;\r\nwidth:150px;\r\nborder-right:1px #16336e dashed;\r\nheight:100%;\r\n}\r\n\r\n.maintable{\r\nborder:0px;\r\nheight:100%;\r\nwidth:800px;\r\nmargin:auto;\r\n}\r\n\r\n\r\n.treeview, .treeview div{\r\nmargin-left:8px;\r\n}\r\n\r\n.treeview a:link,.treeview  a:visited,.treeview a:active{\r\nfont-weight: bold;\r\n	font-size:12px;\r\ndisplay: block;\r\ncolor: #3a3a3a;\r\npadding:3px;\r\npadding-right:0;\r\n}\r\n\r\n.treeview a:hover{\r\ncolor:#d67527;\r\ntext-decoration:none;\r\n}\r\n\r\n.treeview div a:link,.treeview div  a:visited,.treeview div a:active{\r\nfont-weight: normal;\r\n	font-size:11px;\r\ndisplay: block;\r\ncolor: #3a3a3a;\r\npadding:2px;\r\npadding-right:0;\r\nborder:0px;\r\n}\r\n\r\n.treeview div a:hover{\r\ncolor: #16336e;\r\ntext-decoration:none;\r\n}\r\n\r\n\r\n.treeview div a.menu_active:link,\r\n.treeview div a.menu_active:visited,\r\n.treeview div a.menu_active:active{\r\nfont-weight: normal;\r\nfont-style:italic;\r\nfont-size:11px;\r\ndisplay: block;\r\ncolor: #16336e;\r\npadding:2px;\r\npadding-right:0;\r\n}\r\n\r\n\r\n.treeview div div a.menu_active:link,\r\n.treeview div div a.menu_active:visited,\r\n.treeview div div a.menu_active:active{\r\nfont-style: italic;\r\nfont-size:11px;\r\ndisplay: block;\r\ncolor: #16336e;\r\npadding:2px;\r\npadding-right:0;\r\n}\r\n\r\n\r\n.treeview div a.menu_active:hover{\r\ncolor: #d67527;\r\ntext-decoration:none;\r\n}\r\n\r\n\r\na.menu:link,a.menu:visited,a.menu:active{\r\nfont-weight: bold;\r\n	font-size:12px;\r\ndisplay: block;\r\ncolor: #3a3a3a;\r\npadding:3px;\r\npadding-left:11px;\r\npadding-right:0;\r\n}\r\n\r\na.menu:hover{\r\ncolor:#d67527;\r\ntext-decoration:none;\r\n}', 'body{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:11px;\r\nheight:100%;\r\ncolor:#666666;\r\n}\r\n\r\ntd{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:10px;\r\nheight:100%;\r\ncolor:#666666;\r\n}\r\n\r\nhtml{\r\nheight:100%;\r\n}\r\n\r\nh1{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:14px;\r\nfont-weight:bold;\r\ncolor: black;\r\nmargin-top:8px;\r\nmargin-bottom:3px;\r\n}\r\nh2{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:12px;\r\nfont-weight:bold;\r\ncolor: black;\r\nmargin-top:8px;\r\nmargin-bottom:3px;\r\n}\r\nh3{\r\nfont-family: Sans-serif, Arial;\r\nfont-size:11px;\r\nfont-weight:bold;\r\nmargin-top:8px;\r\nmargin-bottom:0px;\r\ncolor: black;\r\n}\r\n\r\nhr{\r\nborder-top-width: 0px;\r\nborder-left-width: 0px;\r\nborder-bottom: #199781 2px solid;\r\nborder-right-width: 0px;\r\nmargin: 0px;\r\nwidth: 100%;\r\n}\r\n\r\na:link, a:visited, a:active{\r\ncolor: #199781;\r\nfont-size:11px;\r\nfont-family: Arial, Sans-serif;\r\ntext-decoration: none;\r\n}\r\na:hover {\r\ncolor: #3a3a3a;\r\ntext-decoration: underline;\r\n}\r\n\r\n', '', '0', 32, 33, '<?xml version="1.0" encoding="UTF-8"?>\r\n<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">', 1, '', '');
 
 -- --------------------------------------------------------
 
@@ -1012,13 +1030,14 @@ CREATE TABLE `countries` (
   `iso_code_2` char(2) NOT NULL default '',
   `iso_code_3` char(3) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `countries`
 -- 
 
-INSERT INTO `countries` (`id`, `name`, `iso_code_2`, `iso_code_3`) VALUES (1, 'Afghanistan', 'AF', 'AFG'),
+INSERT INTO `countries` (`id`, `name`, `iso_code_2`, `iso_code_3`) VALUES 
+(1, 'Afghanistan', 'AF', 'AFG'),
 (2, 'Albania', 'AL', 'ALB'),
 (3, 'Algeria', 'DZ', 'DZA'),
 (4, 'American Samoa', 'AS', 'ASM'),
@@ -1269,13 +1288,14 @@ CREATE TABLE `db_sequence` (
   `seq_name` varchar(50) NOT NULL default '',
   `nextid` int(11) NOT NULL default '0',
   PRIMARY KEY  (`seq_name`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `db_sequence`
 -- 
 
-INSERT INTO `db_sequence` (`seq_name`, `nextid`) VALUES ('acl_items', 60),
+INSERT INTO `db_sequence` (`seq_name`, `nextid`) VALUES 
+('acl_items', 60),
 ('users', 3),
 ('groups', 2),
 ('cal_calendars', 4),
@@ -1327,7 +1347,7 @@ CREATE TABLE `emAccounts` (
   `examine_headers` enum('0','1') NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `emAccounts`
@@ -1350,7 +1370,7 @@ CREATE TABLE `emFilters` (
   `priority` int(11) NOT NULL default '0',
   `mark_as_read` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `emFilters`
@@ -1379,7 +1399,7 @@ CREATE TABLE `emFolders` (
   PRIMARY KEY  (`id`),
   KEY `account_id` (`account_id`),
   KEY `parent_id` (`parent_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `emFolders`
@@ -1403,7 +1423,7 @@ CREATE TABLE `em_links` (
   `path` varchar(255) NOT NULL,
   PRIMARY KEY  (`link_id`),
   KEY `account_id` (`user_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `em_links`
@@ -1431,13 +1451,14 @@ CREATE TABLE `em_settings` (
   `beep` enum('0','1') NOT NULL,
   `auto_check` enum('0','1') NOT NULL,
   PRIMARY KEY  (`user_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `em_settings`
 -- 
 
-INSERT INTO `em_settings` (`user_id`, `send_format`, `add_recievers`, `add_senders`, `request_notification`, `charset`, `enable_vacation`, `vacation_subject`, `vacation_text`, `show_preview`, `beep`, `auto_check`) VALUES (1, 'text/HTML', 0, 0, '0', 'UTF-8', '0', '', '', '1','1','1');
+INSERT INTO `em_settings` (`user_id`, `send_format`, `add_recievers`, `add_senders`, `request_notification`, `charset`, `enable_vacation`, `vacation_subject`, `vacation_text`, `show_preview`, `beep`, `auto_check`) VALUES 
+(1, 'text/HTML', 0, 0, '0', 'UTF-8', '0', '', '', '1', '1', '1');
 
 -- --------------------------------------------------------
 
@@ -1454,7 +1475,7 @@ CREATE TABLE `fs_links` (
   `mtime` int(11) NOT NULL,
   PRIMARY KEY  (`link_id`),
   KEY `path` (`path`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `fs_links`
@@ -1473,13 +1494,14 @@ CREATE TABLE `fs_settings` (
   `notify` enum('0','1') NOT NULL,
   `open_properties` enum('0','1') NOT NULL,
   PRIMARY KEY  (`user_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `fs_settings`
 -- 
 
-INSERT INTO `fs_settings` (`user_id`, `notify`, `open_properties`) VALUES (1, '0', '0');
+INSERT INTO `fs_settings` (`user_id`, `notify`, `open_properties`) VALUES 
+(1, '0', '0');
 
 -- --------------------------------------------------------
 
@@ -1500,13 +1522,14 @@ CREATE TABLE `fs_shares` (
   KEY `type` (`type`),
   KEY `link_id` (`link_id`),
   KEY `link_id_2` (`link_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `fs_shares`
 -- 
 
-INSERT INTO `fs_shares` (`user_id`, `link_id`, `path`, `type`, `acl_read`, `acl_write`) VALUES (1, NULL, '/var/www/groupoffice/local/cms/sites/1', 'site', 35, 34);
+INSERT INTO `fs_shares` (`user_id`, `link_id`, `path`, `type`, `acl_read`, `acl_write`) VALUES 
+(1, NULL, '/var/www/groupoffice/local/cms/sites/1', 'site', 35, 34);
 
 -- --------------------------------------------------------
 
@@ -1524,13 +1547,14 @@ CREATE TABLE `fs_status_history` (
   `comments` text NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `link_id` (`link_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `fs_status_history`
 -- 
 
-INSERT INTO `fs_status_history` (`id`, `link_id`, `status_id`, `user_id`, `ctime`, `comments`) VALUES (1, 5, 2, 1, 1166535060, '');
+INSERT INTO `fs_status_history` (`id`, `link_id`, `status_id`, `user_id`, `ctime`, `comments`) VALUES 
+(1, 5, 2, 1, 1166535060, '');
 
 -- --------------------------------------------------------
 
@@ -1543,13 +1567,14 @@ CREATE TABLE `fs_statuses` (
   `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `fs_statuses`
 -- 
 
-INSERT INTO `fs_statuses` (`id`, `name`) VALUES (2, 'Waiting for approval'),
+INSERT INTO `fs_statuses` (`id`, `name`) VALUES 
+(2, 'Waiting for approval'),
 (3, 'Approved');
 
 -- --------------------------------------------------------
@@ -1564,13 +1589,14 @@ CREATE TABLE `groups` (
   `name` varchar(50) NOT NULL default '',
   `user_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `groups`
 -- 
 
-INSERT INTO `groups` (`id`, `name`, `user_id`) VALUES (1, 'Admins', 1),
+INSERT INTO `groups` (`id`, `name`, `user_id`) VALUES 
+(1, 'Admins', 1),
 (2, 'Everyone', 1);
 
 -- --------------------------------------------------------
@@ -1592,7 +1618,7 @@ CREATE TABLE `ig_galleries` (
   `acl_read` int(11) NOT NULL,
   `acl_write` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `ig_galleries`
@@ -1617,7 +1643,7 @@ CREATE TABLE `ig_images` (
   `height` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `site_id` (`gallery_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `ig_images`
@@ -1640,7 +1666,7 @@ CREATE TABLE `links` (
   KEY `type2` (`type2`),
   KEY `link_id1` (`link_id1`),
   KEY `link_id2` (`link_id2`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `links`
@@ -1663,19 +1689,20 @@ CREATE TABLE `modules` (
   `acl_read` int(11) NOT NULL default '0',
   `acl_write` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `modules`
 -- 
 
-INSERT INTO `modules` (`id`, `version`, `path`, `sort_order`, `admin_menu`, `acl_read`, `acl_write`) VALUES ('modules', '1.0', '', 130, '1', 1, 2),
-('addressbook', '2.4', '', 20, '0', 4, 5),
+INSERT INTO `modules` (`id`, `version`, `path`, `sort_order`, `admin_menu`, `acl_read`, `acl_write`) VALUES 
+('modules', '1.0', '', 130, '1', 1, 2),
+('addressbook', '2.5', '', 20, '0', 4, 5),
 ('calendar', '3.1', '', 40, '0', 6, 7),
-('email', '2.3', '', 30, '0', 8, 9),
+('email', '2.4', '', 30, '0', 8, 9),
 ('filesystem', '1.8', '', 70, '0', 10, 11),
 ('groups', '1.0', '', 120, '1', 12, 13),
-('cms', '2.8', '', 90, '0', 14, 15),
+('cms', '3.0', '', 90, '0', 14, 15),
 ('phpsysinfo', '1.0', '', 140, '1', 16, 17),
 ('projects', '2.2', '', 80, '0', 18, 19),
 ('summary', '1.0', '', 10, '0', 20, 21),
@@ -1706,7 +1733,7 @@ CREATE TABLE `no_notes` (
   KEY `user_id` (`user_id`),
   KEY `file_path` (`file_path`),
   KEY `link_id` (`link_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `no_notes`
@@ -1725,7 +1752,7 @@ CREATE TABLE `no_settings` (
   `sort_field` varchar(20) NOT NULL default '',
   `sort_order` varchar(20) NOT NULL default '',
   PRIMARY KEY  (`user_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `no_settings`
@@ -1747,13 +1774,14 @@ CREATE TABLE `pmFees` (
   `time` int(11) NOT NULL default '0',
   `acl_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `pmFees`
 -- 
 
-INSERT INTO `pmFees` (`id`, `name`, `external_value`, `internal_value`, `time`, `acl_id`) VALUES (1, 'Test', 70, 0, 60, 51);
+INSERT INTO `pmFees` (`id`, `name`, `external_value`, `internal_value`, `time`, `acl_id`) VALUES 
+(1, 'Test', 70, 0, 60, 51);
 
 -- --------------------------------------------------------
 
@@ -1777,7 +1805,7 @@ CREATE TABLE `pmHours` (
   `int_fee_value` double NOT NULL default '0',
   `event_id` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `pmHours`
@@ -1820,7 +1848,7 @@ CREATE TABLE `pmProjects` (
   KEY `contact_id` (`contact_id`),
   KEY `user_id` (`user_id`),
   KEY `link_id` (`link_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `pmProjects`
@@ -1838,13 +1866,14 @@ CREATE TABLE `pmStatuses` (
   `id` int(11) NOT NULL default '0',
   `name` varchar(50) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `pmStatuses`
 -- 
 
-INSERT INTO `pmStatuses` (`id`, `name`) VALUES (1, 'Offer'),
+INSERT INTO `pmStatuses` (`id`, `name`) VALUES 
+(1, 'Offer'),
 (2, 'Ongoing'),
 (3, 'Waiting'),
 (4, 'Done'),
@@ -1862,7 +1891,7 @@ CREATE TABLE `pmTimers` (
   `start_time` int(11) NOT NULL default '0',
   `project_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`user_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `pmTimers`
@@ -1881,13 +1910,14 @@ CREATE TABLE `pm_settings` (
   `show_projects` tinyint(4) NOT NULL default '0',
   `fee_id` int(11) NOT NULL,
   PRIMARY KEY  (`user_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `pm_settings`
 -- 
 
-INSERT INTO `pm_settings` (`user_id`, `show_projects`, `fee_id`) VALUES (1, 1, 0);
+INSERT INTO `pm_settings` (`user_id`, `show_projects`, `fee_id`) VALUES 
+(1, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -1907,7 +1937,7 @@ CREATE TABLE `pm_template_events` (
   `reminder` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `template_id` (`template_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `pm_template_events`
@@ -1928,7 +1958,7 @@ CREATE TABLE `pm_templates` (
   `acl_read` int(11) NOT NULL default '0',
   `acl_write` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `pm_templates`
@@ -1956,7 +1986,7 @@ CREATE TABLE `se_cache` (
   `keywords` text NOT NULL,
   PRIMARY KEY  (`link_id`,`user_id`),
   KEY `name` (`name`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `se_cache`
@@ -1975,7 +2005,7 @@ CREATE TABLE `se_last_sync_times` (
   `module` varchar(50) NOT NULL,
   `last_sync_time` int(11) NOT NULL,
   PRIMARY KEY  (`user_id`,`module`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `se_last_sync_times`
@@ -1994,17 +2024,18 @@ CREATE TABLE `settings` (
   `name` varchar(50) NOT NULL default '',
   `value` text NOT NULL,
   PRIMARY KEY  (`user_id`,`name`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `settings`
 -- 
 
-INSERT INTO `settings` (`user_id`, `name`, `value`) VALUES (0, 'registration_unconfirmed_subject', 'Your account still needs activation'),
+INSERT INTO `settings` (`user_id`, `name`, `value`) VALUES 
+(0, 'registration_unconfirmed_subject', 'Your account still needs activation'),
 (0, 'registration_confirmation', '<html>\r\n    <head>\r\n    </head>\r\n    <body>\r\n        <font size="3" face="Verdana">Dear&nbsp;%beginning%&nbsp;%middle_name%%last_name%,<br />\r\n        <br />\r\n        Welcome to Group-Office! You can login at:<br />\r\n        <br />\r\n        %full_url%<br />\r\n        <br />\r\n        With:<br />\r\n        <br />\r\n        Username: %username%<br />\r\n        Password: %password%<br />\r\n        <br />\r\n        With kind regards,<br />\r\n        <br />\r\n        The Group-Office administrator</font>\r\n    </body>\r\n</html>'),
 (0, 'registration_unconfirmed', '<html>\r\n    <head>\r\n    </head>\r\n    <body>\r\n        <font size="3" face="Verdana">Dear&nbsp;%beginning% %middle_name%%last_name%,<br />\r\n        <br />\r\n        Thank you for your registration at Group-Office. You can login when an administrator activates your account. You will recieve an e-mail with login instructions at that time.<br />\r\n        <br />\r\n        With kind regards,<br />\r\n        <br />\r\n        The Group-Office administrator</font>\r\n    </body>\r\n</html>'),
 (0, 'registration_confirmation_subject', 'Welcome to Group-Office!'),
-(0, 'version', '221'),
+(0, 'version', '222'),
 (0, 'enabled_columns_users', '0,1,2,3,4,5'),
 (1, 'sort_index_users', 'lastlogin'),
 (1, 'sort_asc_users', '0'),
@@ -2033,7 +2064,7 @@ CREATE TABLE `sum_announcements` (
   `content` text NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `due_time` (`due_time`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `sum_announcements`
@@ -2052,7 +2083,7 @@ CREATE TABLE `sync_contacts_maps` (
   `contact_id` int(11) NOT NULL default '0',
   `remote_id` varchar(255) NOT NULL,
   PRIMARY KEY  (`device_id`,`contact_id`,`remote_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `sync_contacts_maps`
@@ -2071,7 +2102,7 @@ CREATE TABLE `sync_contacts_syncs` (
   `local_last_anchor` int(11) NOT NULL default '0',
   `remote_last_anchor` char(32) NOT NULL default '',
   PRIMARY KEY  (`device_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `sync_contacts_syncs`
@@ -2092,7 +2123,7 @@ CREATE TABLE `sync_datastores` (
   `ctype` varchar(50) NOT NULL default '',
   `ctype_version` varchar(10) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `sync_datastores`
@@ -2114,7 +2145,7 @@ CREATE TABLE `sync_devices` (
   `user_id` int(11) NOT NULL default '0',
   `uri` varchar(128) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `sync_devices`
@@ -2134,7 +2165,7 @@ CREATE TABLE `sync_events_maps` (
   `remote_id` varchar(255) NOT NULL,
   `todo` enum('0','1') NOT NULL,
   PRIMARY KEY  (`device_id`,`event_id`,`remote_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `sync_events_maps`
@@ -2153,7 +2184,7 @@ CREATE TABLE `sync_events_syncs` (
   `local_last_anchor` int(11) NOT NULL default '0',
   `remote_last_anchor` char(32) NOT NULL default '',
   PRIMARY KEY  (`device_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `sync_events_syncs`
@@ -2176,13 +2207,14 @@ CREATE TABLE `sync_settings` (
   `max_days_old` tinyint(4) NOT NULL,
   `delete_old_events` enum('0','1') NOT NULL,
   PRIMARY KEY  (`user_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `sync_settings`
 -- 
 
-INSERT INTO `sync_settings` (`user_id`, `addressbook_id`, `calendar_id`, `sync_private`, `server_is_master`, `max_days_old`, `delete_old_events`) VALUES (1, 1, 1, '0', '0', 30, '0');
+INSERT INTO `sync_settings` (`user_id`, `addressbook_id`, `calendar_id`, `sync_private`, `server_is_master`, `max_days_old`, `delete_old_events`) VALUES 
+(1, 1, 1, '0', '0', 30, '0');
 
 -- --------------------------------------------------------
 
@@ -2196,7 +2228,7 @@ CREATE TABLE `sync_todos_syncs` (
   `local_last_anchor` int(11) NOT NULL default '0',
   `remote_last_anchor` char(32) NOT NULL default '',
   PRIMARY KEY  (`device_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `sync_todos_syncs`
@@ -2216,7 +2248,7 @@ CREATE TABLE `td_reminders` (
   `remind_time` int(11) NOT NULL default '0',
   KEY `user_id` (`user_id`),
   KEY `remind_time` (`remind_time`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `td_reminders`
@@ -2235,7 +2267,7 @@ CREATE TABLE `td_settings` (
   `sort_field` varchar(20) NOT NULL default '',
   `sort_order` varchar(20) NOT NULL default '',
   PRIMARY KEY  (`user_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `td_settings`
@@ -2273,7 +2305,7 @@ CREATE TABLE `td_todos` (
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`,`res_user_id`),
   KEY `remind_time` (`reminder`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `td_todos`
@@ -2291,7 +2323,7 @@ CREATE TABLE `tp_mailing_companies` (
   `group_id` int(11) NOT NULL default '0',
   `company_id` int(11) NOT NULL default '0',
   KEY `group_id` (`group_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `tp_mailing_companies`
@@ -2309,7 +2341,7 @@ CREATE TABLE `tp_mailing_contacts` (
   `group_id` int(11) NOT NULL default '0',
   `contact_id` int(11) NOT NULL default '0',
   KEY `group_id` (`group_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `tp_mailing_contacts`
@@ -2330,7 +2362,7 @@ CREATE TABLE `tp_mailing_groups` (
   `acl_write` int(11) NOT NULL default '0',
   `name` varchar(50) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `tp_mailing_groups`
@@ -2348,7 +2380,7 @@ CREATE TABLE `tp_mailing_users` (
   `group_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   KEY `group_id` (`group_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `tp_mailing_users`
@@ -2370,7 +2402,7 @@ CREATE TABLE `tp_templates` (
   `acl_read` int(11) NOT NULL default '0',
   `acl_write` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `tp_templates`
@@ -2388,7 +2420,7 @@ CREATE TABLE `tp_templates_content` (
   `id` int(11) NOT NULL default '0',
   `content` longblob NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `tp_templates_content`
@@ -2410,7 +2442,7 @@ CREATE TABLE `users` (
   `authcode` varchar(20) NOT NULL default '',
   `first_name` varchar(50) NOT NULL default '',
   `middle_name` varchar(50) NOT NULL default '',
-  `last_name` varchar(50) NOT NULL default '',
+  `last_name` varchar(100) NOT NULL,
   `initials` varchar(10) NOT NULL default '',
   `title` varchar(10) NOT NULL default '',
   `sex` enum('M','F') NOT NULL default 'M',
@@ -2466,13 +2498,14 @@ CREATE TABLE `users` (
   PRIMARY KEY  (`id`),
   KEY `link_id` (`link_id`),
   KEY `link_id_2` (`link_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `users`
 -- 
 
-INSERT INTO `users` (`id`, `username`, `password`, `enabled`, `authcode`, `first_name`, `middle_name`, `last_name`, `initials`, `title`, `sex`, `birthday`, `email`, `company`, `department`, `function`, `home_phone`, `work_phone`, `fax`, `cellular`, `country`, `state`, `city`, `zip`, `address`, `address_no`, `homepage`, `work_address`, `work_address_no`, `work_zip`, `work_country`, `work_state`, `work_city`, `work_fax`, `acl_id`, `date_format`, `date_seperator`, `time_format`, `thousands_seperator`, `decimal_seperator`, `currency`, `mail_client`, `logins`, `lastlogin`, `registration_time`, `max_rows_list`, `timezone`, `DST`, `start_module`, `language`, `theme`, `first_weekday`, `sort_name`, `use_checkbox_select`, `country_id`, `work_country_id`, `bank`, `bank_no`, `link_id`, `mtime`) VALUES (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', '1', 'jmvnqxuf', 'Group-Office', '', 'Admin', '', '', 'M', '0000-00-00', 'webmaster@example.com', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 3, 'dmY', '-', 'G:i', ',', '.', 'EUR', 1, 20, 1174057056, 1159517603, 15, 1, '1', 'summary', 'nl', 'Default', 1, 'first_name', '0', 0, 0, '', '', 8, 1159517603);
+INSERT INTO `users` (`id`, `username`, `password`, `enabled`, `authcode`, `first_name`, `middle_name`, `last_name`, `initials`, `title`, `sex`, `birthday`, `email`, `company`, `department`, `function`, `home_phone`, `work_phone`, `fax`, `cellular`, `country`, `state`, `city`, `zip`, `address`, `address_no`, `homepage`, `work_address`, `work_address_no`, `work_zip`, `work_country`, `work_state`, `work_city`, `work_fax`, `acl_id`, `date_format`, `date_seperator`, `time_format`, `thousands_seperator`, `decimal_seperator`, `currency`, `mail_client`, `logins`, `lastlogin`, `registration_time`, `max_rows_list`, `timezone`, `DST`, `start_module`, `language`, `theme`, `first_weekday`, `sort_name`, `use_checkbox_select`, `country_id`, `work_country_id`, `bank`, `bank_no`, `link_id`, `mtime`) VALUES 
+(1, 'admin', '21232f297a57a5a743894a0e4a801fc3', '1', 'jmvnqxuf', 'Group-Office', '', 'Admin', '', '', 'M', '0000-00-00', 'webmaster@example.com', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 3, 'dmY', '-', 'G:i', ',', '.', 'EUR', 1, 21, 1178106057, 1159517603, 15, 1, '1', 'summary', 'nl', 'Default', 1, 'first_name', '0', 0, 0, '', '', 8, 1159517603);
 
 -- --------------------------------------------------------
 
@@ -2485,11 +2518,12 @@ CREATE TABLE `users_groups` (
   `group_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`group_id`,`user_id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 -- 
 -- Gegevens worden uitgevoerd voor tabel `users_groups`
 -- 
 
-INSERT INTO `users_groups` (`group_id`, `user_id`) VALUES (1, 1),
+INSERT INTO `users_groups` (`group_id`, `user_id`) VALUES 
+(1, 1),
 (2, 1);
