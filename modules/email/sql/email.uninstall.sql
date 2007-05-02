@@ -1,0 +1,4 @@
+DROP TABLE IF EXISTS `emAccounts`;
+DROP TABLE IF EXISTS `emFilters`;
+DROP TABLE IF EXISTS `emFolders`;
+DROP TABLE IF EXISTS `em_settings`;
