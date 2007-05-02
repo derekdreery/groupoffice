@@ -255,7 +255,8 @@ if($account['type'] == 'pop3')
 				if($email->f('name') != 'INBOX')
 				{
 					$node .=  '&nbsp;<a href=\'javascript:edit_name("'.htmlspecialchars($email->f('name'), ENT_QUOTES).'");\'" title="'.$strEdit.' '.$decoded_folder_name.'"><img src="'.$GO_THEME->images['edit'].'" border="0" /></a>'.
-						"&nbsp;<a href='javascript:confirm_delete(\"".htmlspecialchars($email->f('name'), ENT_QUOTES)."\",\"".htmlspecialchars(addslashes($strDeletePrefix." ".$decoded_folder_name." ".$strDeleteSuffix))."\")' title=\"".htmlspecialchars(addslashes($strDeleteItem." '".$decoded_folder_name."'"))."\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a>";
+						"&nbsp;<a href=\"javascript:confirm_delete('".addslashes($email->f('name'))."','".addslashes($strDeletePrefix." ".$decoded_folder_name." ".$strDeleteSuffix)."')\" title=\"".htmlspecialchars(addslashes($strDeleteItem." '".$decoded_folder_name."'"))."\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a>";
+
 				}
 				
 				$subNode = new treenode($tv, $email->f('id'), $closedFolderNode.$node, $openedFolderNode.$node, true, true);

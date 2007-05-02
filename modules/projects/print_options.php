@@ -109,6 +109,8 @@ if($task == 'show' || $task == '')
 }
 
 
+$cat_fields=array();
+
 if($task !='')
 {
 	$categories=array();
@@ -171,9 +173,11 @@ if($task !='')
 		
 		foreach($categories as $category_id)
 		{
+			$cat_fields[$category_id]=array();
 			$cf->get_fields($category_id);
 			while($cf->next_record())
 			{
+				$cat_fields[$category_id][]=$cf->Record;
 				$th = new table_heading($cf->f('name'));
 				if($cf->f('datatype') == 'number')
 				{
@@ -239,25 +243,26 @@ if($task !='')
 			foreach($categories as $category_id)
 			{
 				$link_id = $projects->f('link_id') > 0 ? $projects->f('link_id') : 0;
-				$cf->get_fields_with_values($category_id, $link_id);
 				
-				while($cf->next_record())
-				{			
-					switch($cf->f('datatype'))
+				$custom_values=$cf->get_values(5,$link_id);
+				
+				foreach($cat_fields[$category_id] as $field)
+				{		
+					switch($field['datatype'])
 					{
 						case 'number':
-							$cell = new table_cell(format_number($cf->f('value')));
+							$cell = new table_cell(format_number($custom_values['col_'.$field['id']]));
 							$cell->set_attribute('style','text-align:right;');
 						break;
 						
 						case 'date':
-							$cell = new table_cell(db_date_to_date($cf->f('value')));
+							$cell = new table_cell(db_date_to_date($custom_values['col_'.$field['id']]));
 							$cell->set_attribute('style','text-align:left;');
 						break;
 						
 						case 'checkbox':
 							$input = new input('checkbox', '','');
-							if($cf->f('value')=='1')
+							if($custom_values['col_'.$field['id']]=='1')
 							{
 								$input->set_attribute('checked','true');
 							}
@@ -266,7 +271,7 @@ if($task !='')
 						break;
 						
 						default:
-							$cell = new table_cell($cf->f('value'));
+							$cell = new table_cell($custom_values['col_'.$field['id']]);
 							$cell->set_attribute('style','text-align:left;');
 						break;
 					}
@@ -331,11 +336,16 @@ if($task !='')
 		$headings[]  = $pm_billed;
 		$headings[]  = $pm_to_bill;
 		
+		
+
 		foreach($categories as $category_id)
 		{
+			$cat_fields[$category_id]=array();
+		
 			$cf->get_fields($category_id);
 			while($cf->next_record())
 			{
+				$cat_fields[$category_id][]=$cf->Record;
 				$headings[]  = $cf->f('name');				
 			}
 		}
@@ -351,6 +361,7 @@ if($task !='')
 		{
 			if($user = $GO_USERS->get_user($user_id))
 			{
+				$name = format_name($user['last_name'],$user['first_name'], $user['middle_name'], 'first_name');
 				$headings[]  = $pm_hours.' '.$name;
 				$headings[]  = $pm_internal_fee;
 				$headings[]  = $pm_external_fee;
@@ -379,22 +390,22 @@ if($task !='')
 			foreach($categories as $category_id)
 			{
 				$link_id = $projects->f('link_id') > 0 ? $projects->f('link_id') : 0;
-				$cf->get_fields_with_values($category_id, $link_id);
+				$custom_values=$cf->get_values(5,$link_id);
 				
-				while($cf->next_record())
-				{			
-					switch($cf->f('datatype'))
+				foreach($cat_fields[$category_id] as $field)
+				{		
+					switch($field['datatype'])
 					{
 						case 'number':
-							$columns[]= format_number($cf->f('value'));
+							$columns[]= format_number($custom_values['col_'.$field['id']]);
 						break;
 						
 						case 'date':
-							$columns[]=db_date_to_date($cf->f('value'));
+							$columns[]=db_date_to_date($custom_values['col_'.$field['id']]);
 						break;
 						
 						case 'checkbox':
-							if($cf->f('value')=='1')
+							if($custom_values['col_'.$field['id']]=='1')
 							{
 								$columns[]= $cmdYes;
 							}else
@@ -404,7 +415,7 @@ if($task !='')
 						break;
 						
 						default:
-							$columns[]=$cf->f('value');
+							$columns[]=$custom_values['col_'.$field['id']];
 						break;
 					}
 				}
