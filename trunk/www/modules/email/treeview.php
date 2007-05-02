@@ -24,6 +24,8 @@ require_once ($GO_LANGUAGE->get_language_file('email'));
 $mail = new imap();
 $email = new email();
 
+$GO_CONFIG->set_help_url($ml_help_url);
+
 
 function buildTree($rootNode, $parent_folder_id=0)
 {	

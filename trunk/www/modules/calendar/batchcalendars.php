@@ -21,6 +21,8 @@ require_once($GO_LANGUAGE->get_language_file('calendar'));
 require_once($GO_MODULES->path.'classes/calendar.class.inc');
 $cal = new calendar();
 
+$GO_CONFIG->set_help_url($cal_help_url);
+
 $task = isset($_POST['task']) ? $_POST['task'] : '';
 $return_to = isset($_REQUEST['return_to']) ? $_REQUEST['return_to'] : $_SERVER['HTTP_REFERER'];
 $link_back = isset($_REQUEST['link_back']) ? $_REQUEST['link_back'] : $_SERVER['REQUEST_URI'];

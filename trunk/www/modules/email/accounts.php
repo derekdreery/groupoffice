@@ -22,6 +22,9 @@ require_once($GO_CONFIG->class_path."mail/imap.class.inc");
 require_once($GO_MODULES->class_path."email.class.inc");
 require_once($GO_LANGUAGE->get_language_file('email'));
 
+
+$GO_CONFIG->set_help_url($ml_help_url);
+
 $mail = new imap();
 $email = new email();
 $datatable = new datatable('accounts');

@@ -19,6 +19,8 @@ $GO_SECURITY->authenticate();
 $GO_MODULES->authenticate('calendar');
 require_once($GO_LANGUAGE->get_language_file('calendar'));
 
+$GO_CONFIG->set_help_url($cal_help_url);
+
 require_once($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc');
 $cal = new calendar();
 

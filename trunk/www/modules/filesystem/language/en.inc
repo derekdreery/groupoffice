@@ -105,3 +105,5 @@ $fs_open_properties='Open properties window when a file is double clicked';
 
 
 $fs_file='File';
+
+$fs_help_url='http://docs.group-office.com/index.php?folder_id=49&file_id=220';

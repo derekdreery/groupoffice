@@ -148,3 +148,5 @@ $pm_template_exists = 'A template with this name already exists';
 $pm_link_calendar= 'Put working hours in a calendar';
 
 $pm_project='Project';
+
+$pm_help_url='http://docs.group-office.com/index.php?folder_id=49&file_id=221';

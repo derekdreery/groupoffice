@@ -21,6 +21,8 @@ require_once ($GO_MODULES->class_path."email.class.inc");
 require_once ($GO_LANGUAGE->get_language_file('email'));
 $email = new email();
 
+$GO_CONFIG->set_help_url($ml_help_url);
+
 $em_settings = $email->get_settings($GO_SECURITY->user_id);
 
 $account_id = isset ($_REQUEST['account_id']) ? $_REQUEST['account_id'] : 0;

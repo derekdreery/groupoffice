@@ -256,3 +256,4 @@ $ab_ignore='Ignore';
 
 $ab_check_info='The e-mail address has been entered in the contact profile. Click at \'Ok\' to save it.';
 $ab_reset='Reset';
+$ab_help_url='http://docs.group-office.com/index.php?folder_id=56&file_id=0';

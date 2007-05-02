@@ -19,6 +19,8 @@ $GO_SECURITY->authenticate();
 $GO_MODULES->authenticate('projects');
 require_once($GO_LANGUAGE->get_language_file('projects'));
 
+$GO_CONFIG->set_help_url($pm_help_url);
+
 $page_title=$menu_projects;
 require_once($GO_MODULES->class_path."projects.class.inc");
 $projects = new projects();

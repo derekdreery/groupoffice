@@ -39,6 +39,7 @@ $GO_SECURITY->authenticate();
 $GO_MODULES->authenticate('filesystem');
 require_once ($GO_LANGUAGE->get_language_file('filesystem'));
 
+$GO_CONFIG->set_help_url($fs_help_url);
 
 
 $GO_HANDLER = isset ($GO_HANDLER) ? $GO_HANDLER : '';

@@ -14,6 +14,7 @@ $GO_SECURITY->authenticate();
 $GO_MODULES->authenticate('calendar');
 require_once ($GO_LANGUAGE->get_language_file('calendar'));
 
+$GO_CONFIG->set_help_url($cal_help_url);
 
 load_basic_controls();
 load_control('datatable');

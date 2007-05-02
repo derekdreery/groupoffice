@@ -26,6 +26,8 @@ $mail = new imap();
 $email = new email();
 
 
+$GO_CONFIG->set_help_url($ml_help_url);
+
 
 $account_id = isset ($_REQUEST['account_id']) ? $_REQUEST['account_id'] : 0;
 $task = isset ($_REQUEST['task']) ? $_REQUEST['task'] : '';
