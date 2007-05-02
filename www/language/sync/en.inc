@@ -23,3 +23,5 @@ $sync_max_days_old = 'Sync events not older then';
 $sync_days = 'days';
 $sync_delete_old_events='Delete events from the client that are older then the time above';
 $sync_click_to_verify='Click to verify';
+
+$sync_help_url='http://docs.group-office.com/index.php?folder_id=49&file_id=185';
