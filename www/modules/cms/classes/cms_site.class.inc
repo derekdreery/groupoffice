@@ -1576,7 +1576,7 @@ class cms_site extends cms {
 
 						$content .= $file['content'];
 
-						$content = $this->print_plugins($content);
+						//$content = $this->print_plugins($content);
 						$content = str_replace($this->cms_module['full_url'].'view.php', $_SERVER['PHP_SELF'], $content);
 
 						if (isset ($main_template_content)) {
@@ -2695,6 +2695,8 @@ class cms_site extends cms {
 				$content = str_replace($tag, $this-> $function ($attributes, $tag), $content);
 			}
 		}
+		
+		$content=$this->print_plugins($content);
 		return $content;
 	}
 }
