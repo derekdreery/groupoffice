@@ -40,7 +40,7 @@ $images = '';
 
 $account_id = isset ($_REQUEST['account_id']) ? $_REQUEST['account_id'] : 0;
 $task = isset ($_REQUEST['task']) ? $_REQUEST['task'] : '';
-$mailbox = isset ($_REQUEST['mailbox']) ? $_REQUEST['mailbox'] : "INBOX";
+$mailbox = isset ($_REQUEST['mailbox']) ? smart_stripslashes($_REQUEST['mailbox']) : "INBOX";
 $uid = isset ($_REQUEST['uid']) ? $_REQUEST['uid'] : 0;
 $return_to = (isset ($_REQUEST['return_to']) && $_REQUEST['return_to'] != '') ? $_REQUEST['return_to'] : null;
 $link_back = (isset ($_REQUEST['link_back']) && $_REQUEST['link_back'] != '') ? $_REQUEST['link_back'] : $_SERVER['REQUEST_URI'];
