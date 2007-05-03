@@ -1063,6 +1063,12 @@ popup.focus();
 		if (!isset($company['mtime']) || $company['mtime'] == 0) {
 			$company['mtime'] = $company['ctime'];
 		}
+		
+		if(!isset($company['link_id']))
+		{
+			global $GO_LINKS;
+			$company['link_id']=$GO_LINKS->get_link_id();
+		}
 
 		$company['id'] = $this->nextid("ab_companies");
 		if ($company['id']  > 0) {
