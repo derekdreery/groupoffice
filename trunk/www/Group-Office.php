@@ -167,5 +167,5 @@ if ( $GO_CONFIG->log ) {
   openlog('[Group-Office]['.date('Ymd G:i').']['.$username.']', LOG_PERROR, LOG_LOCAL0);
 }
 
-$GO_CONFIG->set_help_url('http://docs.group-office.com');
+
 define('GO_LOADED', true);

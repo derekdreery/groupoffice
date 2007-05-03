@@ -300,7 +300,7 @@ class ical2array
 			case 'param_value':
 				if(!isset($this->param_name))
 				{
-					go_log(LOG_DEBUG, $this->buffer);
+					//go_log(LOG_DEBUG, $this->buffer);
 				}
 				$this->object[$this->object_name]['params'][$this->param_name] = $this->buffer;
 			break;
@@ -458,7 +458,7 @@ class ical2array
 			}
 		}		
 		
-		go_log(LOG_DEBUG, var_export($rrule_arr,true));
+		//go_log(LOG_DEBUG, var_export($rrule_arr,true));
 		
 		return $rrule_arr;
 	}

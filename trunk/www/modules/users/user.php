@@ -15,6 +15,8 @@ require_once($GO_LANGUAGE->get_language_file('users'));
 require_once($GO_LANGUAGE->get_base_language_file('preferences'));
 //require_once($GO_LANGUAGE->get_base_language_file('common'));
 
+$GO_CONFIG->set_help_url($us_help_url);
+
 $GO_SECURITY->authenticate();
 $GO_MODULES->authenticate('users');
 

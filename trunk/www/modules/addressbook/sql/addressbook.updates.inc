@@ -1,6 +1,7 @@
 <?php
 $updates[25] = array();
 
+$updates[24][]="UPDATE ab_contacts SET birthday = '' WHERE birthday = '1999-11-30';";
 $updates[24][]="UPDATE ab_companies SET mtime=NOW() where mtime=0;";
 $updates[24][]="UPDATE ab_companies SET ctime=mtime where ctime=0;";
 
