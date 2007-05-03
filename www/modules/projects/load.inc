@@ -67,6 +67,12 @@ if ($GO_MODULES->write_permission)
 	$load_user_id=$GO_SECURITY->user_id;
 }
 
+$default_start_date = date($_SESSION['GO_SESSION']['date_format'], mktime(0,0,0,$this_month-1, $this_day, $this_year));
+$default_end_date = date($_SESSION['GO_SESSION']['date_format'], $time);
+
+$start_date = isset($_POST['start_date']) ? $_POST['start_date'] : $default_start_date;
+$end_date = isset($_POST['end_date']) ? $_POST['end_date'] : $default_end_date;
+
 if (!$print)
 {
 	$container->add_html_element(new html_element('h3', $pm_load_type.':'));	
@@ -130,15 +136,11 @@ if (!$print)
 	$row = new table_row();
 	$row->add_cell(new table_cell($radiogroup->get_option(new radiobutton('period', 'period'), $pm_show_period)));
 	
-	$default_start_date = date($_SESSION['GO_SESSION']['date_format'], mktime(0,0,0,$this_month-1, $this_day, $this_year));
-	$default_end_date = date($_SESSION['GO_SESSION']['date_format'], $time);
-
-	$start_date = isset($_POST['start_date']) ? $_POST['start_date'] : $default_start_date;
+	
 	$start_datepicker = new date_picker('start_date', $_SESSION['GO_SESSION']['date_format'], $start_date);
 
-	$default_start_date = mktime(0,0,0,$this_month-1, $this_day, $this_year);
 	
-	$end_date = isset($_POST['end_date']) ? $_POST['end_date'] : $default_end_date;
+	
 	$end_datepicker = new date_picker('end_date', $_SESSION['GO_SESSION']['date_format'], $end_date);
 	
 	$row->add_cell(new table_cell($start_datepicker->get_html().'&nbsp;&nbsp;'.$pm_to.'&nbsp;&nbsp;'.$end_datepicker->get_html()));	
