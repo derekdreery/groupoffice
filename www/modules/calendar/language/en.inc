@@ -391,3 +391,4 @@ $cal_dismiss_all = 'Dismiss all';
 $cal_schedule_group='Schedule events for everyone in the view by default. (Otherwise it will only select your default calendar)';
 
 $cal_help_url='http://docs.group-office.com/index.php?folder_id=58&file_id=0';
+$td_help_url='http://docs.group-office.com/index.php?folder_id=49&file_id=217';

@@ -2824,7 +2824,7 @@ class calendar extends db
 
 									if($bymonthday[0] > 0 && date('j', $event['start_time']) != $bymonthday[0])
 									{
-										go_log(LOG_DEBUG, 'ByMonthDay: '.$bymonthday[0]);
+										//go_log(LOG_DEBUG, 'ByMonthDay: '.$bymonthday[0]);
 										$duration = $event['end_time'] - $event['start_time'];
 										$event['start_time'] = mktime(
 										date('G',$event['start_time']),

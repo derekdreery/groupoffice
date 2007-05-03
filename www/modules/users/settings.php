@@ -13,6 +13,8 @@
 require_once("../../Group-Office.php");
 require_once($GO_LANGUAGE->get_language_file('users'));
 
+$GO_CONFIG->set_help_url($us_help_url);
+
 $GO_SECURITY->authenticate();
 $GO_MODULES->authenticate('users');
 

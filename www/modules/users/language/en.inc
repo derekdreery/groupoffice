@@ -114,3 +114,5 @@ $registration_self_success = 'Welcome to %s!';
 $registration_self_success_text = 'Your account was successfully created. You can now login using your username and password.';
 $us_reset='Reset';
 $us_never='Never';
+
+$us_help_url='http://docs.group-office.com/index.php?folder_id=53&file_id=0';

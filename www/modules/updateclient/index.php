@@ -5,6 +5,8 @@ load_basic_controls();
 $GO_SECURITY->authenticate();
 $GO_MODULES->authenticate('updateclient');
 
+$GO_CONFIG->set_help_url($uc_help_url);
+
 require($GO_MODULES->modules['updateclient']['class_path'].'updateclient.class.inc');
 
 require($GO_LANGUAGE->get_language_file('updateclient'));
