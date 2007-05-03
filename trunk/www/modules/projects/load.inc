@@ -60,7 +60,12 @@ if ($project_id== 0 && isset($GO_MODULES->modules['addressbook']) && $GO_MODULES
 	$load_id=$project_id;
 	$load_type='project';
 }
-$load_user_id = isset($_REQUEST['load_user_id']['value']) ? $_REQUEST['load_user_id']['value'] : 0;
+if ($GO_MODULES->write_permission)
+{
+	$load_user_id = isset($_REQUEST['load_user_id']['value']) ? $_REQUEST['load_user_id']['value'] : 0;
+}else {
+	$load_user_id=$GO_SECURITY->user_id;
+}
 
 if (!$print)
 {
@@ -92,7 +97,7 @@ if (!$print)
 		$table->add_row($row);	
 	}else
 	{
-		$row = new table_row();		
+		/*$row = new table_row();		
 		$checkbox = 
 			new checkbox('load_user_id', 'load_user_id[value]', $GO_SECURITY->user_id, 
 			$pm_yours_only, ($load_user_id==$GO_SECURITY->user_id));		
@@ -100,7 +105,9 @@ if (!$print)
 		$cell = new table_cell($checkbox->get_html());
 		$cell->set_attribute('colspan','2');
 		$row->add_cell($cell);
-		$table->add_row($row);				
+		$table->add_row($row);*/
+
+		
 	}
 	
 	$container->add_html_element($table);
@@ -269,7 +276,8 @@ if ($task=='load')
 	{
 		$read_permission = $GO_SECURITY->has_permission($GO_SECURITY->user_id,$projects->f('acl_read'));
 		$write_permission = $GO_SECURITY->has_permission($GO_SECURITY->user_id,$projects->f('acl_write'));
-		if($read_permission || $write_permission)
+		$book_permission = $GO_SECURITY->has_permission($GO_SECURITY->user_id,$projects->f('acl_book'));
+		if($read_permission || $write_permission || $book_permission)
 		{
 			
 			$local_start_time = date($_SESSION['GO_SESSION']['date_format'].' '.
@@ -366,7 +374,7 @@ if ($task=='load')
 			
 			$cell = new table_cell();
 			
-			if (!$print && $write_permission)
+			if (!$print && ($write_permission || $book_permission))
 			{
 				$img = new image('edit');
 				$img->set_attribute('align','middle');
