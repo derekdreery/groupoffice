@@ -608,7 +608,12 @@ function smart_focus()
 		oEditor.Focus();
 	}else
 	{
-		document.sendform.mail_to.focus();
+		<?php 
+		if($report_id > 0)
+		{
+			echo 'document.sendform.mail_to.focus();';
+		}
+		?>
 	}
 }
 function close_attachments()

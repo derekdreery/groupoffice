@@ -7,6 +7,8 @@ require($GO_LANGUAGE->get_language_file('forum'));
 
 require($GO_MODULES->path.'classes/forum.class.inc');
 
+load_basic_controls();
+
 $forum = new forum();
 $del_id = isset($_POST['delete_id']) ? $_POST['delete_id'] : 0;
 if ( $del_id > 0 )
