@@ -10,7 +10,7 @@
  * option) any later version.
  */
 
-$show_period = isset($_POST['show_period']) ? $_POST['show_period'] : 'all';
+$show_period = isset($_POST['show_period']) ? $_POST['show_period'] : 'period';
 //$load_user_id = isset($_POST['load_user_id']) ? $_POST['load_user_id'] : $GO_SECURITY->user_id;
 $load_type = isset($_POST['load_type']) ? $_POST['load_type'] : 'project';
 $print = (isset($_POST['print']) && $_POST['print'] == 'true') ? true : false;
@@ -130,12 +130,15 @@ if (!$print)
 	$row = new table_row();
 	$row->add_cell(new table_cell($radiogroup->get_option(new radiobutton('period', 'period'), $pm_show_period)));
 	
-	$date = date($_SESSION['GO_SESSION']['date_format'], $time);
+	$default_start_date = date($_SESSION['GO_SESSION']['date_format'], mktime(0,0,0,$this_month-1, $this_day, $this_year));
+	$default_end_date = date($_SESSION['GO_SESSION']['date_format'], $time);
 
-	$start_date = isset($_POST['start_date']) ? $_POST['start_date'] : $date;
+	$start_date = isset($_POST['start_date']) ? $_POST['start_date'] : $default_start_date;
 	$start_datepicker = new date_picker('start_date', $_SESSION['GO_SESSION']['date_format'], $start_date);
 
-	$end_date = isset($_POST['end_date']) ? $_POST['end_date'] : $date;
+	$default_start_date = mktime(0,0,0,$this_month-1, $this_day, $this_year);
+	
+	$end_date = isset($_POST['end_date']) ? $_POST['end_date'] : $default_end_date;
 	$end_datepicker = new date_picker('end_date', $_SESSION['GO_SESSION']['date_format'], $end_date);
 	
 	$row->add_cell(new table_cell($start_datepicker->get_html().'&nbsp;&nbsp;'.$pm_to.'&nbsp;&nbsp;'.$end_datepicker->get_html()));	
@@ -173,8 +176,8 @@ if (!$print)
   	$container->add_html_element(new button($cmdClose, "javascript:document.location='".$return_to."';"));
   }
 }
-if ($task=='load')
-{
+/*if ($task=='load')
+{*/
 
 	switch($show_period)
 	{
@@ -184,8 +187,8 @@ if ($task=='load')
 		break;
 
 		case 'period':
-		$end_time = date_to_unixtime($_POST['end_date']);
-		$start_time = date_to_unixtime($_POST['start_date']);//+86400;
+		$end_time = date_to_unixtime($end_date)+86400;
+		$start_time = date_to_unixtime($start_date);//+86400;
 		break;
 
 		case 'month':
@@ -469,7 +472,7 @@ if ($task=='load')
 	$table->add_row($row);
 	
 	$container->add_html_element($table);
-}
+//}
 ?>
 <script type="text/javascript" langauge="javascript">
 function delete_hours(id)

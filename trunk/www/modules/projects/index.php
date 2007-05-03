@@ -28,7 +28,7 @@ $projects = new projects();
 
 $post_action = isset($_REQUEST['post_action']) ? $_REQUEST['post_action'] : '';
 $task = isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
-$link_back = (isset($_REQUEST['link_back']) && $_REQUEST['link_back'] != '') ? $_REQUEST['link_back'] : $_SERVER['REQUEST_URI'];
+$link_back = $_SERVER['PHP_SELF'].'?post_action='.$post_action.'&task='.$task;
 $return_to = (isset($_REQUEST['return_to']) && $_REQUEST['return_to'] != '') ? $_REQUEST['return_to'] : $_SERVER['HTTP_REFERER'];
 
 $time = get_time();
