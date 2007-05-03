@@ -487,14 +487,14 @@ class projects extends db
 		if ($start_time == 0 && $end_time == 0)
 		{
 			$sql = "SELECT pmHours.*, pmProjects.name, ".
-			"pmProjects.description, pmProjects.acl_read, pmProjects.acl_write ".
+			"pmProjects.description, pmProjects.acl_read, pmProjects.acl_write, pmProjects.acl_book ".
 			"FROM pmHours ".
 			"INNER JOIN pmProjects ON (pmProjects.id=pmHours.project_id)";
 			$where = false;
 		}else
 		{
 			$sql = "SELECT pmHours.*, pmProjects.name, ".
-			"pmProjects.description, pmProjects.acl_read, pmProjects.acl_write ".
+			"pmProjects.description, pmProjects.acl_read, pmProjects.acl_write, pmProjects.acl_book ".
 			"FROM pmHours INNER JOIN pmProjects ON (pmProjects.id=pmHours.project_id) ".
 			"WHERE ".
 			"pmHours.start_time >= '$start_time' AND pmHours.start_time < '$end_time'";

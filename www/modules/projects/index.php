@@ -54,10 +54,10 @@ require_once($GO_THEME->theme_path."header.inc");
 
 $form = new form('projects_form');
 
-
+$menu = new button_menu();
 if($GO_MODULES->write_permission)
 {
-	$menu = new button_menu();
+	
 	$menu->add_button('projects', $pm_projects, 'index.php');
 	$menu->add_button('pr_new_project', $pm_new_project, 'project.php');
 	$menu->add_button('pr_load', $pm_load, 'index.php?post_action=load');
@@ -79,8 +79,12 @@ if($GO_MODULES->write_permission)
 		}
 	}
 	
-	$form->add_html_element($menu);
+	
+}else {
+	$menu->add_button('projects', $pm_projects, 'index.php');
+	$menu->add_button('pr_load', $pm_load, 'index.php?post_action=load');
 }
+$form->add_html_element($menu);
 $form->add_html_element(new input('hidden', 'task'));
 $form->add_html_element(new input('hidden', 'post_action',$post_action));
 $form->add_html_element(new input('hidden', 'return_to', $return_to));
