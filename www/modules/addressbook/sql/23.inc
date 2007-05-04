@@ -112,8 +112,9 @@ if(file_exists($GO_CONFIG->root_path.'LICENSE.PRO'))
 				$GO_SECURITY->copy_acl($db->f('acl_read'), $report['acl_read']);
 				$GO_SECURITY->copy_acl($db->f('acl_write'), $report['acl_write']);
 			}else {
-				$report['criteria']=addslashes('col_'.$contacts_field_id.' = \'1\'');
-				$reports->update_report($report);
+				$update_report['id']=$report['id'];
+				$update_report['criteria']=addslashes('col_'.$contacts_field_id.' = \'1\'');
+				$reports->update_report($update_report);
 			}
 		}
 		
@@ -160,8 +161,10 @@ if(file_exists($GO_CONFIG->root_path.'LICENSE.PRO'))
 				$GO_SECURITY->copy_acl($db->f('acl_read'), $report['acl_read']);
 				$GO_SECURITY->copy_acl($db->f('acl_write'), $report['acl_write']);
 			}else {
-				$report['criteria']=addslashes('col_'.$companies_field_id.' = \'1\'');
-				$reports->update_report($report);
+				
+				$update_report['id']=$report['id'];
+				$update_report['criteria']=addslashes('col_'.$companies_field_id.' = \'1\'');
+				$reports->update_report($update_report);
 			}
 		}
 		
@@ -208,8 +211,10 @@ if(file_exists($GO_CONFIG->root_path.'LICENSE.PRO'))
 				$GO_SECURITY->copy_acl($db->f('acl_read'), $report['acl_read']);
 				$GO_SECURITY->copy_acl($db->f('acl_write'), $report['acl_write']);
 			}else {
-				$report['criteria']=addslashes('col_'.$users_field_id.' = \'1\'');
-				$reports->update_report($report);
+				
+				$update_report['id']=$report['id'];
+				$update_report['criteria']=addslashes('col_'.$users_field_id.' = \'1\'');
+				$reports->update_report($update_report);
 			}
 		}
 	}
