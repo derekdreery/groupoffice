@@ -90,6 +90,8 @@ if($uc->status=='401')
 			if(!file_exists(basename($url)))
 			{
 				status('Failed to download package!');
+				status('exited');
+				die();
 			}
 			
 			rename(basename($url), $package['package_name'].'.tar.gz');
