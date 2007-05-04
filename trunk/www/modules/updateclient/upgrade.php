@@ -82,7 +82,7 @@ if($uc->status=='401')
 		{
 			status('Found an update for package '.$package['package_name']);
 			
-			$url = $uc->remote_url.'download_package.php?sid='.$uc->remote_sid.'&license_id='.$package['license_id'].'&package_id='.$package['id'];
+			$url = $uc->remote_url.'download.php?sid='.$uc->remote_sid.'&license_id='.$package['license_id'].'&package_id='.$package['id'];
 		
 			status('Downloading '.$package['package_name'].'.tar.gz');
 			
