@@ -451,10 +451,12 @@ class projects extends db
 		$totals[0]['int_fee'] =0;
 		$totals[0]['ext_fee'] =0;
 
-		$sql = "SELECT user_id, start_time, end_time, break_time, ext_fee_value, int_fee_value, fee_time FROM pmHours WHERE project_id=$project_id";
+		$sql = "SELECT units, user_id, start_time, end_time, break_time, ext_fee_value, int_fee_value, fee_time FROM pmHours WHERE project_id=$project_id";
 		$this->query($sql);
 		while($this->next_record())
 		{
+			
+			
 			if(!isset($totals[$this->f('user_id')]['time']))
 			{
 				$totals[$this->f('user_id')]['time'] =0;
@@ -468,7 +470,15 @@ class projects extends db
 				$totals[$this->f('user_id')]['ext_fee'] =0;
 			}
 
-			$time = $this->f('end_time')-$this->f('start_time')-$this->f('break_time');
+			if ($this->f('units') > 0)
+			{
+				$time = $this->f('units')*$this->f('fee_time')*60;
+			}else
+			{
+				$time = $this->f('end_time')-$this->f('start_time')-$this->f('break_time');
+			}
+			
+			
 			$totals[$this->f('user_id')]['time'] += $time;
 			$int_fee = $this->f('fee_time')> 0 ? ($this->f('int_fee_value')*$time/($this->f('fee_time')*60)) : 0;
 			$totals[$this->f('user_id')]['int_fee'] += $int_fee;
