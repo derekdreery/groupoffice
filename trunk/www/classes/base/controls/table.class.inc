@@ -221,7 +221,7 @@ class table_row extends html_element
 			$this->cells=&$cells;
 		}*/
 		
-		if(isset($this->table->enabled_columns) && !$this->ignore_configuration)
+		if(isset($this->table->enabled_columns) && count($this->table->enabled_columns) && !$this->ignore_configuration)
 		{
 			//var_dump($this->cells);
 			$cellcount = count($this->table->enabled_columns);
