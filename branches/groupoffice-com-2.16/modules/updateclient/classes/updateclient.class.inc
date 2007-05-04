@@ -253,7 +253,7 @@ class updateclient extends db{
 		{
 			return false;
 		}
-		
+
 		$xml = text_to_xml($xml);
 
 		$this->packages=array();
@@ -280,7 +280,7 @@ class updateclient extends db{
 		</response>
 		*/
 
-		
+
 
 
 		$this->remote_sid= $xml->get_data('sid');
@@ -297,16 +297,16 @@ class updateclient extends db{
 
 				foreach($licenseNode->_children as $packageNode)
 				{
-	
+
 					$package=array();
 					$package['license_id']=$license_id;
-				
-						foreach($packageNode->_children as $packageNodeItem)
-						{
-							$package[$packageNodeItem->_name]=$packageNodeItem->get_data();
-							//echo $packageNodeItem->_name.'= '.$packageNodeItem->get_data().'<br />';
-						}
-					
+
+					foreach($packageNode->_children as $packageNodeItem)
+					{
+						$package[$packageNodeItem->_name]=$packageNodeItem->get_data();
+						//echo $packageNodeItem->_name.'= '.$packageNodeItem->get_data().'<br />';
+					}
+
 
 					$local_package = $this->get_package_by_name(addslashes($package['package_name']));
 					if(!$local_package)
@@ -323,9 +323,9 @@ class updateclient extends db{
 
 					$this->packages[]=$package;
 				}
-			}			
+			}
 		}
-		
+
 		return true;
 	}
 }
