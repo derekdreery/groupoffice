@@ -316,15 +316,18 @@ class ical2array
 	function get_timezones($vcalendar)
 	{
 		$timezones = array();
-		while($object = array_shift($vcalendar[0]['objects']))
+		if(isset($vcalendar[0]['objects']))
 		{
-			
-			if($object['type'] == 'VTIMEZONE' && isset($object['TZID']) && isset($object['objects']))
-			{				
-				while($sub_object = array_shift($object['objects']))
-				{
-					$timezones[$object['TZID']['value']][$sub_object['type']] = $this->convert_timezone( $sub_object['TZOFFSETTO']['value']);
-				}				
+			while($object = array_shift($vcalendar[0]['objects']))
+			{
+				
+				if($object['type'] == 'VTIMEZONE' && isset($object['TZID']) && isset($object['objects']))
+				{				
+					while($sub_object = array_shift($object['objects']))
+					{
+						$timezones[$object['TZID']['value']][$sub_object['type']] = $this->convert_timezone( $sub_object['TZOFFSETTO']['value']);
+					}				
+				}
 			}
 		}
 		return $timezones;
