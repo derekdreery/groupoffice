@@ -657,19 +657,10 @@ class email extends db
 			$folder['id'] = $this->f('id');
 			if($status = $mail->status($this->f('name'), SA_ALL))
 			{
-				$update=false;
-				if($status->messages!=$this->f('msgcount'))
+				if($status->messages!=$this->f('msgcount') || $status->unseen!=$this->f('unseen'))
 				{
 					$folder['msgcount'] = $status->messages;
-					$update=true;
-				}
-				if($status->unseen!=$this->f('unseen'))
-				{
 					$folder['unseen'] = $status->unseen;
-					$update=true;
-				}
-				if($update)
-				{
 					$email->__update_folder($folder);
 				}
 			}
