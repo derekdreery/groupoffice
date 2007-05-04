@@ -422,9 +422,12 @@ class ical2array
 						{
 							return false;
 						}	
+				
 						$month_time = array_shift($expl_rrule);
-						//todo negative month times
-						$rrule_arr['BYMONTHDAY'] = substr($month_time, 0, strlen($month_time)-1);
+						//todo negative month times						
+						//$rrule_arr['BYMONTHDAY'] = substr($month_time, 0, strlen($month_time)-1);
+						//for nexthaus
+						$rrule_arr['BYMONTHDAY'] = trim($month_time);//substr($month_time, 0, strlen($month_time)-1);
 					break;
 					
 					case 'YM':
