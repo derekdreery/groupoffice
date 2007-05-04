@@ -1407,6 +1407,7 @@ class calendar extends db
 
 	function is_duplicate_event($event, $calendar_id)
 	{
+		unset($event['exceptions']);
 		$record = array_map('addslashes', $event);
 
 		$sql = "SELECT id FROM cal_events INNER JOIN cal_events_calendars ON cal_events.id=cal_events_calendars.event_id WHERE ".
