@@ -2,10 +2,6 @@
 require('../../Group-Office.php');
 
 $GO_SECURITY->authenticate();
-$GO_MODULES->authenticate('addressbook');
-
-
-require_once ($GO_MODULES->class_path."addressbook.class.inc");
 
 /*
 header('Content-Type: text/xml; charset: UTF-8');
