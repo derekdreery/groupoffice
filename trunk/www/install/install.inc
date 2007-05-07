@@ -193,7 +193,7 @@ function install_required_modules()
 	$module_count = count($modules);
 	while($module = array_shift($modules))
 	{
-		if ($module['name'] != 'CVS' && !$sql_module = $GO_MODULES->get_module($module['name']))
+		if (!$sql_module = $GO_MODULES->get_module($module['name']))
 		{
 			$version = '';
 			$sort_order = '1000';			
