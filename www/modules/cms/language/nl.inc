@@ -158,3 +158,4 @@ $cms_fckeditor_help='Klik hier voor documentatie';
 $cms_add_contact_success_title='Dank u wel!';
 $cms_add_contact_success_text='U zult vanaf nu onze nieuwsbrief ontvangen!';
 $cms_add_contact_email_subject='Nieuw contactpersoon toegevoegd mailing';
+$cms_new_comment_subject = 'Nieuwe opmerking geplaatst in %s';

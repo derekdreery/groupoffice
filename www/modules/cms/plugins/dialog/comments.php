@@ -36,7 +36,7 @@ if($task=='insert')
 	require_once($GO_MODULES->path.'plugins/comments.class.inc');
 	$cms_comments = new cms_comments();	
 
-	$html = '<cms:plugin allow_unregistered="'.$allow_unregistered.'" plugin_id="comments">'.
+	$html = '<cms:plugin email="'.smart_stripslashes($_POST['email']).'" allow_unregistered="'.$allow_unregistered.'" plugin_id="comments">'.
 	htmlspecialchars($cms_comments->get_name()).'</cms:plugin><br /><br />';	
 	?>	
 	<script type="text/javascript" language="javascript">
@@ -64,10 +64,29 @@ if (isset($feedback))
 }
 
 
+
+$table = new table();
+$row = new table_row();
 $checkbox = new checkbox('allow_unregistered', 'allow_unregistered','true',$cms_unregistered_comments, isset($_POST['allow_unregistered']));
+$cell = new table_cell($checkbox);
+$cell->set_attribute('colspan','2');
+$row->add_cell($cell);		
+$table->add_row($row);
+
+$row = new table_row();
+$cell = new table_cell($strEmail.':');
+$cell->set_attribute('style', 'whitespace:nowrap;');
+$row->add_cell($cell);		
+$cell = new table_cell();
+$email = isset($_REQUEST['email']) ? smart_stripslashes($_REQUEST['email']) : $_SESSION['GO_SESSION']['email'];
+$input = new input('text', 'email', $email);
+$input->set_attribute('style','width:200px');
+$cell->add_html_element($input);
+$row->add_cell($cell);
+$table->add_row($row);
 
 
-$tabstrip->add_html_element($checkbox);
+$tabstrip->add_html_element($table);
 
 $tabstrip->innerHTML .= '<br />';
 

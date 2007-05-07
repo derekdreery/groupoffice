@@ -115,7 +115,7 @@ while ($cms->next_record()) {
 	$short_name = strip_extension(cut_string($cms->f('name'), 30));
 	
 	$row = new table_row('file_'.$cms->f('id'));
-	$row->set_attribute('ondblclick', "javascript:_insertHyperlink('".$GO_MODULES->full_url."view.php?site_id=".$_SESSION['site_id']."&amp;file_id=".$cms->f('id')."', '".strip_extension($cms->f('name'))."');");
+	$row->set_attribute('ondblclick', "javascript:_insertHyperlink('".$GO_MODULES->full_url."view.php?folder_id=".$cms->f('folder_id')."&amp;file_id=".$cms->f('id')."', '".strip_extension($cms->f('name'))."');");
 
 	$img = new image('', get_filetype_image($cms->f('extension')));		
 	$img->set_attribute('align','absmiddle');
