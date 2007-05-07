@@ -1,0 +1,10 @@
+<?php
+$module['modules']['description'] = 'The default module management module';
+$module['modules']['version'] = '1.0';
+$module['modules']['release_date'] = '2005-04-17';
+$module['modules']['status'] = 'Stable';
+$module['modules']['authors'][] = array('name'=>'Merijn Schering', 'email'=>'mschering@intermesh.nl');
+$module['modules']['required'] = true; // This module can't be uninstalled
+$module['modules']['admin_menu'] = true;
+$module['modules']['sort_order'] = 130;
+?>
