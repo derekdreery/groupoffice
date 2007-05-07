@@ -26,17 +26,17 @@ $row = new table_row();
 $row->add_cell(new table_cell($strName.'*:'));
 $cell = new table_cell();
 $input = new input('text','first_name',$contact['first_name']);
-$input->set_attribute('style','width:120px');
+$input->set_attribute('style','width:110px');
 $input->set_attribute('maxlength','50');
 $cell->add_html_element($input);
 
 $input = new input('text','middle_name',$contact['middle_name']);
-$input->set_attribute('style','width:34px');
+$input->set_attribute('style','width:54px');
 $input->set_attribute('maxlength','50');
 $cell->add_html_element($input);
 
 $input = new input('text','last_name', $contact['last_name']);
-$input->set_attribute('style','width:120px');
+$input->set_attribute('style','width:110px');
 $input->set_attribute('maxlength','50');
 $cell->add_html_element($input);
 
