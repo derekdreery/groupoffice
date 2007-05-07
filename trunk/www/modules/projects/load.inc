@@ -250,22 +250,28 @@ if (!$print)
 
 	$table->add_column(new table_heading($GLOBALS['pm_project']));
 
+	
 	$cell = new table_heading($GLOBALS['pm_hours']);
 	$cell->set_attribute('style', 'text-align:center');
 	$table->add_column($cell);
 	
-	$cell = new table_heading($GLOBALS['pm_internal_fee']);
-	$table->add_column($cell);
-	
-	$cell = new table_heading($GLOBALS['pm_external_fee']);
-	$table->add_column($cell);
-	
-	
-	
-	
 	$cell = new table_heading($GLOBALS['pm_units']);
 	$cell->set_attribute('style', 'text-align:center');
 	$table->add_column($cell);
+	
+	
+	if($GO_MODULES->write_permission)
+	{	
+		$cell = new table_heading($GLOBALS['pm_internal_fee']);
+		$table->add_column($cell);
+		
+		$cell = new table_heading($GLOBALS['pm_external_fee']);
+		$table->add_column($cell);
+	}
+	
+	
+	
+	
 	
 	$cell = new table_heading('&nbsp;');
 	$table->add_column($cell);
@@ -370,12 +376,17 @@ if (!$print)
 			$cell->set_attribute('style','text-align:center');
 			$row->add_cell($cell);
 			
-			$row->add_cell(new table_cell(($int_fee_string)));
-			$row->add_cell(new table_cell(($ext_fee_string)));
-
 			$cell = new table_cell($units);
 			$cell->set_attribute('style','text-align:center');
 			$row->add_cell($cell);
+			
+			if($GO_MODULES->write_permission)
+			{	
+				$row->add_cell(new table_cell(($int_fee_string)));
+				$row->add_cell(new table_cell(($ext_fee_string)));
+			}
+
+			
 			
 			$cell = new table_cell();
 			
