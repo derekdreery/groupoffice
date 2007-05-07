@@ -445,6 +445,12 @@ if(file_exists($active_tab_id))
 
 
 				$GO_USERS->update_profile($user);
+				
+				if ($_POST['close'] == 'true' && !isset($feedback))
+				{
+					header('Location: '.$return_to);
+					exit();
+				}
 			}
 
 			$table = new table();
@@ -622,6 +628,12 @@ if(file_exists($active_tab_id))
 				$user['use_checkbox_select'] = isset($_POST['use_checkbox_select']) ? '1' : '0';
 				
 				$GO_USERS->update_profile($user);
+				
+				if ($_POST['close'] == 'true' && !isset($feedback))
+				{
+					header('Location: '.$return_to);
+					exit();
+				}
 			}
 
 			
@@ -650,8 +662,8 @@ if(file_exists($active_tab_id))
 			$GO_MODULES->get_modules();
 			while ($GO_MODULES->next_record())
 			{
-				if ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $GO_MODULES->f('acl_read')) ||
-				$GO_SECURITY->has_permission($GO_SECURITY->user_id, $GO_MODULES->f('acl_write'))
+				if ($GO_SECURITY->has_permission($user_id, $GO_MODULES->f('acl_read')) ||
+				$GO_SECURITY->has_permission($user_id, $GO_MODULES->f('acl_write'))
 				)
 				{
 					$language_file = $GO_LANGUAGE->get_language_file($GO_MODULES->f('id'));
@@ -1122,6 +1134,12 @@ if(file_exists($active_tab_id))
 						$GO_SECURITY->add_group_to_acl($GO_GROUPS->f('id'), $user['acl_id']);
 					}
 				}
+				
+				if ($_POST['close'] == 'true' && !isset($feedback))
+				{
+					header('Location: '.$return_to);
+					exit();
+				}
 			}
 			$p = new html_element('p',$admin_module_access);
 
@@ -1328,6 +1346,11 @@ if(file_exists($active_tab_id))
 				}else{
 					$GO_USERS->update_password($user_id, smart_stripslashes($_POST['pass1']));
 					$feedback = $admin_password_changed;
+					if ($_POST['close'] == 'true')
+					{
+						header('Location: '.$return_to);
+						exit();
+					}
 				}
 			}
 
