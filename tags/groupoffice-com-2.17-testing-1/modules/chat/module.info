@@ -1,0 +1,9 @@
+<?php
+$module['chat']['description'] = 'Allows chatting between users';
+$module['chat']['version'] = '1.0';
+$module['chat']['release_date'] = '2004-07-6';
+$module['chat']['status'] = 'Stable';
+$module['chat']['authors'][] = array('name'=>'Boyan Filipov (justchat writer)', 'email'=>'boyanfilipov@yahoo.com');
+$module['chat']['authors'][] = array('name'=>'Chris L. Franklin (module writer)', 'email'=>'cfranklin@nomadcf.com');
+?>
+	
