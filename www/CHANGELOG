@@ -14,7 +14,7 @@ TODO
 *Restrict SMTP servers for mailing lists
 
 
-2007/05/02 Version 2.17-unstable-1
+2007/05/07 Version 2.17-testing-1
 -Full support for Microsoft Windows
 -Move module theme items to module dir
 -Modular select dialog (Done with global search).

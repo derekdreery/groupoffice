@@ -1,3 +1,27 @@
+2007/05/07 Version 2.17
+Great improvements on usability have been made. In the top bar there's now a new search
+box that searches through all Group-Office modules. This makes it very easy to quickly
+find any item in Group-Office. The search mechanism is also used for linking items to
+eachother now which makes it much easier.
+The help button takes you to the right page on the new documentation site for
+Group-Office. On this site users can also leave there comments to help the community.
+
+Group-Office 2.17 has full support for Windows servers now (Tested with XAMPP)
+
+PROFESSIONAL VERSION
+The professional version of 2.17 of course has all the Community improvements. But on
+top of that it has a new reports module. With the reports module it's possible to
+present data from the addressbook and users. You can easily send newsletters by
+e-mail or regular mail to contacts in these reports.
+
+The synchronization server supports the Nexthaus clients now. Nexthaus offers a very
+good Outlook SyncML client and a Blackberry client. With this addition Group-Office
+supports almost every mobile device for synchronization!
+
+It's now possible to link e-mail to contacts, companies, projects etc... Simply
+select the e-mails you want to link and search for a contact for example and they
+are stored at the contact.
+
 2006/11/01 Version 2.16
 This version has an improved linking interface and in the Professional version it's also 
 possible to store e-mail as files and link them to contacts, companies or projects.
