@@ -116,8 +116,11 @@ foreach($GO_MODULES->modules as $module)
 	}
 	$lang_var = isset($lang_modules[$module['id']]) ? $lang_modules[$module['id']] : $module['id'];
 
-	$link = new hyperlink($module['url'], $lang_var);
-	$link->set_attribute('target','mainframe');
+	$link = new hyperlink('#', $lang_var);
+	$link->set_attribute('onclick','GroupOffice.setCenterUrl(\''.$module['url'].'\');');
+	$link->set_attribute('ext:qtip','Some info about the module');
+	$link->set_attribute('ext:qtitle',$module['id']);
+
 	$link->set_attribute('class','selectableItem');
 
 	$southwestdiv->add_html_element($link);
@@ -209,7 +212,7 @@ $iframe->set_attribute('name', 'mainframe');
 $iframe->set_attribute('frameborder', '0');
 $iframe->set_attribute('style', 'width:100%;height:100%');
 
-$centerdiv->add_html_element($iframe);
+//$centerdiv->add_html_element($iframe);
 
 
 $containerdiv->add_html_element($northdiv);
@@ -224,6 +227,7 @@ $propsdiv->set_attribute('style','width:200px;height:200px;overflow:hidden;');
 //$containerdiv->add_html_element($propsdiv);*/
 
 $body->add_html_element($containerdiv);
+
 
 
 require($GO_THEME->theme_path.'footer2.inc');
