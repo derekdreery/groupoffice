@@ -659,7 +659,7 @@ switch($ab_settings['search_type'])
 				}
 				$row->add_cell(new table_cell(htmlspecialchars($work_country)));
 
-				if(isset($GO_MODULES->modules['custom_fields']))
+				if(isset($cf_fields))
 				{
 					foreach($cf_fields as $field)
 					{
