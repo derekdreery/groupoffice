@@ -251,7 +251,7 @@ if ($login_task == "register")
 
 			if($GO_CONFIG->notify_admin_of_registration)
 			{
-				$body = $admin_new_user_body."\r\n\r\n".$GO_CONFIG->full_url.'?return_to='.urlencode($GO_MODULES->modules['users']['url'].'edit_user.php?user_id='.$new_user_id.'&return_to=index.php');
+				$body = $admin_new_user_body."\r\n\r\n".$GO_CONFIG->full_url.'?return_to='.urlencode($GO_MODULES->modules['users']['url'].'user.php?user_id='.$new_user_id.'&return_to=index.php');
 				$subject = $user['enabled'] == '1' ? $admin_new_user_subject : $admin_new_user_subject_activate;
 
 				sendmail($GO_CONFIG->webmaster_email, $GO_CONFIG->webmaster_email, $GO_CONFIG->title, $subject, $body);
