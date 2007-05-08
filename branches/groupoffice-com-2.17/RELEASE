@@ -4,12 +4,12 @@ box that searches through all Group-Office modules. This makes it very easy to q
 find any item in Group-Office. The search mechanism is also used for linking items to
 eachother now which makes it much easier.
 The help button takes you to the right page on the new documentation site for
-Group-Office. On this page users can also leave there comments to help the community.
+Group-Office. On this site users can also leave there comments to help the community.
 
 Group-Office 2.17 has full support for Windows servers now (Tested with XAMPP)
 
 PROFESSIONAL VERSION
-The professional version of 2.17 of course has all the Community improvements but on
+The professional version of 2.17 of course has all the Community improvements. But on
 top of that it has a new reports module. With the reports module it's possible to
 present data from the addressbook and users. You can easily send newsletters by
 e-mail or regular mail to contacts in these reports.
