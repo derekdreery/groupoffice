@@ -84,7 +84,7 @@ class html_element
 				$this->outerHTML .= ' '.$name.'="'.htmlspecialchars($value).'"';
 			}
 			
-			if($this->innerHTML == '')
+			if($this->innerHTML == '' && $this->tagname!='script' && $this->tagname!='meta' && $this->tagname!='link' && $this->tagname!='iframe')
 			{
 				$this->outerHTML .= ' />';
 			}else
