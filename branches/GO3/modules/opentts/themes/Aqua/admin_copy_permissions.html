@@ -1,0 +1,105 @@
+<script LANGUAGE="JavaScript">
+<!--
+function makeStringFromSelect(selectCtrl) {
+	var i;
+	var j = 0;
+	var outlist = "";
+
+	for (i = 0; i < selectCtrl.options.length; i++) {
+		if (j > 0) {
+			outlist = outlist + ", ";
+		}
+		outlist = outlist + selectCtrl.options[i].value;
+		j++;
+	}
+	return outlist;
+}
+
+function addItems(fromCtrl, toCtrl) {
+	var i;
+	var j;
+	var itemexists;
+	var nextitem;
+
+	// step through all items in fromCtrl
+	for (i = 0; i < fromCtrl.options.length; i++) {
+		if (fromCtrl.options[i].selected) {
+			// search toCtrl to see if duplicate
+			j = 0;
+			itemexists = false;
+			while ((j < toCtrl.options.length) && (!(itemexists))) {
+				if (toCtrl.options[j].value == fromCtrl.options[i].value) {
+					itemexists = true;
+					alert(fromCtrl.options[i].value + " found!");
+				}
+				j++;
+			}
+			if (!(itemexists)) {
+				// add the item
+				nextitem = toCtrl.options.length;
+				toCtrl.options[nextitem] = new Option(fromCtrl.options[i].text);
+				toCtrl.options[nextitem].value = fromCtrl.options[i].value;
+			}
+		}
+	}
+}
+
+function removeItems(fromCtrl) {
+	var i = 0;
+	var j;
+	var k = 0;
+
+	while (i < (fromCtrl.options.length - k)) {
+		if (fromCtrl.options[i].selected) {
+			// remove the item
+			for (j = i; j < (fromCtrl.options.length - 1); j++) {
+				fromCtrl.options[j].text = fromCtrl.options[j+1].text;
+				fromCtrl.options[j].value = fromCtrl.options[j+1].value;
+				fromCtrl.options[j].selected = fromCtrl.options[j+1].selected;
+			}
+			k++;
+		} else {
+			i++;
+		}
+	}
+	for (i = 0; i < k; i++) {
+		fromCtrl.options[fromCtrl.options.length - 1] = null;
+	}
+}
+//-->
+</SCRIPT>
+
+</head>
+
+<form NAME="main" ACTION="somewhere.asp" METHOD="GET">
+<input TYPE="HIDDEN" NAME="Sel">
+
+<table BORDER=0 CELLPADDING=0 CELLSPACING=0>
+<tr>
+<td VALIGN="TOP">
+Available Items:<br>
+
+<select MULTIPLE NAME="AvailItems" SIZE="5">
+	<option VALUE="1">Item 1</option>
+	<option VALUE="2">Item 2</option>
+</select>
+</td>
+<td ALIGN="CENTER">
+&nbsp;<input TYPE="BUTTON" NAME="AddBtn" VALUE="&nbsp;&nbsp;&nbsp;&nbsp;>>&nbsp;&nbsp;&nbsp;&nbsp;" OnClick="addItems(this.form.AvailItems, this.form.SelItems); ">&nbsp;<br>
+<br>
+&nbsp;<input TYPE="BUTTON" NAME="RemoveBtn" VALUE="&nbsp;&nbsp;&nbsp;&nbsp;<<&nbsp;&nbsp;&nbsp;&nbsp;" OnClick="removeItems(this.form.SelItems);">&nbsp;<br>
+</td>
+<td VALIGN="TOP">
+Selected Items:<br>
+
+<select MULTIPLE NAME="SelItems" SIZE="5">
+	<option VALUE="3">Item 3</option>
+	<option VALUE="4">Item 4</option>
+</select>
+</td>
+</tr>
+</table>
+<br><br>
+<input TYPE="BUTTON" VALUE="Submit" OnClick="this.form.Sel.value = makeStringFromSelect(this.form.SelItems); this.form.submit();">
+
+</form>

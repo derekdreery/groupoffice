@@ -1,0 +1,7 @@
+<?php
+$module['wiki']['description'] = 'Wiki for Group-Office';
+$module['wiki']['version'] = '1.0';
+$module['wiki']['release_date'] = '2004-04-05';
+$module['wiki']['status'] = 'Alpha';
+$module['wiki']['authors'][] = array('name'=>'Markus Schabel', 'email'=>'markus.schabel@tgm.ac.at');
+?>
