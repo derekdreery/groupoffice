@@ -3,6 +3,7 @@ GroupOffice = function(){
 	var mainPanel;
 	var navPanel;
 	var innerLayout;
+	var mainmenutb;
 	
 	return {
 
@@ -38,11 +39,8 @@ GroupOffice = function(){
 					initialSize: 250,
 					minSize: 100,
 					maxSize: 400,
-					autoScroll:true,
-					collapsible:true,
-					titlebar: false,
-					animate: true,
-					cmargins: {top:2,bottom:0,right:0,left:0}
+					autoScroll:true,					
+					titlebar: false										
 				},
 				center: {
 					autoScroll:true,
@@ -71,7 +69,6 @@ GroupOffice = function(){
 
 			layout.endUpdate();
 			
-			
 			Ext.QuickTips.init();
 			//Ext.QuickTips.register({title: 'Play', qtip: 'The summary displays relevant info', target: 'summary', autoHide:true});
 
@@ -79,7 +76,7 @@ GroupOffice = function(){
 		
 		setCenterUrl : function(url){
 			mainPanel.load({
- 			url: url});
+ 			url: url, scripts: true});
 		},
 		
 		setNavUrl : function(url){
@@ -89,7 +86,8 @@ GroupOffice = function(){
 		
 		getNavPanel : function(){
 			return navPanel;
-		}
+		}	
+		
 
 	};
 

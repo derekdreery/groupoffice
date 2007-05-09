@@ -103,6 +103,13 @@ $westdiv->add_html_element($northwestdiv);
 
 $southwestdiv = new html_element('div');
 $southwestdiv->set_attribute('id','southwest');
+
+$toolbar = new html_element('div');
+$toolbar->set_attribute('id','mainmenu-tb');
+$toolbar->set_attribute('class','mainmenu');
+
+
+
 foreach($GO_MODULES->modules as $module)
 {
 	$GO_THEME->load_module_theme($module['id']);
@@ -116,15 +123,18 @@ foreach($GO_MODULES->modules as $module)
 	}
 	$lang_var = isset($lang_modules[$module['id']]) ? $lang_modules[$module['id']] : $module['id'];
 
-	$link = new hyperlink('#', $lang_var);
-	$link->set_attribute('onclick','GroupOffice.setCenterUrl(\''.$module['url'].'\');');
+	//$link = new hyperlink('#', $lang_var);
+	$link = new hyperlink($module['url'], $lang_var);
+	$link->set_attribute('target','mainframe');
+	//$link->set_attribute('onclick','GroupOffice.setCenterUrl(\''.$module['url'].'\');');
 	$link->set_attribute('ext:qtip','Some info about the module');
 	$link->set_attribute('ext:qtitle',$module['id']);
-
-	$link->set_attribute('class','selectableItem');
-
-	$southwestdiv->add_html_element($link);
+	$link->set_attribute('class','menu-button');
+	
+	$toolbar->add_html_element($link);
+	
 }
+$southwestdiv->add_html_element($toolbar);
 $westdiv->add_html_element($southwestdiv);
 
 $northdiv = new html_element('div');
@@ -212,7 +222,7 @@ $iframe->set_attribute('name', 'mainframe');
 $iframe->set_attribute('frameborder', '0');
 $iframe->set_attribute('style', 'width:100%;height:100%');
 
-//$centerdiv->add_html_element($iframe);
+$centerdiv->add_html_element($iframe);
 
 
 $containerdiv->add_html_element($northdiv);

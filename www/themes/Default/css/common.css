@@ -1,3 +1,31 @@
+.mainmenu{
+	border: 1px solid;
+    border-color:#eaf0f7 #eaf0f7 #a9bfd3 #eaf0f7;
+    display: block;
+	padding:2px;
+    background:#d0def0;
+    height:100%;
+    width:100%;
+}
+
+a.menu-button:visited,a.menu-button:link{
+	display:block;
+	width:100%;
+	padding:5px;
+	background:#d0def0 url(../../../ext/resources/images/default/layout/panel-title-light-bg.gif) repeat-x;
+}
+
+
+a.menu-button:hover,a.menu-button:active{
+	display:block;
+	width:100%;
+	padding:5px;
+	background:#d0def0 url(../../../ext/resources/images/toolbar/tb-btn-sprite.gif)  repeat-x;
+}
+
+
+
+
 #headerTable{
 width:80%;
 height:25px;
