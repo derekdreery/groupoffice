@@ -30,6 +30,7 @@ class form extends html_element
 		$this->tagname = 'form';		
 		$this->set_linebreak("\n");
 		$this->set_attribute('name', $name);
+		$this->set_attribute('id', $name);
 		$this->set_attribute('method', $method);
 		if($action == '')
 		{

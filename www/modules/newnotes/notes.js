@@ -3,17 +3,22 @@ Notes = function(){
 	var previewPanel;
 	var grid;
 	var ds;
+	var preview_id;
 
 
 	return {
 
 		init : function(){
+
+			// initialize state manager, we will use cookies
+			Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+
 			layout = new Ext.BorderLayout(document.body, {
-				south: {
+				east: {
 					split:true,
-					initialSize: 250,
-					minSize: 100,
-					maxSize: 400,
+					initialSize: 300,
+					minSize: 200,
+					maxSize: 500,
 					autoScroll:true,
 					collapsible:true,
 					titlebar: true,
@@ -27,9 +32,14 @@ Notes = function(){
 				}
 			});
 
+
+		
+
 			layout.beginUpdate();
-			previewPanel = new Ext.ContentPanel('no-south', 'Preview');
-			layout.add('south', previewPanel);
+			previewPanel = new Ext.ContentPanel('no-east', {title: NotesLang['note']});
+			layout.add('east', previewPanel);
+
+
 
 
 			Ext.QuickTips.init();
@@ -53,8 +63,10 @@ Notes = function(){
 				]),
 
 				// turn on remote sorting
-				//remoteSort: true
+				remoteSort: true
 			});
+			ds.setDefaultSort('name', 'asc');
+
 
 
 			// the column model has information about grid columns
@@ -67,7 +79,7 @@ Notes = function(){
 				css: 'white-space:normal;'
 			},{
 				header: "Modified at",
-				dataIndex: 'mtime'
+				dataIndex: 'mtime',
 			}]);
 
 			// by default columns are sortable
@@ -83,7 +95,7 @@ Notes = function(){
 			});
 
 			grid.addListener("rowclick", this.rowClicked, this);
-
+			grid.addListener("rowdblclick", this.rowDoubleClicked, this);
 
 
 			// render it
@@ -93,41 +105,41 @@ Notes = function(){
 
 			// add a paging toolbar to the grid's footer
 			var paging = new Ext.PagingToolbar(gridFoot, ds, {
-				pageSize: 10,
+				pageSize: GOsettings['max_rows_list'],
 				displayInfo: true,
 				displayMsg: 'Displaying notes {0} - {1} of {2}',
 				emptyMsg: "No topics to display"
 			});
 
 			// trigger the data store load
-			ds.load({params:{start:0, limit:10}});
+			ds.load({params:{start:0, limit: GOsettings['max_rows_list']}});
 
 
-			var tb = new Ext.Toolbar('toolbar');
+			var tb = new Ext.Toolbar('notestb');
 			tb.add(new Ext.Toolbar.Button({
 				id: 'delete',
-				text: 'Delete',
+				text: GOlang['cmdDelete'],
 				tooltip: {text:'Delete the selected items', title:'Tip Title'},
 				cls: 'x-btn-text-icon',
 				handler: this.onButtonClick
-				})
+			})
 			);
-			
+
 			tb.add(new Ext.Toolbar.Button({
 				id: 'add',
-				text: 'Add',
+				text: GOlang['cmdAdd'],
 				tooltip: {text:'Add a new note', title:'Tip Title'},
 				cls: 'x-btn-text-icon',
 				handler: this.onButtonClick
-				})
+			})
 			);
 
 
 
 
-			layout.add('center', new Ext.GridPanel(grid, {title: 'Notes', toolbar: tb}));
+			layout.add('center', new Ext.GridPanel(grid, {title: NotesLang['notes'], toolbar: tb}));
 
-			layout.getRegion('south').collapse();
+			layout.getRegion('east').collapse();
 			layout.endUpdate();
 		},
 
@@ -135,8 +147,11 @@ Notes = function(){
 			switch(btn.id)
 			{
 				case 'delete':
-					var selectedRows = grid.selModel.selections.keys;
-									
+				var selectedRows = grid.selModel.selections.keys;
+
+				if(selectedRows.length)
+				{
+
 					var conn = new Ext.data.Connection();
 					conn.request({
 						url: 'action.php',
@@ -144,40 +159,82 @@ Notes = function(){
 						callback: Notes.handleDeleteResponse,
 						scope: Notes
 					});
+				}
 				break;
-				
+
 				case 'add':
-					document.location='note.php?return_to='+document.location;
+				document.location='note.php?return_to='+document.location;
+				break;
+
+				case 'save':
+				var frm = new Ext.BasicForm(Ext.get('note_form'), {});
+				var bSuccessful = false;
+
+				frm.submit({
+					url:'./action.php',
+
+					success:function(form, action){
+						alert('Succes');
+					},
+
+					failure: function(form, action) {
+						Ext.MessageBox.alert('Failed', 'Search Failed');
+					}
+				});
 				break;
 			}
 		},
-		
+
 		handleDeleteResponse : function(options, success, response)
 		{
-	
+
 			if(!success)
 			{
-				alert('Failed to delete the items');
+				alert('Failed to connect to the server!');
 			}else
 			{
-				//alert(response['responseText']);
+				var GOresponse=Ext.util.JSON.decode(response['responseText']);
+
+				if(GOresponse['success']!='true')
+				{
+					alert(GOresponse['message']);
+				}
+
+				var east = layout.getRegion('east');
+				east.collapse();
+
 				ds.reload();
 			}
 		},
 
 		rowClicked : function(grid, rowClicked, e) {
+			
+			
+			var selectionModel = grid.getSelectionModel();
+			var record = selectionModel.getSelected();
+			
+			if(preview_id!=record.data['id'])
+			{
+	
+				var east = layout.getRegion('east');
+	
+				previewPanel.load({url: 'viewnote.php?note_id='+record.data['id'], callback: east.expand()});
+				preview_id=record.data['id'];
+			}
+
+		},
+		
+		rowDoubleClicked : function(grid, rowClicked, e) {
 			var selectionModel = grid.getSelectionModel();
 			var record = selectionModel.getSelected();
 
-			var south = layout.getRegion('south');
-
-			previewPanel.load({url: 'note.php?note_id='+record.data['id'], callback: south.expand()});
+			var east = layout.getRegion('east');
 			
+			document.location='note.php?note_id='+record.data['id']+'&return_to='+escape(document.location);
 
-
-			
 		}
 	};
 
 }();
 Ext.EventManager.onDocumentReady(Notes.init, Notes, true);
+
