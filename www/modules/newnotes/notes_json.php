@@ -23,7 +23,7 @@ $count = $notes->get_notes($GO_SECURITY->user_id,false,'name','ASC', $_REQUEST['
 $records=array();
 while($notes->next_record())
 {
-	$records[]=array('name'=>$notes->f('name'), 'mtime'=>$notes->f('mtime'));
+	$records[]=array('id'=>$notes->f('id'),'name'=>$notes->f('name'), 'mtime'=>$notes->f('mtime'));
 }
 
 echo '({"total":"'.$count.'","results":'.json_encode($records).'})'; 
