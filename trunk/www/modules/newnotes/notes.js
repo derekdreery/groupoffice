@@ -1,9 +1,9 @@
 Notes = function(){
 	var layout;
-	var mainPanel;
-	var navPanel;
-	var innerLayout;
-	var mainmenutb;
+	var previewPanel;
+	var grid;
+	var ds;
+
 
 	return {
 
@@ -14,11 +14,10 @@ Notes = function(){
 					initialSize: 250,
 					minSize: 100,
 					maxSize: 400,
-					autoScroll:false,
+					autoScroll:true,
 					collapsible:true,
 					titlebar: true,
-					animate: true,
-					cmargins: {top:2,bottom:0,right:0,left:0}
+					animate: true
 				},
 				center: {
 
@@ -29,15 +28,15 @@ Notes = function(){
 			});
 
 			layout.beginUpdate();
-			layout.add('south', new Ext.ContentPanel('no-south', 'Preview'));
-			layout.add('center', new Ext.ContentPanel('no-center', 'Notes'));
-			layout.endUpdate();
+			previewPanel = new Ext.ContentPanel('no-south', 'Preview');
+			layout.add('south', previewPanel);
+
 
 			Ext.QuickTips.init();
 
 
 
-			var ds = new Ext.data.Store({
+			ds = new Ext.data.Store({
 
 				proxy: new Ext.data.HttpProxy({
 					url: 'notes_json.php'
@@ -48,8 +47,9 @@ Notes = function(){
 					totalProperty: 'total',
 					id: 'id'
 				}, [
+				{name: 'id', mapping: 'id'},
 				{name: 'name', mapping: 'name'},
-				{name: 'mtime', mapping: 'Modified at'}
+				{name: 'mtime', mapping: 'mtime'}
 				]),
 
 				// turn on remote sorting
@@ -74,13 +74,16 @@ Notes = function(){
 			cm.defaultSortable = true;
 
 			// create the editor grid
-			var grid = new Ext.grid.Grid('notes-grid', {
+			grid = new Ext.grid.Grid('no-center', {
 				ds: ds,
 				cm: cm,
-				selModel: new Ext.grid.RowSelectionModel({singleSelect:true}),
+				selModel: new Ext.grid.RowSelectionModel(),
 				enableColLock:false,
 				loadMask: true
 			});
+
+			grid.addListener("rowclick", this.rowClicked, this);
+
 
 
 			// render it
@@ -98,20 +101,81 @@ Notes = function(){
 
 			// trigger the data store load
 			ds.load({params:{start:0, limit:10}});
+
+
+			var tb = new Ext.Toolbar('toolbar');
+			tb.add(new Ext.Toolbar.Button({
+				id: 'delete',
+				text: 'Delete',
+				tooltip: {text:'Delete the selected items', title:'Tip Title'},
+				cls: 'x-btn-text-icon',
+				handler: this.onButtonClick
+				})
+			);
+			
+			tb.add(new Ext.Toolbar.Button({
+				id: 'add',
+				text: 'Add',
+				tooltip: {text:'Add a new note', title:'Tip Title'},
+				cls: 'x-btn-text-icon',
+				handler: this.onButtonClick
+				})
+			);
+
+
+
+
+			layout.add('center', new Ext.GridPanel(grid, {title: 'Notes', toolbar: tb}));
+
+			layout.getRegion('south').collapse();
+			layout.endUpdate();
 		},
 
-		setCenterUrl : function(url){
-			mainPanel.load({
-				url: url});
+		onButtonClick : function(btn){
+			switch(btn.id)
+			{
+				case 'delete':
+					var selectedRows = grid.selModel.selections.keys;
+									
+					var conn = new Ext.data.Connection();
+					conn.request({
+						url: 'action.php',
+						params: {task: 'delete', selectedRows: Ext.encode(selectedRows)},
+						callback: Notes.handleDeleteResponse,
+						scope: Notes
+					});
+				break;
+				
+				case 'add':
+					document.location='note.php?return_to='+document.location;
+				break;
+			}
+		},
+		
+		handleDeleteResponse : function(options, success, response)
+		{
+	
+			if(!success)
+			{
+				alert('Failed to delete the items');
+			}else
+			{
+				//alert(response['responseText']);
+				ds.reload();
+			}
 		},
 
-		setNavUrl : function(url){
-			navPanel.load({
-				url: url});
-		},
+		rowClicked : function(grid, rowClicked, e) {
+			var selectionModel = grid.getSelectionModel();
+			var record = selectionModel.getSelected();
 
-		getNavPanel : function(){
-			return navPanel;
+			var south = layout.getRegion('south');
+
+			previewPanel.load({url: 'note.php?note_id='+record.data['id'], callback: south.expand()});
+			
+
+
+			
 		}
 	};
 

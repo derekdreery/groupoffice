@@ -71,12 +71,17 @@ $southdiv->set_attribute('id','no-south');
 
 $centerdiv = new html_element('div');
 $centerdiv->set_attribute('id','no-center');
+$centerdiv->set_attribute('style', 'width:100%;height:100%');
+
+$toolbar = new html_element('div');
+$toolbar->set_attribute('id','toolbar');
+$containerdiv->add_html_element($toolbar);
 
 $notesdiv = new html_element('div');
 $notesdiv->set_attribute('id', 'notes-grid');
 $notesdiv->set_attribute('style', 'width:100%;height:100%');
 
-$centerdiv->add_html_element($notesdiv);
+//$centerdiv->add_html_element($notesdiv);
 
 
 
