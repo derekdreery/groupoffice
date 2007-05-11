@@ -50,8 +50,24 @@ $head->add_html_element($script);
 
 $script = new html_element('script');
 $script->set_attribute('type','text/javascript');
-$script->set_attribute('src',$GO_CONFIG->host.'ext/ext-all.js');
+$script->set_attribute('src',$GO_CONFIG->host.'ext/ext-all-debug.js');
 $head->add_html_element($script);
+
+$script = new html_element('script');
+$script->set_attribute('type','text/javascript');
+$script->set_attribute('src',$GO_CONFIG->host.'go_settings.php');
+$head->add_html_element($script);
+
+$script = new html_element('script');
+$script->set_attribute('type','text/javascript');
+$script->set_attribute('src',$jslang);
+$head->add_html_element($script);
+
+$script = new html_element('script');
+$script->set_attribute('type','text/javascript');
+$script->set_attribute('src',$no_js_lang);
+$head->add_html_element($script);
+
 
 $script = new html_element('script');
 $script->set_attribute('type','text/javascript');
@@ -63,19 +79,24 @@ $head->add_html_element($script);
 
 
 $containerdiv = new html_element('div');
-$containerdiv->set_attribute('id','sum-container');
+$containerdiv->set_attribute('id','container');
 
-$southdiv = new html_element('div');
-$southdiv->set_attribute('id','no-south');
-
+$eastdiv = new html_element('div');
+$eastdiv->set_attribute('id','no-east');
+//$eastdiv->set_attribute('style', 'padding:5px;');
 
 $centerdiv = new html_element('div');
 $centerdiv->set_attribute('id','no-center');
 $centerdiv->set_attribute('style', 'width:100%;height:100%');
 
 $toolbar = new html_element('div');
-$toolbar->set_attribute('id','toolbar');
+$toolbar->set_attribute('id','notestb');
 $containerdiv->add_html_element($toolbar);
+
+$toolbar = new html_element('div');
+$toolbar->set_attribute('id','notetb');
+$eastdiv->add_html_element($toolbar);
+
 
 $notesdiv = new html_element('div');
 $notesdiv->set_attribute('id', 'notes-grid');
@@ -87,7 +108,7 @@ $notesdiv->set_attribute('style', 'width:100%;height:100%');
 
 $containerdiv->add_html_element($centerdiv);
 
-$containerdiv->add_html_element($southdiv);
+$containerdiv->add_html_element($eastdiv);
 
 //echo $containerdiv->get_html();
 $body->add_html_element($containerdiv);

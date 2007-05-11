@@ -381,3 +381,5 @@ $strAddressAndNo='Address / No.';
 $strWorkAddressAndNo='Workaddress / No.';
 
 $config_help_url='http://docs.group-office.com/index.php?folder_id=49&file_id=202';
+
+$jslang=$GO_CONFIG->host.'language/common/en.js';

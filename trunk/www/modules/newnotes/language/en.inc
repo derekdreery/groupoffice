@@ -2,6 +2,8 @@
 //Uncomment this line in new translations!
 //require_once($GO_LANGUAGE->get_fallback_language_file('notes'));
 
+$no_js_lang = $GO_MODULES->modules['newnotes']['url'].'language/en.js';
+
 $no_notes_count_single = 'note';
 $no_notes_count = 'notes';
 $no_catagory = 'Category';

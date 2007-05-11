@@ -8,6 +8,8 @@ GroupOffice = function(){
 	return {
 
 		init : function(){
+			Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+			
 			layout = new Ext.BorderLayout(document.body, {
 				north: {
 					split:false,
