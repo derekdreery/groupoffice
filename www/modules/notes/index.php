@@ -24,24 +24,102 @@ $link_back = (isset($_REQUEST['link_back']) && $_REQUEST['link_back'] != '') ? h
 require_once($GO_MODULES->class_path."notes.class.inc");
 $notes = new notes();
 
-require_once($GO_MODULES->modules['notes']['class_path'].'notes_list.class.inc');
-$nl = new notes_list('notes_list', $GO_SECURITY->user_id, false, true, 'notes_form', $GO_MODULES->modules['notes']['url']);
+//require_once($GO_MODULES->modules['notes']['class_path'].'notes_list.class.inc');
+//$nl = new notes_list('notes_list', $GO_SECURITY->user_id, false, true, 'notes_form', $GO_MODULES->modules['notes']['url']);
 
-$GO_HEADER['head'] = $nl->get_header();
-require_once($GO_THEME->theme_path."header.inc");
-
+require($GO_THEME->theme_path.'page_header.inc');
 
 
-$form = new form('notes_form');
 
-$menu = new button_menu();
-$menu->add_button('notes', $cmdAdd, $GO_MODULES->modules['notes']['url'].'note.php');
-$menu->add_button('delete_big', $cmdDelete, $nl->get_delete_handler());
-//$menu->add_button('delete_big', $cmdDelete, "javascript:alert('  test' );"  );
+$link = new html_element('link');
+$link->set_attribute('rel','stylesheet');
+$link->set_attribute('type','text/css');
+$link->set_attribute('href',$GO_CONFIG->host.'ext/resources/css/ext-all.css');
+$head->add_html_element($link);
 
-$form->add_html_element($menu);
+$script = new html_element('script');
+$script->set_attribute('type','text/javascript');
+$script->set_attribute('src',$GO_CONFIG->host.'imagesjs.php');
+$head->add_html_element($script);
 
-$form->add_html_element($nl);
 
-echo $form->get_html();
-require_once($GO_THEME->theme_path."footer.inc");
+$script = new html_element('script');
+$script->set_attribute('type','text/javascript');
+$script->set_attribute('src',$GO_CONFIG->host.'ext/adapter/yui/yui-utilities.js');
+$head->add_html_element($script);
+
+$script = new html_element('script');
+$script->set_attribute('type','text/javascript');
+$script->set_attribute('src',$GO_CONFIG->host.'ext/adapter/yui/ext-yui-adapter.js');
+$head->add_html_element($script);
+
+$script = new html_element('script');
+$script->set_attribute('type','text/javascript');
+$script->set_attribute('src',$GO_CONFIG->host.'ext/ext-all-debug.js');
+$head->add_html_element($script);
+
+$script = new html_element('script');
+$script->set_attribute('type','text/javascript');
+$script->set_attribute('src',$GO_CONFIG->host.'go_settings.php');
+$head->add_html_element($script);
+
+$script = new html_element('script');
+$script->set_attribute('type','text/javascript');
+$script->set_attribute('src',$jslang);
+$head->add_html_element($script);
+
+$script = new html_element('script');
+$script->set_attribute('type','text/javascript');
+$script->set_attribute('src',$no_js_lang);
+$head->add_html_element($script);
+
+
+$script = new html_element('script');
+$script->set_attribute('type','text/javascript');
+$script->set_attribute('src','notes.js');
+$head->add_html_element($script);
+
+
+
+
+
+$containerdiv = new html_element('div');
+$containerdiv->set_attribute('id','container');
+
+$eastdiv = new html_element('div');
+$eastdiv->set_attribute('id','no-east');
+//$eastdiv->set_attribute('style', 'padding:5px;');
+
+$centerdiv = new html_element('div');
+$centerdiv->set_attribute('id','no-center');
+$centerdiv->set_attribute('style', 'width:100%;height:100%');
+
+$toolbar = new html_element('div');
+$toolbar->set_attribute('id','notestb');
+$containerdiv->add_html_element($toolbar);
+
+$toolbar = new html_element('div');
+$toolbar->set_attribute('id','notetb');
+$eastdiv->add_html_element($toolbar);
+
+
+$notesdiv = new html_element('div');
+$notesdiv->set_attribute('id', 'notes-grid');
+$notesdiv->set_attribute('style', 'width:100%;height:100%');
+
+//$centerdiv->add_html_element($notesdiv);
+
+
+
+$containerdiv->add_html_element($centerdiv);
+
+$containerdiv->add_html_element($eastdiv);
+
+//echo $containerdiv->get_html();
+$body->add_html_element($containerdiv);
+
+
+
+
+
+require($GO_THEME->theme_path.'page_footer.inc');
