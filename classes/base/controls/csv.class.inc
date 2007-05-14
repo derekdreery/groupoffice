@@ -29,6 +29,7 @@ class csv
 	var $delimiter;
 	var $encapsulator;
 	var $csv;
+
 	
 	function csv($delimiter=',', $encapsulator='"')
 	{
@@ -45,5 +46,26 @@ class csv
 	function get_csv()
 	{
 		return $this->csv;
+	}
+	
+	
+	function import_table($table)
+	{
+		foreach($table->rows as $row)
+		{
+			$record = array();
+			foreach($row->cells as $cell)
+			{				
+				$record[]=strip_tags(str_replace('<br />',' ',$cell->innerHTML));
+				if(isset($cell->attributes['colspan']))
+				{
+					for($i=1;$i<$cell->attributes['colspan'];$i++)
+					{
+						$record[]='';
+					}
+				}				
+			}
+			$this->add_record($record);
+		}
 	}
 }
