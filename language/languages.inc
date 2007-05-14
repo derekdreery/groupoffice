@@ -259,3 +259,9 @@ $languages['tr']['description'] = 'Turkish';
 $languages['tr']['language_file'] = 'tr';
 $languages['tr']['timezone'] = 1;
 $languages['tr']['DST'] = 1;
+
+$languages['si'] = $europe_default;
+$languages['si']['description'] = 'Slovenian';
+$languages['si']['language_file'] = 'si';
+$languages['si']['timezone'] = 1;
+$languages['si']['DST'] = 1;
