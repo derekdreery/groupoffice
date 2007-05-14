@@ -27,7 +27,7 @@ $notes = new notes();
 //require_once($GO_MODULES->modules['notes']['class_path'].'notes_list.class.inc');
 //$nl = new notes_list('notes_list', $GO_SECURITY->user_id, false, true, 'notes_form', $GO_MODULES->modules['notes']['url']);
 
-require($GO_THEME->theme_path.'header2.inc');
+require($GO_THEME->theme_path.'page_header.inc');
 
 
 
@@ -117,4 +117,4 @@ $body->add_html_element($containerdiv);
 
 
 
-require($GO_THEME->theme_path.'footer2.inc');
+require($GO_THEME->theme_path.'page_footer.inc');

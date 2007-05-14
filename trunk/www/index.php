@@ -63,11 +63,11 @@ if ($GO_SECURITY->logged_in())
 
 	if (isset($_REQUEST['return_to']))
 	{
-		$link = $_REQUEST['return_to'];
+		$start_url = $_REQUEST['return_to'];
 		
 		if($load_frames=='false')
 		{
-			header('Location: '.$link);
+			header('Location: '.$start_url);
 			exit();
 		}
 		
@@ -76,10 +76,10 @@ if ($GO_SECURITY->logged_in())
 	$GO_SECURITY->has_permission($GO_SECURITY->user_id,
 	$start_module['acl_write'])))
 	{
-		$link = $start_module['url'];
+		$start_url = $start_module['url'];
 	}else
 	{
-		$link = $GO_CONFIG->host.'configuration/';
+		$start_url = $GO_CONFIG->host.'configuration/';
 	}
 	require_once($GO_THEME->theme_path."frames.inc");
 	exit();
@@ -160,19 +160,19 @@ if ( $_SERVER['REQUEST_METHOD'] == "POST" || (isset($_COOKIE['GO_UN'])
 
 					if (isset($_REQUEST['return_to']))
 					{
-						$link = $_REQUEST['return_to'];
+						$start_url = $_REQUEST['return_to'];
 						if($load_frames=='false')
 						{
-							header('Location: '.$link);
+							header('Location: '.$start_url);
 							exit();
 						}
 						
 					} elseif ($start_module)
 					{
-						$link = $start_module['url'];
+						$start_url = $start_module['url'];
 					} else
 					{
-						$link = $GO_CONFIG->host.'configuration/index.php?account=look.inc';
+						$start_url = $GO_CONFIG->host.'configuration/index.php?account=look.inc';
 					}
 					//redefine theme
 					$GO_THEME = new GO_THEME();
