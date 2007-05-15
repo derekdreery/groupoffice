@@ -145,9 +145,6 @@ $westdiv->add_html_element($southwestdiv);
 $northdiv = new html_element('div');
 $northdiv->set_attribute('id','north');
 
-$form = new form('search_form','post',$GO_CONFIG->control_url.'/select/global_select.php');
-$form->set_attribute('target','main');
-
 
 $table = new table();
 //$table->set_attribute('style','width:100%');
@@ -173,8 +170,10 @@ $cell = new table_cell();
 $cell->set_attribute('style', 'text-align:right;width:15%');
 
 $input = new input('text','query',$cmdSearch.'...');
+$input->set_attribute('id','query');
 $input->set_attribute('onfocus',"javascript:this.value='';");
 $input->set_attribute('onblur',"javascript:document.search_form.reset();");
+$input->set_attribute('onkeypress',"return search(event);");
 
 $img = new image('search');
 $img->set_attribute('style','border:0px;margin-left:10px;margin-right:3px;');
@@ -188,7 +187,7 @@ $img->set_attribute('style','border:0px;margin-right:3px;');
 $img->set_attribute('align','absmiddle');
 
 $link = new hyperlink($GO_CONFIG->host.'configuration/',$img->get_html().$menu_configuration);
-$link->set_attribute('target','main');
+$link->set_attribute('target','mainframe');
 
 $cell->add_html_element($link);
 
@@ -213,9 +212,9 @@ $cell->add_html_element($link);
 $row->add_cell($cell);
 $table->add_row($row);
 
-$form->add_html_element($table);
 
-$northdiv->add_html_element($form);
+
+$northdiv->add_html_element($table);
 
 
 $centerdiv = new html_element('div');
@@ -230,9 +229,13 @@ $iframe->set_attribute('style', 'width:100%;height:100%');
 
 $centerdiv->add_html_element($iframe);
 
+$eastdiv = new html_element('div');
+$eastdiv->set_attribute('id','east');
+
 
 $containerdiv->add_html_element($northdiv);
 $containerdiv->add_html_element($westdiv);
+$containerdiv->add_html_element($eastdiv);
 $containerdiv->add_html_element($centerdiv);
 
 /*
@@ -244,6 +247,30 @@ $propsdiv->set_attribute('style','width:200px;height:200px;overflow:hidden;');
 
 $body->add_html_element($containerdiv);
 
+$body->innerHTML .= '
+<script type="text/javascript">
 
+function search(e)
+{
+	var keynum;	
+	var input;
+	input = Ext.get("query");
+	
+	if(window.event) // IE
+	{
+		keynum = e.keyCode
+	}else if(e.which) // Netscape/Firefox/Opera
+	{
+		keynum = e.which
+	}
+	
+	if(keynum==13)
+	{
+		GroupOffice.search(input.value);
+	}
+	return true;
+}
+
+</script>';
 
 require($GO_THEME->theme_path.'page_footer.inc');

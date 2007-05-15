@@ -80,7 +80,7 @@ class select_link
 	{
 		global $GO_THEME, $GO_CONFIG;
 		
-		$img = new image('addressbook_small');
+		$img = new image('search');
 		$img->set_attribute('style','border:0px;margin-right: 5px;');
 		$img->set_attribute('align','absmiddle');
 		

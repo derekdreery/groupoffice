@@ -19,10 +19,10 @@ Notes = function(){
 					initialSize: 300,
 					minSize: 200,
 					maxSize: 500,
-					autoScroll:true,
-					collapsible:true,
+					autoScroll:false,
+					collapsible:false,
 					titlebar: true,
-					animate: true
+					animate: false
 				},
 				center: {
 
@@ -79,7 +79,7 @@ Notes = function(){
 				css: 'white-space:normal;'
 			},{
 				header: "Modified at",
-				dataIndex: 'mtime',
+				dataIndex: 'mtime'
 			}]);
 
 			// by default columns are sortable
@@ -141,7 +141,7 @@ Notes = function(){
 
 			layout.add('center', new Ext.GridPanel(grid, {title: NotesLang['notes'], toolbar: tb}));
 
-			layout.getRegion('east').collapse();
+			//layout.getRegion('east').collapse();
 			layout.endUpdate();
 		},
 
@@ -202,8 +202,8 @@ Notes = function(){
 					alert(GOresponse['message']);
 				}
 
-				var east = layout.getRegion('east');
-				east.collapse();
+				//var east = layout.getRegion('east');
+				//east.collapse();
 
 				ds.reload();
 			}
