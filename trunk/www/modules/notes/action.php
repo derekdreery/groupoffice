@@ -13,7 +13,7 @@
 
 require_once("../../Group-Office.php");
 $GO_SECURITY->authenticate();
-$GO_MODULES->authenticate('newnotes');
+$GO_MODULES->authenticate('notes');
 
 //load contact management class
 require_once($GO_MODULES->class_path."notes.class.inc");

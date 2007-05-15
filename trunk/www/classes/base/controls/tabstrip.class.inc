@@ -162,7 +162,7 @@ class tabstrip extends table
 
 			if($this->return_to != '')
 			{
-				$close_image = new image('close_small');
+				$close_image = new image('close');
 				$close_image->set_attribute('style','border:0px;');
 
 				$hyperlink = new hyperlink($this->return_to, $close_image->get_html());

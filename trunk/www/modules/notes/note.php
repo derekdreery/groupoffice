@@ -179,7 +179,7 @@ if($note_id>0)
 		$links_list->get_unlink_handler());
 
 		$menu->add_button(
-		'delete_big',
+		'delete',
 		$cmdDelete,
 		$links_list->get_delete_handler());
 	}

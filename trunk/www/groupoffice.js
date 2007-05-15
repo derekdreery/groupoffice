@@ -25,6 +25,16 @@ GroupOffice = function(){
 					collapsible: true,
 					animate: true
 				},
+				east: {
+					split:true,
+					initialSize: 200,
+					minSize: 175,
+					maxSize: 400,
+					titlebar: true,
+					collapsible: true,
+					closable: true,
+					animate: true
+				},
 				center: {
 					titlebar: false,
 					autoScroll:true,
@@ -33,7 +43,8 @@ GroupOffice = function(){
 			});
 
 			layout.beginUpdate();
-			layout.add('north', new Ext.ContentPanel('north', 'North'));
+			layout.add('north', new Ext.ContentPanel('north'));
+			layout.add('east', new Ext.ContentPanel('east'));
 
 			innerLayout = new Ext.BorderLayout('west', {
 				south: {
@@ -59,6 +70,8 @@ GroupOffice = function(){
 			navPanel = new Ext.ContentPanel('northwest');
 			
 			innerLayout.add('center', navPanel);
+			
+			
 
 			// restore innerLayout state
 			//innerLayout.restoreState();
@@ -68,7 +81,8 @@ GroupOffice = function(){
 
 			layout.add('center', mainPanel);
 
-
+			layout.getRegion('east').hide();
+			
 			layout.endUpdate();
 			
 			Ext.QuickTips.init();
@@ -88,7 +102,14 @@ GroupOffice = function(){
 		
 		getNavPanel : function(){
 			return navPanel;
-		}	
+		},
+		
+		search : function(query){
+			var east = layout.getRegion('east');
+			east.show();
+			east.getPanel('east').load('controls/select/global_select.php?query='+escape(query));
+			return false;
+		}
 		
 
 	};

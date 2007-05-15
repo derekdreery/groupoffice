@@ -40,6 +40,7 @@ class button_menu extends table
 		}
 		
 		$this->row = new table_row();
+		$this->set_attribute('class','button_menu');
 
 	}
 	
@@ -47,10 +48,11 @@ class button_menu extends table
 	{
 		$image = new image($image_id);		
 		$image->set_attribute('style', 'border:0px;');
-		$hyperlink = new hyperlink($href, $image->get_html().'<br />'.$text);
+		$image->set_attribute('align', 'absmiddle');
+		$hyperlink = new hyperlink($href, $image->get_html().' '.$text);
 		$hyperlink->attributes=array_merge($hyperlink->attributes,$attributes);
 		$cell = new table_cell($hyperlink->get_html());
-		$cell->set_attribute('class', 'ModuleIcons');
+		//$cell->set_attribute('class', 'ModuleIcons');
 		
 		$this->row->add_cell($cell);	
 	}
