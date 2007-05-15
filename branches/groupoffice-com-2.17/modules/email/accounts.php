@@ -13,7 +13,7 @@ option) any later version.
 require_once("../../Group-Office.php");
 
 $GO_SECURITY->authenticate();
-$GO_MODULES->authenticate('email',true);
+$GO_MODULES->authenticate('email');
 
 load_basic_controls();
 load_control('datatable');
@@ -65,8 +65,12 @@ $form->add_html_element(new input('hidden', 'delete_account_id'));
 
 $menu = new button_menu();
 
-$menu->add_button('account', $ml_new_account, 'account.php?return_to='.urlencode($link_back));
-$menu->add_button('delete_big', $strDeleteItem, $datatable->get_delete_handler());
+
+if($GO_MODULES->write_permission)
+{
+	$menu->add_button('account', $ml_new_account, 'account.php?return_to='.urlencode($link_back));
+	$menu->add_button('delete_big', $strDeleteItem, $datatable->get_delete_handler());
+}
 $menu->add_button('em_refresh', $ml_set_default, 'javascript:document.forms[\''.$datatable->form_name.'\'].elements[\''.$datatable->attributes['id'].'[task]'.'\'].value=\'set_default\'; document.forms[\''.$datatable->form_name.'\'].submit();');
 
 $menu->add_button('close', $cmdClose, htmlspecialchars($return_to));

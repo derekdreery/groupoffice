@@ -204,13 +204,13 @@ function composer(action,mail_to,subject,body)
 			
 
 						
-			if ($GO_MODULES->write_permission) {
+			//if ($GO_MODULES->write_permission) {
 				echo '<td class="ModuleIcons">';
 				echo '<a href="accounts.php?return_to='.urlencode($link_back).'"><img src="'.$GO_THEME->images['accounts'].'" border="0" /><br />'.$ml_accounts.'</a></td>';
-			} else {
+			/*} else {
 				echo '<td class="ModuleIcons">';
 				echo '<a href="account.php?account_id='.$account['id'].'&return_to='.urlencode($link_back).'"><img src="'.$GO_THEME->images['accounts'].'" border="0" /><br />'.$ml_edit_account.'</a></td>';
-			}		
+			}*/		
 			echo '<td class="ModuleIcons">';
 				echo '<a href="javascript:document.location=\'account.php?account_id=\'+messages.document.forms[0].account_id.value+\'&account_tab=folders&return_to='.urlencode($link_back).'\';"><img src="'.$GO_THEME->images['folders'].'" border="0" /><br />'.$ml_folders.'</a></td>';
 
