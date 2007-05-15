@@ -226,6 +226,12 @@ if($account_id > 0)
 {
 	$account = false;
 }
+
+if(!$account && !$GO_MODULES->write_permission)
+{
+	exit($strAccessDenied);
+}
+
 $tabstrip->add_tab('properties',$strProperties);
 
 	
