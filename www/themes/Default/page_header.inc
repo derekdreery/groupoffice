@@ -22,6 +22,12 @@ $script->set_attribute('src',$GO_CONFIG->host.'javascript/common.js');
 $head->add_html_element($script);
 
 $link = new html_element('link');
+$link->set_attribute('rel','stylesheet');
+$link->set_attribute('type','text/css');
+$link->set_attribute('href',$GO_CONFIG->host.'ext/resources/css/ext-all.css');
+$head->add_html_element($link);
+
+$link = new html_element('link');
 $link->set_attribute('rel','shotcut icon');
 $link->set_attribute('href',$GO_CONFIG->host.'lib/favicon.ico');
 $head->add_html_element($link);
@@ -31,6 +37,39 @@ $link->set_attribute('rel','stylesheet');
 $link->set_attribute('type','text/css');
 $link->set_attribute('href',$GO_THEME->theme_url.'css/common.css');
 $head->add_html_element($link);
+
+
+
+$script = new html_element('script');
+$script->set_attribute('type','text/javascript');
+$script->set_attribute('src',$GO_CONFIG->host.'imagesjs.php');
+$head->add_html_element($script);
+
+
+$script = new html_element('script');
+$script->set_attribute('type','text/javascript');
+$script->set_attribute('src',$GO_CONFIG->host.'ext/adapter/yui/yui-utilities.js');
+$head->add_html_element($script);
+
+$script = new html_element('script');
+$script->set_attribute('type','text/javascript');
+$script->set_attribute('src',$GO_CONFIG->host.'ext/adapter/yui/ext-yui-adapter.js');
+$head->add_html_element($script);
+
+$script = new html_element('script');
+$script->set_attribute('type','text/javascript');
+$script->set_attribute('src',$GO_CONFIG->host.'ext/ext-all-debug.js');
+$head->add_html_element($script);
+
+$script = new html_element('script');
+$script->set_attribute('type','text/javascript');
+$script->set_attribute('src',$GO_CONFIG->host.'go_settings.php');
+$head->add_html_element($script);
+
+$script = new html_element('script');
+$script->set_attribute('type','text/javascript');
+$script->set_attribute('src',$jslang);
+$head->add_html_element($script);
 
 
 

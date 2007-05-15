@@ -13,7 +13,7 @@ Notes = function(){
 			// initialize state manager, we will use cookies
 			Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
 
-			layout = new Ext.BorderLayout(document.body, {
+			layout = new Ext.BorderLayout('container', {
 				east: {
 					split:true,
 					initialSize: 300,
@@ -31,12 +31,49 @@ Notes = function(){
 					closeOnTab: true
 				}
 			});
-
-
-		
-
+			
+			
+			
 			layout.beginUpdate();
-			previewPanel = new Ext.ContentPanel('no-east', {title: NotesLang['note']});
+		    
+		    
+		  
+
+
+			var note_form = new Ext.form.Form({
+			        labelWidth: 75, // label settings here cascade unless overridden
+			        url:'save-form.php'
+		    });
+		    note_form.add(
+		        new Ext.form.TextField({
+		            fieldLabel: 'Name',
+		            name: 'name',
+		            allowBlank:false
+		        }),
+		
+		        new Ext.form.TextArea({
+		            fieldLabel: 'Text',
+		            name: 'content'
+		        })			
+		        
+		    );
+		
+		
+		    
+		    
+		    var notetb = new Ext.Toolbar('notetb');
+			notetb.add(new Ext.Toolbar.Button({
+				id: 'save',
+				icon: GOimages['save'],
+				text: GOlang['cmdSave'],					
+				cls: 'x-btn-text-icon',
+				handler: this.onButtonClick
+			})
+			);
+		
+			note_form.render('noteform');	
+			
+			previewPanel = new Ext.ContentPanel('no-east', {title: NotesLang['note'], toolbar: notetb, fitToFrame:true, reziseEl: 'noteform'});
 			layout.add('east', previewPanel);
 
 
@@ -218,10 +255,9 @@ Notes = function(){
 			if(preview_id!=record.data['id'])
 			{
 	
-				var east = layout.getRegion('east');
-	
-				previewPanel.load({url: 'viewnote.php?note_id='+record.data['id'], callback: east.expand()});
-				preview_id=record.data['id'];
+						
+				
+				
 			}
 
 		},

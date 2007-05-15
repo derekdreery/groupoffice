@@ -1,4 +1,5 @@
 var GOlang = {
 	cmdDelete : 'Delete',
-	cmdAdd : 'Add'
+	cmdAdd : 'Add',
+	cmdSave : 'Save'
 };
