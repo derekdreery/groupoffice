@@ -118,7 +118,7 @@ $dropbox->add_value('',$ml_choose_action.'&nbsp;&nbsp;&nbsp;');
 $email->get_subscribed($id);
 while ($email->next_record())
 {
-  if (!($email->f('attributes')&LATT_NOSELECT))
+  if (!($email->f('attributes')&LATT_NOSELECT) && $email->f('name') != 'INBOX')
   {
     $dropbox->add_value($email->f('name'), str_replace('INBOX'.$email->f('delimiter'), '', $email->f('name')));
   }
