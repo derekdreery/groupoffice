@@ -18,14 +18,20 @@ $GO_MODULES->authenticate('notes');
 require_once($GO_MODULES->class_path."notes.class.inc");
 $notes = new notes();
 
-
-
-$count = $notes->get_notes($GO_SECURITY->user_id,false,$_REQUEST['sort'],$_REQUEST['dir'], $_REQUEST['start'], $_REQUEST['limit']);
-
-$records=array();
-while($notes->next_record())
+if(isset($_REQUEST['note_id']) && $_REQUEST['note_id']>0)
 {
-	$records[]=array('id'=>$notes->f('id'),'name'=>$notes->f('name'), 'mtime'=>get_timestamp($notes->f('mtime')));
-}
+	$note = $notes->get_note(smart_addslashes($_REQUEST['note_id']));
+	
+	echo '({"note":['.json_encode($note).']})';
+}else {
 
-echo '({"total":"'.$count.'","results":'.json_encode($records).'})'; 
+	$count = $notes->get_notes($GO_SECURITY->user_id,false,$_REQUEST['sort'],$_REQUEST['dir'], $_REQUEST['start'], $_REQUEST['limit']);
+	
+	$records=array();
+	while($notes->next_record())
+	{
+		$records[]=array('id'=>$notes->f('id'),'name'=>$notes->f('name'), 'mtime'=>get_timestamp($notes->f('mtime')));
+	}
+	
+	echo '({"total":"'.$count.'","results":'.json_encode($records).'})'; 
+}

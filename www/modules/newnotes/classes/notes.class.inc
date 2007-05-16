@@ -85,7 +85,7 @@ class notes extends db
 	{
 		$sql = "SELECT * FROM no_notes WHERE id='$note_id'";
 		$this->query($sql);
-		if ($this->next_record())
+		if ($this->next_record(MYSQL_ASSOC))
 		{
 			return $this->Record;
 		}

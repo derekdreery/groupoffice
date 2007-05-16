@@ -43,6 +43,7 @@ $head->add_html_element($link);
 $script = new html_element('script');
 $script->set_attribute('type','text/javascript');
 $script->set_attribute('src',$GO_CONFIG->host.'imagesjs.php');
+//$script->set_attribute('src',$GO_THEME->theme_url.'images.js');
 $head->add_html_element($script);
 
 

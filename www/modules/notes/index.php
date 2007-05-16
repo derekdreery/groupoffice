@@ -36,38 +36,39 @@ $script->set_attribute('src','notes.js');
 $head->add_html_element($script);
 
 
-$containerdiv = new html_element('div');
-$containerdiv->set_attribute('id','container');
+
 
 $eastdiv = new html_element('div');
 $eastdiv->set_attribute('id','no-east');
 
 $centerdiv = new html_element('div');
 $centerdiv->set_attribute('id','no-center');
-$centerdiv->set_attribute('style', 'width:100%;height:100%');
 
 $toolbar = new html_element('div');
 $toolbar->set_attribute('id','notestb');
-$containerdiv->add_html_element($toolbar);
+$centerdiv->add_html_element($toolbar);
+
+$notesdiv = new html_element('div');
+$notesdiv->set_attribute('id', 'notes-grid');
+$centerdiv->add_html_element($notesdiv);
 
 $toolbar = new html_element('div');
 $toolbar->set_attribute('id','notetb');
 $eastdiv->add_html_element($toolbar);
 
-$noteform = new html_element('div', 'bladiebla');
+$noteform = new html_element('div');
 $noteform->set_attribute('id','noteform');
+$noteform->set_attribute('style','padding:5px;');
 $eastdiv->add_html_element($noteform);
 
 
-$notesdiv = new html_element('div');
-$notesdiv->set_attribute('id', 'notes-grid');
-$notesdiv->set_attribute('style', 'width:100%;height:100%');
 
 
-$containerdiv->add_html_element($centerdiv);
-$containerdiv->add_html_element($eastdiv);
 
-$body->add_html_element($containerdiv);
+$body->add_html_element($centerdiv);
+$body->add_html_element($eastdiv);
+
+$body->add_html_element($body);
 
 
 

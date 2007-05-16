@@ -3,7 +3,9 @@ Notes = function(){
 	var previewPanel;
 	var grid;
 	var ds;
-	var preview_id;
+	var note_id;
+	var note_form;
+	var save_button;
 
 
 	return {
@@ -13,13 +15,11 @@ Notes = function(){
 			// initialize state manager, we will use cookies
 			Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
 
-			layout = new Ext.BorderLayout('container', {
+			layout = new Ext.BorderLayout(document.body, {
 				east: {
 					split:true,
-					initialSize: 300,
-					minSize: 200,
-					maxSize: 500,
-					autoScroll:false,
+					initialSize: 400,
+					autoScroll:true,
 					collapsible:false,
 					titlebar: true,
 					animate: false
@@ -40,38 +40,49 @@ Notes = function(){
 		  
 
 
-			var note_form = new Ext.form.Form({
+			note_form = new Ext.form.Form({
 			        labelWidth: 75, // label settings here cascade unless overridden
-			        url:'save-form.php'
+			        url:'save-form.php',
+			        
+			        reader: new Ext.data.JsonReader({
+						root: 'note',
+						id: 'id'
+						}, [
+						{name: 'name', mapping: 'name'},
+						{name: 'content', mapping: 'content'}						
+						])
 		    });
 		    note_form.add(
 		        new Ext.form.TextField({
 		            fieldLabel: 'Name',
 		            name: 'name',
-		            allowBlank:false
+		            allowBlank:false,
+		            style:'width:100%'
 		        }),
 		
 		        new Ext.form.TextArea({
 		            fieldLabel: 'Text',
-		            name: 'content'
+		            name: 'content',
+		            style:'width:100%;height:400px'
 		        })			
 		        
 		    );
 		
-		
+			note_form.render('noteform');	
 		    
 		    
 		    var notetb = new Ext.Toolbar('notetb');
-			notetb.add(new Ext.Toolbar.Button({
+		    
+		    save_button =notetb.addButton({
 				id: 'save',
 				icon: GOimages['save'],
 				text: GOlang['cmdSave'],					
 				cls: 'x-btn-text-icon',
 				handler: this.onButtonClick
-			})
+			}
 			);
-		
-			note_form.render('noteform');	
+			//save_button.disable();
+			
 			
 			previewPanel = new Ext.ContentPanel('no-east', {title: NotesLang['note'], toolbar: notetb, fitToFrame:true, reziseEl: 'noteform'});
 			layout.add('east', previewPanel);
@@ -123,7 +134,7 @@ Notes = function(){
 			cm.defaultSortable = true;
 
 			// create the editor grid
-			grid = new Ext.grid.Grid('no-center', {
+			grid = new Ext.grid.Grid('notes-grid', {
 				ds: ds,
 				cm: cm,
 				selModel: new Ext.grid.RowSelectionModel(),
@@ -132,7 +143,7 @@ Notes = function(){
 			});
 
 			grid.addListener("rowclick", this.rowClicked, this);
-			grid.addListener("rowdblclick", this.rowDoubleClicked, this);
+			//grid.addListener("rowdblclick", this.rowDoubleClicked, this);
 
 
 			// render it
@@ -177,6 +188,9 @@ Notes = function(){
 
 
 			layout.add('center', new Ext.GridPanel(grid, {title: NotesLang['notes'], toolbar: tb}));
+			//layout.add('center', new Ext.ContentPanel('no-center', {title: NotesLang['notes'], toolbar: tb}));
+			
+			this.toggleForm(false);
 
 			//layout.getRegion('east').collapse();
 			layout.endUpdate();
@@ -195,55 +209,87 @@ Notes = function(){
 					conn.request({
 						url: 'action.php',
 						params: {task: 'delete', selectedRows: Ext.encode(selectedRows)},
-						callback: Notes.handleDeleteResponse,
+						callback: function(options, success, response)
+						{
+							if(!success)
+							{
+								Ext.MessageBox.alert('Failed', response.result.errors);
+							}else
+							{
+								note_form.load('notes_json.php?note_id=0');
+								ds.reload();
+							}
+						},
 						scope: Notes
 					});
 				}
 				break;
 
 				case 'add':
-				document.location='note.php?return_to='+document.location;
+				var conn = new Ext.data.Connection();
+				conn.request({
+					url: 'action.php',
+					params: {task: 'add'},
+					callback: function(options, success, response)
+					{
+						if(!success)
+						{
+							Ext.MessageBox.alert('Failed', response.result.errors);
+						}else
+						{
+							var reponseParams = Ext.util.JSON.decode(response.responseText);
+							note_form.load({url : 'notes_json.php?note_id='+reponseParams['note_id']});
+							note_id=reponseParams['note_id'];
+							note_form.findField('name').focus(true);
+							this.toggleForm(true);
+							ds.reload();
+						}
+					},
+					scope: Notes
+				});
 				break;
 
 				case 'save':
-				var frm = new Ext.BasicForm(Ext.get('note_form'), {});
-				var bSuccessful = false;
 
-				frm.submit({
+				note_form.submit({
 					url:'./action.php',
+					params: {'task' : 'save','note_id' : note_id},
 
 					success:function(form, action){
-						alert('Succes');
+						//reload grid
+						ds.reload();
 					},
 
 					failure: function(form, action) {
-						Ext.MessageBox.alert('Failed', 'Search Failed');
+						Ext.MessageBox.alert('Failed', action.result.errors);
 					}
 				});
 				break;
 			}
 		},
-
-		handleDeleteResponse : function(options, success, response)
+		
+		toggleForm : function(enabled)
 		{
-
-			if(!success)
+			if(enabled)
 			{
-				alert('Failed to connect to the server!');
+				save_button.enable();
 			}else
 			{
-				var GOresponse=Ext.util.JSON.decode(response['responseText']);
-
-				if(GOresponse['success']!='true')
-				{
-					alert(GOresponse['message']);
-				}
-
-				//var east = layout.getRegion('east');
-				//east.collapse();
-
-				ds.reload();
+				save_button.disable();
 			}
+
+			if(enabled)
+			{
+				note_form.findField('name').enable();
+				note_form.findField('content').enable();
+			}else
+			{
+				note_form.findField('name').disable();
+				note_form.findField('name').setRawValue('');
+				note_form.findField('content').disable();
+				note_form.findField('content').setRawValue('');
+			}
+			
 		},
 
 		rowClicked : function(grid, rowClicked, e) {
@@ -252,12 +298,11 @@ Notes = function(){
 			var selectionModel = grid.getSelectionModel();
 			var record = selectionModel.getSelected();
 			
-			if(preview_id!=record.data['id'])
-			{
-	
-						
-				
-				
+			if(note_id!=record.data['id'])
+			{		
+				note_id=record.data['id'];	
+				note_form.load({url: 'notes_json.php?note_id='+record.data['id'], waitMsg:'Loading...'});
+				this.toggleForm(true);
 			}
 
 		},
