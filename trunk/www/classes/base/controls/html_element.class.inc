@@ -84,13 +84,13 @@ class html_element
 				$this->outerHTML .= ' '.$name.'="'.htmlspecialchars($value).'"';
 			}
 			
-			if($this->innerHTML == '' && $this->tagname!='script' && $this->tagname!='meta' && $this->tagname!='link' && $this->tagname!='iframe')
+			/*if($this->innerHTML == '' && $this->tagname!='script' && $this->tagname!='meta' && $this->tagname!='link' && $this->tagname!='iframe')
 			{
 				$this->outerHTML .= ' />';
 			}else
-			{
+			{*/
 				$this->outerHTML .= '>'.$this->innerHTML.'</'.$this->tagname.'>'.$this->lb;
-			}
+			//}
 		}
 		return $this->outerHTML;
 	}

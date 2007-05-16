@@ -160,6 +160,7 @@ $iframe->set_attribute('style','height:20px;width:100%;border:0;');
 $iframe->set_attribute('frameborder','0');
 $iframe->set_attribute('scrolling','no');
 $iframe->set_attribute('name','checker');
+$iframe->set_attribute('ALLOWTRANSPARENCY','true');
 $iframe->set_attribute('src',$GO_CONFIG->host.'checker.php');
 
 $cell = new table_cell($iframe->get_html());
@@ -172,7 +173,7 @@ $cell->set_attribute('style', 'text-align:right;width:15%');
 $input = new input('text','query',$cmdSearch.'...');
 $input->set_attribute('id','query');
 $input->set_attribute('onfocus',"javascript:this.value='';");
-$input->set_attribute('onblur',"javascript:document.search_form.reset();");
+$input->set_attribute('onblur',"javascript:this.value='".$cmdSearch."...';");
 $input->set_attribute('onkeypress',"return search(event);");
 
 $img = new image('search');

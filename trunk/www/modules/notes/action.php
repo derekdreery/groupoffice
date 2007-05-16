@@ -30,10 +30,32 @@ switch($_REQUEST['task'])
         {
             $notes->delete_note($note_id);            
         }
-        $result['success']='true';
-        $result['message']='Notes deleted successfully';
+        $result['success']=true;
+        $result['errors']='Notes deleted successfully';
         
         break;
+        
+    case 'save':
+    	
+    	$note['id']=smart_addslashes($_POST['note_id']);
+    	$note['name']=smart_addslashes($_POST['name']);
+    	$note['content']=smart_addslashes($_POST['content']);
+    	
+    	if($notes->update_note($note))
+    	{
+    		$result['success']=true;        
+    	}else{	    	
+	    	$result['success']=false;
+	        $result['errors']='A failure test';
+    	}
+    	break;
+    case 'add':
+    	$note['name']='New note';
+    	$note['user_id']=$GO_SECURITY->user_id;
+    	$result['note_id']=$notes->add_note($note);
+    	
+    	$result['success']=true;    	
+    	break;
 }
 
 echo json_encode($result);

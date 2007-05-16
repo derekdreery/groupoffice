@@ -13,7 +13,7 @@ foreach($GO_THEME->images as $key=>$image)
 		$first=false;
 	}
 
-	echo $key.':"'.$image.'"';
+	echo '"'.$key.'":"'.$image.'"';
 	
 }
 echo '};';
