@@ -145,13 +145,16 @@ $westdiv->add_html_element($southwestdiv);
 $northdiv = new html_element('div');
 $northdiv->set_attribute('id','north');
 
+$img = new image('',$GO_CONFIG->host.'lib/go-icon.png');
+$img->set_attribute('style','text-align:middle;vertical-align:middle;border:0px;padding:2px;');
+
 
 $table = new table();
 //$table->set_attribute('style','width:100%');
 $table->set_attribute('id','headerTable');
 
 $row = new table_row();
-$cell = new table_cell($strLoggedInAs.' '.htmlspecialchars($_SESSION['GO_SESSION']['name']));
+$cell = new table_cell($img->get_html().$strLoggedInAs.' '.htmlspecialchars($_SESSION['GO_SESSION']['name']));
 $cell->set_attribute('style', 'width:15%');
 $row->add_cell($cell);
 

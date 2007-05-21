@@ -8,6 +8,10 @@ Group-Office. On this site users can also leave there comments to help the commu
 
 Group-Office 2.17 has full support for Windows servers now (Tested with XAMPP)
 
+IMPORTANT: Themes Professional, Professional 2, Default 2 are removed from Group-Office.
+Please run install.php and not upgrade.php to set the new theme. You can also manualy
+change login_screen and theme in config.php
+
 PROFESSIONAL VERSION
 The professional version of 2.17 of course has all the Community improvements. But on
 top of that it has a new reports module. With the reports module it's possible to

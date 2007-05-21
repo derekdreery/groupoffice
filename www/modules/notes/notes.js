@@ -35,7 +35,14 @@ Notes = function(){
 			
 			
 			layout.beginUpdate();
-		    
+			
+			
+			
+			
+			
+
+	        
+	        	    
 		    
 		  
 
@@ -81,16 +88,102 @@ Notes = function(){
 				handler: this.onButtonClick
 			}
 			);
-			//save_button.disable();
 			
+						
 			
-			previewPanel = new Ext.ContentPanel('no-east', {title: NotesLang['note'], toolbar: notetb, fitToFrame:true, reziseEl: 'noteform'});
+			previewPanel = new Ext.ContentPanel('noteproperties', 
+			{
+				title: NotesLang['note'], 
+				toolbar: notetb, 
+				resizeEl: 'noteform', 
+ 				autoScroll:true, 
+ 				fitToFrame:true });
 			layout.add('east', previewPanel);
+			
+			
+			
+			//Section for links
+			
+			links_ds = new Ext.data.Store({
+
+				proxy: new Ext.data.HttpProxy({
+					url: '../../links_json.php'
+				}),
+
+				reader: new Ext.data.JsonReader({
+					root: 'results',
+					totalProperty: 'total',
+					id: 'link_id'
+				}, [
+				{name: 'link_id', mapping: 'link_id'},
+				{name: 'name', mapping: 'name'},
+				{name: 'mtime', mapping: 'mtime'}
+				]),
+
+				// turn on remote sorting
+				remoteSort: true
+			});
+			links_ds.setDefaultSort('mtime', 'desc');
+			
+			
+			
+			// the column model has information about grid columns
+			// dataIndex maps the column to the specific data field in
+			// the data store
+			var links_cm = new Ext.grid.ColumnModel([{
+				header: "Name",
+				dataIndex: 'name',
+				css: 'white-space:normal;'
+			},{
+				header: "Modified at",
+				dataIndex: 'mtime'
+			}]);
+
+			// by default columns are sortable
+			links_cm.defaultSortable = true;
+
+			// create the editor grid
+			var links_grid = new Ext.grid.Grid('links', {
+				ds: links_ds,
+				cm: links_cm,
+				selModel: new Ext.grid.RowSelectionModel(),
+				enableColLock:false,
+				loadMask: true
+			});
+
+			//grid.addListener("rowclick", this.rowClicked, this);
+			//grid.addListener("rowdblclick", this.rowDoubleClicked, this);
 
 
+			// render it
+			links_grid.render();
 
+			var linksGridFoot = links_grid.getView().getFooterPanel(true);
 
-			Ext.QuickTips.init();
+			// add a paging toolbar to the grid's footer
+			var links_paging = new Ext.PagingToolbar(linksGridFoot, links_ds, {
+				pageSize: GOsettings['max_rows_list'],
+				displayInfo: true,
+				displayMsg: 'Displaying notes {0} - {1} of {2}',
+				emptyMsg: "No topics to display"
+			});
+
+			// trigger the data store load
+			links_ds.load({params:{start:0, limit: GOsettings['max_rows_list']}});
+			
+			
+			
+			
+
+			var linksPanel = new Ext.GridPanel(links_grid, 
+			{
+				title: 'Links', 
+			});
+			layout.add('east', linksPanel);
+			
+			layout.getRegion('east').showPanel('noteproperties');
+
+			//Ext.QuickTips.init();
 
 
 
@@ -123,7 +216,6 @@ Notes = function(){
 			var cm = new Ext.grid.ColumnModel([{
 				header: "Name",
 				dataIndex: 'name',
-				width: 420,
 				css: 'white-space:normal;'
 			},{
 				header: "Modified at",

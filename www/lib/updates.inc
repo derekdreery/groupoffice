@@ -12,7 +12,8 @@ $updates[221][]="ALTER TABLE `users` CHANGE `last_name` `last_name` VARCHAR( 100
 $updates[220][]="ALTER TABLE `sync_contacts_maps` CHANGE `remote_id` `remote_id` VARCHAR( 255 ) NOT NULL";
 $updates[220][]="ALTER TABLE `sync_events_maps` CHANGE `remote_id` `remote_id` VARCHAR( 255 ) NOT NULL";
 
-$updates[219][]="update users set theme='Default' where theme like 'Professional%';";
+$updates[219][]="update users set theme='Default' where theme like 'Professional%' OR like 'Default%';";
+
 $updates[218][]="ALTER TABLE `users` ADD `mtime` INT NOT NULL ;";
 $updates[218][]="UPDATE users SET mtime=registration_time";
 

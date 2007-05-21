@@ -70,6 +70,11 @@ class notes extends db
 	{
 		$note['id'] = $this->nextid("no_notes");
 		$note['ctime'] = $note['mtime'] = get_gmt_time();
+		
+		if(empty($note['link_id']))
+		{
+			$note['link_id']=$GLOBALS['GO_LINKS']->get_link_id();
+		}
 
 		if ($note['id'] > 0)
 		{
