@@ -13,6 +13,13 @@ TODO
 *SMTP server per e-mail account
 *Restrict SMTP servers for mailing lists
 
+2007/05/21 Version 2.17-stable-1
+-Added Slovenian language
+-Updated Turkish language
+-Changed e-mail permissions behaviour
+-Fixed update procedure error
+
+
 
 2007/05/07 Version 2.17-testing-1
 -Full support for Microsoft Windows

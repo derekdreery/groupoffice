@@ -38,8 +38,8 @@ $head->add_html_element($script);
 
 
 
-$eastdiv = new html_element('div');
-$eastdiv->set_attribute('id','no-east');
+//$eastdiv = new html_element('div');
+//$eastdiv->set_attribute('id','no-east');
 
 $centerdiv = new html_element('div');
 $centerdiv->set_attribute('id','no-center');
@@ -52,21 +52,41 @@ $notesdiv = new html_element('div');
 $notesdiv->set_attribute('id', 'notes-grid');
 $centerdiv->add_html_element($notesdiv);
 
+
+
+//$notetabs = new html_element('div');
+//$notetabs->set_attribute('id','notetabs');
+
+
+$noteprops = new html_element('div');
+$noteprops->set_attribute('id','noteproperties');
+//$noteprops->set_attribute('style','padding:5px;');
+
 $toolbar = new html_element('div');
 $toolbar->set_attribute('id','notetb');
-$eastdiv->add_html_element($toolbar);
+$noteprops->add_html_element($toolbar);
+
 
 $noteform = new html_element('div');
 $noteform->set_attribute('id','noteform');
 $noteform->set_attribute('style','padding:5px;');
-$eastdiv->add_html_element($noteform);
+$noteprops->add_html_element($noteform);
+
+$body->add_html_element($noteprops);
+
+$links = new html_element('div');
+$links->set_attribute('id','links');
+$body->add_html_element($links);
+
+
+//$eastdiv->add_html_element($notetabs);
 
 
 
 
 
 $body->add_html_element($centerdiv);
-$body->add_html_element($eastdiv);
+//$body->add_html_element($eastdiv);
 
 $body->add_html_element($body);
 
