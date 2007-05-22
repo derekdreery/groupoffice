@@ -62,7 +62,11 @@ class search extends db {
 		
 		if(isset($links))
 		{
-			$sql .= " AND link_id IN ($links)";
+			if(!count($links))
+			{
+				return 0;
+			}
+			$sql .= " AND link_id IN (".implode(',',$links).")";
 		}
 
 

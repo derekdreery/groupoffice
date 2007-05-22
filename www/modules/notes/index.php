@@ -35,6 +35,10 @@ $script->set_attribute('type','text/javascript');
 $script->set_attribute('src','notes.js');
 $head->add_html_element($script);
 
+$script = new html_element('script');
+$script->set_attribute('type','text/javascript');
+$script->set_attribute('src','../../links.js');
+$head->add_html_element($script);
 
 
 
@@ -76,6 +80,12 @@ $body->add_html_element($noteprops);
 
 $links = new html_element('div');
 $links->set_attribute('id','links');
+
+
+$linksgrid = new html_element('div');
+$linksgrid->set_attribute('id','linksgrid');
+
+$links->add_html_element($linksgrid);
 $body->add_html_element($links);
 
 
