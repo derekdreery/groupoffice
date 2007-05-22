@@ -48,7 +48,7 @@ $head->add_html_element($script);
 
 $script = new html_element('script');
 $script->set_attribute('type','text/javascript');
-$script->set_attribute('src',$GO_CONFIG->host.'ext/ext-all.js');
+$script->set_attribute('src',$GO_CONFIG->host.'ext/ext-all-debug.js');
 $head->add_html_element($script);
 
 
@@ -85,6 +85,12 @@ $script = new html_element('script');
 $script->set_attribute('type','text/javascript');
 $script->set_attribute('src',$GO_CONFIG->host.'groupoffice.js');
 $head->add_html_element($script);
+
+
+/*$script = new html_element('script');
+$script->set_attribute('type','text/javascript');
+$script->set_attribute('src',$GO_CONFIG->host.'search.js');
+$head->add_html_element($script);*/
 
 
 
@@ -251,6 +257,43 @@ $propsdiv->set_attribute('style','width:200px;height:200px;overflow:hidden;');
 
 $body->add_html_element($containerdiv);
 
+$dialogdiv = new html_element('div');
+$dialogdiv->set_attribute('id','dialog');
+$dialogdiv->set_attribute('style','visibility:hidden;height:100%;width:100%;');
+/*
+$subdiv = new html_element('div');
+$subdiv->set_attribute('id','dialogbody');
+$subdiv->set_attribute('style','height:100%;width:100%;');
+$subdiv->set_attribute('class','x-dlg-bd');
+
+
+$tabdiv = new html_element('div');
+$tabdiv->set_attribute('id','dialogtab');
+$tabdiv->set_attribute('style','height:100%;width:100%;');
+$tabdiv->set_attribute('class','x-dlg-tab');
+
+
+$iframe = new html_element('iframe');
+$iframe->set_attribute('id', 'dialogframe');
+$iframe->set_attribute('name', 'dialogframe');
+$iframe->set_attribute('frameborder', '0');
+$iframe->set_attribute('style', 'width:100%;height:100%');
+//$tabdiv->add_html_element($iframe);
+
+$subdiv->add_html_element($iframe);
+
+$dialogdiv->add_html_element($subdiv);
+*/
+$iframe = new html_element('iframe');
+$iframe->set_attribute('id', 'dialogframe');
+$iframe->set_attribute('name', 'dialogframe');
+$iframe->set_attribute('frameborder', '0');
+$iframe->set_attribute('style', 'width:100%;height:100%');
+//$dialogdiv->add_html_element($iframe);
+
+$body->add_html_element($dialogdiv);
+
+
 $body->innerHTML .= '
 <script type="text/javascript">
 
@@ -270,7 +313,7 @@ function search(e)
 	
 	if(keynum==13)
 	{
-		GroupOffice.search(input.value);
+		GroupOffice.search(input.getValue());
 	}
 	return true;
 }

@@ -4,9 +4,11 @@ Notes = function(){
 	var grid;
 	var ds;
 	var note_id;
+	var link_id;
 	var note_form;
 	var save_button;
-
+	var linksPanel;
+var linksGrid;
 
 	return {
 
@@ -101,89 +103,14 @@ Notes = function(){
 			layout.add('east', previewPanel);
 			
 			
-			
-			//Section for links
-			
-			links_ds = new Ext.data.Store({
-
-				proxy: new Ext.data.HttpProxy({
-					url: '../../links_json.php'
-				}),
-
-				reader: new Ext.data.JsonReader({
-					root: 'results',
-					totalProperty: 'total',
-					id: 'link_id'
-				}, [
-				{name: 'link_id', mapping: 'link_id'},
-				{name: 'name', mapping: 'name'},
-				{name: 'mtime', mapping: 'mtime'}
-				]),
-
-				// turn on remote sorting
-				remoteSort: true
-			});
-			links_ds.setDefaultSort('mtime', 'desc');
+			linksPanel = new Ext.ContentPanel('links', { title: 'Links'});
 			
 			
-			
-			// the column model has information about grid columns
-			// dataIndex maps the column to the specific data field in
-			// the data store
-			var links_cm = new Ext.grid.ColumnModel([{
-				header: "Name",
-				dataIndex: 'name',
-				css: 'white-space:normal;'
-			},{
-				header: "Modified at",
-				dataIndex: 'mtime'
-			}]);
-
-			// by default columns are sortable
-			links_cm.defaultSortable = true;
-
-			// create the editor grid
-			var links_grid = new Ext.grid.Grid('links', {
-				ds: links_ds,
-				cm: links_cm,
-				selModel: new Ext.grid.RowSelectionModel(),
-				enableColLock:false,
-				loadMask: true
-			});
-
-			//grid.addListener("rowclick", this.rowClicked, this);
-			//grid.addListener("rowdblclick", this.rowDoubleClicked, this);
-
-
-			// render it
-			links_grid.render();
-
-			var linksGridFoot = links_grid.getView().getFooterPanel(true);
-
-			// add a paging toolbar to the grid's footer
-			var links_paging = new Ext.PagingToolbar(linksGridFoot, links_ds, {
-				pageSize: GOsettings['max_rows_list'],
-				displayInfo: true,
-				displayMsg: 'Displaying notes {0} - {1} of {2}',
-				emptyMsg: "No topics to display"
-			});
-
-			// trigger the data store load
-			links_ds.load({params:{start:0, limit: GOsettings['max_rows_list']}});
-			
-			
-			
-			
-
-			var linksPanel = new Ext.GridPanel(links_grid, 
-			{
-				title: 'Links', 
-			});
+						
 			layout.add('east', linksPanel);
 			
 			layout.getRegion('east').showPanel('noteproperties');
 
-			//Ext.QuickTips.init();
 
 
 
@@ -199,6 +126,7 @@ Notes = function(){
 					id: 'id'
 				}, [
 				{name: 'id', mapping: 'id'},
+				{name: 'link_id', mapping: 'link_id'},				
 				{name: 'name', mapping: 'name'},
 				{name: 'mtime', mapping: 'mtime'}
 				]),
@@ -287,6 +215,8 @@ Notes = function(){
 			//layout.getRegion('east').collapse();
 			layout.endUpdate();
 		},
+		
+		
 
 		onButtonClick : function(btn){
 			switch(btn.id)
@@ -332,7 +262,7 @@ Notes = function(){
 							var reponseParams = Ext.util.JSON.decode(response.responseText);
 							note_form.load({url : 'notes_json.php?note_id='+reponseParams['note_id']});
 							note_id=reponseParams['note_id'];
-							note_form.findField('name').focus(true);
+							note_form.findField('name').focus(true);							
 							this.toggleForm(true);
 							ds.reload();
 						}
@@ -393,8 +323,21 @@ Notes = function(){
 			if(note_id!=record.data['id'])
 			{		
 				note_id=record.data['id'];	
-				note_form.load({url: 'notes_json.php?note_id='+record.data['id'], waitMsg:'Loading...'});
-				this.toggleForm(true);
+				link_id=record.data['link_id'];	
+				note_form.load({url: 'notes_json.php?note_id='+record.data['id'], waitMsg:'Loading...'});				
+				this.toggleForm(true);				
+				layout.getRegion('east').showPanel('noteproperties');
+				
+				//linksGrid = new GroupOffice.linksGrid('linksgrid', {link_id: record.data['link_id'], link_type: '8'});
+				//linksGrid.render();
+			
+				linksPanel.setUrl({url: '../../links.php?link_id='+link_id,scripts: true });
+				
+				/*var updateManager = linksPanel.getUpdateManager();
+				updateManager.loadScripts = true;
+				updateManager.setDefaultUrl('../../links.php?link_id='+link_id);
+				updateManager.refresh();
+				*/
 			}
 
 		},
