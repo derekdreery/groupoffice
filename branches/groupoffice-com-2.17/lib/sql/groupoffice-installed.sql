@@ -1972,7 +1972,7 @@ CREATE TABLE IF NOT EXISTS `pm_templates` (
 -- 
 
 DROP TABLE IF EXISTS `se_cache`;
-CREATE TABLE IF NOT EXISTS `se_cache` (
+CREATE TABLE `se_cache` (
   `link_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `table` varchar(50) NOT NULL,
@@ -1984,6 +1984,7 @@ CREATE TABLE IF NOT EXISTS `se_cache` (
   `link_type` int(11) NOT NULL,
   `type` varchar(20) NOT NULL,
   `keywords` text NOT NULL,
+  `mtime` int(11) NOT NULL
   PRIMARY KEY  (`link_id`,`user_id`),
   KEY `name` (`name`)
 ) TYPE=MyISAM;

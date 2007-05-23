@@ -36,6 +36,7 @@ $GO_MODULES->authenticate('tools');
 require($GO_THEME->theme_path.'header.inc');
 echo 'Checking link ID\'s...<br />';
 $db2 = new db();
+$db3 = new db();
 
 $db = new db();
 $db->Halt_On_Error = 'no';
@@ -93,6 +94,29 @@ foreach($tables as $table)
 		
 		$db2->update_row($table,'id', $ud);
 	}
+	
+	
+	$sql = "SELECT link_id FROM `$table` group by link_id having count(*) > 1;";
+	$db->query($sql);
+	while($db->next_record())
+	{
+		$first=true;
+		$db2->query("SELECT id FROM $table WHERE link_id=".$db->f('link_id')." ORDER BY id ASC");
+		while($db2->next_record())
+		{
+			if($first)
+			{
+				$first=false;
+			}else {
+				$ud['id']=$db2->f('id');
+				$ud['link_id']=$GO_LINKS->get_link_id();
+				
+				$db3->update_row($table,'id', $ud);
+				echo 'Updating duplicate link<br />';
+			}
+		}
+	}
+	
 }
 echo $count.' links added<br /><br />';
 
