@@ -1984,7 +1984,7 @@ CREATE TABLE `se_cache` (
   `link_type` int(11) NOT NULL,
   `type` varchar(20) NOT NULL,
   `keywords` text NOT NULL,
-  `mtime` int(11) NOT NULL
+  `mtime` int(11) NOT NULL,
   PRIMARY KEY  (`link_id`,`user_id`),
   KEY `name` (`name`)
 ) TYPE=MyISAM;
