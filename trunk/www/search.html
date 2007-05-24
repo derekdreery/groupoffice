@@ -1,0 +1,157 @@
+
+<script type="text/javascript">
+
+
+SearchLinks = function(){
+
+	var search_links_ds;
+
+	return {
+
+		init : function(){
+
+
+			search_links_ds = new Ext.data.Store({
+
+				proxy: new Ext.data.HttpProxy({
+					url: 'links_json.php'
+				}),
+
+				baseParams: {"query": ''},
+
+				reader: new Ext.data.JsonReader({
+					root: 'results',
+					totalProperty: 'total',
+					id: 'link_id'
+				}, [
+				{name: 'link_id', mapping: 'link_id'},
+				{name: 'name', mapping: 'name'},
+				{name: 'type', mapping: 'type'},
+				{name: 'url', mapping: 'url'},
+				{name: 'mtime', mapping: 'mtime'}
+				]),
+
+				// turn on remote sorting
+				remoteSort: true
+			});
+			search_links_ds.setDefaultSort('mtime', 'desc');
+
+
+
+			// the column model has information about grid columns
+			// dataIndex maps the column to the specific data field in
+			// the data store
+			var search_links_cm = new Ext.grid.ColumnModel([{
+				header: "Name",
+				dataIndex: 'name',
+				css: 'white-space:normal;'
+			},{
+				header: "Type",
+				dataIndex: 'type'
+			},{
+				header: "Modified at",
+				dataIndex: 'mtime'
+			}]);
+
+			// by default columns are sortable
+			search_links_cm.defaultSortable = true;
+
+			// create the editor grid
+			search_links_grid = new Ext.grid.Grid('search_links', {
+				ds: search_links_ds,
+				cm: search_links_cm,
+				selModel: new Ext.grid.RowSelectionModel(),
+				enableColLock:false,
+				loadMask: true
+
+			});
+
+			//grid.addListener("rowclick", this.rowClicked, this);
+			search_links_grid.addListener("rowdblclick", this.rowDoulbleClicked, this);
+
+
+			// trigger the data store load
+			search_links_ds.load({params:{start:0, limit: GOsettings['max_rows_list']}});
+
+			// render it
+			search_links_grid.render();
+
+			var search_linksGridFoot = search_links_grid.getView().getFooterPanel(true);
+
+			// add a paging toolbar to the grid's footer
+			var search_links_paging = new Ext.PagingToolbar(search_linksGridFoot, search_links_ds, {
+				pageSize: GOsettings['max_rows_list'],
+				displayInfo: true,
+				displayMsg: 'Displaying notes {0} - {1} of {2}',
+				emptyMsg: "No topics to display"
+			});
+
+
+
+			
+		},
+		search : function(query){
+			search_links_ds.baseParams = {"query": query};
+
+			search_links_ds.load({params:{start:0, limit: GOsettings['max_rows_list']}});
+		},
+		
+		keyEvent : function(e){
+			
+			var keynum;	
+			var input;
+			input = Ext.get("query");
+			
+			if(window.event) // IE
+			{
+				keynum = e.keyCode
+			}else if(e.which) // Netscape/Firefox/Opera
+			{
+				keynum = e.which
+			}
+			
+			if(keynum==13)
+			{
+				this.search(input.getValue());
+			}
+			return true;
+		},
+		linkItems : function(fromlinks)	{
+			var selectionModel = search_links_grid.getSelectionModel();
+			var records = selectionModel.getSelections();
+			
+			var tolinks = [];
+	
+        	for (var i = 0;i<records.length;i++)
+        	{
+        		tolinks.push(records[i].data['link_id']);
+        	}
+        	
+        	var conn = new Ext.data.Connection();
+			conn.request({
+				url: 'action.php',
+				params: {task: 'link', fromLinks: Ext.encode(GroupOffice.fromLinks), toLinks: Ext.encode(tolinks)},
+				callback: function(options, success, response)
+				{
+					if(!success)
+					{
+						Ext.MessageBox.alert('Failed', response.result.errors);
+					}else
+					{
+						GroupOffice.linksDialog.hide();
+					}
+				}
+			});
+		}
+	}
+}
+
+
+SearchLinks = new SearchLinks();
+SearchLinks.init();
+Ext.get('query').focus();
+GroupOffice.linksDialog.addButton('Submit', SearchLinks.linkItems, GroupOffice.linksDialog);
+
+
+</script>
+
