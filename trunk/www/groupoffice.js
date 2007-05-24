@@ -6,6 +6,9 @@ GroupOffice = function(){
 	var mainmenutb;
 	var search_ds;
 	var dialog;
+	var linksDialog;
+	var search_links_ds;
+	var fromlinks;
 
 	return {
 
@@ -176,27 +179,13 @@ GroupOffice = function(){
 
 		},
 
-		setCenterUrl : function(url){
-			mainPanel.load({
-				url: url, scripts: true});
-		},
-
-		setNavUrl : function(url){
-			navPanel.load({
-				url: url});
-		},
-
-		getNavPanel : function(){
-			return navPanel;
-		},
-
 		rowDoulbleClicked : function(search_grid, rowClicked, e) {
 
 			var selectionModel = search_grid.getSelectionModel();
 			var record = selectionModel.getSelected();
 
 			//parent.mainframe.document.location=record.data['url'];
-			this.showDialog(record.data['url']);
+			this.showDialog({ url: record.data['url'], iframe: true });
 			//layout.getRegion('east').collapse();
 		},
 
@@ -204,39 +193,178 @@ GroupOffice = function(){
 			var east = layout.getRegion('east');
 			east.expand();
 			//east.getPanel('east').load('search.php?query='+escape(query), { scripts: true, nocache: true });
-			
+
 			search_ds.baseParams = {"query": query};
-			
+
 			search_ds.load({params:{start:0, limit: GOsettings['max_rows_list']}});
-			
+
 			return false;
 		},
-		
-		showDialog : function(url){
-			
-			var dialogdiv = Ext.get('dialog');
-			dialogdiv.update('');
-			dialogdiv.setStyle('width:100%;height:100%');
-			
-            //if(!dialog){ // lazy initialize the dialog and only create it once
-                dialog = new Ext.BasicDialog("dialog", { 
-                        shadow:false,                        
-                        draggable: true,
-                        modal:true,
-                        title: 'Title',                        
-                        resizable:false,
-                        style: 'height:100%;width:100%'
-                });
-                
-                var iframe= Ext.DomHelper.append(dialog.body, {tag: 'iframe', id: 'dialogFrame', frameBorder: 0, src: url, style:'width:100%;height:100%'});
-                
-                dialog.addKeyListener(27, dialog.hide, dialog);
-                dialog.addButton('Submit', dialog.hide, dialog).disable();
-                dialog.addButton('Close', dialog.hide, dialog);
-            //}
-            //parent.dialogframe.document.location=url;
-            dialog.show();
-        }
+
+		showLinks : function(config){
+
+
+			records = config['records'];
+
+			fromlinks = [];
+
+			for (var i = 0;i<records.length;i++)
+			{
+				fromlinks.push({ 'link_id' : records[i].data['link_id'], 'link_type' : records[i].data['link_type'] });
+			}
+
+			if(!linksDialog)
+			{
+				linksDialog = new Ext.BasicDialog("search_links_dialog", {
+					shadow:false,
+					draggable: true,
+					modal:true,
+					title: 'Title',
+					resizable:false,
+					style: 'width:'+config['width']+';height:'+config['height'],
+					width: 600,
+					height:420
+				});
+
+
+
+				search_links_ds = new Ext.data.Store({
+
+					proxy: new Ext.data.HttpProxy({
+						url: 'links_json.php'
+					}),
+
+					baseParams: {"query": ''},
+
+					reader: new Ext.data.JsonReader({
+						root: 'results',
+						totalProperty: 'total',
+						id: 'link_id'
+					}, [
+					{name: 'link_id', mapping: 'link_id'},
+					{name: 'link_type', mapping: 'link_type'},
+					{name: 'name', mapping: 'name'},
+					{name: 'type', mapping: 'type'},
+					{name: 'url', mapping: 'url'},
+					{name: 'mtime', mapping: 'mtime'}
+					]),
+
+					// turn on remote sorting
+					remoteSort: true
+				});
+				search_links_ds.setDefaultSort('mtime', 'desc');
+
+
+
+				// the column model has information about grid columns
+				// dataIndex maps the column to the specific data field in
+				// the data store
+				var search_links_cm = new Ext.grid.ColumnModel([{
+					header: "Name",
+					dataIndex: 'name',
+					css: 'white-space:normal;'
+				},{
+					header: "Type",
+					dataIndex: 'type'
+				},{
+					header: "Modified at",
+					dataIndex: 'mtime'
+				}]);
+
+				// by default columns are sortable
+				search_links_cm.defaultSortable = true;
+
+				// create the editor grid
+				search_links_grid = new Ext.grid.Grid('search_links_grid', {
+					ds: search_links_ds,
+					cm: search_links_cm,
+					selModel: new Ext.grid.RowSelectionModel(),
+					enableColLock:false,
+					loadMask: true
+
+				});
+
+				//grid.addListener("rowclick", this.rowClicked, this);
+				search_links_grid.addListener("rowdblclick", this.rowDoulbleClicked, this);
+
+
+				// trigger the data store load
+				//search_links_ds.load({params:{start:0, limit: GOsettings['max_rows_list']}});
+
+				// render it
+				search_links_grid.render();
+
+				var search_linksGridFoot = search_links_grid.getView().getFooterPanel(true);
+
+				// add a paging toolbar to the grid's footer
+				var search_links_paging = new Ext.PagingToolbar(search_linksGridFoot, search_links_ds, {
+					pageSize: GOsettings['max_rows_list'],
+					displayInfo: true,
+					displayMsg: 'Displaying notes {0} - {1} of {2}',
+					emptyMsg: "No topics to display"
+				});
+
+
+
+				linksDialog.addKeyListener(27, linksDialog.hide, linksDialog);
+				linksDialog.addButton('Submit', this.linkItems, this);
+				linksDialog.addButton('Close', linksDialog.hide, linksDialog);
+
+			}
+			linksDialog.show();
+		},
+		searchLinks : function(query){
+			search_links_ds.baseParams = {"query": query};
+
+			search_links_ds.load({params:{start:0, limit: GOsettings['max_rows_list']}});
+		},
+		searchLinksKeyEvent : function(e){
+
+			var keynum;
+			var input;
+			input = Ext.get("query");
+
+			if(window.event) // IE
+			{
+				keynum = e.keyCode
+			}else if(e.which) // Netscape/Firefox/Opera
+			{
+				keynum = e.which
+			}
+
+			if(keynum==13)
+			{
+				this.searchLinks(input.getValue());
+			}
+			return true;
+		},
+		linkItems : function()	{
+			var selectionModel = search_links_grid.getSelectionModel();
+			var records = selectionModel.getSelections();
+
+			var tolinks = [];
+
+			for (var i = 0;i<records.length;i++)
+			{
+				tolinks.push({ 'link_id' : records[i].data['link_id'], 'link_type' : records[i].data['link_type'] });
+			}
+
+			var conn = new Ext.data.Connection();
+			conn.request({
+				url: 'action.php',
+				params: {task: 'link', fromLinks: Ext.encode(fromlinks), toLinks: Ext.encode(tolinks)},
+				callback: function(options, success, response)
+				{
+					if(!success)
+					{
+						Ext.MessageBox.alert('Failed', response.result.errors);
+					}else
+					{
+						linksDialog.hide();
+					}
+				}
+			});
+		}
 
 
 	};

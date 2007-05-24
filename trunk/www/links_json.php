@@ -31,7 +31,8 @@ if($count)
 	while($search->next_record())
 	{
 		$records[]=array(
-		'link_id'=>$search->f('id'),
+		'link_id'=>$search->f('link_id'),
+		'link_type'=>$search->f('link_type'),
 		'name'=>$search->f('name'),
 		'type'=>$search->f('type'),
 		'description'=>$search->f('description'),

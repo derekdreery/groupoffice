@@ -38,6 +38,11 @@ $head->add_html_element($script);
 $script = new html_element('script');
 $script->set_attribute('type','text/javascript');
 $script->set_attribute('src','../../links.js');
+//$head->add_html_element($script);
+
+$script = new html_element('script');
+$script->set_attribute('type','text/javascript');
+$script->set_attribute('src','../../common.js');
 $head->add_html_element($script);
 
 
@@ -61,7 +66,7 @@ $centerdiv->add_html_element($notesdiv);
 //$notetabs = new html_element('div');
 //$notetabs->set_attribute('id','notetabs');
 
-
+/*
 $noteprops = new html_element('div');
 $noteprops->set_attribute('id','noteproperties');
 //$noteprops->set_attribute('style','padding:5px;');
@@ -95,13 +100,14 @@ $body->add_html_element($links);
 
 
 
-$body->add_html_element($centerdiv);
 //$body->add_html_element($eastdiv);
 
 $body->add_html_element($body);
+*/
 
+$body->add_html_element($centerdiv);
 
-
+$body->innerHTML .= '<div id="dialog" style="width:100%;height:100%"></div>';
 
 
 require($GO_THEME->theme_path.'page_footer.inc');

@@ -30,7 +30,7 @@ if(isset($_REQUEST['note_id']) && $_REQUEST['note_id']>0)
 	$records=array();
 	while($notes->next_record())
 	{
-		$records[]=array('id'=>$notes->f('id'),'link_id'=>$notes->f('link_id'), 'name'=>$notes->f('name'), 'mtime'=>get_timestamp($notes->f('mtime')));
+		$records[]=array('id'=>$notes->f('id'),'link_id'=>$notes->f('link_id'), 'link_type'=> 4, 'name'=>$notes->f('name'), 'mtime'=>get_timestamp($notes->f('mtime')));
 	}
 	
 	echo '({"total":"'.$count.'","results":'.json_encode($records).'})'; 
