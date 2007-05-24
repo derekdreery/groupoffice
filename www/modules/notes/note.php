@@ -32,38 +32,118 @@ require_once($GO_LANGUAGE->get_language_file('notes'));
 
 load_basic_controls();
 
-$page_title=$lang_modules['notes'];
 require_once($GO_MODULES->class_path."notes.class.inc");
 $notes = new notes();
 
 $task = isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
 $note_id = isset($_REQUEST['note_id']) ? $_REQUEST['note_id'] : 0;
 
-$return_to = isset($_REQUEST['return_to']) ? $_REQUEST['return_to'] : $_SERVER['HTTP_REFERER'];
-$link_back = isset($_REQUEST['link_back']) ? $_REQUEST['link_back'] : $_SERVER['REQUEST_URI'];
+?>
 
-//creates the basic html and loads default controls
-//require($GO_THEME->theme_path.'page_header.inc');
+<div class="x-dlg-hd">Note</div>
 
-
-
-//add html to body that comes from page header
-$container_div = new html_element('div');
-$container_div->set_attribute('id','container');
-
-$toolbar_div = new html_element('div');
-$toolbar_div->set_attribute('id','toolbar');
-
-$note_form_div = new html_element('div');
-$note_form_div->set_attribute('id','note_form');
-
-$container_div->add_html_element($toolbar_div);
-$container_div->add_html_element($note_form_div);
-
-echo $container_div->get_html();
-
-//$body->add_html_element($container_div);
+    <div class="x-dlg-bd">
+	    <div id="properties" class="x-dlg-tab">
+		<div id="toolbar"></div>
+			<div id="inner-tab" class="inner-tab">		
+				<div id="form"></div>		
+			</div>
+		</div>
+		<div id="links" class="x-dlg-tab">
+		<div class="inner-tab">
+		</div>
+		</div>
+    </div>
+</div>
 
 
-//finish html document and output to the browser
-//require($GO_THEME->theme_path.'page_footer.inc');
+<script type="text/javascript">
+
+dialog = new Ext.LayoutDialog("dialog", {
+	modal:true,
+	shadow:true,
+	minWidth:300,
+	minHeight:300,
+	height:400,
+	width:600,
+	proxyDrag: true,
+	center: {
+		autoScroll:true,
+		tabPosition: 'top',
+		closeOnTab: true,
+		alwaysShowTabs: true
+	}
+});
+dialog.addKeyListener(27, dialog.hide, dialog);
+dialog.addButton('Submit', dialog.hide, dialog);
+dialog.addButton('Close', dialog.hide, dialog);
+
+var layout = dialog.getLayout();
+layout.beginUpdate();
+note_form = new Ext.form.Form({
+	labelWidth: 75, // label settings here cascade unless overridden
+	url:'save-form.php',
+
+	reader: new Ext.data.JsonReader({
+		root: 'note',
+		id: 'id'
+	}, [
+	{name: 'name', mapping: 'name'},
+	{name: 'content', mapping: 'content'}
+	])
+});
+note_form.add(
+new Ext.form.TextField({
+	fieldLabel: 'Name',
+	name: 'name',
+	allowBlank:false,
+	style:'width:400px'
+}),
+
+new Ext.form.TextArea({
+	fieldLabel: 'Text',
+	name: 'content',
+	style:'width:400px;height:200px'
+})
+
+);
+
+note_form.render('form');
+
+
+var notetb = new Ext.Toolbar('toolbar');
+
+save_button =notetb.addButton({
+	id: 'save',
+	icon: GOimages['save'],
+	text: GOlang['cmdSave'],
+	cls: 'x-btn-text-icon',
+	handler: this.onButtonClick
+}
+);
+
+
+
+notePanel = new Ext.ContentPanel('properties',{
+	title: NotesLang['note'],
+	toolbar: notetb,
+	resizeEl: 'inner-tab',
+	autoScroll:true,
+	fitToFrame:true
+});
+
+layout.add('center', notePanel);
+
+
+linksPanel = new Ext.ContentPanel('links', { title: 'Links'});
+
+
+
+layout.add('center', linksPanel);
+layout.getRegion('center').showPanel('properties');
+
+layout.endUpdate();
+
+dialog.show();
+
+</script>

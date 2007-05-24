@@ -179,8 +179,8 @@ $row->add_cell($cell);
 $cell = new table_cell();
 $cell->set_attribute('style', 'text-align:right;width:15%');
 
-$input = new input('text','query',$cmdSearch.'...');
-$input->set_attribute('id','query');
+$input = new input('text','search_query',$cmdSearch.'...');
+$input->set_attribute('id','search_query');
 $input->set_attribute('onfocus',"javascript:this.value='';");
 $input->set_attribute('onblur',"javascript:this.value='".$cmdSearch."...';");
 $input->set_attribute('onkeypress',"return search(event);");
@@ -260,38 +260,22 @@ $body->add_html_element($containerdiv);
 $dialogdiv = new html_element('div');
 $dialogdiv->set_attribute('id','dialog');
 $dialogdiv->set_attribute('style','visibility:hidden;height:100%;width:100%;');
-/*
-$subdiv = new html_element('div');
-$subdiv->set_attribute('id','dialogbody');
-$subdiv->set_attribute('style','height:100%;width:100%;');
-$subdiv->set_attribute('class','x-dlg-bd');
-
-
-$tabdiv = new html_element('div');
-$tabdiv->set_attribute('id','dialogtab');
-$tabdiv->set_attribute('style','height:100%;width:100%;');
-$tabdiv->set_attribute('class','x-dlg-tab');
-
-
-$iframe = new html_element('iframe');
-$iframe->set_attribute('id', 'dialogframe');
-$iframe->set_attribute('name', 'dialogframe');
-$iframe->set_attribute('frameborder', '0');
-$iframe->set_attribute('style', 'width:100%;height:100%');
-//$tabdiv->add_html_element($iframe);
-
-$subdiv->add_html_element($iframe);
-
-$dialogdiv->add_html_element($subdiv);
-*/
-$iframe = new html_element('iframe');
-$iframe->set_attribute('id', 'dialogframe');
-$iframe->set_attribute('name', 'dialogframe');
-$iframe->set_attribute('frameborder', '0');
-$iframe->set_attribute('style', 'width:100%;height:100%');
-//$dialogdiv->add_html_element($iframe);
 
 $body->add_html_element($dialogdiv);
+
+
+
+$body->innerHTML .= '
+
+<div id="search_links_dialog" style="visibility:hidden;">
+	<div class="x-dlg-hd">Link to items</div>
+	<div class="x-dlg-bd">
+		<div id="search_links_input" style="height:20px;">
+			<input type="text" id="query" name="query" onkeypress="return GroupOffice.searchLinksKeyEvent(event);" />
+		</div>
+		<div id="search_links_grid" style="height:300px;padding-top:10px;"></div>
+	</div>
+</div>';
 
 
 $body->innerHTML .= '
@@ -301,7 +285,7 @@ function search(e)
 {
 	var keynum;	
 	var input;
-	input = Ext.get("query");
+	input = Ext.get("search_query");
 	
 	if(window.event) // IE
 	{

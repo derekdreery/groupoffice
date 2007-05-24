@@ -18,14 +18,6 @@ var linksGrid;
 			Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
 
 			layout = new Ext.BorderLayout(document.body, {
-				east: {
-					split:true,
-					initialSize: 400,
-					autoScroll:true,
-					collapsible:false,
-					titlebar: true,
-					animate: false
-				},
 				center: {
 
 					titlebar: true,
@@ -39,79 +31,6 @@ var linksGrid;
 			layout.beginUpdate();
 			
 			
-			
-			
-			
-
-	        
-	        	    
-		    
-		  
-
-
-			note_form = new Ext.form.Form({
-			        labelWidth: 75, // label settings here cascade unless overridden
-			        url:'save-form.php',
-			        
-			        reader: new Ext.data.JsonReader({
-						root: 'note',
-						id: 'id'
-						}, [
-						{name: 'name', mapping: 'name'},
-						{name: 'content', mapping: 'content'}						
-						])
-		    });
-		    note_form.add(
-		        new Ext.form.TextField({
-		            fieldLabel: 'Name',
-		            name: 'name',
-		            allowBlank:false,
-		            style:'width:100%'
-		        }),
-		
-		        new Ext.form.TextArea({
-		            fieldLabel: 'Text',
-		            name: 'content',
-		            style:'width:100%;height:400px'
-		        })			
-		        
-		    );
-		
-			note_form.render('noteform');	
-		    
-		    
-		    var notetb = new Ext.Toolbar('notetb');
-		    
-		    save_button =notetb.addButton({
-				id: 'save',
-				icon: GOimages['save'],
-				text: GOlang['cmdSave'],					
-				cls: 'x-btn-text-icon',
-				handler: this.onButtonClick
-			}
-			);
-			
-						
-			
-			previewPanel = new Ext.ContentPanel('noteproperties', 
-			{
-				title: NotesLang['note'], 
-				toolbar: notetb, 
-				resizeEl: 'noteform', 
- 				autoScroll:true, 
- 				fitToFrame:true });
-			layout.add('east', previewPanel);
-			
-			
-			linksPanel = new Ext.ContentPanel('links', { title: 'Links'});
-			
-			
-						
-			layout.add('east', linksPanel);
-			
-			layout.getRegion('east').showPanel('noteproperties');
-
-
 
 
 			ds = new Ext.data.Store({
@@ -127,6 +46,7 @@ var linksGrid;
 				}, [
 				{name: 'id', mapping: 'id'},
 				{name: 'link_id', mapping: 'link_id'},				
+				{name: 'link_type', mapping: 'link_type'},	
 				{name: 'name', mapping: 'name'},
 				{name: 'mtime', mapping: 'mtime'}
 				]),
@@ -162,8 +82,8 @@ var linksGrid;
 				loadMask: true
 			});
 
-			grid.addListener("rowclick", this.rowClicked, this);
-			//grid.addListener("rowdblclick", this.rowDoubleClicked, this);
+	
+			grid.addListener("rowdblclick", this.rowDoubleClicked, this);
 
 
 			// render it
@@ -203,16 +123,23 @@ var linksGrid;
 				handler: this.onButtonClick
 			})
 			);
+			
+			tb.add(new Ext.Toolbar.Button({
+				id: 'link',
+				icon: GOimages['link'],
+				text: GOlang['cmdLink'],
+				tooltip: {text:'Add a new note', title:'Tip Title'},
+				cls: 'x-btn-text-icon',
+				handler: this.onButtonClick
+			})
+			);
 
 
 
 
 			layout.add('center', new Ext.GridPanel(grid, {title: NotesLang['notes'], toolbar: tb}));
-			//layout.add('center', new Ext.ContentPanel('no-center', {title: NotesLang['notes'], toolbar: tb}));
 			
-			this.toggleForm(false);
 
-			//layout.getRegion('east').collapse();
 			layout.endUpdate();
 		},
 		
@@ -221,6 +148,12 @@ var linksGrid;
 		onButtonClick : function(btn){
 			switch(btn.id)
 			{
+				case 'link':
+					var selectionModel = grid.getSelectionModel();
+					var records = selectionModel.getSelections();					
+					
+					parent.GroupOffice.showLinks({ 'url': '../../search.html', 'records': records});
+				break;
 				case 'delete':
 				var selectedRows = grid.selModel.selections.keys;
 
@@ -290,66 +223,15 @@ var linksGrid;
 			}
 		},
 		
-		toggleForm : function(enabled)
-		{
-			if(enabled)
-			{
-				save_button.enable();
-			}else
-			{
-				save_button.disable();
-			}
 
-			if(enabled)
-			{
-				note_form.findField('name').enable();
-				note_form.findField('content').enable();
-			}else
-			{
-				note_form.findField('name').disable();
-				note_form.findField('name').setRawValue('');
-				note_form.findField('content').disable();
-				note_form.findField('content').setRawValue('');
-			}
-			
-		},
 
-		rowClicked : function(grid, rowClicked, e) {
-			
-			
-			var selectionModel = grid.getSelectionModel();
-			var record = selectionModel.getSelected();
-			
-			if(note_id!=record.data['id'])
-			{		
-				note_id=record.data['id'];	
-				link_id=record.data['link_id'];	
-				note_form.load({url: 'notes_json.php?note_id='+record.data['id'], waitMsg:'Loading...'});				
-				this.toggleForm(true);				
-				layout.getRegion('east').showPanel('noteproperties');
-				
-				//linksGrid = new GroupOffice.linksGrid('linksgrid', {link_id: record.data['link_id'], link_type: '8'});
-				//linksGrid.render();
-			
-				linksPanel.setUrl({url: '../../links.php?link_id='+link_id,scripts: true });
-				
-				/*var updateManager = linksPanel.getUpdateManager();
-				updateManager.loadScripts = true;
-				updateManager.setDefaultUrl('../../links.php?link_id='+link_id);
-				updateManager.refresh();
-				*/
-			}
-
-		},
 		
 		rowDoubleClicked : function(grid, rowClicked, e) {
 			var selectionModel = grid.getSelectionModel();
 			var record = selectionModel.getSelected();
 
-			var east = layout.getRegion('east');
-			
-			document.location='note.php?note_id='+record.data['id']+'&return_to='+escape(document.location);
-
+			//showDialog('dialog', {url: 'note.php?note_id='+record.data['id']});
+			Ext.get('dialog').load({url: 'note.php?note_id='+record.data['id'], scripts: true });
 		}
 	};
 

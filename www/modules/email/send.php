@@ -67,8 +67,23 @@ function close()
 //send to contacts in a report?
 $report_id = isset($_REQUEST['report_id']) ? $_REQUEST['report_id'] : 0;
 
+$htmleditor = new htmleditor('mail_body') ;
+
+if(!$wysiwyg = $htmleditor->IsCompatible())
+{
+	$content_type= 'text/PLAIN';
+}else
+{
+	$content_type= isset($_POST['content_type']) ? $_POST['content_type'] : $em_settings['send_format'];
+}
+
 $mail_subject = isset($_REQUEST['mail_subject']) ? smart_stripslashes($_REQUEST['mail_subject']) : '';
-$mail_body = isset($_REQUEST['mail_body']) ? smart_stripslashes($_REQUEST['mail_body']) : '<font face="Arial"><br /></font>';
+if($content_type=='text/PLAIN')
+{
+	$mail_body = isset($_REQUEST['mail_body']) ? smart_stripslashes($_REQUEST['mail_body']) : '';
+}else {
+	$mail_body = isset($_REQUEST['mail_body']) ? smart_stripslashes($_REQUEST['mail_body']) : '<font face="Arial"><br /></font>';
+}
 $mail_from = isset($_REQUEST['mail_from']) ? $_REQUEST['mail_from'] : 0;
 $mail_to = isset($_REQUEST['mail_to']) ? smart_stripslashes($_REQUEST['mail_to']) : '';
 $mail_cc = isset($_REQUEST['mail_cc']) ? smart_stripslashes($_REQUEST['mail_cc']) : '';
@@ -90,15 +105,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
 }
 
 
-$htmleditor = new htmleditor('mail_body') ;
 
-if(!$wysiwyg = $htmleditor->IsCompatible())
-{
-	$content_type= 'text/PLAIN';
-}else
-{
-	$content_type= isset($_POST['content_type']) ? $_POST['content_type'] : $em_settings['send_format'];
-}
 
 
 
@@ -776,7 +783,7 @@ if ($_SERVER['REQUEST_METHOD'] != "POST" && $tp_plugin && $template_id == 0 &&
 
 			if ($content_type=='text/HTML')
 			{
-				if ($mail_body != '')
+				if($mail_body != '' && $mail_body != '<font face="Arial"><br /></font>')
 				{
 					//replace inline images with the url to display the part by Group-Office
 					if (isset($_SESSION['url_replacements']))
@@ -882,7 +889,7 @@ if ($_SERVER['REQUEST_METHOD'] != "POST" && $tp_plugin && $template_id == 0 &&
 		$mail->close();
 	}else
 	{
-		if($mail_body == '')
+		if($mail_body == '' || $mail_body == '<font face="Arial"><br /></font>')
 		{
 			$mail_body = $signature;
 		}
