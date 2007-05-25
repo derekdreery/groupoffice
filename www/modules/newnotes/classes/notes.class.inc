@@ -108,6 +108,7 @@ class notes extends db
 
 	function update_note($note)
 	{
+		var_dump($note);
 		$note['mtime'] = get_gmt_time();
 		return $this->update_row('no_notes','id', $note);
 	}

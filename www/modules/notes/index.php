@@ -38,7 +38,7 @@ $head->add_html_element($script);
 $script = new html_element('script');
 $script->set_attribute('type','text/javascript');
 $script->set_attribute('src','../../links.js');
-//$head->add_html_element($script);
+$head->add_html_element($script);
 
 $script = new html_element('script');
 $script->set_attribute('type','text/javascript');
@@ -107,7 +107,7 @@ $body->add_html_element($body);
 
 $body->add_html_element($centerdiv);
 
-$body->innerHTML .= '<div id="dialog" style="width:100%;height:100%"></div>';
+$body->innerHTML .= '<div id="dialog"></div>';
 
 
 require($GO_THEME->theme_path.'page_footer.inc');

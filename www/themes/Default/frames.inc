@@ -53,6 +53,7 @@ $head->add_html_element($script);
 
 
 
+
 $head->innerHTML .= '
 	<style type="text/css">
 	.x-layout-panel-north {
@@ -84,6 +85,11 @@ $head->innerHTML .= '
 $script = new html_element('script');
 $script->set_attribute('type','text/javascript');
 $script->set_attribute('src',$GO_CONFIG->host.'groupoffice.js');
+$head->add_html_element($script);
+
+$script = new html_element('script');
+$script->set_attribute('type','text/javascript');
+$script->set_attribute('src',$GO_CONFIG->host.'links.js');
 $head->add_html_element($script);
 
 
@@ -241,6 +247,16 @@ $centerdiv->add_html_element($iframe);
 
 $eastdiv = new html_element('div');
 $eastdiv->set_attribute('id','east');
+
+$toolbardiv = new html_element('div');
+$toolbardiv->set_attribute('id','searchtoolbar');
+
+$eastdiv->add_html_element($toolbardiv);
+
+$toolbardiv = new html_element('div');
+$toolbardiv->set_attribute('id','searchgrid');
+
+$eastdiv->add_html_element($toolbardiv);
 
 
 $containerdiv->add_html_element($northdiv);

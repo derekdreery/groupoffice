@@ -143,6 +143,10 @@ var linksGrid;
 			layout.endUpdate();
 		},
 		
+		getDataSource : function()
+		{
+			return ds;
+		},
 		
 
 		onButtonClick : function(btn){
@@ -171,7 +175,6 @@ var linksGrid;
 								Ext.MessageBox.alert('Failed', response.result.errors);
 							}else
 							{
-								note_form.load('notes_json.php?note_id=0');
 								ds.reload();
 							}
 						},
@@ -181,7 +184,7 @@ var linksGrid;
 				break;
 
 				case 'add':
-				var conn = new Ext.data.Connection();
+				/*var conn = new Ext.data.Connection();
 				conn.request({
 					url: 'action.php',
 					params: {task: 'add'},
@@ -193,7 +196,7 @@ var linksGrid;
 						}else
 						{
 							var reponseParams = Ext.util.JSON.decode(response.responseText);
-							note_form.load({url : 'notes_json.php?note_id='+reponseParams['note_id']});
+							//note_form.load({url : 'notes_json.php?note_id='+reponseParams['note_id']});
 							note_id=reponseParams['note_id'];
 							note_form.findField('name').focus(true);							
 							this.toggleForm(true);
@@ -201,7 +204,8 @@ var linksGrid;
 						}
 					},
 					scope: Notes
-				});
+				});*/
+					Ext.get('dialog').load({url: 'note.php?note_id=0', scripts: true });
 				break;
 
 				case 'save':

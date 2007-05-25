@@ -100,7 +100,7 @@ GroupOffice = function(){
 			search_cm.defaultSortable = true;
 
 			// create the editor grid
-			search_grid = new Ext.grid.Grid('east', {
+			search_grid = new Ext.grid.Grid('searchgrid', {
 				ds: search_ds,
 				cm: search_cm,
 				selModel: new Ext.grid.RowSelectionModel(),
@@ -128,8 +128,19 @@ GroupOffice = function(){
 				displayMsg: 'Displaying notes {0} - {1} of {2}',
 				emptyMsg: "No topics to display"
 			});
+			
+			var searchtb = new Ext.Toolbar('searchtoolbar');
 
-			var gridPanel = new Ext.GridPanel(search_grid, { title: 'Search results' });
+			var save_button =searchtb.addButton({
+				id: 'close',
+				icon: GOimages['close'],
+				text: GOlang['cmdClose'],
+				cls: 'x-btn-text-icon',
+				handler: this.closeSearchPanel
+			}
+			);
+
+			var gridPanel = new Ext.GridPanel(search_grid, { title: 'Search results', toolbar: searchtb });
 
 
 
@@ -170,13 +181,17 @@ GroupOffice = function(){
 
 			layout.add('center', mainPanel);
 
-			layout.getRegion('east').collapse();
+			layout.getRegion('east').hide();
 
 			layout.endUpdate();
 
 			Ext.QuickTips.init();
 			//Ext.QuickTips.register({title: 'Play', qtip: 'The summary displays relevant info', target: 'summary', autoHide:true});
 
+		},
+		closeSearchPanel : function()
+		{
+			layout.getRegion('east').hide();
 		},
 
 		rowDoulbleClicked : function(search_grid, rowClicked, e) {
@@ -185,13 +200,15 @@ GroupOffice = function(){
 			var record = selectionModel.getSelected();
 
 			//parent.mainframe.document.location=record.data['url'];
-			this.showDialog({ url: record.data['url'], iframe: true });
+			//this.showDialog({ url: record.data['url'], iframe: true });
 			//layout.getRegion('east').collapse();
+			
+			Ext.get('dialog').load({url: record.data['url'], scripts: true });
 		},
 
 		search : function(query){
 			var east = layout.getRegion('east');
-			east.expand();
+			east.show();
 			//east.getPanel('east').load('search.php?query='+escape(query), { scripts: true, nocache: true });
 
 			search_ds.baseParams = {"query": query};
@@ -204,15 +221,22 @@ GroupOffice = function(){
 		showLinks : function(config){
 
 
-			records = config['records'];
+			fromlinks = config['fromlinks'];
 
-			fromlinks = [];
-
-			for (var i = 0;i<records.length;i++)
+			if(config['records'])
 			{
-				fromlinks.push({ 'link_id' : records[i].data['link_id'], 'link_type' : records[i].data['link_type'] });
+				var records=config['records'];
+				fromlinks = [];
+	
+				for (var i = 0;i<records.length;i++)
+				{
+					fromlinks.push({ 'link_id' : records[i].data['link_id'], 'link_type' : records[i].data['link_type'] });
+				}
+			}else
+			{
+				fromlinks = config['fromlinks'];
 			}
-
+			
 			if(!linksDialog)
 			{
 				linksDialog = new Ext.BasicDialog("search_links_dialog", {

@@ -40,7 +40,7 @@ switch($_REQUEST['task'])
     	$note['id']=smart_addslashes($_POST['note_id']);
     	$note['name']=smart_addslashes($_POST['name']);
     	$note['content']=smart_addslashes($_POST['content']);
-    	
+   	
     	if($notes->update_note($note))
     	{
     		$result['success']=true;        

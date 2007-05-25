@@ -16,12 +16,15 @@ $GO_SECURITY->authenticate();
 require_once($GO_CONFIG->class_path.'/base/search.class.inc');
 $search = new search();
 
+$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : 0;
+$limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : 0;
+
 if(isset($_REQUEST['link_id']))
 {
 	$links = $GO_LINKS->get_links($_REQUEST['link_id'], $_REQUEST['link_type']);
-	$count = $search->global_search($GO_SECURITY->user_id, '', $_REQUEST['start'], $_REQUEST['limit'], $_REQUEST['sort'],$_REQUEST['dir'], $links);
+	$count = $search->global_search($GO_SECURITY->user_id, '', $start, $limit, $_REQUEST['sort'],$_REQUEST['dir'], $links);
 }else {
-	$count = $search->global_search($GO_SECURITY->user_id, smart_addslashes($_REQUEST['query']), $_REQUEST['start'], $_REQUEST['limit'], $_REQUEST['sort'],$_REQUEST['dir']);
+	$count = $search->global_search($GO_SECURITY->user_id, smart_addslashes($_REQUEST['query']), $start, $limit, $_REQUEST['sort'],$_REQUEST['dir']);
 }
 
 

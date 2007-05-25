@@ -14,7 +14,7 @@ GroupOffice.linksGrid = function(element, config) {
 			var links_ds = new Ext.data.Store({
 
 				proxy: new Ext.data.HttpProxy({
-					url: '../../links_json.php?link_id='+config['link_id']+'&link_type='+config['link_type']
+					url: BaseHref+'links_json.php?link_id='+config['link_id']+'&link_type='+config['link_type']
 				}),
 
 				reader: new Ext.data.JsonReader({
@@ -65,20 +65,12 @@ GroupOffice.linksGrid = function(element, config) {
 
 
 			// trigger the data store load
-			links_ds.load({params:{start:0, limit: GOsettings['max_rows_list']}});
+			//links_ds.load({params:{start:0, limit: GOsettings['max_rows_list']}});
+			links_ds.load();
 
 			// render it
 			links_grid.render();
 
-			var linksGridFoot = links_grid.getView().getFooterPanel(true);
-
-			// add a paging toolbar to the grid's footer
-			var links_paging = new Ext.PagingToolbar(linksGridFoot, links_ds, {
-				pageSize: GOsettings['max_rows_list'],
-				displayInfo: true,
-				displayMsg: 'Displaying notes {0} - {1} of {2}',
-				emptyMsg: "No topics to display"
-			});
 		},
 		
 		rowDoulbleClicked : function(links_grid, rowClicked, e) {

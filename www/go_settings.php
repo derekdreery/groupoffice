@@ -28,5 +28,7 @@ require_once("Group-Office.php");
 
 $GO_SECURITY->authenticate();
 ?>
+var BaseHref = '<?php echo $GO_CONFIG->host; ?>';
+
 GOsettings=Ext.util.JSON.decode('<?php echo addslashes(json_encode($_SESSION['GO_SESSION'])); ?>');	
 		
