@@ -60,7 +60,7 @@ while($GO_USERS->next_record(MYSQL_ASSOC))
 	
 	foreach($GO_USERS->Record as $key=>$value)
 	{
-		echo '<'.$key.'>'.$value.'</'.$key.'>';
+		echo '<'.$key.'>'.htmlspecialchars($value).'</'.$key.'>';
 	}
 	echo '</user>';
 }
