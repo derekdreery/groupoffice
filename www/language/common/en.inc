@@ -383,3 +383,14 @@ $strWorkAddressAndNo='Workaddress / No.';
 $config_help_url='http://docs.group-office.com/index.php?folder_id=49&file_id=202';
 
 $jslang=$GO_CONFIG->host.'language/common/en.js';
+
+$link_types[1]='Events';
+$link_types[2]='Contacts';
+$link_types[3]='Companies';
+$link_types[4]='Notes';
+$link_types[5]='Projects';
+$link_types[6]='Files';
+$link_types[7]='Orders';
+$link_types[8]='Users';
+$link_types[9]='E-mail';
+$link_types[10]='Timeregistration';
