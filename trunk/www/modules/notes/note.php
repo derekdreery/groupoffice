@@ -61,7 +61,8 @@ $note = $notes->get_note($note_id);
 				</div>
 			</div>
 			<div id="links" class="x-dlg-tab">
-			<div class="inner-tab">
+			<div id="linkstoolbar"></div>
+			<div class="inner-tab" id="linkGridsDiv">
 			</div>
 			</div>
 	    </div>
@@ -70,10 +71,13 @@ $note = $notes->get_note($note_id);
 
 <script type="text/javascript">
 
+
+
 Note = function(){
 	
 	var linksPanel;
 	var dialog;
+	var linkGrids;
 	
 	return {
 
@@ -174,7 +178,33 @@ Note = function(){
 			
 				layout.add('center', notePanel);
 				
-				linksPanel = new Ext.ContentPanel('links', { title: 'Links'});
+				
+				
+				
+				var linkstb = new Ext.Toolbar('linkstoolbar');
+			
+				
+				linkstb.addButton({
+					id: 'link',
+					icon: GOimages['link'],
+					text: GOlang['cmdLink'],
+					cls: 'x-btn-text-icon',
+					handler: this.onButtonClick
+				}
+				);
+				
+				linkstb.addButton({
+					id: 'unlink',
+					icon: GOimages['unlink'],
+					text: GOlang['cmdUnlink'],
+					cls: 'x-btn-text-icon',
+					handler: this.onButtonClick
+				}
+				);
+				
+				
+				
+				linksPanel = new Ext.ContentPanel('links', { title: 'Links', toolbar: linkstb});
 				
 				//linksPanel.setUrl({ url: '../../links.php?link_id=<?php echo $note['link_id']; ?>', scripts: true});	
 				layout.add('center', linksPanel);
@@ -190,7 +220,12 @@ Note = function(){
 		},
 		loadLinks : function()
 		{
-			linksPanel.load({ url: '<?php echo $GO_CONFIG->host; ?>links.php?link_id=<?php echo $note['link_id']; ?>', scripts: true});
+			Ext.get('linkGridsDiv').load({ url: '<?php echo $GO_CONFIG->host; ?>links.php?link_id=<?php echo $note['link_id']; ?>', scripts: true});
+		},
+		setLinkGrids : function (passedLinkGrids)
+		{
+			linkGrids=passedLinkGrids;
+			
 		},
 		onButtonClick : function(btn){
 			switch(btn.id)
@@ -200,8 +235,34 @@ Note = function(){
 					var fromlinks = [];
 					fromlinks.push({ 'link_id' : <?php echo $note['link_id']; ?>, 'link_type' : 4 });				
 					
-					parent.GroupOffice.showLinks({ 'url': '../../search.html', 'fromlinks': fromlinks});
-				break;	
+					parent.GroupOffice.showLinks({ 'fromlinks': fromlinks});
+				break;
+				
+				case 'unlink':
+					
+					var fromlinks = [];
+					fromlinks.push({ 'link_id' : <?php echo $note['link_id']; ?>, 'link_type' : 4 });	
+					
+				
+					var unlinks = [];
+					
+					for (var i = 0;i<linkGrids.length;i++)
+					{
+						var selectionModel = linkGrids[i].getSelectionModel();
+						var records = selectionModel.getSelections();	
+						
+						for (var i = 0;i<records.length;i++)
+						{
+							unlinks.push(records[i].data['link_id']);
+						}
+						
+					}			
+					
+					if(parent.GroupOffice.unlink(<?php echo $note['link_id']; ?>, unlinks))
+					{
+						this.loadLinks();
+					}
+				break;
 				
 				case 'ok':
 					note_form.submit({

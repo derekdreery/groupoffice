@@ -3,6 +3,7 @@ var GOlang = {
 	cmdAdd : 'Add',
 	cmdSave : 'Save',
 	cmdLink : 'Link',
+	cmdUnlink : 'Unlink',
 	cmdClose : 'Close',
 	cmdOk : 'Ok'
 };

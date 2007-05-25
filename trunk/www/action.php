@@ -20,20 +20,34 @@ $result =array();
 switch($_REQUEST['task'])
 {
     case 'link':
-        var_dump($_POST);
-        
+ 
         $fromLinks = json_decode(smart_stripslashes($_POST['fromLinks']));
         $toLinks = json_decode(smart_stripslashes($_POST['toLinks']));
-        
-        var_dump($fromLinks);
-        var_dump($toLinks);
-        
+
         foreach($fromLinks as $fromLink)
         {
         	foreach($toLinks as $toLink)
 	        {
 	        	$GO_LINKS->add_link($fromLink->link_id, $fromLink->link_type, $toLink->link_id, $toLink->link_type);
 	        }
+        }
+
+        $result['success']=true;
+        $result['errors']='Items linked successfully';
+        
+        break;
+        
+      case 'unlink':
+  
+        
+        $unlinks = json_decode(smart_stripslashes($_POST['unlinks']));
+        $link_id = smart_stripslashes($_POST['link_id']);
+        
+
+        
+        foreach($unlinks as $unlink_id)
+        {        
+	    	$GO_LINKS->delete_link($link_id, $unlink_id);  
         }
 
         $result['success']=true;

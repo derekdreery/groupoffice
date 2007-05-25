@@ -15,23 +15,29 @@ $GO_SECURITY->authenticate();
 load_basic_controls();
 
 $script='';
-for($link_type=1;$link_type<10;$link_type++)
+foreach($link_types as $link_type=>$name)
 {
 	$links = $GO_LINKS->get_links($_REQUEST['link_id'], $link_type);
 	
 	if(count($links))
 	{
-		$p = new html_element('p','Type');
-		$p->set_attribute('style','font-weight:bold');
+		$p = new html_element('h3',$name);
 		echo $p->get_html();
 		$div = new html_element('div');
 		$div->set_attribute('id','link_type_'.$link_type);
 		
-		echo $div->get_html();
-		$script .= "linksGrid = new GroupOffice.linksGrid('link_type_".$link_type."', {link_id: ".$_REQUEST['link_id'].", link_type: ".$link_type."});linksGrid.render();";				
+		echo $div->get_html().' <hr>';
+		$script .= "linkGrids.push(new GroupOffice.linksGrid('link_type_".$link_type."', {link_id: ".$_REQUEST['link_id'].", link_type: ".$link_type."}));";				
 	}
 }
 ?>
 <script type="text/javascript">
+var linkGrids = [];
 <?php echo $script; ?>
+
+for (var i = 0;i<linkGrids.length;i++)
+{
+	linkGrids[i].render();
+}
+Note.setLinkGrids(linkGrids);
 </script>

@@ -388,6 +388,24 @@ GroupOffice = function(){
 					}
 				}
 			});
+		},
+		unlink : function(link_id, unlinks)	{
+		
+			var conn = new Ext.data.Connection();
+			conn.request({
+				url: BaseHref+'action.php',
+				params: {task: 'unlink', link_id: link_id, unlinks: Ext.encode(unlinks)},
+				callback: function(options, success, response)
+				{
+					if(!success)
+					{
+						Ext.MessageBox.alert('Failed', response.result.errors);
+					}else
+					{
+						return true;
+					}
+				}
+			});
 		}
 
 
