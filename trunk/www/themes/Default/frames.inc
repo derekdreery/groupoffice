@@ -287,7 +287,7 @@ $body->innerHTML .= '
 	<div class="x-dlg-hd">Link to items</div>
 	<div class="x-dlg-bd">
 		<div id="search_links_input" style="height:20px;">
-			<input type="text" id="query" name="query" onkeypress="return GroupOffice.searchLinksKeyEvent(event);" />
+			<input class="x-form-text x-form-field" type="text" id="links_query" name="links_query" onkeypress="return GroupOffice.searchLinksKeyEvent(event);" />
 		</div>
 		<div id="search_links_grid" style="height:300px;padding-top:10px;"></div>
 	</div>
@@ -317,6 +317,7 @@ function search(e)
 	}
 	return true;
 }
+
 
 </script>';
 

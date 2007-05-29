@@ -9,6 +9,7 @@ GroupOffice = function(){
 	var linksDialog;
 	var search_links_ds;
 	var fromlinks;
+	var search_grid_rendered;
 
 	return {
 
@@ -117,17 +118,9 @@ GroupOffice = function(){
 			//search_ds.load({params:{start:0, limit: GOsettings['max_rows_list']}});
 
 			// render it
-			search_grid.render();
+			
 
-			var searchGridFoot = search_grid.getView().getFooterPanel(true);
-
-			// add a paging toolbar to the grid's footer
-			var search_paging = new Ext.PagingToolbar(searchGridFoot, search_ds, {
-				pageSize: GOsettings['max_rows_list'],
-				displayInfo: true,
-				displayMsg: 'Displaying notes {0} - {1} of {2}',
-				emptyMsg: "No topics to display"
-			});
+			
 			
 			var searchtb = new Ext.Toolbar('searchtoolbar');
 
@@ -140,7 +133,7 @@ GroupOffice = function(){
 			}
 			);
 
-			var gridPanel = new Ext.GridPanel(search_grid, { title: 'Search results', toolbar: searchtb });
+			var gridPanel = new Ext.GridPanel(search_grid, { title: GOlang['strSearchResults'], toolbar: searchtb });
 
 
 
@@ -185,7 +178,7 @@ GroupOffice = function(){
 
 			layout.endUpdate();
 
-			Ext.QuickTips.init();
+			//Ext.QuickTips.init();
 			//Ext.QuickTips.register({title: 'Play', qtip: 'The summary displays relevant info', target: 'summary', autoHide:true});
 
 		},
@@ -214,6 +207,23 @@ GroupOffice = function(){
 			search_ds.baseParams = {"query": query};
 
 			search_ds.load({params:{start:0, limit: GOsettings['max_rows_list']}});
+			
+			if(!search_grid_rendered)
+			{
+				search_grid.render();
+				
+				var searchGridFoot = search_grid.getView().getFooterPanel(true);
+
+				// add a paging toolbar to the grid's footer
+				var search_paging = new Ext.PagingToolbar(searchGridFoot, search_ds, {
+					pageSize: GOsettings['max_rows_list'],
+					displayInfo: true,
+					displayMsg: GOlang['displayingItems'],
+					emptyMsg: GOlang['strNoItems']
+				});
+				
+				search_grid_rendered=true;
+			}
 
 			return false;
 		},
@@ -242,8 +252,9 @@ GroupOffice = function(){
 				linksDialog = new Ext.BasicDialog("search_links_dialog", {
 					shadow:false,
 					draggable: true,
+					collapsible: false,
 					modal:true,
-					title: 'Title',
+					title: GOlang['strLinkItems'],
 					resizable:false,
 					style: 'width:'+config['width']+';height:'+config['height'],
 					width: 600,
@@ -284,14 +295,14 @@ GroupOffice = function(){
 				// dataIndex maps the column to the specific data field in
 				// the data store
 				var search_links_cm = new Ext.grid.ColumnModel([{
-					header: "Name",
+					header: GOlang['strName'],
 					dataIndex: 'name',
 					css: 'white-space:normal;'
 				},{
-					header: "Type",
+					header: GOlang['strType'],
 					dataIndex: 'type'
 				},{
-					header: "Modified at",
+					header: GOlang['strMtime'],
 					dataIndex: 'mtime'
 				}]);
 
@@ -324,29 +335,36 @@ GroupOffice = function(){
 				var search_links_paging = new Ext.PagingToolbar(search_linksGridFoot, search_links_ds, {
 					pageSize: GOsettings['max_rows_list'],
 					displayInfo: true,
-					displayMsg: 'Displaying notes {0} - {1} of {2}',
-					emptyMsg: "No topics to display"
+					displayMsg: GOlang['displayingItems'],
+					emptyMsg: GOlang['strNoItems']
 				});
 
 
 
 				linksDialog.addKeyListener(27, linksDialog.hide, linksDialog);
-				linksDialog.addButton('Submit', this.linkItems, this);
-				linksDialog.addButton('Close', linksDialog.hide, linksDialog);
+				linksDialog.addButton(GOlang['cmdOk'], this.linkItems, this);
+				linksDialog.addButton(GOlang['cmdClose'], linksDialog.hide, linksDialog);
 
 			}
+			
 			linksDialog.show();
+			
+			var links_query = Ext.get('links_query');
+			
+			links_query.focus(true);
+			
 		},
 		searchLinks : function(query){
 			search_links_ds.baseParams = {"query": query};
 
 			search_links_ds.load({params:{start:0, limit: GOsettings['max_rows_list']}});
+			
 		},
 		searchLinksKeyEvent : function(e){
 
 			var keynum;
 			var input;
-			input = Ext.get("query");
+			input = Ext.get("links_query");
 
 			if(window.event) // IE
 			{
@@ -406,6 +424,24 @@ GroupOffice = function(){
 					}
 				}
 			});
+		},
+		showDialog : function (config){
+
+			if(!config['width'])
+			{
+				config['width']='100%';
+			}
+			if(!config['height'])
+			{
+				config['height']='100%';
+			}
+		
+			var id = Ext.id();
+			Ext.DomHelper.append(document.body, {tag: 'div', id: id});
+			
+			dialogdiv = Ext.get(id);
+		
+			dialogdiv.load({url: config['url'], scripts: true, nocache: true});
 		}
 
 

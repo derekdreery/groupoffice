@@ -67,10 +67,12 @@ class search extends db {
 				return 0;
 			}
 			$sql .= " AND link_id IN (".implode(',',$links).")";
+			
+			$sql .=" ORDER BY se_cache.type ASC, $sort_index $sort_order";
+			
+		}else {
+			$sql .=" ORDER BY $sort_index $sort_order";
 		}
-
-
-		$sql .=" ORDER BY $sort_index $sort_order";
 
 		$this->query($sql);
 		$count =$this->num_rows();

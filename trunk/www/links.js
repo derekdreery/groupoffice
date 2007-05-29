@@ -14,7 +14,7 @@ GroupOffice.linksGrid = function(element, config) {
 			var links_ds = new Ext.data.Store({
 
 				proxy: new Ext.data.HttpProxy({
-					url: BaseHref+'links_json.php?link_id='+config['link_id']+'&link_type='+config['link_type']
+					url: BaseHref+'links_json.php?link_id='+config['link_id']
 				}),
 
 				reader: new Ext.data.JsonReader({
@@ -24,6 +24,7 @@ GroupOffice.linksGrid = function(element, config) {
 				}, [
 				{name: 'link_id', mapping: 'link_id'},
 				{name: 'name', mapping: 'name'},
+				{name: 'type', mapping: 'type'},
 				{name: 'url', mapping: 'url'},
 				{name: 'mtime', mapping: 'mtime'}
 				]),
@@ -42,6 +43,9 @@ GroupOffice.linksGrid = function(element, config) {
 				header: "Name",
 				dataIndex: 'name',
 				css: 'white-space:normal;'
+			},{
+				header: "Type",
+				dataIndex: 'type'
 			},{
 				header: "Modified at",
 				dataIndex: 'mtime'
@@ -68,8 +72,7 @@ GroupOffice.linksGrid = function(element, config) {
 			//links_ds.load({params:{start:0, limit: GOsettings['max_rows_list']}});
 			links_ds.load();
 
-			// render it
-			links_grid.render();
+			return links_grid;
 
 		},
 		
