@@ -1,6 +1,7 @@
 <?php
 
 $images['unknown_module']='22x22/gnome-windows.png';
+$images['unknown_link_type']='16x16/gnome-windows.png';
 
 $images['help']='16x16/icon-help.png';
 $images['configuration']='16x16/administration.png';
