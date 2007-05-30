@@ -151,13 +151,23 @@ if (isset ($GO_MODULES->modules['calendar']) && $GO_MODULES->modules['calendar']
 		{
 			$h3 = new html_element('h3', $sum_unfinished);
 			$em_cell->add_html_element($h3);			
-			$events = $cal->get_events_in_array(0, 0, $GO_SECURITY->user_id, 1, $interval_end_time, true, false, false);				
+			//$events = $cal->get_events_in_array(0, 0, $GO_SECURITY->user_id, 1, $interval_end_time, true, false, false);				
+			$cal->get_events(1,0,0,0,0,$GO_SECURITY->user_id,false,1,$interval_end_time);
+			while($cal->next_record())
+			{
+				$events[]=$cal->Record;
+			}
 		}else
 		{
 			$h3 = new html_element('h3', $sum_tommorow);
 			$h3->set_attribute('style','margin-top:10px');
 			$em_cell->add_html_element($h3);					
-			$events = $cal->get_events_in_array(0, 0, $GO_SECURITY->user_id, $tommorow_interval_start_time, $tommorow_interval_end_time, true, false, false);						
+			//$events = $cal->get_events_in_array(0, 0, $GO_SECURITY->user_id, $tommorow_interval_start_time, $tommorow_interval_end_time, true, false, false);						
+			$cal->get_events(1,0,0,0,0,$GO_SECURITY->user_id,false,$tommorow_interval_start_time,$tommorow_interval_end_time);
+			while($cal->next_record())
+			{
+				$events[]=$cal->Record;
+			}
 		}
 		$cal2 = new calendar();
 		
