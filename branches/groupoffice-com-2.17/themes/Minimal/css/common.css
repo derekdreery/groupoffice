@@ -1,3 +1,34 @@
+#headerTable{
+width:80%;
+height:20px;
+border:0px;
+background-color: #22437f;
+border-bottom:1px solid black;
+width:100%;
+}
+#headerTable td{
+white-space:nowrap;
+color:white;		
+}
+
+#headerTable a:link, #headerTable a:visited, #headerTable a:active {
+color: #F7F8F2;
+text-decoration: none;
+margin-left:10px;
+}
+
+#headerTable a:hover {
+color: #ffffff;
+text-decoration: underline;
+}
+
+#headerTable input{
+background-color:#22437f;
+border:1px solid white;
+color:white;
+padding-left:1px;
+}
+
 .textbox_error{
 font-family: arial,verdana,sans-serif;
 font-size: 12px;
