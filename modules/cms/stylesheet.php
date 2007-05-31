@@ -36,6 +36,14 @@ color: red;
 background-color:#f1f1f1;
 }
 }
+
+embed{
+border:1px dashed red;
+display:block;
+padding:5px;
+color: red;
+background-color:#f1f1f1;
+}
   	<?php
   }else
   {

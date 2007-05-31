@@ -206,3 +206,4 @@ $cms_add_contact_email_subject='New contact added to mailing';
 
 
 $cms_new_comment_subject = 'New comment placed in %s';
+$cms_insert_video='Insert video';
