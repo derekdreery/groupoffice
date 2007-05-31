@@ -8,73 +8,86 @@ header('Content-Type: text/html; charset='.$charset);
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset; ?>">
+<link href="<?php echo $GO_THEME->theme_url.'css/common.css'; ?>" rel="stylesheet" type="text/css" />
 <script language="javascript" type="text/javascript" src="<?php echo $GO_CONFIG->host; ?>javascript/common.js"></script>
 <?php require($GO_CONFIG->control_path.'fixpng.inc'); ?>
-<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset; ?>" />
-<title><?php echo $GO_CONFIG->title; ?>
-</title>
-<link href="<?php echo $GO_THEME->theme_url.'css/common.css'; ?>" rel="stylesheet" type="text/css" />
-<link rel="shortcut icon" href="<?php echo $GO_CONFIG->host; ?>lib/favicon.ico" />
+<title><?php echo $GO_CONFIG->title; ?></title>
+<link rel="shortcut icon" href="<?php echo $GO_CONFIG->host; ?>lib/favicon.ico" />  
 </head>
 <body style="padding:0px;margin:0px;" dir="<?php echo $htmldirection; ?>" onblur="document.search_form.reset();">
-<table border="0" cellpadding="0" cellspacing="0" width="100%" height="23">
-<tr>
-	<td class="HeaderBar" style="color:black;text-align:left;padding-left:5px;vertical-align:top;padding-top:4px;">
-	<?php echo $strLoggedInAs.' '.htmlspecialchars($_SESSION['GO_SESSION']['name']); ?>
-	</td>
-    <td class="HeaderBar" style="padding-top:2px;">
-    
-    <?php
-    load_basic_controls();
-    $form = new form('search_form','post',$GO_CONFIG->control_url.'/select/global_select.php');
-    $form->set_attribute('style','margin:0px;');
-    $form->set_attribute('target','main');
-    $input = new input('text','query',$cmdSearch.'...');
-    $input->set_attribute('onfocus',"javascript:this.value='';");
-    $input->set_attribute('onblur',"javascript:document.search_form.reset();");
-    $input->set_attribute('style','background-color:#ADC7B5;border:1px solid black;padding-left:1px;');
+<?php
+load_basic_controls();
 
-    $img = new image('magnifier');
-    $img->set_attribute('style','border:0px;margin-right:3px;');
-    $img->set_attribute('align','absmiddle');
+$form = new form('search_form','post',$GO_CONFIG->control_url.'/select/global_select.php');
+$form->set_attribute('target','main');
 
-    $form->add_html_element($img);
-    $form->add_html_element($input);
 
-    $img = new image('configuration');
-    $img->set_attribute('style','border:0px;margin-right:3px;');
-    $img->set_attribute('align','absmiddle');
+$table = new table();
+$table->set_attribute('id','headerTable');
 
-    $link = new hyperlink($GO_CONFIG->host.'configuration/',$img->get_html().$menu_configuration);
-    $link->set_attribute('target','main');
-    $link->set_attribute('class','HeaderBar');
+$row = new table_row();
+$cell = new table_cell($strLoggedInAs.' '.htmlspecialchars($_SESSION['GO_SESSION']['name']));
+$cell->set_attribute('style', 'width:15%');
+$row->add_cell($cell);
 
-    $form->add_html_element($link);
+$iframe = new html_element('iframe',' ');
+$iframe->set_attribute('style','height:20px;width:100%;border:0;');
+$iframe->set_attribute('frameborder','0');
+$iframe->set_attribute('scrolling','no');
+$iframe->set_attribute('name','checker');
+$iframe->set_attribute('src',$GO_CONFIG->host.'checker.php');
 
-    $img = new image('help');
-    $img->set_attribute('style','border:0px;margin-right:3px;');
-    $img->set_attribute('align','absmiddle');
+$cell = new table_cell($iframe->get_html());
+$cell->set_attribute('style', 'text-align:right;width:70%');
+$row->add_cell($cell);
 
-    $link = new hyperlink($GO_CONFIG->host.'doc/index.php',$img->get_html().$menu_help);
-    $link->set_attribute('target','main');
-    $link->set_attribute('class','HeaderBar');
+$cell = new table_cell();
+$cell->set_attribute('style', 'text-align:right;width:15%');
 
-    $form->add_html_element($link);
+$input = new input('text','query',$cmdSearch.'...');
+$input->set_attribute('onfocus',"javascript:this.value='';");
+$input->set_attribute('onblur',"javascript:document.search_form.reset();");
 
-    $img = new image('logout');
-    $img->set_attribute('style','border:0px;margin-right:3px;');
-    $img->set_attribute('align','absmiddle');
+$img = new image('magnifier');
+$img->set_attribute('style','border:0px;margin-left:10px;margin-right:3px;');
+$img->set_attribute('align','absmiddle');
 
-    $link = new hyperlink($GO_CONFIG->host.'index.php?task=logout',$img->get_html().$menu_logout);
-    $link->set_attribute('class','HeaderBar');
-    $link->set_attribute('target','_top');
+$cell->add_html_element($img);
+$cell->add_html_element($input);
 
-    $form->add_html_element($link);
+$img = new image('configuration');
+$img->set_attribute('style','border:0px;margin-right:3px;');
+$img->set_attribute('align','absmiddle');
 
-    echo $form->get_html();
-    ?>
-    </td>
-</tr>
-</table>
+$link = new hyperlink($GO_CONFIG->host.'configuration/',$img->get_html().$menu_configuration);
+$link->set_attribute('target','main');
+
+$cell->add_html_element($link);
+
+$img = new image('help');
+$img->set_attribute('style','border:0px;margin-right:3px;');
+$img->set_attribute('align','absmiddle');
+
+$link = new hyperlink($GO_CONFIG->host.'help.php',$img->get_html().$menu_help);
+$link->set_attribute('target','_blank');
+
+$cell->add_html_element($link);
+
+$img = new image('logout');
+$img->set_attribute('style','border:0px;margin-right:3px;');
+$img->set_attribute('align','absmiddle');
+
+$link = new hyperlink($GO_CONFIG->host.'index.php?task=logout',$img->get_html().$menu_logout);
+$link->set_attribute('target','_top');
+
+$cell->add_html_element($link);
+
+$row->add_cell($cell);
+$table->add_row($row);
+
+$form->add_html_element($table);
+
+echo $form->get_html();
+?>
 </body>
 </html>
