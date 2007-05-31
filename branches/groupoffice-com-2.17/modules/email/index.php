@@ -99,10 +99,7 @@ function search_messages()
 	messages.location.href='search.php?account_id='+messages.document.forms[0].account_id.value+'&mailbox='+messages.document.forms[0].mailbox.value;	
 }
 
-function print_message()
-{
-	popup('message_body.php?account_id='+message.document.forms[0].account_id.value+'&uid='+message.document.forms[0].uid.value+'&mailbox='+message.document.forms[0].mailbox.value+'&print=true');
-}
+
 
 function save_message()
 {
@@ -234,7 +231,7 @@ function composer(action,mail_to,subject,body)
 			//echo "<a href=\"javascript:popup('properties.php?account_id='+message.document.forms[0].account_id.value+'&uid='+message.document.forms[0].uid.value+'&mailbox='+message.document.forms[0].mailbox.value,'450','500')\"><img src=\"".$GO_THEME->images['properties']."\" border=\"0\" /><br />".$fbProperties."</a></td>\n";
 			
 			echo '<td class="ModuleIcons">';
-			echo '<a href="javascript:print_message();"><img src="'.$GO_THEME->images['print'].'" border="0" /><br />'.$ml_print.'</a></td>';
+			echo '<a href="javascript:window.message.print_message();"><img src="'.$GO_THEME->images['print'].'" border="0" /><br />'.$ml_print.'</a></td>';
 			
 			if(file_exists($GO_MODULES->modules['email']['path'].'save_message.php') && isset($GO_MODULES->modules['filesystem']) && $GO_MODULES->modules['filesystem']['read_permission'])
 			{
