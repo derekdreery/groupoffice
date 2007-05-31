@@ -43,7 +43,7 @@ if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_per
 		header('Content-Type: application/download');
 		if($mode == 'download')
 		{
-			header('Content-Disposition: attachment; filename="'.$filename.'"');
+			header('Content-Disposition: attachment; filename="'.rawurlencode($filename).'";');
 		}else
 		{
 			header('Content-Disposition: inline; filename="'.$filename.'"');
@@ -55,7 +55,7 @@ if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_per
 		if($mode == 'download')
 		{
 			header('Content-Type: application/download');
-			header('Content-Disposition: attachment; filename="'.$filename.'"');
+			header('Content-Disposition: attachment; filename="'.$filename.'";');
 		}else
 		{
 			header('Content-Type: '.mime_content_type($path));
