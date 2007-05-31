@@ -924,7 +924,7 @@ class email extends db
 					$filename .= strip_extension($filename).' ('.$x.').'.get_extension($filename);
 				}
 
-				if(!$fp = fopen($tmpdir.'/'.$message['parts'][$i]["name"],'w+'))
+				if(!$fp = fopen($tmpdir.'/'.$filename,'w+'))
 				{
 					return false;
 				}
