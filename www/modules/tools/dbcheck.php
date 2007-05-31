@@ -221,6 +221,17 @@ if(isset($GO_MODULES->modules['cms']))
 			echo 'Adding share for '.$template_file_path.'<br />';
 		}
 	}
+	
+	$cms->get_sites();
+	while($cms->next_record())
+	{
+		$site_file_path = $GO_CONFIG->local_path.'cms/sites/'.$cms->f('id').'/';		
+		if(is_dir($site_file_path) && !$fs->find_share($site_file_path))
+		{			
+			$fs->add_share($cms->f('user_id'), $site_file_path, 'template', $cms->f('acl_read'), $cms->f('acl_write'));
+			echo 'Adding share for '.$site_file_path.'<br />';
+		}
+	}
 	echo 'Done<br /><br />';
 }
 
