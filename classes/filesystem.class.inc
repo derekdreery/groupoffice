@@ -715,6 +715,8 @@ class filesystem extends db
 
 		$source_path = dirname($source_path).'/'.basename($source_path);
 		$destination_path = dirname($destination_path).'/'.basename($destination_path);
+		
+		//echo $source_path.' -> '.$destination_path;
 
 		global $GO_CONFIG, $GO_MODULES;
 		//do not move into own path
@@ -828,10 +830,15 @@ class filesystem extends db
 		$source_path = dirname($source_path).'/'.basename($source_path);
 		$destination_path = dirname($destination_path).'/'.basename($destination_path);
 
+		//echo $source_path.' -> '.$destination_path;
+		
 		global $GO_CONFIG;
-		//do not copy into own path
-		if (strpos($destination_path, $source_path) === 0)
+		
+		if($source_path == $destination_path)
 		{
+			return true;
+		}elseif (strpos($destination_path, $source_path) === 0)
+		{//do not copy into own path
 			// TODO add translation
 			$this->action_result = "source and destination path are the same";
 			return false;
