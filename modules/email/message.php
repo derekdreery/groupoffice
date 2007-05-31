@@ -176,6 +176,11 @@ function previous_message()
 	get_message(<?php echo $content['previous']; ?>);
 }
 
+function print_message()
+{
+	popup('message_body.php?account_id=<?php echo $account_id; ?>&uid=<?php echo $uid; ?>&mailbox=<?php echo base64_encode($mailbox); ?>&print=true');
+}
+
 //-->
 </script>
 

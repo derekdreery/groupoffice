@@ -25,7 +25,7 @@ $images = '';
 
 $print = isset($_REQUEST['print']) ? true : false;
 
-$mailbox = isset($_REQUEST['mailbox'])?  $_REQUEST['mailbox'] : "INBOX";
+$mailbox = isset($_REQUEST['mailbox'])?  base64_decode($_REQUEST['mailbox']) : "INBOX";
 $uid = isset($_REQUEST['uid']) ? $_REQUEST['uid'] : 0;
 $part = isset($_REQUEST['part']) ? $_REQUEST['part'] : '';
 $account_id = isset($_REQUEST['account_id']) ? $_REQUEST['account_id'] : 0;
