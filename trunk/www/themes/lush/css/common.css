@@ -1,3 +1,31 @@
+#headerTable{
+width:80%;
+height:20px;
+border:0px;
+background-color: #ADC7B5;
+border-bottom:1px solid black;
+width:100%;
+}
+#headerTable td{
+white-space:nowrap;
+}
+
+#headerTable a:link, #headerTable a:visited, #headerTable a:active {
+color: #00000;
+text-decoration: none;
+margin-left:10px;
+}
+
+#headerTable a:hover {
+color: #ffffff;
+text-decoration: underline;
+}
+
+#headerTable input{
+border:1px solid black;
+padding-left:1px;
+}
+
 .textbox_error{
 font-family: arial,verdana,sans-serif;
 font-size: 12px;
@@ -126,28 +154,7 @@ a.FooterBar:hover {
 	text-decoration: none;
 }
 
-.HeaderBar {
-	font-family:	arial, verdana, sans-serif;
-	font-size:	12px;
-	font-weight: normal;
-	background-color: #ADC7B5;
-	padding:	0;
-	border-bottom: 1px solid black;
-	height: 22px;
-	text-align: right;
-}
 
-a.HeaderBar:link, a.HeaderBar:visited, a.HeaderBar:active {
-	color: #000000;
-	font-family: arial, helvetica, sans-serif;
-	font-size: 12px;
-	font-style: normal;
-	font-weight: normal;
-	text-decoration: none;
-	border: 0;
-	padding: 2px;
-	padding-right: 10px;
-}
 
 a.HeaderBar:hover {
 	color: #ffffff;
