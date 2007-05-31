@@ -232,8 +232,10 @@ switch ($task) {
 						}
 					}
 				}
-		
+
+				
 				while ($file = smart_stripslashes(array_shift($_SESSION['cut_files']))) {
+					//echo basename($file);
 					$new_path = $fv->path.'/'.basename($file);
 					if (!$fs->has_write_permission($GO_SECURITY->user_id, $fv->path)) {
 						$popup_feedback .= access_denied_box($fv->path);
@@ -242,13 +244,14 @@ switch ($task) {
 					elseif (file_exists($new_path)) {
 						if ($overwrite_destination_path == $new_path && $overwrite_all != 'true') {
 							if ($overwrite == "true") {
+								
 								if(!$file_uploaded = $fs->move(addslashes($file), $new_path))
 								{
 									$task = 'upload';
 									$feedback = $fs_inssufficient_diskspace;
 								}else
-								{									
-									$file_link_id = $fs->get_link_id($new_path);								
+								{
+									$file_link_id = $fs->get_link_id($new_path);
 								}
 							}
 						}else{
@@ -259,20 +262,21 @@ switch ($task) {
 							break;
 						}
 					} else {
+						
 						if(!$file_uploaded = $fs->move(addslashes($file), $fv->path.'/'.basename($file)))
 						{
 							$task = 'upload';
 							$feedback = $fs_inssufficient_diskspace;
 						}else
 						{
-							$file_link_id = $fs->get_link_id($new_path);
+							$file_link_id = $fs->get_link_id(addslashes($new_path));
 						}
 					}
 				}
 				if(!isset($feedback)  && isset($_REQUEST['return_to']) && $task != 'overwrite')
 				{
 					header('Location: '.$_REQUEST['return_to']);
-				
+
 					exit();
 				}
 
