@@ -67,11 +67,11 @@ if ($GO_MODULES->write_permission)
 	$load_user_id=$GO_SECURITY->user_id;
 }
 
-$default_start_date = date($_SESSION['GO_SESSION']['date_format'], mktime(0,0,0,$this_month-1, $this_day, $this_year));
-$default_end_date = date($_SESSION['GO_SESSION']['date_format'], $time);
+$default_load_start_date = date($_SESSION['GO_SESSION']['date_format'], mktime(0,0,0,$this_month-1, $this_day, $this_year));
+$default_load_end_date = date($_SESSION['GO_SESSION']['date_format'], $time);
 
-$start_date = isset($_POST['start_date']) ? $_POST['start_date'] : $default_start_date;
-$end_date = isset($_POST['end_date']) ? $_POST['end_date'] : $default_end_date;
+$load_start_date = isset($_POST['load_start_date']) ? $_POST['load_start_date'] : $default_load_start_date;
+$load_end_date = isset($_POST['load_end_date']) ? $_POST['load_end_date'] : $default_load_end_date;
 
 if (!$print)
 {
@@ -137,13 +137,13 @@ if (!$print)
 	$row->add_cell(new table_cell($radiogroup->get_option(new radiobutton('period', 'period'), $pm_show_period)));
 	
 	
-	$start_datepicker = new date_picker('start_date', $_SESSION['GO_SESSION']['date_format'], $start_date);
+	$load_start_datepicker = new date_picker('load_start_date', $_SESSION['GO_SESSION']['date_format'], $load_start_date);
 
 	
 	
-	$end_datepicker = new date_picker('end_date', $_SESSION['GO_SESSION']['date_format'], $end_date);
+	$load_end_datepicker = new date_picker('load_end_date', $_SESSION['GO_SESSION']['date_format'], $load_end_date);
 	
-	$row->add_cell(new table_cell($start_datepicker->get_html().'&nbsp;&nbsp;'.$pm_to.'&nbsp;&nbsp;'.$end_datepicker->get_html()));	
+	$row->add_cell(new table_cell($load_start_datepicker->get_html().'&nbsp;&nbsp;'.$pm_to.'&nbsp;&nbsp;'.$load_end_datepicker->get_html()));	
 	$table->add_row($row);
 	
 	$row = new table_row();
@@ -189,8 +189,8 @@ if (!$print)
 		break;
 
 		case 'period':
-		$end_time = date_to_unixtime($end_date)+86400;
-		$start_time = date_to_unixtime($start_date);//+86400;
+		$end_time = date_to_unixtime($load_end_date)+86400;
+		$start_time = date_to_unixtime($load_start_date);//+86400;
 		break;
 
 		case 'month':
