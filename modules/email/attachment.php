@@ -35,7 +35,7 @@ if ($mail->open($account['host'], $account['type'],$account['port'],$account['us
 	if ($browser['name'] == 'MSIE')
 	{
 		header('Content-Type: application/download');
-		header('Content-Disposition: attachment; filename="'.$filename.'";');
+		header('Content-Disposition: attachment; filename="'.rawurlencode($filename).'";');
 		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 		header('Pragma: public');
 	}else
