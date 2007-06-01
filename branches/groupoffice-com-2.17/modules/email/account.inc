@@ -99,6 +99,8 @@ $table->add_row($row);
 
 if (!$GO_MODULES->write_permission)
 {
+	$form->add_html_element(new input('hidden','use_ssl',$use_ssl));
+	$form->add_html_element(new input('hidden','novalidate_cert',$novalidate_cert));
 	$form->add_html_element(new input('hidden','host',$host));
 	$form->add_html_element(new input('hidden','mbroot',$mbroot));
 	$form->add_html_element(new input('hidden','type',$type));

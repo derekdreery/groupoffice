@@ -139,8 +139,8 @@ switch ($task)
 		$feedback = $error_missing_field;
 	}else
 	{
-		$use_ssl = isset($_REQUEST['use_ssl']) ? '1' : '0';
-		$novalidate_cert = isset($_REQUEST['novalidate_cert']) ? '1' : '0';
+		$use_ssl = isset($_REQUEST['use_ssl'])  ? $_REQUEST['use_ssl'] : '0';
+	 	$novalidate_cert = isset($_REQUEST['novalidate_cert']) ? $_REQUEST['novalidate_cert'] : '0';
 		
 		
 
