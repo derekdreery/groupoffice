@@ -78,7 +78,7 @@ $menu->add_button('close', $cmdClose, htmlspecialchars($return_to));
 
 $datatable->add_column(new table_heading($strEmail));
 
-if($GO_MODULES->write_permission)
+if($GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
 {
 	$datatable->add_column(new table_heading($strOwner));
 	$count = $email->get_accounts();
