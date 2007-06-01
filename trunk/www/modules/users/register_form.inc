@@ -283,7 +283,7 @@ $row = new table_row();
 $row->add_cell(new table_cell($strHomepage.':'));
 $input = new input('text','homepage', $user['homepage']);
 $input->set_attribute('style','width:280px');
-$input->set_attribute('maxlength','20');
+$input->set_attribute('maxlength','100');
 $row->add_cell(new table_cell($input->get_html()));
 $table->add_row($row);
 
