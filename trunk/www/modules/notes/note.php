@@ -119,7 +119,7 @@ Note = function(){
 
 				note_form = new Ext.form.Form({
 					labelWidth: 75, // label settings here cascade unless overridden
-					
+
 
 					reader: new Ext.data.JsonReader({
 						root: 'note',
@@ -129,7 +129,7 @@ Note = function(){
 					{name: 'content'}
 					])
 				});
-				
+
 				var name_field = new Ext.form.TextField({
 					fieldLabel: GOlang['strName'],
 					name: 'name',
@@ -137,8 +137,8 @@ Note = function(){
 					allowBlank:false,
 					style:'width:100%'
 				});
-				
-				
+
+
 				note_form.add(name_field
 				,
 
@@ -152,7 +152,7 @@ Note = function(){
 				);
 
 				note_form.render('form_<?php echo $uniqid; ?>');
-				
+
 
 				var notetb = new Ext.Toolbar('toolbar_<?php echo $uniqid; ?>');
 
@@ -232,8 +232,8 @@ Note = function(){
 				});
 				links_ds.setDefaultSort('mtime', 'desc');
 
-				
-				function IconRenderer(src){					
+
+				function IconRenderer(src){
 					return '<img src=\"' + src +' \" />';
 				}
 
@@ -242,9 +242,9 @@ Note = function(){
 				// the data store
 				var links_cm = new Ext.grid.ColumnModel([
 				{
-					header:"", 
+					header:"",
 					width:28,
-					dataIndex: 'icon', 
+					dataIndex: 'icon',
 					renderer: IconRenderer
 				},{
 					header: GOlang['strName'],
@@ -286,7 +286,7 @@ Note = function(){
 
 				linksPanel = new Ext.GridPanel(links_grid, { title: 'Links', toolbar: linkstb});
 				layout.add('center', linksPanel);
-				
+
 				linksPanel.on('activate',this.loadLinks);
 
 				layout.getRegion('center').showPanel('properties_<?php echo $uniqid; ?>');
@@ -294,11 +294,39 @@ Note = function(){
 				layout.endUpdate();
 			}
 			dialog.show();
-			
+
 			name_field.focus(true);
 		},
 		destroyDialog : function(){
-			dialog.destroy(true);
+			if(dialog.isVisible()){
+				dialog.animateTarget = null;
+				dialog.hide();
+			}
+			Ext.EventManager.removeResizeListener(dialog.adjustViewport, dialog);
+			if(dialog.tabs){
+				dialog.tabs.destroy(removeEl);
+			}
+			Ext.destroy(
+			dialog.shim,
+			dialog.proxy,
+			dialog.close,
+			dialog.mask
+			);
+			if(dialog.dd){
+				dialog.dd.unreg();
+			}
+			if(dialog.buttons){
+				for(var i = 0, len = dialog.buttons.length; i < len; i++){
+					dialog.buttons[i].destroy();
+				}
+			}
+			dialog.el.removeAllListeners();
+
+			dialog.el.update("");
+			dialog.el.remove();
+
+			Ext.DialogManager.unregister(dialog);
+
 		},
 		loadLinks : function()
 		{
@@ -306,14 +334,14 @@ Note = function(){
 			{
 				links_loaded=true;
 				links_ds.load();
-				links_grid.render();			
+				links_grid.render();
 			}
 		},
 		rowDoulbleClicked : function(search_grid, rowClicked, e) {
 
 			var selectionModel = links_grid.getSelectionModel();
 			var record = selectionModel.getSelected();
-			
+
 			//parent.Ext.get('dialog').load({url: record.data['url'], scripts: true });
 			parent.GroupOffice.showDialog({url: record.data['url'], scripts: true });
 		},
@@ -325,7 +353,7 @@ Note = function(){
 				var fromlinks = [];
 				fromlinks.push({ 'link_id' : <?php echo $note['link_id']; ?>, 'link_type' : 4 });
 
-				parent.GroupOffice.showLinks({ 'fromlinks': fromlinks});
+				parent.GroupOffice.showLinks({ 'fromlinks': fromlinks, 'callback': function(){links_ds.load()}});
 				break;
 
 				case 'unlink':
@@ -336,17 +364,15 @@ Note = function(){
 
 				var unlinks = [];
 
-				for (var i = 0;i<linkGrids.length;i++)
+				var selectionModel = links_grid.getSelectionModel();
+				var records = selectionModel.getSelections();
+
+				for (var i = 0;i<records.length;i++)
 				{
-					var selectionModel = linkGrids[i].getSelectionModel();
-					var records = selectionModel.getSelections();
-
-					for (var i = 0;i<records.length;i++)
-					{
-						unlinks.push(records[i].data['link_id']);
-					}
-
+					unlinks.push(records[i].data['link_id']);
 				}
+
+
 
 				if(parent.GroupOffice.unlink(<?php echo $note['link_id']; ?>, unlinks))
 				{
