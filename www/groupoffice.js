@@ -10,6 +10,7 @@ GroupOffice = function(){
 	var search_links_ds;
 	var fromlinks;
 	var search_grid_rendered;
+	var links_callback;
 
 	return {
 
@@ -230,7 +231,10 @@ GroupOffice = function(){
 
 		showLinks : function(config){
 
-
+			
+            
+            links_callback = config['callback'];
+            
 			fromlinks = config['fromlinks'];
 
 			if(config['records'])
@@ -402,6 +406,7 @@ GroupOffice = function(){
 						Ext.MessageBox.alert('Failed', response.result.errors);
 					}else
 					{
+             		   	links_callback.call();					
 						linksDialog.hide();
 					}
 				}
@@ -424,6 +429,7 @@ GroupOffice = function(){
 					}
 				}
 			});
+			return true;
 		},
 		showDialog : function (config){
 
