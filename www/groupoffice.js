@@ -207,7 +207,7 @@ GroupOffice = function(){
 
 			search_ds.baseParams = {"query": query};
 
-			search_ds.load({params:{start:0, limit: GOsettings['max_rows_list']}});
+			search_ds.load({params:{start:0, limit: parseInt(GOsettings['max_rows_list'])}});
 			
 			if(!search_grid_rendered)
 			{
@@ -217,7 +217,7 @@ GroupOffice = function(){
 
 				// add a paging toolbar to the grid's footer
 				var search_paging = new Ext.PagingToolbar(searchGridFoot, search_ds, {
-					pageSize: GOsettings['max_rows_list'],
+					pageSize: parseInt(GOsettings['max_rows_list']),
 					displayInfo: true,
 					displayMsg: GOlang['displayingItems'],
 					emptyMsg: GOlang['strNoItems']
@@ -337,7 +337,7 @@ GroupOffice = function(){
 
 				// add a paging toolbar to the grid's footer
 				var search_links_paging = new Ext.PagingToolbar(search_linksGridFoot, search_links_ds, {
-					pageSize: GOsettings['max_rows_list'],
+					pageSize: parseInt(GOsettings['max_rows_list']),
 					displayInfo: true,
 					displayMsg: GOlang['displayingItems'],
 					emptyMsg: GOlang['strNoItems']
@@ -361,7 +361,7 @@ GroupOffice = function(){
 		searchLinks : function(query){
 			search_links_ds.baseParams = {"query": query};
 
-			search_links_ds.load({params:{start:0, limit: GOsettings['max_rows_list']}});
+			search_links_ds.load({params:{start:0, limit: parseInt(GOsettings['max_rows_list'])}});
 			
 		},
 		searchLinksKeyEvent : function(e){

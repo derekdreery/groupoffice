@@ -93,14 +93,14 @@ var linksGrid;
 
 			// add a paging toolbar to the grid's footer
 			var paging = new Ext.PagingToolbar(gridFoot, ds, {
-				pageSize: GOsettings['max_rows_list'],
+				pageSize: parseInt(GOsettings['max_rows_list']),
 				displayInfo: true,
 				displayMsg: 'Displaying notes {0} - {1} of {2}',
 				emptyMsg: "No topics to display"
 			});
 
 			// trigger the data store load
-			ds.load({params:{start:0, limit: GOsettings['max_rows_list']}});
+			ds.load({params:{start:0, limit: parseInt(GOsettings['max_rows_list'])}});
 
 
 			var tb = new Ext.Toolbar('notestb');
