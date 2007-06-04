@@ -207,3 +207,7 @@ $cms_add_contact_email_subject='New contact added to mailing';
 
 $cms_new_comment_subject = 'New comment placed in %s';
 $cms_insert_video='Insert video';
+
+$cms_antispam_text='Please answer the following simple question to avoid SPAM';
+
+$cms_antispam_fail='The answer to the antispam question was incorrect. Please try again.';

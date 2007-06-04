@@ -34,6 +34,14 @@ class cms_comments {
 	{
 		global $GO_LANGUAGE, $GO_SECURITY, $GO_CONFIG;
 		
+		
+		$antispams[]=array('question'=>'1 + 3 = ', 'answer'=>'4');
+		$antispams[]=array('question'=>'1 + 2 = ', 'answer'=>'3');
+		$antispams[]=array('question'=>'4 / 2 = ', 'answer'=>'2');
+		$antispams[]=array('question'=>'5 + 3 = ', 'answer'=>'8');
+		$antispams[]=array('question'=>'2 x 2 = ', 'answer'=>'4');
+			
+		
 		$form = new form('comments_form');
 		$form->add_html_element(new input('hidden','user_id', '', false));
 		$form->add_html_element(new input('hidden', 'comments_task', 'add'));
@@ -52,7 +60,10 @@ class cms_comments {
 			$comment['user_id'] = isset($GO_SECURITY->user_id) ? $GO_SECURITY->user_id : 0;
 			$comment['file_id']=$this->cms_site->file_id;
 			
-			if($comment['name']=='' || $comment['comments']=='')
+			if($anitspams[$_POST['antispam_key']] == $_POST['antispam_answer'])
+			{
+				$feedback = $cms_antispam_fail;	
+			}elseif($comment['name']=='' || $comment['comments']=='')
 			{
 				$feedback = $cms_comments_missing_field;	
 			}else {								
@@ -149,6 +160,41 @@ class cms_comments {
 			$textarea = new textarea('comments', '');
 			$textarea->set_attribute('style', 'width:99%;height:80px;');
 			$cell=new table_cell($textarea->get_html());
+			$cell->set_attribute('style','width:100%');
+			$row->add_cell($cell);
+			$table->add_row($row);
+			
+			
+			
+			
+			
+			$row = new table_row();
+	
+			$cell = new table_cell($cms_antispam_text);
+			$cell->set_attribute('colspan','2');
+	
+			$row->add_cell($cell);
+			$table->add_row($row);
+			
+			
+			
+			
+			$row = new table_row();
+			
+			
+			
+			$antispam_key = array_rand($antispams);
+			
+			$cell = new table_cell($antispam_questions[$antispam_key]['question'].':');
+			$cell->set_attribute('style','white-space:nowrap');
+			$row->add_cell($cell);
+			
+			$form->add_html_element(new input('hidden','antispam_key',$antispam_key,false));
+			
+			
+			$input = new input('text', 'antispam_answer', '');
+			$input->set_attribute('style', 'width:99%;');
+			$cell=new table_cell($input->get_html());
 			$cell->set_attribute('style','width:100%');
 			$row->add_cell($cell);
 			$table->add_row($row);
