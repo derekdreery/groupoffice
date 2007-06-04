@@ -90,6 +90,7 @@ class Image_Cache {
     if ( !DOMPDF_ENABLE_REMOTE && $remote ) {
       $resolved_url = DOMPDF_LIB_DIR . "/res/broken_image.png";
       $ext = "png";
+      go_log(LOG_DEBUG, 'Remote');
 
     } else if ( DOMPDF_ENABLE_REMOTE && $remote ) {
       // Download remote files to a temporary directory
@@ -98,12 +99,14 @@ class Image_Cache {
       if ( isset(self::$_cache[$url]) ) {
         list($resolved_url,$ext) = self::$_cache[$url];
         //echo "Using cached image $url (" . $resolved_url . ")\n";
-
+		go_log(LOG_DEBUG, 'Cache');
       } else {
 
         //echo "Downloading file $url to temporary location: ";
         $resolved_url = tempnam(DOMPDF_TEMP_DIR, "dompdf_img_");
         //echo $resolved_url . "\n";
+        
+        go_log(LOG_DEBUG, 'Download: '.$resolved_url);
 
         $old_err = set_error_handler("record_warnings");
         $image = file_get_contents($url);
@@ -112,6 +115,7 @@ class Image_Cache {
         if ( strlen($image) == 0 ) {
           $image = file_get_contents(DOMPDF_LIB_DIR . "/res/broken_image.png");
           $ext = "png";
+          go_log(LOG_DEBUG, 'lenght 0');
         }
 
         file_put_contents($resolved_url, $image);
@@ -152,6 +156,7 @@ class Image_Cache {
         list($file, $ext) = $entry;
         unlink($file);
       }
+      self::$_cache=array();
     }
   }
 
