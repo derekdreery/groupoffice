@@ -34,6 +34,14 @@ class cms_comments {
 	{
 		global $GO_LANGUAGE, $GO_SECURITY, $GO_CONFIG;
 		
+		
+		$antispams[]=array('question'=>'1 + 3 = ', 'answer'=>'4');
+		$antispams[]=array('question'=>'1 + 2 = ', 'answer'=>'3');
+		$antispams[]=array('question'=>'4 / 2 = ', 'answer'=>'2');
+		$antispams[]=array('question'=>'5 + 3 = ', 'answer'=>'8');
+		$antispams[]=array('question'=>'2 x 2 = ', 'answer'=>'4');
+			
+		
 		$form = new form('comments_form');
 		$form->add_html_element(new input('hidden','user_id', '', false));
 		$form->add_html_element(new input('hidden', 'comments_task', 'add'));
@@ -52,7 +60,11 @@ class cms_comments {
 			$comment['user_id'] = isset($GO_SECURITY->user_id) ? $GO_SECURITY->user_id : 0;
 			$comment['file_id']=$this->cms_site->file_id;
 			
-			if($comment['name']=='' || $comment['comments']=='')
+			
+			if($antispams[$_POST['antispam_key']]['answer'] != $_POST['antispam_answer'])
+			{
+				$feedback = $cms_antispam_fail;	
+			}elseif($comment['name']=='' || $comment['comments']=='')
 			{
 				$feedback = $cms_comments_missing_field;	
 			}else {								
@@ -132,7 +144,12 @@ class cms_comments {
 			$cell->set_attribute('style','white-space:nowrap');
 			$row->add_cell($cell);
 			
-			$name = $GO_SECURITY->logged_in() ? $_SESSION['GO_SESSION']['name'] : '';
+			if(isset($_POST['name']))
+			{
+				$name = smart_stripslashes($_POST['name']);
+			}else {
+				$name = $GO_SECURITY->logged_in() ? $_SESSION['GO_SESSION']['name'] : '';
+			}
 			$input = new input('text', 'name', $name);
 			$input->set_attribute('style', 'width:99%;');
 			$cell=new table_cell($input->get_html());
@@ -146,9 +163,51 @@ class cms_comments {
 			$cell->set_attribute('style','white-space:nowrap;vertical-align:top');
 			$row->add_cell($cell);
 			
-			$textarea = new textarea('comments', '');
+			if(isset($_POST['comments']))
+			{
+				$comments = smart_stripslashes($_POST['comments']);
+			}else {
+				$comments = '';
+			}
+			
+			$textarea = new textarea('comments', $comments);
 			$textarea->set_attribute('style', 'width:99%;height:80px;');
 			$cell=new table_cell($textarea->get_html());
+			$cell->set_attribute('style','width:100%');
+			$row->add_cell($cell);
+			$table->add_row($row);
+			
+			
+			
+			
+			
+			$row = new table_row();
+	
+			$cell = new table_cell($cms_antispam_text);
+			$cell->set_attribute('colspan','2');
+	
+			$row->add_cell($cell);
+			$table->add_row($row);
+			
+			
+			
+			
+			$row = new table_row();
+			
+			
+			
+			$antispam_key = array_rand($antispams);
+			
+			$cell = new table_cell($antispams[$antispam_key]['question']);
+			$cell->set_attribute('style','white-space:nowrap');
+			$row->add_cell($cell);
+			
+			$form->add_html_element(new input('hidden','antispam_key',$antispam_key,false));
+			
+			
+			$input = new input('text', 'antispam_answer', '');
+			$input->set_attribute('style', 'width:99%;');
+			$cell=new table_cell($input->get_html());
 			$cell->set_attribute('style','width:100%');
 			$row->add_cell($cell);
 			$table->add_row($row);
