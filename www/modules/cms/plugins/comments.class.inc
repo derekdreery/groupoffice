@@ -60,7 +60,8 @@ class cms_comments {
 			$comment['user_id'] = isset($GO_SECURITY->user_id) ? $GO_SECURITY->user_id : 0;
 			$comment['file_id']=$this->cms_site->file_id;
 			
-			if($anitspams[$_POST['antispam_key']] == $_POST['antispam_answer'])
+			
+			if($antispams[$_POST['antispam_key']]['answer'] != $_POST['antispam_answer'])
 			{
 				$feedback = $cms_antispam_fail;	
 			}elseif($comment['name']=='' || $comment['comments']=='')
@@ -143,7 +144,12 @@ class cms_comments {
 			$cell->set_attribute('style','white-space:nowrap');
 			$row->add_cell($cell);
 			
-			$name = $GO_SECURITY->logged_in() ? $_SESSION['GO_SESSION']['name'] : '';
+			if(isset($_POST['name']))
+			{
+				$name = smart_stripslashes($_POST['name']);
+			}else {
+				$name = $GO_SECURITY->logged_in() ? $_SESSION['GO_SESSION']['name'] : '';
+			}
 			$input = new input('text', 'name', $name);
 			$input->set_attribute('style', 'width:99%;');
 			$cell=new table_cell($input->get_html());
@@ -157,7 +163,14 @@ class cms_comments {
 			$cell->set_attribute('style','white-space:nowrap;vertical-align:top');
 			$row->add_cell($cell);
 			
-			$textarea = new textarea('comments', '');
+			if(isset($_POST['comments']))
+			{
+				$comments = smart_stripslashes($_POST['comments']);
+			}else {
+				$comments = '';
+			}
+			
+			$textarea = new textarea('comments', $comments);
 			$textarea->set_attribute('style', 'width:99%;height:80px;');
 			$cell=new table_cell($textarea->get_html());
 			$cell->set_attribute('style','width:100%');
@@ -185,7 +198,7 @@ class cms_comments {
 			
 			$antispam_key = array_rand($antispams);
 			
-			$cell = new table_cell($antispam_questions[$antispam_key]['question'].':');
+			$cell = new table_cell($antispams[$antispam_key]['question']);
 			$cell->set_attribute('style','white-space:nowrap');
 			$row->add_cell($cell);
 			
