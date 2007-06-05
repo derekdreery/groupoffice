@@ -751,6 +751,8 @@ if ($_SERVER['REQUEST_METHOD'] != "POST" && $tp_plugin && $template_id == 0 &&
 					}
 
 					//add html messages as an attachment since we don't have an html editor to display it coreect yet
+					/*
+					Disabled because some spam filters block messages with HTML attachments
 					if (strtolower($parts[$i]["mime"]) == "text/html" &&
 							!eregi("ATTACHMENT", $parts[$i]["disposition"]))
 					{
@@ -777,7 +779,7 @@ if ($_SERVER['REQUEST_METHOD'] != "POST" && $tp_plugin && $template_id == 0 &&
 
 						$email->register_attachment($tmp_file, $parts[$i]["name"],
 								$parts[$i]["size"], $parts[$i]["mime"]);
-					}
+					}*/
 				}
 			}
 
