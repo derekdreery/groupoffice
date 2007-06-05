@@ -4,7 +4,23 @@
 
 $filetypes['unknown'] = 'Unkown filetype';
 $filetypes['txt'] = 'Textfile';
-$filetypes['sxw'] = 'OpenOffice.Org Writer document';
+$filetypes['sxw'] = 'OpenOffice.Org text';
+$filetypes['ott'] = 'OpenOffice.Org template';
+$filetypes['odc']= 'OpenOffice.Org chart';
+$filetypes['odb']= 'OpenOffice.Org database';
+$filetypes['odf']= 'OpenOffice.Org formula';
+$filetypes['odg']= 'OpenOffice.Org graphics';
+$filetypes['otg']= 'OpenOffice.Org graphics template';
+$filetypes['odi']= 'OpenOffice.Org image';
+$filetypes['odp']= 'OpenOffice.Org presentation';
+$filetypes['otp']= 'OpenOffice.Org presentation template';
+$filetypes['ods']= 'OpenOffice.Org spreadsheet';
+$filetypes['ots']= 'OpenOffice.Org spreadsheet template';
+$filetypes['odt']= 'OpenOffice.Org text';
+$filetypes['odm']= 'OpenOffice.Org text master';
+$filetypes['oth']= 'OpenOffice.Org web page';
+
+
 $filetypes['doc'] = 'Microsoft Word document';
 $filetypes['xls'] = 'Microsoft Excel spreadsheet';
 $filetypes['mdb'] = 'Microsoft Access database';

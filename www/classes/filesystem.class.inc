@@ -223,6 +223,13 @@ class filesystem extends db
 			return $file['link_id'];
 		}
 	}
+	
+	function get_latest_files()
+	{
+		$sql = "SELECT * FROM fs_links ORDER BY mtime DESC";
+		$this->query($sql);
+		return $this->num_rows();
+	}
 
 	function get_file($path)
 	{
@@ -237,6 +244,8 @@ class filesystem extends db
 
 			$file['path'] = $path;
 			$file['link_id'] = $GO_LINKS->get_link_id();
+			$file['ctime']=filectime($path);
+			$file['mtime']=filemtime($path);
 
 			$this->insert_row('fs_links', $file);
 
