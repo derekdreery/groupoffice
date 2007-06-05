@@ -1,177 +1,241 @@
-
-
-function expand_all()
-{
-	document.forms[0].form_action.value = 'expand_all';
-	document.forms[0].submit();
-}
-
-function collapse_all()
-{
-	document.forms[0].form_action.value = 'collapse_all';
-	document.forms[0].submit();
-}
-
-function move_mail()
-{
-	document.forms[0].form_action.value = 'move';
-	document.forms[0].submit();
-}
+email = function(){
+	var layout;
+	var previewPanel;
+	var grid;
+	var ds;
 
 
 
-function set_flag()
-{
-	document.forms[0].form_action.value = 'set_flag';
-	document.forms[0].submit();
-}
+	return {
 
-function open_folder(account_id, mailbox)
-{
-		parent.messages.location='messages.php?account_id='+account_id+'&mailbox='+escape(mailbox);
-}
-function expand_folder(folder_id)
-{
-	document.forms[0].expand_id.value=folder_id;
-	document.forms[0].submit();
-}
-function open_account(account_id)
-{
-	parent.update_toolbar(false);
-	document.location = 'treeview.php?account_id='+account_id+'&mailbox=INBOX';
-	parent.message.location.href='about:blank';
-	parent.messages.location.href='messages.php?account_id='+account_id+'&mailbox=INBOX';
-}
+		init : function(){
 
-function update_toolbar(enabled)
-{
-	var messageButtons = get_object('messageButtons');
-	var accountButtons = get_object('accountButtons');
-	if(enabled)
-	{
-		messageButtons.style.display='';
-		accountButtons.style.display='none';
-	}else
-	{
-		messageButtons.style.display='none';
-		accountButtons.style.display='';
-	}
-	toggle_message_frame(enabled);
-}
+			// initialize state manager, we will use cookies
+			Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
 
-function toggle_message_frame(enabled)
-{
-	var message = get_object('message');
-	var messages = get_object('messages');
+			layout = new Ext.BorderLayout(document.body, {
+				center: {
+
+					titlebar: true,
+					autoScroll:true,
+					closeOnTab: true,
+					split:true,
+                    initialSize: 400,
+                    minSize: 205,
+                    maxSize: 700
+					
+				},
+				east: {
+
+					titlebar: true,
+					autoScroll:true,
+					closeOnTab: true,
+					split:true,
+                    initialSize: 400,
+                    minSize: 205,
+                    maxSize: 700
+					
+					
+				}
+			});
+			
+			
+			
+			layout.beginUpdate();
+			
+			
+
+
+			ds = new Ext.data.Store({
+
+				proxy: new Ext.data.HttpProxy({
+					url: 'messages_json.php'
+				}),
+
+				reader: new Ext.data.JsonReader({
+					root: 'results',
+					totalProperty: 'total',
+					id: 'uid'
+				}, [
+				{name: 'uid', mapping: 'uid'},
+				{name: 'subject'},				
+				{name: 'from'},	
+				{name: 'size'},
+				{name: 'date'}
+				]),
+
+				// turn on remote sorting
+				remoteSort: true
+			});
+			ds.setDefaultSort('utime', 'asc');
+
+
+
+			// the column model has information about grid columns
+			// dataIndex maps the column to the specific data field in
+			// the data store
+			var cm = new Ext.grid.ColumnModel([{
+				header: "From",
+				dataIndex: 'from',
+				css: 'white-space:normal;'
+			},{
+				header: "Subject",
+				dataIndex: 'subject'
+			},{
+				header: "Size",
+				dataIndex: 'size'
+			},{
+				header: "Date",
+				dataIndex: 'date'
+			}]);
+
+			// by default columns are sortable
+			cm.defaultSortable = true;
+
+			// create the editor grid
+			grid = new Ext.grid.Grid('email-grid', {
+				ds: ds,
+				cm: cm,
+				selModel: new Ext.grid.RowSelectionModel(),
+				enableColLock:false,
+				loadMask: true
+			});
+
 	
-	if(enabled)
-	{
-		if(message.style.height!='100%')
+			grid.addListener("rowdblclick", this.rowDoubleClicked, this);
+			grid.addListener("rowclick", this.rowClicked, this);
+
+			// render it
+			grid.render();
+
+			var gridFoot = grid.getView().getFooterPanel(true);
+
+			// add a paging toolbar to the grid's footer
+			var paging = new Ext.PagingToolbar(gridFoot, ds, {
+				pageSize: parseInt(GOsettings['max_rows_list']),
+				displayInfo: true,
+				displayMsg: 'Displaying messages {0} - {1} of {2}',
+				emptyMsg: "No messages to display"
+			});
+
+			// trigger the data store load
+			ds.load({params:{start:0, limit: parseInt(GOsettings['max_rows_list'])}});
+
+
+			var tb = new Ext.Toolbar('emailtb');
+			tb.add(new Ext.Toolbar.Button({
+				id: 'delete',
+				icon: GOimages['delete'],
+				text: GOlang['cmdDelete'],				
+				cls: 'x-btn-text-icon',
+				handler: this.onButtonClick
+			})
+			);
+			
+			tb.add(new Ext.Toolbar.Button({
+				id: 'link',
+				icon: GOimages['link'],
+				text: GOlang['cmdLink'],
+				cls: 'x-btn-text-icon',
+				handler: this.onButtonClick
+			})
+			);
+
+
+
+
+			layout.add('center', new Ext.GridPanel(grid, {title: emailLang['messages'], toolbar: tb}));
+			
+			previewPanel = new Ext.ContentPanel('east', {title: emailLang['message']});
+			layout.add('east', previewPanel);
+			
+
+			layout.endUpdate();
+		},
+		
+		getDataSource : function()
 		{
-			var fsButton = get_object('fsButton');
-			fsButton.style.display='';
-			messages.style.height='50%';
-			message.style.height='50%';
-		}
-	}else
-	{		
-		message.style.height='0';
-		messages.style.height='100%';
-	}
-}
-
-function close_message_frame()
-{	
-	var message = get_object('message');
-	if(message.style.height=='100%')
-	{
-		toggle_navigation(true);
-	}else
-	{
-		message.src='blank.html';
-		var messagestd = get_object('messages');
-		messagestd.style.height='100%';		
-		messagestd.style.height='0';
-		var fsButton = get_object('fsButton');
-		fsButton.style.display='none';
-		update_toolbar(false);
-		messages.table_clear_selection('email_form', 'messages_table');
-	}
-}
-
-function close_message_frame_for_delete()
-{
-	var message = get_object('message');
-	message.src='blank.html';
-	
-	var tv = get_object('treeview');
-	var tvFrame = get_object('treeviewFrame');
-	tvFrame.style.width='100%';
-	tv.style.width='25%';
-	var messagestd = get_object('messages');
-	messagestd.style.height='100%';		
-	messagestd.style.height='0';
-	var fsButton = get_object('fsButton');
-	fsButton.style.display='none';
-	update_toolbar(false);
-}
-
-function toggle_next_button(visible)
-{
-	var next_button =get_object('next_button');
-	if(visible)
-	{
-		next_button.style.display='';
-	}else
-	{
-		next_button.style.display='none';
-	}
-}
-
-function toggle_previous_button(visible)
-{
-	var previous_button =get_object('previous_button');
-	if(visible)
-	{
-		previous_button.style.display='';
-	}else
-	{
-		previous_button.style.display='none';
-	}
-}
-
-function toggle_navigation(display)
-{
-	var fsButton = get_object('fsButton');
-	fsButton.style.display='';
-	
-	var tv = get_object('treeview');
-	var tvFrame = get_object('treeviewFrame');
-	
-	if(display)
-	{
-		tvFrame.style.width='100%';
-		tv.style.width='25%';
-	}else
-	{
-		tvFrame.style.width='0';
-		tv.style.width='0';
-	}
-	
-	var messagesTD = get_object('messagesTD');
-	var messages = get_object('messages');
-	var message = get_object('message');
+			return ds;
+		},
 		
 
-	if(display)
-	{
-		messagesTD.style.width='75%';
-		message.style.height='50%';
-		messages.style.height='50%';
-	}else
-	{
-		messages.style.height='0';
-		message.style.height='100%';	
-		messagesTD.style.width='100%';
-	}
-}
+		onButtonClick : function(btn){
+			switch(btn.id)
+			{
+				case 'link':
+					var selectionModel = grid.getSelectionModel();
+					var records = selectionModel.getSelections();					
+					
+					parent.GroupOffice.showLinks({ 'url': '../../search.html', 'records': records});
+				break;
+				case 'delete':
+				var selectedRows = grid.selModel.selections.keys;
+
+				if(selectedRows.length)
+				{
+
+					var conn = new Ext.data.Connection();
+					conn.request({
+						url: 'action.php',
+						params: {task: 'delete', selectedRows: Ext.encode(selectedRows)},
+						callback: function(options, success, response)
+						{
+							if(!success)
+							{
+								Ext.MessageBox.alert('Failed', response.result.errors);
+							}else
+							{
+								ds.reload();
+							}
+						},
+						scope: email
+					});
+				}
+				break;
+
+				case 'add':
+				/*var conn = new Ext.data.Connection();
+				conn.request({
+					url: 'action.php',
+					params: {task: 'add'},
+					callback: function(options, success, response)
+					{
+						if(!success)
+						{
+							Ext.MessageBox.alert('Failed', response.result.errors);
+						}else
+						{
+							var reponseParams = Ext.util.JSON.decode(response.responseText);
+							//email_form.load({url : 'email_json.php?email_id='+reponseParams['email_id']});
+							email_id=reponseParams['email_id'];
+							email_form.findField('name').focus(true);							
+							this.toggleForm(true);
+							ds.reload();
+						}
+					},
+					scope: email
+				});*/
+					Ext.get('dialog').load({url: 'email.php?email_id=0', scripts: true });
+				break;
+
+	
+			}
+		},		
+		rowDoubleClicked : function(grid, rowClicked, e) {
+			var selectionModel = grid.getSelectionModel();
+			var record = selectionModel.getSelected();
+
+			//showDialog('dialog', {url: 'email.php?email_id='+record.data['id']});
+			Ext.get('dialog').load({url: 'email.php?email_id='+record.data['id'], scripts: true });
+		},		
+		rowClicked : function(grid, rowClicked, e) {
+			
+			var selectionModel = grid.getSelectionModel();
+			var record = selectionModel.getSelected();
+			previewPanel.load({url: 'message.php?uid='+record.data['uid'], scripts: true });
+		}
+	};
+
+}();
+Ext.EventManager.onDocumentReady(email.init, email, true);
+
