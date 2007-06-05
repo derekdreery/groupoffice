@@ -44,40 +44,40 @@ $db->Halt_On_Error = 'no';
 
 if($GO_MODULES->get_module('addressbook'))
 {
-	$tables[]='ab_contacts';	
+	$tables[]='ab_contacts';
 	$tables[]='ab_companies';
 }
 if($GO_MODULES->get_module('calendar'))
 {
-	$tables[]='cal_events';	
+	$tables[]='cal_events';
 }
 if($GO_MODULES->get_module('projects'))
 {
-	$tables[]='pmProjects';	
+	$tables[]='pmProjects';
 }
 if($GO_MODULES->get_module('notes'))
 {
-	$tables[]='no_notes';	
+	$tables[]='no_notes';
 }
 if($GO_MODULES->get_module('users'))
 {
-	$tables[]='users';	
+	$tables[]='users';
 }
 
 if($GO_MODULES->get_module('billing'))
 {
-	$tables[]='bs_orders';	
+	$tables[]='bs_orders';
 }
 
 if($GO_MODULES->get_module('shipping'))
 {
-	$tables[]='sh_jobs';	
-	$tables[]='sh_packages';	
+	$tables[]='sh_jobs';
+	$tables[]='sh_packages';
 }
 
 if($GO_MODULES->get_module('updateserver'))
 {
-	$tables[]='us_licenses';		
+	$tables[]='us_licenses';
 }
 
 $count=0;
@@ -85,17 +85,17 @@ foreach($tables as $table)
 {
 	$sql = "SELECT id FROM $table WHERE link_id=0 OR ISNULL(link_id)";
 	$db->query($sql);
-	
+
 	while($db->next_record())
 	{
 		$count++;
 		$ud['id']=$db->f('id');
 		$ud['link_id']=$GO_LINKS->get_link_id();
-		
+
 		$db2->update_row($table,'id', $ud);
 	}
-	
-	
+
+
 	$sql = "SELECT link_id FROM `$table` group by link_id having count(*) > 1;";
 	$db->query($sql);
 	while($db->next_record())
@@ -110,13 +110,13 @@ foreach($tables as $table)
 			}else {
 				$ud['id']=$db2->f('id');
 				$ud['link_id']=$GO_LINKS->get_link_id();
-				
+
 				$db3->update_row($table,'id', $ud);
 				echo 'Updating duplicate link<br />';
 			}
 		}
 	}
-	
+
 }
 echo $count.' links added<br /><br />';
 
@@ -137,7 +137,7 @@ while($db->next_record())
 	{
 		echo 'Adding owner to '.$db->f('id').'<br />';
 		$GO_SECURITY->add_user_to_acl($db->f('user_id'), $db->f('id'));
-	}	
+	}
 }
 echo 'Done<br /><br />';
 
@@ -159,7 +159,7 @@ while($db->next_record())
 				$tables[]=$db->f(0);
 				break;
 			}
-		}	
+		}
 	}
 }
 
@@ -170,12 +170,12 @@ foreach($tables as $table)
 	$db->query($sql);
 	$db->next_record();
 	$max = $db->f(0);
-	
+
 	if(!empty($max))
 	{
 		$sql = "REPLACE INTO db_sequence VALUES ('$table', '$max');";
 		$db->query($sql);
-		
+
 		echo 'Setting '.$table.'='.$max.'<br />';
 	}
 }
@@ -191,7 +191,7 @@ $tables = array();
 while($db->next_record())
 {
 	echo 'Optimizing: '.$db->f(0).'<br />';
-	$db2->query('OPTIMIZE TABLE `'.$db->f(0).'`');	
+	$db2->query('OPTIMIZE TABLE `'.$db->f(0).'`');
 }
 echo 'Done<br /><br />';
 
@@ -208,28 +208,53 @@ if(isset($GO_MODULES->modules['cms']))
 	echo 'Checking CMS folder permissions<br />';
 	require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 	$fs = new filesystem();
-			
+
 	require($GO_MODULES->modules['cms']['class_path'].'cms.class.inc');
 	$cms = new cms();
 	$cms->get_templates();
 	while($cms->next_record())
 	{
-		$template_file_path = $GO_CONFIG->local_path.'cms/templates/'.$cms->f('id').'/';		
+		$template_file_path = $GO_CONFIG->local_path.'cms/templates/'.$cms->f('id').'/';
 		if(is_dir($template_file_path) && !$fs->find_share($template_file_path))
-		{			
+		{
 			$fs->add_share($cms->f('user_id'), $template_file_path, 'template', $cms->f('acl_read'), $cms->f('acl_write'));
 			echo 'Adding share for '.$template_file_path.'<br />';
 		}
 	}
-	
+
 	$cms->get_sites();
 	while($cms->next_record())
 	{
-		$site_file_path = $GO_CONFIG->local_path.'cms/sites/'.$cms->f('id').'/';		
+		$site_file_path = $GO_CONFIG->local_path.'cms/sites/'.$cms->f('id').'/';
 		if(is_dir($site_file_path) && !$fs->find_share($site_file_path))
-		{			
+		{
 			$fs->add_share($cms->f('user_id'), $site_file_path, 'template', $cms->f('acl_read'), $cms->f('acl_write'));
 			echo 'Adding share for '.$site_file_path.'<br />';
+		}
+	}
+	echo 'Done<br /><br />';
+}
+if(isset($GO_MODULES->modules['filesystem']))
+{
+
+	echo 'Checking filesystem links...<br />';
+	require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+	$fs = new filesystem(true);
+	$fs2 = new filesystem(true);
+
+	$fs->get_latest_files();
+
+	while($fs->next_record())
+	{
+		if(file_exists($fs->f('path')))
+		{
+			$file['link_id']=$fs->f('link_id');
+			$file['mtime']=filemtime($fs->f('path'));
+			$file['ctime']=filectime($fs->f('path'));
+
+			$fs2->update_row('fs_links','link_id',$file);
+		}else {
+			$fs2->query("DELETE FROM fs_links WHERE link_id=".$fs->f('link_id'));
 		}
 	}
 	echo 'Done<br /><br />';

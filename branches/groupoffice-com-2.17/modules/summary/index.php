@@ -125,6 +125,7 @@ $cell->set_attribute('valign','top');
 	  
 //require_once('sum_email.inc');
 require_once('sum_calendar.inc');
+require_once('sum_filesystem.inc');
 
 $cell->innerHTML .= '&nbsp;';
 $row->add_cell($cell);
