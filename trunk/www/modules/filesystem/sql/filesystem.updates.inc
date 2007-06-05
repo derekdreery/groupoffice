@@ -1,6 +1,6 @@
 <?php
+$updates[19] = array();
 $updates[18] = array();
-
 
 $updates[17][] = "ALTER TABLE `fs_links` ADD `ctime` INT NOT NULL , ADD `mtime` INT NOT NULL ;";
 

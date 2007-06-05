@@ -21,4 +21,6 @@ $sum_today = 'Today';
 $sum_tommorow = 'Tomorrow';
 $sum_unfinished = 'Unfinished';
 
+$sum_latest_files='Latest uploaded files';
+
 $sum_help_url='http://docs.group-office.com/index.php?folder_id=49&file_id=208';
