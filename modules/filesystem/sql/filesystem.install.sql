@@ -21,6 +21,8 @@ CREATE TABLE `fs_links` (
   `link_id` int(11) NOT NULL default '0',
   `path` varchar(255) NOT NULL default '',
   `status_id` int(11) NOT NULL,
+  `ctime` int(11) NOT NULL,
+  `mtime` int(11) NOT NULL,
   PRIMARY KEY  (`link_id`),
   KEY `path` (`path`)
 ) TYPE=MyISAM;

@@ -2,8 +2,8 @@
 $filetypes['unknown'] = 'filetypes/unknown.png';
 $filetypes['txt'] = 'filetypes/txt.png';
 $filetypes['pdf'] = 'filetypes/pdf.png';
-$filetypes['doc'] = $filetypes['sxw'] = 'filetypes/doc.png';
-$filetypes['xls'] = $filetypes['sxc'] = 'filetypes/spreadsheet.png';
+$filetypes['doc'] = $filetypes['sxw'] = $filetypes['ott']=$filetypes['odt']= 'filetypes/doc.png';
+$filetypes['xls'] = $filetypes['sxc'] = $filetypes['odc']= $filetypes['ods']= $filetypes['ots']='filetypes/spreadsheet.png';
 $filetypes['tar'] = 'filetypes/tar.png';
 $filetypes['gz'] = $filetypes['tgz'] = $filetypes['zip'] ='filetypes/tgz.png';
 
