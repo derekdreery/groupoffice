@@ -22,6 +22,9 @@ require_once ($GO_LANGUAGE->get_language_file('email'));
 $mail = new imap();
 $email = new email();
 
+
+$GO_THEME->load_module_theme('email');
+
 $account_id = isset ($_REQUEST['account_id']) ? $_REQUEST['account_id'] : 0;
 $mailbox = isset ($_REQUEST['mailbox']) ? smart_stripslashes($_REQUEST['mailbox']) : 'INBOX';
 
@@ -52,14 +55,29 @@ $msg_count = $mail->sort($sort_field , $sort_order);
 
 $mail->get_messages($_REQUEST['start'], $_REQUEST['limit']);
 
+//require($GO_CONFIG->class_path.'mail/RFC822.class.inc');
+$RFC822 = new RFC822();
+
 while($mail->next_message(($account['examine_headers']=='1' || isset($_POST['examine_headers']))))
 {
-		$messages[]=array(
+	if($mail->f('new'))
+	{
+		$icon = $GO_THEME->images['message_new'];
+	}elseif($mail->f('answered'))
+	{
+		$icon = $GO_THEME->images['message_answered'];
+	}else {
+		$icon = $GO_THEME->images['message'];
+	}
+	$messages[]=array(
 		'uid'=>$mail->f('uid'),
+		'icon'=>$icon,
+		'new'=>$mail->f('new'),
 		'subject'=>$mail->f('subject'),
+		//'from'=>htmlspecialchars($RFC822->write_address($mail->f('from'),$mail->f('sender'))),
 		'from'=>$mail->f('from'),
 		'size'=>format_size($mail->f('size')),
 		'date'=>get_timestamp($mail->f('udate'))
-		);
+	);
 }
-echo '({"total":"'.$msg_count.'","results":'.json_encode($messages).'})'; 
+echo '({"total":"'.$msg_count.'","results":'.json_encode($messages).'})';

@@ -44,6 +44,18 @@ email = function(){
 			layout.beginUpdate();
 			
 			
+			function renderMessage(value, p, record){
+				if(record.data['new'])
+				{
+     		   		return String.format('<p style="margin:0px;margin-bottom:4px;font-weight:bold;">{0}</p>{1}', value, record.data['subject']);
+				}else
+				{
+					return String.format('<p style="margin:0px;margin-bottom:4px;">{0}</p>{1}', value, record.data['subject']);
+				}
+    		}
+    		function renderIcon(src){
+					return '<img src=\"' + src +' \" />';
+				}
 
 
 			ds = new Ext.data.Store({
@@ -57,7 +69,9 @@ email = function(){
 					totalProperty: 'total',
 					id: 'uid'
 				}, [
-				{name: 'uid', mapping: 'uid'},
+				{name: 'uid'},
+				{name: 'icon'},
+				{name: 'new'},
 				{name: 'subject'},				
 				{name: 'from'},	
 				{name: 'size'},
@@ -74,19 +88,22 @@ email = function(){
 			// the column model has information about grid columns
 			// dataIndex maps the column to the specific data field in
 			// the data store
-			var cm = new Ext.grid.ColumnModel([{
-				header: "From",
+			var cm = new Ext.grid.ColumnModel([
+			{
+				header:"",
+				width:28,
+				dataIndex: 'icon',
+				renderer: renderIcon
+			},{
+				header: "Message",
 				dataIndex: 'from',
-				css: 'white-space:normal;'
-			},{
-				header: "Subject",
-				dataIndex: 'subject'
-			},{
-				header: "Size",
-				dataIndex: 'size'
+				renderer: renderMessage,
+				css: 'white-space:normal;',
+				width:400
 			},{
 				header: "Date",
-				dataIndex: 'date'
+				dataIndex: 'date',
+				width:100
 			}]);
 
 			// by default columns are sortable
