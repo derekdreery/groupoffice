@@ -15,6 +15,8 @@ require('../../Group-Office.php');
 $GO_SECURITY->authenticate();
 $GO_MODULES->authenticate('email');
 
+ini_set('display_errors','off');
+
 
 require_once ($GO_CONFIG->class_path."mail/imap.class.inc");
 require_once ($GO_MODULES->class_path."email.class.inc");
@@ -27,6 +29,26 @@ $GO_THEME->load_module_theme('email');
 
 $account_id = isset ($_REQUEST['account_id']) ? $_REQUEST['account_id'] : 0;
 $mailbox = isset ($_REQUEST['mailbox']) ? smart_stripslashes($_REQUEST['mailbox']) : 'INBOX';
+
+if(isset($_REQUEST['node']) && strpos($_REQUEST['node'],'_'))
+{
+	$node = explode('_',$_REQUEST['node']);
+	$node_type=$node[0];
+	$node_id=$node[1];
+	
+	if($node_type=='account')
+	{
+		$account_id=$node_id;
+		$mailbox == 'INBOX';
+	}else {
+		$folder = $email->get_folder_by_id($node_id);
+		$mailbox = $folder['name'];
+		$account_id=$folder['account_id'];
+	}	
+	
+}else {
+	$mailbox = 'INBOX';
+}
 
 
 if (!$account = $email->get_account($account_id)) {
@@ -42,7 +64,7 @@ if ($account) {
 	}
 	if (!$mail->open($account['host'], $account['type'], $account['port'], $account['username'], $account['password'], $mailbox, 0, $account['use_ssl'], $account['novalidate_cert'])) {
 		$result['success']=false;
-		$result['errors']='Error connection to server!';
+		$result['errors']='Could not connect to server: '.$account['host'];
 		echo json_encode($result);
 		exit();
 	}

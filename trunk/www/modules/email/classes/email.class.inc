@@ -374,8 +374,15 @@ class email extends db
 
 	function get_subscribed($account_id, $folder_id=-1)
 	{
-		$sql = "SELECT * FROM emFolders WHERE account_id='$account_id'".
-		" AND (subscribed='1' OR name='INBOX')";
+		$sql = "SELECT * FROM emFolders";
+
+		if($account_id>0)
+		{
+			$sql .= " WHERE account_id='$account_id'".
+				" AND (subscribed='1' OR name='INBOX')";
+		}else {
+			$sql .= " WHERE (subscribed='1' OR name='INBOX')";
+		}
 
 		if ($folder_id > -1)
 		{
