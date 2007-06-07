@@ -136,11 +136,9 @@ $from .= '&nbsp;&lt;'.$content['sender'].'&gt;';
 //$from .= '&nbsp;<a href="javascript:document.location=\'about:blank\';parent.messages.location.href=\'messages.php?account_id='.$account_id.'&task=set_search_query&from='.$content['sender'].'&uid='.$uid.'\';" title="'.$ml_search_sender.'"><img src="'.$GO_THEME->images['magnifier'].'" border="0" align="middle" /></a>';
 ?>
 
+<div style="padding:5px;background-color:#c3daf9;">
+<table width="100%">
 
-<table class="headerTable" width="100%" id="largeHeader">
-<tr>
-	<td>
-	<table border="0">
 	<?php
 	if($content["priority"] > 3)
 	{
@@ -250,12 +248,7 @@ $from .= '&nbsp;&lt;'.$content['sender'].'&gt;';
 			<td><?php echo format_size($content['size']); ?></td>
 		</tr>	
 		</table>
-		</td>
-		<td align="right" valign="top">
-<a class="normal" href="javascript:popup('properties.php?account_id='+document.forms[0].account_id.value+'&uid='+document.forms[0].uid.value+'&mailbox='+document.forms[0].mailbox.value,'580','580');"><?php echo  $em_source; ?></a></td>
-		</td>
-	</tr>
-	</table>
+
 	</td>
 </tr>
 <tr>
@@ -337,6 +330,8 @@ $from .= '&nbsp;&lt;'.$content['sender'].'&gt;';
 	if ($count > 0) {
 		echo '<table class="HeaderTable" width="100%" style="margin-top:2px;">'.'<tr><td valign="top"><b>'.$ml_attachments.':</b>&nbsp;&nbsp;</td><td width="100%">'.$attachments.'</td></tr></table>';
 	}
+	
+	echo '<div style="background-color:white;padding:3px;border:1px solid black">';
 
 	$count = 0;
 	$splitter = 0;
@@ -421,7 +416,7 @@ $from .= '&nbsp;&lt;'.$content['sender'].'&gt;';
 
 	$mail->close();
 
-	echo '</form>';
+	echo '</div></div>';
 
 	if (isset ($ask_to_add)) {
 ?>

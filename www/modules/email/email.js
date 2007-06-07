@@ -3,6 +3,7 @@ email = function(){
 	var previewPanel;
 	var grid;
 	var ds;
+	var messagesPanel;
 
 
 
@@ -10,59 +11,60 @@ email = function(){
 
 		init : function(){
 
+
+
 			// initialize state manager, we will use cookies
 			Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
 
 			layout = new Ext.BorderLayout(document.body, {
-				center: {
-
+				west: {
 					titlebar: true,
 					autoScroll:true,
 					closeOnTab: true,
-					split:true,
-                    initialSize: 400,
-                    minSize: 205,
-                    maxSize: 700
-					
+					initialSize: 200,
+					split:true
+				},
+				center: {
+					titlebar: true,
+					autoScroll:true,
+					closeOnTab: true,
+					split:true
 				},
 				east: {
-
-					titlebar: true,
+					titlebar: false,
 					autoScroll:true,
 					closeOnTab: true,
 					split:true,
-                    initialSize: 400,
-                    minSize: 205,
-                    maxSize: 700
-					
-					
+					initialSize: 350,
+					minSize: 205,
+					maxSize: 700
 				}
 			});
-			
-			
-			
+
+
+
 			layout.beginUpdate();
-			
-			
+
+
 			function renderMessage(value, p, record){
 				if(record.data['new'])
 				{
-     		   		return String.format('<p style="margin:0px;margin-bottom:4px;font-weight:bold;">{0}</p>{1}', value, record.data['subject']);
+					return String.format('<p style="margin:0px;margin-bottom:4px;font-weight:bold;">{0}</p>{1}', value, record.data['subject']);
 				}else
 				{
 					return String.format('<p style="margin:0px;margin-bottom:4px;">{0}</p>{1}', value, record.data['subject']);
 				}
-    		}
-    		function renderIcon(src){
-					return '<img src=\"' + src +' \" />';
-				}
-
+			}
+			function renderIcon(src){
+				return '<img src=\"' + src +' \" />';
+			}
 
 			ds = new Ext.data.Store({
 
 				proxy: new Ext.data.HttpProxy({
-					url: 'messages_json.php'
+					url: BaseHref+'modules/email/messages_json.php'
 				}),
+				baseParams: {"node": ''},
 
 				reader: new Ext.data.JsonReader({
 					root: 'results',
@@ -72,8 +74,8 @@ email = function(){
 				{name: 'uid'},
 				{name: 'icon'},
 				{name: 'new'},
-				{name: 'subject'},				
-				{name: 'from'},	
+				{name: 'subject'},
+				{name: 'from'},
 				{name: 'size'},
 				{name: 'date'}
 				]),
@@ -83,7 +85,15 @@ email = function(){
 			});
 			ds.setDefaultSort('utime', 'asc');
 
+			ds.on('loadexception', loadexception);
 
+			function loadexception(param1, param2, response)
+			{
+				var reponseParams = Ext.util.JSON.decode(response.responseText);
+
+				Ext.MessageBox.alert('Failed', reponseParams['errors']);
+
+			}
 
 			// the column model has information about grid columns
 			// dataIndex maps the column to the specific data field in
@@ -99,7 +109,7 @@ email = function(){
 				dataIndex: 'from',
 				renderer: renderMessage,
 				css: 'white-space:normal;',
-				width:400
+				width:300
 			},{
 				header: "Date",
 				dataIndex: 'date',
@@ -115,10 +125,12 @@ email = function(){
 				cm: cm,
 				selModel: new Ext.grid.RowSelectionModel(),
 				enableColLock:false,
-				loadMask: true
+				loadMask: true,
+				enableDragDrop: true,
+				ddGroup : 'TreeDD'
 			});
 
-	
+
 			grid.addListener("rowdblclick", this.rowDoubleClicked, this);
 			grid.addListener("rowclick", this.rowClicked, this);
 
@@ -143,12 +155,12 @@ email = function(){
 			tb.add(new Ext.Toolbar.Button({
 				id: 'delete',
 				icon: GOimages['delete'],
-				text: GOlang['cmdDelete'],				
+				text: GOlang['cmdDelete'],
 				cls: 'x-btn-text-icon',
 				handler: this.onButtonClick
 			})
 			);
-			
+
 			tb.add(new Ext.Toolbar.Button({
 				id: 'link',
 				icon: GOimages['link'],
@@ -158,32 +170,76 @@ email = function(){
 			})
 			);
 
+			var Tree = Ext.tree;
+
+			var tree = new Tree.TreePanel('email-tree', {
+				ddGroup : 'TreeDD',
+				animate:true,
+				loader: new Tree.TreeLoader({dataUrl:'tree_json.php'}),
+				enableDrop:true,
+				dropConfig : {
+				    appendOnly:true
+				},
+				containerScroll: true
+			});
+
+			// set the root node
+			var root = new Tree.AsyncTreeNode({
+				text: 'Accounts',
+				draggable:false,
+				id:'source'
+			});
+			tree.setRootNode(root);
 
 
-
-			layout.add('center', new Ext.GridPanel(grid, {title: emailLang['messages'], toolbar: tb}));
+			tree.on('beforenodedrop', function(e){
+				var s = e.data.selections, r = [];
+				for(var i = 0, len = s.length; i < len; i++){
+					
+					
+				}
+				e.dropNode = r;  // return the new nodes to the Tree DD
+				e.cancel = r.length < 1; // cancel if all nodes were duplicates
+			});
 			
-			previewPanel = new Ext.ContentPanel('east', {title: emailLang['message']});
+			tree.on('nodedrop', function(e){
+				alert(e);
+			});
+
+
+			//tree.on('click',nodeClick);
+
+			// render the tree
+			tree.render();
+			root.expand();
+
+			var treePanel = new Ext.ContentPanel('west',{title: 'E-mail'});
+			layout.add('west', treePanel);
+
+			messagesPanel = new Ext.GridPanel(grid, {title: emailLang['messages'], toolbar: tb});
+			layout.add('center', messagesPanel);
+
+			previewPanel = new Ext.ContentPanel('east');
 			layout.add('east', previewPanel);
-			
 
+			layout.restoreState();
 			layout.endUpdate();
 		},
-		
+
 		getDataSource : function()
 		{
 			return ds;
 		},
-		
+
 
 		onButtonClick : function(btn){
 			switch(btn.id)
 			{
 				case 'link':
-					var selectionModel = grid.getSelectionModel();
-					var records = selectionModel.getSelections();					
-					
-					parent.GroupOffice.showLinks({ 'url': '../../search.html', 'records': records});
+				var selectionModel = grid.getSelectionModel();
+				var records = selectionModel.getSelections();
+
+				parent.GroupOffice.showLinks({ 'url': '../../search.html', 'records': records});
 				break;
 				case 'delete':
 				var selectedRows = grid.selModel.selections.keys;
@@ -213,40 +269,47 @@ email = function(){
 				case 'add':
 				/*var conn = new Ext.data.Connection();
 				conn.request({
-					url: 'action.php',
-					params: {task: 'add'},
-					callback: function(options, success, response)
-					{
-						if(!success)
-						{
-							Ext.MessageBox.alert('Failed', response.result.errors);
-						}else
-						{
-							var reponseParams = Ext.util.JSON.decode(response.responseText);
-							//email_form.load({url : 'email_json.php?email_id='+reponseParams['email_id']});
-							email_id=reponseParams['email_id'];
-							email_form.findField('name').focus(true);							
-							this.toggleForm(true);
-							ds.reload();
-						}
-					},
-					scope: email
+				url: 'action.php',
+				params: {task: 'add'},
+				callback: function(options, success, response)
+				{
+				if(!success)
+				{
+				Ext.MessageBox.alert('Failed', response.result.errors);
+				}else
+				{
+				var reponseParams = Ext.util.JSON.decode(response.responseText);
+				//email_form.load({url : 'email_json.php?email_id='+reponseParams['email_id']});
+				email_id=reponseParams['email_id'];
+				email_form.findField('name').focus(true);
+				this.toggleForm(true);
+				ds.reload();
+				}
+				},
+				scope: email
 				});*/
-					Ext.get('dialog').load({url: 'email.php?email_id=0', scripts: true });
+				Ext.get('dialog').load({url: 'email.php?email_id=0', scripts: true });
 				break;
 
-	
+
 			}
-		},		
+		},
+		loadMessages : function(node)
+		{
+			messagesPanel.setTitle(node.text);
+			ds.baseParams = {"node": node.id};
+			ds.load({params:{start:0, limit: parseInt(GOsettings['max_rows_list'])}});
+
+		},
 		rowDoubleClicked : function(grid, rowClicked, e) {
 			var selectionModel = grid.getSelectionModel();
 			var record = selectionModel.getSelected();
 
 			//showDialog('dialog', {url: 'email.php?email_id='+record.data['id']});
 			Ext.get('dialog').load({url: 'email.php?email_id='+record.data['id'], scripts: true });
-		},		
+		},
 		rowClicked : function(grid, rowClicked, e) {
-			
+
 			var selectionModel = grid.getSelectionModel();
 			var record = selectionModel.getSelected();
 			previewPanel.load({url: 'message.php?uid='+record.data['uid'], scripts: true });

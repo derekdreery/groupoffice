@@ -23,15 +23,6 @@ GroupOffice = function(){
 					initialSize: 25,
 					titlebar: false
 				},
-				west: {
-					split:true,
-					initialSize: 200,
-					minSize: 175,
-					maxSize: 400,
-					titlebar: false,
-					collapsible: true,
-					animate: true
-				},
 				east: {
 					split:true,
 					initialSize: 400,
@@ -47,6 +38,7 @@ GroupOffice = function(){
 					autoScroll:true,
 					closeOnTab: true
 				}
+				
 			});
 
 			layout.beginUpdate();
@@ -140,36 +132,7 @@ GroupOffice = function(){
 
 			layout.add('east', gridPanel);
 
-			innerLayout = new Ext.BorderLayout('west', {
-				south: {
-					split:true,
-					initialSize: 250,
-					minSize: 100,
-					maxSize: 400,
-					autoScroll:true,
-					titlebar: false
-				},
-				center: {
-					autoScroll:true,
-					titlebar:false
-				}
-			});
-			// add the nested layout
-			navLayout = new Ext.NestedLayoutPanel(innerLayout, 'Group-Office');
-			layout.add('west', navLayout);
 
-			innerLayout.beginUpdate();
-			innerLayout.add('south', new Ext.ContentPanel('southwest'));
-
-			navPanel = new Ext.ContentPanel('northwest');
-
-			innerLayout.add('center', navPanel);
-
-
-
-			// restore innerLayout state
-			//innerLayout.restoreState();
-			innerLayout.endUpdate(true);
 
 			mainPanel = new Ext.ContentPanel('center');
 
@@ -449,8 +412,6 @@ GroupOffice = function(){
 		
 			dialogdiv.load({url: config['url'], scripts: true, nocache: true});
 		}
-
-
 	};
 
 }();
