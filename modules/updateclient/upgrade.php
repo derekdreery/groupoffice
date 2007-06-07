@@ -66,7 +66,7 @@ if($uc->status=='401')
 		status('Found '.count($uc->packages));
 	}
 	
-	status('Backing up datatase '.$GO_CONFIG->db_name);
+	status('Backing up database '.$GO_CONFIG->db_name);
 	system('mysqldump '.$GO_CONFIG->db_name.' -u '.$GO_CONFIG->db_user.' --password='.$GO_CONFIG->db_pass.' > '.$GO_CONFIG->root_path.'groupoffice-'.date('Ymd').'.sql');
 	
 	status('Backing up Group-Office: '.$GO_CONFIG->root_path);
@@ -86,7 +86,7 @@ if($uc->status=='401')
 		
 			status('Downloading '.$package['package_name'].'.tar.gz');
 			
-			system(escapeshellcmd('wget '.$url));
+			system(escapeshellcmd('wget --no-check-certificate '.$url));
 			if(!file_exists(basename($url)))
 			{
 				status('Failed to download package!');

@@ -415,13 +415,26 @@ if($event_count+$todo_count>1)
 	$form->add_html_element($button);
 }
 
+if($_SERVER['REQUEST_METHOD'] != 'POST' && (!isset($_SESSION['reminder_beep']) || $_SESSION['reminder_beep']))
+{
+	echo '<object width="1" height="1">'.
+	'<param name="movie" value="'.$GO_THEME->sounds['reminder'].'">'.
+	'<param name="loop" value="false">'.
+	'<embed src="'.$GO_THEME->sounds['reminder'].'" loop="false" width="1" height="1">'.
+	'</embed>'.
+	'</object>';
+}
+
 ?>
 <script type="text/javascript">
 
 <?php
 if(!$stay_open)
 {
+	$_SESSION['reminder_beep']=true;
 	echo 'window.close();';
+}else {
+	$_SESSION['reminder_beep']=false;
 }
 
 ?>
@@ -462,15 +475,7 @@ function goto_url(url)
 </script>
 <?php
 
-if($_SERVER['REQUEST_METHOD'] != 'POST')
-{
-	echo '<object width="1" height="1">'.
-	'<param name="movie" value="'.$GO_THEME->sounds['reminder'].'">'.
-	'<param name="loop" value="false">'.
-	'<embed src="'.$GO_THEME->sounds['reminder'].'" loop="false" width="1" height="1">'.
-	'</embed>'.
-	'</object>';
-}
+
 echo $form->get_html();
 
 require_once($GO_THEME->theme_path."footer.inc");
