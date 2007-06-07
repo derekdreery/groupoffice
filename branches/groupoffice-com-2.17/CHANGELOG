@@ -1,3 +1,9 @@
+2007/05/31 Version 2.17-stable-3
+-E-mail status indicator was missing in all themes except default
+-Fixed an issue with strange characters in filenames
+-Fixed printing e-mails from a folder with strange characters
+-Fixed other small bugs
+
 2007/05/21 Version 2.17-stable-1
 -Added Slovenian language
 -Updated Turkish language
