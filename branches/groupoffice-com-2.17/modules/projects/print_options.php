@@ -282,7 +282,7 @@ if($task !='')
 			}
 
 
-			$totals = $projects2->get_total_hours($projects->f('id'));
+			$totals = $projects2->get_total_hours($projects->f('id'), $start_time,$end_time);
 			/*$row_totals['int_fee']=0;
 			$row_totals['ext_fee']=0;
 			$row_totals['time']=0;*/
