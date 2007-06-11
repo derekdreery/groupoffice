@@ -443,7 +443,7 @@ class projects extends db
 		return $rel_projects;
 	}
 
-	function get_total_hours($project_id)
+	function get_total_hours($project_id, $start_time=0, $end_time=0)
 	{
 		$totals = array();
 
@@ -452,6 +452,16 @@ class projects extends db
 		$totals[0]['ext_fee'] =0;
 
 		$sql = "SELECT units, user_id, start_time, end_time, break_time, ext_fee_value, int_fee_value, fee_time FROM pmHours WHERE project_id=$project_id";
+		
+		if($start_time>0)
+		{
+			$sql .= " AND start_time>=$start_time";
+		}
+		if($end_time>0)
+		{
+			$sql .= " AND end_time>$end_time";
+		}
+
 		$this->query($sql);
 		while($this->next_record())
 		{
