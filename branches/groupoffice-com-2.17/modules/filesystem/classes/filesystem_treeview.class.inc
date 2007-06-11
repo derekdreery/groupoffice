@@ -112,6 +112,7 @@ class filesystem_treeview extends html_element
 										htmlspecialchars($folder_name));*/
 										
 									$last_folder = $fs->f('path');
+									
 								
 									$folder_node = new treenode($this->treeview, $share_path, $closedFolderLink->get_html());
 									$folder_node = $this->buildTree($folder_node);

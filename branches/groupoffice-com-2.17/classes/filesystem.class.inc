@@ -336,9 +336,9 @@ class filesystem extends db
 	{
 		if(substr($parent_path,-1,1)!='/')
 		{
-			$parent_path+='/';
+			$parent_path.='/';
 		}
-
+//echo 'Parent: '.$parent_path.' Sub: '.$sub_path.'<br />';
 		if(strpos($sub_path, $parent_path)===0)
 		{
 			return true;
