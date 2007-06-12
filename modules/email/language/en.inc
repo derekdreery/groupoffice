@@ -232,3 +232,5 @@ $ml_windows_mail = 'If you want to use Group-Office as your default e-mail clien
 $ml_download_reg='Download register file';
 
 $ml_help_url='http://docs.group-office.com/index.php?folder_id=57&file_id=0';
+
+$ml_attachment_message = 'Message';

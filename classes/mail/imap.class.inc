@@ -624,6 +624,7 @@ class imap {
 		}
 
 		$full_mime_type = $type."/".$mimeobj->subtype;
+		//echo $full_mime_type.'<br />';
 		$encoding = $this->get_encoding($mimeobj->encoding);
 
 		if (isset ($mimeobj->parameters)) {
@@ -679,6 +680,7 @@ class imap {
 		$x = 0;
 		if (isset ($mimeobj->parts)) {
 			for ($x = 0; $x < count($mimeobj->parts); $x ++) {
+			
 				if ($mimeobj->subtype == "ALTERNATIVE" && $preferred_type == "html") {
 					if (isset ($mimeobj->parts[$x +1]) && eregi('html', $mimeobj->parts[$x +1]->subtype)) {
 						$x ++;
@@ -690,6 +692,12 @@ class imap {
 				// If we are in the root of the object increment by whole integers
 
 				if ($section == 0) {
+					/*if(strtolower($mimeobj->subtype)!='related' && strtolower($mimeobj->subtype)!='mixed' && strtolower($mimeobj->subtype)!='alternative')
+					{
+						$nsection = $x +1;
+					}else {
+						//$nsection=0;
+					}*/
 					$nsection = $x +1;
 				} else
 					if (($pos = strrpos($section, ".")) && ($mimeobj->parts[0]->type != TYPEMULTIPART || $mimeobj->parts[0]->subtype != 'RELATED')) {
@@ -718,10 +726,16 @@ class imap {
 					}
 				}
 
-				$this->get_parts($mimeobj->parts[$x], $preferred_type, $nsection);
+				if(strtolower($full_mime_type) != 'message/rfc822')
+				{
+					$this->get_parts($mimeobj->parts[$x], $preferred_type, $nsection);
+				}else {
+					$section .= ".2";
+				}
+				
 
-				if ($mimeobj->subtype == "ALTERNATIVE" && $preferred_type == "plain")
-					$x ++;
+				//if ($mimeobj->subtype == "ALTERNATIVE" && $preferred_type == "plain")
+					//$x ++;
 
 			}
 		}
@@ -734,9 +748,9 @@ class imap {
 		}
 
 		if ($type != "multipart" && $full_mime_type) {
-			if (eregi('message', $full_mime_type)) {
+			/*if (eregi('message', $full_mime_type)) {
 				$section ++;
-			}
+			}*/
 
 			$part_charset = 'ISO-8859-15';
 			if ($mimeobj->ifparameters) {
@@ -748,7 +762,7 @@ class imap {
 					}
 				}
 			}
-
+echo $section.': '.$full_mime_type.' '.$name.'<br>';
 			$bytes = isset ($mimeobj->bytes) ? $mimeobj->bytes : 0;
 			$tmp = Array ('number' => $section, 'id' => $mimeobj->ifid ? $mimeobj->id : 0, 'name' => $name, 'mime' => $full_mime_type, 'transfer' => $encoding, 'charset' => $part_charset, 'disposition' => $mimeobj->ifdisposition ? $mimeobj->disposition : '', 'size' => $bytes);
 
