@@ -1,0 +1,69 @@
+##
+## DAV-Container for the Users of Group-Office
+## 
+## Author: Michael Borko <michael.borko@tgm.ac.at>
+## Version: 1.0 Release date: 22 April 2004
+## 
+###############################################################################
+##									     ## 
+##		      DON'T EDIT THIS FILE BY HAND !!!			     ##
+##									     ## 
+###############################################################################
+
+
+Alias %ALIAS_USERNAME% %REALPATH_USERNAME%
+<Directory %REALPATH_USERNAME%>
+  Dav On
+  DavMinTimeout 120
+  LimitRequestBody 0
+  LimitXMLRequestBody 0
+
+  Options All MultiViews
+
+  AllowOverride AuthConfig Limit
+  AuthName "Please authorize yourself..."
+  AuthType Basic
+
+  Auth_MySQL_Password_Table users
+  Auth_MySQL_Username_Field username
+  Auth_MySQL_Password_Field password
+  Auth_MySQL_Encrypted_Passwords Off
+
+  <Limit GET POST PUT CONNECT OPTIONS PATCH PROPFIND PROPPATCH MKCOL COPY LOCK UNLOCK MOVE DELETE>
+    Order allow,deny
+    Allow from all
+    Require user %USERNAME%
+  </Limit>
+  <LimitExcept PROPFIND>
+    Order deny,allow
+    Deny from all
+  </LimitExcept>
+</Directory>
+
+<Directory %REALPATH_USERNAME%/%SHAREFOLDER%>
+  Dav On
+  DavMinTimeout 120
+  LimitRequestBody 0
+  LimitXMLRequestBody 0
+
+  Options All MultiViews
+
+  AllowOverride AuthConfig Limit
+  AuthName "Please authorize yourself..."
+  AuthType Basic
+
+  Auth_MySQL_Password_Table users
+  Auth_MySQL_Username_Field username
+  Auth_MySQL_Password_Field password
+  Auth_MySQL_Encrypted_Passwords Off
+
+  <Limit GET>
+    Order deny,allow
+    Deny from all
+    Require user %USERNAME%
+  </Limit>
+  <LimitExcept PROPFIND>
+    Order deny,allow
+    Deny from all
+  </LimitExcept>
+</Directory>
