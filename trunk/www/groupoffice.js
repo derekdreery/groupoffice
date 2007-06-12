@@ -36,9 +36,10 @@ GroupOffice = function(){
 				center: {
 					titlebar: false,
 					autoScroll:true,
-					closeOnTab: true
+					closeOnTab: true,
+					tabPosition:top
 				}
-				
+
 			});
 
 			layout.beginUpdate();
@@ -111,10 +112,10 @@ GroupOffice = function(){
 			//search_ds.load({params:{start:0, limit: GOsettings['max_rows_list']}});
 
 			// render it
-			
 
-			
-			
+
+
+
 			var searchtb = new Ext.Toolbar('searchtoolbar');
 
 			var save_button =searchtb.addButton({
@@ -134,9 +135,9 @@ GroupOffice = function(){
 
 
 
-			mainPanel = new Ext.ContentPanel('center');
+			//mainPanel = new Ext.ContentPanel('center');
 
-			layout.add('center', mainPanel);
+			//layout.add('center', mainPanel);
 
 			layout.getRegion('east').hide();
 
@@ -150,6 +151,14 @@ GroupOffice = function(){
 		{
 			layout.getRegion('east').hide();
 		},
+		addCenterPanel : function(title, url)
+		{
+			var iframe = Ext.DomHelper.append(document.body,
+			{tag: 'iframe', frameBorder: 0, src: url});
+			var panel = new Ext.ContentPanel(iframe,
+			{title: title, fitToFrame:true, closable:true});
+			layout.add('center', panel);
+		},
 
 		rowDoulbleClicked : function(search_grid, rowClicked, e) {
 
@@ -159,7 +168,7 @@ GroupOffice = function(){
 			//parent.mainframe.document.location=record.data['url'];
 			//this.showDialog({ url: record.data['url'], iframe: true });
 			//layout.getRegion('east').collapse();
-			
+
 			Ext.get('dialog').load({url: record.data['url'], scripts: true });
 		},
 
@@ -171,11 +180,11 @@ GroupOffice = function(){
 			search_ds.baseParams = {"query": query};
 
 			search_ds.load({params:{start:0, limit: parseInt(GOsettings['max_rows_list'])}});
-			
+
 			if(!search_grid_rendered)
 			{
 				search_grid.render();
-				
+
 				var searchGridFoot = search_grid.getView().getFooterPanel(true);
 
 				// add a paging toolbar to the grid's footer
@@ -185,7 +194,7 @@ GroupOffice = function(){
 					displayMsg: GOlang['displayingItems'],
 					emptyMsg: GOlang['strNoItems']
 				});
-				
+
 				search_grid_rendered=true;
 			}
 
@@ -194,17 +203,17 @@ GroupOffice = function(){
 
 		showLinks : function(config){
 
-			
-            
-            links_callback = config['callback'];
-            
+
+
+			links_callback = config['callback'];
+
 			fromlinks = config['fromlinks'];
 
 			if(config['records'])
 			{
 				var records=config['records'];
 				fromlinks = [];
-	
+
 				for (var i = 0;i<records.length;i++)
 				{
 					fromlinks.push({ 'link_id' : records[i].data['link_id'], 'link_type' : records[i].data['link_type'] });
@@ -213,7 +222,7 @@ GroupOffice = function(){
 			{
 				fromlinks = config['fromlinks'];
 			}
-			
+
 			if(!linksDialog)
 			{
 				linksDialog = new Ext.BasicDialog("search_links_dialog", {
@@ -313,19 +322,19 @@ GroupOffice = function(){
 				linksDialog.addButton(GOlang['cmdClose'], linksDialog.hide, linksDialog);
 
 			}
-			
+
 			linksDialog.show();
-			
+
 			var links_query = Ext.get('links_query');
-			
+
 			links_query.focus(true);
-			
+
 		},
 		searchLinks : function(query){
 			search_links_ds.baseParams = {"query": query};
 
 			search_links_ds.load({params:{start:0, limit: parseInt(GOsettings['max_rows_list'])}});
-			
+
 		},
 		searchLinksKeyEvent : function(e){
 
@@ -369,14 +378,14 @@ GroupOffice = function(){
 						Ext.MessageBox.alert('Failed', response.result.errors);
 					}else
 					{
-             		   	links_callback.call();					
+						links_callback.call();
 						linksDialog.hide();
 					}
 				}
 			});
 		},
 		unlink : function(link_id, unlinks)	{
-		
+
 			var conn = new Ext.data.Connection();
 			conn.request({
 				url: BaseHref+'action.php',
@@ -404,12 +413,12 @@ GroupOffice = function(){
 			{
 				config['height']='100%';
 			}
-		
+
 			var id = Ext.id();
 			Ext.DomHelper.append(document.body, {tag: 'div', id: id});
-			
+
 			dialogdiv = Ext.get(id);
-		
+
 			dialogdiv.load({url: config['url'], scripts: true, nocache: true});
 		}
 	};

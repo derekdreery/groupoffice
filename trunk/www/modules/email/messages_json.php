@@ -99,7 +99,10 @@ while($mail->next_message(($account['examine_headers']=='1' || isset($_POST['exa
 		//'from'=>htmlspecialchars($RFC822->write_address($mail->f('from'),$mail->f('sender'))),
 		'from'=>$mail->f('from'),
 		'size'=>format_size($mail->f('size')),
-		'date'=>get_timestamp($mail->f('udate'))
+		'date'=>get_timestamp($mail->f('udate')),
+		'mailbox'=>$mailbox,
+		'account_id'=>$account['id']
+		
 	);
 }
 echo '({"total":"'.$msg_count.'","results":'.json_encode($messages).'})';
