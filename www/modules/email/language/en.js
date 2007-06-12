@@ -1,4 +1,5 @@
 var emailLang = {	
 	messages		: "Messages",
-	message 		: "Message"
+	message 		: "Message",
+	inbox 		: "Inbox"
 };

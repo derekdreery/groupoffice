@@ -14,6 +14,8 @@ class email extends db
 {
 	var $last_error;
 	var $mail;
+	
+	
 
 	function get_accounts($user_id=0, $start=0, $offset=0)
 	{

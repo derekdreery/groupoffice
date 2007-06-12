@@ -38,10 +38,12 @@ require($GO_CONFIG->root_path.'default_head.inc');
 	<div id="searchtoolbar"></div>
 	<div id="searchgrid"></div>
 	</div>
-	
+	<?php
+	/*
 	<div id="center">
 	<iframe id="mainframe" name="mainframe" frameborder="0" src="<?php echo $start_url; ?>" style="width:100%;height:100%"></iframe>
-	</div>
+	</div>*/
+?>
 </div>
 
 
@@ -58,6 +60,27 @@ require($GO_CONFIG->root_path.'default_head.inc');
 	</div>
 </div>
 <script type="text/javascript">
+Ext.onReady(function(){
+<?php
+
+
+foreach($GO_MODULES->modules as $module)
+{
+	$GO_THEME->load_module_theme($module['id']);
+	$GO_THEME->images[$module['id']] = isset($GO_THEME->images[$module['id']]) ? $GO_THEME->images[$module['id']] : $GO_THEME->images['unknown_module'];
+
+	//require language file to obtain module name in the right language
+	$language_file = $GO_LANGUAGE->get_language_file($module['id']);
+	if(file_exists($language_file))
+	{
+		require_once($language_file);
+	}
+	$lang_var = isset($lang_modules[$module['id']]) ? $lang_modules[$module['id']] : $module['id'];
+	
+	echo "GroupOffice.addCenterPanel('".$lang_var."', '".$module['url']."');";
+}
+?>
+});
 
 
 function search(e)

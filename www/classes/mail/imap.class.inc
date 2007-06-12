@@ -992,8 +992,8 @@ class imap {
 			$str = str_replace(chr(148), '"', $str);		 */	
 		}
 		if (function_exists('iconv') && $part_charset != '' && $part_charset != $charset) {
-			//echo 'Charset:'.$part_charset.' -- > '.$charset.' '.$transfer.'<br>';
-			if($part_charset=='us-ascii')
+	
+			if(strtolower($part_charset)=='us-ascii')
 			{
 				$part_charset='ISO-8859-1';
 			}

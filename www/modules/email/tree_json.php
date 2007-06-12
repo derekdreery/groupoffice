@@ -23,6 +23,9 @@ $email = new email();
 $email2 = new email();
 
 
+//$account_id=isset($_REQUEST['account_id']) ? smart_addslashes($_REQUEST['account_id']) : 0;
+//$folder_id=isset($_REQUEST['folder_id']) ? smart_addslashes($_REQUEST['folder_id']) : 0;
+
 if(isset($_REQUEST['node']) && strpos($_REQUEST['node'],'_'))
 {
 	$node = explode('_',$_REQUEST['node']);
@@ -40,7 +43,15 @@ if($node_id==0)
 
 	while($email->next_record())
 	{
-		$nodes[] = array('text'=>$email->f('email'), 'id'=>'account_'.$email->f('id'), 'cls'=>'folder', 'expanded'=>true);
+		$nodes[] = array(
+			'text'=>$email->f('email'), 
+			'id'=>'account_'.$email->f('id'), 
+			'cls'=>'folder', 
+			'expanded'=>true, 
+			'account_id'=>$email->f('id'),
+			'folder_id'=>0,
+			'mailbox'=>'INBOX'
+			);
 	}
 }else
 {
@@ -88,9 +99,25 @@ if($node_id==0)
 		
 		if($email2->get_subscribed(0, $email->f('id')))		
 		{
-			$nodes[] = array('text'=>$folder_name.' '.$status, 'id'=>'folder_'.$email->f('id'), 'cls'=>'folder');
+			$nodes[] = array(
+				'text'=>$folder_name.' '.$status, 
+				'id'=>'folder_'.$email->f('id'), 
+				'cls'=>'folder', 
+				'account_id'=>$email->f('account_id'),
+				'folder_id'=>$email->f('id'),				
+				'mailbox'=>$email->f('name')
+				);
 		}else {
-			$nodes[] = array('text'=>$folder_name.' '.$status, 'id'=>'folder_'.$email->f('id'), 'cls'=>'folder', 'expanded'=>true, 'children'=>array());
+			$nodes[] = array(
+				'text'=>$folder_name.' '.$status, 
+				'id'=>'folder_'.$email->f('id'), 
+				'cls'=>'folder', 
+				'account_id'=>$email->f('account_id'), 
+				'folder_id'=>$email->f('id'),
+				'mailbox'=>$email->f('name'), 
+				'expanded'=>true, 
+				'children'=>array()
+				);
 		}
 	}
 }

@@ -77,7 +77,9 @@ email = function(){
 				{name: 'subject'},
 				{name: 'from'},
 				{name: 'size'},
-				{name: 'date'}
+				{name: 'date'},
+				{name: 'mailbox'},
+				{name: 'account_id'}
 				]),
 
 				// turn on remote sorting
@@ -193,13 +195,48 @@ email = function(){
 
 
 			tree.on('beforenodedrop', function(e){
-				var s = e.data.selections, r = [];
-				for(var i = 0, len = s.length; i < len; i++){
+				var s = e.data.selections, messages = [];
+				
+				for(var i = 0, len = s.length; i < len; i++){					
 					
-					
+					if(s[i].data['account_id'] != e.target.attributes['account_id'])
+					{
+						Ext.MessageBox.alert('Sorry', 'Can not move messages to another account');
+						return false
+					}else if(s[i].data['mailbox'] == e.target.mailbox)
+					{
+						return false;
+					}else{
+						messages.push(s[i].id);
+					}
 				}
-				e.dropNode = r;  // return the new nodes to the Tree DD
-				e.cancel = r.length < 1; // cancel if all nodes were duplicates
+					
+				if(messages.length>0)
+				{
+					var conn = new Ext.data.Connection();
+					conn.request({
+						url: 'action.php',
+						params: {
+							task: 'move', 
+							from_mailbox: s[0].data['mailbox'],
+							to_mailbox: e.target.attributes['mailbox'],
+							account_id: e.target.attributes['account_id'],
+							messages: Ext.encode(messages)
+						},
+						callback: function(options, success, response)
+						{
+							if(!success)
+							{
+								Ext.MessageBox.alert('Failed', response.result.errors);
+							}else
+							{
+								ds.reload();
+							}
+						}
+					});
+				}
+					
+
 			});
 			
 			tree.on('nodedrop', function(e){
@@ -207,7 +244,14 @@ email = function(){
 			});
 
 
-			//tree.on('click',nodeClick);
+			tree.on('click', function(node)	{
+					messagesPanel.setTitle(node.text);
+					ds.baseParams = {
+						"node": node.id
+					};
+					ds.load({params:{start:0, limit: parseInt(GOsettings['max_rows_list'])}});
+				
+			});
 
 			// render the tree
 			tree.render();
@@ -216,7 +260,7 @@ email = function(){
 			var treePanel = new Ext.ContentPanel('west',{title: 'E-mail'});
 			layout.add('west', treePanel);
 
-			messagesPanel = new Ext.GridPanel(grid, {title: emailLang['messages'], toolbar: tb});
+			messagesPanel = new Ext.GridPanel(grid, {title: emailLang['inbox'], toolbar: tb});
 			layout.add('center', messagesPanel);
 
 			previewPanel = new Ext.ContentPanel('east');
@@ -294,13 +338,6 @@ email = function(){
 
 			}
 		},
-		loadMessages : function(node)
-		{
-			messagesPanel.setTitle(node.text);
-			ds.baseParams = {"node": node.id};
-			ds.load({params:{start:0, limit: parseInt(GOsettings['max_rows_list'])}});
-
-		},
 		rowDoubleClicked : function(grid, rowClicked, e) {
 			var selectionModel = grid.getSelectionModel();
 			var record = selectionModel.getSelected();
@@ -312,7 +349,15 @@ email = function(){
 
 			var selectionModel = grid.getSelectionModel();
 			var record = selectionModel.getSelected();
-			previewPanel.load({url: 'message.php?uid='+record.data['uid'], scripts: true });
+			previewPanel.load(
+			{
+				url: 'message.php',
+				params: {
+					uid: record.data['uid'], 
+					mailbox: record.data['mailbox'] 
+				},
+			 	scripts: true 
+			});
 		}
 	};
 
