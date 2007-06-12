@@ -459,7 +459,7 @@ class projects extends db
 		}
 		if($end_time>0)
 		{
-			$sql .= " AND end_time>$end_time";
+			$sql .= " AND end_time<$end_time";
 		}
 
 		$this->query($sql);
