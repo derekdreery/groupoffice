@@ -762,7 +762,7 @@ class imap {
 					}
 				}
 			}
-echo $section.': '.$full_mime_type.' '.$name.'<br>';
+//echo $section.': '.$full_mime_type.' '.$name.'<br>';
 			$bytes = isset ($mimeobj->bytes) ? $mimeobj->bytes : 0;
 			$tmp = Array ('number' => $section, 'id' => $mimeobj->ifid ? $mimeobj->id : 0, 'name' => $name, 'mime' => $full_mime_type, 'transfer' => $encoding, 'charset' => $part_charset, 'disposition' => $mimeobj->ifdisposition ? $mimeobj->disposition : '', 'size' => $bytes);
 
