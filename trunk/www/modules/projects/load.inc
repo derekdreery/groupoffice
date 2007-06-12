@@ -10,11 +10,11 @@
  * option) any later version.
  */
 
-$show_period = isset($_POST['show_period']) ? $_POST['show_period'] : 'period';
+$show_period = isset($_REQUEST['show_period']) ? $_REQUEST['show_period'] : 'period';
 //$load_user_id = isset($_POST['load_user_id']) ? $_POST['load_user_id'] : $GO_SECURITY->user_id;
-$load_type = isset($_POST['load_type']) ? $_POST['load_type'] : 'project';
-$print = (isset($_POST['print']) && $_POST['print'] == 'true') ? true : false;
-$project_id = isset($_POST['project_id']) ? $_POST['project_id'] : '0';
+$load_type = isset($_REQUEST['load_type']) ? $_REQUEST['load_type'] : 'project';
+$print = (isset($_REQUEST['print']) && $_REQUEST['print'] == 'true') ? true : false;
+$project_id = isset($_REQUEST['project_id']) ? $_REQUEST['project_id'] : '0';
 
 
 $time = get_time();
@@ -22,8 +22,8 @@ $this_day = date("j", $time);
 $this_year = date("Y", $time);
 $this_month = date("m", $time);
 
-$month = isset($_POST['month']) ? $_POST['month'] : $this_month;
-$year = isset($_POST['year']) ? $_POST['year'] : $this_year;
+$month = isset($_POST['month']) ? $_REQUEST['month'] : $this_month;
+$year = isset($_POST['year']) ? $_REQUEST['year'] : $this_year;
 
 $module_url = isset($projects_module) ? $projects_module['url'] : $GO_MODULES->url;
 
@@ -52,8 +52,8 @@ if (isset($feedback))
 
 if ($project_id== 0 && isset($GO_MODULES->modules['addressbook']) && $GO_MODULES->modules['addressbook']['read_permission'])
 {
-	$load_id = isset($_POST['load_id']['value']) ? $_POST['load_id']['value'] : '0';
-	$load_type = isset($_POST['load_id']['type']) ? $_POST['load_id']['type'] : 'contact';
+	$load_id = isset($_REQUEST['load_id']['value']) ? $_REQUEST['load_id']['value'] : '0';
+	$load_type = isset($_REQUEST['load_id']['type']) ? $_REQUEST['load_id']['type'] : 'contact';
 	
 }else
 {
