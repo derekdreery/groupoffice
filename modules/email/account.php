@@ -230,7 +230,7 @@ if($account_id > 0)
 if(!$account && !$GO_MODULES->write_permission)
 {
 	exit($strAccessDenied);
-}elseif($account['user_id']!=$GO_SECURITY->user_id && !$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id)) {
+}elseif($account && $account['user_id']!=$GO_SECURITY->user_id && !$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id)) {
 	exit($strAccessDenied);
 }
 
