@@ -33,8 +33,8 @@ function popup(url,w,h,target)
 <title><?php echo $GO_CONFIG->title; ?>
 </title>
 <?php
-//echo '<meta http-equiv="refresh" content="'.$GO_CONFIG->refresh_rate.';url='.$_SERVER['PHP_SELF'].'?initiated=true">';
-echo '<meta http-equiv="refresh" content="5;url='.$_SERVER['PHP_SELF'].'?initiated=true">';
+echo '<meta http-equiv="refresh" content="'.$GO_CONFIG->refresh_rate.';url='.$_SERVER['PHP_SELF'].'?initiated=true">';
+//echo '<meta http-equiv="refresh" content="5;url='.$_SERVER['PHP_SELF'].'?initiated=true">';
 $height = 0;
 //if user uses the calendar then check for events to remind
 $calendar_module = isset($GO_MODULES->modules['calendar']) ? $GO_MODULES->modules['calendar'] : false;
