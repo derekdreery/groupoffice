@@ -55,8 +55,8 @@ if($datatable->task == 'delete')
 
 
 $datatable->add_column(new table_heading($strName, 'name'));
-$datatable->add_column(new table_heading($sum_due_time, 'name'));
-$datatable->add_column(new table_heading($strModifiedAt, 'name'));
+$datatable->add_column(new table_heading($sum_due_time, 'due_time'));
+$datatable->add_column(new table_heading($strModifiedAt, 'mtime'));
 
 $count = $summary->get_all_announcements($datatable->start, $datatable->offset);
 
