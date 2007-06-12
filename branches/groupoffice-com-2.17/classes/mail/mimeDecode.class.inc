@@ -69,8 +69,8 @@
 		> headers. Therefore I made the following function:
 		> 
 		> function decode_utf8($txt) {
-		> $trans=array("�&#8216;"=>"õ","ű"=>"û","Ő"=>"�&#8226;","Ű"
-		=>"�&#8250;");
+		> $trans=array("�&#8216;"=>"õ","ű"=>"û","Ő"=>"�&#8226;","Ű"
+		=>"�&#8250;");
 		> $txt=strtr($txt,$trans);
 		> return(utf8_decode($txt));
 		> }
@@ -536,10 +536,13 @@ class Mail_mimeDecode
                     break;
 
                 case 'q':
-                    $text = str_replace('_', ' ', $text);
+                  /*  $text = str_replace('_', ' ', $text);
                     preg_match_all('/=([a-f0-9]{2})/i', $text, $matches);
                     foreach($matches[1] as $value)
                         $text = str_replace('='.$value, chr(hexdec($value)), $text);
+                    */
+                  	$text = enc_utf8($encoded);
+                     
                     break;
             }
 

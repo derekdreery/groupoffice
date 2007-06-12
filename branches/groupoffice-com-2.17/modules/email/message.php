@@ -388,9 +388,14 @@ if (!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $ab_module['acl_read'])
 $splitter = 0;
 
 for ($i = 0; $i < count($parts); $i ++) {
-	if (eregi("ATTACHMENT", $parts[$i]["disposition"])  || (eregi("INLINE", $parts[$i]["disposition"]) && $parts[$i]["name"] != '') || $parts[$i]["name"] != ''){
+	if (eregi("message", $parts[$i]["mime"])  ||eregi("ATTACHMENT", $parts[$i]["disposition"])  || (eregi("INLINE", $parts[$i]["disposition"]) && $parts[$i]["name"] != '') || $parts[$i]["name"] != ''){
+		if(eregi("message", $parts[$i]["mime"]))
+		{
+			$parts[$i]["name"] = $ml_attachment_message.'.eml';
+		}
 		$extension = get_extension($parts[$i]["name"]);
-		if ($extension == 'ics' && $cal_module) {
+		
+		if ($extension == 'ics' && $cal_module && $content["new"] == 1) {
 			$target = '_self';
 			$link = "javascript:popup('import_ics.php?account_id=".$account['id']."&mailbox=".urlencode($mailbox)."&uid=".$uid."&part=".$parts[$i]["number"]."&transfer=".$parts[$i]["transfer"]."&mime=".$parts[$i]["mime"]."&filename=".urlencode($parts[$i]["name"])."', '400','80');";
 			if ($content["new"] == 1) {
@@ -398,7 +403,7 @@ for ($i = 0; $i < count($parts); $i ++) {
 			}
 
 		}
-		elseif ($extension == 'vcf' && $ab_module) {
+		elseif ($extension == 'vcf' && $ab_module && $content["new"] == 1) {
 			$target = '_self';
 			$link = "javascript:popup('import_vcf.php?account_id=".$account['id']."&mailbox=".urlencode($mailbox)."&uid=".$uid."&part=".$parts[$i]["number"]."&transfer=".$parts[$i]["transfer"]."&mime=".$parts[$i]["mime"]."&filename=".urlencode($parts[$i]["name"])."', '400','80');";
 			if ($content["new"] == 1) {
@@ -408,7 +413,12 @@ for ($i = 0; $i < count($parts); $i ++) {
 		{
 			$target = '_self';
 			$link = "tnef.php?account_id=".$account['id']."&mailbox=".urlencode($mailbox)."&uid=".$uid."&part=".$parts[$i]["number"]."&transfer=".$parts[$i]["transfer"]."&mime=".$parts[$i]["mime"]."&filename=".urlencode($parts[$i]["name"]);			
-		} else {
+		} elseif($extension == 'eml')
+		{
+			$target = '_blank';
+			$link = $GO_CONFIG->control_url."mimeviewer/mimeviewer.php?account_id=".$account['id']."&mailbox=".urlencode($mailbox)."&uid=".$uid."&part=".$parts[$i]["number"]."&transfer=".$parts[$i]["transfer"]."&mime=".$parts[$i]["mime"]."&filename=".urlencode($parts[$i]["name"]);						
+		}else{
+			
 			$target = '_top';
 			$link = "attachment.php?account_id=".$account['id']."&mailbox=".urlencode($mailbox)."&uid=".$uid."&part=".$parts[$i]["number"]."&transfer=".$parts[$i]["transfer"]."&mime=".$parts[$i]["mime"]."&filename=".urlencode($parts[$i]["name"]);
 		}
