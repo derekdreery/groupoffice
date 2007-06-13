@@ -9,8 +9,8 @@ if(file_exists($GO_CONFIG->root_path.'LICENSE.PRO'))
 		$module_id='custom_fields';
 		$acl_read = $GO_SECURITY->get_new_acl('Module read: '.$module_id, 0);
 		$acl_write = $GO_SECURITY->get_new_acl('Module write: '.$module_id, 0);		
-		$module_info = $GO_MODULES2->get_module_info($module_id);
-		$GO_MODULES2->add_module($module_id, $module_info['version'], $acl_read, $acl_write, $module_info['sort_order'], true);
+		$_module_info = $GO_MODULES2->get_module_info($module_id);
+		$GO_MODULES2->add_module($module_id, $_module_info['version'], $acl_read, $acl_write, $_module_info['sort_order'], true);
 	}
 	
 	if(!isset($GO_MODULES->modules['reports']))
@@ -18,8 +18,8 @@ if(file_exists($GO_CONFIG->root_path.'LICENSE.PRO'))
 		$module_id='reports';
 		$acl_read = $GO_SECURITY->get_new_acl('Module read: '.$module_id, 0);
 		$acl_write = $GO_SECURITY->get_new_acl('Module write: '.$module_id, 0);		
-		$module_info = $GO_MODULES2->get_module_info($module_id);
-		$GO_MODULES2->add_module($module_id, $module_info['version'], $acl_read, $acl_write, $module_info['sort_order']);
+		$_module_info = $GO_MODULES2->get_module_info($module_id);
+		$GO_MODULES2->add_module($module_id, $_module_info['version'], $acl_read, $acl_write, $_module_info['sort_order']);
 	}
 	$GO_MODULES2->load_modules();
 	

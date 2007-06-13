@@ -233,7 +233,7 @@ $ml_download_reg='Download register file';
 
 $ml_help_url='http://docs.group-office.com/index.php?folder_id=57&file_id=0';
 
-$em_js_lang=$GO_MODULES->modules['email']['url'].'language/en.js';=======
+$em_js_lang=$GO_MODULES->modules['email']['url'].'language/en.js';
 $ml_help_url='http://docs.group-office.com/index.php?folder_id=57&file_id=0';
 
 $ml_attachment_message = 'Message';

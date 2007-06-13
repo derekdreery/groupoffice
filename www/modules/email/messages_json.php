@@ -48,12 +48,19 @@ if(isset($_REQUEST['node']) && strpos($_REQUEST['node'],'_'))
 	
 }else {
 	$mailbox = 'INBOX';
+	
 }
 
 
 if (!$account = $email->get_account($account_id)) {
 	$account = $email->get_account(0);
 }
+
+if(!isset($folder))
+{
+	$folder = $email->get_folder($account['id'],$mailbox);
+}
+
 if ($account) {
 	if($account['user_id']!=$GO_SECURITY->user_id)
 	{
@@ -101,7 +108,8 @@ while($mail->next_message(($account['examine_headers']=='1' || isset($_POST['exa
 		'size'=>format_size($mail->f('size')),
 		'date'=>get_timestamp($mail->f('udate')),
 		'mailbox'=>$mailbox,
-		'account_id'=>$account['id']
+		'account_id'=>$account['id'],
+		'folder_id'=>$folder['id']
 		
 	);
 }

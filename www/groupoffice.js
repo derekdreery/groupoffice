@@ -151,13 +151,27 @@ GroupOffice = function(){
 		{
 			layout.getRegion('east').hide();
 		},
-		addCenterPanel : function(title, url)
+		addCenterPanel : function(id, title, url)
 		{
 			var iframe = Ext.DomHelper.append(document.body,
-			{tag: 'iframe', frameBorder: 0, src: url});
+			{'id': id, tag: 'iframe', frameBorder: 0 });
 			var panel = new Ext.ContentPanel(iframe,
-			{title: title, fitToFrame:true, closable:true});
+			{title: title, fitToFrame:true, closable:false});		
+			
 			layout.add('center', panel);
+			panel.on('activate', function()
+			{
+				var frame = panel.getEl();
+				if(frame.dom.src=='')
+				{
+					frame.set({'src': url});
+				}
+			}
+			);
+			
+		},
+		showPanel :  function (panelName){
+			layout.showPanel(panelName);			
 		},
 
 		rowDoulbleClicked : function(search_grid, rowClicked, e) {

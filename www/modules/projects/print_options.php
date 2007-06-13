@@ -424,7 +424,7 @@ if($task !='')
 			}
 
 			
-			$totals = $projects2->get_total_hours($projects->f('id'));
+			$totals = $projects2->get_total_hours($projects->f('id'), $start_time,$end_time);
 			
 			$columns[]=format_number($totals[0]['time']/3600);
 			$columns[]=format_number($totals[0]['int_fee']);

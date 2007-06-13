@@ -136,7 +136,7 @@ $from .= '&nbsp;&lt;'.$content['sender'].'&gt;';
 //$from .= '&nbsp;<a href="javascript:document.location=\'about:blank\';parent.messages.location.href=\'messages.php?account_id='.$account_id.'&task=set_search_query&from='.$content['sender'].'&uid='.$uid.'\';" title="'.$ml_search_sender.'"><img src="'.$GO_THEME->images['magnifier'].'" border="0" align="middle" /></a>';
 ?>
 
-<div style="padding:5px;background-color:#c3daf9;">
+<div style="padding:5px;background-color:#c3daf9">
 <table width="100%">
 
 	<?php
@@ -331,7 +331,7 @@ $from .= '&nbsp;&lt;'.$content['sender'].'&gt;';
 		echo '<table class="HeaderTable" width="100%" style="margin-top:2px;">'.'<tr><td valign="top"><b>'.$ml_attachments.':</b>&nbsp;&nbsp;</td><td width="100%">'.$attachments.'</td></tr></table>';
 	}
 	
-	echo '<div style="background-color:white;padding:3px;border:1px solid black">';
+	echo '<div style="background-color:white;padding:3px;border:1px solid black;overflow:auto">';
 
 	$count = 0;
 	$splitter = 0;

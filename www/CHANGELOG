@@ -13,6 +13,12 @@ TODO
 *SMTP server per e-mail account
 *Restrict SMTP servers for mailing lists
 
+2007/06/12 Version 2.17-stable-5
+-Better character set conversion in e-mail messages
+-Filesystem shares bug with invalid tree structures
+-Display inline e-mail attachments
+-Other small bugs
+
 2007/06/07 Version 2.17-stable-4
 -Added the last 10 uploaded files to the summary
 -Calendar and task reminder beeps only once if it's not dismissed.

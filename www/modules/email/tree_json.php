@@ -91,16 +91,16 @@ if($node_id==0)
 		
 		if ($unseen > 0)
 		{
-			$status = '<span class="count">&nbsp;('.$unseen.')</span>';
+			$status = '&nbsp;(<span id="status_'.$email->f('id').'">'.$unseen.'</span>)';
 		}else
 		{
-			$status = '';
+			$status = '&nbsp;<span id="status_'.$email->f('id').'"></span>';
 		}
 		
 		if($email2->get_subscribed(0, $email->f('id')))		
 		{
 			$nodes[] = array(
-				'text'=>$folder_name.' '.$status, 
+				'text'=>$folder_name.$status, 
 				'id'=>'folder_'.$email->f('id'), 
 				'cls'=>'folder', 
 				'account_id'=>$email->f('account_id'),
@@ -109,7 +109,7 @@ if($node_id==0)
 				);
 		}else {
 			$nodes[] = array(
-				'text'=>$folder_name.' '.$status, 
+				'text'=>$folder_name.$status, 
 				'id'=>'folder_'.$email->f('id'), 
 				'cls'=>'folder', 
 				'account_id'=>$email->f('account_id'), 
