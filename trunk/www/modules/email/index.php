@@ -21,6 +21,8 @@ require_once($GO_LANGUAGE->get_language_file('email'));
 <title><?php echo $GO_CONFIG->title.' - '.$lang_modules['email']; ?></title>
 <?php
 require($GO_CONFIG->root_path.'default_head.inc');
+$GO_THEME->load_module_theme('email');
+echo $GO_THEME->get_stylesheet('email');
 ?>
 <script type="text/javascript" src="language/en.js"></script>
 <script type="text/javascript" src="email.js"></script>

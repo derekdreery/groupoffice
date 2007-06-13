@@ -49,10 +49,10 @@ email = function(){
 			function renderMessage(value, p, record){
 				if(record.data['new'])
 				{
-					return String.format('<p style="margin:0px;margin-bottom:4px;font-weight:bold;">{0}</p>{1}', value, record.data['subject']);
+					return String.format('<p id="sbj_'+record.data['uid']+'" class="NewSubject">{0}</p>{1}', value, record.data['subject']);
 				}else
 				{
-					return String.format('<p style="margin:0px;margin-bottom:4px;">{0}</p>{1}', value, record.data['subject']);
+					return String.format('<p id="sbj_'+record.data['uid']+'" class="Subject">{0}</p>{1}', value, record.data['subject']);
 				}
 			}
 			function renderIcon(src){
@@ -79,7 +79,8 @@ email = function(){
 				{name: 'size'},
 				{name: 'date'},
 				{name: 'mailbox'},
-				{name: 'account_id'}
+				{name: 'account_id'},
+				{name: 'folder_id'}
 				]),
 
 				// turn on remote sorting
@@ -347,8 +348,27 @@ email = function(){
 		},
 		rowClicked : function(grid, rowClicked, e) {
 
+			
+			
 			var selectionModel = grid.getSelectionModel();
 			var record = selectionModel.getSelected();
+			
+			if(record.data['new']==1)
+			{
+				//update subject as read
+				var sbj = Ext.get('sbj_'+record.data['uid']);
+				sbj.set({'class': 'Subject'});
+				
+				//decrease treeview status id is defined in tree_json.php
+				var status = Ext.get('status_'+record.data['folder_id']);
+				
+				var unseen = parseInt(status.dom.innerHTML)-1;
+				status.dom.innerHTML = unseen;
+				
+				
+			}
+			
+			//load message
 			previewPanel.load(
 			{
 				url: 'message.php',
