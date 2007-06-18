@@ -1,0 +1,11 @@
+<?php
+$module['projects']['description'] = 'With the projects module you can easily '.
+			'administrate your working hours. You can load the working hours back '.
+			'based on project, client or employee.';
+$module['projects']['version'] = '2.2';
+$module['projects']['release_date'] = '2006-11-29';
+$module['projects']['status'] = 'Stable';
+$module['projects']['authors'][] = array('name'=>'Merijn Schering', 'email'=>'mschering@intermesh.nl');
+$module['projects']['sort_order'] = '80';
+$module['projects']['linkable_items'][] = array('url'=>'project.php', 'language'=>'pm_new_project', 'button'=>'pr_new_project');
+?>	
