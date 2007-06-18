@@ -1,5 +1,6 @@
 var GOlang = {
 	strName : 'Name',
+	strEmail : 'E-mail',
 	strType : 'Type',
 	strMtime : 'Modified at',
 	strCtime : 'Created at',

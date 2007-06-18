@@ -933,7 +933,7 @@ class email extends db
 					$filename .= strip_extension($filename).' ('.$x.').'.get_extension($filename);
 				}
 
-				if(!$fp = fopen($tmpdir.'/'.$filename,'w+'))
+				if(!$fp = fopen($filename,'w+'))
 				{
 					return false;
 				}
