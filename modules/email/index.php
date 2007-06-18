@@ -187,7 +187,7 @@ function composer(action,mail_to,subject,body)
 			echo '<td class="ModuleIcons">';
 			echo '<a href="javascript:window.messages.confirm_delete();"><img src="'.$GO_THEME->images['delete_big'].'" border="0" /><br />'.$ml_delete.'</a></td>';					
 			
-			if(file_exists($GO_CONFIG->control_path.'mimeviewer/mimeviewer.php'))
+			if(file_exists($GO_MODULES->modules['email']['path'].'prepare_message_link_handler.php'))
 			{
 				echo '<td class="ModuleIcons">';
 				echo '<a href="javascript:link_messages();"><img src="'.$GO_THEME->images['link'].'" border="0" /><br />'.$strCreateLink.'</a></td>';

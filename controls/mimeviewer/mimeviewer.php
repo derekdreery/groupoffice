@@ -96,8 +96,8 @@ function get_parts($structure, $part_number_prefix='')
 
 	if (isset($structure->parts))
 	{
-		$part_number=0;
-		foreach ($structure->parts as $part) {
+		//$part_number=0;
+		foreach ($structure->parts as $part_number=>$part) {
 
 			//text part and no attachment so it must be the body
 			if($structure->ctype_primary=='multipart' && $structure->ctype_secondary=='alternative' && 
@@ -166,13 +166,13 @@ function get_parts($structure, $part_number_prefix='')
 							$url_replacement['url'] = $GO_CONFIG->control_url.'mimeviewer/mimepart.php?path='.urlencode($path).'&amp;part_number='.$part_number;
 						}else 
 						{
-							$url_replacement['url'] = $GO_CONFIG->control_url.'mimeviewer/mimepart.php?account_id='.$account['id'].'&mailbox='.urlencode(smart_stripslashes($_REQUEST['mailbox'])).'&uid='.smart_stripslashes($_REQUEST['uid']).'&part='.$_REQUEST['part'].'&transfer='.urlencode($_REQUEST['transfer']).'&part_number='.$part_number;
+							$url_replacement['url'] = $GO_CONFIG->control_url.'mimeviewer/mimepart.php?account_id='.$_REQUEST['account_id'].'&mailbox='.urlencode(smart_stripslashes($_REQUEST['mailbox'])).'&uid='.smart_stripslashes($_REQUEST['uid']).'&part='.$_REQUEST['part'].'&transfer='.urlencode($_REQUEST['transfer']).'&part_number='.$part_number;
 						}
 						$_SESSION['url_replacements'][] = $url_replacement;
 					}
 				}
 			}
-			$part_number++;
+			//$part_number++;
 			if(isset($part->parts))
 			{
 				get_parts($part, $part_number_prefix.$part_number.'.');
@@ -278,7 +278,7 @@ foreach($attachments as $attachment)
 		$href = $GO_CONFIG->control_url.'mimeviewer/mimepart.php?path='.urlencode($path).'&amp;part_number='.$attachment["part_number"];
 	}else 
 	{
-		$href = $GO_CONFIG->control_url.'mimeviewer/mimepart.php?account_id='.$account['id'].'&mailbox='.urlencode(smart_stripslashes($_REQUEST['mailbox'])).'&uid='.smart_stripslashes($_REQUEST['uid']).'&part='.$_REQUEST['part'].'&transfer='.urlencode($_REQUEST['transfer']).'&part_number='.$attachment["part_number"];
+		$href = $GO_CONFIG->control_url.'mimeviewer/mimepart.php?account_id='.$_REQUEST['account_id'].'&mailbox='.urlencode(smart_stripslashes($_REQUEST['mailbox'])).'&uid='.smart_stripslashes($_REQUEST['uid']).'&part='.$_REQUEST['part'].'&transfer='.urlencode($_REQUEST['transfer']).'&part_number='.$attachment["part_number"];
 	}
 
 	$attachments_str .= '<td><img border="0" width="16" height="16" src="'.get_filetype_image(get_extension($attachment["filename"])).'" /></td>';
