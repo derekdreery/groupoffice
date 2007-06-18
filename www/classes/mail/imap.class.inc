@@ -713,24 +713,30 @@ class imap {
 				// If there are more parts to the part about to be processed reference it as a header with ".0"
 				// but only if the child of this child isn't MULTIPART
 
-				if (isset ($mimeobj->parts[$x]->parts) && count($mimeobj->parts[$x]->parts)) {
+				if (isset ($mimeobj->parts[$x]->parts) && count($mimeobj->parts[$x]->parts) && strtolower($mimeobj->parts[$x]->subtype) != 'rfc822') {
 					// Funny really, if a mime section is a inline message that has a multipart body you reference the message
 					// mime section with "2" the inline message header with "2.0" and the subsections with	"2.x"
 					// However if the mime section is a inline message with only 1 part then you reference the
 					// mime section in the message with 2.0 and the	inline message body with 2.1
 
+					/*	//echo $mimeobj->parts[$x]->parts[0]->type.' '.TYPEMULTIPART.'<br />';
 					if (!($mimeobj->parts[$x]->type == TYPEMESSAGE && $mimeobj->parts[$x]->parts[0]->type == TYPEMULTIPART)) {
 						$nsection .= ".0";
 					} else {
 						$nsection .= "";
-					}
+					}*/
+					
+					$nsection .= ".0";
 				}
 
 				if(strtolower($full_mime_type) != 'message/rfc822')
 				{
 					$this->get_parts($mimeobj->parts[$x], $preferred_type, $nsection);
 				}else {
-					$section .= ".2";
+			
+					if (strtolower($mimeobj->parts[$x]->subtype) == 'mixed') {					
+						$section .= ".2";
+					}
 				}
 				
 

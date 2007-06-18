@@ -62,11 +62,11 @@ var linksGrid;
 			// dataIndex maps the column to the specific data field in
 			// the data store
 			var cm = new Ext.grid.ColumnModel([{
-				header: "Name",
+				header: GOlang['strName'],
 				dataIndex: 'name',
 				css: 'white-space:normal;'
 			},{
-				header: "Modified at",
+				header: GOlang['strMtime'],
 				dataIndex: 'mtime'
 			}]);
 
@@ -95,8 +95,8 @@ var linksGrid;
 			var paging = new Ext.PagingToolbar(gridFoot, ds, {
 				pageSize: parseInt(GOsettings['max_rows_list']),
 				displayInfo: true,
-				displayMsg: 'Displaying notes {0} - {1} of {2}',
-				emptyMsg: "No topics to display"
+				displayMsg: GOlang['displayingItems'],
+				emptyMsg: GOlang['strNoItems']
 			});
 
 			// trigger the data store load
@@ -108,7 +108,6 @@ var linksGrid;
 				id: 'delete',
 				icon: GOimages['delete'],
 				text: GOlang['cmdDelete'],
-				tooltip: {text:'Delete the selected items', title:'Tip Title'},
 				cls: 'x-btn-text-icon',
 				handler: this.onButtonClick
 			})
@@ -118,7 +117,6 @@ var linksGrid;
 				id: 'add',
 				icon: GOimages['add'],
 				text: GOlang['cmdAdd'],
-				tooltip: {text:'Add a new note', title:'Tip Title'},
 				cls: 'x-btn-text-icon',
 				handler: this.onButtonClick
 			})
@@ -128,7 +126,6 @@ var linksGrid;
 				id: 'link',
 				icon: GOimages['link'],
 				text: GOlang['cmdLink'],
-				tooltip: {text:'Add a new note', title:'Tip Title'},
 				cls: 'x-btn-text-icon',
 				handler: this.onButtonClick
 			})
