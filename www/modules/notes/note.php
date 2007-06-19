@@ -278,12 +278,6 @@ Note = function(){
 				links_grid.addListener("rowdblclick", this.rowDoulbleClicked, this);
 
 
-				// trigger the data store load
-				//links_ds.load({params:{start:0, limit: GOsettings['max_rows_list']}});
-				//
-
-				//links_grid.render();
-
 				linksPanel = new Ext.GridPanel(links_grid, { title: 'Links', toolbar: linkstb});
 				layout.add('center', linksPanel);
 

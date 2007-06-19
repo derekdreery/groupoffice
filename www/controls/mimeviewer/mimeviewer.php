@@ -316,6 +316,5 @@ if($pos = strpos(strtolower($content), '<body'))
 	$content = $header.$content;
 }
 
-
+header('Content-Type: text/html; charset='.$charset);
 echo $content;
-?>

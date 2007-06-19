@@ -20,5 +20,7 @@ var GOlang = {
 	strNoItems : 'No items to display',
 	
 	strLinkItems : 'Search for items to link',
-	strSearchResults: 'Search results'
+	strSearchResults: 'Search results',
+	
+	strPleaseSelect : 'Please select...'
 };
