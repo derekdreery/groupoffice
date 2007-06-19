@@ -318,4 +318,3 @@ if($pos = strpos(strtolower($content), '<body'))
 
 header('Content-Type: text/html; charset='.$charset);
 echo $content;
-?>
