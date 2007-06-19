@@ -348,7 +348,7 @@ $cmdUnlink = 'Unlink';
 
 
 
-$strAdministrate = 'Administrate';
+$strAdministrate = 'Administration';
 $strProOnly = 'This feature is only available in Group-Office Professional. <a href="http://www.group-office.com">Click here to learn more about Group-Office Professional</a>';
 
 $strMoreColors='More colors';
