@@ -13,6 +13,10 @@ TODO
 *SMTP server per e-mail account
 *Restrict SMTP servers for mailing lists
 
+2007/06/18 Version 2.17-stable-6
+-fixed bug with inline e-mail attachments
+-Fixed display of link e-mail button in Community version
+
 2007/06/12 Version 2.17-stable-5
 -Better character set conversion in e-mail messages
 -Filesystem shares bug with invalid tree structures
