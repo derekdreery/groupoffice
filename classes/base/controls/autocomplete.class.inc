@@ -93,7 +93,14 @@ class autocomplete extends html_element
 					oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_XML;
 					oACDS.queryMatchContains = true;
 					oACDS.scriptQueryParam = "query";
+					';
+					
+					if(!empty($this->scriptQueryAppend))
+					{
+						$header .='oACDS.scriptQueryAppend="'.$this->scriptQueryAppend.'";';
+					}
 
+					$header .='
 					oAutoComp = new YAHOO.widget.AutoComplete("'.$this->text_input->attributes['id'].'","'.$this->container->attributes['id'].'", oACDS);
 					oAutoComp.queryDelay=0.5;
 					oAutoComp.autoHighlight = true;
@@ -162,7 +169,7 @@ class autocomplete extends html_element
 	
 
 	function autocomplete($id='autocomplete', $textarea=false, $text_input_name, $text_input_value, 
-		$form_name, $xml_source, $xml_root_element, $xml_fields, $overwrite_values=true, $submit_on_enter=false)
+		$form_name, $xml_source, $xml_root_element, $xml_fields, $overwrite_values=true, $submit_on_enter=false, $scriptQueryAppend='')
 	{
 		
 		$this->submit_on_enter=$submit_on_enter;
@@ -171,6 +178,7 @@ class autocomplete extends html_element
 		$this->xml_source=$xml_source;
 		$this->xml_fields=$xml_fields;
 		$this->xml_root_element=$xml_root_element;
+		$this->scriptQueryAppend = $scriptQueryAppend;
 		
 		$this->set_attribute('id', $id);
 		$this->set_attribute('class','autocomplete');
