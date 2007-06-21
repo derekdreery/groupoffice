@@ -26,6 +26,7 @@ echo $GO_THEME->get_stylesheet('users');
 ?>
 <script type="text/javascript" src="language/en.js"></script>
 <script type="text/javascript" src="users.js"></script>
+<script type="text/javascript" src="../../links.js"></script>
 </head>
 <body>
 
@@ -34,5 +35,9 @@ echo $GO_THEME->get_stylesheet('users');
 	<div id="grid"></div>
 </div>
 <div id="dialog"></div>
+
+<?php
+require('user.php');
+?>
 </body>
 </html>

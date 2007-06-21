@@ -81,7 +81,9 @@ foreach($GO_MODULES->modules as $module)
 	echo "GroupOffice.addCenterPanel('".$module['id']."','".$lang_var."', '".$module['url']."');";
 }
 ?>
-GroupOffice.showPanel('email');
+
+GroupOffice.showPanel('users');
+
 });
 
 

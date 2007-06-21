@@ -1,33 +1,56 @@
 
-// namespace object
-var GroupOffice = GroupOffice || {};
+links = function(){
 
-
-GroupOffice.linksGrid = function(element, config) {
+	var linksPanel;
+	var dialog;
 	var links_grid;
-	
+	var links_ds;
+	var user_form;
+	var reader;
+	var link_id=0;
 
 	return {
 
-		render : function(){
+		getGridPanel : function(uniqid){
+			var linkstb = new Ext.Toolbar('linkstoolbar_'+uniqid);
 
-			var links_ds = new Ext.data.Store({
+
+			linkstb.addButton({
+				id: 'link',
+				icon: GOimages['link'],
+				text: GOlang['cmdLink'],
+				cls: 'x-btn-text-icon',
+				handler: this.onButtonClick
+			}
+			);
+
+			linkstb.addButton({
+				id: 'unlink',
+				icon: GOimages['unlink'],
+				text: GOlang['cmdUnlink'],
+				cls: 'x-btn-text-icon',
+				handler: this.onButtonClick
+			}
+			);
+
+			links_ds = new Ext.data.Store({
 
 				proxy: new Ext.data.HttpProxy({
-					url: BaseHref+'links_json.php?link_id='+config['link_id']
+					url: BaseHref+'links_json.php',
+					baseParams: {"link_id": link_id}
 				}),
-
 				reader: new Ext.data.JsonReader({
-					root: 'results',
-					totalProperty: 'total',
-					id: 'link_id'
-				}, [
-				{name: 'link_id', mapping: 'link_id'},
-				{name: 'name', mapping: 'name'},
-				{name: 'type', mapping: 'type'},
-				{name: 'url', mapping: 'url'},
-				{name: 'mtime', mapping: 'mtime'}
-				]),
+						root: 'results',
+						totalProperty: 'total',
+						id: 'link_id'
+					}, [
+					{name: 'icon'},
+					{name: 'link_id'},
+					{name: 'name'},
+					{name: 'type'},
+					{name: 'url'},
+					{name: 'mtime'}
+					]),
 
 				// turn on remote sorting
 				remoteSort: true
@@ -35,19 +58,28 @@ GroupOffice.linksGrid = function(element, config) {
 			links_ds.setDefaultSort('mtime', 'desc');
 
 
+			function IconRenderer(src){
+				return '<img src=\"' + src +' \" />';
+			}
 
 			// the column model has information about grid columns
 			// dataIndex maps the column to the specific data field in
 			// the data store
-			var links_cm = new Ext.grid.ColumnModel([{
-				header: "Name",
+			var links_cm = new Ext.grid.ColumnModel([
+			{
+				header:"",
+				width:28,
+				dataIndex: 'icon',
+				renderer: IconRenderer
+			},{
+				header: GOlang['strName'],
 				dataIndex: 'name',
 				css: 'white-space:normal;'
 			},{
-				header: "Type",
+				header: GOlang['strType'],
 				dataIndex: 'type'
 			},{
-				header: "Modified at",
+				header: GOlang['strMtime'],
 				dataIndex: 'mtime'
 			}]);
 
@@ -55,38 +87,44 @@ GroupOffice.linksGrid = function(element, config) {
 			links_cm.defaultSortable = true;
 
 			// create the editor grid
-			links_grid = new Ext.grid.Grid(element, {
+			links_grid = new Ext.grid.Grid('links_grid_div_'+uniqid, {
 				ds: links_ds,
 				cm: links_cm,
 				selModel: new Ext.grid.RowSelectionModel(),
 				enableColLock:false,
-				loadMask: true				
-				
+				loadMask: true,
+				displayInfo: true,
+				displayMsg: GOlang['displayingItems'],
+				emptyMsg: GOlang['strNoItems']
+
 			});
 
 			//grid.addListener("rowclick", this.rowClicked, this);
 			links_grid.addListener("rowdblclick", this.rowDoulbleClicked, this);
 
-
-			// trigger the data store load
-			//links_ds.load({params:{start:0, limit: GOsettings['max_rows_list']}});
-			links_ds.load();
-
-			return links_grid;
+			
+			return new Ext.GridPanel(links_grid, { title: 'Links', toolbar: linkstb});
+			
+			
 
 		},
-		
-		rowDoulbleClicked : function(links_grid, rowClicked, e) {
-			
+		loadLinks : function(new_link_id)
+		{
+			if(link_id!=new_link_id)
+			{
+				link_id=new_link_id;
+				links_ds.baseParams = {"link_id": link_id};				
+				links_ds.load();
+				links_grid.render();
+			}
+		},
+		rowDoulbleClicked : function(search_grid, rowClicked, e) {
+
 			var selectionModel = links_grid.getSelectionModel();
 			var record = selectionModel.getSelected();
-			
-			document.location=record.data['url'];
+
+			//parent.Ext.get('dialog').load({url: record.data['url'], scripts: true });
+			parent.GroupOffice.showDialog({url: record.data['url'], scripts: true });
 		}
 	}
-};
-
-
-
-
-
+}();

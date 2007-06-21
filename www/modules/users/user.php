@@ -30,29 +30,28 @@ $GO_SECURITY->authenticate();
 $GO_MODULES->authenticate('users');
 require_once($GO_LANGUAGE->get_language_file('users'));
 
-$user_id=isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : 0;
+//$user_id=isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : 0;
 
 $uniqid=uniqid();
 
-$user = $GO_USERS->get_user($user_id);
+//$user = $GO_USERS->get_user($user_id);
 
 ?>
 
-<div id="userdialog__<?php echo $uniqid; ?>">
+<div id="userdialog_<?php echo $uniqid; ?>">
 	<div class="x-dlg-hd"><?php echo $strUser; ?></div>	
-	    <div class="x-dlg-bd">	   
+	    <div id="box-bd_<?php echo $uniqid; ?>" class="x-dlg-bd">	   
 		    <div id="properties_<?php echo $uniqid; ?>" class="x-dlg-tab">
 			 <div id="toolbar_<?php echo $uniqid; ?>"></div>
 				<div id="inner_tab_<?php echo $uniqid; ?>" class="inner-tab">		
-					<div id="form_<?php echo $uniqid; ?>">
-					</div>		
+					<div id="form_<?php echo $uniqid; ?>"></div>		
 				</div>
 			</div>
 			<div id="links_tab_<?php echo $uniqid; ?>" class="x-dlg-tab">
-			<div id="linkstoolbar_<?php echo $uniqid; ?>"></div>
-			<div id="links_grid_div_<?php echo $uniqid; ?>">
+				<div id="linkstoolbar_<?php echo $uniqid; ?>"></div>
+				<div id="links_grid_div_<?php echo $uniqid; ?>"></div>
 			</div>
-			</div>
+			<div id="access_<?php echo $uniqid; ?>" class="x-dlg-tab"></div>
 	    </div>
 	</div>
 </div>
@@ -61,12 +60,13 @@ $user = $GO_USERS->get_user($user_id);
 Countries = [
 <?php
 
+$countries=array();
 $GO_USERS->get_countries();
 while($GO_USERS->next_record())
 {
-	echo '['.$GO_USERS->f('id').',"'.$GO_USERS->f('name').'"],';
+	$countries[] = '['.$GO_USERS->f('id').',"'.$GO_USERS->f('name').'"]';
 }
-
+echo implode(',',$countries);
 ?>
 ];
 
@@ -75,10 +75,10 @@ user = function(){
 
 	var linksPanel;
 	var dialog;
-	var links_grid;
-	var links_ds;
-	var links_loaded;
+	
 	var user_form;
+	var reader;
+	var layout;
 
 	return {
 
@@ -92,7 +92,7 @@ user = function(){
 			];
 
 
-			dialog = new Ext.LayoutDialog('userdialog__<?php echo $uniqid; ?>', {
+			dialog = new Ext.LayoutDialog('userdialog_<?php echo $uniqid; ?>', {
 				modal:true,
 				shadow:false,
 				resizable:false,
@@ -115,14 +115,42 @@ user = function(){
 			dialog.addButton('Close', this.destroyDialog, this);
 
 
-			var layout = dialog.getLayout();
+			layout = dialog.getLayout();
 			layout.beginUpdate();
 
-
+			reader = new Ext.data.JsonReader({
+				root: 'user',
+				id: 'id'
+			},
+			[
+			'first_name',
+			'middle_name',
+			'last_name',
+			'title',
+			'inititals',
+			'sex',
+			'company',
+			'birthday',
+			'email',
+			'home_phone',
+			'fax',
+			'cellular',
+			'address',
+			'address_no',
+			'city',
+			'zip',
+			'state',
+			'country_id',
+			'id',
+			'link_id'
+			]
+			);
 
 			user_form = new Ext.form.Form({
 				labelAlign: 'right',
-				labelWidth: 80
+				labelWidth: 80,
+				waitMsgTarget: 'box-bd_<?php echo $uniqid; ?>',
+				reader: reader
 			});
 
 			user_form.column({width:300, labelWidth:75}); // open column, without auto close
@@ -133,33 +161,28 @@ user = function(){
 				fieldLabel: UsersLang['first_name'],
 				name: 'first_name',
 				width:190,
-				allowBlank:false,
-				value: '<?php echo addslashes($user['first_name']); ?>'
+				allowBlank:false
 			}),
 			new Ext.form.TextField({
 				fieldLabel: UsersLang['middle_name'],
 				name: 'middle_name',
-				width:190,
-				value: '<?php echo addslashes($user['middle_name']); ?>'
+				width:190
 			}),
 			new Ext.form.TextField({
 				fieldLabel: UsersLang['last_name'],
 				name: 'last_name',
 				allowBlank:false,
-				width:190,
-				value: '<?php echo addslashes($user['last_name']); ?>'
+				width:190
 			}),
 			new Ext.form.TextField({
 				fieldLabel: UsersLang['title'],
 				name: 'title',
-				width:190,
-				value: '<?php echo addslashes($user['title']); ?>'
+				width:190
 			}),
 			new Ext.form.TextField({
 				fieldLabel: UsersLang['initials'],
 				name: 'initials',
-				width:190,
-				value: '<?php echo addslashes($user['initials']); ?>'
+				width:190
 			}),
 
 			new Ext.form.ComboBox({
@@ -176,106 +199,94 @@ user = function(){
 				triggerAction: 'all',
 				emptyText:GOlang['strPleaseSelect'],
 				selectOnFocus:true,
-				width:190,
-				value: '<?php echo addslashes($user['sex']); ?>'
+				width:190
 			}),
 
 			new Ext.form.TextField({
 				fieldLabel: UsersLang['company'],
 				name: 'company',
-				width:190,
-				value: '<?php echo addslashes($user['company']); ?>'
+				width:190
 			}),
 
-			
+
 			new Ext.form.DateField({
 				fieldLabel: UsersLang['birthday'],
 				name: 'birthday',
-				width:190,				
-				value: '<?php echo addslashes(db_date_to_date($user['birthday'])); ?>',
+				width:190,
 				format: GOsettings['date_format']
 			})
 			);
 
-			
-			
-			
+
+
+
 			user_form.fieldset(
 			{legend:UsersLang['contactinfo']},
-			
+
 			new Ext.form.TextField({
 				fieldLabel: UsersLang['email'],
 				name: 'email',
 				vtype:'email',
 				allowBlank:false,
-				width:190,
-				value: '<?php echo addslashes($user['email']); ?>'
+				width:190
 			}),
 			new Ext.form.TextField({
 				fieldLabel: UsersLang['phone'],
 				name: 'home_phone',
-				width:190,
-				value: '<?php echo addslashes($user['home_phone']); ?>'
+				width:190
 			}),
 			new Ext.form.TextField({
 				fieldLabel: UsersLang['fax'],
 				name: 'fax',
-				width:190,
-				value: '<?php echo addslashes($user['fax']); ?>'
+				width:190
 			}),
 			new Ext.form.TextField({
 				fieldLabel: UsersLang['cellular'],
 				name: 'cellular',
-				width:190,
-				value: '<?php echo addslashes($user['cellular']); ?>'
+				width:190
 			})
 			);
-			
+
 			user_form.end();
 
 			user_form.column(
 			{width:300, style:'margin-left:10px', clear:true}
 			);
-			
+
 			user_form.fieldset(
 			{legend: UsersLang['address']},
-			
+
 			new Ext.form.TextField({
 				fieldLabel: UsersLang['street'],
 				name: 'address',
-				width:190,
-				value: '<?php echo addslashes($user['address']); ?>'
+				width:190
 			}),
 			new Ext.form.TextField({
 				fieldLabel: UsersLang['address_no'],
 				name: 'address_no',
-				width:190,
-				value: '<?php echo addslashes($user['address_no']); ?>'
+				width:190
 			}),
 			new Ext.form.TextField({
 				fieldLabel: UsersLang['zip'],
 				name: 'zip',
-				width:190,
-				value: '<?php echo addslashes($user['zip']); ?>'
+				width:190
 			}),
 			new Ext.form.TextField({
 				fieldLabel: UsersLang['city'],
 				name: 'city',
-				width:190,
-				value: '<?php echo addslashes($user['city']); ?>'
+				width:190
 			}),
 			new Ext.form.TextField({
 				fieldLabel: UsersLang['state'],
 				name: 'state',
-				width:190,
-				value: '<?php echo addslashes($user['state']); ?>'
+				width:190
 			}),
 			new Ext.form.ComboBox({
 				fieldLabel: UsersLang['country'],
 				hiddenName:'country_id',
 				store: new Ext.data.SimpleStore({
 					fields: ['id', 'name'],
-					data : Countries 
+					data : Countries
 				}),
 				displayField:'name',
 				valueField: 'id',
@@ -284,12 +295,11 @@ user = function(){
 				triggerAction: 'all',
 				emptyText:GOlang['strPleaseSelect'],
 				selectOnFocus:true,
-				width:190,
-				value: '<?php echo addslashes($user['country_id']); ?>'
+				width:190
 			})
 			);
-			
-			
+
+
 
 			user_form.end();
 
@@ -322,138 +332,50 @@ user = function(){
 
 			userPanel = new Ext.ContentPanel('properties_<?php echo $uniqid; ?>',{
 				title: '<?php echo $strProperties; ?>',
-				//toolbar: usertb,
-				autoScroll:true,
+				toolbar: usertb,
+				autoScroll:true
 			});
 
 			layout.add('center', userPanel);
 
-
-
-
-			var linkstb = new Ext.Toolbar('linkstoolbar_<?php echo $uniqid; ?>');
-
-
-			linkstb.addButton({
-				id: 'link',
-				icon: GOimages['link'],
-				text: GOlang['cmdLink'],
-				cls: 'x-btn-text-icon',
-				handler: this.onButtonClick
-			}
-			);
-
-			linkstb.addButton({
-				id: 'unlink',
-				icon: GOimages['unlink'],
-				text: GOlang['cmdUnlink'],
-				cls: 'x-btn-text-icon',
-				handler: this.onButtonClick
-			}
-			);
-
-			links_ds = new Ext.data.Store({
-
-				proxy: new Ext.data.HttpProxy({
-					url: BaseHref+'links_json.php?link_id=<?php echo $user['link_id']; ?>'
-				}),
-
-				reader: new Ext.data.JsonReader({
-					root: 'results',
-					totalProperty: 'total',
-					id: 'link_id'
-				}, [
-				{name: 'icon'},
-				{name: 'link_id'},
-				{name: 'name'},
-				{name: 'type'},
-				{name: 'url'},
-				{name: 'mtime'}
-				]),
-
-				// turn on remote sorting
-				remoteSort: true
-			});
-			links_ds.setDefaultSort('mtime', 'desc');
-
-
-			function IconRenderer(src){
-				return '<img src=\"' + src +' \" />';
-			}
-
-			// the column model has information about grid columns
-			// dataIndex maps the column to the specific data field in
-			// the data store
-			var links_cm = new Ext.grid.ColumnModel([
-			{
-				header:"",
-				width:28,
-				dataIndex: 'icon',
-				renderer: IconRenderer
-			},{
-				header: GOlang['strName'],
-				dataIndex: 'name',
-				css: 'white-space:normal;'
-			},{
-				header: GOlang['strType'],
-				dataIndex: 'type'
-			},{
-				header: GOlang['strMtime'],
-				dataIndex: 'mtime'
-			}]);
-
-			// by default columns are sortable
-			links_cm.defaultSortable = true;
-
-			// create the editor grid
-			links_grid = new Ext.grid.Grid('links_grid_div_<?php echo $uniqid; ?>', {
-				ds: links_ds,
-				cm: links_cm,
-				selModel: new Ext.grid.RowSelectionModel(),
-				enableColLock:false,
-				loadMask: true,
-				displayInfo: true,
-				displayMsg: GOlang['displayingItems'],
-				emptyMsg: GOlang['strNoItems']
-
-			});
-
-			//grid.addListener("rowclick", this.rowClicked, this);
-			links_grid.addListener("rowdblclick", this.rowDoulbleClicked, this);
-
-
-			linksPanel = new Ext.GridPanel(links_grid, { title: 'Links', toolbar: linkstb});
+			linksPanel = links.getGridPanel('<?php echo $uniqid; ?>');
 			layout.add('center', linksPanel);
+			linksPanel.on('activate',function() { links.loadLinks(reader.jsonData.user[0]['link_id']); });
+			
+			var permissionsPanel = new Ext.ContentPanel('access_<?php echo $uniqid; ?>',
+			{				
+				title: 'Access permissions',
+				autoScroll:true
+			});
+			
+			layout.add('center', permissionsPanel);
+			permissionsPanel.on('activate', 
+				function() { 
+					permissionsPanel.load({
+							scripts: true, 
+							url: 'permissions.php',
+							params: {
+								user_id: reader.jsonData.user[0]['id'],
+								uniqid: '<?php echo $uniqid; ?>'
+							}
+							
+						});
+				});
 
-			linksPanel.on('activate',this.loadLinks);
-
-			layout.getRegion('center').showPanel('properties_<?php echo $uniqid; ?>');
-
+			
 			layout.endUpdate();
 
-
-
-
-			dialog.show();
-
-
 		},
-		loadLinks : function()
+		getDialog : function()
 		{
-			if(!links_loaded)
-			{
-				links_loaded=true;
-				links_ds.load();
-				links_grid.render();
-			}
+			return dialog;
 		},
-		rowDoulbleClicked : function(search_grid, rowClicked, e) {
-
-			var selectionModel = links_grid.getSelectionModel();
-			var record = selectionModel.getSelected();
-
-			//parent.Ext.get('dialog').load({url: record.data['url'], scripts: true });
-			parent.GroupOffice.showDialog({url: record.data['url'], scripts: true });
+		destroyDialogButtons : function()
+		{
+			for (var i = 0;i<dialog.buttons.length;i++)
+			{
+				dialog.buttons[i].destroy();
+			}
 		},
 		onButtonClick : function(btn){
 			switch(btn.id)
@@ -461,7 +383,7 @@ user = function(){
 				case 'link':
 
 				var fromlinks = [];
-				fromlinks.push({ 'link_id' : <?php echo $user['link_id']; ?>, 'link_type' : 8 });
+				fromlinks.push({ 'link_id' : reader.jsonData.user[0]['link_id'], 'link_type' : 8 });
 
 				parent.GroupOffice.showLinks({ 'fromlinks': fromlinks, 'callback': function(){links_ds.load()}});
 				break;
@@ -469,7 +391,7 @@ user = function(){
 				case 'unlink':
 
 				var fromlinks = [];
-				fromlinks.push({ 'link_id' : <?php echo $user['link_id']; ?>, 'link_type' : 8 });
+				fromlinks.push({ 'link_id' : reader.jsonData.user[0]['link_id'], 'link_type' : 8 });
 
 
 				var unlinks = [];
@@ -484,7 +406,7 @@ user = function(){
 
 
 
-				if(parent.GroupOffice.unlink(<?php echo $user['link_id']; ?>, unlinks))
+				if(parent.GroupOffice.unlink(link_id, unlinks))
 				{
 					links_ds.load();
 				}
@@ -493,7 +415,7 @@ user = function(){
 				case 'ok':
 				user_form.submit({
 					url:'./action.php',
-					params: {'task' : 'save','user_id' : <?php echo $user['id']; ?>},
+					params: {'task' : 'save','user_id' : reader.jsonData.user[0]['id']},
 
 					success:function(form, action){
 						//reload grid
@@ -511,7 +433,7 @@ user = function(){
 
 				user_form.submit({
 					url:'./action.php',
-					params: {'task' : 'save','user_id' : <?php echo $user['id']; ?>},
+					params: {'task' : 'save','user_id' : reader.jsonData.user[0]['id']},
 					waitMsg:'Saving...',
 					success:function(form, action){
 						//reload grid
@@ -525,14 +447,20 @@ user = function(){
 				break;
 			}
 		},
+		showDialog : function(user_id){
+			layout.getRegion('center').showPanel('properties_<?php echo $uniqid; ?>');
+			user_form.load({url: 'users_json.php?user_id='+user_id, waitMsg:'Loading...'});
+			dialog.show();
+
+		},
 		destroyDialog : function(){
-			if(dialog.isVisible()){
-				dialog.animateTarget = null;
-				dialog.hide();
+			/*if(dialog.isVisible()){
+			dialog.animateTarget = null;
+			dialog.hide();
 			}
 			Ext.EventManager.removeResizeListener(dialog.adjustViewport, dialog);
 			if(dialog.tabs){
-				dialog.tabs.destroy(removeEl);
+			dialog.tabs.destroy(removeEl);
 			}
 			Ext.destroy(
 			dialog.shim,
@@ -541,23 +469,29 @@ user = function(){
 			dialog.mask
 			);
 			if(dialog.dd){
-				dialog.dd.unreg();
+			dialog.dd.unreg();
 			}
 			if(dialog.buttons){
-				for(var i = 0, len = dialog.buttons.length; i < len; i++){
-					dialog.buttons[i].destroy();
-				}
+			for(var i = 0, len = dialog.buttons.length; i < len; i++){
+			dialog.buttons[i].destroy();
+			}
 			}
 			dialog.el.removeAllListeners();
 
 			dialog.el.update("");
 			dialog.el.remove();
 
-			Ext.DialogManager.unregister(dialog);
-
+			Ext.DialogManager.unregister(dialog);*/
+			dialog.hide();
 		}
 	}
 }();
 
 user.init();
+<?php
+if(isset($_REQUEST['user_id']))
+{
+	echo 'user.showDialog('.$_REQUEST['user_id'].');';
+}
+?>
 </script>
