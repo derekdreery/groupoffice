@@ -52,6 +52,7 @@ $uniqid=uniqid();
 				<div id="links_grid_div_<?php echo $uniqid; ?>"></div>
 			</div>
 			<div id="access_<?php echo $uniqid; ?>" class="x-dlg-tab"></div>
+			<div id="lookandfeel_<?php echo $uniqid; ?>" class="x-dlg-tab"></div>
 	    </div>
 	</div>
 </div>
@@ -79,6 +80,8 @@ user = function(){
 	var user_form;
 	var reader;
 	var layout;
+	
+	var loaded_user_id=0;
 
 	return {
 
@@ -96,6 +99,7 @@ user = function(){
 				modal:true,
 				shadow:false,
 				resizable:false,
+				proxyDrag: true,
 				width:700,
 				height:550,
 				center: {
@@ -107,12 +111,7 @@ user = function(){
 
 			});
 			dialog.addKeyListener(27, this.destroyDialog, this);
-			dialog.addButton({
-				id: 'ok',
-				text: GOlang['cmdOk'],
-				handler: this.onButtonClick
-			}, this.destroyDialog, this);
-			dialog.addButton('Close', this.destroyDialog, this);
+			
 
 
 			layout = dialog.getLayout();
@@ -311,15 +310,6 @@ user = function(){
 			var usertb = new Ext.Toolbar('toolbar_<?php echo $uniqid; ?>');
 
 			usertb.addButton({
-				id: 'save',
-				icon: GOimages['save'],
-				text: GOlang['cmdSave'],
-				cls: 'x-btn-text-icon',
-				handler: this.onButtonClick
-			}
-			);
-
-			usertb.addButton({
 				id: 'link',
 				icon: GOimages['link'],
 				text: GOlang['cmdLink'],
@@ -337,14 +327,52 @@ user = function(){
 			});
 
 			layout.add('center', userPanel);
+			userPanel.on('activate', function() {
+				
+				user.destroyDialogButtons();
+				var dialog = user.getDialog();
+				
+				dialog.addButton({
+								id: 'ok',
+								text: GOlang['cmdOk'],
+								handler: function(){
+									user_form.submit({
+										url:'./action.php',
+										params: {'task' : 'save','user_id' : reader.jsonData.user[0]['id']},
+										waitMsg:'Saving...',
+										success:function(form, action){
+											//reload grid
+											//users.getDataSource().reload();
+										},
+					
+										failure: function(form, action) {
+											Ext.MessageBox.alert('Error', action.result.errors);
+										}
+									});				
+								}
+							}, user);
+							
+				dialog.addButton('Close', dialog.hide, dialog);
+			});
+			
+			
 
-			linksPanel = links.getGridPanel('<?php echo $uniqid; ?>');
+			linksPanel = links.getGridPanel('<?php echo $uniqid; ?>');			
 			layout.add('center', linksPanel);
+			linksPanel.on('activate', function() {
+				
+				user.destroyDialogButtons();
+				var dialog = user.getDialog();
+						
+				dialog.addButton('Close', dialog.hide, dialog);
+			});
+			
+			
 			linksPanel.on('activate',function() { links.loadLinks(reader.jsonData.user[0]['link_id']); });
 			
 			var permissionsPanel = new Ext.ContentPanel('access_<?php echo $uniqid; ?>',
 			{				
-				title: 'Access permissions',
+				title: 'Permissions',
 				autoScroll:true
 			});
 			
@@ -354,6 +382,26 @@ user = function(){
 					permissionsPanel.load({
 							scripts: true, 
 							url: 'permissions.php',
+							params: {
+								user_id: reader.jsonData.user[0]['id'],
+								uniqid: '<?php echo $uniqid; ?>'
+							}
+							
+						});
+				});
+				
+			var lookAndFeelPanel = new Ext.ContentPanel('lookandfeel_<?php echo $uniqid; ?>',
+			{				
+				title: 'Look and feel',
+				autoScroll:true
+			});
+			
+			layout.add('center', lookAndFeelPanel);
+			lookAndFeelPanel.on('activate', 
+				function() { 
+					lookAndFeelPanel.load({
+							scripts: true, 
+							url: 'look_and_feel.php',
 							params: {
 								user_id: reader.jsonData.user[0]['id'],
 								uniqid: '<?php echo $uniqid; ?>'
@@ -372,9 +420,12 @@ user = function(){
 		},
 		destroyDialogButtons : function()
 		{
-			for (var i = 0;i<dialog.buttons.length;i++)
+			if(typeof(dialog.buttons) != 'undefined')
 			{
-				dialog.buttons[i].destroy();
+				for (var i = 0;i<dialog.buttons.length;i++)
+				{
+					dialog.buttons[i].destroy();
+				}
 			}
 		},
 		onButtonClick : function(btn){
@@ -412,42 +463,11 @@ user = function(){
 				}
 				break;
 
-				case 'ok':
-				user_form.submit({
-					url:'./action.php',
-					params: {'task' : 'save','user_id' : reader.jsonData.user[0]['id']},
 
-					success:function(form, action){
-						//reload grid
-						//users.getDataSource().reload();
-					},
-
-					failure: function(form, action) {
-						Ext.MessageBox.alert('Failed', action.result.errors);
-					}
-				});
-				dialog.destroy(true);
-				break;
-
-				case 'save':
-
-				user_form.submit({
-					url:'./action.php',
-					params: {'task' : 'save','user_id' : reader.jsonData.user[0]['id']},
-					waitMsg:'Saving...',
-					success:function(form, action){
-						//reload grid
-						//users.getDataSource().reload();
-					},
-
-					failure: function(form, action) {
-						Ext.MessageBox.alert('Error', action.result.errors);
-					}
-				});
-				break;
 			}
 		},
 		showDialog : function(user_id){
+			loaded_user_id=user_id;
 			layout.getRegion('center').showPanel('properties_<?php echo $uniqid; ?>');
 			user_form.load({url: 'users_json.php?user_id='+user_id, waitMsg:'Loading...'});
 			dialog.show();
