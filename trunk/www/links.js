@@ -8,6 +8,7 @@ links = function(){
 	var user_form;
 	var reader;
 	var link_id=0;
+	var link_type=0;
 
 	return {
 
@@ -20,7 +21,11 @@ links = function(){
 				icon: GOimages['link'],
 				text: GOlang['cmdLink'],
 				cls: 'x-btn-text-icon',
-				handler: this.onButtonClick
+				handler: function(){
+					var fromlinks = [];
+					fromlinks.push({ 'link_id' : link_id, 'link_type' : link_type });
+					parent.GroupOffice.showLinks({ 'fromlinks': fromlinks, 'callback': function(){ links_ds.load();}});
+				}
 			}
 			);
 
@@ -29,7 +34,22 @@ links = function(){
 				icon: GOimages['unlink'],
 				text: GOlang['cmdUnlink'],
 				cls: 'x-btn-text-icon',
-				handler: this.onButtonClick
+				handler: function() {
+					
+					var unlinks = [];
+	
+					var selectionModel = links_grid.getSelectionModel();
+					var records = selectionModel.getSelections();
+	
+					for (var i = 0;i<records.length;i++)
+					{
+						unlinks.push(records[i].data['link_id']);
+					}
+					if(parent.GroupOffice.unlink(link_id, unlinks))
+					{
+						links_ds.load();
+					}
+				}
 			}
 			);
 
@@ -108,10 +128,11 @@ links = function(){
 			
 
 		},
-		loadLinks : function(new_link_id)
+		loadLinks : function(new_link_id, new_link_type)
 		{
 			if(link_id!=new_link_id)
 			{
+				link_type=new_link_type;
 				link_id=new_link_id;
 				links_ds.baseParams = {"link_id": link_id};				
 				links_ds.load();
