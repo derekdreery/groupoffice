@@ -34,7 +34,7 @@ echo $GO_THEME->get_stylesheet('users');
 	<div id="toolbar"></div>
 	<div id="grid"></div>
 </div>
-<div id="dialog"></div>
+<div id="dialogloader"></div>
 
 <?php
 require('user.php');

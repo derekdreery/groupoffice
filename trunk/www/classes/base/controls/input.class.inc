@@ -71,6 +71,8 @@ class input extends html_element
 		{
 			$this->set_attribute('value', htmlspecialchars($value));
 		}
+		
+		$this->set_attribute('class',  'x-form-text x-form-field');
 
 		if($this->required && isset($_POST[$name]) && empty($_POST[$name]))
 		{

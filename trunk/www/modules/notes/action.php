@@ -48,6 +48,7 @@ switch($_REQUEST['task'])
 	    	$result['success']=false;
 	        $result['errors']='A failure test';
     	}
+
     	break;
     case 'add':
     	$note['name']='New note';
