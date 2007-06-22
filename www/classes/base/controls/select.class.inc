@@ -74,6 +74,8 @@ class select extends html_element
 			$this->value=$value;
 		}
 		
+		$this->set_attribute('class',  'x-form-select-one x-form-field');
+		
 		if($this->required && isset($_POST[$name]) && empty($_POST[$name]))
 		{
 			$this->set_attribute('class','textbox_error');
@@ -232,6 +234,11 @@ class select extends html_element
 		if(!isset($this->attributes['class']))
 		{
 			$this->set_attribute('class','textbox');
+		}
+		
+		if(!isset($this->attributes['id']))
+		{
+			$this->set_attribute('id',$this->name);
 		}
 
 		$optgroup_open = false;

@@ -42,17 +42,16 @@ $uniqid=uniqid();
 	<div class="x-dlg-hd"><?php echo $strUser; ?></div>	
 	    <div id="box-bd_<?php echo $uniqid; ?>" class="x-dlg-bd">	   
 		    <div id="properties_<?php echo $uniqid; ?>" class="x-dlg-tab">
-			 <div id="toolbar_<?php echo $uniqid; ?>"></div>
-				<div id="inner_tab_<?php echo $uniqid; ?>" class="inner-tab">		
-					<div id="form_<?php echo $uniqid; ?>"></div>		
-				</div>
-			</div>
+		    <div id="toolbar_<?php echo $uniqid; ?>"></div>
+			<div id="profileContent"></div>
+		    </div>			 
 			<div id="links_tab_<?php echo $uniqid; ?>" class="x-dlg-tab">
 				<div id="linkstoolbar_<?php echo $uniqid; ?>"></div>
 				<div id="links_grid_div_<?php echo $uniqid; ?>"></div>
 			</div>
 			<div id="access_<?php echo $uniqid; ?>" class="x-dlg-tab"></div>
 			<div id="lookandfeel_<?php echo $uniqid; ?>" class="x-dlg-tab"></div>
+			<div id="regional_<?php echo $uniqid; ?>" class="x-dlg-tab"></div>
 	    </div>
 	</div>
 </div>
@@ -76,29 +75,23 @@ user = function(){
 
 	var linksPanel;
 	var dialog;
-	
+
 	var user_form;
-	var reader;
+
 	var layout;
-	
+
 	var loaded_user_id=0;
+	var loaded_link_id=0;
+	var linkButton;
 
 	return {
 
 		init : function(){
 
-
-
-			Sexes = [
-			['M', UsersLang['sexes']['M']],
-			['F', UsersLang['sexes']['F']]
-			];
-
-
 			dialog = new Ext.LayoutDialog('userdialog_<?php echo $uniqid; ?>', {
 				modal:true,
 				shadow:false,
-				resizable:false,
+				resizable:true,
 				proxyDrag: true,
 				width:700,
 				height:550,
@@ -110,309 +103,166 @@ user = function(){
 				}
 
 			});
-			dialog.addKeyListener(27, this.destroyDialog, this);
-			
+			dialog.addKeyListener(27, dialog.hide, this);
 
 
 			layout = dialog.getLayout();
+			
+			
+
+		},
+		createTabs : function()
+		{
 			layout.beginUpdate();
 
-			reader = new Ext.data.JsonReader({
-				root: 'user',
-				id: 'id'
-			},
-			[
-			'first_name',
-			'middle_name',
-			'last_name',
-			'title',
-			'inititals',
-			'sex',
-			'company',
-			'birthday',
-			'email',
-			'home_phone',
-			'fax',
-			'cellular',
-			'address',
-			'address_no',
-			'city',
-			'zip',
-			'state',
-			'country_id',
-			'id',
-			'link_id'
-			]
-			);
+			if(!layout.findPanel('properties_<?php echo $uniqid; ?>'))
+			{
+				var usertb = new Ext.Toolbar('toolbar_<?php echo $uniqid; ?>');
 
-			user_form = new Ext.form.Form({
-				labelAlign: 'right',
-				labelWidth: 80,
-				waitMsgTarget: 'box-bd_<?php echo $uniqid; ?>',
-				reader: reader
-			});
+				linkButton = usertb.addButton({
+					id: 'link',
+					icon: GOimages['link'],
+					text: GOlang['cmdLink'],
+					cls: 'x-btn-text-icon',
+					handler: function(){
+						var fromlinks = [];
+						fromlinks.push({ 'link_id' : loaded_link_id, 'link_type' : 8 });
 
-			user_form.column({width:300, labelWidth:75}); // open column, without auto close
+						parent.GroupOffice.showLinks({ 'fromlinks': fromlinks, 'callback': function(){links_ds.load()}});
 
-			user_form.fieldset(
-			{legend:UsersLang['personalinfo']},
-			new Ext.form.TextField({
-				fieldLabel: UsersLang['first_name'],
-				name: 'first_name',
-				width:190,
-				allowBlank:false
-			}),
-			new Ext.form.TextField({
-				fieldLabel: UsersLang['middle_name'],
-				name: 'middle_name',
-				width:190
-			}),
-			new Ext.form.TextField({
-				fieldLabel: UsersLang['last_name'],
-				name: 'last_name',
-				allowBlank:false,
-				width:190
-			}),
-			new Ext.form.TextField({
-				fieldLabel: UsersLang['title'],
-				name: 'title',
-				width:190
-			}),
-			new Ext.form.TextField({
-				fieldLabel: UsersLang['initials'],
-				name: 'initials',
-				width:190
-			}),
-
-			new Ext.form.ComboBox({
-				fieldLabel: UsersLang['sex'],
-				hiddenName:'sex',
-				store: new Ext.data.SimpleStore({
-					fields: ['abbr', 'sex'],
-					data : Sexes // from states.js
-				}),
-				valueField: 'abbr',
-				displayField:'sex',
-				typeAhead: true,
-				mode: 'local',
-				triggerAction: 'all',
-				emptyText:GOlang['strPleaseSelect'],
-				selectOnFocus:true,
-				width:190
-			}),
-
-			new Ext.form.TextField({
-				fieldLabel: UsersLang['company'],
-				name: 'company',
-				width:190
-			}),
+					}
+				}
+				);
+				linkButton.disable();
 
 
-			new Ext.form.DateField({
-				fieldLabel: UsersLang['birthday'],
-				name: 'birthday',
-				width:190,
-				format: GOsettings['date_format']
-			})
-			);
+				userPanel = new Ext.ContentPanel('properties_<?php echo $uniqid; ?>',{
+					title: '<?php echo $strProperties; ?>',
+					autoScroll:true,
+					toolbar: usertb,
+					resizeEl: 'profileContent',
+					fitToFrame:true
+				});
 
+				layout.add('center', userPanel);
+				userPanel.on('activate',
+				function() {
+					userPanel.resizeEl.load({
+						scripts: true,
+						url: 'profile.php',						
+						params: {
+							user_id: loaded_user_id,
+							uniqid: '<?php echo $uniqid; ?>'
+						}
 
-
-
-			user_form.fieldset(
-			{legend:UsersLang['contactinfo']},
-
-			new Ext.form.TextField({
-				fieldLabel: UsersLang['email'],
-				name: 'email',
-				vtype:'email',
-				allowBlank:false,
-				width:190
-			}),
-			new Ext.form.TextField({
-				fieldLabel: UsersLang['phone'],
-				name: 'home_phone',
-				width:190
-			}),
-			new Ext.form.TextField({
-				fieldLabel: UsersLang['fax'],
-				name: 'fax',
-				width:190
-			}),
-			new Ext.form.TextField({
-				fieldLabel: UsersLang['cellular'],
-				name: 'cellular',
-				width:190
-			})
-			);
-
-			user_form.end();
-
-			user_form.column(
-			{width:300, style:'margin-left:10px', clear:true}
-			);
-
-			user_form.fieldset(
-			{legend: UsersLang['address']},
-
-			new Ext.form.TextField({
-				fieldLabel: UsersLang['street'],
-				name: 'address',
-				width:190
-			}),
-			new Ext.form.TextField({
-				fieldLabel: UsersLang['address_no'],
-				name: 'address_no',
-				width:190
-			}),
-			new Ext.form.TextField({
-				fieldLabel: UsersLang['zip'],
-				name: 'zip',
-				width:190
-			}),
-			new Ext.form.TextField({
-				fieldLabel: UsersLang['city'],
-				name: 'city',
-				width:190
-			}),
-			new Ext.form.TextField({
-				fieldLabel: UsersLang['state'],
-				name: 'state',
-				width:190
-			}),
-			new Ext.form.ComboBox({
-				fieldLabel: UsersLang['country'],
-				hiddenName:'country_id',
-				store: new Ext.data.SimpleStore({
-					fields: ['id', 'name'],
-					data : Countries
-				}),
-				displayField:'name',
-				valueField: 'id',
-				typeAhead: true,
-				mode: 'local',
-				triggerAction: 'all',
-				emptyText:GOlang['strPleaseSelect'],
-				selectOnFocus:true,
-				width:190
-			})
-			);
-
-
-
-			user_form.end();
-
-			user_form.render('form_<?php echo $uniqid; ?>');
-
-
-
-
-			var usertb = new Ext.Toolbar('toolbar_<?php echo $uniqid; ?>');
-
-			usertb.addButton({
-				id: 'link',
-				icon: GOimages['link'],
-				text: GOlang['cmdLink'],
-				cls: 'x-btn-text-icon',
-				handler: this.onButtonClick
+					});
+				});
+				
 			}
-			);
+
+			if(loaded_user_id>0 && !layout.findPanel('access_<?php echo $uniqid; ?>'))
+			{
+
+				linksPanel = links.getGridPanel('<?php echo $uniqid; ?>');
+				layout.add('center', linksPanel);
+				linksPanel.on('activate', function() {
+
+					user.destroyDialogButtons();
+					var dialog = user.getDialog();
+
+					dialog.addButton('Close', dialog.hide, dialog);
+				});
 
 
+				linksPanel.on('activate',function() {
 
-			userPanel = new Ext.ContentPanel('properties_<?php echo $uniqid; ?>',{
-				title: '<?php echo $strProperties; ?>',
-				toolbar: usertb,
-				autoScroll:true
-			});
+					links.loadLinks(loaded_link_id);
 
-			layout.add('center', userPanel);
-			userPanel.on('activate', function() {
-				
-				user.destroyDialogButtons();
-				var dialog = user.getDialog();
-				
-				dialog.addButton({
-								id: 'ok',
-								text: GOlang['cmdOk'],
-								handler: function(){
-									user_form.submit({
-										url:'./action.php',
-										params: {'task' : 'save','user_id' : reader.jsonData.user[0]['id']},
-										waitMsg:'Saving...',
-										success:function(form, action){
-											//reload grid
-											//users.getDataSource().reload();
-										},
-					
-										failure: function(form, action) {
-											Ext.MessageBox.alert('Error', action.result.errors);
-										}
-									});				
-								}
-							}, user);
-							
-				dialog.addButton('Close', dialog.hide, dialog);
-			});
-			
-			
+				});
 
-			linksPanel = links.getGridPanel('<?php echo $uniqid; ?>');			
-			layout.add('center', linksPanel);
-			linksPanel.on('activate', function() {
-				
-				user.destroyDialogButtons();
-				var dialog = user.getDialog();
-						
-				dialog.addButton('Close', dialog.hide, dialog);
-			});
-			
-			
-			linksPanel.on('activate',function() { links.loadLinks(reader.jsonData.user[0]['link_id']); });
-			
-			var permissionsPanel = new Ext.ContentPanel('access_<?php echo $uniqid; ?>',
-			{				
-				title: 'Permissions',
-				autoScroll:true
-			});
-			
-			layout.add('center', permissionsPanel);
-			permissionsPanel.on('activate', 
-				function() { 
+				var permissionsPanel = new Ext.ContentPanel('access_<?php echo $uniqid; ?>',
+				{
+					title: 'Permissions',
+					autoScroll:true
+				});
+
+				layout.add('center', permissionsPanel);
+				permissionsPanel.on('activate',
+				function() {
+
 					permissionsPanel.load({
-							scripts: true, 
-							url: 'permissions.php',
-							params: {
-								user_id: reader.jsonData.user[0]['id'],
-								uniqid: '<?php echo $uniqid; ?>'
-							}
-							
-						});
+						scripts: true,
+						url: 'permissions.php',
+						params: {
+							user_id: loaded_user_id,
+							uniqid: '<?php echo $uniqid; ?>'
+						}
+
+					});
+
 				});
-				
-			var lookAndFeelPanel = new Ext.ContentPanel('lookandfeel_<?php echo $uniqid; ?>',
-			{				
-				title: 'Look and feel',
-				autoScroll:true
-			});
-			
-			layout.add('center', lookAndFeelPanel);
-			lookAndFeelPanel.on('activate', 
-				function() { 
+
+				var lookAndFeelPanel = new Ext.ContentPanel('lookandfeel_<?php echo $uniqid; ?>',
+				{
+					title: 'Look and feel',
+					autoScroll:true
+				});
+
+				layout.add('center', lookAndFeelPanel);
+				lookAndFeelPanel.on('activate',
+				function() {
 					lookAndFeelPanel.load({
-							scripts: true, 
-							url: 'look_and_feel.php',
-							params: {
-								user_id: reader.jsonData.user[0]['id'],
-								uniqid: '<?php echo $uniqid; ?>'
-							}
-							
-						});
+						scripts: true,
+						url: 'look_and_feel.php',
+						params: {
+							user_id: loaded_user_id,
+							uniqid: '<?php echo $uniqid; ?>'
+						}
+
+					});
 				});
 
-			
-			layout.endUpdate();
+				var regionalPanel = new Ext.ContentPanel('regional_<?php echo $uniqid; ?>',
+				{
+					title: 'Regional settings',
+					autoScroll:true
+				});
 
+				layout.add('center', regionalPanel);
+				regionalPanel.on('activate',
+				function() {
+					regionalPanel.load({
+						scripts: true,
+						url: 'regional.php',
+						params: {
+							user_id: loaded_user_id,
+							uniqid: '<?php echo $uniqid; ?>'
+						}
+
+					});
+				});
+				linkButton.enable();
+			}
+			
+			layout.getRegion('center').showPanel('properties_<?php echo $uniqid; ?>');
+
+			layout.endUpdate();
+		},
+		removePanels : function()
+		{
+			var region = layout.getRegion('center');
+			
+			var panels = [];
+			for (var i = 1;i<region.panels.items.length;i++)
+			{				
+				panels.push(region.panels.items[i].getId());
+			}
+			for (var i = 0;i<panels.length;i++)
+			{				
+				region.remove(panels[i]);
+			}
+			linkButton.disable();
+			
 		},
 		getDialog : function()
 		{
@@ -428,81 +278,49 @@ user = function(){
 				}
 			}
 		},
-		onButtonClick : function(btn){
-			switch(btn.id)
+		setUserID : function(user_id)
+		{
+			if(loaded_user_id>0 && user_id!=loaded_user_id)
 			{
-				case 'link':
-
-				var fromlinks = [];
-				fromlinks.push({ 'link_id' : reader.jsonData.user[0]['link_id'], 'link_type' : 8 });
-
-				parent.GroupOffice.showLinks({ 'fromlinks': fromlinks, 'callback': function(){links_ds.load()}});
-				break;
-
-				case 'unlink':
-
-				var fromlinks = [];
-				fromlinks.push({ 'link_id' : reader.jsonData.user[0]['link_id'], 'link_type' : 8 });
-
-
-				var unlinks = [];
-
-				var selectionModel = links_grid.getSelectionModel();
-				var records = selectionModel.getSelections();
-
-				for (var i = 0;i<records.length;i++)
+				if(user_id==0)
 				{
-					unlinks.push(records[i].data['link_id']);
-				}
+					this.removePanels();
+				}				
+			}
+			
+			
+			
+			loaded_user_id=user_id;
+			
+			this.createTabs();
+			
+			if(loaded_user_id==0 && user_id==0)
+			{
+				userPanel.resizeEl.load({
+					scripts: true,
+					url: 'profile.php',						
+					params: {
+						user_id: user_id,
+						uniqid: '<?php echo $uniqid; ?>'
+					}
 
-
-
-				if(parent.GroupOffice.unlink(link_id, unlinks))
-				{
-					links_ds.load();
-				}
-				break;
-
-
+				});
 			}
 		},
-		showDialog : function(user_id){
-			loaded_user_id=user_id;
-			layout.getRegion('center').showPanel('properties_<?php echo $uniqid; ?>');
-			user_form.load({url: 'users_json.php?user_id='+user_id, waitMsg:'Loading...'});
+
+		showDialog : function(user_id, link_id){
+			
+			
+			
+			this.setUserID(user_id);
+			
+			//user_form.load({url: 'users_json.php?user_id='+user_id, waitMsg:'Loading...'});
 			dialog.show();
 
 		},
-		destroyDialog : function(){
-			/*if(dialog.isVisible()){
-			dialog.animateTarget = null;
-			dialog.hide();
-			}
-			Ext.EventManager.removeResizeListener(dialog.adjustViewport, dialog);
-			if(dialog.tabs){
-			dialog.tabs.destroy(removeEl);
-			}
-			Ext.destroy(
-			dialog.shim,
-			dialog.proxy,
-			dialog.close,
-			dialog.mask
-			);
-			if(dialog.dd){
-			dialog.dd.unreg();
-			}
-			if(dialog.buttons){
-			for(var i = 0, len = dialog.buttons.length; i < len; i++){
-			dialog.buttons[i].destroy();
-			}
-			}
-			dialog.el.removeAllListeners();
-
-			dialog.el.update("");
-			dialog.el.remove();
-
-			Ext.DialogManager.unregister(dialog);*/
-			dialog.hide();
+		setLinkID : function(link_id)
+		{
+			loaded_link_id=link_id;
 		}
 	}
 }();

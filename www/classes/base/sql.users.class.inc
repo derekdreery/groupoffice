@@ -534,6 +534,7 @@ class sql_users extends base_users
 		{
 			$this->query( "SELECT id FROM users WHERE	email='".$user['email']."' OR username='".$user['username']."'" );
 			if ( $this->num_rows() > 0 ) {
+			
 				return false;
 			}
 		}

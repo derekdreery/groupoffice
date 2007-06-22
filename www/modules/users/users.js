@@ -16,12 +16,12 @@ Users = function(){
 					closeOnTab: true
 				}
 			});
-			
-			
-			
+
+
+
 			layout.beginUpdate();
-			
-			
+
+
 
 
 			ds = new Ext.data.Store({
@@ -36,8 +36,8 @@ Users = function(){
 					id: 'id'
 				}, [
 				{name: 'id'},
-				{name: 'link_id'},				
-				{name: 'link_type'},	
+				{name: 'link_id'},
+				{name: 'link_type'},
 				{name: 'name'},
 				{name: 'email'}
 				]),
@@ -73,17 +73,17 @@ Users = function(){
 				loadMask: true
 			});
 
-	
+
 			grid.addListener("rowdblclick", this.rowDoubleClicked, this);
 
-			
-			
+
+
 			// render it
 			grid.render();
-			
+
 			ds.on('load', function (){grid.getView().autoSizeColumns();});
-			
-		
+
+
 
 			var gridFoot = grid.getView().getFooterPanel(true);
 
@@ -97,9 +97,9 @@ Users = function(){
 
 			// trigger the data store load
 			ds.load({params:{start:0, limit: parseInt(GOsettings['max_rows_list'])}});
-			
-			
-			
+
+
+
 
 
 			var tb = new Ext.Toolbar('toolbar');
@@ -108,7 +108,29 @@ Users = function(){
 				icon: GOimages['delete'],
 				text: GOlang['cmdDelete'],
 				cls: 'x-btn-text-icon',
-				handler: this.onButtonClick
+				handler: function(){
+					var selectedRows = grid.selModel.selections.keys;
+
+					if(selectedRows.length)
+					{
+						var conn = new Ext.data.Connection();
+						conn.request({
+							url: 'action.php',
+							params: {task: 'delete', selectedRows: Ext.encode(selectedRows)},
+							callback: function(options, success, response)
+							{
+								if(!success)
+								{
+									Ext.MessageBox.alert('Failed', response.result.errors);
+								}else
+								{
+									
+									ds.reload();
+								}
+							}
+						});
+					}
+				}
 			})
 			);
 
@@ -116,11 +138,20 @@ Users = function(){
 				id: 'add',
 				icon: GOimages['add'],
 				text: GOlang['cmdAdd'],
-					cls: 'x-btn-text-icon',
-				handler: this.onButtonClick
+				cls: 'x-btn-text-icon',
+				handler: function(){
+					
+					if(typeof(user)!='undefined')
+					{
+					user.showDialog(0);
+					}else
+					{
+					Ext.get('dialogloader').load({url: 'user.php?user_id=0', scripts: true });
+					}
+				}
 			})
 			);
-			
+
 			tb.add(new Ext.Toolbar.Button({
 				id: 'link',
 				icon: GOimages['link'],
@@ -134,114 +165,48 @@ Users = function(){
 
 
 			layout.add('center', new Ext.GridPanel(grid, {title: UsersLang['users'], toolbar: tb}));
-			
+
 
 			layout.endUpdate();
-			
-			
+
+
 		},
 		
+
 		getDataSource : function()
 		{
 			return ds;
 		},
-		
+
 
 		onButtonClick : function(btn){
 			switch(btn.id)
 			{
 				case 'link':
-					var selectionModel = grid.getSelectionModel();
-					var records = selectionModel.getSelections();					
-					
-					parent.GroupOffice.showLinks({ 'url': '../../search.html', 'records': records});
-				break;
-				case 'delete':
-				var selectedRows = grid.selModel.selections.keys;
+				var selectionModel = grid.getSelectionModel();
+				var records = selectionModel.getSelections();
 
-				if(selectedRows.length)
-				{
-
-					var conn = new Ext.data.Connection();
-					conn.request({
-						url: 'action.php',
-						params: {task: 'delete', selectedRows: Ext.encode(selectedRows)},
-						callback: function(options, success, response)
-						{
-							if(!success)
-							{
-								Ext.MessageBox.alert('Failed', response.result.errors);
-							}else
-							{
-								ds.reload();
-							}
-						},
-						scope: Notes
-					});
-				}
-				break;
-
-				case 'add':
-				/*var conn = new Ext.data.Connection();
-				conn.request({
-					url: 'action.php',
-					params: {task: 'add'},
-					callback: function(options, success, response)
-					{
-						if(!success)
-						{
-							Ext.MessageBox.alert('Failed', response.result.errors);
-						}else
-						{
-							var reponseParams = Ext.util.JSON.decode(response.responseText);
-							//note_form.load({url : 'notes_json.php?note_id='+reponseParams['note_id']});
-							note_id=reponseParams['note_id'];
-							note_form.findField('name').focus(true);							
-							this.toggleForm(true);
-							ds.reload();
-						}
-					},
-					scope: Notes
-				});*/
-					Ext.get('dialog').load({url: 'note.php?note_id=0', scripts: true });
-				break;
-
-				case 'save':
-
-				note_form.submit({
-					url:'./action.php',
-					params: {'task' : 'save','note_id' : note_id},
-
-					success:function(form, action){
-						//reload grid
-						ds.reload();
-					},
-
-					failure: function(form, action) {
-						Ext.MessageBox.alert('Failed', action.result.errors);
-					}
-				});
+				parent.GroupOffice.showLinks({ 'url': '../../search.html', 'records': records});
 				break;
 			}
 		},
-		
 
 
-		
+
+
 		rowDoubleClicked : function(grid, rowClicked, e) {
 			var selectionModel = grid.getSelectionModel();
 			var record = selectionModel.getSelected();
 
 
-			Ext.get('dialog').load({url: 'user.php?user_id='+record.data['id'], scripts: true });
-/*
+		
 			if(typeof(user)!='undefined')
 			{
-				user.showDialog(record.data['id']);	
+			user.showDialog(record.data['id']);
 			}else
 			{
-				Ext.get('dialog').load({url: 'user.php?user_id='+record.data['id'], scripts: true });
-			}*/
+			Ext.get('dialogloader').load({url: 'user.php?user_id='+record.data['id'], scripts: true });
+			}
 		}
 	};
 
