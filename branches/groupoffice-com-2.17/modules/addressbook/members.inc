@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
 	}
 }
 
-
+/*
 $table = new table();
 $table->set_attribute('style','width:100%');
 $row = new table_row();
@@ -106,8 +106,9 @@ $row->add_cell($cell);
 $table->add_row($row);
 
 $form->add_html_element($table);
+*/
 
-
+$datatable = new datatable('members');
 $datatable->add_column(new table_heading($strName, 'name'));
 $datatable->add_column(new table_heading($strEmail, 'email'));
 $datatable->add_column(new table_heading($strCompany, 'company'));
@@ -159,4 +160,4 @@ if (isset($feedback))
   $form->add_html_element($p);
 }
 
-$form->add_html_element($datatable);
+//$form->add_html_element($datatable);
