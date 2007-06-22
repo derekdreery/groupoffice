@@ -90,6 +90,7 @@ $form->add_html_element(new input('hidden', 'move_addressbook_id', 0, false));
 switch($post_action)
 {
 	case 'members':
+		$form->add_html_element($menu);
 		require_once('members.inc');
 		break;
 
