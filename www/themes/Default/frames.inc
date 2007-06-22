@@ -5,7 +5,6 @@
 require($GO_CONFIG->root_path.'default_head.inc');
 ?>
 <script src="<?php echo $GO_CONFIG->host; ?>groupoffice.js" type="text/javascript"></script>
-<script src="<?php echo $GO_CONFIG->host; ?>links.js" type="text/javascript"></script>
 </head>
 <body>
 <div id="container">

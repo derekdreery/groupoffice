@@ -176,7 +176,7 @@ user = function(){
 
 				linksPanel.on('activate',function() {
 
-					links.loadLinks(loaded_link_id);
+					links.loadLinks(loaded_link_id, 8);
 
 				});
 

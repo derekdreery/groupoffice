@@ -352,10 +352,6 @@ Note = function(){
 
 				case 'unlink':
 
-				var fromlinks = [];
-				fromlinks.push({ 'link_id' : <?php echo $note['link_id']; ?>, 'link_type' : 4 });
-
-
 				var unlinks = [];
 
 				var selectionModel = links_grid.getSelectionModel();
