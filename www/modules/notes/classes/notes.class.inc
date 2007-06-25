@@ -213,10 +213,11 @@ class notes extends db
 			$cache['link_id'] = $this->f('link_id');
 			$cache['link_type']=4;
 			$cache['description']=addslashes($this->f('description'));
-			$cache['url']=$GO_MODULES->modules['notes']['url'].'note.php?note_id='.$this->f('id');
+			$cache['url']=$GO_MODULES->modules['notes']['url'].'index.php?note_id='.$this->f('id');
 			$cache['type']=$no_note;
 			$cache['keywords']=addslashes(record_to_keywords($this->Record)).','.$cache['type'];
 			$cache['mtime']=$this->f('mtime');
+			$cache['module']='notes';
 			if($this->f('ctime')>$last_sync_time)
 			{
 				$db->insert_row('se_cache',$cache);

@@ -213,3 +213,15 @@ Users = function(){
 }();
 Ext.EventManager.onDocumentReady(Users.init, Users, true);
 
+
+function showSearchResult(record)
+{
+	if(typeof(user)!='undefined')
+	{
+		user.showDialog(record.data['id']);
+	}else
+	{
+		Ext.get('dialogloader').load({url: BaseHref+'modules/users/user.php?user_id='+record.data['id'], scripts: true });
+	}
+}
+
