@@ -139,15 +139,8 @@ Users = function(){
 				icon: GOimages['add'],
 				text: GOlang['cmdAdd'],
 				cls: 'x-btn-text-icon',
-				handler: function(){
-					
-					if(typeof(user)!='undefined')
-					{
-					user.showDialog(0);
-					}else
-					{
-					Ext.get('dialogloader').load({url: 'user.php?user_id=0', scripts: true });
-					}
+				handler: function(){					
+					user.showDialog(0);					
 				}
 			})
 			);
@@ -199,29 +192,292 @@ Users = function(){
 			var record = selectionModel.getSelected();
 
 
-		
-			if(typeof(user)!='undefined')
-			{
+
 			user.showDialog(record.data['id']);
-			}else
-			{
-			Ext.get('dialogloader').load({url: 'user.php?user_id='+record.data['id'], scripts: true });
-			}
+
 		}
 	};
 
 }();
-Ext.EventManager.onDocumentReady(Users.init, Users, true);
 
+
+
+
+user = function(){
+
+	var linksPanel;
+	var dialog;
+
+	var user_form;
+
+	var layout;
+
+	var loaded_user_id=0;
+	var loaded_link_id=0;
+	var linkButton;
+	var moduleBase;
+
+	return {
+		
+		
+
+		init : function(){
+			
+			moduleBase = BaseHref+'modules/users/';
+
+			dialog = new Ext.LayoutDialog('userdialog', {
+				modal:true,
+				shadow:false,
+				resizable:true,
+				proxyDrag: true,
+				width:700,
+				height:550,
+				collapsible:false,
+				center: {
+					autoScroll:true,
+					tabPosition: 'top',
+					closeOnTab: true,
+					alwaysShowTabs: true
+				}
+
+			});
+			dialog.addKeyListener(27, dialog.hide, this);
+
+
+			layout = dialog.getLayout();
+			
+			
+
+		},
+		createTabs : function()
+		{
+			layout.beginUpdate();
+
+			if(!layout.findPanel('properties'))
+			{
+				var usertb = new Ext.Toolbar('toolbar');
+				
+				linkButton = usertb.addButton({
+					id: 'link',
+					icon: GOimages['link'],
+					text: GOlang['cmdLink'],
+					cls: 'x-btn-text-icon',
+					handler: function(){
+						var fromlinks = [];
+						fromlinks.push({ 'link_id' : loaded_link_id, 'link_type' : 8 });
+
+						parent.GroupOffice.showLinks({ 'fromlinks': fromlinks, 'callback': function(){links_ds.load()}});
+
+					}
+				}
+				);
+				linkButton.disable();
+
+				
+
+
+				userPanel = new Ext.ContentPanel('properties',{
+					title: GOlang['strProperties'],
+					autoScroll:true,
+					toolbar: usertb,
+					resizeEl: 'profileContent',
+					fitToFrame:true,
+					background: true
+				});
+
+				
+				userPanel.on('activate',
+				function() {
+					userPanel.resizeEl.load({
+						scripts: true,
+						url: moduleBase+'profile.php',						
+						params: {
+							user_id: loaded_user_id
+						}
+
+					});
+				});
+				layout.add('center', userPanel);
+				
+			}
+
+			if(loaded_user_id>0 && !layout.findPanel('access'))
+			{
+
+				linksPanel = links.getGridPanel('linkstoolbar','links_grid_div');
+				layout.add('center', linksPanel);
+				linksPanel.on('activate', function() {
+
+					user.destroyDialogButtons();
+					var dialog = user.getDialog();
+
+					dialog.addButton('Close', dialog.hide, dialog);
+				});
+
+
+				linksPanel.on('activate',function() {
+
+					links.loadLinks(loaded_link_id, 8);
+
+				});
+				
+	
+
+				var permissionsPanel = new Ext.ContentPanel('access',
+				{
+					title: 'Permissions',
+					autoScroll:true
+				});
+
+				layout.add('center', permissionsPanel);
+				permissionsPanel.on('activate',
+				function() {
+
+					permissionsPanel.load({
+						scripts: true,
+						url: moduleBase+'permissions.php',
+						params: {
+							user_id: loaded_user_id
+						}
+
+					});
+
+				});
+
+				var lookAndFeelPanel = new Ext.ContentPanel('lookandfeel',
+				{
+					title: 'Look and feel',
+					autoScroll:true,
+					background: true,
+					url:{
+						scripts: true,
+						url: moduleBase+'look_and_feel.php',
+						params: {
+							user_id: loaded_user_id
+						}
+					}
+				});
+				layout.add('center', lookAndFeelPanel);
+
+
+				var regionalPanel = new Ext.ContentPanel('regional',
+				{
+					title: 'Regional settings',
+					autoScroll:true,
+					background: true,
+					url:{
+						scripts: true,
+						url: moduleBase+'regional.php',
+						params: {
+							user_id: loaded_user_id
+						}
+					}
+				});
+				
+			
+				
+				
+				layout.add('center', regionalPanel);
+				linkButton.enable();
+			}
+			var region = layout.getRegion('center');
+			var activePanel = region.getActivePanel();
+			if(activePanel && activePanel.getId()=='properties')
+			{
+				activePanel.fireEvent('activate');
+			}else
+			{
+				region.showPanel('properties');
+			}
+
+			layout.endUpdate();
+		},
+		removePanels : function()
+		{
+			var region = layout.getRegion('center');
+			
+			var panels = [];
+			for (var i = 1;i<region.panels.items.length;i++)
+			{				
+				panels.push(region.panels.items[i].getId());
+			}
+			for (var i = 0;i<panels.length;i++)
+			{				
+				region.remove(panels[i],true);
+			}
+			if(typeof(linkButton)!='undefined')
+			{
+				linkButton.disable();
+			}
+			
+		},
+		getDialog : function()
+		{
+			return dialog;
+		},
+		destroyDialogButtons : function()
+		{
+			if(typeof(dialog.buttons) != 'undefined')
+			{
+				for (var i = 0;i<dialog.buttons.length;i++)
+				{
+					dialog.buttons[i].destroy();
+				}
+			}
+		},
+		setUserID : function(user_id)
+		{
+			if(loaded_user_id>0 && user_id!=loaded_user_id)
+			{
+				if(user_id==0)
+				{
+					this.removePanels();
+				}				
+			}
+			
+			
+			
+			loaded_user_id=user_id;
+			
+			this.createTabs();
+			
+			/*if(loaded_user_id==0 && user_id==0)
+			{
+				userPanel.resizeEl.load({
+					scripts: true,
+					url: 'profile.php',						
+					params: {
+						user_id: user_id,
+						uniqid: '<?php echo $uniqid; ?>'
+					}
+
+				});
+			}*/
+		},
+
+		showDialog : function(user_id, link_id){
+			
+			
+			
+			this.setUserID(user_id);
+			
+			//user_form.load({url: 'users_json.php?user_id='+user_id, waitMsg:'Loading...'});
+			dialog.show();
+
+		},
+		setLinkID : function(link_id)
+		{
+			loaded_link_id=link_id;
+		}
+	}
+}();
+
+
+Ext.EventManager.onDocumentReady(Users.init, Users, true);
+Ext.EventManager.onDocumentReady(user.init, Users, true);
 
 function showSearchResult(record)
 {
-	if(typeof(user)!='undefined')
-	{
-		user.showDialog(record.data['id']);
-	}else
-	{
-		Ext.get('dialogloader').load({url: BaseHref+'modules/users/user.php?user_id='+record.data['id'], scripts: true });
-	}
+	user.showDialog(record.data['id']);
 }
 

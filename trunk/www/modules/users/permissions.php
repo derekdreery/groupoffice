@@ -156,9 +156,29 @@ while($GO_GROUPS->next_record())
 </form>
 </div>
 <script type="text/javascript">
+
+
+
+
+var permissionsForm;
+
+function submitPermissionsForm()
+{
+	permissionsForm.submit(
+	{
+		url:'./action.php',
+		params: {'task' : 'save_permissions','user_id' : <?php echo $user_id; ?>},
+		waitMsg: GOlang['waitMsgSave'],
+		failure: function(form, action) {
+			Ext.MessageBox.alert(GOlang['Error'], action.result.errors);
+		}
+	});
+}
+
+
 Ext.onReady(function(){
-	var permissionsForm = new Ext.BasicForm('permissions-form', {
-		waitMsgTarget: 'box-bd_<?php echo $_REQUEST['uniqid']; ?>'
+	permissionsForm = new Ext.BasicForm('permissions-form', {
+		waitMsgTarget: 'box-bd'
 	});
 
 	user.destroyDialogButtons();
@@ -168,23 +188,16 @@ Ext.onReady(function(){
 		id: 'ok',
 		text: GOlang['cmdOk'],
 		handler: function(){
-			permissionsForm.submit(
-			{
-				url:'./action.php',
-				params: {'task' : 'save_permissions','user_id' : <?php echo $user_id; ?>},
-				waitMsg:'Saving...',
-				success:function(form, action){
-					//reload grid
-					//users.getDataSource().reload();
-					
-
-					
-				},
-
-				failure: function(form, action) {
-					Ext.MessageBox.alert('Error', action.result.errors);
-				}
-			});
+			submitPermissionsForm();
+			dialog.hide();
+		}
+	}, this);
+	
+	dialog.addButton({
+		id: 'ok',
+		text: GOlang['cmdApply'],
+		handler: function(){
+			submitPermissionsForm();
 		}
 	}, this);
 

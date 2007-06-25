@@ -83,9 +83,27 @@ echo $table->get_html();
 </form>
 </div>
 <script type="text/javascript">
+
+var lookandfeelForm;
+
+function submitlookandfeelForm()
+{
+	lookandfeelForm.submit(
+	{
+		url:'./action.php',
+		params: {'task' : 'save_lookandfeel','user_id' : <?php echo $user['id']; ?>},
+		waitMsg: GOlang['waitMsgSave'],
+
+		failure: function(form, action) {
+			Ext.MessageBox.alert(GOlang['Error'], action.result.errors);
+		}
+	});
+}
+
+
 Ext.onReady(function(){
-	var lookAndFeelForm = new Ext.BasicForm('lookandfeel-form', {
-		waitMsgTarget: 'box-bd_<?php echo $_REQUEST['uniqid']; ?>'
+	lookandfeelForm = new Ext.BasicForm('lookandfeel-form', {
+		waitMsgTarget: 'box-bd'
 	});
 
 	user.destroyDialogButtons();
@@ -95,25 +113,20 @@ Ext.onReady(function(){
 		id: 'ok',
 		text: GOlang['cmdOk'],
 		handler: function(){
-			lookAndFeelForm.submit(
-			{
-				url:'./action.php',
-				params: {'task' : 'save_lookandfeel','user_id' : <?php echo $user['id']; ?>},
-				waitMsg:'Saving...',
-				success:function(form, action){
-					//reload grid
-					//users.getDataSource().reload();
-				},
-
-				failure: function(form, action) {
-					Ext.MessageBox.alert('Error', action.result.errors);
-				}
-			});
+			submitlookandfeelForm();
+			dialog.hide();
+		}
+	}, this);
+	
+	dialog.addButton({
+		id: 'ok',
+		text: GOlang['cmdApply'],
+		handler: function(){
+			submitlookandfeelForm();
 		}
 	}, this);
 
 	dialog.addButton('Close', dialog.hide, dialog);
 
 });
-
 </script>
