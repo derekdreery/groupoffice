@@ -6,7 +6,7 @@
 <script src="<?php echo $GO_CONFIG->host; ?>imagesjs.php" type="text/javascript"></script>
 <script src="<?php echo $GO_CONFIG->host; ?>ext/adapter/yui/yui-utilities.js" type="text/javascript"></script>
 <script src="<?php echo $GO_CONFIG->host; ?>ext/adapter/yui/ext-yui-adapter.js" type="text/javascript"></script>
-<script src="<?php echo $GO_CONFIG->host; ?>ext/ext-all-debug.js" type="text/javascript"></script>
+<script src="<?php echo $GO_CONFIG->host; ?>ext/ext-all.js" type="text/javascript"></script>
 <script src="<?php echo $GO_CONFIG->host; ?>go_settings.php" type="text/javascript"></script>
 <script src="<?php echo $GO_CONFIG->host; ?>language/common/en.js" type="text/javascript"></script>
 <link href="<?php echo $GO_CONFIG->host; ?>ext/resources/css/ext-all.css" type="text/css" rel="stylesheet"></link>
