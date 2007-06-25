@@ -83,10 +83,15 @@ user = function(){
 	var loaded_user_id=0;
 	var loaded_link_id=0;
 	var linkButton;
+	var moduleBase;
 
 	return {
+		
+		
 
 		init : function(){
+			
+			moduleBase = BaseHref+'modules/users/';
 
 			dialog = new Ext.LayoutDialog('userdialog_<?php echo $uniqid; ?>', {
 				modal:true,
@@ -95,6 +100,7 @@ user = function(){
 				proxyDrag: true,
 				width:700,
 				height:550,
+				collapsible:false,
 				center: {
 					autoScroll:true,
 					tabPosition: 'top',
@@ -118,7 +124,7 @@ user = function(){
 			if(!layout.findPanel('properties_<?php echo $uniqid; ?>'))
 			{
 				var usertb = new Ext.Toolbar('toolbar_<?php echo $uniqid; ?>');
-
+				
 				linkButton = usertb.addButton({
 					id: 'link',
 					icon: GOimages['link'],
@@ -135,21 +141,24 @@ user = function(){
 				);
 				linkButton.disable();
 
+				
+
 
 				userPanel = new Ext.ContentPanel('properties_<?php echo $uniqid; ?>',{
 					title: '<?php echo $strProperties; ?>',
 					autoScroll:true,
 					toolbar: usertb,
 					resizeEl: 'profileContent',
-					fitToFrame:true
+					fitToFrame:true,
+					background: true
 				});
 
-				layout.add('center', userPanel);
+				
 				userPanel.on('activate',
 				function() {
 					userPanel.resizeEl.load({
 						scripts: true,
-						url: 'profile.php',						
+						url: moduleBase+'profile.php',						
 						params: {
 							user_id: loaded_user_id,
 							uniqid: '<?php echo $uniqid; ?>'
@@ -157,6 +166,7 @@ user = function(){
 
 					});
 				});
+				layout.add('center', userPanel);
 				
 			}
 
@@ -179,6 +189,8 @@ user = function(){
 					links.loadLinks(loaded_link_id, 8);
 
 				});
+				
+	
 
 				var permissionsPanel = new Ext.ContentPanel('access_<?php echo $uniqid; ?>',
 				{
@@ -192,7 +204,7 @@ user = function(){
 
 					permissionsPanel.load({
 						scripts: true,
-						url: 'permissions.php',
+						url: moduleBase+'permissions.php',
 						params: {
 							user_id: loaded_user_id,
 							uniqid: '<?php echo $uniqid; ?>'
@@ -205,46 +217,50 @@ user = function(){
 				var lookAndFeelPanel = new Ext.ContentPanel('lookandfeel_<?php echo $uniqid; ?>',
 				{
 					title: 'Look and feel',
-					autoScroll:true
-				});
-
-				layout.add('center', lookAndFeelPanel);
-				lookAndFeelPanel.on('activate',
-				function() {
-					lookAndFeelPanel.load({
+					autoScroll:true,
+					background: true,
+					url:{
 						scripts: true,
-						url: 'look_and_feel.php',
+						url: moduleBase+'look_and_feel.php',
 						params: {
 							user_id: loaded_user_id,
 							uniqid: '<?php echo $uniqid; ?>'
 						}
-
-					});
+					}
 				});
+				layout.add('center', lookAndFeelPanel);
+
 
 				var regionalPanel = new Ext.ContentPanel('regional_<?php echo $uniqid; ?>',
 				{
 					title: 'Regional settings',
-					autoScroll:true
-				});
-
-				layout.add('center', regionalPanel);
-				regionalPanel.on('activate',
-				function() {
-					regionalPanel.load({
+					autoScroll:true,
+					background: true,
+					url:{
 						scripts: true,
-						url: 'regional.php',
+						url: moduleBase+'regional.php',
 						params: {
 							user_id: loaded_user_id,
 							uniqid: '<?php echo $uniqid; ?>'
 						}
-
-					});
+					}
 				});
+				
+			
+				
+				
+				layout.add('center', regionalPanel);
 				linkButton.enable();
 			}
-			
-			layout.getRegion('center').showPanel('properties_<?php echo $uniqid; ?>');
+			var region = layout.getRegion('center');
+			var activePanel = region.getActivePanel();
+			if(activePanel && activePanel.getId()=='properties_<?php echo $uniqid; ?>')
+			{
+				activePanel.fireEvent('activate');
+			}else
+			{
+				region.showPanel('properties_<?php echo $uniqid; ?>');
+			}
 
 			layout.endUpdate();
 		},
@@ -259,9 +275,12 @@ user = function(){
 			}
 			for (var i = 0;i<panels.length;i++)
 			{				
-				region.remove(panels[i]);
+				region.remove(panels[i], true);
 			}
-			linkButton.disable();
+			if(typeof(linkButton)!='undefined')
+			{
+				linkButton.disable();
+			}
 			
 		},
 		getDialog : function()
@@ -294,7 +313,7 @@ user = function(){
 			
 			this.createTabs();
 			
-			if(loaded_user_id==0 && user_id==0)
+			/*if(loaded_user_id==0 && user_id==0)
 			{
 				userPanel.resizeEl.load({
 					scripts: true,
@@ -305,7 +324,7 @@ user = function(){
 					}
 
 				});
-			}
+			}*/
 		},
 
 		showDialog : function(user_id, link_id){
@@ -329,7 +348,7 @@ user.init();
 <?php
 if(isset($_REQUEST['user_id']))
 {
-	echo 'user.showDialog('.$_REQUEST['user_id'].');';
+	echo 'Ext.onReady(function(){user.showDialog('.$_REQUEST['user_id'].');});';
 }
 ?>
 </script>

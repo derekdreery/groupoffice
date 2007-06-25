@@ -49,10 +49,11 @@ class users extends db
 			$cache['link_id'] = $this->f('link_id');
 			$cache['link_type']=8;
 			$cache['description']='';
-			$cache['url']=$GO_MODULES->modules['users']['url'].'user.php?user_id='.$this->f('id');
+			$cache['url']=$GO_MODULES->modules['users']['url'].'index.php?user_id='.$this->f('id');
 			$cache['type']=$GLOBALS['strUser'];
 			$cache['keywords']=addslashes(record_to_keywords($this->Record)).','.$cache['type'];
 			$cache['mtime']=$this->f('mtime');
+			$cache['module']='users';
 			
 			if($this->f('registration_time')>$last_sync_time)
 			{

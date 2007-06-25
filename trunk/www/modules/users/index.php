@@ -29,6 +29,7 @@ echo $GO_THEME->get_stylesheet('users');
 <script type="text/javascript" src="../../links.js"></script>
 </head>
 <body>
+<base href="<?php echo $GO_MODULES->modules['users']['url']; ?>">
 
 <div id="center">
 	<div id="toolbar"></div>
@@ -37,7 +38,10 @@ echo $GO_THEME->get_stylesheet('users');
 <div id="dialogloader"></div>
 
 <?php
-require('user.php');
+if(isset($_REQUEST['user_id']))
+{
+	require('user.php');
+}
 ?>
 </body>
 </html>

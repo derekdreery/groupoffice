@@ -62,11 +62,14 @@ GroupOffice = function(){
 					totalProperty: 'total',
 					id: 'link_id'
 				}, [
-				{name: 'link_id', mapping: 'link_id'},
-				{name: 'name', mapping: 'name'},
-				{name: 'type', mapping: 'type'},
+				{name: 'icon'},
+				{name: 'link_id'},
+				{name: 'name'},
+				{name: 'type'},
 				{name: 'url', mapping: 'url'},
-				{name: 'mtime', mapping: 'mtime'}
+				{name: 'mtime'},
+				{name: 'module'},
+				{name: 'id'}
 				]),
 
 				// turn on remote sorting
@@ -75,11 +78,20 @@ GroupOffice = function(){
 			search_ds.setDefaultSort('mtime', 'desc');
 
 
+			function IconRenderer(src){
+				return '<img src=\"' + src +' \" />';
+			}
 
 			// the column model has information about grid columns
 			// dataIndex maps the column to the specific data field in
 			// the data store
-			var search_cm = new Ext.grid.ColumnModel([{
+			var search_cm = new Ext.grid.ColumnModel([
+			{
+				header:"",
+				width:28,
+				dataIndex: 'icon',
+				renderer: IconRenderer
+			},{
 				header: "Name",
 				dataIndex: 'name',
 				css: 'white-space:normal;'
@@ -105,7 +117,30 @@ GroupOffice = function(){
 			});
 
 			//grid.addListener("rowclick", this.rowClicked, this);
-			search_grid.addListener("rowdblclick", this.rowDoulbleClicked, this);
+			search_grid.addListener("rowdblclick",
+			function(search_grid, rowClicked, e) {
+
+				var selectionModel = search_grid.getSelectionModel();
+				var record = selectionModel.getSelected();
+
+				//parent.mainframe.document.location=record.data['url'];
+				//this.showDialog({ url: record.data['url'], iframe: true });
+				//layout.getRegion('east').collapse();
+				
+		
+				
+				if(window.frames[record.data['module']].showSearchResult)
+				{
+					window.frames[record.data['module']].showSearchResult(record);
+					layout.showPanel(record.data['module']);
+				}else{
+				
+					this.showPanel(record.data['module'], record.data['url']);
+				}
+
+				//Ext.get('dialog').load({url: record.data['url'], scripts: true });
+			}
+			, this);
 
 
 			// trigger the data store load
@@ -154,11 +189,16 @@ GroupOffice = function(){
 		addCenterPanel : function(id, title, url)
 		{
 			var iframe = Ext.DomHelper.append(document.body,
-			{'id': id, tag: 'iframe', frameBorder: 0 });
+			{
+				'id': id, 
+				name: id, 
+				tag: 'iframe', 
+				frameBorder: 0 
+			});
 			var panel = new Ext.ContentPanel(iframe,
-			{title: title, fitToFrame:true, closable:false});		
-			
-			layout.add('center', panel);
+			{title: title, fitToFrame:true, closable:false, background:true});
+
+
 			panel.on('activate', function()
 			{
 				var frame = panel.getEl();
@@ -168,23 +208,21 @@ GroupOffice = function(){
 				}
 			}
 			);
-			
+
+			layout.add('center', panel);
+
 		},
-		showPanel :  function (panelName){
-			layout.showPanel(panelName);			
+		showPanel :  function (panelID, url){
+			if(typeof(url)!='undefined')
+			{
+				frame = Ext.get(panelID);
+				frame.set({'src': url});
+			}
+			layout.showPanel(panelID);
+
+
 		},
 
-		rowDoulbleClicked : function(search_grid, rowClicked, e) {
-
-			var selectionModel = search_grid.getSelectionModel();
-			var record = selectionModel.getSelected();
-
-			//parent.mainframe.document.location=record.data['url'];
-			//this.showDialog({ url: record.data['url'], iframe: true });
-			//layout.getRegion('east').collapse();
-
-			Ext.get('dialog').load({url: record.data['url'], scripts: true });
-		},
 
 		search : function(query){
 			var east = layout.getRegion('east');

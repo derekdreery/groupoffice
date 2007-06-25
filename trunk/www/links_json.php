@@ -74,7 +74,9 @@ if($count)
 		'type'=>$search->f('type'),
 		'description'=>$search->f('description'),
 		'url'=>$search->f('url'),
-		'mtime'=>get_timestamp($search->f('mtime'))
+		'mtime'=>get_timestamp($search->f('mtime')),
+		'module'=>$search->f('module'),
+		'id'=>$search->f('id')
 		);
 	}
 }
