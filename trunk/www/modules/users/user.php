@@ -275,7 +275,7 @@ user = function(){
 			}
 			for (var i = 0;i<panels.length;i++)
 			{				
-				region.remove(panels[i], true);
+				region.remove(panels[i],true);
 			}
 			if(typeof(linkButton)!='undefined')
 			{
