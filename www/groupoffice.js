@@ -218,7 +218,13 @@ GroupOffice = function(){
 				frame = Ext.get(panelID);
 				frame.set({'src': url});
 			}
-			layout.showPanel(panelID);
+			//don't know why but I get an error when trying to open a linked
+			//item that links to the active panel if I don't check if layout
+			//is defined
+			if(typeof(layout) != 'undefined')
+			{
+				layout.showPanel(panelID);
+			}
 
 
 		},

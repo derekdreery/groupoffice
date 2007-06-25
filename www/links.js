@@ -69,7 +69,9 @@ links = function(){
 					{name: 'name'},
 					{name: 'type'},
 					{name: 'url'},
-					{name: 'mtime'}
+					{name: 'mtime'},
+					{name: 'id'},
+					{name: 'module'}
 					]),
 
 				// turn on remote sorting
@@ -120,7 +122,32 @@ links = function(){
 			});
 
 			//grid.addListener("rowclick", this.rowClicked, this);
-			links_grid.addListener("rowdblclick", this.rowDoulbleClicked, this);
+			links_grid.addListener("rowdblclick",
+			function(search_grid, rowClicked, e) {
+
+				var selectionModel = search_grid.getSelectionModel();
+				var record = selectionModel.getSelected();
+
+				//parent.mainframe.document.location=record.data['url'];
+				//this.showDialog({ url: record.data['url'], iframe: true });
+				//layout.getRegion('east').collapse();
+				
+				/*for (var i = 0;i<parent.window.frames.length;i++)
+				{
+					alert(parent.window.frames[i].name);
+				}*/
+				if(parent.window.frames[record.data['module']].showSearchResult)
+				{
+					parent.window.frames[record.data['module']].showSearchResult(record);
+					layout.showPanel(record.data['module']);
+				}else{
+				
+					parent.GroupOffice.showPanel(record.data['module'], record.data['url']);
+				}
+
+				//Ext.get('dialog').load({url: record.data['url'], scripts: true });
+			}
+			, this);
 
 			
 			return new Ext.GridPanel(links_grid, { title: 'Links', toolbar: linkstb});
@@ -138,14 +165,6 @@ links = function(){
 				links_ds.load();
 				links_grid.render();
 			}
-		},
-		rowDoulbleClicked : function(search_grid, rowClicked, e) {
-
-			var selectionModel = links_grid.getSelectionModel();
-			var record = selectionModel.getSelected();
-
-			//parent.Ext.get('dialog').load({url: record.data['url'], scripts: true });
-			parent.GroupOffice.showDialog({url: record.data['url'], scripts: true });
 		}
 	}
 }();
