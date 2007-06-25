@@ -12,8 +12,8 @@ links = function(){
 
 	return {
 
-		getGridPanel : function(uniqid){
-			var linkstb = new Ext.Toolbar('linkstoolbar_'+uniqid);
+		getGridPanel : function(toolbarEl, gridEl){
+			var linkstb = new Ext.Toolbar(toolbarEl);
 
 
 			linkstb.addButton({
@@ -109,7 +109,7 @@ links = function(){
 			links_cm.defaultSortable = true;
 
 			// create the editor grid
-			links_grid = new Ext.grid.Grid('links_grid_div_'+uniqid, {
+			links_grid = new Ext.grid.Grid(gridEl, {
 				ds: links_ds,
 				cm: links_cm,
 				selModel: new Ext.grid.RowSelectionModel(),

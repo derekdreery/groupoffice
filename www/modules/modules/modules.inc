@@ -88,10 +88,10 @@ echo '</table>';
 echo '</td><td valign="top">';
 
 echo '<table class="go_table">'.
-'<tr class="x-grid-hd-row"><td class="x-grid-hd">'.$mod_installed.'</td>'.
-'<td class="x-grid-hd">'.$mod_sort_order.'</td>'.
-'<td class="x-grid-hd">'.$menu_admin.'</td>'.
-'<td class="x-grid-hd" colspan="3">&nbsp;</td></tr>';
+'<tr><th>'.$mod_installed.'</th>'.
+'<th>'.$mod_sort_order.'</th>'.
+'<th>'.$menu_admin.'</th>'.
+'<th colspan="3">&nbsp;</th></tr>';
 
 $column_count = 0;
 
