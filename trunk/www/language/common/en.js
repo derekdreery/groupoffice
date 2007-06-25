@@ -14,6 +14,7 @@ var GOlang = {
 	cmdUnlink : 'Unlink',
 	cmdClose : 'Close',
 	cmdOk : 'Ok',
+	cmdApply : 'Apply',
 	
 	
 	displayingItems : 'Displaying items {0} - {1} of {2}',
@@ -22,5 +23,11 @@ var GOlang = {
 	strLinkItems : 'Search for items to link',
 	strSearchResults: 'Search results',
 	
-	strPleaseSelect : 'Please select...'
+	strPleaseSelect : 'Please select...',
+	strProperties : 'Properties',
+	
+	strSuccess: 'Success',
+	strError: 'Error',
+	waitMsgSave: 'Saving...',
+	waitMsgLoad: 'Loading...'
 };

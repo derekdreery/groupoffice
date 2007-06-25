@@ -24,7 +24,32 @@ load_basic_controls();
 load_control('tooltip');
 
 $GO_HEADER['head'] = tooltip::get_header();
-require_once ($GO_THEME->theme_path."header.inc");
+
+
+
+require_once("../../Group-Office.php");
+$GO_SECURITY->authenticate();
+$GO_MODULES->authenticate('users');
+load_basic_controls();
+require_once($GO_LANGUAGE->get_language_file('users'));
+?>
+<html>
+<head>
+<title><?php echo $GO_CONFIG->title.' - '.$lang_modules['users']; ?></title>
+<?php
+require($GO_CONFIG->root_path.'default_head.inc');
+//$GO_THEME->load_module_theme('modules');
+//echo $GO_THEME->get_stylesheet('users');
+
+echo tooltip::get_header();
+?>
+<script type="text/javascript" src="language/en.js"></script>
+<script type="text/javascript" src="users.js"></script>
+<script type="text/javascript" src="../../links.js"></script>
+</head>
+<body>
+<?php
+
 
 switch ($task) {
 	case 'install' :
@@ -96,7 +121,7 @@ if ($task == 'install' || $task == 'uninstall' || $task == 'sort_order') {
 	echo '</script>';
 }
 
-echo '<form method="post" name="modules" action="'.$_SERVER['PHP_SELF'].'">';
+echo '<form class="x-form" method="post" name="modules" action="'.$_SERVER['PHP_SELF'].'">';
 echo '<input type="hidden" name="task" />';
 echo '<input type="hidden" name="version" />';
 echo '<input type="hidden" name="sort_order" />';
@@ -105,5 +130,5 @@ echo '<input type="hidden" name="admin_menu" />';
 echo '<input type="hidden" name="close" value="false" />';
 require_once ('modules.inc');
 echo '</form>';
+echo '</body></html>';
 
-require_once ($GO_THEME->theme_path."footer.inc");
