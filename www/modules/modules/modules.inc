@@ -71,9 +71,9 @@ while($module = array_shift($modules))
 
 		echo '<tr>';
 
-		$GO_THEME->images[$module['name']] = isset($GO_THEME->images[$module['name']]) ? $GO_THEME->images[$module['name']] : $GO_THEME->images['unknown'];
+		$GO_THEME->images[$module['name']] = isset($GO_THEME->images[$module['name']]) ? $GO_THEME->images[$module['name']] : $GO_THEME->images['unknown_module'];
 
-		$cell = new table_cell('<img style="margin-right: 5px;" src="'.$GO_THEME->images[$module['name']].'" border="0" width="32" height="32" align="absmiddle" />'.$lang_var);
+		$cell = new table_cell('<img style="margin-right: 5px;" src="'.$GO_THEME->images[$module['name']].'" border="0" align="absmiddle" />'.$lang_var);
 		$cell->set_tooltip(new tooltip($tooltip));
 		echo $cell->get_html();
 		echo '<td align="right">';
@@ -88,10 +88,10 @@ echo '</table>';
 echo '</td><td valign="top">';
 
 echo '<table class="go_table">'.
-'<tr><th>'.$mod_installed.'</th>'.
-'<th>'.$mod_sort_order.'</th>'.
-'<th>'.$menu_admin.'</th>'.
-'<th colspan="3">&nbsp;</th></tr>';
+'<tr class="x-grid-hd-row"><td class="x-grid-hd">'.$mod_installed.'</td>'.
+'<td class="x-grid-hd">'.$mod_sort_order.'</td>'.
+'<td class="x-grid-hd">'.$menu_admin.'</td>'.
+'<td class="x-grid-hd" colspan="3">&nbsp;</td></tr>';
 
 $column_count = 0;
 
@@ -133,9 +133,9 @@ while($module = array_shift($modules))
 
 	echo '<tr>';
 
-	$GO_THEME->images[$module['id']] = isset($GO_THEME->images[$module['id']]) ? $GO_THEME->images[$module['id']] : $GO_THEME->images['unknown'];
+	$GO_THEME->images[$module['id']] = isset($GO_THEME->images[$module['id']]) ? $GO_THEME->images[$module['id']] : $GO_THEME->images['unknown_module'];
 
-	$cell = new table_cell('<img style="margin-right: 5px;" src="'.$GO_THEME->images[$module['id']].'" border="0" width="32" height="32" align="absmiddle" />'.$lang_var);
+	$cell = new table_cell('<img style="margin-right: 5px;" src="'.$GO_THEME->images[$module['id']].'" border="0" align="absmiddle" />'.$lang_var);
 	$cell->set_tooltip(new tooltip($tooltip));
 	echo $cell->get_html();
 

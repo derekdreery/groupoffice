@@ -226,6 +226,7 @@ switch($_REQUEST['task'])
 							sendmail($user['email'], $GO_CONFIG->webmaster_email, $GO_CONFIG->title, $registration_mail_subject, $registration_mail_body,'3','text/HTML');
 						}
 					}
+					$result['success']=true;
 				}
 			}else {
 				if($user['enabled']=='1')
