@@ -973,7 +973,7 @@ class imap {
 		for ($i = 0; $i < count($messages); $i ++) {
 			@ imap_delete($this->conn, $messages[$i], FT_UID);
 		}
-		@ imap_expunge($this->conn);
+		return @ imap_expunge($this->conn);
 	}
 
 	/**
@@ -1273,8 +1273,7 @@ class imap {
 	function move($folder, $messages) {
 		$messageset = implode(",", $messages);
 		if (imap_mail_move($this->conn, $messageset, $folder, CP_UID)) {
-			imap_expunge($this->conn);
-			return true;
+			return imap_expunge($this->conn);
 		}
 		return false;
 	}

@@ -27,7 +27,7 @@ function connect($account_id, $mailbox='INBOX')
 	global $email, $imap, $GO_SECURITY;
 	if (!$account = $email->get_account($account_id)) {
 		$result['success']=false;
-		$result['errors']='Database error!';
+		$result['errors']=$strDataError;
 		echo json_encode($result);
 		exit();
 	}
@@ -41,10 +41,12 @@ function connect($account_id, $mailbox='INBOX')
 	}
 	if (!$imap->open($account['host'], $account['type'], $account['port'], $account['username'], $account['password'], $mailbox, 0, $account['use_ssl'], $account['novalidate_cert'])) {
 		$result['success']=false;
-		$result['errors']='Could not connect to server: '.$account['host'];
+		$result['errors']=$ml_connect_failed.' '.$account['host'];
 		echo json_encode($result);
 		exit();
 	}
+	
+	return $account;
 
 }
 
@@ -53,15 +55,51 @@ $result =array();
 switch($_REQUEST['task'])
 {
     case 'delete':
+    	
+    	$result['success']=false;
+    	
+    	$mailbox = smart_stripslashes($_REQUEST['mailbox']);
+    	$account_id = smart_stripslashes($_REQUEST['account_id']);
+    	
+    	$account = connect($account_id, $mailbox);
         
-        $selectedRows = json_decode(smart_stripslashes($_POST['selectedRows']));
-        foreach($selectedRows as $note_id)
+        $messages = json_decode(smart_stripslashes($_POST['messages']));
+       
+        if($mailbox != $account['trash'])
         {
-            $notes->delete_note($note_id);            
+        	$result['success']=$imap->move($account['trash'], $messages);
+        }else {
+        	$result['success']=$imap->delete($messages);
         }
-        $result['success']=true;
-        $result['errors']='Messages deleted successfully';
-        
+		
+        break;
+    case 'mark_as_read':    	    	
+    	$mailbox = smart_stripslashes($_REQUEST['mailbox']);
+    	$account_id = smart_stripslashes($_REQUEST['account_id']);    	
+    	$account = connect($account_id, $mailbox);        
+        $messages = json_decode(smart_stripslashes($_POST['messages']));       
+       	$result['success']=$imap->set_message_flag($mailbox, $messages, "\\Seen");        
+        break;
+    case 'mark_as_unread':    	    	
+    	$mailbox = smart_stripslashes($_REQUEST['mailbox']);
+    	$account_id = smart_stripslashes($_REQUEST['account_id']);    	
+    	$account = connect($account_id, $mailbox);        
+        $messages = json_decode(smart_stripslashes($_POST['messages']));       
+       	$result['success']=$imap->set_message_flag($mailbox, $messages, "\\Seen", "reset");        
+        break;
+    case 'flag':    	    	
+    	$mailbox = smart_stripslashes($_REQUEST['mailbox']);
+    	$account_id = smart_stripslashes($_REQUEST['account_id']);    	
+    	$account = connect($account_id, $mailbox);        
+        $messages = json_decode(smart_stripslashes($_POST['messages']));       
+       	$result['success']=$imap->set_message_flag($mailbox, $messages, "\\Flagged");        
+        break;
+    case 'unflag':    	    	
+    	$mailbox = smart_stripslashes($_REQUEST['mailbox']);
+    	$account_id = smart_stripslashes($_REQUEST['account_id']);    	
+    	$account = connect($account_id, $mailbox);        
+        $messages = json_decode(smart_stripslashes($_POST['messages']));       
+       	$result['success']=$imap->set_message_flag($mailbox, $messages, "\\Flagged", "reset");        
         break;
         
     case 'move':
@@ -72,11 +110,8 @@ switch($_REQUEST['task'])
     	
     	connect($account_id, $from_mailbox);
     	
-    	$imap->move($to_mailbox, $messages);    	
-    	
-
-        $result['success']=true;
-        $result['errors']='Messages moved successfully';    	
+    	$result['success']=$imap->move($to_mailbox, $messages);
+    		
     	break;
 }
 
