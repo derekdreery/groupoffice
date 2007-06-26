@@ -211,6 +211,8 @@ if(count($files))
 	  $p->set_attribute('class','Error');
 	  $tabstrip->add_html_element($p);
 	}
+	
+	$tabstrip->add_html_element(new html_element('p', $cms_batch_upload_text));
 			
 	$tabstrip->add_html_element(new html_element('p', $fbSelect.':'));
 	

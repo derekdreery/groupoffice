@@ -209,3 +209,6 @@ $cms_insert_video='Insert video';
 $cms_antispam_text='Please answer the following simple question to avoid SPAM';
 $cms_antispam_fail='The answer to the antispam question was incorrect. Please try again.';
 $cms_insert_video='Insert video';
+
+$cms_batch_upload = 'Batch upload';
+$cms_batch_upload_text = 'With this function you can insert multiple links to files at once.';
