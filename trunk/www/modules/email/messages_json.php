@@ -90,6 +90,7 @@ $RFC822 = new RFC822();
 $messages=array();
 
 while($mail->next_message(($account['examine_headers']=='1' || isset($_POST['examine_headers']))))
+//while($mail->next_message(true))
 {
 	if($mail->f('answered'))
 	{
@@ -106,6 +107,9 @@ while($mail->next_message(($account['examine_headers']=='1' || isset($_POST['exa
 		'from'=>$mail->f('from'),
 		'size'=>format_size($mail->f('size')),
 		'date'=>get_timestamp($mail->f('udate')),
+		'attachments'=>$mail->f('attachments'),
+		'flagged'=>$mail->f('flagged')
+		
 		//'mailbox'=>$mailbox,
 		//'account_id'=>$account['id'],
 		//'folder_id'=>$folder['id']

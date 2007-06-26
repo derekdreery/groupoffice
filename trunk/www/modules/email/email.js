@@ -71,6 +71,22 @@ email = function(){
 			function renderIcon(src){
 				return '<img src=\"' + src +' \" />';
 			}
+			
+			function renderFlagged(value, p, record){
+				
+				var str = '';
+				
+				if(record.data['flagged']==1)
+				{
+					str += '<img src=\"' + GOimages['flag'] +' \" style="display:block" />';
+				}
+				if(record.data['attachments'])
+				{
+					str += '<img src=\"' + GOimages['attach'] +' \" style="display:block" />';
+				}
+				return str;
+				
+			}
 
 			ds = new Ext.data.Store({
 
@@ -86,11 +102,14 @@ email = function(){
 				}, [
 				{name: 'uid'},
 				{name: 'icon'},
+				{name: 'flagged'},
+				{name: 'attachments'},
 				{name: 'new'},
 				{name: 'subject'},
 				{name: 'from'},
 				{name: 'size'},
 				{name: 'date'}
+				
 				]),
 
 				// turn on remote sorting
@@ -114,9 +133,14 @@ email = function(){
 			var cm = new Ext.grid.ColumnModel([
 			{
 				header:"",
-				width:28,
+				width:22,
 				dataIndex: 'icon',
 				renderer: renderIcon
+			},{
+				header:"",
+				width:22,
+				dataIndex: 'flagged',
+				renderer: renderFlagged
 			},{
 				header: "Message",
 				dataIndex: 'from',
@@ -408,7 +432,7 @@ email = function(){
 			
 			this.setAccount(account_id, folder_id, mailbox);
 
-			layout.restoreState();
+			//layout.restoreState();
 			layout.endUpdate();
 			
 			// render the tree has to be done after grid loads. Don't know why but otherwise
