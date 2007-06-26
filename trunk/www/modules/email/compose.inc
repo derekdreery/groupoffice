@@ -177,7 +177,7 @@ if ($report_id > 0 && $report = $reports->get_report($report_id)) {
     if ($ab_module) {
     	echo '<a class="normal" href="'.$ab->select_contacts('document.sendform.mail_to', $GO_CONFIG->control_url.'select/add.php').'">';
 
-    	echo '<img src="'.$GO_THEME->images['addressbook_small'].'" width="16" height="16" border="0" align="absmiddle" '.'style="padding-right: 3px;" />'.$ml_to.'</a> :&nbsp;';
+    	echo '<img src="'.$GO_THEME->images['search_addressbook'].'" width="16" height="16" border="0" align="absmiddle" '.'style="padding-right: 3px;" />'.$ml_to.'</a> :&nbsp;';
     } else {
     	echo $ml_to.':&nbsp;';
     }
@@ -232,7 +232,7 @@ if ($report_id > 0 && $report = $reports->get_report($report_id)) {
       if ($ab_module) {
       	echo '<a class="normal" href="'.$ab->select_contacts('document.sendform.mail_cc', $GO_CONFIG->control_url.'select/add.php').'">';
 
-      	echo '<img src="'.$GO_THEME->images['addressbook_small'].'" width="16" height="16" border="0" align="absmiddle" '.'style="padding-right: 3px;" />CC</a> :';
+      	echo '<img src="'.$GO_THEME->images['search_addressbook'].'" width="16" height="16" border="0" align="absmiddle" '.'style="padding-right: 3px;" />CC</a> :';
       } else {
       	echo 'CC :';
       }
@@ -267,7 +267,7 @@ if ($report_id > 0 && $report = $reports->get_report($report_id)) {
 	if ($ab_module) {
 		echo '<a class="normal" href="'.$ab->select_contacts('document.sendform.mail_bcc', $GO_CONFIG->control_url.'select/add.php').'">';
 
-		echo '<img src="'.$GO_THEME->images['addressbook_small'].'" width="16" height="16" border="0" align="absmiddle" '.'style="padding-right: 3px;" />BCC</a> :';
+		echo '<img src="'.$GO_THEME->images['search_addressbook'].'" width="16" height="16" border="0" align="absmiddle" '.'style="padding-right: 3px;" />BCC</a> :';
 	} else {
 		echo 'BCC :';
 	}

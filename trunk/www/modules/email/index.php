@@ -15,21 +15,37 @@ $GO_SECURITY->authenticate();
 $GO_MODULES->authenticate('email');
 load_basic_controls();
 require_once($GO_LANGUAGE->get_language_file('email'));
-
-require($GO_CONFIG->root_path.'default_head.inc');
-$GO_THEME->load_module_theme('email');
+require_once ($GO_MODULES->class_path."email.class.inc");
+$email = new email();
+$account = $email->get_account(0);
+$mailbox = $email->get_folder($account['id'], 'INBOX');
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<?php
+//$GO_THEME->load_module_theme('email');
 echo $GO_THEME->get_stylesheet('email');
+require($GO_CONFIG->root_path.'default_head.inc');
 ?>
 <script type="text/javascript" src="language/en.js"></script>
 <script type="text/javascript" src="email.js"></script>
+<script type="text/javascript">
+
+Ext.EventManager.onDocumentReady(
+function(){
+	email.init(<?php echo $account['id']; ?>, <?php echo $mailbox['id']; ?>, 'INBOX');
+}, email, true);
+</script>
 </head>
 <body>
-
+<div id="north">
+	<div id="emailtb"></div>
+</div>
 <div id="west">
-<div id="email-tree"></div>
+	<div id="email-tree"></div>
 </div>
 <div id="center">
-	<div id="emailtb"></div>
 	<div id="email-grid"></div>
 </div>
 <div id="east" style="background-color:#c3daf9;height:100%"></div>

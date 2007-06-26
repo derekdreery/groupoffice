@@ -15,3 +15,12 @@ $images['save']='16x16/gtk-save.png';
 
 $images['link']='16x16/connect_established.png';
 $images['unlink']='16x16/stock-disconnect.png';
+
+$images['search_addressbook'] = '16x16/search_addressbook.png';
+
+//for the old Group-Office datatable
+$images['arrow_down']		= '16x16/arrow_down.gif';
+$images['arrow_up']		= '16x16/arrow_up.gif';
+
+//used in fixpng script for IE<7
+$images['blank']		= '16x16/blank.gif';

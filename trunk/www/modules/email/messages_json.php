@@ -29,7 +29,7 @@ $GO_THEME->load_module_theme('email');
 
 $account_id = isset ($_REQUEST['account_id']) ? $_REQUEST['account_id'] : 0;
 $mailbox = isset ($_REQUEST['mailbox']) ? smart_stripslashes($_REQUEST['mailbox']) : 'INBOX';
-
+/*
 if(isset($_REQUEST['node']) && strpos($_REQUEST['node'],'_'))
 {
 	$node = explode('_',$_REQUEST['node']);
@@ -50,11 +50,11 @@ if(isset($_REQUEST['node']) && strpos($_REQUEST['node'],'_'))
 	$mailbox = 'INBOX';
 	
 }
+*/
 
+$account = $email->get_account($account_id);
+	
 
-if (!$account = $email->get_account($account_id)) {
-	$account = $email->get_account(0);
-}
 
 if(!isset($folder))
 {
@@ -87,12 +87,11 @@ $mail->get_messages($_REQUEST['start'], $_REQUEST['limit']);
 //require($GO_CONFIG->class_path.'mail/RFC822.class.inc');
 $RFC822 = new RFC822();
 
+$messages=array();
+
 while($mail->next_message(($account['examine_headers']=='1' || isset($_POST['examine_headers']))))
 {
-	if($mail->f('new'))
-	{
-		$icon = $GO_THEME->images['message_new'];
-	}elseif($mail->f('answered'))
+	if($mail->f('answered'))
 	{
 		$icon = $GO_THEME->images['message_answered'];
 	}else {
@@ -107,9 +106,9 @@ while($mail->next_message(($account['examine_headers']=='1' || isset($_POST['exa
 		'from'=>$mail->f('from'),
 		'size'=>format_size($mail->f('size')),
 		'date'=>get_timestamp($mail->f('udate')),
-		'mailbox'=>$mailbox,
-		'account_id'=>$account['id'],
-		'folder_id'=>$folder['id']
+		//'mailbox'=>$mailbox,
+		//'account_id'=>$account['id'],
+		//'folder_id'=>$folder['id']
 		
 	);
 }
