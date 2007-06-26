@@ -17,9 +17,8 @@ session_id($_REQUEST['sid']);
 //basic group-office authentication
 require_once("../../Group-Office.php");
 $GO_SECURITY->authenticate();
-$GO_MODULES->authenticate('email');
-require_once($GO_MODULES->class_path."email.class.inc");
-$email = new email();
+$GO_MODULES->authenticate('gallery');
+
 
 require_once ($GO_LANGUAGE->get_language_file('filesystem'));
 
