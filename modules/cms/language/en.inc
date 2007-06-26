@@ -2,6 +2,7 @@
 //Uncomment this line in new translations!
 //require_once($GO_LANGUAGE->get_fallback_language_file('cms'));
 
+$fbMultipleFiles='Multiple files';
 $strType = "Type";
 $strModified = "Modified";
 $strSize = "Size";
@@ -29,7 +30,7 @@ $fbUpload_nofile = "No file was not recieved.";
 $fbFolderExists = "The folder already exists.";
 $fbFolder = "Folder";
 $fbSelect = "Select file...";
-$fbNoFile = "The file you tried to upload is too big.<br /> The maximum transferable filesize is set to: ";
+$fbNoFile = "No file was received. Maybe the file you tried to upload is too big.<br /> The maximum transferable filesize is set to: ";
 $fbPleaseWait = "Please wait. Sending data...";
 $fbFilename = "Filename";
 $fbUpLevel = "Level up";

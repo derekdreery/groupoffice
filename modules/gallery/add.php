@@ -39,16 +39,16 @@ $link_back = (isset ($_REQUEST['link_back']) && $_REQUEST['link_back'] != '') ? 
 $gallery_id = isset($_REQUEST['gallery_id']) ? $_REQUEST['gallery_id'] : 0;
 
 
-$image_file_path = $GO_CONFIG->local_path.'gallery/'.$gallery_id.'/';	
+	
 
 require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 $fs = new filesystem();	
 
-if(!is_dir($image_file_path))
+/*if(!is_dir($image_file_path))
 {
 	mkdir_recursive($image_file_path);	
 	//$fs->add_share($gallery['user_id'], $image_file_path, 'gallery', $gallery['acl_read'], $gallery['acl_write']);
-}
+}*/
 
 $tmp_dir = $GO_CONFIG->tmpdir.'gallery/'.$GO_SECURITY->user_id.'/';
 if(!is_dir($tmp_dir))
@@ -82,14 +82,24 @@ switch($task)
 			foreach($_POST['images'] as $image)
 			{				
 				
+				$image_file_path = $GO_CONFIG->local_path.'gallery/'.$image['gallery_id'].'/';
+				
 				$image['filename']=basename($image['path']);
 		
-				$image['gallery_id']=$gallery_id;
+				//$image['gallery_id']=$gallery_id;
 		
 				$dimensions = getimagesize($image['path']); 
 				$image['width']=$dimensions[0];
 				$image['height']=$dimensions[1];
 				$image['user_id']=$GO_SECURITY->user_id;
+				
+				$image = array_map('smart_addslashes',$image);
+				
+				$gallery = $ig->get_gallery($image['gallery_id']);
+				if($gallery['resizeto']>0)
+				{
+					$ig->resize_image($image['path'], $gallery['resizeto']);	
+				}
 								
 				rename($image['path'], $image_file_path.$image['filename']);
 				
@@ -108,14 +118,14 @@ switch($task)
 }
 
 
-$gallery = $ig->get_gallery($gallery_id);
+//$gallery = $ig->get_gallery($gallery_id);
 
-if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $gallery['acl_read']) && 
+/*if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $gallery['acl_read']) && 
 !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $gallery['acl_write']))
 {
 	header('Location: '.$GO_CONFIG->host.'error_docs/403.php');
 	exit();
-}
+}*/
 
 
 
@@ -138,28 +148,38 @@ if($task == 'process_images')
 {
 	load_control('datatable');
 	
-	$tabstrip = new tabstrip('gallery_strip', $gallery['name']);
+	$tabstrip = new tabstrip('gallery_strip', $ig_upload);
 	$tabstrip->set_attribute('style','width:100%;height:100%;');
 	$tabstrip->set_return_to($return_to);
 
 	$table = new datatable('ig_files_list');
 	$table->set_attribute('cellspacing', '3');
 	
+	$galleries=array();
+	$ig->get_authorized_galleries($GO_SECURITY->user_id);
+	while($ig->next_record())
+	{
+		$galleries[$ig->f('id')]=$ig->f('name');
+	}
+	
 	
 	$table->add_column(new table_heading());
-	//$table->add_column(new table_heading($strName));
+	
+	if(count($galleries)>1)
+	{
+		$table->add_column(new table_heading($ig_gallery));
+	}
 	$table->add_column(new table_heading($strDescription));
 	
 	$GO_HEADER['head'] = $table->get_header();
+	
+	
 
 	$files = $fs->get_files_sorted($tmp_dir);
 	$count=1;
 	while($file = array_shift($files))
 	{
-		if($gallery['resizeto']>0)
-		{
-			$ig->resize_image($file['path'], $gallery['resizeto']);	
-		}
+		
 			
 		$row = new table_row();
 		
@@ -179,6 +199,24 @@ if($task == 'process_images')
 		$thumb = new image('', $GO_CONFIG->control_url.'phpthumb/phpThumb.php?src='.$file['path'].$dimension);
 		$cell->add_html_element($thumb);			
 		$row->add_cell($cell);
+		
+		if(count($galleries)>1)
+		{
+			$cell = new table_cell();
+			$cell->set_attribute('style', 'vertical-align:top;padding:2px');
+			
+			$select = new select('images['.$count.'][gallery_id]',$gallery_id);
+			foreach($galleries as $_gallery_id=>$name)
+			{
+				$select->add_value($_gallery_id, $name);
+			}			
+			$cell->add_html_element($select);
+			$row->add_cell($cell);
+		}else 
+		{
+			$form->add_html_element(new input('hidden','images['.$count.'][gallery_id]', $gallery_id));
+		}
+		
 		
 		$description = isset($_POST['images'][$count]['description']) ? smart_stripslashes($_POST['images'][$count]['description']) : '';
 	 	

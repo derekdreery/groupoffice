@@ -83,6 +83,9 @@ echo '<a class="small" href="site.php?site_id='.$_SESSION['site_id'].'&return_to
 echo '<td class="ModuleIcons">';
 echo '<a class="small" href="index.php"><img src="'.$GO_THEME->images['exit'].'" border="0" height="32" width="32" /><br />'.$cmdClose.'</a></td>';
 
+echo '<td class="ModuleIcons">';
+echo '<a class="small" href="upload.php"><img src="'.$GO_THEME->images['upload'].'" border="0" height="32" width="32" /><br />'.$fbUpload.'</a></td>';
+
 echo '</table>';
 $cms_settings = $cms->get_settings($GO_SECURITY->user_id);
 
