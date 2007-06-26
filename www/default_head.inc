@@ -16,4 +16,4 @@ if(!empty($GO_MODULES->id))
 <script src="<?php echo $GO_CONFIG->host; ?>ext/ext-all.js" type="text/javascript"></script>
 <script src="<?php echo $GO_CONFIG->host; ?>go_settings.php" type="text/javascript"></script>
 <script src="<?php echo $GO_CONFIG->host; ?>language/common/en.js" type="text/javascript"></script>
-<link href="<?php echo $GO_CONFIG->host; ?>ext/resources/css/ext-all.css" type="text/css" rel="stylesheet"></link>
+<link href="<?php echo $GO_CONFIG->host; ?>ext/resources/css/xtheme-vista.css" type="text/css" rel="stylesheet"></link>
