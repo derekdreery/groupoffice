@@ -2,6 +2,7 @@
 //Uncomment this line in new translations!
 //require_once($GO_LANGUAGE->get_fallback_language_file('cms'));
 
+$fbMultipleFiles='Multiple files';
 $strType = "Type";
 $strModified = "Modified";
 $strSize = "Size";
@@ -29,7 +30,7 @@ $fbUpload_nofile = "No file was not recieved.";
 $fbFolderExists = "The folder already exists.";
 $fbFolder = "Folder";
 $fbSelect = "Select file...";
-$fbNoFile = "The file you tried to upload is too big.<br /> The maximum transferable filesize is set to: ";
+$fbNoFile = "No file was received. Maybe the file you tried to upload is too big.<br /> The maximum transferable filesize is set to: ";
 $fbPleaseWait = "Please wait. Sending data...";
 $fbFilename = "Filename";
 $fbUpLevel = "Level up";
@@ -208,3 +209,6 @@ $cms_insert_video='Insert video';
 $cms_antispam_text='Please answer the following simple question to avoid SPAM';
 $cms_antispam_fail='The answer to the antispam question was incorrect. Please try again.';
 $cms_insert_video='Insert video';
+
+$cms_batch_upload = 'Batch upload';
+$cms_batch_upload_text = 'With this function you can insert multiple links to files at once.';

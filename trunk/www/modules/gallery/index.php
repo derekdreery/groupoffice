@@ -59,6 +59,11 @@ if($datatable->task == 'delete')
 $menu = new button_menu();
 $menu->add_button('add',$cmdAdd,'edit_gallery.php?return_to='.urlencode($link_back));
 $menu->add_button('delete_big',$cmdDelete, $datatable->get_delete_handler());
+$menu->add_button(
+	'upload',
+	$strUpload,
+	'add.php?gallery_id=0'.'&return_to='.
+	urlencode($link_back));
 
 $form->add_html_element($menu);
 

@@ -1653,7 +1653,7 @@ class cms_site extends cms {
 							$content = cut_string($stripped_content, $max_length);
 							$multipage_item .= $content;
 
-							if (strlen($file['content']) != strlen($content)) {
+							if (!empty($read_more_text) && strlen($file['content']) != strlen($content)) {
 								$multipage_item .= '<br /><div style="text-align:right;"><a class="'.$read_more_class.'" href="'.$this->create_url($file['folder_id'], $file['id']).'">'.$read_more_text.'</a></div>';
 							}
 						}
@@ -1662,6 +1662,11 @@ class cms_site extends cms {
 						$multipage_item .= '<br /><div style="text-align:right;"><a class="'.$read_more_class.'" href="'.$this->create_url($file['folder_id'], $file['id']).'">'.$read_more_text.'</a></div>';
 					}
 					$multipage_item .= '</div>';
+					
+					if (empty($read_more_text))
+					{
+						$multipage_item = '<a class="'.$read_more_class.'" href="'.$this->create_url($file['folder_id'], $file['id']).'">'.$multipage_item.'</a>';
+					}
 
 					if ($template_content) {
 						$multipage .= str_replace($this->get_tag('content', $template_content), $multipage_item, $template_content);
@@ -1720,7 +1725,7 @@ class cms_site extends cms {
 									$content = cut_string($stripped_content, $max_length);
 									$multipage_item .= $content;
 
-									if (strlen($file['content']) != strlen($content)) {
+									if (!empty($read_more_text) && strlen($file['content']) != strlen($content)) {
 										$multipage_item .= '<br /><div style="text-align:right;"><a class="'.$read_more_class.'" href="'.$this->create_url($file['folder_id'], $file['id']).'">'.$read_more_text.'</a></div>';
 									}
 
@@ -1730,6 +1735,11 @@ class cms_site extends cms {
 								$multipage_item .= '<br /><div style="text-align:right;"><a class="'.$read_more_class.'" href="'.$this->create_url($file['folder_id'], $file['id']).'">'.$read_more_text.'</a></div>';
 							}
 							$multipage_item .= '</div>';
+							if (empty($read_more_text))
+							{
+								$multipage_item = '<a class="'.$read_more_class.'" href="'.$this->create_url($file['folder_id'], $file['id']).'">'.$multipage_item.'</a>';
+							}
+							
 							if ($template_content) {
 								$multipage .= str_replace($this->get_tag('content', $template_content), $multipage_item, $template_content);
 							} else {
@@ -1762,7 +1772,7 @@ class cms_site extends cms {
 
 		$title_class = isset ($attributes['title_class']) ? $attributes['title_class'] : '';
 		$read_more_class = isset ($attributes['read_more_class']) ? $attributes['read_more_class'] : '';
-		$read_more_text = isset ($attributes['read_more_text']) ? $attributes['read_more_text'] : 'Read more';
+		$read_more_text = isset ($attributes['read_more_text']) ? $attributes['read_more_text'] : '';
 		$template_name = isset ($attributes['template']) ? $attributes['template'] : '';
 		$item_template = isset ($attributes['item_template']) ? $attributes['item_template'] : '';
 		$print_root_only = isset ($attributes['print_root_only']) ? $attributes['print_root_only'] : 'false';
