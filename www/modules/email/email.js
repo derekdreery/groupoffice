@@ -10,6 +10,11 @@ email = function(){
 	var ds;
 	var messagesPanel;
 	var previewedUid;
+	
+	var btnForward;
+	var btnReply;
+	var btnReplyAll;
+	var btnCloseMessage;
 
 
 
@@ -38,25 +43,32 @@ email = function(){
 					split:true
 				},
 				center: {
-					titlebar: true,
-					autoScroll:true,
-					closeOnTab: true,
-					split:true
-				},
-				east: {
 					titlebar: false,
 					autoScroll:true,
 					closeOnTab: true,
-					split:true,
-					initialSize: 350,
-					minSize: 205,
-					maxSize: 700
+					split:true
 				}
 			});
+			
+			var innerLayout = new Ext.BorderLayout('inner-layout', {
+                west: {
+                    split:true,
+                    initialSize: 450,
+                    minSize: 200,                   
+                    autoScroll:true,
+                    collapsible:false,
+                    titlebar: true
+                },
+                center: {
+                    autoScroll:true,
+                    titlebar: false
+                }
+            });
 
 
 
 			layout.beginUpdate();
+			innerLayout.beginUpdate();
 
 
 			function renderMessage(value, p, record){
@@ -142,13 +154,13 @@ email = function(){
 				dataIndex: 'flagged',
 				renderer: renderFlagged
 			},{
-				header: "Message",
+				header: emailLang['Message'],
 				dataIndex: 'from',
 				renderer: renderMessage,
 				css: 'white-space:normal;',
 				width:300
 			},{
-				header: "Date",
+				header: GOlang['strDate'],
 				dataIndex: 'date',
 				width:100
 			}]);
@@ -168,7 +180,12 @@ email = function(){
 			});
 
 
-			grid.addListener("rowdblclick", this.rowDoubleClicked, this);
+			grid.addListener("rowdblclick", function(){
+				innerLayout.getRegion('west').hide();
+				layout.getRegion('west').hide();
+				btnCloseMessage.show();
+			});
+			
 
 
 			grid.addListener("rowclick", function(grid, rowClicked, e) {
@@ -202,6 +219,10 @@ email = function(){
 					});
 
 					previewedUid=record.data['uid'];
+					
+					btnForward.enable();
+					btnReply.enable();
+					btnReplyAll.enable();
 				}
 			}, this);
 			
@@ -295,7 +316,7 @@ email = function(){
 			tb.add(new Ext.Toolbar.Separator());
 			
 			
-			tb.add(new Ext.Toolbar.Button({
+			btnReply = tb.addButton({
 				id: 'reply',
 				icon: GOimages['reply'],
 				text: emailLang['reply'],
@@ -304,10 +325,10 @@ email = function(){
 					this.composer('reply','','','', previewedUid);
 				},
 				scope: this
-			})
+			}
 			);
 			
-			tb.add(new Ext.Toolbar.Button({
+			btnReplyAll = tb.addButton({
 				id: 'reply_all',
 				icon: GOimages['reply_all'],
 				text: emailLang['reply_all'],
@@ -316,10 +337,10 @@ email = function(){
 					this.composer('reply_all','','','', previewedUid);
 				},
 				scope: this
-			})
+			}
 			);
 			
-			tb.add(new Ext.Toolbar.Button({
+			btnForward = tb.addButton({
 				id: 'forward',
 				icon: GOimages['forward'],
 				text: emailLang['forward'],
@@ -328,9 +349,29 @@ email = function(){
 					this.composer('forward','','','', previewedUid);
 				},
 				scope: this
-			})
+			}
 			);
 			tb.add(new Ext.Toolbar.Separator());
+			
+			
+			btnCloseMessage = tb.addButton({
+				id: 'close',
+				icon: GOimages['close'],
+				text: GOlang['cmdClose'],
+				cls: 'x-btn-text-icon',
+				handler: function(){
+					innerLayout.getRegion('west').show();
+					layout.getRegion('west').show();
+					btnCloseMessage.hide();
+				},
+				scope: this
+			}
+			);
+			
+			btnCloseMessage.hide();
+			btnForward.disable();
+			btnReply.disable();
+			btnReplyAll.disable();
 			
 			
 			
@@ -424,16 +465,21 @@ email = function(){
 			layout.add('west', treePanel);
 
 			messagesPanel = new Ext.GridPanel(grid, {title: emailLang['inbox']});
-			layout.add('center', messagesPanel);
+			innerLayout.add('west', messagesPanel);
 
-			previewPanel = new Ext.ContentPanel('east');
-			layout.add('east', previewPanel);
+			previewPanel = new Ext.ContentPanel('preview');
+			innerLayout.add('center', previewPanel);
+			
+			layout.add('center', new Ext.NestedLayoutPanel(innerLayout));
 			
 			
 			this.setAccount(account_id, folder_id, mailbox);
 
-			//layout.restoreState();
+			layout.restoreState();
 			layout.endUpdate();
+			
+			innerLayout.restoreState();
+			innerLayout.endUpdate();
 			
 			// render the tree has to be done after grid loads. Don't know why but otherwise
 			// it doesn't load.
@@ -509,11 +555,7 @@ email = function(){
 
 			}
 		},
-		rowDoubleClicked : function(grid, rowClicked, e) {
-			var selectionModel = grid.getSelectionModel();
-			var record = selectionModel.getSelected();
 
-		},
 		composer : function(action,mail_to,subject,body, uid)
 		{
 			if(typeof(mail_to) == "undefined")

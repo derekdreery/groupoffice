@@ -45,9 +45,9 @@ function(){
 <div id="west">
 	<div id="email-tree"></div>
 </div>
-<div id="center">
+<div id="inner-layout">
 	<div id="email-grid"></div>
+	<div id="preview" style="background-color:#c3daf9;height:100%"></div>
 </div>
-<div id="east" style="background-color:#c3daf9;height:100%"></div>
 </body>
 </html>

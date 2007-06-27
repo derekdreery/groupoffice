@@ -5,6 +5,7 @@ var GOlang = {
 	strMtime : 'Modified at',
 	strCtime : 'Created at',
 	strText : 'Text',
+	strDate : 'Date',
 	
 	
 	cmdDelete : 'Delete',

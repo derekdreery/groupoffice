@@ -11,7 +11,7 @@ Users = function(){
 			layout = new Ext.BorderLayout(document.body, {
 				center: {
 
-					titlebar: true,
+					titlebar: false,
 					autoScroll:true,
 					closeOnTab: true
 				}
