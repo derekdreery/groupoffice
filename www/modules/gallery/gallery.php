@@ -68,22 +68,22 @@ $menu = new button_menu();
 if($write_permission)
 {
 	$menu->add_button(
-			'cms_settings', 
-			$cmdSettings, 
-			'edit_gallery.php?gallery_id='.$gallery_id.'&return_to='.
-					urlencode($link_back));
-	
+	'cms_settings',
+	$cmdSettings,
+	'edit_gallery.php?gallery_id='.$gallery_id.'&return_to='.
+	urlencode($link_back));
+
 	$menu->add_button(
-			'upload', 
-			$strUpload, 
-			'add.php?gallery_id='.$gallery_id.'&return_to='.
-					urlencode($link_back));
+	'upload',
+	$strUpload,
+	'add.php?gallery_id='.$gallery_id.'&return_to='.
+	urlencode($link_back));
 }
 $menu->add_button(
-	'close', 
-	$cmdClose, 
-	'index.php');
-	
+'close',
+$cmdClose,
+'index.php');
+
 $form->add_html_element($menu);
 
 
@@ -101,31 +101,31 @@ $colcount=0;
 
 
 $count = $ig->get_images($gallery_id, $start, $offset);
-		
+
 while($ig->next_record())
 {
 	$colcount++;
-	
+
 	$path = $GO_CONFIG->local_path.'gallery/'.$gallery_id.'/'.$ig->f('filename');
 	$url = $GO_CONFIG->local_url.'gallery/'.$gallery_id.'/'.$ig->f('filename');
-	
+
 	$cell = new table_cell();
 	$cell->set_attribute('style','text-align:center;vertical-align:top');
-	
+
 	if($ig->f('width') > $ig->f('height'))
 	{
 		$dimension = '&w='.$gallery['thumbwidth'];
 	}else {
 		$dimension = '&h='.$gallery['thumbwidth'];
 	}
-	
+
 	$thumb = new image('', $GO_CONFIG->control_url.'phpthumb/phpThumb.php?src='.$path.$dimension);
 	$thumb->set_attribute('style', 'border:1px solid #aaaaaa;');
-	
+
 	$user = $GO_USERS->get_user($ig->f('user_id'));
-			$name = format_name($user['last_name'], $user['first_name'], $user['middle_name'], 'first_name');
-			
-	$link = new hyperlink("javascript:popup('".$url."','".($ig->f('width')+30)."','".($ig->f('height')+40)."');",$thumb->get_html(), $ig_uploaded_by.' '.$name);		
+	$name = format_name($user['last_name'], $user['first_name'], $user['middle_name'], 'first_name');
+
+	$link = new hyperlink("javascript:popup('".$url."','".($ig->f('width')+30)."','".($ig->f('height')+40)."');",$thumb->get_html(), $ig_uploaded_by.' '.$name);
 	$cell->add_html_element($link);
 
 	if($ig->f('description')!='')
@@ -136,20 +136,20 @@ while($ig->next_record())
 	}
 	$row->add_cell($cell);
 	if($colcount==$gallery['maxcolumns'])
-	{		
+	{
 		$table->add_row($row);
-		$row = new table_row();	
+		$row = new table_row();
 		$colcount=0;
 	}
 }
 
 if($colcount>0)
-{	
+{
 	$colspan = $gallery['maxcolumns']-$colcount;
 	$cell = new table_cell();
 	$cell->set_attribute('colspan',$colspan);
 	$row->add_cell($cell);
-	
+
 	$table->add_row($row);
 }
 
@@ -160,48 +160,52 @@ $cell = new table_cell();
 $cell->set_attribute('colspan', '99');
 $cell->set_attribute('style','text-align:center;padding-top:10px;');
 
-$number_of_pages = ceil($count/$offset);
-$page = $start/$offset;
-
-if($number_of_pages>1)
+if($offset>0)
 {
-	if($page>0)
+	$number_of_pages = ceil($count/$offset);
+	$page = $start/$offset;
+
+
+	if($number_of_pages>1)
 	{
-		$link = new hyperlink("javascript:document.gallery_form.elements['start[".$gallery_id."]'].value=".($start-$offset).";document.gallery_form.submit();", '&lt;&lt; '.$cmdPrevious);		
-		$link->set_attribute('class', 'ig_pagination');
-		$cell->add_html_element($link);
-	}else {
-		$span = new html_element('span', '&lt;&lt; '.$cmdPrevious);
-		$span->set_attribute('class', 'ig_paginationDisabled');
-		$cell->add_html_element($span);
-	}
-	
-	for ($i=1;$i<=$number_of_pages;$i++)
-	{
-		$new_start = ($i-1)*$offset;
-		$link = new hyperlink("javascript:document.gallery_form.elements['start[".$gallery_id."]'].value=".$new_start.";document.gallery_form.submit();", $i);
-		if($new_start==$start)
+		if($page>0)
 		{
-			$link->set_attribute('class', 'ig_paginationActive');
-		}else {
+			$link = new hyperlink("javascript:document.gallery_form.elements['start[".$gallery_id."]'].value=".($start-$offset).";document.gallery_form.submit();", '&lt;&lt; '.$cmdPrevious);
 			$link->set_attribute('class', 'ig_pagination');
+			$cell->add_html_element($link);
+		}else {
+			$span = new html_element('span', '&lt;&lt; '.$cmdPrevious);
+			$span->set_attribute('class', 'ig_paginationDisabled');
+			$cell->add_html_element($span);
 		}
-		$cell->add_html_element($link);
-		
-		
+
+		for ($i=1;$i<=$number_of_pages;$i++)
+		{
+			$new_start = ($i-1)*$offset;
+			$link = new hyperlink("javascript:document.gallery_form.elements['start[".$gallery_id."]'].value=".$new_start.";document.gallery_form.submit();", $i);
+			if($new_start==$start)
+			{
+				$link->set_attribute('class', 'ig_paginationActive');
+			}else {
+				$link->set_attribute('class', 'ig_pagination');
+			}
+			$cell->add_html_element($link);
+
+
+		}
+		if($page<$number_of_pages-1)
+		{
+			$link = new hyperlink("javascript:document.gallery_form.elements['start[".$gallery_id."]'].value=".($start+$offset).";document.gallery_form.submit();", $cmdNext.' &gt;&gt;');
+			$link->set_attribute('class', 'ig_pagination');
+			$cell->add_html_element($link);
+		}else {
+			$span = new html_element('span', $cmdNext.' &gt;&gt;');
+			$span->set_attribute('class', 'ig_paginationDisabled');
+			$cell->add_html_element($span);
+		}
+		$row->add_cell($cell);
+		$table->add_row($row);
 	}
-	if($page<$number_of_pages-1)
-	{
-		$link = new hyperlink("javascript:document.gallery_form.elements['start[".$gallery_id."]'].value=".($start+$offset).";document.gallery_form.submit();", $cmdNext.' &gt;&gt;');		
-		$link->set_attribute('class', 'ig_pagination');
-		$cell->add_html_element($link);
-	}else {
-		$span = new html_element('span', $cmdNext.' &gt;&gt;');
-		$span->set_attribute('class', 'ig_paginationDisabled');
-		$cell->add_html_element($span);
-	}
-	$row->add_cell($cell);
-	$table->add_row($row);
 }
 $form->add_html_element($table);
 

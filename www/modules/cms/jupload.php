@@ -17,13 +17,12 @@ session_id($_REQUEST['sid']);
 //basic group-office authentication
 require_once("../../Group-Office.php");
 $GO_SECURITY->authenticate();
-$GO_MODULES->authenticate('gallery');
-
+$GO_MODULES->authenticate('cms');
 
 require_once ($GO_LANGUAGE->get_language_file('filesystem'));
 
 
-$tmp_dir = $GO_CONFIG->tmpdir.'gallery/'.$GO_SECURITY->user_id.'/';
+$tmp_dir = $GO_CONFIG->tmpdir.'/'.$GO_SECURITY->user_id.'/cms/batch_upload/';
 if(!is_dir($tmp_dir))
 {
 	mkdir_recursive($tmp_dir);
