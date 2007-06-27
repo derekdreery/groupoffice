@@ -65,7 +65,7 @@ Users = function(){
 			cm.defaultSortable = true;
 
 			// create the editor grid
-			grid = new Ext.grid.Grid('grid', {
+			var grid = new Ext.grid.Grid('grid', {
 				ds: ds,
 				cm: cm,
 				selModel: new Ext.grid.RowSelectionModel(),

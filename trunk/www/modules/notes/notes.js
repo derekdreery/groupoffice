@@ -360,7 +360,7 @@ Note = function(){
 				notePanel = new Ext.ContentPanel('properties',{
 					title: NotesLang['note'],
 					//toolbar: notetb,
-					autoScroll:true,
+					autoScroll:true
 				});
 
 				layout.add('center', notePanel);
