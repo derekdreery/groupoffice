@@ -48,26 +48,9 @@ if($note_id==0)
 $note = $notes->get_note($note_id);
 
 
-$uniqid=uniqid();
 
 ?>
-<div id="notedialog__<?php echo $uniqid; ?>">
-	<div class="x-dlg-hd">Note</div>	
-	    <div class="x-dlg-bd">	   
-		    <div id="properties_<?php echo $uniqid; ?>" class="x-dlg-tab">
-			 <div id="toolbar_<?php echo $uniqid; ?>"></div>
-				<div id="inner_tab_<?php echo $uniqid; ?>" class="inner-tab">		
-					<div id="form_<?php echo $uniqid; ?>"></div>		
-				</div>
-			</div>
-			<div id="links_tab_<?php echo $uniqid; ?>" class="x-dlg-tab">
-			<div id="linkstoolbar_<?php echo $uniqid; ?>"></div>
-			<div id="links_grid_div_<?php echo $uniqid; ?>">
-			</div>
-			</div>
-	    </div>
-	</div>
-</div>
+
 
 <script type="text/javascript">
 
@@ -75,18 +58,15 @@ $uniqid=uniqid();
 
 Note = function(){
 
-	var linksPanel;
 	var dialog;
-	var links_grid;
-	var links_ds;
-	var links_loaded;
+	var loaded_user_id;
 
 	return {
 
 		init : function(){
 
 			if(!dialog){
-				dialog = new Ext.LayoutDialog("notedialog__<?php echo $uniqid; ?>", {
+				dialog = new Ext.LayoutDialog("notedialog_", {
 					modal:true,
 					shadow:false,
 					minWidth:300,
@@ -101,13 +81,13 @@ Note = function(){
 						alwaysShowTabs: true
 					}
 				});
-				dialog.addKeyListener(27, this.destroyDialog, this);
+				dialog.addKeyListener(27, this.hide, this);
 				dialog.addButton({
 					id: 'ok',
 					text: GOlang['cmdOk'],
 					handler: this.onButtonClick
-				}, this.destroyDialog, this);
-				dialog.addButton('Close', this.destroyDialog, this);
+				}, this);
+				dialog.addButton(GOlang['cmdClose'], this.hide, this);
 
 				var layout = dialog.getLayout();
 				layout.beginUpdate();
@@ -133,7 +113,6 @@ Note = function(){
 				var name_field = new Ext.form.TextField({
 					fieldLabel: GOlang['strName'],
 					name: 'name',
-					value: "<?php echo addslashes($note['name']); ?>",
 					allowBlank:false,
 					style:'width:100%'
 				});
@@ -145,16 +124,15 @@ Note = function(){
 				new Ext.form.TextArea({
 					fieldLabel: GOlang['strText'],
 					name: 'content',
-					value: "<?php echo addslashes($note['content']); ?>",
 					style:'width:100%;height:200px'
 				})
 
 				);
 
-				note_form.render('form_<?php echo $uniqid; ?>');
+				note_form.render('form');
 
 
-				var notetb = new Ext.Toolbar('toolbar_<?php echo $uniqid; ?>');
+				var notetb = new Ext.Toolbar('toolbar');
 
 				notetb.addButton({
 					id: 'save',
@@ -176,8 +154,8 @@ Note = function(){
 
 
 
-				notePanel = new Ext.ContentPanel('properties_<?php echo $uniqid; ?>',{
-					title: '<?php echo $no_note; ?>',
+				notePanel = new Ext.ContentPanel('properties',{
+					title: NotesLang['note'],
 					//toolbar: notetb,
 					autoScroll:true,
 				});
@@ -187,103 +165,9 @@ Note = function(){
 
 
 
-				var linkstb = new Ext.Toolbar('linkstoolbar_<?php echo $uniqid; ?>');
+				
 
-
-				linkstb.addButton({
-					id: 'link',
-					icon: GOimages['link'],
-					text: GOlang['cmdLink'],
-					cls: 'x-btn-text-icon',
-					handler: this.onButtonClick
-				}
-				);
-
-				linkstb.addButton({
-					id: 'unlink',
-					icon: GOimages['unlink'],
-					text: GOlang['cmdUnlink'],
-					cls: 'x-btn-text-icon',
-					handler: this.onButtonClick
-				}
-				);
-
-				links_ds = new Ext.data.Store({
-
-					proxy: new Ext.data.HttpProxy({
-						url: BaseHref+'links_json.php?link_id=<?php echo $note['link_id']; ?>'
-					}),
-
-					reader: new Ext.data.JsonReader({
-						root: 'results',
-						totalProperty: 'total',
-						id: 'link_id'
-					}, [
-					{name: 'icon'},
-					{name: 'link_id'},
-					{name: 'name'},
-					{name: 'type'},
-					{name: 'url'},
-					{name: 'mtime'}
-					]),
-
-					// turn on remote sorting
-					remoteSort: true
-				});
-				links_ds.setDefaultSort('mtime', 'desc');
-
-
-				function IconRenderer(src){
-					return '<img src=\"' + src +' \" />';
-				}
-
-				// the column model has information about grid columns
-				// dataIndex maps the column to the specific data field in
-				// the data store
-				var links_cm = new Ext.grid.ColumnModel([
-				{
-					header:"",
-					width:28,
-					dataIndex: 'icon',
-					renderer: IconRenderer
-				},{
-					header: GOlang['strName'],
-					dataIndex: 'name',
-					css: 'white-space:normal;'
-				},{
-					header: GOlang['strType'],
-					dataIndex: 'type'
-				},{
-					header: GOlang['strMtime'],
-					dataIndex: 'mtime'
-				}]);
-
-				// by default columns are sortable
-				links_cm.defaultSortable = true;
-
-				// create the editor grid
-				links_grid = new Ext.grid.Grid('links_grid_div_<?php echo $uniqid; ?>', {
-					ds: links_ds,
-					cm: links_cm,
-					selModel: new Ext.grid.RowSelectionModel(),
-					enableColLock:false,
-					loadMask: true,
-					displayInfo: true,
-					displayMsg: GOlang['displayingItems'],
-					emptyMsg: GOlang['strNoItems']
-
-				});
-
-				//grid.addListener("rowclick", this.rowClicked, this);
-				links_grid.addListener("rowdblclick", this.rowDoulbleClicked, this);
-
-
-				linksPanel = new Ext.GridPanel(links_grid, { title: 'Links', toolbar: linkstb});
-				layout.add('center', linksPanel);
-
-				linksPanel.on('activate',this.loadLinks);
-
-				layout.getRegion('center').showPanel('properties_<?php echo $uniqid; ?>');
+				layout.getRegion('center').showPanel('properties');
 
 				layout.endUpdate();
 			}
@@ -291,46 +175,8 @@ Note = function(){
 
 			name_field.focus(true);
 		},
-		destroyDialog : function(){
-			if(dialog.isVisible()){
-				dialog.animateTarget = null;
-				dialog.hide();
-			}
-			Ext.EventManager.removeResizeListener(dialog.adjustViewport, dialog);
-			if(dialog.tabs){
-				dialog.tabs.destroy(removeEl);
-			}
-			Ext.destroy(
-			dialog.shim,
-			dialog.proxy,
-			dialog.close,
-			dialog.mask
-			);
-			if(dialog.dd){
-				dialog.dd.unreg();
-			}
-			if(dialog.buttons){
-				for(var i = 0, len = dialog.buttons.length; i < len; i++){
-					dialog.buttons[i].destroy();
-				}
-			}
-			dialog.el.removeAllListeners();
+		showDialog : function ()
 
-			dialog.el.update("");
-			dialog.el.remove();
-
-			Ext.DialogManager.unregister(dialog);
-
-		},
-		loadLinks : function()
-		{
-			if(!links_loaded)
-			{
-				links_loaded=true;
-				links_ds.load();
-				links_grid.render();
-			}
-		},
 		rowDoulbleClicked : function(search_grid, rowClicked, e) {
 
 			var selectionModel = links_grid.getSelectionModel();
@@ -384,7 +230,7 @@ Note = function(){
 						Ext.MessageBox.alert('Failed', action.result.errors);
 					}
 				});
-				dialog.destroy(true);
+				dialog.hide();
 				break;
 
 				case 'save':

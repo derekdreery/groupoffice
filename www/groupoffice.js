@@ -37,7 +37,7 @@ GroupOffice = function(){
 					titlebar: false,
 					autoScroll:true,
 					closeOnTab: true,
-					tabPosition:top
+					tabPosition: 'top'
 				}
 
 			});

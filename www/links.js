@@ -139,7 +139,7 @@ links = function(){
 				if(parent.window.frames[record.data['module']].showSearchResult)
 				{
 					parent.window.frames[record.data['module']].showSearchResult(record);
-					layout.showPanel(record.data['module']);
+					parent.GroupOffice.showPanel(record.data['module']);
 				}else{
 				
 					parent.GroupOffice.showPanel(record.data['module'], record.data['url']);
