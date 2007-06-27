@@ -1,13 +1,28 @@
 <?php
-/*
-   Copyright Intermesh 2003
-   Author: Merijn Schering <mschering@intermesh.nl>
-   Version: 1.0 Release date: 08 July 2003
+/**
+ * @copyright Copyright Intermesh 2007
+ * @version 1.0
+ *
+ * @author Merijn Schering <mschering@intermesh.nl>
 
-   This program is free software; you can redistribute it and/or modify it
-   under the terms of the GNU General Public License as published by the
-   Free Software Foundation; either version 2 of the License, or (at your
-   option) any later version.
+   This file is part of Group-Office.
+
+   Group-Office is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   Group-Office is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with Group-Office; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
+ * @package Users
+
  */
 
 require_once("../../Group-Office.php");
@@ -21,93 +36,46 @@ $task = isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
 $link_back = (isset($_REQUEST['link_back']) && $_REQUEST['link_back'] != '') ? htmlspecialchars($_REQUEST['link_back']) : $_SERVER['REQUEST_URI'];
 
 
-require($GO_THEME->theme_path.'page_header.inc');
+?>
+<html>
+<head>
+<title><?php echo $GO_CONFIG->title.' - '.$lang_modules['notes']; ?></title>
+<?php
+require($GO_CONFIG->root_path.'default_head.inc');
+?>
+<script type="text/javascript" src="<?php echo $no_js_lang; ?>"></script>
+<script type="text/javascript" src="notes.js"></script>
+<script type="text/javascript" src="../../links.js"></script>
+</head>
+<body>
+<div id="no-center">
+	<div id="notestb"></div>
+	<div id="notes-grid"></div>
+</div>
+<div id="notedialog">
+	<div class="x-dlg-hd"><?php echo $no_note; ?></div>	
+	    <div class="x-dlg-bd">	   
+		    <div id="properties" class="x-dlg-tab">
+			 <div id="toolbar"></div>
+				<div id="inner_tab" class="inner-tab">		
+					<div id="form"></div>		
+				</div>
+			</div>
+			<div id="links_tab" class="x-dlg-tab">
+			<div id="linkstoolbar"></div>
+			<div id="links_grid_div">
+			</div>
+			</div>
+	    </div>
+	</div>
+</div>
 
 
-$script = new html_element('script');
-$script->set_attribute('type','text/javascript');
-$script->set_attribute('src',$no_js_lang);
-$head->add_html_element($script);
-
-
-$script = new html_element('script');
-$script->set_attribute('type','text/javascript');
-$script->set_attribute('src','notes.js');
-$head->add_html_element($script);
-
-$script = new html_element('script');
-$script->set_attribute('type','text/javascript');
-$script->set_attribute('src','../../links.js');
-$head->add_html_element($script);
-
-$script = new html_element('script');
-$script->set_attribute('type','text/javascript');
-$script->set_attribute('src','../../common.js');
-$head->add_html_element($script);
-
-
-
-//$eastdiv = new html_element('div');
-//$eastdiv->set_attribute('id','no-east');
-
-$centerdiv = new html_element('div');
-$centerdiv->set_attribute('id','no-center');
-
-$toolbar = new html_element('div');
-$toolbar->set_attribute('id','notestb');
-$centerdiv->add_html_element($toolbar);
-
-$notesdiv = new html_element('div');
-$notesdiv->set_attribute('id', 'notes-grid');
-$centerdiv->add_html_element($notesdiv);
-
-
-
-//$notetabs = new html_element('div');
-//$notetabs->set_attribute('id','notetabs');
-
-/*
-$noteprops = new html_element('div');
-$noteprops->set_attribute('id','noteproperties');
-//$noteprops->set_attribute('style','padding:5px;');
-
-$toolbar = new html_element('div');
-$toolbar->set_attribute('id','notetb');
-$noteprops->add_html_element($toolbar);
-
-
-$noteform = new html_element('div');
-$noteform->set_attribute('id','noteform');
-$noteform->set_attribute('style','padding:5px;');
-$noteprops->add_html_element($noteform);
-
-$body->add_html_element($noteprops);
-
-$links = new html_element('div');
-$links->set_attribute('id','links');
-
-
-$linksgrid = new html_element('div');
-$linksgrid->set_attribute('id','linksgrid');
-
-$links->add_html_element($linksgrid);
-$body->add_html_element($links);
-
-
-//$eastdiv->add_html_element($notetabs);
-
-
-
-
-
-//$body->add_html_element($eastdiv);
-
-$body->add_html_element($body);
-*/
-
-$body->add_html_element($centerdiv);
-
-$body->innerHTML .= '<div id="dialog"></div>';
-
-
-require($GO_THEME->theme_path.'page_footer.inc');
+<?php
+if(isset($_REQUEST['note_id']))
+{
+	echo '<script type="text/javascript">Ext.onReady(function(){Note.showDialog('.$_REQUEST['note_id'].');});</script>';
+}
+?>
+</body>
+</html>

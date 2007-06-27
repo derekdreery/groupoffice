@@ -205,22 +205,6 @@ var linksGrid;
 					Ext.get('dialog').load({url: 'note.php?note_id=0', scripts: true });
 				break;
 
-				case 'save':
-
-				note_form.submit({
-					url:'./action.php',
-					params: {'task' : 'save','note_id' : note_id},
-
-					success:function(form, action){
-						//reload grid
-						ds.reload();
-					},
-
-					failure: function(form, action) {
-						Ext.MessageBox.alert('Failed', action.result.errors);
-					}
-				});
-				break;
 			}
 		},
 		
@@ -232,10 +216,242 @@ var linksGrid;
 			var record = selectionModel.getSelected();
 
 			//showDialog('dialog', {url: 'note.php?note_id='+record.data['id']});
-			Ext.get('dialog').load({url: 'note.php?note_id='+record.data['id'], scripts: true });
+			//Ext.get('dialog').load({url: 'note.php?note_id='+record.data['id'], scripts: true });
+			Note.showDialog(record.data['id']);
 		}
 	};
 
 }();
-Ext.EventManager.onDocumentReady(Notes.init, Notes, true);
 
+
+
+
+
+
+Note = function(){
+
+	var dialog;
+	var note_form;
+	var layout;
+
+
+	return {
+
+		init : function(){
+
+			if(!dialog){
+				dialog = new Ext.LayoutDialog("notedialog", {
+					modal:true,
+					shadow:false,
+					minWidth:300,
+					minHeight:300,
+					height:400,
+					width:600,
+					proxyDrag: true,
+					collapsible: false,
+					center: {
+						autoScroll:true,
+						tabPosition: 'top',
+						closeOnTab: true,
+						alwaysShowTabs: true
+					}
+				});
+				dialog.addKeyListener(27, this.hide, this);
+				dialog.addButton({
+					id: 'ok',
+					text: GOlang['cmdOk'],
+					handler: function(){
+						note_form.submit({
+						url:'./action.php',
+						params: {'task' : 'save','note_id' : loaded_note_id},
+	
+						success:function(form, action){
+							//reload grid
+							Notes.getDataSource().reload();
+						},
+	
+						failure: function(form, action) {
+							Ext.MessageBox.alert(GOlang['strError'], action.result.errors);
+						}
+					});
+					dialog.hide();
+					}
+				}, this);
+				
+				dialog.addButton({
+					id: 'apply',
+					text: GOlang['cmdApply'],
+					handler: function(){
+						note_form.submit({
+						url:'./action.php',
+						params: {'task' : 'save','note_id' : loaded_note_id},
+	
+						success:function(form, action){
+							//reload grid
+							Notes.getDataSource().reload();
+						},
+	
+						failure: function(form, action) {
+							Ext.MessageBox.alert(GOlang['strError'], action.result.errors);
+						}
+					});					
+					}
+				}, this);
+				
+				dialog.addButton(GOlang['cmdClose'], dialog.hide, dialog);
+
+				layout = dialog.getLayout();
+				layout.beginUpdate();
+
+
+
+
+
+
+				note_form = new Ext.form.Form({
+					labelWidth: 75, // label settings here cascade unless overridden
+
+
+					reader: new Ext.data.JsonReader({
+						root: 'note',
+						id: 'id'
+					}, [
+					{name: 'name'},
+					{name: 'content'}
+					])
+				});
+
+				var name_field = new Ext.form.TextField({
+					fieldLabel: GOlang['strName'],
+					name: 'name',
+					allowBlank:false,
+					style:'width:100%'
+				});
+
+
+				note_form.add(name_field
+				,
+
+				new Ext.form.TextArea({
+					fieldLabel: GOlang['strText'],
+					name: 'content',
+					style:'width:100%;height:200px'
+				})
+
+				);
+
+				note_form.render('form');
+
+
+				var notetb = new Ext.Toolbar('toolbar');
+
+
+				notetb.addButton({
+					id: 'link',
+					icon: GOimages['link'],
+					text: GOlang['cmdLink'],
+					cls: 'x-btn-text-icon',
+					handler: this.onButtonClick
+				}
+				);
+
+
+
+				notePanel = new Ext.ContentPanel('properties',{
+					title: NotesLang['note'],
+					//toolbar: notetb,
+					autoScroll:true,
+				});
+
+				layout.add('center', notePanel);
+				
+				
+				
+				
+				
+				linksPanel = links.getGridPanel('linkstoolbar','links_grid_div');
+				layout.add('center', linksPanel);
+				linksPanel.on('activate',function() {
+
+					links.loadLinks(note_form.reader.jsonData.note[0].link_id, 4);
+
+				});
+				
+				
+
+
+
+
+				
+
+				layout.getRegion('center').showPanel('properties');
+
+				layout.endUpdate();
+			}
+			name_field.focus(true);
+		},
+		showDialog : function (note_id)
+		{
+			loaded_note_id=note_id;
+			note_form.load({url: 'notes_json.php?note_id='+note_id, waitMsg:GOlang['waitMsgLoad']});
+			
+			layout.getRegion('center').showPanel('properties');
+			
+			dialog.show();
+		},
+
+		rowDoulbleClicked : function(search_grid, rowClicked, e) {
+
+			var selectionModel = links_grid.getSelectionModel();
+			var record = selectionModel.getSelected();
+
+			//parent.Ext.get('dialog').load({url: record.data['url'], scripts: true });
+			parent.GroupOffice.showDialog({url: record.data['url'], scripts: true });
+		},
+		onButtonClick : function(btn){
+			switch(btn.id)
+			{
+				case 'link':
+
+				var fromlinks = [];
+				fromlinks.push({ 'link_id' : note_form.reader.jsonData.note[0].link_id, 'link_type' : 4 });
+
+				parent.GroupOffice.showLinks({ 'fromlinks': fromlinks, 'callback': function(){links_ds.load()}});
+				break;
+
+				case 'unlink':
+
+				var unlinks = [];
+
+				var selectionModel = links_grid.getSelectionModel();
+				var records = selectionModel.getSelections();
+
+				for (var i = 0;i<records.length;i++)
+				{
+					unlinks.push(records[i].data['link_id']);
+				}
+
+
+
+				if(parent.GroupOffice.unlink(note_form.reader.jsonData.note[0].link_id, unlinks))
+				{
+					links_ds.load();
+				}
+				break;
+
+		
+			}
+		}
+	}
+}();
+
+
+
+Ext.EventManager.onDocumentReady(Notes.init, Notes, true);
+Ext.EventManager.onDocumentReady(Note.init, Note, true);
+
+//for the Group-Office search function
+function showSearchResult(record)
+{
+	Note.showDialog(record.data['id']);
+}

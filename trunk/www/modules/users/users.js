@@ -476,6 +476,7 @@ user = function(){
 Ext.EventManager.onDocumentReady(Users.init, Users, true);
 Ext.EventManager.onDocumentReady(user.init, Users, true);
 
+//for the Group-Office search function
 function showSearchResult(record)
 {
 	user.showDialog(record.data['id']);
