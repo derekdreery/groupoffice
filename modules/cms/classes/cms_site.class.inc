@@ -143,7 +143,17 @@ class cms_site extends cms {
 		{
 			$folder_id=$this->site['root_folder_id'];
 		}
-		if(!$files = $this->get_authorized_files($folder_id, $GO_SECURITY->user_id))
+		$files = $this->get_authorized_files($folder_id, $GO_SECURITY->user_id);
+		
+
+		foreach($files as $file)
+		{
+			if (eregi('htm', $file['extension'])) {
+				return $file['id'];
+			}
+		}
+		$folders = $this->get_authorized_folders($folder_id, $GO_SECURITY->user_id);
+		if(!count($folders))
 		{
 			$folder = $this->get_folder($folder_id);
 			if(!$folder)
@@ -156,14 +166,6 @@ class cms_site extends cms {
 				}
 			}
 		}
-
-		foreach($files as $file)
-		{
-			if (eregi('htm', $file['extension'])) {
-				return $file['id'];
-			}
-		}
-		$folders = $this->get_authorized_folders($folder_id, $GO_SECURITY->user_id);
 		foreach($folders as $folder)
 		{
 			return $this->find_page($folder['id']);

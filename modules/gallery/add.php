@@ -44,11 +44,13 @@ $gallery_id = isset($_REQUEST['gallery_id']) ? $_REQUEST['gallery_id'] : 0;
 require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 $fs = new filesystem();	
 
-/*if(!is_dir($image_file_path))
+$image_file_path = $GO_CONFIG->local_path.'gallery/'.$gallery_id.'/';	
+		
+
+if(!is_dir($image_file_path))
 {
-	mkdir_recursive($image_file_path);	
-	//$fs->add_share($gallery['user_id'], $image_file_path, 'gallery', $gallery['acl_read'], $gallery['acl_write']);
-}*/
+	mkdir_recursive($image_file_path);			
+}
 
 $tmp_dir = $GO_CONFIG->tmpdir.'gallery/'.$GO_SECURITY->user_id.'/';
 if(!is_dir($tmp_dir))
