@@ -84,7 +84,7 @@ class event extends html_element
 				$this->event['id'].'&return_to='.	rawurlencode($this->link_back).
 				'&gmt_start_time='.$gmt_start_time;
 			
-			if(isset($this->maxlength))
+			if(isset($this->maxlength) && $this->maxlength>0)
 			{
 				 $event_name = cut_string($this->event['name'], $this->maxlength, false);
 			}else
