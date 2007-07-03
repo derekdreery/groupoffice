@@ -1,13 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 2.8.2-Debian-0.2
+-- version 2.9.1.1-Debian-2ubuntu1
 -- http://www.phpmyadmin.net
 -- 
 -- Host: localhost
--- Generatie Tijd: 16 Mar 2007 om 16:45
--- Server versie: 5.0.24
--- PHP Versie: 5.1.6
+-- Generatie Tijd: 03 Jul 2007 om 13:28
+-- Server versie: 5.0.38
+-- PHP Versie: 5.2.1
 -- 
--- Database: `imfoss_nl`
+-- Database: `imfoss`
 -- 
 
 -- --------------------------------------------------------
@@ -16,7 +16,6 @@
 -- Tabel structuur voor tabel `emAccounts`
 -- 
 
-DROP TABLE IF EXISTS `emAccounts`;
 CREATE TABLE `emAccounts` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -38,6 +37,7 @@ CREATE TABLE `emAccounts` (
   `spam` varchar(100) NOT NULL default '',
   `spamtag` varchar(20) NOT NULL default '',
   `examine_headers` enum('0','1') NOT NULL default '0',
+  `auto_check` enum('0','1') NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
 ) TYPE=MyISAM;
@@ -48,7 +48,6 @@ CREATE TABLE `emAccounts` (
 -- Tabel structuur voor tabel `emFilters`
 -- 
 
-DROP TABLE IF EXISTS `emFilters`;
 CREATE TABLE `emFilters` (
   `id` int(11) NOT NULL default '0',
   `account_id` int(11) NOT NULL default '0',
@@ -66,7 +65,6 @@ CREATE TABLE `emFilters` (
 -- Tabel structuur voor tabel `emFolders`
 -- 
 
-DROP TABLE IF EXISTS `emFolders`;
 CREATE TABLE `emFolders` (
   `id` int(11) NOT NULL default '0',
   `account_id` int(11) NOT NULL default '0',
@@ -78,7 +76,7 @@ CREATE TABLE `emFolders` (
   `sort_order` tinyint(4) NOT NULL default '0',
   `msgcount` int(11) NOT NULL default '0',
   `unseen` int(11) NOT NULL default '0',
-  `auto_check` enum('0','1') NOT NULL,
+  `auto_check` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `account_id` (`account_id`),
   KEY `parent_id` (`parent_id`)
@@ -90,15 +88,14 @@ CREATE TABLE `emFolders` (
 -- Tabel structuur voor tabel `em_links`
 -- 
 
-DROP TABLE IF EXISTS `em_links`;
 CREATE TABLE `em_links` (
-  `link_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `from` varchar(255) NOT NULL,
+  `link_id` int(11) NOT NULL default '0',
+  `user_id` int(11) NOT NULL default '0',
+  `from` varchar(255) NOT NULL default '',
   `to` text NOT NULL,
-  `subject` varchar(255) NOT NULL,
-  `time` int(11) NOT NULL,
-  `path` varchar(255) NOT NULL,
+  `subject` varchar(255) NOT NULL default '',
+  `time` int(11) NOT NULL default '0',
+  `path` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`link_id`),
   KEY `account_id` (`user_id`)
 ) TYPE=MyISAM;
@@ -109,7 +106,6 @@ CREATE TABLE `em_links` (
 -- Tabel structuur voor tabel `em_settings`
 -- 
 
-DROP TABLE IF EXISTS `em_settings`;
 CREATE TABLE `em_settings` (
   `user_id` int(11) NOT NULL default '0',
   `send_format` varchar(10) NOT NULL default '',
@@ -121,7 +117,7 @@ CREATE TABLE `em_settings` (
   `vacation_subject` varchar(100) NOT NULL default '',
   `vacation_text` text NOT NULL,
   `show_preview` enum('0','1') NOT NULL default '1',
-  `beep` enum('0','1') NOT NULL,
-  `auto_check` enum('0','1') NOT NULL,
+  `beep` enum('0','1') NOT NULL default '0',
+  `open_popup` enum('0','1') NOT NULL,
   PRIMARY KEY  (`user_id`)
-) ENGINE=MyISAM ;
+) TYPE=MyISAM;

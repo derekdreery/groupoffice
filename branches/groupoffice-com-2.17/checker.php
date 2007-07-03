@@ -57,9 +57,8 @@ $task = isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
 $_SESSION['GO_SESSION']['email_module']['notified'] = isset($_SESSION['GO_SESSION']['email_module']['notified']) ? $_SESSION['GO_SESSION']['email_module']['notified'] : 0;
 $_SESSION['GO_SESSION']['email_module']['new'] = 0;
 $remind_email = false;
-//if(($_SESSION['GO_SESSION']['start_module'] != 'summary' && $_SESSION['GO_SESSION']['start_module'] != 'email')
-//|| isset($_REQUEST['initiated']))
-//{
+if($_SESSION['GO_SESSION']['start_module'] != 'email' || isset($_REQUEST['initiated']))
+{
 	//check for email
 	if (isset($GO_MODULES->modules['email']) && $GO_MODULES->modules['email']['read_permission'])
 	{
@@ -70,30 +69,28 @@ $remind_email = false;
 		
 		$settings = $email->get_settings($GO_SECURITY->user_id);
 		
-		if($settings['auto_check']=='1' || $settings['open_popup']=='1')
+
+		if(!isset($_SESSION['GO_SESSION']['email_module']['cached']))
 		{
-
-			if(!isset($_SESSION['GO_SESSION']['email_module']['cached']))
-			{
-				$email->cache_accounts($GO_SECURITY->user_id);
-				$_SESSION['GO_SESSION']['email_module']['cached']=true;
-			}else {
-				$email->cache_accounts($GO_SECURITY->user_id,true);
-			}
-			
-			 $_SESSION['GO_SESSION']['email_module']['new']=$email->get_total_unseen($GO_SECURITY->user_id);
-	
-	
-			if ($_SESSION['GO_SESSION']['email_module']['new'] > 0 && $_SESSION['GO_SESSION']['email_module']['new'] > $_SESSION['GO_SESSION']['email_module']['notified'])
-			{				
-				$remind_email = true;
-				$height += 120;
-			}
+			$email->cache_accounts($GO_SECURITY->user_id);
+			$_SESSION['GO_SESSION']['email_module']['cached']=true;
+		}else {
+			$email->cache_accounts($GO_SECURITY->user_id,true);
 		}
-	}
-//}
+		
+		 $_SESSION['GO_SESSION']['email_module']['new']=$email->get_total_unseen($GO_SECURITY->user_id);
 
-if ($remind_events || ($remind_email && $settings['open_popup']=='1'))
+
+		if ($_SESSION['GO_SESSION']['email_module']['new'] > 0 && $_SESSION['GO_SESSION']['email_module']['new'] > $_SESSION['GO_SESSION']['email_module']['notified'])
+		{				
+			$remind_email = true;
+			$height += 120;
+		}
+		
+	}
+}
+
+if (($remind_events || ($remind_email && $settings['open_popup']=='1')) && isset($_REQUEST['initiated']))
 {
 	if($height > 600) $height = 600;
 
@@ -109,7 +106,7 @@ if ($remind_events || ($remind_email && $settings['open_popup']=='1'))
 <body>
 <?php
 
-if ($settings['auto_check']=='1' && isset($GO_MODULES->modules['email']) && $GO_MODULES->modules['email']['read_permission'] && $_SESSION['GO_SESSION']['email_module']['new']>0)
+if (isset($GO_MODULES->modules['email']) && $GO_MODULES->modules['email']['read_permission'] && $_SESSION['GO_SESSION']['email_module']['new']>0)
 {
 	echo '<a href="'.$GO_MODULES->modules['email']['url'].'" target="main"><img src="'.$GO_THEME->images['mail'].'" border="0" align="absmiddle" /> '.$_SESSION['GO_SESSION']['email_module']['new'].'</a>';
 }
