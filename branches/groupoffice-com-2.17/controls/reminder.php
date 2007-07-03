@@ -43,13 +43,65 @@ require_once($GO_THEME->theme_path."header.inc");
 
 $task = isset($_POST['task']) ? $_POST['task'] : '';
 
-$stay_open = false;
+$stay_open_for_email = false;
+$stay_open_for_calendar = false;
 
 $form = new form('reminder_form');
 
 $form->add_html_element(new input('hidden', 'task','',false));
 $form->add_html_element(new input('hidden', 'event_id','',false));
 
+if ($GO_MODULES->modules['email'] && $GO_MODULES->modules['email']['read_permission'] &&
+$_SESSION['GO_SESSION']['email_module']['new'] > $_SESSION['GO_SESSION']['email_module']['notified'])
+{
+	$stay_open_for_email = true;
+	require_once($GO_LANGUAGE->get_language_file('email'));
+
+	$em_table = new table();
+	$em_table->set_attribute('style', 'border:0px;margin-top:10px;');
+	
+	$img = new image('email');
+	$img->set_attribute('style', 'border:0px;margin-right:10px;width:32px;height:32px');
+	
+	$em_cell = new table_cell();
+	$em_cell->set_attribute('valign','top');
+	$em_cell->add_html_element($img);
+	
+	$em_row = new table_row();
+	$em_row->add_cell($em_cell);
+	
+	$link = new hyperlink("javascript:goto_url('".$GO_MODULES->modules['email']['url']."');", $lang_modules['email']);
+	
+	$h2 = new html_element('h2',$link->get_html());
+	$em_row->add_cell(new table_cell($h2->get_html()));
+	$em_table->add_row($em_row);
+	
+	$em_row = new table_row();
+	$em_row->add_cell(new table_cell('&nbsp;'));		
+	
+	$link = new hyperlink("javascript:goto_url('".$GO_MODULES->modules['email']['url']."');",'');
+
+	switch($_SESSION['GO_SESSION']['email_module']['new'])
+	{
+		case 0:
+			$link->innerHTML = $ml_no_new_mail;
+		break;
+		case 1:
+			$link->innerHTML = $ml_you_have.' <b>'.$_SESSION['GO_SESSION']['email_module']['new'].'</b> '.$ml_new_mail_single;
+		break;
+		
+		default:
+			$link->innerHTML = $ml_you_have.' <b>'.$_SESSION['GO_SESSION']['email_module']['new'].'</b> '.$ml_new_mail_multiple;
+		break;
+	}
+	
+	$em_row->add_cell(new table_cell($link->get_html()));	
+	$em_table->add_row($em_row);
+	
+	$form->add_html_element($em_table);
+
+	$_SESSION['GO_SESSION']['email_module']['notified'] = $_SESSION['GO_SESSION']['email_module']['new'];
+}
 
 if ($GO_MODULES->modules['calendar'] && $GO_MODULES->modules['calendar']['read_permission'])
 {
@@ -93,7 +145,7 @@ if ($GO_MODULES->modules['calendar'] && $GO_MODULES->modules['calendar']['read_p
 
 if($event_count = $cal->get_events_to_remind($GO_SECURITY->user_id, true, false))
 {
-	$stay_open = true;
+	$stay_open_for_calendar = true;
 
 	$em_table = new table();
 	$em_table->set_attribute('style', 'border:0px;margin-top:10px;width:100%');
@@ -251,7 +303,7 @@ if($event_count = $cal->get_events_to_remind($GO_SECURITY->user_id, true, false)
 $todo_count = $cal->get_events_to_remind($GO_SECURITY->user_id, false, true);
 if($todo_count)
 {
-	$stay_open = true;
+	$stay_open_for_calendar = true;
 
 	$em_table = new table();
 	$em_table->set_attribute('style', 'border:0px;margin-top:10px;width:100%');
@@ -429,10 +481,13 @@ if($_SERVER['REQUEST_METHOD'] != 'POST' && (!isset($_SESSION['reminder_beep']) |
 <script type="text/javascript">
 
 <?php
-if(!$stay_open)
+if(!$stay_open_for_calendar)
 {
 	$_SESSION['reminder_beep']=true;
-	echo 'window.close();';
+	if(!$stay_open_for_email)
+	{
+		echo 'window.close();';
+	}
 }else {
 	$_SESSION['reminder_beep']=false;
 }
@@ -454,17 +509,17 @@ function update_todo_reminder(todo_id, task)
 
 function goto_url(url)
 {
-	if (opener.parent.main)
+	if (opener.top.main)
 	{
 		if(url.indexOf("?") > 0)
 		{
-			url = url+'&return_to='+escape(opener.parent.main.location)
+			url = url+'&return_to='+escape(opener.top.main.location)
 		}else
 		{
-			url = url+'?return_to='+escape(opener.parent.main.location)
+			url = url+'?return_to='+escape(opener.top.main.location)
 		}
-		opener.parent.main.location=url;
-		opener.parent.main.focus();
+		opener.top.main.location=url;
+		opener.top.main.focus();
 	}else
 	{
 		window.open('<?php echo $GO_CONFIG->full_url.'index.php?return_to='; ?>'+escape(url), 'groupoffice','scrollbars=yes,resizable=yes,status=yes');
