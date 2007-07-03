@@ -124,6 +124,10 @@ if($view_id > 0 && $cal_settings['merged_view']=='0')
 	{
 		require_once($GO_MODULES->modules['calendar']['class_path'].'calendar_monthview.class.inc');
 		$cal_view = new calendar_monthview('calender_view','calendar_form', $read_only);
+		if($print)
+		{
+			$cal_view->print=true;
+		}
 	}else
 	{
 		require_once($GO_MODULES->modules['calendar']['class_path'].'calendar_view.class.inc');
