@@ -382,6 +382,7 @@ switch($ab_settings['search_type'])
 		$datatable->add_column(new table_heading($strEmail, 'ab_contacts.email'));
 		$datatable->add_column(new table_heading($strPhone, 'ab_contacts.home_phone'));
 		$datatable->add_column(new table_heading($strWorkphone, 'ab_contacts.work_phone'));
+		$datatable->add_column(new table_heading($strCellular, 'ab_contacts.cellular'));
 
 		$datatable->add_column(new table_heading($strAddress, 'ab_contacts.address'));
 		$datatable->add_column(new table_heading($strZip, 'ab_contacts.zip'));
@@ -432,6 +433,7 @@ switch($ab_settings['search_type'])
 			$row->add_cell(new table_cell(mail_to(empty_to_stripe(addslashes($full_email)), empty_to_stripe($ab->f('email')),'normal',true, $ab->f('id'))));
 			$row->add_cell(new table_cell(empty_to_stripe(htmlspecialchars($ab->f('home_phone')))));
 			$row->add_cell(new table_cell(empty_to_stripe(htmlspecialchars($ab->f('work_phone')))));
+			$row->add_cell(new table_cell(empty_to_stripe(htmlspecialchars($ab->f('cellular')))));
 			$row->add_cell(new table_cell(empty_to_stripe(htmlspecialchars($ab->f('address')))));
 			$row->add_cell(new table_cell(empty_to_stripe(htmlspecialchars($ab->f('zip')))));
 			$row->add_cell(new table_cell(empty_to_stripe(htmlspecialchars($ab->f('city')))));
@@ -569,6 +571,7 @@ switch($ab_settings['search_type'])
 		$datatable->add_column(new table_heading($strPhone, 'home_phone'));
 		$datatable->add_column(new table_heading($strWorkphone, 'work_phone'));
 		$datatable->add_column(new table_heading($strWorkFax, 'work_fax'));
+		$datatable->add_column(new table_heading($strCellular, 'cellular'));
 
 		$datatable->add_column(new table_heading($strAddress, 'address'));
 		$datatable->add_column(new table_heading($strZip, 'zip'));
@@ -627,6 +630,7 @@ switch($ab_settings['search_type'])
 				$row->add_cell(new table_cell(empty_to_stripe(htmlspecialchars($GO_USERS->f('home_phone')))));
 				$row->add_cell(new table_cell(empty_to_stripe(htmlspecialchars($GO_USERS->f('work_phone')))));
 				$row->add_cell(new table_cell(empty_to_stripe(htmlspecialchars($GO_USERS->f('work_fax')))));
+				$row->add_cell(new table_cell(empty_to_stripe(htmlspecialchars($GO_USERS->f('cellular')))));
 
 				$row->add_cell(new table_cell(htmlspecialchars($GO_USERS->f('address').' '.$GO_USERS->f('address_no'))));
 				$row->add_cell(new table_cell(htmlspecialchars($GO_USERS->f('zip'))));
