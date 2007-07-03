@@ -27,6 +27,7 @@ $mailbox = $email->get_folder($account['id'], 'INBOX');
 //$GO_THEME->load_module_theme('email');
 echo $GO_THEME->get_stylesheet('email');
 require($GO_CONFIG->root_path.'default_head.inc');
+require($GO_CONFIG->root_path.'default_scripts.inc');
 ?>
 <script type="text/javascript" src="language/en.js"></script>
 <script type="text/javascript" src="email.js"></script>

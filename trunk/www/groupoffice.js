@@ -20,7 +20,7 @@ GroupOffice = function(){
 			layout = new Ext.BorderLayout(document.body, {
 				north: {
 					split:false,
-					initialSize: 25,
+					initialSize: 28,
 					titlebar: false
 				},
 				east: {
@@ -43,7 +43,7 @@ GroupOffice = function(){
 			});
 
 			layout.beginUpdate();
-			layout.add('north', new Ext.ContentPanel('north'));
+			layout.add('north', new Ext.ContentPanel('header'));
 
 
 
@@ -180,6 +180,23 @@ GroupOffice = function(){
 
 			//Ext.QuickTips.init();
 			//Ext.QuickTips.register({title: 'Play', qtip: 'The summary displays relevant info', target: 'summary', autoHide:true});
+			
+			
+			var loading = Ext.get('loading');
+			var mask = Ext.get('loading-mask');
+			mask.setOpacity(.8);
+			mask.shift({
+				xy:loading.getXY(),
+				width:loading.getWidth(),
+				height:loading.getHeight(), 
+				remove:true,
+				duration:1,
+				opacity:.3,
+				easing:'bounceOut',
+				callback : function(){
+					loading.fadeOut({duration:.2,remove:true});
+				}
+			});
 
 		},
 		closeSearchPanel : function()

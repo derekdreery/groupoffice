@@ -42,6 +42,7 @@ $link_back = (isset($_REQUEST['link_back']) && $_REQUEST['link_back'] != '') ? h
 <title><?php echo $GO_CONFIG->title.' - '.$lang_modules['notes']; ?></title>
 <?php
 require($GO_CONFIG->root_path.'default_head.inc');
+require($GO_CONFIG->root_path.'default_scripts.inc');
 ?>
 <script type="text/javascript" src="<?php echo $no_js_lang; ?>"></script>
 <script type="text/javascript" src="notes.js"></script>
