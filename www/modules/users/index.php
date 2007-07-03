@@ -36,6 +36,7 @@ require_once($GO_LANGUAGE->get_language_file('users'));
 <title><?php echo $GO_CONFIG->title.' - '.$lang_modules['users']; ?></title>
 <?php
 require($GO_CONFIG->root_path.'default_head.inc');
+require($GO_CONFIG->root_path.'default_scripts.inc');
 $GO_THEME->load_module_theme('users');
 echo $GO_THEME->get_stylesheet('users');
 ?>

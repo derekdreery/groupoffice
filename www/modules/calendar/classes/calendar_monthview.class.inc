@@ -45,6 +45,7 @@ class calendar_monthview extends table
 	var $max_events = 4;
 	
 	var $read_only=false;
+	var $print=false;
 		
 	function calendar_monthview($id, $form_name='0', $read_only=false)
 	{	
@@ -304,13 +305,21 @@ class calendar_monthview extends table
 			$div->set_attribute('style','text-align:center');			
 			
 			$cell = new table_cell($div->get_html());
+			if($this->print)
+			{
+				$cell->set_attribute('style','width:0;height:0;');
+			}
 			
 			if(isset($this->events[$time]))
 			{
 				$event_count = 0;
 				foreach($this->events[$time] as $event)
 				{
-					if($event_count >= $this->max_events)
+					if($this->print)
+					{
+						$event->set_maxlength(0);
+					}
+					if(!$this->print && $event_count >= $this->max_events)
 					{
 						$div = new html_element('div', '...');
 						$div->set_attribute('style','text-align: center');

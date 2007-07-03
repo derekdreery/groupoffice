@@ -1,7 +1,7 @@
 
 body {
-	background-color: #f1f1f1;
-	font-family: arial, helvetica, sans-serif;
+	background-color: white;
+	font-family: tahoma, arial, helvetica, sans-serif;
 	font-size: 12px;
 	color: #000000;
 	margin: 0px;
@@ -10,14 +10,14 @@ body {
 }
 
 table {
-	font-family: arial, helvetica, sans-serif;
+	font-family: tahoma, arial, helvetica, sans-serif;
 	font-size: 12px;
 	color: #000000;
 	margin: 0;
 }
 
 h1{
-	font-family: arial, helvetica, sans-serif;
+	font-family: tahoma, arial, helvetica, sans-serif;
 	font-size: 18px;
 	color: #000000;
 	font-weight: bold;
@@ -27,16 +27,17 @@ h1{
 }
 
 h2{
-	font-family: arial, helvetica, sans-serif;
+	font-family: tahoma, arial, helvetica, sans-serif;
 	font-size: 14px;
 	font-weight: bold;
 	color: #000000;
 	margin: 0px;
-	margin-bottom: 5px;
+	margin-top:10px;
+	margin-bottom: 20px;
 }
 
 h3{
-	font-family: arial, helvetica, sans-serif;
+	font-family: tahoma, arial, helvetica, sans-serif;
 	font-size: 12px;
 	font-weight: bold;
 	color: #000000;
@@ -64,20 +65,6 @@ a.lost_password:hover {
     color:  #900;
 }
 
-.textbox{
-font-family: arial,verdana,sans-serif;
-font-size: 12px;
-border: 1px solid #666666;
-border-bottom: 1px solid #f8f8f8;
-border-right: 1px solid #f8f8f8;
-}
-
-.textbox_error{
-font-family: arial,verdana,sans-serif;
-font-size: 12px;
-border: 1px solid red;
-background-color:#ffd1d1;
-}
 
 .button{
 	background-color: #22437f;
@@ -102,54 +89,6 @@ background-color:#ffd1d1;
 	color: #ffffff;
 }
 
-#header-logo {
-	background-color: #F7F8F2;
-	height: 50;
-	width: 100%;
-	border: 0;
-}
-
-#header-logo img {
-	border: 0;
-	vertical-align: middle;
-	margin: 10px;
-	margin-bottom: 5px;
-	margin-top: 5px;
-	padding: 0;
-}
-
-#header-border {
-	margin: 0;
-	padding: 0;
-	background-color: #22437f;
-	font-size: 0;
-	height: 5px;
-	border-top: 1px solid #000;
-	border-bottom: 1px solid #000;
-	width: 100%;
-}
-
-#header{
-	border: 1px solid black;
-	font-size: 0.9em;
-	font-family: Arial, Sans-serif;
-	height: 300px;
-	width: 600px;
-	border-spacing: 0px;
-	border-collapse: collapse;
-}
-
-#FooterBar {
-	background-color: #22437f;
-	height: 20px;
-	border: 0;
-	border-top: 1px solid black;
-	color: white;
-	padding: 5px;
-}
-#FooterBar a{
-text-decoration: none;
-}
 .Error {
 	font-size: 12px;
         color: red;
