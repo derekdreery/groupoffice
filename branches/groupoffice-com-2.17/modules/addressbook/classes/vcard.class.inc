@@ -645,18 +645,20 @@ class vcard extends addressbook {
 											//											$parm_types .= DELIM_SEMICOLON . PARM_TYPE . DELIM_EQUAL . $parm_type;
 											$parm_types .= DELIM_SEMICOLON.$parm_type;
 										}
+										
 										$lines[] = $property->name.$parm_types.DELIM_COLON.$property->values[0];
 									}
 									break;
 								case "BDAY" :
 				
 									if (intval($property->values[0]) > 0) {
-										$lines[] = $property->name.DELIM_COLON.$property->values[0];
+										//$lines[] = $property->name.DELIM_COLON.$property->values[0];
+										$lines = array_merge($lines, $this->format_line($property->name, $property->values[0]));
 									}
 									break;
 								default :
 									if (!empty ($property->values[0])) {
-										$lines[] = $property->name.DELIM_COLON.$property->values[0];
+										$lines = array_merge($lines, $this->format_line($property->name, $property->values[0]));
 									}
 							}
 						}
@@ -674,7 +676,6 @@ class vcard extends addressbook {
 
 		
 		foreach ($lines as $line) {
-			
 			$line_parts = array();				
 			while(strlen($line)>LINE_LENGTH)
 			{
@@ -683,7 +684,7 @@ class vcard extends addressbook {
 				for($i=strlen($test)-1;$i>=0;$i--)
 				{						
 					$char=$test[$i];
-					if($char==' ' || $char==';' || $char==':')
+					if($char==' ' || $char==';' || $char==':' || $char=='=')
 					{						
 						$line_parts[] = substr($line, 0, $i+1);
 						$line = substr($line, $i+1);
