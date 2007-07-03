@@ -214,7 +214,7 @@ $table->add_row($row);
 $row = new table_row();
 $cell = new table_cell();
 $cell->set_attribute('colspan','2');	
-$cell->add_html_element(new checkbox('auto_check','auto_check', true, $ml_auto_check, $auto_check));
+$cell->add_html_element(new checkbox('auto_check','auto_check', true, $ml_show_new_mail, $auto_check));
 $row->add_cell($cell);
 $table->add_row($row);
 

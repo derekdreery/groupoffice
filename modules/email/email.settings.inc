@@ -29,7 +29,6 @@ if($task == 'save_email_settings')
 	$settings['vacation_subject'] = isset($_POST['vacation_subject']) ? smart_addslashes($_POST['vacation_subject']) : '';
 	$settings['vacation_text'] = isset($_POST['vacation_text']) ? smart_addslashes($_POST['vacation_text']) : '';
 	$settings['show_preview'] = isset($_POST['show_preview']) ? '1' : '0';
-	$settings['auto_check'] = isset($_POST['auto_check']) ? '1' : '0';
 	$settings['open_popup'] = isset($_POST['open_popup']) ? '1' : '0';
 	$settings['beep'] = isset($_POST['beep']) ? '1' : '0';
 	$email->update_settings($settings);
@@ -86,13 +85,6 @@ $cell->add_html_element(new checkbox('show_preview','show_preview', true, $ml_sh
 $row->add_cell($cell);
 $table->add_row($row);
 
-
-$row = new table_row();
-$cell = new table_cell();
-$cell->set_attribute('colspan','2');	
-$cell->add_html_element(new checkbox('auto_check','auto_check', true, $ml_show_new_mail, $settings['auto_check']));
-$row->add_cell($cell);
-$table->add_row($row);
 
 $row = new table_row();
 $cell = new table_cell();

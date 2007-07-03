@@ -1,8 +1,11 @@
 <?php
-$updates[24] = array();
+$updates[25] = array();
 
-ALTER TABLE `em_settings` ADD `open_popup` ENUM( '0', '1' ) NOT NULL ;
-ALTER TABLE `emAccounts` ADD `auto_check` ENUM( '0', '1' ) NOT NULL ;
+$updates[24][] = "ALTER TABLE `em_settings` ADD `open_popup` ENUM( '0', '1' ) NOT NULL ;";
+$updates[24][] = "ALTER TABLE `emAccounts` ADD `auto_check` ENUM( '0', '1' ) NOT NULL ;";
+$updates[24][] = "ALTER TABLE `em_settings` DROP `auto_check`";
+
+$updates[24][] = "update emAccounts set auto_check='1';";
 
 $updates[23][] = "ALTER TABLE `em_settings` ADD `beep` ENUM( '0', '1' ) NOT NULL ,
 ADD `auto_check` ENUM( '0', '1' ) NOT NULL ;";
