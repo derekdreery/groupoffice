@@ -186,7 +186,7 @@ $ml_keep='Bewaren';
 $ml_examine_headers='Toon paperclip wanneer een bericht bijlagen bevat en toon de prioriteit van een bericht. Waarschuwing! Dit vertraagt het tonen van de lijst van berichten.';
 $ml_show_attachments='Toon bijlagen en prioriteiten (langzamer)';
 $ml_unknown_reciepent='De ontvanger is onbekend. Vul gegevens in a.u.b.';
-$ml_auto_check='Controleer automatisch of er nieuwe berichten zijn';
+$ml_show_new_mail='Toon nieuwe berichten altijd in de bovenste menubalk';
 $ml_beep='Maak geluid als er nieuwe e-mail is';
 //2.17
 $ml_mail_to='Een venster om een e-mail te schrijven is voor u geopend omdat u op het e-mail adres \'%s\' hebt geklikt.';
@@ -194,3 +194,4 @@ $ml_windows_mail = 'Wanneer u Group-Office als uw standaard e-mail programma in 
 $ml_download_reg='Download register bestand';
 
 $ml_attachment_message = 'Bericht';
+$ml_open_popup='Open een popup bij nieuwe e-mail berichten';

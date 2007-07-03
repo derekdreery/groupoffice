@@ -223,7 +223,7 @@ $ml_examine_headers='Show paperclip when a message has attachments and the messa
 $ml_show_attachments='Show attachments and priorities (slower)';
 $ml_unknown_reciepent='The recipient is unknown. Please complete the recipient\'s profile.';
 
-$ml_auto_check='Check if there are new messages automatically';
+$ml_show_new_mail='Always show new messages in the top menubar';
 $ml_beep='Beep on new e-mail';
 
 //2.17
@@ -234,3 +234,4 @@ $ml_download_reg='Download register file';
 $ml_help_url='http://docs.group-office.com/index.php?folder_id=57&file_id=0';
 
 $ml_attachment_message = 'Message';
+$ml_open_popup='Display popup on new e-mail';

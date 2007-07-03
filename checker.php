@@ -70,7 +70,7 @@ $remind_email = false;
 		
 		$settings = $email->get_settings($GO_SECURITY->user_id);
 		
-		if($settings['auto_check']=='1')
+		if($settings['auto_check']=='1' || $settings['open_popup']=='1')
 		{
 
 			if(!isset($_SESSION['GO_SESSION']['email_module']['cached']))
@@ -85,24 +85,23 @@ $remind_email = false;
 	
 	
 			if ($_SESSION['GO_SESSION']['email_module']['new'] > 0 && $_SESSION['GO_SESSION']['email_module']['new'] > $_SESSION['GO_SESSION']['email_module']['notified'])
-			{
-				$_SESSION['GO_SESSION']['email_module']['notified']=$_SESSION['GO_SESSION']['email_module']['new'];
+			{				
 				$remind_email = true;
-			}elseif($_SESSION['GO_SESSION']['email_module']['notified'] >  $_SESSION['GO_SESSION']['email_module']['new'])
-			{
-				$_SESSION['GO_SESSION']['email_module']['notified'] =  $_SESSION['GO_SESSION']['email_module']['new'];
+				$height += 120;
 			}
 		}
 	}
 //}
 
-if ($remind_events)
+if ($remind_events || ($remind_email && $settings['open_popup']=='1'))
 {
 	if($height > 600) $height = 600;
 
 	echo '<script language="javascript" type="text/javascript">'.
 	'popup("'.$GO_CONFIG->control_url.'reminder.php", "600", "'.$height.'", "reminder");'.
 	'</script>';
+}else {
+	$_SESSION['GO_SESSION']['email_module']['notified']=$_SESSION['GO_SESSION']['email_module']['new'];
 }
 ?>
 <link href="<?php echo $GO_THEME->theme_url.'css/checker.css'; ?>" rel="stylesheet" type="text/css" />
@@ -110,7 +109,7 @@ if ($remind_events)
 <body>
 <?php
 
-if (isset($GO_MODULES->modules['email']) && $GO_MODULES->modules['email']['read_permission'] && $_SESSION['GO_SESSION']['email_module']['new']>0)
+if ($settings['auto_check']=='1' && isset($GO_MODULES->modules['email']) && $GO_MODULES->modules['email']['read_permission'] && $_SESSION['GO_SESSION']['email_module']['new']>0)
 {
 	echo '<a href="'.$GO_MODULES->modules['email']['url'].'" target="main"><img src="'.$GO_THEME->images['mail'].'" border="0" align="absmiddle" /> '.$_SESSION['GO_SESSION']['email_module']['new'].'</a>';
 }

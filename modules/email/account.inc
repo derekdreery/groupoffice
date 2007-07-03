@@ -20,6 +20,7 @@ if ($account && $task != 'save_account')
 	$signature = $account["signature"];
 	$mbroot = utf7_imap_decode($account["mbroot"]);
 	$examine_headers = $account['examine_headers'] == '1' ? true : false;
+	$auto_check = $account['auto_check'] == '1' ? true : false;
 	$use_ssl = $account['use_ssl'] == '1' ? true : false;
 	$novalidate_cert = $account['novalidate_cert'] == '1' ? true : false;
 	$account_user_id=$account['user_id'];
@@ -41,6 +42,7 @@ if ($account && $task != 'save_account')
 	$signature = isset($_REQUEST['signature']) ? smart_stripslashes($_REQUEST['signature']) : '';
 	$mbroot = isset($_REQUEST['mbroot']) ? smart_stripslashes($_REQUEST['mbroot']) : '';
 	$examine_headers = isset($_REQUEST['examine_headers']) ? true : false;
+	$auto_check = isset($_REQUEST['auto_check']) ? true : false;
 	$use_ssl = isset($_REQUEST['use_ssl']) ? true : false;
 	$novalidate_cert = isset($_REQUEST['novalidate_cert']) ? true : false;
 	$account_user_id=isset($_REQUEST['account_user_id']) ? smart_stripslashes($_REQUEST['account_user_id']) : $GO_SECURITY->user_id;
@@ -208,6 +210,14 @@ $cell = new table_cell($checkbox->get_html());
 $cell->set_attribute('colspan','2');
 $row->add_cell($cell);
 $table->add_row($row);
+
+$row = new table_row();
+$cell = new table_cell();
+$cell->set_attribute('colspan','2');	
+$cell->add_html_element(new checkbox('auto_check','auto_check', true, $ml_auto_check, $auto_check));
+$row->add_cell($cell);
+$table->add_row($row);
+
 
 $tabstrip->add_html_element($table);
 $tabstrip->add_html_element(new button($cmdOk, "javascript:_save('save_account', 'true');"));

@@ -18,6 +18,7 @@ if (isset ($GO_MODULES->modules['calendar']) && $GO_MODULES->modules['calendar']
 	 require_once($GO_MODULES->modules['calendar']['class_path'].'event.class.inc');
 	$cal = new calendar();
 	
+
 	
 	$em_table = new table();
 	$em_table->set_attribute('style', 'border:0px;margin-top:10px;');
@@ -80,7 +81,9 @@ if (isset ($GO_MODULES->modules['calendar']) && $GO_MODULES->modules['calendar']
 		$em_row->add_cell($em_cell);
 		$em_table->add_row($em_row);
 	}
+
 	$cell->add_html_element($em_table);
+
 	
 	
 	
@@ -190,15 +193,13 @@ if (isset ($GO_MODULES->modules['calendar']) && $GO_MODULES->modules['calendar']
 				$td_table->add_row($td_row);
 								
 				$em_cell->add_html_element($td_table);					
-			}				
-		} else {
-			$span= new html_element('span', $cal_no_todos);		
-			$em_cell->add_html_element($span);				
-		}			
+			}	
+			$em_row->add_cell($em_cell);
+			$em_table->add_row($em_row);
+			$cell->add_html_element($em_table);			
+		} 			
 	}
-	$em_row->add_cell($em_cell);
-	$em_table->add_row($em_row);
-	$cell->add_html_element($em_table);
+	
 }
 ?>
 <script type="text/javascript">

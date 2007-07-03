@@ -82,6 +82,5 @@ if (isset ($GO_MODULES->modules['filesystem']) && $GO_MODULES->modules['filesyst
 	if($count)
 	{
 		$cell->add_html_element($em_table);
-	}
-	
+	}	
 }

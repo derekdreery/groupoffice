@@ -125,7 +125,7 @@ class email extends db
 		}
 	}
 
-	function add_account($user_id, $type, $host, $port, $use_ssl, $novalidate_cert, $mbroot, $username, $password, $name, $email, $signature, $examine_headers=0)
+	function add_account($user_id, $type, $host, $port, $use_ssl, $novalidate_cert, $mbroot, $username, $password, $name, $email, $signature, $examine_headers=0, $auto_check='1')
 	{
 		global $GO_CONFIG, $GO_LANGUAGE;
 
@@ -220,6 +220,7 @@ class email extends db
 				$account['email']=$email;
 				$account['signature']=$signature;
 				$account['examine_headers']=$examine_headers;
+				$account['auto_check']=$auto_check;
 
 
 				if(!$this->insert_row('emAccounts', $account))
@@ -240,7 +241,7 @@ class email extends db
 		return $this->update_row('emAccounts', 'id', $account);
 	}
 
-	function update_account($account_id, $type, $host, $port, $use_ssl, $novalidate_cert, $mbroot, $username, $password, $name, $email, $signature, $examine_headers=0, $user_id=0)
+	function update_account($account_id, $type, $host, $port, $use_ssl, $novalidate_cert, $mbroot, $username, $password, $name, $email, $signature, $examine_headers=0, $user_id=0, $auto_check='1')
 	{
 		global $GO_CONFIG;
 
@@ -257,7 +258,7 @@ class email extends db
 			", use_ssl='$use_ssl', novalidate_cert='$novalidate_cert'".
 			", mbroot='$mbroot', username='$username', password='".$password."',".
 			" name='$name', email='$email'".
-			", signature='$signature', examine_headers='$examine_headers'";
+			", signature='$signature', examine_headers='$examine_headers', auto_check='$auto_check'";
 			if($user_id>0)
 			{
 				$sql .=", user_id=$user_id";
@@ -621,7 +622,10 @@ class email extends db
 
 			while($this->next_record())
 			{
-				$email->cache_account_status($this->Record,$auto_check_only);
+				if(!$auto_check_only || $this->f('auto_check')=='1')
+				{
+					$email->cache_account_status($this->Record,$auto_check_only);
+				}
 			}
 		}
 	}
@@ -671,7 +675,7 @@ class email extends db
 	
 	function get_total_unseen($user_id)
 	{
-		$sql = "SELECT SUM(unseen) FROM emFolders INNER JOIN emAccounts ON emFolders.account_id=emAccounts.id WHERE user_id='$user_id'";
+		$sql = "SELECT SUM(unseen) FROM emFolders INNER JOIN emAccounts ON emFolders.account_id=emAccounts.id WHERE user_id='$user_id' AND emAccounts.auto_check='1'";
 		$this->query($sql);
 		$this->next_record();
 		return $this->f(0);

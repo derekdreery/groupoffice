@@ -149,6 +149,7 @@ switch ($task)
 		$drafts = $_POST['type'] == 'pop3' ? '' : smart_addslashes($_POST['drafts']);*/
 
 		$examine_headers = isset($_POST['examine_headers']) ? '1' : '0';
+		$auto_check = isset($_POST['auto_check']) ? '1' : '0';
 		if ($account_id > 0)
 		{
 			$account_user_id=isset($_REQUEST['account_user_id']) ? smart_stripslashes($_REQUEST['account_user_id']) : 0;
@@ -162,7 +163,7 @@ switch ($task)
 			smart_addslashes($_POST['name']),
 			smart_addslashes($_POST['mail_address']),
 			smart_addslashes($_POST['signature']),
-			$examine_headers,$account_user_id))
+			$examine_headers,$account_user_id, $auto_check))
 			{
 				$feedback = '<p class="Error">'.$ml_connect_failed.' \''.$_POST['host'].
 				'\' '.$ml_at_port.': '.$_POST['port'].'</p>';
@@ -191,7 +192,7 @@ switch ($task)
 			smart_addslashes($_POST['name']),
 			smart_addslashes($_POST['mail_address']),
 			smart_addslashes($_POST['signature']),
-			$examine_headers))
+			$examine_headers, $auto_check))
 			{
 				$feedback = '<p class="Error">'.$ml_connect_failed.' \''.
 				$_POST['host'].'\' '.$ml_at_port.': '.$_POST['port'].'</p>'.
