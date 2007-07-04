@@ -308,3 +308,80 @@ $sync_download_clients = 'Stažení klienta pro synchronizaci';
 $strNoData = 'Nabyla nalezena žádná data';
 //2.13
 $strSynchronization = 'Synchronizace';
+$strSnooze = 'Dřímat';
+$strDismiss = 'Zruš';
+
+//2.14
+$strUpload = 'nahraj soubor';
+$cmdInsert = 'Vlož';
+$strText = 'Text';
+$strType = 'Typ';
+
+$strNoItemSelected = 'Není vybraná žádná položka';
+//$strNoItemSelected = 'Vyberte ze seznamu';
+$strSelectedItem = 'vybraná položka';
+
+$strKeyword = 'Klíčové slovo';
+
+$strNoActivities = 'Žádné aktivity pro tuto položku';
+
+$strCopy = 'Kopie'; //not a verb
+
+//2.15
+$strBank = 'Banka';
+$strBankNo = 'Bankovní číslo';
+$strSelectedItems = 'vybrané položky';
+
+$strMonth = 'Měsíc';
+$strYear = 'Rok';
+$strDay = 'Den';
+$strHour = 'Hodina';
+$strMinute = 'Minuta';
+
+$strTwelveHourFormat = '12 hodinový formát';
+$strTwentyfourHourFormat = '24 hodinový formát';
+
+//2.16
+$strCreateLink = 'Vytvořit spojení';
+$strCancelLink = 'Zrušit spojení';
+$strLinkText = 'Spojení je aktivní. Vyberte něco, co chcete spojit a klikněte na \'Create link\' tlačítko, abyste spojili s uživatelem \'%s\'. Když vytvoříte něco, co se dá spojit, bude to provázáno automaticky.';
+$strUnlinkPrefix = 'Jste si jisti,že chcete zrušit spojení';
+$strLinks = 'Spojení';
+$strUnlinkSuffix = '?';
+$cmdUnlink = 'Rozpojit';
+
+$strAdministrate = 'Administrace';
+$strProOnly = 'Tato vlastnost je k dispozici pouze v Group-Office Professional. <a href="http://www.group-office.com">Klikněte zde pro informace o Group-Office Professional</a>';
+
+$strMoreColors='Více barev';
+
+$strNoItems = 'žádné položky';
+$cmdExport = 'Export';
+
+$error_username = 'Špatné uživatelské jméno. Pouze tyto znaky jsou povoleny: a-z, 0-9,- en _';
+
+$cmdSettings = 'Nastavení';
+
+
+$strTableConfig = 'Konfigurace tabulky';
+
+$strMonthText = 'Měsíc text';
+
+$cmdUpload='Nahrát';
+$cmdAttachFile='Připoj soubor';
+
+
+$search_text = '<b>Tip:</b> Začleňte do hledací fráze (kontakt, firmu, projekty atd.),když vyhledávání vyhodnocuje stále mnoho výsledků';
+$search_global='Hledat v Group-Office';
+$search_results='výsledky';
+$search_result='výsledek';
+$strTime='Čas';
+$table_config_text='Vložte číslo na začátek sloupců, které chcete zobrazit. Sloupce budou řazeny podle tohoto čísla.';
+$strMoveUp='Move up one row';
+
+$strAddressAndNo='Adresa / Ne.';
+$strWorkAddressAndNo='Adresa do práce / Ne.';
+
+$config_help_url='http://docs.group-office.com/index.php?folder_id=49&file_id=202';
+
+

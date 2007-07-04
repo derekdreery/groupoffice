@@ -22,4 +22,5 @@ $no_file='Datoteka';
 $no_show_all='Prikaži vse';
 $no_show_own='Prikaži lastne';
 $no_show_responsible='Prikaži odgovorne';
+$no_note='Zaznamek';
 ?>

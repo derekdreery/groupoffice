@@ -244,3 +244,157 @@ $cal_default_reminder = 'Standardní budík';
 
 // extra
 $sc_months = 'měsíce';
+$cal_open_calendar = 'Otevři další kalendář';
+$cal_show_completed = 'Ukaž hotové úkoly';
+
+//2.14
+$cal_event = 'Událost';
+$cal_todo = 'Úkol';
+$cal_participants_write = 'Účastník může modifikovat událost';
+
+$cal_everybody_write = 'Každý může modifikovat událost'; //modified string from 2.05 this became the
+$cal_everybody_read = 'Jenom já mohu modifikovat událost';//modified string from 2.05 
+
+$cal_default_permissions = 'Výchozí práva';
+$cal_show_todos = 'Ukaž úkoly v kalendáři';
+
+$cal_edit_series_or_single = 'Edituj pouze tento příklad nebo celou sérii?';
+$cal_single = 'Příklad';
+$cal_series = 'Celá série';
+
+$cal_legend = 'Legenda';
+$cal_multiple_calendars = 'Vícenásobný kalendář';
+
+$cal_cumulative = 'Nesprávně vloženo! Událost musí být delší než opakovací interval.';
+
+$cal_weekview = 'Náhled celého týdne';
+$cal_mo_to_fr = 'Pondělí až pátek';
+$cal_mo_to_su = 'Pondělí až neděle';
+
+$cal_batchcalendars = 'Vytvořte kalendáře pro všechny uživatele';
+$cal_create_all_calendars = 'Vytvořte kalendáře pro všechny uživatele nebo udělte práva uživatelským skupinám';
+
+$cal_no_views = 'Nelze zobrazit';
+
+$cal_my_cals = 'Moje kalendáře';
+
+$cal_event_colors_override = 'Použijte manuální nastavení barev pro události';
+
+//2.15
+$cal_groups = 'Skupiny';
+$cal_new_group = 'Nová skupina';
+$cal_group_exists = 'Tato skupina již existuje. Prosím, vyberte si jiné jméno.';
+$cal_no_calendars = 'Tato skupina neobsahuje žádné kaledáře';
+$cal_group = 'Skupina';
+$cal_resources = 'Zdroje';
+
+$cal_event_mail_subject = 'Událost \'%s\' vytvořena ve Vašem kalendáři';//%s is event name
+$cal_event_mail_body = '%s vytvořil schůzku \'%s\' ve Vašem kalendáři jménem \'%s\'.'; //irst %s is the name of the person who created the event. Second is the event name, third is the calendar name
+$cal_event_mail_open = 'Otevři schůzku';
+$cal_add_custom_field = 'Vyberte vlastní pole';
+
+$cal_event_modified_mail_subject = 'Událost \'%s\' byla modifikována ve Vašem kalendáři';//%s is event name
+$cal_event_modified_mail_body = '%s vytvořil schůzku \'%s\' ve Vašem kalendáři jménem \'%s\'.'; //First %s is the name of the person who created the event. Second is the event name, third is the calendar name
+
+$cal_your_event_modified_mail_subject = 'Událost \'%s\' Vámi vytvořená byla modifikována';//%s is event name
+$cal_your_event_modified_mail_body = '%s modifikoval schůzku \'%s\' která byla vytvořena Vámi.'; //First %s is the name of the person who created the event. Second is the event name.
+$cal_no_custom_fields = 'Nebyla definována žádná vlastní pole';
+$cal_add_field = 'Přidej pole';
+
+
+$cal_resource_mail_subject = 'Zdroj \'%s\' zadán'; //%s is resource name
+$cal_resource_mail_body = '%s udělal záznam pro tento zdroj \'%s\'. Jste správce tohoto zdroje. Prosím otevřete pro odmítnutí nebo potvrzení záznamu.'; //First %s is the name of the person who created the event. Second is the calendar name
+$cal_open_resource = 'Otevři zadání';
+
+$cal_resource_modified_mail_subject = 'Zdrojový \'%s\' záznam modifikován';//%s is resource name
+$cal_resource_modified_mail_body = '%s modifikoval záznam zdroje \'%s\'. '; //First %s is the name of the person who created the event. Second is the calendar name
+
+$cal_your_resource_modified_mail_subject = 'Váš záznam pro \'%s\' se statusem %s je modifikován';//%s is resource name, status
+$cal_your_resource_modified_mail_body = '%s modifikoval záznam zdroje \'%s\'Jste správce tohoto zdroje. Prosím otevřete pro odmítnutí nebo potvrzení záznamu.'; //First %s is the name of the person who created the event. Second is the calendar name
+
+
+$cal_accept_mail_subject = 'Pozvánka na \'%s\' akceptována';
+$cal_accept_mail_body = '%s akceptoval Vaši pozvánku na \'%s\'';
+
+$cal_decline_mail_subject = 'Pozvánka na \'%s\' zamítnuta';
+$cal_decline_mail_body = '%s zamítl Vaši pozvánku na \'%s\'';
+
+$cal_statuses['NEEDS-ACTION'] = 'Stále v řešení';
+$cal_statuses['ACCEPTED'] = 'Přijatý';
+$cal_statuses['DECLINED'] = 'Odmítnutý';
+$cal_statuses['TENTATIVE'] = 'Nezávazný';
+$cal_statuses['DELEGATED'] = 'Delegovaný';
+$cal_statuses['COMPLETED'] = 'Hotový';
+$cal_statuses['IN-PROCESS'] = 'Dělá se na tom';
+
+$cal_booking = 'Záznam pro \'%s\'';//%s is resource name
+
+$cal_group_admins = 'Admins';
+$cal_no_admins = 'Zádný administrátor definován';
+$cal_add_admin = 'Přidej administrátora';
+
+$cal_scale='Míra';
+
+$cal_show_completed = 'Ukaž hotové úkoly';
+
+$cal_resource = 'Zdroj';
+$cal_grid_view = 'Zobrazení jako síť';
+
+$cal_field_types['checkbox'] = 'Checkbox';
+$cal_field_types['text'] = 'Text';
+$cal_field_types['textarea'] = 'Textarea';
+$cal_field_types['date'] = 'Datum';
+
+$cal_conflict = 'Tato událost je v konfliktu s jinou událostí nebo se zdrojovými záznamy. Klikněte na \'Ok\' nebo \'Apply\' znova pro ignorování nebo klikněte na \'Check availability\' pro nalezení vhodného času.';
+
+$cal_select_calendar = 'Vyberte kalendář';
+$cal_check_conflicts = 'Upozorni měna konflikty, kdyz vytvořím událost';
+$cal_email_changes = 'Pošli e-mail když někdo udělá změny v mém kalendáři';
+$cal_shared_calendars = 'Sdílené kalendáře';
+
+$cal_admin = 'Administrace';
+$cal_resource_groups = 'Zdrojové skupiny';
+$cal_open_calendar = 'Otevři dalsí kalendář';
+
+$cal_email_reminders='Pošli upozornění na událost emailem';
+
+$cal_favourites = 'Oblíbené';
+
+$cal_your_resource_accepted_mail_subject = 'Záznam pro \'%s\' je akceptován';//%s is resource name, status
+$cal_your_resource_accepted_mail_body = '%s akceptoval záznam pro zdroj \'%s\'.'; //First %s is the name of the person who created the event. Second is the calendar name
+
+$cal_your_resource_declined_mail_subject = 'Záznam pro \'%s\' je zamítnut';//%s is resource name
+$cal_your_resource_declined_mail_body = '%s zamítl Váš záznam pro zdroj \'%s\'.'; //First %s is the name of the person who created the event. Second is the calendar name
+
+$cal_resource_deleted_mail_subject = 'Záznam pro \'%s\' je smazán';//%s is resource name, status
+
+$cal_repeats_at = 'Opakuj kazdé %s v %s';//eg. Repeats every month at the first monday
+$cal_repeats_at_not_every = 'Opakuj každé %s %s v %s';//eg. Repeats every 2 weeks at monday 
+
+$cal_repeats = 'Opakuj každé %s';
+
+$cal_and='a';
+$sc_months='měsíce';
+$sc_month='měsíc';
+$sc_year='rok';
+$sc_years='roky';
+
+$cal_another_resource = 'Zdroj byl změněn na %s';
+
+$cal_background_colors = 'Barvy pozadí';
+
+$cal_weekday = 'Pracovní den';
+$cal_background_color='Barva pozadí';
+$cal_background = 'Pozadí';
+
+$cal_show_busy='Ukaž jako v činnosti';
+
+$cal_subject='Předmět';
+$cal_dismiss_all = 'Zruš vše';
+$cal_schedule_group='Plánované události pro všechny uživatele jsou ve výchozím zobrazení. (Jinak je pouze vybrám výchozí kalendář)';
+
+$cal_help_url='http://docs.group-office.com/index.php?folder_id=58&file_id=0';
+$td_help_url='http://docs.group-office.com/index.php?folder_id=49&file_id=217';
+
+
+

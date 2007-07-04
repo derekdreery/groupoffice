@@ -166,7 +166,7 @@ $ml_drafts = 'Koncept';
 $ml_save_draft_error = 'Chyba při ukládání konceptu. Prosím zkontrolujte nastavení Vašeho účtu.';
 $ml_search_sender = 'Hledat další e-maily pro tohoto odesílatele';
 
-$ml_no_attachments = 'Nejsou připojeny žádené soubory';
+$ml_no_attachments = 'Nejsou připojeny žádné soubory';
 $ml_search_active = 'Hledání je aktivní. Nejsou zobrazeny všechny zprávy ve složce. Klikněte zde pro ukončení hledání.';
 $ml_local_files = 'Místní soubory';
 $ml_please_close_attachments = 'Prosím uzavřete okno s prílohami a ujistěte se že jsou všechny přeneseny na server.';
@@ -178,7 +178,62 @@ $ml_multiple_files = 'Více souborů';
 
 //2.12
 $ml_reenter_password = 'Z bezpečnostních důvodů je třeba znovu zadat heslo pro Váš e-mailový účet.';
-
 /////// extra string for my extension - used ?
 $ml_sent_ok = 'Mail byl odeslan.';
-$ml_sent_ok_not_stored = 'Mail byl odeslan, ale neni definovana slozka pro odchozi maily.\nNastavte ji v dialogu slozky.';
+$ml_sent_ok_not_stored = 'E-mail byl odeslan, ale neni definovana slozka pro odchozi maily.\nNastavte ji v dialogu slozky.';
+$ml_attachments_added = 'připojené soubory';
+$ml_attachment_added = 'připojený soubor';
+
+//2.13
+$ml_download_zipped_attachments = 'Zip archív všech přípon';
+$ml_fullscreen = 'Otevři&nbsp;fullscreen';
+$ml_nofullscreen = 'Zavři&nbsp;fullscreen';
+$ml_confirm_empty_trash = 'Jste sijistí, ze chcete vyprázdnit koš?';
+$ml_seen = 'Přečteno';
+$ml_charset = 'Kódování';
+
+//2.14
+$ml_no_reciever_add = "Nepřidávej";
+$ml_add_recievers = "Přidej neznámé příjemce do";//changed string from 2.06
+
+$ml_automatic_reply = 'Aktivuj automatickou odpověď';
+
+$ml_set_default = 'Nastav výchozí';
+
+$ml_used_of = 'použito';
+
+$ml_folder_not_available = 'Nemůžete vytvořit extra adresáře, pokud používáte POP-3 účty';
+
+//2.15
+$ml_mark_as_read='Označ filtrované zprávy jako přečtené';
+
+$ml_get_message_error_title = 'Chyba při stahování zprávy';
+$ml_get_message_error_text = 'Nemohu stáhnout zprávu ze serveru. Možná byla smazána jiným klientem. Prosím klikněte na \'Refresh\'.';
+$ml_spamtag = 'Spam tag';
+$ml_confirm_no_subject = 'Nenapsal jste předmět pro tento e-mail. Jste si jisti, že chcete poslat tento e-mail bez předmětu?';
+$ml_show_preview = 'Ukaž náhled, když vyberu zprávu';
+
+$ml_show_headers = 'Ukaž hlavičky zprávy';
+$ml_confirm_empty_mailbox = 'Jste si jisti, že chcete vyprázdnit adresář \'%s\'?';
+
+//2.16
+$em_source = 'Zdrojový kód zprávy';
+$ml_messages_linked = 'Vybrané zprávy jsou provázány';
+$ml_handle_originals='Co chcete dělat s originálními zprávami?';
+$ml_keep='Nechej';
+$ml_examine_headers='Ukaž sponku, když má zpráva přílohu a když má vyšší prioritu ve vylistování zpráv. Varování! Toto zpomaluje prohlížení zpráv v seznamu.';
+$ml_show_attachments='Ukaž přílohy a priority (pomalejší vylistování)';
+$ml_unknown_reciepent='Příjemce je neznámý. Prosím vyplňte příjemcův profil.';
+
+$ml_auto_check='Zkontroluj zda nejsou nějaké nové zprávy automaticky';
+$ml_beep='Pípni na nový e-mail';
+
+//2.17
+$ml_mail_to='Editor zpráv by měl být pro Vás otevřen, jelikož jste klikli na e-mail adresu %s.';
+$ml_windows_mail = 'Když chcete použít Group-Office jako Váš výchozí e-mailový klient v Microsoft Windows, tak potřebujete zapsat tento soubor do registru Windows. Po zapsání souboru do registrů si můžete vybrat Group-Office jako váš výchozí e-mail klient ve Windows v Ovládacích panelech -> Nastavení internetu -> Programy';
+$ml_download_reg='Stáhni soubor registru';
+
+$ml_help_url='http://docs.group-office.com/index.php?folder_id=57&file_id=0';
+
+$ml_attachment_message = 'Zpráva';
+

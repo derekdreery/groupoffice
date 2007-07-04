@@ -80,19 +80,47 @@ $admin_manage = 'Spravovat';
 $admin_groups = 'Skupiny uživatelů';
 $admin_groups_user = 'Uživatel je členem následujících skupin';
 
-//2.11
 
-//Modified string (Added %groupoffice_title%)
-$registration_mail_body=<<<registration_mail_body
-Vážená/ý,
+//2.13
+$registration_mail_subject = "Vítejte v %groupoffice_title%"; //changed string
+$registration_title = "Registrujte se na %groupoffice_title%"; //changed string
 
-Byl jste registrován na Group-Office.
-Doufáme, že budete s našimi službami spokojen(a).
+$lang_modules['users'] = 'Uživatelé';
 
-Přihlásit se můžete pomocí následujících údajů:
+//2.14
+$users_enabled = 'Účet povolen';
 
-Uživatelské jméno: %username%
+$admin_groups_visible = 'Uživatel je viditelný pro následující skupiny';
+$admin_look_feel = 'Vzhled';
 
-Pro přihlášení klikněte na odkaz uvedný níže:
+//2.16
+$disabled_user_fields_text = 'Vyber pole, která chcete zakázat pro editaci uživateli na jejich profilové stránce.';
 
-registration_mail_body;
+$admin_disabled_user_fields = 'Zakaž uživatelská pole';
+$admin_registration_unconfirmed = 'Nepotvrzený registrační e-mail';
+$admin_registration_confirmation = 'Potvrzený registrační e-mail';
+
+$admin_registration_confirmation_text = 'Tento e-mail obdrží uživatelé při aktivaci nového účtu. Pokud zanecháte prázdné, nic nebude posláno.';
+$admin_registration_unconfirmed_text = 'Tento e-mail obdrží uživatelé při neaktivovaném novém účtu. Pokud zanecháte prázdné, nic nebude posláno.';
+
+$admin_subject = 'Předmět';
+
+//string modified:
+$registration_success = "<h1>Blahopřejeme!</h1>Nový uživatel byl úspěšně vytvořen.";
+$registration_success_activate = "<h1>Aktivace je vyžedována</h1>Nový uživatel byl úspěšně vytvořen, ale administrátor musí aktivovat Váš účet.";
+
+
+$admin_new_user_subject = 'Nový uživatel registrován';
+$admin_new_user_body = 'Nový uživatel registrován. Klikněte na odkaz níže pro otevřění účtu.';
+$admin_new_user_subject_activate = 'Nový uživatel registrován. Požadována registrace';
+
+
+$admin_password_changed = 'Heslo úspěšně změněno!';
+
+
+$registration_self_success = 'Vítejte v %s!';
+$registration_self_success_text = 'Váš účet byl úspěšně vytvořen . Nyní se můžete přihlásit s Vaším jménem a heslem.';
+$us_reset='Reset';
+$us_never='Nikdy';
+
+$us_help_url='http://docs.group-office.com/index.php?folder_id=53&file_id=0';
