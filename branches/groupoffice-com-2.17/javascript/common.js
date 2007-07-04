@@ -104,8 +104,12 @@ var BrowserDetect = {
 };
 BrowserDetect.init();
 
-function number_format(number, decimals, decimal_seperator, thousands_seperator)
+function number_format(number, decimals, decimal_seperator, thousands_seperator, precision)
 {
+	if(typeof(precision)=='undefined')
+	{
+		precision=decimals;
+	}
 	if(number=='')
 	{
 		return '';
@@ -113,7 +117,7 @@ function number_format(number, decimals, decimal_seperator, thousands_seperator)
 	var internal_number = number.replace(thousands_seperator, "");
 	internal_number = internal_number.replace(decimal_seperator, ".");
 	var numberFloat = parseFloat(internal_number);
-	numberFloat = numberFloat.toFixed(decimals);
+	numberFloat = numberFloat.toFixed(precision);
 	
 	if(decimals>0)
 	{
@@ -131,6 +135,14 @@ function number_format(number, decimals, decimal_seperator, thousands_seperator)
 			numberFloat = numberFloat+"0";
 		}
 		var formattedNumber = decimal_seperator+numberFloat.substring(dotIndex+1);
+		
+		var dec = precision;
+		while(formattedNumber.substring(formattedNumber.length-1)=='0' && dec>decimals)
+		{
+			dec--;
+			formattedNumber = formattedNumber.substring(0,formattedNumber.length-1);
+		}
+		
 	}else
 	{
 		
