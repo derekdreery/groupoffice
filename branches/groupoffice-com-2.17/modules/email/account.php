@@ -232,7 +232,7 @@ if (isset($account_id))
 	$title = $ml_new_account;
 }
 
-$tabstrip = new tabstrip('account_tab', $title);
+$tabstrip = new tabstrip('account_tab', $title,'140');
 $tabstrip->set_attribute('style','width:100%');
 $tabstrip->set_return_to($return_to);
 

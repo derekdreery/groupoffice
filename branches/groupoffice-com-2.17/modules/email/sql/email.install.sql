@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 -- 
 -- Host: localhost
--- Generatie Tijd: 03 Jul 2007 om 13:28
+-- Generatie Tijd: 04 Jul 2007 om 10:40
 -- Server versie: 5.0.38
 -- PHP Versie: 5.2.1
 -- 
@@ -16,6 +16,7 @@
 -- Tabel structuur voor tabel `emAccounts`
 -- 
 
+DROP TABLE IF EXISTS `emAccounts`;
 CREATE TABLE `emAccounts` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -38,6 +39,9 @@ CREATE TABLE `emAccounts` (
   `spamtag` varchar(20) NOT NULL default '',
   `examine_headers` enum('0','1') NOT NULL default '0',
   `auto_check` enum('0','1') NOT NULL,
+  `enable_vacation` enum('0','1') NOT NULL,
+  `vacation_subject` varchar(100) NOT NULL,
+  `vacation_text` text NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
 ) TYPE=MyISAM;
@@ -48,6 +52,7 @@ CREATE TABLE `emAccounts` (
 -- Tabel structuur voor tabel `emFilters`
 -- 
 
+DROP TABLE IF EXISTS `emFilters`;
 CREATE TABLE `emFilters` (
   `id` int(11) NOT NULL default '0',
   `account_id` int(11) NOT NULL default '0',
@@ -65,6 +70,7 @@ CREATE TABLE `emFilters` (
 -- Tabel structuur voor tabel `emFolders`
 -- 
 
+DROP TABLE IF EXISTS `emFolders`;
 CREATE TABLE `emFolders` (
   `id` int(11) NOT NULL default '0',
   `account_id` int(11) NOT NULL default '0',
@@ -88,6 +94,7 @@ CREATE TABLE `emFolders` (
 -- Tabel structuur voor tabel `em_links`
 -- 
 
+DROP TABLE IF EXISTS `em_links`;
 CREATE TABLE `em_links` (
   `link_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -106,6 +113,7 @@ CREATE TABLE `em_links` (
 -- Tabel structuur voor tabel `em_settings`
 -- 
 
+DROP TABLE IF EXISTS `em_settings`;
 CREATE TABLE `em_settings` (
   `user_id` int(11) NOT NULL default '0',
   `send_format` varchar(10) NOT NULL default '',
@@ -113,9 +121,6 @@ CREATE TABLE `em_settings` (
   `add_senders` int(11) NOT NULL default '0',
   `request_notification` enum('0','1') NOT NULL default '0',
   `charset` varchar(20) NOT NULL default '',
-  `enable_vacation` enum('0','1') NOT NULL default '0',
-  `vacation_subject` varchar(100) NOT NULL default '',
-  `vacation_text` text NOT NULL,
   `show_preview` enum('0','1') NOT NULL default '1',
   `beep` enum('0','1') NOT NULL default '0',
   `open_popup` enum('0','1') NOT NULL,

@@ -1,6 +1,14 @@
 <?php
 $updates[25] = array();
 
+$updates[24][] = "ALTER TABLE `em_settings` DROP `enable_vacation` ,
+DROP `vacation_subject` ,
+DROP `vacation_text` ;";
+
+$updates[24][] = "ALTER TABLE `emAccounts` ADD `enable_vacation` ENUM( '0', '1' ) NOT NULL ,
+ADD `vacation_subject` VARCHAR( 100 ) NOT NULL ,
+ADD `vacation_text` TEXT NOT NULL ;";
+
 $updates[24][] = "ALTER TABLE `em_settings` ADD `open_popup` ENUM( '0', '1' ) NOT NULL ;";
 $updates[24][] = "ALTER TABLE `emAccounts` ADD `auto_check` ENUM( '0', '1' ) NOT NULL ;";
 $updates[24][] = "ALTER TABLE `em_settings` DROP `auto_check`";
