@@ -3,11 +3,11 @@
 -- http://www.phpmyadmin.net
 -- 
 -- Host: localhost
--- Generatie Tijd: 15 Mei 2007 om 13:05
+-- Generatie Tijd: 03 Jul 2007 om 14:40
 -- Server versie: 5.0.38
 -- PHP Versie: 5.2.1
 -- 
--- Database: `go2172`
+-- Database: `go2176`
 -- 
 
 -- --------------------------------------------------------
@@ -17,7 +17,7 @@
 -- 
 
 DROP TABLE IF EXISTS `ab_addressbooks`;
-CREATE TABLE IF NOT EXISTS `ab_addressbooks` (
+CREATE TABLE `ab_addressbooks` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   `name` varchar(50) NOT NULL default '',
@@ -42,7 +42,7 @@ INSERT INTO `ab_addressbooks` (`id`, `user_id`, `name`, `acl_read`, `acl_write`)
 -- 
 
 DROP TABLE IF EXISTS `ab_companies`;
-CREATE TABLE IF NOT EXISTS `ab_companies` (
+CREATE TABLE `ab_companies` (
   `id` int(11) NOT NULL default '0',
   `link_id` int(11) default NULL,
   `user_id` int(11) NOT NULL default '0',
@@ -88,7 +88,7 @@ INSERT INTO `ab_companies` (`id`, `link_id`, `user_id`, `addressbook_id`, `name`
 -- 
 
 DROP TABLE IF EXISTS `ab_contacts`;
-CREATE TABLE IF NOT EXISTS `ab_contacts` (
+CREATE TABLE `ab_contacts` (
   `id` int(11) NOT NULL default '0',
   `link_id` int(11) default NULL,
   `user_id` int(11) NOT NULL default '0',
@@ -140,7 +140,7 @@ CREATE TABLE IF NOT EXISTS `ab_contacts` (
 -- 
 
 DROP TABLE IF EXISTS `ab_settings`;
-CREATE TABLE IF NOT EXISTS `ab_settings` (
+CREATE TABLE `ab_settings` (
   `user_id` int(11) NOT NULL default '0',
   `search_type` varchar(10) NOT NULL default '',
   `search_contacts_field` varchar(30) NOT NULL default '',
@@ -165,7 +165,7 @@ INSERT INTO `ab_settings` (`user_id`, `search_type`, `search_contacts_field`, `s
 -- 
 
 DROP TABLE IF EXISTS `ab_zipcodes`;
-CREATE TABLE IF NOT EXISTS `ab_zipcodes` (
+CREATE TABLE `ab_zipcodes` (
   `id` int(11) NOT NULL default '0',
   `zip` varchar(10) NOT NULL default '',
   `state` varchar(100) NOT NULL default '',
@@ -188,7 +188,7 @@ CREATE TABLE IF NOT EXISTS `ab_zipcodes` (
 -- 
 
 DROP TABLE IF EXISTS `acl`;
-CREATE TABLE IF NOT EXISTS `acl` (
+CREATE TABLE `acl` (
   `acl_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   `group_id` int(11) NOT NULL default '0',
@@ -292,7 +292,7 @@ INSERT INTO `acl` (`acl_id`, `user_id`, `group_id`) VALUES
 -- 
 
 DROP TABLE IF EXISTS `acl_items`;
-CREATE TABLE IF NOT EXISTS `acl_items` (
+CREATE TABLE `acl_items` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   `description` varchar(50) NOT NULL default '',
@@ -360,7 +360,7 @@ INSERT INTO `acl_items` (`id`, `user_id`, `description`) VALUES
 -- 
 
 DROP TABLE IF EXISTS `cal_backgrounds`;
-CREATE TABLE IF NOT EXISTS `cal_backgrounds` (
+CREATE TABLE `cal_backgrounds` (
   `id` int(11) NOT NULL,
   `color` char(6) NOT NULL,
   `name` varchar(100) NOT NULL,
@@ -379,7 +379,7 @@ CREATE TABLE IF NOT EXISTS `cal_backgrounds` (
 -- 
 
 DROP TABLE IF EXISTS `cal_calendar_backgrounds`;
-CREATE TABLE IF NOT EXISTS `cal_calendar_backgrounds` (
+CREATE TABLE `cal_calendar_backgrounds` (
   `id` int(11) NOT NULL,
   `calendar_id` int(11) NOT NULL,
   `background_id` int(11) NOT NULL,
@@ -402,7 +402,7 @@ CREATE TABLE IF NOT EXISTS `cal_calendar_backgrounds` (
 -- 
 
 DROP TABLE IF EXISTS `cal_calendars`;
-CREATE TABLE IF NOT EXISTS `cal_calendars` (
+CREATE TABLE `cal_calendars` (
   `id` int(11) NOT NULL default '0',
   `group_id` int(11) NOT NULL default '1',
   `user_id` int(11) NOT NULL default '0',
@@ -433,7 +433,7 @@ INSERT INTO `cal_calendars` (`id`, `group_id`, `user_id`, `acl_read`, `acl_write
 -- 
 
 DROP TABLE IF EXISTS `cal_events`;
-CREATE TABLE IF NOT EXISTS `cal_events` (
+CREATE TABLE `cal_events` (
   `id` int(11) NOT NULL default '0',
   `event_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -495,7 +495,7 @@ CREATE TABLE IF NOT EXISTS `cal_events` (
 -- 
 
 DROP TABLE IF EXISTS `cal_events_calendars`;
-CREATE TABLE IF NOT EXISTS `cal_events_calendars` (
+CREATE TABLE `cal_events_calendars` (
   `calendar_id` int(11) NOT NULL default '0',
   `event_id` int(11) NOT NULL default '0',
   `sid` char(32) NOT NULL default '',
@@ -514,7 +514,7 @@ CREATE TABLE IF NOT EXISTS `cal_events_calendars` (
 -- 
 
 DROP TABLE IF EXISTS `cal_exceptions`;
-CREATE TABLE IF NOT EXISTS `cal_exceptions` (
+CREATE TABLE `cal_exceptions` (
   `id` int(11) NOT NULL default '0',
   `event_id` int(11) NOT NULL default '0',
   `time` int(11) NOT NULL default '0',
@@ -534,7 +534,7 @@ CREATE TABLE IF NOT EXISTS `cal_exceptions` (
 -- 
 
 DROP TABLE IF EXISTS `cal_group_admins`;
-CREATE TABLE IF NOT EXISTS `cal_group_admins` (
+CREATE TABLE `cal_group_admins` (
   `group_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`group_id`,`user_id`)
@@ -552,7 +552,7 @@ CREATE TABLE IF NOT EXISTS `cal_group_admins` (
 -- 
 
 DROP TABLE IF EXISTS `cal_groups`;
-CREATE TABLE IF NOT EXISTS `cal_groups` (
+CREATE TABLE `cal_groups` (
   `id` int(11) NOT NULL default '0',
   `name` varchar(100) NOT NULL default '',
   `custom_fields` text NOT NULL,
@@ -572,7 +572,7 @@ CREATE TABLE IF NOT EXISTS `cal_groups` (
 -- 
 
 DROP TABLE IF EXISTS `cal_holidays`;
-CREATE TABLE IF NOT EXISTS `cal_holidays` (
+CREATE TABLE `cal_holidays` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   `date` int(10) NOT NULL default '0',
@@ -611,7 +611,7 @@ INSERT INTO `cal_holidays` (`id`, `user_id`, `date`, `name`, `region`) VALUES
 -- 
 
 DROP TABLE IF EXISTS `cal_participants`;
-CREATE TABLE IF NOT EXISTS `cal_participants` (
+CREATE TABLE `cal_participants` (
   `id` int(11) NOT NULL default '0',
   `event_id` int(11) NOT NULL default '0',
   `name` varchar(50) NOT NULL default '',
@@ -634,7 +634,7 @@ CREATE TABLE IF NOT EXISTS `cal_participants` (
 -- 
 
 DROP TABLE IF EXISTS `cal_reminders`;
-CREATE TABLE IF NOT EXISTS `cal_reminders` (
+CREATE TABLE `cal_reminders` (
   `user_id` int(11) NOT NULL default '0',
   `event_id` int(11) NOT NULL default '0',
   `remind_time` int(11) NOT NULL default '0',
@@ -659,7 +659,7 @@ CREATE TABLE IF NOT EXISTS `cal_reminders` (
 -- 
 
 DROP TABLE IF EXISTS `cal_settings`;
-CREATE TABLE IF NOT EXISTS `cal_settings` (
+CREATE TABLE `cal_settings` (
   `user_id` int(11) NOT NULL default '0',
   `default_cal_id` int(11) NOT NULL default '0',
   `default_view_id` int(11) NOT NULL default '0',
@@ -692,7 +692,7 @@ INSERT INTO `cal_settings` (`user_id`, `default_cal_id`, `default_view_id`, `sho
 -- 
 
 DROP TABLE IF EXISTS `cal_statuses`;
-CREATE TABLE IF NOT EXISTS `cal_statuses` (
+CREATE TABLE `cal_statuses` (
   `id` int(11) NOT NULL default '0',
   `type` varchar(20) NOT NULL default '',
   `name` varchar(50) NOT NULL default '',
@@ -725,7 +725,7 @@ INSERT INTO `cal_statuses` (`id`, `type`, `name`) VALUES
 -- 
 
 DROP TABLE IF EXISTS `cal_views`;
-CREATE TABLE IF NOT EXISTS `cal_views` (
+CREATE TABLE `cal_views` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   `name` varchar(50) NOT NULL default '',
@@ -751,7 +751,7 @@ CREATE TABLE IF NOT EXISTS `cal_views` (
 -- 
 
 DROP TABLE IF EXISTS `cal_views_calendars`;
-CREATE TABLE IF NOT EXISTS `cal_views_calendars` (
+CREATE TABLE `cal_views_calendars` (
   `view_id` int(11) NOT NULL default '0',
   `calendar_id` int(11) NOT NULL default '0',
   `background` char(6) NOT NULL default 'CCFFCC',
@@ -770,7 +770,7 @@ CREATE TABLE IF NOT EXISTS `cal_views_calendars` (
 -- 
 
 DROP TABLE IF EXISTS `cms_comments`;
-CREATE TABLE IF NOT EXISTS `cms_comments` (
+CREATE TABLE `cms_comments` (
   `id` int(11) NOT NULL,
   `file_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
@@ -795,7 +795,7 @@ INSERT INTO `cms_comments` (`id`, `file_id`, `user_id`, `name`, `comments`, `cti
 -- 
 
 DROP TABLE IF EXISTS `cms_files`;
-CREATE TABLE IF NOT EXISTS `cms_files` (
+CREATE TABLE `cms_files` (
   `id` int(11) NOT NULL default '0',
   `folder_id` int(11) NOT NULL default '0',
   `extension` varchar(10) NOT NULL default '',
@@ -838,7 +838,7 @@ INSERT INTO `cms_files` (`id`, `folder_id`, `extension`, `size`, `ctime`, `mtime
 -- 
 
 DROP TABLE IF EXISTS `cms_folders`;
-CREATE TABLE IF NOT EXISTS `cms_folders` (
+CREATE TABLE `cms_folders` (
   `id` int(11) NOT NULL default '0',
   `parent_id` int(11) NOT NULL default '0',
   `ctime` int(11) NOT NULL,
@@ -868,7 +868,7 @@ INSERT INTO `cms_folders` (`id`, `parent_id`, `ctime`, `mtime`, `name`, `disable
 -- 
 
 DROP TABLE IF EXISTS `cms_galleries`;
-CREATE TABLE IF NOT EXISTS `cms_galleries` (
+CREATE TABLE `cms_galleries` (
   `id` int(11) NOT NULL,
   `site_id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
@@ -887,7 +887,7 @@ CREATE TABLE IF NOT EXISTS `cms_galleries` (
 -- 
 
 DROP TABLE IF EXISTS `cms_languages`;
-CREATE TABLE IF NOT EXISTS `cms_languages` (
+CREATE TABLE `cms_languages` (
   `id` int(11) NOT NULL default '0',
   `site_id` int(11) NOT NULL default '0',
   `template_item_id` int(11) NOT NULL default '0',
@@ -915,7 +915,7 @@ CREATE TABLE IF NOT EXISTS `cms_languages` (
 -- 
 
 DROP TABLE IF EXISTS `cms_settings`;
-CREATE TABLE IF NOT EXISTS `cms_settings` (
+CREATE TABLE `cms_settings` (
   `user_id` int(11) NOT NULL default '0',
   `sort_field` varchar(20) NOT NULL default '',
   `sort_order` varchar(20) NOT NULL default '',
@@ -936,7 +936,7 @@ INSERT INTO `cms_settings` (`user_id`, `sort_field`, `sort_order`) VALUES
 -- 
 
 DROP TABLE IF EXISTS `cms_sites`;
-CREATE TABLE IF NOT EXISTS `cms_sites` (
+CREATE TABLE `cms_sites` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   `acl_write` int(11) NOT NULL default '0',
@@ -967,7 +967,7 @@ INSERT INTO `cms_sites` (`id`, `user_id`, `acl_write`, `allow_properties`, `doma
 -- 
 
 DROP TABLE IF EXISTS `cms_template_items`;
-CREATE TABLE IF NOT EXISTS `cms_template_items` (
+CREATE TABLE `cms_template_items` (
   `id` int(11) NOT NULL default '0',
   `template_id` int(11) NOT NULL default '0',
   `name` varchar(50) NOT NULL default '',
@@ -992,7 +992,7 @@ INSERT INTO `cms_template_items` (`id`, `template_id`, `name`, `content`, `page`
 -- 
 
 DROP TABLE IF EXISTS `cms_templates`;
-CREATE TABLE IF NOT EXISTS `cms_templates` (
+CREATE TABLE `cms_templates` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   `name` varchar(50) NOT NULL default '',
@@ -1024,7 +1024,7 @@ INSERT INTO `cms_templates` (`id`, `user_id`, `name`, `style`, `additional_style
 -- 
 
 DROP TABLE IF EXISTS `countries`;
-CREATE TABLE IF NOT EXISTS `countries` (
+CREATE TABLE `countries` (
   `id` int(11) NOT NULL default '0',
   `name` varchar(64) NOT NULL default '',
   `iso_code_2` char(2) NOT NULL default '',
@@ -1284,7 +1284,7 @@ INSERT INTO `countries` (`id`, `name`, `iso_code_2`, `iso_code_3`) VALUES
 -- 
 
 DROP TABLE IF EXISTS `db_sequence`;
-CREATE TABLE IF NOT EXISTS `db_sequence` (
+CREATE TABLE `db_sequence` (
   `seq_name` varchar(50) NOT NULL default '',
   `nextid` int(11) NOT NULL default '0',
   PRIMARY KEY  (`seq_name`)
@@ -1324,7 +1324,7 @@ INSERT INTO `db_sequence` (`seq_name`, `nextid`) VALUES
 -- 
 
 DROP TABLE IF EXISTS `emAccounts`;
-CREATE TABLE IF NOT EXISTS `emAccounts` (
+CREATE TABLE `emAccounts` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   `type` varchar(4) NOT NULL default '',
@@ -1345,6 +1345,7 @@ CREATE TABLE IF NOT EXISTS `emAccounts` (
   `spam` varchar(100) NOT NULL default '',
   `spamtag` varchar(20) NOT NULL default '',
   `examine_headers` enum('0','1') NOT NULL,
+  `auto_check` enum('0','1') NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
 ) TYPE=MyISAM;
@@ -1361,7 +1362,7 @@ CREATE TABLE IF NOT EXISTS `emAccounts` (
 -- 
 
 DROP TABLE IF EXISTS `emFilters`;
-CREATE TABLE IF NOT EXISTS `emFilters` (
+CREATE TABLE `emFilters` (
   `id` int(11) NOT NULL default '0',
   `account_id` int(11) NOT NULL default '0',
   `field` varchar(20) NOT NULL default '0',
@@ -1384,7 +1385,7 @@ CREATE TABLE IF NOT EXISTS `emFilters` (
 -- 
 
 DROP TABLE IF EXISTS `emFolders`;
-CREATE TABLE IF NOT EXISTS `emFolders` (
+CREATE TABLE `emFolders` (
   `id` int(11) NOT NULL default '0',
   `account_id` int(11) NOT NULL default '0',
   `name` varchar(100) NOT NULL default '',
@@ -1413,7 +1414,7 @@ CREATE TABLE IF NOT EXISTS `emFolders` (
 -- 
 
 DROP TABLE IF EXISTS `em_links`;
-CREATE TABLE IF NOT EXISTS `em_links` (
+CREATE TABLE `em_links` (
   `link_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `from` varchar(255) NOT NULL,
@@ -1437,7 +1438,7 @@ CREATE TABLE IF NOT EXISTS `em_links` (
 -- 
 
 DROP TABLE IF EXISTS `em_settings`;
-CREATE TABLE IF NOT EXISTS `em_settings` (
+CREATE TABLE `em_settings` (
   `user_id` int(11) NOT NULL default '0',
   `send_format` varchar(10) NOT NULL default '',
   `add_recievers` int(11) NOT NULL default '0',
@@ -1449,7 +1450,7 @@ CREATE TABLE IF NOT EXISTS `em_settings` (
   `vacation_text` text NOT NULL,
   `show_preview` enum('0','1') NOT NULL default '1',
   `beep` enum('0','1') NOT NULL,
-  `auto_check` enum('0','1') NOT NULL,
+  `open_popup` enum('0','1') NOT NULL,
   PRIMARY KEY  (`user_id`)
 ) TYPE=MyISAM;
 
@@ -1457,8 +1458,8 @@ CREATE TABLE IF NOT EXISTS `em_settings` (
 -- Gegevens worden uitgevoerd voor tabel `em_settings`
 -- 
 
-INSERT INTO `em_settings` (`user_id`, `send_format`, `add_recievers`, `add_senders`, `request_notification`, `charset`, `enable_vacation`, `vacation_subject`, `vacation_text`, `show_preview`, `beep`, `auto_check`) VALUES 
-(1, 'text/HTML', 0, 0, '0', 'UTF-8', '0', '', '', '1', '1', '1');
+INSERT INTO `em_settings` (`user_id`, `send_format`, `add_recievers`, `add_senders`, `request_notification`, `charset`, `enable_vacation`, `vacation_subject`, `vacation_text`, `show_preview`, `beep`, `open_popup`) VALUES 
+(1, 'text/HTML', 0, 0, '0', 'UTF-8', '0', '', '', '1', '1', '0');
 
 -- --------------------------------------------------------
 
@@ -1467,7 +1468,7 @@ INSERT INTO `em_settings` (`user_id`, `send_format`, `add_recievers`, `add_sende
 -- 
 
 DROP TABLE IF EXISTS `fs_links`;
-CREATE TABLE IF NOT EXISTS `fs_links` (
+CREATE TABLE `fs_links` (
   `link_id` int(11) NOT NULL default '0',
   `path` varchar(255) NOT NULL default '',
   `status_id` int(11) NOT NULL,
@@ -1489,7 +1490,7 @@ CREATE TABLE IF NOT EXISTS `fs_links` (
 -- 
 
 DROP TABLE IF EXISTS `fs_settings`;
-CREATE TABLE IF NOT EXISTS `fs_settings` (
+CREATE TABLE `fs_settings` (
   `user_id` int(11) NOT NULL,
   `notify` enum('0','1') NOT NULL,
   `open_properties` enum('0','1') NOT NULL,
@@ -1510,7 +1511,7 @@ INSERT INTO `fs_settings` (`user_id`, `notify`, `open_properties`) VALUES
 -- 
 
 DROP TABLE IF EXISTS `fs_shares`;
-CREATE TABLE IF NOT EXISTS `fs_shares` (
+CREATE TABLE `fs_shares` (
   `user_id` int(11) NOT NULL default '0',
   `link_id` int(11) default NULL,
   `path` varchar(200) NOT NULL default '',
@@ -1538,7 +1539,7 @@ INSERT INTO `fs_shares` (`user_id`, `link_id`, `path`, `type`, `acl_read`, `acl_
 -- 
 
 DROP TABLE IF EXISTS `fs_status_history`;
-CREATE TABLE IF NOT EXISTS `fs_status_history` (
+CREATE TABLE `fs_status_history` (
   `id` int(11) NOT NULL,
   `link_id` int(11) NOT NULL,
   `status_id` int(11) NOT NULL,
@@ -1563,7 +1564,7 @@ INSERT INTO `fs_status_history` (`id`, `link_id`, `status_id`, `user_id`, `ctime
 -- 
 
 DROP TABLE IF EXISTS `fs_statuses`;
-CREATE TABLE IF NOT EXISTS `fs_statuses` (
+CREATE TABLE `fs_statuses` (
   `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
   PRIMARY KEY  (`id`)
@@ -1584,7 +1585,7 @@ INSERT INTO `fs_statuses` (`id`, `name`) VALUES
 -- 
 
 DROP TABLE IF EXISTS `groups`;
-CREATE TABLE IF NOT EXISTS `groups` (
+CREATE TABLE `groups` (
   `id` int(11) NOT NULL default '0',
   `name` varchar(50) NOT NULL default '',
   `user_id` int(11) NOT NULL default '0',
@@ -1606,7 +1607,7 @@ INSERT INTO `groups` (`id`, `name`, `user_id`) VALUES
 -- 
 
 DROP TABLE IF EXISTS `ig_galleries`;
-CREATE TABLE IF NOT EXISTS `ig_galleries` (
+CREATE TABLE `ig_galleries` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
@@ -1632,7 +1633,7 @@ CREATE TABLE IF NOT EXISTS `ig_galleries` (
 -- 
 
 DROP TABLE IF EXISTS `ig_images`;
-CREATE TABLE IF NOT EXISTS `ig_images` (
+CREATE TABLE `ig_images` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `gallery_id` int(11) NOT NULL,
@@ -1657,7 +1658,7 @@ CREATE TABLE IF NOT EXISTS `ig_images` (
 -- 
 
 DROP TABLE IF EXISTS `links`;
-CREATE TABLE IF NOT EXISTS `links` (
+CREATE TABLE `links` (
   `type1` tinyint(4) NOT NULL default '0',
   `link_id1` int(11) NOT NULL default '0',
   `type2` tinyint(4) NOT NULL default '0',
@@ -1680,7 +1681,7 @@ CREATE TABLE IF NOT EXISTS `links` (
 -- 
 
 DROP TABLE IF EXISTS `modules`;
-CREATE TABLE IF NOT EXISTS `modules` (
+CREATE TABLE `modules` (
   `id` varchar(20) NOT NULL default '',
   `version` varchar(5) NOT NULL default '',
   `path` varchar(50) NOT NULL default '',
@@ -1699,8 +1700,8 @@ INSERT INTO `modules` (`id`, `version`, `path`, `sort_order`, `admin_menu`, `acl
 ('modules', '1.0', '', 130, '1', 1, 2),
 ('addressbook', '2.5', '', 20, '0', 4, 5),
 ('calendar', '3.1', '', 40, '0', 6, 7),
-('email', '2.4', '', 30, '0', 8, 9),
-('filesystem', '1.8', '', 70, '0', 10, 11),
+('email', '2.5', '', 30, '0', 8, 9),
+('filesystem', '1.9', '', 70, '0', 10, 11),
 ('groups', '1.0', '', 120, '1', 12, 13),
 ('cms', '3.0', '', 90, '0', 14, 15),
 ('phpsysinfo', '1.0', '', 140, '1', 16, 17),
@@ -1719,7 +1720,7 @@ INSERT INTO `modules` (`id`, `version`, `path`, `sort_order`, `admin_menu`, `acl
 -- 
 
 DROP TABLE IF EXISTS `no_notes`;
-CREATE TABLE IF NOT EXISTS `no_notes` (
+CREATE TABLE `no_notes` (
   `id` int(11) NOT NULL default '0',
   `link_id` int(11) default NULL,
   `user_id` int(11) NOT NULL default '0',
@@ -1747,7 +1748,7 @@ CREATE TABLE IF NOT EXISTS `no_notes` (
 -- 
 
 DROP TABLE IF EXISTS `no_settings`;
-CREATE TABLE IF NOT EXISTS `no_settings` (
+CREATE TABLE `no_settings` (
   `user_id` int(11) NOT NULL default '0',
   `sort_field` varchar(20) NOT NULL default '',
   `sort_order` varchar(20) NOT NULL default '',
@@ -1766,7 +1767,7 @@ CREATE TABLE IF NOT EXISTS `no_settings` (
 -- 
 
 DROP TABLE IF EXISTS `pmFees`;
-CREATE TABLE IF NOT EXISTS `pmFees` (
+CREATE TABLE `pmFees` (
   `id` int(11) NOT NULL default '0',
   `name` varchar(50) NOT NULL default '',
   `external_value` double NOT NULL default '0',
@@ -1790,7 +1791,7 @@ INSERT INTO `pmFees` (`id`, `name`, `external_value`, `internal_value`, `time`, 
 -- 
 
 DROP TABLE IF EXISTS `pmHours`;
-CREATE TABLE IF NOT EXISTS `pmHours` (
+CREATE TABLE `pmHours` (
   `id` int(11) NOT NULL default '0',
   `project_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -1819,7 +1820,7 @@ CREATE TABLE IF NOT EXISTS `pmHours` (
 -- 
 
 DROP TABLE IF EXISTS `pmProjects`;
-CREATE TABLE IF NOT EXISTS `pmProjects` (
+CREATE TABLE `pmProjects` (
   `id` int(11) NOT NULL default '0',
   `link_id` int(11) default NULL,
   `user_id` int(11) NOT NULL default '0',
@@ -1862,7 +1863,7 @@ CREATE TABLE IF NOT EXISTS `pmProjects` (
 -- 
 
 DROP TABLE IF EXISTS `pmStatuses`;
-CREATE TABLE IF NOT EXISTS `pmStatuses` (
+CREATE TABLE `pmStatuses` (
   `id` int(11) NOT NULL default '0',
   `name` varchar(50) NOT NULL default '',
   PRIMARY KEY  (`id`)
@@ -1886,7 +1887,7 @@ INSERT INTO `pmStatuses` (`id`, `name`) VALUES
 -- 
 
 DROP TABLE IF EXISTS `pmTimers`;
-CREATE TABLE IF NOT EXISTS `pmTimers` (
+CREATE TABLE `pmTimers` (
   `user_id` int(11) NOT NULL default '0',
   `start_time` int(11) NOT NULL default '0',
   `project_id` int(11) NOT NULL default '0',
@@ -1905,7 +1906,7 @@ CREATE TABLE IF NOT EXISTS `pmTimers` (
 -- 
 
 DROP TABLE IF EXISTS `pm_settings`;
-CREATE TABLE IF NOT EXISTS `pm_settings` (
+CREATE TABLE `pm_settings` (
   `user_id` int(11) NOT NULL default '0',
   `show_projects` tinyint(4) NOT NULL default '0',
   `fee_id` int(11) NOT NULL,
@@ -1926,7 +1927,7 @@ INSERT INTO `pm_settings` (`user_id`, `show_projects`, `fee_id`) VALUES
 -- 
 
 DROP TABLE IF EXISTS `pm_template_events`;
-CREATE TABLE IF NOT EXISTS `pm_template_events` (
+CREATE TABLE `pm_template_events` (
   `id` int(11) NOT NULL default '0',
   `template_id` int(11) NOT NULL default '0',
   `name` varchar(100) NOT NULL default '',
@@ -1951,7 +1952,7 @@ CREATE TABLE IF NOT EXISTS `pm_template_events` (
 -- 
 
 DROP TABLE IF EXISTS `pm_templates`;
-CREATE TABLE IF NOT EXISTS `pm_templates` (
+CREATE TABLE `pm_templates` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   `name` varchar(50) NOT NULL default '',
@@ -2001,7 +2002,7 @@ CREATE TABLE `se_cache` (
 -- 
 
 DROP TABLE IF EXISTS `se_last_sync_times`;
-CREATE TABLE IF NOT EXISTS `se_last_sync_times` (
+CREATE TABLE `se_last_sync_times` (
   `user_id` int(11) NOT NULL,
   `module` varchar(50) NOT NULL,
   `last_sync_time` int(11) NOT NULL,
@@ -2020,7 +2021,7 @@ CREATE TABLE IF NOT EXISTS `se_last_sync_times` (
 -- 
 
 DROP TABLE IF EXISTS `settings`;
-CREATE TABLE IF NOT EXISTS `settings` (
+CREATE TABLE `settings` (
   `user_id` int(11) NOT NULL default '0',
   `name` varchar(50) NOT NULL default '',
   `value` text NOT NULL,
@@ -2036,7 +2037,7 @@ INSERT INTO `settings` (`user_id`, `name`, `value`) VALUES
 (0, 'registration_confirmation', '<html>\r\n    <head>\r\n    </head>\r\n    <body>\r\n        <font size="3" face="Verdana">Dear&nbsp;%beginning%&nbsp;%middle_name%%last_name%,<br />\r\n        <br />\r\n        Welcome to Group-Office! You can login at:<br />\r\n        <br />\r\n        %full_url%<br />\r\n        <br />\r\n        With:<br />\r\n        <br />\r\n        Username: %username%<br />\r\n        Password: %password%<br />\r\n        <br />\r\n        With kind regards,<br />\r\n        <br />\r\n        The Group-Office administrator</font>\r\n    </body>\r\n</html>'),
 (0, 'registration_unconfirmed', '<html>\r\n    <head>\r\n    </head>\r\n    <body>\r\n        <font size="3" face="Verdana">Dear&nbsp;%beginning% %middle_name%%last_name%,<br />\r\n        <br />\r\n        Thank you for your registration at Group-Office. You can login when an administrator activates your account. You will recieve an e-mail with login instructions at that time.<br />\r\n        <br />\r\n        With kind regards,<br />\r\n        <br />\r\n        The Group-Office administrator</font>\r\n    </body>\r\n</html>'),
 (0, 'registration_confirmation_subject', 'Welcome to Group-Office!'),
-(0, 'version', '222'),
+(0, 'version', '223'),
 (0, 'enabled_columns_users', '0,1,2,3,4,5'),
 (1, 'sort_index_users', 'lastlogin'),
 (1, 'sort_asc_users', '0'),
@@ -2054,7 +2055,7 @@ INSERT INTO `settings` (`user_id`, `name`, `value`) VALUES
 -- 
 
 DROP TABLE IF EXISTS `sum_announcements`;
-CREATE TABLE IF NOT EXISTS `sum_announcements` (
+CREATE TABLE `sum_announcements` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   `acl_id` int(11) NOT NULL default '0',
@@ -2079,7 +2080,7 @@ CREATE TABLE IF NOT EXISTS `sum_announcements` (
 -- 
 
 DROP TABLE IF EXISTS `sync_contacts_maps`;
-CREATE TABLE IF NOT EXISTS `sync_contacts_maps` (
+CREATE TABLE `sync_contacts_maps` (
   `device_id` int(11) NOT NULL default '0',
   `contact_id` int(11) NOT NULL default '0',
   `remote_id` varchar(255) NOT NULL,
@@ -2098,7 +2099,7 @@ CREATE TABLE IF NOT EXISTS `sync_contacts_maps` (
 -- 
 
 DROP TABLE IF EXISTS `sync_contacts_syncs`;
-CREATE TABLE IF NOT EXISTS `sync_contacts_syncs` (
+CREATE TABLE `sync_contacts_syncs` (
   `device_id` int(11) NOT NULL default '0',
   `local_last_anchor` int(11) NOT NULL default '0',
   `remote_last_anchor` char(32) NOT NULL default '',
@@ -2117,7 +2118,7 @@ CREATE TABLE IF NOT EXISTS `sync_contacts_syncs` (
 -- 
 
 DROP TABLE IF EXISTS `sync_datastores`;
-CREATE TABLE IF NOT EXISTS `sync_datastores` (
+CREATE TABLE `sync_datastores` (
   `id` int(11) NOT NULL default '0',
   `device_id` int(11) NOT NULL default '0',
   `uri` varchar(100) NOT NULL default '',
@@ -2138,7 +2139,7 @@ CREATE TABLE IF NOT EXISTS `sync_datastores` (
 -- 
 
 DROP TABLE IF EXISTS `sync_devices`;
-CREATE TABLE IF NOT EXISTS `sync_devices` (
+CREATE TABLE `sync_devices` (
   `id` int(11) NOT NULL default '0',
   `manufacturer` varchar(50) NOT NULL default '',
   `model` varchar(50) NOT NULL default '',
@@ -2160,7 +2161,7 @@ CREATE TABLE IF NOT EXISTS `sync_devices` (
 -- 
 
 DROP TABLE IF EXISTS `sync_events_maps`;
-CREATE TABLE IF NOT EXISTS `sync_events_maps` (
+CREATE TABLE `sync_events_maps` (
   `device_id` int(11) NOT NULL default '0',
   `event_id` int(11) NOT NULL default '0',
   `remote_id` varchar(255) NOT NULL,
@@ -2180,7 +2181,7 @@ CREATE TABLE IF NOT EXISTS `sync_events_maps` (
 -- 
 
 DROP TABLE IF EXISTS `sync_events_syncs`;
-CREATE TABLE IF NOT EXISTS `sync_events_syncs` (
+CREATE TABLE `sync_events_syncs` (
   `device_id` int(11) NOT NULL default '0',
   `local_last_anchor` int(11) NOT NULL default '0',
   `remote_last_anchor` char(32) NOT NULL default '',
@@ -2199,7 +2200,7 @@ CREATE TABLE IF NOT EXISTS `sync_events_syncs` (
 -- 
 
 DROP TABLE IF EXISTS `sync_settings`;
-CREATE TABLE IF NOT EXISTS `sync_settings` (
+CREATE TABLE `sync_settings` (
   `user_id` int(11) NOT NULL default '0',
   `addressbook_id` int(11) NOT NULL default '0',
   `calendar_id` int(11) NOT NULL default '0',
@@ -2224,7 +2225,7 @@ INSERT INTO `sync_settings` (`user_id`, `addressbook_id`, `calendar_id`, `sync_p
 -- 
 
 DROP TABLE IF EXISTS `sync_todos_syncs`;
-CREATE TABLE IF NOT EXISTS `sync_todos_syncs` (
+CREATE TABLE `sync_todos_syncs` (
   `device_id` int(11) NOT NULL default '0',
   `local_last_anchor` int(11) NOT NULL default '0',
   `remote_last_anchor` char(32) NOT NULL default '',
@@ -2243,7 +2244,7 @@ CREATE TABLE IF NOT EXISTS `sync_todos_syncs` (
 -- 
 
 DROP TABLE IF EXISTS `td_reminders`;
-CREATE TABLE IF NOT EXISTS `td_reminders` (
+CREATE TABLE `td_reminders` (
   `user_id` int(11) NOT NULL default '0',
   `todo_id` int(11) NOT NULL default '0',
   `remind_time` int(11) NOT NULL default '0',
@@ -2263,7 +2264,7 @@ CREATE TABLE IF NOT EXISTS `td_reminders` (
 -- 
 
 DROP TABLE IF EXISTS `td_settings`;
-CREATE TABLE IF NOT EXISTS `td_settings` (
+CREATE TABLE `td_settings` (
   `user_id` int(11) NOT NULL default '0',
   `sort_field` varchar(20) NOT NULL default '',
   `sort_order` varchar(20) NOT NULL default '',
@@ -2282,7 +2283,7 @@ CREATE TABLE IF NOT EXISTS `td_settings` (
 -- 
 
 DROP TABLE IF EXISTS `td_todos`;
-CREATE TABLE IF NOT EXISTS `td_todos` (
+CREATE TABLE `td_todos` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   `contact_id` int(11) NOT NULL default '0',
@@ -2320,7 +2321,7 @@ CREATE TABLE IF NOT EXISTS `td_todos` (
 -- 
 
 DROP TABLE IF EXISTS `tp_mailing_companies`;
-CREATE TABLE IF NOT EXISTS `tp_mailing_companies` (
+CREATE TABLE `tp_mailing_companies` (
   `group_id` int(11) NOT NULL default '0',
   `company_id` int(11) NOT NULL default '0',
   KEY `group_id` (`group_id`)
@@ -2338,7 +2339,7 @@ CREATE TABLE IF NOT EXISTS `tp_mailing_companies` (
 -- 
 
 DROP TABLE IF EXISTS `tp_mailing_contacts`;
-CREATE TABLE IF NOT EXISTS `tp_mailing_contacts` (
+CREATE TABLE `tp_mailing_contacts` (
   `group_id` int(11) NOT NULL default '0',
   `contact_id` int(11) NOT NULL default '0',
   KEY `group_id` (`group_id`)
@@ -2356,7 +2357,7 @@ CREATE TABLE IF NOT EXISTS `tp_mailing_contacts` (
 -- 
 
 DROP TABLE IF EXISTS `tp_mailing_groups`;
-CREATE TABLE IF NOT EXISTS `tp_mailing_groups` (
+CREATE TABLE `tp_mailing_groups` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   `acl_read` int(11) NOT NULL default '0',
@@ -2377,7 +2378,7 @@ CREATE TABLE IF NOT EXISTS `tp_mailing_groups` (
 -- 
 
 DROP TABLE IF EXISTS `tp_mailing_users`;
-CREATE TABLE IF NOT EXISTS `tp_mailing_users` (
+CREATE TABLE `tp_mailing_users` (
   `group_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   KEY `group_id` (`group_id`)
@@ -2395,7 +2396,7 @@ CREATE TABLE IF NOT EXISTS `tp_mailing_users` (
 -- 
 
 DROP TABLE IF EXISTS `tp_templates`;
-CREATE TABLE IF NOT EXISTS `tp_templates` (
+CREATE TABLE `tp_templates` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   `type` tinyint(4) NOT NULL default '0',
@@ -2417,7 +2418,7 @@ CREATE TABLE IF NOT EXISTS `tp_templates` (
 -- 
 
 DROP TABLE IF EXISTS `tp_templates_content`;
-CREATE TABLE IF NOT EXISTS `tp_templates_content` (
+CREATE TABLE `tp_templates_content` (
   `id` int(11) NOT NULL default '0',
   `content` longblob NOT NULL,
   PRIMARY KEY  (`id`)
@@ -2435,7 +2436,7 @@ CREATE TABLE IF NOT EXISTS `tp_templates_content` (
 -- 
 
 DROP TABLE IF EXISTS `users`;
-CREATE TABLE IF NOT EXISTS `users` (
+CREATE TABLE `users` (
   `id` int(11) NOT NULL default '0',
   `username` varchar(50) NOT NULL default '',
   `password` varchar(64) NOT NULL default '',
@@ -2506,7 +2507,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- 
 
 INSERT INTO `users` (`id`, `username`, `password`, `enabled`, `authcode`, `first_name`, `middle_name`, `last_name`, `initials`, `title`, `sex`, `birthday`, `email`, `company`, `department`, `function`, `home_phone`, `work_phone`, `fax`, `cellular`, `country`, `state`, `city`, `zip`, `address`, `address_no`, `homepage`, `work_address`, `work_address_no`, `work_zip`, `work_country`, `work_state`, `work_city`, `work_fax`, `acl_id`, `date_format`, `date_seperator`, `time_format`, `thousands_seperator`, `decimal_seperator`, `currency`, `mail_client`, `logins`, `lastlogin`, `registration_time`, `max_rows_list`, `timezone`, `DST`, `start_module`, `language`, `theme`, `first_weekday`, `sort_name`, `use_checkbox_select`, `country_id`, `work_country_id`, `bank`, `bank_no`, `link_id`, `mtime`) VALUES 
-(1, 'admin', '21232f297a57a5a743894a0e4a801fc3', '1', 'jmvnqxuf', 'Group-Office', '', 'Admin', '', '', 'M', '0000-00-00', 'webmaster@example.com', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 3, 'dmY', '-', 'G:i', ',', '.', 'EUR', 1, 22, 1179219825, 1159517603, 15, 1, '1', 'summary', 'en', 'Default', 1, 'first_name', '0', 0, 0, '', '', 8, 1159517603);
+(1, 'admin', '21232f297a57a5a743894a0e4a801fc3', '1', 'jmvnqxuf', 'Group-Office', '', 'Admin', '', '', 'M', '0000-00-00', 'webmaster@example.com', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 3, 'dmY', '-', 'G:i', ',', '.', 'EUR', 1, 23, 1183459095, 1159517603, 15, 1, '1', 'summary', 'nl', 'Default', 1, 'first_name', '0', 0, 0, '', '', 8, 1159517603);
 
 -- --------------------------------------------------------
 
@@ -2515,7 +2516,7 @@ INSERT INTO `users` (`id`, `username`, `password`, `enabled`, `authcode`, `first
 -- 
 
 DROP TABLE IF EXISTS `users_groups`;
-CREATE TABLE IF NOT EXISTS `users_groups` (
+CREATE TABLE `users_groups` (
   `group_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`group_id`,`user_id`)

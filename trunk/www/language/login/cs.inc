@@ -22,3 +22,13 @@ $login_lost_password_mail_body = "Požadujete nové heslo pro e-mail %s.\nVaše 
 $login_new_password = 'Nové heslo';
 $login_lost_password_success = 'Nové heslo bylo zaslána na %s';
 $login_lost_password_failed = 'Litujeme, e-mailová adresa \'%s\' není v systému registrovaná.';
+
+//2.14
+$login_fullscreen = 'Group-Office byl zobrazen jako fullscreen automaticky. Můžete zavřít toto okno, nebo spustit Group-Office znova.';
+$login_start = 'Spustit znova';
+
+//2.16
+$login_to = 'Přikhásit se k %s';
+$login_no_account = 'Ještě neregistrován(a)?';
+$login_register = 'Klikněte sem pro registraci %s';
+$login_no_account_text = 'K přihlásění do systému potřebujete registraci.';

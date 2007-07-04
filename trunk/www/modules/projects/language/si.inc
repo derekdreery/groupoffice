@@ -103,4 +103,5 @@ $pm_customer='Stranka';
 $pm_book_rights='Dostopnost knjiženja';
 $pm_template_exists='Predloga s tem imenom že obstaja';
 $pm_link_calendar='Daj delovne ure v koledar';
+$pm_help_url='http://docs.group-office.com/index.php?folder_id=49&file_id=221';
 ?>
