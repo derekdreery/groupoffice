@@ -1227,9 +1227,20 @@ function validate_input($input, $invalid_chars = "") {
 * @return string
 */
 
-function format_number($number, $decimals=2)
+function format_number($number, $decimals=2, $precision=null)
 {
-	return number_format($number, $decimals, $_SESSION['GO_SESSION']['decimal_seperator'], $_SESSION['GO_SESSION']['thousands_seperator']);
+	if(!isset($precision))
+	{
+		$precision=$decimals;
+	}
+	$formatted = number_format($number, $precision, $_SESSION['GO_SESSION']['decimal_seperator'], $_SESSION['GO_SESSION']['thousands_seperator']);
+	$dec=$precision;	
+	while(substr($formatted,-1,1)=='0' && $dec>$decimals)
+	{
+		$dec--;
+		$formatted = substr($formatted,0,-1);
+	}
+	return $formatted;
 }
 
 /**
