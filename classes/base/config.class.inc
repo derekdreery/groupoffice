@@ -583,13 +583,30 @@ class GO_CONFIG
    * @access  public
    */
   var $email_connectstring_options = '';
+   /**
+   * The location of the local home directories. Used for vacation messages in e-mail
+   * module.
+   *
+   * @var     string
+   * @access  public
+   */  
+  var $user_home_dirs = '/home/';
+   /**
+   * Use vacation in e-mail module for out of office replies
+   * Currently only 'system_vacation' for use with home directories and
+   * the vacation program.
+   *
+   * @var     string
+   * @access  public
+   */  
+  var $email_vacation = '';
   /**
    * The maximum size of e-mail attachments the browser attempts to upload.
    * Be aware that the php.ini file must be set accordingly (http://www.php.net).
    *
    * @var     string
    * @access  public
-   */
+   */  
   var $max_attachment_size = '10000000';
   /**
    * The width of the E-mail composer's popup window
