@@ -22,3 +22,6 @@ $groups_users_in_select = "Vyberte ty uživatele, které chcete přidat do této
 //translation required
 $groups_new_group = 'Nová skupina';
 $groups_members = 'Členové';
+
+//2.13
+$lang_modules['groups'] = 'Uživatelské skupiny';

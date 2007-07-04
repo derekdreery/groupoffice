@@ -94,3 +94,59 @@ $pm_load= 'Zobrazit hodiny'; //chnaged. Search above
 
 $pm_edit_data = 'Editace odpracovaných hodin';
 $pm_enter_data = 'Zadání odpracovaných hodin';//changed, search above
+
+//2.14
+$pm_templates = 'Šablony';
+$pm_template = 'Šablona';
+$pm_new_template = 'Nová šablona';
+$pm_no_templates = 'Žádné šablony nenalezeny';
+
+$pm_template_offset = 'Úkol začíná';
+$pm_template_after = 'když nový projekt startuje v';
+
+
+$pm_new_template_event = 'Nový úkol';
+$pm_duration = 'Doba';
+
+$pm_no_template_events = 'Žádné úkoly nenalezeny';
+$pm_no_template = 'Nepoužívej šablonu';
+
+$pm_put_events_in = 'dej úkoly do';
+
+//2.15
+$pm_shift_events = 'Posuň související schůzky  ůkoly když změním startovací datum projektu';
+
+$pm_relate_to_self = 'Projekt nemůže být související sám se sebou';
+
+$pm_print_options = 'Tiskni nastaveni';
+$pm_print_options_text = 'You can select a time period to only print the projects which have started later then the start date and ended before the end date. Leave these fields empty to print all projects.';
+
+$pm_internal_fee= 'Internal fee';
+$pm_external_fee= 'External fee';
+
+$pm_total_external_fee = 'Total external fee';
+$pm_total_internal_fee = 'Total internal fee';
+
+$pm_billed='Billed';
+
+$pm_fee_time = 'Value per';
+
+$pm_book_units='Only enter a number of time units';
+$pm_show_project_users = 'Specify working hours of all project users';
+
+$pm_to_bill = 'To be billed';
+
+$pm_total_recieved = 'Total recieved';
+$pm_result = 'Result';
+
+$pm_customer='Customer';
+
+$pm_book_rights = 'Book access';
+
+$pm_template_exists = 'A template with this name already exists';
+
+$pm_link_calendar= 'Put working hours in a calendar';
+
+$pm_project='Project';
+
+$pm_help_url='http://docs.group-office.com/index.php?folder_id=49&file_id=221';

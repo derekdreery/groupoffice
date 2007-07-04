@@ -21,7 +21,7 @@ $fbShares = "Sdílené složky";
 $fbShare = "Sdílená složka";
 $fbPath = "Cesta";
 $fbFolders = "Složky";
-$fbNoSelect = "Nezvolil jste žádnou položku. Pro výběr klikněte na obrázek vedle jména.";
+$fbNoSelect = "Nic jste nevybrali, vyberte soubor(y) ze seznamu.";
 $fbConfirmDelete = "Potvrďte smazání";
 $fbWritePermissions = "Práva k zápisu";
 $fbReadPermissions = "Práva ke čtení";
@@ -78,3 +78,31 @@ $fs_new_doc = 'Nový dokument';
 $fs_cleanup = 'Vyčistit HTML';
 $fbMultipleFiles = 'Více souborů';
 $fbSelect = "Zvolte soubor"; //changed
+
+//2.14
+$fs_confirm_unshare = 'Jste si jisti, že chcete zrušit všechna oprávnění na tomto adresáři?';
+$fs_users = 'Uživatelé';
+$fs_personal = 'Osobní';
+
+$fs_inssufficient_diskspace = 'Nedostatek diskového prostoru!';
+
+//2.15
+$fs_open_containing_folder = 'Otevři obsahující adresář';
+$fs_file_put_in='Soubor "%s" je nahrán na "%s"';
+$fs_new_file_uploaded = 'Nový soubor nahrán: %s';
+
+$fs_download = 'Stáhnout';
+$fs_view = 'Prohlížet';
+
+$fs_notify = 'Pošli mi email. když někdo uploaduje soubor';
+
+$fs_status='Status';
+$fs_author='Author';
+$fs_no_status_history='Žádná historie statusu';
+$fs_no_status='Žádný';
+$fs_file_updated='Soubor %s modifikován';
+$fs_open_properties='Otevři okno s vlastnostmi souboru při dvojím kliknutí';
+
+$fs_file='Soubor';
+
+$fs_help_url='http://docs.group-office.com/index.php?folder_id=49&file_id=220';

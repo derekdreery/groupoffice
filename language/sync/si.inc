@@ -15,4 +15,6 @@ $sync_log='Sinhroniziraj dnevnik';
 $sync_max_days_old='Sinhroniziraj dogodke, ki niso starejši od';
 $sync_days='Dni';
 $sync_delete_old_events='Izbriši dogodke od stranke ki so starejši od zgornjega časa';
+$sync_click_to_verify='Klikni za potrditev';
+$sync_help_url='http://docs.group-office.com/index.php?folder_id=49&file_id=185';
 ?>

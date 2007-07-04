@@ -87,4 +87,6 @@ $fs_no_status_history='Ni zgodovine stanja';
 $fs_no_status='Noben';
 $fs_file_updated='Datoteka %s spremenjena';
 $fs_open_properties='Odpri okno za lastnosti pri dvokliku datoteke';
+$fs_file='Datoteka';
+$fs_help_url='http://docs.group-office.com/index.php?folder_id=49&file_id=220';
 ?>

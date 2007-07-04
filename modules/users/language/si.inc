@@ -60,7 +60,7 @@ $admin_look_feel='Poglej in občuti';
 $disabled_user_fields_text='Izberi polja, ki jih želiš onemogočiti za urejanje s strani navadnih uporabnikov na strani njihovega profila.';
 $admin_disabled_user_fields='Onemogoči uporabniška polja';
 $admin_registration_unconfirmed='Nepotrjen registracijski e-mail';
-$admin_registration_confirmation='E-mail za potrditev registracije ';
+$admin_registration_confirmation='E-mail za potrditev registracije';
 $admin_registration_confirmation_text='To je e-mail, ki ga prejmejo uporabniki, ko dobijo nov aktiven račun. Pusti prazno, če nočeš pošiljati ta e-mail.';
 $admin_registration_unconfirmed_text='To je e-mail, ki ga prejmejo uporabniki, ko dobijo nov neaktiven račun. Pusti prazno, če nočeš pošiljati ta e-mail.';
 $admin_subject='Zadeva';
@@ -72,4 +72,7 @@ $admin_new_user_subject_activate='Registriran je nov uporabnik. Potrebna aktivac
 $admin_password_changed='Geslo uspešno spremenjeno';
 $registration_self_success='Dobrodošli na %s!';
 $registration_self_success_text='Vaš račun je bil uspešno ustvarjen. Sedaj se lahko prijavite z uporabo svojega uporabniškega imena in gesla.';
+$us_reset='Ponastavi';
+$us_never='Novejše';
+$us_help_url='http://docs.group-office.com/index.php?folder_id=53&file_id=0';
 ?>

@@ -177,4 +177,15 @@ $ab_file='Datoteka';
 $ab_template_uploaded='Dokument je shranjen';
 $ab_select_mailing_group='Izberi skupino, kateri želiš poslati svoja pošiljanja';
 $ab_id='ne.';
+$ab_company='Družba';
+$ab_edit_selected='Uredi izbrano';
+$ab_edit_selected_warning='Opozorilo! Urejate %s %s. Vsi bodo posodobljeni s temi spremembami. Prazna polja bodo ignorirana.';
+$ab_contacts='kontakti';
+$ab_users='uporabniki';
+$ab_dontchange='Ne spreminjaj';
+$ab_select_unknown_recipient='Prejemnik %s je neznan. E-Mail naslov, bi lahko pripadal spodaj navedenemu kontaktu. Klikni na ime kontakta za dodajanje k njemu, dodajanje novega kontakta ali ignoriranje e-mail naslova.';
+$ab_ignore='Ignoriraj';
+$ab_check_info='E-Mail naslov je bil dodan v profil kontakta. Kliknite "Ok" če ga želite shraniti.';
+$ab_reset='Ponastavi';
+$ab_help_url='http://docs.group-office.com/index.php?folder_id=56&file_id=0';
 ?>

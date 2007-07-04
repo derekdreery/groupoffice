@@ -219,3 +219,44 @@ $ab_search_sender = 'Hledat e-mail';
 $ab_contact_exists = 'Kontakt už patrně existuje. Klikněte na %s pro přechod na existujícího kontaktu nebo klikněte \'Ok\' nebo \'Použít\' pro uložení nového kontaktu.';
 $ab_company_exists = 'Firma už patrně existuje. Klikněte na %s pro přechod na existující firmu nebo klikněte \'Ok\' nebo \'Použít\' pro uložení nové firmy.';
 $ab_here = 'zde';
+$ab_move = 'Přesunout';
+
+//2.13
+$ab_search_for_keyword = 'na';
+
+$ab_search_in = 'Hledejte v'; //changed
+$ab_search_on_users = 'Hledejte na';
+
+$ab_users_count_single='uživatel';
+$ab_users_count_multiple='uživatelé';
+$ab_no_users='Žádný uživatel nenalezen';
+
+//2.15
+$ab_select_addressbook = 'Vyber adresář';
+$ab_move = 'Přesuň';
+$ab_file='Soubor';
+
+$ab_template_uploaded = 'Dokument je uložen';
+$ab_select_mailing_group = 'Vyberte skupinu, které chcete poslat vaše maily';
+
+//2.16
+$ab_id = 'ne.';
+
+$ab_contact ='Kontakt';
+$ab_company ='Společnost';
+
+$ab_edit_selected = 'Edituj vybrané';
+$ab_edit_selected_warning = 'Varování! Editujete %s %s. Všechno bude aktualizováno s těmito modifikacemi. Prázdná pole budou ignorována.';
+$ab_contacts='kontakty';
+$ab_companies='společnosti';
+$ab_users='uživatelé';
+$ab_dontchange='Nezměněno';
+
+$ab_select_unknown_recipient='Příjemce %s je neznámý. Emailová adresa možná patří ke kontaktu vylistovaném dole. Klikněte na jméno kontaktu a vložte to k němu, Vložte nový kontakt nebo ignorujte e-mail adresu.';
+$ab_ignore='Ignorovat';
+$ab_check_info='Email adresa, která byla zadána není v adresáři. Klikněte na \'Ok\' pro uložení.';
+$ab_reset='Reset';
+$ab_help_url='http://docs.group-office.com/index.php?folder_id=56&file_id=0';
+
+//Gmork
+$strNoItemSelected = 'Vyberte ze seznamu';
