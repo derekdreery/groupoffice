@@ -64,6 +64,8 @@ array(
 'smtp_username',
 'smtp_password',
 'email_connectstring_options',
+'user_home_dirs',
+'email_vacation',
 'max_attachment_size',
 'cmd_zip',
 'cmd_unzip',
