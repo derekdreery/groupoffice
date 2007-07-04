@@ -24,13 +24,6 @@ $email_module = $GO_MODULES->get_module('email');
 $cal_module = $GO_MODULES->get_module('calendar');
 
 
-
-
-$old = umask(0);
-	
-require_once($email_module['class_path'].'email.class.inc');
-$email = new email();
-
 require_once($cal_module['class_path'].'calendar.class.inc');
 $cal = new calendar();
 $cal2 = new calendar();
@@ -41,72 +34,6 @@ require_once ($GO_LANGUAGE->get_language_file('calendar'));
 $GO_USERS->get_users();	
 while($GO_USERS->next_record())
 {
-	if($email_module)
-	{
-		$username = trim($GO_USERS->f('username'));
-		$pos = strrpos($username, '@');
-		if ($pos) {
-			$username = substr($username, 0, $pos);
-		}
-		
-		if(!empty($username))
-		{		
-			$homedir = '/home/'.$username;
-			
-			$vacation_file = $homedir.'/.vacation.msg';
-			$db_file = $homedir.'/.vacation.db';
-			$forward_file = $homedir.'/.forward';
-			
-			$settings = $email->get_settings($GO_USERS->f('id'));
-			if($settings && $settings['enable_vacation'])
-			{
-				$forward_file_contents = '\\'.$username.', "|/usr/bin/vacation '.$username.'"';	
-				
-				
-				$middle_name = $GO_USERS->f('middle_name') != '' ? ' '.$GO_USERS->f('middle_name').' ' : ' ';			
-				$name = $GO_USERS->f('first_name').$middle_name.$GO_USERS->f('last_name');
-				
-				$vacation_file_contents = 
-					'From: '.$RFC822->write_address($name, $GO_USERS->f('email'))."\n".
-					'Subject: '.$settings['vacation_subject']."\n\n".
-					$settings['vacation_text'];
-					
-				if (!$fp = fopen($forward_file, 'w+')) {
-	         go_log(LOG_INFO, "Cannot open file ($forward_file)");
-	      }else
-	      {
-	      	if (fwrite($fp, $forward_file_contents) === false) {
-		       echo "Cannot write to file ($forward_file)";
-		       exit;
-	   			}
-	   			fclose($fp);
-	      }
-	      if (!$fp = fopen($vacation_file, 'w+')) {
-	         go_log(LOG_INFO, "Cannot open file ($vacation_file)");
-	      }else
-	      {
-	      	if (fwrite($fp, $vacation_file_contents) === false) {
-		       echo "Cannot write to file ($vacation_file)";
-		       exit;
-	   			}
-	   			fclose($fp);
-	      }
-	      
-	      chown($vacation_file, $username);
-	      chown($forward_file, $username);
-	      
-	      
-	      chmod($vacation_file, 0640);
-	      chmod($forward_file, 0640);
-	      
-			}else
-			{
-				if(file_exists($vacation_file)) unlink($vacation_file);
-				if(file_exists($forward_file)) unlink($forward_file);
-				if(file_exists($db_file)) unlink($db_file);
-			}		
-		}		
-	}
 	
 	if($cal_module)
 	{
@@ -137,4 +64,4 @@ while($GO_USERS->next_record())
 		}
 	}	
 }
-umask($old);
+
