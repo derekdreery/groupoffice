@@ -26,3 +26,9 @@ $adjust_to_dst = 'Automaticky upravovat hodiny podle letního času';
 
 //2.08
 $pref_name_order = 'Řadit jména podle';
+
+//2.14
+$pref_use_checkbox_select = 'Multvýběr řádků bez použití klávesy CTRL';
+
+//2.15
+$pref_date_seperator = 'Oddělovač datumu';

@@ -153,4 +153,13 @@ $cms_commentsform='Obrazec za komentarje';
 $cms_login_template_item='Predloga za prijavo';
 $cms_default_go_login='Privzet Group-Office prijavni prostor';
 $cms_userfield='Uporabniško področje podatkov';
+$cms_fckeditor_styles='Možni stili';
+$cms_fckeditor_help='Za dokumentacijo klikni tukaj';
+$cms_add_contact_success_title='Najlepša hvala!';
+$cms_add_contact_success_text='Naročeni ste na naša obvestila!';
+$cms_add_contact_email_subject='Nov kontakt dodan na mailing';
+$cms_new_comment_subject='Nov komentar dodan v %s';
+$cms_insert_video='Vstavi video';
+$cms_antispam_text='Prosim odgovorite na sledeče vprašanje v izogib neželjeni pošti';
+$cms_antispam_fail='Odgovor na vprašanje je bilo napačno. Prosimo poizkusite ponovno.';
 ?>

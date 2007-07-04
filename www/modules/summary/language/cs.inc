@@ -19,3 +19,8 @@ $sum_private = 'Soukromé';
 //2.10
 $sum_today = 'Dnes';
 $sum_tommorow = 'Zítra';
+$sum_unfinished = 'Nedokončené';
+
+$sum_latest_files='Naposled nahrané soubory';
+
+$sum_help_url='http://docs.group-office.com/index.php?folder_id=49&file_id=208';
