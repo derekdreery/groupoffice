@@ -4,6 +4,8 @@
 -Fixed problem in synchronization with strange characters
 -Brought back e-mail popup notification
 -Automatic e-mail check can be enabled per account
+-Updated Czech language
+-Updated Slovenian language
 
 2007/06/18 Version 2.17-stable-6
 -fixed bug with inline e-mail attachments
