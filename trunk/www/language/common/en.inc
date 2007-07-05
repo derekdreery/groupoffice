@@ -393,4 +393,10 @@ $link_types[6]='Files';
 $link_types[7]='Orders';
 $link_types[8]='Users';
 $link_types[9]='E-mail';
-$link_types[10]='Timeregistration';
+$link_types[10]='Timeregistration'
+
+$jupload_text='Select the files from your computer and click at \'Upload\'.';
+
+$jupload_max_size='Maximum size';
+$jupload_width='width';
+$jupload_height='height';

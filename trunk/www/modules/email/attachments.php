@@ -225,9 +225,11 @@ if($task != 'local_files')
 	$cell = new table_cell($ml_select.':'.$br->get_html().$input->get_html());
 	if($GO_CONFIG->use_jupload)
 	{
-		$cell->add_html_element(new button($ml_multiple_files , 'javascript:openPopup(\'upload\',\''.
-			$GO_CONFIG->control_url.'JUpload/jupload.php?post_url='.
-			urlencode($GO_MODULES->full_url.'upload.php?sid='.session_id()).'&onunload=opener.cancel()\',\'640\',\'400\');', '120'));
+			
+		$cell->add_html_element(new button($ml_multiple_files, 'javascript:document.location=\''.
+		$GO_CONFIG->control_url.'JUpload/jupload.php?post_url='.
+		urlencode($GO_MODULES->full_url.'upload.php?sid='.session_id()).
+		'&afterUploadURL='.urlencode($_SERVER['PHP_SELF']).'\'', '120'));
 	}
 	
 	$row->add_cell($cell);

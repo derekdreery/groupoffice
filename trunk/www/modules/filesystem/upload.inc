@@ -36,9 +36,10 @@ $input->set_attribute('size','50');
 $tabstrip->add_html_element($input);
 if($GO_CONFIG->use_jupload)
 {
-	$tabstrip->add_html_element(new button($fbMultipleFiles, 'javascript:openPopup(\'upload\',\''.
+	$tabstrip->add_html_element(new button($fbMultipleFiles, 'javascript:document.location=\''.
 		$GO_CONFIG->control_url.'JUpload/jupload.php?post_url='.
-		urlencode($GO_MODULES->full_url.'jupload.php?sid='.session_id()).'&onunload=opener.cancel()\',\'640\',\'400\');', '120'));
+		urlencode($GO_MODULES->full_url.'jupload.php?sid='.session_id()).
+		'&afterUploadURL='.urlencode($return_to).'\'', '120'));
 }
 
 
