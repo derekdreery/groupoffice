@@ -38,6 +38,8 @@ $link_back = (isset ($_REQUEST['link_back']) && $_REQUEST['link_back'] != '') ? 
 $gallery_id = isset($_REQUEST['gallery_id']) ? $_REQUEST['gallery_id'] : 0;
 
 
+require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+$fs = new filesystem();	
 
 switch($task)
 {
@@ -239,7 +241,10 @@ switch($tabstrip->get_active_tab_id())
 			$table->get_delete_handler());
 			
 		$form->add_html_element($menu);
-		$table->offset=5;
+		if($table->offset!=0)
+		{
+			$table->offset=5;
+		}
 		$count = $ig->get_images($gallery_id, $table->start, $table->offset);
 		$table->set_pagination($count);
 		

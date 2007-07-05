@@ -381,3 +381,9 @@ $strAddressAndNo='Address / No.';
 $strWorkAddressAndNo='Workaddress / No.';
 
 $config_help_url='http://docs.group-office.com/index.php?folder_id=49&file_id=202';
+
+$jupload_text='Select the files from your computer and click at \'Upload\'.';
+
+$jupload_max_size='Maximum size';
+$jupload_width='width';
+$jupload_height='height';

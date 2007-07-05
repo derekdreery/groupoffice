@@ -33,7 +33,7 @@ load_basic_controls();
 require_once($GO_MODULES->path.'classes/gallery.class.inc');
 $ig = new gallery();
 
-$task = isset($_POST['task']) ? $_POST['task'] : '';
+$task = isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
 $return_to = isset($_REQUEST['return_to']) ? $_REQUEST['return_to'] : $_SERVER['HTTP_REFERER'];
 $link_back = (isset ($_REQUEST['link_back']) && $_REQUEST['link_back'] != '') ? $_REQUEST['link_back'] : $_SERVER['REQUEST_URI'];
 $gallery_id = isset($_REQUEST['gallery_id']) ? $_REQUEST['gallery_id'] : 0;
@@ -61,10 +61,13 @@ if(!is_dir($tmp_dir))
 switch($task)
 {
 	case 'upload':
-		for ($i = 0; $i < count($_FILES['file']['tmp_name']); $i ++) {
-			if (is_uploaded_file($_FILES['file']['tmp_name'][$i])) {
-				$destination =$tmp_dir.$_FILES['file']['name'][$i];
-				move_uploaded_file($_FILES['file']['tmp_name'][$i], $destination);					
+		if(isset($_FILES['file']))
+		{
+			for ($i = 0; $i < count($_FILES['file']['tmp_name']); $i ++) {
+				if (is_uploaded_file($_FILES['file']['tmp_name'][$i])) {
+					$destination =$tmp_dir.$_FILES['file']['name'][$i];
+					move_uploaded_file($_FILES['file']['tmp_name'][$i], $destination);					
+				}
 			}
 		}
 		
@@ -79,6 +82,7 @@ switch($task)
 		
 	case 'save_images':
 		
+		ini_set('max_execution_time','120');
 		if(isset($_POST['images']))
 		{
 			foreach($_POST['images'] as $image)
@@ -271,9 +275,25 @@ if($task == 'process_images')
 	$tabstrip->add_html_element($input);
 	if($GO_CONFIG->use_jupload)
 	{
-		$tabstrip->add_html_element(new button($fbMultipleFiles, 'javascript:openPopup(\'upload\',\''.
-			$GO_CONFIG->control_url.'JUpload/jupload.php?post_url='.
-			urlencode($GO_MODULES->modules['gallery']['full_url'].'jupload.php?sid='.session_id()).'&onunload=opener.upload()\',\'640\',\'400\');', '120'));
+		
+		if($gallery_id>0)
+		{
+			$gallery=$ig->get_gallery($gallery_id);
+			$maxPicHeight=$gallery['resizeto'];
+			$maxPicWidth=$gallery['resizeto'];
+		}else {
+			$maxPicHeight=0;
+			$maxPicWidth=0;
+		}
+		
+		
+		$afterUploadURL=$_SERVER['PHP_SELF'].'?task=upload&gallery_id='.$gallery_id.'&return_to='.urlencode($return_to);
+				
+		$tabstrip->add_html_element(new button($fbMultipleFiles, 'javascript:document.location=\''.
+		$GO_CONFIG->control_url.'JUpload/jupload.php?post_url='.
+		urlencode($GO_MODULES->modules['gallery']['full_url'].'jupload.php?sid='.session_id()).
+		'&afterUploadURL='.urlencode($afterUploadURL).'&uploadPolicy=PictureUploadPolicy'.
+		'&maxPicHeight='.$maxPicHeight.'&maxPicWidth='.$maxPicWidth.'\'', '120'));
 	}	
 	
 	$p = new html_element('p', 
