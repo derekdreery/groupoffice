@@ -406,7 +406,7 @@ if ($tp_plugin)
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 
-if ($_SERVER['REQUEST_METHOD'] != "POST" && $tp_plugin && $template_id == 0 && 
+if (($_SERVER['REQUEST_METHOD'] != "POST" || $action='select_template') && $tp_plugin && $template_id == 0 && 
 		$template_count > 0 && $action != 'open')
 {
 	require_once($GO_THEME->theme_path."header.inc");

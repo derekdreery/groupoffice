@@ -25,9 +25,10 @@ $mailbox = $email->get_folder($account['id'], 'INBOX');
 <head>
 <?php
 //$GO_THEME->load_module_theme('email');
-echo $GO_THEME->get_stylesheet('email');
+
 require($GO_CONFIG->root_path.'default_head.inc');
 require($GO_CONFIG->root_path.'default_scripts.inc');
+echo $GO_THEME->get_stylesheet('email');
 ?>
 <script type="text/javascript" src="language/en.js"></script>
 <script type="text/javascript" src="email.js"></script>
@@ -36,6 +37,7 @@ require($GO_CONFIG->root_path.'default_scripts.inc');
 Ext.EventManager.onDocumentReady(
 function(){
 	email.init(<?php echo $account['id']; ?>, <?php echo $mailbox['id']; ?>, 'INBOX');
+	account.init();
 }, email, true);
 </script>
 </head>
@@ -50,5 +52,27 @@ function(){
 	<div id="email-grid"></div>
 	<div id="preview" style="background-color:#c3daf9;height:100%"></div>
 </div>
+
+
+<div id="accounts-dialog" style="visibility:hidden;">
+    <div class="x-dlg-hd"><?php echo $ml_accounts; ?></div>
+    <div class="x-dlg-bd">
+        <div id="accounts-toolbar"></div>
+		<div id="accounts-grid"></div>
+    </div>
+</div>
+
+
+<div id="account-dialog">
+	<div class="x-dlg-hd"><?php echo 'Account'; ?></div>	
+	    <div id="box-bd" class="x-dlg-bd">	   
+		    <div id="properties" class="x-dlg-tab"></div>
+			<div id="folders" class="x-dlg-tab"></div>
+			<div id="filters" class="x-dlg-tab"></div>
+			<div id="autoreply" class="x-dlg-tab"></div>
+	    </div>
+	</div>
+</div>
+
 </body>
 </html>
