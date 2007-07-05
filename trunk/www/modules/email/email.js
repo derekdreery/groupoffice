@@ -1,20 +1,22 @@
 email = function(){
-	
+
 	var account_id;
 	var folder_id;
 	var mailbox;
-	
+
 	var layout;
 	var previewPanel;
 	var grid;
 	var ds;
 	var messagesPanel;
 	var previewedUid;
-	
+
 	var btnForward;
 	var btnReply;
 	var btnReplyAll;
 	var btnCloseMessage;
+
+	var accountsDialog;
 
 
 
@@ -49,21 +51,21 @@ email = function(){
 					split:true
 				}
 			});
-			
+
 			var innerLayout = new Ext.BorderLayout('inner-layout', {
-                west: {
-                    split:true,
-                    initialSize: 450,
-                    minSize: 200,                   
-                    autoScroll:true,
-                    collapsible:false,
-                    titlebar: true
-                },
-                center: {
-                    autoScroll:true,
-                    titlebar: false
-                }
-            });
+				west: {
+					split:true,
+					initialSize: 450,
+					minSize: 200,
+					autoScroll:true,
+					collapsible:false,
+					titlebar: true
+				},
+				center: {
+					autoScroll:true,
+					titlebar: false
+				}
+			});
 
 
 
@@ -83,11 +85,11 @@ email = function(){
 			function renderIcon(src){
 				return '<img src=\"' + src +' \" />';
 			}
-			
+
 			function renderFlagged(value, p, record){
-				
+
 				var str = '';
-				
+
 				if(record.data['flagged']==1)
 				{
 					str += '<img src=\"' + GOimages['flag'] +' \" style="display:block" />';
@@ -97,15 +99,19 @@ email = function(){
 					str += '<img src=\"' + GOimages['attach'] +' \" style="display:block" />';
 				}
 				return str;
-				
+
 			}
 
 			ds = new Ext.data.Store({
 
 				proxy: new Ext.data.HttpProxy({
-					url: BaseHref+'modules/email/messages_json.php'
+					url: BaseHref+'modules/email/json.php'
 				}),
-				baseParams: {"node": ''},
+				baseParams: {
+				"node": '',
+				"type": 'messages'
+				}
+				,
 
 				reader: new Ext.data.JsonReader({
 					root: 'results',
@@ -121,7 +127,7 @@ email = function(){
 				{name: 'from'},
 				{name: 'size'},
 				{name: 'date'}
-				
+
 				]),
 
 				// turn on remote sorting
@@ -185,7 +191,7 @@ email = function(){
 				layout.getRegion('west').hide();
 				btnCloseMessage.show();
 			});
-			
+
 
 
 			grid.addListener("rowclick", function(grid, rowClicked, e) {
@@ -219,49 +225,49 @@ email = function(){
 					});
 
 					previewedUid=record.data['uid'];
-					
+
 					btnForward.enable();
 					btnReply.enable();
 					btnReplyAll.enable();
 				}
 			}, this);
-			
-			
-			
+
+
+
 			var gridContextMenu = new Ext.menu.Menu({
-			shadow: "frame",
-			minWidth: 180,
-			id: 'ContextMenu',
-			items: [
+				shadow: "frame",
+				minWidth: 180,
+				id: 'ContextMenu',
+				items: [
 				{ text: emailLang['mark_as_read'], handler: function(){
-						email.doTaskOnMessages('mark_as_read');				
-					} 
+					email.doTaskOnMessages('mark_as_read');
+				}
 				},
 				{ text: emailLang['mark_as_unread'], handler: function(){
-						email.doTaskOnMessages('mark_as_unread');				
-					}
+					email.doTaskOnMessages('mark_as_unread');
+				}
 				},
 				{ text: emailLang['flag'], handler: function(){
-						email.doTaskOnMessages('flag');				
-					}
+					email.doTaskOnMessages('flag');
+				}
 				},
 				{ text: emailLang['unflag'], handler: function(){
-						email.doTaskOnMessages('unflag');				
-					}
-				} 
+					email.doTaskOnMessages('unflag');
+				}
+				}
 				]
 			});
-			
-			
+
+
 			grid.addListener("rowcontextmenu", function(grid, rowIndex, e) {
-				e.stopEvent(); 
-				var coords = e.getXY(); 
+				e.stopEvent();
+				var coords = e.getXY();
 				gridContextMenu.showAt([coords[0], coords[1]]);
 			},
 			this
 			);
-			
-			
+
+
 
 			// render it
 			grid.render();
@@ -278,7 +284,7 @@ email = function(){
 
 			// trigger the data store load
 			//ds.load({params:{start:0, limit: parseInt(GOsettings['max_rows_list'])}});
-			
+
 
 			var tb = new Ext.Toolbar('emailtb');
 
@@ -312,10 +318,10 @@ email = function(){
 				scope: this
 			})
 			);
-			
+
 			tb.add(new Ext.Toolbar.Separator());
-			
-			
+
+
 			btnReply = tb.addButton({
 				id: 'reply',
 				icon: GOimages['reply'],
@@ -327,7 +333,7 @@ email = function(){
 				scope: this
 			}
 			);
-			
+
 			btnReplyAll = tb.addButton({
 				id: 'reply_all',
 				icon: GOimages['reply_all'],
@@ -339,7 +345,7 @@ email = function(){
 				scope: this
 			}
 			);
-			
+
 			btnForward = tb.addButton({
 				id: 'forward',
 				icon: GOimages['forward'],
@@ -352,23 +358,23 @@ email = function(){
 			}
 			);
 			tb.add(new Ext.Toolbar.Separator());
-			
-			
-			
+
+
+
 			tb.addButton({
 				id: 'accounts',
 				icon: GOimages['accounts'],
 				text: emailLang['accounts'],
 				cls: 'x-btn-text-icon',
 				handler: function(){
-					alert("I am accounts");
+					this.showAccountsDialog();
 				},
 				scope: this
 			}
 			);
-			
-			
-			
+
+
+
 			btnCloseMessage = tb.addButton({
 				id: 'close',
 				icon: GOimages['close'],
@@ -382,21 +388,26 @@ email = function(){
 				scope: this
 			}
 			);
-			
+
 			btnCloseMessage.hide();
 			btnForward.disable();
 			btnReply.disable();
 			btnReplyAll.disable();
-			
-			
-			
+
+
+
 
 			var Tree = Ext.tree;
 
 			var tree = new Tree.TreePanel('email-tree', {
 				ddGroup : 'TreeDD',
 				animate:true,
-				loader: new Tree.TreeLoader({dataUrl:'tree_json.php'}),
+				loader: new Tree.TreeLoader(
+				{
+					dataUrl:'json.php',
+					baseParams:{type: 'tree'}
+
+				}),
 				enableDrop:true,
 				dropConfig : {
 					appendOnly:true
@@ -462,16 +473,16 @@ email = function(){
 
 
 			tree.on('click', function(node)	{
-				
+
 				this.setAccount(
-					node.attributes.account_id, 
-					node.attributes.folder_id, 
-					node.attributes.mailbox
-					);
+				node.attributes.account_id,
+				node.attributes.folder_id,
+				node.attributes.mailbox
+				);
 
 			}, this);
 
-			
+
 
 			var toolbarPanel = new Ext.ContentPanel('north',{toolbar: tb});
 			layout.add('north', toolbarPanel);
@@ -484,35 +495,179 @@ email = function(){
 
 			previewPanel = new Ext.ContentPanel('preview');
 			innerLayout.add('center', previewPanel);
-			
+
 			layout.add('center', new Ext.NestedLayoutPanel(innerLayout));
-			
-			
+
+
 			this.setAccount(account_id, folder_id, mailbox);
 
 			layout.restoreState();
 			layout.endUpdate();
-			
+
 			innerLayout.restoreState();
 			innerLayout.endUpdate();
-			
+
 			// render the tree has to be done after grid loads. Don't know why but otherwise
 			// it doesn't load.
 			tree.render();
 			root.expand();
 		},
+
+		showAccountsDialog : function()
+		{
+			if(!accountsDialog){
+				accountsDialog = new Ext.LayoutDialog("accounts-dialog", {
+					modal:true,
+					shadow:false,
+					minWidth:300,
+					minHeight:300,
+					height:400,
+					width:600,
+					proxyDrag: true,
+					collapsible: false,
+					center: {
+						autoScroll:true,
+						tabPosition: 'top',
+						closeOnTab: true,
+						titlebar: false
+					}
+				});
+				accountsDialog.addKeyListener(27, accountsDialog.hide, accountsDialog);
+
+				accountsDialog.addButton(GOlang['cmdClose'],accountsDialog.hide, accountsDialog);
+
+				var accountsLayout = accountsDialog.getLayout();
+				accountsLayout.beginUpdate();
+
+
+
+
+				var accountsDS = new Ext.data.Store({
+
+					proxy: new Ext.data.HttpProxy({
+						url: BaseHref+'modules/email/json.php'
+					}),
+					baseParams: {
+					"type": 'accounts'
+					}
+					,
+					reader: new Ext.data.JsonReader({
+						root: 'results',
+						totalProperty: 'total',
+						id: 'id'
+					}, [
+					{name: 'id'},
+					{name: 'email'},
+					{name: 'host'},
+					{name: 'standard'}
+					]),
+
+					// turn on remote sorting
+					remoteSort: false
+				});
+				accountsDS.on('loadexception',function(param1, param2, response)
+				{
+					var reponseParams = Ext.util.JSON.decode(response.responseText);
+					Ext.MessageBox.alert(GOlang['strError'], reponseParams['errors']);
+				});
+
+
+
+				// the column model has information about grid columns
+				// dataIndex maps the column to the specific data field in
+				// the data store
+				var cm = new Ext.grid.ColumnModel([
+				{
+					header:"E-mail",
+					dataIndex: 'email'
+				},{
+					header:"Host",
+					dataIndex: 'host'
+				},{
+					header: 'Standard',
+					dataIndex: 'standard'
+				}]);
+
+				// by default columns are sortable
+				cm.defaultSortable = true;
+
+				// create the editor grid
+				var accountsGrid = new Ext.grid.Grid('accounts-grid', {
+					ds: accountsDS,
+					cm: cm,
+					selModel: new Ext.grid.RowSelectionModel(),
+					enableColLock:false,
+					loadMask: true
+				});
+
+
+				accountsGrid.addListener("rowdblclick", function(grid, rowClicked, e){
+					
+					var selectionModel = grid.getSelectionModel();
+					var record = selectionModel.getSelected();
+
+					account.showDialog(record.id);
+				});
+
+
+				accountsDS.on('load', function (){accountsGrid.getView().autoSizeColumns();});
+
+				accountsDS.load();
+				// render it
+				accountsGrid.render();
+
+
+				var emailtb = new Ext.Toolbar('accounts-toolbar');
+
+
+				emailtb.addButton({
+					id: 'add',
+					icon: GOimages['add'],
+					text: GOlang['cmdAdd'],
+					cls: 'x-btn-text-icon',
+					handler: function(){}
+				}
+				);
+
+				emailtb.addButton({
+					id: 'delete',
+					icon: GOimages['delete'],
+					text: GOlang['cmdDelete'],
+					cls: 'x-btn-text-icon',
+					handler: function(){}
+				}
+				);
+
+				var accountsPanel = new Ext.GridPanel(accountsGrid,{
+					toolbar: emailtb
+				});
+
+				accountsLayout.add('center', accountsPanel);
+
+
+
+
+
+				accountsLayout.endUpdate();
+			}
+			accountsDialog.show();
+
+
+		},
+
 		setAccount : function(account_id,folder_id,mailbox)
 		{
 			this.account_id = account_id;
 			this.folder_id = folder_id;
 			this.mailbox = mailbox;
-			
-			
+
+
 			messagesPanel.setTitle(mailbox);
 			ds.baseParams = {
-				"account_id": account_id,
-				"folder_id": folder_id,
-				"mailbox": mailbox
+			"type": 'messages',
+			"account_id": account_id,
+			"folder_id": folder_id,
+			"mailbox": mailbox
 			};
 			ds.load({params:{start:0, limit: parseInt(GOsettings['max_rows_list'])}});
 		},
@@ -521,7 +676,7 @@ email = function(){
 		{
 			return ds;
 		},
-		
+
 		doTaskOnMessages : function (task){
 			var selectedRows = grid.selModel.selections.keys;
 
@@ -566,7 +721,7 @@ email = function(){
 
 				parent.GroupOffice.showLinks({ 'url': '../../search.html', 'records': records});
 				break;
-				
+
 
 			}
 		},
@@ -623,3 +778,168 @@ email = function(){
 }();
 
 
+account = function(){
+
+	var linksPanel;
+	var dialog;
+
+	var account_form;
+
+	var layout;
+
+	var loaded_account_id=0;
+	var loaded_link_id=0;
+	var linkButton;
+	var moduleBase;
+
+	return {
+
+
+
+		init : function(){
+
+			moduleBase = BaseHref+'modules/email/';
+
+			dialog = new Ext.LayoutDialog('account-dialog', {
+				modal:true,
+				shadow:false,
+				resizable:true,
+				proxyDrag: true,
+				width:500,
+				height:500,
+				collapsible:false,
+				center: {
+					autoScroll:true,
+					tabPosition: 'top',
+					closeOnTab: true,
+					alwaysShowTabs: true
+				}
+
+			});
+			dialog.addKeyListener(27, dialog.hide, dialog);
+
+
+			layout = dialog.getLayout();
+
+
+			layout.beginUpdate();
+
+
+
+
+			var accountPanel = new Ext.ContentPanel('properties',{
+				title: GOlang['strProperties'],
+				autoScroll:true,
+				background: true
+			});
+
+
+			accountPanel.on('activate', function() {
+
+					accountPanel.load({
+						scripts: true,
+						url: moduleBase+'account.php',
+						params: {
+							account_id: loaded_account_id
+						}
+
+					});
+				});
+			layout.add('center', accountPanel);
+
+			
+
+			layout.endUpdate();
+		},
+
+
+		hidePanels : function()
+		{
+			var region = layout.getRegion('center');
+			for (var i = 1;i<region.panels.items.length;i++)
+			{
+				region.hidePanel(region.panels.items[i].getId());
+			}
+		},
+		showPanels : function()
+		{
+			var region = layout.getRegion('center');
+			for (var i = 1;i<region.panels.items.length;i++)
+			{
+				region.showPanel(region.panels.items[i].getId());
+			}
+		},
+		getDialog : function()
+		{
+			return dialog;
+		},
+		destroyDialogButtons : function()
+		{
+			if(typeof(dialog.buttons) != 'undefined')
+			{
+				for (var i = 0;i<dialog.buttons.length;i++)
+				{
+					dialog.buttons[i].destroy();
+				}
+			}
+		},
+		setAccountID : function(account_id)
+		{
+			if(loaded_account_id>0 && account_id!=loaded_account_id)
+			{
+				if(account_id==0)
+				{
+					this.hidePanels();
+				}else
+				{
+					this.showPanels();
+				}
+			}
+
+			loaded_account_id=account_id;
+		},
+
+		showDialog : function(account_id){
+
+			this.setAccountID(account_id);
+			
+			var region = layout.getRegion('center');
+			var activePanel = region.getActivePanel();
+			if(activePanel && activePanel.getId()=='properties')
+			{
+				activePanel.fireEvent('activate');
+			}else
+			{
+				region.showPanel('properties');
+			}
+			dialog.show();
+		},
+	}
+}();
+
+
+
+function change_port()
+{
+	if (document.forms['properties-form'].type.value == "imap")
+	{
+		if(document.forms['properties-form'].use_ssl.checked)
+		{
+			document.forms['properties-form'].port.value = "993";
+		}else
+		{
+			document.forms['properties-form'].port.value = "143";
+		}
+		document.forms['properties-form'].mbroot.disabled = false;
+	}else
+	{
+		if(document.forms['properties-form'].use_ssl.checked)
+		{
+			document.forms['properties-form'].port.value = "995";
+		}else
+		{
+			document.forms['properties-form'].port.value = "110";
+		}
+		document.forms['properties-form'].mbroot.disabled = true;
+	}
+}

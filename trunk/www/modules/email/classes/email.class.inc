@@ -127,16 +127,25 @@ class email extends db
 		}
 	}
 
-	function add_account($user_id, $type, $host, $port, $use_ssl, $novalidate_cert, $mbroot, $username, $password, $name, $email, $signature, $examine_headers=0)
+	function add_account($account)
 	{
 		global $GO_CONFIG, $GO_LANGUAGE;
 
+
 		require_once($GO_CONFIG->class_path."mail/imap.class.inc");
-		require($GO_LANGUAGE->get_language_file('email'));
 		$this->mail= new imap();
 
-		if (!$this->mail->open($host, $type, $port, $username, $password, "INBOX", 0, $use_ssl, $novalidate_cert))
-		{
+		if (!$this->mail->open(
+			$account['host'], 
+			$account['type'], 
+			$account['port'], 
+			$account['username'], 
+			$account['password'], 
+			"INBOX", 
+			0, 
+			$account['use_ssl'], 
+			$account['novalidate_cert']))
+		{	
 			$this->last_error = "<p class=\"Error\">".imap_last_error()."</p>";
 			return false;
 		}else
@@ -210,20 +219,6 @@ class email extends db
 				return false;
 			}else
 			{
-				$account['type']=$type;
-				$account['user_id']=$user_id;
-				$account['host']=$host;
-				$account['port']=$port;
-				$account['use_ssl']=$use_ssl;
-				$account['novalidate_cert']=$novalidate_cert;
-				$account['username']=$username;
-				$account['password']=$password;
-				$account['name']=$name;
-				$account['email']=$email;
-				$account['signature']=$signature;
-				$account['examine_headers']=$examine_headers;
-
-
 				if(!$this->insert_row('emAccounts', $account))
 				{
 					$this->last_error = "<p class=\"Error\">".$strSaveError."</p>";
@@ -242,36 +237,35 @@ class email extends db
 		return $this->update_row('emAccounts', 'id', $account);
 	}
 
-	function update_account($account_id, $type, $host, $port, $use_ssl, $novalidate_cert, $mbroot, $username, $password, $name, $email, $signature, $examine_headers=0, $user_id=0)
+	function update_account($account)
 	{
 		global $GO_CONFIG;
 
 		require_once($GO_CONFIG->class_path."mail/imap.class.inc");
 		$this->mail= new imap();
 
-		if ($this->mail->open($host, $type, $port, $username, $password, "INBOX", 0, $use_ssl, $novalidate_cert))
-		{
-			if (!$mbroot = $this->mail->check_mbroot($mbroot))
+		if ($this->mail->open(
+			$account['host'], 
+			$account['type'], 
+			$account['port'], 
+			$account['username'], 
+			$account['password'], 
+			"INBOX", 
+			0, 
+			$account['use_ssl'], 
+			$account['novalidate_cert']))
+		{			
+			
+			if (!$mbroot = $this->mail->check_mbroot($account['mbroot']))
 			{
-				$mbroot = '';
+				$account['mbroot'] = '';
 			}
-			$sql  = "UPDATE emAccounts SET type='$type', host='$host', port='$port'".
-			", use_ssl='$use_ssl', novalidate_cert='$novalidate_cert'".
-			", mbroot='$mbroot', username='$username', password='".$password."',".
-			" name='$name', email='$email'".
-			", signature='$signature', examine_headers='$examine_headers'";
-			if($user_id>0)
-			{
-				$sql .=", user_id=$user_id";
-			}
+			
+			$this->mail->close();
+			
+			$this->update_row('emAccounts','id',$account);
 
-			$sql .=" WHERE id='$account_id'";
-
-			if ($this->query($sql))
-			{
-				$this->mail->close();
-			}
-			return true;
+			return $this->query($sql);		
 		}
 		return false;
 	}
