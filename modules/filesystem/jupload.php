@@ -70,5 +70,6 @@ while($file = array_shift($_FILES))
 			}
 		}
 	}
-
 }
+
+echo "SUCCESS\n";

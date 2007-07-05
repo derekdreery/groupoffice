@@ -580,8 +580,8 @@ function delete_attach()
 function open_attachments()
 {
 	var centered;
-	var width = 600;
-	var height = 300;
+	var width = 640;
+	var height = 400;
 
 	x = (screen.availWidth - width) / 2;
 	y = (screen.availHeight - height) / 2;

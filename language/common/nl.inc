@@ -290,3 +290,5 @@ $table_config_text='Voer een nummer in voor de kolommen die u wilt weergeven. De
 $strMoveUp='Verplaats één plaats naar boven';
 $strAddressAndNo='Adres / Nr.';
 $strWorkAddressAndNo='Werkaddress / Nr.';
+
+$jupload_text='Selecteer de bestanden van uw computer en klik op \'Upload\'.';
