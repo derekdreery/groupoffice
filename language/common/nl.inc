@@ -292,3 +292,8 @@ $strAddressAndNo='Adres / Nr.';
 $strWorkAddressAndNo='Werkaddress / Nr.';
 
 $jupload_text='Selecteer de bestanden van uw computer en klik op \'Upload\'.';
+
+
+$jupload_max_size='Maximale afmetingen';
+$jupload_width='breedte';
+$jupload_height='hoogte';
