@@ -232,7 +232,7 @@ GroupOffice = function(){
 		showPanel :  function (panelID, url){
 			if(typeof(url)!='undefined')
 			{
-				frame = Ext.get(panelID);
+				var frame = Ext.get(panelID);
 				frame.set({'src': url});
 			}
 			//don't know why but I get an error when trying to open a linked

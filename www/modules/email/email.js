@@ -354,6 +354,21 @@ email = function(){
 			tb.add(new Ext.Toolbar.Separator());
 			
 			
+			
+			tb.addButton({
+				id: 'accounts',
+				icon: GOimages['accounts'],
+				text: emailLang['accounts'],
+				cls: 'x-btn-text-icon',
+				handler: function(){
+					alert("I am accounts");
+				},
+				scope: this
+			}
+			);
+			
+			
+			
 			btnCloseMessage = tb.addButton({
 				id: 'close',
 				icon: GOimages['close'],

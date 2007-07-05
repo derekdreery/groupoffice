@@ -10,3 +10,5 @@ $images['forward']='16x16/mail_forward.png';
 
 $images['flag']='16x16/flag.png';
 $images['attach']='16x16/attach.png';
+
+$images['accounts']='16x16/accounts.png';
