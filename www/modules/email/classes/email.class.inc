@@ -243,6 +243,7 @@ class email extends db
 
 		require_once($GO_CONFIG->class_path."mail/imap.class.inc");
 		$this->mail= new imap();
+		
 
 		if ($this->mail->open(
 			$account['host'], 
@@ -255,7 +256,7 @@ class email extends db
 			$account['use_ssl'], 
 			$account['novalidate_cert']))
 		{			
-			
+		
 			if (!$mbroot = $this->mail->check_mbroot($account['mbroot']))
 			{
 				$account['mbroot'] = '';
@@ -263,9 +264,7 @@ class email extends db
 			
 			$this->mail->close();
 			
-			$this->update_row('emAccounts','id',$account);
-
-			return $this->query($sql);		
+			return $this->update_row('emAccounts','id',$account);			
 		}
 		return false;
 	}
@@ -469,7 +468,7 @@ class email extends db
 		$sql = "UPDATE emFilters SET folder='$new_name' ".
 		"WHERE folder='$old_name' AND ".
 		"account_id='$account_id'";
-		$this->query($sql);
+		return $this->query($sql);
 
 	}
 
@@ -508,7 +507,7 @@ class email extends db
 
 		$sql = "DELETE FROM emFilters WHERE account_id='$account_id' ".
 		"AND folder='$name'";
-		$this->query($sql);
+		return $this->query($sql);
 	}
 	function folder_exists($account_id, $name)
 	{

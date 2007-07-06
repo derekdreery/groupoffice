@@ -53,6 +53,21 @@ if($account_id>0)
 <?php
 
 $table = new table();
+
+if($admin_permission = $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
+{
+	//$input = new input('hidden', 'user_id', $account['user_id']);
+	
+	$row = new table_row();
+	$row->add_cell(new table_cell($strOwner.':'));
+	$input = new input('text','user-select');
+	$input->set_attribute('id','user-select');
+	$input->set_attribute('style','width:300px');
+	$row->add_cell(new table_cell($input->get_html()));
+	$table->add_row($row);
+}
+
+
 $row = new table_row();
 $row->add_cell(new table_cell($strName.':'));
 $input = new input('text','name',$account['name']);
@@ -243,6 +258,55 @@ Ext.onReady(function(){
 	}, this);
 
 	dialog.addButton('Close', dialog.hide, dialog);
+	
+	
+	//generate user combobox
+	/*
+	var ds = new Ext.data.Store({
+
+		proxy: new Ext.data.HttpProxy({
+			url: '<?php echo $GO_MODULES->modules['users']['url']; ?>users_json.php'
+		}),
+
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'id'
+		}, [
+		{name: 'id'},
+		{name: 'name'}
+		]),
+		// turn on remote sorting
+		remoteSort: true
+	});
+	ds.setDefaultSort('name', 'asc');
+	
+
+	
+	var userSelect = new Ext.form.ComboBox({
+		store: ds,
+		displayField:'name',
+		typeAhead: true,
+		valueField: 'id',
+		triggerAction: 'all',
+		emptyText:GOlang['strPleaseSelect'],
+		width: 240,
+		selectOnFocus:true
+	});	
+	ds.on('load', function() {userSelect.setValue(<?php echo $account['user_id']; ?>);}, this, {single: true});
+	ds.load();
+	
+	userSelect.applyTo('user-select');*/
+	
+	<?php
+	if($admin_permission)
+	{
+		$user = $GO_USERS->get_user($account['user_id']);
+		echo 'var userCombo = new selectUser("user-select", "user_id", '.$user['id'].', "'.format_name($user['last_name'],$user['first_name'],$user['middle_name']).'",300);';
+	}
+	?>
+	
+	
 
 });
 document.forms['properties-form'].name.focus();

@@ -15,8 +15,11 @@ email = function(){
 	var btnReply;
 	var btnReplyAll;
 	var btnCloseMessage;
+	var btnAccounts;
 
 	var accountsDialog;
+	var tree;
+
 
 
 
@@ -361,13 +364,25 @@ email = function(){
 
 
 
-			tb.addButton({
+			btnAccounts = tb.addButton({
 				id: 'accounts',
 				icon: GOimages['accounts'],
 				text: emailLang['accounts'],
 				cls: 'x-btn-text-icon',
 				handler: function(){
 					this.showAccountsDialog();
+				},
+				scope: this
+			}
+			);
+
+			tb.addButton({
+				id: 'refresh',
+				icon: GOimages['refresh'],
+				text: emailLang['refresh'],
+				cls: 'x-btn-text-icon',
+				handler: function(){
+					this.refresh();
 				},
 				scope: this
 			}
@@ -396,10 +411,9 @@ email = function(){
 
 
 
-
 			var Tree = Ext.tree;
 
-			var tree = new Tree.TreePanel('email-tree', {
+			tree = new Tree.TreePanel('email-tree', {
 				ddGroup : 'TreeDD',
 				animate:true,
 				loader: new Tree.TreeLoader(
@@ -431,7 +445,7 @@ email = function(){
 
 					if(this.account_id != e.target.attributes['account_id'])
 					{
-						Ext.MessageBox.alert(GOlang['error'], emailLang['cross_account_move']);
+						Ext.MessageBox.alert(GOlang['strError'], emailLang['cross_account_move']);
 						return false
 					}else if(this.mailbox == e.target.mailbox)
 					{
@@ -457,7 +471,7 @@ email = function(){
 						{
 							if(!success)
 							{
-								Ext.MessageBox.alert(GOlang['error'], response.result.errors);
+								Ext.MessageBox.alert(GOlang['strError'], response.result.errors);
 							}else
 							{
 								ds.reload();
@@ -507,10 +521,41 @@ email = function(){
 			innerLayout.restoreState();
 			innerLayout.endUpdate();
 
+
+
+
+
 			// render the tree has to be done after grid loads. Don't know why but otherwise
 			// it doesn't load.
 			tree.render();
 			root.expand();
+		},
+
+		refresh : function()
+		{
+			//sync folders
+			var conn = new Ext.data.Connection();
+			conn.request({
+				url: 'action.php',
+				params: {
+					task: 'syncfolders',
+					account_id: this.account_id
+				},
+				callback: function(options, success, response)
+				{
+					if(!success)
+					{
+						Ext.MessageBox.alert(GOlang['strError'], response.result.errors);
+					}else
+					{
+						//ds.reload();
+						tree.root.reload();
+					}
+				},
+				scope: email
+			});
+
+
 		},
 
 		showAccountsDialog : function()
@@ -602,7 +647,7 @@ email = function(){
 
 
 				accountsGrid.addListener("rowdblclick", function(grid, rowClicked, e){
-					
+
 					var selectionModel = grid.getSelectionModel();
 					var record = selectionModel.getSelected();
 
@@ -648,9 +693,14 @@ email = function(){
 
 
 
+
+
+
+
+
 				accountsLayout.endUpdate();
 			}
-			accountsDialog.show();
+			accountsDialog.show('accounts');
 
 
 		},
@@ -699,7 +749,7 @@ email = function(){
 					{
 						if(!success)
 						{
-							Ext.MessageBox.alert(GOlang['error'], response.result.errors);
+							Ext.MessageBox.alert(GOlang['strError'], response.result.errors);
 						}else
 						{
 							ds.reload();
@@ -792,6 +842,8 @@ account = function(){
 	var linkButton;
 	var moduleBase;
 
+	var foldersTree;
+
 	return {
 
 
@@ -836,18 +888,222 @@ account = function(){
 
 			accountPanel.on('activate', function() {
 
-					accountPanel.load({
-						scripts: true,
-						url: moduleBase+'account.php',
-						params: {
-							account_id: loaded_account_id
-						}
+				accountPanel.load({
+					scripts: true,
+					url: moduleBase+'account.php',
+					params: {
+						account_id: loaded_account_id
+					}
 
-					});
 				});
+			});
 			layout.add('center', accountPanel);
 
-			
+
+
+
+
+
+			//start of folders panel
+
+			var folderstb = new Ext.Toolbar('folders-toolbar');
+
+
+			folderstb.addButton({
+				id: 'add',
+				icon: GOimages['add'],
+				text: GOlang['cmdAdd'],
+				cls: 'x-btn-text-icon',
+				handler: function(){
+
+					var selModel = foldersTree.getSelectionModel();
+
+					if(typeof(selModel.selNode)=='undefined')
+					{
+						Ext.MessageBox.alert(GOlang['strError'], emailLang['selectFolderAdd']);
+					}else
+					{
+
+						Ext.MessageBox.prompt('Name', 'Enter the folder name:', function(button, text){
+
+							if(button=='ok')
+							{
+								var conn = new Ext.data.Connection();
+								conn.request({
+									url: 'action.php',
+									params: {
+										task: 'add_folder',
+										folder_id: selModel.selNode.attributes.folder_id,
+										account_id: selModel.selNode.attributes.account_id,
+										new_folder_name: text
+									},
+									callback: function(options, success, response)
+									{
+										if(!success)
+										{
+											Ext.MessageBox.alert(GOlang['strError'], response.result.errors);
+										}else
+										{
+											if(typeof(selModel.selNode.parentNode)=='undefined')
+											{
+												selModel.selNode.parentNode.reload();
+											}else
+											{
+												foldersTree.getRootNode().reload();
+											}
+										}
+									}
+								});
+							}
+
+						});
+					}
+				}
+			}
+			);
+
+			folderstb.addButton({
+				id: 'delete',
+				icon: GOimages['delete'],
+				text: GOlang['cmdDelete'],
+				cls: 'x-btn-text-icon',
+				handler: function(){
+
+					var selModel = foldersTree.getSelectionModel();
+
+					if(typeof(selModel.selNode)=='undefined' || selModel.selNode.attributes.folder_id<1)
+					{
+						Ext.MessageBox.alert(GOlang['strError'], emailLang['selectFolderDelete']);
+					}else
+					{
+						var conn = new Ext.data.Connection();
+						conn.request({
+							url: 'action.php',
+							params: {
+								task: 'delete_folder',
+								folder_id: selModel.selNode.attributes.folder_id
+
+							},
+							callback: function(options, success, response)
+							{
+								if(!success)
+								{
+									Ext.MessageBox.alert(GOlang['strError'], response.result.errors);
+								}else
+								{
+									selModel.selNode.parentNode.reload();
+								}
+							}
+						});
+					}
+
+				}
+			}
+			);
+
+
+
+
+			var foldersPanel = new Ext.ContentPanel('folders',{
+				title: emailLang['folders'],
+				autoScroll:true,
+				background: true,
+				toolbar: folderstb
+			});
+
+
+			foldersPanel.on('activate', function() {
+
+				if(foldersTree)
+				{
+					var root = foldersTree.getRootNode();
+					if(root.id!='account_'+loaded_account_id)
+					{
+						root.id='account_'+loaded_account_id;
+						root.reload();
+					}
+				}else
+				{
+					var Tree = Ext.tree;
+
+					foldersTree = new Tree.TreePanel('folders-tree', {
+						ddGroup : 'TreeDD',
+						animate:true,
+						loader: new Tree.TreeLoader(
+						{
+							dataUrl:'json.php',
+							baseParams:{type: 'tree-edit'}
+
+						}),
+						enableDrop:true,
+						dropConfig : {
+							appendOnly:true
+						},
+						containerScroll: true
+					});
+
+					// set the root node
+					var root = new Tree.AsyncTreeNode({
+						text: emailLang['root'],
+						draggable:false,
+						id:'account_'+loaded_account_id,
+						folder_id: 0
+					});
+					foldersTree.setRootNode(root);
+
+
+					var treeEdit = new Tree.TreeEditor(foldersTree, {
+						ignoreNoChange:true
+					});
+
+					treeEdit.on('beforestartedit', function(editor, boundEl, value){
+						if(editor.editNode.attributes.folder_id==0)
+						{
+							alert("You can't edit this node!");
+							return false;
+						}
+					});
+
+					treeEdit.on('beforecomplete', function(editor, boundEl, value){
+
+						var conn = new Ext.data.Connection();
+						conn.request({
+							url: 'action.php',
+							params: {
+								task: 'rename_folder',
+								folder_id: editor.editNode.attributes.folder_id,
+								new_name: boundEl
+							},
+							callback: function(options, success, response)
+							{
+								if(!success)
+								{
+									Ext.MessageBox.alert(GOlang['strError'], response.result.errors);
+								}else
+								{
+									return true;
+								}
+							}
+						});
+
+					});
+
+
+
+
+
+					foldersTree.render();
+					root.expand();
+
+
+				}
+
+
+
+			});
+			layout.add('center', foldersPanel);
+
+
 
 			layout.endUpdate();
 		},
@@ -896,13 +1152,15 @@ account = function(){
 				}
 			}
 
+
+
 			loaded_account_id=account_id;
 		},
 
 		showDialog : function(account_id){
 
 			this.setAccountID(account_id);
-			
+
 			var region = layout.getRegion('center');
 			var activePanel = region.getActivePanel();
 			if(activePanel && activePanel.getId()=='properties')

@@ -31,4 +31,6 @@ $GO_SECURITY->authenticate();
 var BaseHref = '<?php echo $GO_CONFIG->host; ?>';
 
 GOsettings=Ext.util.JSON.decode('<?php echo addslashes(json_encode($_SESSION['GO_SESSION'])); ?>');	
+
+GOmodules=Ext.util.JSON.decode('<?php echo addslashes(json_encode($GO_MODULES->modules)); ?>');
 		

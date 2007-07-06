@@ -52,14 +52,105 @@ function connect($account_id, $mailbox='INBOX')
 
 }
 
+//we are unsuccessfull by default
+$result =array('success'=>false);
 
-$result =array();
 switch($_REQUEST['task'])
 {
+	case 'add_folder':
+
+		$account = connect(smart_addslashes($_REQUEST['account_id']));
+
+		$delimiter = $imap->get_mailbox_delimiter();
+		$parent_id=smart_addslashes($_REQUEST['folder_id']);
+		if($parent_id>0)
+		{
+			if($folder = $email->get_folder_by_id(smart_addslashes($parent_id)))
+			{
+				$new_folder_name=$folder['name'].$delimiter.utf7_imap_encode(smart_stripslashes($_POST['new_folder_name']));
+			}else {
+				$result['success']=false;
+				$result['errors']=$strDataError;
+				echo json_encode($result);
+				exit();
+			}
+
+		}else {
+			$new_folder_name=utf7_imap_encode(smart_stripslashes($_POST['new_folder_name']));
+		}
+
+
+
+
+
+		if($imap->create_folder($new_folder_name, $delimiter))
+		{
+			$result['succes']=$email->add_folder($account['id'], addslashes($new_folder_name), $parent_id, 1,$delimiter);
+		}
+		$imap->close();
+
+		break;
+
+	case 'delete_folder':
+
+		if($folder = $email->get_folder_by_id(smart_addslashes($_REQUEST['folder_id'])))
+		{
+			$account = connect($folder['account_id']);
+
+
+
+			if ($imap->delete_folder($folder['name'], $account['mbroot']))
+			{
+				/*
+				(cyrus imap) if folder still exists then don't delete it from the
+				database,
+				because it contains at least one child mailbox
+				*/
+				if (!is_array($imap->get_mailboxes($folder['name'])))
+				{
+					$result['succes']=$email->delete_folder($account['id'], addslashes($folder['name']));
+				}
+			}
+			$imap->close();
+		}
+		break;
+	case 'rename_folder':
+
+		if($folder = $email->get_folder_by_id(smart_addslashes($_REQUEST['folder_id'])))
+		{
+			$pos = strrpos($folder['name'], $folder['delimiter']);
+			if ($pos && $folder['delimiter'] != '')
+			{
+				$location = substr($folder['name'],0,$pos+1);
+
+			}else
+			{
+				$location = '';
+			}
+
+			$new_folder = $location.utf7_imap_encode(smart_stripslashes($_POST['new_name']));
+
+			connect($folder['account_id']);
+
+			//echo $folder['name'].' -> '.$new_folder;
+			if ($imap->rename_folder($folder['name'], $new_folder))
+			{
+				$result['success']=$email->rename_folder($folder['account_id'], addslashes($folder['name']), addslashes($new_folder));
+			}
+			$imap->close();
+		}
+		break;
+
+	case 'syncfolders':
+
+		$account = $email->get_account($_REQUEST['account_id']);
+		$email->synchronize_folders($account);
+		break;
+
 	case 'save_account_properties':
-		
-		$result['success']=false;
-		
+
+
+
 		$account['mbroot'] = isset($_POST['mbroot']) ? addslashes(utf7_imap_encode(smart_stripslashes($_POST['mbroot']))) : '';
 		if ($_POST['name'] == "" ||
 		$_POST['mail_address'] == "" ||
@@ -69,7 +160,7 @@ switch($_REQUEST['task'])
 		$_POST['host'] == "")
 		{
 			$result['errors'] = $error_missing_field;
-			
+
 		}else
 		{
 			$account['id']=$_POST['account_id'];
@@ -85,8 +176,8 @@ switch($_REQUEST['task'])
 			$account['name']=smart_addslashes($_POST['name']);
 			$account['email']=smart_addslashes($_POST['mail_address']);
 			$account['signature']=smart_addslashes($_POST['signature']);
-			
-			
+
+
 			if ($account['id'] > 0)
 			{
 				if(isset($_REQUEST['account_user_id']))
@@ -97,7 +188,7 @@ switch($_REQUEST['task'])
 				if(!$email->update_account($account))
 				{
 					$result['errors'] = $ml_connect_failed.' '.
-						$_POST['host'].' '.$ml_at_port.': '.$_POST['port'].' '.$email->last_error;
+					$_POST['host'].' '.$ml_at_port.': '.$_POST['port'].' '.$email->last_error;
 				}else
 				{
 					$result['success']=true;
@@ -109,7 +200,7 @@ switch($_REQUEST['task'])
 				if(!$account_id = $email->add_account($account))
 				{
 					$result['errors'] = $ml_connect_failed.' '.
-						$_POST['host'].' '.$ml_at_port.': '.$_POST['port'].' '.$email->last_error;
+					$_POST['host'].' '.$ml_at_port.': '.$_POST['port'].' '.$email->last_error;
 				}else
 				{
 					$result['success']=true;
@@ -121,7 +212,6 @@ switch($_REQUEST['task'])
 
 	case 'delete':
 
-		$result['success']=false;
 
 		$mailbox = smart_stripslashes($_REQUEST['mailbox']);
 		$account_id = smart_stripslashes($_REQUEST['account_id']);

@@ -15,5 +15,10 @@ var emailLang = {
 	flag : 'Add flag',
 	unflag : 'Remove flag',
 	
-	accounts : 'Accounts'
+	root : 'Root',
+	refresh : 'Refresh',
+	folders : 'Folders',
+	
+	selectFolderDelete : 'Select a folder to delete please',
+	selectFolderAdd : 'First select a folder from the tree where you want to add the new folder. Then click on \'Add\''
 };
