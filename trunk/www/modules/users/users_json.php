@@ -25,9 +25,14 @@ if(isset($_REQUEST['user_id']) && $_REQUEST['user_id']>0)
 	
 	$query = isset($_REQUEST['query']) ? '%'.smart_addslashes($_REQUEST['query']).'%' : '';
 	$search_field = isset($_REQUEST['search_field']) ? smart_addslashes($_REQUEST['search_field']) : '';
+	
+	$start = isset($_REQUEST['start']) ? smart_addslashes($_REQUEST['start']) : 0; 
+	$limit = isset($_REQUEST['limit']) ? smart_addslashes($_REQUEST['limit']) : 0;
+	$dir = isset($_REQUEST['dir']) ? smart_addslashes($_REQUEST['dir']) : 0;
+	$sort = isset($_REQUEST['sort']) ? smart_addslashes($_REQUEST['sort']) : 0;
 
 
-	$count = $GO_USERS->search($query, $search_field, 0, $_REQUEST['start'], $_REQUEST['limit'], $_REQUEST['sort'],$_REQUEST['dir']);
+	$count = $GO_USERS->search($query, $search_field, 0, $start, $limit, $sort,$dir);
 	
 	$records=array();
 	while($GO_USERS->next_record())

@@ -26,7 +26,7 @@ switch($_REQUEST['type'])
 	case 'messages':
 
 		require_once ($GO_CONFIG->class_path."mail/imap.class.inc");
-		
+
 		$mail = new imap();
 		$email = new email();
 
@@ -123,6 +123,8 @@ switch($_REQUEST['type'])
 		}
 		echo '({"total":"'.$msg_count.'","results":'.json_encode($messages).'})';
 		break;
+
+
 
 	case 'tree':
 
@@ -228,31 +230,126 @@ switch($_REQUEST['type'])
 				}
 			}
 		}
-		
+
 		echo json_encode($nodes);
 		break;
-		
+
+
+	case 'tree-edit':
+
+		$email = new email();
+		$email2 = new email();
+
+
+		if(isset($_REQUEST['node']) && strpos($_REQUEST['node'],'_'))
+		{
+			$node = explode('_',$_REQUEST['node']);
+			$node_type=$node[0];
+			$node_id=$node[1];
+		}else {
+			$node_type='root';
+			$node_id=0;
+		}
+
+		$nodes=array();
+		if($node_id==0)
+		{
+			$count = $email->get_accounts($GO_SECURITY->user_id);
+
+			while($email->next_record())
+			{
+				$nodes[] = array(
+				'text'=>$email->f('email'),
+				'id'=>'account_'.$email->f('id'),
+				'iconCls'=>'folderIcon',
+				'expanded'=>true,
+				'account_id'=>$email->f('id'),
+				'folder_id'=>0,
+				'mailbox'=>'INBOX'
+				);
+			}
+		}else
+		{
+			if($node_type=='account')
+			{
+				$account_id=$node_id;
+				$folder_id=0;
+			}else {
+				$account_id=0;
+				$folder_id=$node_id;
+			}
+
+			$email->get_subscribed($account_id, $folder_id);
+			while($email->next_record())
+			{
+
+
+				if($email->f('name') != 'INBOX')
+				{
+
+					$pos = strrpos($email->f('name'), $email->f('delimiter'));
+
+					if ($pos && $email->f('delimiter') != '')
+					{
+						$folder_name = substr($email->f('name'),$pos+1);
+					}else
+					{
+						$folder_name = $email->f('name');
+					}
+					$folder_name = utf7_imap_decode($folder_name);
+
+
+					if($email2->get_subscribed(0, $email->f('id')))
+					{
+						$nodes[] = array(
+						'text'=>$folder_name,
+						'id'=>'folder_'.$email->f('id'),
+						'iconCls'=>'folderIcon',
+						'expanded'=>true,
+						'account_id'=>$email->f('account_id'),
+						'folder_id'=>$email->f('id'),
+						'mailbox'=>$email->f('name')
+						);
+					}else {
+						$nodes[] = array(
+						'text'=>$folder_name,
+						'id'=>'folder_'.$email->f('id'),
+						'iconCls'=>'folderIcon',
+						'account_id'=>$email->f('account_id'),
+						'folder_id'=>$email->f('id'),
+						'mailbox'=>$email->f('name'),
+						'expanded'=>true,
+						'children'=>array()
+						);
+					}
+				}
+			}
+		}
+
+		echo json_encode($nodes);
+		break;
+
 	case 'accounts':
-		
+
 		$email = new email();
 
 		$accounts=array();
-		
+
 		$count = $email->get_accounts($GO_SECURITY->user_id);
-		
+
 		while($email->next_record())
 		{
 			$accounts[] = array(
-					'id'=>$email->f('id'),
-					'email'=>$email->f('email'),
-					'host'=>$email->f('host'),
-					'type'=>$email->f('type'),
-					'standard'=>$email->f('standard')
-					);
+			'id'=>$email->f('id'),
+			'email'=>$email->f('email'),
+			'host'=>$email->f('host'),
+			'type'=>$email->f('type'),
+			'standard'=>$email->f('standard')
+			);
 		}
-		
+
 		echo '({"total":"'.$count.'","results":'.json_encode($accounts).'})';
-		
+
 		break;
 
 }
