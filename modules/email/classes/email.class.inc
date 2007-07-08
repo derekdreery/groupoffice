@@ -120,7 +120,7 @@ class email extends db
 				}
 			}
 			
-			$this->query("INSERT INTO em_settings (user_id, send_format, add_recievers, add_senders, request_notification, charset, beep, auto_check) VALUES ('$user_id', 'text/HTML', $addressbook_id, '0', '0', 'UTF-8','1','1')");
+			$this->query("INSERT INTO em_settings (user_id, send_format, add_recievers, add_senders, request_notification, charset, beep) VALUES ('$user_id', 'text/HTML', $addressbook_id, '0', '0', 'UTF-8','1')");
 			return $this->get_settings($user_id);
 		}
 	}
