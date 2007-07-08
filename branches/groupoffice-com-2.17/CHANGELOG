@@ -1,4 +1,7 @@
-2007/07/5 Version 2.17-stable-7
+2007/07/08 Version 2.17-stable-8
+-Problem with auto_check in email for new users.
+
+2007/07/05 Version 2.17-stable-7
 -Added out of office reply for local e-mail accounts. No cron job is needed 
  anymore but you need to setup sudo.
 -Fixed problem in synchronization with strange characters
