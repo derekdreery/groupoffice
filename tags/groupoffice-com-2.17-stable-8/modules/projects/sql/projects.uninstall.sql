@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS `pmFees`;
+DROP TABLE IF EXISTS `pmHours`;
+DROP TABLE IF EXISTS `pmMaterials`;
+DROP TABLE IF EXISTS `pmProjects`;
+DROP TABLE IF EXISTS `pmTimers`;
+DROP TABLE IF EXISTS `pm_settings`;
+DROP TABLE IF EXISTS `pmStatuses`;
+DROP TABLE IF EXISTS `pm_template_events`;
+DROP TABLE IF EXISTS `pm_templates`;
