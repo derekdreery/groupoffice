@@ -14,8 +14,7 @@ if (self != top)
 </script></head>
 <body dir="ltr" onload="document.login_form.username.focus();" onkeypress="executeOnEnter(event, 'document.login_form.submit();')">
 
-<form name="login_form" id="login_form" method="post" action="/community/www/index.php" target="_parent"><input type="hidden" name="load_frames" value="true" class="x-form-text x-form-field" />
-<input type="hidden" name="task" value="login" class="x-form-text x-form-field" />
+
 
 
 <script type="text/javascript" language="javascript">
@@ -26,13 +25,16 @@ function set_language(dropbox)
 }
 </script>
 
-<div style="width:500px;position:absolute;top:50%;left:50%;margin-top:-300px;margin-left:-250;text-align:center">
+<div style="width:500px;margin:auto;margin-top:30px">
 <div class="x-box-blue" style="width:100%;">
     <div class="x-box-tl"><div class="x-box-tr"><div class="x-box-tc"></div></div></div>
 
     <div class="x-box-ml"><div class="x-box-mr"><div class="x-box-mc">        
     
     	<div style="text-align:left;margin-bottom:20px;"><img src="login_screens/Default/GOCOM.gif" /></div>
+    	
+    	<form name="login_form" id="login_form" method="post" action="/community/www/index.php" target="_parent"><input type="hidden" name="load_frames" value="true" class="x-form-text x-form-field" />
+		<input type="hidden" name="task" value="login" class="x-form-text x-form-field" />
     
    		<table cellspacing="2" cellpadding="1" style="vertical-align:middle;"><tbody>
    		<tr>
@@ -133,7 +135,7 @@ function set_language(dropbox)
 			</tr>
 			</tbody>
 			</table>
-			
+			</form>
 			<div style="text-align:right"><img src="login_screens/Default/intermesh-klein.gif" /></div>
  
         
@@ -147,12 +149,6 @@ function set_language(dropbox)
 Intermesh Group-Office Community<br />
 Copyright &copy Intermesh
 </div>
-
-</form>
-
 	
 </body>
 </html>
-
-
-

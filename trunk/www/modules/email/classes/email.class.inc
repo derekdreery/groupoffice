@@ -469,6 +469,7 @@ class email extends db
 		"WHERE folder='$old_name' AND ".
 		"account_id='$account_id'";
 		return $this->query($sql);
+		//todo child paths.
 
 	}
 

@@ -222,7 +222,8 @@ email = function(){
 						url: 'message.php',
 						params: {
 							uid: record.data['uid'],
-							mailbox: this.mailbox
+							mailbox: this.mailbox,
+							account_id: this.account_id
 						},
 						scripts: true
 					});
@@ -844,6 +845,8 @@ account = function(){
 
 	var foldersTree;
 
+	var contentpanels=Array();
+
 	return {
 
 
@@ -888,14 +891,19 @@ account = function(){
 
 			accountPanel.on('activate', function() {
 
-				accountPanel.load({
-					scripts: true,
-					url: moduleBase+'account.php',
-					params: {
-						account_id: loaded_account_id
-					}
+				if(contentpanels['properties']!=loaded_account_id)
+				{
+					contentpanels['properties']=loaded_account_id;
 
-				});
+					accountPanel.load({
+						scripts: true,
+						url: moduleBase+'account.php',
+						params: {
+							account_id: loaded_account_id
+						}
+
+					});
+				}
 			});
 			layout.add('center', accountPanel);
 
@@ -918,7 +926,7 @@ account = function(){
 
 					var selModel = foldersTree.getSelectionModel();
 
-					if(typeof(selModel.selNode)=='undefined')
+					if(selModel.selNode==null)
 					{
 						Ext.MessageBox.alert(GOlang['strError'], emailLang['selectFolderAdd']);
 					}else
@@ -949,7 +957,14 @@ account = function(){
 												selModel.selNode.parentNode.reload();
 											}else
 											{
-												foldersTree.getRootNode().reload();
+												var responseParams = Ext.decode(response.responseText);
+												if(responseParams.success)
+												{
+													selModel.selNode.parentNode.reload();
+												}else
+												{
+													foldersTree.getRootNode().reload();
+												}
 											}
 										}
 									}
@@ -971,7 +986,7 @@ account = function(){
 
 					var selModel = foldersTree.getSelectionModel();
 
-					if(typeof(selModel.selNode)=='undefined' || selModel.selNode.attributes.folder_id<1)
+					if(selModel.selNode==null || selModel.selNode.attributes.folder_id<1)
 					{
 						Ext.MessageBox.alert(GOlang['strError'], emailLang['selectFolderDelete']);
 					}else
@@ -986,12 +1001,20 @@ account = function(){
 							},
 							callback: function(options, success, response)
 							{
+
 								if(!success)
 								{
 									Ext.MessageBox.alert(GOlang['strError'], response.result.errors);
 								}else
 								{
-									selModel.selNode.parentNode.reload();
+									var responseParams = Ext.decode(response.responseText);
+									if(responseParams.success)
+									{
+										selModel.selNode.parentNode.reload();
+									}else
+									{
+										Ext.MessageBox.alert(GOlang['strError'], responseParams.errors);
+									}
 								}
 							}
 						});
@@ -1014,88 +1037,106 @@ account = function(){
 
 			foldersPanel.on('activate', function() {
 
-				if(foldersTree)
+
+				if(contentpanels['folders']!=loaded_account_id)
 				{
-					var root = foldersTree.getRootNode();
-					if(root.id!='account_'+loaded_account_id)
-					{
-						root.id='account_'+loaded_account_id;
-						root.reload();
-					}
-				}else
-				{
-					var Tree = Ext.tree;
+					contentpanels['folders']=loaded_account_id;
 
-					foldersTree = new Tree.TreePanel('folders-tree', {
-						ddGroup : 'TreeDD',
-						animate:true,
-						loader: new Tree.TreeLoader(
-						{
-							dataUrl:'json.php',
-							baseParams:{type: 'tree-edit'}
-
-						}),
-						enableDrop:true,
-						dropConfig : {
-							appendOnly:true
-						},
-						containerScroll: true
-					});
-
-					// set the root node
-					var root = new Tree.AsyncTreeNode({
-						text: emailLang['root'],
-						draggable:false,
-						id:'account_'+loaded_account_id,
-						folder_id: 0
-					});
-					foldersTree.setRootNode(root);
-
-
-					var treeEdit = new Tree.TreeEditor(foldersTree, {
-						ignoreNoChange:true
-					});
-
-					treeEdit.on('beforestartedit', function(editor, boundEl, value){
-						if(editor.editNode.attributes.folder_id==0)
-						{
-							alert("You can't edit this node!");
-							return false;
+					Ext.get('folders-form-div').load({
+						scripts: true,
+						url: moduleBase+'folders.php',
+						params: {
+							account_id: loaded_account_id
 						}
+
 					});
 
-					treeEdit.on('beforecomplete', function(editor, boundEl, value){
 
-						var conn = new Ext.data.Connection();
-						conn.request({
-							url: 'action.php',
-							params: {
-								task: 'rename_folder',
-								folder_id: editor.editNode.attributes.folder_id,
-								new_name: boundEl
-							},
-							callback: function(options, success, response)
+					if(foldersTree)
+					{
+						var root = foldersTree.getRootNode();
+						if(root.id!='account_'+loaded_account_id)
+						{
+							root.id='account_'+loaded_account_id;
+							root.reload();
+						}
+					}else
+					{
+
+
+						var Tree = Ext.tree;
+
+						foldersTree = new Tree.TreePanel('folders-tree', {
+							ddGroup : 'TreeDD',
+							animate:true,
+							loader: new Tree.TreeLoader(
 							{
-								if(!success)
-								{
-									Ext.MessageBox.alert(GOlang['strError'], response.result.errors);
-								}else
-								{
-									return true;
-								}
+								dataUrl:'json.php',
+								baseParams:{type: 'tree-edit'}
+
+							}),
+							enableDrop:true,
+							dropConfig : {
+								appendOnly:true
+							},
+							containerScroll: true
+						});
+
+						// set the root node
+						var root = new Tree.AsyncTreeNode({
+							text: emailLang['root'],
+							draggable:false,
+							id:'account_'+loaded_account_id,
+							folder_id: 0
+						});
+						foldersTree.setRootNode(root);
+
+
+						var treeEdit = new Tree.TreeEditor(foldersTree, {
+							ignoreNoChange:true
+						});
+
+						treeEdit.on('beforestartedit', function(editor, boundEl, value){
+							if(editor.editNode.attributes.folder_id==0)
+							{
+								alert("You can't edit this node!");
+								return false;
 							}
 						});
 
-					});
+						treeEdit.on('beforecomplete', function(editor, boundEl, value){
+
+							var conn = new Ext.data.Connection();
+							conn.request({
+								url: 'action.php',
+								params: {
+									task: 'rename_folder',
+									folder_id: editor.editNode.attributes.folder_id,
+									new_name: boundEl
+								},
+								callback: function(options, success, response)
+								{
+									if(!success)
+									{
+										Ext.MessageBox.alert(GOlang['strError'], response.result.errors);
+									}else
+									{
+										return true;
+									}
+								}
+							});
+
+						});
 
 
 
 
 
-					foldersTree.render();
-					root.expand();
+						foldersTree.render();
+						root.expand();
 
 
+					}
 				}
 
 

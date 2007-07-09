@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.1 Beta 1
+ * Ext JS Library 1.1 Beta 2
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -864,7 +864,7 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
 	background-repeat: no-repeat;
 	padding-left:18px;
 	padding-top:3px;
-	padding-bottom:3px;
+	padding-bottom:2px;
     padding-right:0;
 }
 
@@ -2139,6 +2139,19 @@ body.x-body-masked .x-dlg select {
 	background-image:url(../images/default/tree/leaf.gif);
 }
 
+
+.ext-ie input.x-tree-node-cb {
+    width:15px;
+    height:15px;
+}
+input.x-tree-node-cb {
+    margin-left:1px;
+}
+.ext-ie input.x-tree-node-cb {
+    margin-left:0;
+}
+
+
 .x-tree-noicon .x-tree-node-icon{
 	width:0; height:0;
 }
@@ -2919,6 +2932,9 @@ td.x-date-mp-sep {
 }
 .x-combo-noedit{
     cursor:pointer;
+}
+.x-combo-list-small .x-combo-list-item {
+    font:normal 11px tahoma, arial, helvetica, sans-serif;
 }
 .x-html-editor-wrap {
     border:1px solid #a9bfd3;

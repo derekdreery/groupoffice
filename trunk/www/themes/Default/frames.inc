@@ -87,7 +87,6 @@ foreach($GO_MODULES->modules as $module)
 	}
 	$lang_var = isset($lang_modules[$module['id']]) ? $lang_modules[$module['id']] : $module['id'];
 	
-	echo "GroupOffice.addCenterPanel('<img src=\"".$GO_THEME->images[$module['id']]."\" align=\"absmiddle\" />".$lang_var."', '".$module['url']."');";
 	echo "GroupOffice.addCenterPanel('".$module['id']."','".$lang_var."', '".$module['url']."');";
 }
 ?>

@@ -57,6 +57,23 @@ $result =array('success'=>false);
 
 switch($_REQUEST['task'])
 {
+	
+	case 'save_account_folders':
+		
+		$up_account['id'] = $_POST['account_id'];
+		$up_account['sent'] = isset($_POST['sent']) ? smart_addslashes($_POST['sent']) : '';
+		$up_account['trash'] = isset($_POST['trash']) ? smart_addslashes($_POST['trash']) : '';
+		$up_account['drafts'] = isset($_POST['drafts']) ? smart_addslashes($_POST['drafts']) : '';
+		$up_account['spam'] = isset($_POST['spam']) ? smart_addslashes($_POST['spam']) : '';
+		$up_account['spamtag']= smart_addslashes($_POST['spamtag']);
+		
+		if(!$result['success']=$email->_update_account($up_account))
+		{
+			$result['errors']=$strSaveError;
+		}
+		
+		break;
+		
 	case 'add_folder':
 
 		$account = connect(smart_addslashes($_REQUEST['account_id']));
@@ -101,17 +118,13 @@ switch($_REQUEST['task'])
 
 			if ($imap->delete_folder($folder['name'], $account['mbroot']))
 			{
-				/*
-				(cyrus imap) if folder still exists then don't delete it from the
-				database,
-				because it contains at least one child mailbox
-				*/
-				if (!is_array($imap->get_mailboxes($folder['name'])))
-				{
-					$result['succes']=$email->delete_folder($account['id'], addslashes($folder['name']));
-				}
+				$result['success']=$email->delete_folder($account['id'], addslashes($folder['name']));
+			}else {
+				$result['errors']=$ml_delete_folder_error;
 			}
 			$imap->close();
+		}else {
+			$result['errors']=$strDataError;
 		}
 		break;
 	case 'rename_folder':
@@ -136,8 +149,12 @@ switch($_REQUEST['task'])
 			if ($imap->rename_folder($folder['name'], $new_folder))
 			{
 				$result['success']=$email->rename_folder($folder['account_id'], addslashes($folder['name']), addslashes($new_folder));
+			}else {
+				$result['errors']=$strSaveError;
 			}
 			$imap->close();
+		}else {
+			$result['errors']=$strDataError;
 		}
 		break;
 
@@ -145,6 +162,7 @@ switch($_REQUEST['task'])
 
 		$account = $email->get_account($_REQUEST['account_id']);
 		$email->synchronize_folders($account);
+		$result['success']=true;
 		break;
 
 	case 'save_account_properties':

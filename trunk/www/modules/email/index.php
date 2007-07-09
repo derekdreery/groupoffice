@@ -72,6 +72,7 @@ function(){
 				<div id="folders-toolbar"></div>
 				<div class="innerTab">
 					<div id="folders-tree"></div>
+					<div id="folders-form-div"></div>
 				</div>			
 			</div>
 			<div id="filters" class="x-dlg-tab"></div>

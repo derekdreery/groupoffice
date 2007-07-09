@@ -23,6 +23,16 @@ require_once ($GO_LANGUAGE->get_language_file('email'));
 switch($_REQUEST['type'])
 {
 
+	case 'filters':
+			$count = $email->get_filters($account_id);
+			
+			while($email->next_record())
+			{
+				$filters[] = $email->Record;
+			}
+			echo '({"total":"'.$msg_count.'","results":'.json_encode($filters).'})';
+		break;
+	
 	case 'messages':
 
 		require_once ($GO_CONFIG->class_path."mail/imap.class.inc");
