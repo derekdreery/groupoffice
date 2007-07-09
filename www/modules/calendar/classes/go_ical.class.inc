@@ -158,10 +158,10 @@ class go_ical extends calendar
 
 		$value_part = str_replace("\r\n","\n", $value_part);
 
-		if(!strpos($value_part, "\n"))
+		/*if(!strpos($value_part, "\n"))
 		{
 			return array($name_part.';CHARSET='.$charset.":".$value_part);
-		}
+		}*/
 		$qp_value_part = quoted_printable_encode($value_part);		
 		
 		if($value_part != $qp_value_part)
@@ -173,7 +173,7 @@ class go_ical extends calendar
 			return explode("\n", $name_part.$qp_value_part);
 		}else
 		{
-			$name_part .= ':';			
+			$name_part .= ';CHARSET='.$charset.':';			
 		}
 		return array($name_part.$value_part);		
 	}

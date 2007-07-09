@@ -18,4 +18,5 @@ if(!empty($GO_MODULES->id))
 var BaseHref = '<?php echo $GO_CONFIG->host; ?>';
 GOsettings=Ext.util.JSON.decode('<?php echo addslashes(json_encode($_SESSION['GO_SESSION'])); ?>');
 GOmodules=Ext.util.JSON.decode('<?php echo addslashes(json_encode($GO_MODULES->modules)); ?>');
+Ext.BLANK_IMAGE_URL = '<?php echo $GO_CONFIG->host; ?>ext/resources/images/default/s.gif';
 </script>

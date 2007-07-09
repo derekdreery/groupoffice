@@ -1,4 +1,6 @@
-
+html {
+height:100%;
+}
 body {
 	background-color: white;
 	font-family: tahoma, arial, helvetica, sans-serif;
@@ -6,7 +8,7 @@ body {
 	color: #000000;
 	margin: 0px;
 	height: 100%;
-	overflow: auto;
+	text-align:center;
 }
 
 table {
