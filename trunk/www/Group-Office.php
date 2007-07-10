@@ -46,6 +46,7 @@ require(dirname(__FILE__).'/classes/base/config.class.inc');
 //load configuration
 $GO_CONFIG = new GO_CONFIG();
 
+
 if(!empty($GO_CONFIG->default_timezone_string))
 {
 	date_default_timezone_set($GO_CONFIG->default_timezone_string);
@@ -59,9 +60,9 @@ if($GO_CONFIG->debug)
 
 //preload classes before session so they can be stored in the session
 if ( isset( $GO_INCLUDES ) ) {
-  while ( $include = array_shift( $GO_INCLUDES ) ) {
-    require_once( $include );
-  }
+	while ( $include = array_shift( $GO_INCLUDES ) ) {
+		require_once( $include );
+	}
 }
 
 //require_once($GO_CONFIG->class_path.'base/controls.class.inc');
@@ -79,9 +80,9 @@ if($GO_CONFIG->debug)
 
 //require external auth_sources file
 if ( $GO_CONFIG->auth_sources != '' ) {
-  require_once($GO_CONFIG->auth_sources);
+	require_once($GO_CONFIG->auth_sources);
 } else {
-  $auth_sources = array();
+	$auth_sources = array();
 }
 
 if(isset($_REQUEST['auth_source_key']) && isset( $auth_sources[$_REQUEST['auth_source_key']]))
@@ -101,26 +102,26 @@ if(isset($_REQUEST['auth_source_key']) && isset( $auth_sources[$_REQUEST['auth_s
 }
 
 $user_manager = $type = 'sql';
- 
+
 if (isset($_SESSION['auth_source'])) {
-  if ( ( $_SESSION['auth_source']['type'] == "ldap" ) |
-       ( $_SESSION['auth_source']['user_manager'] == "ldap" ) )
-  {
-    require_once($GO_CONFIG->root_path.'database/ldap.class.inc');
-    $GO_LDAP = new ldap();
-  }
-  
-  $user_manager = $_SESSION['auth_source']['user_manager'];
-  $type = $_SESSION['auth_source']['type'];
-} 
+	if ( ( $_SESSION['auth_source']['type'] == "ldap" ) |
+	( $_SESSION['auth_source']['user_manager'] == "ldap" ) )
+	{
+		require_once($GO_CONFIG->root_path.'database/ldap.class.inc');
+		$GO_LDAP = new ldap();
+	}
+
+	$user_manager = $_SESSION['auth_source']['user_manager'];
+	$type = $_SESSION['auth_source']['type'];
+}
 
 require_once($GO_CONFIG->class_path.'base/'.$type.'.auth.class.inc');
 require_once($GO_CONFIG->class_path.'base/'.$user_manager.'.security.class.inc');
 require_once($GO_CONFIG->class_path.'base/'.$user_manager.'.groups.class.inc');
-require_once($GO_CONFIG->class_path.'base/'.$user_manager.'.users.class.inc');	
+require_once($GO_CONFIG->class_path.'base/'.$user_manager.'.users.class.inc');
 
 if ( $type == 'ldap' && $user_manager == 'sql' ) {
-	require_once($GO_CONFIG->class_path.'base/ldap.users.class.inc');	
+	require_once($GO_CONFIG->class_path.'base/ldap.users.class.inc');
 }
 
 require_once($GO_CONFIG->class_path.'base/modules.class.inc');
@@ -152,19 +153,20 @@ $GO_MODULES = new GO_MODULES();
 $GO_LINKS = new GO_LINKS();
 
 if ( $GO_CONFIG->dav_switch ) {
-  require_once($GO_CONFIG->class_path.'dav.class.inc');
-  $GO_DAV = new dav();
+	require_once($GO_CONFIG->class_path.'dav.class.inc');
+	$GO_DAV = new dav();
 }
 if ( isset( $_REQUEST['SET_LANGUAGE'] ) ) {
-  $GO_LANGUAGE->set_language( $_REQUEST['SET_LANGUAGE'] );
+	$GO_LANGUAGE->set_language( $_REQUEST['SET_LANGUAGE'] );
 }
 require_once($GO_LANGUAGE->get_base_language_file('common'));
 require_once($GO_LANGUAGE->get_base_language_file('filetypes'));
 
 if ( $GO_CONFIG->log ) {
-  $username = isset($_SESSION['GO_SESSION']['username']) ? $_SESSION['GO_SESSION']['username'] : 'notloggedin';
-  define_syslog_variables();
-  openlog('[Group-Office]['.date('Ymd G:i').']['.$username.']', LOG_PERROR, LOG_LOCAL0);
+
+	$username = isset($_SESSION['GO_SESSION']['username']) ? $_SESSION['GO_SESSION']['username'] : 'notloggedin';
+	define_syslog_variables();
+	openlog('[Group-Office]['.date('Ymd G:i').']['.$username.']', LOG_PERROR, LOG_LOCAL0);
 }
 
 

@@ -64,7 +64,7 @@ function(){
 </div>
 
 
-<div id="account-dialog" style="visibility:hidden;">
+<div id="account-dialog" style="position:fixed;visibility:hidden;">
 	<div class="x-dlg-hd"><?php echo 'Account'; ?></div>	
 	    <div id="box-bd" class="x-dlg-bd">	   
 		    <div id="properties" class="x-dlg-tab"></div>
@@ -75,7 +75,35 @@ function(){
 					<div id="folders-form-div"></div>
 				</div>			
 			</div>
-			<div id="filters" class="x-dlg-tab"></div>
+			<div id="filters" class="x-dlg-tab">
+			<?php
+			$select=new select('field');
+			$select->add_value('sender',$ml_email_is);
+			$select->add_value('subject',$ml_subject_is);
+			$select->add_value('to',$ml_to_is);
+			$select->add_value('cc',$ml_cc_is);
+			
+			echo $select->get_html();
+			
+			
+			$select=new select('folder');
+			$select->add_value('',$ml_choose_action.'&nbsp;&nbsp;&nbsp;');
+			$email->get_subscribed($account['id']);
+			while ($email->next_record())
+			{
+			  if (!($email->f('attributes')&LATT_NOSELECT) && $email->f('name') != 'INBOX')
+			  {
+			    $select->add_value($email->f('name'), str_replace('INBOX'.$email->f('delimiter'), '', $email->f('name')));
+			  }
+			}
+			echo $select->get_html();
+			
+			
+			
+			?>
+			<div id="filters-grid"></div>
+			
+			</div>
 			<div id="autoreply" class="x-dlg-tab"></div>
 	    </div>
 	</div>
