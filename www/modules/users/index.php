@@ -74,7 +74,7 @@ echo $GO_THEME->get_stylesheet('users');
 <?php
 if(isset($_REQUEST['user_id']))
 {
-	//echo '<script type="text/javascript">Ext.onReady(function(){user.showDialog('.$_REQUEST['user_id'].');});</script>';
+	echo '<script type="text/javascript">Ext.onReady(function(){user.showDialog('.$_REQUEST['user_id'].');});</script>';
 }
 ?>
 </body>

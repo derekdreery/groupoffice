@@ -137,7 +137,7 @@ $from .= '&nbsp;&lt;'.$content['sender'].'&gt;';
 ?>
 
 <div style="padding:5px;background-color:#c3daf9">
-<table width="100%">
+<table>
 
 	<?php
 	if($content["priority"] > 3)
@@ -331,7 +331,7 @@ $from .= '&nbsp;&lt;'.$content['sender'].'&gt;';
 		echo '<table class="HeaderTable" width="100%" style="margin-top:2px;">'.'<tr><td valign="top"><b>'.$ml_attachments.':</b>&nbsp;&nbsp;</td><td width="100%">'.$attachments.'</td></tr></table>';
 	}
 	
-	echo '<div style="background-color:white;padding:3px;border:1px solid black;overflow:auto">';
+	echo '<div style="background-color:white;padding:3px;border:1px solid black;">';
 
 	$count = 0;
 	$splitter = 0;

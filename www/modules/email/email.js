@@ -571,6 +571,7 @@ email = function(){
 					width:600,
 					proxyDrag: true,
 					collapsible: false,
+					shim:false,
 					center: {
 						autoScroll:true,
 						tabPosition: 'top',
@@ -863,6 +864,7 @@ account = function(){
 				width:500,
 				height:500,
 				collapsible:false,
+				shim:false,
 				center: {
 					autoScroll:true,
 					tabPosition: 'top',
@@ -1143,6 +1145,149 @@ account = function(){
 
 			});
 			layout.add('center', foldersPanel);
+			
+			
+			
+			
+			
+			
+
+
+	
+					//contentpanels['filters']=loaded_account_id;
+					
+					//initialize filter edit grid
+					
+					 function formatBoolean(value){
+					        return value ? 'Yes' : 'No';  
+					    };
+					
+					// shorthand alias
+				    var fm = Ext.form, Ed = Ext.grid.GridEditor;
+				
+				    // the column model has information about grid columns
+				    // dataIndex maps the column to the specific data field in
+				    // the data store (created below)
+				    var cm = new Ext.grid.ColumnModel([{
+				           header: "Field",
+				           dataIndex: 'field',
+				           width: 220,
+				           editor: new Ed(new Ext.form.ComboBox({
+				               typeAhead: true,
+				               triggerAction: 'all',
+				               transform:'field',
+				               lazyRender:true,
+				               allowBlank: false
+				            }))				           
+				        },{
+				           header: "Contains",
+				           dataIndex: 'keyword',
+				           width: 130,
+				           editor: new Ed(new fm.TextField({
+				               allowBlank: false
+				           }))
+				        },{
+				           header: "Move to folder",
+				           dataIndex: 'folder',
+				           width: 200,				           
+				           editor: new Ed(new Ext.form.ComboBox({
+				               typeAhead: true,
+				               triggerAction: 'all',
+				               transform:'folder',
+				               lazyRender:true,
+				               allowBlank: false
+				            }))			
+				        },{
+				           header: "Mark as read?",
+				           dataIndex: 'mark_as_read',
+				           width: 55,
+				           renderer: formatBoolean,
+				           editor: new Ed(new fm.Checkbox())
+				        }]);
+				
+				    // by default columns are sortable
+				    cm.defaultSortable = true;
+				
+				    // this could be inline, but we want to define the Plant record
+				    // type so we can add records dynamically
+				    var Plant = Ext.data.Record.create([
+				           // the "name" below matches the tag name to read, except "availDate"
+				           // which is mapped to the tag "availability"
+				           {name: 'field'},
+				           {name: 'keyword', type: 'string'},
+				           {name: 'folder'},
+				           {name: 'mark_as_read', type: 'bool'}
+				      ]);
+				
+				    // create the Data Store
+				    var ds = new Ext.data.Store({
+
+						proxy: new Ext.data.HttpProxy({
+							url: BaseHref+'modules/email/json.php',
+							baseParams: {type: 'filters'}
+							
+						}),
+		
+						reader: new Ext.data.JsonReader({
+							root: 'results',
+							totalProperty: 'total',
+							id: 'id'
+						}, [
+							{name: 'id'},
+							{name: 'field'},
+							{name: 'keyword'},		
+							{name: 'folder'},
+							{name: 'mark_as_read'}
+						]),
+		
+						// turn on remote sorting
+						remoteSort: false
+					});
+				
+				    // create the editor grid
+				    var grid = new Ext.grid.EditorGrid('filters-grid', {
+				        ds: ds,
+				        cm: cm,
+				        //selModel: new Ext.grid.RowSelectionModel(),
+				        enableColLock:false
+				    });
+				
+				   				
+				
+				    // render it
+				    grid.render();
+				
+				    
+				    var gridHead = grid.getView().getHeaderPanel(true);
+				    var tb = new Ext.Toolbar(gridHead, [{
+				        text: 'Add filter',
+				        handler : function(){
+				            var p = new Plant({
+				                keyword: '',
+				                folder: '',
+				                field: '',
+				                mark_as_read: false
+				            });
+				            grid.stopEditing();
+				            ds.insert(0, p);
+				            grid.startEditing(0, 0);
+				        }
+				    }]);
+				
+				    // trigger the data store load
+				    ds.load();
+				
+
+
+			var filtersPanel = new Ext.GridPanel(grid,{
+				title: emailLang['filters'],
+				autoScroll:true,
+				background: true,
+				toolbar: folderstb
+			});
+			
+			layout.add('center',filtersPanel);
+			
 
 
 
