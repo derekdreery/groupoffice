@@ -57,23 +57,97 @@ $result =array('success'=>false);
 
 switch($_REQUEST['task'])
 {
-	
-	case 'save_account_folders':
+	case 'delete_accounts':
+
+		$email = new email();
 		
+		$accounts = json_decode(smart_stripslashes($_POST['accounts']));
+		
+		
+		foreach($accounts as $account_id)
+		{
+			$account = $email->get_account($account_id);
+
+			if(!$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id) && (!$GO_MODULES->modules['email']['write_permission'] || $account['user_id']!=$GO_SECURITY->user_id))
+			{
+				$result['success']=false;
+				$result['errors']=$strAccessDenied;
+				echo json_encode($result);
+				exit();
+			}			
+			
+			$email->delete_account($account['user_id'], $account_id);
+		}
+	
+		$result['success']=true;
+	
+
+		break;
+		
+	case 'delete_filters':
+
+		$email = new email();
+		
+		$filters = json_decode(smart_stripslashes($_POST['filters']));
+		
+		foreach($filters as $filter_id)
+		{
+			$email->delete_filter($filter_id);
+		}
+	
+		$result['success']=true;
+	
+
+		break;
+		
+	case 'save_filter':
+		
+		$filter['id']=smart_addslashes($_POST['filter_id']);
+		$filter['mark_as_read']=isset($_POST['mark_as_read']) ? '1' : '0';
+		$filter['keyword']=smart_addslashes($_POST['keyword']);
+		$filter['folder']=smart_addslashes($_POST['folder']);
+		$filter['field']=smart_addslashes($_POST['field']);
+		
+		
+		if($_POST['filter_id']>0)
+		{			
+			if ($email->update_filter($filter))
+			{
+				$result['success']=true;
+			}else
+			{
+				$result['errors']=$strSaveError;
+			}
+		}else
+		{
+			$filter['account_id']=smart_addslashes($_POST['account_id']);
+			if ($result['filter_id']=$email->add_filter($filter))
+			{
+				$result['success']=true;
+			}else
+			{
+				$result['errors']=$strSaveError;
+			}
+		}
+
+		break;
+
+	case 'save_account_folders':
+
 		$up_account['id'] = $_POST['account_id'];
 		$up_account['sent'] = isset($_POST['sent']) ? smart_addslashes($_POST['sent']) : '';
 		$up_account['trash'] = isset($_POST['trash']) ? smart_addslashes($_POST['trash']) : '';
 		$up_account['drafts'] = isset($_POST['drafts']) ? smart_addslashes($_POST['drafts']) : '';
 		$up_account['spam'] = isset($_POST['spam']) ? smart_addslashes($_POST['spam']) : '';
 		$up_account['spamtag']= smart_addslashes($_POST['spamtag']);
-		
+
 		if(!$result['success']=$email->_update_account($up_account))
 		{
 			$result['errors']=$strSaveError;
 		}
-		
+
 		break;
-		
+
 	case 'add_folder':
 
 		$account = connect(smart_addslashes($_REQUEST['account_id']));
@@ -227,6 +301,8 @@ switch($_REQUEST['task'])
 			}
 		}
 		break;
+		
+	
 
 	case 'delete':
 

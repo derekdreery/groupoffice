@@ -220,8 +220,11 @@ function submitForm()
 			if(action.result.account_id)
 			{
 				account.setAccountID(action.result.account_id);	
-				Ext.MessageBox.alert(GOlang['strSuccess'], action.result.errors);			
+				Ext.MessageBox.alert(GOlang['strSuccess'], action.result.errors);		
+					
 			}
+			
+			email.reloadAccounts();
 			
 		},
 
@@ -259,44 +262,6 @@ Ext.onReady(function(){
 
 	dialog.addButton('Close', dialog.hide, dialog);
 	
-	
-	//generate user combobox
-	/*
-	var ds = new Ext.data.Store({
-
-		proxy: new Ext.data.HttpProxy({
-			url: '<?php echo $GO_MODULES->modules['users']['url']; ?>users_json.php'
-		}),
-
-		reader: new Ext.data.JsonReader({
-			root: 'results',
-			totalProperty: 'total',
-			id: 'id'
-		}, [
-		{name: 'id'},
-		{name: 'name'}
-		]),
-		// turn on remote sorting
-		remoteSort: true
-	});
-	ds.setDefaultSort('name', 'asc');
-	
-
-	
-	var userSelect = new Ext.form.ComboBox({
-		store: ds,
-		displayField:'name',
-		typeAhead: true,
-		valueField: 'id',
-		triggerAction: 'all',
-		emptyText:GOlang['strPleaseSelect'],
-		width: 240,
-		selectOnFocus:true
-	});	
-	ds.on('load', function() {userSelect.setValue(<?php echo $account['user_id']; ?>);}, this, {single: true});
-	ds.load();
-	
-	userSelect.applyTo('user-select');*/
 	
 	<?php
 	if($admin_permission)

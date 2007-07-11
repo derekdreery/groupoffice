@@ -81,7 +81,7 @@ Users = function(){
 			// render it
 			grid.render();
 
-			ds.on('load', function (){grid.getView().autoSizeColumns();});
+			ds.on('load', function (){grid.getView().autoSizeColumns();}, false, { single: true });
 
 
 

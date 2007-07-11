@@ -239,3 +239,6 @@ $ml_help_url='http://docs.group-office.com/index.php?folder_id=57&file_id=0';
 $ml_attachment_message = 'Message';
 
 $ml_delete_folder_error='Could not delete the folder';
+
+$ml_account = 'Account';
+$ml_filter = 'Filter';

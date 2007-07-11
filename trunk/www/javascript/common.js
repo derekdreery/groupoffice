@@ -1,3 +1,60 @@
+function deleteItems(url, params, count, callback)
+{
+	switch(count)
+	{
+		case 0:
+			Ext.MessageBox.alert(GOlang['strError'], GOlang['noItemSelected']);
+			return false;
+		break;
+		
+		case 1:
+			var strConfirm = GOlang['strDeleteSelectedItem'];
+		break;
+		
+		default:
+			var t = new Ext.Template(
+		    	GOlang['strDeleteSelectedItems']
+			);
+			var strConfirm = t.applyTemplate({'count': count});						
+		break;						
+	}
+
+	Ext.MessageBox.confirm(GOlang['strConfirm'], strConfirm, function(btn){
+		if(btn=='yes')
+		{
+			var conn = new Ext.data.Connection();
+			conn.request({
+				url: url,
+				params: params,
+				callback: function(options, success, response)
+				{
+
+					if(!success)
+					{
+						Ext.MessageBox.alert(GOlang['strError'], response.result.errors);
+					}else
+					{
+						var responseParams = Ext.decode(response.responseText);
+						if(responseParams.success)
+						{
+							if(typeof('callback')!='undefined')
+							{
+								callback.call();
+							}
+						}else
+						{
+							Ext.MessageBox.alert(GOlang['strError'], responseParams.errors);
+						}
+					}
+				}
+			});	
+		}
+	});
+}
+
+
+
+
 var BrowserDetect = {
 	init: function () {
 		this.browser = this.searchString(this.dataBrowser) || "An unknown browser";

@@ -307,7 +307,8 @@ GroupOffice = function(){
 					modal:true,
 					title: GOlang['strLinkItems'],
 					resizable:false,
-					style: 'width:'+config['width']+';height:'+config['height'],
+					shim:false,
+				 	proxyDrag: true,
 					width: 600,
 					height:420
 				});
@@ -453,7 +454,10 @@ GroupOffice = function(){
 						Ext.MessageBox.alert('Failed', response.result.errors);
 					}else
 					{
-						links_callback.call();
+						if(typeof('links_callbak') != 'undefined')
+						{
+							links_callback.call();
+						}
 						linksDialog.hide();
 					}
 				}
@@ -496,6 +500,7 @@ GroupOffice = function(){
 
 			dialogdiv.load({url: config['url'], scripts: true, nocache: true});
 		}
+		
 	};
 
 }();

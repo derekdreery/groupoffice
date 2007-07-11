@@ -59,7 +59,7 @@ require($GO_CONFIG->root_path.'default_scripts.inc');
 
 <div id="dialog" style="visibility:hidden;height:100%;width:100%;"></div>
 
-<div id="search_links_dialog" style="visibility:hidden;">
+<div id="search_links_dialog" style="visibility:hidden;position:fixed">
 	<div class="x-dlg-hd">Link to items</div>
 
 	<div class="x-dlg-bd">

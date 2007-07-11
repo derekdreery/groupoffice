@@ -18,6 +18,7 @@ email = function(){
 	var btnAccounts;
 
 	var accountsDialog;
+	var accountsDS;
 	var tree;
 
 
@@ -589,7 +590,7 @@ email = function(){
 
 
 
-				var accountsDS = new Ext.data.Store({
+				accountsDS = new Ext.data.Store({
 
 					proxy: new Ext.data.HttpProxy({
 						url: BaseHref+'modules/email/json.php'
@@ -672,7 +673,9 @@ email = function(){
 					icon: GOimages['add'],
 					text: GOlang['cmdAdd'],
 					cls: 'x-btn-text-icon',
-					handler: function(){}
+					handler: function(){
+						account.showDialog(0);
+					}
 				}
 				);
 
@@ -681,7 +684,14 @@ email = function(){
 					icon: GOimages['delete'],
 					text: GOlang['cmdDelete'],
 					cls: 'x-btn-text-icon',
-					handler: function(){}
+					handler: function(){
+					
+						deleteItems('action.php', {
+									task: 'delete_accounts',
+									accounts: Ext.encode(accountsGrid.selModel.selections.keys)
+		
+								}, accountsGrid.selModel.selections.keys.length, function(){accountsDS.load();});		
+					}
 				}
 				);
 
@@ -732,8 +742,8 @@ email = function(){
 		doTaskOnMessages : function (task){
 			var selectedRows = grid.selModel.selections.keys;
 
-			var selectionModel = grid.getSelectionModel();
-			var records = selectionModel.getSelections();
+			//var selectionModel = grid.getSelectionModel();
+			//var records = selectionModel.getSelections();
 
 			if(selectedRows.length)
 			{
@@ -776,6 +786,9 @@ email = function(){
 
 
 			}
+		},
+		reloadAccounts : function(){
+			accountsDS.load();
 		},
 
 		composer : function(action,mail_to,subject,body, uid)
@@ -847,6 +860,8 @@ account = function(){
 	var foldersTree;
 
 	var contentpanels=Array();
+	
+	var filtersds;
 
 	return {
 
@@ -910,10 +925,24 @@ account = function(){
 			layout.add('center', accountPanel);
 
 
+			layout.endUpdate();
+		},
 
-
-
-
+		removePanels : function(){
+			var region = layout.getRegion('center');
+			
+			var panels = [];
+			for (var i = 1;i<region.panels.items.length;i++)
+			{				
+				panels.push(region.panels.items[i].getId());
+			}
+			for (var i = 0;i<panels.length;i++)
+			{				
+				region.remove(panels[i],true);
+			}
+		},
+		createPanels : function()
+		{
 			//start of folders panel
 
 			var folderstb = new Ext.Toolbar('folders-toolbar');
@@ -1150,166 +1179,146 @@ account = function(){
 			
 			
 			
+			//start filters panel
+			
+			
+			var filterstb = new Ext.Toolbar('filters-toolbar');
+
+
+			filterstb.addButton({
+				id: 'add',
+				icon: GOimages['add'],
+				text: GOlang['cmdAdd'],
+				cls: 'x-btn-text-icon',
+				handler: function(){
+					filter.showDialog(0, loaded_account_id);
+
+				}
+			});
+
+			filterstb.addButton({
+				id: 'delete',
+				icon: GOimages['delete'],
+				text: GOlang['cmdDelete'],
+				cls: 'x-btn-text-icon',
+				handler: function(){				
+				
+					deleteItems('action.php', {
+									task: 'delete_filters',
+									filters: Ext.encode(grid.selModel.selections.keys)
+		
+								}, grid.selModel.selections.keys.length, function(){filtersds.load();});		
+				}
+			}
+			);
+			
 			
 
 
 	
-					//contentpanels['filters']=loaded_account_id;
-					
-					//initialize filter edit grid
-					
-					 function formatBoolean(value){
-					        return value ? 'Yes' : 'No';  
-					    };
-					
-					// shorthand alias
-				    var fm = Ext.form, Ed = Ext.grid.GridEditor;
-				
-				    // the column model has information about grid columns
-				    // dataIndex maps the column to the specific data field in
-				    // the data store (created below)
-				    var cm = new Ext.grid.ColumnModel([{
-				           header: "Field",
-				           dataIndex: 'field',
-				           width: 220,
-				           editor: new Ed(new Ext.form.ComboBox({
-				               typeAhead: true,
-				               triggerAction: 'all',
-				               transform:'field',
-				               lazyRender:true,
-				               allowBlank: false
-				            }))				           
-				        },{
-				           header: "Contains",
-				           dataIndex: 'keyword',
-				           width: 130,
-				           editor: new Ed(new fm.TextField({
-				               allowBlank: false
-				           }))
-				        },{
-				           header: "Move to folder",
-				           dataIndex: 'folder',
-				           width: 200,				           
-				           editor: new Ed(new Ext.form.ComboBox({
-				               typeAhead: true,
-				               triggerAction: 'all',
-				               transform:'folder',
-				               lazyRender:true,
-				               allowBlank: false
-				            }))			
-				        },{
-				           header: "Mark as read?",
-				           dataIndex: 'mark_as_read',
-				           width: 55,
-				           renderer: formatBoolean,
-				           editor: new Ed(new fm.Checkbox())
-				        }]);
-				
-				    // by default columns are sortable
-				    cm.defaultSortable = true;
-				
-				    // this could be inline, but we want to define the Plant record
-				    // type so we can add records dynamically
-				    var Plant = Ext.data.Record.create([
-				           // the "name" below matches the tag name to read, except "availDate"
-				           // which is mapped to the tag "availability"
-				           {name: 'field'},
-				           {name: 'keyword', type: 'string'},
-				           {name: 'folder'},
-				           {name: 'mark_as_read', type: 'bool'}
-				      ]);
-				
-				    // create the Data Store
-				    var ds = new Ext.data.Store({
+			//contentpanels['filters']=loaded_account_id;
+			
+			//initialize filter edit grid
+			
+			function formatBoolean(value){
+		        return value ? 'Yes' : 'No';  
+		    };
+			
+			// shorthand alias
+		    var fm = Ext.form, Ed = Ext.grid.Grid;
+		
+		    // the column model has information about grid columns
+		    // dataIndex maps the column to the specific data field in
+		    // the data store (created below)
+		    var cm = new Ext.grid.ColumnModel([{
+		           header: "Field",
+		           dataIndex: 'field'				          	           
+		        },{
+		           header: "Contains",
+		           dataIndex: 'keyword'
+		        },{
+		           header: "Move to folder",
+		           dataIndex: 'folder'
+		        },{
+		           header: "Mark as read?",
+		           dataIndex: 'mark_as_read',
+		           renderer: formatBoolean
+		        }]);
+		
+		    // by default columns are sortable
+		    cm.defaultSortable = false;
+		
+		    // create the Data Store
+		    filtersds = new Ext.data.Store({
 
-						proxy: new Ext.data.HttpProxy({
-							url: BaseHref+'modules/email/json.php',
-							baseParams: {type: 'filters'}
-							
-						}),
+				proxy: new Ext.data.HttpProxy({
+					url: BaseHref+'modules/email/json.php'								
+				}),
+				baseParams: {
+					type: 'filters',
+					account_id: loaded_account_id
+				},
+
+				reader: new Ext.data.JsonReader({
+					root: 'results',
+					totalProperty: 'total',
+					id: 'id'
+				}, [
+					{name: 'id'},
+					{name: 'field'},
+					{name: 'keyword'},		
+					{name: 'folder'},
+					{name: 'mark_as_read'}
+				]),
+
+				// turn on remote sorting
+				remoteSort: false
+			});
 		
-						reader: new Ext.data.JsonReader({
-							root: 'results',
-							totalProperty: 'total',
-							id: 'id'
-						}, [
-							{name: 'id'},
-							{name: 'field'},
-							{name: 'keyword'},		
-							{name: 'folder'},
-							{name: 'mark_as_read'}
-						]),
+		    // create the editor grid
+		    var grid = new Ext.grid.Grid('filters-grid', {
+		        ds: filtersds,
+		        cm: cm,
+		        selModel: new Ext.grid.RowSelectionModel(),
+		        autoSizeColumns:true
+		    });
 		
-						// turn on remote sorting
-						remoteSort: false
-					});
-				
-				    // create the editor grid
-				    var grid = new Ext.grid.EditorGrid('filters-grid', {
-				        ds: ds,
-				        cm: cm,
-				        //selModel: new Ext.grid.RowSelectionModel(),
-				        enableColLock:false
-				    });
-				
-				   				
-				
-				    // render it
-				    grid.render();
-				
-				    
-				    var gridHead = grid.getView().getHeaderPanel(true);
-				    var tb = new Ext.Toolbar(gridHead, [{
-				        text: 'Add filter',
-				        handler : function(){
-				            var p = new Plant({
-				                keyword: '',
-				                folder: '',
-				                field: '',
-				                mark_as_read: false
-				            });
-				            grid.stopEditing();
-				            ds.insert(0, p);
-				            grid.startEditing(0, 0);
-				        }
-				    }]);
-				
-				    // trigger the data store load
-				    ds.load();
-				
+			grid.on('rowdblclick', function(){
+				var selectionModel = grid.getSelectionModel();
+				var record = selectionModel.getSelected();
+				filter.showDialog(record.id);
+				});
+		   				
+		
+		    // render it
+		    grid.render();
+		    
+		    filtersds.on('load', function() {
+				grid.getView().autoSizeColumns();
+			}, false, { single: true });
+		
+		
+		    
+		
 
 
 			var filtersPanel = new Ext.GridPanel(grid,{
 				title: emailLang['filters'],
 				autoScroll:true,
 				background: true,
-				toolbar: folderstb
+				toolbar: filterstb
 			});
 			
 			layout.add('center',filtersPanel);
 			
+			filtersPanel.on('activate', function(){
+				// trigger the data store load
+				filtersds.baseParams={
+						type: 'filters', account_id: loaded_account_id
+					};
+			    filtersds.load();
+			});
 
-
-
-			layout.endUpdate();
-		},
-
-
-		hidePanels : function()
-		{
-			var region = layout.getRegion('center');
-			for (var i = 1;i<region.panels.items.length;i++)
-			{
-				region.hidePanel(region.panels.items[i].getId());
-			}
-		},
-		showPanels : function()
-		{
-			var region = layout.getRegion('center');
-			for (var i = 1;i<region.panels.items.length;i++)
-			{
-				region.showPanel(region.panels.items[i].getId());
-			}
 		},
 		getDialog : function()
 		{
@@ -1327,14 +1336,21 @@ account = function(){
 		},
 		setAccountID : function(account_id)
 		{
-			if(loaded_account_id>0 && account_id!=loaded_account_id)
+			if(account_id!=loaded_account_id)
 			{
+				var region = layout.getRegion('center');
 				if(account_id==0)
 				{
-					this.hidePanels();
+					if(region.panels.items.length>1)
+					{
+						this.removePanels();
+					}
 				}else
 				{
-					this.showPanels();
+					if(region.panels.items.length==1)
+					{
+						this.createPanels();
+					}
 				}
 			}
 
@@ -1345,7 +1361,14 @@ account = function(){
 
 		showDialog : function(account_id){
 
+			
+			
+			if(!dialog)
+			{
+				this.init();
+			}
 			this.setAccountID(account_id);
+
 
 			var region = layout.getRegion('center');
 			var activePanel = region.getActivePanel();
@@ -1358,8 +1381,117 @@ account = function(){
 			}
 			dialog.show();
 		},
+		getFiltersDS : function()
+		{
+			return filtersds;
+		}
 	}
 }();
+
+
+
+
+filter = function(){
+
+	var dialog;
+	var filter_form;
+	var layout;
+	var loaded_filter_id=-1;
+	var moduleBase;
+	var filterPanel;
+
+	return {
+		getDialog : function()
+		{
+			return dialog;
+		},
+	
+		setFilterID : function(filter_id)
+		{
+			
+			loaded_filter_id=filter_id;
+				
+			
+		},
+		showDialog : function(filter_id, account_id){
+		
+			
+			
+			
+			if(!dialog)
+			{
+				moduleBase = BaseHref+'modules/email/';
+	
+				dialog = new Ext.LayoutDialog('filter-dialog', {
+					modal:true,
+					shadow:false,
+					resizable:false,
+					proxyDrag: true,
+					width:600,
+					height:250,
+					collapsible:false,
+					shim:false,
+					center: {
+						autoScroll:true,
+						tabPosition: 'top',
+						closeOnTab: true,
+						alwaysShowTabs: false
+					}
+	
+				});
+				dialog.addKeyListener(27, dialog.hide, dialog);
+	
+	
+				layout = dialog.getLayout();
+	
+	
+				layout.beginUpdate();
+	
+	
+	
+	
+				filterPanel = new Ext.ContentPanel('filter-properties',{
+					title: GOlang['strProperties'],
+					autoScroll:true					
+				});
+	
+				
+				layout.add('center', filterPanel);
+	
+				layout.endUpdate();
+			}
+			
+			if(typeof(account_id)=='undefined')
+			{
+				account_id=0;
+			}
+			
+			
+			if(loaded_filter_id!=filter_id)
+			{
+				filterPanel.load( {
+					scripts: true,
+					url: moduleBase+'filter.php',
+					params: {
+						filter_id: filter_id,
+						account_id: account_id
+					}	
+				});
+			}
+			
+			
+
+			this.setFilterID(filter_id);
+			
+			
+			
+			dialog.show();
+		}
+	}
+}();
+
+
+
 
 
 
