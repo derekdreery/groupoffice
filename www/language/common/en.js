@@ -27,8 +27,13 @@ var GOlang = {
 	strPleaseSelect : 'Please select...',
 	strProperties : 'Properties',
 	
+	strConfirm: 'Confirm',
 	strSuccess: 'Success',
 	strError: 'Error',
 	waitMsgSave: 'Saving...',
-	waitMsgLoad: 'Loading...'
+	waitMsgLoad: 'Loading...',
+	
+	noItemSelected: 'You didn\'t select an item.',
+	strDeleteSelectedItems: 'Are you sure you want to delete the {count} items?',
+	strDeleteSelectedItem: 'Are you sure you want to delete the selected item?'
 };

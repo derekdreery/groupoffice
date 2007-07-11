@@ -15,7 +15,7 @@ require('../../Group-Office.php');
 $GO_SECURITY->authenticate();
 $GO_MODULES->authenticate('email');
 
-ini_set('display_errors','off');
+//ini_set('display_errors','off');
 
 require_once ($GO_MODULES->class_path."email.class.inc");
 require_once ($GO_LANGUAGE->get_language_file('email'));
@@ -24,13 +24,15 @@ switch($_REQUEST['type'])
 {
 
 	case 'filters':
-			$count = $email->get_filters($account_id);
-			
-			while($email->next_record())
-			{
-				$filters[] = $email->Record;
-			}
-			echo '({"total":"'.$msg_count.'","results":'.json_encode($filters).'})';
+		
+		$email = new email();
+		$count = $email->get_filters($_POST['account_id']);
+		$filters=array();
+		while($email->next_record())
+		{
+			$filters[] = $email->Record;
+		}
+		echo '({"total":"'.$count.'","results":'.json_encode($filters).'})';
 		break;
 	
 	case 'messages':

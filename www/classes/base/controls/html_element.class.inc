@@ -94,4 +94,9 @@ class html_element
 		}
 		return $this->outerHTML;
 	}
+	
+	function print_html()
+	{
+		echo $this->get_html();
+	}
 }

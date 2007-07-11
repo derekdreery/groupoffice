@@ -146,11 +146,11 @@ class email extends db
 			$account['use_ssl'], 
 			$account['novalidate_cert']))
 		{	
-			$this->last_error = "<p class=\"Error\">".imap_last_error()."</p>";
+			$this->last_error = imap_last_error();
 			return false;
 		}else
 		{
-			if (!$account['mbroot'] = $this->mail->check_mbroot($mbroot))
+			if (!$account['mbroot'] = $this->mail->check_mbroot($account['mbroot']))
 			{
 				$account['mbroot'] = '';
 			}
@@ -160,10 +160,12 @@ class email extends db
 			$account['drafts'] = '';
 			$account['spam'] = '';
 
-			if ($type=='imap')
+			if ($account['type']=='imap')
 			{
-				$mailboxes =  $this->mail->get_mailboxes($mbroot);
-				$subscribed =  $this->mail->get_subscribed($mbroot);
+				require($GO_LANGUAGE->get_language_file('email'));
+				
+				$mailboxes =  $this->mail->get_mailboxes($account['mbroot']);
+				$subscribed =  $this->mail->get_subscribed($account['mbroot']);
 
 				$mailbox_names = array();
 				while($mailbox = array_shift($mailboxes))
@@ -205,7 +207,7 @@ class email extends db
 			}
 			$this->mail->close();
 
-			if ($this->get_accounts($user_id) == 0)
+			if ($this->get_accounts($account['user_id']) == 0)
 			{
 				$account['standard']="1";
 			}else
@@ -808,16 +810,12 @@ class email extends db
 		return $this->num_rows();
 	}
 
-	function add_filter($account_id, $field, $keyword, $folder, $mark_as_read)
+	function add_filter($filter)
 	{
-		$next_id = $this->nextid("emFilters");
-		if ($next_id > 0)
+		$filter['id'] = $this->nextid("emFilters");
+		if ($filter['id'] > 0 && $this->insert_row('emFilters',$filter))
 		{
-			$sql = "INSERT INTO emFilters (id, account_id, field, keyword, ".
-			"folder, priority, mark_as_read) VALUES ('$next_id','$account_id','$field',".
-			"'$keyword','$folder','$next_id', '$mark_as_read')";
-
-			return $this->query($sql);
+			return $filter['id'];
 		}else
 		{
 			return false;
@@ -837,10 +835,10 @@ class email extends db
 		}
 	}
 
-	function update_filter($filter_id, $field, $keyword, $folder, $mark_as_read)
+	function update_filter($filter)
 	{
-		$sql = "UPDATE emFilters SET field='$field', keyword='$keyword', folder='$folder', mark_as_read='$mark_as_read' WHERE id='$filter_id'";
-		$this->query($sql);
+		return $this->update_row('emFilters','id', $filter);
+		
 	}
 
 	function delete_filter($id)

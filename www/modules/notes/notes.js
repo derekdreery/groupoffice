@@ -85,9 +85,10 @@ var linksGrid;
 	
 			grid.addListener("rowdblclick", this.rowDoubleClicked, this);
 
-
 			// render it
 			grid.render();
+			
+			ds.on('load', function (){grid.getView().autoSizeColumns();}, false, { single: true });
 
 			var gridFoot = grid.getView().getFooterPanel(true);
 
