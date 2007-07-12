@@ -1380,7 +1380,23 @@ class calendar extends db
 			global $GO_LINKS;
 			$event['link_id'] = $GO_LINKS->get_link_id();
 		}
-
+		
+		
+		if(!isset($event['start_time']))
+		{
+			$local_start_time = get_time();
+			$year = date('Y', $local_start_time );
+			$month = date('n', $local_start_time );
+			$day = date('j', $local_start_time );
+			$event['start_time'] = local_to_gmt_time(adodb_mktime(0,0,0,$month, $day, $year));
+			$event['all_day_event']='1';
+		}
+		
+		
+		if(!isset($event['end_time']) || $event['end_time']<$event['start_time'])
+		{
+			$event['end_time']=$event['start_time']+3600;
+		}
 		$event['id'] = $this->nextid("cal_events");
 
 		$exceptions = isset($event['exceptions']) ? $event['exceptions'] : array();
@@ -2457,6 +2473,8 @@ class calendar extends db
 	{
 		if($event = $this->get_event($event_id))
 		{
+			go_log(LOG_DEBUG, 'Event deleted: '.$event['name'].' Start: '.date('Ymd G:i', $event['start_time']));
+			
 			global $GO_LINKS, $GO_CONFIG;
 			$GO_LINKS->delete_link($event['link_id']);
 			
@@ -2575,7 +2593,10 @@ class calendar extends db
 		{
 			$timezone_id = isset($object['DTSTART']['params']['TZID']) ? $object['DTSTART']['params']['TZID'] : '';
 			$event['start_time'] = $this->ical2array->parse_date($object['DTSTART']['value'], $timezone_id);
-		}elseif(isset($object['DUE']['value']))
+		}
+		
+		/*
+		elseif(isset($object['DUE']['value']))
 		{
 			$timezone_id = isset($object['DUE']['params']['TZID']) ? $object['DUE']['params']['TZID'] : '';
 			$event['start_time'] = $this->ical2array->parse_date($object['DUE']['value'],  $timezone_id);
@@ -2587,7 +2608,7 @@ class calendar extends db
 			$day = date('j', $local_start_time );
 			$event['start_time'] = local_to_gmt_time(adodb_mktime(0,0,0,$month, $day, $year));
 			$event['all_day_event']='1';
-		}
+		}*/
 
 		if(isset($object['DTEND']['value']))
 		{
@@ -2604,10 +2625,13 @@ class calendar extends db
 		{
 			$timezone_id = isset($object['DUE']['params']['TZID']) ? $object['DUE']['params']['TZID'] : '';
 			$event['end_time'] = $this->ical2array->parse_date($object['DUE']['value'],  $timezone_id);
-		}else
+		}
+		
+		/*
+		else
 		{
 			$event['end_time'] = $event['start_time']+3600;
-		}
+		}*/
 
 		if(isset($object['COMPLETED']['value']))
 		{
@@ -2689,9 +2713,11 @@ class calendar extends db
 				$duration = $event['end_time']-$event['start_time'];
 				$duration_days = ceil($duration/86400);
 				
-				$year = adodb_date('Y', $event['start_time']);
-				$month = adodb_date('n', $event['start_time']);
-				$day = adodb_date('j', $event['start_time']);
+				$local_start_time = gmt_to_local_time($event['start_time']);
+				
+				$year = adodb_date('Y', $local_start_time);
+				$month = adodb_date('n', $local_start_time);
+				$day = adodb_date('j', $local_start_time);
 				$event['end_time'] = local_to_gmt_time(adodb_mktime(0,-1,0,$month, $day+$duration_days+1, $year));
 				
 			}
