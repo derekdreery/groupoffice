@@ -16,7 +16,8 @@ while($object = array_shift($vcalendar[0]['objects']))
 		var_dump($object);
 		$event = $cal->get_event_from_ical_object($object);
 		
-		echo date('Ymd G:i', $event['start_time']);
+		echo 'Start time: '.date('Ymd G:i', $event['start_time']).'<br>';
+		echo 'End time: '.date('Ymd G:i', $event['end_time']).'<br>';
 		
 		var_dump($event);
 	}
