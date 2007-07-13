@@ -41,12 +41,12 @@ width:100%;
 
 .evenRow{
 	border-top:1px solid #DDDDDD;
-	border-left:1px solid #DDDDDD;
+	border-left:3px double #DDDDDD;
 	height:20px;
 }
 .unevenRow{
 	border-top:1px dotted #DDDDDD;
-	border-left:1px solid #DDDDDD;
+	border-left:3px double #DDDDDD;
 	height:20px;
 }
 .timeHead{
@@ -56,109 +56,467 @@ width:100%;
 	border-top:1px solid #DDDDDD;
 	text-align:right;
 }
+
+.selector{
+	background-color:#ffffcc;
+	position:absolute;
+	visibility:hidden;
+	z-index:10000;
+	opacity: 0.4;
+}
+
+.event {
+	position:absolute;
+	background-color:#ffffcc;
+	border:1px solid #666666;
+	color:000;
+	z-index: 20000;#higher then selector!
+}
 </style>
 </head>
 <body>
 
 
-
-<table border="0" style="table-layout: fixed; width: 100%;">
-<tr>
-	<td style="width:50px;vertical-align:top">
-	<?php
-	for($i=0;$i<24;$i++)
-	{
-		echo '<div id="head'.$i.'" class="timeHead">'.date($_SESSION['GO_SESSION']['time_format'], mktime($i,0)).'</div>';
-	}
-	?></td>
-	<td style="width:auto;vertical-align:top">
-	<div id="col0">
-	<?php
-	for($i=0;$i<24;$i++)
-	{
-		echo '<div id="row'.$i.'" class="evenRow" onmousedown="selector.startSelection(\'row'.$i.'\',\'col0\');"></div>'.
-			'<div id="row'.$i.'" class="unevenRow" onmousedown="selector.startSelection(\'row'.$i.'\',\'col0\');"></div>';
-	}
-	?>
-	</div>
-	</td>
-</tr>
-</table>
-
-<div id="selector" style="background-color:#ffffcc;position:absolute;visibility:hidden;z-index:10000"></div>
+<div id="CalendarGrid" style="width:50%;position:absolute; left:100px;top:50px;border:1px solid black">
+</div>
 
 <script type="text/javascript">
 
-selector = function(){ 
+CalendarGrid = function(container, config){ 
+
+	Ext.apply(this, config);
 	
-	return {
-		startSelection : function (row, col){
+	if(!this.days)
+	{
+		this.days=1;
+	}
+	
+	if(!this.container)
+	{
+		this.container = Ext.get(container);		
+	}
+	
+	this.dragEvent=false;
+	
+	this.events=Array();
+}
+	
+CalendarGrid.prototype = {
+
+
+	//build the html grid
+	render : function (){
+	
+		var t = new Ext.Template(
+	    	'<table cellpadding="0" cellspacing="0" border="0" style="table-layout:fixed;width:100%">'+
+	    	'<tbody><tr><td id="{timeHeadsID}" style="width:40px"></td>'+
+	    	'<td id="{columnsContainerID}"></td></tr></tbody></table>'
+		);
+	
+		var timeHeadsID = Ext.id();
+		var columnsContainerID = Ext.id();
 		
+		this.container.dom.innerHTML = t.applyTemplate({
+			"timeHeadsID":timeHeadsID, 
+			"columnsContainerID":columnsContainerID
+		});
+	
+		var timeColumn = Ext.get(timeHeadsID);		
+		
+		for (var i = 0;i<24;i++)
+		{			
+			 Ext.DomHelper.append(timeColumn,
+				{tag: 'div', id: 'head'+i, class: "timeHead", html: i+':00'}, true);
+		}
+		
+		this.columnsContainer = Ext.get(columnsContainerID);
+		
+		
+	
+		var columnWidth = 100/this.days;
+		
+		for(var day=0;day<this.days;day++)
+		{	
+			var column = Ext.DomHelper.append(this.columnsContainer,
+				{tag: 'div', id: Ext.id(), style: "float:left;width:"+columnWidth+"%"}, true);
+				
+			
+		
+			var class = "evenRow";
+			for (var i = 0;i<48;i++)
+			{			
+				var row = Ext.DomHelper.append(column,
+					{tag: 'div', id: 'day'+day+'_row'+i, class: class}, true);	
+					
+				row.on("mousedown", function (e , el) {					
+					this.startSelection(el.id); 
+				}, this);
+				
+				if(class=="evenRow")
+				{
+					class = "unevenRow";
+				}else
+				{
+					class = "evenRow";
+				}
+			}
+		}
+		
+		
+		//snap on each row and column
+		var snap = row.getSize();
+		
+		this.snapX = snap['width'];
+		this.snapY = snap['height'];
+				
+		
+		 
+	},
+
+	startSelection : function (row){
+	
+		//check if we are not dragging an event
+		if(!this.dragEvent)
+		{
+			//determine the day and hour the user clicked on
+			var arr = row.split('_');		
+			this.clickedDay = parseInt(arr[0].replace("day",""));
+			this.clickedRow = parseInt(arr[1].replace("row",""));
+		
+			//create the selection proxy
+			if(!this.selector)
+			{
+				this.selector = Ext.DomHelper.append(this.container,
+					{tag: 'div', id: Ext.id(), class: "selector"}, true);		
+			}
+		
+			//get position of the row the user clicked on
 			var startRow = Ext.get(row);
 			
 			var position = startRow.getXY();
+			//add double border
+			position[0]+=3;
+			
 			var size=startRow.getSize();
-			this.snapSize=size['height'];
 			
-			if(!this.el)
-			{
-				this.el = Ext.get("selector");
-				
-			}
-			this.el.setOpacity(.4);
-			this.el.setVisible(true,false);
-			this.el.setXY(position);
-			this.el.setSize(size['width'], size['height']);
-		
+			
+			//display the selector proxy
+			//this.selector.setOpacity(.4);
+			this.selector.setVisible(true,false);
+			this.selector.setXY(position);
+			//substract double border
+			this.selector.setSize(size['width']-3, size['height']);
+			
+			
+			//create an overlay to track the mousemovement
 			if(!this.overlay){
-                this.overlay = this.el.createProxy({tag: "div", cls: "x-resizable-overlay", html: "&#160;"});
-                this.overlay.unselectable();
-                this.overlay.enableDisplayMode("block");
-                this.overlay.on("mousemove", this.onMouseMove, this);
-                this.overlay.on("mouseup", this.onMouseUp, this);
-            }
-            
-            this.overlay.setSize(Ext.lib.Dom.getViewWidth(true), Ext.lib.Dom.getViewHeight(true));
-            this.overlay.show();
+			    this.overlay = this.selector.createProxy({tag: "div", cls: "x-resizable-overlay", html: "&#160;"});
+			    this.overlay.unselectable();
+			    this.overlay.enableDisplayMode("block");	
+			    this.overlay.on("mousemove", this.onSelectionMouseMove, this);
+				this.overlay.on("mouseup", this.onSelectionMouseUp, this);	    
+			}		
 			
-			
+			    
+			this.overlay.setSize(Ext.lib.Dom.getViewWidth(true), Ext.lib.Dom.getViewHeight(true));
+			this.overlay.show();
+		}
+	},	
+	onSelectionMouseMove : function (e){
+		
+		//update the selector proxy
+		var eventPos = e.getXY();				
+		var shadowPos = this.selector.getXY();		
+		//var height = this.selector.getHeight();		
+		var increment = this.snap(eventPos[1]-shadowPos[1],this.snapY, 0);
+		this.selector.setHeight(increment);		
 	
-		},	
-		onMouseMove : function (e){
-
-			var eventPos = e.getXY();
+	},	
+	onSelectionMouseUp : function (e){
+		//hide the overlay		
+		this.overlay.hide();
+		
+		//create an event
+		
+		var event = Ext.DomHelper.append(this.container,
+				{tag: 'div', id: Ext.id(), class: "event", html: "New event"}, true);
+				
+		var styles = this.selector.getStyles('width','height','top','left', 'z-index');
+		event.setStyle(styles);		
+		
+		//var selectorSize = this.selector.getSize();
+		//var selectorPosition = this.selector.getXY();
+		//event.setWidth(width);
+				
+		var resizer = new Ext.Resizable(event, {
+		    handles: 's',
+		    //minWidth: event.getWidth(),
+		    minHeight: this.snapY,
+		    maxWidth: event.getWidth(),
+		    //maxHeight: this.snapY*48,
+		    heightIncrement: this.snapY,
+		    draggable: false,
+		    pinned: true
+		});
+		
+		event.on('mousedown', function(e, eventEl) {
+				this.dragEvent=Ext.get(eventEl.id);
+				this.dragEventStartPos=this.dragEvent.getXY();
+				
+				this.startEventDrag();
+			}, this);
+		
+		this.clearSelection();
+		
+		//add the event to the events array
+		
+		if(typeof(this.events[this.clickedDay])=='undefined')
+		{
+			this.events[this.clickedDay]=Array();
+		}		
+		this.events[this.clickedDay].push(event);
+		
+		this.calculateEvents(this.clickedDay);
+		
+		/*
+		//find overlapping events so we can set the widths
+		var overlappingEvents = this.getOverLappingEvents(event);
+		
+		var numberOfOverlaps = overlappingEvents.length+1;
+		
+		var EventWidth = this.snapX/numberOfOverlaps;
+		
+				
+		var left = event.getX();		
+		
+		for(var i=0;i<overlappingEvents.length;i++)
+		{
+			overlappingEvents[i].setWidth(EventWidth);
+			overlappingEvents[i].setX(left);
+			left+=EventWidth;
+		}
+		event.setWidth(EventWidth);
+		event.setX(left);
+		
+		*/
+				
+		
+		
+			
+	},
+	
+	calculateEvents :  function (day)
+	{
+		if(typeof(this.events[day])!='undefined')
+		{
+			//determine the maximum events on one row
+			var maxEvents=0;
+			
+			//store overlaps per event in this array
+			var overlaps = Array();
+			var positions = Array();
+			
+			//sort the events on their start time (Y pos)
+			this.events[day].sort(function(a,b){
+				return a.getY()-b.getY();
+			});
+			
+			//the left coordinate of the day column
+			var dayColumnLeft=0;
+				
+			for(var rowId=0;rowId<48;rowId++)
+			{								
+				var row = Ext.get("day"+day+"_row"+rowId);
+				
+				var rowSize = row.getSize();
+				var rowPosition = row.getXY();			
+				
+				if(rowId==0)
+				{
+					dayColumnLeft=rowPosition[0];
+				}
 					
-			var shadowPos = this.el.getXY();
+				
+				//tmp var to get the events on a row;
+				var rowEvents=Array();
+				//check how manu events are in the row area
+				for(var i=0;i<this.events[day].length;i++)
+				{
+					var position = this.events[day][i].getXY();
+					var size = this.events[day][i].getSize();
+					
+					//new right side is right from existing left side and 
+					//new left side is left from existing right side
+					
+					//and
+					
+					//new top is above the existing bottom and 
+					//new bottom is below the existing top
+					
+					if((
+						rowPosition[0]+rowSize['width'])>position[0] && 
+						rowPosition[0]<position[0]+size['width'] && 
+						rowPosition[1]<position[1]+size['height'] && 
+						rowPosition[1]+rowSize['height']>position[1])
+					{
+						rowEvents.push(this.events[day][i]);						
+					}							
+				}
+				
+				//set the number of overlapping events for each event
+				for(var i=0;i<rowEvents.length;i++)
+				{
+					if(typeof(overlaps[rowEvents[i].id])=='undefined' || overlaps[rowEvents[i].id]<rowEvents.length)
+					{
+						overlaps[rowEvents[i].id]=rowEvents.length;						
+					}
+				}
 			
-			var height = this.el.getHeight();
+				//update the max events on row per day value			
+				if(rowEvents.length>maxEvents)
+				{
+					maxEvents=rowEvents.length;
+				}				
+			}			
+			//we got the maximum number of events on one row now.
+			//we know for each events how many overlaps they have
+			//we now need to know the widths of each event
 			
-			var increment = this.snap(eventPos[1]-shadowPos[1],this.snapSize, 0);
-			this.el.setHeight(increment);		
-		},	
-		onMouseUp : function (e){
-			//this.el.setSize(0,0);		
-			this.overlay.hide();	
-			this.el.setVisible(false,true);	
-		},
+			//the width of the smallest event (one position)
+			var posWidth = this.snapX/maxEvents;
+			var position=0;
+			for(var i=0;i<this.events[day].length;i++)
+			{
+				if(position==maxEvents)
+				{
+					position=0;
+				}
+				//the number of positions this event takes
+				var positions=maxEvents-overlaps[this.events[day][i].id]+1;
+				this.events[day][i].setWidth(positions*posWidth);
+				
+				this.events[day][i].setX(dayColumnLeft+(position*posWidth));
+				
+				position = position+positions;				
+			}
+		}
+	},
 	
-	    // private
-	    snap : function(value, inc, min){
-	        if(!inc || !value) return value;
-	        var newValue = value;
-	        var m = value % inc;
-	        if(m > 0){
-	            if(m > (inc/2)){
-	                newValue = value + (inc-m);
-	            }else{
-	                newValue = value - m;
-	            }
-	        }
-	        return Math.max(min, newValue);
-	    }
-	}
+	getOverLappingEvents : function(checkEvent){
+	
+		var events=Array();
+	
+		if(typeof(this.events)!='undefined')
+		{	
+			//check all events in grid to see if they are in the new event's
+			//area
+			
+			var checkSize = checkEvent.getSize();
+			var checkPosition = checkEvent.getXY();
+			
+			for(var i=0;i<this.events.length;i++)
+			{
+				var position = this.events[i].getXY();
+				var size = this.events[i].getSize();
+				
+				//new right side is right from existing left side and 
+				//new left side is left from existing right side
+				
+				//and
+				
+				//new top is above the existing bottom and 
+				//new bottom is below the existing top
+				
+				if((
+					checkPosition[0]+checkSize['width'])>position[0] && 
+					checkPosition[0]<position[0]+size['width'] && 
+					checkPosition[1]<position[1]+size['height'] && 
+					checkPosition[1]+checkSize['height']>position[1])
+				{
+					events.push(this.events[i]);							
+				}							
+			}		
+		}		
+		return events;	
+	},	
+	clearSelection : function()
+	{
+			
+		this.selector.setVisible(false,true);
+	},
+	
+	startEventDrag : function() {
+	
+
+		//create an overlay to track the mousemovement
+		if(!this.eventDragOverlay){
+		    this.eventDragOverlay = this.selector.createProxy({tag: "div", cls: "x-resizable-overlay", html: "&#160;"});
+		    this.eventDragOverlay.unselectable();
+		    this.eventDragOverlay.enableDisplayMode("block");	
+		    this.eventDragOverlay.on("mousemove", this.onEventDragMouseMove, this);
+			this.eventDragOverlay.on("mouseup", this.onEventDragMouseUp, this);		    
+		}		
+		this.eventDragOverlay.setSize(Ext.lib.Dom.getViewWidth(true), Ext.lib.Dom.getViewHeight(true));
+		this.eventDragOverlay.show();
+		
+		
+		
+	},
+	onEventDragMouseMove : function (e){
+		
+		//update the selector proxy
+		var mouseEventPos = e.getXY();				
+		
+		
+		
+		
+		var x = this.snapPos(this.dragEventStartPos[0],mouseEventPos[0],this.snapX,this.days);
+		var y = this.snapPos(this.dragEventStartPos[1],mouseEventPos[1],this.snapY,48);
+		
+		this.dragEvent.setXY([x, y]);		
+	
+	},	
+	onEventDragMouseUp : function (e){
+		this.eventDragOverlay.hide();
+		this.dragEvent=false;
+	},
+	
+	snapPos : function(oldPos, newPos, snap){
+		
+		var inc = newPos-oldPos;	
+		
+		var snaps = Math.floor(inc/snap);
+		
+		var leftOver = inc-(snaps*snap);		
+	
+		var m = snap/2;
+		if(leftOver>m)
+		{
+			snaps++;
+		}			
+		return oldPos+(snaps*snap);
+	},
+	
+	
+    snap : function(value, inc, min){
+        if(!inc || !value) return value;
+        var newValue = value;
+        var m = value % inc;
+        if(m > 0){
+            if(m > (inc/2)){
+                newValue = value + (inc-m);
+            }else{
+                newValue = value - m;
+            }
+        }
+        return Math.max(min, newValue);
+    }
+
 };
 
-var selector = new selector();
+var CalendarGrid = new CalendarGrid('CalendarGrid', {days: 2});
+
+CalendarGrid.render();
 Ext.EventManager.onDocumentReady(function(){
 	
 });
