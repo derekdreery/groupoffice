@@ -259,6 +259,8 @@ CalendarGrid.prototype = {
 		    pinned: true
 		});
 		
+		resizer.on('resize', function(){this.calculateEvents(this.clickedDay);}, this);
+		
 		event.on('mousedown', function(e, eventEl) {
 				this.dragEvent=Ext.get(eventEl.id);
 				this.dragEventStartPos=this.dragEvent.getXY();
@@ -276,32 +278,7 @@ CalendarGrid.prototype = {
 		}		
 		this.events[this.clickedDay].push(event);
 		
-		this.calculateEvents(this.clickedDay);
-		
-		/*
-		//find overlapping events so we can set the widths
-		var overlappingEvents = this.getOverLappingEvents(event);
-		
-		var numberOfOverlaps = overlappingEvents.length+1;
-		
-		var EventWidth = this.snapX/numberOfOverlaps;
-		
-				
-		var left = event.getX();		
-		
-		for(var i=0;i<overlappingEvents.length;i++)
-		{
-			overlappingEvents[i].setWidth(EventWidth);
-			overlappingEvents[i].setX(left);
-			left+=EventWidth;
-		}
-		event.setWidth(EventWidth);
-		event.setX(left);
-		
-		*/
-				
-		
-		
+		this.calculateEvents(this.clickedDay);		
 			
 	},
 	
@@ -310,11 +287,13 @@ CalendarGrid.prototype = {
 		if(typeof(this.events[day])!='undefined')
 		{
 			//determine the maximum events on one row
-			var maxEvents=0;
+			var maxPositions=0;
 			
 			//store overlaps per event in this array
-			var overlaps = Array();
+			//var overlaps = Array();
 			var positions = Array();
+			var maxPositions = Array();
+			
 			
 			//sort the events on their start time (Y pos)
 			this.events[day].sort(function(a,b){
@@ -333,7 +312,7 @@ CalendarGrid.prototype = {
 				
 				if(rowId==0)
 				{
-					dayColumnLeft=rowPosition[0];
+					dayColumnLeft=rowPosition[0]+3;
 				}
 					
 				
@@ -363,82 +342,116 @@ CalendarGrid.prototype = {
 					}							
 				}
 				
+				position=0;
 				//set the number of overlapping events for each event
 				for(var i=0;i<rowEvents.length;i++)
 				{
-					if(typeof(overlaps[rowEvents[i].id])=='undefined' || overlaps[rowEvents[i].id]<rowEvents.length)
+					
+					if(typeof(positions[rowEvents[i].id])=='undefined')
 					{
-						overlaps[rowEvents[i].id]=rowEvents.length;						
+						positions[rowEvents[i].id]=position;
+						position++;
+					}else
+					{
+						position=positions[rowEvents[i].id];
+						position++;
 					}
 				}
-			
-				//update the max events on row per day value			
-				if(rowEvents.length>maxEvents)
+				
+				for(var i=0;i<rowEvents.length;i++)
 				{
-					maxEvents=rowEvents.length;
-				}				
+					maxPositions[rowEvents[i].id]=position;
+				}
+				
+				/*
+				//update the max events on row per day value	
+				if(position>maxPositions)
+				{
+					maxPositions=position;
+				}*/
+			
+							
 			}			
 			//we got the maximum number of events on one row now.
 			//we know for each events how many overlaps they have
 			//we now need to know the widths of each event
 			
-			//the width of the smallest event (one position)
-			var posWidth = this.snapX/maxEvents;
-			var position=0;
 			for(var i=0;i<this.events[day].length;i++)
 			{
-				if(position==maxEvents)
-				{
-					position=0;
-				}
-				//the number of positions this event takes
-				var positions=maxEvents-overlaps[this.events[day][i].id]+1;
-				this.events[day][i].setWidth(positions*posWidth);
+				//this.events[day][i].dom.innerHTML = 'test';
+				//var maxPos = maxPositions[this.events[day][i].id];
 				
-				this.events[day][i].setX(dayColumnLeft+(position*posWidth));
+				var OverlappingEvents = this.getOverlappingEvents(this.events[day][i],day);
+				var eventWidth = this.snapX/OverlappingEvents.length;
+
+				this.events[day][i].setWidth(eventWidth);
 				
-				position = position+positions;				
+				var offset = positions[this.events[day][i].id]*eventWidth;
+				this.events[day][i].setX(dayColumnLeft+offset);
+				//this.events[day][i].dom.innerHTML = 'New event';
 			}
 		}
 	},
 	
-	getOverLappingEvents : function(checkEvent){
+	getOverlappingEvents : function(checkEvent, day, events){
+			
+		if(typeof(events)=='undefined')
+		{
+			var events = Array();
+		}
+		
 	
-		var events=Array();
-	
-		if(typeof(this.events)!='undefined')
+		if(typeof(this.events[day])!='undefined' )
 		{	
+			
 			//check all events in grid to see if they are in the new event's
 			//area
 			
 			var checkSize = checkEvent.getSize();
 			var checkPosition = checkEvent.getXY();
 			
-			for(var i=0;i<this.events.length;i++)
+			for(var i=0;i<this.events[day].length;i++)
 			{
-				var position = this.events[i].getXY();
-				var size = this.events[i].getSize();
-				
-				//new right side is right from existing left side and 
-				//new left side is left from existing right side
-				
-				//and
-				
-				//new top is above the existing bottom and 
-				//new bottom is below the existing top
-				
-				if((
-					checkPosition[0]+checkSize['width'])>position[0] && 
-					checkPosition[0]<position[0]+size['width'] && 
-					checkPosition[1]<position[1]+size['height'] && 
-					checkPosition[1]+checkSize['height']>position[1])
+				//if(this.events[day][i].id!=checkEvent.id && typeof(checkedEvents[this.events[day][i].id])=='undefined')
+				if(!this.inEventsArray(this.events[day][i].id, events))
 				{
-					events.push(this.events[i]);							
-				}							
+					var position = this.events[day][i].getXY();
+					var size = this.events[day][i].getSize();
+					
+					//new right side is right from existing left side and 
+					//new left side is left from existing right side
+					
+					//and
+					
+					//new top is above the existing bottom and 
+					//new bottom is below the existing top
+					
+					if((
+						checkPosition[0]+this.snapX)>position[0] && 
+						checkPosition[0]<position[0]+this.snapX && 
+						checkPosition[1]<position[1]+size['height'] && 
+						checkPosition[1]+checkSize['height']>position[1])
+					{
+						events.push(this.events[day][i]);
+						events = this.getOverlappingEvents(this.events[day][i],day, events);							
+					}	
+				}						
 			}		
 		}		
 		return events;	
 	},	
+	
+	inEventsArray : function (id, events)
+	{
+		for(var i=0;i<events.length;i++)
+		{
+			if(events[i].id==id)
+			{
+				return true;
+			}
+		}
+		return false;
+	},
 	clearSelection : function()
 	{
 			
@@ -479,6 +492,8 @@ CalendarGrid.prototype = {
 	onEventDragMouseUp : function (e){
 		this.eventDragOverlay.hide();
 		this.dragEvent=false;
+		
+		this.calculateEvents(this.clickedDay);
 	},
 	
 	snapPos : function(oldPos, newPos, snap){
