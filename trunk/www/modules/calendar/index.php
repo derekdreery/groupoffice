@@ -238,8 +238,10 @@ CalendarGrid.prototype = {
 		
 		//create an event
 		
+		var eventId = Ext.id();
+		
 		var event = Ext.DomHelper.append(this.container,
-				{tag: 'div', id: Ext.id(), class: "event", html: "New event"}, true);
+				{tag: 'div', id: eventId, class: "event", html: eventId }, true);
 				
 		var styles = this.selector.getStyles('width','height','top','left', 'z-index');
 		event.setStyle(styles);		
@@ -292,7 +294,8 @@ CalendarGrid.prototype = {
 			//store overlaps per event in this array
 			//var overlaps = Array();
 			var positions = Array();
-			var maxPositions = Array();
+			var maxPositions = 0;
+			
 			
 			
 			//sort the events on their start time (Y pos)
@@ -302,6 +305,9 @@ CalendarGrid.prototype = {
 			
 			//the left coordinate of the day column
 			var dayColumnLeft=0;
+			
+			//create an array of rows with their positions
+			var rows=Array();
 				
 			for(var rowId=0;rowId<48;rowId++)
 			{								
@@ -314,15 +320,19 @@ CalendarGrid.prototype = {
 				{
 					dayColumnLeft=rowPosition[0]+3;
 				}
+				
+				if(typeof(rows[rowId]) == 'undefined')
+				{
+					rows[rowId]=Array();
+				}
 					
 				
-				//tmp var to get the events on a row;
-				var rowEvents=Array();
+	
 				//check how manu events are in the row area
 				for(var i=0;i<this.events[day].length;i++)
 				{
-					var position = this.events[day][i].getXY();
-					var size = this.events[day][i].getSize();
+					var eventPosition = this.events[day][i].getXY();
+					var eventSize = this.events[day][i].getSize();
 					
 					//new right side is right from existing left side and 
 					//new left side is left from existing right side
@@ -333,42 +343,50 @@ CalendarGrid.prototype = {
 					//new bottom is below the existing top
 					
 					if((
-						rowPosition[0]+rowSize['width'])>position[0] && 
-						rowPosition[0]<position[0]+size['width'] && 
-						rowPosition[1]<position[1]+size['height'] && 
-						rowPosition[1]+rowSize['height']>position[1])
+						rowPosition[0]+rowSize['width'])>eventPosition[0] && 
+						rowPosition[0]<eventPosition[0]+eventSize['width'] && 
+						rowPosition[1]<eventPosition[1]+eventSize['height'] && 
+						rowPosition[1]+rowSize['height']>eventPosition[1])
 					{
-						rowEvents.push(this.events[day][i]);						
+						
+						
+						if(typeof(positions[this.events[day][i].id])=='undefined')
+						{
+							//determine the event's position
+							var position=0;
+						
+							//find a free position
+							while(typeof(rows[rowId][position])!='undefined')
+							{
+								position++;											
+							}
+							
+							//set the space occupied
+							eventRowId=rowId;
+							for(var n=rowPosition[1];n<=eventPosition[1]+eventSize['height'];n+=this.snapY)
+							{						
+								if(typeof(rows[eventRowId]) == 'undefined')
+								{
+									rows[eventRowId]=Array();
+								}
+								rows[eventRowId][position]=this.events[day][i].id;
+								eventRowId++;
+							}
+							
+							rows[rowId][position]=this.events[day][i].id;
+												
+							positions[this.events[day][i].id]=position;					
+						}											
 					}							
 				}
 				
-				position=0;
-				//set the number of overlapping events for each event
-				for(var i=0;i<rowEvents.length;i++)
-				{
-					
-					if(typeof(positions[rowEvents[i].id])=='undefined')
-					{
-						positions[rowEvents[i].id]=position;
-						position++;
-					}else
-					{
-						position=positions[rowEvents[i].id];
-						position++;
-					}
-				}
 				
-				for(var i=0;i<rowEvents.length;i++)
-				{
-					maxPositions[rowEvents[i].id]=position;
-				}
 				
-				/*
 				//update the max events on row per day value	
 				if(position>maxPositions)
 				{
 					maxPositions=position;
-				}*/
+				}
 			
 							
 			}			
@@ -376,17 +394,19 @@ CalendarGrid.prototype = {
 			//we know for each events how many overlaps they have
 			//we now need to know the widths of each event
 			
+			var posWidth = this.snapX/(maxPositions+1);
+			
 			for(var i=0;i<this.events[day].length;i++)
 			{
 				//this.events[day][i].dom.innerHTML = 'test';
 				//var maxPos = maxPositions[this.events[day][i].id];
 				
-				var OverlappingEvents = this.getOverlappingEvents(this.events[day][i],day);
-				var eventWidth = this.snapX/OverlappingEvents.length;
+				//var OverlappingEvents = this.getOverlappingEvents(this.events[day][i],day);
+				//var eventWidth = this.snapX/OverlappingEvents.length;
 
-				this.events[day][i].setWidth(eventWidth);
+				this.events[day][i].setWidth(posWidth);
 				
-				var offset = positions[this.events[day][i].id]*eventWidth;
+				var offset = positions[this.events[day][i].id]*posWidth;
 				this.events[day][i].setX(dayColumnLeft+offset);
 				//this.events[day][i].dom.innerHTML = 'New event';
 			}
