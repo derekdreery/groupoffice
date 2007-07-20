@@ -144,7 +144,8 @@ CalendarGrid.prototype = {
 		
 			var class = "evenRow";
 			for (var i = 0;i<48;i++)
-			{			
+			{		
+					
 				var row = Ext.DomHelper.append(column,
 					{tag: 'div', id: 'day'+day+'_row'+i, class: class}, true);	
 					
@@ -159,20 +160,40 @@ CalendarGrid.prototype = {
 				{
 					class = "evenRow";
 				}
-			}
-		}
-		
-		
-		//snap on each row and column
-		var snap = row.getSize();
-		
-		this.snapX = snap['width'];
-		this.snapY = snap['height'];
 				
-		
-		 
+				
+				
+				//set some handy values
+				if(i==0)
+				{
+					//snap on each row and column
+					var snap = row.getSize();
+					
+			
+					this.snapX = snap['width'];
+					this.snapY = snap['height'];
+					
+					
+					//the start of the grid
+					var position = row.getXY();
+					this.gridX = position[0];
+					this.gridY = position[1];
+				}				
+			}
+		}		 
 	},
-
+	
+	getRowIdByXY : function(x,y)
+	{
+		var day = (x-this.gridX)/this.snapX;
+		var row = (y-this.gridY)/this.snapY;
+		return 'day'+day+'_row'+row;
+		
+	},
+	getRowNumberByY : function(y)
+	{
+		return (y-this.gridY)/this.snapY;	
+	},
 	startSelection : function (row){
 	
 		//check if we are not dragging an event
@@ -307,7 +328,7 @@ CalendarGrid.prototype = {
 			var dayColumnLeft=0;
 			
 			//create an array of rows with their positions
-			var rows=Array();
+			this.rows=Array();
 				
 			for(var rowId=0;rowId<48;rowId++)
 			{								
@@ -321,9 +342,9 @@ CalendarGrid.prototype = {
 					dayColumnLeft=rowPosition[0]+3;
 				}
 				
-				if(typeof(rows[rowId]) == 'undefined')
+				if(typeof(this.rows[rowId]) == 'undefined')
 				{
-					rows[rowId]=Array();
+					this.rows[rowId]=Array();
 				}
 					
 				
@@ -356,7 +377,7 @@ CalendarGrid.prototype = {
 							var position=0;
 						
 							//find a free position
-							while(typeof(rows[rowId][position])!='undefined')
+							while(typeof(this.rows[rowId][position])!='undefined')
 							{
 								position++;											
 							}
@@ -365,15 +386,15 @@ CalendarGrid.prototype = {
 							eventRowId=rowId;
 							for(var n=rowPosition[1];n<=eventPosition[1]+eventSize['height'];n+=this.snapY)
 							{						
-								if(typeof(rows[eventRowId]) == 'undefined')
+								if(typeof(this.rows[eventRowId]) == 'undefined')
 								{
-									rows[eventRowId]=Array();
+									this.rows[eventRowId]=Array();
 								}
-								rows[eventRowId][position]=this.events[day][i].id;
+								this.rows[eventRowId][position]=this.events[day][i].id;
 								eventRowId++;
 							}
 							
-							rows[rowId][position]=this.events[day][i].id;
+							this.rows[rowId][position]=this.events[day][i].id;
 												
 							positions[this.events[day][i].id]=position;					
 						}											
@@ -398,19 +419,47 @@ CalendarGrid.prototype = {
 			
 			for(var i=0;i<this.events[day].length;i++)
 			{
-				//this.events[day][i].dom.innerHTML = 'test';
-				//var maxPos = maxPositions[this.events[day][i].id];
 				
-				//var OverlappingEvents = this.getOverlappingEvents(this.events[day][i],day);
-				//var eventWidth = this.snapX/OverlappingEvents.length;
-
-				this.events[day][i].setWidth(posWidth);
+				var eventSize = this.events[day][i].getSize();
+				var eventPosition = this.events[day][i].getXY();				
+				var rowId = this.getRowNumberByY(eventPosition[1]);
+				var eventRows=eventSize['height']/(this.snapY+1);
+				
+				var eventWidth = this.getEventWidth(
+					positions[this.events[day][i].id],
+					maxPositions,
+					rowId,
+					eventRows,
+					posWidth);
+				
+				this.events[day][i].setWidth(eventWidth);
 				
 				var offset = positions[this.events[day][i].id]*posWidth;
 				this.events[day][i].setX(dayColumnLeft+offset);
 				//this.events[day][i].dom.innerHTML = 'New event';
 			}
 		}
+	},
+	
+	getEventWidth : function(startPosition, maxPositions, startRowId, eventRows, posWidth)
+	{
+		var eventWidth = posWidth;
+				
+		var rowPosition = startPosition+1;
+		while(rowPosition<=maxPositions)
+		{
+			
+			for(var r=0;r<eventRows;r++)
+			{
+				if(typeof(this.rows[startRowId+r][rowPosition])!='undefined')
+				{					
+					return eventWidth;
+				}
+			}
+			eventWidth+=posWidth;
+			rowPosition++;
+		}
+		return eventWidth;
 	},
 	
 	getOverlappingEvents : function(checkEvent, day, events){
