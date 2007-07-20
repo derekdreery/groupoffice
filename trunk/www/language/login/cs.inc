@@ -28,7 +28,7 @@ $login_fullscreen = 'Group-Office byl zobrazen jako fullscreen automaticky. Mů�
 $login_start = 'Spustit znova';
 
 //2.16
-$login_to = 'Přikhásit se k %s';
+$login_to = 'Přihlásit se k %s';
 $login_no_account = 'Ještě neregistrován(a)?';
 $login_register = 'Klikněte sem pro registraci %s';
 $login_no_account_text = 'K přihlásění do systému potřebujete registraci.';

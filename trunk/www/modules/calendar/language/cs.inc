@@ -348,7 +348,7 @@ $cal_field_types['date'] = 'Datum';
 $cal_conflict = 'Tato událost je v konfliktu s jinou událostí nebo se zdrojovými záznamy. Klikněte na \'Ok\' nebo \'Apply\' znova pro ignorování nebo klikněte na \'Check availability\' pro nalezení vhodného času.';
 
 $cal_select_calendar = 'Vyberte kalendář';
-$cal_check_conflicts = 'Upozorni měna konflikty, kdyz vytvořím událost';
+$cal_check_conflicts = 'Upozorni mě na konflikty, když vytvořím událost';
 $cal_email_changes = 'Pošli e-mail když někdo udělá změny v mém kalendáři';
 $cal_shared_calendars = 'Sdílené kalendáře';
 
