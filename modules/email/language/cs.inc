@@ -226,6 +226,7 @@ $ml_show_attachments='Ukaž přílohy a priority (pomalejší vylistování)';
 $ml_unknown_reciepent='Příjemce je neznámý. Prosím vyplňte příjemcův profil.';
 
 $ml_auto_check='Zkontroluj zda nejsou nějaké nové zprávy automaticky';
+$ml_show_new_mail='Vždy ukazuj počet nových zpráv na vrchu ovládací lišty (vedle vyhledat)';
 $ml_beep='Pípni na nový e-mail';
 
 //2.17
@@ -237,3 +238,6 @@ $ml_help_url='http://docs.group-office.com/index.php?folder_id=57&file_id=0';
 
 $ml_attachment_message = 'Zpráva';
 
+$ml_open_popup='Příjde-li nový email, použij vyskakovací okno';
+
+$ml_vacation='Automatická odpověď';
