@@ -32,9 +32,10 @@ if($share= $fs->find_share($_SESSION['GO_FILESYSTEM_PATH']))
 	$write_users = $GO_SECURITY->get_authorized_users_in_acl($share['acl_write']);
 	while($user_id = array_shift($write_users))
 	{
-		if(!in_array($user_id, $users))
+		$fs_settings = $fs->get_settings($user_id);
+		if($fs_settings['notify']=='1' && !in_array($user_id, $users))
 		{
-			$users[]=$user_id;
+			$users[]=$user_id;			
 		}
 	}
 }
@@ -55,6 +56,7 @@ while($file = array_shift($_FILES))
 			foreach($users as $user_id)
 			{
 				$user = $GO_USERS->get_user($user_id);
+				
 				$subject = sprintf($fs_new_file_uploaded, basename($file['name']));
 				
 				$link = new hyperlink($GO_CONFIG->full_url.'index.php?return_to='.
