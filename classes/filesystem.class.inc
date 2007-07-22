@@ -440,11 +440,13 @@ class filesystem extends db
 	function get_my_shares()
 	{
 		global $GO_SECURITY;
-		$sql = "SELECT DISTINCT fs_shares.user_id FROM fs_shares INNER JOIN acl ".
-		"ON (fs_shares.acl_read=acl.acl_id OR fs_shares.acl_write=acl.acl_id) ".
+		$sql = "SELECT DISTINCT fs_shares.user_id FROM fs_shares ".
+		"INNER JOIN acl ON (fs_shares.acl_read=acl.acl_id OR fs_shares.acl_write=acl.acl_id) ".
 		"LEFT JOIN users_groups ON (acl.group_id=users_groups.group_id) ".
+		"INNER JOIN users ON fs_shares.user_id=users.id ".
 		"WHERE (users_groups.user_id=".$GO_SECURITY->user_id." OR ".
-		"acl.user_id=".$GO_SECURITY->user_id.") AND fs_shares.type='filesystem'";
+		"acl.user_id=".$GO_SECURITY->user_id.") AND fs_shares.type='filesystem'".
+		"ORDER BY users.first_name ASC, users.last_name ASC";
 		$this->query($sql);
 		$list = array();
 		while ( $this->next_record() ) {
