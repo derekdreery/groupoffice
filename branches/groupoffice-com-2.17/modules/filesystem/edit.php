@@ -134,8 +134,9 @@ $row->add_cell(new table_cell($menu->get_html()));
 $table->add_row($row);
 
 $htmleditor = new htmleditor('content');
+$htmleditor->SetConfig('CustomConfigurationsPath', $GO_MODULES->modules['filesystem']['url'].'fckconfig.js');
 $htmleditor->Value		= $content;
-//$htmleditor->ToolbarSet='Default';
+$htmleditor->ToolbarSet='Default';
 
 
 $row = new table_row();
