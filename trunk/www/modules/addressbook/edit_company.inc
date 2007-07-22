@@ -216,7 +216,7 @@ $row = new table_row();
 $row->add_cell(new table_cell($ab_bank_no.':'));
 $input = new input('text','bank_no', $company['bank_no']);
 $input->set_attribute('style','width:280px');
-$input->set_attribute('maxlength','20');
+$input->set_attribute('maxlength','50');
 $row->add_cell(new table_cell($input->get_html()));
 $table->add_row($row);
 

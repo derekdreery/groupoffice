@@ -56,7 +56,7 @@ CREATE TABLE `ab_companies` (
   `fax` varchar(20) NOT NULL default '',
   `email` varchar(75) NOT NULL default '',
   `homepage` varchar(100) NOT NULL default '',
-  `bank_no` varchar(20) NOT NULL default '',
+  `bank_no` varchar(50) NOT NULL default '',
   `vat_no` varchar(30) NOT NULL default '',
   `ctime` int(11) NOT NULL default '0',
   `mtime` int(11) NOT NULL default '0',
