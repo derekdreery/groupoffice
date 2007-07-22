@@ -1,5 +1,7 @@
 <?php
-$updates[25] = array();
+$updates[26] = array();
+
+$updates[25][]="ALTER TABLE `ab_companies` CHANGE `bank_no` `bank_no` VARCHAR( 50 ) NOT NULL"; 
 
 $updates[24][]="UPDATE ab_contacts SET birthday = '' WHERE birthday = '1999-11-30';";
 $updates[24][]="UPDATE ab_companies SET mtime=NOW() where mtime=0;";
