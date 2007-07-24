@@ -68,7 +68,7 @@ width:100%;
 .event {
 	position:absolute;
 	background-color:#ffffcc;
-	border:1px solid #666666;
+	border:0px solid #666666;
 	color:000;
 	z-index: 20000;#higher then selector!
 }
@@ -293,8 +293,7 @@ CalendarGrid.prototype = {
 		
 		this.clearSelection();
 		
-		//add the event to the events array
-		
+		//add the event to the events array		
 		if(typeof(this.events[this.clickedDay])=='undefined')
 		{
 			this.events[this.clickedDay]=Array();
@@ -303,6 +302,17 @@ CalendarGrid.prototype = {
 		
 		this.calculateEvents(this.clickedDay);		
 			
+	},
+	removeEventFromArray : function (day, event_id)
+	{
+		for(var i=0;i<this.events[day].length;i++)
+		{
+			if(this.events[day][i].id==event_id)
+			{
+				return this.events[day].splice(i,1);				
+			}
+		}
+		return false;
 	},
 	
 	calculateEvents :  function (day)
@@ -527,7 +537,7 @@ CalendarGrid.prototype = {
 		this.selector.setVisible(false,true);
 	},
 	
-	startEventDrag : function() {
+	startEventDrag : function(e) {
 	
 
 		//create an overlay to track the mousemovement
@@ -554,15 +564,43 @@ CalendarGrid.prototype = {
 		
 		var x = this.snapPos(this.dragEventStartPos[0],mouseEventPos[0],this.snapX,this.days);
 		var y = this.snapPos(this.dragEventStartPos[1],mouseEventPos[1],this.snapY,48);
-		
+
 		this.dragEvent.setXY([x, y]);		
 	
 	},	
 	onEventDragMouseUp : function (e){
+		
+		
+		var newPos = this.dragEvent.getXY();
+		
+		var dayShift = (newPos[0]-this.dragEventStartPos[0])/this.snapX;
+		
+		if(dayShift!=0)
+		{
+			//remove it from the original day's events
+			this.removeEventFromArray(this.clickedDay, this.dragEvent.id);
+			
+			//calc the new day
+			var newDay = this.clickedDay+dayShift;	
+			
+			//add it to the new day's events
+			if(typeof(this.events[newDay])=='undefined')
+			{
+				this.events[newDay]=Array();
+			}
+			this.events[newDay].push(this.dragEvent);
+			
+			//recalculate grid
+			this.calculateEvents(this.clickedDay);
+			this.calculateEvents(newDay);
+		}else
+		{
+			this.calculateEvents(this.clickedDay);
+		}
+		
+		//unset the drag stuff
 		this.eventDragOverlay.hide();
 		this.dragEvent=false;
-		
-		this.calculateEvents(this.clickedDay);
 	},
 	
 	snapPos : function(oldPos, newPos, snap){
