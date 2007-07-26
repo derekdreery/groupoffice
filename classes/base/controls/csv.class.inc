@@ -69,21 +69,53 @@ class csv
 			$this->add_record($record);
 		}
 		
-		foreach($table->rows as $row)
+		if($table->autosort)
 		{
-			$record = array();
-			foreach($row->cells as $cell)
-			{				
-				$record[]=strip_tags(str_replace('<br />',' ',$cell->innerHTML));
-				if(isset($cell->attributes['colspan']))
-				{
-					for($i=1;$i<$cell->attributes['colspan'];$i++)
-					{
-						$record[]='';
-					}
-				}				
+			if($table->sort_ascending)
+			{
+				asort($table->sort_table);
+			}else
+			{
+				arsort($table->sort_table);
 			}
-			$this->add_record($record);
+
+			foreach($table->sort_table as $key=>$value)
+			{
+				$row = $table->rows[$key];
+				$record = array();
+				foreach($row->cells as $cell)
+				{				
+					$record[]=strip_tags(str_replace('<br />',' ',$cell->innerHTML));
+					if(isset($cell->attributes['colspan']))
+					{
+						for($i=1;$i<$cell->attributes['colspan'];$i++)
+						{
+							$record[]='';
+						}
+					}				
+				}
+				$this->add_record($record);
+				
+			}
+		}else
+		{
+		
+			foreach($table->rows as $row)
+			{
+				$record = array();
+				foreach($row->cells as $cell)
+				{				
+					$record[]=strip_tags(str_replace('<br />',' ',$cell->innerHTML));
+					if(isset($cell->attributes['colspan']))
+					{
+						for($i=1;$i<$cell->attributes['colspan'];$i++)
+						{
+							$record[]='';
+						}
+					}				
+				}
+				$this->add_record($record);
+			}
 		}
 	}
 }
