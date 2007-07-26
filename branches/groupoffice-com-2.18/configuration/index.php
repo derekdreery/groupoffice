@@ -468,6 +468,7 @@ if ($_SESSION['GO_SESSION']['first_name'] != '' && $_SESSION['GO_SESSION']['last
 			$settings_include = $module['path'].$module['id'].'.settings.inc';
 			if(file_exists($settings_include))
 			{
+				require($GO_LANGUAGE->get_language_file($module['id']));
 				$module_name = isset($lang_modules[$module['id']]) ? $lang_modules[$module['id']] : $module['id'];
 				$tabstrip->add_tab($settings_include, $module_name);
 			}

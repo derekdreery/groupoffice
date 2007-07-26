@@ -45,11 +45,54 @@ $task = isset($_POST['task']) ? $_POST['task'] : '';
 
 $stay_open_for_email = false;
 $stay_open_for_calendar = false;
+$stay_open_for_helpdesk=false;
 
 $form = new form('reminder_form');
 
 $form->add_html_element(new input('hidden', 'task','',false));
 $form->add_html_element(new input('hidden', 'event_id','',false));
+
+
+if ($GO_MODULES->modules['helpdesk'] && $GO_MODULES->modules['helpdesk']['read_permission'] &&
+$_SESSION['GO_SESSION']['helpdesk']['count'] > $_SESSION['GO_SESSION']['helpdesk']['notified'])
+{
+	$stay_open_for_helpdesk = true;
+	
+	$GO_THEME->load_module_theme('helpdesk');
+
+	require_once($GO_LANGUAGE->get_language_file('helpdesk'));
+
+	$em_table = new table();
+	$em_table->set_attribute('style', 'border:0px;margin-top:10px;');
+	
+	$img = new image('helpdesk');
+	$img->set_attribute('style', 'border:0px;margin-right:10px;width:32px;height:32px');
+	
+	$em_cell = new table_cell();
+	$em_cell->set_attribute('valign','top');
+	$em_cell->add_html_element($img);
+	
+	$em_row = new table_row();
+	$em_row->add_cell($em_cell);
+	
+	$link = new hyperlink("javascript:goto_url('".$GO_MODULES->modules['helpdesk']['url']."');", $lang_modules['helpdesk']);
+	
+	$h2 = new html_element('h2',$link->get_html());
+	$em_row->add_cell(new table_cell($h2->get_html()));
+	$em_table->add_row($em_row);
+	
+	$em_row = new table_row();
+	$em_row->add_cell(new table_cell('&nbsp;'));		
+	
+	$link = new hyperlink("javascript:goto_url('".$GO_MODULES->modules['helpdesk']['url']."');",$_SESSION['GO_SESSION']['helpdesk']['count'].' tickets');
+	$em_row->add_cell(new table_cell($link->get_html()));	
+	$em_table->add_row($em_row);
+	
+	$form->add_html_element($em_table);
+
+	$_SESSION['GO_SESSION']['helpdesk']['notified'] = $_SESSION['GO_SESSION']['helpdesk']['count'];
+	
+}
 
 if ($GO_MODULES->modules['email'] && $GO_MODULES->modules['email']['read_permission'] &&
 $_SESSION['GO_SESSION']['email_module']['new'] > $_SESSION['GO_SESSION']['email_module']['notified'])
@@ -484,7 +527,7 @@ if($_SERVER['REQUEST_METHOD'] != 'POST' && (!isset($_SESSION['reminder_beep']) |
 if(!$stay_open_for_calendar)
 {
 	$_SESSION['reminder_beep']=true;
-	if(!$stay_open_for_email)
+	if(!$stay_open_for_email && !$stay_open_for_helpdesk)
 	{
 		echo 'window.close();';
 	}
