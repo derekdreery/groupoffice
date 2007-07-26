@@ -44,11 +44,9 @@ if ($calendar_module && $GO_MODULES->modules['calendar']['read_permission'])
 	$cal = new calendar();
 	if($remind_events = $cal->get_events_to_remind($GO_SECURITY->user_id))
 	{
+		$popup=true;
 		$height += 200+(20*$remind_events);
 	}
-}else
-{
-	$remind_events = false;
 }
 
 $task = isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
@@ -56,7 +54,9 @@ $task = isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
 
 $_SESSION['GO_SESSION']['email_module']['notified'] = isset($_SESSION['GO_SESSION']['email_module']['notified']) ? $_SESSION['GO_SESSION']['email_module']['notified'] : 0;
 $_SESSION['GO_SESSION']['email_module']['new'] = 0;
-$remind_email = false;
+
+$popup=false;
+$beep=false;
 if($_SESSION['GO_SESSION']['start_module'] != 'email' || isset($_REQUEST['initiated']))
 {
 	//check for email
@@ -82,23 +82,71 @@ if($_SESSION['GO_SESSION']['start_module'] != 'email' || isset($_REQUEST['initia
 
 
 		if ($_SESSION['GO_SESSION']['email_module']['new'] > 0 && $_SESSION['GO_SESSION']['email_module']['new'] > $_SESSION['GO_SESSION']['email_module']['notified'])
-		{				
-			$remind_email = true;
+		{			
+			if($settings['beep']=='1')
+			{	
+				$beep = true;
+			}
 			$height += 120;
+			if($settings['open_popup']=='1')
+			{
+				$popup=true;
+			}else
+			{
+				$_SESSION['GO_SESSION']['email_module']['notified']=$_SESSION['GO_SESSION']['email_module']['new'];
+			}
+		}elseif($_SESSION['GO_SESSION']['email_module']['new'] < $_SESSION['GO_SESSION']['email_module']['notified'])
+		{
+			$_SESSION['GO_SESSION']['email_module']['notified']=	$_SESSION['GO_SESSION']['email_module']['new'];		
 		}
 		
 	}
 }
+$remind_helpdesk=false;
+$popup_helpdesk=false;
+if (isset($GO_MODULES->modules['helpdesk']) && $GO_MODULES->modules['helpdesk']['read_permission'])
+{
+	$_SESSION['GO_SESSION']['helpdesk']['notified'] = isset($_SESSION['GO_SESSION']['helpdesk']['notified']) ? $_SESSION['GO_SESSION']['helpdesk']['notified'] : 0;
+	$_SESSION['GO_SESSION']['helpdesk']['count'] = 0;
 
-if (($remind_events || ($remind_email && $settings['open_popup']=='1')) && isset($_REQUEST['initiated']))
+	require_once($GO_MODULES->modules['helpdesk']['class_path']."helpdesk.class.inc");
+	$helpdesk = new helpdesk();
+
+	$hd_settings = $helpdesk->get_settings($GO_SECURITY->user_id);
+
+	$statuses = explode(',',$hd_settings['statuses']);
+	$types = explode(',',$hd_settings['types']);
+	
+	$_SESSION['GO_SESSION']['helpdesk']['count'] = $helpdesk->get_tickets(0, 0, 'id', 'ASC', $statuses, $types);
+
+	if ($_SESSION['GO_SESSION']['helpdesk']['count'] > 0 && $_SESSION['GO_SESSION']['helpdesk']['count'] > $_SESSION['GO_SESSION']['helpdesk']['notified'])
+	{	
+		if($hd_settings['beep']=='1')
+		{			
+			$beep = true;
+		}
+			$height += 120;
+		
+		if($hd_settings['popup']=='1')
+		{
+			$popup=true;
+		}else
+		{
+			$_SESSION['GO_SESSION']['email_module']['notified']=$_SESSION['GO_SESSION']['helpdesk']['count'];
+		}
+	}elseif($_SESSION['GO_SESSION']['email_module']['new'] < $_SESSION['GO_SESSION']['email_module']['notified'])
+	{
+		$_SESSION['GO_SESSION']['email_module']['notified']=	$_SESSION['GO_SESSION']['email_module']['new'];		
+	}
+}
+
+if ($popup && isset($_REQUEST['initiated']))
 {
 	if($height > 600) $height = 600;
 
 	echo '<script language="javascript" type="text/javascript">'.
 	'popup("'.$GO_CONFIG->control_url.'reminder.php", "600", "'.$height.'", "reminder");'.
 	'</script>';
-}else {
-	$_SESSION['GO_SESSION']['email_module']['notified']=$_SESSION['GO_SESSION']['email_module']['new'];
 }
 ?>
 <link href="<?php echo $GO_THEME->theme_url.'css/checker.css'; ?>" rel="stylesheet" type="text/css" />
@@ -106,12 +154,18 @@ if (($remind_events || ($remind_email && $settings['open_popup']=='1')) && isset
 <body>
 <?php
 
+if (isset($GO_MODULES->modules['helpdesk']) && $GO_MODULES->modules['helpdesk']['read_permission'] && $_SESSION['GO_SESSION']['helpdesk']['count']>0)
+{
+	$GO_THEME->load_module_theme('helpdesk');
+	echo '<a href="'.$GO_MODULES->modules['helpdesk']['url'].'" target="main"><img src="'.$GO_THEME->images['ticket_alert'].'" border="0" align="absmiddle" /> '.$_SESSION['GO_SESSION']['helpdesk']['count'].'</a>';
+}
+
 if (isset($GO_MODULES->modules['email']) && $GO_MODULES->modules['email']['read_permission'] && $_SESSION['GO_SESSION']['email_module']['new']>0)
 {
 	echo '<a href="'.$GO_MODULES->modules['email']['url'].'" target="main"><img src="'.$GO_THEME->images['mail'].'" border="0" align="absmiddle" /> '.$_SESSION['GO_SESSION']['email_module']['new'].'</a>';
 }
 
-if($remind_email && isset($_REQUEST['initiated']) && $settings['beep']=='1')
+if($beep && !$popup)// && isset($_REQUEST['initiated']))
 {
 
 
@@ -126,3 +180,4 @@ if($remind_email && isset($_REQUEST['initiated']) && $settings['beep']=='1')
 
 </body>
 </html>
+
