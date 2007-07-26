@@ -76,7 +76,7 @@ if ($task == 'set_search_query' || !isset ($_SESSION['email_search_query'])) {
 $page_title = $lang_modules['email'];
 
 $GO_HEADER['head'] = '<script type="text/javascript" src="'.$GO_MODULES->url.'email.js"></script>';
-$GO_HEADER['head'] .= '<script type="text/javascript" src="'.$GO_CONFIG->host.'javascript/base64.js"></script>';
+//$GO_HEADER['head'] .= '<script type="text/javascript" src="'.$GO_CONFIG->host.'javascript/base64.js"></script>';
 
 
 if(isset($_REQUEST['mail_to']))
