@@ -146,59 +146,48 @@ if (isset ($GO_MODULES->modules['calendar']) && $GO_MODULES->modules['calendar']
 	$interval_end_time = $tommorow_interval_start_time = mktime(0, 0, 0, $month, $day +	1, $year)-$timezone_offset;
 	$tommorow_interval_end_time = mktime(0, 0, 0, $month, $day +	2, $year)-$timezone_offset;
 	for($i=0;$i<2;$i++)
-	{
-		if($i == 0)
-		{
-			$h3 = new html_element('h3', $sum_unfinished);
-			$em_cell->add_html_element($h3);			
-			//$events = $cal->get_events_in_array(0, 0, $GO_SECURITY->user_id, 1, $interval_end_time, true, false, false);				
-			$cal->get_events(1,0,0,0,0,$GO_SECURITY->user_id,false,1,$interval_end_time);
-			while($cal->next_record())
-			{
-				$events[]=$cal->Record;
-			}
-		}else
-		{
-			$h3 = new html_element('h3', $sum_tommorow);
-			$h3->set_attribute('style','margin-top:10px');
-			$em_cell->add_html_element($h3);					
-			//$events = $cal->get_events_in_array(0, 0, $GO_SECURITY->user_id, $tommorow_interval_start_time, $tommorow_interval_end_time, true, false, false);						
-			$cal->get_events(1,0,0,0,0,$GO_SECURITY->user_id,false,$tommorow_interval_start_time,$tommorow_interval_end_time);
-			while($cal->next_record())
-			{
-				$events[]=$cal->Record;
-			}
-		}
-		$cal2 = new calendar();
-		
-		if(count($events) > 0)
-		{
-			while ($event = array_shift($events)) {			
+    {
+        if($i == 0)
+        {
+                $h3 = new html_element('h3', $sum_unfinished);
+                $cal->get_events(1,0,0,0,0,$GO_SECURITY->user_id,false,1,$interval_end_time);
+                while($cal->next_record())
+                {
+                        $events[]=$cal->Record;
+                }
+        }else
+        {
+                $h3 = new html_element('h3', $sum_tommorow);
+                $h3->set_attribute('style','margin-top:10px');
+                $cal->get_events(1,0,0,0,0,$GO_SECURITY->user_id,false,$tommorow_interval_start_time,$tommorow_interval_end_time);
+                while($cal->next_record())
+                {
+                        $events[]=$cal->Record;
+                }
+        }
+        $cal2 = new calendar();
+        if(count($events) > 0)
+        {
+			$em_cell>add_html_element($h3);
+			while ($event = array_shift($events)) {
 				$td_table = new table();
 				$td_row = new table_row();
-				
 				$input = new input('checkbox', 'todo[]', $event['id']);
 				$input->set_attribute('class','');
 				$input->set_attribute('onclick','set_completed(this.value);');
 				$td_cell = new table_cell($input->get_html());
 				$td_row->add_cell($td_cell);
-							
-				$event_obj = new event($event,$link_back);				
-				$td_cell = new table_cell($event_obj->get_html());				
+				$event_obj = new event($event,$link_back);
+				$td_cell = new table_cell($event_obj->get_html());
 				$td_row->add_cell($td_cell);
-				
 				$td_table->add_row($td_row);
-								
-				$em_cell->add_html_element($td_table);					
-			}				
-		} else {
-			$span= new html_element('span', $cal_no_todos);		
-			$em_cell->add_html_element($span);				
-		}			
-	}
-	$em_row->add_cell($em_cell);
-	$em_table->add_row($em_row);
-	$cell->add_html_element($em_table);
+				$em_cell->add_html_element($td_table);
+			}
+        }
+    }	
+    $em_row->add_cell($em_cell);
+    $em_table->add_row($em_row);
+    $cell->add_html_element($em_table);
 }
 ?>
 <script type="text/javascript">
