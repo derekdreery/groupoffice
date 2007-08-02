@@ -1,14 +1,14 @@
 <?php
 /*
-Copyright Intermesh 2003
-Author: Merijn Schering <mschering@intermesh.nl>
-Version: 1.0 Release date: 08 July 2003
+ Copyright Intermesh 2003
+ Author: Merijn Schering <mschering@intermesh.nl>
+ Version: 1.0 Release date: 08 July 2003
 
-This program is free software; you can redistribute it and/or modify it
-under the terms of the GNU General Public License as published by the
-Free Software Foundation; either version 2 of the License, or (at your
-option) any later version.
-*/
+ This program is free software; you can redistribute it and/or modify it
+ under the terms of the GNU General Public License as published by the
+ Free Software Foundation; either version 2 of the License, or (at your
+ option) any later version.
+ */
 require_once("../Group-Office.php");
 
 $GO_SECURITY->authenticate();
@@ -74,45 +74,45 @@ $_SESSION['GO_SESSION']['email_module']['new'] > $_SESSION['GO_SESSION']['email_
 
 	$em_table = new table();
 	$em_table->set_attribute('style', 'border:0px;margin-top:10px;');
-	
+
 	$img = new image('email');
 	$img->set_attribute('style', 'border:0px;margin-right:10px;width:32px;height:32px');
-	
+
 	$em_cell = new table_cell();
 	$em_cell->set_attribute('valign','top');
 	$em_cell->add_html_element($img);
-	
+
 	$em_row = new table_row();
 	$em_row->add_cell($em_cell);
-	
+
 	$link = new hyperlink("javascript:goto_url('".$GO_MODULES->modules['email']['url']."');", $lang_modules['email']);
-	
+
 	$h2 = new html_element('h2',$link->get_html());
 	$em_row->add_cell(new table_cell($h2->get_html()));
 	$em_table->add_row($em_row);
-	
+
 	$em_row = new table_row();
-	$em_row->add_cell(new table_cell('&nbsp;'));		
-	
+	$em_row->add_cell(new table_cell('&nbsp;'));
+
 	$link = new hyperlink("javascript:goto_url('".$GO_MODULES->modules['email']['url']."');",'');
 
 	switch($_SESSION['GO_SESSION']['email_module']['new'])
 	{
 		case 0:
 			$link->innerHTML = $ml_no_new_mail;
-		break;
+			break;
 		case 1:
 			$link->innerHTML = $ml_you_have.' <b>'.$_SESSION['GO_SESSION']['email_module']['new'].'</b> '.$ml_new_mail_single;
-		break;
-		
+			break;
+
 		default:
 			$link->innerHTML = $ml_you_have.' <b>'.$_SESSION['GO_SESSION']['email_module']['new'].'</b> '.$ml_new_mail_multiple;
-		break;
+			break;
 	}
-	
-	$em_row->add_cell(new table_cell($link->get_html()));	
+
+	$em_row->add_cell(new table_cell($link->get_html()));
 	$em_table->add_row($em_row);
-	
+
 	$form->add_html_element($em_table);
 
 	$_SESSION['GO_SESSION']['email_module']['notified'] = $_SESSION['GO_SESSION']['email_module']['new'];
@@ -141,7 +141,7 @@ switch($task)
 		{
 			$reminder['id']=$_POST['reminder_id'];
 			$reminder['time']=get_gmt_time()+$_POST['snooze_reminder'][$_POST['reminder_id']];
-			
+
 			$rm->update_reminder($reminder);
 		}
 		break;
@@ -157,12 +157,12 @@ switch($task)
 $reminder_count = $rm->get_reminders($GO_SECURITY->user_id);
 
 if($reminder_count)
-{	
+{
 	$stay_open_for_reminders = true;
-	
+
 	//require_once($GO_LANGUAGE->get_language_file('calendar'));
-	
-	
+
+
 	$em_table = new table();
 	$em_table->set_attribute('style', 'border:0px;margin-top:10px;width:100%');
 
@@ -176,7 +176,7 @@ if($reminder_count)
 	$em_row = new table_row();
 	$em_row->add_cell($em_cell);
 
-	
+
 	$h2 = new html_element('h2',$strReminder);
 
 	$em_cell = new table_cell($h2->get_html());
@@ -193,7 +193,7 @@ if($reminder_count)
 
 	while($rm->next_record())
 	{
-		
+
 		if ($rm->f('time')< $day_start || $rm->f('time') > $day_end) {
 			$date_format = $_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'];
 		} else {
@@ -202,9 +202,9 @@ if($reminder_count)
 
 
 		$link = new hyperlink('javascript:goto_url(\''.$rm->f('url').'\');',
-			date($date_format, $rm->f('time')).'&nbsp;'.
-			htmlspecialchars($rm->f('name')));
-		
+		date($date_format, $rm->f('time')).'&nbsp;'.
+		htmlspecialchars($rm->f('name')));
+
 		$row = new table_row();
 		$cell = new table_cell($link->get_html());
 		$cell->set_attribute('style','width:100%');
@@ -234,13 +234,13 @@ if($reminder_count)
 		$row->add_cell($cell);
 		$table->add_row($row);
 	}
-	
+
 	$em_row->add_cell(new table_cell($table->get_html()));
 	$em_table->add_row($em_row);
 	$form->add_html_element($em_table);
-	
-	
-	
+
+
+
 }
 
 
@@ -282,63 +282,63 @@ if ($GO_MODULES->modules['calendar'] && $GO_MODULES->modules['calendar']['read_p
 			}
 			break;
 	}
-}
-
-if($event_count = $cal->get_events_to_remind($GO_SECURITY->user_id, true, false))
-{
-	$stay_open_for_calendar = true;
-
-	$em_table = new table();
-	$em_table->set_attribute('style', 'border:0px;margin-top:10px;width:100%');
-
-	$img = new image('calendar');
-	$img->set_attribute('style', 'border:0px;margin-right:10px;width:32px;height:32px');
-
-	$em_cell = new table_cell();
-	$em_cell->set_attribute('valign','top');
-	$em_cell->add_html_element($img);
-
-	$em_row = new table_row();
-	$em_row->add_cell($em_cell);
-
-	$link = new hyperlink("javascript:goto_url('".$GO_MODULES->modules['calendar']['url']."');",$lang_modules['calendar']);
-
-	$h2 = new html_element('h2',$link->get_html());
-
-	$em_cell = new table_cell($h2->get_html());
-	$em_cell->set_attribute('style','width:100%');
-	$em_row->add_cell($em_cell);
-	$em_table->add_row($em_row);
-
-	$em_row = new table_row();
-	$em_row->add_cell(new table_cell('&nbsp;'));
-
-	$table = new table();
-	$table->set_attribute('style','width:100%;white-space:nowrap;');
 
 
-	while($cal->next_record())
+	if($event_count = $cal->get_events_to_remind($GO_SECURITY->user_id, true, false))
 	{
-		$start_time = $cal->f('occurence_time');
-		$end_time = $start_time + $cal->f('end_time') - $cal->f('start_time');
+		$stay_open_for_calendar = true;
 
-		$timezone_offset = get_timezone_offset($start_time)*3600;
-		$start_time += $timezone_offset;
+		$em_table = new table();
+		$em_table->set_attribute('style', 'border:0px;margin-top:10px;width:100%');
 
-		$timezone_offset = get_timezone_offset($end_time)*3600;
-		$end_time += $timezone_offset;
+		$img = new image('calendar');
+		$img->set_attribute('style', 'border:0px;margin-right:10px;width:32px;height:32px');
+
+		$em_cell = new table_cell();
+		$em_cell->set_attribute('valign','top');
+		$em_cell->add_html_element($img);
+
+		$em_row = new table_row();
+		$em_row->add_cell($em_cell);
+
+		$link = new hyperlink("javascript:goto_url('".$GO_MODULES->modules['calendar']['url']."');",$lang_modules['calendar']);
+
+		$h2 = new html_element('h2',$link->get_html());
+
+		$em_cell = new table_cell($h2->get_html());
+		$em_cell->set_attribute('style','width:100%');
+		$em_row->add_cell($em_cell);
+		$em_table->add_row($em_row);
+
+		$em_row = new table_row();
+		$em_row->add_cell(new table_cell('&nbsp;'));
+
+		$table = new table();
+		$table->set_attribute('style','width:100%;white-space:nowrap;');
+
+
+		while($cal->next_record())
+		{
+			$start_time = $cal->f('occurence_time');
+			$end_time = $start_time + $cal->f('end_time') - $cal->f('start_time');
+
+			$timezone_offset = get_timezone_offset($start_time)*3600;
+			$start_time += $timezone_offset;
+
+			$timezone_offset = get_timezone_offset($end_time)*3600;
+			$end_time += $timezone_offset;
 
 
 
-		$title = '';
-		$date_format = '';
+			$title = '';
+			$date_format = '';
 
-		if (($start_time< $day_start) || $end_time > $day_end) {
-			$date_format = $_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'];
-		} else {
-			$date_format = $_SESSION['GO_SESSION']['time_format'];
-		}
-		$title = $sc_start_at.': '.date($date_format, $start_time).
+			if (($start_time< $day_start) || $end_time > $day_end) {
+				$date_format = $_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'];
+			} else {
+				$date_format = $_SESSION['GO_SESSION']['time_format'];
+			}
+			$title = $sc_start_at.': '.date($date_format, $start_time).
 		'<br />'.$sc_end_at.': '.date($date_format, $end_time);
 
 		if (isset($GO_MODULES->modules['addressbook']) &&
@@ -423,79 +423,79 @@ if($event_count = $cal->get_events_to_remind($GO_SECURITY->user_id, true, false)
 
 		$row->add_cell($cell);
 		$table->add_row($row);
+		}
+
+		$em_row->add_cell(new table_cell($table->get_html()));
+		$em_table->add_row($em_row);
+		$form->add_html_element($em_table);
+
+
 	}
 
-	$em_row->add_cell(new table_cell($table->get_html()));
-	$em_table->add_row($em_row);
-	$form->add_html_element($em_table);
-
-
-}
-
-$todo_count = $cal->get_events_to_remind($GO_SECURITY->user_id, false, true);
-if($todo_count)
-{
-	$stay_open_for_calendar = true;
-
-	$em_table = new table();
-	$em_table->set_attribute('style', 'border:0px;margin-top:10px;width:100%');
-
-	$img = new image('todos');
-	$img->set_attribute('style', 'border:0px;margin-right:10px;width:32px;height:32px');
-
-	$em_cell = new table_cell();
-	$em_cell->set_attribute('valign','top');
-	$em_cell->add_html_element($img);
-
-	$em_row = new table_row();
-	$em_row->add_cell($em_cell);
-
-	$link = new hyperlink("javascript:goto_url('".$GO_MODULES->modules['todos']['url']."');",$lang_modules['todos']);
-
-	$h2 = new html_element('h2',$link->get_html());
-
-	$em_cell = new table_cell($h2->get_html());
-	$em_cell->set_attribute('style','width:100%');
-	$em_row->add_cell($em_cell);
-	$em_table->add_row($em_row);
-
-	$em_row = new table_row();
-	$em_row->add_cell(new table_cell('&nbsp;'));
-
-	$table = new table();
-	$table->set_attribute('style','width:100%;white-space:nowrap;');
-
-
-	while($cal->next_record())
+	$todo_count = $cal->get_events_to_remind($GO_SECURITY->user_id, false, true);
+	if($todo_count)
 	{
-		$now = get_gmt_time();
+		$stay_open_for_calendar = true;
 
-		$day = date('j', $now);
-		$month = date('n', $now);
-		$year = date('Y',$now);
+		$em_table = new table();
+		$em_table->set_attribute('style', 'border:0px;margin-top:10px;width:100%');
 
-		$day_start = mktime(0,0,0,$month, $day, $year);
-		$day_end = mktime(0,0,0,$month, $day+1, $year);
+		$img = new image('todos');
+		$img->set_attribute('style', 'border:0px;margin-right:10px;width:32px;height:32px');
 
-		$start_time = $cal->f('occurence_time');
-		$end_time = $start_time + $cal->f('end_time') - $cal->f('start_time');
+		$em_cell = new table_cell();
+		$em_cell->set_attribute('valign','top');
+		$em_cell->add_html_element($img);
 
-		$timezone_offset = get_timezone_offset($start_time)*3600;
-		$start_time += $timezone_offset;
+		$em_row = new table_row();
+		$em_row->add_cell($em_cell);
 
-		$timezone_offset = get_timezone_offset($end_time)*3600;
-		$end_time += $timezone_offset;
+		$link = new hyperlink("javascript:goto_url('".$GO_MODULES->modules['todos']['url']."');",$lang_modules['todos']);
+
+		$h2 = new html_element('h2',$link->get_html());
+
+		$em_cell = new table_cell($h2->get_html());
+		$em_cell->set_attribute('style','width:100%');
+		$em_row->add_cell($em_cell);
+		$em_table->add_row($em_row);
+
+		$em_row = new table_row();
+		$em_row->add_cell(new table_cell('&nbsp;'));
+
+		$table = new table();
+		$table->set_attribute('style','width:100%;white-space:nowrap;');
 
 
-		$title = '';
-		$date_format = '';
+		while($cal->next_record())
+		{
+			$now = get_gmt_time();
 
-		if (($start_time< $day_start) || $end_time > $day_end) {
-			$date_format = $_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'];
-		} else {
-			$date_format = $_SESSION['GO_SESSION']['time_format'];
-		}
-		$title = $sc_start_at.': '.date($date_format, $start_time).
+			$day = date('j', $now);
+			$month = date('n', $now);
+			$year = date('Y',$now);
+
+			$day_start = mktime(0,0,0,$month, $day, $year);
+			$day_end = mktime(0,0,0,$month, $day+1, $year);
+
+			$start_time = $cal->f('occurence_time');
+			$end_time = $start_time + $cal->f('end_time') - $cal->f('start_time');
+
+			$timezone_offset = get_timezone_offset($start_time)*3600;
+			$start_time += $timezone_offset;
+
+			$timezone_offset = get_timezone_offset($end_time)*3600;
+			$end_time += $timezone_offset;
+
+
+			$title = '';
+			$date_format = '';
+
+			if (($start_time< $day_start) || $end_time > $day_end) {
+				$date_format = $_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'];
+			} else {
+				$date_format = $_SESSION['GO_SESSION']['time_format'];
+			}
+			$title = $sc_start_at.': '.date($date_format, $start_time).
 		'<br />'.$sc_end_at.': '.date($date_format, $end_time);
 
 		if (isset($GO_MODULES->modules['addressbook']) &&
@@ -584,15 +584,15 @@ if($todo_count)
 		$cal2->reminder_mail_sent($GO_USERS->f('id'), $cal->f('id'));
 
 
+		}
+
+		$em_row->add_cell(new table_cell($table->get_html()));
+		$em_table->add_row($em_row);
+		$form->add_html_element($em_table);
+
+
 	}
-
-	$em_row->add_cell(new table_cell($table->get_html()));
-	$em_table->add_row($em_row);
-	$form->add_html_element($em_table);
-
-
 }
-
 if($event_count+$todo_count>1)
 {
 	$button = new button($cal_dismiss_all, "javascript:document.reminder_form.task.value='dismiss_all';document.reminder_form.submit();");
