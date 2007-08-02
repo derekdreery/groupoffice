@@ -102,6 +102,19 @@ if($_SESSION['GO_SESSION']['start_module'] != 'email' || isset($_REQUEST['initia
 		
 	}
 }
+
+require($GO_CONFIG->class_path.'base/reminder.class.inc');
+$rm = new reminder();
+
+$reminder_count = $rm->get_reminders($GO_SECURITY->user_id);
+
+if($reminder_count)
+{
+	$height += 120+(20*$reminder_count);
+}
+
+
+/*
 $remind_helpdesk=false;
 $popup_helpdesk=false;
 if (isset($GO_MODULES->modules['helpdesk']) && $GO_MODULES->modules['helpdesk']['read_permission'])
@@ -139,8 +152,8 @@ if (isset($GO_MODULES->modules['helpdesk']) && $GO_MODULES->modules['helpdesk'][
 		$_SESSION['GO_SESSION']['email_module']['notified']=	$_SESSION['GO_SESSION']['email_module']['new'];		
 	}
 }
-
-if ($popup && isset($_REQUEST['initiated']))
+*/
+if ($reminder_count || ($popup && isset($_REQUEST['initiated'])))
 {
 	if($height > 600) $height = 600;
 
@@ -154,10 +167,20 @@ if ($popup && isset($_REQUEST['initiated']))
 <body>
 <?php
 
-if (isset($GO_MODULES->modules['helpdesk']) && $GO_MODULES->modules['helpdesk']['read_permission'] && $_SESSION['GO_SESSION']['helpdesk']['count']>0)
+if (isset($GO_MODULES->modules['helpdesk']) && $GO_MODULES->modules['helpdesk']['read_permission'])
 {
-	$GO_THEME->load_module_theme('helpdesk');
-	echo '<a href="'.$GO_MODULES->modules['helpdesk']['url'].'" target="main"><img src="'.$GO_THEME->images['ticket_alert'].'" border="0" align="absmiddle" /> '.$_SESSION['GO_SESSION']['helpdesk']['count'].'</a>';
+	require_once($GO_MODULES->modules['helpdesk']['class_path']."helpdesk.class.inc");
+	$helpdesk = new helpdesk();
+
+	$hd_settings = $helpdesk->get_settings($GO_SECURITY->user_id);
+
+	$statuses = explode(',',$hd_settings['statuses']);
+	
+	if($count = $helpdesk->get_tickets(0, 0, 'id', 'ASC', $statuses))
+	{
+		$GO_THEME->load_module_theme('helpdesk');
+		echo '<a href="'.$GO_MODULES->modules['helpdesk']['url'].'" target="main"><img src="'.$GO_THEME->images['ticket_alert'].'" border="0" align="absmiddle" /> '.$count.'</a>&nbsp;';
+	}
 }
 
 if (isset($GO_MODULES->modules['email']) && $GO_MODULES->modules['email']['read_permission'] && $_SESSION['GO_SESSION']['email_module']['new']>0)

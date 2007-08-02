@@ -15,6 +15,18 @@ $GO_SECURITY->authenticate();
 load_basic_controls();
 load_control('tooltip');
 
+
+$now = get_gmt_time();
+
+$day = date('j', $now);
+$month = date('n', $now);
+$year = date('Y',$now);
+
+$day_start = mktime(0,0,0,$month, $day, $year);
+$day_end = mktime(0,0,0,$month, $day+1, $year);
+
+
+
 $projects_module = isset($GO_MODULES->modules['projects']) ? $GO_MODULES->modules['projects'] : false;
 if($projects_module && $projects_module['read_permission'])
 {
@@ -45,54 +57,14 @@ $task = isset($_POST['task']) ? $_POST['task'] : '';
 
 $stay_open_for_email = false;
 $stay_open_for_calendar = false;
-$stay_open_for_helpdesk=false;
+$stay_open_for_reminders=false;
 
 $form = new form('reminder_form');
 
 $form->add_html_element(new input('hidden', 'task','',false));
 $form->add_html_element(new input('hidden', 'event_id','',false));
+$form->add_html_element(new input('hidden', 'reminder_id','',false));
 
-
-if ($GO_MODULES->modules['helpdesk'] && $GO_MODULES->modules['helpdesk']['read_permission'] &&
-$_SESSION['GO_SESSION']['helpdesk']['count'] > $_SESSION['GO_SESSION']['helpdesk']['notified'])
-{
-	$stay_open_for_helpdesk = true;
-	
-	$GO_THEME->load_module_theme('helpdesk');
-
-	require_once($GO_LANGUAGE->get_language_file('helpdesk'));
-
-	$em_table = new table();
-	$em_table->set_attribute('style', 'border:0px;margin-top:10px;');
-	
-	$img = new image('helpdesk');
-	$img->set_attribute('style', 'border:0px;margin-right:10px;width:32px;height:32px');
-	
-	$em_cell = new table_cell();
-	$em_cell->set_attribute('valign','top');
-	$em_cell->add_html_element($img);
-	
-	$em_row = new table_row();
-	$em_row->add_cell($em_cell);
-	
-	$link = new hyperlink("javascript:goto_url('".$GO_MODULES->modules['helpdesk']['url']."');", $lang_modules['helpdesk']);
-	
-	$h2 = new html_element('h2',$link->get_html());
-	$em_row->add_cell(new table_cell($h2->get_html()));
-	$em_table->add_row($em_row);
-	
-	$em_row = new table_row();
-	$em_row->add_cell(new table_cell('&nbsp;'));		
-	
-	$link = new hyperlink("javascript:goto_url('".$GO_MODULES->modules['helpdesk']['url']."');",$_SESSION['GO_SESSION']['helpdesk']['count'].' tickets');
-	$em_row->add_cell(new table_cell($link->get_html()));	
-	$em_table->add_row($em_row);
-	
-	$form->add_html_element($em_table);
-
-	$_SESSION['GO_SESSION']['helpdesk']['notified'] = $_SESSION['GO_SESSION']['helpdesk']['count'];
-	
-}
 
 if ($GO_MODULES->modules['email'] && $GO_MODULES->modules['email']['read_permission'] &&
 $_SESSION['GO_SESSION']['email_module']['new'] > $_SESSION['GO_SESSION']['email_module']['notified'])
@@ -145,6 +117,132 @@ $_SESSION['GO_SESSION']['email_module']['new'] > $_SESSION['GO_SESSION']['email_
 
 	$_SESSION['GO_SESSION']['email_module']['notified'] = $_SESSION['GO_SESSION']['email_module']['new'];
 }
+
+
+
+//Start framework reminders
+
+
+require($GO_CONFIG->class_path.'base/reminder.class.inc');
+$rm = new reminder();
+
+
+
+
+switch($task)
+{
+	case 'dismiss_all':
+		$rm->delete_reminders($GO_SECURITY->user_id);
+		break;
+
+
+	case 'snooze':
+		if(isset($_POST['reminder_id']) && $_POST['reminder_id'] > 0)
+		{
+			$reminder['id']=$_POST['reminder_id'];
+			$reminder['time']=get_gmt_time()+$_POST['snooze_reminder'][$_POST['reminder_id']];
+			
+			$rm->update_reminder($reminder);
+		}
+		break;
+
+	case 'dismiss':
+		if(isset($_POST['reminder_id']) && $_POST['reminder_id'] > 0)
+		{
+			$rm->delete_reminder($_POST['reminder_id']);
+		}
+		break;
+}
+
+$reminder_count = $rm->get_reminders($GO_SECURITY->user_id);
+
+if($reminder_count)
+{	
+	$stay_open_for_reminders = true;
+	
+	//require_once($GO_LANGUAGE->get_language_file('calendar'));
+	
+	
+	$em_table = new table();
+	$em_table->set_attribute('style', 'border:0px;margin-top:10px;width:100%');
+
+	$img = new image('reminder');
+	$img->set_attribute('style', 'border:0px;margin-right:10px;width:32px;height:32px');
+
+	$em_cell = new table_cell();
+	$em_cell->set_attribute('valign','top');
+	$em_cell->add_html_element($img);
+
+	$em_row = new table_row();
+	$em_row->add_cell($em_cell);
+
+	
+	$h2 = new html_element('h2',$strReminder);
+
+	$em_cell = new table_cell($h2->get_html());
+	$em_cell->set_attribute('style','width:100%');
+	$em_row->add_cell($em_cell);
+	$em_table->add_row($em_row);
+
+	$em_row = new table_row();
+	$em_row->add_cell(new table_cell('&nbsp;'));
+
+	$table = new table();
+	$table->set_attribute('style','width:100%;white-space:nowrap;');
+
+
+	while($rm->next_record())
+	{
+		
+		if ($rm->f('time')< $day_start || $rm->f('time') > $day_end) {
+			$date_format = $_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'];
+		} else {
+			$date_format = $_SESSION['GO_SESSION']['time_format'];
+		}
+
+
+		$link = new hyperlink('javascript:goto_url(\''.$rm->f('url').'\');',
+			date($date_format, $rm->f('time')).'&nbsp;'.
+			htmlspecialchars($rm->f('name')));
+		
+		$row = new table_row();
+		$cell = new table_cell($link->get_html());
+		$cell->set_attribute('style','width:100%');
+		$row->add_cell($cell);
+
+		$select = new select('snooze_reminder['.$rm->f('id').']', '1800');
+		$select->add_value('300', '5 '.$strMins);
+		$select->add_value('900', '15 '.$strMins);
+		$select->add_value('1800', '30 '.$strMins);
+		$select->add_value('3600', '1 '.$strHour);
+		$select->add_value('7200', '2 '.$strHours);
+		$select->add_value('86400', '1 '.$strDay);
+		$select->add_value('604800','1'.$strDays);
+
+		$row->add_cell(new table_cell($select->get_html()));
+
+		$cell = new table_cell();
+
+		$button = new button($strSnooze, "javascript:update_reminder(".$rm->f('id').",'snooze');");
+		$button->set_attribute('style','margin-top:0px;');
+		$cell->add_html_element($button);
+
+		$button= new button($strDismiss, "javascript:update_reminder(".$rm->f('id').",'dismiss');");
+		$button->set_attribute('style','margin-top:0px;');
+		$cell->add_html_element($button);
+
+		$row->add_cell($cell);
+		$table->add_row($row);
+	}
+	
+	$em_row->add_cell(new table_cell($table->get_html()));
+	$em_table->add_row($em_row);
+	$form->add_html_element($em_table);
+	
+	
+	
+}
+
 
 if ($GO_MODULES->modules['calendar'] && $GO_MODULES->modules['calendar']['read_permission'])
 {
@@ -221,15 +319,6 @@ if($event_count = $cal->get_events_to_remind($GO_SECURITY->user_id, true, false)
 
 	while($cal->next_record())
 	{
-		$now = get_gmt_time();
-
-		$day = date('j', $now);
-		$month = date('n', $now);
-		$year = date('Y',$now);
-
-		$day_start = mktime(0,0,0,$month, $day, $year);
-		$day_end = mktime(0,0,0,$month, $day+1, $year);
-
 		$start_time = $cal->f('occurence_time');
 		$end_time = $start_time + $cal->f('end_time') - $cal->f('start_time');
 
@@ -527,7 +616,7 @@ if($_SERVER['REQUEST_METHOD'] != 'POST' && (!isset($_SESSION['reminder_beep']) |
 if(!$stay_open_for_calendar)
 {
 	$_SESSION['reminder_beep']=true;
-	if(!$stay_open_for_email && !$stay_open_for_helpdesk)
+	if(!$stay_open_for_email && !$stay_open_for_reminders)
 	{
 		echo 'window.close();';
 	}
@@ -549,6 +638,15 @@ function update_todo_reminder(todo_id, task)
 	document.reminder_form.todo_id.value=todo_id;
 	document.reminder_form.submit();
 }
+
+function update_reminder(reminder_id, task)
+{
+	document.reminder_form.task.value=task;
+	document.reminder_form.reminder_id.value=reminder_id;
+	document.reminder_form.submit();
+}
+
+
 
 function goto_url(url)
 {

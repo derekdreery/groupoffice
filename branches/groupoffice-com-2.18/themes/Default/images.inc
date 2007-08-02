@@ -259,3 +259,5 @@ $images['gallery'] = 'buttons/gallery.png';
 $images['translate'] = 'buttons/locale.png';
 $images['timeregistration'] = 'buttons/xclock.png';
 $images['properties_small']='buttons/edit.png';
+
+$images['reminder']='buttons/reminder.png';
