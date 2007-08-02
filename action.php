@@ -67,8 +67,8 @@ switch($task)
 					$account['vacation_text'];
 
 					/* update .forward file */
-					excludeVacation ($forward_file, $account['username']);
-					includeVacation ($forward_file, $account['username']);
+					excludeVacation ($forward_file, $account['username'], $account['email']);
+					includeVacation ($forward_file, $account['username'], $account['email']);
 					writeFile ($vacation_file, $vacation_file_contents);
 					/* update vacation database */
 					//copy ($empty_db_file, $db_file);
@@ -84,7 +84,7 @@ switch($task)
 				}
 				else {
 					/* update .forward file */
-					excludeVacation ($forward_file, $account['username']);
+					excludeVacation ($forward_file, $account['username'], $account['email']);
 					if(file_exists($vacation_file)) unlink($vacation_file);
 					if(file_exists($db_file)) unlink($db_file);
 				}
