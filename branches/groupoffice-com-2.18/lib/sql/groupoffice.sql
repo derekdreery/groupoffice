@@ -15,6 +15,17 @@
 -- 
 -- Tabel structuur voor tabel `acl`
 -- 
+DROP TABLE IF EXISTS `reminders`;
+CREATE TABLE `reminders` (
+  `id` int(11) NOT NULL,
+  `link_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `time` int(11) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `link_id` (`link_id`)
+) TYPE=MyISAM;
 
 DROP TABLE IF EXISTS `acl`;
 CREATE TABLE `acl` (
