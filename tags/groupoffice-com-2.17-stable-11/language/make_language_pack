@@ -1,0 +1,16 @@
+#!/bin/sh
+cd ..
+find . -name "$1.inc" | xargs tar -cvf GO-LANG-$1.tar
+tar uvf GO-LANG-$1.tar ./controls/jscalendar/lang/calendar-$1.js
+tar uvf GO-LANG-$1.tar ./controls/FCKeditor/editor/lang/$1.js
+tar uvf GO-LANG-$1.tar ./controls/htmlarea/lang/$1.js
+tar uvf GO-LANG-$1.tar ./controls/htmlarea/plugins/ContextMenu/lang/$1.js
+tar uvf GO-LANG-$1.tar ./controls/htmlarea/plugins/CSS/lang/$1.js
+tar uvf GO-LANG-$1.tar ./controls/htmlarea/plugins/FullPage/lang/$1.js
+tar uvf GO-LANG-$1.tar ./controls/htmlarea/plugins/ImageManager/lang/$1.js
+tar uvf GO-LANG-$1.tar ./controls/htmlarea/plugins/SpellChecker/lang/$1.js
+tar uvf GO-LANG-$1.tar ./controls/htmlarea/plugins/TableOperations/lang/$1.js
+tar uvf GO-LANG-$1.tar ./language/languages.inc
+tar uvf GO-LANG-$1.tar ./language/holidays.inc
+tar uvf GO-LANG-$1.tar ./language/make_language_pack
+gzip -f GO-LANG-$1.tar
