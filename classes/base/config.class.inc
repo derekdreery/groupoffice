@@ -50,7 +50,7 @@ class GO_CONFIG
    * @var     string
    * @access  public
    */
-  var $version = '2.17';
+  var $version = '2.18';
   
   /**
    * The Group-Office database version number
@@ -58,7 +58,7 @@ class GO_CONFIG
    * @var     string
    * @access  public
    */
-  var $db_version = '223';
+  var $db_version = '224';
 
 	/**
    * The Group-Office release number

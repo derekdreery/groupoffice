@@ -165,6 +165,7 @@ class autocomplete extends html_element
 	{
 		$this->lookup_url=$lookup_url;
 		$this->hidden_input = new input('hidden', $input_name, $input_value, false);
+		$this->text_input->set_attribute('onchange', "document.forms['".$this->form_name."'].elements['".$input_name."'].value=''");
 	}
 	
 

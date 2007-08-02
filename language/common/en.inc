@@ -399,4 +399,7 @@ $strDays='Days';
 $strWeek='Week';
 $strWeeks='Weeks';
 
+$strStartTime = 'Start time';
+$strAddReminder = 'Add reminder';
+
 

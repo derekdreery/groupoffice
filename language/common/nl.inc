@@ -297,3 +297,18 @@ $jupload_text='Selecteer de bestanden van uw computer en klik op \'Upload\'.';
 $jupload_max_size='Maximale afmetingen';
 $jupload_width='breedte';
 $jupload_height='hoogte';
+
+
+$strReminder = 'Herinnering';
+
+$strMin='minuut';
+$strMins='minuten';
+$strHours='uren';
+$strHour='uur';
+$strDay='dag';
+$strDays='dagen';
+$strWeek='week';
+$strWeeks='weken';
+
+$strStartTime = 'Starttijd';
+$strAddReminder = 'Herinnering toevoegen';
