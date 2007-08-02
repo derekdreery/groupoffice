@@ -387,3 +387,16 @@ $jupload_text='Select the files from your computer and click at \'Upload\'.';
 $jupload_max_size='Maximum size';
 $jupload_width='width';
 $jupload_height='height';
+
+$strReminder = 'Reminder';
+
+$strMin='Minute';
+$strMins='Minutes';
+$strHours='Hours';
+$strHour='Hour';
+$strDay='Day';
+$strDays='Days';
+$strWeek='Week';
+$strWeeks='Weeks';
+
+

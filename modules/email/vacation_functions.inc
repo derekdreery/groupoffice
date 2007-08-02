@@ -7,9 +7,9 @@
  * @return
  *   The line to be appended to the .forward file.
  */
-function genForwardDef($username)
+function genForwardDef($username, $email)
 {
-	return '\\'.$username.', "|/usr/bin/vacation '.$username.'"'."\n";
+	return '\\'.$username.', "|/usr/bin/vacation -a '.$email.' '.$username.'"'."\n";
 }
 
 /**
@@ -20,9 +20,9 @@ function genForwardDef($username)
  * @return
  *   The line to be appended to the .forward file.
  */
-function genForwardExim($username)
+function genForwardExim($username, $email)
 {
-	return 'unseen pipe "/usr/bin/vacation '.$username.'"'."\n";
+	return 'unseen pipe "/usr/bin/vacation -a '.$email.' '.$username.'"'."\n";
 }
 
 /**
@@ -35,7 +35,7 @@ function genForwardExim($username)
  * @note
  *   This function is not implemented yet!
  */
-function genForwardSieve($username)
+function genForwardSieve($username, $email)
 {
 	return '# no support for Sieve filters yet';
 }
@@ -51,16 +51,16 @@ function genForwardSieve($username)
  * @return
  *   The line to be appended to the .forward file.
  */
-function getVacation($lines, $username)
+function getVacation($lines, $username, $email)
 {
 	if (count ($lines) > 0 && $lines[0] == "# Exim filter\n") {
-		return genForwardExim ($username);
+		return genForwardExim ($username, $email);
 	}
 	else if (count ($lines) > 0 && $lines[0] == "# Sieve filter\n") {
-		return genForwardSieve ($username);
+		return genForwardSieve ($username, $email);
 	}
 	else {
-		return genForwardDef ($username);
+		return genForwardDef ($username, $email);
 	}
 }
 
@@ -130,14 +130,14 @@ function appendFile($filename, $contents)
  *   exists. You should use excludeVacation() before calling this
  *   function to avoid duplicate lines.
  */
-function includeVacation($filename, $username)
+function includeVacation($filename, $username, $email)
 {
 	if (!file_exists ($filename)) {
-		$vacation = genForwardDef ($username);
+		$vacation = genForwardDef ($username, $email);
 	}
 	else {
 		$lines = file($filename);
-		$vacation = getVacation ($lines, $username);
+		$vacation = getVacation ($lines, $username, $email);
 	}
 
 	appendFile ($filename, $vacation);
@@ -153,7 +153,7 @@ function includeVacation($filename, $username)
  *   If the user has put a line identical to the vacation rule by herself,
  *   it is also removed as the line(s) are found by string matching.
  */
-function excludeVacation($filename, $username)
+function excludeVacation($filename, $username, $email)
 {
 
 	if (!file_exists ($filename))
@@ -162,7 +162,7 @@ function excludeVacation($filename, $username)
 	if ($lines === false)
 		return;
 
-	echo $vacation = getVacation ($lines, $username);
+	$vacation = getVacation ($lines, $username, $email);
 
 	$result = "";
 	foreach ($lines as $line) {

@@ -125,7 +125,7 @@ class autocomplete extends html_element
 								$header .= 'document.forms["'.$this->form_name.'"].elements["'.$form_field.'"].value='.
 									'args[2]['.$count.'];';
 							}else {
-								$header .= 'if(document.forms["'.$this->form_name.'"].elements["'.$form_field.'"].value=="")'.
+								$header .= 'if(document.forms["'.$this->form_name.'"].elements["'.$form_field.'"].value=="" || document.forms["'.$this->form_name.'"].elements["'.$form_field.'"].value=="0")'.
 								'{document.forms["'.$this->form_name.'"].elements["'.$form_field.'"].value=args[2]['.$count.'];}';
 							}
 						}
