@@ -71,10 +71,21 @@ $menu = new button_menu();
 
 if(!is_dir($fv->path))
 {
-	$menu->add_button(
-	'upload',
-	$fs_download,
-	'download.php?mode=download&path='.$urlencoded_path);
+	$gota_supported = file_exists($GO_MODULES->modules['filesystem']['path'].'jnlp.php');
+	$fs_settings = $fs->get_settings($GO_SECURITY->user_id);
+	if($fs_settings['use_gota']=='1' && $gota_supported)
+	{
+		$menu->add_button(
+			'upload',
+			$fs_download,
+			'jnlp.php?path='.$urlencoded_path);
+	}else
+	{
+		$menu->add_button(
+			'upload',
+			$fs_download,
+			'download.php?mode=download&path='.$urlencoded_path);
+	}
 
 	if($fs->is_viewable_in_browser($fv->path))
 	{

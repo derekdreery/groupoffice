@@ -1,5 +1,9 @@
 <?php
-$updates[19] = array();
+$updates[20] = array();
+
+$updates[19][] = "ALTER TABLE `fs_settings` ADD `use_gota` ENUM( '0', '1' ) NOT NULL ;";
+$updates[19][] = "UPDATE `fs_settings` SET `use_gota` = '1'";
+
 $updates[18] = array();
 
 $updates[17][] = "ALTER TABLE `fs_links` ADD `ctime` INT NOT NULL , ADD `mtime` INT NOT NULL ;";

@@ -141,6 +141,8 @@ class filesystem_list extends datatable
 			}
 			$this->add_row($row);
 		}
+		
+		$gota_supported = file_exists($GO_MODULES->modules['filesystem']['path'].'jnlp.php');
 
 		$total_size = 0;
 		foreach($files as $file)
@@ -165,15 +167,24 @@ class filesystem_list extends datatable
 						$GO_MODULES->modules['filesystem']['url'].'index.php?task=properties&path='.urlencode($file['path'])."';");	
 				}else
 				{
-					if($fs->is_viewable_in_browser($file['path']))
-					{
-						$row->set_attribute('ondblclick', "javascript:window.open('".
-							$GO_MODULES->modules['filesystem']['url'].'download.php?mode=inline&path='.urlencode($file['path'])."');");	
-					}else
+					if($fs_settings['use_gota']=='1' && $gota_supported)
 					{
 						$row->set_attribute('ondblclick', "javascript:window.location.href='".
-							$GO_MODULES->modules['filesystem']['url'].'download.php?mode=download&path='.urlencode($file['path'])."';");	
+							$GO_MODULES->modules['filesystem']['url'].'jnlp.php?path='.urlencode($file['path'])."';");
+					}else
+					{
+						if($fs->is_viewable_in_browser($file['path']))
+						{
+							$row->set_attribute('ondblclick', "javascript:window.open('".
+								$GO_MODULES->modules['filesystem']['url'].'download.php?mode=inline&path='.urlencode($file['path'])."');");	
+						}else
+						{
+							$row->set_attribute('ondblclick', "javascript:window.location.href='".
+								$GO_MODULES->modules['filesystem']['url'].'download.php?mode=download&path='.urlencode($file['path'])."';");	
+						}
 					}
+					
+					
 				}
 			}else
 			{
