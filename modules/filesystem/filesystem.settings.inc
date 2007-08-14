@@ -32,6 +32,7 @@ if($task == 'save_filesystem_settings')
 	$fs_settings['user_id']=$user_id; 
 	$fs_settings['notify'] =  isset($_POST['notify']) ? '1' : '0';	
 	$fs_settings['open_properties'] =  isset($_POST['open_properties']) ? '1' : '0';	
+	$fs_settings['use_gota'] =  isset($_POST['use_gota']) ? '1' : '0';
 	$fs->update_settings($fs_settings);
 }else
 {
@@ -44,5 +45,20 @@ $tabstrip->innerHTML .= '<br />';
 $cb = new checkbox('open_properties','open_properties','1', $fs_open_properties, $fs_settings['open_properties']);
 $tabstrip->add_html_element($cb);
 $tabstrip->innerHTML .= '<br />';
+
+
+$disabled = !file_exists($GO_MODULES->modules['filesystem']['path'].'jnlp.php');
+
+if($disabled)
+{
+	$input = new input('hidden','use_gota','1');
+	$tabstrip->add_html_element($input);
+}
+
+$cb = new checkbox('use_gota','use_gota','1', $fs_enable_gota, $fs_settings['use_gota'],$disabled);
+$tabstrip->add_html_element($cb);
+$tabstrip->innerHTML .= '<br />';
+
+
 
 $tabstrip->add_html_element(new button($cmdSave, "javascript:_save('save_filesystem_settings');"));

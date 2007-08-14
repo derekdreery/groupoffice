@@ -87,3 +87,7 @@ $fs_no_status_history='Geen status historie';
 $fs_no_status='Geen';
 $fs_file_updated='Bestamd %s gewijzigd';
 $fs_open_properties='Open eigenschappen wanneer er op een bestand dubbel geklikt wordt';
+
+$fs_enable_gota = 'Schakel de Group-Office Transfer Agent in. De Group-Office Transfer Agent is een klein Java programma dat bestanden in Group-Office opslaat wanneer u bestanden lokaal op uw computer bewerkt.';
+
+

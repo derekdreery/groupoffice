@@ -106,4 +106,7 @@ $fs_open_properties='Open properties window when a file is double clicked';
 
 $fs_file='File';
 
+$fs_enable_gota = 'Enable Group-Office Transfer Agent. The Group-Office Transfer Agent is a small Java program that saves files in Group-Office when you edit them locally. Group-Office Professional and Java 1.6 or higher is required on your computer.';
+
+
 $fs_help_url='http://docs.group-office.com/index.php?folder_id=49&file_id=220';
