@@ -9,6 +9,12 @@
  Free Software Foundation; either version 2 of the License, or (at your
  option) any later version.
  */
+ 
+//Server and client send the session ID in the URL
+if(isset($_REQUEST['sid']))
+{
+	session_id($_REQUEST['sid']);
+}
 
 require_once("../../Group-Office.php");
 //load file management class
