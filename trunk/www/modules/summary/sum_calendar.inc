@@ -18,6 +18,7 @@ if (isset ($GO_MODULES->modules['calendar']) && $GO_MODULES->modules['calendar']
 	 require_once($GO_MODULES->modules['calendar']['class_path'].'event.class.inc');
 	$cal = new calendar();
 	
+
 	
 	$em_table = new table();
 	$em_table->set_attribute('style', 'border:0px;margin-top:10px;');
@@ -80,7 +81,9 @@ if (isset ($GO_MODULES->modules['calendar']) && $GO_MODULES->modules['calendar']
 		$em_row->add_cell($em_cell);
 		$em_table->add_row($em_row);
 	}
+
 	$cell->add_html_element($em_table);
+
 	
 	
 	
@@ -140,7 +143,7 @@ if (isset ($GO_MODULES->modules['calendar']) && $GO_MODULES->modules['calendar']
 	$em_cell = new table_cell();
 	
 	
-
+	$show = false;
 	$timezone_offset = get_timezone_offset(mktime(0, 0, 0, $month, $day, $year))*3600;
 	//$interval_start_time = mktime(0, 0, 0, $month, $day, $year) - ($timezone_offset * 3600);
 	$interval_end_time = $tommorow_interval_start_time = mktime(0, 0, 0, $month, $day +	1, $year)-$timezone_offset;
@@ -168,7 +171,8 @@ if (isset ($GO_MODULES->modules['calendar']) && $GO_MODULES->modules['calendar']
         $cal2 = new calendar();
         if(count($events) > 0)
         {
-			$em_cell>add_html_element($h3);
+        	$show=true;
+			$em_cell->add_html_element($h3);
 			while ($event = array_shift($events)) {
 				$td_table = new table();
 				$td_row = new table_row();
@@ -185,9 +189,12 @@ if (isset ($GO_MODULES->modules['calendar']) && $GO_MODULES->modules['calendar']
 			}
         }
     }	
-    $em_row->add_cell($em_cell);
-    $em_table->add_row($em_row);
-    $cell->add_html_element($em_table);
+    if($show)
+    {
+	    $em_row->add_cell($em_cell);
+	    $em_table->add_row($em_row);
+	    $cell->add_html_element($em_table);
+	}
 }
 ?>
 <script type="text/javascript">

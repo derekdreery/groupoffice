@@ -12,6 +12,12 @@ TODO
 ?vacation autoreply with sudo instead of cronjob
 *SMTP server per e-mail account
 *Restrict SMTP servers for mailing lists
+-Make attachments in composer clickable
+
+2007/08/01 Version 2.17-stable-11
+-Out of office reply didn't work if e-mail mailbox was different then the e-mail
+ name.
+-404 error of base64.js
 
 2007/07/22 Version 2.17-stable-10
 -It was impossible to create an e-mail without a template in previous version
