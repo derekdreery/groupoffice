@@ -18,19 +18,19 @@ class go_ical extends calendar
 	var $events = array();
 	var $datetime_format = 'Ymd\THis';
 	var $date_format = 'Ymd';
-	
+
 	var $timezone_id = '';
-	
+
 	var $version;
-	
+
 	var $local_times;
-	
+
 	var $line_break="\n";
 
 	function go_ical($version='2.0', $local_times=false)
 	{
 		$this->db();
-		
+
 		$this->version = $version;
 		$this->local_times = $local_times;
 
@@ -38,24 +38,24 @@ class go_ical extends calendar
 			"VERSION:".$version.$this->line_break.
 			"PRODID:-//Intermesh//NONSGML Group-Office//EN".$this->line_break.
 			"CALSCALE:GREGORIAN".$this->line_break.
-			"METHOD:PUBLISH\r\n";
+			"METHOD:PUBLISH".$this->line_break;
 	}
-	
+
 	function export_calendar_header($with_timezones=true)
 	{
 		$str= "BEGIN:VCALENDAR".$this->line_break.
-				$this->calendar_properties;
-				
+		$this->calendar_properties;
+
 		if($this->version=='2.0' && $with_timezones)
 		{
-				$str .= $this->export_timezone();
+			$str .= $this->export_timezone();
 		}
 		return $str;
 	}
-	
+
 	function export_calendar_footer()
 	{
-		return "END:VCALENDAR\r\n";
+		return "END:VCALENDAR".$this->line_break;
 	}
 
 	function format_timezone($timezone)
@@ -67,7 +67,7 @@ class go_ical extends calendar
 				$timezone = '+0'.$timezone.'00';
 			}else
 			{
-				$timezone = '-0'.($timezone*-1).'00';				
+				$timezone = '-0'.($timezone*-1).'00';
 			}
 		}else
 		{
@@ -76,54 +76,54 @@ class go_ical extends calendar
 				$timezone = '+'.$timezone.'00';
 			}else
 			{
-				$timezone = '-'.$timezone.'00';				
+				$timezone = '-'.$timezone.'00';
 			}
 		}
-		
+
 		return $timezone;
 	}
 
 	function export_timezone()
 	{
 		global $GO_LANGUAGE;
-		
+
 		$this->timezone_id = $GO_LANGUAGE->language['description'];
-		
+
 		$timezone =	"BEGIN:VTIMEZONE".$this->line_break.
 								"TZID:".$this->timezone_id.$this->line_break;
 								"LAST-MODIFIED:".date($this->date_format, get_time()).$this->line_break;
-							
-		$dst_tz_offset_from = $this->format_timezone($_SESSION['GO_SESSION']['timezone']);			
-		$dst_tz_offset_to = $this->format_timezone($_SESSION['GO_SESSION']['DST']+$_SESSION['GO_SESSION']['timezone']);		
-							
-		if($_SESSION['GO_SESSION']['DST'] > 0)
-		{		
-			$timezone .= 	"BEGIN:DAYLIGHT".$this->line_break.
+
+								$dst_tz_offset_from = $this->format_timezone($_SESSION['GO_SESSION']['timezone']);
+								$dst_tz_offset_to = $this->format_timezone($_SESSION['GO_SESSION']['DST']+$_SESSION['GO_SESSION']['timezone']);
+
+								if($_SESSION['GO_SESSION']['DST'] > 0)
+								{
+									$timezone .= 	"BEGIN:DAYLIGHT".$this->line_break.
 										"DTSTART:19700329T030000".$this->line_break.										
 										"TZOFFSETTO:".$dst_tz_offset_to.$this->line_break.
 										"TZOFFSETFROM:".$dst_tz_offset_from.$this->line_break.
 										"TZNAME:GMT".$dst_tz_offset_to.$this->line_break.
 										"RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=-1SU;BYMONTH=3".$this->line_break.
-										"END:DAYLIGHT\r\n";
-		}
-		
-		$timezone .=  "BEGIN:STANDARD".$this->line_break.
+										"END:DAYLIGHT".$this->line_break;
+								}
+
+								$timezone .=  "BEGIN:STANDARD".$this->line_break.
 									"TZOFFSETTO:".$dst_tz_offset_from.$this->line_break.
 									"TZOFFSETFROM:".$dst_tz_offset_to.$this->line_break.
 									"TZNAME:GMT".$dst_tz_offset_from.$this->line_break;
-			
-		if($_SESSION['GO_SESSION']['DST'] > 0)
-		{
-				$timezone .= 	"DTSTART:19701025T040000".$this->line_break.
-											"RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=-1SU;BYMONTH=10\r\n";
-		}else
-		{
-				$timezone .= "DTSTART:19700101T000000\r\n";
-		}
-		
-		$timezone .= 	"END:STANDARD".$this->line_break.
-									"END:VTIMEZONE\r\n";
-		return $timezone;
+
+									if($_SESSION['GO_SESSION']['DST'] > 0)
+									{
+										$timezone .= 	"DTSTART:19701025T040000".$this->line_break.
+											"RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=-1SU;BYMONTH=10".$this->line_break;
+									}else
+									{
+										$timezone .= "DTSTART:19700101T000000".$this->line_break;
+									}
+
+									$timezone .= 	"END:STANDARD".$this->line_break.
+									"END:VTIMEZONE".$this->line_break;
+									return $timezone;
 	}
 
 	function export_event($event_id, $with_timezones=true)
@@ -131,26 +131,26 @@ class go_ical extends calendar
 		$ics = $this->export_calendar_header($with_timezones);
 		$ics .= $this->convert_event($this->get_event($event_id));
 		$ics .= $this->export_calendar_footer();
-		
+
 		return $ics;
 	}
 
 	function export_calendar($calendar_id)
-	{		
+	{
 		$ics = $this->export_calendar_header();
-		
+
 		$cal = new calendar();
-		
+
 		$cal->get_events(false,true,false, $calendar_id);
 		while($cal->next_record())
 		{
 			$ics .= $this->convert_event($cal->Record);
 		}
-		
+
 		$ics .= $this->export_calendar_footer();
 		return $ics;
 	}
-	
+
 	function format_line($name_part, $value_part)
 	{
 		global $charset;
