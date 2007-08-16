@@ -114,45 +114,7 @@ if($reminder_count)
 }
 
 
-/*
-$remind_helpdesk=false;
-$popup_helpdesk=false;
-if (isset($GO_MODULES->modules['helpdesk']) && $GO_MODULES->modules['helpdesk']['read_permission'])
-{
-	$_SESSION['GO_SESSION']['helpdesk']['notified'] = isset($_SESSION['GO_SESSION']['helpdesk']['notified']) ? $_SESSION['GO_SESSION']['helpdesk']['notified'] : 0;
-	$_SESSION['GO_SESSION']['helpdesk']['count'] = 0;
 
-	require_once($GO_MODULES->modules['helpdesk']['class_path']."helpdesk.class.inc");
-	$helpdesk = new helpdesk();
-
-	$hd_settings = $helpdesk->get_settings($GO_SECURITY->user_id);
-
-	$statuses = explode(',',$hd_settings['statuses']);
-	$types = explode(',',$hd_settings['types']);
-	
-	$_SESSION['GO_SESSION']['helpdesk']['count'] = $helpdesk->get_tickets(0, 0, 'id', 'ASC', $statuses, $types);
-
-	if ($_SESSION['GO_SESSION']['helpdesk']['count'] > 0 && $_SESSION['GO_SESSION']['helpdesk']['count'] > $_SESSION['GO_SESSION']['helpdesk']['notified'])
-	{	
-		if($hd_settings['beep']=='1')
-		{			
-			$beep = true;
-		}
-			$height += 120;
-		
-		if($hd_settings['popup']=='1')
-		{
-			$popup=true;
-		}else
-		{
-			$_SESSION['GO_SESSION']['email_module']['notified']=$_SESSION['GO_SESSION']['helpdesk']['count'];
-		}
-	}elseif($_SESSION['GO_SESSION']['email_module']['new'] < $_SESSION['GO_SESSION']['email_module']['notified'])
-	{
-		$_SESSION['GO_SESSION']['email_module']['notified']=	$_SESSION['GO_SESSION']['email_module']['new'];		
-	}
-}
-*/
 if ($reminder_count || ($popup && isset($_REQUEST['initiated'])))
 {
 	if($height > 600) $height = 600;
@@ -188,7 +150,7 @@ if (isset($GO_MODULES->modules['email']) && $GO_MODULES->modules['email']['read_
 	echo '<a href="'.$GO_MODULES->modules['email']['url'].'" target="main"><img src="'.$GO_THEME->images['mail'].'" border="0" align="absmiddle" /> '.$_SESSION['GO_SESSION']['email_module']['new'].'</a>';
 }
 
-if($beep && !$popup)// && isset($_REQUEST['initiated']))
+if($beep && !$popup && isset($_REQUEST['initiated']))
 {
 
 
