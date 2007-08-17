@@ -94,7 +94,7 @@ class email_autocomplete extends html_element
 					
 
 					oAutoComp = new YAHOO.widget.AutoComplete("'.$this->text_input->attributes['id'].'","'.$this->container->attributes['id'].'", oACDS);
-					oAutoComp.queryDelay=0;
+					oAutoComp.queryDelay=0.5;
 					oAutoComp.autoHighlight = true;
 					oAutoComp.delimChar=",";
 					oAutoComp.useIFrame=true;
@@ -130,7 +130,7 @@ class email_autocomplete extends html_element
 	
 		$this->text_input = new textarea($text_name,$text_value);		
 		$this->text_input->set_attribute('onfocus', 'this.select();');
-		$this->text_input->set_attribute('onchange', 'YAHOO.'.$this->attributes['id'].'.ACXml.changed();');
+		//$this->text_input->set_attribute('onchange', 'YAHOO.'.$this->attributes['id'].'.ACXml.changed();');
 		$this->text_input->set_attribute('id',$id.'_text_input');
 		$this->text_input->set_attribute('class','autocomplete_input');
 
