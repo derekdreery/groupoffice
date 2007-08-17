@@ -30,7 +30,7 @@ $ab = new addressbook();
 
 
 $task = isset ($_REQUEST['task']) ? $_REQUEST['task'] : '';
-$return_to = (isset ($_REQUEST['return_to']) && $_REQUEST['return_to'] != '') ? $_REQUEST['return_to'] : '';
+$return_to = (isset ($_REQUEST['return_to']) && $_REQUEST['return_to'] != '') ? $_REQUEST['return_to'] : $_SERVER['HTTP_REFERER'];
 $link_back = (isset ($_REQUEST['link_back']) && $_REQUEST['link_back'] != '') ? $_REQUEST['link_back'] : $_SERVER['REQUEST_URI'];
 $contact_id = isset ($_REQUEST['contact_id']) ? smart_addslashes($_REQUEST['contact_id']) : '0';
 $vcf_file = isset ($_REQUEST['vcf_file']) ? smart_addslashes($_REQUEST['vcf_file']) : '';

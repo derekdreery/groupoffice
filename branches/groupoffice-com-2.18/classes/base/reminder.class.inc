@@ -63,6 +63,24 @@ class reminder extends db
 		return $this->query("DELETE FROM reminders WHERE user_id=$user_id");
 	}
 	
+	/**
+	* Gets a reminder record by a link ID
+	*
+	* @param Int $link_id ID of the reminder
+	*
+	* @access public
+	* @return Array Record properties
+	*/
+	
+	function get_reminder_by_link_id($user_id, $link_id)
+	{
+		$this->query("SELECT * FROM reminders WHERE user_id=$user_id AND link_id=$link_id");
+		if($this->next_record())
+		{
+			return $this->Record;
+		}
+		return false;
+	}
 	
 	/**
 	* Gets a reminder record

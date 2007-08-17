@@ -87,7 +87,7 @@ if ($reminder_id > 0)
 	$reminder = $helpdesk->get_reminder($reminder_id);
 }else
 {
-	$reminder['name']=isset($_POST['name']) ? smart_stripslashes(trim($_POST['name']))  : '';
+	$reminder['name']=isset($_REQUEST['name']) ? smart_stripslashes(trim($_REQUEST['name']))  : '';
 	
 	$date = getdate();
 	

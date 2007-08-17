@@ -148,7 +148,7 @@ class autocomplete extends html_element
 					id = document.forms["'.$this->form_name.'"].elements["'.$this->hidden_input->attributes['name'].'"].value;
 					if(id>0)
 					{
-						document.location="'.$this->lookup_url.'"+id;
+						document.location="'.$this->lookup_url.'"+id+"&return_to='.urlencode($this->return_to).'";
 					}
 				}
 			';
@@ -161,8 +161,9 @@ class autocomplete extends html_element
 		return $header;
 	}
 	
-	function add_bound_hidden_value($input_name, $input_value, $lookup_url='')
+	function add_bound_hidden_value($input_name, $input_value, $lookup_url='', $return_to='')
 	{
+		$this->return_to=$return_to;
 		$this->lookup_url=$lookup_url;
 		$this->hidden_input = new input('hidden', $input_name, $input_value, false);
 		$this->text_input->set_attribute('onchange', "document.forms['".$this->form_name."'].elements['".$input_name."'].value=''");
