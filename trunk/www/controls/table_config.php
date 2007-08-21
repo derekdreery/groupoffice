@@ -26,6 +26,7 @@ $task = isset($_POST['task']) ? $_POST['task'] : '';
 if($task == 'save')
 {
 	//$fields = isset($_POST['fields']) ? $_POST['fields'] : array();
+	$fields=array();
 	foreach($_POST['fields'] as $key=>$sort_order)
 	{
 		if($sort_order>0)
