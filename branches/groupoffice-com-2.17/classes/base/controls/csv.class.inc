@@ -40,7 +40,13 @@ class csv
 	
 	function add_record($values)
 	{
-		$this->csv .= $this->encapsulator.implode($this->encapsulator.$this->delimiter.$this->encapsulator, $values).$this->encapsulator."\n";
+		$escaped_values = array();
+		foreach($values as $value)
+		{
+			$escaped_values[]=str_replace($this->encapsulator, $this->encapsulator.$this->encapsulator, $value);
+		}
+
+		$this->csv .= $this->encapsulator.implode($this->encapsulator.$this->delimiter.$this->encapsulator, $escaped_values).$this->encapsulator."\n";
 	}
 	
 	function get_csv()
