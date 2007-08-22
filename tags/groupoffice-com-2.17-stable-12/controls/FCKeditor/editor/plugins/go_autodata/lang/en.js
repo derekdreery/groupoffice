@@ -1,0 +1,1 @@
+FCKLang.AutodataLabel			= 'Autodata' ;
