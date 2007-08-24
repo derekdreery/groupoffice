@@ -224,6 +224,7 @@ function text_to_xml ($xml_text) {
 		xml_get_current_line_number($xml_parser));		
   	go_log(LOG_DEBUG, sprintf($error));
   	go_log(LOG_DEBUG, "XML: ".$xml_text);
+  	
     die($error);
   }
   

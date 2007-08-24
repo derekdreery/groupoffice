@@ -41,7 +41,7 @@ if ($write_permission) {
 	$menu->add_button('upload', $fbUpload, $_SERVER['PHP_SELF'].'?task=upload&path='.$urlencoded_path);
 	$menu->add_button('delete_big', $fbDelete, $fv->fsl->get_delete_handler());
 }
-$menu->add_button('cut', $fbCut, "javascript:cut_items('".htmlspecialchars(addslashes($fbNoSelect))."');");
+$menu->add_button('cut', $fs_move, "javascript:cut_items('".htmlspecialchars(addslashes($fbNoSelect))."');");
 $menu->add_button('copy', $fbCopy, "javascript:copy_items('".htmlspecialchars(addslashes($fbNoSelect))."');");
 
 if ($write_permission) {

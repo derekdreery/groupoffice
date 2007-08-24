@@ -2,7 +2,9 @@
 require('../../Group-Office.php');
 
 $GO_SECURITY->authenticate();
+require_once ($GO_CONFIG->class_path."mail/RFC822.class.inc");
 
+$RFC822 = new RFC822();
 /*
 header('Content-Type: text/xml; charset: UTF-8');
 // create a new XML document
@@ -48,10 +50,15 @@ $GO_USERS->search('%'.smart_addslashes($_REQUEST['query']).'%','name',$GO_SECURI
 
 while($GO_USERS->next_record(MYSQL_ASSOC))
 {
+	
+	$name = format_name($GO_USERS->f('last_name'),$GO_USERS->f('first_name'),$GO_USERS->f('middle_name'),'first_name');
+	$rfc_email = $RFC822->write_address($name, $GO_USERS->f('email'));
+		
 	$salutation = $GO_USERS->f('middle_name')=='' ? $GO_USERS->f('last_name') : $GO_USERS->f('middle_name').' '.$GO_USERS->f('last_name');
 	echo '<user><id>'.$GO_USERS->f('id').'</id>'.
 	'<salutation>'.htmlspecialchars($sir_madam[$GO_USERS->f('sex')].' '.$salutation).'</salutation>'.
-	'<name>'.htmlspecialchars(format_name($GO_USERS->f('last_name'), $GO_USERS->f('first_name'),$GO_USERS->f('middle_name'),'first_name')).'</name>';
+	'<name>'.htmlspecialchars($name).'</name>'.
+	'<full_email>'.htmlspecialchars($rfc_email).'</full_email>';
 	
 	
 	foreach($GO_USERS->Record as $key=>$value)

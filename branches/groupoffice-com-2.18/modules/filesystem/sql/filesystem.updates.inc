@@ -1,6 +1,7 @@
 <?php
 $updates[20] = array();
 
+$updates[19][] = "ALTER TABLE `fs_settings` ADD `show_files_on_summary` ENUM( '0', '1' ) NOT NULL ;";
 $updates[19][] = "ALTER TABLE `fs_settings` ADD `use_gota` ENUM( '0', '1' ) NOT NULL ;";
 $updates[19][] = "UPDATE `fs_settings` SET `use_gota` = '1'";
 

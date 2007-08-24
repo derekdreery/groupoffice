@@ -75,7 +75,7 @@ class csv
 			$this->add_record($record);
 		}
 		
-		if($table->autosort)
+		if(isset($table->autosort) && $table->autosort)
 		{
 			if($table->sort_ascending)
 			{

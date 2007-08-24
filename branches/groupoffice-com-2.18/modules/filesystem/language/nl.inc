@@ -90,4 +90,8 @@ $fs_open_properties='Open eigenschappen wanneer er op een bestand dubbel geklikt
 
 $fs_enable_gota = 'Schakel de Group-Office Transfer Agent in. De Group-Office Transfer Agent is een klein Java programma dat bestanden in Group-Office opslaat wanneer u bestanden lokaal op uw computer bewerkt.';
 
+$fs_show_files_on_summary = 'Toon de 10 laatst gewijzigde bestanden in de samenvatting';
 
+$fs_recursion='U kan mappen niet naar zichzelf kopiëren of verplaatsen';
+$fs_select_destination = 'Selecteer de map van bestemming';
+$fs_move = 'Verplaatsen';

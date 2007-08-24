@@ -37,7 +37,9 @@ DROP TABLE IF EXISTS `fs_settings`;
 CREATE TABLE `fs_settings` (
   `user_id` int(11) NOT NULL default '0',
   `notify` enum('0','1') NOT NULL default '0',
-  `open_properties` enum('0','1') NOT NULL,
+  `open_properties` enum('0','1') NOT NULL default '0',
+  `use_gota` enum('0','1') NOT NULL,
+  `show_files_on_summary` enum('0','1') NOT NULL,
   PRIMARY KEY  (`user_id`)
 ) TYPE=MyISAM;
 
