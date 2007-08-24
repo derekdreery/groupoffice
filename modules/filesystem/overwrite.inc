@@ -10,20 +10,12 @@ Free Software Foundation; either version 2 of the License, or (at your
 option) any later version.
 */
 
-if ($task == 'overwrite')
-{
-	$task = 'paste';
-}
 
-$form->add_html_element(new input('hidden', 'task', $task, false));
+//$form->add_html_element(new input('hidden', 'task', $task, false));
 $form->add_html_element(new input('hidden', 'overwrite_destination_path', $overwrite_destination_path, false));
-$form->add_html_element(new input('hidden', 'overwrite_source_path', $overwrite_source_path, false));
 $form->add_html_element(new input('hidden', 'overwrite', ' false', false));
 $form->add_html_element(new input('hidden', 'overwrite_all', ' false', false));
-if(isset( $_REQUEST['return_to']))
-{
-	$form->add_html_element(new input('hidden', 'return_to', $_REQUEST['return_to'], false));
-}
+$form->add_html_element(new input('hidden', 'path', $ftv->path));
 
 
 $p = new html_element('h2');
@@ -39,8 +31,8 @@ $form->add_html_element(new html_element('p', $strOverwritePrefix."'".basename($
 $form->add_html_element(new button($cmdOk,'javascript:overwrite_file(true);'));
 $form->add_html_element(new button($cmdCancel,'javascript:overwrite_file(false);'));
 $form->add_html_element(new button($cmdYesToAll,'javascript:overwrite_all_files();'));
-?>
 
+$form->innerHTML .= '
 
 <script type="text/javascript" language="javascript">
 function overwrite_file(overwrite)
@@ -58,4 +50,4 @@ function overwrite_all_files()
 	document.forms[0].overwrite.value = "true";
 	document.forms[0].submit();
 }
-</script>
+</script>';

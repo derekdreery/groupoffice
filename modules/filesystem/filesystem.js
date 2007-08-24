@@ -46,6 +46,7 @@ function cut_items(no_select)
 
 	if (count > 0)
 	{
+		document.forms[0].action = 'select_destination.php';
 		document.forms[0].task.value = 'cut';
 		document.forms[0].submit();
 	}else
@@ -70,6 +71,7 @@ function copy_items(no_select)
 
 	if (count > 0)
 	{
+		document.forms[0].action = 'select_destination.php';
 		document.forms[0].task.value = 'copy';
 		document.forms[0].submit();
 	}else

@@ -33,6 +33,7 @@ if($task == 'save_filesystem_settings')
 	$fs_settings['notify'] =  isset($_POST['notify']) ? '1' : '0';	
 	$fs_settings['open_properties'] =  isset($_POST['open_properties']) ? '1' : '0';	
 	$fs_settings['use_gota'] =  isset($_POST['use_gota']) ? '1' : '0';
+	$fs_settings['show_files_on_summary'] =  isset($_POST['show_files_on_summary']) ? '1' : '0';
 	$fs->update_settings($fs_settings);
 }else
 {
@@ -43,6 +44,10 @@ $cb = new checkbox('notify','notify','1', $fs_notify, $fs_settings['notify']);
 $tabstrip->add_html_element($cb);
 $tabstrip->innerHTML .= '<br />';
 $cb = new checkbox('open_properties','open_properties','1', $fs_open_properties, $fs_settings['open_properties']);
+$tabstrip->add_html_element($cb);
+$tabstrip->innerHTML .= '<br />';
+
+$cb = new checkbox('show_files_on_summary','show_files_on_summary','1', $fs_show_files_on_summary, $fs_settings['show_files_on_summary']);
 $tabstrip->add_html_element($cb);
 $tabstrip->innerHTML .= '<br />';
 

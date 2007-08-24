@@ -178,7 +178,7 @@ class filesystem extends db
 			return $this->Record;
 		}else
 		{
-			$this->query("INSERT INTO fs_settings (user_id) VALUES ('$user_id')");
+			$this->query("INSERT INTO fs_settings (user_id, use_gota) VALUES ('$user_id', '1')");
 			return $this->get_settings($user_id);
 		}
 	}
@@ -734,8 +734,9 @@ class filesystem extends db
 		$source_dir_count = count(explode('/',$source_path));
 		$destination_dir_count = count(explode('/',$destination_path));
 
-		if ((strpos($destination_path, $source_path) === 0) && ($destination_dir_count > $source_dir_count))
+		if ((strpos($destination_path, $source_path.'/') === 0) && ($destination_dir_count > $source_dir_count))
 		{
+			$this->action_result='recursion';
 			return false;
 		}elseif($source_path == $destination_path)
 		{
@@ -851,7 +852,7 @@ class filesystem extends db
 		}elseif (strpos($destination_path, $source_path) === 0)
 		{//do not copy into own path
 			// TODO add translation
-			$this->action_result = "source and destination path are the same";
+			$this->action_result = "recursion";
 			return false;
 		}else
 		{

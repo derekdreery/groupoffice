@@ -21,7 +21,7 @@ class filesystem_treeview extends html_element
 	var $change_folder;
 	var $treeview;
 	
-	function filesystem_treeview($id, $path, $return_zero=false, $form_name='forms[0]')
+	function filesystem_treeview($id, $path, $return_zero=false, $form_name='0')
 	{
 		global $GO_USERS, $GO_SECURITY, $GO_CONFIG, $GO_MODULES;
 		
