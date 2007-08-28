@@ -162,9 +162,9 @@ CalendarGrid.prototype = {
 				}
 				
 				
-				
+				/*
 				//set some handy values
-				if(i==0)
+				if(i==0 && day==0)
 				{
 					//snap on each row and column
 					var snap = row.getSize();
@@ -179,8 +179,24 @@ CalendarGrid.prototype = {
 					this.gridX = position[0];
 					this.gridY = position[1];
 				}				
+				*/
 			}
-		}		 
+		}
+
+		//set some handy values
+		
+		var FirstCol = Ext.get("day0_row0");
+		//snap on each row and column
+		var snap = FirstCol.getSize();		
+
+		this.snapX = snap['width'];
+		this.snapY = snap['height'];		
+		
+		//the start of the grid
+		var position = FirstCol.getXY();
+		this.gridX = position[0];
+		this.gridY = position[1];
+						 
 	},
 	
 	getRowIdByXY : function(x,y)
@@ -193,6 +209,10 @@ CalendarGrid.prototype = {
 	getRowNumberByY : function(y)
 	{
 		return (y-this.gridY)/this.snapY;	
+	},
+	getDayByX : function(x)
+	{
+		return Math.floor((x-this.gridX)/this.snapX);
 	},
 	startSelection : function (row){
 	
@@ -299,6 +319,11 @@ CalendarGrid.prototype = {
 			this.events[this.clickedDay]=Array();
 		}		
 		this.events[this.clickedDay].push(event);
+		
+		
+		//test
+		//var position = event.getXY();
+		//event.dom.innerHTML = "X:"+position[0]+" Y:"+position[1];	
 		
 		this.calculateEvents(this.clickedDay);		
 			
@@ -433,7 +458,7 @@ CalendarGrid.prototype = {
 				var eventSize = this.events[day][i].getSize();
 				var eventPosition = this.events[day][i].getXY();				
 				var rowId = this.getRowNumberByY(eventPosition[1]);
-				var eventRows=eventSize['height']/(this.snapY+1);
+				var eventRows=eventSize['height']/(this.snapY);
 				
 				var eventWidth = this.getEventWidth(
 					positions[this.events[day][i].id],
@@ -565,23 +590,28 @@ CalendarGrid.prototype = {
 		var x = this.snapPos(this.dragEventStartPos[0],mouseEventPos[0],this.snapX,this.days);
 		var y = this.snapPos(this.dragEventStartPos[1],mouseEventPos[1],this.snapY,48);
 
-		this.dragEvent.setXY([x, y]);		
+		this.dragEvent.setXY([x, y]);	
+		//this.dragEvent.dom.innerHTML = "X:"+x+" Y:"+y;	
 	
 	},	
 	onEventDragMouseUp : function (e){
 		
+		//unset the drag stuff
+		this.eventDragOverlay.hide();
 		
 		var newPos = this.dragEvent.getXY();
 		
-		var dayShift = (newPos[0]-this.dragEventStartPos[0])/this.snapX;
+		//floor the position because it can be anywhere in the column
+		//var newDay = Math.floor((newPos[0]-this.gridX-3)/this.snapX);
+		var newDay = this.getDayByX(newPos[0]-3);		
+		var originalDay = this.getDayByX(this.dragEventStartPos[0]);
 		
-		if(dayShift!=0)
+		
+		if(newDay!=originalDay)
 		{
 			//remove it from the original day's events
-			this.removeEventFromArray(this.clickedDay, this.dragEvent.id);
-			
-			//calc the new day
-			var newDay = this.clickedDay+dayShift;	
+			this.removeEventFromArray(originalDay, this.dragEvent.id);
+
 			
 			//add it to the new day's events
 			if(typeof(this.events[newDay])=='undefined')
@@ -591,15 +621,14 @@ CalendarGrid.prototype = {
 			this.events[newDay].push(this.dragEvent);
 			
 			//recalculate grid
-			this.calculateEvents(this.clickedDay);
+			this.calculateEvents(originalDay);
 			this.calculateEvents(newDay);
 		}else
 		{
-			this.calculateEvents(this.clickedDay);
+			this.calculateEvents(originalDay);
 		}
 		
-		//unset the drag stuff
-		this.eventDragOverlay.hide();
+		
 		this.dragEvent=false;
 	},
 	
