@@ -203,7 +203,26 @@ var linksGrid;
 					},
 					scope: Notes
 				});*/
-					Ext.get('dialog').load({url: 'note.php?note_id=0', scripts: true });
+				
+				var conn = new Ext.data.Connection();
+				conn.request({
+					url: 'action.php',
+					params: {task: 'add', selectedRows: Ext.encode(selectedRows)},
+					callback: function(options, success, response)
+					{
+						if(!success)
+						{
+							Ext.MessageBox.alert('Failed', response.result.errors);
+						}else
+						{
+							var reponseParams = Ext.util.JSON.decode(response.responseText);
+							Note.showDialog(reponseParams['note_id']);
+						}
+					},
+					scope: Notes
+				});
+					
+					
 				break;
 
 			}
