@@ -175,7 +175,7 @@ Note = function(){
 
 			name_field.focus(true);
 		},
-		showDialog : function ()
+
 
 		rowDoulbleClicked : function(search_grid, rowClicked, e) {
 

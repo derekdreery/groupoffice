@@ -12,7 +12,7 @@ if(!empty($GO_MODULES->id))
 */
 ?>
 <script src="<?php echo $GO_CONFIG->host; ?>ext/adapter/ext/ext-base.js" type="text/javascript"></script>
-<script src="<?php echo $GO_CONFIG->host; ?>ext/ext-all-debug.js" type="text/javascript"></script>
+<script src="<?php echo $GO_CONFIG->host; ?>ext/ext-all.js" type="text/javascript"></script>
 <script src="<?php echo $GO_CONFIG->host; ?>language/common/en.js" type="text/javascript"></script>
 <script type="text/javascript">
 var BaseHref = '<?php echo $GO_CONFIG->host; ?>';
