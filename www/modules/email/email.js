@@ -514,8 +514,8 @@ email = function(){
 
 			layout.add('center', new Ext.NestedLayoutPanel(innerLayout));
 
-
-			this.setAccount(account_id, folder_id, mailbox);
+			
+			
 
 			layout.restoreState();
 			layout.endUpdate();
@@ -526,11 +526,14 @@ email = function(){
 
 
 
-
-			// render the tree has to be done after grid loads. Don't know why but otherwise
-			// it doesn't load.
-			tree.render();
-			root.expand();
+			if(account_id>0)
+			{
+				this.setAccount(account_id, folder_id, mailbox);
+				// render the tree has to be done after grid loads. Don't know why but otherwise
+				// it doesn't load.
+				tree.render();
+				root.expand();
+			}
 		},
 
 		refresh : function()

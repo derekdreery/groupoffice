@@ -18,7 +18,16 @@ require_once($GO_LANGUAGE->get_language_file('email'));
 require_once ($GO_MODULES->class_path."email.class.inc");
 $email = new email();
 $account = $email->get_account(0);
-$mailbox = $email->get_folder($account['id'], 'INBOX');
+if($account)
+{
+	$mailbox = $email->get_folder($account['id'], 'INBOX');
+	
+	$account_id=$account['id'];
+	$mailbox_id=$mailbox['id'];
+}else {
+	$account_id=0;
+	$mailbox_id=0;
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -37,7 +46,7 @@ echo $GO_THEME->get_stylesheet('email');
 
 Ext.EventManager.onDocumentReady(
 function(){
-	email.init(<?php echo $account['id']; ?>, <?php echo $mailbox['id']; ?>, 'INBOX');
+	email.init(<?php echo $account_id; ?>, <?php echo $mailbox_id; ?>, 'INBOX');
 	
 }, email, true);
 </script>
