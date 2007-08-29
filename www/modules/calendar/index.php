@@ -61,16 +61,23 @@ width:100%;
 	background-color:#ffffcc;
 	position:absolute;
 	visibility:hidden;
-	z-index:10000;
+	z-index:1;
 	opacity: 0.4;
 }
 
-.event {
+.event-container {
 	position:absolute;
 	background-color:#ffffcc;
-	border:0px solid #666666;
+	border:1px solid #666666;
 	color:000;
-	z-index: 20000;#higher then selector!
+	z-index: 2;#higher then selector!
+}
+
+.event{
+background-color:#ffccc;
+
+width:100%;
+height:100%;
 }
 </style>
 </head>
@@ -95,6 +102,8 @@ CalendarGrid = function(container, config){
 	{
 		this.container = Ext.get(container);		
 	}
+	
+	this.container.unselectable();
 	
 	this.dragEvent=false;
 	
@@ -282,30 +291,27 @@ CalendarGrid.prototype = {
 		var eventId = Ext.id();
 		
 		var event = Ext.DomHelper.append(this.container,
-				{tag: 'div', id: eventId, class: "event", html: eventId }, true);
+				{tag: 'div', id: eventId, class: "event-container" }, true);
 				
 		var styles = this.selector.getStyles('width','height','top','left', 'z-index');
 		event.setStyle(styles);		
+		
+		
+		//var eventBody = Ext.DomHelper.append(event,
+		//	{tag: 'div', class: "event", html: eventId }, true);
+		
+			//eventBody.fitToParent(true);
 		
 		//var selectorSize = this.selector.getSize();
 		//var selectorPosition = this.selector.getXY();
 		//event.setWidth(width);
 				
-		var resizer = new Ext.Resizable(event, {
-		    handles: 's',
-		    //minWidth: event.getWidth(),
-		    minHeight: this.snapY,
-		    maxWidth: event.getWidth(),
-		    //maxHeight: this.snapY*48,
-		    heightIncrement: this.snapY,
-		    draggable: false,
-		    pinned: true
-		});
 		
-		resizer.on('resize', function(){this.calculateEvents(this.clickedDay);}, this);
 		
 		event.on('mousedown', function(e, eventEl) {
-				this.dragEvent=Ext.get(eventEl.id);
+			
+			//this.dragEvent= Ext.get(eventEl.parentNode);
+				this.dragEvent= Ext.get(eventEl);
 				this.dragEventStartPos=this.dragEvent.getXY();
 				
 				this.startEventDrag();
@@ -318,14 +324,55 @@ CalendarGrid.prototype = {
 		{
 			this.events[this.clickedDay]=Array();
 		}		
-		this.events[this.clickedDay].push(event);
+		
 		
 		
 		//test
 		//var position = event.getXY();
 		//event.dom.innerHTML = "X:"+position[0]+" Y:"+position[1];	
 		
+		//add it to the events of this day for calculation
+		this.events[this.clickedDay].push(event);
 		this.calculateEvents(this.clickedDay);		
+		
+		
+		this.newEvent = Ext.get(eventId);
+		
+		//get the name for the event
+		Ext.MessageBox.prompt('Name', 'Please enter the name:', function(btn, text){
+			
+			if(btn=='ok')
+			{
+				
+				
+				this.newEvent.dom.innerHTML = text;
+				
+				
+				var resizer = new Ext.Resizable(event, {
+				    handles: 's',
+				    //minWidth: event.getWidth(),
+				    minHeight: this.snapY,
+				    maxWidth: event.getWidth(),
+				    //maxHeight: this.snapY*48,
+				    heightIncrement: this.snapY,
+				    draggable: false,
+				    pinned: true
+				});
+				
+				resizer.on('resize', function(){this.calculateEvents(this.clickedDay);}, this);
+			}else
+			{
+				
+				
+				//remove it from the day's events
+				this.removeEventFromArray(this.clickedDay, this.newEvent.id);
+				this.newEvent.remove();
+				this.calculateEvents(this.clickedDay);
+			}
+			
+			
+		},this);
+	
 			
 	},
 	removeEventFromArray : function (day, event_id)
@@ -382,7 +429,7 @@ CalendarGrid.prototype = {
 					this.rows[rowId]=Array();
 				}
 					
-				
+				var rowY = rowPosition[1]-(this.snapY/2);
 	
 				//check how manu events are in the row area
 				for(var i=0;i<this.events[day].length;i++)
@@ -401,7 +448,7 @@ CalendarGrid.prototype = {
 					if((
 						rowPosition[0]+rowSize['width'])>eventPosition[0] && 
 						rowPosition[0]<eventPosition[0]+eventSize['width'] && 
-						rowPosition[1]<eventPosition[1]+eventSize['height'] && 
+						rowPosition[1]+rowSize['height']<eventPosition[1]+eventSize['height'] && 
 						rowPosition[1]+rowSize['height']>eventPosition[1])
 					{
 						
@@ -419,7 +466,7 @@ CalendarGrid.prototype = {
 							
 							//set the space occupied
 							eventRowId=rowId;
-							for(var n=rowPosition[1];n<=eventPosition[1]+eventSize['height'];n+=this.snapY)
+							for(var n=rowPosition[1];n<eventPosition[1]+eventSize['height']-2;n+=this.snapY)
 							{						
 								if(typeof(this.rows[eventRowId]) == 'undefined')
 								{
@@ -488,13 +535,13 @@ CalendarGrid.prototype = {
 			{
 				if(typeof(this.rows[startRowId+r][rowPosition])!='undefined')
 				{					
-					return eventWidth;
+					return eventWidth-3;
 				}
 			}
 			eventWidth+=posWidth;
 			rowPosition++;
 		}
-		return eventWidth;
+		return eventWidth-3;
 	},
 	
 	getOverlappingEvents : function(checkEvent, day, events){
@@ -589,8 +636,21 @@ CalendarGrid.prototype = {
 		
 		var x = this.snapPos(this.dragEventStartPos[0],mouseEventPos[0],this.snapX,this.days);
 		var y = this.snapPos(this.dragEventStartPos[1],mouseEventPos[1],this.snapY,48);
+		
+		var gridRight = this.gridX+this.days*this.snapX;
+		var gridBottom = this.gridY+48*this.snapY;
+		if(x<gridRight && x>this.gridX)
+		{
+			this.dragEvent.setX(x);
+		}
 
-		this.dragEvent.setXY([x, y]);	
+		
+		if(y<gridBottom && y>this.gridY)
+		{
+			this.dragEvent.setY(y);
+		}
+
+		//this.dragEvent.setXY([x, y]);	
 		//this.dragEvent.dom.innerHTML = "X:"+x+" Y:"+y;	
 	
 	},	
@@ -644,7 +704,7 @@ CalendarGrid.prototype = {
 		if(leftOver>m)
 		{
 			snaps++;
-		}			
+		}	
 		return oldPos+(snaps*snap);
 	},
 	
