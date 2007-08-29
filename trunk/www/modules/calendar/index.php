@@ -66,11 +66,13 @@ width:100%;
 }
 
 .event-container {
+padding:2px;
 	position:absolute;
 	background-color:#ffffcc;
 	border:1px solid #666666;
 	color:000;
 	z-index: 2;#higher then selector!
+	
 }
 
 .event{
@@ -375,6 +377,70 @@ CalendarGrid.prototype = {
 	
 			
 	},
+	
+	addEvent : function (name, day, startRow, endRow)
+	{
+		var eventId = Ext.id();
+		
+		var event = Ext.DomHelper.append(this.container,
+				{tag: 'div', id: eventId, class: "event-container", html: name }, true);
+				
+				
+		var startRowEl = Ext.get("day"+day+"_row"+startRow);
+		var endRowEl = Ext.get("day"+day+"_row"+endRow);
+		
+		var startRowPos = startRowEl.getXY();
+		var endRowPos = endRowEl.getXY();
+		
+		var height = endRowPos[1]+startRowPos[1]+this.snapY+3;
+		
+		event.setXY(startRowPos);
+		event.setSize(this.snapX-2, height);
+		
+		//var styles = {'width':this.snapX-3+'px', 'height': height+'px', 'z-index':'1', 'top': startRowPos[1]+'px', 'left':startRowPos[0]+'px' };
+
+		//event.setStyle(styles);		
+		
+		
+		event.on('mousedown', function(e, eventEl) {
+			
+			//this.dragEvent= Ext.get(eventEl.parentNode);
+				this.dragEvent= Ext.get(eventEl);
+				this.dragEventStartPos=this.dragEvent.getXY();
+				
+				this.startEventDrag();
+			}, this);
+			
+			
+		//add the event to the events array		
+		if(typeof(this.events[day])=='undefined')
+		{
+			this.events[day]=Array();
+		}		
+		
+		
+		//add it to the events of this day for calculation
+		this.events[day].push(event);
+		this.calculateEvents(day);		
+		
+		
+		var resizer = new Ext.Resizable(event, {
+				    handles: 's',
+				    //minWidth: event.getWidth(),
+				    minHeight: this.snapY,
+				    maxWidth: event.getWidth(),
+				    //maxHeight: this.snapY*48,
+				    heightIncrement: this.snapY,
+				    draggable: false,
+				    pinned: true
+				});
+			
+		resizer.on('resize', function(){this.calculateEvents(this.clickedDay);}, this);
+		
+		
+		
+		
+	},
 	removeEventFromArray : function (day, event_id)
 	{
 		for(var i=0;i<this.events[day].length;i++)
@@ -611,7 +677,13 @@ CalendarGrid.prototype = {
 	
 	startEventDrag : function(e) {
 	
-
+		//create the selection proxy
+		if(!this.selector)
+		{
+			this.selector = Ext.DomHelper.append(this.container,
+				{tag: 'div', id: Ext.id(), class: "selector"}, true);		
+		}
+		
 		//create an overlay to track the mousemovement
 		if(!this.eventDragOverlay){
 		    this.eventDragOverlay = this.selector.createProxy({tag: "div", cls: "x-resizable-overlay", html: "&#160;"});
@@ -727,9 +799,11 @@ CalendarGrid.prototype = {
 
 var CalendarGrid = new CalendarGrid('CalendarGrid', {days: 2});
 
-CalendarGrid.render();
+
 Ext.EventManager.onDocumentReady(function(){
+	CalendarGrid.render();
 	
+	CalendarGrid.addEvent('test','0','3','6');
 });
 </script>
 
