@@ -4,6 +4,9 @@ require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 $fs = new filesystem();
 $fs2 = new filesystem();
 
+$fs_settings = $fs->get_settings($GO_SECURITY->user_id);
+$gota_supported = file_exists($GO_MODULES->modules['filesystem']['path'].'jnlp.php');
+
 $datatable = new datatable('filesystem_links',false, $form_name);
 $datatable->set_attribute('style','margin-bottom:20px;');
 
@@ -66,11 +69,41 @@ if(count($links))
 		{
 			/*$row->set_attribute('ondblclick', "javascript:document.location='".
 				$GO_MODULES->modules['filesystem']['url'].'index.php?task=properties&path='.
-				urlencode($fs->f('path'))."&return_to=".urlencode($return_to)."';");*/
+				urlencode($fs->f('path'))."&return_to=".urlencode($return_to)."';");
 			
 			$row->set_attribute('ondblclick', "javascript:document.location='".
 				$GO_MODULES->modules['filesystem']['url'].'download.php?path='.
-				urlencode($fs->f('path'))."';");
+				urlencode($fs->f('path'))."';");*/
+			
+			
+					
+				if($fs_settings['open_properties']=='1' || eregi('htm', $extension) || eregi('eml', $extension))
+				{
+					$row->set_attribute('ondblclick', "javascript:window.location.href='".
+						$GO_MODULES->modules['filesystem']['url'].'index.php?task=properties&path='.urlencode($file['path'])."';");	
+				}else
+				{
+					if($fs_settings['use_gota']=='1' && $gota_supported)
+					{
+						$row->set_attribute('ondblclick', "javascript:window.location.href='".
+							$GO_MODULES->modules['filesystem']['url'].'jnlp.php?path='.urlencode($file['path'])."';");
+					}else
+					{
+						if($fs->is_viewable_in_browser($file['path']))
+						{
+							$row->set_attribute('ondblclick', "javascript:window.open('".
+								$GO_MODULES->modules['filesystem']['url'].'download.php?mode=inline&path='.urlencode($file['path'])."');");	
+						}else
+						{
+							$row->set_attribute('ondblclick', "javascript:window.location.href='".
+								$GO_MODULES->modules['filesystem']['url'].'download.php?mode=download&path='.urlencode($file['path'])."';");	
+						}
+					}
+					
+					
+				}
+
+			
 			
 			$extension = get_extension($filename);	
 			
