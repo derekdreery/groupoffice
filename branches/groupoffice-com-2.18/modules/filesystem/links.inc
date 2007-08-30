@@ -75,28 +75,28 @@ if(count($links))
 				$GO_MODULES->modules['filesystem']['url'].'download.php?path='.
 				urlencode($fs->f('path'))."';");*/
 			
-			
+		
 					
 				if($fs_settings['open_properties']=='1' || eregi('htm', $extension) || eregi('eml', $extension))
 				{
 					$row->set_attribute('ondblclick', "javascript:window.location.href='".
-						$GO_MODULES->modules['filesystem']['url'].'index.php?task=properties&path='.urlencode($file['path'])."';");	
+						$GO_MODULES->modules['filesystem']['url'].'index.php?task=properties&path='.urlencode($fs->f('path'))."';");	
 				}else
 				{
 					if($fs_settings['use_gota']=='1' && $gota_supported)
 					{
 						$row->set_attribute('ondblclick', "javascript:window.location.href='".
-							$GO_MODULES->modules['filesystem']['url'].'jnlp.php?path='.urlencode($file['path'])."';");
+							$GO_MODULES->modules['filesystem']['url'].'jnlp.php?path='.urlencode($fs->f('path'))."';");
 					}else
 					{
 						if($fs->is_viewable_in_browser($file['path']))
 						{
 							$row->set_attribute('ondblclick', "javascript:window.open('".
-								$GO_MODULES->modules['filesystem']['url'].'download.php?mode=inline&path='.urlencode($file['path'])."');");	
+								$GO_MODULES->modules['filesystem']['url'].'download.php?mode=inline&path='.urlencode($fs->f('path'))."');");	
 						}else
 						{
 							$row->set_attribute('ondblclick', "javascript:window.location.href='".
-								$GO_MODULES->modules['filesystem']['url'].'download.php?mode=download&path='.urlencode($file['path'])."';");	
+								$GO_MODULES->modules['filesystem']['url'].'download.php?mode=download&path='.urlencode($fs->f('path'))."';");	
 						}
 					}
 					
