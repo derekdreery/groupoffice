@@ -69,7 +69,7 @@ var linksGrid;
 				header: GOlang['strMtime'],
 				dataIndex: 'mtime'
 			}]);
-
+			
 			// by default columns are sortable
 			cm.defaultSortable = true;
 

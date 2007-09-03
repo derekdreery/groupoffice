@@ -91,7 +91,7 @@ height:100%;
 
 <script type="text/javascript">
 
-CalendarGrid = function(container, config){ 
+Ext.CalendarGrid = function(container, config){ 
 
 	Ext.apply(this, config);
 	
@@ -109,10 +109,36 @@ CalendarGrid = function(container, config){
 	
 	this.dragEvent=false;
 	
-	this.events=Array();
+	this.appointments=Array();
+	
+	
+	
+	
+	this.addEvents({
+        /**
+	     * @event click
+	     * Fires when this button is clicked
+	     * @param {Button} this
+	     * @param {EventObject} e The click event
+	     */
+	    "create" : true,
+        /**
+	     * @event toggle
+	     * Fires when the "pressed" state of this button changes (only if enableToggle = true)
+	     * @param {Button} this
+	     * @param {Boolean} pressed
+	     */
+	    "change" : true
+
+    });
+	
+	
+	
+	
+	Ext.CalendarGrid.superclass.constructor.call(this);
 }
 	
-CalendarGrid.prototype = {
+Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 
 
 	//build the html grid
@@ -193,6 +219,7 @@ CalendarGrid.prototype = {
 				*/
 			}
 		}
+		/*
 
 		//set some handy values
 		
@@ -208,6 +235,23 @@ CalendarGrid.prototype = {
 		this.gridX = position[0];
 		this.gridY = position[1];
 						 
+		*/
+	},
+	
+	getSnap : function()
+	{
+		var FirstCol = Ext.get("day0_row0");
+		//snap on each row and column
+		var snap = FirstCol.getSize();		
+
+		return [snap['width'],snap['height']];
+	},
+	
+	getGridXY : function()
+	{
+		var FirstCol = Ext.get("day0_row0");
+		
+		return FirstCol.getXY();		
 	},
 	
 	getRowIdByXY : function(x,y)
@@ -243,13 +287,13 @@ CalendarGrid.prototype = {
 			}
 		
 			//get position of the row the user clicked on
-			var startRow = Ext.get(row);
+			this.selectorStartRow = Ext.get(row);
 			
-			var position = startRow.getXY();
+			var position = this.selectorStartRow.getXY();
 			//add double border
-			position[0]+=3;
+			//position[0]+=3;
 			
-			var size=startRow.getSize();
+			var size=this.selectorStartRow.getSize();
 			
 			
 			//display the selector proxy
@@ -295,47 +339,23 @@ CalendarGrid.prototype = {
 		var event = Ext.DomHelper.append(this.container,
 				{tag: 'div', id: eventId, class: "event-container" }, true);
 				
-		var styles = this.selector.getStyles('width','height','top','left', 'z-index');
-		event.setStyle(styles);		
 		
-		
-		//var eventBody = Ext.DomHelper.append(event,
-		//	{tag: 'div', class: "event", html: eventId }, true);
-		
-			//eventBody.fitToParent(true);
-		
-		//var selectorSize = this.selector.getSize();
-		//var selectorPosition = this.selector.getXY();
-		//event.setWidth(width);
-				
-		
-		
-		event.on('mousedown', function(e, eventEl) {
-			
-			//this.dragEvent= Ext.get(eventEl.parentNode);
-				this.dragEvent= Ext.get(eventEl);
-				this.dragEventStartPos=this.dragEvent.getXY();
-				
-				this.startEventDrag();
-			}, this);
-		
+		var position = this.selectorStartRow.getXY();		
+		event.setXY(position);		
+		event.setSize(this.selector.getSize());
+
 		this.clearSelection();
 		
-		//add the event to the events array		
-		if(typeof(this.events[this.clickedDay])=='undefined')
+		//add the event to the appointments array		
+		if(typeof(this.appointments[this.clickedDay])=='undefined')
 		{
-			this.events[this.clickedDay]=Array();
+			this.appointments[this.clickedDay]=Array();
 		}		
 		
 		
-		
-		//test
-		//var position = event.getXY();
-		//event.dom.innerHTML = "X:"+position[0]+" Y:"+position[1];	
-		
-		//add it to the events of this day for calculation
-		this.events[this.clickedDay].push(event);
-		this.calculateEvents(this.clickedDay);		
+		//add it to the appointments of this day for calculation
+		this.appointments[this.clickedDay].push(event);
+		this.calculateappointments(this.clickedDay);		
 		
 		
 		this.newEvent = Ext.get(eventId);
@@ -361,15 +381,18 @@ CalendarGrid.prototype = {
 				    pinned: true
 				});
 				
-				resizer.on('resize', function(){this.calculateEvents(this.clickedDay);}, this);
+				resizer.on('resize', function(){this.calculateappointments(this.clickedDay);}, this);
+				
+				
+				this.fireEvent("create", this, false);
 			}else
 			{
 				
 				
-				//remove it from the day's events
+				//remove it from the day's appointments
 				this.removeEventFromArray(this.clickedDay, this.newEvent.id);
 				this.newEvent.remove();
-				this.calculateEvents(this.clickedDay);
+				this.calculateappointments(this.clickedDay);
 			}
 			
 			
@@ -406,22 +429,22 @@ CalendarGrid.prototype = {
 			
 			//this.dragEvent= Ext.get(eventEl.parentNode);
 				this.dragEvent= Ext.get(eventEl);
-				this.dragEventStartPos=this.dragEvent.getXY();
+				this.dragappointmentstartPos=this.dragEvent.getXY();
 				
 				this.startEventDrag();
 			}, this);
 			
 			
-		//add the event to the events array		
-		if(typeof(this.events[day])=='undefined')
+		//add the event to the appointments array		
+		if(typeof(this.appointments[day])=='undefined')
 		{
-			this.events[day]=Array();
+			this.appointments[day]=Array();
 		}		
 		
 		
-		//add it to the events of this day for calculation
-		this.events[day].push(event);
-		this.calculateEvents(day);		
+		//add it to the appointments of this day for calculation
+		this.appointments[day].push(event);
+		this.calculateappointments(day);		
 		
 		
 		var resizer = new Ext.Resizable(event, {
@@ -435,7 +458,7 @@ CalendarGrid.prototype = {
 				    pinned: true
 				});
 			
-		resizer.on('resize', function(){this.calculateEvents(this.clickedDay);}, this);
+		resizer.on('resize', function(){this.calculateappointments(this.clickedDay);}, this);
 		
 		
 		
@@ -443,21 +466,21 @@ CalendarGrid.prototype = {
 	},
 	removeEventFromArray : function (day, event_id)
 	{
-		for(var i=0;i<this.events[day].length;i++)
+		for(var i=0;i<this.appointments[day].length;i++)
 		{
-			if(this.events[day][i].id==event_id)
+			if(this.appointments[day][i].id==event_id)
 			{
-				return this.events[day].splice(i,1);				
+				return this.appointments[day].splice(i,1);				
 			}
 		}
 		return false;
 	},
 	
-	calculateEvents :  function (day)
+	calculateappointments :  function (day)
 	{
-		if(typeof(this.events[day])!='undefined')
+		if(typeof(this.appointments[day])!='undefined')
 		{
-			//determine the maximum events on one row
+			//determine the maximum appointments on one row
 			var maxPositions=0;
 			
 			//store overlaps per event in this array
@@ -467,8 +490,8 @@ CalendarGrid.prototype = {
 			
 			
 			
-			//sort the events on their start time (Y pos)
-			this.events[day].sort(function(a,b){
+			//sort the appointments on their start time (Y pos)
+			this.appointments[day].sort(function(a,b){
 				return a.getY()-b.getY();
 			});
 			
@@ -487,7 +510,7 @@ CalendarGrid.prototype = {
 				
 				if(rowId==0)
 				{
-					dayColumnLeft=rowPosition[0]+3;
+					dayColumnLeft=rowPosition[0]+1;
 				}
 				
 				if(typeof(this.rows[rowId]) == 'undefined')
@@ -497,11 +520,11 @@ CalendarGrid.prototype = {
 					
 				var rowY = rowPosition[1]-(this.snapY/2);
 	
-				//check how manu events are in the row area
-				for(var i=0;i<this.events[day].length;i++)
+				//check how manu appointments are in the row area
+				for(var i=0;i<this.appointments[day].length;i++)
 				{
-					var eventPosition = this.events[day][i].getXY();
-					var eventSize = this.events[day][i].getSize();
+					var eventPosition = this.appointments[day][i].getXY();
+					var appointmentsize = this.appointments[day][i].getSize();
 					
 					//new right side is right from existing left side and 
 					//new left side is left from existing right side
@@ -513,13 +536,13 @@ CalendarGrid.prototype = {
 					
 					if((
 						rowPosition[0]+rowSize['width'])>eventPosition[0] && 
-						rowPosition[0]<eventPosition[0]+eventSize['width'] && 
-						rowPosition[1]+rowSize['height']<eventPosition[1]+eventSize['height'] && 
+						rowPosition[0]<eventPosition[0]+appointmentsize['width'] && 
+						rowPosition[1]+rowSize['height']<eventPosition[1]+appointmentsize['height'] && 
 						rowPosition[1]+rowSize['height']>eventPosition[1])
 					{
 						
 						
-						if(typeof(positions[this.events[day][i].id])=='undefined')
+						if(typeof(positions[this.appointments[day][i].id])=='undefined')
 						{
 							//determine the event's position
 							var position=0;
@@ -532,26 +555,26 @@ CalendarGrid.prototype = {
 							
 							//set the space occupied
 							eventRowId=rowId;
-							for(var n=rowPosition[1];n<eventPosition[1]+eventSize['height']-2;n+=this.snapY)
+							for(var n=rowPosition[1];n<eventPosition[1]+appointmentsize['height']-2;n+=this.snapY)
 							{						
 								if(typeof(this.rows[eventRowId]) == 'undefined')
 								{
 									this.rows[eventRowId]=Array();
 								}
-								this.rows[eventRowId][position]=this.events[day][i].id;
+								this.rows[eventRowId][position]=this.appointments[day][i].id;
 								eventRowId++;
 							}
 							
-							this.rows[rowId][position]=this.events[day][i].id;
+							this.rows[rowId][position]=this.appointments[day][i].id;
 												
-							positions[this.events[day][i].id]=position;					
+							positions[this.appointments[day][i].id]=position;					
 						}											
 					}							
 				}
 				
 				
 				
-				//update the max events on row per day value	
+				//update the max appointments on row per day value	
 				if(position>maxPositions)
 				{
 					maxPositions=position;
@@ -559,32 +582,32 @@ CalendarGrid.prototype = {
 			
 							
 			}			
-			//we got the maximum number of events on one row now.
-			//we know for each events how many overlaps they have
+			//we got the maximum number of appointments on one row now.
+			//we know for each appointments how many overlaps they have
 			//we now need to know the widths of each event
 			
 			var posWidth = this.snapX/(maxPositions+1);
 			
-			for(var i=0;i<this.events[day].length;i++)
+			for(var i=0;i<this.appointments[day].length;i++)
 			{
 				
-				var eventSize = this.events[day][i].getSize();
-				var eventPosition = this.events[day][i].getXY();				
+				var appointmentsize = this.appointments[day][i].getSize();
+				var eventPosition = this.appointments[day][i].getXY();				
 				var rowId = this.getRowNumberByY(eventPosition[1]);
-				var eventRows=eventSize['height']/(this.snapY);
+				var eventRows=(appointmentsize['height']-2)/this.snapY;
 				
 				var eventWidth = this.getEventWidth(
-					positions[this.events[day][i].id],
+					positions[this.appointments[day][i].id],
 					maxPositions,
 					rowId,
 					eventRows,
 					posWidth);
 				
-				this.events[day][i].setWidth(eventWidth);
+				this.appointments[day][i].setWidth(eventWidth);
 				
-				var offset = positions[this.events[day][i].id]*posWidth;
-				this.events[day][i].setX(dayColumnLeft+offset);
-				//this.events[day][i].dom.innerHTML = 'New event';
+				var offset = positions[this.appointments[day][i].id]*posWidth;
+				this.appointments[day][i].setX(dayColumnLeft+offset);
+				//this.appointments[day][i].dom.innerHTML = 'New event';
 			}
 		}
 	},
@@ -610,30 +633,30 @@ CalendarGrid.prototype = {
 		return eventWidth-3;
 	},
 	
-	getOverlappingEvents : function(checkEvent, day, events){
+	getOverlappingappointments : function(checkEvent, day, appointments){
 			
-		if(typeof(events)=='undefined')
+		if(typeof(appointments)=='undefined')
 		{
-			var events = Array();
+			var appointments = Array();
 		}
 		
 	
-		if(typeof(this.events[day])!='undefined' )
+		if(typeof(this.appointments[day])!='undefined' )
 		{	
 			
-			//check all events in grid to see if they are in the new event's
+			//check all appointments in grid to see if they are in the new event's
 			//area
 			
 			var checkSize = checkEvent.getSize();
 			var checkPosition = checkEvent.getXY();
 			
-			for(var i=0;i<this.events[day].length;i++)
+			for(var i=0;i<this.appointments[day].length;i++)
 			{
-				//if(this.events[day][i].id!=checkEvent.id && typeof(checkedEvents[this.events[day][i].id])=='undefined')
-				if(!this.inEventsArray(this.events[day][i].id, events))
+				//if(this.appointments[day][i].id!=checkEvent.id && typeof(checkedappointments[this.appointments[day][i].id])=='undefined')
+				if(!this.inappointmentsArray(this.appointments[day][i].id, appointments))
 				{
-					var position = this.events[day][i].getXY();
-					var size = this.events[day][i].getSize();
+					var position = this.appointments[day][i].getXY();
+					var size = this.appointments[day][i].getSize();
 					
 					//new right side is right from existing left side and 
 					//new left side is left from existing right side
@@ -649,20 +672,20 @@ CalendarGrid.prototype = {
 						checkPosition[1]<position[1]+size['height'] && 
 						checkPosition[1]+checkSize['height']>position[1])
 					{
-						events.push(this.events[day][i]);
-						events = this.getOverlappingEvents(this.events[day][i],day, events);							
+						appointments.push(this.appointments[day][i]);
+						appointments = this.getOverlappingappointments(this.appointments[day][i],day, appointments);							
 					}	
 				}						
 			}		
 		}		
-		return events;	
+		return appointments;	
 	},	
 	
-	inEventsArray : function (id, events)
+	inappointmentsArray : function (id, appointments)
 	{
-		for(var i=0;i<events.length;i++)
+		for(var i=0;i<appointments.length;i++)
 		{
-			if(events[i].id==id)
+			if(appointments[i].id==id)
 			{
 				return true;
 			}
@@ -706,8 +729,8 @@ CalendarGrid.prototype = {
 		
 		
 		
-		var x = this.snapPos(this.dragEventStartPos[0],mouseEventPos[0],this.snapX,this.days);
-		var y = this.snapPos(this.dragEventStartPos[1],mouseEventPos[1],this.snapY,48);
+		var x = this.snapPos(this.dragappointmentstartPos[0],mouseEventPos[0],this.snapX,this.days);
+		var y = this.snapPos(this.dragappointmentstartPos[1],mouseEventPos[1],this.snapY,48);
 		
 		var gridRight = this.gridX+this.days*this.snapX;
 		var gridBottom = this.gridY+48*this.snapY;
@@ -735,31 +758,32 @@ CalendarGrid.prototype = {
 		
 		//floor the position because it can be anywhere in the column
 		//var newDay = Math.floor((newPos[0]-this.gridX-3)/this.snapX);
-		var newDay = this.getDayByX(newPos[0]-3);		
-		var originalDay = this.getDayByX(this.dragEventStartPos[0]);
+		var newDay = this.getDayByX(newPos[0]);		
+		var originalDay = this.getDayByX(this.dragappointmentstartPos[0]);
 		
 		
 		if(newDay!=originalDay)
 		{
-			//remove it from the original day's events
+			//remove it from the original day's appointments
 			this.removeEventFromArray(originalDay, this.dragEvent.id);
 
 			
-			//add it to the new day's events
-			if(typeof(this.events[newDay])=='undefined')
+			//add it to the new day's appointments
+			if(typeof(this.appointments[newDay])=='undefined')
 			{
-				this.events[newDay]=Array();
+				this.appointments[newDay]=Array();
 			}
-			this.events[newDay].push(this.dragEvent);
+			this.appointments[newDay].push(this.dragEvent);
 			
 			//recalculate grid
-			this.calculateEvents(originalDay);
-			this.calculateEvents(newDay);
+			this.calculateappointments(originalDay);
+			this.calculateappointments(newDay);
 		}else
 		{
-			this.calculateEvents(originalDay);
+			this.calculateappointments(originalDay);
 		}
 		
+		this.fireEvent("change", this, false);
 		
 		this.dragEvent=false;
 	},
@@ -795,15 +819,24 @@ CalendarGrid.prototype = {
         return Math.max(min, newValue);
     }
 
-};
+});
 
-var CalendarGrid = new CalendarGrid('CalendarGrid', {days: 2});
+var CalendarGrid = new Ext.CalendarGrid('CalendarGrid', {days: 5});
 
 
 Ext.EventManager.onDocumentReady(function(){
 	CalendarGrid.render();
 	
 	CalendarGrid.addEvent('test','0','3','6');
+	
+	
+	CalendarGrid.on("create", function(){
+		alert('create');
+	});
+	
+	CalendarGrid.on("change", function(){
+		alert('change');
+	});
 });
 </script>
 

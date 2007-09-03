@@ -35,7 +35,6 @@ $post_action = isset($_REQUEST['post_action']) ? $_REQUEST['post_action'] : '';
 $task = isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
 $link_back = (isset($_REQUEST['link_back']) && $_REQUEST['link_back'] != '') ? htmlspecialchars($_REQUEST['link_back']) : $_SERVER['REQUEST_URI'];
 
-
 ?>
 <html>
 <head>
