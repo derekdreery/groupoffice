@@ -265,3 +265,10 @@ $languages['si']['description'] = 'Slovenian';
 $languages['si']['language_file'] = 'si';
 $languages['si']['timezone'] = 1;
 $languages['si']['DST'] = 1;
+
+
+$languages['ar'] = $europe_default;
+$languages['ar']['description'] = 'Arabic';
+$languages['ar']['language_file'] = 'ar';
+$languages['ar']['timezone'] = 1;
+$languages['ar']['DST'] = 1
