@@ -134,13 +134,24 @@ $cms_page_template='Dit sjabloon kan voor pagina\'s worden gebruikt.';
 $cms_go_auth='Gebruik Group-Office authenticatie';
 $cms_start_page='Startpagina';
 $cms_hot_item_text='Hot item tekst';
+
+
 $cms_unregistered_comments='Sta reacties toe van alle bezoekers';
 $cms_comments='Reacties';
 $cms_comments_text='Onderaan de pagina kunt u reageren op deze pagina.';
 $cms_comments_login='U moet ingelogd zijn om te reageren';
 $cms_add_comment='Plaats reactie';
 $cms_comments_missing_field='U moet uw naam en een reactie invullen.';
+$cms_insert_comments='Reactie formulier invoegen';
+$cms_commentsform='Reactie formulier';
+$cms_antispam_text='Geef a.u.b. antwoord op de volgende simpele vraag om SPAM te voorkomen.';
+$cms_antispam_fail='Het antwoord op de anti spam vraag was fout. Probeer het a.u.b. opnieuw.';
+$cms_new_comment_subject = 'Nieuwe opmerking geplaatst in %s';
+
+
+
 $cms_logout='Uitloggen';
+
 $cms_send_message='Versturen';
 $cms_contact_form='Contact formulier';
 $cms_user_search='Gebruikers zoeken';
@@ -148,8 +159,7 @@ $cms_insert_plugin='Plugin invoegen';
 $cms_logged_out='U bent uitgelogd';
 $cms_insert_contactform='Contactformulier invoegen';
 $cms_message_height='Berichtveld grootte';
-$cms_insert_comments='Reactie formulier invoegen';
-$cms_commentsform='Reactie formulier';
+
 $cms_login_template_item='Inlogsjabloon';
 $cms_default_go_login='Standaard Group-Office inlogscherm';
 $cms_userfield='Gebruikers dataveld';
@@ -158,8 +168,5 @@ $cms_fckeditor_help='Klik hier voor documentatie';
 $cms_add_contact_success_title='Dank u wel!';
 $cms_add_contact_success_text='U zult vanaf nu onze nieuwsbrief ontvangen!';
 $cms_add_contact_email_subject='Nieuw contactpersoon toegevoegd mailing';
-$cms_new_comment_subject = 'Nieuwe opmerking geplaatst in %s';
 
-$cms_antispam_text='Geef a.u.b. antwoord op de volgende simpele vraag om SPAM te voorkomen.';
 
-$cms_antispam_fail='Het antwoord op de anti spam vraag was fout. Probeer het a.u.b. opnieuw.';

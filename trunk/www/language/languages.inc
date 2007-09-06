@@ -271,4 +271,4 @@ $languages['ar'] = $europe_default;
 $languages['ar']['description'] = 'Arabic';
 $languages['ar']['language_file'] = 'ar';
 $languages['ar']['timezone'] = 1;
-$languages['ar']['DST'] = 1
+$languages['ar']['DST'] = 1;
