@@ -153,7 +153,7 @@ class tabstrip extends table
 
 		if ($this->title != '')
 		{
-			$th = new table_heading($this->title);
+			$th = new table_heading(htmlspecialchars($this->title));
 			if ($this->tab_direction == 'vertical')
 			{
 				$th->set_attribute('colspan','3');
