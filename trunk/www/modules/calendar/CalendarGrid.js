@@ -31,6 +31,8 @@ Ext.CalendarGrid = function(container, config){
 	//how many rows to display for all dya events
 	this.allDayEventRows=1;
 	
+	
+	this.remoteEventIds=Array();
 
 	
 	
@@ -209,20 +211,7 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 		
 	},
 	
-	parseElement : function(elementId)
-	{
-		var el = Ext.get(elementId);
 		
-		var positioning=el.getPositioning();
-		var size = el.getSize();
-		
-		var startRow = this.getRowNumberByY(topPos);
-		var endRow = this.getRowNumberByY(topPos+size['height']);
-		
-		var day = this.getDayByX(position[0]);
-		
-		return { 'startRow':startRow, 'endRow':endRow, 'day':day };
-	},	
 	getSnap : function()
 	{
 		var FirstCol = Ext.get("day0_row0");
@@ -340,16 +329,16 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 				var snap = this.getSnap();				
 				var rows = this.selector.getHeight()/snap['y'];
 				
-				this.newEventId=Ext.id();
+				var newEventId=Ext.id();
 				
-				this.addEvent(this.newEventId, text, 
+				this.addEvent(newEventId, text, 
 					this.clickedDay,
 					this.clickedRow,
 					this.clickedRow+rows-1);
 				
 				this.calculateAppointments(this.clickedDay);
 				
-				this.fireEvent("create", this, false);
+				this.fireEvent("create", this, newEventId);
 			}
 			this.clearSelection();
 			
@@ -369,9 +358,9 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 					var snap = this.getSnap();				
 					var rows = this.selector.getHeight()/snap['y'];
 					
-					this.newEventId=Ext.id();
+					var newEventId=Ext.id();
 					
-					this.addEvent(this.newEventId, text, 
+					this.addEvent(newEventId, text, 
 						this.clickedDay,
 						this.clickedRow,
 						this.clickedRow+rows-1);
@@ -383,7 +372,7 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 					
 				}
 					
-				this.fireEvent("create", this, false);
+				this.fireEvent("create", this, newEventId);
 			}			
 		},this);	
 	},
@@ -487,7 +476,7 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 					});
 				
 			resizer.on('resize', function(eventEl){
-				this.fireEvent("change", this, false);
+				this.fireEvent("change", this, eventEl.id);
 				this.calculateAppointments(this.clickedDay);
 				}, this);
 		}else
@@ -815,7 +804,7 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 			this.calculateAppointments(originalDay);
 		}
 		
-		this.fireEvent("change", this, false);
+		this.fireEvent("change", this, this.dragEvent.id);
 		
 		this.dragEvent=false;
 	},
@@ -941,13 +930,43 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 						var startDate = Date.parseDate(events[i]['start_time'], this.dateTimeFormat);
 						var endDate = Date.parseDate(events[i]['end_time'], this.dateTimeFormat);
 						
-						CalendarGrid.addTimedEvent(Ext.id(), events[i]['name'], startDate, endDate);				
+						var domId = Ext.id();						
+						CalendarGrid.addTimedEvent(domId, events[i]['name'], startDate, endDate);
+						this.registerEventId(domId, events[i]['id']);				
 					}
 				}
 			},
 			scope: this
 		});
     
-    }
+    },
+    /**
+     * An array of domId=>database ID should be kept so that we can figure out
+     * which event to update when it's modified.
+     * @param {String} domId The unique DOM id of the element
+     * @param {String} remoteId The unique database id of the element     
+     * @return void
+     */
+    registerEventId : function(domId, remoteId)
+    {
+    	this.remoteEventIds[domId]=remoteId;
+    },
+    
+    getEventProperties : function(elementId)
+	{
+		var el = Ext.get(elementId);
+		
+		var positioning=el.getPositioning();
+		var size = el.getSize();
+		
+		var startRow = this.getRowNumberByY(topPos);
+		var endRow = this.getRowNumberByY(topPos+size['height']);
+		
+		var day = this.getDayByX(position[0]);
+		
+		var remoteId = !this.remoteEventIds[domId] ? this.remoteEventIds[domId] : 0;
+		
+		return { 'startRow':startRow, 'endRow':endRow, 'day':day, 'remoteId':remoteId };
+	}
 
 });
