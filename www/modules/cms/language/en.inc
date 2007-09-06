@@ -169,13 +169,7 @@ $cms_start_page = 'Start page';
 $cms_hot_item_text='Hot item text';
 
 //2.16
-$cms_unregistered_comments = 'Allow comments from any visitor';
 
-$cms_comments = 'Comments';
-$cms_comments_text = 'At the bottom of this page you can place your comments on this webpage.';
-$cms_comments_login = 'You need to be logged in to place comments.';
-$cms_add_comment = 'Add comment';
-$cms_comments_missing_field = 'You need to enter both a name and comments.';
 
 $cms_logout = 'Logout';
 $cms_subject = 'Subject';
@@ -188,10 +182,7 @@ $cms_user_search = 'User search';
 $cms_insert_plugin = 'Insert plugin';
 $cms_logged_out =  'You are now logged out';
 
-$cms_insert_contactform = 'Insert contactform';
-$cms_message_height = 'Message field height';
-$cms_insert_comments = 'Insert comments form';
-$cms_commentsform='Comments form';
+
 
 
 $cms_login_template_item = 'Login template';
@@ -204,10 +195,27 @@ $cms_fckeditor_help='Click here for documentation';
 $cms_add_contact_success_title='Thank you!';
 $cms_add_contact_success_text='You are subscribed to our newsletter!';
 $cms_add_contact_email_subject='New contact added to mailing';
+
+$cms_insert_contactform = 'Insert contactform';
+$cms_message_height = 'Message field height';
+
+
+$cms_insert_comments = 'Insert comments form';
+$cms_commentsform='Comments form';
+$cms_unregistered_comments = 'Allow comments from any visitor';
+$cms_comments = 'Comments';
+$cms_comments_text = 'At the bottom of this page you can place your comments on this webpage.';
+$cms_comments_login = 'You need to be logged in to place comments.';
+$cms_add_comment = 'Add comment';
+$cms_comments_missing_field = 'You need to enter both a name and comments.';
 $cms_new_comment_subject = 'New comment placed in %s';
 $cms_insert_video='Insert video';
 $cms_antispam_text='Please answer the following simple question to avoid SPAM';
 $cms_antispam_fail='The answer to the antispam question was incorrect. Please try again.';
+
+
+
+
 $cms_insert_video='Insert video';
 
 $cms_batch_upload = 'Batch upload';
