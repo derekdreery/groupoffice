@@ -14,6 +14,10 @@ TODO
 *Restrict SMTP servers for mailing lists
 -Make attachments in composer clickable
 
+2007/08/21 Version 2.17-stable-12
+-Fixed table configuration bug with register globals enabled
+-Fixed small bugs
+
 2007/08/01 Version 2.17-stable-11
 -Out of office reply didn't work if e-mail mailbox was different then the e-mail
  name.
