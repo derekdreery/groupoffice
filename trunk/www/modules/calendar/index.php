@@ -35,6 +35,7 @@ echo $GO_THEME->get_stylesheet('calendar');
 ?>
 <script src="CalendarGrid.js" type="text/javascript"></script>
 <script type="text/javascript" src="language/en.js"></script>
+
 <style>
 #calendar-grid{
 width:100%;
@@ -115,19 +116,42 @@ height:100%;
 </style>
 </head>
 <body>
-
 <div id="CalendarGrid" style="width:1000px;height:600px;position:relative;">
 </div>
 
+
 <script type="text/javascript">
+<?php
+
+//determine start en end of the week
+$days=5;
+$weekday = date("w");
+$day = date("j");
+$year = date('Y');
+$month= date('m');
+
+$tmpday = $day - $weekday + $_SESSION['GO_SESSION']['first_weekday'];
+if ($tmpday > $day)
+{
+	$tmpday = $tmpday -7;
+}
+$start_time = mktime(0,0,0,$month, $tmpday, $year);
+$end_time = date_add($start_time, $days);
+?>
 
 
-
-var CalendarGrid = new Ext.CalendarGrid('CalendarGrid', {columns: ['Ma<br />03-09-2007', 'Di<br />04-09-2007', 'Wo<br />05-09-2007','Do<br />06-09-2007','Vr<br />07-09-2007']});
-//var CalendarGrid = new Ext.CalendarGrid('CalendarGrid', {columns: ['Ma', 'Di', 'Wo','Do','Vr']});
-
-Ext.EventManager.onDocumentReady(function(){
+	var dt = Date.parseDate("<?php echo date("Y-m-d", $start_time); ?>", "Y-m-d");
+	
+	var CalendarGrid = new Ext.CalendarGrid('CalendarGrid', {startDate: dt, days: 5});
 	CalendarGrid.render();
+	CalendarGrid.load();
+	
+
+
+
+/*
+Ext.EventManager.onDocumentReady(function(){
+	
 	
 	CalendarGrid.addEvent('test 1','0');
 	CalendarGrid.addEvent('test 2','0');
@@ -141,8 +165,12 @@ Ext.EventManager.onDocumentReady(function(){
 	CalendarGrid.on("change", function(){
 		//alert('change');
 	});
-});
+});*/
 </script>
+
+<input type="button" onclick="CalendarGrid.next(7);" value="Next week" />
+
+
 
 </body>
 </html>
