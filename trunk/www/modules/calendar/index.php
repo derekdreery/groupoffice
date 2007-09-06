@@ -123,6 +123,8 @@ height:100%;
 <script type="text/javascript">
 <?php
 
+$calendar = $cal->get_calendar();
+
 //determine start en end of the week
 $days=5;
 $weekday = date("w");
@@ -142,12 +144,42 @@ $end_time = date_add($start_time, $days);
 
 	var dt = Date.parseDate("<?php echo date("Y-m-d", $start_time); ?>", "Y-m-d");
 	
-	var CalendarGrid = new Ext.CalendarGrid('CalendarGrid', {startDate: dt, days: 5});
+	var CalendarGrid = new Ext.CalendarGrid('CalendarGrid', {calendar_id: <?php echo $calendar['id']; ?>, startDate: dt, days: 5});
 	CalendarGrid.render();
 	CalendarGrid.load();
 	
 
+CalendarGrid.on("create", function(CalGrid, newEventEl){
 
+		var event = CalGrid.elementToEvent(newEventEl);
+
+		var conn = new Ext.data.Connection();
+			conn.request({
+			url: 'action.php',
+			params: {task: 'add_event', calendar_id: CalGrid.calendar_id, 'gridEvent': Ext.encode(event)},
+			callback: function(options, success, response)
+			{
+				if(!success)
+				{
+					Ext.MessageBox.alert('Failed');
+				}else
+				{
+					var events = Ext.decode(response.responseText);
+					
+					for(var i=0;i<events.length;i++)
+					{
+						var startDate = Date.parseDate(events[i]['start_time'], this.dateTimeFormat);
+						var endDate = Date.parseDate(events[i]['end_time'], this.dateTimeFormat);
+						
+						var domId = Ext.id();						
+						CalendarGrid.addTimedEvent(domId, events[i]['name'], startDate, endDate);
+						this.registerEventId(domId, events[i]['id']);				
+					}
+				}
+			},
+			scope: CalendarGrid
+		});
+	});
 
 /*
 Ext.EventManager.onDocumentReady(function(){
