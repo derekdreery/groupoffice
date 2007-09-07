@@ -20,6 +20,7 @@ Ext.CalendarGrid = function(container, config){
 		this.container = Ext.get(container);		
 	}
 	
+	this.container.setStyle("overflow", "hidden");
 	this.container.unselectable();
 	
 	this.dragEvent=false;
@@ -69,8 +70,7 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 	//build the html grid
 	render : function (){
 		
-		
-				
+	
 		//create container for the column headers
 		this.headingsContainer = Ext.DomHelper.append(this.container,
 				{tag: 'div', cls: "headings-container"}, true);
@@ -99,7 +99,7 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 		
 	
 		var t = new Ext.Template(
-	    	'<table cellpadding="0" cellspacing="0" border="0" style="table-layout:fixed;width:100%">'+
+	    	'<table cellpadding="0" cellspacing="0" border="0" style="table-layout:fixed;width:100%;">'+
 	    	'<tbody><tr><td id="{timeHeadsID}" style="width:40px"></td>'+
 	    	'<td style="position:relative;" id="{columnsContainerID}"></div></td></tr></tbody></table>'
 		);
@@ -212,6 +212,16 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 		
 		this.gridContainer.scrollTo("top", snap['y']*14);
 		
+	},
+	
+	mask : function()
+	{
+		 this.container.mask('Loading...','x-mask-loading');
+	},
+	
+	unmask : function()
+	{
+		this.container.unmask();
 	},
 	
 		
@@ -341,7 +351,7 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 				
 				this.calculateAppointments(this.clickedDay);
 				
-				this.fireEvent("create", this, newEventId);
+				this.fireEvent("create", this, newEventId, text);
 			}
 			this.clearSelection();
 			
@@ -375,7 +385,7 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 					
 				}
 					
-				this.fireEvent("create", this, newEventId);
+				this.fireEvent("create", this, newEventId, text);
 			}			
 		},this);	
 	},
@@ -395,7 +405,7 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 		
 		
 		var startRow = startDate.getHours()*2;
-		var endRow = endDate.getHours()*2;
+		var endRow = endDate.getHours()*2-1;
 		
 		var startMin = startDate.getMinutes();
 		if(startMin>30)
@@ -479,7 +489,12 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 					});
 				
 			resizer.on('resize', function(eventEl){
-				this.fireEvent("resize", this, eventEl.id);
+				this.fireEvent("resize", this, eventEl.el.id);
+				
+				var elX = eventEl.el.getX();	
+				this.clickedDay = this.getDayByX(elX);
+	
+				
 				this.calculateAppointments(this.clickedDay);
 				}, this);
 		}else
@@ -912,6 +927,7 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
     
     load : function()
     {
+    	this.mask();
     	var start_time = this.startDate.format(this.dateTimeFormat);
     	var end_time = this.startDate.add(Date.DAY, this.days).format(this.dateTimeFormat);
     	
@@ -937,10 +953,20 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 						CalendarGrid.addTimedEvent(domId, events[i]['name'], startDate, endDate);
 						this.registerEventId(domId, events[i]['id']);				
 					}
+					
+					for(var day=0;day<this.days;day++)
+					{
+						this.calculateAppointments(day);
+					}
 				}
+				
+				this.unmask();
 			},
 			scope: this
 		});
+		
+		
+		
     
     },
     /**
@@ -966,8 +992,7 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 		var endRow = this.getRowNumberByY(position[1]+size['height']);
 		
 		var day = this.getDayByX(position[0]);
-		
-		var remoteId = !this.remoteEventIds[elementId] ? this.remoteEventIds[elementId] : 0;
+		var remoteId = !this.remoteEventIds[elementId] ? 0 : this.remoteEventIds[elementId];
 		
 		var date = this.startDate.add(Date.DAY, day);
 		var startDate = date.add(Date.MINUTE,startRow*30);

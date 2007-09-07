@@ -149,36 +149,79 @@ $end_time = date_add($start_time, $days);
 	CalendarGrid.load();
 	
 
-CalendarGrid.on("create", function(CalGrid, newEventEl){
+CalendarGrid.on("create", function(CalGrid, newEventEl, newEventName){
+		CalendarGrid.mask();
 
 		var event = CalGrid.elementToEvent(newEventEl);
 
 		var conn = new Ext.data.Connection();
 			conn.request({
 			url: 'action.php',
-			params: {task: 'add_event', calendar_id: CalGrid.calendar_id, 'gridEvent': Ext.encode(event)},
+			params: {task: 'add_event', calendar_id: CalGrid.calendar_id,  'name': newEventName, 'gridEvent': Ext.encode(event)},
 			callback: function(options, success, response)
 			{
+				var response = Ext.decode(response.responseText);
 				if(!success)
-				{
-					Ext.MessageBox.alert('Failed');
-				}else
-				{
-					var events = Ext.decode(response.responseText);
-					
-					for(var i=0;i<events.length;i++)
-					{
-						var startDate = Date.parseDate(events[i]['start_time'], this.dateTimeFormat);
-						var endDate = Date.parseDate(events[i]['end_time'], this.dateTimeFormat);
-						
-						var domId = Ext.id();						
-						CalendarGrid.addTimedEvent(domId, events[i]['name'], startDate, endDate);
-						this.registerEventId(domId, events[i]['id']);				
-					}
+				{				
+					Ext.MessageBox.alert('Failed', response['errors']);
 				}
+				CalendarGrid.unmask();
 			},
 			scope: CalendarGrid
 		});
+		
+	});
+	
+CalendarGrid.on("move", function(CalGrid, newEventEl, newEventName){
+		CalendarGrid.mask();
+
+		var event = CalGrid.elementToEvent(newEventEl);
+
+		var conn = new Ext.data.Connection();
+			conn.request({
+			url: 'action.php',
+			params: {task: 'update_event', event_id: event['remoteId'], 'startDate': event['startDate']},
+			callback: function(options, success, response)
+			{
+				var response = Ext.decode(response.responseText);
+				if(!success)
+				{				
+					Ext.MessageBox.alert('Failed', response['errors']);
+				}else
+				{
+					CalendarGrid.registerEventId(newEventEl, response['event_id']);
+				}
+				CalendarGrid.unmask();
+			},
+			scope: CalendarGrid
+		});
+		
+	});
+	
+CalendarGrid.on("resize", function(CalGrid, newEventEl, newEventName){
+		CalendarGrid.mask();
+
+		var event = CalGrid.elementToEvent(newEventEl);
+
+		var conn = new Ext.data.Connection();
+			conn.request({
+			url: 'action.php',
+			params: {task: 'update_event', event_id: event['remoteId'], 'endDate': event['endDate']},
+			callback: function(options, success, response)
+			{
+				var response = Ext.decode(response.responseText);
+				if(!success)
+				{				
+					Ext.MessageBox.alert('Failed', response['errors']);
+				}else
+				{
+					CalendarGrid.registerEventId(newEventEl, response['event_id']);
+				}
+				CalendarGrid.unmask();
+			},
+			scope: CalendarGrid
+		});
+		
 	});
 
 /*
