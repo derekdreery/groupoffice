@@ -164,6 +164,9 @@ CalendarGrid.on("create", function(CalGrid, newEventEl, newEventName){
 				if(!success)
 				{				
 					Ext.MessageBox.alert('Failed', response['errors']);
+				}else
+				{
+					CalendarGrid.registerEventId(newEventEl,response['event_id']);
 				}
 				CalendarGrid.unmask();
 			},
@@ -187,9 +190,6 @@ CalendarGrid.on("move", function(CalGrid, newEventEl, newEventName){
 				if(!success)
 				{				
 					Ext.MessageBox.alert('Failed', response['errors']);
-				}else
-				{
-					CalendarGrid.registerEventId(newEventEl, response['event_id']);
 				}
 				CalendarGrid.unmask();
 			},
@@ -213,9 +213,6 @@ CalendarGrid.on("resize", function(CalGrid, newEventEl, newEventName){
 				if(!success)
 				{				
 					Ext.MessageBox.alert('Failed', response['errors']);
-				}else
-				{
-					CalendarGrid.registerEventId(newEventEl, response['event_id']);
 				}
 				CalendarGrid.unmask();
 			},
