@@ -258,6 +258,35 @@ if(isset($GO_MODULES->modules['filesystem']))
 		}
 	}
 	echo 'Done<br /><br />';
+	
+	
+	echo 'Linking file structure...<br />';
+	
+	function link_files($path)
+	{
+		
+		$fs = new filesystem(true);
+		
+		$files = $fs->get_files($path);
+		
+		foreach($files as $file)
+		{
+			$fs->get_link_id(addslashes($file['path']));
+		}
+		
+		$folders = $fs->get_folders($path);
+		
+		foreach($folders as $folder)
+		{
+			link_files($folder['path']);
+		}		
+	}
+	
+	link_files($GO_CONFIG->file_storage_path);
+	echo 'Done<br /><br />';
+	
+	
+	
 }
 
 echo 'All Done!<br />';
