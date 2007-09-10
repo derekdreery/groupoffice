@@ -1317,6 +1317,8 @@ class filesystem extends db
 		
 		$fs = new filesystem();
 
+		$search = new search();
+		
 		$db = new db();
 		while($this->next_record())
 		{
@@ -1334,11 +1336,11 @@ class filesystem extends db
 				$cache['type']=$fs_file;
 				$cache['keywords']=$cache['name'].','.$cache['type'];
 				$cache['mtime']=$this->f('mtime');
-				if($this->f('ctime')>$last_sync_time)
+				if($search->get_search_result($user_id, $this->f('link_id')))
 				{
-					$db->insert_row('se_cache',$cache);
+					$db->update_row('se_cache',array('user_id','link_id'), $cache);					
 				}else {
-					$db->update_row('se_cache',array('user_id','link_id'), $cache);
+					$db->insert_row('se_cache',$cache);
 				}
 			}
 		}

@@ -16,7 +16,7 @@ class search extends db {
 		$this->db();
 	}
 	
-	function global_search($user_id, $query, $start, $offset, $sort_index='name', $sort_order='ASC')
+	function global_search($user_id, $query, $start, $offset, $sort_index='name', $sort_order='ASC', $types=array())
 	{
 		global $GO_MODULES;
 		
@@ -54,6 +54,12 @@ class search extends db {
 			$sql .= ' ('.implode(' AND ', $sql_keywords).') ';
 		}else {
 			$sql .= " keywords LIKE '%$query%'";
+		}
+		
+		if(count($types))
+		{
+			$sql .= " AND link_type IN (".implode(',',$types).")";
+						
 		}
 		
 		$sql .=" ORDER BY $sort_index $sort_order";
@@ -127,6 +133,23 @@ class search extends db {
 		$lst['last_sync_time']=get_gmt_time();
 		
 		$this->update_row('se_last_sync_times',array('user_id','module'),$lst);
+	}
+	
+	function get_search_types($user_id)
+	{
+		if(!isset($_SESSION['GO_SESSION']['search_types']))
+		{
+			$sql = "SELECT DISTINCT link_type, type FROM se_cache WHERE user_id=$user_id";
+			$this->query($sql);
+			while($this->next_record())
+			{
+				$type['type']=$this->f('type');
+				$type['link_type']=$this->f('link_type');
+				
+				$_SESSION['GO_SESSION']['search_types'][]=$type;
+			}
+		}
+		return 	$_SESSION['GO_SESSION']['search_types'];
 	}
 }
 ?>

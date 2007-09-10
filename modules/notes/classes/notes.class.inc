@@ -1,10 +1,10 @@
 <?php
 /*
-Copyright Intermesh 2003
-Author: Merijn Schering <mschering@intermesh.nl>
-Version: 1.0 Release date: 2 Januari 2004
+ Copyright Intermesh 2003
+ Author: Merijn Schering <mschering@intermesh.nl>
+ Version: 1.0 Release date: 2 Januari 2004
 
-Part of the Group-Office Professional license
+ Part of the Group-Office Professional license
 */
 
 define('SHOW_ALL_NOTES', 1);
@@ -126,18 +126,18 @@ class notes extends db
 	function get_new_notes()
 	{
 		/*$sql = "SELECT DISTINCT no_notes.* FROM no_notes ".
-		"INNER JOIN acl ON (no_notes.acl_read = acl.acl_id OR no_notes.acl_write = acl.acl_id) ".
-		"LEFT JOIN users_groups ON (acl.group_id = users_groups.group_id) ".
-		" WHERE ((users_groups.user_id = ".$_SESSION['GO_SESSION']['user_id']." AND acl.user_id = 0 ) OR (".
-		"acl.group_id = 0 AND acl.user_id = ".$_SESSION['GO_SESSION']['user_id'].")) ".
-		"AND mtime>".$_SESSION['GO_SESSION']['lastlogin'];
+		 "INNER JOIN acl ON (no_notes.acl_read = acl.acl_id OR no_notes.acl_write = acl.acl_id) ".
+		 "LEFT JOIN users_groups ON (acl.group_id = users_groups.group_id) ".
+		 " WHERE ((users_groups.user_id = ".$_SESSION['GO_SESSION']['user_id']." AND acl.user_id = 0 ) OR (".
+		 "acl.group_id = 0 AND acl.user_id = ".$_SESSION['GO_SESSION']['user_id'].")) ".
+		 "AND mtime>".$_SESSION['GO_SESSION']['lastlogin'];
 
-		$this->query($sql);
-		return $this->num_rows();*/
+		 $this->query($sql);
+		 return $this->num_rows();*/
 	}
-	
-	
-	
+
+
+
 
 	function get_notes($user_id=0, $links=false,
 	$sort='name', $direction='ASC', $start=0,
@@ -187,7 +187,7 @@ class notes extends db
 
 		$this->query("DELETE FROM no_settings WHERE user_id='$user_id'");
 	}
-	
+
 	function __on_search($user_id,$last_sync_time=0)
 	{
 		global $GO_MODULES, $GO_LANGUAGE;
@@ -212,11 +212,11 @@ class notes extends db
 			$cache['type']=$no_note;
 			$cache['keywords']=addslashes(record_to_keywords($this->Record)).','.$cache['type'];
 			$cache['mtime']=$this->f('mtime');
-			if($this->f('ctime')>$last_sync_time)
+			if($search->get_search_result($user_id, $this->f('link_id')))
 			{
-				$db->insert_row('se_cache',$cache);
-			}else {
 				$db->update_row('se_cache',array('user_id','link_id'), $cache);
+			}else {
+				$db->insert_row('se_cache',$cache);
 			}
 		}
 	}
