@@ -5,14 +5,24 @@ Ext.CalendarGrid = function(container, config){
 	this.dateFormat = 'Y-m-d';
 	this.dateTimeFormat = 'Y-m-d H:i';
 	
+	
+	//amount of days to display
 	if(!this.days)
 	{
 		this.days=1;
 	}
 	
+	//Start day of the week. Monday or sunday
+	if(!this.firstWeekday)
+	{
+		//default is monday
+		this.firstWeekday=1;
+	}
+	
 	if(!this.startDate)
 	{
-		this.startDate=new Date();
+		//Calculate the first day of the week
+		this.startDate=new Date();	
 	}
 	
 	if(!this.container)
@@ -20,19 +30,25 @@ Ext.CalendarGrid = function(container, config){
 		this.container = Ext.get(container);		
 	}
 	
+	//if this is not set the grid does not display well when I put a load mask on it.
 	this.container.setStyle("overflow", "hidden");
+	
+	//Don't select things inside the grid
 	this.container.unselectable();
 	
+	//private var that is used when an event is dragged to another location
 	this.dragEvent=false;
 	
+	//all the grid appointments are stored in this array. First index is day and second is the dom ID.
 	this.appointments=Array();
 	
+	//same for allday appointments.
 	this.allDayAppointments=Array();
 	
 	//how many rows to display for all dya events
 	this.allDayEventRows=1;
 	
-	
+	//The remote database ID's can be stored in this array. Useful for database updates
 	this.remoteEventIds=Array();
 
 	
@@ -70,22 +86,27 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 	//build the html grid
 	render : function (){
 		
+		
+		if(this.days>4)
+		{
+			this.startDate=this.getFirstDateOfWeek(this.startDate);
+		}
 	
 		//create container for the column headers
 		this.headingsContainer = Ext.DomHelper.append(this.container,
-				{tag: 'div', cls: "headings-container"}, true);
+				{tag: 'div', cls: "x-calGrid-headings-container"}, true);
 				
 		
 		//create container for the all day events
 		
 		this.allDayContainer  = Ext.DomHelper.append(this.container,
-				{tag: 'div', cls: "all-day-container"}, true);
+				{tag: 'div', cls: "x-calGrid-all-day-container"}, true);
 		
 		
 		
 		//create container for the grid
 		this.gridContainer = Ext.DomHelper.append(this.container,
-				{tag: 'div', cls: "grid-container"}, true);
+				{tag: 'div', cls: "x-calGrid-grid-container"}, true);
 		
 		//calculate gridContainer size
 		var headingsHeight = this.headingsContainer.getHeight();
@@ -117,7 +138,7 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 		for (var i = 0;i<24;i++)
 		{			
 			 Ext.DomHelper.append(timeColumn,
-				{tag: 'div', id: 'head'+i, cls: "timeHead", html: i+':00'}, true);
+				{tag: 'div', id: 'head'+i, cls: "x-calGrid-timeHead", html: i+':00'}, true);
 		}
 		
 		this.columnsContainer = Ext.get(columnsContainerID);
@@ -132,7 +153,7 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 				
 			//create allday column			
 			var allDayColumn = Ext.DomHelper.append(this.allDayContainer,
-				{tag: 'div', id: 'all_day_'+day, cls: "all-day-column", style: "float:left;width:"+columnWidth+"%"}, true);
+				{tag: 'div', id: 'all_day_'+day, cls: "x-calGrid-all-day-column", style: "float:left;width:"+columnWidth+"%"}, true);
 				
 			allDayColumn.on("click", function(e, columnEl){
 				
@@ -153,7 +174,7 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 				
 			
 		
-			var className = "evenRow";
+			var className = "x-calGrid-evenRow";
 			for (var i = 0;i<48;i++)
 			{		
 					
@@ -164,12 +185,12 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 					this.startSelection(el.id); 
 				}, this);
 				
-				if(className=="evenRow")
+				if(className=="x-calGrid-evenRow")
 				{
-					className = "unevenRow";
+					className = "x-calGrid-unevenRow";
 				}else
 				{
-					className = "evenRow";
+					className = "x-calGrid-evenRow";
 				}
 			}
 		}
@@ -198,20 +219,43 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 		
 		//Monitor window resize
 		
-		Ext.EventManager.onWindowResize(function(w, h){
+		/*Ext.EventManager.onWindowResize(function(w, h){
 			//Ext.Msg.alert('Resize', 'Viewport w = '+w+', h = '+h);
 			for(var i=0;i<this.days;i++)
 			{
 			 	
 		    	this.calculateAppointments(i);
 		    }
-		}, this);
+		}, this);*/
 						 
 		//scroll to 7 am.
 		var snap = this.getSnap();
 		
 		this.gridContainer.scrollTo("top", snap['y']*14);
 		
+	},
+	
+	getFirstDateOfWeek : function(date)
+	{
+		//Calculate the first day of the week
+		
+		var weekday = date.getDay();
+		var day = date.getDate();
+		var month = date.format("m");
+		var year = date.getFullYear();
+		
+		var tmpDay = day-weekday+this.firstWeekday;
+		if(tmpDay>day)
+		{
+			tmpDay-=7;
+		}
+		
+		if(tmpDay.toString().length==1)
+		{
+			tmpDay ="0"+tmpDay;
+		}
+		
+		return Date.parseDate(year+"-"+month+"-"+tmpDay, "Y-m-d")
 	},
 	
 	mask : function()
@@ -280,7 +324,7 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 			if(!this.selector)
 			{
 				this.selector = Ext.DomHelper.append(this.container,
-					{tag: 'div', id: Ext.id(), cls: "selector"}, true);		
+					{tag: 'div', id: Ext.id(), cls: "x-calGrid-selector"}, true);		
 			}
 		
 			//get position of the row the user clicked on
@@ -441,7 +485,7 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 		if(startRow && endRow)
 		{
 			var event = Ext.DomHelper.append(this.columnsContainer,
-				{tag: 'div', 'id': eventId, cls: "event-container", html: name }, true);
+				{tag: 'div', 'id': eventId, cls: "x-calGrid-event-container", html: name }, true);
 				
 			var startRowEl = Ext.get("day"+day+"_row"+startRow);
 			var endRowEl = Ext.get("day"+day+"_row"+endRow);
@@ -502,7 +546,7 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 			//allday event
 			var allDayColumn = Ext.get("all_day_"+day);
 			var event = Ext.DomHelper.append(allDayColumn,
-				{tag: 'div', id: eventId, cls: "event-container", html: name }, true);
+				{tag: 'div', id: eventId, cls: "x-calGrid-event-container", html: name }, true);
 				
 			//add the event to the appointments array		
 			if(typeof(this.allDayAppointments[day])=='undefined')
@@ -536,6 +580,19 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 		
 	},
 	
+	autoSizeGrid : function() {
+		
+		//calculate gridContainer size
+		var headingsHeight = this.headingsContainer.getHeight();
+		var allDayHeight = this.allDayContainer.getHeight();
+		var containerHeight = this.container.getHeight();
+		var containerSize = this.container.getSize();
+		
+		var gridContainerHeight = containerHeight-headingsHeight-allDayHeight;
+		this.gridContainer.setSize(containerSize['width'], gridContainerHeight);
+		
+	},
+	
 	increaseAllDayContainer : function()
 	{
 		var allDayContainerSize = this.allDayContainer.getHeight();
@@ -544,9 +601,7 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 		this.allDayContainer.setHeight(allDayContainerSize+20);
 		this.gridContainer.setHeight(gridContainerSize-20);
 		
-		this.allDayEventRows++;
-			
-		
+		this.allDayEventRows++;		
 	},
 	removeEventFromArray : function (day, event_id)
 	{
@@ -746,7 +801,7 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 		if(!this.selector)
 		{
 			this.selector = Ext.DomHelper.append(this.container,
-				{tag: 'div', id: Ext.id(), cls: "selector"}, true);		
+				{tag: 'div', id: Ext.id(), cls: "x-calGrid-selector"}, true);		
 		}
 		
 		//create an overlay to track the mousemovement
@@ -894,7 +949,7 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 			var dt = this.startDate.add(Date.DAY, day);
 			//create grid heading
 			var heading = Ext.DomHelper.append(this.headingsContainer,
-				{tag: 'div', id: Ext.id(), cls: "heading", style: "float:left;width:"+columnWidth+"%", html: dt.format('D m-d') }, true);
+				{tag: 'div', id: Ext.id(), cls: "x-calGrid-heading", style: "float:left;width:"+columnWidth+"%", html: dt.format('D m-d') }, true);
 		}
 	},
 	
@@ -910,9 +965,15 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
     	this.reload();
     },
     
-    'goto' : function(date)
+    gotoDate : function(date)
     {
-    	this.startDate = date;
+    	if(this.days>4)
+    	{
+    		this.startDate = this.getFirstDateOfWeek(date);
+    	}else
+    	{
+    		this.startDate = date;
+    	}
     	this.reload();
     	
     },
@@ -934,7 +995,7 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
     	var conn = new Ext.data.Connection();
 			conn.request({
 			url: 'json.php',
-			params: {task: 'get_events', calendar_id: this.calendar_id, 'start_time': start_time, 'end_time': end_time},
+			params: {task: 'events', calendar_id: this.calendar_id, 'start_time': start_time, 'end_time': end_time},
 			callback: function(options, success, response)
 			{
 				if(!success)
@@ -950,7 +1011,7 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 						var endDate = Date.parseDate(events[i]['end_time'], this.dateTimeFormat);
 						
 						var domId = Ext.id();						
-						CalendarGrid.addTimedEvent(domId, events[i]['name'], startDate, endDate);
+						this.addTimedEvent(domId, events[i]['name'], startDate, endDate);
 						this.registerEventId(domId, events[i]['id']);				
 					}
 					
