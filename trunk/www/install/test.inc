@@ -180,8 +180,15 @@
 	<td valign="top">libwbxml:</td>
 	<td>
 	<?php	
-	$wbxml2xml = whereis('wbxml2xml') ? whereis('wbxml2xml') : '/usr/bin/wbxml2xml';
-	$xml2wbxml = whereis('xml2wbxml') ? whereis('xml2wbxml') : '/usr/bin/xml2wbxml';;
+	if(isset($GO_CONFIG))
+	{
+		$wbxml2xml = whereis('wbxml2xml') ? whereis('wbxml2xml') : $GO_CONFIG->cmd_wbxml2xml;
+		$xml2wbxml = whereis('xml2wbxml') ? whereis('xml2wbxml') : $GO_CONFIG->cmd_xml2wbxml;
+	}else
+	{
+		$wbxml2xml = whereis('wbxml2xml') ? whereis('wbxml2xml') : '/usr/bin/wbxml2xml';
+		$xml2wbxml = whereis('xml2wbxml') ? whereis('xml2wbxml') : '/usr/bin/xml2wbxml';
+	}
 	if(!is_executable($wbxml2xml) || !is_executable($xml2wbxml))
 	{
 		//$fatal_error = true;
@@ -197,7 +204,13 @@
 	<td valign="top">TAR Compression:</td>
 	<td>
 	<?php	
-	$tar = whereis('tar') ? whereis('tar') : '/bin/tar';
+	if(isset($GO_CONFIG))
+	{
+		$tar = whereis('tar') ? whereis('tar') : $GO_CONFIG->cmd_tar;
+	}else
+	{
+		$tar = whereis('tar') ? whereis('tar') : '/bin/tar';
+	}
 	
 	if(!is_executable($tar))
 	{
@@ -213,8 +226,14 @@
 <tr>
 	<td valign="top">ZIP Compression:</td>
 	<td>
-	<?php	
-	$zip = whereis('zip') ? whereis('zip') : '/usr/bin/zip';
+	<?php
+	if(isset($GO_CONFIG))
+	{	
+		$zip = whereis('zip') ? whereis('zip') : $GO_CONFIG->cmd_zip;
+	}else
+	{
+		$zip = whereis('zip') ? whereis('zip') : '/usr/bin/zip';
+	}
 	
 	if(!is_executable($zip))
 	{
@@ -231,7 +250,13 @@
 	<td valign="top">TNEF:</td>
 	<td>
 	<?php	
-	$tnef = whereis('tnef') ? whereis('tnef') : '/usr/bin/tnef';
+	if(isset($GO_CONFIG))
+	{	
+		$tnef = whereis('tnef') ? whereis('tnef') : $GO_CONFIG->cmd_tnef;
+	}else
+	{
+		$tnef = whereis('tnef') ? whereis('tnef') : '/usr/bin/tnef';
+	}
 	
 	if(!is_executable($tnef))
 	{
