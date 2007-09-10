@@ -167,5 +167,6 @@ if ( $GO_CONFIG->log ) {
   openlog('[Group-Office]['.date('Ymd G:i').']['.$username.']', LOG_PERROR, LOG_LOCAL0);
 }
 
+unset($type);
 
 define('GO_LOADED', true);
