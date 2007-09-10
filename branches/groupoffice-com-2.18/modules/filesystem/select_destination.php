@@ -34,63 +34,63 @@ if($ftv->change_folder || isset($_POST['overwrite']))
 	$overwrite_destination_path = isset ($_POST['overwrite_destination_path']) ? smart_stripslashes($_POST['overwrite_destination_path']) : '';
 	$overwrite_all = (isset($_POST['overwrite_all']) && $_POST['overwrite_all'] == 'true') ? true : false;
 	$overwrite = (isset($_POST['overwrite']) && $_POST['overwrite']=='true') ? true : $overwrite_all;
-	
+
 	//folder was clicked so we are going to move/copy files
 	while($selected_path = array_shift($selected))
 	{
 		$destination = $ftv->path.'/'.basename($selected_path);
-		
 
-			//echo $ftv->path.'<br />';
-			//echo $selected_path.'<br />';
-			if(
-				($task == 'copy' && 
-					(!$fs->has_read_permission($GO_SECURITY->user_id, $selected_path) || 
-					!$fs->has_write_permission($GO_SECURITY->user_id, $ftv->path)))
-			||
-				($task == 'cut' && 
-					(!$fs->has_write_permission($GO_SECURITY->user_id, $selected_path) || 
-					!$fs->has_write_permission($GO_SECURITY->user_id, $ftv->path)))
-				)
+
+		//echo $ftv->path.'<br />';
+		//echo $selected_path.'<br />';
+		if(
+		($task == 'copy' &&
+		(!$fs->has_read_permission($GO_SECURITY->user_id, $selected_path) ||
+		!$fs->has_write_permission($GO_SECURITY->user_id, $ftv->path)))
+		||
+		($task == 'cut' &&
+		(!$fs->has_write_permission($GO_SECURITY->user_id, $selected_path) ||
+		!$fs->has_write_permission($GO_SECURITY->user_id, $ftv->path)))
+		)
+		{
+			$feedback = $strAccessDenied;
+		}elseif($overwrite_destination_path==$destination && !$overwrite)
+		{
+			//do nothing
+		}elseif(file_exists($destination) && !$overwrite_all && $overwrite_destination_path!=$destination)
+		{
+			$overwrite_destination_path=$destination;
+			$confirm_overwrite = true;
+			array_unshift($selected, $selected_path);
+			break;
+		}else
+		{
+			//echo 'Copy '.$selected_path.' -> '.$destination.'<br />';
+
+			if($task=='copy')
 			{
-				$feedback = $strAccessDenied;
-			}elseif($overwrite_destination_path==$destination && !$overwrite)
-			{
-				//do nothing
-			}elseif(file_exists($destination) && !$overwrite_all && $overwrite_destination_path!=$destination)
-			{
-				$overwrite_destination_path=$destination;
-				$confirm_overwrite = true;
-				array_unshift($selected, $selected_path);
-				break;				
+				$result=$fs->copy($selected_path, $destination);
 			}else
 			{
-				//echo 'Copy '.$selected_path.' -> '.$destination.'<br />';
-				
-				if($task=='copy')
+				$result=$fs->move($selected_path, $destination);
+			}
+			if(!$result)
+			{
+				if($fs->action_result=='recursion')
 				{
-					$result=$fs->copy($selected_path, $destination);
+					$feedback = $fs_recursion;
 				}else
 				{
-					$result=$fs->move($selected_path, $destination);
+					$feedback = $fs_inssufficient_diskspace;
 				}
-				if(!$result)
-				{
-					if($fs->action_result=='recursion')
-					{
-						$feedback = $fs_recursion;
-					}else
-					{
-						$feedback = $fs_inssufficient_diskspace;
-					}
 					
-					array_unshift($selected, $selected_path);
-					break;
-				}
+				array_unshift($selected, $selected_path);
+				break;
 			}
-		
+		}
+
 	}
-	
+
 	if(!isset($confirm_overwrite) && !isset($feedback))
 	{
 		header('Location: '.$return_to);
@@ -110,30 +110,68 @@ $form->add_html_element(new input('hidden', 'task', $task));
 
 foreach($selected as $selected_path)
 {
-	$form->add_html_element(new input('hidden', 'selected[]', smart_stripslashes($selected_path)));	
+	$form->add_html_element(new input('hidden', 'selected[]', smart_stripslashes($selected_path)));
 }
 
 if(isset($confirm_overwrite))
 {
-	require('overwrite.inc');
-	
+	$form->add_html_element(new input('hidden', 'overwrite_destination_path', $overwrite_destination_path, false));
+	$form->add_html_element(new input('hidden', 'overwrite', ' false', false));
+	$form->add_html_element(new input('hidden', 'overwrite_all', ' false', false));
+	$form->add_html_element(new input('hidden', 'path', $ftv->path));
+
+
+	$p = new html_element('h2');
+	$img = new image('questionmark');
+	$img->set_attribute('align','middle');
+	$img->set_attribute('style','border:0px;margin-right:10px;');
+	$p->add_html_element($img);
+	$p->innerHTML .=$fbConfirmOverwrite;
+	$form->add_html_element($p);
+
+	$form->add_html_element(new html_element('p', $strOverwritePrefix."'".basename($overwrite_destination_path)."'".$strOverwriteSuffix));
+
+	$form->add_html_element(new button($cmdOk,'javascript:overwrite_file(true);'));
+	$form->add_html_element(new button($cmdCancel,'javascript:overwrite_file(false);'));
+	$form->add_html_element(new button($cmdYesToAll,'javascript:overwrite_all_files();'));
+
+	$form->innerHTML .= '
+
+<script type="text/javascript" language="javascript">
+function overwrite_file(overwrite)
+{
+	if (overwrite)
+	{
+		document.forms[0].overwrite.value = "true";
+	}
+	document.forms[0].submit();
+}
+
+function overwrite_all_files()
+{
+	document.forms[0].overwrite_all.value = "true";
+	document.forms[0].overwrite.value = "true";
+	document.forms[0].submit();
+}
+</script>';
+
 }else
 {
 
-	
+
 	$h1 = new html_element('h1', $fs_select_destination);
 	$form->add_html_element($h1);
-	
+
 	if(isset($feedback))
 	{
 		$p = new html_element('p', $feedback);
 		$p->set_attribute('class','Error');
 		$form->add_html_element($p);
-		
+
 	}
-	
+
 	$form->add_html_element($ftv);
-	
+
 	$button = new button($cmdCancel, "javascript:document.location='$return_to';");
 	$form->add_html_element($button);
 }
