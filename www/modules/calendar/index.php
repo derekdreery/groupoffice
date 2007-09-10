@@ -134,6 +134,16 @@ calendar = function(){
 			
 			
 			var tb = new Ext.Toolbar('toolbar');
+			tb.addButton({
+					id: 'add',
+					icon: GOimages['add'],
+					text: GOlang['cmdAdd'],
+					cls: 'x-btn-text-icon',
+					handler: function(){
+						
+					}
+				}
+				);
 			
 			
 			var toolbarPanel = new Ext.ContentPanel('northDiv',{toolbar: tb});
