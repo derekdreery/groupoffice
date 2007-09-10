@@ -173,9 +173,9 @@ if(count($regions) == 0)
 		break;
 
 		default:
-			$menu = new button_menu();
+			//$menu = new button_menu();
 			$menu->add_button('add',$cmdAdd, 'javascript:edit_holiday(0);');
-			$form->add_html_element($menu);
+			//$form->add_html_element($menu);
 
 				
 
