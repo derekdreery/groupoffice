@@ -1,0 +1,12 @@
+If you want to contribute the following work needs to be done:
+
+-Discussion Board
+-Workflow
+-Filemanager access through WebDAV
+-LDAP addressbook
+-LDAP authentication and user management
+-Database indpendency never tested
+-Do all formating in the CSS Stylesheet and output strict HTML4.01 only
+-Projects module should be able to print bills
+
+Translations in various languages.
