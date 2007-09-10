@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS `cms_files`;
+DROP TABLE IF EXISTS `cms_folders`;
+DROP TABLE IF EXISTS `cms_sites`;
+DROP TABLE IF EXISTS `cms_settings`;
+DROP TABLE IF EXISTS `cms_template_files`;
+DROP TABLE IF EXISTS `cms_template_items`;
+DROP TABLE IF EXISTS `cms_templates`;
+DROP TABLE IF EXISTS `cms_languages`;
+DROP TABLE IF EXISTS `cms_comments`;
