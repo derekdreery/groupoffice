@@ -389,6 +389,7 @@ switch($ab_settings['search_type'])
 		$datatable->add_column(new table_heading($strCity, 'ab_contacts.city'));
 		$datatable->add_column(new table_heading($strState, 'ab_contacts.state'));
 		$datatable->add_column(new table_heading($strCountry, 'ab_contacts.country'));
+		$datatable->add_column(new table_heading($ab_comment, 'ab_contacts.comment'));
 
 
 		if(isset($cf_fields))
@@ -439,6 +440,7 @@ switch($ab_settings['search_type'])
 			$row->add_cell(new table_cell(empty_to_stripe(htmlspecialchars($ab->f('city')))));
 			$row->add_cell(new table_cell(empty_to_stripe(htmlspecialchars($ab->f('state')))));
 			$row->add_cell(new table_cell(empty_to_stripe(htmlspecialchars($ab->f('country')))));
+			$row->add_cell(new table_cell(empty_to_stripe(htmlspecialchars($ab->f('comment')))));
 			if(isset($cf_fields))
 			{
 				foreach($cf_fields as $field)
