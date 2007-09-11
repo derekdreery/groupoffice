@@ -16,6 +16,7 @@ var GOlang = {
 	cmdClose : 'Close',
 	cmdOk : 'Ok',
 	cmdApply : 'Apply',
+	cmdRefresh : 'Refresh',
 	
 	
 	displayingItems : 'Displaying items {0} - {1} of {2}',
