@@ -30,6 +30,11 @@ Ext.CalendarGrid = function(container, config){
 		this.container = Ext.get(container);		
 	}
 	
+	if(!this.timeFormat)
+	{
+		this.timeFormat='H:i';
+	}
+	
 	//if this is not set the grid does not display well when I put a load mask on it.
 	this.container.setStyle("overflow", "hidden");
 	
@@ -73,6 +78,18 @@ Ext.CalendarGrid = function(container, config){
 	    "resize" : true
 
     });
+    
+    
+    
+    if(this.store){
+        this.setStore(this.store, true);
+    }
+    
+    if(this.days>4)
+	{
+		this.startDate=this.getFirstDateOfWeek(this.startDate);
+	}
+	this.setStoreBaseParams();
 	
 	
 	
@@ -87,10 +104,7 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 	render : function (){
 		
 		
-		if(this.days>4)
-		{
-			this.startDate=this.getFirstDateOfWeek(this.startDate);
-		}
+		
 	
 		//create container for the column headers
 		this.headingsContainer = Ext.DomHelper.append(this.container,
@@ -163,7 +177,8 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 							
 					this.clickedRow=-1;
 						
-					this.eventPrompt();
+					//this.eventPrompt();
+					this.fireEvent("create", this, this.elementToEvent(columnEl, true));
 				}, 
 				this);
 			
@@ -219,21 +234,53 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 		
 		//Monitor window resize
 		
-		/*Ext.EventManager.onWindowResize(function(w, h){
+		Ext.EventManager.onWindowResize(function(w, h){
 			//Ext.Msg.alert('Resize', 'Viewport w = '+w+', h = '+h);
+			
+			this.autoSizeGrid();
 			for(var i=0;i<this.days;i++)
 			{
 			 	
 		    	this.calculateAppointments(i);
 		    }
-		}, this);*/
-						 
-		//scroll to 7 am.
-		var snap = this.getSnap();
-		
-		this.gridContainer.scrollTo("top", snap['y']*14);
+		}, this);
 		
 	},
+	scrollTo : function (row)
+	{
+		//scroll to 7 am.
+		var snap = this.getSnap();
+		this.gridContainer.scrollTo("top", snap['y']*row);
+	},
+	setStore : function(store, initial){
+        if(!initial && this.store){
+            this.store.un("datachanged", this.reload);
+            //this.store.un("add", this.onAdd);
+            //this.store.un("remove", this.onRemove);
+            //this.store.un("update", this.onUpdate);
+            this.store.un("clear", this.refresh);
+        }
+        if(store){
+        	store.on("beforeload", this.mask, this)
+            store.on("datachanged", this.reload, this);
+            //store.on("add", this.onAdd, this);
+           // store.on("remove", this.onRemove, this);
+           // store.on("update", this.onUpdate, this);
+            store.on("clear", this.refresh, this);
+            
+            
+            
+        }
+        this.store = store;
+        if(store){
+            //this.refresh();
+        }
+    },
+    
+    setStoreBaseParams : function(){
+    	this.store.baseParams['start_time']=this.startDate.format(this.dateTimeFormat);
+        this.store.baseParams['end_time']=this.startDate.add(Date.DAY, this.days).format(this.dateTimeFormat);    
+    },
 	
 	getFirstDateOfWeek : function(date)
 	{
@@ -373,9 +420,10 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 	onSelectionMouseUp : function (e){
 		//hide the overlay		
 		this.overlay.hide();
-
-			
-			
+		
+		this.fireEvent("create", this, this.elementToEvent(this.selector.id));
+		this.clearSelection();
+		/*
 		//get the name for the event
 		Ext.MessageBox.prompt('Name', 'Please enter the name:', function(btn, text){
 			
@@ -399,9 +447,11 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 			}
 			this.clearSelection();
 			
-		},this);			
+			
+		},this);
+		*/		
 	},
-	
+	/*
 	eventPrompt : function()
 	{
 		//get the name for the event
@@ -432,7 +482,7 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 				this.fireEvent("create", this, newEventId, text);
 			}			
 		},this);	
-	},
+	},*/
 	
 	addTimedEvent : function (eventId, name, startDate, endDate)
 	{
@@ -450,6 +500,10 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 		
 		var startRow = startDate.getHours()*2;
 		var endRow = endDate.getHours()*2-1;
+		if(endRow<startRow)
+		{
+			endRow=startRow+2;
+		}
 		
 		var startMin = startDate.getMinutes();
 		if(startMin>30)
@@ -470,7 +524,7 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 		}
 		
 		
-		this.addEvent(eventId, name, day, startRow, endRow);
+		this.addEvent(eventId, '<p class="x-calGrid-event-time">'+startDate.format(this.timeFormat)+"</p>"+name, day, startRow, endRow);
 		
 		
 		
@@ -489,6 +543,8 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 				
 			var startRowEl = Ext.get("day"+day+"_row"+startRow);
 			var endRowEl = Ext.get("day"+day+"_row"+endRow);
+			
+			
 			
 			var startRowPos = startRowEl.getXY();
 			var endRowPos = endRowEl.getXY();
@@ -960,9 +1016,8 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
     	{
     		days = this.days;
     	}
-    	this.startDate = this.startDate.add(Date.DAY, days);
-    	
-    	this.reload();
+    	this.gotoDate(this.startDate.add(Date.DAY, days));
+  
     },
     
     gotoDate : function(date)
@@ -974,58 +1029,42 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
     	{
     		this.startDate = date;
     	}
-    	this.reload();
     	
+    	this.setStoreBaseParams();    	
+    	this.store.reload();
     },
     
     reload : function()
     {
     	this.clearGrid();
-    	this.createHeadings();
+    	this.createHeadings();    	
     	this.load();
+    	
     },
     
     
     load : function()
-    {
-    	this.mask();
-    	var start_time = this.startDate.format(this.dateTimeFormat);
-    	var end_time = this.startDate.add(Date.DAY, this.days).format(this.dateTimeFormat);
-    	
-    	var conn = new Ext.data.Connection();
-			conn.request({
-			url: 'json.php',
-			params: {task: 'events', calendar_id: this.calendar_id, 'start_time': start_time, 'end_time': end_time},
-			callback: function(options, success, response)
-			{
-				if(!success)
-				{
-					Ext.MessageBox.alert('Failed');
-				}else
-				{
-					var events = Ext.decode(response.responseText);
-					
-					for(var i=0;i<events.length;i++)
-					{
-						var startDate = Date.parseDate(events[i]['start_time'], this.dateTimeFormat);
-						var endDate = Date.parseDate(events[i]['end_time'], this.dateTimeFormat);
-						
-						var domId = Ext.id();						
-						this.addTimedEvent(domId, events[i]['name'], startDate, endDate);
-						this.registerEventId(domId, events[i]['id']);				
-					}
-					
-					for(var day=0;day<this.days;day++)
-					{
-						this.calculateAppointments(day);
-					}
-				}
-				
-				this.unmask();
-			},
-			scope: this
-		});
+    {		
+		var records = this.store.getRange();
+
+        for(var i = 0, len = records.length; i < len; i++){            
+            
+            var startDate = Date.parseDate(records[i].data['start_time'], this.dateTimeFormat);
+			var endDate = Date.parseDate(records[i].data['end_time'], this.dateTimeFormat);
+			
+			var domId = Ext.id();						
+			this.addTimedEvent(domId, records[i].data['name'], startDate, endDate);
+			this.registerEventId(domId, records[i].data['event_id']);
+            
+        }
+        
+        for(var day=0;day<this.days;day++)
+		{
+			this.calculateAppointments(day);
+		}
+		this.unmask();
 		
+		this.scrollTo(14);
 		
 		
     
@@ -1042,19 +1081,41 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
     	this.remoteEventIds[domId]=remoteId;
     },
     
-    elementToEvent : function(elementId)
+    elementToEvent : function(elementId, allDay)
 	{
+		if(!allDay)
+		{
+			allDay=false;
+		}
 		var el = Ext.get(elementId);
 		
 		var position=el.getXY();
-		var size = el.getSize();
 		
-		var startRow = this.getRowNumberByY(position[1]);
-		var endRow = this.getRowNumberByY(position[1]+size['height']);
+		
+		if(!allDay)
+		{
+			var size = el.getSize();
+			
+			var startRow = this.getRowNumberByY(position[1]);
+			if(startRow<0)
+			{
+				startRow=0;
+			}				
+			var endRow = this.getRowNumberByY(position[1]+size['height']);
+			if(endRow<=startRow)
+			{
+				endRow=startRow+1;
+			}
+		}else
+		{
+			startRow=0;
+			endRow=0;
+		}
 		
 		var day = this.getDayByX(position[0]);
 		var remoteId = !this.remoteEventIds[elementId] ? 0 : this.remoteEventIds[elementId];
 		
+				
 		var date = this.startDate.add(Date.DAY, day);
 		var startDate = date.add(Date.MINUTE,startRow*30);
 		var endDate = date.add(Date.MINUTE,endRow*30);

@@ -2000,7 +2000,7 @@ class calendar extends db
 	Times in GMT!
 	*/
 
-	function get_events($todos, $events, $completed, $calendar_id=0, $view_id=0, $user_id=0, $links=false, $interval_start=0,
+	function get_events($todos, $events, $completed, $calendars, $user_id=0, $links=false, $interval_start=0,
 	$interval_end=0, $sort_field='start_time',
 	$sort_order='ASC', $start=0, $offset=0, $only_busy_events=false)
 	{
@@ -2011,16 +2011,10 @@ class calendar extends db
 
 		$sql .=   " FROM cal_events";
 
-		if ($view_id > 0)
+	
+		$sql .= " INNER JOIN cal_events_calendars ON (cal_events.id=cal_events_calendars.event_id)";
+		if($user_id > 0)
 		{
-			$sql .= " INNER JOIN cal_events_calendars ON (cal_events.id=cal_events_calendars.event_id)";
-			$sql .= " INNER JOIN cal_views_calendars ON (cal_views_calendars.calendar_id=cal_events_calendars.calendar_id)";
-		}elseif ($calendar_id > 0)
-		{
-			$sql .= " INNER JOIN cal_events_calendars ON (cal_events.id=cal_events_calendars.event_id)";
-		}elseif($user_id > 0)
-		{
-			$sql .= " INNER JOIN cal_events_calendars ON (cal_events.id=cal_events_calendars.event_id)";
 			$sql .= " INNER JOIN cal_calendars ON (cal_events_calendars.calendar_id=cal_calendars.id)";
 		}
 
@@ -2059,18 +2053,7 @@ class calendar extends db
 			$sql .= "completion_time=0";
 		}
 
-		if ($view_id > 0)
-		{
-			if($where)
-			{
-				$sql .= " AND ";
-			}else
-			{
-				$sql .= " WHERE ";
-				$where=true;
-			}
-			$sql .= "cal_views_calendars.view_id='$view_id'";
-		}elseif($user_id > 0)
+		if($user_id > 0)
 		{
 			if($where)
 			{
@@ -2081,7 +2064,7 @@ class calendar extends db
 				$where=true;
 			}
 			$sql .= "cal_calendars.user_id='$user_id' AND cal_calendars.group_id=0";
-		}elseif ($calendar_id > 0)
+		}else
 		{
 			if($where)
 			{
@@ -2091,7 +2074,7 @@ class calendar extends db
 				$sql .= " WHERE ";
 				$where=true;
 			}
-			$sql .= "cal_events_calendars.calendar_id='$calendar_id'";
+			$sql .= "cal_events_calendars.calendar_id IN (".implode(',', $calendars).")";
 		}
 
 		if(is_array($links))
@@ -2157,15 +2140,14 @@ class calendar extends db
 		}
 	}
 
-	function get_events_in_array($calendar_id, $view_id, $user_id,
+	function get_events_in_array($calendars, $user_id,
 	$interval_start_time, $interval_end_time, $show_todos=false, $completed=false, $show_events=true, $links=false, $with_calendars=false,$only_busy_events=false)
 	{
 		$this->events = array();
 		$this->events_sort=array();
 
 
-		if($count = $this->get_events($show_todos, $show_events, $completed, $calendar_id,
-		$view_id,
+		if($count = $this->get_events($show_todos, $show_events, $completed, $calendars,
 		$user_id,
 		$links,
 		$interval_start_time,

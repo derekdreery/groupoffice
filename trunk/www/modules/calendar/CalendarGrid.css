@@ -36,6 +36,12 @@
 	
 }
 
+.x-calGrid-event-time{
+	font-weight:bold;
+	margin:0px;
+	padding:0px;	
+}
+
 .x-calGrid-grid-container{
 	overflow:auto;
 	position:relative;
