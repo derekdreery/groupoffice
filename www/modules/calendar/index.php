@@ -33,8 +33,14 @@ require($GO_CONFIG->root_path.'default_scripts.inc');
 echo $GO_THEME->get_stylesheet('calendar');
 ?>
 <script src="EventDialog.js" type="text/javascript"></script>
-<script src="CalendarGrid.js" type="text/javascript"></script>
-<script src="calendar.js" type="text/javascript"></script>
+<!-- <script src="CalendarGrid.js" type="text/javascript"></script>
+ <script src="calendar.js" type="text/javascript"></script> -->
+<script>
+Ext.EventManager.onDocumentReady(function(){
+	var eventDialog = new EventDialog();
+	eventDialog.init();
+	},EventDialog);
+</script>
 <link href="CalendarGrid.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript" src="language/en.js"></script>
 </head>
@@ -50,9 +56,52 @@ echo $GO_THEME->get_stylesheet('calendar');
 <div id="CalendarGrid"></div>
 </div>
 
-<div id="eventDialogDiv">
-<div id="eventPropertiesDiv"></div>
+<form id="event-form" name="event-form" method="post">
+<div id="event-dialog">
+	<div id="event-properties">
+		<table>
+			<tr>
+				<td>
+				Subject:
+				</td>
+				<td id="subject-field" class="x-form-element"></td>
+			</tr>
+			<tr>
+				<td>
+				Description:
+				</td>
+				<td id="description-field" class="x-form-element"></td>
+			</tr>
+			<tr>
+				<td>Starts at:</td>
+				<td class="x-form-element">
+				<table border="0" cellpadding="0" cellspacig="0">
+				<tr>
+					<td id="start-date-field"></td>
+					<td id="start-hour-field"></td>
+					<td id="start-minute-field"></td>
+					<td></td>
+				</tr>
+				</table>
+				</td>
+			</tr>
+			<tr>
+				<td>Ends at:</td>
+				<td class="x-form-element">
+				<table border="0" cellpadding="0" cellspacig="0">
+				<tr>
+					<td id="end-date-field"></td>
+					<td id="end-hour-field"></td>
+					<td id="end-minute-field"></td>
+					<td id="all-day-field"></td>
+				</tr>
+				</table>
+				</td>
+			</tr>
+		</table>
+	</div>
 </div>
+</form>
 
 </body>
 </html>
