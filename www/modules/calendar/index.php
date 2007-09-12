@@ -13,13 +13,13 @@
  require_once("../../Group-Office.php");
  $GO_SECURITY->authenticate();
  $GO_MODULES->authenticate('calendar');
- //require_once($GO_LANGUAGE->get_language_file('calendar'));
+ require_once($GO_LANGUAGE->get_language_file('calendar'));
 
- //$GO_CONFIG->set_help_url($cal_help_url);
+ $GO_CONFIG->set_help_url($cal_help_url);
 
 
- /*require_once($GO_MODULES->class_path.'calendar.class.inc');
- $cal = new calendar();*/
+ require_once($GO_MODULES->class_path.'calendar.class.inc');
+ $cal = new calendar();
 
 
 ?>
@@ -33,14 +33,22 @@ require($GO_CONFIG->root_path.'default_scripts.inc');
 echo $GO_THEME->get_stylesheet('calendar');
 ?>
 <script src="EventDialog.js" type="text/javascript"></script>
-<!-- <script src="CalendarGrid.js" type="text/javascript"></script>
- <script src="calendar.js" type="text/javascript"></script> -->
-<script>
+<!-- 
+<script src="CalendarGrid.js" type="text/javascript"></script>
+<script src="calendar.js" type="text/javascript"></script> 
+ 
+ <script>
 Ext.EventManager.onDocumentReady(function(){
 	var eventDialog = new EventDialog();
 	eventDialog.init();
+	eventDialog.eventForm.setValues({subject:'test',description:'description'});
 	},EventDialog);
 </script>
+ 
+ -->
+ 
+<script src="CalendarGrid.js" type="text/javascript"></script>
+<script src="calendar.js" type="text/javascript"></script>
 <link href="CalendarGrid.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript" src="language/en.js"></script>
 </head>
@@ -59,46 +67,62 @@ Ext.EventManager.onDocumentReady(function(){
 <form id="event-form" name="event-form" method="post">
 <div id="event-dialog">
 	<div id="event-properties">
-		<table>
-			<tr>
-				<td>
-				Subject:
-				</td>
-				<td id="subject-field" class="x-form-element"></td>
-			</tr>
-			<tr>
-				<td>
-				Description:
-				</td>
-				<td id="description-field" class="x-form-element"></td>
-			</tr>
-			<tr>
-				<td>Starts at:</td>
-				<td class="x-form-element">
-				<table border="0" cellpadding="0" cellspacig="0">
+		<div class="inner-tab">
+			<table>
 				<tr>
-					<td id="start-date-field"></td>
-					<td id="start-hour-field"></td>
-					<td id="start-minute-field"></td>
-					<td></td>
+					<td>
+					<?php echo $cal_subject; ?>:
+					</td>
+					<td class="x-form-element"><input type="text" id="subject" name="subject" /></td>
 				</tr>
-				</table>
-				</td>
-			</tr>
-			<tr>
-				<td>Ends at:</td>
-				<td class="x-form-element">
-				<table border="0" cellpadding="0" cellspacig="0">
 				<tr>
-					<td id="end-date-field"></td>
-					<td id="end-hour-field"></td>
-					<td id="end-minute-field"></td>
-					<td id="all-day-field"></td>
+					<td>
+					<?php echo $strDescription; ?>:
+					</td>
+					<td class="x-form-element"><input type="text" id="description" name="description" /></td>
 				</tr>
-				</table>
-				</td>
-			</tr>
-		</table>
+				<tr>
+					<td><?php echo $sc_start_at; ?>:</td>
+					<td class="x-form-element">
+					<table border="0" cellpadding="0" cellspacing="0">
+					<tr>
+						<td><input type="text" id="startDate" name="startDate" /></td>
+						<td><input type="text" id="startHour" name="startHour" /></td>
+						<td><input type="text" id="startMinute" name="startMinute" /></td>
+						<td></td>
+					</tr>
+					</table>
+					</td>
+				</tr>
+				<tr>
+					<td><?php echo $sc_end_at; ?>:</td>
+					<td class="x-form-element">
+					<table border="0" cellpadding="0" cellspacing="0">
+					<tr>
+						<td><input type="text" id="endDate" name="endDate" /></td>
+						<td><input type="text" id="endHour" name="endHour" /></td>
+						<td><input type="text" id="endMinute" name="endMinute" /></td>
+						<td><input type="checkbox" id="allDay" name="allDay" /></td>
+					</tr>
+					</table>
+					</td>
+				</tr>
+				<tr>
+					<td>Calendar:</td>
+					<td>
+					<?php
+					load_basic_controls();
+					$select = new select('calendarId');
+					$cal->get_writable_calendars($GO_SECURITY->user_id);
+					while($cal->next_record())
+					{
+						$select->add_value($cal->f('id'), $cal->f('name'));
+					}
+					echo $select->get_html();
+					
+					?>
+			</table>
+		</div>
 	</div>
 </div>
 </form>

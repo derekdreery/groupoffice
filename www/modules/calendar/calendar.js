@@ -5,11 +5,12 @@ calendar = function(){
 	var firstCalendarId=0;
 	var calendarList;
 	var calendarCheckboxes;
+	var eventDialog;
 
 	return {
 		init : function(){
 		
-			
+			this.calendarId=0;
 			// initialize state manager, we will use cookies
 			//Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
 
@@ -93,6 +94,9 @@ calendar = function(){
 			
 			this.createCalendarList();
 			this.createCalendarGrid();
+			
+			eventDialog = new EventDialog();
+			
 		
 
 		},
@@ -159,9 +163,9 @@ calendar = function(){
 									var c = g.calendars[calendar];
 									if(typeof(c) != 'function')
 									{
-										if(firstCalendarId==0)
+										if(this.calendarId==0)
 										{
-											firstCalendarId=c.id;									
+											this.calendarId=c.id;									
 										}
 										calTpl.append(calendarList.dom, c);
 										
@@ -179,8 +183,8 @@ calendar = function(){
 						}
 						
 						//calendarCheckboxes[firstCalendarId].setValue(true);
-						ds.baseParams['calendars']=Ext.encode([firstCalendarId]);
-						this.changeActiveCalendar(firstCalendarId);									
+						ds.baseParams['calendars']=Ext.encode([this.calendarId]);
+						this.changeActiveCalendar(this.calendarId);									
 						ds.load();
 					}
 					
@@ -199,9 +203,9 @@ calendar = function(){
 	        if(a){
 	            e.preventDefault();
 	            
-	            var calendarId = a.id.substr(9);
-				ds.baseParams['calendars']=Ext.encode([calendarId]);
-				this.changeActiveCalendar(calendarId);
+	            this.calendarId = a.id.substr(9);
+				ds.baseParams['calendars']=Ext.encode([this.calendarId]);
+				this.changeActiveCalendar(this.calendarId);
 				ds.reload();
 	        }  
     
@@ -244,9 +248,21 @@ calendar = function(){
 			
 			CalendarGrid.on("create", function(CalGrid, newEvent){
 					//CalendarGrid.mask();
+					var formValues={};
+					
+					formValues['startDate'] = newEvent['startDate'].format(GOsettings['date_format']);					
+					formValues['startHour'] = newEvent['startDate'].format("H");
+					formValues['startMinute'] = newEvent['startDate'].format("i");
+					
+					formValues['endDate'] = newEvent['endDate'].format(GOsettings['date_format']);
+					formValues['endHour'] = newEvent['endDate'].format("H");
+					formValues['endMinute'] = newEvent['endDate'].format("i");
+					
+					formValues['calendarId']=this.calendarId;
+					
+
 			
-					var eventDialog = new EventDialog();
-					eventDialog.init();
+					eventDialog.show(0, formValues);
 					
 			/*
 					var conn = new Ext.data.Connection();
@@ -268,7 +284,7 @@ calendar = function(){
 						scope: CalendarGrid
 					});*/
 					
-				});
+				}, this);
 				
 			CalendarGrid.on("move", function(CalGrid, newEventEl, newEventName){
 					CalendarGrid.mask();

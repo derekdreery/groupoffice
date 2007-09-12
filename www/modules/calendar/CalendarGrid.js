@@ -1120,7 +1120,8 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
 		var startDate = date.add(Date.MINUTE,startRow*30);
 		var endDate = date.add(Date.MINUTE,endRow*30);
 		
-		return { 'startDate': startDate.format(this.dateTimeFormat), 'endDate':endDate.format(this.dateTimeFormat), 'day':day, 'remoteId':remoteId };
+		//return { 'startDate': startDate.format(this.dateTimeFormat), 'endDate':endDate.format(this.dateTimeFormat), 'day':day, 'remoteId':remoteId };
+		return { 'startDate': startDate, 'endDate':endDate, 'day':day, 'remoteId':remoteId };
 	}
 
 });
