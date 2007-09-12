@@ -4,7 +4,9 @@ EventDialog = function(){
 
 	return{
 		
-		init : function () {
+		show : function (eventId, values) {
+			
+			this.eventId=eventId;
 			
 			if(!dialog)
 			{
@@ -40,74 +42,139 @@ EventDialog = function(){
 					}));
 					
 					this.buildForm();
+					
+					
+					
+					dialog.addButton({
+					text: GOlang['cmdOk'],
+					handler: function(){
+						this.submitForm();
+						dialog.hide();
+					},
+					scope:this
+					
+					}, this);
+					
+					dialog.addButton({
+						text: GOlang['cmdApply'],
+						handler: function(){
+							this.submitForm();
+						},
+						scope:this
+					}, this);
+				
+					dialog.addButton(GOlang['cmdClose'], dialog.hide, dialog);
+					
 		
 					layout.endUpdate();
 			
 			}
 			
+			if(values)
+			{
+				this.eventForm.setValues(values);
+			}
+			
+			
+			
 			dialog.show();
+			this.eventForm.findField("subject").focus();
+		},
+		
+		submitForm : function(){
+			
+			var task = this.eventId>0 ? 'update_event' : 'add_event';
+			
+			this.eventForm.submit(
+			{
+				url:'action.php',
+				params: {'task' : task},
+				waitMsg:GOlang['waitMsgSave'],
+				success:function(form, action){
+					
+					if(action.result.event_id)
+					{
+						this.eventId=action.result.event_id;
+					}					
+				},		
+				failure: function(form, action) {
+					Ext.MessageBox.alert(GOlang['Error'], action.result.errors);
+				},
+				scope: this
+			});
+			
 		},
 		
 		
 		buildForm : function () {
+			var hours =[
+	                	['00','00'],
+	                	['01','01'],
+	                	['02','02'],
+	                	['03','03'],
+	                	['04','04'],
+	                	['05','05'],
+	                	['06','06'],
+	                	['07','07'],
+	                	['08','08'],
+	                	['09','09'],
+	                	['10','10'],
+	                	['11','11'],
+	                	['12','12'],
+	                	['13','13'],
+	                	['14','14'],
+	                	['15','15'],
+	                	['16','16'],
+	                	['17','17'],
+	                	['18','18'],
+	                	['19','19'],
+	                	['20','20'],
+	                	['21','21'],
+	                	['22','22'],
+	                	['23','23']];
+	        var minutes = [['00','00'],['15','15'],['30','30'],['45','45']];
 			
 			Ext.QuickTips.init();
 
 		    // turn on validation errors beside the field globally
 		    Ext.form.Field.prototype.msgTarget = 'side';
 			
-			eventForm = new Ext.BasicForm('event-form', {
-				waitMsgTarget: 'box-bd'
+			this.eventForm = new Ext.BasicForm('event-form', {
+				waitMsgTarget: 'event-dialog'
 			});
 			
-			new Ext.form.TextField({
+			var nameField = new Ext.form.TextField({
+			id: 'subject',
             name: 'subject',
           	width:300,
             allowBlank:false
-        	}).render('subject-field');
+        	});        
         	
+        	//nameField.applyTo('subject');
+        		
+        	this.eventForm.add(nameField,        	
         	new Ext.form.TextArea({
+        	id: 'description',
             name: 'description',
           	width:300,
             allowBlank:true
-        	}).render('description-field');
-        	
+        	})
+        	,        	
         	new Ext.form.DateField({
+        	id: 'startDate',
             name: 'startDate',
             width:100,
             format: GOsettings['date_format'],
             allowBlank:false
-        	}).render('start-date-field');
+        	})
+        	);
         	
-        	new Ext.form.ComboBox({            
-	            hiddenName:'startHour',
+        	var startHour = new Ext.form.ComboBox({            
+        		id: 'startHour',
+        		name: 'startHour',
 	            store: new Ext.data.SimpleStore({
 	                fields: ['value','text'],
-	                data: [
-	                	['00','00'],
-	                	['01','01'],
-	                	['02','02'],
-	                	['03','03'],
-	                	['04','04'],
-	                	['05','05'],
-	                	['06','06'],
-	                	['07','07'],
-	                	['08','08'],
-	                	['09','09'],
-	                	['10','10'],
-	                	['11','11'],
-	                	['12','12'],
-	                	['13','13'],
-	                	['14','14'],
-	                	['15','15'],
-	                	['16','16'],
-	                	['17','17'],
-	                	['18','18'],
-	                	['19','19'],
-	                	['20','20'],
-	                	['21','21'],
-	                	['22','22'],
-	                	['23','23']]
+	                data: hours
 	            }),
 	            displayField:'text',
 	            typeAhead: true,
@@ -116,13 +183,16 @@ EventDialog = function(){
 	            selectOnFocus:true,
 	            
 	            width:40
-	        }).render('start-hour-field');
+	        });
 	        
-	        new Ext.form.ComboBox({            
-	            hiddenName:'startMinute',
+	        this.eventForm.add(startHour);
+	        
+	        var startMin = new Ext.form.ComboBox({
+	        	id: 'startMinute',   
+	        	name: 'startMinute',         
 	            store: new Ext.data.SimpleStore({
 	                fields: ['value','text'],
-	                data: [['00','00'],['15','15'],['30','30'],['45','45']]
+	                data: minutes
 	            }),
 	            displayField:'text',
 	            typeAhead: true,
@@ -130,45 +200,24 @@ EventDialog = function(){
 	            triggerAction: 'all',
 	            selectOnFocus:true,
 	            width:40
-	        }).render('start-minute-field');		
+	        });		
+	        this.eventForm.add(startMin);
 	        
-	        
-	        new Ext.form.DateField({
+	        var endDate = new Ext.form.DateField({
+	        id: 'endDate',
             name: 'endDate',
             width:100,
             format: GOsettings['date_format'],
             allowBlank:false
-        	}).render('end-date-field');
+        	});
+        	this.eventForm.add(endDate);
         	
-        	new Ext.form.ComboBox({            
-	            hiddenName:'endHour',
+        	var endHour = new Ext.form.ComboBox({   
+        		id: 'endHour',         
+	            name:'endHour',
 	            store: new Ext.data.SimpleStore({
 	                fields: ['value','text'],
-	                data: [
-	                	['00','00'],
-	                	['01','01'],
-	                	['02','02'],
-	                	['03','03'],
-	                	['04','04'],
-	                	['05','05'],
-	                	['06','06'],
-	                	['07','07'],
-	                	['08','08'],
-	                	['09','09'],
-	                	['10','10'],
-	                	['11','11'],
-	                	['12','12'],
-	                	['13','13'],
-	                	['14','14'],
-	                	['15','15'],
-	                	['16','16'],
-	                	['17','17'],
-	                	['18','18'],
-	                	['19','19'],
-	                	['20','20'],
-	                	['21','21'],
-	                	['22','22'],
-	                	['23','23']]
+	                data: hours
 	            }),
 	            displayField:'text',
 	            typeAhead: true,
@@ -177,13 +226,15 @@ EventDialog = function(){
 	            selectOnFocus:true,
 	            
 	            width:40
-	        }).render('end-hour-field');
+	        });
+	        this.eventForm.add(endHour);
 	        
-	        new Ext.form.ComboBox({            
-	            hiddenName:'endMinute',
+	        var endMin = new Ext.form.ComboBox({
+	        	id:'endMinute',            
+	            name:'endMinute',
 	            store: new Ext.data.SimpleStore({
 	                fields: ['value','text'],
-	                data: [['00','00'],['15','15'],['30','30'],['45','45']]
+	                data: minutes
 	            }),
 	            displayField:'text',
 	            typeAhead: true,
@@ -191,14 +242,38 @@ EventDialog = function(){
 	            triggerAction: 'all',
 	            selectOnFocus:true,
 	            width:40
-	        }).render('end-minute-field');	
+	        });	
+	        this.eventForm.add(endMin);
 	        
-	        new Ext.form.Checkbox({
+	        var allDayCB = new Ext.form.Checkbox({
 	            boxLabel:'Time is not applicable',
-	            name:'all_day',
+	            id:'allDay',  
+	            name:'allDay',
 	            checked:false,
 	            width:'auto'
-        	}).render('all-day-field');	
+        	});
+        	this.eventForm.add(allDayCB);
+        	
+        	allDayCB.on('check', function(checkbox, checked){
+        		startHour.setDisabled(checked);
+        		endHour.setDisabled(checked);
+        		startMin.setDisabled(checked);
+        		endMin.setDisabled(checked);
+        	},this);
+        	
+        	
+        	var calendarId = new Ext.form.ComboBox({
+	        	id:'calendarId',            
+				triggerAction: 'all',
+	            transform:'calendarId',
+	            selectOnFocus:true,
+	            width:300,
+	            forceSelection:true
+	        });	
+	        this.eventForm.add(calendarId);
+        	
+        	
+        	this.eventForm.render();
 		}	
 	
 	}
