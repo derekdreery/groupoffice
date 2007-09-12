@@ -197,6 +197,8 @@ class notes extends db
 		$sql = "SELECT * FROM no_notes WHERE user_id='$user_id' AND mtime>$last_sync_time";
 
 		$this->query($sql);
+		
+		$search = new search();
 
 		$db = new db();
 		while($this->next_record())

@@ -3265,6 +3265,8 @@ class calendar extends db
 
 
 	    	$this->query($sql);
+	    	
+	    	$search = new search();
 
 	    	$db = new db();
 	    	while($this->next_record())
