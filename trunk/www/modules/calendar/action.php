@@ -50,13 +50,25 @@
 
  	case 'add_event':
 
- 		$calendar_id=smart_addslashes($_POST['calendar_id']);
-
- 		$gridEvent = json_decode(smart_stripslashes($_POST['gridEvent']));
+ 		$calendar_id=smart_addslashes($_POST['calendarId']);
  		
- 		$event['name']=smart_addslashes($_POST['name']);
- 		$event['start_time']=local_to_gmt_time(strtotime($gridEvent->startDate));
- 		$event['end_time']=local_to_gmt_time(strtotime($gridEvent->endDate));
+ 		
+ 		if(isset($_POST['description']))
+ 		{
+			$event['description']=smart_addslashes($_POST['description']);
+ 		}
+ 		
+ 		if(isset($_POST['startDate']))
+ 		{
+ 			$event['start_time']=local_to_gmt_time(date_to_unixtime($_POST['startDate'].' '.$_POST['startHour'].':'.$_POST['startMinute']));
+ 		}
+ 		
+ 		if(isset($_POST['endDate']))
+ 		{
+ 			$event['end_time']=local_to_gmt_time(date_to_unixtime($_POST['endDate'].' '.$_POST['endHour'].':'.$_POST['endMinute']));
+ 		}
+
+ 		$event['name']=smart_addslashes($_POST['subject']);
 
  		if(empty($event['name']) || empty($event['start_time']) || empty($event['end_time']))
  		{

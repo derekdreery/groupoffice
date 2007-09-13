@@ -64,6 +64,8 @@ class input extends html_element
 		
 		$this->set_attribute('type', $type);
 		$this->set_attribute('name', $name);
+		$this->set_attribute('id', $name);
+		
 		if($remind_value && $post_value = $this->get_post_value($name))
 		{
 			$this->set_attribute('value', htmlspecialchars(smart_stripslashes($post_value)));

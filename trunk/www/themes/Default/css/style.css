@@ -7,3 +7,13 @@ color:#000;
 .x-form-element {
     padding-left:0px;
 }
+
+.subTable{
+	border:0px;
+	border-collapse: collapse;
+}
+.subTable td {
+	margin:0px;
+	padding:0px;
+	padding-right:4px;
+}

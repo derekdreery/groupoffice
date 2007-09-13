@@ -37,20 +37,20 @@ echo $GO_THEME->get_stylesheet('calendar');
 <script src="CalendarGrid.js" type="text/javascript"></script>
 <script src="calendar.js" type="text/javascript"></script> 
  
+
+ 
+ -->
+
+<link href="CalendarGrid.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="language/en.js"></script>
  <script>
 Ext.EventManager.onDocumentReady(function(){
 	var eventDialog = new EventDialog();
-	eventDialog.init();
-	eventDialog.eventForm.setValues({subject:'test',description:'description'});
+	eventDialog.show();
+	eventDialog.setCurrentDate();
+	
 	},EventDialog);
 </script>
- 
- -->
- 
-<script src="CalendarGrid.js" type="text/javascript"></script>
-<script src="calendar.js" type="text/javascript"></script>
-<link href="CalendarGrid.css" type="text/css" rel="stylesheet" />
-<script type="text/javascript" src="language/en.js"></script>
 </head>
 <body>
 <div id="northDiv">
@@ -65,7 +65,7 @@ Ext.EventManager.onDocumentReady(function(){
 </div>
 
 <form id="event-form" name="event-form" method="post">
-<div id="event-dialog">
+<div id="event-dialog" style="visibility:hidden">
 	<div id="event-properties">
 		<div class="inner-tab">
 			<table>
@@ -76,15 +76,15 @@ Ext.EventManager.onDocumentReady(function(){
 					<td class="x-form-element"><input type="text" id="subject" name="subject" /></td>
 				</tr>
 				<tr>
-					<td>
+					<td style="vertical-align:top">
 					<?php echo $strDescription; ?>:
 					</td>
-					<td class="x-form-element"><input type="text" id="description" name="description" /></td>
+					<td class="x-form-element"><textarea id="description" name="description"></textarea></td>
 				</tr>
 				<tr>
 					<td><?php echo $sc_start_at; ?>:</td>
 					<td class="x-form-element">
-					<table border="0" cellpadding="0" cellspacing="0">
+					<table class="subTable">
 					<tr>
 						<td><input type="text" id="startDate" name="startDate" /></td>
 						<td><input type="text" id="startHour" name="startHour" /></td>
@@ -97,7 +97,7 @@ Ext.EventManager.onDocumentReady(function(){
 				<tr>
 					<td><?php echo $sc_end_at; ?>:</td>
 					<td class="x-form-element">
-					<table border="0" cellpadding="0" cellspacing="0">
+					<table class="subTable">
 					<tr>
 						<td><input type="text" id="endDate" name="endDate" /></td>
 						<td><input type="text" id="endHour" name="endHour" /></td>
@@ -121,8 +121,104 @@ Ext.EventManager.onDocumentReady(function(){
 					echo $select->get_html();
 					
 					?>
+					</td>
+				</tr>
 			</table>
-		</div>
+		</div>	
+	</div>
+	
+	
+	
+	<div id="event-recurrence">
+		<div class="inner-tab">
+			<table>
+				<tr>
+					<td>
+					<?php echo $sc_recur_every; ?>:
+					</td>
+					<td class="x-form-element">
+					<table class="subTable">
+					<tr>
+						<td>
+						<?php
+						$select = new select('repeat_every', '1');
+						for ($i = 1; $i < 13; $i ++) {
+							$select->add_value($i, $i);
+						}
+						$select->print_html();
+						?>
+						</td>
+						<td>
+						<?php					
+						$select = new select('repeat_type','0');					
+						$select->add_value('0', $sc_types1[REPEAT_NONE]);
+						$select->add_value('1', $sc_types1[REPEAT_DAILY]);
+						$select->add_value('2', $sc_types1[REPEAT_WEEKLY]);
+						$select->add_value('3', $sc_types1[REPEAT_MONTH_DATE]);
+						$select->add_value('4', $sc_types1[REPEAT_MONTH_DAY]);
+						$select->add_value('5', $sc_types1[REPEAT_YEARLY]);
+						$select->print_html();
+						?>
+						</td>
+					</tr>
+					</table>
+					</td>
+				</tr>
+				<tr>
+					<td>
+					<?php echo $sc_at_days; ?>:
+					</td>
+					<td class="x-form-element">
+					<table class="subTable">
+					<tr>
+						<td>					
+						<?php
+						$select = new select("month_time", '1');
+						$select->add_arrays(array (1, 2, 3, 4), $month_times);
+						$select->print_html();					
+						?>
+						</td>
+						<td>
+						<?php
+						$day_number = $_SESSION['GO_SESSION']['first_weekday'];
+						
+						for ($i = 0; $i < 7; $i ++) {
+							if ($day_number == 7)
+							$day_number = 0;
+							
+							$input = new input('checkbox', 'repeat_days_'.$day_number,'1');
+							$input->set_attribute('id','repeat_days_'.$day_number);
+							
+							echo '<td>';
+							$input->print_html();
+							echo '</td>';
+							
+							$day_number ++;
+						}
+						?>
+						</td>
+					</tr>
+					</table>					
+					</td>
+				</tr>
+				<tr>
+					<td><?php echo $sc_cycle_end; ?></td>
+					<td class="x-form-element">
+					<table class="subTable">
+					<tr>
+						<td>	
+						<input type="text" id="repeat_end_date" name="repeat_end_date" />
+						</td>
+						<td>
+						<input type="checkbox" name="repeat_forever" id="repeat_forever" />
+						</td>
+					</tr>
+					</table>
+					</td>
+				</tr>
+				
+			</table>
+		</div>	
 	</div>
 </div>
 </form>
