@@ -98,6 +98,8 @@ class filesystem_list extends datatable
 			$this->add_column(new table_heading('&nbsp;'));	
 		}
 
+		$write_permission = $fs->has_write_permission($GO_SECURITY->user_id, $this->path);
+
 		$folders = $fs->get_folders($this->path);
 		$files = $fs->get_files($this->path);
 
@@ -167,7 +169,7 @@ class filesystem_list extends datatable
 						$GO_MODULES->modules['filesystem']['url'].'index.php?task=properties&path='.urlencode($file['path'])."';");	
 				}else
 				{
-					if($fs_settings['use_gota']=='1' && $gota_supported)
+					if($fs_settings['use_gota']=='1' && $gota_supported && $write_permission)
 					{
 						$row->set_attribute('ondblclick', "javascript:window.location.href='".
 							$GO_MODULES->modules['filesystem']['url'].'jnlp.php?path='.urlencode($file['path'])."';");
