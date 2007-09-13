@@ -63,6 +63,7 @@ class select extends html_element
 		$this->lb = "\n";
 
 		$this->name = $name;
+		$this->set_attribute('id',$name);
 
 		$this->multiple = $multiple;
 		if($multiple)

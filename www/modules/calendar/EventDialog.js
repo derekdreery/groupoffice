@@ -15,8 +15,8 @@ EventDialog = function(){
 						shadow:false,
 						resizable:false,
 						proxyDrag: true,
-						width:600,
-						height:250,
+						width:550,
+						height:400,
 						collapsible:false,
 						shim:false,
 						center: {
@@ -24,7 +24,8 @@ EventDialog = function(){
 							tabPosition: 'top',
 							closeOnTab: true,
 							alwaysShowTabs: false
-						}
+						},
+						title: calLang['appointment']
 		
 					});
 					dialog.addKeyListener(27, dialog.hide, dialog);
@@ -38,6 +39,12 @@ EventDialog = function(){
 					
 					layout.add('center', new Ext.ContentPanel('event-properties',{
 						title: GOlang['strProperties'],
+						autoScroll:true					
+					}));
+					
+					
+					layout.add('center', new Ext.ContentPanel('event-recurrence',{
+						title: calLang['recurrence'],
 						autoScroll:true					
 					}));
 					
@@ -81,6 +88,24 @@ EventDialog = function(){
 			this.eventForm.findField("subject").focus();
 		},
 		
+		setCurrentDate : function()
+		{
+			var formValues={};
+			
+			var date = new Date();
+					
+			formValues['startDate'] = date.format(GOsettings['date_format']);					
+			formValues['startHour'] = date.format("H");
+			formValues['startMinute'] = '00';
+			
+			formValues['endDate'] = date.format(GOsettings['date_format']);
+			formValues['endHour'] = date.add(Date.HOUR,1).format("H");
+			formValues['endMinute'] = '00';
+			
+			this.eventForm.setValues(formValues);
+			
+		},
+		
 		submitForm : function(){
 			
 			var task = this.eventId>0 ? 'update_event' : 'add_event';
@@ -98,7 +123,7 @@ EventDialog = function(){
 					}					
 				},		
 				failure: function(form, action) {
-					Ext.MessageBox.alert(GOlang['Error'], action.result.errors);
+					//Ext.MessageBox.alert(GOlang['Error'], action.result.errors);
 				},
 				scope: this
 			});
@@ -146,7 +171,7 @@ EventDialog = function(){
 			var nameField = new Ext.form.TextField({
 			id: 'subject',
             name: 'subject',
-          	width:300,
+          	width:400,
             allowBlank:false
         	});        
         	
@@ -156,7 +181,8 @@ EventDialog = function(){
         	new Ext.form.TextArea({
         	id: 'description',
             name: 'description',
-          	width:300,
+          	width:400,
+          	height:150,
             allowBlank:true
         	})
         	,        	
@@ -271,10 +297,155 @@ EventDialog = function(){
 	            forceSelection:true
 	        });	
 	        this.eventForm.add(calendarId);
+	        
+	        
+	        
+	        
+	        //Start of recurrence tab
+	        
+	        var repeatEvery = new Ext.form.ComboBox({
+	        	id:'repeat_every',            
+				triggerAction: 'all',
+	            transform:'repeat_every',
+	            selectOnFocus:true,
+	            width:40,
+	            forceSelection:true,
+	            disabled: true
+	        });	
+	        this.eventForm.add(repeatEvery);
+	        
+	        var repeatType = new Ext.form.ComboBox({
+	        	id:'repeat_type',            
+				triggerAction: 'all',
+				editable: false,
+	            transform:'repeat_type',
+	            selectOnFocus:true,
+	            width:200,
+	            forceSelection:true
+	        });	
+	        
+	        repeatType.on('select', this.changeRepeat, this);
+	        this.eventForm.add(repeatType);
+	        	        
+	        
+	        var monthTime = new Ext.form.ComboBox({
+	        	id:'month_time',            
+				triggerAction: 'all',
+	            transform:'month_time',
+	            selectOnFocus:true,
+	            disabled: true,
+	            width:80,
+	            forceSelection:true
+	        });	
+	        this.eventForm.add(monthTime);
+	        
+	        for(var day=0;day<7;day++)
+	        {
+	        	var cb = new Ext.form.Checkbox({
+		            boxLabel:calLang['shortDays'][day],
+		            id:'repeat_days_'+day,  
+		            name:'repeat_days_'+day,
+		            disabled: true,
+		            checked:false,
+		            width:'auto'
+	        	});
+	        	this.eventForm.add(cb);
+	        	
+	        }
+	        
+	        
+	        var repeatEndDate = new Ext.form.DateField({
+	        	id: 'repeat_end_date',
+	            name: 'repeat_end_date',
+	            width:100,
+	            disabled: true,
+	            format: GOsettings['date_format'],
+	            allowBlank:true
+        	});
+        	this.eventForm.add(repeatEndDate);
+	        
+	        var repeatForever = new Ext.form.Checkbox({
+	            boxLabel: calLang['repeatForever'],
+	            id:'repeat_forever',  
+	            name:'repeat_forever',
+	            checked:true,
+	            disabled:true,
+	            width:'auto'
+        	});
+        	this.eventForm.add(repeatForever);
+	        
+	        
+	        
+	        //start other options tab
+	        
+	        
+	        
         	
         	
         	this.eventForm.render();
-		}	
+		},
+		changeRepeat : function(checkbox, record, index){
+	        switch(record.data.value)
+			{
+				case '0':
+					this.disableDays(true);
+					this.eventForm.findField('month_time').setDisabled(true);
+					this.eventForm.findField('repeat_forever').setDisabled(true);
+					this.eventForm.findField('repeat_end_date').setDisabled(true);					
+					this.eventForm.findField('repeat_every').setDisabled(true);
+				break;
+		
+				case '1':
+					this.disableDays(true);
+					this.eventForm.findField('month_time').setDisabled(true);
+					this.eventForm.findField('repeat_forever').setDisabled(false);
+					this.eventForm.findField('repeat_end_date').setDisabled(false);					
+					this.eventForm.findField('repeat_every').setDisabled(false);
+					
+				break;
+		
+				case '2':
+					this.disableDays(false);
+					this.eventForm.findField('month_time').setDisabled(true);
+					this.eventForm.findField('repeat_forever').setDisabled(false);
+					this.eventForm.findField('repeat_end_date').setDisabled(false);					
+					this.eventForm.findField('repeat_every').setDisabled(false);
+
+				break;
+		
+				case '3':
+					this.disableDays(true);
+					this.eventForm.findField('month_time').setDisabled(true);
+					this.eventForm.findField('repeat_forever').setDisabled(false);
+					this.eventForm.findField('repeat_end_date').setDisabled(false);					
+					this.eventForm.findField('repeat_every').setDisabled(false);
+				
+				break;
+		
+				case '4':
+					this.disableDays(false);
+					this.eventForm.findField('month_time').setDisabled(false);
+					this.eventForm.findField('repeat_forever').setDisabled(false);
+					this.eventForm.findField('repeat_end_date').setDisabled(false);					
+					this.eventForm.findField('repeat_every').setDisabled(false);
+				break;
+		
+				case '5':
+					this.disableDays(true);
+					this.eventForm.findField('month_time').setDisabled(true);
+					this.eventForm.findField('repeat_forever').setDisabled(false);
+					this.eventForm.findField('repeat_end_date').setDisabled(false);					
+					this.eventForm.findField('repeat_every').setDisabled(false);
+				break;
+			}	        	
+	    },
+	    disableDays : function(disabled){
+	    	for(var day=0;day<7;day++)
+	        {
+	        	this.eventForm.findField('repeat_days_'+day).setDisabled(disabled);
+	        }
+	    		    	
+	    }
 	
 	}
 }
