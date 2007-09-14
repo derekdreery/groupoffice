@@ -25,6 +25,66 @@ $task=isset($_REQUEST['task']) ? smart_addslashes($_REQUEST['task']) : 0;
 
 switch($task)
 {
+	case 'event':
+		
+		$event = $cal->get_event(smart_addslashes($_REQUEST['event_id']));
+		
+		//$result['succes']=true;
+		//$result['data']=$event;
+		
+		$event['subject']=$event['name'];
+		
+		$start_time = gmt_to_local_time($event['start_time']);
+		$end_time = gmt_to_local_time($event['end_time']);
+		
+		$event['start_date']=date($_SESSION['GO_SESSION']['date_format'], $start_time);
+		$event['start_hour'] = date('G', $start_time);
+		$event['start_min'] = date('i', $start_time);
+		
+		$event['end_date']=date($_SESSION['GO_SESSION']['date_format'], $end_time);
+		$event['end_hour'] = date('G', $end_time);
+		$event['end_min'] = date('i', $end_time);
+		
+		$event['repeat_days_0']=($event['sun']=='1');
+		$event['repeat_days_1']=($event['mon']=='1');
+		$event['repeat_days_2']=($event['tue']=='1');
+		$event['repeat_days_3']=($event['wed']=='1');
+		$event['repeat_days_4']=($event['thu']=='1');
+		$event['repeat_days_5']=($event['fri']=='1');
+		$event['repeat_days_6']=($event['sat']=='1');
+		
+		$event['repeat_end_date']=date($_SESSION['GO_SESSION']['date_format'], gmt_to_local_time($event['repeat_end_time']));
+		
+		
+		$multipliers[] = 604800;
+		$multipliers[] = 86400;
+		$multipliers[] = 3600;
+		$multipliers[] = 60;
+
+		$event['reminder_multiplier'] = 60;
+		$event['reminder_value'] = 0;
+
+		if($event['reminder'] != 0)
+		{
+			for ($i = 0; $i < count($multipliers); $i ++) {
+				$devided = $event['reminder'] / $multipliers[$i];
+				$match = (int) $devided;
+				if ($match == $devided) {
+					$event['reminder_multiplier'] = $multipliers[$i];
+					$event['reminder_value'] = $devided;
+					break;
+				}
+			}
+		}
+		
+		
+		
+		
+	
+		//echo json_encode($result);
+		echo '({"event":['.json_encode($event).']})';
+		
+		break;
 	case 'events':
 		
 		$calendar_id=isset($_REQUEST['calendar_id']) ? smart_addslashes($_REQUEST['calendar_id']) : 0;

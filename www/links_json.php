@@ -19,6 +19,9 @@ $search = new search();
 $start = isset($_REQUEST['start']) ? $_REQUEST['start'] : 0;
 $limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : 0;
 
+$sort = isset($_REQUEST['sort']) ? $_REQUEST['sort'] : 'mtime';
+$dir= isset($_REQUEST['dir']) ? $_REQUEST['dir'] : 'DESC';
+
 if(isset($_REQUEST['link_id']))
 {
 	$links = $GO_LINKS->get_links($_REQUEST['link_id']);
@@ -28,9 +31,9 @@ if(isset($_REQUEST['link_id']))
 		$link_ids[]=$link['link_id'];
 	}
 	
-	$count = $search->global_search($GO_SECURITY->user_id, '', $start, $limit, $_REQUEST['sort'],$_REQUEST['dir'], $link_ids);
+	$count = $search->global_search($GO_SECURITY->user_id, '', $start, $limit, $sort,$dir, $link_ids);
 }else {
-	$count = $search->global_search($GO_SECURITY->user_id, smart_addslashes($_REQUEST['query']), $start, $limit, $_REQUEST['sort'],$_REQUEST['dir']);
+	$count = $search->global_search($GO_SECURITY->user_id, smart_addslashes($_REQUEST['query']), $start, $limit, $sort,$dir);
 }
 
 foreach($GO_MODULES->modules as $module)
@@ -70,6 +73,7 @@ if($count)
 		'icon'=>$icon,
 		'link_id'=>$search->f('link_id'),
 		'link_type'=>$search->f('link_type'),
+		'type_name'=>'('.$search->f('type').') '.$search->f('name'),
 		'name'=>$search->f('name'),
 		'type'=>$search->f('type'),
 		'description'=>$search->f('description'),

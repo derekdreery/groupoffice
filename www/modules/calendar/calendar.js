@@ -95,7 +95,7 @@ calendar = function(){
 			this.createCalendarList();
 			this.createCalendarGrid();
 			
-			eventDialog = new EventDialog();
+			eventDialog = new Ext.calendar.EventDialog(CalendarGrid);
 			
 		
 
@@ -224,7 +224,7 @@ calendar = function(){
 				proxy: new Ext.data.HttpProxy({
 					url: 'json.php'
 				}),
-
+				baseParams: {task: 'events'},
 				reader: new Ext.data.JsonReader({
 					root: 'results',
 					id: 'id'
@@ -238,7 +238,7 @@ calendar = function(){
 				])
 			});
         	
-        	CalendarGrid = new Ext.CalendarGrid('CalendarGrid', {store: ds, days: 5});
+        	CalendarGrid = new Ext.calendar.CalendarGrid('CalendarGrid', {store: ds, days: 5});
 			
 			
 			
@@ -250,39 +250,19 @@ calendar = function(){
 					//CalendarGrid.mask();
 					var formValues={};
 					
-					formValues['startDate'] = newEvent['startDate'].format(GOsettings['date_format']);					
-					formValues['startHour'] = newEvent['startDate'].format("H");
-					formValues['startMinute'] = newEvent['startDate'].format("i");
+					formValues['start_date'] = newEvent['startDate'].format(GOsettings['date_format']);					
+					formValues['start_hour'] = newEvent['startDate'].format("H");
+					formValues['start_min'] = newEvent['startDate'].format("i");
 					
-					formValues['endDate'] = newEvent['endDate'].format(GOsettings['date_format']);
-					formValues['endHour'] = newEvent['endDate'].format("H");
-					formValues['endMinute'] = newEvent['endDate'].format("i");
+					formValues['end_date'] = newEvent['endDate'].format(GOsettings['date_format']);
+					formValues['end_hour'] = newEvent['endDate'].format("H");
+					formValues['end_min'] = newEvent['endDate'].format("i");
 					
-					formValues['calendarId']=this.calendarId;
+					formValues['calendar_id']=this.calendarId;
 					
 
 			
 					eventDialog.show(0, formValues);
-					
-			/*
-					var conn = new Ext.data.Connection();
-						conn.request({
-						url: 'action.php',
-						params: {task: 'add_event', calendar_id: ds.baseParams['calendar_id'],  'name': newEventName, 'gridEvent': Ext.encode(event)},
-						callback: function(options, success, response)
-						{
-							var response = Ext.decode(response.responseText);
-							if(!success)
-							{				
-								Ext.MessageBox.alert('Failed', response['errors']);
-							}else
-							{
-								CalendarGrid.registerEventId(newEventEl,response['event_id']);
-							}
-							CalendarGrid.unmask();
-						},
-						scope: CalendarGrid
-					});*/
 					
 				}, this);
 				
