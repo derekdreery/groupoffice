@@ -35,16 +35,17 @@ require($GO_CONFIG->root_path.'default_head.inc');
 require($GO_CONFIG->root_path.'default_scripts.inc');
 echo $GO_THEME->get_stylesheet('calendar');
 ?>
+<link href="CalendarGrid.css" type="text/css" rel="stylesheet" />
+
+<script type="text/javascript" src="language/en.js"></script>
 <script src="../../controls/selectLink.js" type="text/javascript"></script>
 <script src="CalendarGrid.js" type="text/javascript"></script>
 <script src="EventDialog.js" type="text/javascript"></script>
 <script src="calendar.js" type="text/javascript"></script> 
 
+<!--
 
-
-<link href="CalendarGrid.css" type="text/css" rel="stylesheet" />
-<script type="text/javascript" src="language/en.js"></script>
-<!-- <script type="text/javascript">
+ <script type="text/javascript">
 Ext.EventManager.onDocumentReady(function(){
 	var eventDialog = new EventDialog();
 	eventDialog.show(1);
@@ -52,6 +53,7 @@ Ext.EventManager.onDocumentReady(function(){
 	
 	},EventDialog);
 </script> -->
+
 </head>
 <body>
 <div id="northDiv">
@@ -308,7 +310,19 @@ Ext.EventManager.onDocumentReady(function(){
 
 </div>
 </form>
+<!-- 
+<div id="test1" style="border: 1px solid black;width:100 height:100">
 
+<div id="test2" style="border: 1px solid red; width:50px;height:50px;margin-top:20px"></div>
+</div>
+
+<script>
+Ext.get("test1").on("mousedown",function(){alert('test1 mousedown');});
+Ext.get("test1").on("dblclick",function(){alert('test1');});
+Ext.get("test2").on("dblclick",function(){alert('test2');});
+Ext.get("test2").on("mousedown",function(){alert('test2 mousedown');});
+</script>
+-->
 </body>
 </html>
 

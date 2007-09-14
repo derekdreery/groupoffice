@@ -77,7 +77,9 @@ Ext.calendar.CalendarGrid = function(container, config){
 	    "move" : true,
 	    
 	    
-	    "resize" : true
+	    "resize" : true,
+	    
+	    "eventDblClick" : true
 
     });
     
@@ -159,6 +161,9 @@ Ext.extend(Ext.calendar.CalendarGrid, Ext.util.Observable, {
 		
 		this.columnsContainer = Ext.get(columnsContainerID);
 		
+		this.columnsContainer.on("mousedown", this.startSelection, this);
+		this.columnsContainer.on("dblclick", function(){alert('grid');}, this);
+		
 		
 		this.createHeadings();
 	
@@ -198,9 +203,9 @@ Ext.extend(Ext.calendar.CalendarGrid, Ext.util.Observable, {
 				var row = Ext.DomHelper.append(column,
 					{tag: 'div', id: 'day'+day+'_row'+i, cls: className}, true);	
 					
-				row.on("mousedown", function (e , el) {					
+				/*row.on("mousedown", function (e , el) {					
 					this.startSelection(el.id); 
-				}, this);
+				}, this);*/
 				
 				if(className=="x-calGrid-evenRow")
 				{
@@ -358,16 +363,21 @@ Ext.extend(Ext.calendar.CalendarGrid, Ext.util.Observable, {
 		
 		return Math.floor((x-gridPosition[0])/snap["x"]);
 	},
-	startSelection : function (row){
+	startSelection : function (e){
 	
 		//check if we are not dragging an event
 		if(!this.dragEvent)
 		{
+			var coords = e.getXY();
+			
+			this.clickedDay = this.getDayByX(coords[0]);
+			this.clickedRow = this.getRowNumberByY(coords[1]);
+			
 			this.dragSnap = this.getSnap(); 
 			//determine the day and hour the user clicked on
-			var arr = row.split('_');		
-			this.clickedDay = parseInt(arr[0].replace("day",""));
-			this.clickedRow = parseInt(arr[1].replace("row",""));
+			//var arr = row.split('_');		
+			//this.clickedDay = parseInt(arr[0].replace("day",""));
+			//this.clickedRow = parseInt(arr[1].replace("row",""));
 		
 			//create the selection proxy
 			if(!this.selector)
@@ -377,7 +387,7 @@ Ext.extend(Ext.calendar.CalendarGrid, Ext.util.Observable, {
 			}
 		
 			//get position of the row the user clicked on
-			this.selectorStartRow = Ext.get(row);
+			this.selectorStartRow = Ext.get("day"+this.clickedDay+"_row"+this.clickedRow);
 			
 			var position = this.selectorStartRow.getXY();
 			//add double border
@@ -425,67 +435,9 @@ Ext.extend(Ext.calendar.CalendarGrid, Ext.util.Observable, {
 		
 		this.fireEvent("create", this, this.elementToEvent(this.selector.id));
 		this.clearSelection();
-		/*
-		//get the name for the event
-		Ext.MessageBox.prompt('Name', 'Please enter the name:', function(btn, text){
-			
-			if(btn=='ok')
-			{				
-				//var parsedEventEl = this.parseElement(this.selector.id);
-				
-				var snap = this.getSnap();				
-				var rows = this.selector.getHeight()/snap['y'];
-				
-				var newEventId=Ext.id();
-				
-				this.addEvent(newEventId, text, 
-					this.clickedDay,
-					this.clickedRow,
-					this.clickedRow+rows-1);
-				
-				this.calculateAppointments(this.clickedDay);
-				
-				this.fireEvent("create", this, newEventId, text);
-			}
-			this.clearSelection();
-			
-			
-		},this);
-		*/		
-	},
-	/*
-	eventPrompt : function()
-	{
-		//get the name for the event
-		Ext.MessageBox.prompt('Name', 'Please enter the name:', function(btn, text){
-			
-			if(btn=='ok')
-			{			
-				
-				var newEventId=Ext.id();
-				
-				if(this.clickedRow>-1)
-				{
-					var snap = this.getSnap();				
-					var rows = this.selector.getHeight()/snap['y'];
-					
-					this.addEvent(newEventId, text, 
-						this.clickedDay,
-						this.clickedRow,
-						this.clickedRow+rows-1);
-					
-					this.calculateAppointments(this.clickedDay);
-				}else
-				{
-					this.addEvent(newEventId, text,this.clickedDay);
-					
-				}
-					
-				this.fireEvent("create", this, newEventId, text);
-			}			
-		},this);	
-	},*/
 	
+	},
+		
 	addTimedEvent : function (eventId, name, startDate, endDate)
 	{
 		var gridStartDayOfYear = this.startDate.getDayOfYear();		
@@ -558,13 +510,14 @@ Ext.extend(Ext.calendar.CalendarGrid, Ext.util.Observable, {
 			event.setSize(snap["x"]-2, height);
 	
 			
+			/*event.on('click', function(e, eventEl){
+				alert('hallo');
+				this.fireEvent("eventDblClick", this, this.elementToEvent(eventEl, false));
+			}, this, {stopPropagation:false});
 			
-			event.on('mousedown', function(e, eventEl) {			
-					this.dragEvent= Ext.get(eventEl);
-					this.dragappointmentstartPos=this.dragEvent.getXY();
-					
-					this.startEventDrag();
-				}, this);
+			event.on('mousedown', this.startEventDrag, this);*/
+			
+			
 				
 				
 			//add the event to the appointments array		
@@ -851,7 +804,10 @@ Ext.extend(Ext.calendar.CalendarGrid, Ext.util.Observable, {
 		this.selector.setVisible(false,true);
 	},
 	
-	startEventDrag : function(e) {
+	startEventDrag : function(e, eventEl) {
+		
+		this.dragEvent= Ext.get(eventEl);
+		this.dragappointmentstartPos=this.dragEvent.getXY();
 	
 		this.dragSnap = this.getSnap();
 		 
@@ -909,33 +865,39 @@ Ext.extend(Ext.calendar.CalendarGrid, Ext.util.Observable, {
 		this.eventDragOverlay.hide();
 		
 		var newPos = this.dragEvent.getXY();
-
-		var newDay = this.getDayByX(newPos[0]);		
-		var originalDay = this.getDayByX(this.dragappointmentstartPos[0]);
 		
 		
-		if(newDay!=originalDay)
+		if(newPos[0] != this.dragappointmentstartPos[0] || newPos[1] != this.dragappointmentstartPos[1])
 		{
-			//remove it from the original day's appointments
-			this.removeEventFromArray(originalDay, this.dragEvent.id);
+		
 
+			var newDay = this.getDayByX(newPos[0]);		
+			var originalDay = this.getDayByX(this.dragappointmentstartPos[0]);
 			
-			//add it to the new day's appointments
-			if(typeof(this.appointments[newDay])=='undefined')
+			
+			if(newDay!=originalDay)
 			{
-				this.appointments[newDay]=Array();
+				//remove it from the original day's appointments
+				this.removeEventFromArray(originalDay, this.dragEvent.id);
+	
+				
+				//add it to the new day's appointments
+				if(typeof(this.appointments[newDay])=='undefined')
+				{
+					this.appointments[newDay]=Array();
+				}
+				this.appointments[newDay].push(this.dragEvent);
+				
+				//recalculate grid
+				this.calculateAppointments(originalDay);
+				this.calculateAppointments(newDay);
+			}else
+			{
+				this.calculateAppointments(originalDay);
 			}
-			this.appointments[newDay].push(this.dragEvent);
 			
-			//recalculate grid
-			this.calculateAppointments(originalDay);
-			this.calculateAppointments(newDay);
-		}else
-		{
-			this.calculateAppointments(originalDay);
+			this.fireEvent("move", this, this.dragEvent.id);
 		}
-		
-		this.fireEvent("move", this, this.dragEvent.id);
 		
 		this.dragEvent=false;
 	},
