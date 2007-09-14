@@ -244,6 +244,12 @@ calendar = function(){
 			
 			CalendarGrid.render();
 			//ds.load();
+			
+			CalendarGrid.on("eventDoubleClick", function(CalGrid, newEvent){
+				
+				eventDialog.show(newEvent['remoteId']);
+				
+			}, this);
 				
 			
 			CalendarGrid.on("create", function(CalGrid, newEvent){
