@@ -10,47 +10,48 @@
  option) any later version.
  */
 
- require_once("../../Group-Office.php");
- $GO_SECURITY->authenticate();
- $GO_MODULES->authenticate('calendar');
- require_once($GO_LANGUAGE->get_language_file('calendar'));
+require_once("../../Group-Office.php");
+$GO_SECURITY->authenticate();
+$GO_MODULES->authenticate('calendar');
+require_once($GO_LANGUAGE->get_language_file('calendar'));
 
- $GO_CONFIG->set_help_url($cal_help_url);
+$GO_CONFIG->set_help_url($cal_help_url);
 
 
- require_once($GO_MODULES->class_path.'calendar.class.inc');
- $cal = new calendar();
+require_once($GO_MODULES->class_path.'calendar.class.inc');
+$cal = new calendar();
+ 
+load_basic_controls();
 
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
+<title>Group-Office Calendar</title>
 <?php
 //$GO_THEME->load_module_theme('email');
 require($GO_CONFIG->root_path.'default_head.inc');
 require($GO_CONFIG->root_path.'default_scripts.inc');
 echo $GO_THEME->get_stylesheet('calendar');
 ?>
-<script src="EventDialog.js" type="text/javascript"></script>
-<!-- 
+<script src="../../controls/selectLink.js" type="text/javascript"></script>
 <script src="CalendarGrid.js" type="text/javascript"></script>
+<script src="EventDialog.js" type="text/javascript"></script>
 <script src="calendar.js" type="text/javascript"></script> 
- 
 
- 
- -->
+
 
 <link href="CalendarGrid.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript" src="language/en.js"></script>
- <script>
+<!-- <script type="text/javascript">
 Ext.EventManager.onDocumentReady(function(){
 	var eventDialog = new EventDialog();
-	eventDialog.show();
-	eventDialog.setCurrentDate();
+	eventDialog.show(1);
+	//eventDialog.setCurrentDate();
 	
 	},EventDialog);
-</script>
+</script> -->
 </head>
 <body>
 <div id="northDiv">
@@ -64,7 +65,7 @@ Ext.EventManager.onDocumentReady(function(){
 <div id="CalendarGrid"></div>
 </div>
 
-<form id="event-form" name="event-form" method="post">
+<form id="event-form" name="event-form" method="post" action="#">
 <div id="event-dialog" style="visibility:hidden">
 	<div id="event-properties">
 		<div class="inner-tab">
@@ -74,6 +75,18 @@ Ext.EventManager.onDocumentReady(function(){
 					<?php echo $cal_subject; ?>:
 					</td>
 					<td class="x-form-element"><input type="text" id="subject" name="subject" /></td>
+				</tr>
+				<tr>
+					<td>
+					<?php echo $sc_location; ?>:
+					</td>
+					<td class="x-form-element"><input type="text" id="location" name="location" /></td>
+				</tr>				
+				<tr>
+					<td>
+					<?php echo $strCreateLink; ?>:
+					</td>
+					<td class="x-form-element"><input type="text" id="link_name" name="link_name" /></td>
 				</tr>
 				<tr>
 					<td style="vertical-align:top">
@@ -86,9 +99,9 @@ Ext.EventManager.onDocumentReady(function(){
 					<td class="x-form-element">
 					<table class="subTable">
 					<tr>
-						<td><input type="text" id="startDate" name="startDate" /></td>
-						<td><input type="text" id="startHour" name="startHour" /></td>
-						<td><input type="text" id="startMinute" name="startMinute" /></td>
+						<td><input type="text" id="start_date" name="start_date" /></td>
+						<td><input type="text" id="start_hour" name="start_hour" /></td>
+						<td><input type="text" id="start_min" name="start_min" /></td>
 						<td></td>
 					</tr>
 					</table>
@@ -99,28 +112,38 @@ Ext.EventManager.onDocumentReady(function(){
 					<td class="x-form-element">
 					<table class="subTable">
 					<tr>
-						<td><input type="text" id="endDate" name="endDate" /></td>
-						<td><input type="text" id="endHour" name="endHour" /></td>
-						<td><input type="text" id="endMinute" name="endMinute" /></td>
-						<td><input type="checkbox" id="allDay" name="allDay" /></td>
+						<td><input type="text" id="end_date" name="end_date" /></td>
+						<td><input type="text" id="end_hour" name="end_hour" /></td>
+						<td><input type="text" id="end_min" name="end_min" /></td>
+						<td><input type="checkbox" id="all_day_event" name="all_day_event" /></td>
 					</tr>
 					</table>
 					</td>
 				</tr>
 				<tr>
-					<td>Calendar:</td>
 					<td>
-					<?php
-					load_basic_controls();
-					$select = new select('calendarId');
-					$cal->get_writable_calendars($GO_SECURITY->user_id);
-					while($cal->next_record())
-					{
-						$select->add_value($cal->f('id'), $cal->f('name'));
-					}
-					echo $select->get_html();
-					
-					?>
+					<?php echo $sc_status; ?>:
+					</td>
+					<td class="x-form-element">
+					<table class="subTable">
+					<tr>
+						<td>
+						<?php
+						$select = new select('status_id');
+						$select->set_attribute('id', 'status_id');
+						$cal->get_statuses('VEVENT');
+						while($cal->next_record())
+						{
+							$select->add_value($cal->f('id'), $cal_statuses[$cal->f('name')]);
+						}			
+						echo $select->get_html();		
+						?>
+						</td>
+						<td colspan="2">
+						<input type="checkbox" id="busy" name="busy" />
+						</td>
+					</tr>
+					</table>
 					</td>
 				</tr>
 			</table>
@@ -195,8 +218,7 @@ Ext.EventManager.onDocumentReady(function(){
 							
 							$day_number ++;
 						}
-						?>
-						</td>
+						?>						
 					</tr>
 					</table>					
 					</td>
@@ -220,6 +242,70 @@ Ext.EventManager.onDocumentReady(function(){
 			</table>
 		</div>	
 	</div>
+	
+	
+	<div id="event-options">
+		<div class="inner-tab">
+			<table>
+				<tr>
+					<td>Calendar:</td>
+					<td>
+					<?php
+					$select = new select('calendar_id');
+					$cal->get_writable_calendars($GO_SECURITY->user_id);
+					while($cal->next_record())
+					{
+						$select->add_value($cal->f('id'), $cal->f('name'));
+					}
+					echo $select->get_html();
+					
+					?>
+					</td>
+				</tr>
+				<tr>
+					<td>
+					<?php echo $sc_reminder; ?>:
+					</td>
+					<td>
+					<table class="subTable">
+					<tr>
+						<td>					
+						<?php
+						$select = new select('reminder_value', '0');
+						$select->add_value('0', $cal_no_reminder);
+						for ($i = 1; $i < 60; $i ++) {
+							$select->add_value($i, $i);
+						}
+										
+						$select->print_html();					
+						?>
+						</td>
+						<td>
+						<?php
+						$select = new select('reminder_multiplier', '60');
+						$select->add_value('60', $sc_mins);
+						$select->add_value('3600', $sc_hours);
+						$select->add_value('86400', $sc_days);
+						$select->add_value('604800', $sc_weeks);
+						$select->print_html();	
+						?>
+						</td>
+					</tr>
+					</table>
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align:top">
+					<?php echo $sc_background; ?>:
+					</td>
+					<td id="colorSelector">
+					</td>
+				</tr>
+				
+			</table>			
+		</div>
+	</div>
+
 </div>
 </form>
 

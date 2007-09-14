@@ -1,4 +1,6 @@
-Ext.CalendarGrid = function(container, config){ 
+Ext.namespace('Ext.calendar');
+
+Ext.calendar.CalendarGrid = function(container, config){ 
 
 	Ext.apply(this, config);
 	
@@ -94,10 +96,10 @@ Ext.CalendarGrid = function(container, config){
 	
 	
 	
-	Ext.CalendarGrid.superclass.constructor.call(this);
+	Ext.calendar.CalendarGrid.superclass.constructor.call(this);
 }
 	
-Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
+Ext.extend(Ext.calendar.CalendarGrid, Ext.util.Observable, {
 
 
 	//build the html grid
@@ -258,7 +260,7 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
             //this.store.un("add", this.onAdd);
             //this.store.un("remove", this.onRemove);
             //this.store.un("update", this.onUpdate);
-            this.store.un("clear", this.refresh);
+            this.store.un("clear", this.reload);
         }
         if(store){
         	store.on("beforeload", this.mask, this)
@@ -266,7 +268,7 @@ Ext.extend(Ext.CalendarGrid, Ext.util.Observable, {
             //store.on("add", this.onAdd, this);
            // store.on("remove", this.onRemove, this);
            // store.on("update", this.onUpdate, this);
-            store.on("clear", this.refresh, this);
+            store.on("clear", this.reload, this);
             
             
             
