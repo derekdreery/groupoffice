@@ -32,13 +32,36 @@ class cms_contact {
 		
 		$contact_task = isset($_REQUEST['contact_task']) ? $_REQUEST['contact_task'] : '';
 		
+		if(!isset($_SESSION['GO_SESSION']['antispamkey']))
+		{
+			$_SESSION['GO_SESSION']['antispamkey']=uniqid();
+		}
+		
 		if($contact_task == 'contact')
 		{		
 			$name = smart_stripslashes(trim($_POST['name']));
 			$email = smart_stripslashes(trim($_POST['email']));
 			$subject = smart_stripslashes(trim($_POST['subject']));  
+			
+			$subject = str_replace("\r",'',$subject);			
+			$subjectArr = explode("\n", $subject);
+			
+			
 			$message = smart_stripslashes(trim($_POST['message']));
-			if ($name == '' || $email == '' || $subject == '' || $message == '')
+			
+			if($_POST['antispamkey']!=$_SESSION['GO_SESSION']['antispamkey'])
+			{
+				die();
+			}elseif(stristr($_SERVER['HTTP_REFERER'],$_SERVER['HTTP_HOST'])===false)
+			{
+				//echo $_SERVER['HTTP_REFERER'].' -> '.$_SERVER['HTTP_HOST'];
+				die('Referrer check failed');
+			}elseif(count($subjectArr)>1)
+			{
+				//something posted a multi line subject
+				//lets just die
+				die();
+			}elseif ($name == '' || $email == '' || $subject == '' || $message == '')
 			{
 				$feedback = $GLOBALS['error_missing_field'];
 			}elseif(!validate_email($email))
@@ -61,6 +84,7 @@ class cms_contact {
 		$form->add_html_element(new input('hidden','contact_task', 'contact'));		
 		$form->add_html_element(new input('hidden','file_id', $this->cms_site->file_id));
 		$form->add_html_element(new input('hidden','folder_id', $this->cms_site->folder_id));
+		$form->add_html_element(new input('hidden','antispamkey', $_SESSION['GO_SESSION']['antispamkey']));
 		
 		//require($GO_LANGUAGE->get_base_language_file('contact'));
 
