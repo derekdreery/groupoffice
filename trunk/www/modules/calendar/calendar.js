@@ -13,28 +13,37 @@ calendar = function(){
 			this.calendarId=0;
 			// initialize state manager, we will use cookies
 			//Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+			
 
-			layout = new Ext.BorderLayout(document.body, {
-				north: {
-					initialSize:30,
-					resizable:false,
+
+			var viewport = new Ext.Viewport({
+			layout:'border',
+            items:[
+                new Ext.BoxComponent({ // raw
+                    region:'north',
+                    el: 'north',
+                    height:30,
+  					resizable:false,
 					split: false,
 					titlebar: false,
 					collapsible: false
-				},
-				west: {
-					titlebar: false,
+                }),{
+                    region:'west',
+                    contentEl: 'west',
+                    split:true,
+                    titlebar: false,
 					autoScroll:true,
 					closeOnTab: true,
-					initialSize: 212,
+					width: 212,
 					split:false
-				},
-				center: {
-					titlebar: false,
+                }, {
+                    region:'center',
+                    contentEl: 'center',
+                    split:true,
+                    titlebar: false,
 					autoScroll:true,
-					closeOnTab: true,
 					split:true
-				}
+                }
 			});
 			
 		
@@ -272,10 +281,8 @@ calendar = function(){
 					
 				}, this);
 				
-			CalendarGrid.on("move", function(CalGrid, newEventEl, newEventName){
+			CalendarGrid.on("move", function(CalGrid, event){
 					CalendarGrid.mask();
-			
-					var event = CalGrid.elementToEvent(newEventEl);
 			
 					var conn = new Ext.data.Connection();
 						conn.request({
@@ -295,10 +302,10 @@ calendar = function(){
 					
 				});
 				
-			CalendarGrid.on("resize", function(CalGrid, newEventEl, newEventName){
+			CalendarGrid.on("resize", function(CalGrid, event, newEventName){
 					CalendarGrid.mask();
 			
-					var event = CalGrid.elementToEvent(newEventEl);
+					//var event = CalGrid.elementToEvent(newEventEl);
 			
 					var conn = new Ext.data.Connection();
 						conn.request({
@@ -317,6 +324,10 @@ calendar = function(){
 					});
 					
 				});
+				
+			CalendarGrid.on("eventDblClick", function(CalGrid, event){
+			
+			alert(event['remoteId']);eventDialog.show(event['remoteId']);});
         }
 	}
 
