@@ -202,6 +202,7 @@ Note = function(){
 	var win;
 	var formPanel;
 	var layout;
+	var linksPanel;
 
 
 	return {
@@ -221,6 +222,7 @@ Note = function(){
 						id: 'id'
 					}, [
 					{name: 'name'},
+					{name: 'link_id'},
 					{name: 'content'}
 					]),
 					
@@ -245,6 +247,15 @@ Note = function(){
 					}]
 				});
 				
+				formPanel.form.on('actioncomplete', function(form, action){
+					if(action.type=='load')
+					{
+						linksPanel.loadLinks(action.result.data['link_id'], 4);
+					}
+				});
+				
+				linksPanel = new Ext.grid.LinksPanel();
+				
 				var tabs = new Ext.TabPanel({
 			        //renderTo: 'tabs1',
 			        activeTab: 0,
@@ -252,6 +263,7 @@ Note = function(){
 			        defaults:{autoHeight: true},
 			        items:[
 			           formPanel,
+			           linksPanel,
 			           {
 			                title: 'Test Tab',
 			                html: "My content was added during construction."
@@ -270,6 +282,7 @@ Note = function(){
 					height:400,
 					width:600,
 					plain:true,
+					closeAction:'hide',
 
         			
 					items: [
@@ -313,6 +326,7 @@ Note = function(){
 			loaded_note_id=note_id;
 			formPanel.form.load({url: 'notes_json.php?note_id='+note_id, waitMsg:GOlang['waitMsgLoad']});
 			
+			//linksPanel.link_id=formPanel.form.reader.jsonData.note[0].link_id;
 			//layout.getRegion('center').showPanel('properties');
 			
 			win.show();
@@ -362,10 +376,10 @@ Note = function(){
 		}
 	}
 }();
-
+Ext.EventManager.onDocumentReady(Note.init, Note, true);
 
 Ext.EventManager.onDocumentReady(Notes.init, Notes, true);
-Ext.EventManager.onDocumentReady(Note.init, Note, true);
+
 
 //for the Group-Office search function
 function showSearchResult(record)

@@ -45,7 +45,7 @@ require($GO_CONFIG->root_path.'default_scripts.inc');
 ?>
 <script type="text/javascript" src="<?php echo $no_js_lang; ?>"></script>
 <script type="text/javascript" src="notes.js"></script>
-<script type="text/javascript" src="../../links.js"></script>
+<script type="text/javascript" src="../../controls/linksPanel.js"></script>
 </head>
 <body>
 

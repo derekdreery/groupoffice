@@ -25,7 +25,12 @@ if(isset($_REQUEST['note_id']) && $_REQUEST['note_id']>0)
 	echo '({"note":['.json_encode($note).']})';
 }else {
 
-	$count = $notes->get_notes($GO_SECURITY->user_id,false,$_REQUEST['sort'],$_REQUEST['dir'], $_REQUEST['start'], $_REQUEST['limit']);
+	$sort = isset($_REQUEST['sort']) ? $_REQUEST['sort'] : 'mtime';
+	$dir = isset($_REQUEST['dir']) ? $_REQUEST['dir'] : 'DESC';
+	$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : '0';
+	$limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : '0';
+	
+	$count = $notes->get_notes($GO_SECURITY->user_id,false,$sort,$dir, $start, $limit);
 	
 	$records=array();
 	while($notes->next_record())

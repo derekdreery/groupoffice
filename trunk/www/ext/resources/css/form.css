@@ -1,9 +1,9 @@
 /*
- * Ext JS Library 1.1.1
+ * Ext JS Library 2.0 Alpha 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
- * http://www.extjs.com/license
+ * http://extjs.com/license
  */
 
 /* all fields */
@@ -103,7 +103,7 @@
     right:0;
 }
 .x-form-field-wrap .x-form-twin-triggers{
-    
+
 }
 .x-form-field-wrap .x-form-twin-triggers .x-form-trigger{
     position:static;
@@ -175,7 +175,6 @@
 }
 .x-editor .x-form-checkbox {
     height:13px;
-    border: 0 none;
 }
 /* If you override the default field font above, you would need to change this font as well */
 .x-form-grow-sizer {
@@ -252,7 +251,7 @@
 }
 .x-form fieldset {
     border:1px solid #B5B8C8;
-    padding:10px 10px 5px 10px;
+    padding:10px;
     margin-bottom:10px;
 }
 .x-form fieldset legend {
@@ -264,6 +263,7 @@
 }
 .ext-ie .x-form fieldset {
     padding-top: 0;
+    padding-bottom:5px;
 }
 .x-form-empty-field {
     color:gray;
@@ -286,6 +286,7 @@
 .ext-strict .x-small-editor .x-form-text {
     height:16px !important;
 }
+
 .ext-safari .x-small-editor .x-form-field {
     /* safari text field will not size so needs bigger font */
     font:normal 12px arial, tahoma, helvetica, sans-serif;
@@ -400,8 +401,46 @@
     background:transparent url(../images/default/form/exclamation.gif) no-repeat 0 2px;
 }
 
+/* fieldsets */
+.x-fieldset legend .x-tool-toggle {
+    margin-right:3px;
+    margin-left:0;
+    float:left !important;
+}
+.x-fieldset legend input {
+    margin-right:3px;
+    float:left !important;
+    height:13px;
+    width:13px;
+}
+fieldset.x-panel-collapsed {
+    padding-bottom:0 !important;
+    border-width: 1px 0 0 0 !important;
+}
+fieldset.x-panel-collapsed .x-fieldset-bwrap {
+    visibility:hidden;
+    position:absolute;
+    left:-1000px;
+    top:-1000px;
+}
 
 .ext-ie td .x-form-text {
     position:relative;
     top:-1px;
+}
+
+.ext-gecko .x-window-body .x-form-item {
+    -moz-outline: none;
+    overflow: auto;
+}
+
+.ext-gecko .x-form-item {
+    -moz-outline: none;
+}
+
+.x-hide-label label.x-form-item-label {
+     display:none;
+}
+.x-hide-label .x-form-element {
+     padding-left: 0 !important;
 }
