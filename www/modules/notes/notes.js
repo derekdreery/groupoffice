@@ -17,21 +17,6 @@ var linksGrid;
 			// initialize state manager, we will use cookies
 			Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
 
-			layout = new Ext.BorderLayout(document.body, {
-				center: {
-
-					titlebar: false,
-					autoScroll:true,
-					closeOnTab: true
-				}
-			});
-			
-			
-			
-			layout.beginUpdate();
-			
-			
-
 
 			ds = new Ext.data.Store({
 
@@ -56,89 +41,54 @@ var linksGrid;
 			});
 			ds.setDefaultSort('name', 'asc');
 
-
-
-			// the column model has information about grid columns
-			// dataIndex maps the column to the specific data field in
-			// the data store
-			var cm = new Ext.grid.ColumnModel([{
-				header: GOlang['strName'],
-				dataIndex: 'name',
-				css: 'white-space:normal;'
-			},{
-				header: GOlang['strMtime'],
-				dataIndex: 'mtime'
-			}]);
-			
-			// by default columns are sortable
-			cm.defaultSortable = true;
-
-			// create the editor grid
-			grid = new Ext.grid.Grid('notes-grid', {
-				ds: ds,
-				cm: cm,
-				selModel: new Ext.grid.RowSelectionModel(),
-				enableColLock:false,
-				loadMask: true
+			grid = new Ext.grid.GridPanel({
+				//el:document.body,
+			    store: ds,
+			    columns: [		        
+			        {header: GOlang['strName'], width: 200, sortable: true, dataIndex: 'name'},
+			        {header: GOlang['strMtime'], width: 120, sortable: true, dataIndex: 'mtime'}
+			    ],
+			    sm: new Ext.grid.RowSelectionModel(),
+			    height:'100%',
+			    iconCls:'icon-grid',
+				tbar:[{
+		           	id: 'delete',
+					icon: GOimages['delete'],
+					text: GOlang['cmdDelete'],
+					cls: 'x-btn-text-icon',
+					handler: this.onButtonClick
+		        },
+		        {
+					id: 'add',
+					icon: GOimages['add'],
+					text: GOlang['cmdAdd'],
+					cls: 'x-btn-text-icon',
+					handler: this.onButtonClick
+				},
+				{
+					id: 'link',
+					icon: GOimages['link'],
+					text: GOlang['cmdLink'],
+					cls: 'x-btn-text-icon',
+					handler: this.onButtonClick
+				}]
+				
 			});
 
 	
 			grid.addListener("rowdblclick", this.rowDoubleClicked, this);
 
-			// render it
-			grid.render();
+
 			
-			ds.on('load', function (){grid.getView().autoSizeColumns();}, false, { single: true });
-
-			var gridFoot = grid.getView().getFooterPanel(true);
-
-			// add a paging toolbar to the grid's footer
-			var paging = new Ext.PagingToolbar(gridFoot, ds, {
-				pageSize: parseInt(GOsettings['max_rows_list']),
-				displayInfo: true,
-				displayMsg: GOlang['displayingItems'],
-				emptyMsg: GOlang['strNoItems']
-			});
-
-			// trigger the data store load
-			ds.load({params:{start:0, limit: parseInt(GOsettings['max_rows_list'])}});
-
-
-			var tb = new Ext.Toolbar('notestb');
-			tb.add(new Ext.Toolbar.Button({
-				id: 'delete',
-				icon: GOimages['delete'],
-				text: GOlang['cmdDelete'],
-				cls: 'x-btn-text-icon',
-				handler: this.onButtonClick
-			})
-			);
-
-			tb.add(new Ext.Toolbar.Button({
-				id: 'add',
-				icon: GOimages['add'],
-				text: GOlang['cmdAdd'],
-				cls: 'x-btn-text-icon',
-				handler: this.onButtonClick
-			})
-			);
+			//ds.on('load', function (){grid.getView().autoSizeColumns();}, false, { single: true });
 			
-			tb.add(new Ext.Toolbar.Button({
-				id: 'link',
-				icon: GOimages['link'],
-				text: GOlang['cmdLink'],
-				cls: 'x-btn-text-icon',
-				handler: this.onButtonClick
-			})
-			);
+			var viewport = new Ext.Viewport({
+	        layout:'fit',
+	        items:[
+	        	grid
+	        	]
+	        });
 
-
-
-
-			layout.add('center', new Ext.GridPanel(grid, {title: NotesLang['notes'], toolbar: tb}));
-			
-
-			layout.endUpdate();
 		},
 		
 		getDataSource : function()
@@ -247,11 +197,10 @@ var linksGrid;
 
 
 
-
 Note = function(){
 
-	var dialog;
-	var note_form;
+	var win;
+	var formPanel;
 	var layout;
 
 
@@ -259,165 +208,114 @@ Note = function(){
 
 		init : function(){
 
-			if(!dialog){
-				dialog = new Ext.LayoutDialog("notedialog", {
-					modal:true,
-					shadow:false,
-					minWidth:300,
-					minHeight:300,
-					height:400,
-					width:600,
-					proxyDrag: true,
-					collapsible: false,
-					center: {
-						autoScroll:true,
-						tabPosition: 'top',
-						closeOnTab: true,
-						alwaysShowTabs: true
-					}
-				});
-				dialog.addKeyListener(27, this.hide, this);
-				dialog.addButton({
-					id: 'ok',
-					text: GOlang['cmdOk'],
-					handler: function(){
-						note_form.submit({
-						url:'./action.php',
-						params: {'task' : 'save','note_id' : loaded_note_id},
-	
-						success:function(form, action){
-							//reload grid
-							Notes.getDataSource().reload();
-						},
-	
-						failure: function(form, action) {
-							Ext.MessageBox.alert(GOlang['strError'], action.result.errors);
-						}
-					});
-					dialog.hide();
-					}
-				}, this);
-				
-				dialog.addButton({
-					id: 'apply',
-					text: GOlang['cmdApply'],
-					handler: function(){
-						note_form.submit({
-						url:'./action.php',
-						params: {'task' : 'save','note_id' : loaded_note_id},
-	
-						success:function(form, action){
-							//reload grid
-							Notes.getDataSource().reload();
-						},
-	
-						failure: function(form, action) {
-							Ext.MessageBox.alert(GOlang['strError'], action.result.errors);
-						}
-					});					
-					}
-				}, this);
-				
-				dialog.addButton(GOlang['cmdClose'], dialog.hide, dialog);
 
-				layout = dialog.getLayout();
-				layout.beginUpdate();
-
-
-
-
-
-
-				note_form = new Ext.form.Form({
+			if(!win){
+			
+				formPanel = new Ext.form.FormPanel({
+					title: 'Properties',
 					labelWidth: 75, // label settings here cascade unless overridden
-
-
+					defaultType: 'textfield',
+        			bodyStyle:'padding:5px;',
 					reader: new Ext.data.JsonReader({
 						root: 'note',
 						id: 'id'
 					}, [
 					{name: 'name'},
 					{name: 'content'}
-					])
-				});
-
-				var name_field = new Ext.form.TextField({
-					fieldLabel: GOlang['strName'],
-					name: 'name',
-					allowBlank:false,
-					style:'width:100%'
-				});
-
-
-				note_form.add(name_field
-				,
-
-				new Ext.form.TextArea({
-					fieldLabel: GOlang['strText'],
-					name: 'content',
-					style:'width:100%;height:200px'
-				})
-
-				);
-
-				note_form.render('form');
-
-
-				var notetb = new Ext.Toolbar('toolbar');
-
-
-				notetb.addButton({
-					id: 'link',
-					icon: GOimages['link'],
-					text: GOlang['cmdLink'],
-					cls: 'x-btn-text-icon',
-					handler: this.onButtonClick
-				}
-				);
-
-
-
-				notePanel = new Ext.ContentPanel('properties',{
-					title: NotesLang['note'],
-					//toolbar: notetb,
-					autoScroll:true
-				});
-
-				layout.add('center', notePanel);
-				
-				
-				
-				
-				
-				linksPanel = links.getGridPanel('linkstoolbar','links_grid_div');
-				layout.add('center', linksPanel);
-				linksPanel.on('activate',function() {
-
-					links.loadLinks(note_form.reader.jsonData.note[0].link_id, 4);
-
+					]),
+					
+					items: [{
+						fieldLabel: GOlang['strName'],
+						name: 'name',
+						allowBlank:false,
+						style:'width:100%'
+					},{
+						fieldLabel: GOlang['strText'],
+						name: 'content',
+						xtype: 'textarea',
+						style:'width:100%;height:200px'
+					}					
+					],
+					tbar: [{
+						id: 'link',
+						icon: GOimages['link'],
+						text: GOlang['cmdLink'],
+						cls: 'x-btn-text-icon',
+						handler: this.onButtonClick
+					}]
 				});
 				
-				
+				var tabs = new Ext.TabPanel({
+			        //renderTo: 'tabs1',
+			        activeTab: 0,
+			        frame:true,
+			        defaults:{autoHeight: true},
+			        items:[
+			           formPanel,
+			           {
+			                title: 'Test Tab',
+			                html: "My content was added during construction."
+			           }
+			        ]
+			    });
+			
+			
+				win = new Ext.Window( {
+					el: 'notedialog',
+					layout: 'fit',
+					modal:true,
+					shadow:false,
+					minWidth:300,
+					minHeight:300,
+					height:400,
+					width:600,
+					plain:true,
 
-
-
-
-				
-
-				layout.getRegion('center').showPanel('properties');
-
-				layout.endUpdate();
+        			
+					items: [
+						tabs
+					],
+					
+					buttons: [
+						{
+							id: 'ok',
+							text: GOlang['cmdOk'],
+							handler: function(){
+								formPanel.form.submit({
+								url:'./action.php',
+								params: {'task' : 'save','note_id' : loaded_note_id},
+			
+								success:function(form, action){
+									//reload grid
+									Notes.getDataSource().reload();
+								},
+			
+								failure: function(form, action) {
+									Ext.MessageBox.alert(GOlang['strError'], action.result.errors);
+								}
+							});
+							win.hide();
+							},
+							scope:this
+						},
+						{
+							id: 'close',
+							text: GOlang['cmdClose'],
+							handler: function(){win.hide();},
+							scope: this
+						}
+					]
+				});
 			}
-			name_field.focus(true);
 		},
 		showDialog : function (note_id)
 		{
 			loaded_note_id=note_id;
-			note_form.load({url: 'notes_json.php?note_id='+note_id, waitMsg:GOlang['waitMsgLoad']});
+			formPanel.form.load({url: 'notes_json.php?note_id='+note_id, waitMsg:GOlang['waitMsgLoad']});
 			
-			layout.getRegion('center').showPanel('properties');
+			//layout.getRegion('center').showPanel('properties');
 			
-			dialog.show();
+			win.show();
 		},
 
 		rowDoulbleClicked : function(search_grid, rowClicked, e) {
@@ -464,7 +362,6 @@ Note = function(){
 		}
 	}
 }();
-
 
 
 Ext.EventManager.onDocumentReady(Notes.init, Notes, true);

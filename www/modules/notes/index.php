@@ -48,26 +48,9 @@ require($GO_CONFIG->root_path.'default_scripts.inc');
 <script type="text/javascript" src="../../links.js"></script>
 </head>
 <body>
-<div id="no-center">
-	<div id="notestb"></div>
-	<div id="notes-grid"></div>
-</div>
+
 <div id="notedialog">
-	<div class="x-dlg-hd"><?php echo $no_note; ?></div>	
-	    <div class="x-dlg-bd">	   
-		    <div id="properties" class="x-dlg-tab">
-			 <div id="toolbar"></div>
-				<div id="inner_tab" class="inner-tab">		
-					<div id="form"></div>		
-				</div>
-			</div>
-			<div id="links_tab" class="x-dlg-tab">
-			<div id="linkstoolbar"></div>
-			<div id="links_grid_div">
-			</div>
-			</div>
-	    </div>
-	</div>
+	<div class="x-window-header"><?php echo $no_note; ?></div>
 </div>
 
 

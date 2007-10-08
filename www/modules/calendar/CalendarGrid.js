@@ -107,8 +107,8 @@ Ext.extend(Ext.calendar.CalendarGrid, Ext.util.Observable, {
 	//build the html grid
 	render : function (){
 		
-		
-		
+		//test
+		//this.clickEventFired='false';
 	
 		//create container for the column headers
 		this.headingsContainer = Ext.DomHelper.append(this.container,
@@ -161,8 +161,8 @@ Ext.extend(Ext.calendar.CalendarGrid, Ext.util.Observable, {
 		
 		this.columnsContainer = Ext.get(columnsContainerID);
 		
-		this.columnsContainer.on("mousedown", this.startSelection, this);
-		this.columnsContainer.on("dblclick", function(){alert('grid');}, this);
+		this.columnsContainer.on("mousedown", this.startSelection, this);//, {delay:250});
+		//this.columnsContainer.on("dblclick", function(){alert('grid');}, this);
 		
 		
 		this.createHeadings();
@@ -364,7 +364,7 @@ Ext.extend(Ext.calendar.CalendarGrid, Ext.util.Observable, {
 		return Math.floor((x-gridPosition[0])/snap["x"]);
 	},
 	startSelection : function (e){
-	
+	//alert('mousedown on grid');
 		//check if we are not dragging an event
 		if(!this.dragEvent)
 		{
@@ -406,7 +406,7 @@ Ext.extend(Ext.calendar.CalendarGrid, Ext.util.Observable, {
 			
 			//create an overlay to track the mousemovement
 			if(!this.overlay){
-			    this.overlay = this.selector.createProxy({tag: "div", cls: "x-resizable-overlay", html: "&#160;"});
+			    this.overlay = this.container.createProxy({tag: "div", cls: "x-resizable-overlay", html: "&#160;"});
 			    this.overlay.unselectable();
 			    this.overlay.enableDisplayMode("block");	
 			    this.overlay.on("mousemove", this.onSelectionMouseMove, this);
@@ -510,12 +510,26 @@ Ext.extend(Ext.calendar.CalendarGrid, Ext.util.Observable, {
 			event.setSize(snap["x"]-2, height);
 	
 			
-			/*event.on('click', function(e, eventEl){
-				alert('hallo');
-				this.fireEvent("eventDblClick", this, this.elementToEvent(eventEl, false));
-			}, this, {stopPropagation:false});
+			event.on('dblclick', function(e, eventEl){
+				//this.eventDoubleClicked=true;
+				var event = this.elementToEvent(this.clickedEventId);
+				
+				this.fireEvent("eventDblClick", this, event);
+			}, this);
 			
-			event.on('mousedown', this.startEventDrag, this);*/
+			event.on('mousedown', function(e, eventEl){
+			
+				this.clickedEventId=eventId;
+				//wait 250 ms for a mouseup
+				//if a doubleclick is fired then abort in startEventDrag
+				this.eventMouseUp=false;
+				this.startEventDrag.defer(250, this, [eventId]);
+				
+			}, this, {stopEvent: true});	
+			
+			event.on('mouseup', function(){
+				this.eventMouseUp=true;
+			}, this);
 			
 			
 				
@@ -544,7 +558,11 @@ Ext.extend(Ext.calendar.CalendarGrid, Ext.util.Observable, {
 					});
 				
 			resizer.on('resize', function(eventEl){
-				this.fireEvent("resize", this, eventEl.el.id);
+			
+			
+				var event = this.elementToEvent(this.clickedEventId);
+				
+				this.fireEvent("resize", this, event);
 				
 				var elX = eventEl.el.getX();	
 				this.clickedDay = this.getDayByX(elX);
@@ -804,30 +822,33 @@ Ext.extend(Ext.calendar.CalendarGrid, Ext.util.Observable, {
 		this.selector.setVisible(false,true);
 	},
 	
-	startEventDrag : function(e, eventEl) {
-		
-		this.dragEvent= Ext.get(eventEl);
-		this.dragappointmentstartPos=this.dragEvent.getXY();
-	
-		this.dragSnap = this.getSnap();
-		 
-		//create the selection proxy
-		if(!this.selector)
+	startEventDrag : function(eventId) {
+		//don't start dragging when a doubleclick is recorded
+		if(!this.eventMouseUp)
 		{
-			this.selector = Ext.DomHelper.append(this.container,
-				{tag: 'div', id: Ext.id(), cls: "x-calGrid-selector"}, true);		
-		}
+			this.dragEvent= Ext.get(eventId);
+			this.dragappointmentstartPos=this.dragEvent.getXY();
 		
-		//create an overlay to track the mousemovement
-		if(!this.eventDragOverlay){
-		    this.eventDragOverlay = this.selector.createProxy({tag: "div", cls: "x-resizable-overlay", html: "&#160;"});
-		    this.eventDragOverlay.unselectable();
-		    this.eventDragOverlay.enableDisplayMode("block");	
-		    this.eventDragOverlay.on("mousemove", this.onEventDragMouseMove, this);
-			this.eventDragOverlay.on("mouseup", this.onEventDragMouseUp, this);		    
-		}		
-		this.eventDragOverlay.setSize(Ext.lib.Dom.getViewWidth(true), Ext.lib.Dom.getViewHeight(true));
-		this.eventDragOverlay.show();
+			this.dragSnap = this.getSnap();
+			 
+			//create the selection proxy
+			/*if(!this.selector)
+			{
+				this.selector = Ext.DomHelper.append(this.container,
+					{tag: 'div', id: Ext.id(), cls: "x-calGrid-selector"}, true);		
+			}*/
+			
+			//create an overlay to track the mousemovement
+			if(!this.eventDragOverlay){
+			    this.eventDragOverlay = this.container.createProxy({tag: "div", cls: "x-resizable-overlay", html: "&#160;"});
+			    this.eventDragOverlay.unselectable();
+			    this.eventDragOverlay.enableDisplayMode("block");	
+			    this.eventDragOverlay.on("mousemove", this.onEventDragMouseMove, this);
+				this.eventDragOverlay.on("mouseup", this.onEventDragMouseUp, this);		    
+			}		
+			this.eventDragOverlay.setSize(Ext.lib.Dom.getViewWidth(true), Ext.lib.Dom.getViewHeight(true));
+			this.eventDragOverlay.show();
+		}
 		
 		
 		
@@ -896,7 +917,9 @@ Ext.extend(Ext.calendar.CalendarGrid, Ext.util.Observable, {
 				this.calculateAppointments(originalDay);
 			}
 			
-			this.fireEvent("move", this, this.dragEvent.id);
+			var event = this.elementToEvent(this.dragEvent.id);
+			
+			this.fireEvent("move", this, event);
 		}
 		
 		this.dragEvent=false;
