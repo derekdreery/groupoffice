@@ -23,52 +23,34 @@ require($GO_CONFIG->root_path.'default_scripts.inc');
 ?>
 <script src="<?php echo $GO_CONFIG->host; ?>groupoffice.js" type="text/javascript"></script>
   
-<div id="container">
 
-	<div id="header">
-		<div id="headerLeft">
-			<img src="<?php echo $GO_CONFIG->host; ?>lib/go-icon.png" style="text-align:middle;vertical-align:middle;border:0px;padding:2px;" />
-			<?php echo $strLoggedInAs.' '.htmlspecialchars($_SESSION['GO_SESSION']['name']); ?>
-		</div>
-		<div id="headerRight">
-			
-			<img src="<?php echo $GO_CONFIG->host; ?>themes/Default/images/16x16/icon-search.png" style="border:0px;margin-left:10px;margin-right:1px;" align="absmiddle"></img>
-			<input type="text" name="search_query" value="<?php echo $cmdSearch; ?>..." id="search_query" onfocus="javascript:this.value='';" onblur="javascript:this.value='<?php echo $cmdSearch; ?>...';" onkeypress="return search(event);" class="textbox" />
-			<a href="<?php echo $GO_CONFIG->host; ?>configuration/" target="mainframe">
-				<img src="<?php echo $GO_CONFIG->host; ?>themes/Default/images/16x16/administration.png" style="border:0px;margin-right:3px;" align="absmiddle" />Configuration</a>
-			<a href="<?php echo $GO_CONFIG->host; ?>help.php" target="_blank">
-				<img src="<?php echo $GO_CONFIG->host; ?>themes/Default/images/16x16/icon-help.png" style="border:0px;margin-right:3px;" align="absmiddle" />Help</a>
-			<a href="<?php echo $GO_CONFIG->host; ?>index.php?task=logout" target="_top">
-				<img src="<?php echo $GO_CONFIG->host; ?>themes/Default/images/16x16/gnome-logout.png" style="border:0px;margin-right:3px;" align="absmiddle" />Logout</a>
-		</div>
-	</div>
 
-	
-	<div id="east">
-	<div id="searchtoolbar"></div>
-	<div id="searchgrid"></div>
+<div id="header">
+	<div id="headerLeft">
+		<img src="<?php echo $GO_CONFIG->host; ?>lib/go-icon.png" style="text-align:middle;vertical-align:middle;border:0px;padding:2px;" />
+		<?php echo $strLoggedInAs.' '.htmlspecialchars($_SESSION['GO_SESSION']['name']); ?>
 	</div>
-	<?php
-	/*
-	<div id="center">
-	<iframe id="mainframe" name="mainframe" frameborder="0" src="<?php echo $start_url; ?>" style="width:100%;height:100%"></iframe>
-	</div>*/
-?>
+	<div id="headerRight">
+		
+		<img src="<?php echo $GO_CONFIG->host; ?>themes/Default/images/16x16/icon-search.png" style="border:0px;margin-left:10px;margin-right:1px;" align="absmiddle"></img>
+		<input type="text" name="search_query" value="<?php echo $cmdSearch; ?>..." id="search_query" onfocus="javascript:this.value='';" onblur="javascript:this.value='<?php echo $cmdSearch; ?>...';" onkeypress="return search(event);" class="textbox" />
+		<a href="<?php echo $GO_CONFIG->host; ?>configuration/" target="mainframe">
+			<img src="<?php echo $GO_CONFIG->host; ?>themes/Default/images/16x16/administration.png" style="border:0px;margin-right:3px;" align="absmiddle" />Configuration</a>
+		<a href="<?php echo $GO_CONFIG->host; ?>help.php" target="_blank">
+			<img src="<?php echo $GO_CONFIG->host; ?>themes/Default/images/16x16/icon-help.png" style="border:0px;margin-right:3px;" align="absmiddle" />Help</a>
+		<a href="<?php echo $GO_CONFIG->host; ?>index.php?task=logout" target="_top">
+			<img src="<?php echo $GO_CONFIG->host; ?>themes/Default/images/16x16/gnome-logout.png" style="border:0px;margin-right:3px;" align="absmiddle" />Logout</a>
+	</div>
+</div>
+
+<div id="center"></div>
+
+<div id="east">
 </div>
 
 
-<div id="dialog" style="visibility:hidden;height:100%;width:100%;"></div>
 
-<div id="search_links_dialog" style="visibility:hidden;position:fixed">
-	<div class="x-dlg-hd">Link to items</div>
 
-	<div class="x-dlg-bd">
-		<div id="search_links_input" style="height:20px;">
-			<input class="x-form-text x-form-field" type="text" id="links_query" name="links_query" onkeypress="return GroupOffice.searchLinksKeyEvent(event);" />
-		</div>
-		<div id="search_links_grid" style="height:300px;padding-top:10px;"></div>
-	</div>
-</div>
 <script type="text/javascript">
 Ext.onReady(function(){
 <?php
@@ -91,7 +73,7 @@ foreach($GO_MODULES->modules as $module)
 }
 ?>
 
-GroupOffice.showPanel('<?php echo $_SESSION['GO_SESSION']['start_module']; ?>');
+//GroupOffice.showPanel('<?php echo $_SESSION['GO_SESSION']['start_module']; ?>');
 
 });
 
