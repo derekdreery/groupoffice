@@ -637,7 +637,7 @@ $div->set_attribute('style','text-align:center');
 
 if($multiselect == 'true' && $count > 0)
 {
-	if($mode=='mailings')
+	if($mode=='reports')
 	{
 		$div->add_html_element(new button($cmdAdd,'javascript:_select_report();'));
 	}else {
