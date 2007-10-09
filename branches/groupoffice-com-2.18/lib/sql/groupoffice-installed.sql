@@ -3,11 +3,11 @@
 -- http://www.phpmyadmin.net
 -- 
 -- Host: localhost
--- Generatie Tijd: 03 Jul 2007 om 14:40
+-- Generatie Tijd: 09 Oct 2007 om 11:16
 -- Server versie: 5.0.38
 -- PHP Versie: 5.2.1
 -- 
--- Database: `go2176`
+-- Database: `go2181`
 -- 
 
 -- --------------------------------------------------------
@@ -15,17 +15,6 @@
 -- 
 -- Tabel structuur voor tabel `ab_addressbooks`
 -- 
-DROP TABLE IF EXISTS `reminders`;
-CREATE TABLE `reminders` (
-  `id` int(11) NOT NULL,
-  `link_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `time` int(11) NOT NULL,
-  `url` varchar(255) NOT NULL,
-  PRIMARY KEY  (`id`),
-  KEY `link_id` (`link_id`)
-) TYPE=MyISAM;
 
 DROP TABLE IF EXISTS `ab_addressbooks`;
 CREATE TABLE `ab_addressbooks` (
@@ -75,7 +64,7 @@ CREATE TABLE `ab_companies` (
   `fax` varchar(20) NOT NULL default '',
   `email` varchar(75) NOT NULL default '',
   `homepage` varchar(100) NOT NULL default '',
-  `bank_no` varchar(20) NOT NULL default '',
+  `bank_no` varchar(50) NOT NULL,
   `vat_no` varchar(30) NOT NULL default '',
   `ctime` int(11) NOT NULL default '0',
   `mtime` int(11) NOT NULL default '0',
@@ -1357,6 +1346,9 @@ CREATE TABLE `emAccounts` (
   `spamtag` varchar(20) NOT NULL default '',
   `examine_headers` enum('0','1') NOT NULL,
   `auto_check` enum('0','1') NOT NULL,
+  `enable_vacation` enum('0','1') NOT NULL,
+  `vacation_subject` varchar(100) NOT NULL,
+  `vacation_text` text NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
 ) TYPE=MyISAM;
@@ -1456,9 +1448,6 @@ CREATE TABLE `em_settings` (
   `add_senders` int(11) NOT NULL default '0',
   `request_notification` enum('0','1') NOT NULL default '0',
   `charset` varchar(20) NOT NULL default '',
-  `enable_vacation` enum('0','1') NOT NULL default '0',
-  `vacation_subject` varchar(100) NOT NULL default '',
-  `vacation_text` text NOT NULL,
   `show_preview` enum('0','1') NOT NULL default '1',
   `beep` enum('0','1') NOT NULL,
   `open_popup` enum('0','1') NOT NULL,
@@ -1469,8 +1458,8 @@ CREATE TABLE `em_settings` (
 -- Gegevens worden uitgevoerd voor tabel `em_settings`
 -- 
 
-INSERT INTO `em_settings` (`user_id`, `send_format`, `add_recievers`, `add_senders`, `request_notification`, `charset`, `enable_vacation`, `vacation_subject`, `vacation_text`, `show_preview`, `beep`, `open_popup`) VALUES 
-(1, 'text/HTML', 0, 0, '0', 'UTF-8', '0', '', '', '1', '1', '0');
+INSERT INTO `em_settings` (`user_id`, `send_format`, `add_recievers`, `add_senders`, `request_notification`, `charset`, `show_preview`, `beep`, `open_popup`) VALUES 
+(1, 'text/HTML', 0, 0, '0', 'UTF-8', '1', '1', '0');
 
 -- --------------------------------------------------------
 
@@ -1505,6 +1494,8 @@ CREATE TABLE `fs_settings` (
   `user_id` int(11) NOT NULL,
   `notify` enum('0','1') NOT NULL,
   `open_properties` enum('0','1') NOT NULL,
+  `show_files_on_summary` enum('0','1') NOT NULL,
+  `use_gota` enum('0','1') NOT NULL,
   PRIMARY KEY  (`user_id`)
 ) TYPE=MyISAM;
 
@@ -1512,8 +1503,8 @@ CREATE TABLE `fs_settings` (
 -- Gegevens worden uitgevoerd voor tabel `fs_settings`
 -- 
 
-INSERT INTO `fs_settings` (`user_id`, `notify`, `open_properties`) VALUES 
-(1, '0', '0');
+INSERT INTO `fs_settings` (`user_id`, `notify`, `open_properties`, `show_files_on_summary`, `use_gota`) VALUES 
+(1, '0', '0', '0', '1');
 
 -- --------------------------------------------------------
 
@@ -1709,10 +1700,10 @@ CREATE TABLE `modules` (
 
 INSERT INTO `modules` (`id`, `version`, `path`, `sort_order`, `admin_menu`, `acl_read`, `acl_write`) VALUES 
 ('modules', '1.0', '', 130, '1', 1, 2),
-('addressbook', '2.5', '', 20, '0', 4, 5),
+('addressbook', '2.6', '', 20, '0', 4, 5),
 ('calendar', '3.1', '', 40, '0', 6, 7),
 ('email', '2.5', '', 30, '0', 8, 9),
-('filesystem', '1.9', '', 70, '0', 10, 11),
+('filesystem', '2.0', '', 70, '0', 10, 11),
 ('groups', '1.0', '', 120, '1', 12, 13),
 ('cms', '3.0', '', 90, '0', 14, 15),
 ('phpsysinfo', '1.0', '', 140, '1', 16, 17),
@@ -1980,6 +1971,29 @@ CREATE TABLE `pm_templates` (
 -- --------------------------------------------------------
 
 -- 
+-- Tabel structuur voor tabel `reminders`
+-- 
+
+DROP TABLE IF EXISTS `reminders`;
+CREATE TABLE `reminders` (
+  `id` int(11) NOT NULL,
+  `link_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `time` int(11) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `link_id` (`link_id`)
+) TYPE=MyISAM;
+
+-- 
+-- Gegevens worden uitgevoerd voor tabel `reminders`
+-- 
+
+
+-- --------------------------------------------------------
+
+-- 
 -- Tabel structuur voor tabel `se_cache`
 -- 
 
@@ -2048,7 +2062,7 @@ INSERT INTO `settings` (`user_id`, `name`, `value`) VALUES
 (0, 'registration_confirmation', '<html>\r\n    <head>\r\n    </head>\r\n    <body>\r\n        <font size="3" face="Verdana">Dear&nbsp;%beginning%&nbsp;%middle_name%%last_name%,<br />\r\n        <br />\r\n        Welcome to Group-Office! You can login at:<br />\r\n        <br />\r\n        %full_url%<br />\r\n        <br />\r\n        With:<br />\r\n        <br />\r\n        Username: %username%<br />\r\n        Password: %password%<br />\r\n        <br />\r\n        With kind regards,<br />\r\n        <br />\r\n        The Group-Office administrator</font>\r\n    </body>\r\n</html>'),
 (0, 'registration_unconfirmed', '<html>\r\n    <head>\r\n    </head>\r\n    <body>\r\n        <font size="3" face="Verdana">Dear&nbsp;%beginning% %middle_name%%last_name%,<br />\r\n        <br />\r\n        Thank you for your registration at Group-Office. You can login when an administrator activates your account. You will recieve an e-mail with login instructions at that time.<br />\r\n        <br />\r\n        With kind regards,<br />\r\n        <br />\r\n        The Group-Office administrator</font>\r\n    </body>\r\n</html>'),
 (0, 'registration_confirmation_subject', 'Welcome to Group-Office!'),
-(0, 'version', '223'),
+(0, 'version', '224'),
 (0, 'enabled_columns_users', '0,1,2,3,4,5'),
 (1, 'sort_index_users', 'lastlogin'),
 (1, 'sort_asc_users', '0'),
@@ -2518,7 +2532,7 @@ CREATE TABLE `users` (
 -- 
 
 INSERT INTO `users` (`id`, `username`, `password`, `enabled`, `authcode`, `first_name`, `middle_name`, `last_name`, `initials`, `title`, `sex`, `birthday`, `email`, `company`, `department`, `function`, `home_phone`, `work_phone`, `fax`, `cellular`, `country`, `state`, `city`, `zip`, `address`, `address_no`, `homepage`, `work_address`, `work_address_no`, `work_zip`, `work_country`, `work_state`, `work_city`, `work_fax`, `acl_id`, `date_format`, `date_seperator`, `time_format`, `thousands_seperator`, `decimal_seperator`, `currency`, `mail_client`, `logins`, `lastlogin`, `registration_time`, `max_rows_list`, `timezone`, `DST`, `start_module`, `language`, `theme`, `first_weekday`, `sort_name`, `use_checkbox_select`, `country_id`, `work_country_id`, `bank`, `bank_no`, `link_id`, `mtime`) VALUES 
-(1, 'admin', '21232f297a57a5a743894a0e4a801fc3', '1', 'jmvnqxuf', 'Group-Office', '', 'Admin', '', '', 'M', '0000-00-00', 'webmaster@example.com', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 3, 'dmY', '-', 'G:i', ',', '.', 'EUR', 1, 23, 1183459095, 1159517603, 15, 1, '1', 'summary', 'nl', 'Default', 1, 'first_name', '0', 0, 0, '', '', 8, 1159517603);
+(1, 'admin', '21232f297a57a5a743894a0e4a801fc3', '1', 'jmvnqxuf', 'Group-Office', '', 'Admin', '', '', 'M', '0000-00-00', 'webmaster@example.com', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 3, 'dmY', '-', 'G:i', ',', '.', 'EUR', 1, 24, 1191914020, 1159517603, 15, 1, '1', 'summary', 'en', 'Default', 1, 'first_name', '0', 0, 0, '', '', 8, 1191914020);
 
 -- --------------------------------------------------------
 
