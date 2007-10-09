@@ -71,8 +71,8 @@ Ext.grid.LinksPanel = function(config){
 				cls: 'x-btn-text-icon',
 				handler: function(){
 					var fromlinks = [];
-					fromlinks.push({ 'link_id' : link_id, 'link_type' : link_type });
-					parent.GroupOffice.showLinks({ 'fromlinks': fromlinks, 'callback': function(){ links_ds.load();}});
+					fromlinks.push({ 'link_id' : this.link_id, 'link_type' : this.link_type });
+					//parent.GroupOffice.showLinks({ 'fromlinks': fromlinks, 'callback': function(){ links_ds.load();}});
 				}
 			},{
 				id: 'unlink',
@@ -85,14 +85,18 @@ Ext.grid.LinksPanel = function(config){
 	
 					var selectionModel = this.getSelectionModel();
 					var records = selectionModel.getSelections();
+					
+					if(records.length>0)
+					{
 	
-					for (var i = 0;i<records.length;i++)
-					{
-						unlinks.push(records[i].data['link_id']);
-					}
-					if(this.unlink(this.link_id, unlinks))
-					{
-						this.store.reload();
+						for (var i = 0;i<records.length;i++)
+						{
+							unlinks.push(records[i].data['link_id']);
+						}
+						if(this.unlink(this.link_id, unlinks))
+						{
+							this.store.reload();
+						}
 					}
 				},
 				scope: this

@@ -1,14 +1,8 @@
 Notes = function(){
-	var layout;
-	var previewPanel;
-	var grid;
 	var ds;
 	var note_id;
-	var link_id;
-	var note_form;
 	var save_button;
-	var linksPanel;
-var linksGrid;
+	var grid;
 
 	return {
 
@@ -88,6 +82,8 @@ var linksGrid;
 	        	grid
 	        	]
 	        });
+	        
+	        ds.load();
 
 		},
 		
