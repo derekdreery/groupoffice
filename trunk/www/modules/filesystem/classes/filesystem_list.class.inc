@@ -146,7 +146,7 @@ class filesystem_list extends datatable
 		
 		$gota_supported = file_exists($GO_MODULES->modules['filesystem']['path'].'jnlp.php');
 		
-		$nogota_extensions=array('jpg','pdf','gif','bmp','png', 'zip','tar','gz','ps');
+		$nogota_extensions=array('pdf','ps','jpg','gif','png','zip','gz','tar','bmp','mpg','avi');
 
 		$total_size = 0;
 		foreach($files as $file)
