@@ -3,6 +3,7 @@ Notes = function(){
 	var note_id;
 	var save_button;
 	var grid;
+	var linksDialog;
 
 	return {
 
@@ -64,7 +65,8 @@ Notes = function(){
 					icon: GOimages['link'],
 					text: GOlang['cmdLink'],
 					cls: 'x-btn-text-icon',
-					handler: this.onButtonClick
+					handler: this.onButtonClick,
+					scope: this
 				}]
 				
 			});
@@ -98,9 +100,13 @@ Notes = function(){
 			{
 				case 'link':
 					var selectionModel = grid.getSelectionModel();
-					var records = selectionModel.getSelections();					
-					
-					parent.GroupOffice.showLinks({ 'url': '../../search.html', 'records': records});
+					var records = selectionModel.getSelections();						
+					if(!linksDialog)
+					{
+						linksDialog= new Ext.LinksDialog({"gridRecords":records, linksStore: ds});
+					}
+					linksDialog.setLinkRecords(records);
+					linksDialog.show();
 				break;
 				case 'delete':
 				var selectedRows = grid.selModel.selections.keys;
@@ -199,6 +205,8 @@ Note = function(){
 	var formPanel;
 	var layout;
 	var linksPanel;
+	var linksDialog;
+	var loaded_link_id=0;
 
 
 	return {
@@ -239,7 +247,8 @@ Note = function(){
 						icon: GOimages['link'],
 						text: GOlang['cmdLink'],
 						cls: 'x-btn-text-icon',
-						handler: this.onButtonClick
+						handler: this.onButtonClick,
+						scope: this
 					}]
 				});
 				
@@ -247,6 +256,7 @@ Note = function(){
 					if(action.type=='load')
 					{
 						linksPanel.loadLinks(action.result.data['link_id'], 4);
+						loaded_link_id=action.result.data['link_id'];
 					}
 				});
 				
@@ -341,10 +351,12 @@ Note = function(){
 			{
 				case 'link':
 
-				var fromlinks = [];
-				fromlinks.push({ 'link_id' : note_form.reader.jsonData.note[0].link_id, 'link_type' : 4 });
-
-				parent.GroupOffice.showLinks({ 'fromlinks': fromlinks, 'callback': function(){links_ds.load()}});
+					if(!linksDialog)
+					{
+						linksDialog= new Ext.LinksDialog();
+					}
+					linksDialog.setSingleLink(loaded_link_id, 4);
+					linksDialog.show();
 				break;
 
 				case 'unlink':
@@ -375,6 +387,8 @@ Note = function(){
 Ext.EventManager.onDocumentReady(Note.init, Note, true);
 
 Ext.EventManager.onDocumentReady(Notes.init, Notes, true);
+
+
 
 
 //for the Group-Office search function

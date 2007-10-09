@@ -1,5 +1,7 @@
 Ext.grid.LinksPanel = function(config){
 	
+	var linksDialog;
+	
 	Ext.apply(this, config);
 	
 	if(!this.link_id)
@@ -11,6 +13,9 @@ Ext.grid.LinksPanel = function(config){
 	{
 		this.link_type=0;
 	}
+	
+	
+	
 	
 	this.store = new Ext.data.Store({
 
@@ -39,6 +44,7 @@ Ext.grid.LinksPanel = function(config){
 	this.store.setDefaultSort('mtime', 'desc');
 			
 	
+	this.linksDialog = new Ext.LinksDialog({linksStore: this.store});
 
 	
 	
@@ -69,11 +75,11 @@ Ext.grid.LinksPanel = function(config){
 				icon: GOimages['link'],
 				text: GOlang['cmdLink'],
 				cls: 'x-btn-text-icon',
-				handler: function(){
-					var fromlinks = [];
-					fromlinks.push({ 'link_id' : this.link_id, 'link_type' : this.link_type });
-					//parent.GroupOffice.showLinks({ 'fromlinks': fromlinks, 'callback': function(){ links_ds.load();}});
-				}
+				handler: function(){				
+					this.linksDialog.show();					
+				},
+				scope: this
+				
 			},{
 				id: 'unlink',
 				icon: GOimages['unlink'],
@@ -122,11 +128,13 @@ Ext.extend(Ext.grid.LinksPanel, Ext.grid.GridPanel, {
 	loadLinks : function (link_id, link_type)
 	{
 		if(this.link_id!=link_id)
-		{
+		{	
 			this.link_type=link_type;
 			this.link_id=link_id;
 			this.store.baseParams = {"link_id": link_id};				
 			this.store.load();
+			
+			this.linksDialog.setSingleLink(this.link_id, this.link_type);
 		}
 	},
 	unlink : function(link_id, unlinks)	{
