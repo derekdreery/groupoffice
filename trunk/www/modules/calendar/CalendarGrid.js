@@ -1,6 +1,6 @@
 Ext.namespace('Ext.calendar');
 
-Ext.calendar.CalendarGrid = function(container, config){ 
+Ext.calendar.CalendarGrid = function(config){ 
 
 	Ext.apply(this, config);
 	
@@ -27,21 +27,14 @@ Ext.calendar.CalendarGrid = function(container, config){
 		this.startDate=new Date();	
 	}
 	
-	if(!this.container)
-	{
-		this.container = Ext.get(container);		
-	}
+
 	
 	if(!this.timeFormat)
 	{
 		this.timeFormat='H:i';
 	}
 	
-	//if this is not set the grid does not display well when I put a load mask on it.
-	this.container.setStyle("overflow", "hidden");
 	
-	//Don't select things inside the grid
-	this.container.unselectable();
 	
 	//private var that is used when an event is dragged to another location
 	this.dragEvent=false;
@@ -101,37 +94,59 @@ Ext.calendar.CalendarGrid = function(container, config){
 	Ext.calendar.CalendarGrid.superclass.constructor.call(this);
 }
 	
-Ext.extend(Ext.calendar.CalendarGrid, Ext.util.Observable, {
+Ext.extend(Ext.calendar.CalendarGrid, Ext.BoxComponent, {
 
 
 	//build the html grid
-	render : function (){
+	onRender : function(ct, position){
+		//alert('ja');
 		
-		//test
-		//this.clickEventFired='false';
+		Ext.calendar.CalendarGrid.superclass.onRender.apply(this, arguments);
+		
+		this.el = ct.createChild({tag: 'div', id: this.id}, position);
+
+		
+		//if this is not set the grid does not display well when I put a load mask on it.
+		this.el.setStyle("overflow", "hidden");
+		
+		//Don't select things inside the grid
+		this.el.unselectable();
+
 	
+		
+	},
+	
+	
+	afterRender : function(){
+        Ext.calendar.CalendarGrid.superclass.afterRender.call(this);
+        
+        
+        
+        
+        
+        
 		//create container for the column headers
-		this.headingsContainer = Ext.DomHelper.append(this.container,
+		this.headingsContainer = Ext.DomHelper.append(this.el,
 				{tag: 'div', cls: "x-calGrid-headings-container"}, true);
 				
 		
 		//create container for the all day events
 		
-		this.allDayContainer  = Ext.DomHelper.append(this.container,
+		this.allDayContainer  = Ext.DomHelper.append(this.el,
 				{tag: 'div', cls: "x-calGrid-all-day-container"}, true);
 		
 		
 		
 		//create container for the grid
-		this.gridContainer = Ext.DomHelper.append(this.container,
+		this.gridContainer = Ext.DomHelper.append(this.el,
 				{tag: 'div', cls: "x-calGrid-grid-container"}, true);
-		
+
 		//calculate gridContainer size
 		var headingsHeight = this.headingsContainer.getHeight();
 		var allDayHeight = this.allDayContainer.getHeight();
-		var containerHeight = this.container.getHeight();
-		var containerSize = this.container.getSize();
-		
+		var containerHeight = this.el.getHeight();
+		var containerSize = this.el.getSize();
+	
 		var gridContainerHeight = containerHeight-headingsHeight-allDayHeight;
 		this.gridContainer.setSize(containerSize['width'], gridContainerHeight);
 		
@@ -239,6 +254,14 @@ Ext.extend(Ext.calendar.CalendarGrid, Ext.util.Observable, {
 		this.gridY=0;
 		
 		
+		/*this.autoSizeGrid();
+		for(var i=0;i<this.days;i++)
+		{
+		 	
+	    	this.calculateAppointments(i);
+	    }*/
+		
+		
 		//Monitor window resize
 		
 		Ext.EventManager.onWindowResize(function(w, h){
@@ -251,8 +274,22 @@ Ext.extend(Ext.calendar.CalendarGrid, Ext.util.Observable, {
 		    	this.calculateAppointments(i);
 		    }
 		}, this);
-		
-	},
+        
+    },
+    
+    onResize : function(){
+        //Ext.grid.GridPanel.superclass.onResize.apply(this, arguments);
+
+        this.autoSizeGrid();
+		for(var i=0;i<this.days;i++)
+		{
+		 	
+	    	this.calculateAppointments(i);
+	    }
+    },
+
+	
+	
 	scrollTo : function (row)
 	{
 		//scroll to 7 am.
@@ -314,12 +351,12 @@ Ext.extend(Ext.calendar.CalendarGrid, Ext.util.Observable, {
 	
 	mask : function()
 	{
-		 this.container.mask('Loading...','x-mask-loading');
+		 this.el.mask('Loading...','x-mask-loading');
 	},
 	
 	unmask : function()
 	{
-		this.container.unmask();
+		this.el.unmask();
 	},
 	
 		
@@ -382,7 +419,7 @@ Ext.extend(Ext.calendar.CalendarGrid, Ext.util.Observable, {
 			//create the selection proxy
 			if(!this.selector)
 			{
-				this.selector = Ext.DomHelper.append(this.container,
+				this.selector = Ext.DomHelper.append(this.el,
 					{tag: 'div', id: Ext.id(), cls: "x-calGrid-selector"}, true);		
 			}
 		
@@ -406,7 +443,7 @@ Ext.extend(Ext.calendar.CalendarGrid, Ext.util.Observable, {
 			
 			//create an overlay to track the mousemovement
 			if(!this.overlay){
-			    this.overlay = this.container.createProxy({tag: "div", cls: "x-resizable-overlay", html: "&#160;"});
+			    this.overlay = this.el.createProxy({tag: "div", cls: "x-resizable-overlay", html: "&#160;"});
 			    this.overlay.unselectable();
 			    this.overlay.enableDisplayMode("block");	
 			    this.overlay.on("mousemove", this.onSelectionMouseMove, this);
@@ -614,8 +651,8 @@ Ext.extend(Ext.calendar.CalendarGrid, Ext.util.Observable, {
 		//calculate gridContainer size
 		var headingsHeight = this.headingsContainer.getHeight();
 		var allDayHeight = this.allDayContainer.getHeight();
-		var containerHeight = this.container.getHeight();
-		var containerSize = this.container.getSize();
+		var containerHeight = this.el.getHeight();
+		var containerSize = this.el.getSize();
 		
 		var gridContainerHeight = containerHeight-headingsHeight-allDayHeight;
 		this.gridContainer.setSize(containerSize['width'], gridContainerHeight);
@@ -840,7 +877,7 @@ Ext.extend(Ext.calendar.CalendarGrid, Ext.util.Observable, {
 			
 			//create an overlay to track the mousemovement
 			if(!this.eventDragOverlay){
-			    this.eventDragOverlay = this.container.createProxy({tag: "div", cls: "x-resizable-overlay", html: "&#160;"});
+			    this.eventDragOverlay = this.el.createProxy({tag: "div", cls: "x-resizable-overlay", html: "&#160;"});
 			    this.eventDragOverlay.unselectable();
 			    this.eventDragOverlay.enableDisplayMode("block");	
 			    this.eventDragOverlay.on("mousemove", this.onEventDragMouseMove, this);

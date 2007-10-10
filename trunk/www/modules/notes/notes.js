@@ -51,8 +51,11 @@ Notes = function(){
 			ds.setDefaultSort('name', 'asc');
 
 			grid = new Ext.grid.GridPanel({
-				//el:document.body,
-				autoSizeColumns: true,
+	
+				view: new Ext.grid.GridView({
+		              forceFit: true,
+		              autoFill: true
+		          }),
 			    store: ds,
 			    columns: [		        
 			        {header: GOlang['strName'], sortable: true, dataIndex: 'name'},
