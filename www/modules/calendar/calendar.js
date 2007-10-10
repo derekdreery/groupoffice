@@ -13,41 +13,13 @@ calendar = function(){
 			this.calendarId=0;
 			// initialize state manager, we will use cookies
 			//Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+
+
+
 			
-
-
-			var viewport = new Ext.Viewport({
-			layout:'border',
-            items:[
-                new Ext.BoxComponent({ // raw
-                    region:'north',
-                    el: 'north',
-                    height:30,
-  					resizable:false,
-					split: false,
-					titlebar: false,
-					collapsible: false
-                }),{
-                    region:'west',
-                    contentEl: 'west',
-                    split:true,
-                    titlebar: false,
-					autoScroll:true,
-					closeOnTab: true,
-					width: 212,
-					split:false
-                }, {
-                    region:'center',
-                    contentEl: 'center',
-                    split:true,
-                    titlebar: false,
-					autoScroll:true,
-					split:true
-                }
-			});
 			
 		
-			layout.beginUpdate();
+
 			
 			var datePicker = new Ext.DatePicker();
 			
@@ -59,43 +31,91 @@ calendar = function(){
 			
 			
 			
-			var tb = new Ext.Toolbar('toolbar');
-			tb.addButton({
-					id: 'add',
-					icon: GOimages['add'],
-					text: GOlang['cmdAdd'],
-					cls: 'x-btn-text-icon',
-					handler: this.refresh,
-					scope: this
-				}
-				);
-				
-			tb.addButton({
-					id: 'refresh',
-					icon: GOimages['refresh'],
-					text: GOlang['cmdRefresh'],
-					cls: 'x-btn-text-icon',
-					handler: this.refresh,
-					scope: this
-				}
-				);
 			
 			
-			var toolbarPanel = new Ext.ContentPanel('northDiv',{toolbar: tb});
-			layout.add('north', toolbarPanel);
+			ds = new Ext.data.Store({
 
-			var navigationPanel = new Ext.ContentPanel('westDiv');
-			layout.add('west', navigationPanel);
+				proxy: new Ext.data.HttpProxy({
+					url: 'json.php'
+				}),
+				baseParams: {task: 'events'},
+				reader: new Ext.data.JsonReader({
+					root: 'results',
+					id: 'id'
+				}, [
+				{name: 'id'},
+				{name: 'event_id'},
+				{name: 'name' },				
+				{name: 'start_time'},	
+				{name: 'end_time'},
+				{name: 'tooltip'}
+				])
+			});
+        	
+        	CalendarGrid = new Ext.calendar.CalendarGrid({store: ds, days: 5});
 			
-			var centerPanel = new Ext.ContentPanel('centerDiv', { fitToFrame:true, resizeEl: 'CalendarGrid'});
+			
+			
+			
+			
+			var viewport = new Ext.Viewport({
+				layout:'border',
+	            items:[
+	               { // raw
+	                    region:'north',
+	                    el: 'northDiv',
+	                    height:30,
+	  					resizable:false,
+						split: false,
+						titlebar: false,
+						collapsible: false,
+						tbar: [{
+							id: 'add',
+							icon: GOimages['add'],
+							text: GOlang['cmdAdd'],
+							cls: 'x-btn-text-icon',
+							handler: this.refresh,
+							scope: this
+						},{
+							id: 'refresh',
+							icon: GOimages['refresh'],
+							text: GOlang['cmdRefresh'],
+							cls: 'x-btn-text-icon',
+							handler: this.refresh,
+							scope: this
+						}
+						
+						]
+						
+	                },{
+	                    region:'west',
+	                    contentEl: 'westDiv',
+	                    split:true,
+	                    titlebar: false,
+						autoScroll:true,
+						closeOnTab: true,
+						width: 212,
+						split:false
+	                }, {
+	                    region:'center',
+	                    contentEl: 'centerDiv',
+	                    split:true,
+	                    titlebar: false,
+						autoScroll:true,
+						split:true,
+						layout: 'fit',
+						items: [CalendarGrid]
+	                }]
+			});
+			
 			
 
-			layout.add('center', centerPanel);
+			//layout.add('center', centerPanel);
 			
-			layout.getRegion("west").bodyEl.addClass("bluePanel");
+			//layout.getRegion("west").bodyEl.addClass("bluePanel");
 
 			//layout.restoreState();
-			layout.endUpdate();
+			//layout.endUpdate();
 			
 			calendarList= Ext.get("calendarList");
 			calendarList.on('click', this.calendarClicked, this);
@@ -228,31 +248,10 @@ calendar = function(){
         createCalendarGrid : function()
         {
         
-        	ds = new Ext.data.Store({
-
-				proxy: new Ext.data.HttpProxy({
-					url: 'json.php'
-				}),
-				baseParams: {task: 'events'},
-				reader: new Ext.data.JsonReader({
-					root: 'results',
-					id: 'id'
-				}, [
-				{name: 'id'},
-				{name: 'event_id'},
-				{name: 'name' },				
-				{name: 'start_time'},	
-				{name: 'end_time'},
-				{name: 'tooltip'}
-				])
-			});
         	
-        	CalendarGrid = new Ext.calendar.CalendarGrid('CalendarGrid', {store: ds, days: 5});
 			
 			
-			
-			CalendarGrid.render();
-			//ds.load();
+
 			
 			CalendarGrid.on("eventDoubleClick", function(CalGrid, newEvent){
 				
