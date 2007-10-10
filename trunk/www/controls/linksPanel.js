@@ -112,8 +112,9 @@ Ext.grid.LinksPanel = function(config){
     Ext.grid.GridPanel.superclass.constructor.call(this, {
     	region: 'center',
         id: 'topic-grid',
-        title: 'Links',
-        loadMask: {msg:'Loading links...'},
+        title: GOlang['strLinks'],
+        disabled: true,
+        loadMask: {msg: GOlang['waitMsgLoad']},
         sm: new Ext.grid.RowSelectionModel({})
     });
 	
@@ -127,6 +128,13 @@ Ext.extend(Ext.grid.LinksPanel, Ext.grid.GridPanel, {
 	
 	loadLinks : function (link_id, link_type)
 	{
+		if(link_id>0)
+		{
+			this.setDisabled(false);
+		}else
+		{
+			this.setDisabled(true);
+		}
 		if(this.link_id!=link_id)
 		{	
 			this.link_type=link_type;
@@ -147,7 +155,7 @@ Ext.extend(Ext.grid.LinksPanel, Ext.grid.GridPanel, {
 			{
 				if(!success)
 				{
-					Ext.MessageBox.alert('Failed', response.result.errors);
+					Ext.MessageBox.alert(GOlang['strError'], response.result.errors);
 				}else
 				{
 					return true;
