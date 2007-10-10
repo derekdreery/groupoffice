@@ -30,12 +30,8 @@ $GO_SECURITY->authenticate();
 $GO_MODULES->authenticate('notes');
 load_basic_controls();
 require_once($GO_LANGUAGE->get_language_file('notes'));
-
-$post_action = isset($_REQUEST['post_action']) ? $_REQUEST['post_action'] : '';
-$task = isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
-$link_back = (isset($_REQUEST['link_back']) && $_REQUEST['link_back'] != '') ? htmlspecialchars($_REQUEST['link_back']) : $_SERVER['REQUEST_URI'];
-
 ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
 <title><?php echo $GO_CONFIG->title.' - '.$lang_modules['notes']; ?></title>
@@ -44,18 +40,15 @@ require($GO_CONFIG->root_path.'default_head.inc');
 require($GO_CONFIG->root_path.'default_scripts.inc');
 ?>
 <script type="text/javascript" src="<?php echo $no_js_lang; ?>"></script>
+<script type="text/javascript" src="note.js"></script>
 <script type="text/javascript" src="notes.js"></script>
 <script type="text/javascript" src="../../controls/linksDialog.js"></script>
 <script type="text/javascript" src="../../controls/linksPanel.js"></script>
-
 </head>
 <body>
-
-<div id="notedialog">
+<div id="notedialog" style="visibility:hidden">
 	<div class="x-window-header"><?php echo $no_note; ?></div>
 </div>
-
-
 <?php
 if(isset($_REQUEST['note_id']))
 {

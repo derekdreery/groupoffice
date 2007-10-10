@@ -18,12 +18,15 @@ var GOlang = {
 	cmdApply : 'Apply',
 	cmdRefresh : 'Refresh',
 	
+	strLinks : 'Links',
+	
 	
 	displayingItems : 'Displaying items {0} - {1} of {2}',
 	strNoItems : 'No items to display',
 	
 	strLinkItems : 'Search for items to link',
 	strSearchResults: 'Search results',
+	strSearch: 'Search',
 	
 	strPleaseSelect : 'Please select...',
 	strProperties : 'Properties',

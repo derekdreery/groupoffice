@@ -106,6 +106,11 @@ Ext.LinksDialog = function(config){
 		    sm: new Ext.grid.RowSelectionModel(),
 			
 		});
+		
+	this.SearchField = new Ext.app.SearchField({
+                store: this.store,
+                width:320
+            });
 
 
     var panel = new Ext.Panel({
@@ -115,19 +120,16 @@ Ext.LinksDialog = function(config){
         items: this.grid,
 
         tbar: [
-            'Search: ', ' ',
-            new Ext.app.SearchField({
-                store: this.store,
-                width:320
-            })
+            GOlang['strSearch']+': ', ' ',
+            this.SearchField
         ],
 
         bbar: new Ext.PagingToolbar({
             store: this.store,
             pageSize: 20,
             displayInfo: true,
-            displayMsg: 'Items {0} - {1} of {2}',
-            emptyMsg: "No items to display"
+            displayMsg: GOlang['displayingItems'],
+            emptyMsg: GOlang['strNoItems']
         })
     });
 
@@ -137,7 +139,7 @@ Ext.LinksDialog = function(config){
 			
 	
 	
-	Ext.grid.GridPanel.superclass.constructor.call(this, {
+	Ext.Window.superclass.constructor.call(this, {
     	layout: 'fit',
 		modal:false,
 		shadow:false,
@@ -147,7 +149,7 @@ Ext.LinksDialog = function(config){
 		width:600,
 		plain:true,
 		closeAction:'hide',
-		title:'Search for an item to link...',
+		title:GOlang['strLinkItems'],
 
 		
 		items: [
@@ -192,6 +194,14 @@ Ext.extend(Ext.LinksDialog, Ext.Window, {
 		this.fromLinks=[{"link_id":link_id,"link_type":link_type}];
 	},
 	
+	show : function()
+	{
+		
+		Ext.LinksDialog.superclass.show.call(this);
+		//If I don't put a 100ms delay it doesn't work in Firefox 2.0 on Linux
+		this.SearchField.focus.defer(100, this.SearchField,[true]);
+	},
+	
 	linkItems : function()	{
 		var selectionModel = this.grid.getSelectionModel();
 		var records = selectionModel.getSelections();
@@ -211,7 +221,7 @@ Ext.extend(Ext.LinksDialog, Ext.Window, {
 			{
 				if(!success)
 				{
-					Ext.MessageBox.alert('Failed', response.result.errors);
+					Ext.MessageBox.alert(GOlang['strError'], response.result.errors);
 				}else
 				{
 					if(this.linksStore)
