@@ -181,14 +181,19 @@ if($task !='')
 			{
 				$cat_fields[$category_id][]=$cf->Record;
 				$th = new table_heading($cf->f('name'));
-				if($cf->f('datatype') == 'number')
+				if($cf->f('datatype') == 'number' || $cf->f('datatype')=='function')
 				{
 					$th->set_attribute('style','text-align:right;background-color:#f1f1f1;');
+					$table->add_column($th);
+				}elseif($cf->f('datatype') == 'heading')
+				{
+				
 				}else
 				{
 					$th->set_attribute('style','text-align:left;background-color:#f1f1f1;');
+					$table->add_column($th);
 				}
-				$table->add_column($th);
+				
 				
 			}
 		}
@@ -252,6 +257,40 @@ if($task !='')
 				{		
 					switch($field['datatype'])
 					{
+						case 'heading':
+							continue;
+					
+						break;
+						
+						case 'function':
+							
+							$result_string='';
+							if(trim($field['function'])!='')
+							{
+								$calc_array=explode(" ",$field['function']);
+								foreach ($calc_array as $val){
+			
+									if($val{0}=="f")
+									{//echo $values['col_'.ltrim($val, "f")].'<br>';
+										$value = $custom_values['col_'.ltrim($val, "f")];
+										if(empty($value))
+										{
+											$value=0;
+										}
+									}else {
+										$value=$val;
+									}
+									$result_string.=$value;
+								}
+			
+								//echo $result_string;
+								eval("\$result_string=$result_string;");
+							}
+	
+							$cell = new table_cell(format_number($result_string));
+							$cell->set_attribute('style','text-align:right;');
+						
+						break;
 						case 'number':
 							$cell = new table_cell(format_number($custom_values['col_'.$field['id']]));
 							$cell->set_attribute('style','text-align:right;');
@@ -282,7 +321,7 @@ if($task !='')
 			}
 
 
-			$totals = $projects2->get_total_hours($projects->f('id'));
+			$totals = $projects2->get_total_hours($projects->f('id'), $start_time,$end_time);
 			/*$row_totals['int_fee']=0;
 			$row_totals['ext_fee']=0;
 			$row_totals['time']=0;*/

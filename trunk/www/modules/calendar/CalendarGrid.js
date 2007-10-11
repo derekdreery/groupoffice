@@ -1,3 +1,17 @@
+/**
+ * @copyright Copyright Intermesh 2007
+ * @author Merijn Schering <mschering@intermesh.nl>
+ * 
+ * This file is part of Group-Office.
+ * 
+ * Group-Office is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ * 
+ * See file /LICENSE.GPL
+ */
+ 
 Ext.namespace('Ext.calendar');
 
 Ext.calendar.CalendarGrid = function(config){ 
@@ -252,28 +266,6 @@ Ext.extend(Ext.calendar.CalendarGrid, Ext.BoxComponent, {
 		
 		this.gridX=0;
 		this.gridY=0;
-		
-		
-		/*this.autoSizeGrid();
-		for(var i=0;i<this.days;i++)
-		{
-		 	
-	    	this.calculateAppointments(i);
-	    }*/
-		
-		
-		//Monitor window resize
-		
-		Ext.EventManager.onWindowResize(function(w, h){
-			//Ext.Msg.alert('Resize', 'Viewport w = '+w+', h = '+h);
-			
-			this.autoSizeGrid();
-			for(var i=0;i<this.days;i++)
-			{
-			 	
-		    	this.calculateAppointments(i);
-		    }
-		}, this);
         
     },
     
@@ -281,11 +273,23 @@ Ext.extend(Ext.calendar.CalendarGrid, Ext.BoxComponent, {
         //Ext.grid.GridPanel.superclass.onResize.apply(this, arguments);
 
         this.autoSizeGrid();
+        
+        //recalculate the snap settings of a column
+        var FirstCol = Ext.get("day0_row0");
+		//snap on each row and column
+		var snap = FirstCol.getSize();		
+
+		this.snapCol = {'x':snap['width'], 'y': snap['height']};
+		
+		
+        
 		for(var i=0;i<this.days;i++)
 		{
 		 	
 	    	this.calculateAppointments(i);
 	    }
+	    
+	    
     },
 
 	
@@ -362,12 +366,14 @@ Ext.extend(Ext.calendar.CalendarGrid, Ext.BoxComponent, {
 		
 	getSnap : function()
 	{
-		var FirstCol = Ext.get("day0_row0");
+		/*var FirstCol = Ext.get("day0_row0");
 		//snap on each row and column
 		var snap = FirstCol.getSize();		
 
-		return {'x':snap['width'], 'y': snap['height']};
+		return {'x':snap['width'], 'y': snap['height']};*/
+		return this.snapCol;
 	},
+
 	
 	getGridXY : function()
 	{
@@ -595,17 +601,19 @@ Ext.extend(Ext.calendar.CalendarGrid, Ext.BoxComponent, {
 					});
 				
 			resizer.on('resize', function(eventEl){
-			
-			
-				var event = this.elementToEvent(this.clickedEventId);
+
+				var event = this.elementToEvent(eventEl.el.id);
 				
 				this.fireEvent("resize", this, event);
 				
 				var elX = eventEl.el.getX();	
 				this.clickedDay = this.getDayByX(elX);
 	
+				//TODO maybe dynamic recalculation?
+				//this.calculateAppointments(this.clickedDay);
 				
-				this.calculateAppointments(this.clickedDay);
+				
+				
 				}, this);
 		}else
 		{
@@ -796,7 +804,7 @@ Ext.extend(Ext.calendar.CalendarGrid, Ext.BoxComponent, {
 			//we now need to know the widths of each event
 			
 			var posWidth = snap["x"]/(maxPositions+1);
-			
+
 			for(var i=0;i<this.appointments[day].length;i++)
 			{
 				
@@ -929,7 +937,7 @@ Ext.extend(Ext.calendar.CalendarGrid, Ext.BoxComponent, {
 		{
 		
 
-			var newDay = this.getDayByX(newPos[0]);		
+			/*var newDay = this.getDayByX(newPos[0]);		
 			var originalDay = this.getDayByX(this.dragappointmentstartPos[0]);
 			
 			
@@ -952,7 +960,7 @@ Ext.extend(Ext.calendar.CalendarGrid, Ext.BoxComponent, {
 			}else
 			{
 				this.calculateAppointments(originalDay);
-			}
+			}*/
 			
 			var event = this.elementToEvent(this.dragEvent.id);
 			

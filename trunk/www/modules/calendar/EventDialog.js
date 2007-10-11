@@ -1,3 +1,17 @@
+/**
+ * @copyright Copyright Intermesh 2007
+ * @author Merijn Schering <mschering@intermesh.nl>
+ * 
+ * This file is part of Group-Office.
+ * 
+ * Group-Office is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ * 
+ * See file /LICENSE.GPL
+ */
+ 
 Ext.calendar.EventDialog = function(calendarGrid){
 	
 	this.calendarGrid=calendarGrid;
@@ -10,77 +24,76 @@ Ext.calendar.EventDialog.prototype = {
 		
 		
 		
-		if(!this.dialog)
+		if(!this.win)
 		{
-			this.dialog = new Ext.LayoutDialog('event-dialog', {
+			
+
+			this.buildForm();
+			
+			var tabs = new Ext.TabPanel({
+			        activeTab: 0,
+			        frame:true,
+			        deferredRender:false,
+			        defaults:{autoHeight: true,bodyStyle:'padding:5px;'},
+			        items:[
+			           {
+							title: GOlang['strProperties'],
+							autoScroll:true,
+							contentEl: 'event-properties'	
+							
+						},
+						{
+							title: calLang['recurrence'],
+							autoScroll:true,
+							contentEl: 'event-recurrence'	
+							
+						},
+						{
+							title: calLang['options'],
+							autoScroll:true,
+							contentEl: 'event-options'	
+							
+						}
+			        ]
+			    });
+			    
+
+			
+			
+			
+			this.win = new Ext.Window({
+					contentEl: 'event-dialog',
+					layout:'fit',
 					modal:true,
 					shadow:false,
 					resizable:false,
-					proxyDrag: true,
 					width:560,
 					height:400,
-					collapsible:false,
-					shim:false,
-					center: {
-						autoScroll:true,
-						tabPosition: 'top',
-						closeOnTab: true,
-						alwaysShowTabs: false
-					},
-					title: calLang['appointment']
-	
+					title: calLang['appointment'],					
+					items: [tabs],
+					buttons:[{
+							text: GOlang['cmdOk'],
+							handler: function(){
+								this.submitForm();
+								this.win.hide();
+							},
+							scope: this
+						},{
+							text: GOlang['cmdApply'],
+							handler: function(){
+								this.submitForm();
+							},
+							scope:this
+						},{
+							text: GOlang['cmdClose'],
+							handler: function(){
+								this.win.hide();
+							},
+							scope:this
+						}					
+					]	
 				});
-				this.dialog.addKeyListener(27, this.dialog.hide, this.dialog);
-	
-	
-				layout = this.dialog.getLayout();
-	
-	
-				layout.beginUpdate();
-			
-				
-				layout.add('center', new Ext.ContentPanel('event-properties',{
-					title: GOlang['strProperties'],
-					autoScroll:true					
-				}));
-				
-				
-				layout.add('center', new Ext.ContentPanel('event-recurrence',{
-					title: calLang['recurrence'],
-					autoScroll:true					
-				}));
-				
-				layout.add('center', new Ext.ContentPanel('event-options',{
-					title: calLang['options'],
-					autoScroll:true					
-				}));
-				
-				this.buildForm();
-				
-				
-				
-				this.dialog.addButton({
-				text: GOlang['cmdOk'],
-				handler: function(){
-					this.submitForm();
-					this.dialog.hide();
-				},
-				scope:this
-				
-				}, this);
-				
-				this.dialog.addButton({
-					text: GOlang['cmdApply'],
-					handler: function(){
-						this.submitForm();
-					},
-					scope:this
-				}, this);
-			
-				this.dialog.addButton(GOlang['cmdClose'], this.dialog.hide, this.dialog);
-				
-	
-				layout.endUpdate();
+
 		
 		}
 		
@@ -99,13 +112,10 @@ Ext.calendar.EventDialog.prototype = {
 		{
 			this.eventForm.setValues(values);
 		}
+
 		
-		
-		layout.showPanel(0);
-		
-		
-		this.dialog.show();
-		this.eventForm.findField("subject").focus();
+		this.win.show();
+		this.eventForm.findField("subject").focus.defer(100);
 	},
 	setEventId : function(eventId)
 	{
@@ -243,16 +253,20 @@ Ext.calendar.EventDialog.prototype = {
 		},this);
 		
 		var nameField = new Ext.form.TextField({
-			id: 'subject',
+			applyTo: 'subject',
+            id: 'subject',
             name: 'subject',
           	width:400,
             allowBlank:false
     	});    
+
+    	
+
     	
     	
     	var locationField = new Ext.form.TextField({
-			id: 'location',
-            name: 'location',
+			applyTo: 'location',
+            id: 'location',
           	width:400,
             allowBlank:true
     	});       
@@ -260,8 +274,8 @@ Ext.calendar.EventDialog.prototype = {
     	
     	var selectLinkField = new Ext.form.selectLink( 	
     	{
+    		applyTo: 'link_name',
     		id: 'link_name',
-    		name: 'link_name',
     		typeAhead: true,
     		triggerAction: 'all',
 			width: 400,
@@ -279,25 +293,26 @@ Ext.calendar.EventDialog.prototype = {
     	        		
     	this.eventForm.add(nameField, locationField, selectLinkField,  	
         	new Ext.form.TextArea({
-        	id: 'description',
-            name: 'description',
+        	applyTo: 'description',
+            id: 'description',
           	width:400,
           	height:100,
             allowBlank:true
-    	})
-    	,        	
+    	}),
+    	       	
         	new Ext.form.DateField({
         	id: 'start_date',
-            name: 'start_date',
+        	applyTo: 'start_date',
+            id: 'start_date',
             width:100,
             format: GOsettings['date_format'],
             allowBlank:false
         	})
     	);
     	
-    	var startHour = new Ext.form.ComboBox({            
+    	var startHour = new Ext.form.ComboBox({ 
+    		applyTo: 'start_hour',
     		id: 'start_hour',
-    		name: 'start_hour',
             store: new Ext.data.SimpleStore({
                 fields: ['value','text'],
                 data: hours
@@ -306,16 +321,15 @@ Ext.calendar.EventDialog.prototype = {
             typeAhead: true,
             mode: 'local',
             triggerAction: 'all',
-            selectOnFocus:true,
-            
+            selectOnFocus:true,            
             width:40
         });
         
         this.eventForm.add(startHour);
         
         var startMin = new Ext.form.ComboBox({
-        	id: 'start_min',   
-        	name: 'start_min',         
+        	applyTo: 'start_min',   
+        	id: 'start_min',         
             store: new Ext.data.SimpleStore({
                 fields: ['value','text'],
                 data: minutes
@@ -330,8 +344,8 @@ Ext.calendar.EventDialog.prototype = {
         this.eventForm.add(startMin);
         
         var endDate = new Ext.form.DateField({
-	        id: 'end_date',
-            name: 'end_date',
+	        applyTo: 'end_date',
+            id: 'end_date',
             width:100,
             format: GOsettings['date_format'],
             allowBlank:false
@@ -339,8 +353,8 @@ Ext.calendar.EventDialog.prototype = {
     	this.eventForm.add(endDate);
     	
     	var endHour = new Ext.form.ComboBox({   
-    		id: 'end_hour',         
-            name:'end_hour',
+    		applyTo: 'end_hour',         
+            id:'end_hour',
             store: new Ext.data.SimpleStore({
                 fields: ['value','text'],
                 data: hours
@@ -356,8 +370,8 @@ Ext.calendar.EventDialog.prototype = {
         this.eventForm.add(endHour);
         
         var endMin = new Ext.form.ComboBox({
-        	id:'end_min',            
-            name:'end_min',
+        	applyTo:'end_min',            
+            id:'end_min',
             store: new Ext.data.SimpleStore({
                 fields: ['value','text'],
                 data: minutes
@@ -373,8 +387,8 @@ Ext.calendar.EventDialog.prototype = {
         
         var allDayCB = new Ext.form.Checkbox({
             boxLabel:calLang['allDay'],
-            id:'all_day_event',  
-            name:'all_day_event',
+            applyTo:'all_day_event',  
+            id:'all_day_event',
             checked:false,
             width:'auto'
     	});
@@ -401,18 +415,15 @@ Ext.calendar.EventDialog.prototype = {
         
          var busy = new Ext.form.Checkbox({
             boxLabel: calLang['busy'],
-            id:'busy',  
-            name:'busy',
+            applyTo:'busy',  
+            id:'busy',
             checked:true,
             width:'auto'
     	});
     	this.eventForm.add(busy);
+
     	
-    	
-    	
-        
-        
-        
+
         
         //Start of recurrence tab
         
@@ -456,8 +467,8 @@ Ext.calendar.EventDialog.prototype = {
         {
         	var cb = new Ext.form.Checkbox({
 	            boxLabel:calLang['shortDays'][day],
-	            id:'repeat_days_'+day,  
-	            name:'repeat_days_'+day,
+	            applyTo:'repeat_days_'+day,  
+	            id:'repeat_days_'+day,
 	            disabled: true,
 	            checked:false,
 	            width:'auto'
@@ -468,8 +479,8 @@ Ext.calendar.EventDialog.prototype = {
         
         
         var repeatEndDate = new Ext.form.DateField({
-        	id: 'repeat_end_date',
-            name: 'repeat_end_date',
+        	applyTo: 'repeat_end_date',
+            id: 'repeat_end_date',
             width:100,
             disabled: true,
             format: GOsettings['date_format'],
@@ -479,8 +490,8 @@ Ext.calendar.EventDialog.prototype = {
         
         var repeatForever = new Ext.form.Checkbox({
             boxLabel: calLang['repeatForever'],
-            id:'repeat_forever',  
-            name:'repeat_forever',
+            applyTo:'repeat_forever',  
+            id:'repeat_forever',
             checked:true,
             disabled:true,
             width:'auto'
@@ -535,7 +546,7 @@ Ext.calendar.EventDialog.prototype = {
         
     	
     	
-    	this.eventForm.render();
+    	//this.eventForm.render();
 	},
 	changeRepeat : function(value){
         switch(value)
