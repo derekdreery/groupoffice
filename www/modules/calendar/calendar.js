@@ -1,4 +1,17 @@
-
+/**
+ * @copyright Copyright Intermesh 2007
+ * @author Merijn Schering <mschering@intermesh.nl>
+ * 
+ * This file is part of Group-Office.
+ * 
+ * Group-Office is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ * 
+ * See file /LICENSE.GPL
+ */
+ 
 calendar = function(){
 	
 	var CalendarGrid, ds;
@@ -284,17 +297,22 @@ calendar = function(){
 					CalendarGrid.mask();
 			
 					var conn = new Ext.data.Connection();
-						conn.request({
+					conn.request({
 						url: 'action.php',
-						params: {task: 'update_event', event_id: event['remoteId'], 'startDate': event['startDate']},
+						params: {
+							task: 'update_event', 
+							event_id: event['remoteId'], 
+							'startDate': 
+							event['startDate'].format(CalendarGrid.dateTimeFormat)},
 						callback: function(options, success, response)
 						{
 							var response = Ext.decode(response.responseText);
 							if(!success)
 							{				
-								Ext.MessageBox.alert('Failed', response['errors']);
+								Ext.MessageBox.alert(GOlang['strError'], response['errors']);
 							}
 							CalendarGrid.unmask();
+							CalendarGrid.store.reload();
 						},
 						scope: CalendarGrid
 					});
@@ -303,30 +321,33 @@ calendar = function(){
 				
 			CalendarGrid.on("resize", function(CalGrid, event, newEventName){
 					CalendarGrid.mask();
-			
-					//var event = CalGrid.elementToEvent(newEventEl);
-			
+
 					var conn = new Ext.data.Connection();
-						conn.request({
+					conn.request({
 						url: 'action.php',
-						params: {task: 'update_event', event_id: event['remoteId'], 'endDate': event['endDate']},
+						params: {
+							task: 'update_event', 
+							'event_id': event['remoteId'], 
+							'endDate': event['endDate'].format(CalendarGrid.dateTimeFormat)
+							},
 						callback: function(options, success, response)
 						{
 							var response = Ext.decode(response.responseText);
 							if(!success)
 							{				
-								Ext.MessageBox.alert('Failed', response['errors']);
+								Ext.MessageBox.alert(GOlang['strError'], response['errors']);
 							}
 							CalendarGrid.unmask();
+							CalendarGrid.store.reload();
 						},
-						scope: CalendarGrid
+						scope: this
 					});
 					
 				});
 				
-			CalendarGrid.on("eventDblClick", function(CalGrid, event){
-			
-			alert(event['remoteId']);eventDialog.show(event['remoteId']);});
+			CalendarGrid.on("eventDblClick", function(CalGrid, event){			
+				eventDialog.show(event['remoteId']);
+			});
         }
 	}
 

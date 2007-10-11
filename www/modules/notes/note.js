@@ -80,7 +80,6 @@ Note = function(){
 				linksPanel = new Ext.grid.LinksPanel();
 				
 				var tabs = new Ext.TabPanel({
-			        //renderTo: 'tabs1',
 			        activeTab: 0,
 			        frame:true,
 			        defaults:{autoHeight: true},
