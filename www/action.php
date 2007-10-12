@@ -33,7 +33,7 @@ switch($_REQUEST['task'])
 			$result['success']=$login_missing_field;
 
 		} else {
-
+		
 			//attempt login using security class inherited from index.php
 			//$params = isset( $auth_sources[$auth_source]) ?  $auth_sources[$auth_source] : false;
 			if (!$GO_AUTH->login($username, $password, $_SESSION['auth_source']))
@@ -53,8 +53,7 @@ switch($_REQUEST['task'])
 						SetCookie("GO_PW",$password,time()+3600*24*30,"/",'',0);
 					}
 					
-					$GO_MODULES->load_modules();
-					
+		
 					$result['success']=true;
 				}
 			}

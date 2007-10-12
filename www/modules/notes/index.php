@@ -27,7 +27,7 @@ require_once($GO_LANGUAGE->get_language_file('notes'));
 require($GO_CONFIG->root_path.'default_head.inc');
 require($GO_CONFIG->root_path.'default_scripts.inc');
 ?>
-<script type="text/javascript" src="<?php echo $no_js_lang; ?>"></script>
+<script type="text/javascript" src="language/<?php echo $no_js_lang; ?>"></script>
 <script type="text/javascript" src="note.js"></script>
 <script type="text/javascript" src="notes.js"></script>
 <script type="text/javascript" src="../../javascript/windows/linksDialog.js"></script>
