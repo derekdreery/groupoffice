@@ -14,7 +14,7 @@ if(!empty($GO_MODULES->id))
 <script src="<?php echo $GO_CONFIG->host; ?>ext/adapter/ext/ext-base.js" type="text/javascript"></script>
 <script src="<?php echo $GO_CONFIG->host; ?>ext/ext-all-debug.js" type="text/javascript"></script>
 <script src="<?php echo $GO_CONFIG->host; ?>language/common/en.js" type="text/javascript"></script>
-<script type="text/javascript" src="<?php echo $GO_CONFIG->host; ?>controls/loginDialog.js"></script>
+<script type="text/javascript" src="<?php echo $GO_CONFIG->host; ?>javascript/windows/loginDialog.js"></script>
 <script type="text/javascript">
 var BaseHref = '<?php echo $GO_CONFIG->host; ?>';
 GOsettings=Ext.util.JSON.decode('<?php echo addslashes(json_encode($_SESSION['GO_SESSION'])); ?>');

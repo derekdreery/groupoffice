@@ -41,12 +41,12 @@ echo $GO_THEME->get_stylesheet('calendar');
 <link href="CalendarGrid.css" type="text/css" rel="stylesheet" />
 
 <script type="text/javascript" src="language/en.js"></script>
-<script src="../../controls/selectLink.js" type="text/javascript"></script>
+<script src="../../javascript/form/selectLink.js" type="text/javascript"></script>
 <script src="CalendarGrid.js" type="text/javascript"></script>
 <script src="EventDialog.js" type="text/javascript"></script>
 <script src="calendar.js" type="text/javascript"></script> 
-<script type="text/javascript" src="../../controls/linksDialog.js"></script>
-<script type="text/javascript" src="../../controls/linksPanel.js"></script>
+<script type="text/javascript" src="../../javascript/windows/linksDialog.js"></script>
+<script type="text/javascript" src="../../javascript/panels/linksPanel.js"></script>
 
 <!--
 

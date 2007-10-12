@@ -143,7 +143,7 @@ Note = function(){
 			loaded_note_id=note_id;
 			if(note_id>0)
 			{
-				formPanel.form.load({url: 'notes_json.php?note_id='+note_id, waitMsg:GOlang['waitMsgLoad']});
+				formPanel.form.load({url: 'json.php?note_id='+note_id, waitMsg:GOlang['waitMsgLoad']});
 			}else
 			{
 				formPanel.form.reset();
