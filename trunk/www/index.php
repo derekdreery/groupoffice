@@ -31,4 +31,4 @@ if(is_writable($config_file))
 	exit();
 }*/
 
-require_once($GO_THEME->theme_path."frames.inc");
+require_once($GO_THEME->theme_path."layout.inc");
