@@ -40,9 +40,75 @@ GroupOffice = function(){
 
                 }]
             });
+            
+            
+            this.removeLoadMask();
+            
+            
+            this.loadModules();
+            
+            
+			
+			
+			
 
-
-
+		},
+		
+		loadModules : function()
+		{
+			var conn = new Ext.data.Connection();
+			conn.request({
+				url: BaseHref+'json.php',
+				params: {task: 'modules'},
+				callback: function(options, success, response)
+				{
+					
+				
+					
+					if(!success)
+					{				
+						Ext.MessageBox.alert('Failed', response['errors']);
+					}else
+					{   
+						
+						var result = Ext.decode(response.responseText);
+						
+						if(!result.success)
+						{
+							switch(result.errors)
+		        			{
+		        				case 'UNAUTHORIZED':
+		        					Ext.Msg.alert(GOlang['strUnauthorized'], GOlang['strUnauthorizedText']);
+		        				break;
+		        				
+		        				case 'NOTLOGGEDIN':
+		        					var loginDialog = new Ext.LoginDialog({
+		        						callback: this.loadModules,
+		        						scope: this
+		        					});
+		        					loginDialog.show();
+		        				break;
+		        			}
+						}else
+						{	
+							for (var module in result.modules)
+							{
+								this.addCenterPanel(module, result.modules[module].humanName, result.modules[module].url);
+							}
+							
+							tabs.items.map['notes'].show();
+						}
+					}
+				},
+				scope: this
+			});
+			
+			
+			
+		},
+		
+		removeLoadMask : function()
+		{
 			var loading = Ext.get('loading');
 			var mask = Ext.get('loading-mask');
 			mask.setOpacity(.8);
@@ -58,7 +124,6 @@ GroupOffice = function(){
 					loading.fadeOut({duration:.2,remove:true});
 				}
 			});
-
 		},
 
 		addCenterPanel : function(id, title, url)

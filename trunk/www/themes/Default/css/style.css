@@ -8,12 +8,21 @@ color:#000;
     padding-left:0px;
 }
 
-.subTable{
+.go-sub-table{
 	border:0px;
 	border-collapse: collapse;
 }
-.subTable td {
+.go-sub-table td {
 	margin:0px;
 	padding:0px;
 	padding-right:4px;
+}
+
+
+.go-inner-tab{
+	padding:5px;
+}
+
+.go-app-icon{
+	background: url('../../../lib/go-icon.png');
 }

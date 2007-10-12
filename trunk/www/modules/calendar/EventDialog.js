@@ -27,33 +27,55 @@ Ext.calendar.EventDialog.prototype = {
 		if(!this.win)
 		{
 			
+			
+			
 
 			this.buildForm();
 			
+			//Create the standard GO linkspanel
+			var linksPanel = new Ext.grid.LinksPanel();
+			
+			//when the form loads load the links as well. Make sure the link_id is defined
+			//in the form reader.
+			this.eventForm.on('actioncomplete', function(form, action){
+					if(action.type=='load')
+					{
+						linksPanel.loadLinks(action.result.data['link_id'], 1);
+						//loaded_link_id=action.result.data['link_id'];
+					}
+				});
+				
+				
+			
 			var tabs = new Ext.TabPanel({
+					el: 'event-form',
 			        activeTab: 0,
-			        frame:true,
 			        deferredRender:false,
-			        defaults:{autoHeight: true,bodyStyle:'padding:5px;'},
+			        frame:true,					        
+			        defaults:{autoHeight: true, hideMode:'offsets'},
 			        items:[
 			           {
 							title: GOlang['strProperties'],
 							autoScroll:true,
-							contentEl: 'event-properties'	
+							el: 'event-properties',
+							autoShow: true
 							
 						},
 						{
 							title: calLang['recurrence'],
 							autoScroll:true,
-							contentEl: 'event-recurrence'	
+							el: 'event-recurrence',
+							autoShow: true	
 							
 						},
 						{
 							title: calLang['options'],
 							autoScroll:true,
-							contentEl: 'event-options'	
+							el: 'event-options',
+							autoShow: true	
 							
-						}
+						},
+						linksPanel
 			        ]
 			    });
 			    
@@ -168,8 +190,10 @@ Ext.calendar.EventDialog.prototype = {
 					this.calendarGrid.addTimedEvent(action.result.event_id, this.eventForm.findField('subject').getValue(),startDate, endDate);
 					*/
 					//TODO dynamic update
-					this.calendarGrid.reload();
-				}					
+					
+				}
+				
+				this.calendarGrid.store.reload();					
 			},		
 			failure: function(form, action) {
 				//Ext.MessageBox.alert(GOlang['Error'], action.result.errors);
@@ -219,6 +243,7 @@ Ext.calendar.EventDialog.prototype = {
 				root: 'event',
 				id: 'id'
 			}, [
+			{name: 'link_id'},
 			{name: 'subject'},
 			{name: 'description'},
 			{name: 'location'},

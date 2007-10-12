@@ -53,5 +53,11 @@ var GOlang = {
 	
 	noItemSelected: 'You didn\'t select an item.',
 	strDeleteSelectedItems: 'Are you sure you want to delete the {count} items?',
-	strDeleteSelectedItem: 'Are you sure you want to delete the selected item?'
+	strDeleteSelectedItem: 'Are you sure you want to delete the selected item?',
+	
+	strUnauthorized: 'Unauthorized',
+	strUnauthorizedText: 'You don\'t have permission to perform this action',
+	
+	strLogin: 'Login required'
+	
 };

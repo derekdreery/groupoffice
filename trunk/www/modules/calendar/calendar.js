@@ -27,12 +27,6 @@ calendar = function(){
 			// initialize state manager, we will use cookies
 			//Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
 
-
-
-			
-			
-		
-
 			
 			var datePicker = new Ext.DatePicker();
 			
@@ -41,8 +35,6 @@ calendar = function(){
 				},this);
 			
 			datePicker.render("DatePicker");
-			
-			
 			
 			
 			
@@ -69,7 +61,7 @@ calendar = function(){
 			
 			
 			
-			
+			var westPanel;
 			
 			var viewport = new Ext.Viewport({
 				layout:'border',
@@ -100,7 +92,7 @@ calendar = function(){
 						
 						]
 						
-	                },{
+	                },westPanel = new Ext.Panel({
 	                    region:'west',
 	                    contentEl: 'westDiv',
 	                    split:true,
@@ -109,7 +101,7 @@ calendar = function(){
 						closeOnTab: true,
 						width: 212,
 						split:false
-	                }, {
+	                }), {
 	                    region:'center',
 	                    contentEl: 'centerDiv',
 	                    split:true,
@@ -121,14 +113,7 @@ calendar = function(){
 	                }]
 			});
 			
-			
-
-			//layout.add('center', centerPanel);
-			
-			//layout.getRegion("west").bodyEl.addClass("bluePanel");
-
-			//layout.restoreState();
-			//layout.endUpdate();
+			westPanel.body.addClass('blue-panel');
 			
 			calendarList= Ext.get("calendarList");
 			calendarList.on('click', this.calendarClicked, this);
