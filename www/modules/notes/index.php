@@ -30,8 +30,8 @@ require($GO_CONFIG->root_path.'default_scripts.inc');
 <script type="text/javascript" src="<?php echo $no_js_lang; ?>"></script>
 <script type="text/javascript" src="note.js"></script>
 <script type="text/javascript" src="notes.js"></script>
-<script type="text/javascript" src="../../controls/linksDialog.js"></script>
-<script type="text/javascript" src="../../controls/linksPanel.js"></script>
+<script type="text/javascript" src="../../javascript/windows/linksDialog.js"></script>
+<script type="text/javascript" src="../../javascript/panels/linksPanel.js"></script>
 </head>
 <body>
 <div id="notedialog" style="visibility:hidden">

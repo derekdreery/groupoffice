@@ -34,8 +34,8 @@ Ext.grid.LinksPanel = function(config){
 	this.store = new Ext.data.Store({
 
 			proxy: new Ext.data.HttpProxy({
-				url: BaseHref+'links_json.php',
-				baseParams: {"link_id": this.link_id}
+				url: BaseHref+'json.php',
+				baseParams: {task: "links", "link_id": this.link_id}
 			}),
 			reader: new Ext.data.JsonReader({
 					root: 'results',

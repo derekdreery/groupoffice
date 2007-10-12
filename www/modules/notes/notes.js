@@ -30,7 +30,7 @@ Notes = function(){
 			ds = new Ext.data.Store({
 
 				proxy: new Ext.data.HttpProxy({
-					url: 'notes_json.php'
+					url: 'json.php'
 				}),
 
 				reader: new Ext.data.JsonReader({
