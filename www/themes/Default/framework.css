@@ -28,7 +28,7 @@ html, body {
 }
 #loading .loading-indicator{
 	border:1px solid #a3bad9;
-	background:white url(../images/block-bg.gif) repeat-x;
+	background:white url(images/block-bg.gif) repeat-x;
 	color:#003366;
 	font:bold 13px tahoma,arial,helvetica;
 	padding:10px;
@@ -37,7 +37,7 @@ html, body {
 
 #header{
    border:0px none;
-   background:#0000aa url(../images/hd-sprite.gif) repeat-x 0px -83px;
+   background:#0000aa url(images/hd-sprite.gif) repeat-x 0px -83px;
    padding-top:3px;
    padding-left:3px;
    color:white;
@@ -61,7 +61,7 @@ text-decoration:none;
 #header input {
 	color:white;
 	
-	background:#0000aa url(../images/hd-sprite.gif) repeat-x 0px -83px;
+	background:#0000aa url(images/hd-sprite.gif) repeat-x 0px -83px;
 	border:1px solid white;
 	padding-left:2px;
 }
