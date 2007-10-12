@@ -28,4 +28,4 @@ $no_show_responsible = 'Show responsible';
 
 $no_note='Note';
 
-$no_js_lang=$GO_MODULES->modules['notes']['url'].'language/en.js';
+$no_js_lang='en.js';
