@@ -2,10 +2,15 @@
 <html>
 <head>
 <title><?php echo $GO_CONFIG->title; ?></title>
+<link href="<?php echo $GO_THEME->theme_url; ?>framework.css" type="text/css" rel="stylesheet"></link>
+<link href="<?php echo $GO_THEME->theme_url; ?>style.css" type="text/css" rel="stylesheet"></link>
 <?php
 require($GO_CONFIG->root_path.'default_head.inc');
+foreach($GO_MODULES->modules as $module)
+{
+	echo $GO_THEME->get_stylesheet($module['id']);
+}
 ?>
-<link href="<?php echo $GO_THEME->theme_url; ?>css/framework.css" type="text/css" rel="stylesheet"></link>
 </head>
 <body>
 <div id="loading-mask" style="width:100%;height:100%;background:#c3daf9;position:absolute;z-index:20000;left:0;top:0;">&#160;</div>
