@@ -45,6 +45,7 @@
 .x-calGrid-grid-container{
 	overflow:auto;
 	position:relative;
+	font:normal 11px arial, tahoma, helvetica, sans-serif;
 }
 
 .x-calGrid-headings-container{
@@ -70,4 +71,5 @@
 
 .x-calGrid-heading{
 	margin-top:6px;
+	font:normal 11px arial, tahoma, helvetica, sans-serif;
 }
