@@ -8,6 +8,7 @@ border:0px;
 
 
 .calendar-list{
+	font:normal 11px arial, tahoma, helvetica, sans-serif;
 	padding:2px;
 	background-color:white;
 	border:1px solid #c3daf9;
