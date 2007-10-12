@@ -119,7 +119,7 @@ class GO_MODULES extends db {
    */
 	function load_modules()
 	{
-		global $GO_SECURITY;
+		global $GO_SECURITY, $GO_LANGUAGE, $lang_modules;
 		$this->modules=array();
 				
 		$modules = $this->get_modules_with_locations();
@@ -133,10 +133,22 @@ class GO_MODULES extends db {
 					$_SESSION['GO_SESSION']['modules'][$modules[$i]['id']]['write_permission'] ? true :
 						$GO_SECURITY->has_permission(
 							$_SESSION['GO_SESSION']['user_id'], $modules[$i]['acl_read']);
+							
+			
+							
 			}else
 			{
 				$_SESSION['GO_SESSION']['modules'][$modules[$i]['id']]['write_permission'] = $_SESSION['GO_SESSION']['modules'][$modules[$i]['id']]['read_permission'] = false;
 			}
+			
+			$language_file = $GO_LANGUAGE->get_language_file($modules[$i]['id']);			
+			if(file_exists($language_file))
+			{				
+				require_once($language_file);				
+			}
+			
+			$_SESSION['GO_SESSION']['modules'][$modules[$i]['id']]['humanName'] = isset($lang_modules[$modules[$i]['id']]) ? $lang_modules[$modules[$i]['id']] : $modules[$i]['id'];
+			
 		}
 		$this->modules=$_SESSION['GO_SESSION']['modules'];
 

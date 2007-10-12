@@ -164,6 +164,7 @@ Ext.LinksDialog = function(config){
 		plain:true,
 		closeAction:'hide',
 		title:GOlang['strLinkItems'],
+		
 
 		
 		items: [

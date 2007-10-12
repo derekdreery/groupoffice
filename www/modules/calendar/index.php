@@ -45,6 +45,8 @@ echo $GO_THEME->get_stylesheet('calendar');
 <script src="CalendarGrid.js" type="text/javascript"></script>
 <script src="EventDialog.js" type="text/javascript"></script>
 <script src="calendar.js" type="text/javascript"></script> 
+<script type="text/javascript" src="../../controls/linksDialog.js"></script>
+<script type="text/javascript" src="../../controls/linksPanel.js"></script>
 
 <!--
 
@@ -74,10 +76,10 @@ Ext.EventManager.onDocumentReady(function(){
 </div>
 
 <form id="event-form" name="event-form" method="post" action="#">
-<div id="event-dialog">
+<div id="event-dialog" style="visibility:none">
 
-	<div id="event-properties">
-	
+	<div id="event-properties" class="x-hide-offsets">
+		<div class="go-inner-tab">
 		<table>
 			<tr>
 				<td>
@@ -106,7 +108,7 @@ Ext.EventManager.onDocumentReady(function(){
 			<tr>
 				<td><?php echo $sc_start_at; ?>:</td>
 				<td class="x-form-element">
-				<table class="subTable">
+				<table class="go-sub-table">
 				<tr>
 					<td><input type="text" id="start_date" name="start_date" /></td>
 					<td><input type="text" id="start_hour" name="start_hour" /></td>
@@ -119,7 +121,7 @@ Ext.EventManager.onDocumentReady(function(){
 			<tr>
 				<td><?php echo $sc_end_at; ?>:</td>
 				<td class="x-form-element">
-				<table class="subTable">
+				<table class="go-sub-table">
 				<tr>
 					<td><input type="text" id="end_date" name="end_date" /></td>
 					<td><input type="text" id="end_hour" name="end_hour" /></td>
@@ -134,7 +136,7 @@ Ext.EventManager.onDocumentReady(function(){
 				<?php echo $sc_status; ?>:
 				</td>
 				<td class="x-form-element">
-				<table class="subTable">
+				<table class="go-sub-table">
 				<tr>
 					<td>
 					<?php
@@ -156,19 +158,20 @@ Ext.EventManager.onDocumentReady(function(){
 				</td>
 			</tr>
 		</table>
-		
+		</div>
 	</div>
 	
 	
 	
-	<div id="event-recurrence">
+	<div id="event-recurrence" class="x-hide-offsets">
+		<div class="go-inner-tab">
 		<table>
 			<tr>
 				<td>
 				<?php echo $sc_recur_every; ?>:
 				</td>
 				<td class="x-form-element">
-				<table class="subTable">
+				<table class="go-sub-table">
 				<tr>
 					<td>
 					<?php
@@ -200,7 +203,7 @@ Ext.EventManager.onDocumentReady(function(){
 				<?php echo $sc_at_days; ?>:
 				</td>
 				<td class="x-form-element">
-				<table class="subTable">
+				<table class="go-sub-table">
 				<tr>
 					<td>					
 					<?php
@@ -234,7 +237,7 @@ Ext.EventManager.onDocumentReady(function(){
 			<tr>
 				<td><?php echo $sc_cycle_end; ?></td>
 				<td class="x-form-element">
-				<table class="subTable">
+				<table class="go-sub-table">
 				<tr>
 					<td>	
 					<input type="text" id="repeat_end_date" name="repeat_end_date" />
@@ -247,10 +250,12 @@ Ext.EventManager.onDocumentReady(function(){
 				</td>
 			</tr>				
 		</table>
+		</div>
 	</div>
 	
 	
-	<div id="event-options">
+	<div id="event-options" class="x-hide-offsets">
+		<div class="go-inner-tab">
 		<table>
 			<tr>
 				<td>Calendar:</td>
@@ -272,7 +277,7 @@ Ext.EventManager.onDocumentReady(function(){
 				<?php echo $sc_reminder; ?>:
 				</td>
 				<td>
-				<table class="subTable">
+				<table class="go-sub-table">
 				<tr>
 					<td>					
 					<?php
@@ -307,6 +312,7 @@ Ext.EventManager.onDocumentReady(function(){
 				</td>
 			</tr>			
 		</table>
+		</div>
 	</div>
 	
 </div>

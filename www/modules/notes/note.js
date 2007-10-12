@@ -150,7 +150,7 @@ Note = function(){
 				linksPanel.setDisabled(true);
 			}
 
-			nameField.focus.defer(1000, nameField, [true]);
+			nameField.focus.defer(100, nameField, [true]);
 			
 			
 			win.show();

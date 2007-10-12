@@ -119,9 +119,10 @@ class base_security extends db
 	* @access public
 	* @return void
 	*/
-	function authenticate($admin = false, $load_frames=true)
+	function authenticate($module='')
 	{
-		global $GO_CONFIG, $GO_AUTH, $auth_sources;
+		//return 'NOTLOGGEDIN';
+		global $GO_CONFIG, $GO_AUTH, $auth_sources, $GO_MODULES;
 
 		$GO_AUTH_SOURCE_KEY = 
 			isset($_COOKIE['GO_AUTH_SOURCE_KEY']) ? 
@@ -132,11 +133,7 @@ class base_security extends db
 			$params = isset( $auth_sources[$GO_AUTH_SOURCE_KEY]) ?  
 				$auth_sources[$GO_AUTH_SOURCE_KEY] : false;			
 			
-			if(isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW']))
-			{
-				$username = $_SERVER['PHP_AUTH_USER'];
-				$password = $_SERVER['PHP_AUTH_PW'];
-			}elseif(isset($_COOKIE['GO_UN']) && isset($_COOKIE['GO_PW']) &&
+			if(isset($_COOKIE['GO_UN']) && isset($_COOKIE['GO_PW']) &&
 					$_COOKIE['GO_UN'] !='' && $_COOKIE['GO_PW'] != '')
 			{
 				$username = $_COOKIE['GO_UN'];
@@ -146,37 +143,35 @@ class base_security extends db
 			if (!isset($username) || !isset($password) ||
 					!$GO_AUTH->login($username, $password, $params))
 			{
-				$location = $GO_CONFIG->host.
-					'index.php?return_to='.urlencode($_SERVER['REQUEST_URI']);
-				
-				if($load_frames)
-				{
-					$location .= '&load_frames=true';
-				}else
-				{
-					$location .= '&load_frames=false';
-				}
-					
-				header('Location: '.$location);
-				exit();
+				return 'NOTLOGGEDIN';			
+
 			}
 		}
 
-		if ($admin && !$this->has_admin_permission($this->user_id))
+		if($module!='' && 
+			!$GO_MODULES->modules[$module]['write_permission'] && 
+			!$GO_MODULES->modules[$module]['read_permission'])
+			{
+				return 'UNAUTHORIZED';
+			}
+		return 'AUTHORIZED';		
+	}
+	
+	function json_authenticate($module='')
+	{
+		$authenticated = $this->authenticate($module);
+		if($authenticated!='AUTHORIZED')
 		{
-			header("Location: ".$GO_CONFIG->host."error_docs/403.php");
+			$response['success']=false;
+			$response['errors']=$authenticated;
+			echo json_encode($response);
 			exit();
+		}else
+		{
+			return true;
 		}
 	}
 	
-	function http_authenticate() {
-	
-		global $GO_CONFIG;
-		
-		header('WWW-Authenticate: Basic realm="'.$GO_CONFIG->title.'"');
-		header( "HTTP/1.0 401 Unauthorized");
-		exit();
-	}
 
 	/**
 	* Creates and returns a new Access Control List to secure an object

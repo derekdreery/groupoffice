@@ -94,9 +94,6 @@ Notes = function(){
 	
 			grid.addListener("rowdblclick", this.rowDoubleClicked, this);
 
-
-			
-			//ds.on('load', function (){grid.getView().autoSizeColumns();}, false, { single: true });
 			
 			var viewport = new Ext.Viewport({
 	        layout:'fit',
@@ -105,7 +102,24 @@ Notes = function(){
 	        	]
 	        });
 	        
-	        ds.load();
+	        ds.load({
+	        	callback: function(r, options, success){
+	        		if(!success)
+	        		{
+	        			switch(this.reader.jsonData.errors)
+	        			{
+	        				case 'UNAUTHORIZED':
+	        					Ext.Msg.alert(GOlang['strUnauthorized'], GOlang['strUnauthorizedText']);
+	        				break;
+	        				
+	        				case 'NOTLOGGEDIN':
+	        					var loginDialog = new Ext.LoginDialog();
+	        					loginDialog.show();
+	        				break;
+	        			}
+	        		}
+	        	}
+	        });
 
 		},
 		
