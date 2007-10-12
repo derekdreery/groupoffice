@@ -135,6 +135,7 @@ GroupOffice = function(){
 		     closable:true,
 		     // layout to fit child component
 		     layout:'fit', 
+		     iconCls: 'go-app-icon',
 		     // add iframe as the child component
 		     items: [ new Ext.ux.IFrameComponent({ 'id': id, 'url': url }) ]
 
