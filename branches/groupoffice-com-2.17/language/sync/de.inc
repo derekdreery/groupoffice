@@ -10,9 +10,10 @@ $sync_devices='Geräte';
 $sync_last_calendar_sync='Kalender zuletzt synchronisiert';
 $sync_last_addressbook_sync='Adressbuch zuletzt synchronisiert';
 $sync_never='Niemals';
-$sync_last_todos_sync='Letze Syncronisation der Aufgaben';
+$sync_last_todos_sync='Aufgaben zuletzt synchronisiert';
 $sync_log='Sync Log';
 $sync_max_days_old='Sync Ereignisse nicht älter als';
 $sync_days='Tage';
 $sync_delete_old_events='Ereignisse des Benutzers löschen, die älter als der angegebene Zeitpunkt sind';
+$sync_click_to_verify='Klicken zum bestätigen';
 ?>
