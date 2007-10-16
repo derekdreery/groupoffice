@@ -2,9 +2,9 @@
 //Translated with Group-Office translate module
 require_once($GO_LANGUAGE->get_fallback_language_file('bookmarks'));
 $bm_save_title='Lesezeichen speichern';
-$bm_new_window='Lesezeichen in einem neuen Fenster öffnen';
+$bm_new_window='Lesezeichen in einem neuen Fenster öffnen.';
 $bm_current_page='Aktuelle Seite';
-$bm_no_bookmarks='Keine Lesezeichen';
+$bm_no_bookmarks='Sie haben keine Lesezeichen';
 $bm_catagory_exists='Eine Kategorie mit diesem Namen existiert bereits';
 $bm_private='Privat';
 $bm_catagory_other='Andere';
@@ -17,5 +17,5 @@ $bm_bookmarks='Lesezeichen';
 $bm_and_all_contents='und die gesamten Inhalte';
 $bm_copy_read_permissions='Kopiere Leseberechtigungen zum Lesezeichen';
 $bm_copy_write_permissions='Kopiere Schreibberechtigungen zum Lesezeichen';
-$bm_move_to_catagory='Verschiebe ausgewählte Lesezeichen in Kategorie';
+$bm_move_to_catagory='Verschiebe ausgewählte Lesezeichen in Kategorie...';
 ?>
