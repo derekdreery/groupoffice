@@ -145,6 +145,8 @@ class filesystem_list extends datatable
 		}
 		
 		$gota_supported = file_exists($GO_MODULES->modules['filesystem']['path'].'jnlp.php');
+		
+		$nogota_extensions=array('pdf','ps','jpg','gif','png','zip','gz','tar','bmp','mpg','avi');
 
 		$total_size = 0;
 		foreach($files as $file)
@@ -169,7 +171,7 @@ class filesystem_list extends datatable
 						$GO_MODULES->modules['filesystem']['url'].'index.php?task=properties&path='.urlencode($file['path'])."';");	
 				}else
 				{
-					if($fs_settings['use_gota']=='1' && $gota_supported && $write_permission)
+					if($fs_settings['use_gota']=='1' && $gota_supported && $write_permission && !in_array($extension, $nogota_extensions))
 					{
 						$row->set_attribute('ondblclick', "javascript:window.location.href='".
 							$GO_MODULES->modules['filesystem']['url'].'jnlp.php?path='.urlencode($file['path'])."';");
