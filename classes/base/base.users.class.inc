@@ -375,8 +375,7 @@ class base_users extends db
 
 			$_SESSION['GO_SESSION']['user_id'] = $user_id;
 			
-			//It session could be stolen from another host!
-			$_SESSION['DIR_CHECK'] = $GO_CONFIG->root_path;
+			
 			
 			$_SESSION['GO_SESSION']['username'] = $userdata['username'];
 			$_SESSION['GO_SESSION']['authcode'] = $userdata['authcode'];
