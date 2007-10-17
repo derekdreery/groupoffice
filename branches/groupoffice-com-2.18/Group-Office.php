@@ -71,6 +71,18 @@ if ( isset( $GO_INCLUDES ) ) {
 
 //start session
 session_start();
+
+if(!isset($_SESSION['DIR_CHECK']))
+{
+	$_SESSION['DIR_CHECK'] = $GO_CONFIG->root_path;
+}elseif($_SESSION['DIR_CHECK'] != $GO_CONFIG->root_path)
+{
+	go_log(LOG_DEBUG, 'Session root path check failed. Stored root path in session: '.
+		$_SESSION['DIR_CHECK'].' doesn\'t match the configured one: '.$GO_CONFIG->root_path);
+		
+	session_destroy();
+}
+
 if($GO_CONFIG->debug)
 {
 	$_SESSION['query_count']=0;

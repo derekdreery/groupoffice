@@ -974,6 +974,8 @@ class GO_CONFIG
 	}
 	
 	
+	
+	
   }
   
   function set_help_url($url)
