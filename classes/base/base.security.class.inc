@@ -55,9 +55,9 @@ class base_security extends db
 		global $GO_CONFIG;
 		$this->db();
 
-		if (isset($_SESSION['GO_SESSION']['user_id']) &&
-		$_SESSION['GO_SESSION']['user_id'] > 0)
-		{
+		//if (isset($_SESSION['GO_SESSION']['user_id']) &&
+		//$_SESSION['GO_SESSION']['user_id'] > 0)
+		//{
 			if(!isset($_SESSION['DIR_CHECK']) || $_SESSION['DIR_CHECK'] != $GO_CONFIG->root_path)
 			{
 				go_log(LOG_DEBUG, 'Session root path check failed. Stored root path in session: '.
@@ -68,7 +68,7 @@ class base_security extends db
 			{
 				$this->user_id=$_SESSION['GO_SESSION']['user_id'];
 			}
-		}
+		//}
 	}
 
 	/**
