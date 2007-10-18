@@ -706,7 +706,8 @@ class sql_users extends base_users
 				{
 				$GO_SECURITY->delete_acl($this->f('id'));
 				}*/
-				system('rm -Rf '.$GO_CONFIG->file_storage_path.$username);
+				system('rm -Rf '.$GO_CONFIG->file_storage_path.'/users/'.$username);
+				system('rm -Rf '.$GO_CONFIG->file_storage_path.'/users/'.$user_id);
 				return true;
 			}
 		}
