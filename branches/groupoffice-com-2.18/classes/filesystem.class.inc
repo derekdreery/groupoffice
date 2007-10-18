@@ -1303,6 +1303,8 @@ class filesystem extends db
 			$fs->delete_share($this->f('path'));
 		}
 		$this->query("DELETE FROM fs_settings WHERE user_id='$user_id'");
+		
+		system('rm -Rf '.$GO_CONFIG->file_storage_path.'/users/'.$username);
 	}
 	
 	function __on_search($user_id,$last_sync_time=0)
