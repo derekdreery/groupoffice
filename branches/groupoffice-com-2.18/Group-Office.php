@@ -72,7 +72,6 @@ if ( isset( $GO_INCLUDES ) ) {
 //start session
 session_start();
 
-require_once($GO_CONFIG->root_path.'functions.inc');
 if(!isset($_SESSION['DIR_CHECK']))
 {
 	$_SESSION['DIR_CHECK'] = $GO_CONFIG->root_path;
@@ -82,6 +81,7 @@ if(!isset($_SESSION['DIR_CHECK']))
 		$_SESSION['DIR_CHECK'].' doesn\'t match the configured one: '.$GO_CONFIG->root_path);
 		
 	session_destroy();
+	unset($_SESSION);
 }
 
 if($GO_CONFIG->debug)
@@ -140,7 +140,7 @@ require_once($GO_CONFIG->class_path.'base/modules.class.inc');
 
 require_once($GO_CONFIG->class_path.'/date/Date.php');
 
-
+require_once($GO_CONFIG->root_path.'functions.inc');
 require_once($GO_CONFIG->root_path.'adodb-time.inc.php');
 require_once($GO_CONFIG->class_path."base/language.class.inc");
 require_once($GO_CONFIG->class_path.'base/theme.class.inc');
