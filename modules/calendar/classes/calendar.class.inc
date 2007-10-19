@@ -2473,7 +2473,7 @@ class calendar extends db
 	    {
 	    	if($event = $this->get_event($event_id))
 	    	{
-	    		go_log(LOG_DEBUG, 'Event deleted: '.$event['name'].' Start: '.date('Ymd G:i', $event['start_time']));
+	    		go_log(LOG_DEBUG, 'Deleted Event ID: '.$event['id'].' '.$event['name'].' Start: '.date('Ymd G:i', $event['start_time']));
 	    			
 	    		global $GO_LINKS, $GO_CONFIG;
 	    		$GO_LINKS->delete_link($event['link_id']);
