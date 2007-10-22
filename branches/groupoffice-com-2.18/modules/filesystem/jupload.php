@@ -49,7 +49,24 @@ while($file = array_shift($_FILES))
 					break;
 				}
 		}
-		move_uploaded_file($file['tmp_name'], $_SESSION['GO_FILESYSTEM_PATH'].'/'.basename($file['name']));		
+		
+		$destination_path=$_SESSION['GO_FILESYSTEM_PATH'].'/'.basename($file['name']);
+		
+		if($GO_LOGGER->enabled)
+		{
+			if(file_exists($destination_path))
+			{
+				$link_id=$fs->get_link_id($path);
+				$GO_LOGGER->log('filesystem', 'OVERWRITE '.$path, $link_id);
+			}else
+			{
+				$link_id=$fs->get_link_id($path);
+				$GO_LOGGER->log('filesystem', 'NEW FILE '.$path, $link_id);
+			}
+			
+		}
+		move_uploaded_file($file['tmp_name'], $destination_path);
+				
 	
 		if($share)
 		{

@@ -429,7 +429,9 @@ $GO_HEADER['head'] .= $birthday_picker->get_header();
 
 if ($_SESSION['GO_SESSION']['first_name'] != '' && $_SESSION['GO_SESSION']['last_name'] != '' && $_SESSION['GO_SESSION']['email'] != '')
 {
-
+	require($GO_LANGUAGE->get_language_file('groups'));
+	$tabstrip->add_tab('groups.inc', $lang_modules['groups']);
+	
 	if ($GO_CONFIG->allow_password_change)
 	{
 		$tabstrip->add_tab('security.inc', $acSecurity);

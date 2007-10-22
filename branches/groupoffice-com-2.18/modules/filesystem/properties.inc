@@ -114,6 +114,19 @@ if(!is_dir($fv->path))
 	if (isset($GO_MODULES->modules['email']) && $GO_MODULES->modules['email']['read_permission']) {
 		$menu->add_button('fs_email', $lang_modules['email'],"javascript:document.forms[0].prop_task.value='mail';document.forms[0].submit();");
 	}
+	
+	if(isset($GO_MODULES->modules['logviewer']) && $GO_MODULES->modules['logviewer']['read_permission'])
+	{
+		$GO_THEME->load_module_theme('logviewer');
+		
+		require($GO_LANGUAGE->get_language_file('logviewer'));
+		
+		$menu->add_button(
+		'logviewer',
+		$lv_view_log,
+		"javascript:popup('".$GO_MODULES->modules['logviewer']['url'].'index.php?link_id='.$link_id."','900','400');");
+	}
+	
 }
 
 if($tabstrip->get_active_tab_id()=='links')

@@ -129,7 +129,11 @@ switch ($task) {
 				elseif (file_exists($fv->path.'/'.basename($file))) {
 					if ($overwrite_destination_path == $fv->path.'/'.basename($file) || $overwrite_all == 'true') {
 						if ($overwrite == "true") {
-							$fs->move($file, $fv->path.'/'.basename($file));
+							$new_path = $fv->path.'/'.basename($file);
+							$fs->move($file, $new_path);					
+							
+							$file_link_id = $fs->get_link_id($new_path);									
+							$GO_LOGGER->log('filesystem', 'OVERWRITE '.$fs->strip_file_storage_path($new_path), $file_link_id);
 						}
 					} else {
 						array_unshift($_SESSION['cut_files'], $file);
@@ -244,14 +248,14 @@ switch ($task) {
 					elseif (file_exists($new_path)) {
 						if ($overwrite_destination_path == $new_path && $overwrite_all != 'true') {
 							if ($overwrite == "true") {
-								
+
 								if(!$file_uploaded = $fs->move(addslashes($file), $new_path))
 								{
-									$task = 'upload';
 									$feedback = $fs_inssufficient_diskspace;
 								}else
 								{
-									$file_link_id = $fs->get_link_id($new_path);
+									$file_link_id = $fs->get_link_id($new_path);									
+									$GO_LOGGER->log('filesystem', 'OVERWRITE '.$fs->strip_file_storage_path($new_path), $file_link_id);
 								}
 							}
 						}else{
@@ -263,13 +267,14 @@ switch ($task) {
 						}
 					} else {
 						
-						if(!$file_uploaded = $fs->move(addslashes($file), $fv->path.'/'.basename($file)))
+						if(!$file_uploaded = $fs->move(addslashes($file), $fv->path.'/'.basename($file), false))
 						{
 							$task = 'upload';
 							$feedback = $fs_inssufficient_diskspace;
 						}else
 						{
 							$file_link_id = $fs->get_link_id(addslashes($new_path));
+							$GO_LOGGER->log('filesystem', 'NEW FILE '.$fs->strip_file_storage_path($new_path), $file_link_id);
 						}
 					}
 				}
@@ -578,6 +583,7 @@ switch ($task) {
 				$feedback = $strSaveError;
 				require_once ('new_folder.inc');
 			} else {
+				$GO_LOGGER->log('filesystem', 'NEW FOLDER '.$fs->strip_file_storage_path($fv->path.'/'.$name));
 				require_once ($GO_MODULES->modules['filesystem']['path'].'listview.inc');
 			}
 		} else {
