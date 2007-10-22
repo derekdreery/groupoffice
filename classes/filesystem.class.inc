@@ -205,22 +205,26 @@ class filesystem extends db
 
 	function get_link_id($path)
 	{
-		$sql = "SELECT link_id FROM fs_links WHERE path='$path';";
-		$this->query($sql);
-		if($this->next_record())
-		{
-			return $this->f('link_id');
-		}else
-		{
-			global $GO_LINKS;
-
-			$file['path'] = $path;
-			$file['link_id'] = $GO_LINKS->get_link_id();
-			$file['ctime']=$file['mtime']=get_gmt_time();
-
-			$this->insert_row('fs_links', $file);
-
-			return $file['link_id'];
+		if($this->is_sub_dir($path, $GLOBALS['GO_CONFIG']->file_storage_path)
+		 || $this->is_sub_dir($path, $GLOBALS['GO_CONFIG']->local_path))
+		 {
+			$sql = "SELECT link_id FROM fs_links WHERE path='$path';";
+			$this->query($sql);
+			if($this->next_record())
+			{
+				return $this->f('link_id');
+			}else
+			{
+				global $GO_LINKS;
+	
+				$file['path'] = $path;
+				$file['link_id'] = $GO_LINKS->get_link_id();
+				$file['ctime']=$file['mtime']=get_gmt_time();
+	
+				$this->insert_row('fs_links', $file);
+	
+				return $file['link_id'];
+			}
 		}
 	}
 	
@@ -721,15 +725,17 @@ class filesystem extends db
 		}
 	}
 
-	function move($source_path, $destination_path)
+	function move($source_path, $destination_path, $log=true)
 	{
 
 		$source_path = dirname($source_path).'/'.basename($source_path);
 		$destination_path = dirname($destination_path).'/'.basename($destination_path);
 		
 		//echo $source_path.' -> '.$destination_path;
+		
+		
 
-		global $GO_CONFIG, $GO_MODULES;
+		global $GO_CONFIG, $GO_MODULES, $GO_LOGGER;
 		//do not move into own path
 		$source_dir_count = count(explode('/',$source_path));
 		$destination_dir_count = count(explode('/',$destination_path));
@@ -746,6 +752,11 @@ class filesystem extends db
 
 			if (is_dir($source_path))
 			{
+				if($log)
+				{
+					$GO_LOGGER->log('filesystem', 'MOVE '.$this->strip_file_storage_path($source_path).' to '.$this->strip_file_storage_path($destination_path));
+				}
+				
 				if (!file_exists($destination_path))
 				{
 					if (!mkdir($destination_path, $GO_CONFIG->create_mode))
@@ -758,7 +769,7 @@ class filesystem extends db
 							$this->update_share($source_path, $destination_path);
 						}
 
-						$link['link_id'] = $this->get_link_id_by_path(addslashes($source_path));
+						$link['link_id'] = $this->get_link_id(addslashes($source_path));
 						if($link['link_id'])
 						{
 							$link['path'] = addslashes($destination_path);
@@ -789,7 +800,7 @@ class filesystem extends db
 							$this->update_share($child['path'], $destination_path.'/'.$child['name']);
 						}
 
-						$link['link_id'] = $this->get_link_id_by_path(addslashes($source_path));
+						$link['link_id'] = $this->get_link_id(addslashes($source_path));
 						if($link['link_id'])
 						{
 							$link['path'] = addslashes($destination_path);
@@ -811,11 +822,15 @@ class filesystem extends db
 			}else
 			{
 				//rename fails when moving accross partitions
-				if($link['link_id'] = $this->get_link_id_by_path(addslashes($source_path)))
+				if($link['link_id'] = $this->get_link_id(addslashes($source_path)))
 				{
 					$link['path'] = addslashes($destination_path);
 					$link['mtime']=get_gmt_time();
 					$this->update_row('fs_links', 'link_id', $link);
+				}
+				if($log)
+				{
+					$GO_LOGGER->log('filesystem', 'MOVE '.$this->strip_file_storage_path($source_path).' to '.$this->strip_file_storage_path($destination_path), $link['link_id']);
 				}
 
 				if(isset($_SESSION['GO_SESSION']['username']) && strstr($source_path, $GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/') &&
@@ -825,7 +840,7 @@ class filesystem extends db
 					return rename($source_path, $destination_path);
 				}else
 				{
-					if ($this->copy($source_path, $destination_path))
+					if ($this->copy($source_path, $destination_path, false))
 					{
 						return unlink($source_path);
 					}else
@@ -836,15 +851,22 @@ class filesystem extends db
 			}
 		}
 	}
+	
+	function strip_file_storage_path($path)
+	{
+		return str_replace($GLOBALS['GO_CONFIG']->file_storage_path,'/', $path);
+	}
 
-	function copy($source_path, $destination_path)
+	function copy($source_path, $destination_path, $log=true)
 	{
 		$source_path = dirname($source_path).'/'.basename($source_path);
 		$destination_path = dirname($destination_path).'/'.basename($destination_path);
 
 		//echo $source_path.' -> '.$destination_path;
 		
-		global $GO_CONFIG;
+		global $GO_CONFIG, $GO_CONFIG, $GO_LOGGER;
+		
+		
 		
 		if($source_path == $destination_path)
 		{
@@ -858,6 +880,11 @@ class filesystem extends db
 		{
 			if (is_dir($source_path))
 			{
+				if($log)
+				{
+					$GO_LOGGER->log('filesystem', 'COPY '.$this->strip_file_storage_path($source_path).' to '.$this->strip_file_storage_path($destination_path));
+				}
+				
 				if (!file_exists($destination_path))
 				{
 					if (!mkdir($destination_path, $GO_CONFIG->create_mode))
@@ -898,6 +925,14 @@ class filesystem extends db
 						$this->action_result = "not enough space (over quota)";
 						return false;
 					}
+				}
+				
+				$link_id = $this->get_link_id($destination_path);
+				
+				if($GO_LOGGER->enabled && $log)
+				{
+					$source_link_id=$this->get_link_id($source_path);
+					$GO_LOGGER->log('filesystem', 'COPY '.$this->strip_file_storage_path($source_path).' to '.$this->strip_file_storage_path($destination_path), $source_link_id);
 				}
 
 				return copy($source_path, $destination_path);
@@ -940,8 +975,11 @@ class filesystem extends db
 	function delete($path)
 	{
 		$path = dirname($path).'/'.basename($path);
-
-		global $GO_SECURITY, $GO_MODULES;
+		
+	
+		global $GO_SECURITY, $GO_MODULES, $GO_LOGGER;
+		
+		
 
 		if(isset($GO_MODULES->modules['filesystem']) && $link_id = $this->get_link_id_by_path(addslashes($path)))
 		{
@@ -950,6 +988,8 @@ class filesystem extends db
 
 			$GO_LINKS->delete_link($link_id);
 		}
+		
+		$GO_LOGGER->log('filesystem', 'DELETE '.$this->strip_file_storage_path($path), $link_id);
 
 		if (is_dir($path))
 		{

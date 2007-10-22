@@ -37,6 +37,12 @@ if(!$fs->is_sub_dir(dirname($path),$GO_CONFIG->file_storage_path) && !$fs->is_su
 if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_permission($GO_SECURITY->user_id, $path))
 {
 
+	if($GO_LOGGER->enabled)
+	{
+		$link_id=$fs->get_link_id_by_path($path);
+		$GO_LOGGER->log('filesystem', 'VIEW '.$path, $link_id);
+	}
+	
 	$browser = detect_browser();
 
 

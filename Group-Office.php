@@ -180,6 +180,11 @@ if ( $GO_CONFIG->log ) {
   openlog('[Group-Office]['.date('Ymd G:i').']['.$username.']', LOG_PERROR, LOG_LOCAL0);
 }
 
+require($GO_CONFIG->class_path.'base/logger.class.inc');
+$GO_LOGGER = new logger();	
+
+
+
 unset($type);
 
 define('GO_LOADED', true);

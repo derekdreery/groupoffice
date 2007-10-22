@@ -92,6 +92,15 @@ class GO_CONFIG
    */
    
   var $log = false;
+  
+    /**
+   * Enable database log
+   *
+   * @var     bool
+   * @access  public
+   */
+   
+  var $dblog = false;
 
   /**
    * Slash to use '/' for linux and '\\' for windows
