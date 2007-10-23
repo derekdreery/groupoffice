@@ -1,5 +1,5 @@
 <?php
-$tabstrip->innerHTML .= 'You are in: <br />';
+$tabstrip->innerHTML .= $groups_you_are_in.': <br />';
 
 $GO_GROUPS->get_groups($GO_SECURITY->user_id);
 

@@ -58,3 +58,5 @@ $ac_auth_text = 'Enter the e-mail address from the user who\'s account you want 
 $ac_accept = 'Accept';
 $ac_decline = 'Decline';
 $ac_salutation = 'Dear';
+
+$groups_you_are_in = 'You are a member of the following user groups';
