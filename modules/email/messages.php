@@ -365,7 +365,7 @@ if ($msg_count > 0)
 		$short_subject = cut_string($subject, 45);
 		if ($show == "from")
 		{
-			$short_from = cut_string($mail->f('from'), 30);
+			$short_from = htmlentities(cut_string($mail->f('from'), 30), ENT_COMPAT, 'UTF-8');
 		}else
 		{
 			$to = '';
@@ -455,7 +455,7 @@ if ($msg_count > 0)
 		$cell->set_attribute('style','width:10px;');
 		$row->add_cell($cell);
 
-		$cell = new table_cell($short_subject);
+		$cell = new table_cell(htmlspecialchars($short_subject, ENT_COMPAT, 'UTF-8'));
 		$cell->set_attribute('style','white-space:nowrap');
 		$row->add_cell($cell);
 

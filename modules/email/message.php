@@ -92,7 +92,7 @@ if ($account && $mail->open($account['host'], $account['type'], $account['port']
 		exit();
 	}
 	$subject = !empty ($content["subject"]) ? $content["subject"] : $ml_no_subject;
-
+	$subject=htmlspecialchars($subject, ENT_COMPAT, 'UTF-8');
 } else {
 	require_once ($GO_THEME->theme_path.'header.inc');
 	echo '<p class="Error">'.$ml_connect_failed.' \''.$account['host'].'\' '.$ml_at_port.': '.$account['port'].'</p>';
@@ -192,6 +192,7 @@ if ($has_contacts_module) {
 	$ab = new addressbook();
 }
 
+$content['from']=htmlspecialchars($content['from'], ENT_COMPAT, 'UTF-8');
 if ($has_contacts_module) {
 	if ($contact = $ab->get_contact_by_email($content['sender'], $GO_SECURITY->user_id)) {
 		if ($contact['color'] != '') {
