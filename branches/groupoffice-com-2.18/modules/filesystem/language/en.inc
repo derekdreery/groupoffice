@@ -113,4 +113,8 @@ $fs_recursion='You can\'t move or copy folders into itself';
 $fs_select_destination = 'Select the destination folder'; 
 $fs_move = 'Move';
 
+$fs_java_not_installed="Java is not installed. Java is required to use the Group-Office Transfer Agent. Do you want to install it? If you don't want or are not able to install Java you can disable the Group-Office Transfer Agent at Configuration -> Files.";
+$fs_java_install = 'Install Java Webstart';
+$fs_java_install_text = 'Please start the Java installation now by clicking on the information bar on top of this page. If it does not work you can try to click <a class="normal" href="http://www.java.com">here to install it manually.</a>';
+
 $fs_help_url='http://docs.group-office.com/index.php?folder_id=49&file_id=220';

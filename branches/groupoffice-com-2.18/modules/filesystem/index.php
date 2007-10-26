@@ -486,6 +486,49 @@ switch ($task) {
 
 $GO_HEADER['head'] = datatable::get_header();
 $GO_HEADER['head'] .= '<script type="text/javascript" language="javascript" src="'.$GO_MODULES->url.'filesystem.js"></script>';
+
+$GO_HEADER['head'] .= '
+<SCRIPT LANGUAGE="JavaScript"> 
+var javawsInstalled = 0;  
+var javaws142Installed=0;
+var javaws150Installed=0;
+var javaws160Installed = 0;
+isIE = "false"; 
+if (navigator.mimeTypes && navigator.mimeTypes.length) { 
+   x = navigator.mimeTypes["application/x-java-jnlp-file"]; 
+   if (x) { 
+      javawsInstalled = 1; 
+  } 
+} 
+else { 
+   isIE = "true"; 
+}
+</SCRIPT>
+<SCRIPT LANGUAGE="VBScript">
+on error resume next
+If isIE = "true" Then
+  If Not(IsObject(CreateObject("JavaWebStart.isInstalled"))) Then
+     javawsInstalled = 0
+  Else
+     javawsInstalled = 1
+  End If
+End If
+</SCRIPT>
+<script language="JavaScript">
+function launchGOTA(path)
+{
+	if (javawsInstalled){
+	    document.location="jnlp.php?path="+path;	    
+	} else {
+		if(confirm("'.$fs_java_not_installed.'"))
+		{
+			window.open("http://java.sun.com/PluginBrowserCheck?pass='.urlencode($GO_MODULES->modules['filesystem']['full_url']).'downloadjws.php?path="+path+"&fail=http://www.java.com");
+		}
+	}
+}
+</SCRIPT>';
+
+
 switch($task)
 {
 	case 'create_archive':
