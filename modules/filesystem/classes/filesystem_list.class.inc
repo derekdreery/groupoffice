@@ -173,8 +173,7 @@ class filesystem_list extends datatable
 				{
 					if($fs_settings['use_gota']=='1' && $gota_supported && $write_permission && !in_array($extension, $nogota_extensions))
 					{
-						$row->set_attribute('ondblclick', "javascript:window.location.href='".
-							$GO_MODULES->modules['filesystem']['url'].'jnlp.php?path='.urlencode($file['path'])."';");
+						$row->set_attribute('ondblclick', "javascript:launchGOTA('".urlencode($file['path'])."');");
 					}else
 					{
 						if($fs->is_viewable_in_browser($file['path']))

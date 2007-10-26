@@ -95,3 +95,9 @@ $fs_show_files_on_summary = 'Toon de 10 laatst gewijzigde bestanden in de samenv
 $fs_recursion='U kan mappen niet naar zichzelf kopiëren of verplaatsen';
 $fs_select_destination = 'Selecteer de map van bestemming';
 $fs_move = 'Verplaatsen';
+
+
+$fs_java_not_installed="Java is niet geïnstalleerd. Java is vereist op de Group-Office Tranfser Agent te gebruiken. Wilt u Java installeren? Als u Java niet wilt of kunt installeren kunt u de Group-Office Transfer Agent uitschakelen bij Configuratie -> Bestanden";
+$fs_java_install = 'Java Webstart installeren';
+$fs_java_install_text = 'U kunt nu de Java installatie starten door op de informatiebalk bovenaan deze pagina te klikken. Werkt dit niet dan kunt u <a class="normal" href="http://www.java.com">hier klikken om de installatie handmatig te doen.</a>';
+
