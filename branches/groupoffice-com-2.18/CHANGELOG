@@ -1,3 +1,11 @@
+2007/10/26 Version 2.18-stable-1
+-Group-Office Transfer Agent (GOTA). A small Java program that saves documents.
+ back to Group-Office when you edit them on your PC.
+-Helpdesk module (beta)
+-Reports module is now called Address lists and is more user friendly.
+-Updated various translations
+
+
 2007/09/10 Version 2.17-stable-13
 -Added Arabic translation
 -Small bug fixes
