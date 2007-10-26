@@ -1,3 +1,9 @@
+2007/10/26 Version 2.18
+This version has a new Java Webstart program that makes file management easier for you.
+When you edit a text document on your PC it will automatically save the document in 
+Group-Office for you.
+The mailing lists are now more user friendly and there is a new helpdesk module.
+
 2007/05/07 Version 2.17
 Great improvements on usability have been made. In the top bar there's now a new search
 box that searches through all Group-Office modules. This makes it very easy to quickly
