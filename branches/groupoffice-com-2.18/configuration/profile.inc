@@ -573,7 +573,7 @@ if(in_array('homepage',$required_fields))
 $row->add_cell(new table_cell($strHomepage.$end));
 $input = new input('text','homepage', $user['homepage'], true, $required);
 $input->set_attribute('style','width:280px');
-$input->set_attribute('maxlength','20');
+$input->set_attribute('maxlength','255');
 if(in_array('homepage', $disabled_user_fields))
 {
 	$input->set_attribute('disabled', 'true');
