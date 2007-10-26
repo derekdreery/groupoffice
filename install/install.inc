@@ -4,6 +4,7 @@ array(
 'id',
 'debug',
 'log',
+'dblog',
 'slash',
 'language',
 'default_country_id',
