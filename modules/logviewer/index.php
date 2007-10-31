@@ -20,11 +20,19 @@ $GO_MODULES->authenticate('logviewer');
 
 require_once($GO_LANGUAGE->get_language_file('logviewer'));
 
+if(isset($_POST['task']) && $_POST['task']=='delete')
+{
+	
+	$time = date_to_unixtime(smart_stripslashes($_POST['date']));
+	
+	$GO_LOGGER->delete($time);
+}
 
 
 $link_id=isset($_REQUEST['link_id']) ? smart_addslashes($_REQUEST['link_id']) : '';
 
 $form = new form('logform');
+$form->add_html_element(new input('hidden','task', '', false));
 
 $h1 = new html_element('h1', $lang_modules['logviewer']);
 $form->add_html_element($h1);
@@ -34,6 +42,28 @@ if(!$GO_LOGGER->enabled)
 	$form->add_html_element(new html_element('p', $lv_disabled));
 }else
 {
+	if($link_id==0)
+	{
+		load_control('date_picker');
+		$GO_HEADER['head'] = date_picker::get_header();
+		
+	
+		$subtable= new table();
+		$subtable->set_attribute('cellpadding','0');
+		$subtable->set_attribute('cellspacing','0');
+		$subrow= new table_row();
+		$subrow->add_cell(new table_cell($lv_delete.':'));
+		$datepicker = new date_picker('date', $_SESSION['GO_SESSION']['date_format'], date($_SESSION['GO_SESSION']['date_format'],date_add(get_gmt_time(),0,-1)));
+		$subrow->add_cell(new table_cell($datepicker->get_html()));
+		
+		$button = new button($cmdDelete, "javascript:document.forms[0].task.value='delete';document.forms[0].submit();");
+		$button->set_attribute('style','margin-left:5px;margin-top:0px;width:100px');
+		$subrow->add_cell(new table_cell($button->get_html()));
+	
+		$subtable->add_row($subrow);
+		
+		$form->add_html_element($subtable);
+	}
 
 	$datatable = new datatable('logviewer');
 	$th = new table_heading($strDate, 'time');
@@ -48,6 +78,8 @@ if(!$GO_LOGGER->enabled)
 
 	$count = $GO_LOGGER->get_log('',$link_id,'',$datatable->start, $datatable->offset, $datatable->sort_index, $datatable->sql_sort_order);
 
+	$datatable->set_pagination($count);
+	
 	if($count){
 		while($GO_LOGGER->next_record()){
 			$row = new table_row();

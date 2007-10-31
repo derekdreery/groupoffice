@@ -16,6 +16,12 @@ class logger extends db
 	}
 
 
+	function delete($time)
+	{
+		$sql = "DELETE FROM log WHERE time<$time";
+		return $this->query($sql);
+	}
+	
 	function log($module, $text, $link_id='')
 	{
 		if($this->enabled)
@@ -100,7 +106,7 @@ class logger extends db
 		$this->query($sql);
 		$count = $this->num_rows();
 
-		if($offset>0 && $count> $start+$offset)
+		if($offset>0 && $count> $start)
 		{
 			$sql .= " LIMIT $start, $offset";
 			$this->query($sql);
