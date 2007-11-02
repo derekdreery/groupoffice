@@ -34,13 +34,13 @@ $mailbox = isset($_REQUEST['mailbox'])?  smart_stripslashes($_REQUEST['mailbox']
 
 if (!$account = $email->get_account($account_id))
 {
-  $account = $email->get_account(0);
+	$account = $email->get_account(0);
 }
 
 if ($account && $account["user_id"] != $GO_SECURITY->user_id)
 {
-  header('Location: '.$GO_CONFIG->host.'error_docs/403.php');
-  exit();
+	header('Location: '.$GO_CONFIG->host.'error_docs/403.php');
+	exit();
 }
 
 $subject = isset($_REQUEST['subject']) ?smart_stripslashes(trim($_REQUEST['subject'])) : '';
@@ -50,11 +50,11 @@ $cc = isset($_REQUEST['cc']) ?  smart_stripslashes(trim($_REQUEST['cc'])) : '';
 $body = isset($_REQUEST['body']) ? smart_stripslashes(trim($_REQUEST['body'])) : '';
 $before = isset($_REQUEST['before']) ? smart_stripslashes(trim($_REQUEST['before'])) : '';
 $since = isset($_REQUEST['since']) ? smart_stripslashes(trim($_REQUEST['since'])) : '';
-$before = isset($_REQUEST['before']) ? $_REQUEST['before'] : '';	
-$since = isset($_REQUEST['since']) ? $_REQUEST['since'] : '';		
-$flagged = isset($_REQUEST['flagged']) ? $_REQUEST['flagged'] : '';	
+$before = isset($_REQUEST['before']) ? $_REQUEST['before'] : '';
+$since = isset($_REQUEST['since']) ? $_REQUEST['since'] : '';
+$flagged = isset($_REQUEST['flagged']) ? $_REQUEST['flagged'] : '';
 $answered = isset($_REQUEST['answered']) ? $_REQUEST['answered'] : '';
-$seen = isset($_REQUEST['seen']) ? $_REQUEST['seen'] : '';		
+$seen = isset($_REQUEST['seen']) ? $_REQUEST['seen'] : '';
 $return_to = 'messages.php';
 
 
@@ -80,51 +80,59 @@ echo '<table border="0"><tr><td valign="top">';
 echo '<table border="0">';
 if ($account['type'] == "imap")
 {
-  if ($email->get_subscribed($account['id']) > 0)
-  {
-    $dropbox = new dropbox();
-    $dropbox->add_value('INBOX',$ml_inbox);
-    while ($email->next_record())
-    {
-      if (!($email->f('attributes')&LATT_NOSELECT))
-      {
-	$dropbox->add_value($email->f('name'), str_replace('INBOX'.$email->f('delimiter'), '', $email->f('name')));
-      }
-    }
-    echo '<tr><td>'.$ml_folder.':</td><td>';
-    $dropbox->print_dropbox('mailbox', $mailbox);
-    echo '</td></tr>';
-  }
+
+	if ($email->get_subscribed($account['id']) > 0)
+	{
+		$select = new select('mailbox', $mailbox);
+
+		while ($email->next_record())
+		{
+			if (!($email->f('attributes')&LATT_NOSELECT))
+			{
+				if($email->f('name') == 'INBOX')
+				{
+					$select->add_value('INBOX',$ml_inbox);
+				}else
+				{
+					$select->add_value($email->f('name'), utf7_imap_decode(str_replace('INBOX'.$email->f('delimiter'), '', $email->f('name'))));
+				}
+			}
+		}
+		echo '<tr><td>'.$ml_folder.':</td><td>';
+		echo $select->get_html();
+		echo '</td></tr>';
+	}
+
 }
 
-echo 	'<tr><td>'.$ml_subject.':</td><td>'.		
+echo 	'<tr><td>'.$ml_subject.':</td><td>'.
 '<input type="text" name="subject" size="40" class="textbox" value="'.htmlspecialchars($subject).'" />'.
 '</td></tr>';
 
-echo 	'<tr><td>'.$ml_from.':</td><td>'.		
+echo 	'<tr><td>'.$ml_from.':</td><td>'.
 '<input type="text" name="from" size="40" class="textbox" value="'.htmlspecialchars($from).'" />'.
 '</td></tr>';
 
-echo 	'<tr><td>'.$ml_to.':</td><td>'.		
+echo 	'<tr><td>'.$ml_to.':</td><td>'.
 '<input type="text" name="to" size="40" class="textbox" value="'.htmlspecialchars($to).'" />'.
 '</td></tr>';
 
-echo 	'<tr><td>CC:</td><td>'.		
+echo 	'<tr><td>CC:</td><td>'.
 '<input type="text" name="cc" size="40" class="textbox" value="'.htmlspecialchars($cc).'" />'.
 '</td></tr>';
 
-echo 	'<tr><td>'.$ml_body.':</td><td>'.		
+echo 	'<tr><td>'.$ml_body.':</td><td>'.
 '<input type="text" name="body" size="40" class="textbox" value="'.htmlspecialchars($body).'" />'.
 '</td></tr>';		
 
 echo '</table></td><td valign="top"><table border="0">';
 
-echo 	'<tr><td>'.$ml_before.':</td><td>';			
+echo 	'<tr><td>'.$ml_before.':</td><td>';
 $date_picker = new date_picker('before', $_SESSION['GO_SESSION']['date_format'], $before);
 echo $date_picker->get_html();
 echo '</td></tr>';
 
-echo 	'<tr><td>'.$ml_since.':</td><td>';			
+echo 	'<tr><td>'.$ml_since.':</td><td>';
 $date_picker = new date_picker('since', $_SESSION['GO_SESSION']['date_format'], $since);
 echo $date_picker->get_html();
 echo '</td></tr>';
