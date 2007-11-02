@@ -394,6 +394,9 @@ function get_date(dateString, format, date_seperator)
 	if(date_seperator == '/')
 	{
 		date_seperator = '\\/';
+	}else if(date_seperator == '.')
+	{
+		date_seperator = '\\.';
 	}
 	
 	var datetimeArray = dateString.split(' ');
