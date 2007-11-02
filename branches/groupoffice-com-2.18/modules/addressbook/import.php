@@ -111,6 +111,7 @@ if ($task == 'import') {
 							$company_name = isset ($record[$_POST['company_name']]) ? addslashes(trim($record[$_POST['company_name']])) : '';
 							$contact['department'] = isset ($record[$_POST['department']]) ? addslashes(trim($record[$_POST['department']])) : '';
 							$contact['function'] = isset ($record[$_POST['function']]) ? addslashes(trim($record[$_POST['function']])) : '';
+							$contact['comment'] = isset ($record[$_POST['comment']]) ? addslashes(trim($record[$_POST['comment']])) : '';
 
 							if ($company_name != '') {
 								$contact['company_id'] = $ab->get_company_id_by_name($company_name, $_POST['addressbook_id']);
@@ -372,6 +373,13 @@ if ($task == 'upload') {
 							echo '<tr><td>'.$strFunction.':</td><td>';
 							$dropbox->print_dropbox('function', $function);
 							echo '</td></tr>';
+							
+							$default = ($key = array_search($ab_comment, $dropbox->text)) ? $dropbox->value[$key] : -1;
+							$comment = isset ($_POST['comment']) ? $_POST['comment'] : $default;
+							echo '<tr><td>'.$ab_comment.':</td><td>';
+							$dropbox->print_dropbox('comment', $comment);
+							echo '</td></tr>';
+							
 							echo '</table>';
 						} else {
 							$dropbox = new dropbox();
@@ -498,6 +506,9 @@ if ($task == 'upload') {
 							echo '<tr><td>'.$ab_vat_no.':</td><td>';
 							$dropbox->print_dropbox('vat_no', $vat_no);
 							echo '</td></tr>';
+							
+							
+							
 							echo '</table>';
 						}
 
