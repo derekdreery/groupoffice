@@ -108,7 +108,7 @@ if ($sendaction == 'load_template') {
 
 		//get the addressbook language file
 		require_once ($GO_LANGUAGE->get_language_file('addressbook'));
-		if ($report_id == 0) {
+		if ($report_id == 0 && $mailing_group_id == 0){
 			if ($company_id > 0) {
 				$template_body = $tp->replace_company_data_fields($template_body, $company_id);
 			} else {
@@ -162,7 +162,10 @@ if($report_id > 0)
 	$reports = new reports();
 }
 
-if ($report_id > 0 && $report = $reports->get_report($report_id)) {
+if ($mailing_group_id > 0 && $mailing_group = $tp->get_mailing_group($mailing_group_id)) {
+	echo '<input type="hidden" name="mailing_group_id" value="'.$mailing_group_id.'" />';
+	echo '<tr><td>'.$ml_to.': </td><td>'.$mailing_group['name'].'</td></tr>';
+}elseif ($report_id > 0 && $report = $reports->get_report($report_id)) {
 	
 	require($GO_LANGUAGE->get_language_file('reports'));
 	
@@ -519,10 +522,15 @@ function send()
 
 		}
 		<?php
-		if ($report_id == 0) {
-			echo 'if (validate()){';
-		} else {
+		
+		if($mailing_group_id>0)
+		{
+			echo "document.sendform.action = '".$tp_plugin['url']."send_to_mailing_group.php';";
+		}elseif ($report_id > 0) {
 			echo "document.sendform.action = '".$GO_MODULES->modules['reports']['url']."emailing.php';";
+		} else {
+			echo 'if (validate()){';
+			
 		}
 		?>
 		if(document.sendform.mail_subject.value!='' || confirm("<?php echo addslashes(htmlspecialchars($ml_confirm_no_subject)); ?>"))
@@ -535,7 +543,7 @@ function send()
 			?>
 			document.sendform.submit();
 		}
-		<?php if ($report_id == 0) echo '}'; ?>
+		<?php if ($report_id == 0 && $mailing_group_id==0) echo '}'; ?>
 	}
 
 }

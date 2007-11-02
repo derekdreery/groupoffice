@@ -67,6 +67,10 @@ function close()
 //send to contacts in a report?
 $report_id = isset($_REQUEST['report_id']) ? $_REQUEST['report_id'] : 0;
 
+$mailing_group_id = isset($_REQUEST['mailing_group_id']) ? $_REQUEST['mailing_group_id'] : 0;
+
+
+
 $htmleditor = new htmleditor('mail_body') ;
 
 if(!$wysiwyg = $htmleditor->IsCompatible())
@@ -398,6 +402,19 @@ $company_id = isset($_REQUEST['company_id']) ? $_REQUEST['company_id'] : 0;
 
 
 
+if($mailing_group_id > 0 && $tp->get_contacts_from_mailing_group($mailing_group_id) == 0 && $tp->get_companies_from_mailing_group($mailing_group_id) == 0 && $tp->get_users_from_mailing_group($mailing_group_id) == 0)
+{
+	require_once($GO_THEME->theme_path."header.inc");
+	$tabtable = new tabstrip('templates_tabstrip', $ml_attention);
+	$tabstrip->set_attribute('style','width:100%');
+	$tabstrip->add_html_element(new html_element('p', $ml_no_contacts_in_mailing_group));
+	$tabstrip->add_html_element(new button($cmdClose, "javascript:window.close();"));
+	echo $tabstrip->get_html();
+	require_once($GO_THEME->theme_path."footer.inc");
+	exit();
+}
+
+
 
 if ($tp_plugin)
 {
@@ -433,6 +450,7 @@ if (($_SERVER['REQUEST_METHOD'] != "POST" || $action=='select_template') && $tp_
 	echo '<input type="hidden" name="company_id" value="'.$company_id.'" />';
 	echo '<input type="hidden" name="template_id" />';
 	echo '<input type="hidden" name="report_id" value="'.$report_id.'" />';
+	echo '<input type="hidden" name="mailing_group_id" value="'.$mailing_group_id.'" />';
 	echo '<input type="hidden" name="sendaction" value="load_template" />';
 	if($notification_check)
 	{

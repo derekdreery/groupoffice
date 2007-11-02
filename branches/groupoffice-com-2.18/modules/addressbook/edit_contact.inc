@@ -155,27 +155,59 @@ $table->add_row($row);
 
 
 
-if($contact_id=='0' && isset($GO_MODULES->modules['custom_fields']))
+if($contact_id=='0')
 {
-	require_once($GO_MODULES->modules['custom_fields']['class_path'].'custom_fields.class.inc');
-	$cf = new custom_fields();	
-	$cf2=new custom_fields();
-	
-	$cf2->get_authorized_categories(2,$GO_SECURITY->user_id);
-	
-	while($cf2->next_record())
+	if(isset($GO_MODULES->modules['custom_fields']))
 	{
+		require_once($GO_MODULES->modules['custom_fields']['class_path'].'custom_fields.class.inc');
+		$cf = new custom_fields();	
+		$cf2=new custom_fields();
+		
+		$cf2->get_authorized_categories(2,$GO_SECURITY->user_id);
+		
+		while($cf2->next_record())
+		{
+			
+			$row =new table_row();
+			$cell = new table_cell('<br /><b>'.$cf2->f('name').'</b>');
+			$cell->set_attribute('colspan','2');
+			$row->add_cell($cell);
+			$table->add_row($row);
+			
+			if($cf_table = $cf->get_fields_table($cf2->f('id')))
+			{
+				$table->rows=array_merge($table->rows, $cf_table->rows);							
+			}
+		}
+	}
+	
+	if ($templates_plugin) {
+		
 		
 		$row =new table_row();
-		$cell = new table_cell('<br /><b>'.$cf2->f('name').'</b>');
-		$cell->set_attribute('colspan','2');
+		$cell = new table_cell('<br /><b>'.$ab_mailings.'</b>');	
+		$cell->set_attribute('colspan','2');	
 		$row->add_cell($cell);
 		$table->add_row($row);
 		
-		if($cf_table = $cf->get_fields_table($cf2->f('id')))
+		$row =new table_row();
+		$cell = new table_cell($ab_select_mailing_groups);	
+		$cell->set_attribute('colspan','2');	
+		$row->add_cell($cell);
+		$table->add_row($row);
+
+		$tp->get_mailing_groups($GO_SECURITY->user_id);
+		while($tp->next_record())
 		{
-			$table->rows=array_merge($table->rows, $cf_table->rows);							
+			$row =new table_row();
+			$cell = new table_cell();	
+			$cell->set_attribute('colspan','2');		
+			$cell->add_html_element(new checkbox('mailing_groups_'.$tp->f('id'),'mailing_groups[]', $tp->f('id'), $tp->f('name'), false));
+			$row->add_cell($cell);
+			$table->add_row($row);
+
 		}
+		
 	}
 }
 

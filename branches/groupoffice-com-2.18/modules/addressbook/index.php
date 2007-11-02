@@ -75,6 +75,11 @@ $menu->add_button('add_contact', $ab_new_contact, 'contact.php?addressbook_id='.
 $menu->add_button('ab_add_company', $ab_new_company, 'company.php?addressbook_id='.$addressbook_id.'&return_to='.urlencode($link_back));
 $menu->add_button('ab_addressbooks', $strAdministrate, 'admin.php?return_to='.urlencode($link_back));
 
+$tp_plugin = $GO_MODULES->get_plugin('templates');
+if ($tp_plugin )
+{
+	$menu->add_button('mailings', $ab_new_mailing, 'javascript:popup(\''.$tp_plugin['url'].'select_mailing_group.php\',\''.$GO_CONFIG->composer_width.'\',\''.$GO_CONFIG->composer_height.'\');');
+}
 
 
 $form = new form('addressbook_form');
