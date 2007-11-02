@@ -173,6 +173,9 @@ switch ($task) {
 				$ignore = true;
 			} else {
 				
+		
+				
+				
 				$contact['user_id'] = $GO_SECURITY->user_id;				
 				$contact['link_id'] = $GO_LINKS->get_link_id();				
 
@@ -194,6 +197,13 @@ switch ($task) {
 						while($cf2->next_record())
 						{
 							$cf->save_fields($cf2->f('id'), $contact['link_id']);
+						}
+					}
+					
+					
+					if (isset ($_POST['mailing_groups'])) {
+						while ($mailing_group_id = array_shift($_POST['mailing_groups'])) {
+							$tp->add_contact_to_mailing_group($contact_id, $mailing_group_id);
 						}
 					}
 					
@@ -488,9 +498,9 @@ if ($contact_id > 0) {
 				"javascript:popup('".$GO_MODULES->url.'templates/download_oo_template.php?contact_id='.$contact_id."','','');");	
 		}
 
-		/*if ($contact['email'] != '' && $tp->get_mailing_groups($GO_SECURITY->user_id) && $write_permission) {
+		if ($contact['email'] != '' && $tp->get_mailing_groups($GO_SECURITY->user_id) && $write_permission) {
 			$tabstrip->add_tab('mailings', $ab_mailings);
-		}*/
+		}
 	}
 
 

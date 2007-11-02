@@ -165,11 +165,20 @@ if ($show_contacts == 'true' || $show_companies == 'true')
 	$tp_plugin=$GO_MODULES->get_plugin('templates', 'addressbook');
 
 	
-	if($show_mailings && isset($GO_MODULES->modules['reports']) && $GO_MODULES->modules['reports']['read_permission'])
+	
+	if($show_mailings)
 	{
-		$GO_THEME->load_module_theme('reports');
-		require($GO_LANGUAGE->get_language_file('reports'));
-		$menu->add_button('reports', $lang_modules['reports'], "javascript:change_mode('reports');");
+		if( isset($GO_MODULES->modules['reports']) && $GO_MODULES->modules['reports']['read_permission'])
+		{
+			$GO_THEME->load_module_theme('reports');
+			require($GO_LANGUAGE->get_language_file('reports'));
+			$menu->add_button('reports', $lang_modules['reports'], "javascript:change_mode('reports');");
+		}
+		
+		if($tp_plugin)
+		{
+			$menu->add_button('mailings', $ab_mailings, "javascript:change_mode('mailings');");
+		}
 	}
 	
 	
@@ -192,6 +201,37 @@ $datatable->set_multiselect(($multiselect == 'true'));
 
 switch($mode)
 {
+	case 'mailings':
+		if(isset($_POST['addresses']))
+		{
+			$addresses = array_map('smart_stripslashes', $_POST['addresses']);
+		}elseif(isset($_POST['select_table']['selected']))
+		{
+			$addresses = array_map('smart_stripslashes', $_POST['select_table']['selected']);
+		}else
+		{
+			$addresses = array();
+		}
+		foreach($addresses as $address)
+		{
+			$form->add_html_element(new input('hidden', 'addresses[]', $address));
+		}
+		$datatable->add_column(new table_heading($strName));
+		require($tp_plugin['class_path'].'templates.class.inc');
+		$tp = new templates();
+		
+		$count = $tp->get_mailing_groups($GO_SECURITY->user_id);
+		
+		while($tp->next_record())
+		{
+			$row = new table_row($tp->f('id'));
+			$row->set_attribute('ondblclick', "javascript:_select_mailing();");
+			
+			$row->add_cell(new table_cell($tp->f('name')));			
+			$datatable->add_row($row);
+		}
+	break;
+	
 	case 'reports':
 		if(isset($_POST['addresses']))
 		{
@@ -640,7 +680,10 @@ if($multiselect == 'true' && $count > 0)
 	if($mode=='reports')
 	{
 		$div->add_html_element(new button($cmdAdd,'javascript:_select_report();'));
-	}else {
+	}elseif($mode=='mailings')
+	{
+		$div->add_html_element(new button($cmdAdd,'javascript:_select_mailing();'));
+	}else
 		$div->add_html_element(new button($cmdAdd,'javascript:_select();'));
 	}
 }
@@ -710,6 +753,14 @@ function _select()
 	document.select_form.action = "<?php echo $GO_HANDLER; ?>";
 	document.select_form.submit();
 }
+
+<?php if(isset($tp_plugin) && $tp_plugin){?>
+function _select_mailing()
+{
+	document.select_form.action = "<?php echo $tp_plugin['url'].'add_mailing_group.php'; ?>";
+	document.select_form.submit();
+}
+<?php } ?>
 
 <?php if(isset($GO_MODULES->modules['reports']) && $GO_MODULES->modules['reports']['read_permission']){?>
 function _select_report()
