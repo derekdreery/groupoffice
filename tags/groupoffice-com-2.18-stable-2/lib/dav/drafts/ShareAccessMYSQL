@@ -1,0 +1,69 @@
+##
+## DAV-Container for the Users of Group-Office
+##
+## Author: Michael Borko <michael.borko@tgm.ac.at>
+## Version: 1.0 Release date: 22 April 2004
+##
+###############################################################################
+##                                                                           ##
+##                    DON'T EDIT THIS FILE BY HAND !!!                       ##
+##                                                                           ##
+###############################################################################
+
+
+AuthName "Please authorize yourself for this sharefolder..."
+AuthType Basic
+
+Auth_MySQL_Password_Table users
+Auth_MySQL_Username_Field username
+Auth_MySQL_Password_Field password
+Auth_MySQL_Group_Table users_groups
+Auth_MySQL_Group_Field groupname
+Auth_MySQL_Group_User_Field username
+Auth_MySQL_Encrypted_Passwords Off
+
+<Limit GET OPTIONS PROPFIND>
+Order allow,deny
+Allow from all
+##R-linker-Access
+Require user %USERNAME% 
+##END R-linker-Access
+##R-group-Access
+Require group 
+##END R-group-Access
+</Limit>
+
+
+<Limit PUT HEAD>
+Order allow,deny
+Allow from all
+##W-linker-Access
+Require user %USERNAME% 
+##END W-linker-Access
+##W-group-Access
+Require group 
+##END W-group-Access
+</Limit>
+
+
+<Limit GET OPTIONS PROPFIND PUT HEAD LOCK UNLOCK POST CONNECT PATCH PROPPATCH MKCOL COPY MOVE DELETE>
+Order allow,deny
+Allow from all
+##R/W-linker-Access
+Require user %USERNAME% 
+##END R/W-linker-Access
+##R/W-group-Access
+Require group 
+##END R/W-group-Access
+</Limit>
+
+
+<LimitExcept GET>
+Order deny,allow
+Deny from all
+</LimitExcept>
+
+
+##Owner: %USERNAME%
+##Linkers: #
+##Groups: #
