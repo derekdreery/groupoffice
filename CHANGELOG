@@ -3,6 +3,7 @@
 -Cleaned up code in GOTA
 -Funambol 6.0 clients supported for Synchronization
 -Various bug fixes
+-Added support for  MySQL in utf8
 
 2007/10/26 Version 2.18-stable-1
 -Group-Office Transfer Agent (GOTA). A small Java program that saves documents.
