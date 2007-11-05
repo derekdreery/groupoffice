@@ -899,6 +899,17 @@ class GO_CONFIG
    * @access  public
    */
   var $default_timezone_string = '';
+  
+  /**
+   * The charset used to communicate with MySQL.
+   * This should be left at utf8 but if you have an old database and you can't
+   * convert it using lib/scripts/convertToUtf8.sh then you must change it to
+   * latin1
+   *
+   * @var unknown_type
+   */
+  
+  var $db_charset = 'latin1';
 
 
 
@@ -965,11 +976,13 @@ class GO_CONFIG
     require_once($this->root_path.'database/'.$this->db_type.".class.inc");
     if(isset($config['db_user']))
     {   
-	    $this->db = new db();
+	  /*  $this->db = new db();
 	    $this->db->Host = $this->db_host;
 	    $this->db->Database = $this->db_name;
 	    $this->db->User = $this->db_user;
-	    $this->db->Password = $this->db_pass;
+	    $this->db->Password = $this->db_pass;*/
+    	$this->db = new db();
+    	$this->db->set_config($this);
     }
     
     if(is_string($this->create_mode))

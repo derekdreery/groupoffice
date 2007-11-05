@@ -41,26 +41,45 @@ class db {
   var $Query_ID = 0;
 
   var $locked   = false;      ## set to true while we have a lock
+  
+  var $charset=false;
 
   /* public: constructor */
-  function db($query = "") {         
-      
-    global $GO_CONFIG;
-	  if (isset($GO_CONFIG->db_host)) {
-	      $this->Host = $GO_CONFIG->db_host;
+  function db() {     
+    $this->set_config();
+  }
+  
+  function set_config($config=null)
+  {
+  	global $GO_CONFIG;
+  	
+  	if(!isset($config) && isset($GO_CONFIG))
+  	{
+  		$config = $GO_CONFIG;
+  	}
+  	
+  	if(isset($config))
+  	{
+  	  if (isset($config->db_host)) {
+	      $this->Host = $config->db_host;
 	  }
-	  if (isset($GO_CONFIG->db_name)) {
-	      $this->Database = $GO_CONFIG->db_name;
+	  if (isset($config->db_name)) {
+	      $this->Database = $config->db_name;
 	  }
-	  if (isset($GO_CONFIG->db_user)) {
-	      $this->User = $GO_CONFIG->db_user;
+	  if (isset($config->db_user)) {
+	      $this->User = $config->db_user;
 	  }
-	  if (isset($GO_CONFIG->db_pass)) {
-	      $this->Password = $GO_CONFIG->db_pass;
+	  if (isset($config->db_pass)) {
+	      $this->Password = $config->db_pass;
 	  }
-    $this->query($query);
+	  
+	  $this->query("SET NAMES '".$config->db_charset."'");
+  	}
   }
 
+  
+
+  
   /* public: some trivial reporting */
   function link_id() {
     return $this->Link_ID;
@@ -112,7 +131,6 @@ class db {
 
   /* public: perform a query */
   function query($Query_String) {
-  	
   	
   	
     /* No empty queries, please, since PHP4 chokes on them. */
@@ -467,6 +485,7 @@ class db {
   			}
   			$sql .= implode(' AND ', $indexes);  
 	  		
+  			
 	  		return $this->query($sql);
 	  	}
 	  
