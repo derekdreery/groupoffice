@@ -82,7 +82,8 @@ array(
 'quota_protouser',
 'force_fullscreen',
 'logout_url',
-'use_jupload'
+'use_jupload',
+'db_charset'
 );
 
 function is__writable($path) {
