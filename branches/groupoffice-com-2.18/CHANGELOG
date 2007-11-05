@@ -1,3 +1,8 @@
+2007/10/26 Version 2.18-stable-2
+-Brought back the old mailing list feature by request of some customers
+-Cleaned up code in GOTA
+-Funambol 6.0 clients supported for Synchronization
+
 2007/10/26 Version 2.18-stable-1
 -Group-Office Transfer Agent (GOTA). A small Java program that saves documents.
  back to Group-Office when you edit them on your PC. (Pro version only)
