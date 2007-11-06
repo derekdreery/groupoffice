@@ -107,6 +107,9 @@ $form = new form('select_destination_form');
 $form->add_html_element(new input('hidden', 'return_to_path', $return_to_path));
 $form->add_html_element(new input('hidden', 'task', $task));
 
+$menu = new button_menu();
+$menu->add_button('new_folder', $fbNewFolder, "javascript:popup('".$GO_MODULES->modules['filesystem']['url']."new_folder.php?path=".urlencode($ftv->path)."&return_to=javascript:opener.document.forms[0].submit();window.close();','400','300');");
+$form->add_html_element($menu);
 
 foreach($selected as $selected_path)
 {

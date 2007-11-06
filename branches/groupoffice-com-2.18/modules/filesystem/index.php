@@ -67,6 +67,8 @@ if(isset($_REQUEST['path']) && file_exists(smart_stripslashes($_REQUEST['path'])
 	$fv->set_path(smart_stripslashes($_REQUEST['path']));
 }
 
+$link_back = $_SERVER['PHP_SELF'].'?path='.urlencode($fv->path);
+
 $urlencoded_path = urlencode($fv->path);
 $return_to_path = isset ($_REQUEST['return_to_path']) ? smart_stripslashes($_REQUEST['return_to_path']) : $fv->path;
 $return_to_path = is_dir($return_to_path) ? $return_to_path : dirname($return_to_path);
@@ -569,6 +571,9 @@ if($task == 'upload')
 if($task == 'properties')
 {
 	$form->add_html_element(new input('hidden', 'task', 'properties',false));
+}elseif($task=='new_folder')
+{
+	$form->add_html_element(new input('hidden', 'task', 'new_folder', false));
 }else
 {
 	$form->add_html_element(new input('hidden', 'task', '', false));
@@ -608,7 +613,10 @@ switch ($task) {
 		break;
 
 	case 'new_folder' :
-		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+		
+		
+		
+		if (isset($_POST['create_folder']) && $_POST['create_folder']=='true') {
 			$name = smart_stripslashes($_POST['name']);
 			if ($name == '') {
 				$feedback = $error_missing_field;
