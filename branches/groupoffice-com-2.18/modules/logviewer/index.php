@@ -37,6 +37,11 @@ $form->add_html_element(new input('hidden','task', '', false));
 $h1 = new html_element('h1', $lang_modules['logviewer']);
 $form->add_html_element($h1);
 
+$menu = new button_menu();
+$menu->add_button('print', $cmdPrint, 'javascript:window.print();');
+
+$form->add_html_element($menu);
+
 if(!$GO_LOGGER->enabled)
 {
 	$form->add_html_element(new html_element('p', $lv_disabled));
