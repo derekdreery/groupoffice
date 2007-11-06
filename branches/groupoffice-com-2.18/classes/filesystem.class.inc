@@ -595,6 +595,8 @@ class filesystem extends db
 	function find_share($path)
 	{
 		$path = dirname($path).'/'.basename($path);
+		
+		//echo $path.'<br>';
 	
 		$this->count++;
 		
@@ -927,11 +929,11 @@ class filesystem extends db
 					}
 				}
 				
-				$link_id = $this->get_link_id($destination_path);
+				$link_id = $this->get_link_id(addslashes($destination_path));
 				
 				if($GO_LOGGER->enabled && $log)
 				{
-					$source_link_id=$this->get_link_id($source_path);
+					$source_link_id=$this->get_link_id(addslashes($source_path));
 					$GO_LOGGER->log('filesystem', 'COPY '.$this->strip_file_storage_path($source_path).' to '.$this->strip_file_storage_path($destination_path), $source_link_id);
 				}
 

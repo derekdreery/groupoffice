@@ -23,6 +23,8 @@
  * Example entry in /etc/sudoers in case the Apache username is apache:
  * 
  * apache  ALL=NOPASSWD:/usr/sbin/chpasswd
+ * apache  ALL=NOPASSWD:/usr/sbin/useradd
+ * apache  ALL=NOPASSWD:/usr/sbin/userdel
  * 
  * NOPASSWD is required for this to work.
  *

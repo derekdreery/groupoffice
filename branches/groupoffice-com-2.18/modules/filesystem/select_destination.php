@@ -36,13 +36,13 @@ if($ftv->change_folder || isset($_POST['overwrite']))
 	$overwrite = (isset($_POST['overwrite']) && $_POST['overwrite']=='true') ? true : $overwrite_all;
 
 	//folder was clicked so we are going to move/copy files
-	while($selected_path = array_shift($selected))
+	while($selected_path = smart_stripslashes(array_shift($selected)))
 	{
 		$destination = $ftv->path.'/'.basename($selected_path);
 
 
-		//echo $ftv->path.'<br />';
-		//echo $selected_path.'<br />';
+		//echo $ftv->path.' '.$fs->has_write_permission($GO_SECURITY->user_id, $ftv->path).'<br />';
+		//echo $selected_path.' '.$fs->has_write_permission($GO_SECURITY->user_id, $selected_path).'<br />';
 		if(
 		($task == 'copy' &&
 		(!$fs->has_read_permission($GO_SECURITY->user_id, $selected_path) ||

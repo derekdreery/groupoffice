@@ -39,7 +39,7 @@ if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_per
 
 	if($GO_LOGGER->enabled)
 	{
-		$link_id=$fs->get_link_id_by_path($path);
+		$link_id=$fs->get_link_id_by_path(addslashes($path));
 		$GO_LOGGER->log('filesystem', 'VIEW '.$path, $link_id);
 	}
 	
