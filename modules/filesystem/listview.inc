@@ -37,7 +37,7 @@ $menu->add_button('properties', $fbProperties, "javascript:properties('".htmlspe
 
 
 if ($write_permission) {
-	$menu->add_button('new_folder', $fbNewFolder, $_SERVER['PHP_SELF'].'?task=new_folder&path='.$urlencoded_path);
+	$menu->add_button('new_folder', $fbNewFolder, $GO_MODULES->modules['filesystem']['url'].'new_folder.php?path='.$urlencoded_path.'&return_to='.urlencode($link_back));
 	$menu->add_button('upload', $fbUpload, $_SERVER['PHP_SELF'].'?task=upload&path='.$urlencoded_path);
 	$menu->add_button('delete_big', $fbDelete, $fv->fsl->get_delete_handler());
 }
