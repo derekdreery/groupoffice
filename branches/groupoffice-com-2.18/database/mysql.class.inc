@@ -73,7 +73,10 @@ class db {
 	      $this->Password = $config->db_pass;
 	  }
 	  
-	  $this->query("SET NAMES '".$config->db_charset."'");
+	  if($config->db_charset!='latin1')
+	  {
+	  	$this->query("SET NAMES '".$config->db_charset."'");
+	  }
   	}
   }
 
