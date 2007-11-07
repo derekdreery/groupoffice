@@ -684,6 +684,7 @@ if($multiselect == 'true' && $count > 0)
 	{
 		$div->add_html_element(new button($cmdAdd,'javascript:_select_mailing();'));
 	}else
+	{
 		$div->add_html_element(new button($cmdAdd,'javascript:_select();'));
 	}
 }
