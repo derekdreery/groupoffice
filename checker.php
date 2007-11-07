@@ -36,6 +36,9 @@ function popup(url,w,h,target)
 echo '<meta http-equiv="refresh" content="'.$GO_CONFIG->refresh_rate.';url='.$_SERVER['PHP_SELF'].'?initiated=true">';
 //echo '<meta http-equiv="refresh" content="5;url='.$_SERVER['PHP_SELF'].'?initiated=true">';
 $height = 0;
+$popup=false;
+$beep=false;
+
 //if user uses the calendar then check for events to remind
 $calendar_module = isset($GO_MODULES->modules['calendar']) ? $GO_MODULES->modules['calendar'] : false;
 if ($calendar_module && $GO_MODULES->modules['calendar']['read_permission'])
@@ -55,8 +58,7 @@ $task = isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
 $_SESSION['GO_SESSION']['email_module']['notified'] = isset($_SESSION['GO_SESSION']['email_module']['notified']) ? $_SESSION['GO_SESSION']['email_module']['notified'] : 0;
 $_SESSION['GO_SESSION']['email_module']['new'] = 0;
 
-$popup=false;
-$beep=false;
+
 if($_SESSION['GO_SESSION']['start_module'] != 'email' || isset($_REQUEST['initiated']))
 {
 	//check for email
