@@ -40,11 +40,11 @@ switch($datatable->task)
 		    $delete_ab = $ab->get_addressbook($delete_addressbook_id);
 		    if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $delete_ab['acl_write']))
 		    {
-	        if ($ab->delete_addressbook($delete_addressbook_id))
-	        {
-            $GO_SECURITY->delete_acl($delete_ab['acl_write']);
-            $GO_SECURITY->delete_acl($delete_ab['acl_read']);
-	        }
+			if ($ab->delete_addressbook($delete_addressbook_id))
+			{
+			    $GO_SECURITY->delete_acl($delete_ab['acl_write']);
+			    $GO_SECURITY->delete_acl($delete_ab['acl_read']);
+			}
 		    }else
 		    {
 		    	$feedback = $strAccessDenied;
@@ -72,10 +72,23 @@ $tabstrip->set_return_to(htmlspecialchars($return_to));
 
 $tabstrip->add_tab('addressbooks', $ab_addressbooks);
 $tabstrip->add_tab('templates', $ab_templates);
-//$tabstrip->add_tab('mailings', $ab_mailings);
+$tabstrip->add_tab('mailings', $ab_mailings);
 
 switch($tabstrip->get_active_tab_id())
 {
+	case 'mailings':
+		
+  
+		$tp_plugin = $GO_MODULES->get_plugin('templates');
+		if (!$tp_plugin)
+		{
+			$tabstrip->add_html_element(new html_element('p', $strProOnly));
+		}else
+		{
+			require($tp_plugin['path'].'mailings.inc');
+		}
+	break;
+
 	case 'templates':
 		
   
