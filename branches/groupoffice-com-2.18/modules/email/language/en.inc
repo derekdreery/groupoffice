@@ -237,3 +237,6 @@ $ml_attachment_message = 'Message';
 $ml_open_popup='Display popup on new e-mail';
 
 $ml_vacation='Automatic reply';
+
+//2.18
+$ml_forward_local_copy='Keep the message in this account too';

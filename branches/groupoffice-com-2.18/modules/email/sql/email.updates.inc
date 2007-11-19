@@ -1,5 +1,9 @@
 <?php
-$updates[25] = array();
+$updates[26] = array();
+
+$updates[25][] = "ALTER TABLE `emAccounts` ADD `forward_enabled` ENUM( '0', '1' ) NOT NULL ,
+ADD `forward_to` VARCHAR( 255 ) NOT NULL ,
+ADD `forward_local_copy` ENUM( '0', '1' ) NOT NULL ;";
 
 $updates[24][] = "ALTER TABLE `em_settings` DROP `enable_vacation` ,
 DROP `vacation_subject` ,

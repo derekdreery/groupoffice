@@ -196,3 +196,5 @@ $ml_download_reg='Download register bestand';
 $ml_attachment_message = 'Bericht';
 $ml_open_popup='Open een popup bij nieuwe e-mail berichten';
 $ml_vacation='Automatisch antwoord';
+
+$ml_forward_local_copy='Bewaar het bericht ook in deze account';
