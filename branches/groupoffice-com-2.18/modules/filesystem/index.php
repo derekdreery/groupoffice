@@ -471,9 +471,9 @@ switch ($task) {
 	case 'extract' :
 		if (isset ($_POST['fs_list']['selected'])) {
 			chdir($fv->path);
-			while ($file = array_shift($_POST['fs_list']['selected'])) {
+			while ($file = smart_stripslashes(array_shift($_POST['fs_list']['selected']))) {
 				switch (strtolower(get_extension($file))) {
-					case 'zip' :
+					case 'zip' :		
 						exec($GO_CONFIG->cmd_unzip.' "'.$file.'"');
 						break;
 
