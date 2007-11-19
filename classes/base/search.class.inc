@@ -16,7 +16,7 @@ class search extends db {
 		$this->db();
 	}
 	
-	function global_search($user_id, $query, $start, $offset, $sort_index='name', $sort_order='ASC', $types=array())
+	function update_search_cache($user_id)
 	{
 		global $GO_MODULES;
 		
@@ -26,7 +26,7 @@ class search extends db {
 		{
 			if($module['read_permission'] && $module['id'] != 'search' && file_exists($module['class_path'].$module['id'].'.class.inc'))
 			{
-				require($module['class_path'].$module['id'].'.class.inc');
+				require_once($module['class_path'].$module['id'].'.class.inc');
 				$class = new $module['id'];
 			
 				if(method_exists($class, '__on_search'))
@@ -37,7 +37,12 @@ class search extends db {
 				}				
 			}			
 		}
+	}
+	
+	function global_search($user_id, $query, $start, $offset, $sort_index='name', $sort_order='ASC', $types=array())
+	{
 		
+		$this->update_search_cache($user_id);
 		
 		$sql = "SELECT * FROM se_cache WHERE user_id=$user_id AND";
 		
