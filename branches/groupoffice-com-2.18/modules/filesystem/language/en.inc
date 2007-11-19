@@ -117,4 +117,7 @@ $fs_java_not_installed="Java is not installed. Java is required to use the Group
 $fs_java_install = 'Install Java Webstart';
 $fs_java_install_text = 'Please start the Java installation now by clicking on the information bar on top of this page. If it does not work you can try to click <a class="normal" href="http://www.java.com">here to install it manually.</a>';
 
+
+$fs_notify_folder='Notify me about changes to files in this folder';
+
 $fs_help_url='http://docs.group-office.com/index.php?folder_id=49&file_id=220';

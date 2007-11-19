@@ -1,5 +1,12 @@
 <?php
-$updates[20] = array();
+$updates[21] = array();
+
+$updates[20][] = "CREATE TABLE `fs_notifications` (
+`path` VARCHAR( 255 ) NOT NULL ,
+`user_id` INT NOT NULL ,
+PRIMARY KEY ( `path` , `user_id` )
+) ";
+
 
 $updates[19][] = "ALTER TABLE `fs_settings` ADD `show_files_on_summary` ENUM( '0', '1' ) NOT NULL ;";
 $updates[19][] = "ALTER TABLE `fs_settings` ADD `use_gota` ENUM( '0', '1' ) NOT NULL ;";

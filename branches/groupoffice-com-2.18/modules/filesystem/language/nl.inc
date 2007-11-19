@@ -101,3 +101,4 @@ $fs_java_not_installed="Java is niet geïnstalleerd. Java is vereist op de Group
 $fs_java_install = 'Java Webstart installeren';
 $fs_java_install_text = 'U kunt nu de Java installatie starten door op de informatiebalk bovenaan deze pagina te klikken. Werkt dit niet dan kunt u <a class="normal" href="http://www.java.com">hier klikken om de installatie handmatig te doen.</a>';
 
+$fs_notify_folder='Breng me per e-mail op de hoogte over wijzigingen aan bestanden in deze map';

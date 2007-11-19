@@ -1336,6 +1336,50 @@ class filesystem extends db
 		}
 		return $this->search_results;
 	}
+	
+	
+	
+	function add_notification($path, $user_id)
+	{
+		$notification['path']=$path;
+		$notification['user_id']=$user_id;
+		
+		$this->insert_row('fs_notifications', $notification);
+	}
+	
+	function remove_notification($path, $user_id)
+	{
+		$sql = "DELETE FROM fs_notifications WHERE path='$path' AND user_id=$user_id";
+		return $this->query($sql);
+	}
+	
+	function is_notified($path, $user_id)
+	{
+		$sql = "SELECT * FROM fs_notifications WHERE path='$path' AND user_id=$user_id";
+		$this->query($sql);
+		return $this->next_record();
+	}
+	
+	
+	function get_users_to_notify($path)
+	{
+		$users_in_share=$this->get_users_in_share($path);
+		$users=array();
+		
+		foreach($users_in_share as $user_id)
+		{
+			$fs_settings = $this->get_settings($user_id);
+			if($fs_settings['notify']=='1' || $this->is_notified(addslashes($path), $user_id))
+			{
+				$users[]=$user_id;	
+			}
+		}
+		return $users;
+		
+	}
+	
+	
+	
 	function __on_delete_user($user_id)
 	{
 		$fs = new filesystem();
