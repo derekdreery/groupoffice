@@ -270,13 +270,13 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 
 			if (!is__writable($_POST['userdir']))
 			{
-				$feedback = '<font color="red">The path you entered is not writable.<br />Please correct this and try again.</font>';
+				$feedback = '<font color="red">The protected files path you entered is not writable.<br />Please correct this and try again.</font>';
 			}elseif($_POST['max_file_size'] > return_bytes(ini_get('upload_max_filesize')))
 			{
 				$feedback = '<font color="red">You entered a greater upload size then the PHP configuration allows.<br />Please correct this and try again.</font>';
 			}elseif (!is__writable($_POST['local_path']))
 			{
-				$feedback = '<font color="red">The local path you entered is not writable.<br />Please correct this and try again.</font>';
+				$feedback = '<font color="red">The public files path you entered is not writable.<br />Please correct this and try again.</font>';
 			}elseif (!is__writable($tmpdir))
 			{
 				$feedback = '<font color="red">The path you entered is not writable.<br />Please correct this and try again.</font>';
@@ -988,7 +988,8 @@ switch($task)
 		<table>
 		<tr>
 			<td colspan="2">
-			Group-Office needs a place to store user data. Create a writable path for this purpose now and enter it in the box below.<br />
+			Group-Office needs a place to store protected data. This data should not be directly accessible through an URL so it should be located outside the web root or it must be protected by an .htaccess file.
+			Create a writable path for this purpose now and enter it in the box below.<br />
 			The path should be have 0777 permissions or should be owned by the webserver user. You probably need to be root to do the last.
 			<br />Also enter a maximum number of bytes to upload and a valid octal value for the file permissions.
 			<br /><br />
@@ -1004,7 +1005,7 @@ switch($task)
 		<?php
 		$userdir = isset($_POST['userdir']) ? $_POST['userdir'] : $GO_CONFIG->file_storage_path;
 		?>
-		<td>User home directory:</td>
+		<td>Protected files path:</td>
 		<td><input type="text" size="50" name="userdir" value="<?php echo $userdir; ?>" /></td>
 		</tr>
 		<tr>
@@ -1049,7 +1050,7 @@ switch($task)
 		</td>
 		</tr>
 		<tr>
-			<td>Local path:</td>
+			<td>Public files path:</td>
 			<?php
 			$local_path = isset($_POST['local_path']) ? $_POST['local_path'] : $GO_CONFIG->local_path;
 			?>
@@ -1072,7 +1073,7 @@ switch($task)
 		</td>
 	</tr>
 	<tr>
-		<td>Temporarily files directory:</td>
+		<td>Temporary files directory:</td>
 		<?php
 		$tmpdir = isset($_POST['tmpdir']) ? $_POST['tmpdir'] : $GO_CONFIG->tmpdir;
 		?>
