@@ -1,3 +1,8 @@
+2007/11/19 Version 2.18-stable-5
+-Forward e-mail support for local accounts
+-Small bug fixes
+-File upload notifications per folder
+
 2007/10/26 Version 2.18-stable-2
 -Brought back the old mailing list feature by request of some customers
 -Cleaned up code in GOTA
