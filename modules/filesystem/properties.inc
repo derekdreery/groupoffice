@@ -308,6 +308,24 @@ switch($tabstrip->get_active_tab_id())
 			{
 				$form->add_html_element(new input('hidden','share_folder',$fv->path));
 			}
+			
+			
+			$fs_settings = $fs->get_settings($GO_SECURITY->user_id);
+			if($fs_settings['notify']=='0')
+			{
+			
+			
+				$checkbox = new checkbox('notify', 'notify', $fv->path, $fs_notify_folder, $fs->is_notified(addslashes($fv->path), $GO_SECURITY->user_id));
+				//$checkbox->set_attribute('onclick','javascript:confirm_unshare(\''.htmlentities($fs_confirm_unshare, ENT_QUOTES).'\');');
+	
+				$row = new table_row();
+				$cell = new table_cell($checkbox->get_html());
+				$cell->set_attribute('colspan','2');
+				$row->add_cell($cell);
+				$table->add_row($row);
+			}
+			
+			
 		}
 		
 		

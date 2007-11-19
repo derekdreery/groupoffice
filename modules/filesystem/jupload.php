@@ -25,6 +25,7 @@ require_once ($GO_LANGUAGE->get_language_file('filesystem'));
 
 require_once ($GO_CONFIG->class_path.'filesystem.class.inc');
 $fs = new filesystem();
+/*
 if($share= $fs->find_share($_SESSION['GO_FILESYSTEM_PATH']))
 {
 	$users = $GO_SECURITY->get_authorized_users_in_acl($share['acl_read']);
@@ -38,7 +39,7 @@ if($share= $fs->find_share($_SESSION['GO_FILESYSTEM_PATH']))
 			$users[]=$user_id;			
 		}
 	}
-}
+}*/
 
 while($file = array_shift($_FILES))
 {
@@ -68,26 +69,25 @@ while($file = array_shift($_FILES))
 		move_uploaded_file($file['tmp_name'], $destination_path);
 				
 	
-		if($share)
+		$users=$fs->get_users_to_notify($_SESSION['GO_FILESYSTEM_PATH']);
+		foreach($users as $user_id)
 		{
-			foreach($users as $user_id)
-			{
-				$user = $GO_USERS->get_user($user_id);
-				
-				$subject = sprintf($fs_new_file_uploaded, basename($file['name']));
-				
-				$link = new hyperlink($GO_CONFIG->full_url.'index.php?return_to='.
-					urlencode($GO_MODULES->url.'index.php?path='.
-					urlencode($_SESSION['GO_FILESYSTEM_PATH'])),$fs_open_containing_folder);
-					
-				$link->set_attribute('target','_blank');
-				$link->set_attribute('class','blue');
+			$user = $GO_USERS->get_user($user_id);
 			
-				$body = sprintf($fs_file_put_in, basename($file['name']), $_SESSION['GO_FILESYSTEM_PATH']).'<br>'.$link->get_html();
+			$subject = sprintf($fs_new_file_uploaded, basename($file['name']));
+			
+			$link = new hyperlink($GO_CONFIG->full_url.'index.php?return_to='.
+				urlencode($GO_MODULES->url.'index.php?path='.
+				urlencode($_SESSION['GO_FILESYSTEM_PATH'])),$fs_open_containing_folder);
 				
-				sendmail($user['email'], $_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name'], $subject, $body, '3', 'text/HTML');
-			}
+			$link->set_attribute('target','_blank');
+			$link->set_attribute('class','blue');
+		
+			$body = sprintf($fs_file_put_in, basename($file['name']), $_SESSION['GO_FILESYSTEM_PATH']).'<br>'.$link->get_html();
+			
+			sendmail($user['email'], $_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name'], $subject, $body, '3', 'text/HTML');
 		}
+		
 	}
 }
 

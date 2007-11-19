@@ -4,7 +4,7 @@ $module['filesystem']['description'] = 'The filesystem module is used to store '
 			'You can easily cut, paste and copy files to different directories that '.
 			'you can access by a tree view. Sharing files online with your relations '.
 			'was never easier.';
-$module['filesystem']['version'] = '2.0';
+$module['filesystem']['version'] = '2.1';
 $module['filesystem']['release_date'] = '2007-08-14';
 $module['filesystem']['status'] = 'Stable';
 $module['filesystem']['authors'][] = array('name'=>'Merijn Schering', 'email'=>'mschering@intermesh.nl');

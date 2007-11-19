@@ -16,6 +16,13 @@
 -- Tabel structuur voor tabel `fs_links`
 -- 
 
+DROP TABLE IF EXISTS `fs_notifications`;
+CREATE TABLE `fs_notifications` (
+`path` VARCHAR( 255 ) NOT NULL ,
+`user_id` INT NOT NULL ,
+PRIMARY KEY ( `path` , `user_id` )
+) ;
+
 DROP TABLE IF EXISTS `fs_links`;
 CREATE TABLE `fs_links` (
   `link_id` int(11) NOT NULL default '0',

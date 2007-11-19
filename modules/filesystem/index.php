@@ -202,9 +202,8 @@ switch ($task) {
 				$_SESSION['copy_files'] = array ();
 
 				//get share users for email notify
-				$users=$fs->get_users_in_share($fv->path);
-
-
+				$users=$fs->get_users_to_notify($fv->path);
+				
 
 				for ($i = 0; $i < count($_FILES['file']['tmp_name']); $i ++) {
 					if (is_uploaded_file($_FILES['file']['tmp_name'][$i])) {
@@ -216,22 +215,19 @@ switch ($task) {
 							{
 								if($user_id != $GO_SECURITY->user_id)
 								{
-									$fs_settings = $fs->get_settings($user_id);
-									if($fs_settings['notify']=='1')
-									{
-										$user = $GO_USERS->get_user($user_id);
-										$subject = sprintf($fs_new_file_uploaded, $_FILES['file']['name'][$i]);
+									$user = $GO_USERS->get_user($user_id);
+									$subject = sprintf($fs_new_file_uploaded, $_FILES['file']['name'][$i]);
 
-										$link = new hyperlink($GO_CONFIG->full_url.'index.php?return_to='.
-										urlencode($GO_MODULES->url.'index.php?path='.
-										urlencode($fv->path)),$fs_open_containing_folder);
-										$link->set_attribute('target','_blank');
-										$link->set_attribute('class','blue');
+									$link = new hyperlink($GO_CONFIG->full_url.'index.php?return_to='.
+									urlencode($GO_MODULES->url.'index.php?path='.
+									urlencode($fv->path)),$fs_open_containing_folder);
+									$link->set_attribute('target','_blank');
+									$link->set_attribute('class','blue');
 
-										$body = sprintf($fs_file_put_in, $_FILES['file']['name'][$i], str_replace($GO_CONFIG->file_storage_path.'users','', $fv->path)).'<br>'.$link->get_html();
+									$body = sprintf($fs_file_put_in, $_FILES['file']['name'][$i], str_replace($GO_CONFIG->file_storage_path.'users','', $fv->path)).'<br>'.$link->get_html();
 
-										sendmail($user['email'], $_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name'], $subject, $body, '3', 'text/HTML');
-									}
+									sendmail($user['email'], $_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name'], $subject, $body, '3', 'text/HTML');
+									
 								}
 							}
 
@@ -308,6 +304,18 @@ switch ($task) {
 
 			case 'save_properties':
 
+				
+				$new_notify = isset($_POST['notify']);
+				$old_notify = $fs->is_notified(addslashes($fv->path), $GO_SECURITY->user_id);
+				
+				if($new_notify && !$old_notify)
+				{
+					$fs->add_notification(addslashes($fv->path), $GO_SECURITY->user_id);
+				}
+				if(!$new_notify && $old_notify)
+				{
+					$fs->remove_notification(addslashes($fv->path), $GO_SECURITY->user_id);
+				}
 
 
 				if (isset ($_POST['name'])) {
