@@ -92,5 +92,49 @@ switch($task)
 		}
 
 		break;
+		
+	case 'set_forward':
+		
+		$account_id=$argv[2];
+		
+		require($GO_CONFIG->class_path.'mail/RFC822.class.inc');
+		$RFC822 = new RFC822();
+
+		$email_module = $GO_MODULES->get_module('email');
+		require_once($email_module['class_path'].'email.class.inc');
+		$email = new email();
+
+		require($email_module['path'].'vacation_functions.inc');
+
+		$account = $email->get_account($account_id);
+
+		if($account)
+		{
+			$homedir = $GO_CONFIG->user_home_dirs.$account['username'];
+
+
+			if (file_exists ($homedir)) {
+				$forward_file = $homedir.'/.forward';
+
+				removeForward ($forward_file);
+
+				if($account['forward_enabled'])
+				{				
+					
+					$username = $account['forward_local_copy']=='1' ? $account['username'] : '';
+				
+					/* update .forward file */
+					
+					includeForward ($forward_file, $account['forward_to'], $username);
+					
+					chown($forward_file, $account['username']);
+					chmod($forward_file, 0640);
+
+				}
+			}
+		}
+		
+		
+		break;
 
 }

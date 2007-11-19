@@ -140,7 +140,7 @@ function includeVacation($filename, $username, $email)
 		$vacation = getVacation ($lines, $username, $email);
 	}
 
-	appendFile ($filename, $vacation);
+	appendFile ($filename, $vacation."\n");
 }
 
 /**
@@ -172,3 +172,44 @@ function excludeVacation($filename, $username, $email)
 
 	writeFile ($filename, $result);
 }
+
+
+function includeForward($filename, $to, $username='')
+{
+	$forward = "#GO forward def. Do not remove this line\n";
+	if(!empty($username))
+	{
+		$forward .= '\\'.$username.',';
+	}
+	$forward .= $to."\n";
+	
+	appendFile ($filename, $forward);
+}
+
+
+function removeForward($filename)
+{
+	if (!file_exists ($filename))
+		return;
+	$lines = file($filename);
+	if ($lines === false)
+		return;
+
+
+	$result = "";
+	for($i=0;$i<count($lines);$i++)
+	{
+		
+		if (strcmp ($lines[$i], "#GO forward def. Do not remove this line\n") != 0)
+		{
+			$result .= $lines[$i];
+		}else
+		{
+			$i++;
+		}
+	}
+	
+	//echo $result;
+	writeFile ($filename, $result);
+}
+

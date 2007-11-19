@@ -55,7 +55,27 @@ switch ($task)
 			exit();
 		}
 		break;
+		
+	case 'save_forward':
+		
+		$account['id']=$account_id;
+		$account['forward_enabled'] = isset($_POST['forward_enabled']) ? '1' : '0';
+		$account['forward_local_copy'] = isset($_POST['forward_local_copy']) ? '1' : '0';
+		$account['forward_to'] = isset($_POST['forward_to']) ? smart_addslashes($_POST['forward_to']) : '';
+		
+		
+		$email->_update_account($account);
+		
+		exec($GO_CONFIG->cmd_sudo.' '.$GO_CONFIG->root_path.'action.php set_forward '.$account_id);
+		
+		if (isset($_POST['close']) && $_POST['close'] == 'true')
+		{
+			header('Location: '.$return_to);
+			exit();
+		}
+		
 		break;
+		
 	case 'save_folders':
 
 		$account = $email->get_account($account_id);
@@ -266,6 +286,7 @@ if($account)
 	if(eregi('localhost', $account['host']) && $GO_CONFIG->email_vacation=='system_vacation')
 	{
 		$tabstrip->add_tab('vacation',$ml_vacation);
+		$tabstrip->add_tab('forward',$ml_forward);
 	}
 }
 
@@ -293,6 +314,68 @@ $form->add_html_element(new input('hidden','account_id',$account_id, false));
 
 switch($tabstrip->get_active_tab_id())
 {
+	case 'forward':
+		
+		$table = new table();
+		$row = new table_row();
+		$cell = new table_cell();
+		$cell->set_attribute('colspan','2');
+		$checkbox = new checkbox('enable_forward','forward_enabled', true, $ml_forward, $account['forward_enabled']);
+		$checkbox->set_attribute('onclick', "javascript:toggle_table(this.checked);");
+		$cell->add_html_element($checkbox);
+
+
+		$subtable = new table('forward_table');
+		if($account['forward_enabled'] == '0')
+		{
+			$subtable->set_attribute('style','display:none');
+		}
+
+		$subrow = new table_row();
+		$subrow->add_cell(new table_cell($ml_to.':'));
+		$input = new input('text', 'forward_to', $account['forward_to']);
+		$input->set_attribute('style','width:400px;');
+		$input->set_attribute('maxlength','100');
+		$subrow->add_cell(new table_cell($input->get_html()));
+		$subtable->add_row($subrow);
+
+		$subrow = new table_row();
+		$subcell = new table_cell();
+		$subcell->set_attribute('colspan','2');
+		$checkbox = new checkbox('forward_local_copy','forward_local_copy', true, $ml_forward_local_copy, $account['forward_local_copy']);
+		$subcell->add_html_element($checkbox);
+		$subrow->add_cell($subcell);
+		$subtable->add_row($subrow);
+
+		$cell->add_html_element($subtable);
+
+		$row->add_cell($cell);
+		$table->add_row($row);
+		
+		$tabstrip->add_html_element($table);
+		
+		$tabstrip->add_html_element(new button($cmdOk, "javascript:_save('save_forward', 'true');"));
+		$tabstrip->add_html_element(new button($cmdApply, "javascript:_save('save_forward', 'false');"));
+		$tabstrip->add_html_element(new button($cmdCancel,'javascript:document.location=\''.$return_to.'\''));
+		
+		$tabstrip->innerHTML .= '
+			<script type="text/javascript">
+			function toggle_table(visible)
+			{
+				var table = get_object(\'forward_table\');
+				if(visible)
+				{	
+					table.style.display=\'\';
+					document.forms[0].forward_subject.focus();
+				}else
+				{
+					table.style.display=\'none\';
+				}
+			}
+			</script>';
+		
+		break;
+		
 	case 'vacation':
 		$table = new table();
 		$row = new table_row();

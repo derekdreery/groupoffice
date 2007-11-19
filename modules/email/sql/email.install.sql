@@ -42,6 +42,9 @@ CREATE TABLE `emAccounts` (
   `enable_vacation` enum('0','1') NOT NULL,
   `vacation_subject` varchar(100) NOT NULL,
   `vacation_text` text NOT NULL,
+	`forward_enabled` ENUM( '0', '1' ) NOT NULL ,
+	`forward_to` VARCHAR( 255 ) NOT NULL ,
+	`forward_local_copy` ENUM( '0', '1' ) NOT NULL ,
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
 ) TYPE=MyISAM;
