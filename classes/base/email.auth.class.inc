@@ -153,14 +153,15 @@ class email_auth extends base_auth
 		{
 			$imap->close();
 
-			if ( $profile = $GO_USERS->get_user_by_username( $email_address ) ) {
+			if ( $profile = $GO_USERS->get_user_by_username( $username ) ) {
 				$user_id = $profile['id'];
 				if($profile['enabled'] != '1')
 				{
 					return false;
 				}
 			} else {
-				$user['email'] = $user['username'] = $username;
+				$user['email'] =$email_address;
+				$user['username'] = $username;
 				$user['password'] = $password;
 				$user['sex'] = 'M';
 				// the user does not exist, so we have to add him.

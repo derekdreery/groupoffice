@@ -98,8 +98,16 @@ class passwd_users extends sql_users
 			$password=$user['password'];
 		}
 		
-		exec($GO_CONFIG->cmd_sudo.' useradd -m '.$GO_CONFIG->id.'_'.$user['username']);
-		exec('echo '.$GO_CONFIG->id.'_'.$user['username'].':'.$password.' | '.$GO_CONFIG->cmd_sudo.' '.$GO_CONFIG->cmd_chpasswd);
+		if(isset($_SESSION['auth_source']['add_go_id_to_username']) && !$_SESSION['auth_source']['add_go_id_to_username'])
+		{
+			$systemuser = $user['username'];
+		}else
+		{
+			$systemuser = $GO_CONFIG->id.'_'.$user['username'];
+		}
+		
+		exec($GO_CONFIG->cmd_sudo.' useradd -m '.$systemuser);
+		exec('echo '.$systemuser.':'.$password.' | '.$GO_CONFIG->cmd_sudo.' '.$GO_CONFIG->cmd_chpasswd);
 		
 		if(!empty($GO_CONFIG->cmd_edquota) && !empty($GO_CONFIG->quota_protouser))
 		{
@@ -130,7 +138,7 @@ class passwd_users extends sql_users
 				$_SESSION['auth_source']['ssl'],
 				$_SESSION['auth_source']['novalidate_cert'],
 				$_SESSION['auth_source']['mbroot'],
-				$GO_CONFIG->id.'_'.$user['username'],
+				$systemuser,
 				$password,
 				format_name($user['last_name'], $user['first_name'], $user['middle_name'],'first_name'),
 				$user['email'],
@@ -158,7 +166,15 @@ class passwd_users extends sql_users
 		
 		$user = $this->get_user($user_id);
 		
-		exec($GO_CONFIG->cmd_sudo.' userdel '.$GO_CONFIG->id.'_'.$user['username']);
+		if(isset($_SESSION['auth_source']['add_go_id_to_username']) && !$_SESSION['auth_source']['add_go_id_to_username'])
+		{
+			$systemuser = $user['username'];
+		}else
+		{
+			$systemuser = $GO_CONFIG->id.'_'.$user['username'];
+		}
+		
+		exec($GO_CONFIG->cmd_sudo.' userdel '.$systemuser);
 				
 		if(isset($_SESSION['auth_source']['postfix_virtual']) && file_exists($_SESSION['auth_source']['postfix_virtual']))
 		{
