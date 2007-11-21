@@ -1,9 +1,10 @@
 <?php
-
+/*
 $GO_MODULES2=new GO_MODULES();
 
 if(file_exists($GO_CONFIG->root_path.'LICENSE.PRO'))
 {
+	echo 'Converting mailings to reports';
 	if(!isset($GO_MODULES->modules['custom_fields']))
 	{
 		$module_id='custom_fields';
@@ -218,5 +219,5 @@ if(file_exists($GO_CONFIG->root_path.'LICENSE.PRO'))
 			}
 		}
 	}
-
-}
+	echo 'Finished converting mailings to reports';
+}*/

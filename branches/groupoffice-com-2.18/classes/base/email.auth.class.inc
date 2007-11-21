@@ -160,7 +160,7 @@ class email_auth extends base_auth
 					return false;
 				}
 			} else {
-				$user['email'] = $user['username'] = $email_address;
+				$user['email'] = $user['username'] = $username;
 				$user['password'] = $password;
 				$user['sex'] = 'M';
 				// the user does not exist, so we have to add him.
