@@ -2,6 +2,8 @@
 -Forward e-mail support for local accounts
 -Small bug fixes
 -File upload notifications per folder
+-IMAP authentication works better together with creating system users
+-Fixed upgrade from 2.13
 
 2007/10/26 Version 2.18-stable-2
 -Brought back the old mailing list feature by request of some customers
