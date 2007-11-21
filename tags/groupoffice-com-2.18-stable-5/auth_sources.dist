@@ -1,0 +1,98 @@
+<?php
+/*
+Copyright Intermesh 2004
+Author: Merijn Schering <mschering@intermesh.nl>
+Version: 1.0 Release date: 30 March 2004
+
+This program is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation; either version 2 of the License, or (at your
+option) any later version.
+
+-------------------------------------------------------------------------------
+
+Group-Office authentication configuration file
+
+In this file you can create additional authentication sources
+for Group-Office.
+This is an example file. If this file contains passwords or
+othe sensitive information please put it in a safe place.
+Protect it with an .htaccess file or put it outside the public
+web root!
+
+The file is distributed as auth_sources.dist. Please rename it to 
+auth_sources.inc and set the path in Group-Office.php if you want to 
+configure additional authentication sources.
+*/
+
+
+/*
+Normal Group-Office authentication
+Enabled by default.
+Keep this on top for synchronization. otherwise authentication with the
+Sync4GO clients will fail.
+*/
+
+$auth_sources[] =
+        array(
+        'type' => 'sql',
+        'name' => 'Group-Office database',
+        'user_manager' => 'sql'
+        );
+
+
+/*
+An LDAP server
+
+
+$auth_sources[] = 
+	array(
+	'type' => 'ldap',
+	'name' => 'Intermesh LDAP server',
+	'user_manager' => 'sql',
+	'groups' => array('Intermesh'),
+	'visible_groups' => array('Everyone'),
+	'modules_read' => array('email', 'filesystem', 'addressbook', 'calendar', 'bookmarks', 'notes', 'summary'),
+	'modules_write' => array(),
+	'host' => 'ldap.intermesh.nl',
+	'user' => 'admin',
+	'pass' => 'some_pass',
+	'basedn' => 'dc=intermesh,dc=nl',
+	'peopledn' => 'ou=People,dc=intermesh,dc=nl',
+	'groupsdn' => 'ou=Groups,dc=intermesh,dc=nl'
+	);
+
+
+An IMAP/POP3 server.
+TIP: If you run your IMAP or POP server local and you use system accounts you
+can set the user_manager to passwd. You need to have sudo installed to make
+this work.
+
+You need to give the Apache user permissions for chpasswd with visudo.
+An example entry in /etc/sudoers in case the Apache username is apache:
+ 
+apache  ALL=NOPASSWD:/usr/sbin/chpasswd
+
+
+$auth_sources[] = 
+	array(
+	'type' => 'email',							
+	'name' => 'intermesh.nl',
+	'user_manager' => 'sql',
+	'proto' => 'imap',
+	'domain' => 'intermesh.nl',
+	'host' => 'localhost',
+	'port' => '143',
+	'ssl' => false,
+	'novalidate_cert' => false,
+	'mbroot' => 'INBOX',
+	'add_domain_to_username' => false,
+	'create_email_account' => true,
+	'auto_check_email' => true,
+	'groups' => array('Intermesh'),
+	'visible_groups' => array('Everyone'),
+	'modules_read' => array('email', 'filesystem', 'addressbook', 'calendar', 'bookmarks', 'notes', 'summary'),
+	'modules_write' => array()
+	);
+*/
+?>
