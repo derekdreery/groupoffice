@@ -1,4 +1,7 @@
-2007/11/19 Version 2.18-stable-5
+2007/11/22 Version 2.18-stable-6
+-FIxed bug with IMAP authentication
+
+2007/11/21 Version 2.18-stable-5
 -Forward e-mail support for local accounts
 -Small bug fixes
 -File upload notifications per folder
