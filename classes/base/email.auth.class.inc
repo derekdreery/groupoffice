@@ -133,14 +133,21 @@ class email_auth extends base_auth
 		require_once($GO_CONFIG->class_path.'mail/imap.class.inc');
 		$imap = new imap();
 
+		$mail_username=$username;
+		$go_username=$username;
+		
 		$email_address = $username.'@'.$params['domain'];
 		if ($params['add_domain_to_username']) {
-			$username = $email_address;
+			$mail_username = $email_address;
+		}
+		
+		if (!isset($params['go_username_without_domain']) || !$params['go_username_without_domain']) {
+			$go_username = $email_address;
 		}
 		
 		if(isset($params['postfix_virtual_file']) && file_exists($params['postfix_virtual_file']))
 		{
-			if(!$this->validate_user_domain($params['postfix_virtual_file'], $username, $params['domain']))
+			if(!$this->validate_user_domain($params['postfix_virtual_file'], $mail_username, $params['domain']))
 			{
 				return false;				
 			}
@@ -149,11 +156,11 @@ class email_auth extends base_auth
 		
 
 		if ($imap->open($params['host'], $params['proto'], $params['port'],
-		$username, $password, 'INBOX', 0, $params['ssl'], $params['novalidate_cert']))
+		$mail_username, $password, 'INBOX', 0, $params['ssl'], $params['novalidate_cert']))
 		{
 			$imap->close();
 
-			if ( $profile = $GO_USERS->get_user_by_username( $username ) ) {
+			if ( $profile = $GO_USERS->get_user_by_username( $go_username ) ) {
 				$user_id = $profile['id'];
 				if($profile['enabled'] != '1')
 				{
@@ -161,7 +168,7 @@ class email_auth extends base_auth
 				}
 			} else {
 				$user['email'] =$email_address;
-				$user['username'] = $username;
+				$user['username'] = $go_username;
 				$user['password'] = $password;
 				$user['sex'] = 'M';
 				// the user does not exist, so we have to add him.
@@ -172,7 +179,8 @@ class email_auth extends base_auth
 						$params['modules_read'], 
 						$params['modules_write']))
 				{
-					die('FATAL ERROR: Failed adding mail user to Group-Office');
+					go_log(LOG_DEBUG, 'ERROR: Failed adding mail user to Group-Office. The user probably already existed. Try changing go_username_without_domain to true or false in auth_sources.inc');
+					return false;
 				} else {
 				
 					$old_umask = umask( 000 );
@@ -195,7 +203,7 @@ class email_auth extends base_auth
 							$params['ssl'],
 							$params['novalidate_cert'],
 							$params['mbroot'],
-							$username,
+							$mail_username,
 							$password,
 							$username,
 							$email_address,
@@ -227,7 +235,7 @@ class email_auth extends base_auth
 				{
 					require_once($email_module['class_path']."email.class.inc");
 					$email_client = new email();
-					$email_client->update_password($params['host'], $username, $password);
+					$email_client->update_password($params['host'], $mail_username, $password);
 				}
 			}
 
