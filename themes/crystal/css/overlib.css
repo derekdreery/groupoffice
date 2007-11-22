@@ -1,0 +1,28 @@
+.olFont{
+	font-family: arial, helvetica, sans-serif;
+	font-size: 10px;
+	color: #000000;	
+}
+
+.olCaptionFont {
+	font-family: arial, helvetica, sans-serif;
+	font-size: 10px;
+	color: #000000;	
+	font-weight: bold;
+}
+
+.olCaptionFont a {
+	color: #ffffff; font-size: 9px;
+}
+
+.olForeground {
+	background-color: #F1F1F1;
+}
+
+.olBackground {
+	background-color: #666666;
+}
+
+.olCBackground {
+	background-color: #CECFCE;
+}
