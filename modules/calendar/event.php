@@ -2,25 +2,25 @@
 /**
  * @copyright Copyright Intermesh 2006
  * @version $Revision: 1.243 $ $Date: 2006/11/28 13:20:38 $
- * 
+ *
  * @author Merijn Schering <mschering@intermesh.nl>
 
-   This file is part of Group-Office.
+ This file is part of Group-Office.
 
-   Group-Office is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2 of the License, or
-   (at your option) any later version.
+ Group-Office is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
 
-   Group-Office is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
+ Group-Office is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with Group-Office; if not, write to the Free Software
-   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-      
+ You should have received a copy of the GNU General Public License
+ along with Group-Office; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
  * @package Calendar
  * @category Calendar
  */
@@ -305,7 +305,7 @@ switch($task)
 				$feedback = $cal_conflict;
 			}else
 			{
-				$cal2 = new calendar();
+
 				if ($event_id > 0) {
 					$event['id'] = $event_id;
 
@@ -327,7 +327,7 @@ switch($task)
 					$event['user_id']=$GO_SECURITY->user_id;
 
 					$event['link_id'] = $GO_LINKS->get_link_id();
-
+						
 					if (!$event_id = $event['id'] = $cal->add_event($event)) {
 						$feedback = $strSaveError;
 					} else {
@@ -359,6 +359,41 @@ switch($task)
 							}
 						}
 					}
+				}
+
+
+				$cal2 = new calendar();
+				$projects = new projects();
+				
+				$booking['user_id'] = $event['user_id'];
+				$booking['start_time'] = $event['start_time'];
+				$booking['end_time'] = $event['end_time'];
+				$booking['break_time'] = 0;
+				$booking['units'] = 0;
+				$booking['comments'] = $event['description'];
+				if(isset($_POST['fee_id']))
+				{
+					$fee_id = smart_addslashes($_POST['fee_id']);
+					$booking['fee_id'] = $fee_id;
+					$fee = $projects->get_fee($fee_id);
+					$booking['ext_fee_value'] = $fee['external_value'];
+					$booking['fee_time'] = $fee['time'];
+					$booking['int_fee_value'] = $fee['internal_value'];
+				}
+				$booking['event_id'] = $event['id'];
+				
+				$booking_id=$projects->get_booking_id_by_event_id($event['id']);
+				
+				if($booking_id>0)
+				{
+					$booking['id']=$booking_id;
+					$projects->update_booking($booking);
+				}else
+				{
+					$project = $projects->get_project_by_calendar_id($calendar_id);
+					$booking['project_id'] = $project['id'];
+					
+					$projects->add_booking_on_event_id($booking);
 				}
 			}
 
@@ -535,26 +570,26 @@ switch($task)
 							$resource['custom_fields'] = stripslashes($resource['custom_fields']);
 						}elseif($existing_resource)
 						{
-							
-							
+								
+								
 							if($resource_group_id = $cal->get_resource_group_id_by_event_id($existing_resource['id']))
 							{
 								$subject = sprintf($cal_resource_deleted_mail_subject, $existing_resource['name']);
 								$body = $cal->event_to_html($existing_resource);
-								
+
 								$cal->get_resource_group_admins($resource_group_id);
 								while($cal->next_record())
 								{
 									if($cal->f('user_id') != $GO_SECURITY->user_id)
-									{							
+									{
 										$user = $GO_USERS->get_user($cal->f('user_id'));
 										sendmail($user['email'], $_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name'], $subject, $body , '3', 'text/HTML');
 									}
 								}
-			
+									
 							}
 							$cal->delete_event($existing_resource['id']);
-							
+								
 						}
 					}
 				}
@@ -942,52 +977,52 @@ if ($task != 'save_event' && $task != 'change_event' && ($event_id > 0 || isset 
 
 
 	/*
-	//shift the selected weekdays to local time
-	$local_start_hour = date("G", $gmt_start_time) + get_timezone_offset($event['start_time']);
-	if ($local_start_hour > 23) {
-	$local_start_hour = $local_start_hour -24;
-	$shift_day = 1;
-	}
-	elseif ($local_start_hour < 0) {
-	$local_start_hour = 24 + $local_start_hour;
-	$shift_day = -1;
-	} else {
-	$shift_day = 0;
-	}
+	 //shift the selected weekdays to local time
+	 $local_start_hour = date("G", $gmt_start_time) + get_timezone_offset($event['start_time']);
+	 if ($local_start_hour > 23) {
+	 $local_start_hour = $local_start_hour -24;
+	 $shift_day = 1;
+	 }
+	 elseif ($local_start_hour < 0) {
+	 $local_start_hour = 24 + $local_start_hour;
+	 $shift_day = -1;
+	 } else {
+	 $shift_day = 0;
+	 }
 
-	switch ($shift_day) {
-	case 1 :
-	$mon = $event['sun'] == '1' ? '1' : '0';
-	$tue = $event['mon'] == '1' ? '1' : '0';
-	$wed = $event['tue'] == '1' ? '1' : '0';
-	$thu = $event['wed'] == '1' ? '1' : '0';
-	$fri = $event['thu'] == '1' ? '1' : '0';
-	$sat = $event['fri'] == '1' ? '1' : '0';
-	$sun = $event['sat'] == '1' ? '1' : '0';
-	break;
+	 switch ($shift_day) {
+	 case 1 :
+	 $mon = $event['sun'] == '1' ? '1' : '0';
+	 $tue = $event['mon'] == '1' ? '1' : '0';
+	 $wed = $event['tue'] == '1' ? '1' : '0';
+	 $thu = $event['wed'] == '1' ? '1' : '0';
+	 $fri = $event['thu'] == '1' ? '1' : '0';
+	 $sat = $event['fri'] == '1' ? '1' : '0';
+	 $sun = $event['sat'] == '1' ? '1' : '0';
+	 break;
 
-	case -1 :
-	$mon = $event['tue'] == '1' ? '1' : '0';
-	$tue = $event['wed'] == '1' ? '1' : '0';
-	$wed = $event['thu'] == '1' ? '1' : '0';
-	$thu = $event['fri'] == '1' ? '1' : '0';
-	$fri = $event['sat'] == '1' ? '1' : '0';
-	$sat = $event['sun'] == '1' ? '1' : '0';
-	$sun = $event['mon'] == '1' ? '1' : '0';
-	break;
+	 case -1 :
+	 $mon = $event['tue'] == '1' ? '1' : '0';
+	 $tue = $event['wed'] == '1' ? '1' : '0';
+	 $wed = $event['thu'] == '1' ? '1' : '0';
+	 $thu = $event['fri'] == '1' ? '1' : '0';
+	 $fri = $event['sat'] == '1' ? '1' : '0';
+	 $sat = $event['sun'] == '1' ? '1' : '0';
+	 $sun = $event['mon'] == '1' ? '1' : '0';
+	 break;
 
-	}
+	 }
 
-	if ($shift_day != 0) {
-	$event['sun'] = $sun;
-	$event['mon'] = $mon;
-	$event['tue'] = $tue;
-	$event['wed'] = $wed;
-	$event['thu'] = $thu;
-	$event['fri'] = $fri;
-	$event['sat'] = $sat;
-	}
-	*/
+	 if ($shift_day != 0) {
+	 $event['sun'] = $sun;
+	 $event['mon'] = $mon;
+	 $event['tue'] = $tue;
+	 $event['wed'] = $wed;
+	 $event['thu'] = $thu;
+	 $event['fri'] = $fri;
+	 $event['sat'] = $sat;
+	 }
+	 */
 	if($calendar['group_id'] > 1 || $event['event_id'] > 0)
 	{
 		$title = sprintf($cal_booking, $calendar['name']);
@@ -1282,31 +1317,31 @@ if($task == 'availability')
 		$cell->set_attribute('style','width:250px;white-space:nowrap');
 		$row->add_cell($cell);
 		$field=$sl->get_field('100%');
-		$cell = new table_cell($field->get_html());	
+		$cell = new table_cell($field->get_html());
 		$cell->set_attribute('style','width:100%;');
 		$row->add_cell($cell);
 		$table->add_row($row);
 	}
 
 	/*if($event['event_id'] > 0 || $calendar['group_id'] > 1)
-	{
-	$form->add_html_element(new input('hidden','todo','0'));
-	}else
-	{
-	$row = new table_row();
-	$row->add_cell(new table_cell($strType.':'));
+	 {
+	 $form->add_html_element(new input('hidden','todo','0'));
+	 }else
+	 {
+	 $row = new table_row();
+	 $row->add_cell(new table_cell($strType.':'));
 
-	$radiogroup = new radiogroup('todo', $event['todo']);
+	 $radiogroup = new radiogroup('todo', $event['todo']);
 
-	$event_button = new radiobutton('event_button', '0');
-	$event_button->set_attribute('onclick', "javascript:toggle_statuses('VEVENT');");
-	$todo_button = new radiobutton('todo_button', '1');
-	$todo_button->set_attribute('onclick', "javascript:toggle_statuses('VTODO');");
+	 $event_button = new radiobutton('event_button', '0');
+	 $event_button->set_attribute('onclick', "javascript:toggle_statuses('VEVENT');");
+	 $todo_button = new radiobutton('todo_button', '1');
+	 $todo_button->set_attribute('onclick', "javascript:toggle_statuses('VTODO');");
 
-	$row->add_cell(new table_cell($radiogroup->get_option($event_button, $cal_event).
-	$radiogroup->get_option($todo_button, $cal_todo)));
-	$table->add_row($row);
-	}	*/
+	 $row->add_cell(new table_cell($radiogroup->get_option($event_button, $cal_event).
+	 $radiogroup->get_option($todo_button, $cal_todo)));
+	 $table->add_row($row);
+	 }	*/
 
 	$form->add_html_element(new input('hidden','todo', $event['todo']));
 
@@ -1360,7 +1395,7 @@ if($task == 'availability')
 			$cell->innerHTML .= $sc_participants.':';
 			$row->add_cell($cell);
 			$cell = new table_cell();
-			
+				
 			$textarea = new textarea('to', $event['to']);
 			$textarea->set_attribute('style','width:100%;height:50px');
 			$cell->add_html_element($textarea);
@@ -1400,10 +1435,10 @@ if($task == 'availability')
 	$table->add_row($row);
 
 	/*$row = new table_row();
-	$cell = new table_cell('&nbsp;');
-	$cell->set_attribute('colspan','2');
-	$row->add_cell($cell);
-	$table->add_row($row);*/
+	 $cell = new table_cell('&nbsp;');
+	 $cell->set_attribute('colspan','2');
+	 $row->add_cell($cell);
+	 $table->add_row($row);*/
 
 	$row = new table_row();
 	$row->add_cell(new table_cell($sc_start_at.':'));
@@ -1593,6 +1628,50 @@ if($task == 'availability')
 		$table->add_row($row);
 	}
 
+	require($GO_LANGUAGE->get_language_file('projects'));
+	if($projects->get_project_by_calendar_id($calendar_id))
+	{
+		$fees = array();
+		$fee_id = $projects->get_fee_id_by_event_id($event_id);
+		$fee_count = $projects->get_authorized_fees($GO_SECURITY->user_id);
+	
+		switch($fee_count)
+		{
+			case '0':
+				$row = new table_row();
+				$row->add_cell(new table_cell($pm_no_fees));
+				break;
+	
+			case '1':
+				$projects->next_record();
+				$input = new input('hidden', 'fee_id', $projects->f('id'));
+				$row = new table_row();
+				$row->add_cell(new table_cell($input->get_html()));
+				$table->add_row($row);
+					
+				$row = new table_row();
+				$row->add_cell(new table_cell($pm_fee));
+				$row->add_cell(new table_cell($projects->f('name')));
+				break;
+	
+			default:
+				
+				$select = new select('fee_id', $fee_id);
+				while($projects->next_record())
+				{
+					$select->add_value($projects->f('id'), $projects->f('name'));
+				}
+				$row = new table_row();
+				$row->add_cell(new table_cell($pm_fee.':'));
+				$row->add_cell(new table_cell($select->get_html()));
+				break;
+		}
+		$table->add_row($row);
+	}
+	else
+	{
+			
+	}
 
 
 	if($event_id > 0 && $task != 'save_event' && $task != 'change_event')
@@ -1685,6 +1764,7 @@ if($task == 'availability')
 					}
 					$datepicker = new date_picker('custom_fields['.addslashes($inputNode->get_attribute('name')).']', $_SESSION['GO_SESSION']['date_format'], $value);
 					$row->add_cell(new table_cell($datepicker->get_html()));
+
 					break;
 			}
 			$table->add_row($row);
@@ -2205,16 +2285,16 @@ if($task == 'availability')
 			$menu = new button_menu();
 
 			/*if($GO_LINKS->linking_is_active())
-			{
-			if($GO_LINKS->get_active_link())
-			{
-			$menu->add_button('link', $strCreateLink, "javascript:document.event_form.task.value='create_link';document.event_form.submit();");
-			}
-			}else
-			{
-			$menu->add_button('link', $strCreateLink, "javascript:document.event_form.task.value='activate_linking';document.event_form.submit();");
-			}
-			*/
+			 {
+			 if($GO_LINKS->get_active_link())
+			 {
+			 $menu->add_button('link', $strCreateLink, "javascript:document.event_form.task.value='create_link';document.event_form.submit();");
+			 }
+			 }else
+			 {
+			 $menu->add_button('link', $strCreateLink, "javascript:document.event_form.task.value='activate_linking';document.event_form.submit();");
+			 }
+			 */
 
 			$menu->add_button('link', $strCreateLink, $GO_LINKS->search_link($event['link_id'], 1, 'opener.document.location=\''.$ll_link_back.'\';'));
 
@@ -2227,7 +2307,7 @@ if($task == 'availability')
 			'delete_big',
 			$cmdDelete,
 			$links_list->get_delete_handler());
-			
+				
 			if(isset($GO_MODULES->modules['filesystem']) && $GO_MODULES->modules['filesystem']['read_permission'])
 			{
 				$menu->add_button(
@@ -2235,7 +2315,7 @@ if($task == 'availability')
 				$cmdAttachFile,
 				$GO_MODULES->modules['filesystem']['url'].'link_upload.php?path=events/'.$event_id.'&link_id='.$event['link_id'].'&link_type=1&return_to='.urlencode($ll_link_back));
 			}
-			
+				
 			$form->add_html_element($menu);
 
 
@@ -2278,7 +2358,7 @@ if($task == 'availability')
 			{
 				$group_admin=true;
 			}
-			
+				
 			if($group_admin)
 			{
 				if($event['status_id']!=2)
