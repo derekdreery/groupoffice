@@ -64,7 +64,25 @@
  		return false;
  	}
 
-
+ 	function get_booking_id_by_event_id($event_id)
+ 	{
+ 		$this->query("SELECT id FROM pmHours WHERE event_id='$event_id'");
+ 		if($this->next_record())
+ 		{
+ 			return $this->f(0);
+ 		}
+ 		return false;
+ 	}
+ 	
+ 	function get_fee_id_by_event_id($event_id)
+ 	{
+ 		$this->query("SELECT fee_id FROM pmHours WHERE event_id='$event_id'");
+ 		if($this->next_record())
+ 		{
+ 			return $this->f(0);
+ 		}
+ 		return false;
+ 	}
 
  	function set_sorting($user_id, $sort_field, $sort_order)
  	{
@@ -382,7 +400,6 @@
 
  	function add_booking($booking)
  	{
-
  		$booking['id'] = $this->nextid("pmHours");
  		return $this->insert_row('pmHours',$booking);
  	}
@@ -390,7 +407,31 @@
  	function update_booking($booking)
  	{
  		return $this->update_row('pmHours', 'id', $booking);
+ 	}
+ 	
+ 	function get_project_by_calendar_id($calendar_id)
+ 	{
+ 		$sql = "SELECT * FROM pmProjects WHERE calendar_id='$calendar_id'";
+ 		$this->query($sql);
+ 		if ($this->next_record())
+ 		{
+ 			return $this->Record;
+ 		}else
+ 		{
+ 			return false;
+ 		}
+ 	}
+ 	
+ 	function add_booking_on_event_id($event)
+ 	{
 
+ 		$event['id'] = $this->nextid("pmHours");
+ 		return $this->insert_row('pmHours',$event);
+ 	}
+
+ 	function update_booking_on_event_id($event)
+ 	{
+ 		return $this->update_row('pmHours', 'event_id', $event);
  	}
 
  	function get_booking($booking_id)
