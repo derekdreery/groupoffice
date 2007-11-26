@@ -40,7 +40,7 @@ class calendar_groupview extends table
 	
 	var $read_only=false;
 	
-	function calendar_groupview($id, $form_name='0', $read_only=false)
+	function calendar_groupview($id, $form_name='0', $read_only=false, $offset=null)
 	{	
 		global $GO_CONFIG, $GO_SECURITY;
 		
@@ -53,19 +53,25 @@ class calendar_groupview extends table
 		//$this->offset = $offset;
 		$this->read_only=$read_only;
 		
-		if(isset($_POST[$this->id]['offset']) && $this->offset != $_POST[$this->id]['offset'])
+		if(!isset($offset))
 		{
-			$GO_CONFIG->save_setting(
-			'calendar_offset', 
-			smart_addslashes($_POST[$this->id]['offset']), 
-			$GO_SECURITY->user_id);
-		}
-		
-		
-		$this->offset = $GO_CONFIG->get_setting('calendar_offset', $GO_SECURITY->user_id);
-		if(!$this->offset || $this->offset>7)
+			if(isset($_POST[$this->id]['offset']) && $this->offset != $_POST[$this->id]['offset'])
+			{
+				$GO_CONFIG->save_setting(
+				'calendar_offset', 
+				smart_addslashes($_POST[$this->id]['offset']), 
+				$GO_SECURITY->user_id);
+			}
+			
+			
+			$this->offset = $GO_CONFIG->get_setting('calendar_offset', $GO_SECURITY->user_id);
+			if(!$this->offset || $this->offset>7)
+			{
+				$this->offset = 7;
+			}
+		}else
 		{
-			$this->offset = 7;
+			$this->offset=$offset;
 		}
 		
 			
