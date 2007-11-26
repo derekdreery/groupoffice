@@ -131,6 +131,18 @@ class calendar extends db
 		return $this->query($sql);
 	}
 
+	function get_public_by_calendar_id($calendar_id)
+	{
+		$sql = "SELECT public FROM cal_calendars WHERE id='$calendar_id'";
+
+		$this->query($sql);
+		if($this->next_record())
+		{
+			return $this->Record;
+		}
+		return false;
+	}	
+	
 	function event_to_html($event)
 	{
 		global $GO_LANGUAGE;
@@ -1142,10 +1154,10 @@ class calendar extends db
 	 	return false;
 	 }
 
-	 function update_calendar($calendar_id, $user_id,  $name, $start_hour, $end_hour, $background, $group_id=0, $time_interval=1800)
+	 function update_calendar($calendar_id, $user_id,  $name, $start_hour, $end_hour, $background, $public=0, $group_id=0, $time_interval=1800)
 	 {
 	 	$sql = "UPDATE cal_calendars SET background='$background', user_id='$user_id',".
-	 	"name='$name', start_hour='$start_hour', end_hour='$end_hour', group_id='$group_id', time_interval='$time_interval' WHERE id='$calendar_id'";
+	 	"name='$name', start_hour='$start_hour', end_hour='$end_hour', public='$public', group_id='$group_id', time_interval='$time_interval' WHERE id='$calendar_id'";
 	 	return $this->query($sql);
 	 }
 
@@ -1325,7 +1337,6 @@ class calendar extends db
 	 	}
 	 	return false;
 	 }
-
 
 	 /*
 	  Times in GMT!

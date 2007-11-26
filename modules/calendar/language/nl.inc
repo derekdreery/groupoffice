@@ -107,6 +107,7 @@ $sc_colors['yellow']='Geel';
 $sc_colors['grey']='Grijs';
 $sc_colors['purple']='Paars';
 $sc_colors['white']='Wit';
+$sc_public_calendar='Publiceer Kalender';
 $sc_show_hours='Toon uren van';
 $sc_to='t/m';
 $sc_today='Vandaag';

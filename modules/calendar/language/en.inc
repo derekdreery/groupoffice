@@ -137,6 +137,7 @@ $sc_colors['yellow'] = 'Yellow';
 $sc_colors['grey'] = 'Grey';
 $sc_colors['purple'] = 'Purple';
 $sc_colors['white']= 'White';
+$sc_public_calendar = 'Publiceer Kalender';
 
 $sc_show_hours = 'Show hours from';
 $sc_to = 'to';

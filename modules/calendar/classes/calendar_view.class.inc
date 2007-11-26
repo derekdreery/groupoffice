@@ -58,12 +58,14 @@ class calendar_view extends table
 	
 	var $background_colors=array();
 	
-	function calendar_view($id, $day_start_hour, $day_end_hour, $time_interval, $form_name='0', $read_only=false)
+	var $clickable = true;
+	
+	function calendar_view($id, $day_start_hour, $day_end_hour, $time_interval, $form_name='0', $read_only=false, $clickable=true)
 	{	
 		global $GO_CONFIG, $GO_SECURITY;
 		
 		$this->id = $id;
-		$this->form_name = $form_name;		
+		$this->form_name = $form_name;
 		
 		$this->current_day = date('j', get_time());
 		$this->current_month = date('n', get_time());
@@ -73,6 +75,7 @@ class calendar_view extends table
 		$this->calendar_end_time = $day_end_hour*3600+3600;
 		
 		$this->read_only=$read_only;
+		$this->clickable=$clickable;
 
 		if(isset($_POST[$this->id]['day']))
 		{
@@ -148,7 +151,7 @@ class calendar_view extends table
 		$this->start_time = mktime(0,0,0,$this->month, $this->day, $this->year);
 		$this->end_time = $this->start_time+($this->_offset*$this->weeks*86400);		
 		
-		$this->return_to = $_SERVER['HTTP_REFERER'];
+		$this->return_to = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $_SERVER['PHP_SELF'];
 	}
 	
 	function set_return_to($return_to)
@@ -175,7 +178,11 @@ class calendar_view extends table
 		$event['end_time'] += $timezone_offset;
 		$timezone_offset = get_timezone_offset($event['repeat_end_time'])*3600;
 		$event['repeat_end_time'] += $timezone_offset;
-
+		
+		if(!$this->clickable)
+		{
+			$event['read_permission']=true;
+		}
 		
 		if($event['start_time'] == $event['end_time'])
 		{
@@ -485,8 +492,11 @@ class calendar_view extends table
 									
 									$event_cell->innerHTML .= $event_str;	
 									
+									if($this->clickable)
+									{
 									$event_cell->set_attribute('onclick', "javascript:document.location='".
 										$GO_MODULES->modules['calendar']['url'].$link."';");
+									}
 								}
 								}else
 								{
@@ -572,7 +582,8 @@ class calendar_view extends table
 								}
 								$cell = new table_cell();
 								$cell->set_attribute('colspan', $colspan);						
-								$cell->set_attribute('onclick', $this->get_new_event_handler($year,$month,$day,$hour,$min));
+								if($this->clickable)
+									$cell->set_attribute('onclick', $this->get_new_event_handler($year,$month,$day,$hour,$min));
 								
 								$bgcolor_index = date('wGi', $current_time);
 								if(isset($this->background_colors[$bgcolor_index]))
@@ -592,7 +603,8 @@ class calendar_view extends table
 						{
 							$cell->set_attribute('colspan',$this->colspans[$weekday]);	
 						}
-						$cell->set_attribute('onclick', $this->get_new_event_handler($year,$month,$day,$hour,$min));
+						if($this->clickable)
+							$cell->set_attribute('onclick', $this->get_new_event_handler($year,$month,$day,$hour,$min));
 						
 						$bgcolor_index = date('wGi', $current_time);
 						if(isset($this->background_colors[$bgcolor_index]))

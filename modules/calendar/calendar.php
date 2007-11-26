@@ -85,6 +85,7 @@ switch($task)
 						$_POST['calendar_start_hour'], 
 						$_POST['calendar_end_hour'],
 						$_POST['background'],
+						$_POST['public'],
 						$_POST['group_id'],
 							$_POST['time_interval']);
 							
@@ -362,6 +363,12 @@ switch($tabstrip->get_active_tab_id())
 	
 	$color_selector = new color_selector('background','background', $calendar['background'], 'calendar_form');
 	$row->add_cell(new table_cell($color_selector->get_html()));
+	$table->add_row($row);
+	
+	$row = new table_row();
+	$row->add_cell(new table_cell($sc_public_calendar.': '));
+	$checkbox = new checkbox('public','public','1', '', $calendar['public']);
+	$row->add_cell(new table_cell($checkbox->get_html()));
 	$table->add_row($row);
 	
 	$tabstrip->add_html_element($table);
