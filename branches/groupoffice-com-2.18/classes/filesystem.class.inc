@@ -43,6 +43,8 @@
  * @uses db
  */
 
+$nogota_extensions=array('pdf','ps','jpg','gif','png','zip','gz','tar','bmp','mpg','avi');
+
 class filesystem extends db
 {
 	/**

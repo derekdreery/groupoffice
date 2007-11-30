@@ -79,13 +79,13 @@ if(count($links))
 				
 			$extension = get_extension($fs->f('path'));
 				
-			if($fs_settings['open_properties']=='1' || eregi('htm', $extension) || eregi('eml', $extension))
+			if($fs_settings['open_properties']=='1')// || eregi('htm', $extension) || eregi('eml', $extension))
 			{
 				$row->set_attribute('ondblclick', "javascript:window.location.href='".
 				$GO_MODULES->modules['filesystem']['url'].'index.php?task=properties&path='.urlencode($fs->f('path'))."';");
 			}else
 			{
-				if($fs_settings['use_gota']=='1' && $gota_supported)
+				if($fs_settings['use_gota']=='1' && $gota_supported && !in_array($extension, $nogota_extensions))
 				{
 					$row->set_attribute('ondblclick', "javascript:window.location.href='".
 					$GO_MODULES->modules['filesystem']['url'].'jnlp.php?path='.urlencode($fs->f('path'))."';");
