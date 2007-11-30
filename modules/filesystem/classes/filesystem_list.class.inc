@@ -51,7 +51,7 @@ class filesystem_list extends datatable
 
 	function get_html()
 	{
-		global $GO_CONFIG, $GO_LANGUAGE, $GO_MODULES, $GO_SECURITY;
+		global $GO_CONFIG, $GO_LANGUAGE, $GO_MODULES, $GO_SECURITY, $nogota_extensions;
 
 		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 		$fs = new filesystem();		
@@ -146,7 +146,7 @@ class filesystem_list extends datatable
 		
 		$gota_supported = file_exists($GO_MODULES->modules['filesystem']['path'].'jnlp.php');
 		
-		$nogota_extensions=array('pdf','ps','jpg','gif','png','zip','gz','tar','bmp','mpg','avi');
+		
 
 		$total_size = 0;
 		foreach($files as $file)
@@ -165,7 +165,7 @@ class filesystem_list extends datatable
 			
 			if(empty($this->handler))
 			{			
-				if($fs_settings['open_properties']=='1' || eregi('htm', $extension) || eregi('eml', $extension))
+				if($fs_settings['open_properties']=='1')// || eregi('htm', $extension) || eregi('eml', $extension))
 				{
 					$row->set_attribute('ondblclick', "javascript:window.location.href='".
 						$GO_MODULES->modules['filesystem']['url'].'index.php?task=properties&path='.urlencode($file['path'])."';");	

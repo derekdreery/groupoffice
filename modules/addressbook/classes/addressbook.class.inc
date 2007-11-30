@@ -422,7 +422,7 @@ popup.focus();
  			$sql .= " OR email='".$contact['email']."' OR email2='".$contact['email']."' OR email3='".$contact['email']."'";
  		}
  		if ($contact['zip'] != '' && $contact['address_no'] != '') {
- 			$sql .= " AND (zip='".$contact['zip']."' AND address_no='".$contact['address_no']."')";
+ 			$sql .= " OR (zip='".$contact['zip']."' AND address_no='".$contact['address_no']."')";
  		}
  		$sql .= ");";
  		$this->query($sql);
