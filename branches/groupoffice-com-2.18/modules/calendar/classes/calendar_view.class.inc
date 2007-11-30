@@ -60,7 +60,7 @@ class calendar_view extends table
 	
 	var $clickable = true;
 	
-	function calendar_view($id, $day_start_hour, $day_end_hour, $time_interval, $form_name='0', $read_only=false, $clickable=true)
+	function calendar_view($id, $day_start_hour, $day_end_hour, $time_interval, $form_name='0', $read_only=false, $clickable=true, $offset=null)
 	{	
 		global $GO_CONFIG, $GO_SECURITY;
 		
@@ -93,13 +93,25 @@ class calendar_view extends table
 				$_POST[$this->id]['month'], 
 				$_POST[$this->id]['day'], 
 				$_POST[$this->id]['year']);
-				
-			$this->offset = $_POST[$this->id]['offset'];
+
+			if($offset)
+			{
+				$this->offset = $offset;
+			}
+			else
+			{
+				$this->offset = $_POST[$this->id]['offset'];
+			}
 			
 			$_SESSION[$this->id]['browse_time'] = $browse_time;	
 		}else
 		{
-			$this->offset = $GO_CONFIG->get_setting('calendar_offset', $GO_SECURITY->user_id);
+			if($offset)
+			{
+				$this->offset = $offset;
+			}
+			else
+				$this->offset = $GO_CONFIG->get_setting('calendar_offset', $GO_SECURITY->user_id);
 			if(!$this->offset)
 			{
 				$this->offset = 7;
@@ -125,7 +137,7 @@ class calendar_view extends table
 		{
 			//calculate the first day to display in the week view.
 			$weekday = date("w", $browse_time);
-
+			
 			$tmpday = $this->day - $weekday + $_SESSION['GO_SESSION']['first_weekday'];
 
 			if ($tmpday > $this->day)

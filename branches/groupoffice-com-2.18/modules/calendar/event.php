@@ -1265,10 +1265,17 @@ if($task == 'availability')
 		$p->set_attribute('class','Error');
 		$form->add_html_element($p);
 	}
-
 	$table = new table();
 	$table->set_attribute('style','width:100%');
-
+	
+	if($projects->get_project_by_calendar_id($calendar_id))
+	{
+		$row = new table_row();
+		$cell = new table_cell('<i>'.$cal_project_notice.'</i>');
+		$cell->set_attribute('colspan',2);
+		$row->add_cell($cell);
+		$table->add_row($row);
+	}
 	$row = new table_row();
 	$cell = new table_cell($cal_subject.'*:');
 	$cell->set_attribute('style','width:250px;');

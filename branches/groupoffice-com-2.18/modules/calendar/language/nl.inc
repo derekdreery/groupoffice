@@ -271,4 +271,5 @@ $cal_background_color='Achtergrond kleur';
 $cal_background='Achtergrond';
 $cal_show_busy='Toon als bezet';
 $cal_subject='Onderwerp';
+$cal_project_notice='Deze afspraak wordt ook aan het geselecteerde project toegevoegd.';
 $cal_dismiss_all = 'Allemaal uitzetten';
