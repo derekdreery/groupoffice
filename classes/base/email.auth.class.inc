@@ -143,6 +143,8 @@ class email_auth extends base_auth
 		
 		if (!isset($params['go_username_without_domain']) || !$params['go_username_without_domain']) {
 			$go_username = $email_address;
+		}else{
+			$go_username = str_replace('@'.$params['domain'], '', $go_username);
 		}
 		
 		if(isset($params['postfix_virtual_file']) && file_exists($params['postfix_virtual_file']))
