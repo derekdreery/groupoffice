@@ -51,6 +51,8 @@ if(isset($_REQUEST['path']))
 	}
 }
 
+//echo $params['input'];
+
 $content = '';
 $part_number = 0;
 $url_replacements = array();
@@ -63,6 +65,7 @@ $params['decode_headers'] = true;
 
 
 $structure = Mail_mimeDecode::decode($params);
+
 
 $from = isset($structure->headers['from']) ? htmlspecialchars($structure->headers['from']) : $_SESSION['GO_SESSION']['email'];
 
@@ -82,7 +85,15 @@ $subject = empty($structure->headers['subject']) ? $ml_no_subject : $structure->
 $priority=3;
 $notification = isset($structure->headers['disposition-notification-to']) ? true : false;
 
-$udate=strtotime($structure->headers['date']);
+if(isset($structure->headers['date']))
+{
+	$udate=strtotime($structure->headers['date']);
+	$date = date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], get_time($udate));
+}else
+{
+	$date = '-';
+}
+
 //loop through all parts
 $_SESSION['url_replacements'] = array();
 
@@ -248,7 +259,7 @@ if(!empty($bcc))
 	$header .= '</tr><tr><td valign="top"><b>BCC:&nbsp;</b></td><td>'.$bcc.'</td></tr>';
 }
 $header .= '<tr><td><b>'.$strDate.':&nbsp;</b></td>'.
-'<td>'.date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], get_time($udate)).'</td>'.
+'<td>'.$date.'</td>'.
 '</tr></table></td></tr></table>';
 
 $count = 0;
