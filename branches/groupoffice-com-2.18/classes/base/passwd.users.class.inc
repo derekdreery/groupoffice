@@ -60,7 +60,7 @@ class passwd_users extends sql_users
 					{
 						if($_SESSION['auth_source']['add_domain_to_username'])
 						{
-							$mail_username = $user['username'];
+							$mail_username = $username.'@'.$_SESSION['auth_source']['domain'];
 						}else
 						{
 							$mail_username = $username;
