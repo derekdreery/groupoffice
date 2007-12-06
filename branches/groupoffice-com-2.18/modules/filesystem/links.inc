@@ -91,7 +91,7 @@ if(count($links))
 					$GO_MODULES->modules['filesystem']['url'].'jnlp.php?path='.urlencode($fs->f('path'))."';");
 				}else
 				{
-					if($fs->is_viewable_in_browser($file['path']))
+					if($fs->is_viewable_in_browser($fs->f('path')))
 					{
 						$row->set_attribute('ondblclick', "javascript:window.open('".
 						$GO_MODULES->modules['filesystem']['url'].'download.php?mode=inline&path='.urlencode($fs->f('path'))."');");

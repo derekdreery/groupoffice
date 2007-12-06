@@ -144,7 +144,7 @@ class GO_LANGUAGE {
 	* @access public
 	* @return string	Full path to the language file
 	*/
-	function get_language_file($module_id) {
+	function get_language_file($module_id, $language_code=null) {
 		global $GO_CONFIG;
 
 		/*
@@ -152,8 +152,19 @@ class GO_LANGUAGE {
 		modules folder. So we create the absolute path to the file and check
 		if this file exists.
 		*/
+		$language=false;
+		if(isset($language_code))
+		{
+			$language = $this->get_language($language_code);
+		}
+		
+		if(!$language)
+		{
+			$language = $this->language;
+		}
+		
 
-		$file = $GO_CONFIG->module_path.$module_id.$GO_CONFIG->slash."language".$GO_CONFIG->slash.$this->language['language_file'].'.inc';
+		$file = $GO_CONFIG->module_path.$module_id."/language/".$language['language_file'].'.inc';
 
 		if (file_exists($file)) {
 			return $file;
