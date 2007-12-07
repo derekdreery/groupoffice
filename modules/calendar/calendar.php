@@ -109,6 +109,7 @@ switch($task)
 							smart_addslashes($_POST['calendar_start_hour']), 
 							smart_addslashes($_POST['calendar_end_hour']),
 							smart_addslashes($_POST['background']),
+							$public,
 							smart_addslashes($_POST['group_id']),
 							smart_addslashes($_POST['time_interval'])))
 					{
