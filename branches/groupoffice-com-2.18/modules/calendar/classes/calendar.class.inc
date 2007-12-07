@@ -1093,7 +1093,7 @@ class calendar extends db
 	 	return $this->update_row('cal_settings', 'user_id', $settings);
 	 }
 
-	 function add_calendar($user_id, $name, $start_hour, $end_hour, $background='FFFFCC',  $group_id=0, $time_interval=1800)
+	 function add_calendar($user_id, $name, $start_hour, $end_hour,$public,  $background='FFFFCC',  $group_id=0, $time_interval=1800)
 	 {
 	 	global $GO_SECURITY;
 	 	$acl_read = $GO_SECURITY->get_new_acl('calendar read: '.$name, $user_id);
@@ -1103,8 +1103,8 @@ class calendar extends db
 	 		$calendar_id = $this->nextid("cal_calendars");
 	 		if ($calendar_id > 0)
 	 		{
-	 			$sql  = "INSERT INTO cal_calendars (id, user_id, name, acl_read, acl_write, start_hour, end_hour, background, group_id, time_interval) ";
-	 			$sql .= "VALUES ('$calendar_id', '$user_id', '$name', '$acl_read', '$acl_write', '$start_hour', '$end_hour', '$background', '$group_id', '$time_interval')";
+	 			$sql  = "INSERT INTO cal_calendars (id, user_id, name, acl_read, acl_write, start_hour, end_hour, background, group_id, time_interval,public) ";
+	 			$sql .= "VALUES ('$calendar_id', '$user_id', '$name', '$acl_read', '$acl_write', '$start_hour', '$end_hour', '$background', '$group_id', '$time_interval', '$public')";
 	 			if ($this->query($sql))
 	 			{
 	 				$GO_SECURITY->add_user_to_acl($user_id,$acl_write);

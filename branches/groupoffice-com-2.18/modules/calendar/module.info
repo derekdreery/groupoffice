@@ -3,7 +3,7 @@ $module['calendar']['description'] = 'In a corporate environment a shared calend
 		'be missed. This calendar allows you to plan all sorts of recurring events '.
 		'and set reminders for them.	The easy to use interface will never let you '.
 		'miss an event.';
-$module['calendar']['version'] = '3.1';
+$module['calendar']['version'] = '3.2';
 $module['calendar']['release_date'] = '2006-11-24';
 $module['calendar']['status'] = 'Stable';
 $module['calendar']['authors'][] = array('name'=>'Merijn Schering', 'email'=>'mschering@intermesh.nl');

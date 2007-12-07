@@ -61,6 +61,7 @@ switch($task)
 		$user_id = (isset($_POST['user_id']) && $_POST['user_id'] > 0) ? $_POST['user_id'] : $GO_SECURITY->user_id;
 		
 		$name = smart_addslashes(trim($_POST['name']));
+		$public = isset($_POST['public']) ? '1' : '0';
 		if ($name != "")
 		{
 			if ($calendar_id > 0)
@@ -80,14 +81,15 @@ switch($task)
 						$GO_SECURITY->chown_acl($calendar['acl_write'], $user_id);
 					}
 					
+					
 					$cal->update_calendar( $calendar_id, $user_id,
 						$name, 
-						$_POST['calendar_start_hour'], 
-						$_POST['calendar_end_hour'],
-						$_POST['background'],
-						$_POST['public'],
-						$_POST['group_id'],
-							$_POST['time_interval']);
+						smart_addslashes($_POST['calendar_start_hour']), 
+						smart_addslashes($_POST['calendar_end_hour']),
+						smart_addslashes($_POST['background']),
+						$public,
+						smart_addslashes($_POST['group_id']),
+						smart_addslashes($_POST['time_interval']));
 							
 					if ($_POST['close'] == 'true')
 					{
@@ -104,11 +106,11 @@ switch($task)
 				{
 					if ($calendar_id = $cal->add_calendar($user_id, 
 							$name, 
-							$_POST['calendar_start_hour'], 
-							$_POST['calendar_end_hour'],
-							$_POST['background'],
-							$_POST['group_id'],
-							$_POST['time_interval']))
+							smart_addslashes($_POST['calendar_start_hour']), 
+							smart_addslashes($_POST['calendar_end_hour']),
+							smart_addslashes($_POST['background']),
+							smart_addslashes($_POST['group_id']),
+							smart_addslashes($_POST['time_interval'])))
 					{
 						if ($_POST['close'] == 'true')
 						{
@@ -365,7 +367,7 @@ switch($tabstrip->get_active_tab_id())
 	$row->add_cell(new table_cell($color_selector->get_html()));
 	$table->add_row($row);
 	
-	if(file_exists('view_calendar.php'))
+	if(file_exists('public.php'))
 	{	
 		$row = new table_row();
 		$row->add_cell(new table_cell($cal_public_calendar.': '));
@@ -376,7 +378,7 @@ switch($tabstrip->get_active_tab_id())
 		$row = new table_row();
 		$row->add_cell(new table_cell($cal_public_url.': '));
 		
-		$link = new hyperlink($GO_MODULES->modules['calendar']['full_url'].'view_calendar.php?calendar_id='.$calendar_id, $GO_MODULES->modules['calendar']['full_url'].'view_calendar.php?calendar_id='.$calendar_id);
+		$link = new hyperlink($GO_MODULES->modules['calendar']['full_url'].'public.php?calendar_id='.$calendar_id, $GO_MODULES->modules['calendar']['full_url'].'public.php?calendar_id='.$calendar_id);
 		$link->set_attribute('class','normal');
 		$link->set_attribute('target','_blank');
 		
