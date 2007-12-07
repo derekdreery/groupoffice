@@ -241,3 +241,7 @@ $ml_attachment_message = 'Zpráva';
 $ml_open_popup='Příjde-li nový email, použij vyskakovací okno';
 
 $ml_vacation='Automatická odpověď';
+
+//2.18
+$ml_forward_local_copy='Nech zprávu i na tomto účtě';
+
