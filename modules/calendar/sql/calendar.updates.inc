@@ -1,5 +1,7 @@
 <?php
-$updates[31]=array();
+$updates[32]=array();
+
+$updates[31][] = "ALTER TABLE `cal_calendars` ADD `public` ENUM( '0', '1' ) NOT NULL ;";
 
 $updates[30][] = "ALTER TABLE `cal_events` ADD `busy` ENUM( '0', '1' ) NOT NULL ;";
 $updates[30][] = "update cal_events set busy='1';";

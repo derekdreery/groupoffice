@@ -60,6 +60,7 @@ CREATE TABLE `cal_calendars` (
   `end_hour` tinyint(4) NOT NULL default '0',
   `background` varchar(6) NOT NULL default 'FFFFCC',
   `time_interval` int(11) NOT NULL default '1800',
+  `public` ENUM( '0', '1' ) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `group_id` (`group_id`),
   KEY `group_id_2` (`group_id`)
