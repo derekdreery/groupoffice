@@ -1,14 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 2.10.3deb1
+-- version 2.10.3deb1ubuntu0.1
 -- http://www.phpmyadmin.net
 -- 
 -- Host: localhost
--- Generatie Tijd: 26 Oct 2007 om 11:31
+-- Generatie Tijd: 07 Dec 2007 om 10:33
 -- Server versie: 5.0.45
--- PHP Versie: 5.2.3-1ubuntu6
+-- PHP Versie: 5.2.3-1ubuntu6.2
 
 -- 
--- Database: `go218stable1`
+-- Database: `go218stable8`
 -- 
 
 -- --------------------------------------------------------
@@ -17,6 +17,7 @@
 -- Tabel structuur voor tabel `ab_addressbooks`
 -- 
 
+DROP TABLE IF EXISTS `ab_addressbooks`;
 CREATE TABLE IF NOT EXISTS `ab_addressbooks` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -41,6 +42,7 @@ INSERT INTO `ab_addressbooks` (`id`, `user_id`, `name`, `acl_read`, `acl_write`)
 -- Tabel structuur voor tabel `ab_companies`
 -- 
 
+DROP TABLE IF EXISTS `ab_companies`;
 CREATE TABLE IF NOT EXISTS `ab_companies` (
   `id` int(11) NOT NULL default '0',
   `link_id` int(11) default NULL,
@@ -86,6 +88,7 @@ INSERT INTO `ab_companies` (`id`, `link_id`, `user_id`, `addressbook_id`, `name`
 -- Tabel structuur voor tabel `ab_contacts`
 -- 
 
+DROP TABLE IF EXISTS `ab_contacts`;
 CREATE TABLE IF NOT EXISTS `ab_contacts` (
   `id` int(11) NOT NULL default '0',
   `link_id` int(11) default NULL,
@@ -137,6 +140,7 @@ CREATE TABLE IF NOT EXISTS `ab_contacts` (
 -- Tabel structuur voor tabel `ab_settings`
 -- 
 
+DROP TABLE IF EXISTS `ab_settings`;
 CREATE TABLE IF NOT EXISTS `ab_settings` (
   `user_id` int(11) NOT NULL default '0',
   `search_type` varchar(10) NOT NULL default '',
@@ -161,6 +165,7 @@ INSERT INTO `ab_settings` (`user_id`, `search_type`, `search_contacts_field`, `s
 -- Tabel structuur voor tabel `ab_zipcodes`
 -- 
 
+DROP TABLE IF EXISTS `ab_zipcodes`;
 CREATE TABLE IF NOT EXISTS `ab_zipcodes` (
   `id` int(11) NOT NULL default '0',
   `zip` varchar(10) NOT NULL default '',
@@ -183,6 +188,7 @@ CREATE TABLE IF NOT EXISTS `ab_zipcodes` (
 -- Tabel structuur voor tabel `acl`
 -- 
 
+DROP TABLE IF EXISTS `acl`;
 CREATE TABLE IF NOT EXISTS `acl` (
   `acl_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -286,6 +292,7 @@ INSERT INTO `acl` (`acl_id`, `user_id`, `group_id`) VALUES
 -- Tabel structuur voor tabel `acl_items`
 -- 
 
+DROP TABLE IF EXISTS `acl_items`;
 CREATE TABLE IF NOT EXISTS `acl_items` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -353,6 +360,7 @@ INSERT INTO `acl_items` (`id`, `user_id`, `description`) VALUES
 -- Tabel structuur voor tabel `cal_backgrounds`
 -- 
 
+DROP TABLE IF EXISTS `cal_backgrounds`;
 CREATE TABLE IF NOT EXISTS `cal_backgrounds` (
   `id` int(11) NOT NULL,
   `color` char(6) NOT NULL,
@@ -371,6 +379,7 @@ CREATE TABLE IF NOT EXISTS `cal_backgrounds` (
 -- Tabel structuur voor tabel `cal_calendars`
 -- 
 
+DROP TABLE IF EXISTS `cal_calendars`;
 CREATE TABLE IF NOT EXISTS `cal_calendars` (
   `id` int(11) NOT NULL default '0',
   `group_id` int(11) NOT NULL default '1',
@@ -382,6 +391,7 @@ CREATE TABLE IF NOT EXISTS `cal_calendars` (
   `end_hour` tinyint(4) NOT NULL default '0',
   `background` varchar(6) NOT NULL default 'FFFFCC',
   `time_interval` int(11) NOT NULL default '1800',
+  `public` enum('0','1') NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `group_id` (`group_id`),
   KEY `group_id_2` (`group_id`)
@@ -391,9 +401,9 @@ CREATE TABLE IF NOT EXISTS `cal_calendars` (
 -- Gegevens worden uitgevoerd voor tabel `cal_calendars`
 -- 
 
-INSERT INTO `cal_calendars` (`id`, `group_id`, `user_id`, `acl_read`, `acl_write`, `name`, `start_hour`, `end_hour`, `background`, `time_interval`) VALUES 
-(1, 0, 1, 30, 31, 'Admin, Group-Office', 7, 20, 'FFFFCC', 1800),
-(4, 0, 1, 56, 57, 'Test', 8, 20, 'FFFFCC', 1800);
+INSERT INTO `cal_calendars` (`id`, `group_id`, `user_id`, `acl_read`, `acl_write`, `name`, `start_hour`, `end_hour`, `background`, `time_interval`, `public`) VALUES 
+(1, 0, 1, 30, 31, 'Admin, Group-Office', 7, 20, 'FFFFCC', 1800, '0'),
+(4, 0, 1, 56, 57, 'Test', 8, 20, 'FFFFCC', 1800, '0');
 
 -- --------------------------------------------------------
 
@@ -401,6 +411,7 @@ INSERT INTO `cal_calendars` (`id`, `group_id`, `user_id`, `acl_read`, `acl_write
 -- Tabel structuur voor tabel `cal_calendar_backgrounds`
 -- 
 
+DROP TABLE IF EXISTS `cal_calendar_backgrounds`;
 CREATE TABLE IF NOT EXISTS `cal_calendar_backgrounds` (
   `id` int(11) NOT NULL,
   `calendar_id` int(11) NOT NULL,
@@ -423,6 +434,7 @@ CREATE TABLE IF NOT EXISTS `cal_calendar_backgrounds` (
 -- Tabel structuur voor tabel `cal_events`
 -- 
 
+DROP TABLE IF EXISTS `cal_events`;
 CREATE TABLE IF NOT EXISTS `cal_events` (
   `id` int(11) NOT NULL default '0',
   `event_id` int(11) NOT NULL default '0',
@@ -484,6 +496,7 @@ CREATE TABLE IF NOT EXISTS `cal_events` (
 -- Tabel structuur voor tabel `cal_events_calendars`
 -- 
 
+DROP TABLE IF EXISTS `cal_events_calendars`;
 CREATE TABLE IF NOT EXISTS `cal_events_calendars` (
   `calendar_id` int(11) NOT NULL default '0',
   `event_id` int(11) NOT NULL default '0',
@@ -502,6 +515,7 @@ CREATE TABLE IF NOT EXISTS `cal_events_calendars` (
 -- Tabel structuur voor tabel `cal_exceptions`
 -- 
 
+DROP TABLE IF EXISTS `cal_exceptions`;
 CREATE TABLE IF NOT EXISTS `cal_exceptions` (
   `id` int(11) NOT NULL default '0',
   `event_id` int(11) NOT NULL default '0',
@@ -521,6 +535,7 @@ CREATE TABLE IF NOT EXISTS `cal_exceptions` (
 -- Tabel structuur voor tabel `cal_groups`
 -- 
 
+DROP TABLE IF EXISTS `cal_groups`;
 CREATE TABLE IF NOT EXISTS `cal_groups` (
   `id` int(11) NOT NULL default '0',
   `name` varchar(100) NOT NULL default '',
@@ -540,6 +555,7 @@ CREATE TABLE IF NOT EXISTS `cal_groups` (
 -- Tabel structuur voor tabel `cal_group_admins`
 -- 
 
+DROP TABLE IF EXISTS `cal_group_admins`;
 CREATE TABLE IF NOT EXISTS `cal_group_admins` (
   `group_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -557,6 +573,7 @@ CREATE TABLE IF NOT EXISTS `cal_group_admins` (
 -- Tabel structuur voor tabel `cal_holidays`
 -- 
 
+DROP TABLE IF EXISTS `cal_holidays`;
 CREATE TABLE IF NOT EXISTS `cal_holidays` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -595,6 +612,7 @@ INSERT INTO `cal_holidays` (`id`, `user_id`, `date`, `name`, `region`) VALUES
 -- Tabel structuur voor tabel `cal_participants`
 -- 
 
+DROP TABLE IF EXISTS `cal_participants`;
 CREATE TABLE IF NOT EXISTS `cal_participants` (
   `id` int(11) NOT NULL default '0',
   `event_id` int(11) NOT NULL default '0',
@@ -617,6 +635,7 @@ CREATE TABLE IF NOT EXISTS `cal_participants` (
 -- Tabel structuur voor tabel `cal_reminders`
 -- 
 
+DROP TABLE IF EXISTS `cal_reminders`;
 CREATE TABLE IF NOT EXISTS `cal_reminders` (
   `user_id` int(11) NOT NULL default '0',
   `event_id` int(11) NOT NULL default '0',
@@ -641,6 +660,7 @@ CREATE TABLE IF NOT EXISTS `cal_reminders` (
 -- Tabel structuur voor tabel `cal_settings`
 -- 
 
+DROP TABLE IF EXISTS `cal_settings`;
 CREATE TABLE IF NOT EXISTS `cal_settings` (
   `user_id` int(11) NOT NULL default '0',
   `default_cal_id` int(11) NOT NULL default '0',
@@ -673,6 +693,7 @@ INSERT INTO `cal_settings` (`user_id`, `default_cal_id`, `default_view_id`, `sho
 -- Tabel structuur voor tabel `cal_statuses`
 -- 
 
+DROP TABLE IF EXISTS `cal_statuses`;
 CREATE TABLE IF NOT EXISTS `cal_statuses` (
   `id` int(11) NOT NULL default '0',
   `type` varchar(20) NOT NULL default '',
@@ -705,6 +726,7 @@ INSERT INTO `cal_statuses` (`id`, `type`, `name`) VALUES
 -- Tabel structuur voor tabel `cal_views`
 -- 
 
+DROP TABLE IF EXISTS `cal_views`;
 CREATE TABLE IF NOT EXISTS `cal_views` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -730,6 +752,7 @@ CREATE TABLE IF NOT EXISTS `cal_views` (
 -- Tabel structuur voor tabel `cal_views_calendars`
 -- 
 
+DROP TABLE IF EXISTS `cal_views_calendars`;
 CREATE TABLE IF NOT EXISTS `cal_views_calendars` (
   `view_id` int(11) NOT NULL default '0',
   `calendar_id` int(11) NOT NULL default '0',
@@ -748,6 +771,7 @@ CREATE TABLE IF NOT EXISTS `cal_views_calendars` (
 -- Tabel structuur voor tabel `cms_comments`
 -- 
 
+DROP TABLE IF EXISTS `cms_comments`;
 CREATE TABLE IF NOT EXISTS `cms_comments` (
   `id` int(11) NOT NULL,
   `file_id` int(11) NOT NULL,
@@ -772,6 +796,7 @@ INSERT INTO `cms_comments` (`id`, `file_id`, `user_id`, `name`, `comments`, `cti
 -- Tabel structuur voor tabel `cms_files`
 -- 
 
+DROP TABLE IF EXISTS `cms_files`;
 CREATE TABLE IF NOT EXISTS `cms_files` (
   `id` int(11) NOT NULL default '0',
   `folder_id` int(11) NOT NULL default '0',
@@ -814,6 +839,7 @@ INSERT INTO `cms_files` (`id`, `folder_id`, `extension`, `size`, `ctime`, `mtime
 -- Tabel structuur voor tabel `cms_folders`
 -- 
 
+DROP TABLE IF EXISTS `cms_folders`;
 CREATE TABLE IF NOT EXISTS `cms_folders` (
   `id` int(11) NOT NULL default '0',
   `parent_id` int(11) NOT NULL default '0',
@@ -843,6 +869,7 @@ INSERT INTO `cms_folders` (`id`, `parent_id`, `ctime`, `mtime`, `name`, `disable
 -- Tabel structuur voor tabel `cms_galleries`
 -- 
 
+DROP TABLE IF EXISTS `cms_galleries`;
 CREATE TABLE IF NOT EXISTS `cms_galleries` (
   `id` int(11) NOT NULL,
   `site_id` int(11) NOT NULL,
@@ -861,6 +888,7 @@ CREATE TABLE IF NOT EXISTS `cms_galleries` (
 -- Tabel structuur voor tabel `cms_languages`
 -- 
 
+DROP TABLE IF EXISTS `cms_languages`;
 CREATE TABLE IF NOT EXISTS `cms_languages` (
   `id` int(11) NOT NULL default '0',
   `site_id` int(11) NOT NULL default '0',
@@ -888,6 +916,7 @@ CREATE TABLE IF NOT EXISTS `cms_languages` (
 -- Tabel structuur voor tabel `cms_settings`
 -- 
 
+DROP TABLE IF EXISTS `cms_settings`;
 CREATE TABLE IF NOT EXISTS `cms_settings` (
   `user_id` int(11) NOT NULL default '0',
   `sort_field` varchar(20) NOT NULL default '',
@@ -908,6 +937,7 @@ INSERT INTO `cms_settings` (`user_id`, `sort_field`, `sort_order`) VALUES
 -- Tabel structuur voor tabel `cms_sites`
 -- 
 
+DROP TABLE IF EXISTS `cms_sites`;
 CREATE TABLE IF NOT EXISTS `cms_sites` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -938,6 +968,7 @@ INSERT INTO `cms_sites` (`id`, `user_id`, `acl_write`, `allow_properties`, `doma
 -- Tabel structuur voor tabel `cms_templates`
 -- 
 
+DROP TABLE IF EXISTS `cms_templates`;
 CREATE TABLE IF NOT EXISTS `cms_templates` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -969,6 +1000,7 @@ INSERT INTO `cms_templates` (`id`, `user_id`, `name`, `style`, `additional_style
 -- Tabel structuur voor tabel `cms_template_items`
 -- 
 
+DROP TABLE IF EXISTS `cms_template_items`;
 CREATE TABLE IF NOT EXISTS `cms_template_items` (
   `id` int(11) NOT NULL default '0',
   `template_id` int(11) NOT NULL default '0',
@@ -993,6 +1025,7 @@ INSERT INTO `cms_template_items` (`id`, `template_id`, `name`, `content`, `page`
 -- Tabel structuur voor tabel `countries`
 -- 
 
+DROP TABLE IF EXISTS `countries`;
 CREATE TABLE IF NOT EXISTS `countries` (
   `id` int(11) NOT NULL default '0',
   `name` varchar(64) NOT NULL default '',
@@ -1252,6 +1285,7 @@ INSERT INTO `countries` (`id`, `name`, `iso_code_2`, `iso_code_3`) VALUES
 -- Tabel structuur voor tabel `db_sequence`
 -- 
 
+DROP TABLE IF EXISTS `db_sequence`;
 CREATE TABLE IF NOT EXISTS `db_sequence` (
   `seq_name` varchar(50) NOT NULL default '',
   `nextid` int(11) NOT NULL default '0',
@@ -1291,6 +1325,7 @@ INSERT INTO `db_sequence` (`seq_name`, `nextid`) VALUES
 -- Tabel structuur voor tabel `emAccounts`
 -- 
 
+DROP TABLE IF EXISTS `emAccounts`;
 CREATE TABLE IF NOT EXISTS `emAccounts` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -1316,6 +1351,9 @@ CREATE TABLE IF NOT EXISTS `emAccounts` (
   `enable_vacation` enum('0','1') NOT NULL,
   `vacation_subject` varchar(100) NOT NULL,
   `vacation_text` text NOT NULL,
+  `forward_enabled` enum('0','1') NOT NULL,
+  `forward_to` varchar(255) NOT NULL,
+  `forward_local_copy` enum('0','1') NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
 ) TYPE=MyISAM;
@@ -1331,6 +1369,7 @@ CREATE TABLE IF NOT EXISTS `emAccounts` (
 -- Tabel structuur voor tabel `emFilters`
 -- 
 
+DROP TABLE IF EXISTS `emFilters`;
 CREATE TABLE IF NOT EXISTS `emFilters` (
   `id` int(11) NOT NULL default '0',
   `account_id` int(11) NOT NULL default '0',
@@ -1353,6 +1392,7 @@ CREATE TABLE IF NOT EXISTS `emFilters` (
 -- Tabel structuur voor tabel `emFolders`
 -- 
 
+DROP TABLE IF EXISTS `emFolders`;
 CREATE TABLE IF NOT EXISTS `emFolders` (
   `id` int(11) NOT NULL default '0',
   `account_id` int(11) NOT NULL default '0',
@@ -1381,6 +1421,7 @@ CREATE TABLE IF NOT EXISTS `emFolders` (
 -- Tabel structuur voor tabel `em_links`
 -- 
 
+DROP TABLE IF EXISTS `em_links`;
 CREATE TABLE IF NOT EXISTS `em_links` (
   `link_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
@@ -1404,6 +1445,7 @@ CREATE TABLE IF NOT EXISTS `em_links` (
 -- Tabel structuur voor tabel `em_settings`
 -- 
 
+DROP TABLE IF EXISTS `em_settings`;
 CREATE TABLE IF NOT EXISTS `em_settings` (
   `user_id` int(11) NOT NULL default '0',
   `send_format` varchar(10) NOT NULL default '',
@@ -1430,6 +1472,7 @@ INSERT INTO `em_settings` (`user_id`, `send_format`, `add_recievers`, `add_sende
 -- Tabel structuur voor tabel `fs_links`
 -- 
 
+DROP TABLE IF EXISTS `fs_links`;
 CREATE TABLE IF NOT EXISTS `fs_links` (
   `link_id` int(11) NOT NULL default '0',
   `path` varchar(255) NOT NULL default '',
@@ -1448,9 +1491,28 @@ CREATE TABLE IF NOT EXISTS `fs_links` (
 -- --------------------------------------------------------
 
 -- 
+-- Tabel structuur voor tabel `fs_notifications`
+-- 
+
+DROP TABLE IF EXISTS `fs_notifications`;
+CREATE TABLE IF NOT EXISTS `fs_notifications` (
+  `path` varchar(255) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY  (`path`,`user_id`)
+) TYPE=MyISAM;
+
+-- 
+-- Gegevens worden uitgevoerd voor tabel `fs_notifications`
+-- 
+
+
+-- --------------------------------------------------------
+
+-- 
 -- Tabel structuur voor tabel `fs_settings`
 -- 
 
+DROP TABLE IF EXISTS `fs_settings`;
 CREATE TABLE IF NOT EXISTS `fs_settings` (
   `user_id` int(11) NOT NULL,
   `notify` enum('0','1') NOT NULL,
@@ -1473,6 +1535,7 @@ INSERT INTO `fs_settings` (`user_id`, `notify`, `open_properties`, `show_files_o
 -- Tabel structuur voor tabel `fs_shares`
 -- 
 
+DROP TABLE IF EXISTS `fs_shares`;
 CREATE TABLE IF NOT EXISTS `fs_shares` (
   `user_id` int(11) NOT NULL default '0',
   `link_id` int(11) default NULL,
@@ -1500,6 +1563,7 @@ INSERT INTO `fs_shares` (`user_id`, `link_id`, `path`, `type`, `acl_read`, `acl_
 -- Tabel structuur voor tabel `fs_statuses`
 -- 
 
+DROP TABLE IF EXISTS `fs_statuses`;
 CREATE TABLE IF NOT EXISTS `fs_statuses` (
   `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
@@ -1520,6 +1584,7 @@ INSERT INTO `fs_statuses` (`id`, `name`) VALUES
 -- Tabel structuur voor tabel `fs_status_history`
 -- 
 
+DROP TABLE IF EXISTS `fs_status_history`;
 CREATE TABLE IF NOT EXISTS `fs_status_history` (
   `id` int(11) NOT NULL,
   `link_id` int(11) NOT NULL,
@@ -1544,6 +1609,7 @@ INSERT INTO `fs_status_history` (`id`, `link_id`, `status_id`, `user_id`, `ctime
 -- Tabel structuur voor tabel `groups`
 -- 
 
+DROP TABLE IF EXISTS `groups`;
 CREATE TABLE IF NOT EXISTS `groups` (
   `id` int(11) NOT NULL default '0',
   `name` varchar(50) NOT NULL default '',
@@ -1565,6 +1631,7 @@ INSERT INTO `groups` (`id`, `name`, `user_id`) VALUES
 -- Tabel structuur voor tabel `ig_galleries`
 -- 
 
+DROP TABLE IF EXISTS `ig_galleries`;
 CREATE TABLE IF NOT EXISTS `ig_galleries` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
@@ -1590,6 +1657,7 @@ CREATE TABLE IF NOT EXISTS `ig_galleries` (
 -- Tabel structuur voor tabel `ig_images`
 -- 
 
+DROP TABLE IF EXISTS `ig_images`;
 CREATE TABLE IF NOT EXISTS `ig_images` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
@@ -1614,6 +1682,7 @@ CREATE TABLE IF NOT EXISTS `ig_images` (
 -- Tabel structuur voor tabel `links`
 -- 
 
+DROP TABLE IF EXISTS `links`;
 CREATE TABLE IF NOT EXISTS `links` (
   `type1` tinyint(4) NOT NULL default '0',
   `link_id1` int(11) NOT NULL default '0',
@@ -1636,6 +1705,7 @@ CREATE TABLE IF NOT EXISTS `links` (
 -- Tabel structuur voor tabel `log`
 -- 
 
+DROP TABLE IF EXISTS `log`;
 CREATE TABLE IF NOT EXISTS `log` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
@@ -1657,6 +1727,7 @@ CREATE TABLE IF NOT EXISTS `log` (
 -- Tabel structuur voor tabel `modules`
 -- 
 
+DROP TABLE IF EXISTS `modules`;
 CREATE TABLE IF NOT EXISTS `modules` (
   `id` varchar(20) NOT NULL default '',
   `version` varchar(5) NOT NULL default '',
@@ -1675,9 +1746,9 @@ CREATE TABLE IF NOT EXISTS `modules` (
 INSERT INTO `modules` (`id`, `version`, `path`, `sort_order`, `admin_menu`, `acl_read`, `acl_write`) VALUES 
 ('modules', '1.0', '', 130, '1', 1, 2),
 ('addressbook', '2.6', '', 20, '0', 4, 5),
-('calendar', '3.1', '', 40, '0', 6, 7),
-('email', '2.5', '', 30, '0', 8, 9),
-('filesystem', '2.0', '', 70, '0', 10, 11),
+('calendar', '3.2', '', 40, '0', 6, 7),
+('email', '2.6', '', 30, '0', 8, 9),
+('filesystem', '2.1', '', 70, '0', 10, 11),
 ('groups', '1.0', '', 120, '1', 12, 13),
 ('cms', '3.0', '', 90, '0', 14, 15),
 ('phpsysinfo', '1.0', '', 140, '1', 16, 17),
@@ -1695,6 +1766,7 @@ INSERT INTO `modules` (`id`, `version`, `path`, `sort_order`, `admin_menu`, `acl
 -- Tabel structuur voor tabel `no_notes`
 -- 
 
+DROP TABLE IF EXISTS `no_notes`;
 CREATE TABLE IF NOT EXISTS `no_notes` (
   `id` int(11) NOT NULL default '0',
   `link_id` int(11) default NULL,
@@ -1722,6 +1794,7 @@ CREATE TABLE IF NOT EXISTS `no_notes` (
 -- Tabel structuur voor tabel `no_settings`
 -- 
 
+DROP TABLE IF EXISTS `no_settings`;
 CREATE TABLE IF NOT EXISTS `no_settings` (
   `user_id` int(11) NOT NULL default '0',
   `sort_field` varchar(20) NOT NULL default '',
@@ -1740,6 +1813,7 @@ CREATE TABLE IF NOT EXISTS `no_settings` (
 -- Tabel structuur voor tabel `pmFees`
 -- 
 
+DROP TABLE IF EXISTS `pmFees`;
 CREATE TABLE IF NOT EXISTS `pmFees` (
   `id` int(11) NOT NULL default '0',
   `name` varchar(50) NOT NULL default '',
@@ -1763,6 +1837,7 @@ INSERT INTO `pmFees` (`id`, `name`, `external_value`, `internal_value`, `time`, 
 -- Tabel structuur voor tabel `pmHours`
 -- 
 
+DROP TABLE IF EXISTS `pmHours`;
 CREATE TABLE IF NOT EXISTS `pmHours` (
   `id` int(11) NOT NULL default '0',
   `project_id` int(11) NOT NULL default '0',
@@ -1791,6 +1866,7 @@ CREATE TABLE IF NOT EXISTS `pmHours` (
 -- Tabel structuur voor tabel `pmProjects`
 -- 
 
+DROP TABLE IF EXISTS `pmProjects`;
 CREATE TABLE IF NOT EXISTS `pmProjects` (
   `id` int(11) NOT NULL default '0',
   `link_id` int(11) default NULL,
@@ -1833,6 +1909,7 @@ CREATE TABLE IF NOT EXISTS `pmProjects` (
 -- Tabel structuur voor tabel `pmStatuses`
 -- 
 
+DROP TABLE IF EXISTS `pmStatuses`;
 CREATE TABLE IF NOT EXISTS `pmStatuses` (
   `id` int(11) NOT NULL default '0',
   `name` varchar(50) NOT NULL default '',
@@ -1856,6 +1933,7 @@ INSERT INTO `pmStatuses` (`id`, `name`) VALUES
 -- Tabel structuur voor tabel `pmTimers`
 -- 
 
+DROP TABLE IF EXISTS `pmTimers`;
 CREATE TABLE IF NOT EXISTS `pmTimers` (
   `user_id` int(11) NOT NULL default '0',
   `start_time` int(11) NOT NULL default '0',
@@ -1874,6 +1952,7 @@ CREATE TABLE IF NOT EXISTS `pmTimers` (
 -- Tabel structuur voor tabel `pm_settings`
 -- 
 
+DROP TABLE IF EXISTS `pm_settings`;
 CREATE TABLE IF NOT EXISTS `pm_settings` (
   `user_id` int(11) NOT NULL default '0',
   `show_projects` tinyint(4) NOT NULL default '0',
@@ -1894,6 +1973,7 @@ INSERT INTO `pm_settings` (`user_id`, `show_projects`, `fee_id`) VALUES
 -- Tabel structuur voor tabel `pm_templates`
 -- 
 
+DROP TABLE IF EXISTS `pm_templates`;
 CREATE TABLE IF NOT EXISTS `pm_templates` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -1914,6 +1994,7 @@ CREATE TABLE IF NOT EXISTS `pm_templates` (
 -- Tabel structuur voor tabel `pm_template_events`
 -- 
 
+DROP TABLE IF EXISTS `pm_template_events`;
 CREATE TABLE IF NOT EXISTS `pm_template_events` (
   `id` int(11) NOT NULL default '0',
   `template_id` int(11) NOT NULL default '0',
@@ -1938,6 +2019,7 @@ CREATE TABLE IF NOT EXISTS `pm_template_events` (
 -- Tabel structuur voor tabel `reminders`
 -- 
 
+DROP TABLE IF EXISTS `reminders`;
 CREATE TABLE IF NOT EXISTS `reminders` (
   `id` int(11) NOT NULL,
   `link_id` int(11) NOT NULL,
@@ -1960,6 +2042,7 @@ CREATE TABLE IF NOT EXISTS `reminders` (
 -- Tabel structuur voor tabel `settings`
 -- 
 
+DROP TABLE IF EXISTS `settings`;
 CREATE TABLE IF NOT EXISTS `settings` (
   `user_id` int(11) NOT NULL default '0',
   `name` varchar(50) NOT NULL default '',
@@ -1993,6 +2076,7 @@ INSERT INTO `settings` (`user_id`, `name`, `value`) VALUES
 -- Tabel structuur voor tabel `se_cache`
 -- 
 
+DROP TABLE IF EXISTS `se_cache`;
 CREATE TABLE IF NOT EXISTS `se_cache` (
   `link_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
@@ -2021,6 +2105,7 @@ CREATE TABLE IF NOT EXISTS `se_cache` (
 -- Tabel structuur voor tabel `se_last_sync_times`
 -- 
 
+DROP TABLE IF EXISTS `se_last_sync_times`;
 CREATE TABLE IF NOT EXISTS `se_last_sync_times` (
   `user_id` int(11) NOT NULL,
   `module` varchar(50) NOT NULL,
@@ -2039,6 +2124,7 @@ CREATE TABLE IF NOT EXISTS `se_last_sync_times` (
 -- Tabel structuur voor tabel `sum_announcements`
 -- 
 
+DROP TABLE IF EXISTS `sum_announcements`;
 CREATE TABLE IF NOT EXISTS `sum_announcements` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -2063,6 +2149,7 @@ CREATE TABLE IF NOT EXISTS `sum_announcements` (
 -- Tabel structuur voor tabel `sync_contacts_maps`
 -- 
 
+DROP TABLE IF EXISTS `sync_contacts_maps`;
 CREATE TABLE IF NOT EXISTS `sync_contacts_maps` (
   `device_id` int(11) NOT NULL default '0',
   `contact_id` int(11) NOT NULL default '0',
@@ -2081,6 +2168,7 @@ CREATE TABLE IF NOT EXISTS `sync_contacts_maps` (
 -- Tabel structuur voor tabel `sync_contacts_syncs`
 -- 
 
+DROP TABLE IF EXISTS `sync_contacts_syncs`;
 CREATE TABLE IF NOT EXISTS `sync_contacts_syncs` (
   `device_id` int(11) NOT NULL default '0',
   `local_last_anchor` int(11) NOT NULL default '0',
@@ -2099,6 +2187,7 @@ CREATE TABLE IF NOT EXISTS `sync_contacts_syncs` (
 -- Tabel structuur voor tabel `sync_datastores`
 -- 
 
+DROP TABLE IF EXISTS `sync_datastores`;
 CREATE TABLE IF NOT EXISTS `sync_datastores` (
   `id` int(11) NOT NULL default '0',
   `device_id` int(11) NOT NULL default '0',
@@ -2119,6 +2208,7 @@ CREATE TABLE IF NOT EXISTS `sync_datastores` (
 -- Tabel structuur voor tabel `sync_devices`
 -- 
 
+DROP TABLE IF EXISTS `sync_devices`;
 CREATE TABLE IF NOT EXISTS `sync_devices` (
   `id` int(11) NOT NULL default '0',
   `manufacturer` varchar(50) NOT NULL default '',
@@ -2140,6 +2230,7 @@ CREATE TABLE IF NOT EXISTS `sync_devices` (
 -- Tabel structuur voor tabel `sync_events_maps`
 -- 
 
+DROP TABLE IF EXISTS `sync_events_maps`;
 CREATE TABLE IF NOT EXISTS `sync_events_maps` (
   `device_id` int(11) NOT NULL default '0',
   `event_id` int(11) NOT NULL default '0',
@@ -2159,6 +2250,7 @@ CREATE TABLE IF NOT EXISTS `sync_events_maps` (
 -- Tabel structuur voor tabel `sync_events_syncs`
 -- 
 
+DROP TABLE IF EXISTS `sync_events_syncs`;
 CREATE TABLE IF NOT EXISTS `sync_events_syncs` (
   `device_id` int(11) NOT NULL default '0',
   `local_last_anchor` int(11) NOT NULL default '0',
@@ -2177,6 +2269,7 @@ CREATE TABLE IF NOT EXISTS `sync_events_syncs` (
 -- Tabel structuur voor tabel `sync_settings`
 -- 
 
+DROP TABLE IF EXISTS `sync_settings`;
 CREATE TABLE IF NOT EXISTS `sync_settings` (
   `user_id` int(11) NOT NULL default '0',
   `addressbook_id` int(11) NOT NULL default '0',
@@ -2201,6 +2294,7 @@ INSERT INTO `sync_settings` (`user_id`, `addressbook_id`, `calendar_id`, `sync_p
 -- Tabel structuur voor tabel `sync_todos_syncs`
 -- 
 
+DROP TABLE IF EXISTS `sync_todos_syncs`;
 CREATE TABLE IF NOT EXISTS `sync_todos_syncs` (
   `device_id` int(11) NOT NULL default '0',
   `local_last_anchor` int(11) NOT NULL default '0',
@@ -2219,6 +2313,7 @@ CREATE TABLE IF NOT EXISTS `sync_todos_syncs` (
 -- Tabel structuur voor tabel `td_reminders`
 -- 
 
+DROP TABLE IF EXISTS `td_reminders`;
 CREATE TABLE IF NOT EXISTS `td_reminders` (
   `user_id` int(11) NOT NULL default '0',
   `todo_id` int(11) NOT NULL default '0',
@@ -2238,6 +2333,7 @@ CREATE TABLE IF NOT EXISTS `td_reminders` (
 -- Tabel structuur voor tabel `td_settings`
 -- 
 
+DROP TABLE IF EXISTS `td_settings`;
 CREATE TABLE IF NOT EXISTS `td_settings` (
   `user_id` int(11) NOT NULL default '0',
   `sort_field` varchar(20) NOT NULL default '',
@@ -2256,6 +2352,7 @@ CREATE TABLE IF NOT EXISTS `td_settings` (
 -- Tabel structuur voor tabel `td_todos`
 -- 
 
+DROP TABLE IF EXISTS `td_todos`;
 CREATE TABLE IF NOT EXISTS `td_todos` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -2293,6 +2390,7 @@ CREATE TABLE IF NOT EXISTS `td_todos` (
 -- Tabel structuur voor tabel `tp_mailing_companies`
 -- 
 
+DROP TABLE IF EXISTS `tp_mailing_companies`;
 CREATE TABLE IF NOT EXISTS `tp_mailing_companies` (
   `group_id` int(11) NOT NULL default '0',
   `company_id` int(11) NOT NULL default '0',
@@ -2310,6 +2408,7 @@ CREATE TABLE IF NOT EXISTS `tp_mailing_companies` (
 -- Tabel structuur voor tabel `tp_mailing_contacts`
 -- 
 
+DROP TABLE IF EXISTS `tp_mailing_contacts`;
 CREATE TABLE IF NOT EXISTS `tp_mailing_contacts` (
   `group_id` int(11) NOT NULL default '0',
   `contact_id` int(11) NOT NULL default '0',
@@ -2327,6 +2426,7 @@ CREATE TABLE IF NOT EXISTS `tp_mailing_contacts` (
 -- Tabel structuur voor tabel `tp_mailing_groups`
 -- 
 
+DROP TABLE IF EXISTS `tp_mailing_groups`;
 CREATE TABLE IF NOT EXISTS `tp_mailing_groups` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -2347,6 +2447,7 @@ CREATE TABLE IF NOT EXISTS `tp_mailing_groups` (
 -- Tabel structuur voor tabel `tp_mailing_users`
 -- 
 
+DROP TABLE IF EXISTS `tp_mailing_users`;
 CREATE TABLE IF NOT EXISTS `tp_mailing_users` (
   `group_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -2364,6 +2465,7 @@ CREATE TABLE IF NOT EXISTS `tp_mailing_users` (
 -- Tabel structuur voor tabel `tp_templates`
 -- 
 
+DROP TABLE IF EXISTS `tp_templates`;
 CREATE TABLE IF NOT EXISTS `tp_templates` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -2385,6 +2487,7 @@ CREATE TABLE IF NOT EXISTS `tp_templates` (
 -- Tabel structuur voor tabel `tp_templates_content`
 -- 
 
+DROP TABLE IF EXISTS `tp_templates_content`;
 CREATE TABLE IF NOT EXISTS `tp_templates_content` (
   `id` int(11) NOT NULL default '0',
   `content` longblob NOT NULL,
@@ -2402,6 +2505,7 @@ CREATE TABLE IF NOT EXISTS `tp_templates_content` (
 -- Tabel structuur voor tabel `users`
 -- 
 
+DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL default '0',
   `username` varchar(50) NOT NULL default '',
@@ -2480,6 +2584,7 @@ INSERT INTO `users` (`id`, `username`, `password`, `enabled`, `authcode`, `first
 -- Tabel structuur voor tabel `users_groups`
 -- 
 
+DROP TABLE IF EXISTS `users_groups`;
 CREATE TABLE IF NOT EXISTS `users_groups` (
   `group_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
