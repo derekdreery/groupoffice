@@ -288,7 +288,7 @@ a.HoverLink, a.HoverLink:visited, a.HoverLink:active {
 
 a.HoverLinkSelected, a.HoverLinkSelected:visited, a.HoverLinkSelected:active {
   background-color: #7d7d7d;
-  color: #ffffff;
+  color: #ffffff !important;
   display: block;
   font-family: arial, helvetica, sans-serif;
   font-size: 11px;
