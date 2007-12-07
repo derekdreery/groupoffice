@@ -365,11 +365,24 @@ switch($tabstrip->get_active_tab_id())
 	$row->add_cell(new table_cell($color_selector->get_html()));
 	$table->add_row($row);
 	
-	$row = new table_row();
-	$row->add_cell(new table_cell($sc_public_calendar.': '));
-	$checkbox = new checkbox('public','public','1', '', $calendar['public']);
-	$row->add_cell(new table_cell($checkbox->get_html()));
-	$table->add_row($row);
+	if(file_exists('view_calendar.php'))
+	{	
+		$row = new table_row();
+		$row->add_cell(new table_cell($cal_public_calendar.': '));
+		$checkbox = new checkbox('public','public','1', '', $calendar['public']);
+		$row->add_cell(new table_cell($checkbox->get_html()));
+		$table->add_row($row);
+		
+		$row = new table_row();
+		$row->add_cell(new table_cell($cal_public_url.': '));
+		
+		$link = new hyperlink($GO_MODULES->modules['calendar']['full_url'].'view_calendar.php?calendar_id='.$calendar_id, $GO_MODULES->modules['calendar']['full_url'].'view_calendar.php?calendar_id='.$calendar_id);
+		$link->set_attribute('class','normal');
+		$link->set_attribute('target','_blank');
+		
+		$row->add_cell(new table_cell($link->get_html()));
+		$table->add_row($row);
+	}
 	
 	$tabstrip->add_html_element($table);
 	

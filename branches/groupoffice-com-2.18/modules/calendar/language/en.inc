@@ -137,7 +137,7 @@ $sc_colors['yellow'] = 'Yellow';
 $sc_colors['grey'] = 'Grey';
 $sc_colors['purple'] = 'Purple';
 $sc_colors['white']= 'White';
-$sc_public_calendar = 'Publiceer Kalender';
+
 
 $sc_show_hours = 'Show hours from';
 $sc_to = 'to';
@@ -391,6 +391,9 @@ $cal_subject='Subject';
 $cal_project_notice='This booking shall also be added to the selected project.';
 $cal_dismiss_all = 'Dismiss all';
 $cal_schedule_group='Schedule events for everyone in the view by default. (Otherwise it will only select your default calendar)';
+
+$cal_public_calendar = 'Publish calendar';
+$cal_public_url = 'Public URL';
 
 $cal_help_url='http://docs.group-office.com/index.php?folder_id=58&file_id=0';
 $td_help_url='http://docs.group-office.com/index.php?folder_id=49&file_id=217';

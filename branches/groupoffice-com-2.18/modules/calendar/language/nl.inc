@@ -107,7 +107,7 @@ $sc_colors['yellow']='Geel';
 $sc_colors['grey']='Grijs';
 $sc_colors['purple']='Paars';
 $sc_colors['white']='Wit';
-$sc_public_calendar='Publiceer Kalender';
+
 $sc_show_hours='Toon uren van';
 $sc_to='t/m';
 $sc_today='Vandaag';
@@ -273,3 +273,6 @@ $cal_show_busy='Toon als bezet';
 $cal_subject='Onderwerp';
 $cal_project_notice='Deze afspraak wordt ook aan het geselecteerde project toegevoegd.';
 $cal_dismiss_all = 'Allemaal uitzetten';
+
+$cal_public_calendar = 'Publiceer agenda';
+$cal_public_url = 'Publieke URL';
