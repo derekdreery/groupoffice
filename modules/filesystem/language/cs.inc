@@ -105,4 +105,18 @@ $fs_open_properties='Otevři okno s vlastnostmi souboru při dvojím kliknutí';
 
 $fs_file='Soubor';
 
+$fs_enable_gota = 'Povol Group-Office Transfer Agent. Group-Office Transfer Agent je malý Java program, který ukládá soubory do Group-Office když je editujete lokálně. Group-Office Professional and Java 1.6 nebo vyšší je potřeba na vašem počítači.';
+$fs_show_files_on_summary = 'Ukaž posledních 10 modifikovaných souborů na souhrné stránce';
+
+$fs_recursion='Nemůžete přesouvat nebo kopírovat adresáře do sebe sama';
+$fs_select_destination = 'Vyberte cílový adresář'; 
+$fs_move = 'Přesunout';
+
+$fs_java_not_installed="Java není nainstalována. Java je požadována Group-Office Transfer Agentem. Chcete ji nainstalovat? Jestli ji nechcete nainstalovat, nebo nemůžete, je možné vypnout Group-Office Transfer Agenta v Konfiguraci -> Soubory.";
+$fs_java_install = 'Instalovat Java Webstart';
+$fs_java_install_text = 'Prosím začněte s Java instalací nyní kliknutím na horní lištu této stránky. Jestli toto nefunguje, můžete zkusit kliknout <a class="normal" href="http://www.java.com">sem a nainstalovat Javu manuálně.</a>';
+
+
+$fs_notify_folder='Upozorni mě na změnu v souborech v tomto adresáři';
+
 $fs_help_url='http://docs.group-office.com/index.php?folder_id=49&file_id=220';

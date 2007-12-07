@@ -332,11 +332,17 @@ $strBank = 'Banka';
 $strBankNo = 'Bankovní číslo';
 $strSelectedItems = 'vybrané položky';
 
+$strWeek='Týden';
+$strWeeks='Týdny';
 $strMonth = 'Měsíc';
 $strYear = 'Rok';
 $strDay = 'Den';
+$strDays='Dny';
 $strHour = 'Hodina';
+$strHours='Hodiny';
 $strMinute = 'Minuta';
+$strMin='Minuta';
+$strMins='Minuty';
 
 $strTwelveHourFormat = '12 hodinový formát';
 $strTwentyfourHourFormat = '24 hodinový formát';
@@ -382,6 +388,16 @@ $strMoveUp='Move up one row';
 $strAddressAndNo='Adresa / Ne.';
 $strWorkAddressAndNo='Adresa do práce / Ne.';
 
+$jupload_text='Vyberte soubory z Vašeho počítače a klikněte \'Upload\'.';
+
+$jupload_max_size='Maximální velikost';
+$jupload_width='váha';
+$jupload_height='výška';
+
+$strReminder = 'Upomínka';
+
+$strStartTime = 'Začátek';
+$strAddReminder = 'Přidej upomínku';
+
+
 $config_help_url='http://docs.group-office.com/index.php?folder_id=49&file_id=202';
-
-
