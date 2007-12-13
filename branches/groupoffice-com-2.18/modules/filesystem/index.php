@@ -58,7 +58,7 @@ if (!isset ($_SESSION['GO_FILESYSTEM_PATH'])) {
 }
 
 $treeview = isset($treeview) ? $treeview : true;
-
+require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 require_once($GO_MODULES->modules['filesystem']['class_path'].'filesystem_view.class.inc');
 $fv = new filesystem_view('fs_list',  $_SESSION['GO_FILESYSTEM_PATH'], $GO_HANDLER, true,'0',$treeview);
 
