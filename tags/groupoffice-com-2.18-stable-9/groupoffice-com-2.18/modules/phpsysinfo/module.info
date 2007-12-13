@@ -1,0 +1,10 @@
+<?php
+$module['phpsysinfo']['description'] = 'A handy module to view system information based on PHPSysinfo';
+$module['phpsysinfo']['version'] = '1.0';
+$module['phpsysinfo']['release_date'] = '2005-04-17';
+$module['phpsysinfo']['status'] = 'Stable';
+$module['phpsysinfo']['authors'][] = array('name'=>'Uriah Welcome', 'email'=>'precision@users.sf.net');
+$module['phpsysinfo']['authors'][] = array('name'=>'Matthew Snelham', 'email'=>'infinite@users.sf.nett');
+$module['phpsysinfo']['admin_menu'] = true;
+$module['phpsysinfo']['sort_order'] = 140;
+?>
