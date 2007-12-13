@@ -52,6 +52,8 @@ class filesystem_list extends datatable
 	function get_html()
 	{
 		global $GO_CONFIG, $GO_LANGUAGE, $GO_MODULES, $GO_SECURITY, $nogota_extensions;
+		
+
 
 		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 		$fs = new filesystem();		
@@ -145,7 +147,7 @@ class filesystem_list extends datatable
 		}
 		
 		$gota_supported = file_exists($GO_MODULES->modules['filesystem']['path'].'jnlp.php');
-		
+
 		
 
 		$total_size = 0;
