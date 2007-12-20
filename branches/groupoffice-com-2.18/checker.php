@@ -162,7 +162,24 @@ if($beep && !$popup && isset($_REQUEST['initiated']))
 		'<embed src="'.$GO_THEME->sounds['reminder'].'" loop="false" width="1" height="1">'.
 		'</embed>'.
 		'</object>';
-}	
+}
+
+
+foreach($GO_MODULES->modules as $module)
+{
+	if($module['read_permission'] && $module['id'] != 'search' && file_exists($module['class_path'].$module['id'].'.class.inc'))
+	{
+		require_once($module['class_path'].$module['id'].'.class.inc');
+		$class = new $module['id'];
+	
+		if(method_exists($class, '__on_checker'))
+		{	
+			$class->__on_checker();
+		}
+	}
+}
+
+
 ?>
 
 </body>
