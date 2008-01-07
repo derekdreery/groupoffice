@@ -1,0 +1,14 @@
+body{
+font-family:	arial,verdana,sans-serif;
+padding:0px;
+margin:0px;
+font-size:12px;
+padding-top:4px;
+text-align:right;
+background-color: #3495b5;
+}
+
+a:link,a:active,a:visited,a:hover{
+color: black; 
+text-decoration: none;
+}
