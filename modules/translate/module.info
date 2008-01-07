@@ -1,0 +1,8 @@
+<?php
+$module['translate']['description'] = 'Module to translate Group-Office into another language';
+$module['translate']['version'] = '1.0';
+$module['translate']['release_date'] = '2006-11-28';
+$module['translate']['status'] = 'Stable';
+$module['translate']['authors'][] = array('name'=>'Merijn Schering', 'email'=>'mschering@intermesh.nl');
+$module['translate']['sort_order'] = 120;
+?>
