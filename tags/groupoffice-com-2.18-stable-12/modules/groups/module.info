@@ -1,0 +1,9 @@
+<?php
+$module['groups']['description'] = 'The default user group management module';
+$module['groups']['version'] = '1.0';
+$module['groups']['release_date'] = '2005-04-17';
+$module['groups']['status'] = 'Stable';
+$module['groups']['authors'][] = array('name'=>'Merijn Schering', 'email'=>'mschering@intermesh.nl');
+$module['groups']['admin_menu'] = true;
+$module['groups']['sort_order'] = 120;
+?>
