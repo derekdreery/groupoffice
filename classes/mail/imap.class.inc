@@ -587,18 +587,22 @@ class imap {
 
 			$this->mail["parts"] = array ();
 			$this->get_parts($structure, $preferred_type);
+			
+
 
 			// $this->print_structure($structure);
 
 			$header = imap_fetchheader($this->conn, $uid, FT_UID);
 			$this->message["priority"] = $this->get_header_value("X-Priority:", $header);
 			$this->message["notification"] = $this->get_header_value("Disposition-Notification-To:", $header);
-			$this->message["header"] = $header;
-
+			//$this->message["header"] = $header;
+			$this->message['content_type']=$this->get_header_value('Content-type:', $header);
+			
 			$overview = imap_fetch_overview($this->conn, $uid, FT_UID);
 			$this->message["flagged"] = $overview[0]->flagged;
 			$this->message["size"] = $overview[0]->size;
 			$this->message["answered"] = $overview[0]->answered;
+			
 
 			return $this->message;
 
