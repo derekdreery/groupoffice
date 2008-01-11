@@ -138,7 +138,11 @@ $form->add_html_element(new input('hidden', 'template_id', $template_id, false))
 $form->add_html_element(new input('hidden', 'task', '', false));
 $form->add_html_element(new input('hidden', 'return_to',$return_to));
 
-
+if($tabstrip->get_active_tab_id() == 'properties')
+{
+	$datatable = new datatable('pm_templates');
+	$GO_HEADER['head'] = $datatable->get_header();
+}
 
 if ($template_id > 0 && $write_permissions) {
 
@@ -149,8 +153,6 @@ if ($template_id > 0 && $write_permissions) {
 			
 	if($tabstrip->get_active_tab_id() == 'properties')
 	{
-		$datatable = new datatable('pm_templates');
-		$GO_HEADER['head'] = $datatable->get_header();
 
 		$menu->add_button('delete_big', $cmdDelete, $datatable->get_delete_handler());
 
