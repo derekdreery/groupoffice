@@ -363,7 +363,7 @@ switch($task)
 
 
 				$cal2 = new calendar();
-				$projects = new projects();
+				
 				
 				$booking['user_id'] = $event['user_id'];
 				$booking['start_time'] = $event['start_time'];
@@ -382,18 +382,24 @@ switch($task)
 				}
 				$booking['event_id'] = $event['id'];
 				
-				$booking_id=$projects->get_booking_id_by_event_id($event['id']);
-				
-				if($booking_id>0)
+				if($projects_module)
 				{
-					$booking['id']=$booking_id;
-					$projects->update_booking($booking);
-				}else
-				{
-					$project = $projects->get_project_by_calendar_id($calendar_id);
-					$booking['project_id'] = $project['id'];
+					$projects = new projects();
 					
-					$projects->add_booking_on_event_id($booking);
+					
+					$booking_id=$projects->get_booking_id_by_event_id($event['id']);
+					
+					if($booking_id>0)
+					{
+						$booking['id']=$booking_id;
+						$projects->update_booking($booking);
+					}else
+					{
+						$project = $projects->get_project_by_calendar_id($calendar_id);
+						$booking['project_id'] = $project['id'];
+						
+						$projects->add_booking_on_event_id($booking);
+					}
 				}
 			}
 
@@ -1268,7 +1274,7 @@ if($task == 'availability')
 	$table = new table();
 	$table->set_attribute('style','width:100%');
 	
-	if($projects->get_project_by_calendar_id($calendar_id))
+	if($projects_module && $projects->get_project_by_calendar_id($calendar_id))
 	{
 		$row = new table_row();
 		$cell = new table_cell('<i>'.$cal_project_notice.'</i>');
@@ -1635,49 +1641,48 @@ if($task == 'availability')
 		$table->add_row($row);
 	}
 
-	require($GO_LANGUAGE->get_language_file('projects'));
-	if($projects->get_project_by_calendar_id($calendar_id))
+	if($projects_module)
 	{
-		$fees = array();
-		$fee_id = $projects->get_fee_id_by_event_id($event_id);
-		$fee_count = $projects->get_authorized_fees($GO_SECURITY->user_id);
-	
-		switch($fee_count)
+		require($GO_LANGUAGE->get_language_file('projects'));
+		if($projects->get_project_by_calendar_id($calendar_id))
 		{
-			case '0':
-				$row = new table_row();
-				$row->add_cell(new table_cell($pm_no_fees));
-				break;
-	
-			case '1':
-				$projects->next_record();
-				$input = new input('hidden', 'fee_id', $projects->f('id'));
-				$row = new table_row();
-				$row->add_cell(new table_cell($input->get_html()));
-				$table->add_row($row);
+			$fees = array();
+			$fee_id = $projects->get_fee_id_by_event_id($event_id);
+			$fee_count = $projects->get_authorized_fees($GO_SECURITY->user_id);
+		
+			switch($fee_count)
+			{
+				case '0':
+					$row = new table_row();
+					$row->add_cell(new table_cell($pm_no_fees));
+					break;
+		
+				case '1':
+					$projects->next_record();
+					$input = new input('hidden', 'fee_id', $projects->f('id'));
+					$row = new table_row();
+					$row->add_cell(new table_cell($input->get_html()));
+					$table->add_row($row);
+						
+					$row = new table_row();
+					$row->add_cell(new table_cell($pm_fee));
+					$row->add_cell(new table_cell($projects->f('name')));
+					break;
+		
+				default:
 					
-				$row = new table_row();
-				$row->add_cell(new table_cell($pm_fee));
-				$row->add_cell(new table_cell($projects->f('name')));
-				break;
-	
-			default:
-				
-				$select = new select('fee_id', $fee_id);
-				while($projects->next_record())
-				{
-					$select->add_value($projects->f('id'), $projects->f('name'));
-				}
-				$row = new table_row();
-				$row->add_cell(new table_cell($pm_fee.':'));
-				$row->add_cell(new table_cell($select->get_html()));
-				break;
+					$select = new select('fee_id', $fee_id);
+					while($projects->next_record())
+					{
+						$select->add_value($projects->f('id'), $projects->f('name'));
+					}
+					$row = new table_row();
+					$row->add_cell(new table_cell($pm_fee.':'));
+					$row->add_cell(new table_cell($select->get_html()));
+					break;
+			}
+			$table->add_row($row);
 		}
-		$table->add_row($row);
-	}
-	else
-	{
-			
 	}
 
 
