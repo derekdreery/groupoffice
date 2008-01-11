@@ -465,6 +465,11 @@ for ($i=0;$i<sizeof($parts);$i++)
 //for ($i=0;$i<1;$i++)
 {
 	$mime = strtolower($parts[$i]["mime"]);
+	
+	if(count($parts)==1 && strtolower($content['content_type'])=='text/html')
+	{
+		$mime = 'text/html';
+	}
 
 	//if (($mime == "text/html") || ($mime == "text/plain") || ($mime == "text/enriched"))
 	if ($parts[$i]["name"] == '' && ($mime == "text/html" || $mime == "text/plain" || $mime == "text/enriched" || $mime == "unknown/unknown"))
@@ -472,6 +477,7 @@ for ($i=0;$i<sizeof($parts);$i++)
 		//$mail_charset = $parts[$i]['charset'];
 
 		$part = $mail->view_part($uid, $parts[$i]["number"], $parts[$i]["transfer"], $parts[$i]["charset"]);
+		
 
 		switch($mime)
 		{
