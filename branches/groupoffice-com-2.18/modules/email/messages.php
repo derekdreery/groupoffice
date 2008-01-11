@@ -398,13 +398,13 @@ if ($msg_count > 0)
 		{
 			$cell = new table_cell($short_from);
 
-			if(isset($ab) && $contact = $ab->get_contact_by_email($mail->f("sender"), $GO_SECURITY->user_id))
-			{
-				$cell->set_attribute('style','color: #'.$contact['color'].';white-space:nowrap');
-			}else
-			{
+			//if(isset($ab) && $contact = $ab->get_contact_by_email($mail->f("sender"), $GO_SECURITY->user_id))
+			//{
+			//	$cell->set_attribute('style','color: #'.$contact['color'].';white-space:nowrap');
+			//}else
+			//{
 				$cell->set_attribute('style','white-space:nowrap');
-			}
+			//}
 			$row->add_cell($cell);
 		}else
 		{
