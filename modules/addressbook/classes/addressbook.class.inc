@@ -1006,7 +1006,7 @@ popup.focus();
 		if(count($user_ab) > 1)
 		{
 			$sql .= "WHERE addressbook_id IN (".implode(",",$user_ab).") AND ";
-		}elseif($this->next_record())
+		}elseif(count($user_ab)==1)
 		{
 			$sql .= "WHERE addressbook_id=".$user_ab[0]." AND ";
 		}else
