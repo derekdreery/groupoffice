@@ -1,3 +1,13 @@
+2008/01/14 Version 2.18-stable-15
+-Removed contact color lookup in email client because it slows down email the e-mail
+ display with large addressbooks
+-Fixed HTML display in e-mail client from certain clients
+-Created modulair reminder plugins. So all modules can use the reminder system
+-Prevent GOTA to start with certain extensions such as PDF, jpg etc.
+-Small bug fixes
+-Created public calendar featurein pro version
+
+
 2007/11/22 Version 2.18-stable-6
 -FIxed bug with IMAP authentication
 
