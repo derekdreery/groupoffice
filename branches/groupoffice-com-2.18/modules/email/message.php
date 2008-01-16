@@ -246,7 +246,7 @@ $from .= '&nbsp;<a href="javascript:document.location=\'about:blank\';parent.mes
 
 <table class="headerTable" width="100%" id="largeHeader" style="display:none">
 <tr>
-<td width="10" valign="top"><a href="javascript:toggle_header();" style="cursor:default;"><img src="<?php echo $GO_THEME->images['min_node']; ?>" border="0" /></a></td>
+	<td width="10" valign="top"><a href="javascript:toggle_header();" style="cursor:default;"><img src="<?php echo $GO_THEME->images['min_node']; ?>" border="0" /></a></td>
 	<td>
 	<table border="0">
 	<?php
@@ -358,17 +358,14 @@ if (isset ($content["bcc"])) {
 			<td><?php echo format_size($content['size']); ?></td>
 		</tr>	
 		</table>
-		</td>
-		<td align="right" valign="top">
-<a class="normal" href="javascript:popup('properties.php?account_id='+document.forms[0].account_id.value+'&uid='+document.forms[0].uid.value+'&mailbox='+document.forms[0].mailbox.value,'580','580');"><?php echo  $em_source; ?></a></td>
-		</td>
-	</tr>
-	</table>
+	</td>
+	<td align="right" valign="top">
+<a class="normal" href="javascript:popup('properties.php?account_id='+document.forms[0].account_id.value+'&uid='+document.forms[0].uid.value+'&mailbox='+document.forms[0].mailbox.value,'580','580');"><?php echo  $em_source; ?></a>
 	</td>
 </tr>
-<tr>
-	<td>
-	<?php
+</table>
+
+<?php
 
 $count = 0;
 $splitter = 0;
@@ -516,7 +513,7 @@ $replace_id = array();
 
 for ($i=0;$i<sizeof($parts);$i++)
 {
-	if (eregi("image",$parts[$i]["mime"]))
+	if (eregi("inline",$parts[$i]["disposition"]))
 	{
 		//when an image has an id it belongs somewhere in the text we gathered above so replace the
 		//source id with the correct link to display the image.
