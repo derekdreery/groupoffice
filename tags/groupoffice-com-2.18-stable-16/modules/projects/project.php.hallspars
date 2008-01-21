@@ -1,0 +1,674 @@
+<?php
+/**
+ * @copyright Intermesh 2003
+ * @author Merijn Schering <mschering@intermesh.nl>
+ * @version $Revision: 1.1 $ $Date: 2006/02/07 09:33:08 $
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ */
+
+require_once ("../../Group-Office.php");
+
+function database_connect() {
+	$host = "srv_hall01.hall.local";
+	$user = "root";
+	$passwd = "linux";
+	$database ="[100]";
+
+	$db = mssql_connect($host, $user, $passwd) or die("Connection Failed");
+	mssql_select_db($database, $db);
+	return $db;
+}
+
+$GO_HEADER['head'] ='';
+
+$GO_SECURITY->authenticate();
+$GO_MODULES->authenticate('projects');
+require_once ($GO_LANGUAGE->get_language_file('projects'));
+
+//check for the addressbook module
+$ab_module = isset ($GO_MODULES->modules['addressbook']) ? $GO_MODULES->modules['addressbook'] : false;
+if ($ab_module && $ab_module['read_permission']) {
+	require_once ($ab_module['class_path'].'addressbook.class.inc');
+	$ab = new addressbook();
+} else {
+	$ab_module = false;
+}
+
+$page_title = $lang_modules['projects'];
+require_once ($GO_MODULES->class_path."projects.class.inc");
+$projects = new projects();
+
+$task = isset ($_REQUEST['task']) ? $_REQUEST['task'] : '';
+$project_id = isset ($_REQUEST['project_id']) ? $_REQUEST['project_id'] : 0;
+
+$return_to = isset ($_REQUEST['return_to']) ? $_REQUEST['return_to'] : $_SERVER['HTTP_REFERER'];
+
+
+
+$project['project_id'] = isset ($_REQUEST['parent_project_id']) ? $_REQUEST['parent_project_id'] : 0;
+$project['company_id'] = isset ($_REQUEST['company_id']) ? $_REQUEST['company_id'] : 0;
+$project['contact_id'] = isset ($_REQUEST['contact_id']) ? $_REQUEST['contact_id'] : 0;
+
+if (isset ($_POST['id']['type'])) {
+	switch ($_POST['id']['type']) {
+		case 'project' :
+			$project['project_id'] = $_POST['id']['value'];
+			break;
+		case 'contact' :
+			$project['contact_id'] = $_POST['id']['value'];
+			break;
+		case 'company' :
+			$project['company_id'] = $_POST['id']['value'];
+			break;
+	}
+}
+
+switch ($task) {
+	case 'save_project' :
+		//translate the given date stamp to unix time
+		$project['start_date'] = date_to_unixtime($_POST['start_date']);
+		$project['end_date'] = date_to_unixtime($_POST['end_date']);
+		$project['name'] = smart_addslashes(trim($_POST['name']));
+		$project['description'] = smart_addslashes($_POST['description']);
+		$project['comments'] =smart_addslashes($_POST['comments']);
+		$project['status'] =$_POST['status'];
+		$project['probability'] =$_POST['probability'];
+		$project['budget'] =$_POST['budget'];
+		
+		if ($project_id > 0) {
+			if ($project['name'] == '') {
+				$feedback = $error_missing_field;
+			} else {
+				$existing_project = $projects->get_project_by_name($project['name']);
+				$project['id'] = $project_id;
+				if ($existing_project && $existing_project['id'] != $project_id) {
+					$feedback = $pm_project_exists;
+				}elseif (!$projects->update_project($project, isset($_POST['shift_events']))) {						
+					$feedback = $strSaveError;
+				} else {
+					if ($_POST['close'] == 'true') {
+						header('Location: '.$return_to);
+						exit ();
+					}
+				}
+			}
+		} else {
+			if ($project['name'] == '') {
+				$feedback = $error_missing_field;
+			}
+			elseif ($projects->get_project_by_name($project['name'])) {
+				$feedback = $pm_project_exists;
+			} else {
+				$project['acl_read'] = $GO_SECURITY->get_new_acl('Project read: '.$project['name']);
+				$project['acl_write'] = $GO_SECURITY->get_new_acl('Project write: '.$project['name']);
+				if ($project['acl_read'] > 0 && $project['acl_write'] > 0) {
+				
+					$project['user_id'] = $GO_SECURITY->user_id;
+					
+					if ($GO_SECURITY->add_user_to_acl($GO_SECURITY->user_id, $project['acl_write'])) {
+						if (!$project_id = $projects->add_project($project)) {
+									
+							$GO_SECURITY->delete_acl($project['acl_read']);
+							$GO_SECURITY->delete_acl($project['acl_write']);
+							$feedback = $strSaveError;
+						} else {
+						
+							if(isset($_POST['template_id']) && $_POST['template_id'] > 0)
+							{
+								$projects->apply_template($_POST['template_id'], $project_id, $_POST['calendar_id']);							
+							}						
+						
+							if ($_POST['close'] == 'true') {
+								header('Location: '.$return_to);
+								exit ();
+							}
+						}
+					} else {
+						$GO_SECURITY->delete_acl($project['acl_read']);
+						$GO_SECURITY->delete_acl($project['acl_write']);
+						$feedback = $strSaveError;
+					}
+				} else {
+					$feedback = $strAclError;
+				}
+			}
+		}
+		break;
+		
+		case 'copy_project':
+			$project_id = $projects->copy_project($project_id);
+		break;
+}
+
+
+$link_back = $_SERVER['PHP_SELF'].'?project_id='.$project_id.'&return_to='.urlencode($return_to);
+
+$pm_settings = $projects->get_settings($GO_SECURITY->user_id);
+
+if ($project_id > 0) {
+	$project = $projects->get_project($project_id);
+	$project_name = ($project['description'] == '') ? $project['name'] : $project['name'].' ('.$project['description'].')';
+
+	$tabstrip = new tabstrip('project_tabstrip_'.$project_id, $project_name);
+	$tabstrip->set_attribute('style','width:100%');
+	
+	$tabstrip->add_tab('properties', $strProperties);
+
+	$write_permissions = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $project['acl_write']);
+	$read_permissions = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $project['acl_read']);
+
+	if (!$write_permissions && !$read_permissions) {
+		header('Location: '.$GO_CONFIG->host.'error_docs/403.php');
+		exit ();
+	}
+	
+	$tabstrip->add_tab('load', $pm_load);
+	$tabstrip->add_tab('activities', $strActivities);
+	$tabstrip->add_tab('read_permissions', $strReadRights);
+	$tabstrip->add_tab('write_permissions', $strWriteRights);
+	$project['parent_project_id'] = $project['project_id'];
+	$project['start_date'] = date($_SESSION['GO_SESSION']['date_format'], $project['start_date']);
+	$project['end_date'] = date($_SESSION['GO_SESSION']['date_format'], $project['end_date']);
+	$project['responsible_user'] = $project['res_user_id'];
+	
+	$project_file_path = '';
+	if(isset($GO_MODULES->modules['filesystem']) && $GO_MODULES->modules['filesystem']['read_permission'])
+	{
+		$project_file_path = $GO_CONFIG->file_storage_path.'projects/'.$project['name'];
+		
+		if(!is_dir($project_file_path))
+		{
+			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+			$fs = new filesystem();
+			mkdir_recursive($project_file_path);
+			$fs->add_share($project['user_id'], $project_file_path, 'projects', $project['acl_read'], $project['acl_write']);
+		}
+	}
+	
+	$al = new activities_list('project', $project_id,true, true, true, $project_file_path, '0', $link_back);
+	
+} else {
+	$tabstrip = new tabstrip('project_tab', $pm_new_project);
+}
+$tabstrip->set_attribute('style','width:100%');
+$tabstrip->set_return_to($return_to);
+
+if ($project_id == 0 || $task == 'save_project') {
+	$write_permissions = true;
+	$read_permissions = true;
+
+	$project['name'] = isset ($_POST['name']) ? smart_stripslashes($_POST['name']) : '';
+	$project['comments'] = isset ($_POST['comments']) ? smart_stripslashes($_POST['comments']) : '';
+	$project['start_date'] = isset ($_POST['start_date']) ? $_POST['start_date'] : date($_SESSION['GO_SESSION']['date_format'], get_time());
+	$project['end_date'] = isset ($_POST['end_date']) ? $_POST['end_date'] : date($_SESSION['GO_SESSION']['date_format'], get_time());
+	$project['status'] = isset ($_POST['status']) ? $_POST['status'] : '-3';
+	//$project['responsible_user'] = isset ($_POST['responsible_user']['id']) ? $_POST['responsible_user']['id'] : $GO_SECURITY->user_id;
+	$project['probability'] = isset ($_POST['probability']) ? $_POST['probability'] : 0;
+	$project['budget'] = isset ($_POST['budget']) ? $_POST['budget'] : 0;
+	$project['description'] = isset ($_POST['description']) ? smart_stripslashes($_POST['description']) : '';
+	$project['ctime'] = $project['mtime'] = get_gmt_time();
+	$project['user_id'] = $GO_SECURITY->user_id;
+
+}
+
+
+
+$form = new form('projects_form');
+$form->add_html_element(new input('hidden', 'close', 'false'));
+$form->add_html_element(new input('hidden', 'project_id', $project_id, false));
+$form->add_html_element(new input('hidden', 'task', '', false));
+$form->add_html_element(new input('hidden', 'return_to',$return_to));
+
+
+
+
+if ($project_id > 0 && $write_permissions) {
+	
+	$menu = new button_menu();
+	$menu->add_button('enter_data_big', 
+		$pm_enter_data, 
+		$GO_MODULES->url.'book.php?project_id='.$project_id.'&return_to='.urlencode($link_back));
+		
+	$menu->add_button('pr_new_project', 
+		$strNewProject, 
+		$GO_MODULES->url.'project.php?parent_project_id='.$project_id.'&return_to='.rawurlencode($link_back));
+
+	if (isset($GO_MODULES->modules['notes']) && 
+	$GO_MODULES->modules['notes']['read_permission']) {
+		$menu->add_button(
+			'ab_notes', 
+			$strNewNote,
+			$GO_MODULES->modules['notes']['url'].
+				'note.php?project_id='.$project_id.'&return_to='.rawurlencode($link_back)
+			);
+	}
+	
+	if (isset($GO_MODULES->modules['calendar']) && 
+	$GO_MODULES->modules['calendar']['read_permission']) {
+		$menu->add_button(
+			'cal_compose', 
+			$strNewEvent,
+			$GO_MODULES->modules['calendar']['url'].
+				'index.php?project_id='.$project_id.'&link_back='.rawurlencode($link_back)
+			);
+			
+			$menu->add_button(
+				'todos_new', 
+				$strNewTodo,
+				$GO_MODULES->modules['calendar']['url'].
+					'index.php?todo=1&project_id='.$project_id.'&link_back='.rawurlencode($link_back) 
+			);
+	}
+	
+	if (isset($GO_MODULES->modules['filesystem']) && 
+	$GO_MODULES->modules['filesystem']['read_permission']) {
+		$menu->add_button(
+			'upload', 
+			$strUpload, 
+			$GO_MODULES->modules['filesystem']['url'].
+				'index.php?task=upload&path='.rawurlencode($project_file_path).'&return_to='.urlencode($link_back));
+	}
+	
+	if($tabstrip->get_active_tab_id() == 'activities')
+	{
+		
+		$menu->add_button(
+			'delete_big', 
+			$cmdDelete, 
+			$al->get_delete_handler());
+	}
+	$form->add_html_element($menu);
+}
+
+if($tabstrip->get_active_tab_id() == '' || $tabstrip->get_active_tab_id() == 'properties')
+{
+	$GO_HEADER['body_arguments'] = 'onload="document.forms[0].name.focus();"';
+}
+
+$GO_HEADER['head'] .= date_picker::get_header();
+$overlib = new overlib();
+$GO_HEADER['head'] .= $overlib->get_header();
+
+if($tabstrip->get_active_tab_id() == 'activities')
+{
+	$GO_HEADER['head'] = datatable::get_header();
+}
+
+$page_title = $lang_modules['projects'];
+require_once ($GO_THEME->theme_path."header.inc");
+
+switch ($tabstrip->get_active_tab_id()) {
+	case 'read_permissions' :
+		$tabstrip->innerHTML .= get_acl($project['acl_read']);
+		$tabstrip->add_html_element(new html_element('br'));
+		$tabstrip->add_html_element(new button($cmdClose, "javascript:document.location='".$return_to."';"));
+		break;
+
+	case 'write_permissions' :
+		$tabstrip->innerHTML .= get_acl($project['acl_write']);
+		$tabstrip->add_html_element(new html_element('br'));
+		$tabstrip->add_html_element(new button($cmdClose, "javascript:document.location='".$return_to."';"));
+		break;
+
+	case 'load' :
+		$container = &$tabstrip;
+		$fixed_project_id = $project_id;
+		require_once ('load.inc');
+		break;
+
+	case 'activities' :		
+	
+		
+		$tabstrip->add_html_element($al);
+
+		break;
+
+	default :
+		
+		if (isset($feedback))
+		{
+		  $p = new html_element('p', $feedback);
+		  $p->set_attribute('class','Error');
+		  $tabstrip->add_html_element($p);
+		}
+		
+		$table = new table();
+		
+		if($project_id == 0)
+		{
+			$db = database_connect();
+			$query = "select ProjectNr, Description from PRProject order by ProjectNr";
+			$mssql_result = mssql_query($query, $db) or die("query failed");
+			$select= new select('msproject');
+
+			while($row = mssql_fetch_array($mssql_result))
+			{
+			      $select->add_value('['.$row['ProjectNr'].'] '.$row['Description'], 
+			      	'['.$row['ProjectNr'].'] '.$row['Description']);
+			}
+			$select->set_attribute('onchange', 'javascript:set_project(this.value);');
+			$cell = new table_cell($select->get_html());
+			$cell->set_attribute('colspan','2');
+			$row = new table_row();
+			$row->add_cell($cell);
+			$table->add_row($cell);
+		}	
+		if(
+			isset($GO_MODULES->modules['calendar']) && 
+			$GO_MODULES->modules['calendar']['read_permission'] &&
+			$project_id == 0 && 
+			$projects->get_authorized_templates($GO_SECURITY->user_id))
+		{
+			$select = new select('template_id');
+			$select->add_value('0',$pm_no_template);
+			
+			while($projects->next_record())
+			{
+				$select->add_value($projects->f('id'), $projects->f('name'));
+			}
+			
+			$row = new table_row();
+			
+			$row->add_cell(new table_cell($pm_template.':'));
+			$cell = new table_cell($select->get_html());
+			
+			require_once($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc');
+			$cal = new calendar();
+			
+			
+			if(!$cal->get_writable_calendars($GO_SECURITY->user_id))
+			{
+				$cal->get_calendar();
+				$cal->get_writable_calendars($GO_SECURITY->user_id);
+			}
+			
+			$calendar_id = isset($_POST['calendar_id']) ? $_POST['calendar_id'] : '0';
+			$select = new select('calendar_id', $calendar_id);
+			while($cal->next_record())
+			{
+				$select->add_value($cal->f('id'), $cal->f('name'));
+			}
+			
+			$cell->innerHTML .= ' '.$pm_put_events_in.' '.$select->get_html();			
+			$row->add_cell($cell);		
+			
+			$table->add_row($row);		
+		}
+		
+		$row = new table_row();
+		
+		$row->add_cell(new table_cell($strName.':*'));		
+
+		if ($write_permissions) {
+			$input = new input('text', 'name', $project['name']);
+			$input->set_attribute('maxlength','50');
+			$input->set_attribute('style','width:250px;');
+			$row->add_cell(new table_cell($input->get_html()));			
+		} else {
+			$row->add_cell(new table_cell(htmlspecialchars($project['name'])));
+		}
+		
+		$table->add_row($row);
+		$row = new table_row();
+		
+		$row->add_cell(new table_cell($pm_description.':'));		
+
+		if ($write_permissions) {
+			$input = new input('text', 'description', $project['description']);
+			$input->set_attribute('maxlength','50');
+			$input->set_attribute('style','width:250px;');
+			$row->add_cell(new table_cell($input->get_html()));			
+		} else {
+			$row->add_cell(new table_cell(htmlspecialchars($project['description'])));
+		}
+		$table->add_row($row);
+		
+		
+		if ($write_permissions) {
+			$type = '';
+			$value = '';
+			if ($project['project_id'] > 0) {
+				$type = 'project';
+				$value = $project['project_id'];
+			}
+			elseif ($project['contact_id'] > 0) {
+				$type = 'contact';
+				$value = $project['contact_id'];
+			}
+			elseif ($project['company_id'] > 0) {
+				$type = 'company';
+				$value = $project['company_id'];
+			}
+			$select = new object_select($type, 'projects_form', 'id', $value, array ('contact', 'company', 'project'), $link_back);
+			
+			$row = new table_row();
+			$row->add_cell(new table_cell($select->get_link($strRelatedTo).':'));
+			$row->add_cell(new table_cell($select->get_field()));
+			$table->add_row($row);
+
+	/*		$select = new object_select('user', 'projects_form', 'responsible_user', $project['responsible_user']);
+			$row = new table_row();
+			$row->add_cell(new table_cell($select->get_link($pm_employee).':'));
+			$row->add_cell(new table_cell($select->get_field()));
+			$table->add_row($row);*/
+			
+			$row = new table_row();		
+			$row->add_cell(new table_cell($pm_start_date.':'));		
+			$datepicker = new date_picker('start_date', $_SESSION['GO_SESSION']['date_format'], $project['start_date']);
+			
+			$cell = new table_cell($datepicker->get_html().'&nbsp;');
+			
+			if($project_id>0)
+			{
+				$shift_check = new checkbox('shift_events','shift_events', '1', $pm_shift_events);
+				$cell->add_html_element($shift_check);					
+			}
+			
+			$row->add_cell($cell);
+			
+			
+			$table->add_row($row);
+			
+			$row = new table_row();		
+			$row->add_cell(new table_cell($pm_end_date.':'));		
+			$datepicker = new date_picker('end_date', $_SESSION['GO_SESSION']['date_format'], $project['end_date']);
+			$row->add_cell(new table_cell($datepicker->get_html()));
+			$table->add_row($row);
+			
+			
+			$row = new table_row();		
+			$row->add_cell(new table_cell($pm_status.':'));		
+			
+			$select = new select('status', $project['status']);
+			$projects->get_statuses();
+			while($projects->next_record())
+			{
+				$select->add_value($projects->f('id'), $projects->f('name'));
+			}
+			$cell = new table_cell();
+			$cell->add_html_element($select);
+			
+			if($GO_MODULES->write_permission)
+			{
+				$img = new image('edit');
+				$img->set_attribute('style','border:0px;margin-left:5px;');
+				
+				$link = new hyperlink('javascript:popup(\'statuses.php\', \'300\', \'300\');',$img->get_html(), $strEdit);
+				
+				$cell->add_html_element($link);
+			}		
+			
+			$row->add_cell($cell);
+			$table->add_row($row);
+			
+			
+			$row = new table_row();		
+			$row->add_cell(new table_cell($pm_probability.':'));		
+			
+			$select = new select('probability', $project['probability']);
+			$projects->get_statuses();
+			for ($i = 0; $i <= 100; $i = $i +10) {
+				$select->add_value($i, $i.'%');
+			}
+			$row->add_cell(new table_cell($select->get_html()));
+			$table->add_row($row);
+
+			$row = new table_row();		
+			$cell = new table_cell('&nbsp;');
+			$cell->set_attribute('colspan','2');
+			$row->add_cell($cell);		
+			$table->add_row($row);
+			
+			
+		$row = new table_row();
+		
+		$row->add_cell(new table_cell($pm_budget.':'));		
+		$input = new input('text', 'budget', $project['budget']);
+		$input->set_attribute('maxlength','50');
+		$input->set_attribute('style','width:50px;');
+		$row->add_cell(new table_cell($input->get_html().$_SESSION['GO_SESSION']['currency']));					
+		$table->add_row($row);			
+		} else {
+			
+			$row = new table_row();
+			$row->add_cell(new table_cell($strRelatedTo.':'));
+
+			if ($project['parent_project_id'] > 0) {
+				$row->add_cell(new table_cell(show_project($project['parent_project_id'])));
+			}
+			elseif ($project['contact_id'] > 0) {
+				$row->add_cell(new table_cell(show_contact($project['contact_id'])));
+			}
+			elseif ($project['company_id'] > 0) {
+				$row->add_cell(new table_cell(show_company($project['company_id'])));
+			}
+			$table->add_row($row);
+
+			$row = new table_row();
+			$row->add_cell(new table_cell($pm_start_date.':'));
+			$row->add_cell(new table_cell($project['start_date']));
+			$table->add_row($row);
+			
+			$row = new table_row();
+			$row->add_cell(new table_cell($pm_end_date.':'));
+			$row->add_cell(new table_cell($project['end_date']));
+			$table->add_row($row);
+			
+			$row = new table_row();
+			$row->add_cell(new table_cell($pm_status.':'));
+			$status = $projects->get_status($project['status']);
+			$row->add_cell(new table_cell($status['name']));
+			$table->add_row($row);
+			
+			$row = new table_row();
+			$row->add_cell(new table_cell($pm_probability.':'));
+			$row->add_cell(new table_cell($project['probability'].'%'));
+			$table->add_row($row);
+
+			$row = new table_row();		
+			$cell = new table_cell('&nbsp;');
+			$cell->set_attribute('colspan','2');
+			$row->add_cell($cell);		
+			$table->add_row($row);
+			
+			$row = new table_row();
+			$row->add_cell(new table_cell($pm_budget.':'));
+			$row->add_cell(new table_cell($project['budget'].' '.$_SESSION['GO_SESSION']['currency']));
+			$table->add_row($row);		
+		}
+		
+		$row = new table_row();		
+		$cell = new table_cell('&nbsp;');
+		$cell->set_attribute('colspan','2');
+		$row->add_cell($cell);		
+		$table->add_row($row);
+		
+		if ($project_id > 0) {
+
+			$row = new table_row();
+			$row->add_cell(new table_cell($strOwner.':'));
+			$row->add_cell(new table_cell(show_profile($project['user_id'])));
+			$table->add_row($row);
+			
+			$row = new table_row();
+			$row->add_cell(new table_cell($strCreatedAt.':'));
+			$row->add_cell(new table_cell(
+				date($_SESSION['GO_SESSION']['date_format'].' '.
+				$_SESSION['GO_SESSION']['time_format'],
+				 $project['ctime'] + 
+				 (get_timezone_offset($project['ctime']) * 3600))));			 
+			$table->add_row($row);
+
+			$row = new table_row();
+			$row->add_cell(new table_cell($strModifiedAt.':'));
+			$row->add_cell(new table_cell(
+				date($_SESSION['GO_SESSION']['date_format'].' '.
+				$_SESSION['GO_SESSION']['time_format'],
+				 $project['mtime'] + 
+				 (get_timezone_offset($project['mtime']) * 3600))));			 
+			$table->add_row($row);			
+
+			$row = new table_row();		
+			$cell = new table_cell('&nbsp;');
+			$cell->set_attribute('colspan','2');
+			$row->add_cell($cell);		
+			$table->add_row($row);
+		}
+			
+		$row = new table_row();
+		
+		$cell = new table_cell($strComments.':');
+		$cell->set_attribute('style','vertical-align:top');
+		$row->add_cell($cell);		
+
+		if ($write_permissions) {
+			$textarea = new textarea('comments', $project['comments']);
+			$textarea->set_attribute('style','width:500px; height:80px;');
+			$row->add_cell(new table_cell($textarea->get_html()));			
+		} else {
+			$row->add_cell(new table_cell(text_to_html($project['comments'])));
+		}
+		
+		$table->add_row($row);
+		
+		$tabstrip->add_html_element($table);
+
+		if ($write_permissions) {
+			$tabstrip->add_html_element(new button($cmdOk, "javascript:_save('save_project', 'true');"));
+			$tabstrip->add_html_element(new button($cmdApply, "javascript:_save('save_project', 'false')"));
+			$tabstrip->add_html_element(new button($cmdCopy, 
+				"javascript:document.location='project.php?project_id=".
+				$project_id."&task=copy_project&return_to=".urlencode($return_to)."';"));
+		}
+		
+		$tabstrip->add_html_element(new button($cmdClose, "javascript:document.location='".$return_to."';"));		
+		
+		break;
+}
+
+
+$form->add_html_element($tabstrip);
+echo $form->get_html();
+?>
+<script type="text/javascript">
+function _save(task, close)
+{
+	document.projects_form.task.value = task;
+	document.projects_form.close.value = close;
+	document.projects_form.submit();
+}
+function set_project(project_name)
+{
+	var name = project_name.substring(1, project_name.indexOf(']'));
+	var description = project_name.substring(project_name.indexOf(']')+2, project_name.length);
+	document.projects_form.name.value=name;
+	document.projects_form.description.value=description;
+}
+</script>
+<?php
+require_once ($GO_THEME->theme_path."footer.inc");
+?>
