@@ -190,6 +190,10 @@ class xml_text_node_c extends xml_node_c {
   function get_data () {
     return $this->_data;
   }
+  
+	function get_name () {
+    return $this->_name;
+  }
 
   function print_node ($recurse, $rec_level) {
     
