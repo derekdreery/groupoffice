@@ -2264,7 +2264,7 @@ class calendar extends db
 	    				$this->events[] = $calculated_event;
 	    				//echo date('Ymd G:i', $interval_start_time).' '.date('Ymd G:i', $calculated_event['start_time']).' '.date('Ymd G:i', $calculated_event['end_time'])." ".$calculated_event['name']."<br><hr /><br />";
 	    				//$timezone_offset = get_timezone_offset($calculated_event['original_start_time'])*3600;
-	    				$this->events_sort[] = $calculated_event['start_time'];
+	    				$this->events_sort[] = $calculated_event['start_time'].$calculated_event['name'];
 	    			}
 
 	    			if($loops==100)
