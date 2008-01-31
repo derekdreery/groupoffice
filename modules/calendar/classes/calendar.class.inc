@@ -1093,7 +1093,7 @@ class calendar extends db
 	 	return $this->update_row('cal_settings', 'user_id', $settings);
 	 }
 
-	 function add_calendar($user_id, $name, $start_hour, $end_hour,$public,  $background='FFFFCC',  $group_id=0, $time_interval=1800)
+	 function add_calendar($user_id, $name, $start_hour, $end_hour,$public='0',  $background='FFFFCC',  $group_id=0, $time_interval=1800)
 	 {
 	 	global $GO_SECURITY;
 	 	$acl_read = $GO_SECURITY->get_new_acl('calendar read: '.$name, $user_id);
