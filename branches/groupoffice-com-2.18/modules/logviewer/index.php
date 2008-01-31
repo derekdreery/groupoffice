@@ -68,6 +68,9 @@ if(!$GO_LOGGER->enabled)
 		$subtable->add_row($subrow);
 		
 		$form->add_html_element($subtable);
+	}else
+	{
+		$form->add_html_element(new input('hidden','link_id', $link_id));
 	}
 
 	$datatable = new datatable('logviewer');

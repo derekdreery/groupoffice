@@ -1876,7 +1876,7 @@ function enc_utf8($str) {
 	//they are going to be converted to utf8.
 
 	if (preg_match("/=\?/", $str)) {
-		$str = str_replace(" ", "", $str);
+		//$str = str_replace(" ", "", $str);
 		return imap_utf8($str);
 	}else {
 		if (function_exists('iconv'))
