@@ -4,6 +4,9 @@
 // Author: L. Jullien
 // 15 Jan 2007
 
+//co-Author (only corrections of orthography): j.s Hubert jsh@interlug.net
+//13 aout 2007
+
 require_once($GO_LANGUAGE->get_fallback_base_language_file('account'));
 
 //privacy
@@ -19,7 +22,7 @@ $security_confirm_authcode = "Confirmer le code d'autorisation";
 $security_question = "Question secrète";
 $security_answer = "Réponse";
 $security_wrong_password = "Mauvais mot de passe.";
-$security_tasks = "Tâche terminé.";
+$security_tasks = "Tâche terminée.";
 $security_password_update = "Mot de passe modifié.";
 $security_authcode_update = "Code d'autorisation modifié";
 $security_question_update = "Question et réponse modifiées.";
@@ -29,7 +32,7 @@ $acSecurity = "Sécurité";
 $acPrivacy = "Intimité";
 $acManager = "Votre compte";
 $acStatistics = "Statistiques";
-$acProfileText = "Cliquez sur 'Enregistrer' pour changer voter profil. Les champs marqués d'une * sont obligatoires.";
+$acProfileText = "Cliquez sur 'Enregistrer' pour changer votre profil. Les champs marqués d'une * sont obligatoires.";
 $acTitle = "Votre compte";
 $ac_login_info = "Information de connexion";
 $ac_registration_time = "Heure d'enregistrement";
@@ -42,13 +45,13 @@ $ac_used_diskspace = "Espace disque utilisé";
 $ac_used = "utilisé";
 $ac_add_user = 'Demande d\'autorisation';
 $ac_auth_error = 'Une erreur est apparue pendant la demande d\'autorisation. Merci de recommencer.';
-$ac_auth_success = 'Votre compte est maintenant visible pour cet utilisateur et un message lui a été envoyé lui indiquant que vous avez accepter sa requête.';
+$ac_auth_success = 'Votre compte est maintenant visible pour cet utilisateur et un message lui a été envoyé lui indiquant que vous avez accepté sa requête.';
 $ac_auth_decline = 'Un message a été envoyé à l\'utilisateur pour lequel vous avez décliné la requête.';
-$ac_auth_accept_mail_title = 'Demande d\'autorisation de Group-Office accepté';
-$ac_auth_decline_mail_title = 'Demande d\'autorisation de Group-Office refusé';
+$ac_auth_accept_mail_title = 'Demande d\'autorisation de Group-Office acceptée';
+$ac_auth_decline_mail_title = 'Demande d\'autorisation de Group-Office refusée';
 $ac_auth_accept_mail_body = 'a accepté votre requête de vous rendre visible pour ce compte.';
 $ac_auth_decline_mail_body = 'a refusé votre requête de vous rendre visible pour ce compte.';
-$ac_request_auth = 'demande votre permission pour rendre votre compte visible... Voulez vous rendre votre compte visible pour cet utilisateur ?';
+$ac_request_auth = 'demande votre permission pour rendre votre compte visible... Voulez-vous rendre votre compte visible pour cet utilisateur ?';
 $ac_request_auth_mail_title ='Demande d\'autorisation de Group-Office';
 $ac_invalid_email = 'L\'adresse email que vous avez entré n\'est pas enregistré dans le système. Merci de recommencer.';
 $ac_request_mail_body_prefix = 'Un message a été envoyé à ';
