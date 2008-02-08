@@ -9,12 +9,12 @@ require_once($GO_LANGUAGE->get_fallback_base_language_file('login'));
 $strWelcomeTo = "Bienvenue dans ";
 $strUseMenu = "Utilisez le menu ou cliquez sur les liens rapides ci-dessous pour commencer à utiliser ";
 $click_to_login = "Cliquez ici pour vous connecter.";
-$login_text = "Entrer votre nom d'utilisateur et votre mot de passe pour vous connecter";
+$login_text = "Entrez votre nom d'utilisateur et votre mot de passe pour vous connecter";
 $login_username = "Utilisateur";
 $login_password = "Mot de passe";
 $login_missing_field = "Vous n'avez pas rempli votre nom d'utilisateur ou votre mot de passe.";
 $login_bad_login = "Mauvais nom d'utilisateur ou mot de passe";
-$login_remind = "Me laisser connecté jusqu'à ce que j'appuie sur le boutton de déconnexion.";
+$login_remind = "Me laisser connecté jusqu'à ce que j'appuie sur le bouton de déconnexion.";
 $login_language = 'Langue';
 
 //2.12
@@ -22,7 +22,7 @@ $login_register = 'ou cliquez sur %s pour valider';
 $login_here = "ici";
 $login_lost_password = 'Vous avez perdu votre mot de passe ?';
 $login_lost_password_title = 'Vous avez retrouvé votre mot de passe ?';
-$login_lost_password_text= 'Veuillez entrez votre adresse email et un nouveau password vous sera envoyé à cette adresse.';
+$login_lost_password_text= 'Veuillez entrez votre adresse email et un nouveau mot de passe vous sera envoyé à cette adresse.';
 $login_lost_password_mail_body = 'Vous avez demandé un nouveau mot de passe pour %s. Vos nouveaux identifiants pour vous connecter à %s est:\n\nNom d\'utilisateur : %s\nMot de passe : %s';
 $login_new_password = 'Nouveau mot de passe';
 $login_lost_password_success = 'Un nouveau mot de passe a été envoyé à %s';

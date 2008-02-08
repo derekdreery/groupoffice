@@ -4,6 +4,9 @@
 // Author: L. Jullien
 // 15 Jan 2007
 
+//co-Author (only corrections of orthography): j.s Hubert jsh@interlug.net
+//13 aout 2007
+
 require_once($GO_LANGUAGE->get_fallback_base_language_file('preferences'));
 
 $pref_language = "Langue";
@@ -26,7 +29,7 @@ $pref_startmodule = 'Commencer avec le module'; //Start in module
 $pref_first_weekday = 'Premier jour de la semaine';
 
 //2.05
-$adjust_to_dst = 'Ajuster automatiquement l\'économie d\'énergie'; //Daylight Savings Time';
+$adjust_to_dst = 'Ajuster automatiquement l\'observation de l\'heure d\'été'; //Daylight Savings Time';
 
 //2.08
 $pref_name_order = 'Trier les noms par';

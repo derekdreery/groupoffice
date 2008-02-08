@@ -4,10 +4,13 @@
 // Author: L. Jullien
 // 15 Jan 2007
 
+//co-Author (only corrections of orthography): j.s Hubert jsh@interlug.net
+//13 aout 2007
+
 require_once($GO_LANGUAGE->get_fallback_base_language_file('filetypes'));
 
 $ft_title = "Types de fichiers";
-$ft_text = "Les types de fichiers sont automatiquement ajoutés par Group-Office. Vous pouvez changer les icones et les noms içi.";
+$ft_text = "Les types de fichiers sont automatiquement ajoutés par Group-Office. Vous pouvez changer les icones et les noms ici.";
 $ft_icon = "Icone";
 $ft_extension = "Extension";
 $ft_friendly = "Surnom";
@@ -15,7 +18,7 @@ $ft_content = "Type de contenu";
 $ft_no_filetypes = "Pas de type de fichiers trouvé.";
 $ft_upload_text = "Choisissez l'icone du type de fichier à charger. Seuls les fichiers GIF sont acceptés.";
 $ft_no_file = "Aucun fichier reçu.";
-$ft_please_wait = "Patientez pendant que l'icone est téléchargé..";
+$ft_please_wait = "Patientez pendant que l'icone est téléchargée..";
 $ft_properties = "Propriétés";
 $ft_filename = "Nom de fichier";
 $ft_current_icon = "Icone en cours";
@@ -38,7 +41,7 @@ $filetypes['gz'] = 'Archive compressée GZIP';
 $filetypes['tgz'] = 'Archive compressée GZIP';
 $filetypes['bz2'] = 'Archive compressée BZIP2'; 
 $filetypes['exe'] = 'Fichier exécutable Windows';
-$filetypes['ttf'] = 'Police True ype';
+$filetypes['ttf'] = 'Police TrueType';
 $filetypes['html'] = 'Fichier Web HTML';
 $filetypes['htm'] = 'Fichier Web HTM';
 $filetypes['jpg'] = 'Image';

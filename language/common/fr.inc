@@ -1,8 +1,11 @@
-<?php
+﻿<?php
 
 // LANG: "fr", ENCODING: UTF-8
 // Author: L. Jullien
 // 15 Jan 2007
+
+//co-Author (only corrections of orthography): j.s Hubert jsh@interlug.net
+//13 aout 2007
 
 require_once($GO_LANGUAGE->get_fallback_base_language_file('common'));
 
@@ -43,7 +46,7 @@ $strZip = "Code Postal";
 $strAddress = "Rue";
 $strEmail = "Email";
 $strPhone = "Téléphone";
-$strWorkphone = "Téléphone profesionnel";
+$strWorkphone = "Téléphone professionnel";
 $strCellular = "Portable";
 $strCompany = "Société";
 $strDepartment = "Département";
@@ -51,9 +54,9 @@ $strFunction = "Fonction";
 $strQuestion = "Question secrète";
 $strAnswer = "Réponse";
 $strFax = "Fax";
-$strWorkFax = "Fax profesionnel";
+$strWorkFax = "Fax professionnel";
 $strHomepage = "Site web";
-$strWorkAddress = "Adresse profesionnelle";
+$strWorkAddress = "Adresse professionnelle";
 $strWorkZip = "Code postal professionnel";
 $strWorkCountry = "Pays de travail";
 $strWorkState = "Etat de travail";
@@ -68,9 +71,9 @@ $strSaveError = "Une erreur est apparue pendant la sauvegarde des données. Veui
 $strDataError = "Une erreur est apparue pendant la lecture des données. Veuillez recharger cette page.";
 $strDeleteError = "Impossible d'effacer les données.";
 $strAclError = "Erreur de contrôle d'accès";
-$strDateError = "Vous avez entrez une date invalide";
+$strDateError = "Vous avez entré une date invalide";
 $strAccessDenied = "Accès refusé";
-$AccessDenied_text = "Vous n'êtes pas autorisé à voir cette section du site ni à effectuer cette action. Un autre utlisateur a restreint l'accès à l'information que vous avez demandé.";
+$AccessDenied_text = "Vous n'êtes pas autorisé à voir cette section du site ni à effectuer cette action. Un autre utilisateur a restreint l'accès à l'information que vous avez demandé.";
 $invalid_chars = "Les caractères suivants ne sont pas autorisés.";
 $strGroups = "Groupes";
 $strOwner = "Propriétaire";
@@ -87,7 +90,7 @@ $menu_documentation = "Documentation";
 $menu_configuration = "Configuration";
 $menu_groups = "Gestion Utilisateurs/Groupes";
 $menu_accounts = "Modifier les paramètres de votre compte";
-$menu_preferences = "Modifier vos préférences Personnel";
+$menu_preferences = "Modifier vos préférences Personnelles";
 $menu_search_discussions = "Discussions";
 $menu_search_files = "Fichiers et Dossiers";
 $menu_search_web = "Le web";
@@ -95,7 +98,7 @@ $menu_filetypes = "Types de fichiers";
 $menu_discussions = "Forum de discussion";
 $menu_bookmarks = "Favoris";
 $menu_bookmarks_manage = "Modifier les favoris";
-$menu_add_bookmark = "Ajouter un favoris";
+$menu_add_bookmark = "Ajouter un favori";
 $menu_add_current = "Ajouter la page courante";
 $menu_invite = "Inviter des utilisateurs";
 $menu_scheduler = "Agenda";
@@ -103,8 +106,8 @@ $menu_users = "Utilisateurs";
 $menu_start = "Page de démarrage";
 $menu_reboot = "Redémarrer le serveur";
 $menu_halt = "Arrêter le serveur";
-$menu_reboot_text = "ATTENTION ! Tous les services de Group-Office seront temporairement indisponibles. Etes vous certain(e) de vouloir continuer ?";
-$menu_halt_text = "ATTENTION ! Tous les services de Group-Office seront arrétés. Etes vous certain(e) de vouloir continuer ?";
+$menu_reboot_text = "ATTENTION ! Tous les services de Group-Office seront temporairement indisponibles. Êtes-vous certain(e) de vouloir continuer ?";
+$menu_halt_text = "ATTENTION ! Tous les services de Group-Office seront arrêtés. Êtes-vous certain(e) de vouloir continuer ?";
 $menu_new = "Nouveau";
 $menu_message = "Message";
 $menu_contact = "Contact";
@@ -119,11 +122,11 @@ $menu_modules = 'Modules';
 $menu_manual = 'Manuel';
 
 //class validate
-$error_required = "Vous n'avez pas spécifié le champs requis ci-dessous.";
+$error_required = "Vous n'avez pas spécifié le champ requis ci-dessous.";
 $error_match_auth = "Le code d'autorisation ne correspond pas.";
 $error_match_pass = "Le mot de passe de correspond pas.";
-$error_min_length = "Nombre minimun de caractères du champs ci-dessous :";
-$error_max_length = "Nombre maximum de caractères du champs ci-dessous :";
+$error_min_length = "Nombre minimum de caractères du champ ci-dessous :";
+$error_max_length = "Nombre maximum de caractères du champ ci-dessous :";
 $error_email = "L'adresse email que vous avez spécifié n'est pas valide.";
 $error_email_exists = "L'adresse email que vous avez entré existe déjà.";
 $error_username_exists = "Désolé le nom d'utilisateur que vous avez entré existe déjà. Merci d'en choisir un autre.";
@@ -137,7 +140,7 @@ $acl_control_no_contacts = "Vous n'avez aucun contact à sélectionner. Utilisez
 
 $strShowProfile = "Voir le profil";
 $strShowGroup = "Voir les membres du groupe";
-$strProcessingTime = "Le traitement de cette page à pris ";
+$strProcessingTime = "La génération de cette page a duré ";
 $strLoggedInAs = "Connecté en tant que ";
 $strAt = " à";
 $strEmailTo = "Envoyer un email à: ";
@@ -150,7 +153,7 @@ $http_bad_request = "Mauvaise requête";
 $strAddContact = "Ajouter aux contacts";
 
 $strReadRights = "Permissions de lecture";
-$strWriteRights = "Permissions d'ériture";
+$strWriteRights = "Permissions d'écriture";
 $strPermissions = 'Permissions';
 
 //html editor
@@ -160,7 +163,7 @@ $editor_underline = "Souligné";
 $editor_left = "Gauche";
 $editor_right = "Droite";
 $editor_center = "Centrer";
-$editor_ord_list = "Liste trié";
+$editor_ord_list = "Liste triée";
 $editor_bul_list = "Liste à puces";
 $editor_txt_color = "Couleur du texte";
 $editor_back_color = "Couleur de fond";
@@ -296,8 +299,8 @@ $cal_next_month = "Mois suivant (maintenez pour le menu)";
 $cal_next_year  = "Année suivante (maintenez pour le menu)";
 $cal_drag_to_move = "Glissez pour déplacer";
 $cal_part_today = " (aujourd'hui)";
-$cal_monday_first = "Voir d'abord les lundi";
-$cal_sunday_first  = "Voir d'abord les dimanche";
+$cal_monday_first = "Voir d'abord les lundis";
+$cal_sunday_first  = "Voir d'abord les dimanches";
 $cal_select_date = "Choisir une date";
 
 $cmdPrint = 'Imprimer';
@@ -332,7 +335,7 @@ $strEmailFail = 'L\'envoi de l\'email a échoué';
 //for people that want to use ktmlarea
 $ktml_language = 'fr';
 
-$ml_host_unreachable = ' n\'est pas acessible. La vérification automatique d\'email est désactivée.';
+$ml_host_unreachable = ' n\'est pas accessible. La vérification automatique d\'email est désactivée.';
 $strRegion = 'Région';
 
 //2.05
@@ -342,9 +345,9 @@ $strMyName = 'Mon nom';
 //2.06
 $strDeleteRow = 'Êtes-vous sûr de vouloir supprimer cette rangée ? ';
 $strAddressNo = 'Numéro de la rue (Privé)';
-$strWorkAddressNo = 'Numéro de la rue (Professionel)';
+$strWorkAddressNo = 'Numéro de la rue (Professionnel)';
 
-$strPostAddress = 'Addresse';
+$strPostAddress = 'Adresse';
 $strPostAddressNo = 'Adresse personnel';
 $strPostCity = 'Ville';
 $strPostState = 'Etat';
@@ -373,9 +376,9 @@ $lang_modules['opentts'] = "Support technique";
 $cmdVcard = 'vCard';
 
 //2.07
-$strNotEnoughLicenses = 'Vous n\'avez pas assez de license pour utiliser'.
+$strNotEnoughLicenses = 'Vous n\'avez pas assez de licences pour utiliser'.
 								' Group-Office. Merci de contacter sales@intermesh.nl si vous souhaitez '.
-								'acheter des licenses additionels.';
+								'acheter des licences additionnelles.';
 $strActivities = 'Activités';
 $strFile = 'Fichier';
 $strNewProject = 'Nouveau projet';
@@ -394,7 +397,7 @@ $cmdPleaseSelect = 'Sélectionner...';
 
 //2.11
 $strNewEmail = 'Nouveau message';
-$strConsistencyCheck = "Vérification de consistence";
+$strConsistencyCheck = "Vérification de consistance";
 $strSearchAll = 'Tous les champs';
 $sync_download_clients = 'Télécharger le client de synchronisation';
 
@@ -432,13 +435,13 @@ $strTwentyfourHourFormat = 'Format 24 heures';
 //2.16
 $strCreateLink = 'Créer un lien';
 $strCancelLink = 'Annuler le lien';
-$strLinkText = 'La gestion des liens est active. Naviguez vers un objet et cliquez sur \'Créer un lien\' pour le lier à \'%s\'. Si vous créez un nouvel objet qui peut être lié, le lien sera crée automatiquement.';
+$strLinkText = 'La gestion des liens est active. Naviguez vers un objet et cliquez sur \'Créer un lien\' pour le lier à \'%s\'. Si vous créez un nouvel objet qui peut être lié, le lien sera créé automatiquement.';
 $strLinks = 'Liens';
 $strUnlinkPrefix = 'Etes-vous sûr de vouloir annuler le lien ';
 $strUnlinkSuffix = '?';
 $cmdUnlink = 'Annuler le lien';
 $strAdministrate = 'Administrer';
-$strProOnly = 'Cette option est diponible dans la version PRO de Group-Office. <a href="http://www.group-office.com">Cliquez ici pour plus d\'informations</a>';
+$strProOnly = 'Cette option n\'est disponible que dans la version PRO de Group-Office. <a href="http://www.group-office.com">Cliquez ici pour plus d\'informations</a>';
 $strMoreColors='Plus de couleurs';
 $strNoItems = 'Aucun élément trouvé';
 $cmdExport = 'Exporter';
