@@ -120,6 +120,7 @@ class xml_tree_node_c extends xml_node_c {
   }
 
   function get_name () {
+
     return $this->_name;
   }
 
@@ -192,7 +193,8 @@ class xml_text_node_c extends xml_node_c {
   }
   
 	function get_name () {
-    return $this->_name;
+		
+    return isset($this->_name) ? $this->_name : false;
   }
 
   function print_node ($recurse, $rec_level) {
