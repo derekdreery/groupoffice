@@ -79,13 +79,32 @@ class sql_auth extends base_auth
 					"username='$username' AND password='".md5($password)."' " .
 					"AND enabled='1'";
 			$this->query( $sql );
+			
+			// Check if we got a valid result from the SQL database. Otherwise the
+			// login has failed.
+			if  ( !$this->next_record() ) {
+				return null;
+			}
 		}else
 		{
-			$auth_md5_pass = $this->md5_base64($this->md5_base64($username.":".$password).':');
 			$sql = 'SELECT id, password, auth_md5_pass FROM users WHERE ' .
-					"username='$username' AND auth_md5_pass='".$auth_md5_pass."' " .
+					"username='$username' " .
 					"AND enabled='1'";
 			$this->query( $sql );
+			
+			// Check if we got a valid result from the SQL database. Otherwise the
+			// login has failed.
+			if  ( !$this->next_record() ) {
+				return null;
+			}else
+			{
+				$md5_auth_pass = $this->md5_base64(base64_encode(pack('H*',$this->f('auth_md5_pass'))).':');
+				go_log(LOG_DEBUG, $password.' => '.$md5_auth_pass);
+				if($md5_auth_pass!=$password)
+				{
+					return null;
+				}
+			}
 		
 		}
 
@@ -96,11 +115,7 @@ class sql_auth extends base_auth
 			return null;
 		}
 
-		// Check if we got a valid result from the SQL database. Otherwise the
-		// login has failed.
-		if  ( !$this->next_record() ) {
-			return null;
-		}
+		
 		// Fetch the userid number from the database
 		$user_id = $this->f('id');
 

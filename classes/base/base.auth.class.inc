@@ -168,7 +168,7 @@ class base_auth extends db
 		$GO_SECURITY->user_id = 0;
 
 		// Authenticate the user.
-		$user_id = $this->authenticate( $username, $password );
+		$user_id = $this->authenticate( $username, $password, $type );
 		// Check if the authentication was successful, otherwise exit.
 		if ( $user_id == null ) {
 			go_log(LOG_DEBUG, 'Wrong password entered for '.$username);
