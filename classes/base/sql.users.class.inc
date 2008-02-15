@@ -480,7 +480,11 @@ class sql_users extends base_users
 
 	function update_password($user_id, $password)
 	{
-		$sql = "UPDATE users SET password='".md5($password)."' WHERE id='$user_id'";
+		$user = $this->get_user($user_id);
+		
+		$auth_md5_pass= md5($user['username'].':'.$password);
+		
+		$sql = "UPDATE users SET password='".md5($password)."', auth_md5_pass='$auth_md5_pass' WHERE id='$user_id'";
 		if ($this->query($sql))
 		{
 			return true;
@@ -548,6 +552,7 @@ class sql_users extends base_users
 		if(!empty($user['password']))
 		{
 			$user['password'] = md5($user['password']);
+			$user['md5_auth_pass']=md5($user['username'].':'.$user['password']);
 		}
 
 		$user['currency'] = $GO_CONFIG->default_currency;
