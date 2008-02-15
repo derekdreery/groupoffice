@@ -68,14 +68,26 @@ class sql_auth extends base_auth
 	 * to authenticate the user, but got no ID, and null if the authentication
 	 * has failed.
 	 */
-	function authenticate( $username, $password ) {
+	function authenticate( $username, $password, $type='normal') {
 		// Query the database for the given username with the associated
 		// password. We only need to get the userid from the database, all
 		// other columns are not interesting for the authentication.
-		$sql = 'SELECT id FROM users WHERE ' .
-				"username='$username' AND password='".md5($password)."' " .
-				"AND enabled='1'";
-		$this->query( $sql );
+		
+		if($type=='normal')
+		{
+			$sql = 'SELECT id, password, auth_md5_pass FROM users WHERE ' .
+					"username='$username' AND password='".md5($password)."' " .
+					"AND enabled='1'";
+			$this->query( $sql );
+		}else
+		{
+			$auth_md5_pass = $this->md5_base64($this->md5_base64($username.":".$password).':');
+			$sql = 'SELECT id, password, auth_md5_pass FROM users WHERE ' .
+					"username='$username' AND auth_md5_pass='".$auth_md5_pass."' " .
+					"AND enabled='1'";
+			$this->query( $sql );
+		
+		}
 
 		// Check how many results we got from the search above. If we got more
 		// than one result, something is wrong, and we should not authenticate
@@ -103,6 +115,13 @@ class sql_auth extends base_auth
 		// fail.
 		if ( $user_id < 1 ) {
 			return null;
+		}
+		
+		if($this->f('auth_md5_pass')=='')
+		{
+			$up_user['id']=$user_id;
+			$up_user['auth_md5_pass']=md5($username.':'.$password);
+			$this->update_row('users','id', $up_user);
 		}
 		
 		// There were not problems, so we can return the userid number.

@@ -5,7 +5,9 @@ Update queries for each version from 1.95
 From version 2.06 and up put module updates in the module's sql directory!
 
 */
-$updates[225] = array();
+$updates[226] = array();
+
+$updates[225][]="ALTER TABLE `users` ADD `auth_md5_pass` VARCHAR( 100 ) NOT NULL AFTER `password` ;";
 
 $updates[224][]="CREATE TABLE IF NOT EXISTS `log` (
   `id` int(11) NOT NULL,

@@ -2510,6 +2510,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL default '0',
   `username` varchar(50) NOT NULL default '',
   `password` varchar(64) NOT NULL default '',
+  `md5_auth_pass` varchar(100) NOT NULL default '',
   `enabled` enum('0','1') NOT NULL default '1',
   `authcode` varchar(20) NOT NULL default '',
   `first_name` varchar(50) NOT NULL default '',

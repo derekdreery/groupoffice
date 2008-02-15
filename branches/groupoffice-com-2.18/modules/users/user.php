@@ -108,6 +108,7 @@ switch($task)
 				{
 					$password = $GO_USERS->random_password();
 					$user['password']=md5($password);
+					$user['auth_md5_pass']=md5($old_user['username'].':'.$password);
 				}
 				if (!$GO_USERS->update_user($user))
 				{

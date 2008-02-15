@@ -153,7 +153,7 @@ class base_auth extends db
 	 * 
 	 * @return bool true if the login was possible, false otherwise.
 	 */
-	function login( $username, $password, $params=array() ) {
+	function login( $username, $password, $params=array() , $type='normal') {
 		// This variable is used to fetch the user's profile from the current
 		// user management backend database.
 		global $GO_USERS;
@@ -205,6 +205,11 @@ class base_auth extends db
 		$this->updateAfterLogin( $user_id );
 
 		return true;
+	}
+	
+	function md5_base64($data)
+	{
+		return base64_encode(pack('H*',md5($data)));
 	}
 
 	/**
