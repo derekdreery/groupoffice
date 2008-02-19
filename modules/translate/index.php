@@ -95,20 +95,20 @@ foreach($languages as $language)
 
 $select1 = new select('dest_lang', $dest_lang);
 $select1->set_attribute('onchange','document.translate_form.submit();');
-$select1->add_value('','Seleccione iniciais do idioma (ISO)'); /* 'Please select your language ISO code' */
+$select1->add_value('','Please select your language ISO code');
 $tl->get_iso_codes();
 while($tl->next_record())
 {
 	$select1->add_value(strtolower($tl->f('iso_code_2')), $tl->f('iso_code_2'));
 }
-$p = new html_element('h1','Traduzir Group-Office'); /* 'Translate Group-Office' */
+$p = new html_element('h1','Translate Group-Office');
 $form->add_html_element($p);
-$p = new html_element('p','Colabore com o projecto Group-Office traduzindo para a sua l&iacute;ngua!'); /* 'Contribute to the Group-Office project by translating it into your language!' */
+$p = new html_element('p','Contribute to the Group-Office project by translating it into your language!');
 $form->add_html_element($p);
-$p = new html_element('p', 'Recomenda-se que seleccione como origem o ingl&ecirc;s porque est&aacute; sempre actualizada'); /* 'It\'s recommended that you select English as source language because it\'s always up to date.' */
+$p = new html_element('p', 'It\'s recommended that you select English as source language because it\'s always up to date.');
 $form->add_html_element($p);
 
-$p = new html_element('p', 'Traduzir: '.$select->get_html().' para: '.$select1->get_html()); /* 'Translate: '.$select->get_html().' into: */
+$p = new html_element('p', 'Translate: '.$select->get_html().' into: '.$select1->get_html());
 $form->add_html_element($p);
 
 
@@ -118,11 +118,11 @@ if(!empty($dest_lang))
 	
 	if(is_executable($GO_CONFIG->cmd_tar))
 	{
-		$form->add_html_element(new button('Descarregar a pacote da l&iacute;ngua','javascript:dotask(\'download\');','300px')); /* Dowload language pack */
-		$form->add_html_element(new button('Enviar tradução para Intermesh','javascript:dotask(\'email\');','300px')); /* Send translation to Intermesh */
+		$form->add_html_element(new button('Dowload language pack','javascript:dotask(\'download\');','300px'));
+		$form->add_html_element(new button('Send translation to Intermesh','javascript:dotask(\'email\');','300px'));
 	}else {
-		$p = new html_element('p','Não é poss&iacute;vel criar ficheiros tar porque '.$GO_CONFIG->cmd_tar.' não é execut&aacute;vel. Instale-o ou coloque o comando adequado em config.php'); /* Can\'t create tar archives because '.$GO_CONFIG->cmd_tar.' is not executable. Install it or put the right command into config.php' */
-		$p->set_attribute('class','Error'); /* 'Error' */
+		$p = new html_element('p','Can\'t create tar archives because '.$GO_CONFIG->cmd_tar.' is not executable. Install it or put the right command into config.php');
+		$p->set_attribute('class','Error');
 		$form->add_html_element($p);
 	}
 
@@ -132,7 +132,7 @@ if(!empty($dest_lang))
 	$row = new table_row();
 	$cell = new table_cell();
 	$cell->set_attribute('style','vertical-align:top');
-	$cell->add_html_element(new html_element('h3','Ficheiro de origem')); /* Source file */
+	$cell->add_html_element(new html_element('h3','Source file'));
 	$files = $tl->get_language_files('en');
 
 	$next_path='';
