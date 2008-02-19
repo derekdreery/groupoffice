@@ -24,40 +24,40 @@ $form = new form('tools_form');
 
 $form->add_html_element(new html_element('h1', $lang_modules['tools']));
 
-$form->add_html_element(new html_element('p', 'AVISO! Use estes utilit&aacute;rios por sua conta e risco. N&atilde;o se assumem responsabilidades por QUAISQUER danos. Leia, por favor, a licen&ccedil;a GPL inclu&iacute;da com o software.')); /* WARNING! Use these tools at own risk. Intermesh is not liable to you for ANY damages. Please read the GPL license included with the software. */
+$form->add_html_element(new html_element('p', 'WARNING! Use these tools at own risk. Intermesh is not liable to you for ANY damages. Please read the GPL license included with the software.'));
 
 $table = new table();
 
 $row = new table_row();
-$row->add_cell(new table_cell('C&oacute;pia da base de dados')); /* Backup database -> in another place to translate? */
+$row->add_cell(new table_cell('Backup database'));
 $button = new button($cmdRun, "javascript:document.location='backupdb.php';");
 $button->set_attribute('style','margin:0px;margin-top:0px;');
 $row->add_cell(new table_cell($button->get_html()));
 $table->add_row($row);
 
 $row = new table_row();
-$row->add_cell(new table_cell('Verificar base de dados')); /* Check database */
+$row->add_cell(new table_cell('Check database'));
 $button = new button($cmdRun, "javascript:document.location='dbcheck.php';");
 $button->set_attribute('style','margin:0px;margin-top:0px;');
 $row->add_cell(new table_cell($button->get_html()));
 $table->add_row($row);
 
 $row = new table_row();
-$row->add_cell(new table_cell('Importar utilizadores')); /* Import users */
+$row->add_cell(new table_cell('Import users'));
 $button = new button($cmdRun, "javascript:document.location='importusers.php';");
 $button->set_attribute('style','margin:0px;margin-top:0px;');
 $row->add_cell(new table_cell($button->get_html()));
 $table->add_row($row);
 
 $row = new table_row();
-$row->add_cell(new table_cell('Remover compromissos e contactos duplicados')); /* Remove duplicate events and contacts */
+$row->add_cell(new table_cell('Remove duplicate events and contacts'));
 $button = new button($cmdRun, "javascript:document.location='rm_duplicates.php';");
 $button->set_attribute('style','margin:0px;margin-top:0px;');
 $row->add_cell(new table_cell($button->get_html()));
 $table->add_row($row);
 
 $row = new table_row();
-$row->add_cell(new table_cell('Executar query na base de dados')); /* Execute database query */
+$row->add_cell(new table_cell('Execute database query'));
 $button = new button($cmdRun, "javascript:document.location='query.php';");
 $button->set_attribute('style','margin:0px;margin-top:0px;');
 $row->add_cell(new table_cell($button->get_html()));
