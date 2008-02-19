@@ -2,37 +2,60 @@
 require_once($GO_LANGUAGE->get_fallback_base_language_file('account'));
 
 //privacy
-$privacy_text = "Selecione os utlizadores e os grupos a que voc&ecirc; quer ser vis&iacute;vel.";
+$privacy_text = "Seleccione os utlizadores e os grupos que deseja quer tornar vis&iacute;veis.";
 
 //security
-$security_text = "Indroduza a sua senha e os campos que voc&ecirc; quer mudar e clique 'Guardar'";
-$security_current_password = "Senha atual";
-$security_new_password = "Senha nova";
-$security_confirm_password = "Confirme a senha";
-$security_new_authcode = "C&oacute;digo novo de autoriza&ccedil;&atilde;o";
-$security_confirm_authcode = "Confirme o c&oacute;digos de autoriza&ccedil;&atilde;o";
+$security_text = "Indroduza a password e os campos que deseja alterar e clique em 'Guardar'";
+$security_current_password = "Password actual";
+$security_new_password = "Nova password";
+$security_confirm_password = "Confirme a password";
+$security_new_authcode = "Novo c&oacute;digo de autoriza&ccedil;&atilde;o";
+$security_confirm_authcode = "Confirme o c&oacute;digo de autoriza&ccedil;&atilde;o";
 $security_question = "Pergunta secreta";
 $security_answer = "Resposta";
-$security_wrong_password = "Senha errada.";
-$security_tasks = "Tarefas terminadas.";
-$security_password_update = "A senha atualizou.";
-$security_authcode_update = "Os c&oacute;digos de autoriza&ccedil;&atilde;o atualizaram.";
-$security_question_update = "Pergunta e resposta atualizada.";
-$security_question_fail = "Voc&ecirc; n&atilde;o preencheu a pergunta e a resposta ..";
+$security_wrong_password = "Password errada.";
+$security_tasks = "Tarefas concluidas.";
+$security_password_update = "Password actualizada.";
+$security_authcode_update = "C&oacute;digos de autoriza&ccedil;&atilde;o actualizados.";
+$security_question_update = "Pergunta e resposta actualizadas.";
+$security_question_fail = "N&atilde;o preencheu a pergunta e a resposta.";
 
 $acProfile = "Perfil";
-$acSecurity = "Seguran&ccedil;a";
+$acSecurity = "Password";
 $acPrivacy = "Privacidade";
-$acManager = "Sua conta";
-$acStatistics = "Estatisticas";
-$acProfileText = "Clique sobre 'Guardar' para mudar seu perfil. Os campos marcados com a * s&atilde;o requeridos.";
-$acTitle = "Sua conta";
-$ac_login_info = "Informa&ccedil;&atilde;o sobre o inicio da sess&atilde;o";
-$ac_registration_time = "Tempo do registo";
-$ac_lastlogin = "Uacute;ltimo inicio de uma sess&atilde;o";
-$ac_logins = "Inicios totais";
-$ac_disk_usage = "Uso do disco";
-$ac_max_diskspace = "Espa&ccedil;o de disco m&aacute;ximo ";
-$ac_available_diskspace = "Espa&ccedil;o de disco dispon&iacute;vel ";
-$ac_used_diskspace = "Espa&ccedil;o de disco usado";
-$ac_used = "usado";
+$acManager = "A sua conta";
+$acStatistics = "Estat&iacute;sticas";
+$acProfileText = "Clique em 'Guardar' para alterar o perfil. Os campos marcados com * s&atilde;o obrigat&oacute;rios.";
+$acTitle = "A sua conta";
+$ac_login_info = "Informa&ccedil;&atilde;o de entrada";
+$ac_registration_time = "Hora do registo";
+$ac_lastlogin = "Uacute;ltima entrada";
+$ac_logins = "Total de entradas";
+$ac_disk_usage = "Espaço usado em disco";
+$ac_max_diskspace = "Disco - Espa&ccedil;o m&aacute;ximo a utilizar";
+$ac_available_diskspace = "Disco - Espa&ccedil;o dispon&iacute;vel";
+$ac_used_diskspace = "Disco - Espa&ccedil;o utilizado";
+$ac_used = "utilizado";
+
+//translation required
+$ac_add_user = 'Pedido de Autorização';
+$ac_auth_error = 'Ocorreu um erro ao autorizar. Por favor, tente de novo.';
+$ac_auth_success = 'A sua conta está agora visível a este utilizador e foi enviada uma mensagem a aceitar o pedido.';
+$ac_auth_decline = 'Foi enviada uma mensagem a este utilizador recusando o pedido.';
+$ac_auth_accept_mail_title = 'Pedido de autorização Group-Office aceite';
+$ac_auth_decline_mail_title = 'Pedido de autorização Group-Office recusado';
+
+$ac_auth_accept_mail_body = 'aceitou o pedido para tornar a sua conta visível.';
+$ac_auth_decline_mail_body = 'recusou o pedido para tornar a conta visível.';
+$ac_request_auth = 'pede autorização para tornar a conta visível. Deseja tornar a sua conta visível a este utilizador?';
+$ac_request_auth_mail_title ='Pedido de autorização Group-Office';
+$ac_invalid_email = 'O endereço de email não está registado no sistema. Por favor, tente de novo.';
+$ac_request_mail_body_prefix = 'Foi enviada uma mensagem para ';
+$ac_request_mail_body_suffix = 'pedindo a sua permissão para tornar a conta visível.';
+$ac_auth_text = 'Indique o email do utilizador cuja conta deseja tornar visível.';
+
+$ac_accept = 'Aceite';
+$ac_decline = 'Recusado';
+$ac_salutation = 'Olá';
+
+$groups_you_are_in = 'É membro dos seguintes grupos';

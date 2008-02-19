@@ -51,7 +51,7 @@ $uc= new updateclient($host, $username,$password);
 $table =new table();
 
 $row = new table_row();
-$cell = new table_cell('Host:');
+$cell = new table_cell('Servidor:'); /* Host */
 $cell->set_attribute('style', 'whitespace:nowrap;');
 $row->add_cell($cell);
 
@@ -63,7 +63,7 @@ $row->add_cell($cell);
 $table->add_row($row);
 
 $row = new table_row();
-$cell = new table_cell('Username:');
+$cell = new table_cell('Nome utilizador:'); /* Username */
 $cell->set_attribute('style', 'whitespace:nowrap;');
 $row->add_cell($cell);
 

@@ -1,6 +1,6 @@
 // ** I18N
 
-// Calendar pt_BR language
+// Calendar pt-PT language
 // Author: Adalberto Machado, <betosm@terra.com.br>
 // Encoding: any
 // Distributed under the same terms as the calendar itself.
@@ -17,7 +17,7 @@ Calendar._DN = new Array
  "Quarta",
  "Quinta",
  "Sexta",
- "Sabado",
+ "Sábado",
  "Domingo");
 
 // Please note that the following array of short day names (and the same goes
@@ -40,14 +40,14 @@ Calendar._SDN = new Array
  "Qua",
  "Qui",
  "Sex",
- "Sab",
+ "Sáb",
  "Dom");
 
 // full month names
 Calendar._MN = new Array
 ("Janeiro",
  "Fevereiro",
- "Marco",
+ "Março",
  "Abril",
  "Maio",
  "Junho",
@@ -93,12 +93,12 @@ Calendar._TT["ABOUT_TIME"] = "\n\n" +
 "- ou Shift-click para decrementar\n" +
 "- ou clique e segure para selecao rapida.";
 
-Calendar._TT["PREV_YEAR"] = "Ant. ano (segure para menu)";
-Calendar._TT["PREV_MONTH"] = "Ant. mes (segure para menu)";
+Calendar._TT["PREV_YEAR"] = "Ano Ant. (segure para menu)";
+Calendar._TT["PREV_MONTH"] = "Mês Ant. (segure para menu)";
 Calendar._TT["GO_TODAY"] = "Hoje";
-Calendar._TT["NEXT_MONTH"] = "Prox. mes (segure para menu)";
-Calendar._TT["NEXT_YEAR"] = "Prox. ano (segure para menu)";
-Calendar._TT["SEL_DATE"] = "Selecione a data";
+Calendar._TT["NEXT_MONTH"] = "Próx. mês (segure para menu)";
+Calendar._TT["NEXT_YEAR"] = "Próx. ano (segure para menu)";
+Calendar._TT["SEL_DATE"] = "Seleccione a data";
 Calendar._TT["DRAG_TO_MOVE"] = "Arraste para mover";
 Calendar._TT["PART_TODAY"] = " (hoje)";
 

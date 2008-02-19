@@ -67,7 +67,7 @@ if($GO_MODULES->write_permission)
 	if(isset($GO_MODULES->modules['calendar']) && $GO_MODULES->modules['calendar']['read_permission'])
 	{
 		$menu->add_button('projects', $pm_templates, 'templates.php');
-		$menu->add_button('calendar', 'Project agenda', 'projects_calendar.php');
+		$menu->add_button('calendar', 'Agenda dos Projectos', 'projects_calendar.php'); /* Suggestion: 'Project agenda' -> phrase to add in projects modules language */
 	}
 	
 	if($post_action != 'load')

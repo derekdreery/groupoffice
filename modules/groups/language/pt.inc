@@ -1,19 +1,26 @@
 <?php
 require_once($GO_LANGUAGE->get_fallback_language_file('groups'));
 
-$groups_title = "grupos de utilizadores";
-$groups_tab = "grupos";
-$groups_saved = "Os ajustes conservaram.";
-$groups_text = "Clique num grupo para examinar as suas propriedades.";
+$groups_title = "Grupos de utilizadores";
+$groups_tab = "Grupos";
+$groups_saved = "Alterações guardadas";
+$groups_text = "Clique num grupo para ver os detalhes";
 $groups_users_in = "Utilizadores no grupo ";
-$groups_no_contacts = "Voc&ecirc; n&atilde;o tem nenhuns contatos a seleccionar.<br /> Use o Livro de Endere&ccedil;os para adicionar membros &agrave; lista de contatos.";
+$groups_no_contacts = "Não existem contactos a seleccionar.<br /> Use a Agenda para adicionar membros aos contactos.";
 
-$add_group_text = "Encorpore um nome e clique sobre 'OK' para adicionar um grupo novo.";
-$add_group_fail = "A adi&ccedil;&atilde;o do grupo falhou. Por favor tente outra vez.";
+$add_group_text = "Escreva um nome e clique em 'OK' para adicionar um novo grupo.";
+$add_group_fail = "Houve um problema. Por favor tente de novo.";
 $add_group_success = "O grupo foi adicionado com sucesso.";
 $add_group_exists = "Esse nome j&aacute; existe. Por favor escolha outro nome.";
-$add_group_no_name = "Voc&ecirc; n&atilde;o especificou um nome.";
-$groups_everyone = "Este grupo &eacute; um grupo especial e contem todos os utilizadores. Voc&ecirc; n&atilde;o pode modificar este grupo.";
+$add_group_no_name = "Não foi indicado um nome.";
+$groups_everyone = "Este é um grupo especial, porque contém todos os utilizadores. Não pode modificar este grupo.";
 $groups_users_in1 = "utilizador(es) no grupo";
 $groups_no_users = "N&atilde;o existem utilizadores neste grupo.";
-$groups_users_in_select = "Selecione os utilizadores que quer adicionar a este grupo:";
+$groups_users_in_select = "Seleccione os utilizadores que quer adicionar a este grupo:";
+
+//translation required
+$groups_new_group = 'Novo grupo';
+$groups_members = 'Membros';
+
+//2.13
+$lang_modules['groups'] = 'Grupos de utilizadores';
