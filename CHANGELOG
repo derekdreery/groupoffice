@@ -1,3 +1,7 @@
+2008/02/20 Version 2.18-stable-19
+- Bug fixes
+- Synchronization with some Sony Ericsson models fixed
+
 2008/01/14 Version 2.18-stable-15
 -Removed contact color lookup in email client because it slows down email the e-mail
  display with large addressbooks
