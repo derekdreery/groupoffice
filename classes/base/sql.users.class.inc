@@ -552,7 +552,7 @@ class sql_users extends base_users
 		if(!empty($user['password']))
 		{
 			$user['password'] = md5($user['password']);
-			$user['md5_auth_pass']=md5($user['username'].':'.$user['password']);
+			$user['auth_md5_pass']=md5($user['username'].':'.$user['password']);
 		}
 
 		$user['currency'] = $GO_CONFIG->default_currency;

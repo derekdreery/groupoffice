@@ -933,7 +933,7 @@ class GO_CONFIG
   		$this->local_path = $this->root_path.'local/';
   		$this->local_url = $this->host.'local/';
   		
-  		if(ini_get('safe_mode') == '0' && file_exists('/etc/mime.types'))
+  		if(ini_get('safe_mode') == '0' && @file_exists('/etc/mime.types'))
   		{
   			$this->mime_types_file = '/etc/mime.types';
   		}else
