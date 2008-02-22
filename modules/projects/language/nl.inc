@@ -104,3 +104,6 @@ $pm_customer='Opdrachtgever';
 $pm_book_rights='Registratie toegang';
 $pm_template_exists='Er bestaat al een sjabloon met deze naam';
 $pm_link_calendar='Stop gewerkte uren in een agenda';
+
+$pm_add_project_hours = 'Selecteer een project als u deze uren in een project wilt stoppen';
+$pm_dont_add_to_project = 'Stop deze uren niet in een project';

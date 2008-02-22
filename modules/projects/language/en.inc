@@ -150,3 +150,6 @@ $pm_link_calendar= 'Put working hours in a calendar';
 $pm_project='Project';
 
 $pm_help_url='http://docs.group-office.com/index.php?folder_id=49&file_id=221';
+
+$pm_add_project_hours = 'Select a project if you want to add this event as project hours too';
+$pm_dont_add_to_project = 'Don\'t add to a project';
