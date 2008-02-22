@@ -57,24 +57,29 @@ if($catNode->open)
 }
 $tv->addRootNode($catNode);
 
-$catNode = new treenode($tv, 'cal_views', $cal_views);
-$catNode->childnodesNotLoaded=true;
-if($catNode->open)
+if(!isset($_REQUEST['noviews']))
 {
-	if($cal->get_authorized_views($GO_SECURITY->user_id))
+	$catNode = new treenode($tv, 'cal_views', $cal_views);
+	$catNode->childnodesNotLoaded=true;
+	if($catNode->open)
 	{
-		 while($cal->next_record())
-	  {
-	  	$link = new hyperlink('javascript:select_view('.$cal->f('id').');', $cal->f('name'));
-			$link->set_attribute('class','normal');
-			
-			$calNode = new treenode($tv, 'bm_'.$cal->f('id'), $link->get_html());
-			$catNode->addNode($calNode);	
-	  }		    
+		if($cal->get_authorized_views($GO_SECURITY->user_id))
+		{
+			 while($cal->next_record())
+		  {
+		  	$link = new hyperlink('javascript:select_view('.$cal->f('id').');', $cal->f('name'));
+				$link->set_attribute('class','normal');
+				
+				$calNode = new treenode($tv, 'bm_'.$cal->f('id'), $link->get_html());
+				$catNode->addNode($calNode);	
+		  }		    
+		}
 	}
+	$tv->addRootNode($catNode);
+}else
+{
+	$form->add_html_element(new input('hidden', 'noviews', '1'));
 }
-$tv->addRootNode($catNode);
-
 
 $cal2 = new calendar();
 
