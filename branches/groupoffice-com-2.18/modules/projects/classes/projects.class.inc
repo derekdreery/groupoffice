@@ -64,12 +64,12 @@
  		return false;
  	}
 
- 	function get_booking_id_by_event_id($event_id)
+ 	function get_booking_by_event_id($event_id)
  	{
- 		$this->query("SELECT id FROM pmHours WHERE event_id='$event_id'");
+ 		$this->query("SELECT * FROM pmHours WHERE event_id='$event_id'");
  		if($this->next_record())
  		{
- 			return $this->f(0);
+ 			return $this->Record;
  		}
  		return false;
  	}
@@ -407,6 +407,24 @@
  	function update_booking($booking)
  	{
  		return $this->update_row('pmHours', 'id', $booking);
+ 	}
+ 	
+ 	
+ 	function get_project_calendars($user_id)
+ 	{
+ 		
+ 		$sql = "SELECT DISTINCT cal_calendars . * ".
+	 	"FROM cal_calendars ".
+ 		"INNER JOIN pmProjects ON cal_calendars.id=pmProjects.calendar_id ".
+	 	"INNER JOIN acl ON cal_calendars.acl_write = acl.acl_id ".
+	 	"LEFT JOIN users_groups ON acl.group_id = users_groups.group_id ".
+	 	"WHERE (acl.user_id=$user_id ".
+	 	"OR users_groups.user_id=$user_id) ORDER BY cal_calendars.name ASC";
+
+	 	$this->query($sql);
+	 	$count= $this->num_rows();	 	
+	 	return $count;
+ 		
  	}
  	
  	function get_project_by_calendar_id($calendar_id)

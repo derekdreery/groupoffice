@@ -327,7 +327,7 @@ switch($task)
 					$event['user_id']=$GO_SECURITY->user_id;
 
 					$event['link_id'] = $GO_LINKS->get_link_id();
-						
+
 					if (!$event_id = $event['id'] = $cal->add_event($event)) {
 						$feedback = $strSaveError;
 					} else {
@@ -363,44 +363,52 @@ switch($task)
 
 
 				$cal2 = new calendar();
-				
-				
-				$booking['user_id'] = $event['user_id'];
-				$booking['start_time'] = $event['start_time'];
-				$booking['end_time'] = $event['end_time'];
-				$booking['break_time'] = 0;
-				$booking['units'] = 0;
-				$booking['comments'] = $event['description'];
-				if(isset($_POST['fee_id']))
+
+
+				if($projects_module && isset($_POST['project_calendar_id']) && $_POST['project_calendar_id']>0)
 				{
-					$fee_id = smart_addslashes($_POST['fee_id']);
-					$booking['fee_id'] = $fee_id;
-					$fee = $projects->get_fee($fee_id);
-					$booking['ext_fee_value'] = $fee['external_value'];
-					$booking['fee_time'] = $fee['time'];
-					$booking['int_fee_value'] = $fee['internal_value'];
-				}
-				$booking['event_id'] = $event['id'];
-				
-				if($projects_module)
-				{
-					$projects = new projects();
-					
-					
-					$booking_id=$projects->get_booking_id_by_event_id($event['id']);
-					
-					if($booking_id>0)
+						
+						
+						
+					if (!in_array($_POST['project_calendar_id'], $_POST['calendars'])) {
+						$_POST['calendars'][]=$_POST['project_calendar_id'];
+					}
+						
+					$booking['user_id'] = $event['user_id'];
+					$booking['start_time'] = $event['start_time'];
+					$booking['end_time'] = $event['end_time'];
+					$booking['break_time'] = 0;
+					$booking['units'] = 0;
+					$booking['comments'] = $event['description'];
+					if(isset($_POST['fee_id']))
 					{
-						$booking['id']=$booking_id;
+						$fee_id = smart_addslashes($_POST['fee_id']);
+						$booking['fee_id'] = $fee_id;
+						$fee = $projects->get_fee($fee_id);
+						$booking['ext_fee_value'] = $fee['external_value'];
+						$booking['fee_time'] = $fee['time'];
+						$booking['int_fee_value'] = $fee['internal_value'];
+					}
+					$booking['event_id'] = $event['id'];
+						
+					$old_booking=$projects->get_booking_by_event_id($event['id']);
+						
+					//var_dump($booking_id);
+					if($old_booking)
+					{
+						$booking['id']=$old_booking['id'];
 						$projects->update_booking($booking);
 					}else
 					{
-						$project = $projects->get_project_by_calendar_id($calendar_id);
-						$booking['project_id'] = $project['id'];
-						
-						$projects->add_booking_on_event_id($booking);
+						$project = $projects->get_project_by_calendar_id(smart_addslashes($_POST['project_calendar_id']));
+						if($project)
+						{
+							$booking['project_id']=$project['id'];
+							$projects->add_booking_on_event_id($booking);
+						}
 					}
 				}
+
 			}
 
 			if (!isset ($feedback)) {
@@ -576,8 +584,8 @@ switch($task)
 							$resource['custom_fields'] = stripslashes($resource['custom_fields']);
 						}elseif($existing_resource)
 						{
-								
-								
+
+
 							if($resource_group_id = $cal->get_resource_group_id_by_event_id($existing_resource['id']))
 							{
 								$subject = sprintf($cal_resource_deleted_mail_subject, $existing_resource['name']);
@@ -595,7 +603,7 @@ switch($task)
 									
 							}
 							$cal->delete_event($existing_resource['id']);
-								
+
 						}
 					}
 				}
@@ -853,6 +861,22 @@ if($event_id> 0)
 		$event_id = 0;
 	}else {
 		$event = $cal->get_event($event_id);
+
+		if($projects_module)
+		{
+			$old_booking=$projects->get_booking_by_event_id($event['id']);
+			if($old_booking)
+			{
+				$project = $projects->get_project($old_booking['project_id']);
+				if($project)
+				{
+						
+					$_POST['project_calendar_id']=$project['calendar_id'];
+					$_POST['fee_id']=$old_booking['fee_id'];
+				}
+			}
+		}
+
 	}
 
 }
@@ -1273,15 +1297,7 @@ if($task == 'availability')
 	}
 	$table = new table();
 	$table->set_attribute('style','width:100%');
-	
-	if($projects_module && $projects->get_project_by_calendar_id($calendar_id))
-	{
-		$row = new table_row();
-		$cell = new table_cell('<i>'.$cal_project_notice.'</i>');
-		$cell->set_attribute('colspan',2);
-		$row->add_cell($cell);
-		$table->add_row($row);
-	}
+
 	$row = new table_row();
 	$cell = new table_cell($cal_subject.'*:');
 	$cell->set_attribute('style','width:250px;');
@@ -1408,7 +1424,7 @@ if($task == 'availability')
 			$cell->innerHTML .= $sc_participants.':';
 			$row->add_cell($cell);
 			$cell = new table_cell();
-				
+
 			$textarea = new textarea('to', $event['to']);
 			$textarea->set_attribute('style','width:100%;height:50px');
 			$cell->add_html_element($textarea);
@@ -1641,49 +1657,6 @@ if($task == 'availability')
 		$table->add_row($row);
 	}
 
-	if($projects_module)
-	{
-		require($GO_LANGUAGE->get_language_file('projects'));
-		if($projects->get_project_by_calendar_id($calendar_id))
-		{
-			$fees = array();
-			$fee_id = $projects->get_fee_id_by_event_id($event_id);
-			$fee_count = $projects->get_authorized_fees($GO_SECURITY->user_id);
-		
-			switch($fee_count)
-			{
-				case '0':
-					$row = new table_row();
-					$row->add_cell(new table_cell($pm_no_fees));
-					break;
-		
-				case '1':
-					$projects->next_record();
-					$input = new input('hidden', 'fee_id', $projects->f('id'));
-					$row = new table_row();
-					$row->add_cell(new table_cell($input->get_html()));
-					$table->add_row($row);
-						
-					$row = new table_row();
-					$row->add_cell(new table_cell($pm_fee));
-					$row->add_cell(new table_cell($projects->f('name')));
-					break;
-		
-				default:
-					
-					$select = new select('fee_id', $fee_id);
-					while($projects->next_record())
-					{
-						$select->add_value($projects->f('id'), $projects->f('name'));
-					}
-					$row = new table_row();
-					$row->add_cell(new table_cell($pm_fee.':'));
-					$row->add_cell(new table_cell($select->get_html()));
-					break;
-			}
-			$table->add_row($row);
-		}
-	}
 
 
 	if($event_id > 0 && $task != 'save_event' && $task != 'change_event')
@@ -2002,7 +1975,7 @@ if($task == 'availability')
 					$form->add_html_element($input);
 				}
 			}
-			$tabstrip->add_tab('calendars', $sc_calendars, $div);
+			$add=true;
 		} else {
 			for ($i = 0; $i < count($event['calendars']); $i ++) {
 				$input = new input('hidden', 'calendars[]', $event['calendars'][$i]);
@@ -2010,6 +1983,90 @@ if($task == 'availability')
 			}
 			//$form->add_html_element(new input('hidden', 'calendars[]', $calendar['id']));
 		}
+
+
+
+
+		if($projects_module)
+		{
+				
+			require($GO_LANGUAGE->get_language_file('projects'));
+			
+			$count = $projects->get_project_calendars($GO_SECURITY->user_id);
+				
+			if($count)
+			{
+				$add = true;
+
+				$p = new html_element('p', $pm_add_project_hours);
+				$div->add_html_element($p);
+				$table = new table();
+
+
+				$project_calendar_id = isset($_POST['project_calendar_id']) ? $_POST['project_calendar_id'] : '';
+				$select = new select('project_calendar_id', $project_calendar_id);
+
+				$select->add_value(0, $pm_dont_add_to_project);
+				while($projects->next_record())
+				{
+					$select->add_value($projects->f('id'), $projects->f('name'));
+				}
+
+
+				$row->add_cell(new table_cell($pm_project.':'));
+				$row->add_cell(new table_cell($select->get_html()));
+				$table->add_row($row);
+
+				
+
+				$fees = array();
+				//$fee_id = $projects->get_fee_id_by_event_id($event_id);
+				$fee_count = $projects->get_authorized_fees($GO_SECURITY->user_id);
+
+				switch($fee_count)
+				{
+					case '0':
+						//$row = new table_row();
+						//$row->add_cell(new table_cell($pm_no_fees));
+						break;
+
+					case '1':
+						$projects->next_record();
+						$fee_id = isset($_POST['fee_id']) ? $_POST['fee_id'] : $projects->f('id');
+						$input = new input('hidden', 'fee_id', $fee_id);
+						$row = new table_row();
+						$row->add_cell(new table_cell($input->get_html()));
+						$table->add_row($row);
+
+						$row = new table_row();
+						$row->add_cell(new table_cell($pm_fee));
+						$row->add_cell(new table_cell($projects->f('name')));
+						break;
+
+					default:
+						$fee_id = isset($_POST['fee_id']) ? $_POST['fee_id'] : 0;
+						$select = new select('fee_id', $fee_id);
+						while($projects->next_record())
+						{
+							$select->add_value($projects->f('id'), $projects->f('name'));
+						}
+						$row = new table_row();
+						$row->add_cell(new table_cell($pm_fee.':'));
+						$row->add_cell(new table_cell($select->get_html()));
+						break;
+				}
+				$table->add_row($row);
+
+				$div->add_html_element($table);
+			}
+		}
+
+
+		if(isset($add))
+		{
+			$tabstrip->add_tab('calendars', $sc_calendars, $div);
+		}
+
 
 
 		//begin participants
@@ -2319,7 +2376,7 @@ if($task == 'availability')
 			'delete_big',
 			$cmdDelete,
 			$links_list->get_delete_handler());
-				
+
 			if(isset($GO_MODULES->modules['filesystem']) && $GO_MODULES->modules['filesystem']['read_permission'])
 			{
 				$menu->add_button(
@@ -2327,7 +2384,7 @@ if($task == 'availability')
 				$cmdAttachFile,
 				$GO_MODULES->modules['filesystem']['url'].'link_upload.php?path=events/'.$event_id.'&link_id='.$event['link_id'].'&link_type=1&return_to='.urlencode($ll_link_back));
 			}
-				
+
 			$form->add_html_element($menu);
 
 
@@ -2370,7 +2427,7 @@ if($task == 'availability')
 			{
 				$group_admin=true;
 			}
-				
+
 			if($group_admin)
 			{
 				if($event['status_id']!=2)
