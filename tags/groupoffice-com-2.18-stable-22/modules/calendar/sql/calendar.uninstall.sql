@@ -1,0 +1,13 @@
+DROP TABLE IF EXISTS `cal_backgrounds`;
+DROP TABLE IF EXISTS `cal_calendar_backgrounds`;
+DROP TABLE IF EXISTS `cal_calendars`;
+DROP TABLE IF EXISTS `cal_events`;
+DROP TABLE IF EXISTS `cal_events_calendars`;
+DROP TABLE IF EXISTS `cal_holidays`;
+DROP TABLE IF EXISTS `cal_participants`;
+DROP TABLE IF EXISTS `cal_reminders`;
+DROP TABLE IF EXISTS `cal_views`;
+DROP TABLE IF EXISTS `cal_settings`;
+DROP TABLE IF EXISTS `cal_exceptions`;
+DROP TABLE IF EXISTS `cal_groups`;
+DROP TABLE IF EXISTS `cal_statuses`;
