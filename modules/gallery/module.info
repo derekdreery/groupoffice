@@ -1,0 +1,9 @@
+<?php
+$module['gallery']['description'] = 'A gallery module to display your pictures in '.
+		'Group-Office or on a CMS website';
+$module['gallery']['version'] = '1.1';
+$module['gallery']['release_date'] = '2006-09-15';
+$module['gallery']['status'] = 'Stable';
+$module['gallery']['authors'][] = array('name'=>'Merijn Schering', 'email'=>'mschering@intermesh.nl');
+$module['gallery']['sort_order'] = '100';
+?>
