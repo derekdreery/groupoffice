@@ -1303,7 +1303,7 @@ if($task == 'availability')
 	$cell->set_attribute('style','width:250px;');
 	$row->add_cell($cell);
 	$input = new input('text','name',$event['name']);
-	$input->set_attribute('maxlength','50');
+	$input->set_attribute('maxlength','100');
 	$input->set_attribute('style','width:100%');
 	$cell = new table_cell($input->get_html());
 	$cell->set_attribute('style','width:100%;');
