@@ -291,6 +291,11 @@ class calendar_listview extends table
 						$p = new html_element('div');
 						$p->set_attribute('class', 'eventDetails');
 						
+						if($event['location'] != '')
+						{
+							$event['name'] .= ' @ '. $event['location'];
+						}	
+						
 						if($event['description'] != '')
 						{
 							$p->innerHTML .= text_to_html($event['description']).'<br /><br />';

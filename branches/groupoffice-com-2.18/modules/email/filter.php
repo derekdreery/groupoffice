@@ -120,7 +120,7 @@ while ($email->next_record())
 {
   if (!($email->f('attributes')&LATT_NOSELECT) && $email->f('name') != 'INBOX')
   {
-    $dropbox->add_value($email->f('name'), str_replace('INBOX'.$email->f('delimiter'), '', $email->f('name')));
+    $dropbox->add_value($email->f('name'), utf7_imap_decode(str_replace('INBOX'.$email->f('delimiter'), '', $email->f('name'))));
   }
 }
 $dropbox->print_dropbox('folder',$folder).'</td></tr>';

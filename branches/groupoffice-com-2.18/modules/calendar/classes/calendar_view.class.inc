@@ -504,6 +504,11 @@ class calendar_view extends table
 									
 									$event_cell->innerHTML .= $event_str;	
 									
+									if($this->events[$current_time][$n]['location'] != '')
+									{
+										$event_cell->innerHTML .= ' @ '.htmlspecialchars($this->events[$current_time][$n]['location']);
+									}
+									
 									if($this->clickable)
 									{
 									$event_cell->set_attribute('onclick', "javascript:document.location='".
