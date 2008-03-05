@@ -348,9 +348,14 @@ function get_filetype_description($extension) {
 
 
 
-function get_timezone_offset($time = 0) {
+function get_timezone_offset($time = 0, $gmt=false) {
 	if ($time == 0)
 	$time = time();
+	
+	if($gmt)
+	{
+		$time +=($_SESSION['GO_SESSION']['timezone'] + $_SESSION['GO_SESSION']['DST'])*3600;
+	}
 
 	if (date('I', $time) == 0) {
 		return $_SESSION['GO_SESSION']['timezone'];
@@ -714,16 +719,26 @@ function get_gmt_time($local_time = 0) {
 }
 
 function gmt_to_local_time($gmt_time) {
-	$timezone_offset = get_timezone_offset($gmt_time);
+	
+	
+	$timezone_offset = get_timezone_offset($gmt_time, true);
+//	if(basename($_SERVER['PHP_SELF'])=='book.php')
+	//	echo date('Ymd G:i', $gmt_time).' -> '.$timezone_offset.'<br />';
+		
 	$local_time = $gmt_time + ($timezone_offset * 3600);
 
 	return $local_time;
 }
 
 function local_to_gmt_time($local_time) {
-	$timezone_offset = get_timezone_offset($local_time);
+	$timezone_offset = get_timezone_offset($local_time);	
 	$gmt_time = $local_time - ($timezone_offset * 3600);
-
+	//if(basename($_SERVER['PHP_SELF'])=='book.php')
+	//{
+	//	echo date('Ymd G:i', $local_time).' -> '.$timezone_offset.'<br />';
+	//	echo date('Ymd G:i', $gmt_time).' -> '.$timezone_offset.'<br />';
+		
+	//}
 	return $gmt_time;
 }
 
