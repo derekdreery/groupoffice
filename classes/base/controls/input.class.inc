@@ -64,7 +64,8 @@ class input extends html_element
 		
 		$this->set_attribute('type', $type);
 		$this->set_attribute('name', $name);
-		if($remind_value && $post_value = $this->get_post_value($name))
+		$post_value = $this->get_post_value($name);
+		if($remind_value && $post_value)
 		{
 			$this->set_attribute('value', htmlspecialchars(smart_stripslashes($post_value)));
 		}else
@@ -72,7 +73,7 @@ class input extends html_element
 			$this->set_attribute('value', htmlspecialchars($value));
 		}
 
-		if($this->required && isset($_POST[$name]) && empty($_POST[$name]))
+		if($this->required && $_SERVER['REQUEST_METHOD']=='POST' && empty($post_value))
 		{
 			$this->set_attribute('class','textbox_error');
 		}
