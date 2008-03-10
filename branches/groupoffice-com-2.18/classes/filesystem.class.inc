@@ -600,7 +600,7 @@ class filesystem extends db
 		
 		//echo $path.'<br>';
 	
-		$this->count++;
+		//$this->count++;
 		
 		if ($share = $this->get_share($path))
 		{

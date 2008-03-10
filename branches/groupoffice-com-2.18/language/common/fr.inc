@@ -449,4 +449,3 @@ $error_username = 'Nom d\'utilisateur incorrect ! Seul les caractères suivant s
 $cmdSettings = 'Paramètres';
 $strTableConfig = 'Configuration des tableaux';
 $strMonthText = 'Texte du mois';
-?>
