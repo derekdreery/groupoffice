@@ -5,8 +5,8 @@
 $pref_language = "Language";
 $pref_theme = "Theme";
 $pref_date_format = "Date format";
-$pref_thousands_seperator = "Thousands seperator";
-$pref_decimal_seperator = "Decimal seperator";
+$pref_thousands_seperator = "Thousands separator";
+$pref_decimal_seperator = "Decimal separator";
 $pref_mail_client = "Use Group-Office mail client to send E-mail.";
 $pref_look = "Look & feel";
 $pref_notations = "Regional settings";
@@ -31,4 +31,4 @@ $pref_name_order = 'Sort names by';
 $pref_use_checkbox_select = 'Multiselect rows without using the CTRL key';
 
 //2.15
-$pref_date_seperator = 'Date seperator';
+$pref_date_seperator = 'Date separator';
