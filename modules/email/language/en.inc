@@ -69,7 +69,7 @@ $ml_move_mail = "Move selected messages to folder...";
 $ml_filters = "Filters";
 $ml_move_to = "then move the message to folder:";
 $ml_email_is = "If the sender's E-mail adress contains:";
-$ml_to_is = "If the recievers field contains:";
+$ml_to_is = "If the receivers field contains:";
 $ml_cc_is = "If the cc field contains:";
 $ml_subject_is = "If the subject contains:";
 $ml_new_filter = "New Filter:";
@@ -149,15 +149,15 @@ $ml_add_senders = 'Ask if you want to add unknown senders to your default addres
 $ml_text_format = 'Plain text';
 $ml_html_format_is = 'HTML (If browser supports HTML editing)';
 $ml_html_format = 'HTML formatted';
-$ml_always_ask_notification = 'Always ask reciever for a read notification by default';
+$ml_always_ask_notification = 'Always ask receiver for a read notification by default';
 $ml_ask_add_sender = 'The sender address %s belonging to %s is not in your addressbook. Would you like to add this person to your addressbook now?';
 
 $ml_edit_filter = 'Edit filter';
 $ml_choose_action = 'Please choose an action:';
 $ml_search_criteria = 'Search criteria';
 $ml_sender = 'Sender';
-$ml_reciever = 'Reciever';
-$ml_cc_reciever = 'CC-Reciever';
+$ml_reciever = 'Receiver';
+$ml_cc_reciever = 'CC-Receiver';
 
 //2.10
 $ml_empty_trash = 'Empty&nbsp;trashcan';
@@ -192,7 +192,7 @@ $ml_charset = 'Character encoding';
 
 //2.14
 $ml_no_reciever_add = "Don' t add";
-$ml_add_recievers = "Add unknown recievers to";//changed string from 2.06
+$ml_add_recievers = "Add unknown receivers to";//changed string from 2.06
 
 $ml_automatic_reply = 'Activate automatic response';
 
