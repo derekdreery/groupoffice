@@ -630,7 +630,11 @@ class imap {
 		$full_mime_type = $type."/".$mimeobj->subtype;
 		//echo $full_mime_type.'<br />';
 		$encoding = $this->get_encoding($mimeobj->encoding);
+		
+		//var_dump($mimeobj);
 
+		$name = '';
+		
 		if (isset ($mimeobj->parameters)) {
 			$params = $mimeobj->parameters;
 			for ($x = 0; $x < count($params); $x ++) {
@@ -647,16 +651,15 @@ class imap {
 				
 				if(isset($param))
 				{
-					if ((strtolower($param->attribute) == 'name' || strtolower($param->attribute) == 'name*') && $param->value != '') {
-						$name = enc_utf8($param->value);
-						break;
+					if ((substr(strtolower($param->attribute),0,4) == 'name') && $param->value != '') {
+						$name .= $param->value;//enc_utf8($param->value);
 					}
 				}
 			}
 		}
-		$name = isset ($name) ? $name : '';
+		
 
-		if ((!isset ($name) || $name == "") && isset ($mimeobj->dparameters)) {
+		if (empty($name) && isset ($mimeobj->dparameters)) {
 			$params = $mimeobj->dparameters;
 			for ($x = 0; $x < count($params); $x ++) {
 				if(is_object($params) && isset($params->$x))
@@ -672,13 +675,25 @@ class imap {
 				
 				if(isset($param))
 				{
-					if ((strtolower($param->attribute) == 'filename' || strtolower($param->attribute) == 'filename*') && $param->value != '') {
+					if (substr(strtolower($param->attribute),0,8) == 'filename' && $param->value != '') {
 						//$name = enc_utf8(quoted_printable_decode($param->value));
-						$name = enc_utf8($param->value);
-						break;
+						$name .= $param->value;
 					}
 				}
 			}
+		}
+		
+		if(substr($name,0,2)=='=?')
+		{
+			$name = enc_utf8($name);
+		}else
+		{		
+			$start = strpos($name,"''");
+			if($start)
+			{
+				$name = substr($name, $start);
+			}
+			$name = rawurldecode($name);
 		}
 
 		$x = 0;
