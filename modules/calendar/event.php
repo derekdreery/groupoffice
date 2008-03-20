@@ -84,7 +84,6 @@ $return_to = isset ($_REQUEST['return_to']) ? $_REQUEST['return_to'] : $GO_MODUL
 $link_back = isset ($_REQUEST['link_back']) ? $_REQUEST['link_back'] : $_SERVER['PHP_SELF'].'?event_id='.$event_id.'&return_to='.urlencode($return_to);
 $is_resouce=false;
 
-
 if($event_id == 0)
 {
 	$calendar_id =
@@ -110,8 +109,6 @@ if($event_id == 0)
 	}
 	$calendar = $cal->get_calendar($calendar_id);
 }
-
-
 
 $event_link = new hyperlink($GO_CONFIG->full_url.
 '?return_to='.urlencode($GO_MODULES->modules['calendar']['url'].
@@ -901,7 +898,7 @@ if ($event_id > 0 && $task != 'save_event' && $task != 'change_event') {
 		$form->add_html_element(new input('hidden','gmt_start_time',$_REQUEST['gmt_start_time'], false));
 		$form->add_html_element(new input('hidden','return_to',$return_to, false));
 		$form->add_html_element(new input('hidden','create_exception','false', false));
-
+		$form->add_html_element(new input('hidden','print', 'false', false));
 
 		//echo date('Ymd  G:i', $_REQUEST['gmt_start_time']);
 
@@ -1264,7 +1261,7 @@ if($task == 'availability')
 	$form->add_html_element(new input('hidden', 'new_event', 'false', false));
 	$form->add_html_element(new input('hidden','task','change_event'));
 	$form->add_html_element(new input('hidden', 'goto_url', '', false));
-
+	$form->add_html_element(new input('hidden','print', 'false', false));
 
 	if($cal_settings['check_conflicts'] == '0' || (isset($conflicts) && count($conflicts)))
 	{
@@ -1459,7 +1456,7 @@ if($task == 'availability')
 	$cell->set_attribute('valign','top');
 	$row->add_cell($cell);
 	$input = new textarea('description',$event['description']);
-	$input->set_attribute('style','width:100%;height: 70px;');
+	$input->set_attribute('style','width:100%;height: 100px;');
 	$row->add_cell(new table_cell($input->get_html()));
 	$table->add_row($row);
 
@@ -2384,7 +2381,7 @@ if($task == 'availability')
 				$cmdAttachFile,
 				$GO_MODULES->modules['filesystem']['url'].'link_upload.php?path=events/'.$event_id.'&link_id='.$event['link_id'].'&link_type=1&return_to='.urlencode($ll_link_back));
 			}
-
+			$menu->add_button('cal_print', $cmdPrint,  "event_print.php?event_id=".$event_id, array('target'=>'_blank'));
 			$form->add_html_element($menu);
 
 
