@@ -849,6 +849,16 @@ popup.focus();
 		}
 		return false;
 	}
+	
+	function get_contact_by_link_id($link_id)
+	{
+		$sql = "SELECT * FROM ab_contacts WHERE link_id='$link_id'";
+		$this->query($sql);
+		if ($this->next_record()) {
+			return $this->Record;
+		}
+		return false;
+	}
 
 	function get_contact($contact_id) {
 		$this->query("SELECT ab_addressbooks.acl_read, ab_addressbooks.acl_write, ab_contacts.*, ".
