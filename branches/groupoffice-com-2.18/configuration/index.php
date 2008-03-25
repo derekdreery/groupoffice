@@ -33,7 +33,7 @@ function check_fields($required_fields, $disabled_user_fields)
 
 $required_registration_fields = str_replace('address', 'address,address_no,zip,city,state,country_id', $GO_CONFIG->required_registration_fields);
 $required_registration_fields = str_replace('work_address', 'work_address,work_address_no,work_zip,work_city,work_state,work_country_id', $required_registration_fields);
-$required_registration_fields = str_replace('title_initials', 'title,initioals', $required_registration_fields);
+$required_registration_fields = str_replace('title_initials', 'title,initials', $required_registration_fields);
 
 $required_fields = explode(',',$required_registration_fields);
 $required_fields[]='email';
