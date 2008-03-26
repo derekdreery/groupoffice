@@ -11,10 +11,10 @@ option) any later version.
 */
 
 //$file = '/home/mschering/Desktop/users.csv';
-$delimiter=';';
+$delimiter=',';
 $quote='"';
 
-$enabled='0';
+$enabled='1';
 
 
 require_once("../../Group-Office.php");
@@ -185,6 +185,7 @@ if(isset($_SESSION['csvfile']) && $task == 'match')
 	$error ='';
 	while($record = fgetcsv($fp, 4096, $delimiter,$quote))
 	{
+		unset($feedback);
 		$user=array();
 
 		foreach($_POST['gofields'] as $key=>$index)
