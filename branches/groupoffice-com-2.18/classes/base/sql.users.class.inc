@@ -205,7 +205,7 @@ class sql_users extends base_users
 		
 		if(count($links))
 		{
-			$sql = "SELECT users.* FROM users  INNER JOIN acl ON users.acl_id = acl.acl_id ".
+			$sql = "SELECT DISTINCT users.* FROM users  INNER JOIN acl ON users.acl_id = acl.acl_id ".
 				"LEFT JOIN users_groups ON acl.group_id = users_groups.group_id WHERE (acl.user_id=$user_id ".
 				"OR users_groups.user_id=$user_id) AND link_id IN (".implode(',',$links).") ORDER BY last_name ASC, first_name ASC";
 			
