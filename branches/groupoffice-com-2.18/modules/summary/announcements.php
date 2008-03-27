@@ -58,7 +58,10 @@ $datatable->add_column(new table_heading($strName, 'name'));
 $datatable->add_column(new table_heading($sum_due_time, 'due_time'));
 $datatable->add_column(new table_heading($strModifiedAt, 'mtime'));
 
-$count = $summary->get_all_announcements($datatable->start, $datatable->offset);
+if($GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
+	$count = $summary->get_all_announcements($datatable->start, $datatable->offset);
+else
+	$count = $summary->get_all_announcements($datatable->start, $datatable->offset, $GO_SECURITY->user_id);
 
 $datatable->set_pagination($count);
 
