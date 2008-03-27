@@ -95,6 +95,10 @@ switch ($task)
 if ($announcement_id > 0)
 {
 	$announcement = $summary->get_announcement($announcement_id);
+	
+	if(!$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id) && $announcement['user_id'] != $GO_SECURITY->user_id)
+		die($strAccessDenied);
+	
 	$tabstrip = new tabstrip('announcement_tab', $announcement['title']);
 	$tabstrip->add_tab('properties', $strProperties);
 	$tabstrip->add_tab('read_permissions', $strReadRights);

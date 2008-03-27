@@ -76,9 +76,11 @@ class summary extends db
 		return $this->num_rows();
 	}
 	
-	function get_all_announcements($start=0,	$offset=0)
+	function get_all_announcements($start=0, $offset=0, $user_id=0)
 	{
 		$sql = "SELECT id, due_time, title, mtime FROM sum_announcements ";
+		if ($user_id > 0)
+			$sql .= "WHERE user_id = $user_id ";
 		$sql .= "ORDER BY mtime DESC";
 
 		if ($offset > 0)
