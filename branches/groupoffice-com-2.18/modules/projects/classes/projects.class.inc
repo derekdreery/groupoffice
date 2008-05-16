@@ -939,7 +939,7 @@
  			$this->get_template_events($template_id);
  			while($this->next_record(MYSQL_ASSOC))
  			{
- 				$event = $this->Record;
+ 				$event = array_map('addslashes', $this->Record);
  				$event['link_id']= $GO_LINKS->get_link_id();
  				$event['start_time']		= get_gmt_time($project['start_date']+$event['time_offset']);
  				$event['end_time'] = $event['start_time']+$event['duration'];
