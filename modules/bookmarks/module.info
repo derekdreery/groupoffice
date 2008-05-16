@@ -1,0 +1,9 @@
+<?php
+$module['bookmarks']['description'] = 'Your favourite bookmarks ordered by catagories can be'.
+						' shared and made	available anywhere.';
+$module['bookmarks']['version'] = '1.0';
+$module['bookmarks']['release_date'] = '2004-04-05';
+$module['bookmarks']['status'] = 'Stable';
+$module['bookmarks']['authors'][] = array('name'=>'Merijn Schering', 'email'=>'mschering@intermesh.nl');
+$module['bookmarks']['sort_order'] = '100';
+?>
