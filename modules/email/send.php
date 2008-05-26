@@ -405,7 +405,7 @@ $company_id = isset($_REQUEST['company_id']) ? $_REQUEST['company_id'] : 0;
 if($mailing_group_id > 0 && $tp->get_contacts_from_mailing_group($mailing_group_id) == 0 && $tp->get_companies_from_mailing_group($mailing_group_id) == 0 && $tp->get_users_from_mailing_group($mailing_group_id) == 0)
 {
 	require_once($GO_THEME->theme_path."header.inc");
-	$tabtable = new tabstrip('templates_tabstrip', $ml_attention);
+	$tabstrip = new tabstrip('templates_tabstrip', $ml_attention);
 	$tabstrip->set_attribute('style','width:100%');
 	$tabstrip->add_html_element(new html_element('p', $ml_no_contacts_in_mailing_group));
 	$tabstrip->add_html_element(new button($cmdClose, "javascript:window.close();"));

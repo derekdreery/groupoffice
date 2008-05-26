@@ -391,17 +391,22 @@ class filesystem extends db
    */
 	function is_owner($user_id, $path)
 	{
-		global $GO_CONFIG, $GO_USERS;
-
-		if ($user = $GO_USERS->get_user($user_id))
+		global $GO_CONFIG, $GO_USERS, $GO_SECURITY;
+		
+		if($GO_SECURITY->has_admin_permission($user_id))
 		{
+			$home_path = $GO_CONFIG->file_storage_path.'users';
+		}else
+		{
+			$user = $GO_USERS->get_user($user_id);
 			$home_path = $GO_CONFIG->file_storage_path.'users/'.$user['username'];
-
-			if (strpos($path, $home_path) === 0)
-			{
-				return true;
-			}
 		}
+
+		if (strpos($path, $home_path) === 0)
+		{
+			return true;
+		}
+
 		return false;
 	}
 

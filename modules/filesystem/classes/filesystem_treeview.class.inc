@@ -46,7 +46,13 @@ class filesystem_treeview extends html_element
 		$img->set_attribute('align','absmiddle');
 		$img->set_attribute('style','border:0px;margin-right:3px;');
 		
-		$home_path = $GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/';
+		if($GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
+		{
+			$home_path = $GO_CONFIG->file_storage_path.'users/';
+		}else
+		{
+			$home_path = $GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/';
+		}
 		
 		
 		
