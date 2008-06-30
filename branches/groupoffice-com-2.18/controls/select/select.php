@@ -188,12 +188,11 @@ if ($show_contacts == 'true' || $show_companies == 'true')
 require_once($GO_CONFIG->class_path.'mail/RFC822.class.inc');
 $RFC822 = new RFC822();
 
+$addresses=array();
 if (isset($_REQUEST['address_string']))
 {
-	$addresses = $RFC822->explode_address_list(smart_stripslashes($_REQUEST['address_string']));
-}else
-{
-	$addresses=array();
+	$addresses = explode(',',smart_stripslashes($_REQUEST['address_string']));
+
 }
 
 $datatable = new datatable('select_table');
