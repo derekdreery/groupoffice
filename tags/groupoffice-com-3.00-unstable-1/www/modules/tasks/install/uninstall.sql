@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS `ta_lists`;
+DROP TABLE IF EXISTS `ta_tasks`;
