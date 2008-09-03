@@ -1,0 +1,464 @@
+body, td{
+	font:normal 11px arial, tahoma, helvetica, sans-serif;
+	color:#000;
+}
+
+table.about td{
+	font-size:12px;
+}
+
+a.normal-link:active,a.normal-link:link,a.normal-link:visited{
+	color:blue;
+	text-decoration:underline;
+}
+a.normal-link:hover{
+	text-decoration:none;
+}
+
+/* start filetypes */
+
+.filetype-link {
+	background-image:url('images/16x16/filetypes/unknown.png');
+	padding-left:18px;
+	padding-top:3px;
+	padding-bottom:2px;
+  padding-right:5px;
+	background-position: 0 2px;
+	background-repeat: no-repeat;
+	white-space:nowrap;
+	line-height:20px;
+}
+
+.filetype {
+	background-image:url('images/16x16/filetypes/unknown.png') !important;
+	background-repeat: no-repeat;
+}
+
+.filetype-folder {
+	background-image:url('images/16x16/filetypes/folder.png') !important;
+	background-repeat: no-repeat;
+	/*height:16px;
+	width:16px;*/
+}
+
+.filetype-jpg, .filetype-gif, .filetype-bmp, .filetype-tif {
+	background-image:url('images/16x16/filetypes/images.png') !important;
+}
+
+.filetype-pdf {
+	background-image:url('images/16x16/filetypes/pdf.png') !important;
+}
+
+.filetype-doc, .filetype-sxw, .filetype-odt {
+	background-image:url('images/16x16/filetypes/document.png') !important;
+}
+
+.filetype-zip, .filetype-tar, .filetype-gz, .filetype-tgz{
+	background-image:url('images/16x16/filetypes/tar.png') !important;
+}
+/* end filetypes */
+
+
+
+/* start buttons */
+.btn-add {
+	background-image:url('images/16x16/gtk-add.png') !important;
+}
+
+.btn-alert {
+	background-image:url('images/16x16/alert.png') !important;
+}
+
+.btn-delete {
+	background-image:url('images/16x16/gtk-delete.png') !important;
+}
+
+.btn-edit {
+	background-image:url('images/16x16/edit.png') !important;
+}
+
+.btn-report-bug {
+	background-image:url('images/16x16/bug.png') !important;
+}
+
+.btn-search {
+	background-image:url('images/16x16/icon-search.png') !important;
+}
+
+.btn-help {
+	background-image:url('images/16x16/icon-help.png') !important;
+}
+
+.btn-ok {
+	background-image:url('images/16x16/ok.png') !important;
+}
+
+.btn-settings {
+	background-image:url('images/16x16/administration.png') !important;
+}
+
+.btn-export {
+	background-image:url('images/16x16/export.png') !important;
+}
+
+.btn-logout {
+	background-image:url('images/16x16/gnome-logout.png') !important;
+}
+
+.btn-dismiss{
+	background-image:url('images/16x16/clock.png') !important;
+}
+
+.btn-close {
+	background-image:url('images/16x16/gtk-close.png') !important;
+}
+
+
+.btn-save {
+	background-image:url('images/16x16/gtk-save.png') !important;
+}
+
+.btn-permissions {
+	background-image:url('images/16x16/permissions.png') !important;
+}
+
+.btn-actions {
+	background-image:url('images/16x16/actions.png') !important;
+}
+
+.btn-print{
+	background-image:url('images/16x16/print.png') !important;
+}
+
+.btn-link {
+	background-image:url('images/16x16/connect_established.png') !important;
+}
+
+.btn-unlink {
+	background-image:url('images/16x16/stock-disconnect.png') !important;
+
+
+}
+
+.btn-search-addressbook {
+	background-image:url('images/16x16/search_addressbook.png') !important;
+
+
+}
+
+.btn-refresh {
+	background-image:url('images/16x16/reload.png') !important;
+}
+
+.btn-left-arrow {
+	background-image:url('images/16x16/1leftarrow.png') !important;
+}
+
+.btn-right-arrow {
+	background-image:url('images/16x16/1rightarrow.png') !important;
+}
+
+.btn-info{
+	background-image:url('images/16x16/info.png') !important;
+}
+
+
+
+/* end buttons */
+
+/*start edit buttons */
+
+
+.x-html-editor-tb .go-edit-insertimage .x-btn-text{
+	background:transparent url('images/16x16/filetypes/images.png') no-repeat !important;
+}
+
+.x-html-editor-tb .go-edit-selectVariable .x-btn-text {
+	background:transparent url('images/16x16/filetypes/images.png') no-repeat !important;
+}
+
+.go-icon {
+	width:16px;
+	height:16px;
+	background-repeat: no-repeat;
+}
+
+.go-icon-reminders{
+	background: url('images/16x16/reminders.png');
+}
+
+.go-grid-icon{
+	background-repeat:no-repeat;
+	padding-left:20px;
+	height:16px;	
+}
+
+/*
+.go-sub-table{
+	border:0px;
+	border-collapse: collapse;
+}
+.go-sub-table td {
+	margin:0px;
+	padding:0px;
+	padding-right:4px;
+}
+
+
+.go-inner-tab{
+	padding:5px;
+}*/
+
+/* Group-Office icon displayed in the top bar */
+.go-app-icon{
+	background: url('images/16x16/go-icon.png');
+}
+
+
+.go-important-icon{
+	background: url('images/16x16/important.png') no-repeat !important;
+	height:16px;
+	padding-left:20px;
+	line-height:16px;
+}
+
+/* Search icon displayed in top bar */
+.go-search-icon, .go-search-icon-tab{
+	background-image: url('images/16x16/icon-search.png') !important;
+}
+
+
+
+/* Group-Office logo displayed in the login screen */
+.go-app-logo{
+	background: url('images/groupoffice.gif');
+	width:148px;
+	height:40px;
+	background-repeat:no-repeat;
+	margin-top: 10px;
+	margin-bottom: 20px;
+}
+
+/* start ext overrides */
+
+/* align of image with text in a button */
+.x-btn-text-icon .x-btn-center .x-btn-text{
+	background-position:0 2px;
+	background-repeat:no-repeat;
+	padding-left:18px;
+	padding-top:2px;
+	padding-bottom:3px;
+	padding-right:0;
+}
+
+/* font were inconsistent in Ext. No problem on Windows but in Linux it was because Tahoma doesn't exists. */
+.x-toolbar td, .x-toolbar span, .x-toolbar input, .x-toolbar div, .x-toolbar select, .x-toolbar label {
+	font-family:Tahoma,Verdana,Hevetica;
+}
+
+.x-form-check-wrap{
+height:22px;
+overflow:hidden;
+}
+/* end ext overrides */
+
+
+
+
+
+/* start file upload  */
+
+.x-uf-buttons-ct {
+	position:relative;
+	height: 22px;
+	margin-bottom: 5px;
+}
+.x-uf-input-ct {
+	position:absolute;
+	height: 22px;
+	overflow:hidden;
+}
+.x-uf-ubtn-ct {
+	margin-left:78px;
+	float:left;
+}
+.x-uf-cbtn-ct {
+	margin-left:4px;
+	float:left;
+}
+.x-uf-bbtn-ct {
+	float:left;
+	height: 22px;
+}
+.x-uf-input-wrap {
+	position: absolute;
+	opacity: 0.0;
+	-moz-opacity: 0.0;
+	filter: alpha(opacity=0);	
+	right:0;
+	height: 22px;
+}
+.x-uf-input-wrap input {
+	top: 0;
+	height: 22px;
+	font-size: 14px;
+	cursor: pointer;
+	-moz-user-focus: ignore;
+	border: 0px none transparent;
+
+	overflow: hidden;
+}
+.x-uf-input-mask {
+	position:absolute;
+	height: 22px;
+	width: 24px;
+	left: -18px;
+}
+.x-uf-table {
+	width:100%;
+	font-size: 11px;
+	border-collapse: collapse;
+	margin-top: 2px;
+}
+
+.x-uf-filedelete {
+	width: 16px;
+	text-align: right;
+	padding-right: 2px;
+}
+
+
+/* sets the padding for panels with forms or text in it */
+.go-form-panel .x-panel-body{
+	padding: 5px;
+}
+
+.go-form-text-panel .x-panel-body {
+	padding:0px;
+	
+	margin:0px;
+	margin-bottom:10px;
+	font:normal 12px arial, tahoma, helvetica, sans-serif;
+	color:#000;
+}
+
+.go-form-text{
+	font:normal 12px arial, tahoma, helvetica, sans-serif;
+	margin:10px 0 10px 0;
+}
+
+.go-links-panel-description {
+	padding-left:34px;	
+}
+
+
+/* end file upload */
+
+
+/* form field that is read only and only shows a value */
+.x-form-plainfield {
+	height: 22px;
+	line-height: 18px;
+	vertical-align: middle;
+	overflow: hidden;
+}
+
+hr{
+	border:0;
+	color:#cccccc;
+	background-color:#cccccc;
+	margin:10px 0 10px 0;
+	height:2px;
+		
+}
+
+
+/* end of file */
+
+
+/* Data view where you can select a single item */
+
+.go-select-list {
+	font:normal 11px arial, tahoma, helvetica, sans-serif;
+	padding:2px;
+	position:relative;
+	/*background-color:white;*/
+	/*border-bottom:1px solid #c3daf9;*/
+}
+
+.go-select-list div{
+	border:1px solid white;
+	display:block;
+	-moz-outline:none;
+	margin-bottom:2px;
+	text-decoration:none;
+	line-height:18px;
+	cursor-default;
+}
+
+.go-select-list .go-item-wrap{
+	border:1px solid white;
+	display:block;
+	-moz-outline:none;
+	padding: 2px;
+	cursor: default;
+}
+
+.go-select-list .go-view-over{
+    border:1px solid #dddddd;
+    background: #efefef url(../../ext/resources/images/default/grid/row-over.gif) repeat-x left top;
+	padding: 2px;
+}
+
+.go-select-list .go-view-selected{
+	border:1px solid #c3daf9;
+	background-color:#ddecfe;
+	padding: 2px;
+	
+}
+
+
+
+/* end dataview */
+
+table.display-panel{
+	width:100%;	
+}
+
+table.display-panel td{
+	padding:3px;
+}
+
+table.display-panel a:link,
+table.display-panel a:visited,
+table.display-panel a:active	
+{
+	color: blue;
+	text-decoration: underline;
+}
+
+.display-panel-heading
+{
+	height: 30px;
+	width: 100%;
+	line-height: 30px;
+	font-size: 14px;
+	font-weight: normal;
+	background-color: #c3daf9;
+}
+
+.display-panel-links-header, .display-panel-description{
+	background-color: #f1f1f1;
+}
+
+.display-panel-link-description td{
+	padding:1px 0px 54px 0px;
+}
+
+/* Ext grid addons */
+
+.go-grid3-hide-headers .x-grid3-header {
+    display:none;
+}
+
+/* End Ext grid addons */
