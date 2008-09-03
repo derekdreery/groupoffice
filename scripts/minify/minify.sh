@@ -1,7 +1,12 @@
 #!/bin/bash
 
-cd `dirname "$0"`
-cd ../../www
+
+if [ -z $2 ]; then
+	cd `dirname "$0"`
+	cd ../../www
+else
+	cd $2
+fi
 
 
 COMPRESSOR="/usr/lib/jvm/java-6-sun/bin/java -jar ../scripts/minify/yuicompressor-2.3.5/build/yuicompressor-2.3.5.jar"
