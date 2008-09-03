@@ -1,10 +1,10 @@
 #!/bin/bash
 
 cd `dirname "$0"`
-cd ../../
+cd ../../www
 
 
-COMPRESSOR="/usr/lib/jvm/java-6-sun/bin/java -jar scripts/minify/yuicompressor-2.3.5/build/yuicompressor-2.3.5.jar"
+COMPRESSOR="/usr/lib/jvm/java-6-sun/bin/java -jar ../scripts/minify/yuicompressor-2.3.5/build/yuicompressor-2.3.5.jar"
 
 #find . -name "*.js" -exec cat {} \; > go-all.js
 
