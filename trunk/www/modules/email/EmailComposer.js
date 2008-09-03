@@ -530,7 +530,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 						}
 						if(action.result.data.attachments)
 						{
-							this.attachmentsStore.loadData(action.result.data.attachments, true);
+							this.attachmentsStore.loadData({results: action.result.data.attachments}, true);
 						}
 						
 						if(action.result.replace_personal_fields)
