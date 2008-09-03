@@ -87,7 +87,7 @@ class GO_CONFIG
 	 * @var     string
 	 * @access  public
 	 */
-	var $default_timezone = 'GMT';
+	var $default_timezone = 'Europe/Amsterdam';
 
 	/**
 	 * Default language
