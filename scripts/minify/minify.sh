@@ -1,5 +1,18 @@
 #!/bin/bash
 
+PRG="$0"
+OLDPWD=`pwd`
+P=`dirname $PRG`
+cd $P
+if [ `pwd` != "/" ]
+then
+FULLPATH=`pwd`
+else
+FULLPATH=''
+fi
+cd $OLDPWD
+
+
 
 if [ -z $2 ]; then
 	cd `dirname "$0"`
@@ -8,8 +21,11 @@ else
 	cd $2
 fi
 
+echo `pwd`
 
-COMPRESSOR="/usr/lib/jvm/java-6-sun/bin/java -jar ../scripts/minify/yuicompressor-2.3.5/build/yuicompressor-2.3.5.jar"
+exit
+
+COMPRESSOR="/usr/lib/jvm/java-6-sun/bin/java -jar $FULLPATH/yuicompressor-2.3.5/build/yuicompressor-2.3.5.jar"
 
 #find . -name "*.js" -exec cat {} \; > go-all.js
 
