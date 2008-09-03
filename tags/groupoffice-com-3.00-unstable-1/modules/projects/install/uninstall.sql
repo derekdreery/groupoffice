@@ -1,0 +1,6 @@
+DROP TABLE IF EXISTS `cf_5`;
+DROP TABLE IF EXISTS `go_links_5`;
+DROP TABLE IF EXISTS `pm_fees`;
+DROP TABLE IF EXISTS `pm_hours`;
+DROP TABLE IF EXISTS `pm_milestones`;
+DROP TABLE IF EXISTS `pm_projects`;
