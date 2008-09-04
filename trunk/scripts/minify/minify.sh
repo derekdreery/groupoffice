@@ -23,7 +23,6 @@ fi
 
 echo `pwd`
 
-exit
 
 COMPRESSOR="/usr/lib/jvm/java-6-sun/bin/java -jar $FULLPATH/yuicompressor-2.3.5/build/yuicompressor-2.3.5.jar"
 
