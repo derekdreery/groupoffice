@@ -52,8 +52,7 @@ GO.calendar.EventDialog = function(calendar){
 			buttons:[{
 					text: GO.lang.cmdOk,
 					handler: function(){
-						this.submitForm();
-						this.win.hide();
+						this.submitForm(true);						
 					},
 					scope: this
 				},{
@@ -293,7 +292,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 		
 	},
 	
-	submitForm : function(){
+	submitForm : function(hide){
 		this.formPanel.form.submit(
 		{
 			url:GO.settings.modules.calendar.url+'action.php',
@@ -348,10 +347,22 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 				
 				this.fireEvent('save', newEvent, this.oldDomId);
 				
+				if(hide)
+				{
+					this.win.hide();
+				}
+				
 								
 			},		
 			failure: function(form, action) {
-				Ext.MessageBox.alert(GO.lang.strError, action.result.feedback);
+				if(action.failureType=='client')
+				{
+					error = GO.lang.strErrorsInForm;
+				}else
+				{
+					error = action.result.feedback;
+				}
+				Ext.MessageBox.alert(GO.lang.strError, error);
 			},
 			scope: this
 		});

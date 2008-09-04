@@ -451,6 +451,8 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 				}, this);	
 			}
 		}
+		
+		return eventData.domId;
 	},
 	
 	/*
