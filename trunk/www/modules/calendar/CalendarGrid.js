@@ -734,11 +734,11 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			if(startRow && endRow && (day==endDay))
 			{
 				
-				this.addGridEvent(eventData, day, startRow, endRow, recalculateAppointments);
+				return this.addGridEvent(eventData, day, startRow, endRow, recalculateAppointments);
 			}else
 			{
 				
-				this.addAllDayEvent(eventData, day, endDay);
+				return this.addAllDayEvent(eventData, day, endDay);
 			}
 		}
 		
@@ -994,6 +994,8 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 
 		var gridContainerHeight = ctSize['height']-headingsHeight;
 		this.gridContainer.setSize(ctSize['width'],gridContainerHeight );
+		
+		return domId;
 	},
 	
 	
@@ -1154,6 +1156,8 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		{
 			this.calculateAppointments(day);
 		}
+		
+		return domId;
 	},
 	
 	resizeAppointment : function(event_dom_id, day){

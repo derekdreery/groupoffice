@@ -416,7 +416,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					}else
 					{
 						this.monthGrid.removeEvent(oldDomId);
-						this.monthGrid.addMonthGridEvent(newEvent);
+						GO.calendar.eventDialog.oldDomId=this.monthGrid.addMonthGridEvent(newEvent);
 					}
 				break;
 				
@@ -427,7 +427,9 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					}else
 					{
 						this.daysGrid.removeEvent(oldDomId);
-						this.daysGrid.addDaysGridEvent(newEvent, true);
+						GO.calendar.eventDialog.oldDomId=this.daysGrid.addDaysGridEvent(newEvent, true);
+						
+
 					}
 				break;
 				
@@ -438,7 +440,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					}else
 					{
 						this.viewGrid.removeEvent(oldDomId);
-						this.viewGrid.addViewGridEvent(newEvent);
+						GO.calendar.eventDialog.oldDomId=this.viewGrid.addViewGridEvent(newEvent);
+						
 					}
 				break;
 				

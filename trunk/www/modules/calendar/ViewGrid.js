@@ -513,7 +513,9 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 					
 				}, this);	
 			}
-		}	
+		}
+		
+		return domId;	
 	},
 
 	removeEventFromArray : function (day, event_id)
