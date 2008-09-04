@@ -54,3 +54,4 @@ GO.calendar.lang.selectCalendar = 'Select calendar';
 GO.calendar.lang.selectCalendarForAppointment = 'Select the calendar to put this appointment in:';
 GO.calendar.lang.closeWindow = 'The appointment has been accepted and scheduled. You can close this window.';
 GO.calendar.lang.list='List';
+GO.calendar.lang.editRecurringEvent='Do you want to edit this occurence or the entire series?';

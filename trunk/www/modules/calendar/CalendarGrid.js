@@ -1411,7 +1411,6 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		
 		if(!this.recurrenceDialog)
 		{
-			
 			this.recurrenceDialog = new Ext.Window({				
 				width:400,
 				autoHeight:true,
@@ -1422,7 +1421,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				closable:false,
 				title:GO.calendar.lang.recurringEvent,
 				modal:false,
-				html: GO.calendar.lang.deleteRecurringEvent,
+				html: GO.calendar.lang.editRecurringEvent,
 				buttons: [{
 						text: GO.calendar.lang.singleOccurence,
 						handler: function(){
@@ -1433,7 +1432,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 								if(this.currentFireEvent=="eventResize")
 								{
 									this.resizeAppointment(this.currentRecurringEvent.domId, this.currentRecurringEvent.day);
-								}else
+								}else if(this.currentFireEvent=='move')
 								{	
 									this.moveAppointment(this.currentRecurringEvent.domId, this.currentRecurringEvent.oldPos, this.currentRecurringEvent.newPos);
 								}

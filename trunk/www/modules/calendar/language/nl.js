@@ -49,3 +49,4 @@ GO.calendar.lang.selectCalendar = 'Selecteer agenda';
 GO.calendar.lang.selectCalendarForAppointment = 'Selecteer de agenda om deze afspraak in te zetten:';
 GO.calendar.lang.closeWindow = 'De afspraak is geaccepteerd en ingepland. U kunt dit venster nu sluiten.';
 GO.calendar.lang.list='Lijst';
+GO.calendar.lang.editRecurringEvent='Wilt u alleen dit exemplaar bewerken of alle afspraken van deze herhalende reeks?';
