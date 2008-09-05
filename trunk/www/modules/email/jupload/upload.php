@@ -68,6 +68,8 @@ while($file = array_shift($_FILES))
 					unlink($part);
 				}
 				fclose($fp);
+				$_SESSION['GO_SESSION']['just_uploaded_attachments'][]=$filepath;
+				
 				continue;
 			}
 		}else
@@ -85,9 +87,10 @@ while($file = array_shift($_FILES))
 		if(!isset($_POST['jupart']))
 		{
 			$filepath = File::checkfilename($filepath);
+			$_SESSION['GO_SESSION']['just_uploaded_attachments'][]=$filepath;
 		}
 		
-		$_SESSION['GO_SESSION']['just_uploaded_attachments'][]=$filepath;
+		
 
 		move_uploaded_file($file['tmp_name'], $filepath);
 	}
