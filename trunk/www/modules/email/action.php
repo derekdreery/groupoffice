@@ -248,7 +248,7 @@ try{
 							$tmp_name = $GO_CONFIG->file_storage_path.$tmp_name;
 						}
 
-						$img =& new Swift_Message_Image(new Swift_File($tmp_name));
+						$img =& new Swift_Message_Image(new Swift_File($tmp_name),basename($tmp_name), mime_content_type($tmp_name));
 						$src_id = $swift->message->attach($img);
 						$body = str_replace($inlineAttachment['url'], $src_id, $body);
 					}
@@ -267,7 +267,7 @@ try{
 							}
 							$file =& new Swift_File($tmp_name);
 							//$file = file_get_contents($tmp_name);
-							$attachment =& new Swift_Message_Attachment($file);
+							$attachment =& new Swift_Message_Attachment($file,basename($tmp_name), mime_content_type($tmp_name));
 							$swift->message->attach($attachment);
 					
 						}
