@@ -14,7 +14,7 @@
 	}else
 	{
 		$fatal_error = true;
-		echo '<span style="color: red;">Fatal error: Your PHP version is too old to run Group-Office. PHP 4.1.0 is required</span>';
+		echo '<span style="color: red;">Fatal error: Your PHP version is too old to run Group-Office. PHP 5 or higher is required</span>';
 	}
 	?></td>
 </tr>
@@ -177,6 +177,20 @@
 	{
 		//$fatal_error = true;
 		echo '<span style="color: red;">Warning: libwbxml2 is not installed. Synchronization will not work!</span>';
+	}else
+	{
+		echo 'Ok';
+	}
+	?>
+	</td>
+</tr>
+<tr>
+	<td valign="top">MIME types:</td>
+	<td>
+	<?php	
+	if(!function_exists('mime_content_type') || !function_exists('finfo_open'))
+	{
+		echo '<span style="color: red;">Warning: mime-magic is not installed. Group-Office will no be able to determine MIME types of files. This may cause problems with file downloads.</span>';
 	}else
 	{
 		echo 'Ok';
