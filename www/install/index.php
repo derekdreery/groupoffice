@@ -120,7 +120,7 @@ if ($script_path == '')
 }
 
 //check ifconfig exists and if the config file is writable
-$config_location1 = '/etc/groupoffice/'.$_SERVER['SERVER_NAME'].str_replace($_SERVER['DOCUMENT_ROOT'],'/', $GO_CONFIG->root_path).'config.php';
+$config_location1 = '/etc/groupoffice/'.$_SERVER['SERVER_NAME'].'/config.php';
 $config_location2 = $GO_CONFIG->root_path.'config.php';
 
 if($task !='test')
