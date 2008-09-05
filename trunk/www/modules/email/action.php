@@ -651,6 +651,7 @@ try{
 						$_POST['host'].' '.$ml_at_port.': '.$_POST['port'].' '.$email->last_error;
 					}else
 					{
+						$account = $email->get_account($account['id']);
 						$email->synchronize_folders($account);
 
 						$response['success']=true;
