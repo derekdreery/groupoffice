@@ -1,11 +1,8 @@
 <?php
 
-// LANG: "fr", ENCODING: UTF-8
-// Author: L. Jullien
-// 15 Jan 2007
-
-//co-Author (only corrections of orthography): j.s Hubert jsh@interlug.net
-//13 aout 2007
+//French Translation v1.0
+//Author : Lionel JULLIEN
+//Date : September, 04 2008
 
 require_once($GO_LANGUAGE->get_fallback_base_language_file('filetypes'));
 
@@ -69,5 +66,5 @@ $lang['filetypes']['rtf'] = 'Fichier texte avec mise en forme';
 $lang['filetypes']['swf'] = 'Animation Macromedia Flash';
 $lang['filetypes']['fla'] = 'Animation Macromedia Flash (Source)';
 $lang['filetypes']['ai'] = 'Fichier Adobe Illustrator';
-$lang['filetypes']['eml'] = 'Message Email';
+$lang['filetypes']['eml'] = 'Message E-mail';
 ?>
