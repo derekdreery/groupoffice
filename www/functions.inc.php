@@ -205,3 +205,20 @@ function smart_addslashes($string) {
 	}
 	return $string;
 }
+
+
+
+if (!function_exists('mime_content_type')) {
+    function mime_content_type($filename) {
+    		
+    	if(function_exists('finfo_open')){
+        $finfo    = finfo_open(FILEINFO_MIME);
+        $mimetype = finfo_file($finfo, $filename);
+        finfo_close($finfo);
+        return $mimetype;
+    	}else
+    	{
+    		return 'application/octet-stream';
+    	}
+    }
+}

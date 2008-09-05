@@ -385,7 +385,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 		this.normalPriorityCheck.setChecked(true);
 		
 		if(this.attachmentsGrid){
-			this.attachmentsGrid.store.loadData([]);
+			this.attachmentsGrid.store.loadData({results:[]});
 		}
 	},
 
