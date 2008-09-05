@@ -54,11 +54,11 @@ function get_posted_event()
 		$end_min = $_POST['end_min'];
 	}
 	
-	$start_date = new DateTime($_POST['start_date'].' '.$start_hour.':'.$start_min);
+	$start_date = new DateTime(Date::to_input_format($_POST['start_date'].' '.$start_hour.':'.$start_min));
 	$start_date->setTimezone($gmt_tz);
 	$event['start_time'] = $start_date->format('U');
 	
-	$end_date = new DateTime($_POST['end_date'].' '.$end_hour.':'.$end_min);
+	$end_date = new DateTime(Date::to_input_format($_POST['end_date'].' '.$end_hour.':'.$end_min));
 	$start_date->setTimezone($gmt_tz);
 	$event['end_time'] = $end_date->format('U');
 	

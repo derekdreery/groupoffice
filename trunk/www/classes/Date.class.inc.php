@@ -45,12 +45,12 @@ class Date
 	 * @access public
 	 * @return int unix timestamp
 	 */
-	
-	
+
+
 	public function byday_to_days($byday)
 	{
 		$days_arr = explode(',', $byday);
-		
+
 		$days['sun'] = in_array('SU', $days_arr) ? '1' : '0';
 		$days['mon'] = in_array('MO', $days_arr) ? '1' : '0';
 		$days['tue'] = in_array('TU', $days_arr) ? '1' : '0';
@@ -58,7 +58,7 @@ class Date
 		$days['thu'] = in_array('TH', $days_arr) ? '1' : '0';
 		$days['fri'] = in_array('FR', $days_arr) ? '1' : '0';
 		$days['sat'] = in_array('SA', $days_arr) ? '1' : '0';
-		
+
 		return $days;
 	}
 
@@ -154,7 +154,7 @@ class Date
 					
 				$days = Date::byday_to_days($rrule['BYDAY']);
 				$days = Date::shift_days_to_local($days, date('G', $event['start_time']), Date::get_timezone_offset($event['start_time']));
-				
+
 				$interval = $start_time - $first_occurence_time;
 
 				$interval_weeks = floor($interval/604800);
@@ -223,15 +223,15 @@ class Date
 
 					$event['month_time'] = $rrule['BYDAY'][0];
 					$day = substr($rrule['BYDAY'], 1);
-					
-					$days = Date::byday_to_days($day);
 						
+					$days = Date::byday_to_days($day);
+
 					if(!count($days))
-						return false;
-		
+					return false;
+
 
 					$days = Date::shift_days_to_local($days, date('G', $event['start_time']), Date::get_timezone_offset($event['start_time']));
-		
+
 
 					$last_occurence_time=0;
 					while($occurence_time==0)
@@ -248,9 +248,9 @@ class Date
 							$test_time = Date::date_add($last_occurence_time, $d);
 
 							//echo '*'.date('r', $test_time)."\n";
-								
+
 							//go_log(LOG_DEBUG, '**'.date('Ymd G:i', $test_time));
-								
+
 							$weekday = date("w", $test_time);
 
 							if (isset($days[$day_db_field[$weekday]]) && $test_time>$start_time && $test_time>$first_occurence_time)
@@ -273,35 +273,35 @@ class Date
 				}
 				break;
 
-						case 'YEARLY';
-						$interval_years = date('Y', $start_time)-date('Y', $first_occurence_time);
-						$devided = $interval_years/$event['repeat_every'];
-						$rounded = ceil($devided);
+			case 'YEARLY';
+			$interval_years = date('Y', $start_time)-date('Y', $first_occurence_time);
+			$devided = $interval_years/$event['repeat_every'];
+			$rounded = ceil($devided);
 
-						//go_log(LOG_DEBUG, $rounded);
-						while($occurence_time<=$start_time)
-						{
-							$new_year = date('Y', $first_occurence_time)+($event['repeat_every']*$rounded);
+			//go_log(LOG_DEBUG, $rounded);
+			while($occurence_time<=$start_time)
+			{
+				$new_year = date('Y', $first_occurence_time)+($event['repeat_every']*$rounded);
 
-								
 
-							$occurence_time=mktime(
-							date('H', $first_occurence_time),
-							date('i', $first_occurence_time),
-							0,
-							date('n', $first_occurence_time),
-							date('j', $first_occurence_time),
-							$new_year);
-								
-								
-							//	go_log(LOG_DEBUG, date('r', $occurence_time).' -> '.date('r', $start_time));
 
-							if(!$occurence_time)
-							break;
+				$occurence_time=mktime(
+				date('H', $first_occurence_time),
+				date('i', $first_occurence_time),
+				0,
+				date('n', $first_occurence_time),
+				date('j', $first_occurence_time),
+				$new_year);
 
-							$rounded++;
-						}
-						break;
+
+				//	go_log(LOG_DEBUG, date('r', $occurence_time).' -> '.date('r', $start_time));
+
+				if(!$occurence_time)
+				break;
+
+				$rounded++;
+			}
+			break;
 		}
 
 
@@ -330,8 +330,8 @@ class Date
 		} else {
 			$shift_day = 0;
 		}
-		
-		
+
+
 
 		if($shift_day!=0)
 		{
@@ -381,9 +381,9 @@ class Date
 		} else {
 			$shift_day = 0;
 		}
-		
+
 		//debug($gmt_start_hour.' > '.$timezone_offset.' > '.$shift_day);
-		
+
 		if($shift_day!=0)
 		{
 			switch ($shift_day) {
@@ -407,7 +407,7 @@ class Date
 					$sun = $days['mon'];
 					break;
 			}
-				
+
 			$days['sun']=$sun;
 			$days['mon']=$mon;
 			$days['tue']=$tue;
@@ -419,13 +419,76 @@ class Date
 		return $days;
 	}
 
+	/**
+	 * Reformat a date string formatted by Group-Office user preference to a string
+	 * that can be read by strtotime related PHP functions
+	 *
+	 * @param string $date_string
+	 * @param string $date_seperator
+	 * @param string $date_format
+	 * @return string
+	 */
+
+	public static function to_input_format($date_string, $date_seperator=null, $date_format=null)
+	{
+		if(!isset($date_format))
+			$date_format=$_SESSION['GO_SESSION']['date_format'];
+
+		if(!isset($date_seperator))
+			$date_seperator=$_SESSION['GO_SESSION']['date_seperator'];
+
+		$date_string = trim($date_string);
+		
+		if ($date_string != '') {
+
+			$datetime_array = explode(' ', $date_string);
+
+			$date = isset ($datetime_array[0]) ?
+			$datetime_array[0] :
+    	'0000'.$date_seperator.
+    	'00'.$date_seperator.'00';
+
+			$date_array = explode($date_seperator, $datetime_array[0]);
+			//$year = isset ($date_array[2]) ? $date_array[2] : date('Y');
+
+			$format = str_replace($date_seperator,'',$date_format);
+
+			$year_pos = strpos($format, 'Y');
+			$month_pos = strpos($format, 'm');
+			$day_pos = strpos($format, 'd');
+
+			$year = isset ($date_array[$year_pos]) ? $date_array[$year_pos] : date('Y');
+			$month = isset ($date_array[$month_pos]) ? $date_array[$month_pos] : date('m');
+			$day = isset ($date_array[$day_pos]) ? $date_array[$day_pos] : 0;
+
+			$time = isset ($datetime_array[1]) ? $datetime_array[1] : '00:00';
+			$time_array = explode(':', $time);
+
+			$hour = isset ($time_array[0]) ? $time_array[0] : '00';
+			$min = isset ($time_array[1]) ? $time_array[1] : '00';
+			//$sec = isset ($time_array[2]) ? $time_array[2] : '00';
+
+			return $year.'-'.$month.'-'.$day.' '.$hour.':'.$min;
+		}
+		return false;
+
+	}
+
+	/**
+	 * Takes a date string formatted by Group-Office user preference and turns it 
+	 * into a unix timestamp.
+	 *
+	 * @param String $date_string
+	 * @return int Unix timestamp
+	 */
+
 
 	public static function to_unixtime($date_string) {
 		if(empty($date_string))
 		{
 			return 0;
 		}
-		$d = new DateTime($date_string);
+		$d = new DateTime(Date::to_input_format($date_string));
 		return $d->format('U');
 	}
 
@@ -452,6 +515,15 @@ class Date
 
 
 
+	/**
+	 * Add a period to a unix timestamp
+	 *
+	 * @param int $time
+	 * @param int $days
+	 * @param int $months
+	 * @param int $years
+	 * @return int
+	 */
 
 
 	public static function date_add($time,$days=0,$months=0,$years=0)
@@ -498,7 +570,7 @@ class Date
 	public static function get_timestamp($utime, $with_time=true, $timezone='GMT')
 	{
 		if(empty($utime))
-			$utime=0;
+		$utime=0;
 			
 		return Date::format('@'.$utime, $with_time, $timezone);
 	}
