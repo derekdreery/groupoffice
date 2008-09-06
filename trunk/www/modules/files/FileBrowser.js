@@ -400,9 +400,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		
 		if(!this.loaded)
 		{
-			this.buildNewMenu();
-			this.setRootNode(this.root);
-			this.loaded=true;
+			this.loadFiles();
 		}
 				
 	},
@@ -412,22 +410,27 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		
 		GO.files.FileBrowser.superclass.afterRender.call(this);
 		
-		if(this.isVisible())
-		{			
-			this.onShow();
-		}
+		//if(this.isVisible())
+		//{			
+			this.loadFiles();
+		//}
+	},
+	
+	loadFiles : function(){
+		
+		this.buildNewMenu();		
+		this.setRootNode(this.root);
+		this.loaded=true;
 	},
 	
 	setRootPath : function(rootPath, loadNow)
 	{
 		this.root = rootPath;
-		this.loaded=false;
+		this.loaded=false;		
 		
 		if(loadNow)
 		{
-			this.buildNewMenu();		
-			this.setRootNode(this.root);
-			this.loaded=true;
+			this.loadFiles();	
 		}
 	},
 	
@@ -454,6 +457,8 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		{
 			this.setPath(id);
 		}
+		
+		//this.setPath(id);
 	
 		this.rootNode.reload();
 		
