@@ -706,10 +706,6 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			
 			var startRow = eventData.startDate.getHours()*2;
 			var endRow = eventData.endDate.getHours()*2-1;
-			if(endRow<startRow)
-			{
-				endRow=startRow+2;
-			}
 			
 			var startMin = eventData.startDate.getMinutes();
 			if(startMin>30)
@@ -729,6 +725,10 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				endRow++;
 			}
 			
+			if(endRow<startRow)
+			{
+				endRow=startRow;
+			}
 	
 			
 			if(startRow && endRow && (day==endDay))

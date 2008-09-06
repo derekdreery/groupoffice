@@ -376,30 +376,30 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 		});
 		
 		var hours =[
-                	['00','00'],
-                	['01','01'],
-                	['02','02'],
-                	['03','03'],
-                	['04','04'],
-                	['05','05'],
-                	['06','06'],
-                	['07','07'],
-                	['08','08'],
-                	['09','09'],
-                	['10','10'],
-                	['11','11'],
-                	['12','12'],
-                	['13','13'],
-                	['14','14'],
-                	['15','15'],
-                	['16','16'],
-                	['17','17'],
-                	['18','18'],
-                	['19','19'],
-                	['20','20'],
-                	['21','21'],
-                	['22','22'],
-                	['23','23']];
+    	['00','00'],
+    	['01','01'],
+    	['02','02'],
+    	['03','03'],
+    	['04','04'],
+    	['05','05'],
+    	['06','06'],
+    	['07','07'],
+    	['08','08'],
+    	['09','09'],
+    	['10','10'],
+    	['11','11'],
+    	['12','12'],
+    	['13','13'],
+    	['14','14'],
+    	['15','15'],
+    	['16','16'],
+    	['17','17'],
+    	['18','18'],
+    	['19','19'],
+    	['20','20'],
+    	['21','21'],
+    	['22','22'],
+    	['23','23']];
     var minutes = [
     	['00','00'],
     	['05','05'],
@@ -435,13 +435,43 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
         allowBlank:true,
         fieldLabel: GO.lang.strDescription
     	});
+    	
+    var checkDateInput = function(){
+    	
+    	if(startDate.getValue()>endDate.getValue())
+    	{
+    		endDate.setValue(startDate.getValue());
+    	}
+    	
+    	var sH = startHour.getValue();
+    	var eH = endHour.getValue();
+    	var sM = startMin.getValue();
+    	var eM = endMin.getValue();
+    	
+    	if(sH>eH)
+    	{
+    		endHour.setValue(sH);
+    	}
+    	
+    	if(sH==eH && sM>eM)
+    	{
+    		endMin.setValue(sM);
+    	}
+    	
+    }
     	       	
     var startDate = new Ext.form.DateField({
         name: 'start_date',
         width:100,
         format: GO.settings['date_format'],
         allowBlank:false,
-        fieldLabel: GO.lang.strStart
+        fieldLabel: GO.lang.strStart,
+        listeners:{
+        	change:{
+        		fn:checkDateInput,
+        		scope:this
+        	}
+        }
     	});
     	
     	
@@ -457,7 +487,13 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
       selectOnFocus:true,            
       width:40,
       labelSeparator: '',
-			hideLabel: true
+			hideLabel: true,
+        listeners:{
+        	change:{
+        		fn:checkDateInput,
+        		scope:this
+        	}
+        }
       });
         
         
@@ -473,48 +509,72 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
         selectOnFocus:true,
         width:40,
         labelSeparator: '',
-				hideLabel: true
+				hideLabel: true,
+        listeners:{
+        	change:{
+        		fn:checkDateInput,
+        		scope:this
+        	}
+        }
         });		
 
         
 			var endDate = new Ext.form.DateField({
-            name: 'end_date',
-            width:100,
-            format: GO.settings['date_format'],
-            allowBlank:false,
-            fieldLabel: GO.lang.strEnd
-        	});
+        name: 'end_date',
+        width:100,
+        format: GO.settings['date_format'],
+        allowBlank:false,
+        fieldLabel: GO.lang.strEnd,
+        listeners:{
+        	change:{
+        		fn:checkDateInput,
+        		scope:this
+        	}
+        }
+       	});
 
     	
     	var endHour = new Ext.form.ComboBox({   
-            name:'end_hour',
-            store: new Ext.data.SimpleStore({
-                fields: ['value','text'],
-                data: hours
-            }),
-            displayField:'text',
-            mode: 'local',
-            triggerAction: 'all',
-            selectOnFocus:true,            
-            width:40,
-            labelSeparator: '',
-						hideLabel: true
+        name:'end_hour',
+        store: new Ext.data.SimpleStore({
+            fields: ['value','text'],
+            data: hours
+        }),
+        displayField:'text',
+        mode: 'local',
+        triggerAction: 'all',
+        selectOnFocus:true,            
+        width:40,
+        labelSeparator: '',
+				hideLabel: true,
+        listeners:{
+        	change:{
+        		fn:checkDateInput,
+        		scope:this
+        	}
+        }
         });
 
         
       var endMin = new Ext.form.ComboBox({
-          name: 'end_min',
-          store: new Ext.data.SimpleStore({
-              fields: ['value','text'],
-              data: minutes
-          }),
-          displayField:'text',
-          mode: 'local',
-          triggerAction: 'all',
-          selectOnFocus:true,
-          width:40,
-          labelSeparator: '',
-					hideLabel: true
+        name: 'end_min',
+        store: new Ext.data.SimpleStore({
+            fields: ['value','text'],
+            data: minutes
+        }),
+        displayField:'text',
+        mode: 'local',
+        triggerAction: 'all',
+        selectOnFocus:true,
+        width:40,
+        labelSeparator: '',
+				hideLabel: true,
+        listeners:{
+        	change:{
+        		fn:checkDateInput,
+        		scope:this
+        	}
+        }
       });	
  
         
