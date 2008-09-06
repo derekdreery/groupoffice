@@ -85,6 +85,9 @@ function get_posted_event()
 	if($_POST['repeat_type']>0)
 	{
 		$event['rrule']=Date::build_rrule($_POST['repeat_type'], $repeat_every,$event['repeat_end_time'], $days, $month_time);
+	}else
+	{
+		$event['rrule']='';
 	}
 		
 	return $event;
@@ -379,7 +382,6 @@ try{
 				throw new Exception($cal_conflict);
 			}
 			
-			debug(var_export($event, true));
 
 			if($event['id']>0)
 			{

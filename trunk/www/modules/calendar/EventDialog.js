@@ -328,7 +328,6 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 					endDate=endDate.add(Date.MINUTE, this.formPanel.form.findField('end_min').getValue());
 				}
 				
-
 					
 				var newEvent = {
 					id : Ext.id(),
@@ -457,6 +456,23 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
     	{
     		endMin.setValue(sM);
     	}
+    	
+    	
+    	if(repeatType.getValue()>0)
+    	{
+    		if(repeatEndDate.getValue()=='')
+    		{
+    			repeatForever.setValue(true);
+    		}else
+    		{
+    			var eD = endDate.getValue();
+    			if(repeatEndDate.getValue()<eD)
+    			{
+    				repeatEndDate.setValue(eD.add(Date.DAY,1));
+    			}    		
+    		}
+        
+    	} 
     	
     }
     	       	
@@ -776,7 +792,10 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
             ]
 	        }),
 	        hideLabel:true,
-	        laelSeperator:''
+	        listeners:{
+	        	'change':checkDateInput
+	        }
+	        
         });	
         
         repeatType.on('select', function(combo, record){this.changeRepeat(record.data.value);}, this);
@@ -822,13 +841,20 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
         	
         }
         
+        
         var repeatEndDate = new Ext.form.DateField({
             name: 'repeat_end_date',
             width:100,
             disabled: true,
             format: GO.settings['date_format'],
             allowBlank:true,
-            fieldLabel:GO.calendar.lang.repeatUntil
+            fieldLabel:GO.calendar.lang.repeatUntil,
+		        listeners:{
+		        	change:{
+		        		fn:checkDateInput,
+		        		scope:this
+		        	}
+		        }
     	});
 
         var repeatForever = new Ext.form.Checkbox({

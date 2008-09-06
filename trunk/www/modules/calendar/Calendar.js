@@ -407,50 +407,38 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		
 		GO.calendar.eventDialog.on('save', function(newEvent,oldDomId){
 			
-			switch(this.displayType)
+			if(this.displayType=='list')
 			{
-				case 'month':
-					if(newEvent.repeats)
+				this.setDisplay();
+			}else
+			{
+				var activeGrid = this.getActivePanel();
+				//reload grid if old or new event repeats. Do not reload if an occurence of a repeating event is modified
+				if(newEvent.repeats|| (activeGrid.remoteEvents[oldDomId] && activeGrid.remoteEvents[oldDomId].repeats && activeGrid.remoteEvents[oldDomId].event_id==newEvent.event_id))
+				{
+					activeGrid.store.reload();
+				}else
+				{
+					activeGrid.removeEvent(oldDomId);			
+			
+					switch(this.displayType)
 					{
-						this.monthGrid.store.reload();
-					}else
-					{
-						this.monthGrid.removeEvent(oldDomId);
-						GO.calendar.eventDialog.oldDomId=this.monthGrid.addMonthGridEvent(newEvent);
+						case 'month':
+								GO.calendar.eventDialog.oldDomId=this.monthGrid.addMonthGridEvent(newEvent);					
+						break;				
+						case 'days':	
+								GO.calendar.eventDialog.oldDomId=this.daysGrid.addDaysGridEvent(newEvent, true);
+								break;				
+						case 'view':						
+								GO.calendar.eventDialog.oldDomId=this.viewGrid.addViewGridEvent(newEvent);						
+						break;				
 					}
-				break;
-				
-				case 'days':	
-					if(newEvent.repeats)
-					{
-						this.daysGrid.store.reload();
-					}else
-					{
-						this.daysGrid.removeEvent(oldDomId);
-						GO.calendar.eventDialog.oldDomId=this.daysGrid.addDaysGridEvent(newEvent, true);
-						
-
-					}
-				break;
-				
-				case 'view':
-					if(newEvent.repeats)
-					{
-						this.daysGrid.store.reload();
-					}else
-					{
-						this.viewGrid.removeEvent(oldDomId);
-						GO.calendar.eventDialog.oldDomId=this.viewGrid.addViewGridEvent(newEvent);
-						
-					}
-				break;
-				
-				case 'list':
-					this.setDisplay();
-				break;
+				}
 			}
 						
 		}, this);
+		
+		
 		
 		this.state = Ext.state.Manager.get('calendar-state');
 		if(!this.state)
