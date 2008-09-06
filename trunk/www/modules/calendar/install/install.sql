@@ -40,7 +40,7 @@ CREATE TABLE `cal_calendars` (
 -- 
 
 DROP TABLE IF EXISTS `cal_events`;
-CREATE TABLE `cal_events` (
+CREATE TABLE IF NOT EXISTS `cal_events` (
   `id` int(11) NOT NULL default '0',
   `calendar_id` int(11) NOT NULL,
   `event_id` int(11) NOT NULL default '0',
@@ -59,7 +59,7 @@ CREATE TABLE `cal_events` (
   `status` varchar(20) NOT NULL,
   `participants_event_id` int(11) NOT NULL,
   `private` enum('0','1') NOT NULL,
-  `rrule` varchar(50) NOT NULL,
+  `rrule` varchar(100) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `start_time` (`start_time`),
   KEY `end_time` (`end_time`),
