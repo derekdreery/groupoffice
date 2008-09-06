@@ -1,14 +1,16 @@
 <?php
-/**
- * @copyright Intermesh 2008
+/** 
+ * Copyright Intermesh
+ * 
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ * 
+ * If you have questions write an e-mail to info@intermesh.nl
+ * 
+ * @copyright Copyright Intermesh
+ * @version $Id: Calendar.js 2871 2008-08-29 10:31:37Z mschering $
  * @author Merijn Schering <mschering@intermesh.nl>
- *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
- * option) any later version.
  */
-
 
 require_once("../../Group-Office.php");
 $GO_SECURITY->json_authenticate('calendar');
@@ -64,6 +66,8 @@ function get_posted_event()
 	
 	$repeat_every = isset ($_POST['repeat_every']) ? $_POST['repeat_every'] : '1';
 	$event['repeat_end_time'] = (isset ($_POST['repeat_forever']) || !isset($_POST['repeat_end_date'])) ? '0' : Date::to_unixtime($_POST['repeat_end_date'].' '.$end_hour.':'.$end_min);
+	
+	
 	$month_time = isset ($_POST['month_time']) ? $_POST['month_time'] : '0';
 
 	
@@ -374,6 +378,8 @@ try{
 			{
 				throw new Exception($cal_conflict);
 			}
+			
+			debug(var_export($event, true));
 
 			if($event['id']>0)
 			{
