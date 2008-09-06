@@ -224,7 +224,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 			this.selectCalendar.setValue(config.calendar_id);
 			this.selectCalendar.container.up('div.x-form-item').setDisplayed(false);
 		}
-		this.selectCalendar.container.up('div.x-form-item').setDisplayed(this.event_id==0 && this.selectCalendar.getValue()==0);
+		this.selectCalendar.container.up('div.x-form-item').setDisplayed(this.event_id==0 && this.selectCalendar.getValue()==0 && !config.exception_event_id);
 		
 		//if the newMenuButton from another passed a linkTypeId then set this value in the select link field
 		if(config && config.link_config)
