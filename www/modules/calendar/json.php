@@ -252,7 +252,7 @@ try{
 			$response['data']['repeat_forever'] = 0;
 			$response['data']['repeat_type'] = REPEAT_NONE;
 			$response['data']['repeat_end_time'] = 0;
-			$response['data']['month_time'] = 0;
+			$response['data']['month_time'] = 1;
 
 			if (!empty($response['data']['rrule']) && $rrule = ical2array::parse_rrule($response['data']['rrule']))
 			{				

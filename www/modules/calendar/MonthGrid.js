@@ -564,7 +564,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 				border: false,
 				title:GO.calendar.lang.recurringEvent,
 				modal:false,
-				html: GO.calendar.lang.deleteRecurringEvent,
+				html: GO.calendar.lang.editRecurringEvent,
 				buttons: [{
 						text: GO.calendar.lang.singleOccurence,
 						handler: function(){
@@ -577,13 +577,16 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 							
 							this.fireEvent(this.currentFireEvent, this, remoteEvent , this.currentActionData);
 							
-							this.removeEvent(remoteEvent.domId);		
-							remoteEvent.repeats=false;						
-							remoteEvent.startDate = remoteEvent.startDate.add(Date.DAY, offsetDays);
-							remoteEvent.endDate = remoteEvent.endDate.add(Date.DAY, offsetDays);
-							remoteEvent.start_time = remoteEvent.startDate.format('U');
-							remoteEvent.end_time = remoteEvent.endDate.format('U');									
-							this.addMonthGridEvent(remoteEvent);
+							if(this.currentActionData.offsetDays)
+							{
+								this.removeEvent(remoteEvent.domId);		
+								remoteEvent.repeats=false;						
+								remoteEvent.startDate = remoteEvent.startDate.add(Date.DAY, offsetDays);
+								remoteEvent.endDate = remoteEvent.endDate.add(Date.DAY, offsetDays);
+								remoteEvent.start_time = remoteEvent.startDate.format('U');
+								remoteEvent.end_time = remoteEvent.endDate.format('U');									
+								this.addMonthGridEvent(remoteEvent);
+							}
 							
 							
 							
