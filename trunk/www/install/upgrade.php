@@ -22,10 +22,10 @@ $db->Halt_On_Error = 'report';
 
 $old_version = $GO_CONFIG->get_setting('version');
 if(!$old_version)
-	$old_version=0;
-	
-if(!$quiet)
-echo 'Updating framework version: '.$old_version.$line_break;
+$old_version=0;
+
+//if(!$quiet)
+//echo 'Updating framework version: '.$old_version.$line_break;
 require_once($GO_CONFIG->root_path.'install/sql/updates.inc.php');
 
 
@@ -39,22 +39,27 @@ for($i=$old_version;$i<count($updates);$i++)
 			die($update_script.' not found!');
 		}
 		if(!$quiet)
-			echo 'Running '.$update_script.$line_break;
+		echo 'Running '.$update_script.$line_break;
 			
 		require_once($update_script);
 
 	}else
-	{	
+	{
 		@$db->query($updates[$i]);
-		
+
 		//echo 'Excuting: '.$updates[$i].$line_break;
 	}
-		
-	$GO_CONFIG->save_setting('version', $i+1);	
+
+	$GO_CONFIG->save_setting('version', $i+1);
 }
 
 if(!$quiet)
-	echo 'Framework updated to version: '.$i.$line_break;
+{
+	if($old_version!=$i)
+	{
+		echo 'Framework updated from '.$old_version.' to version: '.$i.$line_break;
+	}
+}
 
 
 //Upgrade modules
@@ -66,15 +71,15 @@ while($GO_MODULES->next_record())
 	if(file_exists($update_file))
 	{
 		require($update_file);
-		
+
 		if(isset($updates))
 		{
-			if(!$quiet)
-				echo 'Updating '.$GO_MODULES->f('id').$line_break;			
-						
+			//if(!$quiet)
+			//echo 'Updating '.$GO_MODULES->f('id').$line_break;
+
 			for($i=$GO_MODULES->f('version');$i<count($updates);$i++)
 			{
-				
+
 				if(substr($updates[$i], 0, 7)=='script:')
 				{
 					$update_script=$GO_CONFIG->module_path.$GO_MODULES->f('id').'/install/updatescripts/'.substr($updates[$i], 7);
@@ -83,25 +88,30 @@ while($GO_MODULES->next_record())
 						die($update_script.' not found!');
 					}
 					if(!$quiet)
-						echo 'Running '.$update_script.$line_break;
-						
+					echo 'Running '.$update_script.$line_break;
+
 					require_once($update_script);
-				
+
 				}else
-				{	
-					@$db->query($updates[$i]);					
+				{
+					@$db->query($updates[$i]);
 					//echo 'Excuting: '.$updates[$i].$line_break;
 				}
-				
+
 				$module['id']=$GO_MODULES->f('id');
 				$module['version']=count($updates);
-				$db->update_row('go_modules', 'id', $module);			
+				$db->update_row('go_modules', 'id', $module);
 			}
 			if(!$quiet)
-				echo 'Updated '.$GO_MODULES->f('id').' to version '.$i.$line_break;			
-					
-		}	
+			{
+				if($GO_MODULES->f('version')!=$i)
+				{
+					echo 'Updated '.$GO_MODULES->f('id').' from '.$GO_MODULES->f('version').' to version '.$i.$line_break;
+				}
+			}
+				
+		}
 	}
 }
-echo 'Database updated!'.$line_break.$line_break;
+echo 'Database is up to date now!'.$line_break.$line_break;
 
