@@ -42,7 +42,7 @@ if ($mail->open($account['host'], $account['type'],$account['port'],$account['us
 }
 
 $tmpdir = $GO_CONFIG->tmpdir.'groupoffice/'.$GO_SECURITY->user_id.'/mail/'.uniqid(time()).'/';
-mkdir_recursive($tmpdir);
+mkdir($tmpdir, $GO_CONFIG->create_mode, true);
 
 file_put_contents($tmpdir.'winmail.dat',$file);
 chdir($tmpdir);
@@ -58,14 +58,14 @@ header('Expires: '.gmdate('D, d M Y H:i:s') . ' GMT');
 if ($browser['name'] == 'MSIE')
 {
 	header('Content-Type: application/download');
-	header('Content-Disposition: attachment; filename="'.$ml_attachments.'.zip"');
+	header('Content-Disposition: attachment; filename="'.$lang['email']['attachments'].'.zip"');
 	header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 	header('Pragma: public');
 }else
 {
 	header('Content-Type: application/download');
 	header('Pragma: no-cache');
-	header('Content-Disposition: attachment; filename="'.$ml_attachments.'.zip"');
+	header('Content-Disposition: attachment; filename="'.$lang['email']['attachments'].'.zip"');
 }
 header('Content-Transfer-Encoding: binary');
 
