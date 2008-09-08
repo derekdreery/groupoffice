@@ -34,7 +34,6 @@ GO.grid.SearchPanel = function(config){
   this.searchField.setValue(this.query);
   this.store.baseParams.query=this.query;
   
-  this.store.load();
   
   this.store.on('load', function(){
   	this.setTitle(GO.lang['strSearch']+': "'+Ext.util.Format.htmlEncode(this.store.baseParams.query)+'"');
@@ -51,7 +50,7 @@ Ext.extend(GO.grid.SearchPanel, GO.grid.LinksGrid, {
 		
 		if(GO.linkHandlers[record.data.link_type])
 		{
-			GO.linkHandlers[record.data.link_type].call(this, record.data.id);
+			GO.linkHandlers[record.data.link_type].call(this, record.data.id, record);
 		}else
 		{
 			Ext.Msg.alert(GO.lang['strError'], 'No handler definded for link type: '+record.data.link_type);
@@ -62,6 +61,7 @@ Ext.extend(GO.grid.SearchPanel, GO.grid.LinksGrid, {
 	{
 		GO.grid.SearchPanel.superclass.afterRender.call(this);
 		this.addListener("rowdblclick", this.rowDoulbleClicked, this);
+		this.store.load();
 	}
 	
 	

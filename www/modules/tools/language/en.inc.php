@@ -1,7 +1,7 @@
 <?php
-$lang['tools']['name']='Systeembeheer';
-$lang['tools']['description']='Een module om administratieve taken mee uit te voeren.';
+$lang['tools']['name']='Tools';
+$lang['tools']['description']='A module to perform administrative tasks.';
 
-$lang['tools']['dbcheck']='Database nakijken';
-$lang['tools']['rm_duplicates']='Verwijder dubbele contacten en afspraken';
+$lang['tools']['dbcheck']='Database check';
+$lang['tools']['rm_duplicates']='Remove duplicate contacts and events';
 ?>

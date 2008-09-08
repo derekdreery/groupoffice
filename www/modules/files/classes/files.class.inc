@@ -357,8 +357,17 @@ class files extends filesystem
 		if($this->next_record())
 		{
 			return $this->Record;
+		}else
+		{
+			global $GO_LINKS;
+
+			$folder['path'] = $path;
+
+			$this->add_folder($folder);
+
+			return $this->get_folder($path);
 		}
-		return false;
+		
 	}
 
 	function add_folder($folder)
@@ -645,7 +654,7 @@ class files extends filesystem
 	
 	function __on_add_user($params)
 	{
-		global $GO_CONFIG;
+		global $GO_CONFIG, $GO_SECURITY;
 		
 		$user=$params['user'];
 
@@ -653,6 +662,17 @@ class files extends filesystem
 		
 		if(!is_dir($userdir))
 			mkdir($userdir, 0755, true);
+			
+		$folder = $this->get_folder($userdir);		
+		if(empty($folder['acl_read']))
+		{
+			$up_folder['id']=$folder['id'];
+			$up_folder['user_id']=$user['id'];
+			$up_folder['acl_read']=$GO_SECURITY->get_new_acl('files', $user['id']);
+			$up_folder['acl_write']=$GO_SECURITY->get_new_acl('files', $user['id']);
+			
+			$this->update_folder($up_folder);
+		}
 	}
 	
 	
@@ -670,7 +690,7 @@ class files extends filesystem
 
 	function __on_search($last_sync_time=0)
 	{
-		global $GO_MODULES, $GO_LANGUAGE;
+		global $GO_MODULES, $GO_LANGUAGE, $GO_CONFIG;
 
 		//require($GO_LANGUAGE->get_language_file('files'));
 
@@ -686,8 +706,9 @@ class files extends filesystem
 			$cache['user_id']=$this->f('user_id');
 			$cache['name'] = addslashes(basename($this->f('path')));
 			$cache['link_type']=6;
-			$cache['description']=$fs->f('comments');
+			$cache['description']=addslashes(substr($this->f('path'), strlen($GO_CONFIG->file_storage_path)));
 			$cache['type']='File';
+			$cache['module']='files';
 			$cache['keywords']=$cache['name'].','.$cache['type'];
 			$cache['mtime']=$this->f('mtime');
 
@@ -696,10 +717,9 @@ class files extends filesystem
 			{
 				$cache['acl_read']=$share['acl_read'];
 				$cache['acl_write']=$share['acl_write'];
+				
+				$search->cache_search_result($cache);
 			}
-
-			$search->cache_search_result($cache);
-
 		}
 	}
 

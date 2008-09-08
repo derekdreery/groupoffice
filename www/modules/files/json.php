@@ -19,6 +19,8 @@ $GO_SECURITY->json_authenticate('files');
 require_once ($GO_MODULES->modules['files']['class_path']."files.class.inc");
 $fs = new files();
 
+require($GO_LANGUAGE->get_language_file('files'));
+
 
 $task=isset($_REQUEST['task']) ? smart_addslashes($_REQUEST['task']) : '';
 $response=array();
@@ -52,7 +54,8 @@ try{
 					{
 						$node= array(
 						'text'=>$folder['name'],
-						'id'=>strip_server_path($folder['path'])
+						'id'=>strip_server_path($folder['path']),
+						'notreloadable'=>true			
 						);
 
 						$db_folder = $fs->get_folder(addslashes($folder['path']));
@@ -76,11 +79,12 @@ try{
 						
 
 					$node= array(
-					'text'=>'Personal',
+					'text'=>$lang['files']['personal'],
 					'id'=>strip_server_path($home_path),
 					'iconCls'=>'folder-home',
 					'expanded'=>true,
-					'children'=>$children
+					'children'=>$children,
+					'notreloadable'=>true			
 					);
 					$response[]=$node;
 						
@@ -109,7 +113,8 @@ try{
 									$node = array(
 											'text'=>basename($fs->f('path')),
 											'id'=>strip_server_path($fs->f('path')),
-											'iconCls'=>'folder-default'
+											'iconCls'=>'folder-default',
+											'reloadable'=>false
 											);
 											if(!$fs->get_folders($fs->f('path')))
 											{
@@ -124,11 +129,12 @@ try{
 						
 						
 					$node= array(
-					'text'=>'Shared',
+					'text'=>$lang['files']['shared'],
 					'id'=>'shared',
 					'iconCls'=>'folder-shares',
 					'expanded'=>true,
-					'children'=>$children
+					'children'=>$children,
+					'notreloadable'=>true					
 					);
 					$response[]=$node;
 
@@ -155,7 +161,8 @@ try{
 									$node = array(
 											'text'=>basename($fs->f('path')),
 											'id'=>strip_server_path($fs->f('path')),
-											'iconCls'=>'folder-default'
+											'iconCls'=>'folder-default',
+											'notreloadable'=>true
 											);
 											if(!$fs->get_folders($fs->f('path')))
 											{
@@ -270,9 +277,7 @@ try{
 									if(!$fs->has_write_permission($GO_SECURITY->user_id, SERVER_PATH.$delete_path))
 									{
 										throw new AccessDeniedException();
-									}
-									
-									debug(SERVER_PATH.$delete_path);
+									}								
 									
 									$fs->delete(SERVER_PATH.$delete_path);
 								}

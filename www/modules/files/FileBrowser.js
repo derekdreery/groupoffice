@@ -684,10 +684,51 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	onDelete : function(clickedAt){
 		if(clickedAt=='tree')
 		{
-			alert('todo');
+			GO.deleteItems({
+				url:GO.settings.modules.files.url+'action.php',
+				params:{
+					task:'delete',
+					local_path: this.local_path,
+					path: this.contextTreePath	
+				},
+				count:1,
+				callback:function(responseParams){
+					
+					if(responseParams.success)
+					{
+						var treeNode = this.treePanel.getNodeById(this.contextTreePath);
+						if(treeNode)
+						{
+							if(this.path.indexOf(this.contextTreePath)>-1 || (treeNode.parentNode && treeNode.parentNode.id==this.path))
+							{
+								this.setPath(treeNode.parentNode.id);
+							}
+							treeNode.remove();
+						}
+					}else
+					{
+						Ext.MessageBox.alert(GO.lang['strError'], responseParams.feedback);
+					}
+				},
+				scope:this								
+			});
 		}else
 		{
-			this.gridPanel.deleteSelected();
+			this.gridPanel.deleteSelected({
+				callback:function(){				
+					var treeNode = this.treePanel.getNodeById(this.path);
+					if(treeNode)
+					{
+						while(treeNode.attributes.notreloadable)
+						{
+							treeNode=treeNode.parentNode;
+						}
+						treeNode.reload();
+					}		
+				},
+				scope:this
+			});
+			
 		}
 	},
 	
@@ -1237,6 +1278,11 @@ GO.files.openFolder = function(path)
 	GO.files.fileBrowser.setRootPath(path, true);
 	GO.files.fileBrowserWin.show();
 	
+}
+
+
+GO.linkHandlers[6]=function(id, record){
+	GO.files.openFile(record.data.description);
 }
 
 
