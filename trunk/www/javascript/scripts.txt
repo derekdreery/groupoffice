@@ -20,12 +20,14 @@ javascript/grids/SimpleSelectList.js
 javascript/grids/CheckColumn.js
 javascript/common.js
 javascript/state/HttpProvider.js
-javascript/form/SearchField.js
+
 javascript/plugins/HtmlEditorImageInsert.js
 javascript/panels/IframeComponent.js
 javascript/windows/SelectGroups.js
 javascript/windows/SelectUsers.js
 javascript/windows/SelectEmail.js
+
+javascript/form/SearchField.js
 javascript/form/Combo.js
 javascript/form/ComboReset.js
 javascript/form/ComboBoxMulti.js
@@ -33,6 +35,7 @@ javascript/form/UploadFile.js
 javascript/form/PlainField.js
 javascript/form/SelectUser.js
 javascript/form/SelectCountry.js
+javascript/form/FileUploadField.js
 
 javascript/form/HtmlComponent.js
 javascript/form/NumberField.js
