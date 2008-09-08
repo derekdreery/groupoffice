@@ -430,6 +430,7 @@ class files extends filesystem
 
 		$this->query($sql);
 		return $this->num_rows();
+		
 	}
 
 	/**
@@ -670,6 +671,7 @@ class files extends filesystem
 			$up_folder['user_id']=$user['id'];
 			$up_folder['acl_read']=$GO_SECURITY->get_new_acl('files', $user['id']);
 			$up_folder['acl_write']=$GO_SECURITY->get_new_acl('files', $user['id']);
+			$up_folder['visible']='1';
 			
 			$this->update_folder($up_folder);
 		}

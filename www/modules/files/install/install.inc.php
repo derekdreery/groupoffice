@@ -51,8 +51,10 @@ while($GO_USERS->next_record())
 		if(empty($folder['acl_read']))
 		{
 			$up_folder['id']=$folder['id'];
+			$up_folder['user_id']=$GO_USERS->f('id');
 			$up_folder['acl_read']=$GO_SECURITY->get_new_acl('files', $GO_USERS->f('id'));
 			$up_folder['acl_write']=$GO_SECURITY->get_new_acl('files', $GO_USERS->f('id'));
+			$up_folder['visible']='1';
 			
 			$files->update_folder($up_folder);
 		}
