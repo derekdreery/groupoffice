@@ -1,25 +1,22 @@
 <?php
-/*
-Copyright Intermesh 2003
-Author: Merijn Schering <mschering@intermesh.nl>
-Version: 1.0 Release date: 08 July 2003
-
-This program is free software; you can redistribute it and/or modify it
-under the terms of the GNU General Public License as published by the
-Free Software Foundation; either version 2 of the License, or (at your
-option) any later version.
-*/
-
+/** 
+ * Copyright Intermesh
+ * 
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ * 
+ * If you have questions write an e-mail to info@intermesh.nl
+ * 
+ * @copyright Copyright Intermesh
+ * @version $Id: Group-Office.php 2950 2008-09-03 08:39:41Z mschering $
+ * @author Merijn Schering <mschering@intermesh.nl>
+ */
 
 define('NOTINSTALLED', true);
 
 //config file exists now so require it to get the properties.
 require_once('../Group-Office.php');
 
-
-
-//load_basic_controls();
-//load_control('dropbox');
 
 $CONFIG_FILE = $GO_CONFIG->get_config_file();
 
@@ -42,7 +39,7 @@ $tasks[] = 'create_database';
 $tasks[] = 'database_connection';
 $tasks[] = 'database_structure';
 $tasks[] = 'userdir';
-$tasks[] = 'allow_password_change';
+//$tasks[] = 'allow_password_change';
 $tasks[] = 'default_module_access';
 $tasks[] = 'default_groups';
 $tasks[] = 'smtp';
@@ -329,6 +326,7 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 				$user['password'] = 'admin';
 				$user['email'] = $GO_CONFIG->webmaster_email;
 				$user['sex'] = 'M';
+				$user['enabled']='1';
 
 				$GO_USERS->add_user($user,$user_groups,array($GO_CONFIG->group_everyone));
 				//filesystem::mkdir_recursive($GO_CONFIG->file_storage_path.'users/admin/');
@@ -671,7 +669,7 @@ switch($task)
 		print_head();
 		echo '<input type="hidden" name="task" value="release_notes" />';
 		echo 'Please read the release notes<br /><br />';
-		echo '<iframe style="width: 100%; height: 300px; background: #ffffff;" src="../RELEASE"></iframe>';
+		echo '<iframe style="width: 100%; height: 300px; background: #ffffff;" src="../RELEASE.TXT"></iframe>';
 		echo '<br /><br /><div align="right"><input type="submit" value="Continue" /></div>';
 		print_foot();
 		exit();
