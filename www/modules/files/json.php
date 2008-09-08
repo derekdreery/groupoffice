@@ -95,7 +95,7 @@ try{
 						
 						
 						
-					$share_count = $fs->get_authorized_shares($GO_SECURITY->user_id);
+				/*	$share_count = $fs->get_authorized_shares($GO_SECURITY->user_id);
 					$children = array();
 					while ($fs->next_record())
 					{
@@ -125,16 +125,16 @@ try{
 								}
 							}
 						}
-					}
+					}*/
 						
 						
 					$node= array(
 					'text'=>$lang['files']['shared'],
 					'id'=>'shared',
-					'iconCls'=>'folder-shares',
+					'iconCls'=>'folder-shares'/*,
 					'expanded'=>true,
 					'children'=>$children,
-					'notreloadable'=>true					
+					'notreloadable'=>true				*/	
 					);
 					$response[]=$node;
 
@@ -156,9 +156,7 @@ try{
 								$is_sub_dir = isset($last_folder) ? $fs->is_sub_dir($share_path, $last_folder) : false;
 
 								if (!$is_sub_dir)
-								{
-									$count++;
-									
+								{									
 									$last_folder = $fs->f('path');
 
 									$node = array(
@@ -177,25 +175,7 @@ try{
 							}
 						}
 						
-						if($count==100)
-						{
-							$node = array(
-								'text'=>'Maximum folders reached',
-								'id'=>strip_server_path($fs->f('path')),
-								'iconCls'=>'folder-default',
-								'notreloadable'=>true,
-								'children'=>array(),
-								'expanded'=>true
-								);
-								if(!$fs->get_folders($fs->f('path')))
-								{
-									$node['children']=array();
-									$node['expanded']=true;
-								}
-								$response[]=$node;
-							
-							break;
-						}
+						
 					}
 
 
