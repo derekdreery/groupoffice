@@ -11,3 +11,5 @@ $lang['files']['uploadedSucces'] = 'File uploaded successfully';
 
 $lang['files']['ootextdoc']='Open-Office Text document';
 $lang['files']['wordtextdoc']='Microsoft Word document';
+$lang['files']['personal']='Personal';
+$lang['files']['shared']='Shared';

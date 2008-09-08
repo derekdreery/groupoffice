@@ -448,10 +448,7 @@ class filesystem extends db
 			if ($this->disable_go_permissions ||
 			$this->has_write_permission($GO_SECURITY->user_id, $path))
 			{
-			
-				unlink($path);
-
-				return @unlink($path);
+				return unlink($path);
 			}else
 			{
 				return false;

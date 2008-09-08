@@ -20,6 +20,8 @@ require_once ($GO_MODULES->modules['files']['class_path']."files.class.inc");
 $fs = new files();
 
 
+require($GO_LANGUAGE->get_language_file('files'));
+
 $task=isset($_REQUEST['task']) ? smart_addslashes($_REQUEST['task']) : '';
 define('SERVER_PATH', empty($_POST['local_path']) ? $GO_CONFIG->file_storage_path : $GO_CONFIG->local_path);
 
@@ -29,6 +31,17 @@ try{
 
 	switch($task)
 	{
+		case 'delete':
+			
+			$delete_path = SERVER_PATH.smart_addslashes($_POST['path']);
+
+			if(!$fs->has_write_permission($GO_SECURITY->user_id, $delete_path))
+			{
+				throw new AccessDeniedException();
+			}
+			
+			$response['success']=$fs->delete($delete_path);
+			break;
 		case 'file_properties':
 			$path = SERVER_PATH.smart_stripslashes($_POST['path']);
 
@@ -171,7 +184,7 @@ try{
 			} else {
 				//$GO_LOGGER->log('filesystem', 'NEW FOLDER '.$fs->strip_file_storage_path($fv->path.'/'.$name));
 				
-				$folder['path']=$path;
+				$folder['path']=$path.'/'.$name;
 				$folder['visible']='1';
 				$folder['user_id']=$GO_SECURITY->user_id;
 				
