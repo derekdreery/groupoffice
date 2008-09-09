@@ -1,12 +1,16 @@
 /**
- * @copyright Intermesh 2007
- * @author Merijn Schering <mschering@intermesh.nl>
+ * Copyright Intermesh
  *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
- * option) any later version.
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ *
+ * @version $Id: addressbook.class.inc 2846 2008-08-27 11:42:19Z mschering $
+ * @copyright Copyright Intermesh
+ * @author Merijn Schering <mschering@intermesh.nl>
  */
+
 
 Ext.namespace("GO.files");
 
@@ -988,11 +992,12 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 								}
 								
 								var t = new Ext.Template(GO.lang.overwriteFile);								
-								t.append(this.overwriteDialog.body, {file: responseParams.file_exists});								
+								t.overwrite(this.overwriteDialog.body, {file: responseParams.file_exists});								
 								this.overwriteDialog.show();
 							}else
 							{
-								this.gridStore.reload();						
+								this.gridStore.reload();
+								this.treePanel.getRootNode().reload();						
 								if(this.overwriteDialog)
 								{
 									this.overwriteDialog.hide();

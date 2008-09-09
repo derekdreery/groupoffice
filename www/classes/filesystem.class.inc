@@ -294,9 +294,12 @@ class filesystem extends db
 					}
 				}
 				
-				$folder = $this->get_folder($source_path);
+				$folder = $this->get_folder(addslashes($source_path));
 				$up_folder['id']=$folder['id'];
 				$up_folder['path']=addslashes($destination_path);
+				
+				$this->delete_folder(addslashes($destination_path));
+				
 				$this->update_folder($up_folder);
 				
 				
@@ -315,7 +318,7 @@ class filesystem extends db
 			}else
 			{
 				
-				$file = $this->get_file($source_path);
+				$file = $this->get_file(addslashes($source_path));
 				$up_file['id']=$file['id'];
 				$up_file['path']=addslashes($destination_path);
 				$this->update_file($up_file);
@@ -432,7 +435,7 @@ class filesystem extends db
 			{
 				if (!$this->disable_go_permissions)
 				{
-					$this->delete_folder($path);
+					$this->delete_folder(addslashes($path));
 				}
 
 				global $GO_CONFIG;
@@ -445,6 +448,18 @@ class filesystem extends db
 		}else
 		{
 
+			if (!$this->disable_go_permissions)
+			{
+				$file = $this->get_file(addslashes($path));
+				$this->delete_file(addslashes($path));
+				
+				global $GO_CONFIG;
+				
+				require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
+				$search = new search();
+				$search->delete_search_result($file['id'], 6);
+			}
+				
 			if ($this->disable_go_permissions ||
 			$this->has_write_permission($GO_SECURITY->user_id, $path))
 			{

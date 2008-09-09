@@ -299,8 +299,8 @@ class files extends filesystem
 			global $GO_LINKS;
 
 			$file['path'] = $path;
-			$file['ctime']=filectime($path);
-			$file['mtime']=filemtime($path);
+			$file['ctime']=filectime(stripslashes($path));
+			$file['mtime']=filemtime(stripslashes($path));
 
 			$this->add_file($file);
 
