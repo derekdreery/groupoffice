@@ -13,3 +13,5 @@ $lang['files']['ootextdoc']='Open-Office Text document';
 $lang['files']['wordtextdoc']='Microsoft Word document';
 $lang['files']['personal']='Persoonlijk';
 $lang['files']['shared']='Gedeeld';
+
+$lang['file']['general']='Algemeen';

@@ -40,26 +40,50 @@ while($GO_USERS->next_record())
 {
 	//if($GO_SECURITY->has_permission($GO_USERS->f('id'),$module['acl_read']))
 	//{
-		$home_dir = $GO_CONFIG->file_storage_path.'users/'.$GO_USERS->f('username');
-		if(!is_dir($home_dir))
-		{
-			mkdir($home_dir, $GO_CONFIG->create_mode,true);
-		}
-		
-		$folder = $files->get_folder($home_dir);
-		
-		if(empty($folder['acl_read']))
-		{
-			$up_folder['id']=$folder['id'];
-			$up_folder['user_id']=$GO_USERS->f('id');
-			$up_folder['acl_read']=$GO_SECURITY->get_new_acl('files', $GO_USERS->f('id'));
-			$up_folder['acl_write']=$GO_SECURITY->get_new_acl('files', $GO_USERS->f('id'));
-			$up_folder['visible']='1';
+	$home_dir = $GO_CONFIG->file_storage_path.'users/'.$GO_USERS->f('username');
+	if(!is_dir($home_dir))
+	{
+		mkdir($home_dir, $GO_CONFIG->create_mode,true);
+	}
+
+	$folder = $files->get_folder($home_dir);
+
+	if(empty($folder['acl_read']))
+	{
+		$up_folder['id']=$folder['id'];
+		$up_folder['user_id']=$GO_USERS->f('id');
+		$up_folder['acl_read']=$GO_SECURITY->get_new_acl('files', $GO_USERS->f('id'));
+		$up_folder['acl_write']=$GO_SECURITY->get_new_acl('files', $GO_USERS->f('id'));
+		$up_folder['visible']='1';
 			
-			$files->update_folder($up_folder);
-		}
+		$files->update_folder($up_folder);
+	}
 	//}
+}
+
+$admin = $GO_USERS->get_user(1);
+
+
+$share_dir = $GO_CONFIG->file_storage_path.'users/'.$admin['username'].'/'.addslashes($lang['file']['general']);
+
+if(!is_dir($share_dir))
+{
+	mkdir($share_dir, $GO_CONFIG->create_mode,true);
+}
+
+$folder = $files->get_folder($share_dir);
+
+if(empty($folder['acl_read']))
+{
+	$up_folder['id']=$folder['id'];
+	$up_folder['user_id']=1;
+	$up_folder['acl_read']=$GO_SECURITY->get_new_acl('files', 1);
+	$up_folder['acl_write']=$GO_SECURITY->get_new_acl('files', 1);
+	$up_folder['visible']='1';
+		
+	$files->update_folder($up_folder);
 	
+	$GO_SECURITY->add_group_to_acl($GO_CONFIG->group_internal, $up_folder['acl_write']);
 }
 
 ?>
