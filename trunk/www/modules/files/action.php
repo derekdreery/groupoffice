@@ -109,7 +109,7 @@ try{
 			if($fs->is_owner($GO_SECURITY->user_id, $path))
 			{
 
-				$folder = $fs->get_folder($path);
+				$folder = $fs->get_folder(addslashes($path));
 					
 				
 				$up_folder['path']=addslashes($path);
@@ -184,7 +184,7 @@ try{
 			} else {
 				//$GO_LOGGER->log('filesystem', 'NEW FOLDER '.$fs->strip_file_storage_path($fv->path.'/'.$name));
 				
-				$folder['path']=$path.'/'.$name;
+				$folder['path']=addslashes($path.'/'.$name);
 				$folder['visible']='1';
 				$folder['user_id']=$GO_SECURITY->user_id;
 				
