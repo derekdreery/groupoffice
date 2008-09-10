@@ -54,6 +54,9 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	},
 
 	init : function(){  
+		
+		Ext.QuickTips.init();
+		Ext.state.Manager.setProvider(new GO.state.HttpProvider({url: BaseHref+'state.php'}));
           
    	this.fireReady();
    	
