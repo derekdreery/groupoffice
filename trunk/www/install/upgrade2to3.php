@@ -106,8 +106,11 @@ $sql = "SELECT * FROM go_modules";
 $db->query($sql);
 while($db->next_record())
 {
-	$module_ids[]=$db->f('id');
-	$modules[$db->f('id')]=$db->Record;
+	if(is_dir($GO_CONFIG->root_path.'modules/'.$db->f('id')))
+	{
+		$module_ids[]=$db->f('id');
+		$modules[$db->f('id')]=$db->Record;
+	}
 }
 
 
