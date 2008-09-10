@@ -61,10 +61,8 @@ while($GO_USERS->next_record())
 	//}
 }
 
-$admin = $GO_USERS->get_user(1);
 
-
-$share_dir = $GO_CONFIG->file_storage_path.'users/'.$admin['username'].'/'.addslashes($lang['file']['general']);
+$share_dir = $GO_CONFIG->file_storage_path.'users/admin/'.addslashes($lang['file']['general']);
 
 if(!is_dir($share_dir))
 {

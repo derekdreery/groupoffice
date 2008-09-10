@@ -15,9 +15,15 @@
 $suffix = '?'.$GO_CONFIG->mtime;
 
 ?>
-<script	src="<?php echo $GO_CONFIG->host; ?>ext/adapter/ext/ext-base.js<?php echo $suffix; ?>" type="text/javascript"></script>
-<script	src="<?php echo $GO_CONFIG->host; ?>ext/ext-all.js<?php echo $suffix; ?>" type="text/javascript"></script>
-<script	src="<?php echo $GO_CONFIG->host; ?>javascript/namespaces.js<?php echo $suffix; ?>" type="text/javascript"></script>
+<script
+	src="<?php echo $GO_CONFIG->host; ?>ext/adapter/ext/ext-base.js<?php echo $suffix; ?>"
+	type="text/javascript"></script>
+<script
+	src="<?php echo $GO_CONFIG->host; ?>ext/ext-all.js<?php echo $suffix; ?>"
+	type="text/javascript"></script>
+<script
+	src="<?php echo $GO_CONFIG->host; ?>javascript/namespaces.js<?php echo $suffix; ?>"
+	type="text/javascript"></script>
 
 <script type="text/javascript">
 var BaseHref = '<?php echo $GO_CONFIG->host; ?>';
@@ -71,19 +77,19 @@ if(!$GO_CONFIG->debug)
 
 	$scripts[]=$GO_THEME->theme_path.'MainLayout.js';
 	$scripts[]=$GO_CONFIG->root_path.'javascript/go-all-min.js';
-	
+
 	/*
-	$data = file_get_contents($GO_CONFIG->root_path.'/javascript/scripts.txt');
-	$lines = explode("\n", $data);
-	foreach($lines as $line)
-	{
+	 $data = file_get_contents($GO_CONFIG->root_path.'/javascript/scripts.txt');
+	 $lines = explode("\n", $data);
+	 foreach($lines as $line)
+	 {
 		if(!empty($line))
 		{
-			$scripts[]=$GO_CONFIG->root_path.$line;
+		$scripts[]=$GO_CONFIG->root_path.$line;
 		}
-	}*/
-	
-	
+		}*/
+
+
 
 	$modules=array();
 	foreach($GO_MODULES->modules as $module)
@@ -129,6 +135,14 @@ if(!$GO_CONFIG->debug)
 	}
 
 	echo '<script src="'.$GO_CONFIG->local_url.'scripts/go-all-'.$GO_SECURITY->user_id.'.js'.$suffix.'" type="text/javascript">';
+
+	foreach($GO_MODULES->modules as $module)
+	{
+		if(file_exists($module['path'].'scripts.inc.php'))
+		{
+			require($module['path'].'scripts.inc.php');
+		}
+	}
 }else
 {
 	?>
@@ -186,6 +200,48 @@ if(!$GO_CONFIG->debug)
 		}
 	}
 
+
+	foreach($GO_MODULES->modules as $module)
+	{
+		if($module['read_permission'])
+		{
+			if(file_exists($module['path'].'language/en.js'))
+			{
+				echo '<script type="text/javascript" src="'.$module['url'].'language/en.js"></script>';
+				echo "\n";
+			}
+
+			if($GO_LANGUAGE->language!='en' && file_exists($module['path'].'language/'.$GO_LANGUAGE->language.'.js'))
+			{
+				echo '<script type="text/javascript" src="'.$module['url'].'language/'.$GO_LANGUAGE->language.'.js"></script>';
+				echo "\n";
+			}
+
+
+			if(file_exists($module['path'].'scripts.txt') && $GO_CONFIG->debug)
+			{
+				$data = file_get_contents($module['path'].'scripts.txt');
+				$lines = explode("\n", $data);
+				foreach($lines as $line)
+				{
+					if(!empty($line))
+					{
+						echo '<script type="text/javascript" src="'.$GO_CONFIG->host.$line.'"></script>';
+						echo "\n";
+					}
+				}
+			}else if(file_exists($module['path'].'all-module-scripts-min.js'))
+			{
+				echo '<script type="text/javascript" src="'.$module['url'].'all-module-scripts-min.js"></script>';
+				echo "\n";
+			}
+				
+			if(file_exists($module['path'].'scripts.inc.php'))
+			{
+				require($module['path'].'scripts.inc.php');
+			}
+		}
+	}
 }
 ?>
 <script type="text/javascript">
