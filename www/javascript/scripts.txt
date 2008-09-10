@@ -16,6 +16,7 @@ javascript/windows/LoginDialog.js
 javascript/data/Connection.js
 javascript/data/JsonStore.js
 javascript/grids/GridPanel.js
+
 javascript/grids/SimpleSelectList.js
 javascript/grids/CheckColumn.js
 javascript/common.js
@@ -53,6 +54,8 @@ javascript/links/LinksTemplate.js
 javascript/links/LinksContextMenu.js
 javascript/links/LinkBrowser.js
 javascript/links/LinkViewWindow.js
+
+javascript/panels/SearchPanel.js
 
 javascript/panels/miframe.js
 
