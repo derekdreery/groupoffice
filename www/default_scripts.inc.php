@@ -45,11 +45,11 @@ GO.newMenuItems=[];
 if(!$GO_CONFIG->debug)
 {
 
-	if(!is_dir($GO_CONFIG->local_path.'scripts'))
+	if(!is_dir($GO_CONFIG->local_path.'cache'))
 	{
-		mkdir($GO_CONFIG->local_path.'scripts', 0755, true);
+		mkdir($GO_CONFIG->local_path.'cache', 0755, true);
 	}
-	$script_file = $GO_CONFIG->local_path.'scripts/go-all-'.$GO_SECURITY->user_id.'.js';
+	$script_file = $GO_CONFIG->local_path.'cache/go-all-'.$GO_SECURITY->user_id.'.js';
 
 
 	$scripts=array(
@@ -77,19 +77,6 @@ if(!$GO_CONFIG->debug)
 
 	$scripts[]=$GO_THEME->theme_path.'MainLayout.js';
 	$scripts[]=$GO_CONFIG->root_path.'javascript/go-all-min.js';
-
-	/*
-	 $data = file_get_contents($GO_CONFIG->root_path.'/javascript/scripts.txt');
-	 $lines = explode("\n", $data);
-	 foreach($lines as $line)
-	 {
-		if(!empty($line))
-		{
-		$scripts[]=$GO_CONFIG->root_path.$line;
-		}
-		}*/
-
-
 
 	$modules=array();
 	foreach($GO_MODULES->modules as $module)
@@ -134,7 +121,7 @@ if(!$GO_CONFIG->debug)
 		}
 	}
 
-	echo '<script src="'.$GO_CONFIG->local_url.'scripts/go-all-'.$GO_SECURITY->user_id.'.js'.$suffix.'" type="text/javascript">';
+	echo '<script src="'.$GO_CONFIG->local_url.'cache/go-all-'.$GO_SECURITY->user_id.'.js'.$suffix.'" type="text/javascript">';
 
 	foreach($GO_MODULES->modules as $module)
 	{
@@ -244,8 +231,3 @@ if(!$GO_CONFIG->debug)
 	}
 }
 ?>
-<script type="text/javascript">
-Ext.QuickTips.init();
-Ext.state.Manager.setProvider(new GO.state.HttpProvider({url: BaseHref+'state.php'}));
-</script>
-
