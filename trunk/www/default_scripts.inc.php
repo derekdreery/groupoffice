@@ -128,7 +128,7 @@ if(!$GO_CONFIG->debug)
 		}
 	}
 
-	echo '<script src="'.$GO_CONFIG->local_url.'scripts/go-all-'.$GO_SECURITY->user_id.'.js?'.$suffix.'" type="text/javascript">';
+	echo '<script src="'.$GO_CONFIG->local_url.'scripts/go-all-'.$GO_SECURITY->user_id.'.js'.$suffix.'" type="text/javascript">';
 }else
 {
 	?>
