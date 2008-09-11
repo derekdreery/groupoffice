@@ -222,7 +222,7 @@ Ext.extend(GO.files.TemplateWindow,Ext.Window, {
 		this.formPanel.form.load({
 			url: GO.settings.modules.files.url+'json.php', 
 			params: {template_id: this.template_id, task: 'template'},
-			waitMsg:GO.lang['waitMsgLoad'],
+			
 			success: function(form, action) {
 
 				this.selectUser.setRemoteText(action.result.data.user_name);

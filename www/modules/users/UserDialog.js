@@ -164,7 +164,7 @@ Ext.extend(GO.users.UserDialog, Ext.Window,{
 		{
 			this.formPanel.load({
 				url : GO.settings.modules.users.url+'json.php',
-				waitMsg:GO.lang['waitMsgLoad'],
+				
 				success:function(form, action)
 				{				
 					this.loaded=true;

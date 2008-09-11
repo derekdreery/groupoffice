@@ -136,7 +136,7 @@ Ext.extend(GO.tasks.TasklistDialog, Ext.Window, {
 				tasklist_id:tasklist_id,
 				task: 'tasklist'
 			},
-			waitMsg:GO.lang['waitMsgLoad'],
+			
 			success: function(form, action) {
 				this.tasklist_id=tasklist_id;
 				this.selectUser.setRemoteText(action.result.data.user_name);

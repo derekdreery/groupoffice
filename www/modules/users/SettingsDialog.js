@@ -82,7 +82,7 @@ GO.users.SettingsDialog = function()
 				this.formPanel.form.load({
 					url: GO.settings.modules.users.url+'json.php', 
 					params: {task: 'settings'},
-					waitMsg:GO.lang['waitMsgLoad'],
+					
 					success: function(form, task) {
 
 				    },

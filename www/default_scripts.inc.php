@@ -125,9 +125,12 @@ if(!$GO_CONFIG->debug)
 
 	foreach($GO_MODULES->modules as $module)
 	{
-		if(file_exists($module['path'].'scripts.inc.php'))
+		if($module['read_permission'])
 		{
-			require($module['path'].'scripts.inc.php');
+			if(file_exists($module['path'].'scripts.inc.php'))
+			{
+				require($module['path'].'scripts.inc.php');
+			}
 		}
 	}
 }else

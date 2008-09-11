@@ -43,7 +43,7 @@ GO.grid.LinksPanel = function(config){
 	this.linksTree = new GO.LinksTree({
 		region:'west',
 		split:true,
-		title:'Folders'
+		title:GO.lang.folders
 	});
 	
 	this.linksTree.on('click', function(node)	{
@@ -221,7 +221,6 @@ GO.grid.LinksPanel = function(config){
 		
 	config['tbar'] = [
 			this.linkButton = new Ext.Button({
-				id: 'link',
 				iconCls: 'btn-link',
 				text: GO.lang['cmdLink'],
 				cls: 'x-btn-text-icon',
@@ -231,7 +230,6 @@ GO.grid.LinksPanel = function(config){
 				scope: this
 				
 			}),this.unlinkButton = new Ext.Button({
-				id: 'unlink',
 				iconCls: 'btn-unlink',
 				text: GO.lang['cmdUnlink'],
 				cls: 'x-btn-text-icon',
@@ -359,7 +357,7 @@ Ext.extend(GO.grid.LinksPanel, Ext.Panel, {
 	onShow : function(){
 		GO.grid.LinksPanel.superclass.onShow.call(this);
 		
-		if(!this.loaded)
+		if(!this.loaded && this.link_id>0)
 		{
 			this.linksGrid.store.load();
 			var rootNode = this.linksTree.getRootNode();

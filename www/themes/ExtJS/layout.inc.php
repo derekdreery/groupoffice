@@ -60,6 +60,7 @@ if($GO_SECURITY->logged_in())
 }else
 {
 	?>
+	<div id="checker-icon"></div>
 	<script type="text/javascript">Ext.get("load-status").update("<?php echo $lang['common']['loadingLogin']; ?>");</script>
 	<script type="text/javascript">	
 	Ext.onReady(GO.mainLayout.login, GO.mainLayout);
@@ -78,5 +79,6 @@ if($GO_SECURITY->logged_in())
 </object>
 */
  ?>
+ <div id="go-wait" class="go-wait"></div>
 </body>
 </html>
