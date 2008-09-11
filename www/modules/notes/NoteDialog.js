@@ -26,7 +26,7 @@ GO.notes.NoteDialog = function(config){
 		this.propertiesPanel.items.items[0].focus();
 	};
 	
-	config.iconCls='go-link-icon-4';
+	//config.iconCls='go-link-icon-4';
 	config.maximizable=true;
 	config.layout='fit';
 	config.modal=false;
@@ -172,6 +172,11 @@ Ext.extend(GO.notes.NoteDialog, Ext.Window,{
 							this.fileBrowser.setDisabled(false);
 						}			
 					}
+				}
+				
+				if(this.link_config && this.link_config.callback)
+				{					
+					this.link_config.callback.call(this);					
 				}	
 			},		
 			failure: function(form, action) {

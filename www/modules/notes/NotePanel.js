@@ -29,7 +29,11 @@ GO.notes.NotePanel = function(config)
 			text: GO.lang['cmdEdit'], 
 			cls: 'x-btn-text-icon', 
 			handler: function(){
-				GO.notes.noteDialog.show(this.data.id);
+				if(!GO.notes.noteDialog)
+				{
+					GO.notes.noteDialog = new GO.notes.NoteDialog();
+				}
+				GO.notes.noteDialog.show(this.data.id);					
 			}, 
 			scope: this,
 			disabled : true

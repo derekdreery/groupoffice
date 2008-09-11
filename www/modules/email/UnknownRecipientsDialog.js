@@ -25,6 +25,10 @@ GO.email.UnknownRecipientsDialog = Ext.extend(Ext.Window, {
 		this.list.on('click', function(dataview, index){				
 				var record = dataview.store.data.items[index];
 				
+				if(!GO.addressbook.contactDialog)
+				{
+					GO.addressbook.contactDialog = new GO.addressbook.ContactDialog();
+				}
 				GO.addressbook.contactDialog.show();
 				GO.addressbook.contactDialog.formPanel.form.setValues(record.data);
 				

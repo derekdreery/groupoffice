@@ -346,6 +346,12 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 				
 				this.fireEvent('save', newEvent, this.oldDomId);
 				
+				
+				if(this.link_config && this.link_config.callback)
+				{					
+					this.link_config.callback.call(this);					
+				}
+				
 				if(hide)
 				{
 					this.win.hide();

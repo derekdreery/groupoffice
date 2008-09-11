@@ -67,22 +67,29 @@
 	config.sm=new Ext.grid.RowSelectionModel();
 	config.loadMask=true;
 		    			    		
-	GO.notes.noteDialog.on('save', function(){   
-		this.store.reload();	    			    			
-	}, this);
 	
 	GO.notes.NotesGrid.superclass.constructor.call(this, config);
 	
-	this.on('rowdblclick', function(grid, rowIndex){
+	/*this.on('rowdblclick', function(grid, rowIndex){
 		var record = grid.getStore().getAt(rowIndex);	
 		
 		
 		GO.notes.noteDialog.show(record.data.id);
-		}, this);
+		}, this);*/
 	
 };
 
 
 Ext.extend(GO.notes.NotesGrid, GO.grid.GridPanel,{
 	
+	afterRender : function()
+	{
+		if(!GO.notes.noteDialog.hasListener('save'))
+		{
+			GO.notes.noteDialog.on('save', function(){   
+					this.store.reload();	    			    			
+			}, this);
+		}
+		GO.notes.NotesGrid.superclass.afterRender.call(this);
+	}
 });

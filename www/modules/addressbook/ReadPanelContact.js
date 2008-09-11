@@ -31,6 +31,10 @@ GO.addressbook.ContactReadPanel = function(config)
 			text: GO.lang['cmdEdit'], 
 			cls: 'x-btn-text-icon', 
 			handler: function(){
+				if(!GO.addressbook.contactDialog)
+				{
+					GO.addressbook.contactDialog = new GO.addressbook.ContactDialog();
+				}
 				GO.addressbook.contactDialog.show(this.data.id);
 			}, 
 			scope: this,

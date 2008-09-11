@@ -33,6 +33,11 @@ GO.addressbook.CompanyReadPanel = function(config)
 			text: GO.lang['cmdEdit'], 
 			cls: 'x-btn-text-icon', 
 			handler: function(){
+				if(!GO.addressbook.companyDialog)
+				{
+					GO.addressbook.companyDialog = new GO.addressbook.ContactDialog();
+				}
+				
 				GO.addressbook.companyDialog.show(this.data.id);
 			}, 
 			scope: this,
