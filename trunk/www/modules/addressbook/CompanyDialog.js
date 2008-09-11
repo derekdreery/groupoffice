@@ -96,7 +96,7 @@ GO.addressbook.CompanyDialog = function(config)
 	this.modal= false;
 	this.shadow= false;
 	this.border= false;
-	this.height= 470;
+	this.height= 500;
 	this.width= 820;
 	this.plain= true;
 	this.closeAction= 'hide';
@@ -222,7 +222,7 @@ Ext.extend(GO.addressbook.CompanyDialog, Ext.Window, {
 		this.companyForm.form.load({
 			url: GO.settings.modules.addressbook.url+ 'json.php', 
 			params: {company_id: id, task: 'load_company'},
-			waitMsg:GO.lang['waitMsgLoad'],
+			
 			success: function(form, action) {
 				
 				if(!action.result.data.write_permission)

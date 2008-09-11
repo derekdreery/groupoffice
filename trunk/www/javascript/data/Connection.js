@@ -95,6 +95,17 @@ GO.data.Connection = Ext.extend(Ext.data.Connection, {
      
 	request : function(o){
 		
+		if(!GO.checkerIcon)
+		{
+			GO.checkerIcon = Ext.get("checker-icon");
+			GO.waitMask = Ext.get("go-wait");			
+		}
+		if(GO.checkerIcon)
+		{
+			GO.checkerIcon.setDisplayed(true);
+			GO.waitMask.setDisplayed(true);
+		}
+		
 		if(o.callback)
 		{
 			o.originalCallback = o.callback;
@@ -128,6 +139,11 @@ GO.data.Connection = Ext.extend(Ext.data.Connection, {
 	
 	authHandler : function(options, success, response)
 	{
+		if(GO.checkerIcon)
+		{
+			GO.checkerIcon.setDisplayed(false);
+			GO.waitMask.setDisplayed(false);
+		}
 		if(!success)
 		{
 			Ext.Msg.alert(GO.lang['strError'], String.format(GO.lang['strRequestError'], response.status));

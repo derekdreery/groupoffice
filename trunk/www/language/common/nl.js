@@ -51,7 +51,7 @@ GO.lang.strSex = 'Geslacht';
 GO.lang.strBirthday = 'Verjaardag';
 GO.lang.strEmail = 'E-mail';
 
-GO.lang.strPhone = 'Telefoonnummer';
+GO.lang.strPhone = 'Tel.';
 GO.lang.strFax = 'Fax';
 GO.lang.strCellular = 'Mobiel';
 GO.lang.strAddress = 'Address';
@@ -72,7 +72,7 @@ GO.lang.strWorkZip = 'Postcode (werk)';
 GO.lang.strWorkCity = 'Stad (werk)';
 GO.lang.strWorkState = 'Provincie (werk)';
 GO.lang.strWorkCountry = 'Land (werk)',	
-GO.lang.strWorkPhone = 'Telefoonnummer (werk)';
+GO.lang.strWorkPhone = 'Tel. (werk)';
 GO.lang.strWorkFax = 'Fax (werk)';
 GO.lang.strPostAddress = 'Post adres';
 GO.lang.strPostAddressNo = 'Post huisnummer';

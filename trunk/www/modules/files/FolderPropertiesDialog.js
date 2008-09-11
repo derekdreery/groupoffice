@@ -147,7 +147,7 @@ Ext.extend(GO.files.FolderPropertiesDialog, Ext.Window, {
 				task: 'folder_properties',
 				local_path: this.local_path
 			},
-			waitMsg:GO.lang['waitMsgLoad'],
+			
 			success: function(form, action) {
 
 

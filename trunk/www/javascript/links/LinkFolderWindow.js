@@ -111,7 +111,7 @@ Ext.extend(GO.LinkFolderWindow, Ext.Window,{
 		{
 			this.formPanel.load({
 				url : BaseHref+'json.php',
-				waitMsg:GO.lang['waitMsgLoad'],
+				
 				success:function(form, action)
 				{		
 					this.setLinkFolderId (action.result.data.id);

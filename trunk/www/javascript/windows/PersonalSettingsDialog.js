@@ -88,7 +88,7 @@ Ext.extend(GO.PersonalSettingsDialog, Ext.Window,{
 		{
 			this.formPanel.load({
 				url : BaseHref+'json.php',
-				waitMsg:GO.lang['waitMsgLoad'],
+				
 				success:function(form, action)
 				{				
 					this.loaded=true;

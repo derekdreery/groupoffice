@@ -118,7 +118,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable,{
 		{
 			this.formPanel.load({
 				url : GO.settings.modules.tasks.url+'json.php',
-				waitMsg:GO.lang['waitMsgLoad'],
+				
 				success:function(form, action)
 				{
 										

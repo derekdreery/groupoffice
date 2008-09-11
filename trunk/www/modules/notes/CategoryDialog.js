@@ -87,7 +87,7 @@ Ext.extend(GO.notes.CategoryDialog, Ext.Window,{
 		{
 			this.formPanel.load({
 				url : GO.settings.modules.notes.url+'json.php',
-				waitMsg:GO.lang['waitMsgLoad'],
+				
 				success:function(form, action)
 				{
 					

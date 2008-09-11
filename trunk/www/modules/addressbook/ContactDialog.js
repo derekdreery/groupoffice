@@ -239,7 +239,7 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 		this.formPanel.form.load({
 			url: GO.settings.modules.addressbook.url+ 'json.php', 
 			params: {contact_id: id, task: 'load_contact'},
-			waitMsg:GO.lang['waitMsgLoad'],
+			//
 			success: function(form, action) {
 				
 				if(!action.result.data.write_permission)
@@ -247,8 +247,6 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 					Ext.Msg.alert(GO.lang['strError'], GO.lang['strNoWritePermissions']);						
 				}else
 				{
-					if (action.result.data.sex == 'M') { this.formPanel.form.findField('sexM').setValue(true); }
-					if (action.result.data.sex == 'F') { this.formPanel.form.findField('sexF').setValue(true); }
 					
 					this.personalPanel.setAddressbookID(action.result.data.addressbook_id);
 					//this.oldAddressbookId = task.result.data.addressbook_id;

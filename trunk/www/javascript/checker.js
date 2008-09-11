@@ -244,8 +244,7 @@ GO.Checker = function(){
 			
 		this.checkerWindow = new GO.CheckerWindow();
 		
-		this.checkerIcon = Ext.get("checker-icon");
-		this.checkerIcon.setDisplayed(false);
+		
 				
 		this.reminderIcon = Ext.get("reminder-icon");
 		this.reminderIcon.setDisplayed(false);
@@ -270,7 +269,6 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
 		}else
 		{		
 			this.fireEvent('startcheck', this);
-			this.checkerIcon.setDisplayed(true);	
 			
 			Ext.Ajax.request({
 				url: BaseHref+'json.php',
@@ -306,7 +304,6 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
 						}
 					}
 					this.fireEvent('endcheck', this);
-					this.checkerIcon.setDisplayed(false);
 					this.init.defer(this.interval, this);
 				},
 				scope:this
