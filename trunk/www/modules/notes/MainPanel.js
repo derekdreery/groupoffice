@@ -170,7 +170,11 @@ GO.moduleManager.addModule('notes', GO.notes.MainPanel, {
  */
 
 GO.linkHandlers[4]=function(id){
-		GO.notes.noteDialog.show(id);
+	if(!GO.notes.noteDialog)
+	{
+		GO.notes.noteDialog = new GO.notes.NoteDialog();
+	}
+	GO.notes.noteDialog.show(id);
 }
 
 /* {LINKHANDLERS} */

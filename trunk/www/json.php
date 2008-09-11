@@ -423,15 +423,7 @@ try{
 			$folder_id = isset($_REQUEST['folder_id']) ? smart_addslashes($_REQUEST['folder_id']) : 0;
 			$query = isset($_POST['query']) ? smart_addslashes($_REQUEST['query']) : '';
 				
-			if($link_id>0)
-			{
-				$record = $search->get_search_result($link_id, $link_type);
-				if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $record['acl_read']))
-				{
-					throw new AccessDeniedException();
-				}
-				$response['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $record['acl_write']);
-			}
+			
 
 			if(isset($_REQUEST['unlinks']))
 			{
@@ -449,6 +441,19 @@ try{
 			}
 
 			$links_response = $search->get_links_json($GO_SECURITY->user_id, $query, $start, $limit, $sort,$dir, array(), $link_id, $link_type,$folder_id);
+			
+			/*
+			 * Do this after search otherwise the new search result might not be present
+			 */
+			if($link_id>0)
+			{
+				$record = $search->get_search_result($link_id, $link_type);
+				if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $record['acl_read']))
+				{
+					throw new AccessDeniedException();
+				}
+				$response['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $record['acl_write']);
+			}
 
 			$response = isset($response) ? array_merge($response, $links_response) : $links_response;
 
