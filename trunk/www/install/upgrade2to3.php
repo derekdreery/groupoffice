@@ -30,7 +30,10 @@ ini_set('display_errors', 'On');
 
 function update_link($old_link_id, $id, $link_type)
 {
+	global $module_ids;
+	
 	$db = new db();
+	$db->Halt_On_Error = 'report';
 	
 	$sql = "UPDATE go_links SET link_id1=".$id.", link_id1_converted='1' WHERE link_id1=".$old_link_id." AND type1=$link_type AND link_id1_converted='0'";
 	$db->query($sql);
@@ -38,11 +41,9 @@ function update_link($old_link_id, $id, $link_type)
 	$sql = "UPDATE go_links SET link_id2=".$id.", link_id2_converted='1' WHERE link_id2=".$old_link_id." AND type2=$link_type AND link_id2_converted='0'";
 	$db->query($sql);	
 	
-	if(in_array($link_type, array(2,3,4,5,8)))
+	if(in_array('custom_fields', $module_ids) && in_array($link_type, array(2,3,4,5,8)))
 	{
-		//custom fields conversion
-	
-		
+		//custom fields conversion	
 		$sql = "UPDATE cf_$link_type SET link_id=$id, link_id_converted='1' WHERE link_id=$old_link_id AND link_id_converted='0'";
 		$db->query($sql);		
 	}
@@ -162,17 +163,20 @@ $db->query("ALTER TABLE `go_links` ADD INDEX ( `type1`, `link_id1` )");
 
 //temporary fields for link_id conversion
 $db->query("ALTER TABLE `go_links` ADD `link_id1_converted` ENUM( '0', '1' ) NOT NULL , ADD `link_id2_converted` ENUM( '0', '1' ) NOT NULL ;");
-$db->query("ALTER TABLE `cf_2` ADD `link_id_converted` ENUM( '0', '1' ) NOT NULL ;");
-$db->query("ALTER TABLE `cf_3` ADD `link_id_converted` ENUM( '0', '1' ) NOT NULL ;");
-$db->query("ALTER TABLE `cf_4` ADD `link_id_converted` ENUM( '0', '1' ) NOT NULL ;");
-$db->query("ALTER TABLE `cf_5` ADD `link_id_converted` ENUM( '0', '1' ) NOT NULL ;");
-$db->query("ALTER TABLE `cf_8` ADD `link_id_converted` ENUM( '0', '1' ) NOT NULL ;");
 
-$db->query("ALTER TABLE `cf_2` DROP PRIMARY KEY");
-$db->query("ALTER TABLE `cf_3` DROP PRIMARY KEY");
-$db->query("ALTER TABLE `cf_4` DROP PRIMARY KEY");
-$db->query("ALTER TABLE `cf_5` DROP PRIMARY KEY");
-$db->query("ALTER TABLE `cf_8` DROP PRIMARY KEY");
+if(in_array('custom_fields', $module_ids))
+{	
+	$db->query("ALTER TABLE `cf_2` ADD `link_id_converted` ENUM( '0', '1' ) NOT NULL ;");
+	$db->query("ALTER TABLE `cf_3` ADD `link_id_converted` ENUM( '0', '1' ) NOT NULL ;");
+	$db->query("ALTER TABLE `cf_4` ADD `link_id_converted` ENUM( '0', '1' ) NOT NULL ;");
+	$db->query("ALTER TABLE `cf_5` ADD `link_id_converted` ENUM( '0', '1' ) NOT NULL ;");
+	$db->query("ALTER TABLE `cf_8` ADD `link_id_converted` ENUM( '0', '1' ) NOT NULL ;");
+	$db->query("ALTER TABLE `cf_2` DROP PRIMARY KEY");
+	$db->query("ALTER TABLE `cf_3` DROP PRIMARY KEY");
+	$db->query("ALTER TABLE `cf_4` DROP PRIMARY KEY");
+	$db->query("ALTER TABLE `cf_5` DROP PRIMARY KEY");
+	$db->query("ALTER TABLE `cf_8` DROP PRIMARY KEY");
+}
 
 
 
@@ -291,9 +295,9 @@ if(in_array('notes', $module_ids))
 	}
 	
 	$db->query("ALTER TABLE `no_notes` DROP `link_id`");	
-	$db->query("ALTER TABLE `no_notes` DROP `contact_id`");
-	$db->query("ALTER TABLE `no_notes` DROP `company_id`");
-	$db->query("ALTER TABLE `no_notes` DROP `project_id`");
+	//$db->query("ALTER TABLE `no_notes` DROP `contact_id`");
+	//$db->query("ALTER TABLE `no_notes` DROP `company_id`");
+	//$db->query("ALTER TABLE `no_notes` DROP `project_id`");
 	$db->query("ALTER TABLE `no_notes` DROP `due_date`");
 	$db->query("ALTER TABLE `no_notes` DROP `file_path`");
   
@@ -938,36 +942,44 @@ if(in_array('filesystem', $module_ids))
 echo 'Custom fields updates<br />';
 	flush();
 	
-
-//Becuase of a bug some custom field rows might not have been deleted when a contact was deleted
-$db->query("DELETE FROM cf_2 WHERE link_id_converted='0'");
-$db->query("DELETE FROM cf_3 WHERE link_id_converted='0'");
-$db->query("DELETE FROM cf_4 WHERE link_id_converted='0'");
-$db->query("DELETE FROM cf_5 WHERE link_id_converted='0'");
-$db->query("DELETE FROM cf_8 WHERE link_id_converted='0'");
-
+if(in_array('custom_fields', $module_ids))
+{ 
+	//Becuase of a bug some custom field rows might not have been deleted when a contact was deleted
+	$db->query("DELETE FROM cf_2 WHERE link_id_converted='0'");
+	$db->query("DELETE FROM cf_3 WHERE link_id_converted='0'");
+	$db->query("DELETE FROM cf_4 WHERE link_id_converted='0'");
+	$db->query("DELETE FROM cf_5 WHERE link_id_converted='0'");
+	$db->query("DELETE FROM cf_8 WHERE link_id_converted='0'");
+}
 $db->query("DELETE FROM go_links WHERE link_id1_converted='0' OR link_id2_converted='0'");
 
 //remove temporary fields
 $db->query("ALTER TABLE `go_links` DROP `link_id1_converted`,  DROP `link_id2_converted`;");
 
-$db->query("ALTER TABLE `cf_2` DROP `link_id_converted`");
-$db->query("ALTER TABLE `cf_3` DROP `link_id_converted`");
-$db->query("ALTER TABLE `cf_4` DROP `link_id_converted`");
-$db->query("ALTER TABLE `cf_5` DROP `link_id_converted`");
-$db->query("ALTER TABLE `cf_8` DROP `link_id_converted`");
-
-$db->query("ALTER TABLE `cf_2` ADD PRIMARY KEY ( `link_id` )");
-$db->query("ALTER TABLE `cf_3` ADD PRIMARY KEY ( `link_id` )");
-$db->query("ALTER TABLE `cf_4` ADD PRIMARY KEY ( `link_id` )");
-$db->query("ALTER TABLE `cf_5` ADD PRIMARY KEY ( `link_id` )");
-$db->query("ALTER TABLE `cf_8` ADD PRIMARY KEY ( `link_id` )");
-
+if(in_array('custom_fields', $module_ids))
+{
+	$db->query("ALTER TABLE `cf_2` DROP `link_id_converted`");
+	$db->query("ALTER TABLE `cf_3` DROP `link_id_converted`");
+	$db->query("ALTER TABLE `cf_4` DROP `link_id_converted`");
+	$db->query("ALTER TABLE `cf_5` DROP `link_id_converted`");
+	$db->query("ALTER TABLE `cf_8` DROP `link_id_converted`");
+	
+	$db->query("ALTER TABLE `cf_2` ADD PRIMARY KEY ( `link_id` )");
+	$db->query("ALTER TABLE `cf_3` ADD PRIMARY KEY ( `link_id` )");
+	$db->query("ALTER TABLE `cf_4` ADD PRIMARY KEY ( `link_id` )");
+	$db->query("ALTER TABLE `cf_5` ADD PRIMARY KEY ( `link_id` )");
+	$db->query("ALTER TABLE `cf_8` ADD PRIMARY KEY ( `link_id` )");
+}
 $db->query("UPDATE `go_modules` SET `id` = 'customfields' WHERE  `id` ='custom_fields';");
 
 
 for($link_type=1;$link_type<13;$link_type++)
 {
+	$sql = "CREATE TABLE IF NOT EXISTS `cf_$link_type` (
+  `link_id` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`link_id`)
+	) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+	
 	$sql = "CREATE TABLE IF NOT EXISTS `go_links_$link_type` (
   `id` int(11) NOT NULL,
   `folder_id` int(11) NOT NULL,
@@ -1121,6 +1133,8 @@ $search->update_search_cache(true);
 
 $db->query("update ab_contacts set salutation=CONCAT('".addslashes($lang['common']['default_salutation']['M'])." ',LTRIM(CONCAT(middle_name,' ',last_name))) where sex='M' and salutation='';");
 $db->query("update ab_contacts set salutation=CONCAT('".addslashes($lang['common']['default_salutation']['F'])." ',LTRIM(CONCAT(middle_name,' ',last_name))) where sex='F' and salutation='';");
+
+
 
 echo 'Done<br /><br />';
 
