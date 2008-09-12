@@ -7,7 +7,7 @@
 require_once($GO_LANGUAGE->get_fallback_language_file('files'));
 
 $lang['files']['name'] = 'Fichiers';
-$lang['files']['description'] = 'Module fichiers. Module pour partager des fichiers entre utilisateurs de Group-Office.';
+$lang['files']['description'] = 'Module gestion des fichiers. Module pour partager des fichiers entre utilisateurs de Group-Office.';
 
 $lang['files']['fileNotFound'] = 'Fichier introuvable';
 $lang['files']['folderExists'] = 'Le dossier existe déjà';
