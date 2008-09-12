@@ -100,11 +100,13 @@ GO.email.EmailComposer = function(config){
 		anchor:'100%'      		
 	});
 
-
+	
 	
 	this.formPanel = new Ext.form.FormPanel({
-		baseCls: 'x-plain',
+				border:false,
         labelWidth: 100,
+        waitMsgTarget:true,
+				cls:'go-form-panel',
         url:'save-form.php',
         defaultType: 'textfield',
         items: [
@@ -337,10 +339,9 @@ GO.email.EmailComposer = function(config){
     minWidth: 300,
     minHeight: 200,
     layout: 'fit',
-		maximizable:true,
+		maximizable:true,		
     plain:true,
-    closeAction:'hide',
-    bodyStyle:'padding:5px;',
+    closeAction:'hide',    
     buttonAlign:'center',
 		focus: focusFn.createDelegate(this),
 		tbar:tbar,
@@ -408,15 +409,15 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 		    		this.render(Ext.getBody());
 		    		
 		    		this.show(config);
-		    		Ext.getBody().unmask();
+		    		
 	  			}else
 	  			{
-	  				Ext.getBody().unmask();
+	  				
 	  				Ext.Msg.alert(GO.email.lang.noAccountTitle, GO.email.lang.noAccount);
 	  			}
 	    	}, this, {single: true});
 	    	
-	    Ext.getBody().mask(GO.lang.waitMsgLoad);
+	    
 	    
 			if(!GO.mailings)
 			{
@@ -521,7 +522,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 				this.formPanel.form.load({
 					url: url, 
 					params: params,
-					waitMsg:GO.lang.waitMsgLoad,
+					waitMsg:GO.lang.waitMsgLoad,					
 					success: function(form, action) {		   
 						
 						this.sendParams['reply_uid']=config.uid;
@@ -710,6 +711,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 
     		this.upForm = new Ext.form.FormPanel({
     			fileUpload:true,
+    			waitMsgTarget:true,
     			items: [uploadFile,
     				 new Ext.Button({
 	    				text:GO.lang.largeUpload,
@@ -742,17 +744,15 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 					buttons:[
 						{
 							text:GO.email.lang.startTransfer,
-							handler: function(){		
-								
-								this.upForm.container.mask(GO.lang.waitMsgUpload,'x-mask-loading');
-														
+							handler: function(){						
 								this.upForm.form.submit({
+									waitMsg:GO.lang.waitMsgUpload,
 									url:GO.settings.modules.email.url+'action.php',
 									params: {task: 'attach_file'},
 									success:function(form, action){
 										
 										this.attachmentsStore.loadData({'results' : action.result.files}, true);
-										this.upForm.container.unmask();
+						
 										uploadFile.clearQueue();
 										
 										this.uploadDialog.hide();
@@ -812,11 +812,11 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
     	
 		this.formPanel.form.submit({
 			
-			
-			
+						
 			url:this.sendURL,
 			params: this.sendParams,
 			waitMsg:GO.lang.waitMsgSave,
+			waitMsgTarget:this.formPanel.body,
 			success:function(form, action){
 				
 				if(action.result.account_id)

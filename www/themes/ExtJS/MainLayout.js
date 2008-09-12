@@ -26,6 +26,9 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	ready : false,
 	
 	onReady : function(fn, scope){
+		
+		
+		
 		if(!this.ready){
 			this.on('ready', fn, scope);
 		}else{
@@ -49,6 +52,13 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	},
 	
 	fireReady : function(){
+		
+		GO.waitMask = Ext.get("go-wait");		
+		if(GO.waitMask)
+		{
+			GO.waitMask.setDisplayed(false);
+		}
+		
 		this.fireEvent('ready', this);
 	 	this.ready=true;		
 	},

@@ -829,6 +829,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
     	this.upForm = new Ext.form.FormPanel({
     			fileUpload:true,
+    			waitMsgTarget:true,
     			items: [this.uploadFile, new Ext.Button({
     				text:GO.lang.largeUpload,
     				handler: function(){
@@ -1027,7 +1028,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 					url: GO.settings.modules.files.url+'action.php',
 					defaultType: 'textfield',
 					labelWidth:75,
-					cls:'go-form-panel',
+					cls:'go-form-panel',waitMsgTarget:true,
 					items:this.newFolderNameField			
 				});
 			

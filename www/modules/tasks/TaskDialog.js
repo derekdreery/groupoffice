@@ -393,7 +393,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable,{
 			hideMode:'offsets',
 			title:GO.lang['strProperties'],
 			defaults:{anchor:'-20'},
-			//cls:'go-form-panel',
+			//cls:'go-form-panel',waitMsgTarget:true,
 			bodyStyle: 'padding:5px',
 			layout:'form',
 			autoScroll:true,
@@ -708,6 +708,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable,{
 
     this.formPanel = new Ext.form.FormPanel(
 		{
+			waitMsgTarget:true,
 			url: GO.settings.modules.tasks.url+'action.php',
 			border: false,
 			baseParams: {task: 'task'},

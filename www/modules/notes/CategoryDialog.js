@@ -196,7 +196,7 @@ Ext.extend(GO.notes.CategoryDialog, Ext.Window,{
 			border: false,
 			baseParams: {task: 'category'},			
 			title:GO.lang['strProperties'],			
-			cls:'go-form-panel',			
+			cls:'go-form-panel',waitMsgTarget:true,			
 			layout:'form',
 			autoScroll:true,
 			items:[this.selectUser = new GO.form.SelectUser({
@@ -244,6 +244,7 @@ Ext.extend(GO.notes.CategoryDialog, Ext.Window,{
     
     
     this.formPanel = new Ext.form.FormPanel({
+    	waitMsgTarget:true,
 			url: GO.settings.modules.notes.url+'action.php',
 			border: false,
 			baseParams: {task: 'category'},				

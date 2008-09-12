@@ -113,7 +113,8 @@ Ext.extend(GO.files.TemplateWindow,Ext.Window, {
 			
 			this.formPanel = new Ext.form.FormPanel({
 				title: GO.lang['strProperties'],
-        cls: 'go-form-panel',
+        cls:'go-form-panel',
+        waitMsgTarget:true,
         labelWidth: 85,
         defaultType: 'textfield',
         fileUpload: true,
@@ -238,6 +239,7 @@ Ext.extend(GO.files.TemplateWindow,Ext.Window, {
 	saveTemplate : function(hide)
 	{
 		this.formPanel.form.submit({
+			waitMsg:GO.lang.waitMsgSave,
 			url:GO.settings.modules.files.url+'action.php',
 			params:
 			{

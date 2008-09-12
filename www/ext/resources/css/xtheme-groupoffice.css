@@ -46,6 +46,7 @@ ul.x-tab-strip-top{padding-top:1px;background:#f7f6f1 repeat-x bottom;border-bot
 }
 .x-tab-panel-body{border: 1px solid #acbbc0; background-color:#f7f6f1}
 
+
 .x-tab-panel-body .x-panel-body{
 	background-color:	#f7f6f1 !important;
 }
@@ -117,9 +118,7 @@ ul.x-tab-strip-top{padding-top:1px;background:#f7f6f1 repeat-x bottom;border-bot
 .x-toolbar .x-btn-click .x-btn-right,.x-toolbar .x-btn-pressed .x-btn-right,.x-toolbar .x-btn-menu-active .x-btn-right{background:url(../images/groupoffice/toolbar/tb-btn-sprite.gif) no-repeat 0 -84px;}
 .x-toolbar .x-btn-click .x-btn-center,.x-toolbar .x-btn-pressed .x-btn-center,.x-toolbar .x-btn-menu-active .x-btn-center{background:url(../images/groupoffice/toolbar/tb-btn-sprite.gif) repeat-x 0 -105px;}
 
-.x-toolbar .ytb-text{
-	color: white !important;
-}
+
 
 .x-item-disabled{color:#e4eff4;cursor:default;opacity:.6;-moz-opacity:.6;filter:alpha(opacity=60);}
 .x-item-disabled *{color:#e4eff4!important;cursor:default!important;}
@@ -219,6 +218,9 @@ td.x-grid3-hd-over,td.sort-desc,td.sort-asc,td.x-grid3-hd-menu-open{border-left:
 .x-window-mr{background:transparent url(../images/groupoffice/window/left-right.png) repeat-y right 0;padding-right:6px;zoom:1;}
 .x-window-plain .x-window-mc {background-color:#f3f5f6 !important;border-color:#acbbc0;}
 
+.x-window-plain .x-window-body {border-color:#d0d0d0 !important;}
+
+.x-html-editor-wrap{border-color:#d0d0d0 !important;}
 
 .x-html-editor-tb .x-toolbar {background:#f3f5f6 !important;}
 .x-html-editor-tb .x-btn-pressed .x-btn-left{background:url(../images/default/button/btn-sprite.gif) no-repeat 0 -63px;}

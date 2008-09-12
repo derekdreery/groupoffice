@@ -57,7 +57,7 @@ GO.calendar.ViewDialog = function(config)
 			height:70,
 			defaultType: 'textfield',
 			defaults: {anchor: '100%'},
-			cls: 'go-form-panel',
+			cls:'go-form-panel',waitMsgTarget:true,
 			labelWidth: 75,
 			border:false,
 			items: [
@@ -93,6 +93,7 @@ GO.calendar.ViewDialog = function(config)
 		url: GO.settings.modules.calendar.url+'action.php',
 		//labelWidth: 75, // label settings here cascade unless overridden
 		defaultType: 'textfield',
+		waitMsgTarget:true,
 		border:false,
 		items:[{
 			hideLabel:true,

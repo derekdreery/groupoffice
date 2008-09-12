@@ -293,6 +293,7 @@ Ext.extend(GO.groups.MainPanel, GO.grid.GridPanel,{
 		saveNewGroup : function(hide)
 		{			
 			this.newFormPanel.form.submit({
+				waitMsg:GO.lang.waitMsgSave,
 				url:GO.settings.modules.groups.url+'action.php',
 				params:
 				{

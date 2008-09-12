@@ -12,7 +12,7 @@ GO.tasks.TasklistDialog = function(config)
 		defaults: {anchor: '100%'},
 		defaultType: 'textfield',
 		autoHeight:true,
-		cls: 'go-form-panel',
+		cls:'go-form-panel',waitMsgTarget:true,
 		labelWidth: 75,
    
 		items: [
@@ -43,6 +43,7 @@ GO.tasks.TasklistDialog = function(config)
 	//this.writePermissionsTab.render(document.body);
 
 	this.formPanel = new Ext.form.FormPanel({
+		waitMsgTarget:true,
 		url: GO.settings.modules.tasks.url+'action.php',
 		//labelWidth: 75, // label settings here cascade unless overridden
 		defaultType: 'textfield',
