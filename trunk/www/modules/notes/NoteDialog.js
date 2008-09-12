@@ -266,6 +266,7 @@ Ext.extend(GO.notes.NoteDialog, Ext.Window,{
 				title: GO.lang.strFiles, 
 				treeRootVisible:true, 
 				treeCollapsed:true,
+				loadDelayed:true,
 				disabled:true
 				});
 			items.push(this.fileBrowser);

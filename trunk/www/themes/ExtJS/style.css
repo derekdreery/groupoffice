@@ -266,10 +266,9 @@ a.normal-link:hover{
 .x-toolbar td, .x-toolbar span, .x-toolbar input, .x-toolbar div, .x-toolbar select, .x-toolbar label {
 	font-family:Tahoma,Verdana,Hevetica;
 }
-
-.x-form-check-wrap{
-height:22px;
-overflow:hidden;
+/*.Otherwise checkboxes were scrolling*/
+.ext-gecko .x-window-body .x-form-item{
+overflow:hidden !important;	
 }
 /* end ext overrides */
 

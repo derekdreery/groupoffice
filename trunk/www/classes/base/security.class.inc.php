@@ -122,6 +122,12 @@ class GO_SECURITY extends db {
 		unset($_COOKIE);
 		session_destroy();
 		$this->user_id = 0;
+		
+		global $GO_MODULES;		
+		if(isset($GO_MODULES))
+		{
+			$GO_MODULES->load_modules();
+		}
 	}
 
 	/**

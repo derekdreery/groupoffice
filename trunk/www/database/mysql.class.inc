@@ -151,11 +151,6 @@ class db {
 			return 0; /* we already complained in connect() about that. */
 		};
 
-		if(isset($GLOBALS['GO_CONFIG']) && $GLOBALS['GO_CONFIG']->debug)
-		{
-			$_SESSION['query_count']++;
-		}
-
 		# New query, discard previous result.
 		if ($this->Query_ID) {
 			$this->free();
