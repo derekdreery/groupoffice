@@ -35,12 +35,7 @@ if(is_writable($config_file))
 
 if(isset($_REQUEST['task']) && $_REQUEST['task']=='logout')
 {
-	$GO_SECURITY->logout();
-			
-	SetCookie("GO_UN","",time()-3600,"/","",0);
-	SetCookie("GO_PW","",time()-3600,"/","",0);
-	unset($_SESSION);
-	unset($_COOKIE);
+	$GO_SECURITY->logout();	
 }
 
 require_once($GO_THEME->theme_path."layout.inc.php");

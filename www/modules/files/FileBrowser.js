@@ -414,10 +414,10 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		
 		GO.files.FileBrowser.superclass.afterRender.call(this);
 		
-		//if(this.isVisible())
-		//{			
+		if(!this.loadDelayed)
+		{			
 			this.loadFiles();
-		//}
+		}
 	},
 	
 	loadFiles : function(){
@@ -443,9 +443,9 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		
 		this.rootNode.id=id;
 		this.rootNode.attributes.id=id;
-		delete this.rootNode.children;
-		this.rootNode.expanded=false;
-		this.rootNode.childrenRendered=false;
+		//delete this.rootNode.children;
+		//this.rootNode.expanded=false;
+		//this.rootNode.childrenRendered=false;
 		
 		if(id=='root')
 		{

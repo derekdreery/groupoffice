@@ -258,6 +258,7 @@ Ext.extend(GO.{module}.{friendly_single_ucfirst}Dialog, Ext.Window,{
 			this.fileBrowser = new GO.files.FileBrowser({
 				title: 'Files', 
 				treeRootVisible:true, 
+				loadDelayed:true,
 				treeCollapsed:true,
 				disabled:true
 				});

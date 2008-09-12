@@ -19,6 +19,7 @@ GO.addressbook.CompanyDialog = function(config)
 	{
 		this.fileBrowser = new GO.files.FileBrowser({
 			title: GO.lang.strFiles, 
+			loadDelayed:true,
 			treeRootVisible:true, 
 			treeCollapsed:true,
 			disabled:true

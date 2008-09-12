@@ -21,6 +21,7 @@ GO.addressbook.ContactDialog = function(config)
 		this.fileBrowser = new GO.files.FileBrowser({
 			title: GO.lang.strFiles, 
 			treeRootVisible:true, 
+			loadDelayed:true,
 			treeCollapsed:true,
 			disabled:true
 			});

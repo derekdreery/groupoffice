@@ -268,9 +268,9 @@ a.normal-link:hover{
 }
 
 
-.x-form-check-wrap{
-height:22px;
-overflow:hidden;
+/*.Otherwise checkboxes were scrolling*/
+.ext-gecko .x-window-body .x-form-item{
+overflow:hidden !important;	
 }
 
 
