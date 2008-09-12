@@ -11,7 +11,7 @@ $lang['email']['description'] = 'Module de gestion des E-mails. chaque utilisate
 
 $lang['link_type'][9]='E-mail';
 
-$lang['email']['feedbackNoReciepent'] = 'vous n\'avez pas renseigné de destinataire';
+$lang['email']['feedbackNoReciepent'] = 'Vous n\'avez pas renseigné de destinataire';
 $lang['email']['feedbackSMTPProblem'] = 'Il y a eut un problème de communication avec le serveur SMTP : ';
 $lang['email']['feedbackUnexpectedError'] = 'Il y a eut un problème lors de la construction de l\'e-mail : ';
 $lang['email']['feedbackCreateFolderFailed'] = 'Echec lors de la création du dossier';
