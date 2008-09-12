@@ -657,7 +657,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 			hideMode:'offsets',
 			title:GO.lang.strProperties,
 			defaults:{anchor:'-20'},
-			//cls:'go-form-panel',
+			//cls:'go-form-panel',waitMsgTarget:true,
 			bodyStyle: 'padding:5px',
 			layout:'form',
 			autoScroll:true,
@@ -1237,6 +1237,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 
     this.formPanel = new Ext.form.FormPanel(
 		{
+			waitMsgTarget:true,
 			url: GO.settings.modules.calendar.url+'action.php',
 			border: false,
 			baseParams: {task: 'event'},
@@ -1337,7 +1338,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 			var panel = new Ext.Panel({
 			   
 			    layout:'fit',
-					cls:'go-form-panel',
+					cls:'go-form-panel',waitMsgTarget:true,
 			    items:dataView,
 			    autoScroll:true
 			});

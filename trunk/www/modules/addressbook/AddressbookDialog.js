@@ -85,12 +85,14 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 	{
 
 		this.propertiesPanel = new Ext.FormPanel({
+			waitMsgTarget:true,
 			title: GO.addressbook.lang['cmdPanelProperties'],
 			labelWidth: 85,
 			defaultType: 'textfield',
   		border: false,
 			defaults: { anchor:'100%' },
-			cls: 'go-form-panel',
+			cls:'go-form-panel',
+			waitMsgTarget:true,
   		items:[
 				{
 					fieldLabel: GO.lang['strName'],
@@ -243,13 +245,15 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 		});			
 		
 		this.addressbookImportPanel = new Ext.FormPanel({
+			waitMsgTarget:true,
 			title: GO.addressbook.lang['cmdImport'],
 			labelWidth: 150,
 			defaultType: 'textfield',
 			fileUpload: true,
   		border: false,
 			defaults: { anchor:'100%' },
-			cls: 'go-form-panel',
+			cls:'go-form-panel',
+			waitMsgTarget:true,
   			items:[
 				this.importfileTypeCombo,
 				this.importfileInput,
@@ -270,8 +274,8 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 			labelWidth: 150,
 			defaultType: 'textfield',
 			border: false,
-			defaults: { anchor:'100%', allowBlank: false},
-			cls: 'go-form-panel',
+			defaults: { anchor:'100%', allowBlank: false},		
+			cls:'go-form-panel',waitMsgTarget:true,
 			items:[
 			this.exportfileTypeCombo,
 			this.exportContactsCompaniesCombo,
@@ -311,6 +315,7 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 		this.tabPanel = new Ext.TabPanel({
 				activeTab: 0,
 				deferredRender:false,
+				border:false,
 				items:[
 					this.propertiesPanel,
 					this.addressbookImportPanel,
@@ -434,6 +439,7 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 		}
 		
 		this.addressbookImportData = new Ext.form.FormPanel({
+			waitMsgTarget:true,
 			id: 'addressbook-default-import-data-window',
 			labelWidth: 125,
   		border: false,
@@ -518,6 +524,7 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 	saveAddressbook : function(hide)
 	{
 		this.propertiesPanel.form.submit({
+			waitMsg:GO.lang.waitMsgSave,
 			url:GO.settings.modules.addressbook.url+ 'action.php',
 			params:
 			{

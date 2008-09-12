@@ -214,8 +214,11 @@ Ext.extend(GO.{module}.{friendly_single_ucfirst}Dialog, Ext.Window,{
 						</gotpl>					
 					}
 				}
-				
-									
+				<gotpl if="$link_type&gt;0">
+				if(this.link_config && this.link_config.callback)
+				{					
+					this.link_config.callback.call(this);					
+				}</gotpl>									
 			},		
 			failure: function(form, action) {
 				if(action.failureType == 'client')
@@ -298,6 +301,7 @@ Ext.extend(GO.{module}.{friendly_single_ucfirst}Dialog, Ext.Window,{
     
     
     this.formPanel = new Ext.form.FormPanel({
+	    waitMsgTarget:true,
 			url: GO.settings.modules.{module}.url+'action.php',
 			border: false,
 			baseParams: {task: '{friendly_single}'},				

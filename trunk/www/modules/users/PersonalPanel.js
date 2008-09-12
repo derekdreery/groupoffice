@@ -52,7 +52,7 @@ GO.users.PersonalPanel = function(config)
 				columnWidth: .5,
 				layout: 'form',
 				border: false,
-				cls: 'go-form-panel',
+				cls:'go-form-panel',waitMsgTarget:true,
 				defaults: {anchor: '100%'},
 				defaultType: 'textfield',
 				items: [
@@ -91,7 +91,7 @@ GO.users.PersonalPanel = function(config)
 				columnWidth: .5,
 				layout: 'form',
 				border: false,
-				cls: 'go-form-panel',
+				cls:'go-form-panel',waitMsgTarget:true,
 				defaults: {anchor:'100%', allowBlank: true},
 				defaultType: 'textfield',
 				items: rightColItems

@@ -98,7 +98,7 @@ SelectCalendarWindow = function(){
 					closable:false,					
 					items: new Ext.Panel({
 						items:calendarList,
-						cls: 'go-form-panel',
+						cls:'go-form-panel',waitMsgTarget:true,
 						autoScroll:true
 					})
 				});

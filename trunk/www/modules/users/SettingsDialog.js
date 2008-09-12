@@ -156,6 +156,7 @@ GO.users.SettingsDialog = function()
 		{
 			
 			this.formPanel.form.submit({
+				waitMsg:GO.lang.waitMsgSave,
 				url:GO.settings.modules.users.url+'action.php',
 				params: 
 				{

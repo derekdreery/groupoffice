@@ -74,7 +74,7 @@ GO.addressbook.CompanyDialog = function(config)
 	
 	
 	this.companyForm = new Ext.FormPanel({
-		id: 'addressbook-form-company',
+		waitMsgTarget:true,		
 		border: false,
 		baseParams: {},
     items: [

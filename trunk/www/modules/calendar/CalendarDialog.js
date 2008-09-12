@@ -12,7 +12,8 @@ GO.calendar.CalendarDialog = function(config)
 		defaults: {anchor: '100%'},
 		defaultType: 'textfield',
 		autoHeight:true,
-		cls: 'go-form-panel',
+		cls:'go-form-panel',
+		waitMsgTarget:true,
 		labelWidth: 75,
    
 		items: [

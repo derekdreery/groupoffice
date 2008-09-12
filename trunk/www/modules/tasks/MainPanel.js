@@ -70,15 +70,16 @@ GO.tasks.MainPanel = function(config){
 	
 				
 	var filterPanel = new Ext.form.FormPanel({
-							title:GO.tasks.lang.filter,							
-							height:80,
-							cls: 'go-form-panel',
-							region:'north',
-							border:true,
-							split:true,
-							items: [showCompletedCheck, showInactiveCheck]
-						});
-				
+		title:GO.tasks.lang.filter,							
+		height:80,
+		cls:'go-form-panel',
+		waitMsgTarget:true,
+		region:'north',
+		border:true,
+		split:true,
+		items: [showCompletedCheck, showInactiveCheck]
+	});
+
 				
 
 	

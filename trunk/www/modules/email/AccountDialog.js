@@ -112,7 +112,7 @@ GO.email.AccountDialog = function(config){
         defaults: {anchor: '100%'},
         defaultType: 'textfield',
         autoHeight:true,
-        cls:'go-form-panel',
+        cls:'go-form-panel',waitMsgTarget:true,
 				labelWidth: 120,
         items: [
         	typeField = new Ext.form.ComboBox({
@@ -395,7 +395,9 @@ GO.email.AccountDialog = function(config){
 			url: GO.settings.modules.email.url+'action.php',
 			//labelWidth: 75, // label settings here cascade unless overridden
 			defaultType: 'textfield',
+			waitMsgTarget:true,
 			labelWidth:120,
+			border:false,
 			items:[this.tabPanel = new Ext.TabPanel({
 				hideLabel:true,
 				deferredRender:false,	
@@ -453,7 +455,7 @@ GO.email.AccountDialog = function(config){
     layout: 'fit',
 		modal:false,
 		height:400,
-		width:620,
+		width:650,
 		plain:true,
 		closeAction:'hide',
 		title:GO.email.lang.account,
@@ -617,7 +619,7 @@ filter = function(){
 			        defaultType: 'textfield',
 			        labelWidth:125,
 			        autoHeight:true,
-			        cls:'go-form-panel',
+			        cls:'go-form-panel',waitMsgTarget:true,
 			        items: [
 			        	new Ext.form.ComboBox({
 			               	fieldLabel: GO.email.lang.field,

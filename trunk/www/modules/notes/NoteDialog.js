@@ -204,7 +204,7 @@ Ext.extend(GO.notes.NoteDialog, Ext.Window,{
 			border: false,
 			baseParams: {task: 'note'},			
 			title:GO.lang['strProperties'],			
-			cls:'go-form-panel',			
+			cls:'go-form-panel',waitMsgTarget:true,			
 			layout:'form',
 			autoScroll:true,
 			items:[this.selectLinkField,
@@ -298,6 +298,7 @@ Ext.extend(GO.notes.NoteDialog, Ext.Window,{
     
     
     this.formPanel = new Ext.form.FormPanel({
+    	waitMsgTarget:true,
 			url: GO.settings.modules.notes.url+'action.php',
 			border: false,
 			baseParams: {task: 'note'},				

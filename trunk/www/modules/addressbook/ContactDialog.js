@@ -83,6 +83,7 @@ GO.addressbook.ContactDialog = function(config)
 	
 			
 	this.formPanel = new Ext.FormPanel({
+		waitMsgTarget:true,
 		url: GO.settings.modules.addressbook.url+ 'json.php',
 		baseParams: {},
 		border: false,

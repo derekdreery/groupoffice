@@ -8,7 +8,7 @@ GO.files.FolderPropertiesDialog = function(config){
 	this.propertiesPanel = new Ext.Panel({
 		layout:'form',
 		title:GO.lang['strProperties'],
-    cls:'go-form-panel',
+    cls:'go-form-panel',waitMsgTarget:true,
     defaultType: 'textfield',
 		labelWidth:70, 
 		border:false,   
@@ -96,6 +96,7 @@ GO.files.FolderPropertiesDialog = function(config){
 		
 	this.formPanel = new Ext.form.FormPanel(
 	{
+		waitMsgTarget:true,
 		border:false,
 		defaultType: 'textfield',
 		items:this.tabPanel
