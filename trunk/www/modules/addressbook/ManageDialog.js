@@ -33,7 +33,7 @@ GO.addressbook.ManageDialog = function(config)
 	}
 	
 	config.layout= 'fit';
-	config.modal= true;
+	config.modal= false;
 	config.shadow= false;
 	config.border= false;
 	config.height= 450;

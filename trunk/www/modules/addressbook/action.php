@@ -448,7 +448,19 @@ try
 
 										if ($company_name != '') {
 											$contact['company_id'] = $ab->get_company_id_by_name($company_name, $addressbook_id);
+											
+											if(!$contact['company_id'])
+											{
+												$company['addressbook_id']=$addressbook_id;
+												$company['name']=$company_name;
+												
+												$contact['company_id']=$ab->add_company($company);
+											}
+											
 										}else {
+											
+											
+											
 											$contact['company_id']=0;
 										}
 
