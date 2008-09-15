@@ -90,6 +90,8 @@ ul.x-tab-strip-top{padding-top:1px;background:#f7f6f1 repeat-x bottom;border-bot
 .go-moduletabs-header .x-tab-strip-closable .x-tab-left{padding-right:19px;}
 
 
+
+
 /*.x-form-field{margin:0;font:normal 12px tahoma,arial,helvetica,sans-serif;color:#666;}*/
 
 .x-form-focus,textarea.x-form-focus{border:1px solid #669900;}
@@ -118,10 +120,12 @@ ul.x-tab-strip-top{padding-top:1px;background:#f7f6f1 repeat-x bottom;border-bot
 .x-toolbar .x-btn-click .x-btn-right,.x-toolbar .x-btn-pressed .x-btn-right,.x-toolbar .x-btn-menu-active .x-btn-right{background:url(../images/groupoffice/toolbar/tb-btn-sprite.gif) no-repeat 0 -84px;}
 .x-toolbar .x-btn-click .x-btn-center,.x-toolbar .x-btn-pressed .x-btn-center,.x-toolbar .x-btn-menu-active .x-btn-center{background:url(../images/groupoffice/toolbar/tb-btn-sprite.gif) repeat-x 0 -105px;}
 
+.x-toolbar .x-item-disabled{color:#e4eff4;}
+.x-toolbar .x-item-disabled *{color:#e4eff4!important;}
+
+
 .x-panel-bbar .x-toolbar{border-color:#c0c0c0 !important}
 
-/*.x-item-disabled{color:gray;cursor:default;opacity:.6;-moz-opacity:.6;filter:alpha(opacity=60);}
-.x-item-disabled *{color:#e4eff4!important;cursor:default!important;}*/
 
 
 .go-paging-tb {background:#ebf0f2 !important;border-top:1px solid #c0c0c0 !important;}

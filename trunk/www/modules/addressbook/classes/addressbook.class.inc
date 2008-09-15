@@ -377,7 +377,7 @@ class addressbook extends db {
 
 		require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
 		$search = new search();
-		$search->delete_search_result($contact_id, 2);
+		$search->delete_search_result($company_id, 3);
 	}
 
 	function add_contact($contact) {
@@ -388,7 +388,7 @@ class addressbook extends db {
 		}
 
 		if (!isset($contact['ctime']) || $contact['ctime'] == 0) {
-			$contact['ctime'] = gmmktime();
+			$contact['ctime'] = time();
 		}
 		if (!isset($contact['mtime']) || $contact['mtime'] == 0) {
 			$contact['mtime'] = $contact['ctime'];
