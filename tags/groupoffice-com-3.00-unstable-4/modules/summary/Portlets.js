@@ -1,0 +1,130 @@
+GO.summary.portlets=[];
+
+GO.mainLayout.onReady(function(){
+	var feedGrid = new GO.portlets.rssFeedPortlet();
+	
+	GO.summary.portlets['portlet-rss-reader']=new GO.summary.Portlet({
+		id: 'portlet-rss-reader',
+		//iconCls: 'rss-icon',
+	 	title: GO.summary.lang.hotTopics,
+		layout:'fit',
+		/*tools: [{
+	        id:'gear',
+	        handler: function(){
+	            
+						Ext.Msg.prompt(GO.lang.url, GO.summary.lang.enterRssFeed, function(btn, text){
+							if (btn == 'ok'){
+								
+								feedGrid.loadFeed(text);
+								
+								Ext.Ajax.request({
+									url: GO.settings.modules.summary.url+'action.php',
+									params: {
+										'task':'save_rss_url',
+										'url' : text
+									},
+									waitMsg: GO.lang['waitMsgSave'],
+									waitMsgTarget: 'portlet-rss-reader'		
+								});
+							}
+						});
+	            
+	            
+	        }
+	    },{
+	        id:'close',
+	        handler: function(e, target, panel){
+	            panel.ownerCt.remove(panel, true);
+	        }
+	    }],*/
+		items: feedGrid,
+		height:300
+	});
+	
+	feedGrid.on('render',function(){
+		Ext.Ajax.request({
+			url: GO.settings.modules.summary.url+'json.php',
+			params: {
+				'task':'feed'
+			},
+			waitMsg: GO.lang['waitMsgLoad'],
+			waitMsgTarget: 'portlet-rss-reader',
+			callback: function(options, success, response){
+					if(!success)
+					{
+						Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
+					}else
+					{
+						var responseParams = Ext.decode(response.responseText);
+						
+						if(responseParams.data.url && responseParams.data.url!='')
+						{
+							feedGrid.loadFeed(responseParams.data.url);
+						}else
+						{
+							feedGrid.loadFeed('http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml');
+						}
+					}
+			}		
+		});
+	});
+	
+	
+	
+	
+	
+	
+	/* start note portlet */
+	
+	
+	var noteInput = new Ext.form.TextArea({
+		hideLabel: true,
+		name: 'text',
+		anchor: '100% 100%'
+		
+	});
+	
+	noteInput.on('change', function(){
+		notePanel.form.submit({
+			url: GO.settings.modules.summary.url+'action.php',
+			params: {'task':'save_note'},
+			waitMsg: GO.lang['waitMsgSave']			
+		});
+	});
+	
+	var notePanel = new Ext.form.FormPanel({
+		items: noteInput,
+		waitMsgTarget: true
+	});
+	
+	notePanel.on('render', function(){
+		notePanel.load({
+			url: GO.settings.modules.summary.url+'json.php',
+			params:{task:'note'},
+			waitMsg: GO.lang['waitMsgLoad']
+		});				
+	});
+	
+	
+	
+	
+	
+	
+	GO.summary.portlets['portlet-note']=new GO.summary.Portlet({
+		id: 'portlet-note',
+		//iconCls: 'note-icon',
+	 	title: GO.summary.lang.notes,
+		layout:'fit',
+		/*tools: [{
+	        id:'close',
+	        handler: function(e, target, panel){
+	            panel.ownerCt.remove(panel, true);
+	        }
+	    }],*/
+		items: notePanel,
+		height:300
+	});
+	
+	
+
+});
