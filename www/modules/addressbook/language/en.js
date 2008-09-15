@@ -91,3 +91,4 @@ GO.addressbook.lang.moveAll = 'The company and all employees will also be moved 
 GO.addressbook.lang.addressbook = 'Addressbook';
 GO.addressbook.lang.addressbooks = 'Addressbooks';
 GO.addressbook.lang.sendMailing='Send mailing';
+GO.addressbook.lang.importSuccess='Data imported successfully';

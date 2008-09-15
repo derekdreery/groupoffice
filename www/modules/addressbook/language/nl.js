@@ -84,3 +84,4 @@ GO.addressbook.lang.moveAll = 'Het bedrijf en al zijn werknemers zullen ook naar
 GO.addressbook.lang.addressbook = 'Adresboek';
 GO.addressbook.lang.addressbooks = 'Adresboeken';
 GO.addressbook.lang.sendMailing='Nieuwsbrief versturen';
+GO.addressbook.lang.importSuccess='Gegevens succesvol geimporteerd';

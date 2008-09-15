@@ -268,7 +268,8 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 			defaultType: 'textfield',
 			border: false,
 			defaults: { anchor:'100%', allowBlank: false},		
-			cls:'go-form-panel',waitMsgTarget:true,
+			cls:'go-form-panel',
+			waitMsgTarget:true,
 			items:[
 			this.exportfileTypeCombo,
 			this.exportContactsCompaniesCombo,
@@ -567,7 +568,9 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 					this.csvFieldStore.loadData(action.result);
 				}else
 				{
-					this.csvFieldDialog.close();
+					//this.csvFieldDialog.close();
+					
+					Ext.MessageBox.alert(GO.lang.strSuccess, GO.addressbook.lang.importSuccess);
 				}
 			},
 			failure: function(form, task) {
@@ -594,13 +597,16 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 				import_type: this.addressbookImportPanel.form.items.items[2].getValue(),
 				import_filetype: this.addressbookImportPanel.form.items.items[0].getValue()
 			},
-			success:function(form, task){
-				this.csvFieldDialog.close();				
+			success:function(form, action){
+				if(this.csvFieldDialog)
+					this.csvFieldDialog.close();
+					
+				Ext.MessageBox.alert(GO.lang.strSuccess, GO.addressbook.lang.importSuccess);				
 			},
-			failure: function(form, task) {					
+			failure: function(form, action) {					
 				if(task.failureType != 'client')
 				{					
-					Ext.MessageBox.alert(GO.lang['strError'], task.result.feedback);			
+					Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback);			
 				}
 			},
 			scope: this

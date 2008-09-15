@@ -101,7 +101,7 @@ class vcard extends addressbook {
 				foreach ($this->instance as $vcard) {
 					$record = $this->_get_vcard_contact($vcard);
 					
-					go_log(LOG_DEBUG, var_export($record, true));
+				//	go_log(LOG_DEBUG, var_export($record, true));
 
 					$contact = array_map('addslashes', $record['contact']);
 					
