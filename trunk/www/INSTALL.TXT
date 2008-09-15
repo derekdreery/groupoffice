@@ -61,7 +61,7 @@ Then you can ignore them. Any other error can not be ignored.
 
 SYSTEM REQUIREMENTS
 -Linux (Others might work but I never tested it) 
--PHP5 compiled with:
+-PHP5.2 compiled with:
 	-IMAP extension for e-mail module and IMAP authentication
 	-MySQL extension
 -MySQL 5 or higher
