@@ -1,4 +1,5 @@
-ext-el-mask-msg div{padding:5px 10px 5px 10px;background:#eee;border:1px solid #a3bad9;color:#222;font:normal 12px tahoma,arial,helvetica,sans-serif;cursor:wait;}
+.ext-el-mask-msg{background:#d1d8db url(../images/default/box/tb.gif) repeat-x 0 -16px !important;border: 1px solid #9c9f9d !important;}
+.ext-el-mask-msg div{border:1px solid #c1d1d6 !important;}
 
 .x-btn button{border:0 none;background:transparent;font:normal 11px tahoma,arial,helvetica,sans-serif;color:#fff;padding-left:3px;padding-right:3px;cursor:pointer;margin:0;overflow:visible;width:auto;-moz-outline:0 none;outline:0 none;}
  .x-btn-over .x-btn-text{color:#fff;}
