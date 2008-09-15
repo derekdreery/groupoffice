@@ -149,7 +149,9 @@ $db->query("UPDATE `go_search_cache` SET id=link_id WHERE id=0;");
 $db->query("ALTER TABLE `go_search_cache` ADD `acl_read` INT NOT NULL ,ADD `acl_write` INT NOT NULL ;");
 $db->query("ALTER TABLE `go_search_cache` DROP PRIMARY KEY");
 $db->query("ALTER TABLE `go_search_cache` DROP `link_id`");
+$db->query("TRUNCATE `go_search_cache`;");
 $db->query("ALTER TABLE `go_search_cache` ADD PRIMARY KEY(`id`,`link_type`);");
+
 
 
 //links indexes

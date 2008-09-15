@@ -8,4 +8,6 @@ $updates[]="CREATE TABLE `go_mail_counter` (
 PRIMARY KEY ( `host` ) ,
 INDEX ( `date` )
 ) ENGINE = MYISAM"; 
+
+$updates[]="ALTER TABLE `go_search_cache` ADD PRIMARY KEY(`id`,`link_type`);";
 ?>
