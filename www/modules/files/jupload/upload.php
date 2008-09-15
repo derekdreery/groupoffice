@@ -15,6 +15,11 @@ if($_REQUEST['local_path']=='true')
 	$path = $GO_CONFIG->file_storage_path.urldecode(smart_stripslashes($_REQUEST['path']));
 }
 
+if(!isset($_SESSION['GO_SESSION']['files']['jupload_new_files']))
+{
+	$_SESSION['GO_SESSION']['files']['jupload_new_files']=array();
+}
+
 $count=0;
 while($file = array_shift($_FILES))
 {
@@ -57,8 +62,6 @@ while($file = array_shift($_FILES))
 				$complete_dir = $path.'/'.smart_stripslashes($_POST['relpathinfo'][$count]).'/';
 				$filepath = File::checkfilename($complete_dir.$file['name']);
 
-				debug($filepath);
-
 				$fp = fopen($filepath, 'a+');
 
 				for($i=1;$i<=$_POST['jupart'];$i++)
@@ -67,6 +70,8 @@ while($file = array_shift($_FILES))
 					fwrite($fp, file_get_contents($part));
 					unlink($part);
 				}
+				
+				$_SESSION['GO_SESSION']['files']['jupload_new_files'][]=smart_stripslashes($_POST['relpathinfo'][$count]).'/'.basename($filepath);
 				fclose($fp);
 				continue;
 			}
@@ -84,9 +89,10 @@ while($file = array_shift($_FILES))
 		if(!isset($_POST['jupart']))
 		{
 			$filepath = File::checkfilename($filepath);
+			
+			$_SESSION['GO_SESSION']['files']['jupload_new_files'][]=smart_stripslashes($_POST['relpathinfo'][$count]).'/'.basename($filepath);
 		}
 
-		debug($filepath);
 		move_uploaded_file($file['tmp_name'], $filepath);
 	}
 	$count++;

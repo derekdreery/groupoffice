@@ -62,7 +62,7 @@ while($GO_USERS->next_record())
 }
 
 
-$share_dir = $GO_CONFIG->file_storage_path.'users/admin/'.addslashes($lang['file']['general']);
+$share_dir = $GO_CONFIG->file_storage_path.'users/admin/'.addslashes($lang['files']['general']);
 
 if(!is_dir($share_dir))
 {
