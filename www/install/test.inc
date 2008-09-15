@@ -8,13 +8,13 @@
 	<td valign="top">PHP version:</td>
 	<td>
 	<?php 
-	if(function_exists('version_compare') && version_compare( phpversion(), "5", ">="))
+	if(function_exists('version_compare') && version_compare( phpversion(), "5.2", ">="))
 	{
 		echo 'Ok ('.phpversion().')';
 	}else
 	{
 		$fatal_error = true;
-		echo '<span style="color: red;">Fatal error: Your PHP version is too old to run Group-Office. PHP 5 or higher is required</span>';
+		echo '<span style="color: red;">Fatal error: Your PHP version is too old to run Group-Office. PHP 5.2 or higher is required</span>';
 	}
 	?></td>
 </tr>
