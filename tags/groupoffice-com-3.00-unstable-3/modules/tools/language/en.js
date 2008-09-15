@@ -1,0 +1,9 @@
+Ext.namespace('GO.tools');
+
+GO.tools.lang = {};
+
+GO.tools.lang.tools='Admin tools';
+GO.tools.lang.description='Click on one of the scripts below to execute it.';
+
+GO.tools.lang.scripts='Scripts';
+GO.tools.lang.scriptOutput='Script output';
