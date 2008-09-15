@@ -77,59 +77,96 @@ if(!$GO_CONFIG->debug)
 
 	$scripts[]=$GO_THEME->theme_path.'MainLayout.js';
 	$scripts[]=$GO_CONFIG->root_path.'javascript/go-all-min.js';
-
-	$modules=array();
-	foreach($GO_MODULES->modules as $module)
+	
+	
+	$file = 'base-'.$GO_LANGUAGE->language.'-'.$GO_CONFIG->mtime.'.js';
+	$path = $GO_CONFIG->local_path.'cache/'.$file;
+	$url = $GO_CONFIG->local_url.'cache/'.$file;
+	
+	if(!file_exists($path))
 	{
-		if($module['read_permission'])
+		//cleanup old cache
+		$fs = new filesystem();
+		$files = $fs->get_files_sorted($GO_CONFIG->local_path.'cache');
+		while($file=array_shift($files))
 		{
-			if(file_exists($module['path'].'language/en.js'))
+			if(substr($file['name'],0, 7)=='base-'.$GO_LANGUAGE->language)
 			{
-				$scripts[]=$module['path'].'language/en.js';
+				unlink($file['path']);
 			}
-
-			if($GO_LANGUAGE->language!='en' && file_exists($module['path'].'language/'.$GO_LANGUAGE->language.'.js'))
-			{
-				$scripts[]=$module['path'].'language/'.$GO_LANGUAGE->language.'.js';
-			}
-
-			if(file_exists($module['path'].'all-module-scripts-min.js'))
-			{
-				$scripts[]=$module['path'].'all-module-scripts-min.js';
-			}
-
-			$modules[]=$module['id'];
 		}
-	}
-
-	$new_header = '/*'.$GO_CONFIG->mtime.':'.$GO_LANGUAGE->language.':'.implode(':', $modules).'*/';
-
-	$cur_header='';
-	if(file_exists($script_file))
-	{
-		$fp = fopen($script_file,'r');
-		$cur_header=trim(fgets($fp));
-	}
-
-	if($new_header!=$cur_header)
-	{
-		echo "<!-- regenerated script -->\n";
-		file_put_contents($script_file, $new_header."\n");
+		
+		echo "<!-- regenerated script -->\n";		
 		foreach($scripts as $script)
 		{
-			file_put_contents($script_file,"\n\n/*".$script."*/\n\n".file_get_contents($script),FILE_APPEND);
+			file_put_contents($path,"\n\n/*".$script."*/\n\n".file_get_contents($script),FILE_APPEND);
 		}
 	}
-
-	echo '<script src="'.$GO_CONFIG->local_url.'cache/go-all-'.$GO_SECURITY->user_id.'.js'.$suffix.'" type="text/javascript"></script>';
-
-	foreach($GO_MODULES->modules as $module)
+	echo '<script src="'.$url.'" type="text/javascript"></script>';
+	
+	$scripts=array();	
+	
+	if($GO_SECURITY->logged_in())
 	{
-		if($module['read_permission'])
+		$modules=array();
+		foreach($GO_MODULES->modules as $module)
 		{
-			if(file_exists($module['path'].'scripts.inc.php'))
+			if($module['read_permission'])
 			{
-				require($module['path'].'scripts.inc.php');
+				if(file_exists($module['path'].'language/en.js'))
+				{
+					$scripts[]=$module['path'].'language/en.js';
+				}
+	
+				if($GO_LANGUAGE->language!='en' && file_exists($module['path'].'language/'.$GO_LANGUAGE->language.'.js'))
+				{
+					$scripts[]=$module['path'].'language/'.$GO_LANGUAGE->language.'.js';
+				}
+	
+				if(file_exists($module['path'].'all-module-scripts-min.js'))
+				{
+					$scripts[]=$module['path'].'all-module-scripts-min.js';
+				}
+	
+				$modules[]=$module['id'];
+			}
+		}
+	
+		
+		$file = $GO_SECURITY->user_id.'-'.md5($GO_CONFIG->mtime.':'.$GO_LANGUAGE->language.':'.implode(':', $modules)).'.js';
+		$path = $GO_CONFIG->local_path.'cache/'.$file;
+		$url = $GO_CONFIG->local_url.'cache/'.$file;
+		
+		if(!file_exists($path))
+		{
+			//cleanup old cache
+			$fs = new filesystem();
+			$files = $fs->get_files_sorted($GO_CONFIG->local_path.'cache');
+			while($file=array_shift($files))
+			{
+				if(substr($file['name'],0, 1)==$GO_SECURITY->user_id)
+				{
+					unlink($file['path']);
+				}
+			}
+			
+			echo "<!-- regenerated script -->\n";		
+			foreach($scripts as $script)
+			{
+				file_put_contents($path,"\n\n/*".$script."*/\n\n".file_get_contents($script),FILE_APPEND);
+			}
+		}	
+	
+		echo '<script src="'.$url.'" type="text/javascript"></script>';
+
+		foreach($GO_MODULES->modules as $module)
+		{
+			if($module['read_permission'])
+			{
+				if(file_exists($module['path'].'scripts.inc.php'))
+				{
+					require($module['path'].'scripts.inc.php');
+				}
 			}
 		}
 	}
