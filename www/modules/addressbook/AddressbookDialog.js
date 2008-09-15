@@ -27,13 +27,13 @@ GO.addressbook.AddressbookDialog = function(config)
 	
 	
 	config.layout= 'fit';
-	config.modal= true;
+	config.modal= false;
 	config.shadow= false;
 	config.border= false;
 	config.height= 450;
 	config.width= 800;
 	config.closeAction= 'hide';
-	config.title= GO.addressbook.lang['cmdAddressbookDialog'];
+	config.title= GO.addressbook.lang.addressbook;
 	config.items= this.tabPanel;
 	this.buttons=[
 				{
@@ -108,8 +108,7 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 		});			
 		
 		this.importfileTypeCombo = new Ext.form.ComboBox({
-	    fieldLabel: GO.addressbook.lang['cmdFormLabelFileType'],
-	    id: 'import_filetype_combo',
+	    fieldLabel: GO.addressbook.lang['cmdFormLabelFileType'],	    
 	    value: 'csv',
       store: new Ext.data.SimpleStore({
         fields: ['value', 'text'],
@@ -123,11 +122,10 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
       valueField: 'value',
       hiddenName:'import_filetype',
       mode:'local',
-      triggertask:'all',
+      triggerAction: 'all',
       editable: false,
-			selectOnFocus:true,
-      forceSelection: true,
-      allowBlank: false
+      selectOnFocus:true,
+      forceSelection: true
 		});
 		this.importfileTypeCombo.on('select',
 			function()
@@ -160,24 +158,22 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 		
 		this.exportfileTypeCombo = new Ext.form.ComboBox({
 		    fieldLabel: GO.addressbook.lang['cmdFormLabelFileType'],
-		    id: 'export_filetype_combo',
 		    value:'csv',
-              store: new Ext.data.SimpleStore({
-                  fields: ['value', 'text'],
-                  data : [
-					['csv','CSV (Comma Separated Values)'],
-					['vcf','VCF (vCard)']
-                  ]
-              }),
-              displayField:'text',
-              valueField: 'value',
-              hiddenName:'export_filetype',
-              mode:'local',
-              triggertask:'all',
-              editable: false,
-							selectOnFocus:true,
-              forceSelection: true,
-              allowBlank: false   
+        store: new Ext.data.SimpleStore({
+          fields: ['value', 'text'],
+          data : [
+						['csv','CSV (Comma Separated Values)'],
+						['vcf','VCF (vCard)']
+          ]
+        }),
+        displayField:'text',
+        valueField: 'value',
+        hiddenName:'export_filetype',
+        mode:'local',
+        triggerAction: 'all',
+        editable: false,
+        selectOnFocus:true,
+        forceSelection: true       
 		});
 		this.exportfileTypeCombo.on('select',
 			function()
@@ -202,46 +198,43 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 		);									
 		
 		this.importContactsCompaniesCombo = new Ext.form.ComboBox({
-	    fieldLabel: GO.addressbook.lang['import'],
-	    id: 'import_combo',
+	    fieldLabel: GO.addressbook.lang['cmdImport'],
 	    value:'contacts',
       store: new Ext.data.SimpleStore({
         fields: ['value', 'text'],
         data : [
-					['contacts','Contacts'],
-					['companies','Companies']
+					['contacts',GO.addressbook.lang.contacts],
+					['companies',GO.addressbook.lang.companies]
         ]
     	}),
       displayField:'text',
       valueField: 'value',
       hiddenName:'import_type',
       mode:'local',
-      triggertask:'all',
+      triggerAction: 'all',
       editable: false,
-			selectOnFocus:true,
-      forceSelection: true,
-      allowBlank: false   
+      selectOnFocus:true,
+      forceSelection: true   
 		});						
 		
 		this.exportContactsCompaniesCombo = new Ext.form.ComboBox({
 		    fieldLabel: GO.addressbook.lang['cmdExport'],
-		    id: 'export_combo',
 		    value:'contacts',
-              store: new Ext.data.SimpleStore({
-                  fields: ['value', 'text'],
-                  data : [
-					['contacts','Contacts'],
-					['companies','Companies']
-                  ]
-              }),
-              displayField:'text',
-              valueField: 'value',
-              hiddenName:'export_type',
-              mode:'local',
-              triggertask:'all',
-              editable: false,
-			selectOnFocus:true,
-              forceSelection: true    
+        store: new Ext.data.SimpleStore({
+            fields: ['value', 'text'],
+            data : [
+							['contacts',GO.addressbook.lang.contacts],
+							['companies',GO.addressbook.lang.companies]
+		        ]
+        }),
+        displayField:'text',
+        valueField: 'value',
+        hiddenName:'export_type',
+        mode:'local',
+        triggerAction:'all',
+        editable: false,
+				selectOnFocus:true,
+        forceSelection: true    
 		});			
 		
 		this.addressbookImportPanel = new Ext.FormPanel({
@@ -498,8 +491,8 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 		}
 		
 		var buttons = [
-			{id: 'import', text: GO.addressbook.lang['cmdImport'], handler: this.importData, scope: this},					
-			{id: 'close', text: GO.lang['cmdClose'], 	handler: function(){this.csvFieldDialog.close();}, scope: this }			
+			{text: GO.addressbook.lang['cmdImport'], handler: this.importData, scope: this},					
+			{text: GO.lang['cmdClose'], 	handler: function(){this.csvFieldDialog.close();}, scope: this }			
 		];
 		
 		this.csvFieldDialog = new Ext.Window({
@@ -510,7 +503,6 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 			height: 400,
 			width: 400,
 			plain: true,
-			iconCls: 'go-module-icon-addressbook',
 			title: GO.addressbook.lang['cmdAddressbookDialog'],
 			items: [
 				this.addressbookImportData							

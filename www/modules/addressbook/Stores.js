@@ -40,4 +40,9 @@ GO.addressbook.writableAddressbooksStore = new GO.data.JsonStore({
 
 
 		
-		
+GO.addressbook.writableAddressbooksStore.on('load', function(){	
+	GO.addressbook.writableAddressbooksStore.on('load', function(){
+		GO.addressbook.readableAddressbooksStore.load();
+	});
+});
+

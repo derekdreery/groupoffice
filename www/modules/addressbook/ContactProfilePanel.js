@@ -46,7 +46,7 @@ GO.addressbook.ContactProfilePanel = function(config)
         ]
         
     }),
-    value:'imap',
+    value:'M',
     valueField:'value',
     displayField:'text',
     mode: 'local',
