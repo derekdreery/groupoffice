@@ -36,7 +36,7 @@ class files extends filesystem
 
 	function get_users_to_notify($path)
 	{
-		$users_in_share=$this->get_users_in_share($path);
+		/*$users_in_share=$this->get_users_in_share($path);
 		$users=array();
 
 		foreach($users_in_share as $user_id)
@@ -47,7 +47,7 @@ class files extends filesystem
 				$users[]=$user_id;
 			}
 		}
-		return $users;
+		return $users;*/
 
 	}
 
