@@ -43,7 +43,7 @@ class files extends filesystem
 	
 	function notify_users($path, $short_path, $modified_by_user_id, $modified=array(), $new=array(), $deleted=array())
 	{
-		global $GO_USERS, $GO_LANGUAGE, $GO_CONFIG;
+		global $GO_USERS, $GO_LANGUAGE, $GO_CONFIG, $GO_SECURITY;
 		
 		require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 		require($GO_LANGUAGE->get_language_file('files'));
@@ -78,10 +78,13 @@ class files extends filesystem
 		$this->get_users_to_notify($path);
 		while($this->next_record())
 		{
-			$user = $GO_USERS->get_user($this->f('user_id'));
-					
-			$swift = new GoSwift($user['email'], $lang['files']['folder_modified_subject'],0,'3',$body);			
-			$swift->sendmail($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
+			if($this->f('user_id')!=$GO_SECURITY->user_id)
+			{
+				$user = $GO_USERS->get_user($this->f('user_id'));
+						
+				$swift = new GoSwift($user['email'], $lang['files']['folder_modified_subject'],0,'3',$body);			
+				$swift->sendmail($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
+			}
 		}
 	}
 
