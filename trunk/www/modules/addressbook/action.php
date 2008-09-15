@@ -339,7 +339,7 @@ try
 			$quote	= isset($_REQUEST['quote']) ? smart_stripslashes($_REQUEST['quote']) : '"';
 				
 			$result['success'] = true;
-			$result['feedback'] = $feedback;
+			//$result['feedback'] = $feedback;
 				
 			//go_log(LOG_DEBUG, var_export($_FILES,true));
 			//go_log(LOG_DEBUG, var_export($_POST,true));
@@ -353,7 +353,7 @@ try
 				case 'vcf':
 					require_once ($GO_MODULES->path."classes/vcard.class.inc");
 					$vcard = new vcard();
-					$success = $vcard->import($_SESSION['GO_SESSION']['addressbook']['import_file'], $GO_SECURITY->user_id, $_POST['addressbook_id']);
+					$result['success'] = $vcard->import($_SESSION['GO_SESSION']['addressbook']['import_file'], $GO_SECURITY->user_id, smart_addslashes($_POST['addressbook_id']));
 					break;
 				case 'csv':
 						
@@ -382,8 +382,9 @@ try
 					}
 					break;
 			}
-				
-			go_log(LOG_DEBUG, var_export($result,true));
+			
+			
+
 			echo json_encode($result);
 			break;
 				case'import':
