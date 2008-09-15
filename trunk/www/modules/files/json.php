@@ -228,6 +228,16 @@ try{
 				case 'grid':
 
 					$response['results']=array();
+					
+					if(isset($_SESSION['GO_SESSION']['files']['jupload_new_files']) && count($_SESSION['GO_SESSION']['files']['jupload_new_files']))
+					{
+						$path = smart_stripslashes($_POST['path']);
+						
+						
+						$fs->notify_users(SERVER_PATH.$path, $path,$GO_SECURITY->user_id, array(), $_SESSION['GO_SESSION']['files']['jupload_new_files']);
+						
+						$_SESSION['GO_SESSION']['files']['jupload_new_files']=array();
+					}
 
 					if($_POST['path'] == 'shared')
 					{
@@ -275,6 +285,7 @@ try{
 								$response['deleteSuccess']=true;
 								$delete_paths = json_decode(smart_stripslashes($_POST['delete_keys']));
 
+								$deleted = array();
 								foreach($delete_paths as $delete_path)
 								{
 									if(!$fs->has_write_permission($GO_SECURITY->user_id, SERVER_PATH.$delete_path))
@@ -283,7 +294,12 @@ try{
 									}								
 									
 									$fs->delete(SERVER_PATH.$delete_path);
-								}
+									
+									$deleted[]=basename($delete_path);
+								}								
+								
+								$fs->notify_users($path, strip_server_path($path), $GO_SECURITY->user_id, array(), array(), $deleted);
+			
 							}catch(Exception $e)
 							{
 								$response['deleteSuccess']=false;

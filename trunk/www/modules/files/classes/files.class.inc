@@ -36,19 +36,53 @@ class files extends filesystem
 
 	function get_users_to_notify($path)
 	{
-		/*$users_in_share=$this->get_users_in_share($path);
-		$users=array();
-
-		foreach($users_in_share as $user_id)
+		$sql = "SELECT user_id FROM fs_notifications WHERE path='$path'";
+		$this->query($sql);
+		return $this->num_rows();
+	}
+	
+	function notify_users($path, $short_path, $modified_by_user_id, $modified=array(), $new=array(), $deleted=array())
+	{
+		global $GO_USERS, $GO_LANGUAGE, $GO_CONFIG;
+		
+		require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
+		require($GO_LANGUAGE->get_language_file('files'));
+		
+		$user = $GO_USERS->get_user($modified_by_user_id);		
+		$modified_by_user_name = String::format_name($user);
+		
+		
+		
+		$changes = '';
+		if(count($new))
 		{
-			$fs_settings = $this->get_settings($user_id);
-			if($fs_settings['notify']=='1' || $this->is_notified(addslashes($path), $user_id))
-			{
-				$users[]=$user_id;
-			}
+			$changes .= $lang['files']['new'].":\n".implode("\n", $new)."\n\n";
 		}
-		return $users;*/
-
+		if(count($modified))
+		{
+			$changes .= $lang['files']['modified'].":\n".implode("\n", $modified)."\n\n";
+		}
+		
+		if(count($deleted))
+		{
+			$changes .= $lang['files']['deleted'].":\n".implode("\n", $deleted)."\n\n";
+		}
+		
+		$body = sprintf($lang['files']['folder_modified_body'], 
+			$short_path,
+			$modified_by_user_name,
+			$changes);
+			
+		
+		$users=array();
+		$this->get_users_to_notify($path);
+		while($this->next_record())
+		{
+			$user = $GO_USERS->get_user($this->f('user_id'));
+					
+			$swift = new GoSwift($user['email'], $lang['files']['folder_modified_subject'],0,'3',$body);			
+			$swift->sendmail($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
+		}
 	}
 
 

@@ -14,4 +14,19 @@ $lang['files']['wordtextdoc']='Microsoft Word document';
 $lang['files']['personal']='Personal';
 $lang['files']['shared']='Shared';
 
-$lang['file']['general']='General';
+$lang['files']['general']='General';
+
+
+$lang['folder_modified_subject']='Changes to Group-Office folder';
+$lang['folder_modified_body']='You requested to be notified when changes are made to:
+
+%s
+
+The following changes were made by %s:
+
+%s
+';
+
+$lang['files']['modified']='Modified';
+$lang['files']['new']='New';
+$lang['files']['deleted']='Deleted';

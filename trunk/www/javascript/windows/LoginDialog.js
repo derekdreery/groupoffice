@@ -60,6 +60,7 @@ GO.dialog.LoginDialog = function(config){
         url:'action.php',        
         defaultType: 'textfield',
         autoHeight:true,
+        waitMsgTarget:true,
         //cls:'go-form-panel',
         
         bodyStyle:'padding:5px 10px 5px 10px',

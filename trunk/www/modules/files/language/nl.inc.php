@@ -14,4 +14,18 @@ $lang['files']['wordtextdoc']='Microsoft Word document';
 $lang['files']['personal']='Persoonlijk';
 $lang['files']['shared']='Gedeeld';
 
-$lang['file']['general']='Algemeen';
+$lang['files']['general']='Algemeen';
+
+$lang['files']['folder_modified_subject']='Wijzigingen aan Group-Office map';
+$lang['files']['folder_modified_body']='U heeft verzocht om op de hoogte gehouden te worden over wijzigingen in de map:
+
+%s
+
+De volgende wijzigingen zijn aangebracht door %s:
+
+%s
+';
+
+$lang['files']['modified']='Gewijzigd';
+$lang['files']['new']='Nieuw';
+$lang['files']['deleted']='Verwijderd';

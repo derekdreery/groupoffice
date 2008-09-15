@@ -25,7 +25,14 @@ require($GO_LANGUAGE->get_language_file('files'));
 $task=isset($_REQUEST['task']) ? smart_addslashes($_REQUEST['task']) : '';
 define('SERVER_PATH', empty($_POST['local_path']) ? $GO_CONFIG->file_storage_path : $GO_CONFIG->local_path);
 
+function strip_server_path($path)
+{
+	global $GO_CONFIG;
+	return substr($path, strlen(SERVER_PATH));
+}
+
 $response=array();
+
 
 try{
 
@@ -39,6 +46,8 @@ try{
 			{
 				throw new AccessDeniedException();
 			}
+			
+			$fs->notify_users($path, strip_server_path($delete_path), $GO_SECURITY->user_id, array(), array(), array(basename($delete_path)));
 			
 			$response['success']=$fs->delete($delete_path);
 			break;
@@ -197,6 +206,8 @@ try{
 			//var_dump($_FILES);
 			$response['success']=true;
 			$path = SERVER_PATH.smart_stripslashes($_POST['path']);
+			
+			
 
 			if(!file_exists($GO_CONFIG->tmpdir.'files_upload'))
 			{
@@ -214,10 +225,14 @@ try{
 					$_SESSION['GO_SESSION']['files']['uploaded_files'][]=$tmp_file;
 				}
 			}
+			
 			$response['success']=true;
 			break;
 
 		case 'overwrite':
+			
+			$new = array();
+			$modified=array();
 
 			$command = isset($_POST['command']) ? $_POST['command'] : 'ask';
 			$path = SERVER_PATH.smart_stripslashes($_POST['path']);
@@ -235,13 +250,24 @@ try{
 					}
 				}else
 				{
+					if(file_exists($new_path))
+					{
+						$modified[]=basename($new_path);
+					}else
+					{
+						$new[]=basename($new_path);
+					}
 					$fs->move($tmp_file, $new_path);
 				}
 				if($command != 'yestoall' && $command != 'notoall')
 				{
 					$command='ask';
 				}
+				
+				
 			}
+			
+			$fs->notify_users($path, substr(dirname($path), strlen(SERVER_PATH)), $GO_SECURITY->user_id, $modified, $new);
 
 			$response['success']=true;
 
