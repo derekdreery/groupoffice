@@ -133,7 +133,7 @@ GO.mainLayout.onReady(function(){
 			//iconCls: 'go-module-icon-calendar',
 		 	title: GO.calendar.lang.appointments,
 			layout:'fit',
-			tools: [{
+			/*tools: [{
 		        id:'gear',
 		        handler: function(){
 		            calGrid.store.reload();
@@ -143,7 +143,7 @@ GO.mainLayout.onReady(function(){
 		        handler: function(e, target, panel){
 		            panel.ownerCt.remove(panel, true);
 		        }
-		    }],
+		    }],*/
 			items: calGrid,
 			autoHeight:true
 			

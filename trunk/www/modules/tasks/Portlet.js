@@ -109,7 +109,7 @@ GO.mainLayout.onReady(function(){
 			//iconCls: 'go-module-icon-tasks',
 		 	title: GO.tasks.lang.tasks,
 			layout:'fit',
-			tools: [{
+			/*tools: [{
 		        id:'gear',
 		        handler: function(){
 		            feedGrid.store.reload();
@@ -119,7 +119,7 @@ GO.mainLayout.onReady(function(){
 		        handler: function(e, target, panel){
 		            panel.ownerCt.remove(panel, true);
 		        }
-		    }],
+		    }],*/
 			items: tasksGrid,
 			autoHeight:true
 		});

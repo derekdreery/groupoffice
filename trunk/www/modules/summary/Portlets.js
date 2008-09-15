@@ -8,7 +8,7 @@ GO.mainLayout.onReady(function(){
 		//iconCls: 'rss-icon',
 	 	title: GO.summary.lang.hotTopics,
 		layout:'fit',
-		tools: [{
+		/*tools: [{
 	        id:'gear',
 	        handler: function(){
 	            
@@ -36,7 +36,7 @@ GO.mainLayout.onReady(function(){
 	        handler: function(e, target, panel){
 	            panel.ownerCt.remove(panel, true);
 	        }
-	    }],
+	    }],*/
 		items: feedGrid,
 		height:300
 	});
@@ -115,12 +115,12 @@ GO.mainLayout.onReady(function(){
 		//iconCls: 'note-icon',
 	 	title: GO.summary.lang.notes,
 		layout:'fit',
-		tools: [{
+		/*tools: [{
 	        id:'close',
 	        handler: function(e, target, panel){
 	            panel.ownerCt.remove(panel, true);
 	        }
-	    }],
+	    }],*/
 		items: notePanel,
 		height:300
 	});
