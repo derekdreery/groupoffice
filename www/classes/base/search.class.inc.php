@@ -174,6 +174,8 @@ class search extends db {
 			
 			$this->query($sql);
 			
+			//debug($sql);
+			
 			//$this->query("SELECT FOUND_ROWS() as count;");
 		//	$this->next_record();
 			
