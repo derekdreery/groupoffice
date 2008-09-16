@@ -367,11 +367,27 @@ class imap {
 		$header = str_replace("\r\n", "\n", $header);
 		$header = str_replace("\n\t", " ", $header);
 		
-		$message["priority"] = $this->get_header_value('X-Priority:', $header);
+		$lines = explode("\n", $header);
+		
+		$values = array();
+		foreach($lines as $line)
+		{
+			$colpos = strpos($line, ':');
+			
+			if($colpos)
+			{
+				$key = strtolower(trim(substr($line,0,$colpos)));
+				$value = trim(substr($line, $colpos+1));
+				
+				$values[$key]=$value;
+			}
+		}
+		
+		$message["priority"] = isset($values['x-priority']) ? $values['x-priority'] : '';
 		$message['attachments']=false;
 		
-		$content_type = $this->get_header_value('Content-Type:', $header);
-		if (!empty($content_type) && eregi("([^/]*)/([^ ;\n\t]*)", $content_type, $regs)) {
+		
+		if (!empty($values['content-type']) && eregi("([^/]*)/([^ ;\n\t]*)", $values['content-type'], $regs)) {
 			$mtype = strtolower($regs[1]);
 			$stype = strtolower($regs[2]);
 		}else
@@ -385,17 +401,20 @@ class imap {
 		}
 		
 		$RFC822 = new RFC822();
-	 	$message["to"] = $RFC822->explode_address_list($this->get_header_value('To:', $header));
-	 	$message["cc"] = $RFC822->explode_address_list($this->get_header_value('CC:', $header));
+	 	$message["to"] = isset($values['to']) ? $RFC822->explode_address_list($values['to']) : array();
+	 	$message["cc"] = isset($values['cc']) ? $RFC822->explode_address_list($values['cc']) : array();
 	 	
-	 	$from = $RFC822->parse_address_list($this->get_header_value('From:', $header));
+	 	if(!isset($values['from']))
+	 		$values['from']='';
+	 	
+	 	$from = $RFC822->parse_address_list($values['from']);
 	 	$message["from"] = isset($from[0]['personal']) ? $from[0]['personal'] : '';
 	 	$message["sender"] = isset($from[0]['email']) ? $from[0]['email'] : '';  
-	 	$message['udate'] = strtotime($this->get_header_value('Date:', $header));
-		$message['subject'] = $this->get_header_value('Subject:', $header);
+	 	$message['udate'] = strtotime($values['date']);
+		$message['subject'] = $values['subject'];
 				
-		$message["notification"]=$this->get_header_value("Disposition-Notification-To:", $header);
-		$message['content_type']=$this->get_header_value('Content-type:', $header);
+		$message["notification"]=isset($values['disposition-notification-to']) ? $values['disposition-notification-to'] : false;
+		$message['content_type']=isset($values['content-type']) ? $values['content-type'] : false;;
 		
 		//debug($header);
 		//debug(var_export($message, true));
