@@ -354,50 +354,19 @@ class imap {
 		if ($offset == 0 || ($last > $this->count)) {
 			$last = $this->count;
 		}
-		$get = '';
-		$index = 0;
-		$sorted_uids = array ();
 		for ($i = $first; $i < $last; $i ++) {
-			if ($i != $first) {
-				$get .= ',';
-			}
-			$get .= $this->sort[$i];
-			$sorted_uids[] = $this->sort[$i];
-			$index ++;
-		}
-
-		$tmp = $sorted_uids;
-		sort($tmp); //this is the way they are returned by imap_fetch_overview
-
-		$uid_map = array ();
-		$count = count($tmp);
-		for ($i = 0; $i < $count; $i ++) {
-			$uid_map[$tmp[$i]] = $i;
-		}
-
-		$tmp_overviews = imap_fetch_overview($this->conn, $get, FT_UID);
-
-		while ($message_overview = array_shift($tmp) && $uid = array_shift($sorted_uids)) {
-			$this->messages[] = $tmp_overviews[$uid_map[$uid]];
+			$this->messages[]=$this->sort[$i];
 		}
 	}
 
-	function _next_message()
-	{
-		if (!isset ($this->sort)) {
-			$this->sort();
-		}
 
-		if($uid = array_shift($this->sort))
-		{
-			return $this->get_message($uid);
-		}
-		return false;
-	}
 	
 	
 	function get_header_values($header)
 	{
+		$header = str_replace("\r\n", "\n", $header);
+		$header = str_replace("\n\t", " ", $header);
+		
 		$message["priority"] = $this->get_header_value('X-Priority:', $header);
 		$message['attachments']=false;
 		
@@ -417,6 +386,8 @@ class imap {
 		
 		$RFC822 = new RFC822();
 	 	$message["to"] = $RFC822->explode_address_list($this->get_header_value('To:', $header));
+	 	$message["cc"] = $RFC822->explode_address_list($this->get_header_value('CC:', $header));
+	 	
 	 	$from = $RFC822->parse_address_list($this->get_header_value('From:', $header));
 	 	$message["from"] = isset($from[0]['personal']) ? $from[0]['personal'] : '';
 	 	$message["sender"] = isset($from[0]['email']) ? $from[0]['email'] : '';  
@@ -427,7 +398,7 @@ class imap {
 		$message['content_type']=$this->get_header_value('Content-type:', $header);
 		
 		//debug($header);
-		debug(var_export($message, true));
+		//debug(var_export($message, true));
 		return $message;
 	}
 
@@ -437,80 +408,13 @@ class imap {
 	 * @access public
 	 * @return array The E-mail message elements
 	 */
-	function next_message($examine_header=false) {
-		if (!isset ($this->messages)) {
-			die('Call get_messages() first');
+	function next_message()
+	{		
+		if($uid = array_shift($this->messages))
+		{
+			return $this->get_message($uid, false);
 		}
-
-		if ($overview = array_shift($this->messages)) {
-			
-			/*if(empty($overview->subject))
-			{
-				debug(var_export($overview, true));
-			}*/
-			
-			unset($this->message);
-			$this->message["uid"] = $overview->uid;
-			$this->message["msgno"] = $overview->msgno;
-
-			$this->message['udate'] = strtotime($overview->date);
-			$this->message["date"] = $overview->date;
-			$this->message['subject'] = isset ($overview->subject) ? $this->enc_utf8($overview->subject) : '';
-
-			$from = $this->RFC822->parse_address_list($this->enc_utf8($overview->from));
-			if (isset ($from[0])) {
-				$email = $from[0]['email'];
-			}
-			$personal = isset ($from[0]['personal']) ? $from[0]['personal'] : '';
-
-			$this->message["from"] = $personal == '' ? $email : $personal;
-			$this->message["sender"] = $email;
-			$this->message["flagged"] = $overview->flagged;
-			$this->message["size"] = $overview->size;
-			$this->message["answered"] = $overview->answered;
-			//$this->message['new'] = (($overview->recent==1 || $overview->seen==0) && $this->is_imap()) ? true : false;
-			$this->message['new'] = ($overview->seen == 0 && $this->is_imap()) ? true : false;
-
-
-			$headerinfo = imap_headerinfo($this->conn, imap_msgno($this->conn,$overview->uid));
-			//$this->message['udate'] = $headerinfo->udate;
-			//$this->message['udate'] = strtotime($headerinfo->date);
-
-			if (isset ($headerinfo->to)) {
-				$tmp = $headerinfo->to;
-
-				for ($x = 0; $x < count($tmp); $x ++) {
-					$email = '';
-					if (isset ($tmp[$x]->mailbox)) {
-						$host = isset ($tmp[$x]->host) ? '@'.$tmp[$x]->host : '';
-						$email = $tmp[$x]->mailbox.$host;
-					}
-					$personal = isset ($tmp[$x]->personal) ? $this->enc_utf8($tmp[$x]->personal) : '';
-					$this->message['to'][$x] = $this->RFC822->write_address($personal, $email);
-				}
-			}
-
-
-			if($examine_header)
-			{
-				$header = imap_fetchheader($this->conn, imap_msgno($this->conn,$overview->uid));
-				$values = $this->get_header_values($header);
-				foreach($values as $key=>$value)
-				{
-					if(empty($this->message[$key]))
-					{
-						$this->message[$key]=$this->enc_utf8($value);
-					}
-				}
-			}
-
-
-
-
-			return $this->message;
-		} else {
-			return false;
-		}
+		return false;
 	}
 
 	function get_source($uid)
@@ -526,7 +430,7 @@ class imap {
 	 * @access public
 	 * @return array The E-mail message elements
 	 */
-	function get_message($uid, $part = "") {
+	function get_message($uid, $fetchstructure=true) {
 		if ($this->conn) {
 			unset ($this->message);
 
@@ -559,7 +463,7 @@ class imap {
 
 
 			//$this->message['udate'] = $headerinfo->udate;
-			if(isset($headerinfo->date))
+			/*if(isset($headerinfo->date))
 			{
 				$this->message["udate"] = strtotime($headerinfo->date);
 			}elseif(isset($headerinfo->MailDate))
@@ -568,24 +472,18 @@ class imap {
 			}elseif(isset($headerinfo->udate))
 			{
 				$this->message['udate'] = $headerinfo->udate;
-			}
+			}*/
 
 			$this->message['new'] = ($headerinfo->Unseen == 'U' && $this->is_imap()) ? true : false;
 
-			$tmp = $headerinfo->from;
+			/*$tmp = $headerinfo->from;
 			$this->message["sender"] = $tmp[0]->mailbox.'@'.$tmp[0]->host;
 			$this->message["from"] = isset ($tmp[0]->personal) ? $this->enc_utf8($tmp[0]->personal) : $this->message["sender"];
+			*/
+			
+			//$this->message["subject"] = isset ($headerinfo->Subject) ? $this->enc_utf8($headerinfo->Subject) : '';
 
-			$this->message["reply_to"] = $this->RFC822->write_address($this->message['from'], $this->message["sender"]);
-
-			if (isset ($headerinfo->reply_to)) {
-				$tmp = $headerinfo->reply_to;
-				$this->message["reply_to"] = $this->RFC822->write_address($this->message['from'], $tmp[0]->mailbox.'@'.$tmp[0]->host);
-			}
-
-			$this->message["subject"] = isset ($headerinfo->Subject) ? $this->enc_utf8($headerinfo->Subject) : '';
-
-			$this->message["to"] = array();
+			/*$this->message["to"] = array();
 			if (isset($headerinfo->to) && is_array ($headerinfo->to)) {
 				$tmp = $headerinfo->to;
 
@@ -629,38 +527,57 @@ class imap {
 					$personal = isset ($tmp[$x]->personal) ? $this->enc_utf8($tmp[$x]->personal) : '';
 					$this->message["bcc"][$x] = $this->RFC822->write_address($personal, $email);
 				}
+			}*/
+			
+			$this->message["flagged"] = $headerinfo->Flagged=='F';
+			$this->message["size"] = $headerinfo->Size;
+			$this->message["answered"] = $headerinfo->Answered=='A';
+
+
+			if($fetchstructure)
+			{
+				$this->message["parts"] = array ();
+	
+				if ($part == '') {
+					$structure = imap_fetchstructure($this->conn, $uid, FT_UID);
+				} else {
+					$structure = imap_bodystruct($this->conn, $this->message['number'], $part);
+				}
+	
+				$this->mail["parts"] = array ();
+				$this->get_parts($structure);
+	
+				// $this->print_structure($structure);
 			}
 
-
-
-			$this->message["parts"] = array ();
-
-			if ($part == '') {
-				$structure = imap_fetchstructure($this->conn, $uid, FT_UID);
-			} else {
-				$structure = imap_bodystruct($this->conn, $this->message['number'], $part);
-			}
-
-			$this->mail["parts"] = array ();
-			$this->get_parts($structure);
-
-			// $this->print_structure($structure);
-
-			$header = imap_fetchheader($this->conn, $uid, FT_UID);
+			$header = imap_fetchheader($this->conn, $this->message['number']);
 			
 			$values = $this->get_header_values($header);
 			foreach($values as $key=>$value)
 			{
 				//if(empty($this->message[$key]))
 				//{
-					$this->message[$key]=$this->enc_utf8($value);
+					if(is_array($value))
+					{
+						for($i=0;$i<count($value);$i++)
+						{
+							$value[$i]=$this->enc_utf8($value[$i]);
+						}
+					}else
+					{
+						$value=$this->enc_utf8($value);
+					}
+					$this->message[$key]=$value;
 				//}
 			}
+			
+			
+			$this->message["reply_to"] = $this->RFC822->write_address($this->message['from'], $this->message["sender"]);
 
-			$overview = imap_fetch_overview($this->conn, $uid, FT_UID);
-			$this->message["flagged"] = $overview[0]->flagged;
-			$this->message["size"] = $overview[0]->size;
-			$this->message["answered"] = $overview[0]->answered;
+			if (isset ($headerinfo->reply_to)) {
+				$tmp = $headerinfo->reply_to;
+				$this->message["reply_to"] = $this->RFC822->write_address($this->message['from'], $tmp[0]->mailbox.'@'.$tmp[0]->host);
+			}
 
 			return $this->message;
 
@@ -1027,29 +944,14 @@ class imap {
 		* @return string The value of the fieldname if found.
 		*/
 
-	function get_header_value($fieldname, $header) {
-		$resu = '';
-		//$header = eregi_replace("\t", " ", $header);
-		$results = array ();
-		if (preg_match("/\v$fieldname (.*)/", $header, $results)) {
-			$fieldval = $results[1];
-			for ($b = 0; $b <= strlen($fieldval); $b ++) {
-				$curr = substr($fieldval, $b, 1);
-				$next = substr($fieldval, $b +1, 1);
-				if ($curr == "\n" && $next != " ") {
-					break;
-				}
-				if ($curr == "\t") {
-					$curr = " ";
-				}
-				if ($curr == "\n") {
-					$curr = "";
-				}
-				$resu .= $curr;
-			}
+	function get_header_value($fieldname, $header) {		
+		$value=false;
+		$results = array();
+		if (preg_match("/\v$fieldname (.*)\v/", $header, $results)) {
+			$value = trim($results[1]);			
 		}
-		$resu = eregi_replace("\([^\)]*\)", "", $resu);
-		return trim($resu);
+		
+		return $value;
 	}
 
 	/**
@@ -1479,7 +1381,9 @@ class imap {
 		//containing space values inside, but they mustn't. The space values have to be removed before
 		//they are going to be converted to utf8.
 
-		if (preg_match("/=\?/", $str)) {
+		if (substr($str, 0,2) == '=?') {
+			
+			
 			//$str = str_replace(" ", "", $str);
 			return imap_utf8($str);
 		}else {
