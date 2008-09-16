@@ -112,6 +112,11 @@
 	padding: 5px;	
 }
 
+.message-header-table td{
+	vertical-align:top;	
+}
+
+
 .message-body a:link,.message-body a:active,.message-body a:visited{
 	color: blue;
 	text-decoration: underline;

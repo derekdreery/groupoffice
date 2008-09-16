@@ -116,6 +116,10 @@
 	text-decoration: underline;	
 }
 
+.message-header-table td{
+	vertical-align:top;	
+}
+
 .message-body{
 	padding: 5px;	
 }

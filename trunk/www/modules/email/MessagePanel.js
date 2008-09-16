@@ -20,7 +20,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		
 		this.template = new Ext.XTemplate( 
 			'<div class="message-header">',
-			'<table>',
+			'<table class="message-header-table">',
 			'<tr><td style="width:70px"><b>'+GO.email.lang.from+'</b></td><td>: {full_from}</td></tr>',
 			'<tr><td><b>'+GO.email.lang.subject+'</b></td><td>: {subject}</td></tr>',
 			'<tr><td><b>'+GO.lang.strDate+'</b></td><td>: {date}</td></tr>',
@@ -76,6 +76,8 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			this.attachmentsEl = Ext.get(this.attachmentsId);			
 			this.attachmentsEl.on('click', this.openAttachment, this);
 		}
+		
+		this.body.scrollTo('top',0);
 	},
 	
 	openAttachment :  function(e, target)
