@@ -394,6 +394,42 @@ class imap {
 		}
 		return false;
 	}
+	
+	
+	function get_header_values($header)
+	{
+		$message["priority"] = $this->get_header_value('X-Priority:', $header);
+		$message['attachments']=false;
+		
+		$content_type = $this->get_header_value('Content-Type:', $header);
+		if (!empty($content_type) && eregi("([^/]*)/([^ ;\n\t]*)", $content_type, $regs)) {
+			$mtype = strtolower($regs[1]);
+			$stype = strtolower($regs[2]);
+		}else
+		{
+			$mtype = '';
+			$stype = '';
+		}
+		if ($mtype != 'text' && $stype != 'alternative' && $stype != 'related' && !empty($mtype) && !empty($stype))
+		{
+			$message["attachments"] = true;
+		}
+		
+		$RFC822 = new RFC822();
+	 	$message["to"] = $RFC822->explode_address_list($this->get_header_value('To:', $header));
+	 	$from = $RFC822->parse_address_list($this->get_header_value('From:', $header));
+	 	$message["from"] = isset($from[0]['personal']) ? $from[0]['personal'] : '';
+	 	$message["sender"] = isset($from[0]['email']) ? $from[0]['email'] : '';  
+	 	$message['udate'] = strtotime($this->get_header_value('Date:', $header));
+		$message['subject'] = $this->get_header_value('Subject:', $header);
+				
+		$message["notification"]=$this->get_header_value("Disposition-Notification-To:", $header);
+		$message['content_type']=$this->get_header_value('Content-type:', $header);
+		
+		//debug($header);
+		debug(var_export($message, true));
+		return $message;
+	}
 
 	/**
 	 * Loop trough all messages after calling get_messages()
@@ -407,6 +443,12 @@ class imap {
 		}
 
 		if ($overview = array_shift($this->messages)) {
+			
+			/*if(empty($overview->subject))
+			{
+				debug(var_export($overview, true));
+			}*/
+			
 			unset($this->message);
 			$this->message["uid"] = $overview->uid;
 			$this->message["msgno"] = $overview->msgno;
@@ -451,26 +493,14 @@ class imap {
 
 			if($examine_header)
 			{
-
-				//much slower but people want the attachment icon!
-				$this->message["attachments"]=false;
 				$header = imap_fetchheader($this->conn, imap_msgno($this->conn,$overview->uid));
-				$this->message["priority"] = $this->get_header_value('X-Priority:', $header);
-				/*$RFC822 = new RFC822();
-				 $this->message["to"] = $RFC822->explode_address_list($this->enc_utf8($this->get_header_value('To:', $header)));*/
-
-				$content_type = $this->get_header_value('Content-Type:', $header);
-				if (!empty($content_type) && eregi("([^/]*)/([^ ;\n\t]*)", $content_type, $regs)) {
-					$mtype = strtolower($regs[1]);
-					$stype = strtolower($regs[2]);
-				}else
+				$values = $this->get_header_values($header);
+				foreach($values as $key=>$value)
 				{
-					$mtype = '';
-					$stype = '';
-				}
-				if ($mtype != 'text' && $stype != 'alternative' && $stype != 'related' && !empty($mtype) && !empty($stype))
-				{
-					$this->message["attachments"] = true;
+					if(empty($this->message[$key]))
+					{
+						$this->message[$key]=$this->enc_utf8($value);
+					}
 				}
 			}
 
@@ -515,8 +545,9 @@ class imap {
 				//message doesn't exist
 				return false;
 			}
-			//var_dump($headerinfo);
-
+			
+			//debug(var_export($headerinfo, true));
+			
 			for ($i = 0; $i < sizeof($this->sort); $i ++) {
 				if ($this->message['uid'] == $this->sort[$i]) {
 					$this->message["next"] = ($i -1 >= 0) ? $this->sort[$i -1] : 0;
@@ -528,7 +559,16 @@ class imap {
 
 
 			//$this->message['udate'] = $headerinfo->udate;
-			$this->message["udate"] = strtotime($headerinfo->date);
+			if(isset($headerinfo->date))
+			{
+				$this->message["udate"] = strtotime($headerinfo->date);
+			}elseif(isset($headerinfo->MailDate))
+			{
+				$this->message["udate"] = strtotime($headerinfo->MailDate);
+			}elseif(isset($headerinfo->udate))
+			{
+				$this->message['udate'] = $headerinfo->udate;
+			}
 
 			$this->message['new'] = ($headerinfo->Unseen == 'U' && $this->is_imap()) ? true : false;
 
@@ -607,11 +647,15 @@ class imap {
 			// $this->print_structure($structure);
 
 			$header = imap_fetchheader($this->conn, $uid, FT_UID);
-			$this->message["priority"] = $this->get_header_value("X-Priority:", $header);
-			$this->message["notification"] = $this->get_header_value("Disposition-Notification-To:", $header);
-			//$this->message["header"] = $header;
-			$this->message['content_type']=$this->get_header_value('Content-type:', $header);
-
+			
+			$values = $this->get_header_values($header);
+			foreach($values as $key=>$value)
+			{
+				//if(empty($this->message[$key]))
+				//{
+					$this->message[$key]=$this->enc_utf8($value);
+				//}
+			}
 
 			$overview = imap_fetch_overview($this->conn, $uid, FT_UID);
 			$this->message["flagged"] = $overview[0]->flagged;
@@ -985,9 +1029,9 @@ class imap {
 
 	function get_header_value($fieldname, $header) {
 		$resu = '';
-		$header = eregi_replace("\t", " ", $header);
+		//$header = eregi_replace("\t", " ", $header);
 		$results = array ();
-		if (eregi("$fieldname (.*)", $header, $results)) {
+		if (preg_match("/\v$fieldname (.*)/", $header, $results)) {
 			$fieldval = $results[1];
 			for ($b = 0; $b <= strlen($fieldval); $b ++) {
 				$curr = substr($fieldval, $b, 1);
