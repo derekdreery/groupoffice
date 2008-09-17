@@ -557,11 +557,11 @@ class imap {
 			{
 				$this->message["parts"] = array ();
 	
-				if ($part == '') {
-					$structure = imap_fetchstructure($this->conn, $uid, FT_UID);
-				} else {
+				//if ($part == '') {
+				$structure = imap_fetchstructure($this->conn, $uid, FT_UID);
+				/*} else {
 					$structure = imap_bodystruct($this->conn, $this->message['number'], $part);
-				}
+				}*/
 	
 				$this->mail["parts"] = array ();
 				$this->get_parts($structure);

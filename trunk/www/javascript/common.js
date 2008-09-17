@@ -65,7 +65,7 @@ GO.jsonAuthHandler = function(json, callback, scope)
 		switch(json.authError)
 		{
 			case 'UNAUTHORIZED':
-				Ext.Msg.alert(GO.lang['strUnauthorized'], GO.lang['strUnauthorizedText']);
+				alert(GO.lang['strUnauthorizedText']);
 				return false;
 			break;
 			
@@ -95,7 +95,7 @@ GO.deleteItems = function(config)
 	switch(config.count)
 	{
 		case 0:
-			Ext.MessageBox.alert(GO.lang['strError'], GO.lang['noItemSelected']);
+			alert( GO.lang['noItemSelected']);
 			return false;
 		break;
 		
@@ -111,97 +111,95 @@ GO.deleteItems = function(config)
 		break;						
 	}
 
-	Ext.MessageBox.confirm(GO.lang['strConfirm'], strConfirm, function(btn){
-		if(btn=='yes')
+	if(confirm(strConfirm)){
+		if(config.store)
 		{
-			if(config.store)
+			//add the parameters
+			for(var param in config.params)
 			{
-				//add the parameters
-				for(var param in config.params)
-				{
-					config.store.baseParams[param]=config.params[param];
+				config.store.baseParams[param]=config.params[param];
+			}
+			config.store.reload({
+				//params: config.params,
+				callback: function(){
+					if(!this.reader.jsonData.deleteSuccess)
+					{
+						if(config.failure)
+						{
+							callback = config.failure.createDelegate(config.scope);
+							callback.call();
+						}
+						alert( this.reader.jsonData.deleteFeedback);
+					}else
+					{
+						if(config.success)
+						{
+							callback = config.success.createDelegate(config.scope);
+							callback.call();
+						}
+					}
+					
+					if(config.callback)
+					{
+						callback = config.callback.createDelegate(config.scope);
+						callback.call();
+					}	
 				}
-				config.store.reload({
-					//params: config.params,
-					callback: function(){
-						if(!this.reader.jsonData.deleteSuccess)
+			}
+			);
+			
+			//remove the delete params
+			for(var param in config.params)
+			{					
+				delete config.store.baseParams[param];					
+			}
+			
+			
+		}else
+		{
+
+			Ext.Ajax.request({
+				url: config.url,
+				params: config.params,
+				callback: function(options, success, response)
+				{
+
+					if(!success)
+					{
+						alert( GO.lang['strRequestError']);
+					}else
+					{
+						
+						
+						var responseParams = Ext.decode(response.responseText);
+						if(!responseParams.success)
 						{
 							if(config.failure)
 							{
 								callback = config.failure.createDelegate(config.scope);
-								callback.call();
+								callback.call(this, responseParams);
 							}
-							Ext.MessageBox.alert(GO.lang['strError'], this.reader.jsonData.deleteFeedback);
+							alert( responseParams.feedback);
 						}else
 						{
 							if(config.success)
 							{
 								callback = config.success.createDelegate(config.scope);
-								callback.call();
+								callback.call(this, responseParams);
 							}
 						}
 						
 						if(config.callback)
 						{
 							callback = config.callback.createDelegate(config.scope);
-							callback.call();
-						}	
-					}
-				}
-				);
-				
-				//remove the delete params
-				for(var param in config.params)
-				{					
-					delete config.store.baseParams[param];					
-				}
-				
-				
-			}else
-			{
-
-				Ext.Ajax.request({
-					url: config.url,
-					params: config.params,
-					callback: function(options, success, response)
-					{
-	
-						if(!success)
-						{
-							Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
-						}else
-						{
-							
-							
-							var responseParams = Ext.decode(response.responseText);
-							if(!responseParams.success)
-							{
-								if(config.failure)
-								{
-									callback = config.failure.createDelegate(config.scope);
-									callback.call(this, responseParams);
-								}
-								Ext.MessageBox.alert(GO.lang['strError'], responseParams.feedback);
-							}else
-							{
-								if(config.success)
-								{
-									callback = config.success.createDelegate(config.scope);
-									callback.call(this, responseParams);
-								}
-							}
-							
-							if(config.callback)
-							{
-								callback = config.callback.createDelegate(config.scope);
-								callback.call(this, responseParams);
-							}
+							callback.call(this, responseParams);
 						}
-					}				
-				});
-			}	
-		}
-	});
+					}
+				}				
+			});
+		}	
+	}
+	
 }
 
 GO.util.getFlashMovieObject = function(movieName)
