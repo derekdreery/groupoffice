@@ -41,6 +41,7 @@ GO.LinkFolderWindow = function(config){
 			defaultType: 'textfield',
 			labelWidth:75,
 			cls:'go-form-panel',
+			waitMsgTarget:true,
 			items:this.newFolderNameField,
 			autoHeight:true	,
 			baseParams:{task : 'link_folder', folder_id : 0}

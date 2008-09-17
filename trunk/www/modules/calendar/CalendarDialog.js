@@ -47,6 +47,7 @@ GO.calendar.CalendarDialog = function(config)
 		url: GO.settings.modules.calendar.url+'action.php',
 		//labelWidth: 75, // label settings here cascade unless overridden
 		defaultType: 'textfield',
+		waitMsgTarget:true,
 		border:false,
 		items:[{
 			hideLabel:true,
