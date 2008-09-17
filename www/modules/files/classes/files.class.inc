@@ -25,12 +25,24 @@ class files extends filesystem
 		$sql = "DELETE FROM fs_notifications WHERE path='$path' AND user_id=$user_id";
 		return $this->query($sql);
 	}
+	
+	function remove_notifications($path)
+	{
+		$sql = "DELETE FROM fs_notifications WHERE path='$path'";
+		return $this->query($sql);
+	}
 
 	function is_notified($path, $user_id)
 	{
 		$sql = "SELECT * FROM fs_notifications WHERE path='$path' AND user_id=$user_id";
 		$this->query($sql);
 		return $this->next_record();
+	}
+	
+	function move_notifications($old_path, $new_path)
+	{
+		$sql = "UPDATE fs_notifications SET path='$new_path' WHERE path='$old_path'";
+		return $this->query($sql);		
 	}
 
 
@@ -75,7 +87,7 @@ class files extends filesystem
 			
 		
 		$users=array();
-		$this->get_users_to_notify($path);
+		$this->get_users_to_notify(addslashes($path));
 		while($this->next_record())
 		{
 			if($this->f('user_id')!=$GO_SECURITY->user_id)
@@ -435,6 +447,7 @@ class files extends filesystem
 
 	function delete_folder($path)
 	{
+		$this->remove_notifications($path);
 		$sql = "DELETE FROM fs_folders WHERE path='$path'";
 		$this->query($sql);
 	}
