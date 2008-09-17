@@ -218,7 +218,7 @@ class tasks extends db
 
 		if(!isset($task['ctime']) || $task['ctime'] == 0)
 		{
-			$task['ctime']  =  gmmktime();
+			$task['ctime']  =  time();
 		}
 
 		if(!isset($task['mtime']) || $task['mtime'] == 0)
