@@ -2,7 +2,7 @@
 //============================================================+
 // File name   : unicode_data.php
 // Begin       : 2008-01-01
-// Last Update : 2008-04-01
+// Last Update : 2008-07-21
 // License     : GNU LGPL (http://www.gnu.org/copyleft/lesser.html)
 // 	----------------------------------------------------------------------------
 //  Copyright (C) 2002-2008  Nicola Asuni - Tecnick.com S.r.l.
@@ -38,6 +38,7 @@
 //============================================================+
 // THANKS TO
 // Efthimios Mavrogeorgiadis
+// Saleh AlMatrafe
 
 /**
  * Unicode Include file for TCPDF.
@@ -17848,9 +17849,10 @@ $unicode = array(
 );
 
 /**
-* Mirror unicode characters.
-* For information on bidi mirroring, see UAX #9: Bidirectional Algorithm, at http://www.unicode.org/unicode/reports/tr9/
-*/
+ * Mirror unicode characters.
+ * For information on bidi mirroring, see UAX #9: Bidirectional Algorithm, 
+ * at http://www.unicode.org/unicode/reports/tr9/
+ */
 $unicode_mirror = array(
 0x0028 => 0x0029,
 0x0029 => 0x0028,
@@ -18211,12 +18213,12 @@ $unicode_mirror = array(
  */
 $unicode_arlet = array(
 	1569	=>	array(65152),
-	1570	=>	array(65153, 65154),
-	1571	=>	array(65155, 65156),
+	1570	=>	array(65153, 65154, 65153, 65154),
+	1571	=>	array(65155, 65156, 65155, 65156),
 	1572	=>	array(65157, 65158),
-	1573	=>	array(65159, 65160),
+	1573	=>	array(65159, 65160, 65159, 65160),
 	1574	=>	array(65161, 65162, 65163, 65164),
-	1575	=>	array(65165, 65166),
+	1575	=>	array(65165, 65166, 65165, 65166),
 	1576	=>	array(65167, 65168, 65169, 65170),
 	1577	=>	array(65171, 65172),
 	1578	=>	array(65173, 65174, 65175, 65176),
@@ -18224,10 +18226,10 @@ $unicode_arlet = array(
 	1580	=>	array(65181, 65182, 65183, 65184),
 	1581	=>	array(65185, 65186, 65187, 65188),
 	1582	=>	array(65189, 65190, 65191, 65192),
-	1583	=>	array(65193, 65194),
-	1584	=>	array(65195, 65196),
-	1585	=>	array(65197, 65198),
-	1586	=>	array(65199, 65200),
+	1583	=>	array(65193, 65194, 65193, 65194),
+	1584	=>	array(65195, 65196, 65195, 65196),
+	1585	=>	array(65197, 65198, 65197, 65198),
+	1586	=>	array(65199, 65200, 65199, 65200),
 	1587	=>	array(65201, 65202, 65203, 65204),
 	1588	=>	array(65205, 65206, 65207, 65208),
 	1589	=>	array(65209, 65210, 65211, 65212),
@@ -18243,7 +18245,7 @@ $unicode_arlet = array(
 	1605	=>	array(65249, 65250, 65251, 65252),
 	1606	=>	array(65253, 65254, 65255, 65256),
 	1607	=>	array(65257, 65258, 65259, 65260),
-	1608	=>	array(65261, 65262),
+	1608	=>	array(65261, 65262, 65261, 65262),
 	1609	=>	array(65263, 65264, 64488, 64489),
 	1610	=>	array(65265, 65266, 65267, 65268),
 	1649	=>	array(64336, 64337),
@@ -18263,7 +18265,7 @@ $unicode_arlet = array(
 	1677	=>	array(64386, 64387),
 	1678	=>	array(64390, 64391),
 	1681	=>	array(64396, 64397),
-	1688	=>	array(64394, 64395),
+	1688	=>	array(64394, 64395, 64394, 64395),
 	1700	=>	array(64362, 64363, 64364, 64365),
 	1702	=>	array(64366, 64367, 64368, 64369),
 	1705	=>	array(64398, 64399, 64400, 64401),
@@ -18285,9 +18287,32 @@ $unicode_arlet = array(
 	1740	=>	array(64508, 64509, 64510, 64511),
 	1744	=>	array(64484, 64485, 64486, 64487),
 	1746	=>	array(64430, 64431),
-	1747	=>	array(64432, 64433),
-	8204	=>	array(00000),
-	8205	=>	array(00000, 00000, 00000, 00000)
+	1747	=>	array(64432, 64433)
+);
+
+/**
+ * Arabic laa letter
+ * char code => isolated, final, initial, medial
+ */
+$laa_array = array (
+	1570  => array(65269, 65270, 65269, 65270),
+	1571  => array(65271, 65272, 65271, 65272),
+	1573  => array(65273, 65274, 65273, 65274),
+	1575  => array(65275, 65276, 65275, 65276)
+);
+
+/**
+ * Array of character substitutions for sequences of two diacritics symbols starting with SHADDA (0651 HEX, 1617 DEC).
+ * Combining characters that can occur with Shadda (U0651) are placed in UE586-UE594. 
+ * Putting the combining mark and shadda in the same glyph allows us to avoid the two marks overlapping each other in an illegible manner.
+ * second NSM char code => substitution char
+ */
+$diacritics = array (
+	1612 => 64606, // Shadda + Dammatan
+	1613 => 64607, // Shadda + Kasratan
+	1614 => 64608, // Shadda + Fatha
+	1615 => 64609, // Shadda + Damma
+	1616 => 64610  // Shadda + Kasra
 );
 
 //============================================================+

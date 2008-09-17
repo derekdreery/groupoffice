@@ -2,7 +2,7 @@
 //============================================================+
 // File name   : tcpdf_config.php
 // Begin       : 2004-06-11
-// Last Update : 2008-03-04
+// Last Update : 2008-07-29
 //
 // Description : Congiguration file for TCPDF.
 //
@@ -23,7 +23,7 @@
  * @author Nicola Asuni
  * @copyright 2004-2008 Nicola Asuni - Tecnick.com S.r.l (www.tecnick.com) Via Della Pace, 11 - 09044 - Quartucciu (CA) - ITALY - www.tecnick.com - info@tecnick.com
  * @package com.tecnick.tcpdf
- * @version 2.1.000
+ * @version 4.0.014
  * @link http://tcpdf.sourceforge.net
  * @license http://www.gnu.org/copyleft/lesser.html LGPL
  * @since 2004-10-27
@@ -33,17 +33,46 @@
 
 if (!defined("K_TCPDF_EXTERNAL_CONFIG")) {
 	
-	// PLEASE SET THE FOLLOWING CONSTANTS:
+	// DOCUMENT_ROOT fix for IIS Webserver
+	if ((!isset($_SERVER['DOCUMENT_ROOT'])) OR (empty($_SERVER['DOCUMENT_ROOT']))) {
+		if(isset($_SERVER['SCRIPT_FILENAME'])) {
+			$_SERVER['DOCUMENT_ROOT'] = str_replace( '\\', '/', substr($_SERVER['SCRIPT_FILENAME'], 0, 0-strlen($_SERVER['PHP_SELF'])));
+		} elseif(isset($_SERVER['PATH_TRANSLATED'])) {
+			$_SERVER['DOCUMENT_ROOT'] = str_replace( '\\', '/', substr(str_replace('\\\\', '\\', $_SERVER['PATH_TRANSLATED']), 0, 0-strlen($_SERVER['PHP_SELF'])));
+		}	else {
+			// define here your DOCUMENT_ROOT path if the previous fails
+			$_SERVER['DOCUMENT_ROOT'] = "/var/www";
+		}
+	}
+	
+	// Automatic calculation for the following K_PATH_MAIN constant
+	$k_path_main = str_replace( '\\', '/', realpath(substr(dirname(__FILE__), 0, 0-strlen("config"))));
+	if (substr($k_path_main, -1) != '/') {
+		$k_path_main .= '/';
+	}
 	
 	/**
-	 * installation path (/var/www/tcpdf/)
+	 * Installation path (/var/www/tcpdf/).
+	 * By default it is automatically calculated but you can also set it as a fixed string to improve performances.
 	 */
-	define ("K_PATH_MAIN", $GO_CONFIG->class_path."/tcpdf/");
+	define ("K_PATH_MAIN", $k_path_main);
+	
+	// Automatic calculation for the following K_PATH_URL constant
+	if (isset($_SERVER["HTTP_HOST"]) AND (!empty($_SERVER["HTTP_HOST"]))) {
+		if(isset($_SERVER["HTTPS"]) AND (!empty($_SERVER["HTTPS"])) AND strtolower($_SERVER['HTTPS'])!='off') {
+			$k_path_url = "https://";
+		} else {
+			$k_path_url = "http://";
+		}
+		$k_path_url .= $_SERVER["HTTP_HOST"];
+		$k_path_url .= str_replace( '\\', '/', substr($_SERVER["PHP_SELF"], 0, -24));
+	}
 	
 	/**
-	 * url path (http://localhost/tcpdf/)
+	 * URL path to tcpdf installation folder (http://localhost/tcpdf/).
+	 * By default it is automatically calculated but you can also set it as a fixed string to improve performances..
 	 */
-	define ("K_PATH_URL", $GO_CONFIG->host."classes/tcpdf/");
+	define ("K_PATH_URL", $k_path_url);
 	
 	/**
 	 * path for PDF fonts
@@ -149,7 +178,7 @@ if (!defined("K_TCPDF_EXTERNAL_CONFIG")) {
 	/**
 	 * main font name
 	 */
-	define ("PDF_FONT_NAME_MAIN", "vera"); //vera
+	define ("PDF_FONT_NAME_MAIN", "dejavusans");
 	
 	/**
 	 * main font size
@@ -159,7 +188,7 @@ if (!defined("K_TCPDF_EXTERNAL_CONFIG")) {
 	/**
 	 * data font name
 	 */
-	define ("PDF_FONT_NAME_DATA", "vera"); //vera
+	define ("PDF_FONT_NAME_DATA", "dejavusans");
 	
 	/**
 	 * data font size
