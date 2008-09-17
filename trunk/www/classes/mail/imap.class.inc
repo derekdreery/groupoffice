@@ -493,7 +493,7 @@ class imap {
 				$this->message['udate'] = $headerinfo->udate;
 			}*/
 
-			$this->message['new'] = ($headerinfo->Unseen == 'U' && $this->is_imap()) ? true : false;
+			$this->message['new'] = (($headerinfo->Recent == 'N' || $headerinfo->Unseen == 'U')  && $this->is_imap()) ? true : false;
 
 			/*$tmp = $headerinfo->from;
 			$this->message["sender"] = $tmp[0]->mailbox.'@'.$tmp[0]->host;
