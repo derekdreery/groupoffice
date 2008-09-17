@@ -1432,7 +1432,7 @@ class calendar extends db
 				{
 					if($event['repeat_end_time'] = $this->ical2array->parse_date($rrule['UNTIL']))
 					{
-						$event['repeat_end_time'] = date(0,0,0, adodb_date('n', $event['repeat_end_time']), adodb_date('j', $event['repeat_end_time'])+1, adodb_date('Y', $event['repeat_end_time']));
+						$event['repeat_end_time'] = mtime(0,0,0, date('n', $event['repeat_end_time']), date('j', $event['repeat_end_time'])+1, date('Y', $event['repeat_end_time']));
 					}
 				}			
 				

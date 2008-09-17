@@ -100,8 +100,14 @@ $db2 = new db();
 $db->Halt_On_Error = 'report';
 $db2->Halt_On_Error = 'report';
 
+$db3 = new db();
+$db3->Halt_On_Error = 'report';
+
 echo 'Framework updates<br />';
 flush();
+
+
+$db->query("UPDATE go_modules SET id='files' WHERE id='filesystem'");
 
 $sql = "SELECT * FROM go_modules";
 $db->query($sql);
@@ -191,6 +197,222 @@ $db->query("DELETE FROM go_settings");
 $db->query("UPDATE `go_modules` SET version = ''");
 $db->query("ALTER TABLE `go_modules` CHANGE `version` `version` INT NOT NULL");
 $db->query("ALTER TABLE `go_modules` DROP `path`");
+
+
+
+
+
+
+
+if(in_array('calendar', $module_ids))
+{
+	echo 'Calendar updates<br />';
+	flush();
+
+	require_once('../modules/calendar/classes/calendar.class.inc');
+	
+	$db->query('ALTER TABLE `cal_events` ADD `calendar_id` INT NOT NULL AFTER `id` ;');
+	$db->query('ALTER TABLE `cal_events` ADD `status` VARCHAR( 20 ) NOT NULL ;');
+	$db->query('ALTER TABLE `cal_events` ADD `participants_event_id` INT NOT NULL ;');
+	$db->query('UPDATE cal_events SET participants_event_id = id');
+	$db->query("ALTER TABLE `cal_events` ADD `private` ENUM( '0', '1' ) NOT NULL ;");
+	$db->query("UPDATE cal_events SET private='1' WHERE permissions='3'");
+
+	$db->query("UPDATE cal_events SET status=(SELECT name FROM cal_statuses WHERE id=cal_events.status_id);");
+
+
+	
+	$GO_MODULES->add_module('tasks');
+	
+	$GO_SECURITY->copy_acl($GO_MODULES->modules['calendar']['acl_read'], $GO_MODULES->modules['tasks']['acl_read']);
+	$GO_SECURITY->copy_acl($GO_MODULES->modules['calendar']['acl_write'], $GO_MODULES->modules['tasks']['acl_write']);
+	
+
+
+	//separate events that are in multiple calendars
+	$sql = "SELECT event_id FROM cal_events_calendars GROUP BY event_id HAVING COUNT(calendar_id)>1;";
+	$db->query($sql);
+	while($db->next_record())
+	{
+		$sql = "SELECT * FROM cal_events WHERE id=".$db->f('event_id');
+		$db2->query($sql);
+		$db2->next_record(MYSQL_ASSOC);
+		$event = $db2->Record;
+
+		$sql = "SELECT * FROM cal_events_calendars WHERE event_id=".$event['id'];
+		$db2->query($sql);
+		$db2->next_record();
+		while($db2->next_record())
+		{
+			$new_event = array_map('addslashes',$event);
+			$new_event['calendar_id']=$db2->f('calendar_id');
+			$new_event['id']=$db3->nextid('cal_events');
+							
+			$db3->insert_row('cal_events', $new_event);			
+			$db3->query("DELETE FROM cal_events_calendars WHERE event_id=".$event['id']." AND calendar_id=".$db2->f('calendar_id'));
+		}
+		
+		
+		//todo copy links
+	}
+	
+
+
+	//update links
+	$sql = "SELECT id, link_id FROM cal_events";
+	$db->query($sql);
+	while($db->next_record())
+	{
+		update_link($db->f('link_id'),$db->f('id'), 1);
+	}	
+	
+	
+	
+	//correct timezone bug in 2.x
+	$sql = "SELECT id, start_time, end_time, repeat_end_time FROM cal_events";
+	
+	$db->query($sql);
+	
+	while($db->next_record(MYSQL_ASSOC))
+	{
+		$update = $db->Record;
+		
+		$update['start_time']=add_time($update['start_time']);
+		$update['end_time']=add_time($update['end_time']);
+		
+		$update['repeat_end_time']=$update['repeat_end_time']>86400? add_time($update['repeat_end_time']) : 0;
+		
+		$db2->update_row('cal_events', 'id', $update);	
+	}
+	
+	
+	
+	
+	
+	
+	
+	require('../modules/calendar/classes/go_ical.class.inc');
+	
+
+	//new rrule
+	$db->query("ALTER TABLE `cal_events` ADD `rrule` VARCHAR( 50 ) NOT NULL ;");
+	$db->query("UPDATE cal_events SET repeat_end_time=0 WHERE repeat_end_time<86400");
+	
+	$db->query("SELECT * FROM cal_events WHERE repeat_type!='0'");
+	
+	unset($event);
+	while($db->next_record())
+	{
+		$event['id']=$db->f('id');
+		$event['rrule']=Date::build_rrule($db->f('repeat_type'), $db->f('repeat_every'), $db->f('repeat_end_time'), $db->Record, $db->f('month_time'));
+
+		$db2->update_row('cal_events', 'id', $event);
+	}
+	
+	
+	$db->query("ALTER TABLE `cal_events` ADD INDEX ( `rrule` )");
+	
+	//now update all the new calendar_id fields
+	$sql = "UPDATE cal_events SET calendar_id=(SELECT calendar_id FROM cal_events_calendars WHERE event_id=cal_events.id)";
+	$db->query($sql);
+	
+
+	
+//convert todos
+
+	require_once($GO_CONFIG->root_path.'modules/tasks/classes/tasks.class.inc.php');
+	$tasks = new tasks();
+
+	$tasklists=array();
+
+	$tasks->query("SELECT * FROM ta_lists");
+	while($tasks->next_record())
+	{		
+		$tasklists[$tasks->f('user_id')]=$tasks->f('id');
+	}
+
+	
+
+	$count = 0;
+	$db->query("SELECT e.*, c.user_id AS cal_user_id FROM cal_events e INNER JOIN cal_calendars c ON c.id=e.calendar_id WHERE todo='1'");
+	
+	while($db->next_record())
+	{
+		if(isset($tasklists[$db->f('cal_user_id')]))
+		{
+			$todo['tasklist_id']=$tasklists[$db->f('cal_user_id')];
+			$todo['user_id']=$db->f('cal_user_id');
+			$todo['ctime']=$db->f('ctime');
+			$todo['mtime']=$db->f('mtime');
+			$todo['start_time']=$db->f('start_time');
+			$todo['due_time']=$db->f('end_time');
+			$todo['completion_time']=$db->f('completion_time');
+			$todo['name']=$db->f('name');
+			$todo['description']=$db->f('description');
+			$todo['status']=$db->f('status');
+			$todo['rrule']=$db->f('rrule');
+			$todo['repeat_end_time']=$db->f('repeat_end_time');
+
+
+			$task_id=$tasks->add_task(array_map('addslashes', $todo));
+		
+		
+			$sql = "UPDATE go_links SET link_id1=".$task_id.",type1=12 WHERE link_id1=".$db->f('id')." AND type1=1";
+			$db2->query($sql);
+	
+			$sql = "UPDATE go_links SET link_id2=".$task_id.",type2=12 WHERE link_id2=".$db->f('id')." AND type2=1";
+			$db2->query($sql);
+			
+			$sql = "DELETE FROM cal_events WHERE id=".$db->f('id');
+			$tasks->query($sql);
+		
+			$count++;
+			
+		}else
+		{
+			echo 'Warning! Could not move task :'.$todo['name'].' '.date('Ymd G:i', $todo['start_time']).'<br />';
+		}
+		
+	}
+	
+
+	
+	//drop old fields and tables
+	$db->query("ALTER TABLE `cal_events`
+  DROP `permissions`,
+  DROP `link_id`, 
+  DROP `todo`, 
+  DROP `completion_time`,
+  DROP `status_id`;");
+	
+	$db->query("ALTER TABLE `cal_events`
+  DROP `contact_id`,
+  DROP `company_id`,
+  DROP `project_id`,
+  DROP `background`,
+  DROP `repeat_type`,
+  DROP `repeat_forever`,
+  DROP `repeat_every`,
+  DROP `mon`,
+  DROP `tue`,
+  DROP `wed`,
+  DROP `thu`,
+  DROP `fri`,
+  DROP `sat`,
+  DROP `sun`,
+  DROP `month_time`,
+  DROP `custom_fields`;");
+
+	$db->query("ALTER TABLE `cal_events` DROP `timezone`, DROP `DST`;");
+
+	$db->query("DROP TABLE `cal_statuses`");
+	
+	
+	
+	
+}
+
+
 
 
 if(in_array('cms', $module_ids))
@@ -642,212 +864,6 @@ WHERE id = t.id ) ;");
 }
 
 
-if(in_array('calendar', $module_ids))
-{
-	echo 'Calendar updates<br />';
-	flush();
-
-	require_once('../modules/calendar/classes/calendar.class.inc');
-	
-	$db->query('ALTER TABLE `cal_events` ADD `calendar_id` INT NOT NULL AFTER `id` ;');
-	$db->query('ALTER TABLE `cal_events` ADD `status` VARCHAR( 20 ) NOT NULL ;');
-	$db->query('ALTER TABLE `cal_events` ADD `participants_event_id` INT NOT NULL ;');
-	$db->query('UPDATE cal_events SET participants_event_id = id');
-	$db->query("ALTER TABLE `cal_events` ADD `private` ENUM( '0', '1' ) NOT NULL ;");
-	$db->query("UPDATE cal_events SET private='1' WHERE permissions='3'");
-
-	$db->query("UPDATE cal_events SET status=(SELECT name FROM cal_statuses WHERE id=cal_events.status_id);");
-
-
-	$acl_read = $GO_SECURITY->copy_acl($modules['calendar']['acl_read']);
-	$acl_write = $GO_SECURITY->copy_acl($modules['calendar']['acl_write']);
-
-	$GO_MODULES->add_module('tasks','1.0',$acl_read, $acl_write, 100);
-
-	//separate events that are in multiple calendars
-	$sql = "SELECT event_id FROM cal_events_calendars GROUP BY event_id HAVING COUNT(calendar_id)>1;";
-	$db->query($sql);
-	while($db->next_record())
-	{
-		$sql = "SELECT * FROM cal_events WHERE id=".$db->f('event_id');
-		$db2->query($sql);
-		$db2->next_record(MYSQL_ASSOC);
-		$event = $db2->Record;
-
-		$sql = "SELECT * FROM cal_events_calendars WHERE event_id=".$event['id'];
-		$db2->query($sql);
-		while($db2->next_record())
-		{
-			$new_event = array_map('addslashes',$event);
-			$new_event['calendar_id']=$db2->f('calendar_id');
-			$new_event['id']=$db2->nextid('cal_events');
-				
-			$db2->insert_row('cal_events', $new_event);
-		}
-
-		$db2->query("DELETE FROM cal_events WHERE id=".$event['id']);
-	}
-
-	//now update all the new calendar_id fields
-	$sql = "UPDATE cal_events SET calendar_id=(SELECT calendar_id FROM cal_events_calendars WHERE event_id=cal_events.id)";
-	$db->query($sql);
-
-
-	//update links
-	$sql = "SELECT id, link_id FROM cal_events";
-	$db->query($sql);
-	while($db->next_record())
-	{
-		update_link($db->f('link_id'),$db->f('id'), 1);
-	}
-
-
-	
-
-
-	
-	
-	
-	
-	//correct timezone bug in 2.x
-	$sql = "SELECT id, start_time, end_time, repeat_end_time FROM cal_events";
-	
-	$db->query($sql);
-	
-	while($db->next_record(MYSQL_ASSOC))
-	{
-		$update = $db->Record;
-		
-		$update['start_time']=add_time($update['start_time']);
-		$update['end_time']=add_time($update['end_time']);
-		
-		$update['repeat_end_time']=$update['repeat_end_time']>86400? add_time($update['repeat_end_time']) : 0;
-		
-		$db2->update_row('cal_events', 'id', $update);	
-	}
-	
-	/*
-	$sql = "SELECT id, due_time, completion_time, repeat_end_time FROM ta_tasks";
-	
-	while($db->next_record(MYSQL_ASSOC))
-	{
-		$update = $db->Record;
-		
-		$update['due_time']=add_time($update['due_time']);
-		$update['completion_time']=add_time($update['completion_time']);
-		$update['repeat_end_time']=add_time($update['repeat_end_time']);
-		
-		$db2->update_row('ta_tasks', 'id', $update);	
-	}	*/
-	
-	
-	require('../modules/calendar/classes/go_ical.class.inc');
-	
-	
-	//new rrule
-	$db->query("ALTER TABLE `cal_events` ADD `rrule` VARCHAR( 50 ) NOT NULL ;");
-	$db->query("UPDATE cal_events SET repeat_end_time=0 WHERE repeat_end_time<86400");
-	
-	$db->query("SELECT * FROM cal_events WHERE repeat_type!='0'");
-	while($db->next_record())
-	{
-		$event['id']=$db->f('id');
-		$event['rrule']=Date::build_rrule($db->f('repeat_type'), $db->f('repeat_every'), $db->f('repeat_end_time'), $db->Record, $db->f('month_time'));
-
-		$db2->update_row('cal_events', 'id', $event);
-	}
-	
-	
-	$db->query("ALTER TABLE `cal_events` ADD INDEX ( `rrule` )");
-	
-	
-	
-//convert todos
-
-	require_once($GO_CONFIG->root_path.'modules/tasks/classes/tasks.class.inc.php');
-	$tasks = new tasks();
-
-	$tasklists=array();
-
-	$tasks->query("SELECT * FROM ta_lists");
-	while($tasks->next_record())
-	{		
-		$tasklists[$tasks->f('user_id')]=$tasks->f('id');
-	}
-
-
-	$db->query("SELECT e.*, c.user_id AS cal_user_id FROM cal_events e INNER JOIN cal_events_calendars ec ON ec.event_id=e.id INNER JOIN cal_calendars c ON c.id=ec.calendar_id WHERE todo='1'");
-	while($db->next_record())
-	{
-		if(isset($tasklists[$db->f('cal_user_id')]))
-		{
-			$todo['tasklist_id']=$tasklists[$db->f('cal_user_id')];
-			$todo['user_id']=$db->f('cal_user_id');
-			$todo['ctime']=$db->f('ctime');
-			$todo['mtime']=$db->f('mtime');
-			$todo['start_time']=$db->f('start_time');
-			$todo['due_time']=$db->f('end_time');
-			$todo['completion_time']=$db->f('completion_time');
-			$todo['name']=$db->f('name');
-			$todo['description']=$db->f('description');
-			$todo['status']=$db->f('status');
-			$todo['rrule']=$db->f('rrule');
-			$todo['repeat_end_time']=$db->f('repeat_end_time');
-
-
-			$task_id=$tasks->add_task(array_map('addslashes', $todo));
-		
-		
-			$sql = "UPDATE go_links SET link_id1=".$task_id.",type1=12,link_id1_converted='1' WHERE link_id1=".$db->f('id')." AND type1=1 AND link_id1_converted='0'";
-			$db2->query($sql);
-	
-			$sql = "UPDATE go_links SET link_id2=".$task_id.",type2=12,link_id2_converted='1' WHERE link_id2=".$db->f('id')." AND type2=1 AND link_id2_converted='0'";
-			$db2->query($sql);
-		}
-		$sql = "DELETE FROM cal_events WHERE id=".$db->f('id');
-		$tasks->query($sql);
-		
-	}
-	
-	
-	
-	
-	
-	//drop old fields and tables
-	$db->query("ALTER TABLE `cal_events`
-  DROP `permissions`,
-  DROP `link_id`,
-  DROP `todo`,
-  DROP `completion_time`,
-  DROP `status_id`;");
-	
-	$db->query("ALTER TABLE `cal_events`
-  DROP `contact_id`,
-  DROP `company_id`,
-  DROP `project_id`,
-  DROP `background`,
-  DROP `repeat_type`,
-  DROP `repeat_forever`,
-  DROP `repeat_every`,
-  DROP `mon`,
-  DROP `tue`,
-  DROP `wed`,
-  DROP `thu`,
-  DROP `fri`,
-  DROP `sat`,
-  DROP `sun`,
-  DROP `month_time`,
-  DROP `custom_fields`;");
-
-	$db->query("ALTER TABLE `cal_events` DROP `timezone`, DROP `DST`;");
-
-	$db->query("DROP TABLE `cal_statuses`");
-	
-	
-	
-	
-}
-
 
 if(in_array('email', $module_ids))
 {
@@ -881,13 +897,13 @@ ADD `smtp_password` VARCHAR( 50 ) NOT NULL ;");
 }
 
 
-if(in_array('filesystem', $module_ids))
+if(in_array('files', $module_ids))
 {
 	echo 'Files updates<br />';
 	flush();
 	
 
-	$db->query("UPDATE go_modules SET id='files' WHERE id='filesystem'");
+	
 
 
 
@@ -1137,6 +1153,8 @@ $db->query("update ab_contacts set salutation=CONCAT('".addslashes($lang['common
 $db->query("update ab_contacts set salutation=CONCAT('".addslashes($lang['common']['default_salutation']['F'])." ',LTRIM(CONCAT(middle_name,' ',last_name))) where sex='F' and salutation='';");
 
 
+//lot of people didn't have latest 2.18
+$db->query("alter table go_users add auth_md5_pass varchar(100) not null;");
 
 echo 'Done<br /><br />';
 

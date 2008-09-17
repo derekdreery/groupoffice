@@ -8,8 +8,7 @@ GO.mainLayout.onReady(function(){
 		//iconCls: 'rss-icon',
 	 	title: GO.summary.lang.hotTopics,
 		layout:'fit',
-		/*tools: [{
-	        id:'gear',
+		tools: [{
 	        handler: function(){
 	            
 						Ext.Msg.prompt(GO.lang.url, GO.summary.lang.enterRssFeed, function(btn, text){
@@ -31,12 +30,11 @@ GO.mainLayout.onReady(function(){
 	            
 	            
 	        }
-	    },{
-	        id:'close',
+	    }/*,{
 	        handler: function(e, target, panel){
 	            panel.ownerCt.remove(panel, true);
 	        }
-	    }],*/
+	    }*/],
 		items: feedGrid,
 		height:300
 	});

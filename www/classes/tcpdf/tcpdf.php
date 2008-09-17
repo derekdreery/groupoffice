@@ -3566,10 +3566,11 @@ require_once(dirname(__FILE__)."/barcodes.php");
 				// GD image handler function
 				$gdfunction = "imagecreatefrom".$type;
 				$info = false;
-				if ((method_exists($this,$mtd)) AND (!($resize AND function_exists($gdfunction)))) {
+				if ((method_exists($this,$mtd)) AND (!($resize AND function_exists($gdfunction)))) {					
 					$info = $this->$mtd($file);
 				} 
 				if (!$info) {
+					
 					if (function_exists($gdfunction)) {
 						$img = $gdfunction($file);
 						if ($resize) {
