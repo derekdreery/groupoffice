@@ -784,7 +784,7 @@ try{
 									}
 									if(!$response['deleteSuccess'])
 									{
-										$response['deleteFeedback']=$strDeleteError;
+										$response['deleteFeedback']=$lang['common']['deleteError'];
 									}
 								}
 
