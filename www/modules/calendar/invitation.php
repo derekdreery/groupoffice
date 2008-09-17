@@ -18,8 +18,8 @@ $user = $GO_USERS->get_user_by_email($email);
 <html>
 <head>
 <?php
-require($GO_CONFIG->root_path.'default_head.inc');
-require($GO_CONFIG->root_path.'default_scripts.inc');
+require($GO_THEME->theme_path.'default_head.inc.php');
+require($GO_CONFIG->root_path.'default_scripts.inc.php');
 $load_modules=isset($_REQUEST['load_modules']) ? explode(',', $_REQUEST['load_modules']) : array();
 
 $load_modules[]='calendar';
