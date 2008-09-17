@@ -15,15 +15,21 @@
 $suffix = '?'.$GO_CONFIG->mtime;
 
 ?>
-<script
-	src="<?php echo $GO_CONFIG->host; ?>ext/adapter/ext/ext-base.js<?php echo $suffix; ?>"
-	type="text/javascript"></script>
-<script
-	src="<?php echo $GO_CONFIG->host; ?>ext/ext-all.js<?php echo $suffix; ?>"
-	type="text/javascript"></script>
-<script
-	src="<?php echo $GO_CONFIG->host; ?>javascript/namespaces.js<?php echo $suffix; ?>"
-	type="text/javascript"></script>
+<script	src="<?php echo $GO_CONFIG->host; ?>ext/adapter/ext/ext-base.js<?php echo $suffix; ?>" type="text/javascript"></script>
+<?php
+if($GO_CONFIG->debug)
+{
+?>
+<script	src="<?php echo $GO_CONFIG->host; ?>ext/ext-all.js<?php echo $suffix; ?>"	type="text/javascript"></script>
+<?php
+}else
+{
+?>
+<script	src="<?php echo $GO_CONFIG->host; ?>ext/ext-all-debug.js<?php echo $suffix; ?>"	type="text/javascript"></script>
+<?php
+}
+?>
+<script	src="<?php echo $GO_CONFIG->host; ?>javascript/namespaces.js<?php echo $suffix; ?>"	type="text/javascript"></script>
 
 <script type="text/javascript">
 var BaseHref = '<?php echo $GO_CONFIG->host; ?>';
@@ -49,8 +55,6 @@ if(!$GO_CONFIG->debug)
 	{
 		mkdir($GO_CONFIG->local_path.'cache', 0755, true);
 	}
-	$script_file = $GO_CONFIG->local_path.'cache/go-all-'.$GO_SECURITY->user_id.'.js';
-
 
 	$scripts=array(
 	$GO_CONFIG->root_path.'language/common/en.js',
@@ -173,23 +177,8 @@ if(!$GO_CONFIG->debug)
 }else
 {
 	?>
-
-<script
-	src="<?php echo $GO_CONFIG->host; ?>ext/adapter/ext/ext-base.js<?php echo $suffix; ?>"
-	type="text/javascript"></script>
-	<?php
-	echo '<script src="'.$GO_CONFIG->host.'ext/ext-all-debug.js'.$suffix.'" type="text/javascript"></script>';
-
-	?>
-<script
-	src="<?php echo $GO_CONFIG->host; ?>javascript/namespaces.js<?php echo $suffix; ?>"
-	type="text/javascript"></script>
-<script
-	src="<?php echo $GO_CONFIG->host; ?>language/common/en.js<?php echo $suffix; ?>"
-	type="text/javascript"></script>
-<script
-	src="<?php echo $GO_MODULES->modules['users']['url'].'language/en.js'.$suffix; ?>"
-	type="text/javascript"></script>
+	<script	src="<?php echo $GO_CONFIG->host; ?>language/common/en.js<?php echo $suffix; ?>" type="text/javascript"></script>
+	<script	src="<?php echo $GO_MODULES->modules['users']['url'].'language/en.js'.$suffix; ?>" type="text/javascript"></script>
 	<?php
 
 	if($GO_LANGUAGE->language!='en')
