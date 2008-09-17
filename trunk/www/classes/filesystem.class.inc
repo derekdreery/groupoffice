@@ -294,13 +294,15 @@ class filesystem extends db
 					}
 				}
 				
-				$folder = $this->get_folder(addslashes($source_path));
-				$up_folder['id']=$folder['id'];
-				$up_folder['path']=addslashes($destination_path);
-				
-				$this->delete_folder(addslashes($destination_path));
-				
-				$this->update_folder($up_folder);
+				if(!$this->disable_go_permissions)
+				{				
+					$folder = $this->get_folder(addslashes($source_path));
+					$up_folder['id']=$folder['id'];
+					$up_folder['path']=addslashes($destination_path);
+					$this->update_folder($up_folder);
+									
+					$this->move_notifications(addslashes($source_path), addslashes($destination_path));
+				}			
 				
 				
 				$files = $this->get_files($source_path, true);
