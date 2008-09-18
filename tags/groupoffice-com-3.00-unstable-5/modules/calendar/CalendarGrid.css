@@ -1,0 +1,210 @@
+@CHARSET "UTF-8";
+
+.x-calGrid-table{
+	border-collapse: collapse;
+}
+
+.x-calGrid-evenRow{
+	border-top:1px solid #DDDDDD;
+	border-right:3px double #DDDDDD;
+	height:20px;
+
+}
+.x-calGrid-unevenRow{
+	border-top:1px dotted #DDDDDD;
+	border-right:3px double #DDDDDD;
+	height:20px;
+
+}
+.x-calGrid-timeHead{
+	background-color:#f1f1f1;
+	width:40px !important;
+	height:20px;
+	border-top:1px solid #DDDDDD;
+	border-right:1px solid #DDDDDD;
+	text-align:right;
+}
+
+.x-calGrid-selector{
+	background-color:#ffffcc;
+	position:absolute;
+	visibility:hidden;
+	z-index:1;
+	opacity: 0.4;
+	filter:alpha(opacity=40);
+}
+
+.x-calGrid-event-container {
+
+	position:absolute;
+	background-color:#ffffcc;
+	border:1px solid #666666;
+	color:000;
+	/*z-index:1000;*/
+	font:normal 11px arial, tahoma, helvetica, sans-serif;	
+	cursor:default;
+}
+
+.x-calGrid-all-day-event-container {
+	text-align:left;
+	cursor:default;
+	border:1px solid #c3daf9;
+	margin:1px;
+	margin-left:3px;
+	background-color:#ffffcc;
+	border:1px solid #666666;
+	padding:1px;
+}
+
+.x-calGrid-event-body{
+	padding:2px;
+}
+
+.x-calGrid-selected {
+	background-color: #B8CFEE !important;	
+	z-index:1100 !important;
+}
+
+.x-calGrid-event-time{
+	font-weight:bold;
+	margin:0px;
+	padding:0px;	
+}
+
+.x-calGrid-grid-container{
+	overflow:auto;
+	position:relative;
+	font:normal 11px arial, tahoma, helvetica, sans-serif;
+}
+
+
+
+
+.x-calGrid-headings-table {
+	border-collapse:collapse;
+	background-image:url(../../ext/resources/images/default/layout/panel-title-light-bg.gif);
+}
+
+.x-calGrid-heading{
+	
+	font:normal 11px arial, tahoma, helvetica, sans-serif;
+	margin-top:6px;
+	vertical-align:middle;
+	text-align:center;	
+	border-bottom:1px solid #98C0F4;	
+	color:black;
+	height:24px;
+}
+
+
+.x-calGrid-all-day-table {
+	border-collapse:collapse;
+	background-image:url(../../ext/resources/images/default/layout/panel-title-light-bg.gif);
+}
+
+.x-calGrid-all-day-container{
+	height:0px;
+	background-color:#f1f1f1;
+	vertical-align:top;
+}
+
+
+
+.x-monthGrid-table{
+	border-collapse: collapse;
+}
+
+.x-monthGrid-table td {
+	border:1px solid #c3daf9;
+	vertical-align:top;
+	width:14.28571429%;
+	text-align:right;
+	font:normal 11px arial, tahoma, helvetica, sans-serif;
+}
+.x-monthGrid-cell-current{
+	background-color: #FFF7EB;
+}
+.x-monthGrid-cell-weekend{
+	background-color: #f1f1f1;
+}
+
+.x-monthGrid-cell-today{
+	background-color: #ffffcc;
+}
+
+.x-monthGrid-cell-day-text{
+		
+}
+
+.x-calGrid-month-event-container {
+	text-align:left;
+	cursor:default;
+	border:1px solid #c3daf9;
+	margin:1px;
+	background-color:#ffffcc;
+}
+
+.x-calGrid-month-event-proxy {
+	text-align:left;
+	cursor:default;
+	border:1px solid #0000aa;
+	margin:1px;
+	background-color:#B8CFEE;/*#c3daf9;*/
+	height:14px;
+}
+
+
+
+.x-calGrid-drag-overlay {
+	#background:white none repeat scroll 0%;
+	display:none;
+	height:100%;
+	left:0pt;
+	opacity:0;
+	position:absolute;
+	top:0pt;
+	width:100%;
+	z-index:2000;
+}
+
+
+
+
+/* start view grid */
+
+.x-viewGrid-table{
+	border-collapse: collapse;
+}
+
+.x-viewGrid-table td{
+	border:1px solid #c3daf9;
+	border-bottom:4px double #c3daf9;
+	vertical-align:top;
+	font:normal 11px arial, tahoma, helvetica, sans-serif;
+}
+.x-viewGrid-calendar-name-cell {
+	text-align:right;
+	font-weight:bold;
+	height:60px;	
+	background-color:#f1f1f1;
+}
+
+.x-viewGrid-event-container {
+	text-align:left;
+	cursor:default;
+	border:1px solid #c3daf9;
+	margin:1px;
+	background-color:#ffffcc;
+}
+
+.x-viewGrid-event-proxy {
+	text-align:left;
+	cursor:default;
+	border:1px solid #0000aa;
+	margin:1px;
+	background-color:#B8CFEE;/*#c3daf9;*/
+	height:14px;
+}
+
+
+/* end view grid */
