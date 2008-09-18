@@ -125,7 +125,7 @@ class Date
 			$event['repeat_forever'] = 1;
 		}
 
-		$event['repeat_every']=$rrule['INTERVAL'];
+		$event['repeat_every']=isset($rrule['INTERVAL']) ? $rrule['INTERVAL'] : 1;
 
 		if($event['repeat_every']==0)
 		return false;

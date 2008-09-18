@@ -9,8 +9,9 @@ GO.mainLayout.onReady(function(){
 	 	title: GO.summary.lang.hotTopics,
 		layout:'fit',
 		tools: [{
+					id: 'gear',
 	        handler: function(){
-	            
+	          
 						Ext.Msg.prompt(GO.lang.url, GO.summary.lang.enterRssFeed, function(btn, text){
 							if (btn == 'ok'){
 								
