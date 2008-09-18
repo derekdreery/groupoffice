@@ -516,7 +516,7 @@ try{
 
 			$response['data']['body'] = '<br /><blockquote style="border:0;border-left: 2px solid #22437f; padding:0px; margin:0px; padding-left:5px; margin-left: 5px; ">'.$header_om.$response['data']['body'].'</blockquote>';
 
-			$response['inline_attachments']=$url_replacements;
+			$response['data']['inline_attachments']=$url_replacements;
 
 
 			if(isset($_POST['template_id']) && $_POST['template_id']>0)
@@ -525,8 +525,7 @@ try{
 				$template = load_template($template_id, $response['data']['to']);
 
 				$response['data']['body'] = $template['data']['body'].$response['data']['body'];
-
-				$response['inline_attachments']=array_merge($response['inline_attachments'], $template['inline_attachments']);
+				$response['data']['inline_attachments']=array_merge($response['data']['inline_attachments'], $template['data']['inline_attachments']);
 			}
 
 
