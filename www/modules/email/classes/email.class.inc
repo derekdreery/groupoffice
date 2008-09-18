@@ -915,10 +915,10 @@ class email extends db
 			
 			if (
 				(
-					eregi("ATTACHMENT", $attachments[$i]["disposition"])  ||
-					($attachments[$i]["name"] != '' && empty($attachments[$i]["id"])
+					eregi("ATTACHMENT", $message['parts'][$i]["disposition"])  ||
+					($message['parts'][$i]["name"] != '' && empty($message['parts'][$i]["id"])
 				)
-				&& !($attachments[$i]['type']=='APPLEDOUBLE' && $attachments[$i]['mime']== 'application/APPLEFILE')					
+				&& !($message['parts'][$i]['type']=='APPLEDOUBLE' && $message['parts'][$i]['mime']== 'application/APPLEFILE')					
 			)
 			){
 
