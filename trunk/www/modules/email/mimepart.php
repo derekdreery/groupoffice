@@ -1,25 +1,17 @@
 <?php
-/**
- * @copyright Copyright Intermesh 2006
- * @version $Revision: 1615 $ $Date: 2008-04-25 16:18:36 +0200 (vr, 25 apr 2008) $
+/** 
+ * Copyright Intermesh
  * 
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ * 
+ * If you have questions write an e-mail to info@intermesh.nl
+ * @version $Id: imap.class.inc 2373 2008-07-09 14:52:18Z mschering $
+ * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
-
-   This program is protected by copyright law and the Group-Office Professional license.
-
-   You should have received a copy of the Group-Office Proffessional license
-   along with Group-Office; if not, write to:
-   
-   Intermesh
-   Reitscheweg 37
-   5232BX Den Bosch
-   The Netherlands   
-   
-   info@intermesh.nl
-   
- * @package Templates
- * @category Addressbook
+ * @since Group-Office 1.0
  */
+
  
 //load Group-Office
 require_once("../../Group-Office.php");
