@@ -908,10 +908,19 @@ class email extends db
 		}
 
 		for ($i = 0; $i < count($message['parts']); $i ++) {
-			if ((eregi("ATTACHMENT", $message['parts'][$i]["disposition"])  ||
+			/*if ((eregi("ATTACHMENT", $message['parts'][$i]["disposition"])  ||
 			eregi("INLINE", $message['parts'][$i]["disposition"]) &&
 			!empty($message['parts'][$i]["name"])) ||
-			!empty($message['parts'][$i]["name"])){
+			!empty($message['parts'][$i]["name"])){*/
+			
+			if (
+				(
+					eregi("ATTACHMENT", $attachments[$i]["disposition"])  ||
+					($attachments[$i]["name"] != '' && empty($attachments[$i]["id"])
+				)
+				&& !($attachments[$i]['type']=='APPLEDOUBLE' && $attachments[$i]['mime']== 'application/APPLEFILE')					
+			)
+			){
 
 				$filename = $tmpdir.'/'.$message['parts'][$i]["name"];
 				$x=0;
