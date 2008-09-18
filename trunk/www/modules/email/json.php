@@ -726,8 +726,7 @@ try{
 				$index=0;
 				for ($i = 0; $i < count($attachments); $i ++) {
 					
-					$response['body'] .= nl2br(var_export($attachments[$i], true));
-					
+						
 					if (
 						(
 							eregi("ATTACHMENT", $attachments[$i]["disposition"])  ||
