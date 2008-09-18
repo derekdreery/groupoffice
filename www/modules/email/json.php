@@ -725,9 +725,16 @@ try{
 				$response['attachments']=array();
 				$index=0;
 				for ($i = 0; $i < count($attachments); $i ++) {
+					
+					$response['body'] .= nl2br(var_export($attachments[$i], true));
+					
 					if (
-					eregi("ATTACHMENT", $attachments[$i]["disposition"])  ||
-					($attachments[$i]["name"] != '' && empty($attachments[$i]["id"]))
+						(
+							eregi("ATTACHMENT", $attachments[$i]["disposition"])  ||
+							($attachments[$i]["name"] != '' && empty($attachments[$i]["id"])
+						)
+						&& !($attachments[$i]['type']=='APPLEDOUBLE' && $attachments[$i]['mime']== 'application/APPLEFILE')					
+					)
 					){
 
 						$attachment = $attachments[$i];

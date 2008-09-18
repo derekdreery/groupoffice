@@ -565,6 +565,8 @@ class imap {
 	
 				$this->mail["parts"] = array ();
 				$this->get_parts($structure);
+				
+				//debug(var_export($structure, true));
 	
 				// $this->print_structure($structure);
 			}
@@ -631,31 +633,7 @@ class imap {
 			$name = $this->enc_utf8($mimeobj->description);
 		}else
 		{
-			if (isset ($mimeobj->parameters)) {
-				$params = $mimeobj->parameters;
-				for ($x = 0; $x < count($params); $x ++) {
-					if(is_object($params) && isset($params->$x))
-					{
-						$param = $params->$x;
-					}elseif(is_array($params) && isset($params[$x]))
-					{
-						$param = $params[$x];
-					}else
-					{
-						$param = null;
-					}
-
-					if(isset($param))
-					{
-						if ((substr(strtolower($param->attribute),0,4) == 'name') && $param->value != '') {
-							$name .= $param->value;//$this->enc_utf8($param->value);
-						}
-					}
-				}
-			}
-
-
-			if (empty($name) && isset ($mimeobj->dparameters)) {
+			if (isset ($mimeobj->dparameters)) {
 				$params = $mimeobj->dparameters;
 				for ($x = 0; $x < count($params); $x ++) {
 					if(is_object($params) && isset($params->$x))
@@ -674,6 +652,29 @@ class imap {
 						if (substr(strtolower($param->attribute),0,8) == 'filename' && $param->value != '') {
 							//$name = $this->enc_utf8(quoted_printable_decode($param->value));
 							$name .= $param->value;
+						}
+					}
+				}
+			}
+			
+			if (empty($name) && isset ($mimeobj->parameters)) {
+				$params = $mimeobj->parameters;
+				for ($x = 0; $x < count($params); $x ++) {
+					if(is_object($params) && isset($params->$x))
+					{
+						$param = $params->$x;
+					}elseif(is_array($params) && isset($params[$x]))
+					{
+						$param = $params[$x];
+					}else
+					{
+						$param = null;
+					}
+
+					if(isset($param))
+					{
+						if ((substr(strtolower($param->attribute),0,4) == 'name') && $param->value != '') {
+							$name .= $param->value;//$this->enc_utf8($param->value);
 						}
 					}
 				}
