@@ -719,7 +719,7 @@ try{
 					}
 				}
 
-				debug(var_export($attachments, true));
+				//debug(var_export($attachments, true));
 
 				$response['attachments']=array();
 				$index=0;
@@ -755,7 +755,6 @@ try{
 							}
 							$id = "cid:".$tmp_id;
 							
-							debug($id);
 							$url = $GO_MODULES->modules['email']['url']."attachment.php?account_id=".$account['id']."&mailbox=".urlencode($mailbox)."&amp;uid=".$uid."&amp;part=".$attachments[$i]["number"]."&amp;transfer=".$attachments[$i]["transfer"]."&amp;mime=".$attachments[$i]["mime"]."&amp;filename=".urlencode($attachments[$i]["name"]);
 							$response['body'] = str_replace($id, $url, $response['body']);
 						}
