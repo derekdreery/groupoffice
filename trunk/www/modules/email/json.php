@@ -719,7 +719,7 @@ try{
 					}
 				}
 
-				//go_log(LOG_DEBUG, var_export($attachments, true));
+				debug(var_export($attachments, true));
 
 				$response['attachments']=array();
 				$index=0;
@@ -741,7 +741,8 @@ try{
 						$attachment['extension']=File::get_extension($attachments[$i]["name"]);
 						$response['attachments'][]=$attachment;
 						$index++;
-					}elseif (eregi("inline",$attachments[$i]["disposition"]) && !empty($attachments[$i]["id"]))
+					//}elseif (eregi("inline",$attachments[$i]["disposition"]) && !empty($attachments[$i]["id"]))
+					}elseif (!empty($attachments[$i]["id"]))
 					{
 						//when an image has an id it belongs somewhere in the text we gathered above so replace the
 						//source id with the correct link to display the image.
@@ -753,6 +754,8 @@ try{
 								$tmp_id = substr($attachments[$i]["id"], 1,strlen($attachments[$i]["id"])-2);
 							}
 							$id = "cid:".$tmp_id;
+							
+							debug($id);
 							$url = $GO_MODULES->modules['email']['url']."attachment.php?account_id=".$account['id']."&mailbox=".urlencode($mailbox)."&amp;uid=".$uid."&amp;part=".$attachments[$i]["number"]."&amp;transfer=".$attachments[$i]["transfer"]."&amp;mime=".$attachments[$i]["mime"]."&amp;filename=".urlencode($attachments[$i]["name"]);
 							$response['body'] = str_replace($id, $url, $response['body']);
 						}
