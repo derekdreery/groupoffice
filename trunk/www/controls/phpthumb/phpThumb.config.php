@@ -8,7 +8,7 @@
 //                                                         ///
 //////////////////////////////////////////////////////////////
 
-require(str_replace('controls/phpthumb/phpThumb.config.php','', __FILE__).'classes/base/config.class.inc');
+require(str_replace('controls/phpthumb/phpThumb.config.php','', __FILE__).'classes/base/config.class.inc.php');
 $GO_CONFIG = new GO_CONFIG();
 if(!file_exists($GO_CONFIG->local_path.'phpThumbCache/'))
 {
