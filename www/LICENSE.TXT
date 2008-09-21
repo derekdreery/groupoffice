@@ -32,7 +32,7 @@ Commercial License
 ------------------------------------------------------------------------------------------
 If you are using Group-Office for commercial purposes, we encourage you to purchase
 a commercial license. By buying a commercial license you support the project and you'll
-get extra interesting features. Please visit http://www.group-office.com for more details.
+get extra interesting features. Please see the LICENSE.PRO file for the terms.
 
 
 Developer License
