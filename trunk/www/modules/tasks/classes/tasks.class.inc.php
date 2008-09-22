@@ -401,7 +401,7 @@ class tasks extends db
 	{
 		if($task = $this->get_task($task_id))
 		{
-			global $GO_LINKS, $GO_CONFIG;
+			global $GO_CONFIG;
 			
 			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 			$fs = new filesystem();
@@ -410,12 +410,13 @@ class tasks extends db
 				$fs->delete($GO_CONFIG->file_storage_path.'tasks/'.$task_id.'/');
 			}
 
-
 			$sql = "DELETE FROM ta_tasks WHERE id='$task_id'";
 			$this->query($sql);
-			
-			$GO_LINKS->delete_link($task_id, 11);
-		}
+						
+			require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
+			$search = new search();
+			$search->delete_search_result($task_id, 12);
+			}
 	}
 
 
