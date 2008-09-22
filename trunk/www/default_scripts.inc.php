@@ -46,6 +46,14 @@ GO.linkHandlers={};
 
 GO.newMenuItems=[];
 
+<?php
+
+if(isset($_REQUEST['after_login_url']))
+{
+	echo 'GO.afterLoginUrl="'.smart_stripslashes($_REQUEST['after_login_url']).'";';
+}
+?>
+
 </script>
 <?php
 if(!$GO_CONFIG->debug)
