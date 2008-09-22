@@ -1,5 +1,5 @@
 /** ************************************************************
-	Ext.ux.TinyMCE v0.5
+	Ext.ux.TinyMCE v0.6
 	ExtJS form field containing TinyMCE v3.
 	
 	Author: Andrew Mayorov (http://blogs.byte-force.com/xor)
@@ -94,13 +94,9 @@
 				this.ed.onBeforeRenderUI.add( function( ed, controlManager ){
 					// Replace control manager
 					ed.controlManager = new ControlManager( this, ed );
-					// Change window manager
-					//ed.windowManager = new WindowManager( this.ed );
 				}.createDelegate( this ));
-				
+
 				this.ed.onPostRender.add( function( ed, controlManager ){
-					// Replace control manager
-					//ed.controlManager = new ControlManager( this, ed );
 					// Change window manager
 					ed.windowManager = new WindowManager( this.ed );
 				}.createDelegate( this ));
@@ -118,7 +114,7 @@
 				}.createDelegate( this ));
 				
 				// Bind to editor focus
-				this.ed.onActivate.add( this.focus.createDelegate( this, [ false, false ], false ));
+				//this.ed.onActivate.add( this.focus.createDelegate( this, [ false, false ], false ));
 				
 				// Render the editor
 				this.ed.render();
@@ -319,6 +315,9 @@
 				s = s || {};
 				p = p || {};
 				
+				if ( !s.type )
+					this.bookmark = this.editor.selection.getBookmark( 'simple' );
+				
 				s.width = parseInt(s.width || 320);
 				s.height = parseInt(s.height || 240) + (tinymce.isIE ? 8 : 0);
 				s.min_width = parseInt(s.min_width || 150);
@@ -385,8 +384,15 @@
 				}					
 			},
 			
-			setTitle : function( ti, id ) {
-				var w = Ext.getCmp( id );
+			setTitle : function( win, ti ) {
+			
+				// Probably not inline
+				if( !win.tinyMCEPopup || !win.tinyMCEPopup.id ) {
+					WindowManager.superclass.setTitle.call( this, win, ti );
+					return;
+				}
+				
+				var w = Ext.getCmp( win.tinyMCEPopup.id );
 				if( w ) w.setTitle( ti );
 			},
 
@@ -436,8 +442,7 @@
 				res.showMenu = function( x, y, px ) {
 					orig.call( this, x, y, px );
 					//var zi = self.control.getEl().getStyle( "z-index" );
-					//Ext.fly( 'menu_' + this.id ).setStyle( "z-index", 12000 );
-					Ext.fly( 'menu_' + this.id ).setStyle( "z-index", 200001);
+					Ext.fly( 'menu_' + this.id ).setStyle( "z-index", 200001 );
 				}
 				
 				return res;
@@ -451,8 +456,7 @@
 				var orig = res.showMenu;
 				res.showMenu = function( x, y, px ) {
 					orig.call( this, x, y, px );
-					//Ext.fly( this.id + '_menu' ).setStyle( "z-index", 12000 );
-					Ext.fly( 'menu_' + this.id ).setStyle( "z-index", 200001);
+					Ext.fly( this.id + '_menu' ).setStyle( "z-index", 200001 );
 				}
 				
 				return res;
