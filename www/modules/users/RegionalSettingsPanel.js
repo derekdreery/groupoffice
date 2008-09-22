@@ -85,6 +85,7 @@ GO.users.RegionalSettingsPanel = function(config)
 			hiddenName:'language',
 			mode:'local',
 			triggerAction:'all',
+			editable: false,
 			selectOnFocus:true,
 			forceSelection: true,
 			value: GO.settings.language

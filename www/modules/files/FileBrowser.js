@@ -133,8 +133,8 @@ GO.files.FileBrowser = function(config){
 	});
 	
 	if(config.filesFilter)
-	{
-		this.gridStore.baseParams['files_filter']=config.filesFilter;
+	{		
+		this.setFileFilter(config.fileFilter);
 	}
 	
 	
@@ -408,6 +408,17 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		}
 				
 	},
+	
+	setFileClickHandler : function(handler, scope)
+	{
+		this.fileClickHandler = handler;
+		this.scope = scope;
+	},
+	
+	setFilesFilter : function(filter)
+	{
+		this.gridStore.baseParams['files_filter']=filter;
+	},
 
 	
 	afterRender : function(){
@@ -420,10 +431,10 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		}
 	},
 	
-	loadFiles : function(){
+	loadFiles : function(path){
 		
 		this.buildNewMenu();		
-		this.setRootNode(this.root);
+		this.setRootNode(this.root, path);
 		this.loaded=true;
 	},
 	
@@ -438,7 +449,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		}
 	},
 	
-	setRootNode : function(id)
+	setRootNode : function(id, path)
 	{
 		
 		this.rootNode.id=id;
@@ -447,7 +458,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		//this.rootNode.expanded=false;
 		//this.rootNode.childrenRendered=false;
 		
-		if(id=='root')
+		if(id=='root' && !path)
 		{
 			this.rootNode.on('load', function(node)
 			{
@@ -459,7 +470,10 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			}, this, {single:true});
 		}else
 		{
-			this.setPath(id);
+			if(!path)
+				path = id;
+				
+			this.setPath(path, true, true);
 		}
 		
 		//this.setPath(id);
@@ -1150,22 +1164,30 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		this.pasteButton.setDisabled(!writePermission || !this.pasteSelections.length);	
 	},
 	
-	setPath : function(path, expand)
+	setPath : function(path, expand, createPath)
 	{
 		this.path = path;
 		this.gridStore.baseParams['path']=path;
-		this.gridStore.load();	
+		this.gridStore.baseParams['create_path']=createPath;
+		this.gridStore.load({
+			callback:function(){
+				delete this.gridStore.baseParams['create_path'];
+				
+				if(expand)
+				{
+					var activeNode = this.treePanel.getNodeById(path);
+					if(activeNode)
+					{
+						activeNode.expand();			
+					}
+				}	
+			},
+			scope:this
+		});	
 		
 		this.locationTextField.setValue(this.path);
 		
-		if(expand)
-		{
-			var activeNode = this.treePanel.getNodeById(path);
-			if(activeNode)
-			{
-				activeNode.expand();			
-			}
-		}		
+			
 	},
 	
 	reload : function()

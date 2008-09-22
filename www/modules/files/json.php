@@ -271,6 +271,12 @@ try{
 					}else
 					{
 						$path = SERVER_PATH.smart_stripslashes($_POST['path']);
+						
+						
+						if(!empty($_POST['create_path']) && !is_dir($path))
+						{
+							mkdir($path, 0755, true);
+						}
 
 						if(!$fs->has_read_permission($GO_SECURITY->user_id, $path))
 						{
@@ -430,7 +436,7 @@ try{
 						}
 						
 						
-						if(isset($_POST['files_filter']))
+						if(!empty($_POST['files_filter']))
 						{
 							$extensions = explode(',',$_POST['files_filter']);
 						}

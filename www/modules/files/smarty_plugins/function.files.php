@@ -5,7 +5,18 @@ function smarty_function_files($params, &$smarty)
 
 	if(empty($params['path']))
 	{
-		return 'No path specified in files function!';
+		$images_path = $smarty->_tpl_vars['images_path'];
+		
+		$path = $images_path.$co->build_path($co->folder['id'], $co->site['root_folder_id']).$co->file['name'];
+		
+		if(!is_dir($path))
+		{
+			return 'Could not find path: '.$path;
+		}
+		
+	}else
+	{
+		$path = $GO_CONFIG->file_storage_path.$params['path'];
 	}
 
 	if(empty($params['template']))
@@ -15,7 +26,7 @@ function smarty_function_files($params, &$smarty)
 
 	$fs = new filesystem();
 
-	$files = $fs->get_files_sorted($GO_CONFIG->file_storage_path.$params['path']);
+	$files = $fs->get_files_sorted($path);
 
 	//var_dump($files);
 	$html = '';
