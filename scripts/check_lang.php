@@ -1,5 +1,5 @@
 <?php
-require_once("../Group-Office.php");
+require_once("../www/Group-Office.php");
 
 $modules = $GO_MODULES->get_modules_with_locations();
 $lang1 = (isset($_GET['lang1']))? $_GET['lang1'] : 'en';
