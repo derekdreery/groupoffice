@@ -1,3 +1,5 @@
+.ext-el-mask{z-index:8000;} /*set it lower for windows to be on top */
+
 .ext-el-mask-msg{background:#d1d8db url(../images/default/box/tb.gif) repeat-x 0 -16px !important;border: 1px solid #9c9f9d !important;}
 .ext-el-mask-msg div{border:1px solid #c1d1d6 !important;}
 
