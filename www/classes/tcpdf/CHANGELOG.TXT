@@ -1,3 +1,13 @@
+4.0.027 (2008-09-19)
+	- Bug #2118588 "Undefined offset in tcpdf.php on line 9581" was fixed.
+	- arailunicid0.php font was updated.
+	- The problem of javascript form fields duplication after saving was fixed.
+		
+4.0.026 (2008-09-17)
+	- convertHTMLColorToDec() function was improved to support rgb(RR,GG,BB) notation.
+	- The following inline CSS attributes are now supported: text-decoration, color, background-color and font-size names: xx-small, x-small, small, medium, large, x-large, xx-large
+	- Example n. 6 was updated.
+		
 4.0.025 (2008-09-15)
 	- _putcidfont0 function was improved to include CJK fonts (Chinese, Japanese, Korean, CJK, Asian fonts) without embedding.
 	- arialunicid0 font was added (see the new example n. 38).
