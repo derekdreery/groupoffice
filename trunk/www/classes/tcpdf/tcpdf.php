@@ -2,9 +2,9 @@
 //============================================================+
 // File name   : tcpdf.php
 // Begin       : 2002-08-03
-// Last Update : 2008-09-12
+// Last Update : 2008-09-19
 // Author      : Nicola Asuni - info@tecnick.com - http://www.tcpdf.org
-// Version     : 4.0.025
+// Version     : 4.0.027
 // License     : GNU LGPL (http://www.gnu.org/copyleft/lesser.html)
 // 	----------------------------------------------------------------------------
 //  Copyright (C) 2002-2008  Nicola Asuni - Tecnick.com S.r.l.
@@ -81,6 +81,7 @@
 // Esteban Jo�l Mar�n for OpenType font conversion.
 // Teus Hagen for several suggestions and fixes.
 // Yukihiro Nakadaira for CID-0 CJK fonts fixes.
+// Kosmas Papachristos for some CSS improvements.
 // Anyone that has reported a bug or sent a suggestion.
 //============================================================+
 
@@ -119,7 +120,7 @@
  * @copyright 2004-2008 Nicola Asuni - Tecnick.com S.r.l (www.tecnick.com) Via Della Pace, 11 - 09044 - Quartucciu (CA) - ITALY - www.tecnick.com - info@tecnick.com
  * @link http://www.tcpdf.org
  * @license http://www.gnu.org/copyleft/lesser.html LGPL
- * @version 4.0.025
+ * @version 4.0.027
  */
 
 /**
@@ -145,18 +146,18 @@ require_once(dirname(__FILE__).'/htmlcolors.php');
 require_once(dirname(__FILE__)."/barcodes.php");
 
 
-//if (!class_exists('TCPDF')) {
+
 	/**
 	 * define default PDF document producer
 	 */ 
-	define('PDF_PRODUCER','TCPDF 4.0.025 (http://www.tcpdf.org)');
+	define('PDF_PRODUCER','TCPDF 4.0.027 (http://www.tcpdf.org)');
 	
 	/**
 	* This is a PHP class for generating PDF documents without requiring external extensions.<br>
 	* TCPDF project (http://www.tcpdf.org) has been originally derived in 2002 from the Public Domain FPDF class by Olivier Plathey (http://www.fpdf.org), but now is almost entirely rewritten.<br>
 	* @name TCPDF
 	* @package com.tecnick.tcpdf
-	* @version 4.0.025
+	* @version 4.0.027
 	* @author Nicola Asuni - info@tecnick.com
 	* @link http://www.tcpdf.org
 	* @license http://www.gnu.org/copyleft/lesser.html LGPL
@@ -3566,11 +3567,10 @@ require_once(dirname(__FILE__)."/barcodes.php");
 				// GD image handler function
 				$gdfunction = "imagecreatefrom".$type;
 				$info = false;
-				if ((method_exists($this,$mtd)) AND (!($resize AND function_exists($gdfunction)))) {					
+				if ((method_exists($this,$mtd)) AND (!($resize AND function_exists($gdfunction)))) {
 					$info = $this->$mtd($file);
 				} 
 				if (!$info) {
-					
 					if (function_exists($gdfunction)) {
 						$img = $gdfunction($file);
 						if ($resize) {
@@ -5632,10 +5632,17 @@ require_once(dirname(__FILE__)."/barcodes.php");
 		 */		
 		protected function convertHTMLColorToDec($color="#000000") {
 			global $webcolor;
+			$color = preg_replace('/[\s]*/', '', $color); // remove extra spaces
 			// set default color to be returned in case of error
 			$returncolor = array ('R' => 0, 'G' => 0, 'B' => 0);
 			if (empty($color)) {
 				return $returncolor;
+			}
+			if (substr(strtolower($color), 0, 3) == 'rgb') {
+				$codes = substr($color, 4);
+				$codes = str_replace(')', '', $codes);
+				$returncolor = explode(',', $codes, 3);
+				return $returncolor;	
 			}
 			if (substr($color, 0, 1) != "#") {
 				// decode color name
@@ -5926,7 +5933,7 @@ require_once(dirname(__FILE__)."/barcodes.php");
 				$x = $this->w - $x;
 			}
 			if (($s_x == 0) OR ($s_y == 0)) {
-				$this->Error('Please use values unequal to zero for Scaling');
+				$this->Error('Please do not use values equal to zero for scaling');
 			}
 			$y = ($this->h - $y) * $this->k;
 			$x *= $this->k;
@@ -7655,6 +7662,9 @@ require_once(dirname(__FILE__)."/barcodes.php");
 			if (empty($this->javascript)) {
 				return;
 			}
+			// the following two lines are uded to avoid form fields duplication after saving
+			$js1 = sprintf("ftcpdfdocsaved=this.addField('%s','%s',%d,[%.2f,%.2f,%.2f,%.2f]);", 'tcpdfdocsaved', 'text', 0, 0, 1, 0, 1);
+			$js2 = "getField('tcpdfdocsaved').value = 'saved';";
 			$this->_newobj();
 			$this->n_js = $this->n;
 			$this->_out('<<');
@@ -7664,7 +7674,7 @@ require_once(dirname(__FILE__)."/barcodes.php");
 			$this->_newobj();
 			$this->_out('<<');
 			$this->_out('/S /JavaScript');
-			$this->_out('/JS '.$this->_textstring($this->javascript));
+			$this->_out('/JS '.$this->_textstring($js1."\n".$this->javascript."\n".$js2));
 			$this->_out('>>');
 			$this->_out('endobj');
 		}
@@ -7701,6 +7711,8 @@ require_once(dirname(__FILE__)."/barcodes.php");
 		* @since 2.1.002 (2008-02-12)
 		*/
 		protected function _addfield($type, $name, $x, $y, $w, $h, $prop) {
+			// the followind avoid fields duplication after saving the document
+			$this->javascript .= "if(getField('tcpdfdocsaved').value != 'saved') {";
 			$k = $this->k;
 			$this->javascript .= sprintf("f".$name."=this.addField('%s','%s',%d,[%.2f,%.2f,%.2f,%.2f]);", $name, $type, $this->PageNo()-1, $x*$k, ($this->h-$y)*$k+1, ($x+$w)*$k, ($this->h-$y-$h)*$k+1)."\n";
 			$this->javascript .= "f".$name.".textSize=".$this->FontSizePt.";\n";
@@ -7713,6 +7725,7 @@ require_once(dirname(__FILE__)."/barcodes.php");
 				$this->javascript .= "f".$name.".".$key."=".$val.";\n";
 			}
 			$this->x += $w;
+			$this->javascript .= "}";
 		}
 		
 		/*
@@ -9186,7 +9199,7 @@ require_once(dirname(__FILE__)."/barcodes.php");
 							preg_match_all('/([^:\s]*):([^;]*)/', $dom[$key]['attribute']['style'], $style_array, PREG_PATTERN_ORDER);
 							$dom[$key]['style'] = array(); // reset style attribute array
 							while (list($id, $name) = each($style_array[1])) {
-								$dom[$key]['style'][strtolower($name)] = $style_array[2][$id];
+								$dom[$key]['style'][strtolower($name)] = trim($style_array[2][$id]);
 							}
 							// --- get some style attributes ---
 							if (isset($dom[$key]['style']['font-family'])) {
@@ -9204,7 +9217,40 @@ require_once(dirname(__FILE__)."/barcodes.php");
 							}
 							// font size
 							if (isset($dom[$key]['style']['font-size'])) {
-								$dom[$key]['fontsize'] = intval($dom[$key]['style']['font-size']);
+								$fsize = trim($dom[$key]['style']['font-size']);
+								switch ($fsize) {
+									case 'xx-small': {
+										$dom[$key]['fontsize'] = $dom[0]['fontsize'] - 4;
+										break;
+									}
+									case 'x-small': {
+										$dom[$key]['fontsize'] = $dom[0]['fontsize'] - 3;
+										break;
+									}
+									case 'small': {
+										$dom[$key]['fontsize'] = $dom[0]['fontsize'] - 2;
+										break;
+									}
+									case 'medium': {
+										$dom[$key]['fontsize'] = $dom[0]['fontsize'];
+										break;
+									}
+									case 'large': {
+										$dom[$key]['fontsize'] = $dom[0]['fontsize'] + 2;
+										break;
+									}
+									case 'x-large': {
+										$dom[$key]['fontsize'] = $dom[0]['fontsize'] + 4;
+										break;
+									}
+									case 'xx-large': {
+										$dom[$key]['fontsize'] = $dom[0]['fontsize'] + 6;
+										break;
+									}
+									default: {
+										$dom[$key]['fontsize'] = intval($fsize);
+									}
+								}
 							}
 							// font style
 							$dom[$key]['fontstyle'] = "";
@@ -9213,6 +9259,26 @@ require_once(dirname(__FILE__)."/barcodes.php");
 							}
 							if (isset($dom[$key]['style']['font-style']) AND (strtolower($dom[$key]['style']['font-style']{0}) == "i")) {
 								$dom[$key]['fontstyle'] .= "I";
+							}
+							// font color
+							if (isset($dom[$key]['style']['color']) AND (!empty($dom[$key]['style']['color']))) {
+								$dom[$key]['fgcolor'] = $this->convertHTMLColorToDec($dom[$key]['style']['color']);
+							}
+							// background color
+							if (isset($dom[$key]['style']['background-color']) AND (!empty($dom[$key]['style']['background-color']))) {
+								$dom[$key]['bgcolor'] = $this->convertHTMLColorToDec($dom[$key]['style']['background-color']);
+							}
+							// text-decoration
+							if (isset($dom[$key]['style']['text-decoration'])) {
+								$decors = explode(" ", strtolower($dom[$key]['style']['text-decoration']));
+								foreach ($decors as $dec) {
+									$dec = trim($dec);
+									if ($dec{0} == "u") {
+										$dom[$key]['fontstyle'] .= "U";
+									} elseif ($dec{0} == "l") {
+										$dom[$key]['fontstyle'] .= "D";
+									}
+								}
 							}
 							// check for width attribute
 							if (isset($dom[$key]['style']['width'])) {
@@ -9360,12 +9426,12 @@ require_once(dirname(__FILE__)."/barcodes.php");
 			$yshift = 0;
 			$startlinepage = $this->page;
 			$newline = true;
-			if (isset($this->footerpos[$this->page])) {
+			if (isset($this->footerlen[$this->page])) {
 				$this->footerpos[$this->page] = strlen($this->pages[$this->page]) - $this->footerlen[$this->page];
-				$startlinepos = $this->footerpos[$this->page];
 			} else {
-				$startlinepos = strlen($this->pages[$this->page]);
+				$this->footerpos[$this->page] = strlen($this->pages[$this->page]);
 			}
+			$startlinepos = $this->footerpos[$this->page];
 			$lalign = $align;
 			$plalign = $align;
 			if ($this->rtl) {
@@ -9451,12 +9517,12 @@ require_once(dirname(__FILE__)."/barcodes.php");
 							// the last line must be shifted to be aligned as requested
 							$linew = abs($this->endlinex - $startlinex);
 							$pstart = substr($this->pages[$startlinepage], 0, $startlinepos);
-							if (isset($opentagpos) AND isset($this->footerpos[$startlinepage])) {
+							if (isset($opentagpos) AND isset($this->footerlen[$startlinepage])) {
 								$this->footerpos[$startlinepage] = strlen($this->pages[$startlinepage]) - $this->footerlen[$startlinepage];
 								$midpos = min($opentagpos, $this->footerpos[$startlinepage]);
 							} elseif (isset($opentagpos)) {
 								$midpos = $opentagpos;
-							} elseif (isset($this->footerpos[$startlinepage])) {
+							} elseif (isset($this->footerlen[$startlinepage])) {
 								$this->footerpos[$startlinepage] = strlen($this->pages[$startlinepage]) - $this->footerlen[$startlinepage];
 								$midpos = $this->footerpos[$startlinepage];
 							} else {
@@ -9517,12 +9583,12 @@ require_once(dirname(__FILE__)."/barcodes.php");
 						$startlinepos = $endlinepos;
 						unset($endlinepos);
 					} else {
-						if (isset($this->footerpos[$this->page])) {
+						if (isset($this->footerlen[$this->page])) {
 							$this->footerpos[$this->page] = strlen($this->pages[$this->page]) - $this->footerlen[$this->page];
-							$startlinepos = $this->footerpos[$this->page];
 						} else {
-							$startlinepos = strlen($this->pages[$this->page]);
+							$this->footerpos[$this->page] = strlen($this->pages[$this->page]);
 						}
+						$startlinepos = $this->footerpos[$this->page];
 					}
 					$plalign = $lalign;
 					$this->newline = false;
@@ -9608,12 +9674,12 @@ require_once(dirname(__FILE__)."/barcodes.php");
 							}
 							// add rowspan information to table element
 							if ($rowspan > 1) {
-								if (isset($this->footerpos[$this->page])) {
+								if (isset($this->footerlen[$this->page])) {
 									$this->footerpos[$this->page] = strlen($this->pages[$this->page]) - $this->footerlen[$this->page];
-									$trintmrkpos = $this->footerpos[$this->page];
 								} else {
-									$trintmrkpos = strlen($this->pages[$this->page]);
+									$this->footerpos[$this->page] = strlen($this->pages[$this->page]);
 								}
+								$trintmrkpos = $this->footerpos[$this->page];
 								$trsid = array_push($dom[$table_el]['rowspans'], array('rowspan' => $rowspan, 'colspan' => $colspan, 'startpage' => $this->page, 'startx' => $this->x, 'starty' => $this->y, 'intmrkpos' => $trintmrkpos));
 							}
 							$cellid = array_push($dom[$trid]['cellpos'], array('startx' => $this->x));
@@ -9673,12 +9739,12 @@ require_once(dirname(__FILE__)."/barcodes.php");
 						} else {
 							// opening tag (or self-closing tag)
 							if (!isset($opentagpos)) {
-								if (isset($this->footerpos[$this->page])) {
+								if (isset($this->footerlen[$this->page])) {
 									$this->footerpos[$this->page] = strlen($this->pages[$this->page]) - $this->footerlen[$this->page];
-									$opentagpos = $this->footerpos[$this->page];
 								} else {
-									$opentagpos = strlen($this->pages[$this->page]);
+									$this->footerpos[$this->page] = strlen($this->pages[$this->page]);
 								}
+								$opentagpos = $this->footerpos[$this->page];
 							}
 							$this->openHTMLTagHandler($dom, $key, $cell);
 						}
@@ -9755,12 +9821,12 @@ require_once(dirname(__FILE__)."/barcodes.php");
 					// the last line must be shifted to be aligned as requested
 					$linew = abs($this->endlinex - $startlinex);
 					$pstart = substr($this->pages[$startlinepage], 0, $startlinepos);
-					if (isset($opentagpos) AND isset($this->footerpos[$startlinepage])) {
+					if (isset($opentagpos) AND isset($this->footerlen[$startlinepage])) {
 						$this->footerpos[$startlinepage] = strlen($this->pages[$startlinepage]) - $this->footerlen[$startlinepage];
 						$midpos = min($opentagpos, $this->footerpos[$startlinepage]);
 					} elseif (isset($opentagpos)) {
 						$midpos = $opentagpos;
-					} elseif (isset($this->footerpos[$startlinepage])) {
+					} elseif (isset($this->footerlen[$startlinepage])) {
 						$this->footerpos[$startlinepage] = strlen($this->pages[$startlinepage]) - $this->footerlen[$startlinepage];
 						$midpos = $this->footerpos[$startlinepage];
 					} else {
@@ -10311,7 +10377,7 @@ require_once(dirname(__FILE__)."/barcodes.php");
         }
 		
 	} // END OF TCPDF CLASS
-//}
+
 //============================================================+
 // END OF FILE
 //============================================================+
