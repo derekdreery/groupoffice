@@ -2111,6 +2111,8 @@ require_once(dirname(__FILE__)."/barcodes.php");
 	 	 * @since 4.0.012 (2008-07-24)
 		 */
 		protected function setFooter() {
+			
+
 			//Page footer
 			$this->InFooter = true;
 			// mark this point
