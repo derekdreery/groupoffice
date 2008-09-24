@@ -109,7 +109,7 @@ GO.users.RegionalSettingsPanel = function(config)
 			name: 'date_format',
 			store: dateFormatData,
 			displayField: 'date_format',
-			value: GO.settings.date_format.replace(new RegExp(GO.settings.date_seperator, "g"), ""),
+			value: GO.settings.date_format.replace('/'+GO.settings.date_seperator+'/g', ""),
 			valueField: 'id',
 			hiddenName: 'date_format',
 			mode: 'local',
