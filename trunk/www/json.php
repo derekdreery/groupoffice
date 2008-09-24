@@ -64,6 +64,8 @@ try{
 				$reminder['local_time']=date($_SESSION['GO_SESSION']['time_format'], $reminder['time']);
 				$response['reminders'][]=$reminder;
 			}
+			
+			//$GO_MODULES->fire_event('checker',$response);
 
 			break;
 

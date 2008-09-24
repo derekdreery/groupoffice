@@ -24,6 +24,12 @@ GO.mailTo = function(email){
 	}	
 }
 
+GO.playAlarm = function(){
+	
+	var flashMovie= GO.util.getFlashMovieObject("alarmSound");
+	flashMovie.Play();	
+}
+
 GO.util.nl2br = function (v)
 {
 	return v.replace(/([^>])\n/g, '$1<br />\n');

@@ -258,8 +258,7 @@ GO.Checker = function(){
 
 Ext.extend(GO.Checker, Ext.util.Observable, {
 			
-	interval : 60000,
-	//interval : 5000,
+	interval : 120000,
 	
 	init : function(){
 		
@@ -277,7 +276,7 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
 				{
 					if(!success)
 					{
-						Ext.MessageBox.alert(GO.lang['strError'], "Error in checker");
+						Ext.MessageBox.alert(GO.lang['strError'], "Connection to the internet was lost. Couldn't check for reminders.");
 					}else
 					{				
 						var data = Ext.decode(response.responseText);
@@ -291,8 +290,7 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
 				   			this.checkerWindow.checkerGrid.store.loadData({results: data.reminders});
 				   			if(!this.reminderIcon.isDisplayed())
 				   			{
-				   				//var flashMovie= GO.util.getFlashMovieObject("alarmSound");
-				   				//flashMovie.Play();
+				   				GO.playAlarm();
 				   				
 				   				this.checkerWindow.show();				   			
 				   				this.reminderIcon.setDisplayed(true);
