@@ -998,6 +998,8 @@ for($link_type=1;$link_type<13;$link_type++)
   PRIMARY KEY  (`link_id`)
 	) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 	
+	$db->query($sql);
+	
 	$sql = "CREATE TABLE IF NOT EXISTS `go_links_$link_type` (
   `id` int(11) NOT NULL,
   `folder_id` int(11) NOT NULL,
