@@ -298,25 +298,42 @@ GO.email.EmailClient = function(config){
 	
 	//select the first inbox to be displayed in the messages grid
 	root.on('load', function(node)
-	{
+	{		
+		
+		this.refresh.defer(this.checkMailInterval, this);		
+		
 		this.body.unmask();
 		if(node.childNodes[0])
 		{
 			var firstAccountNode = node.childNodes[0];
 			
+			this.updateNotificationEl();
+			
 			firstAccountNode.on('load', function(node){
 				
 				if(node.childNodes[0])
 				{	
-					
-					var firstInboxNode = node.childNodes[0];			
-					this.setAccount(
-						firstInboxNode.attributes.account_id,
-						firstInboxNode.attributes.folder_id,
-						firstInboxNode.attributes.mailbox
-						);
+					if(this.messagesGrid.store.baseParams['folder_id'])
+					{
+						var node = this.treePanel.getNodeById('folder_'+this.messagesGrid.store.baseParams['folder_id']);						
+						
+						//if(node.attributes.unseen!=this.messagesGrid.store.reader.jsonData.unseen[this.messagesGrid.store.baseParams['folder_id']])
+						//{						
+							this.messagesGrid.store.reload();
+						//}
+					}else
+					{
+						var firstInboxNode = node.childNodes[0];			
+						this.setAccount(
+							firstInboxNode.attributes.account_id,
+							firstInboxNode.attributes.folder_id,
+							firstInboxNode.attributes.mailbox
+							);
+					}
 				}
 			},this, {single: true});
+			
+			
 		}
 	}, this);
 	
@@ -556,6 +573,7 @@ GO.email.EmailClient = function(config){
 };
 
 Ext.extend(GO.email.EmailClient, Ext.Panel,{	
+	checkMailInterval : 300000,
 	
 	afterRender : function(){
 		GO.email.Composer.on('send', function(composer){			
@@ -572,6 +590,44 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		GO.email.EmailClient.superclass.afterRender.call(this);		
 		
 		this.body.mask(GO.lang.waitMsgLoad);
+		
+		//create notify icon
+		
+		var notificationArea = Ext.get('notification-area');		
+		if(notificationArea)
+		{
+			this.notificationEl = notificationArea.createChild({
+				id: 'ml-notify',
+				tag:'div',
+				html:''
+			});
+		}
+		
+		
+		
+	},
+	
+	
+	updateNotificationEl : function(){
+		
+		var node = this.treePanel.getRootNode();
+		
+
+		var inbox_new=0;
+		for(var i=0;i<node.childNodes.length;i++)
+		{			
+			inbox_new += node.childNodes[i].attributes.inbox_new;			
+		}
+		
+		var current = this.notificationEl.dom.innerHTML;
+		
+		if(current!='' && inbox_new>current)
+		{
+			GO.playAlarm();
+		}
+		
+		this.notificationEl.update(inbox_new);
+		
 	},
 	
 	openAttachment :  function(attachment)
@@ -656,6 +712,13 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	{
 		var statusEl = Ext.get('status_'+folder_id);
 		
+		var node = this.treePanel.getNodeById('folder_'+folder_id);
+		if(node && node.attributes.mailbox=='INBOX')
+		{
+			node.parentNode.attributes.inbox_new=unseen;
+			this.updateNotificationEl();
+		}
+		
 		if(unseen>0)
 		{
 			statusEl.dom.innerHTML = "("+unseen+")";
@@ -678,13 +741,8 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 			var status = parseInt(statusText.substring(1, statusText.length-1));
 		}
 		status+=increment;
-		if(status>0)
-		{
-			statusEl.dom.innerHTML = "("+status+")";
-		}else
-		{
-			statusEl.dom.innerHTML = "";
-		}
+		
+		this.updateFolderStatus(folder_id, status);
 	},	
 
 

@@ -70,7 +70,7 @@ function get_all_mailbox_nodes($account_id, $folder_id){
 }
 
 function get_mailbox_nodes($account_id, $folder_id){
-	global $lang, $imap;
+	global $lang, $imap, $inbox_new;
 
 	$email = new email();
 	$email2 = new email();
@@ -101,33 +101,42 @@ function get_mailbox_nodes($account_id, $folder_id){
 		//$unseen = $email->f('unseen');
 
 		$status = $imap->status($email->f('name'), SA_ALL);
+		
+		if($email->f('name')=='INBOX')
+		{
+			$inbox_new += $status->unseen;
+		}
 
 		if ($status->unseen > 0)
 		{
-			$status = '&nbsp;<span id="status_'.$email->f('id').'">('.$status->unseen.')</span>';
+			$status_html = '&nbsp;<span id="status_'.$email->f('id').'">('.$status->unseen.')</span>';
 		}else
 		{
-			$status = '&nbsp;<span id="status_'.$email->f('id').'"></span>';
+			$status_html = '&nbsp;<span id="status_'.$email->f('id').'"></span>';
 		}
+		
+		
 
 		if($email2->get_subscribed(0, $email->f('id')))
 		{
 			$response[] = array(
-				'text'=>$folder_name.$status,
+				'text'=>$folder_name.$status_html,
 				'id'=>'folder_'.$email->f('id'),
 				'iconCls'=>'folder-default',
 				'account_id'=>$email->f('account_id'),
 				'folder_id'=>$email->f('id'),
+				'unseen'=>$status->unseen,
 				'mailbox'=>$email->f('name')
 			);
 		}else {
 			$response[] = array(
-				'text'=>$folder_name.$status,
+				'text'=>$folder_name.$status_html,
 				'id'=>'folder_'.$email->f('id'),
 				'iconCls'=>'folder-default',
 				'account_id'=>$email->f('account_id'),
 				'folder_id'=>$email->f('id'),
 				'mailbox'=>$email->f('name'),
+				'unseen'=>$status->unseen,
 				'expanded'=>true,
 				'children'=>array()
 			);
@@ -154,7 +163,7 @@ function load_template($template_id, $to, $keep_tags=false)
 	$template_body = '';
 
 
-	
+
 	$template = $tp->get_template($template_id);
 
 	require_once($GO_CONFIG->class_path.'mail/Go2Mime.class.inc.php');
@@ -162,17 +171,17 @@ function load_template($template_id, $to, $keep_tags=false)
 
 
 	$response['data'] = $go2mime->mime2GO($template['content'], $GO_MODULES->modules['mailings']['url'].'mime_part.php?template_id='.$template_id, true);
-	
+
 	if(!$keep_tags)
 	{
 		$values=array();
 		$contact_id=0;
 		//if contact_id is not set but email is check if there's contact info available
 		if (!empty($to)) {
-	
+
 			if ($contact = $ab->get_contact_by_email($to, $GO_SECURITY->user_id)) {
-				
-				$values = array_map('htmlspecialchars', $contact);								
+
+				$values = array_map('htmlspecialchars', $contact);
 			}elseif($user = $GO_USERS->get_user_by_email($to))
 			{
 				$values = array_map('htmlspecialchars', $user);
@@ -185,9 +194,9 @@ function load_template($template_id, $to, $keep_tags=false)
 				}
 			}
 		}
-		$tp->replace_fields($response['data']['body'], $values);				
+		$tp->replace_fields($response['data']['body'], $values);
 	}
-		
+
 	$response['data']['to']=$to;
 
 
@@ -324,7 +333,7 @@ try{
 						for ($i=0;$i<sizeof($content["to"]);$i++)
 						{
 							$email = String::get_email_from_string($content["to"][$i]);
-								
+
 							if ($content["to"][$i] != "" && $account['email']!=$email && !in_array($email,$addresses))
 							{
 								$response['data']['to'] .= ",".$content["to"][$i];
@@ -337,7 +346,7 @@ try{
 						for ($i=0;$i<sizeof($content["cc"]);$i++)
 						{
 							$email = String::get_email_from_string($content["cc"][$i]);
-								
+
 							if ($content["cc"][$i] != "" && $account['email']!=$email && !in_array($email,$addresses))
 							{
 								if (!isset($first))
@@ -539,10 +548,10 @@ try{
 
 		switch($_REQUEST['task'])
 		{
-			
+				
 			case 'attachments':
-				
-				
+
+
 				while($file = array_shift($_SESSION['GO_SESSION']['just_uploaded_attachments']))
 				{
 					$response['results'][]=array(
@@ -553,17 +562,17 @@ try{
 					);
 				}
 				$response['total']=count($files);
-				
-				
-				
+
+
+
 				break;
 
 			case 'template':
 
 				$template_id=smart_addslashes($_REQUEST['template_id']);
 				$to=smart_addslashes($_REQUEST['to']);
-				
-				
+
+
 
 				$response = load_template($template_id, $to, isset($_POST['mailing_group_id']) && $_POST['mailing_group_id']>0);
 
@@ -667,8 +676,8 @@ try{
 
 					$mime = isset($part["mime"]) ? strtolower($part["mime"]) : $default_mime;
 
-						
-						
+
+
 					//go_log(LOG_DEBUG, $part['name'].' -> '.$mime);
 
 					if (empty($response['body']) && ($part["name"] == '' || eregi('inline', $part["disposition"]))  && ($mime == "text/html" ||
@@ -724,14 +733,14 @@ try{
 				$response['attachments']=array();
 				$index=0;
 				for ($i = 0; $i < count($attachments); $i ++) {
-					
 						
+
 					if (
-						(
-							eregi("ATTACHMENT", $attachments[$i]["disposition"])  ||
-							($attachments[$i]["name"] != '' && empty($attachments[$i]["id"])
-						)
-						&& !($attachments[$i]['type']=='APPLEDOUBLE' && $attachments[$i]['mime']== 'application/APPLEFILE')					
+					(
+					eregi("ATTACHMENT", $attachments[$i]["disposition"])  ||
+					($attachments[$i]["name"] != '' && empty($attachments[$i]["id"])
+					)
+					&& !($attachments[$i]['type']=='APPLEDOUBLE' && $attachments[$i]['mime']== 'application/APPLEFILE')
 					)
 					){
 
@@ -741,7 +750,7 @@ try{
 						$attachment['extension']=File::get_extension($attachments[$i]["name"]);
 						$response['attachments'][]=$attachment;
 						$index++;
-					//}elseif (eregi("inline",$attachments[$i]["disposition"]) && !empty($attachments[$i]["id"]))
+						//}elseif (eregi("inline",$attachments[$i]["disposition"]) && !empty($attachments[$i]["id"]))
 					}elseif (!empty($attachments[$i]["id"]))
 					{
 						//when an image has an id it belongs somewhere in the text we gathered above so replace the
@@ -754,7 +763,7 @@ try{
 								$tmp_id = substr($attachments[$i]["id"], 1,strlen($attachments[$i]["id"])-2);
 							}
 							$id = "cid:".$tmp_id;
-							
+								
 							$url = $GO_MODULES->modules['email']['url']."attachment.php?account_id=".$account['id']."&mailbox=".urlencode($mailbox)."&amp;uid=".$uid."&amp;part=".$attachments[$i]["number"]."&amp;transfer=".$attachments[$i]["transfer"]."&amp;mime=".$attachments[$i]["mime"]."&amp;filename=".urlencode($attachments[$i]["name"]);
 							$response['body'] = str_replace($id, $url, $response['body']);
 						}
@@ -816,11 +825,11 @@ try{
 										 break;
 										 */
 										case 'move':
-												
+
 											$from_mailbox = smart_stripslashes($_REQUEST['from_mailbox']);
 											$to_mailbox = smart_stripslashes($_REQUEST['to_mailbox']);
 											$response['success']=$imap->move($to_mailbox, $messages);
-												
+
 											$touched_folders[]=$to_mailbox;
 
 											//var_dump($response['success']);
@@ -895,7 +904,7 @@ try{
 									{
 										$continue=false;
 										if(strtoupper($mailbox)=='INBOX' && $imap->f('new'))
-										{											
+										{
 											for ($i=0;$i<sizeof($filters);$i++)
 											{
 												$field = $imap->f($filters[$i]["field"]);
@@ -926,7 +935,7 @@ try{
 														}
 													}
 												}
-											
+													
 											}
 										}
 
@@ -986,25 +995,25 @@ try{
 
 								$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : 0;
 								$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : 0;
-								
-								
+
+
 								$response['results'] = get_messages($start, $limit);
-								
-								
+
+
 								//Show unseen status
 
 								if(!in_array($mailbox, $touched_folders))
-									$touched_folders[]=$mailbox;								
+								$touched_folders[]=$mailbox;
 
 								foreach($touched_folders as $touched_folder)
 								{
 									$status = $imap->status($touched_folder, SA_UNSEEN);
 									$folder = $email->get_folder($account_id, addslashes($touched_folder));
 									//$cached_folder = $email->cache_folder_status($imap, $account_id, $touched_folder);
-										
+
 									if(isset($status->unseen))
 									$response['unseen'][$folder['id']]=$status->unseen;
-								}								
+								}
 								break;
 
 										case 'tree':
@@ -1035,7 +1044,8 @@ try{
 												while($email2->next_record())
 												{
 													$account = connect($email2->f('id'), 'INBOX', false);
-														
+
+													$inbox_new=0;
 													if($account)
 													{
 														$text = $email2->f('email');
@@ -1054,7 +1064,8 @@ try{
 						'account_id'=>$email2->f('id'),
 						'folder_id'=>0,
 						'mailbox'=>'INBOX',
-						'children'=>$children
+						'children'=>$children,
+						'inbox_new'=>$inbox_new
 													);
 												}
 											}else
@@ -1087,20 +1098,20 @@ try{
 											{
 												$folder_id=0;
 											}
-												
-												
+
+
 											$account = $email->get_account($account_id);
 											$email->synchronize_folders($account);
-												
-												
+
+
 											$response = get_all_mailbox_nodes($account_id, $folder_id);
 
 
-												
+
 											break;
 
 										case 'accounts':
-												
+
 											if(isset($_POST['delete_keys']))
 											{
 												$response['deleteSuccess']=true;
@@ -1125,12 +1136,12 @@ try{
 												}
 											}
 											$response['results']=array();
-												
+
 											$user_id = !isset($_POST['personal_only']) && $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id) ? 0 : $GO_SECURITY->user_id;
-												
+
 											$response['total'] = $email->get_accounts($user_id);
 
-												
+
 											while($email->next_record())
 											{
 												$user = $GO_USERS->get_user($email->f('user_id'));
@@ -1144,8 +1155,8 @@ try{
 					'type'=>$email->f('type')
 												);
 											}
-												
-												
+
+
 
 											break;
 
@@ -1155,31 +1166,31 @@ try{
 											$response['success']=false;
 											$response['data']=$email->get_account(smart_addslashes($_POST['account_id']));
 
-												
+
 											if($response['data'])
 											{
 												$user = $GO_USERS->get_user($response['data']['user_id']);
 												$response['data']['user_name']=String::format_name($user['last_name'],$user['first_name'], $user['middle_name']);
-												
-	
+
+
 												if(isset($GO_MODULES->modules['serverclient']))
 												{
 													require_once($GO_MODULES->modules['serverclient']['class_path'].'serverclient.class.inc.php');
 													$sc = new serverclient();
-							
+														
 													foreach($sc->domains as $domain)
-													{																	
+													{
 														if(strpos($response['data']['username'], '@'.$domain))
 														{
-																	
+																
 															$sc->login();
-															
+																
 															$params=array(
-																//'sid'=>$sc->sid,
+															//'sid'=>$sc->sid,
 																'task'=>'serverclient_get_mailbox',
 																'username'=>$response['data']['username'],
 																'password'=>$response['data']['password']														
-															);														
+															);
 															$server_response = $sc->send_request($GO_CONFIG->serverclient_server_url.'modules/postfixadmin/json.php', $params);
 															//go_log(LOG_DEBUG, var_export($server_response, true));
 															$server_response = json_decode($server_response, true);
@@ -1190,7 +1201,7 @@ try{
 																$response['data']['vacation_body']=$server_response['data']['vacation_body'];
 															}
 															break;
-														}													
+														}
 													}
 												}
 
@@ -1198,7 +1209,7 @@ try{
 
 												$response['success']=true;
 											}
-												
+
 
 											break;
 
@@ -1240,7 +1251,7 @@ try{
 												);
 											}
 											$response['success']=true;
-												
+
 											break;
 
 										case 'subscribed_folders':
@@ -1261,7 +1272,7 @@ try{
 												}
 											}
 											$response['success']=true;
-												
+
 											break;
 		}
 	}
