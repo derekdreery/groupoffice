@@ -10,4 +10,6 @@ INDEX ( `date` )
 ) ENGINE = MYISAM"; 
 
 $updates[]="ALTER TABLE `go_search_cache` ADD PRIMARY KEY(`id`,`link_type`);";
+
+$updates[]='script:1.inc.php';
 ?>
