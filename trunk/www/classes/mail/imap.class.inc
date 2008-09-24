@@ -365,8 +365,8 @@ class imap {
 	function get_header_values($header)
 	{
 		$header = str_replace("\r\n", "\n", $header);
-		$header = str_replace("\n\t", " ", $header);
-		
+		$header = preg_replace("/\n\h/", " ", $header);
+
 		$lines = explode("\n", $header);
 		
 		$values = array();
