@@ -265,7 +265,7 @@ try
 			{
 				$response['data']['full_name'] = String::format_name($response['data']['last_name'], $response['data']['first_name'], $response['data']['middle_name']);
 
-				if($task == 'loadCompanyDetails')
+				if($task == 'load_contact_with_items')
 				{
 					$response['data']['comment']=String::text_to_html($response['data']['comment']);
 				}
