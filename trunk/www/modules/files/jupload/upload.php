@@ -1,10 +1,10 @@
 <?php
 require('../../../Group-Office.php');
-
+header('Content-Type: text/html; charset=UTF-8');
 
 if(!$GO_SECURITY->logged_in())
 {
-	die();
+	die('Unauthorized');
 }
 
 if($_REQUEST['local_path']=='true')
