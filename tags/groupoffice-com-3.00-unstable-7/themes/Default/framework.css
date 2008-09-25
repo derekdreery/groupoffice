@@ -1,0 +1,89 @@
+html, body {
+    margin:0;
+    padding:0;
+    border:0 none;
+    overflow:hidden;
+    height:100%;
+}
+
+.loading-indicator {
+    font-size:8pt;    
+    background-repeat: no-repeat;
+    background-position:top left;
+    padding-left:20px;
+	height:120px;
+	text-align:left;
+}
+
+#mainNorthPanel{
+	font:normal 10px "Lucida Sans Unicode","Lucida Grande","Mukti Narrow", sans-serif;
+}
+
+#loading{
+	position:absolute;
+	left:40%;
+	top:40%;
+	border:1px solid #9c9f9d;
+	padding:2px;
+	background:#d1d8db;
+	width:300px;
+	text-align:center;
+	z-index:20001;
+}
+#loading .loading-indicator{
+	border:1px solid #c1d1d6;
+	background:white /*url(images/block-bg.gif) repeat-x*/;
+	color:#666;
+	font:bold 12px "Lucida Sans Unicode","Lucida Grande","Mukti Narrow", sans-serif;
+	padding:10px;
+	margin:0;
+}
+
+.go-top-panel .x-panel-body{
+	padding:3px;
+	border:0px none;
+  	background:#fff url(images/hd-sprite.gif) repeat-x 0px -92px;
+   	padding-top:3px;
+  	padding-left:3px;
+   	color: #666 !important;
+   	font:regular 10px "Lucida Sans Unicode","Lucida Grande","Mukti Narrow", sans-serif;
+   	height:40px !important; /*overwrite inline style tags*/
+}
+
+.go-header-toolbar{
+	background:transparant!important;
+}
+#headerLeft{
+	float:left;
+	background:transparant;
+}
+#headerRight{
+	float:right;
+	background:transparant;
+	margin:12px;
+}
+
+.go-top-panel a:visited, .go-top-panel a:link, .go-top-panel a:active, .go-top-panel a:hover {
+	color: #666 !important;
+	margin-right:6px;
+	text-decoration:none;
+}
+.go-top-panel input {
+	color: #666;	
+	/*background:#0000aa url(images/hd-sprite.gif) repeat-x 0px -92px;*/
+	background-color:#dedede;
+	border:1px solid #dedede;
+	padding-left:2px;	
+}
+
+#checker-loading{
+	
+}
+
+#notification-area{
+		
+}
+
+#admin-menu-link{
+	/*display:none;*/
+}
