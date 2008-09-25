@@ -27,3 +27,6 @@ $lang['email']['subject']='Subject';
 $lang['email']['no_recipients']='No recipients';
 $lang['email']['original_message']='--- Original message follows ---';
 $lang['email']['attachments']='Attachments';
+
+$lang['email']['notification_subject']='Read: %s';
+$lang['email']['notification_body']='Your message with subject "%s" was displayed at %s';

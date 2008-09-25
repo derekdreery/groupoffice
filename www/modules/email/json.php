@@ -626,6 +626,7 @@ try{
 					$response['subject']= $lang['email']['no_subject'];
 				}
 
+				$response['account_id']=$account_id;
 				$response['full_from']=$response['from'].'&nbsp;&lt;'.$response['sender'].'&gt;';
 
 				if (isset ($response['to'])) {
