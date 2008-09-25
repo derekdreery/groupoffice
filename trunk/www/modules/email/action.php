@@ -46,7 +46,7 @@ function add_unknown_recipient($email, $name)
 			$contact['middle_name'] = addslashes($name_arr['middle']);
 			$contact['last_name'] = addslashes($name_arr['last']);
 			$contact['email'] = addslashes($email);
-				
+
 			$response['unknown_recipients'][]=$contact;
 		}
 	}
@@ -63,25 +63,25 @@ try{
 		case 'empty_folder':
 			$account_id = smart_addslashes($_POST['account_id']);
 			$mailbox = smart_stripslashes($_POST['mailbox']);
-				
+
 			if(empty($mailbox))
 			{
 				throw new DatabaseDeleteException();
 			}
-				
+
 			$account = connect($account_id, $mailbox);
-				
+
 			$imap->sort();
 			$imap->delete($imap->sort);
-				
+
 			$response['success']=true;
 			break;
-				
+
 		case 'flag_messages':
-				
+
 			$account_id = isset ($_REQUEST['account_id']) ? $_REQUEST['account_id'] : 0;
 			$mailbox = isset ($_REQUEST['mailbox']) ? smart_stripslashes($_REQUEST['mailbox']) : 'INBOX';
-				
+
 
 			$account = connect($account_id, $mailbox);
 
@@ -101,23 +101,23 @@ try{
 					$response['success']=$imap->set_message_flag($mailbox, $messages, "\\Flagged", "reset");
 					break;
 			}
-				
-				
+
+
 			//$cached_folder = $email->cache_folder_status($imap, $account_id, $mailbox);
 			//$response['unseen']=$cached_folder['unseen'];
-				
+
 			$status = $imap->status($mailbox, SA_UNSEEN);
 			if(isset($status->unseen))
 			$response['unseen']=$status->unseen;
 
-				
-				
+
+
 			if(!$response['success'])
 			$response['feedback']=$lang['common']['saveError'];
 
-				
+
 			break;
-				
+
 
 				case 'attach_file':
 					//var_dump($_FILES);
@@ -151,28 +151,28 @@ try{
 					exit();
 
 					break;
-						
+
 				case 'notification':
-						
+
 					require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
-						
+
 					$body = sprintf($lang['email']['notification_body'], smart_stripslashes($_POST['subject']), Date::get_timestamp(time()));
 
 					$swift =& new GoSwift(
-						smart_stripslashes($_POST['notification_to']),
-						sprintf($lang['email']['notification_subject'],smart_stripslashes($_POST['subject'])),
-						smart_addslashes($_POST['account_id']),
-						3,
-						$body
-						);
-						
+					smart_stripslashes($_POST['notification_to']),
+					sprintf($lang['email']['notification_subject'],smart_stripslashes($_POST['subject'])),
+					smart_addslashes($_POST['account_id']),
+					3,
+					$body
+					);
+
 					$response['success']=$swift->sendmail();
-						
+
 					break;
 
 				case 'sendmail':
 
-					if(empty($_POST['to']) && empty($_POST['cc']))
+					if(empty($_POST['to']) && empty($_POST['cc']) && empty($_POST['draft']))
 					{
 						$response['feedback'] = $lang['email']['feedbackNoReciepent'];
 					}else
@@ -180,8 +180,8 @@ try{
 
 
 						try {
-								
-								
+
+
 							if(isset($GO_MODULES->modules['addressbook']) && $GO_MODULES->modules['addressbook']['read_permission'])
 							{
 								require($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc');
@@ -197,14 +197,14 @@ try{
 							smart_addslashes($_POST['account_id']),
 							smart_stripslashes($_POST['priority'])
 							);
-								
+
 							if(!empty($_POST['reply_uid']))
 							$swift->set_reply_to(smart_stripslashes($_POST['reply_uid']),smart_stripslashes($_POST['reply_mailbox']));
-								
-								
+
+
 							$RFC822 = new RFC822();
-								
-								
+
+
 
 							$to_addresses = $RFC822->parse_address_list(smart_stripslashes($_POST['to']));
 
@@ -213,7 +213,7 @@ try{
 								add_unknown_recipient($address['email'], $address['personal']);
 							}
 
-								
+
 							if(!empty($_POST['cc']))
 							{
 								$cc_addresses = $RFC822->parse_address_list(smart_stripslashes($_POST['cc']));
@@ -287,31 +287,55 @@ try{
 									//$file = file_get_contents($tmp_name);
 									$attachment =& new Swift_Message_Attachment($file,basename($tmp_name), mime_content_type($tmp_name));
 									$swift->message->attach($attachment);
-										
+
 								}
 							}
-
-							$log =& Swift_LogContainer::getLog();
-							$log->setLogLevel(2);
-
-							$response['success']=$swift->sendmail(null,null, isset($_POST['replace_personal_fields']));
-
-							if(!empty($_POST['link']))
+								
+							if(!empty($_POST['draft']))
 							{
-								$link_props = explode(':', $_POST['link']);
-								$swift->link_to(array(
-								array(
-							'link_id'=>smart_addslashes($link_props[1]),
-							'link_type'=>smart_addslashes($link_props[0])
-								)
-								)
-								);
-							}
+								if ($imap->open(
+									$swift->account['host'],
+									$swift->account['type'],
+									$swift->account['port'],
+									$swift->account['username'],
+									$swift->account['password'],
+									$swift->account['drafts'],
+									0,
+									$swift->account['use_ssl'],
+									$swift->account['novalidate_cert'])) {					
 
-							if(!$response['success'])
+									$response['success']=$imap->append_message($swift->account['drafts'], $swift->get_data(),"\\Seen");
+									
+									if(!$response['success'])
+									{
+										$response['feedback']=$imap->last_error();
+									}
+									
+								}
+							}else
 							{
-								$response['feedback']='An error ocurred. The server returned: <br /><br />';
-								$response['feedback'].=nl2br($log->dump(true));
+								$log =& Swift_LogContainer::getLog();
+								$log->setLogLevel(2);
+
+								$response['success']=$swift->sendmail(null,null, isset($_POST['replace_personal_fields']));
+
+								if(!empty($_POST['link']))
+								{
+									$link_props = explode(':', $_POST['link']);
+									$swift->link_to(array(
+									array(
+											'link_id'=>smart_addslashes($link_props[1]),
+											'link_type'=>smart_addslashes($link_props[0])
+									)
+									)
+									);
+								}
+
+								if(!$response['success'])
+								{
+									$response['feedback']='An error ocurred. The server returned: <br /><br />';
+									$response['feedback'].=nl2br($log->dump(true));
+								}
 							}
 
 						} catch (Swift_ConnectionException $e) {
@@ -320,14 +344,8 @@ try{
 							$response['feedback'] = $lang['email']['feedbackUnexpectedError'] . $e->getMessage();
 						}
 					}
-						
-						
-
 					break;
-
-
-
-
+						
 				case 'save_filter':
 
 					$filter['id']=smart_addslashes($_POST['filter_id']);
@@ -357,7 +375,6 @@ try{
 							$response['feedback']=$strSaveError;
 						}
 					}
-
 					break;
 
 				case 'save_account_folders':
@@ -616,8 +633,8 @@ try{
 							{
 								$response['success']=true;
 							}
-								
-								
+
+
 							if(isset($GO_MODULES->modules['serverclient']))
 							{
 								require_once($GO_MODULES->modules['serverclient']['class_path'].'serverclient.class.inc.php');
@@ -653,10 +670,10 @@ try{
 										}
 										break;
 									}
-										
+
 								}
 							}
-								
+
 						}else
 						{
 							$account['user_id']=isset($_REQUEST['user_id']) ? smart_stripslashes($_REQUEST['user_id']) : $GO_SECURITY->user_id;

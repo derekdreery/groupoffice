@@ -264,7 +264,7 @@ GO.email.EmailComposer = function(config){
 	    {
 				text: GO.email.lang.send,
 	      iconCls: 'btn-send',
-				handler: this.sendMail,
+				handler: function(){this.sendMail();},
 				scope:this
 	    },
 			{
@@ -282,7 +282,12 @@ GO.email.EmailComposer = function(config){
 				iconCls: 'btn-attach',
 				handler: this.showAttachmentsDialog,
 				scope:this
-      })
+      }),{
+				iconCls: 'btn-save',
+				text: GO.lang.cmdSave,
+				handler:function(){this.sendMail(true);},
+				scope:this
+			}
 		];
 		
 	if(GO.addressbook)
@@ -525,8 +530,11 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 					waitMsg:GO.lang.waitMsgLoad,					
 					success: function(form, action) {		   
 						
-						this.sendParams['reply_uid']=config.uid;
-						this.sendParams['reply_mailbox']=config.mailbox;
+						if(config.task=='reply' || config.task=='reply_all')
+						{
+							this.sendParams['reply_uid']=config.uid;
+							this.sendParams['reply_mailbox']=config.mailbox;
+						}
 						     
 						if(action.result.data.inline_attachments)
 						{		
@@ -800,8 +808,9 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			this.fileBrowserWindow.hide();
 				
 		},
-    
-    sendMail : function(){
+		
+
+    sendMail : function(draft){
     	
     	if(this.attachmentsStore && this.attachmentsStore.data.keys.length)
     	{
@@ -809,53 +818,52 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
     	}
     	
     	this.sendParams['inline_attachments']=Ext.encode(this.inline_attachments);
+    	    	
+    	this.sendParams.draft = draft;
     	
-		this.formPanel.form.submit({
-			
-						
-			url:this.sendURL,
-			params: this.sendParams,
-			waitMsg:GO.lang.waitMsgSave,
-			waitMsgTarget:this.formPanel.body,
-			success:function(form, action){
-				
-				if(action.result.account_id)
-				{
-					this.account_id=action.result.account_id;
-				}
-				
-				if(this.callback)
-				{
-					if(!this.scope)
+			this.formPanel.form.submit({							
+				url:this.sendURL,
+				params: this.sendParams,
+				waitMsg:GO.lang.waitMsgSave,
+				waitMsgTarget:this.formPanel.body,
+				success:function(form, action){					
+					if(action.result.account_id)
 					{
-						this.scope=this;
+						this.account_id=action.result.account_id;
 					}
 					
-					var callback = this.callback.createDelegate(this.scope);
-					callback.call();
-				}
-				//this.reset();
-				
-				if(GO.addressbook && action.result.unknown_recipients && action.result.unknown_recipients.length)
-				{					
-					if(!GO.email.unknownRecipientsDialog)
-						GO.email.unknownRecipientsDialog = new GO.email.UnknownRecipientsDialog();					
+					if(this.callback)
+					{
+						if(!this.scope)
+						{
+							this.scope=this;
+						}
+						
+						var callback = this.callback.createDelegate(this.scope);
+						callback.call();
+					}
+					//this.reset();
 					
-					GO.email.unknownRecipientsDialog.store.loadData({recipients: action.result.unknown_recipients});
+					if(GO.addressbook && action.result.unknown_recipients && action.result.unknown_recipients.length)
+					{					
+						if(!GO.email.unknownRecipientsDialog)
+							GO.email.unknownRecipientsDialog = new GO.email.UnknownRecipientsDialog();					
+						
+						GO.email.unknownRecipientsDialog.store.loadData({recipients: action.result.unknown_recipients});
+						
+						GO.email.unknownRecipientsDialog.show();					
+					}
 					
-					GO.email.unknownRecipientsDialog.show();					
-				}
-				
-				this.fireEvent('send', this);
-				this.hide();					
-			},
-	
-			failure: function(form, action) {
-				Ext.MessageBox.alert(GO.lang.strError, action.result.feedback);
-			},
-			scope:this
+					this.fireEvent('send', this);
+					this.hide();					
+				},
 			
-		});
+				failure: function(form, action) {
+					Ext.MessageBox.alert(GO.lang.strError, action.result.feedback);
+				},
+				scope:this
+				
+			});
 	},
 		
 	
