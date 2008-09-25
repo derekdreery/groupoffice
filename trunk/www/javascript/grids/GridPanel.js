@@ -103,12 +103,32 @@ GO.grid.GridPanel = function(config)
 	{
 		this.deleteConfig={};
 	}
-    
+	
+	/*this.addEvents({'deferredrowclick':true});
+	
+	this.on('rowclick', function(grid, row, e){
+		console.log('rowclick');
+		this.createDeferredClickEvent.defer(300, this, [grid, row, e]);
+	}, this);
+  this.on('rowdblclick', function(){
+  	console.log('rowdblclick');
+  	this.doubleClickFired=true;
+  	}, this);  */
 }
  
  
 Ext.extend(GO.grid.GridPanel, Ext.grid.GridPanel, {
 	
+	doubleClickFired : false,
+	
+	createDeferredClickEvent : function(grid, row, e){
+		if(!this.doubleClickFired)
+		{
+			console.log('deferredrowclick');
+			this.fireEvent('deferredrowclick', grid, row, e);
+		}
+		this.doubleClickFired=false;
+	},
 	/**
 	 * @cfg {Boolean} paging True to set the store's limit parameter and render a bottom
 	 * paging toolbar.

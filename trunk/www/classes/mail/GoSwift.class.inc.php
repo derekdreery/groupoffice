@@ -227,6 +227,11 @@ class GoSwift extends Swift{
 		$email_from=!empty($email_from) ? $email_from : $this->account['email'];
 		
 		$this->message->setFrom(new Swift_Address($email_from, $name_from));
+		
+		$this->message->setCc($this->recipients->getCc());
+		$this->message->setBcc($this->recipients->getBcc());
+		$this->message->setTo($this->recipients->getTo());
+		
 		$data = $this->message->build();
 		return $data->readFull();
 

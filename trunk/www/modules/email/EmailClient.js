@@ -52,8 +52,20 @@ GO.email.EmailClient = function(config){
 	}, this);
 	
 
-	this.messagesGrid.on("rowdblclick", function(){				
-		this.messagesGrid.collapse();
+	this.messagesGrid.on("rowdblclick", function(){		
+		if(this.messagesGrid.store.reader.jsonData.drafts)
+		{
+			GO.email.Composer.show({
+				uid: this.previewedUid, 
+				task: 'opendraft',
+				template_id: 0,
+				mailbox: this.mailbox,
+				account_id: this.account_id
+			});
+		}else
+		{	
+			this.messagesGrid.collapse();
+		}
 	}, this);
 
 	this.messagesGrid.on('collapse', function(){
@@ -73,9 +85,11 @@ GO.email.EmailClient = function(config){
 		
 		
 		if(!e.ctrlKey && !e.shiftKey)
-		{
+		{			
 			if(record.data['uid']!=this.previewedUid)
 			{
+				this.previewedUid=record.data['uid'];
+				
 				this.messagePanel.el.mask(GO.lang.waitMsgLoad);
 				
 				Ext.Ajax.request({
@@ -90,24 +104,30 @@ GO.email.EmailClient = function(config){
 					callback: function(options, success, response)
 					{
 					
-						this.previewedUid=record.data['uid'];
-						
-						this.replyAllButton.setDisabled(false);
-						this.replyButton.setDisabled(false);
-						this.forwardButton.setDisabled(false);
-						this.printButton.setDisabled(false);
-						
-						if(record.data['new']==1)
-						{		
-							this.incrementFolderStatus(this.folder_id, -1);
-							record.set('new','0');									
-						}
-						
-						var data = Ext.decode(response.responseText);
-						
-						this.messagePanel.setMessage(data);
-						
-						this.messagePanel.el.unmask();				
+						if(!success)
+						{
+							this.previewedUid=0;
+						}else
+						{
+							//this.previewedUid=record.data['uid'];
+							
+							this.replyAllButton.setDisabled(false);
+							this.replyButton.setDisabled(false);
+							this.forwardButton.setDisabled(false);
+							this.printButton.setDisabled(false);
+							
+							if(record.data['new']==1)
+							{		
+								this.incrementFolderStatus(this.folder_id, -1);
+								record.set('new','0');									
+							}
+							
+							var data = Ext.decode(response.responseText);
+							
+							this.messagePanel.setMessage(data);
+							
+							this.messagePanel.el.unmask();
+						}				
 					}
 				});
 				

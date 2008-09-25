@@ -101,7 +101,7 @@ function get_mailbox_nodes($account_id, $folder_id){
 		//$unseen = $email->f('unseen');
 
 		$status = $imap->status($email->f('name'), SA_ALL);
-		
+
 		if($email->f('name')=='INBOX')
 		{
 			$inbox_new += $status->unseen;
@@ -114,8 +114,8 @@ function get_mailbox_nodes($account_id, $folder_id){
 		{
 			$status_html = '&nbsp;<span id="status_'.$email->f('id').'"></span>';
 		}
-		
-		
+
+
 
 		if($email2->get_subscribed(0, $email->f('id')))
 		{
@@ -208,7 +208,7 @@ function load_template($template_id, $to, $keep_tags=false)
 try{
 
 	$task = $_REQUEST['task'];
-	if($task == 'reply' || $task =='reply_all' || $task == 'forward')
+	if($task == 'reply' || $task =='reply_all' || $task == 'forward' || $task=='opendraft')
 	{
 
 
@@ -242,66 +242,6 @@ try{
 
 			switch($task)
 			{
-				case 'open':
-					$mail_subject = $subject;
-					if (isset($content["to"]))
-					{
-						for ($i=0;$i<sizeof($content["to"]);$i++)
-						{
-
-							if ($content["to"][$i] != "" && !in_array(String::get_email_from_string($content["to"][$i]),$addresses))
-							{
-								if (!isset($first))
-								{
-									$first = true;
-								}else
-								{
-									$mail_to .= ',';
-								}
-								$mail_to .= $content["to"][$i];
-							}
-						}
-					}
-					unset($first);
-					if (isset($content["cc"]))
-					{
-						$show_cc = 'true';
-						for ($i=0;$i<sizeof($content["cc"]);$i++)
-						{
-							if ($content["cc"][$i] != "" && !in_array(String::get_email_from_string($content["cc"][$i]),$addresses))
-							{
-								if (!isset($first))
-								{
-									$first = true;
-								}else
-								{
-									$mail_cc .= ',';
-								}
-								$mail_cc .= $content["cc"][$i];
-							}
-						}
-					}
-
-					for ($i=0;$i<count($parts);$i++)
-					{
-						if (eregi("attachment", $parts[$i]["disposition"]) ||
-						($parts[$i]["id"] == '' && eregi("inline", $parts[$i]["disposition"]))
-						&& !eregi("message/RFC822", $parts[$i]["mime"]))
-						{
-							$file = $mail->view_part($uid, $parts[$i]["number"], $parts[$i]["transfer"]);
-
-							$name = $parts[$i]['name'] != '' ? $parts[$i]['name'] : 'attach_'.$i;
-
-							$tmp_file = $GO_CONFIG->tmpdir.md5(uniqid(time()));
-							$fp = fopen($tmp_file,"wb");
-							fwrite ($fp,$file);
-							fclose($fp);
-							$email->register_attachment($tmp_file, $parts[$i]["name"], $parts[$i]["size"], $parts[$i]["mime"], 'attachment', $parts[$i]["id"]);
-						}
-					}
-
-					break;
-
 				case "reply":
 
 
@@ -363,15 +303,60 @@ try{
 
 					break;
 
+				case "opendraft":
 				case "forward":
-
-
-					if(!eregi('Fwd:', $subject))
+						
+					if($task == 'opendraft')
 					{
-						$response['data']['subject'] = 'Fwd: '.$subject;
+						$response['data']['to']='';
+						if (isset($content["to"]))
+						{
+							for ($i=0;$i<sizeof($content["to"]);$i++)
+							{
+
+								if ($content["to"][$i] != "" && !in_array(String::get_email_from_string($content["to"][$i]),$addresses))
+								{
+									if (!isset($first))
+									{
+										$first = true;
+									}else
+									{
+										$response['data']['to'] .= ',';
+									}
+									$response['data']['to'] .= $content["to"][$i];
+								}
+							}
+						}
+						unset($first);
+						if (isset($content["cc"]))
+						{
+							$response['data']['cc']='';
+							for ($i=0;$i<sizeof($content["cc"]);$i++)
+							{
+								if ($content["cc"][$i] != "" && !in_array(String::get_email_from_string($content["cc"][$i]),$addresses))
+								{
+									if (!isset($first))
+									{
+										$first = true;
+									}else
+									{
+										$response['data']['cc'] .= ',';
+									}
+									$response['data']['cc'] .= $content["cc"][$i];
+								}
+							}
+						}
+						$response['data']['subject'] = $subject;
+						
 					}else
 					{
-						$response['data']['subject'] = $subject;
+						if(!eregi('Fwd:', $subject))
+						{
+							$response['data']['subject'] = 'Fwd: '.$subject;
+						}else
+						{
+							$response['data']['subject'] = $subject;
+						}
 					}
 
 					//reattach non-online attachments
@@ -486,45 +471,49 @@ try{
 				}
 			}
 
-			$header_om  = '<font face="verdana" size="2">'.$lang['email']['original_message']."<br />";
-			$om_to = '';
-			if (isset($content))
+			if($task!='opendraft')
 			{
-				$header_om .= "<b>".$lang['email']['subject'].":&nbsp;</b>".addslashes($subject)."<br />";
-				$header_om .= '<b>'.$lang['email']['from'].": &nbsp;</b>".$content['from'].' &lt;'.$content["sender"]."&gt;<br />";
-				if (isset($content['to']))
+				$header_om  = '<font face="verdana" size="2">'.$lang['email']['original_message']."<br />";
+				$om_to = '';
+				if (isset($content))
 				{
-					for ($i=0;$i<sizeof($content["to"]);$i++)
+					$header_om .= "<b>".$lang['email']['subject'].":&nbsp;</b>".addslashes($subject)."<br />";
+					$header_om .= '<b>'.$lang['email']['from'].": &nbsp;</b>".$content['from'].' &lt;'.$content["sender"]."&gt;<br />";
+					if (isset($content['to']))
 					{
-						if ($i!=0)	$om_to .= ',';
-						$om_to .= $content["to"][$i];
-					}
-				}else
-				{
-					$om_to=$lang['email']['no_recipients'];
-				}
-				$header_om .= "<b>".$lang['email']['to'].":&nbsp;</b>".htmlspecialchars($om_to)."<br />";
-				$om_cc = '';
-				if (isset($content['cc']))
-				{
-					for ($i=0;$i<sizeof($content["cc"]);$i++)
+						for ($i=0;$i<sizeof($content["to"]);$i++)
+						{
+							if ($i!=0)	$om_to .= ',';
+							$om_to .= $content["to"][$i];
+						}
+					}else
 					{
-						if ($i!=0)	$om_cc .= ',';
-						$om_cc .= $content["cc"][$i];
+						$om_to=$lang['email']['no_recipients'];
 					}
+					$header_om .= "<b>".$lang['email']['to'].":&nbsp;</b>".htmlspecialchars($om_to)."<br />";
+					$om_cc = '';
+					if (isset($content['cc']))
+					{
+						for ($i=0;$i<sizeof($content["cc"]);$i++)
+						{
+							if ($i!=0)	$om_cc .= ',';
+							$om_cc .= $content["cc"][$i];
+						}
+					}
+					if($om_cc != '')
+					{
+						$header_om .= "<b>CC:&nbsp;</b>".htmlspecialchars($om_cc)."<br />";
+					}
+	
+					$header_om .= "<b>".$lang['common']['date'].":&nbsp;</b>".date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'],$content["udate"])."<br />";
 				}
-				if($om_cc != '')
-				{
-					$header_om .= "<b>CC:&nbsp;</b>".htmlspecialchars($om_cc)."<br />";
-				}
-
-				$header_om .= "<b>".$lang['common']['date'].":&nbsp;</b>".date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'],$content["udate"])."<br />";
+				$header_om .= "</font><br /><br />";
+	
+	
+				$response['data']['body'] = '<br /><blockquote style="border:0;border-left: 2px solid #22437f; padding:0px; margin:0px; padding-left:5px; margin-left: 5px; ">'.$header_om.$response['data']['body'].'</blockquote>';
 			}
-			$header_om .= "</font><br /><br />";
-
-
-			$response['data']['body'] = '<br /><blockquote style="border:0;border-left: 2px solid #22437f; padding:0px; margin:0px; padding-left:5px; margin-left: 5px; ">'.$header_om.$response['data']['body'].'</blockquote>';
-
+				
+			
 			$response['data']['inline_attachments']=$url_replacements;
 
 
@@ -548,7 +537,7 @@ try{
 
 		switch($_REQUEST['task'])
 		{
-				
+
 			case 'attachments':
 
 
@@ -734,7 +723,7 @@ try{
 				$response['attachments']=array();
 				$index=0;
 				for ($i = 0; $i < count($attachments); $i ++) {
-						
+
 
 					if (
 					(
@@ -764,7 +753,7 @@ try{
 								$tmp_id = substr($attachments[$i]["id"], 1,strlen($attachments[$i]["id"])-2);
 							}
 							$id = "cid:".$tmp_id;
-								
+
 							$url = $GO_MODULES->modules['email']['url']."attachment.php?account_id=".$account['id']."&mailbox=".urlencode($mailbox)."&amp;uid=".$uid."&amp;part=".$attachments[$i]["number"]."&amp;transfer=".$attachments[$i]["transfer"]."&amp;mime=".$attachments[$i]["mime"]."&amp;filename=".urlencode($attachments[$i]["name"]);
 							$response['body'] = str_replace($id, $url, $response['body']);
 						}
@@ -784,6 +773,8 @@ try{
 								$query = isset($_POST['query']) ? smart_stripslashes($_POST['query']) : '';
 
 								$account = connect($account_id, $mailbox);
+
+								$response['drafts']=$account['drafts']==$mailbox;
 
 
 								if(isset($_POST['delete_keys']))
@@ -1178,14 +1169,14 @@ try{
 												{
 													require_once($GO_MODULES->modules['serverclient']['class_path'].'serverclient.class.inc.php');
 													$sc = new serverclient();
-														
+
 													foreach($sc->domains as $domain)
 													{
 														if(strpos($response['data']['username'], '@'.$domain))
 														{
-																
+
 															$sc->login();
-																
+
 															$params=array(
 															//'sid'=>$sc->sid,
 																'task'=>'serverclient_get_mailbox',
