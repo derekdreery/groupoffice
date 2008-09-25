@@ -25,3 +25,6 @@ $lang['email']['no_recipients']='Geen ontvangers';
 $lang['email']['original_message']='--- Origineel bericht volgt ---';
 $lang['email']['attachments']='Bijlagen';
 $lang['link_type'][9]='E-mail';
+
+$lang['email']['notification_subject']='Gelezen: %s';
+$lang['email']['notification_body']='Uw bericht met onderwerp "%s" is getoond op %s';

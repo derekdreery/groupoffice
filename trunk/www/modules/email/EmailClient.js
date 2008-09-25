@@ -574,7 +574,7 @@ GO.email.EmailClient = function(config){
 
 Ext.extend(GO.email.EmailClient, Ext.Panel,{	
 	checkMailInterval : 300000,
-	
+	//checkMailInterval : 10000,
 	afterRender : function(){
 		GO.email.Composer.on('send', function(composer){			
 			if(composer.sendParams.reply_uid && composer.sendParams.reply_uid>0)
@@ -599,7 +599,9 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 			this.notificationEl = notificationArea.createChild({
 				id: 'ml-notify',
 				tag:'div',
-				html:''
+				html:'',
+				style:'display:none'
+				
 			});
 		}
 		
@@ -607,27 +609,40 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		
 	},
 	
+	onShow : function(){
+		
+		if(this.notificationEl){
+			this.notificationEl.setDisplayed(false);
+		}
+		
+		GO.email.EmailClient.superclass.onShow.call(this);	
+	},	
 	
 	updateNotificationEl : function(){
 		
-		var node = this.treePanel.getRootNode();
-		
-
-		var inbox_new=0;
-		for(var i=0;i<node.childNodes.length;i++)
-		{			
-			inbox_new += node.childNodes[i].attributes.inbox_new;			
-		}
-		
-		var current = this.notificationEl.dom.innerHTML;
-		
-		if(current!='' && inbox_new>current)
+		if(this.notificationEl)
 		{
-			GO.playAlarm();
+			var node = this.treePanel.getRootNode();
+			
+	
+			var inbox_new=0;
+			for(var i=0;i<node.childNodes.length;i++)
+			{			
+				inbox_new += node.childNodes[i].attributes.inbox_new;			
+			}
+			
+			var current = this.notificationEl.dom.innerHTML;
+			
+			if(current!='' && inbox_new>current)
+			{
+				GO.playAlarm();
+				this.notificationEl.setDisplayed(!this.isVisible());
+			}
+			
+			this.notificationEl.update(inbox_new);
+			
+			
 		}
-		
-		this.notificationEl.update(inbox_new);
-		
 	},
 	
 	openAttachment :  function(attachment)

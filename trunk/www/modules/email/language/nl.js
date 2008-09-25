@@ -98,3 +98,6 @@ GO.email.lang.addToCC = 'Voeg toe aan CC';
 GO.email.lang.addToBCC = 'Voeg toe aan BCC';
 
 GO.email.lang.viewSource='Bron weergeven';
+
+
+GO.email.lang.sendNotification='De afzender van dit bericht wil graag een bevestiging dat dit bericht is aangekomen op: %s. Wilt u deze bevestiging nu versturen?';

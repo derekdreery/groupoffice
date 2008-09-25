@@ -92,6 +92,24 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		}
 		
 		this.body.scrollTo('top',0);
+		
+		if(this.data.notification)
+		{
+			if(confirm(GO.email.lang.sendNotification.replace('%s', this.data.notification)))
+			{
+				var params = {
+					task:'notification',
+					account_id: this.data.account_id,
+					notification_to: this.data.notification,
+					subject: this.data.subject
+				}
+				
+				Ext.Ajax.request({
+					url: GO.settings.modules.email.url+'action.php',
+					params: params
+				});
+			}
+		}
 	},
 	
 	openAttachment :  function(e, target)

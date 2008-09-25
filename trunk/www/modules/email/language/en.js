@@ -106,3 +106,5 @@ GO.email.lang.addToCC = 'Add to CC';
 GO.email.lang.addToBCC = 'Add to BCC';
 
 GO.email.lang.viewSource='View source';
+
+GO.email.lang.sendNotification='The sender of this messages likes a read notification by you at: %s. Do you want to send a read notification now?';
