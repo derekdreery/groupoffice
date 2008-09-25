@@ -183,6 +183,13 @@ GO.email.EmailClient = function(config){
 				
 			},
 			scope: this
+		},'-',
+		{
+			iconCls: 'btn-delete',
+			text: GO.lang.cmdDelete,
+			cls: 'x-btn-text-icon',
+			handler: function(){ this.messagesGrid.deleteSelected(); },
+			scope: this
 		}
 		]
 	});
@@ -377,7 +384,7 @@ GO.email.EmailClient = function(config){
 
 	}, this);	
 	
-	this.searchDialog = new SearchDialog({store:this.messagesGrid.store});
+	this.searchDialog = new GO.email.SearchDialog({store:this.messagesGrid.store});
 	
 	
 	var tbar =[{
@@ -588,6 +595,18 @@ GO.email.EmailClient = function(config){
   this.messagePanel.on('emailClicked', function(email){
   	this.showComposer({to: email});
   }, this);
+  
+  /*
+   * for email seaching on sender from message panel
+   */
+  GO.email.searchSender=function(sender)
+	{
+		this.messagesGrid.store.baseParams.query='FROM "'+sender+'"';
+		this.messagesGrid.store.load();
+	}	
+	GO.email.searchSender = GO.email.searchSender.createDelegate(this);
+
+  
   
   GO.email.EmailClient.superclass.constructor.call(this, config);	
 };
@@ -906,6 +925,7 @@ GO.moduleManager.addModule('email', GO.email.EmailClient, {
 	title : GO.lang.strEmail,
 	iconCls : 'go-tab-icon-email'
 });
+
 
 
 GO.linkHandlers[9] = function(id, remoteMessage){

@@ -35,7 +35,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		this.template = new Ext.XTemplate( 
 			'<div class="message-header">',
 			'<table class="message-header-table">',
-			'<tr><td style="width:70px"><b>'+GO.email.lang.from+'</b></td><td>: {full_from}</td></tr>',
+			'<tr><td style="width:70px"><b>'+GO.email.lang.from+'</b></td><td>: {full_from} (<a class="normal-link" onclick="GO.email.searchSender(\'{sender}\');" href="#">'+GO.email.lang.searchOnSender+'</a> | <a class="normal-link" onclick="GO.addressbook.searchSender(\'{sender}\', \'{from}\');" href="#">'+GO.addressbook.lang.searchOnSender+'</a>)</td></tr>',
 			'<tr><td><b>'+GO.email.lang.subject+'</b></td><td>: {subject}</td></tr>',
 			'<tr><td><b>'+GO.lang.strDate+'</b></td><td>: {date}</td></tr>',
 			'<tr><td><b>'+GO.lang.strSize+'</b></td><td>: {size}</td></tr>',

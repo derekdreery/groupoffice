@@ -1,4 +1,4 @@
-SearchDialog = function(config){
+GO.email.SearchDialog = function(config){
 
 	//Ext.apply(config);
 
