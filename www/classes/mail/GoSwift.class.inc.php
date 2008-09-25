@@ -220,6 +220,17 @@ class GoSwift extends Swift{
 		return $data->readFull();
 		
 	}
+	
+	function get_data($email_from=null, $name_from=null)
+	{
+		$name_from=!empty($name_from) ? $name_from : $this->account['name'];
+		$email_from=!empty($email_from) ? $email_from : $this->account['email'];
+		
+		$this->message->setFrom(new Swift_Address($email_from, $name_from));
+		$data = $this->message->build();
+		return $data->readFull();
+
+	}
 
 	/**
 	 * Sends the email.
