@@ -379,7 +379,7 @@ class imap {
 				$key = strtolower(trim(substr($line,0,$colpos)));
 				$value = trim(substr($line, $colpos+1));
 				
-				$values[$key]=$value;
+				$values[$key]=stripslashes($value);
 			}
 		}
 		

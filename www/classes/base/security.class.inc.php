@@ -166,7 +166,7 @@ class GO_SECURITY extends db {
 	
 	function json_authenticate($module='')
 	{		
-		header('Content-Type: application/json; charset=UTF-8');
+		header('Content-Type: text/html; charset=UTF-8');
 		
 		$authenticated = $this->authenticate($module);
 
