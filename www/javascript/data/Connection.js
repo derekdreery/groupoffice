@@ -103,7 +103,9 @@ GO.data.Connection = Ext.extend(Ext.data.Connection, {
 		if(GO.checkerIcon)
 		{
 			GO.checkerIcon.setDisplayed(true);
-			GO.waitMask.setDisplayed(true);
+			//GO.waitMask.setDisplayed.defer(100, GO.waitMask, [true]);
+			Ext.getBody().addClass('go-wait');
+			
 		}
 		
 		if(o.callback)
@@ -142,7 +144,8 @@ GO.data.Connection = Ext.extend(Ext.data.Connection, {
 		if(GO.checkerIcon)
 		{
 			GO.checkerIcon.setDisplayed(false);
-			GO.waitMask.setDisplayed(false);
+			//GO.waitMask.setDisplayed(false);
+			Ext.getBody().removeClass('go-wait');
 		}
 		if(!success)
 		{

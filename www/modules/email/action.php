@@ -250,7 +250,7 @@ try{
 
 							}
 
-							if(!empty($_POST['notification']))
+							if($_POST['notification']=='true')
 							{
 								$swift->message->requestReadReceipt($swift->account['email']);
 							}

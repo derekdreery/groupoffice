@@ -67,7 +67,6 @@ if($GO_SECURITY->logged_in())
 	<?php	
 }
 ?>
-
 <object width="1" height="1" id="alarmSound">
 <param name="movie" value="<?php echo $GO_THEME->theme_url; ?>reminder.swf">
 <param name="loop" value="false">
@@ -75,7 +74,5 @@ if($GO_SECURITY->logged_in())
 <embed src="<?php echo $GO_THEME->theme_url; ?>reminder.swf" autostart=false loop="false" width="1" height="1" name="alarmSound">
 </embed>
 </object>
-
- <div id="go-wait" class="go-wait"></div>
 </body>
 </html>
