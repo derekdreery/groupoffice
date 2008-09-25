@@ -38,6 +38,23 @@ try
 {
 	switch($task)
 	{
+		case 'search_sender':
+			
+			$email = smart_addslashes($_POST['email']);
+			
+			$contact = $ab->get_contact_by_email($email, $GO_SECURITY->user_id);
+			
+			if($contact)
+			{
+				$response['contact_id']=$contact['id'];
+			}else
+			{
+				$response['contact_id']=0;
+			}
+			$response['success']=true;
+			echo json_encode($response);
+			break;
+		
 		/* all-contacts */
 		case 'contacts':
 

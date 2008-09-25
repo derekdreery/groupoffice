@@ -85,3 +85,5 @@ GO.addressbook.lang.addressbook = 'Adresboek';
 GO.addressbook.lang.addressbooks = 'Adresboeken';
 GO.addressbook.lang.sendMailing='Nieuwsbrief versturen';
 GO.addressbook.lang.importSuccess='Gegevens succesvol geimporteerd';
+GO.addressbook.lang.searchOnSender='Opzoeken';
+GO.addressbook.lang.confirmCreate='Contactpersoon niet gevonden. Wilt u een nieuw contactpersoon aanmaken?';

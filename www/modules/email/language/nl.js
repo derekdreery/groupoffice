@@ -101,3 +101,4 @@ GO.email.lang.viewSource='Bron weergeven';
 
 
 GO.email.lang.sendNotification='De afzender van dit bericht wil graag een bevestiging dat dit bericht is aangekomen op: %s. Wilt u deze bevestiging nu versturen?';
+GO.email.lang.searchOnSender='Toon berichten';

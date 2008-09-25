@@ -291,6 +291,57 @@ GO.mainLayout.onReady(function(){
 });
 			
 
+GO.addressbook.searchSender = function(sender, name){
+	
+	Ext.Ajax.request({
+		url: GO.settings.modules.addressbook.url+'json.php',
+		params: {
+			task:'search_sender',
+			email: sender			
+		},
+		callback: function(options, success, response)
+		{
+			if(!success)
+			{
+				alert( GO.lang['strRequestError']);
+			}else
+			{	
+				
+				var responseParams = Ext.decode(response.responseText);
+				if(!responseParams.contact_id)
+				{
+					if(confirm(GO.addressbook.lang.confirmCreate))
+					{
+						GO.addressbook.contactDialog.show();
+						
+						var names = name.split(' ');
+						var params = {
+							email:sender,
+							first_name: names[0]
+						};
+						if(names[2])
+						{
+							params.last_name=names[2];
+							params.middle_name=names[1];
+						}else if(split[1])
+						{
+							params.last_name=names[1];
+						}
+						
+						GO.addressbook.contactDialog.formPanel.form.setValues(params);				
+					}
+				}else
+				{
+					GO.linkHandlers[2].call(this, responseParams.contact_id);
+				}			
+			}
+		}	
+			
+		
+	});
+	
+}
+
 
 GO.moduleManager.addModule('addressbook', GO.addressbook.MainPanel, {
 	title : GO.addressbook.lang.addressbook,
