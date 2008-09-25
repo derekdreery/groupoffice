@@ -32,6 +32,42 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		this.bodyId = Ext.id();
 		this.attachmentsId = Ext.id();
 		
+		var templateStr = '<div class="message-header">'+
+			'<table class="message-header-table">'+
+			'<tr><td style="width:70px"><b>'+GO.email.lang.from+'</b></td>'+			
+			'<td>: {full_from} (<a class="normal-link" onclick="GO.email.searchSender(\'{sender}\');" href="#">'+GO.email.lang.searchOnSender+'</a>';
+		
+		if(GO.addressbook)
+		{
+			templateStr += ' | <a class="normal-link" onclick="GO.addressbook.searchSender(\'{sender}\', \'{from}\');" href="#">'+GO.addressbook.lang.searchOnSender+'</a>';
+		}
+			
+		templateStr += ')</td></tr><tr><td><b>'+GO.email.lang.subject+'</b></td><td>: {subject}</td></tr>'+
+			'<tr><td><b>'+GO.lang.strDate+'</b></td><td>: {date}</td></tr>'+
+			'<tr><td><b>'+GO.lang.strSize+'</b></td><td>: {size}</td></tr>'+
+			'<tr><td><b>'+GO.email.lang.to+'</b></td><td>: {to}</td></tr>'+
+			'<tpl if="cc.length">'+
+				'<tr><td><b>'+GO.email.lang.cc+'</b></td><td>: {cc}</td></tr>'+
+			'</tpl>'+
+			'<tpl if="bcc.length">'+
+				'<tr><td><b>'+GO.email.lang.bcc+'</b></td><td>: {bcc}</td></tr>'+
+			'</tpl>'+
+			'</table>'+
+			'<tpl if="attachments.length">'+
+				'<table style="padding-top:5px;">'+
+				'<tr><td><b>'+GO.email.lang.attachments+':</b></td></tr><tr><td id="'+this.attachmentsId+'">'+
+					'<tpl for="attachments">'+
+					'<a class="filetype-link filetype-{extension}" id="'+this.attachmentsId+'_{index}" href="#">{name}</a> '+
+					'</tpl>'+
+					'<tpl if="attachments.length&gt;1">'+
+						'<a class="filetype-link filetype-zip" id="'+this.attachmentsId+'_zipofall" href="#">'+GO.email.lang.downloadAllAsZip+'</a>'+
+					'</tpl>'+
+				'</td></tr>'+
+				'</table>'+
+			'</tpl>'+
+			'</div>'+
+			'<div id="'+this.bodyId+'" class="message-body">{body}</div>';
+		
 		this.template = new Ext.XTemplate( 
 			'<div class="message-header">',
 			'<table class="message-header-table">',
