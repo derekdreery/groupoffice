@@ -36,6 +36,7 @@ function get_posted_event()
 	$event['description'] = smart_addslashes(trim($_POST['description']));
 	$event['location'] = smart_addslashes(trim($_POST['location']));
 	$event['status'] = smart_addslashes($_POST['status']);
+	$event['background'] = smart_addslashes($_POST['background']);
 	$event['busy']=isset($_POST['busy']) ? '1' : '0';
 	$event['reminder'] = isset($_POST['reminder_multiplier']) ? $_POST['reminder_multiplier'] * $_POST['reminder_value'] : 0;
 	//$event['background'] = $_POST['background'];

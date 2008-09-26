@@ -13,6 +13,7 @@
 
 GO.lang = {};
 
+GO.lang.color='Color';
 GO.lang.browse='Browse...';
 GO.lang.largeUpload='Large files/folders (Java required)';
 GO.lang.smallUpload='Small files';

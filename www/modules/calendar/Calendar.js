@@ -89,7 +89,7 @@ GO.calendar.MainPanel = function(config){
 		baseParams: {task: 'events'},
 		root: 'results',
 		id: 'id',
-		fields:['id','event_id','name','start_time','end_time','tooltip', 'repeats', 'private','location']
+		fields:['id','event_id','name','start_time','end_time','tooltip', 'repeats', 'private','location', 'background']
 	});
 	
 	this.monthGridStore = new GO.data.JsonStore({
@@ -98,7 +98,7 @@ GO.calendar.MainPanel = function(config){
 		baseParams: {task: 'events'},
 		root: 'results',
 		id: 'id',
-		fields:['id','event_id','name','start_time','end_time','tooltip', 'repeats', 'private','location']
+		fields:['id','event_id','name','start_time','end_time','tooltip', 'repeats', 'private','location', 'background']
 	});
 
 	this.daysGrid = new GO.grid.CalendarGrid(

@@ -26,7 +26,9 @@ require($GO_THEME->theme_path.'default_head.inc.php');
 <?php
 require($GO_CONFIG->root_path.'default_scripts.inc.php');
 
+/*
 $load_modules=isset($_REQUEST['load_modules']) ? explode(',', $_REQUEST['load_modules']) : array();
+
 
 $load_modules[]=$_REQUEST['module'];
 
@@ -65,7 +67,7 @@ foreach($load_modules as $module_id)
 	{
 		require($module['path'].'scripts.inc.php');
 	}	
-}
+}*/
 ?>
 <script type="text/javascript">
 
