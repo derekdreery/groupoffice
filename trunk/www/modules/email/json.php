@@ -403,7 +403,7 @@ try{
 					$dir=$GO_CONFIG->tmpdir.'attachments/';
 					filesystem::mkdir_recursive($dir);
 
-					$tmp_file = $dir.$parts[$i]["name"];
+					$tmp_file = !empty($parts[$i]["name"]) ? $dir.$parts[$i]["name"] : $dir.uniqid(time());
 
 					$fp = fopen($tmp_file,"wb");
 					fwrite ($fp,$file);
