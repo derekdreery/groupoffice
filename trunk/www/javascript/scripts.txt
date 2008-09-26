@@ -30,6 +30,7 @@ javascript/windows/SelectEmail.js
 
 javascript/form/SearchField.js
 javascript/form/Combo.js
+javascript/form/ColorField.js
 javascript/form/ComboReset.js
 javascript/form/ComboBoxMulti.js
 javascript/form/UploadFile.js
