@@ -192,11 +192,12 @@ try{
 							require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 
 							$swift =& new GoSwift(
-							smart_stripslashes($_POST['to']),
-							smart_stripslashes($_POST['subject']),
-							smart_addslashes($_POST['account_id']),
-							smart_stripslashes($_POST['priority'])
+								smart_stripslashes($_POST['to']),
+								smart_stripslashes($_POST['subject']),
+								smart_addslashes($_POST['account_id']),
+								smart_stripslashes($_POST['priority'])
 							);
+
 
 							if(!empty($_POST['reply_uid']))
 							$swift->set_reply_to(smart_stripslashes($_POST['reply_uid']),smart_stripslashes($_POST['reply_mailbox']));
