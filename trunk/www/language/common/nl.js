@@ -11,6 +11,7 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
+GO.lang.color='Kleur';
 GO.lang.browse='Bladeren...';
 
 GO.lang.largeUpload='Grote bestanden/mappen (Java Vereist)';

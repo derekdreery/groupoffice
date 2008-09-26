@@ -107,10 +107,10 @@ GO.form.ColorField =  Ext.extend(Ext.form.TriggerField,  {
   /**
    * Returns the current color value of the color field
    * @return {String} value The hexidecimal color value
-   */
+  
   getValue : function(){
 		return this.curValue || this.defaultValue || "FFFFFF";
-  },
+  }, */
 
   /**
    * Sets the value of the color field.  Format as hex value 'FFFFFF'

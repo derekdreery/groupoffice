@@ -479,6 +479,7 @@ try{
 'end_time'=> date('Y-m-d H:i', $event['end_time']),
 'tooltip'=>$tooltip,
 'location'=>$event['location'],
+'background'=>$event['background'],
 'private'=>($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']),
 'repeats'=>!empty($event['rrule']),
 'day'=>$lang['common']['full_days'][date('w', $event['start_time'])].' '.date($_SESSION['GO_SESSION']['date_format'], $event['start_time'])
@@ -655,6 +656,7 @@ try{
 					'end_time'=> date('Y-m-d H:i', $event['end_time']),
 					'tooltip'=>$tooltip,
 					'location'=>$event['location'],
+					'background'=>$event['background'],
 					'repeats'=>!empty($event['rrule']),
 					'private'=>($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']),
 					'write_permission'=>$response[$cal->f('id')]['write_permission']

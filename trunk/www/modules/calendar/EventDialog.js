@@ -956,52 +956,52 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 			reminderValues.push([i,i]);
 		}
         
-        var reminderValue = new Ext.form.ComboBox({
-        	fieldLabel:GO.calendar.lang.reminder,
-        	hiddenName:'reminder_value',          
-					triggerAction: 'all',
-          editable:false,
-          selectOnFocus:true,
-          width:148,
-          forceSelection:true,
-          mode:'local',
-          value:'0',
-          valueField:'value',
-          displayField:'text',
-          store: new Ext.data.SimpleStore({
-            fields: ['value', 'text'],
-            data: reminderValues
-	        })
-        });	
-
-        
-        var reminderMultiplier = new Ext.form.ComboBox({
-        	hiddenName: 'reminder_multiplier',            
+    var reminderValue = new Ext.form.ComboBox({
+    	fieldLabel:GO.calendar.lang.reminder,
+    	hiddenName:'reminder_value',          
 			triggerAction: 'all',
-            editable:false,
-            selectOnFocus:true,
-            width:148,
-            forceSelection:true,
-            mode:'local',
-            value:'60',
-            valueField:'value',
-            displayField:'text',
-            store: new Ext.data.SimpleStore({
-	            fields: ['value', 'text'],
-	            data: [
-	            	['60',GO.lang.strMinutes],
-	            	['3600',GO.lang.strHours],
-	            	['86400',GO.lang.strDays]
-	            	
-	            ]
-	        }),
-	        hideLabel:true,
-	        labelSeperator:''
-        });	
-        
-        
-        
-        this.participantsStore = new GO.data.JsonStore({			
+      editable:false,
+      selectOnFocus:true,
+      width:148,
+      forceSelection:true,
+      mode:'local',
+      value:'0',
+      valueField:'value',
+      displayField:'text',
+      store: new Ext.data.SimpleStore({
+        fields: ['value', 'text'],
+        data: reminderValues
+      })
+    });	
+
+      
+    var reminderMultiplier = new Ext.form.ComboBox({
+    	hiddenName: 'reminder_multiplier',            
+			triggerAction: 'all',
+      editable:false,
+      selectOnFocus:true,
+      width:148,
+      forceSelection:true,
+      mode:'local',
+      value:'60',
+      valueField:'value',
+      displayField:'text',
+      store: new Ext.data.SimpleStore({
+        fields: ['value', 'text'],
+        data: [
+        	['60',GO.lang.strMinutes],
+        	['3600',GO.lang.strHours],
+        	['86400',GO.lang.strDays]
+        	
+        ]
+      }),
+      hideLabel:true,
+      labelSeperator:''
+    });	
+      
+      
+      
+   this.participantsStore = new GO.data.JsonStore({			
 			url: GO.settings.modules.calendar.url+'json.php',
 			baseParams: {task: "participants"},
 			root: 'results',
@@ -1064,36 +1064,36 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 			}
         
         this.participantsPanel = new GO.grid.GridPanel({
-			title: GO.calendar.lang.participants,
-			store: this.participantsStore,
-			border:false,
-			columns:[{
-			       	header: GO.lang.strName,
-					dataIndex: 'name',
-					sortable: true
-			    },{
-			       	header: GO.lang.strEmail,
-					dataIndex: 'email',
-					sortable: true
-			    },{
-			       	header: GO.lang.strStatus,
-					dataIndex: 'status',
-					sortable: true,
-					renderer: function(v){
-						switch(v){
-							case '2':
-								return GO.calendar.lang.declined;
-							break;
-							
-							case '1':
-								return GO.calendar.lang.accepted;
-							break;
-							
-							case '0':
-								return GO.calendar.lang.notRespondedYet;
-							break;
+					title: GO.calendar.lang.participants,
+					store: this.participantsStore,
+					border:false,
+					columns:[{
+		       	header: GO.lang.strName,
+						dataIndex: 'name',
+						sortable: true
+				    },{
+		       	header: GO.lang.strEmail,
+						dataIndex: 'email',
+						sortable: true
+				    },{
+		       	header: GO.lang.strStatus,
+						dataIndex: 'status',
+						sortable: true,
+						renderer: function(v){
+							switch(v){
+								case '2':
+									return GO.calendar.lang.declined;
+								break;
+								
+								case '1':
+									return GO.calendar.lang.accepted;
+								break;
+								
+								case '0':
+									return GO.calendar.lang.notRespondedYet;
+								break;
+							}
 						}
-					}
 			    },{
 			       	header: GO.lang.strAvailable,
 					dataIndex: 'available',
@@ -1175,10 +1175,15 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 	    			{items:reminderValue},
 	    			{items:reminderMultiplier}
 	    			]
+	    	},	    	
+	    	{
+	    		xtype:'colorfield',
+	    		fieldLabel: GO.lang.color,
+	    		value:'00FF00',
+	    		name:'background',
+	    		anchor:''    		
 	    	},
-	    	privateCB//,
-	    	//cp
-			
+	    	privateCB		
 			]
         });
    /*     

@@ -389,7 +389,6 @@ if(in_array('calendar', $module_ids))
   DROP `contact_id`,
   DROP `company_id`,
   DROP `project_id`,
-  DROP `background`,
   DROP `repeat_type`,
   DROP `repeat_forever`,
   DROP `repeat_every`,

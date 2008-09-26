@@ -926,6 +926,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 					tag: 'div', 
 					id: domId, 
 					cls: "x-calGrid-all-day-event-container", 
+					style:"background-color:#"+eventData.background,
 					html: text , 
 					qtip: eventData.tooltip
 				}, true);
@@ -1026,7 +1027,8 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			{
 				tag: 'div', 
 				id: domId, 
-				cls: "x-calGrid-event-container",			 
+				cls: "x-calGrid-event-container",		
+				style:"background-color:#"+eventData.background,	 
 				qtip: eventData.tooltip,
 				children:{
 					tag : 'div',
