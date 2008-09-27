@@ -11,6 +11,8 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
+GO.lang.fullscreen='Volledig scherm modus';
+
 GO.lang.color='Kleur';
 GO.lang.browse='Bladeren...';
 

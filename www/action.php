@@ -135,6 +135,9 @@ try{
 			$response['user_id']=$GO_SECURITY->user_id;
 			$response['name']=$_SESSION['GO_SESSION']['name'];
 			//$response['sid']=session_id();
+			
+			
+			//$response['fullscreen']=isset($_POST['fullscreen']);
 				
 			$response['settings'] = $GO_CONFIG->get_client_settings();
 			
