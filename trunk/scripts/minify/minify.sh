@@ -37,6 +37,7 @@ if [ "$1" = "delete" ]; then
 	for i in $(cat javascript/scripts.txt); do 
 		rm $i;
 	done
+	rm javascript/scripts.txt
 fi
 
 
@@ -59,6 +60,10 @@ do
 				rm $i;
 			fi		
 		done
+		
+		if [ "$1" = "delete" ]; then
+			rm modules/$module/scripts.txt)
+		fi
 		
 		$COMPRESSOR modules/$module/all-module-scripts.js -o modules/$module/all-module-scripts-min.js
 		
