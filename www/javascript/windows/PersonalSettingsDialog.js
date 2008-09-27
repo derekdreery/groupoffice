@@ -70,11 +70,10 @@ Ext.extend(GO.PersonalSettingsDialog, Ext.Window,{
 		
 		if(!this.rendered)
 		{
-			this.render(Ext.getBody());
+			this.render(Ext.getBody());			
 			
-			var f = this.formPanel.form;
-			f.findField('language_id').on('change', function(){this.reload=true;}, this);
-			f.findField('theme').on('change', function(){this.reload=true;}, this);
+			this.tabPanel.items.items[0].languageCombo.on('change', function(){this.reload=true;}, this);
+			this.tabPanel.items.items[1].themeCombo.on('change', function(){this.reload=true;}, this);
 		
 		}
 		

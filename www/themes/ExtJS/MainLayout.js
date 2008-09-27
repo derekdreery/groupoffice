@@ -110,10 +110,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
     	});
     	
     	
-   var activeTab = this.tabPanel.getLayout().activeItem;
    
-   if(!activeTab)
-   	this.tabPanel.setActiveTab(0);
    
     
    var topPanel = new Ext.Panel({
@@ -253,7 +250,10 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		}
 		
 		
-		
+		var activeTab = this.tabPanel.getLayout().activeItem;
+   
+  	if(!activeTab)
+   		this.tabPanel.setActiveTab(0);
 		
 		this.removeLoadMask();
 

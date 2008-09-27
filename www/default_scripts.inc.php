@@ -91,7 +91,7 @@ if(!$GO_CONFIG->debug)
 	$scripts[]=$GO_CONFIG->root_path.'javascript/go-all-min.js';
 	
 	
-	$file = 'base-'.$GO_LANGUAGE->language.'-'.$GO_CONFIG->mtime.'.js';
+	$file = 'base-'.md5($GO_LANGUAGE->language.$GO_THEME->theme.$GO_CONFIG->mtime).'.js';
 	$path = $GO_CONFIG->local_path.'cache/'.$file;
 	$url = $GO_CONFIG->local_url.'cache/'.$file;
 	

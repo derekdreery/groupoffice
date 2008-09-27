@@ -79,7 +79,7 @@ GO.users.PermissionsPanel = function(config)
 	/* group member grid */
 	
 	var groupsMemberOfColumn = new GO.grid.CheckColumn({
-		header: GO.users.lang['cmdCheckColumnGroups'],
+		header: '',
 		dataIndex: 'group_permission',
 		width: 55
 	});
@@ -94,10 +94,10 @@ GO.users.PermissionsPanel = function(config)
 	
 	var groupMemberGrid = new GO.grid.GridPanel({	
 		columnWidth: .33,	
-		title: GO.users.lang.groupMembership,	
+		title: GO.users.lang.userIsMemberOf,	
 		columns: [
 				{
-					header: GO.users.lang['cmdHeaderColumnGroups'], 
+					header: GO.users.lang.group, 
 					dataIndex: 'group'
 				},
 				groupsMemberOfColumn
@@ -117,7 +117,7 @@ GO.users.PermissionsPanel = function(config)
 	/* group visible grid */
 	
 	var groupsVisibleToColumn = new GO.grid.CheckColumn({
-		header: GO.users.lang['cmdCheckColumnGroups'],
+		header: '',
 		dataIndex: 'visible_permission',
 		width: 55
 	});
@@ -133,10 +133,10 @@ GO.users.PermissionsPanel = function(config)
 	
 	var groupVisibleGrid = new GO.grid.GridPanel({		
 		columnWidth: .33,
-		title: GO.users.lang.groupMembership,
+		title: GO.users.lang.userVisibleTo,
 		columns: [
 				{
-					header: GO.users.lang['cmdHeaderGridUserVisibleTo'], 
+					header: GO.users.lang.group, 
 					dataIndex: 'group'
 				},
 				groupsVisibleToColumn

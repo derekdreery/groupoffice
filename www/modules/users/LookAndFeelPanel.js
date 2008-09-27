@@ -52,7 +52,7 @@ GO.users.LookAndFeelPanel = function(config)
 	});
 	
 	
-	config.items=[new Ext.form.ComboBox({
+	config.items=[this.themeCombo = new Ext.form.ComboBox({
 			fieldLabel: GO.users.lang['cmdFormLabelTheme'],
 			name: 'theme',
 			store: themesStore,

@@ -1,11 +1,9 @@
 GO.users.lang.cmdCheckColumnRead= 'Lezen';
 GO.users.lang.cmdCheckColumnWrite= 'Schrijven';
-GO.users.lang.cmdCheckColumnGroups= 'Groepen';
 GO.users.lang.cmdHeaderColumnName= 'Module naam';
-GO.users.lang.cmdHeaderColumnGroups= 'Groepen';
 GO.users.lang.cmdHeaderGridUserHasAccess = 'Gebruiker heeft toegang tot';
-GO.users.lang.cmdHeaderGridUserIsMemberOf = 'Gebruiker is lid van';
-GO.users.lang.cmdHeaderGridUserVisibleTo = 'Gebruiker is bij de volgende groepen zichtbaar';
+GO.users.lang.userIsMemberOf = 'Gebruiker is lid van';
+GO.users.lang.userVisibleTo = 'Gebruiker is zichtbaar aan';
 
 GO.users.lang.cmdPanelPersonal = 'Persoonlijk';
 GO.users.lang.cmdPanelPassword= 'Wachtwoord';
@@ -71,3 +69,4 @@ GO.users.lang.monday = 'Maandag';
 GO.users.lang.regionalSettings = 'Regionale instellingen';
 GO.users.lang.userSettings = 'Gebruikers instellingen';
 GO.users.lang.maxUsersReached='Het maximaal aantal gebruikers is bereikt. Ga naar de service tab om het maximaal aantal gebruikers uit te breiden.';
+GO.users.lang.group='Groep';

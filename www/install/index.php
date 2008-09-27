@@ -327,6 +327,8 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 				$user['email'] = $GO_CONFIG->webmaster_email;
 				$user['sex'] = 'M';
 				$user['enabled']='1';
+				$user['country']=$GO_CONFIG->default_country;
+				$user['work_country']=$GO_CONFIG->default_country;
 
 				$GO_USERS->add_user($user,$user_groups,array($GO_CONFIG->group_everyone));
 				//filesystem::mkdir_recursive($GO_CONFIG->file_storage_path.'users/admin/');
