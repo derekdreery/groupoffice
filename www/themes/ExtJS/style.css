@@ -274,6 +274,9 @@ a.normal-link:hover{
 .ext-gecko .x-window-body .x-form-item{
 overflow:hidden !important;	
 }
+
+.ext-el-mask{z-index:8000;} /*set it lower for windows to be on top */
+
 /* end ext overrides */
 
 

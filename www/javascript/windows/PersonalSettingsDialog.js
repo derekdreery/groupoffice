@@ -22,13 +22,6 @@ GO.PersonalSettingsDialog = function(config){
 	
 	this.buildForm();
 	
-	var focusName = function(){
-		this.nameField.focus();		
-	};
-	
-		
-	
-	
 	//config.iconCls='go-module-icon-users';
 	config.layout='fit';
 	config.modal=false;
@@ -64,37 +57,39 @@ GO.PersonalSettingsDialog = function(config){
 	
 	GO.PersonalSettingsDialog.superclass.constructor.call(this, config);
 	
-	this.render(Ext.getBody());
-	
 	this.addEvents({'save' : true});	
 };
 
 Ext.extend(GO.PersonalSettingsDialog, Ext.Window,{
 
-	
-	show : function () {
-		
-		//this.maximize();
-		
-		
-		
-		//this.formPanel.show();
+	reload : false,
 
+	
+	show : function () {		
+		this.reload=false;
+		
+		if(!this.rendered)
+		{
+			this.render(Ext.getBody());
+			
+			var f = this.formPanel.form;
+			f.findField('language_id').on('change', function(){this.reload=true;}, this);
+			f.findField('theme').on('change', function(){this.reload=true;}, this);
+		
+		}
+		
+		
 		this.formPanel.form.baseParams['user_id']=GO.settings.user_id;
 		this.user_id=GO.settings.user_id;
-		//this.loaded=true;
 		
 		if(!this.loaded)
 		{
 			this.formPanel.load({
-				url : BaseHref+'json.php',
-				
+				url : BaseHref+'json.php',				
 				success:function(form, action)
 				{				
 					this.loaded=true;
-					GO.PersonalSettingsDialog.superclass.show.call(this);
-					
-					
+					GO.PersonalSettingsDialog.superclass.show.call(this);					
 					
 					for(var i=0;i<this.tabPanel.items.getCount();i++)
 					{
@@ -102,24 +97,20 @@ Ext.extend(GO.PersonalSettingsDialog, Ext.Window,{
 						if(panel.onLoadSettings)
 						{
 							var func = panel.onLoadSettings.createDelegate(panel, [action]);
-							func.call();
-							 
+							func.call();							 
 						}
-					}
-					
+					}					
 			},
 				failure:function(form, action)
 				{
 					Ext.Msg.alert(GO.lang['strError'], action.result.feedback)
 				},
-				scope: this
-				
+				scope: this				
 			});
 		}else
 		{
 			GO.PersonalSettingsDialog.superclass.show.call(this);
 		}
-
 	},
 	
 	setWritePermission : function(writePermission)
@@ -138,7 +129,12 @@ Ext.extend(GO.PersonalSettingsDialog, Ext.Window,{
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){
 				
-				this.fireEvent('save', this);					
+				this.fireEvent('save', this);	
+				
+				if(this.reload)
+				{
+					document.location=GO.settings.config.host;
+				}				
 			},		
 			failure: function(form, action) {
 				if(action.failureType == 'client')
@@ -171,9 +167,8 @@ Ext.extend(GO.PersonalSettingsDialog, Ext.Window,{
 	    waitMsgTarget:true,
 	    border:false
 		});
-    
-    
+		
+		
+		
 	}
 });
-
-

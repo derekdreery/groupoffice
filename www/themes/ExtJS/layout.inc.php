@@ -12,7 +12,7 @@ require($GO_THEME->theme_path.'default_head.inc.php');
 <div id="loading-mask" style="width:100%;height:100%;background:#c3daf9;position:absolute;z-index:20000;left:0;top:0;">&#160;</div>
 <div id="loading">
 	<div class="loading-indicator">
-	<img src="<?php echo $GO_THEME->theme_url; ?>images/groupoffice.gif" style="display:block;margin-bottom:15px;" />
+	<img src="<?php echo $GO_THEME->theme_url; ?>images/groupoffice.gif" style="display:block;margin-bottom:15px;margin-top:15px" />
 	<img src="<?php echo $GO_CONFIG->host; ?>ext/resources/images/default/grid/loading.gif" style="width:16px;height:16px;vertical-align:middle" />&#160;<span id="load-status"><?php echo $lang['common']['loadingCore']; ?></span>
 	<div style="font-size:10px;margin-top:15px;">Copyright &copy; Intermesh 2003-2008</div>
 	</div>
@@ -28,7 +28,7 @@ if($GO_SECURITY->logged_in())
 	?>
 	<div id="mainNorthPanel">
 		<div id="headerLeft">
-			<img src="<?php echo $GO_CONFIG->host; ?>themes/Default/images/16x16/go-icon.png" style="text-align:middle;vertical-align:middle;border:0px;padding:2px;" />
+			<img src="<?php echo $GO_CONFIG->host; ?>themes/Default/images/favicon.gif" style="text-align:middle;vertical-align:middle;border:0px;padding:2px;" />
 			<?php echo $lang['common']['loggedInAs'].' '.htmlspecialchars($_SESSION['GO_SESSION']['name']); ?>
 		</div>
 		<div id="headerRight">
@@ -71,11 +71,11 @@ if($GO_SECURITY->logged_in())
 	<?php	
 }
 ?>
-<object width="1" height="1" id="alarmSound">
+<object width="0" height="0" id="alarmSound">
 <param name="movie" value="<?php echo $GO_THEME->theme_url; ?>reminder.swf">
 <param name="loop" value="false">
 <param name="autostart" value="false">
-<embed src="<?php echo $GO_THEME->theme_url; ?>reminder.swf" autostart=false loop="false" width="1" height="1" name="alarmSound">
+<embed src="<?php echo $GO_THEME->theme_url; ?>reminder.swf" autostart=false loop="false" width="0" height="0" name="alarmSound">
 </embed>
 </object>
 </body>

@@ -77,6 +77,7 @@ var dateFormat = GO.settings.date_format.substring(0,1)+GO.settings.date_format.
 		new Ext.form.ComboBox({
 			fieldLabel: GO.users.lang['cmdFormLabelLanguage'],
 			name: 'language_id',
+			id: 'language_id',
 			store:  new Ext.data.SimpleStore({
 					fields: ['id', 'language'],
 					data : GO.Languages
