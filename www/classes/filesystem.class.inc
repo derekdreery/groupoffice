@@ -531,6 +531,8 @@ class filesystem extends db
 		$path = dirname($path).'/'.utf8_basename($path).'/';
 
 		global $GO_CONFIG;
+		
+		$folders=array();
 
 		if(strstr($path, $GO_CONFIG->root_path))
 		{
