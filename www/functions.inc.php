@@ -46,7 +46,10 @@ function __autoload($class_name) {
 
 
 
-
+function utf8_basename($path)
+{
+	return mb_substr($path, mb_strrpos($path, '/')+1);
+}
 
 
 function resize_image($src, $maxsize)

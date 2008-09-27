@@ -201,7 +201,7 @@ class filesystem extends db
 		{
 			$home_path = $GO_CONFIG->file_storage_path.'users/'.$user['username'];
 
-			if (dirname($path).basename($path) == dirname($home_path).basename($home_path))
+			if (dirname($path).utf8_basename($path) == dirname($home_path).utf8_basename($home_path))
 			{
 				return true;
 			}
@@ -262,8 +262,8 @@ class filesystem extends db
 	function move($source_path, $destination_path)
 	{
 
-		$source_path = dirname($source_path).'/'.basename($source_path);
-		$destination_path = dirname($destination_path).'/'.basename($destination_path);
+		$source_path = dirname($source_path).'/'.utf8_basename($source_path);
+		$destination_path = dirname($destination_path).'/'.utf8_basename($destination_path);
 		
 		
 
@@ -342,8 +342,8 @@ class filesystem extends db
 
 	function copy($source_path, $destination_path)
 	{
-		$source_path = dirname($source_path).'/'.basename($source_path);
-		$destination_path = dirname($destination_path).'/'.basename($destination_path);
+		$source_path = dirname($source_path).'/'.utf8_basename($source_path);
+		$destination_path = dirname($destination_path).'/'.utf8_basename($destination_path);
 
 		//echo $source_path.' -> '.$destination_path;
 		
@@ -407,7 +407,7 @@ class filesystem extends db
 
 	function delete($path)
 	{
-		$path = dirname($path).'/'.basename($path);
+		$path = dirname($path).'/'.utf8_basename($path);
 
 		global $GO_SECURITY, $GO_MODULES;
 
@@ -475,7 +475,7 @@ class filesystem extends db
 
 	function get_parent_path($path)
 	{
-		$path = dirname($path).'/'.basename($path);
+		$path = dirname($path).'/'.utf8_basename($path);
 
 		$last_folder_pos = strrpos($path, '/');
 		if (is_integer($last_folder_pos))
@@ -496,7 +496,7 @@ class filesystem extends db
 	//faster then get_folders_sorted
 	function get_folders($path, $gethidden=false)
 	{
-		$path = dirname($path).'/'.basename($path).'/';
+		$path = dirname($path).'/'.utf8_basename($path).'/';
 
 		global $GO_CONFIG;
 		$slash = stristr(PHP_OS, 'Windows') ? '\\' : '/';
@@ -512,7 +512,7 @@ class filesystem extends db
 				($gethidden || !(strpos($item,".") === 0) ))
 				{
 					$folder['path'] = $folder_path;
-					$folder['name'] = basename($folder_path);
+					$folder['name'] = utf8_basename($folder_path);
 					$folder['mtime'] = filemtime($folder_path);
 					$folder['size'] = filesize($folder_path);
 					$folder['type'] = 'folder';
@@ -526,9 +526,9 @@ class filesystem extends db
 
 	#returns all subfolders of a folder sorted based on the result of a function
 	#passed that is performed on the pathname. (For example filesize();)
-	function get_folders_sorted($path,$sort_field='basename',$sort_direction='ASC', $gethidden=false)
+	function get_folders_sorted($path,$sort_field='utf8_basename',$sort_direction='ASC', $gethidden=false)
 	{
-		$path = dirname($path).'/'.basename($path).'/';
+		$path = dirname($path).'/'.utf8_basename($path).'/';
 
 		global $GO_CONFIG;
 		$folders = array();
@@ -542,7 +542,7 @@ class filesystem extends db
 				$url = str_replace('\\','/',$url);
 			}
 		}
-		$sort_field = function_exists($sort_field) ? $sort_field : 'basename';
+		$sort_field = function_exists($sort_field) ? $sort_field : 'utf8_basename';
 		if (is_dir($path))
 		{
 			$sorted_list = array();
@@ -581,7 +581,7 @@ class filesystem extends db
 				{
 					$folder = array();
 					$folder['path'] = $item;
-					$folder['name'] = basename($item);
+					$folder['name'] = utf8_basename($item);
 					$folder['mtime'] = filemtime($item);
 					$folder['size'] = filesize($item);
 					$folder['type'] = 'folder';
@@ -599,7 +599,7 @@ class filesystem extends db
 	//faster then get_files_sorted
 	function get_files($path, $move=false, $gethidden=false)
 	{
-		$path = dirname($path).'/'.basename($path).'/';
+		$path = dirname($path).'/'.utf8_basename($path).'/';
 
 		global $GO_CONFIG;
 		$slash = stristr(PHP_OS, 'Windows') ? '\\' : '/';
@@ -612,7 +612,7 @@ class filesystem extends db
 				$file_path = $path.$item;
 				if (!is_dir($file_path) && $move) {
 					$file['path'] = $file_path;
-					$file['name'] = basename($file_path);
+					$file['name'] = utf8_basename($file_path);
 					$file['size'] = filesize($file_path);
 					$file['mtime'] = filemtime($file_path);
 					$file['type'] = mime_content_type($file_path);
@@ -623,7 +623,7 @@ class filesystem extends db
 				($gethidden || !(strpos($item,".") === 0)))
 				{
 					$file['path'] = $file_path;
-					$file['name'] = basename($file_path);
+					$file['name'] = utf8_basename($file_path);
 					$file['size'] = filesize($file_path);
 					$file['mtime'] = filemtime($file_path);
 					$file['type'] = mime_content_type($file_path);
@@ -638,9 +638,9 @@ class filesystem extends db
 
 	#returns all subfolders of a folder sorted based on the result of a function
 	#passed that is performed on the pathname. (For example filesize();)
-	function get_files_sorted($path,$sort_field='basename',$sort_direction='ASC', $gethidden=false)
+	function get_files_sorted($path,$sort_field='utf8_basename',$sort_direction='ASC', $gethidden=false)
 	{
-		$path = dirname($path).'/'.basename($path).'/';
+		$path = dirname($path).'/'.utf8_basename($path).'/';
 
 		global $GO_CONFIG;
 		$files = array();
@@ -656,7 +656,7 @@ class filesystem extends db
 				$url = str_replace('\\','/',$url);
 			}
 		}
-		$sort_field = function_exists($sort_field) ? $sort_field : 'basename';
+		$sort_field = function_exists($sort_field) ? $sort_field : 'utf8_basename';
 		if (is_dir($path))
 		{
 			$sorted_list = array();
@@ -694,7 +694,7 @@ class filesystem extends db
 				{
 					$file = array();
 					$file['path'] = $item;
-					$file['name'] = basename($item);
+					$file['name'] = utf8_basename($item);
 					$file['mtime'] = filemtime($item);
 					$file['size'] = filesize($item);
 					$file['type'] = mime_content_type($item);

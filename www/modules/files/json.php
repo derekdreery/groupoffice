@@ -111,7 +111,7 @@ try{
 									$last_folder = $fs->f('path');
 
 									$node = array(
-											'text'=>basename($fs->f('path')),
+											'text'=>utf8_basename($fs->f('path')),
 											'id'=>strip_server_path($fs->f('path')),
 											'iconCls'=>'folder-default',
 											'reloadable'=>false
@@ -160,7 +160,7 @@ try{
 									$last_folder = $fs->f('path');
 
 									$node = array(
-											'text'=>basename($fs->f('path')),
+											'text'=>utf8_basename($fs->f('path')),
 											'id'=>strip_server_path($fs->f('path')),
 											'iconCls'=>'folder-default',
 											'notreloadable'=>true
@@ -258,7 +258,7 @@ try{
 										$last_folder = $fs->f('path');
 											
 										$folder['path']=strip_server_path($share_path);
-										$folder['grid_display']='<div class="go-grid-icon filetype-folder">'.basename($share_path).'</div>';
+										$folder['grid_display']='<div class="go-grid-icon filetype-folder">'.utf8_basename($share_path).'</div>';
 										$folder['type']='Shared folder';
 										$folder['mtime']=Date::get_timestamp(filemtime($share_path));
 										$folder['size']='-';
@@ -301,7 +301,7 @@ try{
 									
 									$fs->delete(SERVER_PATH.$delete_path);
 									
-									$deleted[]=basename($delete_path);
+									$deleted[]=utf8_basename($delete_path);
 								}								
 								
 								$fs->notify_users($path, strip_server_path($path), $GO_SECURITY->user_id, array(), array(), $deleted);
@@ -407,14 +407,14 @@ try{
 								$sort = 'filesize';
 								break;
 							default:
-								$sort = 'basename';
+								$sort = 'utf8_basename';
 								break;
 
 						}
 
 
 
-						$folders = $fs->get_folders_sorted($path, 'basename', $dir);
+						$folders = $fs->get_folders_sorted($path, 'utf8_basename', $dir);
 						foreach($folders as $folder)
 						{
 							$db_folder = $fs->get_folder(addslashes($folder['path']));
@@ -478,7 +478,7 @@ try{
 								$response['success']=true;
 									
 								$response['data'] = $fs->get_folder(addslashes($path));
-								$response['data']['name']=basename($path);
+								$response['data']['name']=utf8_basename($path);
 								$response['data']['path']=smart_stripslashes($_POST['path']);
 								$response['data']['mtime']=Date::get_timestamp(filemtime($path));
 								$response['data']['ctime']=Date::get_timestamp(filectime($path));
@@ -486,7 +486,7 @@ try{
 								$response['data']['type']='<div class="go-grid-icon filetype-folder">Folder</div>';
 								$response['data']['size']=Number::format_size(filesize($path));
 								$response['data']['write_permission']=$fs->is_owner($GO_SECURITY->user_id, $path);
-								$response['data']['is_home_dir']=basename(dirname($path)) == 'users';
+								$response['data']['is_home_dir']=utf8_basename(dirname($path)) == 'users';
 								$response['data']['notify']=$fs->is_notified(addslashes($path), $GO_SECURITY->user_id);
 
 								break;
@@ -508,7 +508,7 @@ try{
 
 								$response['success']=true;
 								$response['data'] = $fs->get_file(addslashes($path));
-								$response['data']['name']=File::strip_extension(basename($path));
+								$response['data']['name']=File::strip_extension(utf8_basename($path));
 								$response['data']['path']=smart_stripslashes($_POST['path']);
 								$response['data']['mtime']=Date::get_timestamp(filemtime($path));
 								$response['data']['ctime']=Date::get_timestamp(filectime($path));

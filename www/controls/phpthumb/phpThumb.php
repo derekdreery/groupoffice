@@ -372,7 +372,7 @@ while ($CanPassThroughDirectly && $phpThumb->src) {
 			}
 
 			if (headers_sent()) {
-				$phpThumb->ErrorImage('Headers already sent ('.basename(__FILE__).' line '.__LINE__.')');
+				$phpThumb->ErrorImage('Headers already sent ('.utf8_basename(__FILE__).' line '.__LINE__.')');
 				exit;
 			}
 			if (@$_GET['phpThumbDebug']) {
@@ -432,7 +432,7 @@ function RedirectToCachedFile() {
 			$phpThumb->DebugMessage('* Would have sent headers (2): Content-Type: '.phpthumb_functions::ImageTypeToMIMEtype($getimagesize[2]), __FILE__, __LINE__);
 		}
 		if (ereg('^'.preg_quote($nice_docroot).'(.*)$', $nice_cachefile, $matches)) {
-			$phpThumb->DebugMessage('* Would have sent headers (3): Location: '.dirname($matches[1]).'/'.urlencode(basename($matches[1])), __FILE__, __LINE__);
+			$phpThumb->DebugMessage('* Would have sent headers (3): Location: '.dirname($matches[1]).'/'.urlencode(utf8_basename($matches[1])), __FILE__, __LINE__);
 		} else {
 			$phpThumb->DebugMessage('* Would have sent data: readfile('.$phpThumb->cache_filename.')', __FILE__, __LINE__);
 		}
@@ -440,7 +440,7 @@ function RedirectToCachedFile() {
 	} else {
 
 		if (headers_sent()) {
-			$phpThumb->ErrorImage('Headers already sent ('.basename(__FILE__).' line '.__LINE__.')');
+			$phpThumb->ErrorImage('Headers already sent ('.utf8_basename(__FILE__).' line '.__LINE__.')');
 			exit;
 		}
 		SendSaveAsFileHeaderIfNeeded();
@@ -457,7 +457,7 @@ function RedirectToCachedFile() {
 			header('Content-Type: image/x-icon');
 		}
 		if (!@$PHPTHUMB_CONFIG['cache_force_passthru'] && ereg('^'.preg_quote($nice_docroot).'(.*)$', $nice_cachefile, $matches)) {
-			header('Location: '.dirname($matches[1]).'/'.urlencode(basename($matches[1])));
+			header('Location: '.dirname($matches[1]).'/'.urlencode(utf8_basename($matches[1])));
 		} else {
 			@readfile($phpThumb->cache_filename);
 		}
@@ -520,9 +520,9 @@ if ($phpThumb->rawImageData) {
 	if ($phpThumb->config_http_user_agent) {
 		ini_set('user_agent', $phpThumb->config_http_user_agent);
 	}
-	$basename = preg_quote(basename($phpThumb->src));
-	$encoded  = rawurlencode(basename($phpThumb->src));
-	$HTTPurl = ereg_replace('(.*)'.$basename.'$', '\\1'.$encoded, $phpThumb->src);
+	$utf8_basename = preg_quote(utf8_basename($phpThumb->src));
+	$encoded  = rawurlencode(utf8_basename($phpThumb->src));
+	$HTTPurl = ereg_replace('(.*)'.$utf8_basename.'$', '\\1'.$encoded, $phpThumb->src);
 	if ($rawImageData = phpthumb_functions::SafeURLread($HTTPurl, $error)) {
 		$phpThumb->setSourceData($rawImageData, urlencode($phpThumb->src));
 	} else {

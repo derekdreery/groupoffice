@@ -47,7 +47,7 @@ if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_per
 	$browser = detect_browser();
 
 
-	$filename = basename($path);
+	$filename = utf8_basename($path);
 	$extension = File::get_extension($filename);
 
 

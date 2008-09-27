@@ -2501,7 +2501,7 @@ require_once(dirname(__FILE__)."/barcodes.php");
 			$fontsdir = opendir($this->_getfontpath());
 			while (($file = readdir($fontsdir)) !== false) {
 				if (substr($file, -4) == ".php") {
-						array_push($this->fontlist, strtolower(basename($file, ".php")));
+						array_push($this->fontlist, strtolower(utf8_basename($file, ".php")));
 				}
 			}
 			closedir($fontsdir);
@@ -3977,7 +3977,7 @@ require_once(dirname(__FILE__)."/barcodes.php");
 						header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 						header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");	
 						header('Content-Length: '.strlen($this->buffer));
-						header('Content-Disposition: inline; filename="'.basename($name).'";');
+						header('Content-Disposition: inline; filename="'.utf8_basename($name).'";');
 					}
 					echo $this->buffer;
 					break;
@@ -4000,7 +4000,7 @@ require_once(dirname(__FILE__)."/barcodes.php");
 					header("Content-Type: application/octet-stream", false);
 					header("Content-Type: application/download", false);
 					// use the Content-Disposition header to supply a recommended filename
-					header('Content-Disposition: attachment; filename="'.basename($name).'";');
+					header('Content-Disposition: attachment; filename="'.utf8_basename($name).'";');
 					header("Content-Transfer-Encoding: binary");
 					header("Content-Length: ".strlen($this->buffer));
 					echo $this->buffer;
