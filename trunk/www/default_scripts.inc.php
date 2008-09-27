@@ -20,12 +20,12 @@ $suffix = '?'.$GO_CONFIG->mtime;
 if($GO_CONFIG->debug)
 {
 ?>
-<script	src="<?php echo $GO_CONFIG->host; ?>ext/ext-all.js<?php echo $suffix; ?>"	type="text/javascript"></script>
+<script	src="<?php echo $GO_CONFIG->host; ?>ext/ext-all-debug.js<?php echo $suffix; ?>"	type="text/javascript"></script>
 <?php
 }else
 {
 ?>
-<script	src="<?php echo $GO_CONFIG->host; ?>ext/ext-all-debug.js<?php echo $suffix; ?>"	type="text/javascript"></script>
+<script	src="<?php echo $GO_CONFIG->host; ?>ext/ext-all.js<?php echo $suffix; ?>"	type="text/javascript"></script>
 <?php
 }
 ?>

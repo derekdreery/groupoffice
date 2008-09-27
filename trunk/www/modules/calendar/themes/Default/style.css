@@ -285,7 +285,7 @@ a:link, a:visited, a:active{
 }
 
 .x-calGrid-event-body{
-	padding:2px;
+	padding:0 2px;
 }
 
 .x-calGrid-selected {

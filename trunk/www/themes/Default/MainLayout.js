@@ -44,6 +44,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 				var url = GO.afterLoginUrl ? GO.afterLoginUrl : GO.settings.config.host;
 			
 				document.location.href=url;
+				//GO.util.popup(url);
 			});
 		GO.loginDialog.show();
 		
