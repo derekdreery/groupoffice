@@ -979,9 +979,9 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				params['repeats']='true';
 			}
 			
-			if(actionData.update_calendar_id)
+			if(actionData.calendar_id)
 			{
-				params['update_calendar_id']=actionData.update_calendar_id;
+				params['update_calendar_id']=actionData.calendar_id;
 			}
 			 		
 			Ext.Ajax.request({
