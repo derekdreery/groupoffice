@@ -62,7 +62,7 @@ do
 		done
 		
 		if [ "$1" = "delete" ]; then
-			rm modules/$module/scripts.txt)
+			rm modules/$module/scripts.txt
 		fi
 		
 		$COMPRESSOR modules/$module/all-module-scripts.js -o modules/$module/all-module-scripts-min.js
