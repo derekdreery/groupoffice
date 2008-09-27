@@ -411,11 +411,12 @@ class filesystem extends db
 
 		global $GO_SECURITY, $GO_MODULES;
 
-		
-
+		debug($path);
 		if (is_dir($path))
 		{
+			
 			$children = $this->get_folders($path);
+			
 			while ($child = array_shift($children))
 			{
 				if (!$this->delete($child['path']))
@@ -498,9 +499,8 @@ class filesystem extends db
 	{
 		$path = dirname($path).'/'.utf8_basename($path).'/';
 
+		debug($path);
 		global $GO_CONFIG;
-		$slash = stristr(PHP_OS, 'Windows') ? '\\' : '/';
-		if (substr($path, -1) != $slash) $path .= $slash;
 
 		$folders = array();
 		if($dir = opendir($path))
@@ -531,16 +531,10 @@ class filesystem extends db
 		$path = dirname($path).'/'.utf8_basename($path).'/';
 
 		global $GO_CONFIG;
-		$folders = array();
-		$slash = stristr(PHP_OS, 'Windows') ? '\\' : '/';
 
 		if(strstr($path, $GO_CONFIG->root_path))
 		{
 			$url = str_replace($GO_CONFIG->root_path, $GO_CONFIG->host, $path);
-			if ($slash == '\\')
-			{
-				$url = str_replace('\\','/',$url);
-			}
 		}
 		$sort_field = function_exists($sort_field) ? $sort_field : 'utf8_basename';
 		if (is_dir($path))
@@ -602,8 +596,7 @@ class filesystem extends db
 		$path = dirname($path).'/'.utf8_basename($path).'/';
 
 		global $GO_CONFIG;
-		$slash = stristr(PHP_OS, 'Windows') ? '\\' : '/';
-		if (substr($path, -1) != $slash) $path .= $slash;
+
 		$files = array();
 		if($dir = @opendir($path))
 		{
@@ -645,16 +638,10 @@ class filesystem extends db
 		global $GO_CONFIG;
 		$files = array();
 
-		$slash = stristr(PHP_OS, 'Windows') ? '\\' : '/';
-		if (substr($path, -1) != $slash) $path .= $slash;
 
 		if(strstr($path, $GO_CONFIG->root_path))
 		{
 			$url = str_replace($GO_CONFIG->root_path, $GO_CONFIG->host, $path);
-			if ($slash == '\\')
-			{
-				$url = str_replace('\\','/',$url);
-			}
 		}
 		$sort_field = function_exists($sort_field) ? $sort_field : 'utf8_basename';
 		if (is_dir($path))

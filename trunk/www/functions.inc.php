@@ -48,6 +48,11 @@ function __autoload($class_name) {
 
 function utf8_basename($path)
 {
+	$path = trim($path);
+	if(substr($path,-1,1)=='/')
+	{
+		$path = substr($path,0,-1);
+	}
 	return mb_substr($path, mb_strrpos($path, '/')+1);
 }
 
