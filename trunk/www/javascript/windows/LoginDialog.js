@@ -83,7 +83,11 @@ GO.dialog.LoginDialog = function(config){
             	hideLabel:true,
             	boxLabel: GO.lang.remindPassword,
             	name:'remind'
-            }]
+            }/*,this.fullscreenField = new Ext.form.Checkbox({            	
+            	hideLabel:true,
+            	boxLabel: GO.lang.fullscreen,
+            	name:'fullscreen'})*/
+            ]
 		});
 
 	

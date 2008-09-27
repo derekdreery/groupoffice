@@ -349,8 +349,15 @@ GO.util.popup = function (url,width,height)
 		centered = 'scrollbars=yes,resizable=yes,status=yes';
 	}	
 	var popup = window.open(url, '_blank', centered);
+	
+	if(!popup)
+	{
+		alert(GO.lang.popupBlocker);
+		return false;
+	}
+	
   if (!popup.opener) popup.opener = self;
-	popup.focus();
+		popup.focus();
 	
 	return popup;
 }

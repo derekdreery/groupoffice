@@ -41,11 +41,17 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		
 		GO.loginDialog.addCallback(function(){
 			
-				var url = GO.afterLoginUrl ? GO.afterLoginUrl : GO.settings.config.host;
+			var url = GO.afterLoginUrl ? GO.afterLoginUrl : GO.settings.config.host;
 			
+			/*if(GO.loginDialog.fullscreenField.getValue())
+			{
+				GO.util.popup(url);
+			}else
+			{
 				document.location.href=url;
-				//GO.util.popup(url);
-			});
+			}*/
+			document.location.href=url;
+		});
 		GO.loginDialog.show();
 		
 		

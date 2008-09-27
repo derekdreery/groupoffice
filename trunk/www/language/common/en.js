@@ -13,6 +13,9 @@
 
 GO.lang = {};
 
+GO.lang.fullscreen='Fullscreen mode';
+GO.lang.popupBlocker = 'Your browser is blocking a popup from Group-Office. Please disable the popup blocker for this site';
+
 GO.lang.color='Color';
 GO.lang.browse='Browse...';
 GO.lang.largeUpload='Large files/folders (Java required)';
