@@ -6,31 +6,81 @@ GO.addressbook.CompanyProfilePanel = function(config)
 	this.formAddress = new Ext.form.TextField(
 	{
 		fieldLabel: GO.lang['strAddress'], 
-		name: 'address'
+		name: 'address',
+		listeners: {
+			change:function(field, v)
+			{
+				if(this.formPostAddress.getValue()=='')
+				{
+					this.formPostAddress.setValue(v);
+				}
+			},
+			scope:this
+		}
 	});
 					
 	this.formAddressNo = new Ext.form.TextField(
 	{
 		fieldLabel: GO.lang['strAddressNo'], 
-		name: 'address_no'		
+		name: 'address_no',
+		listeners: {
+			change:function(field, v)
+			{
+				if(this.formPostAddressNo.getValue()=='')
+				{
+					this.formPostAddressNo.setValue(v);
+				}
+			},
+			scope:this
+		}		
 	});
 					
 	this.formZip = new Ext.form.TextField(
 	{
 		fieldLabel: GO.lang['strZip'], 
-		name: 'zip'
+		name: 'zip',
+		listeners: {
+			change:function(field, v)
+			{
+				if(this.formPostZip.getValue()=='')
+				{
+					this.formPostZip.setValue(v);
+				}
+			},
+			scope:this
+		}
 	});
 					
 	this.formCity = new Ext.form.TextField(
 	{
 		fieldLabel: GO.lang['strCity'], 
-		name: 'city'
+		name: 'city',
+		listeners: {
+			change:function(field, v)
+			{
+				if(this.formPostCity.getValue()=='')
+				{
+					this.formPostCity.setValue(v);
+				}
+			},
+			scope:this
+		}
 	});
 					
 	this.formState = new Ext.form.TextField(
 	{
 		fieldLabel: GO.lang['strState'], 
-		name: 'state'
+		name: 'state',
+		listeners: {
+			change:function(field, v)
+			{
+				if(this.formPostState.getValue()=='')
+				{
+					this.formPostState.setValue(v);
+				}
+			},
+			scope:this
+		}
 	});
 	
 	
@@ -38,7 +88,17 @@ GO.addressbook.CompanyProfilePanel = function(config)
 		fieldLabel: GO.lang['strCountry'],
 		name: 'country_text',
 		hiddenName: 'country',
-		value:GO.settings.country
+		value:GO.settings.country,
+		listeners: {
+			change:function(field, v)
+			{
+				if(this.formPostCountry.getValue()=='')
+				{
+					this.formPostCountry.setValue(v);
+				}
+			},
+			scope:this
+		}
 	});				
 	
 	/*
