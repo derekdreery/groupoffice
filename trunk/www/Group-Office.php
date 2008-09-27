@@ -50,12 +50,6 @@ if ( isset( $GO_INCLUDES ) ) {
   }
 }
 
-/*if(isset($_REQUEST['sid']))
-{
-	session_id($_REQUEST['sid']);
-}*/
-
-
 //start session
 session_name('groupoffice');
 session_start();
@@ -81,9 +75,7 @@ if($GO_CONFIG->debug)
 	$_SESSION['query_count']=0;
 }
 
-
 require_once($GO_CONFIG->class_path.'base/exceptions.class.inc.php');
-
 require_once($GO_CONFIG->class_path.'base/auth.class.inc.php');
 require_once($GO_CONFIG->class_path.'base/security.class.inc.php');
 require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
@@ -92,8 +84,6 @@ require_once($GO_CONFIG->class_path.'base/modules.class.inc.php');
 require_once($GO_CONFIG->class_path.'base/language.class.inc.php');
 require_once($GO_CONFIG->class_path.'base/theme.class.inc.php');
 require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
-
-
 
 $GO_THEME = new GO_THEME();
 $GO_AUTH = new GO_AUTH();
@@ -110,8 +100,8 @@ $GO_MODULES = new GO_MODULES();
 $GO_SECURITY = new GO_SECURITY();
 $GO_LINKS = new GO_LINKS();
 
-if ( isset( $_REQUEST['SET_LANGUAGE'] ) ) {
-  $GO_LANGUAGE->set_language( $_REQUEST['SET_LANGUAGE'] );
+if (isset($_REQUEST['SET_LANGUAGE'])){
+  $GO_LANGUAGE->set_language($_REQUEST['SET_LANGUAGE']);
 }
 
 require($GO_LANGUAGE->get_base_language_file('common'));
@@ -132,10 +122,6 @@ if($GO_SECURITY->user_id>0)
 	$GO_CONFIG->tmpdir=$GO_CONFIG->tmpdir.$GO_SECURITY->user_id.'/';
 }
 
-
-
 unset($type);
-
-
 
 define('GO_LOADED', true);

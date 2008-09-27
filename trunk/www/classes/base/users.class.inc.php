@@ -91,11 +91,21 @@ class GO_USERS extends db
 	 * 
 	 * @return bool
 	 */
-	function update_session( $user_id ) {
+	function update_session( $user_id , $update_language=false) {
 		global $GO_LANGUAGE, $GO_CONFIG;
 		if ($userdata = $this->get_user($user_id)) {
 			$middle_name = $userdata['middle_name'] == '' ? '' : $userdata['middle_name'].' ';
-			$GO_LANGUAGE->set_language($userdata['language']);
+				
+			if($update_language && $GO_LANGUAGE->language != $userdata['language'])
+			{
+				$userdata['language'] = $up_user['language'] = $GO_LANGUAGE->language;
+				$up_user['id']=$user_id;				
+				
+				$this->update_row('go_users', 'id', $up_user);
+			}else
+			{			
+				$GO_LANGUAGE->set_language($userdata['language']);
+			}
 
 			$_SESSION['GO_SESSION']['user_id'] = $user_id;
 			
@@ -116,7 +126,7 @@ class GO_USERS extends db
 			$_SESSION['GO_SESSION']['date_seperator'] = $userdata['date_seperator'];
 			$_SESSION['GO_SESSION']['time_format'] = $userdata['time_format'];
 			$_SESSION['GO_SESSION']['currency'] = $userdata['currency'];
-			$_SESSION['GO_SESSION']['lastlogin'] = isset ($userdata['lastlogin']) ? $userdata['lastlogin'] : gmmktime();
+			$_SESSION['GO_SESSION']['lastlogin'] = isset ($userdata['lastlogin']) ? $userdata['lastlogin'] : time();
 			$_SESSION['GO_SESSION']['max_rows_list'] = $userdata['max_rows_list'];
 			$_SESSION['GO_SESSION']['timezone'] = $userdata['timezone'];
 			$_SESSION['GO_SESSION']['start_module'] = isset ($userdata['start_module']) ? $userdata['start_module'] : 'summary';
@@ -617,8 +627,7 @@ class GO_USERS extends db
 		$GO_MODULES->fire_event('update_user', $params);
 		
 		if(!empty($user['password']))
-		{
-			
+		{			
 			$user['password']=md5($user['password']);
 		}
 		

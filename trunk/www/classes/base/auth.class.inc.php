@@ -183,20 +183,13 @@ class GO_AUTH extends db
 	 * @param int $user_id is the userid number of the user that has been
 	 * authenticated successfully.
 	 */
-	function updateAfterLogin( $user_id ) {
-		global $GO_SECURITY, $GO_MODULES;
+	function updateAfterLogin($user_id) {
+		global $GO_SECURITY, $GO_MODULES, $GO_USERS,$GO_CONFIG;
 		// Tell the security framework that a user has been logged in. The
 		// security framework takes care on setting the userid as active.
-		$GO_SECURITY->logged_in( $user_id );
-
-		global $GO_USERS;
-		// Update the current session with the user's profile information.
-		$GO_USERS->update_session( $user_id );
+		$GO_SECURITY->logged_in($user_id);
 		// Increment the number of logins of the given user.
-		$GO_USERS->increment_logins( $user_id );
-
-		global $GO_CONFIG;
-		
+		$GO_USERS->increment_logins($user_id);
 		//reinitialise available modules
 		$GO_MODULES->load_modules();
 	}
@@ -230,7 +223,7 @@ class GO_AUTH extends db
 	 * 
 	 * @return bool true if the login was possible, false otherwise.
 	 */
-	function login( $username, $password, $params=array() ) {
+	function login($username, $password, $params=array() ) {
 		// This variable is used to fetch the user's profile from the current
 		// user management backend database.
 		global $GO_USERS, $GO_MODULES, $GO_SECURITY;

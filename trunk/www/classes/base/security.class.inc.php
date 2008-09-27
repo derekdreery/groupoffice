@@ -76,10 +76,8 @@ class GO_SECURITY extends db {
 		
 		if(isset($user_id))
 		{
-			$GO_USERS->update_session( $user_id );
+			$GO_USERS->update_session($user_id, true);
 			$this->user_id = $user_id;
-			
-			
 			
 		}else
 		{
