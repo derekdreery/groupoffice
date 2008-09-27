@@ -4,12 +4,10 @@ GO.users.lang={};
 
 GO.users.lang.cmdCheckColumnRead= 'Read';
 GO.users.lang.cmdCheckColumnWrite= 'Write';
-GO.users.lang.cmdCheckColumnGroups= 'Groups';
 GO.users.lang.cmdHeaderColumnName= 'Module name';
-GO.users.lang.cmdHeaderColumnGroups= 'Groups';
 GO.users.lang.cmdHeaderGridUserHasAccess = 'User has access to';
 GO.users.lang.cmdHeaderGridUserIsMemberOf = 'User is member of';
-GO.users.lang.cmdHeaderGridUserVisibleTo = 'User is visible to folowing groups';
+GO.users.lang.cmdHeaderGridUserVisibleTo = 'User is visible to';
 
 GO.users.lang.cmdPanelPersonal = 'Personal';
 GO.users.lang.cmdPanelPassword= 'Password';
@@ -76,3 +74,5 @@ GO.users.lang.regionalSettings = 'Regional settings';
 GO.users.lang.userSettings = 'User settings';
 
 GO.users.lang.maxUsersReached='The maximum number of users has been reached. Go to the service tab to extend your maximum number of users.';
+
+GO.users.lang.group='Group';

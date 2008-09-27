@@ -140,7 +140,8 @@ GO.addressbook.ContactProfilePanel = function(config)
 	this.formCountry = new GO.form.SelectCountry({
 		fieldLabel: GO.lang['strCountry'],
 		name: 'country_text',
-		hiddenName: 'country'
+		hiddenName: 'country',
+		value:GO.settings.country
 
 	});
 	

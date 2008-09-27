@@ -959,6 +959,7 @@ class GO_CONFIG
       		$response['username']=$_SESSION['GO_SESSION']['username'];
       		$response['name']=$_SESSION['GO_SESSION']['name'];
       		$response['email']=$_SESSION['GO_SESSION']['email'];
+      		$response['country']=$_SESSION['GO_SESSION']['country'];
 
       		$response['theme']=$_SESSION['GO_SESSION']['theme'];
 
@@ -985,6 +986,7 @@ class GO_CONFIG
       		$response['email']='';
 
       		$response['thousands_seperator']=$this->default_thousands_seperator;
+      		$response['country']=$this->default_country;
       		$response['decimal_seperator']=$this->default_decimal_seperator;
       		$response['date_format']=$this->default_date_format;
       		$response['date_seperator']=$this->default_date_seperator;

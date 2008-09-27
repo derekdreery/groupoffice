@@ -134,7 +134,7 @@ GO.files.FileBrowser = function(config){
 	
 	if(config.filesFilter)
 	{		
-		this.setFileFilter(config.fileFilter);
+		this.setFilesFilter(config.filesFilter);
 	}
 	
 	

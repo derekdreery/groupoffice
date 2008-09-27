@@ -70,11 +70,11 @@ if($GO_SECURITY->logged_in())
 	<?php	
 }
 ?>
-<object width="1" height="1" id="alarmSound">
+<object width="0" height="0" id="alarmSound">
 <param name="movie" value="<?php echo $GO_THEME->theme_url; ?>reminder.swf">
 <param name="loop" value="false">
 <param name="autostart" value="false">
-<embed src="<?php echo $GO_THEME->theme_url; ?>reminder.swf" autostart=false loop="false" width="1" height="1" name="alarmSound">
+<embed src="<?php echo $GO_THEME->theme_url; ?>reminder.swf" autostart=false loop="false" width="0" height="0" name="alarmSound">
 </embed>
 </object>
 </body>
