@@ -411,7 +411,6 @@ class filesystem extends db
 
 		global $GO_SECURITY, $GO_MODULES;
 
-		debug($path);
 		if (is_dir($path))
 		{
 			
@@ -499,7 +498,6 @@ class filesystem extends db
 	{
 		$path = dirname($path).'/'.utf8_basename($path).'/';
 
-		debug($path);
 		global $GO_CONFIG;
 
 		$folders = array();
