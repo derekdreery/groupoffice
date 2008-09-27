@@ -63,6 +63,7 @@ GO.users.RegionalSettingsPanel = function(config)
 	});
 	
 
+var dateFormat = GO.settings.date_format.substring(0,1)+GO.settings.date_format.substring(2,3)+GO.settings.date_format.substring(4,5);
 	
 	config.border=false;
 	config.hideLabel=true;
@@ -109,7 +110,7 @@ GO.users.RegionalSettingsPanel = function(config)
 			name: 'date_format',
 			store: dateFormatData,
 			displayField: 'date_format',
-			value: GO.settings.date_format.replace('/'+GO.settings.date_seperator+'/g', ""),
+			value: dateFormat,
 			valueField: 'id',
 			hiddenName: 'date_format',
 			mode: 'local',
