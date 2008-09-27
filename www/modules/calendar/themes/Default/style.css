@@ -267,7 +267,8 @@ a:link, a:visited, a:active{
 
 	cursor:default;	
 	position:absolute;	
-	border:1px solid #669900;	
+	/*border:1px solid #669900;*/
+	border:1px solid #c0c0c0;	
 	background-color:#ebf1e2;
 	text-overflow: ellipsis;
 	font:normal 10px tahoma,arial,helvetica,sans-serif;
@@ -288,8 +289,9 @@ a:link, a:visited, a:active{
 }
 
 .x-calGrid-selected {
-	background-color: #deebca !important;	
+	/*background-color: #deebca !important;*/	
 	z-index:1100 !important;
+	border:1px solid #669900 !important;
 }
 
 .x-calGrid-event-time{

@@ -1,5 +1,14 @@
 /**
- * @class Ext.form.ColorField
+ * Based on code found at http://extjs.com/forum/showthread.php?t=5106
+ * 
+ * Modified by Merijn Schering <mschering@intermesh.nl>
+ * 
+ * Changes: 
+ *  -Handles value better. Uses value config property as start value. 
+ *  -Removed changed trigger image because it didn't handle state.
+ * 	-Added colors config property so you can overide the default color palette * 
+ * 
+ * @class GO.form.ColorField
  * @extends Ext.form.TriggerField
  * Provides a very simple color form field with a ColorMenu dropdown.
  * Values are stored as a six-character hex value without the '#'.
@@ -18,7 +27,24 @@ var cf = new Ext.form.ColorField({
  */
 
 
-GO.form.ColorField =  Ext.extend(Ext.form.TriggerField,  {
+GO.form.ColorField =  Ext.extend(function(config){
+	
+  this.menu = new Ext.menu.ColorMenu();
+	this.menu.palette.on('select', this.handleSelect, this );
+
+  this.menu.on(Ext.apply({}, this.menuListeners, {
+      scope:this
+  }));
+  
+  if(config.colors)
+  {
+  	this.menu.palette.colors=config.colors;
+  }
+  
+  GO.form.ColorField.superclass.constructor.call(this, config);
+  
+},Ext.form.TriggerField,  {
+	
 	/**
 	 * @cfg {Boolean} showHexValue
 	 * True to display the HTML Hexidecimal Color Value in the field
@@ -174,13 +200,7 @@ GO.form.ColorField =  Ext.extend(Ext.form.TriggerField,  {
       if(this.disabled){
           return;
       }
-      if(this.menu == null){
-          this.menu = new Ext.menu.ColorMenu();
-					this.menu.palette.on('select', this.handleSelect, this );
-      }
-      this.menu.on(Ext.apply({}, this.menuListeners, {
-          scope:this
-      }));
+      
       this.menu.show(this.el, "tl-bl?");
   }
 });
