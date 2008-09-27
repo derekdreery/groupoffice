@@ -340,6 +340,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 					startDate : startDate,
 					endDate : endDate,
 					tooltip : '',
+					background: this.formPanel.form.findField('background').getValue(),
 					location : this.formPanel.form.findField('location').getValue(),
 					repeats : this.formPanel.form.findField('repeat_type').getValue()>0,
 					'private' : false
@@ -1152,12 +1153,14 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
         labelSeparator: '',
 				hideLabel: true
     	});
+    	
+  	
 		
+
 		
 		var optionsPanel = new Ext.Panel({
 		
 			title:GO.calendar.lang.options,
-			defaults:{anchor:'100%'},
 			bodyStyle:'padding:5px',
 			layout:'form',
 			hideMode:'offsets',
@@ -1177,11 +1180,28 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 	    			]
 	    	},	    	
 	    	{
-	    		xtype:'colorfield',
+	  			xtype:'colorfield',
 	    		fieldLabel: GO.lang.color,
-	    		value:'00FF00',
+	    		value:'EBF1E2',
 	    		name:'background',
-	    		anchor:''    		
+	    		colors:[
+	    			'EBF1E2',
+	    			'95C5D3',
+	    			'FFFF99',
+	    			'A68340',
+	    			'82BA80',
+	    			'F0AE67',
+						'66FF99',
+						'CC0099',
+						'CC99FF',
+						'996600',
+						'999900',
+						'FF0000',
+						'FF6600',
+						'FFFF00',
+						'FF9966',
+						'FF9900'						
+						]
 	    	},
 	    	privateCB		
 			]
