@@ -94,7 +94,7 @@ class File
 
 		if(!isset($filename))
 		{
-			$filename = basename($this->path);
+			$filename = utf8_basename($this->path);
 		}
 
 
@@ -116,7 +116,7 @@ class File
 
 		if(!isset($filename))
 		{
-			$filename = basename($this->path);
+			$filename = utf8_basename($this->path);
 		}
 
 		$extension = '';
@@ -137,7 +137,7 @@ class File
 	function checkfilename($filepath)
 	{
 		$dir = dirname($filepath).'/';
-		$name = basename($filepath);
+		$name = utf8_basename($filepath);
 		$x=1;
 		while(file_exists($filepath))
 		{

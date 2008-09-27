@@ -36,7 +36,7 @@ You should see utf8_general_ci encoding and not latin1_swedish_ci or any other.
 To convert latin encoding to utf8 run the script install/convertDbToUTF8.sh
 
 eg.: 
-./convertDbToUTF8.sh databasename "-u root --password=yourmysqlpass"
+./convertDbToUTF8.sh datautf8_basename "-u root --password=yourmysqlpass"
 
 This should convert it for you.
 

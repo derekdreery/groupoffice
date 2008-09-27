@@ -26,7 +26,6 @@ if(!isset($_SESSION['GO_SESSION']['files']['jupload_new_files']))
 }
 
 
-
 $count=0;
 while($file = array_shift($_FILES))
 {
@@ -78,7 +77,7 @@ while($file = array_shift($_FILES))
 					unlink($part);
 				}
 				
-				$_SESSION['GO_SESSION']['files']['jupload_new_files'][]=smart_stripslashes($_POST['relpathinfo'][$count]).'/'.basename($filepath);
+				$_SESSION['GO_SESSION']['files']['jupload_new_files'][]=smart_stripslashes($_POST['relpathinfo'][$count]).'/'.utf8_basename($filepath);
 				fclose($fp);
 				continue;
 			}
@@ -97,7 +96,7 @@ while($file = array_shift($_FILES))
 		{
 			$filepath = File::checkfilename($filepath);
 			
-			$_SESSION['GO_SESSION']['files']['jupload_new_files'][]=smart_stripslashes($_POST['relpathinfo'][$count]).'/'.basename($filepath);
+			$_SESSION['GO_SESSION']['files']['jupload_new_files'][]=smart_stripslashes($_POST['relpathinfo'][$count]).'/'.utf8_basename($filepath);
 		}
 		
 		move_uploaded_file($file['tmp_name'], $filepath);

@@ -508,7 +508,7 @@ class files extends filesystem
 
 	function find_share($path)
 	{
-		$path = dirname($path).'/'.basename($path);
+		$path = dirname($path).'/'.utf8_basename($path);
 
 		$this->count++;
 
@@ -596,12 +596,12 @@ class files extends filesystem
 	}
 
 
-	function get_content_json($path, $sort='basename', $dir='ASC', $filter=null)
+	function get_content_json($path, $sort='utf8_basename', $dir='ASC', $filter=null)
 	{
 
 		$results = array();
 
-		$folders = $this->get_folders_sorted($path, 'basename', $dir);
+		$folders = $this->get_folders_sorted($path, 'utf8_basename', $dir);
 		foreach($folders as $folder)
 		{
 			$db_folder = $this->get_folder(addslashes($folder['path']));
@@ -681,12 +681,12 @@ class files extends filesystem
 			}
 
 			$folder['path'] = $path;
-			$folder['name'] = basename($path);
+			$folder['name'] = utf8_basename($path);
 			$folder['mtime'] = filemtime($path);
 			$folder['size'] = filesize($path);
 			$folder['type'] = mime_content_type($path);
 
-			if (stristr(basename($path), $keyword) && $modified_later_then < $folder['mtime'] && $modified_earlier_then > $folder['mtime'])
+			if (stristr(utf8_basename($path), $keyword) && $modified_later_then < $folder['mtime'] && $modified_earlier_then > $folder['mtime'])
 			{
 				$this->search_results[] = $folder;
 			}
@@ -756,7 +756,7 @@ class files extends filesystem
 
 			$cache['id']=$this->f('id');
 			$cache['user_id']=$this->f('user_id');
-			$cache['name'] = addslashes(basename($this->f('path')));
+			$cache['name'] = addslashes(utf8_basename($this->f('path')));
 			$cache['link_type']=6;
 			$cache['description']=addslashes(substr($this->f('path'), strlen($GO_CONFIG->file_storage_path)));
 			$cache['type']='File';

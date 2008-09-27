@@ -949,7 +949,7 @@ class GO_CONFIG
       {
       	global $GO_SECURITY, $GO_MODULES, $GO_THEME, $GO_LANGUAGE;
 
-      	$response['state_index'] = basename(dirname($_SERVER['PHP_SELF']));
+      	$response['state_index'] = utf8_basename(dirname($_SERVER['PHP_SELF']));
 
 
       	$response['state']=array();

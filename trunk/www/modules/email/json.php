@@ -545,7 +545,7 @@ try{
 				{
 					$response['results'][]=array(
 						'tmp_name'=>$file,
-						'name'=>basename($file),
+						'name'=>utf8_basename($file),
 						'size'=>Number::format_size(filesize($file)),
 						'type'=>File::get_filetype_description(File::get_extension($file))					
 					);

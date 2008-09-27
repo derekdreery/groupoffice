@@ -494,12 +494,12 @@ class GoSwiftImport extends GoSwift{
 						{
 							$content_id = substr($part->headers['content-id'], 1,strlen($part->headers['content-id'])-2);
 						}
-						$img =& new Swift_Message_Image(new Swift_File($tmp_file),basename($tmp_file), $mime_type,$content_id);
+						$img =& new Swift_Message_Image(new Swift_File($tmp_file),utf8_basename($tmp_file), $mime_type,$content_id);
 						$this->message->attach($img);					
 					}else
 					{
 						$file =& new Swift_File($tmp_file);
-						$attachment =& new Swift_Message_Attachment($file,basename($tmp_file), $mime_type);
+						$attachment =& new Swift_Message_Attachment($file,utf8_basename($tmp_file), $mime_type);
 						$this->message->attach($attachment);
 					}
 				}

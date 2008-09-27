@@ -47,7 +47,7 @@ try{
 				throw new AccessDeniedException();
 			}
 			
-			$fs->notify_users($path, strip_server_path($delete_path), $GO_SECURITY->user_id, array(), array(), array(basename($delete_path)));
+			$fs->notify_users($path, strip_server_path($delete_path), $GO_SECURITY->user_id, array(), array(), array(utf8_basename($delete_path)));
 			
 			$response['success']=$fs->delete($delete_path);
 			break;
@@ -79,7 +79,7 @@ try{
 				$new_name .= '.'.$extension;
 			}
 
-			if($new_name != basename($path))
+			if($new_name != utf8_basename($path))
 			{
 				$new_path = dirname($path).'/'.$new_name;
 
@@ -153,7 +153,7 @@ try{
 					throw new MissingFieldException();
 				}
 					
-				if($new_name != basename($path))
+				if($new_name != utf8_basename($path))
 				{
 					$new_path = dirname($path).'/'.$new_name;
 
@@ -239,23 +239,23 @@ try{
 
 			while($tmp_file = array_shift($_SESSION['GO_SESSION']['files']['uploaded_files']))
 			{
-				$new_path = $path.'/'.basename($tmp_file);
+				$new_path = $path.'/'.utf8_basename($tmp_file);
 				if(file_exists($new_path) && $command!='yes' && $command!='yestoall')
 				{
 					if($command!='no' && $command != 'notoall')
 					{
 						array_unshift($_SESSION['GO_SESSION']['files']['uploaded_files'], $tmp_file);
-						$response['file_exists']=basename($tmp_file);
+						$response['file_exists']=utf8_basename($tmp_file);
 						throw new Exception('File exists');
 					}
 				}else
 				{
 					if(file_exists($new_path))
 					{
-						$modified[]=basename($new_path);
+						$modified[]=utf8_basename($new_path);
 					}else
 					{
-						$new[]=basename($new_path);
+						$new[]=utf8_basename($new_path);
 					}
 					$fs->move($tmp_file, $new_path);
 				}
@@ -294,14 +294,14 @@ try{
 
 				while($paste_source = array_shift($_SESSION['GO_SESSION']['files']['paste_sources']))
 				{
-					$destination = SERVER_PATH.$_SESSION['GO_SESSION']['files']['paste_destination'].'/'.basename($paste_source);
+					$destination = SERVER_PATH.$_SESSION['GO_SESSION']['files']['paste_destination'].'/'.utf8_basename($paste_source);
 
 					if(file_exists($destination) && $command!='yes' && $command!='yestoall')
 					{
 						if($command!='no' && $command != 'notoall')
 						{
 							array_unshift($_SESSION['GO_SESSION']['files']['paste_sources'], $paste_source);
-							$response['file_exists']=basename($destination);
+							$response['file_exists']=utf8_basename($destination);
 							throw new Exception('File exists');
 						}
 					}else

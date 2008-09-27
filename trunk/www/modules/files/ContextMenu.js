@@ -95,7 +95,7 @@ GO.files.FilesContextMenu = function(config)
 	config['items']=[
 				this.downloadButton];
 				
-	if(GO.settings.modules.gota)
+	if(GO.settings.modules.gota && GO.settings.modules.gota.read_permission)
 	{
 		config['items'].push(this.gotaButton);
 	}

@@ -854,7 +854,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 							{    					
 	    					var local_path = this.local_path ? 'true' : false;
 	    					
-	    					GO.util.popup(GO.settings.modules.files.url+'jupload/index.php?path='+escape(this.path)+'&local_path='+local_path, '640','500');
+	    					GO.util.popup(GO.settings.modules.files.url+'jupload/index.php?path='+encodeURIComponent(this.path)+'&local_path='+local_path, '640','500');
 	    					this.uploadDialog.hide();
 	    					//for refreshing by popup
 	    					GO.currentFilesStore = this.gridStore;
@@ -1249,7 +1249,7 @@ GO.files.openFile = function(path)
 		case 'ppt':
 		case 'odp':
 		case 'txt':				
-			if(GO.settings.modules.gota)
+			if(GO.settings.modules.gota && GO.settings.modules.gota.read_permission)
 			{
 				if(!GO.files.noJavaNotified && !deployJava.isWebStartInstalled('1.6.0'))
 				{
