@@ -20,6 +20,7 @@ GO.calendar.ListGrid = function(config)
 						'tooltip',
 						'private',
 						'repeats',
+						'background',
 						'day'			
 					]
 	    	}),
@@ -47,7 +48,12 @@ GO.calendar.ListGrid = function(config)
 		{
 			header:GO.lang.strTime,
 			dataIndex: 'time',
-			width:50
+			width:60,
+			renderer: function(v, metadata, record)
+			{
+				//metadata.attr='style="background-color:#'+record.data.background+';"';
+				return '<div style="border:1px solid #c0c0c0;padding:2px;margin:2px;background-color:#'+record.data.background+';">'+v+'</div>';
+			}
 		},		
 		{
 			id:'summary-calendar-name-heading',
@@ -113,7 +119,7 @@ Ext.extend(GO.calendar.ListGrid, Ext.grid.GridPanel, {
 	
 	renderName : function(grid, value, record)
 	{		
-		return '<div style="font-weight:bold">'+record.data.name+'</div>'+record.data.tooltip;		
+		return '<div style="font-weight:bold;">'+record.data.name+'</div>'+record.data.tooltip;		
 	},
 		
 	afterRender : function()
@@ -127,9 +133,10 @@ Ext.extend(GO.calendar.ListGrid, Ext.grid.GridPanel, {
     	}    	
     }, this);*/
     
-    this.on("rowdblclick", function(grid, rowClicked, e){
-    	var event_id = grid.selModel.selections.keys[0];			 
-			GO.calendar.eventDialog.show({event_id: event_id});
+    this.on("rowdblclick", function(grid, rowIndex, e){
+    	var record = grid.getStore().getAt(rowIndex);	
+					 
+			GO.calendar.eventDialog.show({event_id: record.data.event_id});
 		}, this);		  
 	},
 	

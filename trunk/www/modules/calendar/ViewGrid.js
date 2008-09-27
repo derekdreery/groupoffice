@@ -478,6 +478,7 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 						tag: 'div', 
 						id: domId, 
 						cls: "x-viewGrid-event-container", 
+						style:"background-color:#"+eventData.background,
 						html: text, 						
 						qtip: eventData['tooltip'] 
 					}, true);			

@@ -71,7 +71,7 @@ try{
 					$tooltip .= "<br />".$lang['calendar']['location'].": ".htmlspecialchars($event['location']);
 				}
 				if ($event['description'] != '') {
-					$tooltip .= "<br /><br />". htmlspecialchars(nl2br($event['description']));
+					$tooltip .= "<br /><br />". nl2br(htmlspecialchars($event['description']));
 				}
 
 				$response['results'][] = array(
@@ -218,6 +218,11 @@ try{
 			require($GO_CONFIG->class_path.'Date.class.inc.php');
 			
 			$event = $cal->get_event(smart_addslashes($_REQUEST['event_id']));
+			
+			if(!$event)
+			{
+				throw new DatabaseSelectException();
+			}
 			$calendar = $cal->get_calendar($event['calendar_id']);
 
 			$response['data']=$event;
@@ -464,7 +469,7 @@ try{
 					$tooltip .= "<br />".$lang['calendar']['location'].": ".htmlspecialchars($event['location']);
 				}
 				if ($event['description'] != '') {
-					$tooltip .= "<br /><br />". htmlspecialchars(nl2br($event['description']));
+					$tooltip .= "<br /><br />". nl2br(htmlspecialchars($event['description']));
 				}
 
 				$private = ($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']);
@@ -644,7 +649,7 @@ try{
 													$tooltip .= "<br />".$lang['calendar']['location'].": ".htmlspecialchars($event['location']);
 												}
 												if ($event['description'] != '') {
-													$tooltip .= "<br /><br />". htmlspecialchars(nl2br($event['description']));
+													$tooltip .= "<br /><br />". nl2br(htmlspecialchars($event['description']));
 												}
 
 												$response[$cal->f('id')]['events'][] = array(
