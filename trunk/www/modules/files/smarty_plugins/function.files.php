@@ -35,6 +35,7 @@ function smarty_function_files($params, &$smarty)
 	$s = new cms_smarty($co);
 	for($i=0;$i<count($files);$i++)
 	{
+		$files[$i]['name_without_extension']=File::strip_extension($files[$i]['name']);
 		
 		$s->assign('file', $files[$i]);
 		$s->assign('even', $uneven ? 'uneven' : 'even');
