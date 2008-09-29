@@ -24,6 +24,7 @@
 #loading .loading-indicator{
 	border:1px solid #c1d1d6;
 	color:#666;
+	background:white;
 	font:bold 12px "Lucida Sans Unicode","Lucida Grande","Mukti Narrow", sans-serif;
 	padding:10px;
 	margin:0;
