@@ -55,6 +55,18 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		this.fireEvent('ready', this);
 	 	this.ready=true;		
 	},
+	
+	createTabPanel : function(items){
+		this.tabPanel = new Ext.TabPanel({
+        region:'center',
+        titlebar: false,
+        border:false,
+        activeTab:'go-module-panel-'+GO.settings.start_module,
+        tabPosition:'top',
+        items: items,
+        layoutOnTabChange:true
+    	});
+	},
 
 	init : function(){  
           
@@ -89,16 +101,8 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
     		html: '<h1>No modules available</h1>You have a valid Group-Office account but you don\'t have access to any of the modules. Please contact the administrator if you feel this is an error.'
     	});
     }
-    this.tabPanel = new Ext.TabPanel({
-        region:'center',
-        titlebar: false,
-        border:false,
-        activeTab:'go-module-panel-'+GO.settings.start_module,
-        tabPosition:'top',
-        cls: 'go-moduletabs',
-        items: items,
-        layoutOnTabChange:true
-    	});
+    
+    this.createTabPanel(items);
     	
     	
    

@@ -10,17 +10,19 @@
  * @version $Id: MainLayout.js 2948 2008-09-03 07:16:31Z mschering $
  * @author Merijn Schering <mschering@intermesh.nl>
  */
- 
- /*
-  * Example on how to override theme layout 
-  * 
-  * The main file is at javascript/MainLayout.js
-  */
 
- GO.MainLayout.override({
-    fireReady : function(){			
-			this.fireEvent('ready', this);
-		 	this.ready=true;	
-		}
+GO.MainLayout.override({
+  createTabPanel : function(items){
+		this.tabPanel = new Ext.TabPanel({
+      region:'center',
+      titlebar: false,
+      border:false,
+      activeTab:'go-module-panel-'+GO.settings.start_module,
+      tabPosition:'top',
+      baseCls: 'go-moduletabs',
+      items: items,
+      layoutOnTabChange:true
+  	});
+	}
 });
  
