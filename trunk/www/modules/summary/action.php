@@ -39,7 +39,30 @@ try{
 			$response['success']=true;
 			
 			break;
-			/* {TASKSWITCH} */
+					case 'save_announcement':		
+			$announcement_id=$announcement['id']=isset($_POST['announcement_id']) ? smart_addslashes($_POST['announcement_id']) : 0;
+						if(isset($_POST['user_id']))
+				$announcement['user_id']=smart_addslashes(trim($_POST['user_id']));
+			$announcement['host']=smart_addslashes(trim($_POST['host']));
+			$announcement['ip']=smart_addslashes(trim($_POST['ip']));
+			$announcement['link_id']=smart_addslashes(trim($_POST['link_id']));
+			$announcement['name']=smart_addslashes(trim($_POST['name']));
+			$announcement['expires']=smart_addslashes(trim($_POST['expires']));
+			$announcement['upgrades']=smart_addslashes(trim($_POST['upgrades']));
+			$announcement['notified']=smart_addslashes(trim($_POST['notified']));
+			if($announcement['id']>0)
+			{
+				$summary->update_announcement($announcement);
+				$response['success']=true;
+			}else
+			{
+				$announcement['user_id']=$GO_SECURITY->user_id;
+				$announcement_id= $summary->add_announcement($announcement);
+				$response['announcement_id']=$announcement_id;
+				$response['success']=true;
+			}
+			break;
+/* {TASKSWITCH} */
 	}
 }catch(Exception $e)
 {
