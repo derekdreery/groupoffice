@@ -1,14 +1,16 @@
 <?php
 /**
- * @copyright Intermesh 2008
- * @author Merijn Schering <mschering@intermesh.nl>
+ * Copyright Intermesh
  *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
- * option) any later version.
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ *
+ * @version $Id: action.tpl 1858 2008-04-29 14:09:19Z mschering $
+ * @copyright Copyright Intermesh
+ * @author Merijn Schering <mschering@intermesh.nl>
  */
-
 
 require_once("../../Group-Office.php");
 $GO_SECURITY->json_authenticate('summary');
@@ -29,6 +31,7 @@ try{
 			$response['data']['url'] = $sum->get_feed($GO_SECURITY->user_id);
 			$response['success']=true;
 			break;
+			/* {TASKSWITCH} */
 	}
 }catch(Exception $e)
 {
