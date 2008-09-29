@@ -135,7 +135,29 @@ GO.mainLayout.onReady(function(){
 		items: notePanel,
 		height:300
 	});
+		
 	
 	
+	var announcementPanel = new GO.summary.AnnouncementsGrid(
+	{
+				waitMsgTarget: true
+	});
+	
+	
+	
+	GO.summary.portlets['portlet-announcements']=new GO.summary.Portlet({
+		id: 'portlet-announcement',
+		//iconCls: 'announcement-icon',
+	 	title: GO.summary.lang.announcements,
+		layout:'fit',
+		/*tools: [{
+	        id:'close',
+	        handler: function(e, target, panel){
+	            panel.ownerCt.remove(panel, true);
+	        }
+	    }],*/
+		items: announcementPanel,
+		height:300
+	});
 
 });
