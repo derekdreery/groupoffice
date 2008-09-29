@@ -37,6 +37,7 @@ function smarty_function_files($params, &$smarty)
 	{
 		$files[$i]['friendly_name']=str_replace('_', ' ', File::strip_extension($files[$i]['name']));
 		
+		$s->assign('index', $i);
 		$s->assign('file', $files[$i]);
 		$s->assign('even', $uneven ? 'uneven' : 'even');
 
