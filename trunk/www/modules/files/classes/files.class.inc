@@ -761,7 +761,7 @@ class files extends filesystem
 			$cache['description']=addslashes(substr($this->f('path'), strlen($GO_CONFIG->file_storage_path)));
 			$cache['type']='File';
 			$cache['module']='files';
-			$cache['keywords']=$cache['comments'].','.$cache['name'].','.$cache['type'];
+			$cache['keywords']=addslashes($this->f('comments')).','.$cache['name'].','.$cache['type'];
 			$cache['mtime']=$this->f('mtime');
 
 			$share = $fs->find_share(addslashes($this->f('path')));
