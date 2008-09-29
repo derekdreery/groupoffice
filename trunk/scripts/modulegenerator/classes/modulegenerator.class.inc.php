@@ -226,12 +226,18 @@ class modulegenerator extends db
 	
 	public function create_file($filename, $template, $replacements=array(), $conditions=array())
 	{
-		$conditions['replacements']=$replacements;
-		
-		$content = $this->get_template_content($template, $conditions);
-		$this->replace_template($content, $replacements);
-		
-		file_put_contents($filename, $content);		
+		if(file_exists($filename))
+		{
+			echo "Skipped file '.$filename.' becuase it already exists\n";
+		}else
+		{
+			$conditions['replacements']=$replacements;
+			
+			$content = $this->get_template_content($template, $conditions);
+			$this->replace_template($content, $replacements);
+			
+			file_put_contents($filename, $content);
+		}		
 	}
 	
 	public function create_module($module, $prefix, $main_template, $tables)
@@ -259,7 +265,10 @@ class modulegenerator extends db
 		touch($this->module_dir.'install/install.inc.php');
 		touch($this->module_dir.'install/uninstall.inc.php');
 	
-		copy($GO_CONFIG->root_path.'themes/Default/images/16x16/icon-help.png', $this->module_dir.'themes/Default/images/'.$this->module.'.png');
+		if(!file_exists($this->module_dir.'themes/Default/images/'.$this->module.'.png'))
+		{
+			copy($GO_CONFIG->root_path.'themes/Default/images/16x16/icon-help.png', $this->module_dir.'themes/Default/images/'.$this->module.'.png');
+		}
 
 		$this->create_file($this->module_dir.'classes/'.$this->module.'.class.inc.php', 'class.tpl');		
 		$this->create_file($this->module_dir.'language/en.inc.php', 'lang.tpl');
@@ -273,19 +282,24 @@ class modulegenerator extends db
 		$this->create_file($this->module_dir.'namespaces.js', 'namespaces.tpl');
 		
 		
-		file_put_contents($this->module_dir.'scripts.inc.php', "<?php\nrequire(".'$GO_LANGUAGE->get_language_file(\''.$this->module.'\')'.");\n\n");
+		if($this->module_dir.'scripts.inc.php')
+		{
+			file_put_contents($this->module_dir.'scripts.inc.php', "<?php\nrequire(".'$GO_LANGUAGE->get_language_file(\''.$this->module.'\')'.");\n\n");
+		}
 		
 		
 		$this->create_file($this->module_dir.'MainPanel.js', $this->main_template);
 		
 		$this->process_tables();
 		
-		$main_content=file_get_contents($this->module_dir.'MainPanel.js');		
-		$this->replace_template($main_content, $this->main_panel_replacements);
-		file_put_contents($this->module_dir.'MainPanel.js', $main_content);
 		
-		
-		
+		if($this->module_dir.'MainPanel.js')
+		{
+			$main_content=file_get_contents($this->module_dir.'MainPanel.js');		
+			$this->replace_template($main_content, $this->main_panel_replacements);
+			
+			file_put_contents($this->module_dir.'MainPanel.js', $main_content);
+		}
 	}
 	
 	function get_jslang_var($field_name)
