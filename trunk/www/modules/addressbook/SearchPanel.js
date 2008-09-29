@@ -55,7 +55,7 @@ GO.addressbook.SearchPanel = function(config)
  		{
  			if(arraySelections[0])
  			{		   				
- 				this.selectedLetter = arraySelections[0].textContent;
+ 				this.selectedLetter = arraySelections[0].innerHTML;
  				this.queryField.setValue("");
  				this.fireQueryEvent();
  			}
