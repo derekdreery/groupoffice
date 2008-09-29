@@ -2,6 +2,8 @@ javascript/overrides.js
 
 javascript/DeployJava.js
 
+javascript/MainLayout.js
+
 modules/users/TimeZones.js
 javascript/windows/PersonalSettingsDialog.js
 modules/users/RegionalSettingsPanel.js

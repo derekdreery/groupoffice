@@ -87,11 +87,11 @@ if(!$GO_CONFIG->debug)
 		}
 	}
 
-	$scripts[]=$GO_THEME->theme_path.'MainLayout.js';
+	
 	$scripts[]=$GO_CONFIG->root_path.'javascript/go-all-min.js';
 	
 	
-	$file = 'base-'.md5($GO_LANGUAGE->language.$GO_THEME->theme.$GO_CONFIG->mtime).'.js';
+	$file = 'base-'.md5($GO_LANGUAGE->language.$GO_CONFIG->mtime).'.js';
 	$path = $GO_CONFIG->local_path.'cache/'.$file;
 	$url = $GO_CONFIG->local_url.'cache/'.$file;
 	
@@ -209,9 +209,7 @@ if(!$GO_CONFIG->debug)
 			echo "\n";
 		}
 	}
-	echo '<script src="'.$GO_THEME->theme_url.'MainLayout.js'.$suffix.'" type="text/javascript"></script>';
-	echo "\n";
-
+	
 
 	$data = file_get_contents($GO_CONFIG->root_path.'/javascript/scripts.txt');
 	$lines = explode("\n", $data);
@@ -266,5 +264,12 @@ if(!$GO_CONFIG->debug)
 			}
 		}
 	}
+}
+
+if(file_exists($GO_THEME->theme_path.'MainLayout.js'))
+{
+	echo '<script src="'.$GO_THEME->theme_url.'MainLayout.js'.$suffix.'" type="text/javascript"></script>';
+	echo "\n";
+	
 }
 ?>

@@ -12,7 +12,7 @@ require($GO_THEME->theme_path.'default_head.inc.php');
 <div id="loading-mask" style="width:100%;height:100%;background:#f1f1f1;position:absolute;z-index:20000;left:0;top:0;">&#160;</div>
 <div id="loading">
 	<div class="loading-indicator">
-	<img src="<?php echo $GO_THEME->theme_url; ?>images/groupoffice.gif" style="display:block;margin-bottom:15px;" />
+	<img class="loading-logo" src="<?php echo $GO_THEME->theme_url; ?>images/groupoffice.gif" />
 	<img src="<?php echo $GO_CONFIG->host; ?>ext/resources/images/default/grid/loading.gif" style="width:16px;height:16px;vertical-align:middle" />&#160;<span id="load-status"><?php echo $lang['common']['loadingCore']; ?></span>
 	<div style="font-size:10px; font-weight:normal;margin-top:15px;">Copyright &copy; Intermesh 2003-2008</div>
 	</div>
@@ -28,7 +28,7 @@ if($GO_SECURITY->logged_in())
 	?>
 	<div id="mainNorthPanel">
 		<div id="headerLeft">
-			<img src="<?php echo $GO_CONFIG->host; ?>themes/Default/images/go_logo.gif" style="text-align:middle;vertical-align:middle;border:0px;padding:6px;" />
+			<img class="go_logo" src="<?php echo $GO_THEME->theme_url; ?>images/go_logo.gif" />
 			<?php echo $lang['common']['loggedInAs'].' '.htmlspecialchars($_SESSION['GO_SESSION']['name']); ?>
 		</div>
 		<div id="headerRight">
@@ -44,14 +44,14 @@ if($GO_SECURITY->logged_in())
 			<input type="text" name="search_query" value="<?php echo $lang['common']['search']; ?>..." id="search_query" onfocus="javascript:this.value='';" onblur="javascript:this.value='<?php echo $lang['common']['search']; ?>...';" onkeypress="return GO.mainLayout.search(event);" class="textbox" />
 	
 			
-			&nbsp;&nbsp;<a id="admin-menu-link" href="#"><?php echo $lang['common']['adminMenu']; ?></a>		
+			&nbsp;&nbsp;<a id="admin-menu-link" href="#"><?php echo $lang['common']['adminMenu']; ?>&nbsp;&nbsp;|</a>		
 			
 			<a href="#" id="configuration-link">
-				|&nbsp;&nbsp;<?php echo $lang['common']['settings']; ?></a>
+				<?php echo $lang['common']['settings']; ?>&nbsp;&nbsp;|</a>
 			<a href="#" id="help-link">
-				|&nbsp;&nbsp;<?php echo $lang['common']['help']; ?></a>
+				<?php echo $lang['common']['help']; ?>&nbsp;&nbsp;|</a>
 			<a href="<?php echo $GO_CONFIG->host; ?>index.php?task=logout" target="_top">
-				|&nbsp;&nbsp;<?php echo $lang['common']['logout']; ?></a>
+				<?php echo $lang['common']['logout']; ?></a>
 		</div>
 	</div>	
 	<script type="text/javascript">Ext.get("load-status").update("<?php echo $lang['common']['renderInterface']; ?>");</script>	

@@ -9,5 +9,4 @@ foreach($GO_MODULES->modules as $module)
 }
 ?>
 <link href="<?php echo $GO_THEME->theme_url; ?>images/favicon.ico" rel="shotcut icon" />
-<link href="<?php echo $GO_THEME->theme_url; ?>framework.css" type="text/css" rel="stylesheet"></link>
 <link href="<?php echo $GO_THEME->theme_url; ?>xtheme-groupoffice.css" type="text/css" rel="stylesheet" />

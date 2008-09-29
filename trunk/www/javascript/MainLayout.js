@@ -7,7 +7,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  * 
  * @copyright Copyright Intermesh
- * @version $Id: MainLayout.js 2948 2008-09-03 07:16:31Z mschering $
+ * @version $Id: MainLayout.js 2717 2008-07-27 19:05:38Z mschering $
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
@@ -25,8 +25,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 
 	ready : false,
 	
-	onReady : function(fn, scope){
-				
+	onReady : function(fn, scope){		
 		if(!this.ready){
 			this.on('ready', fn, scope);
 		}else{
@@ -40,18 +39,10 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		this.fireReady();
 		
 		GO.loginDialog.addCallback(function(){
+				var url = GO.afterLoginUrl ? GO.afterLoginUrl : GO.settings.config.host;
 			
-			var url = GO.afterLoginUrl ? GO.afterLoginUrl : GO.settings.config.host;
-			
-			/*if(GO.loginDialog.fullscreenField.getValue())
-			{
-				GO.util.popup(url);
-			}else
-			{
 				document.location.href=url;
-			}*/
-			document.location.href=url;
-		});
+			});
 		GO.loginDialog.show();
 		
 		
@@ -61,25 +52,16 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	
 	fireReady : function(){
 		
-		GO.waitMask = Ext.get("go-wait");		
-		if(GO.waitMask)
-		{
-			GO.waitMask.setDisplayed(false);
-		}
-		
 		this.fireEvent('ready', this);
 	 	this.ready=true;		
 	},
 
 	init : function(){  
-		
-		Ext.QuickTips.init();
-		Ext.state.Manager.setProvider(new GO.state.HttpProvider({url: BaseHref+'state.php'}));
           
    	this.fireReady();
    	
-	GO.checker = new GO.Checker();
-	GO.checker.init();
+		GO.checker = new GO.Checker();
+		GO.checker.init();
 
    		
    	GO.checker.on('alert', function(data){
@@ -113,7 +95,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
         border:false,
         activeTab:'go-module-panel-'+GO.settings.start_module,
         tabPosition:'top',
-        baseCls: 'go-moduletabs',
+        cls: 'go-moduletabs',
         items: items,
         layoutOnTabChange:true
     	});
@@ -169,7 +151,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 								this.tabPanel.add(panel);
 							}else{
 								var panel = this.tabPanel.items.map[panelId];
-							}
+							}	
 							panel.show();
 						},
 						scope: this
@@ -216,24 +198,23 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 			var helpMenu = new Ext.menu.Menu({
     		id: 'helpMenu',
     		items:[{
-    			iconCls:'btn-help',
-    			text:GO.lang.strHelpContents,
-    			handler:function(){
-    				window.open('http://www.group-office.com/wiki/Manual');
-    			},
-    			scope:this
-    			
-    		},{
-    			iconCls:'btn-report-bug',
-    			text:GO.lang.strReportBug,
-    			handler:function(){
-    				window.open('https://sourceforge.net/tracker/?func=add&group_id=76359&atid=547651');			
-    			},
-    			scope:this
-    			
-    		},    		
-    		'-',
-    		{
+	    			iconCls:'btn-help',
+	    			text:GO.lang.strHelpContents,
+	    			handler:function(){
+	    				window.open('http://www.group-office.com/wiki/Manual');
+	    			},
+	    			scope:this
+	    			
+	    		},{
+	    			iconCls:'btn-report-bug',
+	    			text:GO.lang.strReportBug,
+	    			handler:function(){
+	    				window.open('https://sourceforge.net/tracker/?func=add&group_id=76359&atid=547651');			
+	    			},
+	    			scope:this
+	    			
+	    		},    		
+	    		'-',{
     			iconCls:'btn-info',
     			text:GO.lang.strAbout,
     			handler:function(){
@@ -262,7 +243,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		
 		var activeTab = this.tabPanel.getLayout().activeItem;
    
-   	if(!activeTab)
+  	if(!activeTab)
    		this.tabPanel.setActiveTab(0);
 		
 		this.removeLoadMask();
