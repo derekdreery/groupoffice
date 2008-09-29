@@ -282,12 +282,12 @@ GO.email.EmailComposer = function(config){
 				iconCls: 'btn-attach',
 				handler: this.showAttachmentsDialog,
 				scope:this
-      }),{
+      }),this.saveButton = new Ext.Button({
 				iconCls: 'btn-save',
 				text: GO.lang.cmdSave,
 				handler:function(){this.sendMail(true);},
 				scope:this
-			}
+			})
 		];
 		
 	if(GO.addressbook)
@@ -453,7 +453,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			this.showMenuButton.setDisabled(false);
 			this.toCombo.getEl().up('.x-form-item').setDisplayed(true);
 			this.sendURL = GO.settings.modules.email.url+'action.php';
-			
+			this.saveButton.setDisabled(false);
     	
     	if(config.template_id == undefined  && this.templatesStore && this.templatesStore.getTotalCount()==1)
     	{
@@ -518,6 +518,8 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 					
 					//so that template loading won't replace fields
 					params.mailing_group_id=config.mailing_group_id;
+					
+					this.saveButton.setDisabled(true);
 				}
 				
 				

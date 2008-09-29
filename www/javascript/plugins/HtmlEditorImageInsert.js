@@ -158,7 +158,7 @@ Ext.extend(GO.plugins.HtmlEditorImageInsert, Ext.util.Observable, {
 							
 		this.fireEvent('insert', this);
 		
-		this.editor.relayCmd('inserthtml', html);
+		this.editor.insertAtCursor(html);
 		
 		this.fileBrowserWindow.hide();
 	}

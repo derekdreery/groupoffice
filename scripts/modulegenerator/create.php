@@ -32,7 +32,7 @@ $tables=array();
  */
 
 
-$cms_folders = array(
+$folders = array(
 	'template'=>'GridPanel.tpl',
 	'name'=>'us_licenses', 
 	'friendly_single'=>'announcement', 
@@ -41,18 +41,7 @@ $cms_folders = array(
 	'autoload'=>true,
 	'authenticate'=>false);
 
-$tables[] = $cms_folders;
-
-$cms_folders = array(
-	'template'=>'GridPanel.tpl',
-	'name'=>'us_packages', 
-	'friendly_single'=>'package', 
-	'friendly_multiple'=>'packages',
-	'paging'=>true,
-	'autoload'=>true,
-	'authenticate'=>false);
-
-$tables[] = $cms_folders;
+$tables[] = $folders;
 
 
 /* end config */

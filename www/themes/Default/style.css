@@ -71,6 +71,7 @@ display:block;margin-bottom:15px;
 	background-color:#dedede;
 	border:1px solid #dedede;
 	padding-left:2px;	
+	vertical-align:middle;
 }
 
 #checker-loading{

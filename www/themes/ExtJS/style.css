@@ -2,28 +2,6 @@
 	padding:0px;	
 }
 
-#loading{
-	position:absolute;
-	left:40%;
-	top:40%;
-	border:1px solid #6593cf;
-	padding:2px;
-	background:#c3daf9;
-	width:300px;
-	text-align:center;
-	z-index:20001;
-}
-#loading .loading-indicator{
-	border:1px solid #a3bad9;
-	background:white url(images/block-bg.gif) repeat-x;
-	color:#003366;
-	font:bold 13px tahoma,arial,helvetica;
-	padding:10px;
-	margin:0;
-	padding-top:25px;
-}
-
-
 .go-top-panel .x-panel-body{
 	 padding:3px;
    border:0px none;
@@ -58,22 +36,7 @@ line-height:20px;
 	background:#0000aa url(images/hd-sprite.gif) repeat-x 0px -83px;
 	border:1px solid white;
 	padding-left:2px;
-	vertical-align:middle;
 }
-
-#checker-loading{
-	
-}
-
-#notification-area{
-	font:10px tahoma,arial,helvetica;
-	color:white;	
-}
-
-#admin-menu-link{
-	/*display:none;*/
-}
-
 
 /* start buttons */
 .btn-add {

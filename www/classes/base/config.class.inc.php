@@ -16,7 +16,7 @@
  * This class holds the main configuration options of Group-Office
  * Don't modify this file. The values defined here are just default values.
  * They are overwritten by the configuration options in /config.inc.php or
- * /etc/Group-Office/{HOSTNAME}/config.inc.php
+ * /etc/groupoffice/{HOSTNAME}/config.inc.php
  *
  * To edit these options use install.php.
  *

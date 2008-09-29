@@ -323,7 +323,7 @@ GO.addressbook.searchSender = function(sender, name){
 						{
 							params.last_name=names[2];
 							params.middle_name=names[1];
-						}else if(split[1])
+						}else if(names[1])
 						{
 							params.last_name=names[1];
 						}

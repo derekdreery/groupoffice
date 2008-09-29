@@ -40,7 +40,6 @@ GO.LinkViewWindow = function(config){
 	GO.LinkViewWindow.superclass.constructor.call(this, config);
 	
 	this.render(Ext.getBody());
-
 };
 
 Ext.extend(GO.LinkViewWindow, Ext.Window);
