@@ -174,7 +174,10 @@ class modulegenerator extends db
 		
 		foreach($replacements as $key=>$value)
 		{
-			$content = str_replace('{'.$key.'}', $value, $content);
+			if(!empty($key))
+			{
+				$content = str_replace('{'.$key.'}', $value, $content);
+			}
 		}
 	}
 	
@@ -220,7 +223,20 @@ class modulegenerator extends db
 		$content = file_get_contents(dirname(dirname(__FILE__)).'/templates/'.$template);	
 		
 		$this->parse_tags($content, $conditions);
-		$content = str_replace("\n\n", "\n", $content);		
+		
+		
+		$lines = explode("\n", $content);
+		
+		$content='';		
+		foreach($lines as $line)
+		{
+			$test = trim($line);
+			if(!empty($test))
+			{
+				$content .= $line."\n";
+			}
+		}
+		
 		return $content;		
 	}
 	
@@ -279,7 +295,7 @@ class modulegenerator extends db
 		$this->create_file($this->module_dir.'json.php', 'json.tpl');
 		$this->create_file($this->module_dir.'action.php', 'action.tpl');
 		$this->create_file($this->module_dir.'scripts.txt', 'scripts.tpl');
-		$this->create_file($this->module_dir.'namespaces.js', 'namespaces.tpl');
+		//$this->create_file($this->module_dir.'namespaces.js', 'namespaces.tpl');
 		
 		
 		if($this->module_dir.'scripts.inc.php')
@@ -292,14 +308,12 @@ class modulegenerator extends db
 		
 		$this->process_tables();
 		
+
+		$main_content=file_get_contents($this->module_dir.'MainPanel.js');		
+		$this->replace_template($main_content, $this->main_panel_replacements);
 		
-		if($this->module_dir.'MainPanel.js')
-		{
-			$main_content=file_get_contents($this->module_dir.'MainPanel.js');		
-			$this->replace_template($main_content, $this->main_panel_replacements);
-			
-			file_put_contents($this->module_dir.'MainPanel.js', $main_content);
-		}
+		file_put_contents($this->module_dir.'MainPanel.js', $main_content);
+		
 	}
 	
 	function get_jslang_var($field_name)
@@ -534,7 +548,7 @@ class modulegenerator extends db
 				}
 			}
 			
-			file_put_contents($this->module_dir.'scripts.txt', "\nmodules/".$this->module.'/'.$replacements['friendly_multiple_ucfirst'].'Grid.js', FILE_APPEND);
+			file_put_contents($this->module_dir.'scripts.txt', "\nmodules/".$this->module.'/'.$replacements['friendly_multiple_ucfirst']."Grid.js\n".file_get_contents($this->module_dir.'scripts.txt'));
 			$grid_panel_file = $this->module_dir.$replacements['friendly_multiple_ucfirst'].'Grid.js';			
 			$this->create_file($grid_panel_file, $table['template'], $replacements, $table);
 			
@@ -554,11 +568,11 @@ class modulegenerator extends db
 			$this->insert_template($this->module_dir.'action.php','TASKSWITCH', 'actiontasks.tpl', $replacements, $table);
 			
 			//create dialog			
-			file_put_contents($this->module_dir.'scripts.txt', "\nmodules/".$this->module.'/'.$replacements['friendly_single_ucfirst'].'Dialog.js', FILE_APPEND);
+			file_put_contents($this->module_dir.'scripts.txt', "modules/".$this->module.'/'.$replacements['friendly_single_ucfirst']."Dialog.js\n".file_get_contents($this->module_dir.'scripts.txt'));
 			$dialog_file = $this->module_dir.$replacements['friendly_single_ucfirst'].'Dialog.js';			
 			$this->create_file($dialog_file, 'Dialog.tpl', $replacements, $table);		
 			
-			file_put_contents($this->module_dir.'scripts.txt', "\nmodules/".$this->module.'/'.$replacements['friendly_single_ucfirst'].'Panel.js', FILE_APPEND);
+			file_put_contents($this->module_dir.'scripts.txt', "\nmodules/".$this->module.'/'.$replacements['friendly_single_ucfirst']."Panel.js\n".file_get_contents($this->module_dir.'scripts.txt'));
 			$display_file = $this->module_dir.$replacements['friendly_single_ucfirst'].'Panel.js';
 			$this->create_file($display_file, 'DisplayPanel.tpl', $replacements, $table);
 			
@@ -625,6 +639,8 @@ class modulegenerator extends db
 		$template_content = $this->get_template_content($template, $conditions);
 		
 		$this->replace_template($template_content, $replacements);
+		
+		$template_content=str_replace("\n\n", "\n", $template_content);
 		
 		$file_content = file_get_contents($file);
 		
