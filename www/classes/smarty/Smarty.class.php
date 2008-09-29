@@ -1747,7 +1747,7 @@ class Smarty
 
         if(isset($auto_source)) {
             // make source name safe for filename
-            $_filename = urlencode(utf8_basename($auto_source));
+            $_filename = urlencode(basename($auto_source));
             $_crc32 = sprintf('%08X', crc32($auto_source));
             // prepend %% to avoid name conflicts with
             // with $params['auto_id'] names
@@ -1806,7 +1806,7 @@ class Smarty
             $file = null, $line = null, $error_type = E_USER_ERROR)
     {
         if(isset($file) && isset($line)) {
-            $info = ' ('.utf8_basename($file).", line $line)";
+            $info = ' ('.basename($file).", line $line)";
         } else {
             $info = '';
         }
