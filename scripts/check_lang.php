@@ -38,7 +38,7 @@ function compare_arrays($array1, $array2, $file)
 		}
 		if(!empty($output))
 		{
-			echo '<i>Ontbrekend in '.$file.':</i><br />';
+			echo '<i>Missing in '.$file.':</i><br />';
 			foreach($output as $out)
 				echo htmlentities($out).'<br />';
 			echo '<br />';
@@ -52,7 +52,7 @@ function compare_files($file1, $file2, $type)
 	$content2 = get_contents($file2);
 	
 	if(!$content1 || !$content2)
-		echo '<i><font color="red">Kan '.$type.' bestanden niet vergelijken, want een van de vertalingen bestaat niet!</font></i><br />';
+		echo '<i><font color="red">Could not compare '.$type.', because one of the translations doesn\'t exist!</font></i><br />';
 	else
 	{
 		compare_arrays($content1, $content2, $file2);
