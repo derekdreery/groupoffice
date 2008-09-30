@@ -27,6 +27,7 @@ GO.notes.NoteDialog = function(config){
 	};
 	
 	//config.iconCls='go-link-icon-4';
+	config.collapsible=true;
 	config.maximizable=true;
 	config.layout='fit';
 	config.modal=false;

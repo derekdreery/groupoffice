@@ -103,9 +103,9 @@ GO.addressbook.ContactDialog = function(config)
 	
 	this.downloadDocumentButton = new Ext.Button();					
 
+	this.collapsible=true;
 	this.layout= 'fit';
 	this.modal=false;
-	this.animCollapse=false;
 	this.shadow= false;
 	this.border= false;
 	this.height= 545;

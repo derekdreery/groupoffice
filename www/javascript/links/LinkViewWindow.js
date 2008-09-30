@@ -17,7 +17,7 @@ GO.LinkViewWindow = function(config){
 	{
 		config = {};
 	}
-	
+	config.collapsible=true;
 	config.maximizable=true;
 	config.layout='fit';
 	config.modal=false;

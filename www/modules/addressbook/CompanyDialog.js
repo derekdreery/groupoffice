@@ -101,6 +101,7 @@ GO.addressbook.CompanyDialog = function(config)
 	this.width= 820;
 	this.plain= true;
 	this.closeAction= 'hide';
+	this.collapsible=true;
 	//this.iconCls= 'btn-addressbook-company';
 	this.title= GO.addressbook.lang['cmdCompanyDialog'];
 	this.items= this.companyForm;
