@@ -1067,6 +1067,8 @@ try{
 						'children'=>$children,
 						'inbox_new'=>$inbox_new
 													);
+													
+													$imap->close();													
 												}
 											}else
 											{

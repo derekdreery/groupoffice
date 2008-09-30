@@ -1,10 +1,10 @@
 <?php
-/** 
+/**
  * Copyright Intermesh
- * 
+ *
  * This file is part of Group-Office. You should have received a copy of the
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
- * 
+ *
  * If you have questions write an e-mail to info@intermesh.nl
  * @version $Id: imap.class.inc 2373 2008-07-09 14:52:18Z mschering $
  * @copyright Copyright Intermesh
@@ -20,7 +20,7 @@ require_once($GLOBALS['GO_CONFIG']->class_path.'mail/RFC822.class.inc');
 
 /**
  * This class can be used to connect to IMAP or POP-3 servers
- * @version $Id: imap.class.inc 2373 2008-07-09 14:52:18Z mschering $ 
+ * @version $Id: imap.class.inc 2373 2008-07-09 14:52:18Z mschering $
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package go.mail
  * @access public
@@ -169,15 +169,15 @@ class imap {
 		if ($novalidate_cert) {
 			$this->connectstring .= '/novalidate-cert';
 		}
-		
+
 
 		if ($flags != 0) {
 			$this->conn = @ imap_open("{".$this->connectstring."}".$this->mailbox, $username, $password, $flags);
 		} else {
 			$this->conn = @ imap_open("{".$this->connectstring."}".$this->mailbox, $username, $password);
 		}
-		
-		
+
+
 		return $this->conn;
 	}
 
@@ -188,15 +188,18 @@ class imap {
 	 * @return void
 	 */
 	function close() {
-		unset ($this->messages);
-		unset ($this->count);
-		unset ($this->unseen);
-		unset ($this->next_message_id);
-		
-		//for supressing notices that are not really errors
-		imap_errors();
-		imap_close($this->conn);
-		unset ($this->conn);
+		if(isset($this->conn))
+		{
+			unset ($this->messages);
+			unset ($this->count);
+			unset ($this->unseen);
+			unset ($this->next_message_id);
+
+			//for supressing notices that are not really errors
+			imap_errors();
+			imap_close($this->conn);
+			unset ($this->conn);
+		}
 	}
 
 	/**
@@ -363,33 +366,33 @@ class imap {
 	}
 
 
-	
-	
+
+
 	function get_header_values($header)
 	{
 		$header = str_replace("\r\n", "\n", $header);
 		$header = preg_replace("/\n\h/", " ", $header);
 
 		$lines = explode("\n", $header);
-		
+
 		$values = array();
 		foreach($lines as $line)
 		{
 			$colpos = strpos($line, ':');
-			
+				
 			if($colpos)
 			{
 				$key = strtolower(trim(substr($line,0,$colpos)));
 				$value = trim(substr($line, $colpos+1));
-				
+
 				$values[$key]=stripslashes($value);
 			}
 		}
-		
+
 		$message["priority"] = isset($values['x-priority']) ? $values['x-priority'] : '';
 		$message['attachments']=false;
-		
-		
+
+
 		if (!empty($values['content-type']) && eregi("([^/]*)/([^ ;\n\t]*)", $values['content-type'], $regs)) {
 			$mtype = strtolower($regs[1]);
 			$stype = strtolower($regs[2]);
@@ -402,23 +405,23 @@ class imap {
 		{
 			$message["attachments"] = true;
 		}
-		
+
 		$RFC822 = new RFC822();
-	 	$message["to"] = isset($values['to']) ? $RFC822->explode_address_list($values['to']) : array();
-	 	$message["cc"] = isset($values['cc']) ? $RFC822->explode_address_list($values['cc']) : array();
-	 	
-	 	if(!isset($values['from']))
-	 		$values['from']='';
-	 	
-	 	$from = $RFC822->parse_address_list($values['from']);
-	 	$message["from"] = isset($from[0]['personal']) ? $from[0]['personal'] : '';
-	 	$message["sender"] = isset($from[0]['email']) ? $from[0]['email'] : '';  
-	 	$message['udate'] = strtotime($values['date']);
-		$message['subject'] = $values['subject'];
-				
+		$message["to"] = isset($values['to']) ? $RFC822->explode_address_list($values['to']) : array();
+		$message["cc"] = isset($values['cc']) ? $RFC822->explode_address_list($values['cc']) : array();
+		 
+		if(!isset($values['from']))
+			$values['from']='';
+		 
+		$from = $RFC822->parse_address_list($values['from']);
+		$message["from"] = isset($from[0]['personal']) ? $from[0]['personal'] : '';
+		$message["sender"] = isset($from[0]['email']) ? $from[0]['email'] : '';
+		$message['udate'] = isset($values['date']) ? strtotime($values['date']) : '';
+		$message['subject'] = isset($values['subject']) ? $values['subject'] : '';
+
 		$message["notification"]=isset($values['disposition-notification-to']) ? $values['disposition-notification-to'] : false;
 		$message['content_type']=isset($values['content-type']) ? $values['content-type'] : false;;
-		
+
 		//debug($header);
 		//debug(var_export($message, true));
 		return $message;
@@ -431,7 +434,7 @@ class imap {
 	 * @return array The E-mail message elements
 	 */
 	function next_message()
-	{		
+	{
 		if($uid = array_shift($this->messages))
 		{
 			return $this->get_message($uid, false);
@@ -471,9 +474,9 @@ class imap {
 				//message doesn't exist
 				return false;
 			}
-			
+				
 			//debug(var_export($headerinfo, true));
-			
+				
 			for ($i = 0; $i < sizeof($this->sort); $i ++) {
 				if ($this->message['uid'] == $this->sort[$i]) {
 					$this->message["next"] = ($i -1 >= 0) ? $this->sort[$i -1] : 0;
@@ -487,70 +490,70 @@ class imap {
 			//$this->message['udate'] = $headerinfo->udate;
 			/*if(isset($headerinfo->date))
 			{
-				$this->message["udate"] = strtotime($headerinfo->date);
+			$this->message["udate"] = strtotime($headerinfo->date);
 			}elseif(isset($headerinfo->MailDate))
 			{
-				$this->message["udate"] = strtotime($headerinfo->MailDate);
+			$this->message["udate"] = strtotime($headerinfo->MailDate);
 			}elseif(isset($headerinfo->udate))
 			{
-				$this->message['udate'] = $headerinfo->udate;
+			$this->message['udate'] = $headerinfo->udate;
 			}*/
 
 			$this->message['new'] = (($headerinfo->Recent == 'N' || $headerinfo->Unseen == 'U')  && $this->is_imap()) ? true : false;
 
 			/*$tmp = $headerinfo->from;
-			$this->message["sender"] = $tmp[0]->mailbox.'@'.$tmp[0]->host;
-			$this->message["from"] = isset ($tmp[0]->personal) ? $this->enc_utf8($tmp[0]->personal) : $this->message["sender"];
-			*/
-			
+			 $this->message["sender"] = $tmp[0]->mailbox.'@'.$tmp[0]->host;
+			 $this->message["from"] = isset ($tmp[0]->personal) ? $this->enc_utf8($tmp[0]->personal) : $this->message["sender"];
+			 */
+				
 			//$this->message["subject"] = isset ($headerinfo->Subject) ? $this->enc_utf8($headerinfo->Subject) : '';
 
 			/*$this->message["to"] = array();
-			if (isset($headerinfo->to) && is_array ($headerinfo->to)) {
+			 if (isset($headerinfo->to) && is_array ($headerinfo->to)) {
 				$tmp = $headerinfo->to;
 
 				for ($x = 0; $x < sizeof($tmp); $x ++) {
-					$email = '';
-					if (isset ($tmp[$x]->mailbox)) {
-						$host = isset ($tmp[$x]->host) ? '@'.$tmp[$x]->host : '';
-						$email = $tmp[$x]->mailbox.$host;
-					}
-
-					$personal = isset ($tmp[$x]->personal) ? $this->enc_utf8($tmp[$x]->personal) : '';
-					$this->message["to"][$x] = $this->RFC822->write_address($personal, $email);
+				$email = '';
+				if (isset ($tmp[$x]->mailbox)) {
+				$host = isset ($tmp[$x]->host) ? '@'.$tmp[$x]->host : '';
+				$email = $tmp[$x]->mailbox.$host;
 				}
-			}
 
-			$this->message["cc"] = array();
-			if (isset($headerinfo->cc) && is_array ($headerinfo->cc)) {
+				$personal = isset ($tmp[$x]->personal) ? $this->enc_utf8($tmp[$x]->personal) : '';
+				$this->message["to"][$x] = $this->RFC822->write_address($personal, $email);
+				}
+				}
+
+				$this->message["cc"] = array();
+				if (isset($headerinfo->cc) && is_array ($headerinfo->cc)) {
 				$tmp = $headerinfo->cc;
 				for ($x = 0; $x < sizeof($tmp); $x ++) {
-					$email = '';
-					if (isset ($tmp[$x]->mailbox)) {
-						$host = isset ($tmp[$x]->host) ? '@'.$tmp[$x]->host : '';
-						$email = $tmp[$x]->mailbox.$host;
-					}
-
-					$personal = isset ($tmp[$x]->personal) ? $this->enc_utf8($tmp[$x]->personal) : '';
-					$this->message["cc"][$x] = $this->RFC822->write_address($personal, $email);
+				$email = '';
+				if (isset ($tmp[$x]->mailbox)) {
+				$host = isset ($tmp[$x]->host) ? '@'.$tmp[$x]->host : '';
+				$email = $tmp[$x]->mailbox.$host;
 				}
-			}
 
-			$this->message["bcc"] = array();
-			if (isset($headerinfo->bcc) && is_array ($headerinfo->bcc)) {
+				$personal = isset ($tmp[$x]->personal) ? $this->enc_utf8($tmp[$x]->personal) : '';
+				$this->message["cc"][$x] = $this->RFC822->write_address($personal, $email);
+				}
+				}
+
+				$this->message["bcc"] = array();
+				if (isset($headerinfo->bcc) && is_array ($headerinfo->bcc)) {
 				$tmp = $headerinfo->bcc;
 				for ($x = 0; $x < sizeof($tmp); $x ++) {
-					$email = '';
-					if (isset ($tmp[$x]->mailbox)) {
-						$host = isset ($tmp[$x]->host) ? '@'.$tmp[$x]->host : '';
-						$email = $tmp[$x]->mailbox.$host;
-					}
-
-					$personal = isset ($tmp[$x]->personal) ? $this->enc_utf8($tmp[$x]->personal) : '';
-					$this->message["bcc"][$x] = $this->RFC822->write_address($personal, $email);
+				$email = '';
+				if (isset ($tmp[$x]->mailbox)) {
+				$host = isset ($tmp[$x]->host) ? '@'.$tmp[$x]->host : '';
+				$email = $tmp[$x]->mailbox.$host;
 				}
-			}*/
-			
+
+				$personal = isset ($tmp[$x]->personal) ? $this->enc_utf8($tmp[$x]->personal) : '';
+				$this->message["bcc"][$x] = $this->RFC822->write_address($personal, $email);
+				}
+				}*/
+				
 			$this->message["flagged"] = $headerinfo->Flagged=='F';
 			$this->message["size"] = $headerinfo->Size;
 			$this->message["answered"] = $headerinfo->Answered=='A';
@@ -559,45 +562,45 @@ class imap {
 			if($fetchstructure)
 			{
 				$this->message["parts"] = array ();
-	
+
 				//if ($part == '') {
 				$structure = imap_fetchstructure($this->conn, $uid, FT_UID);
 				/*} else {
 					$structure = imap_bodystruct($this->conn, $this->message['number'], $part);
-				}*/
-				
+					}*/
+
 				//debug(var_export($structure, true));
-	
+
 				$this->mail["parts"] = array ();
 				$this->get_parts($structure);
-				
+
 				//debug(var_export($structure, true));
-	
+
 				// $this->print_structure($structure);
 			}
 
 			$header = imap_fetchheader($this->conn, $this->message['number']);
-			
+				
 			$values = $this->get_header_values($header);
 			foreach($values as $key=>$value)
 			{
 				//if(empty($this->message[$key]))
 				//{
-					if(is_array($value))
+				if(is_array($value))
+				{
+					for($i=0;$i<count($value);$i++)
 					{
-						for($i=0;$i<count($value);$i++)
-						{
-							$value[$i]=$this->enc_utf8($value[$i]);
-						}
-					}else
-					{
-						$value=$this->enc_utf8($value);
+						$value[$i]=$this->enc_utf8($value[$i]);
 					}
-					$this->message[$key]=$value;
+				}else
+				{
+					$value=$this->enc_utf8($value);
+				}
+				$this->message[$key]=$value;
 				//}
 			}
-			
-			
+				
+				
 			$this->message["reply_to"] = $this->RFC822->write_address($this->message['from'], $this->message["sender"]);
 
 			if (isset ($headerinfo->reply_to)) {
@@ -661,7 +664,7 @@ class imap {
 					}
 				}
 			}
-			
+				
 			if (empty($name) && isset ($mimeobj->parameters)) {
 				$params = $mimeobj->parameters;
 				for ($x = 0; $x < count($params); $x ++) {
@@ -714,9 +717,9 @@ class imap {
 						}*/
 					$nsection = $x +1;
 				} elseif (
-							($pos = strrpos($section, ".")) && 
-							($mimeobj->parts[0]->type != TYPEMULTIPART || $mimeobj->parts[0]->subtype != 'RELATED')						
-						) {
+				($pos = strrpos($section, ".")) &&
+				($mimeobj->parts[0]->type != TYPEMULTIPART || $mimeobj->parts[0]->subtype != 'RELATED')
+				) {
 					$subsection = (int) substr($section, $pos +1) + $x;
 					if ($subsection == '') {
 						$subsection = '0';
@@ -785,12 +788,12 @@ class imap {
 					}
 				}
 			}
-			
+				
 			if(empty($name) && strtolower($full_mime_type) == 'message/rfc822')
 			{
 				$name='Message.eml';
 			}
-			
+				
 			//echo $section.': '.$full_mime_type.' '.$name.'<br>';
 			$bytes = isset ($mimeobj->bytes) ? $mimeobj->bytes : 0;
 			$tmp = Array (
@@ -968,13 +971,13 @@ class imap {
 		* @return string The value of the fieldname if found.
 		*/
 
-	function get_header_value($fieldname, $header) {		
+	function get_header_value($fieldname, $header) {
 		$value=false;
 		$results = array();
 		if (preg_match("/\v$fieldname (.*)\v/", $header, $results)) {
-			$value = trim($results[1]);			
+			$value = trim($results[1]);
 		}
-		
+
 		return $value;
 	}
 
@@ -1020,7 +1023,7 @@ class imap {
 
 	function view_part($uid, $part_no, $transfer, $part_charset = '') {
 		global $GO_CONFIG;
-		
+
 		$charset='UTF-8';
 
 		$str = imap_fetchbody($this->conn, $uid, $part_no, FT_UID);
@@ -1031,13 +1034,13 @@ class imap {
 		{
 			$str = quoted_printable_decode($str);
 		}
-		
+
 		//PHP sets us-ascii when the charset is unknown. Try to detect it.
 		if(strtolower($part_charset)=='us-ascii')
 		{
 			$part_charset = mb_detect_encoding($str, "ASCII,JIS,UTF-8,ISO-8859-1,EUC-JP,SJIS");
 		}
-	
+
 		if ($part_charset != '' && $part_charset != $charset) {
 			if($converted = @iconv($part_charset, $charset.'//IGNORE', $str))
 			{
@@ -1283,14 +1286,14 @@ class imap {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Return last error
 	 *
 	 * @access public
 	 * @return String Last IMAP error
 	 */
-	
+
 	function last_error()
 	{
 		return imap_last_error();
@@ -1407,11 +1410,11 @@ class imap {
 		//they are going to be converted to utf8.
 
 		if (substr($str, 0,2) == '=?') {
-			
-			
+				
+				
 			//$str = str_replace(" ", "", $str);
 			//return imap_utf8($str);
-			
+				
 			return iconv_mime_decode($str,null,'UTF-8');
 		}else {
 			if (function_exists('iconv'))
@@ -1435,8 +1438,8 @@ class imap {
 			return utf8_encode($text);
 			}	*/
 	}
-	
-	
+
+
 	function encode_imap_path($str, $delimiter='.')
 	{
 		$encoded = array();
@@ -1444,10 +1447,10 @@ class imap {
 		foreach($mailboxes as $mailbox)
 		{
 			$encoded[]=$this->utf7_encode($mailbox);
-		}	
+		}
 		return implode($delimiter, $encoded);
 	}
-	
+
 	function decode_imap_path($str, $delimiter='.')
 	{
 		$decoded = array();
@@ -1455,7 +1458,7 @@ class imap {
 		foreach($mailboxes as $mailbox)
 		{
 			$decoded[]=$this->utf7_decode($mailbox);
-		}	
+		}
 		return implode($delimiter, $decoded);
 	}
 
@@ -1464,21 +1467,21 @@ class imap {
 		$charset = 'UTF-8';
 		if (extension_loaded('iconv')) {
 			if($converted_input = iconv($charset, 'UTF-7', $input))
-			{		
-				$input=preg_replace("/&/","&-",$converted_input);			
-				$input=preg_replace("/\+A/","&A",$input);			
+			{
+				$input=preg_replace("/&/","&-",$converted_input);
+				$input=preg_replace("/\+A/","&A",$input);
 				$input=preg_replace("/&ACY /","&- ",$input);
 				$input=preg_replace("/&ACY/","&",$input);
 				$input=preg_replace("/&AF8(-)?/","_",$input);
 				$input=preg_replace("/&ADs(-)?/",";",$input);
-	      return $input;
-	    }
+				return $input;
+			}
 		}
 		return @imap_utf7_encode(utf8_decode($input));
 	}
-	
 
-	
+
+
 	function utf7_imap_decode($input)
 	{
 		$charset='UTF-8';
@@ -1486,13 +1489,13 @@ class imap {
 		if (extension_loaded('iconv')) {
 			$input=preg_replace("/&A/","+A",$input);
 			$input=preg_replace("/&-/","&",$input);
-			
+				
 			if($converted_input = iconv('UTF-7', $charset, $input))
 			{
 				return $converted_input;
 			}
 		}
-		return utf8_encode(@imap_utf7_decode($input));	
+		return utf8_encode(@imap_utf7_decode($input));
 	}
 
 
