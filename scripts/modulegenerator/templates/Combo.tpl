@@ -10,6 +10,5 @@
         triggerAction: 'all',
         editable: false,
         selectOnFocus:true,
-        forceSelection: true,
-        allowBlank: false
+        forceSelection: true
     }

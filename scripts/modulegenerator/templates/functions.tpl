@@ -153,7 +153,7 @@
 	 * @return Int Number of records found
 	 */
 	 
-	function get_authorized_{friendly_multiple}($auth_type, $user_id, <gotpl if="$relation">${related_field_id}, </gotpl>, $query, $sort='name', $direction='ASC', $start=0, $offset=0)
+	function get_authorized_{friendly_multiple}($auth_type, $user_id, <gotpl if="$relation">${related_field_id}, </gotpl>$query, $sort='name', $direction='ASC', $start=0, $offset=0)
 	{
 		
 		$sql = "SELECT DISTINCT {prefix}_{friendly_multiple}.* FROM {prefix}_{friendly_multiple} ".
