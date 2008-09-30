@@ -12,14 +12,14 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-require('../../www/Group-Office.php');
+require('config.inc.php');
 
 $module_dir=$GO_CONFIG->root_path.'modules/'.$module.'/';
 
 require('classes/modulegenerator.class.inc.php');
 $mg = new modulegenerator();
 
-require('config.inc.php');
+
 
 //exec('rm -Rf '.$module_dir);
 $mg->create_module($module, $prefix, $main_template, $tables);	
