@@ -39,6 +39,8 @@ function connect($account_id, $mailbox='INBOX', $halt_on_error=true)
 		echo json_encode($response);
 		exit();
 	}
+	
+	define('IMAP_CONNECTED', true);
 
 	return $account;
 

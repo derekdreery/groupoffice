@@ -192,7 +192,10 @@ class imap {
 		unset ($this->count);
 		unset ($this->unseen);
 		unset ($this->next_message_id);
-		@ imap_close($this->conn);
+		
+		//for supressing notices that are not really errors
+		imap_errors();
+		imap_close($this->conn);
 		unset ($this->conn);
 	}
 
