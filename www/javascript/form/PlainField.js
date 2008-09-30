@@ -43,6 +43,10 @@ GO.form.PlainField = Ext.extend(Ext.form.Field, {
 			'load'
 		);
 	},
+	
+	getName: function(){
+    return this.name;
+  },
 
 	// private
   initValue : function(){

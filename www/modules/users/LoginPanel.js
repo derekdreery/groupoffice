@@ -29,19 +29,21 @@ GO.users.LoginPanel = function(config)
 	config.labelWidth=140;
 	
 	config.items=[
-		new GO.form.PlainField({
+		{
+      xtype: 'plainfield',
 			fieldLabel: GO.users.lang.cmdFormLabelRegistrationTime,
-			id: 'registration_time'
-		}),
-		new GO.form.PlainField({
+			name: 'registration_time'
+		},
+		{
+      xtype: 'plainfield',
 			fieldLabel: GO.users.lang.cmdFormLabelLastLogin,
-			id: 'lastlogin'
-		}),
-		new GO.form.PlainField({
+			name: 'lastlogin'
+		},
+		{
+      xtype: 'plainfield',
 			fieldLabel: GO.users.lang.numberOfLogins,
-			id: 'logins'
-		})
-		
+			name: 'logins'
+		}		
 	];
 
 	GO.users.LoginPanel.superclass.constructor.call(this, config);		
