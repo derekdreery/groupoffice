@@ -345,6 +345,7 @@ GO.email.EmailComposer = function(config){
     minHeight: 200,
     layout: 'fit',
 		maximizable:true,		
+		collapsible:true,
     plain:true,
     closeAction:'hide',    
     buttonAlign:'center',

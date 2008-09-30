@@ -108,6 +108,7 @@ Ext.extend(GO.summary.MainPanel, GO.summary.Portal, {
 	activePortlets : Array(),
 	availablePortlets : Array(),
 	
+	
 	showAvailablePortlets : function(){
 		
 		var data = {portlets: this.availablePortlets};
