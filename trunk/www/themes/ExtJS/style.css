@@ -1,5 +1,9 @@
+#mainNorthPanel{
+	font:bold 12px tahoma,arial,helvetica;
+}
+
 .go_logo{
-	padding:0px;	
+	padding:2px;	
 }
 
 .go-top-panel .x-panel-body{
