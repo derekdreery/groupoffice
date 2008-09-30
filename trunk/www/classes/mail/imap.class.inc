@@ -562,6 +562,8 @@ class imap {
 				/*} else {
 					$structure = imap_bodystruct($this->conn, $this->message['number'], $part);
 				}*/
+				
+				//debug(var_export($structure, true));
 	
 				$this->mail["parts"] = array ();
 				$this->get_parts($structure);
@@ -708,8 +710,7 @@ class imap {
 						//$nsection=0;
 						}*/
 					$nsection = $x +1;
-				} else
-				if (
+				} elseif (
 							($pos = strrpos($section, ".")) && 
 							($mimeobj->parts[0]->type != TYPEMULTIPART || $mimeobj->parts[0]->subtype != 'RELATED')						
 						) {
@@ -1026,26 +1027,15 @@ class imap {
 		}elseif ($transfer == 'QUOTED-PRINTABLE')
 		{
 			$str = quoted_printable_decode($str);
-
-			/*
-			 * work around for some characters.
-			 * They seem only to occur when transfer-encoding is quoted-printable.
-			 *
-			 * $pos = strpos($str,'20.000')-2;
-			 * 	echo $str[$pos].' = '.ord($str[$pos]);
-			 	
-			 $str = str_replace(chr(128), "&euro;", $str);
-			 $str = str_replace(chr(133), ".", $str);
-			 $str = str_replace(chr(146), "'", $str);
-			 $str = str_replace(chr(147), '"', $str);
-			 $str = str_replace(chr(148), '"', $str);		 */
 		}
-		if (function_exists('iconv') && $part_charset != '' && $part_charset != $charset) {
-
-			if(strtolower($part_charset)=='us-ascii')
-			{
-				$part_charset='ISO-8859-1';
-			}
+		
+		//PHP sets us-ascii when the charset is unknown. Try to detect it.
+		if(strtolower($part_charset)=='us-ascii')
+		{
+			$part_charset = mb_detect_encoding($str, "ASCII,JIS,UTF-8,ISO-8859-1,EUC-JP,SJIS");
+		}
+	
+		if ($part_charset != '' && $part_charset != $charset) {
 			if($converted = @iconv($part_charset, $charset.'//IGNORE', $str))
 			{
 				return str_replace($part_charset, $charset, $converted);
