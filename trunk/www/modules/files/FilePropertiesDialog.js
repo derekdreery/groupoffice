@@ -20,37 +20,42 @@ GO.files.FilePropertiesDialog = function(config){
             fieldLabel: GO.lang['strName'],
             name: 'name',
             anchor: '100%'
-        },new GO.form.PlainField({
-        	type: 'plainfield',
+        },{
+        	xtype: 'plainfield',
         	fieldLabel: 'Path',
-        	id: 'path'
-        }),
+        	name: 'path'
+        },
         new GO.form.HtmlComponent({
         	html:'<hr />'        	
         }),
-        new GO.form.PlainField({
+        {
+        	xtype: 'plainfield',
         	fieldLabel: GO.lang.strCtime,
-        	id: 'ctime'
-        }),
-        new GO.form.PlainField({
+        	name: 'ctime'
+        },
+        {
+        	xtype: 'plainfield',
         	fieldLabel: GO.lang.strMtime,
-        	id: 'mtime'
-        }),
-        new GO.form.PlainField({
+        	name: 'mtime'
+        },
+        {
+        	xtype: 'plainfield',
         	fieldLabel: GO.lang.Atime,
-        	id: 'atime'
-        }),
+        	name: 'atime'
+        },
         new GO.form.HtmlComponent({
         	html:'<hr />'        	
         }),
-        new GO.form.PlainField({
+        {
+        	xtype: 'plainfield',
         	fieldLabel: GO.lang.strType,
-        	id: 'type'
-        }),
-        new GO.form.PlainField({
+        	name: 'type'
+        },
+        {
+        	xtype: 'plainfield',
         	fieldLabel: GO.lang.strSize,
-        	id: 'size'
-        })
+        	name: 'size'
+        }
     ]
 	});
 	

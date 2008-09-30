@@ -3,3 +3,5 @@ GO.form.HtmlComponent = Ext.extend(Ext.BoxComponent, {
           this.el = ct.createChild({tag: 'div', html: this.html, cls: this.cls});
      }
 });
+
+Ext.reg('htmlcomponent', GO.form.HtmlComponent);
