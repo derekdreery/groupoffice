@@ -265,6 +265,11 @@ if(!$GO_CONFIG->debug)
 		}
 	}
 }
+?>
+<script type="text/javascript">
+Ext.state.Manager.setProvider(new GO.state.HttpProvider({url: BaseHref+'state.php'}));
+</script>
+<?php
 
 if(file_exists($GO_THEME->theme_path.'MainLayout.js'))
 {
