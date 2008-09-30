@@ -15,10 +15,10 @@
 require('../../www/Group-Office.php');
 
 //name of the module. No spaces or strange characters.
-$module = 'summary';
+$module = 'test';
 
 //Short name of the module. The prefix of the database tables.
-$prefix = 'su';
+$prefix = 'te';
 
 $tables=array();
 //Tables to create an interface for
@@ -34,9 +34,10 @@ $tables=array();
 
 $folders = array(
 	'template'=>'GridPanel.tpl',
-	'name'=>'us_licenses', 
+	'name'=>'su_announcements', 
 	'friendly_single'=>'announcement', 
 	'friendly_multiple'=>'announcements',
+	'mainpanel_tag'=>'MAINGRID',
 	'paging'=>true,
 	'autoload'=>true,
 	'authenticate'=>false);
@@ -45,7 +46,7 @@ $tables[] = $folders;
 
 
 /* end config */
-$main_template='MainPanel.tpl';
+$main_template='SimleMainPanel.tpl';
 
 
 $module_dir=$GO_CONFIG->root_path.'modules/'.$module.'/';
