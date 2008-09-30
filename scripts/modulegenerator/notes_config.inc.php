@@ -17,16 +17,16 @@ $tables=array();
  */
 
 $westpanel = array(
-	'mainpanel_tag'=> 'WESTPANEL',
-	'template'=>'GridPanel.tpl',
-	'name'=>'no_categories', 
-	'friendly_single'=>'category', 
-	'friendly_multiple'=>'categories',
-	'authenticate'=>true,
-	'paging'=>false,
-	'autoload'=>true,
-	'files'=>false,
-	'select_fields'=>array());
+	'mainpanel_tag'=> 'WESTPANEL', //{WESTPANEL} will be replaced in the MainPanel template defined below.
+	'template'=>'GridPanel.tpl', //The template to use for the grid. This is the only option at the moment
+	'name'=>'no_categories',  //Name of the table
+	'friendly_single'=>'category', //Name for a single item in this table. Must be lower case and alphanummeric
+	'friendly_multiple'=>'categories',//Name for a multiple items in this table. Must be lower case and alphanummeric
+	'authenticate'=>true,//Secure these items with authentication? If true then acl_read and acl_write columns must be defined in the table
+	'paging'=>false, //Use pagination in the grid?
+	'autoload'=>true, //Automatically load this table with data after rendering?
+	'files'=>false //Can files be uploaded to these items?
+	); 
 
 $tables[] = $westpanel;
 
@@ -39,7 +39,7 @@ $tables[] = array(
 		'centerpanel_friendly_single_ucfirst'=>'Note',
 		'centerpanel_friendly_single'=>'note',
 		'EASTPANEL'=>'GO.notes.NotePanel'
-		),
+		), //Custom tags for the mainpanel template that will be replaced
 	'template'=>'GridPanel.tpl',
 	'name'=>'no_notes', 
 	'friendly_single'=>'note', 
@@ -47,10 +47,10 @@ $tables[] = array(
 	'paging'=>true,
 	'autoload'=>false,
 	'authenticate'=>false,
-	'authenticate_relation'=>true,
+	'authenticate_relation'=>true, //Authenticate a related table. In this example the notes categories.
 	'files'=>true,
-	'link_type'=>4,
-	'relation'=>array('field'=>'category_id', 'remote_field'=>'id', 'remote_table'=>$westpanel));
+	'link_type'=>4, //If a link type is specified then this item will be linkable to other items. Choose a free identifier above 100!
+	'relation'=>array('field'=>'category_id', 'remote_field'=>'id', 'remote_table'=>$westpanel)); //Define a relation between the tables
 		
-$main_template='MainPanel.tpl';
+$main_template='MainPanel.tpl'; //The template for MainPanel.js
 ?>

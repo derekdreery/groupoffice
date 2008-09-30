@@ -17,40 +17,17 @@ $tables=array();
  */
 
 $westpanel = array(
-	'mainpanel_tag'=> 'WESTPANEL',
+	'mainpanel_tag'=> 'GRID',
 	'template'=>'GridPanel.tpl',
-	'name'=>'no_categories', 
-	'friendly_single'=>'category', 
-	'friendly_multiple'=>'categories',
-	'authenticate'=>true,
-	'paging'=>false,
+	'name'=>'su_announcements', 
+	'friendly_single'=>'announcement', 
+	'friendly_multiple'=>'announcements',
+	'authenticate'=>false,
+	'paging'=>true,
 	'autoload'=>true,
-	'files'=>false,
-	'select_fields'=>array());
+	'files'=>false);
 
 $tables[] = $westpanel;
 
-$tables[] = array(
-	'mainpanel_tag'=> 'CENTERPANEL',
-	'mainpanel_tags'=>array(
-		'centerpanel_related_field'=>'category_id',
-		'centerpanel_related_friendly_multiple_ucfirst'=>'Categories',
-		'centerpanel_related_friendly_multiple'=>'categories',
-		'centerpanel_friendly_single_ucfirst'=>'Note',
-		'centerpanel_friendly_single'=>'note',
-		'EASTPANEL'=>'GO.notes.NotePanel'
-		),
-	'template'=>'GridPanel.tpl',
-	'name'=>'no_notes', 
-	'friendly_single'=>'note', 
-	'friendly_multiple'=>'notes',
-	'paging'=>true,
-	'autoload'=>false,
-	'authenticate'=>false,
-	'authenticate_relation'=>true,
-	'files'=>true,
-	'link_type'=>4,
-	'relation'=>array('field'=>'category_id', 'remote_field'=>'id', 'remote_table'=>$westpanel));
-		
-$main_template='MainPanel.tpl';
+$main_template='SimpleMainPanel.tpl';
 ?>
