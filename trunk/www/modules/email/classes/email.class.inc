@@ -40,7 +40,10 @@ function connect($account_id, $mailbox='INBOX', $halt_on_error=true)
 		exit();
 	}
 	
-	define('IMAP_CONNECTED', true);
+	if(!defined('IMAP_CONNECTED'))
+	{
+		define('IMAP_CONNECTED', true);
+	}
 
 	return $account;
 
