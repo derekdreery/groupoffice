@@ -205,7 +205,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	    			iconCls:'btn-help',
 	    			text:GO.lang.strHelpContents,
 	    			handler:function(){
-	    				window.open('http://www.group-office.com/wiki/Manual');
+	    				window.open('http://www.group-office.com/wiki/');
 	    			},
 	    			scope:this
 	    			
