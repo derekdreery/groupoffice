@@ -1,4 +1,5 @@
 <?php
+require('../../www/Group-Office.php');
 //name of the module. No spaces or strange characters.
 $module = 'notes2';
 
