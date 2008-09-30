@@ -17,7 +17,7 @@ require('../../Group-Office.php');
 
 $GO_SECURITY->json_authenticate('email');
 
-ini_set('display_errors','off');
+//ini_set('display_errors','off');
 
 require_once ($GO_CONFIG->class_path."mail/imap.class.inc");
 require_once ($GO_MODULES->modules['email']['class_path']."email.class.inc");
@@ -1236,7 +1236,7 @@ try{
 
 														}
 													}
-													$imap->close();
+													//$imap->close();
 												}
 											}
 
@@ -1281,4 +1281,10 @@ try{
 	$response['feedback']=$e->getMessage();
 	$response['success']=false;
 }
+
+if(defined('IMAP_CONNECTED'))
+{
+	$imap->close();
+}
+
 echo json_encode($response);

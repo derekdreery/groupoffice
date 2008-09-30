@@ -22,7 +22,7 @@ require_once ($GO_LANGUAGE->get_language_file('email'));
 $imap = new imap();
 $email = new email();
 
-ini_set('display_errors','off');
+//ini_set('display_errors','off');
 
 
 function add_unknown_recipient($email, $name)
@@ -427,7 +427,7 @@ try{
 							$response['success']=true;
 						}
 					}
-					$imap->close();
+					//$imap->close();
 
 					if(!$response['success'])
 					{
@@ -444,7 +444,7 @@ try{
 					{
 						$response['success']=$email->subscribe($account['id'], addslashes($mailbox));
 					}
-					$imap->close();
+					//$imap->close();
 
 					if(!$response['success'])
 					{
@@ -460,7 +460,7 @@ try{
 					{
 						$response['success']=$email->unsubscribe($account['id'], addslashes($mailbox));
 					}
-					$imap->close();
+					//$imap->close();
 
 					if(!$response['success'])
 					{
@@ -502,7 +502,7 @@ try{
 							}
 						}
 					}
-					$imap->close();
+					//$imap->close();
 					break;
 
 				case 'delete_folder':
@@ -519,7 +519,7 @@ try{
 						}else {
 							$response['feedback']=$ml_delete_folder_error;
 						}
-						$imap->close();
+						//$imap->close();
 					}else {
 						$response['feedback']=$strDataError;
 					}
@@ -549,7 +549,7 @@ try{
 						}else {
 							$response['feedback']=$strSaveError;
 						}
-						$imap->close();
+						//$imap->close();
 					}else {
 						$response['feedback']=$strDataError;
 					}
@@ -701,5 +701,9 @@ try{
 {
 	$response['feedback']=$e->getMessage();
 	$response['success']=false;
+}
+if(defined('IMAP_CONNECTED'))
+{
+	$imap->close();
 }
 echo json_encode($response);
