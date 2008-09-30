@@ -644,9 +644,18 @@ try{
 				$parts = array_reverse($imap->f("parts"));
 
 
-				//go_log(LOG_DEBUG, var_export($parts, true));
-
-
+				/*
+				 * Sometimes clients send multipart/alternative but there's only a text part. FIrst check if there's
+				 * a html alternative to display
+				 */
+				$html_alternative=false;
+				for($i=0;$i<count($parts);$i++)
+				{
+					if(strtolower($parts[$i]['mime'])=='text/html' && strtolower($parts[$i]['type'])=='alternative')
+					{
+						$html_alternative=true;
+					} 
+				}
 
 
 				$response['body']='';
@@ -671,8 +680,7 @@ try{
 					//go_log(LOG_DEBUG, $part['name'].' -> '.$mime);
 
 					if (empty($response['body']) && ($part["name"] == '' || eregi('inline', $part["disposition"]))  && ($mime == "text/html" ||
-					(
-					$mime == "text/plain" && strtolower($part['type'])!='alternative') ||
+					($mime == "text/plain" && (!$html_alternative || strtolower($part['type'])!='alternative')) ||
 					$mime == "text/enriched" ||
 					$mime == "unknown/unknown"))
 					{
