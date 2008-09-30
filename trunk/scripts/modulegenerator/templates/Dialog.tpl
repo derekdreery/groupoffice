@@ -28,6 +28,7 @@ GO.{module}.{friendly_single_ucfirst}Dialog = function(config){
 	};
 	
 	
+	config.collapsible=true;
 	config.maximizable=true;
 	config.layout='fit';
 	config.modal=false;

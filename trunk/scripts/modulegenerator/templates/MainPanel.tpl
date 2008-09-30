@@ -60,7 +60,7 @@ GO.{module}.MainPanel = function(config){
 	this.eastPanel = new {EASTPANEL}({
 		region:'east',
 		width:300,
-		title:GO.{module}.lang.{friendly_single_js},
+		title:GO.{module}.lang.{centerpanel_friendly_single},
 		border:true
 	});
 
@@ -107,7 +107,7 @@ GO.mainLayout.onReady(function(){
  
 GO.moduleManager.addModule('{module}', GO.{module}.MainPanel, {
 	title : GO.{module}.lang.{module},
-	iconCls : 'go-module-icon-{module}'
+	iconCls : 'go-tab-icon-{module}'
 });
 /*
  * If your module has a linkable item, you should add a link handler like this. 
