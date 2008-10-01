@@ -39,17 +39,13 @@ try{
 			$response['success']=true;
 			
 			break;
-					case 'save_announcement':		
+		case 'save_announcement':		
 			$announcement_id=$announcement['id']=isset($_POST['announcement_id']) ? smart_addslashes($_POST['announcement_id']) : 0;
-						if(isset($_POST['user_id']))
+			if(isset($_POST['user_id']))
 				$announcement['user_id']=smart_addslashes(trim($_POST['user_id']));
-			$announcement['host']=smart_addslashes(trim($_POST['host']));
-			$announcement['ip']=smart_addslashes(trim($_POST['ip']));
-			$announcement['link_id']=smart_addslashes(trim($_POST['link_id']));
-			$announcement['name']=smart_addslashes(trim($_POST['name']));
-			$announcement['expires']=smart_addslashes(trim($_POST['expires']));
-			$announcement['upgrades']=smart_addslashes(trim($_POST['upgrades']));
-			$announcement['notified']=smart_addslashes(trim($_POST['notified']));
+			$announcement['due_time']=smart_addslashes(trim($_POST['due_time']));
+			$announcement['title']=smart_addslashes(trim($_POST['title']));
+			$announcement['content']=smart_addslashes(trim($_POST['content']));
 			if($announcement['id']>0)
 			{
 				$summary->update_announcement($announcement);

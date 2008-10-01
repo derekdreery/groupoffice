@@ -19,6 +19,7 @@ GO.summary.AnnouncementDialog = function(config){
 	var focusFirstField = function(){
 		this.propertiesPanel.items.items[0].focus();
 	};
+	config.collapsible=true;
 	config.maximizable=true;
 	config.layout='fit';
 	config.modal=false;
@@ -135,52 +136,21 @@ Ext.extend(GO.summary.AnnouncementDialog, Ext.Window,{
 			})
 ,{
 				xtype: 'textfield',
-			  name: 'host',
+			  name: 'due_time',
 				anchor: '-20',
-			  allowBlank:false,
-			  fieldLabel: GO.summary.lang.host
+			  fieldLabel: GO.summary.lang.dueTime
 			}
 ,{
 				xtype: 'textfield',
-			  name: 'ip',
+			  name: 'title',
 				anchor: '-20',
-			  allowBlank:false,
-			  fieldLabel: GO.summary.lang.ip
+			  fieldLabel: GO.summary.lang.title
 			}
 ,{
-				xtype: 'textfield',
-			  name: 'link_id',
+				xtype: 'textarea',
+			  name: 'content',
 				anchor: '-20',
-			  allowBlank:false,
-			  fieldLabel: GO.summary.lang.linkId
-			}
-,{
-				xtype: 'textfield',
-			  name: 'name',
-				anchor: '-20',
-			  allowBlank:false,
-			  fieldLabel: GO.lang.strName
-			}
-,{
-				xtype: 'textfield',
-			  name: 'expires',
-				anchor: '-20',
-			  allowBlank:false,
-			  fieldLabel: GO.summary.lang.expires
-			}
-,{
-				xtype: 'textfield',
-			  name: 'upgrades',
-				anchor: '-20',
-			  allowBlank:false,
-			  fieldLabel: GO.summary.lang.upgrades
-			}
-,{
-				xtype: 'textfield',
-			  name: 'notified',
-				anchor: '-20',
-			  allowBlank:false,
-			  fieldLabel: GO.summary.lang.notified
+			  fieldLabel: GO.summary.lang.content
 			}
 ]
 		});

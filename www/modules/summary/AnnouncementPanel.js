@@ -43,21 +43,9 @@ Ext.extend(GO.summary.AnnouncementPanel, Ext.Panel,{
 						'</tr>'+
 					'</tpl>'+
 
-					'<tpl if="host.length">'+
+					'<tpl if="due_time.length">'+
 						'<tr>'+
-							'<td>'+GO.summary.lang.host+':</td><td>{host}</td>'+
-						'</tr>'+
-					'</tpl>'+
-
-					'<tpl if="ip.length">'+
-						'<tr>'+
-							'<td>'+GO.summary.lang.ip+':</td><td>{ip}</td>'+
-						'</tr>'+
-					'</tpl>'+
-
-					'<tpl if="link_id.length">'+
-						'<tr>'+
-							'<td>'+GO.summary.lang.linkId+':</td><td>{link_id}</td>'+
+							'<td>'+GO.summary.lang.dueTime+':</td><td>{due_time}</td>'+
 						'</tr>'+
 					'</tpl>'+
 
@@ -73,27 +61,15 @@ Ext.extend(GO.summary.AnnouncementPanel, Ext.Panel,{
 						'</tr>'+
 					'</tpl>'+
 
-					'<tpl if="name.length">'+
+					'<tpl if="title.length">'+
 						'<tr>'+
-							'<td>'+GO.lang.strName+':</td><td>{name}</td>'+
+							'<td>'+GO.summary.lang.title+':</td><td>{title}</td>'+
 						'</tr>'+
 					'</tpl>'+
 
-					'<tpl if="expires.length">'+
+					'<tpl if="content.length">'+
 						'<tr>'+
-							'<td>'+GO.summary.lang.expires+':</td><td>{expires}</td>'+
-						'</tr>'+
-					'</tpl>'+
-
-					'<tpl if="upgrades.length">'+
-						'<tr>'+
-							'<td>'+GO.summary.lang.upgrades+':</td><td>{upgrades}</td>'+
-						'</tr>'+
-					'</tpl>'+
-
-					'<tpl if="notified.length">'+
-						'<tr>'+
-							'<td>'+GO.summary.lang.notified+':</td><td>{notified}</td>'+
+							'<td>'+GO.summary.lang.content+':</td><td>{content}</td>'+
 						'</tr>'+
 					'</tpl>'+
 

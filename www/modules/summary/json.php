@@ -31,7 +31,8 @@ try{
 			$response['data']['url'] = $summary->get_feed($GO_SECURITY->user_id);
 			$response['success']=true;
 			break;
-					case 'announcement':
+
+		case 'announcement':
 			$announcement = $summary->get_announcement(smart_addslashes($_REQUEST['announcement_id']));
 			$user = $GO_USERS->get_user($announcement['user_id']);
 			$announcement['user_name']=String::format_name($user);

@@ -3,6 +3,11 @@ modules/summary/AnnouncementPanel.js
 modules/summary/AnnouncementDialog.js
 
 modules/summary/AnnouncementsGrid.js
+
+modules/summary/AnnouncementPanel.js
+modules/summary/AnnouncementDialog.js
+
+modules/summary/AnnouncementsGrid.js
 modules/summary/PortalColumn.js
 modules/summary/PortalColumn.js
 modules/summary/Portlet.js

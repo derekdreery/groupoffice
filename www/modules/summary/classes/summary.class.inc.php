@@ -81,8 +81,7 @@ class summary extends db{
 	{
 		return $this->update_row('su_rss_feeds','user_id', $feed);
 	}
-	
-		/**
+	/**
 	 * Add a Announcement
 	 *
 	 * @param Array $announcement Associative array of record fields
