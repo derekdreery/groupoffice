@@ -1,3 +1,11 @@
+4.0.029 (2008-09-27)
+	- Infinite loop bug was fixed [Bug item #130309].
+	- Multicell() problem on Header() was fixed.
+	
+4.0.028 (2008-09-26)
+	- setLIsymbol() was added to set the LI symbol used on UL lists.
+	- Missing $padding and $encryption_key variables declarations were added [Bug item #2129058].
+	
 4.0.027 (2008-09-19)
 	- Bug #2118588 "Undefined offset in tcpdf.php on line 9581" was fixed.
 	- arailunicid0.php font was updated.
