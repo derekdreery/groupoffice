@@ -1,6 +1,6 @@
 <?php
 /*
- * First fun RENAME TABLE `modules`  TO `go_modules` ;
+ * First run RENAME TABLE `modules`  TO `go_modules` ;
  *
  *
  *
@@ -106,8 +106,12 @@ $db3->Halt_On_Error = 'report';
 echo 'Framework updates<br />';
 flush();
 
+$sql = "SELECT * FROM go_modules";
+if(!$db->query($sql))
+	die('<br /><b>Error: </b> You must first run RENAME TABLE `modules`  TO `go_modules` ;');
+	
 
-$db->query("UPDATE go_modules SET id='files' WHERE id='filesystem'");
+$db2->query("UPDATE go_modules SET id='files' WHERE id='filesystem'");
 
 $sql = "SELECT * FROM go_modules";
 $db->query($sql);
@@ -117,6 +121,8 @@ while($db->next_record())
 	{
 		$module_ids[]=$db->f('id');
 		$modules[$db->f('id')]=$db->Record;
+		
+		echo $db->f('id').'<br />';
 	}
 }
 

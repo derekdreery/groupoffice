@@ -1038,7 +1038,13 @@ class imap {
 		//PHP sets us-ascii when the charset is unknown. Try to detect it.
 		if(strtolower($part_charset)=='us-ascii')
 		{
-			$part_charset = mb_detect_encoding($str, "ASCII,JIS,UTF-8,ISO-8859-1,EUC-JP,SJIS");
+			if(function_exists('mb_detect_encoding'))
+			{
+				$part_charset = mb_detect_encoding($str, "ASCII,JIS,UTF-8,ISO-8859-1,EUC-JP,SJIS");
+			}else
+			{
+				$part_charset = 'ISO-8859-1';
+			}
 		}
 
 		if ($part_charset != '' && $part_charset != $charset) {

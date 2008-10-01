@@ -69,6 +69,7 @@ try{
 				$announcement = $summary->Record;
 				$user = $GO_USERS->get_user($announcement['user_id']);
 				$announcement['user_name']=String::format_name($user);
+				$announcement['due_time']=!empty($announcement['due_time']) ? Date::get_timestamp($announcement['due_time']) : '-';
 				$announcement['mtime']=Date::get_timestamp($announcement['mtime']);
 				$announcement['ctime']=Date::get_timestamp($announcement['ctime']);
 				$response['results'][] = $announcement;

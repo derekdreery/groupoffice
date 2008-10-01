@@ -16,7 +16,7 @@ $GO_SECURITY->json_authenticate('summary');
 
 require_once ($GO_MODULES->modules['summary']['class_path']."summary.class.inc.php");
 //require_once ($GO_LANGUAGE->get_language_file('calendar'));
-$sum = new summary();
+$summary = new summary();
 
 try{
 
@@ -26,7 +26,7 @@ try{
 			
 			$note['user_id']=$GO_SECURITY->user_id;
 			$note['text']=smart_addslashes($_POST['text']);
-			$sum->update_note($note);
+			$summary->update_note($note);
 			
 			$response['success']=true;
 			
@@ -35,15 +35,14 @@ try{
 		case 'save_rss_url':			
 			$feed['user_id']=$GO_SECURITY->user_id;
 			$feed['url']=smart_addslashes($_POST['url']);
-			$sum->update_feed($feed);			
+			$summary->update_feed($feed);			
 			$response['success']=true;
 			
 			break;
 		case 'save_announcement':		
 			$announcement_id=$announcement['id']=isset($_POST['announcement_id']) ? smart_addslashes($_POST['announcement_id']) : 0;
-			if(isset($_POST['user_id']))
-				$announcement['user_id']=smart_addslashes(trim($_POST['user_id']));
-			$announcement['due_time']=smart_addslashes(trim($_POST['due_time']));
+			
+			$announcement['due_time']=Date::to_unixtime(trim($_POST['due_time']));
 			$announcement['title']=smart_addslashes(trim($_POST['title']));
 			$announcement['content']=smart_addslashes(trim($_POST['content']));
 			if($announcement['id']>0)

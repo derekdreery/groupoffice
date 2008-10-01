@@ -48,6 +48,10 @@ function __autoload($class_name) {
 
 function utf8_basename($path)
 {
+	if(!function_exists('mb_substr'))
+	{
+		return basename($path);
+	}
 	$path = trim($path);
 	if(substr($path,-1,1)=='/')
 	{

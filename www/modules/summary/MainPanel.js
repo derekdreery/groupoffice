@@ -24,7 +24,7 @@
  	
  	if(!this.activePortletsIds)
  	{
- 		this.activePortletsIds=['portlet-rss-reader', 'portlet-tasks', 'portlet-calendar','portlet-note'];
+ 		this.activePortletsIds=['portlet-announcements', 'portlet-tasks', 'portlet-calendar','portlet-note'];
  	}
  	
  		
@@ -86,7 +86,7 @@
   }
   
 
-  /*
+
   this.tbar=[{
   	text: GO.lang['cmdAdd'],
   	iconCls:'btn-add',
@@ -102,7 +102,7 @@
   			this.manageAnnouncementsWindow = new Ext.Window({
   				layout:'fit',
   				items:this.announcementsGrid =  new GO.summary.AnnouncementsGrid(),
-  				width:500,
+  				width:700,
   				height:400,
   				title:GO.summary.lang.announcements,
   				closeAction:'hide',
@@ -121,14 +121,20 @@
 						scope:this
 					}
   			});
+  			
+  			this.announcementsGrid.store.on('load',function(){
+  				this.announcementsGrid.store.on('load',function(){
+  					GO.summary.announcementsPanel.store.load();		
+  				}, this);
+  			}, this);
+  			
   		}
   		
   		this.manageAnnouncementsWindow.show();
   	},
   	scope: this
   }]; 
-  
-  */
+
 
   
 	GO.summary.MainPanel.superclass.constructor.call(this,config);

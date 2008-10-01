@@ -595,7 +595,7 @@ class GO_CONFIG
 	 * @access  public
 	 */
 	
-	var $mtime = '20081001';
+	var $mtime = '20081001-2';
 	
 	/* The permissions mode to use when creating files and folders
 	 *
@@ -949,7 +949,7 @@ class GO_CONFIG
       {
       	global $GO_SECURITY, $GO_MODULES, $GO_THEME, $GO_LANGUAGE;
 
-      	$response['state_index'] = utf8_basename(dirname($_SERVER['PHP_SELF']));
+      	$response['state_index'] = 'go';
 
 
       	$response['state']=array();

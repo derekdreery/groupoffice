@@ -138,9 +138,8 @@ GO.mainLayout.onReady(function(){
 		
 	
 	
-	var announcementPanel = new GO.summary.AnnouncementsGrid();
-	
-	
+	GO.summary.announcementsPanel = new GO.summary.AnnouncementsViewGrid();
+
 	
 	GO.summary.portlets['portlet-announcements']=new GO.summary.Portlet({
 		id: 'portlet-announcement',
@@ -152,8 +151,8 @@ GO.mainLayout.onReady(function(){
 	            panel.ownerCt.remove(panel, true);
 	        }
 	    }],*/
-		items: announcementPanel,
-		height:300
+		items: GO.summary.announcementsPanel,
+		autoHeight:true
 	});
 
 });

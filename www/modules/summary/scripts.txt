@@ -1,14 +1,7 @@
-
 modules/summary/AnnouncementPanel.js
 modules/summary/AnnouncementDialog.js
-
 modules/summary/AnnouncementsGrid.js
-
-modules/summary/AnnouncementPanel.js
-modules/summary/AnnouncementDialog.js
-
-modules/summary/AnnouncementsGrid.js
-modules/summary/PortalColumn.js
+modules/summary/AnnouncementsViewGrid.js
 modules/summary/PortalColumn.js
 modules/summary/Portlet.js
 modules/summary/Portal.js

@@ -17,7 +17,7 @@ GO.summary.AnnouncementDialog = function(config){
 	}
 	this.buildForm();
 	var focusFirstField = function(){
-		this.propertiesPanel.items.items[0].focus();
+		this.formPanel.items.items[0].focus();
 	};
 	config.collapsible=true;
 	config.maximizable=true;
@@ -59,7 +59,7 @@ Ext.extend(GO.summary.AnnouncementDialog, Ext.Window,{
 		{
 			this.render(Ext.getBody());
 		}
-		this.tabPanel.setActiveTab(0);
+
 		if(!announcement_id)
 		{
 			announcement_id=0;			
@@ -72,7 +72,6 @@ Ext.extend(GO.summary.AnnouncementDialog, Ext.Window,{
 				waitMsg:GO.lang['waitMsgLoad'],
 				success:function(form, action)
 				{
-					this.selectUser.setRemoteText(action.result.data.user_name);
 					GO.summary.AnnouncementDialog.superclass.show.call(this);
 				},
 				failure:function(form, action)
@@ -123,51 +122,29 @@ Ext.extend(GO.summary.AnnouncementDialog, Ext.Window,{
 		});
 	},
 	buildForm : function () {
-		this.propertiesPanel = new Ext.Panel({
-			title:GO.lang['strProperties'],			
-			cls:'go-form-panel',			
-			layout:'form',
-			autoScroll:true,
-			items:[this.selectUser = new GO.form.SelectUser({
-				fieldLabel: GO.lang['strUser'],
-				disabled: !GO.settings.modules['summary']['write_permission'],
-				value: GO.settings.user_id,
-				anchor: '-20'
-			})
-,{
-				xtype: 'textfield',
-			  name: 'due_time',
-				anchor: '-20',
-			  fieldLabel: GO.summary.lang.dueTime
-			}
-,{
-				xtype: 'textfield',
-			  name: 'title',
-				anchor: '-20',
-			  fieldLabel: GO.summary.lang.title
-			}
-,{
-				xtype: 'textarea',
-			  name: 'content',
-				anchor: '-20',
-			  fieldLabel: GO.summary.lang.content
-			}
-]
-		});
-		var items  = [this.propertiesPanel];
-    this.tabPanel = new Ext.TabPanel({
-      activeTab: 0,      
-      deferredRender: false,
-    	border: false,
-      items: items,
-      anchor: '100% 100%'
-    }) ;    
     this.formPanel = new Ext.form.FormPanel({
 	    waitMsgTarget:true,
 			url: GO.settings.modules.summary.url+'action.php',
 			border: false,
 			baseParams: {task: 'announcement'},				
-			items:this.tabPanel				
+			cls:'go-form-panel',			
+			items:[{
+				xtype: 'datefield',
+			  name: 'due_time',
+				anchor: '-20',
+				format: GO.settings.date_format,
+			  fieldLabel: GO.summary.lang.dueTime
+			},{
+				xtype: 'textfield',
+			  name: 'title',
+				anchor: '-20',
+			  fieldLabel: GO.summary.lang.title
+			},{
+				xtype: 'htmleditor',
+			  name: 'content',
+				anchor: '-20 -60',
+			  hideLabel:true
+			}]		
 		});
 	}
 });

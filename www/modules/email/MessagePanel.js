@@ -171,6 +171,13 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		
 		e.preventDefault();
 		
+		if(target.tagName!='A')
+		{
+			target = Ext.get(target).findParent('A', 10);
+			if(!target)
+				return false;
+		}
+		
 		if(target.tagName=='A')
 		{
 			var href=target.attributes['href'].value;
