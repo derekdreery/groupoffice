@@ -86,15 +86,49 @@
   }
   
 
-  
-  /*this.tbar=[{
+  /*
+  this.tbar=[{
   	text: GO.lang['cmdAdd'],
   	iconCls:'btn-add',
   	handler: this.showAvailablePortlets,
   	scope: this
-  }];*/ 
+  },{
+  	text: 'Manage announcements',
+  	iconCls:'btn-add',
+  	handler: function(){
+  		if(!this.manageAnnouncementsWindow)
+  		{
+  			
+  			this.manageAnnouncementsWindow = new Ext.Window({
+  				layout:'fit',
+  				items:this.announcementsGrid =  new GO.summary.AnnouncementsGrid(),
+  				width:500,
+  				height:400,
+  				title:GO.summary.lang.announcements,
+  				closeAction:'hide',
+  				buttons:[{
+						text: GO.lang.cmdClose,
+						handler: function(){this.manageAnnouncementsWindow.hide();},
+						scope:this
+					}],
+					listeners:{
+						show: function(){
+							if(!this.announcementsGrid.store.loaded)
+							{
+								this.announcementsGrid.store.load();
+							}							
+						},
+						scope:this
+					}
+  			});
+  		}
+  		
+  		this.manageAnnouncementsWindow.show();
+  	},
+  	scope: this
+  }]; 
   
-  
+  */
 
   
 	GO.summary.MainPanel.superclass.constructor.call(this,config);

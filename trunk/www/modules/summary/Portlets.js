@@ -138,16 +138,12 @@ GO.mainLayout.onReady(function(){
 		
 	
 	
-	var announcementPanel = new GO.summary.AnnouncementsGrid(
-	{
-				waitMsgTarget: true
-	});
+	var announcementPanel = new GO.summary.AnnouncementsGrid();
 	
 	
 	
 	GO.summary.portlets['portlet-announcements']=new GO.summary.Portlet({
 		id: 'portlet-announcement',
-		//iconCls: 'announcement-icon',
 	 	title: GO.summary.lang.announcements,
 		layout:'fit',
 		/*tools: [{

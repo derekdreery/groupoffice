@@ -21,3 +21,10 @@ GO.summary.lang.linkId="Link id";
 GO.summary.lang.expires="Expires";
 GO.summary.lang.upgrades="Upgrades";
 GO.summary.lang.notified="Notified";
+
+/* table: su_announcements */
+GO.summary.lang.announcement="Announcement";
+GO.summary.lang.announcements="Announcements";
+GO.summary.lang.dueTime="Due time";
+GO.summary.lang.title="Title";
+GO.summary.lang.content="Content";

@@ -2,7 +2,7 @@
 require('../../www/Group-Office.php');
 
 //name of the module. No spaces or strange characters.
-$module = 'notes2';
+$module = 'summary';
 
 //Short name of the module. The prefix of the database tables.
 $prefix = 'su';

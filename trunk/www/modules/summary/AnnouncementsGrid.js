@@ -15,7 +15,7 @@ GO.summary.AnnouncementsGrid = function(config){
 	{
 		config = {};
 	}
-	config.title = GO.summary.lang.announcements;
+	config.border=false;
 	config.layout='fit';
 	config.autoScroll=true;
 	config.split=true;
@@ -27,7 +27,7 @@ GO.summary.AnnouncementsGrid = function(config){
 	    root: 'results',
 	    id: 'id',
 	    totalProperty:'total',
-	    fields: ['id','user_name','host','ip','link_id','ctime','mtime','name','expires','upgrades','notified'],
+	    fields: ['id','user_name','due_time','ctime','mtime','title'],
 	    remoteSort: true
 	});
 	config.paging=true;
@@ -36,42 +36,18 @@ GO.summary.AnnouncementsGrid = function(config){
 			header: GO.lang.strOwner, 
 			dataIndex: 'user_name',
 		  sortable: false
-		}
-,		{
-			header: GO.summary.lang.host, 
-			dataIndex: 'host'
-		}
-,		{
-			header: GO.summary.lang.ip, 
-			dataIndex: 'ip'
-		}
-,		{
-			header: GO.summary.lang.linkId, 
-			dataIndex: 'link_id'
-		}
-,		{
+		},		{
+			header: GO.summary.lang.title, 
+			dataIndex: 'title'
+		},		{
+			header: GO.summary.lang.dueTime, 
+			dataIndex: 'due_time'
+		},{
 			header: GO.lang.strCtime, 
 			dataIndex: 'ctime'
-		}
-,		{
+		},{
 			header: GO.lang.strMtime, 
 			dataIndex: 'mtime'
-		}
-,		{
-			header: GO.lang.strName, 
-			dataIndex: 'name'
-		}
-,		{
-			header: GO.summary.lang.expires, 
-			dataIndex: 'expires'
-		}
-,		{
-			header: GO.summary.lang.upgrades, 
-			dataIndex: 'upgrades'
-		}
-,		{
-			header: GO.summary.lang.notified, 
-			dataIndex: 'notified'
 		}
 
 	]);
@@ -112,20 +88,6 @@ GO.summary.AnnouncementsGrid = function(config){
 		}, this);
 };
 Ext.extend(GO.summary.AnnouncementsGrid, GO.grid.GridPanel,{
-	loaded : false,
-	afterRender : function()
-	{
-		GO.summary.AnnouncementsGrid.superclass.afterRender.call(this);
-		if(this.isVisible())
-		{
-			this.onGridShow();
-		}
-	},
-	onGridShow : function(){
-		if(!this.loaded && this.rendered)
-		{
-			this.store.load();
-			this.loaded=true;
-		}
-	}
+
+	
 });
