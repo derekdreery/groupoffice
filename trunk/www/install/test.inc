@@ -199,6 +199,20 @@
 	</td>
 </tr>
 <tr>
+	<td valign="top">MultiByte string functions:</td>
+	<td>
+	<?php	
+	if(!function_exists('mb_detect_encoding'))
+	{
+		echo '<span style="color: red;">Warning: php-mbstring is not installed. Problems with non-ascii characters in e-mails and filenames might occur.</span>';
+	}else
+	{
+		echo 'Ok';
+	}
+	?>
+	</td>
+</tr>
+<tr>
 	<td valign="top">TAR Compression:</td>
 	<td>
 	<?php	
