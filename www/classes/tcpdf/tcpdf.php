@@ -2,9 +2,9 @@
 //============================================================+
 // File name   : tcpdf.php
 // Begin       : 2002-08-03
-// Last Update : 2008-09-19
+// Last Update : 2008-09-27
 // Author      : Nicola Asuni - info@tecnick.com - http://www.tcpdf.org
-// Version     : 4.0.027
+// Version     : 4.0.029
 // License     : GNU LGPL (http://www.gnu.org/copyleft/lesser.html)
 // 	----------------------------------------------------------------------------
 //  Copyright (C) 2002-2008  Nicola Asuni - Tecnick.com S.r.l.
@@ -120,7 +120,7 @@
  * @copyright 2004-2008 Nicola Asuni - Tecnick.com S.r.l (www.tecnick.com) Via Della Pace, 11 - 09044 - Quartucciu (CA) - ITALY - www.tecnick.com - info@tecnick.com
  * @link http://www.tcpdf.org
  * @license http://www.gnu.org/copyleft/lesser.html LGPL
- * @version 4.0.027
+ * @version 4.0.029
  */
 
 /**
@@ -146,18 +146,17 @@ require_once(dirname(__FILE__).'/htmlcolors.php');
 require_once(dirname(__FILE__)."/barcodes.php");
 
 
-
 	/**
 	 * define default PDF document producer
 	 */ 
-	define('PDF_PRODUCER','TCPDF 4.0.027 (http://www.tcpdf.org)');
+	define('PDF_PRODUCER','TCPDF 4.0.029 (http://www.tcpdf.org)');
 	
 	/**
 	* This is a PHP class for generating PDF documents without requiring external extensions.<br>
 	* TCPDF project (http://www.tcpdf.org) has been originally derived in 2002 from the Public Domain FPDF class by Olivier Plathey (http://www.fpdf.org), but now is almost entirely rewritten.<br>
 	* @name TCPDF
 	* @package com.tecnick.tcpdf
-	* @version 4.0.027
+	* @version 4.0.029
 	* @author Nicola Asuni - info@tecnick.com
 	* @link http://www.tcpdf.org
 	* @license http://www.gnu.org/copyleft/lesser.html LGPL
@@ -613,7 +612,7 @@ require_once(dirname(__FILE__)."/barcodes.php");
 		 * @access protected
 		 */
 		protected $print_footer = true;
-				
+			
 		/**
 		 * @var Header image logo.
 		 * @access protected
@@ -657,7 +656,7 @@ require_once(dirname(__FILE__)."/barcodes.php");
 		 * @var store available fonts list.
 		 * @access protected
 		 */
-		var $fontlist = array();
+		protected $fontlist = array();
 		
 		/**
 		 * @var current foreground color
@@ -705,26 +704,26 @@ require_once(dirname(__FILE__)."/barcodes.php");
 		 * @var Bold font style status.
 		 * @access protected
 		 */
-		var $b;
+		protected $b;
 		
 		/**
 		 * @var Underlined font style status.
 		 * @access protected
 		 */
-		var $u;
+		protected $u;
 		
 		/**
 		 * @var Italic font style status.
 		 * @access protected
 		 */
-		var $i;
+		protected $i;
 		
 		/**
 		 * @var Line through font style status.
 		 * @access protected
 		 * @since 2.8.000 (2008-03-19)
 		 */
-		var $d;
+		protected $d;
 		
 		/**
 		 * @var spacer for LI tags.
@@ -810,6 +809,18 @@ require_once(dirname(__FILE__)."/barcodes.php");
 		 * @since 2.0.000 (2008-01-02)
 		 */
 		protected $last_rc4_key_c;
+		
+		/**
+		 * RC4 padding
+		 * @access protected
+		 */
+		protected $padding = "\x28\xBF\x4E\x5E\x4E\x75\x8A\x41\x64\x00\x4E\x56\xFF\xFA\x01\x08\x2E\x2E\x00\xB6\xD0\x68\x3E\x80\x2F\x0C\xA9\xFE\x64\x53\x69\x7A";
+		
+		/**
+		 * RC4 encryption key
+		 * @access protected
+		 */
+		protected $encryption_key;
 		
 		// --- bookmark ---
 		
@@ -1065,6 +1076,13 @@ require_once(dirname(__FILE__)."/barcodes.php");
 		 * @since 4.0.024 (2008-09-12)
 		 */
 		protected $spot_colors = array();
+		
+		/**
+		 * Symbol used for HTML unordered list items
+		 * @access protected
+		 * @since 4.0.028 (2008-09-26)
+		 */
+		protected $lisymbol = "-";
 
 		//------------------------------------------------------------
 		// METHODS
@@ -1871,6 +1889,8 @@ require_once(dirname(__FILE__)."/barcodes.php");
 			if (!empty($font_family)) {
 				$this->SetFont($font_family, $font_style, $font_size);
 			}
+			// mark this point
+			$this->intmrk[$this->page] = strlen($this->pages[$this->page]);
 			//Page header
 			$this->setHeader();
 			// restore graphic styles
@@ -2111,8 +2131,6 @@ require_once(dirname(__FILE__)."/barcodes.php");
 	 	 * @since 4.0.012 (2008-07-24)
 		 */
 		protected function setFooter() {
-			
-
 			//Page footer
 			$this->InFooter = true;
 			// mark this point
@@ -3237,6 +3255,8 @@ require_once(dirname(__FILE__)."/barcodes.php");
 			} else {
 				$arabic = false;
 			}
+			// get a char width
+			$chrwidth = $this->GetCharWidth(".");
 			// get array of chars
 			$chars = $this->UTF8StringToArray($s);
 			// get the number of characters
@@ -3322,8 +3342,8 @@ require_once(dirname(__FILE__)."/barcodes.php");
 						// we have reached the end of column
 						if ($sep == -1) {
 							// check if the line was already started
-							if (($this->rtl AND ($this->x < ($this->w - $this->rMargin)))
-								OR ((!$this->rtl) AND ($this->x > $this->lMargin))) {
+							if (($this->rtl AND ($this->x <= ($this->w - $this->rMargin - $chrwidth)))
+								OR ((!$this->rtl) AND ($this->x >= ($this->lMargin + $chrwidth)))) {
 								// print a void cell and go to next line
 								$this->Cell($w, $h, "", 0, 1);
 								$linebreak = true;
@@ -9428,6 +9448,7 @@ require_once(dirname(__FILE__)."/barcodes.php");
 			$yshift = 0;
 			$startlinepage = $this->page;
 			$newline = true;
+			$loop = 0;
 			if (isset($this->footerlen[$this->page])) {
 				$this->footerpos[$this->page] = strlen($this->pages[$this->page]) - $this->footerlen[$this->page];
 			} else {
@@ -9808,7 +9829,15 @@ require_once(dirname(__FILE__)."/barcodes.php");
 							}
 						}
 						$dom[$key]['value'] = ltrim($strrest);
-						$key--;
+						if ($strrest == $dom[$key]['value']) {
+							$loop++;
+							// used to avoid infinite loop
+						}
+						if ($loop < 3) {
+							$key--;
+						}
+					} else {
+						$loop = 0;
 					}
 				}
 				$key++;
@@ -10073,7 +10102,7 @@ require_once(dirname(__FILE__)."/barcodes.php");
 							}
 						} else {
 							//unordered list symbol
-							$this->lispacer = "-";
+							$this->lispacer = $this->lisymbol;
 						}
 					} else {
 						$this->lispacer = "";
@@ -10378,6 +10407,16 @@ require_once(dirname(__FILE__)."/barcodes.php");
             }
         }
 		
+		/**
+		 * Set the character or string to be used as LI item symbol on UL lists.
+		 * @param string $symbol character or string to be used
+		 * @access public
+		 * @since 4.0.028 (2008-09-26)
+		 */
+		public function setLIsymbol($symbol='-') {
+			$this->lisymbol = $symbol;
+        }
+        
 	} // END OF TCPDF CLASS
 
 //============================================================+

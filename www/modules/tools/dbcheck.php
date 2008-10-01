@@ -1,30 +1,16 @@
 <?php
 /**
- * @copyright Copyright &copy; Intermesh 2006
- * @version $Revision: 1.4 $ $Date: 2006/04/24 08:07:16 $
- * 
+ * Copyright Intermesh
+ *
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ *
+ * @version $Id: action.tpl 1858 2008-04-29 14:09:19Z mschering $
+ * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
-
-   This file is part of Group-Office.
-
-   Group-Office is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2 of the License, or
-   (at your option) any later version.
-
-   Group-Office is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with Group-Office; if not, write to the Free Software
-   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-   
-   
- * This script will make sure admins and owners have access to all items.
-
-
+ *
  * @package Tools
  * @subpackage DB check
  */
