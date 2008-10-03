@@ -839,12 +839,14 @@ class GO_CONFIG
       			$_SESSION['GO_SESSION']['config_file']=$config_file;
       			return $config_file;
       		}
-      		
-      		$config_file = dirname($_SERVER['DOCUMENT_ROOT']).'/config.php';      		
-      		if(@file_exists($config_file))
+      		if(isset($_SERVER['SCRIPT_FILENAME']) && isset($_SERVER['PHP_SELF']))
       		{
-      			$_SESSION['GO_SESSION']['config_file']=$config_file;
-      			return $config_file;
+	      		$config_file = dirname(substr($_SERVER['SCRIPT_FILENAME'], 0 ,-strlen($_SERVER['PHP_SELF']))).'/config.php';      		
+	      		if(@file_exists($config_file))
+	      		{
+	      			$_SESSION['GO_SESSION']['config_file']=$config_file;
+	      			return $config_file;
+	      		}
       		}
       		$config_file = '/etc/groupoffice/'.$_SERVER['SERVER_NAME'].'/config.php';
       		if(@file_exists($config_file))
