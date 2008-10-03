@@ -133,17 +133,12 @@ GO.mainLayout.onReady(function(){
 			//iconCls: 'go-module-icon-calendar',
 		 	title: GO.calendar.lang.appointments,
 			layout:'fit',
-			/*tools: [{
-		        id:'gear',
-		        handler: function(){
-		            calGrid.store.reload();
-		        }
-		    },{
-		        id:'close',
-		        handler: function(e, target, panel){
-		            panel.ownerCt.remove(panel, true);
-		        }
-		    }],*/
+			tools: [{
+	        id:'close',
+	        handler: function(e, target, panel){
+	            panel.removePortlet();
+	        }
+		   }],
 			items: calGrid,
 			autoHeight:true
 			

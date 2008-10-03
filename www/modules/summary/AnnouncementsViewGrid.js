@@ -24,7 +24,8 @@ GO.summary.AnnouncementsViewGrid = function(config){
 	config.store = new GO.data.JsonStore({
 	    url: GO.settings.modules.summary.url+ 'json.php',
 	    baseParams: {
-	    	task: 'announcements'
+	    	task: 'announcements',
+	    	active:'true'
 	    	},
 	    root: 'results',
 	    id: 'id',

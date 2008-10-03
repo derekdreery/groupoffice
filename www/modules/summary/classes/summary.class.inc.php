@@ -188,5 +188,30 @@ class summary extends db{
 		}
 		return $count;
 	}
+	
+/**
+	 * Gets all active announcements
+	 *
+	 * @param Int $start First record of the total record set to return
+	 * @param Int $offset Number of records to return
+	 * @param String $sortfield The field to sort on
+	 * @param String $sortorder The sort order
+	 *
+	 * @access public
+	 * @return Int Number of records found
+	 */
+	function get_active_announcements($sortfield='id', $sortorder='ASC', $start=0, $offset=0)
+	{
+		$sql = "SELECT * FROM su_announcements WHERE due_time=0 OR due_time > UNIX_TIMESTAMP()";
+		$sql .= "ORDER BY $sortfield $sortorder";
+		$this->query($sql);
+		$count = $this->num_rows();
+		if($offset>0)
+		{
+			$sql .= " LIMIT $start,$offset";
+			$this->query($sql);
+		}
+		return $count;
+	}
 /* {CLASSFUNCTIONS} */
 }

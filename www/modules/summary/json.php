@@ -62,6 +62,46 @@ try{
 			$start = isset($_REQUEST['start']) ? smart_addslashes($_REQUEST['start']) : '0';
 			$limit = isset($_REQUEST['limit']) ? smart_addslashes($_REQUEST['limit']) : '0';
 			$query = isset($_REQUEST['query']) ? '%'.smart_addslashes($_REQUEST['query']).'%' : '';
+			if(isset($_POST['active']) && $_POST['active']=='true')
+			{
+				$response['total'] = $summary->get_active_announcements($sort, $dir, $start, $limit);
+			}else
+			{
+				$response['total'] = $summary->get_announcements( $query, $sort, $dir, $start, $limit);
+			}
+			$response['results']=array();
+			while($summary->next_record())
+			{
+				$announcement = $summary->Record;
+				$user = $GO_USERS->get_user($announcement['user_id']);
+				$announcement['user_name']=String::format_name($user);
+				$announcement['due_time']=!empty($announcement['due_time']) ? Date::get_timestamp($announcement['due_time'],false) : '-';
+				$announcement['mtime']=Date::get_timestamp($announcement['mtime']);
+				$announcement['ctime']=Date::get_timestamp($announcement['ctime']);
+				$response['results'][] = $announcement;
+			}
+			break;
+		case 'active_announcements':
+			if(isset($_POST['delete_keys']))
+			{
+				try{
+					$response['deleteSuccess']=true;
+					$delete_announcements = json_decode(smart_stripslashes($_POST['delete_keys']));
+					foreach($delete_announcements as $announcement_id)
+					{
+						$summary->delete_announcement(addslashes($announcement_id));
+					}
+				}catch(Exception $e)
+				{
+					$response['deleteSuccess']=false;
+					$response['deleteFeedback']=$e->getMessage();
+				}
+			}
+			$sort = isset($_REQUEST['sort']) ? smart_addslashes($_REQUEST['sort']) : 'id';
+			$dir = isset($_REQUEST['dir']) ? smart_addslashes($_REQUEST['dir']) : 'DESC';
+			$start = isset($_REQUEST['start']) ? smart_addslashes($_REQUEST['start']) : '0';
+			$limit = isset($_REQUEST['limit']) ? smart_addslashes($_REQUEST['limit']) : '0';
+			$query = isset($_REQUEST['query']) ? '%'.smart_addslashes($_REQUEST['query']).'%' : '';
 			$response['total'] = $summary->get_announcements( $query, $sort, $dir, $start, $limit);
 			$response['results']=array();
 			while($summary->next_record())
@@ -69,7 +109,7 @@ try{
 				$announcement = $summary->Record;
 				$user = $GO_USERS->get_user($announcement['user_id']);
 				$announcement['user_name']=String::format_name($user);
-				$announcement['due_time']=!empty($announcement['due_time']) ? Date::get_timestamp($announcement['due_time']) : '-';
+				$announcement['due_time']=!empty($announcement['due_time']) ? Date::get_timestamp($announcement['due_time'],false) : '-';
 				$announcement['mtime']=Date::get_timestamp($announcement['mtime']);
 				$announcement['ctime']=Date::get_timestamp($announcement['ctime']);
 				$response['results'][] = $announcement;
