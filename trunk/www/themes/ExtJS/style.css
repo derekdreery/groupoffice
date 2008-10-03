@@ -191,7 +191,6 @@ line-height:20px;
 /* Group-Office logo displayed in the login screen */
 .go-app-logo{
 	background: url('images/groupoffice.gif');
-	width:148px;
 	height:40px;
 	background-repeat:no-repeat;
 	margin-top: 10px;

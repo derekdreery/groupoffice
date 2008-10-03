@@ -13,7 +13,7 @@ GO.tasks.TasksPanel = function(config)
 		root: 'results',
 		totalProperty: 'total',
 		id: 'id',
-		fields:['id', 'name','completed','due_time', 'late']
+		fields:['id', 'name','completed','due_time', 'late', 'description']
 	});
 	
 	
@@ -58,8 +58,11 @@ GO.tasks.TasksPanel = function(config)
 		checkColumn,
 		{
 			header:GO.lang['strName'],
-			dataIndex: 'name'
-			
+			dataIndex: 'name',
+			renderer:function(value, p, record){
+		     p.attr = 'ext:qtip="'+record.data.description+'"';
+		     return value;
+			}
 		},{
 			header:GO.tasks.lang.dueDate,
 			dataIndex: 'due_time',

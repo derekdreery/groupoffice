@@ -53,7 +53,8 @@ if($GO_SECURITY->logged_in())
 			<a href="<?php echo $GO_CONFIG->host; ?>index.php?task=logout" target="_top">
 				<?php echo $lang['common']['logout']; ?></a>
 		</div>
-	</div>	
+	</div>
+	
 	<script type="text/javascript">Ext.get("load-status").update("<?php echo $lang['common']['renderInterface']; ?>");</script>	
 	<script type="text/javascript">
 	Ext.onReady(GO.mainLayout.init, GO.mainLayout);
@@ -67,6 +68,10 @@ if($GO_SECURITY->logged_in())
 	<script type="text/javascript">	
 	Ext.onReady(GO.mainLayout.login, GO.mainLayout);
 	</script>
+	
+	<div style="position:absolute;right:10px;bottom:10px">
+	Powered by Group-Office: <a target="_blank" class="normal-link" href="http://www.group-office.com">http://www.group-office.com</a>	
+	</div>
 	<?php	
 }
 ?>

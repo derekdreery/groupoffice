@@ -93,10 +93,15 @@ display:block;margin-bottom:15px;
 	cursor: wait !important;
 }
 
-body, td{
+body{
 	/*font:normal 10px "Lucida Sans Unicode","Lucida Grande","Mukti Narrow", sans-serif;*/
 	font: 11px tahoma,arial,helvetica,sans-serif;
 	color:#000;
+	background-color:#f1f1f1;
+}
+
+td{
+	font: 11px tahoma,arial,helvetica,sans-serif;
 }
 
 table.about td{
@@ -104,7 +109,7 @@ table.about td{
 }
 
 a.normal-link:active,a.normal-link:link,a.normal-link:visited{
-	color:blue;
+	color:#26687C;
 	text-decoration:underline;
 }
 a.normal-link:hover{

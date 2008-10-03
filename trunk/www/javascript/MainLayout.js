@@ -38,7 +38,9 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	
 		this.fireReady();
 		
-		GO.loginDialog.addCallback(function(){
+		var loginDialog = new GO.dialog.LoginDialog({modal:false});
+		
+		loginDialog.addCallback(function(){
 				var url = GO.afterLoginUrl ? GO.afterLoginUrl : GO.settings.config.host;
 			
 				document.location.href=url;

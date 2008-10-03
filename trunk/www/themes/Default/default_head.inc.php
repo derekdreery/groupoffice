@@ -10,3 +10,4 @@ foreach($GO_MODULES->modules as $module)
 ?>
 <link href="<?php echo $GO_THEME->theme_url; ?>images/favicon.ico" rel="shotcut icon" />
 <link href="<?php echo $GO_THEME->theme_url; ?>xtheme-groupoffice.css" type="text/css" rel="stylesheet" />
+<meta name="description" content="Take your office online. Share projects, calendars, files and e-mail online with co-workers and clients. Easy to use and fully customizable, Group-Office takes online colaboration to the next level." />

@@ -31,6 +31,15 @@ GO.LogoComponent = Ext.extend(Ext.BoxComponent, {
  
 GO.dialog.LoginDialog = function(config){
 	
+	if(!config)
+	{
+		config={};
+	}
+	
+	if(config.modal=='undefined')
+	{
+		config.modal=true;
+	}
 	Ext.apply(this, config);
 	
 	var langCombo = new Ext.form.ComboBox({
@@ -95,7 +104,7 @@ GO.dialog.LoginDialog = function(config){
 	
 	GO.dialog.LoginDialog.superclass.constructor.call(this, {
     layout: 'fit',
-		modal:true,
+		
 		autoHeight:true,
 		width:340,
 		resizable: false,
