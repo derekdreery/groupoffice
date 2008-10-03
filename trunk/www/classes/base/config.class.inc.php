@@ -839,7 +839,8 @@ class GO_CONFIG
       			$_SESSION['GO_SESSION']['config_file']=$config_file;
       			return $config_file;
       		}
-      		$config_file = dirname($this->root_path).'/config.php';
+      		
+      		$config_file = dirname($_SERVER['DOCUMENT_ROOT']).'/config.php';      		
       		if(@file_exists($config_file))
       		{
       			$_SESSION['GO_SESSION']['config_file']=$config_file;
