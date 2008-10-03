@@ -43,11 +43,12 @@ GO.mainLayout.onReady(function(){
 	            
 	            
 	        }
-	    }/*,{
+	    },{
+	        id:'close',
 	        handler: function(e, target, panel){
-	            panel.ownerCt.remove(panel, true);
+	            panel.removePortlet();
 	        }
-	    }*/],
+	    }],
 		items: feedGrid,
 		height:300
 	});
@@ -126,12 +127,12 @@ GO.mainLayout.onReady(function(){
 		//iconCls: 'note-icon',
 	 	title: GO.summary.lang.notes,
 		layout:'fit',
-		/*tools: [{
+		tools: [{
 	        id:'close',
 	        handler: function(e, target, panel){
-	            panel.ownerCt.remove(panel, true);
+	            panel.removePortlet();
 	        }
-	    }],*/
+	    }],
 		items: notePanel,
 		height:300
 	});
@@ -142,15 +143,15 @@ GO.mainLayout.onReady(function(){
 
 	
 	GO.summary.portlets['portlet-announcements']=new GO.summary.Portlet({
-		id: 'portlet-announcement',
+		id: 'portlet-announcements',
 	 	title: GO.summary.lang.announcements,
 		layout:'fit',
-		/*tools: [{
+		tools: [{
 	        id:'close',
 	        handler: function(e, target, panel){
-	            panel.ownerCt.remove(panel, true);
+	            panel.removePortlet();
 	        }
-	    }],*/
+	    }],
 		items: GO.summary.announcementsPanel,
 		autoHeight:true
 	});

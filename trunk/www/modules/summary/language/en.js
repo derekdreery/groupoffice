@@ -12,19 +12,12 @@ GO.summary.lang.notes = 'Notes';
 GO.summary.lang.loadingFeed = 'Loading Feed...';
 GO.summary.lang.goToPost = 'Go to Post';
 GO.summary.lang.today = 'Today ';
-/* table: us_licenses */
-GO.summary.lang.announcement="Announcement";
-GO.summary.lang.announcements="Announcements";
-GO.summary.lang.host="Host";
-GO.summary.lang.ip="Ip";
-GO.summary.lang.linkId="Link id";
-GO.summary.lang.expires="Expires";
-GO.summary.lang.upgrades="Upgrades";
-GO.summary.lang.notified="Notified";
 
 /* table: su_announcements */
 GO.summary.lang.announcement="Announcement";
 GO.summary.lang.announcements="Announcements";
-GO.summary.lang.dueTime="Due time";
+GO.summary.lang.dueTime="Show until";
 GO.summary.lang.title="Title";
-GO.summary.lang.content="Content";
+
+
+GO.summary.lang.manageAnnouncements='Manage announcements';

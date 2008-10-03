@@ -24,3 +24,8 @@ Ext.form.TriggerField.override({
         }
     }
 });
+
+
+Ext.Window.override({
+	 shadow : false
+});

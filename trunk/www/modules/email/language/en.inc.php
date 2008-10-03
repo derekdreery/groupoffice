@@ -24,7 +24,7 @@ $lang['email']['no_subject']='No subject';
 $lang['email']['to']='To';
 $lang['email']['from']='From';
 $lang['email']['subject']='Subject';
-$lang['email']['no_recipients']='No recipients';
+$lang['email']['no_recipients']='Undisclosed recipients';
 $lang['email']['original_message']='--- Original message follows ---';
 $lang['email']['attachments']='Attachments';
 

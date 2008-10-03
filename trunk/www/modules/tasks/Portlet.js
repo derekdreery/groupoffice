@@ -109,17 +109,12 @@ GO.mainLayout.onReady(function(){
 			//iconCls: 'go-module-icon-tasks',
 		 	title: GO.tasks.lang.tasks,
 			layout:'fit',
-			/*tools: [{
-		        id:'gear',
-		        handler: function(){
-		            feedGrid.store.reload();
-		        }
-		    },{
+			tools: [{
 		        id:'close',
 		        handler: function(e, target, panel){
-		            panel.ownerCt.remove(panel, true);
+		            panel.removePortlet();
 		        }
-		    }],*/
+		    }],
 			items: tasksGrid,
 			autoHeight:true
 		});

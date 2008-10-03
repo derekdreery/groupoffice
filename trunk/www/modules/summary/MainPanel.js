@@ -20,12 +20,29 @@
  	}
  	
  	
- 	this.activePortletsIds = Ext.state.Manager.get('active-portlets');
+ 	var state  = Ext.state.Manager.get('summary-active-portlets');
  	
- 	if(!this.activePortletsIds)
+ 	if(state)
  	{
- 		this.activePortletsIds=['portlet-announcements', 'portlet-tasks', 'portlet-calendar','portlet-note'];
+ 		state=Ext.decode(state);
+ 		if(!state[0] || state[0].col=='undefined')
+	 	{
+	 		state=false;
+	 	}
+ 	} 	
+ 	
+ 	
+ 	if(!state)
+ 	{
+ 		this.activePortlets=['portlet-announcements', 'portlet-tasks', 'portlet-calendar','portlet-note'];
+ 		state=[{id:'portlet-announcements', col:0},{id:'portlet-tasks', col:0},{id:'portlet-calendar', col:1},{id:'portlet-note', col:1}];
  	}
+ 	this.activePortlets=[];
+ 	for(var i=0;i<state.length;i++)
+ 	{	
+ 		this.activePortlets.push(state[i].id);
+ 	}
+ 	
  	
  		
  	
@@ -47,38 +64,68 @@
 	  	}];
 	  	
 	
-	var portletsPerCol = Math.ceil(this.activePortletsIds.length/this.columns.length);
+	//var portletsPerCol = Math.ceil(this.activePortlets.length/this.columns.length);
 	  	
   
+ // var portletsInCol=0;
+ // var colIndex=0;
   
-  
-	for(var p=0;p<this.activePortletsIds.length;p++)
+	for(var p=0;p<state.length;p++)
   {  	
-  	if(GO.summary.portlets[this.activePortletsIds[p]])
+  	if(GO.summary.portlets[state[p].id])
   	{
-	  	this.activePortlets.push(this.activePortletsIds[p]);
-	  	var index = Math.ceil((p+1)/portletsPerCol)-1;  	
-	  	var column = this.columns[index]; 
+	  	//var index = Math.ceil((p+1)/portletsPerCol)-1;
+	  	
+	  	/*if(portletsInCol==portletsPerCol)
+	  	{
+	  		portletsInCol=0;
+  			colIndex++;
+	  	}*/
+	  	  	
+	  	var column = this.columns[state[p].col]; 
 	  	
 	  	if(!column.items)
 	  	{
-	  		column.items=[GO.summary.portlets[this.activePortletsIds[p]]];
+	  		column.items=[GO.summary.portlets[state[p].id]];
 	  	}else
 	  	{
-	  		column.items.push(GO.summary.portlets[this.activePortletsIds[p]]);
+	  		column.items.push(GO.summary.portlets[state[p].id]);
 	  	}
+	  	//portletsInCol++;
   	}	
   }
+  
+  this.availablePortletsStore = new Ext.data.JsonStore({		
+			id: 'id',   
+	    root: 'portlets',
+	    fields: ['id', 'title', 'iconCls']
+	});
+	
+	for(var p in GO.summary.portlets)
+  {
+  	if(p!='remove')
+  	{
+	  	GO.summary.portlets[p].on('remove', function(portlet){
+	  		portlet.ownerCt.remove(portlet, false);	 
+	  		portlet.hide(); 		
+	  		this.saveActivePortlets();
+	  	}, this);
+	  	
+	  	var indexOf = this.activePortlets.indexOf(p);
+	  	if(indexOf==-1)
+	  	{
+	  		this.availablePortlets.push(GO.summary.portlets[p]);
+	  	}
+  	}
+  }  
+  
+	this.availablePortletsStore.loadData({portlets: this.availablePortlets});
+	
+	
    
   config.items=this.columns;
   
-  for(var p in GO.summary.portlets)
-  {
-  	//if(!this.activePortletsIds.indexOf(p))
-  	//{
-  		this.availablePortlets.push(GO.summary.portlets[p]);
-  	//}
-  }
+  
   
   if(!config.items)
   {
@@ -92,122 +139,144 @@
   	iconCls:'btn-add',
   	handler: this.showAvailablePortlets,
   	scope: this
-  },{
-  	text: 'Manage announcements',
-  	iconCls:'btn-add',
-  	handler: function(){
-  		if(!this.manageAnnouncementsWindow)
-  		{
-  			
-  			this.manageAnnouncementsWindow = new Ext.Window({
-  				layout:'fit',
-  				items:this.announcementsGrid =  new GO.summary.AnnouncementsGrid(),
-  				width:700,
-  				height:400,
-  				title:GO.summary.lang.announcements,
-  				closeAction:'hide',
-  				buttons:[{
-						text: GO.lang.cmdClose,
-						handler: function(){this.manageAnnouncementsWindow.hide();},
-						scope:this
-					}],
-					listeners:{
-						show: function(){
-							if(!this.announcementsGrid.store.loaded)
-							{
-								this.announcementsGrid.store.load();
-							}							
-						},
-						scope:this
-					}
-  			});
-  			
-  			this.announcementsGrid.store.on('load',function(){
-  				this.announcementsGrid.store.on('load',function(){
-  					GO.summary.announcementsPanel.store.load();		
-  				}, this);
-  			}, this);
-  			
-  		}
-  		
-  		this.manageAnnouncementsWindow.show();
-  	},
-  	scope: this
-  }]; 
+  }];
+  
+  if(GO.settings.modules.summary.write_permission)
+  {
+	  this.tbar.push({
+	  	text: GO.summary.lang.manageAnnouncements,
+	  	iconCls:'btn-settings',
+	  	handler: function(){
+	  		if(!this.manageAnnouncementsWindow)
+	  		{
+	  			
+	  			this.manageAnnouncementsWindow = new Ext.Window({
+	  				layout:'fit',
+	  				items:this.announcementsGrid =  new GO.summary.AnnouncementsGrid(),
+	  				width:700,
+	  				height:400,
+	  				title:GO.summary.lang.announcements,
+	  				closeAction:'hide',
+	  				buttons:[{
+							text: GO.lang.cmdClose,
+							handler: function(){this.manageAnnouncementsWindow.hide();},
+							scope:this
+						}],
+						listeners:{
+							show: function(){
+								if(!this.announcementsGrid.store.loaded)
+								{
+									this.announcementsGrid.store.load();
+								}							
+							},
+							scope:this
+						}
+	  			});
+	  			
+	  			this.announcementsGrid.store.on('load',function(){
+	  				this.announcementsGrid.store.on('load',function(){
+	  					GO.summary.announcementsPanel.store.load();		
+	  				}, this);
+	  			}, this);
+	  			
+	  		}
+	  		
+	  		this.manageAnnouncementsWindow.show();
+	  	},
+	  	scope: this
+	  });
+	} 
 
 
   
 	GO.summary.MainPanel.superclass.constructor.call(this,config);
 	
+	this.on('drop', this.saveActivePortlets, this);
 
 };	
 
 Ext.extend(GO.summary.MainPanel, GO.summary.Portal, {
 	
-	
 	activePortlets : Array(),
 	availablePortlets : Array(),
 	
+	saveActivePortlets : function(){
+		
+		this.activePortlets = [];
+		var state = [];
+		for(var c=0;c<this.items.items.length;c++)
+		{
+			var col = this.items.items[c];
+			for(var p=0;p<col.items.items.length;p++)
+			{
+				var id = col.items.items[p].id;
+				this.activePortlets.push(id);
+				
+				state.push({id: id, col: c});
+			}
+		}
+		
+		this.availablePortlets=[];
+		for(var p in GO.summary.portlets)
+	  {
+	  	if(p!='remove' && this.activePortlets.indexOf(p)==-1)
+	  	{	  		
+	  		this.availablePortlets.push(GO.summary.portlets[p]);
+	  	}
+	  }  
+	  
+		this.availablePortletsStore.loadData({portlets: this.availablePortlets});
+		
+	  Ext.state.Manager.set('summary-active-portlets', Ext.encode(state));
+	
+	},
+	
 	
 	showAvailablePortlets : function(){
-		
-		var data = {portlets: this.availablePortlets};
-		
-		var store = new Ext.data.JsonStore({		
-				id: 'id',   
-		    root: 'portlets',
-		    fields: ['id', 'title', 'iconCls']
-		});
-		
-		store.loadData(data);
-		
-		var tpl ='<tpl for=".">'+
-			'<div class="go-item-wrap">{title}</div>'+
-			'</tpl>';
-		
-		var list = new GO.grid.SimpleSelectList({store: store, tpl: tpl});
-		
-		list.on('click', function(dataview, index){
-			var id = dataview.store.data.items[index].data.id;
-			
-			//.renderTo=this.firstColumn;
-			//var portlet = new GO.summary.Portlet();
-			
-			var lastCount = 0;
-			for(var c=0;c<this.columns.length;c++)
-			{
-				if(!this.columns[c].items || this.columns[c].items.length==0 || lastCount > this.columns[c].items.length)
-				{
-					break;
-				}				
-				lastCount = this.columns[c].items.length;
-			}
-			
-			this.columns[c].add(GO.summary.portlets[id]);
-			this.columns[c].doLayout();
+
+		if(!this.portletsWindow)
+		{
 			
 			
-			list.clearSelections();
-			portletsWindow.close();
+
 			
-							
-		}, this);
-		
-		var portletsWindow = new Ext.Window({
-			title: GO.summary.lang.selectPortlet,
-			layout:'fit',
-			modal:false,
-			height:400,
-			width:600,
-			closable:true,
-			closeAction:'hide',	
-			items: new Ext.Panel({
-				items:list,
-				cls: 'go-form-panel'
-			})
-		});
-		
-		portletsWindow.show();
+			var tpl ='<tpl for=".">'+
+				'<div class="go-item-wrap">{title}</div>'+
+				'</tpl>';
+			
+			var list = new GO.grid.SimpleSelectList({store: this.availablePortletsStore, tpl: tpl});
+			
+			list.on('click', function(dataview, index){
+	
+				var id = dataview.store.data.items[index].data.id;
+				
+				
+				this.items.items[0].add(GO.summary.portlets[id]);
+				GO.summary.portlets[id].show();
+				this.items.items[0].doLayout();
+				
+				this.saveActivePortlets(true);			
+				
+				list.clearSelections();
+				this.portletsWindow.hide();			
+								
+			}, this);
+			
+			this.portletsWindow = new Ext.Window({
+				title: GO.summary.lang.selectPortlet,
+				layout:'fit',
+				modal:false,
+				height:400,
+				width:600,
+				closable:true,
+				closeAction:'hide',	
+				items: new Ext.Panel({
+					items:list,
+					cls: 'go-form-panel'
+				})
+			});
+		}
+		this.portletsWindow.show();
 		
 	}
 });

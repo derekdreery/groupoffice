@@ -622,7 +622,7 @@ try{
 					$to = implode(', ',$response['to']);
 				}
 				if (empty($to)) {
-					$to = $lang['email']['no_recipient'];
+					$to = $lang['email']['no_recipients'];
 				}
 				$response['to'] = htmlspecialchars($to, ENT_QUOTES, 'UTF-8');
 

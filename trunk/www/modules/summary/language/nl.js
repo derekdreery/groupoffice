@@ -7,3 +7,9 @@ GO.summary.lang.notes = 'Notities';
 GO.summary.lang.loadingFeed = 'Bezig met laden webfeed...';
 GO.summary.lang.goToPost = 'Ga naar post';
 GO.summary.lang.today = 'Vandaag ';
+/* table: su_announcements */
+GO.summary.lang.announcement="Aankondiging";
+GO.summary.lang.announcements="Aankondigingen";
+GO.summary.lang.dueTime="Toon tot";
+GO.summary.lang.title="Titel";
+GO.summary.lang.manageAnnouncements='Beheer aankondigingen';
