@@ -32,14 +32,14 @@ GO.summary.AnnouncementsGrid = function(config){
 	});
 	config.paging=true;
 	var columnModel =  new Ext.grid.ColumnModel([
-	   		{
+	  {
+			header: GO.summary.lang.title, 
+			dataIndex: 'title'
+		},{
 			header: GO.lang.strOwner, 
 			dataIndex: 'user_name',
 		  sortable: false
-		},		{
-			header: GO.summary.lang.title, 
-			dataIndex: 'title'
-		},		{
+		},{
 			header: GO.summary.lang.dueTime, 
 			dataIndex: 'due_time'
 		},{
