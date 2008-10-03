@@ -575,8 +575,8 @@ class GO_CONFIG
 	var $phpMyAdminUrl='';
 
 	/*//////////////////////////////////////////////////////////////////////////////
-	//////////      Variables that are not configured by config.php   //////////////
-	//////////////////////////////////////////////////////////////////////////////*/
+	 //////////      Variables that are not configured by config.php   //////////////
+	 //////////////////////////////////////////////////////////////////////////////*/
 
 
 	/**
@@ -586,17 +586,17 @@ class GO_CONFIG
 	 * @access  public
 	 */
 	var $version = '3.00';
-	
-	
+
+
 	/**
 	 * Modification date
-	 * 
+	 *
 	 * @var     string
 	 * @access  public
 	 */
-	
+
 	var $mtime = '20081001-2';
-	
+
 	/* The permissions mode to use when creating files and folders
 	 *
 	 * @var     hexadecimal
@@ -756,8 +756,10 @@ class GO_CONFIG
       	}
 
       	$config = array();
+      	
+      	$config_file = $this->get_config_file();      	
 
-      	@include($this->get_config_file());
+      	@include($config_file);
 
       	foreach($config as $key=>$value)
       	{
@@ -804,7 +806,7 @@ class GO_CONFIG
       	{
       		$this->log=true;
       	}
-      	 
+
       	$this->set_full_url();
       }
 
@@ -825,35 +827,50 @@ class GO_CONFIG
       {
       	if(defined('CONFIG_FILE'))
       	return CONFIG_FILE;
-
-      	$config_file = '/etc/groupoffice/'.$_SERVER['SERVER_NAME'].'/config.php';
       	 
-      	if(@file_exists($config_file))
+      	if(isset($_SESSION['GO_SESSION']['config_file']))
       	{
-      		return $config_file;
+      		return $_SESSION['GO_SESSION']['config_file'];
       	}else
       	{
-      		return $this->root_path.'config.php';
+      		$config_file = $this->root_path.'config.php';
+      		if(@file_exists($config_file))
+      		{
+      			$_SESSION['GO_SESSION']['config_file']=$config_file;
+      			return $config_file;
+      		}
+      		$config_file = dirname($this->root_path).'/config.php';
+      		if(@file_exists($config_file))
+      		{
+      			$_SESSION['GO_SESSION']['config_file']=$config_file;
+      			return $config_file;
+      		}
+      		$config_file = '/etc/groupoffice/'.$_SERVER['SERVER_NAME'].'/config.php';
+      		if(@file_exists($config_file))
+      		{
+      			$_SESSION['GO_SESSION']['config_file']=$config_file;
+      			return $config_file;
+      		}
       	}
       }
 
       function set_full_url() {
-				if(isset($_SERVER["SERVER_NAME"]))
-				{
-	      	$https = isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on";
-	      	$url = 'http';
-	      	if ($https)
-	      	{
-	      		$url .= "s";
-	      	}
-	      	$url .= "://";
-	      	if ((!$https && $_SERVER["SERVER_PORT"] != "80") || ($https && $_SERVER["SERVER_PORT"] != "443")) {
-	      		$url .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$this->host;
-	      	} else {
-	      		$url .= $_SERVER["SERVER_NAME"].$this->host;
-	      	}
-	      	$this->full_url=$url;
-				}
+      	if(isset($_SERVER["SERVER_NAME"]))
+      	{
+      		$https = isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on";
+      		$url = 'http';
+      		if ($https)
+      		{
+      			$url .= "s";
+      		}
+      		$url .= "://";
+      		if ((!$https && $_SERVER["SERVER_PORT"] != "80") || ($https && $_SERVER["SERVER_PORT"] != "443")) {
+      			$url .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$this->host;
+      		} else {
+      			$url .= $_SERVER["SERVER_NAME"].$this->host;
+      		}
+      		$this->full_url=$url;
+      	}
       }
 
 
@@ -1003,9 +1020,9 @@ class GO_CONFIG
       	$response['config']['theme']=$GO_THEME->theme;
       	$response['config']['host']=$this->host;
       	$response['config']['local_url']=$this->local_url;
-      	 
+
       	$response['config']['max_users']=$this->max_users;
-      	 
+
 
       	return $response;
 
