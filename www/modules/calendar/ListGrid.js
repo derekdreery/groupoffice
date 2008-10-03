@@ -51,7 +51,6 @@ GO.calendar.ListGrid = function(config)
 			width:60,
 			renderer: function(v, metadata, record)
 			{
-				//metadata.attr='style="background-color:#'+record.data.background+';"';
 				return '<div style="border:1px solid #c0c0c0;padding:2px;margin:2px;background-color:#'+record.data.background+';">'+v+'</div>';
 			}
 		},		

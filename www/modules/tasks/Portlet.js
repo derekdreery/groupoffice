@@ -15,7 +15,7 @@ GO.tasks.SimpleTasksPanel = function(config)
 		root: 'results',
 		totalProperty: 'total',
 		id: 'id',
-		fields:['id', 'name','completed','due_time']
+		fields:['id', 'name','completed','due_time','description']
 	});
 	
 	
@@ -48,7 +48,11 @@ GO.tasks.SimpleTasksPanel = function(config)
 		checkColumn,
 		{
 			header:GO.lang['strName'],
-			dataIndex: 'name'
+			dataIndex: 'name',
+			renderer:function(value, p, record){
+		     p.attr = 'ext:qtip="'+record.data.description+'"';
+		     return value;
+			}
 		},{
 			header:GO.tasks.lang.dueDate,
 			dataIndex: 'due_time',
