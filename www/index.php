@@ -17,25 +17,16 @@
 
 require_once("Group-Office.php");
 
+if(isset($_REQUEST['task']) && $_REQUEST['task']=='logout')
+{
+	$GO_SECURITY->logout();	
+}
+
 //$config_file = $GO_CONFIG->get_config_file();
 if(empty($GO_CONFIG->db_user))
 {
 	header('Location: install/');
 	exit();
-}
-/*Uncomment with release!
-if(is_writable($config_file))
-{
-	echo '<font color="red"><b>\''.$config_file.'\' is writable please chmod 755
-    '.$config_file.' and change the ownership to any other user then the
-    webserver user.</b></font>';
-    
-	exit();
-}*/
-
-if(isset($_REQUEST['task']) && $_REQUEST['task']=='logout')
-{
-	$GO_SECURITY->logout();	
 }
 
 require_once($GO_THEME->theme_path."layout.inc.php");
