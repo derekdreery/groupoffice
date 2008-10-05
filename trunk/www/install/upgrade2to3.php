@@ -588,13 +588,14 @@ if(in_array('projects', $module_ids))
   DROP `comments`,
   DROP `start_date`,
   DROP `end_date`,
-  DROP `status`,
   DROP `probability`,
   DROP `budget`,
   DROP `billed`,
   DROP `unit_value`,
 	DROP `link_id`,
   DROP `calendar_id`;");
+	
+	$db->query("ALTER TABLE `pm_projects` CHANGE `status` `status_id` INT( 11 ) NOT NULL");  
 
 	$db->query("ALTER TABLE `pm_projects` ADD `active` ENUM( '0', '1' ) NOT NULL ;");
 
