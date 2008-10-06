@@ -25,3 +25,5 @@ GO.form.ComboBox = Ext.extend(Ext.form.ComboBox, {
 		}
 	}
 });
+
+Ext.reg('combo', GO.form.ComboBox);
