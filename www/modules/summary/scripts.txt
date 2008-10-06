@@ -1,4 +1,3 @@
-modules/summary/AnnouncementPanel.js
 modules/summary/AnnouncementDialog.js
 modules/summary/AnnouncementsGrid.js
 modules/summary/AnnouncementsViewGrid.js

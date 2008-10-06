@@ -27,5 +27,6 @@ Ext.form.TriggerField.override({
 
 
 Ext.Window.override({
-	 shadow : false
+	 shadow : false,
+	 constrainHeader : true
 });
