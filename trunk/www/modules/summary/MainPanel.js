@@ -103,8 +103,9 @@
 	
 	for(var p in GO.summary.portlets)
   {
-  	if(p!='remove')
+  	if(typeof(GO.summary.portlets[p])=='object')
   	{
+  		
 	  	GO.summary.portlets[p].on('remove', function(portlet){
 	  		portlet.ownerCt.remove(portlet, false);	 
 	  		portlet.hide(); 		
@@ -219,7 +220,7 @@ Ext.extend(GO.summary.MainPanel, GO.summary.Portal, {
 		this.availablePortlets=[];
 		for(var p in GO.summary.portlets)
 	  {
-	  	if(p!='remove' && this.activePortlets.indexOf(p)==-1)
+	  	if(typeof(GO.summary.portlets[p])=='object' && this.activePortlets.indexOf(p)==-1)
 	  	{	  		
 	  		this.availablePortlets.push(GO.summary.portlets[p]);
 	  	}

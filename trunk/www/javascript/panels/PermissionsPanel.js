@@ -209,7 +209,14 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 					if(groupsGrid.selModel.selections.keys.length>0)
 					{
 						this.aclGroupsStore.baseParams['add_groups']=Ext.encode(groupsGrid.selModel.selections.keys);
-						this.aclGroupsStore.load();
+						this.aclGroupsStore.load({
+							callback: function(){
+								if(!this.reader.jsonData.addSuccess)
+								{
+									alert( this.reader.jsonData.addFeedback);
+								}
+							}							
+						});
 						delete this.aclGroupsStore.baseParams['add_groups'];
 						//this.aclGroupsStore.add(groupsGrid.selModel.getSelections());
 						//this.changed=true;
@@ -232,7 +239,14 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 					if(usersGrid.selModel.selections.keys.length>0)
 					{
 						this.aclUsersStore.baseParams['add_users']=Ext.encode(usersGrid.selModel.selections.keys);
-						this.aclUsersStore.load();
+						this.aclUsersStore.load({
+							callback: function(){
+								if(!this.reader.jsonData.addSuccess)
+								{
+									alert( this.reader.jsonData.addFeedback);
+								}
+							}							
+						});
 						delete this.aclUsersStore.baseParams['add_users'];
 					}
 				},
