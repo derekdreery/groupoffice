@@ -3,12 +3,7 @@ GO.tasks.MainPanel = function(config){
 	if(!config)
 	{
 		config = {};
-	}
-
-	
-	
-	
-		
+	}	
 		
 	this.taskListsStore = new GO.data.JsonStore({
 		url: GO.settings.modules.tasks.url+'json.php',
@@ -17,35 +12,35 @@ GO.tasks.MainPanel = function(config){
 		totalProperty: 'total',
 		id: 'id',
 		fields:['id','dom_id','name']
-	});
-	
-	
+	});	
 
-	this.tasksLists= new GO.grid.SimpleSelectList({
-		store: this.taskListsStore		
+
+	this.taskListsPanel= new GO.grid.GridPanel({
+			region:'center',
+			store: this.taskListsStore,
+			cls:'go-grid3-hide-headers',
+			title: GO.tasks.lang.tasklists,
+			items:this.tasksLists,
+			loadMask:true,
+			autoScroll:true,
+			border:true,
+			split:true,
+			viewConfig: {forceFit:true, autoFill: true},
+			columns: [				
+				{
+					header: GO.lang.strName, 
+					dataIndex: 'name'					
+				}				
+			]
 		});
 		
-	
-
-	this.tasksLists.on('click', function(dataview, index){		
-				this.tasklist_id = dataview.store.data.items[index].data.id;
-				this.tasklist_name = dataview.store.data.items[index].data.name;
+	this.taskListsPanel.on('rowclick', function(grid, index){		
+				this.tasklist_id = grid.store.data.items[index].data.id;
+				this.tasklist_name = grid.store.data.items[index].data.name;
 				//this.gridPanel.tasklist_id=this.tasklist_id;
 				this.gridPanel.store.baseParams['tasklist_id']=this.tasklist_id;				
 				this.gridPanel.store.load();
 		}, this);
-	
-	
-
-	
-	var taskListsPanel= new Ext.Panel({
-					region:'center',
-					title: GO.tasks.lang.tasklists,
-					items:this.tasksLists,
-					autoScroll:true,
-					border:true,
-					split:true
-				});
 				
 	var showCompletedCheck = new Ext.form.Checkbox({		
 		boxLabel: GO.tasks.lang.showCompletedTasks,
@@ -71,7 +66,7 @@ GO.tasks.MainPanel = function(config){
 				
 	var filterPanel = new Ext.form.FormPanel({
 		title:GO.tasks.lang.filter,							
-		height:80,
+		height:85,
 		cls:'go-form-panel',
 		waitMsgTarget:true,
 		region:'north',
@@ -80,17 +75,10 @@ GO.tasks.MainPanel = function(config){
 		items: [showCompletedCheck, showInactiveCheck]
 	});
 
-				
-
-	
-
-				
 	this.gridPanel = new GO.tasks.TasksPanel( {
 				region:'center'								
 			});
 			
-        
-
 	config.layout='border';
 	//config.tbar=;
 	config.items=[
@@ -116,8 +104,7 @@ GO.tasks.MainPanel = function(config){
 										}, this);
 									}
 									GO.tasks.taskDialog.show({
-										tasklist_id: this.tasklist_id,
-										tasklist_name: this.tasklist_name
+										tasklist_id: this.tasklist_id
 									});
 									
 								},
@@ -154,7 +141,7 @@ GO.tasks.MainPanel = function(config){
 					layout:'border',							
 					baseCls: 'x-plain',								
 					items:[
-						taskListsPanel,
+						this.taskListsPanel,
 						filterPanel
 						]
        }),
@@ -175,7 +162,9 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 				this.tasklist_id = this.taskListsStore.data.items[0].data.id;		
 				this.tasklist_name = this.taskListsStore.data.items[0].data.name;
 						
-				this.tasksLists.select(this.taskListsStore.data.items[0].data.dom_id);								
+				var sm = this.taskListsPanel.getSelectionModel();				
+				sm.selectFirstRow();
+												
 				this.gridPanel.store.baseParams['tasklist_id']=this.tasklist_id;
 				//this.gridPanel.tasklist_id=this.tasklist_id;								
 				this.gridPanel.store.load();

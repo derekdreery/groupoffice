@@ -146,7 +146,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 					this.participants_event_id=action.result.data.participants_event_id;
 					this.formPanel.form.baseParams['exception_event_id']=config.exception_event_id;
 					this.formPanel.form.baseParams['exceptionDate']=config.exceptionDate;
-					this.formPanel.form.baseParams['calendar_id']=action.result.data.calendar_id;
+					//this.formPanel.form.baseParams['calendar_id']=action.result.data.calendar_id;
 					
 					//set recurrence to none					
 					this.formPanel.form.findField('repeat_type').setValue(0);
@@ -220,13 +220,20 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 			this.setValues(config.values);
 		}
 		
-		if(config.calendar_id)
+		if(!config.calendar_id)
 		{
-			this.selectCalendar.setValue(config.calendar_id);
+			config.calendar_id=GO.calendar.defaultCalendar.id;
+			config.calendar_name=GO.calendar.defaultCalendar.name;
+		}
+		this.selectCalendar.setValue(config.calendar_id);
+		if(config.calendar_name)
+		{
+			this.selectCalendar.container.up('div.x-form-item').setDisplayed(true);
+			this.selectCalendar.setRemoteText(config.calendar_name);
+		}else
+		{
 			this.selectCalendar.container.up('div.x-form-item').setDisplayed(false);
 		}
-		this.selectCalendar.container.up('div.x-form-item').setDisplayed(this.event_id==0 && this.selectCalendar.getValue()==0 && !config.exception_event_id);
-		
 		//if the newMenuButton from another passed a linkTypeId then set this value in the select link field
 		if(config && config.link_config)
 		{
@@ -240,6 +247,10 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 		{
 			delete this.link_config;
 		}
+		
+		
+		
+		
 	},
 	
 	setWritePermission : function(writePermission)
@@ -444,7 +455,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
     	});
     	
     var checkDateInput = function(){
-    	
+    
     	if(startDate.getValue()>endDate.getValue())
     	{
     		endDate.setValue(startDate.getValue());
@@ -664,33 +675,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 			layout:'form',
 			autoScroll:true,
 			items:[
-				this.selectCalendar = new GO.form.ComboBox({
-		       	fieldLabel: GO.calendar.lang.calendar,
-		        hiddenName:'calendar_id',
-		        anchor:'-20',
-		        emptyText:GO.lang.strPleaseSelect,
-		        store: new GO.data.JsonStore({
-						    url: GO.settings.modules.calendar.url+ 'json.php',
-						    baseParams: {						    	
-						    	task: 'writable_calendars'
-					    	},
-				    root: 'results',
-				    id: 'id',
-				    totalProperty:'total',
-				    fields: ['id', 'name'],
-				    remoteSort: true
-					}),
-					pageSize: parseInt(GO.settings.max_rows_list),
-	        valueField:'id',
-	        displayField:'name',
-	        typeAhead: true,
-	        mode: 'remote',
-	        triggerAction: 'all',
-	        editable: false,
-	        selectOnFocus:true,
-	        forceSelection: true,
-	        allowBlank: false
-	    }),
+				
 				this.subjectField,	
 				locationField,
 		    	this.selectLinkField,
@@ -734,7 +719,34 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 		    			{items:eventStatus},
 		    			{items:busy}
 		    			]
-		    	}
+		    	},
+		    	this.selectCalendar = new GO.form.ComboBox({
+		       	fieldLabel: GO.calendar.lang.calendar,
+		        hiddenName:'calendar_id',
+		        anchor:'-20',
+		        emptyText:GO.lang.strPleaseSelect,
+		        store: new GO.data.JsonStore({
+						    url: GO.settings.modules.calendar.url+ 'json.php',
+						    baseParams: {						    	
+						    	task: 'writable_calendars'
+					    	},
+				    root: 'results',
+				    id: 'id',
+				    totalProperty:'total',
+				    fields: ['id', 'name'],
+				    remoteSort: true
+					}),
+					pageSize: parseInt(GO.settings.max_rows_list),
+	        valueField:'id',
+	        displayField:'name',
+	        typeAhead: true,
+	        mode: 'remote',
+	        triggerAction: 'all',
+	        editable: false,
+	        selectOnFocus:true,
+	        forceSelection: true,
+	        allowBlank: false
+	    	})
 			]
 				
 			});

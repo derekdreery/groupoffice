@@ -44,11 +44,7 @@ try{
 			{
 				throw new AccessDeniedException();
 			}
-				
-				
-				
-				
-
+			
 			$response['data']['subject']=$response['data']['name'];
 
 			$due_time = $response['data']['due_time'];
@@ -153,28 +149,17 @@ try{
 			$response['data']['repeat_end_date']=$response['data']['repeat_end_time']>0 ? date($_SESSION['GO_SESSION']['date_format'], $response['data']['repeat_end_time']) : '';
 				
 
-			$multipliers[] = 604800;
-			$multipliers[] = 86400;
-			$multipliers[] = 3600;
-			$multipliers[] = 60;
-
-			$response['data']['reminder_multiplier'] = 60;
-			$response['data']['reminder_value'] = 0;
-
-			if($response['data']['reminder'] != 0)
+			$response['data']['remind']=$response['data']['reminder']>0;
+			
+			if($response['data']['remind'])
 			{
-				for ($i = 0; $i < count($multipliers); $i ++) {
-					$devided = $response['data']['reminder'] / $multipliers[$i];
-					$match = (int) $devided;
-					if ($match == $devided) {
-						$response['data']['reminder_multiplier'] = $multipliers[$i];
-						$response['data']['reminder_value'] = $devided;
-						break;
-					}
-				}
+				$response['data']['remind_date']=date($_SESSION['GO_SESSION']['date_format'], $response['data']['reminder']);
+				$response['data']['remind_time']=date($_SESSION['GO_SESSION']['time_format'], $response['data']['reminder']);
+			}else
+			{
+				$response['data']['remind_date']=date($_SESSION['GO_SESSION']['date_format'], $response['data']['start_time']);
+				$response['data']['remind_time']=date($_SESSION['GO_SESSION']['time_format'], 28800);
 			}
-				
-				
 				
 			if($GO_MODULES->modules['files'])
 			{
@@ -319,7 +304,7 @@ try{
 
 											if($_POST['checked']=='1')
 											{
-												$task['completion_time']=gmmktime();
+												$task['completion_time']=time();
 												$task['status']='COMPLETED';
 													
 												//$tasks->copy_completed($task['id']);

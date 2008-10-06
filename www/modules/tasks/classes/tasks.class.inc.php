@@ -93,6 +93,18 @@ class tasks extends db
 		$this->query($sql);
 		return $this->num_rows();
 	}
+	
+	function get_default_tasklist($user_id)
+	{
+		$sql = "SELECT * FROM ta_lists WHERE user_id=$user_id LIMIT 0,1";
+		$this->query($sql);
+		if($this->next_record())
+		{
+			return $this->Record;
+		}
+		return false;
+		
+	}
 
 	function get_tasklist($list_id=0)
 	{
@@ -111,10 +123,10 @@ class tasks extends db
 		{
 			global $GO_SECURITY;
 
-			$this->get_user_tasklists($GO_SECURITY->user_id);
-			if ($this->next_record(MYSQL_ASSOC))
+			$tasklist = $this->get_default_tasklist($GO_SECURITY->user_id);
+			if ($tasklist)
 			{
-				return $this->Record;
+				return $tasklist;
 			}else
 			{
 				global $GO_USERS;
@@ -205,6 +217,7 @@ class tasks extends db
 
 	function add_task($task)
 	{
+		
 
 		if(empty($task['tasklist_id']))
 		{
@@ -240,7 +253,43 @@ class tasks extends db
 		$this->insert_row('ta_tasks', $task);
 		
 		
+		
+		$this->set_reminder($task);
+		
 		return $task['id'];
+	}
+	
+	function set_reminder($task)
+	{
+		global $GO_CONFIG;
+		
+		$tasklist = $this->get_tasklist($task['tasklist_id']);
+		
+		require_once($GO_CONFIG->class_path.'base/reminder.class.inc.php');
+		$rm = new reminder();
+		$existing_reminder = $rm->get_reminder_by_link_id($tasklist['user_id'], $task['id'], 12);
+
+		if(empty($event['reminder']) && $existing_reminder)
+		{
+			$rm->delete_reminder($existing_reminder['id']);
+		}
+		
+		if(!empty($task['reminder']))
+		{			
+			$reminder['user_id']=$tasklist['user_id'];
+			$reminder['name']=$task['name'];
+			$reminder['link_type']=12;
+			$reminder['link_id']=$task['id'];
+			$reminder['time']=$task['reminder'];
+			
+			if($existing_reminder)
+			{
+				$rm->update_reminder($reminder);
+			}else
+			{
+				$rm->add_reminder($reminder);
+			}
+		}
 	}
 
 
@@ -257,6 +306,10 @@ class tasks extends db
 			$task['repeat_end_time'] = 0;
 		}
 
+		if(isset($task['reminder']))
+		{
+			$this->set_reminder($task);
+		}
 		
 		return $this->update_row('ta_tasks', 'id', $task);
 	}
@@ -270,12 +323,19 @@ class tasks extends db
 		 */
 
 		 $task = $this->get_task($task_id);
+		 $old_start_time = $task['start_time'];
 
-		 if(!empty($task['rrule']) && $next_recurrence_time = Date::get_next_recurrence_time($task['due_time'], $task['due_time'], $task['rrule']))
+		 if(!empty($task['rrule']) && $next_recurrence_time = Date::get_next_recurrence_time($task['start_time'], $task['start_time'], $task['rrule']))
 		 {
 		 	$old_id = $task['id'];
 		 	unset($task['completion_time'], $task['id'], $task['acl_read'], $task['acl_write']);
-		 	$task['due_time'] = $next_recurrence_time;		 	
+		 	$task['start_time'] = $next_recurrence_time;
+		 	
+		 	$diff = $next_recurrence_time-$old_start_time;
+		 	
+		 	$task['due_time']+=$diff;
+		 	$task['reminder']+=$diff;
+		 		 	
 		 	$task['status']='IN-PROCESS';
 		 	
 		 	$task=array_map('addslashes',$task);
@@ -286,11 +346,6 @@ class tasks extends db
 		 }
 		 return true;
 	}
-
-
-
-
-
 
 	function get_tasks(
 	$lists,

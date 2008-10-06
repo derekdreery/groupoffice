@@ -141,6 +141,11 @@ function debug($text)
 	
 	if($GO_CONFIG->log)
 	{
+		if(!is_string($text))
+		{
+			$text = var_export($text, true);
+		}
+		
 		if(!isset($_SESSION['GO_SESION']['debug_log']))
 			$_SESSION['GO_SESION']['debug_log']=$GO_CONFIG->file_storage_path.'debug.log';
 	
