@@ -32,9 +32,6 @@ try{
 	{
 
 		case 'save_task':
-
-				
-
 			$conflicts=array();
 
 			$task_id=$task['id']=isset($_POST['task_id']) ? smart_addslashes($_POST['task_id']) : 0;
@@ -62,9 +59,14 @@ try{
 					$task['completion_time']=time();
 				}
 			}
-
-			$task['reminder'] = isset($_POST['reminder_multiplier']) ? $_POST['reminder_multiplier'] * $_POST['reminder_value'] : 0;
-
+			
+			if(isset($_POST['remind']))
+			{
+				$task['reminder']=Date::to_unixtime(smart_stripslashes($_POST['remind_date'].' '.$_POST['remind_time']));	
+			}else
+			{
+				$task['reminder']=0;
+			}
 			$timezone_offset = Date::get_timezone_offset($task['due_time']);
 
 			if(empty($task['tasklist_id']))
@@ -75,7 +77,7 @@ try{
 				
 
 			$repeat_every = isset ($_POST['repeat_every']) ? $_POST['repeat_every'] : '1';
-			$task['repeat_end_time'] = (isset ($_POST['repeat_forever']) || !isset($_POST['repeat_end_date'])) ? '0' : Date::to_unixtime($_POST['repeat_end_date'].' '.$end_hour.':'.$end_min);
+			$task['repeat_end_time'] = (isset ($_POST['repeat_forever']) || !isset($_POST['repeat_end_date'])) ? '0' : Date::to_unixtime($_POST['repeat_end_date']);
 			$month_time = isset ($_POST['month_time']) ? $_POST['month_time'] : '0';
 
 
@@ -159,6 +161,9 @@ try{
 				$task_id,
 				12);
 			}
+			
+			
+			
 
 			break;
 

@@ -1728,14 +1728,10 @@ class calendar extends db
 	
 	function __on_reminder_dismissed($reminder)
 	{
-		go_log(LOG_DEBUG, var_export($reminder, true));
-		
 		$event = $this->get_event($reminder['link_id']);
 		if($event && !empty($event['rrule']))
 		{
 			$reminder['time'] = Date::get_next_recurrence_time($event['start_time'], time(),$event['rrule']);
-			
-			go_log(LOG_DEBUG, Date::get_timestamp($reminder['time']));
 			
 			if($reminder['time'])
 			{

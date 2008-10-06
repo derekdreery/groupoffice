@@ -475,6 +475,7 @@ try{
 			
 			if(!empty($event['reminder']))
 			{			
+				$reminder['id']=$existing_reminder['id'];
 				$reminder['user_id']=$calendar['user_id'];
 				$reminder['name']=$event['name'];
 				$reminder['link_type']=1;

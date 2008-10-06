@@ -37,9 +37,9 @@ GO.tasks.SelectTasklist = function(config){
 		valueField: 'id',
 		triggerAction:'all',		
 		mode:'remote',
-		editable: false,
+		editable: true,
 		selectOnFocus:true,
-	  forceSelection: true,
+		forceSelection: true,
 		typeAhead: true,
 		emptyText:GO.lang.strPleaseSelect,
 		fieldLabel: GO.tasks.lang.tasklist,
@@ -47,4 +47,18 @@ GO.tasks.SelectTasklist = function(config){
 	});
 	
 }
-Ext.extend(GO.tasks.SelectTasklist, GO.form.ComboBox);
+Ext.extend(GO.tasks.SelectTasklist, GO.form.ComboBox, {
+	
+	/*afterRender : function(){
+		
+		
+		this.store.load({
+			
+			callback:function(){
+				GO.tasks.SelectTasklist.superclass.afterRender.call(this);		
+			},
+			scope: this
+			
+		});	
+	}*/	
+});

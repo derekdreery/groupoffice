@@ -752,7 +752,7 @@ class Date
 
 		if ($repeat_end_time>0)
 		{
-			$rrule .= "UNTIL=".date(go_ical::date_format, $repeat_end_time).";";
+			$rrule .= "UNTIL=".date('Ymd', $repeat_end_time).";";
 		}
 
 		return $rrule;
