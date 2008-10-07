@@ -298,7 +298,7 @@ class modulegenerator extends db
 		//$this->create_file($this->module_dir.'namespaces.js', 'namespaces.tpl');
 		
 		
-		if($this->module_dir.'scripts.inc.php')
+		if(!file_exists($this->module_dir.'scripts.inc.php'))
 		{
 			file_put_contents($this->module_dir.'scripts.inc.php', "<?php\nrequire(".'$GO_LANGUAGE->get_language_file(\''.$this->module.'\')'.");\n\n");
 		}
