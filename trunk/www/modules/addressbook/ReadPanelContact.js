@@ -16,14 +16,18 @@ GO.addressbook.ContactReadPanel = function(config)
 	if(GO.mailings)
 	{	
 		this.newOODoc = new GO.mailings.NewOODocumentMenuItem();
-		this.newMenuButton.menu.add(this.newOODoc);
-		
+		this.newMenuButton.menu.add(this.newOODoc);		
 		
 		GO.mailings.ooTemplatesStore.on('load', function(){
 			this.newOODoc.setDisabled(GO.mailings.ooTemplatesStore.getCount() == 0);
 		}, this);
 	}
 	
+	if(GO.tasks)
+	{
+		this.scheduleCallItem = new GO.tasks.ScheduleCallMenuItem();
+		this.newMenuButton.menu.add(this.scheduleCallItem);
+	}
 	
 	this.tbar = [
 		this.editButton = new Ext.Button({
@@ -402,6 +406,31 @@ Ext.extend(GO.addressbook.ContactReadPanel, Ext.Panel,{
 				},
 				scope:this
 			});
+			
+			if(this.scheduleCallItem)
+			{				
+				var name = this.data.full_name;
+				
+				if(this.data.work_phone!='')
+				{
+					name += ' ('+this.data.work_phone+')';
+				}else if(this.data.cellular!='')
+				{
+					name += ' ('+this.data.cellular+')';
+				}else if(this.data.home_phone!='')
+				{
+					name += ' ('+this.data.home_phone+')';
+				}
+				
+				this.scheduleCallItem.setLinkConfig({
+					name: name,
+					links:[{link_id: this.data.id, link_type:2}],
+					callback:function(){
+						this.loadContact(this.data.id);				
+					},
+					scope: this
+				});
+			}
 		}
 	}
 	

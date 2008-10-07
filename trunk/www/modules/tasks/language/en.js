@@ -29,3 +29,5 @@ GO.tasks.lang.options = 'Options';
 GO.tasks.lang.createLink = 'Create a link';
 GO.tasks.lang.startsAt='Starts at';
 GO.tasks.lang.showInactiveTasks='Show inactive tasks';
+GO.tasks.lang.scheduleCall='Schedule call';
+GO.tasks.lang.call='Call';

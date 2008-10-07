@@ -35,3 +35,9 @@
 .tasks-late td{
 	color: red;
 }
+
+.tasks-call{
+	background-image: url('images/call.png') !important;
+	width:16px;
+	height:16px;
+}
