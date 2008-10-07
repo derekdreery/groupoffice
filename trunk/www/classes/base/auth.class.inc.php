@@ -81,7 +81,7 @@ class GO_AUTH extends db
 			}else
 			{
 				$md5_auth_pass = $this->md5_base64(base64_encode(pack('H*',$this->f('auth_md5_pass'))).':');
-				go_log(LOG_DEBUG, $password.' => '.$md5_auth_pass);
+
 				if($md5_auth_pass!=$password)
 				{
 					return null;
