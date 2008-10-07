@@ -30,7 +30,7 @@ GO.tasks.TaskPanel = function(config)
 				{
 					GO.tasks.taskDialog = new GO.tasks.TaskDialog();
 				}
-				GO.tasks.taskDialog.show(this.data.id);					
+				GO.tasks.taskDialog.show({task_id: this.data.id});					
 			}, 
 			scope: this,
 			disabled : true
