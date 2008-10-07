@@ -226,6 +226,19 @@ GO.CheckerPanel = Ext.extend(GO.grid.GridPanel, {
 		this.loadMask=true;
 		this.autoExpandColumn=3;
 		
+		this.on('rowdblclick', function (grid, index){
+			var selectionModel = grid.getSelectionModel();
+			var record = selectionModel.getSelected();
+			
+			if(GO.linkHandlers[record.data.link_type])
+			{
+				GO.linkHandlers[record.data.link_type].call(this, record.data.link_id);
+			}else
+			{
+				Ext.Msg.alert(GO.lang['strError'], 'No handler definded for link type: '+record.data.link_type);
+			}
+		}, this);
+		
 		GO.CheckerPanel.superclass.initComponent.call(this);
 	},
 	

@@ -6,22 +6,19 @@
  * 
  * If you have questions write an e-mail to info@intermesh.nl
  * 
- * @version $Id: NotePanel.js 2276 2008-07-04 12:22:20Z mschering $
+ * @version $Id: TaskPanel.js 2276 2008-07-04 12:22:20Z mschering $
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
  
-GO.notes.NotePanel = function(config)
+GO.tasks.TaskPanel = function(config)
 {
 	Ext.apply(this, config);
-	
-	this.split=true;
+
 	this.autoScroll=true;
-	this.title=GO.notes.lang.note;
+	//this.title=GO.tasks.lang.task;	
 	
-	
-	this.newMenuButton = new GO.NewMenuButton();
-		
+	this.newMenuButton = new GO.NewMenuButton();		
 	
 	this.tbar = [
 		this.editButton = new Ext.Button({
@@ -29,11 +26,11 @@ GO.notes.NotePanel = function(config)
 			text: GO.lang['cmdEdit'], 
 			cls: 'x-btn-text-icon', 
 			handler: function(){
-				if(!GO.notes.noteDialog)
+				if(!GO.tasks.taskDialog)
 				{
-					GO.notes.noteDialog = new GO.notes.NoteDialog();
+					GO.tasks.taskDialog = new GO.tasks.TaskDialog();
 				}
-				GO.notes.noteDialog.show(this.data.id);					
+				GO.tasks.taskDialog.show(this.data.id);					
 			}, 
 			scope: this,
 			disabled : true
@@ -42,19 +39,18 @@ GO.notes.NotePanel = function(config)
 			cls: 'x-btn-text-icon', 
 			text: GO.lang.cmdBrowseLinks,
 			handler: function(){
-				GO.linkBrowser.show({link_id: this.data.id,link_type: "4",folder_id: "0"});				
+				GO.linkBrowser.show({link_id: this.data.id,link_type: "12",folder_id: "0"});				
 			},
 			scope: this
 		}),		
 		this.newMenuButton
 	];	
 	
-	
-	GO.notes.NotePanel.superclass.constructor.call(this);		
+	GO.tasks.TaskPanel.superclass.constructor.call(this);		
 }
 
 
-Ext.extend(GO.notes.NotePanel, Ext.Panel,{
+Ext.extend(GO.tasks.TaskPanel, Ext.Panel,{
 	
 	initComponent : function(){
 	
@@ -95,17 +91,17 @@ Ext.extend(GO.notes.NotePanel, Ext.Panel,{
 		
 		this.template = new Ext.XTemplate(template, config);
 		
-		GO.notes.NotePanel.superclass.initComponent.call(this);
+		GO.tasks.TaskPanel.superclass.initComponent.call(this);
 	},
 	
-	loadNote : function(note_id)
+	loadTask : function(task_id)
 	{
 		this.body.mask(GO.lang.waitMsgLoad);
 		Ext.Ajax.request({
-			url: GO.settings.modules.notes.url+'json.php',
+			url: GO.settings.modules.tasks.url+'json.php',
 			params: {
-				task: 'note_with_items',
-				note_id: note_id
+				task: 'task_with_items',
+				task_id: task_id
 			},
 			callback: function(options, success, response)
 			{
@@ -133,10 +129,10 @@ Ext.extend(GO.notes.NotePanel, Ext.Panel,{
 		if(data.write_permission)
 			this.newMenuButton.setLinkConfig({
 				id:this.data.id,
-				type:4,
+				type:12,
 				text: this.data.name,
 				callback:function(){
-					this.loadNote(this.data.id);				
+					this.loadTask(this.data.id);				
 				},
 				scope:this
 			});
