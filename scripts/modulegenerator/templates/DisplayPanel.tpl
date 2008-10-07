@@ -33,7 +33,7 @@ GO.{module}.{friendly_single_ucfirst}Panel = function(config)
 			}, 
 			scope: this,
 			disabled : true
-		})<gotpl if="$link_type &gt; 0">,{
+		})<gotpl if="$link_type &gt; 0">,this.linkBrowseButton = new Ext.Button({
 			iconCls: 'btn-link', 
 			cls: 'x-btn-text-icon', 
 			text: GO.lang.cmdBrowseLinks,
@@ -41,7 +41,7 @@ GO.{module}.{friendly_single_ucfirst}Panel = function(config)
 				GO.linkBrowser.show({link_id: this.data.id,link_type: "{link_type}",folder_id: "0"});				
 			},
 			scope: this
-		},	
+		}),	
 		this.newMenuButton</gotpl>
 	];	
 	
@@ -119,7 +119,8 @@ Ext.extend(GO.{module}.{friendly_single_ucfirst}Panel, Ext.Panel,{
 	setData : function(data)
 	{
 		this.data=data;
-		this.editButton.setDisabled(!data.write_permission);
+		this.editButton.setDisabled(!data.write_permission);		
+		<gotpl if="$link_type &gt; 0">this.linkBrowseButton.setDisabled(false);</gotpl>
 		
 		<gotpl if="$link_type &gt; 0">if(data.write_permission)
 			this.newMenuButton.setLinkConfig({

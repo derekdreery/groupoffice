@@ -43,15 +43,16 @@ GO.addressbook.ContactReadPanel = function(config)
 			}, 
 			scope: this,
 			disabled : true
-		}),{
+		}),this.linkBrowseButton = new Ext.Button({
 			iconCls: 'btn-link', 
 			cls: 'x-btn-text-icon', 
 			text: GO.lang.cmdBrowseLinks,
 			handler: function(){
 				GO.linkBrowser.show({link_id: this.data.id,link_type: "2",folder_id: "0"});				
 			},
-			scope: this
-		},
+			scope: this,
+			disabled: true
+		}),
 		this.newMenuButton
 	];	
 	
@@ -393,6 +394,8 @@ Ext.extend(GO.addressbook.ContactReadPanel, Ext.Panel,{
 	{
 		this.data=data;
 		this.editButton.setDisabled(!data.write_permission);
+		this.linkBrowseButton.setDisabled(false);
+		
 		this.template.overwrite(this.body, data);	
 		
 		if(data.write_permission)

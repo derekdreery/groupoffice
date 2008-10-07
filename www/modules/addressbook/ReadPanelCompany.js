@@ -42,7 +42,7 @@ GO.addressbook.CompanyReadPanel = function(config)
 			}, 
 			scope: this,
 			disabled : true
-		}),{
+		}),this.linkBrowseButton = new Ext.Button({
 			iconCls: 'btn-link', 
 			cls: 'x-btn-text-icon', 
 			text: GO.lang.cmdBrowseLinks,
@@ -50,7 +50,7 @@ GO.addressbook.CompanyReadPanel = function(config)
 				GO.linkBrowser.show({link_id: this.data.id,link_type: "3",folder_id: "0"});				
 			},
 			scope: this
-		},
+		}),
 		this.newMenuButton
 	];	
 	
@@ -454,6 +454,7 @@ Ext.extend(GO.addressbook.CompanyReadPanel,Ext.Panel,{
 	{
 		this.data=data;
 		this.editButton.setDisabled(!data.write_permission);
+		this.linkBrowseButton.setDisabled(false);
 		this.template.overwrite(this.body, data);	
 		
 		if(data.write_permission)
