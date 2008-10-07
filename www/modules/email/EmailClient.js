@@ -944,27 +944,28 @@ GO.linkHandlers[9] = function(id, remoteMessage){
   
   messagePanel.on('attachmentClicked', function(attachment, panel){
   	
-  	//if(attachment.mime.indexOf('message')>-1)
-  	//{
-  		
-  	//}else
-  	//{
-  	if(panel.data.path)
+  	if(attachment.mime.indexOf('message')>-1)
   	{
-  		document.location.href=GO.settings.modules.email.url+
-  			'mimepart.php?path='+
-  			escape(panel.data.path)+'&part_number='+attachment.number;
+  		remoteMessage.part_number=attachment.number+".0";
+  		GO.linkHandlers[9].call(this, id, remoteMessage);
   	}else
   	{
-  		document.location.href=GO.settings.modules.email.url+
-  			'mimepart.php?uid='+remoteMessage.uid+'' +
-  			'&account_id='+remoteMessage.account_id+'' +
-  			'&transfer='+attachment.transfer+'' +
-  			'&mailbox='+escape(remoteMessage.mailbox)+'' +
-  			'&part='+remoteMessage.part+'' +
-  			'&part_number='+attachment.number;
+	  	if(panel.data.path)
+	  	{
+	  		document.location.href=GO.settings.modules.email.url+
+	  			'mimepart.php?path='+
+	  			escape(panel.data.path)+'&part_number='+attachment.number;
+	  	}else
+	  	{
+	  		document.location.href=GO.settings.modules.email.url+
+	  			'mimepart.php?uid='+remoteMessage.uid+'' +
+	  			'&account_id='+remoteMessage.account_id+'' +
+	  			'&transfer='+attachment.transfer+'' +
+	  			'&mailbox='+escape(remoteMessage.mailbox)+'' +
+	  			'&part='+remoteMessage.part+'' +
+	  			'&part_number='+attachment.number;
+	  	}
   	}
-  	//}
   	
   	
   }, this);
@@ -1018,11 +1019,21 @@ GO.linkHandlers[9] = function(id, remoteMessage){
 		remoteMessage={};
 	
 	remoteMessage.id=id;
-	remoteMessage.task='linked_message';
+	
+	var url = '';
+	if(remoteMessage.account_id)
+	{
+		remoteMessage.task='message_attachment';
+		url = GO.settings.modules.email.url+'json.php';
+	}else
+	{
+		remoteMessage.task='linked_message';
+		url = GO.settings.modules.mailings.url+'json.php';
+	}
 	
 
 	Ext.Ajax.request({
-			url: GO.settings.modules.mailings.url+'json.php',
+			url: url,
 			params: remoteMessage,
 			scope: this,
 			callback: function(options, success, response)

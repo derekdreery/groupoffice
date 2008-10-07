@@ -105,7 +105,7 @@ class Go2Mime
 	}
 	
 	
-	public function mime2GO($mime, $inline_attachments_url='', $create_tmp_attachments=false){
+	public function mime2GO($mime, $inline_attachments_url='', $create_tmp_attachments=false, $part_number=''){
 		
 		$this->replacements = array();
 		$this->inline_attachments_url=$inline_attachments_url;
@@ -117,6 +117,16 @@ class Go2Mime
 		$params['input'] = $mime;
 
 		$structure = Mail_mimeDecode::decode($params);
+		
+		if($part_number!='')
+		{		
+			$parts_arr = explode('.',$part_number);
+			for($i=0;$i<count($parts_arr);$i++)
+			{
+				$structure = $structure->parts[$parts_arr[$i]];
+			}
+		}
+				
 		
 		//var_dump($structure);
 		
@@ -196,7 +206,7 @@ class Go2Mime
 				if (!empty($part->d_parameters['filename']) && empty($part->headers['content-id']))
 				{
 					$mime_attachment['index']=count($this->response['attachments']);
-					$mime_attachment['size'] = strlen($part->body);
+					$mime_attachment['size'] = isset($part->body) ? strlen($part->body) : 0;
 					$mime_attachment['name'] = $part->d_parameters['filename'];
 					$mime_attachment['extension'] = File::get_extension($part->d_parameters['filename']);
 					$mime_attachment['mime'] = $part->ctype_primary.'/'.$part->ctype_secondary;

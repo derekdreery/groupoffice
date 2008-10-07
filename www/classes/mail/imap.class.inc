@@ -461,8 +461,6 @@ class imap {
 		if ($this->conn) {
 			unset ($this->message);
 
-
-
 			//determine next and previous message
 			if (!isset ($this->sort)) {
 				$this->sort();
@@ -477,8 +475,6 @@ class imap {
 				return false;
 			}
 				
-			//debug(var_export($headerinfo, true));
-				
 			for ($i = 0; $i < sizeof($this->sort); $i ++) {
 				if ($this->message['uid'] == $this->sort[$i]) {
 					$this->message["next"] = ($i -1 >= 0) ? $this->sort[$i -1] : 0;
@@ -486,80 +482,11 @@ class imap {
 					break;
 				}
 			}
-
-
-
-			//$this->message['udate'] = $headerinfo->udate;
-			/*if(isset($headerinfo->date))
-			{
-			$this->message["udate"] = strtotime($headerinfo->date);
-			}elseif(isset($headerinfo->MailDate))
-			{
-			$this->message["udate"] = strtotime($headerinfo->MailDate);
-			}elseif(isset($headerinfo->udate))
-			{
-			$this->message['udate'] = $headerinfo->udate;
-			}*/
-
 			$this->message['new'] = (($headerinfo->Recent == 'N' || $headerinfo->Unseen == 'U')  && $this->is_imap()) ? true : false;
 
-			/*$tmp = $headerinfo->from;
-			 $this->message["sender"] = $tmp[0]->mailbox.'@'.$tmp[0]->host;
-			 $this->message["from"] = isset ($tmp[0]->personal) ? $this->enc_utf8($tmp[0]->personal) : $this->message["sender"];
-			 */
-				
-			//$this->message["subject"] = isset ($headerinfo->Subject) ? $this->enc_utf8($headerinfo->Subject) : '';
-
-			/*$this->message["to"] = array();
-			 if (isset($headerinfo->to) && is_array ($headerinfo->to)) {
-				$tmp = $headerinfo->to;
-
-				for ($x = 0; $x < sizeof($tmp); $x ++) {
-				$email = '';
-				if (isset ($tmp[$x]->mailbox)) {
-				$host = isset ($tmp[$x]->host) ? '@'.$tmp[$x]->host : '';
-				$email = $tmp[$x]->mailbox.$host;
-				}
-
-				$personal = isset ($tmp[$x]->personal) ? $this->enc_utf8($tmp[$x]->personal) : '';
-				$this->message["to"][$x] = $this->RFC822->write_address($personal, $email);
-				}
-				}
-
-				$this->message["cc"] = array();
-				if (isset($headerinfo->cc) && is_array ($headerinfo->cc)) {
-				$tmp = $headerinfo->cc;
-				for ($x = 0; $x < sizeof($tmp); $x ++) {
-				$email = '';
-				if (isset ($tmp[$x]->mailbox)) {
-				$host = isset ($tmp[$x]->host) ? '@'.$tmp[$x]->host : '';
-				$email = $tmp[$x]->mailbox.$host;
-				}
-
-				$personal = isset ($tmp[$x]->personal) ? $this->enc_utf8($tmp[$x]->personal) : '';
-				$this->message["cc"][$x] = $this->RFC822->write_address($personal, $email);
-				}
-				}
-
-				$this->message["bcc"] = array();
-				if (isset($headerinfo->bcc) && is_array ($headerinfo->bcc)) {
-				$tmp = $headerinfo->bcc;
-				for ($x = 0; $x < sizeof($tmp); $x ++) {
-				$email = '';
-				if (isset ($tmp[$x]->mailbox)) {
-				$host = isset ($tmp[$x]->host) ? '@'.$tmp[$x]->host : '';
-				$email = $tmp[$x]->mailbox.$host;
-				}
-
-				$personal = isset ($tmp[$x]->personal) ? $this->enc_utf8($tmp[$x]->personal) : '';
-				$this->message["bcc"][$x] = $this->RFC822->write_address($personal, $email);
-				}
-				}*/
-				
 			$this->message["flagged"] = $headerinfo->Flagged=='F';
 			$this->message["size"] = $headerinfo->Size;
 			$this->message["answered"] = $headerinfo->Answered=='A';
-
 
 			if($fetchstructure)
 			{
@@ -571,14 +498,9 @@ class imap {
 					$structure = imap_bodystruct($this->conn, $this->message['number'], $part);
 					}*/
 
-				//debug(var_export($structure, true));
 
 				$this->mail["parts"] = array ();
 				$this->get_parts($structure);
-
-				//debug(var_export($structure, true));
-
-				// $this->print_structure($structure);
 			}
 
 			$header = imap_fetchheader($this->conn, $this->message['number']);
