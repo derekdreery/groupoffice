@@ -631,7 +631,9 @@ try{
 				$account = connect($account_id, $mailbox);
 
 				$response = $imap->get_message($uid);
-
+				
+				//debug($response);
+				
 				if(empty($response["subject"]))
 				{
 					$response['subject']= $lang['email']['no_subject'];
@@ -684,7 +686,7 @@ try{
 
 				$attachments=array();
 
-				if(count($parts)==0 && eregi('text/html', $response['content_type']))
+				if(/*count($parts)==0 && */eregi('text/html', $response['content_type']))
 				{
 					$default_mime = 'text/html';
 				}else
@@ -692,11 +694,13 @@ try{
 					$default_mime = 'text/plain';
 				}
 
+				$part_count = count($parts);
+				
 				while($part = array_shift($parts))
 				{
 
-					$mime = isset($part["mime"]) ? strtolower($part["mime"]) : $default_mime;
-
+					$mime = isset($part["mime"]) && $part_count>1 ? strtolower($part["mime"]) : $default_mime;
+//debug($default_mime);
 
 
 					//go_log(LOG_DEBUG, $part['name'].' -> '.$mime);
