@@ -49,11 +49,14 @@ $params['decode_headers'] = true;
 
 
 $part = Mail_mimeDecode::decode($params);
+
 $parts_arr = explode('.',$_REQUEST['part_number']);
 for($i=0;$i<count($parts_arr);$i++)
 {
 	$part = $part->parts[$parts_arr[$i]];
 }
+
+
 
 $filename = isset($part->d_parameters['filename']) ? $part->d_parameters['filename'] : 'attachment';
 

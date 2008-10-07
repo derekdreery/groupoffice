@@ -599,6 +599,28 @@ try{
 				}
 
 				break;
+				
+			case 'message_attachment':
+			$account_id = smart_stripslashes($_REQUEST['account_id']);
+			$mailbox = smart_stripslashes($_REQUEST['mailbox']);
+			$uid = $_REQUEST['uid'];
+			$transfer = $_REQUEST['transfer'];
+			$part = $_REQUEST['part'];
+			$part_number = isset($_REQUEST['part_number']) ? smart_addslashes($_REQUEST['part_number']) : "";
+
+			$account = connect($account_id, $mailbox);
+
+			$data = $imap->view_part($uid, $part, $transfer);
+			$response=array();
+			$inline_url = $GO_MODULES->modules['mailings']['url'].'mimepart.php?account_id='.$_REQUEST['account_id'].'&mailbox='.urlencode(smart_stripslashes($_REQUEST['mailbox'])).'&uid='.smart_stripslashes($_REQUEST['uid']).'&part='.$_REQUEST['part'].'&transfer='.urlencode($_REQUEST['transfer']);
+		
+				
+			require_once($GO_CONFIG->class_path.'mail/Go2Mime.class.inc.php');
+			$go2mime = new Go2Mime();
+				
+			$response = array_merge($response, $go2mime->mime2GO($data, $inline_url,false, $part_number));
+
+			break;
 
 			case 'message':
 
