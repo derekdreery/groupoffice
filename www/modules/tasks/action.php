@@ -30,7 +30,37 @@ try{
 
 	switch($_REQUEST['task'])
 	{
+	
+		case 'schedule_call':
+			
+			$tasklist = $tasks->get_tasklist();
+			
+			$task['name']=smart_addslashes($_POST['name']);
+			$task['start_time']=$task['due_time']=Date::to_unixtime($_POST['date']);
+			$task['description']=smart_addslashes($_POST['description']);
+			$task['status']='NEEDS-ACTION';
+			$task['tasklist_id']=$tasklist['id'];
+			$task['reminder']=Date::to_unixtime(smart_stripslashes($_POST['date'].' '.$_POST['remind_time']));	
+			$task['user_id']=$GO_SECURITY->user_id;
+			
+			$response['task_id']= $task_id = $tasks->add_task($task);
 
+			$links = json_decode(smart_stripslashes($_POST['links']), true);
+			
+			foreach($links as $link)
+			{
+				$GO_LINKS->add_link(
+				smart_addslashes($link['link_id']),
+				smart_addslashes($link['link_type']),
+				$task_id,
+				12);
+			}
+			
+			
+			$response['success']=true;
+			
+			break;
+		
 		case 'save_task':
 			$conflicts=array();
 

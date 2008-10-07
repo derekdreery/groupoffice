@@ -1,3 +1,4 @@
+modules/tasks/ScheduleCallDialog.js
 modules/tasks/TasklistDialog.js
 modules/tasks/TaskDialog.js
 modules/tasks/TasksGrid.js
