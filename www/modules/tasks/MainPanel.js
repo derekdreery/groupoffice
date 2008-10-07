@@ -312,11 +312,19 @@ GO.moduleManager.addModule('tasks', GO.tasks.MainPanel, {
  * panel with links. 
  */
 GO.linkHandlers[12]=function(id, link_config){
-		if(!GO.tasks.taskDialog)
+		/*if(!GO.tasks.taskDialog)
 		{
 			GO.tasks.taskDialog = new GO.tasks.TaskDialog();		
 		}
-		GO.tasks.taskDialog.show({task_id: id, link_config: link_config});
+		GO.tasks.taskDialog.show({task_id: id, link_config: link_config});*/
+		
+		var taskPanel = new GO.tasks.TaskPanel();
+		var linkWindow = new GO.LinkViewWindow({
+			title: GO.tasks.lang.task,
+			items: taskPanel
+		});
+		taskPanel.loadTask(id);
+		linkWindow.show();
 	}
 
 

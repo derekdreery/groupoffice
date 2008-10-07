@@ -26,7 +26,7 @@ try{
 
 	switch($task)
 	{
-
+		case 'task_with_items':
 		case 'task':
 			
 			require($GO_CONFIG->class_path.'ical2array.class.inc');
@@ -171,8 +171,6 @@ try{
 				$full_path = $GO_CONFIG->file_storage_path.$response['data']['files_path'];
 				if(!file_exists($full_path))
 				{
-						
-						
 					$fs->mkdir_recursive($full_path);
 						
 					$folder['user_id']=$response['data']['user_id'];
@@ -184,13 +182,27 @@ try{
 					$fs->add_folder($folder);
 				}
 			}
+			
+			if($task!='task')
+			{
+				$response['data']['description']=String::text_to_html($response['data']['description']);
+
+				require_once($GO_CONFIG->class_path.'/base/search.class.inc.php');
+				$search = new search();
+			
+				$links_json = $search->get_latest_links_json($GO_SECURITY->user_id, $response['data']['id'], 12);				
+				$response['data']['links']=$links_json['results'];
 				
-				
-				
+				if(isset($GO_MODULES->modules['files']))
+				{
+					$response['data']['files']=$fs->get_content_json($full_path);
+				}else
+				{
+					$response['data']['files']=array();				
+				}
+			}
 				
 			$response['success']=true;
-
-
 			break;
 
 

@@ -30,8 +30,7 @@ try{
 		case 'save_category':
 				
 			$category_id=$category['id']=isset($_POST['category_id']) ? smart_addslashes($_POST['category_id']) : 0;
-			
-			
+		
 			if(isset($_POST['user_id']))
 				$category['user_id']=smart_addslashes(trim($_POST['user_id']));
 				

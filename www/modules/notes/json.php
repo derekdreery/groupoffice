@@ -26,40 +26,17 @@ try{
 
 	switch($task)
 	{
-		
-		
 		case 'category':
-
 			$category = $notes->get_category(smart_addslashes($_REQUEST['category_id']));
-			
-			
 			$user = $GO_USERS->get_user($category['user_id']);
 			$category['user_name']=String::format_name($user);
-			
-			
-			
-			
 			$response['data']=$category;
-			
-			
-						
-			$response['success']=true;
-			
-			
-			
+			$response['success']=true;		
 			break;
-			
-			
-
 				
 		case 'categories':
-		
-			
 			$auth_type = isset($_POST['auth_type']) ? smart_addslashes($_POST['auth_type']) : 'write';
 			
-			
-			
-
 			if(isset($_POST['delete_keys']))
 			{
 				try{
@@ -84,8 +61,6 @@ try{
 			
 			$query = isset($_REQUEST['query']) ? '%'.smart_addslashes($_REQUEST['query']).'%' : '';
 			
-			
-
 			$response['total'] = $notes->get_authorized_categories($auth_type, $GO_SECURITY->user_id, $query, $sort, $dir, $start, $limit);
 			$response['results']=array();
 			while($notes->next_record())
@@ -110,14 +85,10 @@ try{
 			
 			
 			$user = $GO_USERS->get_user($note['user_id']);
-			$note['user_name']=String::format_name($user);
-			
+			$note['user_name']=String::format_name($user);			
 			
 			$note['mtime']=Date::get_timestamp($note['mtime']);
-			
-			
-			$note['ctime']=Date::get_timestamp($note['ctime']);
-			
+			$note['ctime']=Date::get_timestamp($note['ctime']);			
 			
 			$response['data']=$note;
 			
@@ -126,8 +97,6 @@ try{
 			{
 				throw new AccessDeniedException();
 			}
-			
-			
 			
 			if(isset($GO_MODULES->modules['files']))
 			{
@@ -189,8 +158,7 @@ try{
 				$search = new search();
 			
 				$links_json = $search->get_latest_links_json($GO_SECURITY->user_id, $response['data']['id'], 4);				
-				$response['data']['links']=$links_json['results'];				
-
+				$response['data']['links']=$links_json['results'];
 				
 				if(isset($GO_MODULES->modules['files']))
 				{
@@ -199,27 +167,17 @@ try{
 				{
 					$response['data']['files']=array();				
 				}
-				
-
 				break;
-			}			
-			
-			
-			
-
+			}
 				
 		case 'notes':
-		
-			
-			
 			$category_id=smart_addslashes($_POST['category_id']);
 			$category = $notes->get_category($category_id);
 			$response['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_write']);
 			if(!$response['write_permission'] && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_read']))
 			{
 				throw new AccessDeniedException();
-			}
-			
+			}			
 
 			if(isset($_POST['delete_keys']))
 			{
@@ -247,18 +205,12 @@ try{
 			$response['results']=array();
 			while($notes->next_record())
 			{
-				$note = $notes->Record;
-				
+				$note = $notes->Record;				
 				
 				$user = $GO_USERS->get_user($note['user_id']);
 				$note['user_name']=String::format_name($user);
-				
-				
 				$note['mtime']=Date::get_timestamp($note['mtime']);
-				
-				
-				$note['ctime']=Date::get_timestamp($note['ctime']);
-				
+				$note['ctime']=Date::get_timestamp($note['ctime']);				
 								
 				$response['results'][] = $note;
 			}
