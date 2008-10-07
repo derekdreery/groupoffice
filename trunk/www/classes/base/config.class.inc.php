@@ -595,7 +595,7 @@ class GO_CONFIG
 	 * @access  public
 	 */
 
-	var $mtime = '/* $Id$ */';
+	var $mtime = '20081007';
 
 	/* The permissions mode to use when creating files and folders
 	 *
@@ -807,7 +807,7 @@ class GO_CONFIG
       		$this->log=true;
       	}
 
-      	$this->set_full_url();
+      	$this->set_full_url();      	
       }
 
       /**

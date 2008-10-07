@@ -795,7 +795,7 @@ class tasks extends db
 
 		$search = new search();
 		
-		$now = gmmktime();
+		$now = time();
 
 		while($this->next_record())
 		{
@@ -811,23 +811,16 @@ class tasks extends db
 				$class .= ' tasks-completed';
 			}
 			
-			$description = addslashes($this->f('description'));
-			
-			if(!empty($description))
-			{
-				$description .= '<br />';
-			}
-			
-			$description .= $lang['tasks']['status'].': '.$this->f('status');
+			$status = isset($lang['tasks']['statuses'][$this->f('status')]) ? addslashes($lang['tasks']['statuses'][$this->f('status')]) : $lang['tasks']['statuses']['NEEDS-ACTION']; 
 			
 			//$cache['table']='cal_tasks';
 			$cache['id']=$this->f('id');
 			$cache['user_id']=$this->f('user_id');
-			$cache['name'] = '<span class="'.$class.'">'.addslashes($this->f('name')).'</span>';
+			$cache['name'] = '<span class="'.$class.'">'.addslashes($this->f('name')).' ['.$status.']</span>';
 			//$cache['link_id'] = $this->f('link_id');
 			$cache['link_type']=12;
-			$cache['description']=$description;
-			$cache['type']='Task';
+			$cache['description']='';
+			$cache['type']=$lang['link_type'][12];
 			$cache['keywords']=addslashes($search->record_to_keywords($this->Record)).','.$cache['type'];
 			$cache['mtime']=$this->f('mtime');
 			$cache['acl_read']=$this->f('acl_read');

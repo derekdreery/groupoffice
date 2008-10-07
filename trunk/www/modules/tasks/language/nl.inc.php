@@ -7,4 +7,12 @@ $lang['tasks']['description']='Taken module';
 
 $lang['link_type'][12]=$lang['tasks']['task']='Taak';
 $lang['tasks']['status']='Status';
+
+$lang['tasks']['statuses']['NEEDS-ACTION']='Actie nodig';
+$lang['tasks']['statuses']['ACCEPTED']='Geaccepteerd';
+$lang['tasks']['statuses']['DECLINED']='Geweigerd';
+$lang['tasks']['statuses']['TENTATIVE']='Voorlopig';
+$lang['tasks']['statuses']['DELEGATED']='Gedelegeerd';
+$lang['tasks']['statuses']['COMPLETED']='Voltooid';
+$lang['tasks']['statuses']['IN-PROCESS']='Wordt aan gewerkt';
 ?>
