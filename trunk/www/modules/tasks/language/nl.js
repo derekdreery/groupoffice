@@ -25,3 +25,5 @@ GO.tasks.lang.options = 'Opties';
 GO.tasks.lang.createLink = 'Maak een koppeling';
 GO.tasks.lang.startsAt='Start op';
 GO.tasks.lang.showInactiveTasks='Toon inactive taken';
+GO.tasks.lang.scheduleCall='Telefoongesprek plannen';
+GO.tasks.lang.call='Bellen';
