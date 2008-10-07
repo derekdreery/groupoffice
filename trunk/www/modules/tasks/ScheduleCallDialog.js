@@ -143,11 +143,12 @@ Ext.extend(GO.tasks.ScheduleCallDialog, Ext.Window,{
 	    		name:'remind_time',
 	    		format: GO.settings.time_format,
 	    		value:eight.format(GO.settings['time_format']),
-	    		fieldLabel:GO.lang.strTime
+	    		fieldLabel:GO.lang.strTime,
+	    		anchor:'100%',
 	    	},{
 					xtype: 'textarea',
 				  name: 'description',
-					anchor: '-20',
+					anchor: '100%',
 					height:100,
 				  fieldLabel: GO.lang.strDescription
 				}]				
