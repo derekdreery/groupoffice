@@ -8,7 +8,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  * 
  * @copyright Copyright Intermesh
- * @version $Id: exceptions.class.inc.php 1853 2008-04-29 11:41:02Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
@@ -16,7 +16,7 @@
  * Thrown when a user doesn't have access
  * 
  * @author Merijn Schering <mschering@intermesh.nl>
- * @version $Id: exceptions.class.inc.php 1853 2008-04-29 11:41:02Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @package go.basic.exceptions
  * 
@@ -35,7 +35,7 @@ class AccessDeniedException extends Exception
 * Thrown when an SQL insert query failes
  * 
  * @author Merijn Schering <mschering@intermesh.nl>
- * @version $Id: exceptions.class.inc.php 1853 2008-04-29 11:41:02Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @package go.basic.exceptions
  * 
@@ -55,7 +55,7 @@ class DatabaseInsertException extends Exception
  * Thrown when an SQL Update query failes
  * 
  * @author Merijn Schering <mschering@intermesh.nl>
- * @version $Id: exceptions.class.inc.php 1853 2008-04-29 11:41:02Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @package go.basic.exceptions
  * 
@@ -74,7 +74,7 @@ class DatabaseUpdateException extends Exception
  * Thrown when an error ocurred while deleting data
  * 
  * @author Merijn Schering <mschering@intermesh.nl>
- * @version $Id: exceptions.class.inc.php 1853 2008-04-29 11:41:02Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @package go.basic.exceptions
  * 
@@ -93,7 +93,7 @@ class DatabaseDeleteException extends Exception
 * Thrown when a select SQL query fails
  * 
  * @author Merijn Schering <mschering@intermesh.nl>
- * @version $Id: exceptions.class.inc.php 1853 2008-04-29 11:41:02Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @package go.basic.exceptions
  * 
@@ -112,7 +112,7 @@ class DatabaseSelectException extends Exception
  * Thrown when a replace SQL query fails
  * 
  * @author Merijn Schering <mschering@intermesh.nl>
- * @version $Id: exceptions.class.inc.php 1853 2008-04-29 11:41:02Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @package go.basic.exceptions
  * 
@@ -131,7 +131,7 @@ class DatabaseReplaceException extends Exception
  * Thrown when a user does not supply all required info in a form
  * 
  * @author Merijn Schering <mschering@intermesh.nl>
- * @version $Id: exceptions.class.inc.php 1853 2008-04-29 11:41:02Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @package go.basic.exceptions
  * 

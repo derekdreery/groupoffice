@@ -8,7 +8,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  * 
  * @copyright Copyright Intermesh
- * @version $Id: security.class.inc.php 2830 2008-08-26 12:12:29Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
@@ -18,7 +18,7 @@
  * ACL's can be used to secure items in Group-Office like addressbooks, calendars etc.
  * 
  * @author Merijn Schering <mschering@intermesh.nl>
- * @version $Id: security.class.inc.php 2830 2008-08-26 12:12:29Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @package go.basic
  * 

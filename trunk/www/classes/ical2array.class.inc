@@ -8,7 +8,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  * 
  * @copyright Copyright Intermesh
- * @version $Id: ical2array.class.inc 2137 2008-06-19 15:14:06Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
@@ -49,7 +49,7 @@ define("ICAL_CHAR_HTAB", chr(9));
  * $this->objects[$n]['DTSTART']['value'] = '20040303';
  * 
  * @copyright Copyright Intermesh
- * @version $Id: ical2array.class.inc 2137 2008-06-19 15:14:06Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package go.calendar
  * 

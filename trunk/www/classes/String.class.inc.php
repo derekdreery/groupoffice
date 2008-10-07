@@ -8,7 +8,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  *
  * @copyright Copyright Intermesh
- * @version $Id: String.class.inc.php 2163 2008-06-24 09:40:47Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
@@ -16,7 +16,7 @@
  * This class contains functions for string operations
  *
  * @copyright Copyright Intermesh
- * @version $Id: String.class.inc.php 2163 2008-06-24 09:40:47Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package go.utils
  * @since Group-Office 3.0

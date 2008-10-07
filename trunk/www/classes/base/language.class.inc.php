@@ -8,7 +8,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  * 
  * @copyright Copyright Intermesh
- * @version $Id: language.class.inc.php 1839 2008-04-25 15:52:47Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
@@ -17,7 +17,7 @@
  * This class is used to include language files according to the user's preference
  * 
  * @author Merijn Schering <mschering@intermesh.nl>
- * @version $Id: language.class.inc.php 1839 2008-04-25 15:52:47Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @package go.basic
  * @since Group-Office 1.0

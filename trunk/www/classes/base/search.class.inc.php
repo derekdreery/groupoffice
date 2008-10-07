@@ -8,7 +8,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  * 
  * @copyright Copyright Intermesh
- * @version $Id: search.class.inc.php 2315 2008-07-08 08:18:39Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
@@ -18,7 +18,7 @@
  * function.
  * 
  * @author Merijn Schering <mschering@intermesh.nl>
- * @version $Id: search.class.inc.php 2315 2008-07-08 08:18:39Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @package go.basic
  * @since Group-Office 2.17

@@ -8,7 +8,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  * 
  * @copyright Copyright Intermesh
- * @version $Id: Group-Office.php 2950 2008-09-03 08:39:41Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
@@ -19,7 +19,7 @@
  * To edit these options use install.php.
  * 
  * @copyright Copyright Intermesh 
- * @version $Id: Group-Office.php 2950 2008-09-03 08:39:41Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  * @since Group-Office 1.0
  * @package go.basic

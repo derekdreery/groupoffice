@@ -8,7 +8,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  * 
  * @copyright Copyright Intermesh
- * @version $Id: reminder.class.inc.php 1926 2008-05-08 12:01:53Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
@@ -17,7 +17,7 @@
  * class to set reminders in Group-Office.
  * 
  * @author Merijn Schering <mschering@intermesh.nl>
- * @version $Id: reminder.class.inc.php 1926 2008-05-08 12:01:53Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @package go.basic
  * @since Group-Office 2.17

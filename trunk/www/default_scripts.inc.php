@@ -8,7 +8,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  *
  * @copyright Copyright Intermesh
- * @version $Id: default_scripts.inc.php 2952 2008-09-03 09:47:49Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
@@ -91,7 +91,7 @@ if(!$GO_CONFIG->debug)
 	$scripts[]=$GO_CONFIG->root_path.'javascript/go-all-min.js';
 	
 	
-	$file = 'base-'.md5($GO_LANGUAGE->language.$GO_CONFIG->mtime).'.js';
+	$file = 'base-'.md5($GO_LANGUAGE->language.filemtime($GO_CONFIG->root_path.'javascript/go-all-min.js')).'.js';
 	$path = $GO_CONFIG->local_path.'cache/'.$file;
 	$url = $GO_CONFIG->local_url.'cache/'.$file;
 	
@@ -108,7 +108,7 @@ if(!$GO_CONFIG->debug)
 			}
 		}
 		
-		echo "<!-- regenerated script -->\n";		
+		echo "\n<!-- regenerated script -->\n";		
 		foreach($scripts as $script)
 		{
 			file_put_contents($path,"\n\n/*".$script."*/\n\n".file_get_contents($script),FILE_APPEND);
@@ -145,7 +145,7 @@ if(!$GO_CONFIG->debug)
 		}
 	
 		
-		$file = $GO_SECURITY->user_id.'-'.md5($GO_CONFIG->mtime.':'.$GO_LANGUAGE->language.':'.implode(':', $modules)).'.js';
+		$file = $GO_SECURITY->user_id.'-'.md5(filemtime($GO_CONFIG->root_path.'javascript/go-all-min.js').':'.$GO_LANGUAGE->language.':'.implode(':', $modules)).'.js';
 		$path = $GO_CONFIG->local_path.'cache/'.$file;
 		$url = $GO_CONFIG->local_url.'cache/'.$file;
 		

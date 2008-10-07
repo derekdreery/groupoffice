@@ -7,7 +7,7 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: File.class.inc.php 2825 2008-08-26 07:41:22Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
@@ -16,7 +16,7 @@
  * This file contains functions for file operations.
  *
  * @copyright Copyright Intermesh
- * @version $Id: File.class.inc.php 2825 2008-08-26 07:41:22Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package go.utils
  * @since Group-Office 3.0

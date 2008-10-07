@@ -8,7 +8,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  * 
  * @copyright Copyright Intermesh
- * @version $Id: theme.class.inc.php 2722 2008-08-14 13:36:59Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
@@ -17,7 +17,7 @@
  * theme.
  * 
  * @author Merijn Schering <mschering@intermesh.nl>
- * @version $Id: theme.class.inc.php 2722 2008-08-14 13:36:59Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @package go.basic
  * @since Group-Office 1.0

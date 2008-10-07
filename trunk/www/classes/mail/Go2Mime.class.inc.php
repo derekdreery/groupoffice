@@ -8,7 +8,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  * 
  * @copyright Copyright Intermesh
- * @version $Id: Go2Mime.class.inc.php 1880 2008-05-06 12:48:33Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
@@ -27,7 +27,7 @@ require_once($GO_CONFIG->class_path.'filesystem.class.inc');
  * This class is used to convert mime objects to an array and vice versa
  *
  * @author Merijn Schering <mschering@intermesh.nl>
- * @version $Id: Go2Mime.class.inc.php 1880 2008-05-06 12:48:33Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @license GNU General Public License
  * @package go.mail

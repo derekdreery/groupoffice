@@ -327,7 +327,7 @@ jQuery.fn.offset = function(options, returnObject) {
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
  *
- * Revision: $Id: jquery-plugins.js 1835 2008-04-25 14:24:44Z mschering $
+ * Revision: $Id$
  * Version: 0.9
  */
 

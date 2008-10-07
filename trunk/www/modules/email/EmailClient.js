@@ -5,7 +5,7 @@
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
  * 
  * If you have questions write an e-mail to info@intermesh.nl
- * @version $Id: imap.class.inc 2373 2008-07-09 14:52:18Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  * @since Group-Office 1.0

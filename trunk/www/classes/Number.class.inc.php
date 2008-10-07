@@ -8,7 +8,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  * 
  * @copyright Copyright Intermesh
- * @version $Id: Number.class.inc.php 2801 2008-08-25 07:37:21Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
@@ -17,7 +17,7 @@
  * formats numbers according to the user preferences.
  *  
  * @copyright Copyright Intermesh
- * @version $Id: Number.class.inc.php 2801 2008-08-25 07:37:21Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package go.utils
  * @since Group-Office 3.0
