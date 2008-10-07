@@ -7,7 +7,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  * 
  * @copyright Copyright Intermesh
- * @version $Id: Calendar.js 2871 2008-08-29 10:31:37Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
@@ -445,7 +445,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		{
 			this.state = {
 			displayType:'days',
-			days: 7,
+			days: 5,
 			calendar_id:0,
 			view_id: 0
 			};

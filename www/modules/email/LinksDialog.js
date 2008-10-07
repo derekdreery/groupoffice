@@ -7,7 +7,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  * 
  * @copyright Copyright Intermesh
- * @version $Id: LinksDialog.js 2955 2008-09-03 11:37:22Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  *
  * 

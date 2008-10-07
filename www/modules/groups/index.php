@@ -7,7 +7,7 @@
  * 
  * If you have questions write an e-mail to info@intermesh.nl
  * 
- * @version $Id: index.php 1920 2008-05-07 15:00:22Z dwijffelaars $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  * @author Boy Wijnmaalen <bwijnmaalen@intermesh.nl>

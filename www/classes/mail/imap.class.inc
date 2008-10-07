@@ -6,7 +6,7 @@
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
  *
  * If you have questions write an e-mail to info@intermesh.nl
- * @version $Id: imap.class.inc 2373 2008-07-09 14:52:18Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  * @since Group-Office 1.0
@@ -20,7 +20,7 @@ require_once($GLOBALS['GO_CONFIG']->class_path.'mail/RFC822.class.inc');
 
 /**
  * This class can be used to connect to IMAP or POP-3 servers
- * @version $Id: imap.class.inc 2373 2008-07-09 14:52:18Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package go.mail
  * @access public

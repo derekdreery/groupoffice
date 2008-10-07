@@ -6,7 +6,7 @@
  * 
  * If you have questions write an e-mail to info@intermesh.nl
  * 
- * @version $Id: UserDialog.js 2941 2008-09-02 10:38:40Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  * @author Boy Wijnmaalen <bwijnmaalen@intermesh.nl>

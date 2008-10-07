@@ -8,7 +8,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  * 
  * @copyright Copyright Intermesh
- * @version $Id: GoSwift.class.inc.php 2843 2008-08-27 10:32:36Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
@@ -39,7 +39,7 @@ Swift_Cache_Disk::setSavePath($GO_CONFIG->tmpdir);
  * {@link http://www.swiftmailer.org/wikidocs/"target="_blank Documentation}
  *
  * @author Merijn Schering <mschering@intermesh.nl>
- * @version $Id: GoSwift.class.inc.php 2843 2008-08-27 10:32:36Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @license GNU General Public License
  * @package go.mail

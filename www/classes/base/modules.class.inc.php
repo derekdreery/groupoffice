@@ -8,7 +8,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  * 
  * @copyright Copyright Intermesh
- * @version $Id: modules.class.inc.php 2952 2008-09-03 09:47:49Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
@@ -18,7 +18,7 @@
  * in other PHP scripts. This class is always available in $GO_MODULES. 
  * 
  * @author Merijn Schering <mschering@intermesh.nl>
- * @version $Id: modules.class.inc.php 2952 2008-09-03 09:47:49Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @package go.basic
  * @since Group-Office 1.0

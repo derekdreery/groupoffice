@@ -8,7 +8,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  * 
  * @copyright Copyright Intermesh
- * @version $Id: links.class.inc.php 1955 2008-05-09 11:34:01Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
@@ -36,7 +36,7 @@
  * 13=installation
  * 
  * @author Merijn Schering <mschering@intermesh.nl>
- * @version $Id: links.class.inc.php 1955 2008-05-09 11:34:01Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @package go.basic
  * 
@@ -143,7 +143,7 @@ class GO_LINKS extends db
 			$link['link_type'] = $type2;
 			$link['link_id'] = $id2;
 			$link['description'] = $description1;
-			$link['mtime']=time();
+			$link['ctime']=time();
 	
 			$this->insert_row('go_links_'.$type1,$link);
 		}
@@ -155,7 +155,7 @@ class GO_LINKS extends db
 			$link['link_type'] = $type1;
 			$link['link_id'] = $id1;
 			$link['description'] = $description2;
-			$link['mtime']=time();
+			$link['ctime']=time();
 				
 			$this->insert_row('go_links_'.$type2,$link);
 		}

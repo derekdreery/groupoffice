@@ -8,7 +8,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  * 
  * @copyright Copyright Intermesh
- * @version $Id: users.class.inc.php 2938 2008-09-01 20:39:51Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
@@ -17,7 +17,7 @@
  * This class is used to manage users in Group-Office.
  * 
  * @copyright Copyright Intermesh
- * @version $Id: users.class.inc.php 2938 2008-09-01 20:39:51Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  
  * @package go.basic

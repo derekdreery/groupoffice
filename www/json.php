@@ -8,7 +8,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  *
  * @copyright Copyright Intermesh
- * @version $Id: json.php 2786 2008-08-21 12:34:42Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 

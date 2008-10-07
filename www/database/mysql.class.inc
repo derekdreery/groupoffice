@@ -5,7 +5,7 @@
  * Copyright (c) 1998-2000 NetUSE AG
  *                    Boris Erdmann, Kristian Koehntopp
  *
- * $Id: mysql.class.inc 2660 2008-07-23 08:36:14Z mschering $
+ * $Id$
  *
  */
 

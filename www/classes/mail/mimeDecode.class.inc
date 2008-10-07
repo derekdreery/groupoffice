@@ -87,7 +87,7 @@
 
 *
 * @author  Richard Heyes <richard@phpguru.org>
-* @version $Id: mimeDecode.class.inc 1839 2008-04-25 15:52:47Z mschering $
+* @version $Id$
 * @package go.mail
 */
 class Mail_mimeDecode

@@ -8,7 +8,7 @@
  * 
  * Based on the File Upload Widget of Ing. Jozef Sakalos
  * 
- * @version $Id: UploadFile.js 2832 2008-08-26 12:46:00Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */ 

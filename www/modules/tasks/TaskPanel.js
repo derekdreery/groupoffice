@@ -6,7 +6,7 @@
  * 
  * If you have questions write an e-mail to info@intermesh.nl
  * 
- * @version $Id: TaskPanel.js 2276 2008-07-04 12:22:20Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
@@ -71,10 +71,10 @@ Ext.extend(GO.tasks.TaskPanel, Ext.Panel,{
 				
 				template += GO.linksTemplate;
 												
-				if(GO.customfields)
+				/*if(GO.customfields)
 				{
 					template +=GO.customfields.displayPanelTemplate;
-				}
+				}*/
 	    	
 	  var config = {};
 		

@@ -8,14 +8,14 @@
  * If you have questions write an e-mail to info@intermesh.nl
  * 
  * @copyright Copyright Intermesh
- * @version $Id: RFC822.class.inc 1839 2008-04-25 15:52:47Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
 /**
  * This class is used to parse and write RFC822 compliant recipient lists
  * 
- * @version $Id: RFC822.class.inc 1839 2008-04-25 15:52:47Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package go.mail
  */
