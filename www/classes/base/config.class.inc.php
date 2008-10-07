@@ -8,7 +8,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  *
  * @copyright Copyright Intermesh
- * @version $Id: config.class.inc.php 2939 2008-09-02 09:30:37Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
@@ -21,7 +21,7 @@
  * To edit these options use install.php.
  *
  * @author Merijn Schering <mschering@intermesh.nl>
- * @version $Id: config.class.inc.php 2939 2008-09-02 09:30:37Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @package go.basic
  *
