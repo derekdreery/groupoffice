@@ -116,6 +116,25 @@ $search->update_search_cache(true);
 
 echo 'Done<br /><br />';
 
+
+echo 'Removing dead links<br />';
+
+for($i=1;$i<=13;$i++)
+{
+	$sql = "SELECT * FROM `go_links_$i` l WHERE NOT EXISTS (SELECT id FROM go_search_cache c WHERE c.id=l.id AND c.link_type=$i);";
+	$search->query($sql);
+	$count = $search->num_rows();	
+	
+	while($search->next_record())
+	{
+		$GO_LINKS->delete_link($search->f('id'), $i);
+	}
+	
+	echo 'Removed '.$count.' from table go_links_'.$i.'<br />';
+}
+
+echo 'Done<br /><br />';
+
 echo 'Start of module checks<br />';
 
 $GO_MODULES->fire_event('check_database');
