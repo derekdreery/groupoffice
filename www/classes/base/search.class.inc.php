@@ -139,7 +139,6 @@ class search extends db {
 					$sql_keywords[] = "keywords LIKE '%$keyword%'";
 				}
 
-
 				$sql .= ' AND ('.implode(' AND ', $sql_keywords).') ';
 			}else {
 				$sql .= " AND keywords LIKE '%$query%' ";
@@ -156,7 +155,13 @@ class search extends db {
 			$sql .= "AND $condition ";
 		}
 		
-		$sql .= "ORDER BY sc.type ASC, mtime DESC";
+		if($link_id>0)
+		{
+			$sql .= "ORDER BY sc.type ASC, l.ctime DESC";
+		}else
+		{
+			$sql .= "ORDER BY $sort_index $sort_order";
+		}
 		
 		
 		//go_log(LOG_DEBUG, $sql);
