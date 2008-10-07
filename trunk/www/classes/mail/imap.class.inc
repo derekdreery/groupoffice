@@ -366,6 +366,12 @@ class imap {
 	}
 
 
+	/**
+	 * Get's all mime header values in an associative array
+	 *
+	 * @param String $header MIME headers
+	 * @return Array with header values
+	 */
 
 
 	function get_header_values($header)
@@ -380,6 +386,7 @@ class imap {
 		$values = array();
 		foreach($lines as $line)
 		{
+			$line = stripslashes($line);
 			$colpos = strpos($line, ':');
 				
 			if($colpos)
@@ -387,13 +394,12 @@ class imap {
 				$key = strtolower(trim(substr($line,0,$colpos)));
 				$value = trim(substr($line, $colpos+1));
 
-				$values[$key]=stripslashes($value);
+				$values[$key]=$value;
 			}
 		}
 
 		$message["priority"] = isset($values['x-priority']) ? $values['x-priority'] : '';
 		$message['attachments']=false;
-
 
 		if (!empty($values['content-type']) && eregi("([^/]*)/([^ ;\n\t]*)", $values['content-type'], $regs)) {
 			$mtype = strtolower($regs[1]);
@@ -424,8 +430,6 @@ class imap {
 		$message["notification"]=isset($values['disposition-notification-to']) ? $values['disposition-notification-to'] : false;
 		$message['content_type']=isset($values['content-type']) ? $values['content-type'] : false;;
 
-		//debug($header);
-		//debug(var_export($message, true));
 		return $message;
 	}
 

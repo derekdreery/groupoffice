@@ -493,6 +493,10 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 			
 		case 'default_module_access':
 			
+			$GO_CONFIG->allow_password_change =  isset($_POST['allow_password_change']) ? true : false;
+			$GO_CONFIG->allow_themes =  isset($_POST['allow_themes']) ? true : false;
+			
+			
 			$GO_CONFIG->register_modules_read = isset($_POST['register_modules_read']) ? implode(',',$_POST['register_modules_read']) : '';
 			$GO_CONFIG->register_modules_write = isset($_POST['register_modules_write']) ? implode(',',$_POST['register_modules_write']) : '';
 			
@@ -1377,8 +1381,7 @@ switch($task)
 			echo $feedback.'<br /><br />';
 		}
 	?>
-		<input type="hidden" name="task" value="allow_password_change" />
-	
+		<input type="hidden" name="task" value="allow_password_change" />	
 		<input type="checkbox" name="allow_themes" value="1" <?php if(isset($_POST['allow_themes']) ? true : $GO_CONFIG->allow_themes) echo 'checked'; ?> />Allow users to change the theme
 		<br />
 		<input type="checkbox" name="allow_password_change" value="1" <?php if(isset($_POST['allow_password_change']) ? true : $GO_CONFIG->allow_password_change) echo 'checked'; ?> />Allow users to change thier password
@@ -1446,7 +1449,13 @@ switch($task)
 		}
 
 		echo '<input type="hidden" name="task" value="default_module_access" />';
+		?>
+		<p>Restricted functions</p>
+		<input type="checkbox" name="allow_themes" value="1" <?php if(isset($_POST['allow_themes']) ? true : $GO_CONFIG->allow_themes) echo 'checked'; ?> />Allow users to change the theme
+		<br />
+		<input type="checkbox" name="allow_password_change" value="1" <?php if(isset($_POST['allow_password_change']) ? true : $GO_CONFIG->allow_password_change) echo 'checked'; ?> />Allow users to change thier password
 		
+		<?php
 		echo '<p>New users will automatically have access to the following modules</p>';
 
 		

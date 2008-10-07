@@ -312,6 +312,8 @@ try{
 										$response['feedback']=$imap->last_error();
 									}
 									
+									$imap->close();
+									
 								}
 							}else
 							{

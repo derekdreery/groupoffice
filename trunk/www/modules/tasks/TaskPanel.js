@@ -61,9 +61,9 @@ Ext.extend(GO.tasks.TaskPanel, Ext.Panel,{
 						'<td colspan="2" class="display-panel-heading">{name}</td>'+
 					'</tr>'+
 
-					'<tpl if="content.length">'+
+					'<tpl if="description.length">'+
 						'<tr>'+
-							'<td colspan="2">{content}</td>'+
+							'<td colspan="2">{description}</td>'+
 						'</tr>'+
 					'</tpl>'+
 									
