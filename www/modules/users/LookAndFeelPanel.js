@@ -52,7 +52,11 @@ GO.users.LookAndFeelPanel = function(config)
 	});
 	
 	
-	config.items=[this.themeCombo = new Ext.form.ComboBox({
+	config.items=[];
+	
+	if(GO.settings.config.allow_themes)
+	{
+		config.items.push(this.themeCombo = new Ext.form.ComboBox({
 			fieldLabel: GO.users.lang['cmdFormLabelTheme'],
 			name: 'theme',
 			store: themesStore,
@@ -65,8 +69,10 @@ GO.users.LookAndFeelPanel = function(config)
 			selectOnFocus:true,
 			forceSelection: true,
 			value: GO.settings.config.theme
-		}),
-		this.startModuleField = new GO.form.ComboBox({
+		}));
+	}
+	
+	config.items.push(this.startModuleField = new GO.form.ComboBox({
 			fieldLabel: GO.users.lang['cmdFormLabelStartModule'],
 			name: 'start_module_name',
 			hiddenName: 'start_module',
@@ -79,8 +85,10 @@ GO.users.LookAndFeelPanel = function(config)
 			selectOnFocus:true,
 			forceSelection: true,
 			value: GO.settings.start_module
-		}),
-		new Ext.form.ComboBox({
+		}));
+		
+		config.items.push({
+			xtype:'combo',
 			fieldLabel: GO.users.lang['cmdFormLabelMaximunRows'],
 			store: new Ext.data.SimpleStore({
 				fields: ['value'],
@@ -104,8 +112,10 @@ GO.users.LookAndFeelPanel = function(config)
 			selectOnFocus:true,
 			forceSelection: true,
 			value: GO.settings.max_rows_list
-		}),
-		new Ext.form.ComboBox({
+		});
+		
+		config.items.push({
+			xtype:'combo',
 			fieldLabel: GO.users.lang['cmdFormLabelSortNamesBy'],
 			store: new Ext.data.SimpleStore({
 				fields: ['value', 'text'],
@@ -123,8 +133,8 @@ GO.users.LookAndFeelPanel = function(config)
 			selectOnFocus:true,
 			forceSelection: true,
 			value: GO.settings.sort_name
-		})
-		];
+		});
+		
 	
 	
 	GO.users.LookAndFeelPanel.superclass.constructor.call(this, config);		

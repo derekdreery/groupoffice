@@ -73,7 +73,12 @@ Ext.extend(GO.PersonalSettingsDialog, Ext.Window,{
 			this.render(Ext.getBody());			
 			
 			this.tabPanel.items.items[0].languageCombo.on('change', function(){this.reload=true;}, this);
-			this.tabPanel.items.items[1].themeCombo.on('change', function(){this.reload=true;}, this);
+			
+			//theme changing might be disabled
+			if(this.tabPanel.items.items[1].themeCombo)
+			{
+				this.tabPanel.items.items[1].themeCombo.on('change', function(){this.reload=true;}, this);
+			}
 		
 		}
 		

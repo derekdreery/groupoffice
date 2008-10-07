@@ -239,7 +239,6 @@ try{
 			$response['attachments']=array();
 
 
-
 			switch($task)
 			{
 				case "reply":
@@ -477,7 +476,7 @@ try{
 				$om_to = '';
 				if (isset($content))
 				{
-					$header_om .= "<b>".$lang['email']['subject'].":&nbsp;</b>".addslashes($subject)."<br />";
+					$header_om .= "<b>".$lang['email']['subject'].":&nbsp;</b>".$subject."<br />";
 					$header_om .= '<b>'.$lang['email']['from'].": &nbsp;</b>".$content['from'].' &lt;'.$content["sender"]."&gt;<br />";
 					if (isset($content['to']))
 					{

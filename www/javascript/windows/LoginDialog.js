@@ -36,7 +36,7 @@ GO.dialog.LoginDialog = function(config){
 		config={};
 	}
 	
-	if(config.modal=='undefined')
+	if(typeof(config.modal)=='undefined')
 	{
 		config.modal=true;
 	}
