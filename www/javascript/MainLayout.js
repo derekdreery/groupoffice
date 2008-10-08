@@ -73,23 +73,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	init : function(){  
           
    	this.fireReady();
-   	
-		GO.checker = new GO.Checker();
-		GO.checker.init();
 
-   		
-   	GO.checker.on('alert', function(data){
-   		
-   		
-   		if(data.notification_area)
-   		{
-   			Ext.get('notification-area').update(data.notification_area);
-   		}
-   		
-   		
-   		
-   	}, this);
-		
 		var items = GO.moduleManager.getAllPanels();
     
     if(items.length==0)
@@ -251,8 +235,21 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
    
   	if(!activeTab)
    		this.tabPanel.setActiveTab(0);
+   		
+   		
+   
 		
 		this.removeLoadMask();
+		
+		
+		GO.checker = new GO.Checker();
+		GO.checker.init();
+		GO.checker.on('alert', function(data){   		
+   		if(data.notification_area)
+   		{
+   			Ext.get('notification-area').update(data.notification_area);
+   		}
+   	}, this);
 
 		  
 	},

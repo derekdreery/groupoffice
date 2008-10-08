@@ -125,6 +125,10 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 						this.fileBrowser.setDisabled(false);
 					}
 					this.setWritePermission(action.result.data.write_permission);
+					
+					this.selectCalendar.setRemoteText(action.result.data.calendar_name);
+					this.selectCalendar.container.up('div.x-form-item').setDisplayed(true);
+					
 				},
 				failure:function(form, action)
 				{
@@ -149,6 +153,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 					this.formPanel.form.baseParams['exceptionDate']=config.exceptionDate;
 					//this.formPanel.form.baseParams['calendar_id']=action.result.data.calendar_id;
 					
+					
+					
 					//set recurrence to none					
 					this.formPanel.form.findField('repeat_type').setValue(0);
 					this.changeRepeat(0);	
@@ -161,6 +167,9 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 						this.fileBrowser.setRootPath(action.result.data.files_path);
 						this.fileBrowser.setDisabled(false);
 					}*/
+					
+					this.selectCalendar.setRemoteText(action.result.data.calendar_name);
+					this.selectCalendar.container.up('div.x-form-item').setDisplayed(true);
 					
 					this.setWritePermission(action.result.data.write_permission);
 				},

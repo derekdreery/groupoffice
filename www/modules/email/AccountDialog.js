@@ -166,15 +166,15 @@ GO.email.AccountDialog = function(config){
 	            items:[
 		             sslCb = new Ext.form.Checkbox({
 	                    boxLabel: GO.email.lang.ssl,
-	                    name: 'ssl',
+	                    name: 'use_ssl',
 	                    checked: false,
 	                    hideLabel:true
-	                }),new Ext.form.Checkbox({
+	                }),/*new Ext.form.Checkbox({
 	                    boxLabel: GO.email.lang.tls,
 	                    name: 'tls',
 	                    checked: false,
 	                    hideLabel:true
-	                }),new Ext.form.Checkbox({
+	                }),*/new Ext.form.Checkbox({
 	                    boxLabel: GO.email.lang.novalidateCert,
 	                    name: 'novalidate_cert',
 	                    checked: false,

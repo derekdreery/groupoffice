@@ -107,7 +107,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable,{
 
 		this.setTaskId(config.task_id);
 		
-		this.selectTaskList.container.up('div.x-form-item').setDisplayed(false);
+		//this.selectTaskList.container.up('div.x-form-item').setDisplayed(false);
 		
 		if(config.task_id>0)
 		{
@@ -168,7 +168,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable,{
 			if(config.tasklist_name)
 			{			
 				this.selectTaskList.setRemoteText(config.tasklist_name);
-				this.selectTaskList.container.up('div.x-form-item').setDisplayed(true);
+				//this.selectTaskList.container.up('div.x-form-item').setDisplayed(true);
 			}
 		}
 		
