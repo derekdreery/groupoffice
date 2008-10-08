@@ -1,5 +1,5 @@
 .go-module-icon-{module} , .go-menu-icon-{module}{
-	background:url('images/{module}.png');
+	background-image:url('images/{module}.png') !important;
 }
 
 .go-tab-icon-{module} {

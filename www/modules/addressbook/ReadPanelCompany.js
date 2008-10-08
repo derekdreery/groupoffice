@@ -457,6 +457,7 @@ Ext.extend(GO.addressbook.CompanyReadPanel,Ext.Panel,{
 	
 	setData : function(data)
 	{
+		data.link_type=3;
 		this.data=data;
 		this.editButton.setDisabled(!data.write_permission);
 		this.linkBrowseButton.setDisabled(false);

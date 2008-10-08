@@ -397,6 +397,7 @@ Ext.extend(GO.addressbook.ContactReadPanel, Ext.Panel,{
 	
 	setData : function(data)
 	{
+		data.link_type=2;
 		this.data=data;
 		this.editButton.setDisabled(!data.write_permission);
 		this.linkBrowseButton.setDisabled(false);
