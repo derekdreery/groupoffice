@@ -76,3 +76,5 @@ Ext.extend(GO.form.SelectUser, GO.form.ComboBox,{
 	}
 	
 });
+
+Ext.reg('selectuser', GO.form.SelectUser);
