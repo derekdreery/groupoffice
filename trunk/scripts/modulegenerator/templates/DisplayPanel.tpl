@@ -120,7 +120,8 @@ Ext.extend(GO.{module}.{friendly_single_ucfirst}Panel, Ext.Panel,{
 	{
 		this.data=data;
 		this.editButton.setDisabled(!data.write_permission);		
-		<gotpl if="$link_type &gt; 0">this.linkBrowseButton.setDisabled(false);</gotpl>
+		<gotpl if="$link_type &gt; 0">data.link_type={link_type};
+		this.linkBrowseButton.setDisabled(false);</gotpl>
 		
 		<gotpl if="$link_type &gt; 0">if(data.write_permission)
 			this.newMenuButton.setLinkConfig({
