@@ -538,6 +538,16 @@ try
 			{
 				$response['data']['files']=array();				
 			}
+			
+			
+			if(isset($GO_MODULES->modules['comments']))
+			{
+				require_once ($GO_MODULES->modules['comments']['class_path'].'comments.class.inc.php');
+				$comments = new comments();
+				
+				$response['data']['comments']=$comments->get_comments_json($response['data']['id'], 3);
+			}
+				
 				
 			echo json_encode($response);
 			break;
