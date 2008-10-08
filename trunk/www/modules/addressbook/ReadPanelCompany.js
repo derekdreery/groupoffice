@@ -413,6 +413,11 @@ Ext.extend(GO.addressbook.CompanyReadPanel,Ext.Panel,{
 			template += GO.files.filesTemplate;
 		}
 		
+		if(GO.comments)
+		{
+			template += GO.comments.displayPanelTemplate;
+		}
+		
 		
 				
 		template+='</div>';
@@ -464,7 +469,7 @@ Ext.extend(GO.addressbook.CompanyReadPanel,Ext.Panel,{
 				type:3,
 				text: this.data.name,
 				callback:function(){
-					this.loadContact(this.data.id);				
+					this.loadCompany(this.data.id);				
 				},
 				scope:this
 			});
