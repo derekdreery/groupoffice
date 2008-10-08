@@ -144,7 +144,7 @@ Ext.extend(GO.tasks.ScheduleCallDialog, Ext.Window,{
 	    		format: GO.settings.time_format,
 	    		value:eight.format(GO.settings['time_format']),
 	    		fieldLabel:GO.lang.strTime,
-	    		anchor:'100%',
+	    		anchor:'100%'
 	    	},{
 					xtype: 'textarea',
 				  name: 'description',

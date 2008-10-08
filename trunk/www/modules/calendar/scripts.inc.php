@@ -5,5 +5,5 @@ $cal = new calendar();
 $calendar = $cal->get_calendar();
 ?>
 <script type="text/javascript">
-GO.calendar.defaultCalendar = {id: <?php echo $calendar['id']; ?>, name: '<?php echo $calendar['name']; ?>'};
+GO.calendar.defaultCalendar = {id: <?php echo $calendar['id']; ?>, name: "<?php echo addslashes($calendar['name']); ?>"};
 </script>
