@@ -13,4 +13,6 @@ $updates[]="ALTER TABLE `go_search_cache` ADD PRIMARY KEY(`id`,`link_type`);";
 
 $updates[]='script:1.inc.php';
 $updates[]='script:2_ctime_in_links.inc.php';
+
+$updates[]='script:3_install_comments_module.inc.php';
 ?>
