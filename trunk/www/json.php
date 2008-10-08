@@ -23,12 +23,8 @@ $limit = isset($_REQUEST['limit']) ? smart_addslashes($_REQUEST['limit']) : '0';
 
 
 try{
-
-
 	switch($_REQUEST['task'])
 	{
-
-
 		case 'settings':
 			$response['data']=array();
 				

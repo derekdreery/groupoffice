@@ -32,16 +32,14 @@ GO.LinkBrowser = function(config){
 		title:GO.lang.cmdBrowseLinks,
 		items: this.linksPanel,
 		buttons: [
-			{
-				id: 'ok',
+			/*{
 				text: GO.lang['cmdOk'],
 				handler: function(){							
 					this.linkItems();
 				},
 				scope:this
-			},
+			},*/
 			{
-				id: 'close',
 				text: GO.lang['cmdClose'],
 				handler: function(){this.hide();},
 				scope: this

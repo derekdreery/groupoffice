@@ -373,6 +373,14 @@ try
 				$cf = new customfields();
 				$response['data']['customfields']=$cf->get_all_fields_with_values($GO_SECURITY->user_id, 2, $contact_id);
 			}
+			
+			if(isset($GO_MODULES->modules['comments']))
+			{
+				require_once ($GO_MODULES->modules['comments']['class_path'].'comments.class.inc.php');
+				$comments = new comments();
+				
+				$response['data']['comments']=$comments->get_comments_json($response['data']['id'], 2);
+			}
 				
 			$response['data']['links'] = array();
 			/* loadContactDetails - contact sidepanel */

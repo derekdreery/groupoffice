@@ -73,6 +73,7 @@ GO.addressbook.ContactDialog = function(config)
 	{
 		items.push(this.fileBrowser);
 	}
+
   
   if(GO.customfields && GO.customfields.types["2"])
 	{
@@ -171,18 +172,13 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 				scope:this
 			});
 		}else
-		{
-				
-			
-				
+		{				
 			if(contact_id)
 			{
 				this.contact_id = contact_id;
 			} else {
 				this.contact_id = 0;
-			}			
-			
-			
+			}
 			
 			if(!GO.addressbook.writableAddressbooksStore.loaded)
 			{
@@ -203,9 +199,7 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 				{
 					this.personalPanel.formAddressBooks.selectFirst();
 				}	
-			}
-			
-	
+			}	
 						
 			if(this.contact_id > 0)
 			{
