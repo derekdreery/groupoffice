@@ -234,7 +234,9 @@ try{
 				throw new AccessDeniedException();
 			}
 
-
+			//for IE
+			if(empty($response['data']['background']))
+				$response['data']['background']='EBF1E2';
 
 
 			$response['data']['calendar_name']=$calendar['name'];
