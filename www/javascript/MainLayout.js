@@ -45,7 +45,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 			
 				document.location.href=url;
 			});
-		GO.loginDialog.show();
+		loginDialog.show();
 		
 		
 		this.removeLoadMask();

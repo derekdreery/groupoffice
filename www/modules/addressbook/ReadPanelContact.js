@@ -357,6 +357,11 @@ Ext.extend(GO.addressbook.ContactReadPanel, Ext.Panel,{
 			template += GO.files.filesTemplate;
 		}
 		
+		if(GO.comments)
+		{
+			template += GO.comments.displayPanelTemplate;
+		}
+		
 		this.template = new Ext.XTemplate(template, config);
 		
 		GO.addressbook.ContactReadPanel.superclass.initComponent.call(this);

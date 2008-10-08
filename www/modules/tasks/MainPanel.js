@@ -25,12 +25,13 @@ GO.tasks.MainPanel = function(config){
 			autoScroll:true,
 			border:true,
 			split:true,
+			sm: new Ext.grid.RowSelectionModel(),
 			viewConfig: {forceFit:true, autoFill: true},
 			columns: [				
 				{
 					header: GO.lang.strName, 
 					dataIndex: 'name'					
-				}				
+				}
 			]
 		});
 		
@@ -104,7 +105,8 @@ GO.tasks.MainPanel = function(config){
 										}, this);
 									}
 									GO.tasks.taskDialog.show({
-										tasklist_id: this.tasklist_id
+										tasklist_id: this.tasklist_id,
+										tasklist_name: this.tasklist_name
 									});
 									
 								},
@@ -172,36 +174,19 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 			scope: this
 			
 		});
-		
-		
-	
     
 	},
-	
-	
-  
-  
   
  	showAdminDialog : function() {
 		
 		if(!this.adminDialog)
 		{
-			
-
-			
-
-			
-			
-			
-						
 			this.tasklistDialog = new GO.tasks.TasklistDialog();
 			
 			this.tasklistDialog.on('save', function(){
 				GO.tasks.writableTasklistsStore.load();
 				this.taskListsStore.load();				
-			}, this);
-			
-			
+			}, this);		
 			
 			this.tasklistsGrid = new GO.grid.GridPanel( {
 				paging:true,
@@ -249,10 +234,6 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 				this.tasklistDialog.show(grid.selModel.selections.keys[0]);
 			}, this);
 			
-			
-			
-			
-			
 			this.adminDialog = new Ext.Window({
 				title: GO.tasks.lang.tasklists,
 				layout:'fit',
@@ -273,10 +254,10 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 			
 		}
 		
-			if(!GO.tasks.writableTasklistsStore.loaded){
-				GO.tasks.writableTasklistsStore.load();
-			}
-		
+		if(!GO.tasks.writableTasklistsStore.loaded){
+			GO.tasks.writableTasklistsStore.load();
+		}
+	
 		this.adminDialog.show();			
 	}
 	
