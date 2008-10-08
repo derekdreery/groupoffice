@@ -131,8 +131,7 @@ ul.x-tab-strip-top{padding-top:1px;background:#f7f6f1 repeat-x bottom;border-bot
 
 
 
-.go-paging-tb {background:#ebf0f2 !important;border-top:1px solid #c0c0c0 !important;}
-.go-paging-tb td,.go-paging-tb span,.go-paging-tb input,.go-paging-tb div,.go-paging-tb select,.go-paging-tb label{color:black;};
+
 
 .x-grid-panel .x-panel-mc .x-panel-body{border:1px solid #c0c0c0;}
 .x-grid3-hd-row td,.x-grid3-row td,.x-grid3-summary-row td{font:normal 11px tahoma,arial,helvetica,sans-serif;-moz-outline:none;-moz-user-focus:normal;}
@@ -248,6 +247,12 @@ body.x-body-masked .x-window-plain .x-window-mc{background:#d1d8db;}
 
 .x-tool{background-image:url(images/extjs/panel/tool-sprites.gif) !important;}
 
+
+
+.go-paging-tb, .x-combo-list-ft .x-toolbar {background:#ebf0f2 !important;border-top:1px solid #c0c0c0 !important;olor:black !important;}
+.go-paging-tb td,.go-paging-tb span,.go-paging-tb input,.go-paging-tb div,.go-paging-tb select,.go-paging-tb label{color:black;}
+
+.x-combo-list-ft .x-toolbar td,.x-combo-list-ft .x-toolbar span,.x-combo-list-ft .x-toolbar input,.x-combo-list-ft .x-toolbar div,.x-combo-list-ft .x-toolbar select,.x-combo-list-ft .x-toolbar label {color:black !important;}
 
 /* made textboxes too small
 .ext-strict .x-form-text{height:22px;} */

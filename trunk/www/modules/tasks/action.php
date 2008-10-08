@@ -33,13 +33,13 @@ try{
 	
 		case 'schedule_call':
 			
-			$tasklist = $tasks->get_tasklist();
+			//$tasklist = $tasks->get_tasklist();
 			
 			$task['name']=smart_addslashes($_POST['name']);
 			$task['start_time']=$task['due_time']=Date::to_unixtime($_POST['date']);
 			$task['description']=smart_addslashes($_POST['description']);
 			$task['status']='NEEDS-ACTION';
-			$task['tasklist_id']=$tasklist['id'];
+			$task['tasklist_id']=smart_addslashes($_POST['tasklist_id']);
 			$task['reminder']=Date::to_unixtime(smart_stripslashes($_POST['date'].' '.$_POST['remind_time']));	
 			$task['user_id']=$GO_SECURITY->user_id;
 			

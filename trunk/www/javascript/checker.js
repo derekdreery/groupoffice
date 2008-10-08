@@ -6,14 +6,12 @@ GO.CheckerWindow = function(config){
 		config = {};
 	}
 	
-	config.iconCls='go-icon-reminders';
 	config.title=GO.lang.reminders;
 	config.maximizable=true;
 	config.layout='fit';
 	config.modal=false;
 	config.resizable=true;
 	config.closeAction='hide';
-	config.animateTarget='reminder-icon';
 	
 	if(!config.width)
 		config.width=400;
@@ -169,78 +167,84 @@ Ext.extend(GO.CheckerWindow, Ext.Window,{
 });
 
 
-GO.CheckerPanel = Ext.extend(GO.grid.GridPanel, {
+GO.CheckerPanel = Ext.extend(function(config){
 	
-	initComponent : function(){
+	if(!config)
+	{
+		config = {};
+	}
+	
+	config.layout='fit';
 		
-		this.layout='fit';
 		
-		
-		this.store = new Ext.data.GroupingStore({
-			reader: new Ext.data.JsonReader({
-        totalProperty: "count",
-		    root: "results",
-		    id: "id",
-		    fields:[
-		    'id',
-		    'name', 
-		    'link_id', 
-		    'link_type',
-		    'link_type_name',
-		    'local_time',
-		    'iconCls',
-		    'time'
-		    ]}),		    
-	    groupField:'link_type_name',
-	    sortInfo: {field: 'time', direction: 'ASC'}
-	  });
-	  
-	  
-	 
-		this.cm = new Ext.grid.ColumnModel([
-				{
-					dataIndex: 'link_type_name'
-				},{
-		      header: "",
-		      width:28,
-					dataIndex: 'icon',
-					renderer: this.iconRenderer
-		    },
-				{
-					header:GO.lang.strTime,
-					dataIndex: 'local_time',
-					width: 50
-				},
-				{
-					header:GO.lang['strName'],
-					dataIndex: 'name'
-				}]);
-				
-		this.view=  new Ext.grid.GroupingView({
-		    hideGroupedColumn:true,
-		    groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Items" : "Item"]})',
-		   	emptyText: GO.lang.strNoItems,
-		   	showGroupName:false				
-			});
-		this.selModel = new Ext.grid.RowSelectionModel();
-		this.loadMask=true;
-		this.autoExpandColumn=3;
-		
-		this.on('rowdblclick', function (grid, index){
-			var selectionModel = grid.getSelectionModel();
-			var record = selectionModel.getSelected();
+	config.store = new Ext.data.GroupingStore({
+		reader: new Ext.data.JsonReader({
+      totalProperty: "count",
+	    root: "results",
+	    id: "id",
+	    fields:[
+	    'id',
+	    'name', 
+	    'link_id', 
+	    'link_type',
+	    'link_type_name',
+	    'local_time',
+	    'iconCls',
+	    'time'
+	    ]}),		    
+    groupField:'link_type_name',
+    sortInfo: {field: 'time', direction: 'ASC'}
+  });
+ 
+	config.cm = new Ext.grid.ColumnModel([
+			{
+				dataIndex: 'link_type_name'
+			},{
+	      header: "",
+	      width:28,
+				dataIndex: 'icon',
+				renderer: this.iconRenderer
+	    },
+			{
+				header:GO.lang.strTime,
+				dataIndex: 'local_time',
+				width: 50
+			},
+			{
+				header:GO.lang['strName'],
+				dataIndex: 'name'
+			}]);
 			
-			if(GO.linkHandlers[record.data.link_type])
-			{
-				GO.linkHandlers[record.data.link_type].call(this, record.data.link_id);
-			}else
-			{
-				Ext.Msg.alert(GO.lang['strError'], 'No handler definded for link type: '+record.data.link_type);
-			}
-		}, this);
+	config.view=  new Ext.grid.GroupingView({
+	    hideGroupedColumn:true,
+	    groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Items" : "Item"]})',
+	   	emptyText: GO.lang.strNoItems,
+	   	showGroupName:false		
+		});
+	config.selModel = new Ext.grid.RowSelectionModel();
+	config.loadMask=true;
+	config.autoExpandColumn=3;
+	
+	
+	GO.grid.GridPanel.superclass.constructor.call(this, config);
+	
+	this.on('rowdblclick', function (grid, index){
+		var selectionModel = grid.getSelectionModel();
+		var record = selectionModel.getSelected();
 		
-		GO.CheckerPanel.superclass.initComponent.call(this);
-	},
+		if(GO.linkHandlers[record.data.link_type])
+		{
+			GO.linkHandlers[record.data.link_type].call(this, record.data.link_id);
+		}else
+		{
+			Ext.Msg.alert(GO.lang['strError'], 'No handler definded for link type: '+record.data.link_type);
+		}
+	}, this);
+	
+	
+},GO.grid.GridPanel, {
+	
+
 	
 	iconRenderer : function(src,cell,record){
 		return '<div class=\"go-icon ' + record.data.iconCls +' \"></div>';
@@ -255,18 +259,14 @@ GO.Checker = function(){
 			'endcheck' : true			
 			});
 			
-		this.checkerWindow = new GO.CheckerWindow();
-		
-		
-				
-		this.reminderIcon = Ext.get("reminder-icon");
-		this.reminderIcon.setDisplayed(false);
-		
-		this.reminderIcon.on('click', function(){
-			this.checkerWindow.show();
-		}, this);
-   	
-   
+	this.checkerWindow = new GO.CheckerWindow();
+			
+	this.reminderIcon = Ext.get("reminder-icon");
+	this.reminderIcon.setDisplayed(false);
+	
+	this.reminderIcon.on('click', function(){
+		this.checkerWindow.show();
+	}, this);   
 };
 
 Ext.extend(GO.Checker, Ext.util.Observable, {

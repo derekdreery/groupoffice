@@ -68,6 +68,10 @@ Ext.extend(GO.tasks.ScheduleCallDialog, Ext.Window,{
 
 		
 		this.formPanel.form.reset();		
+		
+		
+		this.selectTaskList.setValue(GO.tasks.defaultTasklist.id);
+		this.selectTaskList.setRemoteText(GO.tasks.defaultTasklist.name);
 
 		GO.tasks.ScheduleCallDialog.superclass.show.call(this);
 
@@ -151,7 +155,8 @@ Ext.extend(GO.tasks.ScheduleCallDialog, Ext.Window,{
 					anchor: '100%',
 					height:100,
 				  fieldLabel: GO.lang.strDescription
-				}]				
+				},
+				this.selectTaskList = new GO.tasks.SelectTasklist({fieldLabel: GO.tasks.lang.tasklist, anchor:'100%'})]				
 		});
     
 	}

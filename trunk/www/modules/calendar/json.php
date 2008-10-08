@@ -237,7 +237,7 @@ try{
 
 
 
-
+			$response['data']['calendar_name']=$calendar['name'];
 			$response['data']['subject']=$response['data']['name'];
 
 			$start_time = $response['data']['start_time'];
