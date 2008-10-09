@@ -1,7 +1,3 @@
-Ext.namespace('GO.email');
-
-GO.email.lang={};
-
 GO.email.lang.messages='Nachrichten';
 GO.email.lang.message='Nachricht';
 GO.email.lang.inbox='Eingang';

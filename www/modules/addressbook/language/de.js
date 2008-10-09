@@ -12,11 +12,6 @@
  */
 
 
-Ext.namespace('GO.addressbook');
-Ext.namespace('GO.addressbook.plugins');
-GO.addressbook.lang={};
-
-
 GO.addressbook.lang.selectMailingGroup='Mailinggruppe auswählen';
 
 GO.addressbook.lang.cmdFormLabelAddressBooks = 'Adressbuch';
