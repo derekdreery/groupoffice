@@ -385,9 +385,7 @@ class export_tasks
 		//alarm
 		if($task['reminder']>0)
 		{
-			$remind_time = $task['due_time']-$task['reminder'];
-
-			$atime = date($this->datetime_format, $remind_time);
+			$atime = date($this->datetime_format, $task['reminder']);
 			$lines[] = 'AALARM:'.$atime.';;0;'.$task['name'];
 			//Nokia crashes on DALARM at task replace
 			//$lines[] = 'DALARM:'.date($this->datetime_format, Date::gmt_to_local_time($remind_time)).';;'.$task['name'];
