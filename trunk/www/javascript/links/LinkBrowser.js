@@ -29,6 +29,7 @@ GO.LinkBrowser = function(config){
 		border:false,
 		plain:true,
 		maximizable:true,
+		collapsible:true,
 		closeAction:'hide',
 		title:GO.lang.cmdBrowseLinks,
 		items: this.linksPanel,

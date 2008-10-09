@@ -48,34 +48,24 @@ try{
 				$response['acl_read']=$category['acl_read']=$GO_SECURITY->get_new_acl('category');
 				$response['acl_write']=$category['acl_write']=$GO_SECURITY->get_new_acl('category');
 				
-				
-				$category_id= $notes->add_category($category);
-
-								
+				$category_id= $notes->add_category($category);							
 
 				$response['category_id']=$category_id;
 				$response['success']=true;
-			}
-			
-			
-		
+			}		
 			break;
 		
-		case 'save_note':
-				
+		case 'save_note':				
 			$note_id=$note['id']=isset($_POST['note_id']) ? smart_addslashes($_POST['note_id']) : 0;
-			
 			
 			$category = $notes->get_category(smart_addslashes(trim($_POST['category_id'])));
 			
 			if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_write']))
 			{
 				throw new AccessDeniedException();
-			}
+			}			
 			
-			
-						$note['category_id']=smart_addslashes(trim($_POST['category_id']));
-			$note['user_id']=smart_addslashes(trim($_POST['user_id']));
+			$note['category_id']=smart_addslashes(trim($_POST['category_id']));
 			$note['name']=smart_addslashes(trim($_POST['name']));
 			$note['content']=smart_addslashes(trim($_POST['content']));
 
@@ -88,9 +78,7 @@ try{
 			{
 				$note['user_id']=$GO_SECURITY->user_id;
 				
-				
 				$note_id= $notes->add_note($note);
-
 				
 				if($GO_MODULES->modules['files'])
 				{

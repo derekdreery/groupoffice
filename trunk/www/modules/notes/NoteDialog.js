@@ -11,14 +11,11 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
  
-GO.notes.NoteDialog = function(config){
-	
-	
+GO.notes.NoteDialog = function(config){	
 	if(!config)
 	{
 		config={};
-	}
-	
+	}	
 	
 	this.buildForm();
 	
@@ -28,12 +25,11 @@ GO.notes.NoteDialog = function(config){
 	
 	//config.iconCls='go-link-icon-4';
 	config.collapsible=true;
-	config.maximizable=true;
 	config.layout='fit';
 	config.modal=false;
 	config.resizable=true;
 	config.width=700;
-	config.height=500;
+	config.autoHeight=true;
 	config.closeAction='hide';
 	config.title= GO.notes.lang.note;					
 	config.items= this.formPanel;
@@ -58,10 +54,8 @@ GO.notes.NoteDialog = function(config){
 			scope:this
 		}					
 	];
-
 	
-	GO.notes.NoteDialog.superclass.constructor.call(this, config);
-	
+	GO.notes.NoteDialog.superclass.constructor.call(this, config);	
 	
 	this.addEvents({'save' : true});	
 }
@@ -73,14 +67,12 @@ Ext.extend(GO.notes.NoteDialog, Ext.Window,{
 		if(!this.rendered)
 			this.render(Ext.getBody());
 		
-		this.tabPanel.setActiveTab(0);
-		
-		
-		
 		if(!note_id)
 		{
 			note_id=0;			
 		}
+		
+		this.propertiesPanel.show();
 			
 		this.setNoteId(note_id);
 		
@@ -88,37 +80,20 @@ Ext.extend(GO.notes.NoteDialog, Ext.Window,{
 		{
 			this.formPanel.load({
 				url : GO.settings.modules.notes.url+'json.php',
-				
 				success:function(form, action)
 				{
-					
-					if(GO.files)
-					{
-						this.fileBrowser.setRootPath(action.result.data.files_path);
-						this.fileBrowser.setDisabled(false);
-					}					
-
-					this.selectCategory.setRemoteText(action.result.data.category_name);
-					this.selectUser.setRemoteText(action.result.data.user_name);
-				
+					this.selectCategory.setRemoteText(action.result.data.category_name);	
 					GO.notes.NoteDialog.superclass.show.call(this);
 				},
 				failure:function(form, action)
 				{
 					Ext.Msg.alert(GO.lang['strError'], action.result.feedback)
 				},
-				scope: this
-				
+				scope: this				
 			});
 		}else 
 		{		
 			this.formPanel.form.reset();
-
-			if(GO.files)
-			{
-				this.fileBrowser.setDisabled(true);
-			}
-
 			GO.notes.NoteDialog.superclass.show.call(this);
 		}
 		
@@ -142,8 +117,6 @@ Ext.extend(GO.notes.NoteDialog, Ext.Window,{
 		this.formPanel.form.baseParams['note_id']=note_id;
 		this.note_id=note_id;
 		
-		this.linksPanel.loadLinks(note_id, 4);
-		
 		this.selectLinkField.container.up('div.x-form-item').setDisplayed(note_id==0);
 	},
 	
@@ -161,17 +134,10 @@ Ext.extend(GO.notes.NoteDialog, Ext.Window,{
 				{
 					this.hide();	
 				}else
-				{
-				
+				{				
 					if(action.result.note_id)
 					{
-						this.setNoteId(action.result.note_id);
-
-						if(GO.files && action.result.files_path)
-						{
-							this.fileBrowser.setRootPath(action.result.files_path);
-							this.fileBrowser.setDisabled(false);
-						}			
+						this.setNoteId(action.result.note_id);	
 					}
 				}
 				
@@ -189,15 +155,13 @@ Ext.extend(GO.notes.NoteDialog, Ext.Window,{
 				}
 			},
 			scope: this
-		});
-		
-	},
-	
+		});		
+	},	
 	
 	buildForm : function () {
 		
 		this.selectLinkField = new GO.form.SelectLink({
-			anchor:'-20'
+			anchor:'100%'
 		});
 
 		this.propertiesPanel = new Ext.Panel({
@@ -207,12 +171,18 @@ Ext.extend(GO.notes.NoteDialog, Ext.Window,{
 			title:GO.lang['strProperties'],			
 			cls:'go-form-panel',waitMsgTarget:true,			
 			layout:'form',
-			autoScroll:true,
-			items:[this.selectLinkField,
-				this.selectCategory = new GO.form.ComboBox({
+			autoHeight:true,
+			items:[{
+					xtype: 'textfield',
+				  name: 'name',
+				  width:300,
+					anchor: '100%',
+				  allowBlank:false,
+				  fieldLabel: GO.lang.strName
+				},this.selectCategory = new GO.form.ComboBox({
 	       	fieldLabel: GO.notes.lang.category_id,
 	        hiddenName:'category_id',
-	        anchor:'-20',
+	        anchor:'100%',
 	        emptyText:GO.lang.strPleaseSelect,
 	        store: new GO.data.JsonStore({
 					    url: GO.settings.modules.notes.url+ 'json.php',
@@ -236,49 +206,18 @@ Ext.extend(GO.notes.NoteDialog, Ext.Window,{
         forceSelection: true,
         allowBlank: false
     }),
-    this.selectUser = new GO.form.SelectUser({
-				fieldLabel: GO.lang['strUser'],
-				disabled: !GO.settings.modules['notes']['write_permission'],
-				value: GO.settings.user_id,
-				anchor: '-20'
-			}),{
-				xtype: 'textfield',
-			  name: 'name',
-			  width:300,
-				anchor: '-20',
-			  allowBlank:false,
-			  fieldLabel: GO.lang.strName
-			},{
+			this.selectLinkField,
+			{
 				xtype: 'textarea',
 			  name: 'content',
-				anchor: '-20 -110',
-			  allowBlank:true,
-			  fieldLabel: GO.notes.lang.content
+				anchor: '100%',
+				height:300,
+			  hideLabel:true
 			}]				
 		});
 
-		var items  = [this.propertiesPanel];
+		var items  = [this.propertiesPanel];		
 		
-    
-      	
-    if(GO.files)
-		{
-			this.fileBrowser = new GO.files.FileBrowser({
-				title: GO.lang.strFiles, 
-				treeRootVisible:true, 
-				treeCollapsed:true,
-				loadDelayed:true,
-				disabled:true
-				});
-			items.push(this.fileBrowser);
-		}
-		
-    
-		
-		
-		//Create the standard GO linkspanel
-		this.linksPanel = new GO.grid.LinksPanel({title: GO.lang['strLinks']});
-		items.push(this.linksPanel);
 		if(GO.customfields && GO.customfields.types["4"])
 		{
 			for(var i=0;i<GO.customfields.types["4"].panels.length;i++)
@@ -286,9 +225,6 @@ Ext.extend(GO.notes.NoteDialog, Ext.Window,{
 				items.push(GO.customfields.types["4"].panels[i]);
 			}
 		}
-		
-		
-		
  
     this.tabPanel = new Ext.TabPanel({
       activeTab: 0,      
@@ -296,17 +232,15 @@ Ext.extend(GO.notes.NoteDialog, Ext.Window,{
     	border: false,
       items: items,
       anchor: '100% 100%'
-    }) ;    
-    
+    });    
     
     this.formPanel = new Ext.form.FormPanel({
     	waitMsgTarget:true,
 			url: GO.settings.modules.notes.url+'action.php',
 			border: false,
+			autoHeight:true,
 			baseParams: {task: 'note'},				
 			items:this.tabPanel				
-		});
-    
-    
+		});    
 	}
 });
