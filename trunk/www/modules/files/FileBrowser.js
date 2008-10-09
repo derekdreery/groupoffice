@@ -1285,8 +1285,8 @@ GO.files.openFolder = function(path)
 		GO.files.fileBrowserWin = new Ext.Window({
 		
 			title: GO.files.lang.fileBrowser,
-			height:400,
-			width:600,
+			height:500,
+			width:700,
 			layout:'fit',
 			border:false,
 			maximizable:true,
