@@ -43,27 +43,7 @@
 				$response['data']['files_path']='{module}/'.$response['data']['id'];
 
 				$full_path = $GO_CONFIG->file_storage_path.$response['data']['files_path'];
-				if(!file_exists($full_path))
-				{
-					$fs->mkdir_recursive($full_path);
-
-					if(!$fs->get_folder(addslashes($full_path)))
-					{
-						$folder['user_id']=$response['data']['user_id'];
-						$folder['path']=addslashes($full_path);
-						$folder['visible']='0';
-						<gotpl if="$authenticate">
-						$folder['acl_read']=${friendly_single}['acl_read'];
-						$folder['acl_write']=${friendly_single}['acl_write'];
-						</gotpl>
-						<gotpl if="$authenticate_relation">
-						$folder['acl_read']=${related_friendly_single}['acl_read'];
-						$folder['acl_write']=${related_friendly_single}['acl_write'];
-						</gotpl>
-
-						$fs->add_folder($folder);
-					}
-				}
+				$fs->check_share($full_path, $response['data']['user_id'], <gotpl if="$authenticate">${friendly_single}['acl_read'],${friendly_single}['acl_write']</gotpl><gotpl if="$authenticate_relation">${related_friendly_single}['acl_read'],${related_friendly_single}['acl_write']</gotpl>);				
 			}
 			</gotpl>			
 			$response['success']=true;
@@ -107,7 +87,14 @@
 					$response['data']['files']=array();				
 				}
 				</gotpl>
-
+				
+				if(isset($GO_MODULES->modules['comments']))
+				{
+					require_once ($GO_MODULES->modules['comments']['class_path'].'comments.class.inc.php');
+					$comments = new comments();
+					
+					$response['data']['comments']=$comments->get_comments_json($response['data']['id'], {link_type});
+				}
 				break;
 			}			
 			</gotpl>
