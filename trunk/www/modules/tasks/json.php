@@ -31,6 +31,7 @@ try{
 			
 			require($GO_CONFIG->class_path.'ical2array.class.inc');
 			require($GO_CONFIG->class_path.'Date.class.inc.php');
+			require_once($GO_LANGUAGE->get_language_file('tasks'));
 			
 			$task = $tasks->get_task(smart_addslashes($_REQUEST['task_id']));
 			$tasklist = $tasks->get_tasklist($task['tasklist_id']);
@@ -38,6 +39,8 @@ try{
 			$response['data']=$task;
 				
 			$response['data']['tasklist_name']=$tasklist['name'];
+			
+			$response['data']['status_text']=isset($lang['tasks']['statuses'][$task['status']]) ? addslashes($lang['tasks']['statuses'][$task['status']]) : $lang['tasks']['statuses']['NEEDS-ACTION'];
 				
 			$response['data']['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_write']);
 			if(!$response['data']['write_permission'] && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_read']))
