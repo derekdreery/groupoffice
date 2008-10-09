@@ -208,17 +208,8 @@ class tasks extends db
 		return $count;
 	}
 
-
-
-
-	/*
-	 Times in GMT!
-	 */
-
 	function add_task($task)
 	{
-		
-
 		if(empty($task['tasklist_id']))
 		{
 			throw new Exception();
@@ -238,21 +229,14 @@ class tasks extends db
 		{
 			$task['mtime']  =  $task['ctime'];
 		}
-
-		
-
 		
 		if(!isset($task['status']))
 		{
 			$task['status'] = 'ACCEPTED';
 		}	
 
-
-		$task['id'] = $this->nextid("ta_tasks");
-		
-		$this->insert_row('ta_tasks', $task);
-		
-		
+		$task['id'] = $this->nextid("ta_tasks");		
+		$this->insert_row('ta_tasks', $task);		
 		
 		$this->set_reminder($task);
 		
