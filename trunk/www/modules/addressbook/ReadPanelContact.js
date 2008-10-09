@@ -53,6 +53,16 @@ GO.addressbook.ContactReadPanel = function(config)
 			scope: this,
 			disabled: true
 		}),
+		this.fileBrowseButton = new Ext.Button({
+			iconCls: 'go-menu-icon-files', 
+			cls: 'x-btn-text-icon', 
+			text: GO.files.lang.files,
+			handler: function(){
+				GO.files.openFolder(this.data.files_path);				
+			},
+			scope: this,
+			disabled: true
+		}),		
 		this.newMenuButton
 	];	
 	
@@ -401,6 +411,7 @@ Ext.extend(GO.addressbook.ContactReadPanel, Ext.Panel,{
 		this.data=data;
 		this.editButton.setDisabled(!data.write_permission);
 		this.linkBrowseButton.setDisabled(false);
+		this.fileBrowseButton.setDisabled(false);
 		
 		this.template.overwrite(this.body, data);	
 		

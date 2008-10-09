@@ -174,4 +174,26 @@ class users extends db
 			$search->cache_search_result($cache);
 		}
 	}
+	
+	function __on_check_database(){
+		global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE;
+		
+		echo 'Checking users folder permissions<br />';
+
+		if(isset($GO_MODULES->modules['files']))
+		{
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
+			$fs = new files();
+
+			$sql = "SELECT last_name, id FROM go_users";
+			$this->query($sql);
+			while($this->next_record())
+			{
+				echo 'Checking '.$this->f('last_name').'<br />';				
+				$full_path = $GO_CONFIG->file_storage_path.'users/'.$this->f('id');
+				$fs->check_share($full_path, 1, $GO_MODULES->modules['users']['acl_read'], $GO_MODULES->modules['users']['acl_write']);
+			}
+		}
+		echo 'Done<br /><br />';
+	}
 }

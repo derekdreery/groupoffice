@@ -829,4 +829,26 @@ class tasks extends db
 			$search->cache_search_result($cache);
 		}
 	}
+	
+	function __on_check_database(){
+		global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE;
+		
+		echo 'Checking tasks folder permissions<br />';
+
+		if(isset($GO_MODULES->modules['files']))
+		{
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
+			$fs = new files();
+
+			$sql = "SELECT e.name,e.id, c.acl_read, c.acl_write, c.user_id FROM ta_tasks e INNER JOIN ta_lists c ON c.id=e.tasklist_id";
+			$this->query($sql);
+			while($this->next_record())
+			{
+				echo 'Checking '.$this->f('name').'<br />';				
+				$full_path = $GO_CONFIG->file_storage_path.'tasks/'.$this->f('id');
+				$fs->check_share($full_path, $this->f('user_id'), $this->f('acl_read'), $this->f('acl_write'));
+			}
+		}
+		echo 'Done<br /><br />';
+	}
 }

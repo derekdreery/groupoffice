@@ -268,7 +268,7 @@ GO.lang.strMax = 'Maximum';
 GO.lang.settings='Settings';
 
 GO.lang.latestLinks='Latest links'
-GO.lang.cmdBrowseLinks = 'Browse links';
+GO.lang.cmdBrowseLinks = 'Links';
 
 
 

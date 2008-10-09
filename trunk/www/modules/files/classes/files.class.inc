@@ -11,6 +11,42 @@ class files extends filesystem
 		$this->disable_go_permissions=false;
 
 	}
+	
+	function check_share($full_path, $user_id, $acl_read, $acl_write)
+	{
+		if(!file_exists($full_path))
+		{
+			$this->mkdir_recursive($full_path);
+		}
+		
+
+		$folder = $this->get_folder(addslashes($full_path));
+		if(!$folder)
+		{
+			$folder['user_id']=$user_id;
+			$folder['path']=addslashes($full_path);
+			$folder['visible']='0';
+			$folder['acl_read']=$acl_read;
+			$folder['acl_write']=$acl_write;
+
+			$this->add_folder($folder);
+			
+			echo 'Adding '.$full_path.'<br />';
+		}else
+		{
+			if($folder['acl_read']==0)
+			{				
+				$up_folder['id']=$folder['id'];
+				$up_folder['user_id']=$user_id;
+				$up_folder['acl_read']=$acl_read;
+				$up_folder['acl_write']=$acl_write;
+				
+				$this->update_folder($up_folder);
+				
+				echo 'Updating '.$full_path.'<br />';
+			}
+		}
+	}
 
 	function add_notification($path, $user_id)
 	{
