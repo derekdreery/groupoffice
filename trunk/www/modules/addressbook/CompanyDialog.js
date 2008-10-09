@@ -234,24 +234,14 @@ Ext.extend(GO.addressbook.CompanyDialog, Ext.Window, {
 				if(action.result.company_id)
 				{
 					this.company_id = action.result.company_id;				
-					this.linksPanel.loadLinks(action.result.company_id, 3);
 					this.employeePanel.setCompanyId(action.result.company_id);
-					
-					if(GO.files && action.result.files_path)
-					{
-						this.fileBrowser.setRootPath(action.result.files_path);
-						this.fileBrowser.setDisabled(false);
-					}	
-				}
-				
+				}				
 				this.fireEvent('save', this);
 				
 				if (hide)
 				{
 					this.hide();
-				}
-				
-			
+				}			
 			},
 			failure: function(form, action) {					
 
