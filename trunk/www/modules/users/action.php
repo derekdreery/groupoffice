@@ -177,6 +177,17 @@ try
 				$user_id = $GO_USERS->add_user($user, $user_groups, $visible_user_groups, $modules_read, $modules_write);
 				
 				
+				if($GO_MODULES->modules['files'])
+				{
+					require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
+					$fs = new files();
+
+					$response['files_path']='users/'.$user_id;						
+					$full_path = $GO_CONFIG->file_storage_path.$response['files_path'];
+					$fs->check_share($full_path, 1, $GO_MODULES->modules['users']['acl_read'], $GO_MODULES->modules['users']['acl_write']);
+				}
+				
+				
 				//confirm registration to the user and exit the script so the form won't load
 				$response['success'] = true;
 				$response['user_id']=$user_id;
@@ -267,6 +278,9 @@ try
 			}
 
 			//end permissions
+			
+			
+				
 				
 				
 			echo json_encode($response);

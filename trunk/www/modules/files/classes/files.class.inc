@@ -12,13 +12,12 @@ class files extends filesystem
 
 	}
 	
-	function check_share($full_path, $user_id, $acl_read, $acl_write)
+	function check_share($full_path, $user_id, $acl_read, $acl_write, $quiet=true)
 	{
 		if(!file_exists($full_path))
 		{
 			$this->mkdir_recursive($full_path);
-		}
-		
+		}	
 
 		$folder = $this->get_folder(addslashes($full_path));
 		if(!$folder)
@@ -31,10 +30,11 @@ class files extends filesystem
 
 			$this->add_folder($folder);
 			
-			echo 'Adding '.$full_path.'<br />';
+			if(!$quiet)
+				echo 'Adding '.$full_path.'<br />';
 		}else
 		{
-			if($folder['acl_read']==0)
+			if($folder['acl_read']!=$acl_read || $folder['acl_write']!=$acl_write)
 			{				
 				$up_folder['id']=$folder['id'];
 				$up_folder['user_id']=$user_id;
@@ -42,8 +42,8 @@ class files extends filesystem
 				$up_folder['acl_write']=$acl_write;
 				
 				$this->update_folder($up_folder);
-				
-				echo 'Updating '.$full_path.'<br />';
+				if(!$quiet)
+					echo 'Updating '.$full_path.'<br />';
 			}
 		}
 	}

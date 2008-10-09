@@ -100,7 +100,8 @@ Ext.extend(GO.tasks.TaskPanel, Ext.Panel,{
 				{
 					template +=GO.customfields.displayPanelTemplate;
 				}*/
-	    	
+				
+					    	
 	  var config = {};
 		
 				
@@ -111,7 +112,14 @@ Ext.extend(GO.tasks.TaskPanel, Ext.Panel,{
 		}
 		Ext.apply(config, GO.linksTemplateConfig);
 		
-				
+		
+		if(GO.comments)
+		{
+			template += GO.comments.displayPanelTemplate;
+		}
+		
+			
+		
 		template+='</div>';
 		
 		this.template = new Ext.XTemplate(template, config);
@@ -147,6 +155,7 @@ Ext.extend(GO.tasks.TaskPanel, Ext.Panel,{
 	
 	setData : function(data)
 	{
+		data.link_type=12;
 		this.data=data;
 		this.editButton.setDisabled(!data.write_permission);
 		this.linkBrowseButton.setDisabled(false);

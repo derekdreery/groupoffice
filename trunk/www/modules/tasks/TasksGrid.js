@@ -41,7 +41,8 @@ GO.tasks.TasksPanel = function(config)
 	    '<thead><tr class="x-grid3-hd-row">{cells}</tr></thead>',
 	    '<tbody><tr class="new-task-row">',
 	        '<td><div id="tasks-new-task-icon"></div></td>',
-	        '<td><table border="0" cellspacing="0" cellpadding="0"><tr><td><div class="x-small-editor" id="new-task-name"></div></td><td><div class="x-small-editor" id="new-task-link"></div></td></tr></table></td>',	        
+	       // '<td><table border="0" cellspacing="0" cellpadding="0"><tr><td><div class="x-small-editor" id="new-task-name"></div></td><td><div class="x-small-editor" id="new-task-link"></div></td></tr></table></td>',	        
+	       	'<td><div class="x-small-editor" id="new-task-name"></div></td>',
 	        '<td><div class="x-small-editor" id="new-task-due"></div></td>',	        
 	    '</tr></tbody>',
 	    "</table>"
@@ -115,13 +116,13 @@ Ext.extend(GO.tasks.TasksPanel, GO.grid.GridPanel, {
     });
     
    
-   this.ntSelectLink = new GO.form.SelectLink({
+   /*this.ntSelectLink = new GO.form.SelectLink({
     	renderTo:'new-task-link',
     	disabled:true,
     	emptyText: GO.tasks.lang.createLink
-    });
+    });*/
     
-    this.on("rowdblclick", function(grid, rowClicked, e){
+   /* this.on("rowdblclick", function(grid, rowClicked, e){
 	    	if(!GO.tasks.taskDialog)
 				{
 					GO.tasks.taskDialog = new GO.tasks.TaskDialog();		
@@ -134,7 +135,7 @@ Ext.extend(GO.tasks.TasksPanel, GO.grid.GridPanel, {
 					}, this);
 				}
 				GO.tasks.taskDialog.show({ task_id: grid.selModel.selections.keys[0]});
-			}, this);
+			}, this);*/
 
     
     
@@ -167,7 +168,7 @@ Ext.extend(GO.tasks.TasksPanel, GO.grid.GridPanel, {
     }
     this.ntName.on(handlers, this);
     this.ntDue.on(handlers, this);
-    this.ntSelectLink.on(handlers, this);
+    //this.ntSelectLink.on(handlers, this);
     
     
 
@@ -175,7 +176,7 @@ Ext.extend(GO.tasks.TasksPanel, GO.grid.GridPanel, {
         this.focused = true;
         if(!this.editing){            
             this.ntDue.enable();
-            this.ntSelectLink.enable();
+            //this.ntSelectLink.enable();
             this.syncFields();
             this.editing = true;
         }
@@ -190,7 +191,8 @@ Ext.extend(GO.tasks.TasksPanel, GO.grid.GridPanel, {
 	syncFields : function(){
 		
 		var cm = this.getColumnModel();
-    this.ntSelectLink.setSize(cm.getColumnWidth(1)-204);     
+    //this.ntSelectLink.setSize(cm.getColumnWidth(1)-204);     
+    this.ntName.setSize(cm.getColumnWidth(1)-4);
     this.ntDue.setSize(cm.getColumnWidth(2)-4);
 		
 	},
@@ -201,7 +203,7 @@ Ext.extend(GO.tasks.TasksPanel, GO.grid.GridPanel, {
     if(this.editing && !this.focused){
         var taskname = this.ntName.getValue();
         var due = this.ntDue.getValue();
-        var link = this.ntSelectLink.getValue();
+       // var link = this.ntSelectLink.getValue();
         if(!Ext.isEmpty(taskname)){
             
             Ext.Ajax.request({
@@ -210,7 +212,7 @@ Ext.extend(GO.tasks.TasksPanel, GO.grid.GridPanel, {
 								task: 'save_task',
 								tasklist_id: this.store.baseParams.tasklist_id,
 								name: taskname,
-								link: link,
+								//link: link,
 								start_date: due.format(GO.settings.date_format),
 								due_date: due.format(GO.settings.date_format)
 							},
@@ -235,8 +237,8 @@ Ext.extend(GO.tasks.TasksPanel, GO.grid.GridPanel, {
                 this.ntName.focus.defer(100, this.ntName);
             }
         }
-        this.ntSelectLink.reset();
-        this.ntSelectLink.disable();            
+        //this.ntSelectLink.reset();
+        //this.ntSelectLink.disable();            
         this.ntDue.disable();
         this.editing = false;
     }

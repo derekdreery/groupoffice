@@ -22,7 +22,30 @@ GO.users.UserDialog = function(config){
 	
 	this.buildForm();
 
+
 	
+	config.tbar = [
+		this.linkBrowseButton = new Ext.Button({
+			iconCls: 'btn-link', 
+			cls: 'x-btn-text-icon', 
+			text: GO.lang.cmdBrowseLinks,
+			disabled:true,
+			handler: function(){
+				GO.linkBrowser.show({link_id: this.user_id,link_type: "8",folder_id: "0"});				
+			},
+			scope: this
+		}),		
+		this.fileBrowseButton = new Ext.Button({
+			iconCls: 'go-menu-icon-files', 
+			cls: 'x-btn-text-icon', 
+			text: GO.files.lang.files,
+			handler: function(){
+				GO.files.openFolder(this.files_path);				
+			},
+			scope: this,
+			disabled: true
+		})
+	];	
 		
 	
 	
@@ -72,6 +95,8 @@ GO.users.UserDialog = function(config){
 
 Ext.extend(GO.users.UserDialog, Ext.Window,{
 
+	files_path : '',
+	
 	setUserId : function(user_id){
 		this.formPanel.form.baseParams['user_id']=user_id;
 		this.user_id=user_id;	
@@ -83,7 +108,10 @@ Ext.extend(GO.users.UserDialog, Ext.Window,{
 		{
 			var visible = user_id>0;
 			this.serverclientFieldSet.setVisible(!visible);
-		}
+		}		
+		
+		this.linkBrowseButton.setDisabled(user_id<1);
+		this.fileBrowseButton.setDisabled(user_id<1);		
 	},
 	
 	serverclientDomainCheckboxes : [],
@@ -115,8 +143,7 @@ Ext.extend(GO.users.UserDialog, Ext.Window,{
 		if(!this.rendered)
 		{
 			if(GO.serverclient && GO.serverclient.domains)
-			{
-				
+			{				
 				this.serverclientFieldSet = new Ext.form.FieldSet({
 					title: 'Mailboxes', 
 					autoHeight:true,
@@ -140,9 +167,7 @@ Ext.extend(GO.users.UserDialog, Ext.Window,{
 				}
 				
 				this.accountTab.add(this.serverclientFieldSet);
-			}
-			
-			
+			}		
 			
 			this.render(Ext.getBody());
 		}
@@ -153,10 +178,6 @@ Ext.extend(GO.users.UserDialog, Ext.Window,{
 		}
 		
 		this.accountTab.show();
-		
-		
-
-		
 
 		this.setUserId(user_id);
 		
@@ -169,6 +190,8 @@ Ext.extend(GO.users.UserDialog, Ext.Window,{
 				{				
 					this.loaded=true;
 					GO.users.UserDialog.superclass.show.call(this);
+					
+					this.files_path = action.result.data.files_path;
 					
 					this.lookAndFeelTab.startModuleField.setRemoteText(action.result.data.start_module_name);
 				},
@@ -184,15 +207,13 @@ Ext.extend(GO.users.UserDialog, Ext.Window,{
 			//reset form
 			this.formPanel.form.reset();
 			GO.users.UserDialog.superclass.show.call(this);
+			
+			this.setUserId(0);
 		}
-
-
 	},
 	
 
 	submitForm : function(hide, reset){
-		
-		
 		var params = this.permissionsTab.getPermissionParameters();
 		
 		params.task='save_user';
@@ -249,6 +270,8 @@ Ext.extend(GO.users.UserDialog, Ext.Window,{
 				}else if(action.result.user_id)
 				{
 					this.setUserId(action.result.user_id);
+					
+					this.files_path = action.result.data.files_path;
 				}
 			},		
 			failure: function(form, action) {
