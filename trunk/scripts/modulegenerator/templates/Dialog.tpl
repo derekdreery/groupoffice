@@ -12,21 +12,17 @@
  */
 
  
-GO.{module}.{friendly_single_ucfirst}Dialog = function(config){
-	
-	
+GO.{module}.{friendly_single_ucfirst}Dialog = function(config){	
 	if(!config)
 	{
 		config={};
 	}
-	
 	
 	this.buildForm();
 	
 	var focusFirstField = function(){
 		this.propertiesPanel.items.items[0].focus();
 	};
-	
 	
 	config.collapsible=true;
 	config.maximizable=true;
@@ -59,7 +55,6 @@ GO.{module}.{friendly_single_ucfirst}Dialog = function(config){
 			scope:this
 		}					
 	];
-
 	
 	GO.{module}.{friendly_single_ucfirst}Dialog.superclass.constructor.call(this, config);
 
@@ -77,8 +72,6 @@ Ext.extend(GO.{module}.{friendly_single_ucfirst}Dialog, Ext.Window,{
 		
 		this.tabPanel.setActiveTab(0);
 		
-		
-		
 		if(!{friendly_single}_id)
 		{
 			{friendly_single}_id=0;			
@@ -92,15 +85,7 @@ Ext.extend(GO.{module}.{friendly_single_ucfirst}Dialog, Ext.Window,{
 				url : GO.settings.modules.{module}.url+'json.php',
 				waitMsg:GO.lang['waitMsgLoad'],
 				success:function(form, action)
-				{
-					<gotpl if="$files">
-					if(GO.files)
-					{
-						this.fileBrowser.setRootPath(action.result.data.files_path);
-						this.fileBrowser.setDisabled(false);
-					}					
-					</gotpl>
-					
+				{					
 					<gotpl if="$authenticate">
 					this.setWritePermission(action.result.data.write_permission);					
 					this.readPermissionsTab.setAcl(action.result.data.acl_read);
@@ -108,7 +93,7 @@ Ext.extend(GO.{module}.{friendly_single_ucfirst}Dialog, Ext.Window,{
 					</gotpl>	
 					<gotpl if="$user_id">
 					this.selectUser.setRemoteText(action.result.data.user_name);
-					</gotpl>				
+					</gotpl>			
 					
 					GO.{module}.{friendly_single_ucfirst}Dialog.superclass.show.call(this);
 				},
@@ -116,27 +101,16 @@ Ext.extend(GO.{module}.{friendly_single_ucfirst}Dialog, Ext.Window,{
 				{
 					Ext.Msg.alert(GO.lang['strError'], action.result.feedback)
 				},
-				scope: this
-				
+				scope: this				
 			});
 		}else 
 		{
-			
 			this.formPanel.form.reset();
-			
 			<gotpl if="$authenticate">
 			this.setWritePermission(true);
 			this.readPermissionsTab.setAcl(0);
 			this.writePermissionsTab.setAcl(0);
 			</gotpl>
-			<gotpl if="$files">
-			if(GO.files)
-			{
-				this.fileBrowser.setDisabled(true);
-			}
-			</gotpl>	
-			
-			
 			GO.{module}.{friendly_single_ucfirst}Dialog.superclass.show.call(this);
 		}
 		
@@ -163,21 +137,14 @@ Ext.extend(GO.{module}.{friendly_single_ucfirst}Dialog, Ext.Window,{
 		this.buttons[0].setDisabled(!writePermission);
 		this.buttons[1].setDisabled(!writePermission);
 		</gotpl>
-		<gotpl if="$authenticate && $link_type&gt;0">
-		this.linksPanel.setWritePermission(writePermission);
-		</gotpl>
 		<gotpl if="$authenticate">
 	},
 	</gotpl>
-	
-	
-
 	set{friendly_single_ucfirst}Id : function({friendly_single}_id)
 	{
 		this.formPanel.form.baseParams['{friendly_single}_id']={friendly_single}_id;
 		this.{friendly_single}_id={friendly_single}_id;
 		<gotpl if="$link_type&gt;0">
-		this.linksPanel.loadLinks({friendly_single}_id, {link_type});
 		this.selectLinkField.container.up('div.x-form-item').setDisplayed({friendly_single}_id==0);
 		</gotpl>
 	},
@@ -188,27 +155,16 @@ Ext.extend(GO.{module}.{friendly_single_ucfirst}Dialog, Ext.Window,{
 			url:GO.settings.modules.{module}.url+'action.php',
 			params: {'task' : 'save_{friendly_single}'},
 			waitMsg:GO.lang['waitMsgSave'],
-			success:function(form, action){
-				
-				this.fireEvent('save', this);
-				
+			success:function(form, action){				
+				this.fireEvent('save', this);				
 				if(hide)
 				{
 					this.hide();	
 				}else
-				{
-				
+				{				
 					if(action.result.{friendly_single}_id)
 					{
 						this.set{friendly_single_ucfirst}Id(action.result.{friendly_single}_id);
-						
-						<gotpl if="$files">
-						if(GO.files && action.result.files_path)
-						{
-							this.fileBrowser.setRootPath(action.result.files_path);
-							this.fileBrowser.setDisabled(false);
-						}					
-						</gotpl>
 						<gotpl if="$authenticate">
 						this.readPermissionsTab.setAcl(action.result.acl_read);
 						this.writePermissionsTab.setAcl(action.result.acl_write);
@@ -230,47 +186,24 @@ Ext.extend(GO.{module}.{friendly_single_ucfirst}Dialog, Ext.Window,{
 				}
 			},
 			scope: this
-		});
-		
+		});		
 	},
 	
-	
 	buildForm : function () {
-
 		<gotpl if="$link_type &gt; 0">
 		this.selectLinkField = new GO.form.SelectLink();
-		</gotpl>
-		
+		</gotpl>		
 		this.propertiesPanel = new Ext.Panel({
 			title:GO.lang['strProperties'],			
 			cls:'go-form-panel',			
 			layout:'form',
 			autoScroll:true,
 			items:[<gotpl if="$link_type &gt; 0">this.selectLinkField,</gotpl>{FORMFIELDS}]
-				
 		});
 
-		var items  = [this.propertiesPanel];
-		
-    
-    <gotpl if="$files">  	
-    if(GO.files)
-		{
-			this.fileBrowser = new GO.files.FileBrowser({
-				title: 'Files', 
-				treeRootVisible:true, 
-				loadDelayed:true,
-				treeCollapsed:true,
-				disabled:true
-				});
-			items.push(this.fileBrowser);
-		}
-		</gotpl>
+		var items  = [this.propertiesPanel];		
     
 		<gotpl if="$link_type &gt; 0">
-		//Create the standard GO linkspanel
-		this.linksPanel = new GO.grid.LinksPanel({title: GO.lang['strLinks']});
-		items.push(this.linksPanel);
 		if(GO.customfields && GO.customfields.types["{link_type}"])
 		{
 			for(var i=0;i<GO.customfields.types["{link_type}"].panels.length;i++)
@@ -278,8 +211,7 @@ Ext.extend(GO.{module}.{friendly_single_ucfirst}Dialog, Ext.Window,{
 				items.push(GO.customfields.types["{link_type}"].panels[i]);
 			}
 		}
-		</gotpl>
-		
+		</gotpl>		
 		<gotpl if="$authenticate">
     this.readPermissionsTab = new GO.grid.PermissionsPanel({
 			title: GO.lang['strReadPermissions']
@@ -299,8 +231,7 @@ Ext.extend(GO.{module}.{friendly_single_ucfirst}Dialog, Ext.Window,{
     	border: false,
       items: items,
       anchor: '100% 100%'
-    }) ;    
-    
+    });   
     
     this.formPanel = new Ext.form.FormPanel({
 	    waitMsgTarget:true,
@@ -308,8 +239,6 @@ Ext.extend(GO.{module}.{friendly_single_ucfirst}Dialog, Ext.Window,{
 			border: false,
 			baseParams: {task: '{friendly_single}'},				
 			items:this.tabPanel				
-		});
-    
-    
+		});   
 	}
 });
