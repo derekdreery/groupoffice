@@ -85,6 +85,8 @@ Ext.extend(GO.notes.NotePanel, Ext.Panel,{
 				{
 					template +=GO.customfields.displayPanelTemplate;
 				}
+				
+				
 	    	
 	  var config = {};		
 				
@@ -93,7 +95,12 @@ Ext.extend(GO.notes.NotePanel, Ext.Panel,{
 			Ext.apply(config, GO.files.filesTemplateConfig);
 			template += GO.files.filesTemplate;
 		}
-		Ext.apply(config, GO.linksTemplateConfig);		
+		Ext.apply(config, GO.linksTemplateConfig);
+		
+		if(GO.comments)
+		{
+			template += GO.comments.displayPanelTemplate;
+		}		
 				
 		template+='</div>';
 		
@@ -130,6 +137,7 @@ Ext.extend(GO.notes.NotePanel, Ext.Panel,{
 	
 	setData : function(data)
 	{
+		data.link_type=4;
 		this.data=data;
 		this.editButton.setDisabled(!data.write_permission);
 		this.linkBrowseButton.setDisabled(false);

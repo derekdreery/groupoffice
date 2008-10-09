@@ -80,6 +80,18 @@ GO.tasks.MainPanel = function(config){
 				region:'center'								
 			});
 			
+	this.gridPanel.on("rowclick", function(grid, rowIndex, e){
+		var record = grid.getStore().getAt(rowIndex);		
+		this.taskPanel.loadTask(record.data.id);
+	}, this);
+			
+	this.taskPanel = new GO.tasks.TaskPanel({
+		title:GO.tasks.lang.task,
+		region:'east',
+		width:400,
+		border:true
+	});
+			
 	config.layout='border';
 	//config.tbar=;
 	config.items=[
@@ -147,7 +159,8 @@ GO.tasks.MainPanel = function(config){
 						filterPanel
 						]
        }),
-       this.gridPanel
+       this.gridPanel,
+       this.taskPanel
        ];
 	
 	GO.tasks.MainPanel.superclass.constructor.call(this, config);
@@ -158,6 +171,11 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 	afterRender : function()
 	{
 		GO.tasks.MainPanel.superclass.afterRender.call(this);
+		
+		GO.tasks.taskDialog.on('save', function(){
+			this.gridPanel.store.reload();
+		}, this);
+					
 		this.taskListsStore.load({
 			callback: function(){
 				
@@ -263,6 +281,10 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 	
 });
 
+
+GO.mainLayout.onReady(function(){
+	GO.tasks.taskDialog = new GO.tasks.TaskDialog();
+});
 
 
 GO.tasks.writableTasklistsStore = new GO.data.JsonStore({
