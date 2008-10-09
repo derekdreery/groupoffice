@@ -137,16 +137,15 @@ GO.data.Connection = Ext.extend(Ext.data.Connection, {
 	 * @returns {Boolean} True if no errors have been returned.
 	 */
 		
-	
 	authHandler : function(options, success, response)
 	{
 		if(GO.checkerIcon)
 		{
-			GO.checkerIcon.setDisplayed(false);
-			
+			GO.checkerIcon.setDisplayed(false);			
 			//this slowed down IE enormously :(
 			//Ext.getBody().removeClass('go-wait');
 		}
+		
 		if(!success)
 		{
 			Ext.Msg.alert(GO.lang['strError'], String.format(GO.lang['strRequestError'], response.status));
