@@ -197,6 +197,10 @@ if(in_array('custom_fields', $module_ids))
 $db->query("DELETE FROM go_settings");
 
 
+//REMINDERS
+$db->query("ALTER TABLE `go_reminders` DROP `url`");
+$db->query("ALTER TABLE `go_reminders` ADD `link_type` INT NOT NULL AFTER `link_id` ;");
+
 //end framework updates
 
 
@@ -1095,10 +1099,6 @@ $module['acl_write']=$GO_SECURITY->copy_acl($GO_MODULES->modules['calendar']['ac
 $db->insert_row('go_modules', array_map('addslashes', $module));
 
 
-
-//REMINDERS
-$db->query("ALTER TABLE `go_reminders` DROP `url`");
-$db->query("ALTER TABLE `go_reminders` ADD `link_type` INT NOT NULL AFTER `link_id` ;");
 
 /*
  * 
