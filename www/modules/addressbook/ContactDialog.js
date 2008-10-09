@@ -191,13 +191,6 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 				this.formPanel.form.reset();
 							
 				this.personalPanel.formAddressBooks.setValue(tempAddressbookID);	
-				this.linksPanel.setDisabled(true);			
-				
-				if(GO.files)
-				{
-					this.fileBrowser.setDisabled(true);
-				}
-				
 				GO.addressbook.ContactDialog.superclass.show.call(this);
 			}	
 			this.tabPanel.setActiveTab(0);
