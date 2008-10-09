@@ -446,9 +446,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
     	this.templatesWindow.show();
     }else
     {
-    	
-    	
-    	
+    	this.updateAttachmentsButton();    	
     	
 			this.toComboVisible=true;
 			this.showMenuButton.setDisabled(false);
