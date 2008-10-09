@@ -16,13 +16,12 @@ GO.{module}.{friendly_single_ucfirst}Panel = function(config)
 	Ext.apply(this, config);
 	
 	this.split=true;
-	this.autoScroll=true;
-	
+	this.autoScroll=true;	
 	
 	<gotpl if="$link_type &gt; 0">
 	this.newMenuButton = new GO.NewMenuButton();
-	</gotpl>	
-	
+	</gotpl>
+		
 	this.tbar = [
 		this.editButton = new Ext.Button({
 			iconCls: 'btn-edit', 
@@ -41,7 +40,17 @@ GO.{module}.{friendly_single_ucfirst}Panel = function(config)
 				GO.linkBrowser.show({link_id: this.data.id,link_type: "{link_type}",folder_id: "0"});				
 			},
 			scope: this
-		}),	
+		}),
+		this.fileBrowseButton = new Ext.Button({
+			iconCls: 'go-menu-icon-files', 
+			cls: 'x-btn-text-icon', 
+			text: GO.files.lang.files,
+			handler: function(){
+				GO.files.openFolder(this.data.files_path);				
+			},
+			scope: this,
+			disabled: true
+		}),
 		this.newMenuButton</gotpl>
 	];	
 	
