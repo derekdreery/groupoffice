@@ -40,27 +40,9 @@
 					require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
 					$fs = new files();
 
-					$response['files_path']='{module}/'.${friendly_single}_id;
-						
+					$response['files_path']='{module}/'.${friendly_single}_id;						
 					$full_path = $GO_CONFIG->file_storage_path.$response['files_path'];
-					if(!file_exists($full_path))
-					{
-						$fs->mkdir_recursive($full_path);
-							
-						$folder['user_id']=$GO_SECURITY->user_id;
-						$folder['path']=addslashes($full_path);
-						$folder['visible']='0';
-						<gotpl if="$authenticate">
-						$folder['acl_read']=${friendly_single}['acl_read'];
-						$folder['acl_write']=${friendly_single}['acl_write'];
-						</gotpl>
-						<gotpl if="$authenticate_relation">
-						$folder['acl_read']=${related_friendly_single}['acl_read'];
-						$folder['acl_write']=${related_friendly_single}['acl_write'];
-						</gotpl>
-							
-						$fs->add_folder($folder);
-					}
+					$fs->check_share($full_path, $GO_SECURITY->user_id, <gotpl if="$authenticate">${friendly_single}['acl_read'],${friendly_single}['acl_write']</gotpl><gotpl if="$authenticate_relation">${related_friendly_single}['acl_read'],${related_friendly_single}['acl_write']</gotpl>);
 				}
 				</gotpl>				
 
