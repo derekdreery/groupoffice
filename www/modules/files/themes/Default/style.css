@@ -1,7 +1,7 @@
 @CHARSET "UTF-8";
 
 .go-module-icon-files , .go-menu-icon-files {
-	background-image: url('images/folder.png') !important;
+	background-image: url('images/files.png') !important;
 }
 
 .go-tab-icon-files {

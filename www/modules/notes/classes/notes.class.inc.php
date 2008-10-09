@@ -431,4 +431,26 @@ class notes extends db {
 		/* {ON_SEARCH_FUNCTION} */
 	}
 	
+	function __on_check_database(){
+		global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE;
+		
+		echo 'Checking notes folder permissions<br />';
+
+		if(isset($GO_MODULES->modules['files']))
+		{
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
+			$fs = new files();
+
+			$sql = "SELECT e.name,e.id, c.acl_read, c.acl_write, c.user_id FROM no_notes e INNER JOIN no_categories c ON c.id=e.category_id";
+			$this->query($sql);
+			while($this->next_record())
+			{
+				echo 'Checking '.$this->f('name').'<br />';				
+				$full_path = $GO_CONFIG->file_storage_path.'notes/'.$this->f('id');
+				$fs->check_share($full_path, $this->f('user_id'), $this->f('acl_read'), $this->f('acl_write'));
+			}
+		}
+		echo 'Done<br /><br />';
+	}
+	
 }

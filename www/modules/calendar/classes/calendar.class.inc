@@ -1830,5 +1830,27 @@ class calendar extends db
 		}
 		return false;
 	}
+	
+	function __on_check_database(){
+		global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE;
+		
+		echo 'Checking calendar folder permissions<br />';
+
+		if(isset($GO_MODULES->modules['files']))
+		{
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
+			$fs = new files();
+
+			$sql = "SELECT e.name,e.id, c.acl_read, c.acl_write, c.user_id FROM cal_events e INNER JOIN cal_calendars c ON c.id=e.calendar_id";
+			$this->query($sql);
+			while($this->next_record())
+			{
+				echo 'Checking '.$this->f('name').'<br />';				
+				$full_path = $GO_CONFIG->file_storage_path.'events/'.$this->f('id');
+				$fs->check_share($full_path, $this->f('user_id'), $this->f('acl_read'), $this->f('acl_write'));
+			}
+		}
+		echo 'Done<br /><br />';
+	}
 
 }

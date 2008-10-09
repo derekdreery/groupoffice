@@ -243,7 +243,7 @@ GO.lang.reminders= 'Herinneringen';
 GO.lang.dismiss='Verwerp';
 GO.lang.snooze='Uitstel';
 GO.lang.latestLinks='Nieuwste links'
-GO.lang.cmdBrowseLinks= 'Blader door links';
+GO.lang.cmdBrowseLinks= 'Koppelingen';
 
 GO.lang.noFilesModule= 'De files-module is nodig voor deze functie';
 GO.lang.strMax= 'Maximum';

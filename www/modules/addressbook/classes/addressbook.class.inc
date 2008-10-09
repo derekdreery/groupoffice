@@ -135,7 +135,7 @@ class addressbook extends db {
 		return $this->num_rows();
 	}
 
-	function get_contacts($addressbook_id=0, $sort = "name", $direction = "ASC", $start=0, $offset=0, $links=false) {
+	function get_contacts($addressbook_id=0, $sort = "name", $direction = "ASC", $start=0, $offset=0) {
 		global $GO_SECURITY;
 
 		if ($sort == 'name') {
@@ -151,21 +151,7 @@ class addressbook extends db {
 			$sql .= " WHERE ab_contacts.addressbook_id='$addressbook_id'";
 		}
 
-		if(is_array($links))
-		{
-			if(!count($links))
-			{
-				return 0;
-			}
-			if($addressbook_id>0)
-			{
-				$sql .= " AND ";
-			}else
-			{
-				$sql .= " WHERE ";
-			}
-			$sql .= "link_id IN (".implode(',', $links).")";
-		}
+		
 		$sql .= 	" ORDER BY $sort $direction";
 
 
@@ -918,5 +904,38 @@ class addressbook extends db {
 		return $this->Record;
 		else
 		return false;
+	}
+	
+	
+	
+	function __on_check_database(){
+		global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE;
+		
+		echo 'Checking addressbook folder permissions<br />';
+
+		if(isset($GO_MODULES->modules['files']))
+		{
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
+			$fs = new files();
+
+			$sql = "SELECT c.*, a.acl_read, a.acl_write, a.user_id AS a_user_id FROM ab_contacts c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id";
+			$this->query($sql);
+			while($this->next_record())
+			{
+				echo 'Checking '.$this->f('last_name').'<br />';				
+				$full_path = $GO_CONFIG->file_storage_path.'contacts/'.$this->f('id');
+				$fs->check_share($full_path, $this->f('a_user_id'), $this->f('acl_read'), $this->f('acl_write'));
+			}
+			
+			$sql = "SELECT c.*, a.acl_read, a.acl_write, a.user_id AS a_user_id FROM ab_companies c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id";
+			$this->query($sql);
+			while($this->next_record())
+			{
+				echo 'Checking '.$this->f('name').'<br />';				
+				$full_path = $GO_CONFIG->file_storage_path.'companies/'.$this->f('id');
+				$fs->check_share($full_path, $this->f('a_user_id'), $this->f('acl_read'), $this->f('acl_write'));
+			}
+		}
+		echo 'Done<br /><br />';
 	}
 }
