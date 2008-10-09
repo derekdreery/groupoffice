@@ -43,21 +43,26 @@ GO.form.ComboBoxMulti = function(config){
     };
     
     GO.form.ComboBoxMulti.superclass.constructor.call(this, config);
+    
+    this.on('focus', function(){this.focused=true;}, this);
+    this.on('blur', function(){this.focused=false;}, this);
 };
 
 Ext.extend(GO.form.ComboBoxMulti, Ext.form.ComboBox, {
+		focused : false,
+		
     getCursorPosition: function(){
-
-        if (document.selection) { // IE
-            var r = document.selection.createRange();
-            var d = r.duplicate();
-            d.moveToElementText(this.el.dom);
-            d.setEndPoint('EndToEnd', r);
-            return d.text.length;
-        }
-        else {
-            return this.el.dom.selectionEnd;
-        }
+		
+	    if (document.selection) { // IE
+	        var r = document.selection.createRange();
+	        var d = r.duplicate();
+	        d.moveToElementText(this.el.dom);
+	        d.setEndPoint('EndToEnd', r);
+	        return d.text.length;            
+	    }
+	    else {
+	        return this.el.dom.selectionEnd;
+	    }
     },
     
     getActiveRange: function(){
@@ -109,6 +114,9 @@ Ext.extend(GO.form.ComboBoxMulti, Ext.form.ComboBox, {
     },
     
     initQuery: function(){
+    	if(this.focused)
+			{
         this.doQuery(this.sep ? this.getActiveEntry() : this.getRawValue());
+			}
     }
 });

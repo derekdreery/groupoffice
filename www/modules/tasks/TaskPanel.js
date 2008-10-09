@@ -60,8 +60,22 @@ Ext.extend(GO.tasks.TaskPanel, Ext.Panel,{
 					'<tr>'+
 						'<td colspan="2" class="display-panel-heading">{name}</td>'+
 					'</tr>'+
-
+					'<tr>'+
+						'<td>'+GO.tasks.lang.startsAt+':</td>'+
+						'<td>{start_date}</td>'+
+					'</tr>'+
+					'<tr>'+
+						'<td>'+GO.tasks.lang.dueAt+':</td>'+
+						'<td>{due_date}</td>'+
+					'</tr>'+
+					'<tr>'+
+						'<td>'+GO.lang.strStatus+':</td>'+
+						'<td>{status_text}</td>'+
+					'</tr>'+
 					'<tpl if="description.length">'+
+						'<tr>'+
+							'<td colspan="2" class="display-panel-heading">'+GO.lang.strDescription+'</td>'+
+						'</tr>'+
 						'<tr>'+
 							'<td colspan="2">{description}</td>'+
 						'</tr>'+

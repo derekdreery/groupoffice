@@ -159,18 +159,14 @@ function load_template($template_id, $to, $keep_tags=false)
 	$ab = new addressbook();
 	$tp = new templates();
 
-
 	$template_body = '';
-
-
 
 	$template = $tp->get_template($template_id);
 
 	require_once($GO_CONFIG->class_path.'mail/Go2Mime.class.inc.php');
 	$go2mime = new Go2Mime();
-
-
 	$response['data'] = $go2mime->mime2GO($template['content'], $GO_MODULES->modules['mailings']['url'].'mime_part.php?template_id='.$template_id, true);
+	
 
 	if(!$keep_tags)
 	{
@@ -198,11 +194,7 @@ function load_template($template_id, $to, $keep_tags=false)
 	}
 
 	$response['data']['to']=$to;
-
-
-
 	return $response;
-
 }
 
 try{
@@ -211,12 +203,9 @@ try{
 	if($task == 'reply' || $task =='reply_all' || $task == 'forward' || $task=='opendraft')
 	{
 
-
 		$account_id = smart_addslashes($_POST['account_id']);
 		$uid = smart_addslashes($_POST['uid']);
 		$mailbox = smart_stripslashes($_POST['mailbox']);
-
-
 
 		$url_replacements=array();
 
@@ -234,16 +223,12 @@ try{
 
 			//fill in the header fields
 			$subject = isset($content['subject']) ? $content['subject'] : $lang['email']['no_subject'];
-
-
+			
 			$response['attachments']=array();
-
 
 			switch($task)
 			{
 				case "reply":
-
-
 					$response['data']['to'] = $content["reply_to"];
 					if(!eregi('Re:', $subject))
 					{
@@ -524,21 +509,13 @@ try{
 				$response['data']['body'] = $template['data']['body'].$response['data']['body'];
 				$response['data']['inline_attachments']=array_merge($response['data']['inline_attachments'], $template['data']['inline_attachments']);
 			}
-
-
 			$response['success']=true;
-
 		}
-
 	}else
 	{
-
-
 		switch($_REQUEST['task'])
 		{
-
 			case 'attachments':
-
 
 				while($file = array_shift($_SESSION['GO_SESSION']['just_uploaded_attachments']))
 				{
@@ -551,16 +528,11 @@ try{
 				}
 				$response['total']=count($files);
 
-
-
 				break;
 
 			case 'template':
-
 				$template_id=smart_addslashes($_REQUEST['template_id']);
 				$to=smart_addslashes($_REQUEST['to']);
-
-
 
 				$response = load_template($template_id, $to, isset($_POST['mailing_group_id']) && $_POST['mailing_group_id']>0);
 
@@ -568,7 +540,6 @@ try{
 				break;
 
 			case 'filters':
-
 				if(isset($_POST['delete_keys']))
 				{
 					$filters = json_decode(smart_stripslashes($_POST['delete_keys']));
@@ -674,7 +645,7 @@ try{
 				$html_alternative=false;
 				for($i=0;$i<count($parts);$i++)
 				{
-					if(strtolower($parts[$i]['mime'])=='text/html' && strtolower($parts[$i]['type'])=='alternative')
+					if(strtolower($parts[$i]['mime'])=='text/html' && (strtolower($parts[$i]['type'])=='alternative' || strtolower($parts[$i]['type'])=='related'))
 					{
 						$html_alternative=true;
 					} 
@@ -697,19 +668,13 @@ try{
 				
 				while($part = array_shift($parts))
 				{
-
 					$mime = isset($part["mime"]) && $part_count>1 ? strtolower($part["mime"]) : $default_mime;
-//debug($default_mime);
-
-
-					//go_log(LOG_DEBUG, $part['name'].' -> '.$mime);
 
 					if (empty($response['body']) && ($part["name"] == '' || eregi('inline', $part["disposition"]))  && ($mime == "text/html" ||
 					($mime == "text/plain" && (!$html_alternative || strtolower($part['type'])!='alternative')) ||
 					$mime == "text/enriched" ||
 					$mime == "unknown/unknown"))
 					{
-
 						$part_body = $imap->view_part($uid, $part["number"], $part["transfer"], $part["charset"]);
 
 						switch($mime)
@@ -756,8 +721,6 @@ try{
 				$response['attachments']=array();
 				$index=0;
 				for ($i = 0; $i < count($attachments); $i ++) {
-
-
 					if (
 					(
 					eregi("ATTACHMENT", $attachments[$i]["disposition"])  ||
@@ -792,9 +755,6 @@ try{
 						}
 					}
 				}
-
-
-
 				break;
 
 							case 'messages':
@@ -869,11 +829,6 @@ try{
 									//sync folder statuses
 									//$email->cache_account_status($account);
 								}
-
-
-
-
-
 
 								if(!isset($folder))
 								{
