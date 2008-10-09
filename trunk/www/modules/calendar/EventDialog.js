@@ -204,6 +204,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 			{
 				this.selectLinkField.setValue(config.link_config.type_id);
 				this.selectLinkField.setRemoteText(config.link_config.text);
+				
+				this.setValues({subject: config.link_config.text});
 			}
 		}else
 		{

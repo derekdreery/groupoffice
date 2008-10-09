@@ -11,30 +11,17 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
- 
-
-
- 
 GO.calendar.MainPanel = function(config){
 	
 	if(!config)
 	{
 		config = {};
-	}
-
-
-
-				
+	}			
 	var datePicker = new Ext.DatePicker();
 	
-	datePicker.on("select", function(DatePicker, DateObj){
-				//this.daysGrid.setDate(Date,this.daysGrid.days,daysGridPanel.getLayout().activeItem.id=='days-grid');
-				//this.monthGrid.setDate(Date,daysGridPanel.getLayout().activeItem.id=='month-grid');
-				
-				this.setDisplay({date: DateObj});
-			
-		},this);
-		
+	datePicker.on("select", function(DatePicker, DateObj){			
+				this.setDisplay({date: DateObj});			
+		},this);		
 		
 	this.calendarsStore = new GO.data.JsonStore({
 		url: GO.settings.modules.calendar.url+'json.php',
@@ -55,12 +42,10 @@ GO.calendar.MainPanel = function(config){
 		id: 'id',
 		fields:['id','name','user_name'],
 		remoteSort:true
-	});
+	});	
 	
 	
-	
-	this.calendarList= new GO.calendar.CalendarList({store: this.calendarsStore});
-	
+	this.calendarList= new GO.calendar.CalendarList({store: this.calendarsStore});	
 	
 	this.viewsList = new GO.calendar.ViewList({store: this.viewsStore}); 
 	
@@ -80,8 +65,6 @@ GO.calendar.MainPanel = function(config){
 					saveState:true				
 				});
 		}, this);
- 		
-
 	
 	this.daysGridStore = new GO.data.JsonStore({
 
@@ -192,15 +175,6 @@ GO.calendar.MainPanel = function(config){
 						}],	
 					items: [this.daysGrid, this.monthGrid, this.viewGrid, this.listGrid]
       });
-        
-        
-	//scroll back on window focus because the browser always scrolls back :S
-	/*document.onfocus=function(){
-		if(calendar && calendar.displayPanel.getLayout().activeItem.id=='days-grid')
-		{					
-			
-		}
-	}*/
 	
 	config.keys=[{
 						    key: Ext.EventObject.DELETE,
@@ -717,11 +691,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	 * 
 	 */
 	
-	setDisplay : function(config){
-		
-		
-		
-		
+	setDisplay : function(config){		
 		if(!config)
 		{
 			config = {};
@@ -862,33 +832,10 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		Ext.state.Manager.set('calendar-state', Ext.encode(state));
 	},
 	
-
-	
-	
 	refresh : function() {
 		this.setDisplay();
 	},
-	
-	/*handleRecurringEvent : function(config){
-		
-		Ext.Msg.show({
-		   title:'Recurring event',
-		   msg: 'This is a recurring event. Do you want to edit this single occurence or the entire series of events?',
-		   buttons: [{
-						text: 'Single occurence',
-						handler: config.single_handler,
-						scope: this
-		   			},{
-						text: 'Entire series',
-						handler: config.series_handler,
-						scope: this
-		   			}],
-		   fn: processResult,
-		   animEl: 'elId',
-		   icon: Ext.MessageBox.QUESTION
-		});
-		
-	},*/        
+      
   createDaysGrid : function()
   {
 		
@@ -1006,11 +953,9 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 							}					
 						}
 					}
-			});
-	  		
+			});	  		
 	  		
 	  	},this);
-
   },
 	  
   onDblClick : function(grid, event, actionData){	
@@ -1087,9 +1032,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 						}					
 					}
 				}
-		});
-		
-		
+		});		
 	},
 
 	showAdminDialog : function() {
@@ -1361,7 +1304,7 @@ GO.newMenuItems.push({
 	iconCls: 'go-link-icon-1',
 	handler:function(item, e){				
 		GO.calendar.eventDialog.show({
-			link_config: item.parentMenu.link_config			
+			link_config: item.parentMenu.link_config		
 		});
 	}
 });
