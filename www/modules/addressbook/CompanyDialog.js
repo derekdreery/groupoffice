@@ -15,18 +15,6 @@ GO.addressbook.CompanyDialog = function(config)
 {
 	Ext.apply(this, config);
 	
-	if(GO.files)
-	{
-		this.fileBrowser = new GO.files.FileBrowser({
-			title: GO.lang.strFiles, 
-			loadDelayed:true,
-			treeRootVisible:true, 
-			treeCollapsed:true,
-			disabled:true
-			});
-	}
-	
-	
 	this.personalPanel = new GO.addressbook.CompanyProfilePanel();	    
 		    
 	this.commentPanel = new Ext.Panel({
@@ -56,14 +44,6 @@ GO.addressbook.CompanyDialog = function(config)
 		items.push(new GO.mailings.SelectMailingsPanel());
 	}
 	items.push(this.employeePanel);
-	this.linksPanel = new GO.grid.LinksPanel({title: GO.lang['strLinks']});
-	items.push(this.linksPanel);
-	
-	if(GO.files)
-	{
-		items.push(this.fileBrowser);
-	}
-	     
   
   if(GO.customfields && GO.customfields.types["3"])
 	{
@@ -71,8 +51,7 @@ GO.addressbook.CompanyDialog = function(config)
   	{			  	
   		items.push(GO.customfields.types["3"].panels[i]);
   	}
-	}
-	
+	}	
 	
 	this.companyForm = new Ext.FormPanel({
 		waitMsgTarget:true,		
@@ -159,17 +138,14 @@ Ext.extend(GO.addressbook.CompanyDialog, Ext.Window, {
 			if(!this.rendered)
 			{
 				this.render(Ext.getBody());
-			}
-			
-			
+			}			
 			
 			if(company_id)
 			{
 				this.company_id = company_id;
 			} else {
 				this.company_id = 0;
-			}
-			
+			}			
 			
 			if(!GO.addressbook.writableAddressbooksStore.loaded)
 			{
@@ -198,7 +174,6 @@ Ext.extend(GO.addressbook.CompanyDialog, Ext.Window, {
 			{
 				this.loadCompany(company_id);				
 			} else {
-				this.linksPanel.setDisabled(true);
 				this.employeePanel.setCompanyId(0);
 				var tempAddressbookID = this.personalPanel.formAddressBooks.getValue();
 				
@@ -206,13 +181,6 @@ Ext.extend(GO.addressbook.CompanyDialog, Ext.Window, {
 				this.personalPanel.formAddressBooks.setValue(tempAddressbookID);	
 				
 				this.personalPanel.setCompanyId(0);
-				
-				
-				if(GO.files)
-				{
-					this.fileBrowser.setDisabled(true);
-				}
-				
 				
 				GO.addressbook.CompanyDialog.superclass.show.call(this);
 			}		
@@ -232,15 +200,8 @@ Ext.extend(GO.addressbook.CompanyDialog, Ext.Window, {
 					Ext.Msg.alert(GO.lang['strError'], GO.lang['strNoWritePermissions']);						
 				}else
 				{					
-					this.linksPanel.loadLinks(action.result.data['id'], 3);
 					this.employeePanel.setCompanyId(action.result.data['id']);
 					this.personalPanel.setCompanyId(action.result.data['id']);
-					
-					if(GO.files)
-					{
-						this.fileBrowser.setRootPath(action.result.data.files_path);
-						this.fileBrowser.setDisabled(false);
-					}	
 					
 					GO.addressbook.CompanyDialog.superclass.show.call(this);
 				}						

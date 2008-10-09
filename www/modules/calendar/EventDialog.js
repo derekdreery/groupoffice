@@ -11,30 +11,10 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-
-
-
- 
 GO.calendar.EventDialog = function(calendar){
 	this.calendar=calendar;
 	
-	
-	//Create the standard GO linkspanel
-	this.linksPanel = new GO.grid.LinksPanel({title: GO.lang['strLinks']});
-	
-	if(GO.files)
-	{
-		this.fileBrowser = new GO.files.FileBrowser({
-			title: GO.lang.strFiles, 
-			treeRootVisible:true, 
-			loadDelayed:true,
-			treeCollapsed:true,
-			disabled:true
-			});
-	}
-
-	this.buildForm();
-	
+	this.buildForm();	
 	
 	var focusSubject = function(){
 		this.subjectField.focus();
@@ -89,19 +69,15 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 		{
 			this.oldDomId=false;
 		}
-
 		propertiesPanel.show();
 
 		if(!config.event_id)
 		{
 			config.event_id=0;
 			
-		}
-		
+		}		
 		this.selectCalendar.container.up('div.x-form-item').setDisplayed(false);
-		
-		
-		
+	
 		this.setEventId(config.event_id);
 		
 		if(config.event_id>0)
@@ -111,19 +87,13 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 				//waitMsg:GO.lang.waitMsgLoad,
 				success:function(form, action)
 				{
-
 					this.win.show();
 					this.participants_event_id=action.result.data.participants_event_id;
 					this.formPanel.form.baseParams['calendar_id']=action.result.data.calendar_id;
 					this.changeRepeat(action.result.data.repeat_type);
 					this.setValues(config.values);
 					this.participantsPanel.setDisabled(false);
-					//this.participantsPanel.store.load();
-					if(GO.files)
-					{
-						this.fileBrowser.setRootPath(action.result.data.files_path);
-						this.fileBrowser.setDisabled(false);
-					}
+					
 					this.setWritePermission(action.result.data.write_permission);
 					
 					this.selectCalendar.setRemoteText(action.result.data.calendar_name);
@@ -145,15 +115,11 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 				params: {event_id: config.exception_event_id},
 				waitMsg:GO.lang.waitMsgLoad,
 				success:function(form, action)
-				{
-					
+				{					
 					this.win.show();	
 					this.participants_event_id=action.result.data.participants_event_id;
 					this.formPanel.form.baseParams['exception_event_id']=config.exception_event_id;
 					this.formPanel.form.baseParams['exceptionDate']=config.exceptionDate;
-					//this.formPanel.form.baseParams['calendar_id']=action.result.data.calendar_id;
-					
-					
 					
 					//set recurrence to none					
 					this.formPanel.form.findField('repeat_type').setValue(0);
@@ -161,12 +127,6 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 					
 					this.setValues(config.values);	
 					this.participantsPanel.setDisabled(false);		
-					
-					/*if(action.result.data.files_path)
-					{
-						this.fileBrowser.setRootPath(action.result.data.files_path);
-						this.fileBrowser.setDisabled(false);
-					}*/
 					
 					this.selectCalendar.setRemoteText(action.result.data.calendar_name);
 					this.selectCalendar.container.up('div.x-form-item').setDisplayed(true);
@@ -185,15 +145,9 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 			delete this.formPanel.form.baseParams['exceptionDate'];
 			
 			this.formPanel.form.reset();
-			this.linksPanel.setDisabled(true);
-			
-			
+				
 			this.participantsPanel.setDisabled(true);
 			this.setWritePermission(true);
-			if(GO.files)
-			{
-				this.fileBrowser.setDisabled(true);
-			}
 			
 			this.win.show();
 			
@@ -242,8 +196,6 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 				this.selectCalendar.setRemoteText(config.calendar_name);
 			}
 		}
-		
-		
 		//if the newMenuButton from another passed a linkTypeId then set this value in the select link field
 		if(config && config.link_config)
 		{
@@ -257,17 +209,12 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 		{
 			delete this.link_config;
 		}
-		
-		
-		
-		
 	},
 	
 	setWritePermission : function(writePermission)
 	{
 		this.win.buttons[0].setDisabled(!writePermission);
 		this.win.buttons[1].setDisabled(!writePermission);
-		this.linksPanel.setWritePermission(writePermission);
 	},
 	
 	setValues : function(values)
@@ -282,14 +229,12 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 					field.setValue(values[key]);
 				}
 			}
-		}
-		
+		}		
 	},
 	setEventId : function(event_id)
 	{
 		this.formPanel.form.baseParams['event_id']=event_id;
 		this.event_id=event_id;
-		this.linksPanel.loadLinks(event_id, 1);
 		
 		this.participantsStore.baseParams['event_id']=event_id;
 		
@@ -310,8 +255,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 		formValues['end_hour'] = date.add(Date.HOUR,1).format("H");
 		formValues['end_min'] = '00';
 		
-		this.formPanel.form.setValues(formValues);
-		
+		this.formPanel.form.setValues(formValues);		
 	},
 	
 	submitForm : function(hide){
@@ -326,14 +270,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 				{
 					this.setEventId(action.result.event_id);
 					this.participants_event_id=action.result.event_id;
-					this.participantsPanel.setDisabled(false);		
-					
-					
-					if(GO.files && action.result.files_path)
-					{
-						this.fileBrowser.setRootPath(action.result.files_path);
-						this.fileBrowser.setDisabled(false);
-					}
+					this.participantsPanel.setDisabled(false);
 				}
 				
 				var startDate = this.formPanel.form.findField('start_date').getValue();
@@ -348,8 +285,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 				{
 					endDate=endDate.add(Date.HOUR, this.formPanel.form.findField('end_hour').getValue());
 					endDate=endDate.add(Date.MINUTE, this.formPanel.form.findField('end_min').getValue());
-				}
-				
+				}				
 					
 				var newEvent = {
 					id : Ext.id(),
@@ -367,8 +303,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 					'private' : false
 				};
 				
-				this.fireEvent('save', newEvent, this.oldDomId);
-				
+				this.fireEvent('save', newEvent, this.oldDomId);				
 				
 				if(this.link_config && this.link_config.callback)
 				{					
@@ -378,9 +313,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 				if(hide)
 				{
 					this.win.hide();
-				}
-				
-								
+				}								
 			},		
 			failure: function(form, action) {
 				if(action.failureType=='client')
@@ -393,10 +326,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 				Ext.MessageBox.alert(GO.lang.strError, error);
 			},
 			scope: this
-		});
-		
-	},
-	
+		});		
+	},	
 	
 	buildForm : function () {
 		
@@ -760,149 +691,139 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 			]
 				
 			});
+	  
+    //Start of recurrence tab
+    
+    var repeatEvery = new Ext.form.ComboBox({
     	
+        fieldLabel:GO.calendar.lang.repeatEvery,  
+      	hiddenName: 'repeat_every',        
+				triggerAction: 'all',
+				editable: false,
+        selectOnFocus:true,
+        width:50,
+        forceSelection:true,
+        mode:'local',
+        value:'1',
+        valueField:'value',
+        displayField:'text',
+        
+        store: new Ext.data.SimpleStore({
+          fields: ['value', 'text'],
+          data: [
+          	['1', '1'],
+          	['2', '2'],
+          	['3', '3'],
+          	['4', '4'],
+          	['5', '5'],
+          	['6', '6'],
+          	['7', '7'],
+          	['8', '8'],
+          	['9', '9'],
+          	['10', '10'],
+          	['11', '11'],
+          	['12', '12']
+          ]
+      })
+    });	
 
-				        
-        //Start of recurrence tab
-        
-        var repeatEvery = new Ext.form.ComboBox({
-        	
-            fieldLabel:GO.calendar.lang.repeatEvery,  
-	        	hiddenName: 'repeat_every',        
-						triggerAction: 'all',
-						editable: false,
-            selectOnFocus:true,
-            width:50,
-            forceSelection:true,
-            mode:'local',
-            value:'1',
-            valueField:'value',
-            displayField:'text',
-            
-            store: new Ext.data.SimpleStore({
-	            fields: ['value', 'text'],
-	            data: [
-	            	['1', '1'],
-	            	['2', '2'],
-	            	['3', '3'],
-	            	['4', '4'],
-	            	['5', '5'],
-	            	['6', '6'],
-	            	['7', '7'],
-	            	['8', '8'],
-	            	['9', '9'],
-	            	['10', '10'],
-	            	['11', '11'],
-	            	['12', '12']
-	            ]
-	        })
-        });	
-
-        
-        var repeatType = new Ext.form.ComboBox({
-        	hiddenName: 'repeat_type',        
-					triggerAction: 'all',
-					editable: false,
-          selectOnFocus:true,
-          width:200,
-          forceSelection:true,
-          mode:'local',
-          value:'0',
-          valueField:'value',
-          displayField:'text',
-          store: new Ext.data.SimpleStore({
-            fields: ['value', 'text'],
-            data: [
-            	['0', GO.calendar.lang.noRecurrence],
-            	['1', GO.calendar.lang.days],
-            	['2', GO.calendar.lang.weeks],
-            	['3', GO.calendar.lang.monthsByDate],
-            	['4', GO.calendar.lang.monthsByDay],
-            	['5', GO.calendar.lang.years]
-            ]
-	        }),
-	        hideLabel:true,
-	        listeners:{
-	        	'change':checkDateInput
-	        }
-	        
-        });	
-        
-        repeatType.on('select', function(combo, record){this.changeRepeat(record.data.value);}, this);
-	        
-        
-        var monthTime = new Ext.form.ComboBox({
-        	hiddenName:'month_time',                  
-					triggerAction: 'all',
-          selectOnFocus:true,
-          disabled: true,
-          width:80,
-          forceSelection:true,
-	        fieldLabel: GO.calendar.lang.atDays,
-	        mode:'local',
-          value:'1',
-          valueField:'value',
-          displayField:'text',
-          store: new Ext.data.SimpleStore({
-	        fields: ['value', 'text'],
-	        data: [
-	            	['1', GO.lang.strFirst],
-	            	['2', GO.lang.strSecond],
-	            	['3', GO.lang.strThird],
-	            	['4', GO.lang.strFourth]
-	            ]
-	        })
-        });	
+    
+    var repeatType = new Ext.form.ComboBox({
+    	hiddenName: 'repeat_type',        
+			triggerAction: 'all',
+			editable: false,
+      selectOnFocus:true,
+      width:200,
+      forceSelection:true,
+      mode:'local',
+      value:'0',
+      valueField:'value',
+      displayField:'text',
+      store: new Ext.data.SimpleStore({
+        fields: ['value', 'text'],
+        data: [
+        	['0', GO.calendar.lang.noRecurrence],
+        	['1', GO.calendar.lang.days],
+        	['2', GO.calendar.lang.weeks],
+        	['3', GO.calendar.lang.monthsByDate],
+        	['4', GO.calendar.lang.monthsByDay],
+        	['5', GO.calendar.lang.years]
+        ]
+      }),
+      hideLabel:true,
+      listeners:{
+      	'change':checkDateInput
+      }
+      
+    });	
+    
+    repeatType.on('select', function(combo, record){this.changeRepeat(record.data.value);}, this);
+      
+    
+    var monthTime = new Ext.form.ComboBox({
+    	hiddenName:'month_time',                  
+			triggerAction: 'all',
+      selectOnFocus:true,
+      disabled: true,
+      width:80,
+      forceSelection:true,
+      fieldLabel: GO.calendar.lang.atDays,
+      mode:'local',
+      value:'1',
+      valueField:'value',
+      displayField:'text',
+      store: new Ext.data.SimpleStore({
+      fields: ['value', 'text'],
+      data: [
+          	['1', GO.lang.strFirst],
+          	['2', GO.lang.strSecond],
+          	['3', GO.lang.strThird],
+          	['4', GO.lang.strFourth]
+          ]
+      })
+    });	
    
-   		var cb = [];
-        for(var day=0;day<7;day++)
-        {
-        		cb[day] = new Ext.form.Checkbox({
-	          boxLabel:GO.lang.shortDays[day],
-	          id:'frm_repeat_days_'+day,
-	          name:'repeat_days_'+day,
-	          disabled: true,
-	          checked:false,
-	          width:'auto',
-		        hideLabel:true,
-		        laelSeperator:''
-        	});
-        	
-        	
+	var cb = [];
+    for(var day=0;day<7;day++)
+    {
+    		cb[day] = new Ext.form.Checkbox({
+        boxLabel:GO.lang.shortDays[day],
+        id:'frm_repeat_days_'+day,
+        name:'repeat_days_'+day,
+        disabled: true,
+        checked:false,
+        width:'auto',
+        hideLabel:true,
+        laelSeperator:''
+    	});
+    }        
+        
+    var repeatEndDate = new Ext.form.DateField({
+        name: 'repeat_end_date',
+        width:100,
+        disabled: true,
+        format: GO.settings['date_format'],
+        allowBlank:true,
+        fieldLabel:GO.calendar.lang.repeatUntil,
+        listeners:{
+        	change:{
+        		fn:checkDateInput,
+        		scope:this
+        	}
         }
-        
-        
-        var repeatEndDate = new Ext.form.DateField({
-            name: 'repeat_end_date',
-            width:100,
-            disabled: true,
-            format: GO.settings['date_format'],
-            allowBlank:true,
-            fieldLabel:GO.calendar.lang.repeatUntil,
-		        listeners:{
-		        	change:{
-		        		fn:checkDateInput,
-		        		scope:this
-		        	}
-		        }
-    	});
+			});
 
-        var repeatForever = new Ext.form.Checkbox({
-            boxLabel: GO.calendar.lang.repeatForever,
-            name:'repeat_forever',
-            checked:true,
-            disabled:true,
-            width:'auto',
-	        hideLabel:true,
-	        laelSeperator:''
+    var repeatForever = new Ext.form.Checkbox({
+        boxLabel: GO.calendar.lang.repeatForever,
+        name:'repeat_forever',
+        checked:true,
+        disabled:true,
+        width:'auto',
+  	    hideLabel:true,
+	      laelSeperator:''
     	});
-
-        
-        
-        var recurrencePanel = new Ext.Panel({
-		
+   var recurrencePanel = new Ext.Panel({
 			title:GO.calendar.lang.recurrence,
-			//defaults:{anchor:'100%'},
 			bodyStyle:'padding: 5px',
 			layout:'form',			
 			hideMode:'offsets',
@@ -956,21 +877,6 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 			]
         });
         
-        
-        
-        
-        
-        //start other options tab
-        
-      /*  var calendarId = new Ext.form.ComboBox({
-        	id:'frm_calendar_id',
-        	hiddenName:'calendar_id',            
-			triggerAction: 'all',
-            transform:'calendar_id',
-            selectOnFocus:true,
-            width:300,
-            forceSelection:true
-        });	*/
 
 		var reminderValues = [['0',GO.calendar.lang.noReminder]];
 		
@@ -1228,61 +1134,23 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 	    	privateCB		
 			]
         });
-   /*     
-       GO.testPanel = function(config)
-       {
-       	if(!config)
-       	{
-       		config={};
-       	}
-       	this.northPanel = new Ext.Panel({
-      		region:'north',
-      		html:'North'
-      	});
-      	
-      	this.centerPanel = new Ext.Panel({
-      		region:'center',
-      		html:'Center'
-      	});
-      	
-      	config.layout='border'
-      	config.title='Test'
-      	config.items=[this.northPanel, this.centerPanel];
-				
-				GO.testPanel.superclass.constructor.call(this, config);
-       	
-       }
-       
-       Ext.extend(GO.testPanel, Ext.Panel);
-
-      
-      var testPanel = new GO.testPanel();*/
+  
         
       var items = [
         	propertiesPanel,
         	recurrencePanel,
         	optionsPanel,
-        	this.participantsPanel,
-        	this.linksPanel        	
+        	this.participantsPanel     	
         ];
-      if(GO.files)
- 			{
- 				items.push(this.fileBrowser);
- 			}
- 			
-      this.tabPanel = new Ext.TabPanel({
-        activeTab: 0,
-        deferredRender: false,
-        //layoutOnTabChange:true,
-      	border: false,
-      	anchor: '100% 100%',
-      	hideLabel:true,
-        items: items
-      }) ;
-      
-    
-        
-
+			
+    this.tabPanel = new Ext.TabPanel({
+      activeTab: 0,
+      deferredRender: false,
+    	border: false,
+    	anchor: '100% 100%',
+    	hideLabel:true,
+      items: items
+    }) ;
     this.formPanel = new Ext.form.FormPanel(
 		{
 			waitMsgTarget:true,
@@ -1291,28 +1159,10 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 			baseParams: {task: 'event'},
       items: this.tabPanel
 		});
-		
-		/*this.formPanel.form.on('actioncomplete', function(form, action){
-			if(action.type=='load')
-			{
-				this.formPanel.form.baseParams['calendar_id']=action.result.data.calendar_id;
-				this.changeRepeat(action.result.data.repeat_type);
-				//linksPanel.loadLinks(action.result.data['link_id'], 1);
-			}		
-		},this);*/
-      
-
 	},
-	
-
-	checkAvailability : function(){
-		
-		
+	checkAvailability : function(){		
 		if(!this.availabilityWindow)
 		{
-		
-			
-			
 			this.availabilityStore = new Ext.data.JsonStore({
 			    url: GO.settings.modules.calendar.url+'json.php',
 			    root: 'participants',
@@ -1321,9 +1171,6 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 			    	task: 'availability'		    	
 			    	}
 			});
-			
-			
-			//var currentDate =  Date.parseDate(store.baseParams.date, 'Y-m-d');
 			
 			var tpl = new Ext.XTemplate(
 				'<div id="availability_date"></div>', 
@@ -1582,9 +1429,6 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
     	for(var day=0;day<7;day++)
         {
         	this.formPanel.form.findField('repeat_days_'+day).setDisabled(disabled);
-        }
-    		    	
+        }    		    	
     }
-
-
 });

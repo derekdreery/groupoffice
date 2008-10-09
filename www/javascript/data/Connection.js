@@ -97,15 +97,14 @@ GO.data.Connection = Ext.extend(Ext.data.Connection, {
 		
 		if(!GO.checkerIcon)
 		{
-			GO.checkerIcon = Ext.get("checker-icon");
-			GO.waitMask = Ext.get("go-wait");			
+			GO.checkerIcon = Ext.get("checker-icon");			
 		}
 		if(GO.checkerIcon)
 		{
-			GO.checkerIcon.setDisplayed(true);
-			//GO.waitMask.setDisplayed.defer(100, GO.waitMask, [true]);
-			Ext.getBody().addClass('go-wait');
+			GO.checkerIcon.setDisplayed(true);	
 			
+			//this slowed down IE enormously :(		
+			//Ext.getBody().addClass('go-wait');			
 		}
 		
 		if(o.callback)
@@ -144,8 +143,9 @@ GO.data.Connection = Ext.extend(Ext.data.Connection, {
 		if(GO.checkerIcon)
 		{
 			GO.checkerIcon.setDisplayed(false);
-			//GO.waitMask.setDisplayed(false);
-			Ext.getBody().removeClass('go-wait');
+			
+			//this slowed down IE enormously :(
+			//Ext.getBody().removeClass('go-wait');
 		}
 		if(!success)
 		{

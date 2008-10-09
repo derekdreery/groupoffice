@@ -16,17 +16,7 @@ GO.addressbook.ContactDialog = function(config)
 {
 	Ext.apply(this, config);
 	
-	if(GO.files)
-	{
-		this.fileBrowser = new GO.files.FileBrowser({
-			title: GO.lang.strFiles, 
-			treeRootVisible:true, 
-			loadDelayed:true,
-			treeCollapsed:true,
-			disabled:true
-			});
-	}
-	
+
 	this.personalPanel = new GO.addressbook.ContactProfilePanel();
 			
 	this.commentPanel = new Ext.Panel({
@@ -66,14 +56,6 @@ GO.addressbook.ContactDialog = function(config)
 		items.push(new GO.mailings.SelectMailingsPanel());
 	}
 	
-	this.linksPanel = new GO.grid.LinksPanel({title: GO.lang['strLinks']});
-	items.push(this.linksPanel);				      	
-	      
-  if(GO.files)
-	{
-		items.push(this.fileBrowser);
-	}
-
   
   if(GO.customfields && GO.customfields.types["2"])
 	{
@@ -235,28 +217,15 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 		this.formPanel.form.load({
 			url: GO.settings.modules.addressbook.url+ 'json.php', 
 			params: {contact_id: id, task: 'load_contact'},
-			//
 			success: function(form, action) {
 				
 				if(!action.result.data.write_permission)
 				{
 					Ext.Msg.alert(GO.lang['strError'], GO.lang['strNoWritePermissions']);						
 				}else
-				{
-					
+				{					
 					this.personalPanel.setAddressbookID(action.result.data.addressbook_id);
-					//this.oldAddressbookId = task.result.data.addressbook_id;
-					//this.oldCompanyId = task.result.data.company_id;
-					
 					this.formPanel.form.findField('company_id').setRemoteText(action.result.data.company_name);
-					this.linksPanel.loadLinks(action.result.data['id'], 2);
-					
-					
-					if(GO.files)
-					{
-						this.fileBrowser.setRootPath(action.result.data.files_path);
-						this.fileBrowser.setDisabled(false);
-					}	
 					
 					GO.addressbook.ContactDialog.superclass.show.call(this);
 				}
@@ -281,14 +250,7 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 			success:function(form, action){
 				if(action.result.contact_id)
 				{
-					this.contact_id = action.result.contact_id;
-					this.linksPanel.loadLinks(action.result.contact_id, 2);
-					
-					if(GO.files && action.result.files_path)
-					{
-						this.fileBrowser.setRootPath(action.result.files_path);
-						this.fileBrowser.setDisabled(false);
-					}	
+					this.contact_id = action.result.contact_id;				
 				}
 				this.fireEvent('save', this);
 

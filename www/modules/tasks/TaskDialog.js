@@ -13,30 +13,12 @@
 
  
 GO.tasks.TaskDialog = function(){
-	//this.tasklist=tasklist;
-	
-	
-	//Create the standard GO linkspanel
-	this.linksPanel = new GO.grid.LinksPanel({title: GO.lang['strLinks']});
-	
-	if(GO.files)
-	{
-		this.fileBrowser = new GO.files.FileBrowser({
-			title: GO.lang.strFiles, 
-			treeRootVisible:true, 
-			loadDelayed:true,
-			treeCollapsed:true,
-			disabled:true
-			});
-	}
 
 	this.buildForm();
 	
 	var focusName = function(){
 		this.nameField.focus();		
 	};
-	
-	
 	
 	this.win = new Ext.Window({
 			layout:'fit',
@@ -112,24 +94,15 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable,{
 		if(config.task_id>0)
 		{
 			this.formPanel.load({
-				url : GO.settings.modules.tasks.url+'json.php',
-				
+				url : GO.settings.modules.tasks.url+'json.php',				
 				success:function(form, action)
 				{
-										
 					this.win.show();
 					this.changeRepeat(action.result.data.repeat_type);
 					this.setValues(config.values);
 					
 					this.selectTaskList.setRemoteText(action.result.data.tasklist_name);
-					if(GO.files)
-					{
-						this.fileBrowser.setRootPath(action.result.data.files_path);
-						this.fileBrowser.setDisabled(false);
-					}
-					this.setWritePermission(action.result.data.write_permission);
-
-					
+					this.setWritePermission(action.result.data.write_permission);		
 				},
 				failure:function(form, action)
 				{
@@ -145,16 +118,10 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable,{
 			
 			this.lastTaskListId=this.selectTaskList.getValue();
 			
-			this.formPanel.form.reset();
-			
+			this.formPanel.form.reset();			
 			this.selectTaskList.setValue(this.lastTaskListId);
 			
-			this.linksPanel.setDisabled(true);			
-			
 			this.setWritePermission(true);
-			
-			if(GO.files)
-				this.fileBrowser.setDisabled(true);
 			
 			this.win.show();
 			this.setValues(config.values);
@@ -185,15 +152,12 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable,{
 		{
 			delete this.link_config;
 		}		
-		
-		
 	},
 	
 	setWritePermission : function(writePermission)
 	{
 		this.win.buttons[0].setDisabled(!writePermission);
 		this.win.buttons[1].setDisabled(!writePermission);
-		this.linksPanel.setWritePermission(writePermission);
 	},
 	
 	setValues : function(values)
@@ -215,7 +179,6 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable,{
 	{
 		this.formPanel.form.baseParams['task_id']=task_id;
 		this.task_id=task_id;
-		this.linksPanel.loadLinks(task_id, 12);
 	},
 	
 	setCurrentDate : function()
@@ -232,10 +195,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable,{
 		formValues['end_hour'] = date.add(Date.HOUR,1).format("H");
 		formValues['end_min'] = '00';
 		
-		
-		
-		this.formPanel.form.setValues(formValues);
-		
+		this.formPanel.form.setValues(formValues);		
 	},
 	
 	submitForm : function(hide){
@@ -248,13 +208,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable,{
 				
 				if(action.result.task_id)
 				{
-					this.setTaskId(action.result.task_id);
-					
-					if(GO.files && action.result.files_path)
-					{
-						this.fileBrowser.setRootPath(action.result.files_path);
-						this.fileBrowser.setDisabled(false);
-					}					
+					this.setTaskId(action.result.task_id);				
 				}
 				
 				if(this.link_config && this.link_config.callback)
@@ -643,12 +597,8 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable,{
     var items = [
       	propertiesPanel,
       	recurrencePanel,
-      	optionsPanel,
-      	this.linksPanel        	
+      	optionsPanel      	
       ];
-      
-    if(GO.files)
-    	items.push(this.fileBrowser);
       
     this.tabPanel = new Ext.TabPanel({
       activeTab: 0,
@@ -659,9 +609,6 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable,{
     	hideLabel:true,
       items: items
     }) ;
-    
-    
-        
 
     var formPanel = this.formPanel = new Ext.form.FormPanel(
 		{
@@ -671,17 +618,6 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable,{
 			baseParams: {task: 'task'},
       items: this.tabPanel
 		});
-		
-		/*this.formPanel.form.on('actioncomplete', function(form, action){
-			if(action.type=='load')
-			{
-				this.formPanel.form.baseParams['tasklist_id']=action.result.data.tasklist_id;
-				this.changeRepeat(action.result.data.repeat_type);
-				//linksPanel.loadLinks(action.result.data['link_id'], 1);
-			}		
-		},this);*/
-      
-
 	},
 	
 

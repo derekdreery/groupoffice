@@ -1290,6 +1290,7 @@ GO.files.openFolder = function(path)
 			layout:'fit',
 			border:false,
 			maximizable:true,
+			collapsible:true,
 			closeAction:'hide',
 			items: GO.files.fileBrowser,
 			buttons:[

@@ -3,7 +3,7 @@ GO.files.filesTemplate = '<tpl if="files.length">'+
 		'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+
 		//LINK DETAILS
 		'<tr>'+
-			'<td colspan="4" class="display-panel-heading">Files</td>'+
+			'<td colspan="4" class="display-panel-heading">'+GO.files.lang.files+'</td>'+
 		'</tr>'+
 		
 		'<tr>'+							
