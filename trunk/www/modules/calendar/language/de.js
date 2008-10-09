@@ -1,8 +1,3 @@
-Ext.namespace('GO.calendar');
-Ext.namespace("GO.calendar.dd");
-
-GO.calendar.lang={};
-
 GO.calendar.lang.appointment = 'Termin';
 GO.calendar.lang.appointments = 'Termine';
 GO.calendar.lang.recurrence = 'Wiederholung';

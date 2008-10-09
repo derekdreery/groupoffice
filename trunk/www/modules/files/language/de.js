@@ -1,7 +1,3 @@
-Ext.namespace('GO.files');
-
-GO.files.lang={};
-
 GO.files.lang.files='Dateien';
 
 GO.files.lang.template = 'Vorlage'

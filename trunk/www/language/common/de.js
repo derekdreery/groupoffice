@@ -11,7 +11,6 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-GO.lang = {};
 
 GO.lang.browse='Durchsuchen...';
 GO.lang.largeUpload='Große Dateien/Ordner (Java benötigt)';

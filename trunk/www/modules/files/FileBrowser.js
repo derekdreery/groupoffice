@@ -175,16 +175,16 @@ GO.files.FileBrowser = function(config){
 					dataIndex: 'grid_display',
 					sortable:true
 				},{
-					header:'Type',
+					header:GO.lang.strType,
 					dataIndex: 'type',
 					sortable:true
 				},{
-					header:'Size',
+					header:GO.lang.strSize,
 					dataIndex: 'size',
 					sortable:true
 					
 				},{
-					header:'Modified at',
+					header:GO.lang.strMtime,
 					dataIndex: 'mtime',
 					sortable:true
 				}],						

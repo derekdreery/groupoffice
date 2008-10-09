@@ -1,5 +1,6 @@
 GO.summary.lang.summary = 'Zusammenfassung';
 GO.summary.lang.noItems = 'Sie haben keine Punkte auf Ihrer Startseite';
+GO.summary.lang.selectPortlet = 'Wähle Portlet';
 GO.summary.lang.hotTopics = 'Interessante Themen';
 GO.summary.lang.enterRssFeed = 'Bitte geben Sie die RSS URL an:';
 GO.summary.lang.notes = 'Notizen';
