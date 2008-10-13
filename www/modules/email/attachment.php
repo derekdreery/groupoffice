@@ -26,7 +26,7 @@ $account = $email->get_account($_REQUEST['account_id']);
 
 if($account['user_id']!=$GO_SECURITY->user_id)
 {
-	die($lang['common']['access_denied']);
+	die($lang['common']['accessDenied']);
 }
 
 
@@ -62,5 +62,5 @@ if ($mail->open($account['host'], $account['type'],$account['port'],$account['us
 	echo ($file);
 }else
 {
-	echo $strDataError;
+	echo $lang['comon']['selectError'];
 }

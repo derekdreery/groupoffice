@@ -18,7 +18,7 @@ function connect($account_id, $mailbox='INBOX', $halt_on_error=true)
 	
 	if (!$account = $email->get_account($account_id)) {
 		$response['success']=false;
-		$response['feedback']=$strDataError;
+		$response['feedback']=$lang['common']['selectError'];
 		echo json_encode($response);
 		exit();
 	}

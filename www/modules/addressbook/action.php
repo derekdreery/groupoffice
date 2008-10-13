@@ -81,7 +81,7 @@ try
 
 					if(!$contact_id)
 					{
-						$result['feedback'] = $strSaveError;
+						$result['feedback'] = $lang['comon']['saveError'];
 						$result['success'] = false;
 					} else {
 						$result['contact_id'] =  $contact_id;
@@ -120,7 +120,7 @@ try
 
 					if(!$ab->update_contact($contact_credentials))
 					{
-						$result['feedback'] = $strSaveError;
+						$result['feedback'] = $lang['comon']['saveError'];
 						$result['success'] = false;
 					}
 				}
@@ -361,7 +361,7 @@ try
 
 					if (!$fp || !$addressbook = $ab->get_addressbook($addressbook_id)) {
 						unlink($_SESSION['GO_SESSION']['addressbook']['import_file']);
-						throw new Exception($strDataError);
+						throw new Exception($lang['comon']['selectError']);
 					} else {
 						//fgets($fp, 4096);
 
@@ -408,7 +408,7 @@ try
 							if (!$fp || !$addressbook = $ab->get_addressbook($addressbook_id))
 							{
 								unlink($_SESSION['GO_SESSION']['addressbook']['import_file']);
-								throw new Exception($strDataError);
+								throw new Exception($lang['comon']['selectError']);
 							}
 
 							fgets($fp, 4096);
