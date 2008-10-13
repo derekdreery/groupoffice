@@ -1,6 +1,6 @@
 .ext-el-mask{z-index:8000;} /*set it lower for windows to be on top */
 
-.ext-el-mask-msg{background:#d1d8db url(images/extjs/default/box/tb.gif) repeat-x 0 -16px !important;border: 1px solid #9c9f9d !important;}
+.ext-el-mask-msg{background:#d1d8db url(images/extjs/box/tb.gif) repeat-x 0 -16px !important;border: 1px solid #9c9f9d !important;}
 .ext-el-mask-msg div{border:1px solid #c1d1d6 !important;}
 
 .x-btn button{border:0 none;background:transparent;font:normal 11px tahoma,arial,helvetica,sans-serif;color:#fff;padding-left:3px;padding-right:3px;cursor:pointer;margin:0;overflow:visible;width:auto;-moz-outline:0 none;outline:0 none;}
@@ -85,8 +85,8 @@ ul.x-tab-strip-top{padding-top:1px;background:#f7f6f1 repeat-x bottom;border-bot
 .go-moduletabs-header .x-tab-strip-top .x-tab-strip-active .x-tab-right{background-position:0 0;}
 .go-moduletabs-header .x-tab-strip-top .x-tab-strip-active .x-tab-left{background-position:right -301px;}
 .go-moduletabs-header .x-tab-strip-top .x-tab-strip-active .x-tab-strip-inner{background-position:0 -151px;}
-.go-moduletabs-header .x-tab-strip-bottom .x-tab-strip-active .x-tab-right{background:url(images/extjs/default/tabs/tab-btm-right-bg.gif) no-repeat bottom left;}
-.go-moduletabs-header .x-tab-strip-bottom .x-tab-strip-active .x-tab-left{background:url(images/extjs/default/tabs/tab-btm-left-bg.gif) no-repeat bottom right;}
+.go-moduletabs-header .x-tab-strip-bottom .x-tab-strip-active .x-tab-right{background:url(images/extjs/tabs/tab-btm-right-bg.gif) no-repeat bottom left;}
+.go-moduletabs-header .x-tab-strip-bottom .x-tab-strip-active .x-tab-left{background:url(images/extjs/tabs/tab-btm-left-bg.gif) no-repeat bottom right;}
 
 .go-moduletabs-header .x-tab-strip .x-tab-strip-close{display:none;}
 .go-moduletabs-header .x-tab-strip-closable{position:relative;}
@@ -229,9 +229,9 @@ td.x-grid3-hd-over,td.sort-desc,td.sort-asc,td.x-grid3-hd-menu-open{border-left:
 .x-html-editor-wrap{border-color:#d0d0d0 !important;}
 
 .x-html-editor-tb .x-toolbar {background:#f3f5f6 !important;}
-.x-html-editor-tb .x-btn-pressed .x-btn-left{background:url(images/extjs/default/button/btn-sprite.gif) no-repeat 0 -63px;}
-.x-html-editor-tb .x-btn-pressed .x-btn-right{background:url(images/extjs/default/button/btn-sprite.gif) no-repeat 0 -84px;}
-.x-html-editor-tb .x-btn-pressed .x-btn-center{background:url(images/extjs/default/button/btn-sprite.gif) repeat-x 0 -126px;}
+.x-html-editor-tb .x-btn-pressed .x-btn-left{background:url(images/extjs/button/btn-sprite.gif) no-repeat 0 -63px;}
+.x-html-editor-tb .x-btn-pressed .x-btn-right{background:url(images/extjs/button/btn-sprite.gif) no-repeat 0 -84px;}
+.x-html-editor-tb .x-btn-pressed .x-btn-center{background:url(images/extjs/button/btn-sprite.gif) repeat-x 0 -126px;}
 .x-html-editor-tb .x-font-select {color:black};
 
 
