@@ -123,7 +123,7 @@ class imapauth extends db
 									go_log(LOG_DEBUG, 'ERROR: Failed to create e-mail account in imapauth module.');
 								}else
 								{
-									//$account = $email_client->get_account($account);
+									$account = $email_client->get_account($account_id);
 									$email_client->synchronize_folders($account);
 								}
 							}

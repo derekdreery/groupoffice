@@ -4,7 +4,7 @@
 //Date : September, 04 2008
 
 //Uncomment this line in new translations!
-require_once($GO_LANGUAGE->get_fallback_language_file('files'));
+require($GO_LANGUAGE->get_fallback_language_file('files'));
 
 $lang['files']['name'] = 'Fichiers';
 $lang['files']['description'] = 'Module gestion des fichiers. Module pour partager des fichiers entre utilisateurs de Group-Office.';
