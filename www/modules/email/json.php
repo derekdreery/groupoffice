@@ -868,7 +868,7 @@ try{
 
 								function get_messages($start, $limit)
 								{
-									global $imap, $mailbox, $GO_THEME, $filters, $day_start, $day_end, $lang, $account, $touched_folders;
+									global $imap, $mailbox, $GO_THEME, $filters, $day_start, $day_end, $lang, $account, $touched_folders, $response;
 
 									$imap->get_messages($start, $limit);
 

@@ -4,7 +4,7 @@
 //Date : September, 04 2008
 
 //Uncomment this line in new translations!
-require_once($GO_LANGUAGE->get_fallback_base_language_file('language'));
+require_once($GO_LANGUAGE->get_fallback_base_language_file('countries'));
 
 $countries['AD'] = 'Andorre';
 $countries['AF'] = 'Afghanistan';
