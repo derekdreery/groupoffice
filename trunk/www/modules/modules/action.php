@@ -32,7 +32,7 @@ switch($task)
 		{
 			if(!$GO_MODULES->update_module($module->id,$module->sort_order, $module->admin_menu))
 			{
-				$result['errors']=$strSaveError;
+				$result['errors']=$lang['comon']['saveError'];
 				$result['success']=false;
 			} else {
 				$result['success']=true;
@@ -46,7 +46,7 @@ switch($task)
 		$id = smart_stripslashes($_REQUEST['id']);		
 
 		if (!$GO_MODULES->add_module($id)) {
-			$result['errors']=$strSaveError;
+			$result['errors']=$lang['comon']['saveError'];
 			$result['success']=false;
 		}else {
 			

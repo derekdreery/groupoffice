@@ -365,7 +365,7 @@ try{
 							$response['success']=true;
 						}else
 						{
-							$response['feedback']=$strSaveError;
+							$response['feedback']=$lang['comon']['saveError'];
 						}
 					}else
 					{
@@ -375,7 +375,7 @@ try{
 							$response['success']=true;
 						}else
 						{
-							$response['feedback']=$strSaveError;
+							$response['feedback']=$lang['comon']['saveError'];
 						}
 					}
 					break;
@@ -391,7 +391,7 @@ try{
 
 					if(!$response['feedback']=$email->_update_account($up_account))
 					{
-						$response['errors']=$strSaveError;
+						$response['errors']=$lang['comon']['saveError'];
 					}
 
 					break;
@@ -409,7 +409,7 @@ try{
 							$new_folder_name=$folder['name'].$delimiter.$imap->utf7_imap_encode(smart_stripslashes($_POST['new_folder_name']));
 						}else {
 							$response['feedback']=false;
-							$response['errors']=$strDataError;
+							$response['errors']=$lang['comon']['selectError'];
 							echo json_encode($response);
 							exit();
 						}
@@ -523,7 +523,7 @@ try{
 						}
 						//$imap->close();
 					}else {
-						$response['feedback']=$strDataError;
+						$response['feedback']=$lang['comon']['selectError'];
 					}
 					break;
 				case 'rename_folder':
@@ -549,11 +549,11 @@ try{
 						{
 							$response['success']=$email->rename_folder($folder['account_id'], addslashes($folder['name']), addslashes($new_folder));
 						}else {
-							$response['feedback']=$strSaveError;
+							$response['feedback']=$lang['comon']['saveError'];
 						}
 						//$imap->close();
 					}else {
-						$response['feedback']=$strDataError;
+						$response['feedback']=$lang['comon']['selectError'];
 					}
 					break;
 
