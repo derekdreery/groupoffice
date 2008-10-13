@@ -101,15 +101,17 @@ function get_mailbox_nodes($account_id, $folder_id){
 		//$unseen = $email->f('unseen');
 
 		$status = $imap->status($email->f('name'), SA_ALL);
+		
+		$unseen = isset($status->unseen) ? $status->unseen : 0;
 
 		if($email->f('name')=='INBOX')
 		{
-			$inbox_new += $status->unseen;
+			$inbox_new += $unseen;
 		}
 
-		if ($status->unseen > 0)
+		if ($unseen > 0)
 		{
-			$status_html = '&nbsp;<span id="status_'.$email->f('id').'">('.$status->unseen.')</span>';
+			$status_html = '&nbsp;<span id="status_'.$email->f('id').'">('.$unseen.')</span>';
 		}else
 		{
 			$status_html = '&nbsp;<span id="status_'.$email->f('id').'"></span>';
@@ -125,7 +127,7 @@ function get_mailbox_nodes($account_id, $folder_id){
 				'iconCls'=>'folder-default',
 				'account_id'=>$email->f('account_id'),
 				'folder_id'=>$email->f('id'),
-				'unseen'=>$status->unseen,
+				'unseen'=>$unseen,
 				'mailbox'=>$email->f('name')
 			);
 		}else {
@@ -136,7 +138,7 @@ function get_mailbox_nodes($account_id, $folder_id){
 				'account_id'=>$email->f('account_id'),
 				'folder_id'=>$email->f('id'),
 				'mailbox'=>$email->f('name'),
-				'unseen'=>$status->unseen,
+				'unseen'=>$unseen,
 				'expanded'=>true,
 				'children'=>array()
 			);
