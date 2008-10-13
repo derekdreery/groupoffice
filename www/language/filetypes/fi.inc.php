@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations! LI 20.01.2006
-require_once($GO_LANGUAGE->get_fallback_base_language_file('filetypes'));
+require($GO_LANGUAGE->get_fallback_base_language_file('filetypes'));
 
 $lang['filetypes']['unknown'] = 'Tuntematon tiedosto tyyppi';
 $lang['filetypes']['txt'] = 'Tekstitiedosto';

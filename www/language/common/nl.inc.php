@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require_once($GO_LANGUAGE->get_fallback_base_language_file('common'));
+require($GO_LANGUAGE->get_fallback_base_language_file('common'));
 $lang['common']['htmldirection']='ltr';
 
 $lang['common']['errorsInForm'] = "Er zaten fouten in het formulier. Corrigeer ze en probeer het opnieuw";

@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require_once($GO_LANGUAGE->get_fallback_language_file('calendar'));
+require($GO_LANGUAGE->get_fallback_language_file('calendar'));
 $lang['calendar']['name'] = 'Agenda';
 $lang['calendar']['description'] = 'Agenda module; Iedere gebruiker kan afspraken toevoegen, bewerken of verwijderen. Ook kunnen afspraken van andere gebruikers worden ingezien en als het nodig is aangepast worden.';
 

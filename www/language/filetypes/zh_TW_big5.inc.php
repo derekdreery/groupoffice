@@ -1,17 +1,17 @@
 <?php
-require_once($GO_LANGUAGE->get_fallback_base_language_file('filetypes'));
+require($GO_LANGUAGE->get_fallback_base_language_file('filetypes'));
 
-$ft_title = "ÀÉ®×Ãþ«¬";
-$ft_text = "ÀÉ®×Ãþ«¬¬OGroup-Office¦Û°Ê·s¼Wªº¡A§A/©p¥i¥H¦b³o¸ÌÅÜ§ó¹Ï¥Ü¤Î¦WºÙ";
+$ft_title = "ï¿½É®ï¿½ï¿½ï¿½ï¿½ï¿½";
+$ft_text = "ï¿½É®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½OGroup-Officeï¿½Û°Ê·sï¿½Wï¿½ï¿½ï¿½Aï¿½A/ï¿½pï¿½iï¿½Hï¿½bï¿½oï¿½ï¿½ï¿½Ü§ï¿½Ï¥Ü¤Î¦Wï¿½ï¿½";
 
-$ft_icon = "¹Ï¥Ü";
-$ft_extension = "°ÆÀÉ¦W";
-$ft_friendly = "Ãþ«¬¦WºÙ";
-$ft_content = "ºØÃþ¤º®e";
-$ft_no_filetypes = "¨S¦³§ä¨ìÀÉ®×Ãþ«¬";
-$ft_upload_text = "¿ï¾ÜÀÉ®×Ãþ«¬¹Ï¥ÜµM«á¤W¸ü¡A¥u±µ¨üGIF¹ÏÀÉ¡C";
-$ft_no_file = "¨S¦³±µ¦¬¥ô¦óÀÉ®×";
-$ft_please_wait = "½Ðµ¥«Ý¡A¥¿¦b¤W¸ü¹Ï¥Ü...";
-$ft_properties = "¤º®e";
-$ft_filename = "ÀÉ®×¦WºÙ";
-$ft_current_icon = "·í«e¹Ï¥Ü";
+$ft_icon = "ï¿½Ï¥ï¿½";
+$ft_extension = "ï¿½ï¿½ï¿½É¦W";
+$ft_friendly = "ï¿½ï¿½ï¿½ï¿½ï¿½Wï¿½ï¿½";
+$ft_content = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½e";
+$ft_no_filetypes = "ï¿½Sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É®ï¿½ï¿½ï¿½ï¿½ï¿½";
+$ft_upload_text = "ï¿½ï¿½ï¿½ï¿½É®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¥ÜµMï¿½ï¿½Wï¿½ï¿½Aï¿½uï¿½ï¿½ï¿½ï¿½GIFï¿½ï¿½ï¿½É¡C";
+$ft_no_file = "ï¿½Sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É®ï¿½";
+$ft_please_wait = "ï¿½Ðµï¿½ï¿½Ý¡Aï¿½ï¿½ï¿½bï¿½Wï¿½ï¿½Ï¥ï¿½...";
+$ft_properties = "ï¿½ï¿½ï¿½e";
+$ft_filename = "ï¿½É®×¦Wï¿½ï¿½";
+$ft_current_icon = "ï¿½ï¿½eï¿½Ï¥ï¿½";
