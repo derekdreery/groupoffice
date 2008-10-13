@@ -1,5 +1,5 @@
 <?php
-require_once($GO_LANGUAGE->get_fallback_base_language_file('filetypes'));
+require($GO_LANGUAGE->get_fallback_base_language_file('filetypes'));
 
 $ft_title = "檔案類型";
 $ft_text = "檔案類型是Group-Office自動新增的，你/妳可以在這裡變更圖示及名稱";

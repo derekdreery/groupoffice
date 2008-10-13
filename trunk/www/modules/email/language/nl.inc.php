@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require_once($GO_LANGUAGE->get_fallback_language_file('email'));
+require($GO_LANGUAGE->get_fallback_language_file('email'));
 $lang['email']['name'] = 'Email';
 $lang['email']['description'] = 'Email module; Een kleine web-based email client. Het is voor iedere gebruiker mogelijk om emails te verzenden, ontvangen en doorsturen';
 $lang['email']['feedbackNoReciepent'] = 'U heeft geen ontvanger ingevuld';

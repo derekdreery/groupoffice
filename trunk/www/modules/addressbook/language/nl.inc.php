@@ -12,7 +12,7 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-require_once($GO_LANGUAGE->get_fallback_language_file('addressbook'));
+require($GO_LANGUAGE->get_fallback_language_file('addressbook'));
 $lang['addressbook']['name'] = 'Adresboek';
 $lang['addressbook']['description'] = 'Module om alle contacten te beheren.';
 

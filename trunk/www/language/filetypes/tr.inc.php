@@ -1,6 +1,6 @@
 <?php
 //Translated with Group-Office translate module
-require_once($GO_LANGUAGE->get_fallback_base_language_file('filetypes'));
+require($GO_LANGUAGE->get_fallback_base_language_file('filetypes'));
 $lang['filetypes']['unknown']='Bilinmeyen dosya tipi';
 $lang['filetypes']['txt']='Metin dosyası';
 $lang['filetypes']['sxw']='OpenOffice.Org Writer belgesi';

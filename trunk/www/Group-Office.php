@@ -105,7 +105,7 @@ if (isset($_REQUEST['SET_LANGUAGE'])){
 }
 
 require($GO_LANGUAGE->get_base_language_file('common'));
-//require_once($GO_LANGUAGE->get_base_language_file('filetypes'));
+//require($GO_LANGUAGE->get_base_language_file('filetypes'));
 
 if ( $GO_CONFIG->log ) {
   $username = isset($_SESSION['GO_SESSION']['username']) ? $_SESSION['GO_SESSION']['username'] : 'notloggedin';
