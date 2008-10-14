@@ -354,7 +354,7 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 				$feedback = '<font color="red">The local path you entered is not writable.<br />Please correct this and try again.</font>';
 			}elseif (!is__writable($tmpdir))
 			{
-				$feedback = '<font color="red">The path you entered is not writable.<br />Please correct this and try again.</font>';
+				$feedback = '<font color="red">The temporary files path you entered is not writable.<br />Please correct this and try again.</font>';
 			}
 
 			if (substr($_POST['userdir'], -1) != '/') $_POST['userdir'] = $_POST['userdir'].'/';
@@ -391,14 +391,14 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 			if (save_config($GO_CONFIG) && !isset($feedback))
 			{
 				//check for userdirs
-				$GO_USERS->get_users();
+				/*$GO_USERS->get_users();
 				while($GO_USERS->next_record())
 				{
 					if(!file_exists($GO_CONFIG->file_storage_path.'users/'.$GO_USERS->f('username')))
 					{
 						filesystem::mkdir_recursive($GO_CONFIG->file_storage_path.'users/'.$GO_USERS->f('username'));
 					}
-				}
+				}*/
 				$task = $nexttask;
 			}
 
@@ -426,8 +426,8 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 
 		case 'url':
 			$host = smart_stripslashes(trim($_POST['host']));
-			$full_url = smart_stripslashes(trim($_POST['full_url']));
-			if ($host != '' && $full_url != '')
+			//$full_url = smart_stripslashes(trim($_POST['full_url']));
+			if ($host != '')
 			{
 				if ($host != '/')
 				{
@@ -435,10 +435,8 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 					if (substr($host , 0, 1) != '/') $host  = '/'.$host;
 				}
 
-				if(substr($full_url,-1) != '/') $full_url = $full_url.'/';
-
+			
 				$GO_CONFIG->host = $host;
-				$GO_CONFIG->full_url = $full_url;
 				if (save_config($GO_CONFIG))
 				{
 					$task = $nexttask;
@@ -970,7 +968,7 @@ switch($task)
 		{
 			$GO_MODULES->load_modules();
 			require('upgrade.php');
-			echo '<div align="right"><input type="button" value="Continue" onclick="javascript:document.location=\''.$_SERVER['PHP_SELF'].'?task=userdir\';" /></div>';
+			echo '<div align="right"><input type="button" value="Continue" onclick="javascript:document.location=\''.$_SERVER['PHP_SELF'].'?task=default_module_access\';" /></div>';
 		}
 		print_foot();
 		exit();
@@ -1043,15 +1041,6 @@ switch($task)
 		$host = isset($_POST['host']) ? $_POST['host'] : $GO_CONFIG->host;
 	?>
 		<input type="text" size="40" name="host" value="<?php echo $host; ?>" />
-		</td>
-		</tr>
-		<tr>
-		<td>Absolute URL:</td>
-		<td>
-		<?php
-		$full_url = isset($_POST['full_url']) ? $_POST['full_url'] : $GO_CONFIG->full_url;
-	?>
-		<input type="text" size="40" name="full_url" value="<?php echo $full_url; ?>" />
 		</td>
 		</tr>
 		</table><br />
