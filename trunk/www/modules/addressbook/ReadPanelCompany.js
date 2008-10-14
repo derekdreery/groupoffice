@@ -50,8 +50,11 @@ GO.addressbook.CompanyReadPanel = function(config)
 				GO.linkBrowser.show({link_id: this.data.id,link_type: "3",folder_id: "0"});				
 			},
 			scope: this
-		}),
-		this.fileBrowseButton = new Ext.Button({
+		})];
+		
+	if(GO.files)
+	{
+		this.tbar.push(this.fileBrowseButton = new Ext.Button({
 			iconCls: 'go-menu-icon-files', 
 			cls: 'x-btn-text-icon', 
 			text: GO.files.lang.files,
@@ -60,11 +63,11 @@ GO.addressbook.CompanyReadPanel = function(config)
 			},
 			scope: this,
 			disabled: true
-		}),
-		this.newMenuButton
-	];	
+		}));
+	}
 	
-	
+	this.tbar.push(this.newMenuButton);
+		
 	GO.addressbook.CompanyReadPanel.superclass.constructor.call(this);		
 }
 
@@ -471,7 +474,10 @@ Ext.extend(GO.addressbook.CompanyReadPanel,Ext.Panel,{
 		this.data=data;
 		this.editButton.setDisabled(!data.write_permission);
 		this.linkBrowseButton.setDisabled(false);
-		this.fileBrowseButton.setDisabled(false);
+		if(GO.files)
+		{
+			this.fileBrowseButton.setDisabled(false);
+		}
 		this.template.overwrite(this.body, data);	
 		
 		if(data.write_permission)

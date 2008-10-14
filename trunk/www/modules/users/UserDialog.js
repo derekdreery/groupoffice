@@ -111,7 +111,10 @@ Ext.extend(GO.users.UserDialog, Ext.Window,{
 		}		
 		
 		this.linkBrowseButton.setDisabled(user_id<1);
-		this.fileBrowseButton.setDisabled(user_id<1);		
+		if(GO.files)
+		{
+			this.fileBrowseButton.setDisabled(user_id<1);
+		}		
 	},
 	
 	serverclientDomainCheckboxes : [],

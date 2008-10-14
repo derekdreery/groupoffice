@@ -52,8 +52,11 @@ GO.addressbook.ContactReadPanel = function(config)
 			},
 			scope: this,
 			disabled: true
-		}),
-		this.fileBrowseButton = new Ext.Button({
+		})];
+		
+	if(GO.files)
+	{
+		this.tbar.push(this.fileBrowseButton = new Ext.Button({
 			iconCls: 'go-menu-icon-files', 
 			cls: 'x-btn-text-icon', 
 			text: GO.files.lang.files,
@@ -62,9 +65,11 @@ GO.addressbook.ContactReadPanel = function(config)
 			},
 			scope: this,
 			disabled: true
-		}),		
-		this.newMenuButton
-	];	
+		}));
+	}
+		
+	this.tbar.push(this.newMenuButton);
+	
 	
 	
 	GO.addressbook.ContactReadPanel.superclass.constructor.call(this);		
@@ -411,7 +416,10 @@ Ext.extend(GO.addressbook.ContactReadPanel, Ext.Panel,{
 		this.data=data;
 		this.editButton.setDisabled(!data.write_permission);
 		this.linkBrowseButton.setDisabled(false);
-		this.fileBrowseButton.setDisabled(false);
+		if(GO.files)
+		{
+			this.fileBrowseButton.setDisabled(false);
+		}
 		
 		this.template.overwrite(this.body, data);	
 		

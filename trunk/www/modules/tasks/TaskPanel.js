@@ -43,19 +43,24 @@ GO.tasks.TaskPanel = function(config)
 				GO.linkBrowser.show({link_id: this.data.id,link_type: "12",folder_id: "0"});				
 			},
 			scope: this
-		}),		
-		this.fileBrowseButton = new Ext.Button({
-			iconCls: 'go-menu-icon-files', 
-			cls: 'x-btn-text-icon', 
-			text: GO.files.lang.files,
-			handler: function(){
-				GO.files.openFolder(this.data.files_path);				
-			},
-			scope: this,
-			disabled: true
-		}),
-		this.newMenuButton
-	];	
+		})];
+		
+		if(GO.files)
+		{
+			this.tbar.push(this.fileBrowseButton = new Ext.Button({
+				iconCls: 'go-menu-icon-files', 
+				cls: 'x-btn-text-icon', 
+				text: GO.files.lang.files,
+				handler: function(){
+					GO.files.openFolder(this.data.files_path);				
+				},
+				scope: this,
+				disabled: true
+			}));
+		}
+		
+	this.tbar.push(this.newMenuButton);
+	
 	
 	GO.tasks.TaskPanel.superclass.constructor.call(this);		
 }
@@ -159,7 +164,10 @@ Ext.extend(GO.tasks.TaskPanel, Ext.Panel,{
 		this.data=data;
 		this.editButton.setDisabled(!data.write_permission);
 		this.linkBrowseButton.setDisabled(false);
-		this.fileBrowseButton.setDisabled(false);
+		if(GO.files)
+		{
+			this.fileBrowseButton.setDisabled(false);
+		}
 		
 		if(data.write_permission)
 			this.newMenuButton.setLinkConfig({
