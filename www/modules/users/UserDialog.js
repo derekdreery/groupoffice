@@ -34,18 +34,22 @@ GO.users.UserDialog = function(config){
 				GO.linkBrowser.show({link_id: this.user_id,link_type: "8",folder_id: "0"});				
 			},
 			scope: this
-		}),		
-		this.fileBrowseButton = new Ext.Button({
-			iconCls: 'go-menu-icon-files', 
-			cls: 'x-btn-text-icon', 
-			text: GO.files.lang.files,
-			handler: function(){
-				GO.files.openFolder(this.files_path);				
-			},
-			scope: this,
-			disabled: true
-		})
-	];	
+		})];
+		
+		if(GO.files)
+		{		
+			this.tbar.push(this.fileBrowseButton = new Ext.Button({
+				iconCls: 'go-menu-icon-files', 
+				cls: 'x-btn-text-icon', 
+				text: GO.files.lang.files,
+				handler: function(){
+					GO.files.openFolder(this.files_path);				
+				},
+				scope: this,
+				disabled: true
+			}));
+		}
+	
 		
 	
 	

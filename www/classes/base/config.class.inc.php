@@ -746,7 +746,14 @@ class GO_CONFIG
       		//Detect some default values for installation if root_path is not set yet
       		//$this->root_path = str_replace('classes/base/config.class.inc','',__FILE__);
       		$this->root_path = str_replace('\\','/',dirname(dirname(dirname(__FILE__)))).'/';
-      		$this->host = dirname(dirname($_SERVER['PHP_SELF'])).'/';
+      		$this->host = dirname(dirname($_SERVER['PHP_SELF']));
+      		
+      		if(substr($this->host,-1) != '/')
+      		{
+      			$this->host .= '/';
+      		}
+      		
+      		
       		$this->full_url = 'http://'.$_SERVER['SERVER_NAME'].dirname(dirname($_SERVER['PHP_SELF'])).'/';
 
       		$this->local_path = $this->root_path.'local/';
