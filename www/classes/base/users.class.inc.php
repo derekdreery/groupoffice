@@ -616,16 +616,15 @@ class GO_USERS extends db
 	 * 
 	 * @return Boolean to indicate the success of the operation.
 	 */
-	function update_profile($user)
+	function update_profile($user, $complete_profile=false)
 	{
 		global $GO_MODULES;
 		$user['mtime']=time();
 		
-		
-		
 		$params = array('user'=>$user);
-		$GO_MODULES->fire_event('update_user', $params);
 		
+		
+		$ret = false;
 		if(!empty($user['password']))
 		{			
 			$user['password']=md5($user['password']);
@@ -635,11 +634,22 @@ class GO_USERS extends db
 		{
 			if(isset($_SESSION['GO_SESSION']['user_id']) && $user['id'] == $_SESSION['GO_SESSION']['user_id'])
 			{
-				return $this->update_session($user['id']);
+				$ret = $this->update_session($user['id']);
 			}
-			return true;
+			$ret = true;
 		}
-		return false;
+		
+		
+		if($complete_profile)
+		{
+			$params['user']=$this->get_user($user['id']);
+			$GO_MODULES->fire_event('add_user', $params);
+		}else
+		{
+			$GO_MODULES->fire_event('update_user', $params);
+		}
+		
+		return $ret;
 	}
 	/**
 	 * This function updates the user's password.
@@ -868,7 +878,12 @@ class GO_USERS extends db
 			}
 			
 			$user['password']=$unencrypted_password;
-			$GO_MODULES->fire_event('add_user', $params);
+			
+			//delay add user event because name must be supplied first.
+			if(!empty($user['first_name']) && !empty($user['first_name']))
+			{			
+				$GO_MODULES->fire_event('add_user', $params);
+			}
 
 			return $user['id'];
 		} else {

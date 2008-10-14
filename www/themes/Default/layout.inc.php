@@ -23,7 +23,7 @@ require($GO_THEME->theme_path.'default_head.inc.php');
 <?php
 require($GO_CONFIG->root_path.'default_scripts.inc.php');
 
-if($GO_SECURITY->logged_in())
+if($GO_SECURITY->logged_in() && trim($_SESSION['GO_SESSION']['name']) != '')
 {
 	?>
 	<div id="mainNorthPanel">

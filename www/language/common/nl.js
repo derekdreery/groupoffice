@@ -11,6 +11,7 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
+GO.lang.completeProfile = 'Vul uw profiel aan a.u.b.';
 GO.lang.fullscreen='Volledig scherm modus';
 
 GO.lang.color='Kleur';
