@@ -413,19 +413,38 @@ class imap {
 		{
 			$message["attachments"] = true;
 		}
+	
 
 		$RFC822 = new RFC822();
-		$message["to"] = isset($values['to']) ? $RFC822->explode_address_list($values['to']) : array();
-		$message["cc"] = isset($values['cc']) ? $RFC822->explode_address_list($values['cc']) : array();
-		 
+		
+		$message["to"]=array();
+		if(isset($values['to']))
+		{
+			$to = $RFC822->parse_address_list($values['to']);
+			foreach($to as $address)
+			{
+				$message['to'][]=$RFC822->write_address($this->enc_utf8($address['personal']), $address['email']);
+			}
+		}
+		
+		$message["cc"]=array();
+		if(isset($values['cc']))
+		{
+			$cc = $RFC822->parse_address_list($values['cc']);			
+			foreach($cc as $address)
+			{
+				$message['cc'][]=$RFC822->write_address($this->enc_utf8($address['personal']), $address['email']);
+			}
+		}
+				 
 		if(!isset($values['from']))
 			$values['from']='';
 		 
 		$from = $RFC822->parse_address_list($values['from']);
-		$message["from"] = isset($from[0]['personal']) ? $from[0]['personal'] : '';
-		$message["sender"] = isset($from[0]['email']) ? $from[0]['email'] : '';
-		$message['udate'] = isset($values['date']) ? strtotime($values['date']) : '';
-		$message['subject'] = isset($values['subject']) ? $values['subject'] : '';
+		$message["from"] = isset($from[0]['personal']) ? $this->enc_utf8($from[0]['personal']) : '';
+		$message["sender"] = isset($from[0]['email']) ? $this->enc_utf8($from[0]['email']) : '';
+		$message['udate'] = isset($values['date']) ? $this->enc_utf8(strtotime($values['date'])) : '';
+		$message['subject'] = isset($values['subject']) ? $this->enc_utf8($values['subject']) : '';
 
 		$message["notification"]=isset($values['disposition-notification-to']) ? $values['disposition-notification-to'] : false;
 		$message['content_type']=isset($values['content-type']) ? $values['content-type'] : false;;
@@ -510,7 +529,7 @@ class imap {
 			$header = imap_fetchheader($this->conn, $this->message['number']);
 				
 			$values = $this->get_header_values($header);
-			foreach($values as $key=>$value)
+			/*foreach($values as $key=>$value)
 			{
 				//if(empty($this->message[$key]))
 				//{
@@ -524,9 +543,12 @@ class imap {
 				{
 					$value=$this->enc_utf8($value);
 				}
+				
 				$this->message[$key]=$value;
 				//}
-			}
+			}*/
+			
+			$this->message = array_merge($this->message, $values);
 				
 				
 			$this->message["reply_to"] = $this->RFC822->write_address($this->message['from'], $this->message["sender"]);
