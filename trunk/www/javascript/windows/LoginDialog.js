@@ -106,7 +106,7 @@ GO.dialog.LoginDialog = function(config){
     layout: 'fit',
 		
 		autoHeight:true,
-		width:340,
+		width:400,
 		resizable: false,
 		closeAction:'hide',
 		title:GO.lang['strLogin'],
