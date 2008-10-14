@@ -3,9 +3,9 @@
 GO.users.lang.cmdCheckColumnRead= 'Lettura';
 GO.users.lang.cmdCheckColumnWrite= 'Scrittura';
 GO.users.lang.cmdHeaderColumnName= 'Nome del modulo';
-GO.users.lang.cmdHeaderGridUserHasAccess = 'L'utente ha accesso a';
-GO.users.lang.cmdHeaderGridUserIsMemberOf = 'L'utente è un membro di';
-GO.users.lang.cmdHeaderGridUserVisibleTo = 'L'utente è visibile a';
+GO.users.lang.cmdHeaderGridUserHasAccess = 'L\'utente ha accesso a';
+GO.users.lang.cmdHeaderGridUserIsMemberOf = 'L\'utente è un membro di';
+GO.users.lang.cmdHeaderGridUserVisibleTo = 'L\'utente è visibile a';
 
 GO.users.lang.cmdPanelPersonal = 'Personale';
 GO.users.lang.cmdPanelPassword= 'Password';
@@ -40,7 +40,7 @@ GO.users.lang.cmdFormLabelMaximunRows = 'Massimo numero di righe negli elenchi';
 GO.users.lang.cmdFormLabelSortNamesBy = 'Cognome';
 GO.users.lang.cmdFormLabelLanguage = 'Lingua';
 GO.users.lang.cmdFormLabelTimezone = 'Fuso orario';
-GO.users.lang.cmdFormLabelAdjustDaylight = 'Passa automaticamente all'ora legale';
+GO.users.lang.cmdFormLabelAdjustDaylight = 'Passa automaticamente all\'ora legale';
 GO.users.lang.cmdFormLabelDateFormat = 'Formato data';
 GO.users.lang.cmdFormLabelDateSeperator = 'Separatore data';
 GO.users.lang.timeFormat = 'Formato tempo';
