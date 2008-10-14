@@ -8,55 +8,80 @@ class imapauth extends db
 	
 	public function __construct(){
 		
-		global $GO_MODULES;
+		global $GO_CONFIG;
 		
 		$this->db();
 		
-		if(file_exists($GO_MODULES->modules['imapauth']['path'].'config.inc.php'))
+		$conf = str_replace('config.php', 'imapauth.config.php', $GO_CONFIG->get_config_file());
+		
+		if(file_exists($conf))
 		{
-			require($GO_MODULES->modules['imapauth']['path'].'config.inc.php');
+			require($conf);
 			$this->config=$config;
+		}else
+		{
+			$this->config = array();
 		}
 	}
-
+	
+	private function get_domain_config($domain)
+	{
+		if(!empty($domain))
+		{			
+			foreach($this->config as $config)
+			{
+				if($config['domains']=='*')
+				{
+					return $config;
+				}
+				$domains = explode(',', $config['domains']);
+				$domains = array_map('trim', $domains);
+				
+				if(in_array($domain, $domains));
+				{
+					return $config;
+				}
+			}
+		}
+		return false;
+		
+	}
+	
+	
 	public function __on_before_login($arguments)
 	{
+		$arr = explode('@', $arguments['username']);
 		
-		if(isset($this->config))
+		$email = trim($arguments['username']);
+		$mailbox = trim($arr[0]);
+		$domain = isset($arr[1]) ? trim($arr[1]) : '';
+		
+		if($config = $this->get_domain_config($domain))
 		{
 			global $GO_CONFIG, $GO_SECURITY, $GO_LANGUAGE, $GO_USERS, $GO_GROUPS,
 			$GO_MODULES;
+						
 	
 			$GO_SECURITY->user_id = 0;
 	
 			require_once($GO_CONFIG->class_path.'mail/imap.class.inc');
 			$imap = new imap();
 	
-			$mail_username=$arguments['username'];
-			$go_username=$arguments['username'];
-			
-			$email_address = $arguments['username'].'@'.$this->config['domain'];
-			if ($this->config['add_domain_to_username']) {
-				$mail_username = $email_address;
+			$go_username=$mail_username=$email;
+			if ($config['remove_domain_from_username']) {
+				$mail_username = $mailbox;
 			}
 			
-			if (!isset($this->config['go_username_without_domain']) || !$this->config['go_username_without_domain']) {
-				$go_username = $email_address;
-			}else{
-				$go_username = str_replace('@'.$this->config['domain'], '', $go_username);
-			}
-			
-	
 			if ($imap->open(
-				$this->config['host'], 
-				$this->config['proto'], 
-				$this->config['port'],
+				$config['host'], 
+				$config['proto'], 
+				$config['port'],
 				$mail_username, 
 				$arguments['password'], 
 				'INBOX', 
 				0, 
-				$this->config['ssl'], 
-				$this->config['novalidate_cert']))
+				$config['ssl'], 
+				$config['novalidate_cert']))
 			{
 				$imap->close();
 	
@@ -70,24 +95,26 @@ class imapauth extends db
 						{
 							require_once($GO_MODULES->modules['email']['class_path']."email.class.inc");
 							$email_client = new email();
-							$email_client->update_password($this->config['host'], $mail_username, $arguments['password']);
+							$email_client->update_password($config['host'], $mail_username, $arguments['password']);
 						}
 					}
 	
 				} else {
 					//user doesn't exist. create it now
 					
-					$user['email'] =$email_address;
+					$user['email'] =$email;
 					$user['username'] = $go_username;
+					//$user['first_name']=$go_username;
+					//$user['last_name']='-';
 					$user['password'] = $arguments['password'];
 					$user['sex'] = 'M';
 					// the user does not exist, so we have to add him.
 					if ( !$user_id = $GO_USERS->add_user(
 							$user, 
-							$GO_GROUPS->groupnames_to_ids($this->config['groups']), 
-							$GO_GROUPS->groupnames_to_ids($this->config['visible_groups']), 
-							$this->config['modules_read'], 
-							$this->config['modules_write']))
+							$GO_GROUPS->groupnames_to_ids($config['groups']), 
+							$GO_GROUPS->groupnames_to_ids($config['visible_groups']), 
+							$config['modules_read'], 
+							$config['modules_write']))
 					{
 						go_log(LOG_DEBUG, 'ERROR: Failed adding mail user to Group-Office. The user probably already existed. Try changing go_username_without_domain to true or false in imapauth config.');
 	
@@ -97,7 +124,7 @@ class imapauth extends db
 						@mkdir( $GO_CONFIG->file_storage_path.'users/'.$email_address, $GO_CONFIG->create_mode );
 						umask($old_umask);
 	
-						if ($this->config['create_email_account'])
+						if ($config['create_email_account'])
 						{
 							if(isset($GO_MODULES->modules['email']))
 							{
@@ -106,17 +133,17 @@ class imapauth extends db
 								$email_client = new email();					
 								
 								$account['user_id']=$user_id;
-								$account['type']=$this->config['proto'];
-								$account['host']=$this->config['host'];
-								$account['port']=$this->config['port'];
-								$account['use_ssl']=$this->config['ssl'];
-								$account['novalidate_cert']=$this->config['novalidate_cert'];
-								$account['mbroot']=$this->config['mbroot'];
-								$account['username']=addslashes($arguments['username']);
+								$account['type']=$config['proto'];
+								$account['host']=$config['host'];
+								$account['port']=$config['port'];
+								$account['use_ssl']=$config['ssl'];
+								$account['novalidate_cert']=$config['novalidate_cert'];
+								$account['mbroot']=$config['mbroot'];
+								$account['username']=addslashes($mail_username);
 								$account['password']=addslashes($arguments['password']);
-								$account['name']=addslashes($email_address);
-								$account['email']=addslashes($email_address);
-								$account['auto_check']=$this->config['auto_check_email'];
+								$account['name']=addslashes($email);
+								$account['email']=addslashes($email);
+								//$account['auto_check']=$config['auto_check_email'];
 								
 								if (!$account_id = $email_client->add_account($account))
 								{								
@@ -130,7 +157,10 @@ class imapauth extends db
 						}
 					}
 				}
-			}	
+			}else
+			{
+				$imap->clear_errors();
+			}
 		}
 	}
 }

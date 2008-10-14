@@ -977,7 +977,7 @@ class GO_CONFIG
       	{
       		$response['user_id']=$GO_SECURITY->user_id;
       		$response['username']=$_SESSION['GO_SESSION']['username'];
-      		$response['name']=$_SESSION['GO_SESSION']['name'];
+      		$response['name']=trim($_SESSION['GO_SESSION']['name']);
       		$response['email']=$_SESSION['GO_SESSION']['email'];
       		$response['country']=$_SESSION['GO_SESSION']['country'];
 

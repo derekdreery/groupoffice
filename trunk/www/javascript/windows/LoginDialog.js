@@ -194,19 +194,16 @@ Ext.extend(GO.dialog.LoginDialog, Ext.Window, {
 			success:function(form, action){
 				
 				//reload user settings
-				window.GO.settings=action.result.settings;
+				window.GO.settings=action.result.settings;				
 				
-				for(var i=0;i<this.callbacks.length;i++)
+				if(GO.settings.name=='')
 				{
-					if(this.callbacks[i].callback)
-					{
-						var scope = this.callbacks[i].scope ? this.callbacks[i].scope : this;
-						//var callback = this.callbacks[i].callback.createDelegate(this.callbacks[i].scope, scope);
-						this.callbacks[i].callback.call(scope);
-					}
+					this.completeProfileDialog();
+				}else
+				{				
+					this.handleCallbacks();
 				}
 				
-				this.callbacks=[];
 				this.hide();
 				
 			},
@@ -219,6 +216,84 @@ Ext.extend(GO.dialog.LoginDialog, Ext.Window, {
 			},
 			scope: this
 		});
+	},
+	
+	handleCallbacks : function(){
+		for(var i=0;i<this.callbacks.length;i++)
+		{
+			if(this.callbacks[i].callback)
+			{
+				var scope = this.callbacks[i].scope ? this.callbacks[i].scope : this;
+				//var callback = this.callbacks[i].callback.createDelegate(this.callbacks[i].scope, scope);
+				this.callbacks[i].callback.call(scope);
+			}
+		}
+		
+		this.callbacks=[];
+	},
+	
+	completeProfileDialog : function(){
+		
+		var formPanel = new Ext.form.FormPanel({
+	    waitMsgTarget:true,
+			url: BaseHref+'action.php',
+			border: false,
+			autoHeight: true,
+			cls:'go-form-panel',
+			baseParams: {task: 'complete_profile'},				
+			defaults:{xtype:'textfield',anchor:'100%'},				
+			items:[{
+				fieldLabel: GO.lang['strFirstName'], 
+				name: 'first_name', 
+				allowBlank: false
+			},
+			{
+				fieldLabel: GO.lang['strMiddleName'], 
+				name: 'middle_name'
+			},
+			{
+				fieldLabel: GO.lang['strLastName'], 
+				name: 'last_name', 
+				allowBlank: false
+			}]				
+		});
+		
+		var focusFirstField = function(){
+			formPanel.items.items[0].focus();
+		};
+		
+		this.completeProfileDialog = new Ext.Window({
+			width: 400,
+			autoHeight:true,
+			title:GO.lang.completeProfile,
+			items:formPanel	,
+			closable:false,
+			focus:focusFirstField.createDelegate(this),
+			buttons:[{
+				text: GO.lang['cmdOk'],
+				handler: function(){
+					formPanel.form.submit(
+					{						
+						waitMsg:GO.lang['waitMsgSave'],
+						success:function(form, action){							
+							this.handleCallbacks();
+						},		
+						failure: function(form, action) {
+							if(action.failureType == 'client')
+							{					
+								Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strErrorsInForm']);			
+							} else {
+								Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback);
+							}
+						},
+						scope: this
+					});
+				},
+				scope: this
+			}]		 
+		});
+		
+		this.completeProfileDialog.show();
 	}
 	
 });

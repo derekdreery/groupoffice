@@ -22,6 +22,19 @@ try{
 
 	switch($_REQUEST['task'])
 	{
+		
+		case 'complete_profile':
+			
+			$user['id']=$GO_SECURITY->user_id;
+			$user['first_name']=smart_addslashes($_POST['first_name']);
+			$user['last_name']=smart_addslashes($_POST['last_name']);
+			
+			$GO_USERS->update_profile($user, true);
+			
+			$response['success']=true;
+			
+			break;
+		
 		case 'lost_password':
 			
 			if($user = $GO_USERS->get_user_by_email(smart_addslashes($_POST['email'])))

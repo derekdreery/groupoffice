@@ -822,6 +822,10 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
     	    	
     	this.sendParams.draft = draft;
     	
+    	//sometimes when paste is used the value wan't synced. So force an extra sync    	
+    	this.htmlEditor.syncValue();
+    	
+    	
 			this.formPanel.form.submit({							
 				url:this.sendURL,
 				params: this.sendParams,

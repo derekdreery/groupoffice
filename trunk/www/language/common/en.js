@@ -13,6 +13,8 @@
 
 GO.lang = {};
 
+
+GO.lang.completeProfile = 'Please complete your profile';
 GO.lang.fullscreen='Fullscreen mode';
 GO.lang.popupBlocker = 'Your browser is blocking a popup from Group-Office. Please disable the popup blocker for this site';
 

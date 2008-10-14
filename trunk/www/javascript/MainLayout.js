@@ -38,14 +38,14 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	
 		this.fireReady();
 		
-		var loginDialog = new GO.dialog.LoginDialog({modal:false});
+		GO.loginDialog = new GO.dialog.LoginDialog({modal:false});
 		
-		loginDialog.addCallback(function(){
+		GO.loginDialog.addCallback(function(){
 				var url = GO.afterLoginUrl ? GO.afterLoginUrl : GO.settings.config.host;
 			
 				document.location.href=url;
 			});
-		loginDialog.show();
+		GO.loginDialog.show();
 		
 		
 		this.removeLoadMask();
