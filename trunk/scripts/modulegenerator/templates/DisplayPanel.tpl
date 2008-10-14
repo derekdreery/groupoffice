@@ -40,8 +40,10 @@ GO.{module}.{friendly_single_ucfirst}Panel = function(config)
 				GO.linkBrowser.show({link_id: this.data.id,link_type: "{link_type}",folder_id: "0"});				
 			},
 			scope: this
-		}),
-		this.fileBrowseButton = new Ext.Button({
+		})</gotpl>];
+	<gotpl if="$authenticate">if(GO.files)
+	{
+		this.tbar.push(this.fileBrowseButton = new Ext.Button({
 			iconCls: 'go-menu-icon-files', 
 			cls: 'x-btn-text-icon', 
 			text: GO.files.lang.files,
@@ -50,11 +52,8 @@ GO.{module}.{friendly_single_ucfirst}Panel = function(config)
 			},
 			scope: this,
 			disabled: true
-		}),
-		this.newMenuButton</gotpl>
-	];	
-	
-	
+		}));
+	}</gotpl><gotpl if="$link_type &gt; 0">this.tbar.push(this.newMenuButton);</gotpl>	
 	GO.{module}.{friendly_single_ucfirst}Panel.superclass.constructor.call(this);		
 }
 
