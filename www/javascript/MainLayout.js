@@ -199,7 +199,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	    			iconCls:'btn-report-bug',
 	    			text:GO.lang.strReportBug,
 	    			handler:function(){
-	    				window.open('https://sourceforge.net/tracker/?func=add&group_id=76359&atid=547651');			
+	    				window.open('https://sourceforge.net/tracker2/?func=add&group_id=76359&atid=547651');			
 	    			},
 	    			scope:this
 	    			
