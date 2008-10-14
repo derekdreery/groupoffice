@@ -614,6 +614,9 @@ GO.email.EmailClient = function(config){
 Ext.extend(GO.email.EmailClient, Ext.Panel,{	
 	checkMailInterval : 300000,
 	//checkMailInterval : 10000,
+	
+	justMarkedUnread : 0, 
+	
 	afterRender : function(){
 		GO.email.Composer.on('send', function(composer){			
 			if(composer.sendParams.reply_uid && composer.sendParams.reply_uid>0)
@@ -639,13 +642,9 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 				id: 'ml-notify',
 				tag:'div',
 				html:'',
-				style:'display:none'
-				
+				style:'display:none'				
 			});
 		}
-		
-		
-		
 	},
 	
 	onShow : function(){
@@ -672,7 +671,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 			
 			var current = this.notificationEl.dom.innerHTML;
 			
-			if(current!='' && inbox_new>current)
+			if(current!='' && inbox_new-this.justMarkedUnread>current)
 			{
 				GO.playAlarm();
 				this.notificationEl.setDisplayed(!this.isVisible());
@@ -680,7 +679,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 			
 			this.notificationEl.update(inbox_new);
 			
-			
+			this.justMarkedUnread=0;
 		}
 	},
 	
@@ -872,21 +871,24 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 							Ext.MessageBox.alert(GO.lang['strError'], responseParams.feedback);
 						}else
 						{
-							
-							this.updateFolderStatus(this.folder_id, responseParams.unseen);
-							
 							var field;
 							var value;
+							
+							var records = this.messagesGrid.selModel.getSelections();
 							
 							switch(task)
 							{
 								case 'mark_as_read':							
 									field='new';
 									value=false;
+									
+									this.justMarkedUnread=-records.length;									
 									break;
 								case 'mark_as_unread':
 									field='new';
 									value=true;
+									
+									this.justMarkedUnread=records.length;									
 									break;
 									
 								case 'flag':					
@@ -898,13 +900,15 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 									value=false;
 									break;
 							}
-							var records = this.messagesGrid.selModel.getSelections();
+							
 							
 							for(var i=0;i<records.length;i++)
 							{
 								records[i].set(field, value);
 								records[i].commit();
 							}
+							
+							this.updateFolderStatus(this.folder_id, responseParams.unseen);
 						}
 					}
 				},

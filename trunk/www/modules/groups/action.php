@@ -36,30 +36,6 @@ $feedback = null;
 
 switch($action)
 {
-	case 'delete':
-		$result['success'] = true;
-		$result['feedback'] = $feedback;
-
-		foreach($groups as $id)
-		{
-			if ($id == 1)
-			{
-				$result['success'] = false;
-				$feedback = $lang['groups']['noDeleteAdmins'];
-			} elseif($id == 2) {
-				$result['success'] = false;
-				$feedback = $lang['groups']['noDeleteEveryone'];
-			} else {
-				if(!$GO_GROUPS->delete_group($id))
-				{
-					$result['success'] = false;
-					$result['feedback'] = $lang['common']['deleteError'];
-				}
-			}
-		}
-
-		echo json_encode($result);
-		break;
 	case 'save_group':
 		$result['success'] = true;
 		$result['feedback'] = $feedback;
@@ -91,39 +67,6 @@ switch($action)
 				$result['group_id'] = $group_id;
 			}
 		}
-		echo json_encode($result);
-		break;
-	case 'delete_user_from_group':
-		$result['success'] = true;
-		$result['feedback'] = $feedback;
-
-		foreach($delete_users as $user_id)
-		{
-			if(!$GO_GROUPS->delete_user_from_group($user_id, $group_id))
-			{
-				$result['success'] = false;
-				$result['feedback'] = $lang['common']['deleteError'];
-			}
-		}
-
-		echo json_encode($result);
-		break;
-	case 'add_user_to_group':
-		$result['success'] = true;
-		$result['feedback'] = $feedback;
-
-		foreach($users as $user_id)
-		{
-			if (!$GO_GROUPS->is_in_group($user_id, $group_id))
-			{
-				if(!$GO_GROUPS->add_user_to_group($user_id, $group_id))
-				{
-					$result['success'] = false;
-					$result['feedback'] = $lang['common']['saveError'];
-				}
-			}
-		}
-
 		echo json_encode($result);
 		break;
 }

@@ -2,6 +2,7 @@ Ext.namespace('GO.groups');
 
 GO.groups.lang={};
 
+GO.groups.lang.group = 'Group';
 GO.groups.lang.groups = 'Groups';
 GO.groups.lang.owner = 'Owner';
 GO.groups.lang.lblNew = 'New';

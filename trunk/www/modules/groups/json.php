@@ -74,8 +74,26 @@ switch ($action)
 		echo json_encode($response);
 		break;
 	case 'users_in_group':
-
+		
 		$response=array();
+		if(isset($_POST['delete_keys']))
+		{
+			try{
+				$response['deleteSuccess']=true;
+				$users = json_decode(smart_stripslashes($_POST['delete_keys']));
+
+				foreach($users as $user_id)
+				{
+					$GO_GROUPS->delete_user_from_group($user_id, $group_id);
+				}
+			}catch(Exception $e)
+			{
+				$response['deleteSuccess']=false;
+				$response['deleteFeedback']=$e->getMessage();
+			}
+		}
+
+		
 		if(isset($_POST['add_users']))
 		{
 			$users = json_decode(smart_stripslashes($_POST['add_users']));
