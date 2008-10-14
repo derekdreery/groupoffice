@@ -43,8 +43,11 @@ GO.notes.NotePanel = function(config)
 			},
 			disabled : true,
 			scope: this
-		}),	
-		this.fileBrowseButton = new Ext.Button({
+		})];
+		
+	if(GO.files)
+	{
+		this.tbar.push(this.fileBrowseButton = new Ext.Button({
 			iconCls: 'go-menu-icon-files', 
 			cls: 'x-btn-text-icon', 
 			text: GO.files.lang.files,
@@ -53,10 +56,9 @@ GO.notes.NotePanel = function(config)
 			},
 			scope: this,
 			disabled: true
-		}),	
-		this.newMenuButton
-	];	
-	
+		}));
+	}
+	this.tbar.push(this.newMenuButton);	
 	
 	GO.notes.NotePanel.superclass.constructor.call(this);		
 }
@@ -141,7 +143,10 @@ Ext.extend(GO.notes.NotePanel, Ext.Panel,{
 		this.data=data;
 		this.editButton.setDisabled(!data.write_permission);
 		this.linkBrowseButton.setDisabled(false);
-		this.fileBrowseButton.setDisabled(false);
+		if(GO.files)
+		{
+			this.fileBrowseButton.setDisabled(false);
+		}
 		
 		if(data.write_permission)
 			this.newMenuButton.setLinkConfig({

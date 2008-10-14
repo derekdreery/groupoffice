@@ -275,10 +275,6 @@ GO.files.FileBrowser = function(config){
 	this.gridPanel.on('rowcontextmenu', this.onGridRowContextMenu, this);
 	
 	
-	
-	
-	
-	
 	this.newMenu = new Ext.menu.Menu({
 					id: 'new-menu',
 	        items: []
@@ -299,8 +295,9 @@ GO.files.FileBrowser = function(config){
 	this.locationPanel = new Ext.Panel({
 	  region:'north',
 	  layout:'form',
-	  border:false,
-	  autoHeight:true,
+	  border:false,	  
+	  baseCls:'x-plain',
+	  height:32,
 	  labelWidth:75,
 	  plain:true,
 	  cls:'go-files-location-panel',
