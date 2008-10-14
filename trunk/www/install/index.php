@@ -118,7 +118,8 @@ if ($script_path == '')
 
 //check ifconfig exists and if the config file is writable
 $config_location1 = '/etc/groupoffice/'.$_SERVER['SERVER_NAME'].'/config.php';
-$config_location2 = $GO_CONFIG->root_path.'config.php';
+$config_location2 = dirname(substr($_SERVER['SCRIPT_FILENAME'], 0 ,-strlen($_SERVER['PHP_SELF']))).'/config.php';
+$config_location3 = $GO_CONFIG->root_path.'config.php';
 
 if($task !='test')
 {
@@ -127,10 +128,10 @@ if($task !='test')
 		print_head();
 		echo '<input type="hidden" name="task" value="license" />';
 		echo 'The configuration file does not exist. You must create an empty writable file at one of the following locations:<br />';
-		echo '<ol><li>'.$config_location1.'</li>';
-		echo '<li>'.$config_location2.'</li></ol></i></font>';
-		echo 'The first location is more secure because the sensitive information is kept outside the document root but it does require root privileges on this machine.<br />The second advantage is that you will be able to seperate the source from the configuration. This can be very usefull with multiple installations on one machine.';
-		echo ' If you choose this location then you have to make sure that in Apache\'s httpd.conf the following is set:<br /><br />';
+		echo '<ol><li>'.$config_location1.'</li><li>'.$config_location2.'</li>';
+		echo '<li>'.$config_location3.'</li></ol></i></font>';
+		echo 'The first two locations are more secure because the sensitive information is kept outside the document root but it does require root privileges on this machine.<br />The second advantage is that you will be able to seperate the source from the configuration. This can be very usefull with multiple installations on one machine.';
+		echo '<br /><br />If you choose the third location then you have to make sure that in Apache\'s httpd.conf the following is set:<br /><br />';
 		echo '<font color="#003399">';
 		echo '<i>UseCanonicalName On</i></font><br />';
 		echo 'This is to make sure it always finds your configuration file at the correct location.';
@@ -644,7 +645,8 @@ switch($task)
 		print_head();
 		echo '<input type="hidden" name="task" value="test" />';
 		
-		echo '<h1>Welcome!</h1><p>Thank you for installing Group-Office. This page checks if your system meets the requirements to run Group-Office.</p>';
+		echo '<h1>Welcome!</h1><p>Thank you for installing Group-Office. This page checks if your system meets the requirements to run Group-Office.</p>'.
+			'<p>If this page prints errors or warnings, please visit this page for more information: <a target="_blank" href="http://www.group-office.com/wiki/Installation">http://www.group-office.com/wiki/Installation</a></p>';
 		
 		require_once($GO_CONFIG->root_path.'install/test.inc');
 
@@ -1745,21 +1747,19 @@ switch($task)
 	<br /><br />
 	Don't use this account for regular use!
 	<br />
-	Read this to get started with Group-Office: <a href="http://docs.group-office.com/index.php?folder_id=53&file_id=0" target="_blank">http://docs.group-office.com/index.php?folder_id=53&file_id=0</a>
+	Read this to get started with Group-Office: <a href="http://www.group-office.com/wiki/Getting_started" target="_blank">http://www.group-office.com/wiki/Getting_started</a>
 	<ul>
-	<li>Navigate to the menu: Administrator menu -> Modules and install the modules you wish to use.</li>
+	<li>Navigate to the menu: Administrator menu -> Modules and remove the modules you do not wish to use.</li>
 	<li>Navigate to the menu: Administrator menu -> User groups and create user groups.</li>
 	<li>Navigate to the menu: Administrator menu -> Users users to add new users.</li>
 	</ul>
 	<br />
+	You can also configure external authentication servers such as an IMAP or POP-3.
+	Read more about it here: <a target="_blank" href="http://www.group-office.com/wiki/IMAP_authentication">http://www.group-office.com/wiki/IMAP_authentication</a>
 	<br />
-	You can also configure external authentication servers such as an IMAP, POP-3 or LDAP server.
-	Take a look at 'auth_sources.dist' for more information about this.
 	<br />
-	<br />
-	For troubleshooting please consult the <a target="_blank" href="../FAQ">FAQ</a> included with the package. 
+	For troubleshooting please visit <a target="_blank" href="http://www.group-office.com/wiki/Troubleshooting">http://www.group-office.com/wiki/Troubleshooting</a><br /> 
 	If that doesn't help post on the <a target="_blank" href="http://www.group-office.com/forum/">forums</a>.<br />
-	Developers should take a look at modules/example/index.php
 	<br /><br />
 	<div align="right">
 	<input type="button" value="Launch Group-Office!" onclick="javascript:window.location='<?php echo $GO_CONFIG->host; ?>';" />
