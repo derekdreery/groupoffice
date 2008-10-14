@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require_once($GO_LANGUAGE->get_fallback_language_file('addressbook'));
+require($GO_LANGUAGE->get_fallback_language_file('addressbook'));
 $lang['addressbook']['name'] = 'Rubrica';
 $lang['addressbook']['description'] = 'Modulo per gestire tutti i contatti.';
 

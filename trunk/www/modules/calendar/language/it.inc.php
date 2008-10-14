@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require_once($GO_LANGUAGE->get_fallback_language_file('calendar'));
+require($GO_LANGUAGE->get_fallback_language_file('calendar'));
 $lang['calendar']['name'] = 'Calendario';
 $lang['calendar']['description'] = 'Modulo calendario; Ogni utente può aggiungere, modificare o cancellare appuntamenti. Anche gli appuntamenti degli altri utenti possono essere visualizzati e modificati se necessario.';
 
