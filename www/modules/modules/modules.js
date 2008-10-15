@@ -259,7 +259,7 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel,{
 						callback: function(){
 							if(!this.store.reader.jsonData.uninstallSuccess)
 							{							
-								Ext.MessageBox.alert(GO.lang['strError'], this.reader.jsonData.uninstallFeedback);
+								Ext.MessageBox.alert(GO.lang['strError'], this.store.reader.jsonData.uninstallFeedback);
 							}
 							
 							this.availableModulesDS.reload();

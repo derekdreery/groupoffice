@@ -1,5 +1,5 @@
 GO.Languages=[
-["de", "Deutch"],
+["de", "Deutsch"],
 ["en", "English"],
 ["fr", "Francais"],
 ["it", "Italiano"],

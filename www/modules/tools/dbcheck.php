@@ -121,6 +121,17 @@ echo 'Removing dead links<br />';
 
 for($i=1;$i<=13;$i++)
 {
+	$sql = "CREATE TABLE IF NOT EXISTS `go_links_$i` (
+  `id` int(11) NOT NULL,
+  `folder_id` int(11) NOT NULL,
+  `link_id` int(11) NOT NULL,
+  `link_type` int(11) NOT NULL,
+  `description` varchar(100) NOT NULL,
+  KEY `link_id` (`link_id`,`link_type`),
+  KEY `id` (`id`,`folder_id`)
+)  DEFAULT CHARSET=utf8;";
+	$db->query($sql);
+	
 	$sql = "SELECT * FROM `go_links_$i` l WHERE NOT EXISTS (SELECT id FROM go_search_cache c WHERE c.id=l.id AND c.link_type=$i);";
 	$search->query($sql);
 	$count = $search->num_rows();	
