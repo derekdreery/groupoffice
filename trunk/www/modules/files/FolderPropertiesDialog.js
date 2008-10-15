@@ -10,7 +10,7 @@ GO.files.FolderPropertiesDialog = function(config){
 		title:GO.lang['strProperties'],
     cls:'go-form-panel',waitMsgTarget:true,
     defaultType: 'textfield',
-		labelWidth:70, 
+		labelWidth:100, 
 		border:false,   
     items: [
     		{

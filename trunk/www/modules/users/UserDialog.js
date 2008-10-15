@@ -38,7 +38,7 @@ GO.users.UserDialog = function(config){
 		
 		if(GO.files)
 		{		
-			this.tbar.push(this.fileBrowseButton = new Ext.Button({
+			config.tbar.push(this.fileBrowseButton = new Ext.Button({
 				iconCls: 'go-menu-icon-files', 
 				cls: 'x-btn-text-icon', 
 				text: GO.files.lang.files,

@@ -13,7 +13,7 @@ GO.files.FilePropertiesDialog = function(config){
 		layout:'form',
 		title:GO.lang['strProperties'],
     cls:'go-form-panel',waitMsgTarget:true,
-    labelWidth: 70,
+    labelWidth: 100,
     defaultType: 'textfield',
     items: [
     		{

@@ -1,5 +1,5 @@
 <?php
-$languages['de']='Deutch';
+$languages['de']='Deutsch';
 $languages['en']='English';
 $languages['fr']='Francais';
 $languages['it']='Italiano';

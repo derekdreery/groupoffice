@@ -367,6 +367,8 @@ class GO_MODULES extends db {
 		global $GO_SECURITY, $GO_CONFIG;
 		if ( $module = $this->get_module($module_id)) {
 			
+			$this->fire_event('uninstall_module', $module);
+			
 			$uninstall_script = $GO_CONFIG->root_path.'modules/'.$module_id.'/install/uninstall.inc.php';
 			if(file_exists($uninstall_script))
 			{
