@@ -289,7 +289,8 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
 				{
 					if(!success)
 					{
-						Ext.MessageBox.alert(GO.lang['strError'], "Connection to the internet was lost. Couldn't check for reminders.");
+						//Ext.MessageBox.alert(GO.lang['strError'], "Connection to the internet was lost. Couldn't check for reminders.");
+						//silently ignore
 					}else
 					{				
 						var data = Ext.decode(response.responseText);

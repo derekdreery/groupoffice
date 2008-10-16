@@ -50,10 +50,7 @@ GO.users.UserDialog = function(config){
 			}));
 		}
 	
-		
-	
-	
-	//config.iconCls='go-module-icon-users';
+
 	config.layout='fit';
 	config.modal=false;
 	config.resizable=false;
@@ -278,7 +275,7 @@ Ext.extend(GO.users.UserDialog, Ext.Window,{
 				{
 					this.setUserId(action.result.user_id);
 					
-					this.files_path = action.result.data.files_path;
+					this.files_path = action.result.files_path;
 				}
 			},		
 			failure: function(form, action) {
