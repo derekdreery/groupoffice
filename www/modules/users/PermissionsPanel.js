@@ -175,8 +175,8 @@ Ext.extend(GO.users.PermissionsPanel, Ext.Panel,{
 	onShow : function(){
 		GO.users.PermissionsPanel.superclass.onShow.call(this);
 		
-		if(this.groupMemberStore.baseParams.user_id!=this.user_id)
-		{
+		//if(this.groupMemberStore.baseParams.user_id!=this.user_id)
+		//{
 			this.modulePermissionsStore.baseParams.user_id=this.user_id;
 			this.groupMemberStore.baseParams.user_id=this.user_id;
 			this.groupVisibleStore.baseParams.user_id=this.user_id;
@@ -184,7 +184,7 @@ Ext.extend(GO.users.PermissionsPanel, Ext.Panel,{
 			this.groupMemberStore.load();
 			this.modulePermissionsStore.load();
 			this.groupVisibleStore.load();
-		}
+		//}
 	},
 	
 	getPermissionParameters : function(){
