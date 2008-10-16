@@ -300,7 +300,7 @@ try{
 							for ($i=0;$i<sizeof($content["to"]);$i++)
 							{
 
-								if ($content["to"][$i] != "" && !in_array(String::get_email_from_string($content["to"][$i]),$addresses))
+								if ($content["to"][$i] != "")
 								{
 									if (!isset($first))
 									{
@@ -319,7 +319,7 @@ try{
 							$response['data']['cc']='';
 							for ($i=0;$i<sizeof($content["cc"]);$i++)
 							{
-								if ($content["cc"][$i] != "" && !in_array(String::get_email_from_string($content["cc"][$i]),$addresses))
+								if ($content["cc"][$i] != "")
 								{
 									if (!isset($first))
 									{
