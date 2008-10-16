@@ -43,7 +43,8 @@ class users extends db
 
 	function __on_save_settings()
 	{
-		global $GO_USERS;
+		global $GO_USERS, $lang;
+		
 		$user['id'] = isset($_POST['user_id']) ? smart_addslashes(trim($_POST['user_id'])) : 0;
 		
 		if(isset($_POST['first_name']))
@@ -133,7 +134,7 @@ class users extends db
 
 			if($_POST["password1"] != $_POST["password2"])
 			{
-				throw new Exception($error_match_pass);
+				throw new Exception($lang['common']['passwordMatchError']);
 			}
 			if(!empty($_POST["password2"]))
 			{

@@ -25,7 +25,7 @@
  * 2=ab_contacts
  * 3=ab_companies
  * 4=no_notes
- * 5=pmProjects
+ * 5=pm_projects
  * 6=folders & files
  * 7=bs_orders
  * 8=users
