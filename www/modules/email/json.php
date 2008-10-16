@@ -260,7 +260,7 @@ try{
 						{
 							$email = String::get_email_from_string($content["to"][$i]);
 
-							if ($content["to"][$i] != "" && $account['email']!=$email && !in_array($email,$addresses))
+							if ($content["to"][$i] != "" && $account['email']!=$email)
 							{
 								$response['data']['to'] .= ",".$content["to"][$i];
 							}
@@ -273,7 +273,7 @@ try{
 						{
 							$email = String::get_email_from_string($content["cc"][$i]);
 
-							if ($content["cc"][$i] != "" && $account['email']!=$email && !in_array($email,$addresses))
+							if ($content["cc"][$i] != "" && $account['email']!=$email)
 							{
 								if (!isset($first))
 								{

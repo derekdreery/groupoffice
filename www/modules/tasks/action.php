@@ -79,8 +79,11 @@ try{
 			$task['due_time']=Date::to_unixtime($_POST['due_date']);
 			$task['start_time']=Date::to_unixtime($_POST['start_date']);
 			$task['tasklist_id']=smart_addslashes($_POST['tasklist_id']);
-			$task['status']=smart_addslashes($_POST['status']);
-			$task['description']=smart_addslashes($_POST['description']);
+			
+			if(isset($_POST['status']))
+				$task['status']=smart_addslashes($_POST['status']);
+			if(isset($_POST['description']))
+				$task['description']=smart_addslashes($_POST['description']);
 				
 			if($task['status']=='COMPLETED')
 			{
@@ -121,7 +124,7 @@ try{
 
 
 			$days = Date::shift_days_to_gmt($days, date('G', $task['due_time']), Date::get_timezone_offset($task['due_time']));
-			if($_POST['repeat_type']>0)
+			if(isset($_POST['repeat_type']) && $_POST['repeat_type']>0)
 			{
 				$task['rrule']=Date::build_rrule($_POST['repeat_type'], $repeat_every,$task['repeat_end_time'], $days, $month_time);
 			}

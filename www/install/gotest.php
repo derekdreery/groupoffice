@@ -303,6 +303,21 @@ function whereis($cmd)
 	</td>
 </tr>
 <tr>
+	<td valign="top">DOM:</td>
+	<td>
+	<?php	
+	if(!class_exists('DOMDocument', false))
+	{
+		echo '<span style="color: red;">Warning: DOM functions are not installed. Synchronization will not work. Install php-xml</span>';
+	}else
+	{
+		echo 'Ok';
+	}
+	?>
+	</td>
+</tr>
+
+<tr>
 	<td valign="top">ZIP Compression:</td>
 	<td>
 	<?php	
