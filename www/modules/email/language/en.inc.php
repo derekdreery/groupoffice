@@ -30,3 +30,6 @@ $lang['email']['attachments']='Attachments';
 
 $lang['email']['notification_subject']='Read: %s';
 $lang['email']['notification_body']='Your message with subject "%s" was displayed at %s';
+
+$lang['email']['errorGettingMessage']='Could not get message from server';
+$lang['email']['no_recipients_drafts']='No recipients';
