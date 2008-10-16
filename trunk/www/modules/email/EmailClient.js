@@ -772,7 +772,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 			this.updateNotificationEl();
 		}
 		
-		if(unseen>0)
+		if(statusEl && unseen>0)
 		{
 			statusEl.dom.innerHTML = "("+unseen+")";
 		}else

@@ -366,7 +366,7 @@ class imap {
 		if ($offset == 0 || ($last > $this->count)) {
 			$last = $this->count;
 		}
-		for ($i = $first; $i < $last; $i ++) {
+		for ($i = $first; $i < $last; $i++) {
 			$this->messages[]=$this->sort[$i];
 		}
 	}
@@ -516,19 +516,16 @@ class imap {
 			$this->message["flagged"] = $headerinfo->Flagged=='F';
 			$this->message["size"] = $headerinfo->Size;
 			$this->message["answered"] = $headerinfo->Answered=='A';
-
+			$this->message["parts"] = array();
+			
 			if($fetchstructure)
-			{
-				$this->message["parts"] = array ();
-
-				//if ($part == '') {
+			{				//if ($part == '') {
 				$structure = imap_fetchstructure($this->conn, $uid, FT_UID);
 				/*} else {
 					$structure = imap_bodystruct($this->conn, $this->message['number'], $part);
 					}*/
 
-
-				$this->mail["parts"] = array ();
+				//$this->mail["parts"] = array ();
 				$this->get_parts($structure);
 			}
 

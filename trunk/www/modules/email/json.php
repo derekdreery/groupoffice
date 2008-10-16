@@ -604,6 +604,11 @@ try{
 
 				$response = $imap->get_message($uid);
 				
+				if(!$response)
+				{
+					throw new Exception($lang['email']['errorGettingMessage']);
+				}
+				
 				//debug($response);
 				
 				if(empty($response["subject"]))
@@ -882,9 +887,9 @@ try{
 									$filtered=0;
 
 									//while($imap->next_message(($account['examine_headers']=='1' || isset($_POST['examine_headers']))))
-									while($imap->next_message(true))
+									while($imap->next_message())
 									{
-										$continue=false;
+										$break=false;
 										if(strtoupper($mailbox)=='INBOX' && $imap->f('new'))
 										{
 											for ($i=0;$i<sizeof($filters);$i++)
@@ -912,23 +917,23 @@ try{
 															}
 
 															$response['total']--;
-															$continue = true;
+															$filtered++;
+															$break=true;
 															break;
 														}
 													}
 												}
-													
-											}
+												if($break)
+												{
+													break;
+												}													
+											}											
 										}
 
-										if ($continue)
-										{
-											$filtered++;
+										if ($break)
+										{											
 											continue;
 										}
-
-
-										//echo $imap->f('subject').' - ';
 
 										if($imap->f('udate')>$day_start && $imap->f('udate')<$day_end)
 										{
@@ -938,21 +943,30 @@ try{
 											$date = date($_SESSION['GO_SESSION']['date_format'],$imap->f('udate'));
 										}
 
-
 										$subject = $imap->f('subject');
 										if(empty($subject))
 										{
 											$subject=$lang['email']['no_subject'];
 										}
 
-										$from = $mailbox == $account['sent'] ? implode(', ', $imap->f('to')) : $imap->f('from');
+										$from = ($mailbox == $account['sent'] || $mailbox == $account['drafts']) ? implode(', ', $imap->f('to')) : $imap->f('from');
 
+										if(empty($from))
+										{
+											if($mailbox==$account['drafts'])
+											{
+												$from = $lang['email']['no_recipients_drafts'];
+											}else
+											{
+												$from = $lang['email']['no_recipients'];
+											}
+										}
 										//go_log(LOG_DEBUG, $mailbox.' = '.$account['sent']);
 
 										$messages[]=array(
 							'uid'=>$imap->f('uid'),
 							'new'=>$imap->f('new'),
-							'subject'=>$subject,
+							'subject'=>htmlspecialchars($subject, ENT_QUOTES, 'UTF-8'),
 							'from'=>htmlspecialchars($from, ENT_QUOTES, 'UTF-8'),
 							'size'=>Number::format_size($imap->f('size')),
 							'date'=>$date,
@@ -976,7 +990,7 @@ try{
 								}
 
 								$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : 0;
-								$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : 0;
+								$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : 30;
 
 
 								$response['results'] = get_messages($start, $limit);

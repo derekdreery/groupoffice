@@ -28,3 +28,6 @@ $lang['link_type'][9]='E-mail';
 
 $lang['email']['notification_subject']='Gelezen: %s';
 $lang['email']['notification_body']='Uw bericht met onderwerp "%s" is getoond op %s';
+
+$lang['email']['errorGettingMessage']='Kon bericht niet ophalen van server';
+$lang['email']['no_recipients_drafts']='Geen ontvangers';
