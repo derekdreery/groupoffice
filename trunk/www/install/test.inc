@@ -147,12 +147,14 @@
 <tr>
 	<td valign="top">Error logging:</td>
 	<td>
-	<?php	
-
+	<?php
 	if(ini_get('log_errors')!='1')
 	{
 		//$fatal_error = true;
-		echo '<span style="color: red;">Warning: PHP error logging is disabled in php.ini. It\'s recommended that this feature is enabled.</span>';
+		echo '<span style="color: red;">Warning: PHP error logging is disabled in php.ini. It\'s recommended that this feature is enabled and display_errors is disabled in a production environment.</span>';
+	}else if(ini_get('display_errors')=='1')
+	{
+		echo '<span style="color: red;">Warning: PHP error display is enabled in php.ini. It\'s recommended that this feature is disabled because it can cause unnessecary interface crashes.</span>';
 	}else
 	{
 		echo 'Ok';
