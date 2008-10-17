@@ -8,6 +8,8 @@ $lang['tasks']['description']='Taken module';
 $lang['link_type'][12]=$lang['tasks']['task']='Taak';
 $lang['tasks']['status']='Status';
 
+$lang['tasks']['scheduled_call']='Telefoongesprek gepland op %s';
+
 $lang['tasks']['statuses']['NEEDS-ACTION']='Actie nodig';
 $lang['tasks']['statuses']['ACCEPTED']='Geaccepteerd';
 $lang['tasks']['statuses']['DECLINED']='Geweigerd';

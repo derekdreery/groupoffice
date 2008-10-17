@@ -9,6 +9,8 @@ $lang['link_type'][12]=$lang['tasks']['task']='Task';
 $lang['tasks']['status']='Status';
 
 
+$lang['tasks']['scheduled_call']='Scheduled call at %s';
+
 $lang['tasks']['statuses']['NEEDS-ACTION'] = 'Needs action';
 $lang['tasks']['statuses']['ACCEPTED'] = 'Accepted';
 $lang['tasks']['statuses']['DECLINED'] = 'Declined';
