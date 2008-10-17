@@ -188,7 +188,7 @@ class imap {
 	 * @return void
 	 */
 	function close() {
-		if(isset($this->conn))
+		if(isset($this->conn) && $this->conn)
 		{
 			unset ($this->messages);
 			unset ($this->count);
