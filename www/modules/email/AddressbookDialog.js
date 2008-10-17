@@ -205,12 +205,13 @@ GO.email.AddressbookDialog = function(config){
 	
 	this.tabPanel =new Ext.TabPanel({
 				activeTab:0,
-				items:items
+				items:items,
+				border:false
 			});	
 	
 
-	Ext.Window.superclass.constructor.call(this, {
-    	layout: 'fit',
+	GO.email.AddressbookDialog.superclass.constructor.call(this, {
+    layout: 'fit',
 		modal:false,
 		height:400,
 		width:600,

@@ -224,6 +224,17 @@ td.x-grid3-hd-over,td.sort-desc,td.sort-asc,td.x-grid3-hd-menu-open{border-left:
 .x-window-mr{background:transparent url(images/extjs/window/left-right.png) repeat-y right 0;padding-right:6px;zoom:1;}
 .x-window-plain .x-window-mc {background-color:#f3f5f6 !important;border-color:#acbbc0;}
 
+.x-panel-ghost{
+background:#f3f5f6;
+}
+.x-panel-ghost ul{
+	border:1px solid #d0d0d0;
+}
+.x-panel-ghost .x-window-tl {
+    border-bottom:1px solid #d0d0d0;
+}
+
+
 .x-window-plain .x-window-body {border-color:#d0d0d0 !important;}
 
 .x-html-editor-wrap{border-color:#d0d0d0 !important;}
