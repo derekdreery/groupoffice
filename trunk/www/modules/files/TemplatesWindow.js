@@ -1,7 +1,17 @@
-
-GO.files.TemplateWindow = function(config){
-	
-	
+/**
+ * Copyright Intermesh
+ *
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ *
+ * @version $Id$
+ * @copyright Copyright Intermesh
+ * @author Merijn Schering <mschering@intermesh.nl>
+ */
+ 
+GO.files.TemplateWindow = function(config){	
 	this.gridStore = new GO.data.JsonStore({
 		url: GO.settings.modules.files.url+'json.php',
 		baseParams: {
@@ -19,8 +29,7 @@ GO.files.TemplateWindow = function(config){
 		this.firstLoad=false;
 	}, this, {single:true});
 	
-	this.gridStore.load();
-	
+	this.gridStore.load();	
 	
 	this.gridPanel = new GO.grid.GridPanel( {
 			region:'center',
@@ -64,8 +73,7 @@ GO.files.TemplateWindow = function(config){
 		
 	this.gridPanel.on('rowdblclick', function(grid){
 		this.showTemplate(grid.selModel.selections.keys[0]);
-	}, this);
-	
+	}, this);	
 	
 	GO.files.TemplateWindow.superclass.constructor.call(this,{
 		title:'Templates',
@@ -79,10 +87,7 @@ GO.files.TemplateWindow = function(config){
 				text:GO.lang['cmdClose'],
 				handler: function(){this.hide()}, 
 				scope: this
-			}
-			]
-		
-		
+			}]
 	});
 }
 
@@ -91,12 +96,9 @@ Ext.extend(GO.files.TemplateWindow,Ext.Window, {
 	firstLoad : true,
 	
 	showTemplate : function(template_id)
-	{
-		
-								
+	{								
 		if(!this.templateDialog)
-		{
-			
+		{			
 			this.uploadFile = new GO.form.UploadFile({
     			inputName : 'file',
     			max: 1
@@ -194,8 +196,6 @@ Ext.extend(GO.files.TemplateWindow,Ext.Window, {
 			});								
 		}
 		
-
-		
 		this.template_id=template_id;
 		
 		this.templateTabPanel.setActiveTab(0);				
@@ -225,12 +225,10 @@ Ext.extend(GO.files.TemplateWindow,Ext.Window, {
 			params: {template_id: this.template_id, task: 'template'},
 			
 			success: function(form, action) {
-
 				this.selectUser.setRemoteText(action.result.data.user_name);
 				this.readPermissionsTab.setAcl(action.result.data.acl_read);
 				this.writePermissionsTab.setAcl(action.result.data.acl_write);
-				this.downloadButton.setDisabled(false);
-										
+				this.downloadButton.setDisabled(false);										
 		    },
 		    scope: this
 		});
@@ -270,6 +268,5 @@ Ext.extend(GO.files.TemplateWindow,Ext.Window, {
 			},
 			scope: this				
 			});
-	}
-	
+	}	
 });

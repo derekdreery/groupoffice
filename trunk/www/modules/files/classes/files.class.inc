@@ -689,13 +689,39 @@ class files extends filesystem
 
 
 
-
-
-
-
-
-
-
+	function __on_check_database()
+	{
+		global $GO_USERS, $GO_CONFIG, $GO_SECURITY;
+		
+		echo "Checking user home directories<br />";
+		
+		$GO_USERS->get_users();
+		
+		while($GO_USERS->next_record())
+		{
+			$home_dir = $GO_CONFIG->file_storage_path.'users/'.$GO_USERS->f('username');
+			if(!is_dir($home_dir))
+			{
+				mkdir($home_dir, $GO_CONFIG->create_mode,true);
+				echo "Creating users/".$GO_USERS->f('username')."<br />";
+			}
+			
+			$folder = $this->get_folder($home_dir);
+			
+			if(empty($folder['acl_read']))
+			{
+				echo "Sharing users/".$GO_USERS->f('username')."<br />";
+				
+				$up_folder['id']=$folder['id'];
+				$up_folder['user_id']=$GO_USERS->f('id');
+				$up_folder['acl_read']=$GO_SECURITY->get_new_acl('files', $GO_USERS->f('id'));
+				$up_folder['acl_write']=$GO_SECURITY->get_new_acl('files', $GO_USERS->f('id'));
+				$up_folder['visible']='1';
+				
+				$this->update_folder($up_folder);
+			}	
+		}
+	}
 
 
 

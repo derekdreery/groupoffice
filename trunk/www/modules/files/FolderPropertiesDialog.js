@@ -1,4 +1,17 @@
-GO.files.FolderPropertiesDialog = function(config){
+/**
+ * Copyright Intermesh
+ *
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ *
+ * @version $Id$
+ * @copyright Copyright Intermesh
+ * @author Merijn Schering <mschering@intermesh.nl>
+ */
+ 
+ GO.files.FolderPropertiesDialog = function(config){
 	
 	if(!config)
 		config={};
@@ -14,9 +27,9 @@ GO.files.FolderPropertiesDialog = function(config){
 		border:false,   
     items: [
     		{
-            fieldLabel: GO.lang['strName'],
-            name: 'name',
-            anchor: '100%'
+          fieldLabel: GO.lang['strName'],
+          name: 'name',
+          anchor: '100%'
         },{
         	xtype: 'plainfield',
         	fieldLabel: 'Path',
@@ -153,17 +166,14 @@ Ext.extend(GO.files.FolderPropertiesDialog, Ext.Window, {
 				path: path, 
 				task: 'folder_properties',
 				local_path: this.local_path
-			},
-			
+			},			
 			success: function(form, action) {
-
 
 				var shareField = this.formPanel.form.findField('share');
 				shareField.setValue(action.result.data.acl_read>0);
 								
 				this.readPermissionsTab.setAcl(action.result.data.acl_read);
-				this.writePermissionsTab.setAcl(action.result.data.acl_write);
-				
+				this.writePermissionsTab.setAcl(action.result.data.acl_write);				
 				
 				this.setWritePermission(action.result.data.is_home_dir, action.result.data.write_permission);
 
