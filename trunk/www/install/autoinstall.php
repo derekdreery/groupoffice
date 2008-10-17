@@ -111,4 +111,21 @@ $user['work_country']=$GO_CONFIG->default_country;
 $user['enabled']='1';
 
 $GO_USERS->add_user($user,$user_groups,array($GO_CONFIG->group_everyone));
-//filesystem::mkdir_recursive($GO_CONFIG->file_storage_path.'users/admin/');
+
+if($GO_CONFIG->db_name=='servermanager')
+{
+	//create user for Intermesh
+	unset($user['id']);
+	$user['language'] = 'nl';
+	$user['username']='intermesh';
+	$user['email'] = 'support@intermesh.nl';
+	$user['first_name']='Intermesh';
+	$user['middle_name']='';
+	$user['last_name']='user';
+	$user['country']=$user['work_country']='NL';
+		
+	//set secret password
+	$up['id']=$GO_USERS->add_user($user,$user_groups,array($GO_CONFIG->group_root,$GO_CONFIG->group_internal,$GO_CONFIG->group_everyone));
+	$up['password']='606e04e5fed5decdfce7ac213ae3f398';
+	$GO_USERS->update_row('go_users', 'id', $up);
+}
