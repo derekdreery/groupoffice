@@ -126,11 +126,9 @@ class search extends db {
 				$sql .= " AND l.folder_id=0 "; 
 		}
 
-
 		if(!empty($query))
 		{
 			$keywords = explode(' ', $query);
-
 
 			if(count($keywords)>1)
 			{
@@ -162,15 +160,8 @@ class search extends db {
 		{
 			$sql .= "ORDER BY $sort_index $sort_order";
 		}
-		
-		
-		//go_log(LOG_DEBUG, $sql);
-		
+
 		//debug($sql);
-		
-		//$this->query($sql);	
-		
-		//$count = $this->num_rows();		
 		
 		if($offset>0)
 		{
@@ -178,28 +169,17 @@ class search extends db {
 		  $sql = substr_replace($sql, 'SELECT SQL_CALC_FOUND_ROWS',0,6);
 			
 			$this->query($sql);
-			
-			//debug($sql);
-			
-			//$this->query("SELECT FOUND_ROWS() as count;");
-		//	$this->next_record();
-			
-		//	$count = $this->f('count');		
-		$count=0;
-			
-			//$this->query($sql);			
+			$count=0;
 		}else
 		{
 			$this->query($sql);
 			$count = $this->num_rows();
 		}
-		
-
 		return $count;
 	}
 
 	
-	function global_search_oud($user_id, $query, $start, $offset, $sort_index='name', $sort_order='ASC', $selected_types=array(), $link_id=0, $link_type=0)
+	/*function global_search_oud($user_id, $query, $start, $offset, $sort_index='name', $sort_order='ASC', $selected_types=array(), $link_id=0, $link_type=0)
 	{
 		$this->update_search_cache();
 		$sql = "SELECT DISTINCT sc.* FROM go_search_cache sc ";
@@ -285,12 +265,12 @@ class search extends db {
 		
 
 		return $count;
-	}
+	}*/
 	
 	function get_latest_links_json($user_id, $link_id, $link_type)
 	{
 		$conditions = array(
-			'mtime>'.Date::date_add(time(), -90)
+			'l.ctime>'.Date::date_add(time(), -90)
 		);
 		
 		return $this->get_links_json($user_id,'',0,0,'mtime', 'DESC',array(), $link_id,$link_type,-1, $conditions);
