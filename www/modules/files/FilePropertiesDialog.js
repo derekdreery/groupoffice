@@ -1,13 +1,22 @@
+/**
+ * Copyright Intermesh
+ *
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ *
+ * @version $Id$
+ * @copyright Copyright Intermesh
+ * @author Merijn Schering <mschering@intermesh.nl>
+ */
 
-
-GO.files.FilePropertiesDialog = function(config){
-	
+GO.files.FilePropertiesDialog = function(config){	
 	
 	if(!config)
 		config={};
 		
-	this.local_path=config.local_path;
-	
+	this.local_path=config.local_path;	
 	
 	this.propertiesPanel = new Ext.Panel({
 		layout:'form',
@@ -58,10 +67,6 @@ GO.files.FilePropertiesDialog = function(config){
         }
     ]
 	});
-	
-
-
-	
 		
 	this.commentsPanel = new Ext.Panel({
 		layout:'form',
@@ -111,24 +116,18 @@ GO.files.FilePropertiesDialog = function(config){
 				text:GO.lang['cmdApply'],
 				handler: function(){this.save(false)}, 
 				scope: this
-			},
-			
+			},			
 			{
 				text:GO.lang['cmdClose'],
 				handler: function(){this.hide()}, 
 				scope: this
-			}
-			]
-		
-		
+			}]
 	});
 	
 	this.addEvents({'rename' : true});
 }
 
 Ext.extend(GO.files.FilePropertiesDialog, Ext.Window, {
-	
-	
 	
 	show : function(path)
 	{
@@ -143,13 +142,9 @@ Ext.extend(GO.files.FilePropertiesDialog, Ext.Window, {
 				path: path, 
 				task: 'file_properties',
 				local_path: this.local_path
-			},
-			
-			success: function(form, action) {
-			
-				
+			},			
+			success: function(form, action) {				
 				this.setWritePermission(action.result.data.write_permission);
-
 				this.tabPanel.setActiveTab(0);
 				
 		    GO.files.FilePropertiesDialog.superclass.show.call(this);
@@ -158,9 +153,7 @@ Ext.extend(GO.files.FilePropertiesDialog, Ext.Window, {
 				Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback);
 			},
 	    scope: this
-		});
-		
-		
+		});		
 	},
 	
 	setWritePermission : function(writePermission)
@@ -181,7 +174,6 @@ Ext.extend(GO.files.FilePropertiesDialog, Ext.Window, {
 			},
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){
-
 				if(action.result.path)
 				{
 					this.path=action.result.path;
@@ -191,10 +183,8 @@ Ext.extend(GO.files.FilePropertiesDialog, Ext.Window, {
 				if(hide)
 				{
 					this.hide();
-				}				
-				
-			},
-	
+				}								
+			},	
 			failure: function(form, action) {
 				var error = '';
 				if(action.failureType=='client')
@@ -207,9 +197,7 @@ Ext.extend(GO.files.FilePropertiesDialog, Ext.Window, {
 				
 				Ext.MessageBox.alert(GO.lang['strError'], error);
 			},
-			scope:this
-			
-		});
-			
+			scope:this			
+		});			
 	}
 });
