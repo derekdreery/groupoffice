@@ -1550,10 +1550,10 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
   	
   	if(load)
   	{
-    	if(!oldEndDate || !oldStartDate || oldEndDate.getElapsed(this.endDate)!=0 || oldStartDate.getElapsed(this.startDate)!=0)
-    	{    			     		
+    	//if(!oldEndDate || !oldStartDate || oldEndDate.getElapsed(this.endDate)!=0 || oldStartDate.getElapsed(this.startDate)!=0)    	
+    	//{    			     		
 	    	this.store.reload();    			    	
-    	}
+    	//}
   	} 
   },
   

@@ -426,12 +426,10 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		}else
 		{
 			this.state = Ext.decode(this.state);
-		}
-		
+		}		
 		
 		this.calendarsStore.load({
-			callback:function(){
-				
+			callback:function(){				
 				if(this.state.displayType!='view')
 				{
 					if(this.state.calendar_id==0)
@@ -440,17 +438,13 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					}
 					this.calendarList.select('calendar-'+this.state.calendar_id);
 					this.setDisplay(this.state);
-				}		
-				
+				}
 			},
-			scope:this
-			
-		});
-		
+			scope:this			
+		});		
 		
 		this.viewsStore.load({
-			callback:function(){
-				
+			callback:function(){				
 				if(this.state.displayType=='view')
 				{
 					this.viewsList.select('view-'+this.state.view_id);
@@ -458,21 +452,9 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				}		
 				
 			},
-			scope:this
-			
-		});
-		
-		
-		
-		this.createDaysGrid();
-	
-		
-		
-		
-	
-		
-		//this.eventDialog = new GO.calendar.EventDialog(this);
-			
+			scope:this			
+		});		
+		this.createDaysGrid();			
 	},
 	
 	deleteHandler : function(){
@@ -755,8 +737,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		{
 			this.view_id=config.view_id;
 			this.viewGrid.setViewId(config.view_id);
-		}
-		
+		}		
 		
 		if(config.date)
 		{

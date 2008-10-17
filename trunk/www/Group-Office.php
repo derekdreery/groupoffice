@@ -122,6 +122,11 @@ if($GO_SECURITY->user_id>0)
 	$GO_CONFIG->tmpdir=$GO_CONFIG->tmpdir.$GO_SECURITY->user_id.'/';
 }
 
+if(!is_dir($GO_CONFIG->tmpdir))
+{
+	mkdir($GO_CONFIG->tmpdir,0755, true);
+}
+
 unset($type);
 
 define('GO_LOADED', true);
