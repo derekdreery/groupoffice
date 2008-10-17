@@ -56,6 +56,24 @@ try{
 				12);
 			}
 			
+			if(isset($GO_MODULES->modules['comments']))
+			{
+				require_once ($GO_LANGUAGE->get_language_file('tasks'));
+				
+				require_once($GO_MODULES->modules['comments']['class_path'].'comments.class.inc.php');
+				$comments = new comments();
+				
+				$comment['comments']=sprintf($lang['tasks']['scheduled_call'], Date::get_timestamp($task['reminder']));
+				if(!empty($task['description']))
+					$comment['comments'] .= "\n\n".$task['description'];
+					
+				$comment['link_id']=smart_addslashes($link['link_id']);
+				$comment['link_type']=smart_addslashes($link['link_type']);			
+				$comment['user_id']=$GO_SECURITY->user_id;
+				
+				$comments->add_comment($comment);
+			}
+			
 			
 			$response['success']=true;
 			
