@@ -27,10 +27,6 @@ require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 $imap = new imap();
 $email = new email();
 
-
-
-
-
 function get_all_mailbox_nodes($account_id, $folder_id){
 
 	global $lang;
@@ -144,9 +140,7 @@ function get_mailbox_nodes($account_id, $folder_id){
 			);
 		}
 	}
-
 	return $response;
-
 }
 
 
@@ -1013,11 +1007,7 @@ try{
 								break;
 
 										case 'tree':
-
 											$email = new email();
-
-
-
 											//$account_id=isset($_REQUEST['account_id']) ? smart_addslashes($_REQUEST['account_id']) : 0;
 											//$folder_id=isset($_REQUEST['folder_id']) ? smart_addslashes($_REQUEST['folder_id']) : 0;
 
@@ -1046,6 +1036,8 @@ try{
 													{
 														$text = $email2->f('email');
 														$children = get_mailbox_nodes($email2->f('id'), 0);
+														
+														$imap->close();
 													}else
 													{
 														$text = $email2->f('email').' (Error!)';
@@ -1053,39 +1045,31 @@ try{
 													}
 
 													$response[] = array(
-						'text'=>$text,
-						'id'=>'account_'.$email2->f('id'),
-						'iconCls'=>'folder-account',
-						'expanded'=>true,
-						'account_id'=>$email2->f('id'),
-						'folder_id'=>0,
-						'mailbox'=>'INBOX',
-						'children'=>$children,
-						'inbox_new'=>$inbox_new
+														'text'=>$text,
+														'id'=>'account_'.$email2->f('id'),
+														'iconCls'=>'folder-account',
+														'expanded'=>true,
+														'account_id'=>$email2->f('id'),
+														'folder_id'=>0,
+														'mailbox'=>'INBOX',
+														'children'=>$children,
+														'inbox_new'=>$inbox_new
 													);
-													
-													$imap->close();													
 												}
 											}else
 											{
-
 												$folder_id=$node_id;
-
 
 												$folder = $email->get_folder_by_id($folder_id);
 												$account = connect($folder['account_id']);
 
 												$response = get_mailbox_nodes(0, $folder_id);
 											}
-
 											break;
 
-
 										case 'tree-edit':
-
 											$email = new email();
 											$email2 = new email();
-
 
 											$account_id = smart_addslashes($_POST['account_id']);
 											if(isset($_REQUEST['node']) && strpos($_REQUEST['node'],'_'))
@@ -1097,15 +1081,10 @@ try{
 												$folder_id=0;
 											}
 
-
 											$account = $email->get_account($account_id);
 											$email->synchronize_folders($account);
 
-
 											$response = get_all_mailbox_nodes($account_id, $folder_id);
-
-
-
 											break;
 
 										case 'accounts':
@@ -1153,23 +1132,17 @@ try{
 					'type'=>$email->f('type')
 												);
 											}
-
-
-
 											break;
 
 										case 'account':
-
 											$email = new email();
 											$response['success']=false;
 											$response['data']=$email->get_account(smart_addslashes($_POST['account_id']));
-
 
 											if($response['data'])
 											{
 												$user = $GO_USERS->get_user($response['data']['user_id']);
 												$response['data']['user_name']=String::format_name($user['last_name'],$user['first_name'], $user['middle_name']);
-
 
 												if(isset($GO_MODULES->modules['serverclient']))
 												{
@@ -1202,13 +1175,8 @@ try{
 														}
 													}
 												}
-
-
-
 												$response['success']=true;
 											}
-
-
 											break;
 
 										case 'all_folders':
@@ -1216,8 +1184,6 @@ try{
 
 											if(isset($_POST['deleteFolders']))
 											{
-
-
 												$deleteFolders = json_decode(smart_stripslashes($_POST['deleteFolders']));
 												if(count($deleteFolders))
 												{
@@ -1234,7 +1200,6 @@ try{
 
 														}
 													}
-													//$imap->close();
 												}
 											}
 
