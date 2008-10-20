@@ -17,7 +17,7 @@
  */
 
 //Uncomment this line in new translations!
-require($GO_LANGUAGE->get_fallback_language_file('addressbook'));
+require_once($GO_LANGUAGE->get_fallback_language_file('addressbook'));
 
 $lang['addressbook']['name'] = 'Carnet d\'adresses';
 $lang['addressbook']['description'] = 'Module de gestion des contacts.';

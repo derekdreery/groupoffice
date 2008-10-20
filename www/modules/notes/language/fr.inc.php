@@ -4,13 +4,13 @@
 //Date : September, 05 2008
 
 //Uncomment this line in new translations!
-require($GO_LANGUAGE->get_fallback_language_file('notes'));
+require_once($GO_LANGUAGE->get_fallback_language_file('notes'));
 
 $modules['notes']['name']='Notes';
 $modules['notes']['description']='Module de gestion des notes.';
 $lang['notes']['note']='Note';
-$lang['notes']['name']='Titre';
-$lang['notes']['description']='Description de la note';
+$lang['notes']['name']='Notes';
+$lang['notes']['description']='Module de gestion des notes.';
 
 $lang['notes']['category']='Catégorie';
 $lang['notes']['categories']='Catégories';

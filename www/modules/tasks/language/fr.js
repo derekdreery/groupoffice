@@ -41,8 +41,12 @@ GO.tasks.lang.atDays = 'Aux jours';
 GO.tasks.lang.repeatUntil = 'Répéter jusqu\'à';
 GO.tasks.lang.repeatForever = 'Répéter pour toujours';
 GO.tasks.lang.recurrence = 'Récurrence';
-GO.tasks.lang.reminder = 'Rappel';
 GO.tasks.lang.options = 'Options';
 GO.tasks.lang.createLink = 'Créer un lien';
 GO.tasks.lang.startsAt='Débute à';
 GO.tasks.lang.showInactiveTasks='Afficher les tâches inactives';
+
+// 3.0-14
+GO.tasks.lang.remindMe= 'Me le rappeler';
+GO.tasks.lang.scheduleCall='Planifier un appelSchedule call';
+GO.tasks.lang.call='Appel';

@@ -8,4 +8,7 @@ $lang['tools']['description']='Outils d\'administration. Gérer les tâche syst�
 
 $lang['tools']['dbcheck']='Vérification de la base de données';
 $lang['tools']['rm_duplicates']='Supprimer les doublons dans les contacts et les rendez-vous';
+
+// 3.0-14
+$lang['tools']['backupdb']='Sauvegarder la base de données';
 ?>

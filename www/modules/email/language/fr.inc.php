@@ -4,7 +4,7 @@
 //Date : September, 04 2008
 
 //Uncomment this line in new translations!
-require($GO_LANGUAGE->get_fallback_language_file('email'));
+require_once($GO_LANGUAGE->get_fallback_language_file('email'));
 
 $lang['email']['name'] = 'E-mail';
 $lang['email']['description'] = 'Module de gestion des E-mails. chaque utilisateur peut envoyer, recevoir et tranférer des messages.';
@@ -32,3 +32,7 @@ $lang['email']['subject']='Sujet';
 $lang['email']['no_recipients']='Pas de destinataire';
 $lang['email']['original_message']='----- MESSAGE ORIGINAL -----';
 $lang['email']['attachments']='Pièces jointes';
+
+// 3.0-14
+$lang['email']['notification_subject']='Lire : %s';
+$lang['email']['notification_body']='Votre message ayant pour sujet "%s" a été lu à %s';

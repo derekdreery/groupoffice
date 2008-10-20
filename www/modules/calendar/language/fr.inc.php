@@ -4,7 +4,7 @@
 //Date : September, 04 2008
 
 //Uncomment this line in new translations!
-require($GO_LANGUAGE->get_fallback_language_file('calendar'));
+require_once($GO_LANGUAGE->get_fallback_language_file('calendar'));
 
 $lang['calendar']['name'] = 'Calendrier';
 $lang['calendar']['description'] = 'Module de gestion du calendrier. Chaque utilisateur peut ajouter, éditer ou supprimer des rendez-vous. Les rendez-vous des autres utilisateurs peuvent être consultés (selon les permissions accordées).';

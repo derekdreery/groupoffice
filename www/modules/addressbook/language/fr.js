@@ -94,3 +94,8 @@ GO.addressbook.lang.moveAll = 'La société ainsi que tous ses employés vont ê
 GO.addressbook.lang.addressbook = 'Carnet d\adresses';
 GO.addressbook.lang.addressbooks = 'Carnets d\adresses';
 GO.addressbook.lang.sendMailing='Envoyer un mailing';
+
+// 3.0-14
+GO.addressbook.lang.importSuccess='Données importées avec succès';
+GO.addressbook.lang.searchOnSender='Rechercher';
+GO.addressbook.lang.confirmCreate='Le contact n\'existe pas. voulez-vous créer un nouveau contact ?';

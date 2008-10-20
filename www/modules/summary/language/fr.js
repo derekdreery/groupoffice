@@ -29,3 +29,10 @@ GO.summary.lang.notes = 'Notes';
 GO.summary.lang.loadingFeed = 'Chargement des fluxs...';
 GO.summary.lang.goToPost = 'Lire l\'article';
 GO.summary.lang.today = 'Aujourd\'hui ';
+
+// 3.0-14
+GO.summary.lang.announcement="Annonce";
+GO.summary.lang.announcements="Annonces";
+GO.summary.lang.dueTime="Afficher jusqu\'à";
+GO.summary.lang.title="Titre";
+GO.summary.lang.manageAnnouncements='Gérer les annonces';

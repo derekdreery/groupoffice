@@ -198,11 +198,6 @@ GO.lang.strLoggedInAs= 'Connecté en tant que';
 
 GO.lang.strErrorsInForm= 'vous avez des erreurs dans votre formulaire. Les champs invalides sont mis en valeur.';
 
-Ext.MessageBox.buttonText.yes = GO.lang['cmdYes'];
-Ext.MessageBox.buttonText.no = GO.lang['cmdNo'];
-Ext.MessageBox.buttonText.ok = GO.lang['cmdOk'];
-Ext.MessageBox.buttonText.cancel = GO.lang['cmdCancel'];
-
 GO.lang.strMinute="Minute";
 GO.lang.strMinutes="Minutes";
 GO.lang.strHour="Heure";
@@ -364,7 +359,6 @@ GO.lang.countries["HU"] = "Hongrie";
 GO.lang.countries["ID"] = "Indonésie";
 GO.lang.countries["IE"] = "Irlande";
 GO.lang.countries["IL"] = "Israël";
-GO.lang.countries["IM"] = "Man (Ile)";
 GO.lang.countries["IN"] = "Inde";
 GO.lang.countries["IO"] = "Inde Britanique Océanique";
 GO.lang.countries["IS"] = "Islande";
@@ -447,7 +441,6 @@ GO.lang.countries["SB"] = "Salomon (Iles)";
 GO.lang.countries["SC"] = "Seychelles";
 GO.lang.countries["SD"] = "Soudan";
 GO.lang.countries["SE"] = "Suède";
-GO.lang.countries["SG"] = "Singapour";
 GO.lang.countries["SH"] = "St Hélène";
 GO.lang.countries["SI"] = "Slovénie";
 GO.lang.countries["SJ"] = "Svalbard & Jan Mayen (Iles)";
@@ -464,7 +457,6 @@ GO.lang.countries["SZ"] = "Swaziland";
 GO.lang.countries["TC"] = "Turks & Caicos (Iles)";
 GO.lang.countries["TD"] = "Tchad";
 GO.lang.countries["TG"] = "Togo";
-GO.lang.countries["TH"] = "Thaïlande";
 GO.lang.countries["TJ"] = "Tadjikistan";
 GO.lang.countries["TK"] = "Tokelau";
 GO.lang.countries["TM"] = "Turkménistan";
@@ -487,7 +479,6 @@ GO.lang.countries["VC"] = "St Vincent & Grenadine";
 GO.lang.countries["VE"] = "Venezuela";
 GO.lang.countries["VG"] = "Vierges (Iles-GB)";
 GO.lang.countries["VI"] = "Vierges (Iles-USA)";
-GO.lang.countries["VN"] = "Vietnam";
 GO.lang.countries["VU"] = "Vanuatu";
 GO.lang.countries["WF"] = "Wallis et Futuna (Iles)";
 GO.lang.countries["WS"] = "Samoa Occidental";
@@ -498,3 +489,9 @@ GO.lang.countries["ZA"] = "Afrique du Sud";
 GO.lang.countries["ZM"] = "Zambie";
 GO.lang.countries["ZR"] = "Zaïre";
 GO.lang.countries["ZW"] = "Zimbabwe";
+
+// 3.0-14
+GO.lang.fullscreen='Plein écran';
+GO.lang.popupBlocker= 'Votre navigateur est en train de bloquer une fenêtre popup de Group-Office. Veuillez désactiver le blocage des popups pour ce site';
+GO.lang.color='Couleur';
+GO.lang.countries["TF"]= "Terres Australes et Antarctiques Françaises";
