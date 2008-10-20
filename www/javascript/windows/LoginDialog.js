@@ -175,6 +175,7 @@ GO.dialog.LoginDialog = function(config){
         }]
     });
     
+    this.addEvents({callbackshandled: true});
     
 };
 
@@ -234,6 +235,8 @@ Ext.extend(GO.dialog.LoginDialog, Ext.Window, {
 		}
 		
 		this.callbacks=[];
+		
+		this.fireEvent('callbackshandled', this);
 	},
 	
 	completeProfileDialog : function(){
