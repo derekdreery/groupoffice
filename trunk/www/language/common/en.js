@@ -203,10 +203,6 @@ GO.lang.strErrorsInForm= 'You have errors in your form. The invalid fields are m
 
 
 
-Ext.MessageBox.buttonText.yes = GO.lang['cmdYes'];
-Ext.MessageBox.buttonText.no = GO.lang['cmdNo'];
-Ext.MessageBox.buttonText.ok = GO.lang['cmdOk'];
-Ext.MessageBox.buttonText.cancel = GO.lang['cmdCancel'];
 
 
 GO.lang.strMinute="Minute";

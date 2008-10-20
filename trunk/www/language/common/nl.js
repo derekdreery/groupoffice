@@ -256,11 +256,6 @@ GO.lang.popupBlocker= 'Uw browser blokkeerd een popup van Group-Office. Schakel 
 GO.lang.strUsage='Gebruiksstatistieken';
 
 
-Ext.MessageBox.buttonText.yes= GO.lang['cmdYes'];
-Ext.MessageBox.buttonText.no= GO.lang['cmdNo'];
-Ext.MessageBox.buttonText.ok= GO.lang['cmdOk'];
-Ext.MessageBox.buttonText.cancel= GO.lang['cmdCancel'];
-
 GO.lang.countries["AF"]= "Afghanistan";
 GO.lang.countries["AL"]= "Albania";
 GO.lang.countries["DZ"]= "Algeria";
