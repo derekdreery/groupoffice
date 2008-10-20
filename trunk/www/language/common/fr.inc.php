@@ -4,7 +4,7 @@
 //Date : September, 04 2008
 
 //Uncomment this line in new translations!
-require($GO_LANGUAGE->get_fallback_base_language_file('common'));
+require_once($GO_LANGUAGE->get_fallback_base_language_file('common'));
 
 $lang['common']['htmldirection']= 'ltr';
 
@@ -160,4 +160,7 @@ Mot de passe : %s';
 
 $lang['common']['lost_password_error']='Impossible de trouver l\'adresse email demandée.';
 $lang['common']['lost_password_success']='Un nouveau mot de passe vient de vous être envoyé.';
+
+// 3.0-14
+$lang['common']['postAddressHead']= 'Adresse postale';
 

@@ -72,14 +72,17 @@ function check_encoding($file)
 
 function compare_files($file1, $file2, $type)
 {
+	global $GO_CONFIG;
+	
 	$content1 = get_contents($file1);
 	$content2 = get_contents($file2);
 	
 	
 	
-	if(!$content1 || !$content2)
-		echo '<i><font color="red">Could not compare '.$type.', because one of the translations doesn\'t exist!</font></i><br />';
-	else
+	if($content1 && !$content2)
+		echo '<i><font color="red">Could not compare '.str_replace($GO_CONFIG->root_path, '', $file1).', because the translation doesn\'t exist!</font></i><br />';
+	
+	if($content1 && $content2)
 	{
 		check_encoding($file1);
 		check_encoding($file2);
@@ -101,9 +104,7 @@ echo '<hr>';
 foreach($modules as $module)
 {
 	echo '<h3>MODULE: '.$module['id'].'</h3>';
-	
-	
-	
+
 	compare_files($module['path'].'language/'.$lang1.'.inc.php', $module['path'].'language/'.$lang2.'.inc.php', 'php');
 	compare_files($module['path'].'language/'.$lang1.'.js', $module['path'].'language/'.$lang2.'.js', 'js');
 	

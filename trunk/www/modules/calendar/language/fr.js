@@ -71,3 +71,6 @@ GO.calendar.lang.selectCalendar = 'Selectionnez un calendrier';
 GO.calendar.lang.selectCalendarForAppointment = 'Selectionnez le calendrier dans lequel il faut mettre le rendez-vous :';
 GO.calendar.lang.closeWindow = 'Le rendez-vous a été accepté et programmé. Vous pouvez fermer cette fenêtre.';
 GO.calendar.lang.list='Liste';
+
+// 3.0-14
+GO.calendar.lang.editRecurringEvent='Voulez-vous éditer cette occurence ou la série complète ?';

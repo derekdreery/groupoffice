@@ -123,3 +123,7 @@ GO.email.lang.addToCC = 'Ajouter en copie';
 GO.email.lang.addToBCC = 'Ajouter en copie cachée';
 
 GO.email.lang.viewSource='Voir la source du message';
+
+// 3.0-14
+GO.email.lang.sendNotification='L\'expéditeur de ce message a demandé une notification de lecture : %s. Voulez-vous envoyé la notification maintenant ?';
+GO.email.lang.searchOnSender='Afficher les messages';

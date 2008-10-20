@@ -4,8 +4,8 @@ GO.users.lang.cmdCheckColumnGroups= 'Gruppen';
 GO.users.lang.cmdHeaderColumnName= 'Modulname';
 GO.users.lang.cmdHeaderColumnGroups= 'Gruppen';
 GO.users.lang.cmdHeaderGridUserHasAccess = 'Der Benutzer hat Zugriff auf';
-GO.users.lang.cmdHeaderGridUserIsMemberOf = 'Der Benutzer ist Mitglied von';
-GO.users.lang.cmdHeaderGridUserVisibleTo = 'Der Benutzer ist für folgende Gruppen sichtbar';
+GO.users.lang.userIsMemberOf = 'Der Benutzer ist Mitglied von';
+GO.users.lang.userVisibleTo = 'Der Benutzer ist für folgende Gruppen sichtbar';
 
 GO.users.lang.cmdPanelPersonal = 'Persönlich';
 GO.users.lang.cmdPanelPassword= 'Passwort';

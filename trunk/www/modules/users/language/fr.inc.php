@@ -4,7 +4,7 @@
 //Date : September, 05 2008
 
 //Uncomment this line in new translations!
-require($GO_LANGUAGE->get_fallback_language_file('users'));
+require_once($GO_LANGUAGE->get_fallback_language_file('users'));
 
 $lang['users']['name'] = 'Utilisateurs';
 $lang['users']['description'] = 'Module Admin. Gérer les utilisateurs de Group-Office.';
