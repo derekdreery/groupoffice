@@ -117,7 +117,7 @@ class GO_SECURITY extends db {
 		SetCookie("GO_UN","",time()-3600,"/","",0);
 		SetCookie("GO_PW","",time()-3600,"/","",0);
 		unset($_SESSION);
-		unset($_COOKIE);
+		//unset($_COOKIE);
 		session_destroy();
 		$this->user_id = 0;
 		

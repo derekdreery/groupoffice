@@ -144,6 +144,10 @@ try{
 				SetCookie("GO_UN",$username,time()+3600*24*30,"/",'',0);
 				SetCookie("GO_PW",$password,time()+3600*24*30,"/",'',0);
 			}
+			
+			$fullscreen = isset($_POST['fullscreen']) ? '1' : '0';
+			
+			SetCookie("GO_FULLSCREEN",$fullscreen,time()+3600*24*30,"/",'',0);
 				
 			$response['user_id']=$GO_SECURITY->user_id;
 			$response['name']=$_SESSION['GO_SESSION']['name'];

@@ -25,12 +25,22 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 
 	ready : false,
 	
+	fullscreenPopup : false,
+	
 	onReady : function(fn, scope){		
 		if(!this.ready){
 			this.on('ready', fn, scope);
 		}else{
 			fn.call(scope, this);
 		}
+	},
+	
+	launchFullscreen : function(url)
+	{
+		this.fullscreenPopup = GO.util.popup({
+			url: url,
+			target: 'groupoffice'
+		});	
 	},
 	
 	
@@ -42,14 +52,18 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		
 		GO.loginDialog.addCallback(function(){
 				var url = GO.afterLoginUrl ? GO.afterLoginUrl : GO.settings.config.host;
-			
-				document.location.href=url;
-			});
+				if(GO.loginDialog.fullscreenField.getValue() && window.name!='groupoffice')
+				{
+					this.launchFullscreen(url);
+					GO.loginDialog.hideDialog=false;
+				}else
+				{
+					document.location.href=url;
+				}
+			}, this);
 		GO.loginDialog.show();
 		
-		
-		this.removeLoadMask();
-		
+		this.removeLoadMask();		
 	},
 	
 	fireReady : function(){

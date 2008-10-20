@@ -336,19 +336,24 @@ GO.util.numberFormat = function (number, decimals, decimal_seperator, thousands_
 	return formattedNumber;
 }
 
-GO.util.popup = function (url,width,height)
+GO.util.popup = function (config)
 {
-	if(width > 0 && height > 0)
+	if(!config.width)
 	{
-		var centered;
-		x = (screen.availWidth - width) / 2;
-		y = (screen.availHeight - height) / 2;
-		centered =',width=' + width + ',height=' + height + ',left=' + x + ',top=' + y + ',scrollbars=yes,resizable=yes,status=yes';
-	}else
+		config.width = screen.availWidth;
+		config.height = screen.availHeight;
+	}
+	if(!config.target)
 	{
-		centered = 'scrollbars=yes,resizable=yes,status=yes';
-	}	
-	var popup = window.open(url, '_blank', centered);
+		config.target='_blank';
+	}
+
+	var centered;
+	x = (screen.availWidth - config.width) / 2;
+	y = (screen.availHeight - config.height) / 2;
+	centered =',width=' + config.width + ',height=' + config.height + ',left=' + x + ',top=' + y + ',scrollbars=yes,resizable=yes,status=no';
+
+	var popup = window.open(config.url, config.target, centered);
 	
 	if(!popup)
 	{
@@ -357,7 +362,8 @@ GO.util.popup = function (url,width,height)
 	}
 	
   if (!popup.opener) popup.opener = self;
-		popup.focus();
+  
+	popup.focus();
 	
 	return popup;
 }

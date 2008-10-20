@@ -851,7 +851,13 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 							{    					
 	    					var local_path = this.local_path ? 'true' : false;
 	    					
-	    					GO.util.popup(GO.settings.modules.files.url+'jupload/index.php?path='+encodeURIComponent(this.path)+'&local_path='+local_path, '640','500');
+	    					GO.util.popup({
+	    						url: GO.settings.modules.files.url+'jupload/index.php?path='+encodeURIComponent(this.path)+'&local_path='+local_path, 
+	    						width : 640,
+	    						height: 500,
+	    						target: 'jupload'
+	    					});
+	    					
 	    					this.uploadDialog.hide();
 	    					//for refreshing by popup
 	    					GO.currentFilesStore = this.gridStore;

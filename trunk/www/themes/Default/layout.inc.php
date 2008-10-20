@@ -23,7 +23,14 @@ require($GO_THEME->theme_path.'default_head.inc.php');
 <?php
 require($GO_CONFIG->root_path.'default_scripts.inc.php');
 
-if($GO_SECURITY->logged_in() && trim($_SESSION['GO_SESSION']['name']) != '')
+/*
+ * If we don't have a name of the user then we don't open Group-Office yet. The login dialog will ask to complete the 
+ * profile. This typically happens when IMAP authentication is used. A user without a name is added.
+ * 
+ * When $popup_groupoffice is set in /default_scripts.inc.php we need to display the login dialog and launch GO in a popup.
+ */
+
+if($GO_SECURITY->logged_in() && trim($_SESSION['GO_SESSION']['name']) != '' && !isset($popup_groupoffice))
 {
 	?>
 	<div id="mainNorthPanel">
@@ -62,11 +69,29 @@ if($GO_SECURITY->logged_in() && trim($_SESSION['GO_SESSION']['name']) != '')
 <?php
 }else
 {
+	if(isset($popup_groupoffice))
+	{
+		?>
+		<script type="text/javascript">
+		GO.mainLayout.launchFullscreen('<?php echo $popup_groupoffice; ?>');
+		</script>
+		<?php
+	}
 	?>
 	<div id="checker-icon"></div>
 	<script type="text/javascript">Ext.get("load-status").update("<?php echo $lang['common']['loadingLogin']; ?>");</script>
 	<script type="text/javascript">	
-	Ext.onReady(GO.mainLayout.login, GO.mainLayout);
+	<?php
+	if(isset($popup_groupoffice))
+	{
+		echo 'Ext.onReady(function(){
+			GO.mainLayout.login.defer(10000, GO.mainLayout);
+		}, GO.mainLayout.login);';
+	}else
+	{
+		echo 'Ext.onReady(GO.mainLayout.login, GO.mainLayout);';
+	}
+	?>
 	</script>
 	
 	<div style="position:absolute;right:10px;bottom:10px">

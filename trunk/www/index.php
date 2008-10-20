@@ -20,6 +20,15 @@ require_once("Group-Office.php");
 if(isset($_REQUEST['task']) && $_REQUEST['task']=='logout')
 {
 	$GO_SECURITY->logout();	
+	if(isset($_COOKIE['GO_FULLSCREEN']) && $_COOKIE['GO_FULLSCREEN']=='1')
+	{
+		?>
+		<script type="text/javascript">
+		window.close();
+		</script>
+		<?php
+		exit();
+	}
 }
 
 //$config_file = $GO_CONFIG->get_config_file();
