@@ -92,10 +92,11 @@ GO.dialog.LoginDialog = function(config){
             	hideLabel:true,
             	boxLabel: GO.lang.remindPassword,
             	name:'remind'
-            }/*,this.fullscreenField = new Ext.form.Checkbox({            	
+            },this.fullscreenField = new Ext.form.Checkbox({            	
             	hideLabel:true,
             	boxLabel: GO.lang.fullscreen,
-            	name:'fullscreen'})*/
+            	checked:GO.fullscreen,
+            	name:'fullscreen'})
             ]
 		});
 
@@ -181,6 +182,8 @@ Ext.extend(GO.dialog.LoginDialog, Ext.Window, {
 	
 	callbacks : new Array(),
 	
+	hideDialog : true,
+	
 	addCallback : function(callback, scope)
 	{		
 		this.callbacks.push({callback: callback, scope: scope});		
@@ -204,7 +207,8 @@ Ext.extend(GO.dialog.LoginDialog, Ext.Window, {
 					this.handleCallbacks();
 				}
 				
-				this.hide();
+				if(this.hideDialog)
+					this.hide();
 				
 			},
 
