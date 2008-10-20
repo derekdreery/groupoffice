@@ -1,8 +1,4 @@
-Ext.namespace('GO.notes');
-
-GO.notes.lang={};
-
-/* new table: no_categories */
+﻿/* new table: no_categories */
 GO.notes.lang.category="Kategorie";
 GO.notes.lang.categories="Kategorien";
 

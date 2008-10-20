@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /** 
  * Copyright Intermesh
  * 
@@ -13,11 +13,9 @@
  */
 
 //Uncomment this line in new translations!
-require($GO_LANGUAGE->get_fallback_language_file('addressbook'));
+//require_once($GO_LANGUAGE->get_fallback_language_file('addressbook'));
 $lang['addressbook']['name'] = 'Adressbuch';
 $lang['addressbook']['description'] = 'Modul zur Verwaltung der Kontakte';
-
-
 
 $lang['addressbook']['allAddressbooks'] = 'Alle Adressbücher';
 $lang['common']['addressbookAlreadyExists'] = 'Das Adressbuch existiert bereits';

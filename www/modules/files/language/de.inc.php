@@ -1,12 +1,12 @@
-<?php
+﻿<?php
 //Uncomment this line in new translations!
-require($GO_LANGUAGE->get_fallback_language_file('files'));
+//require_once($GO_LANGUAGE->get_fallback_language_file('files'));
 $lang['files']['name'] = 'Dateien';
 $lang['files']['description'] = '	
 Modul-Dateien; Modul für die gemeinsame Nutzung von Dateien.';
 
 $lang['files']['fileNotFound'] = 'Datei nicht gefunden';
-$lang['files']['folderExists'] = 'The folder already exists';
+$lang['files']['folderExists'] = 'Der Ordner ist bereits vorhanden';
 $lang['files']['filenameExists'] = 'Dateiname existiert bereits';
 $lang['files']['uploadedSucces'] = 'Datei erfolgreich hochgeladen';
 
@@ -31,3 +31,6 @@ Die folgenden Änderungen wurden gemacht von %s:
 $lang['files']['modified']='Geändert';
 $lang['files']['new']='Neu';
 $lang['files']['deleted']='Gelöscht';
+
+$lang['files']['folder_modified_subject']='Änderungen im Group-Office Ordner';
+$lang['files']['folder_modified_body']='Sie haben eine Nachricht angefordert, wenn eine Änderung erfolgt:';

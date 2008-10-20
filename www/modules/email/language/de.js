@@ -1,4 +1,4 @@
-GO.email.lang.messages='Nachrichten';
+﻿GO.email.lang.messages='Nachrichten';
 GO.email.lang.message='Nachricht';
 GO.email.lang.inbox='Eingang';
 GO.email.lang.accounts='Konten';
@@ -35,7 +35,7 @@ GO.email.lang.novalidateCert='Zertifikat nicht überprüfen'
 GO.email.lang.port='Port';
 GO.email.lang.rootMailbox='Root mailbox';
 GO.email.lang.manageFolders='Ordner verwalten';
-GO.email.lang.sendItemsFolder='Sent items folder';
+GO.email.lang.sendItemsFolder='Gesendete Objekte Ordner';
 GO.email.lang.trashFolder='Papierkorb Ordner';
 GO.email.lang.draftsFolder='Entwürfe Ordner';
 GO.email.lang.sender='Von Feld';
@@ -69,8 +69,8 @@ GO.email.lang.addFolder='Neuen Ordner erstellen';
 GO.email.lang.to='Zu';
 GO.email.lang.downloadAllAsZip='Alles als ZIP-Datei herunterladen';
 GO.email.lang.body='Body';
-GO.email.lang.recievedBefore='Recieved before';
-GO.email.lang.recievedSince='Recieved since';
+GO.email.lang.recievedBefore='Empfangen vor';
+GO.email.lang.recievedSince='Empfangen seit';
 GO.email.lang.answered='Beantwortet';
 GO.email.lang.unanswered='Unbeantwortet';
 GO.email.lang.viewed='Angezeigt';
@@ -87,18 +87,22 @@ GO.email.lang.NA='N/A';
 GO.email.lang.emptyFolder='Ordner löschen';
 GO.email.lang.emptyFolderConfirm='Möchten Sie wirklich den Ordner \'{mailbox}\'löschen ?';
 GO.email.lang.addUnknownRecipients='Unbekannten Empfänger hinzufügen';
-GO.email.lang.addUnknownRecipientsText='You just sent an e-mail to one or more recipients that are not in your addressbook. Click on a name if you want to add that person or close this window.';
+GO.email.lang.addUnknownRecipientsText='Sie haben eine E-Mail zu einem oder mehreren Empfängern gesandt, die nicht in Ihrem Adressbuch vorhanden sind. Klicken Sie auf den Namen, wenn Sie diesen Empfänger zu Ihrem Adressbuch hinzufügen möchten oder schliessen Sie das Fenster.';
 GO.email.lang.attachFilesPC='Vom PC hinzufügen';
 GO.email.lang.attachFilesGO='Von Group-Office hinzufügen';
 
 
-GO.email.lang.vacation='Automatic reply';
-GO.email.lang.vacationActive='Activate automatic reply';
+GO.email.lang.vacation='Automatische Antwort';
+GO.email.lang.vacationActive='Automatische Antowrt aktivieren';
 GO.email.lang.vacationSubject='Betreff';
 GO.email.lang.vacationBody='Body';
 
-GO.email.lang.addToRecipients = 'Zu Empfänger hinzufügenAdd to recipients';
+GO.email.lang.addToRecipients = 'Zu Empfänger hinzufügen';
 GO.email.lang.addToCC = 'Zu CC hinzufügen';
 GO.email.lang.addToBCC = 'Zu BCC hinzufügen';
 
 GO.email.lang.viewSource='Quelle anzeigen';
+
+
+GO.email.lang.sendNotification='Der Sender hat eine Lesebestätigung angefordert. %s. Möchten Sie eine Lesebestätigung senden?';
+GO.email.lang.searchOnSender='Nachrichten anzeigen';
