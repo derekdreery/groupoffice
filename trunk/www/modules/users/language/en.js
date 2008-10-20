@@ -6,8 +6,8 @@ GO.users.lang.cmdCheckColumnRead= 'Read';
 GO.users.lang.cmdCheckColumnWrite= 'Write';
 GO.users.lang.cmdHeaderColumnName= 'Module name';
 GO.users.lang.cmdHeaderGridUserHasAccess = 'User has access to';
-GO.users.lang.cmdHeaderGridUserIsMemberOf = 'User is member of';
-GO.users.lang.cmdHeaderGridUserVisibleTo = 'User is visible to';
+GO.users.lang.userIsMemberOf = 'User is member of';
+GO.users.lang.userVisibleTo = 'User is visible to';
 
 GO.users.lang.cmdPanelPersonal = 'Personal';
 GO.users.lang.cmdPanelPassword= 'Password';
