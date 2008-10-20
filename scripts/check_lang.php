@@ -40,7 +40,7 @@ function compare_arrays($array1, $array2, $file)
 		{
 			echo '<i>Missing in '.$file.':</i><br />';
 			foreach($output as $out)
-				echo htmlentities($out).'<br />';
+				echo htmlentities($out,ENT_QUOTES,'UTF-8').'<br />';
 			echo '<br />';
 		}
 	}
