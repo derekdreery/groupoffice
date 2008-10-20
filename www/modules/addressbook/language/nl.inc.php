@@ -31,4 +31,7 @@ $lang['link_type'][3]=$lang['addressbook']['company'] = 'Bedrijf';
 $lang['addressbook']['customers'] = 'Klanten';
 $lang['addressbook']['suppliers'] = 'Leveranciers';
 $lang['addressbook']['prospects'] = 'Potentiële klanten';
+
+$lang['addressbook']['contacts']= 'Contactpersonen';
+$lang['addressbook']['companies']= 'Bedrijven';
 ?>
