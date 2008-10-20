@@ -1,4 +1,4 @@
-﻿/** 
+/** 
  * Copyright Intermesh
  * 
  * This file is part of Group-Office. You should have received a copy of the
@@ -194,12 +194,6 @@ GO.lang.strLoggedInAs= 'Eingeloggt als';
 
 GO.lang.strErrorsInForm= 'Es sind Fehler im Formular, bitte korrigieren Sie diese und versuchen es erneut.';
 
-
-
-Ext.MessageBox.buttonText.yes = GO.lang['cmdJa'];
-Ext.MessageBox.buttonText.no = GO.lang['cmdNein'];
-Ext.MessageBox.buttonText.ok = GO.lang['cmdOK'];
-Ext.MessageBox.buttonText.cancel = GO.lang['cmdAbbruch'];
 
 
 GO.lang.strMinute="Minute";
