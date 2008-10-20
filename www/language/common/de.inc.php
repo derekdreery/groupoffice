@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 //Uncomment this line in new translations!
 //require_once($GO_LANGUAGE->get_fallback_base_language_file('common'));
 
