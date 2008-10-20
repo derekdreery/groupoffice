@@ -15,4 +15,3 @@ $lang['users']['error_email_exists']='Die E-Mail-Adresse ist bereits registriert
 $lang['users']['error_match_pass']='Die Passwörter sind nicht identisch';
 $lang['users']['error_email']='Sie haben eine ungültige E-Mail-Adresse angegeben';
 
-GO.users.lang.group='Gruppe';
