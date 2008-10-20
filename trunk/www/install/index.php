@@ -589,7 +589,7 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 					$sql = 'CREATE DATABASE `'.$_POST['db_name'].'`;';
 					if($db->query($sql))
 					{
-						$sql = "GRANT ALL PRIVILEGES ON ".smart_addslashes($_POST['db_name']).".*	TO ".
+						$sql = "GRANT ALL PRIVILEGES ON `".smart_addslashes($_POST['db_name'])."`.*	TO ".
 						"'".$_POST['db_user']."'@'".smart_addslashes($_POST['host_allow'])."' ".
 						"IDENTIFIED BY '".smart_addslashes($_POST['db_pass1'])."' WITH GRANT OPTION";
 						if($db->query($sql))
