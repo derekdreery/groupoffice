@@ -30,3 +30,10 @@ Ext.Window.override({
 	 shadow : false,
 	 constrainHeader : true
 });
+
+
+
+Ext.MessageBox.buttonText.yes = GO.lang['cmdYes'];
+Ext.MessageBox.buttonText.no = GO.lang['cmdNo'];
+Ext.MessageBox.buttonText.ok = GO.lang['cmdOk'];
+Ext.MessageBox.buttonText.cancel = GO.lang['cmdCancel'];
