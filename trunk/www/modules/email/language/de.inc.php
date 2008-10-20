@@ -1,6 +1,6 @@
-<?php
+﻿<?php
 //Uncomment this line in new translations!
-require($GO_LANGUAGE->get_fallback_language_file('email'));
+//require_once($GO_LANGUAGE->get_fallback_language_file('email'));
 $lang['email']['name'] = 'E-Mail';
 $lang['email']['description'] = 'E-Mail-Modul; Webbasierter E-Mail-Client. Jeder Benutzer hat die Möglichkeit, E-Mails zu senden, empfangen und weiterzuleiten';
 
@@ -27,3 +27,6 @@ $lang['email']['subject']='Betreff';
 $lang['email']['no_recipients']='Kein Empfänger';
 $lang['email']['original_message']='--- Original Nachricht ---';
 $lang['email']['attachments']='Anhänge';
+
+$lang['email']['notification_subject']='Gelesen: %s';
+$lang['email']['notification_body']='Ihre Nachrichte mit dem Titel "%s" wurde am angezeigt %s';

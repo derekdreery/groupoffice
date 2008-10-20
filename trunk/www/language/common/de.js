@@ -1,4 +1,4 @@
-/** 
+﻿/** 
  * Copyright Intermesh
  * 
  * This file is part of Group-Office. You should have received a copy of the
@@ -14,16 +14,16 @@
 
 GO.lang.browse='Durchsuchen...';
 GO.lang.largeUpload='Große Dateien/Ordner (Java benötigt)';
-GO.lang.smallUpload='Kleine dateien';
+GO.lang.smallUpload='Kleine Dateien';
 
 
-GO.lang.lostPassword='Lost password?';
-GO.lang.lostPasswordText='To recover your password you must be able to read your e-mail without access to Group-Office. If you enter your e-mail address a new password will be sent to your e-mail address.<br /><br />Enter your e-mail address:';
+GO.lang.lostPassword='Passwort vergessen?';
+GO.lang.lostPasswordText='Um Ihr Passwort wiederherzustellen, müssen Sie Ihre E-Mail ausserhalb von Group-Office öffnen können. Wenn Sie Ihre E-Mail-Adresse eingeben, wird Ihnen ein neues Passwort zugesandt.<br /><br />Geben Sie ihre E-Mail-Adresse ein:';
 
-GO.lang.noJava='Java Webstart is not installed. Java enables easier editing of files and easier file uploading. Please visit <a class="normal-link" href="http://www.java.com/download" target="_blank">http://www.java.com/download</a> to install it.';
+GO.lang.noJava='Java Webstart ist nicht installiert. Java ermöglich ein einfacheres bearbeiten und hochladen der Dateien. Gehen Sie auf <a class="normal-link" href="http://www.java.com/download" target="_blank">http://www.java.com/download</a> um Java zu installieren.';
 
 GO.lang.strHelpContents='Hilfeinhalt';
-GO.lang.strReportBug='Report a bug';
+GO.lang.strReportBug='Einen Fehler melden';
 GO.lang.strAbout='Über Group-Office';
 GO.lang.strUsage='Nutzungsstatistiken';
 
@@ -68,20 +68,20 @@ GO.lang.strDepartment = 'Abteilung';
 GO.lang.strFunction = 'Funktion';
 GO.lang.strSalutation = 'Anrede';
 GO.lang.strComment = 'Kommentar';
-GO.lang.strWorkAddress = 'Work address';
-GO.lang.strWorkAddressNo = 'Work address no';
-GO.lang.strWorkZip = 'Work zip/postal code';
-GO.lang.strWorkCity = 'City work';
-GO.lang.strWorkState = 'State work';
-GO.lang.strWorkCountry = 'Country work',	
-GO.lang.strWorkPhone = 'Phone work';
-GO.lang.strWorkFax = 'Fax work';
-GO.lang.strPostAddress = 'Post address';
-GO.lang.strPostAddressNo = 'Post number of house';
-GO.lang.strPostCity = 'Post city';
-GO.lang.strPostState = 'Post state';
-GO.lang.strPostCountry = 'Post country';
-GO.lang.strPostZip = 'Post zip';
+GO.lang.strWorkAddress = 'Strasse (Arbeit)';
+GO.lang.strWorkAddressNo = 'Hausnr. (Arbeit)';
+GO.lang.strWorkZip = 'PLZ (Arbeit)';
+GO.lang.strWorkCity = 'Stadt (Arbeit)';
+GO.lang.strWorkState = 'Bundesland (Arbeit)';
+GO.lang.strWorkCountry = 'Land (Arbeit)',	
+GO.lang.strWorkPhone = 'Telefon (Arbeit)';
+GO.lang.strWorkFax = 'Telefax (Arbeit)';
+GO.lang.strPostAddress = 'Strasse';
+GO.lang.strPostAddressNo = 'Hausnr.';
+GO.lang.strPostCity = 'Stadt';
+GO.lang.strPostState = 'Bundesland';
+GO.lang.strPostCountry = 'Land';
+GO.lang.strPostZip = 'PLZ';
 
 GO.lang.locations = 'Locations';
 GO.lang.folder = 'Ordner';
@@ -498,3 +498,7 @@ GO.lang.countries["ZR"] = "Demokratische Republik Kongo";
 GO.lang.countries["ZM"] = "sambia";
 GO.lang.countries["ZW"] = "simbabwe";
 GO.lang.countries["SA"] = "Saudi-Arabien";
+
+GO.lang.fullscreen='Vollbildmodus';
+GO.lang.popupBlocker= 'Ihr Browser blockiert ein Popup von Group-Office. Bitte deaktivieren Sie Ihren Popupblocker für die Seite';
+GO.lang.color='Farbe';

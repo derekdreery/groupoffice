@@ -1,4 +1,4 @@
-/** 
+﻿/** 
  * Copyright Intermesh
  * 
  * This file is part of Group-Office. You should have received a copy of the
@@ -86,3 +86,9 @@ GO.addressbook.lang.moveAll = 'Die Firma und alle Mitarbeiter werden in das neue
 GO.addressbook.lang.addressbook = 'Adressbuch';
 GO.addressbook.lang.addressbooks = 'Adressbücher';
 GO.addressbook.lang.sendMailing='Nachricht senden';
+
+GO.addressbook.lang.contact= 'Kontakt';
+GO.addressbook.lang.company= 'Firma';
+GO.addressbook.lang.importSuccess='Datenimport erfolgreich';
+GO.addressbook.lang.searchOnSender='Lookup';
+GO.addressbook.lang.confirmCreate='Der Kontakt ist nicht vorhanden, möchten Sie einen Neuen anlegen?';

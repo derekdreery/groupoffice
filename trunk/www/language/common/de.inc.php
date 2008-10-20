@@ -1,6 +1,6 @@
-<?php
+﻿<?php
 //Uncomment this line in new translations!
-require($GO_LANGUAGE->get_fallback_base_language_file('common'));
+//require_once($GO_LANGUAGE->get_fallback_base_language_file('common'));
 
 $lang['common']['htmldirection']= 'ltr';
 
@@ -41,12 +41,12 @@ $lang['common']['sexes']['F'] = 'weiblich';
 $lang['common']['title'] = 'Titel';
 $lang['common']['addressNo'] = 'Hausnr.';
 $lang['common']['workAddressNo'] = 'Hausnr. (Arbeit)';
-$lang['common']['postAddress'] = 'Post address';
-$lang['common']['postAddressNo'] = 'Post number of house';
-$lang['common']['postCity'] = 'Post city';
-$lang['common']['postState'] = 'Post state';
-$lang['common']['postCountry'] = 'Post country';
-$lang['common']['postZip'] = 'Post zip';
+$lang['common']['postAddress'] = 'Strasse';
+$lang['common']['postAddressNo'] = 'Hausnr.';
+$lang['common']['postCity'] = 'Stadt';
+$lang['common']['postState'] = 'Bundesland';
+$lang['common']['postCountry'] = 'Land';
+$lang['common']['postZip'] = 'PLZ';
 $lang['common']['visitAddress'] = 'Visit address';
 $lang['common']['postAddress'] = 'Post address';
 $lang['common']['name'] = 'Name';
@@ -160,3 +160,4 @@ Passwort: %s';
 $lang['common']['lost_password_error']='Die angegebende E-Mail-Adresse konnte nicht gefunden werden.';
 $lang['common']['lost_password_success']='An Ihre E-Mail-Adresse wurde ein neues Passwort versandt.';
 
+$lang['common']['postAddressHead']= 'Adresse';

@@ -1,4 +1,4 @@
-GO.calendar.lang.appointment = 'Termin';
+﻿GO.calendar.lang.appointment = 'Termin';
 GO.calendar.lang.appointments = 'Termine';
 GO.calendar.lang.recurrence = 'Wiederholung';
 GO.calendar.lang.options = 'Optionen';
@@ -14,7 +14,7 @@ GO.calendar.lang.sevenDays = '7 Tage';
 GO.calendar.lang.month = 'Monat';
 GO.calendar.lang.recurringEvent = 'Wiederkehrender Termin';
 GO.calendar.lang.deleteRecurringEvent = 'Möchten Sie eine einzelne Instanz oder alle Instanzen dieses wiederkehrenden Termines löschen?';
-GO.calendar.lang.singleOccurence = 'Single occurence';
+GO.calendar.lang.singleOccurence = 'Einmaliges Ereignis';
 GO.calendar.lang.entireSeries = 'Entire series';
 GO.calendar.lang.calendar = 'Kalender';
 GO.calendar.lang.calendars = 'Kalender';

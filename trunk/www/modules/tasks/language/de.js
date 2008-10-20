@@ -1,8 +1,4 @@
-Ext.namespace('GO.tasks');
-
-GO.tasks.lang={};
-
-GO.tasks.lang.task = 'Aufgabe';
+﻿GO.tasks.lang.task = 'Aufgabe';
 GO.tasks.lang.noTask = 'Keine Aufgaben zum anzeigen';
 GO.tasks.lang.tasks = 'Aufgaben';
 GO.tasks.lang.addTask = 'Aufgabe hinzufügen...';
@@ -29,3 +25,7 @@ GO.tasks.lang.options = 'Optionen';
 GO.tasks.lang.createLink = 'Link hinzufügen';
 GO.tasks.lang.startsAt='Beginne am';
 GO.tasks.lang.showInactiveTasks='zeige inaktive Aufgaben';
+
+GO.tasks.lang.remindMe= 'Erinnern';
+GO.tasks.lang.scheduleCall='Erinnnerungsruf';
+GO.tasks.lang.call='Anruf';
