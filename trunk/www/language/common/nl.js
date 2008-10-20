@@ -10,7 +10,7 @@
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-
+ 
 GO.lang.completeProfile = 'Vul uw profiel aan a.u.b.';
 GO.lang.fullscreen='Volledig scherm modus';
 
@@ -24,7 +24,7 @@ GO.lang.lostPassword='Wachtwoord vergeten?';
 GO.lang.lostPasswordText='Om uw wachtwoord opnieuw in te stellen heeft u toegang tot uw e-mail nodig zonder toegang tot Group-Office. Als u hier uw e-mail adres invult wordt een nieuw wachtwoord naar uw e-mail adres verzonden.<br /><br />Vul uw e-mail adres in:';
 
 
-GO.lang.noJava='Java Webstart is niet ge�nstalleerd. Java maakt het mogelijk om gemakkelijk bestanden te uploaden en te bewerken. Ga naar <a class="normal-link" href="http://www.java.com/download" target="_blank">http://www.java.com/download</a> om Java op uw computer te installeren.';
+GO.lang.noJava='Java Webstart is niet geïnstalleerd. Java maakt het mogelijk om gemakkelijk bestanden te uploaden en te bewerken. Ga naar <a class="normal-link" href="http://www.java.com/download" target="_blank">http://www.java.com/download</a> om Java op uw computer te installeren.';
 
  
 GO.lang.strDefault = 'Standaard';
@@ -193,7 +193,7 @@ GO.lang.cmdNoToAll= 'Nee op alles';
 GO.lang.author= 'Auteur';
 GO.lang.paste= 'Plakken';
 GO.lang.cut= 'Knippen';
-GO.lang.copy= 'Kopiëren';
+GO.lang.copy= 'KopiÃ«ren';
 GO.lang.compress= 'Inpakken';
 GO.lang.decompress= 'Uitpakken';
 GO.lang.upload= 'Upload';

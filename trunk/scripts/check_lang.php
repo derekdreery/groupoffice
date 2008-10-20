@@ -46,15 +46,44 @@ function compare_arrays($array1, $array2, $file)
 	}
 }
 
+function check_encoding($file)
+{
+	global $GO_CONFIG;
+	
+	if(function_exists('mb_detect_encoding'))
+	{
+		$str = file_get_contents($file);
+		$enc = mb_detect_encoding($str, "ASCII,JIS,UTF-8,ISO-8859-1,ISO-8859-15,EUC-JP,SJIS");
+		if($enc!='UTF-8' && $enc!='ASCII')
+		{
+			if(is_writable($file))
+			{
+				echo '<p style="color:red">Warning, corrected encoding of '.str_replace($GO_CONFIG->root_path, '', $file).' from '.$enc.' to UTF-8</p>';
+				
+				$str = mb_convert_encoding($str,'UTF-8', $enc);
+				file_put_contents($file, $str);
+			}else
+			{
+				echo '<p style="color:red">Warning, encoding of '.str_replace($GO_CONFIG->root_path, '', $file).' is '.$enc.' and should be UTF-8. Make the file writable to let this script correct it.</p>';
+			}
+		}
+	}
+}
+
 function compare_files($file1, $file2, $type)
 {
 	$content1 = get_contents($file1);
 	$content2 = get_contents($file2);
 	
+	
+	
 	if(!$content1 || !$content2)
 		echo '<i><font color="red">Could not compare '.$type.', because one of the translations doesn\'t exist!</font></i><br />';
 	else
 	{
+		check_encoding($file1);
+		check_encoding($file2);
+	
 		compare_arrays($content1, $content2, $file2);
 		compare_arrays($content2, $content1, $file1);
 	}
@@ -72,6 +101,8 @@ echo '<hr>';
 foreach($modules as $module)
 {
 	echo '<h3>MODULE: '.$module['id'].'</h3>';
+	
+	
 	
 	compare_files($module['path'].'language/'.$lang1.'.inc.php', $module['path'].'language/'.$lang2.'.inc.php', 'php');
 	compare_files($module['path'].'language/'.$lang1.'.js', $module['path'].'language/'.$lang2.'.js', 'js');
