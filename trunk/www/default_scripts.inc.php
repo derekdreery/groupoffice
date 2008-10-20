@@ -69,6 +69,13 @@ if($GO_SECURITY->logged_in() && $fullscreen=='true' && !isset($_REQUEST['fullscr
 	$popup_groupoffice = String::add_params_to_url($popup_groupoffice, 'fullscreen_loaded=true');
 }
 
+require($GO_CONFIG->root_path.'language/languages.inc.php');
+echo 'GO.Languages=[];';
+foreach($languages as $code=>$language)
+{
+	echo 'GO.Languages.push(["'.$code.'","'.$language.'"]);';
+}
+
 ?>
 
 </script>

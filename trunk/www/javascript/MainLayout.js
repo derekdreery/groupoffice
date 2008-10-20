@@ -47,8 +47,13 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	login : function(){
 	
 		this.fireReady();
-		
 		GO.loginDialog = new GO.dialog.LoginDialog({modal:false});
+		this.createLoginCallback();
+		GO.loginDialog.show();
+		this.removeLoadMask();		
+	},
+	
+	createLoginCallback : function(){
 		
 		GO.loginDialog.addCallback(function(){
 				var url = GO.afterLoginUrl ? GO.afterLoginUrl : GO.settings.config.host;
@@ -56,14 +61,12 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 				{
 					this.launchFullscreen(url);
 					GO.loginDialog.hideDialog=false;
+					GO.loginDialog.on('callbackshandled', this.createLoginCallback, this);
 				}else
 				{
 					document.location.href=url;
 				}
-			}, this);
-		GO.loginDialog.show();
-		
-		this.removeLoadMask();		
+			}, this);		
 	},
 	
 	fireReady : function(){
