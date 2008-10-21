@@ -42,8 +42,7 @@ GO.addressbook.MainPanel = function(config)
 		{
 			var record = grid.getStore().getAt(rowIndex);			
 			this.companyEastPanel.loadCompany(record.get('id'));			
-		}, this);	
- 
+		}, this); 
 	  
 	this.searchPanel = new GO.addressbook.SearchPanel({
 		region: 'north'
@@ -51,22 +50,17 @@ GO.addressbook.MainPanel = function(config)
 	
 	this.searchPanel.on('queryChange', function(params){		
 		this.setSearchParams(params);
-	}, this);
-	
-	
-	
+	}, this);	
 	
 	this.contactEastPanel = new GO.addressbook.ContactReadPanel({
 		region : 'east',
 		title: GO.addressbook.lang['cmdPanelContact']
 	});
-
 	
 	this.companyEastPanel = new GO.addressbook.CompanyReadPanel({
 		region : 'east',
 		title: GO.addressbook.lang['cmdPanelCompany']
-	});		
-	
+	});	
 	
 	this.contactsPanel = new Ext.Panel({
   	id: 'ab-contacts-grid',
@@ -78,7 +72,6 @@ GO.addressbook.MainPanel = function(config)
   	]		    	
   });		
 	this.contactsPanel.on("show", this.contactsGrid.onGridShow, this.contactsGrid);
-	
 	
 	this.companyPanel = new Ext.Panel({
 	    	id: 'ab-company-grid',
@@ -95,15 +88,12 @@ GO.addressbook.MainPanel = function(config)
 	
 	this.addressbooksGrid = new GO.addressbook.AddresbooksGrid({
 		region:'west',
-		width:160
+		width:180
 	});
 	
-	this.addressbooksGrid.on('rowclick', function(grid, rowIndex)
-		{
-			var record = grid.getStore().getAt(rowIndex);	
-
-			this.setSearchParams({addressbook_id : record.get("id")});
-			
+	this.addressbooksGrid.on('rowclick', function(grid, rowIndex){
+			var record = grid.getStore().getAt(rowIndex);
+			this.setSearchParams({addressbook_id : record.get("id")});			
 	}, this);
 
 	
@@ -117,16 +107,54 @@ GO.addressbook.MainPanel = function(config)
     ]
 	});
 
-
-
 	config.layout='border';
 	config.border=false;
 	config.id='ab-tbar';
-	config.items= [
-		this.searchPanel,
-		this.addressbooksGrid,
-		this.tabPanel
-	];
+	
+	if(GO.mailings)
+	{
+		this.mailingsFilterPanel = new GO.mailings.MailingsFilterPanel({
+			region:'center'
+		});
+		
+		this.mailingsFilterPanel.on('change', function(grid, mailings_filter){
+			var panel = this.tabPanel.getActiveTab();		
+			if(panel.id=='ab-contacts-grid')
+			{
+				this.contactsGrid.store.baseParams.mailings_filter = Ext.encode(mailings_filter);
+				this.contactsGrid.store.load();
+				delete this.contactsGrid.store.baseParams.mailings_filter;
+			}else
+			{
+				this.companiesGrid.store.baseParams.mailings_filter = Ext.encode(mailings_filter);
+				this.companiesGrid.store.load();
+				delete this.companiesGrid.store.baseParams.mailings_filter;
+			}			
+		}, this);
+			
+		this.addressbooksGrid.region='north';
+		this.addressbooksGrid.height=200;
+		var westPanel = new Ext.Panel({
+			layout:'border',
+			border:false,
+			region:'west',
+			width:180,
+			split:true,
+			items:[this.addressbooksGrid,this.mailingsFilterPanel]			
+		});
+		config.items= [
+			this.searchPanel,
+			westPanel,
+			this.tabPanel
+		];
+	}else
+	{
+		config.items= [
+			this.searchPanel,
+			this.addressbooksGrid,
+			this.tabPanel
+		];
+	}
 	
 	var tbar=[
 		{

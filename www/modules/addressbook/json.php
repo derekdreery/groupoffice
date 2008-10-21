@@ -57,6 +57,17 @@ try
 		
 		/* all-contacts */
 		case 'contacts':
+			
+			
+			if(isset($_POST['mailings_filter']))
+			{
+				$mailings_filter = json_decode(smart_stripslashes($_POST['mailings_filter']), true);				
+				$GO_CONFIG->save_setting('mailings_filter', implode(',',$mailings_filter), $GO_SECURITY->user_id);
+			}else
+			{	
+				$mailings_filter = $GO_CONFIG->get_setting('mailings_filter', $GO_SECURITY->user_id);
+				$mailings_filter = empty($mailings_filter) ? array() : explode(',', $mailings_filter);
+			}
 
 
 			if(isset($_POST['delete_keys']))
@@ -113,7 +124,8 @@ try
 			$sort,
 			$dir,
 			false,
-			$query_type
+			$query_type,
+			$mailings_filter
 			);
 
 			while($ab->next_record())
@@ -128,6 +140,17 @@ try
 
 			/* all compagnies */
 		case 'companies':
+			
+			if(isset($_POST['mailings_filter']))
+			{
+				$mailings_filter = json_decode(smart_stripslashes($_POST['mailings_filter']), true);				
+				$GO_CONFIG->save_setting('mailings_filter', implode(',',$mailings_filter), $GO_SECURITY->user_id);
+			}else
+			{	
+				$mailings_filter = $GO_CONFIG->get_setting('mailings_filter', $GO_SECURITY->user_id);
+				$mailings_filter = empty($mailings_filter) ? array() : explode(',', $mailings_filter);
+			}
+			
 			if(isset($_POST['delete_keys']))
 			{
 				$response['deleteSuccess'] = true;
@@ -180,7 +203,8 @@ try
 			false,
 			$sort,
 			$dir,
-			$query_type
+			$query_type,
+			$mailings_filter
 			);
 
 			while($ab->next_record())

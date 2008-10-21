@@ -459,7 +459,7 @@ class addressbook extends db {
 				
 	}
 
-	function search_contacts($user_id, $query, $field = 'last_name', $addressbook_id = 0, $start=0, $offset=0, $require_email=false, $sort_index='name', $sort_order='ASC', $writable_only=false, $query_type='LIKE') {
+	function search_contacts($user_id, $query, $field = 'last_name', $addressbook_id = 0, $start=0, $offset=0, $require_email=false, $sort_index='name', $sort_order='ASC', $writable_only=false, $query_type='LIKE', $mailings_filter=array()) {
 		global $GO_MODULES;
 		//$query = str_replace('*', '%', $query);
 
@@ -472,12 +472,25 @@ class addressbook extends db {
 			}
 		}
 
-		$sql = "SELECT ab_contacts.*, ab_companies.name AS company_name FROM ab_contacts ".
+		if(count($mailings_filter))
+		{
+			$sql = "SELECT DISTINCT ";
+		}else
+		{
+			$sql = "SELECT ";
+		}
+		
+		$sql .= "ab_contacts.*, ab_companies.name AS company_name FROM ab_contacts ".
 		"LEFT JOIN ab_companies ON ab_contacts.company_id=ab_companies.id ";
 
 		if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
 		{
 			$sql .= "LEFT JOIN cf_2 ON cf_2.link_id=ab_contacts.link_id ";
+		}
+		
+		if(count($mailings_filter))
+		{
+			$sql .= "INNER JOIN ml_mailing_contacts mc ON mc.contact_id=ab_contacts.id ";
 		}
 
 
@@ -570,6 +583,11 @@ class addressbook extends db {
 		{
 			$sql .= " AND ab_contacts.email != ''";
 		}
+		
+		if(count($mailings_filter))
+		{
+			$sql .= " AND mc.group_id IN (".implode(',', $mailings_filter).")";
+		}
 
 		$sql .= " ORDER BY $sort_index $sort_order";
 			
@@ -587,17 +605,30 @@ class addressbook extends db {
 		return $count;
 	}
 
-	function search_companies($user_id, $query, $field = 'name', $addressbook_id = 0, $start=0, $offset=0, $require_email=false, $sort_index='name', $sort_order='ASC', $query_type='LIKE') {
+	function search_companies($user_id, $query, $field = 'name', $addressbook_id = 0, $start=0, $offset=0, $require_email=false, $sort_index='name', $sort_order='ASC', $query_type='LIKE', $mailings_filter=array()) {
 		global $GO_MODULES;
 
 		//$query = str_replace('*', '%', $query);
+		
+		if(count($mailings_filter))
+		{
+			$sql = "SELECT DISTINCT ";
+		}else
+		{
+			$sql = "SELECT ";
+		}
 
 		if(isset($GO_MODULES->modules['customfields']))
 		{
-			$sql = "SELECT ab_companies.*, cf_3.* FROM ab_companies ".
+			$sql .= "ab_companies.*, cf_3.* FROM ab_companies ".
 				"LEFT JOIN cf_3 ON cf_3.link_id=ab_companies.link_id ";
 		}else {
-			$sql = "SELECT ab_companies.* FROM ab_companies ";
+			$sql .= "ab_companies.* FROM ab_companies ";
+		}
+		
+		if(count($mailings_filter))
+		{
+			$sql .= "INNER JOIN ml_mailing_companies mc ON mc.company_id=ab_companies.id ";
 		}
 
 		if ($addressbook_id > 0) {
@@ -660,6 +691,11 @@ class addressbook extends db {
 		if($require_email)
 		{
 			$sql .= " AND ab_companies.email != ''";
+		}
+		
+		if(count($mailings_filter))
+		{
+			$sql .= " AND mc.group_id IN (".implode(',', $mailings_filter).")";
 		}
 
 		$sql .= " ORDER BY $sort_index $sort_order";
