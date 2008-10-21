@@ -19,18 +19,12 @@ require_once ($GO_MODULES->modules['tasks']['class_path']."tasks.class.inc.php")
 //require_once ($GO_LANGUAGE->get_language_file('tasks'));
 $tasks = new tasks();
 
-//ini_set('display_errors','off');
-
-
-
 //we are unsuccessfull by default
 $response =array('success'=>false);
 
 try{
-
 	switch($_REQUEST['task'])
-	{
-	
+	{	
 		case 'schedule_call':
 			
 			//$tasklist = $tasks->get_tasklist();
@@ -49,14 +43,19 @@ try{
 			
 			foreach($links as $link)
 			{
-				$GO_LINKS->add_link(
-				smart_addslashes($link['link_id']),
-				smart_addslashes($link['link_type']),
-				$task_id,
-				12);
+				if($link['link_id']>0)
+				{
+					$GO_LINKS->add_link(
+					smart_addslashes($link['link_id']),
+					smart_addslashes($link['link_type']),
+					$task_id,
+					12);
+				}
 			}
 			
-			if(isset($GO_MODULES->modules['comments']))
+			$comment_link_index = isset($_POST['comment_link_index']) ? $_POST['comment_link_index'] : 0; 
+			
+			if(isset($GO_MODULES->modules['comments']) && isset($links[$comment_link_index]))
 			{
 				require_once ($GO_LANGUAGE->get_language_file('tasks'));
 				
@@ -67,8 +66,8 @@ try{
 				if(!empty($task['description']))
 					$comment['comments'] .= "\n\n".$task['description'];
 					
-				$comment['link_id']=smart_addslashes($link['link_id']);
-				$comment['link_type']=smart_addslashes($link['link_type']);			
+				$comment['link_id']=smart_addslashes($links[$comment_link_index]['link_id']);
+				$comment['link_type']=smart_addslashes($links[$comment_link_index]['link_type']);			
 				$comment['user_id']=$GO_SECURITY->user_id;
 				
 				$comments->add_comment($comment);

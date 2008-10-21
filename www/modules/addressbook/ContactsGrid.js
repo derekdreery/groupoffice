@@ -7,7 +7,7 @@ GO.addressbook.ContactsGrid = function(config){
 	
 	config.store = new GO.data.JsonStore({
 	    url: GO.settings.modules.addressbook.url+ 'json.php',
-	    baseParams: {task: 'contacts'},
+	    baseParams: {task: 'contacts', enable_mailings_filter:true},
 	    root: 'results',
 	    id: 'id',
 	    totalProperty:'total',

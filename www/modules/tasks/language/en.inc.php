@@ -18,4 +18,7 @@ $lang['tasks']['statuses']['TENTATIVE'] = 'Tentative';
 $lang['tasks']['statuses']['DELEGATED'] = 'Delegated';
 $lang['tasks']['statuses']['COMPLETED'] = 'Completed';
 $lang['tasks']['statuses']['IN-PROCESS'] = 'In process';
+
+
+$lang['tasks']['call']='Call';
 ?>

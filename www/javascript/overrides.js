@@ -32,6 +32,27 @@ Ext.Window.override({
 });
 
 
+Ext.override(Ext.Editor, {
+	doAutoSize : function(){
+		if(this.autoSize){
+			var sz = this.boundEl.getSize(), fs = this.field.getSize();
+			switch(this.autoSize){
+				case "width":
+					this.setSize(sz.width, fs.height);
+					break;
+				case "height":
+					this.setSize(fs.width, sz.height);
+					break;
+				case "none":
+					this.setSize(fs.width, fs.height);
+					break;
+				default:
+					this.setSize(sz.width,  sz.height);
+			}
+		}
+	}
+});
+
 
 Ext.MessageBox.buttonText.yes = GO.lang['cmdYes'];
 Ext.MessageBox.buttonText.no = GO.lang['cmdNo'];

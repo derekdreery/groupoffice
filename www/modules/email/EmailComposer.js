@@ -732,7 +732,12 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 								{    					
 		    					var local_path = this.local_path ? 'true' : false;
 		    					
-		    					GO.util.popup(GO.settings.modules.email.url+'jupload/index.php', '640','500');
+		    					GO.util.popup({
+		    						url: GO.settings.modules.email.url+'jupload/index.php',
+		    						width:640,
+		    						height:500
+		    					});
+		    					
 		    					this.uploadDialog.hide();
 		    					//for refreshing by popup
 		    					GO.attachmentsStore = this.attachmentsStore;
