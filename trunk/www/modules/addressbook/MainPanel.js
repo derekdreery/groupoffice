@@ -117,6 +117,16 @@ GO.addressbook.MainPanel = function(config)
 			region:'center'
 		});
 		
+		GO.mailings.readableMailingsStore.on('load', function(){
+			if(GO.mailings.readableMailingsStore.getCount()==0)
+			{
+				this.mailingsFilterPanel.hide();
+			}else
+			{
+				this.mailingsFilterPanel.show();
+			}
+		}, this);
+		
 		this.mailingsFilterPanel.on('change', function(grid, mailings_filter){
 			var panel = this.tabPanel.getActiveTab();		
 			if(panel.id=='ab-contacts-grid')
