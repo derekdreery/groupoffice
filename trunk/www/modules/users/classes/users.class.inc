@@ -101,14 +101,17 @@ class users extends db
 		}
 
 
-		if(isset($_POST['theme']))
+		if(isset($_POST['max_rows_list']))
 		{
-			$user['theme'] = smart_addslashes($_POST["theme"]);
+			if(isset($_POST['theme']))
+				$user['theme'] = smart_addslashes($_POST["theme"]);
+				
 
 			$user['language'] = smart_addslashes($_POST["language"]);
 			$user['max_rows_list'] = smart_addslashes($_POST["max_rows_list"]);
 			$user['sort_name'] = smart_addslashes($_POST["sort_name"]);
 			$user['start_module'] = smart_addslashes($_POST["start_module"]);
+			$user['mute_sound'] = isset($_POST["mute_sound"]) ? '1' : '0';
 		}
 
 		if($_POST['language'])

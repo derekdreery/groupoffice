@@ -265,7 +265,6 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 				//create new empty database
 				//table is empty create the structure
 				$queries = String::get_sql_queries($GO_CONFIG->root_path."install/sql/groupoffice.sql");
-				//$queries = get_sql_queries($GO_CONFIG->root_path."lib/sql/groupoffice.sql");
 				while ($query = array_shift($queries))
 				{
 					$db->query($query);

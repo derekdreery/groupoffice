@@ -178,7 +178,8 @@ GO.email.EmailClient = function(config){
 				var record = this.messagesGrid.selModel.getSelected();
 				if(record)
 				{				
-					window.open(GO.settings.modules.email.url+'source.php?account_id='+this.account_id+'&mailbox='+escape(this.mailbox)+'&uid='+escape(record.data.uid));
+					var win = window.open(GO.settings.modules.email.url+'source.php?account_id='+this.account_id+'&mailbox='+escape(this.mailbox)+'&uid='+escape(record.data.uid));
+					win.focus();
 				}
 				
 			},
@@ -585,7 +586,8 @@ GO.email.EmailClient = function(config){
   	
   
   this.messagePanel.on('linkClicked', function(href){
-  	window.open(href);
+  	var win = window.open(href);
+  	win.focus();
   }, this);
   
   this.messagePanel.on('attachmentClicked', this.openAttachment, this);
@@ -943,7 +945,8 @@ GO.linkHandlers[9] = function(id, remoteMessage){
 		
 		
 	messagePanel.on('linkClicked', function(href){
-  	window.open(href);
+  	var win = window.open(href);
+  	win.focus();
   }, this);
   
   messagePanel.on('attachmentClicked', function(attachment, panel){

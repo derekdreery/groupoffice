@@ -41,8 +41,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 			url: url,
 			target: 'groupoffice'
 		});	
-	},
-	
+	},	
 	
 	login : function(){
 	
@@ -106,10 +105,6 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
     }
     
     this.createTabPanel(items);
-    	
-    	
-   
-   
     
    var topPanel = new Ext.Panel({
         region:'north',
@@ -118,15 +113,13 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
         height:28,
         titlebar:false,
         border:false
-      });
-		
+      });		
 		
 		var viewport = new Ext.Viewport({
         layout:'border',
         border:false,
         items:[topPanel,this.tabPanel]
-      });
-    
+      });    
     
     var adminMenuLink = Ext.get("admin-menu-link");
     var adminModulePanels = GO.moduleManager.getAllAdminPanelConfigs();
@@ -136,8 +129,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 			adminMenuLink.setDisplayed(true);
 			
 			var adminMenu = new Ext.menu.Menu({
-    	id: 'adminMenu'});
-    	
+    	id: 'adminMenu'});    	
       
       for(var i=0;i<adminModulePanels.length;i++)
       {
@@ -162,10 +154,8 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 							panel.show();
 						},
 						scope: this
-					});
-				
-      }
-			
+					});				
+      }			
 			
 			adminMenuLink.on("click", function(){
 
@@ -208,7 +198,9 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	    			iconCls:'btn-help',
 	    			text:GO.lang.strHelpContents,
 	    			handler:function(){
-	    				window.open('http://www.group-office.com/wiki/');
+	    				
+	    				var win = window.open('http://www.group-office.com/wiki/');
+	    				win.focus();
 	    			},
 	    			scope:this
 	    			
@@ -216,7 +208,8 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	    			iconCls:'btn-report-bug',
 	    			text:GO.lang.strReportBug,
 	    			handler:function(){
-	    				window.open('https://sourceforge.net/tracker2/?func=add&group_id=76359&atid=547651');			
+	    				var win = window.open('https://sourceforge.net/tracker2/?func=add&group_id=76359&atid=547651');
+	    				win.focus();			
 	    			},
 	    			scope:this
 	    			
@@ -231,18 +224,15 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
     				} 
     				this.aboutDialog.show();   				
     			},
-    			scope:this
-    			
-    		}]
-    		
+    			scope:this    			
+    		}]    		
     	});
 			
 			helpLink.on("click", function(){
 				var x = helpLink.getX();
 				var y = topPanel.el.getY()+topPanel.el.getHeight();
 
-				helpMenu.showAt([x,y]);
-																
+				helpMenu.showAt([x,y]);																
 			},
 			this);
 		}
@@ -253,22 +243,16 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
   	if(!activeTab)
    		this.tabPanel.setActiveTab(0);
    		
-   		
-   
-		
-		this.removeLoadMask();
-		
+		this.removeLoadMask();		
 		
 		GO.checker = new GO.Checker();
-		GO.checker.init();
+		GO.checker.init.defer(2000,GO.checker);
 		GO.checker.on('alert', function(data){   		
    		if(data.notification_area)
    		{
    			Ext.get('notification-area').update(data.notification_area);
    		}
    	}, this);
-
-		  
 	},
 	
 	search :function(e)
@@ -354,4 +338,3 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 });
 
 GO.mainLayout = new GO.MainLayout();
-

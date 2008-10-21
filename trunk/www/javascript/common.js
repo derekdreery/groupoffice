@@ -26,8 +26,11 @@ GO.mailTo = function(email){
 
 GO.playAlarm = function(){
 	
-	var flashMovie= GO.util.getFlashMovieObject("alarmSound");
-	flashMovie.Play();	
+	if(!GO.settings.mute_sound)
+	{
+		var flashMovie= GO.util.getFlashMovieObject("alarmSound");
+		flashMovie.Play();
+	}	
 }
 
 GO.util.nl2br = function (v)
