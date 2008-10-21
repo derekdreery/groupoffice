@@ -252,7 +252,7 @@ GO.util.unlocalizeNumber = function (number, decimal_seperator, thousands_sepera
 
 GO.util.numberFormat = function (number, decimals, decimal_seperator, thousands_seperator)
 {
-	if(!decimals)
+	if(typeof(decimals)=='undefined')
 	{
 		decimals=2;
 	}

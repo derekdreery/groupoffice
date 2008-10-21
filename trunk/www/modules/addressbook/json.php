@@ -66,7 +66,7 @@ try
 			}else
 			{	
 				$mailings_filter = $GO_CONFIG->get_setting('mailings_filter', $GO_SECURITY->user_id);
-				$mailings_filter = empty($mailings_filter) ? array() : explode(',', $mailings_filter);
+				$mailings_filter = (empty($mailings_filter) || !isset($_POST['enable_mailings_filter'])) ? array() : explode(',', $mailings_filter);
 			}
 
 
@@ -148,7 +148,7 @@ try
 			}else
 			{	
 				$mailings_filter = $GO_CONFIG->get_setting('mailings_filter', $GO_SECURITY->user_id);
-				$mailings_filter = empty($mailings_filter) ? array() : explode(',', $mailings_filter);
+				$mailings_filter = (empty($mailings_filter) || !isset($_POST['enable_mailings_filter'])) ? array() : explode(',', $mailings_filter);
 			}
 			
 			if(isset($_POST['delete_keys']))

@@ -17,4 +17,6 @@ $lang['tasks']['statuses']['TENTATIVE']='Voorlopig';
 $lang['tasks']['statuses']['DELEGATED']='Gedelegeerd';
 $lang['tasks']['statuses']['COMPLETED']='Voltooid';
 $lang['tasks']['statuses']['IN-PROCESS']='Wordt aan gewerkt';
+
+$lang['tasks']['call']='Bellen';
 ?>

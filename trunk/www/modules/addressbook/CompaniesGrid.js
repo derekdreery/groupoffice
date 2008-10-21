@@ -7,7 +7,7 @@ GO.addressbook.CompaniesGrid = function(config){
 	
 	config.store = new GO.data.JsonStore({
 	    url: GO.settings.modules.addressbook.url+ 'json.php',
-	    baseParams: {task: 'companies'},
+	    baseParams: {task: 'companies', enable_mailings_filter:true},
 	    root: 'results',
 	    id: 'id',
 	    totalProperty:'total',
