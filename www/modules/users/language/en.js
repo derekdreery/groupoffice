@@ -76,3 +76,5 @@ GO.users.lang.userSettings = 'User settings';
 GO.users.lang.maxUsersReached='The maximum number of users has been reached. Go to the service tab to extend your maximum number of users.';
 
 GO.users.lang.group='Group';
+
+GO.users.lang.muteSound='Mute sound';

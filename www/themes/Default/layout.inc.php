@@ -73,7 +73,7 @@ if($GO_SECURITY->logged_in() && trim($_SESSION['GO_SESSION']['name']) != '' && !
 	{
 		?>
 		<script type="text/javascript">
-		GO.mainLayout.launchFullscreen('<?php echo $popup_groupoffice; ?>');
+		
 		</script>
 		<?php
 	}
@@ -85,7 +85,9 @@ if($GO_SECURITY->logged_in() && trim($_SESSION['GO_SESSION']['name']) != '' && !
 	if(isset($popup_groupoffice))
 	{
 		echo 'Ext.onReady(function(){
-			GO.mainLayout.login.defer(10000, GO.mainLayout);
+			//GO.mainLayout.login.defer(10000, GO.mainLayout);
+			GO.mainLayout.login();
+			GO.mainLayout.launchFullscreen("'.$popup_groupoffice.'");
 		}, GO.mainLayout.login);';
 	}else
 	{

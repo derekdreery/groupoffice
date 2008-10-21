@@ -1001,6 +1001,7 @@ class GO_CONFIG
       		$response['sort_name']=$_SESSION['GO_SESSION']['sort_name'];
       		$response['max_rows_list']=$_SESSION['GO_SESSION']['max_rows_list'];
       		$response['currency']=$_SESSION['GO_SESSION']['currency'];
+      		$response['mute_sound']=$_SESSION['GO_SESSION']['mute_sound']=='1';
 
       		$response['language']=$GO_LANGUAGE->language;
       		//state for Ext components
@@ -1024,6 +1025,7 @@ class GO_CONFIG
       		$response['sort_name']='first_name';
       		$response['max_rows_list']=30;
       		$response['language']=$GO_LANGUAGE->language;
+      		$response['mute_sound']=false;
       	}
       	$response['modules']=$GO_MODULES->modules;
       	$response['config']['theme_url']=$GO_THEME->theme_url;

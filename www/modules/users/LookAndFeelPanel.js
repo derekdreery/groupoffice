@@ -135,6 +135,12 @@ GO.users.LookAndFeelPanel = function(config)
 			value: GO.settings.sort_name
 		});
 		
+	config.items.push({
+			xtype:'checkbox',
+			hideLabel: true,
+			boxLabel: GO.users.lang.muteSound,
+			name: 'mute_sound'
+		});
 	
 	
 	GO.users.LookAndFeelPanel.superclass.constructor.call(this, config);		

@@ -226,7 +226,6 @@ CREATE TABLE IF NOT EXISTS `go_state` (
 -- 
 -- Tabel structuur voor tabel `go_users`
 -- 
-
 DROP TABLE IF EXISTS `go_users`;
 CREATE TABLE IF NOT EXISTS `go_users` (
   `id` int(11) NOT NULL default '0',
@@ -283,6 +282,7 @@ CREATE TABLE IF NOT EXISTS `go_users` (
   `bank` varchar(50) NOT NULL default '',
   `bank_no` varchar(50) NOT NULL default '',
   `mtime` int(11) NOT NULL default '0',
+  `mute_sound` enum('0','1') NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
