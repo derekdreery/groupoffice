@@ -755,7 +755,7 @@ class Date
 			$rrule .= "UNTIL=".date('Ymd', $repeat_end_time).";";
 		}
 
-		return $rrule;
+		return substr($rrule,0,-1);
 	}
 
 
