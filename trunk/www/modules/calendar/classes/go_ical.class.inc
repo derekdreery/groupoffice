@@ -91,7 +91,8 @@ class go_ical extends calendar
 
 		if($value_part != $qp_value_part)
 		{
-			$name_part .= ";ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:=\n";
+			//$name_part .= ";ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:=\n";
+			$name_part .= ";ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:";
 			//$qp_value_part = ' '.str_replace("\n", "\n ", $qp_value_part);
 			$qp_value_part = str_replace('=0A', "=0D=0A", $qp_value_part)."\n";
 
