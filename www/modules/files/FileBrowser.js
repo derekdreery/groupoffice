@@ -31,12 +31,6 @@ GO.files.FileBrowser = function(config){
 	{
 		config.root='root';
 	}
-	
-	
-	if(config.local_path)
-		this.local_path= config.local_path;
-	else
-		this.local_path='';
 
 	this.treePanel = new Ext.tree.TreePanel({
 		region:'west',
@@ -50,7 +44,7 @@ GO.files.FileBrowser = function(config){
 		loader: new Ext.tree.TreeLoader(
 		{
 			dataUrl:GO.settings.modules.files.url+'json.php',
-			baseParams:{task: 'tree', local_path: this.local_path},
+			baseParams:{task: 'tree'},
 			preloadChildren:true
 		}),
 		collapsed: config.treeCollapsed,
@@ -124,7 +118,7 @@ GO.files.FileBrowser = function(config){
 	
 	this.gridStore = new GO.data.JsonStore({
 		url: GO.settings.modules.files.url+'json.php',
-		baseParams: {'task': 'grid', local_path: this.local_path},
+		baseParams: {'task': 'grid'},
 		root: 'results',
 		totalProperty: 'total',
 		id: 'path',
@@ -484,7 +478,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	{
 		if(!this.folderPropertiesDialog)
 		{
-			this.folderPropertiesDialog = new GO.files.FolderPropertiesDialog({local_path:this.local_path});
+			this.folderPropertiesDialog = new GO.files.FolderPropertiesDialog();
 				this.folderPropertiesDialog.on('rename', function(){
 				this.reload();
 			}, this);
@@ -494,7 +488,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	
 	showFilePropertiesDialog : function(path)
 	{
-		this.filePropertiesDialog = new GO.files.FilePropertiesDialog({local_path:this.local_path});
+		this.filePropertiesDialog = new GO.files.FilePropertiesDialog();
 		this.filePropertiesDialog.on('rename', function(){
 			this.gridStore.load();	
 		}, this);
@@ -703,7 +697,6 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 				url:GO.settings.modules.files.url+'action.php',
 				params:{
 					task:'delete',
-					local_path: this.local_path,
 					path: this.contextTreePath	
 				},
 				count:1,
@@ -848,11 +841,9 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 							{		
     						Ext.MessageBox.alert(GO.lang.strError, GO.lang.noJava);
 							}else
-							{    					
-	    					var local_path = this.local_path ? 'true' : false;
-	    					
+							{ 					
 	    					GO.util.popup({
-	    						url: GO.settings.modules.files.url+'jupload/index.php?path='+encodeURIComponent(this.path)+'&local_path='+local_path, 
+	    						url: GO.settings.modules.files.url+'jupload/index.php?path='+encodeURIComponent(this.path), 
 	    						width : 640,
 	    						height: 500,
 	    						target: 'jupload'
@@ -898,16 +889,14 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			url:GO.settings.modules.files.url+'action.php',
 			params: {
 			  task: 'upload',
-			  path: this.path,
-			  local_path: this.local_path
+			  path: this.path
 			},
 			success:function(form, action){
 				this.uploadFile.clearQueue();						
 				this.uploadDialog.hide();		
 				this.sendOverwrite({
 					path : this.path,
-					task: 'overwrite',
-					local_path: this.local_path
+					task: 'overwrite'
 				});
 				
 				this.upForm.container.unmask();
@@ -1069,7 +1058,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 						this.newFolderFormPanel.form.submit({
 										
 							url:GO.settings.modules.files.url+'action.php',
-							params: {'task' : 'new_folder', 'path': this.path, local_path: this.local_path},
+							params: {'task' : 'new_folder', 'path': this.path},
 							waitMsg:GO.lang['waitMsgSave'],
 							success:function(form, action){
 								this.gridStore.reload();	

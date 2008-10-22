@@ -15,8 +15,7 @@ GO.files.FilePropertiesDialog = function(config){
 	
 	if(!config)
 		config={};
-		
-	this.local_path=config.local_path;	
+
 	
 	this.propertiesPanel = new Ext.Panel({
 		layout:'form',
@@ -140,8 +139,7 @@ Ext.extend(GO.files.FilePropertiesDialog, Ext.Window, {
 			url: GO.settings.modules.files.url+'json.php', 
 			params: {
 				path: path, 
-				task: 'file_properties',
-				local_path: this.local_path
+				task: 'file_properties'
 			},			
 			success: function(form, action) {				
 				this.setWritePermission(action.result.data.write_permission);
@@ -169,8 +167,7 @@ Ext.extend(GO.files.FilePropertiesDialog, Ext.Window, {
 			url:GO.settings.modules.files.url+'action.php',
 			params: {
 				path: this.path, 
-				task: 'file_properties',
-				local_path: this.local_path
+				task: 'file_properties'
 			},
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){

@@ -23,13 +23,6 @@ $fs = new files();
 require($GO_LANGUAGE->get_language_file('files'));
 
 $task=isset($_REQUEST['task']) ? smart_addslashes($_REQUEST['task']) : '';
-define('SERVER_PATH', empty($_POST['local_path']) ? $GO_CONFIG->file_storage_path : $GO_CONFIG->local_path);
-
-function strip_server_path($path)
-{
-	global $GO_CONFIG;
-	return substr($path, strlen(SERVER_PATH));
-}
 
 $response=array();
 
@@ -40,19 +33,19 @@ try{
 	{
 		case 'delete':
 			
-			$delete_path = SERVER_PATH.smart_addslashes($_POST['path']);
+			$delete_path = $GO_CONFIG->file_storage_path.smart_addslashes($_POST['path']);
 
 			if(!$fs->has_write_permission($GO_SECURITY->user_id, $delete_path))
 			{
 				throw new AccessDeniedException();
 			}
 			
-			$fs->notify_users($path, strip_server_path($delete_path), $GO_SECURITY->user_id, array(), array(), array(utf8_basename($delete_path)));
+			$fs->notify_users($path, $fs->strip_server_path($delete_path), $GO_SECURITY->user_id, array(), array(), array(utf8_basename($delete_path)));
 			
 			$response['success']=$fs->delete($delete_path);
 			break;
 		case 'file_properties':
-			$path = SERVER_PATH.smart_stripslashes($_POST['path']);
+			$path = $GO_CONFIG->file_storage_path.smart_stripslashes($_POST['path']);
 
 			if(!file_exists($path))
 			{
@@ -84,7 +77,7 @@ try{
 				$new_path = dirname($path).'/'.$new_name;
 
 				$fs->move($path, $new_path);
-				$response['path']=str_replace(SERVER_PATH,'',$new_path);
+				$response['path']=str_replace($GO_CONFIG->file_storage_path,'',$new_path);
 			}
 
 			$response['success']=true;
@@ -92,7 +85,7 @@ try{
 			break;
 
 		case 'folder_properties':
-			$path = SERVER_PATH.smart_stripslashes($_POST['path']);
+			$path = $GO_CONFIG->file_storage_path.smart_stripslashes($_POST['path']);
 
 			if(!file_exists($path))
 			{
@@ -158,7 +151,7 @@ try{
 					$new_path = dirname($path).'/'.$new_name;
 
 					$fs->move($path, $new_path);
-					$response['path']=str_replace(SERVER_PATH,'',$new_path);
+					$response['path']=str_replace($GO_CONFIG->file_storage_path,'',$new_path);
 				}
 			}
 			$response['success']=true;
@@ -167,7 +160,7 @@ try{
 
 		case 'new_folder':
 
-			$path = SERVER_PATH.smart_stripslashes($_POST['path']);
+			$path = $GO_CONFIG->file_storage_path.smart_stripslashes($_POST['path']);
 
 			if(!file_exists($path))
 			{
@@ -205,7 +198,7 @@ try{
 		case 'upload':
 			//var_dump($_FILES);
 			$response['success']=true;
-			$path = SERVER_PATH.smart_stripslashes($_POST['path']);
+			$path = $GO_CONFIG->file_storage_path.smart_stripslashes($_POST['path']);
 			
 			
 
@@ -235,7 +228,7 @@ try{
 			$modified=array();
 
 			$command = isset($_POST['command']) ? $_POST['command'] : 'ask';
-			$path = SERVER_PATH.smart_stripslashes($_POST['path']);
+			$path = $GO_CONFIG->file_storage_path.smart_stripslashes($_POST['path']);
 
 			while($tmp_file = array_shift($_SESSION['GO_SESSION']['files']['uploaded_files']))
 			{
@@ -267,7 +260,7 @@ try{
 				
 			}
 			
-			$fs->notify_users($path, substr(dirname($path), strlen(SERVER_PATH)), $GO_SECURITY->user_id, $modified, $new);
+			$fs->notify_users($path, substr(dirname($path), strlen($GO_CONFIG->file_storage_path)), $GO_SECURITY->user_id, $modified, $new);
 
 			$response['success']=true;
 
@@ -285,7 +278,7 @@ try{
 
 				$response['success']=true;
 
-				if(!$fs->has_write_permission($GO_SECURITY->user_id, SERVER_PATH.$_SESSION['GO_SESSION']['files']['paste_destination']))
+				if(!$fs->has_write_permission($GO_SECURITY->user_id, $GO_CONFIG->file_storage_path.$_SESSION['GO_SESSION']['files']['paste_destination']))
 				{
 					throw new AccessDeniedException();
 				}
@@ -294,7 +287,7 @@ try{
 
 				while($paste_source = array_shift($_SESSION['GO_SESSION']['files']['paste_sources']))
 				{
-					$destination = SERVER_PATH.$_SESSION['GO_SESSION']['files']['paste_destination'].'/'.utf8_basename($paste_source);
+					$destination = $GO_CONFIG->file_storage_path.$_SESSION['GO_SESSION']['files']['paste_destination'].'/'.utf8_basename($paste_source);
 
 					if(file_exists($destination) && $command!='yes' && $command!='yestoall')
 					{
@@ -308,15 +301,15 @@ try{
 					{
 						if($_POST['paste_mode']=='cut')
 						{
-							if(!$fs->has_write_permission($GO_SECURITY->user_id, SERVER_PATH.$paste_source))
+							if(!$fs->has_write_permission($GO_SECURITY->user_id, $GO_CONFIG->file_storage_path.$paste_source))
 							{
 								throw new AccessDeniedException();
 							}
-							$fs->move(SERVER_PATH.$paste_source,
+							$fs->move($GO_CONFIG->file_storage_path.$paste_source,
 							$destination);
 						}else
 						{
-							$fs->copy(SERVER_PATH.$paste_source,
+							$fs->copy($GO_CONFIG->file_storage_path.$paste_source,
 							$destination);
 						}
 					}
