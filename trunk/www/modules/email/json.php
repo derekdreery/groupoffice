@@ -634,7 +634,7 @@ try{
 				$response['bcc'] = htmlspecialchars($bcc, ENT_QUOTES, 'UTF-8');
 
 				$response['date']=date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], $response['udate']);
-				$response['size']=Number::format_size($response['size']);
+				//$response['size']=Number::format_size($response['size']);
 
 				$parts = array_reverse($imap->f("parts"));
 

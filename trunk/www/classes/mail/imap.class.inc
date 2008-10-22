@@ -197,12 +197,12 @@ class imap {
 
 			//for supressing notices that are not really errors
 			$this->clear_errors();
-			
+				
 			imap_close($this->conn);
 			unset ($this->conn);
 		}
 	}
-	
+
 	function clear_errors()
 	{
 		imap_errors();
@@ -354,6 +354,23 @@ class imap {
 	 * @return void
 	 */
 
+	/*function get_messages($first, $offset) {
+		//Use imap_fetch_overview and sort them correctly
+		//for performance.
+
+		if (!isset($this->sort)) {
+		$this->sort();
+		}
+
+		$last = $first + $offset;
+		if ($offset == 0 || ($last > $this->count)) {
+		$last = $this->count;
+		}
+		for ($i = $first; $i < $last; $i++) {
+		$this->messages[]=$this->sort[$i];
+		}
+		}*/
+
 	function get_messages($first, $offset) {
 		//Use imap_fetch_overview and sort them correctly
 		//for performance.
@@ -366,8 +383,31 @@ class imap {
 		if ($offset == 0 || ($last > $this->count)) {
 			$last = $this->count;
 		}
-		for ($i = $first; $i < $last; $i++) {
-			$this->messages[]=$this->sort[$i];
+		$get = '';
+		$index = 0;
+		$sorted_uids = array ();
+		for ($i = $first; $i < $last; $i ++) {
+			if ($i != $first) {
+				$get .= ',';
+			}
+			$get .= $this->sort[$i];
+			$sorted_uids[] = $this->sort[$i];
+			$index ++;
+		}
+
+		$tmp = $sorted_uids;
+		sort($tmp); //this is the way they are returned by imap_fetch_overview
+
+		$uid_map = array ();
+		$count = count($tmp);
+		for ($i = 0; $i < $count; $i ++) {
+			$uid_map[$tmp[$i]] = $i;
+		}
+
+		$tmp_overviews = imap_fetch_overview($this->conn, $get, FT_UID);
+
+		while ($message_overview = array_shift($tmp) && $uid = array_shift($sorted_uids)) {
+			$this->messages[] = $tmp_overviews[$uid_map[$uid]];
 		}
 	}
 
@@ -382,11 +422,11 @@ class imap {
 
 	function get_header_values($header)
 	{
-		$header = str_replace("\r\n", "\n", $header);		
+		$header = str_replace("\r\n", "\n", $header);
 		//commented with \h is better but only supported from 5.2.4
-		//$header = preg_replace("/\n\h/", " ", $header);		
+		//$header = preg_replace("/\n\h/", " ", $header);
 		$header = preg_replace("/\n\s/", " ", $header);
-		
+
 		$lines = explode("\n", $header);
 
 		$values = array();
@@ -394,7 +434,7 @@ class imap {
 		{
 			$line = stripslashes($line);
 			$colpos = strpos($line, ':');
-				
+
 			if($colpos)
 			{
 				$key = strtolower(trim(substr($line,0,$colpos)));
@@ -419,10 +459,10 @@ class imap {
 		{
 			$message["attachments"] = true;
 		}
-	
+
 
 		$RFC822 = new RFC822();
-		
+
 		$message["to"]=array();
 		if(isset($values['to']))
 		{
@@ -432,24 +472,24 @@ class imap {
 				$message['to'][]=$RFC822->write_address($this->enc_utf8($address['personal']), $address['email']);
 			}
 		}
-		
+
 		$message["cc"]=array();
 		if(isset($values['cc']))
 		{
-			$cc = $RFC822->parse_address_list($values['cc']);			
+			$cc = $RFC822->parse_address_list($values['cc']);
 			foreach($cc as $address)
 			{
 				$message['cc'][]=$RFC822->write_address($this->enc_utf8($address['personal']), $address['email']);
 			}
 		}
-				 
+			
 		if(!isset($values['from']))
-			$values['from']='';
-		 
+		$values['from']='';
+			
 		$from = $RFC822->parse_address_list($values['from']);
 		$message["from"] = isset($from[0]['personal']) ? $this->enc_utf8($from[0]['personal']) : '';
 		$message["sender"] = isset($from[0]['email']) ? $this->enc_utf8($from[0]['email']) : '';
-		$message['udate'] = isset($values['date']) ? $this->enc_utf8(strtotime($values['date'])) : '';
+		$message['udate'] = isset($values['date']) ? strtotime($values['date']) : '';
 		$message['subject'] = isset($values['subject']) ? $this->enc_utf8($values['subject']) : '';
 
 		$message["notification"]=isset($values['disposition-notification-to']) ? $values['disposition-notification-to'] : false;
@@ -466,9 +506,9 @@ class imap {
 	 */
 	function next_message()
 	{
-		if($uid = array_shift($this->messages))
+		if($overview = array_shift($this->messages))
 		{
-			return $this->get_message($uid, false);
+			return $this->get_message($overview, false);
 		}
 		return false;
 	}
@@ -495,15 +535,30 @@ class imap {
 				$this->sort();
 			}
 
-			$this->message['uid'] = $uid;
-			$this->message['number'] = imap_msgno($this->conn, $uid);
-
-			if(!@$headerinfo = imap_headerinfo($this->conn, $this->message['number']))
+			if(is_object($uid))
 			{
-				//message doesn't exist
-				return false;
+				$this->message['uid'] = $uid->uid;
+				$this->message['number'] = $uid->msgno;
+				$this->message['new'] = (!$uid->seen && !$uid->recent && $this->is_imap());
+				$this->message["flagged"] = $uid->flagged;
+				$this->message["size"] = $uid->size;
+				$this->message["answered"] = $uid->answered;
+			}else
+			{					
+				$this->message['uid'] = $uid;
+				$this->message['number'] = imap_msgno($this->conn, $uid);
+
+				/*if(!@$headerinfo = imap_headerinfo($this->conn, $this->message['number']))
+				{
+					//message doesn't exist
+					return false;
+				}
+				$this->message['new'] = (($headerinfo->Recent == 'N' || $headerinfo->Unseen == 'U')  && $this->is_imap());
+				$this->message["flagged"] = $headerinfo->Flagged=='F';
+				$this->message["size"] = $headerinfo->Size;
+				$this->message["answered"] = $headerinfo->Answered=='A';*/
 			}
-				
+
 			for ($i = 0; $i < sizeof($this->sort); $i ++) {
 				if ($this->message['uid'] == $this->sort[$i]) {
 					$this->message["next"] = ($i -1 >= 0) ? $this->sort[$i -1] : 0;
@@ -511,13 +566,9 @@ class imap {
 					break;
 				}
 			}
-			$this->message['new'] = (($headerinfo->Recent == 'N' || $headerinfo->Unseen == 'U')  && $this->is_imap()) ? true : false;
-
-			$this->message["flagged"] = $headerinfo->Flagged=='F';
-			$this->message["size"] = $headerinfo->Size;
-			$this->message["answered"] = $headerinfo->Answered=='A';
-			$this->message["parts"] = array();
 			
+			$this->message["parts"] = array();
+				
 			if($fetchstructure)
 			{				//if ($part == '') {
 				$structure = imap_fetchstructure($this->conn, $uid, FT_UID);
@@ -530,37 +581,40 @@ class imap {
 			}
 
 			$header = imap_fetchheader($this->conn, $this->message['number']);
-				
+
 			$values = $this->get_header_values($header);
 			/*foreach($values as $key=>$value)
-			{
+			 {
 				//if(empty($this->message[$key]))
 				//{
 				if(is_array($value))
 				{
-					for($i=0;$i<count($value);$i++)
-					{
-						$value[$i]=$this->enc_utf8($value[$i]);
-					}
+				for($i=0;$i<count($value);$i++)
+				{
+				$value[$i]=$this->enc_utf8($value[$i]);
+				}
 				}else
 				{
-					$value=$this->enc_utf8($value);
+				$value=$this->enc_utf8($value);
 				}
-				
+
 				$this->message[$key]=$value;
 				//}
-			}*/
-			
+				}*/
+				
 			$this->message = array_merge($this->message, $values);
-				
-				
-			$this->message["reply_to"] = $this->RFC822->write_address($this->message['from'], $this->message["sender"]);
 
-			if (isset ($headerinfo->reply_to)) {
-				$tmp = $headerinfo->reply_to;
-				$this->message["reply_to"] = $this->RFC822->write_address($this->message['from'], $tmp[0]->mailbox.'@'.$tmp[0]->host);
+			if(!isset($this->message["reply_to"]))
+			{
+				$this->message["reply_to"]=$this->message["from"];
 			}
 
+			/*$this->message["reply_to"] = $this->RFC822->write_address($this->message['from'], $this->message["sender"]);
+
+			if (isset ($headerinfo->reply_to)) {
+			$tmp = $headerinfo->reply_to;
+			$this->message["reply_to"] = $this->RFC822->write_address($this->message['from'], $tmp[0]->mailbox.'@'.$tmp[0]->host);
+			}*/
 			return $this->message;
 
 		} else {
@@ -617,7 +671,7 @@ class imap {
 					}
 				}
 			}
-				
+
 			if (empty($name) && isset ($mimeobj->parameters)) {
 				$params = $mimeobj->parameters;
 				for ($x = 0; $x < count($params); $x ++) {
@@ -741,12 +795,12 @@ class imap {
 					}
 				}
 			}
-				
+
 			if(empty($name) && strtolower($full_mime_type) == 'message/rfc822')
 			{
 				$name='Message.eml';
 			}
-				
+
 			//echo $section.': '.$full_mime_type.' '.$name.'<br>';
 			$bytes = isset ($mimeobj->bytes) ? $mimeobj->bytes : 0;
 			$tmp = Array (
@@ -758,6 +812,7 @@ class imap {
 				'charset' => $part_charset, 
 				'disposition' => $mimeobj->ifdisposition ? $mimeobj->disposition : '', 
 				'size' => $bytes,
+				'human_size'=>Number::format_size($bytes),
 				'type' => $parttype);
 
 			array_unshift($this->message["parts"], $tmp);
@@ -1368,9 +1423,9 @@ class imap {
 		//containing space values inside, but they mustn't. The space values have to be removed before
 		//they are going to be converted to utf8.
 
-		if (strpos($str, '=?') !== false) {				
+		if (strpos($str, '=?') !== false) {
 			//$str = str_replace(" ", "", $str);
-			//return imap_utf8($str);				
+			//return imap_utf8($str);
 			return iconv_mime_decode($str,null,'UTF-8');
 		}else {
 			if (function_exists('iconv'))
@@ -1445,7 +1500,7 @@ class imap {
 		if (extension_loaded('iconv')) {
 			$input=preg_replace("/&A/","+A",$input);
 			$input=preg_replace("/&-/","&",$input);
-				
+
 			if($converted_input = iconv('UTF-7', $charset, $input))
 			{
 				return $converted_input;
