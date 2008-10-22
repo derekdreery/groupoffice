@@ -34,14 +34,6 @@ class filesystem extends db
 	var $search_results = array();
 
 	/**
-   * Disable Group-Office permissons when fetching files and folders
-   *
-   * @var     bool
-   * @access  private
-   */
-	var $disable_go_permissions = true;
-
-	/**
    * Holds an error message if one occured.
    *
    * @var     mixed
@@ -54,8 +46,6 @@ class filesystem extends db
    * be used. In most cases they should be used but when you just want to fetch some
    * files as an administrator you can disable them.
    *
-   * @param bool $disable_go_permissions Disable Group-Office permission system
-   *
    * @access public
    * @return void
    */
@@ -64,13 +54,7 @@ class filesystem extends db
 		global $GO_MODULES;
 		
 		$this->db();
-
-	}
-	
-
-
-	
-	
+	}	
 	
 	 /**
 	 * Creates a directory recursively
@@ -182,59 +166,13 @@ class filesystem extends db
 			return false;
 		}
 	}
-
-
-	/**
-   * Check if a path is the user's home path
-   *
-   * @param int $user_id Group-Office user ID
-   * @param string $path The path to check
-   *
-   * @access public
-   * @return bool 
-   */
-	function is_home_path($user_id, $path)
-	{
-		global $GO_CONFIG, $GO_USERS;
-
-		if ($user = $GO_USERS->get_user($user_id))
-		{
-			$home_path = $GO_CONFIG->file_storage_path.'users/'.$user['username'];
-
-			if (dirname($path).utf8_basename($path) == dirname($home_path).utf8_basename($home_path))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-   * Check if a user owns a path
-   *
-   * @param int $user_id Group-Office user ID
-   * @param string $path The path to check
-   *
-   * @access public
-   * @return bool 
-   */
-	function is_owner($user_id, $path)
-	{
-		global $GO_CONFIG, $GO_USERS;
-
-		if ($user = $GO_USERS->get_user($user_id))
-		{
-			$home_path = $GO_CONFIG->file_storage_path.'users/'.$user['username'];
-
-			if (strpos($path, $home_path) === 0)
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-
 	
+	/**
+	 * Calculate the size of a folder
+	 *
+	 * @param string $path
+	 * @return int The size in bytes
+	 */
 
 	function size($path)
 	{
@@ -258,23 +196,22 @@ class filesystem extends db
 			return filesize($path);
 		}
 	}
+	
+	/**
+	 * Move a file or folder
+	 *
+	 * @param string $source_path
+	 * @param string $destination_path
+	 * @return bool true on success
+	 */
 
 	function move($source_path, $destination_path)
 	{
-
 		$source_path = dirname($source_path).'/'.utf8_basename($source_path);
 		$destination_path = dirname($destination_path).'/'.utf8_basename($destination_path);
-		
-		
-
-		//throw new Exception($source_path.' -> '.$destination_path);
 
 		global $GO_CONFIG, $GO_MODULES;
-		//do not move into own path
-	//	$source_dir_count = count(explode('/',$source_path));
-		//$destination_dir_count = count(explode('/',$destination_path));
-
-		//if ((strpos($destination_path, $source_path) === 0) && ($destination_dir_count > $source_dir_count))
+		
 		if (strpos($destination_path.'/', $source_path.'/')===0)
 		{
 			throw new Exception('The destination is located inside the source directory');
@@ -283,7 +220,6 @@ class filesystem extends db
 			throw new Exception('The source and destionation are the same');
 		}else
 		{
-
 			if (is_dir($source_path))
 			{
 				if (!file_exists($destination_path))
@@ -294,16 +230,7 @@ class filesystem extends db
 					}
 				}
 				
-				if(!$this->disable_go_permissions)
-				{				
-					$folder = $this->get_folder(addslashes($source_path));
-					$up_folder['id']=$folder['id'];
-					$up_folder['path']=addslashes($destination_path);
-					$this->update_folder($up_folder);
-									
-					$this->move_notifications(addslashes($source_path), addslashes($destination_path));
-				}			
-				
+				$this->move_folder(addslashes($source_path),addslashes($destination_path));				
 				
 				$files = $this->get_files($source_path, true);
 				while ($file = array_shift($files))
@@ -316,14 +243,10 @@ class filesystem extends db
 					$this->move($child['path'], $destination_path.'/'.$child['name']);
 				}
 				
-				rmdir($source_path);
+				return rmdir($source_path);
 			}else
 			{
-				
-				$file = $this->get_file(addslashes($source_path));
-				$up_file['id']=$file['id'];
-				$up_file['path']=addslashes($destination_path);
-				$this->update_file($up_file);
+				$this->move_file(addslashes($source_path),addslashes($destination_path));
 				
 				//rename fails when moving accross partitions
 				if(isset($_SESSION['GO_SESSION']['username']) && strstr($source_path, $GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/') &&
@@ -334,19 +257,51 @@ class filesystem extends db
 				}else
 				{
 					$this->copy($source_path, $destination_path);
-					unlink($source_path);				
+					return unlink($source_path);				
 				}
 			}
 		}
 	}
+	
+	/**
+	 * Abstract method that is called when a file is moved
+	 *
+	 * @param string $source_path
+	 * @param string $destination_path
+	 */
+	
+	function move_file($source_path, $destination_path)
+	{
+
+				
+	}
+	
+	/**
+	 * Abstract method that is called when a folder is moved
+	 *
+	 * @param string $source_path
+	 * @param string $destination_path
+	 */
+	
+	function move_folder($source_path, $destination_path)
+	{
+
+				
+	}
+	
+	/**
+	 * Copy a file or folder
+	 *
+	 * @param string $source_path
+	 * @param string $destination_path
+	 * @return true on success
+	 */
 
 	function copy($source_path, $destination_path)
 	{
 		$source_path = dirname($source_path).'/'.utf8_basename($source_path);
 		$destination_path = dirname($destination_path).'/'.utf8_basename($destination_path);
 
-		//echo $source_path.' -> '.$destination_path;
-		
 		global $GO_CONFIG;
 		
 		if($source_path == $destination_path)
@@ -379,11 +334,17 @@ class filesystem extends db
 				return true;
 			}else
 			{
-				//go_log(LOG_DEBUG, $source_path.' -> '.$destination_path);
 				return copy($source_path, $destination_path);
 			}
 		}
 	}
+	
+	/**
+	 * Get the diskspace used by a folder
+	 *
+	 * @param string $path
+	 * @return int Usage in bytes
+	 */
 
 	function get_usedspace($path)
 	{
@@ -401,10 +362,13 @@ class filesystem extends db
 		}
 		return false;
 	}
-
-
-
-
+	
+	/**
+	 * Delete a file or folder
+	 *
+	 * @param String $path
+	 * @return bool true on success
+	 */
 	function delete($path)
 	{
 		$path = dirname($path).'/'.utf8_basename($path);
@@ -432,16 +396,9 @@ class filesystem extends db
 					return false;
 				}
 			}
-			if ($this->disable_go_permissions ||
-			$this->has_write_permission($GO_SECURITY->user_id, $path))
+			if ($this->has_write_permission($GO_SECURITY->user_id, $path))
 			{
-				if (!$this->disable_go_permissions)
-				{
-					$this->delete_folder(addslashes($path));
-				}
-
-				global $GO_CONFIG;
-
+				$this->delete_folder(addslashes($path));
 				return rmdir($path);
 			}else
 			{
@@ -449,21 +406,9 @@ class filesystem extends db
 			}
 		}else
 		{
-
-			if (!$this->disable_go_permissions)
-			{
-				$file = $this->get_file(addslashes($path));
-				$this->delete_file(addslashes($path));
+			$this->delete_file(addslashes($path));				
 				
-				global $GO_CONFIG;
-				
-				require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
-				$search = new search();
-				$search->delete_search_result($file['id'], 6);
-			}
-				
-			if ($this->disable_go_permissions ||
-			$this->has_write_permission($GO_SECURITY->user_id, $path))
+			if ($this->has_write_permission($GO_SECURITY->user_id, $path))
 			{
 				return unlink($path);
 			}else
@@ -472,6 +417,35 @@ class filesystem extends db
 			}
 		}
 	}
+	
+	/**
+	 * Abstract method that is called when a file is deleted
+	 *
+	 * @param string $path
+	 */
+	
+	function delete_file($path)
+	{
+		
+	}
+	
+	/**
+	 * Abstract method that is called when a folder is deleted
+	 *
+	 * @param string $path
+	 */
+	
+	function delete_folder($path)
+	{
+		
+	}
+	
+	/**
+	 * Get the parent path of a file or folder
+	 *
+	 * @param string $path
+	 * @return mixed parent path or false
+	 */
 
 	function get_parent_path($path)
 	{
@@ -493,7 +467,13 @@ class filesystem extends db
 		}
 	}
 
-	//faster then get_folders_sorted
+	/**
+	 * Get an array of folders
+	 *
+	 * @param string $path
+	 * @param bool $gethidden true if you want hidden files (eg. .svn)
+	 * @return array with folders (path,name, mtime,size,type)
+	 */
 	function get_folders($path, $gethidden=false)
 	{
 		$path = dirname($path).'/'.utf8_basename($path).'/';
@@ -524,6 +504,17 @@ class filesystem extends db
 
 	#returns all subfolders of a folder sorted based on the result of a function
 	#passed that is performed on the pathname. (For example filesize();)
+	
+	/**
+	 * returns all subfolders of a folder sorted based on the result of a function
+	 * passed that is performed on the pathname. (For example filesize();)
+	 *
+	 * @param string $path
+	 * @param sort_file A php function performed on the path used for sorting. eg. filesize, basename
+	 * @param sort_direction ASC or DESC
+	 * @param bool $gethidden true if you want hidden files (eg. .svn)
+	 * @return array with folders (path,name, mtime,size,type)
+	 */
 	function get_folders_sorted($path,$sort_field='utf8_basename',$sort_direction='ASC', $gethidden=false)
 	{
 		$path = dirname($path).'/'.utf8_basename($path).'/';
@@ -590,8 +581,14 @@ class filesystem extends db
 		return $folders;
 	}
 
-	//faster then get_files_sorted
-	function get_files($path, $move=false, $gethidden=false)
+	/**
+	 * Get an array of files in a folder
+	 *
+	 * @param string $path
+	 * @param bool $gethidden
+	 * @return unknown
+	 */
+	function get_files($path, $gethidden=false)
 	{
 		$path = dirname($path).'/'.utf8_basename($path).'/';
 
@@ -603,17 +600,7 @@ class filesystem extends db
 			while($item=readdir($dir))
 			{
 				$file_path = $path.$item;
-				if (!is_dir($file_path) && $move) {
-					$file['path'] = $file_path;
-					$file['name'] = utf8_basename($file_path);
-					$file['size'] = filesize($file_path);
-					$file['mtime'] = filemtime($file_path);
-					$file['type'] = mime_content_type($file_path);
-
-					$files[] = $file;
-				}
-				if (!is_dir($file_path) && !$move &&
-				($gethidden || !(strpos($item,".") === 0)))
+				if (!is_dir($file_path) && ($gethidden || !(strpos($item,".") === 0)))
 				{
 					$file['path'] = $file_path;
 					$file['name'] = utf8_basename($file_path);
@@ -629,8 +616,16 @@ class filesystem extends db
 		return $files;
 	}
 
-	#returns all subfolders of a folder sorted based on the result of a function
-	#passed that is performed on the pathname. (For example filesize();)
+	/**
+	 * returns all files of a folder sorted based on the result of a function
+	 * passed that is performed on the pathname. (For example filesize();)
+	 *
+	 * @param string $path
+	 * @param sort_file A php function performed on the path used for sorting. eg. filesize, basename
+	 * @param sort_direction ASC or DESC
+	 * @param bool $gethidden true if you want hidden files (eg. .svn)
+	 * @return array with folders (path,name, mtime,size,type)
+	 */
 	function get_files_sorted($path,$sort_field='utf8_basename',$sort_direction='ASC', $gethidden=false)
 	{
 		$path = dirname($path).'/'.utf8_basename($path).'/';
@@ -697,6 +692,30 @@ class filesystem extends db
 		}
 		return $files;
 	}
-
 	
+	/**
+	 * Returns true if the path is writable
+	 *
+	 * @param int $user_id
+	 * @param string $path
+	 * @return bool
+	 */
+	
+	function has_write_permission($user_id, $path)
+	{
+		return is_writable($path);
+	}
+	
+	/**
+	 * Returns true if the path is readable
+	 *
+	 * @param int $user_id
+	 * @param string $path
+	 * @return bool
+	 */
+	
+	function has_read_permission($user_id, $path)
+	{
+		return is_readable($path);
+	}	
 }
