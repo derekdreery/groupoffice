@@ -81,6 +81,9 @@ try{
 		case 'save_task':
 			$conflicts=array();
 
+			//for servers with register_globals on
+			unset($task);
+			
 			$task_id=$task['id']=isset($_POST['task_id']) ? smart_addslashes($_POST['task_id']) : 0;
 				
 			if($task_id>0)

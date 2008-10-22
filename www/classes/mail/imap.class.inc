@@ -1368,12 +1368,9 @@ class imap {
 		//containing space values inside, but they mustn't. The space values have to be removed before
 		//they are going to be converted to utf8.
 
-		if (substr($str, 0,2) == '=?') {
-				
-				
+		if (strpos($str, '=?') !== false) {				
 			//$str = str_replace(" ", "", $str);
-			//return imap_utf8($str);
-				
+			//return imap_utf8($str);				
 			return iconv_mime_decode($str,null,'UTF-8');
 		}else {
 			if (function_exists('iconv'))
