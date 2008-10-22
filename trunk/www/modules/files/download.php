@@ -46,7 +46,7 @@ if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_per
 	header('Content-Length: '.filesize($path));
 	//header('Expires: '.gmdate('D, d M Y H:i:s') . ' GMT');
 	header('Content-Transfer-Encoding: binary');
-	
+	header('Expires: ' . gmstrftime("%a, %d %b %Y %H:%M:%S GMT", time()+1080));
 	header("Last-Modified: ".gmdate("D, d M Y H:i:s", filemtime($path))." GMT");
 	header("Etag: ".md5_file($path));
 	header('Cache-Control: private, pre-check=0, post-check=0, max-age=1080');
