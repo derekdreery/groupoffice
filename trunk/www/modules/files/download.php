@@ -52,6 +52,7 @@ if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_per
 	
 	header("Last-Modified: ".gmdate("D, d M Y H:i:s", $last_modified_time)." GMT");
 	header("Etag: $etag");
+	header('Cache-Control: private, pre-check=0, post-check=0, max-age=1080');
 
 	if ($browser['name'] == 'MSIE')
 	{
