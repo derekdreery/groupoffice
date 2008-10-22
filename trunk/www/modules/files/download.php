@@ -43,13 +43,15 @@ if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_per
 	$filename = utf8_basename($path);
 	$extension = File::get_extension($filename);
 
+	$mtime = filemtime($path);
+	
+	header("Date: " . date("D, j M Y G:i:s ", $mtime) . 'GMT');
 	header('Content-Length: '.filesize($path));
-	//header('Expires: '.gmdate('D, d M Y H:i:s') . ' GMT');
 	header('Content-Transfer-Encoding: binary');
-	//header('Expires: ' . gmstrftime("%a, %d %b %Y %H:%M:%S GMT", time()+1080));
-	header("Last-Modified: ".gmdate("D, d M Y H:i:s", filemtime($path))." GMT");
+	header("Expires: " . gmdate("D, j M Y H:i:s", time() + 86400) . " GMT");	
+	header("Last-Modified: ".gmdate("D, d M Y H:i:s", $mtime)." GMT");
 	header("Etag: ".md5_file($path));
-	header('Cache-Control: private, pre-check=0, post-check=0, max-age=1080');
+	header('Cache-Control: cache, max-age=86400');
 	header('Pragma: cache');
 	
 	if ($browser['name'] == 'MSIE')
