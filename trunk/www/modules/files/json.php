@@ -21,17 +21,8 @@ $fs = new files();
 
 require($GO_LANGUAGE->get_language_file('files'));
 
-
 $task=isset($_REQUEST['task']) ? smart_addslashes($_REQUEST['task']) : '';
 $response=array();
-
-define('SERVER_PATH', empty($_POST['local_path']) ? $GO_CONFIG->file_storage_path : $GO_CONFIG->local_path);
-
-function strip_server_path($path)
-{
-	global $GO_CONFIG;
-	return substr($path, strlen(SERVER_PATH));
-}
 
 try{
 
@@ -39,7 +30,7 @@ try{
 	{
 		case 'tree':
 
-			$home_path = SERVER_PATH.'users/'.$_SESSION['GO_SESSION']['username'];
+			$home_path = $GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'];
 			$node = isset($_POST['node']) ? smart_stripslashes($_POST['node']) : 'root';
 
 			switch($node)
@@ -54,7 +45,7 @@ try{
 					{
 						$node= array(
 						'text'=>$folder['name'],
-						'id'=>strip_server_path($folder['path']),
+						'id'=>$fs->strip_server_path($folder['path']),
 						'notreloadable'=>true			
 						);
 
@@ -80,7 +71,7 @@ try{
 
 					$node= array(
 					'text'=>$lang['files']['personal'],
-					'id'=>strip_server_path($home_path),
+					'id'=>$fs->strip_server_path($home_path),
 					'iconCls'=>'folder-home',
 					'expanded'=>true,
 					'children'=>$children,
@@ -112,7 +103,7 @@ try{
 
 									$node = array(
 											'text'=>utf8_basename($fs->f('path')),
-											'id'=>strip_server_path($fs->f('path')),
+											'id'=>$fs->strip_server_path($fs->f('path')),
 											'iconCls'=>'folder-default',
 											'reloadable'=>false
 											);
@@ -161,7 +152,7 @@ try{
 
 									$node = array(
 											'text'=>utf8_basename($fs->f('path')),
-											'id'=>strip_server_path($fs->f('path')),
+											'id'=>$fs->strip_server_path($fs->f('path')),
 											'iconCls'=>'folder-default',
 											'notreloadable'=>true
 											);
@@ -185,7 +176,7 @@ try{
 					break;
 
 				default:
-					$path = SERVER_PATH.smart_stripslashes($_POST['node']);
+					$path = $GO_CONFIG->file_storage_path.smart_stripslashes($_POST['node']);
 					if(!$fs->has_read_permission($GO_SECURITY->user_id, $path))
 					{
 						throw new AccessDeniedException();
@@ -199,7 +190,7 @@ try{
 					{
 						$node= array(
 						'text'=>$folder['name'],
-						'id'=>strip_server_path($folder['path'])
+						'id'=>$fs->strip_server_path($folder['path'])
 						);
 
 						$db_folder = $fs->get_folder(addslashes($folder['path']));
@@ -234,7 +225,7 @@ try{
 						$path = smart_stripslashes($_POST['path']);
 						
 						
-						$fs->notify_users(SERVER_PATH.$path, $path,$GO_SECURITY->user_id, array(), $_SESSION['GO_SESSION']['files']['jupload_new_files']);
+						$fs->notify_users($GO_CONFIG->file_storage_path.$path, $path,$GO_SECURITY->user_id, array(), $_SESSION['GO_SESSION']['files']['jupload_new_files']);
 						
 						$_SESSION['GO_SESSION']['files']['jupload_new_files']=array();
 					}
@@ -257,7 +248,7 @@ try{
 									{
 										$last_folder = $fs->f('path');
 											
-										$folder['path']=strip_server_path($share_path);
+										$folder['path']=$fs->strip_server_path($share_path);
 										$folder['grid_display']='<div class="go-grid-icon filetype-folder">'.utf8_basename($share_path).'</div>';
 										$folder['type']='Shared folder';
 										$folder['mtime']=Date::get_timestamp(filemtime($share_path));
@@ -270,7 +261,7 @@ try{
 						}
 					}else
 					{
-						$path = SERVER_PATH.smart_stripslashes($_POST['path']);
+						$path = $GO_CONFIG->file_storage_path.smart_stripslashes($_POST['path']);
 						
 						
 						if(!empty($_POST['create_path']) && !is_dir($path))
@@ -294,17 +285,17 @@ try{
 								$deleted = array();
 								foreach($delete_paths as $delete_path)
 								{
-									if(!$fs->has_write_permission($GO_SECURITY->user_id, SERVER_PATH.$delete_path))
+									if(!$fs->has_write_permission($GO_SECURITY->user_id, $GO_CONFIG->file_storage_path.$delete_path))
 									{
 										throw new AccessDeniedException();
 									}								
 									
-									$fs->delete(SERVER_PATH.$delete_path);
+									$fs->delete($GO_CONFIG->file_storage_path.$delete_path);
 									
 									$deleted[]=utf8_basename($delete_path);
 								}								
 								
-								$fs->notify_users($path, strip_server_path($path), $GO_SECURITY->user_id, array(), array(), $deleted);
+								$fs->notify_users($path, $fs->strip_server_path($path), $GO_SECURITY->user_id, array(), array(), $deleted);
 			
 							}catch(Exception $e)
 							{
@@ -323,7 +314,7 @@ try{
 								$new_path = $path.'/'.smart_stripslashes($_POST['template_name']).'.'.$template['extension'];
 								file_put_contents($new_path, $template['content']);
 
-								$response['new_path']=strip_server_path($new_path);
+								$response['new_path']=$fs->strip_server_path($new_path);
 							}
 
 							try{
@@ -335,7 +326,7 @@ try{
 									function strip_path($client_path)
 									{
 										global $path, $GO_CONFIG;
-										return '.'.substr(SERVER_PATH.$client_path, strlen($path));
+										return '.'.substr($GO_CONFIG->file_storage_path.$client_path, strlen($path));
 									}
 										
 									$compress_sources=array_map('strip_path', $compress_sources);
@@ -367,16 +358,16 @@ try{
 										switch(File::get_extension($file))
 										{
 											case 'zip':
-												exec($GO_CONFIG->cmd_unzip.' "'.SERVER_PATH.$file.'"');
+												exec($GO_CONFIG->cmd_unzip.' "'.$GO_CONFIG->file_storage_path.$file.'"');
 												break;
 
 											case 'gz':
 											case 'tgz':
-												exec($GO_CONFIG->cmd_tar.' zxf "'.SERVER_PATH.$file.'"');
+												exec($GO_CONFIG->cmd_tar.' zxf "'.$GO_CONFIG->file_storage_path.$file.'"');
 												break;
 
 											case 'tar':
-												exec($GO_CONFIG->cmd_tar.' xf "'.SERVER_PATH.$file.'"');
+												exec($GO_CONFIG->cmd_tar.' xf "'.$GO_CONFIG->file_storage_path.$file.'"');
 												break;
 										}
 
@@ -426,7 +417,7 @@ try{
 								$class='filetype-folder';
 							}
 
-							$folder['path']=strip_server_path($folder['path']);
+							$folder['path']=$fs->strip_server_path($folder['path']);
 							$folder['grid_display']='<div class="go-grid-icon '.$class.'">'.$folder['name'].'</div>';
 							$folder['type']='Folder';
 							$folder['mtime']=Date::get_timestamp($folder['mtime']);
@@ -450,7 +441,7 @@ try{
 							if(!isset($extensions) || in_array($extension, $extensions))
 							{							
 								$file['extension']=$extension;
-								$file['path']=strip_server_path($file['path']);
+								$file['path']=$fs->strip_server_path($file['path']);
 								$file['grid_display']='<div class="go-grid-icon filetype filetype-'.$extension.'">'.$file['name'].'</div>';
 								$file['type']=File::get_filetype_description($extension);
 								$file['mtime']=Date::get_timestamp($file['mtime']);
@@ -465,7 +456,7 @@ try{
 
 							case 'folder_properties':
 
-								$path = SERVER_PATH.smart_stripslashes($_POST['path']);
+								$path = $GO_CONFIG->file_storage_path.smart_stripslashes($_POST['path']);
 
 								if(!file_exists($path))
 								{
@@ -496,7 +487,7 @@ try{
 
 							case 'file_properties':
 
-								$path = SERVER_PATH.smart_stripslashes($_POST['path']);
+								$path = $GO_CONFIG->file_storage_path.smart_stripslashes($_POST['path']);
 
 								if(!file_exists($path))
 								{

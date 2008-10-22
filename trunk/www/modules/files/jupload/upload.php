@@ -7,13 +7,7 @@ if(!$GO_SECURITY->logged_in())
 	die('Unauthorized');
 }
 
-if($_REQUEST['local_path']=='true')
-{
-	$path = $GO_CONFIG->local_path.urldecode(smart_stripslashes($_REQUEST['path']));
-}else
-{
-	$path = $GO_CONFIG->file_storage_path.urldecode(smart_stripslashes($_REQUEST['path']));
-}
+$path = $GO_CONFIG->file_storage_path.urldecode(smart_stripslashes($_REQUEST['path']));
 
 if(substr($path,-1,1)=='/')
 {

@@ -16,8 +16,7 @@
 	if(!config)
 		config={};
 		
-	this.local_path=config.local_path;
-	
+
 	this.propertiesPanel = new Ext.Panel({
 		layout:'form',
 		title:GO.lang['strProperties'],
@@ -164,8 +163,7 @@ Ext.extend(GO.files.FolderPropertiesDialog, Ext.Window, {
 			url: GO.settings.modules.files.url+'json.php', 
 			params: {
 				path: path, 
-				task: 'folder_properties',
-				local_path: this.local_path
+				task: 'folder_properties'
 			},			
 			success: function(form, action) {
 
@@ -206,8 +204,7 @@ Ext.extend(GO.files.FolderPropertiesDialog, Ext.Window, {
 			url:GO.settings.modules.files.url+'action.php',
 			params: {
 				path: this.path, 
-				task: 'folder_properties',
-				local_path: this.local_path
+				task: 'folder_properties'
 			},
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){

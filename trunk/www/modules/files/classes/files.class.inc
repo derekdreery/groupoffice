@@ -1,4 +1,16 @@
 <?php
+/** 
+ * Copyright Intermesh
+ * 
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ * 
+ * If you have questions write an e-mail to info@intermesh.nl
+ * 
+ * @version $Id$
+ * @copyright Copyright Intermesh
+ * @author Merijn Schering <mschering@intermesh.nl>
+ */
 
 require_once($GLOBALS['GO_CONFIG']->class_path.'filesystem.class.inc');
 
@@ -13,19 +25,21 @@ class files extends filesystem
 		global $GO_CONFIG;
 		
 		parent::__construct();
+		
+		$this->readable_paths = array(
+			$GO_CONFIG->tmpdir,				
+			$GO_CONFIG->file_storage_path.'public/'
+		);
+		
+		$this->writeable_paths = array(
+			$GO_CONFIG->tmpdir
+		);
 
+		
 		if(!empty($_SESSION['GO_SESSION']['username']))
-		{
-			$this->readable_paths = array(
-				$GO_CONFIG->tmpdir,
-				$GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/',
-				$GO_CONFIG->file_storage_path.'public/'
-			);
-			
-			$this->writeable_paths = array(
-				$GO_CONFIG->tmpdir,
-				$GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/'
-			);
+		{	
+			$this->readable_paths[] = $GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/';
+			$this->writeable_paths[] = $GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/';
 		}		
 	}	
 	
@@ -610,10 +624,13 @@ class files extends filesystem
 
 	function find_share($path)
 	{
-		$path = dirname($path).'/'.utf8_basename($path);
-
-		$this->count++;
-
+		$dir = dirname($path);
+		if($dir != '/')
+		{
+			$dir .= '/';
+		}
+		$path = $dir.utf8_basename($path);
+		
 		$folder = $this->get_folder($path);
 
 		if ($folder && $folder['acl_read']>0)
@@ -636,8 +653,8 @@ class files extends filesystem
 
 	function has_read_permission($user_id, $path)
 	{
-		foreach($this->reabable_paths as $readable_path)
-		{
+		foreach($this->readable_paths as $readable_path)
+		{			
 			if($this->is_sub_dir($path, $readable_path))
 			{
 				return true;
@@ -671,6 +688,7 @@ class files extends filesystem
 		
 		if ($share = $this->find_share($path))
 		{
+			
 			if($GO_SECURITY->has_permission($user_id, $share['acl_write']))
 			{
 				return is_writable($path);

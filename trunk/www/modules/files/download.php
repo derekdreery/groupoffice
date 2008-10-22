@@ -1,13 +1,15 @@
 <?php
-/*
- Copyright Intermesh 2003
- Author: Merijn Schering <mschering@intermesh.nl>
- Version: 1.0 Release date: 08 July 2003
-
- This program is free software; you can redistribute it and/or modify it
- under the terms of the GNU General Public License as published by the
- Free Software Foundation; either version 2 of the License, or (at your
- option) any later version.
+/** 
+ * Copyright Intermesh
+ * 
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ * 
+ * If you have questions write an e-mail to info@intermesh.nl
+ * 
+ * @version $Id$
+ * @copyright Copyright Intermesh
+ * @author Merijn Schering <mschering@intermesh.nl>
  */
  
 //Server and client send the session ID in the URL
@@ -19,7 +21,7 @@ if(isset($_REQUEST['sid']))
 require_once("../../Group-Office.php");
 //load file management class
 
-$GO_SECURITY->html_authenticate('files');
+//$GO_SECURITY->html_authenticate('files');
 
 require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
 $fs = new files();
@@ -28,16 +30,8 @@ $path = $GO_CONFIG->file_storage_path.smart_stripslashes($_REQUEST['path']);
 
 $mode = isset($_REQUEST['mode'])  ? $_REQUEST['mode'] : 'download';
 
-/*
-if(!$fs->is_sub_dir(dirname($path),$GO_CONFIG->file_storage_path) && !$fs->is_sub_dir(dirname($path),$GO_CONFIG->local_path))
-{
-	exit('Forbidden');
-}*/
-
-
 if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_permission($GO_SECURITY->user_id, $path))
 {
-
 	/*if($GO_LOGGER->enabled)
 	{
 		$link_id=$fs->get_link_id_by_path(addslashes($path));
@@ -46,11 +40,8 @@ if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_per
 	
 	$browser = detect_browser();
 
-
 	$filename = utf8_basename($path);
 	$extension = File::get_extension($filename);
-
-
 
 	header('Content-Length: '.filesize($path));
 	header('Expires: '.gmdate('D, d M Y H:i:s') . ' GMT');
@@ -94,6 +85,5 @@ if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_per
 
 }else
 {
-	header('Location: '.$GO_CONFIG->host.'error_docs/401.php');
-	exit();
+	exit($lang['common']['accessDenied']);
 }

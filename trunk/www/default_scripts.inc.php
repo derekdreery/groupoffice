@@ -82,7 +82,6 @@ foreach($languages as $code=>$language)
 <?php
 if(!$GO_CONFIG->debug)
 {
-
 	if(!is_dir($GO_CONFIG->local_path.'cache'))
 	{
 		mkdir($GO_CONFIG->local_path.'cache', 0755, true);

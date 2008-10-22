@@ -12,8 +12,7 @@ function smarty_function_files($params, &$smarty)
 		if(!is_dir($path))
 		{
 			return 'Could not find path: '.$path;
-		}
-		
+		}		
 	}else
 	{
 		$path = $GO_CONFIG->file_storage_path.$params['path'];
