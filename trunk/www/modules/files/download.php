@@ -51,7 +51,7 @@ if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_per
 	//header("Expires: " . gmdate("D, j M Y H:i:s", time() + 86400) . " GMT");	
 	header("Last-Modified: ".gmdate("D, d M Y H:i:s", $mtime)." GMT");
 	header("Etag: ".md5_file($path));
-	header('Cache-Control: cache');
+	header('Cache-Control: cache, max-age=1080');
 	header('Pragma: cache');
 	
 	if ($browser['name'] == 'MSIE')
