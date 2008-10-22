@@ -4,12 +4,79 @@ require_once($GLOBALS['GO_CONFIG']->class_path.'filesystem.class.inc');
 
 class files extends filesystem
 {
+	
+	var $reabable_paths = array();
+	var $writable_paths = array();
+	
 	function __construct()
 	{
+		global $GO_CONFIG;
+		
 		parent::__construct();
 
-		$this->disable_go_permissions=false;
+		if(!empty($_SESSION['GO_SESSION']['username']))
+		{
+			$this->readable_paths = array(
+				$GO_CONFIG->tmpdir,
+				$GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/',
+				$GO_CONFIG->file_storage_path.'public/'
+			);
+			
+			$this->writeable_paths = array(
+				$GO_CONFIG->tmpdir,
+				$GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/'
+			);
+		}		
+	}	
+	
+	/**
+   * Check if a path is the user's home path
+   *
+   * @param int $user_id Group-Office user ID
+   * @param string $path The path to check
+   *
+   * @access public
+   * @return bool 
+   */
+	function is_home_path($user_id, $path)
+	{
+		global $GO_CONFIG, $GO_USERS;
 
+		if ($user = $GO_USERS->get_user($user_id))
+		{
+			$home_path = $GO_CONFIG->file_storage_path.'users/'.$user['username'];
+
+			if (dirname($path).utf8_basename($path) == dirname($home_path).utf8_basename($home_path))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+   * Check if a user owns a path
+   *
+   * @param int $user_id Group-Office user ID
+   * @param string $path The path to check
+   *
+   * @access public
+   * @return bool 
+   */
+	function is_owner($user_id, $path)
+	{
+		global $GO_CONFIG, $GO_USERS;
+
+		if ($user = $GO_USERS->get_user($user_id))
+		{
+			$home_path = $GO_CONFIG->file_storage_path.'users/'.$user['username'];
+
+			if (strpos($path, $home_path) === 0)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	function check_share($full_path, $user_id, $acl_read, $acl_write, $quiet=true)
@@ -392,9 +459,35 @@ class files extends filesystem
 			return $this->get_file($path);
 		}
 	}
-
+	
+	function move_file($source_path, $destination_path)
+	{
+		$file = $this->get_file($source_path);
+		$up_file['id']=$file['id'];
+		$up_file['path']=$destination_path;
+		$this->update_file($up_file);			
+	}
+	
+	function move_folder($source_path, $destination_path)
+	{
+		$folder = $this->get_folder(addslashes($source_path));
+		$up_folder['id']=$folder['id'];
+		$up_folder['path']=addslashes($destination_path);
+		$this->update_folder($up_folder);
+						
+		$this->move_notifications(addslashes($source_path), addslashes($destination_path));			
+	}
+	
 	function delete_file($path)
 	{
+		global $GO_CONFIG;
+				
+		require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
+		$search = new search();
+		
+		$file = $this->get_file($path);
+		$search->delete_search_result($file['id'], 6);		
+		
 		$sql = "DELETE FROM fs_files WHERE path='$path'";
 		$this->query($sql);
 	}
@@ -419,21 +512,6 @@ class files extends filesystem
 		$file['mtime']=gmmktime();
 		$this->update_row('fs_files', $index, $file);
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	function get_folder($path)
 	{
@@ -487,12 +565,7 @@ class files extends filesystem
 		$sql = "DELETE FROM fs_folders WHERE path='$path'";
 		$this->query($sql);
 	}
-
-
-
-
-
-
+	
 	/**
 	 * Get the shares owned by a user.
 	 *
@@ -535,13 +608,6 @@ class files extends filesystem
 		return $this->num_rows();
 	}
 
-
-
-
-
-
-
-
 	function find_share($path)
 	{
 		$path = dirname($path).'/'.utf8_basename($path);
@@ -570,57 +636,47 @@ class files extends filesystem
 
 	function has_read_permission($user_id, $path)
 	{
-		global $GO_CONFIG;
-
-		if ($this->disable_go_permissions || $this->is_owner($user_id, $path) || $path == $GO_CONFIG->file_storage_path)
+		foreach($this->reabable_paths as $readable_path)
 		{
-			return is_readable($path);
-		}else
-		{
-
-			//go_log(LOG_DEBUG, var_export($path, true));
-			if ($share = $this->find_share($path))
+			if($this->is_sub_dir($path, $readable_path))
 			{
-
-				global $GO_SECURITY;
-				if($GO_SECURITY->has_permission($user_id, $share['acl_read']) || $GO_SECURITY->has_permission($user_id, $share['acl_write']))
-				{
-					return is_readable($path);
-				}
+				return true;
 			}
-			global $GO_CONFIG;
-			if (strpos($path, $GO_CONFIG->tmpdir) === 0)
+		}
+	
+		if ($share = $this->find_share($path))
+		{
+			global $GO_SECURITY;
+			
+			if($GO_SECURITY->has_permission($user_id, $share['acl_read']) || $GO_SECURITY->has_permission($user_id, $share['acl_write']))
 			{
 				return is_readable($path);
 			}
 		}
+		
 		return false;
 	}
 
 	function has_write_permission($user_id, $path)
 	{
-		global $GO_CONFIG;
-
-		if ($this->disable_go_permissions || $this->is_owner($user_id, $path))
+		foreach($this->writeable_paths as $writeable_path)
 		{
-			return is_writable($path);
-		}else
-		{
-
-			global $GO_SECURITY;
-			if ($share = $this->find_share($path))
+			if($this->is_sub_dir($path, $writeable_path))
 			{
-				if($GO_SECURITY->has_permission($user_id, $share['acl_write']))
-				{
-					return is_writable($path);
-				}
+				return true;
 			}
-
-			if (strpos($path, $GO_CONFIG->tmpdir) === 0)
+		}
+		
+		global $GO_SECURITY;
+		
+		if ($share = $this->find_share($path))
+		{
+			if($GO_SECURITY->has_permission($user_id, $share['acl_write']))
 			{
 				return is_writable($path);
 			}
 		}
+		
 		return false;
 	}
 
@@ -634,7 +690,6 @@ class files extends filesystem
 
 	function get_content_json($path, $sort='utf8_basename', $dir='ASC', $filter=null)
 	{
-
 		$results = array();
 
 		$folders = $this->get_folders_sorted($path, 'utf8_basename', $dir);
@@ -836,6 +891,9 @@ class files extends filesystem
 			}
 		}
 	}
+	
+	
+
 
 	
 
