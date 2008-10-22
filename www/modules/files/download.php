@@ -47,11 +47,8 @@ if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_per
 	//header('Expires: '.gmdate('D, d M Y H:i:s') . ' GMT');
 	header('Content-Transfer-Encoding: binary');
 	
-	$last_modified_time = filemtime($file);
-	$etag = md5_file($file);
-	
-	header("Last-Modified: ".gmdate("D, d M Y H:i:s", $last_modified_time)." GMT");
-	header("Etag: $etag");
+	header("Last-Modified: ".gmdate("D, d M Y H:i:s", filemtime($path))." GMT");
+	header("Etag: ".md5_file($path));
 	header('Cache-Control: private, pre-check=0, post-check=0, max-age=1080');
 
 	if ($browser['name'] == 'MSIE')
