@@ -30,6 +30,8 @@ $path = $GO_CONFIG->file_storage_path.smart_stripslashes($_REQUEST['path']);
 
 $mode = isset($_REQUEST['mode'])  ? $_REQUEST['mode'] : 'download';
 
+$cache = $fs->is_sub_dir($path, $GO_CONFIG->file_storage_path.'public');
+
 if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_permission($GO_SECURITY->user_id, $path))
 {
 	/*if($GO_LOGGER->enabled)
@@ -43,16 +45,20 @@ if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_per
 	$filename = utf8_basename($path);
 	$extension = File::get_extension($filename);
 
-	$mtime = filemtime($path);
+	$mtime = Date::date_add(filemtime($path),1);
 	
-	header("Date: " . date("D, j M Y G:i:s ", $mtime) . 'GMT');
+	
 	header('Content-Length: '.filesize($path));
 	header('Content-Transfer-Encoding: binary');
-	//header("Expires: " . gmdate("D, j M Y H:i:s", time() + 86400) . " GMT");	
-	header("Last-Modified: ".gmdate("D, d M Y H:i:s", $mtime)." GMT");
-	header("Etag: ".md5_file($path));
-	header('Cache-Control: cache, max-age=1080');
-	header('Pragma: cache');
+
+	if($cache)
+	{
+		header("Expires: " . date("D, j M Y G:i:s ", $mtime) . 'GMT');
+		header("Last-Modified: ".gmdate("D, d M Y H:i:s", $mtime)." GMT");
+		header("ETag: ".md5_file($path));
+		header('Cache-Control: cache');
+		header('Pragma: cache');
+	}
 	
 	if ($browser['name'] == 'MSIE')
 	{
@@ -64,15 +70,15 @@ if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_per
 		{
 			header('Content-Disposition: inline; filename="'.$filename.'"');
 		}
-		//header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-		//header('Pragma: public');
+		if(!$cache)
+		{
+			header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+			header('Pragma: public');
+		}
 	}else
 	{
 		if($mode == 'download')
 		{
-			//$finfo = finfo_open(FILEINFO_MIME);
-			//$mime = finfo_file($finfo, $path);
-
 			header('Content-Type: application/download');
 			header('Content-Disposition: attachment; filename="'.$filename.'"');
 		}else
@@ -80,9 +86,11 @@ if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_per
 			header('Content-Type: '.mime_content_type($path));
 			header('Content-Disposition: inline; filename="'.$filename.'"');
 		}
-		
+		if(!$cache)
+		{
+			header('Pragma: no-cache');
+		}		
 	}
-
 
 	$fd = fopen($path,'rb');
 	while (!feof($fd)) {
