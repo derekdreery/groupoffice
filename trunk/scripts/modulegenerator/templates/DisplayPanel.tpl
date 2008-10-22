@@ -98,6 +98,12 @@ Ext.extend(GO.{module}.{friendly_single_ucfirst}Panel, Ext.Panel,{
 		GO.{module}.{friendly_single_ucfirst}Panel.superclass.initComponent.call(this);
 	},
 	
+	reload : function()
+	{
+		if(this.data && this.data.id)
+			this.load{friendly_single_ucfirst}(this.data.id);
+	},
+	
 	load{friendly_single_ucfirst} : function({friendly_single}_id)
 	{
 		this.body.mask(GO.lang.waitMsgLoad);

@@ -44,7 +44,7 @@ if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_per
 	$extension = File::get_extension($filename);
 
 	header('Content-Length: '.filesize($path));
-	header('Expires: '.gmdate('D, d M Y H:i:s') . ' GMT');
+	//header('Expires: '.gmdate('D, d M Y H:i:s') . ' GMT');
 	header('Content-Transfer-Encoding: binary');
 
 	if ($browser['name'] == 'MSIE')
@@ -57,8 +57,8 @@ if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_per
 		{
 			header('Content-Disposition: inline; filename="'.$filename.'"');
 		}
-		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-		header('Pragma: public');
+		//header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+		//header('Pragma: public');
 	}else
 	{
 		if($mode == 'download')
@@ -73,7 +73,7 @@ if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_per
 			header('Content-Type: '.mime_content_type($path));
 			header('Content-Disposition: inline; filename="'.$filename.'"');
 		}
-		header('Pragma: no-cache');
+		//header('Pragma: no-cache');
 	}
 
 
