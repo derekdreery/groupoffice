@@ -17,11 +17,7 @@ if(isset($_REQUEST['sid']))
 {
 	session_id($_REQUEST['sid']);
 }
-
 require_once("../../Group-Office.php");
-//load file management class
-
-//$GO_SECURITY->html_authenticate('files');
 
 require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
 $fs = new files();
@@ -30,6 +26,9 @@ $path = $GO_CONFIG->file_storage_path.smart_stripslashes($_REQUEST['path']);
 
 $mode = isset($_REQUEST['mode'])  ? $_REQUEST['mode'] : 'download';
 
+/*
+ * Enable browser caching for public files. They expire in one day.
+ */
 $cache = $fs->is_sub_dir($path, $GO_CONFIG->file_storage_path.'public');
 
 if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_permission($GO_SECURITY->user_id, $path))
