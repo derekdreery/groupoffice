@@ -48,10 +48,10 @@ if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_per
 	header("Date: " . date("D, j M Y G:i:s ", $mtime) . 'GMT');
 	header('Content-Length: '.filesize($path));
 	header('Content-Transfer-Encoding: binary');
-	header("Expires: " . gmdate("D, j M Y H:i:s", time() + 86400) . " GMT");	
+	//header("Expires: " . gmdate("D, j M Y H:i:s", time() + 86400) . " GMT");	
 	header("Last-Modified: ".gmdate("D, d M Y H:i:s", $mtime)." GMT");
 	header("Etag: ".md5_file($path));
-	header('Cache-Control: cache, max-age=86400');
+	header('Cache-Control: cache');
 	header('Pragma: cache');
 	
 	if ($browser['name'] == 'MSIE')
