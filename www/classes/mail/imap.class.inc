@@ -606,7 +606,7 @@ class imap {
 
 			if(!isset($this->message["reply_to"]))
 			{
-				$this->message["reply_to"]=$this->message["from"];
+				$this->message["reply_to"] = $this->RFC822->write_address($this->message['from'], $this->message["sender"]);
 			}
 
 			/*$this->message["reply_to"] = $this->RFC822->write_address($this->message['from'], $this->message["sender"]);
