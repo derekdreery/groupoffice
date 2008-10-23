@@ -267,7 +267,7 @@ class files extends filesystem
 
 	function delete_template($template_id)
 	{
-		return $this->query("DELETE FROM fs_templates WHERE id=$template_id");
+		return $this->query("DELETE FROM fs_templates WHERE id=".$this->escape($template_id));
 	}
 
 
@@ -289,7 +289,7 @@ class files extends filesystem
 		{
 			$fields = 'id, name, user_id, extension, acl_read, acl_write';
 		}
-		$this->query("SELECT $fields FROM fs_templates WHERE id=$template_id");
+		$this->query("SELECT $fields FROM fs_templates WHERE id=".$this->escape($template_id));
 		if($this->next_record())
 		{
 			return $this->Record;
