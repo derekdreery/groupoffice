@@ -136,9 +136,6 @@ class db {
 
 	/* public: perform a query */
 	function query($Query_String) {
-			
-			
-			
 		/* No empty queries, please, since PHP4 chokes on them. */
 		if ($Query_String == "")
 		/* The empty query string is passed on from the constructor,
@@ -159,14 +156,10 @@ class db {
 		if ($this->Debug)
 		printf("Debug: query = %s<br>\n", $Query_String);
 
-		//go_log(LOG_DEBUG, $Query_String);
-
 		$this->Query_ID = @mysql_query($Query_String,$this->Link_ID);
 
-		//go_log(LOG_DEBUG, '** query finished **');
 		$this->Row   = 0;
-		$this->Errno = mysql_errno();
-		$this->Error = mysql_error();
+
 		if (!$this->Query_ID) {
 			$this->halt("Invalid SQL: ".$Query_String);
 		}
@@ -184,14 +177,8 @@ class db {
 
 		$this->Record = @mysql_fetch_array($this->Query_ID, $result_type);
 		$this->Row   += 1;
-		$this->Errno  = mysql_errno();
-		$this->Error  = mysql_error();
-
-		$stat = is_array($this->Record);
-		if (!$stat && $this->Auto_Free) {
-			$this->free();
-		}
-		return $stat;
+	
+		return $this->Record;
 	}
 
 	/* public: position in result set */

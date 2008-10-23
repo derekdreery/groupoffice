@@ -280,7 +280,7 @@ class GO_USERS extends db
 				$sql .= "CONCAT(first_name,middle_name,last_name) LIKE '".$this->escape(str_replace(' ','%', $query))."' ";
 			}else
 			{
-				$sql .= "$field LIKE '$query' ";
+				$sql .= "$field LIKE '".$this->escape($query)."' ";
 			}
 		}
 		if(count($fields)>1)
@@ -309,7 +309,7 @@ class GO_USERS extends db
 		if(count($links))
 		{
 			$sql = "SELECT go_users.* FROM go_users  INNER JOIN go_acl ON go_users.acl_id = go_acl.acl_id ".
-				"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id WHERE (go_acl.user_id=$user_id ".
+				"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id WHERE (go_acl.user_id=".$this->escape($user_id)." ".
 				"OR go_users_groups.user_id=".$this->escape($user_id).") AND link_id IN (".implode(',',$links).") ORDER BY last_name ASC, first_name ASC";
 			
 			$this->query($sql);

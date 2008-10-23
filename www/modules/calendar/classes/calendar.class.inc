@@ -1676,7 +1676,7 @@ class calendar extends db
 
 		$sql  = "SELECT DISTINCT cal_events.*, cal_calendars.acl_read, cal_calendars.acl_write FROM cal_events ".
 		"INNER JOIN cal_calendars ON cal_events.calendar_id=cal_calendars.id ".
-		"WHERE mtime>$last_sync_time";
+		"WHERE mtime>".$this->escape($last_sync_time);
 
 
 		$this->query($sql);

@@ -637,7 +637,7 @@ class addressbook extends db {
 							$first = true;
 							$sql .= '(';
 						}
-						$sql .= "ab_companies.".$this->f('Field')." LIKE '$query'";
+						$sql .= "ab_companies.".$this->f('Field')." LIKE '".$this->escape($query)."'";
 					}
 				}
 				if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
@@ -765,7 +765,7 @@ class addressbook extends db {
 		{
 			return false;
 		}
-		$sql .= "(CONCAT(first_name,middle_name,last_name) LIKE '".$query."' OR email LIKE '$query' OR email2 LIKE '$query' OR email3 LIKE '$query')";
+		$sql .= "(CONCAT(first_name,middle_name,last_name) LIKE '".$query."' OR email LIKE '".$this->escape($query)."' OR email2 LIKE '".$this->escape($query)."' OR email3 LIKE '".$this->escape($query)."')";
 
 		if ($_SESSION['GO_SESSION']['sort_name'] == 'first_name') {
 			$sort_index = 'ab_contacts.first_name ASC, ab_contacts.last_name';
@@ -810,7 +810,7 @@ class addressbook extends db {
 
 		require($GO_LANGUAGE->get_language_file('addressbook'));
 
-		$sql = "SELECT c.*,a.acl_read,a.acl_write FROM ab_contacts c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id WHERE mtime>$last_sync_time";
+		$sql = "SELECT c.*,a.acl_read,a.acl_write FROM ab_contacts c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id WHERE mtime>".$this->escape($last_sync_time);
 
 		$this->query($sql);
 
@@ -832,7 +832,7 @@ class addressbook extends db {
 		}
 
 
-		$sql = "SELECT c.*, a.acl_read, a.acl_write FROM ab_companies c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id WHERE mtime>$last_sync_time";
+		$sql = "SELECT c.*, a.acl_read, a.acl_write FROM ab_companies c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id WHERE mtime>".$this->escape($last_sync_time);
 
 		$this->query($sql);
 

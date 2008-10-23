@@ -334,7 +334,7 @@ class files extends filesystem
 		$sql = "SELECT DISTINCT t.id, t.user_id, t.name, t.extension FROM fs_templates t ".
 			"INNER JOIN go_acl a ON (a.acl_id=t.acl_read OR a.acl_id=t.acl_write) ".
 			"LEFT JOIN go_users_groups ug ON a.group_id=ug.group_id ".
-			"WHERE (a.user_id=$user_id OR ug.user_id=$user_id) ORDER BY ".$this->escape($sortfield." ".$sortorder);
+			"WHERE (a.user_id=".$this->escape($user_id)." OR ug.user_id=".$this->escape($user_id).") ORDER BY ".$this->escape($sortfield." ".$sortorder);
 
 		$this->query($sql);
 		$count = $this->num_rows();
@@ -366,7 +366,7 @@ class files extends filesystem
 		$sql = "SELECT DISTINCT t.id, t.user_id, t.name, t.extension FROM fs_templates t ".
 			"INNER JOIN go_acl a ON a.acl_id=t.acl_write ".
 			"LEFT JOIN go_users_groups ug ON a.group_id=ug.group_id ".
-			"WHERE (a.user_id=$user_id OR ug.user_id=$user_id) ORDER BY ".$this->escape($sortfield." ".$sortorder);
+			"WHERE (a.user_id=".$this->escape($user_id)." OR ug.user_id=".$this->escape($user_id).") ORDER BY ".$this->escape($sortfield." ".$sortorder);
 
 		$this->query($sql);
 		$count = $this->num_rows();
@@ -598,7 +598,7 @@ class files extends filesystem
 		$sql = "SELECT DISTINCT f.* FROM fs_folders f ".
 		"INNER JOIN go_acl a ON (f.acl_read=a.acl_id OR f.acl_write=a.acl_id) ".
 		"LEFT JOIN go_users_groups ug ON (a.group_id=ug.group_id) ".
-		"WHERE (ug.user_id=$user_id OR a.user_id=$user_id) AND f.user_id!=$user_id ";
+		"WHERE (ug.user_id=".$this->escape($user_id)." OR a.user_id=".$this->escape($user_id).") AND f.user_id!=$user_id ";
 		if($visible_only)
 		{
 			$sql .= "AND f.visible='1' ";
@@ -885,7 +885,7 @@ class files extends filesystem
 
 		//require($GO_LANGUAGE->get_language_file('files'));
 
-		$sql = "SELECT * FROM fs_files WHERE mtime>$last_sync_time";
+		$sql = "SELECT * FROM fs_files WHERE mtime>".$this->escape($last_sync_time);
 		$this->query($sql);
 		$fs = new files();
 		$search = new search();
