@@ -38,7 +38,7 @@ try
 					
 				foreach($credentials as $key)
 				{
-					$contact_credentials[$key] = isset($_REQUEST[$key]) ? ($_REQUEST[$key]) : null;
+					$contact_credentials[$key] = isset($_REQUEST[$key]) ? $_REQUEST[$key] : null;
 				}
 				
 				
@@ -117,7 +117,7 @@ try
 					{
 						$ab->move_contacts_company($contact_credentials['company_id'], $old_contact['addressbook_id'], $contact_credentials['addressbook_id']);
 					}
-
+debug($contact_credentials['first_name']);
 					if(!$ab->update_contact($contact_credentials))
 					{
 						$result['feedback'] = $lang['comon']['saveError'];

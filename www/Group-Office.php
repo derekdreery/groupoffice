@@ -134,4 +134,6 @@ define('GO_LOADED', true);
 if(get_magic_quotes_gpc())
 {
 	$_POST=array_map('stripslashes', $_POST);
+	$_REQUEST=array_map('stripslashes', $_REQUEST);
+	$_GET=array_map('stripslashes', $_GET);
 }
