@@ -371,15 +371,15 @@ class calendar extends db
 
 	function delete_view($view_id)
 	{
-		if($this->query("DELETE FROM cal_views_calendars WHERE view_id='$view_id'"))
+		if($this->query("DELETE FROM cal_views_calendars WHERE view_id='".$this->query($view_id)."'"))
 		{
-			return $this->query("DELETE FROM cal_views WHERE id='$view_id'");
+			return $this->query("DELETE FROM cal_views WHERE id='".$this->query($view_id)."'");
 		}
 	}
 
 	function get_user_views($user_id)
 	{
-		$sql = "SELECT * FROM cal_views WHERE user_id='$user_id'";
+		$sql = "SELECT * FROM cal_views WHERE user_id='".$this->query($user_id)."'";
 		$this->query($sql);
 		return $this->num_rows();
 	}
@@ -399,7 +399,7 @@ class calendar extends db
 		$count= $this->num_rows();
 		if($offset>0)
 		{
-			$sql .= " LIMIT ".$this->replace($start.",".$offset);
+			$sql .= " LIMIT ".$this->escape($start.",".$offset);
 			$this->query($sql);
 		}
 		return $count;
@@ -699,7 +699,7 @@ class calendar extends db
 		$count= $this->num_rows();
 		if($offset>0)
 		{
-			$sql .= " LIMIT ".$this->replace($start.",".$offset);
+			$sql .= " LIMIT ".$this->escape($start.",".$offset);
 			$this->query($sql);
 		}
 		return $count;
@@ -718,7 +718,7 @@ class calendar extends db
 		$count= $this->num_rows();
 		if($offset>0)
 		{
-			$sql .= " LIMIT ".$this->replace($start.",".$offset);
+			$sql .= " LIMIT ".$this->escape($start.",".$offset);
 			$this->query($sql);
 		}
 		return $count;
@@ -1066,7 +1066,7 @@ class calendar extends db
 			$this->query($sql);
 			$count = $this->num_rows();
 
-			$sql .= " LIMIT ".$this->replace($start.",".$offset);
+			$sql .= " LIMIT ".$this->escape($start.",".$offset);
 
 			$this->query($sql);
 
