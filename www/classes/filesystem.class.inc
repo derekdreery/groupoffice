@@ -230,7 +230,7 @@ class filesystem extends db
 					}
 				}
 				
-				$this->move_folder(addslashes($source_path),addslashes($destination_path));				
+				$this->move_folder($source_path,$destination_path);				
 				
 				$files = $this->get_files($source_path, true);
 				while ($file = array_shift($files))
@@ -246,7 +246,7 @@ class filesystem extends db
 				return rmdir($source_path);
 			}else
 			{
-				$this->move_file(addslashes($source_path),addslashes($destination_path));
+				$this->move_file($source_path,$destination_path);
 				
 				//rename fails when moving accross partitions
 				if(isset($_SESSION['GO_SESSION']['username']) && strstr($source_path, $GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/') &&
@@ -398,7 +398,7 @@ class filesystem extends db
 			}
 			if ($this->has_write_permission($GO_SECURITY->user_id, $path))
 			{
-				$this->delete_folder(addslashes($path));
+				$this->delete_folder($path);
 				return rmdir($path);
 			}else
 			{
@@ -406,7 +406,7 @@ class filesystem extends db
 			}
 		}else
 		{
-			$this->delete_file(addslashes($path));				
+			$this->delete_file($path);				
 				
 			if ($this->has_write_permission($GO_SECURITY->user_id, $path))
 			{
