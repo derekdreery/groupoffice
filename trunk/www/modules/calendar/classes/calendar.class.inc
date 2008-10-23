@@ -742,7 +742,7 @@ class calendar extends db
 
 		if(!isset($event['ctime']) || $event['ctime'] == 0)
 		{
-			$event['ctime']  =  gmmktime();
+			$event['ctime']  =  time();
 		}
 
 		if(!isset($event['mtime']) || $event['mtime'] == 0)
@@ -835,7 +835,7 @@ class calendar extends db
 		unset($event['read_permission'], $event['write_permission']);
 		if(!isset($event['mtime']) || $event['mtime'] == 0)
 		{
-			$event['mtime']  = gmmktime();
+			$event['mtime']  = time();
 		}
 
 		if(isset($event['completion_time']) && $event['completion_time'] > 0 && $this->copy_completed($event['id']))

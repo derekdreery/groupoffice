@@ -104,7 +104,7 @@ class files extends filesystem
 		if(!$folder)
 		{
 			$folder['user_id']=$user_id;
-			$folder['path']=addslashes($full_path);
+			$folder['path']=$full_path;
 			$folder['visible']='0';
 			$folder['acl_read']=$acl_read;
 			$folder['acl_write']=$acl_write;
@@ -139,33 +139,33 @@ class files extends filesystem
 
 	function remove_notification($path, $user_id)
 	{
-		$sql = "DELETE FROM fs_notifications WHERE path='$path' AND user_id=$user_id";
+		$sql = "DELETE FROM fs_notifications WHERE path='".$this->escape($path)."' AND user_id=".$this->escape($user_id);
 		return $this->query($sql);
 	}
 	
 	function remove_notifications($path)
 	{
-		$sql = "DELETE FROM fs_notifications WHERE path='$path'";
+		$sql = "DELETE FROM fs_notifications WHERE path='".$this->escape($path)."'";
 		return $this->query($sql);
 	}
 
 	function is_notified($path, $user_id)
 	{
-		$sql = "SELECT * FROM fs_notifications WHERE path='$path' AND user_id=$user_id";
+		$sql = "SELECT * FROM fs_notifications WHERE path='".$this->escape($path)."' AND user_id=".$this->escape($user_id);
 		$this->query($sql);
 		return $this->next_record();
 	}
 	
 	function move_notifications($old_path, $new_path)
 	{
-		$sql = "UPDATE fs_notifications SET path='$new_path' WHERE path='$old_path'";
+		$sql = "UPDATE fs_notifications SET path='".$this->escape($new_path)."' WHERE path='".$this->escape($old_path)."'";
 		return $this->query($sql);		
 	}
 
 
 	function get_users_to_notify($path)
 	{
-		$sql = "SELECT user_id FROM fs_notifications WHERE path='$path'";
+		$sql = "SELECT user_id FROM fs_notifications WHERE path='".$this->escape($path)."'";
 		$this->query($sql);
 		return $this->num_rows();
 	}
@@ -330,6 +330,7 @@ class files extends filesystem
 	 */
 	function get_authorized_templates($user_id, $start=0, $offset=0, $sortfield='id', $sortorder='ASC')
 	{
+		$user_id = $this->escape($user_id);
 		$sql = "SELECT DISTINCT t.id, t.user_id, t.name, t.extension FROM fs_templates t ".
 			"INNER JOIN go_acl a ON (a.acl_id=t.acl_read OR a.acl_id=t.acl_write) ".
 			"LEFT JOIN go_users_groups ug ON a.group_id=ug.group_id ".
@@ -360,6 +361,8 @@ class files extends filesystem
 	 */
 	function get_writable_templates($user_id, $start=0, $offset=0, $sortfield='id', $sortorder='ASC')
 	{
+		$user_id = $this->escape($user_id);
+		
 		$sql = "SELECT DISTINCT t.id, t.user_id, t.name, t.extension FROM fs_templates t ".
 			"INNER JOIN go_acl a ON a.acl_id=t.acl_write ".
 			"LEFT JOIN go_users_groups ug ON a.group_id=ug.group_id ".
@@ -383,14 +386,14 @@ class files extends filesystem
 		$sql = "SELECT fs_status_history.*, fs_statuses.name AS status_name FROM ".
 		"fs_status_history  ".
 		"INNER JOIN fs_statuses ON fs_statuses.id=fs_status_history.status_id".
-		" WHERE link_id='$link_id' ORDER BY ctime ASC";
+		" WHERE link_id='".$this->escape($link_id)."' ORDER BY ctime ASC";
 		$this->query($sql);
 		return $this->num_rows();
 	}
 
 	function get_status_name($status_id)
 	{
-		$sql = "SELECT name FROM fs_statuses WHERE id=$status_id";
+		$sql = "SELECT name FROM fs_statuses WHERE id=".$this->escape($status_id);
 		$this->query($sql);
 		if($this->next_record())
 		{
@@ -417,7 +420,7 @@ class files extends filesystem
 		$status['id']=$this->nextid('fs_status_history');
 		$status['link_id']=$link_id;
 		$status['status_id']=$status_id;
-		$status['ctime']=gmmktime();
+		$status['ctime']=time();
 		$status['user_id']=$GO_SECURITY->user_id;
 		$status['comments']=$comments;
 
@@ -455,7 +458,7 @@ class files extends filesystem
 
 	function get_file($path)
 	{
-		$sql = "SELECT * FROM fs_files WHERE path='$path';";
+		$sql = "SELECT * FROM fs_files WHERE path='".$this->escape($path)."';";
 		$this->query($sql);
 		if($this->next_record())
 		{
@@ -484,12 +487,12 @@ class files extends filesystem
 	
 	function move_folder($source_path, $destination_path)
 	{
-		$folder = $this->get_folder(addslashes($source_path));
+		$folder = $this->get_folder($source_path);
 		$up_folder['id']=$folder['id'];
-		$up_folder['path']=addslashes($destination_path);
+		$up_folder['path']=$destination_path;
 		$this->update_folder($up_folder);
 						
-		$this->move_notifications(addslashes($source_path), addslashes($destination_path));			
+		$this->move_notifications($source_path, $destination_path);			
 	}
 	
 	function delete_file($path)
@@ -502,13 +505,13 @@ class files extends filesystem
 		$file = $this->get_file($path);
 		$search->delete_search_result($file['id'], 6);		
 		
-		$sql = "DELETE FROM fs_files WHERE path='$path'";
+		$sql = "DELETE FROM fs_files WHERE path='".$this->escape($path)."'";
 		$this->query($sql);
 	}
 
 	function add_file($file)
 	{
-		$file['ctime']=$file['mtime']=gmmktime();
+		$file['ctime']=$file['mtime']=time();
 		$file['id']=$this->nextid('fs_files');
 		$this->insert_row('fs_files', $file);
 	}
@@ -523,13 +526,13 @@ class files extends filesystem
 			$index=  'path';
 		}
 
-		$file['mtime']=gmmktime();
+		$file['mtime']=time();
 		$this->update_row('fs_files', $index, $file);
 	}
 
 	function get_folder($path)
 	{
-		$sql = "SELECT * FROM fs_folders WHERE path='".$path."';";
+		$sql = "SELECT * FROM fs_folders WHERE path='".$this->escape($path)."';";
 		$this->query($sql);
 		if($this->next_record())
 		{
@@ -576,7 +579,7 @@ class files extends filesystem
 	function delete_folder($path)
 	{
 		$this->remove_notifications($path);
-		$sql = "DELETE FROM fs_folders WHERE path='$path'";
+		$sql = "DELETE FROM fs_folders WHERE path='".$this->escape($path)."'";
 		$this->query($sql);
 	}
 	
@@ -590,6 +593,7 @@ class files extends filesystem
 	 */
 	function get_authorized_shares($user_id, $visible_only=true)
 	{
+		$user_id=$this->escape($user_id);
 		//ORDER BY PATH important so higher order shares come first
 		$sql = "SELECT DISTINCT f.* FROM fs_folders f ".
 		"INNER JOIN go_acl a ON (f.acl_read=a.acl_id OR f.acl_write=a.acl_id) ".
@@ -617,7 +621,7 @@ class files extends filesystem
 	function get_user_shares($user_id)
 	{
 		//ORDER BY PATH important so higher order shares come first
-		$sql = "SELECT * FROM fs_shares WHERE user_id='$user_id' ORDER BY path ASC";
+		$sql = "SELECT * FROM fs_shares WHERE user_id='".$this->escape($user_id)."' ORDER BY path ASC";
 		$this->query($sql);
 		return $this->num_rows();
 	}
@@ -909,10 +913,4 @@ class files extends filesystem
 			}
 		}
 	}
-	
-	
-
-
-	
-
 }

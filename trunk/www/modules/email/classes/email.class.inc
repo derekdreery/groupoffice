@@ -62,7 +62,7 @@ class email extends db
 
 		if($user_id > 0)
 		{
-			$sql .= " WHERE user_id='$user_id'";
+			$sql .= " WHERE user_id='".$this->escape($user_id)."'";
 			$sql .= " ORDER BY standard ASC";			
 		}else {
 			$sql .= " ORDER BY email ASC, standard ASC";
@@ -92,13 +92,13 @@ class email extends db
 
 	function delete_linked_message($link_id)
 	{
-		$sql ="DELETE FROM em_links WHERE link_id=$link_id";
+		$sql ="DELETE FROM em_links WHERE link_id=".$this->escape($link_id);
 		return $this->query($sql);
 	}
 	
 	function get_linked_message($id)
 	{
-		$sql = "SELECT * FROM em_links WHERE link_id=$id";
+		$sql = "SELECT * FROM em_links WHERE link_id=".$this->escape($id);
 		$this->query($sql);
 		if($this->next_record())
 		{
@@ -121,7 +121,7 @@ class email extends db
 
 	function get_settings($user_id)
 	{
-		$this->query("SELECT * FROM em_settings WHERE user_id='$user_id'");
+		$this->query("SELECT * FROM em_settings WHERE user_id='".$this->escape($user_id)."'");
 		if ($this->next_record())
 		{
 			return $this->Record;
@@ -289,17 +289,21 @@ class email extends db
 
 	function update_password($host, $username, $password)
 	{
-		$sql = "UPDATE em_accounts SET password='".$password.
-		"' WHERE username='$username' AND host='$host'";
+		$sql = "UPDATE em_accounts SET password='".$this->escape($password).
+		"' WHERE username='".$this->escape($username)."' AND host='".$this->escape($host)."'";
 
 		return $this->query($sql);
 	}
 
 	function update_folders($account_id, $sent, $trash, $drafts, $spam)
 	{
-		$sql = "UPDATE em_accounts SET sent='$sent', ".
-		"trash='$trash',drafts='$drafts', spam='$spam'  WHERE id='$account_id'";
-		return $this->query($sql);
+		$account['sent']=$sent;
+		$account['drafts']=$drafts;
+		$account['spam']=$spam;
+		$account['trash']=$trash;
+		$account['id']=$account_id;
+		
+		return $this->update_row('em_accounts', 'id', $account);
 	}
 
 	function get_account($id = 0)
@@ -310,7 +314,7 @@ class email extends db
 			$_SESSION['GO_SESSION']['user_id']."'";
 		}else
 		{
-			$sql = "SELECT * FROM em_accounts WHERE id='$id'";
+			$sql = "SELECT * FROM em_accounts WHERE id='".$this->escape($id)."'";
 		}
 
 		$this->query($sql);
@@ -327,7 +331,7 @@ class email extends db
 
 	function delete_account($id)
 	{
-
+		$id = $this->escape($id);
 		$sql = "DELETE FROM em_accounts WHERE id='$id'";
 		if ($this->query($sql))
 		{
@@ -350,7 +354,7 @@ class email extends db
 
 		if($account_id>0)
 		{
-			$sql .= " WHERE account_id='$account_id'".
+			$sql .= " WHERE account_id='".$this->escape($account_id)."'".
 				" AND (subscribed='1' OR name='INBOX')";
 		}else {
 			$sql .= " WHERE (subscribed='1' OR name='INBOX')";
@@ -358,7 +362,7 @@ class email extends db
 
 		if ($folder_id > -1)
 		{
-			$sql .= " AND parent_id='$folder_id'";
+			$sql .= " AND parent_id='".$this->escape($folder_id)."'";
 		}
 		$sql .= " ORDER BY sort_order ASC, name ASC";
 
@@ -368,7 +372,7 @@ class email extends db
 	
 	function get_auto_check_folders($account_id)
 	{
-		$sql = "SELECT * FROM em_folders WHERE account_id='$account_id'".
+		$sql = "SELECT * FROM em_folders WHERE account_id='".$this->escape($account_id)."'".
 		" AND (auto_check='1' OR name='INBOX') ORDER BY sort_order ASC, name ASC";
 		$this->query($sql);
 		return $this->num_rows();
@@ -376,11 +380,11 @@ class email extends db
 
 	function get_mailboxes($account_id, $folder_id=-1)
 	{
-		$sql = "SELECT * FROM em_folders WHERE account_id='$account_id'";
+		$sql = "SELECT * FROM em_folders WHERE account_id='".$this->escape($account_id)."'";
 
 		if ($folder_id > -1)
 		{
-			$sql .= " AND parent_id='$folder_id'";
+			$sql .= " AND parent_id='".$this->escape($folder_id)."'";
 		}
 		$sql .= " ORDER BY sort_order ASC, name ASC";
 
@@ -394,14 +398,14 @@ class email extends db
 
 		if($account_id>0)
 		{
-			$sql .= " WHERE account_id='$account_id'";
+			$sql .= " WHERE account_id='".$this->escape($account_id)."'";
 			if ($folder_id > -1)
 			{
-				$sql .= " AND parent_id='$folder_id'";
+				$sql .= " AND parent_id='".$this->escape($folder_id)."'";
 			}
 		}elseif ($folder_id > -1)
 		{
-			$sql .= " WHERE parent_id='$folder_id'";
+			$sql .= " WHERE parent_id='".$this->escape($folder_id)."'";
 		}
 		$sql .= " ORDER BY sort_order ASC, name ASC";
 
@@ -428,42 +432,41 @@ class email extends db
 	function add_folder($account_id, $name, $parent_id=0, $subscribed=1,
 	$delimiter='/', $attributes=0, $sort_order=10)
 	{
-		$next_id = $this->nextid("em_folders");
-		if ($next_id > 0)
-		{
-			$sql = "INSERT INTO em_folders (id, parent_id, account_id, subscribed, ".
-			"name, attributes, delimiter, sort_order) VALUES ('$next_id', '$parent_id', ".
-			"'$account_id', '$subscribed', '$name', ".
-			"'$attributes', '$delimiter', '$sort_order')";
-			if ($this->query($sql))
-			{
-				return $next_id;
-			}
-		}
-		return false;
+		$folder['id'] = $this->nextid("em_folders");
+		$folder['parent_id']=$parent_id;
+		$folder['account_id']=$account_id;
+		$folder['subscribed']=$subscribed;
+		$folder['name']=$name;
+		$folder['attributes']=$attributes;
+		$folder['delimiter']=$delimiter;
+		$folder['sort_order']=$sort_order;
+		
+		$this->insert_row('em_folders',$folder);
+
+		return $folder['id'];		
 	}
 	function rename_folder($account_id, $old_name, $new_name)
 	{
-		$sql = "UPDATE em_folders SET name='$new_name' WHERE".
-		" name='".($old_name)."' AND ".
-		"account_id='$account_id'";
+		$sql = "UPDATE em_folders SET name='".$this->escape($new_name)."' WHERE".
+		" name='".$this->escape($old_name)."' AND ".
+		"account_id='".$this->escape($account_id)."'";
 
 		$this->query($sql);
-		$sql = "UPDATE em_filters SET folder='$new_name' ".
-		"WHERE folder='$old_name' AND ".
-		"account_id='$account_id'";
+		$sql = "UPDATE em_filters SET folder='".$this->escape($new_name)."' ".
+		"WHERE folder='".$this->escape($old_name)."' AND ".
+		"account_id='".$this->escape($account_id)."'";
 		return $this->query($sql);
-		//todo child paths.
-
 	}
 
 	function update_folder($folder_id, $parent_id, $subscribed, $attributes, $sort_order=10)
-	{
-		$sql = "UPDATE em_folders SET subscribed='$subscribed', ".
-		"parent_id='$parent_id', attributes='$attributes', sort_order='$sort_order' ".
-		"WHERE id='$folder_id'";
-
-		$this->query($sql);
+	{		
+		$folder['id'] = $folder_id;
+		$folder['parent_id']=$parent_id;
+		$folder['subscribed']=$subscribed;
+		$folder['attributes']=$attributes;
+		$folder['sort_order']=$sort_order;
+		
+		$this->update_row('em_folders','id', $folder);
 	}
 
 	function __update_folder($folder)
@@ -486,17 +489,17 @@ class email extends db
 
 	function delete_folder($account_id, $name)
 	{
-		$sql = "DELETE FROM em_folders WHERE account_id='$account_id' ".
-		"AND name='$name'";
+		$sql = "DELETE FROM em_folders WHERE account_id='".$this->escape($account_id)."' ".
+		"AND name='".$this->escape($name)."'";
 		$this->query($sql);
 
-		$sql = "DELETE FROM em_filters WHERE account_id='$account_id' ".
+		$sql = "DELETE FROM em_filters WHERE account_id='".$this->escape($account_id)."' ".
 		"AND folder='$name'";
 		return $this->query($sql);
 	}
 	function folder_exists($account_id, $name)
 	{
-		$sql = "SELECT id FROM em_folders WHERE name='$name' AND account_id='$account_id'";
+		$sql = "SELECT id FROM em_folders WHERE name='".$this->escape($name)."' AND account_id='".$this->escape($account_id)."'";
 		$this->query($sql);
 		if ($this->next_record())
 		{
@@ -509,8 +512,8 @@ class email extends db
 
 	function get_folder($account_id, $name)
 	{
-		$sql = "SELECT * FROM em_folders WHERE name='$name' AND ".
-		"account_id='$account_id'";
+		$sql = "SELECT * FROM em_folders WHERE name='".$this->escape($name)."' AND ".
+		"account_id='".$this->escape($account_id)."'";
 		$this->query($sql);
 		if ($this->next_record(MYSQL_ASSOC))
 		{
@@ -523,7 +526,7 @@ class email extends db
 
 	function get_folder_by_id($folder_id)
 	{
-		$sql = "SELECT * FROM em_folders WHERE id=$folder_id";
+		$sql = "SELECT * FROM em_folders WHERE id=".$this->escape($folder_id);
 		$this->query($sql);
 		if($this->next_record(MYSQL_ASSOC))
 		{
@@ -563,13 +566,13 @@ class email extends db
 	function subscribe($account_id, $name)
 	{
 		return $this->query("UPDATE em_folders SET subscribed='1' ".
-		"WHERE account_id='$account_id' AND name='$name'");
+		"WHERE account_id='".$this->escape($account_id)."' AND name='".$this->escape($name)."'");
 	}
 
 	function unsubscribe($account_id, $name)
 	{
 		return $this->query("UPDATE em_folders SET subscribed='0' ".
-		"WHERE account_id='$account_id' AND name='$name'");
+		"WHERE account_id='".$this->escape($account_id)."' AND name='".$this->escape($name)."'");
 	}
 
 	/*
@@ -594,7 +597,7 @@ class email extends db
 
 	function delete_folders($account_id)
 	{
-		$sql = "DELETE FROM em_folders WHERE account_id='$account_id'";
+		$sql = "DELETE FROM em_folders WHERE account_id='".$this->escape($account_id)."'";
 		return $this->query($sql);
 	}
 
@@ -677,7 +680,7 @@ class email extends db
 	
 	function get_total_unseen($user_id)
 	{
-		$sql = "SELECT SUM(unseen) FROM em_folders INNER JOIN em_accounts ON em_folders.account_id=em_accounts.id WHERE user_id='$user_id'";
+		$sql = "SELECT SUM(unseen) FROM em_folders INNER JOIN em_accounts ON em_folders.account_id=em_accounts.id WHERE user_id='".$this->escape($user_id)."'";
 		$this->query($sql);
 		$this->next_record();
 		return $this->f(0);
@@ -805,7 +808,7 @@ class email extends db
 
 	function get_filters($account_id)
 	{
-		$sql = "SELECT * FROM em_filters WHERE account_id='$account_id' ".
+		$sql = "SELECT * FROM em_filters WHERE account_id='".$this->escape($account_id)."' ".
 		"ORDER BY priority DESC";
 		$this->query($sql);
 		return $this->num_rows();
@@ -853,10 +856,10 @@ class email extends db
 		if ($move_up_pr == $move_dn_pr)
 		$move_up_pr++;
 
-		$sql = "UPDATE em_filters SET priority='$move_up_pr' WHERE id='$move_up_id'";
+		$sql = "UPDATE em_filters SET priority='".$this->escape($move_up_pr)."' WHERE id='".$this->escape($move_up_id)."'";
 		$this->query($sql);
 
-		$sql = "UPDATE em_filters SET priority='$move_dn_pr' WHERE id='$move_dn_id'";
+		$sql = "UPDATE em_filters SET priority='".$this->escape($move_dn_pr)."' WHERE id='".$this->escape($move_dn_id)."'";
 		$this->query($sql);
 	}
 
@@ -956,7 +959,7 @@ class email extends db
 
 	function get_default_account_id($user_id)
 	{
-		$sql = "SELECT id FROM em_accounts WHERE user_id='$user_id' AND standard=1";
+		$sql = "SELECT id FROM em_accounts WHERE user_id='".$this->escape($user_id)."' AND standard=1";
 
 		$this->query($sql);
 
@@ -995,11 +998,11 @@ class email extends db
 			$cache['id']=$this->f('link_id');
 			$cache['user_id']=$this->f('user_id');
 			$cache['module']='email';
-			$cache['name'] = addslashes($this->f('subject'));
+			$cache['name'] = $this->f('subject');
 			$cache['link_type']=9;
-			$cache['description']=addslashes($lang['email']['from'].': '.$this->f('from'));
+			$cache['description']=$lang['email']['from'].': '.$this->f('from');
 			$cache['type']=$lang['link_type'][9];
-			$cache['keywords']=addslashes($search->record_to_keywords($this->Record)).','.$cache['type'];
+			$cache['keywords']=$search->record_to_keywords($this->Record).','.$cache['type'];
 			$cache['mtime']=$this->f('time');
 			$cache['acl_read']=$GO_MODULES->modules['email']['acl_read'];
 			$cache['acl_write']=$GO_MODULES->modules['email']['acl_write'];

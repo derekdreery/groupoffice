@@ -69,7 +69,7 @@ class notes extends db {
 	{
 				
 		
-		return $this->query("DELETE FROM no_categories WHERE id=$category_id");
+		return $this->query("DELETE FROM no_categories WHERE id=".$this->escape($category_id));
 	}
 
 
@@ -84,7 +84,7 @@ class notes extends db {
 
 	function get_category($category_id)
 	{
-		$this->query("SELECT * FROM no_categories WHERE id=$category_id");
+		$this->query("SELECT * FROM no_categories WHERE id=".$this->escape($category_id));
 		if($this->next_record())
 		{
 			return $this->Record;
@@ -218,7 +218,7 @@ class notes extends db {
 	function add_note($note)
 	{
 		
-		$note['ctime']=$note['mtime']=gmmktime();
+		$note['ctime']=$note['mtime']=time();
 		
 		
 		$note['id']=$this->nextid('no_notes');
@@ -241,7 +241,7 @@ class notes extends db {
 	function update_note($note)
 	{
 		
-		$note['mtime']=gmmktime();
+		$note['mtime']=time();
 		
 		return $this->update_row('no_notes', 'id', $note);
 	}
@@ -266,7 +266,7 @@ class notes extends db {
 		$search->delete_search_result($note_id, 4);
 				
 		
-		return $this->query("DELETE FROM no_notes WHERE id=$note_id");
+		return $this->query("DELETE FROM no_notes WHERE id=".$this->escape($note_id));
 	}
 
 
@@ -281,7 +281,7 @@ class notes extends db {
 
 	function get_note($note_id)
 	{
-		$this->query("SELECT * FROM no_notes WHERE id=$note_id");
+		$this->query("SELECT * FROM no_notes WHERE id=".$this->escape($note_id));
 		if($this->next_record())
 		{
 			return $this->Record;

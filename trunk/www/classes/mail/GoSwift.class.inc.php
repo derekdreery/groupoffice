@@ -371,7 +371,7 @@ class GoSwift extends Swift{
 		
 		$link_message['to']=implode(',',$to);
 		$link_message['subject']=addslashes($this->message->headers->get('subject'));
-		$link_message['ctime']=$link_message['time']=gmmktime();
+		$link_message['ctime']=$link_message['time']=time();
 		$link_message['link_id'] = $email->link_message($link_message);
 
 		foreach($links as $link)
