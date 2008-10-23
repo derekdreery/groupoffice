@@ -34,7 +34,7 @@ class summary extends db{
 	function get_note($user_id)
 	{
 		
-		$sql = "SELECT * FROM su_notes WHERE user_id='.$this->escape($user_id).'";
+		$sql = "SELECT * FROM su_notes WHERE user_id='".$this->escape($user_id)."'";
 		$this->query($sql);
 		
 		if(!$this->next_record())
@@ -58,7 +58,7 @@ class summary extends db{
 	function get_feed($user_id)
 	{
 		
-		$sql = "SELECT * FROM su_rss_feeds WHERE user_id='.$this->escape($user_id).'";
+		$sql = "SELECT * FROM su_rss_feeds WHERE user_id='".$this->escape($user_id)."'";
 		$this->query($sql);
 		
 		if(!$this->next_record())
@@ -122,7 +122,7 @@ class summary extends db{
 	 */
 	function delete_announcement($announcement_id)
 	{
-		return $this->query("DELETE FROM su_announcements WHERE id='.$this->escape($announcement_id).'");
+		return $this->query("DELETE FROM su_announcements WHERE id='".$this->escape($announcement_id)."'");
 	}
 	/**
 	 * Gets a Announcement record
@@ -134,7 +134,7 @@ class summary extends db{
 	 */
 	function get_announcement($announcement_id)
 	{
-		$this->query("SELECT * FROM su_announcements WHERE id='.$this->escape($announcement_id).'");
+		$this->query("SELECT * FROM su_announcements WHERE id='".$this->escape($announcement_id)."'");
 		if($this->next_record())
 		{
 			return $this->Record;
@@ -153,7 +153,7 @@ class summary extends db{
 	 */
 	function get_announcement_by_name($name)
 	{
-		$this->query("SELECT * FROM su_announcements WHERE name='.$this->escape($name).'");
+		$this->query("SELECT * FROM su_announcements WHERE name='".$this->escape($name)."'");
 		if($this->next_record())
 		{
 			return $this->Record;
@@ -176,14 +176,14 @@ class summary extends db{
 		$sql = "SELECT * FROM su_announcements ";
 		if(!empty($query))
  		{
- 			$sql .= " WHERE name LIKE '$query'";
+ 			$sql .= " WHERE name LIKE '".$this->escape($query)."'";
  		} 		
-		$sql .= "ORDER BY $sortfield $sortorder";
+		$sql .= "ORDER BY ".$this->escape($sortfield)." ".$this->escape($sortorder)."";
 		$this->query($sql);
 		$count = $this->num_rows();
 		if($offset>0)
 		{
-			$sql .= " LIMIT ".$this->escape($start,$offset);
+			$sql .= " LIMIT (".$this->escape($start).",".$this->escape($offset).")";
 			$this->query($sql);
 		}
 		return $count;
@@ -203,12 +203,12 @@ class summary extends db{
 	function get_active_announcements($sortfield='id', $sortorder='ASC', $start=0, $offset=0)
 	{
 		$sql = "SELECT * FROM su_announcements WHERE due_time=0 OR due_time > UNIX_TIMESTAMP()";
-		$sql .= "ORDER BY $sortfield $sortorder";
+		$sql .= "ORDER BY ".$this->escape($sortfield)." ".$this->escape($sortorder)."";
 		$this->query($sql);
 		$count = $this->num_rows();
 		if($offset>0)
 		{
-			$sql .= " LIMIT ".$this->escape($start,$offset);
+			$sql .= " LIMIT (".$this->escape($start).",".$this->escape($offset).")";
 			$this->query($sql);
 		}
 		return $count;
