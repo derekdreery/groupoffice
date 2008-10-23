@@ -209,7 +209,7 @@ class addressbook extends db {
 		}
 
 		if (!isset($company['ctime']) || $company['ctime'] == 0) {
-			$company['ctime'] = gmmktime();
+			$company['ctime'] = time();
 		}
 		if (!isset($company['mtime']) || $company['mtime'] == 0) {
 			$company['mtime'] = $company['ctime'];
@@ -230,7 +230,7 @@ class addressbook extends db {
 	function update_company($company)
 	{
 		if (!isset($company['mtime']) || $company['mtime'] == 0) {
-			$company['mtime'] = gmmktime();
+			$company['mtime'] = time();
 		}
 		return $this->update_row('ab_companies', 'id', $company);
 	}

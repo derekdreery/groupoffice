@@ -91,7 +91,7 @@ class summary extends db{
 	 */
 	function add_announcement($announcement)
 	{
-		$announcement['ctime']=$announcement['mtime']=gmmktime();
+		$announcement['ctime']=$announcement['mtime']=time();
 		$announcement['id']=$this->nextid('su_announcements');
 		if($this->insert_row('su_announcements', $announcement))
 		{
@@ -109,7 +109,7 @@ class summary extends db{
 	 */
 	function update_announcement($announcement)
 	{
-		$announcement['mtime']=gmmktime();
+		$announcement['mtime']=time();
 		return $this->update_row('su_announcements', 'id', $announcement);
 	}
 	/**
