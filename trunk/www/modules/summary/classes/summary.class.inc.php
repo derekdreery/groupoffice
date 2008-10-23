@@ -183,7 +183,7 @@ class summary extends db{
 		$count = $this->num_rows();
 		if($offset>0)
 		{
-			$sql .= " LIMIT $start,$offset";
+			$sql .= " LIMIT ".$this->escape($start,$offset);
 			$this->query($sql);
 		}
 		return $count;
@@ -208,7 +208,7 @@ class summary extends db{
 		$count = $this->num_rows();
 		if($offset>0)
 		{
-			$sql .= " LIMIT $start,$offset";
+			$sql .= " LIMIT ".$this->escape($start,$offset);
 			$this->query($sql);
 		}
 		return $count;
