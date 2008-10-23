@@ -371,7 +371,7 @@ class tasks extends db
 				$sql .= " WHERE ";
 				$where=true;
 			}
-			$sql .= "l.user_id='.$this->escape($user_id).' ";
+			$sql .= "l.user_id='".$this->escape($user_id)."' ";
 		}else
 		{
 			if($where)
