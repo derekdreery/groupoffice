@@ -89,7 +89,7 @@ class tasks extends db
 	
 	function get_user_tasklists($user_id)
 	{
-		$sql = "SELECT * FROM ta_lists WHERE user_id='.$this->escape($user_id).";
+		$sql = "SELECT * FROM ta_lists WHERE user_id=".$this->escape($user_id);
 		$this->query($sql);
 		return $this->num_rows();
 	}

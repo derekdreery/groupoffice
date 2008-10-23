@@ -317,8 +317,6 @@ class calendar extends db
 			$dst_event[$key] = $value;
 		}
 
-		$dst_event = array_map('addslashes', $dst_event);
-
 		return $this->add_event($dst_event);
 
 	}
@@ -363,9 +361,7 @@ class calendar extends db
 	{
 		$view['id'] = $this->nextid("cal_views");
 		$this->insert_row('cal_views',$view);
-
 		return $view['id'];
-
 	}
 
 	function update_view($view)
@@ -395,15 +391,15 @@ class calendar extends db
 		"INNER JOIN go_acl ON ( cal_views.acl_read = go_acl.acl_id ".
 		"OR cal_views.acl_write = go_acl.acl_id ) ".
 		"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ".
-		"WHERE go_acl.user_id=$user_id ".
-		"OR go_users_groups.user_id=$user_id ".
+		"WHERE go_acl.user_id=".$this->escape($user_id)." ".
+		"OR go_users_groups.user_id=".$this->escape($user_id)." ".
 		"ORDER BY cal_views.name ASC";
 
 		$this->query($sql);
 		$count= $this->num_rows();
 		if($offset>0)
 		{
-			$sql .= " LIMIT $start, $offset";
+			$sql .= " LIMIT ".$this->replace($start.",".$offset);
 			$this->query($sql);
 		}
 		return $count;
@@ -703,7 +699,7 @@ class calendar extends db
 		$count= $this->num_rows();
 		if($offset>0)
 		{
-			$sql .= " LIMIT $start, $offset";
+			$sql .= " LIMIT ".$this->replace($start.",".$offset);
 			$this->query($sql);
 		}
 		return $count;
@@ -722,7 +718,7 @@ class calendar extends db
 		$count= $this->num_rows();
 		if($offset>0)
 		{
-			$sql .= " LIMIT $start, $offset";
+			$sql .= " LIMIT ".$this->replace($start.",".$offset);
 			$this->query($sql);
 		}
 		return $count;
@@ -954,7 +950,7 @@ class calendar extends db
 
 		if($sort_field != '' && $sort_order != '')
 		{
-			$sql .=	" ORDER BY $sort_field $sort_order";
+			$sql .=	" ORDER BY ".$this->replace($sort_field." ".$sort_order);
 		}
 
 		$this->query($sql);
@@ -1058,7 +1054,7 @@ class calendar extends db
 
 		if($sort_field != '' && $sort_order != '')
 		{
-			$sql .=	" ORDER BY $sort_field $sort_order";
+			$sql .=	" ORDER BY ".$this->replace($sort_field." ".$sort_order);
 		}
 
 		if($offset == 0)
@@ -1070,7 +1066,7 @@ class calendar extends db
 			$this->query($sql);
 			$count = $this->num_rows();
 
-			$sql .= " LIMIT $start, $offset";
+			$sql .= " LIMIT ".$this->replace($start.",".$offset);
 
 			$this->query($sql);
 

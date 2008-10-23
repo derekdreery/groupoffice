@@ -74,7 +74,7 @@ class email extends db
 
 		if($offset>0)
 		{
-			$sql .= "LIMIT $start, $offset";
+			$sql .= "LIMIT ".$this->replace($start.",".$offset);
 			$this->query($sql);
 		}
 		return $count;

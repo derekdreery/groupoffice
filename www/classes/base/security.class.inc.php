@@ -219,7 +219,7 @@ class GO_SECURITY extends db {
 		
 		$this->add_group_to_acl($GO_CONFIG->group_root, $ai['id']);		
 		$this->add_user_to_acl($user_id, $ai['id']);			
-		return $id;		
+		return $ai['id'];		
 	}
 	
 	/**
