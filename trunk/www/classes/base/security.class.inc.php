@@ -211,14 +211,15 @@ class GO_SECURITY extends db {
 		{
 			$user_id = $this->user_id;
 		}
-		$id = $this->nextid("go_acl_items");
-
-		$this->query("INSERT INTO go_acl_items (id, description, user_id) ".
-		"VALUES ('$id', '$description', '$user_id')");			
-		$this->add_group_to_acl($GO_CONFIG->group_root, $id);		
-		$this->add_user_to_acl($user_id, $id);			
-		return $id;
+		$ai['id'] = $this->nextid("go_acl_items");		
+		$ai['description']=$description;
+		$ai['user_id']=$user_id;
 		
+		$this->insert_row('go_acl_items', $ai);
+		
+		$this->add_group_to_acl($GO_CONFIG->group_root, $ai['id']);		
+		$this->add_user_to_acl($user_id, $ai['id']);			
+		return $id;		
 	}
 	
 	/**
@@ -244,7 +245,7 @@ class GO_SECURITY extends db {
 	*/
 	function user_owns_acl($user_id, $acl_id)
 	{
-		$this->query("SELECT user_id FROM go_acl_items WHERE id='$acl_id'");
+		$this->query("SELECT user_id FROM go_acl_items WHERE id='".$this->escape($acl_id)."'");
 		if ($this->next_record())
 		{
 			if ($user_id == $this->f('user_id'))
@@ -268,7 +269,7 @@ class GO_SECURITY extends db {
 	*/	
 	function chown_acl($acl_id, $user_id)
 	{
-		$sql = "UPDATE go_acl_items SET user_id='$user_id' WHERE id='$acl_id'";
+		$sql = "UPDATE go_acl_items SET user_id='".$this->escape($user_id)."' WHERE id='".$this->escape($acl_id)."'";
 		return $this->query($sql);
 	}
 
@@ -281,9 +282,9 @@ class GO_SECURITY extends db {
 	*/
 	function delete_acl($acl_id)
 	{
-		if($this->query("DELETE FROM go_acl WHERE acl_id='$acl_id'"))
+		if($this->query("DELETE FROM go_acl WHERE acl_id='".$this->escape($acl_id)."'"))
 		{
-			return $this->query("DELETE FROM go_acl_items WHERE id='$acl_id'");
+			return $this->query("DELETE FROM go_acl_items WHERE id='".$this->escape($acl_id)."'");
 		}
 		return false;
 	}
@@ -299,7 +300,7 @@ class GO_SECURITY extends db {
 	function add_user_to_acl($user_id,$acl_id)
 	{
 		return $this->query("INSERT INTO go_acl (acl_id,user_id) ".
-		"VALUES ('$acl_id','$user_id')");
+		"VALUES ('".$this->escape($acl_id)."','".$this->escape($user_id)."')");
 	}
 
 	/**
@@ -312,7 +313,7 @@ class GO_SECURITY extends db {
 	*/
 	function delete_user_from_acl($user_id, $acl_id)
 	{
-		$sql = "DELETE FROM go_acl WHERE user_id='$user_id' AND acl_id='$acl_id'";
+		$sql = "DELETE FROM go_acl WHERE user_id='".$this->escape($user_id)."' AND acl_id='".$this->escape($acl_id)."'";
 		return $this->query($sql);
 	}
 
@@ -327,7 +328,7 @@ class GO_SECURITY extends db {
 	function add_group_to_acl($group_id,$acl_id)
 	{
 		return $this->query("INSERT INTO go_acl (acl_id,group_id) ".
-		"VALUES ('$acl_id','$group_id')");
+		"VALUES ('".$this->escape($acl_id)."','".$this->escape($group_id)."')");
 	}
 
 	/**
@@ -343,7 +344,7 @@ class GO_SECURITY extends db {
 		global $GO_CONFIG;
 		if($group_id != $GO_CONFIG->group_root)
 		{
-			$sql = "DELETE FROM go_acl WHERE group_id='$group_id' AND acl_id='$acl_id'";
+			$sql = "DELETE FROM go_acl WHERE group_id='".$this->escape($group_id)."' AND acl_id='".$this->escape($acl_id)."'";
 			return $this->query($sql);
 		}
 	}
@@ -359,7 +360,7 @@ class GO_SECURITY extends db {
 	{
 		global $GO_CONFIG;
 		
-		if($this->query("DELETE FROM go_acl WHERE acl_id='$acl_id'"))
+		if($this->query("DELETE FROM go_acl WHERE acl_id='".$this->escape($acl_id)."'"))
 		{
 			return $this->add_group_to_acl($GO_CONFIG->group_root, $acl_id);
 		}
@@ -375,7 +376,7 @@ class GO_SECURITY extends db {
 	*/
 	function set_acl_owner($acl_id, $user_id)
 	{
-		return $this->query("UPDATE go_acl_items SET user_id='$user_id' WHERE id='$acl_id'");
+		return $this->query("UPDATE go_acl_items SET user_id='".$this->escape($user_id)."' WHERE id='".$this->escape($acl_id)."'");
 	}
 
 	/**
@@ -406,7 +407,7 @@ class GO_SECURITY extends db {
 		global $GO_CONFIG, $auth_sources;
 
 		$sql = "SELECT go_groups.* FROM go_groups INNER JOIN go_acl ON".
-		" go_acl.group_id=go_groups.id WHERE go_acl.acl_id='$acl_id'".
+		" go_acl.group_id=go_groups.id WHERE go_acl.acl_id='".$this->escape($acl_id)."'".
 		" ORDER BY go_groups.name";
 		$this->query($sql);
 		return $this->num_rows();
@@ -442,7 +443,7 @@ class GO_SECURITY extends db {
 	{
 		$sql = "SELECT u.id, u.first_name, u.middle_name, u.last_name ".
 			"FROM go_acl a INNER JOIN go_users u ON u.id=a.user_id WHERE ".
-			"a.acl_id='$acl_id'";
+			"a.acl_id='".$this->escape($acl_id)."'";
 		$this->query($sql);
 		return $this->num_rows();
 	}
@@ -457,7 +458,7 @@ class GO_SECURITY extends db {
 	function get_authorized_users_in_acl($acl_id)
 	{
 		$users=array();
-		$sql = "SELECT user_id FROM go_acl WHERE acl_id='$acl_id' AND user_id!=0";
+		$sql = "SELECT user_id FROM go_acl WHERE acl_id='".$this->escape($acl_id)."' AND user_id!=0";
 		
 		$this->query($sql);
 		while($this->next_record())
@@ -466,7 +467,7 @@ class GO_SECURITY extends db {
 		}
 		
 		$sql = "SELECT go_users_groups.user_id FROM go_users_groups INNER JOIN go_acl ON ".
-			"go_acl.group_id=go_users_groups.group_id WHERE go_acl.acl_id=$acl_id AND go_users_groups.user_id!=0";
+			"go_acl.group_id=go_users_groups.group_id WHERE go_acl.acl_id=".$this->escape($acl_id)." AND go_users_groups.user_id!=0";
 		$this->query($sql);
 		while($this->next_record())
 		{
@@ -488,7 +489,7 @@ class GO_SECURITY extends db {
 	*/
 	function user_in_acl($user_id, $acl_id)
 	{
-		$sql = "SELECT user_id FROM go_acl WHERE acl_id='$acl_id' AND".
+		$sql = "SELECT user_id FROM go_acl WHERE acl_id='".$this->escape($acl_id)."' AND".
 		" user_id='$user_id'";
 		$this->query($sql);
 		if ($this->num_rows() > 0)
@@ -508,7 +509,7 @@ class GO_SECURITY extends db {
 	*/
 	function group_in_acl($group_id, $acl_id)
 	{
-		$sql = "SELECT group_id FROM go_acl WHERE acl_id='$acl_id' AND group_id='$group_id'";
+		$sql = "SELECT group_id FROM go_acl WHERE acl_id='".$this->escape($acl_id)."' AND group_id='".$this->escape($group_id)."'";
 		$this->query($sql);
 		if ($this->num_rows() > 0)
 		{
@@ -528,7 +529,7 @@ class GO_SECURITY extends db {
 	*/
 	function get_acl_id($description)
 	{
-		$sql = "SELECT id FROM go_acl_items WHERE description='$description'";
+		$sql = "SELECT id FROM go_acl_items WHERE description='".$this->escape($description)."'";
 		$this->query($sql);
 		if ($this->next_record())
 		{
@@ -550,7 +551,7 @@ class GO_SECURITY extends db {
    */
 	function acl_exists( $acl_id )
 	{
-		$sql = "SELECT * FROM go_acl_items WHERE id='$acl_id'";
+		$sql = "SELECT * FROM go_acl_items WHERE id='".$this->escape($acl_id)."'";
 		$this->query($sql);
 		if ( $this->num_rows() != 0 ) {
 			return true;
@@ -615,7 +616,7 @@ class GO_SECURITY extends db {
 		if ($this->user_id == $user_id)
 		return true;
 
-		$sql = "SELECT acl_id FROM go_users WHERE id='$user_id'";
+		$sql = "SELECT acl_id FROM go_users WHERE id='".$this->escape($user_id)."'";
 		$this->query($sql);
 		$this->next_record();
 		return $this->has_permission($this->user_id, $this->f("acl_id"));
@@ -645,7 +646,7 @@ class GO_SECURITY extends db {
 	*/
 	function delete_group($group_id)
 	{
-		$sql = "DELETE FROM go_acl WHERE group_id='$group_id'";
+		$sql = "DELETE FROM go_acl WHERE group_id='".$this->escape($group_id)."'";
 		return $this->query($sql);
 	}
 
@@ -665,7 +666,7 @@ class GO_SECURITY extends db {
 
 		if ($user_id > 0 && $acl_id > 0) {
 			$sql = "SELECT acl_id FROM go_acl WHERE ".
-				"acl_id='$acl_id' AND user_id='$user_id'";
+				"acl_id='".$this->escape($acl_id)."' AND user_id='".$this->escape($user_id)."'";
 			$this->query($sql);
 
 			if ($this->num_rows() > 0) {
@@ -673,8 +674,8 @@ class GO_SECURITY extends db {
 			}
 
 			$sql = "SELECT go_acl.acl_id FROM go_acl, go_users_groups	WHERE ".
-				"go_acl.acl_id='$acl_id' AND go_acl.group_id=go_users_groups.group_id AND ".
-				"go_users_groups.user_id='$user_id'";
+				"go_acl.acl_id='".$this->escape($acl_id)."' AND go_acl.group_id=go_users_groups.group_id AND ".
+				"go_users_groups.user_id='".$this->escape($user_id)."'";
 			$this->query($sql);
 
 			if ($this->num_rows() > 0) {

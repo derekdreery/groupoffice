@@ -218,8 +218,8 @@ class GO_USERS extends db
 				$sql .= "LEFT JOIN cf_8 ON cf_8.link_id=users.link_id ";
 			}*/
 			
-			$sql .= "WHERE (go_acl.user_id=$user_id ".
-			"OR go_users_groups.user_id=$user_id) AND ";
+			$sql .= "WHERE (go_acl.user_id=".$this->escape($user_id)." ".
+			"OR go_users_groups.user_id=".$this->escape($user_id).") AND ";
 		}else
 		{
 			$sql = "SELECT * FROM go_users ";
@@ -277,7 +277,7 @@ class GO_USERS extends db
 			
 			if($field=='name')
 			{
-				$sql .= "CONCAT(first_name,middle_name,last_name) LIKE '".str_replace(' ','%', $query)."' ";
+				$sql .= "CONCAT(first_name,middle_name,last_name) LIKE '".$this->escape(str_replace(' ','%', $query))."' ";
 			}else
 			{
 				$sql .= "$field LIKE '$query' ";
@@ -286,9 +286,7 @@ class GO_USERS extends db
 		if(count($fields)>1)
 		{
 			$sql .= ')';
-		}			
-		
-		
+		}	
 
 		$sql .= " ORDER BY $sort $sort_direction";
 		$this->query($sql);
@@ -312,7 +310,7 @@ class GO_USERS extends db
 		{
 			$sql = "SELECT go_users.* FROM go_users  INNER JOIN go_acl ON go_users.acl_id = go_acl.acl_id ".
 				"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id WHERE (go_acl.user_id=$user_id ".
-				"OR go_users_groups.user_id=$user_id) AND link_id IN (".implode(',',$links).") ORDER BY last_name ASC, first_name ASC";
+				"OR go_users_groups.user_id=".$this->escape($user_id).") AND link_id IN (".implode(',',$links).") ORDER BY last_name ASC, first_name ASC";
 			
 			$this->query($sql);
 			return $this->num_rows();
@@ -403,8 +401,8 @@ class GO_USERS extends db
 		$sql = "SELECT DISTINCT go_users.* FROM go_users ".
 		"INNER JOIN go_acl ON go_users.acl_id= go_acl.acl_id ".
 		"LEFT JOIN go_users_groups ON (go_acl.group_id = go_users_groups.group_id) ".
-		"WHERE go_users_groups.user_id=".$user_id." OR ".
-		"go_acl.user_id = ".$user_id." ORDER BY ".$sort." ".$direction;
+		"WHERE go_users_groups.user_id=".$this->escape($user_id)." OR ".
+		"go_acl.user_id = ".$this->escape($user_id)." ORDER BY ".$sort." ".$direction;
 
 		$this->query($sql);
 		return $this->num_rows();
@@ -424,7 +422,7 @@ class GO_USERS extends db
 	function get_user_by_email($email)
 	{
 		$email = String::get_email_from_string($email);
-		$sql = "SELECT * FROM go_users WHERE email='$email'";
+		$sql = "SELECT * FROM go_users WHERE email='".$this->escape($email)."'";
 		$this->query($sql);
 		
 		//return false if there is more then one result
@@ -452,8 +450,8 @@ class GO_USERS extends db
 		$sql = "SELECT DISTINCT go_users.* FROM go_users ".
 		"INNER JOIN go_acl ON go_users.acl_id= go_acl.acl_id ".
 		"LEFT JOIN go_users_groups ON (go_acl.group_id = go_users_groups.group_id) ".
-		"WHERE (go_users_groups.user_id=".$user_id." OR ".
-		"go_acl.user_id = ".$user_id.") AND email='$email'";
+		"WHERE (go_users_groups.user_id=".$this->escape($user_id)." OR ".
+		"go_acl.user_id = ".$this->escape($user_id).") AND email='".$this->escape($email)."'";
 		$this->query($sql);
 		if ($this->next_record(MYSQL_ASSOC))
 		{
@@ -491,7 +489,7 @@ class GO_USERS extends db
 	 */
 	function get_user($user_id)
 	{
-		$sql = "SELECT * FROM go_users WHERE id='$user_id'";
+		$sql = "SELECT * FROM go_users WHERE id='".$this->escape($user_id)."'";
 		$this->query( $sql );
 		if ($this->next_record(MYSQL_ASSOC))
 		{
@@ -686,7 +684,7 @@ class GO_USERS extends db
 	 */
 	function get_user_by_username($username)
 	{
-		$sql = "SELECT * FROM go_users WHERE username='$username'";
+		$sql = "SELECT * FROM go_users WHERE username='".$this->escape($username)."'";
 		$this->query($sql);
 		if ($this->next_record())
 		{
@@ -706,7 +704,7 @@ class GO_USERS extends db
 	 */
 	function email_exists($email)
 	{
-		$sql = "SELECT id FROM go_users WHERE email='$email'";
+		$sql = "SELECT id FROM go_users WHERE email='".$this->escape($email)."'";
 		$this->query($sql);
 		if ($this->num_rows() > 0)
 		{
@@ -752,15 +750,12 @@ class GO_USERS extends db
 		// with the same name...
 		if(!$GO_CONFIG->allow_duplicate_email)
 		{
-			$this->query( "SELECT id FROM go_users WHERE email='".$user['email']."' OR username='".$user['username']."'" );
+			$this->query( "SELECT id FROM go_users WHERE email='".$this->escape($user['email'])."' OR username='".$this->escape($user['username'])."'");
 			if ( $this->num_rows() > 0 ) {
 
 				return false;
 			}
-		}
-
-
-		
+		}		
 		
 		if(!isset($user['start_module']))
 			$user['start_module']='summary';
@@ -932,7 +927,7 @@ class GO_USERS extends db
 		{
 			$acl_id = $this->f("acl_id");
 			$username = $this->f("username");
-			$sql = "DELETE FROM go_users WHERE id='$user_id'";
+			$sql = "DELETE FROM go_users WHERE id='".$this->escape($user_id)."'";
 			if ($this->query($sql))
 			{
 				$GO_SECURITY->delete_acl($acl_id);
@@ -949,7 +944,7 @@ class GO_USERS extends db
 				//$GO_GROUPS->__on_user_delete($user_id);
 
 				
-				$sql = "DELETE FROM go_acl WHERE user_id=$user_id;";
+				$sql = "DELETE FROM go_acl WHERE user_id=".$this->escape($user_id).";";
 				$this->query($sql);
 				
 //				system('rm -Rf '.$GO_CONFIG->file_storage_path.'users/'.$user_id);
@@ -960,7 +955,7 @@ class GO_USERS extends db
 	}
 
 	function increment_logins( $user_id ) {
-		$sql =  "UPDATE go_users SET logins=logins+1, lastlogin='".gmmktime().
+		$sql =  "UPDATE go_users SET logins=logins+1, lastlogin='".time().
 		"' WHERE id='$user_id'";
 		$this->query( $sql );
 	}

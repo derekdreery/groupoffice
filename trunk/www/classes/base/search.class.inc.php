@@ -103,7 +103,7 @@ class search extends db {
 			$sql .= "INNER JOIN go_links_$link_type l ON l.link_id=sc.id AND l.link_type=sc.link_type ";		
 		}		
 		
-		$sql .= "WHERE (a.user_id=$user_id OR ug.user_id=$user_id) ";
+		$sql .= "WHERE (a.user_id=".$this->escape($user_id)." OR ug.user_id=".$this->escape($user_id).") ";
 		
 		/*
 		 * Verrrrry sloowwww
@@ -117,10 +117,10 @@ class search extends db {
 		
 		if($link_folder_id>0)
 		{
-			$sql .= "AND l.folder_id=$link_folder_id ";
+			$sql .= "AND l.folder_id=".$this->escape($link_folder_id)." ";
 		}elseif($link_id>0)
 		{
-			$sql .= "AND l.id=$link_id ";
+			$sql .= "AND l.id=".$this->escape($link_id)." ";
 			
 			if($link_folder_id>-1)
 				$sql .= " AND l.folder_id=0 "; 
@@ -134,12 +134,12 @@ class search extends db {
 			{
 				foreach($keywords as $keyword)
 				{
-					$sql_keywords[] = "keywords LIKE '%$keyword%'";
+					$sql_keywords[] = "keywords LIKE '%".$this->escape($keyword)."%'";
 				}
 
 				$sql .= ' AND ('.implode(' AND ', $sql_keywords).') ';
 			}else {
-				$sql .= " AND keywords LIKE '%$query%' ";
+				$sql .= " AND keywords LIKE '%".$this->escape($query)."%' ";
 			}
 		}
 		
@@ -370,7 +370,7 @@ class search extends db {
 	 */
 	function get_search_result($id, $type)
 	{
-		$sql = "SELECT * FROM go_search_cache WHERE id=$id AND link_type=$type";
+		$sql = "SELECT * FROM go_search_cache WHERE id=".$this->escape($id)." AND link_type=".$this->escape($type);
 		$this->query($sql);
 		if($this->next_record())
 		{
@@ -387,7 +387,7 @@ class search extends db {
 	 */
 	function get_last_sync_time($module)
 	{
-		$sql = "SELECT last_sync_time FROM go_search_sync WHERE module='$module'";
+		$sql = "SELECT last_sync_time FROM go_search_sync WHERE module='".$this->escape($module)."'";
 		$this->query($sql);
 		if($this->next_record())
 		{
@@ -411,7 +411,7 @@ class search extends db {
 	
 	function delete_search_result($id, $link_type)
 	{
-		$sql = "DELETE FROM go_search_cache WHERE id=$id AND link_type=$link_type";
+		$sql = "DELETE FROM go_search_cache WHERE id=".$this->escape($id)." AND link_type=".$this->escape($link_type);
 		$this->query($sql);
 		
 		global $GO_LINKS;
@@ -472,7 +472,7 @@ class search extends db {
 	function update_last_sync_time( $module)
 	{
 		$lst['module']=$module;
-		$lst['last_sync_time']=gmmktime();
+		$lst['last_sync_time']=time();
 
 		$this->update_row('go_search_sync','module',$lst);
 	}
