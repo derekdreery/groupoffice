@@ -134,7 +134,7 @@ class summary extends db{
 	 */
 	function get_announcement($announcement_id)
 	{
-		$this->query("SELECT * FROM su_announcements WHERE id=$announcement_id");
+		$this->query("SELECT * FROM su_announcements WHERE id='.$this->escape($announcement_id).'");
 		if($this->next_record())
 		{
 			return $this->Record;
@@ -153,7 +153,7 @@ class summary extends db{
 	 */
 	function get_announcement_by_name($name)
 	{
-		$this->query("SELECT * FROM su_announcements WHERE name='$name'");
+		$this->query("SELECT * FROM su_announcements WHERE name='.$this->escape($name).'");
 		if($this->next_record())
 		{
 			return $this->Record;
