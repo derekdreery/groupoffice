@@ -134,7 +134,6 @@ define('GO_LOADED', true);
 //undo magic quotes
 if (get_magic_quotes_gpc())
 {
-
 	function stripslashes_array($data) {
 		if (is_array($data)){
 			foreach ($data as $key => $value){

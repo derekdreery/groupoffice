@@ -19,6 +19,21 @@
 	?></td>
 </tr>
 <tr>
+	<td valign="top">Magic quotes setting:</td>
+	<td>
+	<?php
+	if(!get_magic_quotes_gpc())
+	{
+		echo 'Ok';
+	}else
+	{
+		echo '<span style="color: red;">Warning: magic_quotes_gpc is enabled. You will get better performance if you disable this setting.</span>';
+	}
+	?>
+	</td>
+</tr>
+
+<tr>
 	<td valign="top">MySQL support:</td>
 	<td>
 	<?php
