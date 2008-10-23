@@ -28,8 +28,8 @@ function get_posted_event()
 	
 	$gmt_tz = new DateTimeZone('GMT');
 	
-	$event['id']=($_POST['event_id']);
-	$event['calendar_id']=($_POST['calendar_id']);
+	$event['id']=$_POST['event_id'];
+	$event['calendar_id']=$_POST['calendar_id'];
 
 	$event['private']=isset($_POST['private']) ? '1' : '0';
 	$event['name'] = (trim($_POST['subject']));
@@ -126,7 +126,7 @@ try{
 			
 		case 'delete_event':
 			
-			$event_id=($_POST['event_id']);
+			$event_id=$_POST['event_id'];
 			
 			$event = $cal->get_event($event_id);
 			
@@ -161,7 +161,7 @@ try{
 				
 			if(isset($_POST['update_event_id']))
 			{
-				$update_event_id=($_POST['update_event_id']);
+				$update_event_id=$_POST['update_event_id'];
 				$old_event = $cal->get_event($update_event_id);
 				
 				//an event is moved or resized
@@ -225,7 +225,7 @@ try{
 
 					if(isset($_POST['update_calendar_id']))
 					{
-						$update_event['calendar_id']=($_POST['update_calendar_id']);
+						$update_event['calendar_id']=$_POST['update_calendar_id'];
 					}
 
 
@@ -261,7 +261,7 @@ try{
 					
 					if(isset($_POST['update_calendar_id']))
 					{
-						$update_event['calendar_id']=($_POST['update_calendar_id']);
+						$update_event['calendar_id']=$_POST['update_calendar_id'];
 					}
 					
 					$update_event['id']=$update_event_id;
@@ -428,7 +428,7 @@ try{
 						$cal->add_exception($exception);
 
 						//for sync update the timestamp
-						$update_event['id']=($_REQUEST['exception_event_id']);
+						$update_event['id']=$_REQUEST['exception_event_id'];
 						$cal->update_event($update_event);
 
 					}
@@ -496,9 +496,9 @@ try{
 
 		case 'save_calendar':
 
-			$calendar['id']=($_POST['calendar_id']);
+			$calendar['id']=$_POST['calendar_id'];
 			$calendar['user_id'] = isset($_POST['user_id']) ? ($_POST['user_id']) : $GO_SECURITY->user_id;
-			$calendar['name']=($_POST['name']);
+			$calendar['name']=$_POST['name'];
 
 
 			if(empty($calendar['name']))
@@ -548,9 +548,9 @@ try{
 
 		case 'save_view':
 
-			$view['id']=($_POST['view_id']);
+			$view['id']=$_POST['view_id'];
 			$view['user_id'] = isset($_POST['user_id']) ? ($_POST['user_id']) : $GO_SECURITY->user_id;
-			$view['name']=($_POST['name']);
+			$view['name']=$_POST['name'];
 
 			$view_calendars = json_decode(($_POST['view_calendars']));
 

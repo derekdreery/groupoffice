@@ -340,7 +340,7 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 			break;
 
 		case 'userdir':
-			$tmpdir=($_POST['tmpdir']);
+			$tmpdir=$_POST['tmpdir'];
 
 			if (!is__writable($_POST['userdir']))
 			{
@@ -357,15 +357,15 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 			}
 
 			if (substr($_POST['userdir'], -1) != '/') $_POST['userdir'] = $_POST['userdir'].'/';
-			$GO_CONFIG->file_storage_path=($_POST['userdir']);
-			//$GO_CONFIG->create_mode=($_POST['create_mode']);
-			$GO_CONFIG->max_file_size=($_POST['max_file_size']);
+			$GO_CONFIG->file_storage_path=$_POST['userdir'];
+			//$GO_CONFIG->create_mode=$_POST['create_mode'];
+			$GO_CONFIG->max_file_size=$_POST['max_file_size'];
 
 			if (substr($_POST['local_path'], -1) != '/') $_POST['local_path'] = $_POST['local_path'].'/';
 			if (substr($_POST['local_url'], -1) != '/') $_POST['local_url'] = $_POST['local_url'].'/';
 
-			$GO_CONFIG->local_path=($_POST['local_path']);
-			$GO_CONFIG->local_url=($_POST['local_url']);
+			$GO_CONFIG->local_path=$_POST['local_path'];
+			$GO_CONFIG->local_url=$_POST['local_url'];
 
 			if (substr($tmpdir, -1) != '/') $tmpdir = $tmpdir.'/';
 			$GO_CONFIG->tmpdir=$tmpdir;

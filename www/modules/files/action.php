@@ -56,7 +56,7 @@ try{
 			}
 			
 			$up_file['path']=addslashes($path);
-			$up_file['comments']=($_POST['comments']);
+			$up_file['comments']=$_POST['comments'];
 			$fs->update_file($up_file);
 
 
@@ -115,7 +115,7 @@ try{
 					
 				
 				$up_folder['path']=addslashes($path);
-				$up_folder['comments']=($_POST['comments']);
+				$up_folder['comments']=$_POST['comments'];
 				
 				if (isset ($_POST['share']) && $folder['acl_read']==0) {
 					
@@ -328,7 +328,7 @@ try{
 		case 'save_template':
 				
 			$template['id']=isset($_POST['template_id']) ? ($_POST['template_id']) : 0;
-			$template['name']=($_POST['name']);
+			$template['name']=$_POST['name'];
 			
 			if (is_uploaded_file($_FILES['file']['tmp_name'][0]))
 			{
@@ -341,7 +341,7 @@ try{
 
 			if(isset($_POST['user_id']))
 			{
-				$template['user_id']=($_POST['user_id']);
+				$template['user_id']=$_POST['user_id'];
 			}
 			
 			debug(var_export($template, true));

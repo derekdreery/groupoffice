@@ -351,11 +351,11 @@ try{
 						
 				case 'save_filter':
 
-					$filter['id']=($_POST['filter_id']);
+					$filter['id']=$_POST['filter_id'];
 					$filter['mark_as_read']=isset($_POST['mark_as_read']) ? '1' : '0';
-					$filter['keyword']=($_POST['keyword']);
-					$filter['folder']=($_POST['folder']);
-					$filter['field']=($_POST['field']);
+					$filter['keyword']=$_POST['keyword'];
+					$filter['folder']=$_POST['folder'];
+					$filter['field']=$_POST['field'];
 
 
 					if($_POST['filter_id']>0)
@@ -369,7 +369,7 @@ try{
 						}
 					}else
 					{
-						$filter['account_id']=($_POST['account_id']);
+						$filter['account_id']=$_POST['account_id'];
 						if ($response['filter_id']=$email->add_filter($filter))
 						{
 							$response['success']=true;
@@ -401,7 +401,7 @@ try{
 					$account = connect(($_REQUEST['account_id']));
 
 					$delimiter = $imap->get_mailbox_delimiter();
-					$parent_id=($_REQUEST['folder_id']);
+					$parent_id=$_REQUEST['folder_id'];
 					if($parent_id>0)
 					{
 						if($folder = $email->get_folder_by_id(($parent_id)))
@@ -600,20 +600,20 @@ try{
 						$account['use_ssl'] = isset($_REQUEST['use_ssl'])  ? $_REQUEST['use_ssl'] : '0';
 						$account['novalidate_cert'] = isset($_REQUEST['novalidate_cert']) ? $_REQUEST['novalidate_cert'] : '0';
 						$account['examine_headers'] = isset($_POST['examine_headers']) ? '1' : '0';
-						$account['type']=($_POST['type']);
-						$account['host']=($_POST['host']);
-						$account['port']=($_POST['port']);
-						$account['username']=($_POST['username']);
-						$account['password']=($_POST['password']);
-						$account['name']=($_POST['name']);
-						$account['email']=($_POST['email']);
-						//$account['signature']=($_POST['signature']);
+						$account['type']=$_POST['type'];
+						$account['host']=$_POST['host'];
+						$account['port']=$_POST['port'];
+						$account['username']=$_POST['username'];
+						$account['password']=$_POST['password'];
+						$account['name']=$_POST['name'];
+						$account['email']=$_POST['email'];
+						//$account['signature']=$_POST['signature'];
 
-						$account['smtp_host']=($_POST['smtp_host']);
-						$account['smtp_port']=($_POST['smtp_port']);
-						$account['smtp_encryption']=($_POST['smtp_encryption']);
-						$account['smtp_username']=($_POST['smtp_username']);
-						$account['smtp_password']=($_POST['smtp_password']);
+						$account['smtp_host']=$_POST['smtp_host'];
+						$account['smtp_port']=$_POST['smtp_port'];
+						$account['smtp_encryption']=$_POST['smtp_encryption'];
+						$account['smtp_username']=$_POST['smtp_username'];
+						$account['smtp_password']=$_POST['smtp_password'];
 
 
 
@@ -621,12 +621,12 @@ try{
 						{
 							if(isset($_REQUEST['user_id']))
 							{
-								$account['user_id']=($_REQUEST['user_id']);
+								$account['user_id']=$_REQUEST['user_id'];
 							}
 
-							$account['sent']=($_POST['sent']);
-							$account['drafts']=($_POST['drafts']);
-							$account['trash']=($_POST['trash']);
+							$account['sent']=$_POST['sent'];
+							$account['drafts']=$_POST['drafts'];
+							$account['trash']=$_POST['trash'];
 
 							if(!$email->update_account($account))
 							{
