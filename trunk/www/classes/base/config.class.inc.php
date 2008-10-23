@@ -893,7 +893,7 @@ class GO_CONFIG
        */
       function get_setting($name, $user_id=0)
       {
-      	$this->db->query("SELECT * FROM go_settings WHERE name='".$this->escape($name)."' AND user_id=".$this->escape($user_id));
+      	$this->db->query("SELECT * FROM go_settings WHERE name='".$this->db->escape($name)."' AND user_id=".$this->db->escape($user_id));
       	if ( $this->db->next_record() ) {
       		return $this->db->f('value');
       	}
@@ -910,7 +910,7 @@ class GO_CONFIG
       function get_settings($user_id)
       {
       	$settings=array();
-      	$this->db->query("SELECT * FROM go_settings WHERE user_id=".$this->escape($user_id));
+      	$this->db->query("SELECT * FROM go_settings WHERE user_id=".$this->db->escape($user_id));
       	while($this->db->next_record())
       	{
       		$settings[$this->db->f('name')]=$this->db->f('value');
@@ -931,7 +931,7 @@ class GO_CONFIG
       	if ( $this->get_setting($name, $user_id) === false ) {
       		return $this->db->query("INSERT INTO go_settings (name, value, user_id) VALUES ('$name', '$value', '$user_id')");
       	} else {
-      		return $this->db->query("UPDATE go_settings SET value='".$this->escape($value)."' WHERE name='".$this->escape($name)."' AND user_id='".$this->escape($user_id)."'");
+      		return $this->db->query("UPDATE go_settings SET value='".$this->db->escape($value)."' WHERE name='".$this->db->escape($name)."' AND user_id='".$this->db->escape($user_id)."'");
       	}
       }
 
@@ -944,7 +944,7 @@ class GO_CONFIG
        */
       function delete_setting( $name )
       {
-      	return $this->db->query("DELETE FROM go_settings WHERE name='".$this->escape($name)."'");
+      	return $this->db->query("DELETE FROM go_settings WHERE name='".$this->db->escape($name)."'");
       }
 
       function save_state($user_id, $index, $name, $value)
@@ -960,7 +960,7 @@ class GO_CONFIG
       function get_state($user_id, $index)
       {
       	$state = array();
-      	$sql = "SELECT * FROM go_state WHERE user_id=".$this->escape($user_id)." AND `index`='".$this->escape($index)."'";
+      	$sql = "SELECT * FROM go_state WHERE user_id=".$this->db->escape($user_id)." AND `index`='".$this->db->escape($index)."'";
       	$this->db->query($sql);
 
       	while($this->db->next_record(MYSQL_ASSOC))
