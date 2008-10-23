@@ -29,11 +29,11 @@ try{
 			
 			//$tasklist = $tasks->get_tasklist();
 			
-			$task['name']=($_POST['name']);
+			$task['name']=$_POST['name'];
 			$task['start_time']=$task['due_time']=Date::to_unixtime($_POST['date']);
-			$task['description']=($_POST['description']);
+			$task['description']=$_POST['description'];
 			$task['status']='NEEDS-ACTION';
-			$task['tasklist_id']=($_POST['tasklist_id']);
+			$task['tasklist_id']=$_POST['tasklist_id'];
 			$task['reminder']=Date::to_unixtime(($_POST['date'].' '.$_POST['remind_time']));	
 			$task['user_id']=$GO_SECURITY->user_id;
 			
@@ -95,15 +95,15 @@ try{
 				}
 			}
 				
-			$task['name']=($_POST['name']);
+			$task['name']=$_POST['name'];
 			$task['due_time']=Date::to_unixtime($_POST['due_date']);
 			$task['start_time']=Date::to_unixtime($_POST['start_date']);
-			$task['tasklist_id']=($_POST['tasklist_id']);
+			$task['tasklist_id']=$_POST['tasklist_id'];
 			
 			if(isset($_POST['status']))
-				$task['status']=($_POST['status']);
+				$task['status']=$_POST['status'];
 			if(isset($_POST['description']))
-				$task['description']=($_POST['description']);
+				$task['description']=$_POST['description'];
 				
 			if($task['status']=='COMPLETED')
 			{
@@ -223,9 +223,9 @@ try{
 
 		case 'save_tasklist':
 
-			$tasklist['id']=($_POST['tasklist_id']);
+			$tasklist['id']=$_POST['tasklist_id'];
 			$tasklist['user_id'] = isset($_POST['user_id']) ? ($_POST['user_id']) : $GO_SECURITY->user_id;
-			$tasklist['name']=($_POST['name']);
+			$tasklist['name']=$_POST['name'];
 
 
 			if(empty($tasklist['name']))

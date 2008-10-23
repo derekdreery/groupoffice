@@ -25,7 +25,7 @@ try{
 		case 'save_note':
 			
 			$note['user_id']=$GO_SECURITY->user_id;
-			$note['text']=($_POST['text']);
+			$note['text']=$_POST['text'];
 			$summary->update_note($note);
 			
 			$response['success']=true;
@@ -34,7 +34,7 @@ try{
 			
 		case 'save_rss_url':			
 			$feed['user_id']=$GO_SECURITY->user_id;
-			$feed['url']=($_POST['url']);
+			$feed['url']=$_POST['url'];
 			$summary->update_feed($feed);			
 			$response['success']=true;
 			

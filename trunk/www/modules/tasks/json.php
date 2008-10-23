@@ -323,7 +323,7 @@ try{
 										if(isset($_POST['completed_task_id']))
 										{
 											$task=array();
-											$task['id']=($_POST['completed_task_id']);
+											$task['id']=$_POST['completed_task_id'];
 
 											if($_POST['checked']=='1')
 											{

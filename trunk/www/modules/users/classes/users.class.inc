@@ -116,7 +116,7 @@ class users extends db
 
 		if($_POST['language'])
 		{
-			$user['language']=($_POST['language']);
+			$user['language']=$_POST['language'];
 			$user['first_weekday'] = ($_POST["first_weekday"]);
 			$user['date_format'] = ($_POST["date_format"]);
 			$user['date_seperator'] = ($_POST["date_seperator"]);

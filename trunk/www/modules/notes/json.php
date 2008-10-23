@@ -179,7 +179,7 @@ try{
 			}
 				
 		case 'notes':
-			$category_id=($_POST['category_id']);
+			$category_id=$_POST['category_id'];
 			$category = $notes->get_category($category_id);
 			$response['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_write']);
 			if(!$response['write_permission'] && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_read']))

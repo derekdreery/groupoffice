@@ -527,8 +527,8 @@ try{
 				break;
 
 			case 'template':
-				$template_id=($_REQUEST['template_id']);
-				$to=($_REQUEST['to']);
+				$template_id=$_REQUEST['template_id'];
+				$to=$_REQUEST['to'];
 
 				$response = load_template($template_id, $to, isset($_POST['mailing_group_id']) && $_POST['mailing_group_id']>0);
 

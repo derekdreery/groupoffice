@@ -26,8 +26,8 @@ try{
 		case 'complete_profile':
 			
 			$user['id']=$GO_SECURITY->user_id;
-			$user['first_name']=($_POST['first_name']);
-			$user['last_name']=($_POST['last_name']);
+			$user['first_name']=$_POST['first_name'];
+			$user['last_name']=$_POST['last_name'];
 			
 			$GO_USERS->update_profile($user, true);
 			
@@ -238,7 +238,7 @@ try{
 
 		case 'save_link_folder':
 			$folder['id']=isset($_POST['folder_id']) ? ($_POST['folder_id']) : 0;
-			$folder['name']=($_POST['name']);
+			$folder['name']=$_POST['name'];
 			$folder['parent_id']=isset($_POST['parent_id']) ? ($_POST['parent_id']) : 0;
 			$folder['link_id']=isset($_POST['link_id']) ? ($_POST['link_id']) : 0;
 			$folder['link_type']=isset($_POST['link_type']) ? ($_POST['link_type']) : 0;

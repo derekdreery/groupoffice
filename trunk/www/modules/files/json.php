@@ -472,7 +472,7 @@ try{
 									
 								$response['data'] = $fs->get_folder(addslashes($path));
 								$response['data']['name']=utf8_basename($path);
-								$response['data']['path']=($_POST['path']);
+								$response['data']['path']=$_POST['path'];
 								$response['data']['mtime']=Date::get_timestamp(filemtime($path));
 								$response['data']['ctime']=Date::get_timestamp(filectime($path));
 								$response['data']['atime']=Date::get_timestamp(fileatime($path));
@@ -502,7 +502,7 @@ try{
 								$response['success']=true;
 								$response['data'] = $fs->get_file(addslashes($path));
 								$response['data']['name']=File::strip_extension(utf8_basename($path));
-								$response['data']['path']=($_POST['path']);
+								$response['data']['path']=$_POST['path'];
 								$response['data']['mtime']=Date::get_timestamp(filemtime($path));
 								$response['data']['ctime']=Date::get_timestamp(filectime($path));
 								$response['data']['atime']=Date::get_timestamp(fileatime($path));

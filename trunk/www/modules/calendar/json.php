@@ -510,7 +510,7 @@ try{
 											//an event is moved or resized
 
 
-											$update_event_id=($_REQUEST['update_event_id']);
+											$update_event_id=$_REQUEST['update_event_id'];
 											$old_event = $cal->get_event($update_event_id);
 
 
@@ -562,7 +562,7 @@ try{
 
 												if(isset($_REQUEST['update_calendar_id']))
 												{
-													$update_event['calendar_id']=($_REQUEST['update_calendar_id']);
+													$update_event['calendar_id']=$_REQUEST['update_calendar_id'];
 												}
 
 
@@ -598,7 +598,7 @@ try{
 
 												if(isset($_REQUEST['update_calendar_id']))
 												{
-													$update_event['calendar_id']=($_REQUEST['update_calendar_id']);
+													$update_event['calendar_id']=$_REQUEST['update_calendar_id'];
 												}
 
 												$update_event['id']=$update_event_id;
@@ -842,7 +842,7 @@ try{
 
 									case 'participants':
 
-										$event_id=($_REQUEST['event_id']);
+										$event_id=$_REQUEST['event_id'];
 
 										if(isset($_REQUEST['delete_keys']))
 										{
@@ -867,8 +867,8 @@ try{
 											foreach($participants as $participant)
 											{
 												$participant['event_id']=$event_id;
-												//$participant['name']=($_REQUEST['name']);
-												//$participant['email']=($_REQUEST['email']);
+												//$participant['name']=$_REQUEST['name'];
+												//$participant['email']=$_REQUEST['email'];
 
 												$cal->add_participant(array_map('addslashes', $participant));
 											}
