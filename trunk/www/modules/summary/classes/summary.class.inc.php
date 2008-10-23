@@ -34,7 +34,7 @@ class summary extends db{
 	function get_note($user_id)
 	{
 		
-		$sql = "SELECT * FROM su_notes WHERE user_id=$user_id";
+		$sql = "SELECT * FROM su_notes WHERE user_id='.$this->escape($user_id).'";
 		$this->query($sql);
 		
 		if(!$this->next_record())
@@ -58,7 +58,7 @@ class summary extends db{
 	function get_feed($user_id)
 	{
 		
-		$sql = "SELECT * FROM su_rss_feeds WHERE user_id=$user_id";
+		$sql = "SELECT * FROM su_rss_feeds WHERE user_id='.$this->escape($user_id).'";
 		$this->query($sql);
 		
 		if(!$this->next_record())
@@ -122,7 +122,7 @@ class summary extends db{
 	 */
 	function delete_announcement($announcement_id)
 	{
-		return $this->query("DELETE FROM su_announcements WHERE id=$announcement_id");
+		return $this->query("DELETE FROM su_announcements WHERE id='.$this->escape($announcement_id).'");
 	}
 	/**
 	 * Gets a Announcement record

@@ -80,7 +80,7 @@ foreach($tables as $table)
 //echo $table.':'.$max.'<br />';	
 	if(!empty($max))
 	{
-		$sql = "REPLACE INTO go_db_sequence VALUES ('$table', '$max');";
+		$sql = "REPLACE INTO go_db_sequence VALUES ('.$this->escape($table).', '.$this->escape($max).');";
 		$db->query($sql);
 
 		echo 'Setting '.$table.'='.$max.'<br />';

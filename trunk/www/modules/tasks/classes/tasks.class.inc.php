@@ -11,12 +11,12 @@ class tasks extends db
 	function is_duplicate_task($task, $tasklist_id)
 	{
 		unset($task['exceptions']);
-		$record = array_map('addslashes', $task);
+		$record = $task;
 
 		$sql = "SELECT id FROM ta_tasks WHERE ".
-		"name='".$record['name']."' AND ".
-		"due_time='".$record['due_time']."' AND ".
-		"tasklist_id='".$tasklist_id."'";
+		"name='".$this->escape($record['name'])."' AND ".
+		"due_time='".$this->escape($record['due_time'])."' AND ".
+		"tasklist_id='".$this->escape($tasklist_id)."'";
 
 		$this->query($sql);
 		if($this->next_record())
@@ -66,7 +66,7 @@ class tasks extends db
 			throw new AccessDeniedException();
 		}
 
-		$sql = "SELECT * FROM ta_tasks WHERE tasklist_id='$list_id'";
+		$sql = "SELECT * FROM ta_tasks WHERE tasklist_id='.$this->escape($list_id).'";
 		$this->query($sql);
 
 		while ($this->next_record())
@@ -74,7 +74,7 @@ class tasks extends db
 			$delete->delete_task($this->f('id'));
 		}
 		
-		$sql= "DELETE FROM ta_lists WHERE id='$list_id'";
+		$sql= "DELETE FROM ta_lists WHERE id='.$this->escape($list_id).'";
 		$this->query($sql);
 		
 		$GO_SECURITY->delete_acl($tasklist['acl_read']);
@@ -89,14 +89,14 @@ class tasks extends db
 	
 	function get_user_tasklists($user_id)
 	{
-		$sql = "SELECT * FROM ta_lists WHERE user_id=$user_id";
+		$sql = "SELECT * FROM ta_lists WHERE user_id='.$this->escape($user_id).";
 		$this->query($sql);
 		return $this->num_rows();
 	}
 	
 	function get_default_tasklist($user_id)
 	{
-		$sql = "SELECT * FROM ta_lists WHERE user_id=$user_id LIMIT 0,1";
+		$sql = "SELECT * FROM ta_lists WHERE user_id='.$this->escape($user_id).' LIMIT 0,1";
 		$this->query($sql);
 		if($this->next_record())
 		{
@@ -110,7 +110,7 @@ class tasks extends db
 	{
 		if($list_id > 0)
 		{
-			$sql = "SELECT * FROM ta_lists WHERE id='$list_id'";
+			$sql = "SELECT * FROM ta_lists WHERE id='.$this->escape($list_id).'";
 			$this->query($sql);
 			if ($this->next_record(MYSQL_ASSOC))
 			{
@@ -158,11 +158,11 @@ class tasks extends db
 
 	function get_tasklist_by_name($name, $user_id=0)
 	{
-		$sql = "SELECT * FROM ta_lists WHERE name='$name'";
+		$sql = "SELECT * FROM ta_lists WHERE name='.$this->escape($name).'";
 
 		if($user_id>0)
 		{
-			$sql .= " AND user_id=$user_id";
+			$sql .= " AND user_id=.$this->escape($user_id).";
 		}
 		$this->query($sql);
 		if ($this->next_record())
@@ -188,21 +188,21 @@ class tasks extends db
 			$sql .= "INNER JOIN go_acl a ON (l.acl_write = a.acl_id ) ";
 		}
 		$sql .= "LEFT JOIN go_users_groups ug ON a.group_id = ug.group_id ".
-		"WHERE (a.user_id=$user_id OR ug.user_id=$user_id) ";
+		"WHERE (a.user_id='.$this->escape($user_id).' OR ug.user_id='.$this->escape($user_id)).'";
 		
 		if(!empty($query))
 		{
-			$sql .= " AND name LIKE '$query'";
+			$sql .= " AND name LIKE '.$this->escape($query).'";
 		}
 		
-		$sql .= "ORDER BY $sort $direction";
+		$sql .= "ORDER BY '.$this->escape($sort).' '.$this->escape($direction).'";
 		
 
 		$this->query($sql);
 		$count= $this->num_rows();
 		if($offset>0)
 		{
-			$sql .= " LIMIT $start, $offset";
+			$sql .= " LIMIT '.$this->escape($start).', '.$this->escape($offset)'";
 			$this->query($sql);
 		}
 		return $count;
@@ -369,7 +369,7 @@ class tasks extends db
 				$sql .= " WHERE ";
 				$where=true;
 			}
-			$sql .= "l.user_id='$user_id' ";
+			$sql .= "l.user_id='.$this->escape($user_id).' ";
 		}else
 		{
 			if($where)
@@ -380,7 +380,7 @@ class tasks extends db
 				$sql .= " WHERE ";
 				$where=true;
 			}
-			$sql .= "t.tasklist_id IN (".implode(',', $lists).")";
+			$sql .= "t.tasklist_id IN (".implode(',', $this->escape($lists)).")";
 		}
 		
 		if(!$show_inactive)
@@ -399,7 +399,7 @@ class tasks extends db
 
 		if($sort_field != '' && $sort_order != '')
 		{
-			$sql .=	" ORDER BY $sort_field $sort_order";
+			$sql .=	" ORDER BY '.$this->escape($sort_field).' '.$this->escape($sort_order).'";
 		}
 
 		if($offset == 0)
@@ -411,7 +411,7 @@ class tasks extends db
 			$this->query($sql);
 			$count = $this->num_rows();
 
-			$sql .= " LIMIT $start, $offset";
+			$sql .= " LIMIT '.$this->escape($start).', '.$this->escape($offset).'";
 
 			$this->query($sql);
 
@@ -423,7 +423,7 @@ class tasks extends db
 
 	function get_task($task_id)
 	{
-		$sql = "SELECT t.*, tl.acl_read, tl.acl_write FROM ta_tasks t INNER JOIN ta_lists tl ON tl.id=t.tasklist_id WHERE t.id='$task_id'";
+		$sql = "SELECT t.*, tl.acl_read, tl.acl_write FROM ta_tasks t INNER JOIN ta_lists tl ON tl.id=t.tasklist_id WHERE t.id='.$this->escape($task_id).'";
 		$this->query($sql);
 		if($this->next_record(MYSQL_ASSOC))
 		{
@@ -449,7 +449,7 @@ class tasks extends db
 				$fs->delete($GO_CONFIG->file_storage_path.'tasks/'.$task_id.'/');
 			}
 
-			$sql = "DELETE FROM ta_tasks WHERE id='$task_id'";
+			$sql = "DELETE FROM ta_tasks WHERE id='.$this->escape($task_id).'";
 			$this->query($sql);
 						
 			require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
@@ -756,7 +756,7 @@ class tasks extends db
 	function __on_user_delete($user)
 	{
 		$delete = new tasks();
-		$sql = "SELECT * FROM ta_lists WHERE user_id='".$user['id']."'";
+		$sql = "SELECT * FROM ta_lists WHERE user_id='".$this->escape($user['id'])."'";
 		$this->query($sql);
 		while($this->next_record())
 		{
@@ -772,7 +772,7 @@ class tasks extends db
 
 		$sql  = "SELECT DISTINCT t.*, tl.acl_read, tl.acl_write FROM ta_tasks t ".
 		"INNER JOIN ta_lists tl ON t.tasklist_id=tl.id ".
-		"WHERE mtime>$last_sync_time";
+		"WHERE mtime>'.$this->escape($last_sync_time).'";
 
 
 		$this->query($sql);

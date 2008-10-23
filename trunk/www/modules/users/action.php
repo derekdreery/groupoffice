@@ -29,43 +29,43 @@ try
 	switch($task)
 	{
 		case 'save_user':
-			$user['id'] = isset($_POST['user_id']) ? (trim($_POST['user_id'])) : 0;
+			$user['id'] = isset($_POST['user_id']) ? ($_POST['user_id']) : 0;
 			if(isset($_POST['first_name']))
 			{
-				$user['first_name'] = (trim($_POST['first_name']));
-				$user['middle_name'] = (trim($_POST['middle_name']));
-				$user['last_name'] = (trim($_POST['last_name']));
+				$user['first_name'] = $_POST['first_name'];
+				$user['middle_name'] = $_POST['middle_name'];
+				$user['last_name'] = $_POST['last_name'];
 				
-				$user['email'] = ($_POST["email"]);
+				$user['email'] = $_POST["email"];
 			
-				$user['enabled'] = (isset($_POST['enabled'])) ? '1' : '0' ;
-				$user['title'] = ($_POST["title"]);
+				$user['enabled'] = isset($_POST['enabled']) ? '1' : '0' ;
+				$user['title'] = $_POST["title"];
 
 
-				$user['initials'] = ($_POST["initials"]);
-				$user['birthday'] = Date::to_db_date(($_POST['birthday']));
-				$user['work_phone'] = ($_POST["work_phone"]);
-				$user['home_phone'] = ($_POST["home_phone"]);
-				$user['fax'] = ($_POST["fax"]);
-				$user['cellular'] = ($_POST["cellular"]);
-				$user['country'] = ($_POST["country"]);
-				$user['state'] = ($_POST["state"]);
-				$user['city'] = ($_POST["city"]);
-				$user['zip'] = ($_POST["zip"]);
-				$user['address'] = ($_POST["address"]);
-				$user['address_no'] = ($_POST["address_no"]);
-				$user['department'] = ($_POST["department"]);
-				$user['function'] = ($_POST["function"]);
-				$user['company'] = ($_POST["company"]);
-				$user['work_country'] = ($_POST["work_country"]);
-				$user['work_state'] = ($_POST["work_state"]);
-				$user['work_city'] = ($_POST["work_city"]);
-				$user['work_zip'] = ($_POST["work_zip"]);
-				$user['work_address'] = ($_POST["work_address"]);
-				$user['work_address_no'] = ($_POST["work_address_no"]);
-				$user['work_fax'] = ($_POST["work_fax"]);
-				$user['homepage'] = ($_POST["homepage"]);
-				$user['sex'] = ($_POST["sex"]);
+				$user['initials'] = $_POST["initials"];
+				$user['birthday'] = Date::to_db_date($_POST['birthday']);
+				$user['work_phone'] = $_POST["work_phone"];
+				$user['home_phone'] = $_POST["home_phone"];
+				$user['fax'] = $_POST["fax"];
+				$user['cellular'] = $_POST["cellular"];
+				$user['country'] = $_POST["country"];
+				$user['state'] = $_POST["state"];
+				$user['city'] = $_POST["city"];
+				$user['zip'] = $_POST["zip"];
+				$user['address'] = $_POST["address"];
+				$user['address_no'] = $_POST["address_no"];
+				$user['department'] = $_POST["department"];
+				$user['function'] = $_POST["function"];
+				$user['company'] = $_POST["company"];
+				$user['work_country'] = $_POST["work_country"];
+				$user['work_state'] = $_POST["work_state"];
+				$user['work_city'] = $_POST["work_city"];
+				$user['work_zip'] = $_POST["work_zip"];
+				$user['work_address'] = $_POST["work_address"];
+				$user['work_address_no'] = $_POST["work_address_no"];
+				$user['work_fax'] = $_POST["work_fax"];
+				$user['homepage'] = $_POST["homepage"];
+				$user['sex'] = $_POST["sex"];
 
 
 				if(empty($user['email']) || empty($user['first_name']) || empty($user['last_name']))
@@ -91,25 +91,25 @@ try
 
 			if(isset($_POST['theme']))
 			{
-				$user['theme'] = ($_POST["theme"]);
+				$user['theme'] = $_POST["theme"];
 
-				$user['language'] = ($_POST["language"]);
-				$user['max_rows_list'] = ($_POST["max_rows_list"]);
-				$user['sort_name'] = ($_POST["sort_name"]);
-				$user['start_module'] = ($_POST["start_module"]);
+				$user['language'] = $_POST["language"];
+				$user['max_rows_list'] = $_POST["max_rows_list"];
+				$user['sort_name'] = $_POST["sort_name"];
+				$user['start_module'] = $_POST["start_module"];
 			}
 
 			if($_POST['language'])
 			{
-				$user['language']=($_POST['language']);
-				$user['first_weekday'] = ($_POST["first_weekday"]);
-				$user['date_format'] = ($_POST["date_format"]);
-				$user['date_seperator'] = ($_POST["date_seperator"]);
-				$user['decimal_seperator'] = ($_POST["decimal_seperator"]);
-				$user['thousands_seperator'] = ($_POST["thousands_seperator"]);
-				$user['time_format'] = ($_POST["time_format"]);
-				$user['timezone'] = ($_POST["timezone"]);
-				$user['currency'] = ($_POST["currency"]);
+				$user['language']=$_POST['language'];
+				$user['first_weekday'] = $_POST["first_weekday"];
+				$user['date_format'] = $_POST["date_format"];
+				$user['date_seperator'] = $_POST["date_seperator"];
+				$user['decimal_seperator'] = $_POST["decimal_seperator"];
+				$user['thousands_seperator'] = $_POST["thousands_seperator"];
+				$user['time_format'] = $_POST["time_format"];
+				$user['timezone'] = $_POST["timezone"];
+				$user['currency'] = $_POST["currency"];
 			}
 
 
@@ -141,9 +141,9 @@ try
 			} else {
 				
 				
-				$user['password'] = ($_POST["password1"]);
-				$password2 = ($_POST["password2"]);
-				$user['username'] = ($_POST['username']);
+				$user['password'] = $_POST["password1"];
+				$password2 = $_POST["password2"];
+				$user['username'] = $_POST['username'];
 
 				if (empty($user['username']) || empty($user['password']) || empty($password2))
 				{
@@ -287,10 +287,10 @@ try
 			break;
 
 		case 'save_setting':
-			$email['confirmed'] = ($_POST["confirmed"]);
-			$email['unconfirmed'] = ($_POST["unconfirmed"]);
-			$email['confirmed_subject'] = ($_POST["confirmed_subject"]);
-			$email['unconfirmed_subject'] = ($_POST["unconfirmed_subject"]);
+			$email['confirmed'] = $_POST["confirmed"];
+			$email['unconfirmed'] = $_POST["unconfirmed"];
+			$email['confirmed_subject'] = $_POST["confirmed_subject"];
+			$email['unconfirmed_subject'] = $_POST["unconfirmed_subject"];
 
 			$GO_CONFIG->save_setting('registration_confirmation', $email['confirmed']);
 			$GO_CONFIG->save_setting('registration_confirmation_subject', $email['confirmed_subject']);
