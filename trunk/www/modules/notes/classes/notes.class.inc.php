@@ -406,7 +406,7 @@ class notes extends db {
 				
 		
 		$sql = "SELECT i.*,r.acl_read,r.acl_write FROM no_notes i ".
-			"INNER JOIN no_categories r ON r.id=i.category_id WHERE mtime>$last_sync_time";
+			"INNER JOIN no_categories r ON r.id=i.category_id WHERE mtime>".$this->escape($last_sync_time);
 		
 		
 

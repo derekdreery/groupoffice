@@ -111,7 +111,7 @@ class search extends db {
 		$sql .=	"WHERE EXISTS (".
 				"SELECT acl_id FROM go_acl a ".
 				"LEFT JOIN go_users_groups ug ON ug.group_id=a.group_id ".
-				"WHERE (a.user_id=$user_id OR ug.user_id=$user_id) AND ".
+				"WHERE (a.user_id=".$this->escape($user_id)." OR ug.user_id=".$this->escape($user_id).") AND ".
 				"(a.acl_id=sc.acl_read OR a.acl_id=sc.acl_write)) ";
 		*/
 		
@@ -201,11 +201,11 @@ class search extends db {
 		//WIth an offset the joins work faster then the subselects
 		if($offset>0)
 		{
-			$sql .= "WHERE (a.user_id=$user_id OR ug.user_id=$user_id) ";
+			$sql .= "WHERE (a.user_id=".$this->escape($user_id)." OR ug.user_id=".$this->escape($user_id).") ";
 		}else
 		{		
-			$sql .=	"WHERE (sc.acl_read IN (SELECT acl_id FROM go_acl a INNER JOIN go_users_groups ug ON ug.group_id=a.group_id WHERE a.user_id=$user_id OR ug.user_id=$user_id) OR ".
-				"sc.acl_write IN (SELECT acl_id FROM go_acl a INNER JOIN go_users_groups ug ON ug.group_id=a.group_id WHERE a.user_id=$user_id OR ug.user_id=$user_id)) ";
+			$sql .=	"WHERE (sc.acl_read IN (SELECT acl_id FROM go_acl a INNER JOIN go_users_groups ug ON ug.group_id=a.group_id WHERE a.user_id=".$this->escape($user_id)." OR ug.user_id=".$this->escape($user_id).") OR ".
+				"sc.acl_write IN (SELECT acl_id FROM go_acl a INNER JOIN go_users_groups ug ON ug.group_id=a.group_id WHERE a.user_id=".$this->escape($user_id)." OR ug.user_id=".$this->escape($user_id).")) ";
 		}
 
 
