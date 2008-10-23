@@ -333,14 +333,14 @@ class files extends filesystem
 		$sql = "SELECT DISTINCT t.id, t.user_id, t.name, t.extension FROM fs_templates t ".
 			"INNER JOIN go_acl a ON (a.acl_id=t.acl_read OR a.acl_id=t.acl_write) ".
 			"LEFT JOIN go_users_groups ug ON a.group_id=ug.group_id ".
-			"WHERE (a.user_id=$user_id OR ug.user_id=$user_id) ORDER BY $sortfield $sortorder";
+			"WHERE (a.user_id=$user_id OR ug.user_id=$user_id) ORDER BY ".$this->escape($sortfield." ".$sortorder);
 
 		$this->query($sql);
 		$count = $this->num_rows();
 
 		if($offset>0)
 		{
-			$sql .= " LIMIT $start,$offset";
+			$sql .= " LIMIT ".$this->escape($start.",".$offset);
 			$this->query($sql);
 		}
 		return $count;
@@ -363,14 +363,14 @@ class files extends filesystem
 		$sql = "SELECT DISTINCT t.id, t.user_id, t.name, t.extension FROM fs_templates t ".
 			"INNER JOIN go_acl a ON a.acl_id=t.acl_write ".
 			"LEFT JOIN go_users_groups ug ON a.group_id=ug.group_id ".
-			"WHERE (a.user_id=$user_id OR ug.user_id=$user_id) ORDER BY $sortfield $sortorder";
+			"WHERE (a.user_id=$user_id OR ug.user_id=$user_id) ORDER BY ".$this->escape($sortfield." ".$sortorder);
 
 		$this->query($sql);
 		$count = $this->num_rows();
 
 		if($offset>0)
 		{
-			$sql .= " LIMIT $start,$offset";
+			$sql .= " LIMIT ".$this->escape($start.",".$offset);
 			$this->query($sql);
 		}
 		return $count;

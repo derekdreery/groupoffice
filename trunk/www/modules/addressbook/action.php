@@ -56,13 +56,10 @@ try
 					{
 						throw new AccessDeniedException();
 					}
-				}
-
-					
+				}					
 
 				$result['success'] = true;
-				$result['feedback'] = $feedback;
-					
+				$result['feedback'] = $feedback;					
 			
 				if(!empty($contact_credentials['company']) && empty($contact_credentials['company_id']))
 				{
@@ -117,7 +114,6 @@ try
 					{
 						$ab->move_contacts_company($contact_credentials['company_id'], $old_contact['addressbook_id'], $contact_credentials['addressbook_id']);
 					}
-debug($contact_credentials['first_name']);
 					if(!$ab->update_contact($contact_credentials))
 					{
 						$result['feedback'] = $lang['comon']['saveError'];

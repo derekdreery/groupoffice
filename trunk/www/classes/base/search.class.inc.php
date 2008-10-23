@@ -165,7 +165,7 @@ class search extends db {
 		
 		if($offset>0)
 		{
-			$sql .= " LIMIT $start,$offset";			
+			$sql .= " LIMIT ".$this->escape($start.",".$offset);			
 		  $sql = substr_replace($sql, 'SELECT SQL_CALC_FOUND_ROWS',0,6);
 			
 			$this->query($sql);
@@ -244,7 +244,7 @@ class search extends db {
 		
 		if($offset>0)
 		{
-			$sql .= " LIMIT $start,$offset";			
+			$sql .= " LIMIT ".$this->escape($start.",".$offset);			
 		  $sql = substr_replace($sql, 'SELECT SQL_CALC_FOUND_ROWS',0,6);
 			
 			$this->query($sql);
