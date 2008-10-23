@@ -127,14 +127,14 @@ class notes extends db {
 	 */
 	function get_categories($sortfield='id', $sortorder='ASC', $start=0, $offset=0)
 	{
-		$sql = "SELECT * FROM no_categories ORDER BY $sortfield $sortorder";
+		$sql = "SELECT * FROM no_categories ORDER BY ".$this->escape($sortfield." ".$sortorder);
 
 		$this->query($sql);
 		$count = $this->num_rows();
 
 		if($offset>0)
 		{
-			$sql .= " LIMIT $start,$offset";
+			$sql .= " LIMIT ".$this->escape($start.",".$offset);
 			$this->query($sql);
 		}
 		return $count;
@@ -324,14 +324,14 @@ class notes extends db {
 	 */
 	function get_notes($category_id, $sortfield='id', $sortorder='ASC', $start=0, $offset=0)
 	{
-		$sql = "SELECT * FROM no_notes WHERE category_id=$category_id ORDER BY $sortfield $sortorder";
+		$sql = "SELECT * FROM no_notes WHERE category_id=$category_id ORDER BY ".$this->escape($sortfield." ".$sortorder);
 
 		$this->query($sql);
 		$count = $this->num_rows();
 
 		if($offset>0)
 		{
-			$sql .= " LIMIT $start,$offset";
+			$sql .= " LIMIT ".$this->escape($start.",".$offset);
 			$this->query($sql);
 		}
 		return $count;
