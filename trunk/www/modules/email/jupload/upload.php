@@ -55,7 +55,7 @@ while($file = array_shift($_FILES))
 				move_uploaded_file($file['tmp_name'], $filepath);
 
 
-				$complete_dir = $path.'/'.smart_stripslashes($_POST['relpathinfo'][$count]).'/';
+				$complete_dir = $path.'/'.($_POST['relpathinfo'][$count]).'/';
 				$filepath = File::checkfilename($complete_dir.$file['name']);
 
 
@@ -74,7 +74,7 @@ while($file = array_shift($_FILES))
 			}
 		}else
 		{
-			$dir = $path.'/'.smart_stripslashes($_POST['relpathinfo'][$count]).'/';
+			$dir = $path.'/'.($_POST['relpathinfo'][$count]).'/';
 			$filepath = $dir.$file['name'];
 			
 		}

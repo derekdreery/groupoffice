@@ -61,8 +61,8 @@ try{
 	{
 
 		case 'empty_folder':
-			$account_id = smart_addslashes($_POST['account_id']);
-			$mailbox = smart_stripslashes($_POST['mailbox']);
+			$account_id = ($_POST['account_id']);
+			$mailbox = ($_POST['mailbox']);
 
 			if(empty($mailbox))
 			{
@@ -80,12 +80,12 @@ try{
 		case 'flag_messages':
 
 			$account_id = isset ($_REQUEST['account_id']) ? $_REQUEST['account_id'] : 0;
-			$mailbox = isset ($_REQUEST['mailbox']) ? smart_stripslashes($_REQUEST['mailbox']) : 'INBOX';
+			$mailbox = isset ($_REQUEST['mailbox']) ? ($_REQUEST['mailbox']) : 'INBOX';
 
 
 			$account = connect($account_id, $mailbox);
 
-			$messages = json_decode(smart_stripslashes($_POST['messages']));
+			$messages = json_decode(($_POST['messages']));
 			switch($_POST['action'])
 			{
 				case 'mark_as_read':
@@ -135,12 +135,12 @@ try{
 					{
 						if (is_uploaded_file($_FILES['attachments']['tmp_name'][$n]))
 						{
-							$tmp_file = $dir.smart_stripslashes($_FILES['attachments']['name'][$n]);
+							$tmp_file = $dir.($_FILES['attachments']['name'][$n]);
 							move_uploaded_file($_FILES['attachments']['tmp_name'][$n], $tmp_file);
 
 							$response['files'][] = array(
 					'tmp_name'=>$tmp_file,
-					'name'=>smart_stripslashes($_FILES['attachments']['name'][$n]),
+					'name'=>($_FILES['attachments']['name'][$n]),
 					'size'=>Number::format_size($_FILES['attachments']['size'][$n]),
 					'type'=>File::get_filetype_description(File::get_extension($_FILES['attachments']['name'][$n]))					
 							);
@@ -156,12 +156,12 @@ try{
 
 					require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 
-					$body = sprintf($lang['email']['notification_body'], smart_stripslashes($_POST['subject']), Date::get_timestamp(time()));
+					$body = sprintf($lang['email']['notification_body'], ($_POST['subject']), Date::get_timestamp(time()));
 
 					$swift =& new GoSwift(
-					smart_stripslashes($_POST['notification_to']),
-					sprintf($lang['email']['notification_subject'],smart_stripslashes($_POST['subject'])),
-					smart_addslashes($_POST['account_id']),
+					($_POST['notification_to']),
+					sprintf($lang['email']['notification_subject'],($_POST['subject'])),
+					($_POST['account_id']),
 					3,
 					$body
 					);
@@ -192,22 +192,22 @@ try{
 							require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 
 							$swift =& new GoSwift(
-								smart_stripslashes($_POST['to']),
-								smart_stripslashes($_POST['subject']),
-								smart_addslashes($_POST['account_id']),
-								smart_stripslashes($_POST['priority'])
+								($_POST['to']),
+								($_POST['subject']),
+								($_POST['account_id']),
+								($_POST['priority'])
 							);
 
 
 							if(!empty($_POST['reply_uid']))
-							$swift->set_reply_to(smart_stripslashes($_POST['reply_uid']),smart_stripslashes($_POST['reply_mailbox']));
+							$swift->set_reply_to(($_POST['reply_uid']),($_POST['reply_mailbox']));
 
 
 							$RFC822 = new RFC822();
 
 
 
-							$to_addresses = $RFC822->parse_address_list(smart_stripslashes($_POST['to']));
+							$to_addresses = $RFC822->parse_address_list(($_POST['to']));
 
 							foreach($to_addresses as $address)
 							{
@@ -217,7 +217,7 @@ try{
 
 							if(!empty($_POST['cc']))
 							{
-								$cc_addresses = $RFC822->parse_address_list(smart_stripslashes($_POST['cc']));
+								$cc_addresses = $RFC822->parse_address_list(($_POST['cc']));
 									
 								foreach($cc_addresses as $address)
 								{
@@ -227,7 +227,7 @@ try{
 							}
 							if(!empty($_POST['bcc']))
 							{
-								$bcc_addresses = $RFC822->parse_address_list(smart_stripslashes($_POST['bcc']));
+								$bcc_addresses = $RFC822->parse_address_list(($_POST['bcc']));
 
 								foreach($bcc_addresses as $address)
 								{
@@ -256,9 +256,9 @@ try{
 								$swift->message->requestReadReceipt($swift->account['email']);
 							}
 
-							$body = smart_stripslashes($_POST['body']);
+							$body = ($_POST['body']);
 							//process inline attachments
-							$inline_attachments = json_decode(smart_stripslashes($_POST['inline_attachments']), true);
+							$inline_attachments = json_decode(($_POST['inline_attachments']), true);
 							foreach($inline_attachments as $inlineAttachment)
 							{
 								$tmp_name = $inlineAttachment['tmp_file'];
@@ -276,7 +276,7 @@ try{
 
 							if(isset($_POST['attachments']))
 							{
-								$attachments = json_decode(smart_stripslashes($_POST['attachments'],true));
+								$attachments = json_decode($_POST['attachments'],true);
 
 								foreach($attachments as $tmp_name)
 								{
@@ -327,8 +327,8 @@ try{
 									$link_props = explode(':', $_POST['link']);
 									$swift->link_to(array(
 									array(
-											'link_id'=>smart_addslashes($link_props[1]),
-											'link_type'=>smart_addslashes($link_props[0])
+											'link_id'=>($link_props[1]),
+											'link_type'=>($link_props[0])
 									)
 									)
 									);
@@ -351,11 +351,11 @@ try{
 						
 				case 'save_filter':
 
-					$filter['id']=smart_addslashes($_POST['filter_id']);
+					$filter['id']=($_POST['filter_id']);
 					$filter['mark_as_read']=isset($_POST['mark_as_read']) ? '1' : '0';
-					$filter['keyword']=smart_addslashes($_POST['keyword']);
-					$filter['folder']=smart_addslashes($_POST['folder']);
-					$filter['field']=smart_addslashes($_POST['field']);
+					$filter['keyword']=($_POST['keyword']);
+					$filter['folder']=($_POST['folder']);
+					$filter['field']=($_POST['field']);
 
 
 					if($_POST['filter_id']>0)
@@ -369,7 +369,7 @@ try{
 						}
 					}else
 					{
-						$filter['account_id']=smart_addslashes($_POST['account_id']);
+						$filter['account_id']=($_POST['account_id']);
 						if ($response['filter_id']=$email->add_filter($filter))
 						{
 							$response['success']=true;
@@ -383,11 +383,11 @@ try{
 				case 'save_account_folders':
 
 					$up_account['id'] = $_POST['account_id'];
-					$up_account['sent'] = isset($_POST['sent']) ? smart_addslashes($_POST['sent']) : '';
-					$up_account['trash'] = isset($_POST['trash']) ? smart_addslashes($_POST['trash']) : '';
-					$up_account['drafts'] = isset($_POST['drafts']) ? smart_addslashes($_POST['drafts']) : '';
-					$up_account['spam'] = isset($_POST['spam']) ? smart_addslashes($_POST['spam']) : '';
-					$up_account['spamtag']= smart_addslashes($_POST['spamtag']);
+					$up_account['sent'] = isset($_POST['sent']) ? ($_POST['sent']) : '';
+					$up_account['trash'] = isset($_POST['trash']) ? ($_POST['trash']) : '';
+					$up_account['drafts'] = isset($_POST['drafts']) ? ($_POST['drafts']) : '';
+					$up_account['spam'] = isset($_POST['spam']) ? ($_POST['spam']) : '';
+					$up_account['spamtag']= ($_POST['spamtag']);
 
 					if(!$response['feedback']=$email->_update_account($up_account))
 					{
@@ -398,15 +398,15 @@ try{
 
 				case 'add_folder':
 
-					$account = connect(smart_addslashes($_REQUEST['account_id']));
+					$account = connect(($_REQUEST['account_id']));
 
 					$delimiter = $imap->get_mailbox_delimiter();
-					$parent_id=smart_addslashes($_REQUEST['folder_id']);
+					$parent_id=($_REQUEST['folder_id']);
 					if($parent_id>0)
 					{
-						if($folder = $email->get_folder_by_id(smart_addslashes($parent_id)))
+						if($folder = $email->get_folder_by_id(($parent_id)))
 						{
-							$new_folder_name=$folder['name'].$delimiter.$imap->utf7_imap_encode(smart_stripslashes($_POST['new_folder_name']));
+							$new_folder_name=$folder['name'].$delimiter.$imap->utf7_imap_encode(($_POST['new_folder_name']));
 						}else {
 							$response['feedback']=false;
 							$response['errors']=$lang['comon']['selectError'];
@@ -415,7 +415,7 @@ try{
 						}
 
 					}else {
-						$new_folder_name=$imap->utf7_imap_encode(smart_stripslashes($_POST['new_folder_name']));
+						$new_folder_name=$imap->utf7_imap_encode(($_POST['new_folder_name']));
 					}
 
 
@@ -440,8 +440,8 @@ try{
 
 				case 'subscribe':
 
-					$account = connect(smart_addslashes($_REQUEST['account_id']));
-					$mailbox = $imap->utf7_imap_encode(smart_stripslashes($_POST['mailbox']));
+					$account = connect(($_REQUEST['account_id']));
+					$mailbox = $imap->utf7_imap_encode(($_POST['mailbox']));
 					if($imap->subscribe($mailbox))
 					{
 						$response['success']=$email->subscribe($account['id'], addslashes($mailbox));
@@ -456,8 +456,8 @@ try{
 
 				case 'unsubscribe':
 
-					$account = connect(smart_addslashes($_REQUEST['account_id']));
-					$mailbox = $imap->utf7_imap_encode(smart_stripslashes($_POST['mailbox']));
+					$account = connect(($_REQUEST['account_id']));
+					$mailbox = $imap->utf7_imap_encode(($_POST['mailbox']));
 					if($imap->unsubscribe($mailbox))
 					{
 						$response['success']=$email->unsubscribe($account['id'], addslashes($mailbox));
@@ -472,10 +472,10 @@ try{
 
 				case 'subscribtions':
 
-					$account = connect(smart_addslashes($_REQUEST['account_id']));
+					$account = connect(($_REQUEST['account_id']));
 
 					$response['success']=true;
-					$newSubscriptions=json_decode(smart_stripslashes($_POST['subscribtions']), true);
+					$newSubscriptions=json_decode(($_POST['subscribtions']), true);
 					$curSubscriptions = $imap->get_subscribed('', true);
 
 					//var_dump($newSubscriptions);
@@ -509,7 +509,7 @@ try{
 
 				case 'delete_folder':
 
-					if($folder = $email->get_folder_by_id(smart_addslashes($_REQUEST['folder_id'])))
+					if($folder = $email->get_folder_by_id(($_REQUEST['folder_id'])))
 					{
 						$account = connect($folder['account_id']);
 
@@ -528,7 +528,7 @@ try{
 					break;
 				case 'rename_folder':
 
-					if($folder = $email->get_folder_by_id(smart_addslashes($_REQUEST['folder_id'])))
+					if($folder = $email->get_folder_by_id(($_REQUEST['folder_id'])))
 					{
 						$pos = strrpos($folder['name'], $folder['delimiter']);
 						if ($pos && $folder['delimiter'] != '')
@@ -540,7 +540,7 @@ try{
 							$location = '';
 						}
 
-						$new_folder = $location.$imap->utf7_imap_encode(smart_stripslashes($_POST['new_name']));
+						$new_folder = $location.$imap->utf7_imap_encode(($_POST['new_name']));
 
 						connect($folder['account_id']);
 
@@ -566,7 +566,7 @@ try{
 
 				case 'save_accounts_sort_order':
 
-					$sort_order = json_decode(smart_stripslashes($_POST['sort_order']), true);
+					$sort_order = json_decode(($_POST['sort_order']), true);
 
 					foreach($sort_order as $account_id=>$sort_index)
 					{
@@ -581,7 +581,7 @@ try{
 
 
 
-					$account['mbroot'] = isset($_POST['mbroot']) ? addslashes($imap->utf7_imap_encode(smart_stripslashes($_POST['mbroot']))) : '';
+					$account['mbroot'] = isset($_POST['mbroot']) ? addslashes($imap->utf7_imap_encode(($_POST['mbroot']))) : '';
 					if ($_POST['name'] == "" ||
 					$_POST['email'] == "" ||
 					$_POST['port'] == "" ||
@@ -595,25 +595,25 @@ try{
 
 					}else
 					{
-						$account['id']=isset($_POST['account_id']) ? smart_addslashes($_POST['account_id']) : 0;
-						$account['mbroot'] = isset($_POST['mbroot']) ? smart_addslashes($_POST['mbroot']) : '';
+						$account['id']=isset($_POST['account_id']) ? ($_POST['account_id']) : 0;
+						$account['mbroot'] = isset($_POST['mbroot']) ? ($_POST['mbroot']) : '';
 						$account['use_ssl'] = isset($_REQUEST['use_ssl'])  ? $_REQUEST['use_ssl'] : '0';
 						$account['novalidate_cert'] = isset($_REQUEST['novalidate_cert']) ? $_REQUEST['novalidate_cert'] : '0';
 						$account['examine_headers'] = isset($_POST['examine_headers']) ? '1' : '0';
-						$account['type']=smart_addslashes($_POST['type']);
-						$account['host']=smart_addslashes($_POST['host']);
-						$account['port']=smart_addslashes($_POST['port']);
-						$account['username']=smart_addslashes($_POST['username']);
-						$account['password']=smart_addslashes($_POST['password']);
-						$account['name']=smart_addslashes($_POST['name']);
-						$account['email']=smart_addslashes($_POST['email']);
-						//$account['signature']=smart_addslashes($_POST['signature']);
+						$account['type']=($_POST['type']);
+						$account['host']=($_POST['host']);
+						$account['port']=($_POST['port']);
+						$account['username']=($_POST['username']);
+						$account['password']=($_POST['password']);
+						$account['name']=($_POST['name']);
+						$account['email']=($_POST['email']);
+						//$account['signature']=($_POST['signature']);
 
-						$account['smtp_host']=smart_addslashes($_POST['smtp_host']);
-						$account['smtp_port']=smart_addslashes($_POST['smtp_port']);
-						$account['smtp_encryption']=smart_addslashes($_POST['smtp_encryption']);
-						$account['smtp_username']=smart_addslashes($_POST['smtp_username']);
-						$account['smtp_password']=smart_addslashes($_POST['smtp_password']);
+						$account['smtp_host']=($_POST['smtp_host']);
+						$account['smtp_port']=($_POST['smtp_port']);
+						$account['smtp_encryption']=($_POST['smtp_encryption']);
+						$account['smtp_username']=($_POST['smtp_username']);
+						$account['smtp_password']=($_POST['smtp_password']);
 
 
 
@@ -621,12 +621,12 @@ try{
 						{
 							if(isset($_REQUEST['user_id']))
 							{
-								$account['user_id']=smart_addslashes($_REQUEST['user_id']);
+								$account['user_id']=($_REQUEST['user_id']);
 							}
 
-							$account['sent']=smart_addslashes($_POST['sent']);
-							$account['drafts']=smart_addslashes($_POST['drafts']);
-							$account['trash']=smart_addslashes($_POST['trash']);
+							$account['sent']=($_POST['sent']);
+							$account['drafts']=($_POST['drafts']);
+							$account['trash']=($_POST['trash']);
 
 							if(!$email->update_account($account))
 							{
@@ -657,8 +657,8 @@ try{
 									'username'=>$account['username'],
 									'password'=>$account['password'],
 									'vacation_active'=>isset($_POST['vacation_active']) ? '1' : '0',
-									'vacation_subject'=>smart_stripslashes($_POST['vacation_subject']),
-									'vacation_body'=>smart_stripslashes($_POST['vacation_body'])													
+									'vacation_subject'=>($_POST['vacation_subject']),
+									'vacation_body'=>($_POST['vacation_body'])													
 										);
 
 										//go_log(LOG_DEBUG, var_export($params, true));
@@ -679,7 +679,7 @@ try{
 
 						}else
 						{
-							$account['user_id']=isset($_REQUEST['user_id']) ? smart_stripslashes($_REQUEST['user_id']) : $GO_SECURITY->user_id;
+							$account['user_id']=isset($_REQUEST['user_id']) ? ($_REQUEST['user_id']) : $GO_SECURITY->user_id;
 
 
 							$account['id'] = $email->add_account($account);

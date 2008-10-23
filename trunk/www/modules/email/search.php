@@ -30,7 +30,7 @@ $email = new email();
 $em_settings = $email->get_settings($GO_SECURITY->user_id);
 
 $account_id = isset($_REQUEST['account_id']) ? $_REQUEST['account_id'] : 0;
-$mailbox = isset($_REQUEST['mailbox'])?  smart_stripslashes($_REQUEST['mailbox']) : 'INBOX';
+$mailbox = isset($_REQUEST['mailbox'])?  ($_REQUEST['mailbox']) : 'INBOX';
 
 if (!$account = $email->get_account($account_id))
 {
@@ -43,13 +43,13 @@ if ($account && $account["user_id"] != $GO_SECURITY->user_id)
   exit();
 }
 
-$subject = isset($_REQUEST['subject']) ?smart_stripslashes(trim($_REQUEST['subject'])) : '';
-$from = isset($_REQUEST['from']) ? smart_stripslashes(trim($_REQUEST['from'])) : '';
-$to = isset($_REQUEST['to']) ? smart_stripslashes(trim($_REQUEST['to'])) : '';
-$cc = isset($_REQUEST['cc']) ?  smart_stripslashes(trim($_REQUEST['cc'])) : '';
-$body = isset($_REQUEST['body']) ? smart_stripslashes(trim($_REQUEST['body'])) : '';
-$before = isset($_REQUEST['before']) ? smart_stripslashes(trim($_REQUEST['before'])) : '';
-$since = isset($_REQUEST['since']) ? smart_stripslashes(trim($_REQUEST['since'])) : '';
+$subject = isset($_REQUEST['subject']) ?(trim($_REQUEST['subject'])) : '';
+$from = isset($_REQUEST['from']) ? (trim($_REQUEST['from'])) : '';
+$to = isset($_REQUEST['to']) ? (trim($_REQUEST['to'])) : '';
+$cc = isset($_REQUEST['cc']) ?  (trim($_REQUEST['cc'])) : '';
+$body = isset($_REQUEST['body']) ? (trim($_REQUEST['body'])) : '';
+$before = isset($_REQUEST['before']) ? (trim($_REQUEST['before'])) : '';
+$since = isset($_REQUEST['since']) ? (trim($_REQUEST['since'])) : '';
 $before = isset($_REQUEST['before']) ? $_REQUEST['before'] : '';	
 $since = isset($_REQUEST['since']) ? $_REQUEST['since'] : '';		
 $flagged = isset($_REQUEST['flagged']) ? $_REQUEST['flagged'] : '';	

@@ -29,12 +29,12 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 {
 	$db = new db();
 	$db->Halt_On_Error="no";
-	if($db->query(smart_stripslashes($_POST['query'])))
+	if($db->query(($_POST['query'])))
 	{
 		$feedback = 'Query executed successfully. Affected rows: '.$db->affected_rows();		
 	}else {
 		$feedback = sprintf("<b>Database error:</b> %s<br>\n<b>MySQL Error</b>: %s (%s)<br>\n",
-		  	'Invalid SQL: '.smart_stripslashes($_POST['query']),
+		  	'Invalid SQL: '.($_POST['query']),
 	  		$db->Errno,
 	      	$db->Error);
 	}
@@ -57,7 +57,7 @@ if(isset($feedback))
 	$form->add_html_element($p);
 }
 
-$query=isset($_POST['query']) ? smart_stripslashes($_POST['query']) : '';
+$query=isset($_POST['query']) ? ($_POST['query']) : '';
 $textarea = new textarea('query', $query);
 $textarea->set_attribute('style','width:100%;height:200px');
 

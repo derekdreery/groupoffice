@@ -16,7 +16,7 @@
 require_once("../../Group-Office.php");
 $GO_SECURITY->json_authenticate('modules');
 
-$task = isset($_REQUEST['task']) ? smart_stripslashes($_REQUEST['task']) : null;
+$task = isset($_REQUEST['task']) ? ($_REQUEST['task']) : null;
 
 
 $result =array();
@@ -26,7 +26,7 @@ switch($task)
 {
 	case 'update':
 
-		$modules = isset($_REQUEST['modules']) ? json_decode(smart_stripslashes($_REQUEST['modules'])) : null;
+		$modules = isset($_REQUEST['modules']) ? json_decode(($_REQUEST['modules'])) : null;
 		//var_dump($modules);
 		foreach($modules as $module)
 		{
@@ -43,7 +43,7 @@ switch($task)
 
 	case 'install':
 		
-		$id = smart_stripslashes($_REQUEST['id']);		
+		$id = ($_REQUEST['id']);		
 
 		if (!$GO_MODULES->add_module($id)) {
 			$result['errors']=$lang['comon']['saveError'];

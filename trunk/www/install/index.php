@@ -205,15 +205,15 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 				$user['first_name']='Group-Office';
 				$user['middle_name']='';
 				$user['last_name']=$lang['common']['admin'];
-				$user['username'] = smart_addslashes($username);
-				$user['password'] = smart_addslashes($pass1);
-				$user['email'] = smart_addslashes($email);
+				$user['username'] = ($username);
+				$user['password'] = ($pass1);
+				$user['email'] = ($email);
 				$user['sex'] = 'M';
 
 				$GO_USERS->add_user($user,$user_groups,array($GO_CONFIG->group_everyone));
 
 				$old_umask = umask(000);
-				filesystem::mkdir_recursive($GO_CONFIG->file_storage_path.'users/'.smart_stripslashes($username), $GO_CONFIG->create_mode);
+				filesystem::mkdir_recursive($GO_CONFIG->file_storage_path.'users/'.($username), $GO_CONFIG->create_mode);
 				umask($old_umask);
 
 				$task = $nexttask;
@@ -228,10 +228,10 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 			$db = new db();
 			$db->Halt_On_Error = 'no';
 
-			$GO_CONFIG->db_host = smart_stripslashes($_POST['db_host']);
-			$GO_CONFIG->db_name = smart_stripslashes($_POST['db_name']);
-			$GO_CONFIG->db_user = smart_stripslashes($_POST['db_user']);
-			$GO_CONFIG->db_pass = smart_stripslashes($_POST['db_pass']);
+			$GO_CONFIG->db_host = ($_POST['db_host']);
+			$GO_CONFIG->db_name = ($_POST['db_name']);
+			$GO_CONFIG->db_user = ($_POST['db_user']);
+			$GO_CONFIG->db_pass = ($_POST['db_pass']);
 
 			if(@$db->connect($GO_CONFIG->db_name,
 			$GO_CONFIG->db_host,
@@ -281,9 +281,9 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 				$GO_GROUPS->query("DELETE FROM go_db_sequence WHERE seq_name='groups'");
 				$GO_GROUPS->query("DELETE FROM go_groups");
 
-				$admin_group_id = $GO_GROUPS->add_group($user['id'], addslashes($lang['common']['group_admins']));
-				$everyone_group_id = $GO_GROUPS->add_group($user['id'], addslashes($lang['common']['group_everyone']));
-				$internal_group_id = $GO_GROUPS->add_group($user['id'], addslashes($lang['common']['group_internal']));
+				$admin_group_id = $GO_GROUPS->add_group($user['id'], $lang['common']['group_admins']);
+				$everyone_group_id = $GO_GROUPS->add_group($user['id'], $lang['common']['group_everyone']);
+				$internal_group_id = $GO_GROUPS->add_group($user['id'], $lang['common']['group_internal']);
 				
 				$user_groups = array($admin_group_id, $everyone_group_id, $internal_group_id);
 				
@@ -340,7 +340,7 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 			break;
 
 		case 'userdir':
-			$tmpdir=smart_stripslashes($_POST['tmpdir']);
+			$tmpdir=($_POST['tmpdir']);
 
 			if (!is__writable($_POST['userdir']))
 			{
@@ -357,15 +357,15 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 			}
 
 			if (substr($_POST['userdir'], -1) != '/') $_POST['userdir'] = $_POST['userdir'].'/';
-			$GO_CONFIG->file_storage_path=smart_stripslashes($_POST['userdir']);
-			//$GO_CONFIG->create_mode=smart_stripslashes($_POST['create_mode']);
-			$GO_CONFIG->max_file_size=smart_stripslashes($_POST['max_file_size']);
+			$GO_CONFIG->file_storage_path=($_POST['userdir']);
+			//$GO_CONFIG->create_mode=($_POST['create_mode']);
+			$GO_CONFIG->max_file_size=($_POST['max_file_size']);
 
 			if (substr($_POST['local_path'], -1) != '/') $_POST['local_path'] = $_POST['local_path'].'/';
 			if (substr($_POST['local_url'], -1) != '/') $_POST['local_url'] = $_POST['local_url'].'/';
 
-			$GO_CONFIG->local_path=smart_stripslashes($_POST['local_path']);
-			$GO_CONFIG->local_url=smart_stripslashes($_POST['local_url']);
+			$GO_CONFIG->local_path=($_POST['local_path']);
+			$GO_CONFIG->local_url=($_POST['local_url']);
 
 			if (substr($tmpdir, -1) != '/') $tmpdir = $tmpdir.'/';
 			$GO_CONFIG->tmpdir=$tmpdir;
@@ -414,8 +414,8 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 				$feedback = '<font color="red">You entered an invalid e-mail address.</font>';
 			}else
 			{
-				$GO_CONFIG->webmaster_email = smart_stripslashes($_POST['webmaster_email']);
-				$GO_CONFIG->title = smart_stripslashes($_POST['title']);
+				$GO_CONFIG->webmaster_email = ($_POST['webmaster_email']);
+				$GO_CONFIG->title = ($_POST['title']);
 				if (save_config($GO_CONFIG))
 				{
 					$task = $nexttask;
@@ -424,8 +424,8 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 			break;
 
 		case 'url':
-			$host = smart_stripslashes(trim($_POST['host']));
-			//$full_url = smart_stripslashes(trim($_POST['full_url']));
+			$host = (trim($_POST['host']));
+			//$full_url = (trim($_POST['full_url']));
 			if ($host != '')
 			{
 				if ($host != '/')
@@ -452,17 +452,17 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 			
 			$GO_LANGUAGE->set_language($GO_CONFIG->language);
 			
-			$GO_CONFIG->theme = smart_stripslashes($_POST['theme']);
+			$GO_CONFIG->theme = ($_POST['theme']);
 			
-			$GO_CONFIG->default_country = smart_addslashes($_POST['default_country']);
-			$GO_CONFIG->default_timezone = smart_addslashes($_POST['default_timezone']);
-			$GO_CONFIG->default_currency = smart_addslashes($_POST['default_currency']);
-			$GO_CONFIG->default_date_format = smart_addslashes($_POST['default_date_format']);
-			$GO_CONFIG->default_date_seperator = smart_addslashes($_POST['default_date_seperator']);
-			$GO_CONFIG->default_time_format = smart_addslashes($_POST['default_time_format']);
-			$GO_CONFIG->default_first_weekday = smart_addslashes($_POST['default_first_weekday']);
-			$GO_CONFIG->default_decimal_seperator = smart_addslashes($_POST['default_decimal_seperator']);
-			$GO_CONFIG->default_thousands_seperator = smart_addslashes($_POST['default_thousands_seperator']);
+			$GO_CONFIG->default_country = ($_POST['default_country']);
+			$GO_CONFIG->default_timezone = ($_POST['default_timezone']);
+			$GO_CONFIG->default_currency = ($_POST['default_currency']);
+			$GO_CONFIG->default_date_format = ($_POST['default_date_format']);
+			$GO_CONFIG->default_date_seperator = ($_POST['default_date_seperator']);
+			$GO_CONFIG->default_time_format = ($_POST['default_time_format']);
+			$GO_CONFIG->default_first_weekday = ($_POST['default_first_weekday']);
+			$GO_CONFIG->default_decimal_seperator = ($_POST['default_decimal_seperator']);
+			$GO_CONFIG->default_thousands_seperator = ($_POST['default_thousands_seperator']);
 			
 
 			if (save_config($GO_CONFIG))
@@ -525,15 +525,15 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 			}
 
 			//$GO_CONFIG->mailer = $_POST['mailer'];
-			$GO_CONFIG->smtp_port = isset($_POST['smtp_port']) ? smart_stripslashes(trim($_POST['smtp_port'])) : '';
-			$GO_CONFIG->smtp_server= isset($_POST['smtp_server']) ? smart_stripslashes(trim($_POST['smtp_server'])) : '';
+			$GO_CONFIG->smtp_port = isset($_POST['smtp_port']) ? (trim($_POST['smtp_port'])) : '';
+			$GO_CONFIG->smtp_server= isset($_POST['smtp_server']) ? (trim($_POST['smtp_server'])) : '';
 
-			$GO_CONFIG->smtp_username= isset($_POST['smtp_username']) ? smart_stripslashes(trim($_POST['smtp_username'])) : '';
-			$GO_CONFIG->smtp_password= isset($_POST['smtp_password']) ? smart_stripslashes(trim($_POST['smtp_password'])) : '';
+			$GO_CONFIG->smtp_username= isset($_POST['smtp_username']) ? (trim($_POST['smtp_username'])) : '';
+			$GO_CONFIG->smtp_password= isset($_POST['smtp_password']) ? (trim($_POST['smtp_password'])) : '';
 
 
-			$GO_CONFIG->max_attachment_size= smart_stripslashes(trim($_POST['max_attachment_size']));
-			$GO_CONFIG->email_connectstring_options = smart_stripslashes(trim($_POST['email_connectstring_options']));
+			$GO_CONFIG->max_attachment_size= (trim($_POST['max_attachment_size']));
+			$GO_CONFIG->email_connectstring_options = (trim($_POST['email_connectstring_options']));
 			if (save_config($GO_CONFIG) && !isset($feedback))
 			{
 				$task = $nexttask;
@@ -578,19 +578,19 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 				$db = new db();
 				$db->Halt_On_Error = 'no';
 
-				$GO_CONFIG->db_host = smart_stripslashes($_POST['db_host']);
-				$GO_CONFIG->db_name = smart_stripslashes($_POST['db_name']);
-				$GO_CONFIG->db_user = smart_stripslashes($_POST['db_user']);
-				$GO_CONFIG->db_pass = smart_stripslashes($_POST['db_pass1']);
+				$GO_CONFIG->db_host = ($_POST['db_host']);
+				$GO_CONFIG->db_name = ($_POST['db_name']);
+				$GO_CONFIG->db_user = ($_POST['db_user']);
+				$GO_CONFIG->db_pass = ($_POST['db_pass1']);
 
-				if(@$db->connect('mysql', smart_stripslashes($_POST['db_host']), smart_stripslashes($_POST['admin_user']), smart_stripslashes($_POST['admin_pass'])))
+				if(@$db->connect('mysql', ($_POST['db_host']), ($_POST['admin_user']), ($_POST['admin_pass'])))
 				{
 					$sql = 'CREATE DATABASE `'.$_POST['db_name'].'`;';
 					if($db->query($sql))
 					{
-						$sql = "GRANT ALL PRIVILEGES ON `".smart_addslashes($_POST['db_name'])."`.*	TO ".
-						"'".$_POST['db_user']."'@'".smart_addslashes($_POST['host_allow'])."' ".
-						"IDENTIFIED BY '".smart_addslashes($_POST['db_pass1'])."' WITH GRANT OPTION";
+						$sql = "GRANT ALL PRIVILEGES ON `".($_POST['db_name'])."`.*	TO ".
+						"'".$_POST['db_user']."'@'".($_POST['host_allow'])."' ".
+						"IDENTIFIED BY '".($_POST['db_pass1'])."' WITH GRANT OPTION";
 						if($db->query($sql))
 						{
 
@@ -1672,7 +1672,7 @@ switch($task)
 			<td>Username:</td>
 			<td>
 			<?php 
-			$username = isset($_POST['username']) ? smart_stripslashes(htmlspecialchars($_POST['username'])) : 'admin';
+			$username = isset($_POST['username']) ? (htmlspecialchars($_POST['username'])) : 'admin';
 		?>
 			<input name="username" type="text" value="<?php echo $username; ?>" />
 			</tr>

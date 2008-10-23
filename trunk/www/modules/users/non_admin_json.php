@@ -15,7 +15,7 @@
 require_once("../../Group-Office.php");
 $GO_SECURITY->json_authenticate();
 
-$task = isset($_REQUEST['task']) ? smart_addslashes($_REQUEST['task']) : '';
+$task = isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
 
 switch($task)
 {

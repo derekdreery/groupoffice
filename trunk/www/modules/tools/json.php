@@ -4,7 +4,7 @@ require('../../Group-Office.php');
 $GO_SECURITY->json_authenticate('tools');
 
 require($GO_LANGUAGE->get_language_file('tools'));
-$task=isset($_REQUEST['task']) ? smart_addslashes($_REQUEST['task']) : '';
+$task=isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
 
 try{
 

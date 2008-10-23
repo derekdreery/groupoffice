@@ -48,9 +48,9 @@ $user['id'] = $GO_USERS->nextid("go_users");
 $GO_GROUPS->query("DELETE FROM go_db_sequence WHERE seq_name='groups'");
 $GO_GROUPS->query("DELETE FROM go_groups");
 
-$admin_group_id = $GO_GROUPS->add_group($user['id'], addslashes($lang['common']['group_admins']));
-$everyone_group_id = $GO_GROUPS->add_group($user['id'], addslashes($lang['common']['group_everyone']));
-$internal_group_id = $GO_GROUPS->add_group($user['id'], addslashes($lang['common']['group_internal']));
+$admin_group_id = $GO_GROUPS->add_group($user['id'], $lang['common']['group_admins']);
+$everyone_group_id = $GO_GROUPS->add_group($user['id'], $lang['common']['group_everyone']);
+$internal_group_id = $GO_GROUPS->add_group($user['id'], $lang['common']['group_internal']);
 
 $user_groups = array($admin_group_id, $everyone_group_id, $internal_group_id);
 

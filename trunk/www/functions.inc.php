@@ -194,37 +194,6 @@ function detect_browser() {
 }
 
 
-
-/**
- * Unescapes a slashed string if magic_quotes_gpc is on
- *
- * @param	string $string
- * @access public
- * @return string Stripped of slashes
- */
-function smart_stripslashes($string) {
-	if (get_magic_quotes_gpc()) {
-		$string = stripslashes($string);
-	}
-	return $string;
-}
-
-/**
- * Escapes a string with slashes if magic_quotes_gpc is off
- *
- * @param	string $string
- * @access public
- * @return string Stripped of slashes
- */
-function smart_addslashes($string) {
-	if (!get_magic_quotes_gpc()) {
-		$string = addslashes($string);
-	}
-	return $string;
-}
-
-
-
 if (!function_exists('mime_content_type')) {
     function mime_content_type($filename) {
     		

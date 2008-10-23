@@ -59,12 +59,12 @@ if($file_type == 'vcf') {
 		echo $vcard->vcf;
 	}
 } else {
-	$quote = smart_stripslashes($_POST['quote']);
-	$crlf = smart_stripslashes($_POST['crlf']);
+	$quote = ($_POST['quote']);
+	$crlf = ($_POST['crlf']);
 	$crlf = str_replace('\\r', "\015", $crlf);
 	$crlf = str_replace('\\n', "\012", $crlf);
 	$crlf = str_replace('\\t', "\011", $crlf);
-	$seperator = smart_stripslashes($_POST['seperator']);
+	$seperator = ($_POST['seperator']);
 
 	if ($_POST['export_type'] == 'contacts')
 	{

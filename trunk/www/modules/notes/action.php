@@ -29,12 +29,12 @@ try{
 				
 		case 'save_category':
 				
-			$category_id=$category['id']=isset($_POST['category_id']) ? smart_addslashes($_POST['category_id']) : 0;
+			$category_id=$category['id']=isset($_POST['category_id']) ? ($_POST['category_id']) : 0;
 		
 			if(isset($_POST['user_id']))
-				$category['user_id']=smart_addslashes(trim($_POST['user_id']));
+				$category['user_id']=(trim($_POST['user_id']));
 				
-			$category['name']=smart_addslashes(trim($_POST['name']));
+			$category['name']=(trim($_POST['name']));
 
 			if($category['id']>0)
 			{
@@ -56,18 +56,18 @@ try{
 			break;
 		
 		case 'save_note':				
-			$note_id=$note['id']=isset($_POST['note_id']) ? smart_addslashes($_POST['note_id']) : 0;
+			$note_id=$note['id']=isset($_POST['note_id']) ? ($_POST['note_id']) : 0;
 			
-			$category = $notes->get_category(smart_addslashes(trim($_POST['category_id'])));
+			$category = $notes->get_category((trim($_POST['category_id'])));
 			
 			if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_write']))
 			{
 				throw new AccessDeniedException();
 			}			
 			
-			$note['category_id']=smart_addslashes(trim($_POST['category_id']));
-			$note['name']=smart_addslashes(trim($_POST['name']));
-			$note['content']=smart_addslashes(trim($_POST['content']));
+			$note['category_id']=(trim($_POST['category_id']));
+			$note['name']=(trim($_POST['name']));
+			$note['content']=(trim($_POST['content']));
 
 			if($note['id']>0)
 			{
@@ -122,8 +122,8 @@ try{
 			{
 				$link_props = explode(':', $_POST['link']);
 				$GO_LINKS->add_link(
-				smart_addslashes($link_props[1]),
-				smart_addslashes($link_props[0]),
+				($link_props[1]),
+				($link_props[0]),
 				$note_id,
 				4);
 			}

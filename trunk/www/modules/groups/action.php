@@ -17,20 +17,20 @@ require_once("../../Group-Office.php");
 $GO_SECURITY->json_authenticate('groups');
 require_once($GO_LANGUAGE->get_language_file('groups'));
 
-$action = isset($_REQUEST['action']) ? smart_addslashes($_REQUEST['action']) : null;
+$action = isset($_REQUEST['action']) ? ($_REQUEST['action']) : null;
 
 /* case delete */
-$groups = isset($_REQUEST['groups']) ? json_decode(smart_stripslashes($_REQUEST['groups']), true) : null;
+$groups = isset($_REQUEST['groups']) ? json_decode(($_REQUEST['groups']), true) : null;
 
 /* case save_group*/
-$name = isset($_REQUEST['name']) ? smart_addslashes($_REQUEST['name']) : null;
+$name = isset($_REQUEST['name']) ? ($_REQUEST['name']) : null;
 
 /* case delete user from group */
-$delete_users = isset($_REQUEST['delete_users']) ? json_decode(smart_stripslashes($_REQUEST['delete_users']), true) : null;
-$group_id = isset($_REQUEST['group_id']) ? smart_addslashes($_REQUEST['group_id']) : null;
+$delete_users = isset($_REQUEST['delete_users']) ? json_decode(($_REQUEST['delete_users']), true) : null;
+$group_id = isset($_REQUEST['group_id']) ? ($_REQUEST['group_id']) : null;
 
 /* case add user to group */
-$users = isset($_REQUEST['users']) ? json_decode(smart_stripslashes($_REQUEST['users']), true) : null;
+$users = isset($_REQUEST['users']) ? json_decode(($_REQUEST['users']), true) : null;
 
 $feedback = null;
 

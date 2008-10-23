@@ -17,7 +17,7 @@ header('Content-Type: text/html; charset=UTF-8');
 	            height="100%"
 	            mayscript 
 	            alt="The java pugin must be installed.">
-            <param name="postURL" value="upload.php?path=<?php echo urlencode(smart_stripslashes($_REQUEST['path'])); ?>" />
+            <param name="postURL" value="upload.php?path=<?php echo urlencode(($_REQUEST['path'])); ?>" />
             <param name="afterUploadURL" value="javascript:opener.GO.currentFilesStore.reload();if(%success%){window.close();}" />
             <param name="lookAndFeel" value="system" />
             <param name="showLogWindow" value="true" />

@@ -348,7 +348,7 @@ class GO_MODULES extends db {
 	 */
 	function update_module($module_id, $sort_order, $admin_menu ) {
 		$admin_menu = $admin_menu ? '1' : '0';
-		$sql = "UPDATE go_modules SET sort_order='$sort_order', admin_menu='$admin_menu' WHERE id='$module_id'";
+		$sql = "UPDATE go_modules SET sort_order='$sort_order', admin_menu='".$this->escape($admin_menu)."' WHERE id='".$this->escape($module_id)."'";
 		return $this->query($sql);
 	}
 

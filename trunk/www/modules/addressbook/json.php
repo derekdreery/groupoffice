@@ -18,20 +18,20 @@ $GO_SECURITY->json_authenticate('addressbook');
 require($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc');
 $ab = new addressbook;
 
-$sort = isset($_REQUEST['sort']) ? smart_addslashes($_REQUEST['sort']) : 'name';
-$dir = isset($_REQUEST['dir']) ? smart_addslashes($_REQUEST['dir']) : 'ASC';
-$start = isset($_REQUEST['start']) ? smart_addslashes($_REQUEST['start']) : '0';
-$limit = isset($_REQUEST['limit']) ? smart_addslashes($_REQUEST['limit']) : '0';
-$query = isset($_REQUEST['query']) ? smart_addslashes($_REQUEST['query']) : null;
-$field = isset($_REQUEST['field']) ? smart_addslashes($_REQUEST['field']) : 'name';
+$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'name';
+$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'ASC';
+$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
+$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
+$query = isset($_REQUEST['query']) ? ($_REQUEST['query']) : null;
+$field = isset($_REQUEST['field']) ? ($_REQUEST['field']) : 'name';
 
-$clicked_letter = isset($_REQUEST['clicked_letter']) ? smart_addslashes($_REQUEST['clicked_letter']) : false;
+$clicked_letter = isset($_REQUEST['clicked_letter']) ? ($_REQUEST['clicked_letter']) : false;
 
-$contact_id = isset($_REQUEST['contact_id']) ? smart_addslashes($_REQUEST['contact_id']) : null;
-$company_id = isset($_REQUEST['company_id']) ? smart_addslashes($_REQUEST['company_id']) : null;
-$addressbook_id = isset($_REQUEST['addressbook_id']) ? smart_addslashes($_REQUEST['addressbook_id']) : null;
+$contact_id = isset($_REQUEST['contact_id']) ? ($_REQUEST['contact_id']) : null;
+$company_id = isset($_REQUEST['company_id']) ? ($_REQUEST['company_id']) : null;
+$addressbook_id = isset($_REQUEST['addressbook_id']) ? ($_REQUEST['addressbook_id']) : null;
 
-$task = isset($_REQUEST['task']) ? smart_addslashes($_REQUEST['task']) : 'null';
+$task = isset($_REQUEST['task']) ? ($_REQUEST['task']) : 'null';
 
 $records = array();
 try
@@ -40,7 +40,7 @@ try
 	{
 		case 'search_sender':
 			
-			$email = smart_addslashes($_POST['email']);
+			$email = ($_POST['email']);
 			
 			$contact = $ab->get_contact_by_email($email, $GO_SECURITY->user_id);
 			
@@ -61,7 +61,7 @@ try
 			
 			if(isset($_POST['mailings_filter']))
 			{
-				$mailings_filter = json_decode(smart_stripslashes($_POST['mailings_filter']), true);				
+				$mailings_filter = json_decode(($_POST['mailings_filter']), true);				
 				$GO_CONFIG->save_setting('mailings_filter', implode(',',$mailings_filter), $GO_SECURITY->user_id);
 			}else
 			{	
@@ -74,7 +74,7 @@ try
 			{
 				$response['deleteSuccess'] = true;
 				try{
-					$delete_contacts = json_decode(smart_stripslashes($_POST['delete_keys']));
+					$delete_contacts = json_decode(($_POST['delete_keys']));
 
 					foreach($delete_contacts as $id)
 					{
@@ -143,7 +143,7 @@ try
 			
 			if(isset($_POST['mailings_filter']))
 			{
-				$mailings_filter = json_decode(smart_stripslashes($_POST['mailings_filter']), true);				
+				$mailings_filter = json_decode(($_POST['mailings_filter']), true);				
 				$GO_CONFIG->save_setting('mailings_filter', implode(',',$mailings_filter), $GO_SECURITY->user_id);
 			}else
 			{	
@@ -155,7 +155,7 @@ try
 			{
 				$response['deleteSuccess'] = true;
 				try{
-					$delete_companies = json_decode(smart_stripslashes($_POST['delete_keys']));
+					$delete_companies = json_decode(($_POST['delete_keys']));
 
 					foreach($delete_companies as $id)
 					{
@@ -230,7 +230,7 @@ try
 			{
 				$response['deleteSuccess'] = true;
 				try{
-					$delete_contacts = json_decode(smart_stripslashes($_POST['delete_keys']));
+					$delete_contacts = json_decode(($_POST['delete_keys']));
 
 					foreach($delete_contacts as $id)
 					{
@@ -250,7 +250,7 @@ try
 			if(isset($_POST['add_contacts']))
 			{
 				try{
-					$add_contacts = json_decode(smart_stripslashes($_POST['add_contacts']));
+					$add_contacts = json_decode(($_POST['add_contacts']));
 
 					foreach($add_contacts as $id)
 					{
@@ -607,7 +607,7 @@ try
 					{
 						$response['deleteSuccess'] = true;
 							
-						$delete_addressbooks = json_decode(smart_stripslashes($_POST['delete_keys']));
+						$delete_addressbooks = json_decode(($_POST['delete_keys']));
 							
 						foreach($delete_addressbooks as $id)
 						{

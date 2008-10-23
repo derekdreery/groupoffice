@@ -58,7 +58,7 @@ class GO_AUTH extends db
 		if($type=='normal')
 		{
 			$sql = 'SELECT id, password, auth_md5_pass FROM go_users WHERE ' .
-					"username='$username' AND password='".md5($password)."' " .
+					"username='".$this->escape($username)."' AND password='".md5($password)."' " .
 					"AND enabled='1'";
 			$this->query( $sql );
 			
@@ -70,7 +70,7 @@ class GO_AUTH extends db
 		}else
 		{
 			$sql = 'SELECT id, password, auth_md5_pass FROM go_users WHERE ' .
-					"username='$username' " .
+					"username='".$this->escape($username)."' " .
 					"AND enabled='1'";
 			$this->query( $sql );
 			
@@ -147,7 +147,7 @@ class GO_AUTH extends db
 		// Query the database for the given username with the associated
 		// password.
 		$sql = 'SELECT id FROM go_users WHERE ' .
-				"username='$username' AND password='".md5($password)."' " .
+				"username='".$this->escape($username)."' AND password='".md5($password)."' " .
 				"AND enabled='1'";
 		$this->query( $sql );
 

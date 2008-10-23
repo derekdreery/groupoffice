@@ -22,7 +22,7 @@ $fs = new files();
 
 require($GO_LANGUAGE->get_language_file('files'));
 
-$task=isset($_REQUEST['task']) ? smart_addslashes($_REQUEST['task']) : '';
+$task=isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
 
 $response=array();
 
@@ -33,7 +33,7 @@ try{
 	{
 		case 'delete':
 			
-			$delete_path = $GO_CONFIG->file_storage_path.smart_addslashes($_POST['path']);
+			$delete_path = $GO_CONFIG->file_storage_path.($_POST['path']);
 
 			if(!$fs->has_write_permission($GO_SECURITY->user_id, $delete_path))
 			{
@@ -45,7 +45,7 @@ try{
 			$response['success']=$fs->delete($delete_path);
 			break;
 		case 'file_properties':
-			$path = $GO_CONFIG->file_storage_path.smart_stripslashes($_POST['path']);
+			$path = $GO_CONFIG->file_storage_path.($_POST['path']);
 
 			if(!file_exists($path))
 			{
@@ -56,11 +56,11 @@ try{
 			}
 			
 			$up_file['path']=addslashes($path);
-			$up_file['comments']=smart_addslashes($_POST['comments']);
+			$up_file['comments']=($_POST['comments']);
 			$fs->update_file($up_file);
 
 
-			$new_name = smart_stripslashes($_POST['name']);
+			$new_name = ($_POST['name']);
 
 			if(empty($new_name))
 			{
@@ -85,7 +85,7 @@ try{
 			break;
 
 		case 'folder_properties':
-			$path = $GO_CONFIG->file_storage_path.smart_stripslashes($_POST['path']);
+			$path = $GO_CONFIG->file_storage_path.($_POST['path']);
 
 			if(!file_exists($path))
 			{
@@ -115,7 +115,7 @@ try{
 					
 				
 				$up_folder['path']=addslashes($path);
-				$up_folder['comments']=smart_addslashes($_POST['comments']);
+				$up_folder['comments']=($_POST['comments']);
 				
 				if (isset ($_POST['share']) && $folder['acl_read']==0) {
 					
@@ -139,7 +139,7 @@ try{
 				
 				$fs->update_folder($up_folder);
 					
-				$new_name = smart_stripslashes($_POST['name']);
+				$new_name = ($_POST['name']);
 					
 				if(empty($new_name))
 				{
@@ -160,7 +160,7 @@ try{
 
 		case 'new_folder':
 
-			$path = $GO_CONFIG->file_storage_path.smart_stripslashes($_POST['path']);
+			$path = $GO_CONFIG->file_storage_path.($_POST['path']);
 
 			if(!file_exists($path))
 			{
@@ -173,7 +173,7 @@ try{
 			$response['success']=true;
 
 
-			$name = smart_stripslashes($_POST['name']);
+			$name = ($_POST['name']);
 			if ($name == '') {
 				throw new Exception($lang['common']['missingField']);
 			}
@@ -198,7 +198,7 @@ try{
 		case 'upload':
 			//var_dump($_FILES);
 			$response['success']=true;
-			$path = $GO_CONFIG->file_storage_path.smart_stripslashes($_POST['path']);
+			$path = $GO_CONFIG->file_storage_path.($_POST['path']);
 			
 			
 
@@ -213,7 +213,7 @@ try{
 			{
 				if (is_uploaded_file($_FILES['attachments']['tmp_name'][$n]))
 				{
-					$tmp_file = $GO_CONFIG->tmpdir.'files_upload/'.smart_stripslashes($_FILES['attachments']['name'][$n]);
+					$tmp_file = $GO_CONFIG->tmpdir.'files_upload/'.($_FILES['attachments']['name'][$n]);
 					move_uploaded_file($_FILES['attachments']['tmp_name'][$n], $tmp_file);
 					$_SESSION['GO_SESSION']['files']['uploaded_files'][]=$tmp_file;
 				}
@@ -228,7 +228,7 @@ try{
 			$modified=array();
 
 			$command = isset($_POST['command']) ? $_POST['command'] : 'ask';
-			$path = $GO_CONFIG->file_storage_path.smart_stripslashes($_POST['path']);
+			$path = $GO_CONFIG->file_storage_path.($_POST['path']);
 
 			while($tmp_file = array_shift($_SESSION['GO_SESSION']['files']['uploaded_files']))
 			{
@@ -269,8 +269,8 @@ try{
 		case 'paste':
 			if(isset($_POST['paste_sources']) && isset($_POST['paste_destination']))
 			{
-				$_SESSION['GO_SESSION']['files']['paste_sources']= json_decode(smart_stripslashes($_POST['paste_sources']));
-				$_SESSION['GO_SESSION']['files']['paste_destination']= smart_stripslashes($_POST['paste_destination']);
+				$_SESSION['GO_SESSION']['files']['paste_sources']= json_decode(($_POST['paste_sources']));
+				$_SESSION['GO_SESSION']['files']['paste_destination']= ($_POST['paste_destination']);
 			}
 
 			if(isset($_SESSION['GO_SESSION']['files']['paste_sources']) && count($_SESSION['GO_SESSION']['files']['paste_sources']))
@@ -327,8 +327,8 @@ try{
 				
 		case 'save_template':
 				
-			$template['id']=isset($_POST['template_id']) ? smart_addslashes($_POST['template_id']) : 0;
-			$template['name']=smart_addslashes($_POST['name']);
+			$template['id']=isset($_POST['template_id']) ? ($_POST['template_id']) : 0;
+			$template['name']=($_POST['name']);
 			
 			if (is_uploaded_file($_FILES['file']['tmp_name'][0]))
 			{
@@ -341,7 +341,7 @@ try{
 
 			if(isset($_POST['user_id']))
 			{
-				$template['user_id']=smart_addslashes($_POST['user_id']);
+				$template['user_id']=($_POST['user_id']);
 			}
 			
 			debug(var_export($template, true));

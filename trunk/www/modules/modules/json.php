@@ -13,10 +13,10 @@
  * @author Boy Wijnmaalen <bwijnmaalen@intermesh.nl>
  */
 
-$sort = isset($_REQUEST['sort']) ? smart_addslashes($_REQUEST['sort']) : 'sort_order';
-$dir = isset($_REQUEST['dir']) ? smart_addslashes($_REQUEST['dir']) : 'DESC';
-$start = isset($_REQUEST['start']) ? smart_addslashes($_REQUEST['start']) : '0';
-$limit = isset($_REQUEST['limit']) ? smart_addslashes($_REQUEST['limit']) : '0';
+$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'sort_order';
+$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'DESC';
+$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
+$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 
 require_once("../../Group-Office.php");
 $GO_SECURITY->json_authenticate('modules');
@@ -66,7 +66,7 @@ try{
 			{
 
 				try{
-					$modules = json_decode(smart_stripslashes($_POST['uninstall_modules']),true);					
+					$modules = json_decode(($_POST['uninstall_modules']),true);					
 					
 					$response['uninstallSuccess']=true;
 					foreach($modules as $module_id)

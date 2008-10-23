@@ -31,7 +31,7 @@ class users extends db
 	{
 		global $GO_USERS, $GO_MODULES;
 		
-		$user_id = isset($_REQUEST['user_id']) ? smart_addslashes($_REQUEST['user_id']) : 0;
+		$user_id = isset($_REQUEST['user_id']) ? ($_REQUEST['user_id']) : 0;
 
 		$user = $GO_USERS->get_user($user_id);
 		$response['data']=array_merge($response['data'], $user);
@@ -45,42 +45,42 @@ class users extends db
 	{
 		global $GO_USERS, $lang;
 		
-		$user['id'] = isset($_POST['user_id']) ? smart_addslashes(trim($_POST['user_id'])) : 0;
+		$user['id'] = isset($_POST['user_id']) ? (trim($_POST['user_id'])) : 0;
 		
 		if(isset($_POST['first_name']))
 		{
-			$user['first_name'] = smart_addslashes(trim($_POST['first_name']));
-			$user['middle_name'] = smart_addslashes(trim($_POST['middle_name']));
-			$user['last_name'] = smart_addslashes(trim($_POST['last_name']));
-			$user['email'] = smart_addslashes($_POST["email"]);
+			$user['first_name'] = (trim($_POST['first_name']));
+			$user['middle_name'] = (trim($_POST['middle_name']));
+			$user['last_name'] = (trim($_POST['last_name']));
+			$user['email'] = ($_POST["email"]);
 			$user['enabled'] = (isset($_POST['enabled'])) ? '1' : '0' ;
-			$user['title'] = smart_addslashes($_POST["title"]);
+			$user['title'] = ($_POST["title"]);
 
 
-			$user['initials'] = smart_addslashes($_POST["initials"]);
-			$user['birthday'] = Date::to_db_date(smart_addslashes($_POST['birthday']));
-			$user['work_phone'] = smart_addslashes($_POST["work_phone"]);
-			$user['home_phone'] = smart_addslashes($_POST["home_phone"]);
-			$user['fax'] = smart_addslashes($_POST["fax"]);
-			$user['cellular'] = smart_addslashes($_POST["cellular"]);
-			$user['country_id'] = smart_addslashes($_POST["country_id"]);
-			$user['state'] = smart_addslashes($_POST["state"]);
-			$user['city'] = smart_addslashes($_POST["city"]);
-			$user['zip'] = smart_addslashes($_POST["zip"]);
-			$user['address'] = smart_addslashes($_POST["address"]);
-			$user['address_no'] = smart_addslashes($_POST["address_no"]);
-			$user['department'] = smart_addslashes($_POST["department"]);
-			$user['function'] = smart_addslashes($_POST["function"]);
-			$user['company'] = smart_addslashes($_POST["company"]);
-			$user['work_country_id'] = smart_addslashes($_POST["work_country_id"]);
-			$user['work_state'] = smart_addslashes($_POST["work_state"]);
-			$user['work_city'] = smart_addslashes($_POST["work_city"]);
-			$user['work_zip'] = smart_addslashes($_POST["work_zip"]);
-			$user['work_address'] = smart_addslashes($_POST["work_address"]);
-			$user['work_address_no'] = smart_addslashes($_POST["work_address_no"]);
-			$user['work_fax'] = smart_addslashes($_POST["work_fax"]);
-			$user['homepage'] = smart_addslashes($_POST["homepage"]);
-			$user['sex'] = smart_addslashes($_POST["sex"]);
+			$user['initials'] = ($_POST["initials"]);
+			$user['birthday'] = Date::to_db_date(($_POST['birthday']));
+			$user['work_phone'] = ($_POST["work_phone"]);
+			$user['home_phone'] = ($_POST["home_phone"]);
+			$user['fax'] = ($_POST["fax"]);
+			$user['cellular'] = ($_POST["cellular"]);
+			$user['country_id'] = ($_POST["country_id"]);
+			$user['state'] = ($_POST["state"]);
+			$user['city'] = ($_POST["city"]);
+			$user['zip'] = ($_POST["zip"]);
+			$user['address'] = ($_POST["address"]);
+			$user['address_no'] = ($_POST["address_no"]);
+			$user['department'] = ($_POST["department"]);
+			$user['function'] = ($_POST["function"]);
+			$user['company'] = ($_POST["company"]);
+			$user['work_country_id'] = ($_POST["work_country_id"]);
+			$user['work_state'] = ($_POST["work_state"]);
+			$user['work_city'] = ($_POST["work_city"]);
+			$user['work_zip'] = ($_POST["work_zip"]);
+			$user['work_address'] = ($_POST["work_address"]);
+			$user['work_address_no'] = ($_POST["work_address_no"]);
+			$user['work_fax'] = ($_POST["work_fax"]);
+			$user['homepage'] = ($_POST["homepage"]);
+			$user['sex'] = ($_POST["sex"]);
 
 			if(empty($user['email']) || empty($user['first_name']) || empty($user['last_name']))
 			{
@@ -104,33 +104,33 @@ class users extends db
 		if(isset($_POST['max_rows_list']))
 		{
 			if(isset($_POST['theme']))
-				$user['theme'] = smart_addslashes($_POST["theme"]);
+				$user['theme'] = ($_POST["theme"]);
 				
 
-			$user['language'] = smart_addslashes($_POST["language"]);
-			$user['max_rows_list'] = smart_addslashes($_POST["max_rows_list"]);
-			$user['sort_name'] = smart_addslashes($_POST["sort_name"]);
-			$user['start_module'] = smart_addslashes($_POST["start_module"]);
+			$user['language'] = ($_POST["language"]);
+			$user['max_rows_list'] = ($_POST["max_rows_list"]);
+			$user['sort_name'] = ($_POST["sort_name"]);
+			$user['start_module'] = ($_POST["start_module"]);
 			$user['mute_sound'] = isset($_POST["mute_sound"]) ? '1' : '0';
 		}
 
 		if($_POST['language'])
 		{
-			$user['language']=smart_addslashes($_POST['language']);
-			$user['first_weekday'] = smart_addslashes($_POST["first_weekday"]);
-			$user['date_format'] = smart_addslashes($_POST["date_format"]);
-			$user['date_seperator'] = smart_addslashes($_POST["date_seperator"]);
-			$user['decimal_seperator'] = smart_addslashes($_POST["decimal_seperator"]);
-			$user['thousands_seperator'] = smart_addslashes($_POST["thousands_seperator"]);
-			$user['time_format'] = smart_addslashes($_POST["time_format"]);
-			$user['timezone'] = smart_addslashes($_POST["timezone"]);
-			$user['currency'] = smart_addslashes($_POST["currency"]);
+			$user['language']=($_POST['language']);
+			$user['first_weekday'] = ($_POST["first_weekday"]);
+			$user['date_format'] = ($_POST["date_format"]);
+			$user['date_seperator'] = ($_POST["date_seperator"]);
+			$user['decimal_seperator'] = ($_POST["decimal_seperator"]);
+			$user['thousands_seperator'] = ($_POST["thousands_seperator"]);
+			$user['time_format'] = ($_POST["time_format"]);
+			$user['timezone'] = ($_POST["timezone"]);
+			$user['currency'] = ($_POST["currency"]);
 		}
 
 
 		if (!empty($_POST["password1"]) || !empty($_POST["password2"]))
 		{
-			if(!$GO_USERS->check_password(smart_stripslashes($_POST['current_password'])))
+			if(!$GO_USERS->check_password(($_POST['current_password'])))
 			{
 				throw new Exception($lang['common']['badPassword']);
 			}
@@ -141,7 +141,7 @@ class users extends db
 			}
 			if(!empty($_POST["password2"]))
 			{
-				$user['password']=smart_stripslashes($_POST["password2"]);
+				$user['password']=($_POST["password2"]);
 			}
 		}
 

@@ -22,7 +22,7 @@ require_once("../../Group-Office.php");
 require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
 $fs = new files();
 
-$path = $GO_CONFIG->file_storage_path.smart_stripslashes($_REQUEST['path']);
+$path = $GO_CONFIG->file_storage_path.($_REQUEST['path']);
 
 $mode = isset($_REQUEST['mode'])  ? $_REQUEST['mode'] : 'download';
 

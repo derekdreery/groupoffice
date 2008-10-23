@@ -16,15 +16,15 @@
 require_once("../../Group-Office.php");
 $GO_SECURITY->json_authenticate('groups');
 
-$sort = isset($_REQUEST['sort']) ? smart_addslashes($_REQUEST['sort']) : 'name';
-$dir = isset($_REQUEST['dir']) ? smart_addslashes($_REQUEST['dir']) : 'ASC';
-$start = isset($_REQUEST['start']) ? smart_addslashes($_REQUEST['start']) : '0';
-$limit = isset($_REQUEST['limit']) ? smart_addslashes($_REQUEST['limit']) : '0';
+$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'name';
+$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'ASC';
+$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
+$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 
-$action = isset($_REQUEST['action']) ? smart_addslashes($_REQUEST['action']) : 'null';
-$group_id = isset($_REQUEST['group_id']) ? smart_addslashes($_REQUEST['group_id']) : 'null';
-$query = isset($_REQUEST['query']) ? '%'.smart_addslashes($_REQUEST['query']).'%' : null;
-$search_field = isset($_REQUEST['search_field']) ? smart_addslashes($_REQUEST['search_field']) : null;
+$action = isset($_REQUEST['action']) ? ($_REQUEST['action']) : 'null';
+$group_id = isset($_REQUEST['group_id']) ? ($_REQUEST['group_id']) : 'null';
+$query = isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : null;
+$search_field = isset($_REQUEST['search_field']) ? ($_REQUEST['search_field']) : null;
 
 switch ($action)
 {
@@ -35,7 +35,7 @@ switch ($action)
 		{
 			try{
 				$response['deleteSuccess']=true;
-				$groups = json_decode(smart_stripslashes($_POST['delete_keys']));
+				$groups = json_decode(($_POST['delete_keys']));
 
 				foreach($groups as $group_id)
 				{
@@ -80,7 +80,7 @@ switch ($action)
 		{
 			try{
 				$response['deleteSuccess']=true;
-				$users = json_decode(smart_stripslashes($_POST['delete_keys']));
+				$users = json_decode(($_POST['delete_keys']));
 
 				foreach($users as $user_id)
 				{
@@ -96,7 +96,7 @@ switch ($action)
 		
 		if(isset($_POST['add_users']))
 		{
-			$users = json_decode(smart_stripslashes($_POST['add_users']));
+			$users = json_decode(($_POST['add_users']));
 
 			foreach($users as $user_id)
 			{

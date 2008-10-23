@@ -33,7 +33,7 @@ try{
 			break;
 
 		case 'announcement':
-			$announcement = $summary->get_announcement(smart_addslashes($_REQUEST['announcement_id']));
+			$announcement = $summary->get_announcement(($_REQUEST['announcement_id']));
 			$user = $GO_USERS->get_user($announcement['user_id']);
 			$announcement['user_name']=String::format_name($user);
 			$announcement['mtime']=Date::get_timestamp($announcement['mtime']);
@@ -46,7 +46,7 @@ try{
 			{
 				try{
 					$response['deleteSuccess']=true;
-					$delete_announcements = json_decode(smart_stripslashes($_POST['delete_keys']));
+					$delete_announcements = json_decode(($_POST['delete_keys']));
 					foreach($delete_announcements as $announcement_id)
 					{
 						$summary->delete_announcement(addslashes($announcement_id));
@@ -57,11 +57,11 @@ try{
 					$response['deleteFeedback']=$e->getMessage();
 				}
 			}
-			$sort = isset($_REQUEST['sort']) ? smart_addslashes($_REQUEST['sort']) : 'id';
-			$dir = isset($_REQUEST['dir']) ? smart_addslashes($_REQUEST['dir']) : 'DESC';
-			$start = isset($_REQUEST['start']) ? smart_addslashes($_REQUEST['start']) : '0';
-			$limit = isset($_REQUEST['limit']) ? smart_addslashes($_REQUEST['limit']) : '0';
-			$query = isset($_REQUEST['query']) ? '%'.smart_addslashes($_REQUEST['query']).'%' : '';
+			$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'id';
+			$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'DESC';
+			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
+			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
+			$query = isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
 			if(isset($_POST['active']) && $_POST['active']=='true')
 			{
 				$response['total'] = $summary->get_active_announcements($sort, $dir, $start, $limit);
@@ -86,7 +86,7 @@ try{
 			{
 				try{
 					$response['deleteSuccess']=true;
-					$delete_announcements = json_decode(smart_stripslashes($_POST['delete_keys']));
+					$delete_announcements = json_decode(($_POST['delete_keys']));
 					foreach($delete_announcements as $announcement_id)
 					{
 						$summary->delete_announcement(addslashes($announcement_id));
@@ -97,11 +97,11 @@ try{
 					$response['deleteFeedback']=$e->getMessage();
 				}
 			}
-			$sort = isset($_REQUEST['sort']) ? smart_addslashes($_REQUEST['sort']) : 'id';
-			$dir = isset($_REQUEST['dir']) ? smart_addslashes($_REQUEST['dir']) : 'DESC';
-			$start = isset($_REQUEST['start']) ? smart_addslashes($_REQUEST['start']) : '0';
-			$limit = isset($_REQUEST['limit']) ? smart_addslashes($_REQUEST['limit']) : '0';
-			$query = isset($_REQUEST['query']) ? '%'.smart_addslashes($_REQUEST['query']).'%' : '';
+			$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'id';
+			$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'DESC';
+			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
+			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
+			$query = isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
 			$response['total'] = $summary->get_announcements( $query, $sort, $dir, $start, $limit);
 			$response['results']=array();
 			while($summary->next_record())

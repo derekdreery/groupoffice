@@ -66,7 +66,7 @@ class GO_GROUPS extends db
 			global $GO_SECURITY;
 			if($GO_SECURITY->delete_group($group_id))
 			{
-				return $this->query("DELETE FROM go_groups WHERE id='$group_id'");
+				return $this->query("DELETE FROM go_groups WHERE id='".$this->escape($group_id)."'");
 			}
 		}
 		return false;
@@ -81,7 +81,7 @@ class GO_GROUPS extends db
 	 */
 	function clear_group($group_id)
 	{
-		return $this->query("DELETE FROM go_users_groups WHERE group_id='$group_id'");
+		return $this->query("DELETE FROM go_users_groups WHERE group_id='".$this->escape($group_id)."'");
 	}
 
 	/**
@@ -114,7 +114,7 @@ class GO_GROUPS extends db
 	function delete_user_from_group($user_id, $group_id)
 	{
 		return $this->query("DELETE FROM go_users_groups WHERE".
-			" user_id='$user_id' AND group_id='$group_id'");
+			" user_id='".$this->escape($user_id)."' AND group_id='".$this->escape($group_id)."'");
 	}
 
 	/**
@@ -126,7 +126,7 @@ class GO_GROUPS extends db
 	 */
 	function get_group($group_id)
 	{
-		$this->query("SELECT * FROM go_groups WHERE id='$group_id'");
+		$this->query("SELECT * FROM go_groups WHERE id='".$this->escape($group_id)."'");
 
 		if($this->next_record())
 		return $this->Record;
@@ -144,7 +144,7 @@ class GO_GROUPS extends db
 	 */
 	function update_group($group_id, $name)
 	{
-		return $this->query("UPDATE go_groups SET name='$name' WHERE id='$group_id'");
+		return $this->query("UPDATE go_groups SET name='".$this->escape($name)."' WHERE id='".$this->escape($group_id)."'");
 	}
 
 	/**
@@ -156,7 +156,7 @@ class GO_GROUPS extends db
 	 */
 	function get_group_by_name($name)
 	{
-		$this->query("SELECT * FROM go_groups WHERE name='$name'");
+		$this->query("SELECT * FROM go_groups WHERE name='".$this->escape($name)."'");
 		if ($this->next_record())
 		{
 			return $this->Record;
@@ -176,16 +176,12 @@ class GO_GROUPS extends db
 	 */
 	function add_group($user_id, $name)
 	{
-		$group_id = $this->nextid("go_groups");
-		if ($group_id > 0)
-		{
-			$this->query("INSERT INTO go_groups (id, user_id, name) VALUES".
-	  		" ('$group_id','$user_id','$name')");
-			return $group_id;
-		}else
-		{
-			return false;
-		}
+		$group['id'] = $this->nextid("go_groups");		
+		$group['user_id']=$user_id;
+		$group['name']=$name;
+		
+		$this->insert_row('go_groups', $group);
+		return $group['id'];		
 	}
 
 	/**
@@ -220,7 +216,7 @@ class GO_GROUPS extends db
 	function is_in_group($user_id, $group_id)
 	{
 		$sql = "SELECT user_id FROM go_users_groups WHERE".
-      " user_id='$user_id' AND group_id='$group_id'";
+      " user_id='".$this->escape($user_id)."' AND group_id='".$this->escape($group_id)."'";
 		$this->query($sql);
 
 		if ($this->num_rows() > 0)
@@ -255,7 +251,7 @@ class GO_GROUPS extends db
 
 		$sql = "SELECT go_users.id, go_users.email, go_users.first_name, go_users.middle_name , go_users.last_name FROM".
 			" go_users LEFT JOIN go_users_groups ON (go_users.id = go_users_groups.user_id)".
-			" WHERE go_users_groups.group_id='$group_id' ORDER BY ".		
+			" WHERE go_users_groups.group_id='".$this->escape($group_id)."' ORDER BY ".		
 		$sort." ".$direction;
 
 		$this->query($sql);
@@ -303,7 +299,7 @@ class GO_GROUPS extends db
 		if($user_id > 0)
 		{
 			$sql .= "INNER JOIN go_users_groups ON go_groups.id=go_users_groups.group_id ".
-							"AND go_users_groups.user_id='$user_id' ";
+							"AND go_users_groups.user_id='".$this->escape($user_id)."' ";
 		}
 
 		$sql .= 'ORDER BY '.$sort.' '.$direction;
@@ -356,9 +352,9 @@ class GO_GROUPS extends db
 		$sql = "SELECT go_users.* FROM go_users, go_users_groups INNER ".
 			"JOIN go_acl ON go_users.go_acl_id= go_acl.go_acl_id WHERE ".
 			"((go_acl.group_id = go_users_groups.group_id ".
-			"AND go_users_groups.user_id = ".$user_id.") OR (".
-			"go_acl.user_id = ".$user_id." )) AND $field ".
-			"LIKE '$query' ".
+			"AND go_users_groups.user_id = ".$this->escape($user_id).") OR (".
+			"go_acl.user_id = ".$this->escape($user_id)." )) AND $field ".
+			"LIKE '".$this->escape($query)."' ".
 			"GROUP BY go_users.id ORDER BY name ASC";
 
 		if ($offset != 0)	$sql .= " LIMIT $start, $offset";
@@ -377,9 +373,9 @@ class GO_GROUPS extends db
 
 	function __on_user_delete($user)
 	{					
-		$sql = "DELETE FROM go_users_groups WHERE user_id='".$user['id']."'";
+		$sql = "DELETE FROM go_users_groups WHERE user_id='".$this->escape($user['id'])."'";
 		$this->query($sql);
-		$sql = "SELECT id FROM go_groups WHERE user_id='".$user['id']."'";
+		$sql = "SELECT id FROM go_groups WHERE user_id='".$this->escape($user['id'])."'";
 		$this->query($sql);
 		$del = new GO_GROUPS();
 		while ($this->next_record())

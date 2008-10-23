@@ -20,7 +20,7 @@ require_once ($GO_MODULES->modules['tasks']['class_path']."tasks.class.inc.php")
 $tasks = new tasks();
 
 
-$task=isset($_REQUEST['task']) ? smart_addslashes($_REQUEST['task']) : '';
+$task=isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
 
 try{
 
@@ -33,7 +33,7 @@ try{
 			require($GO_CONFIG->class_path.'Date.class.inc.php');
 			require_once($GO_LANGUAGE->get_language_file('tasks'));
 			
-			$task = $tasks->get_task(smart_addslashes($_REQUEST['task_id']));
+			$task = $tasks->get_task(($_REQUEST['task_id']));
 			$tasklist = $tasks->get_tasklist($task['tasklist_id']);
 				
 			$response['data']=$task;
@@ -220,7 +220,7 @@ try{
 
 									case 'tasklist':
 
-										$response['data']=$tasks->get_tasklist(smart_addslashes($_POST['tasklist_id']));
+										$response['data']=$tasks->get_tasklist(($_POST['tasklist_id']));
 										$user = $GO_USERS->get_user($response['data']['user_id']);
 										$response['data']['user_name']=String::format_name($user);
 										$response['success']=true;
@@ -234,7 +234,7 @@ try{
 										{
 											try{
 												$response['deleteSuccess']=true;
-												$tasklists = json_decode(smart_stripslashes($_POST['delete_keys']));
+												$tasklists = json_decode(($_POST['delete_keys']));
 
 												foreach($tasklists as $tasklist_id)
 												{
@@ -252,12 +252,12 @@ try{
 											}
 										}
 											
-										$sort = isset($_REQUEST['sort']) ? smart_addslashes($_REQUEST['sort']) : 'name';
-										$dir = isset($_REQUEST['dir']) ? smart_addslashes($_REQUEST['dir']) : 'ASC';
-										$start = isset($_REQUEST['start']) ? smart_addslashes($_REQUEST['start']) : '0';
-										$limit = isset($_REQUEST['limit']) ? smart_addslashes($_REQUEST['limit']) : '0';
+										$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'name';
+										$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'ASC';
+										$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
+										$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 											
-										$query = isset($_REQUEST['query']) ? '%'.smart_addslashes($_REQUEST['query']).'%' : '';
+										$query = isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
 											
 											
 										$auth_type = isset($_POST['auth_type']) ? $_POST['auth_type'] : 'read';
@@ -284,7 +284,7 @@ try{
 											
 										if(isset($_REQUEST['tasklist_id']))
 										{
-											$tasklist_id = smart_addslashes($_REQUEST['tasklist_id']);
+											$tasklist_id = ($_REQUEST['tasklist_id']);
 											$user_id=0;
 											$tasklists = array($tasklist_id);
 
@@ -301,7 +301,7 @@ try{
 											{
 												try{
 													$response['deleteSuccess']=true;
-													$delete_tasks = json_decode(smart_stripslashes($_POST['delete_keys']));
+													$delete_tasks = json_decode(($_POST['delete_keys']));
 
 													foreach($delete_tasks as $task_id)
 													{
@@ -315,7 +315,7 @@ try{
 											}
 										}else
 										{
-											$user_id = smart_addslashes($_REQUEST['user_id']);
+											$user_id = ($_REQUEST['user_id']);
 											$tasklists = array();
 										}
 											
@@ -323,7 +323,7 @@ try{
 										if(isset($_POST['completed_task_id']))
 										{
 											$task=array();
-											$task['id']=smart_addslashes($_POST['completed_task_id']);
+											$task['id']=($_POST['completed_task_id']);
 
 											if($_POST['checked']=='1')
 											{
@@ -343,10 +343,10 @@ try{
 											
 											
 											
-										$sort = isset($_REQUEST['sort']) ? smart_addslashes($_REQUEST['sort']) : 'due_time ASC, ctime';
-										$dir = isset($_REQUEST['dir']) ? smart_addslashes($_REQUEST['dir']) : 'ASC';
-										$start = isset($_REQUEST['start']) ? smart_addslashes($_REQUEST['start']) : '0';
-										$limit = isset($_REQUEST['limit']) ? smart_addslashes($_REQUEST['limit']) : '0';
+										$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'due_time ASC, ctime';
+										$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'ASC';
+										$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
+										$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 											
 										$show_completed=isset($_POST['show_completed']) && $_POST['show_completed']=='true';
 										$show_inactive=isset($_POST['show_inactive']) && $_POST['show_inactive']=='true';

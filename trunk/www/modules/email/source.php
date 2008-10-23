@@ -17,9 +17,9 @@ require_once("../../Group-Office.php");
 
 $GO_SECURITY->html_authenticate();
 
-$account_id = smart_addslashes($_REQUEST['account_id']);
-$mailbox = smart_stripslashes($_REQUEST['mailbox']);
-$uid = smart_stripslashes($_REQUEST['uid']);
+$account_id = ($_REQUEST['account_id']);
+$mailbox = ($_REQUEST['mailbox']);
+$uid = ($_REQUEST['uid']);
 
 require_once($GO_LANGUAGE->get_language_file('email'));
 require_once($GO_CONFIG->class_path."mail/imap.class.inc");

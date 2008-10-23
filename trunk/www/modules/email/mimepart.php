@@ -24,7 +24,7 @@ $GO_SECURITY->authenticate();
 
 if(isset($_REQUEST['path']))
 {
-	$path = smart_stripslashes($_REQUEST['path']);
+	$path = ($_REQUEST['path']);
 	$params['input'] = file_get_contents($path);
 }else
 {

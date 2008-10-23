@@ -20,14 +20,14 @@ require_once ($GO_MODULES->modules['notes']['class_path'].'notes.class.inc.php')
 $notes = new notes();
 
 
-$task=isset($_REQUEST['task']) ? smart_addslashes($_REQUEST['task']) : '';
+$task=isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
 
 try{
 
 	switch($task)
 	{
 		case 'category':
-			$category = $notes->get_category(smart_addslashes($_REQUEST['category_id']));
+			$category = $notes->get_category(($_REQUEST['category_id']));
 			$user = $GO_USERS->get_user($category['user_id']);
 			$category['user_name']=String::format_name($user);
 			$response['data']=$category;
@@ -35,13 +35,13 @@ try{
 			break;
 				
 		case 'categories':
-			$auth_type = isset($_POST['auth_type']) ? smart_addslashes($_POST['auth_type']) : 'write';
+			$auth_type = isset($_POST['auth_type']) ? ($_POST['auth_type']) : 'write';
 			
 			if(isset($_POST['delete_keys']))
 			{
 				try{
 					$response['deleteSuccess']=true;
-					$delete_categories = json_decode(smart_stripslashes($_POST['delete_keys']));
+					$delete_categories = json_decode(($_POST['delete_keys']));
 
 					foreach($delete_categories as $category_id)
 					{
@@ -54,12 +54,12 @@ try{
 				}
 			}
 
-			$sort = isset($_REQUEST['sort']) ? smart_addslashes($_REQUEST['sort']) : 'id';
-			$dir = isset($_REQUEST['dir']) ? smart_addslashes($_REQUEST['dir']) : 'DESC';
-			$start = isset($_REQUEST['start']) ? smart_addslashes($_REQUEST['start']) : '0';
-			$limit = isset($_REQUEST['limit']) ? smart_addslashes($_REQUEST['limit']) : '0';
+			$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'id';
+			$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'DESC';
+			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
+			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 			
-			$query = isset($_REQUEST['query']) ? '%'.smart_addslashes($_REQUEST['query']).'%' : '';
+			$query = isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
 			
 			$response['total'] = $notes->get_authorized_categories($auth_type, $GO_SECURITY->user_id, $query, $sort, $dir, $start, $limit);
 			$response['results']=array();
@@ -78,7 +78,7 @@ try{
 		case 'note_with_items':
 		case 'note':
 
-			$note = $notes->get_note(smart_addslashes($_REQUEST['note_id']));
+			$note = $notes->get_note(($_REQUEST['note_id']));
 			
 			$category = $notes->get_category($note['category_id']);
 			$note['category_name']=$category['name'];	
@@ -179,7 +179,7 @@ try{
 			}
 				
 		case 'notes':
-			$category_id=smart_addslashes($_POST['category_id']);
+			$category_id=($_POST['category_id']);
 			$category = $notes->get_category($category_id);
 			$response['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_write']);
 			if(!$response['write_permission'] && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_read']))
@@ -191,7 +191,7 @@ try{
 			{
 				try{
 					$response['deleteSuccess']=true;
-					$delete_notes = json_decode(smart_stripslashes($_POST['delete_keys']));
+					$delete_notes = json_decode(($_POST['delete_keys']));
 
 					foreach($delete_notes as $note_id)
 					{
@@ -204,10 +204,10 @@ try{
 				}
 			}
 
-			$sort = isset($_REQUEST['sort']) ? smart_addslashes($_REQUEST['sort']) : 'id';
-			$dir = isset($_REQUEST['dir']) ? smart_addslashes($_REQUEST['dir']) : 'DESC';
-			$start = isset($_REQUEST['start']) ? smart_addslashes($_REQUEST['start']) : '0';
-			$limit = isset($_REQUEST['limit']) ? smart_addslashes($_REQUEST['limit']) : '0';
+			$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'id';
+			$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'DESC';
+			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
+			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 
 			$response['total'] = $notes->get_notes($category_id, $sort, $dir, $start, $limit);
 			$response['results']=array();
