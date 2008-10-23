@@ -1,4 +1,5 @@
 2008/09/03 Version 3.00
+
 It was time for Group-Office to modernise. New web techniques have been developed and 
 are ready to use in a professional platform such as Group-Office. Techniques such as 
 AJAX, PHP5 and MySQL5. We compared a lot of AJAX frameworks and we came to the 
