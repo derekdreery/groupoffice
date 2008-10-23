@@ -110,7 +110,7 @@ class addressbook extends db {
 		$count= $this->num_rows();
 		if($offset>0)
 		{
-			$sql .= " LIMIT $start, $offset";
+			$sql .= " LIMIT ".$this->replace($start.",".$offset);
 			$this->query($sql);
 		}
 		return $count;
@@ -153,7 +153,7 @@ class addressbook extends db {
 		$this->query($sql);
 		$count =  $this->num_rows();
 		if ($offset != 0 && $count > $offset) {
-			$sql .= " LIMIT $start, $offset";
+			$sql .= " LIMIT ".$this->replace($start.",".$offset);
 			$this->query($sql);
 		}
 
@@ -195,7 +195,7 @@ class addressbook extends db {
 		$count= $this->num_rows();
 		if($offset>0)
 		{
-			$sql .= " LIMIT $start, $offset";
+			$sql .= " LIMIT ".$this->replace($start.",".$offset);
 			$this->query($sql);
 		}
 		return $count;
@@ -250,7 +250,7 @@ class addressbook extends db {
 		$count = $this->num_rows();
 
 		if ($offset != 0 && $count > $offset) {
-			$sql .= " LIMIT $start, $offset";
+			$sql .= " LIMIT ".$this->replace($start.",".$offset);
 			$this->query($sql);
 		}
 		return $count;
@@ -300,7 +300,7 @@ class addressbook extends db {
 		$sql = "SELECT * FROM ab_contacts WHERE company_id='".$this->escape($company_id)."' ORDER BY $sort $direction";
 
 		if ($offset != 0) {
-			$sql .= " LIMIT $start, $offset";
+			$sql .= " LIMIT ".$this->replace($start.",".$offset);
 
 			$sql2 = "SELECT * FROM ab_contacts WHERE company_id='".$this->escape($company_id)."'";
 
@@ -572,7 +572,7 @@ class addressbook extends db {
 
 		if($offset > 0)
 		{
-			$sql .= " LIMIT $start, $offset";
+			$sql .= " LIMIT ".$this->replace($start.",".$offset);
 			$this->query($sql);
 		}
 		//echo $sql;
@@ -680,7 +680,7 @@ class addressbook extends db {
 
 		if($offset > 0 )
 		{
-			$sql .= " LIMIT $start, $offset";
+			$sql .= " LIMIT ".$this->replace($start.",".$offset);
 			//echo $sql;
 			$this->query($sql);
 			return $count;

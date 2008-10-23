@@ -259,7 +259,7 @@ class GO_GROUPS extends db
 
 		if ($offset != 0)
 		{
-			$sql .= " LIMIT $start, $offset";
+			$sql .= " LIMIT ".$this->replace($start.",".$offset);
 			$this->query($sql);
 		}
 			
@@ -310,7 +310,7 @@ class GO_GROUPS extends db
 
 		if ($offset != 0)
 		{
-			$sql .= " LIMIT $start, $offset";
+			$sql .= " LIMIT ".$this->replace($start.",".$offset);
 			$this->query($sql);
 		}
 
@@ -357,7 +357,7 @@ class GO_GROUPS extends db
 			"LIKE '".$this->escape($query)."' ".
 			"GROUP BY go_users.id ORDER BY name ASC";
 
-		if ($offset != 0)	$sql .= " LIMIT $start, $offset";
+		if ($offset != 0)	$sql .= " LIMIT ".$this->replace($start.",".$offset);
 
 		$this->query($sql);
 		return $this->num_rows();

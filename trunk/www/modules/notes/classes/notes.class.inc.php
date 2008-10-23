@@ -190,7 +190,7 @@ class notes extends db {
 
 		if ($offset > 0)
 		{
-			$sql .=" LIMIT $start, $offset";
+			$sql .=" LIMIT ".$this->replace($start.",".$offset);
 			
 			go_log(LOG_DEBUG, $sql);
 
