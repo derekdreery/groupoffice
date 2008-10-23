@@ -105,7 +105,7 @@ class notes extends db {
 
 	function get_category_by_name($name)
 	{
-		$this->query("SELECT * FROM no_categories WHERE name='$name'");
+		$this->query("SELECT * FROM no_categories WHERE name='".$this->escape($name)."'");
 		if($this->next_record())
 		{
 			return $this->Record;
@@ -157,6 +157,7 @@ class notes extends db {
 	 
 	function get_authorized_categories($auth_type, $user_id, $query, $sort='name', $direction='ASC', $start=0, $offset=0)
 	{
+		$user_id=$this->escape($user_id);
 		
 		$sql = "SELECT DISTINCT no_categories.* FROM no_categories ".
  		"INNER JOIN go_acl a ON ";
@@ -178,10 +179,10 @@ class notes extends db {
  		
  		if(!empty($query))
  		{
- 			$sql .= " AND name LIKE '$query'";
+ 			$sql .= " AND name LIKE '".$this->escape($query)."'";
  		}
 
-		$sql .= " ORDER BY $sort $direction";
+		$sql .= " ORDER BY ".$this->escape($sort." ".$direction);
 		
 		$this->query($sql);
 		$count = $this->num_rows();
@@ -190,7 +191,7 @@ class notes extends db {
 
 		if ($offset > 0)
 		{
-			$sql .=" LIMIT ".$this->replace($start.",".$offset);
+			$sql .=" LIMIT ".$this->escape($start.",".$offset);
 			
 			go_log(LOG_DEBUG, $sql);
 
@@ -302,7 +303,7 @@ class notes extends db {
 
 	function get_note_by_name($name)
 	{
-		$this->query("SELECT * FROM no_notes WHERE name='$name'");
+		$this->query("SELECT * FROM no_notes WHERE name='".$this->escape($name)."'");
 		if($this->next_record())
 		{
 			return $this->Record;
@@ -324,7 +325,7 @@ class notes extends db {
 	 */
 	function get_notes($category_id, $sortfield='id', $sortorder='ASC', $start=0, $offset=0)
 	{
-		$sql = "SELECT * FROM no_notes WHERE category_id=$category_id ORDER BY ".$this->escape($sortfield." ".$sortorder);
+		$sql = "SELECT * FROM no_notes WHERE category_id=".$this->escape($category_id)." ORDER BY ".$this->escape($sortfield." ".$sortorder);
 
 		$this->query($sql);
 		$count = $this->num_rows();
@@ -417,11 +418,11 @@ class notes extends db {
 			$cache['id']=$this->f('id');
 			$cache['user_id']=$this->f('user_id');
 			$cache['module']='notes';
-			$cache['name'] = addslashes($this->f('name'));
+			$cache['name'] = $this->f('name');
 			$cache['link_type']=4;
 			$cache['description']='';			
 			$cache['type']=$lang['notes']['note'];
-			$cache['keywords']=addslashes($search->record_to_keywords($this->Record)).','.$cache['type'];
+			$cache['keywords']=$search->record_to_keywords($this->Record).','.$cache['type'];
 			$cache['mtime']=$this->f('mtime');
 			$cache['acl_read']=$this->f('acl_read');
  			$cache['acl_write']=$this->f('acl_write');	

@@ -308,7 +308,7 @@ class files extends filesystem
 
 	function get_template_by_name($name)
 	{
-		$this->query("SELECT * FROM fs_templates WHERE template_name='$name'");
+		$this->query("SELECT * FROM fs_templates WHERE template_name='".$this->escape($name)."'");
 		if($this->next_record())
 		{
 			return $this->Record;

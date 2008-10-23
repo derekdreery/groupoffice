@@ -137,7 +137,7 @@ class Swift_Plugin_Decorator implements Swift_Events_BeforeSendListener, Swift_E
     {
       foreach ($mime->headers->getList() as $name => $value)
       {
-        if (is_string($value) && ($replaced = $this->replace($replacements, $value)) != $value)
+        if (is_string($value) && ($replaced = $this->escape($replacements, $value)) != $value)
         {
           $mime->headers->set($name, $replaced);
           $store["headers"][$name] = array();
@@ -147,7 +147,7 @@ class Swift_Plugin_Decorator implements Swift_Events_BeforeSendListener, Swift_E
         foreach ($mime->headers->listAttributes($name) as $att_name => $att_value)
         {
           if (is_string($att_value)
-            && ($att_replaced = $this->replace($replacements, $att_value)) != $att_value)
+            && ($att_replaced = $this->escape($replacements, $att_value)) != $att_value)
           {
             if (!isset($store["headers"][$name]))
             {
@@ -162,7 +162,7 @@ class Swift_Plugin_Decorator implements Swift_Events_BeforeSendListener, Swift_E
     //Check body
     $body = $mime->getData();
     if ($this->isPermittedType($mime->getContentType())
-      && is_string($body) && ($replaced = $this->replace($replacements, $body)) != $body)
+      && is_string($body) && ($replaced = $this->escape($replacements, $body)) != $body)
     {
       $mime->setData($replaced);
       $store["body"] = $body;

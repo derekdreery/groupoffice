@@ -139,10 +139,10 @@ class imapauth extends db
 								$account['use_ssl']=$config['ssl'];
 								$account['novalidate_cert']=$config['novalidate_cert'];
 								$account['mbroot']=$config['mbroot'];
-								$account['username']=addslashes($mail_username);
-								$account['password']=addslashes($arguments['password']);
-								$account['name']=addslashes($email);
-								$account['email']=addslashes($email);
+								$account['username']=$mail_username;
+								$account['password']=$arguments['password'];
+								$account['name']=$email;
+								$account['email']=$email;
 								//$account['auto_check']=$config['auto_check_email'];
 								
 								if (!$account_id = $email_client->add_account($account))

@@ -110,7 +110,7 @@ class addressbook extends db {
 		$count= $this->num_rows();
 		if($offset>0)
 		{
-			$sql .= " LIMIT ".$this->replace($start.",".$offset);
+			$sql .= " LIMIT ".$this->escape($start.",".$offset);
 			$this->query($sql);
 		}
 		return $count;
@@ -153,7 +153,7 @@ class addressbook extends db {
 		$this->query($sql);
 		$count =  $this->num_rows();
 		if ($offset != 0 && $count > $offset) {
-			$sql .= " LIMIT ".$this->replace($start.",".$offset);
+			$sql .= " LIMIT ".$this->escape($start.",".$offset);
 			$this->query($sql);
 		}
 
@@ -195,7 +195,7 @@ class addressbook extends db {
 		$count= $this->num_rows();
 		if($offset>0)
 		{
-			$sql .= " LIMIT ".$this->replace($start.",".$offset);
+			$sql .= " LIMIT ".$this->escape($start.",".$offset);
 			$this->query($sql);
 		}
 		return $count;
@@ -250,7 +250,7 @@ class addressbook extends db {
 		$count = $this->num_rows();
 
 		if ($offset != 0 && $count > $offset) {
-			$sql .= " LIMIT ".$this->replace($start.",".$offset);
+			$sql .= " LIMIT ".$this->escape($start.",".$offset);
 			$this->query($sql);
 		}
 		return $count;
@@ -279,7 +279,7 @@ class addressbook extends db {
 	}
 
 	function get_company_id_by_name($name, $addressbook_id) {
-		$sql = "SELECT id FROM ab_companies WHERE addressbook_id='$addressbook_id' AND name='$name'";
+		$sql = "SELECT id FROM ab_companies WHERE addressbook_id='$addressbook_id' AND name='".$this->escape($name)."'";
 		$this->query($sql);
 		if ($this->next_record()) {
 			return $this->f('id');
@@ -300,7 +300,7 @@ class addressbook extends db {
 		$sql = "SELECT * FROM ab_contacts WHERE company_id='".$this->escape($company_id)."' ORDER BY $sort $direction";
 
 		if ($offset != 0) {
-			$sql .= " LIMIT ".$this->replace($start.",".$offset);
+			$sql .= " LIMIT ".$this->escape($start.",".$offset);
 
 			$sql2 = "SELECT * FROM ab_contacts WHERE company_id='".$this->escape($company_id)."'";
 
@@ -572,7 +572,7 @@ class addressbook extends db {
 
 		if($offset > 0)
 		{
-			$sql .= " LIMIT ".$this->replace($start.",".$offset);
+			$sql .= " LIMIT ".$this->escape($start.",".$offset);
 			$this->query($sql);
 		}
 		//echo $sql;
@@ -680,7 +680,7 @@ class addressbook extends db {
 
 		if($offset > 0 )
 		{
-			$sql .= " LIMIT ".$this->replace($start.",".$offset);
+			$sql .= " LIMIT ".$this->escape($start.",".$offset);
 			//echo $sql;
 			$this->query($sql);
 			return $count;
