@@ -163,7 +163,7 @@ class reminder extends db
 	*/
 	function get_reminders($user_id)
 	{
-		//echo date('Ymd G:i', gmmktime);
+		//echo date('Ymd G:i', time());
 	 	$sql = "SELECT * FROM go_reminders WHERE user_id=".$this->escape($user_id)." AND time<".time();
 		$this->query($sql);
 

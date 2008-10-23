@@ -68,7 +68,7 @@ class search extends db {
 
 						$last_sync_time = $this->get_last_sync_time($module['id']);
 						$class->__on_search($last_sync_time);
-						$this->update_last_sync_time($module['id'], gmmktime);
+						$this->update_last_sync_time($module['id'], time());
 					}
 				}
 			}

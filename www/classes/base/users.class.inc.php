@@ -294,7 +294,7 @@ class GO_USERS extends db
 
 		if ($offset != 0)
 		{
-			$sql .= " LIMIT ".$this->replace($start.",".$offset);
+			$sql .= " LIMIT ".$this->escape($start.",".$offset);
 			$this->query($sql);
 		}
 
