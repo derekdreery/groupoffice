@@ -28,15 +28,15 @@ function get_posted_event()
 	
 	$gmt_tz = new DateTimeZone('GMT');
 	
-	$event['id']=smart_addslashes($_POST['event_id']);
-	$event['calendar_id']=smart_addslashes($_POST['calendar_id']);
+	$event['id']=($_POST['event_id']);
+	$event['calendar_id']=($_POST['calendar_id']);
 
 	$event['private']=isset($_POST['private']) ? '1' : '0';
-	$event['name'] = smart_addslashes(trim($_POST['subject']));
-	$event['description'] = smart_addslashes(trim($_POST['description']));
-	$event['location'] = smart_addslashes(trim($_POST['location']));
-	$event['status'] = smart_addslashes($_POST['status']);
-	$event['background'] = smart_addslashes($_POST['background']);
+	$event['name'] = (trim($_POST['subject']));
+	$event['description'] = (trim($_POST['description']));
+	$event['location'] = (trim($_POST['location']));
+	$event['status'] = ($_POST['status']);
+	$event['background'] = ($_POST['background']);
 	$event['busy']=isset($_POST['busy']) ? '1' : '0';
 	$event['reminder'] = isset($_POST['reminder_multiplier']) ? $_POST['reminder_multiplier'] * $_POST['reminder_value'] : 0;
 	//$event['background'] = $_POST['background'];
@@ -126,7 +126,7 @@ try{
 			
 		case 'delete_event':
 			
-			$event_id=smart_addslashes($_POST['event_id']);
+			$event_id=($_POST['event_id']);
 			
 			$event = $cal->get_event($event_id);
 			
@@ -137,7 +137,7 @@ try{
 			
 			if(isset($_POST['create_exception']) && $_POST['create_exception'] =='true')
 			{
-				$exceptionDate = strtotime(smart_stripslashes($_POST['exception_date']));
+				$exceptionDate = strtotime(($_POST['exception_date']));
 
 				//an instance of a recurring event was modified. We must create an exception for the
 				//recurring event.
@@ -161,7 +161,7 @@ try{
 				
 			if(isset($_POST['update_event_id']))
 			{
-				$update_event_id=smart_addslashes($_POST['update_event_id']);
+				$update_event_id=($_POST['update_event_id']);
 				$old_event = $cal->get_event($update_event_id);
 				
 				//an event is moved or resized
@@ -177,7 +177,7 @@ try{
 				if(isset($_POST['createException']) && $_POST['createException'] =='true')
 				{
 
-					$exceptionDate = strtotime(smart_stripslashes($_POST['exceptionDate']));
+					$exceptionDate = strtotime(($_POST['exceptionDate']));
 
 					//an instance of a recurring event was modified. We must create an exception for the
 					//recurring event.
@@ -198,7 +198,7 @@ try{
 					if(isset($_POST['offset']))
 					{
 						//move an event
-						$offset = smart_addslashes($_POST['offset']);
+						$offset = ($_POST['offset']);
 
 
 						$update_event['start_time']=round_half_hours($update_event['start_time']+$offset);
@@ -210,7 +210,7 @@ try{
 					if(isset($_POST['offsetDays']))
 					{
 						//move an event
-						$offsetDays = smart_addslashes($_POST['offsetDays']);
+						$offsetDays = ($_POST['offsetDays']);
 						$update_event['start_time'] = Date::date_add($update_event['start_time'], $offsetDays);
 						$update_event['end_time'] = Date::date_add($update_event['end_time'], $offsetDays);
 							
@@ -219,13 +219,13 @@ try{
 					if(isset($_POST['duration']))
 					{
 						//change duration
-						$duration = smart_addslashes($_POST['duration']);
+						$duration = ($_POST['duration']);
 						$update_event['end_time']=round_half_hours($update_event['start_time']+$duration);
 					}
 
 					if(isset($_POST['update_calendar_id']))
 					{
-						$update_event['calendar_id']=smart_addslashes($_POST['update_calendar_id']);
+						$update_event['calendar_id']=($_POST['update_calendar_id']);
 					}
 
 
@@ -235,7 +235,7 @@ try{
 					if(isset($_POST['offset']))
 					{
 						//move an event
-						$offset = smart_addslashes($_POST['offset']);
+						$offset = ($_POST['offset']);
 
 
 						$update_event['start_time']=round_half_hours($old_event['start_time']+$offset);
@@ -245,7 +245,7 @@ try{
 					if(isset($_POST['offsetDays']))
 					{
 						//move an event
-						$offsetDays = smart_addslashes($_POST['offsetDays']);
+						$offsetDays = ($_POST['offsetDays']);
 						$update_event['start_time'] = Date::date_add($old_event['start_time'], $offsetDays);
 						$update_event['end_time'] = Date::date_add($old_event['end_time'], $offsetDays);
 					}
@@ -253,7 +253,7 @@ try{
 					if(isset($_POST['duration']))
 					{
 						//change duration
-						$duration = smart_addslashes($_POST['duration']);
+						$duration = ($_POST['duration']);
 
 						$update_event['start_time']=$old_event['start_time'];
 						$update_event['end_time']=round_half_hours($old_event['start_time']+$duration);
@@ -261,7 +261,7 @@ try{
 					
 					if(isset($_POST['update_calendar_id']))
 					{
-						$update_event['calendar_id']=smart_addslashes($_POST['update_calendar_id']);
+						$update_event['calendar_id']=($_POST['update_calendar_id']);
 					}
 					
 					$update_event['id']=$update_event_id;
@@ -270,7 +270,7 @@ try{
 					//move the exceptions if a recurrent event is moved
 					if(!empty($old_event['rrule']) && isset($offset))
 					{
-						$cal->move_exceptions(smart_addslashes($_POST['update_event_id']), $offset);
+						$cal->move_exceptions(($_POST['update_event_id']), $offset);
 					}
 				}
 				$response['success']=true;
@@ -285,8 +285,8 @@ try{
 
 		case 'accept':
 
-			$event_id = smart_addslashes($_REQUEST['event_id']);
-			$calendar_id = smart_addslashes($_REQUEST['calendar_id']);
+			$event_id = ($_REQUEST['event_id']);
+			$calendar_id = ($_REQUEST['calendar_id']);
 			
 
 			$event = $cal->get_event($event_id);
@@ -413,8 +413,8 @@ try{
 					{
 						$link_props = explode(':', $_POST['link']);
 						$GO_LINKS->add_link(
-						smart_addslashes($link_props[1]),
-						smart_addslashes($link_props[0]),
+						($link_props[1]),
+						($link_props[0]),
 						$event_id,
 						1);
 					}
@@ -423,12 +423,12 @@ try{
 
 					if(isset($_REQUEST['exception_event_id']) && $_REQUEST['exception_event_id'] > 0)
 					{
-						$exception['event_id'] = smart_addslashes($_REQUEST['exception_event_id']);
-						$exception['time'] = strtotime(smart_stripslashes($_POST['exceptionDate']));
+						$exception['event_id'] = ($_REQUEST['exception_event_id']);
+						$exception['time'] = strtotime(($_POST['exceptionDate']));
 						$cal->add_exception($exception);
 
 						//for sync update the timestamp
-						$update_event['id']=smart_addslashes($_REQUEST['exception_event_id']);
+						$update_event['id']=($_REQUEST['exception_event_id']);
 						$cal->update_event($update_event);
 
 					}
@@ -496,9 +496,9 @@ try{
 
 		case 'save_calendar':
 
-			$calendar['id']=smart_addslashes($_POST['calendar_id']);
-			$calendar['user_id'] = isset($_POST['user_id']) ? smart_addslashes($_POST['user_id']) : $GO_SECURITY->user_id;
-			$calendar['name']=smart_addslashes($_POST['name']);
+			$calendar['id']=($_POST['calendar_id']);
+			$calendar['user_id'] = isset($_POST['user_id']) ? ($_POST['user_id']) : $GO_SECURITY->user_id;
+			$calendar['name']=($_POST['name']);
 
 
 			if(empty($calendar['name']))
@@ -548,11 +548,11 @@ try{
 
 		case 'save_view':
 
-			$view['id']=smart_addslashes($_POST['view_id']);
-			$view['user_id'] = isset($_POST['user_id']) ? smart_addslashes($_POST['user_id']) : $GO_SECURITY->user_id;
-			$view['name']=smart_addslashes($_POST['name']);
+			$view['id']=($_POST['view_id']);
+			$view['user_id'] = isset($_POST['user_id']) ? ($_POST['user_id']) : $GO_SECURITY->user_id;
+			$view['name']=($_POST['name']);
 
-			$view_calendars = json_decode(smart_stripslashes($_POST['view_calendars']));
+			$view_calendars = json_decode(($_POST['view_calendars']));
 
 			//throw new Exception(var_export($view_calendars, true));
 

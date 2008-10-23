@@ -20,14 +20,14 @@ $ab = new addressbook;
 
 $feedback = null;
 
-$task = isset($_REQUEST['task']) ? smart_addslashes($_REQUEST['task']) : null;
+$task = isset($_REQUEST['task']) ? $_REQUEST['task'] : null;
 
 try
 {
 	switch($task)
 	{
 		case 'save_contact':
-			$contact_id = isset($_REQUEST['contact_id']) ? smart_addslashes($_REQUEST['contact_id']) : 0;
+			$contact_id = isset($_REQUEST['contact_id']) ? ($_REQUEST['contact_id']) : 0;
 
 			$credentials = array (
 				'first_name','middle_name','last_name','title','initials','sex','birthday','email',
@@ -38,7 +38,7 @@ try
 					
 				foreach($credentials as $key)
 				{
-					$contact_credentials[$key] = isset($_REQUEST[$key]) ? smart_addslashes($_REQUEST[$key]) : null;
+					$contact_credentials[$key] = isset($_REQUEST[$key]) ? ($_REQUEST[$key]) : null;
 				}
 				
 				
@@ -161,7 +161,7 @@ try
 				echo json_encode($result);
 				break;
 		case 'save_company':
-			$company_id = isset($_REQUEST['company_id']) ? smart_addslashes($_REQUEST['company_id']) : 0;
+			$company_id = isset($_REQUEST['company_id']) ? ($_REQUEST['company_id']) : 0;
 
 			$credentials = array (
 				'addressbook_id','name','address','address_no','zip','city','state','country',
@@ -171,7 +171,7 @@ try
 					
 			foreach($credentials as $key)
 			{
-				$company_credentials[$key] = isset($_REQUEST[$key]) ? smart_addslashes($_REQUEST[$key]) : null;
+				$company_credentials[$key] = isset($_REQUEST[$key]) ? ($_REQUEST[$key]) : null;
 			}
 			
 			$addressbook = $ab->get_addressbook($company_credentials['addressbook_id']);
@@ -273,9 +273,9 @@ try
 			break;
 			
 		case 'save_addressbook':
-			$addressbook_id = isset($_REQUEST['addressbook_id']) ? smart_addslashes($_REQUEST['addressbook_id']) : 0;
-			$user_id = isset($_REQUEST['user_id']) ? smart_addslashes($_REQUEST['user_id']) : $GO_SECURITY->user_id;
-			$name = isset($_REQUEST['name']) ? smart_addslashes($_REQUEST['name']) : null;
+			$addressbook_id = isset($_REQUEST['addressbook_id']) ? ($_REQUEST['addressbook_id']) : 0;
+			$user_id = isset($_REQUEST['user_id']) ? ($_REQUEST['user_id']) : $GO_SECURITY->user_id;
+			$name = isset($_REQUEST['name']) ? ($_REQUEST['name']) : null;
 				
 			$result['success'] = true;
 			$result['feedback'] = $feedback;
@@ -332,11 +332,11 @@ try
 			echo json_encode($result);
 			break;
 		case 'upload':
-			$addressbook_id = isset($_REQUEST['addressbook_id']) ? smart_addslashes($_REQUEST['addressbook_id']) : 0;
-			$import_filetype = isset($_REQUEST['import_filetype']) ? smart_addslashes($_REQUEST['import_filetype']) : null;
-			$import_file = isset($_FILES['import_file']['tmp_name']) ? smart_addslashes($_FILES['import_file']['tmp_name']) : null;
-			$seperator	= isset($_REQUEST['seperator']) ? smart_stripslashes($_REQUEST['seperator']) : ',';
-			$quote	= isset($_REQUEST['quote']) ? smart_stripslashes($_REQUEST['quote']) : '"';
+			$addressbook_id = isset($_REQUEST['addressbook_id']) ? ($_REQUEST['addressbook_id']) : 0;
+			$import_filetype = isset($_REQUEST['import_filetype']) ? ($_REQUEST['import_filetype']) : null;
+			$import_file = isset($_FILES['import_file']['tmp_name']) ? ($_FILES['import_file']['tmp_name']) : null;
+			$seperator	= isset($_REQUEST['seperator']) ? ($_REQUEST['seperator']) : ',';
+			$quote	= isset($_REQUEST['quote']) ? ($_REQUEST['quote']) : '"';
 				
 			$result['success'] = true;
 			//$result['feedback'] = $feedback;
@@ -353,7 +353,7 @@ try
 				case 'vcf':
 					require_once ($GO_MODULES->path."classes/vcard.class.inc");
 					$vcard = new vcard();
-					$result['success'] = $vcard->import($_SESSION['GO_SESSION']['addressbook']['import_file'], $GO_SECURITY->user_id, smart_addslashes($_POST['addressbook_id']));
+					$result['success'] = $vcard->import($_SESSION['GO_SESSION']['addressbook']['import_file'], $GO_SECURITY->user_id, ($_POST['addressbook_id']));
 					break;
 				case 'csv':
 						
@@ -388,11 +388,11 @@ try
 			echo json_encode($result);
 			break;
 				case'import':
-					$addressbook_id = isset($_REQUEST['addressbook_id']) ? smart_addslashes($_REQUEST['addressbook_id']) : 0;
-					$seperator	= isset($_REQUEST['seperator']) ? smart_stripslashes($_REQUEST['seperator']) : ',';
-					$quote	= isset($_REQUEST['quote']) ? smart_stripslashes($_REQUEST['quote']) : '"';
-					$import_type = isset($_REQUEST['import_type']) ? smart_stripslashes($_REQUEST['import_type']) : '';
-					$import_filetype = isset($_REQUEST['import_filetype']) ? smart_stripslashes($_REQUEST['import_filetype']) : '';
+					$addressbook_id = isset($_REQUEST['addressbook_id']) ? ($_REQUEST['addressbook_id']) : 0;
+					$seperator	= isset($_REQUEST['seperator']) ? ($_REQUEST['seperator']) : ',';
+					$quote	= isset($_REQUEST['quote']) ? ($_REQUEST['quote']) : '"';
+					$import_type = isset($_REQUEST['import_type']) ? ($_REQUEST['import_type']) : '';
+					$import_filetype = isset($_REQUEST['import_filetype']) ? ($_REQUEST['import_filetype']) : '';
 						
 					$result['success'] = true;
 					$result['feedback'] = $feedback;

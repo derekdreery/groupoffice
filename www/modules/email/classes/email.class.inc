@@ -445,7 +445,7 @@ class email extends db
 	function rename_folder($account_id, $old_name, $new_name)
 	{
 		$sql = "UPDATE em_folders SET name='$new_name' WHERE".
-		" name='".smart_addslashes($old_name)."' AND ".
+		" name='".($old_name)."' AND ".
 		"account_id='$account_id'";
 
 		$this->query($sql);
@@ -867,8 +867,8 @@ class email extends db
 	{
 		global $GO_CONFIG;
 
-		$filename = smart_addslashes($filename);
-		$tmp_file = smart_addslashes($tmp_file);
+		$filename = ($filename);
+		$tmp_file = ($tmp_file);
 
 
 		$attachment['file_name'] = $filename;

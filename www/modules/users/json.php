@@ -15,14 +15,14 @@
 require_once("../../Group-Office.php");
 $GO_SECURITY->json_authenticate('users');
 
-$sort = isset($_REQUEST['sort']) ? smart_addslashes($_REQUEST['sort']) : 'username';
-$dir = isset($_REQUEST['dir']) ? smart_addslashes($_REQUEST['dir']) : 'ASC';
-$start = isset($_REQUEST['start']) ? smart_addslashes($_REQUEST['start']) : '0';
-$limit = isset($_REQUEST['limit']) ? smart_addslashes($_REQUEST['limit']) : '0';
-$query = isset($_REQUEST['query']) ? '%'.smart_addslashes($_REQUEST['query']).'%' : null;
-$search_field = isset($_REQUEST['search_field']) ? smart_addslashes($_REQUEST['search_field']) : null;
-$task = isset($_REQUEST['task']) ? smart_addslashes($_REQUEST['task']) : null;
-$user_id = isset($_REQUEST['user_id']) ? smart_addslashes($_REQUEST['user_id']) : null;
+$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'username';
+$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'ASC';
+$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
+$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
+$query = isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : null;
+$search_field = isset($_REQUEST['search_field']) ? ($_REQUEST['search_field']) : null;
+$task = isset($_REQUEST['task']) ? ($_REQUEST['task']) : null;
+$user_id = isset($_REQUEST['user_id']) ? ($_REQUEST['user_id']) : null;
 
 $records = array();
 
@@ -41,7 +41,7 @@ switch($task)
 				}
 				
 				$response['deleteSuccess']=true;
-				$users = json_decode(smart_stripslashes($_POST['delete_keys']));
+				$users = json_decode(($_POST['delete_keys']));
 
 				foreach($users as $delete_user_id)
 				{
@@ -110,7 +110,7 @@ switch($task)
 
 	case 'user':
 		$result['success'] = false;
-		$result['data'] = $GO_USERS->get_user(smart_addslashes($user_id));
+		$result['data'] = $GO_USERS->get_user(($user_id));
 
 		$result['data']['birthday']=Date::format($result['data']['birthday'], false);
 	

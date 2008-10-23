@@ -1608,7 +1608,7 @@ class calendar extends db
 			{
 				$id = 0;
 
-				if($member_profile = $GO_USERS->get_user_by_email(smart_addslashes($participants_array[$i])))
+				if($member_profile = $GO_USERS->get_user_by_email(($participants_array[$i])))
 				{
 					$id = $member_profile["id"];
 

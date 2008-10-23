@@ -130,3 +130,8 @@ if(!is_dir($GO_CONFIG->tmpdir))
 unset($type);
 
 define('GO_LOADED', true);
+
+if(get_magic_quotes_gpc())
+{
+	$_POST=array_map('stripslashes', $_POST);
+}

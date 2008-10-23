@@ -21,7 +21,7 @@ $fs = new files();
 
 require($GO_LANGUAGE->get_language_file('files'));
 
-$task=isset($_REQUEST['task']) ? smart_addslashes($_REQUEST['task']) : '';
+$task=isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
 $response=array();
 
 try{
@@ -31,7 +31,7 @@ try{
 		case 'tree':
 
 			$home_path = $GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'];
-			$node = isset($_POST['node']) ? smart_stripslashes($_POST['node']) : 'root';
+			$node = isset($_POST['node']) ? ($_POST['node']) : 'root';
 
 			switch($node)
 			{
@@ -176,7 +176,7 @@ try{
 					break;
 
 				default:
-					$path = $GO_CONFIG->file_storage_path.smart_stripslashes($_POST['node']);
+					$path = $GO_CONFIG->file_storage_path.($_POST['node']);
 					if(!$fs->has_read_permission($GO_SECURITY->user_id, $path))
 					{
 						throw new AccessDeniedException();
@@ -222,7 +222,7 @@ try{
 					
 					if(isset($_SESSION['GO_SESSION']['files']['jupload_new_files']) && count($_SESSION['GO_SESSION']['files']['jupload_new_files']))
 					{
-						$path = smart_stripslashes($_POST['path']);
+						$path = ($_POST['path']);
 						
 						
 						$fs->notify_users($GO_CONFIG->file_storage_path.$path, $path,$GO_SECURITY->user_id, array(), $_SESSION['GO_SESSION']['files']['jupload_new_files']);
@@ -261,7 +261,7 @@ try{
 						}
 					}else
 					{
-						$path = $GO_CONFIG->file_storage_path.smart_stripslashes($_POST['path']);
+						$path = $GO_CONFIG->file_storage_path.($_POST['path']);
 						
 						
 						if(!empty($_POST['create_path']) && !is_dir($path))
@@ -280,7 +280,7 @@ try{
 						{
 							try{
 								$response['deleteSuccess']=true;
-								$delete_paths = json_decode(smart_stripslashes($_POST['delete_keys']));
+								$delete_paths = json_decode(($_POST['delete_keys']));
 
 								$deleted = array();
 								foreach($delete_paths as $delete_path)
@@ -309,9 +309,9 @@ try{
 							if(!empty($_POST['template_id']) && !empty($_POST['template_name']))
 							{
 
-								$template = $fs->get_template(smart_addslashes($_POST['template_id']), true);
+								$template = $fs->get_template(($_POST['template_id']), true);
 
-								$new_path = $path.'/'.smart_stripslashes($_POST['template_name']).'.'.$template['extension'];
+								$new_path = $path.'/'.($_POST['template_name']).'.'.$template['extension'];
 								file_put_contents($new_path, $template['content']);
 
 								$response['new_path']=$fs->strip_server_path($new_path);
@@ -320,8 +320,8 @@ try{
 							try{
 								if(isset($_POST['compress_sources']) && isset($_POST['archive_name']))
 								{
-									$compress_sources = json_decode(smart_stripslashes($_POST['compress_sources']),true);
-									$archive_name = smart_stripslashes($_POST['archive_name']).'.zip';
+									$compress_sources = json_decode(($_POST['compress_sources']),true);
+									$archive_name = ($_POST['archive_name']).'.zip';
 										
 									function strip_path($client_path)
 									{
@@ -353,7 +353,7 @@ try{
 								if(isset($_POST['decompress_sources']))
 								{
 									chdir($path);
-									$decompress_sources = json_decode(smart_stripslashes($_POST['decompress_sources']));
+									$decompress_sources = json_decode(($_POST['decompress_sources']));
 									while ($file = array_shift($decompress_sources)) {
 										switch(File::get_extension($file))
 										{
@@ -456,7 +456,7 @@ try{
 
 							case 'folder_properties':
 
-								$path = $GO_CONFIG->file_storage_path.smart_stripslashes($_POST['path']);
+								$path = $GO_CONFIG->file_storage_path.($_POST['path']);
 
 								if(!file_exists($path))
 								{
@@ -472,7 +472,7 @@ try{
 									
 								$response['data'] = $fs->get_folder(addslashes($path));
 								$response['data']['name']=utf8_basename($path);
-								$response['data']['path']=smart_stripslashes($_POST['path']);
+								$response['data']['path']=($_POST['path']);
 								$response['data']['mtime']=Date::get_timestamp(filemtime($path));
 								$response['data']['ctime']=Date::get_timestamp(filectime($path));
 								$response['data']['atime']=Date::get_timestamp(fileatime($path));
@@ -487,7 +487,7 @@ try{
 
 							case 'file_properties':
 
-								$path = $GO_CONFIG->file_storage_path.smart_stripslashes($_POST['path']);
+								$path = $GO_CONFIG->file_storage_path.($_POST['path']);
 
 								if(!file_exists($path))
 								{
@@ -502,7 +502,7 @@ try{
 								$response['success']=true;
 								$response['data'] = $fs->get_file(addslashes($path));
 								$response['data']['name']=File::strip_extension(utf8_basename($path));
-								$response['data']['path']=smart_stripslashes($_POST['path']);
+								$response['data']['path']=($_POST['path']);
 								$response['data']['mtime']=Date::get_timestamp(filemtime($path));
 								$response['data']['ctime']=Date::get_timestamp(filectime($path));
 								$response['data']['atime']=Date::get_timestamp(fileatime($path));
@@ -516,7 +516,7 @@ try{
 								{
 									try{
 										$response['deleteSuccess']=true;
-										$templates = json_decode(smart_stripslashes($_POST['delete_keys']));
+										$templates = json_decode(($_POST['delete_keys']));
 
 										foreach($templates as $template_id)
 										{
@@ -551,7 +551,7 @@ try{
 								break;
 
 							case 'template':
-								$response['data']=$fs->get_template(smart_addslashes($_POST['template_id']));
+								$response['data']=$fs->get_template(($_POST['template_id']));
 								$user = $GO_USERS->get_user($response['data']['user_id']);
 								$response['data']['user_name']=String::format_name($user);
 								$response['success']=true;

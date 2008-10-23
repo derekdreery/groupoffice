@@ -36,7 +36,7 @@ if ($mail->open($account['host'], $account['type'],$account['port'],$account['us
 	$file = $mail->view_part($_REQUEST['uid'], $_REQUEST['part'], $_REQUEST['transfer']);
 	$mail->close();
 
-	$filename = smart_stripslashes($_REQUEST['filename']);
+	$filename = ($_REQUEST['filename']);
 	$browser = detect_browser();
 
 	

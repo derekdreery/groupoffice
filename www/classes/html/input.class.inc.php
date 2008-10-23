@@ -67,7 +67,7 @@ class input extends html_element
 		$post_value = $this->get_post_value($name);
 		if($remind_value && $post_value)
 		{
-			$this->set_attribute('value', htmlspecialchars(smart_stripslashes($post_value)));
+			$this->set_attribute('value', htmlspecialchars($post_value));
 		}else
 		{
 			$this->set_attribute('value', htmlspecialchars($value));

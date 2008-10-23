@@ -16,10 +16,10 @@ require_once("Group-Office.php");
 
 $GO_SECURITY->json_authenticate();
 
-$sort = isset($_REQUEST['sort']) ? smart_addslashes($_REQUEST['sort']) : 'name';
-$dir = isset($_REQUEST['dir']) ? smart_addslashes($_REQUEST['dir']) : 'ASC';
-$start = isset($_REQUEST['start']) ? smart_addslashes($_REQUEST['start']) : '0';
-$limit = isset($_REQUEST['limit']) ? smart_addslashes($_REQUEST['limit']) : '0';
+$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'name';
+$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'ASC';
+$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
+$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 
 
 try{
@@ -89,8 +89,8 @@ try{
 			//used by /javascript/dialog/SelectUsers.js
 			/*case 'users':
 
-			$query = isset($_REQUEST['query']) ? '%'.smart_addslashes($_REQUEST['query']).'%' : null;
-			$search_field = isset($_REQUEST['search_field']) ? smart_addslashes($_REQUEST['search_field']) : null;
+			$query = isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : null;
+			$search_field = isset($_REQUEST['search_field']) ? ($_REQUEST['search_field']) : null;
 
 			$GO_USERS->search($query, $search_field, 0, $start, $limit, $sort,$dir);
 
@@ -108,7 +108,7 @@ try{
 
 		case 'groups_in_acl':
 
-			$acl_id = smart_addslashes($_REQUEST['acl_id']);
+			$acl_id = ($_REQUEST['acl_id']);
 
 			if(isset($_REQUEST['delete_keys']))
 			{
@@ -120,7 +120,7 @@ try{
 					}
 
 					$response['deleteSuccess']=true;
-					$groups = json_decode(smart_stripslashes($_REQUEST['delete_keys']));
+					$groups = json_decode(($_REQUEST['delete_keys']));
 
 					foreach($groups as $group_id)
 					{
@@ -143,7 +143,7 @@ try{
 					}
 
 					$response['addSuccess']=true;
-					$groups = json_decode(smart_stripslashes($_REQUEST['add_groups']));
+					$groups = json_decode(($_REQUEST['add_groups']));
 
 					foreach($groups as $group_id)
 					{
@@ -169,7 +169,7 @@ try{
 
 
 		case 'users_in_acl':
-			$acl_id = smart_addslashes($_REQUEST['acl_id']);
+			$acl_id = ($_REQUEST['acl_id']);
 
 			if(isset($_REQUEST['delete_keys']))
 			{
@@ -181,7 +181,7 @@ try{
 					}
 
 					$response['deleteSuccess']=true;
-					$users = json_decode(smart_stripslashes($_REQUEST['delete_keys']));
+					$users = json_decode(($_REQUEST['delete_keys']));
 
 					foreach($users as $user_id)
 					{
@@ -204,7 +204,7 @@ try{
 					}
 
 					$response['addSuccess']=true;
-					$users = json_decode(smart_stripslashes($_REQUEST['add_users']));
+					$users = json_decode(($_REQUEST['add_users']));
 
 					foreach($users as $user_id)
 					{
@@ -240,7 +240,7 @@ try{
 
 			$results=array();
 
-			$query = isset($_REQUEST['query']) ? '%'.smart_addslashes($_REQUEST['query']).'%' : '%';
+			$query = isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '%';
 
 			if(isset($GO_MODULES->modules['addressbook']) && $GO_MODULES->modules['addressbook']['read_permission'])
 			{
@@ -350,7 +350,7 @@ try{
 			$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : 0;
 			$limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : 0;
 
-			$sort = isset($_REQUEST['sort']) ? smart_addslashes($_REQUEST['sort']) : 'mtime';
+			$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'mtime';
 			$dir= isset($_REQUEST['dir']) ? $_REQUEST['dir'] : 'DESC';
 
 
@@ -358,7 +358,7 @@ try{
 			if(isset($_REQUEST['delete_keys']))
 			{
 				try{
-					$delete_links = json_decode(smart_stripslashes($_REQUEST['delete_keys']), true);
+					$delete_links = json_decode(($_REQUEST['delete_keys']), true);
 
 					foreach($delete_links as $delete_link)
 					{
@@ -416,16 +416,16 @@ try{
 			}
 
 
-			$link_id = isset($_REQUEST['link_id']) ?  smart_addslashes($_REQUEST['link_id']) : 0;
-			$link_type = isset($_REQUEST['link_type']) ? smart_addslashes($_REQUEST['link_type']) : 0;
-			$folder_id = isset($_REQUEST['folder_id']) ? smart_addslashes($_REQUEST['folder_id']) : 0;
-			$query = isset($_POST['query']) ? smart_addslashes($_REQUEST['query']) : '';
+			$link_id = isset($_REQUEST['link_id']) ?  ($_REQUEST['link_id']) : 0;
+			$link_type = isset($_REQUEST['link_type']) ? ($_REQUEST['link_type']) : 0;
+			$folder_id = isset($_REQUEST['folder_id']) ? ($_REQUEST['folder_id']) : 0;
+			$query = isset($_POST['query']) ? ($_REQUEST['query']) : '';
 				
 			
 
 			if(isset($_REQUEST['unlinks']))
 			{
-				$unlinks = json_decode(smart_stripslashes($_REQUEST['unlinks']), true);
+				$unlinks = json_decode(($_REQUEST['unlinks']), true);
 				foreach($unlinks as $unlink)
 				{
 					$link = explode(':', $unlink);
@@ -446,11 +446,13 @@ try{
 			if($link_id>0)
 			{
 				$record = $search->get_search_result($link_id, $link_type);
-				if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $record['acl_read']))
+				$response['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $record['acl_write']);
+				
+				if(!$response['write_permission'] && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $record['acl_read']))
 				{
 					throw new AccessDeniedException();
 				}
-				$response['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $record['acl_write']);
+				
 			}
 
 			$response = isset($response) ? array_merge($response, $links_response) : $links_response;
@@ -461,15 +463,15 @@ try{
 
 		case 'link_folder':
 
-			$response['data']= $GO_LINKS->get_folder(smart_addslashes($_REQUEST['folder_id']));
+			$response['data']= $GO_LINKS->get_folder(($_REQUEST['folder_id']));
 			$response['success']=true;
 			break;
 
 		case 'link_folders':
 
-			$folder_id=isset($_POST['folder_id']) ? smart_addslashes($_POST['folder_id']) : 0;
-			$link_id=isset($_POST['link_id']) ? smart_addslashes($_POST['link_id']) : 0;
-			$link_type=isset($_POST['link_type']) ? smart_addslashes($_POST['link_type']) : 0;
+			$folder_id=isset($_POST['folder_id']) ? ($_POST['folder_id']) : 0;
+			$link_id=isset($_POST['link_id']) ? ($_POST['link_id']) : 0;
+			$link_type=isset($_POST['link_type']) ? ($_POST['link_type']) : 0;
 
 			$response['total']=$GO_LINKS->get_link_folders($link_id, $link_type, $parent_id);
 			$response['results']=array();
@@ -481,9 +483,9 @@ try{
 
 		case 'link_folders_tree':
 
-			$folder_id=isset($_POST['node']) && substr($_POST['node'],0,10)=='lt-folder-' ? smart_addslashes(substr($_POST['node'],10)) : 0;
-			$link_id=isset($_POST['link_id']) ? smart_addslashes($_POST['link_id']) : 0;
-			$link_type=isset($_POST['link_type']) ? smart_addslashes($_POST['link_type']) : 0;
+			$folder_id=isset($_POST['node']) && substr($_POST['node'],0,10)=='lt-folder-' ? (substr($_POST['node'],10)) : 0;
+			$link_id=isset($_POST['link_id']) ? ($_POST['link_id']) : 0;
+			$link_type=isset($_POST['link_type']) ? ($_POST['link_type']) : 0;
 
 			$GO_LINKS->get_folders($link_id, $link_type, $folder_id);
 			$response=array();

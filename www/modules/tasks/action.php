@@ -29,25 +29,25 @@ try{
 			
 			//$tasklist = $tasks->get_tasklist();
 			
-			$task['name']=smart_addslashes($_POST['name']);
+			$task['name']=($_POST['name']);
 			$task['start_time']=$task['due_time']=Date::to_unixtime($_POST['date']);
-			$task['description']=smart_addslashes($_POST['description']);
+			$task['description']=($_POST['description']);
 			$task['status']='NEEDS-ACTION';
-			$task['tasklist_id']=smart_addslashes($_POST['tasklist_id']);
-			$task['reminder']=Date::to_unixtime(smart_stripslashes($_POST['date'].' '.$_POST['remind_time']));	
+			$task['tasklist_id']=($_POST['tasklist_id']);
+			$task['reminder']=Date::to_unixtime(($_POST['date'].' '.$_POST['remind_time']));	
 			$task['user_id']=$GO_SECURITY->user_id;
 			
 			$response['task_id']= $task_id = $tasks->add_task($task);
 
-			$links = json_decode(smart_stripslashes($_POST['links']), true);
+			$links = json_decode(($_POST['links']), true);
 			
 			foreach($links as $link)
 			{
 				if($link['link_id']>0)
 				{
 					$GO_LINKS->add_link(
-					smart_addslashes($link['link_id']),
-					smart_addslashes($link['link_type']),
+					($link['link_id']),
+					($link['link_type']),
 					$task_id,
 					12);
 				}
@@ -66,8 +66,8 @@ try{
 				if(!empty($task['description']))
 					$comment['comments'] .= "\n\n".$task['description'];
 					
-				$comment['link_id']=smart_addslashes($links[$comment_link_index]['link_id']);
-				$comment['link_type']=smart_addslashes($links[$comment_link_index]['link_type']);			
+				$comment['link_id']=($links[$comment_link_index]['link_id']);
+				$comment['link_type']=($links[$comment_link_index]['link_type']);			
 				$comment['user_id']=$GO_SECURITY->user_id;
 				
 				$comments->add_comment($comment);
@@ -84,7 +84,7 @@ try{
 			//for servers with register_globals on
 			unset($task);
 			
-			$task_id=$task['id']=isset($_POST['task_id']) ? smart_addslashes($_POST['task_id']) : 0;
+			$task_id=$task['id']=isset($_POST['task_id']) ? ($_POST['task_id']) : 0;
 				
 			if($task_id>0)
 			{
@@ -95,15 +95,15 @@ try{
 				}
 			}
 				
-			$task['name']=smart_addslashes($_POST['name']);
+			$task['name']=($_POST['name']);
 			$task['due_time']=Date::to_unixtime($_POST['due_date']);
 			$task['start_time']=Date::to_unixtime($_POST['start_date']);
-			$task['tasklist_id']=smart_addslashes($_POST['tasklist_id']);
+			$task['tasklist_id']=($_POST['tasklist_id']);
 			
 			if(isset($_POST['status']))
-				$task['status']=smart_addslashes($_POST['status']);
+				$task['status']=($_POST['status']);
 			if(isset($_POST['description']))
-				$task['description']=smart_addslashes($_POST['description']);
+				$task['description']=($_POST['description']);
 				
 			if($task['status']=='COMPLETED')
 			{
@@ -115,7 +115,7 @@ try{
 			
 			if(isset($_POST['remind']))
 			{
-				$task['reminder']=Date::to_unixtime(smart_stripslashes($_POST['remind_date'].' '.$_POST['remind_time']));	
+				$task['reminder']=Date::to_unixtime(($_POST['remind_date'].' '.$_POST['remind_time']));	
 			}else
 			{
 				$task['reminder']=0;
@@ -209,8 +209,8 @@ try{
 			{
 				$link_props = explode(':', $_POST['link']);
 				$GO_LINKS->add_link(
-				smart_addslashes($link_props[1]),
-				smart_addslashes($link_props[0]),
+				($link_props[1]),
+				($link_props[0]),
 				$task_id,
 				12);
 			}
@@ -223,9 +223,9 @@ try{
 
 		case 'save_tasklist':
 
-			$tasklist['id']=smart_addslashes($_POST['tasklist_id']);
-			$tasklist['user_id'] = isset($_POST['user_id']) ? smart_addslashes($_POST['user_id']) : $GO_SECURITY->user_id;
-			$tasklist['name']=smart_addslashes($_POST['name']);
+			$tasklist['id']=($_POST['tasklist_id']);
+			$tasklist['user_id'] = isset($_POST['user_id']) ? ($_POST['user_id']) : $GO_SECURITY->user_id;
+			$tasklist['name']=($_POST['name']);
 
 
 			if(empty($tasklist['name']))

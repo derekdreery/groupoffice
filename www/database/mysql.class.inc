@@ -487,7 +487,7 @@ class db {
 
 	}
 
-	function update_row($table, $index, $fields)
+	function update_row($table, $index, $fields, $trim=true)
 	{
 		if(!is_array($fields))
 		{
@@ -502,7 +502,7 @@ class db {
 		{
 			if(!in_array($key, $index))
 			{
-				$updates[] = "`$key`='$value'";
+				$updates[] = "`$key`='".$this->escape($value, $trim)."'";
 			}
 		}
 		if(isset($updates))
@@ -531,7 +531,7 @@ class db {
 		return false;
 	}
 
-	function insert_row($table, $fields)
+	function insert_row($table, $fields, $trim=true)
 	{
 		if(!is_array($fields))
 		{
@@ -542,7 +542,7 @@ class db {
 		foreach($fields as $key => $value)
 		{
 			$field_names[] = $key;
-			$field_values[] = $value;
+			$field_values[] = $this->escape($value, $trim);
 		}
 		if(isset($field_names))
 		{
@@ -566,12 +566,12 @@ class db {
 			
 	}
 
-	function replace_row($table, $fields)
+	function replace_row($table, $fields, $trim=true)
 	{
 		foreach($fields as $key => $value)
 		{
 			$field_names[] = $key;
-			$field_values[] = $value;
+			$field_values[] = $this->escape($value, $trim);
 		}
 		if(isset($field_names))
 		{
@@ -595,5 +595,13 @@ class db {
 	function insert_id()
 	{
 		return mysql_insert_id($this->Query_ID);
+	}
+	
+	function escape($value, $trim=true)
+	{
+		if($trim)
+			$value = trim($value);
+			
+		return mysql_real_escape_string($value);
 	}
 }

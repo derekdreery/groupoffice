@@ -7,9 +7,9 @@ $cal = new calendar();
 require_once($GO_LANGUAGE->get_language_file('calendar'));
 
 $calendar_id = isset($_REQUEST['calendar_id']) ? $_REQUEST['calendar_id'] : 0;
-$email = isset($_REQUEST['email']) ? smart_addslashes($_REQUEST['email']) : "";
+$email = isset($_REQUEST['email']) ? ($_REQUEST['email']) : "";
 $task = isset($_REQUEST['task']) ? $_REQUEST['task'] : "";
-$event_id = isset($_REQUEST['event_id']) ? smart_addslashes($_REQUEST['event_id']) : 0;
+$event_id = isset($_REQUEST['event_id']) ? ($_REQUEST['event_id']) : 0;
 
 
 $user = $GO_USERS->get_user_by_email($email);

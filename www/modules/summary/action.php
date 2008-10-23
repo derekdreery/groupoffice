@@ -25,7 +25,7 @@ try{
 		case 'save_note':
 			
 			$note['user_id']=$GO_SECURITY->user_id;
-			$note['text']=smart_addslashes($_POST['text']);
+			$note['text']=($_POST['text']);
 			$summary->update_note($note);
 			
 			$response['success']=true;
@@ -34,17 +34,17 @@ try{
 			
 		case 'save_rss_url':			
 			$feed['user_id']=$GO_SECURITY->user_id;
-			$feed['url']=smart_addslashes($_POST['url']);
+			$feed['url']=($_POST['url']);
 			$summary->update_feed($feed);			
 			$response['success']=true;
 			
 			break;
 		case 'save_announcement':		
-			$announcement_id=$announcement['id']=isset($_POST['announcement_id']) ? smart_addslashes($_POST['announcement_id']) : 0;
+			$announcement_id=$announcement['id']=isset($_POST['announcement_id']) ? ($_POST['announcement_id']) : 0;
 			
 			$announcement['due_time']=Date::to_unixtime(trim($_POST['due_time']));
-			$announcement['title']=smart_addslashes(trim($_POST['title']));
-			$announcement['content']=smart_addslashes(trim($_POST['content']));
+			$announcement['title']=(trim($_POST['title']));
+			$announcement['content']=(trim($_POST['content']));
 			if($announcement['id']>0)
 			{
 				$summary->update_announcement($announcement);

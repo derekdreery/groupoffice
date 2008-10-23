@@ -7,7 +7,7 @@ if(!$GO_SECURITY->logged_in())
 	die('Unauthorized');
 }
 
-$path = $GO_CONFIG->file_storage_path.urldecode(smart_stripslashes($_REQUEST['path']));
+$path = $GO_CONFIG->file_storage_path.urldecode(($_REQUEST['path']));
 
 if(substr($path,-1,1)=='/')
 {
@@ -59,7 +59,7 @@ while($file = array_shift($_FILES))
 				move_uploaded_file($file['tmp_name'], $filepath);
 
 
-				$complete_dir = $path.'/'.smart_stripslashes($_POST['relpathinfo'][$count]).'/';
+				$complete_dir = $path.'/'.($_POST['relpathinfo'][$count]).'/';
 				$filepath = File::checkfilename($complete_dir.$file['name']);
 
 				$fp = fopen($filepath, 'a+');
@@ -71,13 +71,13 @@ while($file = array_shift($_FILES))
 					unlink($part);
 				}
 				
-				$_SESSION['GO_SESSION']['files']['jupload_new_files'][]=smart_stripslashes($_POST['relpathinfo'][$count]).'/'.utf8_basename($filepath);
+				$_SESSION['GO_SESSION']['files']['jupload_new_files'][]=($_POST['relpathinfo'][$count]).'/'.utf8_basename($filepath);
 				fclose($fp);
 				continue;
 			}
 		}else
 		{
-			$dir = $path.'/'.smart_stripslashes($_POST['relpathinfo'][$count]).'/';
+			$dir = $path.'/'.($_POST['relpathinfo'][$count]).'/';
 			$filepath = $dir.$file['name'];
 		}
 			
@@ -90,7 +90,7 @@ while($file = array_shift($_FILES))
 		{
 			$filepath = File::checkfilename($filepath);
 			
-			$_SESSION['GO_SESSION']['files']['jupload_new_files'][]=smart_stripslashes($_POST['relpathinfo'][$count]).'/'.utf8_basename($filepath);
+			$_SESSION['GO_SESSION']['files']['jupload_new_files'][]=($_POST['relpathinfo'][$count]).'/'.utf8_basename($filepath);
 		}
 		
 		move_uploaded_file($file['tmp_name'], $filepath);

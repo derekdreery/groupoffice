@@ -319,7 +319,7 @@ class GoSwift extends Swift{
 				{
 					if (!empty($this->reply_uid) && !empty($this->reply_mailbox))
 					{
-						$uid_arr = array(smart_stripslashes($this->reply_uid));
+						$uid_arr = array($this->reply_uid);
 						$imap->set_message_flag($this->reply_mailbox, $uid_arr, "\\Answered");
 					}
 					$imap->close();

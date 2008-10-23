@@ -199,9 +199,9 @@ try{
 	if($task == 'reply' || $task =='reply_all' || $task == 'forward' || $task=='opendraft')
 	{
 
-		$account_id = smart_addslashes($_POST['account_id']);
-		$uid = smart_addslashes($_POST['uid']);
-		$mailbox = smart_stripslashes($_POST['mailbox']);
+		$account_id = ($_POST['account_id']);
+		$uid = ($_POST['uid']);
+		$mailbox = ($_POST['mailbox']);
 
 		$url_replacements=array();
 
@@ -499,7 +499,7 @@ try{
 
 			if(isset($_POST['template_id']) && $_POST['template_id']>0)
 			{
-				$template_id = smart_addslashes($_POST['template_id']);
+				$template_id = ($_POST['template_id']);
 				$template = load_template($template_id, $response['data']['to']);
 
 				$response['data']['body'] = $template['data']['body'].$response['data']['body'];
@@ -527,8 +527,8 @@ try{
 				break;
 
 			case 'template':
-				$template_id=smart_addslashes($_REQUEST['template_id']);
-				$to=smart_addslashes($_REQUEST['to']);
+				$template_id=($_REQUEST['template_id']);
+				$to=($_REQUEST['to']);
 
 				$response = load_template($template_id, $to, isset($_POST['mailing_group_id']) && $_POST['mailing_group_id']>0);
 
@@ -538,7 +538,7 @@ try{
 			case 'filters':
 				if(isset($_POST['delete_keys']))
 				{
-					$filters = json_decode(smart_stripslashes($_POST['delete_keys']));
+					$filters = json_decode(($_POST['delete_keys']));
 
 					foreach($filters as $filter_id)
 					{
@@ -546,7 +546,7 @@ try{
 					}
 					$response['deleteSuccess']=true;
 				}
-				$response['total']=$email->get_filters(smart_addslashes($_POST['account_id']));
+				$response['total']=$email->get_filters(($_POST['account_id']));
 				$response['results']=array();
 				while($email->next_record(MYSQL_ASSOC))
 				{
@@ -558,7 +558,7 @@ try{
 			case 'filter':
 
 				$response['success']=false;
-				$response['data']=$email->get_filter(smart_addslashes($_POST['filter_id']));
+				$response['data']=$email->get_filter(($_POST['filter_id']));
 				if($response['data'])
 				{
 					$response['success']=true;
@@ -567,18 +567,18 @@ try{
 				break;
 				
 			case 'message_attachment':
-			$account_id = smart_stripslashes($_REQUEST['account_id']);
-			$mailbox = smart_stripslashes($_REQUEST['mailbox']);
+			$account_id = ($_REQUEST['account_id']);
+			$mailbox = ($_REQUEST['mailbox']);
 			$uid = $_REQUEST['uid'];
 			$transfer = $_REQUEST['transfer'];
 			$part = $_REQUEST['part'];
-			$part_number = isset($_REQUEST['part_number']) ? smart_addslashes($_REQUEST['part_number']) : "";
+			$part_number = isset($_REQUEST['part_number']) ? ($_REQUEST['part_number']) : "";
 
 			$account = connect($account_id, $mailbox);
 
 			$data = $imap->view_part($uid, $part, $transfer);
 			$response=array();
-			$inline_url = $GO_MODULES->modules['mailings']['url'].'mimepart.php?account_id='.$_REQUEST['account_id'].'&mailbox='.urlencode(smart_stripslashes($_REQUEST['mailbox'])).'&uid='.smart_stripslashes($_REQUEST['uid']).'&part='.$_REQUEST['part'].'&transfer='.urlencode($_REQUEST['transfer']);
+			$inline_url = $GO_MODULES->modules['mailings']['url'].'mimepart.php?account_id='.$_REQUEST['account_id'].'&mailbox='.urlencode(($_REQUEST['mailbox'])).'&uid='.($_REQUEST['uid']).'&part='.$_REQUEST['part'].'&transfer='.urlencode($_REQUEST['transfer']);
 		
 				
 			require_once($GO_CONFIG->class_path.'mail/Go2Mime.class.inc.php');
@@ -590,8 +590,8 @@ try{
 
 			case 'message':
 
-				$account_id = smart_stripslashes($_REQUEST['account_id']);
-				$mailbox = smart_stripslashes($_REQUEST['mailbox']);
+				$account_id = ($_REQUEST['account_id']);
+				$mailbox = ($_REQUEST['mailbox']);
 				$uid = $_REQUEST['uid'];
 
 				$account = connect($account_id, $mailbox);
@@ -763,8 +763,8 @@ try{
 								$touched_folders=array();
 
 								$account_id = isset ($_REQUEST['account_id']) ? $_REQUEST['account_id'] : 0;
-								$mailbox = isset ($_REQUEST['mailbox']) ? smart_stripslashes($_REQUEST['mailbox']) : 'INBOX';
-								$query = isset($_POST['query']) ? smart_stripslashes($_POST['query']) : '';
+								$mailbox = isset ($_REQUEST['mailbox']) ? ($_REQUEST['mailbox']) : 'INBOX';
+								$query = isset($_POST['query']) ? ($_POST['query']) : '';
 
 								$account = connect($account_id, $mailbox);
 
@@ -774,7 +774,7 @@ try{
 								if(isset($_POST['delete_keys']))
 								{
 
-									$messages = json_decode(smart_stripslashes($_POST['delete_keys']));
+									$messages = json_decode(($_POST['delete_keys']));
 
 									$imap->set_message_flag($mailbox, $messages, "\\Seen");
 
@@ -793,7 +793,7 @@ try{
 
 								if(isset($_POST['action']))
 								{
-									$messages = json_decode(smart_stripslashes($_POST['messages']));
+									$messages = json_decode(($_POST['messages']));
 									switch($_POST['action'])
 									{
 										/*
@@ -812,8 +812,8 @@ try{
 										 */
 										case 'move':
 
-											$from_mailbox = smart_stripslashes($_REQUEST['from_mailbox']);
-											$to_mailbox = smart_stripslashes($_REQUEST['to_mailbox']);
+											$from_mailbox = ($_REQUEST['from_mailbox']);
+											$to_mailbox = ($_REQUEST['to_mailbox']);
 											$response['success']=$imap->move($to_mailbox, $messages);
 
 											$touched_folders[]=$to_mailbox;
@@ -1008,8 +1008,8 @@ try{
 
 										case 'tree':
 											$email = new email();
-											//$account_id=isset($_REQUEST['account_id']) ? smart_addslashes($_REQUEST['account_id']) : 0;
-											//$folder_id=isset($_REQUEST['folder_id']) ? smart_addslashes($_REQUEST['folder_id']) : 0;
+											//$account_id=isset($_REQUEST['account_id']) ? ($_REQUEST['account_id']) : 0;
+											//$folder_id=isset($_REQUEST['folder_id']) ? ($_REQUEST['folder_id']) : 0;
 
 											if(isset($_REQUEST['node']) && strpos($_REQUEST['node'],'_'))
 											{
@@ -1071,7 +1071,7 @@ try{
 											$email = new email();
 											$email2 = new email();
 
-											$account_id = smart_addslashes($_POST['account_id']);
+											$account_id = ($_POST['account_id']);
 											if(isset($_REQUEST['node']) && strpos($_REQUEST['node'],'_'))
 											{
 												$node = explode('_',$_REQUEST['node']);
@@ -1093,7 +1093,7 @@ try{
 											{
 												$response['deleteSuccess']=true;
 												try{
-													$deleteAccounts = json_decode(smart_stripslashes($_POST['delete_keys']));
+													$deleteAccounts = json_decode(($_POST['delete_keys']));
 
 													foreach($deleteAccounts as $account_id)
 													{
@@ -1137,7 +1137,7 @@ try{
 										case 'account':
 											$email = new email();
 											$response['success']=false;
-											$response['data']=$email->get_account(smart_addslashes($_POST['account_id']));
+											$response['data']=$email->get_account(($_POST['account_id']));
 
 											if($response['data'])
 											{
@@ -1180,18 +1180,18 @@ try{
 											break;
 
 										case 'all_folders':
-											$account_id = smart_addslashes($_POST['account_id']);
+											$account_id = ($_POST['account_id']);
 
 											if(isset($_POST['deleteFolders']))
 											{
-												$deleteFolders = json_decode(smart_stripslashes($_POST['deleteFolders']));
+												$deleteFolders = json_decode(($_POST['deleteFolders']));
 												if(count($deleteFolders))
 												{
 													$account = connect($account_id);
 
 													foreach($deleteFolders as $folder_id)
 													{
-														if($folder = $email->get_folder_by_id(smart_addslashes($folder_id)))
+														if($folder = $email->get_folder_by_id(($folder_id)))
 														{
 															if($imap->delete_folder($folder['name'], $account['mbroot']))
 															{
@@ -1218,7 +1218,7 @@ try{
 											break;
 
 										case 'subscribed_folders':
-											$account_id = smart_addslashes($_POST['account_id']);
+											$account_id = ($_POST['account_id']);
 
 											$hide_inbox = isset($_POST['hideInbox']) && $_POST['hideInbox']=='true';
 

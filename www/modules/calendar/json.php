@@ -20,7 +20,7 @@ require_once ($GO_MODULES->modules['calendar']['class_path']."calendar.class.inc
 $cal = new calendar();
 
 
-$task=isset($_REQUEST['task']) ? smart_addslashes($_REQUEST['task']) : '';
+$task=isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
 
 try{
 
@@ -104,7 +104,7 @@ try{
 
 			$response['success']=true;
 
-			$event_id = smart_addslashes($_REQUEST['event_id']);
+			$event_id = ($_REQUEST['event_id']);
 			$event = $cal->get_event($event_id);
 
 			$response['data']['subject']=$lang['calendar']['appointment'].$event['name'];
@@ -156,8 +156,8 @@ try{
 
 			break;
 		case 'availability':
-			$event_id = smart_addslashes($_REQUEST['event_id']);
-			$date = Date::to_unixtime(smart_stripslashes($_REQUEST['date']),'-','Ymd');
+			$event_id = ($_REQUEST['event_id']);
+			$date = Date::to_unixtime(($_REQUEST['date']),'-','Ymd');
 
 			//echo date('Ymd G:i', $date);
 			$cal2 = new calendar();
@@ -178,7 +178,7 @@ try{
 
 				if($user)
 				{
-					$freebusy=$cal2->get_free_busy($user['id'], $date, smart_addslashes($_POST['event_id']));
+					$freebusy=$cal2->get_free_busy($user['id'], $date, ($_POST['event_id']));
 
 					$participant['freebusy']=array();
 
@@ -217,7 +217,7 @@ try{
 			require($GO_CONFIG->class_path.'ical2array.class.inc');
 			require($GO_CONFIG->class_path.'Date.class.inc.php');
 			
-			$event = $cal->get_event(smart_addslashes($_REQUEST['event_id']));
+			$event = $cal->get_event(($_REQUEST['event_id']));
 			
 			if(!$event)
 			{
@@ -425,9 +425,9 @@ try{
 			//setlocale(LC_ALL, 'nl_NL@euro');
 
 			//return all events for a given period
-			$calendar_id=isset($_REQUEST['calendar_id']) ? smart_addslashes($_REQUEST['calendar_id']) : 0;
-			$calendars=isset($_REQUEST['calendars']) ? json_decode(smart_stripslashes($_REQUEST['calendars'])) : array($calendar_id);
-			//$view_id=isset($_REQUEST['view_id']) ? smart_addslashes($_REQUEST['view_id']) : 0;
+			$calendar_id=isset($_REQUEST['calendar_id']) ? ($_REQUEST['calendar_id']) : 0;
+			$calendars=isset($_REQUEST['calendars']) ? json_decode(($_REQUEST['calendars'])) : array($calendar_id);
+			//$view_id=isset($_REQUEST['view_id']) ? ($_REQUEST['view_id']) : 0;
 			$start_time=isset($_REQUEST['start_time']) ? strtotime($_REQUEST['start_time']) : 0;
 			$end_time=isset($_REQUEST['end_time']) ? strtotime($_REQUEST['end_time']) : 0;
 
@@ -498,7 +498,7 @@ try{
 									case 'view_events':
 
 
-										$view_id = smart_addslashes($_REQUEST['view_id']);
+										$view_id = ($_REQUEST['view_id']);
 										$start_time=isset($_REQUEST['start_time']) ? strtotime($_REQUEST['start_time']) : 0;
 										$end_time=isset($_REQUEST['end_time']) ? strtotime($_REQUEST['end_time']) : 0;
 
@@ -510,14 +510,14 @@ try{
 											//an event is moved or resized
 
 
-											$update_event_id=smart_addslashes($_REQUEST['update_event_id']);
+											$update_event_id=($_REQUEST['update_event_id']);
 											$old_event = $cal->get_event($update_event_id);
 
 
 											if(isset($_REQUEST['createException']) && $_REQUEST['createException'] =='true')
 											{
 
-												$exceptionDate = strtotime(smart_stripslashes($_REQUEST['exceptionDate']));
+												$exceptionDate = strtotime(($_REQUEST['exceptionDate']));
 
 												//an instance of a recurring event was modified. We must create an exception for the
 												//recurring event.
@@ -535,7 +535,7 @@ try{
 												if(isset($_REQUEST['offset']))
 												{
 													//move an event
-													$offset = smart_addslashes($_REQUEST['offset']);
+													$offset = ($_REQUEST['offset']);
 
 
 													$update_event['start_time']=$update_event['start_time']+$offset;
@@ -547,7 +547,7 @@ try{
 												if(isset($_REQUEST['offsetDays']))
 												{
 													//move an event
-													$offsetDays = smart_addslashes($_REQUEST['offsetDays']);
+													$offsetDays = ($_REQUEST['offsetDays']);
 													$update_event['start_time'] = Date::date_add($update_event['start_time'], $offsetDays);
 													$update_event['end_time'] = Date::date_add($update_event['end_time'], $offsetDays);
 														
@@ -556,13 +556,13 @@ try{
 												if(isset($_REQUEST['duration']))
 												{
 													//change duration
-													$duration = smart_addslashes($_REQUEST['duration']);
+													$duration = ($_REQUEST['duration']);
 													$update_event['end_time']=$update_event['start_time']+$duration;
 												}
 
 												if(isset($_REQUEST['update_calendar_id']))
 												{
-													$update_event['calendar_id']=smart_addslashes($_REQUEST['update_calendar_id']);
+													$update_event['calendar_id']=($_REQUEST['update_calendar_id']);
 												}
 
 
@@ -572,7 +572,7 @@ try{
 												if(isset($_REQUEST['offset']))
 												{
 													//move an event
-													$offset = smart_addslashes($_REQUEST['offset']);
+													$offset = ($_REQUEST['offset']);
 
 
 													$update_event['start_time']=$old_event['start_time']+$offset;
@@ -582,7 +582,7 @@ try{
 												if(isset($_REQUEST['offsetDays']))
 												{
 													//move an event
-													$offsetDays = smart_addslashes($_REQUEST['offsetDays']);
+													$offsetDays = ($_REQUEST['offsetDays']);
 													$update_event['start_time'] = Date::date_add($old_event['start_time'], $offsetDays);
 													$update_event['end_time'] = Date::date_add($old_event['end_time'], $offsetDays);
 												}
@@ -590,7 +590,7 @@ try{
 												if(isset($_REQUEST['duration']))
 												{
 													//change duration
-													$duration = smart_addslashes($_REQUEST['duration']);
+													$duration = ($_REQUEST['duration']);
 
 													$update_event['start_time']=$old_event['start_time'];
 													$update_event['end_time']=$old_event['start_time']+$duration;
@@ -598,7 +598,7 @@ try{
 
 												if(isset($_REQUEST['update_calendar_id']))
 												{
-													$update_event['calendar_id']=smart_addslashes($_REQUEST['update_calendar_id']);
+													$update_event['calendar_id']=($_REQUEST['update_calendar_id']);
 												}
 
 												$update_event['id']=$update_event_id;
@@ -607,7 +607,7 @@ try{
 												//move the exceptions if a recurrent event is moved
 												if($old_event['repeat_type']>0 && isset($offset))
 												{
-													$cal->move_exceptions(smart_addslashes($_REQUEST['update_event_id']), $offset);
+													$cal->move_exceptions(($_REQUEST['update_event_id']), $offset);
 												}
 											}
 												
@@ -703,7 +703,7 @@ try{
 										{
 											try{
 												$response['deleteSuccess']=true;
-												$calendars = json_decode(smart_stripslashes($_REQUEST['delete_keys']));
+												$calendars = json_decode(($_REQUEST['delete_keys']));
 
 												foreach($calendars as $calendar_id)
 												{
@@ -721,8 +721,8 @@ try{
 											}
 										}
 											
-										$start = isset($_REQUEST['start']) ? smart_addslashes($_REQUEST['start']) : '0';
-										$limit = isset($_REQUEST['limit']) ? smart_addslashes($_REQUEST['limit']) : '0';
+										$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
+										$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 
 
 										$response['total'] = $cal->get_writable_calendars($GO_SECURITY->user_id, $start, $limit);
@@ -744,7 +744,7 @@ try{
 
 									case 'view_calendars':
 
-										$view_id = smart_addslashes($_REQUEST['view_id']);
+										$view_id = ($_REQUEST['view_id']);
 
 										$cal2 = new calendar();
 
@@ -788,7 +788,7 @@ try{
 										{
 											try{
 												$response['deleteSuccess']=true;
-												$views = json_decode(smart_stripslashes($_REQUEST['delete_keys']));
+												$views = json_decode(($_REQUEST['delete_keys']));
 
 												foreach($views as $view_id)
 												{
@@ -820,7 +820,7 @@ try{
 
 									case 'view':
 
-										$response['data']=$cal->get_view(smart_addslashes($_REQUEST['view_id']));
+										$response['data']=$cal->get_view(($_REQUEST['view_id']));
 										$user = $GO_USERS->get_user($response['data']['user_id']);
 										$response['data']['user_name']=String::format_name($user);
 										$response['success']=true;
@@ -831,7 +831,7 @@ try{
 
 									case 'calendar':
 
-										$response['data']=$cal->get_calendar(smart_addslashes($_REQUEST['calendar_id']));
+										$response['data']=$cal->get_calendar(($_REQUEST['calendar_id']));
 										$user = $GO_USERS->get_user($response['data']['user_id']);
 										$response['data']['user_name']=String::format_name($user);
 										$response['success']=true;
@@ -842,13 +842,13 @@ try{
 
 									case 'participants':
 
-										$event_id=smart_addslashes($_REQUEST['event_id']);
+										$event_id=($_REQUEST['event_id']);
 
 										if(isset($_REQUEST['delete_keys']))
 										{
 											try{
 												$response['deleteSuccess']=true;
-												$participants = json_decode(smart_stripslashes($_REQUEST['delete_keys']));
+												$participants = json_decode(($_REQUEST['delete_keys']));
 
 												foreach($participants as $participant_id)
 												{
@@ -863,12 +863,12 @@ try{
 
 										if(isset($_REQUEST['add_participants']))
 										{
-											$participants = json_decode(smart_stripslashes($_REQUEST['add_participants']),true);
+											$participants = json_decode(($_REQUEST['add_participants']),true);
 											foreach($participants as $participant)
 											{
 												$participant['event_id']=$event_id;
-												//$participant['name']=smart_addslashes($_REQUEST['name']);
-												//$participant['email']=smart_addslashes($_REQUEST['email']);
+												//$participant['name']=($_REQUEST['name']);
+												//$participant['email']=($_REQUEST['email']);
 
 												$cal->add_participant(array_map('addslashes', $participant));
 											}
