@@ -21,7 +21,6 @@ class addressbook extends db {
 
 	function is_duplicate_contact($contact)
 	{
-
 		$contact = array_map('addslashes', $contact);
 
 		$contact['email']=isset($contact['email']) ? $contact['email'] : '';
@@ -30,11 +29,11 @@ class addressbook extends db {
 		$contact['last_name']=isset($contact['last_name']) ? $contact['last_name'] : '';
 
 		$sql = "SELECT id FROM ab_contacts WHERE ".
- 		"addressbook_id='".$contact['addressbook_id']."' AND ".
- 		"first_name='".$contact['first_name']."' AND ".
- 		"middle_name='".$contact['middle_name']."' AND ".
- 		"last_name='".$contact['last_name']."' AND ".
- 		"email='".$contact['email']."'";
+ 		"addressbook_id='".$this->escape($contact['addressbook_id'])."' AND ".
+ 		"first_name='".$this->escape($contact['first_name'])."' AND ".
+ 		"middle_name='".$this->escape($contact['middle_name'])."' AND ".
+ 		"last_name='".$this->escape($contact['last_name'])."' AND ".
+ 		"email='".$this->escape($contact['email'])."'";
 
 		$this->query($sql);
 		if($this->next_record())
@@ -85,11 +84,9 @@ class addressbook extends db {
 					$x ++;
 				}
 				$addressbook_id = $this->add_addressbook($GO_SECURITY->user_id, addslashes($new_ab_name));
-					
-					
 			}
 		}
-		$sql = "SELECT * FROM ab_addressbooks WHERE id='$addressbook_id'";
+		$sql = "SELECT * FROM ab_addressbooks WHERE id='".$this->escape($addressbook_id)."'";
 		$this->query($sql);
 		if ($this->next_record()) {
 			return $this->Record;
@@ -105,8 +102,8 @@ class addressbook extends db {
 		"	INNER JOIN go_acl ON (ab_addressbooks.acl_read = go_acl.acl_id ".
 		"OR ab_addressbooks.acl_write = go_acl.acl_id) ".
 		"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ".
-		"WHERE go_acl.user_id=$user_id ".
-		"OR go_users_groups.user_id=$user_id ".
+		"WHERE go_acl.user_id=".$this->escape($user_id)." ".
+		"OR go_users_groups.user_id=".$this->escape($user_id)." ".
 		"ORDER BY ab_addressbooks.".$sort." ".$dir;
 
 		$this->query($sql);
@@ -128,7 +125,7 @@ class addressbook extends db {
 		$sql = "SELECT ab_contacts.*,".
  		"ab_companies.name AS company FROM ab_contacts ".
  		"LEFT JOIN ab_companies ON (ab_contacts.company_id=ab_companies.id) ".
- 		" WHERE ab_contacts.addressbook_id='$addressbook_id' ".
+ 		" WHERE ab_contacts.addressbook_id='".$this->escape($addressbook_id)."' ".
  		"ORDER BY ab_contacts.first_name, ab_contacts.last_name ASC";
 
 		$this->query($sql);
@@ -148,12 +145,10 @@ class addressbook extends db {
 		$sql = "SELECT * FROM ab_contacts ";
 		if($addressbook_id>0)
 		{
-			$sql .= " WHERE ab_contacts.addressbook_id='$addressbook_id'";
+			$sql .= " WHERE ab_contacts.addressbook_id='".$this->escape($addressbook_id)."'";
 		}
-
 		
 		$sql .= 	" ORDER BY $sort $direction";
-
 
 		$this->query($sql);
 		$count =  $this->num_rows();
@@ -193,8 +188,8 @@ class addressbook extends db {
 		"FROM ab_addressbooks ".
 		"	INNER JOIN go_acl ON ab_addressbooks.acl_write = go_acl.acl_id ".
 		"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ".
-		"WHERE go_acl.user_id=$user_id ".
-		"OR go_users_groups.user_id=$user_id ".
+		"WHERE go_acl.user_id=".$this->escape($user_id)." ".
+		"OR go_users_groups.user_id=".$this->escape($user_id)." ".
 		"ORDER BY ab_addressbooks.".$sort." ".$dir;
 		$this->query($sql);
 		$count= $this->num_rows();
@@ -219,8 +214,7 @@ class addressbook extends db {
 		if (!isset($company['mtime']) || $company['mtime'] == 0) {
 			$company['mtime'] = $company['ctime'];
 		}
-
-
+		
 		$company['id'] = $this->nextid("ab_companies");
 		if ($company['id']  > 0) {
 			if ($this->insert_row('ab_companies', $company)) {
@@ -241,7 +235,7 @@ class addressbook extends db {
 		return $this->update_row('ab_companies', 'id', $company);
 	}
 
-	function get_companies($addressbook_id=0, $sort = 'name', $direction = 'ASC', $start = 0, $offset = 0, $links=false) {
+	function get_companies($addressbook_id=0, $sort = 'name', $direction = 'ASC', $start = 0, $offset = 0) {
 		global $GO_SECURITY;
 
 		$sql = "SELECT ab_companies.* FROM ab_companies";
@@ -250,22 +244,7 @@ class addressbook extends db {
 		{
 			$sql .= " WHERE addressbook_id='$addressbook_id'";
 		}
-
-		if(is_array($links))
-		{
-			if(!count($links))
-			{
-				return 0;
-			}
-			if($addressbook_id>0)
-			{
-				$sql .= " AND ";
-			}else
-			{
-				$sql .= " WHERE ";
-			}
-			$sql .= "link_id IN (".implode(',', $links).")";
-		}
+		
 		$sql .= " ORDER BY $sort $direction";
 		$this->query($sql);
 		$count = $this->num_rows();
@@ -277,14 +256,12 @@ class addressbook extends db {
 		return $count;
 	}
 
-
-
 	function get_company($company_id) {
 		$sql = "SELECT ab_companies.*, ab_addressbooks.acl_read, ".
 		"ab_addressbooks.acl_write FROM ab_companies ".
 		"INNER JOIN ab_addressbooks ON ".
 		"(ab_addressbooks.id=ab_companies.addressbook_id) ".
-		"WHERE ab_companies.id='$company_id'";
+		"WHERE ab_companies.id='".$this->escape($company_id)."'";
 		$this->query($sql);
 		if ($this->next_record(MYSQL_ASSOC)) {
 			return $this->Record;
@@ -293,7 +270,7 @@ class addressbook extends db {
 	}
 
 	function get_company_by_name($addressbook_id, $name) {
-		$sql = "SELECT * FROM ab_companies WHERE addressbook_id='$addressbook_id' AND name='$name'";
+		$sql = "SELECT * FROM ab_companies WHERE addressbook_id='".$this->escape($addressbook_id)."' AND name='".$this->escape($name)."'";
 		$this->query($sql);
 		if ($this->next_record()) {
 			return $this->Record;
@@ -320,12 +297,12 @@ class addressbook extends db {
 
 			//	  $sort = 'first_name '.$direction.', last_name';
 		}
-		$sql = "SELECT * FROM ab_contacts WHERE company_id='$company_id' ORDER BY $sort $direction";
+		$sql = "SELECT * FROM ab_contacts WHERE company_id='".$this->escape($company_id)."' ORDER BY $sort $direction";
 
 		if ($offset != 0) {
 			$sql .= " LIMIT $start, $offset";
 
-			$sql2 = "SELECT * FROM ab_contacts WHERE company_id='$company_id'";
+			$sql2 = "SELECT * FROM ab_contacts WHERE company_id='".$this->escape($company_id)."'";
 
 			$this->query($sql2);
 			$count = $this->num_rows();
@@ -350,7 +327,7 @@ class addressbook extends db {
 		#$GO_LINKS->delete_link($company['link_id']);
 
 		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
-		$fs = new filesystem(true);
+		$fs = new filesystem();
 		if(file_exists($GO_CONFIG->file_storage_path.'companies/'.$company_id.'/'))
 		{
 			$fs->delete($GO_CONFIG->file_storage_path.'companies/'.$company_id.'/');
@@ -383,8 +360,7 @@ class addressbook extends db {
 		if (isset($contact['sex']) && $contact['sex'] == '') {
 			$contact['sex'] = 'M';
 		}
-
-
+		
 		$contact['id'] = $this->nextid("ab_contacts");
 
 		$this->insert_row('ab_contacts', $contact);
@@ -418,7 +394,7 @@ class addressbook extends db {
 		"ab_companies.post_country AS work_post_country ".
 		"FROM ab_contacts LEFT JOIN ab_companies ON (ab_contacts.company_id=ab_companies.id) ".
 		"INNER JOIN ab_addressbooks ON (ab_contacts.addressbook_id=ab_addressbooks.id) ".
-		"WHERE ab_contacts.id='$contact_id'");
+		"WHERE ab_contacts.id='".$this->escape($contact_id)."'");
 
 
 		if ($this->next_record(MYSQL_ASSOC)) {
@@ -447,7 +423,7 @@ class addressbook extends db {
 			
 		if(isset($GO_MODULES->modules['mailings']))
 		{
-			$sql1 = "DELETE FROM ml_mailing_contacts WHERE contact_id='$contact_id'";
+			$sql1 = "DELETE FROM ml_mailing_contacts WHERE contact_id='".$this->escape($contact_id)."'";
 			$this->query($sql1);
 		}
 
@@ -455,7 +431,7 @@ class addressbook extends db {
 		$search = new search();
 		$search->delete_search_result($contact_id, 2);
 		
-		return $this->query("DELETE FROM ab_contacts WHERE id='$contact_id'");
+		return $this->query("DELETE FROM ab_contacts WHERE id='".$this->escape($contact_id)."'");
 				
 	}
 
@@ -566,10 +542,10 @@ class addressbook extends db {
 
 				if($field=='name')
 				{
-					$sql .= "CONCAT(first_name,middle_name,last_name) $query_type '".str_replace(' ','%', $query)."' ";
+					$sql .= "CONCAT(first_name,middle_name,last_name) $query_type '".$this->escape(str_replace(' ','%', $query))."' ";
 				}else
 				{
-					$sql .= "$field $query_type '$query' ";
+					$sql .= "$field $query_type '".$this->escape($query)."' ";
 				}
 			}
 			if(count($fields)>1)
@@ -590,8 +566,6 @@ class addressbook extends db {
 		}
 
 		$sql .= " ORDER BY $sort_index $sort_order";
-			
-
 
 		$this->query($sql);
 		$count = $this->num_rows();
@@ -650,6 +624,7 @@ class addressbook extends db {
 
 		if(!empty($query))
 		{
+			$query = $this->escape($query);
 			$sql .= ' AND ';
 			if ($field == '') {
 				$fields_sql = "SHOW FIELDS FROM ab_companies";
@@ -718,30 +693,24 @@ class addressbook extends db {
 	function add_addressbook($user_id, $name) {
 		global $GO_SECURITY;
 
-		$result['addressbook_id'] = $this->nextid('ab_addressbooks');
+		$result['id'] = $this->nextid('ab_addressbooks');
 		$result['acl_read'] = $GO_SECURITY->get_new_acl('acl_read addressbook_id: '.$result['addressbook_id'], $user_id);
 		$result['acl_write'] = $GO_SECURITY->get_new_acl('acl_write addressbook_id: '.$result['addressbook_id'], $user_id);
-
-		if ($result['addressbook_id'] > 0 && $result['acl_read'] > 0 && $result['acl_write'] > 0) {
-			$sql = "INSERT INTO ab_addressbooks (id, user_id, name, acl_read, acl_write) VALUES ('".$result['addressbook_id']."', '$user_id', '$name', '".$result['acl_read']."', '".$result['acl_write']."')";
-			if ($this->query($sql)) {
-
-				return $result;
-			}
-		} else {
-			$GO_SECURITY->delete_acl($result['acl_read']);
-			$GO_SECURITY->delete_acl($result['acl_write']);
-		}
-		throw new DatabaseInsertException();
+		$result['user_id']=$user_id;
+		$result['name']=$name;
+		
+		$this->insert_row('ab_addressbooks', $result);
+		$result['addressbook_id']=$result['id'];
+		return $result;		
 	}
 
 	function update_addressbook($addressbook_id, $user_id, $name) {
-		$sql = "UPDATE ab_addressbooks SET name='$name', user_id='$user_id' WHERE id='$addressbook_id'";
+		$sql = "UPDATE ab_addressbooks SET name='".$this->escape($name)."', user_id='".$this->escape($user_id)."' WHERE id='".$this->escape($addressbook_id)."'";
 		return $this->query($sql);
 	}
 
 	function get_addressbook_by_name($name) {
-		$sql = "SELECT * FROM ab_addressbooks WHERE name='$name'";
+		$sql = "SELECT * FROM ab_addressbooks WHERE name='".$this->escape($name)."'";
 		$this->query($sql);
 		if ($this->next_record()) {
 			return $this->Record;
@@ -773,7 +742,7 @@ class addressbook extends db {
 			$ab->delete_company($this->f('id'));
 		}
 
-		$sql = "DELETE FROM ab_addressbooks WHERE id='$addressbook_id'";
+		$sql = "DELETE FROM ab_addressbooks WHERE id='".$this->escape($addressbook_id)."'";
 		$this->query($sql);
 
 	}
@@ -781,7 +750,7 @@ class addressbook extends db {
 	function search_email($user_id, $query)
 	{
 
-		$query = str_replace(' ','%', $query);
+		$query = $this->escape(str_replace(' ','%', $query));
 
 		$sql = "SELECT DISTINCT ab_contacts.first_name, ab_contacts.middle_name, ab_contacts.last_name, ab_contacts.email, ab_contacts.email2, ab_contacts.email3 FROM ab_contacts WHERE ";
 
@@ -851,11 +820,11 @@ class addressbook extends db {
 			$cache['id']=$this->f('id');
 			$cache['user_id']=$this->f('user_id');
 			$cache['module']='addressbook';
-			$cache['name'] = addslashes(String::format_name($this->f('last_name'),$this->f('first_name'),$this->f('middle_name')));
+			$cache['name'] = String::format_name($this->f('last_name'),$this->f('first_name'),$this->f('middle_name'));
 			$cache['link_type']=2;
 			$cache['description']='';
 			$cache['type']=$lang['addressbook']['contact'];
-			$cache['keywords']=addslashes($search->record_to_keywords($this->Record)).','.$lang['addressbook']['contact'];
+			$cache['keywords']=$search->record_to_keywords($this->Record).','.$lang['addressbook']['contact'];
 			$cache['mtime']=$this->f('mtime');
 			$cache['acl_read']=$this->f('acl_read');
 			$cache['acl_write']=$this->f('acl_write');
@@ -873,12 +842,12 @@ class addressbook extends db {
 		{
 			$cache['id']=$this->f('id');
 			$cache['user_id']=$this->f('user_id');
-			$cache['name'] = addslashes($this->f('name'));
+			$cache['name'] = $this->f('name');
 			$cache['link_type']=3;
 			$cache['module']='addressbook';
 			$cache['description']='';
 			$cache['type']=$lang['addressbook']['company'];
-			$cache['keywords']=addslashes($search->record_to_keywords($this->Record)).','.$cache['type'];
+			$cache['keywords']=$search->record_to_keywords($this->Record).','.$cache['type'];
 			$cache['mtime']=$this->f('mtime');
 			$cache['acl_read']=$this->f('acl_read');
 			$cache['acl_write']=$this->f('acl_write');
@@ -894,12 +863,12 @@ class addressbook extends db {
 	 */
 
 	function __on_user_delete($user) {
-		$sql = "UPDATE ab_contacts SET source_id='0' WHERE source_id='".$user['id']."'";
+		$sql = "UPDATE ab_contacts SET source_id='0' WHERE source_id='".$this->escape($user['id'])."'";
 		$this->query($sql);
 
 		$ab = new addressbook();
 
-		$sql = "SELECT id FROM ab_addressbooks WHERE user_id='".$user['id']."'";
+		$sql = "SELECT id FROM ab_addressbooks WHERE user_id='".$this->escape($user['id'])."'";
 		$this->query($sql);
 		while ($this->next_record()) {
 			$ab->delete_addressbook($this->f('id'));
@@ -910,16 +879,16 @@ class addressbook extends db {
 	{
 		if($company_id>0)
 		{
-			$this->query('UPDATE ab_contacts SET addressbook_id="'.$addressbook_id.'" WHERE company_id="'.$company_id.'" AND addressbook_id="'.$old_addressbook_id.'"');
+			$this->query('UPDATE ab_contacts SET addressbook_id="'.$this->escape($addressbook_id).'" WHERE company_id="'.$this->escape($company_id).'" AND addressbook_id="'.$this->escape($old_addressbook_id).'"');
 			if($update_company)
 			{
-				$this->query('UPDATE ab_companies SET addressbook_id="'.$addressbook_id.'" WHERE id="'.$company_id.'"');
+				$this->query('UPDATE ab_companies SET addressbook_id="'.$this->escape($addressbook_id).'" WHERE id="'.$this->escape($company_id).'"');
 			}
 		}
 	}
 
 	function get_contact_by_email($email, $user_id) {
-		$email = String::get_email_from_string($email);
+		$email = $this->escape(String::get_email_from_string($email));
 		$sql = "SELECT * FROM ab_contacts ";
 
 		$user_ab = $this->get_user_addressbook_ids($user_id);
