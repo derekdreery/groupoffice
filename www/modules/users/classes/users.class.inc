@@ -49,38 +49,38 @@ class users extends db
 		
 		if(isset($_POST['first_name']))
 		{
-			$user['first_name'] = (trim($_POST['first_name']));
-			$user['middle_name'] = (trim($_POST['middle_name']));
-			$user['last_name'] = (trim($_POST['last_name']));
-			$user['email'] = ($_POST["email"]);
-			$user['enabled'] = (isset($_POST['enabled'])) ? '1' : '0' ;
-			$user['title'] = ($_POST["title"]);
+			$user['first_name'] = $_POST['first_name'];
+			$user['middle_name'] = $_POST['middle_name'];
+			$user['last_name'] = $_POST['last_name'];
+			$user['email'] = $_POST["email"];
+			$user['enabled'] = isset($_POST['enabled']) ? '1' : '0' ;
+			$user['title'] = $_POST["title"];
 
 
-			$user['initials'] = ($_POST["initials"]);
-			$user['birthday'] = Date::to_db_date(($_POST['birthday']));
-			$user['work_phone'] = ($_POST["work_phone"]);
-			$user['home_phone'] = ($_POST["home_phone"]);
-			$user['fax'] = ($_POST["fax"]);
-			$user['cellular'] = ($_POST["cellular"]);
-			$user['country_id'] = ($_POST["country_id"]);
-			$user['state'] = ($_POST["state"]);
-			$user['city'] = ($_POST["city"]);
-			$user['zip'] = ($_POST["zip"]);
-			$user['address'] = ($_POST["address"]);
-			$user['address_no'] = ($_POST["address_no"]);
-			$user['department'] = ($_POST["department"]);
-			$user['function'] = ($_POST["function"]);
-			$user['company'] = ($_POST["company"]);
-			$user['work_country_id'] = ($_POST["work_country_id"]);
-			$user['work_state'] = ($_POST["work_state"]);
-			$user['work_city'] = ($_POST["work_city"]);
-			$user['work_zip'] = ($_POST["work_zip"]);
-			$user['work_address'] = ($_POST["work_address"]);
-			$user['work_address_no'] = ($_POST["work_address_no"]);
-			$user['work_fax'] = ($_POST["work_fax"]);
-			$user['homepage'] = ($_POST["homepage"]);
-			$user['sex'] = ($_POST["sex"]);
+			$user['initials'] = $_POST["initials"];
+			$user['birthday'] = Date::to_db_date($_POST['birthday']);
+			$user['work_phone'] = $_POST["work_phone"];
+			$user['home_phone'] = $_POST["home_phone"];
+			$user['fax'] = $_POST["fax"];
+			$user['cellular'] = $_POST["cellular"];
+			$user['country_id'] = $_POST["country_id"];
+			$user['state'] = $_POST["state"];
+			$user['city'] = $_POST["city"];
+			$user['zip'] = $_POST["zip"];
+			$user['address'] = $_POST["address"];
+			$user['address_no'] = $_POST["address_no"];
+			$user['department'] = $_POST["department"];
+			$user['function'] = $_POST["function"];
+			$user['company'] = $_POST["company"];
+			$user['work_country_id'] = $_POST["work_country_id"];
+			$user['work_state'] = $_POST["work_state"];
+			$user['work_city'] = $_POST["work_city"];
+			$user['work_zip'] = $_POST["work_zip"];
+			$user['work_address'] = $_POST["work_address"];
+			$user['work_address_no'] = $_POST["work_address_no"];
+			$user['work_fax'] = $_POST["work_fax"];
+			$user['homepage'] = $_POST["homepage"];
+			$user['sex'] = $_POST["sex"];
 
 			if(empty($user['email']) || empty($user['first_name']) || empty($user['last_name']))
 			{
@@ -104,7 +104,7 @@ class users extends db
 		if(isset($_POST['max_rows_list']))
 		{
 			if(isset($_POST['theme']))
-				$user['theme'] = ($_POST["theme"]);
+				$user['theme'] = $_POST["theme"];
 				
 
 			$user['language'] = ($_POST["language"]);
@@ -155,7 +155,7 @@ class users extends db
 
 		require($GO_LANGUAGE->get_language_file('users'));
 
-		$sql = "SELECT DISTINCT go_users.*  FROM go_users WHERE mtime>$last_sync_time";
+		$sql = "SELECT DISTINCT go_users.*  FROM go_users WHERE mtime>".$this->escape($last_sync_time);
 
 		$this->query($sql);
 
@@ -165,11 +165,11 @@ class users extends db
 		{
 			$cache['id']=$this->f('id');
 			$cache['user_id']=1;
-			$cache['name'] = addslashes(String::format_name($this->f('last_name'),$this->f('first_name'),$this->f('middle_name')));
+			$cache['name'] = String::format_name($this->f('last_name'),$this->f('first_name'),$this->f('middle_name'));
 			$cache['link_type']=8;
 			$cache['description']='';
 			$cache['type']=$us_user;
-			$cache['keywords']=addslashes($search->record_to_keywords($this->Record)).','.$cache['type'];
+			$cache['keywords']=$search->record_to_keywords($this->Record).','.$cache['type'];
 			$cache['mtime']=$this->f('mtime');
 			$cache['module']='users';
 			$cache['acl_read']=$GO_MODULES->modules['users']['acl_read'];
