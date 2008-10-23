@@ -341,7 +341,7 @@ if(in_array('calendar', $module_ids))
 		$tasklists[$tasks->f('user_id')]=$tasks->f('id');
 	}
 
-	
+	require($GO_LANGUAGE->get_language_file('calendar'));
 
 	$count = 0;
 	$db->query("SELECT e.*, c.user_id AS cal_user_id FROM cal_events e INNER JOIN cal_calendars c ON c.id=e.calendar_id WHERE todo='1'");
@@ -358,7 +358,12 @@ if(in_array('calendar', $module_ids))
 			$todo['due_time']=$db->f('end_time');
 			$todo['completion_time']=$db->f('completion_time');
 			$todo['name']=$db->f('name');
-			$todo['description']=$db->f('description');
+			
+			$todo['description']='';
+			if($db->f('location')!='')
+				$todo['description']=$lang['calendar']['location'].': '.$db->f('location')."\n\n";
+				
+			$todo['description'].=$db->f('description');
 			$todo['status']=$db->f('status');
 			$todo['rrule']=$db->f('rrule');
 			$todo['repeat_end_time']=$db->f('repeat_end_time');
@@ -1142,9 +1147,8 @@ $search = new search();
 $search->reset();
 flush();
 
-echo 'Building search cache<br />';
-
-$search->update_search_cache(true);
+//echo 'Building search cache<br />';
+//$search->update_search_cache(true);
 
 
 
