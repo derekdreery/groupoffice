@@ -72,7 +72,7 @@ class reminder extends db
 	
 	function delete_reminder($reminder_id)
 	{
-		return $this->query("DELETE FROM go_reminders WHERE id=$reminder_id");
+		return $this->query("DELETE FROM go_reminders WHERE id=".$this->escape($reminder_id));
 	}
 	
 	/**
@@ -86,7 +86,7 @@ class reminder extends db
 	
 	function delete_reminders($user_id)
 	{
-		return $this->query("DELETE FROM go_reminders WHERE user_id=$user_id");
+		return $this->query("DELETE FROM go_reminders WHERE user_id=".$this->escape($user_id));
 	}
 	
 	/**
@@ -100,7 +100,7 @@ class reminder extends db
 	
 	function get_reminder_by_link_id($user_id, $link_id, $link_type)
 	{
-		$this->query("SELECT * FROM go_reminders WHERE user_id=$user_id AND link_id=$link_id AND link_type=$link_type");
+		$this->query("SELECT * FROM go_reminders WHERE user_id=".$this->escape($user_id)." AND link_id=".$this->escape($link_id)." AND link_type=".$this->escape($link_type));
 		if($this->next_record())
 		{
 			return $this->Record;
@@ -122,7 +122,7 @@ class reminder extends db
 	
 	function get_reminder($reminder_id)
 	{
-		$this->query("SELECT * FROM go_reminders WHERE id=$reminder_id");
+		$this->query("SELECT * FROM go_reminders WHERE id=".$this->escape($reminder_id));
 		if($this->next_record())
 		{
 			return $this->Record;
@@ -141,7 +141,7 @@ class reminder extends db
 	
 	function get_reminder_by_name($name)
 	{
-		$this->query("SELECT * FROM go_reminders WHERE reminder_name='$name'");
+		$this->query("SELECT * FROM go_reminders WHERE reminder_name='".$this->escape($name)."'");
 		if($this->next_record())
 		{
 			return $this->Record;
@@ -164,7 +164,7 @@ class reminder extends db
 	function get_reminders($user_id)
 	{
 		//echo date('Ymd G:i', gmmktime());
-	 	$sql = "SELECT * FROM go_reminders WHERE user_id=$user_id AND time<".gmmktime();
+	 	$sql = "SELECT * FROM go_reminders WHERE user_id=".$this->escape($user_id)." AND time<".time();
 		$this->query($sql);
 
 		return $this->num_rows();
