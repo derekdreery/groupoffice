@@ -870,7 +870,7 @@ try{
 												//$participant['name']=$_REQUEST['name'];
 												//$participant['email']=$_REQUEST['email'];
 
-												$cal->add_participant(array_map('addslashes', $participant));
+												$cal->add_participant($participant);
 											}
 										}
 

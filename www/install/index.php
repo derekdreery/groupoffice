@@ -163,66 +163,6 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 {
 	switch($task)
 	{
-		/*case 'administrator':
-			$pass1=trim($_POST['pass1']);
-			$pass2=trim($_POST['pass2']);
-			$email=trim($_POST['email']);
-			$username=trim($_POST['username']);
-
-
-			if ($pass1 == '' || $username=='')
-			{
-				$feedback = '<font color="red">Please enter a password and a username!</font>';
-			}elseif(!preg_match('/^[a-z0-9_-]*$/', $username))
-			{
-				$feedback = 'Invalid username. Only these charachters are allowed: a-z, 0-9,- en _';
-			}elseif( strlen($pass1) < 4)
-			{
-				$feedback = '<font color="red">Password can\'t be shorter then 4 characters!</font>';
-			}elseif($pass1 != $pass2)
-			{
-				$feedback = '<font color="red">Passwords did not match!</font>';
-			}elseif(!String::validate_email( $email ))
-			{
-				$feedback = '<font color="red">Invalid E-mail address!</font>';
-			}else
-			{
-				$GO_USERS->get_users();
-				$user['id'] = $GO_USERS->nextid("go_users");
-
-				$GO_GROUPS->query("DELETE FROM go_db_sequence WHERE seq_name='groups'");
-				$GO_GROUPS->query("DELETE FROM go_groups");
-
-				$admin_group_id = $GO_GROUPS->add_group($user['id'], addslashes($lang['group_admins']));
-				$everyone_group_id = $GO_GROUPS->add_group($user['id'], addslashes($lang['group_everyone']));
-				$internal_group_id = $GO_GROUPS->add_group($user['id'], addslashes($lang['group_internal']));
-				
-				$user_groups = array($admin_group_id, $everyone_group_id, $internal_group_id);
-				
-								
-				//$user['language'] = $GO_LANGUAGE->language;
-				$user['language'] = $GO_LANGUAGE->language;
-				$user['first_name']='Group-Office';
-				$user['middle_name']='';
-				$user['last_name']=$lang['common']['admin'];
-				$user['username'] = ($username);
-				$user['password'] = ($pass1);
-				$user['email'] = ($email);
-				$user['sex'] = 'M';
-
-				$GO_USERS->add_user($user,$user_groups,array($GO_CONFIG->group_everyone));
-
-				$old_umask = umask(000);
-				filesystem::mkdir_recursive($GO_CONFIG->file_storage_path.'users/'.($username), $GO_CONFIG->create_mode);
-				umask($old_umask);
-
-				$task = $nexttask;
-				
-				
-				
-			}
-			break;*/
-
 		case 'post_database_connection':
 			$task = 'database_connection';
 			$db = new db();
