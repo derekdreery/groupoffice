@@ -49,7 +49,7 @@ try{
 					$delete_announcements = json_decode(($_POST['delete_keys']));
 					foreach($delete_announcements as $announcement_id)
 					{
-						$summary->delete_announcement(addslashes($announcement_id));
+						$summary->delete_announcement($announcement_id);
 					}
 				}catch(Exception $e)
 				{
@@ -89,7 +89,7 @@ try{
 					$delete_announcements = json_decode(($_POST['delete_keys']));
 					foreach($delete_announcements as $announcement_id)
 					{
-						$summary->delete_announcement(addslashes($announcement_id));
+						$summary->delete_announcement($announcement_id);
 					}
 				}catch(Exception $e)
 				{

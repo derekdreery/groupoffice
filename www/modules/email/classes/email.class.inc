@@ -660,7 +660,7 @@ class email extends db
 	
 	function cache_folder_status($imap, $account_id, $mailbox)
 	{
-		$cached_folder = $this->get_folder($account_id, addslashes($mailbox));
+		$cached_folder = $this->get_folder($account_id, $mailbox);
 			
 		if($status = $imap->status($mailbox, SA_ALL))
 		{		
@@ -716,7 +716,7 @@ class email extends db
 		{
 			$mailbox_names[] = $mailbox['name'];
 			$folder['account_id'] = $account['id'];
-			$folder['parent_id'] = $this->get_parent_id($account['id'], addslashes($mailbox['name']), 	$mailbox['delimiter']);
+			$folder['parent_id'] = $this->get_parent_id($account['id'], $mailbox['name'], 	$mailbox['delimiter']);
 			$folder['attributes'] = $mailbox['attributes'];
 			$folder['name'] = $mailbox['name'];
 
@@ -751,7 +751,7 @@ class email extends db
 
 			$folder = $folder;
 
-			if ($existing_folder = $this->get_folder($account['id'],addslashes($mailbox['name'])))
+			if ($existing_folder = $this->get_folder($account['id'],$mailbox['name']))
 			{
 				$folder['id'] = $existing_folder['id'];
 				$this->__update_folder($folder);
@@ -776,7 +776,7 @@ class email extends db
 				$folder['unseen'] = $status->unseen;
 			}
 
-			if ($existing_folder = $this->get_folder($account['id'],addslashes('INBOX')))
+			if ($existing_folder = $this->get_folder($account['id'],'INBOX'))
 			{
 				$folder['id'] = $existing_folder['id'];
 				$this->__update_folder($folder);
@@ -799,7 +799,7 @@ class email extends db
 		{
 			if (!in_array($this->f('name'), $mailbox_names))
 			{
-				$emailobj->delete_folder($account['id'], addslashes($this->f('name')));
+				$emailobj->delete_folder($account['id'], $this->f('name'));
 			}
 		}
 	}

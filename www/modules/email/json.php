@@ -998,7 +998,7 @@ try{
 								foreach($touched_folders as $touched_folder)
 								{
 									$status = $imap->status($touched_folder, SA_UNSEEN);
-									$folder = $email->get_folder($account_id, addslashes($touched_folder));
+									$folder = $email->get_folder($account_id, $touched_folder);
 									//$cached_folder = $email->cache_folder_status($imap, $account_id, $touched_folder);
 
 									if(isset($status->unseen))
@@ -1195,7 +1195,7 @@ try{
 														{
 															if($imap->delete_folder($folder['name'], $account['mbroot']))
 															{
-																$email->delete_folder($account_id, addslashes($folder['name']));
+																$email->delete_folder($account_id, $folder['name']);
 															}
 
 														}

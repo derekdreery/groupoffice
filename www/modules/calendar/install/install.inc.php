@@ -8,7 +8,7 @@ $cal = new calendar();
 
 require($GO_LANGUAGE->get_language_file('calendar'));
 
-$view['name']=addslashes($lang['calendar']['groupView']);
+$view['name']=$lang['calendar']['groupView'];
 $view['user_id']=1;
 $view['acl_read']=$GO_SECURITY->get_new_acl('view', 1);
 $view['acl_write']=$GO_SECURITY->get_new_acl('view', 1);
@@ -24,7 +24,7 @@ while($GO_USERS->next_record())
 	$count++;
 	$user = $GO_USERS->record;		
 		
-	$calendar['name']=addslashes(String::format_name($user));
+	$calendar['name']=String::format_name($user);
 	$calendar['user_id']=$user['id'];
 	$calendar['acl_read']=$GO_SECURITY->get_new_acl('category', $user['id']);
 	$calendar['acl_write']=$GO_SECURITY->get_new_acl('category', $user['id']);

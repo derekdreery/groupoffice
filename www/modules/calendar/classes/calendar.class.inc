@@ -635,13 +635,13 @@ class calendar extends db
 				$calendar['acl_read']=$GO_SECURITY->get_new_acl();
 				$calendar['acl_write']=$GO_SECURITY->get_new_acl();
 				$x = 1;
-				while($this->get_calendar_by_name(addslashes($calendar['name'])))
+				while($this->get_calendar_by_name($calendar['name']))
 				{
 					$calendar['name'] = $calendar_name.' ('.$x.')';
 					$x++;
 				}
 
-				$calendar['name'] = addslashes($calendar['name']);
+				$calendar['name'] = $calendar['name'];
 				if (!$calendar_id = $this->add_calendar($calendar))
 				{
 					throw new DatabaseInsertException();
@@ -1644,7 +1644,7 @@ class calendar extends db
 
 		$user = $params['user'];
 
-		$calendar['name']=addslashes(String::format_name($user));
+		$calendar['name']=String::format_name($user);
 		$calendar['user_id']=$user['id'];
 		$calendar['acl_read']=$GO_SECURITY->get_new_acl('category', $user['id']);
 		$calendar['acl_write']=$GO_SECURITY->get_new_acl('category', $user['id']);
@@ -1688,7 +1688,7 @@ class calendar extends db
 			//$cache['table']='cal_events';
 			$cache['id']=$this->f('id');
 			$cache['user_id']=$this->f('user_id');
-			$cache['name'] = addslashes($this->f('name'));
+			$cache['name'] = $this->f('name');
 			//$cache['link_id'] = $this->f('link_id');
 			$cache['link_type']=1;
 			$cache['module']='calendar';

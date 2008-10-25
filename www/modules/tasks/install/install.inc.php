@@ -11,7 +11,7 @@ while($GO_USERS->next_record())
 {
 	$user = $GO_USERS->record;		
 		
-	$tasklist['name']=addslashes(String::format_name($user));
+	$tasklist['name']=String::format_name($user);
 	$tasklist['user_id']=$user['id'];
 	$tasklist['acl_read']=$GO_SECURITY->get_new_acl('category', $user['id']);
 	$tasklist['acl_write']=$GO_SECURITY->get_new_acl('category', $user['id']);

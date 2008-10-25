@@ -39,13 +39,13 @@ function add_unknown_recipient($email, $name)
 			$name=$email;
 		}
 
-		if (!$ab->get_contact_by_email(addslashes($email),$GO_SECURITY->user_id) && !$GO_USERS->get_authorized_user_by_email($GO_SECURITY->user_id, addslashes($email)))
+		if (!$ab->get_contact_by_email($email,$GO_SECURITY->user_id) && !$GO_USERS->get_authorized_user_by_email($GO_SECURITY->user_id, $email))
 		{
 			$contact['name']=htmlspecialchars($RFC822->write_address($name, $email), ENT_COMPAT, 'UTF-8');
-			$contact['first_name'] = addslashes($name_arr['first']);
-			$contact['middle_name'] = addslashes($name_arr['middle']);
-			$contact['last_name'] = addslashes($name_arr['last']);
-			$contact['email'] = addslashes($email);
+			$contact['first_name'] = $name_arr['first'];
+			$contact['middle_name'] = $name_arr['middle'];
+			$contact['last_name'] = $name_arr['last'];
+			$contact['email'] = $email;
 
 			$response['unknown_recipients'][]=$contact;
 		}
@@ -424,7 +424,7 @@ try{
 
 					if($imap->create_folder($new_folder_name, $delimiter))
 					{
-						if($email->add_folder($account['id'], addslashes($new_folder_name), $parent_id, 1,$delimiter))
+						if($email->add_folder($account['id'], $new_folder_name, $parent_id, 1,$delimiter))
 						{
 							$response['success']=true;
 						}
@@ -444,7 +444,7 @@ try{
 					$mailbox = $imap->utf7_imap_encode(($_POST['mailbox']));
 					if($imap->subscribe($mailbox))
 					{
-						$response['success']=$email->subscribe($account['id'], addslashes($mailbox));
+						$response['success']=$email->subscribe($account['id'], $mailbox);
 					}
 					//$imap->close();
 
@@ -460,7 +460,7 @@ try{
 					$mailbox = $imap->utf7_imap_encode(($_POST['mailbox']));
 					if($imap->unsubscribe($mailbox))
 					{
-						$response['success']=$email->unsubscribe($account['id'], addslashes($mailbox));
+						$response['success']=$email->unsubscribe($account['id'], $mailbox);
 					}
 					//$imap->close();
 
@@ -493,14 +493,14 @@ try{
 							//echo 'SUBSCRIBE:'.$folderName."\n";
 							if($imap->subscribe($folderName))
 							{
-								$email->subscribe($account['id'], addslashes($folderName));
+								$email->subscribe($account['id'], $folderName);
 							}
 						}elseif($is_subscribed && !$must_be_subscribed)
 						{
 							//echo 'UNSUBSCRIBE:'.$folderName."\n";
 							if($imap->unsubscribe($folderName))
 							{
-								$email->unsubscribe($account['id'], addslashes($folderName));
+								$email->unsubscribe($account['id'], $folderName);
 							}
 						}
 					}
@@ -517,7 +517,7 @@ try{
 
 						if ($imap->delete_folder($folder['name'], $account['mbroot']))
 						{
-							$response['success']=$email->delete_folder($account['id'], addslashes($folder['name']));
+							$response['success']=$email->delete_folder($account['id'], $folder['name']);
 						}else {
 							$response['feedback']=$ml_delete_folder_error;
 						}
@@ -547,7 +547,7 @@ try{
 						//echo $folder['name'].' -> '.$new_folder;
 						if ($imap->rename_folder($folder['name'], $new_folder))
 						{
-							$response['success']=$email->rename_folder($folder['account_id'], addslashes($folder['name']), addslashes($new_folder));
+							$response['success']=$email->rename_folder($folder['account_id'], $folder['name'], $new_folder);
 						}else {
 							$response['feedback']=$lang['comon']['saveError'];
 						}
@@ -581,7 +581,7 @@ try{
 
 
 
-					$account['mbroot'] = isset($_POST['mbroot']) ? addslashes($imap->utf7_imap_encode(($_POST['mbroot']))) : '';
+					$account['mbroot'] = isset($_POST['mbroot']) ? $imap->utf7_imap_encode(($_POST['mbroot'])) : '';
 					if ($_POST['name'] == "" ||
 					$_POST['email'] == "" ||
 					$_POST['port'] == "" ||

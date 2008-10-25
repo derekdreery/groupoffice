@@ -79,11 +79,11 @@ class addressbook extends db {
 				$user = $GO_USERS->get_user($GO_SECURITY->user_id);
 				$new_ab_name = String::format_name($user['last_name'], $user['first_name'], $user['middle_name'], 'last_name');
 				$x = 1;
-				while ($this->get_addressbook_by_name(addslashes($new_ab_name))) {
+				while ($this->get_addressbook_by_name($new_ab_name)) {
 					$new_ab_name = $_SESSION['GO_SESSION']['name'].' ('.$x.')';
 					$x ++;
 				}
-				$addressbook_id = $this->add_addressbook($GO_SECURITY->user_id, addslashes($new_ab_name));
+				$addressbook_id = $this->add_addressbook($GO_SECURITY->user_id, $new_ab_name);
 			}
 		}
 		$sql = "SELECT * FROM ab_addressbooks WHERE id='".$this->escape($addressbook_id)."'";

@@ -193,7 +193,7 @@ try{
 						'id'=>$fs->strip_server_path($folder['path'])
 						);
 
-						$db_folder = $fs->get_folder(addslashes($folder['path']));
+						$db_folder = $fs->get_folder($folder['path']);
 						if($db_folder['acl_read']>0)
 						{
 							$node['iconCls']='folder-shared';
@@ -408,7 +408,7 @@ try{
 						$folders = $fs->get_folders_sorted($path, 'utf8_basename', $dir);
 						foreach($folders as $folder)
 						{
-							$db_folder = $fs->get_folder(addslashes($folder['path']));
+							$db_folder = $fs->get_folder($folder['path']);
 							if($db_folder['acl_read']>0)
 							{
 								$class='folder-shared';
@@ -470,7 +470,7 @@ try{
 								
 								$admin = $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id);
 									
-								$response['data'] = $fs->get_folder(addslashes($path));
+								$response['data'] = $fs->get_folder($path);
 								$response['data']['name']=utf8_basename($path);
 								$response['data']['path']=$_POST['path'];
 								$response['data']['mtime']=Date::get_timestamp(filemtime($path));
@@ -480,7 +480,7 @@ try{
 								$response['data']['size']=Number::format_size(filesize($path));
 								$response['data']['write_permission']=$admin || $fs->is_owner($GO_SECURITY->user_id, $path);
 								$response['data']['is_home_dir']=utf8_basename(dirname($path)) == 'users' && !$admin;
-								$response['data']['notify']=$fs->is_notified(addslashes($path), $GO_SECURITY->user_id);
+								$response['data']['notify']=$fs->is_notified($path, $GO_SECURITY->user_id);
 
 								break;
 
@@ -500,7 +500,7 @@ try{
 								$extension=File::get_extension($path);
 
 								$response['success']=true;
-								$response['data'] = $fs->get_file(addslashes($path));
+								$response['data'] = $fs->get_file($path);
 								$response['data']['name']=File::strip_extension(utf8_basename($path));
 								$response['data']['path']=$_POST['path'];
 								$response['data']['mtime']=Date::get_timestamp(filemtime($path));
@@ -520,7 +520,7 @@ try{
 
 										foreach($templates as $template_id)
 										{
-											$fs->delete_template(addslashes($template_id));
+											$fs->delete_template($template_id);
 										}
 									}catch(Exception $e)
 									{

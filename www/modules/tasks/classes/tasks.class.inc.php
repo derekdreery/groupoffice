@@ -139,13 +139,13 @@ class tasks extends db
 				$list['acl_read']=$GO_SECURITY->get_new_acl();
 				$list['acl_write']=$GO_SECURITY->get_new_acl();
 				$x = 1;
-				while($this->get_tasklist_by_name(addslashes($list['name'])))
+				while($this->get_tasklist_by_name($list['name']))
 				{
 					$list['name'] = $task_name.' ('.$x.')';
 					$x++;
 				}
 
-				$list['name'] = addslashes($list['name']);
+				$list['name'] = $list['name'];
 				if (!$list_id = $this->add_tasklist($list))
 				{
 					throw new DatabaseInsertException();
@@ -746,7 +746,7 @@ class tasks extends db
 
 		$user = $params['user'];
 
-		$tasklist['name']=addslashes(String::format_name($user));
+		$tasklist['name']=String::format_name($user);
 		$tasklist['user_id']=$user['id'];
 		$tasklist['acl_read']=$GO_SECURITY->get_new_acl('tasks', $user['id']);
 		$tasklist['acl_write']=$GO_SECURITY->get_new_acl('tasks', $user['id']);
@@ -799,17 +799,17 @@ class tasks extends db
 				$class .= ' tasks-completed';
 			}
 			
-			$status = isset($lang['tasks']['statuses'][$this->f('status')]) ? addslashes($lang['tasks']['statuses'][$this->f('status')]) : $lang['tasks']['statuses']['NEEDS-ACTION']; 
+			$status = isset($lang['tasks']['statuses'][$this->f('status')]) ? $lang['tasks']['statuses'][$this->f('status']) : $lang['tasks']['statuses']['NEEDS-ACTION']; 
 			
 			//$cache['table']='cal_tasks';
 			$cache['id']=$this->f('id');
 			$cache['user_id']=$this->f('user_id');
-			$cache['name'] = '<span class="'.$class.'">'.addslashes($this->f('name')).' ['.$status.']</span>';
+			$cache['name'] = '<span class="'.$class.'">'.$this->f('name').' ['.$status.']</span>';
 			//$cache['link_id'] = $this->f('link_id');
 			$cache['link_type']=12;
 			$cache['description']='';
 			$cache['type']=$lang['link_type'][12];
-			$cache['keywords']=addslashes($search->record_to_keywords($this->record)).','.$cache['type'];
+			$cache['keywords']=$search->record_to_keywords($this->record).','.$cache['type'];
 			$cache['mtime']=$this->f('mtime');
 			$cache['acl_read']=$this->f('acl_read');
 			$cache['acl_write']=$this->f('acl_write');
