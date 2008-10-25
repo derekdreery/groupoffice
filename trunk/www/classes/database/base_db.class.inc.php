@@ -17,7 +17,7 @@
  * 
  * @version $Id: imap.class.inc 1201 2008-10-22 18:23:34Z mschering $
  * @author Merijn Schering <mschering@intermesh.nl>
- * @package go.mail
+ * @package go.database
  * @access public
  */
 

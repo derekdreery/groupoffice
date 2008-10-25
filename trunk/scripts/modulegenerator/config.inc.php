@@ -2,10 +2,10 @@
 require('../../www/Group-Office.php');
 
 //name of the module. No spaces or strange characters.
-$module = 'tasks';
+$module = 'comments';
 
 //Short name of the module. The prefix of the database tables.
-$prefix = 'ta';
+$prefix = 'co';
 
 $tables=array();
 //Tables to create an interface for
@@ -14,12 +14,12 @@ $tables=array();
 $westpanel = array(
 	'mainpanel_tag'=> 'GRID',
 	'template'=>'GridPanel.tpl',
-	'name'=>'pm_tasks', 
-	'friendly_single'=>'task', 
-	'friendly_multiple'=>'types',
-	'authenticate'=>true,
+	'name'=>'co_comments', 
+	'friendly_single'=>'comment', 
+	'friendly_multiple'=>'comments',
+	'authenticate'=>false,
 	'paging'=>true,
-	'autoload'=>true,
+	'autoload'=>false,
 	'files'=>false);
 
 $tables[] = $westpanel;

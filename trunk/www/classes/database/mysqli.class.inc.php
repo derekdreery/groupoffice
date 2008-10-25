@@ -13,17 +13,19 @@
  */
 
 /**
- * Class that connects to MySQL using the MySQLi extension
- * 
- * @version $Id: imap.class.inc 1201 2008-10-22 18:23:34Z mschering $
- * @author Merijn Schering <mschering@intermesh.nl>
- * @package go.mail
- * @access public
+ * Constants
  */
-
 define('DB_NUM', MYSQLI_NUM);
 define('DB_BOTH', MYSQLI_BOTH);
 define('DB_ASSOC', MYSQLI_ASSOC);
+
+/**
+ * Class that connects to MySQL using the MySQLi extension
+ * 
+ * @author Merijn Schering <mschering@intermesh.nl>
+ * @package go.database
+ * @access public
+ */
 
 class db extends base_db{
 

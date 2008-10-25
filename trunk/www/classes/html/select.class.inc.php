@@ -1,30 +1,33 @@
 <?php
-/**
- * @copyright Intermesh 2003
+/** 
+ * Copyright Intermesh
+ * 
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ * 
+ * If you have questions write an e-mail to info@intermesh.nl
+ * 
+ * @copyright Copyright Intermesh
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
- * @version $Revision: 1.35 $ $Date: 2006/11/21 16:25:34 $
-
-    This program is free software; you can redistribute it and/or modify it
-    under the terms of the GNU General Public License as published by the
-    Free Software Foundation; either version 2 of the License, or (at your
-    option) any later version.
-
- * @package Framework
- * @subpackage Controls
  */
+
+/**
+ * Required classes
+ */
+require_once($GO_CONFIG->class_path.'html/html_element.class.inc.php');
 
 /**
  * Create a select dropdown list
  * 
  * This class is used to draw dropboxes on the website.
  * 
- * @package Framework
- * @subpackage Controls
- * 
+ * @author Merijn Schering <mschering@intermesh.nl> 
+ * @package go.html
  * @access public
  */
 
-require_once($GO_CONFIG->class_path.'html/html_element.class.inc.php');
+
 
 class select extends html_element
 {

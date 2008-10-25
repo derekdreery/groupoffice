@@ -1,9 +1,9 @@
 		
 		<gotpl if="$authenticate_relation">
-		$sql = "SELECT i.*,r.acl_read,r.acl_write FROM {prefix}_{friendly_multiple} i INNER JOIN {prefix}_{related_friendly_multiple} r ON r.id=i.{related_field_id} WHERE mtime>$last_sync_time";
+		$sql = "SELECT i.*,r.acl_read,r.acl_write FROM {prefix}_{friendly_multiple} i INNER JOIN {prefix}_{related_friendly_multiple} r ON r.id=i.{related_field_id} WHERE mtime>".$this->escape($last_sync_time);
 		</gotpl>
 		<gotpl if="$authenticate">
-		$sql = "SELECT * FROM {prefix}_{friendly_multiple} WHERE mtime>$last_sync_time";
+		$sql = "SELECT * FROM {prefix}_{friendly_multiple} WHERE mtime>".$this->escape($last_sync_time);
 		</gotpl>
 
 		$this->query($sql);
