@@ -24,8 +24,8 @@ class db{
 	var $type     = "mysqli";
 
 	/* private: link and query handles */
-	var $Link_ID  = 0;
-	var $Query_ID = 0;
+	var $link  = 0;
+	var $result = 0;
 
 	var $locked   = false;      ## set to true while we have a lock
 
@@ -63,29 +63,25 @@ class db{
 		  	$this->Password = $config->db_pass;
 		  }
 		}		
-		//$this->Link_ID->query('SET NAMES UTF-8');
+		//$this->link->query('SET NAMES UTF-8');
 	}
 	
 	function connect()
 	{
-		if(!$this->Link_ID)
+		if(!$this->link)
 		{
-			$this->Link_ID = new mysqli($this->Host, $this->User, $this->Password, $this->Database);
-			$this->Link_ID->set_charset("utf8");
+			$this->link = new MySQLi($this->Host, $this->User, $this->Password, $this->Database);
+			$this->link->set_charset("utf8");
 		}
-		return $this->Link_ID;
+		return $this->link;
 	}
 	
 	function query($sql)
 	{
 		$this->connect();
 		
-		$this->Query_ID = $this->Link_ID->query($sql);
-		return $this->Query_ID; 
-	}
-
-	function query_id() {
-		return $this->Query_ID;
+		$this->result = $this->link->query($sql);
+		return $this->result; 
 	}
 
 	function found_rows(){
@@ -97,12 +93,12 @@ class db{
 
 	/* public: walk result set */
 	function next_record($result_type=MYSQL_ASSOC) {
-		if (!$this->Query_ID) {
+		if (!$this->result) {
 			$this->halt("next_record called with no query pending.");
 			return 0;
 		}
 
-		$this->Record = $this->Query_ID->fetch_assoc();
+		$this->Record = $this->result->fetch_assoc();
 		$this->Row   += 1;
 	
 		return $this->Record;
@@ -213,13 +209,13 @@ class db{
 	}
 	
 	function num_rows() {
-		return $this->Query_ID->num_rows;
+		return $this->result->num_rows;
 	}
 
 	/* private: error handling */
 	function halt($msg) {
-		$this->Error = @mysql_error($this->Link_ID);
-		$this->Errno = @mysql_errno($this->Link_ID);
+		$this->Error = @mysql_error($this->link);
+		$this->Errno = @mysql_errno($this->link);
 
 		if ($this->locked) {
 			$this->unlock();
@@ -379,6 +375,6 @@ class db{
 		if($trim)
 			$value = trim($value);
 			
-		return $this->Link_ID->real_escape_string($value);
+		return $this->link->real_escape_string($value);
 	}
 }
