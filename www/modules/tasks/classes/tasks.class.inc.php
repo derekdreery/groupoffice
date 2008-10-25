@@ -799,7 +799,7 @@ class tasks extends db
 				$class .= ' tasks-completed';
 			}
 			
-			$status = isset($lang['tasks']['statuses'][$this->f('status')]) ? $lang['tasks']['statuses'][$this->f('status']) : $lang['tasks']['statuses']['NEEDS-ACTION']; 
+			$status = isset($lang['tasks']['statuses'][$this->f('status')]) ? $lang['tasks']['statuses'][$this->f('status')] : $lang['tasks']['statuses']['NEEDS-ACTION']; 
 			
 			//$cache['table']='cal_tasks';
 			$cache['id']=$this->f('id');

@@ -43,8 +43,8 @@ try{
 			$announcement_id=$announcement['id']=isset($_POST['announcement_id']) ? ($_POST['announcement_id']) : 0;
 			
 			$announcement['due_time']=Date::to_unixtime(trim($_POST['due_time']));
-			$announcement['title']=(trim($_POST['title']));
-			$announcement['content']=(trim($_POST['content']));
+			$announcement['title']=$_POST['title'];
+			$announcement['content']=$_POST['content'];
 			if($announcement['id']>0)
 			{
 				$summary->update_announcement($announcement);
