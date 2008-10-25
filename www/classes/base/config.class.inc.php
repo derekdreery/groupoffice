@@ -795,7 +795,7 @@ class GO_CONFIG
       	$this->configuration_url = $this->host.$this->configuration_url.'/';
 
       	// database class library
-      	require_once($this->root_path.'database/'.$this->db_type.".class.inc");
+      	require_once($this->class_path.'database/'.$this->db_type.'.class.inc.php');
 
       	$this->db = new db();
       	$this->db->Host = $this->db_host;
