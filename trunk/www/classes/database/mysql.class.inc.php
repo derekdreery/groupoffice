@@ -25,7 +25,7 @@ define('DB_NUM', MYSQL_NUM);
 define('DB_BOTH', MYSQL_BOTH);
 define('DB_ASSOC', MYSQL_ASSOC);
 
-class db {
+class db extends base_db {
 	
 	/**
 	 * Type of database connector
@@ -33,6 +33,13 @@ class db {
 	 * @var unknown_type
 	 */
 	var $type     = "mysql";
+	
+	/**
+	 * Use pconnect
+	 *
+	 * @var bool
+	 */
+	var $pconnect     = false;
 
 
 	/**
@@ -42,7 +49,7 @@ class db {
 	 * @return unknown
 	 */
 	
-	function found_rows(){
+	public function found_rows(){
 		$this->query("SELECT FOUND_ROWS() as found;");
 		$this->next_record();
 		return $this->f('found');
@@ -53,15 +60,15 @@ class db {
 	 *
 	 * @return resource The connection link identifier
 	 */
-	function connect() {
+	public function connect() {
 
 		/* establish connection, select database */
 		if ( 0 == $this->link ) {
 
 			if(!$this->pconnect) {
-				$this->link = mysql_connect($host, $user, $password);
+				$this->link = mysql_connect($this->host, $this->user, $this->password);
 			} else {
-				$this->link = mysql_pconnect($host, $user, $password);
+				$this->link = mysql_pconnect($this->host, $this->user, $this->password);
 			}
 			if (!$this->link) {
 				$this->halt('Could not connect to MySQL database');
@@ -70,8 +77,8 @@ class db {
 				
 			$this->query("SET NAMES UTF8");
 				
-			if (!empty($Database) && !@mysql_select_db($database,$this->link)) {
-				$this->halt("cannot use database ".$database);
+			if (!empty($this->database) && !@mysql_select_db($this->database,$this->link)) {
+				$this->halt("cannot use database ".$this->database);
 				return 0;
 			}
 		}
@@ -83,7 +90,7 @@ class db {
 	 * Frees the memory associated with a result
 	 * return void
 	 */
-	function free() {
+	public function free() {
 		@mysql_free_result($this->result);
 		$this->result = 0;
 	}
@@ -94,7 +101,7 @@ class db {
 	 * @param string $sql
 	 * @return object The result object 
 	 */
-	function query($sql) {
+	public function query($sql) {
 		/* No empty queries, please, since PHP4 chokes on them. */
 		if ($sql == "")
 		/* The empty query string is passed on from the constructor,
@@ -112,8 +119,8 @@ class db {
 			$this->free();
 		}
 
-		if ($this->Debug)
-		printf("Debug: query = %s<br>\n", $sql);
+		if ($this->debug)
+			printf("Debug: query = %s<br>\n", $sql);
 
 		$this->result = @mysql_query($sql,$this->link);
 
@@ -133,7 +140,7 @@ class db {
 	 * @param int $result_type DB_ASSOC, DB_BOTH or DB_NUM
 	 * @return unknown
 	 */
-	function next_record($result_type=DB_ASSOC) {
+	public function next_record($result_type=DB_ASSOC) {
 		if (!$this->result) {
 			$this->halt("next_record called with no query pending.");
 			return 0;
@@ -150,7 +157,7 @@ class db {
 	 *
 	 * @return int
 	 */
-	function affected_rows() {
+	public function affected_rows() {
 		return @mysql_affected_rows($this->link);
 	}
 	
@@ -160,7 +167,7 @@ class db {
 	 * @return int Number of rows
 	 */
 	
-	function num_rows() {
+	public function num_rows() {
 		return @mysql_num_rows($this->result);
 	}
 
@@ -169,7 +176,7 @@ class db {
 	 *
 	 * @return int
 	 */
-	function num_fields() {
+	public function num_fields() {
 		return @mysql_num_fields($this->result);
 	}
 
@@ -178,7 +185,7 @@ class db {
 	 *
 	 * @return void
 	 */
-	private function set_error()
+	protected function set_error()
 	{
 		$this->error = @mysql_error($this->link);
 		$this->errno = @mysql_errno($this->link);
@@ -189,7 +196,7 @@ class db {
 	 *
 	 * @return int
 	 */
-	function insert_id()
+	public function insert_id()
 	{
 		return mysql_insert_id($this->result,$this->link);
 	}
@@ -201,7 +208,7 @@ class db {
 	 * @param bool $trim Trim the value
 	 * @return mixed the escaped value.
 	 */
-	function escape($value, $trim=true)
+	public function escape($value, $trim=true)
 	{
 		$this->connect();
 		

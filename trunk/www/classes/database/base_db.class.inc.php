@@ -96,14 +96,14 @@ class base_db{
 	/**
 	 * Database error message
 	 *
-	 * @var unknown_type
+	 * @var string
 	 */
 	var $error    = "";
 
 	/**
 	 * Type of database connector
 	 *
-	 * @var unknown_type
+	 * @var string
 	 */
 	var $type     = "mysqli";
 
@@ -117,14 +117,14 @@ class base_db{
 	/**
 	 * The result object from a query
 	 *
-	 * @var unknown_type
+	 * @var resource
 	 */
 	var $result = 0;
 
 	/**
 	 * True when a table is locked
 	 *
-	 * @var unknown_type
+	 * @var bool
 	 */
 	var $locked   = false;
 
@@ -546,7 +546,7 @@ class base_db{
 	 *
 	 * @return void
 	 */
-	private function set_error()
+	protected function set_error()
 	{
 		
 	}
@@ -556,7 +556,8 @@ class base_db{
 	 *
 	 * @param unknown_type $msg
 	 */
-	private function halt($msg) {
+	protected function halt($msg) {
+		
 		$this->set_error();
 
 		if ($this->locked) {
