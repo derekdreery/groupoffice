@@ -24,6 +24,17 @@
 
 class String {
 
+	function replace_once($search, $replace, $subject) {
+		$firstChar = strpos($subject, $search);
+		if($firstChar !== false) {
+			$beforeStr = substr($subject,0,$firstChar);
+			$afterStr = substr($subject, $firstChar + strlen($search));
+			return $beforeStr.$replace.$afterStr;
+		} else {
+			return $subject;
+		}
+	}
+
 	function trim_lines($text)
 	{
 		//go_log(LOG_DEBUG, $text);
@@ -631,7 +642,7 @@ class String {
 				//$sLine=str_replace('=0D ','=0D=20',$sLine);
 				//$sLine=str_replace('=0A ','=0A=20',$sLine);
 			}
-				
+
 			//merijn$sLine  = str_replace(' ','=20',$sLine);
 
 			// finally split into softlines no longer than 76 chars,
