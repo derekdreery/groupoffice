@@ -16,7 +16,7 @@ class addressbook extends db {
 	var $selector_is_enabled = false;
 
 	function addressbook() {
-		$this->db();
+		parent::__construct();
 	}
 
 	function is_duplicate_contact($contact)
@@ -89,7 +89,7 @@ class addressbook extends db {
 		$sql = "SELECT * FROM ab_addressbooks WHERE id='".$this->escape($addressbook_id)."'";
 		$this->query($sql);
 		if ($this->next_record()) {
-			return $this->Record;
+			return $this->record;
 		}else
 		{
 			return false;
@@ -264,7 +264,7 @@ class addressbook extends db {
 		"WHERE ab_companies.id='".$this->escape($company_id)."'";
 		$this->query($sql);
 		if ($this->next_record(MYSQL_ASSOC)) {
-			return $this->Record;
+			return $this->record;
 		}
 		return false;
 	}
@@ -273,7 +273,7 @@ class addressbook extends db {
 		$sql = "SELECT * FROM ab_companies WHERE addressbook_id='".$this->escape($addressbook_id)."' AND name='".$this->escape($name)."'";
 		$this->query($sql);
 		if ($this->next_record()) {
-			return $this->Record;
+			return $this->record;
 		}
 		return false;
 	}
@@ -398,7 +398,7 @@ class addressbook extends db {
 
 
 		if ($this->next_record(MYSQL_ASSOC)) {
-			return $this->Record;
+			return $this->record;
 		}else
 		{
 			throw new DatabaseSelectException();
@@ -713,7 +713,7 @@ class addressbook extends db {
 		$sql = "SELECT * FROM ab_addressbooks WHERE name='".$this->escape($name)."'";
 		$this->query($sql);
 		if ($this->next_record()) {
-			return $this->Record;
+			return $this->record;
 		} else {
 			return false;
 		}
@@ -824,7 +824,7 @@ class addressbook extends db {
 			$cache['link_type']=2;
 			$cache['description']='';
 			$cache['type']=$lang['addressbook']['contact'];
-			$cache['keywords']=$search->record_to_keywords($this->Record).','.$lang['addressbook']['contact'];
+			$cache['keywords']=$search->record_to_keywords($this->record).','.$lang['addressbook']['contact'];
 			$cache['mtime']=$this->f('mtime');
 			$cache['acl_read']=$this->f('acl_read');
 			$cache['acl_write']=$this->f('acl_write');
@@ -847,7 +847,7 @@ class addressbook extends db {
 			$cache['module']='addressbook';
 			$cache['description']='';
 			$cache['type']=$lang['addressbook']['company'];
-			$cache['keywords']=$search->record_to_keywords($this->Record).','.$cache['type'];
+			$cache['keywords']=$search->record_to_keywords($this->record).','.$cache['type'];
 			$cache['mtime']=$this->f('mtime');
 			$cache['acl_read']=$this->f('acl_read');
 			$cache['acl_write']=$this->f('acl_write');
@@ -906,7 +906,7 @@ class addressbook extends db {
 
 		$this->query($sql);
 		if ($this->next_record())
-		return $this->Record;
+		return $this->record;
 		else
 		return false;
 	}

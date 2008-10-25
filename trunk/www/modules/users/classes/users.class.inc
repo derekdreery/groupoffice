@@ -169,7 +169,7 @@ class users extends db
 			$cache['link_type']=8;
 			$cache['description']='';
 			$cache['type']=$us_user;
-			$cache['keywords']=$search->record_to_keywords($this->Record).','.$cache['type'];
+			$cache['keywords']=$search->record_to_keywords($this->record).','.$cache['type'];
 			$cache['mtime']=$this->f('mtime');
 			$cache['module']='users';
 			$cache['acl_read']=$GO_MODULES->modules['users']['acl_read'];

@@ -15,7 +15,7 @@
 class notes extends db {
 
 	public function __construct() {
-		$this->db();
+		parent::__construct();
 	}
 	
 		
@@ -87,7 +87,7 @@ class notes extends db {
 		$this->query("SELECT * FROM no_categories WHERE id=".$this->escape($category_id));
 		if($this->next_record())
 		{
-			return $this->Record;
+			return $this->record;
 		}else
 		{
 			throw new DatabaseSelectException();
@@ -108,7 +108,7 @@ class notes extends db {
 		$this->query("SELECT * FROM no_categories WHERE name='".$this->escape($name)."'");
 		if($this->next_record())
 		{
-			return $this->Record;
+			return $this->record;
 		}
 		return false;
 	}
@@ -285,7 +285,7 @@ class notes extends db {
 		$this->query("SELECT * FROM no_notes WHERE id=".$this->escape($note_id));
 		if($this->next_record())
 		{
-			return $this->Record;
+			return $this->record;
 		}else
 		{
 			throw new DatabaseSelectException();
@@ -306,7 +306,7 @@ class notes extends db {
 		$this->query("SELECT * FROM no_notes WHERE name='".$this->escape($name)."'");
 		if($this->next_record())
 		{
-			return $this->Record;
+			return $this->record;
 		}
 		return false;
 	}
@@ -422,7 +422,7 @@ class notes extends db {
 			$cache['link_type']=4;
 			$cache['description']='';			
 			$cache['type']=$lang['notes']['note'];
-			$cache['keywords']=$search->record_to_keywords($this->Record).','.$cache['type'];
+			$cache['keywords']=$search->record_to_keywords($this->record).','.$cache['type'];
 			$cache['mtime']=$this->f('mtime');
 			$cache['acl_read']=$this->f('acl_read');
  			$cache['acl_write']=$this->f('acl_write');	

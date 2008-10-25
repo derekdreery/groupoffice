@@ -15,7 +15,7 @@ class summary extends db{
 	
 	function __construct()
 	{
-		$this->db();
+		parent::__construct();
 	}
 	
 	function __on_add_user($params)
@@ -137,7 +137,7 @@ class summary extends db{
 		$this->query("SELECT * FROM su_announcements WHERE id='".$this->escape($announcement_id)."'");
 		if($this->next_record())
 		{
-			return $this->Record;
+			return $this->record;
 		}else
 		{
 			throw new DatabaseSelectException();
@@ -156,7 +156,7 @@ class summary extends db{
 		$this->query("SELECT * FROM su_announcements WHERE name='".$this->escape($name)."'");
 		if($this->next_record())
 		{
-			return $this->Record;
+			return $this->record;
 		}
 		return false;
 	}

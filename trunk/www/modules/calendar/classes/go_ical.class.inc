@@ -28,7 +28,7 @@ class go_ical extends calendar
 
 	function go_ical($version='2.0')
 	{
-		$this->db();
+		parent::__construct();
 
 		$this->version = $version;
 
@@ -70,7 +70,7 @@ class go_ical extends calendar
 		$cal->get_events(false,true,false, $calendar_id);
 		while($cal->next_record())
 		{
-			$ics .= $this->convert_event($cal->Record);
+			$ics .= $this->convert_event($cal->record);
 		}
 
 		$ics .= $this->export_calendar_footer();

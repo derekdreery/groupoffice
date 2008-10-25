@@ -79,7 +79,7 @@ class GO_USERS extends db
 		}
 		
 		
-		$this->db();
+		parent::__construct();
 	}
 	
 /**
@@ -431,7 +431,7 @@ class GO_USERS extends db
 			return false;
 		}elseif ($this->next_record(MYSQL_ASSOC))
 		{
-			return $this->Record;
+			return $this->record;
 		}
 		
 	}
@@ -455,7 +455,7 @@ class GO_USERS extends db
 		$this->query($sql);
 		if ($this->next_record(MYSQL_ASSOC))
 		{
-			return $this->Record;
+			return $this->record;
 		}
 		return false;
 	}
@@ -493,11 +493,11 @@ class GO_USERS extends db
 		$this->query( $sql );
 		if ($this->next_record(MYSQL_ASSOC))
 		{
-			if($this->Record['date_seperator']=='')
+			if($this->record['date_seperator']=='')
 			{
-				$this->Record['date_seperator']=' ';
+				$this->record['date_seperator']=' ';
 			}
-			return $this->Record;
+			return $this->record;
 		}
 		return false;
 	}
@@ -688,7 +688,7 @@ class GO_USERS extends db
 		$this->query($sql);
 		if ($this->next_record())
 		{
-			return $this->Record;
+			return $this->record;
 		}
 		return false;
 	}

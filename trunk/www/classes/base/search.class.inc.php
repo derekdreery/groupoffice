@@ -30,7 +30,7 @@ class search extends db {
 
 	
 	function __construct() {
-		$this->db();
+		parent::__construct();
 	}
 
 	/**
@@ -374,7 +374,7 @@ class search extends db {
 		$this->query($sql);
 		if($this->next_record())
 		{
-			return $this->Record;
+			return $this->record;
 		}
 		return false;
 	}

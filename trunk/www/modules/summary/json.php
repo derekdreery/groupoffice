@@ -72,7 +72,7 @@ try{
 			$response['results']=array();
 			while($summary->next_record())
 			{
-				$announcement = $summary->Record;
+				$announcement = $summary->record;
 				$user = $GO_USERS->get_user($announcement['user_id']);
 				$announcement['user_name']=String::format_name($user);
 				$announcement['due_time']=!empty($announcement['due_time']) ? Date::get_timestamp($announcement['due_time'],false) : '-';
@@ -106,7 +106,7 @@ try{
 			$response['results']=array();
 			while($summary->next_record())
 			{
-				$announcement = $summary->Record;
+				$announcement = $summary->record;
 				$user = $GO_USERS->get_user($announcement['user_id']);
 				$announcement['user_name']=String::format_name($user);
 				$announcement['due_time']=!empty($announcement['due_time']) ? Date::get_timestamp($announcement['due_time'],false) : '-';

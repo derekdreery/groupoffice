@@ -103,7 +103,7 @@ class reminder extends db
 		$this->query("SELECT * FROM go_reminders WHERE user_id=".$this->escape($user_id)." AND link_id=".$this->escape($link_id)." AND link_type=".$this->escape($link_type));
 		if($this->next_record())
 		{
-			return $this->Record;
+			return $this->record;
 		}
 		return false;
 	}
@@ -125,7 +125,7 @@ class reminder extends db
 		$this->query("SELECT * FROM go_reminders WHERE id=".$this->escape($reminder_id));
 		if($this->next_record())
 		{
-			return $this->Record;
+			return $this->record;
 		}
 		return false;
 	}
@@ -144,7 +144,7 @@ class reminder extends db
 		$this->query("SELECT * FROM go_reminders WHERE reminder_name='".$this->escape($name)."'");
 		if($this->next_record())
 		{
-			return $this->Record;
+			return $this->record;
 		}
 		return false;
 	}

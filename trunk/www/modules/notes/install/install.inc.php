@@ -19,7 +19,7 @@ $GLOBALS['GO_SECURITY']->add_group_to_acl($GO_CONFIG->group_everyone, $category[
 $GO_USERS->get_users();
 while($GO_USERS->next_record())
 {
-	$user = $GO_USERS->Record;		
+	$user = $GO_USERS->record;		
 	
 	$category['name']=addslashes(String::format_name($user));
 	$category['user_id']=$user['id'];

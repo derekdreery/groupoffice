@@ -29,7 +29,7 @@ class GO_AUTH extends db
 	
 	public function __construct(){
 		
-		$this->db();
+		parent::__construct();
 	}
 	/**
 	 * Authenticate the user against the Group-Office SQL database.
@@ -153,7 +153,7 @@ class GO_AUTH extends db
 
 		// Fetch the user array from the database
 		$this->next_record();
-		$user = $this->Record;
+		$user = $this->record;
 		
 		// We have to create a new id for this user, so that we can prevent
 		// different users (from different authenticateion backends) with the

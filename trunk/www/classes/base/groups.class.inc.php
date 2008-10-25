@@ -35,7 +35,7 @@ class GO_GROUPS extends db
 	 */
 	function __construct()
 	{
-		$this->db();
+		parent::__construct();
 	}
 
 	function groupnames_to_ids($groupnames)
@@ -129,7 +129,7 @@ class GO_GROUPS extends db
 		$this->query("SELECT * FROM go_groups WHERE id='".$this->escape($group_id)."'");
 
 		if($this->next_record())
-		return $this->Record;
+		return $this->record;
 		else
 		return false;
 	}
@@ -159,7 +159,7 @@ class GO_GROUPS extends db
 		$this->query("SELECT * FROM go_groups WHERE name='".$this->escape($name)."'");
 		if ($this->next_record())
 		{
-			return $this->Record;
+			return $this->record;
 		}else
 		{
 			return false;

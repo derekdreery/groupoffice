@@ -5,7 +5,7 @@ class smtp_restrict extends db{
 	
 	function __construct()
 	{
-		$this->db();
+		parent::__construct();
 		
 		$this->hosts = $this->get_hosts();
 	}
@@ -124,7 +124,7 @@ class smtp_restrict extends db{
 		$this->query("SELECT * FROM go_mail_counter WHERE host='$host'");
 		if($this->next_record())
 		{
-			return $this->Record;
+			return $this->record;
 		}else
 		{
 			return false;

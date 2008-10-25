@@ -455,7 +455,7 @@ class vcard extends addressbook {
 
 		if ($this->get_contacts($addressbook_id)) {
 			while ($this->next_record()) {
-				$records[] = $this->Record;
+				$records[] = $this->record;
 			}
 		} else {
 			return false;

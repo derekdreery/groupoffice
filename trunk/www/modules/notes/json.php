@@ -65,7 +65,7 @@ try{
 			$response['results']=array();
 			while($notes->next_record())
 			{
-				$category = $notes->Record;			
+				$category = $notes->record;			
 				
 				$user = $GO_USERS->get_user($category['user_id']);
 				$category['user_name']=String::format_name($user);
@@ -213,7 +213,7 @@ try{
 			$response['results']=array();
 			while($notes->next_record())
 			{
-				$note = $notes->Record;				
+				$note = $notes->record;				
 				
 				$user = $GO_USERS->get_user($note['user_id']);
 				$note['user_name']=String::format_name($user);

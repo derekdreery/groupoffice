@@ -108,7 +108,7 @@ class GO_MODULES extends db {
 	 * @return void
 	 */
 	function __construct() {
-		$this->db();		
+		parent::__construct();		
 		if(isset($_SESSION['GO_SESSION']['modules']))
 		{
 			$this->modules = $_SESSION['GO_SESSION']['modules'];
@@ -264,15 +264,15 @@ class GO_MODULES extends db {
 		$sql = "SELECT * FROM go_modules WHERE id='".addslashes($module_id)."'";
 		$this->query($sql);
 		if ( $this->next_record(MYSQL_ASSOC) ) {
-			$this->Record['full_url'] =
+			$this->record['full_url'] =
 			$GO_CONFIG->full_url.'modules/'.$module_id.'/';
-			$this->Record['url'] =
+			$this->record['url'] =
 			$GO_CONFIG->host.'modules/'.$module_id.'/';
-			$this->Record['path'] =
+			$this->record['path'] =
 			$GO_CONFIG->root_path.'modules/'.$module_id.'/';
-			$this->Record['class_path'] =
-			$this->Record['path'].'classes/';
-			return $this->Record;
+			$this->record['class_path'] =
+			$this->record['path'].'classes/';
+			return $this->record;
 		} else {
 			return false;
 		}
@@ -436,22 +436,22 @@ class GO_MODULES extends db {
 		$this->get_modules($admin_menu);
 		while ( $this->next_record(MYSQL_ASSOC) ) {
 				
-			$this->Record['path'] = $GO_CONFIG->root_path.'modules/'.$this->f('id').'/';
-			$this->Record['full_url'] =	$GO_CONFIG->full_url.'modules/'.$this->f('id').'/';
-			$this->Record['url'] = $GO_CONFIG->host.'modules/'.$this->f('id').'/';
-			$this->Record['legacy']=false;
-			if(!file_exists($this->Record['path']))
+			$this->record['path'] = $GO_CONFIG->root_path.'modules/'.$this->f('id').'/';
+			$this->record['full_url'] =	$GO_CONFIG->full_url.'modules/'.$this->f('id').'/';
+			$this->record['url'] = $GO_CONFIG->host.'modules/'.$this->f('id').'/';
+			$this->record['legacy']=false;
+			if(!file_exists($this->record['path']))
 			{
-				$this->Record['path'] = $GO_CONFIG->root_path.'legacy/modules/'.$this->f('id').'/';
-				$this->Record['full_url'] =	$GO_CONFIG->full_url.'legacy/modules/'.$this->f('id').'/';
-				$this->Record['url'] = $GO_CONFIG->host.'legacy/modules/'.$this->f('id').'/';
-				$this->Record['legacy']=true;
+				$this->record['path'] = $GO_CONFIG->root_path.'legacy/modules/'.$this->f('id').'/';
+				$this->record['full_url'] =	$GO_CONFIG->full_url.'legacy/modules/'.$this->f('id').'/';
+				$this->record['url'] = $GO_CONFIG->host.'legacy/modules/'.$this->f('id').'/';
+				$this->record['legacy']=true;
 			}
-			if(file_exists($this->Record['path']))
+			if(file_exists($this->record['path']))
 			{
-				$this->Record['class_path'] =	$this->Record['path'].'classes/';
+				$this->record['class_path'] =	$this->record['path'].'classes/';
 					
-				$modules[] = $this->Record;
+				$modules[] = $this->record;
 			}
 		}
 		return $modules;

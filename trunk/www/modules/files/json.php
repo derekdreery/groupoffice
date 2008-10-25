@@ -542,10 +542,10 @@ try{
 									$user = $GO_USERS->get_user($fs->f('user_id'));
 
 
-									$fs->Record['user_name'] = String::format_name($user);
-									$fs->Record['type'] = File::get_filetype_description($fs->f('extension'));
-									$fs->Record['grid_display']='<div class="go-grid-icon filetype filetype-'.$fs->f('extension').'">'.$fs->f('name').'</div>';
-									$response['results'][] = $fs->Record;
+									$fs->record['user_name'] = String::format_name($user);
+									$fs->record['type'] = File::get_filetype_description($fs->f('extension'));
+									$fs->record['grid_display']='<div class="go-grid-icon filetype filetype-'.$fs->f('extension').'">'.$fs->f('name').'</div>';
+									$response['results'][] = $fs->record;
 								}
 
 								break;

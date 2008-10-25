@@ -172,7 +172,7 @@ try{
 			$response['participants']=array();
 			while($cal->next_record(MYSQL_ASSOC))
 			{
-				$participant=$cal->Record;
+				$participant=$cal->record;
 
 				$user = $GO_USERS->get_user_by_email($cal->f('email'));
 
@@ -692,8 +692,8 @@ try{
 										{
 											//$user = $GO_USERS->get_user($cal->f('user_id'));
 
-											//$cal->Record['user_name'] = String::format_name($user);
-											$response['results'][] = $cal->Record;
+											//$cal->record['user_name'] = String::format_name($user);
+											$response['results'][] = $cal->record;
 										}
 										break;
 
@@ -736,8 +736,8 @@ try{
 										{
 											$user = $GO_USERS->get_user($cal->f('user_id'));
 
-											$cal->Record['user_name'] = String::format_name($user);
-											$response['results'][] = $cal->Record;
+											$cal->record['user_name'] = String::format_name($user);
+											$response['results'][] = $cal->record;
 										}
 										break;
 
@@ -759,11 +759,11 @@ try{
 										{
 											$user = $GO_USERS->get_user($cal->f('user_id'));
 
-											$cal->Record['user_name'] = String::format_name($user);
+											$cal->record['user_name'] = String::format_name($user);
 
-											$cal->Record['selected']=$cal2->is_view_calendar($cal->f('id'), $view_id) ? '1' : '0';
+											$cal->record['selected']=$cal2->is_view_calendar($cal->f('id'), $view_id) ? '1' : '0';
 
-											$response['results'][] = $cal->Record;
+											$response['results'][] = $cal->record;
 										}
 										break;
 
@@ -776,8 +776,8 @@ try{
 										{
 											$user = $GO_USERS->get_user($cal->f('user_id'));
 
-											$cal->Record['user_name'] = String::format_name($user);
-											$response['results'][] = $cal->Record;
+											$cal->record['user_name'] = String::format_name($user);
+											$response['results'][] = $cal->record;
 										}
 										break;
 
@@ -813,8 +813,8 @@ try{
 										{
 											$user = $GO_USERS->get_user($cal->f('user_id'));
 
-											$cal->Record['user_name'] = String::format_name($user);
-											$response['results'][] = $cal->Record;
+											$cal->record['user_name'] = String::format_name($user);
+											$response['results'][] = $cal->record;
 										}
 										break;
 
@@ -882,7 +882,7 @@ try{
 										$response['results']=array();
 										while($cal->next_record(MYSQL_ASSOC))
 										{
-											$participant = $cal->Record;
+											$participant = $cal->record;
 
 											$participant['available']='?';
 											$user=$GO_USERS->get_user_by_email($participant['email']);
