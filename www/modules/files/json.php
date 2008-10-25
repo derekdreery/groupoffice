@@ -49,7 +49,7 @@ try{
 						'notreloadable'=>true			
 						);
 
-						$db_folder = $fs->get_folder(addslashes($folder['path']));
+						$db_folder = $fs->get_folder($folder['path']);
 						if($db_folder['acl_read']>0)
 						{
 							$node['iconCls']='folder-shared';
