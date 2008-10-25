@@ -107,7 +107,7 @@ class db extends base_db{
 		$params = func_get_args();		
 		
 		$param_count = count($params);
-		$this->prepared_statement=$param_count>1;
+		$this->prepared_statement=$param_count>2;
 			
 		if($this->prepared_statement)
 		{
