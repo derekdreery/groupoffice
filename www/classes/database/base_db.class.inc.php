@@ -194,9 +194,12 @@ class base_db{
 	 * Queries the database
 	 *
 	 * @param string $sql
-	 * @return object The result object 
+	 * @param array If the parameters are given in the statement will be prepared
+	 * @param string The types of the parameters. possible values: i, d, s, b for integet, double, string and blob
+	 * 
+	 * @return object The result object
 	 */
-	public function query($sql)
+	public function query($sql, $params=array(), $types='')
 	{
 	}
 	
