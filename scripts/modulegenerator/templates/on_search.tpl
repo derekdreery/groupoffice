@@ -9,19 +9,19 @@
 		$this->query($sql);
 
 		$search = new search();
-		while($this->next_record())
+		while($record = $this->next_record())
 		{
-			$cache['id']=$this->f('id');
-			$cache['user_id']=$this->f('user_id');
+			$cache['id']=$record['id'];
+			$cache['user_id']=$record['user_id'];
 			$cache['module']='{module}';
-			$cache['name'] = addslashes($this->f('name'));
+			$cache['name'] = $record['name'];
 			$cache['link_type']={link_type};
 			$cache['description']='';			
-			$cache['type']=addslashes($lang['{module}']['{friendly_single}']);
-			$cache['keywords']=addslashes($search->record_to_keywords($this->Record)).','.$cache['type'];
-			$cache['mtime']=$this->f('mtime');
-			$cache['acl_read']=$this->f('acl_read');
- 			$cache['acl_write']=$this->f('acl_write');	
+			$cache['type']=$lang['{module}']['{friendly_single}'];
+			$cache['keywords']=$search->record_to_keywords(record).','.$cache['type'];
+			$cache['mtime']=$record['mtime'];
+			$cache['acl_read']=$record['acl_read'];
+ 			$cache['acl_write']=$record['acl_write'];	
 			$search->cache_search_result($cache);
 		}
 		

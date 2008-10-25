@@ -516,9 +516,9 @@ class modulegenerator extends db
 						$formfields[]=$formfield;
 						
 						if($db->f('Field')=='user_id')
-							$actionfields[] = "\t\t\t".'if(isset($_POST[\''.$db->f('Field').'\']))'."\n\t\t\t\t".'$'.$table['friendly_single'].'[\''.$db->f('Field').'\']=smart_addslashes(trim($_POST[\''.$db->f('Field').'\']));';
+							$actionfields[] = "\t\t\t".'if(isset($_POST[\''.$db->f('Field').'\']))'."\n\t\t\t\t".'$'.$table['friendly_single'].'[\''.$db->f('Field').'\']=$_POST[\''.$db->f('Field').'\'];';
 						else
-							$actionfields[] = "\t\t\t".'$'.$table['friendly_single'].'[\''.$db->f('Field').'\']=smart_addslashes(trim($_POST[\''.$db->f('Field').'\']));';
+							$actionfields[] = "\t\t\t".'$'.$table['friendly_single'].'[\''.$db->f('Field').'\']=$_POST[\''.$db->f('Field').'\'];';
 					}
 					
 					$displayfield = $this->get_template_content('DisplayField.tpl',$table);

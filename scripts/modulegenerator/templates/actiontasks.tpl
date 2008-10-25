@@ -6,10 +6,10 @@
 			}
 			
 			</gotpl>
-			${friendly_single}_id=${friendly_single}['id']=isset($_POST['{friendly_single}_id']) ? smart_addslashes($_POST['{friendly_single}_id']) : 0;
+			${friendly_single}_id=${friendly_single}['id']=isset($_POST['{friendly_single}_id']) ? $_POST['{friendly_single}_id'] : 0;
 			
 			<gotpl if="$authenticate_relation && $relation">
-			${related_friendly_single} = ${module}->get_{related_friendly_single}(smart_addslashes(trim($_POST['{related_field_id}'])));
+			${related_friendly_single} = ${module}->get_{related_friendly_single}($_POST['{related_field_id}']);
 			
 			if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, ${related_friendly_single}['acl_write']))
 			{
@@ -62,8 +62,8 @@
 			{
 				$link_props = explode(':', $_POST['link']);
 				$GO_LINKS->add_link(
-				smart_addslashes($link_props[1]),
-				smart_addslashes($link_props[0]),
+				$link_props[1],
+				$link_props[0],
 				${friendly_single}_id,
 				{link_type});
 			}

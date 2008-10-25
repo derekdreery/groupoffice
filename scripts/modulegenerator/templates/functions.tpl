@@ -11,7 +11,7 @@
 	function add_{friendly_single}(${friendly_single})
 	{
 		<gotpl if="$mtime">
-		${friendly_single}['ctime']=${friendly_single}['mtime']=gmmktime();
+		${friendly_single}['ctime']=${friendly_single}['mtime']=time();
 		</gotpl>
 		
 		${friendly_single}['id']=$this->nextid('{prefix}_{friendly_multiple}');
@@ -34,7 +34,7 @@
 	function update_{friendly_single}(${friendly_single})
 	{
 		<gotpl if="$mtime">
-		${friendly_single}['mtime']=gmmktime();
+		${friendly_single}['mtime']=time();
 		</gotpl>
 		return $this->update_row('{prefix}_{friendly_multiple}', 'id', ${friendly_single});
 	}
@@ -59,7 +59,7 @@
 		$search->delete_search_result(${friendly_single}_id, {link_type});
 		</gotpl>		
 		
-		return $this->query("DELETE FROM {prefix}_{friendly_multiple} WHERE id=${friendly_single}_id");
+		return $this->query("DELETE FROM {prefix}_{friendly_multiple} WHERE id=?", 'i', ${friendly_single}_id);
 	}
 
 
@@ -74,14 +74,8 @@
 
 	function get_{friendly_single}(${friendly_single}_id)
 	{
-		$this->query("SELECT * FROM {prefix}_{friendly_multiple} WHERE id=${friendly_single}_id");
-		if($this->next_record())
-		{
-			return $this->Record;
-		}else
-		{
-			throw new DatabaseSelectException();
-		}
+		$this->query("SELECT * FROM {prefix}_{friendly_multiple} WHERE id=?", 'i', ${friendly_single}_id);
+		return $this->next_record();		
 	}
 
 	/**
@@ -95,12 +89,8 @@
 
 	function get_{friendly_single}_by_name($name)
 	{
-		$this->query("SELECT * FROM {prefix}_{friendly_multiple} WHERE name='$name'");
-		if($this->next_record())
-		{
-			return $this->Record;
-		}
-		return false;
+		$this->query("SELECT * FROM {prefix}_{friendly_multiple} WHERE name=?", 's', $name);
+		return $this->next_record();		
 	}
 
 
@@ -117,24 +107,44 @@
 	 */
 	function get_{friendly_multiple}(<gotpl if="$relation">${related_field_id}, </gotpl>$query, $sortfield='id', $sortorder='ASC', $start=0, $offset=0)
 	{
-		$sql = "SELECT * FROM {prefix}_{friendly_multiple} <gotpl if="$relation">WHERE {related_field_id}=${related_field_id} </gotpl>";
+		$sql = "SELECT ";		
+		if($offset>0)
+		{
+			$sql .= "SQL_CALC_FOUND_ROWS ";
+		}		
+		$sql .= "* FROM {prefix}_{friendly_multiple} <gotpl if="$relation">WHERE {related_field_id}=?</gotpl>";
+		
+		$types='';
+		$params=array();<gotpl if="$relation">
+		$types .= 'i';
+		$params[]=${related_field_id};</gotpl>
 		
 		if(!empty($query))
  		{
- 			$sql .= " <gotpl if="$relation">AND</gotpl><gotpl if="!$relation">WHERE</gotpl> name LIKE '".$this->escape($query)."'";
+ 			$sql .= " <gotpl if="$relation">AND</gotpl><gotpl if="!$relation">WHERE</gotpl> name LIKE ?";
+ 			
+ 			$types .= 's';
+ 			$params[]=$query;
  		} 		
 		
-		$sql .= "ORDER BY $sortfield $sortorder";
-
-		$this->query($sql);
-		$count = $this->num_rows();
+		$sql .= "ORDER BY ? ?";
+		
+		$params[]=$sortfield;
+		$params[]=$sortorder;
+		
+		$types .= 'ss';	
 
 		if($offset>0)
 		{
-			$sql .= " LIMIT $start,$offset";
-			$this->query($sql);
+			$sql .= " LIMIT ?,?";
+			
+			$params[]=$start;
+			$params[]=$offset;
+		
+			$types .= 'ii';	
 		}
-		return $count;
+		
+		return $this->query($sql, $types, $params);
 	}
 	
 	<gotpl if="$authenticate">
@@ -156,7 +166,12 @@
 	function get_authorized_{friendly_multiple}($auth_type, $user_id, <gotpl if="$relation">${related_field_id}, </gotpl>$query, $sort='name', $direction='ASC', $start=0, $offset=0)
 	{
 		
-		$sql = "SELECT DISTINCT {prefix}_{friendly_multiple}.* FROM {prefix}_{friendly_multiple} ".
+		$sql = "SELECT ";		
+		if($offset>0)
+		{
+			$sql .= "SQL_CALC_FOUND_ROWS ";
+		}		
+		$sql .= "DISTINCT {prefix}_{friendly_multiple}.* FROM {prefix}_{friendly_multiple} ".
  		"INNER JOIN go_acl a ON ";
 		
 		switch($auth_type)
@@ -168,33 +183,43 @@
 			case 'write':
 				$sql .= "{prefix}_{friendly_multiple}.acl_write = a.acl_id ";
 				break;
-		}
-		
+		}		
 		
  		$sql .= "LEFT JOIN go_users_groups ug ON (a.group_id = ug.group_id) WHERE ((".
  		"ug.user_id = ".$user_id.") OR (a.user_id = ".$user_id.")) <gotpl if="$relation">AND {related_field_id}=${related_field_id} </gotpl>";
  		
+ 		$types='ii';
+ 		$params=array($user_id, $user_id); 		
+ 		<gotpl if="$relation">
+		$types .= 'i';
+		$params[]=${related_field_id};</gotpl>
+ 		
  		if(!empty($query))
  		{
  			$sql .= " AND name LIKE '".$this->escape($query)."'";
+ 			
+ 			$types .= 's';
+ 			$params[]=$query;
  		} 		
 
-		$sql .= " ORDER BY $sort $direction";
+		$sql .= "ORDER BY ? ?";
 		
-		$this->query($sql);
-		$count = $this->num_rows();
+		$params[]=$sortfield;
+		$params[]=$sortorder;
+		
+		$types .= 'ss';	
 
-		if ($offset > 0)
+		if($offset>0)
 		{
-			$sql ." LIMIT $start, $offset";
-
-			$this->query($sql);
-			return $count;
-
-		}else
-		{
-			return $count;
+			$sql .= " LIMIT ?,?";
+			
+			$params[]=$start;
+			$params[]=$offset;
+		
+			$types .= 'ii';	
 		}
+		
+		return $this->query($sql, $types, $params);
 	}
 	</gotpl>
 
