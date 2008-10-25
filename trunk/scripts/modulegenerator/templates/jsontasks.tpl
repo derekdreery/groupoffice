@@ -9,7 +9,7 @@
 			
 			</gotpl>
 
-			${friendly_single} = ${module}->get_{friendly_single}(smart_addslashes($_REQUEST['{friendly_single}_id']));
+			${friendly_single} = ${module}->get_{friendly_single}($_REQUEST['{friendly_single}_id']);
 			<gotpl if="$authenticate_relation && $relation">
 			${related_friendly_single} = ${module}->get_{related_friendly_single}(${friendly_single}['{related_field_id}']);
 			${friendly_single}[{related_friendly_single}_name]=${related_friendly_single}['name'];
@@ -144,7 +144,7 @@
 
 			$query = isset($_REQUEST['query']) ? '%'.smart_addslashes($_REQUEST['query']).'%' : '';
 			
-			$response['total'] = ${module}->get_<gotpl if="$authenticate">authorized_</gotpl>{friendly_multiple}(<gotpl if="$authenticate">$auth_type, $GO_SECURITY->user_id, </gotpl><gotpl if="$relation">${related_field_id}, </gotpl> $query, $sort, $dir, $start, $limit);
+			${module}->get_<gotpl if="$authenticate">authorized_</gotpl>{friendly_multiple}(<gotpl if="$authenticate">$auth_type, $GO_SECURITY->user_id, </gotpl><gotpl if="$relation">${related_field_id}, </gotpl> $query, $sort, $dir, $start, $limit);
 			$response['results']=array();
 			while(${module}->next_record())
 			{
@@ -163,6 +163,8 @@
 								
 				$response['results'][] = ${friendly_single};
 			}
+			
+			$response['total'] = ${module}->found_rows();
 
 			break;
 			
