@@ -18,7 +18,7 @@ echo 'Updating Group-Office database: '.$GO_CONFIG->db_name.$line_break;
 $GO_MODULES->load_modules();
 
 $db = new db();
-$db->Halt_On_Error = 'report';
+$db->halt_on_error = 'report';
 
 $old_version = $GO_CONFIG->get_setting('version');
 if(!$old_version)
