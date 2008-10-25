@@ -39,7 +39,7 @@ class tasks extends db
 			$dst_task[$key] = $value;
 		}
 
-		$dst_task = array_map('addslashes', $dst_task);
+		$dst_task = $dst_task;
 
 		return $this->add_task($dst_task);
 
@@ -683,7 +683,7 @@ class tasks extends db
 				{
 					$exceptions=isset($task['exceptions']) ? $task['exceptions'] : array();
 					unset($task['exceptions']);
-					$task = array_map('addslashes', $task);
+					$task = $task;
 					$task = array_map('trim', $task);
 					$task['exceptions']=$exceptions;
 
@@ -723,7 +723,7 @@ class tasks extends db
 
 						$exceptions=isset($task['exceptions']) ? $task['exceptions'] : array();
 						unset($task['exceptions']);
-						$task = array_map('addslashes', $task);
+						$task = $task;
 						$task = array_map('trim', $task);
 						$task['exceptions']=$exceptions;
 

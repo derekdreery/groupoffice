@@ -112,7 +112,7 @@ class GO_MODULES extends db {
 		if(isset($_SESSION['GO_SESSION']['modules']))
 		{
 			$this->modules = $_SESSION['GO_SESSION']['modules'];
-		}elseif(!defined('NOTINSTALLED') && !empty($this->User))
+		}elseif(!defined('NOTINSTALLED') && !empty($this->user))
 		{
 			$this->load_modules();
 		}	
@@ -261,7 +261,7 @@ class GO_MODULES extends db {
 	function get_module( $module_id ) {
 		global $GO_CONFIG;
 
-		$sql = "SELECT * FROM go_modules WHERE id='".addslashes($module_id)."'";
+		$sql = "SELECT * FROM go_modules WHERE id='".$this->escape($module_id)."'";
 		$this->query($sql);
 		if ( $this->next_record(MYSQL_ASSOC) ) {
 			$this->record['full_url'] =
@@ -308,7 +308,7 @@ class GO_MODULES extends db {
 			$module['version']=isset($updates) ? count($updates) : 0;
 		}
 
-		$this->insert_row('go_modules', array_map('addslashes', $module));
+		$this->insert_row('go_modules', $module);
 
 
 		$install_sql_file = $GO_CONFIG->root_path.'modules/'.$module_id.'/install/install.sql';

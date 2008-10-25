@@ -11,7 +11,7 @@ if(is_dir($GO_CONFIG->module_path.'mailings'))
 	$GO_SECURITY->copy_acl($GO_MODULES->modules['addressbook']['acl_read'], $module['acl_read']);
 	$GO_SECURITY->copy_acl($GO_MODULES->modules['addressbook']['acl_write'], $module['acl_write']);
 	
-	$db->insert_row('go_modules', array_map('addslashes', $module));
+	$db->insert_row('go_modules', $module);
 	
 	$mod = new GO_MODULES();	
 	$mod->load_modules();

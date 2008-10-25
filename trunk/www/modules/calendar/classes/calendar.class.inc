@@ -1516,7 +1516,7 @@ class calendar extends db
 				{
 					$exceptions=isset($event['exceptions']) ? $event['exceptions'] : array();
 					unset($event['exceptions']);
-					$event = array_map('addslashes', $event);
+					$event = $event;
 					$event = array_map('trim', $event);
 					$event['exceptions']=$exceptions;
 
@@ -1556,7 +1556,7 @@ class calendar extends db
 
 						$exceptions=isset($event['exceptions']) ? $event['exceptions'] : array();
 						unset($event['exceptions']);
-						$event = array_map('addslashes', $event);
+						$event = $event;
 						$event = array_map('trim', $event);
 						$event['exceptions']=$exceptions;
 

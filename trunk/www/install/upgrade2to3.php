@@ -254,7 +254,7 @@ if(in_array('calendar', $module_ids))
 		$db2->next_record();
 		while($db2->next_record())
 		{
-			$new_event = array_map('addslashes',$event);
+			$new_event = $event;
 			$new_event['calendar_id']=$db2->f('calendar_id');
 			$new_event['id']=$db3->nextid('cal_events');
 							
@@ -369,7 +369,7 @@ if(in_array('calendar', $module_ids))
 			$todo['repeat_end_time']=$db->f('repeat_end_time');
 
 
-			$task_id=$tasks->add_task(array_map('addslashes', $todo));
+			$task_id=$tasks->add_task($todo);
 		
 		
 			$sql = "UPDATE go_links SET link_id1=".$task_id.",type1=12 WHERE link_id1=".$db->f('id')." AND type1=1";
@@ -561,7 +561,7 @@ if(in_array('notes', $module_ids))
 		$user = $GO_USERS->record;		
 		
 		$category['id']=$db->nextid('no_categories');
-		$category['name']=addslashes(String::format_name($user));
+		$category['name']=String::format_name($user);
 		$category['user_id']=$user['id'];
 		$category['acl_read']=$GO_SECURITY->get_new_acl('', $user['id']);
 		$category['acl_write']=$GO_SECURITY->get_new_acl('', $user['id']);
@@ -1101,7 +1101,7 @@ $module['id']='sync';
 $module['sort_order'] = count($GO_MODULES->modules)+1;
 $module['acl_read']=$GO_SECURITY->copy_acl($GO_MODULES->modules['calendar']['acl_read']);
 $module['acl_write']=$GO_SECURITY->copy_acl($GO_MODULES->modules['calendar']['acl_write']);
-$db->insert_row('go_modules', array_map('addslashes', $module));
+$db->insert_row('go_modules', $module);
 
 
 
@@ -1161,8 +1161,8 @@ flush();
  * 
  */
 
-$db->query("update ab_contacts set salutation=CONCAT('".addslashes($lang['common']['default_salutation']['M'])." ',LTRIM(CONCAT(middle_name,' ',last_name))) where sex='M' and salutation='';");
-$db->query("update ab_contacts set salutation=CONCAT('".addslashes($lang['common']['default_salutation']['F'])." ',LTRIM(CONCAT(middle_name,' ',last_name))) where sex='F' and salutation='';");
+$db->query("update ab_contacts set salutation=CONCAT('".$lang['common']['default_salutation']['M']." ',LTRIM(CONCAT(middle_name,' ',last_name))) where sex='M' and salutation='';");
+$db->query("update ab_contacts set salutation=CONCAT('".$lang['common']['default_salutation']['F']." ',LTRIM(CONCAT(middle_name,' ',last_name))) where sex='F' and salutation='';");
 
 
 //lot of people didn't have latest 2.18

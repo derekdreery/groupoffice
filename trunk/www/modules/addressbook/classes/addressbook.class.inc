@@ -21,7 +21,7 @@ class addressbook extends db {
 
 	function is_duplicate_contact($contact)
 	{
-		$contact = array_map('addslashes', $contact);
+		$contact = $contact;
 
 		$contact['email']=isset($contact['email']) ? $contact['email'] : '';
 		$contact['first_name']=isset($contact['first_name']) ? $contact['first_name'] : '';

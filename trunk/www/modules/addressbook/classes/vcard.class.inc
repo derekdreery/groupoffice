@@ -103,7 +103,7 @@ class vcard extends addressbook {
 					
 				//	go_log(LOG_DEBUG, var_export($record, true));
 
-					$contact = array_map('addslashes', $record['contact']);
+					$contact = $record['contact'];
 					
 
 					global $GO_SECURITY;
@@ -111,7 +111,7 @@ class vcard extends addressbook {
 						$contact['addressbook_id'] =$addressbook_id;
 						if(isset($record['company']))
 						{
-							$company = array_map('addslashes', $record['company']);
+							$company = $record['company'];
 							$company['addressbook_id']=$contact['addressbook_id'];
 							if(!$contact['company_id'] = $this->get_company_id_by_name($company['name'], $addressbook_id))
 							{							

@@ -749,7 +749,7 @@ class email extends db
 				$folder['sort_order'] = 10;
 			}
 
-			$folder = array_map('addslashes', $folder);
+			$folder = $folder;
 
 			if ($existing_folder = $this->get_folder($account['id'],addslashes($mailbox['name'])))
 			{
