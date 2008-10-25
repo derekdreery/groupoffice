@@ -24,7 +24,7 @@ $db2 = new db();
 $db3 = new db();
 
 $db = new db();
-$db->Halt_On_Error = 'no';
+$db->halt_on_error = 'no';
 
 
 

@@ -43,7 +43,7 @@ $tasks[] = 'database_structure';
 $tasks[] = 'default_module_access';
 $tasks[] = 'default_groups';
 $tasks[] = 'smtp';
-$GO_USERS->Halt_On_Error='no';
+$GO_USERS->halt_on_error='no';
 /*
 if ($task != 'database_structure' && !empty($GO_CONFIG->db_name) && !$GO_USERS->get_user(1))
 {
@@ -226,7 +226,7 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 		case 'post_database_connection':
 			$task = 'database_connection';
 			$db = new db();
-			$db->Halt_On_Error = 'no';
+			$db->halt_on_error = 'no';
 
 			$GO_CONFIG->db_host = ($_POST['db_host']);
 			$GO_CONFIG->db_name = ($_POST['db_name']);
@@ -251,7 +251,7 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 
 		case 'database_structure':
 			$db = new db();
-			$db->Halt_On_Error = 'report';
+			$db->halt_on_error = 'report';
 
 			if (!$db->connect($GO_CONFIG->db_name, $GO_CONFIG->db_host, $GO_CONFIG->db_user, $GO_CONFIG->db_pass))
 			{
@@ -576,7 +576,7 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 				$GO_CONFIG->db_host = '';
 
 				$db = new db();
-				$db->Halt_On_Error = 'no';
+				$db->halt_on_error = 'no';
 
 				$GO_CONFIG->db_host = ($_POST['db_host']);
 				$GO_CONFIG->db_name = ($_POST['db_name']);
@@ -856,7 +856,7 @@ switch($task)
 
 	case 'database_structure':
 		$db = new db();
-		$db->Halt_On_Error = 'no';
+		$db->halt_on_error = 'no';
 		if (!@$db->connect($GO_CONFIG->db_name, $GO_CONFIG->db_host, $GO_CONFIG->db_user, $GO_CONFIG->db_pass))
 		{
 			print_head();
@@ -956,7 +956,7 @@ switch($task)
 		echo 	'<input type="hidden" name="task" value="title" />';
 
 		$db = new db();
-		$db->Halt_On_Error = 'no';
+		$db->halt_on_error = 'no';
 
 		if (!$db->connect($GO_CONFIG->db_name, $GO_CONFIG->db_host, $GO_CONFIG->db_user, $GO_CONFIG->db_pass))
 		{

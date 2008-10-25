@@ -28,7 +28,7 @@ load_basic_controls();
 if($_SERVER['REQUEST_METHOD']=='POST')
 {
 	$db = new db();
-	$db->Halt_On_Error="no";
+	$db->halt_on_error="no";
 	if($db->query(($_POST['query'])))
 	{
 		$feedback = 'Query executed successfully. Affected rows: '.$db->affected_rows();		

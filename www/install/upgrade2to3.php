@@ -33,7 +33,7 @@ function update_link($old_link_id, $id, $link_type)
 	global $module_ids;
 	
 	$db = new db();
-	$db->Halt_On_Error = 'report';
+	$db->halt_on_error = 'report';
 	
 	$sql = "UPDATE go_links SET link_id1=".$id.", link_id1_converted='1' WHERE link_id1=".$old_link_id." AND type1=$link_type AND link_id1_converted='0'";
 	$db->query($sql);
@@ -97,11 +97,11 @@ function add_time($time)
 
 $db = new db();
 $db2 = new db();
-$db->Halt_On_Error = 'report';
-$db2->Halt_On_Error = 'report';
+$db->halt_on_error = 'report';
+$db2->halt_on_error = 'report';
 
 $db3 = new db();
-$db3->Halt_On_Error = 'report';
+$db3->halt_on_error = 'report';
 
 echo 'Framework updates<br />';
 flush();
