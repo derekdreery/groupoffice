@@ -81,6 +81,9 @@ class db extends base_db{
 			$this->free();
 		}
 		
+		if ($this->debug)
+			printf("Debug: query = %s<br>\n", $sql);
+		
 		$this->result = $this->link->query($sql);
 		if(!$this->result)
 		{
@@ -155,10 +158,10 @@ class db extends base_db{
 	 *
 	 * @return void
 	 */
-	private function set_error()
+	protected function set_error()
 	{
 		$this->error = $this->link->error;
-		$this->errno = $this->link->errono;
+		$this->errno = $this->link->errno;
 	}
 	
 	/**
