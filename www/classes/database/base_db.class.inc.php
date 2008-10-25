@@ -56,7 +56,7 @@ class base_db{
 	 *
 	 * @var string
 	 */
-	var $debug         = 0; 
+	var $debug         = false; 
 
 	/**
 	 * "yes" (halt with message), "no" (ignore errors quietly), "report" (ignore errror, but spit a warning)
@@ -112,14 +112,14 @@ class base_db{
 	 *
 	 * @var resource
 	 */
-	var $link  = 0;
+	var $link  = false;
 	
 	/**
 	 * The result object from a query
 	 *
 	 * @var resource
 	 */
-	var $result = 0;
+	var $result = false;
 
 	/**
 	 * True when a table is locked

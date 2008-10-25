@@ -59,8 +59,11 @@ class db extends base_db{
 	 * return void
 	 */
 	function free() {
-		$this->result->free();
-		$this->result = 0;
+		if(is_object($this->result))
+		{
+			$this->result->free();			
+		}
+		$this->result = false;
 	}
 	
 	/**
@@ -72,14 +75,12 @@ class db extends base_db{
 	public function query($sql)
 	{
 		if(empty($sql))
-			return 0;
+			return false;
 			
 		$this->connect();
 		
 		# New query, discard previous result.
-		if ($this->result) {
-			$this->free();
-		}
+		$this->free();
 		
 		if ($this->debug)
 			printf("Debug: query = %s<br>\n", $sql);
@@ -115,7 +116,7 @@ class db extends base_db{
 	public function next_record($result_type=DB_ASSOC) {
 		if (!$this->result) {
 			$this->halt("next_record called with no query pending.");
-			return 0;
+			return false;
 		}
 
 		$this->record = $this->result->fetch_assoc();

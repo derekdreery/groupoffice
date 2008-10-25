@@ -72,14 +72,14 @@ class db extends base_db {
 			}
 			if (!$this->link) {
 				$this->halt('Could not connect to MySQL database');
-				return 0;
+				return false;
 			}
 				
 			$this->query("SET NAMES UTF8");
 				
 			if (!empty($this->database) && !@mysql_select_db($this->database,$this->link)) {
 				$this->halt("cannot use database ".$this->database);
-				return 0;
+				return false;
 			}
 		}
 
@@ -91,8 +91,11 @@ class db extends base_db {
 	 * return void
 	 */
 	public function free() {
-		@mysql_free_result($this->result);
-		$this->result = 0;
+		if(is_object($this->result))
+		{
+			@mysql_free_result($this->result);
+		}
+		$this->result = false;
 	}
 
 	/**
@@ -108,23 +111,21 @@ class db extends base_db {
 		 * when calling the class without a query, e.g. in situations
 		 * like these: '$db = new DB_Sql_Subclass;'
 		 */
-		return 0;
+		return false;
 
 		if (!$this->connect()) {
-			return 0; /* we already complained in connect() about that. */
+			return false; /* we already complained in connect() about that. */
 		};
 
 		# New query, discard previous result.
-		if ($this->result) {
-			$this->free();
-		}
+		$this->free();
 
 		if ($this->debug)
 			printf("Debug: query = %s<br>\n", $sql);
 
 		$this->result = @mysql_query($sql,$this->link);
 
-		$this->Row   = 0;
+		$this->row   = 0;
 
 		if (!$this->result) {
 			$this->halt("Invalid SQL: ".$sql);
@@ -143,7 +144,7 @@ class db extends base_db {
 	public function next_record($result_type=DB_ASSOC) {
 		if (!$this->result) {
 			$this->halt("next_record called with no query pending.");
-			return 0;
+			return false;
 		}
 
 		$this->record = @mysql_fetch_array($this->result, $result_type);
