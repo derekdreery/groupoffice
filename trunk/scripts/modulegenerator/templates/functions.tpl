@@ -127,21 +127,11 @@
  			$params[]=$query;
  		} 		
 		
-		$sql .= "ORDER BY ? ?";
-		
-		$params[]=$sortfield;
-		$params[]=$sortorder;
-		
-		$types .= 'ss';	
+		$sql .= " ORDER BY ".$this->escape($sortfield.' '.$sortorder);	
 
 		if($offset>0)
 		{
-			$sql .= " LIMIT ?,?";
-			
-			$params[]=$start;
-			$params[]=$offset;
-		
-			$types .= 'ii';	
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
 		}
 		
 		return $this->query($sql, $types, $params);
@@ -163,9 +153,8 @@
 	 * @return Int Number of records found
 	 */
 	 
-	function get_authorized_{friendly_multiple}($auth_type, $user_id, <gotpl if="$relation">${related_field_id}, </gotpl>$query, $sort='name', $direction='ASC', $start=0, $offset=0)
-	{
-		
+	function get_authorized_{friendly_multiple}($auth_type, $user_id, <gotpl if="$relation">${related_field_id}, </gotpl>$query, $sortfield='name', $sortorder='ASC', $start=0, $offset=0)
+	{		
 		$sql = "SELECT ";		
 		if($offset>0)
 		{
@@ -186,7 +175,7 @@
 		}		
 		
  		$sql .= "LEFT JOIN go_users_groups ug ON (a.group_id = ug.group_id) WHERE ((".
- 		"ug.user_id = ".$user_id.") OR (a.user_id = ".$user_id.")) <gotpl if="$relation">AND {related_field_id}=${related_field_id} </gotpl>";
+ 		"ug.user_id = ?) OR (a.user_id = ?)) <gotpl if="$relation">AND {related_field_id}=?</gotpl>";
  		
  		$types='ii';
  		$params=array($user_id, $user_id); 		
@@ -196,27 +185,17 @@
  		
  		if(!empty($query))
  		{
- 			$sql .= " AND name LIKE '".$this->escape($query)."'";
+ 			$sql .= " AND name LIKE ?";
  			
  			$types .= 's';
  			$params[]=$query;
  		} 		
 
-		$sql .= "ORDER BY ? ?";
-		
-		$params[]=$sortfield;
-		$params[]=$sortorder;
-		
-		$types .= 'ss';	
+		$sql .= " ORDER BY ".$this->escape($sortfield.' '.$sortorder);	
 
 		if($offset>0)
 		{
-			$sql .= " LIMIT ?,?";
-			
-			$params[]=$start;
-			$params[]=$offset;
-		
-			$types .= 'ii';	
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
 		}
 		
 		return $this->query($sql, $types, $params);

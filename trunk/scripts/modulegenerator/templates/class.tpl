@@ -14,10 +14,6 @@
 
 class {module} extends db {
 
-	public function __construct() {
-		$this->db();
-	}
-	
 	/* {CLASSFUNCTIONS} */
 	
 	
