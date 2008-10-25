@@ -90,7 +90,7 @@ class db extends base_db{
 	 * 
 	 * @return object The result object
 	 */
-	public function query($sql, $types='')
+	public function query($sql, $types='', $params=array())
 	{
 		if(empty($sql))
 		return false;
@@ -103,11 +103,9 @@ class db extends base_db{
 		if ($this->debug)
 		printf("Debug: query = %s<br>\n", $sql);
 		
-		
-		$params = func_get_args();		
-		
+
 		$param_count = count($params);
-		$this->prepared_statement=$param_count>2;
+		$this->prepared_statement=$param_count>0;
 			
 		if($this->prepared_statement)
 		{
@@ -121,7 +119,7 @@ class db extends base_db{
 
 			//bind parameters
 			$param_args=array($types);
-			for($i=2;$i<$param_count;$i++)
+			for($i=0;$i<$param_count;$i++)
 			{
 				$param_args[]=$params[$i];
 			}
@@ -183,19 +181,27 @@ class db extends base_db{
 		{
 			if ($this->prepared_statement) {
 				if(!$this->result->fetch())
-					$this->record=false;	
+				{
+					return false;
+				}else
+				{
+					$record = array();
+					foreach($this->record as $key=>$value)
+					{
+							$record[$key]=$value;
+					}
+					return $record;
+				}
 			}else
 			{
 				$this->record = $this->result->fetch_assoc();
+				return $this->record;
 			}			
 		}else
 		{
 			$this->halt("next_record called with no query pending.");
 			return false;
-		}
-		$this->row   += 1;
-
-		return $this->record;
+		}		
 	}
 
 	/**

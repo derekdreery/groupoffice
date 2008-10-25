@@ -20,7 +20,7 @@ require_once ($GO_MODULES->modules['{module}']['class_path'].'{module}.class.inc
 ${module} = new {module}();
 
 
-$task=isset($_REQUEST['task']) ? smart_addslashes($_REQUEST['task']) : '';
+$task=isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
 
 try{
 

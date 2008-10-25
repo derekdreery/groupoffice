@@ -18,7 +18,7 @@
 			$cache['link_type']={link_type};
 			$cache['description']='';			
 			$cache['type']=$lang['{module}']['{friendly_single}'];
-			$cache['keywords']=$search->record_to_keywords(record).','.$cache['type'];
+			$cache['keywords']=$search->record_to_keywords($record).','.$cache['type'];
 			$cache['mtime']=$record['mtime'];
 			$cache['acl_read']=$record['acl_read'];
  			$cache['acl_write']=$record['acl_write'];	

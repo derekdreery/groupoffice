@@ -107,11 +107,11 @@
 		case '{friendly_multiple}':
 		
 			<gotpl if="$authenticate">
-			$auth_type = isset($_POST['auth_type']) ? smart_addslashes($_POST['auth_type']) : 'write';
+			$auth_type = isset($_POST['auth_type']) ? $_POST['auth_type'] : 'write';
 			
 			</gotpl>
 			<gotpl if="$relation">
-			${related_field_id}=smart_addslashes($_POST['{related_field_id}']);
+			${related_field_id}=$_POST['{related_field_id}'];
 			${related_friendly_single} = ${module}->get_{related_friendly_single}(${related_field_id});
 			$response['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, ${related_friendly_single}['acl_write']);
 			if(!$response['write_permission'] && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, ${related_friendly_single}['acl_read']))
@@ -124,7 +124,7 @@
 			{
 				try{
 					$response['deleteSuccess']=true;
-					$delete_{friendly_multiple} = json_decode(smart_stripslashes($_POST['delete_keys']));
+					$delete_{friendly_multiple} = json_decode($_POST['delete_keys']);
 
 					foreach($delete_{friendly_multiple} as ${friendly_single}_id)
 					{
@@ -137,19 +137,17 @@
 				}
 			}
 
-			$sort = isset($_REQUEST['sort']) ? smart_addslashes($_REQUEST['sort']) : 'id';
-			$dir = isset($_REQUEST['dir']) ? smart_addslashes($_REQUEST['dir']) : 'DESC';
-			$start = isset($_REQUEST['start']) ? smart_addslashes($_REQUEST['start']) : '0';
-			$limit = isset($_REQUEST['limit']) ? smart_addslashes($_REQUEST['limit']) : '0';
+			$sort = isset($_REQUEST['sort']) ? $_REQUEST['sort'] : 'id';
+			$dir = isset($_REQUEST['dir']) ? $_REQUEST['dir'] : 'DESC';
+			$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : '0';
+			$limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : '0';
 
-			$query = isset($_REQUEST['query']) ? '%'.smart_addslashes($_REQUEST['query']).'%' : '';
+			$query = isset($_REQUEST['query']) ? '%'.$_REQUEST['query'].'%' : '';
 			
 			${module}->get_<gotpl if="$authenticate">authorized_</gotpl>{friendly_multiple}(<gotpl if="$authenticate">$auth_type, $GO_SECURITY->user_id, </gotpl><gotpl if="$relation">${related_field_id}, </gotpl> $query, $sort, $dir, $start, $limit);
 			$response['results']=array();
-			while(${module}->next_record())
+			while(${friendly_single} = ${module}->next_record())
 			{
-				${friendly_single} = ${module}->Record;
-				
 				<gotpl if="$user_id">
 				$user = $GO_USERS->get_user(${friendly_single}['user_id']);
 				${friendly_single}['user_name']=String::format_name($user);

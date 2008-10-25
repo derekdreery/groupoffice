@@ -18,13 +18,6 @@ class modulegenerator extends db
 	
 	var $main_panel_replacements = array();
 	
-	public function __construct()
-	{
-		$this->db();
-		
-		
-	}
-	
 	public function test_sub_tag()
 	{
 		$data = '
