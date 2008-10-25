@@ -69,7 +69,7 @@ class export_tasks
 		$cal->get_events(false,true,false, $tasklist_id);
 		while($cal->next_record())
 		{
-			$ics .= $this->convert_event($cal->Record);
+			$ics .= $this->convert_event($cal->record);
 		}*/
 
 		$ics .= $this->export_tasklist_footer();

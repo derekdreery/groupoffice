@@ -130,9 +130,9 @@ try
 
 			while($ab->next_record())
 			{
-				$ab->Record['name'] = String::format_name($ab->f('last_name'), $ab->f('first_name'), $ab->f('middle_name'));
+				$ab->record['name'] = String::format_name($ab->f('last_name'), $ab->f('first_name'), $ab->f('middle_name'));
 
-				$response['results'][] = $ab->Record;
+				$response['results'][] = $ab->record;
 			}
 
 			echo json_encode($response);
@@ -209,7 +209,7 @@ try
 
 			while($ab->next_record())
 			{
-				$response['results'][] = $ab->Record;
+				$response['results'][] = $ab->record;
 			}
 
 			echo json_encode($response);
@@ -536,7 +536,7 @@ try
 			{
 				$response['data']['employees'][]=array(
 					'id'=>$ab->f('id'),
-					'name'=>String::format_name($ab->Record),
+					'name'=>String::format_name($ab->record),
 					'email'=>$ab->f('email')					
 				);
 			}

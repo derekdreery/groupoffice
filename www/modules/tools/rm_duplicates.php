@@ -43,7 +43,7 @@ $ab = new addressbook();
 $counter = 0;
 while($db->next_record())
 {
-	if(is_duplicate_contact($db->Record))
+	if(is_duplicate_contact($db->record))
 	{
 		if($doreal)
 		{
@@ -79,7 +79,7 @@ function is_duplicate_event($record)
 	if($db->num_rows()>1)
 	{
 		$db->next_record();
-		return $db->Record;
+		return $db->record;
 	}
 	return false;
 }
@@ -95,7 +95,7 @@ $db->query($sql);
 $counter = 0;
 while($db->next_record())
 {
-	$duplicate = is_duplicate_event($db->Record);
+	$duplicate = is_duplicate_event($db->record);
 	if($duplicate)
 	{
 		if($doreal)

@@ -292,7 +292,7 @@ class files extends filesystem
 		$this->query("SELECT $fields FROM fs_templates WHERE id=".$this->escape($template_id));
 		if($this->next_record())
 		{
-			return $this->Record;
+			return $this->record;
 		}
 		return false;
 	}
@@ -311,7 +311,7 @@ class files extends filesystem
 		$this->query("SELECT * FROM fs_templates WHERE template_name='".$this->escape($name)."'");
 		if($this->next_record())
 		{
-			return $this->Record;
+			return $this->record;
 		}
 		return false;
 	}
@@ -462,7 +462,7 @@ class files extends filesystem
 		$this->query($sql);
 		if($this->next_record())
 		{
-			return $this->Record;
+			return $this->record;
 		}else
 		{
 			global $GO_LINKS;
@@ -536,7 +536,7 @@ class files extends filesystem
 		$this->query($sql);
 		if($this->next_record())
 		{
-			return $this->Record;
+			return $this->record;
 		}else
 		{
 			global $GO_LINKS;

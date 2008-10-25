@@ -102,7 +102,7 @@ class email extends db
 		$this->query($sql);
 		if($this->next_record())
 		{
-			return $this->Record;
+			return $this->record;
 		}
 		throw new DatabaseSelectException();
 	}
@@ -124,7 +124,7 @@ class email extends db
 		$this->query("SELECT * FROM em_settings WHERE user_id='".$this->escape($user_id)."'");
 		if ($this->next_record())
 		{
-			return $this->Record;
+			return $this->record;
 		}else
 		{
 			global $GO_MODULES;
@@ -320,7 +320,7 @@ class email extends db
 		$this->query($sql);
 		if ($this->next_record(MYSQL_ASSOC))
 		{
-			return $this->Record;
+			return $this->record;
 		}else
 		{
 			return false;
@@ -517,7 +517,7 @@ class email extends db
 		$this->query($sql);
 		if ($this->next_record(MYSQL_ASSOC))
 		{
-			return $this->Record;
+			return $this->record;
 		}else
 		{
 			return false;
@@ -530,7 +530,7 @@ class email extends db
 		$this->query($sql);
 		if($this->next_record(MYSQL_ASSOC))
 		{
-			return $this->Record;
+			return $this->record;
 		}
 		return false;
 	}
@@ -610,7 +610,7 @@ class email extends db
 
 			while($this->next_record())
 			{
-				$email->cache_account_status($this->Record,$auto_check_only);
+				$email->cache_account_status($this->record,$auto_check_only);
 			}
 		}
 	}
@@ -832,7 +832,7 @@ class email extends db
 		$this->query($sql);
 		if ($this->next_record(MYSQL_ASSOC))
 		{
-			return $this->Record;
+			return $this->record;
 		}else
 		{
 			return false;
@@ -1002,7 +1002,7 @@ class email extends db
 			$cache['link_type']=9;
 			$cache['description']=$lang['email']['from'].': '.$this->f('from');
 			$cache['type']=$lang['link_type'][9];
-			$cache['keywords']=$search->record_to_keywords($this->Record).','.$cache['type'];
+			$cache['keywords']=$search->record_to_keywords($this->record).','.$cache['type'];
 			$cache['mtime']=$this->f('time');
 			$cache['acl_read']=$GO_MODULES->modules['email']['acl_read'];
 			$cache['acl_write']=$GO_MODULES->modules['email']['acl_write'];

@@ -22,7 +22,7 @@ $GO_USERS->get_users();
 while($GO_USERS->next_record())
 {
 	$count++;
-	$user = $GO_USERS->Record;		
+	$user = $GO_USERS->record;		
 		
 	$calendar['name']=addslashes(String::format_name($user));
 	$calendar['user_id']=$user['id'];

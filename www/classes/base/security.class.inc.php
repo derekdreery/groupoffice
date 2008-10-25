@@ -54,7 +54,7 @@ class GO_SECURITY extends db {
 	 */
 	function __construct() {
 		global $GO_CONFIG;
-		$this->db();
+		parent::__construct();
 
 		if (isset($_SESSION['GO_SESSION']['user_id']) &&
 		$_SESSION['GO_SESSION']['user_id'] > 0)

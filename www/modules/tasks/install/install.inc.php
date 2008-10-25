@@ -9,7 +9,7 @@ $tasks = new tasks();
 $GO_USERS->get_users();
 while($GO_USERS->next_record())
 {
-	$user = $GO_USERS->Record;		
+	$user = $GO_USERS->record;		
 		
 	$tasklist['name']=addslashes(String::format_name($user));
 	$tasklist['user_id']=$user['id'];

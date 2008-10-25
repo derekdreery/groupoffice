@@ -58,11 +58,11 @@ foreach($tables as $table)
 	
 	while($db->next_record(MYSQL_ASSOC))
 	{
-		if(count($db->Record))
+		if(count($db->record))
 		{
 			$fields=array();
 			$values=array();
-			foreach($db->Record as $field=>$value)
+			foreach($db->record as $field=>$value)
 			{
 				$fields[]=$field;
 				$values[]=addslashes($value);

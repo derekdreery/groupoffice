@@ -10,7 +10,7 @@ class imapauth extends db
 		
 		global $GO_CONFIG;
 		
-		$this->db();
+		parent::__construct();
 		
 		$conf = str_replace('config.php', 'imapauth.config.php', $GO_CONFIG->get_config_file());
 		

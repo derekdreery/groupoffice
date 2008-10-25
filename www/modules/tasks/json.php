@@ -271,7 +271,7 @@ try{
 										$response['results']=array();
 										while($tasks->next_record(MYSQL_ASSOC))
 										{
-											$tasklist = $tasks->Record;
+											$tasklist = $tasks->record;
 											$tasklist['dom_id']='tl-'.$tasks->f('id');
 											$response['results'][] = $tasklist;
 										}
@@ -358,7 +358,7 @@ try{
 										
 										while($tasks->next_record(MYSQL_ASSOC))
 										{
-											$task = $tasks->Record;
+											$task = $tasks->record;
 											$task['completed']=$tasks->f('completion_time')>0;
 											$task['late']=!$task['completed'] && $task['due_time']<$now;	
 											$task['due_time']=date($_SESSION['GO_SESSION']['date_format'], $tasks->f('due_time'));

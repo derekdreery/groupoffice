@@ -120,7 +120,7 @@ while($db->next_record())
 	if(is_dir($GO_CONFIG->root_path.'modules/'.$db->f('id')))
 	{
 		$module_ids[]=$db->f('id');
-		$modules[$db->f('id')]=$db->Record;
+		$modules[$db->f('id')]=$db->record;
 		
 		echo $db->f('id').'<br />';
 	}
@@ -247,7 +247,7 @@ if(in_array('calendar', $module_ids))
 		$sql = "SELECT * FROM cal_events WHERE id=".$db->f('event_id');
 		$db2->query($sql);
 		$db2->next_record(MYSQL_ASSOC);
-		$event = $db2->Record;
+		$event = $db2->record;
 
 		$sql = "SELECT * FROM cal_events_calendars WHERE event_id=".$event['id'];
 		$db2->query($sql);
@@ -285,7 +285,7 @@ if(in_array('calendar', $module_ids))
 	
 	while($db->next_record(MYSQL_ASSOC))
 	{
-		$update = $db->Record;
+		$update = $db->record;
 		
 		$update['start_time']=add_time($update['start_time']);
 		$update['end_time']=add_time($update['end_time']);
@@ -314,7 +314,7 @@ if(in_array('calendar', $module_ids))
 	while($db->next_record())
 	{
 		$event['id']=$db->f('id');
-		$event['rrule']=Date::build_rrule($db->f('repeat_type'), $db->f('repeat_every'), $db->f('repeat_end_time'), $db->Record, $db->f('month_time'));
+		$event['rrule']=Date::build_rrule($db->f('repeat_type'), $db->f('repeat_every'), $db->f('repeat_end_time'), $db->record, $db->f('month_time'));
 
 		$db2->update_row('cal_events', 'id', $event);
 	}
@@ -558,7 +558,7 @@ if(in_array('notes', $module_ids))
 	$GO_USERS->get_users();
 	while($GO_USERS->next_record())
 	{
-		$user = $GO_USERS->Record;		
+		$user = $GO_USERS->record;		
 		
 		$category['id']=$db->nextid('no_categories');
 		$category['name']=addslashes(String::format_name($user));

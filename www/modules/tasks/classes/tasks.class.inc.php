@@ -5,7 +5,7 @@ class tasks extends db
 
 	function tasks()
 	{
-		$this->db();
+		parent::__construct();
 	}
 	
 	function is_duplicate_task($task, $tasklist_id)
@@ -101,7 +101,7 @@ class tasks extends db
 		$this->query($sql);
 		if($this->next_record())
 		{
-			return $this->Record;
+			return $this->record;
 		}
 		return false;
 		
@@ -115,7 +115,7 @@ class tasks extends db
 			$this->query($sql);
 			if ($this->next_record(MYSQL_ASSOC))
 			{
-				return $this->Record;
+				return $this->record;
 			}else
 			{
 				return $this->get_tasklist();
@@ -168,7 +168,7 @@ class tasks extends db
 		$this->query($sql);
 		if ($this->next_record())
 		{
-			return $this->Record;
+			return $this->record;
 		}else
 		{
 			return false;
@@ -431,7 +431,7 @@ class tasks extends db
 		$this->query($sql);
 		if($this->next_record(MYSQL_ASSOC))
 		{
-			return $this->Record;
+			return $this->record;
 		}else
 		{
 			throw new DatabaseSelectException();
@@ -809,7 +809,7 @@ class tasks extends db
 			$cache['link_type']=12;
 			$cache['description']='';
 			$cache['type']=$lang['link_type'][12];
-			$cache['keywords']=addslashes($search->record_to_keywords($this->Record)).','.$cache['type'];
+			$cache['keywords']=addslashes($search->record_to_keywords($this->record)).','.$cache['type'];
 			$cache['mtime']=$this->f('mtime');
 			$cache['acl_read']=$this->f('acl_read');
 			$cache['acl_write']=$this->f('acl_write');

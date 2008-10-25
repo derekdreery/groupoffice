@@ -54,7 +54,7 @@ try{
 
 			while($rm->next_record())
 			{
-				$reminder=$rm->Record;
+				$reminder=$rm->record;
 				$reminder['iconCls']='go-link-icon-'.$reminder['link_type'];
 				$reminder['link_type_name']=isset($lang['link_type'][$reminder['link_type']]) ? $lang['link_type'][$reminder['link_type']] : 'Unknown';
 				$reminder['local_time']=date($_SESSION['GO_SESSION']['time_format'], $reminder['time']);
@@ -163,7 +163,7 @@ try{
 			$response['results']=array();
 			while($GO_SECURITY->next_record(MYSQL_ASSOC))
 			{
-				$response['results'][]=$GO_SECURITY->Record;
+				$response['results'][]=$GO_SECURITY->record;
 			}
 			break;
 
@@ -225,7 +225,7 @@ try{
 			while($GO_SECURITY->next_record(MYSQL_ASSOC))
 			{
 				$result['id']=$GO_SECURITY->f('id');
-				$result['name']=String::format_name($GO_SECURITY->Record);
+				$result['name']=String::format_name($GO_SECURITY->record);
 				$response['results'][]=$result;
 			}
 
@@ -477,7 +477,7 @@ try{
 			$response['results']=array();
 			while($GO_LINKS->next_record())
 			{
-				$response['results'][] = $GO_LINKS->Record;
+				$response['results'][] = $GO_LINKS->record;
 			}
 			break;
 

@@ -53,7 +53,7 @@ class filesystem extends db
 	{
 		global $GO_MODULES;
 		
-		$this->db();
+		parent::__construct();
 	}	
 	
 	 /**

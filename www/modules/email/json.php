@@ -182,7 +182,7 @@ function load_template($template_id, $to, $keep_tags=false)
 				$ab->search_companies($GO_SECURITY->user_id, $to, 'email');
 				if($ab->next_record())
 				{
-					$values = array_map('htmlspecialchars', $ab->Record);
+					$values = array_map('htmlspecialchars', $ab->record);
 				}
 			}
 		}
@@ -550,7 +550,7 @@ try{
 				$response['results']=array();
 				while($email->next_record(MYSQL_ASSOC))
 				{
-					$response['results'][] = $email->Record;
+					$response['results'][] = $email->record;
 				}
 
 				break;

@@ -794,15 +794,11 @@ class GO_CONFIG
       	// url to user configuration apps
       	$this->configuration_url = $this->host.$this->configuration_url.'/';
 
-      	// database class library
+      	// database class library      	
+				require_once($this->class_path.'database/base_db.class.inc.php');
       	require_once($this->class_path.'database/'.$this->db_type.'.class.inc.php');
 
-      	$this->db = new db();
-      	$this->db->Host = $this->db_host;
-      	$this->db->Database = $this->db_name;
-      	$this->db->User = $this->db_user;
-      	$this->db->Password = $this->db_pass;
-
+      	$this->db = new db($this);      	
 
       	if(is_string($this->create_mode))
       	{

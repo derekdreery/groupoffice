@@ -28,7 +28,7 @@ class calendar extends db
 
 	function calendar()
 	{
-		$this->db();
+		parent::__construct();
 	}
 
 	function event_to_html($event)
@@ -426,7 +426,7 @@ class calendar extends db
 		$this->query($sql);
 		if($this->next_record())
 		{
-			return $this->Record;
+			return $this->record;
 		}
 		throw new DatabaseSelectException();
 	}
@@ -475,7 +475,7 @@ class calendar extends db
 		$this->query($sql);
 		if($this->next_record())
 		{
-			return $this->Record;
+			return $this->record;
 		}
 		return false;
 	}
@@ -543,7 +543,7 @@ class calendar extends db
 		$this->query("SELECT * FROM cal_settings WHERE user_id='".$this->escape($user_id)."'");
 		if ($this->next_record(MYSQL_ASSOC))
 		{
-			return $this->Record;
+			return $this->record;
 		}else
 		{
 			$this->query("INSERT INTO cal_settings (user_id) VALUES ('".$this->escape($user_id)."')");
@@ -611,7 +611,7 @@ class calendar extends db
 			$this->query($sql);
 			if ($this->next_record(MYSQL_ASSOC))
 			{
-				return $this->Record;
+				return $this->record;
 			}else
 			{
 				return false;
@@ -623,7 +623,7 @@ class calendar extends db
 			$this->get_user_calendars($GO_SECURITY->user_id);
 			if ($this->next_record(MYSQL_ASSOC))
 			{
-				return $this->Record;
+				return $this->record;
 			}else
 			{
 				global $GO_USERS;
@@ -664,7 +664,7 @@ class calendar extends db
 		$this->query($sql);
 		if ($this->next_record())
 		{
-			return $this->Record;
+			return $this->record;
 		}else
 		{
 			return false;
@@ -1071,7 +1071,7 @@ class calendar extends db
 		{
 			while($this->next_record())
 			{
-				$this->calculate_event($this->Record,
+				$this->calculate_event($this->record,
 				$interval_start_time,
 				$interval_end_time);
 			}
@@ -1166,7 +1166,7 @@ class calendar extends db
 		$this->query($sql);
 		if($this->next_record(MYSQL_ASSOC))
 		{
-			return $this->Record;
+			return $this->record;
 		}else
 		{
 			return false;
@@ -1695,7 +1695,7 @@ class calendar extends db
 			$cache['description']=$this->f('description');
 			//$cache['url']=$GO_MODULES->modules['calendar']['url'].'event.php?event_id='.$this->f('id');
 			$cache['type']=$this->f('todo')=='1' ? $cal_todo : $lang['calendar']['event'];
-			$cache['keywords']=$search->record_to_keywords($this->Record).','.$cache['type'];
+			$cache['keywords']=$search->record_to_keywords($this->record).','.$cache['type'];
 			$cache['mtime']=$this->f('mtime');
 			$cache['acl_read']=$this->f('acl_read');
 			$cache['acl_write']=$this->f('acl_write');

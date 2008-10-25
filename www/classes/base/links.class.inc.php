@@ -47,7 +47,7 @@ class GO_LINKS extends db
 {
 	function __construct() 
 	{
-		$this->db();
+		parent::__construct();
 	}
 	
 	function get_link_id()
@@ -73,7 +73,7 @@ class GO_LINKS extends db
 		$this->query($sql);
 		if($this->next_record())
 		{
-			return $this->Record;
+			return $this->record;
 		}
 		return false;
 	}
