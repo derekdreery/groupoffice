@@ -121,7 +121,7 @@
 		
 		if(!empty($query))
  		{
- 			$sql .= " <gotpl if="$relation">AND</gotpl><gotpl if="!$relation">WHERE</gotpl> name LIKE '$query'";
+ 			$sql .= " <gotpl if="$relation">AND</gotpl><gotpl if="!$relation">WHERE</gotpl> name LIKE '".$this->escape($query)."'";
  		} 		
 		
 		$sql .= "ORDER BY $sortfield $sortorder";
@@ -176,7 +176,7 @@
  		
  		if(!empty($query))
  		{
- 			$sql .= " AND name LIKE '$query'";
+ 			$sql .= " AND name LIKE '".$this->escape($query)."'";
  		} 		
 
 		$sql .= " ORDER BY $sort $direction";

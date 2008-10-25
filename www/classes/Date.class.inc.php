@@ -13,16 +13,8 @@
  */
 
 /**
- * This class has functions that handle dates and takes the user's date
- * preferences into account.
- *
- * @copyright Copyright Intermesh
- * @version $Id$
- * @package go.utils
- * @since Group-Office 3.0
+ * Define some constants
  */
-
-
 if(!defined('REPEAT_NONE'))
 {
 	define('REPEAT_NONE', '0');
@@ -33,6 +25,16 @@ if(!defined('REPEAT_NONE'))
 	define('REPEAT_YEARLY', '5');
 }
 
+
+/**
+ * This class has functions that handle dates and takes the user's date
+ * preferences into account.
+ *
+ * @copyright Copyright Intermesh
+ * @version $Id$
+ * @package go.utils
+ * @since Group-Office 3.0
+ */
 
 class Date
 {

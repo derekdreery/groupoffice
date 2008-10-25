@@ -13,17 +13,22 @@
  */
 
 /**
+ * Constants
+ */
+define('DB_NUM', MYSQL_NUM);
+define('DB_BOTH', MYSQL_BOTH);
+define('DB_ASSOC', MYSQL_ASSOC);
+
+/**
  * Class that connects to MySQL using the MySQLi extension
  *
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
- * @package go.mail
+ * @package go.database
  * @access public
  */
 
-define('DB_NUM', MYSQL_NUM);
-define('DB_BOTH', MYSQL_BOTH);
-define('DB_ASSOC', MYSQL_ASSOC);
+
 
 class db extends base_db {
 	
