@@ -65,7 +65,7 @@ foreach($tables as $table)
 			foreach($db->record as $field=>$value)
 			{
 				$fields[]=$field;
-				$values[]=addslashes($value);
+				$values[]=$value;
 			}
 			
 			echo "REPLACE INTO `$table` (`"; 

@@ -45,7 +45,7 @@ try{
 
 					foreach($delete_categories as $category_id)
 					{
-						$notes->delete_category(addslashes($category_id));
+						$notes->delete_category($category_id);
 					}
 				}catch(Exception $e)
 				{
@@ -110,10 +110,10 @@ try{
 				{
 					$fs->mkdir_recursive($full_path);
 
-					if(!$fs->get_folder(addslashes($full_path)))
+					if(!$fs->get_folder($full_path))
 					{
 						$folder['user_id']=$response['data']['user_id'];
-						$folder['path']=addslashes($full_path);
+						$folder['path']=$full_path;
 						$folder['visible']='0';
 						
 						
@@ -195,7 +195,7 @@ try{
 
 					foreach($delete_notes as $note_id)
 					{
-						$notes->delete_note(addslashes($note_id));
+						$notes->delete_note($note_id);
 					}
 				}catch(Exception $e)
 				{

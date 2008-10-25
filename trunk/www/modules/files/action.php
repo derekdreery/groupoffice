@@ -55,7 +55,7 @@ try{
 				throw new AccessDeniedException();
 			}
 			
-			$up_file['path']=addslashes($path);
+			$up_file['path']=$path;
 			$up_file['comments']=$_POST['comments'];
 			$fs->update_file($up_file);
 
@@ -96,25 +96,25 @@ try{
 			}
 
 			$new_notify = isset($_POST['notify']);
-			$old_notify = $fs->is_notified(addslashes($path), $GO_SECURITY->user_id);
+			$old_notify = $fs->is_notified($path, $GO_SECURITY->user_id);
 
 			if($new_notify && !$old_notify)
 			{
-				$fs->add_notification(addslashes($path), $GO_SECURITY->user_id);
+				$fs->add_notification($path, $GO_SECURITY->user_id);
 			}
 			if(!$new_notify && $old_notify)
 			{
-				$fs->remove_notification(addslashes($path), $GO_SECURITY->user_id);
+				$fs->remove_notification($path, $GO_SECURITY->user_id);
 			}
 
 
 			if($fs->is_owner($GO_SECURITY->user_id, $path))
 			{
 
-				$folder = $fs->get_folder(addslashes($path));
+				$folder = $fs->get_folder($path);
 					
 				
-				$up_folder['path']=addslashes($path);
+				$up_folder['path']=$path;
 				$up_folder['comments']=$_POST['comments'];
 				
 				if (isset ($_POST['share']) && $folder['acl_read']==0) {
@@ -186,7 +186,7 @@ try{
 			} else {
 				//$GO_LOGGER->log('filesystem', 'NEW FOLDER '.$fs->strip_file_storage_path($fv->path.'/'.$name));
 				
-				$folder['path']=addslashes($path.'/'.$name);
+				$folder['path']=$path.'/'.$name;
 				$folder['visible']='1';
 				$folder['user_id']=$GO_SECURITY->user_id;
 				
@@ -333,7 +333,7 @@ try{
 			if (is_uploaded_file($_FILES['file']['tmp_name'][0]))
 			{
 				$fp = fopen($_FILES['file']['tmp_name'][0], "rb");
-				$template['content'] = addslashes(fread($fp, $_FILES['file']['size'][0]));
+				$template['content'] = fread($fp, $_FILES['file']['size'][0]);
 				fclose($fp);
 				
 				$template['extension']=File::get_extension($_FILES['file']['name'][0]);

@@ -5,5 +5,5 @@ $tasks = new tasks();
 $tasklist = $tasks->get_tasklist();
 ?>
 <script type="text/javascript">
-GO.tasks.defaultTasklist = {id: <?php echo $tasklist['id']; ?>, name: "<?php echo addslashes($tasklist['name']); ?>"};
+GO.tasks.defaultTasklist = {id: <?php echo $tasklist['id']; ?>, name: "<?php echo $tasklist['name']; ?>"};
 </script>

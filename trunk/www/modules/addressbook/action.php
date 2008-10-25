@@ -97,7 +97,7 @@ try
 							$fs->mkdir_recursive($full_path);
 								
 							$folder['user_id']=$GO_SECURITY->user_id;
-							$folder['path']=addslashes($full_path);
+							$folder['path']=$full_path;
 							$folder['visible']='0';
 							$folder['acl_read']=$addressbook['acl_read'];
 							$folder['acl_write']=$addressbook['acl_write'];
@@ -210,7 +210,7 @@ try
 						$fs->mkdir_recursive($full_path);
 							
 						$folder['user_id']=$GO_SECURITY->user_id;
-						$folder['path']=addslashes($full_path);
+						$folder['path']=$full_path;
 						$folder['visible']='0';
 						$folder['acl_read']=$addressbook['acl_read'];
 						$folder['acl_write']=$addressbook['acl_write'];
@@ -416,32 +416,32 @@ try
 								{
 									if ((isset ($record[$_POST['first_name']]) && $record[$_POST['first_name']] != "") || (isset ($record[$_POST['last_name']]) && $record[$_POST['last_name']] != ''))
 									{
-										$contact['title'] = isset ($record[$_POST['title']]) ? addslashes(trim($record[$_POST['title']])) : '';
-										$contact['first_name'] = isset ($record[$_POST['first_name']]) ? addslashes(trim($record[$_POST['first_name']])) : '';
-										$contact['middle_name'] = isset ($record[$_POST['middle_name']]) ? addslashes(trim($record[$_POST['middle_name']])) : '';
-										$contact['last_name'] = isset ($record[$_POST['last_name']]) ? addslashes(trim($record[$_POST['last_name']])) : '';
-										$contact['initials'] = isset ($record[$_POST['initials']]) ? addslashes(trim($record[$_POST['initials']])) : '';
-										$contact['sex'] = isset ($record[$_POST['sex']]) ? addslashes(trim($record[$_POST['sex']])) : 'M';
-										$contact['birthday'] = isset ($record[$_POST['birthday']]) ? addslashes(trim($record[$_POST['birthday']])) : '';
+										$contact['title'] = isset ($record[$_POST['title']]) ? trim($record[$_POST['title']]) : '';
+										$contact['first_name'] = isset ($record[$_POST['first_name']]) ? trim($record[$_POST['first_name']]) : '';
+										$contact['middle_name'] = isset ($record[$_POST['middle_name']]) ? trim($record[$_POST['middle_name']]) : '';
+										$contact['last_name'] = isset ($record[$_POST['last_name']]) ? trim($record[$_POST['last_name']]) : '';
+										$contact['initials'] = isset ($record[$_POST['initials']]) ? trim($record[$_POST['initials']]) : '';
+										$contact['sex'] = isset ($record[$_POST['sex']]) ? trim($record[$_POST['sex']]) : 'M';
+										$contact['birthday'] = isset ($record[$_POST['birthday']]) ? trim($record[$_POST['birthday']]) : '';
 										$contact['email'] = isset ($record[$_POST['email']]) ? String::get_email_from_string($record[$_POST['email']]) : '';
 										$contact['email2'] = isset ($record[$_POST['email2']]) ? String::get_email_from_string($record[$_POST['email2']]) : '';
 										$contact['email3'] = isset ($record[$_POST['email3']]) ? String::get_email_from_string($record[$_POST['email3']]) : '';
-										$contact['work_phone'] = isset ($record[$_POST['work_phone']]) ? addslashes(trim($record[$_POST['work_phone']])) : '';
-										$contact['home_phone'] = isset ($record[$_POST['home_phone']]) ? addslashes(trim($record[$_POST['home_phone']])) : '';
-										$contact['fax'] = isset ($record[$_POST['fax']]) ? addslashes(trim($record[$_POST['fax']])) : '';
-										$contact['work_fax'] = isset ($record[$_POST['work_fax']]) ? addslashes(trim($record[$_POST['work_fax']])) : '';
-										$contact['cellular'] = isset ($record[$_POST['cellular']]) ? addslashes(trim($record[$_POST['cellular']])) : '';
-										$contact['country'] = isset ($record[$_POST['country']]) ? addslashes(trim($record[$_POST['country']])) : '';
-										$contact['state'] =  isset($record[$_POST['state']]) ? addslashes(trim($record[$_POST['state']])) : '';
-										$contact['city'] = isset ($record[$_POST['city']]) ? addslashes(trim($record[$_POST['city']])) : '';
-										$contact['zip'] = isset ($record[$_POST['zip']]) ? addslashes(trim($record[$_POST['zip']])) : '';
-										$contact['address'] = isset ($record[$_POST['address']]) ? addslashes(trim($record[$_POST['address']])) : '';
-										$contact['address_no'] = isset ($record[$_POST['address_no']]) ? addslashes(trim($record[$_POST['address_no']])) : '';
-										$company_name = isset ($record[$_POST['company_name']]) ? addslashes(trim($record[$_POST['company_name']])) : '';
-										$contact['department'] = isset ($record[$_POST['department']]) ? addslashes(trim($record[$_POST['department']])) : '';
-										$contact['function'] = isset ($record[$_POST['function']]) ? addslashes(trim($record[$_POST['function']])) : '';
-										$contact['salutation'] = isset ($record[$_POST['salutation']]) ? addslashes(trim($record[$_POST['salutation']])) : '';
-										$contact['comment'] = isset ($record[$_POST['comment']]) ? addslashes(trim($record[$_POST['comment']])) : '';
+										$contact['work_phone'] = isset ($record[$_POST['work_phone']]) ? trim($record[$_POST['work_phone']]) : '';
+										$contact['home_phone'] = isset ($record[$_POST['home_phone']]) ? trim($record[$_POST['home_phone']]) : '';
+										$contact['fax'] = isset ($record[$_POST['fax']]) ? trim($record[$_POST['fax']]) : '';
+										$contact['work_fax'] = isset ($record[$_POST['work_fax']]) ? trim($record[$_POST['work_fax']]) : '';
+										$contact['cellular'] = isset ($record[$_POST['cellular']]) ? trim($record[$_POST['cellular']]) : '';
+										$contact['country'] = isset ($record[$_POST['country']]) ? trim($record[$_POST['country']]) : '';
+										$contact['state'] =  isset($record[$_POST['state']]) ? trim($record[$_POST['state']]) : '';
+										$contact['city'] = isset ($record[$_POST['city']]) ? trim($record[$_POST['city']]) : '';
+										$contact['zip'] = isset ($record[$_POST['zip']]) ? trim($record[$_POST['zip']]) : '';
+										$contact['address'] = isset ($record[$_POST['address']]) ? trim($record[$_POST['address']]) : '';
+										$contact['address_no'] = isset ($record[$_POST['address_no']]) ? trim($record[$_POST['address_no']]) : '';
+										$company_name = isset ($record[$_POST['company_name']]) ? trim($record[$_POST['company_name']]) : '';
+										$contact['department'] = isset ($record[$_POST['department']]) ? trim($record[$_POST['department']]) : '';
+										$contact['function'] = isset ($record[$_POST['function']]) ? trim($record[$_POST['function']]) : '';
+										$contact['salutation'] = isset ($record[$_POST['salutation']]) ? trim($record[$_POST['salutation']]) : '';
+										$contact['comment'] = isset ($record[$_POST['comment']]) ? trim($record[$_POST['comment']]) : '';
 
 										if ($company_name != '') {
 											$contact['company_id'] = $ab->get_company_id_by_name($company_name, $addressbook_id);
@@ -468,28 +468,28 @@ try
 								} else {
 									if (isset ($record[$_POST['name']]) && $record[$_POST['name']] != '')
 									{
-										$company['name'] = addslashes(trim($record[$_POST['name']]));
+										$company['name'] = trim($record[$_POST['name']]);
 
 										if (!$ab->get_company_by_name($_POST['addressbook_id'], $company['name']))
 										{
 											$company['email'] = isset ($record[$_POST['email']]) ? String::get_email_from_string($record[$_POST['email']]) : '';
-											$company['phone'] = isset ($record[$_POST['phone']]) ? addslashes(trim($record[$_POST['phone']])) : '';
-											$company['fax'] = isset ($record[$_POST['fax']]) ? addslashes(trim($record[$_POST['fax']])) : '';
-											$company['country'] = isset ($record[$_POST['country']]) ? addslashes(trim($record[$_POST['country']])) : '';
-											$company['state'] = isset ($record[$_POST['state']]) ? addslashes(trim($record[$_POST['state']])) : '';
-											$company['city'] = isset ($record[$_POST['city']]) ? addslashes(trim($record[$_POST['city']])) : '';
-											$company['zip'] = isset ($record[$_POST['zip']]) ? addslashes(trim($record[$_POST['zip']])) : '';
-											$company['address'] = isset ($record[$_POST['address']]) ? addslashes(trim($record[$_POST['address']])) : '';
-											$company['address_no'] = isset ($record[$_POST['address_no']]) ? addslashes(trim($record[$_POST['address_no']])) : '';
-											$company['post_country'] = isset ($record[$_POST['post_country']]) ? addslashes(trim($record[$_POST['post_country']])) : '';
-											$company['post_state'] = isset ($record[$_POST['post_state']]) ? addslashes(trim($record[$_POST['post_state']])) : '';
-											$company['post_city'] = isset ($record[$_POST['post_city']]) ? addslashes(trim($record[$_POST['post_city']])) : '';
-											$company['post_zip'] = isset ($record[$_POST['post_zip']]) ? addslashes(trim($record[$_POST['post_zip']])) : '';
-											$company['post_address'] = isset ($record[$_POST['post_address']]) ? addslashes(trim($record[$_POST['post_address']])) : '';
-											$company['post_address_no'] = isset ($record[$_POST['post_address_no']]) ? addslashes(trim($record[$_POST['post_address_no']])) : '';
-											$company['homepage'] = isset ($record[$_POST['homepage']]) ? addslashes(trim($record[$_POST['homepage']])) : '';
-											$company['bank_no'] = isset ($record[$_POST['bank_no']]) ? addslashes(trim($record[$_POST['bank_no']])) : '';
-											$company['vat_no'] = isset ($record[$_POST['vat_no']]) ? addslashes(trim($record[$_POST['vat_no']])) : '';
+											$company['phone'] = isset ($record[$_POST['phone']]) ? trim($record[$_POST['phone']]) : '';
+											$company['fax'] = isset ($record[$_POST['fax']]) ? trim($record[$_POST['fax']]) : '';
+											$company['country'] = isset ($record[$_POST['country']]) ? trim($record[$_POST['country']]) : '';
+											$company['state'] = isset ($record[$_POST['state']]) ? trim($record[$_POST['state']]) : '';
+											$company['city'] = isset ($record[$_POST['city']]) ? trim($record[$_POST['city']]) : '';
+											$company['zip'] = isset ($record[$_POST['zip']]) ? trim($record[$_POST['zip']]) : '';
+											$company['address'] = isset ($record[$_POST['address']]) ? trim($record[$_POST['address']]) : '';
+											$company['address_no'] = isset ($record[$_POST['address_no']]) ? trim($record[$_POST['address_no']]) : '';
+											$company['post_country'] = isset ($record[$_POST['post_country']]) ? trim($record[$_POST['post_country']]) : '';
+											$company['post_state'] = isset ($record[$_POST['post_state']]) ? trim($record[$_POST['post_state']]) : '';
+											$company['post_city'] = isset ($record[$_POST['post_city']]) ? trim($record[$_POST['post_city']]) : '';
+											$company['post_zip'] = isset ($record[$_POST['post_zip']]) ? trim($record[$_POST['post_zip']]) : '';
+											$company['post_address'] = isset ($record[$_POST['post_address']]) ? trim($record[$_POST['post_address']]) : '';
+											$company['post_address_no'] = isset ($record[$_POST['post_address_no']]) ? trim($record[$_POST['post_address_no']]) : '';
+											$company['homepage'] = isset ($record[$_POST['homepage']]) ? trim($record[$_POST['homepage']]) : '';
+											$company['bank_no'] = isset ($record[$_POST['bank_no']]) ? trim($record[$_POST['bank_no']]) : '';
+											$company['vat_no'] = isset ($record[$_POST['vat_no']]) ? trim($record[$_POST['vat_no']]) : '';
 											$company['addressbook_id']  = $_POST['addressbook_id'];
 
 											$ab->add_company($company);

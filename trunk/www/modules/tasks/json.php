@@ -40,7 +40,7 @@ try{
 				
 			$response['data']['tasklist_name']=$tasklist['name'];
 			
-			$response['data']['status_text']=isset($lang['tasks']['statuses'][$task['status']]) ? addslashes($lang['tasks']['statuses'][$task['status']]) : $lang['tasks']['statuses']['NEEDS-ACTION'];
+			$response['data']['status_text']=isset($lang['tasks']['statuses'][$task['status']]) ? $lang['tasks']['statuses'][$task['status']] : $lang['tasks']['statuses']['NEEDS-ACTION'];
 				
 			$response['data']['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_write']);
 			if(!$response['data']['write_permission'] && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_read']))
@@ -177,7 +177,7 @@ try{
 					$fs->mkdir_recursive($full_path);
 						
 					$folder['user_id']=$response['data']['user_id'];
-					$folder['path']=addslashes($full_path);
+					$folder['path']=$full_path;
 					$folder['visible']='0';
 					$folder['acl_read']=$tasklist['acl_read'];
 					$folder['acl_write']=$tasklist['acl_write'];
@@ -243,7 +243,7 @@ try{
 													{
 														throw new AccessDeniedException();
 													}
-													$tasks->delete_tasklist(addslashes($tasklist_id));
+													$tasks->delete_tasklist($tasklist_id);
 												}
 											}catch(Exception $e)
 											{
@@ -305,7 +305,7 @@ try{
 
 													foreach($delete_tasks as $task_id)
 													{
-														$tasks->delete_task(addslashes($task_id));
+														$tasks->delete_task($task_id);
 													}
 												}catch(Exception $e)
 												{

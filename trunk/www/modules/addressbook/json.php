@@ -347,10 +347,10 @@ try
 					{
 						$fs->mkdir_recursive($full_path);
 	
-						if(!$fs->get_folder(addslashes($full_path)))
+						if(!$fs->get_folder($full_path))
 						{
 							$folder['user_id']=$response['data']['user_id'];
-							$folder['path']=addslashes($full_path);
+							$folder['path']=$full_path;
 							$folder['visible']='0';
 							$folder['acl_read']=$response['data']['acl_read'];
 							$folder['acl_write']=$response['data']['acl_write'];
@@ -475,10 +475,10 @@ try
 					{
 						$fs->mkdir_recursive($full_path);
 	
-						if(!$fs->get_folder(addslashes($full_path)))
+						if(!$fs->get_folder($full_path))
 						{
 							$folder['user_id']=$response['data']['user_id'];
-							$folder['path']=addslashes($full_path);
+							$folder['path']=$full_path;
 							$folder['visible']='0';
 							$folder['acl_read']=$response['data']['acl_read'];
 							$folder['acl_write']=$response['data']['acl_write'];

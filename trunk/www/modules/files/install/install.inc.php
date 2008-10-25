@@ -8,10 +8,10 @@ require($GO_LANGUAGE->get_language_file('files'));
 require_once($module['class_path'].'files.class.inc');
 $files = new files();
 
-$template['name']=addslashes($lang['files']['ootextdoc']);
+$template['name']=$lang['files']['ootextdoc'];
 $template['user_id']=1;
 $template['extension']='odt';
-$template['content']=addslashes(file_get_contents($module['path'].'install/templates/empty.odt'));
+$template['content']=file_get_contents($module['path'].'install/templates/empty.odt');
 $template['acl_read']=$GO_SECURITY->get_new_acl('files');
 $template['acl_write']=$GO_SECURITY->get_new_acl('files');
 
@@ -20,10 +20,10 @@ $GO_SECURITY->add_group_to_acl($GO_CONFIG->group_internal, $template['acl_read']
 $files->add_template($template);
 
 
-$template['name']=addslashes($lang['files']['wordtextdoc']);
+$template['name']=$lang['files']['wordtextdoc'];
 $template['user_id']=1;
 $template['extension']='doc';
-$template['content']=addslashes(file_get_contents($module['path'].'install/templates/empty.doc'));
+$template['content']=file_get_contents($module['path'].'install/templates/empty.doc');
 $template['acl_read']=$GO_SECURITY->get_new_acl('files');
 $template['acl_write']=$GO_SECURITY->get_new_acl('files');
 
@@ -62,7 +62,7 @@ while($GO_USERS->next_record())
 }
 
 
-$share_dir = $GO_CONFIG->file_storage_path.'users/admin/'.addslashes($lang['files']['general']);
+$share_dir = $GO_CONFIG->file_storage_path.'users/admin/'.$lang['files']['general'];
 
 if(!is_dir($share_dir))
 {

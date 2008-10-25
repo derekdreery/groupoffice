@@ -93,7 +93,7 @@ try{
 						$fs->mkdir_recursive($full_path);
 							
 						$folder['user_id']=$GO_SECURITY->user_id;
-						$folder['path']=addslashes($full_path);
+						$folder['path']=$full_path;
 						$folder['visible']='0';
 						
 						

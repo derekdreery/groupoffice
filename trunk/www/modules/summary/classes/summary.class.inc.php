@@ -25,7 +25,7 @@ class summary extends db{
 		require($GO_LANGUAGE->get_language_file('summary'));
 		
 		$feed['user_id']=$params['user']['id'];
-		$feed['url']=addslashes($lang['summary']['default_rss_url']);
+		$feed['url']=$lang['summary']['default_rss_url'];
 		
 		$this->add_feed($feed);
 	}

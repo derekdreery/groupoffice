@@ -405,7 +405,7 @@ try{
 					$fs->mkdir_recursive($full_path);
 
 					$folder['user_id']=$response['data']['user_id'];
-					$folder['path']=addslashes($full_path);
+					$folder['path']=$full_path;
 					$folder['visible']='0';
 					$folder['acl_read']=$calendar['acl_read'];
 					$folder['acl_write']=$calendar['acl_write'];
@@ -712,7 +712,7 @@ try{
 													{
 														throw new AccessDeniedException();
 													}
-													$cal->delete_calendar(addslashes($calendar_id));
+													$cal->delete_calendar($calendar_id);
 												}
 											}catch(Exception $e)
 											{
@@ -797,7 +797,7 @@ try{
 													{
 														throw new AccessDeniedException();
 													}
-													$cal->delete_view(addslashes($view_id));
+													$cal->delete_view($view_id);
 												}
 											}catch(Exception $e)
 											{

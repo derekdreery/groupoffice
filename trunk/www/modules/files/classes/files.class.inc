@@ -100,7 +100,7 @@ class files extends filesystem
 			$this->mkdir_recursive($full_path);
 		}	
 
-		$folder = $this->get_folder(addslashes($full_path));
+		$folder = $this->get_folder($full_path);
 		if(!$folder)
 		{
 			$folder['user_id']=$user_id;
@@ -204,7 +204,7 @@ class files extends filesystem
 			
 		
 		$users=array();
-		$this->get_users_to_notify(addslashes($path));
+		$this->get_users_to_notify($path);
 		while($this->next_record())
 		{
 			if($this->f('user_id')!=$GO_SECURITY->user_id)
@@ -717,7 +717,7 @@ class files extends filesystem
 		$folders = $this->get_folders_sorted($path, 'utf8_basename', $dir);
 		foreach($folders as $folder)
 		{
-			$db_folder = $this->get_folder(addslashes($folder['path']));
+			$db_folder = $this->get_folder($folder['path']);
 			if($db_folder['acl_read']>0)
 			{
 				$class='folder-shared';
@@ -895,15 +895,15 @@ class files extends filesystem
 
 			$cache['id']=$this->f('id');
 			$cache['user_id']=$this->f('user_id');
-			$cache['name'] = addslashes(utf8_basename($this->f('path')));
+			$cache['name'] = utf8_basename($this->f('path'));
 			$cache['link_type']=6;
-			$cache['description']=addslashes(substr($this->f('path'), strlen($GO_CONFIG->file_storage_path)));
+			$cache['description']=substr($this->f('path', strlen($GO_CONFIG->file_storage_path)));
 			$cache['type']='File';
 			$cache['module']='files';
-			$cache['keywords']=addslashes($this->f('comments')).','.$cache['name'].','.$cache['type'];
+			$cache['keywords']=$this->f('comments').','.$cache['name'].','.$cache['type'];
 			$cache['mtime']=$this->f('mtime');
 
-			$share = $fs->find_share(addslashes($this->f('path')));
+			$share = $fs->find_share($this->f('path'));
 			if($share)
 			{
 				$cache['acl_read']=$share['acl_read'];

@@ -12,7 +12,7 @@ $GO_USERS->get_users();
 while($GO_USERS->next_record())
 {
 	$feed['user_id']=$GO_USERS->f('id');
-	$feed['url']=addslashes($lang['summary']['default_rss_url']);
+	$feed['url']=$lang['summary']['default_rss_url'];
 	$sum->add_feed($feed);			
 }
 ?>
