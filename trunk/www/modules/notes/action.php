@@ -32,9 +32,9 @@ try{
 			$category_id=$category['id']=isset($_POST['category_id']) ? ($_POST['category_id']) : 0;
 		
 			if(isset($_POST['user_id']))
-				$category['user_id']=(trim($_POST['user_id']));
+				$category['user_id']=$_POST['user_id'];
 				
-			$category['name']=(trim($_POST['name']));
+			$category['name']=$_POST['name'];
 
 			if($category['id']>0)
 			{
@@ -65,9 +65,9 @@ try{
 				throw new AccessDeniedException();
 			}			
 			
-			$note['category_id']=(trim($_POST['category_id']));
-			$note['name']=(trim($_POST['name']));
-			$note['content']=(trim($_POST['content']));
+			$note['category_id']=$_POST['category_id'];
+			$note['name']=$_POST['name'];
+			$note['content']=$_POST['content'];
 
 			if($note['id']>0)
 			{
