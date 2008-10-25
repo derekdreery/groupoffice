@@ -360,7 +360,7 @@ class GoSwift extends Swift{
 
 		$email = new email();
 
-		$link_message['from']=addslashes($this->message->headers->get('from'));
+		$link_message['from']=$this->message->headers->get('from');
 		
 		$to=$this->recipients->getTo();
 		foreach ($to as $key => $value)
@@ -370,7 +370,7 @@ class GoSwift extends Swift{
 
 		
 		$link_message['to']=implode(',',$to);
-		$link_message['subject']=addslashes($this->message->headers->get('subject'));
+		$link_message['subject']=$this->message->headers->get('subject');
 		$link_message['ctime']=$link_message['time']=time();
 		$link_message['link_id'] = $email->link_message($link_message);
 

@@ -124,7 +124,7 @@ try{
 
 					foreach($groups as $group_id)
 					{
-						$GO_SECURITY->delete_group_from_acl(addslashes($group_id), $acl_id);
+						$GO_SECURITY->delete_group_from_acl($group_id, $acl_id);
 					}
 				}catch(Exception $e)
 				{
@@ -185,7 +185,7 @@ try{
 
 					foreach($users as $user_id)
 					{
-						$GO_SECURITY->delete_user_from_acl(addslashes($user_id), $acl_id);
+						$GO_SECURITY->delete_user_from_acl($user_id, $acl_id);
 					}
 				}catch(Exception $e)
 				{
@@ -210,7 +210,7 @@ try{
 					{
 						if(!$GO_SECURITY->user_in_acl($user_id, $acl_id))
 						{
-							$GO_SECURITY->add_user_to_acl(addslashes($user_id), $acl_id);
+							$GO_SECURITY->add_user_to_acl($user_id, $acl_id);
 						}
 					}
 				}catch(Exception $e)
