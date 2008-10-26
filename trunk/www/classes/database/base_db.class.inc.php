@@ -393,37 +393,53 @@ class base_db{
 	 * @return bool
 	 */
 	
-	public function update_row($table, $index, $fields, $trim=true)
+	public function update_row($table, $index, $fields, $types='', $trim=true)
 	{
 		if(!is_array($fields))
 		{			
 			$this->halt('Invalid update row called');
 			return false;
-		}
-		
+		}		
 		if(!is_array($index))
 		{
 			$index = array($index);
 		}
+		if(empty($types))
+		{
+			$types = str_repeat('s', count($fields));
+		}
+		
+		$field_types='';
+		$index_types='';
+		$count=0;
+		$indexes=array();
+		
 		foreach($fields as $key => $value)
 		{
 			if(!in_array($key, $index))
 			{
-				$updates[] = "`$key`='".$this->escape($value, $trim)."'";
+				$updates[] = "`$key`=?";
+				$field_values[] = $value;						
+				$field_types.=$types[$count];
+			}else
+			{
+				$indexes[]="`$key`=?";
+				$index_types.=$types[$count];
+				$index_values[] = $value;
 			}
+			$count++;
 		}
 		if(isset($updates))
 		{
-			$sql = "UPDATE `$table` SET ".implode(',',$updates)." WHERE ";
-
-			$indexes=array();
-			foreach($index as $subindex)
+			$sql = "UPDATE `$table` SET ".implode(',',$updates)." WHERE ".implode(' AND ', $indexes);
+			
+			foreach($index_values as $index_value)
 			{
-				$indexes[]="`$subindex`='".$fields[$subindex]."'";
+				$field_values[]=$index_value;
 			}
-			$sql .= implode(' AND ', $indexes);
+			$field_types .= $index_types;
 
-			if(!$this->query($sql))
+			if(!$this->query($sql, $field_types, $field_values))
 			{
 				if($this->halt_on_error=='yes')
 				{
@@ -447,7 +463,7 @@ class base_db{
 	 * @return bool
 	 */
 
-	public function insert_row($table, $fields, $trim=true)
+	public function insert_row($table, $fields, $types='', $trim=true)
 	{
 		if(!is_array($fields))
 		{			
@@ -458,14 +474,19 @@ class base_db{
 		foreach($fields as $key => $value)
 		{
 			$field_names[] = $key;
-			$field_values[] = $this->escape($value, $trim);
+			$field_values[] = $value;
 		}
 		if(isset($field_names))
 		{
 			$sql = "INSERT INTO `$table` (`".implode('`,`', $field_names)."`) VALUES ".
-  					"('".implode("','", $field_values)."')";
+  					"(".str_repeat('?,', count($field_values)-1)."?)";
+			
+			if(empty($types))
+			{
+				$types = str_repeat('s',count($field_values));
+			}
 
-			if(!$this->query($sql))
+			if(!$this->query($sql, $types, $field_values))
 			{
 				if($this->halt_on_error=='yes')
 				{

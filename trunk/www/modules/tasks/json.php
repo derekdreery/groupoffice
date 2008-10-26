@@ -20,11 +20,11 @@ require_once ($GO_MODULES->modules['tasks']['class_path']."tasks.class.inc.php")
 $tasks = new tasks();
 
 
-$task=isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
+$_task=isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
 
 try{
 
-	switch($task)
+	switch($_task)
 	{
 		case 'task_with_items':
 		case 'task':
@@ -186,7 +186,7 @@ try{
 				}
 			}
 			
-			if($task!='task')
+			if($_task!='task')
 			{
 				$response['data']['description']=String::text_to_html($response['data']['description']);
 
