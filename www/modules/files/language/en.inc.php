@@ -30,3 +30,5 @@ The following changes were made by %s:
 $lang['files']['modified']='Modified';
 $lang['files']['new']='New';
 $lang['files']['deleted']='Deleted';
+
+$lang['files']['file']='File';

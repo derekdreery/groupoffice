@@ -87,11 +87,18 @@ class email extends db
 
 		$message['link_id']=$this->nextid('em_links');
 		$this->insert_row('em_links',$message);
+		
+		$this->cache_message($message['link_id']);
+		
 		return $message['link_id'];
 	}
 
 	function delete_linked_message($link_id)
 	{
+		require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
+		$search = new search();
+		$search->delete_search_result($link_id, 9);
+		
 		$sql ="DELETE FROM em_links WHERE link_id=".$this->escape($link_id);
 		return $this->query($sql);
 	}
@@ -100,11 +107,7 @@ class email extends db
 	{
 		$sql = "SELECT * FROM em_links WHERE link_id=".$this->escape($id);
 		$this->query($sql);
-		if($this->next_record())
-		{
-			return $this->record;
-		}
-		throw new DatabaseSelectException();
+		return $this->next_record();
 	}
 	
 	
@@ -982,19 +985,20 @@ class email extends db
 		}
 	}
 	
-	function __on_search($last_sync_time=0)
+	function cache_message($message_id)
 	{
-		global $GO_MODULES, $GO_LANGUAGE;
+		global $GO_CONFIG, $GO_LANGUAGE;
+		require_once($GO_CONFIG->class_path.'/base/search.class.inc.php');
+		$search = new search();
 
 		require($GO_LANGUAGE->get_language_file('email'));
 
-		$sql  = "SELECT * FROM em_links WHERE ctime>$last_sync_time";
+		$sql  = "SELECT * FROM em_links WHERE link_id>?";
+		$this->query($sql,'i', $message_id);
 
-		$this->query($sql);
-		$search = new search();
-
-		while($this->next_record())
-		{
+		$record = $this->next_record();
+		if($record)
+		{		
 			$cache['id']=$this->f('link_id');
 			$cache['user_id']=$this->f('user_id');
 			$cache['module']='email';
@@ -1006,10 +1010,25 @@ class email extends db
 			$cache['mtime']=$this->f('time');
 			$cache['acl_read']=$GO_MODULES->modules['email']['acl_read'];
 			$cache['acl_write']=$GO_MODULES->modules['email']['acl_write'];
-				
 			
 			$search->cache_search_result($cache);
 		}
+	}
+	
+	/**
+	 * When a global search action is performed this function will be called for each module
+	 *
+	 * @param int $last_sync_time The time this function was called last
+	 */
+	public function __on_build_search_index()
+	{				
+		$sql = "SELECT id FROM em_links";		
+		$email = new email();
+		while($record = $this->next_record())
+		{
+			$email->cache_message($record['id']);
+		}
+/* {ON_BUILD_SEARCH_INDEX_FUNCTION} */
 	}
 	
 }

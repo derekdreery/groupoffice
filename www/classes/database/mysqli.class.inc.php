@@ -50,7 +50,7 @@ class db extends base_db{
 	 */
 
 	public function connect()
-	{
+	{		
 		if(!$this->link)
 		{
 			$this->link = new MySQLi($this->host, $this->user, $this->password, $this->database);
