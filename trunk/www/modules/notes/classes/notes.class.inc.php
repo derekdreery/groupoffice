@@ -397,7 +397,7 @@ class notes extends db {
 	 * @param int $last_sync_time The time this function was called last
 	 */
 	
-	public function __on_search($last_sync_time=0)
+	/*public function __on_search($last_sync_time=0)
 	{
 		global $GO_MODULES, $GO_LANGUAGE;
 		
@@ -428,9 +428,8 @@ class notes extends db {
  			$cache['acl_write']=$this->f('acl_write');	
 			$search->cache_search_result($cache);
 		}
-		
-		/* {ON_SEARCH_FUNCTION} */
-	}
+
+	}*/
 	
 	function __on_check_database(){
 		global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE;

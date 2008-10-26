@@ -13,11 +13,6 @@
  */
 
 class addressbook extends db {
-	var $selector_is_enabled = false;
-
-	function addressbook() {
-		parent::__construct();
-	}
 
 	function is_duplicate_contact($contact)
 	{
@@ -216,15 +211,10 @@ class addressbook extends db {
 		}
 		
 		$company['id'] = $this->nextid("ab_companies");
-		if ($company['id']  > 0) {
-			if ($this->insert_row('ab_companies', $company)) {
-				return $company['id'];
-			} else {
-				return false;
-			}
-		} else {
-			return false;
-		}
+		$this->insert_row('ab_companies', $company);				
+		$this->cache_company($company['id']);
+				
+		return $company['id'];		
 	}
 
 	function update_company($company)
@@ -232,7 +222,9 @@ class addressbook extends db {
 		if (!isset($company['mtime']) || $company['mtime'] == 0) {
 			$company['mtime'] = time();
 		}
-		return $this->update_row('ab_companies', 'id', $company);
+		$r = $this->update_row('ab_companies', 'id', $company);
+		$this->cache_company($company['id']);
+		return $r;
 	}
 
 	function get_companies($addressbook_id=0, $sort = 'name', $direction = 'ASC', $start = 0, $offset = 0) {
@@ -364,6 +356,9 @@ class addressbook extends db {
 		$contact['id'] = $this->nextid("ab_contacts");
 
 		$this->insert_row('ab_contacts', $contact);
+		
+		$this->cache_contact($contact['id']);
+		
 		return $contact['id'];
 	}
 
@@ -377,7 +372,10 @@ class addressbook extends db {
 			$contact['sex'] = 'M';
 		}
 
-		return $this->update_row('ab_contacts', 'id', $contact);
+		$r = $this->update_row('ab_contacts', 'id', $contact);
+		
+		$this->cache_contact($contact['id']);
+		return $r;
 	}
 
 	function get_contact($contact_id) {
@@ -797,26 +795,26 @@ class addressbook extends db {
 			$this->delete_contact($id);
 		}
 	}
+	
 
 	/**
-	 * When a global search action is performed this function will be called for each module
+	 * Adds or updates a note in the search cache table
 	 *
-	 * @param int $last_sync_time The time this function was called last
+	 * @param int $note_id
 	 */
-
-	function __on_search($last_sync_time=0)
+	private function cache_contact($contact_id)
 	{
-		global $GO_MODULES, $GO_LANGUAGE;
-
-		require($GO_LANGUAGE->get_language_file('addressbook'));
-
-		$sql = "SELECT c.*,a.acl_read,a.acl_write FROM ab_contacts c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id WHERE mtime>".$this->escape($last_sync_time);
-
-		$this->query($sql);
-
+		global $GO_CONFIG, $GO_LANGUAGE;
+		require_once($GO_CONFIG->class_path.'/base/search.class.inc.php');
 		$search = new search();
-		while($this->next_record())
-		{
+		
+		require($GO_LANGUAGE->get_language_file('addressbook'));
+		
+		$sql = "SELECT c.*,a.acl_read,a.acl_write FROM ab_contacts c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id WHERE c.id=?";
+		$this->query($sql, 'i', $contact_id);
+		$record = $this->next_record();
+		if($record)
+		{		
 			$cache['id']=$this->f('id');
 			$cache['user_id']=$this->f('user_id');
 			$cache['module']='addressbook';
@@ -828,18 +826,27 @@ class addressbook extends db {
 			$cache['mtime']=$this->f('mtime');
 			$cache['acl_read']=$this->f('acl_read');
 			$cache['acl_write']=$this->f('acl_write');
-			$search->cache_search_result($cache);
+			
+	 		$search->cache_search_result($cache);
 		}
-
-
-		$sql = "SELECT c.*, a.acl_read, a.acl_write FROM ab_companies c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id WHERE mtime>".$this->escape($last_sync_time);
-
-		$this->query($sql);
-
-
-
-		while($this->next_record())
-		{
+	}
+	
+	/**
+	 * Adds or updates a note in the search cache table
+	 *
+	 * @param int $note_id
+	 */
+	private function cache_company($company_id)
+	{
+		global $GO_CONFIG, $GO_LANGUAGE;
+		require_once($GO_CONFIG->class_path.'/base/search.class.inc.php');
+		$search = new search();
+		require($GO_LANGUAGE->get_language_file('addressbook'));
+		$sql = "SELECT c.*, a.acl_read, a.acl_write FROM ab_companies c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id WHERE c.id=?";
+		$this->query($sql, 'i', $company_id);
+		$record = $this->next_record();
+		if($record)
+		{		
 			$cache['id']=$this->f('id');
 			$cache['user_id']=$this->f('user_id');
 			$cache['name'] = $this->f('name');
@@ -851,8 +858,31 @@ class addressbook extends db {
 			$cache['mtime']=$this->f('mtime');
 			$cache['acl_read']=$this->f('acl_read');
 			$cache['acl_write']=$this->f('acl_write');
+			
+	 		$search->cache_search_result($cache);
+		}
+	}
 
-			$search->cache_search_result($cache);
+	/**
+	 * When a global search action is performed this function will be called for each module
+	 *
+	 * @param int $last_sync_time The time this function was called last
+	 */
+
+	function __on_build_search_index()
+	{
+		$sql = "SELECT id FROM ab_contacts";		
+		$ab = new addressbook();
+		while($record = $this->next_record())
+		{
+			$ab->cache_contact($record['id']);
+		}
+		
+		$sql = "SELECT id FROM ab_companies";		
+		$ab = new addressbook();
+		while($record = $this->next_record())
+		{
+			$ab->cache_company($record['id']);
 		}
 	}
 

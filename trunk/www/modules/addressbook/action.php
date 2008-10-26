@@ -33,13 +33,15 @@ try
 				'first_name','middle_name','last_name','title','initials','sex','birthday','email',
 				'email2','email3','home_phone','fax','cellular','comment','address','address_no',
 				'zip','city','state','country','company','company_id','department','function','work_phone',
-				'work_fax','addressbook_id','salutation', 'email_allowed'
+				'work_fax','addressbook_id','salutation'
 				);
-					
+
+				$contact_credentials['email_allowed']=isset($_POST['email_allowed']) ? '1' : '0';
 				foreach($credentials as $key)
 				{
-					$contact_credentials[$key] = isset($_REQUEST[$key]) ? $_REQUEST[$key] : null;
+					$contact_credentials[$key] = isset($_REQUEST[$key]) ? $_REQUEST[$key] : '';
 				}
+				
 				
 				
 				$addressbook = $ab->get_addressbook($contact_credentials['addressbook_id']);
@@ -162,9 +164,10 @@ try
 			$credentials = array (
 				'addressbook_id','name','address','address_no','zip','city','state','country',
 				'post_address','post_address_no','post_city','post_state','post_country','post_zip','phone',
-				'fax','email','homepage','bank_no','vat_no','comment', 'email_allowed'
+				'fax','email','homepage','bank_no','vat_no','comment'
 				);
 					
+			$company_credentials['email_allowed']=isset($_POST['email_allowed']) ? '1' : '0';
 			foreach($credentials as $key)
 			{
 				$company_credentials[$key] = isset($_REQUEST[$key]) ? ($_REQUEST[$key]) : null;

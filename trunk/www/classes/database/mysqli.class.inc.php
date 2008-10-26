@@ -85,8 +85,8 @@ class db extends base_db{
 	 * Queries the database
 	 *
 	 * @param string $sql	 
-	 * @param string The types of the parameters. possible values: i, d, s, b for integet, double, string and blob
-	 * @param [array,..] If the parameters are given in the statement will be prepared
+	 * @param string $types The types of the parameters. possible values: i, d, s, b for integet, double, string and blob
+	 * @param mixed $params If a single or an array of parameters are given in the statement will be prepared
 	 * 
 	 * @return object The result object
 	 */
@@ -103,6 +103,9 @@ class db extends base_db{
 		if ($this->debug)
 			debug($sql);
 		
+		//a single parameter does not need to be an array.
+		if(!is_array($params))
+			$params=array($params);
 
 		$param_count = count($params);
 		$this->prepared_statement=$param_count>0;
@@ -125,8 +128,12 @@ class db extends base_db{
 			}
 			call_user_func_array(array(&$this->result, 'bind_param'), $param_args);
 				
-			$this->result->execute();
-
+			$ret = $this->result->execute();
+			if(!$ret)
+			{
+				$this->halt("Invalid SQL: ".$sql."<br />\nParams: ".implode(',', $param_args));
+				return false;
+			}
 				
 			//bind result			
 			$meta = $this->result->result_metadata();
@@ -143,7 +150,7 @@ class db extends base_db{
 				call_user_func_array(array(&$this->result, 'bind_result'), $result_args);
 			}
 
-			return $this->result;
+			return $ret;
 		}else
 		{
 			$this->result = $this->link->query($sql);

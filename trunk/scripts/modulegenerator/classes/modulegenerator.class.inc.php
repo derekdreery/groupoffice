@@ -580,7 +580,7 @@ class modulegenerator extends db
 				file_put_contents($this->module_dir.'scripts.inc.php', $cf, FILE_APPEND);
 				
 				//add on_search function
-				$this->insert_template($this->module_dir.'classes/'.$this->module.'.class.inc.php','ON_SEARCH_FUNCTION', 'on_search.tpl', $replacements, $table);
+				$this->insert_template($this->module_dir.'classes/'.$this->module.'.class.inc.php','ON_BUILD_SEARCH_INDEX_FUNCTION', 'on_search.tpl', $replacements, $table);
 
 				//add on_delete function
 				$this->insert_template($this->module_dir.'classes/'.$this->module.'.class.inc.php','ON_DELETE_LINK_FUNCTION', 'on_delete_link.tpl', $replacements, $table);

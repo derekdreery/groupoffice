@@ -31,4 +31,4 @@ $updates[] = " RENAME TABLE `ab_mailing_contacts`  TO `ml_mailing_contacts` ;";
 $updates[] = " RENAME TABLE `ab_mailing_users`  TO `ml_mailing_users` ;";
 $updates[] = " RENAME TABLE `ab_templates`  TO `ml_templates` ;";
 
-$updates[] = "script:1.inc.php";
+$updates[] = "script:1.inc.php"; 

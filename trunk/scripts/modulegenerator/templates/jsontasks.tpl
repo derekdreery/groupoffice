@@ -12,7 +12,7 @@
 			${friendly_single} = ${module}->get_{friendly_single}($_REQUEST['{friendly_single}_id']);
 			<gotpl if="$authenticate_relation && $relation">
 			${related_friendly_single} = ${module}->get_{related_friendly_single}(${friendly_single}['{related_field_id}']);
-			${friendly_single}[{related_friendly_single}_name]=${related_friendly_single}['name'];
+			${friendly_single}['{related_friendly_single}_name']=${related_friendly_single}['name'];
 			</gotpl>
 			<gotpl if="$user_id">
 			$user = $GO_USERS->get_user(${friendly_single}['user_id']);

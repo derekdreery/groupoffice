@@ -25,7 +25,7 @@ try{
 
 	switch($_REQUEST['task'])
 	{
-		/* {TASKSWITCH} */
+/* {TASKSWITCH} */
 	}
 }catch(Exception $e)
 {
