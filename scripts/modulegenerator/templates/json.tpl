@@ -26,7 +26,7 @@ try{
 
 	switch($task)
 	{
-		/* {TASKSWITCH} */
+/* {TASKSWITCH} */
 	}
 }catch(Exception $e)
 {

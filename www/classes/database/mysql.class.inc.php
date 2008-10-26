@@ -107,8 +107,8 @@ class db extends base_db {
 	 * Queries the database
 	 *
 	 * @param string $sql	 
-	 * @param string The types of the parameters. possible values: i, d, s, b for integet, double, string and blob
-	 * @param array If the parameters are given in the statement will be prepared
+	 * @param string $types The types of the parameters. possible values: i, d, s, b for integet, double, string and blob
+	 * @param mixed $params If a single or an array of parameters are given in the statement will be prepared
 	 * 
 	 * @return object The result object
 	 */

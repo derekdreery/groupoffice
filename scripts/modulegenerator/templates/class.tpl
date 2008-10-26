@@ -14,7 +14,7 @@
 
 class {module} extends db {
 
-	/* {CLASSFUNCTIONS} */
+/* {CLASSFUNCTIONS} */
 	
 	
 	/**
@@ -27,7 +27,7 @@ class {module} extends db {
 	
 	function __on_delete_link($id, $link_type)
 	{		
-		/* {ON_DELETE_LINK_FUNCTION} */	
+/* {ON_DELETE_LINK_FUNCTION} */	
 	}
 	
 	/**
@@ -42,18 +42,13 @@ class {module} extends db {
 	}
 	
 	/**
-	 * When a global search action is performed this function will be called for each module
-	 *
-	 * @param int $last_sync_time The time this function was called last
+	 * When a database check is performed this function will be called for each module
+	 * it will rebuild the search results.
 	 */
 	
-	public function __on_search($last_sync_time=0)
-	{
-		global $GO_MODULES, $GO_LANGUAGE;
-		
-		require($GO_LANGUAGE->get_language_file('{module}'));
-		
-		/* {ON_SEARCH_FUNCTION} */
+	public function __on_build_search_index()
+	{				
+/* {ON_BUILD_SEARCH_INDEX_FUNCTION} */
 	}
 	
 }

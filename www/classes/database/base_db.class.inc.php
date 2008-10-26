@@ -28,7 +28,7 @@ class base_db{
 	 *
 	 * @var string
 	 */
-	var $host     = "";
+	var $host = "";
 	
 	/**
 	 * The database name
@@ -42,7 +42,7 @@ class base_db{
 	 *
 	 * @var string
 	 */
-	var $user     = "";
+	var $user = "";
 	
 	/**
 	 * The database password
@@ -56,7 +56,7 @@ class base_db{
 	 *
 	 * @var string
 	 */
-	var $debug         = false; 
+	var $debug = false; 
 
 	/**
 	 * "yes" (halt with message), "no" (ignore errors quietly), "report" (ignore errror, but spit a warning)
@@ -70,14 +70,14 @@ class base_db{
 	 *
 	 * @var unknown_type
 	 */
-	var $seq_table     = "go_db_sequence";
+	var $seq_table = "go_db_sequence";
 
 	/**
 	 * The current record from a select query
 	 *
 	 * @var array
 	 */
-	var $record   = array();
+	var $record = array();
 	
 	/**
 	 * The current row index when waling through a result set
@@ -91,28 +91,28 @@ class base_db{
 	 *
 	 * @var int
 	 */
-	var $errno    = 0;
+	var $errno = 0;
 	
 	/**
 	 * Database error message
 	 *
 	 * @var string
 	 */
-	var $error    = "";
+	var $error = "";
 
 	/**
 	 * Type of database connector
 	 *
 	 * @var string
 	 */
-	var $type     = "mysqli";
+	var $type = "mysqli";
 
 	/**
 	 * The database connection link identifier 
 	 *
 	 * @var resource
 	 */
-	var $link  = false;
+	var $link = false;
 	
 	/**
 	 * The result object from a query
@@ -126,7 +126,7 @@ class base_db{
 	 *
 	 * @var bool
 	 */
-	var $locked   = false;
+	var $locked = false;
 
 	/**
 	 * Constructor a config object with db_host, db_pass, db_user and db_name
@@ -194,12 +194,12 @@ class base_db{
 	 * Queries the database
 	 *
 	 * @param string $sql	 
-	 * @param string The types of the parameters. possible values: i, d, s, b for integet, double, string and blob
-	 * @param [array,..] If the parameters are given in the statement will be prepared
+	 * @param string $types The types of the parameters. possible values: i, d, s, b for integet, double, string and blob
+	 * @param mixed $params If a single or an array of parameters are given in the statement will be prepared
 	 * 
 	 * @return object The result object
 	 */
-	public function query($sql, $types='')
+	public function query($sql, $types='', $params=array())
 	{
 	}
 	
@@ -485,7 +485,7 @@ class base_db{
 			{
 				$types = str_repeat('s',count($field_values));
 			}
-
+			
 			if(!$this->query($sql, $types, $field_values))
 			{
 				if($this->halt_on_error=='yes')

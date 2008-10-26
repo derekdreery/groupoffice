@@ -17,6 +17,10 @@
 		${friendly_single}['id']=$this->nextid('{prefix}_{friendly_multiple}');
 		if($this->insert_row('{prefix}_{friendly_multiple}', ${friendly_single}))
 		{
+			<gotpl if="$link_type &gt; 0">
+			$this->cache_{friendly_single}(${friendly_single}['id']);
+			</gotpl>
+			
 			return ${friendly_single}['id'];
 		}
 		return false;
@@ -36,10 +40,58 @@
 		<gotpl if="$mtime">
 		${friendly_single}['mtime']=time();
 		</gotpl>
-		return $this->update_row('{prefix}_{friendly_multiple}', 'id', ${friendly_single});
+		$r = $this->update_row('{prefix}_{friendly_multiple}', 'id', ${friendly_single});
+		
+		<gotpl if="$link_type &gt; 0">
+		$this->cache_{friendly_single}(${friendly_single}['id']);
+		</gotpl>
+		
+		return $r;
+	}
+	
+	<gotpl if="$link_type &gt; 0">/**
+	 * Adds or updates a note in the search cache table
+	 *
+	 * @param int $note_id
+	 */
+	
+	private function cache_{friendly_single}(${friendly_single}_id)
+	{
+		global $GO_CONFIG, $GO_LANGUAGE;
+		
+		require_once($GO_CONFIG->class_path.'/base/search.class.inc.php');
+		$search = new search();
+		
+		require($GO_LANGUAGE->get_language_file('{module}'));
+		
+		<gotpl if="$authenticate_relation">
+		$sql = "SELECT i.*,r.acl_read,r.acl_write FROM {prefix}_{friendly_multiple} i INNER JOIN {prefix}_{related_friendly_multiple} r ON r.id=i.{related_field_id} WHERE i.id=?";
+		</gotpl>
+		<gotpl if="$authenticate">
+		$sql = "SELECT * FROM {prefix}_{friendly_multiple} i WHERE i.id=?";
+		</gotpl>
+		$this->query($sql, 'i', ${friendly_single}_id);
+		$record = $this->next_record();
+		
+		if($record)
+		{		
+			$cache['id']=$record['id'];
+			$cache['user_id']=$record['user_id'];
+			$cache['module']='{module}';
+			$cache['name'] = $record['name'];
+			$cache['link_type']={link_type};
+			$cache['description']='';			
+			$cache['type']=$lang['{module}']['{friendly_single}'];
+			$cache['keywords']=$search->record_to_keywords($record).','.$cache['type'];
+			$cache['mtime']=$record['mtime'];
+			$cache['acl_read']=$record['acl_read'];
+	 		$cache['acl_write']=$record['acl_write'];	
+
+	 		$search->cache_search_result($cache);
+		}
 	}
 
-
+	</gotpl>
 	/**
 	 * Delete a {friendly_single_ucfirst}
 	 *
