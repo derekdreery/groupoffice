@@ -804,6 +804,8 @@ class calendar extends db
 					$this->add_exception($exception);
 				}
 			}
+			
+			$this->cache_event($event['id']);
 
 			return $event['id'];
 		}
@@ -860,7 +862,11 @@ class calendar extends db
 			unset($event['exceptions']);
 		}
 
-		return $this->update_row('cal_events', 'id', $event);
+		$r = $this->update_row('cal_events', 'id', $event);
+		
+		$this->cache_event($event['id']);
+		
+		return $r;
 	}
 
 	function search_events(
@@ -1667,34 +1673,33 @@ class calendar extends db
 			$this->add_calendar_to_view($calendar_id, '', $view_id);
 		}
 	}
+	
+	
 
-	function __on_search($last_sync_time=0)
+	function cache_event($event_id)
 	{
-		global $GO_MODULES, $GO_LANGUAGE;
+		global $GO_CONFIG, $GO_LANGUAGE;
+		
+		require_once($GO_CONFIG->class_path.'/base/search.class.inc.php');
+		$search = new search();
 
 		require($GO_LANGUAGE->get_language_file('calendar'));
 
 		$sql  = "SELECT DISTINCT cal_events.*, cal_calendars.acl_read, cal_calendars.acl_write FROM cal_events ".
 		"INNER JOIN cal_calendars ON cal_events.calendar_id=cal_calendars.id ".
-		"WHERE mtime>".$this->escape($last_sync_time);
-
-
-		$this->query($sql);
-
-		$search = new search();
-
-		while($this->next_record())
+		"WHERE cal_events.id=?";
+		
+		$this->query($sql, 'i', $event_id);
+		$record = $this->next_record();
+		if($record)
 		{
-			//$cache['table']='cal_events';
 			$cache['id']=$this->f('id');
 			$cache['user_id']=$this->f('user_id');
 			$cache['name'] = $this->f('name');
-			//$cache['link_id'] = $this->f('link_id');
 			$cache['link_type']=1;
 			$cache['module']='calendar';
 			$cache['description']=$this->f('description');
-			//$cache['url']=$GO_MODULES->modules['calendar']['url'].'event.php?event_id='.$this->f('id');
-			$cache['type']=$this->f('todo')=='1' ? $cal_todo : $lang['calendar']['event'];
+			$cache['type']=$lang['calendar']['event'];
 			$cache['keywords']=$search->record_to_keywords($this->record).','.$cache['type'];
 			$cache['mtime']=$this->f('mtime');
 			$cache['acl_read']=$this->f('acl_read');
@@ -1702,6 +1707,16 @@ class calendar extends db
 
 			$search->cache_search_result($cache);
 		}
+	}
+	public function __on_build_search_index()
+	{				
+		$sql = "SELECT id FROM cal_events";		
+		$cal = new calendar();
+		while($record = $this->next_record())
+		{
+			$cal->cache_event($record['id']);
+		}
+/* {ON_BUILD_SEARCH_INDEX_FUNCTION} */
 	}
 	
 	function __on_reminder_dismissed($reminder)
