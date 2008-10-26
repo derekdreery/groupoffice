@@ -108,11 +108,11 @@ class db extends base_db {
 	 *
 	 * @param string $sql	 
 	 * @param string The types of the parameters. possible values: i, d, s, b for integet, double, string and blob
-	 * @param [array,..] If the parameters are given in the statement will be prepared
+	 * @param array If the parameters are given in the statement will be prepared
 	 * 
 	 * @return object The result object
 	 */
-	public function query($sql, $types='')
+	public function query($sql, $types='', $params=array())
 	{
 		/* No empty queries, please, since PHP4 chokes on them. */
 		if ($sql == "")
@@ -128,21 +128,19 @@ class db extends base_db {
 
 		# New query, discard previous result.
 		$this->free();
-		
-		$params = func_get_args();		
-		
+				
 		$param_count = count($params);
 		
-		if($param_count>2)
+		if($param_count>0)
 		{
-			for($i=2;$i<$param_count;$i++)
+			for($i=0;$i<$param_count;$i++)
 			{
 				$sql = String::replace_once('?', "'".$this->escape($params[$i])."'", $sql);
 			}
 		}
 
 		if ($this->debug)
-			printf("Debug: query = %s<br>\n", $sql);
+			debug($sql);
 
 		$this->result = @mysql_query($sql,$this->link);
 

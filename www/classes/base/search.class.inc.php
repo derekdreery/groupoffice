@@ -339,10 +339,14 @@ class search extends db {
 			//'id'=>$search->f('id')
 			);
 		}
-			
-		$this->query("SELECT FOUND_ROWS() as found");
-		$this->next_record();
-		$response['total']=$this->f('found');
+		
+		if($limit>0)
+		{
+			$response['total']=$this->found_rows();	
+		}else
+		{
+			$response['total']=$this->num_rows();
+		}
 		
 		return $response;
 	}
