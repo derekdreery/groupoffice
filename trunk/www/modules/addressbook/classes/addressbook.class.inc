@@ -879,7 +879,6 @@ class addressbook extends db {
 		}
 		
 		$sql = "SELECT id FROM ab_companies";		
-		$ab = new addressbook();
 		while($record = $this->next_record())
 		{
 			$ab->cache_company($record['id']);
@@ -946,7 +945,7 @@ class addressbook extends db {
 	function __on_check_database(){
 		global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE;
 		
-		echo 'Checking addressbook folder permissions<br />';
+		/*echo 'Checking addressbook folder permissions<br />';
 
 		if(isset($GO_MODULES->modules['files']))
 		{
@@ -971,6 +970,6 @@ class addressbook extends db {
 				$fs->check_share($full_path, $this->f('a_user_id'), $this->f('acl_read'), $this->f('acl_write'));
 			}
 		}
-		echo 'Done<br /><br />';
+		echo 'Done<br /><br />';*/
 	}
 }
