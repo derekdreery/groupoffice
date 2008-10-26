@@ -514,6 +514,10 @@ class files extends filesystem
 		$file['ctime']=$file['mtime']=time();
 		$file['id']=$this->nextid('fs_files');
 		$this->insert_row('fs_files', $file);
+		
+		$this->cache_file($file['path']);
+		
+		return $file['id'];
 	}
 
 	function update_file($file)
@@ -525,6 +529,8 @@ class files extends filesystem
 		{
 			$index=  'path';
 		}
+		
+		$this->cache_file($file['path'], $index);
 
 		$file['mtime']=time();
 		$this->update_row('fs_files', $index, $file);
@@ -878,39 +884,52 @@ class files extends filesystem
 		
 		system('rm -Rf '.$GO_CONFIG->file_storage_path.'users/'.$username);
 	}
-
-	function __on_search($last_sync_time=0)
+	
+	function cache_file($path, $index='path')
 	{
-		global $GO_MODULES, $GO_LANGUAGE, $GO_CONFIG;
-
-		//require($GO_LANGUAGE->get_language_file('files'));
-
-		$sql = "SELECT * FROM fs_files WHERE mtime>".$this->escape($last_sync_time);
-		$this->query($sql);
-		$fs = new files();
+		global $GO_CONFIG, $GO_LANGUAGE;
+		require_once($GO_CONFIG->class_path.'/base/search.class.inc.php');
 		$search = new search();
+		
+		require($GO_LANGUAGE->get_language_file('files'));
 
-		while($this->next_record())
+		$fs = new files();
+		
+		$sql = "SELECT * FROM fs_files WHERE $index=?;";
+		$this->query($sql, 's', $path);
+		$file = $this->next_record();
+			
+		$share = $fs->find_share(dirname($path));
+
+		if($file && $share)
 		{
-
-			$cache['id']=$this->f('id');
-			$cache['user_id']=$this->f('user_id');
-			$cache['name'] = utf8_basename($this->f('path'));
+			$cache['id']=$file['id'];
+			$cache['user_id']=$file['user_id'];
+			$cache['name'] = utf8_basename($path);
 			$cache['link_type']=6;
-			$cache['description']=substr($this->f('path', strlen($GO_CONFIG->file_storage_path)));
-			$cache['type']='File';
+			$cache['description']=substr($path, strlen($GO_CONFIG->file_storage_path));
+			$cache['type']=$lang['files']['file'];
 			$cache['module']='files';
-			$cache['keywords']=$this->f('comments').','.$cache['name'].','.$cache['type'];
-			$cache['mtime']=$this->f('mtime');
-
-			$share = $fs->find_share($this->f('path'));
-			if($share)
-			{
-				$cache['acl_read']=$share['acl_read'];
-				$cache['acl_write']=$share['acl_write'];
+			$cache['keywords']=$file['comments'].','.$cache['name'].','.$cache['type'];
+			$cache['mtime']=$file['mtime'];
+			$cache['acl_read']=$share['acl_read'];
+			$cache['acl_write']=$share['acl_write'];
 				
-				$search->cache_search_result($cache);
-			}
+			$search->cache_search_result($cache);
 		}
+	}
+	
+	/**
+	 * When a global search action is performed this function will be called for each module
+	 */
+	public function __on_build_search_index()
+	{				
+		$sql = "SELECT path FROM fs_files";		
+		$fs = new files();
+		while($record = $this->next_record())
+		{
+			$fs->cache_file($record['path']);
+		}
+/* {ON_BUILD_SEARCH_INDEX_FUNCTION} */
 	}
 }

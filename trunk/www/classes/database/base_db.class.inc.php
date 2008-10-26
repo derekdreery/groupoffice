@@ -52,9 +52,9 @@ class base_db{
 	var $password = "";
 
 	/**
-	 * Set to 1 for debugging messages.
+	 * Set to true for debugging messages.
 	 *
-	 * @var string
+	 * @var bool
 	 */
 	var $debug = false; 
 
