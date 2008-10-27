@@ -28,11 +28,6 @@
 
 class search extends db {
 
-	
-	function __construct() {
-		parent::__construct();
-	}
-
 	/**
 	 * This function will call the __on_search function in all main module 
 	 * classes
@@ -58,16 +53,14 @@ class search extends db {
 				{						
 					$class = new $module['id'];
 
-					if(method_exists($class, '__on_search'))
+					if(method_exists($class, '__on_build_search_index'))
 					{
 						if($verbose)
 						{
 							echo 'Caching items from '.$module['id'].'<br />';
 							flush();
 						}
-
-						$last_sync_time = $this->get_last_sync_time($module['id']);
-						$class->__on_search($last_sync_time);
+						$class->__on_build_search_index();
 						$this->update_last_sync_time($module['id'], time());
 					}
 				}
@@ -92,10 +85,8 @@ class search extends db {
 	 */
 	function global_search($user_id, $query, $start, $offset, $sort_index='name', $sort_order='ASC', $selected_types=array(), $link_id=0, $link_type=0, $link_folder_id=0, $conditions=array())
 	{
-		$this->update_search_cache();
-		$sql = "SELECT DISTINCT sc.* FROM go_search_cache sc ";
-			
-		$sql .= "INNER JOIN go_acl a ON (sc.acl_read=a.acl_id OR sc.acl_write=a.acl_id) ".
+		$sql = "SELECT DISTINCT sc.* FROM go_search_cache sc ".
+			"INNER JOIN go_acl a ON (sc.acl_read=a.acl_id OR sc.acl_write=a.acl_id) ".
 			"LEFT JOIN go_users_groups ug ON (ug.group_id=a.group_id) ";
 				
 		if($link_id>0)

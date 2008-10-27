@@ -1706,7 +1706,8 @@ class calendar extends db
 	}
 	public function __on_build_search_index()
 	{				
-		$sql = "SELECT id FROM cal_events";		
+		$sql = "SELECT id FROM cal_events";
+		$this->query($sql);		
 		$cal = new calendar();
 		while($record = $this->next_record())
 		{
@@ -1823,7 +1824,7 @@ class calendar extends db
 	function __on_check_database(){
 		global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE;
 		
-		echo 'Checking calendar folder permissions<br />';
+	/*	echo 'Checking calendar folder permissions<br />';
 
 		if(isset($GO_MODULES->modules['files']))
 		{
@@ -1839,7 +1840,7 @@ class calendar extends db
 				$fs->check_share($full_path, $this->f('user_id'), $this->f('acl_read'), $this->f('acl_write'));
 			}
 		}
-		echo 'Done<br /><br />';
+		echo 'Done<br /><br />';*/
 	}
 
 }

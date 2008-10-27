@@ -811,7 +811,7 @@ switch($task)
 			if ($db->num_rows() > 0)
 			{
 				//structure exists see if the settings table exists
-				while ($db->next_record(MYSQL_BOTH))
+				while ($db->next_record(DB_BOTH))
 				{
 					if ($db->f(0) == 'go_settings')
 					{

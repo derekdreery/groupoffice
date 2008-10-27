@@ -871,14 +871,18 @@ class addressbook extends db {
 
 	function __on_build_search_index()
 	{
-		$sql = "SELECT id FROM ab_contacts";		
 		$ab = new addressbook();
+		
+		$sql = "SELECT id FROM ab_contacts";		
+		$this->query($sql);
+		
 		while($record = $this->next_record())
 		{
 			$ab->cache_contact($record['id']);
 		}
 		
-		$sql = "SELECT id FROM ab_companies";		
+		$sql = "SELECT id FROM ab_companies";
+		$this->query($sql);		
 		while($record = $this->next_record())
 		{
 			$ab->cache_company($record['id']);

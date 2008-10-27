@@ -1,4 +1,16 @@
 <?php
+/** 
+ * Copyright Intermesh
+ * 
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ * 
+ * If you have questions write an e-mail to info@intermesh.nl
+ * 
+ * @version $Id$
+ * @copyright Copyright Intermesh
+ * @author Merijn Schering <mschering@intermesh.nl>
+ */
 
 class tasks extends db
 {
@@ -843,7 +855,7 @@ class tasks extends db
 	}
 	
 	function __on_check_database(){
-		global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE;
+	/*	global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE;
 		
 		echo 'Checking tasks folder permissions<br />';
 
@@ -861,6 +873,6 @@ class tasks extends db
 				$fs->check_share($full_path, $this->f('user_id'), $this->f('acl_read'), $this->f('acl_write'));
 			}
 		}
-		echo 'Done<br /><br />';
+		echo 'Done<br /><br />';*/
 	}
 }
