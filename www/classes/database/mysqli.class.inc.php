@@ -28,7 +28,6 @@ define('DB_ASSOC', MYSQLI_ASSOC);
  */
 
 class db extends base_db{
-var $debug=true;
 	/**
 	 * Type of database connector
 	 *
