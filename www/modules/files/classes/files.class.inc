@@ -931,6 +931,7 @@ class files extends filesystem
 	public function __on_build_search_index()
 	{				
 		$sql = "SELECT path FROM fs_files";		
+		$this->query($sql);
 		$fs = new files();
 		while($record = $this->next_record())
 		{

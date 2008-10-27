@@ -28,14 +28,14 @@ define('DB_ASSOC', MYSQLI_ASSOC);
  */
 
 class db extends base_db{
-
+var $debug=true;
 	/**
 	 * Type of database connector
 	 *
 	 * @var unknown_type
 	 */
 	var $type     = "mysqli";
-	
+
 	/**
 	 * Set to true when are working with a prepared statement
 	 *
@@ -50,7 +50,7 @@ class db extends base_db{
 	 */
 
 	public function connect()
-	{		
+	{
 		if(!$this->link)
 		{
 			$this->link = new MySQLi($this->host, $this->user, $this->password, $this->database);
@@ -84,10 +84,10 @@ class db extends base_db{
 	/**
 	 * Queries the database
 	 *
-	 * @param string $sql	 
+	 * @param string $sql
 	 * @param string $types The types of the parameters. possible values: i, d, s, b for integet, double, string and blob
 	 * @param mixed $params If a single or an array of parameters are given in the statement will be prepared
-	 * 
+	 *
 	 * @return object The result object
 	 */
 	public function query($sql, $types='', $params=array())
@@ -101,19 +101,19 @@ class db extends base_db{
 		$this->free();
 
 		if ($this->debug)
-			debug($sql);
-		
+		debug($sql);
+
 		//a single parameter does not need to be an array.
 		if(!is_array($params))
-			$params=array($params);
+		$params=array($params);
 
 		$param_count = count($params);
 		$this->prepared_statement=$param_count>0;
 			
 		if($this->prepared_statement)
 		{
-			$this->result = $this->link->prepare($sql);			
-				
+			$this->result = $this->link->prepare($sql);
+
 			if(!$this->result)
 			{
 				$this->halt('Could not prepare statement SQL: '.$sql);
@@ -127,21 +127,21 @@ class db extends base_db{
 				$param_args[]=$params[$i];
 			}
 			call_user_func_array(array(&$this->result, 'bind_param'), $param_args);
-				
+
 			$ret = $this->result->execute();
 			if(!$ret)
 			{
 				$this->halt("Invalid SQL: ".$sql."<br />\nParams: ".implode(',', $param_args));
 				return false;
 			}
-				
-			//bind result			
+
+			//bind result
 			$meta = $this->result->result_metadata();
 			if($meta)
 			{
 				//we got results so we need to bind them and store it.
 				$this->result->store_result();
-				
+
 				$this->record=array();
 				while ($field = $meta->fetch_field())
 				{
@@ -159,7 +159,7 @@ class db extends base_db{
 				$this->halt("Invalid SQL: ".$sql);
 			}
 			return $this->result;
-		}		
+		}
 	}
 
 	/**
@@ -192,23 +192,40 @@ class db extends base_db{
 					return false;
 				}else
 				{
+					if($result_type==DB_BOTH || $result_type==DB_NUM)
+						$this->add_indexed_values($this->record);
+
 					$record = array();
+					$i=0;
 					foreach($this->record as $key=>$value)
 					{
-							$record[$key]=$value;
+						$record[$key]=$value;
 					}
 					return $record;
 				}
 			}else
 			{
-				$this->record = $this->result->fetch_assoc();
+				$this->record = $this->result->fetch_array($result_type);
 				return $this->record;
-			}			
+			}
 		}else
 		{
 			$this->halt("next_record called with no query pending.");
 			return false;
-		}		
+		}
+	}
+
+	private function add_indexed_values(&$record)
+	{
+		if($record)
+		{
+			$i=0;
+			foreach($this->record as $key=>$value)
+			{
+				$this->record[$i]=$value;
+				$i++;
+			}				
+		}
 	}
 
 	/**
@@ -247,8 +264,11 @@ class db extends base_db{
 	 */
 	protected function set_error()
 	{
-		$this->error = $this->link->error;
-		$this->errno = $this->link->errno;
+		if($this->link)
+		{
+			$this->error = $this->link->error;
+			$this->errno = $this->link->errno;
+		}
 	}
 
 	/**

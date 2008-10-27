@@ -29,6 +29,8 @@ $db->halt_on_error = 'no';
 
 
 
+
+
 echo 'Checking ACL...<br />';
 
 $sql = "SELECT * FROM go_acl_items";
@@ -48,13 +50,15 @@ while($db->next_record())
 }
 echo 'Done<br /><br />';
 
+flush();
+
 echo 'Resetting DB sequence...<br />';
 
 $db->query("SHOW TABLES");
 
 $tables = array();
 
-while($db->next_record(MYSQL_BOTH))
+while($db->next_record(DB_BOTH))
 {
 	if($db->f(0) != 'go_db_sequence')
 	{
@@ -75,12 +79,12 @@ foreach($tables as $table)
 	$max=0;
 	$sql = "SELECT max(id) FROM `$table`";
 	$db->query($sql);
-	$db->next_record(MYSQL_BOTH);
+	$db->next_record(DB_BOTH);
 	$max = $db->f(0);
 //echo $table.':'.$max.'<br />';	
 	if(!empty($max))
 	{
-		$sql = "REPLACE INTO go_db_sequence VALUES ('.$this->escape($table).', '.$this->escape($max).');";
+		$sql = "REPLACE INTO go_db_sequence VALUES ('".$db->escape($table)."', '".$db->escape($max)."');";
 		$db->query($sql);
 
 		echo 'Setting '.$table.'='.$max.'<br />';
@@ -88,13 +92,18 @@ foreach($tables as $table)
 }
 echo 'Done<br /><br />';
 
+flush();
+
+
+
+
 echo 'Optimizing tables<br />';
 
 $db->query("SHOW TABLES");
 
 $tables = array();
 
-while($db->next_record(MYSQL_BOTH))
+while($record = $db->next_record(DB_BOTH))
 {
 	echo 'Optimizing: '.$db->f(0).'<br />';
 	$db2->query('OPTIMIZE TABLE `'.$db->f(0).'`');

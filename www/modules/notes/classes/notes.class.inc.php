@@ -439,9 +439,7 @@ class notes extends db {
 	public function __on_build_search_index()
 	{
 		$sql = "SELECT id FROM no_notes";
-
-		$this->query($sql);
-		$search = new search();
+		$this->query($sql);	
 		
 		$notes = new notes();
 		while($record=$this->next_record())
@@ -453,7 +451,7 @@ class notes extends db {
 	}
 	
 	function __on_check_database(){
-		global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE;
+		/*global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE;
 		
 		echo 'Checking notes folder permissions<br />';
 
@@ -471,7 +469,7 @@ class notes extends db {
 				$fs->check_share($full_path, $this->f('user_id'), $this->f('acl_read'), $this->f('acl_write'));
 			}
 		}
-		echo 'Done<br /><br />';
+		echo 'Done<br /><br />';*/
 	}
 	
 }

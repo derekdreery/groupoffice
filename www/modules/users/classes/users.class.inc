@@ -1,28 +1,15 @@
 <?php
-/**
- * @copyright Copyright &copy; Intermesh 2003
- * @version $Revision: 1615 $ $Date: 2008-04-25 16:18:36 +0200 (vr, 25 apr 2008) $
- *
+/** 
+ * Copyright Intermesh
+ * 
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ * 
+ * If you have questions write an e-mail to info@intermesh.nl
+ * 
+ * @version $Id$
+ * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
-
- This file is part of Group-Office.
-
- Group-Office is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
-
- Group-Office is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License
- along with Group-Office; if not, write to the Free Software
- Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
- * @package Users
-
  */
 
 class users extends db
@@ -165,7 +152,7 @@ class users extends db
 	}
 	
 	function __on_check_database(){
-		global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE;
+		/*global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE;
 		
 		echo 'Checking users folder permissions<br />';
 
@@ -183,6 +170,6 @@ class users extends db
 				$fs->check_share($full_path, 1, $GO_MODULES->modules['users']['acl_read'], $GO_MODULES->modules['users']['acl_write']);
 			}
 		}
-		echo 'Done<br /><br />';
+		echo 'Done<br /><br />';>*/
 	}
 }

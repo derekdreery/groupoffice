@@ -987,7 +987,7 @@ class email extends db
 	
 	function cache_message($message_id)
 	{
-		global $GO_CONFIG, $GO_LANGUAGE;
+		global $GO_MODULES, $GO_CONFIG, $GO_LANGUAGE;
 		require_once($GO_CONFIG->class_path.'/base/search.class.inc.php');
 		$search = new search();
 
@@ -1022,11 +1022,12 @@ class email extends db
 	 */
 	public function __on_build_search_index()
 	{				
-		$sql = "SELECT id FROM em_links";		
+		$sql = "SELECT link_id FROM em_links";		
+		$this->query($sql);
 		$email = new email();
 		while($record = $this->next_record())
 		{
-			$email->cache_message($record['id']);
+			$email->cache_message($record['link_id']);
 		}
 /* {ON_BUILD_SEARCH_INDEX_FUNCTION} */
 	}
