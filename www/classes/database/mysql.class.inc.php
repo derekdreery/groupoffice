@@ -297,7 +297,11 @@ class db extends base_db{
 		return $this->link->insert_id();
 	}
 	
-	 
+	/**
+	 * When this object is stored in a session it must reconnect when 
+	 * created by the session again.
+	 *
+	 */
 	public function __wakeup()
 	{
 		$this->link=false;
