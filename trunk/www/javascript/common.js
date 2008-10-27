@@ -243,9 +243,22 @@ GO.util.unlocalizeNumber = function (number, decimal_seperator, thousands_sepera
 	}
 	
 	number = number+"";
-	
-	number = number.replace(thousands_seperator, "");
+		
+	var re = new RegExp('['+thousands_seperator+']', 'g');	
+	number = number.replace(re, "");
 	return number.replace(decimal_seperator, ".");	
+}
+
+String.prototype.regexpEscape = function() {
+  var specials = [
+    '/', '.', '*', '+', '?', '|',
+    '(', ')', '[', ']', '{', '}', '\\'
+  ];
+  var re = new RegExp(
+    '(\\' + specials.join('|\\') + ')', 'g'
+  );
+
+  return this.replace(re, '\\$1');
 }
 
 
@@ -370,4 +383,5 @@ GO.util.popup = function (config)
 	
 	return popup;
 }
+
 
