@@ -33,7 +33,7 @@ $account = $email->get_account($_REQUEST['account_id']);
 if($account['user_id']!=$GO_SECURITY->user_id)
 	exit($lang['common']['access_denied']);
 
-if ($imap->open($account['host'], $account['type'], $account['port'], $account['username'], $account['password'], $mailbox, 0, $account['use_ssl'], $account['novalidate_cert']))
+if ($imap->open($account['host'], $account['type'], $account['port'], $account['username'], $account['password'], $mailbox, null, $account['use_ssl'], $account['novalidate_cert']))
 {
 	$source = $imap->get_source($uid);
 

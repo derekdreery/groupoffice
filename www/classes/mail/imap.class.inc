@@ -147,9 +147,9 @@ class imap {
 	 * @access public
 	 * @return mixed	The recource ID on success or false on failure
 	 */
-	function open($host, $type, $port, $username, $password, $mailbox = "INBOX", $flags = 0, $ssl = false, $novalidate_cert = false, $tls=false) {
-		global $GO_CONFIG;
-
+	function open($host, $type, $port, $username, $password, $mailbox = "INBOX", $flags = null, $ssl = false, $novalidate_cert = false, $tls=false) {
+		global $GO_CONFIG;		
+		
 		$this->servertype = strtolower($type);
 		$this->mailbox = $mailbox;
 		$this->connectstring = $host.":".$port."/".$this->servertype.$GO_CONFIG->email_connectstring_options;
@@ -170,13 +170,8 @@ class imap {
 			$this->connectstring .= '/novalidate-cert';
 		}
 
-
-		if ($flags != 0) {
-			$this->conn = @ imap_open("{".$this->connectstring."}".$this->mailbox, $username, $password, $flags);
-		} else {
-			$this->conn = @ imap_open("{".$this->connectstring."}".$this->mailbox, $username, $password);
-		}
-
+		$this->conn = @ imap_open("{".$this->connectstring."}".$this->mailbox, $username, $password, $flags, 1);
+		
 		return $this->conn;
 	}
 	
