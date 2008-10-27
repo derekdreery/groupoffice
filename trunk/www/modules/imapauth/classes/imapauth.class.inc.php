@@ -79,7 +79,7 @@ class imapauth extends db
 				$mail_username, 
 				$arguments['password'], 
 				'INBOX', 
-				0, 
+				null, 
 				$config['ssl'], 
 				$config['novalidate_cert']))
 			{

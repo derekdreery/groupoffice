@@ -30,7 +30,7 @@ function connect($account_id, $mailbox='INBOX', $halt_on_error=true)
 		echo json_encode($response);
 		exit();
 	}
-	if (!$imap->open($account['host'], $account['type'], $account['port'], $account['username'], $account['password'], $mailbox, 0, $account['use_ssl'], $account['novalidate_cert'])) {
+	if (!$imap->open($account['host'], $account['type'], $account['port'], $account['username'], $account['password'], $mailbox, null, $account['use_ssl'], $account['novalidate_cert'])) {
 		if(!$halt_on_error)
 		return false;
 
@@ -905,7 +905,7 @@ class email extends db
 		$account['username'],
 		$account['password'],
 		$mailbox,
-		0,
+		null,
 		$account['use_ssl'],
 		$account['novalidate_cert']))
 		{

@@ -303,7 +303,7 @@ try{
 									$swift->account['username'],
 									$swift->account['password'],
 									$swift->account['drafts'],
-									0,
+									null,
 									$swift->account['use_ssl'],
 									$swift->account['novalidate_cert'])) {					
 
