@@ -45,6 +45,7 @@ $countries['KY'] = 'Cayman Islands';
 $countries['CF'] = 'Central African Republic';
 $countries['TD'] = 'Chad';
 $countries['CL'] = 'Chile';
+$countries['CN'] = 'China';
 $countries['CX'] = 'Christmas Island';
 $countries['CC'] = 'Cocos (Keeling) Islands';
 $countries['CO'] = 'Colombia';
