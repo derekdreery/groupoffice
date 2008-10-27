@@ -202,10 +202,7 @@ class notes extends db {
 		{
 			return $count;
 		}
-	}
-	
-
-	
+	}	
 		
 	/**
 	 * Add a Note
@@ -217,14 +214,14 @@ class notes extends db {
 	 */
 
 	function add_note($note)
-	{
-		
-		$note['ctime']=$note['mtime']=time();
-		
+	{		
+		$note['ctime']=$note['mtime']=time();		
 		
 		$note['id']=$this->nextid('no_notes');
 		if($this->insert_row('no_notes', $note))
 		{
+			$this->cache_note($note['id']);
+			
 			return $note['id'];
 		}
 		return false;
@@ -240,11 +237,14 @@ class notes extends db {
 	 */
 
 	function update_note($note)
-	{
-		
+	{		
 		$note['mtime']=time();
 		
-		return $this->update_row('no_notes', 'id', $note);
+		$r = $this->update_row('no_notes', 'id', $note);
+		
+		$this->cache_note($note['id']);
+		
+		return $r;
 	}
 
 
@@ -397,24 +397,22 @@ class notes extends db {
 	 * @param int $last_sync_time The time this function was called last
 	 */
 	
-	/*public function __on_search($last_sync_time=0)
+	private function cache_note($note_id)
 	{
-		global $GO_MODULES, $GO_LANGUAGE;
+		global $GO_CONFIG, $GO_LANGUAGE;
+		
+		require_once($GO_CONFIG->class_path.'/base/search.class.inc.php');
+		$search = new search();
 		
 		require($GO_LANGUAGE->get_language_file('notes'));
 		
-				
-		
 		$sql = "SELECT i.*,r.acl_read,r.acl_write FROM no_notes i ".
-			"INNER JOIN no_categories r ON r.id=i.category_id WHERE mtime>".$this->escape($last_sync_time);
+			"INNER JOIN no_categories r ON r.id=i.category_id WHERE i.id=?";
 		
-		
-
-		$this->query($sql);
-
-		$search = new search();
-		while($this->next_record())
-		{
+		$this->query($sql, 'i', $note_id);
+		$record = $this->next_record();
+		if($record)
+		{		
 			$cache['id']=$this->f('id');
 			$cache['user_id']=$this->f('user_id');
 			$cache['module']='notes';
@@ -426,10 +424,33 @@ class notes extends db {
 			$cache['mtime']=$this->f('mtime');
 			$cache['acl_read']=$this->f('acl_read');
  			$cache['acl_write']=$this->f('acl_write');	
+ 			
 			$search->cache_search_result($cache);
 		}
 
-	}*/
+	}
+	
+	/**
+	 * When a global search action is performed this function will be called for each module
+	 *
+	 * @param int $last_sync_time The time this function was called last
+	 */
+
+	public function __on_build_search_index()
+	{
+		$sql = "SELECT id FROM no_notes";
+
+		$this->query($sql);
+		$search = new search();
+		
+		$notes = new notes();
+		while($record=$this->next_record())
+		{
+			$notes->cache_note($record['id']);
+		}
+
+		/* {ON_BUILD_SEARCH_INDEX_FUNCTION} */
+	}
 	
 	function __on_check_database(){
 		global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE;
