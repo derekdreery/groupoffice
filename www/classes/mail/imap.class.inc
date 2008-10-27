@@ -297,9 +297,9 @@ class imap {
 	 */
 	function sort($sort_type = SORTDATE, $reverse = "1", $query = '') {
 		if ($query != '') {
-			$this->sort = imap_sort($this->conn, $sort_type, $reverse, SE_UID, trim($query));
+			$this->sort = imap_sort($this->conn, $sort_type, $reverse, SE_UID+SE_NOPREFETCH, trim($query));
 		} else {
-			$this->sort = imap_sort($this->conn, $sort_type, $reverse, SE_UID);
+			$this->sort = imap_sort($this->conn, $sort_type, $reverse, SE_UID+SE_NOPREFETCH);
 		}
 		if ($this->sort) {
 			$this->count = count($this->sort);
@@ -379,11 +379,11 @@ class imap {
 	
 	function get_messages($first, $offset) {
 		//Use imap_fetch_overview and sort them correctly
-		//for performance.
+		//for performance.	
 
-		if (!isset($this->sort)) {
+		/*if (!isset($this->sort)) {
 			$this->sort();
-		}
+		}*/
 
 		$last = $first + $offset;
 		if ($offset == 0 || ($last > $this->count)) {

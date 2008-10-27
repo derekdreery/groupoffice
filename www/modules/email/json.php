@@ -841,8 +841,6 @@ try{
 
 								$response['total'] = $imap->sort($sort_field , $sort_order, $query);
 
-
-
 								//apply filters
 								if($response['total']>0 && strtoupper($mailbox)=='INBOX')
 								{
