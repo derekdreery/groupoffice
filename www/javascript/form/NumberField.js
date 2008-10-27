@@ -19,7 +19,7 @@ GO.form.NumberField = Ext.extend(Ext.form.TextField, {
 		this.style="text-align:right";
 		
 		this.on('blur', function(input){			
-			var number = GO.util.unlocalizeNumber(input.getValue());			
+			var number = GO.util.unlocalizeNumber(input.getValue());	
  			input.setValue(GO.util.numberFormat(number, this.decimals));
   	});
   	  	
