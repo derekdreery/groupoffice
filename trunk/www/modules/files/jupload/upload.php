@@ -27,9 +27,7 @@ while($file = array_shift($_FILES))
 	if (is_uploaded_file($file['tmp_name']))
 	{
 		if(isset($_POST['jupart']))
-		{
-				
-				
+		{				
 			$dir = $GO_CONFIG->tmpdir.'chunked_upload/';
 			$filepath = $dir.$file['name'].'.part'.$_POST['jupart'];
 				
@@ -71,6 +69,8 @@ while($file = array_shift($_FILES))
 					unlink($part);
 				}
 				
+				$fs->add_file($filepath);
+				
 				$_SESSION['GO_SESSION']['files']['jupload_new_files'][]=($_POST['relpathinfo'][$count]).'/'.utf8_basename($filepath);
 				fclose($fp);
 				continue;
@@ -94,6 +94,7 @@ while($file = array_shift($_FILES))
 		}
 		
 		move_uploaded_file($file['tmp_name'], $filepath);
+		$fs->add_file($filepath);
 	}
 	$count++;
 }
