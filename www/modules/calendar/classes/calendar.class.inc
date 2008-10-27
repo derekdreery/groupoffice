@@ -1138,11 +1138,7 @@ class calendar extends db
 
 				if($calculated_event['start_time'] > $interval_end_time || $calculated_event['end_time'] < $interval_start_time)
 				break;
-					
-
-					
-					
-
+				
 				if(!$cal->is_exception($calculated_event['id'],$calculated_event['start_time']))
 				{
 					$this->events[] = $calculated_event;
