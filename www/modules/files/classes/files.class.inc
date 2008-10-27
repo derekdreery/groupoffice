@@ -468,8 +468,8 @@ class files extends filesystem
 			global $GO_LINKS;
 
 			$file['path'] = $path;
-			$file['ctime']=filectime(stripslashes($path));
-			$file['mtime']=filemtime(stripslashes($path));
+			$file['ctime']=filectime($path);
+			$file['mtime']=filemtime($path);
 
 			$this->add_file($file);
 
@@ -511,6 +511,11 @@ class files extends filesystem
 
 	function add_file($file)
 	{
+		if(!is_array($file))
+		{
+			$file = array('path'=>$file);
+		}
+		
 		$file['ctime']=$file['mtime']=time();
 		$file['id']=$this->nextid('fs_files');
 		$this->insert_row('fs_files', $file);
@@ -640,6 +645,7 @@ class files extends filesystem
 			$dir .= '/';
 		}
 		$path = $dir.utf8_basename($path);
+
 		
 		$folder = $this->get_folder($path);
 
@@ -854,7 +860,7 @@ class files extends filesystem
 		
 		$user=$params['user'];
 
-		$userdir = $GO_CONFIG->file_storage_path.'users/'.stripslashes($user['username']);
+		$userdir = $GO_CONFIG->file_storage_path.'users/'.$user['username'];
 		
 		if(!is_dir($userdir))
 			mkdir($userdir, 0755, true);

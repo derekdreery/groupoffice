@@ -128,6 +128,11 @@ class db extends base_db {
 
 		# New query, discard previous result.
 		$this->free();
+		
+		if(!is_array($params))
+		{
+			$params=array($params);
+		}
 				
 		$param_count = count($params);
 		
@@ -138,9 +143,6 @@ class db extends base_db {
 				$sql = String::replace_once('?', "'".$this->escape($params[$i])."'", $sql);
 			}
 		}
-
-		if ($this->debug)
-			debug($sql);
 
 		$this->result = @mysql_query($sql,$this->link);
 

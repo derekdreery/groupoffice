@@ -250,14 +250,13 @@ try{
 					{
 						$new[]=utf8_basename($new_path);
 					}
-					$fs->move($tmp_file, $new_path);
+					$fs->move($tmp_file, $new_path);						
+					$fs->add_file($new_path);
 				}
 				if($command != 'yestoall' && $command != 'notoall')
 				{
 					$command='ask';
-				}
-				
-				
+				}			
 			}
 			
 			$fs->notify_users($path, substr(dirname($path), strlen($GO_CONFIG->file_storage_path)), $GO_SECURITY->user_id, $modified, $new);
