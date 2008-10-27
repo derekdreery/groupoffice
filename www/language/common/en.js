@@ -315,6 +315,7 @@ GO.lang.countries["KY"] = "Cayman Islands";
 GO.lang.countries["CF"] = "Central African Republic";
 GO.lang.countries["TD"] = "Chad";
 GO.lang.countries["CL"] = "Chile";
+GO.lang.countries["CN"] = "China";
 GO.lang.countries["CX"] = "Christmas Island";
 GO.lang.countries["CC"] = "Cocos (Keeling) Islands";
 GO.lang.countries["CO"] = "Colombia";
