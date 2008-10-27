@@ -8,86 +8,57 @@
  * If you have questions write an e-mail to info@intermesh.nl
  *
  * @copyright Copyright Intermesh
- * @version $Id$
+ * @version $Id: about.php 1088 2008-10-07 13:02:06Z mschering $
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
 /**
  * Constants
  */
-define('DB_NUM', MYSQL_NUM);
-define('DB_BOTH', MYSQL_BOTH);
-define('DB_ASSOC', MYSQL_ASSOC);
+define('DB_NUM', MYSQLI_NUM);
+define('DB_BOTH', MYSQLI_BOTH);
+define('DB_ASSOC', MYSQLI_ASSOC);
 
 /**
  * Class that connects to MySQL using the MySQLi extension
  *
- * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package go.database
  * @access public
  */
 
-
-
-class db extends base_db {
-	
+class db extends base_db{
 	/**
 	 * Type of database connector
 	 *
 	 * @var unknown_type
 	 */
-	var $type     = "mysql";
-	
+	var $type     = "mysqli";
+
 	/**
-	 * Use pconnect
+	 * Set to true when are working with a prepared statement
 	 *
 	 * @var bool
 	 */
-	var $pconnect     = false;
-
-
-	/**
-	 * Returns the number of rows found when you have used 
-	 * SELECT SQL_CALC_FOUND_ROWS
-	 *
-	 * @return unknown
-	 */
-	
-	public function found_rows(){
-		$this->query("SELECT FOUND_ROWS() as found;");
-		$this->next_record();
-		return $this->f('found');
-	}
+	var $prepared_statement = false;
 
 	/**
 	 * Connnects to the database
 	 *
 	 * @return resource The connection link identifier
 	 */
-	public function connect() {
 
-		/* establish connection, select database */
-		if ( 0 == $this->link ) {
-
-			if(!$this->pconnect) {
-				$this->link = mysql_connect($this->host, $this->user, $this->password);
-			} else {
-				$this->link = mysql_pconnect($this->host, $this->user, $this->password);
-			}
-			if (!$this->link) {
+	public function connect()
+	{
+		if(!$this->link)
+		{
+			$this->link = new MySQLi($this->host, $this->user, $this->password, $this->database);
+			if(!$this->link)
+			{
 				$this->halt('Could not connect to MySQL database');
-				return false;
 			}
-				
-			$this->query("SET NAMES UTF8");
-				
-			if (!empty($this->database) && !@mysql_select_db($this->database,$this->link)) {
-				$this->halt("cannot use database ".$this->database);
-				return false;
-			}
+			$this->link->set_charset("utf8");
 		}
-
 		return $this->link;
 	}
 
@@ -95,10 +66,16 @@ class db extends base_db {
 	 * Frees the memory associated with a result
 	 * return void
 	 */
-	public function free() {
+	function free() {
 		if(is_object($this->result))
 		{
-			@mysql_free_result($this->result);
+			if($this->prepared_statement)
+			{
+				$this->result->free_result();
+			}else
+			{
+				$this->result->free();
+			}
 		}
 		$this->result = false;
 	}
@@ -106,55 +83,97 @@ class db extends base_db {
 	/**
 	 * Queries the database
 	 *
-	 * @param string $sql	 
+	 * @param string $sql
 	 * @param string $types The types of the parameters. possible values: i, d, s, b for integet, double, string and blob
 	 * @param mixed $params If a single or an array of parameters are given in the statement will be prepared
-	 * 
+	 *
 	 * @return object The result object
 	 */
 	public function query($sql, $types='', $params=array())
 	{
-		/* No empty queries, please, since PHP4 chokes on them. */
-		if ($sql == "")
-		/* The empty query string is passed on from the constructor,
-		 * when calling the class without a query, e.g. in situations
-		 * like these: '$db = new DB_Sql_Subclass;'
-		 */
+		if(empty($sql))
 		return false;
-
-		if (!$this->connect()) {
-			return false; /* we already complained in connect() about that. */
-		};
+			
+		$this->connect();
 
 		# New query, discard previous result.
 		$this->free();
-		
+
+		if ($this->debug)
+		debug($sql);
+
+		//a single parameter does not need to be an array.
 		if(!is_array($params))
-		{
-			$params=array($params);
-		}
-				
+		$params=array($params);
+
 		$param_count = count($params);
-		
-		if($param_count>0)
+		$this->prepared_statement=$param_count>0;
+			
+		if($this->prepared_statement)
 		{
+			$this->result = $this->link->prepare($sql);
+
+			if(!$this->result)
+			{
+				$this->halt('Could not prepare statement SQL: '.$sql);
+				return false;
+			}
+
+			//bind parameters
+			$param_args=array($types);
 			for($i=0;$i<$param_count;$i++)
 			{
-				$sql = String::replace_once('?', "'".$this->escape($params[$i])."'", $sql);
+				$param_args[]=$params[$i];
 			}
+			call_user_func_array(array(&$this->result, 'bind_param'), $param_args);
+
+			$ret = $this->result->execute();
+			if(!$ret)
+			{
+				$this->halt("Invalid SQL: ".$sql."<br />\nParams: ".implode(',', $param_args));
+				return false;
+			}
+
+			//bind result
+			$meta = $this->result->result_metadata();
+			if($meta)
+			{
+				//we got results so we need to bind them and store it.
+				$this->result->store_result();
+
+				$this->record=array();
+				while ($field = $meta->fetch_field())
+				{
+					$result_args[] = &$this->record[$field->name];
+				}
+				call_user_func_array(array(&$this->result, 'bind_result'), $result_args);
+			}
+
+			return $ret;
+		}else
+		{
+			$this->result = $this->link->query($sql);
+			if(!$this->result)
+			{
+				$this->halt("Invalid SQL: ".$sql);
+			}
+			return $this->result;
 		}
-
-		$this->result = @mysql_query($sql,$this->link);
-
-		$this->row   = 0;
-
-		if (!$this->result) {
-			$this->halt("Invalid SQL: ".$sql);
-		}
-
-		# Will return nada if it fails. That's fine.
-		return $this->result;
 	}
+
+	/**
+	 * Returns the number of rows found when you have used
+	 * SELECT SQL_CALC_FOUND_ROWS
+	 *
+	 * @return unknown
+	 */
+
+	public function found_rows(){
+		$this->query("SELECT FOUND_ROWS() as found;");
+		$this->next_record();
+		return $this->f('found');
+	}
+
 
 	/**
 	 * Walk the result set from a select query
@@ -163,15 +182,59 @@ class db extends base_db {
 	 * @return unknown
 	 */
 	public function next_record($result_type=DB_ASSOC) {
-		if (!$this->result) {
+			
+		if($this->result)
+		{
+			if ($this->prepared_statement) {
+				if(!$this->result->fetch())
+				{
+					return false;
+				}else
+				{
+					if($result_type==DB_BOTH || $result_type==DB_NUM)
+						$this->add_indexed_values($this->record);
+
+					$record = array();
+					$i=0;
+					foreach($this->record as $key=>$value)
+					{
+						$record[$key]=$value;
+					}
+					return $record;
+				}
+			}else
+			{
+				$this->record = $this->result->fetch_array($result_type);
+				return $this->record;
+			}
+		}else
+		{
 			$this->halt("next_record called with no query pending.");
 			return false;
 		}
+	}
 
-		$this->record = @mysql_fetch_array($this->result, $result_type);
-		$this->row   += 1;
+	private function add_indexed_values(&$record)
+	{
+		if($record)
+		{
+			$i=0;
+			foreach($this->record as $key=>$value)
+			{
+				$this->record[$i]=$value;
+				$i++;
+			}				
+		}
+	}
 
-		return $this->record;
+	/**
+	 * Return the number of rows found in the last select statement
+	 *
+	 * @return int Number of rows
+	 */
+
+	public function num_rows() {
+		return $this->result->num_rows;
 	}
 
 	/**
@@ -179,27 +242,18 @@ class db extends base_db {
 	 *
 	 * @return int
 	 */
-	public function affected_rows() {
-		return @mysql_affected_rows($this->link);
+	function affected_rows() {
+		return $this->link->affected_row();
 	}
-	
-	/**
-	 * Return the number of rows found in the last select statement
-	 *
-	 * @return int Number of rows
-	 */
-	
-	public function num_rows() {
-		return @mysql_num_rows($this->result);
-	}
+
 
 	/**
 	 * Get the number of fields in a result
 	 *
 	 * @return int
 	 */
-	public function num_fields() {
-		return @mysql_num_fields($this->result);
+	function num_fields() {
+		return $this->result->field_count;
 	}
 
 	/**
@@ -209,18 +263,11 @@ class db extends base_db {
 	 */
 	protected function set_error()
 	{
-		$this->error = @mysql_error($this->link);
-		$this->errno = @mysql_errno($this->link);
-	}
-
-	/**
-	 * Returns the auto generated id used in the last query
-	 *
-	 * @return int
-	 */
-	public function insert_id()
-	{
-		return mysql_insert_id($this->result,$this->link);
+		if($this->link)
+		{
+			$this->error = $this->link->error;
+			$this->errno = $this->link->errno;
+		}
 	}
 
 	/**
@@ -233,10 +280,20 @@ class db extends base_db {
 	public function escape($value, $trim=true)
 	{
 		$this->connect();
-		
+
 		if($trim)
-			$value = trim($value);
+		$value = trim($value);
 			
-		return mysql_real_escape_string($value, $this->link);
+		return $this->link->real_escape_string($value);
+	}
+
+	/**
+	 * Returns the auto generated id used in the last query
+	 *
+	 * @return int
+	 */
+	function insert_id()
+	{
+		return $this->link->insert_id();
 	}
 }
