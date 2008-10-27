@@ -219,7 +219,8 @@ class Date
 					{
 						$occurence_time=mktime(date('H', $first_occurence_time), date('i', $first_occurence_time),0, date('n', $first_occurence_time)+($event['repeat_every']*$rounded), date('j', $first_occurence_time), date('Y', $first_occurence_time));
 						$rounded++;
-					}
+					}			
+					
 				}else
 				{
 
@@ -234,33 +235,32 @@ class Date
 
 					$days = Date::shift_days_to_local($days, date('G', $event['start_time']), Date::get_timezone_offset($event['start_time']));
 
-
+					//debug('New call');
+					///start searching at the current day.
+					$start_day=date('j', $start_time);
 					$last_occurence_time=0;
 					while($occurence_time==0)
-					{
-						//go_log(LOG_DEBUG, '*'.date('Ymd G:i', $last_occurence_time));
+					{				
+						//debug('while '.$start_day.' '.$occurence_time);
 
 						$last_occurence_time=mktime(date('H', $first_occurence_time), date('i', $first_occurence_time),0, date('n', $first_occurence_time)+($event['repeat_every']*$rounded), 1, date('Y', $first_occurence_time));
 						$rounded++;
 							
-							
-							
-						for($d=0;$d<31;$d++)
+						for($d=$start_day;$d<31;$d++)
 						{
 							$test_time = Date::date_add($last_occurence_time, $d);
 
-							//echo '*'.date('r', $test_time)."\n";
-
-							//go_log(LOG_DEBUG, '**'.date('Ymd G:i', $test_time));
+							//debug('*'.date('r', $test_time));
 
 							$weekday = date("w", $test_time);
 
-							if (isset($days[$day_db_field[$weekday]]) && $test_time>$start_time && $test_time>$first_occurence_time)
+							if (!empty($days[$day_db_field[$weekday]]) && $test_time>$start_time && $test_time>$first_occurence_time)
 							{
-								//echo '**'.ceil(date('j',$test_time)/7).' = '.$event['month_time'].'<br>';
+								//debug('**'.ceil(date('j',$test_time)/7).' = '.$event['month_time']);
 								if (ceil(date('j',$test_time)/7) == $event['month_time'])
-								{
+								{									
 									$occurence_time=$test_time;
+									//debug('found '.date('Ymd', $occurence_time));
 									break;
 								}
 							}
@@ -271,7 +271,9 @@ class Date
 								$d=-1;
 							}
 						}
+						$start_day=0;
 					}
+					
 				}
 				break;
 

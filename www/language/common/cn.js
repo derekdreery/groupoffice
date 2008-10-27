@@ -203,13 +203,6 @@ GO.lang.strLoggedInAs= '已登录';
 GO.lang.strErrorsInForm= '您提交的数据有错误。无效数据已经标出';
 
 
-
-Ext.MessageBox.buttonText.yes = GO.lang['cmdYes'];
-Ext.MessageBox.buttonText.no = GO.lang['cmdNo'];
-Ext.MessageBox.buttonText.ok = GO.lang['cmdOk'];
-Ext.MessageBox.buttonText.cancel = GO.lang['cmdCancel'];
-
-
 GO.lang.strMinute="分钟";
 GO.lang.strMinutes="分钟";
 GO.lang.strHour="小时";

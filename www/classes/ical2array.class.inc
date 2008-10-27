@@ -477,6 +477,11 @@ class ical2array
 					$rrule_arr[strtoupper(trim($param_arr[0]))] = strtoupper(trim($param_arr[1]));
 				}
 			}
+			
+			if(empty($rrule_arr['INTERVAL']))
+			{
+				$rrule_arr['INTERVAL']=1;
+			}
 		}		
 		
 		//go_log(LOG_DEBUG, var_export($rrule_arr,true));
