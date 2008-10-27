@@ -240,6 +240,8 @@ class tasks extends db
 		$task['id'] = $this->nextid("ta_tasks");		
 		$this->insert_row('ta_tasks', $task);		
 		
+		$this->cache_task($task['id']);
+		
 		$this->set_reminder($task);
 		
 		return $task['id'];
@@ -297,7 +299,9 @@ class tasks extends db
 			$this->set_reminder($task);
 		}
 		
-		return $this->update_row('ta_tasks', 'id', $task);
+		$r = $this->update_row('ta_tasks', 'id', $task);
+		$this->cache_task($task['id']);
+		return $r;
 	}
 	
 	
@@ -767,26 +771,46 @@ class tasks extends db
 			$delete->delete_tasklist($this->f('id'));
 		}
 	}
+	
+	/**
+	 * When a global search action is performed this function will be called for each module
+	 *
+	 * @param int $last_sync_time The time this function was called last
+	 */
 
-	function __on_search($last_sync_time=0)
+	public function __on_build_search_index()
 	{
-		global $GO_MODULES, $GO_LANGUAGE;
+		$sql = "SELECT id FROM ta_tasks";
+		$this->query($sql);
+		
+		$tasks = new tasks();
+		while($record=$this->next_record())
+		{
+			$tasks->cache_task($record['id']);
+		}
 
+		/* {ON_BUILD_SEARCH_INDEX_FUNCTION} */
+	}
+	
+
+	private function cache_task($task_id)
+	{
+		global $GO_CONFIG, $GO_LANGUAGE;
+		
+		require_once($GO_CONFIG->class_path.'/base/search.class.inc.php');
+		$search = new search();
 		require($GO_LANGUAGE->get_language_file('tasks'));
 
 		$sql  = "SELECT DISTINCT t.*, tl.acl_read, tl.acl_write FROM ta_tasks t ".
 		"INNER JOIN ta_lists tl ON t.tasklist_id=tl.id ".
-		"WHERE mtime>'".$this->escape($last_sync_time)."'";
+		"WHERE t.id=?";
 
+		$this->query($sql, 'i', $task_id);
+		$record = $this->next_record();
+		if($record)
+		{		
+			$now = time();
 
-		$this->query($sql);
-
-		$search = new search();
-		
-		$now = time();
-
-		while($this->next_record())
-		{
 			$class = '';
 			
 			if($this->f('due_time')<$now)

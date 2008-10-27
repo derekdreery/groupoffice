@@ -148,35 +148,20 @@ class users extends db
 		$GO_USERS->update_user($user);
 
 	}
-
-	function __on_search($last_sync_time=0)
+	
+	public function __on_build_search_index()
 	{
-		global $GO_MODULES, $GO_LANGUAGE, $GO_USERS;
-
-		require($GO_LANGUAGE->get_language_file('users'));
-
-		$sql = "SELECT DISTINCT go_users.*  FROM go_users WHERE mtime>".$this->escape($last_sync_time);
-
+		global $GO_USERS;
+		
+		$sql = "SELECT id FROM go_users";
 		$this->query($sql);
-
-		$search = new search();
-
-		while($this->next_record())
+		
+		while($record=$this->next_record())
 		{
-			$cache['id']=$this->f('id');
-			$cache['user_id']=1;
-			$cache['name'] = String::format_name($this->f('last_name'),$this->f('first_name'),$this->f('middle_name'));
-			$cache['link_type']=8;
-			$cache['description']='';
-			$cache['type']=$us_user;
-			$cache['keywords']=$search->record_to_keywords($this->record).','.$cache['type'];
-			$cache['mtime']=$this->f('mtime');
-			$cache['module']='users';
-			$cache['acl_read']=$GO_MODULES->modules['users']['acl_read'];
-			$cache['acl_write']=$GO_MODULES->modules['users']['acl_write'];
-				
-			$search->cache_search_result($cache);
+			$GO_USERS->cache_user($record['id']);
 		}
+
+		/* {ON_BUILD_SEARCH_INDEX_FUNCTION} */
 	}
 	
 	function __on_check_database(){

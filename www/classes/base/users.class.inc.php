@@ -521,6 +521,9 @@ class GO_USERS extends db
 
 		if($this->update_profile($user))
 		{
+			
+			$this->cache_user($user['id']);
+			
 			$GO_MODULES->get_modules();
 			while ($GO_MODULES->next_record())
 			{
@@ -638,6 +641,7 @@ class GO_USERS extends db
 			$ret = true;
 		}
 		
+		$this->cache_user($user['id']);
 		
 		if($complete_profile)
 		{
@@ -829,6 +833,9 @@ class GO_USERS extends db
 
 		if ($user['id'] > 0 && $this->insert_row('go_users', $user))
 		{
+			
+			$this->cache_user($user['id']);
+			
 			$GO_SECURITY->set_acl_owner( $user['acl_id'], $user['id'] );
 			$GO_GROUPS->add_user_to_group( $user['id'], $GO_CONFIG->group_everyone);
 
@@ -1034,5 +1041,43 @@ class GO_USERS extends db
 			}
 		}
 		return $password;
+	}
+	
+/**
+	 * When a global search action is performed this function will be called for each module
+	 *
+	 * @param int $last_sync_time The time this function was called last
+	 */
+
+	
+
+	function cache_user($user_id)
+	{
+		global $GO_MODULES, $GO_CONFIG, $GO_LANGUAGE;
+		
+		require_once($GO_CONFIG->class_path.'/base/search.class.inc.php');
+		$search = new search();
+
+		require($GO_LANGUAGE->get_language_file('users'));
+
+		$sql = "SELECT DISTINCT *  FROM go_users WHERE id=?";
+		$this->query($sql, 'i', $user_id);
+		$record = $this->next_record();
+		if($record)
+		{	
+			$cache['id']=$this->f('id');
+			$cache['user_id']=1;
+			$cache['name'] = String::format_name($this->f('last_name'),$this->f('first_name'),$this->f('middle_name'));
+			$cache['link_type']=8;
+			$cache['description']='';
+			$cache['type']=$us_user;
+			$cache['keywords']=$search->record_to_keywords($this->record).','.$cache['type'];
+			$cache['mtime']=$this->f('mtime');
+			$cache['module']='users';
+			$cache['acl_read']=$GO_MODULES->modules['users']['acl_read'];
+			$cache['acl_write']=$GO_MODULES->modules['users']['acl_write'];
+				
+			$search->cache_search_result($cache);
+		}
 	}
 }
