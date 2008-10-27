@@ -570,37 +570,14 @@ class imap {
 			$this->message["parts"] = array();
 				
 			if($fetchstructure)
-			{				//if ($part == '') {
-				$structure = imap_fetchstructure($this->conn, $uid, FT_UID);
-				/*} else {
-					$structure = imap_bodystruct($this->conn, $this->message['number'], $part);
-					}*/
-
-				//$this->mail["parts"] = array ();
+			{
+				$structure = imap_fetchstructure($this->conn, $this->message['uid'], FT_UID);
 				$this->get_parts($structure);
 			}
 
-			$header = imap_fetchheader($this->conn, $this->message['number']);
+			$header = imap_fetchheader($this->conn, $this->message['uid'], FT_UID);
 
 			$values = $this->get_header_values($header);
-			/*foreach($values as $key=>$value)
-			 {
-				//if(empty($this->message[$key]))
-				//{
-				if(is_array($value))
-				{
-				for($i=0;$i<count($value);$i++)
-				{
-				$value[$i]=$this->enc_utf8($value[$i]);
-				}
-				}else
-				{
-				$value=$this->enc_utf8($value);
-				}
-
-				$this->message[$key]=$value;
-				//}
-				}*/
 				
 			$this->message = array_merge($this->message, $values);
 
@@ -608,15 +585,7 @@ class imap {
 			{
 				$this->message["reply_to"] = $this->RFC822->write_address($this->message['from'], $this->message["sender"]);
 			}
-
-			/*$this->message["reply_to"] = $this->RFC822->write_address($this->message['from'], $this->message["sender"]);
-
-			if (isset ($headerinfo->reply_to)) {
-			$tmp = $headerinfo->reply_to;
-			$this->message["reply_to"] = $this->RFC822->write_address($this->message['from'], $tmp[0]->mailbox.'@'.$tmp[0]->host);
-			}*/
 			return $this->message;
-
 		} else {
 			return false;
 		}
