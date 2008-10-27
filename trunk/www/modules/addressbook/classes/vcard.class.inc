@@ -81,9 +81,10 @@ class vcard extends addressbook {
 		$this->index = null;
 		$this->instance = array ();
 		$this->version = 'VERSION:2.1';
-		$this->_set_revision();
-		$this->addressbook();
+		$this->_set_revision();		
 		$this->vcf = '';
+		
+		parent::construct();
 	}
 
 	/**
