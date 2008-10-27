@@ -53,9 +53,9 @@ class db extends base_db{
 		if(!$this->link)
 		{			
 			$this->link = new MySQLi($this->host, $this->user, $this->password, $this->database);
-			if(!$this->link)
-			{
-				$this->halt('Could not connect to MySQL database');
+			if(!$this->link || $this->link->connect_error)
+			{				
+				$this->halt('Could not connect to MySQL database: '.$mysqli->connect_error);
 			}
 			$this->link->set_charset("utf8");
 		}
