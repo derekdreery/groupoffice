@@ -1,12 +1,12 @@
 <?php
-/** 
+/**
  * Copyright Intermesh
- * 
+ *
  * This file is part of Group-Office. You should have received a copy of the
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
- * 
+ *
  * If you have questions write an e-mail to info@intermesh.nl
- * 
+ *
  * @copyright Copyright Intermesh
  * @version $Id: about.php 1088 2008-10-07 13:02:06Z mschering $
  * @author Merijn Schering <mschering@intermesh.nl>
@@ -14,7 +14,7 @@
 
 /**
  * Class that connects to MySQL using the MySQLi extension
- * 
+ *
  * @version $Id: imap.class.inc 1201 2008-10-22 18:23:34Z mschering $
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package go.database
@@ -29,21 +29,21 @@ class base_db{
 	 * @var string
 	 */
 	var $host = "";
-	
+
 	/**
 	 * The database name
 	 *
 	 * @var string
 	 */
 	var $database = "";
-	
+
 	/**
 	 * The database username
 	 *
 	 * @var string
 	 */
 	var $user = "";
-	
+
 	/**
 	 * The database password
 	 *
@@ -56,7 +56,7 @@ class base_db{
 	 *
 	 * @var bool
 	 */
-	var $debug = false; 
+	var $debug = false;
 
 	/**
 	 * "yes" (halt with message), "no" (ignore errors quietly), "report" (ignore errror, but spit a warning)
@@ -64,7 +64,7 @@ class base_db{
 	 * @var string
 	 */
 	var $halt_on_error = "yes";
-	
+
 	/**
 	 * The sequence table to use for autoincrementing numbers.
 	 *
@@ -78,7 +78,7 @@ class base_db{
 	 * @var array
 	 */
 	var $record = array();
-	
+
 	/**
 	 * The current row index when waling through a result set
 	 *
@@ -92,7 +92,7 @@ class base_db{
 	 * @var int
 	 */
 	var $errno = 0;
-	
+
 	/**
 	 * Database error message
 	 *
@@ -108,12 +108,12 @@ class base_db{
 	var $type = "mysqli";
 
 	/**
-	 * The database connection link identifier 
+	 * The database connection link identifier
 	 *
 	 * @var resource
 	 */
 	var $link = false;
-	
+
 	/**
 	 * The result object from a query
 	 *
@@ -139,7 +139,7 @@ class base_db{
 	{
 		$this->set_config($config);
 	}
-	
+
 	/**
 	 * Set's the connection parameters. A config object with db_host, db_pass, db_user and db_name
 	 * may be passed so it can connect to a different database then the default.
@@ -150,61 +150,61 @@ class base_db{
 	public function set_config($config=null)
 	{
 		global $GO_CONFIG;
-		 
+			
 		if(!isset($config) && isset($GO_CONFIG))
 		{
 			$config = $GO_CONFIG;
 		}
-		 
+			
 		if(isset($config))
 		{
 			if (isset($config->db_host)) {
 				$this->host = $config->db_host;
-		  }
-		  if (isset($config->db_name)) {
-		  	$this->database = $config->db_name;
-		  }
-		  if (isset($config->db_user)) {
-		  	$this->user = $config->db_user;
-		  }
-		  if (isset($config->db_pass)) {
-		  	$this->password = $config->db_pass;
-		  }
+			}
+			if (isset($config->db_name)) {
+				$this->database = $config->db_name;
+			}
+			if (isset($config->db_user)) {
+				$this->user = $config->db_user;
+			}
+			if (isset($config->db_pass)) {
+				$this->password = $config->db_pass;
+			}
 		}
 	}
-	
+
 	/**
 	 * Connnects to the database
 	 *
 	 * @return resource The connection link identifier
 	 */
-	
+
 	public function connect()
 	{
 	}
-	
+
 	/**
 	 * Frees the memory associated with a result
 	 * return void
 	 */
 	function free() {
 	}
-	
+
 	/**
 	 * Queries the database
 	 *
-	 * @param string $sql	 
+	 * @param string $sql
 	 * @param string $types The types of the parameters. possible values: i, d, s, b for integet, double, string and blob
 	 * @param mixed $params If a single or an array of parameters are given in the statement will be prepared
-	 * 
+	 *
 	 * @return object The result object
 	 */
 	public function query($sql, $types='', $params=array())
 	{
 	}
-	
+
 	/**
-	 * Returns the number of rows found when you have used 
+	 * Returns the number of rows found when you have used
 	 * SELECT SQL_CALC_FOUND_ROWS
 	 *
 	 * @return unknown
@@ -225,7 +225,7 @@ class base_db{
 
 
 	/**
-	 * Lock a table 
+	 * Lock a table
 	 *
 	 * @param string $table
 	 * @param string $mode Modes are: "read", "read local", "write", "low priority write"
@@ -255,7 +255,7 @@ class base_db{
 		$this->locked = true;
 		return true;
 	}
-	
+
 	/**
 	 * Unlock tables
 	 *
@@ -272,7 +272,7 @@ class base_db{
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Fetch a single field from a result record
 	 *
@@ -287,7 +287,7 @@ class base_db{
 	}
 
 	/**
-	 * Print a single field from a result record. 
+	 * Print a single field from a result record.
 	 *
 	 * @param string $name Field name or index
 	 * @return mixed the field value
@@ -356,16 +356,16 @@ class base_db{
 
 		return $nextid;
 	}
-	
+
 	/**
 	 * Return the number of rows found in the last select statement
 	 *
 	 * @return int Number of rows
 	 */
-	
+
 	public function num_rows() {
 	}
-	
+
 	/**
 	 * Gets the number of affected rows in a previous MySQL operatio
 	 *
@@ -392,14 +392,14 @@ class base_db{
 	 * @param bool $trim Trim values in the array
 	 * @return bool
 	 */
-	
+
 	public function update_row($table, $index, $fields, $types='', $trim=true)
 	{
 		if(!is_array($fields))
-		{			
+		{
 			$this->halt('Invalid update row called');
 			return false;
-		}		
+		}
 		if(!is_array($index))
 		{
 			$index = array($index);
@@ -408,18 +408,18 @@ class base_db{
 		{
 			$types = str_repeat('s', count($fields));
 		}
-		
+
 		$field_types='';
 		$index_types='';
 		$count=0;
 		$indexes=array();
-		
+
 		foreach($fields as $key => $value)
 		{
 			if(!in_array($key, $index))
 			{
 				$updates[] = "`$key`=?";
-				$field_values[] = $value;						
+				$field_values[] = $value;
 				$field_types.=$types[$count];
 			}else
 			{
@@ -432,7 +432,7 @@ class base_db{
 		if(isset($updates))
 		{
 			$sql = "UPDATE `$table` SET ".implode(',',$updates)." WHERE ".implode(' AND ', $indexes);
-			
+				
 			foreach($index_values as $index_value)
 			{
 				$field_values[]=$index_value;
@@ -453,7 +453,7 @@ class base_db{
 			
 		return false;
 	}
-	
+
 	/**
 	 * Inserts a row in a table
 	 *
@@ -466,11 +466,11 @@ class base_db{
 	public function insert_row($table, $fields, $types='', $trim=true)
 	{
 		if(!is_array($fields))
-		{			
+		{
 			$this->halt('Invalid insert row called');
 			return false;
 		}
-		
+
 		foreach($fields as $key => $value)
 		{
 			$field_names[] = $key;
@@ -480,12 +480,12 @@ class base_db{
 		{
 			$sql = "INSERT INTO `$table` (`".implode('`,`', $field_names)."`) VALUES ".
   					"(".str_repeat('?,', count($field_values)-1)."?)";
-			
+				
 			if(empty($types))
 			{
 				$types = str_repeat('s',count($field_values));
 			}
-			
+				
 			if(!$this->query($sql, $types, $field_values))
 			{
 				if($this->halt_on_error=='yes')
@@ -512,15 +512,15 @@ class base_db{
 	 * @param bool $trim Trim values in the array
 	 * @return bool
 	 */
-	
+
 	public function replace_row($table, $fields, $trim=true)
 	{
 		if(!is_array($fields))
-		{			
+		{
 			$this->halt('Invalid replace row called');
 			return false;
 		}
-		
+
 		foreach($fields as $key => $value)
 		{
 			$field_names[] = $key;
@@ -544,7 +544,7 @@ class base_db{
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Escapes a value to make it safe to send to MySQL
 	 *
@@ -555,7 +555,7 @@ class base_db{
 	public function escape($value, $trim=true)
 	{
 	}
-	
+
 	/**
 	 * Returns the auto generated id used in the last query
 	 *
@@ -564,7 +564,7 @@ class base_db{
 	public function insert_id()
 	{
 	}
-	
+
 	/**
 	 * Sets the error and errno property
 	 *
@@ -572,16 +572,16 @@ class base_db{
 	 */
 	protected function set_error()
 	{
-		
+
 	}
-	
+
 	/**
 	 * Halts when an error occurs
 	 *
 	 * @param unknown_type $msg
 	 */
 	protected function halt($msg) {
-		
+
 		$this->set_error();
 
 		if ($this->locked) {
@@ -607,4 +607,5 @@ class base_db{
 			$this->error);
 		}
 	}
+
 }

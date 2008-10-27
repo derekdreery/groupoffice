@@ -53,7 +53,7 @@ class db extends base_db{
 		if(!$this->link)
 		{			
 			$this->link = new MySQLi($this->host, $this->user, $this->password, $this->database);
-			if(!$this->link || $this->link->connect_error)
+			if(!$this->link)
 			{				
 				$this->halt('Could not connect to MySQL database: '.$mysqli->connect_error);
 			}
@@ -295,5 +295,12 @@ class db extends base_db{
 	function insert_id()
 	{
 		return $this->link->insert_id();
+	}
+	
+	 
+	public function __wakeup()
+	{
+		$this->link=false;
+		$this->connect();
 	}
 }
