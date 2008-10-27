@@ -223,6 +223,8 @@ class Date
 					
 				}else
 				{
+					
+					//Maybe more efficient to jump to right week first....
 
 					$event['month_time'] = $rrule['BYDAY'][0];
 					$day = substr($rrule['BYDAY'], 1);
