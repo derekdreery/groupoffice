@@ -35,7 +35,7 @@ function connect($account_id, $mailbox='INBOX', $halt_on_error=true)
 		return false;
 
 		$response['success']=false;
-		$response['feedback']= sprintf($lang['email']['feedbackCannotConnect'], $account['host'], imap_last_error());
+		$response['feedback']= sprintf($lang['email']['feedbackCannotConnect'], $account['host'],  $imap->last_error(), $account['port']);
 		echo json_encode($response);
 		exit();
 	}
@@ -167,8 +167,7 @@ class email extends db
 			0, 
 			$account['use_ssl'], 
 			$account['novalidate_cert']))
-		{	
-			$this->last_error = imap_last_error();
+		{			
 			return false;
 		}else
 		{

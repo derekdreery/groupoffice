@@ -88,5 +88,5 @@ GO.addressbook.lang.searchOnSender='Opzoeken';
 GO.addressbook.lang.confirmCreate='Contactpersoon niet gevonden. Wilt u een nieuw contactpersoon aanmaken?';
 
 GO.addressbook.lang.selectMailingGroup='Selecteer adreslijst';
-GO.addressbook.lang.strSelectContact= 'Selecteer contactpersson';
+GO.addressbook.lang.strSelectContact= 'Selecteer contactpersoon';
 GO.addressbook.lang.strSelectCompany= 'Selecteer bedrijf';

@@ -271,6 +271,8 @@ try{
 								$src_id = $swift->message->attach($img);
 								$body = str_replace($inlineAttachment['url'], $src_id, $body);
 							}
+							
+							
 
 							$swift->set_body($body);
 
@@ -630,8 +632,7 @@ try{
 
 							if(!$email->update_account($account))
 							{
-								$response['feedback'] = $ml_connect_failed.' '.
-								$_POST['host'].' '.$ml_at_port.': '.$_POST['port'].' '.$email->last_error;
+								$response['feedback'] = sprintf($lang['email']['feedbackCannotConnect'],$_POST['host'], $imap->last_error(), $_POST['port']);
 							}else
 							{
 								$response['success']=true;
@@ -685,8 +686,7 @@ try{
 							$account['id'] = $email->add_account($account);
 							if(!$account['id'])
 							{
-								$response['feedback'] = $ml_connect_failed.' '.
-								$_POST['host'].' '.$ml_at_port.': '.$_POST['port'].' '.$email->last_error;
+								$response['feedback'] = sprintf($lang['email']['feedbackCannotConnect'],$_POST['host'], $imap->last_error(), $_POST['port']);
 							}else
 							{
 								$account = $email->get_account($account['id']);

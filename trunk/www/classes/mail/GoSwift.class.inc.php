@@ -180,6 +180,14 @@ class GoSwift extends Swift{
 
 	function set_body($body,$type='html')
 	{
+		global $GO_CONFIG;
+		
+		//correction for IE. It likes to add the domain name to relative url's
+		if($type=='html')
+		{
+			$body = str_replace(substr($GO_CONFIG->full_url,0,-strlen($GO_CONFIG->host)).'cid:', 'cid:', $body);
+		}
+		
 		//add body
 		$this->message->attach(new Swift_Message_Part($body, 'text/'.$type, null, 'UTF-8'));
 

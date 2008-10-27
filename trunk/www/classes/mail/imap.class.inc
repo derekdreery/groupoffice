@@ -177,8 +177,21 @@ class imap {
 			$this->conn = @ imap_open("{".$this->connectstring."}".$this->mailbox, $username, $password);
 		}
 
-
 		return $this->conn;
+	}
+	
+	/**
+	 * Return last error
+	 *
+	 * @access public
+	 * @return String Last IMAP error
+	 */
+	
+	function last_error()
+	{
+		$error = imap_last_error();
+		$this->clear_errors();
+		return $error;
 	}
 
 	/**
@@ -1270,17 +1283,8 @@ class imap {
 		return true;
 	}
 
-	/**
-	 * Return last error
-	 *
-	 * @access public
-	 * @return String Last IMAP error
-	 */
+	
 
-	function last_error()
-	{
-		return imap_last_error();
-	}
 
 	/**
 		* Move messages to another mailbox

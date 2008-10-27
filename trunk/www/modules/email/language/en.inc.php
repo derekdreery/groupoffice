@@ -12,7 +12,7 @@ $lang['email']['feedbackUnexpectedError'] = 'There was an unexpected problem bui
 $lang['email']['feedbackCreateFolderFailed'] = 'Failed to create folder';
 $lang['email']['feedbackSubscribeFolderFailed'] = 'Failed to subscribe folder';
 $lang['email']['feedbackUnsubscribeFolderFailed'] = 'Failed to unsubscribe folder';
-$lang['email']['feedbackCannotConnect'] = 'Could not connect to %1$s<br /><br />The mail server returned: %2$s';
+$lang['email']['feedbackCannotConnect'] = 'Could not connect to %1$s at port %3$s<br /><br />The mail server returned: %2$s';
 $lang['email']['inbox'] = 'Inbox';
 
 $lang['email']['spam']='Spam';
