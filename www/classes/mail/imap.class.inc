@@ -367,7 +367,7 @@ class imap {
 	 * @return void
 	 */
 
-	function get_messages($first, $offset) {
+	/*function get_messages($first, $offset) {
 		if (!isset($this->sort)) {
 			$this->sort();
 		}
@@ -379,9 +379,9 @@ class imap {
 		for ($i = $first; $i < $last; $i++) {
 			$this->messages[]=$this->sort[$i];
 		}
-	}
+	}*/
 	
-	/*
+	
 	function get_messages($first, $offset) {
 		//Use imap_fetch_overview and sort them correctly
 		//for performance.
@@ -420,7 +420,7 @@ class imap {
 		while ($message_overview = array_shift($tmp) && $uid = array_shift($sorted_uids)) {
 			$this->messages[] = $tmp_overviews[$uid_map[$uid]];
 		}
-	}*/
+	}
 
 
 
