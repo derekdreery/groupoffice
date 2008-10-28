@@ -212,11 +212,11 @@ try
 					$read = $module['read_permission'];
 					$write = $module['write_permission'];
 
-					if ($module['read_permission'])
+					if (!empty($module['read_permission']))
 					{
 						if(!$GO_SECURITY->user_in_acl($user_id, $mod['acl_read']))
 						{
-							$GO_SECURITY->add_user_to_acl($user_id, $mod['acl_read']);
+							$GO_SECURITY->add_user_to_acl($user_id, $mod['acl_read']);							
 						}
 					} else {
 						if($GO_SECURITY->user_in_acl($user_id, $mod['acl_read']))
@@ -225,7 +225,7 @@ try
 						}
 					}
 
-					if ($module['write_permission'])
+					if (!empty($module['write_permission']))
 					{
 						if(!$GO_SECURITY->user_in_acl($user_id, $mod['acl_write']))
 						{
@@ -237,7 +237,6 @@ try
 							$GO_SECURITY->delete_user_from_acl($user_id, $mod['acl_write']);
 						}
 					}
-
 				}
 
 				foreach($permissions['group_member'] as $group)

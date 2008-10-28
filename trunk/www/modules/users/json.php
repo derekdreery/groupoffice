@@ -29,12 +29,9 @@ $records = array();
 switch($task)
 {
 	case 'users':
-
-
 		if(isset($_POST['delete_keys']))
 		{
-			try{
-				
+			try{				
 				if(!$GO_MODULES->modules['users']['write_permission'])
 				{
 					throw new AccessDeniedException();

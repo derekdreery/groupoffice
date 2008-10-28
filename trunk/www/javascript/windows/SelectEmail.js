@@ -37,7 +37,7 @@ GO.dialog.SelectEmail = function(config){
 
 	var items = Array();
 	this.usersStore = new GO.data.JsonStore({
-	    url: GO.settings.modules.users.url+'json.php',
+	    url: GO.settings.modules.users.url+'non_admin_json.php',
 	    baseParams: {task: 'users'},
 	    id: 'id',
 	    root: 'results',

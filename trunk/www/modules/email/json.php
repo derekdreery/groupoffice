@@ -14,10 +14,7 @@
 
 require('../../Group-Office.php');
 
-
 $GO_SECURITY->json_authenticate('email');
-
-//ini_set('display_errors','off');
 
 require_once ($GO_CONFIG->class_path."mail/imap.class.inc");
 require_once ($GO_MODULES->modules['email']['class_path']."email.class.inc");
@@ -48,7 +45,6 @@ function get_all_mailbox_nodes($account_id, $folder_id){
 			$folder_name = $email->f('name');
 		}
 		$folder_name = imap::utf7_imap_decode($folder_name);
-
 
 		$response[] = array(
 				'text'=>$folder_name,
@@ -112,9 +108,7 @@ function get_mailbox_nodes($account_id, $folder_id){
 		{
 			$status_html = '&nbsp;<span id="status_'.$email->f('id').'"></span>';
 		}
-
-
-
+		
 		if($email2->get_subscribed(0, $email->f('id')))
 		{
 			$response[] = array(

@@ -3,6 +3,8 @@ Ext.namespace("GO.calendar.dd");
 
 GO.calendar.lang={};
 
+GO.calendar.lang.addressbook='Addressbook';
+
 GO.calendar.lang.appointment = 'Appointment';
 GO.calendar.lang.appointments = 'Appointments';
 GO.calendar.lang.recurrence = 'Recurrence';

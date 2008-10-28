@@ -13,6 +13,7 @@
 
 GO.lang = {};
 
+GO.lang.moduleRequired='This feature requires the \'{module}\' module. This module is not available.';
 
 GO.lang.completeProfile = 'Please complete your profile';
 GO.lang.fullscreen='Fullscreen mode';

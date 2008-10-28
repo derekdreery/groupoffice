@@ -29,7 +29,7 @@ GO.dialog.SelectUsers = function(config){
 	
 
 	this.store = new GO.data.JsonStore({
-   	url: GO.settings.modules.users.url+'json.php',
+   	url: GO.settings.modules.users.url+'non_admin_json.php',
     root: 'results',
 		totalProperty: 'total',
 		id: 'id',

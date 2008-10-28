@@ -22,7 +22,7 @@ GO.users.PermissionsPanel = function(config)
 	config.border=false;
 	config.hideLabel=true;
 	config.title = GO.lang['strPermissions'];
-	config.layout='column';
+	config.layout='columnfit';
 	config.anchor='100% 100%';
 	
 	config.defaults={
@@ -56,7 +56,7 @@ GO.users.PermissionsPanel = function(config)
 	var moduleAccessGrid = new GO.grid.GridPanel({		
 		columnWidth: .34,
 		title: GO.users.lang.moduleAccess,
-		
+		layout:'fit',
 		columns: [
 				{
 					header: GO.users.lang['cmdHeaderColumnName'], 
@@ -94,6 +94,7 @@ GO.users.PermissionsPanel = function(config)
 	
 	var groupMemberGrid = new GO.grid.GridPanel({	
 		columnWidth: .33,	
+		layout:'fit',
 		title: GO.users.lang.userIsMemberOf,	
 		columns: [
 				{
@@ -133,6 +134,7 @@ GO.users.PermissionsPanel = function(config)
 	
 	var groupVisibleGrid = new GO.grid.GridPanel({		
 		columnWidth: .33,
+		layout:'fit',
 		title: GO.users.lang.userVisibleTo,
 		columns: [
 				{
@@ -174,7 +176,7 @@ Ext.extend(GO.users.PermissionsPanel, Ext.Panel,{
 	
 	onShow : function(){
 		GO.users.PermissionsPanel.superclass.onShow.call(this);
-		
+				
 		//if(this.groupMemberStore.baseParams.user_id!=this.user_id)
 		//{
 			this.modulePermissionsStore.baseParams.user_id=this.user_id;

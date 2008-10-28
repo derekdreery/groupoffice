@@ -11,6 +11,8 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
  
+GO.lang.moduleRequired='Deze functie vereist de \'{module}\' module. Deze module is niet beschikbaar.';
+ 
 GO.lang.completeProfile = 'Vul uw profiel aan a.u.b.';
 GO.lang.fullscreen='Volledig scherm modus';
 

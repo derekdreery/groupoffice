@@ -12,7 +12,6 @@
  */
  
 //override Ext functions here
-
 /* bug in 2.2 */
 Ext.form.TriggerField.override({
     afterRender : function(){
@@ -25,12 +24,18 @@ Ext.form.TriggerField.override({
     }
 });
 
+/**
+ * Keep window in viewport and no shadows by default for IE performance
+ */
 
 Ext.Window.override({
 	 shadow : false,
 	 constrainHeader : true
 });
 
+/**
+ * For editor grid in scrolling view
+ */
 
 Ext.override(Ext.Editor, {
 	doAutoSize : function(){
@@ -53,8 +58,21 @@ Ext.override(Ext.Editor, {
 	}
 });
 
-
+/**
+ * Localization
+ */
 Ext.MessageBox.buttonText.yes = GO.lang['cmdYes'];
 Ext.MessageBox.buttonText.no = GO.lang['cmdNo'];
 Ext.MessageBox.buttonText.ok = GO.lang['cmdOk'];
 Ext.MessageBox.buttonText.cancel = GO.lang['cmdCancel'];
+
+
+/**
+ * Fix for loosing pasted value in HTML editor
+ */
+Ext.override(Ext.form.HtmlEditor, {
+	getValue : function() {
+		this.syncValue();
+		return Ext.form.HtmlEditor.superclass.getValue.call(this);
+	}
+});

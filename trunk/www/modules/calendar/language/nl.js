@@ -1,3 +1,4 @@
+GO.calendar.lang.addressbook='Adresboek';
 GO.calendar.lang.appointment = 'Afspraak';
 GO.calendar.lang.appointments = 'Afspraken';
 GO.calendar.lang.recurrence = 'Herhaling';
