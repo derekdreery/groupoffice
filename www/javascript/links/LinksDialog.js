@@ -65,6 +65,14 @@ Ext.extend(GO.dialog.LinksDialog, Ext.Window, {
 	
 	folder_id : 0,
 	
+	show : function(){		
+		GO.dialog.LinksDialog.superclass.show.call(this);
+		if(!this.grid.store.loaded)
+		{
+			this.grid.store.load();
+		}
+	},
+	
 	setLinkRecords : function(gridRecords)
 	{
 		this.fromLinks = [];

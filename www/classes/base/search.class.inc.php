@@ -85,7 +85,7 @@ class search extends db {
 	 */
 	function global_search($user_id, $query, $start, $offset, $sort_index='name', $sort_order='ASC', $selected_types=array(), $link_id=0, $link_type=0, $link_folder_id=0, $conditions=array())
 	{
-		$sql = "SELECT DISTINCT sc.* FROM go_search_cache sc ".
+		$sql = "SELECT DISTINCT sc.user_id,sc.id, sc.module, sc.name, sc.description,sc.link_type, sc.type, sc.mtime FROM go_search_cache sc ".
 			"INNER JOIN go_acl a ON (sc.acl_read=a.acl_id OR sc.acl_write=a.acl_id) ".
 			"LEFT JOIN go_users_groups ug ON (ug.group_id=a.group_id) ";
 				
