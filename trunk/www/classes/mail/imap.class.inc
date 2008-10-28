@@ -549,7 +549,7 @@ class imap {
 			{
 				$this->message['uid'] = $uid->uid;
 				$this->message['number'] = $uid->msgno;
-				$this->message['new'] = (!$uid->seen && !$uid->recent && $this->is_imap());
+				$this->message['new'] = (!$uid->seen && $this->is_imap());
 				$this->message["flagged"] = $uid->flagged;
 				$this->message["size"] = $uid->size;
 				$this->message["answered"] = $uid->answered;
