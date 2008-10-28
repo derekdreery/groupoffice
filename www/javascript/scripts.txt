@@ -4,6 +4,8 @@ javascript/DeployJava.js
 
 javascript/MainLayout.js
 
+javascript/ColumnFitLayout.js
+
 modules/users/TimeZones.js
 javascript/windows/PersonalSettingsDialog.js
 modules/users/RegionalSettingsPanel.js

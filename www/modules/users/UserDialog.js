@@ -55,6 +55,7 @@ GO.users.UserDialog = function(config){
 	config.modal=false;
 	config.resizable=false;
 	config.width=750;
+	config.collapsible=true;
 	config.height=400;
 	config.closeAction='hide';
 	config.title= GO.users.lang.userSettings;					
@@ -293,9 +294,6 @@ Ext.extend(GO.users.UserDialog, Ext.Window,{
 	
 	
 	buildForm : function () {
-		
-		
-		
 		this.accountTab = new GO.users.AccountPanel();			
 		this.personalTab = new GO.users.PersonalPanel();		
 		this.companyTab = new GO.users.CompanyPanel();
@@ -307,7 +305,7 @@ Ext.extend(GO.users.UserDialog, Ext.Window,{
     this.tabPanel = new Ext.TabPanel({     
       deferredRender: false,
 			anchor:'100% 100%',
-      //layoutOnTabChange:true,
+      layoutOnTabChange:true,
     	border: false,
       items: [
       	this.accountTab,

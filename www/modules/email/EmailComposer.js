@@ -825,11 +825,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
     	
     	this.sendParams['inline_attachments']=Ext.encode(this.inline_attachments);
     	    	
-    	this.sendParams.draft = draft;
-    	
-    	//sometimes when paste is used the value wan't synced. So force an extra sync    	
-    	this.htmlEditor.syncValue();
-    	
+    	this.sendParams.draft = draft;   	
     	
 			this.formPanel.form.submit({							
 				url:this.sendURL,

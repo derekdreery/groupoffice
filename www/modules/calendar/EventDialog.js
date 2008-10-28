@@ -1343,6 +1343,12 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 
 	showAddParticipantsDialog : function()
 	{
+		if(!GO.addressbook)
+		{
+			var tpl = new Ext.XTemplate(GO.lang.moduleRequired);			
+			Ext.Msg.alert(GO.lang.strError,tpl.apply({module: GO.calendar.lang.addressbook}));
+			return false;
+		}
 		if(!this.addParticipantsDialog)
 		{
 			this.addParticipantsDialog = new GO.dialog.SelectEmail({

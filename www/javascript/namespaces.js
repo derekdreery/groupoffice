@@ -20,4 +20,4 @@ Ext.namespace("GO.state");
 Ext.namespace("GO.data");
 Ext.namespace("GO.dialog");
 Ext.namespace("GO.users");
-Ext.namespace('GO.legacy');
+Ext.namespace('GO.layout');
