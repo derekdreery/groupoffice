@@ -305,5 +305,6 @@ class db extends base_db{
 	public function __wakeup()
 	{
 		$this->link=false;
+		$this->result=false;
 	}
 }

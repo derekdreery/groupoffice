@@ -98,9 +98,7 @@ GO.users.LookAndFeelPanel = function(config)
 				['20'],
 				['25'],
 				['30'],
-				['50'],
-				['75'],
-				['100']
+				['50']
 				]
 			}),
 			displayField:'value',
