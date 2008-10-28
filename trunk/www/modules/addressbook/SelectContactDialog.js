@@ -83,12 +83,13 @@ GO.addressbook.SelectContactDialog = function(config){
 
 Ext.extend(GO.addressbook.SelectContactDialog, Ext.Window, {
 
-	show : function(){
+	show : function(){		
+		GO.addressbook.SelectContactDialog.superclass.show.call(this);
+		
 		if(!this.grid.store.loaded)
 		{
 			this.grid.store.load();
 		}
-		GO.addressbook.SelectContactDialog.superclass.show.call(this);
 	},
 	
 	
