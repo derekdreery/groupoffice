@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $lang['summary']['name']='Zusammenfassung';
 $lang['summary']['description']='Beschreibung hier eingeben';
 
