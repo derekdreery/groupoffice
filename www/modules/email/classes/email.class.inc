@@ -646,7 +646,7 @@ class email extends db
 		while($this->next_record())
 		{
 			$folder['id'] = $this->f('id');
-			if($status = $mail->status($this->f('name'), SA_ALL))
+			if($status = $mail->status($this->f('name'), SA_UNSEEN+SA_MESSAGES))
 			{
 				if($status->messages!=$this->f('msgcount') || $status->unseen!=$this->f('unseen'))
 				{
@@ -664,7 +664,7 @@ class email extends db
 	{
 		$cached_folder = $this->get_folder($account_id, $mailbox);
 			
-		if($status = $imap->status($mailbox, SA_ALL))
+		if($status = $imap->status($mailbox, SA_UNSEEN+SA_MESSAGES))
 		{		
 			$folder['id']=$cached_folder['id'];
 			$folder['msgcount'] = $status->messages;
@@ -725,7 +725,7 @@ class email extends db
 			$folder['subscribed']=in_array($mailbox['name'], $subscribed);
 			//$folder['subscribed']='1';
 			$folder['delimiter'] = $mailbox['delimiter'];
-			if($status = $mail->status($mailbox['name'], SA_ALL))
+			if($status = $mail->status($mailbox['name'], SA_UNSEEN+SA_MESSAGES))
 			{
 				$folder['msgcount'] = $status->messages;
 				$folder['unseen'] = $status->unseen;
@@ -772,7 +772,7 @@ class email extends db
 			$folder['sort_order']=0;
 			$folder['subscribed']=true;
 			$folder['delimiter'] = '';
-			if($status = $mail->status('INBOX', SA_ALL))
+			if($status = $mail->status('INBOX', SA_UNSEEN+SA_MESSAGES))
 			{
 				$folder['msgcount'] = $status->messages;
 				$folder['unseen'] = $status->unseen;

@@ -19,12 +19,10 @@ GO.email.EmailClient = function(config){
 	if(!config)
 	{
 		config = {};
-	}
+	}	
+	
+	var messagesGridConfig = {};
 
-	
-	
-	var messagesGridConfig = {id:'email-grid-panel'};
-	//var messagesGridConfig = {};
 	if(screen.width>1024)
 	{
 		messagesGridConfig.region = 'west';
@@ -34,6 +32,8 @@ GO.email.EmailClient = function(config){
 		messagesGridConfig.region = 'north';
 		messagesGridConfig.height=250;
 	}
+	
+	messagesGridConfig.id='email-grid-panel-'+messagesGridConfig.region;
 	
 	this.messagesGrid = new GO.email.MessagesGrid(messagesGridConfig);
 
@@ -74,15 +74,12 @@ GO.email.EmailClient = function(config){
 	
 	this.messagesGrid.on('expand', function(){
 		this.closeMessageButton.setVisible(false);
-	}, this);
-	
+	}, this);	
 
 	
 	this.messagesGrid.on("rowclick", function(grid, rowClicked, e) {
 		var selectionModel = grid.getSelectionModel();
-		var record = selectionModel.getSelected();
-
-		
+		var record = selectionModel.getSelected();		
 		
 		if(!e.ctrlKey && !e.shiftKey)
 		{			
@@ -102,8 +99,7 @@ GO.email.EmailClient = function(config){
 					},
 					scope: this,
 					callback: function(options, success, response)
-					{
-					
+					{					
 						if(!success)
 						{
 							this.previewedUid=0;
@@ -250,6 +246,7 @@ GO.email.EmailClient = function(config){
 										this.messagesGrid.store.removeAll();										
 									}
 									this.updateFolderStatus(this.emptyFolderNode.folder_id);
+									this.updateNotificationEl();
 								},
 							scope: this
 							});
@@ -328,7 +325,7 @@ GO.email.EmailClient = function(config){
 	root.on('load', function(node)
 	{		
 		
-		this.refresh.defer(this.checkMailInterval, this);		
+		//this.refresh.defer(this.checkMailInterval, this);		
 		
 		this.body.unmask();
 		if(node.childNodes[0])
@@ -358,6 +355,8 @@ GO.email.EmailClient = function(config){
 							firstInboxNode.attributes.mailbox
 							);
 					}
+					
+					this.checkMail.defer(this.checkMailInterval, this);
 				}
 			},this, {single: true});
 			
@@ -370,23 +369,18 @@ GO.email.EmailClient = function(config){
 			return false;
 	}, this);
 
-	this.treePanel.on('click', function(node)	{
-		
-		
+	this.treePanel.on('click', function(node)	{		
 		if(node.attributes.folder_id>0)
-		{
-			
+		{		
 			this.setAccount(
 				node.attributes.account_id,
 				node.attributes.folder_id,
 				node.attributes.mailbox
 			);
 		}
-
 	}, this);	
 	
 	this.searchDialog = new GO.email.SearchDialog({store:this.messagesGrid.store});
-	
 	
 	var tbar =[{
 					iconCls: 'btn-compose',
@@ -762,25 +756,39 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		this.messagesGrid.store.load();
 		//this.messagesGrid.store.load();
 	},
-	
+	/**
+	 * Returns true if the current folder needs to be refreshed in the grid
+	 */
 	updateFolderStatus : function(folder_id, unseen)
 	{
 		var statusEl = Ext.get('status_'+folder_id);
+		
+		var isGridFolder = false;
 		
 		var node = this.treePanel.getNodeById('folder_'+folder_id);
 		if(node && node.attributes.mailbox=='INBOX')
 		{
 			node.parentNode.attributes.inbox_new=unseen;
-			this.updateNotificationEl();
 		}
 		
-		if(statusEl && statusEl.dom && unseen>0)
+		if(statusEl && statusEl.dom)
 		{
-			statusEl.dom.innerHTML = "("+unseen+")";
-		}else
-		{
-			statusEl.dom.innerHTML = "";
+			var statusText = statusEl.dom.innerHTML;
+			var current = parseInt(statusText.substring(1, statusText.length-1));
+			
+			if(current != unseen)
+			{		
+				if(unseen>0)
+				{
+					statusEl.dom.innerHTML = "("+unseen+")";
+				}else
+				{
+					statusEl.dom.innerHTML = "";
+				}
+				return true;
+			}
 		}
+		return false;
 	},
 	
 	incrementFolderStatus : function(folder_id, increment)
@@ -798,35 +806,43 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		status+=increment;
 		
 		this.updateFolderStatus(folder_id, status);
+		this.updateNotificationEl();
 	},	
-
-
-	refresh : function()
-	{
-		//sync folders		
-		/*
+	
+	
+	checkMail : function(){		
 		Ext.Ajax.request({
 			url: GO.settings.modules.email.url+'action.php',
 			params: {
-				task: 'syncfolders',
-				account_id: this.account_id
+				task: 'check_mail'
 			},
 			callback: function(options, success, response)
 			{
-				if(!success)
+				if(success)
 				{
-					Ext.MessageBox.alert(GO.lang['strError'], response.result.errors);
-				}else
-				{
-					this.treePanel.root.reload();
+					var responseParams = Ext.decode(response.responseText);
+					
+					for(var folder_id in responseParams.status)
+					{
+						var changed = this.updateFolderStatus(folder_id, responseParams.status[folder_id].unseen);
+						if(changed && this.messagesGrid.store.baseParams.folder_id==folder_id)
+						{
+							this.messagesGrid.store.reload();
+						}
+					}					
+					this.updateNotificationEl();
+					
+					this.checkMail.defer(this.checkMailInterval, this);
 				}
 			},
 			scope: this
-		});
-		*/
-		
-		this.treePanel.root.reload();
+		});	
+	},
 
+
+	refresh : function()
+	{		
+		this.treePanel.root.reload();
 	},
 
 	showAccountsDialog : function()
@@ -911,6 +927,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 							}
 							
 							this.updateFolderStatus(this.folder_id, responseParams.unseen);
+							this.updateNotificationEl();
 						}
 					}
 				},

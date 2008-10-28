@@ -92,7 +92,7 @@ function get_mailbox_nodes($account_id, $folder_id){
 		//check for unread mail
 		//$unseen = $email->f('unseen');
 
-		$status = $imap->status($email->f('name'), SA_ALL);
+		$status = $imap->status($email->f('name'), SA_UNSEEN);
 		
 		$unseen = isset($status->unseen) ? $status->unseen : 0;
 

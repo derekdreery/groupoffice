@@ -59,6 +59,22 @@ $response =array('success'=>false);
 try{
 	switch($_REQUEST['task'])
 	{
+		
+		case 'check_mail':
+			$count = $email->get_accounts($GO_SECURITY->user_id);
+			$email2 = new email();
+			$response['unseen']=array();
+			while($email->next_record())
+			{
+				$account = connect($email->f('id'), 'INBOX', false);				
+				$inbox = $email2->get_folder($email->f('id'), 'INBOX');
+				
+				$status = $imap->status('INBOX', SA_UNSEEN+SA_MESSAGES);
+				$response['status'][$inbox['id']]['unseen'] = isset($status->unseen) ? $status->unseen : 0;
+				$response['status'][$inbox['id']]['messages'] = isset($status->messages) ? $status->messages : 0;
+			}
+			$response['success']=true;
+			break;
 
 		case 'empty_folder':
 			$account_id = ($_POST['account_id']);
