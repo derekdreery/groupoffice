@@ -20,7 +20,7 @@ static method {$methods[methods].function_call}, {$methods[methods].sdesc}<br />
     </td></tr></table>
     </td></tr></table><br />
 	
-		{include file="docblock.tpl" sdesc=$methods[methods].sdesc desc=$methods[methods].desc tags=$methods[methods].tags}<br /><br />
+		{include file="docblock.tpl" sdesc=$methods[methods].sdesc desc=$methods[methods].desc tags=$methods[methods].tags}
 
 {if $methods[methods].descmethod}
 	<p>Overridden in child classes as:<br />
@@ -44,11 +44,11 @@ static method {$methods[methods].function_call}, {$methods[methods].sdesc}<br />
 	{/section}
 	{/if}
 {* original    {if $methods[methods].descmethod != ""
-    {$methods[methods].descmethod<br /><br />
+    {$methods[methods].descmethod
     {/if *}
-{if $methods[methods].method_overrides}Overrides {$methods[methods].method_overrides.link} ({$methods[methods].method_overrides.sdesc|default:"parent method not documented"})<br /><br />{/if}
+{if $methods[methods].method_overrides}Overrides {$methods[methods].method_overrides.link} ({$methods[methods].method_overrides.sdesc|default:"parent method not documented"}){/if}
 {* original    {if $methods[methods].method_overrides != ""
-    {$methods[methods].method_overrides<br /><br />
+    {$methods[methods].method_overrides
     {/if *}
 
     {if count($methods[methods].params) > 0}
@@ -93,7 +93,7 @@ method {$methods[methods].function_call}, {$methods[methods].sdesc}<br />
     </td></tr></table>
     </td></tr></table><br />
 	
-		{include file="docblock.tpl" sdesc=$methods[methods].sdesc desc=$methods[methods].desc tags=$methods[methods].tags}<br /><br />
+		{include file="docblock.tpl" sdesc=$methods[methods].sdesc desc=$methods[methods].desc tags=$methods[methods].tags}
 
 {if $methods[methods].descmethod}
 	<p>Overridden in child classes as:<br />
@@ -117,11 +117,11 @@ method {$methods[methods].function_call}, {$methods[methods].sdesc}<br />
 	{/section}
 	{/if}
 {* original    {if $methods[methods].descmethod != ""
-    {$methods[methods].descmethod<br /><br />
+    {$methods[methods].descmethod
     {/if *}
-{if $methods[methods].method_overrides}Overrides {$methods[methods].method_overrides.link} ({$methods[methods].method_overrides.sdesc|default:"parent method not documented"})<br /><br />{/if}
+{if $methods[methods].method_overrides}Overrides {$methods[methods].method_overrides.link} ({$methods[methods].method_overrides.sdesc|default:"parent method not documented"}){/if}
 {* original    {if $methods[methods].method_overrides != ""
-    {$methods[methods].method_overrides<br /><br />
+    {$methods[methods].method_overrides
     {/if *}
 
     {if count($methods[methods].params) > 0}

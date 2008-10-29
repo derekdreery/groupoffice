@@ -7,7 +7,7 @@ body
 {
   color:              #000000;
   background-color:   #ffffff;
-  background-image:   url("background.png");
+  background-image:   url("background2.png");
   background-repeat:  repeat-y;
   font-family:        tahoma, verdana, arial, sans-serif;
   font-size:          10pt;
@@ -17,7 +17,7 @@ body
 
 a
 {
-  color:              #1a366a;
+  color:              #000;
   background-color:   transparent;
   text-decoration:    none;
 }
@@ -33,6 +33,7 @@ a.menu
   background-color:   transparent;
 }
 
+
 td
 {
   font-size:          10pt;
@@ -40,15 +41,15 @@ td
 
 td.header_top
 {
-  color:              #1a366a;
-  background-color:   #F7F8F2;
-  background-image:   url('GOCOM.gif');
+  background-image:   url('logo_5.png');
   background-repeat:  no-repeat;
-  background-position:10px 5px;
+  background-color:   #e5eae6;
+  color:              #000;
   font-size:          16pt;
   font-weight:        bold;
   text-align:         right;
-  padding:            10px;
+  position: 		  relative;
+  padding:			  35px;
 }
 
 td.header_line
@@ -60,17 +61,18 @@ td.header_line
 td.header_menu
 {
   color:              #ffffff;
-  background-color:   #1a366a;
+  background-color:   #378cb5;
   font-size:          8pt;
   text-align:         right;
   padding:            2px;
-  padding-right:      5px;
+  position: 		  relative;
+  
 }
 
 td.menu
 {
   padding:            2px;
-  padding-left:       5px;
+  padding-left:       25px;
 }
 
 td.code_border
@@ -122,6 +124,7 @@ div.warning
   background-color:   transparent;
 }
 
+	
 div.description
 {
   padding-left:       15px;
@@ -196,3 +199,15 @@ ul {
 .cmd-title { font-weight: bold }
 .toc { margin-left: 2em; padding-left: 0em }
 
+
+
+h1
+{
+	color:			#e67802;
+	font-size:		1.65em;
+}
+h3
+{
+	color:			#e67802;
+	
+}
