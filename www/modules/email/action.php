@@ -64,10 +64,10 @@ try{
 			$count = $email->get_accounts($GO_SECURITY->user_id);
 			$email2 = new email();
 			$response['unseen']=array();
-			while($email->next_record())
+			while($email2->next_record())
 			{
-				$account = connect($email->f('id'), 'INBOX', false);				
-				$inbox = $email2->get_folder($email->f('id'), 'INBOX');
+				$account = connect($email2->f('id'), 'INBOX', false);				
+				$inbox = $email->get_folder($email2->f('id'), 'INBOX');
 				
 				$status = $imap->status('INBOX', SA_UNSEEN+SA_MESSAGES);
 				$response['status'][$inbox['id']]['unseen'] = isset($status->unseen) ? $status->unseen : 0;
