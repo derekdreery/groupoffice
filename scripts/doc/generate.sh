@@ -7,7 +7,7 @@
 #echo "  --Removed *-min.js files"
 
 echo "--GENERATING PHP DOCUMENTATION--"
-phpdoc/phpdoc -t ./go_doc/php -ti Group-Office PHP-Documentation -dn GO -ric CHANGELOG, DEVELOPERS, README, RELEASE, TODO, TRANSLATORS, FAQ, LICENSE, Release-1.4.0 -d ../../www/classes -i mail/phpmailer/,mail/swift/,smarty/,tcpdf/ -o HTML:Smarty:Group-Office -s on
+phpdoc/phpdoc -t ./go_doc/php -ti Group-Office PHP-Documentation -dn GO -ric CHANGELOG, DEVELOPERS, README, RELEASE, TODO, TRANSLATORS, FAQ, LICENSE, Release-1.4.0 -d ../../www/classes -i mail/phpmailer/,mail/swift/,smarty/,tcpdf/,database/mysqlold.class.inc.php -o HTML:Smarty:Group-Office -s on
 
 #echo "--GENERATING JS DOCUMENTATION--"
 #cd jsdoc
