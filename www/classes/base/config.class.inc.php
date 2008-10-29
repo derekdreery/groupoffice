@@ -816,7 +816,7 @@ class GO_CONFIG
       /**
        * Get's the location of a configuration file.
        * Group-Office searches two locations:
-       *  1. /etc/Group-Office/APACHE SERVER NAME/subdir/to/groupoffice/config.php
+       *	1. /etc/Group-Office/APACHE SERVER NAME/subdir/to/groupoffice/config.php
        *	2. /path/to/groupoffice/config.php
        *
        * The first location is more secure because the sensitive information is kept
@@ -860,6 +860,14 @@ class GO_CONFIG
       	}
       }
 
+	/**
+	 * Sets Full URL to reach Group-Office with slash on end
+	 * 
+	 * This function checks wether or not Group-Office runs on a 
+	 * default http or https port and stores the full url in a variable
+	 *
+	 * @access public
+	 */
       function set_full_url() {
       	if(isset($_SERVER["SERVER_NAME"]))
       	{
@@ -883,7 +891,7 @@ class GO_CONFIG
       /**
        * Gets a custom saved setting from the database
        *
-       * @param 	string $name Configuration key name
+       * @param  string $name Configuration key name
        * @access public
        * @return string Configuration key value
        */
@@ -896,7 +904,7 @@ class GO_CONFIG
       	return false;
       }
 
-      /*
+      /**
        * Gets all custom saved user settings from the database
        *
        * @param  user_id The user ID to get the settings for.
