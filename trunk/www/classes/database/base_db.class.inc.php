@@ -172,6 +172,23 @@ class base_db{
 			}
 		}
 	}
+	
+	/**
+	 * Set the connection parameters manually
+	 *
+	 * @param string $host
+	 * @param string $database
+	 * @param string $user
+	 * @param string $pass
+	 */
+	
+	public function set_parameters($host, $database, $user, $pass)
+	{
+		$this->host = $host;
+		$this->database = $database;
+		$this->user = $user;
+		$this->password = $pass;
+	}
 
 	/**
 	 * Connnects to the database

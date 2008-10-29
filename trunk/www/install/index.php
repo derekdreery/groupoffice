@@ -522,8 +522,10 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 				$GO_CONFIG->db_name = ($_POST['db_name']);
 				$GO_CONFIG->db_user = ($_POST['db_user']);
 				$GO_CONFIG->db_pass = ($_POST['db_pass1']);
+				
+				$db->set_parameters($_POST['db_host'], null, $_POST['admin_user'], $_POST['admin_pass']);
 
-				if(@$db->connect('mysql', ($_POST['db_host']), ($_POST['admin_user']), ($_POST['admin_pass'])))
+				if($db->connect())
 				{
 					$sql = 'CREATE DATABASE `'.$_POST['db_name'].'`;';
 					if($db->query($sql))
@@ -533,7 +535,6 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 						"IDENTIFIED BY '".($_POST['db_pass1'])."' WITH GRANT OPTION";
 						if($db->query($sql))
 						{
-
 							$db->query("FLUSH PRIVILEGES;");
 
 							if (save_config($GO_CONFIG))
@@ -544,17 +545,17 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 						}else
 						{
 							$feedback ='<font color="red">Failed to create user.<br />'.
-							'<b>MySQL Error</b>: '.$db->Errno.' '.$db->Error.'</font>';
+							'<b>MySQL Error</b>: '.$db->errno.' '.$db->error.'</font>';
 						}
 					}else
 					{
 						$feedback ='<font color="red">Failed to create database.<br />'.
-						'<b>MySQL Error</b>: '.$db->Errno.' '.$db->Error.'</font>';;
+						'<b>MySQL Error</b>: '.$db->errno.' '.$db->error.'</font>';;
 					}
 				}else
 				{
 					$feedback ='<font color="red">Failed to connect to database as administrator.<br />'.
-					'<b>MySQL Error</b>: '.$db->Errno.' '.$db->Error.'</font>';
+					'<b>MySQL Error</b>: '.$db->errno.' '.$db->error.'</font>';
 				}
 			}
 			break;

@@ -692,8 +692,8 @@ class addressbook extends db {
 		global $GO_SECURITY;
 
 		$result['id'] = $this->nextid('ab_addressbooks');
-		$result['acl_read'] = $GO_SECURITY->get_new_acl('acl_read addressbook_id: '.$result['addressbook_id'], $user_id);
-		$result['acl_write'] = $GO_SECURITY->get_new_acl('acl_write addressbook_id: '.$result['addressbook_id'], $user_id);
+		$result['acl_read'] = $GO_SECURITY->get_new_acl('addressbook', $user_id);
+		$result['acl_write'] = $GO_SECURITY->get_new_acl('addressbook'.$result['id'], $user_id);
 		$result['user_id']=$user_id;
 		$result['name']=$name;
 		
