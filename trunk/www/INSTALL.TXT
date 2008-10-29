@@ -50,6 +50,8 @@ Run this query on your database:
 
 RENAME TABLE `modules`  TO `go_modules` ;
 
+Then it's wise to create another backup in case anything goes wrong in the upgrade2to3.php script.
+
 Do not run install/index.php! Run install/upgrade2to3.php in your browser. This will take some time but 
 when it's finished without problems, you are ready to run Group-Office 3.0!
 
@@ -62,7 +64,7 @@ Then you can ignore them. Any other error can not be ignored.
 
 
 SYSTEM REQUIREMENTS
--Linux (Others might work but I never tested it) 
+-Linux, Mac OS X, Windows
 -PHP5.2 compiled with:
 	-IMAP extension for e-mail module and IMAP authentication
 	-MySQL extension
