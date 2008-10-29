@@ -52,12 +52,21 @@ class db extends base_db{
 	{
 		if(!$this->link)
 		{			
-			$this->link = new MySQLi($this->host, $this->user, $this->password, $this->database);
-			if(!$this->link)
-			{				
-				$this->halt('Could not connect to MySQL database: '.$mysqli->connect_error);
-			}
-			$this->link->set_charset("utf8");
+			@$this->link = new MySQLi($this->host, $this->user, $this->password, $this->database);
+			
+			//workaround for PHP bug: http://bugs.php.net/bug.php?id=45940&edit=2
+			//$this->link->connect_error does not work			
+			$this->errno = mysqli_connect_errno();
+			$this->error = mysqli_connect_error();		
+				
+			if(!empty($this->error))
+			{	
+				$this->link=false;					
+				$this->halt('Could not connect to MySQL database');							
+			}else
+			{
+				$this->link->set_charset("utf8");
+			}				
 		}
 		return $this->link;
 	}
