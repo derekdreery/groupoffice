@@ -1,25 +1,13 @@
 <?php
 /*
- * First run RENAME TABLE `modules`  TO `go_modules` ;
- *
- *
- *
- *	1=cal_events
- *   2=ab_contacts
- *   3=ab_companies
- *   4=no_notes
- *   5=pmProjects
- *   6=folders & files
- *   7=bs_orders
- * 8=users
- *   9=em_links
- * 10=timeregistration
- * 11=license
- * 12=tasks
+ * Fisrt convert the old database to UTF8 as described in the INSTALL.TXT file
  * 
+ * Then run RENAME TABLE `modules`  TO `go_modules` ;
  * 
- * 
- * ALTER TABLE `ta_tasks` ADD `start_time` INT NOT NULL AFTER `mtime` ;
+ * Then it's wise to create another backup in case anything goes wrong in this script.
+ *
+ * Then run this script.
+ *
  */
 
 require_once('../Group-Office.php');
@@ -235,8 +223,7 @@ if(in_array('calendar', $module_ids))
 	$GO_MODULES->add_module('tasks');
 	
 	$GO_SECURITY->copy_acl($GO_MODULES->modules['calendar']['acl_read'], $GO_MODULES->modules['tasks']['acl_read']);
-	$GO_SECURITY->copy_acl($GO_MODULES->modules['calendar']['acl_write'], $GO_MODULES->modules['tasks']['acl_write']);
-	
+	$GO_SECURITY->copy_acl($GO_MODULES->modules['calendar']['acl_write'], $GO_MODULES->modules['tasks']['acl_write']);	
 
 
 	//separate events that are in multiple calendars
@@ -246,27 +233,31 @@ if(in_array('calendar', $module_ids))
 	{
 		$sql = "SELECT * FROM cal_events WHERE id=".$db->f('event_id');
 		$db2->query($sql);
-		$db2->next_record(MYSQL_ASSOC);
-		$event = $db2->record;
-
-		$sql = "SELECT * FROM cal_events_calendars WHERE event_id=".$event['id'];
-		$db2->query($sql);
-		$db2->next_record();
-		while($db2->next_record())
-		{
-			$new_event = $event;
-			$new_event['calendar_id']=$db2->f('calendar_id');
-			$new_event['id']=$db3->nextid('cal_events');
-							
-			$db3->insert_row('cal_events', $new_event);			
-			$db3->query("DELETE FROM cal_events_calendars WHERE event_id=".$event['id']." AND calendar_id=".$db2->f('calendar_id'));
+		if($event = $db2->next_record())
+		{		
+			echo 'Duplicating event '.$event['name'].'<br />';
+			flush();
+			
+			$sql = "SELECT * FROM cal_events_calendars WHERE event_id=".$event['id'];
+			$db2->query($sql);
+			$db2->next_record();
+			while($db2->next_record())
+			{
+				$new_event = $event;
+				$new_event['calendar_id']=$db2->f('calendar_id');
+				$new_event['id']=$db3->nextid('cal_events');
+								
+				$db3->insert_row('cal_events', $new_event);			
+				$db3->query("DELETE FROM cal_events_calendars WHERE event_id=".$event['id']." AND calendar_id=".$db2->f('calendar_id'));
+			}
 		}
-		
 		
 		//todo copy links
 	}
 	
 
+	echo 'Updating calendar links<br />';
+	flush();
 
 	//update links
 	$sql = "SELECT id, link_id FROM cal_events";
@@ -283,7 +274,7 @@ if(in_array('calendar', $module_ids))
 	
 	$db->query($sql);
 	
-	while($db->next_record(MYSQL_ASSOC))
+	while($db->next_record())
 	{
 		$update = $db->record;
 		
@@ -1170,6 +1161,8 @@ $db->query("alter table go_users add auth_md5_pass varchar(100) not null;");
 
 echo 'Done<br /><br />';
 
-echo '<a href="upgrade.php">Click here to process latest updates for version 3.00</a>';
+echo '<a target="_blank" href="upgrade.php">Click here to process latest updates for version 3.00</a>';
+
+echo '<br /><br /><a target="_blank" href="../modules/tools/dbcheck.php">After that run a database check and rebuild the search index</a>';
 
 ?>

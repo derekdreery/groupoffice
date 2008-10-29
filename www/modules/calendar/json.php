@@ -390,7 +390,7 @@ try{
 
 
 
-			if($GO_MODULES->modules['files'])
+			if(isset($GO_MODULES->modules['files']))
 			{
 				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
 				$fs = new files();
