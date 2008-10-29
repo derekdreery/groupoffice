@@ -60,9 +60,9 @@ try{
 	switch($_REQUEST['task'])
 	{
 		
-		case 'check_mail':
-			$count = $email->get_accounts($GO_SECURITY->user_id);
+		case 'check_mail':			
 			$email2 = new email();
+			$count = $email2->get_accounts($GO_SECURITY->user_id);
 			$response['unseen']=array();
 			while($email2->next_record())
 			{
