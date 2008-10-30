@@ -101,7 +101,7 @@ GO.files.FilePropertiesDialog = function(config){
 	GO.files.FilePropertiesDialog.superclass.constructor.call(this,{
 		title:GO.lang['strProperties'],
 		layout:'fit',
-		width:400,
+		width:440,
 		height:400,
 		closeAction:'hide',
 		items:this.formPanel,

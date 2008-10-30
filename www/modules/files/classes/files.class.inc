@@ -81,9 +81,9 @@ class files extends filesystem
 	{
 		global $GO_CONFIG, $GO_USERS;
 
-		if ($user = $GO_USERS->get_user($user_id))
+		if(!empty($_SESSION['GO_SESSION']['username']))
 		{
-			$home_path = $GO_CONFIG->file_storage_path.'users/'.$user['username'];
+			$home_path = 'users/'.$_SESSION['GO_SESSION']['username'];
 
 			if (strpos($path, $home_path) === 0)
 			{
@@ -100,11 +100,12 @@ class files extends filesystem
 			$this->mkdir_recursive($full_path);
 		}	
 
-		$folder = $this->get_folder($full_path);
+		$path = $this->strip_server_path($full_path);
+		$folder = $this->get_folder($path);
 		if(!$folder)
 		{
 			$folder['user_id']=$user_id;
-			$folder['path']=$full_path;
+			$folder['path']=$path;
 			$folder['visible']='0';
 			$folder['acl_read']=$acl_read;
 			$folder['acl_write']=$acl_write;
@@ -112,7 +113,7 @@ class files extends filesystem
 			$this->add_folder($folder);
 			
 			if(!$quiet)
-				echo 'Adding '.$full_path.'<br />';
+				echo 'Adding '.$path.'<br />';
 		}else
 		{
 			if($folder['acl_read']!=$acl_read || $folder['acl_write']!=$acl_write)
@@ -124,7 +125,7 @@ class files extends filesystem
 				
 				$this->update_folder($up_folder);
 				if(!$quiet)
-					echo 'Updating '.$full_path.'<br />';
+					echo 'Updating '.$path.'<br />';
 			}
 		}
 	}
@@ -138,9 +139,9 @@ class files extends filesystem
 	}
 
 	function remove_notification($path, $user_id)
-	{
-		$sql = "DELETE FROM fs_notifications WHERE path='".$this->escape($path)."' AND user_id=".$this->escape($user_id);
-		return $this->query($sql);
+	{	
+		$sql = "DELETE FROM fs_notifications WHERE path=? AND user_id=?";
+		return $this->query($sql, 'si', $path, $user_id);
 	}
 	
 	function remove_notifications($path)
@@ -170,7 +171,7 @@ class files extends filesystem
 		return $this->num_rows();
 	}
 	
-	function notify_users($path, $short_path, $modified_by_user_id, $modified=array(), $new=array(), $deleted=array())
+	function notify_users($path, $modified_by_user_id, $modified=array(), $new=array(), $deleted=array())
 	{
 		global $GO_USERS, $GO_LANGUAGE, $GO_CONFIG, $GO_SECURITY;
 		
@@ -178,8 +179,7 @@ class files extends filesystem
 		require($GO_LANGUAGE->get_language_file('files'));
 		
 		$user = $GO_USERS->get_user($modified_by_user_id);		
-		$modified_by_user_name = String::format_name($user);
-		
+		$modified_by_user_name = String::format_name($user);		
 		
 		
 		$changes = '';
@@ -198,7 +198,7 @@ class files extends filesystem
 		}
 		
 		$body = sprintf($lang['files']['folder_modified_body'], 
-			$short_path,
+			$path,
 			$modified_by_user_name,
 			$changes);
 			
@@ -465,11 +465,11 @@ class files extends filesystem
 			return $this->record;
 		}else
 		{
-			global $GO_LINKS;
+			global $GO_CONFIG;
 
 			$file['path'] = $path;
-			$file['ctime']=filectime($path);
-			$file['mtime']=filemtime($path);
+			$file['ctime']=filectime($GO_CONFIG->file_storage_path.$path);
+			$file['mtime']=filemtime($GO_CONFIG->file_storage_path.$path);
 
 			$this->add_file($file);
 
@@ -479,6 +479,9 @@ class files extends filesystem
 	
 	function move_file($source_path, $destination_path)
 	{
+		$source_path=$this->strip_server_path($source_path);
+		$destination_path=$this->strip_server_path($destination_path);
+		
 		$file = $this->get_file($source_path);
 		$up_file['id']=$file['id'];
 		$up_file['path']=$destination_path;
@@ -487,6 +490,9 @@ class files extends filesystem
 	
 	function move_folder($source_path, $destination_path)
 	{
+		$source_path=$this->strip_server_path($source_path);
+		$destination_path=$this->strip_server_path($destination_path);
+		
 		$folder = $this->get_folder($source_path);
 		$up_folder['id']=$folder['id'];
 		$up_folder['path']=$destination_path;
@@ -498,6 +504,8 @@ class files extends filesystem
 	function delete_file($path)
 	{
 		global $GO_CONFIG;
+		
+		$path = $this->strip_server_path($path);
 				
 		require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
 		$search = new search();
@@ -505,8 +513,8 @@ class files extends filesystem
 		$file = $this->get_file($path);
 		$search->delete_search_result($file['id'], 6);		
 		
-		$sql = "DELETE FROM fs_files WHERE path='".$this->escape($path)."'";
-		$this->query($sql);
+		$sql = "DELETE FROM fs_files WHERE path=?";
+		$this->query($sql, 's', $path);
 	}
 
 	function add_file($file)
@@ -557,8 +565,7 @@ class files extends filesystem
 			$this->add_folder($folder);
 
 			return $this->get_folder($path);
-		}
-		
+		}		
 	}
 
 	function add_folder($folder)
@@ -589,9 +596,11 @@ class files extends filesystem
 
 	function delete_folder($path)
 	{
+		$path = $this->strip_server_path($path);
+		
 		$this->remove_notifications($path);
-		$sql = "DELETE FROM fs_folders WHERE path='".$this->escape($path)."'";
-		$this->query($sql);
+		$sql = "DELETE FROM fs_folders WHERE path=?";
+		$this->query($sql, 's', $path);
 	}
 	
 	/**
@@ -669,15 +678,17 @@ class files extends filesystem
 
 	function has_read_permission($user_id, $path)
 	{
+		$path = $this->check_path($path);
+		
 		foreach($this->readable_paths as $readable_path)
 		{			
-			if($this->is_sub_dir($path, $readable_path))
+			if($path==$readable_path || $this->is_sub_dir($path, $readable_path))
 			{
 				return true;
 			}
 		}
 	
-		if ($share = $this->find_share($path))
+		if ($share = $this->find_share($this->strip_server_path($path)))
 		{
 			global $GO_SECURITY;
 			
@@ -692,9 +703,11 @@ class files extends filesystem
 
 	function has_write_permission($user_id, $path)
 	{
+		$path = $this->check_path($path);
+				
 		foreach($this->writeable_paths as $writeable_path)
 		{
-			if($this->is_sub_dir($path, $writeable_path))
+			if($path==$writeable_path || $this->is_sub_dir($path, $writeable_path))
 			{
 				return true;
 			}
@@ -702,9 +715,8 @@ class files extends filesystem
 		
 		global $GO_SECURITY;
 		
-		if ($share = $this->find_share($path))
-		{
-			
+		if ($share = $this->find_share($this->strip_server_path($path)))
+		{			
 			if($GO_SECURITY->has_permission($user_id, $share['acl_write']))
 			{
 				return is_writable($path);
@@ -713,6 +725,8 @@ class files extends filesystem
 		
 		return false;
 	}
+	
+	
 
 
 	function strip_server_path($path)
@@ -782,6 +796,32 @@ class files extends filesystem
 	{
 		global $GO_USERS, $GO_CONFIG, $GO_SECURITY;
 		
+		$fs2 = new files();
+		echo 'Deleting invalid folders in database<br />';
+		$sql = "SELECT * FROM fs_folders";
+		$this->query($sql);
+		while($folder = $this->next_record())
+		{
+			$full_path = $GO_CONFIG->file_storage_path.$folder['path'];
+			if(!is_dir($full_path))
+			{
+				$fs2->delete_folder($full_path);
+			}
+		}
+		
+		echo 'Deleting invalid files in database<br />';
+		
+		$sql = "SELECT * FROM fs_files";
+		$this->query($sql);
+		while($file = $this->next_record())
+		{
+			$full_path = $GO_CONFIG->file_storage_path.$file['path'];
+			if(!file_exists($full_path))
+			{
+				$fs2->delete_file($full_path);
+			}
+		}
+		
 		echo "Checking user home directories<br />";
 		
 		$GO_USERS->get_users();
@@ -795,7 +835,7 @@ class files extends filesystem
 				echo "Creating users/".$GO_USERS->f('username')."<br />";
 			}
 			
-			$folder = $this->get_folder($home_dir);
+			$folder = $this->get_folder($this->strip_server_path($home_dir));
 			
 			if(empty($folder['acl_read']))
 			{
