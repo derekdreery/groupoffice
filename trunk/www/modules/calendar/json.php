@@ -28,16 +28,11 @@ try{
 	{
 
 		case 'summary':
-
-
 			//get the local times
 			$local_time = time();
 			$year = date("Y", $local_time);
 			$month = date("m", $local_time);
 			$day = date("j", $local_time);
-				
-				
-				
 
 
 			$timezone_offset = Date::get_timezone_offset(mktime(0, 0, 0, $month, $day, $year))*3600;
@@ -94,9 +89,6 @@ try{
 
 		case 'invitation':
 
-
-				
-
 			require_once($GO_CONFIG->class_path.'mail/RFC822.class.inc');
 			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 
@@ -121,13 +113,11 @@ try{
 			$participants=array();
 			$cal->get_participants($event_id);
 			while($cal->next_record())
-			{
-					
+			{					
 				$participants[] = $RFC822->write_address($cal->f('name'), $cal->f('email'));
 			}
 
 			$response['data']['to']=implode(',', $participants);
-
 
 			//create ics attachment
 			require_once ($GO_MODULES->modules['calendar']['class_path'].'go_ical.class.inc');

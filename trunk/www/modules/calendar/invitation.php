@@ -19,67 +19,27 @@ $user = $GO_USERS->get_user_by_email($email);
 <head>
 <?php
 require($GO_THEME->theme_path.'default_head.inc.php');
-require($GO_CONFIG->root_path.'default_scripts.inc.php');
-$load_modules=isset($_REQUEST['load_modules']) ? explode(',', $_REQUEST['load_modules']) : array();
-
-$load_modules[]='calendar';
-
-foreach($load_modules as $module_id)
-{
-	$module = $GO_MODULES->modules[$module_id];
-	
-	echo '<script type="text/javascript" src="'.$module['url'].'language/en.js"></script>';
-	echo "\n";
-	
-	if(file_exists($module['path'].'language/'.$GO_LANGUAGE->language.'.js'))
-	{
-		echo '<script type="text/javascript" src="'.$module['url'].'language/'.$GO_LANGUAGE->language.'.js"></script>';
-		echo "\n";
-	}
-	
-	if(file_exists($module['path'].'scripts.txt') && $GO_CONFIG->debug)
-	{					
-		$data = file_get_contents($module['path'].'scripts.txt');
-		$lines = explode("\n", $data);
-		foreach($lines as $line)
-		{
-			if(!empty($line))
-			{
-				echo '<script type="text/javascript" src="'.$GO_CONFIG->host.$line.'"></script>';
-				echo "\n";
-			}
-		}
-	}else if(file_exists($module['path'].'all-module-scripts-min.js'))
-	{
-		echo '<script type="text/javascript" src="'.$module['url'].'all-module-scripts-min.js"></script>';
-		echo "\n";
-	}
-		
-	if(file_exists($module['path'].'scripts.inc.php'))
-	{
-		require($module['path'].'scripts.inc.php');
-	}	
-}
 ?>
-<script src="SelectCalendarWindow.js" type="text/javascript"></script>
 </head>
 <body>
+
+<div style="padding:20px">
 
 <?php
 $event = $cal->get_event($event_id);
 $owner = $GO_USERS->get_user($event['user_id']);
 if(!$event = $cal->get_event($event_id))
 {
+	echo '<h1 class="cal-go-title">'.$GO_CONFIG->title.'</h1>';
 	echo '<p>'.$lang['calendar']['bad_event'].'</p>';
 }elseif(!$user || $task == 'decline')
 {
 	if($task=='accept')
 	{
 		$cal->set_event_status($event_id, '1', $email);
+		echo '<h1 class="cal-go-title">'.$GO_CONFIG->title.'</h1>';
 		echo '<h1>'.$lang['calendar']['accept_title'].'</h1>';
-		echo '<p>'.$lang['calendar']['accept_confirm'].'</p>';
-		
-		
+		echo '<p>'.$lang['calendar']['accept_confirm'].'</p>';		
 			
 		require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 		$swift = new GoSwift($owner['email'],  sprintf($lang['calendar']['accept_mail_subject'],$event['name']));
@@ -93,6 +53,8 @@ if(!$event = $cal->get_event($event_id))
 	}else
 	{
 		$cal->set_event_status($event_id, '2', $email);
+		
+		echo '<h1 class="cal-go-title">'.$GO_CONFIG->title.'</h1>';
 		echo '<h1>'.$lang['calendar']['decline_title'].'</h1>';
 		echo '<p>'.$lang['calendar']['decline_confirm'].'</p>';
 		
@@ -103,25 +65,42 @@ if(!$event = $cal->get_event($event_id))
 		$body .= '<br /><br />'.$cal->event_to_html($event);
 		
 		$swift->set_body($body);
-		$swift->sendmail($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
-		
+		$swift->sendmail($GO_CONFIG->webmaster_email, $GO_CONFIG->title);		
 	}
 		
 	$user = $GO_USERS->get_user($event['user_id']);
 
 }else
 {
-	echo '<script type="text/javascript">
-	Ext.onReady(function(){
-
-		GO.mainLayout.fireReady();
-		selectCalendarWin = new SelectCalendarWindow();
-		selectCalendarWin.show('.$event_id.');
-	});
-	</script>';
-
+	
+	$status = $cal->get_event_status($event['id'], $email);
+	if($status['status']=='1')
+	{
+		echo '<h1 class="cal-go-title">'.$GO_CONFIG->title.'</h1>';
+		echo '<h1>'.$lang['calendar']['accept_title'].'</h1>';
+		echo '<p>'.$lang['calendar']['already_accepted'].'</p>';
+	}else
+	{		
+		require($GO_CONFIG->root_path.'default_scripts.inc.php');
+		
+		echo '<script src="language/en.js" type="text/javascript"></script>';
+		
+		if($GO_LANGUAGE->language!='en' && file_exists($GO_MODULES->modules['calendar']['path'].'language/'.$GO_LANGUAGE->language.'.js'))
+		{
+			echo '<script src="language/'.$GO_LANGUAGE->language.'.js" type="text/javascript"></script>';
+		}
+		
+		echo '<script src="SelectCalendarWindow.js" type="text/javascript"></script><script type="text/javascript">
+		Ext.onReady(function(){
+	
+			GO.mainLayout.fireReady();
+			selectCalendarWin = new SelectCalendarWindow();
+			selectCalendarWin.show('.$event_id.');
+		});
+		</script>';
+	}
 }
 ?>
-
+</div>
 </body>
 </html>

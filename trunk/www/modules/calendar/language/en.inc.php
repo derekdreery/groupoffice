@@ -63,3 +63,5 @@ $lang['calendar']['decline_title']='Declined';
 $lang['calendar']['decline_confirm']='The owner will be notified that you declined the event';
 
 $lang['calendar']['cumulative']='Invalid recurrence rule. The next occurence may not start before the previous has ended.';
+
+$lang['calendar']['already_accepted']='You already accepted this event.';

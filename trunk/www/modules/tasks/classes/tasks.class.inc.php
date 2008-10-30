@@ -209,14 +209,14 @@ class tasks extends db
 			$sql .= " AND name LIKE '".$this->escape($query)."'";
 		}
 		
-		$sql .= "ORDER BY '".$this->escape($sort)."' '".$this->escape($direction)."'";
+		$sql .= "ORDER BY ".$this->escape($sort.",".$direction);
 		
 
 		$this->query($sql);
 		$count= $this->num_rows();
 		if($offset>0)
 		{
-			$sql .= " LIMIT '".$this->escape($start)."', '".$this->escape($offset)."'";
+			$sql .= " LIMIT ".$this->escape($start.','.$offset);
 			$this->query($sql);
 		}
 		return $count;

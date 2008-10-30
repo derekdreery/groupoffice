@@ -281,7 +281,7 @@ class GoSwift extends Swift{
 			$this->batch->setSleepTime(10);
 			$this->batch->setMaxTries(2);
 			$this->batch->setMaxSuccessiveFailures(10);		
-			$this->batch->send($this->message, $this->recipients, new Swift_Address($email_from, $name_from));
+			$send_success=$this->batch->send($this->message, $this->recipients, new Swift_Address($email_from, $name_from));
 			
 		}else
 		{

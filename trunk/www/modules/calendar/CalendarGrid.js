@@ -142,9 +142,6 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		
 			this.setStore(this.store);
 		}
-		
-		
-		
 	},
 	
 	renderDaysGrid : function(){
@@ -153,17 +150,14 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
     this.body.update('');
         
         //get content size of element
-		var ctSize = this.container.getSize(true);
-		
-		
+		var ctSize = this.container.getSize(true);		
 		
 		//column width is the container size minus the time column width
 		var columnWidth = (ctSize['width']-40-this.scrollOffset)/this.days;		
-		columnWidth = Math.floor(columnWidth);
-		
+		columnWidth = Math.floor(columnWidth);		
         
-        //generate table for headings and all day events
-        this.headingsTable = Ext.DomHelper.append(this.body,
+    //generate table for headings and all day events
+    this.headingsTable = Ext.DomHelper.append(this.body,
 			{
 				tag: 'table', 
 				id: Ext.id(), 
@@ -810,12 +804,13 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			var i = this.appointmentsMap[domId].i;
 			
 			this.appointments[day].splice(i,1);
+			
+			this.calculateAppointments(day);
+			
 		}else if(this.allDayAppointmentsMap[domId])
 		{
 			this.allDayAppointmentsMap.splice(i,1);
-		}
-	
-		
+		}	
 	},
 	
 	unregisterDomId : function(domId)
