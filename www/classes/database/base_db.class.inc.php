@@ -406,6 +406,7 @@ class base_db{
 	 * @param string $table The table name
 	 * @param string $index The field name to select on ( WHERE '$index'=1). This field must be present in the $fields parameter
 	 * @param array $fields An associative array with fieldname=>value
+	 * @param string $types The types of the parameters. possible values: i, d, s, b for integet, double, string and blob
 	 * @param bool $trim Trim values in the array
 	 * @return bool
 	 */
@@ -476,11 +477,12 @@ class base_db{
 	 *
 	 * @param string $table The table name
 	 * @param array $fields An associative array with fieldname=>value
+	 * @param string $types The types of the parameters. possible values: i, d, s, b for integet, double, string and blob
 	 * @param bool $trim Trim values in the array
 	 * @return bool
 	 */
 
-	public function insert_row($table, $fields, $types='', $trim=true)
+	public function insert_row($table, $fields, $types='', $trim=true, $replace=false)
 	{
 		if(!is_array($fields))
 		{
@@ -495,7 +497,8 @@ class base_db{
 		}
 		if(isset($field_names))
 		{
-			$sql = "INSERT INTO `$table` (`".implode('`,`', $field_names)."`) VALUES ".
+			$sql = $replace ? 'REPLACE' : 'INSERT';
+			$sql .= " INTO `$table` (`".implode('`,`', $field_names)."`) VALUES ".
   					"(".str_repeat('?,', count($field_values)-1)."?)";
 				
 			if(empty($types))
@@ -516,8 +519,7 @@ class base_db{
 		}else
 		{
 			throw new DatabaseInsertException();
-		}
-			
+		}			
 	}
 
 	/**
@@ -526,40 +528,14 @@ class base_db{
 	 * @param string $table The table name
 	 * @param string $index The field name to select on ( WHERE '$index'=1). This field must be present in the $fields parameter
 	 * @param array $fields An associative array with fieldname=>value
+	 * @param string $types The types of the parameters. possible values: i, d, s, b for integet, double, string and blob
 	 * @param bool $trim Trim values in the array
 	 * @return bool
 	 */
 
-	public function replace_row($table, $fields, $trim=true)
+	public function replace_row($table, $fields, $types, $trim=true)
 	{
-		if(!is_array($fields))
-		{
-			$this->halt('Invalid replace row called');
-			return false;
-		}
-
-		foreach($fields as $key => $value)
-		{
-			$field_names[] = $key;
-			$field_values[] = $this->escape($value, $trim);
-		}
-		if(isset($field_names))
-		{
-			$sql = "REPLACE INTO `$table` (`".implode('`,`', $field_names)."`) VALUES ".
-  					"('".implode("','", $field_values)."')";
-
-			if(!$this->query($sql))
-			{
-				if($this->halt_on_error=='yes')
-				{
-					throw new DatabaseReplaceException();
-				}
-			}else
-			{
-				return true;
-			}
-		}
-		return false;
+		return $this->insert_row($table, $fields, $types,$trim, true);
 	}
 
 	/**
