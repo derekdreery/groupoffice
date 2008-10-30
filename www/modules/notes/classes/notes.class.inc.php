@@ -13,11 +13,6 @@
  */
 
 class notes extends db {
-
-	public function __construct() {
-		parent::__construct();
-	}
-	
 		
 	/**
 	 * Add a Category
