@@ -33,19 +33,19 @@ try{
 	{
 		case 'delete':
 			
-			$delete_path = $GO_CONFIG->file_storage_path.($_POST['path']);
+			$delete_path = $GO_CONFIG->file_storage_path.$_POST['path'];
 
 			if(!$fs->has_write_permission($GO_SECURITY->user_id, $delete_path))
 			{
 				throw new AccessDeniedException();
 			}
 			
-			$fs->notify_users($path, $fs->strip_server_path($delete_path), $GO_SECURITY->user_id, array(), array(), array(utf8_basename($delete_path)));
+			$fs->notify_users($_POST['path'], $GO_SECURITY->user_id, array(), array(), array(utf8_basename($delete_path)));
 			
 			$response['success']=$fs->delete($delete_path);
 			break;
 		case 'file_properties':
-			$path = $GO_CONFIG->file_storage_path.($_POST['path']);
+			$path = $GO_CONFIG->file_storage_path.$_POST['path'];
 
 			if(!file_exists($path))
 			{
@@ -55,12 +55,12 @@ try{
 				throw new AccessDeniedException();
 			}
 			
-			$up_file['path']=$path;
+			$up_file['path']=$_POST['path'];
 			$up_file['comments']=$_POST['comments'];
 			$fs->update_file($up_file);
 
 
-			$new_name = ($_POST['name']);
+			$new_name = $_POST['name'];
 
 			if(empty($new_name))
 			{
@@ -85,36 +85,31 @@ try{
 			break;
 
 		case 'folder_properties':
-			$path = $GO_CONFIG->file_storage_path.($_POST['path']);
-
-			if(!file_exists($path))
+			if(!file_exists($GO_CONFIG->file_storage_path.$_POST['path']))
 			{
 				throw new Exception($lang['files']['fileNotFound']);
-			}elseif(!$fs->has_read_permission($GO_SECURITY->user_id, $path))
+			}elseif(!$fs->has_read_permission($GO_SECURITY->user_id, $GO_CONFIG->file_storage_path.$_POST['path']))
 			{
 				throw new AccessDeniedException();
 			}
 
 			$new_notify = isset($_POST['notify']);
-			$old_notify = $fs->is_notified($path, $GO_SECURITY->user_id);
+			$old_notify = $fs->is_notified($_POST['path'], $GO_SECURITY->user_id);
 
 			if($new_notify && !$old_notify)
 			{
-				$fs->add_notification($path, $GO_SECURITY->user_id);
+				$fs->add_notification($_POST['path'], $GO_SECURITY->user_id);
 			}
 			if(!$new_notify && $old_notify)
 			{
-				$fs->remove_notification($path, $GO_SECURITY->user_id);
+				$fs->remove_notification($_POST['path'], $GO_SECURITY->user_id);
 			}
 
-
-			if($fs->is_owner($GO_SECURITY->user_id, $path))
+			if($fs->is_owner($GO_SECURITY->user_id, $_POST['path']))
 			{
-
-				$folder = $fs->get_folder($path);
-					
+				$folder = $fs->get_folder($_POST['path']);
 				
-				$up_folder['path']=$path;
+				$up_folder['path']=$_POST['path'];
 				$up_folder['comments']=$_POST['comments'];
 				
 				if (isset ($_POST['share']) && $folder['acl_read']==0) {
@@ -139,19 +134,19 @@ try{
 				
 				$fs->update_folder($up_folder);
 					
-				$new_name = ($_POST['name']);
+				$new_name = $_POST['name'];
 					
 				if(empty($new_name))
 				{
 					throw new MissingFieldException();
 				}
 					
-				if($new_name != utf8_basename($path))
+				if($new_name != utf8_basename($_POST['path']))
 				{
-					$new_path = dirname($path).'/'.$new_name;
+					$new_path = dirname($_POST['path']).'/'.$new_name;
 
-					$fs->move($path, $new_path);
-					$response['path']=str_replace($GO_CONFIG->file_storage_path,'',$new_path);
+					$fs->move($GO_CONFIG->file_storage_path.$_POST['path'], $GO_CONFIG->file_storage_path.$new_path);
+					$response['path']=$new_path;
 				}
 			}
 			$response['success']=true;
@@ -160,12 +155,11 @@ try{
 
 		case 'new_folder':
 
-			$path = $GO_CONFIG->file_storage_path.($_POST['path']);
-
-			if(!file_exists($path))
+			$full_path = $GO_CONFIG->file_storage_path.$_POST['path'];
+			if(!file_exists($full_path))
 			{
 				throw new Exception($lang['files']['fileNotFound']);
-			}elseif(!$fs->has_write_permission($GO_SECURITY->user_id, $path))
+			}elseif(!$fs->has_write_permission($GO_SECURITY->user_id, $full_path))
 			{
 				throw new AccessDeniedException();
 			}
@@ -173,20 +167,20 @@ try{
 			$response['success']=true;
 
 
-			$name = ($_POST['name']);
+			$name = $_POST['name'];
 			if ($name == '') {
 				throw new Exception($lang['common']['missingField']);
 			}
 
-			if (file_exists($path.'/'.$name)) {
+			if (file_exists($full_path.'/'.$name)) {
 				throw new Exception($lang['files']['folderExists']);
 			}
-			if (!@ mkdir($path.'/'.$name, $GO_CONFIG->create_mode)) {
+			if (!@ mkdir($full_path.'/'.$name, $GO_CONFIG->create_mode)) {
 				throw new Exception($lang['comon']['saveError']);
 			} else {
 				//$GO_LOGGER->log('filesystem', 'NEW FOLDER '.$fs->strip_file_storage_path($fv->path.'/'.$name));
 				
-				$folder['path']=$path.'/'.$name;
+				$folder['path']=$_POST['path'].'/'.$name;
 				$folder['visible']='1';
 				$folder['user_id']=$GO_SECURITY->user_id;
 				
@@ -198,9 +192,7 @@ try{
 		case 'upload':
 			//var_dump($_FILES);
 			$response['success']=true;
-			$path = $GO_CONFIG->file_storage_path.($_POST['path']);
-			
-			
+			$full_path = $GO_CONFIG->file_storage_path.$_POST['path'];
 
 			if(!file_exists($GO_CONFIG->tmpdir.'files_upload'))
 			{
@@ -228,11 +220,11 @@ try{
 			$modified=array();
 
 			$command = isset($_POST['command']) ? $_POST['command'] : 'ask';
-			$path = $GO_CONFIG->file_storage_path.($_POST['path']);
+			$full_path = $GO_CONFIG->file_storage_path.$_POST['path'];
 
 			while($tmp_file = array_shift($_SESSION['GO_SESSION']['files']['uploaded_files']))
 			{
-				$new_path = $path.'/'.utf8_basename($tmp_file);
+				$new_path = $full_path.'/'.utf8_basename($tmp_file);
 				if(file_exists($new_path) && $command!='yes' && $command!='yestoall')
 				{
 					if($command!='no' && $command != 'notoall')
@@ -251,7 +243,7 @@ try{
 						$new[]=utf8_basename($new_path);
 					}
 					$fs->move($tmp_file, $new_path);						
-					$fs->add_file($new_path);
+					$fs->add_file($fs->strip_server_path($new_path));
 				}
 				if($command != 'yestoall' && $command != 'notoall')
 				{
@@ -259,7 +251,7 @@ try{
 				}			
 			}
 			
-			$fs->notify_users($path, substr(dirname($path), strlen($GO_CONFIG->file_storage_path)), $GO_SECURITY->user_id, $modified, $new);
+			$fs->notify_users($_POST['path'], $GO_SECURITY->user_id, $modified, $new);
 
 			$response['success']=true;
 
@@ -268,13 +260,12 @@ try{
 		case 'paste':
 			if(isset($_POST['paste_sources']) && isset($_POST['paste_destination']))
 			{
-				$_SESSION['GO_SESSION']['files']['paste_sources']= json_decode(($_POST['paste_sources']));
-				$_SESSION['GO_SESSION']['files']['paste_destination']= ($_POST['paste_destination']);
+				$_SESSION['GO_SESSION']['files']['paste_sources']= json_decode($_POST['paste_sources']);
+				$_SESSION['GO_SESSION']['files']['paste_destination']= $_POST['paste_destination'];
 			}
 
 			if(isset($_SESSION['GO_SESSION']['files']['paste_sources']) && count($_SESSION['GO_SESSION']['files']['paste_sources']))
 			{
-
 				$response['success']=true;
 
 				if(!$fs->has_write_permission($GO_SECURITY->user_id, $GO_CONFIG->file_storage_path.$_SESSION['GO_SESSION']['files']['paste_destination']))
@@ -342,8 +333,6 @@ try{
 			{
 				$template['user_id']=$_POST['user_id'];
 			}
-			
-			debug(var_export($template, true));
 
 			if($template['id']>0)
 			{

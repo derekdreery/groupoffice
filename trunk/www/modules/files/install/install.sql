@@ -42,7 +42,7 @@ DROP TABLE IF EXISTS `fs_folders`;
 CREATE TABLE IF NOT EXISTS `fs_folders` (
   `user_id` int(11) NOT NULL default '0',
   `id` int(11) NOT NULL,
-  `path` varchar(200) NOT NULL default '',
+  `path` varchar(255) NOT NULL default '',
   `visible` enum('0','1') NOT NULL,
   `acl_read` int(11) NOT NULL default '0',
   `acl_write` int(11) NOT NULL default '0',

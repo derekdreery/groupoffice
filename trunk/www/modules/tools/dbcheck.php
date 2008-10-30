@@ -112,18 +112,8 @@ echo 'Done<br /><br />';
 
 
 
-echo 'Clearing search cache<br />';
-
 require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
 $search = new search();
-$search->reset();
-flush();
-
-echo 'Building search cache<br />';
-
-$search->update_search_cache(true);
-
-echo 'Done<br /><br />';
 
 
 echo 'Removing dead links<br />';
@@ -159,5 +149,21 @@ echo 'Start of module checks<br />';
 
 $GO_MODULES->fire_event('check_database');
 
-echo 'All Done!<br />';
 
+
+
+echo 'Clearing search cache<br />';
+
+
+$search->reset();
+flush();
+
+echo 'Building search cache<br />';
+
+$search->update_search_cache(true);
+
+echo 'Done<br /><br />';
+
+
+
+echo 'All Done!<br />';
