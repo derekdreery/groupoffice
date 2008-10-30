@@ -6,17 +6,15 @@
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
  * 
  * If you have questions write an e-mail to info@intermesh.nl
- * 
+ */
+ 
+/**
+ * This file holds global functions for use inside Group-Office
+ *  
+ * @package go.global
  * @copyright Copyright Intermesh
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
- */
-
-/**
- * This file holds global functions for use inside Group-Office
- *
- * @package go.global
- * @author   Merijn Schering <mschering@intermesh.nl>
  * @since    Group-Office 1.0
  */
 

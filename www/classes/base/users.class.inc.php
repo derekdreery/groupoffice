@@ -324,7 +324,6 @@ class GO_USERS extends db
 	 * This function retrieves all users from the database and returns their
 	 * number. After that you are able to process each user via next_record.
 	 * 
-	 * @todo Maybe another method than next_record should be used to iterate
 	 * over the different user accounts. next_user() should be considered.
 	 * 
 	 * @access public
