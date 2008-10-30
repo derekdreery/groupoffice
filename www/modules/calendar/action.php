@@ -290,31 +290,33 @@ try{
 			
 
 			$event = $cal->get_event($event_id);
-
-			if(!$cal->is_participant($event_id, $_SESSION['GO_SESSION']['email']))
-			{
-				throw new Exception($lang['calendar']['not_invited']);
+			if($event['calendar_id']!=$calendar_id)
+			{	
+				if(!$cal->is_participant($event_id, $_SESSION['GO_SESSION']['email']))
+				{
+					throw new Exception($lang['calendar']['not_invited']);
+				}
+	
+				$new_event['user_id']=$GO_SECURITY->user_id;
+				$new_event['calendar_id']=$calendar_id;
+				$new_event['participants_event_id']=$event_id;
+	
+				$cal->copy_event($event_id, $new_event);
+				
+				
+				$cal->set_event_status($event_id, '1', $_SESSION['GO_SESSION']['email']);
+				
+				$owner = $GO_USERS->get_user($event['user_id']);
+				
+				require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
+				$swift = new GoSwift($owner['email'], sprintf($lang['calendar']['accept_mail_subject'],$event['name']));
+				
+				$body = sprintf($lang['calendar']['accept_mail_body'],$_SESSION['GO_SESSION']['email']);		
+				$body .= '<br /><br />'.$cal->event_to_html($event);
+				
+				$swift->set_body($body);
+				$swift->sendmail($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
 			}
-
-			$new_event['user_id']=$GO_SECURITY->user_id;
-			$new_event['calendar_id']=$calendar_id;
-			$new_event['participants_event_id']=$event_id;
-
-			$cal->copy_event($event_id, $new_event);
-			
-			
-			$cal->set_event_status($event_id, '1', $_SESSION['GO_SESSION']['email']);
-			
-			$owner = $GO_USERS->get_user($event['user_id']);
-			
-			require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
-			$swift = new GoSwift($owner['email'], sprintf($lang['calendar']['accept_mail_subject'],$event['name']));
-			
-			$body = sprintf($lang['calendar']['accept_mail_body'],$_SESSION['GO_SESSION']['email']);		
-			$body .= '<br /><br />'.$cal->event_to_html($event);
-			
-			$swift->set_body($body);
-			$swift->sendmail($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
 				
 
 			$response['success']=true;
