@@ -34,6 +34,25 @@ class String {
 			return $subject;
 		}
 	}
+	
+	/**
+	 * Reverse strpos. couldn't get PHP strrpos to work with offset
+	 *
+	 * @param string $haystack
+	 * @param string $needle
+	 * @param int $offset
+	 * @return int
+	 */
+	function rstrpos ($haystack, $needle, $offset=0)
+	{
+	    $size = strlen ($haystack);
+	    $pos = strpos (strrev($haystack), strrev($needle), $size - $offset);
+	  
+	    if ($pos === false)
+	        return false;
+	  
+	    return $size - $pos - strlen($needle);
+	}
 
 	function trim_lines($text)
 	{

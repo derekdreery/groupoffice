@@ -76,13 +76,13 @@ if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_per
 		}
 	}else
 	{
+		debug(File::get_mime($path));
+		header('Content-Type: '.File::get_mime($path));
 		if($mode == 'download')
-		{
-			header('Content-Type: application/download');
+		{			
 			header('Content-Disposition: attachment; filename="'.$filename.'"');
 		}else
-		{
-			header('Content-Type: '.mime_content_type($path));
+		{			
 			header('Content-Disposition: inline; filename="'.$filename.'"');
 		}
 		if(!$cache)

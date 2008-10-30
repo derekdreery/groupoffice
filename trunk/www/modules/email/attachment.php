@@ -52,7 +52,7 @@ if ($mail->open($account['host'], $account['type'],$account['port'],$account['us
 	{
 		
 		
-		$mime = mime_content_type($filename);
+		$mime = File::get_mime($filename);
 		
 		header('Content-Type: '.$mime);
 		header('Pragma: no-cache');
