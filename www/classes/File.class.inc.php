@@ -24,8 +24,8 @@
 
 class File
 {
-
 	var $path;
+	
 
 	function __construct($path){
 		$this->path = $path;
@@ -80,6 +80,39 @@ class File
 		} else {
 			return $lang['filetypes']['unknown'];
 		}
+	}
+	
+
+	
+	function get_mime($path)
+	{
+		global $GO_CONFIG;
+		
+		$types = file_get_contents($GO_CONFIG->root_path.'mime.types');
+		
+		$pos = strpos($types, File::get_extension($path));
+		
+		if($pos)
+		{
+			$start_of_line = String::rstrpos($types, "\n", $pos);			
+			$end_of_mime = strpos($types, ' ', $start_of_line);
+			$mime = substr($types, $start_of_line+1, $end_of_mime-$start_of_line-1);
+			
+			return $mime;		
+		}	
+		
+		if(function_exists('finfo_open')){
+        $finfo    = finfo_open(FILEINFO_MIME);
+        $mimetype = finfo_file($finfo, $filename);
+        finfo_close($finfo);
+        return $mimetype;
+    }elseif(function_exists('mime_content_type'))
+    {
+    	return mime_content_type($path);		
+    }else
+    {
+    	return 'application/octet-stream';
+    }		
 	}
 
 

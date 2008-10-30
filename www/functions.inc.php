@@ -32,20 +32,6 @@ function __autoload($class_name) {
     require_once $GO_CONFIG->class_path. $class_name.'.class.inc.php';
 }
 
-
-/* function quoted_printable_encode($str)
- {
- global $GO_CONFIG;
- require_once($GO_CONFIG->class_path."mail/phpmailer/class.phpmailer.php");
- $mail = new PHPMailer();
-
- return trim($mail->EncodeQP ($str));
-
- }
- */
-
-
-
 function utf8_basename($path)
 {
 	if(!function_exists('mb_substr'))
@@ -59,7 +45,6 @@ function utf8_basename($path)
 	}
 	return mb_substr($path, mb_strrpos($path, '/')+1);
 }
-
 
 function resize_image($src, $maxsize)
 {
@@ -191,20 +176,4 @@ function detect_browser() {
 		$browser['name'] = 'OTHER';
 	}
 	return $browser;
-}
-
-
-if (!function_exists('mime_content_type')) {
-    function mime_content_type($filename) {
-    		
-    	if(function_exists('finfo_open')){
-        $finfo    = finfo_open(FILEINFO_MIME);
-        $mimetype = finfo_file($finfo, $filename);
-        finfo_close($finfo);
-        return $mimetype;
-    	}else
-    	{
-    		return 'application/octet-stream';
-    	}
-    }
 }

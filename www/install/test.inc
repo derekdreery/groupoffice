@@ -216,20 +216,6 @@
 	</td>
 </tr>
 <tr>
-	<td valign="top">MIME types:</td>
-	<td>
-	<?php	
-	if(!function_exists('mime_content_type') && !function_exists('finfo_open'))
-	{
-		echo '<span style="color: red;">Warning: mime-magic is not installed. Group-Office will no be able to determine MIME types of files. This may cause problems with file downloads.</span>';
-	}else
-	{
-		echo 'Ok';
-	}
-	?>
-	</td>
-</tr>
-<tr>
 	<td valign="top">MultiByte string functions:</td>
 	<td>
 	<?php	
