@@ -7,6 +7,9 @@ if(!$GO_SECURITY->logged_in())
 	die('Unauthorized');
 }
 
+require_once ($GO_MODULES->modules['files']['class_path']."files.class.inc");
+$fs = new files();
+
 $path = $GO_CONFIG->file_storage_path.urldecode(($_REQUEST['path']));
 
 if(substr($path,-1,1)=='/')
@@ -18,6 +21,8 @@ if(!isset($_SESSION['GO_SESSION']['files']['jupload_new_files']))
 {
 	$_SESSION['GO_SESSION']['files']['jupload_new_files']=array();
 }
+
+
 
 
 $count=0;
