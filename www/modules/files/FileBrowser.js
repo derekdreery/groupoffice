@@ -1249,7 +1249,7 @@ GO.files.openFile = function(path, store)
 				var r = store.data.items[i].data;
 				var ext = GO.util.getFileExtension(r.path);
 				
-				if(ext=='jpg')
+				if(ext=='jpg' || ext=='png' || ext=='gif' || ext=='bmp')
 				{
 					images.push({name: r.name, src: GO.settings.modules.files.url+'download.php?mode=download&path='+r.path})
 				}

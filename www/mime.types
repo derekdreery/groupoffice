@@ -23,7 +23,7 @@ application/pgp-keys key
 application/pgp-signature pgp
 application/pics-rules prf
 application/postscript ps ai eps
-application/rar rar
+application/x-rar rar
 application/rdf+xml rdf
 application/rss+xml rss
 application/rtf rtf
@@ -106,7 +106,9 @@ application/x-futuresplash spl
 application/x-gnumeric gnumeric
 application/x-go-sgf sgf
 application/x-graphing-calculator gcf
-application/x-gtar gtar tgz taz
+application/x-gtar gtar taz
+application/x-gzip tgz gz
+application/x-bzip-compressed-tar bz2
 application/x-hdf hdf
 application/x-httpd-php phtml pht php
 application/x-httpd-php-source phps
