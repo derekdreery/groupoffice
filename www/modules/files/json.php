@@ -404,7 +404,7 @@ try{
 							{
 								$class='filetype-folder';
 							}
-
+							
 							$folder['path']=$fs->strip_server_path($folder['path']);
 							$folder['grid_display']='<div class="go-grid-icon '.$class.'">'.$folder['name'].'</div>';
 							$folder['type']='Folder';
