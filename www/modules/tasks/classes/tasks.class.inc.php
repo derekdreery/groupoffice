@@ -209,7 +209,7 @@ class tasks extends db
 			$sql .= " AND name LIKE '".$this->escape($query)."'";
 		}
 		
-		$sql .= " ORDER BY ".$this->escape($sort.",".$direction);
+		$sql .= " ORDER BY ".$this->escape($sort." ".$direction);
 		
 
 		$this->query($sql);
