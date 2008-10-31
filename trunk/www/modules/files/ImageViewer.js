@@ -12,7 +12,7 @@ GO.files.ImageViewer = Ext.extend(Ext.Window, {
 		this.plain=true;
 		this.maximizable=true;
 		this.width=640;
-		this.height=640;
+		this.height=Ext.getBody().getHeight()-80;
 		this.bodyStyle='text-align:center;vertical-align:middle';
 		this.title='Image viewer';		
 		

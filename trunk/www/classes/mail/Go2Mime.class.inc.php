@@ -96,6 +96,9 @@ class Go2Mime
 				$src_id = $message->attach($img);
 			}
 			$this->body = str_replace($inline_attachment['url'], $src_id, $this->body);
+			
+			//Fix for IE because it makes relative URL's absolute.
+			$this->body = str_replace(substr($GO_CONFIG->full_url,0,-strlen($GO_CONFIG->host)).'cid:', 'cid:', $this->body);		
 		}
 		
 		$body =& new Swift_Message_Part($this->body, "text/html", null, "UTF-8");
@@ -147,7 +150,7 @@ class Go2Mime
 		if(isset($structure->headers['date']))		
 			$this->response['date']=date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], strtotime($structure->headers['date']));
 		else
-			$this->response['date']=mktime();
+			$this->response['date']=time();
 			
 		$this->response['size']=strlen($params['input']);
 
