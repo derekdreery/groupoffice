@@ -1,5 +1,5 @@
 <?php
-if(is_dir($GO_CONFIG->module_path.'comments'))
+if(is_dir($GO_CONFIG->module_path.'comments') && !$GO_MODULES->get_module('comments'))
 {		
 	$mod = new GO_MODULES();	
 	$mod->add_module('comments');
