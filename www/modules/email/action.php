@@ -615,8 +615,8 @@ try{
 					{
 						$account['id']=isset($_POST['account_id']) ? ($_POST['account_id']) : 0;
 						$account['mbroot'] = isset($_POST['mbroot']) ? ($_POST['mbroot']) : '';
-						$account['use_ssl'] = isset($_REQUEST['use_ssl'])  ? $_REQUEST['use_ssl'] : '0';
-						$account['novalidate_cert'] = isset($_REQUEST['novalidate_cert']) ? $_REQUEST['novalidate_cert'] : '0';
+						$account['use_ssl'] = isset($_REQUEST['use_ssl'])  ? '1' : '0';
+						$account['novalidate_cert'] = isset($_REQUEST['novalidate_cert']) ? '1' : '0';
 						$account['examine_headers'] = isset($_POST['examine_headers']) ? '1' : '0';
 						$account['type']=$_POST['type'];
 						$account['host']=$_POST['host'];

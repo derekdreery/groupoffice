@@ -1234,6 +1234,21 @@ GO.files.openFile = function(path)
 	
 	switch(extension)
 	{
+		case 'bmp':
+		case 'png':
+		case 'gif':
+		case 'jpg':
+		
+		if(!this.imageViewer)
+		{
+			this.imageViewer = new GO.files.ImageViewer({
+				closeAction:'hide'
+			});
+		}
+		this.imageViewer.show(GO.settings.modules.files.url+'download.php?mode=download&path='+path);
+			
+		break;
+		
 		case 'doc':
 		case 'odt':
 		case 'ods':

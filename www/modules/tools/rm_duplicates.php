@@ -88,7 +88,7 @@ function is_duplicate_event($record)
 
 $sql = "SELECT id, name, start_time, end_time, user_id, calendar_id, rrule ".
 	"FROM `cal_events` ".
-	"ORDER BY mtime DESC";
+	" ORDER BY mtime DESC";
 
 $db->query($sql);
 

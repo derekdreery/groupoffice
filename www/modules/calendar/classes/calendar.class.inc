@@ -393,7 +393,7 @@ class calendar extends db
 		"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ".
 		"WHERE go_acl.user_id=".$this->escape($user_id)." ".
 		"OR go_users_groups.user_id=".$this->escape($user_id)." ".
-		"ORDER BY cal_views.name ASC";
+		" ORDER BY cal_views.name ASC";
 
 		$this->query($sql);
 		$count= $this->num_rows();
@@ -414,7 +414,7 @@ class calendar extends db
 		"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ".
 		"WHERE go_acl.user_id=".$this->escape($user_id)." ".
 		"OR go_users_groups.user_id=".$this->escape($user_id)." ".
-		"ORDER BY cal_views.name ASC";
+		" ORDER BY cal_views.name ASC";
 
 		$this->query($sql);
 		return $this->num_rows();
