@@ -146,10 +146,10 @@ class search extends db {
 		
 		if($link_id>0)
 		{
-			$sql .= "ORDER BY sc.type ASC, l.ctime DESC";
+			$sql .= " ORDER BY sc.type ASC, l.ctime DESC";
 		}else
 		{
-			$sql .= "ORDER BY $sort_index $sort_order";
+			$sql .= " ORDER BY $sort_index $sort_order";
 		}
 
 		//debug($sql);
@@ -224,7 +224,7 @@ class search extends db {
 			$sql .= " AND link_type IN (".implode(',', $selected_types).") ";
 		}
 		
-		$sql .= "ORDER BY sc.type ASC, mtime ASC";
+		$sql .= " ORDER BY sc.type ASC, mtime ASC";
 		
 		
 		

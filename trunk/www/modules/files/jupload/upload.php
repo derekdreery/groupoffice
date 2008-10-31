@@ -22,9 +22,6 @@ if(!isset($_SESSION['GO_SESSION']['files']['jupload_new_files']))
 	$_SESSION['GO_SESSION']['files']['jupload_new_files']=array();
 }
 
-
-
-
 $count=0;
 while($file = array_shift($_FILES))
 {

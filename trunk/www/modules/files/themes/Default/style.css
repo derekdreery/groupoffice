@@ -1,5 +1,11 @@
 @CHARSET "UTF-8";
 
+.fs-img-viewer{
+border:1px solid #d0d0d0;
+display:block;
+margin:auto;
+}
+
 .go-module-icon-files , .go-menu-icon-files {
 	background-image: url('images/files.png') !important;
 }

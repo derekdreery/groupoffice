@@ -178,12 +178,12 @@ class summary extends db{
  		{
  			$sql .= " WHERE name LIKE '".$this->escape($query)."'";
  		} 		
-		$sql .= "ORDER BY ".$this->escape($sortfield)." ".$this->escape($sortorder)."";
+		$sql .= " ORDER BY ".$this->escape($sortfield)." ".$this->escape($sortorder)."";
 		$this->query($sql);
 		$count = $this->num_rows();
 		if($offset>0)
 		{
-			$sql .= " LIMIT (".$this->escape($start).",".$this->escape($offset).")";
+			$sql .= " LIMIT ".$this->escape($start).",".$this->escape($offset);
 			$this->query($sql);
 		}
 		return $count;
@@ -203,7 +203,7 @@ class summary extends db{
 	function get_active_announcements($sortfield='id', $sortorder='ASC', $start=0, $offset=0)
 	{
 		$sql = "SELECT * FROM su_announcements WHERE due_time=0 OR due_time > UNIX_TIMESTAMP()";
-		$sql .= "ORDER BY ".$this->escape($sortfield)." ".$this->escape($sortorder)."";
+		$sql .= " ORDER BY ".$this->escape($sortfield)." ".$this->escape($sortorder)."";
 		$this->query($sql);
 		$count = $this->num_rows();
 		if($offset>0)

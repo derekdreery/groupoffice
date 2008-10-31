@@ -4,3 +4,4 @@ modules/files/ContextMenu.js
 modules/files/TemplatesWindow.js
 modules/files/FileBrowser.js
 modules/files/FilesTemplate.js
+modules/files/ImageViewer.js

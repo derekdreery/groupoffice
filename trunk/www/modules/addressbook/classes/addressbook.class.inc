@@ -99,7 +99,7 @@ class addressbook extends db {
 		"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ".
 		"WHERE go_acl.user_id=".$this->escape($user_id)." ".
 		"OR go_users_groups.user_id=".$this->escape($user_id)." ".
-		"ORDER BY ab_addressbooks.".$sort." ".$dir;
+		" ORDER BY ab_addressbooks.".$sort." ".$dir;
 
 		$this->query($sql);
 		$count= $this->num_rows();
@@ -121,7 +121,7 @@ class addressbook extends db {
  		"ab_companies.name AS company FROM ab_contacts ".
  		"LEFT JOIN ab_companies ON (ab_contacts.company_id=ab_companies.id) ".
  		" WHERE ab_contacts.addressbook_id='".$this->escape($addressbook_id)."' ".
- 		"ORDER BY ab_contacts.first_name, ab_contacts.last_name ASC";
+ 		" ORDER BY ab_contacts.first_name, ab_contacts.last_name ASC";
 
 		$this->query($sql);
 		return $this->num_rows();
@@ -185,7 +185,7 @@ class addressbook extends db {
 		"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ".
 		"WHERE go_acl.user_id=".$this->escape($user_id)." ".
 		"OR go_users_groups.user_id=".$this->escape($user_id)." ".
-		"ORDER BY ab_addressbooks.".$sort." ".$dir;
+		" ORDER BY ab_addressbooks.".$sort." ".$dir;
 		$this->query($sql);
 		$count= $this->num_rows();
 		if($offset>0)
