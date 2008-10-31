@@ -24,6 +24,17 @@ GO.mailTo = function(email){
 	}	
 }
 
+GO.util.getFileExtension = function(filename)
+{
+	var lastIndex = filename.lastIndexOf('.');
+	var extension = '';
+	if(lastIndex)
+	{
+		extension = filename.substr(lastIndex+1);
+	}
+	return extension.toLowerCase();
+}
+
 GO.playAlarm = function(){
 	
 	if(!GO.settings.mute_sound)

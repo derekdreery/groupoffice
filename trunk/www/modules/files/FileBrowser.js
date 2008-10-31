@@ -1140,7 +1140,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 				this.fileClickHandler.call(this.scope);
 			}else
 			{
-				GO.files.openFile(record.data.path);
+				GO.files.openFile(record.data.path, this.gridStore);
 			}			
 		}
 	},
@@ -1222,15 +1222,9 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 
 
-GO.files.openFile = function(path)
+GO.files.openFile = function(path, store)
 {
-	var lastIndex = path.lastIndexOf('.');
-	var extension = '';
-	if(lastIndex)
-	{
-		extension = path.substr(lastIndex+1);
-	}
-	
+	var extension = GO.util.getFileExtension(path);	
 	
 	switch(extension)
 	{
@@ -1245,7 +1239,28 @@ GO.files.openFile = function(path)
 				closeAction:'hide'
 			});
 		}
-		this.imageViewer.show(GO.settings.modules.files.url+'download.php?mode=download&path='+path);
+		
+		var index = 0;
+		var images = Array();
+		if(store)
+		{
+			for (var i = 0; i < store.data.items.length;  i++)
+			{
+				var r = store.data.items[i].data;
+				var ext = GO.util.getFileExtension(r.path);
+				
+				if(ext=='jpg')
+				{
+					images.push({name: r.name, src: GO.settings.modules.files.url+'download.php?mode=download&path='+r.path})
+				}
+				if(r.path==path)
+				{
+					index=images.length-1;
+				}
+			}
+		}
+		
+		this.imageViewer.show(images, index);
 			
 		break;
 		
