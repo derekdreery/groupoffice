@@ -96,11 +96,12 @@ class Go2Mime
 			{				
 				$img =& new Swift_Message_Image(new Swift_File($inline_attachment['tmp_file']));
 				$src_id = $message->attach($img);
-			}
-			$this->body = str_replace($inline_attachment['url'], $src_id, $this->body);
+			}			
 			
-			//Fix for IE because it makes relative URL's absolute.
-			$this->body = str_replace(substr($GO_CONFIG->full_url,0,-strlen($GO_CONFIG->host)).'cid:', 'cid:', $this->body);		
+			//Browsers reformat URL's so a pattern match
+			//$this->body = str_replace($inline_attachment['url'], $src_id, $this->body);			
+			$just_filename = utf8_basename($inline_attachment['url']);	
+			$this->body = preg_replace('/=".*'.preg_quote($just_filename).'"/', '="'.$src_id.'"', $this->body);					
 		}
 		
 		$body =& new Swift_Message_Part($this->body, "text/html", null, "UTF-8");

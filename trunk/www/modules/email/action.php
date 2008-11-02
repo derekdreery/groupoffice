@@ -285,10 +285,12 @@ try{
 
 								$img =& new Swift_Message_Image(new Swift_File($tmp_name),utf8_basename($tmp_name), File::get_mime($tmp_name));
 								$src_id = $swift->message->attach($img);
-								$body = str_replace($inlineAttachment['url'], $src_id, $body);
-							}
-							
-							
+								
+								//Browsers reformat URL's so a pattern match
+								//$body = str_replace($inlineAttachment['url'], $src_id, $body);			
+								$just_filename = utf8_basename($inlineAttachment['url']);	
+								$body = preg_replace('/=".*'.preg_quote($just_filename).'"/', '="'.$src_id.'"', $body);	
+							}						
 
 							$swift->set_body($body);
 
