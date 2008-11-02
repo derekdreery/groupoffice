@@ -271,11 +271,9 @@ try{
 							{
 								$swift->message->requestReadReceipt($swift->account['email']);
 							}
-
-							//replace URL's with anchor tags
-							$body = preg_replace('/[\s\n]{1}http(s?):\/\/([^\b<\n]*)/', "<a href=\"http$1://$2\">http$1://$2</a>", $_POST['body']);
-
-							
+														
+							$body = $_POST['body'];
+														
 							//process inline attachments
 							$inline_attachments = json_decode(($_POST['inline_attachments']), true);
 							foreach($inline_attachments as $inlineAttachment)
