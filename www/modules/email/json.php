@@ -661,6 +661,8 @@ try{
 
 				$part_count = count($parts);
 				
+				$response['blocked_images']=0;
+				
 				while($part = array_shift($parts))
 				{
 					$mime = isset($part["mime"]) && $part_count>1 ? strtolower($part["mime"]) : $default_mime;
@@ -682,7 +684,7 @@ try{
 								break;
 
 							case 'text/html':
-								$part_body = String::convert_html($part_body);
+								$part_body = String::convert_html($part_body, true, $response['blocked_images']);
 								//	$part = convert_links($part);
 								break;
 
