@@ -87,45 +87,7 @@ GO.email.EmailClient = function(config){
 			{
 				this.previewedUid=record.data['uid'];
 				
-				this.messagePanel.el.mask(GO.lang.waitMsgLoad);
-				
-				Ext.Ajax.request({
-					url: GO.settings.modules.email.url+'json.php',
-					params: {
-						uid: record.data['uid'],
-						mailbox: this.mailbox,
-						account_id: this.account_id,
-						task:'message'
-					},
-					scope: this,
-					callback: function(options, success, response)
-					{					
-						if(!success)
-						{
-							this.previewedUid=0;
-						}else
-						{
-							//this.previewedUid=record.data['uid'];
-							
-							this.replyAllButton.setDisabled(false);
-							this.replyButton.setDisabled(false);
-							this.forwardButton.setDisabled(false);
-							this.printButton.setDisabled(false);
-							
-							if(record.data['new']==1)
-							{		
-								this.incrementFolderStatus(this.folder_id, -1);
-								record.set('new','0');									
-							}
-							
-							var data = Ext.decode(response.responseText);
-							
-							this.messagePanel.setMessage(data);
-							
-							this.messagePanel.el.unmask();
-						}				
-					}
-				});
+				this.messagePanel.loadMessage(record.data.uid, this.mailbox, this.account_id);
 				
 			}
 		}
@@ -576,7 +538,30 @@ GO.email.EmailClient = function(config){
 					border:true
 				})
 			]
-  	}]
+  	}];
+  	
+  this.messagePanel.on('load', function(options, success, response){
+  	if(!success)
+		{
+			this.previewedUid=0;
+		}else
+		{
+			//this.previewedUid=record.data['uid'];
+			
+			this.replyAllButton.setDisabled(false);
+			this.replyButton.setDisabled(false);
+			this.forwardButton.setDisabled(false);
+			this.printButton.setDisabled(false);
+			
+			var record = this.messagesGrid.store.getById(this.previewedUid);			
+			if(record.data['new']==1)
+			{		
+				this.incrementFolderStatus(this.folder_id, -1);
+				record.set('new','0');									
+			}
+		}		
+  	
+  }, this);
   	
   
   this.messagePanel.on('linkClicked', function(href){

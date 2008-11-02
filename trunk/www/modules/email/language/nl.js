@@ -102,3 +102,6 @@ GO.email.lang.viewSource='Bron weergeven';
 
 GO.email.lang.sendNotification='De afzender van dit bericht wil graag een bevestiging dat dit bericht is aangekomen op: %s. Wilt u deze bevestiging nu versturen?';
 GO.email.lang.searchOnSender='Toon berichten';
+
+GO.email.lang.blocked = '{blocked_images} externe URL(\'s) voor afbeeldingen en links werden voor uw veiligheid geblokkeerd.';
+GO.email.lang.unblock = 'Klik hier om de blokkade op te heffen';
