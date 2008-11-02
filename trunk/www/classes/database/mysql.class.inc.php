@@ -10,6 +10,7 @@
  * @copyright Copyright Intermesh
  * @version $Id: about.php 1088 2008-10-07 13:02:06Z mschering $
  * @author Merijn Schering <mschering@intermesh.nl>
+ * @package go.database
  */
 
 /**

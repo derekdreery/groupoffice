@@ -9,6 +9,7 @@
  * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
+ * @package go.mail
  * @since Group-Office 1.0
  */
 

@@ -10,11 +10,12 @@
  * @copyright Copyright Intermesh
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
+ * @package go.html
  */
 
 
 /**
- * Create any HTML element
+ * Create any HTML element used as base for an easy way to create select and input elements with PHP.
  *
  * @author Merijn Schering <mschering@intermesh.nl> 
  * @package go.html

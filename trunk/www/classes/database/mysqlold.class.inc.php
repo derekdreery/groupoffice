@@ -10,6 +10,7 @@
  * @copyright Copyright Intermesh
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
+ * @package go.database
  */
 
 /**
@@ -20,7 +21,7 @@ define('DB_BOTH', MYSQL_BOTH);
 define('DB_ASSOC', MYSQL_ASSOC);
 
 /**
- * Class that connects to MySQL using the MySQLi extension
+ * Class that connects to MySQL using the old MySQL extension
  *
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
