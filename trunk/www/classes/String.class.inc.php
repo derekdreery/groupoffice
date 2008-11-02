@@ -34,7 +34,7 @@ class String {
 			return $subject;
 		}
 	}
-	
+
 	/**
 	 * Reverse strpos. couldn't get PHP strrpos to work with offset
 	 *
@@ -45,13 +45,13 @@ class String {
 	 */
 	function rstrpos ($haystack, $needle, $offset=0)
 	{
-	    $size = strlen ($haystack);
-	    $pos = strpos (strrev($haystack), strrev($needle), $size - $offset);
-	  
-	    if ($pos === false)
-	        return false;
-	  
-	    return $size - $pos - strlen($needle);
+		$size = strlen ($haystack);
+		$pos = strpos (strrev($haystack), strrev($needle), $size - $offset);
+		 
+		if ($pos === false)
+		return false;
+		 
+		return $size - $pos - strlen($needle);
 	}
 
 	function trim_lines($text)
@@ -530,7 +530,7 @@ class String {
 	 * @access public
 	 * @return string HTML formatted string
 	 */
-	function convert_html($html) {
+	function convert_html($html, $block_external_images=true, &$replace_count) {
 
 		$html = str_replace("\r", '', $html);
 		$html = str_replace("\n",' ', $html);
@@ -556,6 +556,13 @@ class String {
 
 	$html = preg_replace($to_removed_array, '', $html);
 	$html = preg_replace("/([\"']?)javascript:/i", "$1removed_script:", $html);
+
+	if($block_external_images)
+	{
+		//$html = preg_replace("/<img(.*)src=([\"']?)http([^>])/", "<img$1src=$2blocked:http$3", $html);
+		//$html = preg_replace("/<([^=]*)=[\"']?http[^\"'\s>]*/", "<$1=\"blocked\"", $html);
+		$html = preg_replace("/<([^>]*)https?:([^>]*)/", "<$1blocked:$2", $html, -1, $replace_count);
+	}
 
 	return $html;
 	}
