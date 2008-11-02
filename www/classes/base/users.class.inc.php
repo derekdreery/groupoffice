@@ -10,6 +10,7 @@
  * @copyright Copyright Intermesh
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
+ * @package go.basic
  */
 
 
@@ -323,8 +324,6 @@ class GO_USERS extends db
 	 * 
 	 * This function retrieves all users from the database and returns their
 	 * number. After that you are able to process each user via next_record.
-	 * 
-	 * over the different user accounts. next_user() should be considered.
 	 * 
 	 * @access public
 	 * 

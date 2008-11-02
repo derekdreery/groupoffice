@@ -10,6 +10,8 @@
  * @copyright Copyright Intermesh
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
+ * @package go.mail
+ * @uses Swift
  */
 
 /**
@@ -29,7 +31,7 @@ require_once($GO_CONFIG->class_path.'filesystem.class.inc');
  * @author Merijn Schering <mschering@intermesh.nl>
  * @version $Id$
  * @copyright Copyright Intermesh
- * @license GNU General Public License
+ * @license Affero General Public License
  * @package go.mail
  * @uses Swift
  * @since Group-Office 3.0

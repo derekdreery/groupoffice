@@ -10,6 +10,7 @@
  * @copyright Copyright Intermesh
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
+ * @package go.mail
  */
 
 /**

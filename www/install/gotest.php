@@ -116,13 +116,13 @@ function whereis($cmd)
 	<td valign="top">MySQL support:</td>
 	<td>
 	<?php
-	if(function_exists('mysql_connect'))
+	if(function_exists('mysqli_connect'))
 	{
 		echo 'Ok';
 	}else
 	{
 		$fatal_error = true;
-		echo '<span style="color: red;">Fatal error: The MySQL extension is required. So is the MySQL server.</span>';
+		echo '<span style="color: red;">Fatal error: The improved MySQL (MySQLi) extension is required. So is the MySQL server.</span>';
 	}
 	?>
 	</td>

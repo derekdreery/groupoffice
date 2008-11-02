@@ -10,6 +10,7 @@
  * @copyright Copyright Intermesh
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
+ * @package go.xml
  */
 
 /**
@@ -19,7 +20,7 @@
  * @version $Id$
  * @copyright Copyright Intermesh
  * @license AGPL Affero General Public License
- * @package go.mail
+ * @package go.xml
  * @uses db
  * @since Group-Office 3.0
  */
