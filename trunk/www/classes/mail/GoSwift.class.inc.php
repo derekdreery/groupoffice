@@ -185,12 +185,6 @@ class GoSwift extends Swift{
 	{
 		global $GO_CONFIG;
 		
-		//correction for IE. It likes to add the domain name to relative url's
-		/*if($type=='html')
-		{
-			$body = str_replace(substr($GO_CONFIG->full_url,0,-strlen($GO_CONFIG->host)).'cid:', 'cid:', $body);
-		}*/
-		
 		if($type=='html')
 		{
 			//replace URL's with anchor tags
