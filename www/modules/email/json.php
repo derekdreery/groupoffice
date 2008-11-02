@@ -684,7 +684,7 @@ try{
 								break;
 
 							case 'text/html':
-								$part_body = String::convert_html($part_body, true, $response['blocked_images']);
+								$part_body = String::convert_html($part_body, !isset($_POST['unblock']), $response['blocked_images']);
 								//	$part = convert_links($part);
 								break;
 

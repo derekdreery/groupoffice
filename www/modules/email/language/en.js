@@ -110,3 +110,6 @@ GO.email.lang.viewSource='View source';
 GO.email.lang.sendNotification='The sender of this messages likes a read notification by you at: %s. Do you want to send a read notification now?';
 
 GO.email.lang.searchOnSender='Show messages';
+
+GO.email.lang.blocked = '{blocked_images} external URL(\'s) for images and links were blocked for your securtity.';
+GO.email.lang.unblock = 'Click here to unblock them';

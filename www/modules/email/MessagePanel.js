@@ -26,7 +26,8 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			attachmentClicked : true,
 			zipOfAttachmentsClicked : true,
 			linkClicked : true,
-			emailClicked : true
+			emailClicked : true,
+			load : true
 		});
 		
 		this.bodyId = Ext.id();
@@ -65,10 +66,44 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				'</td></tr>'+
 				'</table>'+
 			'</tpl>'+
+			'<tpl if="blocked_images&gt;0">'+
+			'<div class="go-warning-msg em-blocked">'+GO.email.lang.blocked+' <a id="em-unblock" href="#" class="normal-link">'+GO.email.lang.unblock+'</a></div>'+
+			'</tpl>'+
 			'</div>'+
 			'<div id="'+this.bodyId+'" class="message-body">{body}</div>';
 		
 		this.template = new Ext.XTemplate(templateStr);			
+	},
+	
+	loadMessage : function(uid, mailbox, account_id)
+	{
+		if(uid)
+		{
+			this.params = {
+					uid: uid,
+					mailbox: mailbox,
+					account_id: account_id,
+					task:'message'
+				};
+		}
+				
+		this.el.mask(GO.lang.waitMsgLoad);				
+		Ext.Ajax.request({
+			url: GO.settings.modules.email.url+'json.php',
+			params: this.params,
+			scope: this,
+			callback: function(options, success, response)
+			{					
+				this.fireEvent('load', options, success, response);
+				
+				if(success)					
+				{
+					var data = Ext.decode(response.responseText);						
+					this.setMessage(data);						
+					this.el.unmask();
+				}				
+			}
+		});
 	},
 	
 	setMessage : function(data)
@@ -86,7 +121,22 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			this.attachmentsEl.removeAllListeners();
 		}
 		
+		if(this.unblockEl)
+		{
+			this.unblockEl.removeAllListeners();
+		}
+		
 		this.template.overwrite(this.body, data);		
+		
+		
+		this.unblockEl = Ext.get('em-unblock');
+		if(this.unblockEl)
+		{
+			this.unblockEl.on('click', function(){
+				this.params.unblock='true';
+				this.loadMessage();
+			}, this);
+		}
 		
 		this.messageBodyEl = Ext.get(this.bodyId);		
 		this.messageBodyEl.on('click', this.onMessageBodyClick, this);

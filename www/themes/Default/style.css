@@ -614,3 +614,11 @@ table.display-panel a:active
     z-index: 3;
     color: #777;
 }
+
+
+.go-warning-msg{
+	background:url('images/16x16/important.png') no-repeat;
+	padding-left:20px;
+	height:16px;
+	vertical-align:middle;
+}
