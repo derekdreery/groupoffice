@@ -661,7 +661,20 @@ try{
 
 				$part_count = count($parts);
 				
-				$response['blocked_images']=0;
+				//block remote URL's if contacts is unknown
+				$response['blocked_images']=0;				
+				if(!isset($_POST['unblock']))
+				{
+					require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc');
+					$ab = new addressbook();
+					
+					$contact = $ab->get_contact_by_email($response['sender'], $GO_SECURITY->user_id);
+					$block = !is_array($contact);
+				}else
+				{
+					$block=false;
+				}
+				
 				
 				while($part = array_shift($parts))
 				{
@@ -684,7 +697,7 @@ try{
 								break;
 
 							case 'text/html':
-								$part_body = String::convert_html($part_body, !isset($_POST['unblock']), $response['blocked_images']);
+								$part_body = String::convert_html($part_body, $block, $response['blocked_images']);
 								//	$part = convert_links($part);
 								break;
 
