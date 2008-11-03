@@ -297,18 +297,15 @@ class GoSwift extends Swift{
 		
 		$this->message->setCc($this->recipients->getCc());
 		$this->message->setBcc($this->recipients->getBcc());
-		$this->message->setTo($this->recipients->getTo());
+		$this->message->setTo($this->recipients->getTo());		
 		
 		
-		
-		if($send_success && $this->account)
+		if($send_success && $this->account && $this->account['type']=='imap' && !empty($this->account['sent']))
 		{
 			global $GO_CONFIG;
 				
 			require_once ($GO_CONFIG->class_path."mail/imap.class.inc");
-			$imap = new imap();
-				
-				
+			$imap = new imap();				
 				
 			if ($imap->open(
 			$this->account['host'],
