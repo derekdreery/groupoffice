@@ -1,6 +1,6 @@
 ﻿<?php
 //Uncomment this line in new translations!
-//require_once($GO_LANGUAGE->get_fallback_language_file('files'));
+//require($GO_LANGUAGE->get_fallback_language_file('files'));
 $lang['files']['name'] = 'Dateien';
 $lang['files']['description'] = '	
 Modul-Dateien; Modul für die gemeinsame Nutzung von Dateien.';
