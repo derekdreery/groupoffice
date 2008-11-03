@@ -240,4 +240,12 @@ class db extends base_db {
 			
 		return mysql_real_escape_string($value, $this->link);
 	}
+	
+	/**
+	 * Close the database connection
+	 *
+	 */
+	public function close(){
+		return mysql_close($this->link);
+	}
 }
