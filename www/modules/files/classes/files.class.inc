@@ -28,8 +28,7 @@ class files extends filesystem
 		
 		$this->readable_paths = array(
 			$GO_CONFIG->tmpdir,				
-			$GO_CONFIG->file_storage_path.'public/',
-			$GO_CONFIG->local_path
+			$GO_CONFIG->file_storage_path.'public/'
 		);
 		
 		$this->writeable_paths = array(

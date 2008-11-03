@@ -90,7 +90,14 @@ class File
 		
 		$types = file_get_contents($GO_CONFIG->root_path.'mime.types');
 		
-		$pos = strpos($types, File::get_extension($path));
+		$extension = File::get_extension($path);
+		
+		if(empty($extension))
+		{
+			return 'application/octet-stream';
+		}
+		
+		$pos = strpos($types, $extension);
 		
 		if($pos)
 		{
