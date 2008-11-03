@@ -1,6 +1,7 @@
-﻿<?php
+<?php
 //Uncomment this line in new translations!
-//require($GO_LANGUAGE->get_fallback_language_file('users'));
+require($GO_LANGUAGE->get_fallback_language_file('users'));
+
 $lang['users']['name'] = 'Benutzer';
 $lang['users']['description'] = 'Admin-Modul; Systemverwaltung';
 
