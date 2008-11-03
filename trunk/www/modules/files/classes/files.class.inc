@@ -468,8 +468,8 @@ class files extends filesystem
 			global $GO_CONFIG;
 
 			$file['path'] = $path;
-			$file['ctime']=filectime($GO_CONFIG->file_storage_path.$path);
-			$file['mtime']=filemtime($GO_CONFIG->file_storage_path.$path);
+			$file['ctime']=@filectime($GO_CONFIG->file_storage_path.$path);
+			$file['mtime']=@filemtime($GO_CONFIG->file_storage_path.$path);
 
 			$this->add_file($file);
 

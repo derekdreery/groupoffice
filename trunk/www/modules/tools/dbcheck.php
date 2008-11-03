@@ -18,18 +18,13 @@
 require_once("../../Group-Office.php");
 //$GO_SECURITY->html_authenticate('tools');
 
-
+ini_set('max_execution_time', 360);
 
 $db2 = new db();
 $db3 = new db();
 
 $db = new db();
 $db->halt_on_error = 'no';
-
-
-
-
-
 
 echo 'Checking ACL...<br />';
 
@@ -148,8 +143,6 @@ echo 'Done<br /><br />';
 echo 'Start of module checks<br />';
 
 $GO_MODULES->fire_event('check_database');
-
-
 
 
 echo 'Clearing search cache<br />';
