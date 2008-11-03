@@ -32,3 +32,4 @@ $lang['files']['new']='New';
 $lang['files']['deleted']='Deleted';
 
 $lang['files']['file']='File';
+$lang['files']['folder']='Folder';

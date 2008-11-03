@@ -91,21 +91,9 @@ try
 						require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
 						$fs = new files();
 	
-						$result['files_path']='contacts/'.$contact_id;
-							
+						$result['files_path']='contacts/'.$contact_id;							
 						$full_path = $GO_CONFIG->file_storage_path.$result['files_path'];
-						if(!file_exists($full_path))
-						{
-							$fs->mkdir_recursive($full_path);
-								
-							$folder['user_id']=$GO_SECURITY->user_id;
-							$folder['path']=$full_path;
-							$folder['visible']='0';
-							$folder['acl_read']=$addressbook['acl_read'];
-							$folder['acl_write']=$addressbook['acl_write'];
-								
-							$fs->add_folder($folder);
-						}
+						$fs->check_share($full_path, $GO_SECURITY->user_id, $addressbook['acl_read'], $addressbook['acl_write'],true);					
 					}
 				} else {
 					
@@ -205,21 +193,9 @@ try
 					require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
 					$fs = new files();
 
-					$result['files_path']='companies/'.$company_id;
-						
+					$result['files_path']='companies/'.$company_id;						
 					$full_path = $GO_CONFIG->file_storage_path.$result['files_path'];
-					if(!file_exists($full_path))
-					{
-						$fs->mkdir_recursive($full_path);
-							
-						$folder['user_id']=$GO_SECURITY->user_id;
-						$folder['path']=$full_path;
-						$folder['visible']='0';
-						$folder['acl_read']=$addressbook['acl_read'];
-						$folder['acl_write']=$addressbook['acl_write'];
-							
-						$fs->add_folder($folder);
-					}
+					$fs->check_share($full_path, $GO_SECURITY->user_id, $addressbook['acl_read'], $addressbook['acl_write'],true);
 				}
 				
 			} else {

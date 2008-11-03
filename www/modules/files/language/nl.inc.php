@@ -29,3 +29,6 @@ De volgende wijzigingen zijn aangebracht door %s:
 $lang['files']['modified']='Gewijzigd';
 $lang['files']['new']='Nieuw';
 $lang['files']['deleted']='Verwijderd';
+
+$lang['files']['file']='Bestand';
+$lang['files']['folder']='Map';

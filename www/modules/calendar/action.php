@@ -441,24 +441,10 @@ try{
 						$fs = new files();
 							
 						$response['files_path']='events/'.$event_id;
-
 						$full_path = $GO_CONFIG->file_storage_path.$response['files_path'];
-						if(!file_exists($full_path))
-						{
-							$fs->mkdir_recursive($full_path);
-
-							$folder['user_id']=$GO_SECURITY->user_id;
-							$folder['path']=$full_path;
-							$folder['visible']='0';
-							$folder['acl_read']=$calendar['acl_read'];
-							$folder['acl_write']=$calendar['acl_write'];
-
-							$fs->add_folder($folder);
-						}
+						$fs->check_share($full_path, $GO_SECURITY->user_id, $calendar['acl_read'], $calendar['acl_write'],true);						
 					}
-
-
-
+					
 					$response['event_id']=$event_id;
 					$response['success']=true;
 				}

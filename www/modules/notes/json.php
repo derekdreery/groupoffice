@@ -106,24 +106,7 @@ try{
 				$response['data']['files_path']='notes/'.$response['data']['id'];
 
 				$full_path = $GO_CONFIG->file_storage_path.$response['data']['files_path'];
-				if(!file_exists($full_path))
-				{
-					$fs->mkdir_recursive($full_path);
-
-					if(!$fs->get_folder($full_path))
-					{
-						$folder['user_id']=$response['data']['user_id'];
-						$folder['path']=$full_path;
-						$folder['visible']='0';
-						
-						
-						$folder['acl_read']=$category['acl_read'];
-						$folder['acl_write']=$category['acl_write'];
-						
-
-						$fs->add_folder($folder);
-					}
-				}
+				$fs->check_share($full_path, $response['data']['user_id'], $category['acl_read'], $category['acl_write'],true);
 			}
 						
 			$response['success']=true;

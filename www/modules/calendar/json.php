@@ -377,9 +377,6 @@ try{
 					}
 				}
 			}
-
-
-
 			if(isset($GO_MODULES->modules['files']))
 			{
 				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
@@ -388,25 +385,8 @@ try{
 				$response['data']['files_path']='events/'.$response['data']['id'];
 
 				$full_path = $GO_CONFIG->file_storage_path.$response['data']['files_path'];
-				if(!file_exists($full_path))
-				{
-
-
-					$fs->mkdir_recursive($full_path);
-
-					$folder['user_id']=$response['data']['user_id'];
-					$folder['path']=$full_path;
-					$folder['visible']='0';
-					$folder['acl_read']=$calendar['acl_read'];
-					$folder['acl_write']=$calendar['acl_write'];
-
-					$fs->add_folder($folder);
-				}
+				$fs->check_share($full_path, $GO_SECURITY->user_id, $calendar['acl_read'], $calendar['acl_write'],true);		
 			}
-
-
-
-
 			$response['success']=true;
 
 			break;
