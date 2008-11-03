@@ -534,7 +534,7 @@ class base_db{
 	 * @return bool
 	 */
 
-	public function replace_row($table, $fields, $types, $trim=true)
+	public function replace_row($table, $fields, $types='', $trim=true)
 	{
 		return $this->insert_row($table, $fields, $types,$trim, true);
 	}

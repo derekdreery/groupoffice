@@ -84,7 +84,7 @@ class vcard extends addressbook {
 		$this->_set_revision();		
 		$this->vcf = '';
 		
-		parent::construct();
+		parent::__construct();
 	}
 
 	/**
