@@ -1,4 +1,7 @@
 <?php
+//Uncomment this line in new translations!
+//require($GO_LANGUAGE->get_fallback_language_file('tools'));
+
 $lang['tools']['name']='Tools';
 $lang['tools']['description']='A module to perform administrative tasks.';
 

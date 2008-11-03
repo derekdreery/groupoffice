@@ -1,6 +1,6 @@
-﻿<?php
+<?php
 //Uncomment this line in new translations!
-//require($GO_LANGUAGE->get_fallback_language_file('tasks'));
+require($GO_LANGUAGE->get_fallback_language_file('tasks'));
 
 $lang['tasks']['name']='Aufgaben';
 $lang['tasks']['description']='Beschreibung hier eingeben';

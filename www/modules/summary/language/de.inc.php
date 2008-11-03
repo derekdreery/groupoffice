@@ -1,4 +1,7 @@
 <?php
+//Uncomment this line in new translations!
+require($GO_LANGUAGE->get_fallback_language_file('summary'));
+
 $lang['summary']['name']='Zusammenfassung';
 $lang['summary']['description']='Beschreibung hier eingeben';
 
