@@ -4,7 +4,7 @@
 //Author : Lionel JULLIEN
 //Date : September, 04 2008
 
-require_once($GO_LANGUAGE->get_fallback_base_language_file('filetypes'));
+require($GO_LANGUAGE->get_fallback_base_language_file('filetypes'));
 
 $ft_title = "Types de fichiers";
 $ft_text = "Les types de fichiers sont automatiquement ajoutés par Group-Office. Vous pouvez changer les icones et les noms ici.";

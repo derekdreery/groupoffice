@@ -4,7 +4,7 @@
 //Date : September, 05 2008
 
 //Uncomment this line in new translations!
-require_once($GO_LANGUAGE->get_fallback_language_file('notes'));
+require($GO_LANGUAGE->get_fallback_language_file('notes'));
 
 $modules['notes']['name']='Notes';
 $modules['notes']['description']='Module de gestion des notes.';

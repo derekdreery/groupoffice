@@ -1,6 +1,6 @@
 ﻿<?php
 //Uncomment this line in new translations!
-//require_once($GO_LANGUAGE->get_fallback_language_file('email'));
+//require($GO_LANGUAGE->get_fallback_language_file('email'));
 $lang['email']['name'] = 'E-Mail';
 $lang['email']['description'] = 'E-Mail-Modul; Webbasierter E-Mail-Client. Jeder Benutzer hat die Möglichkeit, E-Mails zu senden, empfangen und weiterzuleiten';
 
