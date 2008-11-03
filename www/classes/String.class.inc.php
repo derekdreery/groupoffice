@@ -530,7 +530,7 @@ class String {
 	 * @access public
 	 * @return string HTML formatted string
 	 */
-	function convert_html($html, $block_external_images=true, &$replace_count) {
+	function convert_html($html, $block_external_images=false, &$replace_count=0) {
 
 		$html = str_replace("\r", '', $html);
 		$html = str_replace("\n",' ', $html);
