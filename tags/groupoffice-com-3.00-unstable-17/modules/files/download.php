@@ -1,0 +1,103 @@
+<?php
+/** 
+ * Copyright Intermesh
+ * 
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ * 
+ * If you have questions write an e-mail to info@intermesh.nl
+ * 
+ * @version $Id$
+ * @copyright Copyright Intermesh
+ * @author Merijn Schering <mschering@intermesh.nl>
+ */
+ 
+//Server and client send the session ID in the URL
+if(isset($_REQUEST['sid']))
+{
+	session_id($_REQUEST['sid']);
+}
+require_once("../../Group-Office.php");
+
+require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
+$fs = new files();
+
+$path = $GO_CONFIG->file_storage_path.($_REQUEST['path']);
+
+$mode = isset($_REQUEST['mode'])  ? $_REQUEST['mode'] : 'download';
+
+/*
+ * Enable browser caching for public files. They expire in one day.
+ */
+$cache = $fs->is_sub_dir($path, $GO_CONFIG->file_storage_path.'public');
+
+if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_permission($GO_SECURITY->user_id, $path))
+{
+	/*if($GO_LOGGER->enabled)
+	{
+		$link_id=$fs->get_link_id_by_path($path);
+		$GO_LOGGER->log('filesystem', 'VIEW '.$path, $link_id);
+	}*/
+	
+	$browser = detect_browser();
+
+	$filename = utf8_basename($path);
+	$extension = File::get_extension($filename);
+
+	$mtime = Date::date_add(filemtime($path),1);
+	
+	
+	header('Content-Length: '.filesize($path));
+	header('Content-Transfer-Encoding: binary');
+
+	if($cache)
+	{
+		header("Expires: " . date("D, j M Y G:i:s ", $mtime) . 'GMT');
+		header("Last-Modified: ".gmdate("D, d M Y H:i:s", $mtime)." GMT");
+		header("ETag: ".md5_file($path));
+		header('Cache-Control: cache');
+		header('Pragma: cache');
+	}
+	
+	if ($browser['name'] == 'MSIE')
+	{
+		header('Content-Type: application/download');
+		if($mode == 'download')
+		{
+			header('Content-Disposition: attachment; filename="'.$filename.'"');
+		}else
+		{
+			header('Content-Disposition: inline; filename="'.$filename.'"');
+		}
+		if(!$cache)
+		{
+			header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+			header('Pragma: public');
+		}
+	}else
+	{
+		debug(File::get_mime($path));
+		header('Content-Type: '.File::get_mime($path));
+		if($mode == 'download')
+		{			
+			header('Content-Disposition: attachment; filename="'.$filename.'"');
+		}else
+		{			
+			header('Content-Disposition: inline; filename="'.$filename.'"');
+		}
+		if(!$cache)
+		{
+			header('Pragma: no-cache');
+		}		
+	}
+
+	$fd = fopen($path,'rb');
+	while (!feof($fd)) {
+		print fread($fd, 32768);
+	}
+	fclose($fd);
+
+}else
+{
+	exit($lang['common']['accessDenied']);
+}
