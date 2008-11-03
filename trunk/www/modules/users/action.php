@@ -150,8 +150,8 @@ try
 					throw new MissingFieldException();
 				}
 
-				if (!preg_match('/^[a-z0-9_-]*$/', $user['username'])) {
-					throw new Exception($error_username);
+				if (!$GO_USERS->check_username($user['username'])) {
+					throw new Exception($lang['users']['error_username']);
 				}
 
 

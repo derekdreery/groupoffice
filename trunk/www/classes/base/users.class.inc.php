@@ -714,6 +714,17 @@ class GO_USERS extends db
 		}
 		return false;
 	}
+	
+	/**
+	 * Check if a string is valid to use for a username
+	 *
+	 * @param string $username
+	 * @return bool true if valid
+	 */
+	function check_username($username)
+	{
+		return preg_match('/^[A-Za-z0-9_-]*$/', $username);
+	}
 
 	/**
 	 * This function adds a new user to the database.
