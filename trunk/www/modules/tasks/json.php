@@ -172,18 +172,7 @@ try{
 				$response['data']['files_path']='tasks/'.$response['data']['id'];
 
 				$full_path = $GO_CONFIG->file_storage_path.$response['data']['files_path'];
-				if(!file_exists($full_path))
-				{
-					$fs->mkdir_recursive($full_path);
-						
-					$folder['user_id']=$response['data']['user_id'];
-					$folder['path']=$full_path;
-					$folder['visible']='0';
-					$folder['acl_read']=$tasklist['acl_read'];
-					$folder['acl_write']=$tasklist['acl_write'];
-						
-					$fs->add_folder($folder);
-				}
+				$fs->check_share($full_path, $response['data']['user_id'], $tasklist['acl_read'], $tasklist['acl_write'],true);
 			}
 			
 			if($_task!='task')

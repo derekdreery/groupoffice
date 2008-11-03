@@ -85,26 +85,10 @@ try{
 					require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
 					$fs = new files();
 
-					$response['files_path']='notes/'.$note_id;
-						
+					$response['files_path']='notes/'.$note_id;						
 					$full_path = $GO_CONFIG->file_storage_path.$response['files_path'];
-					if(!file_exists($full_path))
-					{
-						$fs->mkdir_recursive($full_path);
-							
-						$folder['user_id']=$GO_SECURITY->user_id;
-						$folder['path']=$full_path;
-						$folder['visible']='0';
-						
-						
-						$folder['acl_read']=$category['acl_read'];
-						$folder['acl_write']=$category['acl_write'];
-						
-							
-						$fs->add_folder($folder);
-					}
-				}
-								
+					$fs->check_share($full_path, $GO_SECURITY->user_id, $category['acl_read'], $category['acl_write'],true);
+				}			
 
 				$response['note_id']=$note_id;
 				$response['success']=true;

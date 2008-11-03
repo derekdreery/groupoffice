@@ -238,7 +238,7 @@ try{
 											
 										$folder['path']=$fs->f('path');
 										$folder['grid_display']='<div class="go-grid-icon filetype-folder">'.utf8_basename($share_path).'</div>';
-										$folder['type']='Shared folder';
+										$folder['type']=$lang['files']['folder'];
 										$folder['mtime']=Date::get_timestamp(filemtime($share_path));
 										$folder['size']='-';
 										$folder['extension']='folder';
@@ -407,7 +407,8 @@ try{
 							
 							$folder['path']=$fs->strip_server_path($folder['path']);
 							$folder['grid_display']='<div class="go-grid-icon '.$class.'">'.$folder['name'].'</div>';
-							$folder['type']='Folder';
+							$folder['type']=$lang['files']['folder'];
+							$folder['timestamp']=$folder['mtime'];
 							$folder['mtime']=Date::get_timestamp($folder['mtime']);
 							$folder['size']='-';
 							$folder['extension']='folder';
@@ -432,6 +433,7 @@ try{
 								$file['path']=$fs->strip_server_path($file['path']);
 								$file['grid_display']='<div class="go-grid-icon filetype filetype-'.$extension.'">'.$file['name'].'</div>';
 								$file['type']=File::get_filetype_description($extension);
+								$file['timestamp']=$file['mtime'];
 								$file['mtime']=Date::get_timestamp($file['mtime']);
 								$file['size']=Number::format_size($file['size']);
 								$response['results'][]=$file;
