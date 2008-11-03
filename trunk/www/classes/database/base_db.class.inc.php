@@ -601,5 +601,13 @@ class base_db{
 			$this->error);
 		}
 	}
+	
+	/**
+	 * Close the database connection
+	 *
+	 */
+	public function close(){
+	
+	}
 
 }

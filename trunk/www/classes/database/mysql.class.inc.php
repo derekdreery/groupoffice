@@ -317,4 +317,12 @@ class db extends base_db{
 		$this->link=false;
 		$this->result=false;
 	}
+	
+/**
+	 * Close the database connection
+	 *
+	 */
+	public function close(){
+		return $this->link->close();
+	}
 }
