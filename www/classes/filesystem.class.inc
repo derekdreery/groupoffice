@@ -617,7 +617,7 @@ class filesystem extends db
 					$file['name'] = utf8_basename($file_path);
 					$file['size'] = filesize($file_path);
 					$file['mtime'] = filemtime($file_path);
-					$file['type'] = mime_content_type($file_path);
+					$file['type'] = File::get_mime($file_path);
 
 					$files[] = $file;
 				}
@@ -690,7 +690,7 @@ class filesystem extends db
 					$file['name'] = utf8_basename($item);
 					$file['mtime'] = filemtime($item);
 					$file['size'] = filesize($item);
-					$file['type'] = mime_content_type($item);
+					$file['type'] = File::get_mime($item);
 
 					if(isset($url))
 					{
