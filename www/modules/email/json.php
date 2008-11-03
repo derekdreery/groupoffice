@@ -577,7 +577,9 @@ try{
 				
 			require_once($GO_CONFIG->class_path.'mail/Go2Mime.class.inc.php');
 			$go2mime = new Go2Mime();
-				
+			
+			$response['blocked_images']=0;
+			
 			$response = array_merge($response, $go2mime->mime2GO($data, $inline_url,false, $part_number));
 
 			break;
