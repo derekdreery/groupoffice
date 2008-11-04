@@ -14,11 +14,11 @@ function is_duplicate_contact($record)
 	$db = new db();
 		
 	$sql = "SELECT id FROM ab_contacts WHERE ".
-		"addressbook_id='".$this->escape($record['addressbook_id'])."' AND ".
-		"first_name='".$this->escape($record['first_name'])."' AND ".
-		"middle_name='".$this->escape($record['middle_name'])."' AND ".
-		"last_name='".$this->escape($record['last_name'])."' AND ".
-		"email='".$this->escape($record['email'])."'";
+		"addressbook_id='".$db->escape($record['addressbook_id'])."' AND ".
+		"first_name='".$db->escape($record['first_name'])."' AND ".
+		"middle_name='".$db->escape($record['middle_name'])."' AND ".
+		"last_name='".$db->escape($record['last_name'])."' AND ".
+		"email='".$db->escape($record['email'])."'";
 		
 	$db->query($sql);
 	if($db->num_rows()>1)
@@ -68,12 +68,12 @@ function is_duplicate_event($record)
 	$db = new db();
 	
 	$sql = "SELECT DISTINCT id FROM cal_events WHERE ".
-		"name='".$this->escape($record['name'])."' AND ".
-		"start_time='".$this->escape($record['start_time'])."' AND ".
-		"end_time='".$this->escape($record['end_time'])."' AND ".
-		"calendar_id='".$this->escape($record['calendar_id'])."' AND ".
-		"rrule='".$this->escape($record['rrule'])."' AND ".
-		"user_id='".$this->escape($record['user_id'])."' ORDER BY mtime ASC";
+		"name='".$db->escape($record['name'])."' AND ".
+		"start_time='".$db->escape($record['start_time'])."' AND ".
+		"end_time='".$db->escape($record['end_time'])."' AND ".
+		"calendar_id='".$db->escape($record['calendar_id'])."' AND ".
+		"rrule='".$db->escape($record['rrule'])."' AND ".
+		"user_id='".$db->escape($record['user_id'])."' ORDER BY mtime ASC";
 		
 	$db->query($sql);
 	if($db->num_rows()>1)
