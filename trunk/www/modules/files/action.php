@@ -210,7 +210,6 @@ try{
 					$_SESSION['GO_SESSION']['files']['uploaded_files'][]=$tmp_file;
 				}
 			}
-			
 			$response['success']=true;
 			break;
 

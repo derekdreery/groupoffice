@@ -46,26 +46,26 @@ GO.users.MainPanel = function(config)
 	});
 			
 	config.cm = new Ext.grid.ColumnModel([
-        {id:'username',header: GO.lang['strUsername'], dataIndex: 'username'},
-        {id:'name',header: GO.lang['strName'], dataIndex: 'name', width: 250},
-        {id:'company',header: GO.lang['strCompany'], dataIndex: 'company', width: 200},
-        {id:'logins',header: GO.users.lang['cmdFormLabelTotalLogins'], dataIndex: 'logins', width: 100},
-        {id:'lastlogin',header: GO.users.lang['cmdFormLabelLastLogin'], dataIndex: 'lastlogin', width: 100},
-        {id:'registration_time',header: GO.users.lang['cmdFormLabelRegistrationTime'], dataIndex: 'registration_time', width: 100},
+        {header: GO.lang['strUsername'], dataIndex: 'username'},
+        {header: GO.lang['strName'], dataIndex: 'name', width: 250},
+        {header: GO.lang['strCompany'], dataIndex: 'company', width: 200},
+        {header: GO.users.lang['cmdFormLabelTotalLogins'], dataIndex: 'logins', width: 100},
+        {header: GO.users.lang['cmdFormLabelLastLogin'], dataIndex: 'lastlogin', width: 100},
+        {header: GO.users.lang['cmdFormLabelRegistrationTime'], dataIndex: 'registration_time', width: 100},
         
-        {id:'address',header: GO.lang['strAddress'], dataIndex: 'address', width: 100, hidden: true},
-        {id:'zip',header: GO.lang['strZip'], dataIndex: 'zip', width: 100, hidden: true},
-        {id:'city',header: GO.lang['strCity'], dataIndex: 'city', width: 100, hidden: true},
-        {id:'state',header: GO.lang['strState'], dataIndex: 'state', width: 100, hidden: true},
-        {id:'country',header: GO.lang['strCountry'], dataIndex: 'country', width: 100, hidden: true},
-        {id:'phone',header: GO.lang['strPhone'], dataIndex: 'phone', width: 100, hidden: true},
-        {id:'email',header: GO.lang['strEmail'], dataIndex: 'email', width: 100, hidden: true},
-        {id:'waddress',header: GO.lang['strWorkAddress'], dataIndex: 'waddress', width: 100, hidden: true},
-        {id:'wzip',header: GO.lang['strWorkZip'], dataIndex: 'wzip', width: 100, hidden: true},
-        {id:'wcity',header: GO.lang['strWorkCity'], dataIndex: 'wcity', width: 100, hidden: true},
-        {id:'wstate',header: GO.lang['strWorkState'], dataIndex: 'wstate', width: 100, hidden: true},
-        {id:'wcountry',header: GO.lang['strWorkCountry'], dataIndex: 'wcountry', width: 100, hidden: true},
-        {id:'wphone',header: GO.lang['strWorkPhone'], dataIndex: 'wphone', width: 100, hidden: true}      			        
+        {header: GO.lang['strAddress'], dataIndex: 'address', width: 100, hidden: true},
+        {header: GO.lang['strZip'], dataIndex: 'zip', width: 100, hidden: true},
+        {header: GO.lang['strCity'], dataIndex: 'city', width: 100, hidden: true},
+        {header: GO.lang['strState'], dataIndex: 'state', width: 100, hidden: true},
+        {header: GO.lang['strCountry'], dataIndex: 'country', width: 100, hidden: true},
+        {header: GO.lang['strPhone'], dataIndex: 'phone', width: 100, hidden: true},
+        {header: GO.lang['strEmail'], dataIndex: 'email', width: 100, hidden: true},
+        {header: GO.lang['strWorkAddress'], dataIndex: 'waddress', width: 100, hidden: true},
+        {header: GO.lang['strWorkZip'], dataIndex: 'wzip', width: 100, hidden: true},
+        {header: GO.lang['strWorkCity'], dataIndex: 'wcity', width: 100, hidden: true},
+        {header: GO.lang['strWorkState'], dataIndex: 'wstate', width: 100, hidden: true},
+        {header: GO.lang['strWorkCountry'], dataIndex: 'wcountry', width: 100, hidden: true},
+        {header: GO.lang['strWorkPhone'], dataIndex: 'wphone', width: 100, hidden: true}      			        
     ]);
 	config.cm.defaultSortable = true;
 		    	
@@ -93,8 +93,18 @@ GO.users.MainPanel = function(config)
 		  		cls: 'x-btn-text-icon', 
 		  		handler: this.deleteSelected,  
 		  		scope: this
+		  	},{
+		  		text:'import',
+		  		handler:function(){
+		  			if(!this.importDialog)
+		  			{
+		  				this.importDialog = new GO.users.ImportDialog();
+		  			}
+		  			this.importDialog.show();
+		  		},
+		  		scope:this		  		
 		  	},
-				 	new Ext.Toolbar.Separator(),
+				'-',
 		         GO.lang['strSearch']+':',
 		        this.searchField
 		    ]});
