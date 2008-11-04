@@ -72,3 +72,8 @@ GO.users.lang.maxUsersReached='Het maximaal aantal gebruikers is bereikt. Ga naa
 GO.users.lang.group='Groep';
 
 GO.users.lang.muteSound='Demp geluiden';
+
+
+GO.users.lang.downloadSampleCSV='Download voorbeeld CSV';
+
+GO.users.lang.importText='U kunt gebruikers importeren met een CSV bestand. Om te zien hoe dit bestand eruit moet zien kunt u het voorbeeldbestand downloaden.<br />De eerste regel moet de kollomnamen bevatten en de volgende velden zijn vereist voor elke gebruiker:<br /><br />username, password, first_name, last_name, email';

@@ -78,3 +78,7 @@ GO.users.lang.maxUsersReached='The maximum number of users has been reached. Go 
 GO.users.lang.group='Group';
 
 GO.users.lang.muteSound='Mute sound';
+
+GO.users.lang.downloadSampleCSV='Download sample CSV';
+
+GO.users.lang.importText='You can import users using a CSV file. To know how the CSV file should be formatted, download the sample file.<br />The first line must contain the column names. The following fields are required for each user:<br /><br />username, password, first_name, last_name, email';

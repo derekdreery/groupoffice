@@ -11,6 +11,11 @@ $link_type[8]=$us_user = 'User';
 
 $lang['users']['error_username']='You have invalid characters in the username';
 $lang['users']['error_username_exists']='Sorry, that username already exists';
-$lang['users']['error_email_exists']='Sorry, that e-mail address is already registered here. You can use the forgotten password feature to recover your password.';
+$lang['users']['error_email_exists']='Sorry, that e-mail address is already registered here.';
 $lang['users']['error_match_pass']='The passwords didn\'t match';
 $lang['users']['error_email']='You entered an invalid e-mail address';
+
+$lang['users']['imported']='Imported %s users';
+$lang['users']['failed']='Failed';
+
+$lang['users']['incorrectFormat']='File was not in correct CSV format';

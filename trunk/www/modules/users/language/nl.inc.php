@@ -12,6 +12,11 @@ $link_type[8]=$us_user = 'Gebruiker';
 
 $lang['users']['error_username']='Er staan ongeldige tekens in de gebruikersnaam';
 $lang['users']['error_username_exists']='Sorry, die gebruikersnaam bestaat al';
-$lang['users']['error_email_exists']='Sorry, dat e-mail adres staat hier al geregistreerd. U kunt de vergeten-wachtwoord-functie niet gebruiken om uw wachtwoord terug te halen.';
+$lang['users']['error_email_exists']='Sorry, dat e-mail adres staat hier al geregistreerd.';
 $lang['users']['error_match_pass']='De wachtwoorden kwamen niet overeen';
 $lang['users']['error_email']='U heeft een ongeldig e-mail adres ingevoerd';
+
+$lang['users']['imported']='%s gebruikers geïmporteerd';
+$lang['users']['failed']='Mislukt';
+
+$lang['users']['incorrectFormat']='Bestand was niet in het jusite CSV formaat';
