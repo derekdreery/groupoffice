@@ -905,7 +905,7 @@ class files extends filesystem
 		if(!is_dir($userdir))
 			mkdir($userdir, 0755, true);
 			
-		$folder = $this->get_folder($userdir);		
+		$folder = $this->get_folder('users/'.$user['username']);		
 		if(empty($folder['acl_read']))
 		{
 			$up_folder['id']=$folder['id'];
