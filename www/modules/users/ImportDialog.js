@@ -4,7 +4,7 @@ GO.users.ImportDialog = Ext.extend(Ext.Window, {
 		
 		this.title=GO.lang.cmdImport;
 		
-		this.width=300;
+		this.width=500;
 		this.autoHeight=true;
 		
 		this.closeAction='hide';

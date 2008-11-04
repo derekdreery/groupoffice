@@ -95,7 +95,7 @@ GO.users.MainPanel = function(config)
 		  		scope: this
 		  	},{
 		  		iconCls: 'btn-upload',
-		  		text:'import',
+		  		text:GO.lang.cmdImport,
 		  		handler:function(){
 		  			if(!this.importDialog)
 		  			{
