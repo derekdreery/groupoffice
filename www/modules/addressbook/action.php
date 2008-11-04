@@ -431,18 +431,13 @@ try
 												$company['name']=$company_name;
 												
 												$contact['company_id']=$ab->add_company($company);
-											}
-											
-										}else {
-											
-											
-											
+											}											
+										}else {											
 											$contact['company_id']=0;
 										}
 
 										$contact['addressbook_id'] = $addressbook_id;
 										$ab->add_contact($contact);
-
 									}
 								} else {
 									if (isset ($record[$_POST['name']]) && $record[$_POST['name']] != '')

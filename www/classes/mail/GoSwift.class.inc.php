@@ -317,9 +317,7 @@ class GoSwift extends Swift{
 			0,
 			$this->account['use_ssl'],
 			$this->account['novalidate_cert'])) {
-					
-
-					
+									
 				$this->data = $this->message->build();
 				$this->data = $this->data->readFull();
 
