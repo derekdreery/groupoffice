@@ -10,7 +10,8 @@
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
- 
+
+
 GO.lang.moduleRequired='Deze functie vereist de \'{module}\' module. Deze module is niet beschikbaar.';
  
 GO.lang.completeProfile = 'Vul uw profiel aan a.u.b.';
@@ -109,6 +110,7 @@ GO.lang.cmdUnlink = 'Ontkoppelen';
 GO.lang.cmdClose = 'Sluiten';
 GO.lang.cmdSettings = 'Instellingen';
 GO.lang.cmdReset = 'Resetten';
+GO.lang.cmdImport='Importeren';
 
 GO.lang.cmdActions = 'Acties';
 
