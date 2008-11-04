@@ -137,11 +137,14 @@ class db extends base_db {
 				
 		$param_count = count($params);
 		
+		//replace ? with ''?'' becuase that string can never occur in a user submitted value.
+		$sql = str_replace('?', "''?''", $sql);
+		
 		if($param_count>0)
 		{
 			for($i=0;$i<$param_count;$i++)
 			{
-				$sql = String::replace_once('?', "'".$this->escape($params[$i])."'", $sql);
+				$sql = String::replace_once("''?''", "'".$this->escape($params[$i])."'", $sql);
 			}
 		}
 
