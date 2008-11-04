@@ -135,6 +135,12 @@ class imapauth extends db
 								$account['user_id']=$user_id;
 								$account['type']=$config['proto'];
 								$account['host']=$config['host'];
+								$account['smtp_host']=$config['smtp_host'];
+								$account['smtp_port']=$config['smtp_port'];
+								$account['smtp_encryption']=$config['smtp_encryption'];
+								$account['smtp_username']=$config['smtp_username'];
+								$account['smtp_password']=$config['smtp_password'];
+								
 								$account['port']=$config['port'];
 								$account['use_ssl']=$config['ssl'];
 								$account['novalidate_cert']=$config['novalidate_cert'];
