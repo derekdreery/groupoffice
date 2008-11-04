@@ -188,7 +188,7 @@ class GoSwift extends Swift{
 		if($type=='html')
 		{
 			//replace URL's with anchor tags
-			$body = preg_replace('/[\s\n]{1}http(s?):\/\/([^\b<\n]*)/', "<a href=\"http$1://$2\">http$1://$2</a>", $body);
+			//$body = preg_replace('/[\s\n;]{1}http(s?):\/\/([^\b<\n]*)/', "<a href=\"http$1://$2\">http$1://$2</a>", $body);
 		}
 		
 		//add body
