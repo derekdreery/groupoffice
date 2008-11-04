@@ -92,10 +92,16 @@ if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_per
 	}
 
 	$fd = fopen($path,'rb');
-	while (!feof($fd)) {
-		print fread($fd, 32768);
+	if($fd)
+	{
+		while (!feof($fd)) {
+			print fread($fd, 32768);
+		}
+		fclose($fd);
+	}else
+	{
+		trigger_error('Could not open '.$path, E_USER_ERROR);
 	}
-	fclose($fd);
 
 }else
 {
