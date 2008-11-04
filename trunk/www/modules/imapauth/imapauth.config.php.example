@@ -17,6 +17,12 @@ $config[] =
 	'groups' => array('Internal'),
 	'visible_groups' => array('Everyone', 'Internal'),
 	'modules_read' => array('email', 'files', 'addressbook', 'calendar', 'tasks', 'notes', 'summary'),
-	'modules_write' => array()
+	'modules_write' => array(),
+	
+	'smtp_host'='localhost',
+	'smtp_port'='25',
+	'smtp_encryption='8',
+	'smtp_username'='',
+	'smtp_password'=''
 	);
 ?>
