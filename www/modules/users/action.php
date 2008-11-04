@@ -1,17 +1,17 @@
 <?php
-/** 
+/**
  * Copyright Intermesh
- * 
+ *
  * This file is part of Group-Office. You should have received a copy of the
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
- * 
+ *
  * If you have questions write an e-mail to info@intermesh.nl
- * 
+ *
  * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
- 
+
 
 require_once("../../Group-Office.php");
 $GO_SECURITY->json_authenticate('users');
@@ -28,6 +28,130 @@ try
 {
 	switch($task)
 	{
+		case 'import':
+			$cols[]='username';
+			$cols[]='password';
+			$cols[]='enabled';
+			$cols[]='first_name';
+			$cols[]='middle_name';
+			$cols[]='last_name';
+			$cols[]='initials';
+			$cols[]='title';
+			$cols[]='sex';
+			$cols[]='birthday';
+			$cols[]='email';
+			$cols[]='company';
+			$cols[]='department';
+			$cols[]='function';
+			$cols[]='home_phone';
+			$cols[]='work_phone';
+			$cols[]='fax';
+			$cols[]='cellular';
+			$cols[]='country';
+			$cols[]='state';
+			$cols[]='city';
+			$cols[]='zip';
+			$cols[]='address';
+			$cols[]='address_no';
+			$cols[]='homepage';
+			$cols[]='work_address';
+			$cols[]='work_address_no';
+			$cols[]='work_zip';
+			$cols[]='work_country';
+			$cols[]='work_state';
+			$cols[]='work_city';
+			$cols[]='work_fax';
+				
+			$import_file = $GO_CONFIG->tmpdir.'userimport.csv';
+			if (is_uploaded_file($_FILES['importfile']['tmp_name'][0]))
+			{
+				move_uploaded_file($_FILES['importfile']['tmp_name'][0], $import_file);
+			}
+
+			if(!file_exists($import_file))
+			{
+				throw new Exception('File was not uploaded!');
+			}
+				
+			$fp = fopen($import_file, "r");
+			if(!$fp)
+			{
+				throw new Exception('Could not open uploaded file');
+			}
+
+			$record = fgetcsv($fp, 4096, ',', '"');
+			for($i=0;$i<count($cols);$i++)
+			{
+				if(empty($record[$i]) || $record[$i]!=$cols[$i])
+				{
+					throw new Exception('File was not in correct format. "'.implode('","', $cols).'"');
+				}
+			}
+				
+			$failed = array();
+			
+			$success_count = 0;
+
+			while($record = fgetcsv($fp, 4096, ',', '"'))
+			{
+				$user = array();
+
+				for($i=0;$i<count($cols);$i++)
+				{
+					$user[$cols[$i]]=$record[$i];
+				}						
+
+				if(empty($user['username']) || empty($user['password']) || empty($user['email']) || empty($user['first_name']) || empty($user['last_name']))
+				{
+					$failed[]=$user['username'].': '.$lang['common']['missingField'];
+					continue;
+				}
+				
+				if (!$GO_USERS->check_username($user['username'])) {
+					$failed[]=$user['username'].': '.$lang['users']['error_username'];
+					continue;
+				}
+
+				if (!String::validate_email($user['email'])) {
+					$failed[]=$user['username'].': '.$lang['users']['error_email'];
+					continue;
+				}
+
+				$existing_email_user = $GO_CONFIG->allow_duplicate_email ? false : $GO_USERS->get_user_by_email($user['email']);
+
+				if ($existing_email_user && ($user_id == 0 || $existing_email_user['id'] != $user_id)) {
+					$failed[]=$user['username'].': '.$lang['users']['error_email_exists'];
+					continue;
+				}
+				
+				//User is ok to add
+				$user_id = $GO_USERS->add_user($user);
+				
+				if(!$user_id)
+				{
+					$failed[]=$user['username'].': '.$lang['comon']['saveError'];
+					continue;
+				}else
+				{
+					$success_count++;
+				}
+			}
+			
+			$feedback = 'Imported '.$success_count.' users.';
+			
+			if(count($failed))
+			{
+				$feedback .= "\nFailed: ".implode("\n", $failed);
+			}
+			
+			debug($feedback);
+			
+			throw new Exception($feedback);
+
+
+			break;
+
+
 		case 'save_user':
 			$user['id'] = isset($_POST['user_id']) ? ($_POST['user_id']) : 0;
 			if(isset($_POST['first_name']))
@@ -35,9 +159,9 @@ try
 				$user['first_name'] = $_POST['first_name'];
 				$user['middle_name'] = $_POST['middle_name'];
 				$user['last_name'] = $_POST['last_name'];
-				
+
 				$user['email'] = $_POST["email"];
-			
+					
 				$user['enabled'] = isset($_POST['enabled']) ? '1' : '0' ;
 				$user['title'] = $_POST["title"];
 
@@ -72,7 +196,7 @@ try
 				{
 					throw new MissingFieldException();
 				}
-				
+
 
 				if (!String::validate_email($user['email'])) {
 					throw new Exception($lang['users']['error_email']);
@@ -81,13 +205,9 @@ try
 				$existing_email_user = $GO_CONFIG->allow_duplicate_email ? false : $GO_USERS->get_user_by_email($user['email']);
 
 				if ($existing_email_user && ($user_id == 0 || $existing_email_user['id'] != $user_id)) {
-					{
-						throw new Exception($lang['users']['error_email_exists']);
-					}
+					throw new Exception($lang['users']['error_email_exists']);
 				}
-				
 			}
-
 
 			if(isset($_POST['theme']))
 			{
@@ -136,11 +256,11 @@ try
 
 				$GO_USERS->update_user($user);
 
-				$response['success']=true;					
+				$response['success']=true;
 					
 			} else {
-				
-				
+
+
 				$user['password'] = $_POST["password1"];
 				$password2 = $_POST["password2"];
 				$user['username'] = $_POST['username'];
@@ -158,8 +278,8 @@ try
 				if ($user['password'] != $password2) {
 					throw new Exception($lang['users']['error_match_pass']);
 				}
-				
-				
+
+
 				if($user['enabled'] == '1')
 				{
 					$password = $user['password']; // = ($_POST["pass1"]);
@@ -167,7 +287,7 @@ try
 					$password='';
 				}
 
-				
+
 				//deprecated modules get updated below
 				$modules_read = array_map('trim', explode(',',$GO_CONFIG->register_modules_read));
 				$modules_write = array_map('trim', explode(',',$GO_CONFIG->register_modules_write));
@@ -175,27 +295,27 @@ try
 				$visible_user_groups = $GO_GROUPS->groupnames_to_ids(array_map('trim',explode(',',$GO_CONFIG->register_visible_user_groups)));
 
 				$user_id = $GO_USERS->add_user($user, $user_groups, $visible_user_groups, $modules_read, $modules_write);
-				
-				
-				if($GO_MODULES->modules['files'])
+
+
+				/*if($GO_MODULES->modules['files'])
 				{
 					require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
 					$fs = new files();
 
-					$response['files_path']='users/'.$user_id;						
+					$response['files_path']='users/'.$user_id;
 					$full_path = $GO_CONFIG->file_storage_path.$response['files_path'];
 					$fs->check_share($full_path, 1, $GO_MODULES->modules['users']['acl_read'], $GO_MODULES->modules['users']['acl_write']);
-				}
-				
-				
+				}*/
+
+
 				//confirm registration to the user and exit the script so the form won't load
 				$response['success'] = true;
 				$response['user_id']=$user_id;
-				
+
 				//for permissions below
 				$old_user = $GO_USERS->get_user($user_id);
 			}
-				
+
 			//set permissions
 
 
@@ -216,7 +336,7 @@ try
 					{
 						if(!$GO_SECURITY->user_in_acl($user_id, $mod['acl_read']))
 						{
-							$GO_SECURITY->add_user_to_acl($user_id, $mod['acl_read']);							
+							$GO_SECURITY->add_user_to_acl($user_id, $mod['acl_read']);
 						}
 					} else {
 						if($GO_SECURITY->user_in_acl($user_id, $mod['acl_read']))
@@ -277,11 +397,11 @@ try
 			}
 
 			//end permissions
-			
-			
-				
-				
-				
+
+
+
+
+
 			echo json_encode($response);
 			break;
 
@@ -305,4 +425,3 @@ catch(Exception $e)
 
 	echo json_encode($response);
 }
-?>

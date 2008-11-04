@@ -45,6 +45,10 @@ function utf8_basename($path)
 	{
 		$path = substr($path,0,-1);
 	}
+	if(empty($path))
+	{
+		return '';
+	}
 	return mb_substr($path, mb_strrpos($path, '/')+1);
 }
 

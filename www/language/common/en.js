@@ -129,6 +129,7 @@ GO.lang.cmdSettings = 'Settings';
 GO.lang.cmdReset = 'Reset';
 GO.lang.cmdExport='Export';
 GO.lang.cmdPrint='Print';
+GO.lang.cmdImport='Import';
 
 GO.lang.cmdActions = 'Actions';
 
