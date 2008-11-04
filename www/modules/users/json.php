@@ -32,7 +32,7 @@ switch($task)
 		if(isset($_POST['delete_keys']))
 		{
 			try{				
-				if(!$GO_MODULES->modules['users']['write_permission'])
+				if(!$GO_MODULES->modules['users']['read_permission'])
 				{
 					throw new AccessDeniedException();
 				}

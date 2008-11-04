@@ -61,7 +61,9 @@ try
 			$cols[]='work_state';
 			$cols[]='work_city';
 			$cols[]='work_fax';
-				
+
+
+
 			$import_file = $GO_CONFIG->tmpdir.'userimport.csv';
 			if (is_uploaded_file($_FILES['importfile']['tmp_name'][0]))
 			{
@@ -72,7 +74,7 @@ try
 			{
 				throw new Exception('File was not uploaded!');
 			}
-				
+
 			$fp = fopen($import_file, "r");
 			if(!$fp)
 			{
@@ -84,12 +86,22 @@ try
 			{
 				if(empty($record[$i]) || $record[$i]!=$cols[$i])
 				{
-					throw new Exception('File was not in correct format. "'.implode('","', $cols).'"');
+					throw new Exception($lang['users']['incorrectFormat']);
 				}
 			}
-				
+
+			$modules_read = array_map('trim', explode(',',$GO_CONFIG->register_modules_read));
+			$modules_write = array_map('trim', explode(',',$GO_CONFIG->register_modules_write));
+
+			//user groups the user will be added to.
+			$user_groups = $GO_GROUPS->groupnames_to_ids(array_map('trim',explode(',',$GO_CONFIG->register_user_groups)));
+
+			//user groups that this user will be visible to
+			$visible_user_groups = $GO_GROUPS->groupnames_to_ids(array_map('trim',explode(',',$GO_CONFIG->register_visible_user_groups)));
+
+
 			$failed = array();
-			
+
 			$success_count = 0;
 
 			while($record = fgetcsv($fp, 4096, ',', '"'))
@@ -99,14 +111,14 @@ try
 				for($i=0;$i<count($cols);$i++)
 				{
 					$user[$cols[$i]]=$record[$i];
-				}						
+				}
 
 				if(empty($user['username']) || empty($user['password']) || empty($user['email']) || empty($user['first_name']) || empty($user['last_name']))
 				{
 					$failed[]=$user['username'].': '.$lang['common']['missingField'];
 					continue;
 				}
-				
+
 				if (!$GO_USERS->check_username($user['username'])) {
 					$failed[]=$user['username'].': '.$lang['users']['error_username'];
 					continue;
@@ -123,10 +135,10 @@ try
 					$failed[]=$user['username'].': '.$lang['users']['error_email_exists'];
 					continue;
 				}
-				
+
 				//User is ok to add
-				$user_id = $GO_USERS->add_user($user);
-				
+				$user_id = $GO_USERS->add_user($user, $user_groups, $visible_user_groups, $modules_read, $modules_write);
+
 				if(!$user_id)
 				{
 					$failed[]=$user['username'].': '.$lang['comon']['saveError'];
@@ -136,19 +148,17 @@ try
 					$success_count++;
 				}
 			}
-			
-			$feedback = 'Imported '.$success_count.' users.';
-			
+
+			$response['feedback'] = sprintf($lang['users']['imported'],$success_count);
+
 			if(count($failed))
 			{
-				$feedback .= "\nFailed: ".implode("\n", $failed);
+				$response['feedback'] .= "BRBR".$lang['users']['failed'].":BR".implode("BRBR", $failed);
 			}
-			
-			debug($feedback);
-			
-			throw new Exception($feedback);
 
+			$response['success']=true;
 
+			echo json_encode($response);
 			break;
 
 
@@ -298,14 +308,14 @@ try
 
 
 				/*if($GO_MODULES->modules['files'])
-				{
-					require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
-					$fs = new files();
+				 {
+				 require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
+				 $fs = new files();
 
-					$response['files_path']='users/'.$user_id;
-					$full_path = $GO_CONFIG->file_storage_path.$response['files_path'];
-					$fs->check_share($full_path, 1, $GO_MODULES->modules['users']['acl_read'], $GO_MODULES->modules['users']['acl_write']);
-				}*/
+				 $response['files_path']='users/'.$user_id;
+				 $full_path = $GO_CONFIG->file_storage_path.$response['files_path'];
+				 $fs->check_share($full_path, 1, $GO_MODULES->modules['users']['acl_read'], $GO_MODULES->modules['users']['acl_write']);
+				 }*/
 
 
 				//confirm registration to the user and exit the script so the form won't load
@@ -422,6 +432,5 @@ catch(Exception $e)
 {
 	$response['success']=false;
 	$response['feedback']=$e->getMessage();
-
 	echo json_encode($response);
 }

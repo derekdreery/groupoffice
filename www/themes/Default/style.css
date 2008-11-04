@@ -266,6 +266,10 @@ a.normal-link:hover{
 	background-image:url('images/16x16/info.png') !important;
 }
 
+.btn-upload{
+	background-image:url('images/16x16/upload.png') !important;
+}
+
 /* end buttons */
 
 /*start edit buttons */

@@ -94,11 +94,13 @@ GO.users.MainPanel = function(config)
 		  		handler: this.deleteSelected,  
 		  		scope: this
 		  	},{
+		  		iconCls: 'btn-upload',
 		  		text:'import',
 		  		handler:function(){
 		  			if(!this.importDialog)
 		  			{
 		  				this.importDialog = new GO.users.ImportDialog();
+		  				this.importDialog.on('import', function(){this.store.reload();}, this);
 		  			}
 		  			this.importDialog.show();
 		  		},
