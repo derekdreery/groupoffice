@@ -290,7 +290,7 @@ try{
 								//Browsers reformat URL's so a pattern match
 								//$body = str_replace($inlineAttachment['url'], $src_id, $body);			
 								$just_filename = utf8_basename($inlineAttachment['url']);	
-								$body = preg_replace('/=".*'.preg_quote($just_filename).'"/', '="'.$src_id.'"', $body);	
+								$body = preg_replace('/="[^"]*'.preg_quote($just_filename).'"/', '="'.$src_id.'"', $body);	
 							}						
 
 							$swift->set_body($body);
