@@ -561,7 +561,7 @@ class String {
 	{
 		//$html = preg_replace("/<img(.*)src=([\"']?)http([^>])/", "<img$1src=$2blocked:http$3", $html);
 		//$html = preg_replace("/<([^=]*)=[\"']?http[^\"'\s>]*/", "<$1=\"blocked\"", $html);
-		$html = preg_replace("/<([^>]*)https?:([^>]*)/", "<$1blocked:$2", $html, -1, $replace_count);
+		$html = preg_replace("/<([^a]{1})([^>]*)https?:([^>]*)/", "<$1$2blocked:$3", $html, -1, $replace_count);
 	}
 
 	return $html;
