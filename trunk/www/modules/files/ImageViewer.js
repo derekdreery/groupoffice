@@ -49,16 +49,11 @@ GO.files.ImageViewer = Ext.extend(Ext.Window, {
 	
 	show : function(images, index)
 	{
-		//this.render(Ext.getBody());
-		
-		
 		GO.files.ImageViewer.superclass.show.call(this);
 		
 		this.viewerImages = images;
 		
-		this.loadImage(index);	
-		
-		
+		this.loadImage(index);		
 	},
 	
 	loadImage : function(index)
