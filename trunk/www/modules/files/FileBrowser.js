@@ -54,7 +54,8 @@ GO.files.FileBrowser = function(config){
 		ddAppendOnly: true,
 		containerScroll: true,
 		ddGroup : 'FilesDD',
-		enableDD:true
+		enableDD:true,
+		selModel:new Ext.tree.MultiSelectionModel()
 		
 	});
 	
@@ -90,10 +91,19 @@ GO.files.FileBrowser = function(config){
 
 	this.treePanel.on('contextmenu', function(node, e){
 		e.stopEvent();
-		this.contextTreePath = node.id;
+		
+		var selModel = this.treePanel.getSelectionModel();
+		
+		if(!selModel.isSelected(node))
+		{
+			selModel.clearSelections();
+			selModel.select(node);
+		}
+		
+		var records = this.getSelectedTreeRecords();
 		
 		var coords = e.getXY();
-		this.filesContextMenu.showAt([coords[0], coords[1]], 'folder', 'tree');
+		this.filesContextMenu.showAt(coords, records, 'tree');
 	}, this);
 	
 	this.treePanel.on('beforenodedrop', function(e){
@@ -122,15 +132,14 @@ GO.files.FileBrowser = function(config){
 		root: 'results',
 		totalProperty: 'total',
 		id: 'path',
-		fields:['path','name','type', 'size', 'mtime', 'grid_display', 'extension', 'timestamp'],
+		fields:['path','name','type', 'size', 'mtime', 'grid_display', 'extension', 'timestamp', 'thumb_url'],
 		remoteSort:true
 	});
 	
 	if(config.filesFilter)
 	{		
 		this.setFilesFilter(config.filesFilter);
-	}
-	
+	}	
 	
 	this.gridStore.on('load', function(store){
 		this.setWritePermission(store.reader.jsonData.write_permission);
@@ -149,6 +158,7 @@ GO.files.FileBrowser = function(config){
 	
 	
 	this.gridPanel = new GO.grid.GridPanel( {
+			id:'files-grid',
 			region:'center',
 			layout:'fit',
 			split:true,
@@ -189,9 +199,7 @@ GO.files.FileBrowser = function(config){
 			sm: new Ext.grid.RowSelectionModel(),
 			loadMask: true,
 			enableDragDrop: true,
-			ddGroup : 'FilesDD'
-			
-		
+			ddGroup : 'FilesDD'		
 		});
 		
 	
@@ -213,59 +221,31 @@ GO.files.FileBrowser = function(config){
 	
 	this.filesContextMenu = new GO.files.FilesContextMenu();
 	
-	this.filesContextMenu.on('properties', function(menu, clickedAt){
-		
-		if(clickedAt=='tree')
-		{			
-			this.showFolderPropertiesDialog(this.contextTreePath);
-		}else
-		{
-			this.showGridPropertiesDialog();
-		}	
+	this.filesContextMenu.on('properties', function(menu, records){		
+		this.showPropertiesDialog(records[0]);
 	}, this);
 	
-	this.filesContextMenu.on('cut', function(menu, clickedAt){		
-		this.onCutCopy('cut', clickedAt);
+	this.filesContextMenu.on('cut', function(menu, records){		
+		this.onCutCopy('cut', records);
 	}, this);
 
-	this.filesContextMenu.on('copy', function(menu, clickedAt){		
-		this.onCutCopy('copy', clickedAt);
+	this.filesContextMenu.on('copy', function(menu, records){		
+		this.onCutCopy('copy', records);
 	}, this);
 	
-	this.filesContextMenu.on('delete', function(menu, clickedAt){		
+	this.filesContextMenu.on('delete', function(menu, records, clickedAt){		
 		this.onDelete(clickedAt);
 	}, this);
 	
-	this.filesContextMenu.on('compress', function(menu, clickedAt){		
-		this.onCompress(clickedAt);
+	this.filesContextMenu.on('compress', function(menu, records, clickedAt){		
+		this.onCompress(records);
 	}, this);
 	
-	this.filesContextMenu.on('decompress', function(menu, clickedAt){		
-		this.onDecompress(clickedAt);
+	this.filesContextMenu.on('decompress', function(menu, records){		
+		this.onDecompress(records);
 	}, this);
 	
-	
-	this.filesContextMenu.on('download', function(){
-		var selectionModel = this.gridPanel.getSelectionModel();
-		var record = selectionModel.getSelected();
-		
-		window.location.href=GO.settings.modules.files.url+'download.php?mode=download&path='+record.data.path;
-	}, this);
-	
-	this.filesContextMenu.on('gota', function(){
-		var selectionModel = this.gridPanel.getSelectionModel();
-		var record = selectionModel.getSelected();
-		
-		if(!deployJava.isWebStartInstalled('1.6.0'))
-		{
-			Ext.MessageBox.alert(GO.lang.strError, GO.lang.noJava);
-		}else
-		{		
-			window.location.href=GO.settings.modules.gota.url+'jnlp.php?path='+record.data.path;
-		}
-	}, this);
-		
-	
+
 	this.gridPanel.on('rowcontextmenu', this.onGridRowContextMenu, this);
 	
 	
@@ -340,7 +320,8 @@ GO.files.FileBrowser = function(config){
 					text: GO.lang.cut,
 					cls: 'x-btn-text-icon',
 					handler: function(){
-						this.onCutCopy('cut', 'grid');
+						var records = this.getSelectedGridRecords();
+						this.onCutCopy('cut', records);
 					},
 					scope: this
 				});
@@ -349,7 +330,8 @@ GO.files.FileBrowser = function(config){
 					text: GO.lang.copy,
 					cls: 'x-btn-text-icon',
 					handler: function(){
-						this.onCutCopy('copy', 'grid');
+						var records = this.getSelectedGridRecords();
+						this.onCutCopy('copy', records);
 					},
 					scope: this
 				});
@@ -371,7 +353,58 @@ GO.files.FileBrowser = function(config){
 				this.deleteButton
 				
 			]});
-	config['items']=[this.locationPanel, this.treePanel,this.gridPanel];
+
+	this.thumbsPanel = new GO.files.ThumbsPanel({
+		store: this.gridStore,
+		id:'files-thumbs'
+	});
+	
+	this.thumbsPanel.view.on('dblclick', function(view, index, node, e){
+		
+		var record = view.store.getAt(index);
+		
+		if(record.data.extension=='folder')
+		{
+			this.setPath(record.data.path, true);	
+		}else
+		{
+			if(this.fileClickHandler)
+			{
+				this.fileClickHandler.call(this.scope);
+			}else
+			{
+				GO.files.openFile(record.data.path, this.gridStore);
+			}			
+		}
+	}, this);
+	
+	this.thumbsPanel.view.on('contextmenu', function(view, index, node, e){		 
+		
+		if(!view.isSelected(index))
+		{
+			view.clearSelections();			
+			view.selectRange(index, index);			
+		}
+		var records = view.getSelectedRecords();
+		
+		e.stopEvent();
+		this.contextTreePath = node.id;
+		
+		var coords = e.getXY();
+		this.filesContextMenu.showAt(coords, records);
+		
+	}, this);
+	
+	this.cardPanel =new Ext.TabPanel({
+			region:'center',
+			activeTab: 0,
+			deferredRender:false,
+		  border:false,
+		  anchor:'100% 100%',
+			items:[this.gridPanel, this.thumbsPanel]		
+		});
+			
+	config['items']=[this.locationPanel, this.treePanel,this.cardPanel];
 //config['items']=[this.treePanel,this.gridPanel];
 	
 	GO.files.FileBrowser.superclass.constructor.call(this, config);
@@ -610,11 +643,14 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		}		
 	},
 	
-	onDecompress : function(clickedAt){
+	onDecompress : function(records){
 		
-
-		var decompress_sources = this.gridPanel.selModel.selections.keys;
-		
+		var decompress_sources = [];		
+		for(var i=0;i<records.length;i++)
+		{
+			decompress_sources.push(records[i].data.path);
+		}
+				
 		if(decompress_sources.length)
 		{		
 			this.gridStore.baseParams['decompress_sources']=Ext.encode(decompress_sources);
@@ -633,9 +669,13 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		}		
 	},
 	
-	onCompress : function(clickedAt, filename)
-	{
-		var compress_sources = this.gridPanel.selModel.selections.keys;
+	onCompress : function(records, filename)
+	{		
+		var compress_sources = [];		
+		for(var i=0;i<records.length;i++)
+		{
+			compress_sources.push(records[i].data.path);
+		}		
 		
 		if(compress_sources.length)
 		{		
@@ -643,7 +683,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			{
 				Ext.Msg.prompt(GO.files.lang.enterName, GO.files.lang.pleaseEnterNameArchive, 
 					function(id, filename){ 
-						this.onCompress(clickedAt, filename);
+						this.onCompress(records, filename);
 					},this);
 			}else
 			{
@@ -661,24 +701,38 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 					},
 					scope: this
 				});
+				delete this.gridStore.baseParams['compress_sources'];
 				delete this.gridStore.baseParams['archive_name'];
 			}		
 		}
 	},
 	
-	onCutCopy : function(pasteMode, clickedAt){
-		if(clickedAt=='tree')
-		{
-			var record = {};
-		  record.data={};
-		  record.data['extension']='folder';
-		  record.data['path']=this.contextTreePath;
-		  this.pasteSelections= [record];
-		}else
+	getSelectedTreeRecords : function(){
+		 var sm = this.treePanel.getSelectionModel();		 
+		 var nodes = sm.getSelectedNodes();
+		 
+		 var records=[];
+		 
+		 for(var i=0;i<nodes.length;i++)
+		 {
+		 	records.push({data: {path: nodes[i].id, extension:'folder'}});
+		 }
+		 return records;		
+	},
+	
+	getSelectedGridRecords : function(){
+		if(this.cardPanel.getLayout().activeItem.id=='files-grid')
 		{
 			var selModel = this.gridPanel.getSelectionModel();
-			this.pasteSelections=selModel.getSelections();			
+			return selModel.getSelections();
+		}else
+		{
+			return this.thumbsPanel.view.getSelectedRecords();
 		}
+	},
+	
+	onCutCopy : function(pasteMode, records){		
+		this.pasteSelections=records;
 		this.pasteMode=pasteMode;
 		if(this.pasteSelections.length)
 		{
@@ -690,14 +744,16 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			this.paste(this.pasteMode, this.path, this.pasteSelections);
 	},
 	
-	onDelete : function(clickedAt){
+	onDelete : function(clickedAt){		
+				
 		if(clickedAt=='tree')
 		{
+			var records = this.getSelectedTreeRecords();
 			GO.deleteItems({
 				url:GO.settings.modules.files.url+'action.php',
 				params:{
 					task:'delete',
-					path: this.contextTreePath	
+					path: records[0]	
 				},
 				count:1,
 				callback:function(responseParams){
@@ -722,21 +778,39 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			});
 		}else
 		{
-			this.gridPanel.deleteSelected({
-				callback:function(){				
-					var treeNode = this.treePanel.getNodeById(this.path);
-					if(treeNode)
-					{
-						while(treeNode.attributes.notreloadable)
+			if(this.cardPanel.getLayout().activeItem.id=='files-grid')
+			{
+				this.gridPanel.deleteSelected({
+					callback:function(){				
+						var treeNode = this.treePanel.getNodeById(this.path);
+						if(treeNode)
 						{
-							treeNode=treeNode.parentNode;
-						}
-						treeNode.reload();
-					}		
-				},
-				scope:this
-			});
-			
+							while(treeNode.attributes.notreloadable)
+							{
+								treeNode=treeNode.parentNode;
+							}
+							treeNode.reload();
+						}		
+					},
+					scope:this
+				});
+			}else
+			{
+				this.thumbsPanel.deleteSelected({
+					callback:function(){				
+						var treeNode = this.treePanel.getNodeById(this.path);
+						if(treeNode)
+						{
+							while(treeNode.attributes.notreloadable)
+							{
+								treeNode=treeNode.parentNode;
+							}
+							treeNode.reload();
+						}		
+					},
+					scope:this
+				});
+			}			
 		}
 	},
 	
@@ -784,17 +858,11 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
       if(selModel.isSelected(rowIndex) !== true) {
           selModel.clearSelections();
           selModel.selectRow(rowIndex);
-      }   
-			
-			var extension = '';
-			var selections = selModel.getSelections();
-			if(selections.length=='1')
-			{				
-    		extension = selections[0].data.extension;				
-			}
+      }
+			var selections = selModel.getSelections();	
 			
 			var coords = e.getXY();
-			this.filesContextMenu.showAt([coords[0], coords[1]], extension, 'grid');
+			this.filesContextMenu.showAt(coords, selections);
 	},
 	
 	paste : function(pasteMode, destination, records)
@@ -1205,15 +1273,19 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			Ext.Msg.alert(GO.lang['strError'], GO.files.lang.errorOneItem);
 		}else
 		{
+			this.showPropertiesDialog(selections[0]);
 			
-			if(selections[0].data.extension=='folder')
-			{
-				this.showFolderPropertiesDialog(selections[0].data.path);
-			}else
-			{
-				this.showFilePropertiesDialog(selections[0].data.path);
-				
-			}
+		}
+	},
+	
+	showPropertiesDialog : function(record)
+	{
+		if(record.data.extension=='folder')
+		{
+			this.showFolderPropertiesDialog(record.data.path);
+		}else
+		{
+			this.showFilePropertiesDialog(record.data.path);			
 		}
 	}
 });

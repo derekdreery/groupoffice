@@ -25,7 +25,9 @@ GO.files.FilesContextMenu = function(config)
 					text: GO.lang.download,
 					cls: 'x-btn-text-icon',
 					handler: function(){
-						this.fireEvent('download', this, this.clickedAt);
+						//this.fireEvent('download', this, this.records);
+						
+						window.location.href=GO.settings.modules.files.url+'download.php?mode=download&path='+this.records[0].data.path;
 					},
 					scope: this
 				});
@@ -35,7 +37,13 @@ GO.files.FilesContextMenu = function(config)
 					text: GO.files.lang.downloadGOTA,
 					cls: 'x-btn-text-icon',
 					handler: function(){
-						this.fireEvent('gota', this, this.clickedAt);
+						if(!deployJava.isWebStartInstalled('1.6.0'))
+						{
+							Ext.MessageBox.alert(GO.lang.strError, GO.lang.noJava);
+						}else
+						{		
+							window.location.href=GO.settings.modules.gota.url+'jnlp.php?path='+this.records[0].data.path;
+						}
 					},
 					scope: this
 				});
@@ -55,7 +63,7 @@ GO.files.FilesContextMenu = function(config)
 					text: GO.lang['cmdDelete'],
 					cls: 'x-btn-text-icon',
 					handler: function(){
-						this.fireEvent('delete', this, this.clickedAt);
+						this.fireEvent('delete', this, this.records, this.clickedAt);
 					},
 					scope: this
 				});
@@ -65,7 +73,7 @@ GO.files.FilesContextMenu = function(config)
 					text: GO.lang.cut,
 					cls: 'x-btn-text-icon',
 					handler: function(){
-						this.fireEvent('cut', this, this.clickedAt);
+						this.fireEvent('cut', this, this.records, this.clickedAt);
 					},
 					scope: this
 				});
@@ -74,7 +82,7 @@ GO.files.FilesContextMenu = function(config)
 					text: GO.lang.copy,
 					cls: 'x-btn-text-icon',
 					handler: function(){
-						this.fireEvent('copy', this, this.clickedAt);
+						this.fireEvent('copy', this, this.records, this.clickedAt);
 					},
 					scope: this
 				});
@@ -85,7 +93,7 @@ GO.files.FilesContextMenu = function(config)
 					text: GO.lang.compress,
 					cls: 'x-btn-text-icon',
 					handler: function(){
-						this.fireEvent('compress', this, this.clickedAt);
+						this.fireEvent('compress', this, this.records, this.clickedAt);
 					},
 					scope: this
 				});
@@ -94,14 +102,13 @@ GO.files.FilesContextMenu = function(config)
 				text: GO.lang.decompress,
 				cls: 'x-btn-text-icon',
 				handler: function(){
-					this.fireEvent('decompress', this, this.clickedAt);
+					this.fireEvent('decompress', this, this.records, this.clickedAt);
 				},
 				scope: this
 			});
 	
 	
-	config['items']=[
-				this.downloadButton];
+	config['items']=[this.downloadButton];
 				
 	if(GO.settings.modules.gota && GO.settings.modules.gota.read_permission)
 	{
@@ -113,7 +120,7 @@ GO.files.FilesContextMenu = function(config)
 		iconCls: 'btn-properties',
 		text: GO.lang['strProperties'], 
 		handler: function(){
-				this.fireEvent('properties', this, this.clickedAt);
+				this.fireEvent('properties', this, this.records);
 		},
 		scope:this					
 	});
@@ -145,41 +152,59 @@ GO.files.FilesContextMenu = function(config)
 }
 
 Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
-	/*tree or grid */
+	/*tree or grid */	
+	
 	clickedAt : 'grid',
 	
-	showAt : function(xy, extension, clickedAt)
+	records : [],	
+	
+	
+	showAt : function(xy, records, clickedAt)
 	{ 	
-		this.clickedAt = clickedAt;
- 	
-		switch(extension)
-	 	{
-	 		case 'zip':
-	 		case 'tar':
-	 		case 'tgz':
-	 		case 'gz':
-	 			this.downloadButton.show();
-	 			this.gotaButton.show();
-	 			this.decompressButton.show();
-	 			this.compressButton.hide();
-	 		break;
-	 		
-	 		case '':
-			case 'folder':
-	 			this.downloadButton.hide();
-	 			this.gotaButton.hide();
-	 			this.decompressButton.hide();
-	 			this.compressButton.show();
-	 			
-	 		break;
-	 		
-	 		default:
-	 			this.downloadButton.show();
-	 			this.gotaButton.show();
-	 			this.compressButton.show();	
-	 			this.decompressButton.hide();
-	 		break;	 		
-	 	} 	
+		if(clickedAt)
+			this.clickedAt = clickedAt;
+			
+		var extension = '';
+		this.records = records;
+		if(records.length=='1')
+		{				
+  		extension = records[0].data.extension;				
+			
+			switch(extension)
+		 	{
+		 		case 'zip':
+		 		case 'tar':
+		 		case 'tgz':
+		 		case 'gz':
+		 			this.downloadButton.show();
+		 			this.gotaButton.show();
+		 			this.decompressButton.show();
+		 			this.compressButton.hide();
+		 		break;
+		 		
+		 		case '':
+				case 'folder':
+		 			this.downloadButton.hide();
+		 			this.gotaButton.hide();
+		 			this.decompressButton.hide();
+		 			this.compressButton.show();
+		 			
+		 		break;
+		 		
+		 		default:
+		 			this.downloadButton.show();
+		 			this.gotaButton.show();
+		 			this.compressButton.show();	
+		 			this.decompressButton.hide();
+		 		break;	 		
+		 	}
+		}else
+		{
+			this.compressButton.show();
+			this.decompressButton.hide();
+			this.downloadButton.hide();
+		 	this.gotaButton.hide();
+		} 	
 		GO.files.FilesContextMenu.superclass.showAt.call(this, xy);
 	}	
 });
