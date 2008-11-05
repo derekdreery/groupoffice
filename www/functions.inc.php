@@ -40,7 +40,7 @@ function utf8_basename($path)
 	{
 		return basename($path);
 	}
-	$path = trim($path);
+	//$path = trim($path);
 	if(substr($path,-1,1)=='/')
 	{
 		$path = substr($path,0,-1);
