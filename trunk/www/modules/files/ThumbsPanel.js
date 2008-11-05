@@ -31,6 +31,8 @@ GO.files.ThumbsPanel = Ext.extend(Ext.Panel, {
             }
         })];
         
+     this.autoScroll=true;
+        
      GO.files.ThumbsPanel.superclass.initComponent.call(this);
 		
 	},
