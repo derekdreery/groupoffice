@@ -37,7 +37,7 @@ GO.email.AddressbookDialog = function(config){
 
 	var items = Array();
 	this.usersStore = new GO.data.JsonStore({
-	    url: GO.settings.modules.users.url+'json.php',
+	    url: GO.settings.modules.users.url+'non_admin_json.php',
 	    baseParams: {task: 'users'},
 	    id: 'id',
 	    root: 'results',
@@ -48,6 +48,7 @@ GO.email.AddressbookDialog = function(config){
 	    	'country','phone','email',
 	    	'waddress','wzip','wcity',
 	    	'wstate','wcountry','wphone'],
+	    totalProperty: 'total',
 	    remoteSort: true
 	});
     
@@ -106,6 +107,7 @@ GO.email.AddressbookDialog = function(config){
 			    baseParams: {task: 'contacts'},
 			    root: 'results',
 			    id: 'id',
+			    totalProperty: 'total',
 			    fields: ['id', 'name', 'company_name', 'email', 'home_phone', 'work_phone', 'work_fax', 'cellular'],
 			    remoteSort: true
 			});				
@@ -156,6 +158,7 @@ GO.email.AddressbookDialog = function(config){
 		    baseParams: {task: 'companies'},
 		    root: 'results',
 		    id: 'id',
+		    totalProperty: 'total',
 		    fields: ['id', 'name', 'city', 'email', 'phone', 'homepage', 'address', 'zip'],
 		    remoteSort: true
 		});		
