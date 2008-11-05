@@ -76,6 +76,22 @@ class files extends filesystem
 				return $GO_THEME->image_url.'128x128/filetypes/doc.png';
 				break;
 			
+			case 'odc':
+			case 'xls':
+			case 'xlsx':
+				return $GO_THEME->image_url.'128x128/filetypes/spreadsheet.png';
+				break;
+			
+			case 'odp':
+			case 'pps':
+			case 'pptx':
+				return $GO_THEME->image_url.'128x128/filetypes/pps.png';
+				break;
+				
+			case 'htm':
+				return $GO_THEME->image_url.'128x128/filetypes/doc.png';
+				break;
+			
 			default:
 				if(file_exists($GO_THEME->theme_path.'images/128x128/filetypes/'.$extension.'.png'))
 				{
