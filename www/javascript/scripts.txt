@@ -24,6 +24,7 @@ javascript/grids/CheckColumn.js
 javascript/common.js
 javascript/state/HttpProvider.js
 
+javascript/plugins/DataView.js
 javascript/plugins/HtmlEditorImageInsert.js
 javascript/panels/IframeComponent.js
 javascript/windows/SelectGroups.js

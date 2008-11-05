@@ -31,6 +31,16 @@ try{
 
 	switch($task)
 	{
+		case 'set_view':
+			
+			$up_folder['path']=$_POST['path'];
+			$up_folder['thumbs']=$_POST['thumbs'];
+			
+			$fs->update_folder($up_folder);
+			
+			$response['success']=true;
+			
+			break;
 		case 'delete':
 			
 			$delete_path = $GO_CONFIG->file_storage_path.$_POST['path'];

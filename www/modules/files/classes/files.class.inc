@@ -56,11 +56,34 @@ class files extends filesystem
 			case 'jpeg';
 			case 'png';
 			case 'gif';
-				return phpThumbURL('src='.$path.'&w=128&h=128&zc=1');
+				return phpThumbURL('src='.$path.'&w=100&h=100&zc=1');
 			break;
 			
+			case 'pdf':
+				return $GO_THEME->image_url.'128x128/filetypes/pdf.png';
+				break;
+
+			case 'tar':
+			case 'tgz':
+			case 'gz':
+			case 'bz2':
+			case 'zip':
+				return $GO_THEME->image_url.'128x128/filetypes/zip.png';
+				break;
+			case 'odt':
+			case 'docx':
+			case 'doc':
+				return $GO_THEME->image_url.'128x128/filetypes/doc.png';
+				break;
+			
 			default:
-				return $GO_THEME->image_url.'128x128/filetypes/unknown.png';
+				if(file_exists($GO_THEME->theme_path.'images/128x128/filetypes/'.$extension.'.png'))
+				{
+					return $GO_THEME->image_url.'128x128/filetypes/'.$extension.'.png';
+				}else
+				{
+					return $GO_THEME->image_url.'128x128/filetypes/unknown.png';
+				}
 			break;	
 			
 		}

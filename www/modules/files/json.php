@@ -236,6 +236,7 @@ try{
 									{
 										$last_folder = $share_path;
 											
+										$folder['thumb_url']=$GO_THEME->image_url.'128x128/filetypes/folder.png';										
 										$folder['path']=$fs->f('path');
 										$folder['grid_display']='<div class="go-grid-icon filetype-folder">'.utf8_basename($share_path).'</div>';
 										$folder['type']=$lang['files']['folder'];
@@ -249,8 +250,20 @@ try{
 						}
 					}else
 					{
-						$path = $GO_CONFIG->file_storage_path.$_POST['path'];
+						$path = $GO_CONFIG->file_storage_path.$_POST['path'];						
 						
+						$db_folder = $fs->get_folder($_POST['path']);						
+						$response['thumbs']=$db_folder['thumbs'];
+						
+						/*if($db_folder['thumbs']=='0' && !empty($_POST['thumbs']))
+						{
+							$up_folder['id']=$db_folder['id'];
+							$up_folder['thumbs']='1';
+							
+							$fs->update_folder($up_folder);
+							$response['thumbs']='1';
+							
+						}*/
 						
 						if(!empty($_POST['create_path']) && !is_dir($path))
 						{
@@ -296,7 +309,6 @@ try{
 						{
 							if(!empty($_POST['template_id']) && !empty($_POST['template_name']))
 							{
-
 								$template = $fs->get_template($_POST['template_id'], true);
 
 								$new_path = $path.'/'.$_POST['template_name'].'.'.$template['extension'];
@@ -405,7 +417,8 @@ try{
 								$class='filetype-folder';
 							}
 							
-							$folder['thumb_url']=$GO_THEME->image_url.'128x128/filetypes/folder.png';
+							$folder['thumb_url']=$GO_THEME->image_url.'128x128/filetypes/folder.png';							
+							$folder['thumbs']=$db_folder['thumbs'];
 							$folder['path']=$fs->strip_server_path($folder['path']);
 							$folder['grid_display']='<div class="go-grid-icon '.$class.'">'.$folder['name'].'</div>';
 							$folder['type']=$lang['files']['folder'];
@@ -429,8 +442,8 @@ try{
 							$extension = File::get_extension($file['name']);
 							
 							if(!isset($extensions) || in_array($extension, $extensions))
-							{							
-								$file['thumb_url']=$fs->get_thumb_url($file['path']);
+							{		
+								$file['thumb_url']=$fs->get_thumb_url($file['path']);								
 								$file['extension']=$extension;
 								$file['path']=$fs->strip_server_path($file['path']);
 								$file['grid_display']='<div class="go-grid-icon filetype filetype-'.$extension.'">'.$file['name'].'</div>';

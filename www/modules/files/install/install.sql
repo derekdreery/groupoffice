@@ -37,20 +37,20 @@ CREATE TABLE IF NOT EXISTS `fs_files` (
 -- 
 -- Tabel structuur voor tabel `fs_folders`
 -- 
-
 DROP TABLE IF EXISTS `fs_folders`;
 CREATE TABLE IF NOT EXISTS `fs_folders` (
   `user_id` int(11) NOT NULL default '0',
   `id` int(11) NOT NULL,
-  `path` varchar(255) NOT NULL default '',
+  `path` varchar(255) NOT NULL,
   `visible` enum('0','1') NOT NULL,
   `acl_read` int(11) NOT NULL default '0',
   `acl_write` int(11) NOT NULL default '0',
   `comments` text NOT NULL,
+  `thumbs` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`path`),
   KEY `link_id_2` (`id`),
   KEY `visible` (`visible`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;;
 
 -- --------------------------------------------------------
 
