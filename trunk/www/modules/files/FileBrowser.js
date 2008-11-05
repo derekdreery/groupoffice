@@ -350,7 +350,7 @@ GO.files.FileBrowser = function(config){
 				this.deleteButton,
 				'-',
 				this.thumbsToggle = new Ext.Button({
-					text: 'Thumbnails',
+					text: GO.files.lang.thumbnails,
 	        enableToggle: true,
 	        toggleHandler: function(item, pressed){
 	        	if(pressed)
