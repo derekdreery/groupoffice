@@ -18,3 +18,4 @@ GO.files.lang.notifyChanges = 'Notify me about changes in this folder';
 GO.files.lang.comments = 'Comments';
 GO.files.lang.downloadGOTA = 'Download with GOTA';
 GO.files.lang.fileBrowser = 'File browser';
+GO.files.lang.thumbnails = 'Thumbnails';

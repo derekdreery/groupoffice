@@ -14,4 +14,4 @@ GO.files.lang.notifyChanges = 'Stel me op de hoogte van veranderingen in deze ma
 GO.files.lang.comments = 'Commentaren';
 GO.files.lang.downloadGOTA = 'Download met GOTA';
 GO.files.lang.fileBrowser = 'Bestands verkenner';
-
+GO.files.lang.thumbnails = 'Pictogrammen';
