@@ -135,8 +135,8 @@ eval("use File::Copy;");
 			$sFilePath = $sServerDir . $sFileName;
 			if(-e $sFilePath) {
 				$iCounter++ ;
-				($path,$BaseName,$ext) = &RemoveExtension($sOriginalFileName);
-				$sFileName = $BaseName . '(' . $iCounter . ').' . $ext;
+				($path,$utf8_basename,$ext) = &RemoveExtension($sOriginalFileName);
+				$sFileName = $utf8_basename . '(' . $iCounter . ').' . $ext;
 				$sErrorNumber = '201';
 			} else {
 				copy("$img_dir/$new_fname","$sFilePath");

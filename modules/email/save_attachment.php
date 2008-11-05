@@ -31,7 +31,7 @@ if ($filename != '' && $_SERVER['REQUEST_METHOD'] != 'POST')
 
 if ($filename == '')
 {
-	$filename = basename($_SESSION['email_tmp_file']);
+	$filename = utf8_basename($_SESSION['email_tmp_file']);
 }else
 {
 	$filename = smart_stripslashes($filename);

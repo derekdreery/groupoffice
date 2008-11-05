@@ -69,7 +69,7 @@ if ($template == 'random') {
 }
 
 if ($template != 'xml') {
-  $template = basename(APP_ROOT . '/templates/' . $template); 
+  $template = utf8_basename(APP_ROOT . '/templates/' . $template); 
   // figure out if we got a template passed in the url
   if (!file_exists(APP_ROOT . "/templates/$template")) {
     // default template we should use if we don't get a argument.
@@ -85,7 +85,7 @@ if (!isset($lng)) {
   $lng = isset($_COOKIE['lng']) ? $_COOKIE['lng'] : $default_lng;
 }
 
-$lng = basename(APP_ROOT . '/includes/lang/' . $lng . '.php', '.php');
+$lng = utf8_basename(APP_ROOT . '/includes/lang/' . $lng . '.php', '.php');
 
 if (!file_exists(APP_ROOT . '/includes/lang/' . $lng . '.php')) {
   // see if the browser knows the right languange.

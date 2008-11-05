@@ -112,7 +112,7 @@ if ($GO_CONFIG->window_mode == 'popup') {
 				
 				$select->add_optgroup($user['name']);
 				for ($i = 0; $i < $share_count; $i ++) {
-					$select->add_value($shares[$i], basename($shares[$i]));
+					$select->add_value($shares[$i], utf8_basename($shares[$i]));
 				}
 			}
 		}

@@ -240,7 +240,7 @@ class ImageEditor
 		$pathinfo = pathinfo($fullpath);
 
 		$path = Files::fixPath($pathinfo['dirname']);
-		$file = Files::escape($pathinfo['basename']);
+		$file = Files::escape($pathinfo['utf8_basename']);
 		
 		$filename = $file;
 
@@ -329,7 +329,7 @@ class ImageEditor
             $unique_str = $this->manager->getTmpPrefix().$this->_uid.'_'.$this->uniqueStr().".".$imgType;
         }
 
-		$this->cleanUp($path,$pathinfo['basename']);
+		$this->cleanUp($path,$pathinfo['utf8_basename']);
 
 		Return $unique_str;
 	}

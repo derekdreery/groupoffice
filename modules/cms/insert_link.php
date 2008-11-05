@@ -25,6 +25,6 @@ function _insertHyperlink(url, name)
 }
 </script>
 </head>
-<body onload="javascript:_insertHyperlink('<?php echo $url; ?>','<?php echo basename($path); ?>');">
+<body onload="javascript:_insertHyperlink('<?php echo $url; ?>','<?php echo utf8_basename($path); ?>');">
 </body>
 </html>

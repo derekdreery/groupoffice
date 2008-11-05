@@ -55,7 +55,7 @@ if ($attachments_size < $GO_CONFIG->max_attachment_size)
 		$tmp_file = $GO_CONFIG->tmpdir.md5(uniqid(time()));
 		if (copy($file, $tmp_file))
 		{
-			$filename = basename($file);
+			$filename = utf8_basename($file);
 			$email->register_attachment($tmp_file, $filename, filesize($file), mime_content_type($file), 'attachment');
 		}
 	}

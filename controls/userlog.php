@@ -19,7 +19,7 @@ $fs = new filesystem();
 
 $path = $GO_CONFIG->file_storage_path.'userlogs/'.$GO_SECURITY->user_id.'/'.smart_stripslashes($_REQUEST['log']);
 
-$filename = basename($path);
+$filename = utf8_basename($path);
 
 header('Content-Length: '.filesize($path));
 header('Content-Type: text/plain');

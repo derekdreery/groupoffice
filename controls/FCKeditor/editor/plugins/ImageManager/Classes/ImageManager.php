@@ -275,7 +275,7 @@ class ImageManager
 	{
 		$path_parts = pathinfo($fullpathfile);
 		
-		$thumbnail = $this->config['thumbnail_prefix'].$path_parts['basename'];
+		$thumbnail = $this->config['thumbnail_prefix'].$path_parts['utf8_basename'];
 
 		if($this->config['safe_mode'] == true
 			|| strlen(trim($this->config['thumbnail_dir'])) == 0)
@@ -308,7 +308,7 @@ class ImageManager
 	function getThumbURL($relative) 
 	{
 		$path_parts = pathinfo($relative);
-		$thumbnail = $this->config['thumbnail_prefix'].$path_parts['basename'];
+		$thumbnail = $this->config['thumbnail_prefix'].$path_parts['utf8_basename'];
 		if($path_parts['dirname']=='\\') $path_parts['dirname']='/';
 
 		if($this->config['safe_mode'] == true

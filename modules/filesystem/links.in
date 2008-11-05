@@ -47,7 +47,7 @@ if(count($links))
 	{
 		$row = new table_row($fs->f('path'));
 		
-		$filename = basename($fs->f('path'));
+		$filename = utf8_basename($fs->f('path'));
 		
 		if(is_dir($fs->f('path')))
 		{

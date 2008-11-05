@@ -113,7 +113,7 @@ function install_font_family($fontname, $normal, $bold = null, $italic = null, $
     throw new DOMPDF_Exception("Unable to read '$normal'.");
     
   $dir = dirname($normal);
-  list($file, $ext) = explode(".", basename($normal), 2);  // subtract extension
+  list($file, $ext) = explode(".", utf8_basename($normal), 2);  // subtract extension
     
   // Try $file_Bold.$ext etc.
   $ext = ".$ext";
@@ -195,7 +195,7 @@ function install_font_family($fontname, $normal, $bold = null, $italic = null, $
     foreach ($fonts as $var => $src) {
 
       if ( is_null($src) ) {
-        $entry[$var] = DOMPDF_FONT_DIR . basename($normal);
+        $entry[$var] = DOMPDF_FONT_DIR . utf8_basename($normal);
         continue;
       }
       
@@ -203,7 +203,7 @@ function install_font_family($fontname, $normal, $bold = null, $italic = null, $
       if ( !is_readable($src) ) 
         throw new User_DOMPDF_Exception("Requested font '$pathname' is not readable");
       
-      $dest = DOMPDF_FONT_DIR . basename($src);
+      $dest = DOMPDF_FONT_DIR . utf8_basename($src);
       if ( !is_writeable(dirname($dest)) )
         throw new User_DOMPDF_Exception("Unable to write to destination '$dest'.");
         
@@ -223,10 +223,10 @@ function install_font_family($fontname, $normal, $bold = null, $italic = null, $
   if ( mb_strtolower($ext) === ".ttf") {
     foreach ($fonts as $var => $font) {
       if ( is_null($font) ) {
-        $entry[$var] = DOMPDF_FONT_DIR . mb_substr(basename($normal), 0, -4);
+        $entry[$var] = DOMPDF_FONT_DIR . mb_substr(utf8_basename($normal), 0, -4);
         continue;
       }
-      $dest = DOMPDF_FONT_DIR . mb_substr(basename($font),0, -4);
+      $dest = DOMPDF_FONT_DIR . mb_substr(utf8_basename($font),0, -4);
       echo "Generating .afm for $font...\n";
       exec( _TTF2AFM . " " . escapeshellarg($font) . " " . $dest . " &> /dev/null", $output, $ret );
       

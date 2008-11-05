@@ -33,6 +33,32 @@ require_once($GO_CONFIG->root_path.'functions_compat.inc');
  }
  */
 
+/**
+ * Get's the last file or directory name of a filesystem path and works
+ * with UTF-8 too unlike the basename function in PHP.
+ *
+ * @param string $path
+ * @return string basename
+ */
+
+function utf8_basename($path)
+{
+	if(!function_exists('mb_substr'))
+	{
+		return basename($path);
+	}
+	//$path = trim($path);
+	if(substr($path,-1,1)=='/')
+	{
+		$path = substr($path,0,-1);
+	}
+	if(empty($path))
+	{
+		return '';
+	}
+	return mb_substr($path, mb_strrpos($path, '/')+1);
+}
+
 function trim_lines($text)
 {
 	go_log(LOG_DEBUG, $text);
@@ -722,7 +748,7 @@ function gmt_to_local_time($gmt_time) {
 	
 	
 	$timezone_offset = get_timezone_offset($gmt_time, true);
-//	if(basename($_SERVER['PHP_SELF'])=='book.php')
+//	if(utf8_basename($_SERVER['PHP_SELF'])=='book.php')
 	//	echo date('Ymd G:i', $gmt_time).' -> '.$timezone_offset.'<br />';
 		
 	$local_time = $gmt_time + ($timezone_offset * 3600);
@@ -733,7 +759,7 @@ function gmt_to_local_time($gmt_time) {
 function local_to_gmt_time($local_time) {
 	$timezone_offset = get_timezone_offset($local_time);	
 	$gmt_time = $local_time - ($timezone_offset * 3600);
-	//if(basename($_SERVER['PHP_SELF'])=='book.php')
+	//if(utf8_basename($_SERVER['PHP_SELF'])=='book.php')
 	//{
 	//	echo date('Ymd G:i', $local_time).' -> '.$timezone_offset.'<br />';
 	//	echo date('Ymd G:i', $gmt_time).' -> '.$timezone_offset.'<br />';

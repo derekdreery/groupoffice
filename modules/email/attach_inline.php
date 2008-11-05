@@ -53,7 +53,7 @@ header('Content-Type: text/html; charset='.$charset);
 if ($attachments_size < $GO_CONFIG->max_attachment_size)
 {
 	$GO_URL = $GO_MODULES->url.'download.php?path='.urlencode($path);
-	$filename = basename($path);
+	$filename = utf8_basename($path);
 	$content_id = md5(uniqid(time())).'@groupoffice';
 
 	$tmp_file = $GO_CONFIG->tmpdir.md5(uniqid(time())).'.'.strip_extension($filename);

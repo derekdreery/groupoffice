@@ -51,7 +51,7 @@ while($file = array_shift($_FILES))
 				}
 		}
 		
-		$destination_path=$_SESSION['GO_FILESYSTEM_PATH'].'/'.basename($file['name']);
+		$destination_path=$_SESSION['GO_FILESYSTEM_PATH'].'/'.utf8_basename($file['name']);
 		
 		if($GO_LOGGER->enabled)
 		{
@@ -74,7 +74,7 @@ while($file = array_shift($_FILES))
 		{
 			$user = $GO_USERS->get_user($user_id);
 			
-			$subject = sprintf($fs_new_file_uploaded, basename($file['name']));
+			$subject = sprintf($fs_new_file_uploaded, utf8_basename($file['name']));
 			
 			$link = new hyperlink($GO_CONFIG->full_url.'index.php?return_to='.
 				urlencode($GO_MODULES->url.'index.php?path='.
@@ -83,7 +83,7 @@ while($file = array_shift($_FILES))
 			$link->set_attribute('target','_blank');
 			$link->set_attribute('class','blue');
 		
-			$body = sprintf($fs_file_put_in, basename($file['name']), $_SESSION['GO_FILESYSTEM_PATH']).'<br>'.$link->get_html();
+			$body = sprintf($fs_file_put_in, utf8_basename($file['name']), $_SESSION['GO_FILESYSTEM_PATH']).'<br>'.$link->get_html();
 			
 			sendmail($user['email'], $_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name'], $subject, $body, '3', 'text/HTML');
 		}

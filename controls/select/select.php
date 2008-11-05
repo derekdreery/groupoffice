@@ -389,7 +389,7 @@ switch($mode)
 							$search_fields->add_optgroup($user['username']);
 							for ($i=0;$i<$share_count;$i++)
 							{
-							  $search_fields->add_value($shares[$i], basename($shares[$i]));
+							  $search_fields->add_value($shares[$i], utf8_basename($shares[$i]));
 							}
 			      }
 			    }

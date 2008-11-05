@@ -84,7 +84,7 @@ if($_POST['multiselect'] == 'true')
 		break;
 		
 		case 'file':		
-			$name_field_value = basename($value);
+			$name_field_value = utf8_basename($value);
 		break;
 	}
 	?>

@@ -342,7 +342,7 @@ function MakeFont($fontfile,$afmfile,$enc='cp1252',$patch=array(),$type='TrueTyp
 	$s.='$cw='.$w.";\n";
 	$s.='$enc=\''.$enc."';\n";
 	$s.='$diff=\''.$diff."';\n";
-	$basename=substr(basename($afmfile),0,-4);
+	$utf8_basename=substr(utf8_basename($afmfile),0,-4);
 	if($fontfile)
 	{
 		//Embedded font
@@ -370,14 +370,14 @@ function MakeFont($fontfile,$afmfile,$enc='cp1252',$patch=array(),$type='TrueTyp
 		}
 		if(function_exists('gzcompress'))
 		{
-			$cmp=$basename.'.z';
+			$cmp=$utf8_basename.'.z';
 			SaveToFile($cmp,gzcompress($file),'b');
 			$s.='$file=\''.$cmp."';\n";
 			echo 'Font file compressed ('.$cmp.')<BR>';
 		}
 		else
 		{
-			$s.='$file=\''.basename($fontfile)."';\n";
+			$s.='$file=\''.utf8_basename($fontfile)."';\n";
 			echo '<B>Notice:</B> font file could not be compressed (gzcompress not available)<BR>';
 		}
 		if($type=='Type1')
@@ -394,6 +394,6 @@ function MakeFont($fontfile,$afmfile,$enc='cp1252',$patch=array(),$type='TrueTyp
 		$s.='$file='."'';\n";
 	}
 	$s.="?>\n";
-	SaveToFile($basename.'.php',$s);
-	echo 'Font definition file generated ('.$basename.'.php'.')<BR>';
+	SaveToFile($utf8_basename.'.php',$s);
+	echo 'Font definition file generated ('.$utf8_basename.'.php'.')<BR>';
 }

@@ -16,7 +16,7 @@ $mode = isset ($mode) ? $mode : 'normal';
 function access_denied_box($file) {
 	global $strAccessDenied;
 	$string = "<script type=\"text/javascript\" language=\"javascript\">\n";
-	$string .= "alert('".$strAccessDenied.": ".basename($file)."');\n";
+	$string .= "alert('".$strAccessDenied.": ".utf8_basename($file)."');\n";
 	$string .= "</script>\n";
 	return $string;
 }
@@ -119,7 +119,7 @@ switch ($task) {
 
 		while ($file = smart_stripslashes(array_shift($_SESSION['cut_files']))) {
 
-			if ($file != $fv->path.'/'.basename($file)) {
+			if ($file != $fv->path.'/'.utf8_basename($file)) {
 				if (!$fs->has_write_permission($GO_SECURITY->user_id, $file)) {
 					$popup_feedback .= access_denied_box($file);
 					break;
@@ -128,10 +128,10 @@ switch ($task) {
 					$popup_feedback .= access_denied_box($fv->path);
 					break;
 				}
-				elseif (file_exists($fv->path.'/'.basename($file))) {
-					if ($overwrite_destination_path == $fv->path.'/'.basename($file) || $overwrite_all == 'true') {
+				elseif (file_exists($fv->path.'/'.utf8_basename($file))) {
+					if ($overwrite_destination_path == $fv->path.'/'.utf8_basename($file) || $overwrite_all == 'true') {
 						if ($overwrite == "true") {
-							$new_path = $fv->path.'/'.basename($file);
+							$new_path = $fv->path.'/'.utf8_basename($file);
 							$fs->move($file, $new_path);					
 							
 							$file_link_id = $fs->get_link_id($new_path);									
@@ -140,13 +140,13 @@ switch ($task) {
 					} else {
 						array_unshift($_SESSION['cut_files'], $file);
 						$overwrite_source_path = $file;
-						$overwrite_destination_path = $fv->path.'/'.basename($file);
+						$overwrite_destination_path = $fv->path.'/'.utf8_basename($file);
 						$task = 'overwrite';
 						break;
 					}
 				} else {
 
-					if(!$fs->move($file, $fv->path.'/'.basename($file)))
+					if(!$fs->move($file, $fv->path.'/'.utf8_basename($file)))
 					{
 						$feedback = $fs_inssufficient_diskspace;
 					}
@@ -155,7 +155,7 @@ switch ($task) {
 			}
 		}
 		while ($file = smart_stripslashes(array_shift($_SESSION['copy_files']))) {
-			if ($file != $fv->path.'/'.basename($file)) {
+			if ($file != $fv->path.'/'.utf8_basename($file)) {
 				if (!$fs->has_read_permission($GO_SECURITY->user_id, $file)) {
 					$popup_feedback .= access_denied_box($file);
 					break;
@@ -164,10 +164,10 @@ switch ($task) {
 					$popup_feedback .= access_denied_box($fv->path);
 					break;
 				}
-				elseif (file_exists($fv->path.'/'.basename($file))) {
-					if ($overwrite_destination_path == $fv->path.'/'.basename($file) || $overwrite_all == 'true') {
+				elseif (file_exists($fv->path.'/'.utf8_basename($file))) {
+					if ($overwrite_destination_path == $fv->path.'/'.utf8_basename($file) || $overwrite_all == 'true') {
 						if ($overwrite == "true") {
-							if(!$fs->copy($file, $fv->path.'/'.basename($file)))
+							if(!$fs->copy($file, $fv->path.'/'.utf8_basename($file)))
 							{
 								$feedback = $fs_inssufficient_diskspace;
 							}
@@ -175,12 +175,12 @@ switch ($task) {
 					} else {
 						array_unshift($_SESSION['copy_files'], $file);
 						$overwrite_source_path = $file;
-						$overwrite_destination_path = $fv->path.'/'.basename($file);
+						$overwrite_destination_path = $fv->path.'/'.utf8_basename($file);
 						$task = 'overwrite';
 						break;
 					}
 				} else {
-					if(!$fs->copy($file, $fv->path.'/'.basename($file)))
+					if(!$fs->copy($file, $fv->path.'/'.utf8_basename($file)))
 					{
 						$feedback = $fs_inssufficient_diskspace;
 					}
@@ -237,8 +237,8 @@ switch ($task) {
 
 				
 				while ($file = smart_stripslashes(array_shift($_SESSION['cut_files']))) {
-					//echo basename($file);
-					$new_path = $fv->path.'/'.basename($file);
+					//echo utf8_basename($file);
+					$new_path = $fv->path.'/'.utf8_basename($file);
 					if (!$fs->has_write_permission($GO_SECURITY->user_id, $fv->path)) {
 						$popup_feedback .= access_denied_box($fv->path);
 						break;
@@ -265,7 +265,7 @@ switch ($task) {
 						}
 					} else {
 						
-						if(!$file_uploaded = $fs->move(addslashes($file), $fv->path.'/'.basename($file), false))
+						if(!$file_uploaded = $fs->move(addslashes($file), $fv->path.'/'.utf8_basename($file), false))
 						{
 							$task = 'upload';
 							$feedback = $fs_inssufficient_diskspace;
@@ -368,7 +368,7 @@ switch ($task) {
 							$location = dirname($fv->path);
 							$name = smart_stripslashes($name);
 							$new_path = $location.'/'.$name.$extension;
-							if ($name.$extension != basename($fv->path)) {
+							if ($name.$extension != utf8_basename($fv->path)) {
 								if (file_exists($new_path)) {
 									$feedback = $fbNameExists;
 								} else {
@@ -410,7 +410,7 @@ switch ($task) {
 
 		switch ($prop_task) {
 			case 'activate_linking':
-				$GO_LINKS->activate_linking($link_id, 6, basename($fv->path), $GO_MODULES->modules['filesystem']['url'].'?task=properties&path='.$urlencoded_path);
+				$GO_LINKS->activate_linking($link_id, 6, utf8_basename($fv->path), $GO_MODULES->modules['filesystem']['url'].'?task=properties&path='.$urlencoded_path);
 
 				header('Location: '.$GO_CONFIG->host.'link.php');
 				exit();
@@ -601,11 +601,11 @@ switch ($task) {
 				if ($fs->has_read_permission($GO_SECURITY->user_id, $file)) {
 					$tmp_file = $GO_CONFIG->tmpdir.md5(uniqid(time()));
 					if (copy($file, $tmp_file)) {
-						$filename = basename($file);
+						$filename = utf8_basename($file);
 						$email->register_attachment($tmp_file, $filename, filesize($file), mime_content_type($file));
 					}
 				} else {
-					$popup_feedback .= access_denied_box(basename($file));
+					$popup_feedback .= access_denied_box(utf8_basename($file));
 				}
 			}
 			$form->innerHTML .= '<script type="text/javascript" language="javascript">';
