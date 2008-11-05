@@ -40,21 +40,6 @@ class filesystem extends db
    * @access  private
    */
 	var $action_result = false;
-
-	/**
-   * Constructor. Inititates parent db class and defines if Group-Office permissions should
-   * be used. In most cases they should be used but when you just want to fetch some
-   * files as an administrator you can disable them.
-   *
-   * @access public
-   * @return void
-   */
-	function filesystem()
-	{
-		global $GO_MODULES;
-		
-		parent::__construct();
-	}	
 	
 	 /**
 	 * Creates a directory recursively
