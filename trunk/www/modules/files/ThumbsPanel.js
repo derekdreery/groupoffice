@@ -8,11 +8,10 @@ GO.files.ThumbsPanel = Ext.extend(Ext.Panel, {
 		    '<span class="x-editable">{shortName}</span></div>',
         '</tpl>',
         '<div class="x-clear"></div>');
-        
      
         
      this.items=[this.view = new Ext.DataView({
-            store: this.store,
+    //        store: this.store,
             tpl: tpl,
             autoHeight:true,
             multiSelect: true,
@@ -21,30 +20,43 @@ GO.files.ThumbsPanel = Ext.extend(Ext.Panel, {
             itemSelector:'div.fs-thumb-wrap',
             emptyText: 'No images to display',
 
-            /*plugins: [
-                new Ext.DataView.DragSelector(),
-                new Ext.DataView.LabelEditor({dataIndex: 'name'})
-            ],*/
+            plugins: [
+                new Ext.DataView.DragSelector()
+                //new Ext.DataView.LabelEditor({dataIndex: 'name'})
+            ],
 
             prepareData: function(data){
-                data.shortName = Ext.util.Format.ellipsis(data.name, 15);
-                data.sizeString = Ext.util.Format.fileSize(data.size);
-                //data.dateString = data.lastmod.format("m/d/Y g:i a");
+                data.shortName = Ext.util.Format.ellipsis(data.name, 20);
                 return data;
-            },
-            
-            listeners: {
-            	selectionchange: {
-            		fn: function(dv,nodes){
-            			var l = nodes.length;
-            			var s = l != 1 ? 's' : '';
-            			//panel.setTitle('Simple DataView ('+l+' item'+s+' selected)');
-            		}
-            	}
             }
         })];
         
      GO.files.ThumbsPanel.superclass.initComponent.call(this);
+		
+	},
+	
+	onBeforeLoad : function(){		
+    this.body.mask(GO.lang.waitMsgLoad);     
+	},
+	
+	onStoreLoad : function(){		
+    this.body.unmask();     
+	},
+	
+	setStore : function(store){
+		if(this.store)
+		{
+			this.store.un("beforeload", this.onBeforeLoad, this);
+			this.store.un("load", this.onStoreLoad, this);
+		}
+		
+		if(store)
+		{
+			this.store.on("befoelad", this.onBeforeLoad, this);
+			this.store.on("load", this.onStoreLoad, this);
+		}
+		
+		this.view.setStore(store);
 		
 	},
 	/**
