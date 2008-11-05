@@ -96,7 +96,7 @@ class GO_MODULES extends db {
 	function GO_MODULES() {
 		$this->db();
 
-		if(basename($_SERVER['PHP_SELF']) != 'install.php' && !empty($this->User))
+		if(utf8_basename($_SERVER['PHP_SELF']) != 'install.php' && !empty($this->User))
 		{
 			if(isset($_SESSION['GO_SESSION']['modules']))
 			{

@@ -38,7 +38,7 @@ if($ftv->change_folder || isset($_POST['overwrite']))
 	//folder was clicked so we are going to move/copy files
 	while($selected_path = smart_stripslashes(array_shift($selected)))
 	{
-		$destination = $ftv->path.'/'.basename($selected_path);
+		$destination = $ftv->path.'/'.utf8_basename($selected_path);
 
 
 		//echo $ftv->path.' '.$fs->has_write_permission($GO_SECURITY->user_id, $ftv->path).'<br />';
@@ -132,7 +132,7 @@ if(isset($confirm_overwrite))
 	$p->innerHTML .=$fbConfirmOverwrite;
 	$form->add_html_element($p);
 
-	$form->add_html_element(new html_element('p', $strOverwritePrefix."'".basename($overwrite_destination_path)."'".$strOverwriteSuffix));
+	$form->add_html_element(new html_element('p', $strOverwritePrefix."'".utf8_basename($overwrite_destination_path)."'".$strOverwriteSuffix));
 
 	$form->add_html_element(new button($cmdOk,'javascript:overwrite_file(true);'));
 	$form->add_html_element(new button($cmdCancel,'javascript:overwrite_file(false);'));

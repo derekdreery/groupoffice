@@ -88,7 +88,7 @@ also causes trouble). For instance, at the end of the script, you can put the fo
 <TABLE WIDTH="100%" BGCOLOR="#E0E0E0"><TR><TD>
 <TT>
 //Determine a temporary file name in the current directory<BR>
-$file=basename(tempnam(getcwd(),'tmp'));<BR>
+$file=utf8_basename(tempnam(getcwd(),'tmp'));<BR>
 //Save PDF to file<BR>
 $pdf-&gt;Output($file);<BR>
 //JavaScript redirection<BR>
@@ -130,7 +130,7 @@ consists in redirecting directly to the temporary file. The file name must there
 <TABLE WIDTH="100%" BGCOLOR="#E0E0E0"><TR><TD>
 <TT>
 //Determine a temporary file name in the current directory<BR>
-$file=basename(tempnam(getcwd(),'tmp'));<BR>
+$file=utf8_basename(tempnam(getcwd(),'tmp'));<BR>
 rename($file,$file.'.pdf');<BR>
 $file.='.pdf';<BR>
 //Save PDF to file<BR>

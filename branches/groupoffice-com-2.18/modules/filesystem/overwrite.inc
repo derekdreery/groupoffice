@@ -34,7 +34,7 @@ $p->add_html_element($img);
 $p->innerHTML .=$fbConfirmOverwrite;
 $form->add_html_element($p);
 
-$form->add_html_element(new html_element('p', $strOverwritePrefix."'".basename($overwrite_destination_path)."'".$strOverwriteSuffix));
+$form->add_html_element(new html_element('p', $strOverwritePrefix."'".utf8_basename($overwrite_destination_path)."'".$strOverwriteSuffix));
 
 $form->add_html_element(new button($cmdOk,'javascript:overwrite_file(true);'));
 $form->add_html_element(new button($cmdCancel,'javascript:overwrite_file(false);'));

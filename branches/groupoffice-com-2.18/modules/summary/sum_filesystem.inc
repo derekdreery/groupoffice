@@ -67,7 +67,7 @@ if (isset ($GO_MODULES->modules['filesystem']) && $GO_MODULES->modules['filesyst
 					$image->set_attribute('style','height:16;width:16;border:0px;margin-right:5px;');
 					
 					$link = new hyperlink($GO_MODULES->modules['filesystem']['url'].'index.php?path='.urlencode(dirname($fs->f('path'))),
-						$image->get_html().strip_extension(basename($fs->f('path'))).' ('.get_filetype_description($extension).')');
+						$image->get_html().strip_extension(utf8_basename($fs->f('path'))).' ('.get_filetype_description($extension).')');
 					
 					$em_row = new table_row();
 					$em_row->add_cell(new table_cell('&nbsp;'));	

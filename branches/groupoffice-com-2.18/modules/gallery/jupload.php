@@ -33,6 +33,6 @@ while($file = array_shift($_FILES))
 {
 	if (is_uploaded_file($file['tmp_name']))
 	{
-		move_uploaded_file($file['tmp_name'], $tmp_dir.basename($file['name']));
+		move_uploaded_file($file['tmp_name'], $tmp_dir.utf8_basename($file['name']));
 	}
 }

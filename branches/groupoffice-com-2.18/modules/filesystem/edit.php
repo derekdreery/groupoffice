@@ -76,7 +76,7 @@ if(!is_dir($path))
 		exit();
 	}
 	
-	$name = basename($path);
+	$name = utf8_basename($path);
 	
 	$content = '';
 	if(!$fd = fopen($path,'r'))

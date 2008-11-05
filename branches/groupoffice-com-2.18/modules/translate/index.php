@@ -52,7 +52,7 @@ if($task=='download')
 
 	exec($GO_CONFIG->cmd_tar.' -czf "'.$file.'" "'.$dest_lang.'"');
 	
-	$email->register_attachment($file, basename($file), filesize($file), mime_content_type($file));
+	$email->register_attachment($file, utf8_basename($file), filesize($file), mime_content_type($file));
 
 
 	//$order = $billing->get_order($order_id);

@@ -20,7 +20,7 @@ if(file_exists($GO_CONFIG->root_path.'LICENSE.PRO'))
 <link rel="shortcut icon" href="<?php echo $GO_CONFIG->host; ?>lib/favicon.ico" />
 <title><?php echo $GO_CONFIG->title; ?></title>
 <?php
-if($GO_CONFIG->force_fullscreen && basename($_SERVER['PHP_SELF']) != 'fullscreen.php')
+if($GO_CONFIG->force_fullscreen && utf8_basename($_SERVER['PHP_SELF']) != 'fullscreen.php')
 {
 	echo '<script type="text/javascript">if(window.name != "groupoffice"){openPopup("groupoffice", document.location,"","");document.location="fullscreen.php";}</script>';
 

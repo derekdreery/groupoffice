@@ -11,7 +11,7 @@ option) any later version.
 */
 
 
-$filename = basename($fv->path);
+$filename = utf8_basename($fv->path);
 $extension = get_extension($filename);
 $type = mime_content_type($fv->path);
 $location = dirname($fv->path);
@@ -36,7 +36,7 @@ if($prop_task == 'mail')
 			$email->register_attachment($tmp_file, $filename, filesize($fv->path), mime_content_type($fv->path));
 		}
 	} else {
-		$popup_feedback .= access_denied_box(basename($file));
+		$popup_feedback .= access_denied_box(utf8_basename($file));
 	}
 
 	$form->innerHTML .= '<script type="text/javascript" language="javascript">';
@@ -188,21 +188,21 @@ switch($tabstrip->get_active_tab_id())
 		{
 			if(is_dir($fv->path))
 			{
-				$input = new input('text', 'name', basename($fv->path));
+				$input = new input('text', 'name', utf8_basename($fv->path));
 				$input->set_attribute('style','width:300px;');
 				$cell->add_html_element($input);
 			}else
 			{
-				$input = new input('text', 'name', strip_extension(basename($fv->path)));
+				$input = new input('text', 'name', strip_extension(utf8_basename($fv->path)));
 				$input->set_attribute('style','width:300px;');
 
 				$cell->add_html_element($input);
-				$form->add_html_element(new input('hidden', 'extension', get_extension(basename($fv->path))));
+				$form->add_html_element(new input('hidden', 'extension', get_extension(utf8_basename($fv->path))));
 				$form->add_html_element(new input('hidden', 'location', dirname($fv->path)));
 			}
 		}else
 		{
-			$cell->innerHTML .= basename($fv->path);
+			$cell->innerHTML .= utf8_basename($fv->path);
 		}
 		$row->add_cell($cell);
 
@@ -211,7 +211,7 @@ switch($tabstrip->get_active_tab_id())
 
 		$row->add_cell(new table_cell($fbLocation.':'));
 
-		if (dirname($GO_CONFIG->file_storage_path).$GO_CONFIG->slash.basename($GO_CONFIG->file_storage_path) == $location)
+		if (dirname($GO_CONFIG->file_storage_path).$GO_CONFIG->slash.utf8_basename($GO_CONFIG->file_storage_path) == $location)
 		{
 			$row->add_cell(new table_cell($GO_CONFIG->slash));
 		}else

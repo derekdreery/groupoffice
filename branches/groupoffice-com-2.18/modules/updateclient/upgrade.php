@@ -87,14 +87,14 @@ if($uc->status=='401')
 			status('Downloading '.$package['package_name'].'.tar.gz');
 			
 			system(escapeshellcmd('wget --no-check-certificate '.$url));
-			if(!file_exists(basename($url)))
+			if(!file_exists(utf8_basename($url)))
 			{
 				status('Failed to download package!');
 				status('exited');
 				die();
 			}
 			
-			rename(basename($url), $package['package_name'].'.tar.gz');
+			rename(utf8_basename($url), $package['package_name'].'.tar.gz');
 			status('Downloaded '.$package['package_name'].'.tar.gz');
 			
 			status('Entering '.$GO_CONFIG->root_path);

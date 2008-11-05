@@ -26,21 +26,21 @@ my $tmpdir = '/tmp';
 my $config = parseXML("project-config.xml");
 speak(3, Data::Dumper::Dumper($config));
 
-my ($project, $version, $release, $basename);
+my ($project, $version, $release, $utf8_basename);
 
 $project = $config->{project}{ATTR}{title};
 $version = $config->{project}{version}{DATA};
 $release = $config->{project}{release}{DATA};
-$basename = "$project-$version";
-$basename .= "-$release" if ($release);
+$utf8_basename = "$project-$version";
+$utf8_basename .= "-$release" if ($release);
 
-speak(1, "Project: $basename");
+speak(1, "Project: $utf8_basename");
 
 ## create directory tree
 my ($basedir);
 {
     # base directory
-    $basedir = "$tmpdir/$basename";
+    $basedir = "$tmpdir/$utf8_basename";
     if (-d $basedir) {
         speak(-1, "$basedir already exists, removing... >:-]\n");
         system "rm -rf $basedir";
@@ -51,9 +51,9 @@ process_directory();
 
 ## make the ZIP file
 chdir "$basedir/..";
-speak(1, "Making ZIP file /tmp/$basename.zip");
-system ("zip -r $basename.zip $basename > /dev/null");
-system ("ls -la /tmp/$basename.zip");
+speak(1, "Making ZIP file /tmp/$utf8_basename.zip");
+system ("zip -r $utf8_basename.zip $utf8_basename > /dev/null");
+system ("ls -la /tmp/$utf8_basename.zip");
 
 ## remove the basedir
 system("rm -rf $basedir");

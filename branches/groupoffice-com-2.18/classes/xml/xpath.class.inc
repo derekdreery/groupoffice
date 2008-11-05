@@ -576,7 +576,7 @@ class XPathBase {
    * @see getLastError()
    */
   function _setLastError($message='', $line='-', $file='-') {
-    $this->_lastError = 'XPath error in ' . basename($file) . ':' . $line . '. Message: ' . $message;
+    $this->_lastError = 'XPath error in ' . utf8_basename($file) . ':' . $line . '. Message: ' . $message;
   }
   
   /**
@@ -594,7 +594,7 @@ class XPathBase {
    */
   function _displayError($message, $lineNumber='-', $file='-', $terminate=TRUE) {
     // Display the error message.
-    $err = '<b>XPath error in '.basename($file).':'.$lineNumber.'</b> '.$message."<br \>\n";
+    $err = '<b>XPath error in '.utf8_basename($file).':'.$lineNumber.'</b> '.$message."<br \>\n";
     $this->_setLastError($message, $lineNumber, $file);
     if (($this->properties['verboseLevel'] > 0) OR ($terminate)) echo $err;
     // End the execution of this script.
@@ -611,7 +611,7 @@ class XPathBase {
    */
   function _displayMessage($message, $lineNumber='-', $file='-') {
     // Display the error message.
-    $err = '<b>XPath message from '.basename($file).':'.$lineNumber.'</b> '.$message."<br \>\n";
+    $err = '<b>XPath message from '.utf8_basename($file).':'.$lineNumber.'</b> '.$message."<br \>\n";
     if ($this->properties['verboseLevel'] > 0) echo $err;
   }
   
@@ -629,7 +629,7 @@ class XPathBase {
    * @see       _closeDebugFunction()
    */
   function _beginDebugFunction($functionName) {
-    $fileName = basename(__FILE__);
+    $fileName = utf8_basename(__FILE__);
     static $color = array('green','blue','red','lime','fuchsia', 'aqua');
     static $colIndex = -1;
     $colIndex++;
@@ -1696,7 +1696,7 @@ class XPathEngine extends XPathBase {
 
       // Parse the XML source and on error generate an error message.
       if (!xml_parse($parser, $xmlString, TRUE)) {
-        $source = empty($this->properties['xmlFile']) ? 'string' : 'file ' . basename($this->properties['xmlFile']) . "'";
+        $source = empty($this->properties['xmlFile']) ? 'string' : 'file ' . utf8_basename($this->properties['xmlFile']) . "'";
         $errStr = "XML error in given {$source} on line ".
                xml_get_current_line_number($parser). '  column '. xml_get_current_column_number($parser) .
                '. Reason:'. xml_error_string(xml_get_error_code($parser));
@@ -6210,7 +6210,7 @@ function _title($title) {
 }
 
 $self = isSet($_SERVER) ? $_SERVER['PHP_SELF'] : $PHP_SELF;
-if (basename($self) == 'XPath.class.php') {
+if (utf8_basename($self) == 'XPath.class.php') {
   // The sampe source:
   $q = '?';
   $xmlSource = <<< EOD

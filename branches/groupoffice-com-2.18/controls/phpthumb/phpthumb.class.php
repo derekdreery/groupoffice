@@ -466,7 +466,7 @@ class phpthumb {
 			return false;
 		}
 		// render thumbnail to this file only, do not cache, do not output to browser
-		//$renderfilename = $this->ResolveFilenameToAbsolute(dirname($filename)).DIRECTORY_SEPARATOR.basename($filename);
+		//$renderfilename = $this->ResolveFilenameToAbsolute(dirname($filename)).DIRECTORY_SEPARATOR.utf8_basename($filename);
 		$renderfilename = $filename;
 		if (($filename{0} != '/') && ($filename{0} != '\\') && ($filename{1} != ':')) {
 			$renderfilename = $this->ResolveFilenameToAbsolute($renderfilename);
@@ -987,7 +987,7 @@ class phpthumb {
 			if (@file_exists($this->config_imagemagick_path)) {
 				$this->DebugMessage('using ImageMagick path from $this->config_imagemagick_path ('.$this->config_imagemagick_path.')', __FILE__, __LINE__);
 				if ($this->iswindows) {
-					$commandline = substr($this->config_imagemagick_path, 0, 2).' && cd "'.str_replace('/', DIRECTORY_SEPARATOR, substr(dirname($this->config_imagemagick_path), 2)).'" && '.basename($this->config_imagemagick_path);
+					$commandline = substr($this->config_imagemagick_path, 0, 2).' && cd "'.str_replace('/', DIRECTORY_SEPARATOR, substr(dirname($this->config_imagemagick_path), 2)).'" && '.utf8_basename($this->config_imagemagick_path);
 				} else {
 					$commandline = '"'.$this->config_imagemagick_path.'"';
 				}
@@ -2321,7 +2321,7 @@ class phpthumb {
 						$bg_opacity = ($bg_opacity      ? $bg_opacity : 0);
 						$fillextend = ($fillextend      ? $fillextend : '');
 
-						if (basename($ttffont) == $ttffont) {
+						if (utf8_basename($ttffont) == $ttffont) {
 							$ttffont = realpath($this->config_ttf_directory.DIRECTORY_SEPARATOR.$ttffont);
 						} else {
 							$ttffont = $this->ResolveFilenameToAbsolute($ttffont);
@@ -2767,7 +2767,7 @@ class phpthumb {
 			if (strpos($this->config_cache_default_only_suffix, '*') === false) {
 				$this->DebugMessage('aborting simplified caching filename because no * in "'.$this->config_cache_default_only_suffix.'"', __FILE__, __LINE__);
 			} else {
-				eregi('(.+)(\.[a-z0-9]+)?$', basename($this->sourceFilename), $matches);
+				eregi('(.+)(\.[a-z0-9]+)?$', utf8_basename($this->sourceFilename), $matches);
 				$this->cache_filename = $this->config_cache_directory.DIRECTORY_SEPARATOR.rawurlencode(str_replace('*', @$matches[1], $this->config_cache_default_only_suffix)).'.'.strtolower($this->thumbnailFormat);
 				return true;
 			}
@@ -3526,7 +3526,7 @@ class phpthumb {
 	}
 
 	function DebugMessage($message, $file='', $line='') {
-		$this->debugmessages[] = $message.($file ? ' in file "'.(basename($file) ? basename($file) : $file).'"' : '').($line ? ' on line '.$line : '');
+		$this->debugmessages[] = $message.($file ? ' in file "'.(utf8_basename($file) ? utf8_basename($file) : $file).'"' : '').($line ? ' on line '.$line : '');
 		return true;
 	}
 
@@ -3534,7 +3534,7 @@ class phpthumb {
 		if (!$timestamp) {
 			$timestamp = array_sum(explode(' ', microtime()));
 		}
-		$this->debugtiming[number_format($timestamp, 6, '.', '')] = ': '.$message.($file ? ' in file "'.(basename($file) ? basename($file) : $file).'"' : '').($line ? ' on line '.$line : '');
+		$this->debugtiming[number_format($timestamp, 6, '.', '')] = ': '.$message.($file ? ' in file "'.(utf8_basename($file) ? utf8_basename($file) : $file).'"' : '').($line ? ' on line '.$line : '');
 		return true;
 	}
 

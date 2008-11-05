@@ -90,7 +90,7 @@ switch($task)
 				
 				$image_file_path = $GO_CONFIG->local_path.'gallery/'.$image['gallery_id'].'/';
 				
-				$image['filename']=basename($image['path']);
+				$image['filename']=utf8_basename($image['path']);
 		
 				//$image['gallery_id']=$gallery_id;
 		
