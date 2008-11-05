@@ -1,0 +1,10 @@
+<?php
+$module['notes']['description'] = 'The notes module is integrated in all '.
+		'other modules. You can easily stick notes to files, projects or contacts.';
+$module['notes']['version'] = '1.2';
+$module['notes']['release_date'] = '2004-04-05';
+$module['notes']['status'] = 'Stable';
+$module['notes']['authors'][] = array('name'=>'Merijn Schering', 'email'=>'mschering@intermesh.nl');
+$module['notes']['sort_order'] = '60';
+$module['notes']['linkable_items'][] = array('url'=>'note.php', 'language'=>'no_new_note', 'button'=>'notes');
+?>
