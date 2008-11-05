@@ -336,31 +336,25 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 		this.selectLinkField = new GO.form.SelectLink({
 		});
 		
-		var hours =[
-    	['00','00'],
-    	['01','01'],
-    	['02','02'],
-    	['03','03'],
-    	['04','04'],
-    	['05','05'],
-    	['06','06'],
-    	['07','07'],
-    	['08','08'],
-    	['09','09'],
-    	['10','10'],
-    	['11','11'],
-    	['12','12'],
-    	['13','13'],
-    	['14','14'],
-    	['15','15'],
-    	['16','16'],
-    	['17','17'],
-    	['18','18'],
-    	['19','19'],
-    	['20','20'],
-    	['21','21'],
-    	['22','22'],
-    	['23','23']];
+		
+		var hours = Array();
+		if(GO.settings.time_format.substr(0,1)=='G')
+		{
+			var hourWidth=40;
+			var timeformat = 'G';
+		}else
+		{
+			var hourWidth=60;
+			var timeformat = 'g a';
+		}
+		
+		for(var i=0;i<24;i++)
+		{
+			var h = Date.parseDate(i, "G");
+			hours.push([h.format('G'), h.format(timeformat)]);
+		}
+	
+    	
     var minutes = [
     	['00','00'],
     	['05','05'],
@@ -459,11 +453,12 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
         fields: ['value','text'],
         data: hours
       }),
+      valueField:'value',
       displayField:'text',
       mode: 'local',
       triggerAction: 'all',
       selectOnFocus:true,            
-      width:40,
+      width:hourWidth,
       labelSeparator: '',
 			hideLabel: true,
         listeners:{
@@ -519,10 +514,11 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
             data: hours
         }),
         displayField:'text',
+        valueField:'value',
         mode: 'local',
         triggerAction: 'all',
         selectOnFocus:true,            
-        width:40,
+        width:hourWidth,
         labelSeparator: '',
 				hideLabel: true,
         listeners:{
