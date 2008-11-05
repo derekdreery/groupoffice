@@ -30,7 +30,17 @@ GO.files.ImageViewer = Ext.extend(Ext.Window, {
 				this.loadImage(this.currentImgIndex+1);
 			},
 			scope:this
-		})];
+		}),
+		'-',
+		{
+			iconCls: 'btn-save',
+			text: GO.lang.download,
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				document.location.replace(this.imgEl.dom.src);
+			},
+			scope: this
+		}];
 		
 		GO.files.ImageViewer.superclass.initComponent.call(this);
 		this.on('resize', this.syncImgSize, this);
@@ -40,6 +50,7 @@ GO.files.ImageViewer = Ext.extend(Ext.Window, {
 	show : function(images, index)
 	{
 		//this.render(Ext.getBody());
+		
 		
 		GO.files.ImageViewer.superclass.show.call(this);
 		

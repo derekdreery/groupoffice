@@ -664,7 +664,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		}
 	},
 	
-	openAttachment :  function(attachment)
+	openAttachment :  function(attachment, panel)
 	{
 		
 		if(attachment.mime.indexOf('message')>-1)
@@ -681,6 +681,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
   	{	
 			switch(attachment.extension)
 			{
+				
 				case 'dat':
 					document.location.href=GO.settings.modules.email.url+
 						'tnef.php?account_id='+this.account_id+
@@ -691,6 +692,55 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 						'&mime='+attachment.mime+
 						'&filename='+escape(attachment.name);
 				break;
+				
+				case 'bmp':
+				case 'png':
+				case 'gif':
+				case 'jpg':
+				case 'jpeg':
+				
+				if(GO.files)
+				{
+					if(!this.imageViewer)
+					{
+						this.imageViewer = new GO.files.ImageViewer({
+							closeAction:'hide'
+						});
+					}
+					
+					var index = 0;
+					var images = Array();
+					if(panel)
+					{
+						for (var i = 0; i < panel.data.attachments.length;  i++)
+						{
+							var r = panel.data.attachments[i];
+							var ext = GO.util.getFileExtension(r.name);
+							
+							if(ext=='jpg' || ext=='png' || ext=='gif' || ext=='bmp' || ext=='jpeg')
+							{
+								images.push({
+									name: r.name, 
+									src: GO.settings.modules.email.url+
+									'attachment.php?account_id='+this.account_id+
+									'&mailbox='+escape(this.mailbox)+
+									'&uid='+this.previewedUid+
+									'&part='+r.number+
+									'&transfer='+r.transfer+
+									'&mime='+r.mime+
+									'&filename='+escape(r.name)
+									});
+							}
+							if(r.name==attachment.name)
+							{
+								index=images.length-1;
+							}
+						}
+						this.imageViewer.show(images, index);
+						break;
+					}
+				}			
+				
 				
 				default:
 					document.location.href=GO.settings.modules.email.url+
