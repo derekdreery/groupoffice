@@ -43,6 +43,30 @@ class files extends filesystem
 		}		
 	}	
 	
+	
+	function get_thumb_url($path)
+	{
+		global $GO_THEME, $GO_CONFIG;
+		
+		$extension = File::get_extension($path);
+		
+		switch($extension)
+		{
+			case 'jpg':
+			case 'jpeg';
+			case 'png';
+			case 'gif';
+				return phpThumbURL('src='.$path.'&w=128&h=128&zc=1');
+			break;
+			
+			default:
+				return $GO_THEME->image_url.'128x128/filetypes/unknown.png';
+			break;	
+			
+		}
+		
+	}
+	
 	/**
    * Check if a path is the user's home path
    *

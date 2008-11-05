@@ -391,7 +391,7 @@ try{
 
 						}
 
-
+						require_once($GO_CONFIG->control_path.'phpthumb/phpThumb.config.php');
 
 						$folders = $fs->get_folders_sorted($path, 'utf8_basename', $dir);
 						foreach($folders as $folder)
@@ -405,6 +405,7 @@ try{
 								$class='filetype-folder';
 							}
 							
+							$folder['thumb_url']=$GO_THEME->image_url.'128x128/filetypes/folder.png';
 							$folder['path']=$fs->strip_server_path($folder['path']);
 							$folder['grid_display']='<div class="go-grid-icon '.$class.'">'.$folder['name'].'</div>';
 							$folder['type']=$lang['files']['folder'];
@@ -429,6 +430,7 @@ try{
 							
 							if(!isset($extensions) || in_array($extension, $extensions))
 							{							
+								$file['thumb_url']=$fs->get_thumb_url($file['path']);
 								$file['extension']=$extension;
 								$file['path']=$fs->strip_server_path($file['path']);
 								$file['grid_display']='<div class="go-grid-icon filetype filetype-'.$extension.'">'.$file['name'].'</div>';
