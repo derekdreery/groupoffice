@@ -61,7 +61,7 @@ GO.notes.MainPanel = function(config){
 	this.centerPanel.on('rowclick', function(grid, rowIndex)
 	{
 		var record = grid.getStore().getAt(rowIndex);		
-		this.eastPanel.loadNote(record.data.id);		
+		this.eastPanel.load(record.data.id);		
 	}, this);
 	
 	this.eastPanel = new GO.notes.NotePanel({
@@ -170,11 +170,13 @@ GO.moduleManager.addModule('notes', GO.notes.MainPanel, {
  */
 
 GO.linkHandlers[4]=function(id){
-	if(!GO.notes.noteDialog)
-	{
-		GO.notes.noteDialog = new GO.notes.NoteDialog();
-	}
-	GO.notes.noteDialog.show(id);
+	var notePanel = new GO.notes.NotePanel();
+	var linkWindow = new GO.LinkViewWindow({
+		title: GO.notes.lang.note,
+		items: notePanel
+	});
+	notePanel.load(id);
+	linkWindow.show();
 }
 
 /* {LINKHANDLERS} */

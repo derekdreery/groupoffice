@@ -342,7 +342,7 @@ try{
 
 		case 'links':
 
-			ini_set('max_execution_time', 120);
+			//ini_set('max_execution_time', 120);
 
 			require_once($GO_CONFIG->class_path.'/base/search.class.inc.php');
 			$search = new search();
@@ -352,7 +352,6 @@ try{
 
 			$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'mtime';
 			$dir= isset($_REQUEST['dir']) ? $_REQUEST['dir'] : 'DESC';
-
 
 
 			if(isset($_REQUEST['delete_keys']))
@@ -446,8 +445,10 @@ try{
 			if($link_id>0)
 			{
 				$record = $search->get_search_result($link_id, $link_type);
-				$response['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $record['acl_write']);
 				
+				debug($record);
+				
+				$response['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $record['acl_write']);				
 				if(!$response['write_permission'] && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $record['acl_read']))
 				{
 					throw new AccessDeniedException();

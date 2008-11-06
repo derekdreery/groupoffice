@@ -394,7 +394,7 @@ GO.linkHandlers[2]=function(id){
 		title: GO.addressbook.lang.contact,
 		items: contactPanel
 	});
-	contactPanel.loadContact(id);
+	contactPanel.load(id);
 	linkWindow.show();
 }
 
@@ -406,6 +406,6 @@ GO.linkHandlers[3]=function(id){
 		title: GO.addressbook.lang.company,
 		items: companyPanel
 	});
-	companyPanel.loadCompany(id);
+	companyPanel.load(id);
 	linkWindow.show();
 }
