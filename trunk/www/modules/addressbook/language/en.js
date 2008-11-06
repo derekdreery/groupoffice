@@ -31,7 +31,7 @@ GO.addressbook.lang.btnReset = 'Reset';
 GO.addressbook.lang.cmdFormSearchFirst = 'Search in= ';
 GO.addressbook.lang.cmdFormSearchSecond = ' on= ';
 GO.addressbook.lang.cmdFormSearchThird = ' for= ';
-GO.addressbook.lang.cmdFormSearchFourth = '(Use \'%\' as a joker) ';
+GO.addressbook.lang.cmdFormSearchFourth = '(Use \'%\' as a wildcard) ';
 GO.addressbook.lang.cmdFormLabelTitleInitials = 'Title/Initials';
 GO.addressbook.lang.cmdFormLabelSalutation = 'Salutation';
 GO.addressbook.lang.cmdFormLabelComment = 'Comment';

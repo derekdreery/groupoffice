@@ -120,8 +120,8 @@ Ext.extend(GO.plugins.HtmlEditorImageInsert, Ext.util.Observable, {
 			this.fileBrowserWindow = new Ext.Window({
 				
 				title: 'Select files',
-				height:400,
-				width:600,
+				height:480,
+				width:680,
 				layout:'fit',
 				border:false,
 				closeAction:'hide',
@@ -147,19 +147,20 @@ Ext.extend(GO.plugins.HtmlEditorImageInsert, Ext.util.Observable, {
 	},
 	
 	selectImage : function(){
-		this.selectedPath = this.fileBrowser.gridPanel.selModel.selections.items[0].data.path;
-		this.selectedUrl = GO.settings.modules.files.url+'download.php?path='+escape(this.selectedPath);
 		
-	
-		//this.urlField.setValue(this.selectedUrl);
+		var records = this.fileBrowser.getSelectedGridRecords();
 		
-		
-		var html = '<img src="'+this.selectedUrl+'" border="0" />';
-							
-		this.fireEvent('insert', this);
-		
-		this.editor.insertAtCursor(html);
-		
+		if(records.length)
+		{
+			this.selectedPath = records[0].data.path;
+			this.selectedUrl = GO.settings.modules.files.url+'download.php?path='+escape(this.selectedPath);
+				
+			var html = '<img src="'+this.selectedUrl+'" border="0" />';
+								
+			this.fireEvent('insert', this);
+			
+			this.editor.insertAtCursor(html);
+		}	
 		this.fileBrowserWindow.hide();
 	}
 	

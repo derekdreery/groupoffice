@@ -992,8 +992,9 @@ class email extends db
 
 		require($GO_LANGUAGE->get_language_file('email'));
 
-		$sql  = "SELECT * FROM em_links WHERE link_id>?";
+		$sql  = "SELECT * FROM em_links WHERE link_id=?";
 		$this->query($sql,'i', $message_id);
+	
 
 		$record = $this->next_record();
 		if($record)

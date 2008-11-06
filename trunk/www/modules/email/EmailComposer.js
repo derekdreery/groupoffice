@@ -571,9 +571,6 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 				});
 				
 			}
-	
-	
-	    
 	      
 	     //somehow on render fails???
 	    if(!this.showed)
@@ -581,20 +578,15 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 	    	this.showed=true;
 				this.ccCombo.getEl().up('.x-form-item').setDisplayed(false);
 		 		this.bccCombo.getEl().up('.x-form-item').setDisplayed(false);
-	    }
-	 		    
+	    }	 		    
 	 		//this.setEditorHeight();
-
 			}
    		
     }, 
     
-    showAttachmentsDialog : function(){
-    	
+    showAttachmentsDialog : function(){    	
     	if(!this.attachmentsDialog)
-    	{
-    		
-    		
+    	{    		
     		var tbar = [];
     		
     		tbar.push({
@@ -628,8 +620,8 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 				        			this.fileBrowserWindow = new Ext.Window({
 				        				
 				        				title: GO.lang.strSelectFiles,
-				        				height:400,
-				        				width:600,
+				        				height:480,
+				        				width:680,
 				        				layout:'fit',
 				        				border:false,
 				        				closeAction:'hide',
@@ -645,15 +637,11 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 				        							this.fileBrowserWindow.hide();
 				        						},
 				        						scope:this
-				        					}
-				        					
-				        				]
-				        								        				
+				        					}				        					
+				        				]				        								        				
 				        			});
-				        		}
-				        		
-				        		this.fileBrowserWindow.show();
-				        		
+				        		}				        		
+				        		this.fileBrowserWindow.show();				        		
 				        	}, 
 				        	scope: this
 				        });
@@ -673,16 +661,14 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 				    		},  
 				    		scope: this
 				    	});
-  			
-    		
     		
     		this.attachmentsGrid = new Ext.grid.GridPanel({
 			    	id: 'groups-grid-overview-users',
 			    	store: this.attachmentsStore,
 			        columns:[
-			        	{id:'name',header: GO.lang.strName, dataIndex: 'name'},
-			        	{id:'size',header: GO.lang.strSize, dataIndex: 'size'},
-			        	{id:'type',header: GO.lang.strType, dataIndex: 'type'}
+			        	{header: GO.lang.strName, dataIndex: 'name'},
+			        	{header: GO.lang.strSize, dataIndex: 'size'},
+			        	{header: GO.lang.strType, dataIndex: 'type'}
 			        	],
 			        
 			        sm: new Ext.grid.RowSelectionModel({singleSelect: false}),
@@ -796,7 +782,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			    {name: 'size'}
 			]);
 			
-			var selections = this.fileBrowser.gridPanel.selModel.selections.items;
+			var selections = this.fileBrowser.getSelectedGridRecords();
 			
 			for(var i=0;i<selections.length;i++)
 			{
