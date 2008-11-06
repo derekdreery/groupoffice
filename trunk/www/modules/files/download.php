@@ -31,6 +31,15 @@ $mode = isset($_REQUEST['mode'])  ? $_REQUEST['mode'] : 'download';
  */
 $cache = $fs->is_sub_dir($path, $GO_CONFIG->file_storage_path.'public');
 
+
+/*
+//add timestamp for caching
+if(!isset($_REQUEST['mtime']))
+{
+	header('Location: '.$_SERVER['PHP_SELF'].'?path='.urlencode($_REQUEST['path']).'&mode='.$mode.'&mtime='.filemtime($path));
+	exit();
+}*/
+
 if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_permission($GO_SECURITY->user_id, $path))
 {
 	/*if($GO_LOGGER->enabled)
@@ -44,17 +53,19 @@ if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_per
 	$filename = utf8_basename($path);
 	$extension = File::get_extension($filename);
 
-	$mtime = Date::date_add(filemtime($path),1);
+	//$mtime = Date::date_add(filemtime($path),1);
 	
 	
 	header('Content-Length: '.filesize($path));
 	header('Content-Transfer-Encoding: binary');
 
+	header("Last-Modified: ".gmdate("D, d M Y H:i:s", filemtime($path))." GMT");
+	header("ETag: ".md5_file($path));
+	
+		
 	if($cache)
 	{
-		header("Expires: " . date("D, j M Y G:i:s ", $mtime) . 'GMT');
-		header("Last-Modified: ".gmdate("D, d M Y H:i:s", $mtime)." GMT");
-		header("ETag: ".md5_file($path));
+		header("Expires: " . date("D, j M Y G:i:s ", time()+86400) . 'GMT');//expires in 1 day	
 		header('Cache-Control: cache');
 		header('Pragma: cache');
 	}
@@ -76,7 +87,6 @@ if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_per
 		}
 	}else
 	{
-		debug(File::get_mime($path));
 		header('Content-Type: '.File::get_mime($path));
 		if($mode == 'download')
 		{			
