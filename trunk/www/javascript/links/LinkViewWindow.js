@@ -23,7 +23,7 @@ GO.LinkViewWindow = function(config){
 	config.modal=false;
 	config.resizable=true;
 	if(!config.width)
-		config.width=400;
+		config.width=500;
 	if(!config.height)
 		config.height=500;
 
