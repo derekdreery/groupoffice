@@ -29,7 +29,7 @@ GO.addressbook.MainPanel = function(config)
   this.contactsGrid.on("rowclick",function(grid, rowIndex)
 		{
 			var record = grid.getStore().getAt(rowIndex);			
-			this.contactEastPanel.loadContact(record.get('id'));			
+			this.contactEastPanel.load(record.get('id'));			
 		}, this);
 	
   this.companiesGrid = new GO.addressbook.CompaniesGrid({
@@ -41,7 +41,7 @@ GO.addressbook.MainPanel = function(config)
   this.companiesGrid.on("rowclick",function(grid, rowIndex)
 		{
 			var record = grid.getStore().getAt(rowIndex);			
-			this.companyEastPanel.loadCompany(record.get('id'));			
+			this.companyEastPanel.load(record.get('id'));			
 		}, this); 
 	  
 	this.searchPanel = new GO.addressbook.SearchPanel({
