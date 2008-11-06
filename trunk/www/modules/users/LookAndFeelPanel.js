@@ -109,7 +109,7 @@ GO.users.LookAndFeelPanel = function(config)
 			editable: false,
 			selectOnFocus:true,
 			forceSelection: true,
-			value: GO.settings.max_rows_list
+			value: 30
 		});
 		
 		config.items.push({
