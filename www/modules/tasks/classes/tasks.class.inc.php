@@ -14,11 +14,6 @@
 
 class tasks extends db
 {
-
-	function tasks()
-	{
-		parent::__construct();
-	}
 	
 	function is_duplicate_task($task, $tasklist_id)
 	{

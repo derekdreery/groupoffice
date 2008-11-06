@@ -82,7 +82,7 @@ GO.tasks.MainPanel = function(config){
 			
 	this.gridPanel.on("rowclick", function(grid, rowIndex, e){
 		var record = grid.getStore().getAt(rowIndex);		
-		this.taskPanel.loadTask(record.data.id);
+		this.taskPanel.load(record.data.id);
 	}, this);
 			
 	this.taskPanel = new GO.tasks.TaskPanel({
@@ -330,7 +330,7 @@ GO.linkHandlers[12]=function(id, link_config){
 			title: GO.tasks.lang.task,
 			items: taskPanel
 		});
-		taskPanel.loadTask(id);
+		taskPanel.load(id);
 		linkWindow.show();
 	}
 

@@ -11,66 +11,26 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
  
-GO.tasks.TaskPanel = function(config)
-{
-	Ext.apply(this, config);
-
-	this.autoScroll=true;
-	//this.title=GO.tasks.lang.task;	
+GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
+	link_type : 12,
 	
-	this.newMenuButton = new GO.NewMenuButton();		
+	loadParams : {task: 'task_with_items'},
 	
-	this.tbar = [
-		this.editButton = new Ext.Button({
-			iconCls: 'btn-edit', 
-			text: GO.lang['cmdEdit'], 
-			cls: 'x-btn-text-icon', 
-			handler: function(){
-				if(!GO.tasks.taskDialog)
-				{
-					GO.tasks.taskDialog = new GO.tasks.TaskDialog();
-				}
-				GO.tasks.taskDialog.show({task_id: this.data.id});					
-			}, 
-			scope: this,
-			disabled : true
-		}),this.linkBrowseButton = new Ext.Button({
-			iconCls: 'btn-link', 
-			cls: 'x-btn-text-icon', 
-			text: GO.lang.cmdBrowseLinks,
-			disabled:true,
-			handler: function(){
-				GO.linkBrowser.show({link_id: this.data.id,link_type: "12",folder_id: "0"});				
-			},
-			scope: this
-		})];
-		
-		if(GO.files)
+	idParam : 'task_id',
+	
+	loadUrl : GO.settings.modules.tasks.url+'json.php',
+	
+	editHandler : function(){
+		if(!GO.tasks.taskDialog)
 		{
-			this.tbar.push(this.fileBrowseButton = new Ext.Button({
-				iconCls: 'go-menu-icon-files', 
-				cls: 'x-btn-text-icon', 
-				text: GO.files.lang.files,
-				handler: function(){
-					GO.files.openFolder(this.data.files_path);				
-				},
-				scope: this,
-				disabled: true
-			}));
+			GO.tasks.taskDialog = new GO.tasks.TaskDialog();
 		}
-		
-	this.tbar.push(this.newMenuButton);
-	
-	
-	GO.tasks.TaskPanel.superclass.constructor.call(this);		
-}
-
-
-Ext.extend(GO.tasks.TaskPanel, Ext.Panel,{
+		GO.tasks.taskDialog.show({task_id: this.data.id});
+	},	
 	
 	initComponent : function(){
 	
-		var template = 
+		this.template = 
 			'<div>'+
 				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+
 					'<tr>'+
@@ -99,7 +59,7 @@ Ext.extend(GO.tasks.TaskPanel, Ext.Panel,{
 									
 				'</table>';																		
 				
-				template += GO.linksTemplate;
+		this.template += GO.linksTemplate;
 												
 				/*if(GO.customfields)
 				{
@@ -107,27 +67,21 @@ Ext.extend(GO.tasks.TaskPanel, Ext.Panel,{
 				}*/
 				
 					    	
-	  var config = {};
+	  this.templateConfig = {};
 		
 				
 		if(GO.files)
 		{
-			Ext.apply(config, GO.files.filesTemplateConfig);
-			template += GO.files.filesTemplate;
+			Ext.apply(this.templateConfig, GO.files.filesTemplateConfig);
+			this.template += GO.files.filesTemplate;
 		}
-		Ext.apply(config, GO.linksTemplateConfig);
+		Ext.apply(this.templateConfig, GO.linksTemplateConfig);
 		
 		
 		if(GO.comments)
 		{
-			template += GO.comments.displayPanelTemplate;
+			this.template += GO.comments.displayPanelTemplate;
 		}
-		
-			
-		
-		template+='</div>';
-		
-		this.template = new Ext.XTemplate(template, config);
 		
 		GO.tasks.TaskPanel.superclass.initComponent.call(this);
 	},
@@ -154,33 +108,6 @@ Ext.extend(GO.tasks.TaskPanel, Ext.Panel,{
 				}				
 			},
 			scope: this			
-		});
-		
-	},
-	
-	setData : function(data)
-	{
-		data.link_type=12;
-		this.data=data;
-		this.editButton.setDisabled(!data.write_permission);
-		this.linkBrowseButton.setDisabled(false);
-		if(GO.files)
-		{
-			this.fileBrowseButton.setDisabled(false);
-		}
-		
-		if(data.write_permission)
-			this.newMenuButton.setLinkConfig({
-				id:this.data.id,
-				type:12,
-				text: this.data.name,
-				callback:function(){
-					this.loadTask(this.data.id);				
-				},
-				scope:this
-			});
-		
-		this.template.overwrite(this.body, data);	
-	}
-	
+		});		
+	}	
 });			

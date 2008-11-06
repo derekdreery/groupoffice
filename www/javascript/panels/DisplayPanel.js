@@ -15,11 +15,9 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 	loadUrl : '',
 	
 	
-	createTopToolBar : function(){
+	createTopToolbar : function(){
 		
-		this.newMenuButton = new GO.NewMenuButton();
-		
-		
+		this.newMenuButton = new GO.NewMenuButton();		
 		
 		var tbar=[];
 		tbar.push(this.editButton = new Ext.Button({
@@ -36,7 +34,7 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 			cls: 'x-btn-text-icon', 
 			text: GO.lang.cmdBrowseLinks,
 			handler: function(){
-				GO.linkBrowser.show({link_id: this.data.id,link_type: "5",folder_id: "0"});				
+				GO.linkBrowser.show({link_id: this.data.id,link_type: this.link_type,folder_id: "0"});				
 			},
 			disabled: true,
 			scope: this
