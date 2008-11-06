@@ -155,8 +155,6 @@ GO.files.FileBrowser = function(config){
 	}	
 	
 	this.gridPanel = new GO.grid.GridPanel( {
-			id:'files-grid',
-			region:'center',
 			layout:'fit',
 			split:true,
 			//paging:true,
@@ -247,7 +245,7 @@ GO.files.FileBrowser = function(config){
 	
 	
 	this.newMenu = new Ext.menu.Menu({
-					id: 'new-menu',
+					//id: 'new-menu',
 	        items: []
 			});
 	
@@ -381,10 +379,7 @@ GO.files.FileBrowser = function(config){
 				
 			]});
 
-	this.thumbsPanel = new GO.files.ThumbsPanel({
-		//store: this.thumbsStore,
-		id:'files-thumbs'
-	});
+	this.thumbsPanel = new GO.files.ThumbsPanel();
 	
 	this.thumbsPanel.view.on('dblclick', function(view, index, node, e){
 		
@@ -486,7 +481,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	setFilesFilter : function(filter)
 	{
 		this.gridStore.baseParams['files_filter']=filter;
-		this.thumbsStore.baseParams['files_filter']=filter;
+		//this.thumbsStore.baseParams['files_filter']=filter;
 	},
 
 	
@@ -769,7 +764,8 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	},
 	
 	getSelectedGridRecords : function(){
-		if(this.cardPanel.getLayout().activeItem.id=='files-grid')
+		//detect grid on selModel. thumbs doesn't have that
+		if(this.cardPanel.getLayout().activeItem.selModel)
 		{
 			var selModel = this.gridPanel.getSelectionModel();
 			return selModel.getSelections();
@@ -783,13 +779,13 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		
 		return this.gridStore;
 		
-		if(this.cardPanel.getLayout().activeItem.id=='files-grid')
+		/*if(this.cardPanel.getLayout().activeItem.id=='files-grid')
 		{
 			return this.gridStore;
 		}else
 		{
 			return this.thumbsStore;
-		}
+		}*/
 	},
 	
 	onCutCopy : function(pasteMode, records){		
@@ -839,7 +835,8 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			});
 		}else
 		{
-			if(this.cardPanel.getLayout().activeItem.id=='files-grid')
+			//detect grid on selModel. thumbs doesn't have that
+			if(this.cardPanel.getLayout().activeItem.selModel)
 			{
 				this.gridPanel.deleteSelected({
 					callback:function(){				
