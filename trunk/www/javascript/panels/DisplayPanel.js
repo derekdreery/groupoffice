@@ -15,13 +15,14 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 	loadUrl : '',
 	
 	
-	initComponent : function(){
-		this.autoScroll=true;
-	
+	createTopToolBar : function(){
+		
 		this.newMenuButton = new GO.NewMenuButton();
 		
-		this.tbar=[];
-		this.tbar.push(this.editButton = new Ext.Button({
+		
+		
+		var tbar=[];
+		tbar.push(this.editButton = new Ext.Button({
 				iconCls: 'btn-edit', 
 				text: GO.lang['cmdEdit'], 
 				cls: 'x-btn-text-icon', 
@@ -30,7 +31,7 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 				disabled : true
 			}));
 		
-		this.tbar.push(this.linkBrowseButton = new Ext.Button({
+		tbar.push(this.linkBrowseButton = new Ext.Button({
 			iconCls: 'btn-link', 
 			cls: 'x-btn-text-icon', 
 			text: GO.lang.cmdBrowseLinks,
@@ -43,7 +44,7 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 		
 		if(GO.files)
 		{
-			this.tbar.push(this.fileBrowseButton = new Ext.Button({
+			tbar.push(this.fileBrowseButton = new Ext.Button({
 				iconCls: 'go-menu-icon-files', 
 				cls: 'x-btn-text-icon', 
 				text: GO.files.lang.files,
@@ -55,16 +56,23 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 			}));
 		}
 		
-		this.tbar.push(this.newMenuButton);
+		tbar.push(this.newMenuButton);
 		
-		this.tbar.push('-');
-		this.tbar.push({            
+		tbar.push('-');
+		tbar.push({            
 	      iconCls: "btn-refresh",
 	      tooltip:GO.lang.cmdRefresh,      
 	      handler: this.reload,
 	      scope:this
 	  });
+	  
+	  return tbar;
+	},	
 	
+	initComponent : function(){
+		this.autoScroll=true;
+		this.split=true;
+		this.tbar = this.createTopToolbar();	
 		this.xtemplate = new Ext.XTemplate(this.template, this.templateConfig);
 		
 		GO.DisplayPanel.superclass.initComponent.call(this);		
