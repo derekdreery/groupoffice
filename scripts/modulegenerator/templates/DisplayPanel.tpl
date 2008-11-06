@@ -11,59 +11,23 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
  
-GO.{module}.{friendly_single_ucfirst}Panel = function(config)
-{
-	Ext.apply(this, config);
-	
-	this.split=true;
-	this.autoScroll=true;	
-	
-	<gotpl if="$link_type &gt; 0">
-	this.newMenuButton = new GO.NewMenuButton();
-	</gotpl>
+GO.{module}.{friendly_single_ucfirst}Panel = Ext.extend(GO.DisplayPanel,{
+
+	link_type : {link_type},
 		
-	this.tbar = [
-		this.editButton = new Ext.Button({
-			iconCls: 'btn-edit', 
-			text: GO.lang['cmdEdit'], 
-			cls: 'x-btn-text-icon', 
-			handler: function(){
-				GO.{module}.{friendly_single}Dialog.show(this.data.id);
-			}, 
-			scope: this,
-			disabled : true
-		})<gotpl if="$link_type &gt; 0">,this.linkBrowseButton = new Ext.Button({
-			iconCls: 'btn-link', 
-			cls: 'x-btn-text-icon', 
-			text: GO.lang.cmdBrowseLinks,
-			handler: function(){
-				GO.linkBrowser.show({link_id: this.data.id,link_type: "{link_type}",folder_id: "0"});				
-			},
-			scope: this
-		})</gotpl>];
-	<gotpl if="$authenticate">if(GO.files)
-	{
-		this.tbar.push(this.fileBrowseButton = new Ext.Button({
-			iconCls: 'go-menu-icon-files', 
-			cls: 'x-btn-text-icon', 
-			text: GO.files.lang.files,
-			handler: function(){
-				GO.files.openFolder(this.data.files_path);				
-			},
-			scope: this,
-			disabled: true
-		}));
-	}</gotpl><gotpl if="$link_type &gt; 0">this.tbar.push(this.newMenuButton);</gotpl>	
-	GO.{module}.{friendly_single_ucfirst}Panel.superclass.constructor.call(this);		
-}
-
-
-Ext.extend(GO.{module}.{friendly_single_ucfirst}Panel, Ext.Panel,{
+	loadParams : {task: '{friendly_single}_with_items'},
+	
+	idParam : '{friendly_single}_id',
+	
+	loadUrl : GO.settings.modules.{module}.url+'json.php',
+	
+	editHandler : function(){
+		GO.{module}.{friendly_single}Dialog.show({ {friendly_single}_id: this.data.id});
+	},
 	
 	initComponent : function(){
 	
-		var template = 
-			'<div>'+
+		this.template =
 				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+
 					'<tr>'+
 						'<td colspan="2" class="display-panel-heading">Information</td>'+
@@ -73,82 +37,27 @@ Ext.extend(GO.{module}.{friendly_single_ucfirst}Panel, Ext.Panel,{
 									
 				'</table>';																		
 				<gotpl if="$link_type &gt; 0">
-				template += GO.linksTemplate;
+				this.template += GO.linksTemplate;
 												
 				if(GO.customfields)
 				{
-					template +=GO.customfields.displayPanelTemplate;
+					this.template +=GO.customfields.displayPanelTemplate;
 				}</gotpl>
 	    	
-	  var config = {};
+	  this.templateConfig = {};
 		
 		<gotpl if="$files">		
 		if(GO.files)
 		{
-			Ext.apply(config, GO.files.filesTemplateConfig);
-			template += GO.files.filesTemplate;
+			Ext.apply(this.templateConfig, GO.files.filesTemplateConfig);
+			this.template += GO.files.filesTemplate;
 		}
-		Ext.apply(config, GO.linksTemplateConfig);
+		Ext.apply(this.templateConfig, GO.linksTemplateConfig);
 		</gotpl>
-				
-		template+='</div>';
 		
-		this.template = new Ext.XTemplate(template, config);
+		this.xtemplate = new Ext.XTemplate(this.template, this.templateConfig);
 		
 		GO.{module}.{friendly_single_ucfirst}Panel.superclass.initComponent.call(this);
-	},
-	
-	reload : function()
-	{
-		if(this.data && this.data.id)
-			this.load{friendly_single_ucfirst}(this.data.id);
-	},
-	
-	load{friendly_single_ucfirst} : function({friendly_single}_id)
-	{
-		this.body.mask(GO.lang.waitMsgLoad);
-		Ext.Ajax.request({
-			url: GO.settings.modules.{module}.url+'json.php',
-			params: {
-				task: '{friendly_single}_with_items',
-				{friendly_single}_id: {friendly_single}_id
-			},
-			callback: function(options, success, response)
-			{
-				this.body.unmask();
-				if(!success)
-				{
-					Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
-				}else
-				{
-					var responseParams = Ext.decode(response.responseText);
-					this.setData(responseParams.data);
-				}				
-			},
-			scope: this			
-		});
-		
-	},
-	
-	setData : function(data)
-	{
-		this.data=data;
-		this.editButton.setDisabled(!data.write_permission);		
-		<gotpl if="$link_type &gt; 0">data.link_type={link_type};
-		this.linkBrowseButton.setDisabled(false);</gotpl>
-		
-		<gotpl if="$link_type &gt; 0">if(data.write_permission)
-			this.newMenuButton.setLinkConfig({
-				id:this.data.id,
-				type:{link_type},
-				text: this.data.name,
-				callback:function(){
-					this.load{friendly_single_ucfirst}(this.data.id);				
-				},
-				scope:this
-			});</gotpl>
-		
-		this.template.overwrite(this.body, data);	
 	}
 	
 });			

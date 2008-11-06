@@ -6,7 +6,7 @@ GO.linkHandlers[{link_type}]=function(id){
 		title: GO.billing.lang.{friendly_single_js},
 		items: {friendly_single_js}Panel
 	});
-	 {friendly_single_js}Panel.load{friendly_single_ucfirst}(id);
+	 {friendly_single_js}Panel.load(id);
 	linkWindow.show();
 }
 
