@@ -57,7 +57,7 @@ try{
 			
 			if(isset($GO_MODULES->modules['comments']) && isset($links[$comment_link_index]))
 			{
-				require_once ($GO_LANGUAGE->get_language_file('tasks'));
+				require($GO_LANGUAGE->get_language_file('tasks'));
 				
 				require_once($GO_MODULES->modules['comments']['class_path'].'comments.class.inc.php');
 				$comments = new comments();

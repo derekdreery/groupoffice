@@ -1,87 +1,21 @@
-GO.addressbook.ContactReadPanel = function(config)
-{
-	if(!config)
-	{
-		config={};
-	}
-	config.width=450;
-	config.split=true;
-	config.autoScroll=true;
-	config.layout='fit';
+GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 	
-	Ext.apply(this, config);
+	link_type : 2,
 	
-	this.newMenuButton = new GO.NewMenuButton();	
+	loadParams : {task: 'load_contact_with_items'},
 	
-	if(GO.mailings)
-	{	
-		this.newOODoc = new GO.mailings.NewOODocumentMenuItem();
-		this.newMenuButton.menu.add(this.newOODoc);		
-		
-		GO.mailings.ooTemplatesStore.on('load', function(){
-			this.newOODoc.setDisabled(GO.mailings.ooTemplatesStore.getCount() == 0);
-		}, this);
-	}
+	idParam : 'contact_id',
 	
-	if(GO.tasks)
-	{
-		this.scheduleCallItem = new GO.tasks.ScheduleCallMenuItem();
-		this.newMenuButton.menu.add(this.scheduleCallItem);
-	}
+	loadUrl : GO.settings.modules.addressbook.url+'json.php',
 	
-	this.tbar = [
-		this.editButton = new Ext.Button({
-			iconCls: 'btn-edit', 
-			text: GO.lang['cmdEdit'], 
-			cls: 'x-btn-text-icon', 
-			handler: function(){
-				if(!GO.addressbook.contactDialog)
-				{
-					GO.addressbook.contactDialog = new GO.addressbook.ContactDialog();
-				}
-				GO.addressbook.contactDialog.show(this.data.id);
-			}, 
-			scope: this,
-			disabled : true
-		}),this.linkBrowseButton = new Ext.Button({
-			iconCls: 'btn-link', 
-			cls: 'x-btn-text-icon', 
-			text: GO.lang.cmdBrowseLinks,
-			handler: function(){
-				GO.linkBrowser.show({link_id: this.data.id,link_type: "2",folder_id: "0"});				
-			},
-			scope: this,
-			disabled: true
-		})];
-		
-	if(GO.files)
-	{
-		this.tbar.push(this.fileBrowseButton = new Ext.Button({
-			iconCls: 'go-menu-icon-files', 
-			cls: 'x-btn-text-icon', 
-			text: GO.files.lang.files,
-			handler: function(){
-				GO.files.openFolder(this.data.files_path);				
-			},
-			scope: this,
-			disabled: true
-		}));
-	}
-		
-	this.tbar.push(this.newMenuButton);
-	
-	
-	
-	GO.addressbook.ContactReadPanel.superclass.constructor.call(this);		
-}
-
-
-Ext.extend(GO.addressbook.ContactReadPanel, Ext.Panel,{
+	editHandler : function(){
+		GO.addressbook.contactDialog.show(this.data.id);
+	},	
 	
 	initComponent : function(){
 		
 		
-		var template = 
+		this.template = 
 				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+
 					'<tr>'+
 						'<td colspan="2" class="display-panel-heading">' + GO.addressbook.lang['cmdContactDetailsFor'] + ' <b>{full_name}</b></td>'+
@@ -293,11 +227,11 @@ Ext.extend(GO.addressbook.ContactReadPanel, Ext.Panel,{
 				
 				if(GO.customfields)
 				{
-					template +=GO.customfields.displayPanelTemplate;
+					this.template +=GO.customfields.displayPanelTemplate;
 				}
 				
 			
-		var config = {
+		this.templateConfig = {
 			isContactFieldset: function(values){
 				if(values['email'].length ||
 					values['email2'].length ||
@@ -363,78 +297,49 @@ Ext.extend(GO.addressbook.ContactReadPanel, Ext.Panel,{
 			}
 		};		
 		
-		Ext.apply(config, GO.linksTemplateConfig);
+		Ext.apply(this.templateConfig, GO.linksTemplateConfig);
 		
 		
 		if(GO.files)
 		{
-			Ext.apply(config, GO.files.filesTemplateConfig);
-			template += GO.files.filesTemplate;
+			Ext.apply(this.templateConfig, GO.files.filesTemplateConfig);
+			this.template += GO.files.filesTemplate;
 		}
 		
 		if(GO.comments)
 		{
-			template += GO.comments.displayPanelTemplate;
+			this.template += GO.comments.displayPanelTemplate;
 		}
 		
-		this.template = new Ext.XTemplate(template, config);
 		
 		GO.addressbook.ContactReadPanel.superclass.initComponent.call(this);
-	},
-	
-	
-	loadContact : function(contact_id)
-	{
-		this.body.mask(GO.lang.waitMsgLoad);
-		Ext.Ajax.request({
-			url: GO.settings.modules.addressbook.url+'json.php',
-			params: {
-				contact_id: contact_id,
-				task: 'load_contact_with_items'
-			},
-			scope: this,
-			callback: function(options, success, response)
-			{		
-				this.body.unmask();
-				
-				var data = Ext.decode(response.responseText);
-				this.setData(data.data);
-			}
-		});
 		
-	},
-	
-	reload : function()
-	{
-		if(this.data)
-			this.loadContact(this.data.id);
-	},
-	
-	setData : function(data)
-	{
-		data.link_type=2;
-		this.data=data;
-		this.editButton.setDisabled(!data.write_permission);
-		this.linkBrowseButton.setDisabled(false);
-		if(GO.files)
-		{
-			this.fileBrowseButton.setDisabled(false);
+		
+		if(GO.mailings)
+		{	
+			this.newOODoc = new GO.mailings.NewOODocumentMenuItem();
+			this.newMenuButton.menu.add(this.newOODoc);		
+			
+			GO.mailings.ooTemplatesStore.on('load', function(){
+				this.newOODoc.setDisabled(GO.mailings.ooTemplatesStore.getCount() == 0);
+			}, this);
 		}
 		
-		this.template.overwrite(this.body, data);	
-		
+		if(GO.tasks)
+		{
+			this.scheduleCallItem = new GO.tasks.ScheduleCallMenuItem();
+			this.newMenuButton.menu.add(this.scheduleCallItem);
+		}
+	},
+	getLinkName : function(){
+		return this.data.full_name;
+	},
+	setData : function(data)
+	{
+		GO.addressbook.ContactReadPanel.superclass.setData.call(this, data);
+				
 		if(data.write_permission)
 		{
-			this.newMenuButton.setLinkConfig({
-				id:this.data.id,
-				type:2,
-				text: this.data.first_name+' '+this.data.last_name,
-				callback:function(){
-					this.loadContact(this.data.id);				
-				},
-				scope:this
-			});
-			
 			if(this.scheduleCallItem)
 			{				
 				var name = this.data.full_name;
@@ -453,13 +358,10 @@ Ext.extend(GO.addressbook.ContactReadPanel, Ext.Panel,{
 				this.scheduleCallItem.setLinkConfig({
 					name: name,
 					links:[{link_id: this.data.id, link_type:2}],
-					callback:function(){
-						this.loadContact(this.data.id);				
-					},
+					callback:this.reload,
 					scope: this
 				});
 			}
 		}
-	}
-	
+	}	
 });			

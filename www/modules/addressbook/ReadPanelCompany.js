@@ -1,81 +1,20 @@
-GO.addressbook.CompanyReadPanel = function(config)
-{
-	if(!config)
-	{
-		config={};
-	}
+GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 	
-	config.width=450;
-	config.split=true;
-	config.autoScroll=true;
+	link_type : 3,
 	
-	config.layout='fit';
+	loadParams : {task: 'load_company_with_items'},
 	
+	idParam : 'company_id',
 	
-	Ext.apply(this, config);
+	loadUrl : GO.settings.modules.addressbook.url+'json.php',
 	
-	this.newMenuButton = new GO.NewMenuButton();
-	
-	if(GO.mailings)
-	{		
-		
-		this.newOODoc = new GO.mailings.NewOODocumentMenuItem();
-		this.newMenuButton.menu.add(this.newOODoc);		
-		
-		GO.mailings.ooTemplatesStore.on('load', function(){
-			this.newOODoc.setDisabled(GO.mailings.ooTemplatesStore.getCount() == 0);
-		}, this);
-	}
-	
-	this.tbar = [
-		this.editButton = new Ext.Button({
-			iconCls: 'btn-edit', 
-			text: GO.lang['cmdEdit'], 
-			cls: 'x-btn-text-icon', 
-			handler: function(){
-				if(!GO.addressbook.companyDialog)
-				{
-					GO.addressbook.companyDialog = new GO.addressbook.ContactDialog();
-				}
-				
-				GO.addressbook.companyDialog.show(this.data.id);
-			}, 
-			scope: this,
-			disabled : true
-		}),this.linkBrowseButton = new Ext.Button({
-			iconCls: 'btn-link', 
-			cls: 'x-btn-text-icon', 
-			text: GO.lang.cmdBrowseLinks,
-			handler: function(){
-				GO.linkBrowser.show({link_id: this.data.id,link_type: "3",folder_id: "0"});				
-			},
-			scope: this
-		})];
-		
-	if(GO.files)
-	{
-		this.tbar.push(this.fileBrowseButton = new Ext.Button({
-			iconCls: 'go-menu-icon-files', 
-			cls: 'x-btn-text-icon', 
-			text: GO.files.lang.files,
-			handler: function(){
-				GO.files.openFolder(this.data.files_path);				
-			},
-			scope: this,
-			disabled: true
-		}));
-	}
-	
-	this.tbar.push(this.newMenuButton);
-		
-	GO.addressbook.CompanyReadPanel.superclass.constructor.call(this);		
-}
-
-Ext.extend(GO.addressbook.CompanyReadPanel,Ext.Panel,{
+	editHandler : function(){
+		GO.addressbook.companyDialog.show(this.data.id);
+	},	
 	
 	initComponent : function(){
  
-			var template = '<div>'+
+			this.template = '<div>'+
 				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+
 					'<tr>'+
 						'<tpl if="this.isCompanySecondColumn(values)">'+
@@ -316,10 +255,10 @@ Ext.extend(GO.addressbook.CompanyReadPanel,Ext.Panel,{
 			
 		if(GO.customfields)
 		{
-			template +=GO.customfields.displayPanelTemplate;
+			this.template +=GO.customfields.displayPanelTemplate;
 		}
 	    	
-	   var config =	{
+	  this.templateConfig =	{
 			isCompanySecondColumn : function(values)
 			{
 				if(
@@ -415,83 +354,32 @@ Ext.extend(GO.addressbook.CompanyReadPanel,Ext.Panel,{
 				}
 			}
 		};
-				
-
 		
-		Ext.apply(config, GO.linksTemplateConfig);		
+		Ext.apply(this.templateConfig, GO.linksTemplateConfig);		
 		
 		if(GO.files)
 		{
-			Ext.apply(config, GO.files.filesTemplateConfig);
-			template += GO.files.filesTemplate;
+			Ext.apply(this.templateConfig, GO.files.filesTemplateConfig);
+			this.template += GO.files.filesTemplate;
 		}
 		
 		if(GO.comments)
 		{
-			template += GO.comments.displayPanelTemplate;
+			this.template += GO.comments.displayPanelTemplate;
 		}
-		
-		
 				
-		template+='</div>';
-		
-		this.template = new Ext.XTemplate(template, config);
-		
-				
-		
+		this.template+='</div>';		
+			
 		GO.addressbook.CompanyReadPanel.superclass.initComponent.call(this);
-	},
-	
-	reload : function()
-	{
-		if(this.data)
-			this.loadCompany(this.data.id);
-	},
-	
-	
-	loadCompany : function(company_id)
-	{
-		this.body.mask(GO.lang.waitMsgLoad);
-		Ext.Ajax.request({
-			url: GO.settings.modules.addressbook.url+'json.php',
-			params: {
-				company_id: company_id,
-				task: 'load_company_with_items'
-			},
-			scope: this,
-			callback: function(options, success, response)
-			{		
-				this.body.unmask();
-				var data = Ext.decode(response.responseText);
-				this.setData(data.data);
-			}
-		});		
-	},
-	
-	setData : function(data)
-	{
-		data.link_type=3;
-		this.data=data;
-		this.editButton.setDisabled(!data.write_permission);
-		this.linkBrowseButton.setDisabled(false);
-		if(GO.files)
-		{
-			this.fileBrowseButton.setDisabled(false);
-		}
-		this.template.overwrite(this.body, data);	
 		
-		if(data.write_permission)
-		{
-			this.newMenuButton.setLinkConfig({
-				id:this.data.id,
-				type:3,
-				text: this.data.name,
-				callback:function(){
-					this.loadCompany(this.data.id);				
-				},
-				scope:this
-			});
+		if(GO.mailings)
+		{			
+			this.newOODoc = new GO.mailings.NewOODocumentMenuItem();
+			this.newMenuButton.menu.add(this.newOODoc);		
+			
+			GO.mailings.ooTemplatesStore.on('load', function(){
+				this.newOODoc.setDisabled(GO.mailings.ooTemplatesStore.getCount() == 0);
+			}, this);
 		}
-	}
-	
+	}	
 });
