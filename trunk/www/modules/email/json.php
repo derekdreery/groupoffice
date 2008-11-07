@@ -542,7 +542,7 @@ try{
 				}
 				$response['total']=$email->get_filters(($_POST['account_id']));
 				$response['results']=array();
-				while($email->next_record(MYSQL_ASSOC))
+				while($email->next_record(DB_ASSOC))
 				{
 					$response['results'][] = $email->record;
 				}
@@ -1214,7 +1214,7 @@ try{
 
 											$response['total']=$email->get_folders($account_id);
 											$response['data']=array();
-											while($email->next_record(MYSQL_ASSOC))
+											while($email->next_record(DB_ASSOC))
 											{
 												$response['data'][]=array(
 				'id'=>$email->f('id'),
@@ -1233,7 +1233,7 @@ try{
 
 											$response['total']=$email->get_subscribed($account_id);
 											$response['data']=array();
-											while($email->next_record(MYSQL_ASSOC))
+											while($email->next_record(DB_ASSOC))
 											{
 												if ($email->f('attributes') != LATT_NOSELECT && (!$hide_inbox || $email->f('name')!='INBOX'))
 												{

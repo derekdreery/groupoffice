@@ -258,7 +258,7 @@ try{
 											$response['total'] = $tasks->get_authorized_tasklists($auth_type, $query, $GO_SECURITY->user_id, $start, $limit, $sort, $dir);
 										}
 										$response['results']=array();
-										while($tasks->next_record(MYSQL_ASSOC))
+										while($tasks->next_record(DB_ASSOC))
 										{
 											$tasklist = $tasks->record;
 											$tasklist['dom_id']='tl-'.$tasks->f('id');
@@ -345,7 +345,7 @@ try{
 										
 										$now=time();
 										
-										while($tasks->next_record(MYSQL_ASSOC))
+										while($tasks->next_record(DB_ASSOC))
 										{
 											$task = $tasks->record;
 											$task['completed']=$tasks->f('completion_time')>0;

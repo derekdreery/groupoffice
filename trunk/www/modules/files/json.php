@@ -542,7 +542,7 @@ try{
 									$response['total'] = $fs->get_authorized_templates($GO_SECURITY->user_id);
 								}
 								$response['results']=array();
-								while($fs->next_record(MYSQL_ASSOC))
+								while($fs->next_record(DB_ASSOC))
 								{
 									$user = $GO_USERS->get_user($fs->f('user_id'));
 

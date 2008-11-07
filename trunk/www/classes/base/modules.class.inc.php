@@ -264,7 +264,7 @@ class GO_MODULES extends db {
 
 		$sql = "SELECT * FROM go_modules WHERE id='".$this->escape($module_id)."'";
 		$this->query($sql);
-		if ( $this->next_record(MYSQL_ASSOC) ) {
+		if ( $this->next_record(DB_ASSOC) ) {
 			$this->record['full_url'] =
 			$GO_CONFIG->full_url.'modules/'.$module_id.'/';
 			$this->record['url'] =
@@ -435,7 +435,7 @@ class GO_MODULES extends db {
 
 		$modules = array();
 		$this->get_modules($admin_menu);
-		while ( $this->next_record(MYSQL_ASSOC) ) {
+		while ( $this->next_record(DB_ASSOC) ) {
 				
 			$this->record['path'] = $GO_CONFIG->root_path.'modules/'.$this->f('id').'/';
 			$this->record['full_url'] =	$GO_CONFIG->full_url.'modules/'.$this->f('id').'/';

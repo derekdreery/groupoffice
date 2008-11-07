@@ -427,7 +427,7 @@ class GO_USERS extends db
 		if($this->num_rows()!=1)
 		{
 			return false;
-		}elseif ($this->next_record(MYSQL_ASSOC))
+		}elseif ($this->next_record(DB_ASSOC))
 		{
 			return $this->record;
 		}
@@ -451,7 +451,7 @@ class GO_USERS extends db
 		"WHERE (go_users_groups.user_id=".$this->escape($user_id)." OR ".
 		"go_acl.user_id = ".$this->escape($user_id).") AND email='".$this->escape($email)."'";
 		$this->query($sql);
-		if ($this->next_record(MYSQL_ASSOC))
+		if ($this->next_record(DB_ASSOC))
 		{
 			return $this->record;
 		}
@@ -489,7 +489,7 @@ class GO_USERS extends db
 	{
 		$sql = "SELECT * FROM go_users WHERE id='".$this->escape($user_id)."'";
 		$this->query( $sql );
-		if ($this->next_record(MYSQL_ASSOC))
+		if ($this->next_record(DB_ASSOC))
 		{
 			if($this->record['date_seperator']=='')
 			{
