@@ -105,3 +105,5 @@ GO.email.lang.searchOnSender='Toon berichten';
 
 GO.email.lang.blocked = '{blocked_images} externe afbeeldingen werden voor uw veiligheid geblokkeerd.';
 GO.email.lang.unblock = 'Klik hier om de blokkade op te heffen';
+
+GO.email.lang.loadEmailFirst = 'Om deze functie te gebruiken moet u eerst uw e-mail laden door op het tabblad E-mail te klikken.';

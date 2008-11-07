@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `fs_folders` (
   PRIMARY KEY  (`path`),
   KEY `link_id_2` (`id`),
   KEY `visible` (`visible`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;s
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
