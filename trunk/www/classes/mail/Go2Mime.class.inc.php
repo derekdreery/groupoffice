@@ -139,7 +139,7 @@ class Go2Mime
 		
 		$this->response['notification'] = isset($structure->headers['disposition-notification-to']) ? true : false;
 		$this->response['subject']= empty($structure->headers['subject']) ? '' : $structure->headers['subject'];
-		
+		$this->response['sender']= htmlspecialchars(String::get_email_from_string($structure->headers['from']));
 		$this->response['from'] = isset($structure->headers['from']) ? htmlspecialchars($structure->headers['from']) : $_SESSION['GO_SESSION']['email'];
 		$this->response['to'] = isset($structure->headers['to']) ? htmlspecialchars($structure->headers['to']) : '';
 		$this->response['cc'] = isset($structure->headers['cc']) ? htmlspecialchars($structure->headers['cc']) : '';
@@ -213,6 +213,7 @@ class Go2Mime
 				{
 					$mime_attachment['index']=count($this->response['attachments']);
 					$mime_attachment['size'] = isset($part->body) ? strlen($part->body) : 0;
+					$mime_attachment['human_size'] = Number::format_size($mime_attachment['size']);
 					$mime_attachment['name'] = $part->d_parameters['filename'];
 					$mime_attachment['extension'] = File::get_extension($part->d_parameters['filename']);
 					$mime_attachment['mime'] = $part->ctype_primary.'/'.$part->ctype_secondary;

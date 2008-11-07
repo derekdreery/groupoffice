@@ -582,12 +582,18 @@ GO.email.EmailClient = function(config){
    */
   GO.email.searchSender=function(sender)
 	{
-		this.messagesGrid.store.baseParams.query='FROM "'+sender+'"';
-		this.messagesGrid.store.load();
+		if(this.rendered)
+		{
+			this.messagesGrid.store.baseParams.query='FROM "'+sender+'"';
+			this.messagesGrid.store.load();
+			
+			GO.mainLayout.tabPanel.setActiveTab(this.id);
+		}else
+		{
+			alert(GO.email.lang.loadEmailFirst);
+		}
 	}	
 	GO.email.searchSender = GO.email.searchSender.createDelegate(this);
-
-  
   
   GO.email.EmailClient.superclass.constructor.call(this, config);	
 };
@@ -1038,6 +1044,7 @@ GO.linkHandlers[9] = function(id, remoteMessage){
 	
 	var win = new Ext.Window({
 			maximizable:true,
+			collapsible:true,
 			title: GO.email.lang.emailMessage,
 			height: 400,
 			width: 600,
