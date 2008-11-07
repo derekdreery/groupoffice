@@ -474,7 +474,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		
 		GO.files.FileBrowser.superclass.afterRender.call(this);
 		
-		if(!this.loadDelayed)
+		if(!this.loadDelayed && !this.loaded)
 		{			
 			this.loadFiles();
 		}
@@ -1428,7 +1428,7 @@ GO.files.openFolder = function(path)
 		
 			title: GO.files.lang.fileBrowser,
 			height:500,
-			width:700,
+			width:740,
 			layout:'fit',
 			border:false,
 			maximizable:true,

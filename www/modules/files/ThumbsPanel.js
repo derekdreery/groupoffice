@@ -31,8 +31,6 @@ GO.files.ThumbsPanel = Ext.extend(Ext.Panel, {
             overClass:'fs-view-over',
             selectedClass:'fs-view-selected',
             itemSelector:'div.fs-thumb-wrap',
-            emptyText: 'No images to display',
-
            /* plugins: [
                 new Ext.DataView.DragSelector()
                 //new Ext.DataView.LabelEditor({dataIndex: 'name'})
