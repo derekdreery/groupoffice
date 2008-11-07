@@ -1,5 +1,5 @@
 GO.files.ThumbsPanel = Ext.extend(Ext.Panel, {
-	
+	store : false,
 	initComponent : function(){
 		
     var tpl = new Ext.XTemplate('<tpl for=".">',
@@ -50,15 +50,17 @@ GO.files.ThumbsPanel = Ext.extend(Ext.Panel, {
 		{
 			this.store.un("beforeload", this.onBeforeLoad, this);
 			this.store.un("load", this.onStoreLoad, this);
+			this.store=false;
 		}
 		
 		if(store)
 		{
+			this.store=store;
 			this.store.on("befoelad", this.onBeforeLoad, this);
 			this.store.on("load", this.onStoreLoad, this);
 		}
 		
-		this.view.setStore(store);
+		this.view.setStore(this.store);
 		
 	},
 	/**
