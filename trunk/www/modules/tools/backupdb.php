@@ -25,21 +25,11 @@ $browser = detect_browser();
 
 $filename = 'groupoffice-dbbackup-'.date('YmdGi').'.sql';
 
-header('Content-Transfer-Encoding: binary');
-
-if ($browser['name'] == 'MSIE')
-{
-	header('Content-Type: application/download');
-	header('Content-Disposition: attachment; filename="'.$filename.'"');
-	header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-	header('Pragma: public');
-
-}else
-{
-	header('Content-Type: text/plain');
-	header('Pragma: no-cache');	
-}
-
+//header('Content-Transfer-Encoding: binary');
+header('Content-Type: application/download');
+header('Content-Disposition: attachment; filename="'.$filename.'"');
+header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+header('Pragma: no-cache,public');
 
 
 echo "#Group-Office version ".$GO_CONFIG->version."\n";
@@ -60,7 +50,7 @@ foreach($tables as $table)
 {
 	$db->query("SHOW CREATE TABLE `$table`");
 	
-	if($db->next_record())
+	if($db->next_record(DB_BOTH))
 	{
 		echo "\n#Create table ".$table."\n\n";		
 		

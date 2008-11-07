@@ -28,15 +28,16 @@ CREATE TABLE IF NOT EXISTS `fs_files` (
   `ctime` int(11) NOT NULL default '0',
   `mtime` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL,
-  `comments` text NOT NULL,
+  `comments` text,
   PRIMARY KEY  (`path`,`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Tabel structuur voor tabel `fs_folders`
--- 
+--
+
 DROP TABLE IF EXISTS `fs_folders`;
 CREATE TABLE IF NOT EXISTS `fs_folders` (
   `user_id` int(11) NOT NULL default '0',
@@ -45,12 +46,12 @@ CREATE TABLE IF NOT EXISTS `fs_folders` (
   `visible` enum('0','1') NOT NULL,
   `acl_read` int(11) NOT NULL default '0',
   `acl_write` int(11) NOT NULL default '0',
-  `comments` text NOT NULL,
+  `comments` text,
   `thumbs` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`path`),
   KEY `link_id_2` (`id`),
   KEY `visible` (`visible`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;s
 
 -- --------------------------------------------------------
 
