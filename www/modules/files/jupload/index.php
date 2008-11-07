@@ -9,6 +9,7 @@ header('Content-Type: text/html; charset=UTF-8');
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 </head>
 <body style="margin:0;padding:0;height:100%">
+        
         <applet
 	            code="wjhk.jupload2.JUploadApplet"
 	            name="JUpload"

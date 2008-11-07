@@ -953,7 +953,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	    						height: 500,
 	    						target: 'jupload'
 	    					});
-	    					
+	    							
 	    					this.uploadDialog.hide();
 	    					//for refreshing by popup
 	    					GO.currentFilesStore = this.getActiveGridStore();
