@@ -14,19 +14,16 @@
 GO.dialog.LinksDialog = function(config){
 	
 	Ext.apply(this, config);
-
-	  
-  
 	
 	this.grid = new GO.grid.LinksGrid({
 						
 		});
+
+	this.grid.on('rowdblclick', this.linkItems, this);
 		
 	var focusSearch = function(){
 		this.grid.searchField.focus(true);		
 	};
-	
-
 	
 	GO.dialog.LinksDialog.superclass.constructor.call(this, {
    	layout: 'fit',
@@ -36,13 +33,13 @@ GO.dialog.LinksDialog = function(config){
 		minHeight:300,
 		height:400,
 		width:600,
+		border:false,
 		plain:true,
 		closeAction:'hide',
 		title:GO.lang['strLinkItems'],
 		items: this.grid,
 		buttons: [
 			{
-				id: 'ok',
 				text: GO.lang['cmdOk'],
 				handler: function(){							
 					this.linkItems();
@@ -50,7 +47,6 @@ GO.dialog.LinksDialog = function(config){
 				scope:this
 			},
 			{
-				id: 'close',
 				text: GO.lang['cmdClose'],
 				handler: function(){this.hide();},
 				scope: this
@@ -69,7 +65,7 @@ Ext.extend(GO.dialog.LinksDialog, Ext.Window, {
 		GO.dialog.LinksDialog.superclass.show.call(this);
 		if(!this.grid.store.loaded)
 		{
-			this.grid.store.load();
+			//this.grid.store.load();
 		}
 	},
 	

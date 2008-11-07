@@ -68,14 +68,13 @@ GO.email.LinksDialog = function(config){
 		 	tbar: [
 	            GO.lang.strSearch+': ', ' ',
 	            this.SearchField
-	        ]
-			
+	        ]			
 		});
 		
-	
+	this.grid.on('rowdblclick', this.linkItems, this);
 
 	
-	Ext.Window.superclass.constructor.call(this, {
+	GO.email.LinksDialog.superclass.constructor.call(this, {
     layout: 'fit',
 		modal:false,
 		minWidth:300,
@@ -83,6 +82,7 @@ GO.email.LinksDialog = function(config){
 		height:400,
 		width:600,
 		plain:true,
+		border:false,
 		closeAction:'hide',
 		title:GO.lang.strLinkItems,
 		items: this.grid,
@@ -109,6 +109,15 @@ GO.email.LinksDialog = function(config){
 };
 
 Ext.extend(GO.email.LinksDialog, Ext.Window, {
+	
+	show : function(){		
+		GO.dialog.LinksDialog.superclass.show.call(this);
+		if(!this.store.loaded)
+		{
+			//this.store.load();
+		}
+	},
+	
 	
 	IconRenderer : function(src,cell,record){
 		return '<div class=\"go-link-icon-' + record.data.link_type +' \"></div>';
