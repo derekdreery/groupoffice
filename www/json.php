@@ -96,7 +96,7 @@ try{
 
 			$response['results']=array();
 
-			while($GO_USERS->next_record(MYSQL_ASSOC))
+			while($GO_USERS->next_record(DB_ASSOC))
 			{
 			$response['results'][]=array(
 			'id'=>$GO_USERS->f('id'),
@@ -161,7 +161,7 @@ try{
 
 			$response['total'] = $GO_SECURITY->get_groups_in_acl($acl_id);
 			$response['results']=array();
-			while($GO_SECURITY->next_record(MYSQL_ASSOC))
+			while($GO_SECURITY->next_record(DB_ASSOC))
 			{
 				$response['results'][]=$GO_SECURITY->record;
 			}
@@ -222,7 +222,7 @@ try{
 
 			$response['total'] = $GO_SECURITY->get_users_in_acl($acl_id);
 			$response['results']=array();
-			while($GO_SECURITY->next_record(MYSQL_ASSOC))
+			while($GO_SECURITY->next_record(DB_ASSOC))
 			{
 				$result['id']=$GO_SECURITY->f('id');
 				$result['name']=String::format_name($GO_SECURITY->record);
@@ -250,7 +250,7 @@ try{
 
 					
 
-				while($ab->next_record(MYSQL_ASSOC))
+				while($ab->next_record(DB_ASSOC))
 				{
 					$name = String::format_name($ab->f('last_name'),$ab->f('first_name'),$ab->f('middle_name'),'first_name');
 					$rfc_email =$RFC822->write_address($name, $ab->f('email'));
@@ -304,7 +304,7 @@ try{
 			{
 				$GO_USERS->search($query,array('name','email'),$GO_SECURITY->user_id, 0,10);
 
-				while($GO_USERS->next_record(MYSQL_ASSOC))
+				while($GO_USERS->next_record(DB_ASSOC))
 				{
 					$name = String::format_name($GO_USERS->f('last_name'),$GO_USERS->f('first_name'),$GO_USERS->f('middle_name'),'first_name');
 					$rfc_email = $RFC822->write_address($name, $GO_USERS->f('email'));

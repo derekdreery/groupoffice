@@ -968,7 +968,7 @@ class GO_CONFIG
       	$sql = "SELECT * FROM go_state WHERE user_id=".$this->db->escape($user_id)." AND `index`='".$this->db->escape($index)."'";
       	$this->db->query($sql);
 
-      	while($this->db->next_record(MYSQL_ASSOC))
+      	while($this->db->next_record(DB_ASSOC))
       	{
       		$state[$this->db->f('name')]=$this->db->f('value');
       	}

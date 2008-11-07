@@ -120,7 +120,7 @@ class tasks extends db
 		{
 			$sql = "SELECT * FROM ta_lists WHERE id='".$this->escape($list_id)."'";
 			$this->query($sql);
-			if ($this->next_record(MYSQL_ASSOC))
+			if ($this->next_record(DB_ASSOC))
 			{
 				return $this->record;
 			}else
@@ -440,7 +440,7 @@ class tasks extends db
 	{
 		$sql = "SELECT t.*, tl.acl_read, tl.acl_write FROM ta_tasks t INNER JOIN ta_lists tl ON tl.id=t.tasklist_id WHERE t.id='".$this->escape($task_id)."'";
 		$this->query($sql);
-		if($this->next_record(MYSQL_ASSOC))
+		if($this->next_record(DB_ASSOC))
 		{
 			return $this->record;
 		}else

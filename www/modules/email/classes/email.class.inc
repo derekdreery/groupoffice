@@ -320,7 +320,7 @@ class email extends db
 		}
 
 		$this->query($sql);
-		if ($this->next_record(MYSQL_ASSOC))
+		if ($this->next_record(DB_ASSOC))
 		{
 			return $this->record;
 		}else
@@ -517,7 +517,7 @@ class email extends db
 		$sql = "SELECT * FROM em_folders WHERE name='".$this->escape($name)."' AND ".
 		"account_id='".$this->escape($account_id)."'";
 		$this->query($sql);
-		if ($this->next_record(MYSQL_ASSOC))
+		if ($this->next_record(DB_ASSOC))
 		{
 			return $this->record;
 		}else
@@ -530,7 +530,7 @@ class email extends db
 	{
 		$sql = "SELECT * FROM em_folders WHERE id=".$this->escape($folder_id);
 		$this->query($sql);
-		if($this->next_record(MYSQL_ASSOC))
+		if($this->next_record(DB_ASSOC))
 		{
 			return $this->record;
 		}
@@ -832,7 +832,7 @@ class email extends db
 	{
 		$sql = "SELECT * FROM em_filters WHERE id='$filter_id'";
 		$this->query($sql);
-		if ($this->next_record(MYSQL_ASSOC))
+		if ($this->next_record(DB_ASSOC))
 		{
 			return $this->record;
 		}else

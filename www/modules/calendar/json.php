@@ -160,7 +160,7 @@ try{
 			}
 
 			$response['participants']=array();
-			while($cal->next_record(MYSQL_ASSOC))
+			while($cal->next_record(DB_ASSOC))
 			{
 				$participant=$cal->record;
 
@@ -658,7 +658,7 @@ try{
 											$response['total'] = $cal->get_authorized_calendars($GO_SECURITY->user_id);
 										}
 										$response['results']=array();
-										while($cal->next_record(MYSQL_ASSOC))
+										while($cal->next_record(DB_ASSOC))
 										{
 											//$user = $GO_USERS->get_user($cal->f('user_id'));
 
@@ -702,7 +702,7 @@ try{
 											$response['total'] = $cal->get_writable_calendars($GO_SECURITY->user_id, $start, $limit);
 										}
 										$response['results']=array();
-										while($cal->next_record(MYSQL_ASSOC))
+										while($cal->next_record(DB_ASSOC))
 										{
 											$user = $GO_USERS->get_user($cal->f('user_id'));
 
@@ -725,7 +725,7 @@ try{
 											$response['total'] = $cal->get_authorized_calendars($GO_SECURITY->user_id);
 										}
 										$response['results']=array();
-										while($cal->next_record(MYSQL_ASSOC))
+										while($cal->next_record(DB_ASSOC))
 										{
 											$user = $GO_USERS->get_user($cal->f('user_id'));
 
@@ -742,7 +742,7 @@ try{
 
 										$response['total'] = $cal->get_authorized_views($GO_SECURITY->user_id);
 										$response['results']=array();
-										while($cal->next_record(MYSQL_ASSOC))
+										while($cal->next_record(DB_ASSOC))
 										{
 											$user = $GO_USERS->get_user($cal->f('user_id'));
 
@@ -779,7 +779,7 @@ try{
 
 										$response['total'] = $cal->get_writable_views($GO_SECURITY->user_id);
 										$response['results']=array();
-										while($cal->next_record(MYSQL_ASSOC))
+										while($cal->next_record(DB_ASSOC))
 										{
 											$user = $GO_USERS->get_user($cal->f('user_id'));
 
@@ -850,7 +850,7 @@ try{
 
 										$response['total'] = $cal->get_participants($event_id);
 										$response['results']=array();
-										while($cal->next_record(MYSQL_ASSOC))
+										while($cal->next_record(DB_ASSOC))
 										{
 											$participant = $cal->record;
 

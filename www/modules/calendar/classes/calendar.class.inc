@@ -541,7 +541,7 @@ class calendar extends db
 	function get_settings($user_id)
 	{
 		$this->query("SELECT * FROM cal_settings WHERE user_id='".$this->escape($user_id)."'");
-		if ($this->next_record(MYSQL_ASSOC))
+		if ($this->next_record(DB_ASSOC))
 		{
 			return $this->record;
 		}else
@@ -609,7 +609,7 @@ class calendar extends db
 		{
 			$sql = "SELECT * FROM cal_calendars WHERE id='".$this->escape($calendar_id)."'";
 			$this->query($sql);
-			if ($this->next_record(MYSQL_ASSOC))
+			if ($this->next_record(DB_ASSOC))
 			{
 				return $this->record;
 			}else
@@ -621,7 +621,7 @@ class calendar extends db
 			global $GO_SECURITY;
 
 			$this->get_user_calendars($GO_SECURITY->user_id);
-			if ($this->next_record(MYSQL_ASSOC))
+			if ($this->next_record(DB_ASSOC))
 			{
 				return $this->record;
 			}else
@@ -1166,7 +1166,7 @@ class calendar extends db
 	{
 		$sql = "SELECT e.*, c.acl_read, c.acl_write FROM cal_events e INNER JOIN cal_calendars c ON c.id=e.calendar_id WHERE e.id='".$this->escape($event_id)."'";
 		$this->query($sql);
-		if($this->next_record(MYSQL_ASSOC))
+		if($this->next_record(DB_ASSOC))
 		{
 			return $this->record;
 		}else

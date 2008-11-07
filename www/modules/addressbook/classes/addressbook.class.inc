@@ -255,7 +255,7 @@ class addressbook extends db {
 		"(ab_addressbooks.id=ab_companies.addressbook_id) ".
 		"WHERE ab_companies.id='".$this->escape($company_id)."'";
 		$this->query($sql);
-		if ($this->next_record(MYSQL_ASSOC)) {
+		if ($this->next_record(DB_ASSOC)) {
 			return $this->record;
 		}
 		return false;
@@ -395,7 +395,7 @@ class addressbook extends db {
 		"WHERE ab_contacts.id='".$this->escape($contact_id)."'");
 
 
-		if ($this->next_record(MYSQL_ASSOC)) {
+		if ($this->next_record(DB_ASSOC)) {
 			return $this->record;
 		}else
 		{
