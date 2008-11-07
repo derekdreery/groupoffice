@@ -71,20 +71,6 @@ GO.files.FileBrowser = function(config){
 	this.treePanel.setRootNode(this.rootNode);
 	
 	
-	/*if(!config.treeRootVisible)
-	{
-		this.rootNode.on('load', function(node)
-		{
-			if(node.childNodes[0])
-			{
-				var firstAccountNode = node.childNodes[0];
-				this.setPath(firstAccountNode.id);
-			}				
-		}, this, {single:true});
-	}*/
-	
-	
-	
 	this.treePanel.on('click', function(node)	{
 		this.setPath(node.id, true);
 	}, this);
@@ -117,9 +103,9 @@ GO.files.FileBrowser = function(config){
 		  record.data={};
 		  record.data['extension']='folder';
 		  record.data['path']=e.data.node.id;
-		  var selections = [record];
-		  
+		  var selections = [record];		  
 		}
+		
 		this.paste('cut', e.target.id, selections);
 	},
 	this);
@@ -136,17 +122,6 @@ GO.files.FileBrowser = function(config){
 		remoteSort:true
 	});
 	
-	/*this.thumbsStore = new GO.data.JsonStore({
-		url: GO.settings.modules.files.url+'json.php',
-		baseParams: {'task': 'grid', 'thumbs' : 'true'},
-		root: 'results',
-		totalProperty: 'total',
-		id: 'path',
-		fields:['path','name','type', 'size', 'mtime', 'grid_display', 'extension', 'timestamp', 'thumb_url'],
-		remoteSort:true
-	}); 
-	
-	this.thumbsStore.on('load', this.onStoreLoad, this);*/
 	this.gridStore.on('load', this.onStoreLoad, this);
 	
 	if(config.filesFilter)
@@ -157,7 +132,6 @@ GO.files.FileBrowser = function(config){
 	this.gridPanel = new GO.grid.GridPanel( {
 			layout:'fit',
 			split:true,
-			//paging:true,
 			store: this.gridStore,
 			deleteConfig: {
 				scope:this,
@@ -207,8 +181,7 @@ GO.files.FileBrowser = function(config){
 			notifyOver : this.onGridNotifyOver,
 			notifyDrop : this.onGridNotifyDrop.createDelegate(this)
 		});
-	}, this);
-	
+	}, this);	
 	
 	this.gridPanel.on('rowdblclick', this.onGridDoubleClick, this);
 	
@@ -417,6 +390,10 @@ GO.files.FileBrowser = function(config){
 		
 	}, this);
 	
+	this.thumbsPanel.on('drop', function(targetPath, dragRecords){
+		this.paste('cut', targetPath, dragRecords);
+	}, this);
+	
 	this.cardPanel =new Ext.Panel({
 			region:'center',
 			layout:'card',
@@ -493,6 +470,8 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		{			
 			this.loadFiles();
 		}
+		
+		
 	},
 	
 	loadFiles : function(path){

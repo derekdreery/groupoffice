@@ -16,14 +16,14 @@ GO.files.ThumbsPanel = Ext.extend(Ext.Panel, {
             autoHeight:true,
             multiSelect: true,
             overClass:'fs-view-over',
-             selectedClass:'fs-view-selected',
+            selectedClass:'fs-view-selected',
             itemSelector:'div.fs-thumb-wrap',
             emptyText: 'No images to display',
 
-            plugins: [
+           /* plugins: [
                 new Ext.DataView.DragSelector()
                 //new Ext.DataView.LabelEditor({dataIndex: 'name'})
-            ],
+            ],*/
 
             prepareData: function(data){
                 data.shortName = Ext.util.Format.ellipsis(data.name, 20);
@@ -32,11 +32,21 @@ GO.files.ThumbsPanel = Ext.extend(Ext.Panel, {
         })];
         
      this.autoScroll=true;
+     
+		 this.view.on('render', function(){
+     	var dragZone = new GO.files.ImageDragZone(this.view, {containerScroll:true,
+        ddGroup: 'FilesDD'});
+       var dropZone = new GO.files.ThumbsDropZone(this.view, {
+       	notifyDrop: this.onNotifyDrop.createDelegate(this)
+       });        
+     }, this);
+     
+     this.addEvents({drop:true});
         
      GO.files.ThumbsPanel.superclass.initComponent.call(this);
-		
 	},
 	
+
 	onBeforeLoad : function(){		
     this.body.mask(GO.lang.waitMsgLoad);     
 	},
@@ -119,9 +129,148 @@ GO.files.ThumbsPanel = Ext.extend(Ext.Panel, {
 		{
 		  deleteItemsConfig['scope']=config.scope;
 		}
-		
-	
+			
 		GO.deleteItems(deleteItemsConfig);		
+	},
+	
+	onNotifyDrop : function(dd, e, data)
+	{
+		var dragData = dd.getDragData(e);
+
+		if(dd.dragData)
+		{	
+			var dropRecord = this.view.store.getAt(dragData.ddel.viewIndex);
+					
+			if(dropRecord && dropRecord.data.extension=='folder')
+			{
+				this.fireEvent('drop', dropRecord.data.path, data.selections);
+				return true;
+			}
+		}
 	}
 	
 });
+
+
+GO.files.ThumbsDropZone = function(view, config)
+{
+	this.view = view;
+  GO.files.ThumbsDropZone.superclass.constructor.call(this, view.getEl(), config);
+};
+
+Ext.extend(GO.files.ThumbsDropZone, Ext.dd.DropTarget,{
+	ddGroup: 'FilesDD',
+	copy:false,
+	notifyOver : function(dd, e, data){
+		var target = e.getTarget('.fs-thumb-wrap');
+		
+		if(target)
+		{		
+			var dropRecord = this.view.store.getAt(target.viewIndex);		
+			if(dropRecord)
+			{
+				if(dropRecord.data.extension=='folder')
+				{
+					return this.dropAllowed;
+				}
+			}
+		}		
+		return false;
+	}
+});
+
+
+
+
+/**
+ * Create a DragZone instance for our JsonView
+ */
+GO.files.ImageDragZone = function(view, config){
+    this.view = view;
+    GO.files.ImageDragZone.superclass.constructor.call(this, view.getEl(), config);
+};
+Ext.extend(GO.files.ImageDragZone, Ext.dd.DragZone, {
+		ddGroup: 'FilesDD',
+    // We don't want to register our image elements, so let's 
+    // override the default registry lookup to fetch the image 
+    // from the event instead
+    getDragData : function(e){
+    	if(e.ctrlKey)
+    	{
+    		return false;
+    	}
+        var target = e.getTarget('.fs-thumb-wrap');
+        if(target){
+            var view = this.view;
+            if(!view.isSelected(target)){
+                view.onClick(e);
+            }
+            var selNodes = view.getSelectedNodes();
+            var records = view.getSelectedRecords();
+            
+            var dragData = {
+                nodes: selNodes,
+                selections: records
+            };
+            if(selNodes.length == 1){
+                dragData.ddel = target;
+                dragData.single = true;
+            }else{
+                var div = document.createElement('div'); // create the multi element drag "ghost"
+                div.className = 'multi-proxy';
+                for(var i = 0, len = selNodes.length; i < len; i++){
+                    div.appendChild(selNodes[i].firstChild.firstChild.cloneNode(true)); // image nodes only
+                    if((i+1) % 3 == 0){
+                        div.appendChild(document.createElement('br'));
+                    }
+                }
+                var count = document.createElement('div'); // selected image count
+                count.innerHTML = i + ' images selected';
+                div.appendChild(count);
+                
+                dragData.ddel = div;
+                dragData.multi = true;
+            }
+            return dragData;
+        }
+        return false;
+    },
+
+    // this method is called by the TreeDropZone after a node drop
+    // to get the new tree node (there are also other way, but this is easiest)
+  /*  getTreeNode : function(){
+        var treeNodes = [];
+        var nodeData = this.view.getRecords(this.dragData.nodes);
+        for(var i = 0, len = nodeData.length; i < len; i++){
+            var data = nodeData[i].data;
+            treeNodes.push(new Ext.tree.TreeNode({
+                text: data.name,
+                icon: '../view/'+data.url,
+                data: data,
+                leaf:true,
+                cls: 'image-node'
+            }));
+        }
+        return treeNodes;
+    },*/
+    
+    // the default action is to "highlight" after a bad drop
+    // but since an image can't be highlighted, let's frame it 
+    afterRepair:function(){
+        for(var i = 0, len = this.dragData.nodes.length; i < len; i++){
+            Ext.fly(this.dragData.nodes[i]).frame('#8db2e3', 1);
+        }
+        this.dragging = false;    
+    },
+    
+    // override the default repairXY with one offset for the margins and padding
+    getRepairXY : function(e){
+        if(!this.dragData.multi){
+            var xy = Ext.Element.fly(this.dragData.ddel).getXY();
+            xy[0]+=3;xy[1]+=3;
+            return xy;
+        }
+        return false;
+    }
+});
+
