@@ -1,3 +1,16 @@
+/**
+ * Copyright Intermesh
+ *
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ *
+ * @version $Id: FileBrowser.js 1369 2008-11-07 09:55:58Z mschering $
+ * @copyright Copyright Intermesh
+ * @author Merijn Schering <mschering@intermesh.nl>
+ */
+
 GO.files.ThumbsPanel = Ext.extend(Ext.Panel, {
 	store : false,
 	initComponent : function(){
@@ -34,7 +47,7 @@ GO.files.ThumbsPanel = Ext.extend(Ext.Panel, {
      this.autoScroll=true;
      
 		 this.view.on('render', function(){
-     	var dragZone = new GO.files.ImageDragZone(this.view, {containerScroll:true,
+     	var dragZone = new GO.files.ThumbsDragZone(this.view, {containerScroll:true,
         ddGroup: 'FilesDD'});
        var dropZone = new GO.files.ThumbsDropZone(this.view, {
        	notifyDrop: this.onNotifyDrop.createDelegate(this)
@@ -185,11 +198,11 @@ Ext.extend(GO.files.ThumbsDropZone, Ext.dd.DropTarget,{
 /**
  * Create a DragZone instance for our JsonView
  */
-GO.files.ImageDragZone = function(view, config){
+GO.files.ThumbsDragZone = function(view, config){
     this.view = view;
-    GO.files.ImageDragZone.superclass.constructor.call(this, view.getEl(), config);
+    GO.files.ThumbsDragZone.superclass.constructor.call(this, view.getEl(), config);
 };
-Ext.extend(GO.files.ImageDragZone, Ext.dd.DragZone, {
+Ext.extend(GO.files.ThumbsDragZone, Ext.dd.DragZone, {
 		ddGroup: 'FilesDD',
     // We don't want to register our image elements, so let's 
     // override the default registry lookup to fetch the image 
@@ -199,41 +212,41 @@ Ext.extend(GO.files.ImageDragZone, Ext.dd.DragZone, {
     	{
     		return false;
     	}
-        var target = e.getTarget('.fs-thumb-wrap');
-        if(target){
-            var view = this.view;
-            if(!view.isSelected(target)){
-                view.onClick(e);
-            }
-            var selNodes = view.getSelectedNodes();
-            var records = view.getSelectedRecords();
-            
-            var dragData = {
-                nodes: selNodes,
-                selections: records
-            };
-            if(selNodes.length == 1){
-                dragData.ddel = target;
-                dragData.single = true;
-            }else{
-                var div = document.createElement('div'); // create the multi element drag "ghost"
-                div.className = 'multi-proxy';
-                for(var i = 0, len = selNodes.length; i < len; i++){
-                    div.appendChild(selNodes[i].firstChild.firstChild.cloneNode(true)); // image nodes only
-                    if((i+1) % 3 == 0){
-                        div.appendChild(document.createElement('br'));
-                    }
-                }
-                var count = document.createElement('div'); // selected image count
-                count.innerHTML = i + ' images selected';
-                div.appendChild(count);
-                
-                dragData.ddel = div;
-                dragData.multi = true;
-            }
-            return dragData;
-        }
-        return false;
+      var target = e.getTarget('.fs-thumb-wrap');
+      if(target){
+          var view = this.view;
+          if(!view.isSelected(target)){
+              view.onClick(e);
+          }
+          var selNodes = view.getSelectedNodes();
+          var records = view.getSelectedRecords();
+          
+          var dragData = {
+              nodes: selNodes,
+              selections: records
+          };
+          if(selNodes.length == 1){
+              dragData.ddel = target;
+              dragData.single = true;
+          }else{
+              var div = document.createElement('div'); // create the multi element drag "ghost"
+              div.className = 'multi-proxy';
+              for(var i = 0, len = selNodes.length; i < len; i++){
+                  div.appendChild(selNodes[i].firstChild.firstChild.cloneNode(true)); // image nodes only
+                  if((i+1) % 3 == 0){
+                      div.appendChild(document.createElement('br'));
+                  }
+              }
+              var count = document.createElement('div'); // selected image count
+              count.innerHTML = i + ' images selected';
+              div.appendChild(count);
+              
+              dragData.ddel = div;
+              dragData.multi = true;
+          }
+          return dragData;
+      }
+      return false;
     },
 
     // this method is called by the TreeDropZone after a node drop
