@@ -138,7 +138,7 @@ GO.email.AccountDialog = function(config){
             new Ext.form.TextField({		                	
                 fieldLabel: GO.email.lang.host,
                 name: 'host',
-                allowBlank:false			   
+                allowBlank:false	   
             }),
             new Ext.form.TextField({		                	
                 fieldLabel: GO.lang.strUsername,
@@ -237,7 +237,8 @@ GO.email.AccountDialog = function(config){
             new Ext.form.TextField({		                	
                 fieldLabel: GO.email.lang.host,
                 name: 'smtp_host',
-                allowBlank:false			   
+                allowBlank:false,
+                value: GO.email.defaultSmtpHost		   
             }),            
 		        this.encryptionField = new Ext.form.ComboBox({
 	             	fieldLabel: GO.email.lang.encryption,
