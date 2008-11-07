@@ -1,3 +1,24 @@
+2008/11/07 Version 3.00-unstable-19
+Lot's of bugs were fixed from version 1 till 19. This should be the 
+last "unstable" release.
+
+- Changed to MySQLi improved PHP mysql extension
+- Removed smart_addslashes and smart_stripslashes functions. GO runs best
+  with magic_quotes_gpc=off now and escaping values that go into the database
+  is done at the lowest level. Either by the MySQLi extension or in the
+  GO database class. This makes GO safer and programmers don't have to worry about
+  it anymore. 
+
+- Added thumbnail view and Image viewer in files module
+- E-mail blocks remote images for unknown senders
+- Image attachments in e-mail can be viewed directly in GO with the image viewer (files mod required)
+- Projects module was improved so it supports all 2.x features
+- New Schedule call option at quotes, contacts and companies
+- Support for all unicode characters in the filesystem module
+- All filesystem paths are stored relative to the filesystem path configured in config.ph
+  This makes it easier to move an installations and safe's space in the database.
+
+
 2008/09/03 Version 3.00-unstable-1
 -Complete rewrite of Group-Office with ExtJS (www.extjs.com).
 

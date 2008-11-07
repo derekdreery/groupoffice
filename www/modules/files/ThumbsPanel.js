@@ -79,7 +79,7 @@ GO.files.ThumbsPanel = Ext.extend(Ext.Panel, {
 		if(store)
 		{
 			this.store=store;
-			this.store.on("befoelad", this.onBeforeLoad, this);
+			this.store.on("beforeload", this.onBeforeLoad, this);
 			this.store.on("load", this.onStoreLoad, this);
 		}
 		
