@@ -312,7 +312,15 @@ GO.files.FileBrowser = function(config){
 				this.newButton,
 				this.uploadButton,	
 				new Ext.Toolbar.Separator(),
-				this.upButton,		
+				this.upButton,{            
+			      iconCls: "btn-refresh",
+			      text:GO.lang.cmdRefresh,      
+			      handler: function(){
+			      	this.rootNode.reload();
+			      	this.setPath(this.path);	
+			      },
+			      scope:this
+			  },		
 				new Ext.Toolbar.Separator(),				
 				this.copyButton,
 				this.cutButton,
