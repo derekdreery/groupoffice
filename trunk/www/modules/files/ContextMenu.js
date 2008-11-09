@@ -27,7 +27,7 @@ GO.files.FilesContextMenu = function(config)
 					handler: function(){
 						//this.fireEvent('download', this, this.records);
 						
-						window.location.href=GO.settings.modules.files.url+'download.php?mode=download&path='+this.records[0].data.path;
+						window.location.href=GO.settings.modules.files.url+'download.php?mode=download&path='+encodeURIComponent(this.records[0].data.path);
 					},
 					scope: this
 				});
@@ -42,7 +42,7 @@ GO.files.FilesContextMenu = function(config)
 							Ext.MessageBox.alert(GO.lang.strError, GO.lang.noJava);
 						}else
 						{		
-							window.location.href=GO.settings.modules.gota.url+'jnlp.php?path='+this.records[0].data.path;
+							window.location.href=GO.settings.modules.gota.url+'jnlp.php?path='+encodeURIComponent(this.records[0].data.path);
 						}
 					},
 					scope: this
