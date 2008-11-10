@@ -445,7 +445,7 @@ try{
 				}
 
 				$private = ($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']);
-				$name = $private ? 'Private' : htmlspecialchars($event['name'],ENT_COMPAT,'UTF-8');
+				$name = $private ? $lang['calendar']['private'] : htmlspecialchars($event['name'],ENT_COMPAT,'UTF-8');
 
 				$response['results'][] = array(
 'id'=>$response['count'],

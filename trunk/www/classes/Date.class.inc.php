@@ -311,7 +311,7 @@ class Date
 		}
 
 
-		if ($event['repeat_forever'] == '0' && $occurence_time > $event['repeat_end_time'])
+		if ($event['repeat_forever'] == '0' && $occurence_time >= $event['repeat_end_time'])
 		{
 			return 0;
 		}else
