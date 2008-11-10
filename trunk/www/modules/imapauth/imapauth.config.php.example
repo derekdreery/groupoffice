@@ -21,7 +21,7 @@ $config[] =
 	
 	'smtp_host'=>'localhost',
 	'smtp_port'=>'25',
-	'smtp_encryption=>'8',
+	'smtp_encryption'=>'8',
 	'smtp_username'=>'',
 	'smtp_password'=>''
 	);
