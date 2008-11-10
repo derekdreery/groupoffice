@@ -70,8 +70,10 @@ GO.grid.GridPanel = function(config)
 	
 	config.keys.push({
         key: Ext.EventObject.DELETE,
-        fn: function(){
-        	this.deleteSelected(this.deleteConfig);
+        fn: function(key, e){
+        	//sometimes there's a search input in the grid, so dont delete when focus is on an input
+        	if(e.target.tagName!='INPUT')               	
+        		this.deleteSelected(this.deleteConfig);
         },
         scope:this
     });	
