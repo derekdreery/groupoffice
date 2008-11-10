@@ -449,8 +449,6 @@ class tasks extends db
 		}
 	}
 
-
-
 	function delete_task($task_id)
 	{
 		if($task = $this->get_task($task_id))
@@ -470,11 +468,8 @@ class tasks extends db
 			require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
 			$search = new search();
 			$search->delete_search_result($task_id, 12);
-			}
+		}
 	}
-
-
-
 	
 	
 	
@@ -552,18 +547,18 @@ class tasks extends db
 		if(isset($object['DALARM']['value']))
 		{
 			$dalarm = explode(';', $object['DALARM']['value']);
-			if(isset($dalarm[0]) && $remind_time = $this->ical2array->parse_date($dalarm[0]))
+			if(isset($dalarm[0]))
 			{
-				$task['reminder'] = $task['start_time']-$remind_time;
+				$task['reminder']= $this->ical2array->parse_date($dalarm[0]);
 			}
 		}
 
 		if(!isset($task['reminder']) && isset($object['AALARM']['value']))
 		{
 			$aalarm = explode(';', $object['AALARM']['value']);
-			if(isset($aalarm[0]) && $remind_time = $this->ical2array->parse_date($aalarm[0]))
+			if(isset($aalarm[0]))
 			{
-				$task['reminder'] = $task['due_time']-$remind_time;
+				$task['reminder']= $this->ical2array->parse_date($aalarm[0]);
 			}
 		}
 
@@ -573,25 +568,10 @@ class tasks extends db
 			$task['reminder'] = 1800;
 		}
 
-		if($task['name'] != '')// && $task['start_time'] > 0 && $task['end_time'] > 0)
+		if($task['name'] != '')
 		{
-			//$task['all_day_task'] = (isset($object['DTSTART']['params']['VALUE']) &&
-			//strtoupper($object['DTSTART']['params']['VALUE']) == 'DATE') ? true : false;
-
-			//for Nokia. It doesn't send all day task in any way. If the local times are equal and the
-			//time is 0:00 hour then this is probably an all day task.
-
-			/*if(isset($object['CLASS']['value']) && $object['CLASS']['value'] == 'PRIVATE')
-			{
-				$task['private'] = '1';
-			}else {
-				$task['private']= '0';
-			}*/
-
-
 			$task['rrule'] = '';
 			$task['repeat_end_time'] = 0;
-
 
 			if (isset($object['RRULE']['value']) && $rrule = $this->ical2array->parse_rrule($object['RRULE']['value']))
 			{
@@ -688,7 +668,7 @@ class tasks extends db
 
 		while($object = array_shift($vtask[0]['objects']))
 		{
-			if($object['type'] == 'Vtask' || $object['type'] == 'VTODO')
+			if($object['type'] == 'VTODO')
 			{
 				if($task = $this->get_task_from_ical_object($object))
 				{
@@ -698,11 +678,7 @@ class tasks extends db
 					$task = array_map('trim', $task);
 					$task['exceptions']=$exceptions;
 
-					if ($task_id = $this->add_task($task))
-					{
-						$this->subscribe_task($task_id, $task_id);
-						return $task_id;
-					}
+					$task_id = $this->add_task($task);
 				}
 			}
 		}
@@ -731,18 +707,14 @@ class tasks extends db
 				{
 					if($task = $this->get_task_from_ical_object($object))
 					{
-
 						$exceptions=isset($task['exceptions']) ? $task['exceptions'] : array();
 						unset($task['exceptions']);
 						$task = $task;
 						$task = array_map('trim', $task);
 						$task['exceptions']=$exceptions;
 
-						if ($task_id = $this->add_task($task))
-						{
-							$count++;
-							$this->subscribe_task($task_id, $task_id);
-						}
+						$task_id = $this->add_task($task);						
+						$count++;
 					}
 				}
 			}
