@@ -15,8 +15,6 @@
 GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 	
 	
-	
-	
 	initComponent : function(){
 		
 		GO.email.MessagePanel.superclass.initComponent.call(this);
@@ -104,6 +102,26 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				}				
 			}
 		});
+	},
+	
+	reset : function(){
+		this.data=false;
+		
+		if(this.messageBodyEl)
+		{
+			this.messageBodyEl.removeAllListeners();
+		}
+		if(this.attachmentsEl)
+		{
+			this.attachmentsEl.removeAllListeners();
+		}
+		
+		if(this.unblockEl)
+		{
+			this.unblockEl.removeAllListeners();
+		}
+		
+		this.body.update('');
 	},
 	
 	setMessage : function(data)

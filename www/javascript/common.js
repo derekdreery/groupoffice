@@ -139,6 +139,7 @@ GO.deleteItems = function(config)
 			{
 				config.store.baseParams[param]=config.params[param];
 			}
+						
 			config.store.reload({
 				//params: config.params,
 				callback: function(){
@@ -147,7 +148,7 @@ GO.deleteItems = function(config)
 						if(config.failure)
 						{
 							callback = config.failure.createDelegate(config.scope);
-							callback.call();
+							callback.call(config.scope, config);
 						}
 						alert( this.reader.jsonData.deleteFeedback);
 					}else
@@ -155,14 +156,14 @@ GO.deleteItems = function(config)
 						if(config.success)
 						{
 							callback = config.success.createDelegate(config.scope);
-							callback.call();
+							callback.call(config.scope, config);
 						}
 					}
 					
 					if(config.callback)
 					{
 						callback = config.callback.createDelegate(config.scope);
-						callback.call();
+						callback.call(this, config);
 					}	
 				}
 			}

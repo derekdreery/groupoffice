@@ -147,7 +147,7 @@ GO.email.EmailClient = function(config){
 			iconCls: 'btn-delete',
 			text: GO.lang.cmdDelete,
 			cls: 'x-btn-text-icon',
-			handler: function(){ this.messagesGrid.deleteSelected(); },
+			handler: this.deleteMessages,
 			scope: this
 		}
 		]
@@ -359,7 +359,7 @@ GO.email.EmailClient = function(config){
 					iconCls: 'btn-delete',
 					text: GO.lang.cmdDelete,
 					cls: 'x-btn-text-icon',
-					handler: function(){ this.messagesGrid.deleteSelected(); },
+					handler: this.deleteMessages,
 					scope: this
 				},new Ext.Toolbar.Separator(),
 				{
@@ -603,6 +603,22 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	//checkMailInterval : 10000,
 	
 	justMarkedUnread : 0, 
+	
+	deleteMessages : function(){ 
+		this.messagesGrid.deleteSelected({
+			callback : function(config){
+				var keys = Ext.decode(config.params.delete_keys);				
+				for(var i=0;i<keys.length;i++)
+				{
+					if(this.previewedUid==keys[i])
+					{
+						this.messagePanel.reset();
+					}
+				}
+			},
+			scope: this
+		}); 
+	},
 	
 	afterRender : function(){
 		GO.email.Composer.on('send', function(composer){			
