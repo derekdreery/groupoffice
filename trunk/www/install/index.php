@@ -178,14 +178,13 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 			$GO_CONFIG->db_user,
 			$GO_CONFIG->db_pass))
 			{
-
 				if (save_config($GO_CONFIG))
 				{
 					$task = 'database_structure';
 				}
 			}else
 			{
-				$feedback ='<font color="red">Failed to connect to database</font>';
+				$feedback ='<font color="red">Failed to connect to database<br /><b>MySQL Error</b>: '.$this->errno.' ('.$this->error.')<br>\n</font>';
 			}
 			break;
 

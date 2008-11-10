@@ -804,65 +804,68 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 
     sendMail : function(draft){
     	
-    	if(this.attachmentsStore && this.attachmentsStore.data.keys.length)
-    	{
-    		this.sendParams['attachments']=Ext.encode(this.attachmentsStore.data.keys);    		
-    	}
-    	
-    	this.sendParams['inline_attachments']=Ext.encode(this.inline_attachments);
-    	    	
-    	this.sendParams.draft = draft;  
-    	
-    	//extra sync to make sure all is in there.
-    	this.htmlEditor.syncValue(); 	
-    	
-			this.formPanel.form.submit({							
-				url:this.sendURL,
-				params: this.sendParams,
-				waitMsg:GO.lang.waitMsgSave,
-				waitMsgTarget:this.formPanel.body,
-				success:function(form, action){					
-					if(action.result.account_id)
-					{
-						this.account_id=action.result.account_id;
-					}
-					
-					if(this.callback)
-					{
-						if(!this.scope)
+    	if(this.subjectField.getValue()!='' || confirm(GO.email.lang.confirmEmptySubject))
+    	{    	
+	    	if(this.attachmentsStore && this.attachmentsStore.data.keys.length)
+	    	{
+	    		this.sendParams['attachments']=Ext.encode(this.attachmentsStore.data.keys);    		
+	    	}
+	    	
+	    	this.sendParams['inline_attachments']=Ext.encode(this.inline_attachments);
+	    	    	
+	    	this.sendParams.draft = draft;  
+	    	
+	    	//extra sync to make sure all is in there.
+	    	this.htmlEditor.syncValue(); 	
+	    	
+				this.formPanel.form.submit({							
+					url:this.sendURL,
+					params: this.sendParams,
+					waitMsg:GO.lang.waitMsgSave,
+					waitMsgTarget:this.formPanel.body,
+					success:function(form, action){					
+						if(action.result.account_id)
 						{
-							this.scope=this;
+							this.account_id=action.result.account_id;
 						}
 						
-						var callback = this.callback.createDelegate(this.scope);
-						callback.call();
-					}
-					//this.reset();
-					
-					if(GO.addressbook && action.result.unknown_recipients && action.result.unknown_recipients.length)
-					{					
-						if(!GO.email.unknownRecipientsDialog)
-							GO.email.unknownRecipientsDialog = new GO.email.UnknownRecipientsDialog();					
+						if(this.callback)
+						{
+							if(!this.scope)
+							{
+								this.scope=this;
+							}
+							
+							var callback = this.callback.createDelegate(this.scope);
+							callback.call();
+						}
+						//this.reset();
 						
-						GO.email.unknownRecipientsDialog.store.loadData({recipients: action.result.unknown_recipients});
+						if(GO.addressbook && action.result.unknown_recipients && action.result.unknown_recipients.length)
+						{					
+							if(!GO.email.unknownRecipientsDialog)
+								GO.email.unknownRecipientsDialog = new GO.email.UnknownRecipientsDialog();					
+							
+							GO.email.unknownRecipientsDialog.store.loadData({recipients: action.result.unknown_recipients});
+							
+							GO.email.unknownRecipientsDialog.show();					
+						}
 						
-						GO.email.unknownRecipientsDialog.show();					
-					}
-					
-					this.fireEvent('send', this);
-					this.hide();					
-				},
-			
-				failure: function(form, action) {
-					Ext.MessageBox.alert(GO.lang.strError, action.result.feedback);
-				},
-				scope:this
+						this.fireEvent('send', this);
+						this.hide();					
+					},
 				
-			});
-	},
-		
-	
-    
+					failure: function(form, action) {
+						Ext.MessageBox.alert(GO.lang.strError, action.result.feedback);
+					},
+					scope:this
+					
+				});
+    	}else
+    	{
+    		this.subjectField.focus();
+    	}
+    },
 
     onShowFieldCheck : function(check, checked)
     {
