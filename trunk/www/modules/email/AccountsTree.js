@@ -16,8 +16,6 @@ GO.email.AccountsTree = function(config){
 	{
 		config = {};
 	}
-		
-	config.title=GO.email.lang.categories;
 	config.layout='fit';
   config.split=true;
 	config.autoScroll=true;
@@ -37,8 +35,14 @@ GO.email.AccountsTree = function(config){
 	config.collapsible=true;
 	config.ddAppendOnly=true;
 	config.containerScroll=true;	
-	config. enableDrop=true;
+	config.enableDrop=true;
 	config.ddGroup='EmailDD';
+	
+	config.bbar=new Ext.StatusBar({
+		cls:'go-paging-tb',
+		defaultText: 'Usage 1.8GB / 3GB (76%)',
+		
+	});
 
 	GO.email.AccountsTree.superclass.constructor.call(this, config);	
 	

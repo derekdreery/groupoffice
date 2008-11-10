@@ -37,7 +37,7 @@ GO.email.MessagesGrid = function(config){
 	config.store.setDefaultSort('date', 'DESC');
 	
 	config.paging=true;
-	
+
 	if(config.region=='north')
 	{
 		config.cm =  new Ext.grid.ColumnModel([

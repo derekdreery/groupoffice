@@ -520,7 +520,6 @@ GO.email.EmailClient = function(config){
 			items: tbar
 			});
 				
-	
 				
 	config.items=[
 		this.treePanel,

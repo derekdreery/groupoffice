@@ -1043,7 +1043,15 @@ try{
 													$inbox_new=0;
 													if($account)
 													{
+														
 														$text = $email2->f('email');
+														
+														$server_response = $email->get_servermanager_mailbox_info($account);
+														if(isset($server_response['success']))
+														{
+															$text .= ' ('.Number::format_size($server_response['data']['usage']*1024).'/'.Number::format_size($server_response['data']['quota']*1024).')';	
+														}
+														
 														$children = get_mailbox_nodes($email2->f('id'), 0);
 														
 														$imap->close();
@@ -1152,37 +1160,13 @@ try{
 											{
 												$user = $GO_USERS->get_user($response['data']['user_id']);
 												$response['data']['user_name']=String::format_name($user['last_name'],$user['first_name'], $user['middle_name']);
-
-												if(isset($GO_MODULES->modules['serverclient']))
+												
+												$server_response = $email->get_servermanager_mailbox_info($response['data']);
+												if(isset($server_response['success']))									
 												{
-													require_once($GO_MODULES->modules['serverclient']['class_path'].'serverclient.class.inc.php');
-													$sc = new serverclient();
-
-													foreach($sc->domains as $domain)
-													{
-														if(strpos($response['data']['username'], '@'.$domain))
-														{
-
-															$sc->login();
-
-															$params=array(
-															//'sid'=>$sc->sid,
-																'task'=>'serverclient_get_mailbox',
-																'username'=>$response['data']['username'],
-																'password'=>$response['data']['password']														
-															);
-															$server_response = $sc->send_request($GO_CONFIG->serverclient_server_url.'modules/postfixadmin/json.php', $params);
-															//go_log(LOG_DEBUG, var_export($server_response, true));
-															$server_response = json_decode($server_response, true);
-															if(isset($server_response['success']))
-															{
-																$response['data']['vacation_active']=$server_response['data']['vacation_active'];
-																$response['data']['vacation_subject']=$server_response['data']['vacation_subject'];
-																$response['data']['vacation_body']=$server_response['data']['vacation_body'];
-															}
-															break;
-														}
-													}
+													$response['data']['vacation_active']=$server_response['data']['vacation_active'];
+													$response['data']['vacation_subject']=$server_response['data']['vacation_subject'];
+													$response['data']['vacation_body']=$server_response['data']['vacation_body'];
 												}
 												$response['success']=true;
 											}
