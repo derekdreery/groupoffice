@@ -56,12 +56,13 @@ class imapauth extends db
 		$mailbox = trim($arr[0]);
 		$domain = isset($arr[1]) ? trim($arr[1]) : '';
 		
-		if($config = $this->get_domain_config($domain))
+		$config = $this->get_domain_config($domain);
+		if($config)
 		{
 			global $GO_CONFIG, $GO_SECURITY, $GO_LANGUAGE, $GO_USERS, $GO_GROUPS,
 			$GO_MODULES;
 						
-	
+		
 			$GO_SECURITY->user_id = 0;
 	
 			require_once($GO_CONFIG->class_path.'mail/imap.class.inc');
@@ -99,16 +100,13 @@ class imapauth extends db
 						}
 					}
 	
-				} else {
-					//user doesn't exist. create it now
-					
+				} else {					
+					//user doesn't exist. create it now					
 					$user['email'] =$email;
 					$user['username'] = $go_username;
-					//$user['first_name']=$go_username;
-					//$user['last_name']='-';
 					$user['password'] = $arguments['password'];
 					$user['sex'] = 'M';
-					// the user does not exist, so we have to add him.
+
 					if ( !$user_id = $GO_USERS->add_user(
 							$user, 
 							$GO_GROUPS->groupnames_to_ids($config['groups']), 
@@ -116,8 +114,7 @@ class imapauth extends db
 							$config['modules_read'], 
 							$config['modules_write']))
 					{
-						go_log(LOG_DEBUG, 'ERROR: Failed adding mail user to Group-Office. The user probably already existed. Try changing go_username_without_domain to true or false in imapauth config.');
-	
+						trigger_error('Failed creating user '.$go_username.' and e-mail '.$email.' with imapauth. The e-mail address probably already existed at another user.', E_USER_WARNING);	
 					} else {
 					
 						$old_umask = umask( 000 );
@@ -153,7 +150,7 @@ class imapauth extends db
 								
 								if (!$account_id = $email_client->add_account($account))
 								{								
-									go_log(LOG_DEBUG, 'ERROR: Failed to create e-mail account in imapauth module.');
+									trigger_error('Failed creating e-mail account for user '.$go_username.' in imapauth module.', E_USER_WARNING);									
 								}else
 								{
 									$account = $email_client->get_account($account_id);
