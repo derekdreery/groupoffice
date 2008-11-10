@@ -189,6 +189,13 @@ td.x-grid3-hd-over,td.sort-desc,td.sort-asc,td.x-grid3-hd-menu-open{border-left:
 .x-combo-list .x-combo-selected{border:1px dotted #669900!important;background:#ebf1e2;cursor:pointer;}
 .x-combo-list-small .x-combo-list-item{font:normal 12px tahoma,arial,helvetica,sans-serif;}
 
+.x-panel-noborder .x-panel-header-noborder{
+	border-bottom:1px solid #d0d0d0;
+}
+.x-panel-noborder .x-panel-tbar-noborder .x-toolbar{
+	border-bottom:1px solid #d0d0d0;
+}
+
 .x-panel-header{overflow:hidden;zoom:1;color:#666;font:bold 12px tahoma,arial,helvetica,sans-serif;padding:5px 3px 4px 5px;border:1px solid #c1d1d6;line-height:15px;background:transparent url(images/extjs/panel/white-top-bottom.gif) repeat-x 0 -1px;}
 .x-panel-body{border:1px solid #d0d0d0;border-top:1px none;overflow:hidden;background:#fff;position:relative;}
 .x-panel-tbar .x-toolbar{border:1px solid #D0DEF0;border-top:0 none;overflow:hidden;padding:2px;}
@@ -260,9 +267,9 @@ body.x-body-masked .x-window-plain .x-window-mc{background:#d1d8db;}
 
 
 
-.go-paging-tb, .x-combo-list-ft .x-toolbar {background:#ebf0f2 !important;border-top:1px solid #c0c0c0 !important;olor:black !important;}
+.go-paging-tb, .x-combo-list-ft .x-toolbar {background:#ebf0f2 !important;border-top:1px solid #c0c0c0 !important;color:black !important;}
 .go-paging-tb td,.go-paging-tb span,.go-paging-tb input,.go-paging-tb div,.go-paging-tb select,.go-paging-tb label{color:black;}
-
+.go-paging-tb .x-status-text{cursor:default;height:21px;line-height:21px;padding:0 4px;}
 .x-combo-list-ft .x-toolbar td,.x-combo-list-ft .x-toolbar span,.x-combo-list-ft .x-toolbar input,.x-combo-list-ft .x-toolbar div,.x-combo-list-ft .x-toolbar select,.x-combo-list-ft .x-toolbar label {color:black !important;}
 
 /* made textboxes too small

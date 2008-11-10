@@ -1,12 +1,12 @@
 <?php
-/** 
+/**
  * Copyright Intermesh
- * 
+ *
  * This file is part of Group-Office. You should have received a copy of the
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
- * 
+ *
  * If you have questions write an e-mail to info@intermesh.nl
- * 
+ *
  * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
@@ -15,7 +15,7 @@
 function connect($account_id, $mailbox='INBOX', $halt_on_error=true)
 {
 	global $email, $imap, $GO_SECURITY, $lang;
-	
+
 	if (!$account = $email->get_account($account_id)) {
 		$response['success']=false;
 		$response['feedback']=$lang['common']['selectError'];
@@ -39,7 +39,7 @@ function connect($account_id, $mailbox='INBOX', $halt_on_error=true)
 		echo json_encode($response);
 		exit();
 	}
-	
+
 	if(!defined('IMAP_CONNECTED'))
 	{
 		define('IMAP_CONNECTED', true);
@@ -53,8 +53,35 @@ class email extends db
 {
 	var $last_error;
 	var $mail;
-	
-	
+
+	function get_servermanager_mailbox_info($account)
+	{
+		global $GO_CONFIG, $GO_MODULES;
+		
+		if(isset($GO_MODULES->modules['serverclient']))
+		{
+			require_once($GO_MODULES->modules['serverclient']['class_path'].'serverclient.class.inc.php');
+			$sc = new serverclient();
+
+			foreach($sc->domains as $domain)
+			{
+				if(strpos($account['username'], '@'.$domain))
+				{
+					$sc->login();
+
+					$params=array(
+						'task'=>'serverclient_get_mailbox',
+						'username'=>$account['username'],
+						'password'=>$account['password']														
+					);
+					$server_response = $sc->send_request($GO_CONFIG->serverclient_server_url.'modules/postfixadmin/json.php', $params);
+					//go_log(LOG_DEBUG, var_export($server_response, true));
+					return json_decode($server_response, true);					
+				}
+			}
+		}
+		return false;
+	}
 
 	function get_accounts($user_id=0, $start=0, $offset=0)
 	{
@@ -63,11 +90,11 @@ class email extends db
 		if($user_id > 0)
 		{
 			$sql .= " WHERE user_id='".$this->escape($user_id)."'";
-			$sql .= " ORDER BY standard ASC";			
+			$sql .= " ORDER BY standard ASC";
 		}else {
 			$sql .= " ORDER BY email ASC, standard ASC";
 		}
-		
+
 
 		$this->query($sql);
 		$count =  $this->num_rows();
@@ -87,9 +114,9 @@ class email extends db
 
 		$message['link_id']=$this->nextid('em_links');
 		$this->insert_row('em_links',$message);
-		
+
 		$this->cache_message($message['link_id']);
-		
+
 		return $message['link_id'];
 	}
 
@@ -98,19 +125,19 @@ class email extends db
 		require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
 		$search = new search();
 		$search->delete_search_result($link_id, 9);
-		
+
 		$sql ="DELETE FROM em_links WHERE link_id=".$this->escape($link_id);
 		return $this->query($sql);
 	}
-	
+
 	function get_linked_message($id)
 	{
 		$sql = "SELECT * FROM em_links WHERE link_id=".$this->escape($id);
 		$this->query($sql);
 		return $this->next_record();
 	}
-	
-	
+
+
 
 	function update_settings($settings)
 	{
@@ -131,19 +158,19 @@ class email extends db
 		}else
 		{
 			global $GO_MODULES;
-			
+				
 			$addressbook_id=0;
 			if(isset($GO_MODULES->modules['addressbook']) && $GO_MODULES->modules['addressbook']['read_permission'])
 			{
 				require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc');
 				$ab = new addressbook();
-				
+
 				if($addressbook=$ab->get_addressbook())
 				{
 					$addressbook_id=$addressbook['id'];
 				}
 			}
-			
+				
 			$this->query("INSERT INTO em_settings (user_id, send_format, add_recievers, add_senders, request_notification, charset, beep, auto_check) VALUES ('$user_id', 'text/HTML', $addressbook_id, '0', '0', 'UTF-8','1','1')");
 			return $this->get_settings($user_id);
 		}
@@ -158,16 +185,16 @@ class email extends db
 		$this->mail= new imap();
 
 		if (!$this->mail->open(
-			$account['host'], 
-			$account['type'], 
-			$account['port'], 
-			$account['username'], 
-			$account['password'], 
+		$account['host'],
+		$account['type'],
+		$account['port'],
+		$account['username'],
+		$account['password'],
 			"INBOX", 
-			0, 
-			$account['use_ssl'], 
-			$account['novalidate_cert']))
-		{			
+		0,
+		$account['use_ssl'],
+		$account['novalidate_cert']))
+		{
 			return false;
 		}else
 		{
@@ -180,12 +207,12 @@ class email extends db
 			$account['sent'] = '';
 			$account['drafts'] = '';
 			$account['spam'] = '';
-			
+				
 
 			if ($account['type']=='imap')
 			{
 				require($GO_LANGUAGE->get_language_file('email'));
-				
+
 				$mailboxes =  $this->mail->get_mailboxes($account['mbroot']);
 				$subscribed =  $this->mail->get_subscribed($account['mbroot']);
 
@@ -247,28 +274,28 @@ class email extends db
 
 		require_once($GO_CONFIG->class_path."mail/imap.class.inc");
 		$this->mail= new imap();
-		
+
 
 		if ($this->mail->open(
-			$account['host'], 
-			$account['type'], 
-			$account['port'], 
-			$account['username'], 
-			$account['password'], 
+		$account['host'],
+		$account['type'],
+		$account['port'],
+		$account['username'],
+		$account['password'],
 			"INBOX", 
-			0, 
-			$account['use_ssl'], 
-			$account['novalidate_cert']))
-		{			
-		
+		0,
+		$account['use_ssl'],
+		$account['novalidate_cert']))
+		{
+
 			if (!$mbroot = $this->mail->check_mbroot($account['mbroot']))
 			{
 				$account['mbroot'] = '';
 			}
-			
+				
 			$this->mail->close();
-			
-			return $this->update_row('em_accounts','id',$account);			
+				
+			return $this->update_row('em_accounts','id',$account);
 		}
 		return false;
 	}
@@ -304,7 +331,7 @@ class email extends db
 		$account['spam']=$spam;
 		$account['trash']=$trash;
 		$account['id']=$account_id;
-		
+
 		return $this->update_row('em_accounts', 'id', $account);
 	}
 
@@ -346,9 +373,9 @@ class email extends db
 
 
 	/*
-	gets the subfolder of a folder id. Account id is only usefull for the root
-	level where all folders have parent 0
-	*/
+	 gets the subfolder of a folder id. Account id is only usefull for the root
+	 level where all folders have parent 0
+	 */
 
 	function get_subscribed($account_id, $folder_id=-1)
 	{
@@ -371,7 +398,7 @@ class email extends db
 		$this->query($sql);
 		return $this->num_rows();
 	}
-	
+
 	function get_auto_check_folders($account_id)
 	{
 		$sql = "SELECT * FROM em_folders WHERE account_id='".$this->escape($account_id)."'".
@@ -415,22 +442,22 @@ class email extends db
 		return $this->num_rows();
 	}
 	/*
-	function get_all_folders($account_id, $subscribed_only=false)
-	{
-	if ($subscribed_only)
-	{
-	$sql = "SELECT * FROM em_folders WHERE account_id='$account_id' AND ".
-	"subscribed='1' ORDER BY NAME ASC";
-	}else
-	{
-	$sql = "SELECT * FROM em_folders WHERE account_id='$account_id' ORDER ".
-	"BY NAME ASC";
-	}
-	$this->query($sql);
-	return $this->num_rows();
-	}
+	 function get_all_folders($account_id, $subscribed_only=false)
+	 {
+	 if ($subscribed_only)
+	 {
+	 $sql = "SELECT * FROM em_folders WHERE account_id='$account_id' AND ".
+	 "subscribed='1' ORDER BY NAME ASC";
+	 }else
+	 {
+	 $sql = "SELECT * FROM em_folders WHERE account_id='$account_id' ORDER ".
+	 "BY NAME ASC";
+	 }
+	 $this->query($sql);
+	 return $this->num_rows();
+	 }
 
-	*/
+	 */
 	function add_folder($account_id, $name, $parent_id=0, $subscribed=1,
 	$delimiter='/', $attributes=0, $sort_order=10)
 	{
@@ -442,10 +469,10 @@ class email extends db
 		$folder['attributes']=$attributes;
 		$folder['delimiter']=$delimiter;
 		$folder['sort_order']=$sort_order;
-		
+
 		$this->insert_row('em_folders',$folder);
 
-		return $folder['id'];		
+		return $folder['id'];
 	}
 	function rename_folder($account_id, $old_name, $new_name)
 	{
@@ -461,13 +488,13 @@ class email extends db
 	}
 
 	function update_folder($folder_id, $parent_id, $subscribed, $attributes, $sort_order=10)
-	{		
+	{
 		$folder['id'] = $folder_id;
 		$folder['parent_id']=$parent_id;
 		$folder['subscribed']=$subscribed;
 		$folder['attributes']=$attributes;
 		$folder['sort_order']=$sort_order;
-		
+
 		$this->update_row('em_folders','id', $folder);
 	}
 
@@ -578,8 +605,8 @@ class email extends db
 	}
 
 	/*
-	Gets the parent_id from a folder path
-	*/
+	 Gets the parent_id from a folder path
+	 */
 	function get_parent_id($account_id, $path, $delimiter)
 	{
 		if ($pos = strrpos($path, $delimiter))
@@ -655,31 +682,31 @@ class email extends db
 					$email->__update_folder($folder);
 				}
 			}
-			
+				
 		}
 		$mail->close();
 	}
-	
+
 	function cache_folder_status($imap, $account_id, $mailbox)
 	{
 		$cached_folder = $this->get_folder($account_id, $mailbox);
 			
 		if($status = $imap->status($mailbox, SA_UNSEEN+SA_MESSAGES))
-		{		
+		{
 			$folder['id']=$cached_folder['id'];
 			$folder['msgcount'] = $status->messages;
 			$folder['unseen'] = $status->unseen;
-				
+
 			if($status->messages!=$cached_folder['msgcount'] || $status->unseen!=$cached_folder['unseen'])
-			{				
-				$this->__update_folder($folder);				
+			{
+				$this->__update_folder($folder);
 			}
 			return $folder;
 		}
 		return false;
 	}
-	
-	
+
+
 	function get_total_unseen($user_id)
 	{
 		$sql = "SELECT SUM(unseen) FROM em_folders INNER JOIN em_accounts ON em_folders.account_id=em_accounts.id WHERE user_id='".$this->escape($user_id)."'";
@@ -706,7 +733,7 @@ class email extends db
 		{
 			return false;
 		}
-		
+
 			
 		$subscribed =  $mail->get_subscribed('', true);
 		$mailboxes =  $mail->get_mailboxes('');
@@ -791,9 +818,9 @@ class email extends db
 		$mail->close();
 
 		/*
-		get all the Group-Office folders and delete the folders that no longer
-		exist on the IMAP server
-		*/
+		 get all the Group-Office folders and delete the folders that no longer
+		 exist on the IMAP server
+		 */
 
 		$this->get_folders($account['id']);
 		$emailobj = new email();
@@ -844,7 +871,7 @@ class email extends db
 	function update_filter($filter)
 	{
 		return $this->update_row('em_filters','id', $filter);
-		
+
 	}
 
 	function delete_filter($id)
@@ -919,16 +946,16 @@ class email extends db
 
 		for ($i = 0; $i < count($message['parts']); $i ++) {
 			/*if ((eregi("ATTACHMENT", $message['parts'][$i]["disposition"])  ||
-			eregi("INLINE", $message['parts'][$i]["disposition"]) &&
-			!empty($message['parts'][$i]["name"])) ||
-			!empty($message['parts'][$i]["name"])){*/
-			
+			 eregi("INLINE", $message['parts'][$i]["disposition"]) &&
+			 !empty($message['parts'][$i]["name"])) ||
+			 !empty($message['parts'][$i]["name"])){*/
+				
 			if (
-				(
-					eregi("ATTACHMENT", $message['parts'][$i]["disposition"])  ||
-					($message['parts'][$i]["name"] != '' && empty($message['parts'][$i]["id"])
-				)
-				&& !($message['parts'][$i]['type']=='APPLEDOUBLE' && $message['parts'][$i]['mime']== 'application/APPLEFILE')					
+			(
+			eregi("ATTACHMENT", $message['parts'][$i]["disposition"])  ||
+			($message['parts'][$i]["name"] != '' && empty($message['parts'][$i]["id"])
+			)
+			&& !($message['parts'][$i]['type']=='APPLEDOUBLE' && $message['parts'][$i]['mime']== 'application/APPLEFILE')
 			)
 			){
 
@@ -957,7 +984,7 @@ class email extends db
 		exec('rm -Rf '.$tmpdir);
 		return $data;
 	}
-	
+
 
 	function get_default_account_id($user_id)
 	{
@@ -983,7 +1010,7 @@ class email extends db
 			$del->delete_account($user['id'],$this->f("id"));
 		}
 	}
-	
+
 	function cache_message($message_id)
 	{
 		global $GO_MODULES, $GO_CONFIG, $GO_LANGUAGE;
@@ -994,11 +1021,11 @@ class email extends db
 
 		$sql  = "SELECT * FROM em_links WHERE link_id=?";
 		$this->query($sql,'i', $message_id);
-	
+
 
 		$record = $this->next_record();
 		if($record)
-		{		
+		{
 			$cache['id']=$this->f('link_id');
 			$cache['user_id']=$this->f('user_id');
 			$cache['module']='email';
@@ -1010,26 +1037,26 @@ class email extends db
 			$cache['mtime']=$this->f('time');
 			$cache['acl_read']=$GO_MODULES->modules['email']['acl_read'];
 			$cache['acl_write']=$GO_MODULES->modules['email']['acl_write'];
-			
+				
 			$search->cache_search_result($cache);
 		}
 	}
-	
+
 	/**
 	 * When a global search action is performed this function will be called for each module
 	 *
 	 * @param int $last_sync_time The time this function was called last
 	 */
 	public function __on_build_search_index()
-	{				
-		$sql = "SELECT link_id FROM em_links";		
+	{
+		$sql = "SELECT link_id FROM em_links";
 		$this->query($sql);
 		$email = new email();
 		while($record = $this->next_record())
 		{
 			$email->cache_message($record['link_id']);
 		}
-/* {ON_BUILD_SEARCH_INDEX_FUNCTION} */
+		/* {ON_BUILD_SEARCH_INDEX_FUNCTION} */
 	}
-	
+
 }
