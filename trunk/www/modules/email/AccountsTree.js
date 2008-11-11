@@ -21,7 +21,6 @@ GO.email.AccountsTree = function(config){
 	config.autoScroll=true;
 	config.width=200;
 	
-	
 	config.animate=true;
 	config.loader=new Ext.tree.TreeLoader(
 	{
@@ -38,10 +37,8 @@ GO.email.AccountsTree = function(config){
 	config.enableDrop=true;
 	config.ddGroup='EmailDD';
 	
-	config.bbar=new Ext.StatusBar({
-		cls:'go-paging-tb',
-		defaultText: 'Usage 1.8GB / 3GB (76%)',
-		
+	config.bbar=this.statusBar = new Ext.StatusBar({
+		cls:'go-paging-tb'		
 	});
 
 	GO.email.AccountsTree.superclass.constructor.call(this, config);	
@@ -57,14 +54,22 @@ GO.email.AccountsTree = function(config){
 	});
 	this.setRootNode(rootNode);
 	
-	
-	
-	
-	
 }
 
 Ext.extend(GO.email.AccountsTree, Ext.tree.TreePanel, {
 	
-	
-	
+	setUsage : function(usage){
+		
+		this.bbar.setVisibilityMode(Ext.Element.DISPLAY);
+		
+		if(usage!='')
+		{
+			this.bbar.show()
+			this.statusBar.setText(GO.email.lang.usage+': '+usage);
+		}else
+		{
+			this.bbar.hide()
+		}
+    this.syncSize();	
+	}
 });

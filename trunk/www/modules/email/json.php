@@ -62,7 +62,7 @@ function get_all_mailbox_nodes($account_id, $folder_id){
 }
 
 function get_mailbox_nodes($account_id, $folder_id){
-	global $lang, $imap, $inbox_new;
+	global $lang, $imap, $inbox_new, $usage;
 
 	$email = new email();
 	$email2 = new email();
@@ -118,7 +118,8 @@ function get_mailbox_nodes($account_id, $folder_id){
 				'account_id'=>$email->f('account_id'),
 				'folder_id'=>$email->f('id'),
 				'unseen'=>$unseen,
-				'mailbox'=>$email->f('name')
+				'mailbox'=>$email->f('name'),
+				'usage'=>$usage
 			);
 		}else {
 			$response[] = array(
@@ -130,7 +131,8 @@ function get_mailbox_nodes($account_id, $folder_id){
 				'mailbox'=>$email->f('name'),
 				'unseen'=>$unseen,
 				'expanded'=>true,
-				'children'=>array()
+				'children'=>array(),
+				'usage'=>$usage
 			);
 		}
 	}
@@ -1040,16 +1042,22 @@ try{
 												{
 													$account = connect($email2->f('id'), 'INBOX', false);
 
+													$usage = '';
 													$inbox_new=0;
 													if($account)
-													{
-														
-														$text = $email2->f('email');
+													{														
+														$text = $email2->f('email');														
 														
 														$server_response = $email->get_servermanager_mailbox_info($account);
 														if(isset($server_response['success']))
 														{
-															$text .= ' ('.Number::format_size($server_response['data']['usage']*1024).'/'.Number::format_size($server_response['data']['quota']*1024).')';	
+															$usage .= Number::format_size($server_response['data']['usage']*1024);
+															
+															if($server_response['data']['quota']>0)
+															{
+																$percentage = ceil($server_response['data']['usage']*100/$server_response['data']['quota']);																
+																$usage .= '/'.Number::format_size($server_response['data']['quota']*1024).' ('.$percentage.'%)';
+															}	
 														}
 														
 														$children = get_mailbox_nodes($email2->f('id'), 0);
@@ -1070,7 +1078,8 @@ try{
 														'folder_id'=>0,
 														'mailbox'=>'INBOX',
 														'children'=>$children,
-														'inbox_new'=>$inbox_new
+														'inbox_new'=>$inbox_new,
+														'usage'=>$usage
 													);
 												}
 											}else

@@ -8,7 +8,6 @@
  * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
- * @since Group-Office 1.0
  */
 
 
@@ -314,7 +313,8 @@ GO.email.EmailClient = function(config){
 						this.setAccount(
 							firstInboxNode.attributes.account_id,
 							firstInboxNode.attributes.folder_id,
-							firstInboxNode.attributes.mailbox
+							firstInboxNode.attributes.mailbox,
+							firstInboxNode.attributes.usage
 							);
 					}
 					
@@ -337,7 +337,8 @@ GO.email.EmailClient = function(config){
 			this.setAccount(
 				node.attributes.account_id,
 				node.attributes.folder_id,
-				node.attributes.mailbox
+				node.attributes.mailbox,
+				node.attributes.usage
 			);
 		}
 	}, this);	
@@ -794,7 +795,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		});
 	},
 	
-	setAccount : function(account_id,folder_id,mailbox)
+	setAccount : function(account_id,folder_id,mailbox, usage)
 	{
 		
 		this.messagesGrid.expand();
@@ -803,7 +804,6 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		this.folder_id = folder_id;
 		this.mailbox = mailbox;
 
-
 		//messagesPanel.setTitle(mailbox);
 		this.messagesGrid.store.baseParams['task']='messages';
 		this.messagesGrid.store.baseParams['account_id']=account_id;
@@ -811,6 +811,8 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		this.messagesGrid.store.baseParams['mailbox']=mailbox;
 		this.messagesGrid.store.load();
 		//this.messagesGrid.store.load();
+		
+		this.treePanel.setUsage(usage);
 	},
 	/**
 	 * Returns true if the current folder needs to be refreshed in the grid
