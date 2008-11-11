@@ -390,7 +390,7 @@ class imap {
 		}*/
 		
 		$first=intval($first);
-		$last=intval($last);
+		$offset=intval($offset);
 
 		$last = $first + $offset;
 		if ($offset == 0 || ($last > $this->count)) {
