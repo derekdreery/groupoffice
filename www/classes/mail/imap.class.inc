@@ -388,6 +388,9 @@ class imap {
 		/*if (!isset($this->sort)) {
 			$this->sort();
 		}*/
+		
+		$first=intval($first);
+		$last=intval($last);
 
 		$last = $first + $offset;
 		if ($offset == 0 || ($last > $this->count)) {
