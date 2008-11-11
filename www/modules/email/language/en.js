@@ -117,3 +117,5 @@ GO.email.lang.unblock = 'Click here to unblock them';
 GO.email.lang.loadEmailFirst = 'To use this function you must load your e-mail first by pressing the e-mail tab';
 
 GO.email.lang.confirmEmptySubject='You didn\'t fill in a subject. Are you sure you want to send this message without a subject?';
+
+GO.email.lang.usage='Disk usage';
