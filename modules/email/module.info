@@ -1,0 +1,12 @@
+<?php
+$module['email']['description'] = 'With the e-mail client you can add your IMAP and POP3'. 
+		' mail accounts and view your e-mail online with this easy '.
+		'to use e-mail client. It supports multiple folders and filters. '.
+		'The mail composer can create both HTML and plain text e-mails.';
+$module['email']['version'] = '2.6';
+$module['email']['release_date'] = '2007-11-19';
+$module['email']['status'] = 'Stable';
+$module['email']['authors'][] = array('name'=>'Merijn Schering', 'email'=>'mschering@intermesh.nl');
+$module['email']['authors'][] = array('name'=>'Georg Lorenz', 'email'=>'georg@lonux.de');
+$module['email']['sort_order'] = '30';
+?>

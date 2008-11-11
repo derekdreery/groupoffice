@@ -1,0 +1,2 @@
+#!/bin/bash
+/var/www/groupoffice/lib/dav/WebDAV.php $1
