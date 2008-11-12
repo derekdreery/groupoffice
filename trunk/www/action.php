@@ -166,6 +166,10 @@ try{
 			}
 			$fs->mkdir_recursive($GO_CONFIG->tmpdir.$GO_SECURITY->user_id.'/');
 			
+			require_once($GO_CONFIG->class_path.'cache.class.inc.php');
+			$cache = new cache();
+			$cache->cleanup();
+			
 			$response['success']=true;
 
 			break;
