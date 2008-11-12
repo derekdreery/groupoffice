@@ -1015,7 +1015,8 @@ try{
 											$response['unseen'][$folder['id']]=$status->unseen;
 									}
 									
-									$cache->save($GO_SECURITY->user_id, $cache_key, json_encode($response));
+									if(!$nocache)
+										$cache->save($GO_SECURITY->user_id, $cache_key, json_encode($response));
 								}
 								debug('Load time: '.(get_microtime()-$starttime));
 								
