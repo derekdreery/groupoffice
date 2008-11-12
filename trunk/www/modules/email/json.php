@@ -788,14 +788,10 @@ try{
 								$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : 0;
 								$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : 30;
 								
-								$nocache=false;
+								$nocache=!empty($query);
 
 								$account = connect($account_id, $mailbox);
-
 								$response['drafts']=$account['drafts']==$mailbox;
-								
-								
-
 
 								if(isset($_POST['delete_keys']))
 								{
@@ -847,7 +843,7 @@ try{
 								$cache_key=$account_id.$mailbox.$start.$limit.$sort_field.$sort_order;
 
 								$current_folder_status = $imap->status($mailbox, SA_UNSEEN+SA_MESSAGES);								
-								if($imap->check_cache($account, $current_folder_status->unseen, $current_folder_status->messages) && $cached_response = $cache->get_cache($GO_SECURITY->user_id, $cache_key))
+								if(!$nocache && $imap->check_cache($account, $current_folder_status->unseen, $current_folder_status->messages) && $cached_response = $cache->get_cache($GO_SECURITY->user_id, $cache_key))
 								{
 									$imap->close();
 									exit($cached_response);
@@ -874,8 +870,7 @@ try{
 									}
 	
 									$day_start = mktime(0,0,0);
-									$day_end = mktime(0,0,0,date('m'),date('d')+1);
-									
+									$day_end = mktime(0,0,0,date('m'),date('d')+1);								
 									
 	
 									function get_messages($start, $limit)
