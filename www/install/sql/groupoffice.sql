@@ -15,6 +15,16 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
 -- --------------------------------------------------------
 
+DROP TABLE IF EXISTS `go_cache`;
+CREATE TABLE IF NOT EXISTS `go_cache` (
+  `user_id` int(11) NOT NULL,
+  `key` varchar(255) NOT NULL,
+  `content` longtext NOT NULL,
+  `mtime` int(11) NOT NULL,
+  PRIMARY KEY  (`user_id`,`key`),
+  KEY `mtime` (`mtime`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 -- 
 -- Tabel structuur voor tabel `go_acl`
 -- 

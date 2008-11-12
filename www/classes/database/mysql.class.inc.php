@@ -125,7 +125,7 @@ class db extends base_db{
 
 			if(!$this->result)
 			{
-				$this->halt('Could not prepare statement SQL: '.$sql);
+				$this->halt('Could not prepare statement SQL: '.$sql.' types:'.$types.' params: '.var_export($params, true));
 				return false;
 			}
 

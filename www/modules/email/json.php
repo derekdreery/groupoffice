@@ -596,6 +596,11 @@ try{
 
 				$response = $imap->get_message($uid);
 				
+				if(!empty($response['new']))
+				{
+					$imap->update_unseen_cache($account, array($response['uid']), true);
+				}
+				
 				if(!$response)
 				{
 					throw new Exception($lang['email']['errorGettingMessage']);
@@ -773,20 +778,27 @@ try{
 
 							case 'messages':
 
+								$starttime = get_microtime();
 								$touched_folders=array();
 
 								$account_id = isset ($_REQUEST['account_id']) ? $_REQUEST['account_id'] : 0;
 								$mailbox = isset ($_REQUEST['mailbox']) ? ($_REQUEST['mailbox']) : 'INBOX';
 								$query = isset($_POST['query']) ? ($_POST['query']) : '';
+								
+								$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : 0;
+								$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : 30;
+								
+								$nocache=false;
 
 								$account = connect($account_id, $mailbox);
 
 								$response['drafts']=$account['drafts']==$mailbox;
+								
+								
 
 
 								if(isset($_POST['delete_keys']))
 								{
-
 									$messages = json_decode(($_POST['delete_keys']));
 
 									$imap->set_message_flag($mailbox, $messages, "\\Seen");
@@ -809,39 +821,16 @@ try{
 									$messages = json_decode(($_POST['messages']));
 									switch($_POST['action'])
 									{
-										/*
-										 case 'mark_as_read':
-										 $response['success']=$imap->set_message_flag($mailbox, $messages, "\\Seen");
-										 break;
-										 case 'mark_as_unread':
-										 $response['success']=$imap->set_message_flag($mailbox, $messages, "\\Seen", "reset");
-										 break;
-										 case 'flag':
-										 $response['success']=$imap->set_message_flag($mailbox, $messages, "\\Flagged");
-										 break;
-										 case 'unflag':
-										 $response['success']=$imap->set_message_flag($mailbox, $messages, "\\Flagged", "reset");
-										 break;
-										 */
 										case 'move':
-
 											$from_mailbox = ($_REQUEST['from_mailbox']);
 											$to_mailbox = ($_REQUEST['to_mailbox']);
 											$response['success']=$imap->move($to_mailbox, $messages);
 
 											$touched_folders[]=$to_mailbox;
-
-											//var_dump($response['success']);
-											//echo $to_mailbox;
-											//exit();
-
+											
+											$nocache=true;
 											break;
 									}
-
-
-									//BAD DOES SECOND CONNECT
-									//sync folder statuses
-									//$email->cache_account_status($account);
 								}
 
 								if(!isset($folder))
@@ -851,170 +840,190 @@ try{
 
 								$sort_field=isset($_POST['sort']) && $_POST['sort']=='from' ? SORTFROM : SORTARRIVAL;
 								$sort_order=isset($_POST['dir']) && $_POST['dir']=='ASC' ? 0 : 1;
+								
+								require_once($GO_CONFIG->class_path.'cache.class.inc.php');
+								$cache = new cache();
+								
+								$cache_key=$account_id.$mailbox.$start.$limit.$sort_field.$sort_order;
 
-								$response['total'] = $imap->sort($sort_field , $sort_order, $query);
-
-								//apply filters
-								if($response['total']>0 && strtoupper($mailbox)=='INBOX')
+								$current_folder_status = $imap->status($mailbox, SA_UNSEEN+SA_MESSAGES);								
+								if($imap->check_cache($account, $current_folder_status->unseen, $current_folder_status->messages) && $cached_response = $cache->get_cache($GO_SECURITY->user_id, $cache_key))
 								{
-									$filters = array();
-
-									//if there are new messages get the filters
-									$email->get_filters($account['id']);
-									while ($email->next_record())
-									{
-										$filter["field"] = $email->f("field");
-										$filter["folder"] = $email->f("folder");
-										$filter["keyword"] = $email->f("keyword");
-										$filter['mark_as_read'] = ($email->f('mark_as_read') == '1');
-										$filters[] = $filter;
-									}
-								}
-
-								//$date = getdate();
-
-								$day_start = mktime(0,0,0);
-								$day_end = mktime(0,0,0,date('m'),date('d')+1);
-
-
-
-								function get_messages($start, $limit)
+									$imap->close();
+									exit($cached_response);
+								}else
 								{
-									global $imap, $mailbox, $GO_THEME, $filters, $day_start, $day_end, $lang, $account, $touched_folders, $response;
-
-									$imap->get_messages($start, $limit);
-
-									//require($GO_CONFIG->class_path.'mail/RFC822.class.inc');
-									$RFC822 = new RFC822();
-
-									$messages=array();
-
-									$filtered=0;
-
-									//while($imap->next_message(($account['examine_headers']=='1' || isset($_POST['examine_headers']))))
-									while($imap->next_message())
+								
+									$response['total'] = $imap->sort($sort_field , $sort_order, $query);
+	
+									//apply filters
+									if($response['total']>0 && strtoupper($mailbox)=='INBOX')
 									{
-										$break=false;
-										if(strtoupper($mailbox)=='INBOX' && $imap->f('new'))
+										$filters = array();
+	
+										//if there are new messages get the filters
+										$email->get_filters($account['id']);
+										while ($email->next_record())
 										{
-											for ($i=0;$i<sizeof($filters);$i++)
+											$filter["field"] = $email->f("field");
+											$filter["folder"] = $email->f("folder");
+											$filter["keyword"] = $email->f("keyword");
+											$filter['mark_as_read'] = ($email->f('mark_as_read') == '1');
+											$filters[] = $filter;
+										}
+									}
+	
+									$day_start = mktime(0,0,0);
+									$day_end = mktime(0,0,0,date('m'),date('d')+1);
+									
+									
+	
+									function get_messages($start, $limit)
+									{
+										global $filtered_messages, $imap, $mailbox, $GO_THEME, $filters, $day_start, $day_end, $lang, $account, $touched_folders, $response, $current_folder_status;
+	
+										$imap->get_messages($start, $limit);
+	
+										//require($GO_CONFIG->class_path.'mail/RFC822.class.inc');
+										$RFC822 = new RFC822();
+	
+										$messages=array();
+	
+										$filtered=0;
+	
+										//while($imap->next_message(($account['examine_headers']=='1' || isset($_POST['examine_headers']))))
+										while($imap->next_message())
+										{
+											$break=false;
+											if(strtoupper($mailbox)=='INBOX' && $imap->f('new'))
 											{
-												$field = $imap->f($filters[$i]["field"]);
-												if (!is_array($field))
+												for ($i=0;$i<sizeof($filters);$i++)
 												{
-													$field = array($field);
-												}
-												for ($x=0;$x<sizeof($field);$x++)
-												{
-													if (stristr($field[$x], $filters[$i]["keyword"]))
+													$field = $imap->f($filters[$i]["field"]);
+													if (!is_array($field))
 													{
-														$move_messages = array($imap->f("uid"));
-
-														if($filters[$i]['mark_as_read'])
+														$field = array($field);
+													}
+													for ($x=0;$x<sizeof($field);$x++)
+													{
+														if (stristr($field[$x], $filters[$i]["keyword"]))
 														{
-															$ret = $imap->set_message_flag($mailbox, $move_messages, "\\Seen");
-														}
-														if ($imap->move($filters[$i]["folder"], $move_messages))
-														{
-															if(!in_array($filters[$i]["folder"], $touched_folders))
+															$move_messages = array($imap->f("uid"));
+	
+															if($filters[$i]['mark_as_read'])
 															{
-																$touched_folders[]=$filters[$i]["folder"];
+																$ret = $imap->set_message_flag($mailbox, $move_messages, "\\Seen");
 															}
-
-															$response['total']--;
-															$filtered++;
-															$break=true;
-															break;
+															if ($imap->move($filters[$i]["folder"], $move_messages))
+															{
+																if(!in_array($filters[$i]["folder"], $touched_folders))
+																{
+																	$touched_folders[]=$filters[$i]["folder"];
+																}
+	
+																$response['total']--;
+																$filtered++;
+																$current_folder_status->unseen--;
+																$current_folder_status->messages--;
+																
+																$nocache=true;
+																
+																$break=true;
+																break;
+															}
 														}
 													}
-												}
-												if($break)
-												{
-													break;
-												}													
-											}											
-										}
-
-										if ($break)
-										{											
-											continue;
-										}
-
-										if($imap->f('udate')>$day_start && $imap->f('udate')<$day_end)
-										{
-											$date = date($_SESSION['GO_SESSION']['time_format'],$imap->f('udate'));
-										}else
-										{
-											$date = date($_SESSION['GO_SESSION']['date_format'],$imap->f('udate'));
-										}
-
-										$subject = $imap->f('subject');
-										if(empty($subject))
-										{
-											$subject=$lang['email']['no_subject'];
-										}
-
-										$from = ($mailbox == $account['sent'] || $mailbox == $account['drafts']) ? implode(', ', $imap->f('to')) : $imap->f('from');
-
-										if(empty($from))
-										{
-											if($mailbox==$account['drafts'])
+													if($break)
+													{
+														break;
+													}													
+												}											
+											}
+	
+											if ($break)
+											{											
+												continue;
+											}
+	
+											if($imap->f('udate')>$day_start && $imap->f('udate')<$day_end)
 											{
-												$from = $lang['email']['no_recipients_drafts'];
+												$date = date($_SESSION['GO_SESSION']['time_format'],$imap->f('udate'));
 											}else
 											{
-												$from = $lang['email']['no_recipients'];
+												$date = date($_SESSION['GO_SESSION']['date_format'],$imap->f('udate'));
 											}
+	
+											$subject = $imap->f('subject');
+											if(empty($subject))
+											{
+												$subject=$lang['email']['no_subject'];
+											}
+	
+											$from = ($mailbox == $account['sent'] || $mailbox == $account['drafts']) ? implode(', ', $imap->f('to')) : $imap->f('from');
+	
+											if(empty($from))
+											{
+												if($mailbox==$account['drafts'])
+												{
+													$from = $lang['email']['no_recipients_drafts'];
+												}else
+												{
+													$from = $lang['email']['no_recipients'];
+												}
+											}
+											//go_log(LOG_DEBUG, $mailbox.' = '.$account['sent']);
+	
+											$messages[]=array(
+								'uid'=>$imap->f('uid'),
+								'new'=>$imap->f('new'),
+								'subject'=>htmlspecialchars($subject, ENT_QUOTES, 'UTF-8'),
+								'from'=>htmlspecialchars($from, ENT_QUOTES, 'UTF-8'),
+								'size'=>Number::format_size($imap->f('size')),
+								'date'=>$date,
+								'attachments'=>$imap->f('attachments'),
+								'flagged'=>$imap->f('flagged'),
+								'answered'=>$imap->f('answered'),
+								'priority'=>$imap->f('priority')
+											);
 										}
-										//go_log(LOG_DEBUG, $mailbox.' = '.$account['sent']);
-
-										$messages[]=array(
-							'uid'=>$imap->f('uid'),
-							'new'=>$imap->f('new'),
-							'subject'=>htmlspecialchars($subject, ENT_QUOTES, 'UTF-8'),
-							'from'=>htmlspecialchars($from, ENT_QUOTES, 'UTF-8'),
-							'size'=>Number::format_size($imap->f('size')),
-							'date'=>$date,
-							'attachments'=>$imap->f('attachments'),
-							'flagged'=>$imap->f('flagged'),
-							'answered'=>$imap->f('answered'),
-							'priority'=>$imap->f('priority')
-										);
+	
+										if($filtered>0)
+										{//echo $start+$offset-$filtered;
+											//some messages were filtered away. We need to get some more.
+											$extra_messages = get_messages($start+$limit, $filtered);
+											//echo ($start+$limit-$filtered).' '.$filtered;
+											//	var_dump($extra_messages);
+											$messages = array_merge($messages, $extra_messages);
+										}
+	
+										return $messages;
 									}
-
-									if($filtered>0)
-									{//echo $start+$offset-$filtered;
-										//some messages were filtered away. We need to get some more.
-										$extra_messages = get_messages($start+$limit, $filtered);
-										//echo ($start+$limit-$filtered).' '.$filtered;
-										//	var_dump($extra_messages);
-										$messages = array_merge($messages, $extra_messages);
+	
+									
+	
+									$response['results'] = get_messages($start, $limit);
+	
+									if(!$nocache)
+										$imap->update_cache($current_folder_status->unseen, $current_folder_status->messages);
+	
+									//Show unseen status
+	
+									if(!in_array($mailbox, $touched_folders))
+										$touched_folders[]=$mailbox;
+	
+									foreach($touched_folders as $touched_folder)
+									{
+										$status = $touched_folder=='INBOX' ? $current_folder_status : $imap->status($touched_folder, SA_UNSEEN);
+										$folder = $email->get_folder($account_id, $touched_folder);
+	
+										if(isset($status->unseen))
+											$response['unseen'][$folder['id']]=$status->unseen;
 									}
-
-									return $messages;
+									
+									$cache->save($GO_SECURITY->user_id, $cache_key, json_encode($response));
 								}
-
-								$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : 0;
-								$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : 30;
-
-
-								$response['results'] = get_messages($start, $limit);
-
-
-								//Show unseen status
-
-								if(!in_array($mailbox, $touched_folders))
-								$touched_folders[]=$mailbox;
-
-								foreach($touched_folders as $touched_folder)
-								{
-									$status = $imap->status($touched_folder, SA_UNSEEN);
-									$folder = $email->get_folder($account_id, $touched_folder);
-									//$cached_folder = $email->cache_folder_status($imap, $account_id, $touched_folder);
-
-									if(isset($status->unseen))
-									$response['unseen'][$folder['id']]=$status->unseen;
-								}
+								debug('Load time: '.(get_microtime()-$starttime));
+								
 								break;
 
 										case 'tree':

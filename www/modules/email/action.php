@@ -99,16 +99,18 @@ try{
 			$mailbox = isset ($_REQUEST['mailbox']) ? ($_REQUEST['mailbox']) : 'INBOX';
 
 
-			$account = connect($account_id, $mailbox);
+			$account = connect($account_id, $mailbox);		
 
-			$messages = json_decode(($_POST['messages']));
+			$messages = json_decode($_POST['messages']);
 			switch($_POST['action'])
 			{
 				case 'mark_as_read':
 					$response['success']=$imap->set_message_flag($mailbox, $messages, "\\Seen");
+					$imap->update_unseen_cache($account, $messages, true);
 					break;
 				case 'mark_as_unread':
 					$response['success']=$imap->set_message_flag($mailbox, $messages, "\\Seen", "reset");
+					$imap->update_unseen_cache($account, $messages, false);
 					break;
 				case 'flag':
 					$response['success']=$imap->set_message_flag($mailbox, $messages, "\\Flagged");

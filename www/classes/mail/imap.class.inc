@@ -17,6 +17,8 @@
  * Include RCF8222 class
  */
 require_once($GLOBALS['GO_CONFIG']->class_path.'mail/RFC822.class.inc');
+require_once($GLOBALS['GO_CONFIG']->class_path.'cache.class.inc.php');
+
 
 
 /**
@@ -129,8 +131,22 @@ class imap {
 	 * @access public
 	 * @return void
 	 */
-	function imap() {
+	function __construct() {
+
+		global $GO_SECURITY;
+
 		$this->RFC822 = new RFC822();
+
+		$this->db_cache = new cache();
+
+		$cached = $this->db_cache->get_cache($GO_SECURITY->user_id, 'email');
+		//debug($cached);
+		$this->cache = $cached ? json_decode($cached,true) : array();
+	}
+
+	function __destruct(){
+		global $GO_SECURITY;
+		$this->db_cache->save($GO_SECURITY->user_id, 'email', json_encode($this->cache));
 	}
 
 	/**
@@ -149,8 +165,13 @@ class imap {
 	 * @return mixed	The recource ID on success or false on failure
 	 */
 	function open($host, $type, $port, $username, $password, $mailbox = "INBOX", $flags = null, $ssl = false, $novalidate_cert = false, $tls=false) {
-		global $GO_CONFIG;		
-		
+		global $GO_CONFIG;
+
+		$this->host=$host;
+		$this->username=$username;
+
+		$this->cache_key = $this->host.'.'.$this->username;
+
 		$this->servertype = strtolower($type);
 		$this->mailbox = $mailbox;
 		$this->connectstring = $host.":".$port."/".$this->servertype.$GO_CONFIG->email_connectstring_options;
@@ -178,14 +199,14 @@ class imap {
 		}
 		return $this->conn;
 	}
-	
+
 	/**
 	 * Return last error
 	 *
 	 * @access public
 	 * @return String Last IMAP error
 	 */
-	
+
 	function last_error()
 	{
 		$error = imap_last_error();
@@ -209,7 +230,7 @@ class imap {
 
 			//for supressing notices that are not really errors
 			$this->clear_errors();
-				
+
 			imap_close($this->conn);
 			unset ($this->conn);
 		}
@@ -290,6 +311,77 @@ class imap {
 		}
 	}
 
+	function check_cache($account, $unseen, $messages)
+	{
+		global $GO_SECURITY;
+		
+		if(!isset($this->cache[$this->cache_key][$this->mailbox]) || $this->cache[$this->cache_key][$this->mailbox]['unseen']!=$unseen || $this->cache[$this->cache_key][$this->mailbox]['messages']!=$messages)
+		{
+			//debug('Cache not up to date cache: '.$this->cache[$this->cache_key][$this->mailbox]['unseen'].' current:'.$unseen);
+			$this->db_cache->query("DELETE FROM go_cache WHERE user_id=? AND `key` LIKE ?", 'is', array($GO_SECURITY->user_id, $account['id'].$this->mailbox.'%'));
+				
+			unset($this->cache[$this->cache_key][$this->mailbox]);
+			return false;
+		}else
+		{
+			return true;
+		}
+	}
+
+	function update_cache($unseen, $messages)
+	{
+		$this->cache[$this->cache_key][$this->mailbox]['unseen']=$unseen;
+		$this->cache[$this->cache_key][$this->mailbox]['messages']=$messages;
+		$this->cache[$this->cache_key][$this->mailbox]['sort_'.$this->sort_type.'_'.$this->sort_reverse]=$this->sort;
+	}
+
+	function update_unseen_cache($account, $uids, $substract_new){
+
+		if(isset($this->cache[$this->cache_key]))
+		{
+			global $GO_SECURITY;
+			
+			$db = new db();
+			$sql = "SELECT * FROM go_cache WHERE user_id=? AND `key` LIKE ?";
+			$db->query($sql, 'is', array($GO_SECURITY->user_id, $account['id'].$this->mailbox.'%'));
+			
+			$success_uids=array();
+			
+			while($cached = $db->next_record())
+			{			
+				$cache_obj = json_decode($cached['content'], true);
+					
+				for($i=0;$i<count($cache_obj['results']);$i++)
+				{
+					if(in_array($cache_obj['results'][$i]['uid'], $uids))
+					{
+						$new_value = $substract_new ? false : true;
+						if($cache_obj['results'][$i]['new']!=$new_value)
+						{
+							$success_uids[]=$cache_obj['results'][$i]['uid'];
+							$cache_obj['results'][$i]['new']=$new_value;
+						}
+					}
+				}
+				
+				$json = json_encode($cache_obj);
+				if($json)
+				{						
+					$this->db_cache->save($GO_SECURITY->user_id, $cached['key'], $json);
+				}
+			}
+			
+			if($substract_new)
+			{
+				$this->cache[$this->cache_key][$this->mailbox]['unseen']-=count($success_uids);
+			}else
+			{
+				$this->cache[$this->cache_key][$this->mailbox]['unseen']+=count($success_uids);
+			}
+			//debug('cache updated: '.$this->mailbox.' '.$this->cache[$this->cache_key][$this->mailbox]['unseen']);
+		}
+	}
+
 	/**
 	 * Sort message UID's into $this->sort (see imap_sort() PHP docs)
 	 *
@@ -300,10 +392,21 @@ class imap {
 	 * @return int	 Number of sorted messages
 	 */
 	function sort($sort_type = SORTDATE, $reverse = "1", $query = '') {
+
+		$this->sort_type=$sort_type;
+		$this->sort_reverse=$reverse;
+
 		if ($query != '') {
 			$this->sort = imap_sort($this->conn, $sort_type, $reverse, SE_UID+SE_NOPREFETCH, trim($query));
 		} else {
-			$this->sort = imap_sort($this->conn, $sort_type, $reverse, SE_UID+SE_NOPREFETCH);
+			if(isset($this->cache[$this->cache_key][$this->mailbox]['sort_'.$sort_type.'_'.$reverse]))
+			{
+				debug('Used cache');
+				$this->sort = $this->cache[$this->cache_key][$this->mailbox]['sort_'.$sort_type.'_'.$reverse];
+			}else
+			{
+				$this->sort = imap_sort($this->conn, $sort_type, $reverse, SE_UID+SE_NOPREFETCH);
+			}
 		}
 		if ($this->sort) {
 			$this->count = count($this->sort);
@@ -368,27 +471,27 @@ class imap {
 
 	/*function get_messages($first, $offset) {
 		if (!isset($this->sort)) {
-			$this->sort();
+		$this->sort();
 		}
 
 		$last = $first + $offset;
 		if ($offset == 0 || ($last > $this->count)) {
-			$last = $this->count;
+		$last = $this->count;
 		}
 		for ($i = $first; $i < $last; $i++) {
-			$this->messages[]=$this->sort[$i];
+		$this->messages[]=$this->sort[$i];
 		}
-	}*/
-	
-	
+		}*/
+
+
 	function get_messages($first, $offset) {
 		//Use imap_fetch_overview and sort them correctly
-		//for performance.	
+		//for performance.
 
 		/*if (!isset($this->sort)) {
 			$this->sort();
-		}*/
-		
+			}*/
+
 		$first=intval($first);
 		$offset=intval($offset);
 
@@ -544,11 +647,6 @@ class imap {
 		if ($this->conn) {
 			unset ($this->message);
 
-			//determine next and previous message
-			if (!isset ($this->sort)) {
-				$this->sort();
-			}
-
 			if(is_object($uid))
 			{
 				$this->message['uid'] = $uid->uid;
@@ -558,11 +656,11 @@ class imap {
 				$this->message["size"] = $uid->size;
 				$this->message["answered"] = $uid->answered;
 			}else
-			{					
+			{
 				$this->message['uid'] = $uid;
 				$this->message['number'] = imap_msgno($this->conn, $uid);
 
-				/*if(!@$headerinfo = imap_headerinfo($this->conn, $this->message['number']))
+				if(!@$headerinfo = imap_headerinfo($this->conn, $this->message['number']))
 				{
 					//message doesn't exist
 					return false;
@@ -570,7 +668,7 @@ class imap {
 				$this->message['new'] = (($headerinfo->Recent == 'N' || $headerinfo->Unseen == 'U')  && $this->is_imap());
 				$this->message["flagged"] = $headerinfo->Flagged=='F';
 				$this->message["size"] = $headerinfo->Size;
-				$this->message["answered"] = $headerinfo->Answered=='A';*/
+				$this->message["answered"] = $headerinfo->Answered=='A';
 			}
 
 			for ($i = 0; $i < sizeof($this->sort); $i ++) {
@@ -580,9 +678,9 @@ class imap {
 					break;
 				}
 			}
-			
-			$this->message["parts"] = array();
 				
+			$this->message["parts"] = array();
+
 			if($fetchstructure)
 			{
 				$structure = imap_fetchstructure($this->conn, $this->message['uid'], FT_UID);
@@ -590,9 +688,8 @@ class imap {
 			}
 
 			$header = imap_fetchheader($this->conn, $this->message['uid'], FT_UID);
-
 			$values = $this->get_header_values($header);
-				
+
 			$this->message = array_merge($this->message, $values);
 
 			if(!isset($this->message["reply_to"]))
@@ -1284,7 +1381,7 @@ class imap {
 		return true;
 	}
 
-	
+
 
 
 	/**
