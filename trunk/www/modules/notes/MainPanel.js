@@ -85,9 +85,7 @@ GO.notes.MainPanel = function(config){
 			text: GO.lang['cmdAdd'],
 			cls: 'x-btn-text-icon',
 			handler: function(){
-	    	GO.notes.noteDialog.show();
-	    	GO.notes.noteDialog.formPanel.form.setValues({category_id: this.centerPanel.store.baseParams.category_id});
-	    	GO.notes.noteDialog.selectCategory.setRemoteText(this.category_name);
+	    	GO.notes.noteDialog.show(0, {category_id: this.centerPanel.store.baseParams.category_id, category_name: this.category_name});
 			},
 			scope: this
 		},{
