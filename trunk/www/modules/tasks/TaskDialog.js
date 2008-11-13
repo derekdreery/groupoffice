@@ -216,7 +216,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable,{
 					this.link_config.callback.call(this);					
 				}
 				
-				this.fireEvent('save', this);	
+				this.fireEvent('save', this, this.task_id);	
 				
 				if(hide)
 				{
