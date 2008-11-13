@@ -150,3 +150,6 @@ if (get_magic_quotes_gpc())
 	$_POST=stripslashes_array($_POST);
 	$_COOKIE=stripslashes_array($_COOKIE);
 }
+
+
+umask(0000);

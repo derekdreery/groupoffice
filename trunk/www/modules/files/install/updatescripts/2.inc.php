@@ -13,7 +13,7 @@ while($GO_USERS->next_record())
 	$home_dir = $GO_CONFIG->file_storage_path.'users/'.$GO_USERS->f('username');
 	if(!is_dir($home_dir))
 	{
-		mkdir($home_dir, $GO_CONFIG->create_mode,true);
+		mkdir($home_dir, $GO_CONFIG->folder_create_mode,true);
 	}
 	
 	$folder = $files->get_folder($home_dir);

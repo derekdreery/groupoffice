@@ -185,7 +185,7 @@ try{
 			if (file_exists($full_path.'/'.$name)) {
 				throw new Exception($lang['files']['folderExists']);
 			}
-			if (!@ mkdir($full_path.'/'.$name, $GO_CONFIG->create_mode)) {
+			if (!@ mkdir($full_path.'/'.$name, $GO_CONFIG->folder_create_mode)) {
 				throw new Exception($lang['comon']['saveError']);
 			} else {
 				//$GO_LOGGER->log('filesystem', 'NEW FOLDER '.$fs->strip_file_storage_path($fv->path.'/'.$name));
@@ -217,6 +217,8 @@ try{
 				{
 					$tmp_file = $GO_CONFIG->tmpdir.'files_upload/'.($_FILES['attachments']['name'][$n]);
 					move_uploaded_file($_FILES['attachments']['tmp_name'][$n], $tmp_file);
+					chmod($tmp_file, $GO_CONFIG->file_create_mode);
+	
 					$_SESSION['GO_SESSION']['files']['uploaded_files'][]=$tmp_file;
 				}
 			}

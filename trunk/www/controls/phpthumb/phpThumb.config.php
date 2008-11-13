@@ -14,7 +14,7 @@ if(!isset($GO_CONFIG))
 	$GO_CONFIG = new GO_CONFIG();
 	if(!file_exists($GO_CONFIG->file_storage_path.'phpThumbCache/'))
 	{
-		mkdir($GO_CONFIG->file_storage_path.'phpThumbCache/', $GO_CONFIG->create_mode);
+		mkdir($GO_CONFIG->file_storage_path.'phpThumbCache/', $GO_CONFIG->folder_create_mode);
 	}
 }
 ob_start();

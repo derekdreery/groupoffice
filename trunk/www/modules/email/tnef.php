@@ -44,7 +44,7 @@ if ($mail->open($account['host'], $account['type'],$account['port'],$account['us
 }
 
 $tmpdir = $GO_CONFIG->tmpdir.'groupoffice/'.$GO_SECURITY->user_id.'/mail/'.uniqid(time()).'/';
-mkdir($tmpdir, $GO_CONFIG->create_mode, true);
+mkdir($tmpdir, $GO_CONFIG->folder_create_mode, true);
 
 file_put_contents($tmpdir.'winmail.dat',$file);
 chdir($tmpdir);

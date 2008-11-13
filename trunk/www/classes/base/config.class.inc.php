@@ -598,12 +598,19 @@ class GO_CONFIG
 
 	var $mtime = '20081107';
 
-	/* The permissions mode to use when creating files and folders
+	/* The permissions mode to use when creating files
 	 *
-	 * @var     hexadecimal
+	 * @var     string
 	 * @access  public
 	 */
-	var $create_mode = '0755';
+	var $file_create_mode = '0644';
+	
+	/* The permissions mode to use when creating folders
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $folder_create_mode = '0755';
 
 	#group configuration
 	/**
@@ -801,9 +808,14 @@ class GO_CONFIG
 
       	$this->db = new db($this);      	
 
-      	if(is_string($this->create_mode))
+      	if(is_string($this->file_create_mode))
       	{
-      		$this->create_mode=octdec($this->create_mode);
+      		$this->file_create_mode=octdec($this->file_create_mode);
+      	}
+      	
+     		if(is_string($this->folder_create_mode))
+      	{
+      		$this->folder_create_mode=octdec($this->folder_create_mode);
       	}
 
       	if($this->debug)

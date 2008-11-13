@@ -116,11 +116,6 @@ class imapauth extends db
 					{
 						trigger_error('Failed creating user '.$go_username.' and e-mail '.$email.' with imapauth. The e-mail address probably already existed at another user.', E_USER_WARNING);	
 					} else {
-					
-						$old_umask = umask( 000 );
-						@mkdir( $GO_CONFIG->file_storage_path.'users/'.$email_address, $GO_CONFIG->create_mode );
-						umask($old_umask);
-	
 						if ($config['create_email_account'])
 						{
 							if(isset($GO_MODULES->modules['email']))
