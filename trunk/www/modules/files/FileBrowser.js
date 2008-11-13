@@ -634,11 +634,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 				}
 			},
 			scope: this		
-		});
-		
-		
-		
-		
+		});		
 	},
 	
 	createFileFromTemplate : function(template_id, filename){
@@ -647,7 +643,10 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		{
 			Ext.Msg.prompt(GO.files.lang.enterName, GO.files.lang.pleaseEnterName, 
 				function(id, filename){ 
-					this.createFileFromTemplate(template_id, filename);
+					if(id=='cancel')
+						return false;
+					else
+						this.createFileFromTemplate(template_id, filename);
 				},this);
 		}else
 		{
