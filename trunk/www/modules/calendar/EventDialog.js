@@ -448,7 +448,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
     	
     	
   	var startHour = new Ext.form.ComboBox({
-  		name: 'start_hour',
+  		hiddenName: 'start_hour',
       store: new Ext.data.SimpleStore({
         fields: ['value','text'],
         data: hours
@@ -508,7 +508,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 
     	
     	var endHour = new Ext.form.ComboBox({   
-        name:'end_hour',
+        hiddenName:'end_hour',
         store: new Ext.data.SimpleStore({
             fields: ['value','text'],
             data: hours
