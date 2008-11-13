@@ -814,7 +814,7 @@ try{
 
 								if(isset($_POST['action']))
 								{
-									$messages = json_decode(($_POST['messages']));
+									$messages = json_decode($_POST['messages']);
 									switch($_POST['action'])
 									{
 										case 'move':
@@ -843,7 +843,7 @@ try{
 								$cache_key=$account_id.$mailbox.$start.$limit.$sort_field.$sort_order;
 
 								$current_folder_status = $imap->status($mailbox, SA_UNSEEN+SA_MESSAGES);								
-								if(!$nocache && $imap->check_cache($account, $current_folder_status->unseen, $current_folder_status->messages) && $cached_response = $cache->get_cache($GO_SECURITY->user_id, $cache_key))
+								if($imap->check_cache($account, $current_folder_status->unseen, $current_folder_status->messages) && $cached_response = $cache->get_cache($GO_SECURITY->user_id, $cache_key))
 								{
 									$imap->close();
 									exit($cached_response);
@@ -983,11 +983,8 @@ try{
 										}
 	
 										if($filtered>0)
-										{//echo $start+$offset-$filtered;
-											//some messages were filtered away. We need to get some more.
+										{
 											$extra_messages = get_messages($start+$limit, $filtered);
-											//echo ($start+$limit-$filtered).' '.$filtered;
-											//	var_dump($extra_messages);
 											$messages = array_merge($messages, $extra_messages);
 										}
 	
@@ -1014,6 +1011,8 @@ try{
 										if(isset($status->unseen))
 											$response['unseen'][$folder['id']]=$status->unseen;
 									}
+									
+									$response['timestamp']=date('c');
 									
 									if(!$nocache)
 										$cache->save($GO_SECURITY->user_id, $cache_key, json_encode($response));
@@ -1053,7 +1052,7 @@ try{
 													{														
 														$text = $email2->f('email');														
 														
-														$server_response = $email->get_servermanager_mailbox_info($account);
+														/*$server_response = $email->get_servermanager_mailbox_info($account);
 														if(isset($server_response['success']))
 														{
 															$usage .= Number::format_size($server_response['data']['usage']*1024);
@@ -1063,6 +1062,21 @@ try{
 																$percentage = ceil($server_response['data']['usage']*100/$server_response['data']['quota']);																
 																$usage .= '/'.Number::format_size($server_response['data']['quota']*1024).' ('.$percentage.'%)';
 															}	
+														}*/
+														
+														$quota = $imap->get_quota();
+														if(isset($quota['usage']))
+														{
+															
+															
+															if(!empty($quota['limit']))
+															{
+																$percentage = ceil($quota['usage']*100/$quota['limit']);			
+																$usage = sprintf($lang['email']['usage_limit'], $percentage.'%', Number::format_size($quota['limit']*1024));
+															}	else
+															{
+																$usage = sprintf($lang['email']['usage'], Number::format_size($quota['usage']*1024));
+															}
 														}
 														
 														$children = get_mailbox_nodes($email2->f('id'), 0);

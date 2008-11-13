@@ -24,8 +24,8 @@ GO.email.MessagesGrid = function(config){
 	config.store = new GO.data.JsonStore({
 		url: GO.settings.modules.email.url+'json.php',
 		baseParams: {
-		"node": '',
-		"type": 'messages'
+			"node": '',
+			"type": 'messages'
 		},
 		root: 'results',
 		totalProperty: 'total',

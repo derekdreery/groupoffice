@@ -199,6 +199,10 @@ class imap {
 		}
 		return $this->conn;
 	}
+	
+	function get_quota(){		
+		return imap_get_quotaroot($this->conn, $this->mailbox);		 
+	}
 
 	/**
 	 * Return last error
