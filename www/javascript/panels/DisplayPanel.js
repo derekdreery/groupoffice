@@ -14,6 +14,20 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 	
 	loadUrl : '',
 	
+	data : {},
+	
+	saveHandlerAdded : false,
+	
+	
+	addSaveHandler : function(win)
+	{
+		if(!this.saveHandlerAdded)
+		{
+			win.on('save', this.onSave, this);
+			this.saveHandlerAdded=true;
+		}
+	},
+	
 	
 	createTopToolbar : function(){
 		
@@ -80,6 +94,14 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 		return this.data.name;
 	},
 	
+	onSave : function(panel, saved_id)
+	{
+		if(saved_id > 0 && this.data.id == saved_id)
+		{
+			this.reload();
+		}
+	},
+	
 	setData : function(data)
 	{
 		data.link_type=this.link_type;
@@ -106,7 +128,7 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 	
 	load : function(id, reload)
 	{
-		if(!this.data || this.data.id!=id || reload)
+		if(this.data.id!=id || reload)
 		{
 			this.loadParams[this.idParam]=id;
 			
@@ -132,7 +154,7 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 	},
 	
 	reload : function(){
-		if(this.data)
+		if(this.data.id)
 			this.load(this.data.id, true);
 	},
 	

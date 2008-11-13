@@ -245,7 +245,7 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 				{
 					this.contact_id = action.result.contact_id;				
 				}
-				this.fireEvent('save', this);
+				this.fireEvent('save', this, this.contact_id);
 
 				if (hide)
 				{
