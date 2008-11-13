@@ -111,7 +111,7 @@ GO.email.lang.sendNotification='The sender of this messages likes a read notific
 
 GO.email.lang.searchOnSender='Show messages';
 
-GO.email.lang.blocked = '{blocked_images} external images were blocked for your securtity.';
+GO.email.lang.blocked = '{blocked_images} external images were blocked for your security.';
 GO.email.lang.unblock = 'Click here to unblock them';
 
 GO.email.lang.loadEmailFirst = 'To use this function you must load your e-mail first by pressing the e-mail tab';
