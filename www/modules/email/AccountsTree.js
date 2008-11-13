@@ -65,7 +65,7 @@ Ext.extend(GO.email.AccountsTree, Ext.tree.TreePanel, {
 		if(usage!='')
 		{
 			this.bbar.show()
-			this.statusBar.setText(GO.email.lang.usage+': '+usage);
+			this.statusBar.setText(usage);
 		}else
 		{
 			this.bbar.hide()

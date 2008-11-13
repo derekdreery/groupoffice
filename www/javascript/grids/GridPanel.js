@@ -95,7 +95,7 @@ GO.grid.GridPanel = function(config)
     if(!config.store.baseParams)
     {
     	config.store.baseParams={};
-    }        
+    }
     config.store.baseParams['limit']=parseInt(GO.settings['max_rows_list']);
   }
     

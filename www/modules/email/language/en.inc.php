@@ -33,3 +33,5 @@ $lang['email']['notification_body']='Your message with subject "%s" was displaye
 
 $lang['email']['errorGettingMessage']='Could not get message from server';
 $lang['email']['no_recipients_drafts']='No recipients';
+$lang['email']['usage_limit'] = '%s of %s used';
+$lang['email']['usage'] = '%s used';

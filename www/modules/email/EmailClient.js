@@ -251,43 +251,25 @@ GO.email.EmailClient = function(config){
 		}
 
 		if(messages.length>0)
-		{
-			
-			/*this.messagesGrid.store.baseParams['action']='move';
+		{			
+			this.messagesGrid.store.baseParams['action']='move';
 			this.messagesGrid.store.baseParams['from_mailbox']=this.mailbox;
 			this.messagesGrid.store.baseParams['to_mailbox']=e.target.attributes['mailbox'];
-			this.messagesGrid.store.baseParams['messages']=Ext.encode(messages);*/
+			this.messagesGrid.store.baseParams['messages']=Ext.encode(messages);
 			
-			this.messagesGrid.store.reload({
-				params:{
-					action: 'move',
-					from_mailbox: this.mailbox,
-					to_mailbox: e.target.attributes['mailbox'],
-					messages: Ext.encode(messages)
-				},
-				callback : function(){
-					//var folderNode = this.treePanel.getNodeById('folder_'+this.folder_id);
-					//folderNode.parentNode.reload();
-					
-					/*delete this.messagesGrid.store.baseParams['action'];
-					delete this.messagesGrid.store.baseParams['from_mailbox'];
-					delete this.messagesGrid.store.baseParams['to_mailbox'];
-					delete this.messagesGrid.store.baseParams['messages'];*/
-				},
-				scope:this	
-			});
+			this.messagesGrid.store.reload();
+	
+			delete this.messagesGrid.store.baseParams['action'];
+			delete this.messagesGrid.store.baseParams['from_mailbox'];
+			delete this.messagesGrid.store.baseParams['to_mailbox'];
+			delete this.messagesGrid.store.baseParams['messages'];	
 		}
-
-
 	},
 	this);
 	
 	//select the first inbox to be displayed in the messages grid
 	root.on('load', function(node)
 	{		
-		
-		//this.refresh.defer(this.checkMailInterval, this);		
-		
 		this.body.unmask();
 		if(node.childNodes[0])
 		{
@@ -299,7 +281,7 @@ GO.email.EmailClient = function(config){
 				
 				if(node.childNodes[0])
 				{	
-					if(this.messagesGrid.store.baseParams['folder_id'])
+					/*if(this.messagesGrid.store.baseParams['folder_id'])
 					{
 						var node = this.treePanel.getNodeById('folder_'+this.messagesGrid.store.baseParams['folder_id']);						
 						
@@ -308,7 +290,7 @@ GO.email.EmailClient = function(config){
 							this.messagesGrid.store.reload();
 						//}
 					}else
-					{
+					{*/
 						var firstInboxNode = node.childNodes[0];			
 						this.setAccount(
 							firstInboxNode.attributes.account_id,
@@ -316,7 +298,7 @@ GO.email.EmailClient = function(config){
 							firstInboxNode.attributes.mailbox,
 							firstInboxNode.attributes.usage
 							);
-					}
+					//}
 					
 					this.checkMail.defer(this.checkMailInterval, this);
 				}
@@ -396,7 +378,7 @@ GO.email.EmailClient = function(config){
 					hidden:true,
 					handler: function(){
 						this.messagesGrid.store.baseParams['query']='';	
-						this.messagesGrid.store.load();							
+						this.messagesGrid.store.load({params:{start:0}});							
 					},
 					scope: this
 				})
@@ -585,7 +567,7 @@ GO.email.EmailClient = function(config){
 		if(this.rendered)
 		{
 			this.messagesGrid.store.baseParams.query='FROM "'+sender+'"';
-			this.messagesGrid.store.load();
+			this.messagesGrid.store.load({params:{start:0}});
 			
 			GO.mainLayout.tabPanel.setActiveTab(this.id);
 		}else
@@ -809,7 +791,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		this.messagesGrid.store.baseParams['account_id']=account_id;
 		this.messagesGrid.store.baseParams['folder_id']=folder_id;
 		this.messagesGrid.store.baseParams['mailbox']=mailbox;
-		this.messagesGrid.store.load();
+		this.messagesGrid.store.load({params:{start:0}});
 		//this.messagesGrid.store.load();
 		
 		this.treePanel.setUsage(usage);

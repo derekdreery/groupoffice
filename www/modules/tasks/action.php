@@ -105,7 +105,7 @@ try{
 			if(isset($_POST['description']))
 				$task['description']=$_POST['description'];
 				
-			if($task['status']=='COMPLETED')
+			if(isset($task['status']) && $task['status']=='COMPLETED')
 			{
 				if(!isset($old_task) || $old_task['completion_time']==0)
 				{
