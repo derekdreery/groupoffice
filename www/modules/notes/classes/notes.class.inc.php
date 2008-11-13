@@ -77,16 +77,55 @@ class notes extends db {
 	 * @return Array Record properties
 	 */
 
-	function get_category($category_id)
+	function get_category($category_id=0)
 	{
-		$this->query("SELECT * FROM no_categories WHERE id=".$this->escape($category_id));
-		if($this->next_record())
+		if($category_id>0)
 		{
-			return $this->record;
+			$this->query("SELECT * FROM no_categories WHERE id=".$this->escape($category_id));
+			return $this->next_record();
+
 		}else
 		{
-			throw new DatabaseSelectException();
+			global $GO_SECURITY;
+
+			$category = $this->get_default_category($GO_SECURITY->user_id);
+			if ($category)
+			{
+				return $category;
+			}else
+			{
+				global $GO_USERS;
+
+				$category['user_id']=$GO_SECURITY->user_id;
+				$user = $GO_USERS->get_user($GO_SECURITY->user_id);
+				$task_name = String::format_name($user['last_name'], $user['first_name'], $user['middle_name'], 'last_name');
+				$category['name'] = $task_name;
+				$category['acl_read']=$GO_SECURITY->get_new_acl();
+				$category['acl_write']=$GO_SECURITY->get_new_acl();
+				$x = 1;
+				while($this->get_category_by_name($category['name']))
+				{
+					$category['name'] = $task_name.' ('.$x.')';
+					$x++;
+				}
+
+				if (!$category_id = $this->add_category($category))
+				{
+					throw new DatabaseInsertException();
+				}else
+				{
+					return $this->get_category($category_id);
+				}
+			}
 		}
+		
+	}
+	
+	function get_default_category($user_id)
+	{
+		$sql = "SELECT * FROM no_categories WHERE user_id='".$this->escape($user_id)."' LIMIT 0,1";
+		$this->query($sql);
+		return $this->next_record();
 	}
 
 	/**

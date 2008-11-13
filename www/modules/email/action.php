@@ -195,17 +195,15 @@ try{
 						$response['feedback'] = $lang['email']['feedbackNoReciepent'];
 					}else
 					{
-
-
 						try {
-
-
 							if(isset($GO_MODULES->modules['addressbook']) && $GO_MODULES->modules['addressbook']['read_permission'])
 							{
 								require($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc');
 								$ab = new addressbook();
 								$response['unknown_recipients']=array();
 							}
+							
+							
 
 							require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 
@@ -216,14 +214,10 @@ try{
 								($_POST['priority'])
 							);
 
-
 							if(!empty($_POST['reply_uid']))
 							$swift->set_reply_to(($_POST['reply_uid']),($_POST['reply_mailbox']));
 
-
 							$RFC822 = new RFC822();
-
-
 
 							$to_addresses = $RFC822->parse_address_list(($_POST['to']));
 

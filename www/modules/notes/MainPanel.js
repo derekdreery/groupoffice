@@ -38,16 +38,18 @@ GO.notes.MainPanel = function(config){
 	}, this);
 	
 	this.westPanel.store.on('load', function(){
-		this.westPanel.selModel.selectFirstRow();
+		var sm = this.westPanel.selModel;		
+		
+		var defaultRecord = this.westPanel.store.getById(GO.notes.defaultCategory.id);
+		sm.selectRecords([defaultRecord]);
 		
 		GO.notes.writableCategoriesStore.load();
-		
-		var record = this.westPanel.selModel.getSelected();
-		if(record)
+
+		if(defaultRecord)
 		{
-			this.centerPanel.store.baseParams.category_id = record.data.id;
-			this.category_id=record.data.id;
-			this.category_name=record.data.name;		
+			this.centerPanel.store.baseParams.category_id = defaultRecord.data.id;
+			this.category_id=defaultRecord.data.id;
+			this.category_name=defaultRecord.data.name;		
 			
 			this.centerPanel.store.load();
 		}		
@@ -126,10 +128,7 @@ GO.notes.MainPanel = function(config){
 
 
 Ext.extend(GO.notes.MainPanel, Ext.Panel, {
-	afterRender : function(){
-		GO.notes.MainPanel.superclass.afterRender.call(this);
 
-	}
 });
 
 

@@ -152,7 +152,6 @@ class tasks extends db
 					$x++;
 				}
 
-				$list['name'] = $list['name'];
 				if (!$list_id = $this->add_tasklist($list))
 				{
 					throw new DatabaseInsertException();
