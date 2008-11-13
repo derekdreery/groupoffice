@@ -61,13 +61,11 @@ class filesystem extends db
 	    }
 	    $path = dirname($path);
 	  }
-	  $old_umask = umask(000);	
 	  while ($dir = array_pop($dirs_to_create)) {
-	    if (@ !mkdir($dir, $GO_CONFIG->create_mode)) {
+	    if (@ !mkdir($dir, $GO_CONFIG->folder_create_mode)) {
 	      die("Failed creating required directory ".$dir);
 	    }
 	  }
-	  umask($old_umask);
 	  return true;
 	}
 
@@ -220,7 +218,7 @@ class filesystem extends db
 			{
 				if (!file_exists($destination_path))
 				{
-					if (!mkdir($destination_path, $GO_CONFIG->create_mode))
+					if (!mkdir($destination_path, $GO_CONFIG->folder_create_mode))
 					{
 						throw new Exception('Failed to create direcory');
 					}
@@ -312,7 +310,7 @@ class filesystem extends db
 			{
 				if (!file_exists($destination_path))
 				{
-					if (!mkdir($destination_path, $GO_CONFIG->create_mode))
+					if (!mkdir($destination_path, $GO_CONFIG->folder_create_mode))
 					{
 						throw new Exception('Failed to create direcory');
 					}
@@ -330,7 +328,13 @@ class filesystem extends db
 				return true;
 			}else
 			{
-				return copy($source_path, $destination_path);
+				if(!copy($source_path, $destination_path))
+				{
+					return false;
+				}
+				chmod($destination_path, $GO_CONFIG->file_create_mode);
+				
+				return true;
 			}
 		}
 	}

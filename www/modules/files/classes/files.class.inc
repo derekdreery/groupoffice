@@ -894,7 +894,7 @@ class files extends filesystem
 			$home_dir = $GO_CONFIG->file_storage_path.'users/'.$GO_USERS->f('username');
 			if(!is_dir($home_dir))
 			{
-				mkdir($home_dir, $GO_CONFIG->create_mode,true);
+				mkdir($home_dir, $GO_CONFIG->folder_create_mode,true);
 				echo "Creating users/".$GO_USERS->f('username')."<br />";
 			}
 			
@@ -966,7 +966,7 @@ class files extends filesystem
 		$userdir = $GO_CONFIG->file_storage_path.'users/'.$user['username'];
 		
 		if(!is_dir($userdir))
-			mkdir($userdir, 0755, true);
+			mkdir($userdir, $GO_CONFIG->folder_create_mode, true);
 			
 		$folder = $this->get_folder('users/'.$user['username']);		
 		if(empty($folder['acl_read']))
