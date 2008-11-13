@@ -1501,7 +1501,7 @@ class imap {
 		if (strpos($str, '=?') !== false) {
 			//$str = str_replace(" ", "", $str);
 			//return imap_utf8($str);
-			return iconv_mime_decode($str,null,'UTF-8');
+			return @iconv_mime_decode($str,null,'UTF-8');
 		}else {
 			if (function_exists('iconv'))
 			{
