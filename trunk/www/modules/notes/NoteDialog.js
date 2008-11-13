@@ -140,7 +140,7 @@ Ext.extend(GO.notes.NoteDialog, Ext.Window,{
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){
 				
-				this.fireEvent('save', this);
+				
 				
 				if(hide)
 				{
@@ -152,6 +152,8 @@ Ext.extend(GO.notes.NoteDialog, Ext.Window,{
 						this.setNoteId(action.result.note_id);	
 					}
 				}
+				
+				this.fireEvent('save', this, this.note_id);
 				
 				if(this.link_config && this.link_config.callback)
 				{					

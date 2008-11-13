@@ -267,7 +267,6 @@ Ext.extend(GO.addressbook.MainPanel, Ext.Panel,{
 				if(panel.id=='ab-contacts-grid')
 				{
 					this.contactsGrid.store.reload();
-					this.contactEastPanel.reload();
 				}
 			}, this);
 			
@@ -277,7 +276,6 @@ Ext.extend(GO.addressbook.MainPanel, Ext.Panel,{
 				if(panel.id=='ab-company-grid')
 				{
 					this.companiesGrid.store.reload();
-					this.companyEastPanel.reload();
 				}
 			}, this);
 			

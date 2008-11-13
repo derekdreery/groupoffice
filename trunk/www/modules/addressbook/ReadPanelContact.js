@@ -10,6 +10,7 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 	
 	editHandler : function(){
 		GO.addressbook.contactDialog.show(this.data.id);
+		this.addSaveHandler(GO.addressbook.contactDialog);
 	},	
 	
 	initComponent : function(){

@@ -236,7 +236,7 @@ Ext.extend(GO.addressbook.CompanyDialog, Ext.Window, {
 					this.company_id = action.result.company_id;				
 					this.employeePanel.setCompanyId(action.result.company_id);
 				}				
-				this.fireEvent('save', this);
+				this.fireEvent('save', this, this.company_id);
 				
 				if (hide)
 				{

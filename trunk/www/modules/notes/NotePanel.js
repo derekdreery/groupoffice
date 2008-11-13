@@ -23,8 +23,10 @@ GO.notes.NotePanel = Ext.extend(GO.DisplayPanel,{
 	editHandler : function(){
 		if(!GO.notes.noteDialog)
 		{
-			GO.notes.noteDialog = new GO.notes.NoteDialog();
+			GO.notes.noteDialog = new GO.notes.NoteDialog();			
 		}
+		this.addSaveHandler(GO.notes.noteDialog);
+				
 		GO.notes.noteDialog.show(this.data.id);
 	},	
 		
