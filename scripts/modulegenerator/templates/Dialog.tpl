@@ -155,21 +155,21 @@ Ext.extend(GO.{module}.{friendly_single_ucfirst}Dialog, Ext.Window,{
 			url:GO.settings.modules.{module}.url+'action.php',
 			params: {'task' : 'save_{friendly_single}'},
 			waitMsg:GO.lang['waitMsgSave'],
-			success:function(form, action){				
-				this.fireEvent('save', this);				
+			success:function(form, action){
+			
+				if(action.result.{friendly_single}_id)
+				{
+					this.set{friendly_single_ucfirst}Id(action.result.{friendly_single}_id);
+					<gotpl if="$authenticate">
+					this.readPermissionsTab.setAcl(action.result.acl_read);
+					this.writePermissionsTab.setAcl(action.result.acl_write);
+					</gotpl>					
+				}				
+								
+				this.fireEvent('save', this, this.{friendly_single}_id);				
 				if(hide)
 				{
 					this.hide();	
-				}else
-				{				
-					if(action.result.{friendly_single}_id)
-					{
-						this.set{friendly_single_ucfirst}Id(action.result.{friendly_single}_id);
-						<gotpl if="$authenticate">
-						this.readPermissionsTab.setAcl(action.result.acl_read);
-						this.writePermissionsTab.setAcl(action.result.acl_write);
-						</gotpl>					
-					}
 				}
 				<gotpl if="$link_type&gt;0">
 				if(this.link_config && this.link_config.callback)

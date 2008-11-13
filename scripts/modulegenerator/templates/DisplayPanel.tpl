@@ -23,6 +23,7 @@ GO.{module}.{friendly_single_ucfirst}Panel = Ext.extend(GO.DisplayPanel,{
 	
 	editHandler : function(){
 		GO.{module}.{friendly_single}Dialog.show({ {friendly_single}_id: this.data.id});
+		this.addSaveHandler(GO.{module}.{friendly_single}Dialog);
 	},
 	
 	initComponent : function(){
