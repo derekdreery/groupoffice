@@ -146,12 +146,12 @@ class go_ical extends calendar
 			$line = "DTSTART:".date($this->datetime_format, $event['start_time']);
 			$lines[] = $line;
 			
-			if($event['all_day_event']=='0')
-			{
+			//if($event['all_day_event']=='0')
+			//{
 				$line = "DTEND:";
 				$line .= date($this->datetime_format, $event['end_time']);
 				$lines[] = $line;
-			}
+			//}
 
 		}else
 		{
