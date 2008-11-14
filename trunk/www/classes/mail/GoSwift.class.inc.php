@@ -347,11 +347,11 @@ class GoSwift extends Swift{
 		global $GO_CONFIG, $GO_LINKS;
 
 
-		$link_message['path']=$GO_CONFIG->file_storage_path.'email/'.date('mY').'/sent_'.time().'.eml';
+		$link_message['path']='email/'.date('mY').'/sent_'.time().'.eml';
 			
 		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 		$fs = new filesystem();
-		$fs->mkdir_recursive(dirname($link_message['path']));
+		$fs->mkdir_recursive($GO_CONFIG->file_storage_path.dirname($link_message['path']));
 
 		if(empty($this->data))
 		{
@@ -360,7 +360,7 @@ class GoSwift extends Swift{
 		}
 
 
-		$fp = fopen($link_message['path'],"w+");
+		$fp = fopen($GO_CONFIG->file_storage_path.$link_message['path'],"w+");
 		fputs ($fp, $this->data, strlen($this->data));
 		fclose($fp);
 
