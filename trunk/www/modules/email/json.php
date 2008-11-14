@@ -778,7 +778,6 @@ try{
 
 							case 'messages':
 
-								$starttime = get_microtime();
 								$touched_folders=array();
 
 								$account_id = isset ($_REQUEST['account_id']) ? $_REQUEST['account_id'] : 0;
@@ -843,7 +842,7 @@ try{
 								$cache_key=$account_id.$mailbox.$start.$limit.$sort_field.$sort_order;
 
 								$current_folder_status = $imap->status($mailbox, SA_UNSEEN+SA_MESSAGES);								
-								if($imap->check_cache($account, $current_folder_status->unseen, $current_folder_status->messages) && $cached_response = $cache->get_cache($GO_SECURITY->user_id, $cache_key))
+								if($imap->check_cache($account, $current_folder_status->unseen, $current_folder_status->messages) && !$nocache && $cached_response = $cache->get_cache($GO_SECURITY->user_id, $cache_key))
 								{
 									$imap->close();
 									exit($cached_response);
