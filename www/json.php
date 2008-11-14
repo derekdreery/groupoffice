@@ -350,7 +350,7 @@ try{
 			$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : 0;
 			$limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : 0;
 
-			$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'mtime';
+			$sort = isset($_REQUEST['sort']) ? $_REQUEST['sort'] : 'mtime';
 			$dir= isset($_REQUEST['dir']) ? $_REQUEST['dir'] : 'DESC';
 
 
