@@ -354,7 +354,8 @@ class imap {
 			while($cached = $db->next_record())
 			{			
 				$cache_obj = json_decode($cached['content'], true);
-					
+				
+				//search for this message uid in the cache and update 'new' value.
 				for($i=0;$i<count($cache_obj['results']);$i++)
 				{
 					if(in_array($cache_obj['results'][$i]['uid'], $uids))
@@ -366,6 +367,18 @@ class imap {
 							$cache_obj['results'][$i]['new']=$new_value;
 						}
 					}
+				}
+				
+				//the total of unseen messages in this folder should be changed too				
+				if (list($folder_id, $unseen) = each($cache_obj['unseen'])) {					
+					if($substract_new)
+					{
+						$cache_obj['unseen'][$folder_id]=$unseen-count($success_uids);
+					}else
+					{
+						$cache_obj['unseen'][$folder_id]=$unseen+count($success_uids);
+					}
+					//debug('Updated unseen '.$folder_id.' to '.$cache_obj['unseen'][$folder_id]);
 				}
 				
 				$json = json_encode($cache_obj);
