@@ -145,13 +145,9 @@ class search extends db {
 			$sql .= "AND $condition ";
 		}
 		
-		if($link_id>0)
-		{
-			$sql .= " ORDER BY sc.type ASC, l.ctime DESC";
-		}else
-		{
-			$sql .= " ORDER BY $sort_index $sort_order";
-		}
+
+		$sql .= " ORDER BY $sort_index $sort_order";
+		
 
 		//debug($sql);
 		
@@ -261,11 +257,11 @@ class search extends db {
 	
 	function get_latest_links_json($user_id, $link_id, $link_type)
 	{
-		$conditions = array(
+		/*$conditions = array(
 			'l.ctime>'.Date::date_add(time(), -90)
-		);
+		);*/
 		
-		return $this->get_links_json($user_id,'',0,0,'mtime', 'DESC',array(), $link_id,$link_type,-1, $conditions);
+		return $this->get_links_json($user_id,'',0,15,'l.ctime', 'DESC',array(), $link_id,$link_type,-1);
 	}
 	
 	/**
