@@ -979,19 +979,14 @@ class files extends filesystem
 			
 			$this->update_folder($up_folder);
 		}
-	}
+	}	
 	
-	
-	function __on_delete_user($user_id)
+	function __on_user_delete($user)
 	{
-		$fs = new filesystem();
-		$this->get_all_shares($user_id);
-		while($this->next_record())
-		{
-			$fs->delete_share($this->f('path'));
-		}
+		global $GO_CONFIG;		
 		
-		system('rm -Rf '.$GO_CONFIG->file_storage_path.'users/'.$username);
+		$this->delete($GO_CONFIG->file_storage_path.'users/'.$user['username']);
+		$this->delete($GO_CONFIG->file_storage_path.'users/'.$user['id']);
 	}
 	
 	function cache_file($path, $index='path')
