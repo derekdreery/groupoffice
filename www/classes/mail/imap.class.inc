@@ -623,7 +623,7 @@ class imap {
 		$from = $RFC822->parse_address_list($values['from']);
 		$message["from"] = isset($from[0]['personal']) ? $this->enc_utf8($from[0]['personal']) : '';
 		$message["sender"] = isset($from[0]['email']) ? $this->enc_utf8($from[0]['email']) : '';
-		$message['udate'] = isset($values['date']) ? strtotime($values['date']) : '';
+		$message['udate'] = isset($values['date']) ? strtotime($values['date']) : 0;
 		$message['subject'] = isset($values['subject']) ? $this->enc_utf8($values['subject']) : '';
 
 		$message["notification"]=isset($values['disposition-notification-to']) ? $values['disposition-notification-to'] : false;
