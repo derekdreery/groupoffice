@@ -76,3 +76,8 @@ Ext.override(Ext.form.HtmlEditor, {
 		return Ext.form.HtmlEditor.superclass.getValue.call(this);
 	}
 });
+
+Ext.override(Ext.DatePicker, {
+	startDay: parseInt(GO.settings.first_weekday)
+});
+

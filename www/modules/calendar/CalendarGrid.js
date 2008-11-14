@@ -1540,6 +1540,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
   	if(this.days>4)
   	{
   		this.startDate = this.getFirstDateOfWeek(date);
+  		console.log(this.startDate);
   	}else
   	{
   		this.startDate = date;

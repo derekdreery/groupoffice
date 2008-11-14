@@ -88,25 +88,29 @@ GO.calendar.MainPanel = function(config){
 	{
 		id: 'days-grid',
 		store: this.daysGridStore, 
-		border: false
+		border: false,
+		firstWeekday: parseInt(GO.settings.first_weekday)
 	});
 	
 	this.monthGrid = new GO.grid.MonthGrid({
 		id: 'month-grid',
 		store: this.monthGridStore,
-		border: false
+		border: false,
+		firstWeekday: parseInt(GO.settings.first_weekday)
 		
 	});
 	
 	this.viewGrid = new GO.grid.ViewGrid({
 		id: 'view-grid',
-		border: false
+		border: false,
+		firstWeekday: parseInt(GO.settings.first_weekday)
 	});
 	
 	
 	this.listGrid = new GO.calendar.ListGrid({
 		id: 'list-grid',
-		border: false
+		border: false,
+		firstWeekday: parseInt(GO.settings.first_weekday)
 	});
 
 	this.listStore = this.listGrid.store;
