@@ -122,9 +122,15 @@ class email extends db
 
 	function delete_linked_message($link_id)
 	{
+		global $GO_CONFIG;
+		
 		require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
 		$search = new search();
 		$search->delete_search_result($link_id, 9);
+		
+		$message = $this->get_linked_message($link_id);
+		
+		unlink($GO_CONFIG->file_storage_path.$message['path']);
 
 		$sql ="DELETE FROM em_links WHERE link_id=".$this->escape($link_id);
 		return $this->query($sql);
@@ -999,6 +1005,17 @@ class email extends db
 		} else {
 			return false;
 		}
+	}
+	
+	function __on_delete_link($id, $link_type)
+	{
+
+		if($link_type==9)
+		{
+			$this->delete_linked_message($id);
+		}
+
+		/* {ON_DELETE_LINK_FUNCTION} */
 	}
 
 	function __on_user_delete($user)

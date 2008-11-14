@@ -101,11 +101,6 @@ GO.grid.LinksPanel = function(config){
 	this);
 	
 	
-	
-	
-	
-	
-	
 	this.linksGrid = new GO.grid.LinksGrid({
 		region:'center',
 		deleteConfig: {
@@ -168,9 +163,6 @@ GO.grid.LinksPanel = function(config){
 		
 	}, this);
 	
-	
-	
-	
 	this.folderWindow = new GO.LinkFolderWindow();
 	this.folderWindow.on('save', function(){
 		this.linksGrid.store.reload();
@@ -183,12 +175,9 @@ GO.grid.LinksPanel = function(config){
 		{
 			this.linksTree.getRootNode().reload();
 		}
-	}, this);
+	}, this);	
 	
-	
-	
-	config.items=[this.linksTree, this.linksGrid];	
-	
+	config.items=[this.linksTree, this.linksGrid];		
 	
 	this.linksContextMenu = new GO.LinksContextMenu();
 	
