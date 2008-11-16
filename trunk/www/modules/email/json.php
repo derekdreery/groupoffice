@@ -910,6 +910,9 @@ try{
 									if(isset($status->unseen))
 										$response['unseen'][$folder['id']]=$status->unseen;
 								}
+								
+								if(!$nocache)
+									$imap->update_cache($current_folder_status->unseen, $current_folder_status->messages);
 					
 								
 								break;
