@@ -504,7 +504,7 @@ class imap{
 		$overviews = imap_fetch_overview($this->conn, $get, FT_UID);
 		foreach($overviews as $overview)
 		{
-			$message = $this->get_message($overview->uid, false);			
+			$message = $this->get_message($overview, false);			
 			
 			//$cached_message['folder_id']=$folder_id;
 			$cached_message['uid']=$message['uid'];
