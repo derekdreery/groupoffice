@@ -13,6 +13,22 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- Database: `go3test3`
 --
 
+DROP TABLE IF EXISTS `em_messages_cache`;
+CREATE TABLE IF NOT EXISTS `em_messages_cache` (
+  `folder_id` int(11) NOT NULL,
+  `uid` int(11) NOT NULL,
+  `new` enum('0','1') NOT NULL,
+  `subject` varchar(255) NOT NULL,
+  `from` varchar(255) NOT NULL,
+  `size` int(11) NOT NULL,
+  `date` int(11) NOT NULL,
+  `attachments` enum('0','1') NOT NULL,
+  `flagged` enum('0','1') NOT NULL,
+  `answered` enum('0','1') NOT NULL,
+  `priority` tinyint(4) NOT NULL,
+  PRIMARY KEY  (`folder_id`,`uid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 -- --------------------------------------------------------
 
 --

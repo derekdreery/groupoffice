@@ -28,7 +28,7 @@ require_once($GLOBALS['GO_CONFIG']->class_path.'cache.class.inc.php');
  * @package go.mail
  * @access public
  */
-class imap {
+class imap{
 	/**
 	 * The recource ID that points to the IMAP stream
 	 *
@@ -477,38 +477,8 @@ class imap {
 		return $query;
 	}
 
-	/**
-	 * Fetches the sorted messages and puts them into $this->messages
-	 *
-	 * @param	int	$first The first message to fetch
-	 * @param	int	$offset The number of messages to fetch
-	 * @access public
-	 * @return void
-	 */
-
-	/*function get_messages($first, $offset) {
-		if (!isset($this->sort)) {
-		$this->sort();
-		}
-
-		$last = $first + $offset;
-		if ($offset == 0 || ($last > $this->count)) {
-		$last = $this->count;
-		}
-		for ($i = $first; $i < $last; $i++) {
-		$this->messages[]=$this->sort[$i];
-		}
-		}*/
-
-
-	function get_messages($first, $offset) {
-		//Use imap_fetch_overview and sort them correctly
-		//for performance.
-
-		/*if (!isset($this->sort)) {
-			$this->sort();
-			}*/
-
+	function get_message_uids($first, $offset)
+	{
 		$first=intval($first);
 		$offset=intval($offset);
 
@@ -516,34 +486,43 @@ class imap {
 		if ($offset == 0 || ($last > $this->count)) {
 			$last = $this->count;
 		}
-		$get = '';
+
 		$index = 0;
 		$sorted_uids = array ();
 		for ($i = $first; $i < $last; $i ++) {
-			if ($i != $first) {
-				$get .= ',';
-			}
-			$get .= $this->sort[$i];
 			$sorted_uids[] = $this->sort[$i];
-			$index ++;
-		}
-
-		$tmp = $sorted_uids;
-		sort($tmp); //this is the way they are returned by imap_fetch_overview
-
-		$uid_map = array ();
-		$count = count($tmp);
-		for ($i = 0; $i < $count; $i ++) {
-			$uid_map[$tmp[$i]] = $i;
-		}
-
-		$tmp_overviews = imap_fetch_overview($this->conn, $get, FT_UID);
-
-		while ($message_overview = array_shift($tmp) && $uid = array_shift($sorted_uids)) {
-			$this->messages[] = $tmp_overviews[$uid_map[$uid]];
-		}
+		}	
+		return $sorted_uids;
 	}
+	
 
+	
+	function get_message_headers($uids)
+	{
+		$get = implode(',', $uids);
+			
+		$overviews = imap_fetch_overview($this->conn, $get, FT_UID);
+		foreach($overviews as $overview)
+		{
+			$message = $this->get_message($overview->uid, false);			
+			
+			//$cached_message['folder_id']=$folder_id;
+			$cached_message['uid']=$message['uid'];
+			$cached_message['new']=$message['new'];
+			$cached_message['subject']=$message['subject'];
+			$cached_message['size']=$message['uid'];
+			$cached_message['udate']=$message['udate'];
+			$cached_message['attachments']=$message['attachments'];
+			$cached_message['flagged']=$message['flagged'];
+			$cached_message['answered']=$message['answered'];
+			$cached_message['priority']=empty($message['priority']) ? 3 : intval($message['priority']);			
+			$cached_message['from']=$message['from'];
+			$cached_message['to']=implode(',', $message['to']);	
+
+			$this->messages[$message['uid']]=$cached_message;
+		}
+		return $this->messages;
+	}
 
 
 	/**
@@ -626,26 +605,13 @@ class imap {
 		$message['udate'] = isset($values['date']) ? strtotime($values['date']) : 0;
 		$message['subject'] = isset($values['subject']) ? $this->enc_utf8($values['subject']) : '';
 
-		$message["notification"]=isset($values['disposition-notification-to']) ? $values['disposition-notification-to'] : false;
+		$message["notification"]=isset($values['disposition-notification-to']) ? $this->enc_utf8($values['disposition-notification-to']) : false;
 		$message['content_type']=isset($values['content-type']) ? $values['content-type'] : false;;
 
 		return $message;
 	}
 
-	/**
-	 * Loop trough all messages after calling get_messages()
-	 *
-	 * @access public
-	 * @return array The E-mail message elements
-	 */
-	function next_message()
-	{
-		if($overview = array_shift($this->messages))
-		{
-			return $this->get_message($overview, false);
-		}
-		return false;
-	}
+
 
 	function get_source($uid)
 	{
@@ -677,7 +643,7 @@ class imap {
 				$this->message['uid'] = $uid;
 				$this->message['number'] = imap_msgno($this->conn, $uid);
 
-				if(!@$headerinfo = imap_headerinfo($this->conn, $this->message['number']))
+				/*if(!@$headerinfo = imap_headerinfo($this->conn, $this->message['number']))
 				{
 					//message doesn't exist
 					return false;
@@ -685,16 +651,16 @@ class imap {
 				$this->message['new'] = (($headerinfo->Recent == 'N' || $headerinfo->Unseen == 'U')  && $this->is_imap());
 				$this->message["flagged"] = $headerinfo->Flagged=='F';
 				$this->message["size"] = $headerinfo->Size;
-				$this->message["answered"] = $headerinfo->Answered=='A';
+				$this->message["answered"] = $headerinfo->Answered=='A';*/
 			}
 
-			for ($i = 0; $i < sizeof($this->sort); $i ++) {
+			/*for ($i = 0; $i < sizeof($this->sort); $i ++) {
 				if ($this->message['uid'] == $this->sort[$i]) {
 					$this->message["next"] = ($i -1 >= 0) ? $this->sort[$i -1] : 0;
 					$this->message["previous"] = ($i +1 < sizeof($this->sort)) ? $this->sort[$i +1] : 0;
 					break;
 				}
-			}
+			}*/
 				
 			$this->message["parts"] = array();
 
