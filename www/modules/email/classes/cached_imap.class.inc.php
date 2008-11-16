@@ -197,6 +197,7 @@ class cached_imap extends imap{
 
 	function get_cached_messages($folder_id, $uids)
 	{
+		//TODO dont select all fields
 		$this->email->query("SELECT * FROM em_messages_cache WHERE folder_id=".$this->email->escape($folder_id)." AND uid IN (".$this->email->escape(implode(',',$uids)).")");
 	}
 
