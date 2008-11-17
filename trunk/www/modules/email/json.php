@@ -658,7 +658,7 @@ try{
 				$html_alternative=false;
 				for($i=0;$i<count($parts);$i++)
 				{
-					if(strtolower($parts[$i]['mime'])=='text/html' && (strtolower($parts[$i]['type'])=='alternative' || strtolower($parts[$i]['type'])=='related'))
+					if(eregi('html', $parts[$i]['mime']) && (strtolower($parts[$i]['type'])=='alternative' || strtolower($parts[$i]['type'])=='related'))
 					{
 						$html_alternative=true;
 					} 
@@ -669,7 +669,7 @@ try{
 
 				$attachments=array();
 
-				if(/*count($parts)==0 && */eregi('text/html', $response['content_type']))
+				if(/*count($parts)==0 && */eregi('html', $response['content_type']))
 				{
 					$default_mime = 'text/html';
 				}else
@@ -697,9 +697,16 @@ try{
 				while($part = array_shift($parts))
 				{
 					$mime = isset($part["mime"]) && $part_count>1 ? strtolower($part["mime"]) : $default_mime;
+					
+					//some clients just send html
+					if($mime=='html')
+					{
+						$mime = 'text/html';
+					}
+					
 
-					if (empty($response['body']) && ($part["name"] == '' || eregi('inline', $part["disposition"]))  && ($mime == "text/html" ||
-					($mime == "text/plain" && (!$html_alternative || strtolower($part['type'])!='alternative')) ||
+					if (empty($response['body']) && ($part["name"] == '' || eregi('inline', $part["disposition"]))  && (eregi('html', $mime) ||
+					(eregi('plain', $mime) && (!$html_alternative || strtolower($part['type'])!='alternative')) ||
 					$mime == "text/enriched" ||
 					$mime == "unknown/unknown"))
 					{
