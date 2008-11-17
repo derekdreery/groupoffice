@@ -312,7 +312,7 @@ class cached_imap extends imap{
 
 		for ($i=0;$i<sizeof($this->filters);$i++)
 		{
-			if(count($this->filters[$i]['uids']))
+			if(isset($this->filters[$i]['uids']) && count($this->filters[$i]['uids']))
 			{
 				if($this->filters[$i]['mark_as_read'])
 				{
