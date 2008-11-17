@@ -1283,7 +1283,7 @@ class imap{
 		* @access public
 		* @return bool True on success
 		*/
-	function move($folder, $messages) {
+	function move($folder, $messages, $expunge=true) {
 		$messageset = implode(",", $messages);
 		if (imap_mail_move($this->conn, $messageset, $folder, CP_UID)) {
 			
@@ -1292,9 +1292,18 @@ class imap{
 				$this->touched_folders[]=$folder;
 			}
 			
-			return imap_expunge($this->conn);
+			if($expunge)
+				$this->expunge();
+			
+			return true;
 		}
 		return false;
+	}
+	
+	function expunge()
+	{
+		imap_expunge($this->conn);
+		debug('Expunged');
 	}
 
 	/**

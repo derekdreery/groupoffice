@@ -130,10 +130,10 @@ class cached_imap extends imap{
 		* @access public
 		* @return bool True on success
 		*/
-	function move($folder, $messages) {
+	function move($folder, $messages, $expunge=true) {
 		if(count($messages))
 		{
-			if(parent::move($folder, $messages))
+			if(parent::move($folder, $messages, $expunge))
 			{
 				$this->delete_cached_messages($messages);
 				return true;
@@ -157,11 +157,14 @@ class cached_imap extends imap{
 			//remove uids from cached sort
 			$sort = $this->sort;		
 			$this->sort=array();
+			$removed=0;
+			$total = count($uids);
 			foreach($sort as $uid)
 			{
-				if(!in_array($uid, $uids))
-				{
+				if($total==$removed || !in_array($uid, $uids))
+				{					
 					$this->sort[]=$uid;
+					$removed++;					
 				}
 			}
 			$this->folder_sort_cache[$this->sort_type.'_'.$this->sort_reverse]=$this->sort;
@@ -205,9 +208,9 @@ class cached_imap extends imap{
 	function get_message_headers($start, $limit, $sort_field , $sort_order, $query)
 	{
 		$uids = $this->get_message_uids($start, $limit, $sort_field , $sort_order, $query);
-		
+
 		$messages=array();
-		$this->filtered=0;
+		$this->filtered=array();
 		
 		if(count($uids))
 		{
@@ -232,8 +235,9 @@ class cached_imap extends imap{
 			}		
 						
 			if(count($uncached_uids))
-			{
+			{				
 				$new_messages = $this->get_filtered_message_headers($uncached_uids);
+
 				foreach($new_messages as $message)
 				{
 					$messages[$message['uid']]=$message;
@@ -246,12 +250,12 @@ class cached_imap extends imap{
 			}
 			debug('Got '.count($uncached_uids).' from IMAP server');
 			
-			if($this->filtered>0)
+			if(count($this->filtered))
 			{
-				debug('Extra messages start '.($this->first+$this->offset-$this->filtered));
-				debug('Extra messages offset '.$this->filtered);
+				debug('Extra messages start '.($this->first+$this->offset-count($this->filtered)));
+				debug('Extra messages offset '.count($this->filtered));
 					
-				$extra_messages = $this->get_message_headers($this->first+$this->offset-$this->filtered, $this->filtered, $sort_field , $sort_order, $query);
+				$extra_messages = $this->get_message_headers($this->first+$this->offset-count($this->filtered), count($this->filtered), $sort_field , $sort_order, $query);
 				foreach($extra_messages as $uid=>$message)
 				{
 					$messages[$uid]=$message;
@@ -269,14 +273,14 @@ class cached_imap extends imap{
 	function get_filtered_message_headers($uids)
 	{
 		$messages=array();
-		$this->filtered=0;
-		
+		$this->filtered=array();		
+	
 		$new_messages = parent::get_message_headers($uids);
 		if(strtoupper($this->mailbox)!='INBOX')
 		{
 			return $new_messages;
-		}
-		
+		}		
+
 		while($message = array_shift($new_messages))
 		{			
 			if($message['new']=='1')
@@ -285,32 +289,16 @@ class cached_imap extends imap{
 				
 				for ($i=0;$i<sizeof($this->filters);$i++)
 				{
+					if(!isset($this->filters[$i]['uids']))
+						$this->filters[$i]['uids']=array();
+					
 					$field = $message[$this->filters[$i]["field"]];
 
 					if (stristr($field, $this->filters[$i]["keyword"]))
-					{
-						$move_messages = array($message['uid']);
-
-						if($this->filters[$i]['mark_as_read'])
-						{
-							$ret = $this->set_message_flag($this->mailbox, $move_messages, "\\Seen");
-						}
-						
-						//moving uses unseen and count for a cache update
-						$this->unseen--;
-						$this->count--;
-						if ($this->move($this->filters[$i]["folder"], $move_messages))
-						{							
-							debug('Filtered:');
-							debug($message);
-							$this->filtered++;
-							$continue=true;
-							break;
-						}else
-						{
-							$this->unseen++;
-							$this->count++;
-						}
+					{									
+						$this->filters[$i]['uids'][]=$message['uid'];							
+						$continue=true;
+						break;					
 					}												
 				}
 				if ($continue)
@@ -322,6 +310,32 @@ class cached_imap extends imap{
 			$messages[]=$message;
 		}
 
+		for ($i=0;$i<sizeof($this->filters);$i++)
+		{
+			if(count($this->filters[$i]['uids']))
+			{
+				if($this->filters[$i]['mark_as_read'])
+				{
+					$ret = $this->set_message_flag($this->mailbox, $this->filters[$i]['uids'], "\\Seen");
+				}
+				if(parent::move($this->filters[$i]["folder"], $this->filters[$i]['uids'],false))
+				{
+					foreach($this->filters[$i]['uids'] as $uid)
+					{
+						$this->filtered[]=$uid;
+					}
+				}
+			}
+		}
+		if(count($this->filtered))
+		{
+			$this->expunge();
+			
+			$this->unseen-=count($this->filtered);
+			$this->count-=count($this->filtered);
+			
+			$this->delete_cached_messages($this->filtered);
+		}
 		return $messages;		
 	}
 	
