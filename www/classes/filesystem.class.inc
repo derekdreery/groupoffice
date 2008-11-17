@@ -481,7 +481,7 @@ class filesystem extends db
 		global $GO_CONFIG;
 
 		$folders = array();
-		if($dir = opendir($path))
+		if($dir = @opendir($path))
 		{
 			while($item=readdir($dir))
 			{
