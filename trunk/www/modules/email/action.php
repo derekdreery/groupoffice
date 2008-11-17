@@ -107,17 +107,19 @@ try{
 			{
 				case 'mark_as_read':
 					$response['success']=$imap->set_message_flag($mailbox, $messages, "\\Seen");
-					$imap->update_unseen_cache($account, $messages, true);
+					$imap->set_unseen_cache($messages, false);
 					break;
 				case 'mark_as_unread':
 					$response['success']=$imap->set_message_flag($mailbox, $messages, "\\Seen", "reset");
-					$imap->update_unseen_cache($account, $messages, false);
+					$imap->set_unseen_cache($messages, true);
 					break;
 				case 'flag':
 					$response['success']=$imap->set_message_flag($mailbox, $messages, "\\Flagged");
+					$imap->set_flagged_cache($messages, true);
 					break;
 				case 'unflag':
 					$response['success']=$imap->set_message_flag($mailbox, $messages, "\\Flagged", "reset");
+					$imap->set_flagged_cache($messages, false);
 					break;
 			}
 

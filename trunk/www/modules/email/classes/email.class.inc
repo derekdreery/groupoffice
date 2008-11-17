@@ -388,7 +388,7 @@ class email extends db
 
 	function get_subscribed($account_id, $folder_id=-1)
 	{
-		$sql = "SELECT * FROM em_folders";
+		$sql = "SELECT id,account_id,name,delimiter,attributes,parent_id FROM em_folders";
 
 		if($account_id>0)
 		{
@@ -725,22 +725,26 @@ class email extends db
 	}
 
 
-	function synchronize_folders($account)
+	function synchronize_folders($account, $mail=false)
 	{
-		$mail = new imap();
-
-		if (!$mail->open(
-		$account['host'],
-		$account['type'],
-		$account['port'],
-		$account['username'],
-		$account['password'],
-		'INBOX',
-		0,
-		$account['use_ssl'],
-		$account['novalidate_cert']))
+		if(!$mail)
 		{
-			return false;
+			$mail = new imap();
+	
+	
+			if (!$mail->open(
+			$account['host'],
+			$account['type'],
+			$account['port'],
+			$account['username'],
+			$account['password'],
+			'INBOX',
+			0,
+			$account['use_ssl'],
+			$account['novalidate_cert']))
+			{
+				return false;
+			}
 		}
 
 			
@@ -824,7 +828,7 @@ class email extends db
 			}
 		}
 
-		$mail->close();
+		//$mail->close();
 
 		/*
 		 get all the Group-Office folders and delete the folders that no longer

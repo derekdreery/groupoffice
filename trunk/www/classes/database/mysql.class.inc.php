@@ -253,7 +253,7 @@ class db extends base_db{
 	 * @return int
 	 */
 	function affected_rows() {
-		return $this->link->affected_row();
+		return $this->link->affected_rows;
 	}
 
 

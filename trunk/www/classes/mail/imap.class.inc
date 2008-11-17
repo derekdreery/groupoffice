@@ -136,17 +136,6 @@ class imap{
 		global $GO_SECURITY;
 
 		$this->RFC822 = new RFC822();
-
-		$this->db_cache = new cache();
-
-		$cached = $this->db_cache->get_cache($GO_SECURITY->user_id, 'email');
-		//debug($cached);
-		$this->cache = $cached ? json_decode($cached,true) : array();
-	}
-
-	function __destruct(){
-		global $GO_SECURITY;
-		$this->db_cache->save($GO_SECURITY->user_id, 'email', json_encode($this->cache));
 	}
 
 	/**
@@ -315,89 +304,6 @@ class imap{
 		}
 	}
 
-	function check_cache($account, $unseen, $messages)
-	{
-		global $GO_SECURITY;
-		
-		if(!isset($this->cache[$this->cache_key][$this->mailbox]) || $this->cache[$this->cache_key][$this->mailbox]['unseen']!=$unseen || $this->cache[$this->cache_key][$this->mailbox]['messages']!=$messages)
-		{
-			//debug('Cache not up to date cache: '.$this->cache[$this->cache_key][$this->mailbox]['unseen'].' current:'.$unseen);
-			$this->db_cache->query("DELETE FROM go_cache WHERE user_id=? AND `key` LIKE ?", 'is', array($GO_SECURITY->user_id, $account['id'].$this->mailbox.'%'));
-				
-			unset($this->cache[$this->cache_key][$this->mailbox]);
-			return false;
-		}else
-		{
-			return true;
-		}
-	}
-
-	function update_cache($unseen, $messages)
-	{
-		$this->cache[$this->cache_key][$this->mailbox]['unseen']=$unseen;
-		$this->cache[$this->cache_key][$this->mailbox]['messages']=$messages;
-		$this->cache[$this->cache_key][$this->mailbox]['sort_'.$this->sort_type.'_'.$this->sort_reverse]=$this->sort;
-	}
-
-	function update_unseen_cache($account, $uids, $substract_new){
-
-		if(isset($this->cache[$this->cache_key]))
-		{
-			global $GO_SECURITY;
-			
-			$db = new db();
-			$sql = "SELECT * FROM go_cache WHERE user_id=? AND `key` LIKE ?";
-			$db->query($sql, 'is', array($GO_SECURITY->user_id, $account['id'].$this->mailbox.'%'));
-			
-			$success_uids=array();
-			
-			while($cached = $db->next_record())
-			{			
-				$cache_obj = json_decode($cached['content'], true);
-				
-				//search for this message uid in the cache and update 'new' value.
-				for($i=0;$i<count($cache_obj['results']);$i++)
-				{
-					if(in_array($cache_obj['results'][$i]['uid'], $uids))
-					{
-						$new_value = $substract_new ? false : true;
-						if($cache_obj['results'][$i]['new']!=$new_value)
-						{
-							$success_uids[]=$cache_obj['results'][$i]['uid'];
-							$cache_obj['results'][$i]['new']=$new_value;
-						}
-					}
-				}
-				
-				//the total of unseen messages in this folder should be changed too				
-				if (list($folder_id, $unseen) = each($cache_obj['unseen'])) {					
-					if($substract_new)
-					{
-						$cache_obj['unseen'][$folder_id]=$unseen-count($success_uids);
-					}else
-					{
-						$cache_obj['unseen'][$folder_id]=$unseen+count($success_uids);
-					}
-					//debug('Updated unseen '.$folder_id.' to '.$cache_obj['unseen'][$folder_id]);
-				}
-				
-				$json = json_encode($cache_obj);
-				if($json)
-				{						
-					$this->db_cache->save($GO_SECURITY->user_id, $cached['key'], $json);
-				}
-			}
-			
-			if($substract_new)
-			{
-				$this->cache[$this->cache_key][$this->mailbox]['unseen']-=count($success_uids);
-			}else
-			{
-				$this->cache[$this->cache_key][$this->mailbox]['unseen']+=count($success_uids);
-			}
-			//debug('cache updated: '.$this->mailbox.' '.$this->cache[$this->cache_key][$this->mailbox]['unseen']);
-		}
-	}
 
 	/**
 	 * Sort message UID's into $this->sort (see imap_sort() PHP docs)
@@ -416,22 +322,8 @@ class imap{
 		if ($query != '') {
 			$this->sort = imap_sort($this->conn, $sort_type, $reverse, SE_UID+SE_NOPREFETCH, trim($query));
 		} else {
-			if(isset($this->cache[$this->cache_key][$this->mailbox]['sort_'.$sort_type.'_'.$reverse]))
-			{
-				debug('Used cache');
-				$this->sort = $this->cache[$this->cache_key][$this->mailbox]['sort_'.$sort_type.'_'.$reverse];
-			}else
-			{
-				$this->sort = imap_sort($this->conn, $sort_type, $reverse, SE_UID+SE_NOPREFETCH);
-			}
+			$this->sort = imap_sort($this->conn, $sort_type, $reverse, SE_UID+SE_NOPREFETCH);			
 		}
-		if ($this->sort) {
-			$this->count = count($this->sort);
-		} else {
-			$this->sort = array ();
-			$this->count = 0;
-		}
-		return $this->count;
 	}
 
 	function build_search_query($subject = '', $from = '', $to = '', $cc = '', $body = '', $before = '', $since = '', $before = '', $since = '', $flagged = '', $answered = '', $seen='') {
@@ -477,8 +369,16 @@ class imap{
 		return $query;
 	}
 
-	function get_message_uids($first, $offset)
+	function get_message_uids($first, $offset, $sort_type = SORTDATE, $reverse = "1", $query = '')
 	{
+		//get the unseen and total messages		
+		$status = $this->status($this->mailbox, SA_UNSEEN+SA_MESSAGES);
+		$this->unseen = $status->unseen;
+		$this->count = $status->messages;
+		
+		//sort the uid's
+		$this->sort($sort_type, $reverse, $query);
+		
 		$first=intval($first);
 		$offset=intval($offset);
 
