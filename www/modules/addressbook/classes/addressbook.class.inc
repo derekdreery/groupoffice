@@ -495,10 +495,10 @@ class addressbook extends db {
 			$sql .= " AND ";
 
 			if(!is_array($field))
-			{
-				$fields=array('name');
+			{				
 				if($field == '')
 				{
+					$fields=array('name');
 					$fields_sql = "SHOW FIELDS FROM ab_contacts";
 					$this->query($fields_sql);
 					while($this->next_record())
@@ -515,7 +515,6 @@ class addressbook extends db {
 						while ($this->next_record()) {
 							$fields[]='cf_2.'.$this->f('Field');
 						}
-
 					}
 				}else {
 					$fields[]=$field;
@@ -573,7 +572,8 @@ class addressbook extends db {
 			$sql .= " LIMIT ".$this->escape($start.",".$offset);
 			$this->query($sql);
 		}
-		//echo $sql;
+
+		//debug($sql);
 		return $count;
 	}
 
