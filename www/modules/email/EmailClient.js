@@ -882,7 +882,9 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 
 	refresh : function()
 	{		
+		this.treePanel.loader.baseParams.refresh=true;
 		this.treePanel.root.reload();
+		//delete this.treePanel.root.loader.baseParams.refresh;
 	},
 
 	showAccountsDialog : function()

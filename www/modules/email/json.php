@@ -195,7 +195,6 @@ try{
 	$task = $_REQUEST['task'];
 	if($task == 'reply' || $task =='reply_all' || $task == 'forward' || $task=='opendraft')
 	{
-
 		$account_id = ($_POST['account_id']);
 		$uid = ($_POST['uid']);
 		$mailbox = ($_POST['mailbox']);
@@ -230,7 +229,6 @@ try{
 					{
 						$response['data']['subject'] = $subject;
 					}
-
 					break;
 
 				case "reply_all":
@@ -596,6 +594,8 @@ try{
 				$account = connect($account_id, $mailbox);
 
 				$response = $imap->get_message($uid);
+				
+				$imap->set_unseen_cache(array($uid), false);
 					
 				if(!$response)
 				{
@@ -783,8 +783,6 @@ try{
 								$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : 0;
 								$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : 30;
 								
-								$nocache=!empty($query);
-
 								$account = connect($account_id, $mailbox);
 								$response['drafts']=$account['drafts']==$mailbox;
 
@@ -822,24 +820,14 @@ try{
 											$nocache=true;
 											break;
 									}
-								}
-
-								if(!isset($folder))
-								{
-									$folder = $email->get_folder($account['id'],$mailbox);
-								}
+								}		
 
 								$sort_field=isset($_POST['sort']) && $_POST['sort']=='from' ? SORTFROM : SORTARRIVAL;
 								$sort_order=isset($_POST['dir']) && $_POST['dir']=='ASC' ? 0 : 1;
+									
+								$uids = $imap->get_message_uids($start, $limit, $sort_field , $sort_order, $query);
 								
-								require_once($GO_CONFIG->class_path.'cache.class.inc.php');
-								$cache = new cache();
-				
-								$current_folder_status = $imap->status($mailbox, SA_UNSEEN+SA_MESSAGES);
-
-								$imap->check_cache($account, $current_folder_status->unseen, $current_folder_status->messages);
-								
-								$response['total'] = $imap->sort($sort_field , $sort_order, $query);
+								$response['total'] = $imap->count;
 
 								//apply filters
 								if($response['total']>0 && strtoupper($mailbox)=='INBOX')
@@ -859,11 +847,9 @@ try{
 								}
 
 								$day_start = mktime(0,0,0);
-								$day_end = mktime(0,0,0,date('m'),date('d')+1);								
+								$day_end = mktime(0,0,0,date('m'),date('d')+1);		
 								
-								$uids = $imap->get_message_uids($start, $limit);
-								
-								$messages = $imap->get_message_headers($uids, $folder['id']);
+								$messages = $imap->get_message_headers($uids);
 								
 								$response['results']=array();
 								
@@ -904,16 +890,18 @@ try{
 
 								foreach($touched_folders as $touched_folder)
 								{
-									$status = $touched_folder=='INBOX' ? $current_folder_status : $imap->status($touched_folder, SA_UNSEEN);
-									$folder = $email->get_folder($account_id, $touched_folder);
+									if($touched_folder==$mailbox)
+									{
+										$response['unseen'][$imap->folder['id']]=$imap->unseen;
+									}else
+									{
+										$status = $imap->status($touched_folder, SA_UNSEEN);
+										$folder = $email->get_folder($account_id, $touched_folder);
 
-									if(isset($status->unseen))
-										$response['unseen'][$folder['id']]=$status->unseen;
-								}
-								
-								if(!$nocache)
-									$imap->update_cache($current_folder_status->unseen, $current_folder_status->messages);
-					
+										if(isset($status->unseen))
+											$response['unseen'][$folder['id']]=$status->unseen;
+									}
+								}						
 								
 								break;
 
@@ -941,11 +929,17 @@ try{
 												while($email2->next_record())
 												{
 													$account = connect($email2->f('id'), 'INBOX', false);
-
+													
 													$usage = '';
 													$inbox_new=0;
 													if($account)
-													{														
+													{			
+														if(isset($_POST['refresh']))
+														{
+															$email->synchronize_folders($account, $imap);
+															$imap->clear_cache();
+														}
+																								
 														$text = $email2->f('email');														
 														
 														/*$server_response = $email->get_servermanager_mailbox_info($account);
@@ -963,8 +957,6 @@ try{
 														$quota = $imap->get_quota();
 														if(isset($quota['usage']))
 														{
-															
-															
 															if(!empty($quota['limit']))
 															{
 																$percentage = ceil($quota['usage']*100/$quota['limit']);			
