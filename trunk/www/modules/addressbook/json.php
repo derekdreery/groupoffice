@@ -97,7 +97,7 @@ try
 			$query_type = 'LIKE';
 			if(!empty($clicked_letter))
 			{
-				$field = 'name';
+				$field = $_SESSION['GO_SESSION']['sort_name'];
 				if($clicked_letter=='[0-9]')
 				{
 					$query = '^[0-9].*$';
