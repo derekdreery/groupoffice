@@ -237,7 +237,8 @@ class cached_imap extends imap{
 				foreach($new_messages as $message)
 				{
 					$messages[$message['uid']]=$message;
-					$message['cached']=false;
+					$messages[$message['uid']]['cached']=false;
+					
 					$message['folder_id']=$this->folder['id'];
 					$message['account_id']=$this->account['id'];
 					$this->add_cached_message($message);
