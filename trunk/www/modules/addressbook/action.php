@@ -291,7 +291,7 @@ try
 					if ($existing_ab && $existing_ab['id'] != $addressbook_id)
 					{
 						throw new Exception($lang['common']['addressbookAlreadyExists']);
-					}
+					}			
 
 					if($existing_ab['user_id'] != $user_id)
 					{
@@ -300,7 +300,7 @@ try
 					}
 
 					$ab->update_addressbook($addressbook_id, $user_id, $name);
-					$result['addressbook_id'] = $addressbook_id;
+					//$result['addressbook_id'] = $addressbook_id;
 				}
 			}
 
