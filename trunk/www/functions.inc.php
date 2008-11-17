@@ -145,7 +145,3 @@ function detect_browser() {
 	return $browser;
 }
 
-function get_microtime(){
-	list ($usec, $sec) = explode(" ", microtime());
-	return ((float) $usec + (float) $sec);
-}

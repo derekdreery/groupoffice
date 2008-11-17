@@ -93,10 +93,10 @@ function get_mailbox_nodes($account_id, $folder_id){
 		//check for unread mail
 		//$unseen = $email->f('unseen');
 
-		$status = $imap->status($email->f('name'), SA_UNSEEN+SA_MESSAGES);
+		$status = $imap->status($email->f('name'), SA_UNSEEN);
 		
 		//first time the e-mail is loaded. Let's check the cache
-		if(!isset($_POST['refresh']))
+		/*if(!isset($_POST['refresh']))
 		{
 			if($email->f('unseen')!= $status->unseen || $email->f('msgcount')!= $status->messages)
 			{
@@ -106,7 +106,7 @@ function get_mailbox_nodes($account_id, $folder_id){
 			{
 				debug('Cache of '.$email->f('name').' is ok');
 			}
-		}
+		}*/
 		
 		$unseen = isset($status->unseen) ? $status->unseen : 0;
 
@@ -793,7 +793,7 @@ try{
 				break;
 
 							case 'messages':
-
+								
 								$account_id = isset ($_REQUEST['account_id']) ? $_REQUEST['account_id'] : 0;
 								$mailbox = isset ($_REQUEST['mailbox']) ? ($_REQUEST['mailbox']) : 'INBOX';
 								$query = isset($_POST['query']) ? ($_POST['query']) : '';
@@ -822,7 +822,6 @@ try{
 									}
 								}
 
-
 								if(isset($_POST['action']))
 								{
 									$messages = json_decode($_POST['messages']);
@@ -835,7 +834,7 @@ try{
 											$nocache=true;
 											break;
 									}
-								}		
+								}	
 
 								$sort_field=isset($_POST['sort']) && $_POST['sort']=='from' ? SORTFROM : SORTARRIVAL;
 								$sort_order=isset($_POST['dir']) && $_POST['dir']=='ASC' ? 0 : 1;
@@ -859,7 +858,7 @@ try{
 									}
 									$imap->set_filters($filters);
 								}
-
+	
 								$day_start = mktime(0,0,0);
 								$day_end = mktime(0,0,0,date('m'),date('d')+1);		
 								
@@ -867,12 +866,8 @@ try{
 								
 								//filtering might have changed the uid list
 								$uids = $imap->get_uids_subset($start, $limit);
+
 								
-								foreach($messages as $key=>$message)
-								{
-									$message_uids[]=$key;
-								}
-	
 								$response['results']=array();
 								
 								foreach($uids as $uid)
@@ -905,7 +900,8 @@ try{
 										}
 									}									
 									$response['results'][]=$message;										
-								}				
+								}			
+
 
 								$response['total'] = $imap->count;
 							
@@ -922,7 +918,7 @@ try{
 										if(isset($status->unseen))
 											$response['unseen'][$folder['id']]=$status->unseen;
 									}
-								}						
+								}
 								
 								break;
 
