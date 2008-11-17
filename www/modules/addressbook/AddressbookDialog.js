@@ -525,11 +525,13 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 				addressbook_id : this.addressbook_id
 			},
 			success:function(form, action){
-				this.addressbook_id = action.result.addressbook_id;
+				
 				GO.addressbook.writableAddressbooksStore.reload();
 				
-				if(this.addressbook_id && !hide)
+				if(action.result.addressbook_id)
 				{
+					this.addressbook_id = action.result.addressbook_id;
+					
 					this.addressbookImportPanel.setDisabled(false);
 					this.addressbookExportPanel.setDisabled(false);
 					this.readPermissionsTab.setAcl(action.result.acl_read);

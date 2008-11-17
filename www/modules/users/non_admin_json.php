@@ -29,14 +29,14 @@ switch($task)
 		$search_field = isset($_REQUEST['search_field']) ? ($_REQUEST['search_field']) : null;
 
 		$response['total'] = $GO_USERS->search($query, $search_field, $GO_SECURITY->user_id, $start, $limit, $sort,$dir);
-
+		$response['results']=array();
 		while($GO_USERS->next_record())
 		{				
 			$name = String::format_name($GO_USERS->f('last_name'),$GO_USERS->f('first_name'),$GO_USERS->f('middle_name'));
 			$address = $GO_USERS->f('address').' '.$GO_USERS->f('address_no');
 			$waddress = $GO_USERS->f('work_address').' '.$GO_USERS->f('work_address_no');
 				
-			$records[]=array(
+			$response['results'][]=array(
 					'id'=>$GO_USERS->f('id'),
 					'username'=>$GO_USERS->f('username'), 
 					'name'=>htmlspecialchars($name), 
@@ -59,8 +59,6 @@ switch($task)
 					'wphone' => $GO_USERS->f('work_phone')
 			);				
 		}
-
-		$response['results']=$records;
 
 		echo json_encode($response);
 		break;
