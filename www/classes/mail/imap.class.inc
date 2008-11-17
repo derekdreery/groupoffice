@@ -53,13 +53,6 @@ class imap{
 	 */
 	var $unseen;
 
-	/**
-	 * Array of messages that were fetched with imap_fetch_overview()
-	 *
-	 * @var     		Array
-	 * @access  private
-	 */
-	var $messages = array ();
 
 	/**
 	 * Current message that is get with get_message();
@@ -124,6 +117,10 @@ class imap{
 	 * @access  private
 	 */
 	var $RFC822;
+	
+	
+	var $touched_folders =array();
+	
 
 	/**
 	 * Constructor. Initialises RFC822 class
@@ -163,6 +160,9 @@ class imap{
 
 		$this->servertype = strtolower($type);
 		$this->mailbox = $mailbox;
+		
+		$this->touched_folders[]=$this->mailbox;
+		
 		$this->connectstring = $host.":".$port."/".$this->servertype.$GO_CONFIG->email_connectstring_options;
 
 		if ($ssl) {
@@ -216,10 +216,8 @@ class imap{
 	function close() {
 		if(isset($this->conn) && $this->conn)
 		{
-			unset ($this->messages);
 			unset ($this->count);
 			unset ($this->unseen);
-			unset ($this->next_message_id);
 
 			//for supressing notices that are not really errors
 			$this->clear_errors();
@@ -375,12 +373,23 @@ class imap{
 		$status = $this->status($this->mailbox, SA_UNSEEN+SA_MESSAGES);
 		$this->unseen = $status->unseen;
 		$this->count = $status->messages;
+		$this->query = $query;
+		$this->first = $first;
+		$this->offset = $offset;
 		
 		//sort the uid's
 		$this->sort($sort_type, $reverse, $query);
 		
+		return $this->get_uids_subset($first, $offset);
+	}
+	
+	function get_uids_subset($first, $offset)
+	{
 		$first=intval($first);
 		$offset=intval($offset);
+		
+		$this->first = $first;
+		$this->offset = $offset;
 
 		$last = $first + $offset;
 		if ($offset == 0 || ($last > $this->count)) {
@@ -394,11 +403,10 @@ class imap{
 		}	
 		return $sorted_uids;
 	}
-	
-
-	
+		
 	function get_message_headers($uids)
-	{
+	{		
+		$messages = array();
 		$get = implode(',', $uids);
 			
 		$overviews = imap_fetch_overview($this->conn, $get, FT_UID);
@@ -419,9 +427,9 @@ class imap{
 			$cached_message['from']=$message['from'];
 			$cached_message['to']=implode(',', $message['to']);	
 
-			$this->messages[$message['uid']]=$cached_message;
+			$messages[$message['uid']]=$cached_message;
 		}
-		return $this->messages;
+		return $messages;
 	}
 
 
@@ -1278,6 +1286,12 @@ class imap{
 	function move($folder, $messages) {
 		$messageset = implode(",", $messages);
 		if (imap_mail_move($this->conn, $messageset, $folder, CP_UID)) {
+			
+			if(!in_array($folder, $this->touched_folders))
+			{
+				$this->touched_folders[]=$folder;
+			}
+			
 			return imap_expunge($this->conn);
 		}
 		return false;

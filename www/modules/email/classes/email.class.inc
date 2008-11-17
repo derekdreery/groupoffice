@@ -388,7 +388,7 @@ class email extends db
 
 	function get_subscribed($account_id, $folder_id=-1)
 	{
-		$sql = "SELECT id,account_id,name,delimiter,attributes,parent_id FROM em_folders";
+		$sql = "SELECT id,account_id,name,delimiter,attributes,parent_id,unseen,msgcount FROM em_folders";
 
 		if($account_id>0)
 		{
@@ -746,11 +746,9 @@ class email extends db
 				return false;
 			}
 		}
-
 			
 		$subscribed =  $mail->get_subscribed('', true);
 		$mailboxes =  $mail->get_mailboxes('');
-
 
 		$mailbox_names = array();
 
@@ -765,11 +763,11 @@ class email extends db
 			$folder['subscribed']=in_array($mailbox['name'], $subscribed);
 			//$folder['subscribed']='1';
 			$folder['delimiter'] = $mailbox['delimiter'];
-			if($status = $mail->status($mailbox['name'], SA_UNSEEN+SA_MESSAGES))
+			/*if($status = $mail->status($mailbox['name'], SA_UNSEEN+SA_MESSAGES))
 			{
 				$folder['msgcount'] = $status->messages;
 				$folder['unseen'] = $status->unseen;
-			}
+			}*/
 
 			if($mailbox['name'] == 'INBOX')
 			{
@@ -812,11 +810,11 @@ class email extends db
 			$folder['sort_order']=0;
 			$folder['subscribed']=true;
 			$folder['delimiter'] = '';
-			if($status = $mail->status('INBOX', SA_UNSEEN+SA_MESSAGES))
+			/*if($status = $mail->status('INBOX', SA_UNSEEN+SA_MESSAGES))
 			{
 				$folder['msgcount'] = $status->messages;
 				$folder['unseen'] = $status->unseen;
-			}
+			}*/
 
 			if ($existing_folder = $this->get_folder($account['id'],'INBOX'))
 			{

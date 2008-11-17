@@ -93,7 +93,20 @@ function get_mailbox_nodes($account_id, $folder_id){
 		//check for unread mail
 		//$unseen = $email->f('unseen');
 
-		$status = $imap->status($email->f('name'), SA_UNSEEN);
+		$status = $imap->status($email->f('name'), SA_UNSEEN+SA_MESSAGES);
+		
+		//first time the e-mail is loaded. Let's check the cache
+		if(!isset($_POST['refresh']))
+		{
+			if($email->f('unseen')!= $status->unseen || $email->f('msgcount')!= $status->messages)
+			{
+				debug('Clearing dirty cache of folder: '.$email->f('name'));
+				$imap->clear_cache($email->f('id'));
+			}else
+			{
+				debug('Cache of '.$email->f('name').' is ok');
+			}
+		}
 		
 		$unseen = isset($status->unseen) ? $status->unseen : 0;
 
@@ -774,8 +787,6 @@ try{
 
 							case 'messages':
 
-								$touched_folders=array();
-
 								$account_id = isset ($_REQUEST['account_id']) ? $_REQUEST['account_id'] : 0;
 								$mailbox = isset ($_REQUEST['mailbox']) ? ($_REQUEST['mailbox']) : 'INBOX';
 								$query = isset($_POST['query']) ? ($_POST['query']) : '';
@@ -813,10 +824,7 @@ try{
 										case 'move':
 											$from_mailbox = ($_REQUEST['from_mailbox']);
 											$to_mailbox = ($_REQUEST['to_mailbox']);
-											$response['success']=$imap->move($to_mailbox, $messages);
-
-											$touched_folders[]=$to_mailbox;
-											
+											$response['success']=$imap->move($to_mailbox, $messages);											
 											$nocache=true;
 											break;
 									}
@@ -825,12 +833,10 @@ try{
 								$sort_field=isset($_POST['sort']) && $_POST['sort']=='from' ? SORTFROM : SORTARRIVAL;
 								$sort_order=isset($_POST['dir']) && $_POST['dir']=='ASC' ? 0 : 1;
 									
-								$uids = $imap->get_message_uids($start, $limit, $sort_field , $sort_order, $query);
+								//$uids = $imap->get_message_uids();
 								
-								$response['total'] = $imap->count;
-
 								//apply filters
-								if($response['total']>0 && strtoupper($mailbox)=='INBOX')
+								if(strtoupper($mailbox)=='INBOX')
 								{
 									$filters = array();
 
@@ -844,13 +850,22 @@ try{
 										$filter['mark_as_read'] = ($email->f('mark_as_read') == '1');
 										$filters[] = $filter;
 									}
+									$imap->set_filters($filters);
 								}
 
 								$day_start = mktime(0,0,0);
 								$day_end = mktime(0,0,0,date('m'),date('d')+1);		
 								
-								$messages = $imap->get_message_headers($uids);
+								$messages = $imap->get_message_headers($start, $limit, $sort_field , $sort_order, $query);
 								
+								//filtering might have changed the uid list
+								$uids = $imap->get_uids_subset($start, $limit);
+								
+								foreach($messages as $key=>$message)
+								{
+									$message_uids[]=$key;
+								}
+	
 								$response['results']=array();
 								
 								foreach($uids as $uid)
@@ -883,12 +898,11 @@ try{
 										}
 									}									
 									$response['results'][]=$message;										
-								}								
-							
-								if(!in_array($mailbox, $touched_folders))
-									$touched_folders[]=$mailbox;
+								}				
 
-								foreach($touched_folders as $touched_folder)
+								$response['total'] = $imap->count;
+							
+								foreach($imap->touched_folders as $touched_folder)
 								{
 									if($touched_folder==$mailbox)
 									{
@@ -897,7 +911,7 @@ try{
 									{
 										$status = $imap->status($touched_folder, SA_UNSEEN);
 										$folder = $email->get_folder($account_id, $touched_folder);
-
+										
 										if(isset($status->unseen))
 											$response['unseen'][$folder['id']]=$status->unseen;
 									}

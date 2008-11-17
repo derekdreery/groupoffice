@@ -17,16 +17,20 @@ DROP TABLE IF EXISTS `em_messages_cache`;
 CREATE TABLE IF NOT EXISTS `em_messages_cache` (
   `folder_id` int(11) NOT NULL,
   `uid` int(11) NOT NULL,
+  `account_id` int(11) NOT NULL,
   `new` enum('0','1') NOT NULL,
-  `subject` varchar(255) NOT NULL,
-  `from` varchar(255) NOT NULL,
+  `subject` varchar(100) NOT NULL,
+  `from` varchar(100) NOT NULL,
+  `reply_to` varchar(100) NOT NULL,
   `size` int(11) NOT NULL,
-  `date` int(11) NOT NULL,
+  `udate` int(11) NOT NULL,
   `attachments` enum('0','1') NOT NULL,
   `flagged` enum('0','1') NOT NULL,
   `answered` enum('0','1') NOT NULL,
   `priority` tinyint(4) NOT NULL,
-  PRIMARY KEY  (`folder_id`,`uid`)
+  `to` varchar(100) NOT NULL,
+  PRIMARY KEY  (`folder_id`,`uid`),
+  KEY `account_id` (`account_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -110,6 +114,7 @@ CREATE TABLE IF NOT EXISTS `em_folders` (
   `msgcount` int(11) NOT NULL default '0',
   `unseen` int(11) NOT NULL default '0',
   `auto_check` enum('0','1') NOT NULL default '0',
+  `sort` longtext NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `account_id` (`account_id`),
   KEY `parent_id` (`parent_id`)

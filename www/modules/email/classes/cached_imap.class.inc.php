@@ -24,6 +24,11 @@ class cached_imap extends imap{
 	 */
 	var $account;
 	
+	var $filters=array();
+	
+	var $filtered=0;
+
+	
 	function __construct()
 	{
 		$this->email = new email();
@@ -144,7 +149,30 @@ class cached_imap extends imap{
 		$record = $this->next_record();*/
 		
 		$sql = "DELETE FROM em_messages_cache WHERE folder_id=".$this->email->escape($this->folder['id'])." AND uid IN(".$this->email->escape(implode(',',$uids)).")";
-		return $this->email->query($sql);
+		$this->email->query($sql);
+		debug('Deleted '.implode(',', $uids).' from cache');
+		if(isset($this->sort_reverse))
+		{
+			debug('Removed '.implode(',', $uids).' from sort');
+			//remove uids from cached sort
+			$sort = $this->sort;		
+			$this->sort=array();
+			foreach($sort as $uid)
+			{
+				if(!in_array($uid, $uids))
+				{
+					$this->sort[]=$uid;
+				}
+			}
+			$this->folder_sort_cache[$this->sort_type.'_'.$this->sort_reverse]=$this->sort;
+			
+			$up_folder['id'] = $this->folder['id'];
+			$up_folder['sort']=json_encode($this->folder_sort_cache);
+			$up_folder['unseen']=$this->unseen;
+			$up_folder['msgcount']=$this->count;
+			
+			$this->email->__update_folder($up_folder);
+		}
 	}
 	
 	function set_unseen_cache($uids, $new)
@@ -174,9 +202,12 @@ class cached_imap extends imap{
 		$this->email->query($sql);
 	}
 
-	function get_message_headers($uids)
+	function get_message_headers($start, $limit, $sort_field , $sort_order, $query)
 	{
+		$uids = $this->get_message_uids($start, $limit, $sort_field , $sort_order, $query);
+		
 		$messages=array();
+		$this->filtered=0;
 		
 		if(count($uids))
 		{
@@ -201,7 +232,7 @@ class cached_imap extends imap{
 						
 			if(count($uncached_uids))
 			{
-				$new_messages = parent::get_message_headers($uncached_uids);
+				$new_messages = $this->get_filtered_message_headers($uncached_uids);
 				foreach($new_messages as $message)
 				{
 					$messages[$message['uid']]=$message;
@@ -211,8 +242,84 @@ class cached_imap extends imap{
 				}
 			}
 			debug('Got '.count($uncached_uids).' from IMAP server');
+			
+			if($this->filtered>0)
+			{
+				debug('Extra messages start '.($this->first+$this->offset-$this->filtered));
+				debug('Extra messages offset '.$this->filtered);
+					
+				$extra_messages = $this->get_message_headers($this->first+$this->offset-$this->filtered, $this->filtered, $sort_field , $sort_order, $query);
+				foreach($extra_messages as $uid=>$message)
+				{
+					$messages[$uid]=$message;
+				}
+			}
 		}
 		return $messages;
+	}
+	
+	function set_filters($filters)
+	{
+		$this->filters=$filters;
+	}
+	
+	function get_filtered_message_headers($uids)
+	{
+		$messages=array();
+		$this->filtered=0;
+		
+		$new_messages = parent::get_message_headers($uids);
+		if(strtoupper($this->mailbox)!='INBOX')
+		{
+			return $new_messages;
+		}
+		
+		while($message = array_shift($new_messages))
+		{			
+			if($message['new']=='1')
+			{
+				$continue=false;
+				
+				for ($i=0;$i<sizeof($this->filters);$i++)
+				{
+					$field = $message[$this->filters[$i]["field"]];
+
+					if (stristr($field, $this->filters[$i]["keyword"]))
+					{
+						$move_messages = array($message['uid']);
+
+						if($this->filters[$i]['mark_as_read'])
+						{
+							$ret = $this->set_message_flag($this->mailbox, $move_messages, "\\Seen");
+						}
+						
+						//moving uses unseen and count for a cache update
+						$this->unseen--;
+						$this->count--;
+						if ($this->move($this->filters[$i]["folder"], $move_messages))
+						{							
+							debug('Filtered:');
+							debug($message);
+							$this->filtered++;
+							$continue=true;
+							break;
+						}else
+						{
+							$this->unseen++;
+							$this->count++;
+						}
+					}												
+				}
+				if ($continue)
+				{					
+					//message was filtered so dont't add it						
+					continue;
+				}											
+			}
+			$messages[]=$message;
+		}
+
+		return $messages;		
 	}
 	
 	
@@ -232,12 +339,22 @@ class cached_imap extends imap{
 	}
 	
 	
-	function clear_cache(){
-		$sql = "DELETE FROM em_messages_cache WHERE account_id=?";
-		$this->email->query($sql, 'i', $this->account['id']);
-		
-		$sql = "UPDATE em_folders SET sort='' WHERE account_id=?";
-		$this->email->query($sql, 'i', $this->account['id']);
+	function clear_cache($folder_id=0){
+		if($folder_id==0)
+		{
+			$sql = "DELETE FROM em_messages_cache WHERE account_id=?";
+			$this->email->query($sql, 'i', $this->account['id']);
+			
+			$sql = "UPDATE em_folders SET sort='' WHERE account_id=?";
+			$this->email->query($sql, 'i', $this->account['id']);
+		}else
+		{
+			$sql = "DELETE FROM em_messages_cache WHERE folder_id=?";
+			$this->email->query($sql, 'i', $folder_id);
+			
+			$sql = "UPDATE em_folders SET sort='' WHERE id=?";
+			$this->email->query($sql, 'i', $folder_id);
+		}
 	}
 
 	/**
