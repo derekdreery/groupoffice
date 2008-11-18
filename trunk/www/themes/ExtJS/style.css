@@ -147,7 +147,9 @@ line-height:20px;
 .btn-upload{
 	background-image:url('images/16x16/upload.png') !important;
 }
-
+.btn-forum {
+	background-image:url('images/16x16/forum.png') !important;
+}
 
 
 /* end buttons */
