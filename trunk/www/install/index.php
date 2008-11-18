@@ -172,11 +172,10 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 			$GO_CONFIG->db_name = ($_POST['db_name']);
 			$GO_CONFIG->db_user = ($_POST['db_user']);
 			$GO_CONFIG->db_pass = ($_POST['db_pass']);
+			
+			$db->set_config($GO_CONFIG);
 
-			if(@$db->connect($GO_CONFIG->db_name,
-			$GO_CONFIG->db_host,
-			$GO_CONFIG->db_user,
-			$GO_CONFIG->db_pass))
+			if(@$db->connect())
 			{
 				if (save_config($GO_CONFIG))
 				{
@@ -184,7 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 				}
 			}else
 			{
-				$feedback ='<font color="red">Failed to connect to database<br /><b>MySQL Error</b>: '.$this->errno.' ('.$this->error.')<br>\n</font>';
+				$feedback ='<font color="red">Failed to connect to database<br /><b>MySQL Error</b>: '.$db->errno.' ('.$db->error.')<br>\n</font>';
 			}
 			break;
 
@@ -192,10 +191,12 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 			$db = new db();
 			$db->halt_on_error = 'report';
 
-			if (!$db->connect($GO_CONFIG->db_name, $GO_CONFIG->db_host, $GO_CONFIG->db_user, $GO_CONFIG->db_pass))
+			$db->set_config($GO_CONFIG);
+			
+			if (!$db->connect())
 			{
 				print_head();
-				echo 'Can\'t connect to database!';
+				echo '<font color="red">Failed to connect to database<br /><b>MySQL Error</b>: '.$db->errno.' ('.$db->error.')<br>\n</font>';
 				echo '<br /><br />Correct this and refresh this page.';
 				print_foot();
 				exit();

@@ -299,6 +299,23 @@
 	</td>
 </tr>
 
+
+<tr>
+	<td valign="top">Ioncube:</td>
+	<td>
+	<?php		
+	if(!ioncube_tester())
+	{
+		//$fatal_error = true;
+		echo '<span style="color: red;">Warning: Ioncube is not installed. The professional version will not run.</span>';
+	}else
+	{
+		echo 'Ok';
+	}
+	?>
+	</td>
+</tr>
+
 <tr>
 	<td colspan="2">
 	<br />
