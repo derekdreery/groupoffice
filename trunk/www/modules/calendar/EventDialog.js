@@ -69,7 +69,9 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 		{
 			this.oldDomId=false;
 		}
-		propertiesPanel.show();
+		//propertiesPanel.show();
+		
+		this.tabPanel.setActiveTab(0);
 
 		if(!config.event_id)
 		{
@@ -92,7 +94,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 					this.formPanel.form.baseParams['calendar_id']=action.result.data.calendar_id;
 					this.changeRepeat(action.result.data.repeat_type);
 					this.setValues(config.values);
-					this.participantsPanel.setDisabled(false);
+					//this.participantsPanel.setDisabled(false);
 					
 					this.setWritePermission(action.result.data.write_permission);
 					
@@ -126,7 +128,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 					this.changeRepeat(0);	
 					
 					this.setValues(config.values);	
-					this.participantsPanel.setDisabled(false);		
+					//this.participantsPanel.setDisabled(false);		
 					
 					this.selectCalendar.setRemoteText(action.result.data.calendar_name);
 					this.selectCalendar.container.up('div.x-form-item').setDisplayed(true);
@@ -146,7 +148,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 			
 			this.formPanel.form.reset();
 				
-			this.participantsPanel.setDisabled(true);
+			//this.participantsPanel.setDisabled(true);
 			this.setWritePermission(true);
 			
 			this.win.show();
@@ -260,7 +262,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 		this.formPanel.form.setValues(formValues);		
 	},
 	
-	submitForm : function(hide){
+	submitForm : function(hide, config){
 		this.formPanel.form.submit(
 		{
 			url:GO.settings.modules.calendar.url+'action.php',
@@ -272,7 +274,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 				{
 					this.setEventId(action.result.event_id);
 					this.participants_event_id=action.result.event_id;
-					this.participantsPanel.setDisabled(false);
+					//this.participantsPanel.setDisabled(false);
 				}
 				
 				var startDate = this.formPanel.form.findField('start_date').getValue();
@@ -315,7 +317,12 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 				if(hide)
 				{
 					this.win.hide();
-				}								
+				}	
+				
+				if(config && config.callback)
+				{
+					config.callback.call(this, this, true);
+				}							
 			},		
 			failure: function(form, action) {
 				if(action.failureType=='client')
@@ -325,6 +332,12 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 				{
 					error = action.result.feedback;
 				}
+				
+				if(config && config.callback)
+				{
+					config.callback.call(this, this, false);
+				}
+				
 				Ext.MessageBox.alert(GO.lang.strError, error);
 			},
 			scope: this
@@ -1055,6 +1068,9 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 		});       
 		
 		this.participantsPanel.on('show', function(){
+			
+			
+			
 			if(!this.loadedParticipantsEventId || this.loadedParticipantsEventId!=this.participants_event_id)
 			{
 				this.participantsStore.baseParams['event_id']=this.participants_event_id;
@@ -1063,6 +1079,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 			}
 		},this);
         
+    
         
       /*  var cp = new Ext.ColorPalette({value:'993300'});  // initial selected color
 		
@@ -1149,6 +1166,26 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
     	hideLabel:true,
       items: items
     }) ;
+    
+    this.tabPanel.on('beforetabchange', function(tabpanel, newTab, currentTab){    	
+    	if(newTab==this.participantsPanel)
+    	{
+	    	if(this.event_id==0)
+				{
+					this.submitForm(false, {
+						callback:function(panel, success){
+							if(success)
+							{
+								panel.participantsPanel.show();
+							}
+						}					
+					});
+					return false;
+				}
+    	}
+    	    	
+    }, this);
+    
     this.formPanel = new Ext.form.FormPanel(
 		{
 			waitMsgTarget:true,
