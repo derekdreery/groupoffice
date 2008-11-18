@@ -903,7 +903,7 @@ try{
 								}			
 
 
-								$response['total'] = $imap->count;
+								$response['total'] = count($imap->sort);
 							
 								foreach($imap->touched_folders as $touched_folder)
 								{
