@@ -205,6 +205,15 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	    			scope:this
 	    			
 	    		},{
+	    			iconCls:'btn-forum',
+	    			text:GO.lang.strCommunityForum,
+	    			handler:function(){	    				
+	    				var win = window.open('http://www.group-office.com/forum/');
+	    				win.focus();
+	    			},
+	    			scope:this
+	    			
+	    		},{
 	    			iconCls:'btn-report-bug',
 	    			text:GO.lang.strReportBug,
 	    			handler:function(){
