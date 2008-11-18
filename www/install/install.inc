@@ -1,4 +1,168 @@
 <?php
+//
+// Detect some system parameters
+//
+function ic_system_info()
+{
+	$thread_safe = false;
+	$debug_build = false;
+	$cgi_cli = false;
+	$php_ini_path = '';
+
+	ob_start();
+	phpinfo(INFO_GENERAL);
+	$php_info = ob_get_contents();
+	ob_end_clean();
+
+	foreach (split("\n",$php_info) as $line) {
+		if (eregi('command',$line)) {
+			continue;
+		}
+
+		if (preg_match('/thread safety.*(enabled|yes)/Ui',$line)) {
+			$thread_safe = true;
+		}
+
+		if (preg_match('/debug.*(enabled|yes)/Ui',$line)) {
+			$debug_build = true;
+		}
+
+		if (eregi("configuration file.*(</B></td><TD ALIGN=\"left\">| => |v\">)([^ <]*)(.*</td.*)?",$line,$match)) {
+			$php_ini_path = $match[2];
+
+			//
+			// If we can't access the php.ini file then we probably lost on the match
+			//
+			if (!@file_exists($php_ini_path)) {
+				$php_ini_path = '';
+			}
+		}
+
+		$cgi_cli = ((strpos(php_sapi_name(),'cgi') !== false) ||
+		(strpos(php_sapi_name(),'cli') !== false));
+	}
+
+	return array('THREAD_SAFE' => $thread_safe,
+	       'DEBUG_BUILD' => $debug_build,
+	       'PHP_INI'     => $php_ini_path,
+	       'CGI_CLI'     => $cgi_cli);
+}
+
+
+function ioncube_tester()
+{
+	if(extension_loaded('ionCube Loader'))
+	{
+		return true;
+	}
+
+	//
+	// Test some system info
+	//
+	$sys_info = ic_system_info();
+
+	if ($sys_info['THREAD_SAFE'] && !$sys_info['CGI_CLI']) {
+		return false;
+	}
+
+	if ($sys_info['DEBUG_BUILD']) {
+		return false;
+	}
+	//
+	// Check safe mode and for a valid extensions directory
+	//
+	if (ini_get('safe_mode') == '1') {
+		return false;
+	}
+
+
+	// Old style naming should be long gone now
+	$test_old_name = false;
+
+	$_u = php_uname();
+	$_os = substr($_u,0,strpos($_u,' '));
+	$_os_key = strtolower(substr($_u,0,3));
+
+	$_php_version = phpversion();
+	$_php_family = substr($_php_version,0,3);
+
+	$_loader_sfix = (($_os_key == 'win') ? '.dll' : '.so');
+
+	$_ln_old="ioncube_loader.$_loader_sfix";
+	$_ln_old_loc="/ioncube/$_ln_old";
+
+	$_ln_new="ioncube_loader_${_os_key}_${_php_family}${_loader_sfix}";
+	$_ln_new_loc="/ioncube/$_ln_new";
+
+
+	$_extdir = ini_get('extension_dir');
+	if ($_extdir == './') {
+		$_extdir = '.';
+	}
+
+	$_oid = $_id = realpath($_extdir);
+
+	$_here = dirname(__FILE__);
+	if ((@$_id[1]) == ':') {
+		$_id = str_replace('\\','/',substr($_id,2));
+		$_here = str_replace('\\','/',substr($_here,2));
+	}
+	$_rd=str_repeat('/..',substr_count($_id,'/')).$_here.'/';
+
+	if ($_oid === false) {
+		return false;
+	}
+
+
+	$_ln = '';
+	$_i=strlen($_rd);
+	while($_i--) {
+		if($_rd[$_i]=='/') {
+			if ($test_old_name) {
+				// Try the old style Loader name
+				$_lp=substr($_rd,0,$_i).$_ln_old_loc;
+				$_fqlp=$_oid.$_lp;
+				if(@file_exists($_fqlp)) {
+			  $_ln=$_lp;
+			  break;
+				}
+			}
+			// Try the new style Loader name
+			$_lp=substr($_rd,0,$_i).$_ln_new_loc;
+			$_fqlp=$_oid.$_lp;
+			if(@file_exists($_fqlp)) {
+				$_ln=$_lp;
+				break;
+			}
+		}
+	}
+
+	//
+	// If Loader not found, try the fallback of in the extensions directory
+	//
+	if (!$_ln) {
+		if ($test_old_name) {
+			if (@file_exists($_id.$_ln_old_loc)) {
+				$_ln = $_ln_old_loc;
+			}
+		}
+		if (@file_exists($_id.$_ln_new_loc)) {
+			$_ln = $_ln_new_loc;
+		}
+	}
+
+	if ($_ln) {
+		@dl($_ln);
+		if(extension_loaded('ionCube Loader')) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	return false;
+}
+
+
 /*$CONFIG_KEYS =
  array(
  'id',
@@ -105,7 +269,7 @@ function save_config($config_obj)
 	foreach($values as $key=>$value)
 	{
 		if($key == 'version')
-			break;
+		break;
 			
 			
 		if(!is_object($value))
@@ -113,7 +277,7 @@ function save_config($config_obj)
 			$config[$key]=$value;
 		}
 	}
-	
+
 
 	$config_data = "<?php\n";
 	foreach($config as $key=>$value)
