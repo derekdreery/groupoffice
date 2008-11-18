@@ -208,6 +208,8 @@ class cached_imap extends imap{
 	function get_message_headers($start, $limit, $sort_field , $sort_order, $query)
 	{
 		$uids = $this->get_message_uids($start, $limit, $sort_field , $sort_order, $query);
+		
+		debug($uids);
 
 		$messages=array();
 		$this->filtered=array();

@@ -390,10 +390,12 @@ class imap{
 		
 		$this->first = $first;
 		$this->offset = $offset;
+		
+		$count = count($this->sort);
 
 		$last = $first + $offset;
-		if ($offset == 0 || ($last > $this->count)) {
-			$last = $this->count;
+		if ($offset == 0 || ($last > $count)) {
+			$last = $count;
 		}
 
 		$index = 0;
