@@ -106,31 +106,35 @@ GO.grid.GridPanel = function(config)
 		this.deleteConfig={};
 	}
 	
-	/*this.addEvents({'deferredrowclick':true});
 	
-	this.on('rowclick', function(grid, row, e){
-		console.log('rowclick');
-		this.createDeferredClickEvent.defer(300, this, [grid, row, e]);
+	//create a delayed rowselect event so that when a user repeatedly presses the
+	//up and down button it will only load if it stays on the same record for 400ms
+	this.addEvents({'delayedrowselect':true});
+	
+	this.on('rowclick', function(grid, rowIndex){
+		var record = this.getSelectionModel().getSelected();
+		this.fireEvent('delayedrowselect', this, rowIndex, record);
+		
+		this.rowClicked=true;
 	}, this);
-  this.on('rowdblclick', function(){
-  	console.log('rowdblclick');
-  	this.doubleClickFired=true;
-  	}, this);  */
+	  	
+  this.getSelectionModel().on("rowselect",function(sm, rowIndex, r)
+		{
+			if(!this.rowClicked)
+			{
+				var record = this.getSelectionModel().getSelected();	
+				if(record==r)
+				{
+					this.fireEvent('delayedrowselect', this, rowIndex, r);
+				}
+			}
+			this.rowClicked=false;
+		}, this, {delay:400});
 }
  
  
 Ext.extend(GO.grid.GridPanel, Ext.grid.GridPanel, {
 	
-	doubleClickFired : false,
-	
-	createDeferredClickEvent : function(grid, row, e){
-		if(!this.doubleClickFired)
-		{
-			console.log('deferredrowclick');
-			this.fireEvent('deferredrowclick', grid, row, e);
-		}
-		this.doubleClickFired=false;
-	},
 	/**
 	 * @cfg {Boolean} paging True to set the store's limit parameter and render a bottom
 	 * paging toolbar.
@@ -149,7 +153,6 @@ Ext.extend(GO.grid.GridPanel, Ext.grid.GridPanel, {
 	 * 
 	 */
 	deleteSelected : function(config){
-	  
 		
 		if(!config)
 		{
