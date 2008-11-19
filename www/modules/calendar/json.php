@@ -147,7 +147,7 @@ try{
 			break;
 		case 'availability':
 			$event_id = ($_REQUEST['event_id']);
-			$date = Date::to_unixtime(($_REQUEST['date']),'-','Ymd');
+			$date = Date::to_unixtime($_REQUEST['date']);
 
 			//echo date('Ymd G:i', $date);
 			$cal2 = new calendar();

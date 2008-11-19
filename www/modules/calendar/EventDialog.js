@@ -292,8 +292,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 				}				
 					
 				var newEvent = {
-					id : Ext.id(),
-					calendar_id : this.formPanel.form.baseParams['calendar_id'],
+					//id : Ext.id(),
+					calendar_id : this.selectCalendar.getValue(),
 					event_id : this.event_id,
 					name : this.subjectField.getValue(),
 					start_time : startDate.format('U'),
@@ -1069,8 +1069,6 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 		
 		this.participantsPanel.on('show', function(){
 			
-			
-			
 			if(!this.loadedParticipantsEventId || this.loadedParticipantsEventId!=this.participants_event_id)
 			{
 				this.participantsStore.baseParams['event_id']=this.participants_event_id;
@@ -1078,27 +1076,15 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 				this.participantsStore.load();
 			}
 		},this);
-        
-    
-        
-      /*  var cp = new Ext.ColorPalette({value:'993300'});  // initial selected color
-		
-		cp.on('select', function(palette, selColor){
-		    // do something with selColor
-		});
-		*/
-		
-		 var privateCB = new Ext.form.Checkbox({
-        boxLabel:GO.calendar.lang.privateEvent,
-        name:'private',
-        checked:false,
-        width:'auto',
-        labelSeparator: '',
-				hideLabel: true
-    	});
-    	
-  	
-		
+				
+	 var privateCB = new Ext.form.Checkbox({
+      boxLabel:GO.calendar.lang.privateEvent,
+      name:'private',
+      checked:false,
+      width:'auto',
+      labelSeparator: '',
+			hideLabel: true
+  	});
 
 		
 		var optionsPanel = new Ext.Panel({
@@ -1253,7 +1239,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 			     hasFreeBusy: function(freebusy){
 			         return freebusy.length>0;
 			     }
-			}
+				}
 			);
 			
 			var dataView =  new Ext.DataView({
@@ -1273,19 +1259,13 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 			    autoScroll:true
 			});
 					
-			dataView.on('click', function(dataview, index, node){
-									
-				//alert(node.id);
+			dataView.on('click', function(dataview, index, node){									
 				var time = node.id.substr(4);
 				
 				var colonIndex = time.indexOf(':');
 				
 				var minutes = time.substr(colonIndex+1);
-				var hours = time.substr(0,colonIndex);
-				
-				var date = Date.parseDate(this.availabilityStore.baseParams.date, 'Y-m-d');	
-				
-							
+				var hours = time.substr(0,colonIndex);							
 				
 				var frmStartHour = this.formPanel.form.findField('start_hour');
 				var frmStartMin = this.formPanel.form.findField('start_min');
@@ -1293,16 +1273,14 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 				
 				var frmEndHour = this.formPanel.form.findField('end_hour');
 				var frmEndMin = this.formPanel.form.findField('end_min');
-				var frmEndDate = this.formPanel.form.findField('end_date');
+				var frmEndDate = this.formPanel.form.findField('end_date');				
 				
-				
-				var hourDiff = frmEndHour.getValue()-frmStartHour.getValue();
-				var minDiff = frmEndMin.getValue()-frmStartMin.getValue();
-				
+				var hourDiff = parseInt(frmEndHour.getValue())-parseInt(frmStartHour.getValue());
+				var minDiff = parseInt(frmEndMin.getValue())-parseInt(frmStartMin.getValue());				
 				
 				frmStartHour.setValue(hours);
 				frmStartMin.setValue(minutes);
-				frmStartDate.setValue(date);
+				frmStartDate.setValue(this.availabilityStore.baseParams.date);
 				
 				var endHour = parseInt(hours)+hourDiff;
 				var endMin = parseInt(minutes)+minDiff;
@@ -1313,17 +1291,14 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 				
 				frmEndHour.setValue(endHour);
 				frmEndMin.setValue(endMin);
-				frmEndDate.setValue(date);
+				frmEndDate.setValue(this.availabilityStore.baseParams.date);
 				
-				propertiesPanel.show();
-				this.availabilityWindow.hide();
-				
-					
-	     		}, this);
+				this.tabPanel.setActiveTab(0);
+				this.availabilityWindow.hide();					
+	    }, this);
 			
 			this.availabilityStore.on('load', function(){
-				var date = Date.parseDate(this.availabilityStore.baseParams.date, 'Y-m-d');					
-				Ext.get("availability_date").update(date.format(GO.settings.date_format));
+				Ext.get("availability_date").update(this.availabilityStore.baseParams.date);
 			}, this);
 			
 			this.availabilityWindow = new Ext.Window({
@@ -1339,8 +1314,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 					text: GO.calendar.lang.previousDay,
 					cls: 'x-btn-text-icon',
 					handler: function(){
-						var date = Date.parseDate(this.availabilityStore.baseParams.date, 'Y-m-d').add(Date.DAY, -1);					
-						this.availabilityStore.baseParams.date=date.format('Y-m-d');
+						var date = Date.parseDate(this.availabilityStore.baseParams.date, GO.settings.date_format).add(Date.DAY, -1);					
+						this.availabilityStore.baseParams.date=date.format(GO.settings.date_format);
 						this.availabilityStore.load();					
 					},
 					scope: this
@@ -1349,8 +1324,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 					text: GO.calendar.lang.nextDay,
 					cls: 'x-btn-text-icon',
 					handler: function(){
-						var date = Date.parseDate(this.availabilityStore.baseParams.date, 'Y-m-d').add(Date.DAY, 1);					
-						this.availabilityStore.baseParams.date=date.format('Y-m-d');
+						var date = Date.parseDate(this.availabilityStore.baseParams.date, GO.settings.date_format).add(Date.DAY, 1);					
+						this.availabilityStore.baseParams.date=date.format(GO.settings.date_format);
 						this.availabilityStore.load();					
 					},
 					scope: this
@@ -1366,8 +1341,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 		}
 		
 		var start_date = this.formPanel.form.findField('start_date');
-		start_date = start_date.getValue();
-		this.availabilityStore.baseParams['date']=start_date.format('Y-m-d');
+		//start_date = start_date.getValue();
+		this.availabilityStore.baseParams['date']=start_date.getRawValue();
 		this.availabilityStore.baseParams['event_id']=this.event_id;
 		this.availabilityStore.load();
 		this.availabilityWindow.show();

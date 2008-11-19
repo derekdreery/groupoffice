@@ -669,11 +669,14 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		this.clearSelection();
 	
 	},
-
-	addDaysGridEvent : function (eventData, recalculateAppointments)
+	
+	getDayIndex : function (unixtime)
 	{
 		
-		
+	},
+
+	addDaysGridEvent : function (eventData, recalculateAppointments)
+	{	
 		//the start of the day the event starts
 		var eventStartDay = Date.parseDate(eventData.startDate.format('Ymd'),'Ymd');
 		var eventEndDay = Date.parseDate(eventData.endDate.format('Ymd'),'Ymd');
@@ -788,9 +791,35 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		}
 	},
 	
-	removeEvent : function(domId){		
+	removeEvent : function(domId){
+		if(this.appointmentsMap[domId])
+		{
+			var day = this.appointmentsMap[domId].day;
+			var newAppointments = [];
+			for(var i=0;i<this.appointments[day].length;i++)
+			{
+				if(this.appointments[day][i].id!=domId)
+				{
+					newAppointments.push(this.appointments[day][i]);
+				}
+			}			
+			this.appointments[day]=newAppointments;
+			
+		}else if(this.allDayAppointmentsMap[domId])
+		{		
+			var day = this.allDayAppointmentsMap[domId];
+			var newAppointments = [];
+			for(var i=0;i<this.appointments[day].length;i++)
+			{
+				if(this.appointments[day][i].id!=domId)
+				{
+					newAppointments.push(this.appointments[day][i]);
+				}
+			}			
+			this.allDayAppointmentsMap[day]=newAppointments;
+		}		
+				
 		var ids = this.getRelatedDomElements(domId);
-		
 		if(ids)
 		{
 			for(var i=0;i<ids.length;i++)
@@ -800,29 +829,25 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				el.remove();
 				
 				this.unregisterDomId(ids[i]);
-			}			
+			}
 		}
 		
-		if(this.appointmentsMap[domId])
+		if(day)
 		{
-			var day = this.appointmentsMap[domId].day;
-			var i = this.appointmentsMap[domId].i;
-			
-			this.appointments[day].splice(i,1);
-			
 			this.calculateAppointments(day);
-			
-		}else if(this.allDayAppointmentsMap[domId])
-		{
-			this.allDayAppointmentsMap.splice(i,1);
-		}	
+		}
+		
+		console.log(this.appointments);
+		console.log(this.appointmentsMap);
+		
 	},
 	
 	unregisterDomId : function(domId)
 	{
 		delete this.remoteEvents[domId];
+		delete this.appointmentsMap[domId];
 		
-		var found = false;
+		var found =false;
 		
 		for(var e in this.domIds)
 		{
@@ -840,25 +865,6 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				break;
 			}
 		}
-		
-		/*found=false;
-		
-		for(var e in this.eventIdToDomId)
-		{
-			for(var i=0;i<this.eventIdToDomId[e].length;i++)
-			{
-				if(this.eventIdToDomId[e][i]==domId)
-				{
-					this.eventIdToDomId[e].splice(i,1);
-					found=true;
-					break;
-				}
-			}
-			if(found)
-			{
-				break;
-			}
-		}*/
 	},
 	
 	addAllDayEvent : function (eventData, startDay, endDay)
@@ -950,18 +956,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			}, this);
 			
 			event.on('dblclick', function(e, eventEl){
-				//this.eventDoubleClicked=true;
-				/*var event = this.elementToEvent(this.clickedEventId);
-				
-				if(this.remoteEvents[this.clickedEventId]['repeats'])
-				{
-					this.handleRecurringEvent("eventDblClick", event);
-				}else
-				{
-					this.fireEvent("eventDblClick", this, event, true);
-				}*/
-				
-				
+
 				var actionData = {}; 
 				
 				//do last because orginal times will be lost after this.
@@ -974,8 +969,6 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				{
 					this.fireEvent("eventDblClick", this, event, actionData);
 				}
-				
-				
 				
 			}, this);	
 			
@@ -995,8 +988,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 	
 	
 	addGridEvent : function (eventData, day, startRow, endRow, recalculateAppointments)
-	{
-		
+	{		
 		var text = '<span class="x-calGrid-event-time">'+eventData.startDate.format(GO.settings.time_format)+"</span> "+eventData.name;
 		
 		if(eventData.location!='')
@@ -1014,9 +1006,6 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		{
 			endRow=47;
 		}
-				
-		
-
 		var event = this.gridContainer.insertFirst(
 			{
 				tag: 'div', 
@@ -1051,8 +1040,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		
 			eventEl = Ext.get(eventEl).findParent('div.x-calGrid-event-container', 4, true);
 				
-			this.selectEventElement(eventEl);	
-			
+			this.selectEventElement(eventEl);			
 			
 			this.clickedEventId=eventEl.id;
 			this.eventMouseUp=false;
@@ -1060,9 +1048,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		}, this);
 		
 
-		event.on('dblclick', function(e, eventEl){
-	
-			
+		event.on('dblclick', function(e, eventEl){			
 			var actionData = {}; 
 				
 			//do last because orginal times will be lost after this.
@@ -1074,27 +1060,25 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			}else
 			{
 				this.fireEvent("eventDblClick", this, event, actionData);
-			}
-			
+			}			
 		}, this);
 		
 		event.on('mouseup', function(){
 			this.eventMouseUp=true;
 		}, this);
-		
-		
-			
 			
 		//add the event to the appointments array		
 		if(typeof(this.appointments[day])=='undefined')
 		{
 			this.appointments[day]=Array();
-		}		
-	
+		}
 	
 		//add it to the appointments of this day for calculation
+		
+		console.log('Add '+domId);
+		
 		this.appointments[day].push(event);
-		this.appointmentsMap[domId]={day: day, i: this.appointments[day].length-1};
+		this.appointmentsMap[domId]={day: day};
 		//this.calculateappointments(day);		
 		
 		if(this.writePermission && !eventData['private'])
@@ -1110,16 +1094,13 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 					    pinned: true
 					});
 				
-			resizer.on('resize', function(eventEl, adjWidth, adjHeight, rawWidth, rawHeight){
-	
+			resizer.on('resize', function(eventEl, adjWidth, adjHeight, rawWidth, rawHeight){	
 				if(adjHeight>0)
-				{
-					
+				{					
 					var times = this.domToTimes(eventEl.el.id, false);
 					
 					var newStartTime = times.startDate.format('U');
-					var newEndTime = times.endDate.format('U');
-					
+					var newEndTime = times.endDate.format('U');					
 					
 					var actionData = {duration : newEndTime-newStartTime, dragDate: this.remoteEvents[eventEl.el.id].startDate}; 
 					
@@ -1190,9 +1171,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			//store overlaps per event in this array
 			//var overlaps = Array();
 			var positions = Array();
-			var maxPositions = 0;
-			
-			
+			var maxPositions = 0;			
 			
 			//sort the appointments on their start time (Y pos)
 			this.appointments[day].sort(function(a,b){
@@ -1204,6 +1183,9 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			
 			//create an array of rows with their positions
 			this.rows=Array();
+			
+			console.log('Calc');
+			console.log(this.appointments[day]);
 				
 			for(var rowId=0;rowId<48;rowId++)
 			{								
@@ -1227,11 +1209,11 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 					this.rows[rowId]=Array();
 				}
 
-	
+				
 				//check how many appointments are in the row area
 				for(var i=0;i<this.appointments[day].length;i++)
 				{
-					
+										
 					if(!this.appointments[day][i].xy)
 					{
 						this.appointments[day][i].xy=this.appointments[day][i].getXY();
@@ -1563,7 +1545,11 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
   },    
     
   load : function()
-  {		
+  {  	
+		this.allDayAppointmentsMap={};
+		this.appointmentsMap={};
+		this.appointments={};
+  	
 		var records = this.store.getRange();
 		
 		this.writePermission = this.store.reader.jsonData.write_permission;
@@ -1588,7 +1574,10 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
     	this.calculateAppointments(i);
     }
 		this.unmask();		
-		this.loaded=true;    
+		this.loaded=true;   
+		
+		console.log(this.appointments);		
+		console.log(this.appointmentsMap);
   },
   /**
    * An array of domId=>database ID should be kept so that we can figure out
@@ -1832,15 +1821,11 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		//unset the drag stuff
 		
 		if(this.dragEvent)
-		{
-			
-			var newPos = this.dragEvent.getXY();
-			
+		{			
+			var newPos = this.dragEvent.getXY();			
 			
 			if(newPos[0] != this.dragappointmentstartPos[0] || newPos[1] != this.dragappointmentstartPos[1])
-			{
-				
-			
+			{			
 				var times = this.domToTimes(this.dragEvent.id, false);
 				
 				var dropTime = times.startDate.format('U');
@@ -1867,9 +1852,6 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				{
 					this.moveAppointment(this.dragEvent.id, this.dragappointmentstartPos, newPos);
 					this.fireEvent("move", this, event, actionData);
-					
-					
-					
 				}
 			}
 			
