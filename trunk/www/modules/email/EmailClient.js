@@ -76,22 +76,13 @@ GO.email.EmailClient = function(config){
 	}, this);	
 
 	
-	this.messagesGrid.on("rowclick", function(grid, rowClicked, e) {
-		var selectionModel = grid.getSelectionModel();
-		var record = selectionModel.getSelected();		
-		
-		if(!e.ctrlKey && !e.shiftKey)
-		{			
-			if(record.data['uid']!=this.previewedUid)
-			{
-				this.previewedUid=record.data['uid'];
-				
-				this.messagePanel.loadMessage(record.data.uid, this.mailbox, this.account_id);
-				
-			}
+	this.messagesGrid.on("delayedrowselect",function(grid, rowIndex, r){
+		if(r.data['uid']!=this.previewedUid)
+		{
+			this.previewedUid=r.data['uid'];			
+			this.messagePanel.loadMessage(r.data.uid, this.mailbox, this.account_id);			
 		}
 	}, this);
-
 
 
 	var gridContextMenu = new Ext.menu.Menu({

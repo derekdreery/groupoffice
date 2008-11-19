@@ -60,10 +60,8 @@ GO.notes.MainPanel = function(config){
 		border:true
 	});
 	
-	this.centerPanel.on('rowclick', function(grid, rowIndex)
-	{
-		var record = grid.getStore().getAt(rowIndex);		
-		this.eastPanel.load(record.data.id);		
+	this.centerPanel.on("delayedrowselect",function(grid, rowIndex, r){
+		this.eastPanel.load(r.data.id);		
 	}, this);
 	
 	this.eastPanel = new GO.notes.NotePanel({

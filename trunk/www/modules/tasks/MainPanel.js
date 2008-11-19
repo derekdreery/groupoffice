@@ -80,9 +80,8 @@ GO.tasks.MainPanel = function(config){
 				region:'center'								
 			});
 			
-	this.gridPanel.on("rowclick", function(grid, rowIndex, e){
-		var record = grid.getStore().getAt(rowIndex);		
-		this.taskPanel.load(record.data.id);
+	this.gridPanel.on("delayedrowselect",function(grid, rowIndex, r){
+		this.taskPanel.load(r.data.id);
 	}, this);
 			
 	this.taskPanel = new GO.tasks.TaskPanel({
