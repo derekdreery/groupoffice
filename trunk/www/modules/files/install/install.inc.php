@@ -38,8 +38,6 @@ $GO_USERS->get_users();
 
 while($GO_USERS->next_record())
 {
-	//if($GO_SECURITY->has_permission($GO_USERS->f('id'),$module['acl_read']))
-	//{
 	$home_dir = $GO_CONFIG->file_storage_path.'users/'.$GO_USERS->f('username');
 	if(!is_dir($home_dir))
 	{
@@ -58,7 +56,6 @@ while($GO_USERS->next_record())
 			
 		$files->update_folder($up_folder);
 	}
-	//}
 }
 
 
@@ -66,7 +63,7 @@ $share_dir = $GO_CONFIG->file_storage_path.'users/admin/'.$lang['files']['genera
 
 if(!is_dir($share_dir))
 {
-	mkdir($share_dir, $GO_CONFIG->create_mode,true);
+	mkdir($share_dir, $GO_CONFIG->folder_create_mode, true);
 }
 
 $folder = $files->get_folder($share_dir);
