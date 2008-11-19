@@ -26,10 +26,8 @@ GO.addressbook.MainPanel = function(config)
   	id: 'ab-contacts-grid-panel'
   });  
   
-  this.contactsGrid.on("rowclick",function(grid, rowIndex)
-		{
-			var record = grid.getStore().getAt(rowIndex);			
-			this.contactEastPanel.load(record.get('id'));			
+  this.contactsGrid.on("delayedrowselect",function(grid, rowIndex, r){
+				this.contactEastPanel.load(r.get('id'));
 		}, this);
 	
   this.companiesGrid = new GO.addressbook.CompaniesGrid({
@@ -38,10 +36,8 @@ GO.addressbook.MainPanel = function(config)
   	id: 'ab-company-grid-panel'  	
   });
   
-  this.companiesGrid.on("rowclick",function(grid, rowIndex)
-		{
-			var record = grid.getStore().getAt(rowIndex);			
-			this.companyEastPanel.load(record.get('id'));			
+  this.companiesGrid.on("delayedrowselect",function(grid, rowIndex, r){
+			this.companyEastPanel.load(r.get('id'));			
 		}, this); 
 	  
 	this.searchPanel = new GO.addressbook.SearchPanel({
