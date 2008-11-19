@@ -402,11 +402,14 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					switch(this.displayType)
 					{
 						case 'month':
-								GO.calendar.eventDialog.oldDomId=this.monthGrid.addMonthGridEvent(newEvent);					
+								if(newEvent.calendar_id==this.calendar_id)
+									GO.calendar.eventDialog.oldDomId=this.monthGrid.addMonthGridEvent(newEvent);					
 						break;				
 						case 'days':	
-								GO.calendar.eventDialog.oldDomId=this.daysGrid.addDaysGridEvent(newEvent, true);
-								break;				
+								if(newEvent.calendar_id==this.calendar_id)
+									GO.calendar.eventDialog.oldDomId=this.daysGrid.addDaysGridEvent(newEvent, true);
+						break;		
+								
 						case 'view':						
 								GO.calendar.eventDialog.oldDomId=this.viewGrid.addViewGridEvent(newEvent);						
 						break;				
