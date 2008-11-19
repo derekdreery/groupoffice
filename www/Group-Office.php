@@ -36,13 +36,6 @@ if(!$GO_CONFIG->enabled)
 	die('<h1>Disabled</h1>This Group-Office installation has been disabled');
 }
 
-
-if($GO_CONFIG->debug)
-{
-	list ($usec, $sec) = explode(" ", microtime());
-	$load_start = ((float) $usec + (float) $sec);
-}
-
 //preload classes before session so they can be stored in the session
 if ( isset( $GO_INCLUDES ) ) {
 	while ( $include = array_shift( $GO_INCLUDES ) ) {
@@ -152,4 +145,4 @@ if (get_magic_quotes_gpc())
 }
 
 
-umask(0000);
+umask(0);

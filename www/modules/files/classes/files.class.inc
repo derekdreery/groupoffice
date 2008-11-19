@@ -966,7 +966,9 @@ class files extends filesystem
 		$userdir = $GO_CONFIG->file_storage_path.'users/'.$user['username'];
 		
 		if(!is_dir($userdir))
+		{
 			mkdir($userdir, $GO_CONFIG->folder_create_mode, true);
+		}
 			
 		$folder = $this->get_folder('users/'.$user['username']);		
 		if(empty($folder['acl_read']))

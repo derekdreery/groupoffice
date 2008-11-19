@@ -952,18 +952,13 @@ class GO_USERS extends db
 				require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
 				$search = new search();
 				
-				$search->delete_search_result($user_id, 8);
-				
+				$search->delete_search_result($user_id, 8);				
 				
 				$GO_MODULES->fire_event('user_delete', $user);
 
-				//$GO_GROUPS->__on_user_delete($user_id);
-
-				
 				$sql = "DELETE FROM go_acl WHERE user_id=".$this->escape($user_id).";";
 				$this->query($sql);
-				
-//				system('rm -Rf '.$GO_CONFIG->file_storage_path.'users/'.$user_id);
+
 				return true;
 			}
 		}
