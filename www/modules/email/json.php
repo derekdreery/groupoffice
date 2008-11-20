@@ -93,18 +93,15 @@ function get_mailbox_nodes($account_id, $folder_id){
 		//check for unread mail
 		//$unseen = $email->f('unseen');
 
-		$status = $imap->status($email->f('name'), SA_UNSEEN);
+		$status = $imap->status($email->f('name'), SA_UNSEEN);//+SA_MESSAGES+SA_RECENT);
 		
 		//first time the e-mail is loaded. Let's check the cache
 		/*if(!isset($_POST['refresh']))
 		{
-			if($email->f('unseen')!= $status->unseen || $email->f('msgcount')!= $status->messages)
+			if($email->f('unseen')+$status->recent!= $status->unseen || $email->f('msgcount')+$status->recent!= $status->messages)
 			{
 				debug('Clearing dirty cache of folder: '.$email->f('name'));
 				$imap->clear_cache($email->f('id'));
-			}else
-			{
-				debug('Cache of '.$email->f('name').' is ok');
 			}
 		}*/
 		
