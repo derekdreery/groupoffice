@@ -190,7 +190,7 @@ class imap{
 	}
 	
 	function get_quota(){		
-		return imap_get_quotaroot($this->conn, $this->mailbox);		 
+		return @imap_get_quotaroot($this->conn, $this->mailbox);		 
 	}
 
 	/**
@@ -1456,7 +1456,7 @@ class imap{
 	{
 		$charset = 'UTF-8';
 		if (extension_loaded('iconv')) {
-			if($converted_input = iconv($charset, 'UTF-7', $input))
+			if($converted_input = @iconv($charset, 'UTF-7', $input))
 			{
 				$input=preg_replace("/&/","&-",$converted_input);
 				$input=preg_replace("/\+A/","&A",$input);
@@ -1480,7 +1480,7 @@ class imap{
 			$input=preg_replace("/&A/","+A",$input);
 			$input=preg_replace("/&-/","&",$input);
 
-			if($converted_input = iconv('UTF-7', $charset, $input))
+			if($converted_input = @iconv('UTF-7', $charset, $input))
 			{
 				return $converted_input;
 			}

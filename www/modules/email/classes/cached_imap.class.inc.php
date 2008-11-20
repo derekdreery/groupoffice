@@ -59,7 +59,8 @@ class cached_imap extends imap{
 		
 		$this->folder = $this->email->get_folder($this->account['id'],$mailbox);
 		
-		$this->folder_sort_cache=json_decode($this->folder['sort'], true);
+		if($this->folder)
+			$this->folder_sort_cache=json_decode($this->folder['sort'], true);
 		
 		return $conn;
 	}
