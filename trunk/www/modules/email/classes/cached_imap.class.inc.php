@@ -387,7 +387,7 @@ class cached_imap extends imap{
 
 	function update_cached_message($cached_message)
 	{
-		return $this->email->update_row('em_messages_cache', 'id', $cached_message);
+		return $this->email->update_row('em_messages_cache', array('uid', 'folder_id'), $cached_message);
 	}
 
 	/**

@@ -302,21 +302,13 @@ class GoSwift extends Swift{
 		
 		if($send_success && $this->account && $this->account['type']=='imap' && !empty($this->account['sent']))
 		{
-			global $GO_CONFIG;
-				
+			global $GO_CONFIG, $GO_MODULES;				
+			
 			require_once ($GO_CONFIG->class_path."mail/imap.class.inc");
-			$imap = new imap();				
+			require_once ($GO_MODULES->modules['email']['class_path']."cached_imap.class.inc.php");
+			$imap = new cached_imap();				
 				
-			if ($imap->open(
-			$this->account['host'],
-			$this->account['type'],
-			$this->account['port'],
-			$this->account['username'],
-			$this->account['password'],
-				'INBOX',
-			0,
-			$this->account['use_ssl'],
-			$this->account['novalidate_cert'])) {
+			if ($imap->open($this->account,'INBOX')) {
 									
 				$this->data = $this->message->build();
 				$this->data = $this->data->readFull();
@@ -327,6 +319,12 @@ class GoSwift extends Swift{
 					{
 						$uid_arr = array($this->reply_uid);
 						$imap->set_message_flag($this->reply_mailbox, $uid_arr, "\\Answered");
+						
+						$cached_message['folder_id']=$imap->folder['id'];
+						$cached_message['uid']=$this->reply_uid;
+						$cached_message['answered']='1';
+						$imap->update_cached_message($cached_message);
+						
 					}
 					$imap->close();
 
