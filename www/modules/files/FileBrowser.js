@@ -895,7 +895,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	},
 	
 	onGridRowContextMenu : function(grid, rowIndex, e) {
-			var selections = selModel.getSelections();	
+			var selections = grid.getSelectionModel().getSelections();	
 			
 			var coords = e.getXY();
 			this.filesContextMenu.showAt(coords, selections);
