@@ -1,0 +1,43 @@
+TRANSLATION GUIDELINES FOR DEVELOPERS
+
+1.) Create the English language files first.
+2.) Make sure that your program is completed and will not require any translating after 
+    you have contacted the translators! They will not translate a few words at a time but only the
+    completed program!
+3.) There should be a working copy of the program available for the translators so they can
+    see what they are translating.
+4.) Do not contact the persons below for anything else.
+5.) If you want to be on this list or you want to be removed from this list please send an edited
+    copy of this file to: <mschering@intermesh.nl>
+
+
+WILL TRANSLATE		INTO			NAME			EMAIL
+
+English			Nederlands					Merijn Schering					mschering@intermesh.nl
+English			Francais 							Hervé Thouzard 				herve@herve-thouzard.com
+English			Francais								Armel Kermorvant			armelk@akserver.dyndns.org
+English			Deutsch								Georg Lorenz 						georg@lonux.de
+English			Dansk									Jacob Hammeken  		jacobh@post.cybercity.dk
+English			Italiano									Filippo Maguolo   				filippo.maguolo@gmail.com
+English			Svenska								Martin Östlund						mo@microsaft.nu
+English			Chinese								Ricky Chan 								ricky@rickychan.dynu.com
+English			Spanish								Joirge Albero Arocha  jdisin@armada.mil.co
+English			Portugues(brazil)	Paul daSilva								paul@linuxzealots.com		
+English			Norsk										Edward H. Valholm		ehv@songnetworks.no
+English			Bulgaria								Todor Lazarov 						todor.lazarov@chepelare-bg.net
+English			Japanese							Takeru Nomoto					latte@monochrome-ash.myvnc.com 
+
+mschering@intermesh.nl, herve@herve-thouzard.com, georg@lonux.de, zilent@brainfreeze.dk, maguolo@cs.unibo.it, mo@microsaft.nu, ricky@rickychan.dynu.com, jdisin@armada.mil.co, paul@linuxzealots.com, ehv@songnetworks.no, todor.lazarov@chepelare-bg.net,latte@monochrome-ash.myvnc.com 
+
+
+Hi translators,
+
+A new version of Group-Office is released and it requires addtional translation. Please donwload the new version and send me the translations.
+The new strings are at the bottom and are under the line '//translation required'. Please cross-check the files with your copy in your language and add the new strings to the language files in YOUR language.
+Please send the complete language pack in YOUR language to "mschering@intermesh.nl". I don't want the english files with other languages inside them because that's very inefficiënt and can cause mistakes.
+You can find a working copy at group-office.sourceforge.net: user:translator passwd: trans. This user has access to the e-mail app. You can also get the latest version from the CVS server. See http://group-office.sourceforge.net for instructions to access the CVS server.
+
+Good luck and thank you very much!
+
+Merijn Schering
+
