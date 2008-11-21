@@ -98,7 +98,7 @@ try{
 			if(!file_exists($GO_CONFIG->file_storage_path.$_POST['path']))
 			{
 				throw new Exception($lang['files']['fileNotFound']);
-			}elseif(!$fs->has_read_permission($GO_SECURITY->user_id, $GO_CONFIG->file_storage_path.$_POST['path']))
+			}elseif(!$fs->has_write_permission($GO_SECURITY->user_id, $GO_CONFIG->file_storage_path.$_POST['path']))
 			{
 				throw new AccessDeniedException();
 			}
