@@ -144,20 +144,10 @@ GO.email.EmailClient = function(config){
 	});
 
 
-	this.messagesGrid.addListener("rowcontextmenu", function(grid, rowIndex, e) {
-		e.stopEvent();
-		
-	
-    if(this.messagesGrid.getSelectionModel().isSelected(rowIndex) !== true) {
-        this.messagesGrid.getSelectionModel().clearSelections();
-        this.messagesGrid.getSelectionModel().selectRow(rowIndex);
-    }
-		
+	this.messagesGrid.on("rowcontextmenu", function(grid, rowIndex, e) {
 		var coords = e.getXY();
 		gridContextMenu.showAt([coords[0], coords[1]]);
-	},
-	this
-	);
+	},this);
 
 	this.treePanel = new GO.email.AccountsTree({
 		id:'email-tree-panel',

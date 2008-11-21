@@ -111,29 +111,39 @@ GO.grid.GridPanel = function(config)
 	//up and down button it will only load if it stays on the same record for 400ms
 	this.addEvents({'delayedrowselect':true});
 	
+	this.on("rowcontextmenu", function(grid, rowIndex, e) {
+		e.stopEvent();
+		
+		this.rowClicked=true;
+		
+		var sm =this.getSelectionModel();
+    if(sm.isSelected(rowIndex) !== true) {
+      sm.clearSelections();
+      sm.selectRow(rowIndex);
+    }
+	}, this);
+	
 	this.on('rowclick', function(grid, rowIndex, e){
 		
 		if(!e.ctrlKey && !e.shiftKey)
 		{
 			var record = this.getSelectionModel().getSelected();
 			this.fireEvent('delayedrowselect', this, rowIndex, record);
-		}
-		
+		}		
 		this.rowClicked=true;
 	}, this);
 	  	
-  this.getSelectionModel().on("rowselect",function(sm, rowIndex, r)
+  this.getSelectionModel().on("rowselect",function(sm, rowIndex, r){
+		if(!this.rowClicked)
 		{
-			if(!this.rowClicked)
+			var record = this.getSelectionModel().getSelected();	
+			if(record==r)
 			{
-				var record = this.getSelectionModel().getSelected();	
-				if(record==r)
-				{
-					this.fireEvent('delayedrowselect', this, rowIndex, r);
-				}
+				this.fireEvent('delayedrowselect', this, rowIndex, r);
 			}
-			this.rowClicked=false;
-		}, this, {delay:400});
+		}
+		this.rowClicked=false;
+	}, this, {delay:400});
 }
  
  

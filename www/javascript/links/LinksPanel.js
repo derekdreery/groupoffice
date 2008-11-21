@@ -136,14 +136,6 @@ GO.grid.LinksPanel = function(config){
 
 	
 	this.linksGrid.on('rowcontextmenu', function(grid, rowIndex,e){
-		e.stopEvent();				
-		
-		var selModel = grid.getSelectionModel();
-		
-    if(selModel.isSelected(rowIndex) !== true) {
-        selModel.clearSelections();
-        selModel.selectRow(rowIndex);
-    }   
 		
 		var type = '';
 		var selections = selModel.getSelections();
