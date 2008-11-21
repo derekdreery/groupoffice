@@ -895,14 +895,6 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	},
 	
 	onGridRowContextMenu : function(grid, rowIndex, e) {
-			e.stopEvent();				
-		
-			var selModel = grid.getSelectionModel();
-			
-      if(selModel.isSelected(rowIndex) !== true) {
-          selModel.clearSelections();
-          selModel.selectRow(rowIndex);
-      }
 			var selections = selModel.getSelections();	
 			
 			var coords = e.getXY();
