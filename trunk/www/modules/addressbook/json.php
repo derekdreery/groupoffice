@@ -321,12 +321,9 @@ try
 				
 				require($GO_LANGUAGE->get_base_language_file('countries'));
 				$response['data']['country']=isset($countries[$response['data']['country']]) ? $countries[$response['data']['country']] : $response['data']['country'];
-			
-				
 
-				if($response['data']['company_id'] > 0)
-				{
-					$company = $ab->get_company($response['data']['company_id']);
+				if($response['data']['company_id'] > 0 && $company = $ab->get_company($response['data']['company_id']))
+				{					
 					$response['data']['company_name'] = $company['name'];
 				} else {
 					$response['data']['company_name'] = '';

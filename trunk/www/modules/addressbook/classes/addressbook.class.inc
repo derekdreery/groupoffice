@@ -324,6 +324,9 @@ class addressbook extends db {
 		{
 			$fs->delete($GO_CONFIG->file_storage_path.'companies/'.$company_id.'/');
 		}
+		
+		$sql = "UPDATE ab_contacts SET company_id=0 WHERE company_id=$company_id";
+		$this->query($sql);
 			
 		$sql = "DELETE FROM ab_companies WHERE id='$company_id'";
 		if ($this->query($sql)) {
