@@ -1,7 +1,13 @@
+/**
+ * Don't copy the next lines into a translation
+ */
 Ext.namespace('GO.summary');
 Ext.namespace('GO.portlets');
 
 GO.summary.lang={};
+/**
+ * Copy everything below for translations
+ */
 
 GO.summary.lang.summary = 'Summary';
 GO.summary.lang.noItems = 'You don\'t have any items on your startpage.';

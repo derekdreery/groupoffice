@@ -1,6 +1,15 @@
+/**
+ * Don't copy the next lines into a translation
+ */
+
 Ext.namespace('GO.groups');
 
 GO.groups.lang={};
+
+/**
+ * Copy everything below for translations
+ */
+
 
 GO.groups.lang.group = 'Group';
 GO.groups.lang.groups = 'Groups';
