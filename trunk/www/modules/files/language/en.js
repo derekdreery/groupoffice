@@ -1,6 +1,12 @@
+/**
+ * Don't copy the next lines into a translation
+ */
 Ext.namespace('GO.files');
 
 GO.files.lang={};
+/**
+ * Copy everything below for translations
+ */
 
 GO.files.lang.files='Files';
 

@@ -11,10 +11,16 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-
+/**
+ * Don't copy the next lines into a translation
+ */
 Ext.namespace('GO.addressbook');
 Ext.namespace('GO.addressbook.plugins');
 GO.addressbook.lang={};
+
+/**
+ * Copy everything below for translations
+ */
 
 
 GO.addressbook.lang.selectMailingGroup='Select mailing group';

@@ -1,6 +1,12 @@
+/**
+ * Don't copy the next lines into a translation
+ */
 Ext.namespace('GO.users');
 
 GO.users.lang={};
+/**
+ * Copy everything below for translations
+ */
 
 GO.users.lang.cmdCheckColumnRead= 'Read';
 GO.users.lang.cmdCheckColumnWrite= 'Write';

@@ -1,6 +1,13 @@
+/**
+ * Don't copy the next lines into a translation
+ */
+ 
 Ext.namespace('GO.email');
 
 GO.email.lang={};
+/**
+ * Copy everything below for translations
+ */
 
 GO.email.lang.messages='Messages';
 GO.email.lang.message='Message';

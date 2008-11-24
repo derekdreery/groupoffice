@@ -1,6 +1,13 @@
+/**
+ * Don't copy the next lines into a translation
+ */
+
 Ext.namespace('GO.tasks');
 
 GO.tasks.lang={};
+/**
+ * Copy everything below for translations
+ */
 
 GO.tasks.lang.task = 'Task';
 GO.tasks.lang.noTask = 'No Tasks to display';
