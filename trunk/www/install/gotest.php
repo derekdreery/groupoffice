@@ -201,6 +201,13 @@ function test_system(){
 
 	$tests[]=$test;
 	
+	$test['name']='JSON functions';
+	$test['pass']=function_exists('json_encode');
+	$test['feedback']='Fatal error: json_encode and json_decode functions are not available.';
+	$test['fatal']=true;
+
+	$tests[]=$test;
+	
 	return $tests;
 }
 
