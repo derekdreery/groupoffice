@@ -1276,22 +1276,40 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 				var frmEndDate = this.formPanel.form.findField('end_date');				
 				
 				var hourDiff = parseInt(frmEndHour.getValue())-parseInt(frmStartHour.getValue());
-				var minDiff = parseInt(frmEndMin.getValue())-parseInt(frmStartMin.getValue());				
+				var minDiff = parseInt(frmEndMin.getValue())-parseInt(frmStartMin.getValue());
+				
+				if(minDiff<0)
+				{
+					minDiff +=60;
+					hourDiff--;
+				}		
+				
+				if(minutes<10)
+				{
+					minutes='0'+minutes;
+				}		
+				
+				alert(minutes);
 				
 				frmStartHour.setValue(hours);
 				frmStartMin.setValue(minutes);
-				frmStartDate.setValue(this.availabilityStore.baseParams.date);
+				frmStartDate.setValue(Date.parseDate(this.availabilityStore.baseParams.date, GO.settings.date_format));
 				
 				var endHour = parseInt(hours)+hourDiff;
 				var endMin = parseInt(minutes)+minDiff;
-				if(endMin==0)
+				if(endMin>60)
 				{
-					endMin="00";
+					endMin -=60;
+					endHour++;
+				}
+				if(endMin<10)
+				{
+					endMin = "0"+endMin;
 				}
 				
 				frmEndHour.setValue(endHour);
 				frmEndMin.setValue(endMin);
-				frmEndDate.setValue(this.availabilityStore.baseParams.date);
+				frmEndDate.setValue(Date.parseDate(this.availabilityStore.baseParams.date, GO.settings.date_format));
 				
 				this.tabPanel.setActiveTab(0);
 				this.availabilityWindow.hide();					
