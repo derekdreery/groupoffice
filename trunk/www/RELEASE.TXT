@@ -1,4 +1,22 @@
-2008/09/03 Version 3.00
+2008/11/24 Version 3.00 stable
+
+After more then one and a half year of development time and testing it's finally there! 
+We are proud to present Group-Office 3.0 It was time for Group-Office to modernise. 
+New web techniques have been developed and are ready to use in a professional platform 
+such as Group-Office. We completely rewrote the interface of Group-Office. It feels much 
+more like a desktop application now with drag and drop features, flexible information panels
+and much more!
+Besides the eye candy and usability enhancements a lot has been improved under the hood too.
+The database adapter has been rewritten to use the improved MySQLi extension for better security. 
+Data sent to the database is checked for attacks at the lowest level so it's impossible for
+ developers to write insecure database queries when they use the Group-Office framework.
+A lot more has been done to improve security like image blocking for unknown senders in the
+e-mail module and filesystem paths are stored relatively in the database now.
+
+To sum this up Group-Office looks better, works better and is ready for the future! 
+Upgrading is recommended.
+
+2008/09/03 Version 3.00 unstable
 
 It was time for Group-Office to modernise. New web techniques have been developed and 
 are ready to use in a professional platform such as Group-Office. Techniques such as 
