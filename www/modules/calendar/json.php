@@ -179,7 +179,7 @@ try{
 							$merged_free_busy[$min]=1;
 						}
 						$participant['freebusy'][]=array(
-							'time'=>date($_SESSION['GO_SESSION']['time_format'], mktime(0,$min)),
+							'time'=>date('G:i', mktime(0,$min)),
 							'busy'=>$busy);
 					}
 				}
