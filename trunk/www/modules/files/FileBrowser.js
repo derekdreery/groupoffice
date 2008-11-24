@@ -1376,6 +1376,7 @@ GO.files.openFile = function(path, store)
 			
 		break;
 		
+		case 'dwg':
 		case 'doc':
 		case 'odt':
 		case 'ods':
