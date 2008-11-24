@@ -52,6 +52,11 @@
 	background-image:url('images/decompress.png') !important;
 }
 
+.btn-thumbnails{
+	background-image:url('images/thumbs.png') !important;
+}
+
+
 
 
 .go-files-location-panel .x-plain-body{
