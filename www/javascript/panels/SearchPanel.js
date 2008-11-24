@@ -27,8 +27,29 @@ GO.grid.SearchPanel = function(config){
   config['title']=GO.lang['strSearch']+': "'+Ext.util.Format.htmlEncode(this.query)+'"';
 	config['closable']=true;
 	config['iconCls']='go-search-icon-tab';
+	
+
+	
+	
 		
   GO.grid.SearchPanel.superclass.constructor.call(this, config);
+  
+  
+  this.topToolbar.push('-');
+  
+  this.topToolbar.push({
+		iconCls: 'btn-delete',
+		text: GO.lang['cmdDelete'],
+		cls: 'x-btn-text-icon',
+		handler: function(){
+			this.deleteSelected();
+		},
+		scope: this
+	});
+  
+  
+  
+  
   
   
   this.searchField.setValue(this.query);

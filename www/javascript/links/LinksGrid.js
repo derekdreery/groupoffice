@@ -96,7 +96,8 @@ GO.grid.LinksGrid = function(config){
 	config['layout']='fit';
 	config['view']=new Ext.grid.GridView({
 		enableRowBody:true,
-		showPreview:true,				
+		showPreview:true,			
+		emptyText:GO.lang.strNoItems,	
 		getRowClass : function(record, rowIndex, p, store){
 	    if(this.showPreview && record.data.description.length){
 	        p.body = '<div class="go-links-panel-description">'+record.data.description+'</div>';
