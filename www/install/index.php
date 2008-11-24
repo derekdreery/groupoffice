@@ -20,7 +20,7 @@ require_once('../Group-Office.php');
 
 $CONFIG_FILE = $GO_CONFIG->get_config_file();
 
-require_once('install.inc');
+require_once('gotest.php');
 require_once(dirname(dirname(__FILE__)).'/classes/filesystem.class.inc');
 
 $task = isset($_REQUEST['task']) ? $_REQUEST['task'] : 'test';
@@ -585,10 +585,8 @@ switch($task)
 		
 		echo '<h1>Welcome!</h1><p>Thank you for installing Group-Office. This page checks if your system meets the requirements to run Group-Office.</p>'.
 			'<p>If this page prints errors or warnings, please visit this page for more information: <a target="_blank" href="http://www.group-office.com/wiki/Installation">http://www.group-office.com/wiki/Installation</a></p>';
-		
-		require_once($GO_CONFIG->root_path.'install/test.inc');
 
-		if(isset($fatal_error))
+		if(!output_system_test())
 		{
 			echo '<p style="color: red;">Because of a fatal error in your system setup the installation can\'t continue. Please fix the errors above first.</p>';
 		}else
