@@ -29,7 +29,7 @@ $template['acl_write']=$GO_SECURITY->get_new_acl('files');
 
 $GO_SECURITY->add_group_to_acl($GO_CONFIG->group_internal, $template['acl_read']);
 
-$files->add_template($template);
+$files->add_template($template,'sisbii');
 
 
 $GO_USERS->get_users();

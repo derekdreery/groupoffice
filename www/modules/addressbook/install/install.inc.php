@@ -36,6 +36,7 @@ $company['homepage']='http://www.intermesh.nl';
 $company['bank_no']='';
 $company['vat_no']='NL 1502.03.871.B01';
 $company['user_id']=1;
+$company['comment']='';
 
 $contact['user_id']=1;
 $contact['company_id']=$ab->add_company($company);
@@ -47,6 +48,7 @@ $contact['initials']='M.K.';
 $contact['sex']='M';
 $contact['email']='mschering@intermesh.nl';
 $contact['salutation']='Dear Merijn';
+$contact['comment']='';
 
 $ab->add_contact($contact);
 

@@ -69,12 +69,24 @@ class db extends base_db {
 	public function connect() {
 
 		/* establish connection, select database */
+		
+		if(!empty($this->socket))
+		{
+			$host = $this->host.':'.$this->socket;
+		}else
+		{
+			$host = $this->host.':'.$this->port;
+		}
+		
+		
+		
 		if ( 0 == $this->link ) {
+			debug($host);
 
 			if(!$this->pconnect) {
-				$this->link = mysql_connect($this->host, $this->user, $this->password);
+				$this->link = mysql_connect($host, $this->user, $this->password);
 			} else {
-				$this->link = mysql_pconnect($this->host, $this->user, $this->password);
+				$this->link = mysql_pconnect($host, $this->user, $this->password);
 			}
 			if (!$this->link) {
 				$this->halt('Could not connect to MySQL database');
