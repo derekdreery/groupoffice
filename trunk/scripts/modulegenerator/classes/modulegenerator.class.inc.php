@@ -397,6 +397,9 @@ class modulegenerator extends db
 			if(isset($table['link_type']))
 			{
 				$replacements['link_type']=$table['link_type'];
+			}else
+			{
+				$replacements['link_type']=0;
 			}
 			if(isset($table['relation']))
 			{

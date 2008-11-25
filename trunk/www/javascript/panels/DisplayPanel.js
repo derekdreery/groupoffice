@@ -107,7 +107,12 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 		data.link_type=this.link_type;
 		this.data=data;
 		this.editButton.setDisabled(!data.write_permission);
-		this.linkBrowseButton.setDisabled(false);
+		
+		if(this.link_type>0)
+		{
+			this.linkBrowseButton.setDisabled(false);
+		}
+		
 		if(GO.files)
 		{
 			this.fileBrowseButton.setDisabled(false);
