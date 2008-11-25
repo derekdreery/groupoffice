@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `ab_contacts` (
   `initials` varchar(10) default NULL,
   `title` varchar(10) default NULL,
   `sex` enum('M','F') NOT NULL default 'M',
-  `birthday` date NOT NULL default '0000-00-00',
+  `birthday` date NULL default NULL,
   `email` varchar(100) default NULL,
   `email2` varchar(100) default NULL,
   `email3` varchar(100) default NULL,
