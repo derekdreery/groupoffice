@@ -52,7 +52,7 @@ GO.{module}.MainPanel = function(config){
 	});
 	
 	this.centerPanel.on("delayedrowselect",function(grid, rowIndex, r){
-		this.eastPanel.load{centerpanel_friendly_single_ucfirst}(r.data.id);		
+		this.eastPanel.load(r.data.id);		
 	}, this);
 	
 	this.eastPanel = new {EASTPANEL}({
