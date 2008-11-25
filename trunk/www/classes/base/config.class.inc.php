@@ -350,6 +350,22 @@ class GO_CONFIG
 	 * @access  public
 	 */
 	var $db_pass = '';
+	
+	/**
+	 * Specifies the port number to attempt to connect to the MySQL server. 
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $db_port = 3306;
+	
+	/**
+	 * Specifies the socket or named pipe that should be used.
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $db_socket = '';
 
 	/** Path to local installation specific files
 	 *

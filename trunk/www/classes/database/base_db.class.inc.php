@@ -51,6 +51,20 @@ class base_db{
 	 * @var string
 	 */
 	var $password = "";
+	
+	/**
+	 * Specifies the port number to attempt to connect to the MySQL server. 
+	 *
+	 * @var string
+	 */
+	var $port = "";
+	
+	/**
+	 * Specifies the socket or named pipe that should be used.
+	 *
+	 * @var string
+	 */
+	var $socket = "";
 
 	/**
 	 * Set to true for debugging messages.
@@ -171,6 +185,12 @@ class base_db{
 			if (isset($config->db_pass)) {
 				$this->password = $config->db_pass;
 			}
+			if (isset($config->db_port)) {
+				$this->port = $config->db_port;
+			}
+			if (isset($config->db_socket)) {
+				$this->socket = $config->db_socket;
+			}
 		}
 	}
 	
@@ -183,12 +203,14 @@ class base_db{
 	 * @param string $pass
 	 */
 	
-	public function set_parameters($host, $database, $user, $pass)
+	public function set_parameters($host, $database, $user, $pass, $port=3306, $socket='')
 	{
 		$this->host = $host;
 		$this->database = $database;
 		$this->user = $user;
 		$this->password = $pass;
+		$this->port = $port;
+		$this->socket = $socket;
 	}
 
 	/**

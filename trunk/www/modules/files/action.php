@@ -331,6 +331,8 @@ try{
 			$template['id']=isset($_POST['template_id']) ? ($_POST['template_id']) : 0;
 			$template['name']=$_POST['name'];
 			
+			$types = 'is';
+			
 			if (is_uploaded_file($_FILES['file']['tmp_name'][0]))
 			{
 				$fp = fopen($_FILES['file']['tmp_name'][0], "rb");
@@ -338,16 +340,18 @@ try{
 				fclose($fp);
 				
 				$template['extension']=File::get_extension($_FILES['file']['name'][0]);
+				$types .= 'bs';
 			}		
 
 			if(isset($_POST['user_id']))
 			{
 				$template['user_id']=$_POST['user_id'];
+				$types .= 'i';
 			}
 
 			if($template['id']>0)
 			{
-				$fs->update_template($template);
+				$fs->update_template($template, $types);
 				$response['success']=true;
 			}else
 			{
@@ -357,7 +361,8 @@ try{
 				}
 				$response['acl_read']=$template['acl_read']=$GO_SECURITY->get_new_acl();
 				$response['acl_write']=$template['acl_write']=$GO_SECURITY->get_new_acl();
-				$response['template_id']=$fs->add_template($template);				
+				$types .= 'ii';
+				$response['template_id']=$fs->add_template($template, $types);				
 			}
 			$response['success']=true;
 				

@@ -291,12 +291,16 @@ class files extends filesystem
 	 * @return int New record ID created
 	 */
 
-	function add_template($template)
+	function add_template($template, $types='')
 	{
 		$template['id']=$this->nextid('fs_templates');
 
+		if(!empty($types))
+		{
+			$types.='i';
+		}
 
-		if($this->insert_row('fs_templates', $template))
+		if($this->insert_row('fs_templates', $template, $types))
 		{
 			return $template['id'];
 		}
@@ -312,10 +316,9 @@ class files extends filesystem
 	 * @return bool True on success
 	 */
 
-	function update_template($template)
+	function update_template($template, $types='')
 	{
-
-		return $this->update_row('fs_templates', 'id', $template);
+		return $this->update_row('fs_templates', 'id', $template, $types);
 	}
 
 

@@ -168,10 +168,12 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 			$db = new db();
 			$db->halt_on_error = 'no';
 
-			$GO_CONFIG->db_host = ($_POST['db_host']);
-			$GO_CONFIG->db_name = ($_POST['db_name']);
-			$GO_CONFIG->db_user = ($_POST['db_user']);
-			$GO_CONFIG->db_pass = ($_POST['db_pass']);
+			$GO_CONFIG->db_host = $_POST['db_host'];
+			$GO_CONFIG->db_name = $_POST['db_name'];
+			$GO_CONFIG->db_user = $_POST['db_user'];
+			$GO_CONFIG->db_pass = $_POST['db_pass'];
+			$GO_CONFIG->db_port = $_POST['db_port'];
+			$GO_CONFIG->db_socket = $_POST['db_socket'];
 			
 			$db->set_config($GO_CONFIG);
 
@@ -510,20 +512,17 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 				$feedback ='<font color="red">Passwords did not match</font>';
 			}else
 			{
-				$GO_CONFIG->db_name = '';
-				$GO_CONFIG->db_pass = '';
-				$GO_CONFIG->db_user = '';
-				$GO_CONFIG->db_host = '';
-
 				$db = new db();
 				$db->halt_on_error = 'no';
 
-				$GO_CONFIG->db_host = ($_POST['db_host']);
-				$GO_CONFIG->db_name = ($_POST['db_name']);
-				$GO_CONFIG->db_user = ($_POST['db_user']);
-				$GO_CONFIG->db_pass = ($_POST['db_pass1']);
+				$GO_CONFIG->db_host = $_POST['db_host'];
+				$GO_CONFIG->db_name = $_POST['db_name'];
+				$GO_CONFIG->db_user = $_POST['db_user'];
+				$GO_CONFIG->db_pass = $_POST['db_pass1'];
+				$GO_CONFIG->db_port = $_POST['db_port'];
+				$GO_CONFIG->db_socket = $_POST['db_socket'];
 				
-				$db->set_parameters($_POST['db_host'], null, $_POST['admin_user'], $_POST['admin_pass']);
+				$db->set_parameters($_POST['db_host'], null, $_POST['admin_user'], $_POST['admin_pass'], $_POST['db_port'], $_POST['db_socket']);
 
 				if($db->connect())
 				{
@@ -653,6 +652,24 @@ switch($task)
 			</tr>
 			<tr>
 			<td>
+			Port:
+			</td>
+			<td>
+			<?php $db_port = isset($_POST['db_port']) ? $_POST['db_port'] : $GO_CONFIG->db_port; ?>
+			<input type="text" size="40" name="db_port" value="<?php echo $db_port; ?>" />
+			</td>
+			</tr>
+			<tr>
+			<td>
+			Or you can use a socket:
+			</td>
+			<td>
+			<?php $db_socket = isset($_POST['db_socket']) ? $_POST['db_socket'] : $GO_CONFIG->db_socket; ?>
+			<input type="text" size="40" name="db_socket" value="<?php echo $db_socket; ?>" />
+			</td>
+			</tr>
+			<tr>
+			<td>
 			Administrator username:
 			</td>
 			<td>
@@ -668,9 +685,7 @@ switch($task)
 			<input type="password" size="40" name="admin_pass" value=""  />
 			</td>
 			</tr>
-
 			<tr><td colspan="2">&nbsp;</td></tr>
-
 			<tr>
 			<td>
 			Database:
@@ -755,6 +770,22 @@ switch($task)
 			</td>
 			<td>
 			<input type="text" size="40" name="db_host" value="<?php echo $GO_CONFIG->db_host; ?>" />
+			</td>
+			</tr>
+			<tr>
+			<td>
+			Port:
+			</td>
+			<td>
+			<input type="text" size="40" name="db_port" value="<?php echo $GO_CONFIG->db_port; ?>" />
+			</td>
+			</tr>
+			<tr>
+			<td>
+			Or you can use a socket:
+			</td>
+			<td>
+			<input type="text" size="40" name="db_socket" value="<?php echo $GO_CONFIG->db_socket; ?>" />
 			</td>
 			</tr>
 			<tr>

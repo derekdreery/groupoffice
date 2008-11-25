@@ -53,7 +53,7 @@ class db extends base_db{
 	{
 		if(!$this->link)
 		{			
-			@$this->link = new MySQLi($this->host, $this->user, $this->password, $this->database);
+			@$this->link = new MySQLi($this->host, $this->user, $this->password, $this->database, $this->port, $this->socket);
 			
 			//workaround for PHP bug: http://bugs.php.net/bug.php?id=45940&edit=2
 			//$this->link->connect_error does not work			
