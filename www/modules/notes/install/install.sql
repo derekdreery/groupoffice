@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `go_links_4` (
   `folder_id` int(11) NOT NULL,
   `link_id` int(11) NOT NULL,
   `link_type` int(11) NOT NULL,
-  `description` varchar(100) NOT NULL,
+  `description` varchar(100) NULL,
   `ctime` int(11) NOT NULL,
   KEY `link_id` (`link_id`,`link_type`),
   KEY `id` (`id`,`folder_id`),
@@ -46,9 +46,9 @@ CREATE TABLE IF NOT EXISTS `go_links_4` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Tabel structuur voor tabel `no_categories`
--- 
+--
 
 DROP TABLE IF EXISTS `no_categories`;
 CREATE TABLE IF NOT EXISTS `no_categories` (
@@ -56,15 +56,15 @@ CREATE TABLE IF NOT EXISTS `no_categories` (
   `user_id` int(11) NOT NULL,
   `acl_read` int(11) NOT NULL,
   `acl_write` int(11) NOT NULL,
-  `name` varchar(50) NOT NULL,
+  `name` varchar(50) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Tabel structuur voor tabel `no_notes`
--- 
+--
 
 DROP TABLE IF EXISTS `no_notes`;
 CREATE TABLE IF NOT EXISTS `no_notes` (
@@ -73,8 +73,8 @@ CREATE TABLE IF NOT EXISTS `no_notes` (
   `user_id` int(11) NOT NULL default '0',
   `ctime` int(11) NOT NULL default '0',
   `mtime` int(11) NOT NULL default '0',
-  `name` varchar(50) NOT NULL default '',
-  `content` text NOT NULL,
+  `name` varchar(50) default NULL,
+  `content` text,
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`),
   KEY `category_id` (`category_id`)

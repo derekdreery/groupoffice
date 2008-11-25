@@ -15,9 +15,9 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Tabel structuur voor tabel `fs_files`
--- 
+--
 
 DROP TABLE IF EXISTS `fs_files`;
 CREATE TABLE IF NOT EXISTS `fs_files` (
@@ -42,7 +42,7 @@ DROP TABLE IF EXISTS `fs_folders`;
 CREATE TABLE IF NOT EXISTS `fs_folders` (
   `user_id` int(11) NOT NULL default '0',
   `id` int(11) NOT NULL,
-  `path` varchar(255) NOT NULL,
+  `path` varchar(255) NOT NULL default '',
   `visible` enum('0','1') NOT NULL,
   `acl_read` int(11) NOT NULL default '0',
   `acl_write` int(11) NOT NULL default '0',
@@ -55,35 +55,35 @@ CREATE TABLE IF NOT EXISTS `fs_folders` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Tabel structuur voor tabel `fs_notifications`
--- 
+--
 
 DROP TABLE IF EXISTS `fs_notifications`;
 CREATE TABLE IF NOT EXISTS `fs_notifications` (
-  `path` varchar(255) NOT NULL,
+  `path` varchar(255) NOT NULL default '',
   `user_id` int(11) NOT NULL,
   PRIMARY KEY  (`path`,`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Tabel structuur voor tabel `fs_statuses`
--- 
+--
 
 DROP TABLE IF EXISTS `fs_statuses`;
 CREATE TABLE IF NOT EXISTS `fs_statuses` (
   `id` int(11) NOT NULL default '0',
-  `name` varchar(50) NOT NULL default '',
+  `name` varchar(50) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Tabel structuur voor tabel `fs_status_history`
--- 
+--
 
 DROP TABLE IF EXISTS `fs_status_history`;
 CREATE TABLE IF NOT EXISTS `fs_status_history` (
@@ -92,22 +92,22 @@ CREATE TABLE IF NOT EXISTS `fs_status_history` (
   `status_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   `ctime` int(11) NOT NULL default '0',
-  `comments` text NOT NULL,
+  `comments` text,
   PRIMARY KEY  (`id`),
   KEY `link_id` (`link_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Tabel structuur voor tabel `fs_templates`
--- 
+--
 
 DROP TABLE IF EXISTS `fs_templates`;
 CREATE TABLE IF NOT EXISTS `fs_templates` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `name` varchar(50) NOT NULL,
+  `name` varchar(50) default NULL,
   `acl_read` int(11) NOT NULL,
   `acl_write` int(11) NOT NULL,
   `content` blob NOT NULL,
@@ -115,6 +115,7 @@ CREATE TABLE IF NOT EXISTS `fs_templates` (
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 
 -- --------------------------------------------------------
 
@@ -128,7 +129,7 @@ CREATE TABLE IF NOT EXISTS `go_links_6` (
   `folder_id` int(11) NOT NULL,
   `link_id` int(11) NOT NULL,
   `link_type` int(11) NOT NULL,
-  `description` varchar(100) NOT NULL,
+  `description` varchar(100) NULL,
   `ctime` int(11) NOT NULL,
   KEY `link_id` (`link_id`,`link_type`),
   KEY `id` (`id`,`folder_id`),

@@ -27,4 +27,6 @@ $updates[]="CREATE TABLE IF NOT EXISTS `go_cache` (
   PRIMARY KEY  (`user_id`,`key`),
   KEY `mtime` (`mtime`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates[]='script:4_set_null_allowed.inc.php';
 ?>

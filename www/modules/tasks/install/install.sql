@@ -22,7 +22,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 DROP TABLE IF EXISTS `ta_lists`;
 CREATE TABLE IF NOT EXISTS `ta_lists` (
   `id` int(11) NOT NULL,
-  `name` varchar(100) NOT NULL,
+  `name` varchar(100) default NULL,
   `user_id` int(11) NOT NULL,
   `acl_read` int(11) NOT NULL,
   `acl_write` int(11) NOT NULL,
@@ -45,16 +45,17 @@ CREATE TABLE IF NOT EXISTS `ta_tasks` (
   `start_time` int(11) NOT NULL,
   `due_time` int(11) NOT NULL,
   `completion_time` int(11) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `description` text NOT NULL,
-  `status` varchar(20) NOT NULL,
+  `name` varchar(100) default NULL,
+  `description` text,
+  `status` varchar(20) default NULL,
   `repeat_end_time` int(11) NOT NULL,
   `reminder` int(11) NOT NULL,
-  `rrule` varchar(50) NOT NULL,
+  `rrule` varchar(50) default NULL,
   PRIMARY KEY  (`id`),
   KEY `list_id` (`tasklist_id`),
   KEY `rrule` (`rrule`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 
 DROP TABLE IF EXISTS `go_links_12`;
 CREATE TABLE IF NOT EXISTS `go_links_12` (
@@ -62,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `go_links_12` (
   `folder_id` int(11) NOT NULL,
   `link_id` int(11) NOT NULL,
   `link_type` int(11) NOT NULL,
-  `description` varchar(100) NOT NULL,
+  `description` varchar(100) NULL,
   `ctime` int(11) NOT NULL,
   KEY `link_id` (`link_id`,`link_type`),
   KEY `id` (`id`,`folder_id`),

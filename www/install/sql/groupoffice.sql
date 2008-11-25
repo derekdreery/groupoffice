@@ -13,21 +13,9 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- Database: `imfoss_nl`
 -- 
 
--- --------------------------------------------------------
-
-DROP TABLE IF EXISTS `go_cache`;
-CREATE TABLE IF NOT EXISTS `go_cache` (
-  `user_id` int(11) NOT NULL,
-  `key` varchar(255) NOT NULL,
-  `content` longtext NOT NULL,
-  `mtime` int(11) NOT NULL,
-  PRIMARY KEY  (`user_id`,`key`),
-  KEY `mtime` (`mtime`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- 
+--
 -- Tabel structuur voor tabel `go_acl`
--- 
+--
 
 DROP TABLE IF EXISTS `go_acl`;
 CREATE TABLE IF NOT EXISTS `go_acl` (
@@ -39,28 +27,44 @@ CREATE TABLE IF NOT EXISTS `go_acl` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Tabel structuur voor tabel `go_acl_items`
--- 
+--
 
 DROP TABLE IF EXISTS `go_acl_items`;
 CREATE TABLE IF NOT EXISTS `go_acl_items` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
-  `description` varchar(50) NOT NULL default '',
+  `description` varchar(50) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
--- 
+--
+-- Tabel structuur voor tabel `go_cache`
+--
+
+DROP TABLE IF EXISTS `go_cache`;
+CREATE TABLE IF NOT EXISTS `go_cache` (
+  `user_id` int(11) NOT NULL,
+  `key` varchar(255) NOT NULL default '',
+  `content` longtext,
+  `mtime` int(11) NOT NULL,
+  PRIMARY KEY  (`user_id`,`key`),
+  KEY `mtime` (`mtime`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Tabel structuur voor tabel `go_countries`
--- 
+--
 
 DROP TABLE IF EXISTS `go_countries`;
 CREATE TABLE IF NOT EXISTS `go_countries` (
   `id` int(11) NOT NULL default '0',
-  `name` varchar(64) NOT NULL default '',
+  `name` varchar(64) default NULL,
   `iso_code_2` char(2) NOT NULL default '',
   `iso_code_3` char(3) NOT NULL default '',
   PRIMARY KEY  (`id`)
@@ -68,9 +72,9 @@ CREATE TABLE IF NOT EXISTS `go_countries` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Tabel structuur voor tabel `go_db_sequence`
--- 
+--
 
 DROP TABLE IF EXISTS `go_db_sequence`;
 CREATE TABLE IF NOT EXISTS `go_db_sequence` (
@@ -81,23 +85,23 @@ CREATE TABLE IF NOT EXISTS `go_db_sequence` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Tabel structuur voor tabel `go_groups`
--- 
+--
 
 DROP TABLE IF EXISTS `go_groups`;
 CREATE TABLE IF NOT EXISTS `go_groups` (
   `id` int(11) NOT NULL default '0',
-  `name` varchar(50) NOT NULL default '',
+  `name` varchar(50) default NULL,
   `user_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Tabel structuur voor tabel `go_link_folders`
--- 
+--
 
 DROP TABLE IF EXISTS `go_link_folders`;
 CREATE TABLE IF NOT EXISTS `go_link_folders` (
@@ -105,7 +109,7 @@ CREATE TABLE IF NOT EXISTS `go_link_folders` (
   `parent_id` int(11) NOT NULL,
   `link_id` int(11) NOT NULL,
   `link_type` int(11) NOT NULL,
-  `name` varchar(50) NOT NULL,
+  `name` varchar(50) default NULL,
   PRIMARY KEY  (`id`),
   KEY `link_id` (`link_id`,`link_type`),
   KEY `parent_id` (`parent_id`)
@@ -113,26 +117,41 @@ CREATE TABLE IF NOT EXISTS `go_link_folders` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Tabel structuur voor tabel `go_log`
--- 
+--
 
 DROP TABLE IF EXISTS `go_log`;
 CREATE TABLE IF NOT EXISTS `go_log` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `module` varchar(50) NOT NULL,
+  `module` varchar(50) default NULL,
   `time` int(11) NOT NULL,
   `link_id` int(255) NOT NULL,
-  `text` varchar(255) NOT NULL,
+  `text` varchar(255) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
--- 
+--
+-- Tabel structuur voor tabel `go_mail_counter`
+--
+
+DROP TABLE IF EXISTS `go_mail_counter`;
+CREATE TABLE IF NOT EXISTS `go_mail_counter` (
+  `host` varchar(100) NOT NULL default '',
+  `date` date NOT NULL,
+  `count` int(11) NOT NULL,
+  PRIMARY KEY  (`host`),
+  KEY `date` (`date`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Tabel structuur voor tabel `go_modules`
--- 
+--
 
 DROP TABLE IF EXISTS `go_modules`;
 CREATE TABLE IF NOT EXISTS `go_modules` (
@@ -147,9 +166,9 @@ CREATE TABLE IF NOT EXISTS `go_modules` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Tabel structuur voor tabel `go_reminders`
--- 
+--
 
 DROP TABLE IF EXISTS `go_reminders`;
 CREATE TABLE IF NOT EXISTS `go_reminders` (
@@ -157,7 +176,7 @@ CREATE TABLE IF NOT EXISTS `go_reminders` (
   `link_id` int(11) NOT NULL default '0',
   `link_type` int(11) NOT NULL,
   `user_id` int(11) NOT NULL default '0',
-  `name` varchar(100) NOT NULL default '',
+  `name` varchar(100) default NULL,
   `time` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `link_id` (`link_id`)
@@ -165,22 +184,22 @@ CREATE TABLE IF NOT EXISTS `go_reminders` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Tabel structuur voor tabel `go_search_cache`
--- 
+--
 
 DROP TABLE IF EXISTS `go_search_cache`;
 CREATE TABLE IF NOT EXISTS `go_search_cache` (
   `user_id` int(11) NOT NULL default '0',
-  `table` varchar(50) NOT NULL default '',
+  `table` varchar(50) default NULL,
   `id` int(11) NOT NULL default '0',
-  `module` varchar(50) NOT NULL default '',
-  `name` varchar(100) NOT NULL default '',
-  `description` varchar(255) NOT NULL default '',
-  `url` varchar(255) NOT NULL default '',
+  `module` varchar(50) default NULL,
+  `name` varchar(100) default NULL,
+  `description` varchar(255) default NULL,
+  `url` varchar(255) default NULL,
   `link_type` int(11) NOT NULL default '0',
-  `type` varchar(20) NOT NULL default '',
-  `keywords` text NOT NULL,
+  `type` varchar(20) default NULL,
+  `keywords` text,
   `mtime` int(11) NOT NULL default '0',
   `acl_read` int(11) NOT NULL,
   `acl_write` int(11) NOT NULL,
@@ -190,9 +209,9 @@ CREATE TABLE IF NOT EXISTS `go_search_cache` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Tabel structuur voor tabel `go_search_sync`
--- 
+--
 
 DROP TABLE IF EXISTS `go_search_sync`;
 CREATE TABLE IF NOT EXISTS `go_search_sync` (
@@ -204,78 +223,79 @@ CREATE TABLE IF NOT EXISTS `go_search_sync` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Tabel structuur voor tabel `go_settings`
--- 
+--
 
 DROP TABLE IF EXISTS `go_settings`;
 CREATE TABLE IF NOT EXISTS `go_settings` (
   `user_id` int(11) NOT NULL default '0',
   `name` varchar(50) NOT NULL default '',
-  `value` text NOT NULL,
+  `value` text,
   PRIMARY KEY  (`user_id`,`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Tabel structuur voor tabel `go_state`
--- 
+--
 
 DROP TABLE IF EXISTS `go_state`;
 CREATE TABLE IF NOT EXISTS `go_state` (
   `user_id` int(11) NOT NULL,
-  `index` varchar(50) NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `value` text NOT NULL,
+  `index` varchar(50) NOT NULL default '',
+  `name` varchar(50) NOT NULL default '',
+  `value` text,
   PRIMARY KEY  (`user_id`,`index`,`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Tabel structuur voor tabel `go_users`
--- 
+--
+
 DROP TABLE IF EXISTS `go_users`;
 CREATE TABLE IF NOT EXISTS `go_users` (
   `id` int(11) NOT NULL default '0',
-  `username` varchar(50) NOT NULL default '',
-  `password` varchar(64) NOT NULL default '',
-  `auth_md5_pass` varchar(100) NOT NULL,
+  `username` varchar(50) default NULL,
+  `password` varchar(64) default NULL,
+  `auth_md5_pass` varchar(100) default NULL,
   `enabled` enum('0','1') NOT NULL default '1',
-  `first_name` varchar(50) NOT NULL default '',
-  `middle_name` varchar(50) NOT NULL default '',
-  `last_name` varchar(100) NOT NULL default '',
-  `initials` varchar(10) NOT NULL default '',
-  `title` varchar(10) NOT NULL default '',
+  `first_name` varchar(50) default NULL,
+  `middle_name` varchar(50) default NULL,
+  `last_name` varchar(100) default NULL,
+  `initials` varchar(10) default NULL,
+  `title` varchar(10) default NULL,
   `sex` enum('M','F') NOT NULL default 'M',
   `birthday` date NOT NULL default '0000-00-00',
-  `email` varchar(100) NOT NULL default '',
-  `company` varchar(50) NOT NULL default '',
-  `department` varchar(50) NOT NULL default '',
-  `function` varchar(50) NOT NULL default '',
-  `home_phone` varchar(20) NOT NULL default '',
-  `work_phone` varchar(20) NOT NULL default '',
-  `fax` varchar(20) NOT NULL default '',
-  `cellular` varchar(20) NOT NULL default '',
+  `email` varchar(100) default NULL,
+  `company` varchar(50) default NULL,
+  `department` varchar(50) default NULL,
+  `function` varchar(50) default NULL,
+  `home_phone` varchar(20) default NULL,
+  `work_phone` varchar(20) default NULL,
+  `fax` varchar(20) default NULL,
+  `cellular` varchar(20) default NULL,
   `country` char(2) NOT NULL,
-  `state` varchar(50) NOT NULL default '',
-  `city` varchar(50) NOT NULL default '',
-  `zip` varchar(10) NOT NULL default '',
-  `address` varchar(100) NOT NULL default '',
-  `address_no` varchar(10) NOT NULL default '',
-  `homepage` varchar(100) NOT NULL default '',
-  `work_address` varchar(100) NOT NULL default '',
-  `work_address_no` varchar(10) NOT NULL default '',
-  `work_zip` varchar(10) NOT NULL default '',
+  `state` varchar(50) default NULL,
+  `city` varchar(50) default NULL,
+  `zip` varchar(10) default NULL,
+  `address` varchar(100) default NULL,
+  `address_no` varchar(10) default NULL,
+  `homepage` varchar(100) default NULL,
+  `work_address` varchar(100) default NULL,
+  `work_address_no` varchar(10) default NULL,
+  `work_zip` varchar(10) default NULL,
   `work_country` char(2) NOT NULL,
-  `work_state` varchar(50) NOT NULL default '',
-  `work_city` varchar(50) NOT NULL default '',
-  `work_fax` varchar(20) NOT NULL default '',
+  `work_state` varchar(50) default NULL,
+  `work_city` varchar(50) default NULL,
+  `work_fax` varchar(20) default NULL,
   `acl_id` int(11) NOT NULL default '0',
-  `date_format` varchar(20) NOT NULL default 'd-m-Y H:i',
+  `date_format` varchar(20) default NULL,
   `date_seperator` char(1) NOT NULL default '-',
-  `time_format` varchar(10) NOT NULL default '',
+  `time_format` varchar(10) default NULL,
   `thousands_seperator` char(1) NOT NULL default '.',
   `decimal_seperator` char(1) NOT NULL default ',',
   `currency` char(3) NOT NULL default '',
@@ -283,14 +303,14 @@ CREATE TABLE IF NOT EXISTS `go_users` (
   `lastlogin` int(11) NOT NULL default '0',
   `registration_time` int(11) NOT NULL default '0',
   `max_rows_list` tinyint(4) NOT NULL default '15',
-  `timezone` varchar(50) NOT NULL default '0',
-  `start_module` varchar(50) NOT NULL default '',
-  `language` varchar(20) NOT NULL default '',
-  `theme` varchar(20) NOT NULL default '',
+  `timezone` varchar(50) default NULL,
+  `start_module` varchar(50) default NULL,
+  `language` varchar(20) default NULL,
+  `theme` varchar(20) default NULL,
   `first_weekday` tinyint(4) NOT NULL default '0',
-  `sort_name` varchar(20) NOT NULL default 'first_name',
-  `bank` varchar(50) NOT NULL default '',
-  `bank_no` varchar(50) NOT NULL default '',
+  `sort_name` varchar(20) default NULL,
+  `bank` varchar(50) default NULL,
+  `bank_no` varchar(50) default NULL,
   `mtime` int(11) NOT NULL default '0',
   `mute_sound` enum('0','1') NOT NULL,
   PRIMARY KEY  (`id`)
@@ -298,9 +318,9 @@ CREATE TABLE IF NOT EXISTS `go_users` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Tabel structuur voor tabel `go_users_groups`
--- 
+--
 
 DROP TABLE IF EXISTS `go_users_groups`;
 CREATE TABLE IF NOT EXISTS `go_users_groups` (
@@ -308,13 +328,3 @@ CREATE TABLE IF NOT EXISTS `go_users_groups` (
   `user_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`group_id`,`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
-DROP TABLE IF EXISTS `go_mail_counter`;
-CREATE TABLE `go_mail_counter` (
-`host` VARCHAR( 100 ) NOT NULL ,
-`date` DATE NOT NULL ,
-`count` INT NOT NULL ,
-PRIMARY KEY ( `host` ) ,
-INDEX ( `date` )
-) ENGINE = MYISAM DEFAULT CHARSET=utf8; 

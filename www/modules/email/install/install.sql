@@ -10,32 +10,6 @@
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
 --
--- Database: `go3test3`
---
-
-DROP TABLE IF EXISTS `em_messages_cache`;
-CREATE TABLE IF NOT EXISTS `em_messages_cache` (
-  `folder_id` int(11) NOT NULL,
-  `uid` int(11) NOT NULL,
-  `account_id` int(11) NOT NULL,
-  `new` enum('0','1') NOT NULL,
-  `subject` varchar(100) NOT NULL,
-  `from` varchar(100) NOT NULL,
-  `reply_to` varchar(100) NOT NULL,
-  `size` int(11) NOT NULL,
-  `udate` int(11) NOT NULL,
-  `attachments` enum('0','1') NOT NULL,
-  `flagged` enum('0','1') NOT NULL,
-  `answered` enum('0','1') NOT NULL,
-  `priority` tinyint(4) NOT NULL,
-  `to` varchar(100) NOT NULL,
-  PRIMARY KEY  (`folder_id`,`uid`),
-  KEY `account_id` (`account_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
 -- Tabel structuur voor tabel `em_accounts`
 --
 
@@ -43,36 +17,36 @@ DROP TABLE IF EXISTS `em_accounts`;
 CREATE TABLE IF NOT EXISTS `em_accounts` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
-  `type` varchar(4) NOT NULL default '',
-  `host` varchar(100) NOT NULL default '',
+  `type` varchar(4) default NULL,
+  `host` varchar(100) default NULL,
   `port` int(11) NOT NULL default '0',
   `use_ssl` enum('0','1') NOT NULL default '0',
   `novalidate_cert` enum('0','1') NOT NULL default '0',
-  `username` varchar(50) NOT NULL default '',
-  `password` varchar(64) NOT NULL default '',
-  `name` varchar(100) NOT NULL default '',
-  `email` varchar(100) NOT NULL default '',
-  `signature` text NOT NULL,
+  `username` varchar(50) default NULL,
+  `password` varchar(64) default NULL,
+  `name` varchar(100) default NULL,
+  `email` varchar(100) default NULL,
+  `signature` text,
   `standard` tinyint(4) NOT NULL default '0',
-  `mbroot` varchar(30) NOT NULL default '',
-  `sent` varchar(100) NOT NULL default '',
-  `drafts` varchar(100) NOT NULL default '',
-  `trash` varchar(100) NOT NULL default '',
-  `spam` varchar(100) NOT NULL default '',
-  `spamtag` varchar(20) NOT NULL default '',
+  `mbroot` varchar(30) default NULL,
+  `sent` varchar(100) default NULL,
+  `drafts` varchar(100) default NULL,
+  `trash` varchar(100) default NULL,
+  `spam` varchar(100) default NULL,
+  `spamtag` varchar(20) default NULL,
   `examine_headers` enum('0','1') NOT NULL default '0',
   `enable_vacation` enum('0','1') NOT NULL default '0',
-  `vacation_subject` varchar(100) NOT NULL default '',
-  `vacation_text` text NOT NULL,
+  `vacation_subject` varchar(100) default NULL,
+  `vacation_text` text,
   `auto_check` enum('0','1') NOT NULL default '0',
   `forward_enabled` enum('0','1') NOT NULL,
-  `forward_to` varchar(255) NOT NULL,
+  `forward_to` varchar(255) default NULL,
   `forward_local_copy` enum('0','1') NOT NULL,
-  `smtp_host` varchar(100) NOT NULL,
+  `smtp_host` varchar(100) default NULL,
   `smtp_port` int(11) NOT NULL,
   `smtp_encryption` tinyint(4) NOT NULL,
-  `smtp_username` varchar(50) NOT NULL,
-  `smtp_password` varchar(50) NOT NULL,
+  `smtp_username` varchar(50) default NULL,
+  `smtp_password` varchar(50) default NULL,
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -87,9 +61,9 @@ DROP TABLE IF EXISTS `em_filters`;
 CREATE TABLE IF NOT EXISTS `em_filters` (
   `id` int(11) NOT NULL default '0',
   `account_id` int(11) NOT NULL default '0',
-  `field` varchar(20) NOT NULL default '0',
-  `keyword` varchar(100) NOT NULL default '0',
-  `folder` varchar(100) NOT NULL default '0',
+  `field` varchar(20) default NULL,
+  `keyword` varchar(100) default NULL,
+  `folder` varchar(100) default NULL,
   `priority` int(11) NOT NULL default '0',
   `mark_as_read` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`)
@@ -105,7 +79,7 @@ DROP TABLE IF EXISTS `em_folders`;
 CREATE TABLE IF NOT EXISTS `em_folders` (
   `id` int(11) NOT NULL default '0',
   `account_id` int(11) NOT NULL default '0',
-  `name` varchar(100) NOT NULL default '',
+  `name` varchar(100) default NULL,
   `subscribed` enum('0','1') NOT NULL default '0',
   `parent_id` int(11) NOT NULL default '0',
   `delimiter` char(1) NOT NULL default '',
@@ -114,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `em_folders` (
   `msgcount` int(11) NOT NULL default '0',
   `unseen` int(11) NOT NULL default '0',
   `auto_check` enum('0','1') NOT NULL default '0',
-  `sort` longtext NOT NULL,
+  `sort` longtext,
   PRIMARY KEY  (`id`),
   KEY `account_id` (`account_id`),
   KEY `parent_id` (`parent_id`)
@@ -130,16 +104,41 @@ DROP TABLE IF EXISTS `em_links`;
 CREATE TABLE IF NOT EXISTS `em_links` (
   `link_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
-  `from` varchar(255) NOT NULL default '',
-  `to` text NOT NULL,
-  `subject` varchar(255) NOT NULL default '',
+  `from` varchar(255) default NULL,
+  `to` text,
+  `subject` varchar(255) default NULL,
   `time` int(11) NOT NULL default '0',
-  `path` varchar(255) NOT NULL default '',
+  `path` varchar(255) default NULL,
   `ctime` int(11) NOT NULL,
   PRIMARY KEY  (`link_id`),
   KEY `account_id` (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
+--
+-- Tabel structuur voor tabel `em_messages_cache`
+--
+
+DROP TABLE IF EXISTS `em_messages_cache`;
+CREATE TABLE IF NOT EXISTS `em_messages_cache` (
+  `folder_id` int(11) NOT NULL,
+  `uid` int(11) NOT NULL,
+  `account_id` int(11) NOT NULL,
+  `new` enum('0','1') NOT NULL,
+  `subject` varchar(100) default NULL,
+  `from` varchar(100) default NULL,
+  `reply_to` varchar(100) default NULL,
+  `size` int(11) NOT NULL,
+  `udate` int(11) NOT NULL,
+  `attachments` enum('0','1') NOT NULL,
+  `flagged` enum('0','1') NOT NULL,
+  `answered` enum('0','1') NOT NULL,
+  `priority` tinyint(4) NOT NULL,
+  `to` varchar(100) default NULL,
+  PRIMARY KEY  (`folder_id`,`uid`),
+  KEY `account_id` (`account_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- --------------------------------------------------------
 
 -- 
@@ -152,7 +151,7 @@ CREATE TABLE IF NOT EXISTS `go_links_9` (
   `folder_id` int(11) NOT NULL,
   `link_id` int(11) NOT NULL,
   `link_type` int(11) NOT NULL,
-  `description` varchar(100) NOT NULL,
+  `description` varchar(100) NULL,
   `ctime` int(11) NOT NULL,
   KEY `link_id` (`link_id`,`link_type`),
   KEY `id` (`id`,`folder_id`),
