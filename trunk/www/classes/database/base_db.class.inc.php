@@ -51,14 +51,14 @@ class base_db{
 	 * @var string
 	 */
 	var $password = "";
-	
+
 	/**
-	 * Specifies the port number to attempt to connect to the MySQL server. 
+	 * Specifies the port number to attempt to connect to the MySQL server.
 	 *
 	 * @var string
 	 */
 	var $port = "";
-	
+
 	/**
 	 * Specifies the socket or named pipe that should be used.
 	 *
@@ -193,7 +193,7 @@ class base_db{
 			}
 		}
 	}
-	
+
 	/**
 	 * Set the connection parameters manually
 	 *
@@ -202,7 +202,7 @@ class base_db{
 	 * @param string $user
 	 * @param string $pass
 	 */
-	
+
 	public function set_parameters($host, $database, $user, $pass, $port=3306, $socket='')
 	{
 		$this->host = $host;
@@ -445,50 +445,62 @@ class base_db{
 		{
 			$index = array($index);
 		}
-		if(empty($types))
-		{
-			$types = str_repeat('s', count($fields));
-		}
+
 
 		$field_types='';
 		$index_types='';
 		$count=0;
 		$indexes=array();
 
-		foreach($fields as $key => $value)
+		if(empty($types))
 		{
-			if(!in_array($key, $index))
-			{
-				$updates[] = "`$key`=?";
-				$field_values[] = $value;
-				$field_types.=$types[$count];
-			}else
-			{
-				$indexes[]="`$key`=?";
-				$index_types.=$types[$count];
-				$index_values[] = $value;
-			}
-			$count++;
-		}
-		if(isset($updates))
-		{
-			$sql = "UPDATE `$table` SET ".implode(',',$updates)." WHERE ".implode(' AND ', $indexes);
-				
-			foreach($index_values as $index_value)
-			{
-				$field_values[]=$index_value;
-			}
-			$field_types .= $index_types;
+			foreach($fields as $key => $value)
+	  	{
+	  		if(!in_array($key, $index))
+	  		{
+	  			$updates[] = "`$key`='$value'";
+	  		}
+	  	}
+	  	if(isset($updates))
+	  	{
+	  		$sql = "UPDATE `$table` SET ".implode(',',$updates)." WHERE ";	  		
 
-			if(!$this->query($sql, $field_types, $field_values))
+  			$indexes=array();
+  			foreach($index as $subindex)
+  			{
+  				$indexes[]="`$subindex`='".$this->escape($fields[$subindex])."'";
+  			}
+  			$sql .= implode(' AND ', $indexes);
+	  		return $this->query($sql);
+	  	}
+		}else
+		{
+			foreach($fields as $key => $value)
 			{
-				if($this->halt_on_error=='yes')
+				if(!in_array($key, $index))
 				{
-					throw new DatabaseUpdateException();
+					$updates[] = "`$key`=?";
+					$field_values[] = $value;
+					$field_types.=$types[$count];
+				}else
+				{
+					$indexes[]="`$key`=?";
+					$index_types.=$types[$count];
+					$index_values[] = $value;
 				}
-			}else
+				$count++;
+			}
+			if(isset($updates))
 			{
-				return true;
+				$sql = "UPDATE `$table` SET ".implode(',',$updates)." WHERE ".implode(' AND ', $indexes);
+
+				foreach($index_values as $index_value)
+				{
+					$field_values[]=$index_value;
+				}
+				$field_types .= $index_types;
+
+				return $this->query($sql, $field_types, $field_values);
 			}
 		}
 			
@@ -516,33 +528,36 @@ class base_db{
 		foreach($fields as $key => $value)
 		{
 			$field_names[] = $key;
-			$field_values[] = $value;
+			if(empty($types))
+			{
+				$field_values[] = $this->escape($value, $trim);
+			}else
+			{
+				$field_values[] = $value;
+			}
 		}
 		if(isset($field_names))
 		{
-			$sql = $replace ? 'REPLACE' : 'INSERT';
-			$sql .= " INTO `$table` (`".implode('`,`', $field_names)."`) VALUES ".
-  					"(".str_repeat('?,', count($field_values)-1)."?)";
-				
 			if(empty($types))
 			{
-				$types = str_repeat('s',count($field_values));
-			}
-				
-			if(!$this->query($sql, $types, $field_values))
-			{
-				if($this->halt_on_error=='yes')
-				{
-					throw new DatabaseInsertException();
-				}
+				$sql = $replace ? 'REPLACE' : 'INSERT';
+				$sql .= " INTO `$table` (`".implode('`,`', $field_names)."`) VALUES ".
+	  					"('".implode("','", $field_values)."')";
+			
+				return $this->query($sql);
 			}else
 			{
-				return true;
+				$sql = $replace ? 'REPLACE' : 'INSERT';
+				$sql .= " INTO `$table` (`".implode('`,`', $field_names)."`) VALUES ".
+	  					"(".str_repeat('?,', count($field_values)-1)."?)";
+					
+				return $this->query($sql, $types, $field_values);
 			}
 		}else
 		{
-			throw new DatabaseInsertException();
-		}			
+			$this->halt('Error insering row');
+		}
+		return false;
 	}
 
 	/**
@@ -623,13 +638,13 @@ class base_db{
 			$this->error);
 		}
 	}
-	
+
 	/**
 	 * Close the database connection
 	 *
 	 */
 	public function close(){
-	
+
 	}
 
 }

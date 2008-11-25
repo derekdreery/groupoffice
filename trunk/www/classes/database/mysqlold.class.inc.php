@@ -77,12 +77,8 @@ class db extends base_db {
 		{
 			$host = $this->host.':'.$this->port;
 		}
-		
-		
-		
+				
 		if ( 0 == $this->link ) {
-			debug($host);
-
 			if(!$this->pconnect) {
 				$this->link = mysql_connect($host, $this->user, $this->password);
 			} else {

@@ -17,16 +17,16 @@
 -- 
 
 DROP TABLE IF EXISTS `cal_calendars`;
-CREATE TABLE `cal_calendars` (
+CREATE TABLE IF NOT EXISTS `cal_calendars` (
   `id` int(11) NOT NULL default '0',
   `group_id` int(11) NOT NULL default '1',
   `user_id` int(11) NOT NULL default '0',
   `acl_read` int(11) NOT NULL default '0',
   `acl_write` int(11) NOT NULL default '0',
-  `name` varchar(100) NOT NULL default '',
+  `name` varchar(100) default NULL,
   `start_hour` tinyint(4) NOT NULL default '0',
   `end_hour` tinyint(4) NOT NULL default '0',
-  `background` varchar(6) NOT NULL default 'FFFFCC',
+  `background` varchar(6) default NULL,
   `time_interval` int(11) NOT NULL default '1800',
   `public` enum('0','1') NOT NULL,
   PRIMARY KEY  (`id`),
@@ -35,9 +35,9 @@ CREATE TABLE `cal_calendars` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Tabel structuur voor tabel `cal_events`
--- 
+--
 
 DROP TABLE IF EXISTS `cal_events`;
 CREATE TABLE IF NOT EXISTS `cal_events` (
@@ -48,18 +48,18 @@ CREATE TABLE IF NOT EXISTS `cal_events` (
   `start_time` int(11) NOT NULL default '0',
   `end_time` int(11) NOT NULL default '0',
   `all_day_event` enum('0','1') NOT NULL default '0',
-  `name` varchar(100) NOT NULL default '',
-  `description` text NOT NULL,
-  `location` varchar(100) NOT NULL default '',
+  `name` varchar(100) default NULL,
+  `description` text,
+  `location` varchar(100) default NULL,
   `repeat_end_time` int(11) NOT NULL default '0',
   `reminder` int(11) NOT NULL default '0',
   `ctime` int(11) NOT NULL default '0',
   `mtime` int(11) NOT NULL default '0',
   `busy` enum('0','1') NOT NULL default '0',
-  `status` varchar(20) NOT NULL,
+  `status` varchar(20) default NULL,
   `participants_event_id` int(11) NOT NULL,
   `private` enum('0','1') NOT NULL,
-  `rrule` varchar(100) NOT NULL,
+  `rrule` varchar(100) default NULL,
   `background` char(6) NOT NULL default 'ebf1e2',
   PRIMARY KEY  (`id`),
   KEY `start_time` (`start_time`),
@@ -71,12 +71,12 @@ CREATE TABLE IF NOT EXISTS `cal_events` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Tabel structuur voor tabel `cal_exceptions`
--- 
+--
 
 DROP TABLE IF EXISTS `cal_exceptions`;
-CREATE TABLE `cal_exceptions` (
+CREATE TABLE IF NOT EXISTS `cal_exceptions` (
   `id` int(11) NOT NULL default '0',
   `event_id` int(11) NOT NULL default '0',
   `time` int(11) NOT NULL default '0',
@@ -86,16 +86,16 @@ CREATE TABLE `cal_exceptions` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Tabel structuur voor tabel `cal_participants`
--- 
+--
 
 DROP TABLE IF EXISTS `cal_participants`;
-CREATE TABLE `cal_participants` (
+CREATE TABLE IF NOT EXISTS `cal_participants` (
   `id` int(11) NOT NULL default '0',
   `event_id` int(11) NOT NULL default '0',
-  `name` varchar(50) NOT NULL default '',
-  `email` varchar(100) NOT NULL default '',
+  `name` varchar(50) default NULL,
+  `email` varchar(100) default NULL,
   `user_id` int(11) NOT NULL default '0',
   `status` enum('0','1','2') NOT NULL default '0',
   PRIMARY KEY  (`id`)
@@ -103,15 +103,15 @@ CREATE TABLE `cal_participants` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Tabel structuur voor tabel `cal_views`
--- 
+--
 
 DROP TABLE IF EXISTS `cal_views`;
-CREATE TABLE `cal_views` (
+CREATE TABLE IF NOT EXISTS `cal_views` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
-  `name` varchar(50) NOT NULL default '',
+  `name` varchar(50) default NULL,
   `start_hour` tinyint(4) NOT NULL default '0',
   `end_hour` tinyint(4) NOT NULL default '0',
   `event_colors_override` enum('0','1') NOT NULL default '0',
@@ -124,19 +124,18 @@ CREATE TABLE `cal_views` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Tabel structuur voor tabel `cal_views_calendars`
--- 
+--
 
 DROP TABLE IF EXISTS `cal_views_calendars`;
-CREATE TABLE `cal_views_calendars` (
+CREATE TABLE IF NOT EXISTS `cal_views_calendars` (
   `view_id` int(11) NOT NULL default '0',
   `calendar_id` int(11) NOT NULL default '0',
   `background` char(6) NOT NULL default 'CCFFCC',
   PRIMARY KEY  (`view_id`,`calendar_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
 
 -- 
 -- Tabel structuur voor tabel `go_links_1`
@@ -148,7 +147,7 @@ CREATE TABLE IF NOT EXISTS `go_links_1` (
   `folder_id` int(11) NOT NULL,
   `link_id` int(11) NOT NULL,
   `link_type` int(11) NOT NULL,
-  `description` varchar(100) NOT NULL,
+  `description` varchar(100) NULL,
   `ctime` int(11) NOT NULL,
   KEY `link_id` (`link_id`,`link_type`),
   KEY `id` (`id`,`folder_id`),

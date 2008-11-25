@@ -826,9 +826,11 @@ class GO_USERS extends db
 			$user['acl_id'] = $GO_SECURITY->get_new_acl( $user['email'] );
 		}
 		
-		
+		$user['auth_md5_pass']='';
 
 		$user['registration_time'] = $user['mtime']=time();
+		
+	
 		
 		$params = array('user'=>$user);
 		$GO_MODULES->fire_event('before_add_user', $params);

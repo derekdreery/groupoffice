@@ -512,14 +512,12 @@ class Date
 	public static function to_db_date($date_string, $with_time = false) {
 		if(empty($date_string))
 		{
-			return '';
+			return '0000-00-00';
 		}
 		$time = Date::to_unixtime($date_string);
 		$date_format = $with_time ? 'Y-m-d H:i' : 'Y-m-d';
 		return date($date_format, $time);
 	}
-
-
 
 	/**
 	 * Add a period to a unix timestamp

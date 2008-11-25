@@ -216,8 +216,6 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 				//store the version number for future upgrades
 				$GO_CONFIG->save_setting('version', count($updates));
 				
-				
-				
 				$user['id'] = $GO_USERS->nextid("go_users");
 
 				$GO_GROUPS->query("DELETE FROM go_db_sequence WHERE seq_name='groups'");
@@ -228,8 +226,6 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 				$internal_group_id = $GO_GROUPS->add_group($user['id'], $lang['common']['group_internal']);
 				
 				$user_groups = array($admin_group_id, $everyone_group_id, $internal_group_id);
-				
-				
 				
 				$GO_MODULES->load_modules();
 				
@@ -260,6 +256,8 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 					}
 				}
 				
+
+				
 				$user['language'] = $GO_LANGUAGE->language;
 				$user['first_name']='Group-Office';
 				$user['middle_name']='';
@@ -272,6 +270,7 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 				$user['country']=$GO_CONFIG->default_country;
 				$user['work_country']=$GO_CONFIG->default_country;
 
+				$GO_USERS->debug=true;
 				$GO_USERS->add_user($user,$user_groups,array($GO_CONFIG->group_everyone));
 				//filesystem::mkdir_recursive($GO_CONFIG->file_storage_path.'users/admin/');
 				
