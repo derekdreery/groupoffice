@@ -243,6 +243,11 @@ class cached_imap extends imap{
 
 				foreach($new_messages as $message)
 				{
+					if(strlen($message['to'])>100)
+					{
+						$message['to']=substr($message['to'],0,100);
+					}
+					
 					$messages[$message['uid']]=$message;
 					$messages[$message['uid']]['cached']=false;
 					

@@ -418,15 +418,16 @@ class imap{
 			
 			//$cached_message['folder_id']=$folder_id;
 			$cached_message['uid']=$message['uid'];
-			$cached_message['new']=$message['new'];
+			$cached_message['new']=$message['new'] ? '1' : '0';
 			$cached_message['subject']=$message['subject'];
 			$cached_message['size']=$message['uid'];
 			$cached_message['udate']=$message['udate'];
-			$cached_message['attachments']=$message['attachments'];
-			$cached_message['flagged']=$message['flagged'];
-			$cached_message['answered']=$message['answered'];
+			$cached_message['attachments']=$message['attachments'] ? '1' : '0';
+			$cached_message['flagged']=$message['flagged'] ? '1' : '0';
+			$cached_message['answered']=$message['answered'] ? '1' : '0';
 			$cached_message['priority']=empty($message['priority']) ? 3 : intval($message['priority']);			
 			$cached_message['from']=$message['from'];
+			$cached_message['reply_to']=$message['reply_to'];
 			$cached_message['to']=implode(',', $message['to']);	
 
 			$messages[$message['uid']]=$cached_message;
