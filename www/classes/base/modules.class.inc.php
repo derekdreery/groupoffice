@@ -302,6 +302,7 @@ class GO_MODULES extends db {
 		$module['acl_read']=$GO_SECURITY->get_new_acl();
 		$module['acl_write']=$GO_SECURITY->get_new_acl();
 		
+		$module['version']=0;
 		$updates_file = $GO_CONFIG->root_path.'modules/'.$module_id.'/install/updates.inc.php';		
 		if(file_exists($updates_file))
 		{
