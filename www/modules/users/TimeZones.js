@@ -354,7 +354,7 @@ GO.users.TimeZones=[
 ["EST"],
 ["EST5EDT"],
 ["Etc/GMT"],
-["Etc/GMT+0"],
+/*["Etc/GMT+0"],
 ["Etc/GMT+1"],
 ["Etc/GMT+10"],
 ["Etc/GMT+11"],
@@ -381,7 +381,7 @@ GO.users.TimeZones=[
 ["Etc/GMT-6"],
 ["Etc/GMT-7"],
 ["Etc/GMT-8"],
-["Etc/GMT-9"],
+["Etc/GMT-9"],*/
 ["Etc/GMT0"],
 ["Etc/Greenwich"],
 ["Etc/UCT"],

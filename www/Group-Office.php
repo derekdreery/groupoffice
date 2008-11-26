@@ -82,7 +82,7 @@ $GO_THEME = new GO_THEME();
 $GO_AUTH = new GO_AUTH();
 $GO_USERS = new GO_USERS();
 
-if(strlen($_SESSION['GO_SESSION']['timezone'])>3)
+if(!is_int($_SESSION['GO_SESSION']['timezone']))
 {
 	//set user timezone setting after user class is loaded
 	date_default_timezone_set($_SESSION['GO_SESSION']['timezone']);

@@ -422,6 +422,11 @@ class search extends db {
 		//$this->replace_row('go_search_cache', $result);
 		
 	//	go_log(LOG_DEBUG, var_export($result, true));
+	
+		if(isset($result['keywords']) && strlen($result['keywords'])>255)
+		{
+			$result['keywords']=substr($result['keywords'],0,255);
+		}
 		
 		if($this->get_search_result($result['id'], $result['link_type']))
  		{
