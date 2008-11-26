@@ -30,9 +30,9 @@ try
 			$contact_id = isset($_REQUEST['contact_id']) ? ($_REQUEST['contact_id']) : 0;
 
 			$credentials = array (
-				'first_name','middle_name','last_name','title','initials','sex','birthday','email',
+				'first_name','middle_name','last_name','title','initials','sex','email',
 				'email2','email3','home_phone','fax','cellular','comment','address','address_no',
-				'zip','city','state','country','company','company_id','department','function','work_phone',
+				'zip','city','state','country','company','department','function','work_phone',
 				'work_fax','addressbook_id','salutation'
 				);
 
@@ -42,6 +42,7 @@ try
 					$contact_credentials[$key] = isset($_REQUEST[$key]) ? $_REQUEST[$key] : '';
 				}
 				
+				$contact_credentials['company_id'] = !empty($_REQUEST['company_id']) ? $_REQUEST['company_id'] : 0;
 				
 				
 				$addressbook = $ab->get_addressbook($contact_credentials['addressbook_id']);
@@ -73,6 +74,10 @@ try
 						$contact_credentials['company_id'] = $ab->add_company($company);
 					}
 				}
+				
+				if(!empty($contact_credentials['birthday']))
+					$contact_credentials['birthday'] = Date::to_db_date($contact_credentials['birthday'], false);
+				
 				unset($contact_credentials['company']);
 				if ($contact_id < 1)
 				{					
@@ -98,7 +103,7 @@ try
 				} else {
 					
 					$contact_credentials['id'] = $contact_id;
-					$contact_credentials['birthday'] = Date::to_db_date($contact_credentials['birthday'], false);
+					
 
 					if($old_contact['addressbook_id']!=$contact_credentials['addressbook_id'])
 					{

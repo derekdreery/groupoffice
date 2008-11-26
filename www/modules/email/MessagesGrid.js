@@ -160,7 +160,7 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
 			str += '<div class="email-grid-icon btn-message"></div>';
 		}
 		
-		if(record.data['attachments'])
+		if(record.data['attachments']=='1')
 		{
 			str += '<div class="email-grid-icon ml-icon-attach"></div>';
 			//str += '<img src=\"' + GOimages['attach'] +' \" style="display:block" />';
