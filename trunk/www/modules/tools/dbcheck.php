@@ -26,6 +26,36 @@ $db3 = new db();
 $db = new db();
 $db->halt_on_error = 'no';
 
+$acls=array();
+
+$db->query("SELECT acl_read FROM `go_modules` GROUP BY acl_read HAVING count( * )>1");
+while($record = $db->next_record())
+{
+	$acls[]=$record['acl_read'];
+}
+
+if(count($acls))
+{
+	echo "Correcting module permissions...<br />";
+	foreach($acls as $acl_read)
+	{
+		$sql = "SELECT * FROM go_modules WHERE acl_read='$acl_read'";
+		$db->query($sql);
+		$first = $db->next_record();
+		while($record = $db->next_record())
+		{
+			$mod['id']=$record['id'];
+			$mod['acl_read']=$GO_SECURITY->copy_acl($first['acl_read']);
+			$mod['acl_write']=$GO_SECURITY->copy_acl($first['acl_write']);
+			
+			$db2->update_row('go_modules', 'id', $mod);
+		}
+	}
+	$GO_MODULES->load_modules();
+	echo "Done<br /><br />";
+}
+
+
 echo 'Checking ACL...<br />';
 
 $sql = "SELECT * FROM go_acl_items";

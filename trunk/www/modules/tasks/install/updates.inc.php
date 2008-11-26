@@ -8,4 +8,6 @@ $updates[]="CREATE TABLE IF NOT EXISTS `go_links_12` (
   KEY `link_id` (`link_id`,`link_type`),
   KEY `id` (`id`,`folder_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates[]="ALTER TABLE `ta_tasks` CHANGE `completion_time` `completion_time` INT( 11 ) NULL";
 ?>

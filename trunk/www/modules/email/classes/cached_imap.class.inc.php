@@ -243,10 +243,11 @@ class cached_imap extends imap{
 
 				foreach($new_messages as $message)
 				{
-					if(strlen($message['to'])>100)
-					{
-						$message['to']=substr($message['to'],0,100);
-					}
+					//trim values for mysql insertion
+					$message['to']=substr($message['to'],100);
+					$message['subject']=substr($message['subject'],0,100);
+					$message['from']=substr($message['from'],0,100);
+					$message['reply_to']=substr($message['reply_to'],0,100);
 					
 					$messages[$message['uid']]=$message;
 					$messages[$message['uid']]['cached']=false;
