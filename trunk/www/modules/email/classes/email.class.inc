@@ -133,7 +133,7 @@ class email extends db
 		
 		$message = $this->get_linked_message($link_id);
 		
-		unlink($GO_CONFIG->file_storage_path.$message['path']);
+		@unlink($GO_CONFIG->file_storage_path.$message['path']);
 
 		$sql ="DELETE FROM em_links WHERE link_id=".$this->escape($link_id);
 		return $this->query($sql);
