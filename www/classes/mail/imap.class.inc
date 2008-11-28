@@ -516,9 +516,9 @@ class imap{
 		if(!isset($values['from']))
 		$values['from']='';
 			
-		$from = $RFC822->parse_address_list($values['from']);
-		$message["from"] = isset($from[0]['personal']) ? $this->enc_utf8($from[0]['personal']) : '';
-		$message["sender"] = isset($from[0]['email']) ? $this->enc_utf8($from[0]['email']) : '';
+		//$from = $RFC822->parse_address_list($values['from']);
+		$message["from"] = isset($values['from']) ? $this->enc_utf8($values['from']) : '';
+		//$message["sender"] = isset($from[0]['email']) ? $this->enc_utf8($from[0]['email']) : '';
 		$message['udate'] = isset($values['date']) ? strtotime($values['date']) : 0;
 		$message['subject'] = isset($values['subject']) ? $this->enc_utf8($values['subject']) : '';
 
@@ -594,7 +594,7 @@ class imap{
 
 			if(!isset($this->message["reply_to"]))
 			{
-				$this->message["reply_to"] = $this->RFC822->write_address($this->message['from'], $this->message["sender"]);
+				$this->message["reply_to"] = $this->message['from'];
 			}
 			return $this->message;
 		} else {
