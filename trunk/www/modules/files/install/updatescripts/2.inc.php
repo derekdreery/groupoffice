@@ -1,7 +1,8 @@
 <?php
 $GO_USERS->get_users();
 
-$fs_module = $GO_MODULES->get_module('files');
+$mod = new GO_MODULES();
+$fs_module = $mod->get_module('files');
 
 require($GO_LANGUAGE->get_language_file('files'));
 
