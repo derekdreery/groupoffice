@@ -17,7 +17,7 @@ GO.LinksTree = function(config){
 		config = {};
 	}
 		
-	config.title='Folders';
+	config.title=GO.lang.folders;
 	config.layout='fit';
   config.split=true;
 	config.autoScroll=true;
@@ -47,12 +47,9 @@ GO.LinksTree = function(config){
 		text: 'Root',
 		draggable:false,
 		iconCls : 'folder-default',
-		expanded:false
+		expanded:true
 	});
 	this.setRootNode(rootNode);
-	
-	
-	
 }
 
 Ext.extend(GO.LinksTree, Ext.tree.TreePanel, {
@@ -61,6 +58,7 @@ Ext.extend(GO.LinksTree, Ext.tree.TreePanel, {
 	{
 		this.loader.baseParams.link_id=link_id;
 		this.loader.baseParams.link_type=link_type;
+		this.rootNode.reload();
 	}
 	
 });

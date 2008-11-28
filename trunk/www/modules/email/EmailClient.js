@@ -850,6 +850,10 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	
 	setAccount : function(account_id,folder_id,mailbox, usage)
 	{
+		if(account_id!=this.account_id)
+		{
+			this.messagePanel.reset();
+		}
 		
 		this.messagesGrid.expand();
 		

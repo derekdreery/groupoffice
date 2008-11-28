@@ -160,13 +160,14 @@ GO.grid.LinksPanel = function(config){
 		this.linksGrid.store.reload();
 		
 		var activeNode = this.linksTree.getNodeById('lt-folder-'+this.folder_id);
-		if(activeNode && activeNode.parentNode)
+		
+		if(activeNode)
 		{
-			activeNode.parentNode.reload();			
-		}else
-		{
-			this.linksTree.getRootNode().reload();
+			//delete preloaded children otherwise no request will be sent
+			delete activeNode.attributes.children;
+			activeNode.reload();
 		}
+
 	}, this);	
 	
 	config.items=[this.linksTree, this.linksGrid];		
@@ -396,10 +397,7 @@ Ext.extend(GO.grid.LinksPanel, Ext.Panel, {
 			this.linksGrid.store.baseParams["folder_id"]=folder_id;
 			
 			this.linksTree.loadLinks(link_id, link_type);
-			
-			
-						
-			
+
 			this.linksDialog.setSingleLink(this.link_id, this.link_type);
 			this.loaded=false;
 		}
