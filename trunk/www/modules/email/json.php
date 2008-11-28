@@ -620,7 +620,13 @@ try{
 				}
 
 				$response['account_id']=$account_id;
-				$response['full_from']=$response['from'].'&nbsp;&lt;'.$response['sender'].'&gt;';
+				$response['full_from']=htmlspecialchars($response['from'], ENT_QUOTES, 'UTF-8');
+				
+				$RFC822 = new RFC822();
+				$address = $RFC822->parse_address_list($response['from']);
+				$response['sender']=isset($address[0]['email']) ? $address[0]['email'] : '';
+				$response['from']=isset($address[0]['personal']) ? $address[0]['personal'] : '';
+				
 
 				if (isset ($response['to'])) {
 					$to = implode(', ',$response['to']);
