@@ -1218,14 +1218,22 @@ class imap{
 		* @return bool True on success
 		*/
 	function delete_folder($name, $mailbox_root) {
-		if ($this->is_subscribed($name, $mailbox_root)) {
-			if ($this->unsubscribe($name)) {
-				return imap_deletemailbox($this->conn, "{".$this->connectstring."}".$name);
+		
+		$children = $this->get_mailboxes($name);
+		//debug($children);
+		foreach($children as $child)
+		{
+			if($child['name']!=$name)
+			{
+				if(!$this->delete_folder($child['name'], $mailbox_root))
+				{
+					return false;
+				}
 			}
-			return false;
-		} else {
-			return imap_deletemailbox($this->conn, "{".$this->connectstring."}".$name);
 		}
+		
+		//$this->unsubscribe($name);
+		return imap_deletemailbox($this->conn, "{".$this->connectstring."}".$name);		
 	}
 
 	/**

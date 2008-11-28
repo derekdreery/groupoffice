@@ -48,8 +48,17 @@ GO.email.EmailClient = function(config){
 		{
 			this.resetSearchButton.setVisible(false);
 		}		
-	}, this);
-	
+		
+		var selModel = this.treePanel.getSelectionModel();
+		if(!selModel.getSelectedNode())
+		{	
+			var node = this.treePanel.getNodeById('folder_'+this.messagesGrid.store.reader.jsonData.folder_id);
+			if(node)
+			{
+				selModel.select(node);
+			}
+		}					
+	}, this);	
 
 	this.messagesGrid.on("rowdblclick", function(){		
 		if(this.messagesGrid.store.reader.jsonData.drafts)
@@ -351,26 +360,15 @@ GO.email.EmailClient = function(config){
 			firstAccountNode.on('load', function(node){
 				
 				if(node.childNodes[0])
-				{	
-					/*if(this.messagesGrid.store.baseParams['folder_id'])
-					{
-						var node = this.treePanel.getNodeById('folder_'+this.messagesGrid.store.baseParams['folder_id']);						
-						
-						//if(node.attributes.unseen!=this.messagesGrid.store.reader.jsonData.unseen[this.messagesGrid.store.baseParams['folder_id']])
-						//{						
-							this.messagesGrid.store.reload();
-						//}
-					}else
-					{*/
-						var firstInboxNode = node.childNodes[0];			
-						this.setAccount(
-							firstInboxNode.attributes.account_id,
-							firstInboxNode.attributes.folder_id,
-							firstInboxNode.attributes.mailbox,
-							firstInboxNode.attributes.usage
-							);
-					//}
+				{					
+					var firstInboxNode = node.childNodes[0];
 					
+					this.setAccount(
+						firstInboxNode.attributes.account_id,
+						firstInboxNode.attributes.folder_id,
+						firstInboxNode.attributes.mailbox,
+						firstInboxNode.parentNode.attributes.usage
+						);					
 					this.checkMail.defer(this.checkMailInterval, this);
 				}
 			},this, {single: true});
@@ -387,11 +385,24 @@ GO.email.EmailClient = function(config){
 	this.treePanel.on('click', function(node)	{		
 		if(node.attributes.folder_id>0)
 		{		
+			var usage=false;
+			var cnode = node;
+			while(cnode.parentNode && usage===false)
+			{
+				if(cnode.attributes.usage)
+				{
+					usage=cnode.attributes.usage;
+				}else
+				{
+					cnode=cnode.parentNode;
+				}
+			}
+			
 			this.setAccount(
 				node.attributes.account_id,
 				node.attributes.folder_id,
 				node.attributes.mailbox,
-				node.attributes.usage
+				usage
 			);
 		}
 	}, this);	
