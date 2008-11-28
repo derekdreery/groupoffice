@@ -19,7 +19,7 @@ GO.files.filesTemplate = '<tpl if="files.length">'+
 				'<tpl if="values.extension!=\'folder\'">'+										
 					'<td><a href="#" onclick="GO.files.openFile(\'{[this.getPath(values.path)]}\');">{grid_display}</a></td>'+
 				'</tpl>'+
-				'<td>{mtime}</td>'+
+				'<td style="white-space:nowrap">{mtime}</td>'+
 			'</tr>'+
 		'</tpl>'+
 	
