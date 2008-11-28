@@ -36,8 +36,8 @@ class imapauth extends db
 				}
 				$domains = explode(',', $config['domains']);
 				$domains = array_map('trim', $domains);
-				
-				if(in_array($domain, $domains));
+
+				if(in_array($domain, $domains))
 				{
 					return $config;
 				}
