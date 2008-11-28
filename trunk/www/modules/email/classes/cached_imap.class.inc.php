@@ -303,7 +303,7 @@ class cached_imap extends imap{
 					
 					$field = $message[$this->filters[$i]["field"]];
 
-					if (stristr($field, $this->filters[$i]["keyword"]))
+					if (eregi($this->filters[$i]["keyword"], $field))
 					{									
 						$this->filters[$i]['uids'][]=$message['uid'];							
 						$continue=true;

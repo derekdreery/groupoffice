@@ -745,6 +745,8 @@ class email extends db
 			{
 				return false;
 			}
+			
+			$close_connection = true;
 		}
 			
 		$subscribed =  $mail->get_subscribed('', true);
@@ -841,6 +843,11 @@ class email extends db
 			{
 				$emailobj->delete_folder($account['id'], $this->f('name'));
 			}
+		}
+		
+		if(isset($close_connection))
+		{
+			$mail->close();
 		}
 	}
 
