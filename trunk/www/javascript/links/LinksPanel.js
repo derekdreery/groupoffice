@@ -166,6 +166,9 @@ GO.grid.LinksPanel = function(config){
 			//delete preloaded children otherwise no request will be sent
 			delete activeNode.attributes.children;
 			activeNode.reload();
+		}else
+		{
+			this.linksTree.rootNode.reload();
 		}
 
 	}, this);	

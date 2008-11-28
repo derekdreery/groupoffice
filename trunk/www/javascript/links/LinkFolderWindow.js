@@ -13,24 +13,15 @@
 
  
 GO.LinkFolderWindow = function(config){
-	
-	
 	if(!config)
 	{
 		config={};
 	}
-	
-	
-
-	
 	var focusName = function(){
 		this.newFolderNameField.focus(true);		
 	};
-	
-	
 		
-	this.newFolderNameField = new Ext.form.TextField({	
-				id:'new-folder-input',	                	
+	this.newFolderNameField = new Ext.form.TextField({	             	
         fieldLabel: GO.lang['strName'],
         name: 'name',
         value: 'New folder',
@@ -46,9 +37,6 @@ GO.LinkFolderWindow = function(config){
 			autoHeight:true	,
 			baseParams:{task : 'link_folder', folder_id : 0}
 		});
-	
-	
-	
 	
 	config.layout='fit';
 	config.modal=false;
@@ -79,11 +67,8 @@ GO.LinkFolderWindow = function(config){
 			scope:this
 		}					
 	];
-
 	
 	GO.LinkFolderWindow.superclass.constructor.call(this, config);
-	
-	
 	
 	this.addEvents({'save' : true});	
 }
@@ -100,8 +85,6 @@ Ext.extend(GO.LinkFolderWindow, Ext.Window,{
 		{
 			config.folder_id=0
 		}
-		
-		
 		this.link_id=config.link_id ? config.link_id : 0;
 		this.link_type=config.link_type ? config.link_type : 0;
 		this.parent_id=config.parent_id ? config.parent_id : 0;
@@ -186,4 +169,3 @@ Ext.extend(GO.LinkFolderWindow, Ext.Window,{
 		
 	}
 });
-
