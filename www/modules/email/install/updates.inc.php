@@ -22,4 +22,6 @@ $updates[]="CREATE TABLE IF NOT EXISTS `em_messages_cache` (
 
 $updates[]="ALTER TABLE `em_folders` ADD `sort` LONGTEXT NOT NULL ;";
 
+$updates[]="update `em_filters` set field='from' where field='sender';";
+
 ?>

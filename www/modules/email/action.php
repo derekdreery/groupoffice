@@ -533,15 +533,12 @@ try{
 					{
 						$account = connect($folder['account_id']);
 
-
-
 						if ($imap->delete_folder($folder['name'], $account['mbroot']))
 						{
 							$response['success']=$email->delete_folder($account['id'], $folder['name']);
 						}else {
-							$response['feedback']=$ml_delete_folder_error;
+							$response['feedback']=$lang['email']['feedbackDeleteFolderFailed'];
 						}
-						//$imap->close();
 					}else {
 						$response['feedback']=$lang['comon']['selectError'];
 					}

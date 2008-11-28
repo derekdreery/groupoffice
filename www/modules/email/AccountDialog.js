@@ -592,27 +592,17 @@ Ext.extend(GO.email.AccountDialog, Ext.Window, {
 
 
 filter = function(){
-
-
 	return {
-
 		showDialog : function(filter_id, account_id, ds){
-		
-			
-			
-			
-			
 			if(!this.win)
-			{
-				
+			{				
 				var subscribedFoldersStore = new Ext.data.JsonStore({
 
 					url: GO.settings.modules.email.url+'json.php',
 					baseParams: {task:'subscribed_folders', hideInbox: 'true',  account_id:account_id},
 					root: 'data',
 					fields: ['id','name']
-				});
-				
+				});				
 				
 				this.formPanel = new Ext.form.FormPanel({
 			        layout:'form',
@@ -628,14 +618,13 @@ filter = function(){
 			                store: new Ext.data.SimpleStore({
 			                    fields: ['value', 'text'],
 			                    data : [
-			                    	['sender', GO.email.lang.sender],
+			                    	['from', GO.email.lang.sender],
 			                    	['subject', GO.email.lang.subject],
 			                    	['to', GO.email.lang.sendTo],
 			                    	['cc', GO.email.lang.ccField]
-			                    ]
-			                    
+			                    ]			                    
 			                }),
-			                value:'sender',
+			                value:'from',
 			                valueField:'value',
 			                displayField:'text',
 			                typeAhead: true,
@@ -644,33 +633,31 @@ filter = function(){
 			                editable: false,
 			                selectOnFocus:true,
 			                forceSelection: true
-			            }),
-			        	{
-			                fieldLabel: GO.email.lang.keyword,
-			                name: 'keyword',
-			                allowBlank:false
-			   
-			            },
-						new Ext.form.ComboBox({
-			               	fieldLabel: GO.email.lang.moveToFolder,
-			                hiddenName:'folder',
-			                store: subscribedFoldersStore,
-			                valueField:'name',
-			                displayField:'name',
-			                typeAhead: true,
-			                mode: 'remote',
-			                triggerAction: 'all',
-			                editable: false,
-			                selectOnFocus:true,
-			                forceSelection: true,
-			                allowBlank: false
-			            }),	
-			            new Ext.form.Checkbox({
-		                    boxLabel: GO.email.lang.markAsRead,
-		                    name: 'mark_as_read',
-		                    checked: false,
-		                    hideLabel:true
-		                })						
+		            }),{
+		                fieldLabel: GO.email.lang.keyword,
+		                name: 'keyword',
+		                allowBlank:false			   
+		            },
+								new Ext.form.ComboBox({
+		               	fieldLabel: GO.email.lang.moveToFolder,
+		                hiddenName:'folder',
+		                store: subscribedFoldersStore,
+		                valueField:'name',
+		                displayField:'name',
+		                typeAhead: true,
+		                mode: 'remote',
+		                triggerAction: 'all',
+		                editable: false,
+		                selectOnFocus:true,
+		                forceSelection: true,
+		                allowBlank: false
+		            }),	
+		            new Ext.form.Checkbox({
+	                    boxLabel: GO.email.lang.markAsRead,
+	                    name: 'mark_as_read',
+	                    checked: false,
+	                    hideLabel:true
+	                })						
 					]	
 					}       
 				
@@ -757,8 +744,7 @@ filter = function(){
 				{
 					this.formPanel.form.reset();
 				}
-			}	
-			
+			}			
 			this.win.show();
 		}			
 	}

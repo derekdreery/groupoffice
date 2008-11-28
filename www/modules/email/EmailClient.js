@@ -164,48 +164,138 @@ GO.email.EmailClient = function(config){
 	
 	this.treeContextMenu = new Ext.menu.Menu({		
 		
-		items: [
+		items: [{
+			iconCls: 'btn-add',
+			text: GO.email.lang.addFolder,
+			handler: function(){
+				Ext.MessageBox.prompt(GO.lang.strName, GO.email.lang.enterFolderName, function(button, text){
+					if(button=='ok')
+					{						
+						var sm = this.treePanel.getSelectionModel();		 
+		 				var node = sm.getSelectedNode();
+		 		
+						Ext.Ajax.request({
+							url: GO.settings.modules.email.url+'action.php',
+							params: {
+								task: 'add_folder',
+								folder_id: node.attributes.folder_id,
+								account_id: node.attributes.account_id,
+								new_folder_name: text
+							},
+							callback: function(options, success, response)
+							{
+								if(!success)
+								{
+									Ext.MessageBox.alert(GO.lang.strError, response.result.errors);
+								}else
+								{
+									var responseParams = Ext.decode(response.responseText);
+									if(responseParams.success)
+									{
+										//remove preloaded children otherwise it won't request the server
+										delete node.attributes.children;
+										node.reload();
+									}else
+									{
+										Ext.MessageBox.alert(GO.lang.strError,responseParams.feedback);
+									}								
+								}
+							},
+							scope: this
+						});
+					}
+
+				}, this);
+			},
+			scope:this
+		},'-',
 		{
 			iconCls: 'btn-delete', 
 			text: GO.email.lang.emptyFolder, 
 			handler: function(){
+				
+				var sm = this.treePanel.getSelectionModel();		 
+		 		var node = sm.getSelectedNode();
 					
-					var t = new Ext.Template(GO.email.lang.emptyFolderConfirm);
-					
-					Ext.MessageBox.confirm(GO.lang['strConfirm'], t.applyTemplate(this.emptyFolderNode), function(btn){
-						if(btn=='yes')
-						{
-							Ext.Ajax.request({
-								url: GO.settings.modules.email.url+'action.php',
-								params:{
-									task:'empty_folder',
-									account_id: this.emptyFolderNode.account_id,
-									mailbox: this.emptyFolderNode.mailbox
-								},
-								callback:function(){
-									if(this.emptyFolderNode.mailbox==this.mailbox)
-									{
-										this.messagesGrid.store.removeAll();										
-									}
-									this.updateFolderStatus(this.emptyFolderNode.folder_id);
-									this.updateNotificationEl();
-								},
-							scope: this
-							});
-						}
-					}, this);
+				var t = new Ext.Template(GO.email.lang.emptyFolderConfirm);
+				
+				Ext.MessageBox.confirm(GO.lang['strConfirm'], t.applyTemplate(node.attributes), function(btn){
+					if(btn=='yes')
+					{
+						Ext.Ajax.request({
+							url: GO.settings.modules.email.url+'action.php',
+							params:{
+								task:'empty_folder',
+								account_id: node.attributes.account_id,
+								mailbox: node.attributes.mailbox
+							},
+							callback:function(){
+								if(node.attributes.mailbox==this.mailbox)
+								{
+									this.messagesGrid.store.removeAll();										
+								}
+								this.updateFolderStatus(node.attributes.folder_id);
+								this.updateNotificationEl();
+							},
+						scope: this
+						});
+					}
+				}, this);
 			},
 			scope:this			
-		}
-		]
+		},{
+			iconCls: 'btn-delete',
+			text: GO.lang.cmdDelete,
+			cls: 'x-btn-text-icon',
+			scope: this,
+			handler: function(){				
+				var sm = this.treePanel.getSelectionModel();		 
+		 		var node = sm.getSelectedNode();
+
+				if(!node|| node.attributes.folder_id<1)
+				{
+					Ext.MessageBox.alert(GO.lang.strError, GO.email.lang.selectFolderDelete);
+				}else if(node.attributes.mailbox=='INBOX')
+				{
+					Ext.MessageBox.alert(GO.lang.strError, GO.email.lang.cantDeleteInboxFolder);
+				}else
+				{					
+					GO.deleteItems({
+						url: GO.settings.modules.email.url+'action.php',
+						params: {
+							task: 'delete_folder',
+							folder_id: node.attributes.folder_id
+						},
+						callback: function(responseParams)
+						{
+							if(responseParams.success)
+							{
+								node.remove();
+							}else
+							{
+								Ext.MessageBox.alert(GO.lang.strError,responseParams.feedback);
+							}
+						},
+						count: 1,
+						scope: this	
+					});					
+				}				
+			}
+    }]
 	});
 	
 	
 	
 	this.treePanel.on('contextmenu', function(node, e){
-		e.stopEvent();
-				
-		this.emptyFolderNode = node.attributes;
+		e.stopEvent();		
+		
+		var selModel = this.treePanel.getSelectionModel();
+		
+		if(!selModel.isSelected(node))
+		{
+			selModel.clearSelections();
+			selModel.select(node);
+		}
 		
 		var coords = e.getXY();
 		
@@ -865,7 +955,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	{		
 		this.treePanel.loader.baseParams.refresh=true;
 		this.treePanel.root.reload();
-		//delete this.treePanel.root.loader.baseParams.refresh;
+		delete this.treePanel.loader.baseParams.refresh;
 	},
 
 	showAccountsDialog : function()

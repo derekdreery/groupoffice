@@ -935,7 +935,7 @@ try{
 											}
 
 											$response=array();
-											if($node_id==0)
+											if($node_type=='root')
 											{
 												$email2 = new email();
 												$count = $email2->get_accounts($GO_SECURITY->user_id);
@@ -1003,7 +1003,11 @@ try{
 														'usage'=>$usage
 													);
 												}
-											}else
+											}elseif($node_type=='account')
+											{
+												$account = connect($node_id);
+												$response = get_mailbox_nodes($node_id, 0);
+											}	else
 											{
 												$folder_id=$node_id;
 

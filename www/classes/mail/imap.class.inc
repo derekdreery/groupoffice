@@ -371,8 +371,14 @@ class imap{
 	{
 		//get the unseen and total messages		
 		$status = $this->status($this->mailbox, SA_UNSEEN+SA_MESSAGES);
-		$this->unseen = $status->unseen;
-		$this->count = $status->messages;
+		if($status)
+		{
+			$this->unseen = $status->unseen;
+			$this->count = $status->messages;
+		}else
+		{
+			$this->unseen = $this->count = 0;
+		}
 		$this->query = $query;
 		$this->first = $first;
 		$this->offset = $offset;

@@ -26,7 +26,8 @@
 			baseParams:{
 				task: 'tree-edit',
 				account_id: 0				
-			}
+			},
+			preloadChildren:true
 		})
 	});
 
@@ -135,33 +136,36 @@
 			text: GO.lang.cmdDelete,
 			cls: 'x-btn-text-icon',
 			scope: this,
-			handler: function(){
-				
-				var selModel = this.foldersTree.getSelectionModel();
+			handler: function(){				
+				var sm = this.foldersTree.getSelectionModel();		 
+		 		var node = sm.getSelectedNode();
 
-				if(selModel.selNode==null || selModel.selNode.attributes.folder_id<1)
+				if(!node|| node.attributes.folder_id<1)
 				{
 					Ext.MessageBox.alert(GO.lang.strError, GO.email.lang.selectFolderDelete);
-				}else if(selModel.selNode.attributes.mailbox=='INBOX')
+				}else if(node.attributes.mailbox=='INBOX')
 				{
 					Ext.MessageBox.alert(GO.lang.strError, GO.email.lang.cantDeleteInboxFolder);
 				}else
-				{
-					
+				{					
 					GO.deleteItems({
 						url: GO.settings.modules.email.url+'action.php',
 						params: {
 							task: 'delete_folder',
-							folder_id: selModel.selNode.attributes.folder_id
-
+							folder_id: node.attributes.folder_id
 						},
-						callback: function()
+						callback: function(responseParams)
 						{
-							selModel.selNode.remove();			
+							if(responseParams.success)
+							{
+								node.remove();
+							}else
+							{
+								Ext.MessageBox.alert(GO.lang.strError,responseParams.feedback);
+							}
 						},
 						count: 1,
-						scope: this	 
-
+						scope: this	
 					});					
 				}				
 			}
@@ -172,60 +176,51 @@
 			cls: 'x-btn-text-icon',
 			handler: function(){
 				
-				var selModel = this.foldersTree.getSelectionModel();
+				var sm = this.foldersTree.getSelectionModel();		 
+		 		var node = sm.getSelectedNode();
 
-					if(selModel.selNode==null)
-					{
-						Ext.MessageBox.alert(GO.lang.strError, GO.email.lang.selectFolderAdd);
-					}else
-					{
+				if(!node)
+				{
+					Ext.MessageBox.alert(GO.lang.strError, GO.email.lang.selectFolderAdd);
+				}else
+				{
+					Ext.MessageBox.prompt(GO.lang.strName, GO.email.lang.enterFolderName, function(button, text){
 
-						Ext.MessageBox.prompt(GO.lang.strName, GO.email.lang.enterFolderName, function(button, text){
-
-							if(button=='ok')
-							{
-								
-								Ext.Ajax.request({
-									url: GO.settings.modules.email.url+'action.php',
-									params: {
-										task: 'add_folder',
-										folder_id: selModel.selNode.attributes.folder_id,
-										account_id: this.account_id,
-										new_folder_name: text
-									},
-									callback: function(options, success, response)
+						if(button=='ok')
+						{							
+							Ext.Ajax.request({
+								url: GO.settings.modules.email.url+'action.php',
+								params: {
+									task: 'add_folder',
+									folder_id: node.attributes.folder_id,
+									account_id: this.account_id,
+									new_folder_name: text
+								},
+								callback: function(options, success, response)
+								{
+									if(!success)
 									{
-										if(!success)
+										Ext.MessageBox.alert(GO.lang.strError, response.result.errors);
+									}else
+									{
+										var responseParams = Ext.decode(response.responseText);
+										if(responseParams.success)
 										{
-											Ext.MessageBox.alert(GO.lang.strError, response.result.errors);
+											//remove preloaded children otherwise it won't request the server
+											delete node.attributes.children;
+											node.reload();
 										}else
 										{
-	
-											var responseParams = Ext.decode(response.responseText);
-											if(responseParams.success)
-											{
-												if(selModel.selNode.parentNode)
-												{
-													selModel.selNode.parentNode.reload();
-												}else
-												{
-													this.foldersTree.getRootNode().reload();
-												}
-											}else
-											{
-												Ext.MessageBox.alert(GO.lang.strError,responseParams.feedback);
-												this.foldersTree.getRootNode().reload();
-											}
-										
+											Ext.MessageBox.alert(GO.lang.strError,responseParams.feedback);
 										}
-									},
-									scope: this
-								});
-							}
-
-						}, this);
-					}
-				
+									
+									}
+								},
+								scope: this
+							});
+						}
+					}, this);
+				}				
 			},
 			scope: this
 		},
