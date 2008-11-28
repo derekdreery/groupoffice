@@ -1206,16 +1206,12 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 					handler: function(){this.newFolderWindow.hide();},
 					scope: this
 				}]				
-			});
-			
-		
+			});		
 		}else
 		{
 			this.newFolderNameField.reset();
 		}
 		this.newFolderWindow.show();
-		
-		
 	},
 	
 	onGridDoubleClick : function(grid, rowClicked, e){
@@ -1236,8 +1232,6 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			}			
 		}
 	},
-	
-	
 	
 	setWritePermission : function(writePermission)
 	{
@@ -1317,9 +1311,6 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 });
 
 
-
-
-
 GO.files.openFile = function(path, store)
 {
 	var extension = GO.util.getFileExtension(path);	
@@ -1357,6 +1348,15 @@ GO.files.openFile = function(path, store)
 					index=images.length-1;
 				}
 			}
+		}else
+		{
+			var name = path;
+			var lio = path.lastIndexOf('/', path);
+			if(lio)
+			{
+				name = path.substring(lio+1, path.length);
+			}
+			images.push({name: name, src: GO.settings.modules.files.url+'download.php?mode=download&path='+path})
 		}
 		
 		this.imageViewer.show(images, index);
