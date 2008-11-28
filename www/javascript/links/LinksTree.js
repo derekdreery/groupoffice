@@ -43,13 +43,13 @@ GO.LinksTree = function(config){
 	
 	
 	// set the root node
-	var rootNode = new Ext.tree.AsyncTreeNode({
+	this.rootNode = new Ext.tree.AsyncTreeNode({
 		text: 'Root',
 		draggable:false,
 		iconCls : 'folder-default',
-		expanded:true
+		expanded:false
 	});
-	this.setRootNode(rootNode);
+	this.setRootNode(this.rootNode);
 }
 
 Ext.extend(GO.LinksTree, Ext.tree.TreePanel, {
@@ -58,7 +58,11 @@ Ext.extend(GO.LinksTree, Ext.tree.TreePanel, {
 	{
 		this.loader.baseParams.link_id=link_id;
 		this.loader.baseParams.link_type=link_type;
-		this.rootNode.reload();
+		
+		if(this.rootNode.isExpanded())
+			this.rootNode.reload();
+		else
+			this.rootNode.expand();
 	}
 	
 });

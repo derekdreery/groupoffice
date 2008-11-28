@@ -1127,8 +1127,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		
 		if(!this.newFolderWindow)
 		{
-			this.newFolderNameField = new Ext.form.TextField({	
-						id:'new-folder-input',	                	
+			this.newFolderNameField = new Ext.form.TextField({	              	
 	          fieldLabel: GO.lang['strName'],
 	          name: 'name',
 	          value: 'New folder',
@@ -1143,6 +1142,9 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 					items:this.newFolderNameField			
 				});
 			
+			var focusName = function(){
+				this.newFolderNameField.focus(true);		
+			};
 			
 			this.newFolderWindow = new Ext.Window({
 				title:GO.files.lang.addFolder,
@@ -1151,9 +1153,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 				modal:false,
 				closeAction:'hide',
 				items: this.newFolderFormPanel,
-				focus:function(){
-					Ext.getCmp('new-folder-input').focus(true);
-				},
+				focus:focusName.createDelegate(this),
 				scope:this,
 				buttons: [
 				{
