@@ -128,6 +128,16 @@ class db extends base_db{
 				$this->halt('Could not prepare statement SQL: '.$sql.' types:'.$types.' params: '.var_export($params, true));
 				return false;
 			}
+			
+			if(is_array($types))
+			{
+				$types = $this->get_types_string($params,$types);
+			}
+			if ($this->debug)
+			{
+				debug($params);
+				debug($types);
+			}
 
 			//bind parameters
 			$param_args=array($types);

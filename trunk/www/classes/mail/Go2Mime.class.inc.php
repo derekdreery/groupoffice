@@ -132,23 +132,16 @@ class Go2Mime
 				$structure = $structure->parts[$parts_arr[$i]];
 			}
 		}
-				
-		
-		//var_dump($structure);
-		
 		
 		$this->response['notification'] = isset($structure->headers['disposition-notification-to']) ? true : false;
-		$this->response['subject']= empty($structure->headers['subject']) ? '' : $structure->headers['subject'];
-		$this->response['sender']= htmlspecialchars(String::get_email_from_string($structure->headers['from']));
-		$this->response['from'] = isset($structure->headers['from']) ? htmlspecialchars($structure->headers['from']) : $_SESSION['GO_SESSION']['email'];
+		$this->response['subject']= empty($structure->headers['subject']) ? '' : $structure->headers['subject'];		
+		$this->response['from'] = isset($structure->headers['from']) ? htmlspecialchars($structure->headers['from']) : '';		
+		$this->response['sender']= isset($structure->headers['from']) ? htmlspecialchars(String::get_email_from_string($structure->headers['from'])) : '';
 		$this->response['to'] = isset($structure->headers['to']) ? htmlspecialchars($structure->headers['to']) : '';
 		$this->response['cc'] = isset($structure->headers['cc']) ? htmlspecialchars($structure->headers['cc']) : '';
 		$this->response['bcc'] = isset($structure->headers['bcc']) ? htmlspecialchars($structure->headers['bcc']) : '';
-
 		$this->response['full_from']=$this->response['from'];
-
 		$this->response['priority']=3;
-
 
 		if(isset($structure->headers['date']))		
 			$this->response['date']=date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], strtotime($structure->headers['date']));
@@ -159,9 +152,7 @@ class Go2Mime
 
 		$this->response['attachments']=array();
 		$this->response['inline_attachments']=array();
-		$this->response['body']='';
-		
-		
+		$this->response['body']='';		
 		
 		$this->get_parts($structure, '', $create_tmp_attachments);
 		

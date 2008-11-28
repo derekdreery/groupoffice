@@ -445,6 +445,11 @@ class base_db{
 		{
 			$index = array($index);
 		}
+		
+		if(is_array($types))
+		{
+			$types=$this->get_types_string($fields, $types);
+		}
 
 
 		$field_types='';
@@ -458,7 +463,7 @@ class base_db{
 	  	{
 	  		if(!in_array($key, $index))
 	  		{
-	  			$updates[] = "`$key`='$value'";
+	  			$updates[] = "`$key`='".$this->escape($value)."'";
 	  		}
 	  	}
 	  	if(isset($updates))
@@ -523,6 +528,11 @@ class base_db{
 		{
 			$this->halt('Invalid insert row called');
 			return false;
+		}
+		
+		if(is_array($types))
+		{
+			$types=$this->get_types_string($fields, $types);
 		}
 
 		foreach($fields as $key => $value)
@@ -645,6 +655,25 @@ class base_db{
 	 */
 	public function close(){
 
+	}
+	
+	/**
+	 * Change an array of types needed for mysqli_stmt_bind_param eg. array('id'=>'i', name=>'s', float_field=>'d', blob_field=>'b') into a 
+	 * string like 'is'. If a type is not given it will use 's';
+	 *
+	 * @param array $values
+	 * @param array $types_array
+	 * @return string
+	 */
+	
+	public function get_types_string($values, $types_array)
+	{
+		$types='';
+		foreach($values as $key=>$value)
+		{
+			$types .= isset($types_array[$key]) ? $types_array[$key] : 's';
+		}
+		return $types;
 	}
 
 }
