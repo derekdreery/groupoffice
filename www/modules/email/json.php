@@ -63,7 +63,7 @@ function get_all_mailbox_nodes($account_id, $folder_id){
 }
 
 function get_mailbox_nodes($account_id, $folder_id){
-	global $lang, $imap, $inbox_new, $usage;
+	global $lang, $imap, $inbox_new;
 
 	$email = new email();
 	$email2 = new email();
@@ -129,8 +129,7 @@ function get_mailbox_nodes($account_id, $folder_id){
 				'account_id'=>$email->f('account_id'),
 				'folder_id'=>$email->f('id'),
 				'unseen'=>$unseen,
-				'mailbox'=>$email->f('name'),
-				'usage'=>$usage
+				'mailbox'=>$email->f('name')
 			);
 		}else {
 			$response[] = array(
@@ -142,8 +141,7 @@ function get_mailbox_nodes($account_id, $folder_id){
 				'mailbox'=>$email->f('name'),
 				'unseen'=>$unseen,
 				'expanded'=>true,
-				'children'=>array(),
-				'usage'=>$usage
+				'children'=>array()
 			);
 		}
 	}
@@ -905,7 +903,7 @@ try{
 									$response['results'][]=$message;										
 								}			
 
-
+								$response['folder_id']=$imap->folder['id'];
 								$response['total'] = count($imap->sort);
 							
 								foreach($imap->touched_folders as $touched_folder)

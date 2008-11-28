@@ -27,7 +27,16 @@
 				task: 'tree-edit',
 				account_id: 0				
 			},
-			preloadChildren:true
+			preloadChildren:true,
+			listeners: {
+				beforeload : function(){
+					this.body.mask(GO.lang.waitMsgLoad);
+				},
+				load : function(){
+					this.body.unmask();
+				},
+				scope:this				
+			}
 		})
 	});
 
@@ -266,6 +275,8 @@
 Ext.extend(GO.email.FoldersDialog, Ext.Window, {
 	
 	show : function(account_id){
+		
+		this.render(Ext.getBody());
 		
 		this.account_id=account_id;
 		this.foldersTree.loader.baseParams.account_id=account_id;

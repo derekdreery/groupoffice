@@ -437,11 +437,7 @@ try{
 					}else {
 						$new_folder_name=$imap->utf7_imap_encode(($_POST['new_folder_name']));
 					}
-
-
-
-
-
+					
 					if($imap->create_folder($new_folder_name, $delimiter))
 					{
 						if($email->add_folder($account['id'], $new_folder_name, $parent_id, 1,$delimiter))
