@@ -1174,22 +1174,9 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 								var activeNode = this.treePanel.getNodeById(this.path);
 								if(activeNode)
 								{
-								  var callback = function(){
-								    var newNode = this.treePanel.getNodeById(this.path);
-								  	if(newNode)
-								  	{
-								  	  newNode.expand();
-								  	}									    
-								  }
-								  var callbackDelegate = callback.createDelegate(this);
-								  
-								  if(activeNode.parentNode)
-								  {
-										activeNode.parentNode.reload(callbackDelegate);
-								  }else
-								  {
-								  	activeNode.reload(callbackDelegate);
-								  }			
+								  //delete preloaded children otherwise no request will be sent
+								  delete activeNode.attributes.children;
+								  activeNode.reload();	
 								}	
 															
 								this.newFolderWindow.hide();
