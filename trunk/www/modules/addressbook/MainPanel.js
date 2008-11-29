@@ -27,6 +27,7 @@ GO.addressbook.MainPanel = function(config)
   });  
   
   this.contactsGrid.on("delayedrowselect",function(grid, rowIndex, r){
+  //this.contactsGrid.getSelectionModel().on("rowselect",function(sm, rowIndex, r){
 				this.contactEastPanel.load(r.get('id'));
 		}, this);
 	

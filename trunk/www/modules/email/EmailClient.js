@@ -84,7 +84,7 @@ GO.email.EmailClient = function(config){
 		this.closeMessageButton.setVisible(false);
 	}, this);	
 
-	
+	//this.messagesGrid.getSelectionModel().on("rowselect",function(sm, rowIndex, r){
 	this.messagesGrid.on("delayedrowselect",function(grid, rowIndex, r){
 		if(r.data['uid']!=this.previewedUid)
 		{
@@ -92,6 +92,15 @@ GO.email.EmailClient = function(config){
 			this.messagePanel.loadMessage(r.data.uid, this.mailbox, this.account_id);			
 		}
 	}, this);
+	
+	/*this.messagesGrid.on('rowclick', function(grid, rowIndex, e ){
+		var r = grid.store.getAt(rowIndex);
+		if(r.data['uid']!=this.previewedUid)
+		{
+			this.previewedUid=r.data['uid'];			
+			this.messagePanel.loadMessage(r.data.uid, this.mailbox, this.account_id);			
+		}
+	}, this);*/
 
 
 	var gridContextMenu = new Ext.menu.Menu({
