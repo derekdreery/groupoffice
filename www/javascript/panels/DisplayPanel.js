@@ -86,6 +86,7 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 		this.split=true;
 		this.tbar = this.createTopToolbar();	
 		this.xtemplate = new Ext.XTemplate(this.template, this.templateConfig);
+		this.xtemplate.compile();
 		
 		GO.DisplayPanel.superclass.initComponent.call(this);		
 	},

@@ -70,7 +70,8 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			'</div>'+
 			'<div id="'+this.bodyId+'" class="message-body">{body}</div>';
 		
-		this.template = new Ext.XTemplate(templateStr);			
+		this.template = new Ext.XTemplate(templateStr);		
+		this.template.compile();	
 	},
 	
 	loadMessage : function(uid, mailbox, account_id)
