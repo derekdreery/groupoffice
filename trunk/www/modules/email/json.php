@@ -890,6 +890,10 @@ try{
 
 									$message['from'] = ($mailbox == $account['sent'] || $mailbox == $account['drafts']) ? $message['to'] : $message['from'];
 
+									$message['from']=htmlspecialchars($message['from'], ENT_QUOTES, 'UTF-8');
+									$message['subject']=htmlspecialchars($message['subject'], ENT_QUOTES, 'UTF-8');
+
+
 									if(empty($message['from']))
 									{
 										if($mailbox==$account['drafts'])
