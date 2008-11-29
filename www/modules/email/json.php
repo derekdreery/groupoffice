@@ -890,6 +890,17 @@ try{
 
 									$message['from'] = ($mailbox == $account['sent'] || $mailbox == $account['drafts']) ? $message['to'] : $message['from'];
 
+									$RFC822 = new RFC822();
+									$address = $RFC822->parse_address_list($message['from']);
+
+									if(!empty($address[0]['personal']))
+									{
+										$message['from']=$address[0]['personal'];
+									}else
+									{
+										$message['from']=$address[0]['email'];
+									}
+
 									$message['from']=htmlspecialchars($message['from'], ENT_QUOTES, 'UTF-8');
 									$message['subject']=htmlspecialchars($message['subject'], ENT_QUOTES, 'UTF-8');
 
