@@ -1,6 +1,6 @@
 
 
-GO.tools.lang.tools='Herramientas de administración';
+GO.tools.lang.tools='Herramientas de administraciÃ³n';
 GO.tools.lang.description='Haga clic en una de las secuencia de comandos para ejecutarlo.';
 
 GO.tools.lang.scripts='Script';

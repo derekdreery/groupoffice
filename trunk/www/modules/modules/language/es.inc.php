@@ -1,5 +1,5 @@
 <?php
-	$lang['modules']['name'] = 'M骴ulos';
-	$lang['modules']['description'] = 'M骴ulo de administraci髇; M骴ulos de gesti髇.';
-	$lang['modules']['deleteModule'] = 'Los "m骴ulos" no se puede borrar!';
+	$lang['modules']['name'] = 'M贸dulos';
+	$lang['modules']['description'] = 'M贸dulo de administraci贸n; M贸dulos de gesti贸n.';
+	$lang['modules']['deleteModule'] = 'Los "m贸dulos" no se puede borrar!';
 ?>

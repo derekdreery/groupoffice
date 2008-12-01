@@ -2,16 +2,16 @@
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_language_file('addressbook'));
 $lang['addressbook']['name'] = 'Contactos';
-$lang['addressbook']['description'] = 'Módulo para gestionar todos los contactos.';
+$lang['addressbook']['description'] = 'MÃ³dulo para gestionar todos los contactos.';
 
 
 
 $lang['addressbook']['allAddressbooks'] = 'Todas las secciones';
-$lang['common']['addressbookAlreadyExists'] = 'La partida que está intentando crear ya existe';
-$lang['addressbook']['notIncluded'] = 'No de importación';
+$lang['common']['addressbookAlreadyExists'] = 'La partida que estÃ¡ intentando crear ya existe';
+$lang['addressbook']['notIncluded'] = 'No de importaciÃ³n';
 
 $lang['addressbook']['comment'] = 'Notes';
-$lang['addressbook']['bankNo'] = 'Número de cuenta bancaria'; 
+$lang['addressbook']['bankNo'] = 'NÃºmero de cuenta bancaria'; 
 $lang['addressbook']['vatNo'] = 'IVA';
 $lang['addressbook']['contactsGroup'] = 'Grupo';
 

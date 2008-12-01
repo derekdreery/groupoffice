@@ -1,10 +1,10 @@
 <?php
 $lang['summary']['name']='Contenido';
-$lang['summary']['description']='Por favor, introduzca una descripción';
+$lang['summary']['description']='Por favor, introduzca una descripciÃ³n';
 
 $lang['summary']['default_rss_url']='http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml';
-$lang['summary']['announcement']='Comunicación';
+$lang['summary']['announcement']='ComunicaciÃ³n';
 $lang['summary']['announcements']='Comunicaciones';
-$lang['summary']['announcement']='Comunicación';
+$lang['summary']['announcement']='ComunicaciÃ³n';
 $lang['summary']['announcements']='Comunicaciones';
 

@@ -8,76 +8,76 @@ $lang['common']['errorsInForm'] = 'Hay errores en el formulario. Por favor, corr
 
 $lang['common']['loadingCore']= 'Cargando el sistema base';
 $lang['common']['loadingLogin'] = 'Cargando ventana de acceso';
-$lang['common']['renderInterface']='Renderización Interfaz';
-$lang['common']['loadingModule'] = 'Módulo de carga';
+$lang['common']['renderInterface']='RenderizaciÃ³n Interfaz';
+$lang['common']['loadingModule'] = 'MÃ³dulo de carga';
 
 $lang['common']['loggedInAs'] = "Acceso a cabo por";
 $lang['common']['search']='Buscar';
 $lang['common']['settings']='Opciones';
-$lang['common']['adminMenu']='Menú de Administrador';
+$lang['common']['adminMenu']='MenÃº de Administrador';
 $lang['common']['help']='Ayuda';
 $lang['common']['logout']='Logout';
-$lang['common']['badLogin'] = 'Nombre de usuario o contraseña equivocada';
-$lang['common']['badPassword'] = 'La contraseña es incorrecta';
+$lang['common']['badLogin'] = 'Nombre de usuario o contraseÃ±a equivocada';
+$lang['common']['badPassword'] = 'La contraseÃ±a es incorrecta';
 
-$lang['common']['passwordMatchError']='Las contraseñas no coinciden';
+$lang['common']['passwordMatchError']='Las contraseÃ±as no coinciden';
 $lang['common']['accessDenied']='Acceso denegado';
 $lang['common']['saveError']='Error al guardar los datos';
-$lang['common']['deleteError']='Error l\'eliminación de los datos';
+$lang['common']['deleteError']='Error l\'eliminaciÃ³n de los datos';
 $lang['common']['selectError']='Error de lectura de datos';
 $lang['common']['missingField'] = 'Usted no ha completado todos los campos obligatorios.';
 
-$lang['common']['salutation']='Fórmula de apertura';
+$lang['common']['salutation']='FÃ³rmula de apertura';
 $lang['common']['firstName'] = 'Nombre';
 $lang['common']['lastName'] = 'Apellido';
 $lang['common']['middleName'] = 'Segundo Nombre';
-$lang['common']['sirMadam']['M'] = 'Señor';
+$lang['common']['sirMadam']['M'] = 'SeÃ±or';
 $lang['common']['sirMadam']['F'] = 'Dama';
 $lang['common']['initials'] = 'Iniciales';
 $lang['common']['sex'] = 'Sexo';
 $lang['common']['birthday'] = 'Fecha de nacimiento';
 $lang['common']['sexes']['M'] = 'Macho';
 $lang['common']['sexes']['F'] = 'Hembra';
-$lang['common']['title'] = 'Título';
-$lang['common']['addressNo'] = 'Número';
-$lang['common']['workAddressNo'] = 'Número (trabajo)';
-$lang['common']['postAddress'] = 'Dirección';
-$lang['common']['postAddressNo'] = 'Número';
+$lang['common']['title'] = 'TÃ­tulo';
+$lang['common']['addressNo'] = 'NÃºmero';
+$lang['common']['workAddressNo'] = 'NÃºmero (trabajo)';
+$lang['common']['postAddress'] = 'DirecciÃ³n';
+$lang['common']['postAddressNo'] = 'NÃºmero';
 $lang['common']['postCity'] = 'Ciudad';
 $lang['common']['postState'] = 'Provincia';
-$lang['common']['postCountry'] = 'Nación';
+$lang['common']['postCountry'] = 'NaciÃ³n';
 $lang['common']['postZip'] = 'PAC';
-$lang['common']['visitAddress'] = 'Visit Dirección';
-$lang['common']['postAddressHead'] = 'Post Dirección';
+$lang['common']['visitAddress'] = 'Visit DirecciÃ³n';
+$lang['common']['postAddressHead'] = 'Post DirecciÃ³n';
 $lang['common']['name'] = 'Nombre';
 $lang['common']['user'] = 'Usuario';
 $lang['common']['username'] = 'Username';
 $lang['common']['password'] = 'Password';
-$lang['common']['authcode'] = 'Código de autorización';
-$lang['common']['country'] = 'Nación';
+$lang['common']['authcode'] = 'CÃ³digo de autorizaciÃ³n';
+$lang['common']['country'] = 'NaciÃ³n';
 $lang['common']['state'] = 'Provincia';
 $lang['common']['city'] = 'Ciudad';
 $lang['common']['zip'] = 'PAC';
-$lang['common']['address'] = 'Dirección';
+$lang['common']['address'] = 'DirecciÃ³n';
 $lang['common']['email'] = 'E-mail';
-$lang['common']['phone'] = 'Teléfono';
-$lang['common']['workphone'] = 'Teléfono (trabajo)';
+$lang['common']['phone'] = 'TelÃ©fono';
+$lang['common']['workphone'] = 'TelÃ©fono (trabajo)';
 $lang['common']['cellular'] = 'Celular';
-$lang['common']['company'] = 'Compañía';
+$lang['common']['company'] = 'CompaÃ±Ã­a';
 $lang['common']['department'] = 'Oficina';
-$lang['common']['function'] = 'Función';
+$lang['common']['function'] = 'FunciÃ³n';
 $lang['common']['question'] = 'Pregunta';
 $lang['common']['answer'] = 'Respuesta';
 $lang['common']['fax'] = 'Fax';
 $lang['common']['workFax'] = 'Fax (trabajo)';
 $lang['common']['homepage'] = 'Homepage';
-$lang['common']['workAddress'] = 'Dirección (trabajo)';
+$lang['common']['workAddress'] = 'DirecciÃ³n (trabajo)';
 $lang['common']['workZip'] = 'PAC (trabajo)';
-$lang['common']['workCountry'] = 'Nación (trabajo)';
+$lang['common']['workCountry'] = 'NaciÃ³n (trabajo)';
 $lang['common']['workState'] = 'Provincia (trabajo)';
 $lang['common']['workCity'] = 'Ciudad (trabajo)';
 $lang['common']['today'] = 'Hoy';
-$lang['common']['tomorrow'] = 'Mañana';
+$lang['common']['tomorrow'] = 'MaÃ±ana';
 
 $lang['common']['SearchAll'] = 'Todos los campos';
 $lang['common']['total'] = 'total';
@@ -109,24 +109,24 @@ $lang['common']['short_days'][6]="Sa";
 $lang['common']['full_days'][0] = "Domingo";
 $lang['common']['full_days'][1] = "Lunes";
 $lang['common']['full_days'][2] = "Martes";
-$lang['common']['full_days'][3] = "Miércoles";
+$lang['common']['full_days'][3] = "MiÃ©rcoles";
 $lang['common']['full_days'][4] = "Jueves";
 $lang['common']['full_days'][5] = "Viernes";
-$lang['common']['full_days'][6] = "Sábado";
+$lang['common']['full_days'][6] = "SÃ¡bado";
 
 $lang['common']['default']='Predeterminado';
-$lang['common']['description']='Descripción';
+$lang['common']['description']='DescripciÃ³n';
 $lang['common']['date']='Fecha';
 
-$lang['common']['default_salutation']['M']='Estimado señor';
-$lang['common']['default_salutation']['F']='Señora';
+$lang['common']['default_salutation']['M']='Estimado seÃ±or';
+$lang['common']['default_salutation']['F']='SeÃ±ora';
 
 
 $lang['common']['mins'] = 'Ver';
 $lang['common']['hour'] = 'Hora';
 $lang['common']['hours'] = 'Horas';
-$lang['common']['day'] = 'días';
-$lang['common']['days'] = 'días';
+$lang['common']['day'] = 'dÃ­as';
+$lang['common']['days'] = 'dÃ­as';
 $lang['common']['week'] = 'semanas';
 $lang['common']['weeks'] = 'semanas';
 
@@ -136,9 +136,9 @@ $lang['common']['group_internal']='Interna';
 
 $lang['common']['admin']='Administrador';
 
-$lang['common']['beginning']='Fórmula de apertura';
+$lang['common']['beginning']='FÃ³rmula de apertura';
 
-$lang['common']['max_emails_reached']= "El número máximo de e-mail a la l\'host SMTP %s de %s por día se alcanza.";
+$lang['common']['max_emails_reached']= "El nÃºmero mÃ¡ximo de e-mail a la l\'host SMTP %s de %s por dÃ­a se alcanza.";
 $lang['common']['usage_stats']='Diskspace usage per %s';
 $lang['common']['usage_text']='This Group-Office installation is using';
 
@@ -147,16 +147,16 @@ $lang['common']['files']='File';
 $lang['common']['email']='E-mail';
 $lang['common']['total']='Total';
 
-$lang['common']['lost_password_subject']='Nueva Contraseña';
+$lang['common']['lost_password_subject']='Nueva ContraseÃ±a';
 $lang['common']['lost_password_body']='%s,<br />
 <br />
-Ha solicitado una nueva contraseña para %s.<br />
+Ha solicitado una nueva contraseÃ±a para %s.<br />
 <br />
 Su nuevo ingreso es:<br />
 <br />
 Nombre de usuario: %s<br />
-Contraseña: %s';
+ContraseÃ±a: %s';
 
-$lang['common']['lost_password_error']='No se puede encontrar su dirección de correo electrónico.';
-$lang['common']['lost_password_success']='Una nueva contraseña ha sido enviado a su e-mail.';
+$lang['common']['lost_password_error']='No se puede encontrar su direcciÃ³n de correo electrÃ³nico.';
+$lang['common']['lost_password_success']='Una nueva contraseÃ±a ha sido enviado a su e-mail.';
 

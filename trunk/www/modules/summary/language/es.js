@@ -1,16 +1,16 @@
 
 
 GO.summary.lang.summary = 'Contenido';
-GO.summary.lang.noItems = 'No tienen ningún elemento en su inicio.';
+GO.summary.lang.noItems = 'No tienen ningÃºn elemento en su inicio.';
 GO.summary.lang.selectPortlet = 'Seleccione portlet';
 GO.summary.lang.hotTopics = 'Temas';
-GO.summary.lang.enterRssFeed = 'Enter' URL del feed RSS:';
+GO.summary.lang.enterRssFeed = 'Enter URL del feed RSS:';
 GO.summary.lang.notes = 'Notas';
 GO.summary.lang.loadingFeed = 'Cargando Feed...';
 GO.summary.lang.goToPost = 'Ir a Correos';
 GO.summary.lang.today = 'Hoy';
 /* table: us_licenses */
-GO.summary.lang.announcement="Comunicación";
+GO.summary.lang.announcement="ComunicaciÃ³n";
 GO.summary.lang.announcements="Comunicaciones";
 GO.summary.lang.host="Host";
 GO.summary.lang.ip="Ip";
@@ -20,9 +20,9 @@ GO.summary.lang.upgrades="Actualizaciones";
 GO.summary.lang.notified="Notificados";
 
 /* table: su_announcements */
-GO.summary.lang.announcement="Comunicación";
+GO.summary.lang.announcement="ComunicaciÃ³n";
 GO.summary.lang.announcements="Comunicaciones";
-GO.summary.lang.dueTime="Fecha límite";
-GO.summary.lang.title="Titùlo";
+GO.summary.lang.dueTime="Fecha lÃ­mite";
+GO.summary.lang.title="TitÃ¹lo";
 GO.summary.lang.content="Contenido";
 GO.summary.lang.manageAnnouncements='Gerente de comunicaciones';

@@ -2,15 +2,15 @@
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_language_file('users'));
 $lang['users']['name'] = 'Usuarios';
-$lang['users']['description'] = 'Módulo de administración; sistema de gestión de los usuarios.';
+$lang['users']['description'] = 'MÃ³dulo de administraciÃ³n; sistema de gestiÃ³n de los usuarios.';
 
 $lang['users']['deletePrimaryAdmin'] = 'Usted no puede borrar l\'Administrador Principal';
 $lang['users']['deleteYourself'] = 'Usted no puede borrar su';
 
 $link_type[8]=$us_user = 'Usuario';
 
-$lang['users']['error_username']='Hay caracteres no válidos en el nombre de usuario';
+$lang['users']['error_username']='Hay caracteres no vÃ¡lidos en el nombre de usuario';
 $lang['users']['error_username_exists']='Este nombre de usuario ya existe';
-$lang['users']['error_email_exists']='Esta dirección de correo electrónico ya está registrado. Puede utilizar la función de contraseña olvidada para recuperar tu contraseña.';
-$lang['users']['error_match_pass']='La contraseña es incorrecta';
-$lang['users']['error_email']='La dirección de correo electrónico no es válida';
+$lang['users']['error_email_exists']='Esta direcciÃ³n de correo electrÃ³nico ya estÃ¡ registrado. Puede utilizar la funciÃ³n de contraseÃ±a olvidada para recuperar tu contraseÃ±a.';
+$lang['users']['error_match_pass']='La contraseÃ±a es incorrecta';
+$lang['users']['error_email']='La direcciÃ³n de correo electrÃ³nico no es vÃ¡lida';

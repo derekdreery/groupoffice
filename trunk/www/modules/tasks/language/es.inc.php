@@ -3,12 +3,12 @@
 require($GO_LANGUAGE->get_fallback_language_file('tasks'));
 
 $lang['tasks']['name']='Actividad';
-$lang['tasks']['description']='Por favor, introduzca una descripción';
+$lang['tasks']['description']='Por favor, introduzca una descripciÃ³n';
 
 $lang['link_type'][12]=$lang['tasks']['task']='Actividad';
 $lang['tasks']['status']='Estado';
 
-$lang['tasks']['statuses']['NEEDS-ACTION']= 'Solicitud de Acción';
+$lang['tasks']['statuses']['NEEDS-ACTION']= 'Solicitud de AcciÃ³n';
 $lang['tasks']['statuses']['ACCEPTED']= 'Aceptada';
 $lang['tasks']['statuses']['DECLINED']= 'Rechazada';
 $lang['tasks']['statuses']['TENTATIVE']= 'Intento';
