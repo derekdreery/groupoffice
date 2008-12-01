@@ -1,0 +1,110 @@
+
+
+GO.email.lang.messages='Mensaje';
+GO.email.lang.message='Mensajes';
+GO.email.lang.inbox='Bandeja de entrada';
+GO.email.lang.accounts='Account';
+GO.email.lang.account='Account e-mail';
+GO.email.lang.crossAccountMove='No es posible mover los mensajes a otra cuenta';
+GO.email.lang.compose='Grabar';
+GO.email.lang.reply='Responder';
+GO.email.lang.replyAll='Responder a todos';
+GO.email.lang.forward='Adelante';
+GO.email.lang.markAsRead='Marcar como leído';
+GO.email.lang.markAsUnread='Marcar como no leído';
+GO.email.lang.flag='Añadir marca';
+GO.email.lang.unflag='Quitar marca';
+GO.email.lang.flagged='Marcado';
+GO.email.lang.unflagged='No Marcado';
+GO.email.lang.root='Root';
+GO.email.lang.folders='Carpetas';
+GO.email.lang.filter='Filtro';
+GO.email.lang.filters='Filtros';
+GO.email.lang.selectFolderDelete='Seleccione una carpeta a borrar';
+GO.email.lang.selectFolderAdd='En primer lugar, seleccione una carpeta de árbol en la que desea agregar a la carpeta. A continuación, haga clic en Añadir';
+GO.email.lang.forward='Adelante';
+GO.email.lang.resetSearch='Restablecer la búsqueda';
+GO.email.lang.emailMessage='Mensaje de correo electrónico';
+GO.email.lang.host='Host';
+GO.email.lang.field='Campo';
+GO.email.lang.contains='Contains';
+GO.email.lang.moveToFolder='Mover a carpeta';
+GO.email.lang.incomingMail='Bandeja de entrada';
+GO.email.lang.advanced='Avanzado';
+GO.email.lang.ssl='SSL';
+GO.email.lang.tls='TLS';
+GO.email.lang.novalidateCert='No se puede validar el certificado'
+GO.email.lang.port='Puerta';
+GO.email.lang.rootMailbox='buzón de raíz';
+GO.email.lang.manageFolders='Administratr carpetas';
+GO.email.lang.sendItemsFolder='Carpeta de Correo enviado';
+GO.email.lang.trashFolder='basura';
+GO.email.lang.draftsFolder='Carpeta de proyectos';
+GO.email.lang.sender='Campo Da';
+GO.email.lang.subject='Oggetto';
+GO.email.lang.toField='Campo A';
+GO.email.lang.ccField='Campo CC';
+GO.email.lang.bccField='Campo BCC';
+GO.email.lang.keyword='Palabra clave';
+GO.email.lang.notification='solicitud de notificación de la lectura';
+GO.email.lang.high='Alto';
+GO.email.lang.normal='Normal';
+GO.email.lang.low='Bajo';
+GO.email.lang.from='Da';
+GO.email.lang.sendTo='A';
+GO.email.lang.cc='CC';
+GO.email.lang.bcc='BCC';
+GO.email.lang.selectTemplate='Seleccione un modelo';
+GO.email.lang.composeEmail='Enviar un e-mail';
+GO.email.lang.send='Enviar';
+GO.email.lang.extraOptions='Extras opcionales';
+GO.email.lang.attachments='Adjuntos';
+GO.email.lang.show='Mostrar';
+GO.email.lang.noAccount='Usted todavía no han creado un e-mail. Ir a la e-mail -> Account para establecer su dirección de e-mail';
+GO.email.lang.attachFiles='Adjuntar archivo';
+GO.email.lang.uploadAttachments='Subir archivos adjuntos';
+GO.email.lang.startTransfer='Principio de transferencia';
+GO.email.lang.cantEditFolder='No se puede cambiar esta carpeta';
+GO.email.lang.cantDeleteInboxFolder='No se puede borrar la Bandeja de entrada';
+GO.email.lang.enterFolderName='Introduzca el nombre de la carpeta:';
+GO.email.lang.addFolder='Añadir carpeta';
+GO.email.lang.to='A';
+GO.email.lang.downloadAllAsZip='Obtener todo como archivos zip';
+GO.email.lang.body='Cuerpo';
+GO.email.lang.recievedBefore='Recibió el primer';
+GO.email.lang.recievedSince='Recibió';
+GO.email.lang.answered='Respuesta';
+GO.email.lang.unanswered='No responde';
+GO.email.lang.viewed='Leer';
+GO.email.lang.outgoingMail='Mensajes enviados';
+GO.email.lang.encryption='Codificación';
+GO.email.lang.type='Tipo';
+GO.email.lang.noEncryption='No codificación';
+GO.email.lang.noAccountTitle='No account';
+GO.email.lang.priority='Prioridad';
+
+GO.email.lang.read='Leer';
+GO.email.lang.NA='N/A';
+
+GO.email.lang.emptyFolder='Carpeta vacía';
+GO.email.lang.emptyFolderConfirm='¿Está usted seguro de que deseas CLEARED \'{mailbox}\'?';
+GO.email.lang.addUnknownRecipients='Añadir destinatarios desconocidos';
+GO.email.lang.addUnknownRecipientsText='Usted acaba de enviarse a e-mail a uno o más destinatarios no en su libreta de direcciones. Haga clic en el nombre si usted desea agregar a la persona o cerrar esta ventana.';
+GO.email.lang.attachFilesPC='Añadir por PC';
+GO.email.lang.attachFilesGO='Añadir por Group-Office';
+
+
+GO.email.lang.vacation='Respuesta automática';
+GO.email.lang.vacationActive='Activar la función de respuesta automática';
+GO.email.lang.vacationSubject='Objeto';
+GO.email.lang.vacationBody='Cuerpo';
+
+GO.email.lang.addToRecipients = 'Añadir a los destinatarios';
+GO.email.lang.addToCC = 'Añadir a CC';
+GO.email.lang.addToBCC = 'Añadir a BCC';
+
+GO.email.lang.viewSource='Ver código fuente';
+
+GO.email.lang.sendNotification='El remitente de este mensaje ha solicitado una notificación de la lectura del mensaje: %s. ¿Quieres enviar una confirmación?';
+
+GO.email.lang.searchOnSender='Mostrar mensajes';
