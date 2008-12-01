@@ -803,7 +803,7 @@ try{
 								$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : 30;
 								
 								$account = connect($account_id, $mailbox);
-								$response['drafts']=$account['drafts']==$mailbox;
+								$response['drafts']=$imap->utf7_imap_encode($account['drafts'])==$mailbox;
 
 								if(isset($_POST['delete_keys']))
 								{
@@ -813,7 +813,7 @@ try{
 
 									if($mailbox != $account['trash'])
 									{
-										$response['deleteSuccess']=$imap->move($account['trash'], $messages);
+										$response['deleteSuccess']=$imap->move($imap->utf7_imap_encode($account['trash']), $messages);
 									}else {
 										$response['deleteSuccess']=$imap->delete($messages);
 									}

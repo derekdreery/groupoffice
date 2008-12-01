@@ -268,13 +268,10 @@ class GoSwift extends Swift{
 			global $lang;
 			$msg = sprintf($lang['common']['max_emails_reached'], $this->smtp_host, $smtp_restrict->hosts[gethostbyname($this->smtp_host)]);
 			throw new Exception($msg);
-		}
-		
+		}		
 		
 		$name_from=!empty($name_from) ? $name_from : $this->account['name'];
 		$email_from=!empty($email_from) ? $email_from : $this->account['email'];
-
-		
 
 		if($batch)
 		{
@@ -313,7 +310,7 @@ class GoSwift extends Swift{
 				$this->data = $this->message->build();
 				$this->data = $this->data->readFull();
 
-				if ($imap->append_message($this->account['sent'], $this->data,"\\Seen"))
+				if ($imap->append_message($imap->utf7_imap_encode($this->account['sent']), $this->data,"\\Seen"))
 				{
 					if (!empty($this->reply_uid) && !empty($this->reply_mailbox))
 					{
@@ -327,7 +324,6 @@ class GoSwift extends Swift{
 						
 					}
 					$imap->close();
-
 				}
 			}
 		}

@@ -206,15 +206,13 @@ try{
 								$response['unknown_recipients']=array();
 							}
 							
-							
-
 							require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 
 							$swift =& new GoSwift(
-								($_POST['to']),
-								($_POST['subject']),
-								($_POST['account_id']),
-								($_POST['priority'])
+								$_POST['to'],
+								$_POST['subject'],
+								$_POST['account_id'],
+								$_POST['priority']
 							);
 
 							if(!empty($_POST['reply_uid']))
@@ -314,18 +312,9 @@ try{
 								
 							if(!empty($_POST['draft']))
 							{
-								if ($imap->open(
-									$swift->account['host'],
-									$swift->account['type'],
-									$swift->account['port'],
-									$swift->account['username'],
-									$swift->account['password'],
-									$swift->account['drafts'],
-									null,
-									$swift->account['use_ssl'],
-									$swift->account['novalidate_cert'])) {					
+								if ($imap->open($swift->account)){					
 
-									$response['success']=$imap->append_message($swift->account['drafts'], $swift->get_data(),"\\Seen");
+									$response['success']=$imap->append_message($imap->utf7_imap_encode($swift->account['drafts']), $swift->get_data(),"\\Seen");
 									
 									if(!$response['success'])
 									{
