@@ -1,14 +1,14 @@
 
 
 /* new table: no_categories */
-GO.notes.lang.category="Categoría";
-GO.notes.lang.categories="Categorías";
+GO.notes.lang.category="CategorÃ­a";
+GO.notes.lang.categories="CategorÃ­as";
 
 /* new table: no_notes */
 GO.notes.lang.note="Nota";
 GO.notes.lang.notes="Note";
-GO.notes.lang.category_id="ID Categoría";
+GO.notes.lang.category_id="ID CategorÃ­a";
 GO.notes.lang.content="Contenido";
 
 
-GO.notes.lang.manageCategories="La gestión de categorías";
+GO.notes.lang.manageCategories="La gestiÃ³n de categorÃ­as";

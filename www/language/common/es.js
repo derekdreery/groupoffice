@@ -18,21 +18,21 @@ GO.lang.popupBlocker = 'Su navegador bloquea pop de un grupo de ejercicio. Desha
 GO.lang.color='Color';
 GO.lang.browse='Navegar...';
 GO.lang.largeUpload='Grandes archivos / carpetas (requiere Java)';
-GO.lang.smallUpload='Pequeño tamaño';
+GO.lang.smallUpload='PequeÃ±o tamaÃ±o';
 
 
-GO.lang.lostPassword='¿Olvidaste tu contraseña?';
-GO.lang.lostPasswordText='Para recuperar su contraseña puede leer su dirección de e-mail sin acceso a un grupo de ejercicio. Si introduce su dirección de e-mail una nueva contraseña será enviado a tu dirección de e-mail. <br /> <br /> Ingrese su dirección de e-mail:';
+GO.lang.lostPassword='Â¿Olvidaste tu contraseÃ±a?';
+GO.lang.lostPasswordText='Para recuperar su contraseÃ±a puede leer su direcciÃ³n de e-mail sin acceso a un grupo de ejercicio. Si introduce su direcciÃ³n de e-mail una nueva contraseÃ±a serÃ¡ enviado a tu direcciÃ³n de e-mail. <br /> <br /> Ingrese su direcciÃ³n de e-mail:';
 
-GO.lang.noJava='WebStart Java no está instalado. Java le permite cambiar fácilmente y cargar archivos. Visita <a class="normal-link" href="http://www.java.com/download" target="_blank"> http://www.java.com/download </ a> para instalarlo.';
+GO.lang.noJava='WebStart Java no estÃ¡ instalado. Java le permite cambiar fÃ¡cilmente y cargar archivos. Visita <a class="normal-link" href="http://www.java.com/download" target="_blank"> http://www.java.com/download </ a> para instalarlo.';
 
 GO.lang.strHelpContents='Ayuda';
 GO.lang.strReportBug='Informar de un error';
 GO.lang.strAbout='About Group-Office';
-GO.lang.strUsage='Estadísticas de uso';
+GO.lang.strUsage='EstadÃ­sticas de uso';
 
 GO.lang.strName = 'Nombre';
-GO.lang.strDescription = 'Descripción';
+GO.lang.strDescription = 'DescripciÃ³n';
 GO.lang.strEmail = 'E-mail';
 GO.lang.strUser = 'Usuario';
 GO.lang.users = 'Usuarios';
@@ -45,7 +45,7 @@ GO.lang.strOpenOffice = 'Documento OpenOffice.org';
 
 GO.lang.strDefault = 'Predeterminado';
 GO.lang.strUsername = 'Nombre de usuario';
-GO.lang.strPassword = 'Contraseña';
+GO.lang.strPassword = 'ContraseÃ±a';
 
 GO.lang.strFirstName = 'Nombre';
 GO.lang.strMiddleName = 'Segundo Nombre';
@@ -57,34 +57,34 @@ GO.lang.strSex = 'Sexo';
 GO.lang.strBirthday = 'Fecha de nacimiento';
 GO.lang.strEmail = 'E-mail';
 
-GO.lang.strPhone = 'Teléfono';
+GO.lang.strPhone = 'TelÃ©fono';
 GO.lang.strFax = 'Fax';
 GO.lang.strCellular = 'Celular';
-GO.lang.strAddress = 'Dirección';
+GO.lang.strAddress = 'DirecciÃ³n';
 GO.lang.strAddressNo = 'Numero';
 GO.lang.strZip = 'PAC';
 GO.lang.strCity = 'Ciudad';
 GO.lang.strState = 'Provincia';
-GO.lang.strCountry = 'Nación';
+GO.lang.strCountry = 'NaciÃ³n';
 GO.lang.strHomepage = 'Homepage';
 GO.lang.strCompany = 'Empresa';
 GO.lang.strDepartment = 'Oficina';
 GO.lang.strFunction = 'Funcion';
 GO.lang.strSalutation = 'Formula de apertura';
 GO.lang.strComment = 'Notas';
-GO.lang.strWorkAddress = 'Dirección (Trabajo)';
+GO.lang.strWorkAddress = 'DirecciÃ³n (Trabajo)';
 GO.lang.strWorkAddressNo = 'Numero(Trabajo)';
 GO.lang.strWorkZip = 'PAC (Trabajo)';
 GO.lang.strWorkCity = 'Ciudad (Trabajo)';
 GO.lang.strWorkState = 'Provincia (Trabajo)';
-GO.lang.strWorkCountry = 'Nación (Trabajo)',	
-GO.lang.strWorkPhone = 'Teléfono (Trabajo)';
+GO.lang.strWorkCountry = 'NaciÃ³n (Trabajo)',	
+GO.lang.strWorkPhone = 'TelÃ©fono (Trabajo)';
 GO.lang.strWorkFax = 'Fax (Trabajo)';
-GO.lang.strPostAddress = 'Dirección';
+GO.lang.strPostAddress = 'DirecciÃ³n';
 GO.lang.strPostAddressNo = 'Numero';
 GO.lang.strPostCity = 'Ciudad';
 GO.lang.strPostState = 'Provincia';
-GO.lang.strPostCountry = 'Nación';
+GO.lang.strPostCountry = 'NaciÃ³n';
 GO.lang.strPostZip = 'PAC';
 
 GO.lang.locations = 'Path';
@@ -93,7 +93,7 @@ GO.lang.folders = 'Carpetas';
 
 GO.lang.up = 'Nivel superior';
 GO.lang.fileExists = 'El archivo existe';
-GO.lang.overwriteFile = '¿Desea sobrescribir el archivo \'{file}\'?';
+GO.lang.overwriteFile = 'Â¿Desea sobrescribir el archivo \'{file}\'?';
 
 GO.lang.url = 'URL';
 
@@ -102,19 +102,19 @@ GO.lang.strFemale = 'Hembra';
 
 GO.lang.strMtime = 'Modificado para';
 GO.lang.strCtime = 'Creado para';
-GO.lang.Atime = 'Último inicio de sesión';
+GO.lang.Atime = 'Ãšltimo inicio de sesiÃ³n';
 GO.lang.strText = 'Testo';
 GO.lang.texts = 'Testi';
 GO.lang.strDate = 'Fecha';
 GO.lang.strUser = 'Usuario';
 
-GO.lang.strSize = 'Tamaño';
+GO.lang.strSize = 'TamaÃ±o';
 GO.lang.strType = 'Tipo';
 GO.lang.strNA = 'N/A';
 
 GO.lang.cmdDelete = 'Eliminar';
-GO.lang.cmdAdd = 'Añadir';
-GO.lang.cmdAddPlusNew = 'Adición + nuevos';
+GO.lang.cmdAdd = 'AÃ±adir';
+GO.lang.cmdAddPlusNew = 'AdiciÃ³n + nuevos';
 GO.lang.cmdSavePlusNew='Guardar + nuevos';
 GO.lang.cmdSave = 'Guardar';
 GO.lang.cmdEdit = 'Editar';
@@ -156,16 +156,16 @@ GO.lang.download = 'Descargar';
 GO.lang.uploadFiles = 'Subir Archivios';
 
 GO.lang.displayingItems = 'Viendo {0} - {1} di {2}';
-GO.lang.strNoItems = 'No hay artículos para mostrar';
+GO.lang.strNoItems = 'No hay artÃ­culos para mostrar';
 
 GO.lang.strLinkItems = 'Buscar los temas a ser conectados';
-GO.lang.strSearchResults= 'Resultados de la búsqueda';
+GO.lang.strSearchResults= 'Resultados de la bÃºsqueda';
 GO.lang.strSearch= 'Buscar';
 
 GO.lang.strPleaseSelect = 'Seleccione...';
 GO.lang.strProperties = 'Propiedades';
 
-GO.lang.strConfirm= 'Confirmación';
+GO.lang.strConfirm= 'ConfirmaciÃ³n';
 GO.lang.strSuccess= 'Exito';
 GO.lang.strError= 'Error';
 GO.lang.waitMsgSave= 'Rescate en curso...';
@@ -173,15 +173,15 @@ GO.lang.waitMsgLoad= 'Cargando...';
 GO.lang.waitMsgUpload= 'Cargando...';
 GO.lang.strRequestError= 'No se ha podido enviar la solicitud. El servidor devuelve el estado {0}';
 
-GO.lang.strSelected = 'Selección';
-GO.lang.noItemSelected= 'No ha seleccionado ningún tema.';
-GO.lang.strDeleteSelectedItems= '¿Está usted seguro de que deseas eliminar {count} elementos?';
-GO.lang.strDeleteSelectedItem= '¿Estás seguro de que deseas eliminar l\' objeto seleccionado?';
+GO.lang.strSelected = 'SelecciÃ³n';
+GO.lang.noItemSelected= 'No ha seleccionado ningÃºn tema.';
+GO.lang.strDeleteSelectedItems= 'Â¿EstÃ¡ usted seguro de que deseas eliminar {count} elementos?';
+GO.lang.strDeleteSelectedItem= 'Â¿EstÃ¡s seguro de que deseas eliminar l\' objeto seleccionado?';
 
-GO.lang.strNoWritePermissions = 'Usted no está autorizado a cambiar esta objeto ';
+GO.lang.strNoWritePermissions = 'Usted no estÃ¡ autorizado a cambiar esta objeto ';
 
 GO.lang.strUnauthorized= 'No autorizada';
-GO.lang.strUnauthorizedText= 'Usted no tiene permiso para realizar esta acción';
+GO.lang.strUnauthorizedText= 'Usted no tiene permiso para realizar esta acciÃ³n';
 GO.lang.strReadPermissions = 'Permisos de lectura';
 GO.lang.strWritePermissions = 'Permisos de escritura';
 GO.lang.strPermissions = 'Permisos';
@@ -216,8 +216,8 @@ GO.lang.strWeek="Semana";
 GO.lang.strWeeks="Semanas";
 GO.lang.strMonth="Mese";
 GO.lang.strMonths="Meses";
-GO.lang.strYear="Año";
-GO.lang.strYears="Años";
+GO.lang.strYear="AÃ±o";
+GO.lang.strYears="AÃ±os";
 GO.lang.strTime='Tiempo';
 
 GO.lang.shortDays = ['Dom', 'Lun', 'Mar', 'Mie', 'Juv', 'Vie','Sab'];
@@ -229,7 +229,7 @@ GO.lang.monthsByDay = 'Months by day';
 GO.lang.strSelectFiles='Seleccione el archivo';
 GO.lang.strFiles='Archivo';
 GO.lang.strSubject='Objeto';
-GO.lang.strLocation='Localización';
+GO.lang.strLocation='LocalizaciÃ³n';
 GO.lang.strStart='Inicio';
 GO.lang.strEnd='Finalizar';
 
@@ -247,26 +247,26 @@ GO.lang.field = 'Campo';
 
 GO.lang.customer = 'Cliente';
 
-GO.lang.strNoCountrySelected='No hay país seleccionado';
+GO.lang.strNoCountrySelected='No hay paÃ­s seleccionado';
 GO.lang.menu = 'Menu';
 GO.lang.root = 'Root';
 GO.lang.left = 'Izquierda';
 GO.lang.right = 'Derecha';
 
-GO.lang.noFilesModule = 'El módulo de archivo es necesario para esta función';
+GO.lang.noFilesModule = 'El mÃ³dulo de archivo es necesario para esta funciÃ³n';
 
 
-GO.lang.remindPassword='Recordar mi inicio de sesión en este equipo';
+GO.lang.remindPassword='Recordar mi inicio de sesiÃ³n en este equipo';
 
 GO.lang.reminders = 'Recordatorios';
 GO.lang.dismiss='Cancelar';
 GO.lang.snooze='Repetir';
 
-GO.lang.strMax = 'Máximo';
+GO.lang.strMax = 'MÃ¡ximo';
 
 GO.lang.settings='Opciones';
 
-GO.lang.latestLinks='Última links'
+GO.lang.latestLinks='Ãšltima links'
 GO.lang.cmdBrowseLinks = 'Navegar links';
 
 
@@ -432,7 +432,7 @@ GO.lang.countries["PW"] = "Palau";
 GO.lang.countries["PA"] = "Panama";
 GO.lang.countries["PG"] = "Papua Nuova Guinea";
 GO.lang.countries["PY"] = "Paraguay";
-GO.lang.countries["PE"] = "PerÃ¹";
+GO.lang.countries["PE"] = "PerÃƒÂ¹";
 GO.lang.countries["PH"] = "Filippine";
 GO.lang.countries["PN"] = "Pitcairn";
 GO.lang.countries["PL"] = "Polonia";
@@ -490,7 +490,7 @@ GO.lang.countries["UM"] = "Isole Minori degli Sati Uniti";
 GO.lang.countries["UY"] = "Uruguay";
 GO.lang.countries["UZ"] = "Uzbekistan";
 GO.lang.countries["VU"] = "Vanuatu";
-GO.lang.countries["VA"] = "CittÃ  del Vaticano";
+GO.lang.countries["VA"] = "CittÃƒÂ  del Vaticano";
 GO.lang.countries["VE"] = "Venezuela";
 GO.lang.countries["VG"] = "Isole Vergini (UK)";
 GO.lang.countries["VI"] = "Isole Vergini (USA)";

@@ -2,12 +2,12 @@
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_language_file('files'));
 $lang['files']['name'] = 'Archivo';
-$lang['files']['description'] = 'Presentar la Forma; módulo para el uso compartido de archivos';
+$lang['files']['description'] = 'Presentar la Forma; mÃ³dulo para el uso compartido de archivos';
 
 $lang['files']['fileNotFound'] = 'El archivo no se encuentra';
 $lang['files']['folderExists'] = 'La carpeta ya existe';
 $lang['files']['filenameExists'] = 'El nombre de archivo ya existe';
-$lang['files']['uploadedSucces'] = 'Cargando archivo completado con éxito';
+$lang['files']['uploadedSucces'] = 'Cargando archivo completado con Ã©xito';
 
 $lang['files']['ootextdoc']='Documento Open-Office Testo';
 $lang['files']['wordtextdoc']='Documento Microsoft Word';

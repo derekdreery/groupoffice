@@ -1,10 +1,10 @@
 
 GO.modules.lang.cmdSaveChanges = 'Guardar cambios',
 GO.modules.lang.cmdInstall = 'Instalar',
-GO.modules.lang.cmdUninstall = 'desinstalaci髇',
-GO.modules.lang.cmdAvailableModules = 'M骴ulos disponibles',
+GO.modules.lang.cmdUninstall = 'desinstalaci贸n',
+GO.modules.lang.cmdAvailableModules = 'M贸dulos disponibles',
 GO.modules.lang.cmdModuleName = 'Nombre de la forma',
-GO.modules.lang.cmdModuleDescription = 'Descripci髇',
+GO.modules.lang.cmdModuleDescription = 'Descripci贸n',
 GO.modules.lang.cmdGridColumnModuleName = 'Nombre de la forma',
-GO.modules.lang.cmdUninstallMessage = 'DVERTENCIA! Todos los datos en este formulario ser醤 borrados! 縀st醩 seguro de que desea desinstalar el "{0}" forma?',
-GO.modules.lang.cmdModulesCannotBeDeleted = 'El m骴ulo "M骴ulos" no se puede borrar!.'
+GO.modules.lang.cmdUninstallMessage = '隆ADVERTENCIA! Todos los datos en este formulario ser谩n borrados! 驴Est谩s seguro de que desea desinstalar el "{0}" forma?',
+GO.modules.lang.cmdModulesCannotBeDeleted = 'El m贸dulo "M贸dulos" no se puede borrar!.'

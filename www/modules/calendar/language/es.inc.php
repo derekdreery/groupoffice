@@ -2,7 +2,7 @@
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_language_file('calendar'));
 $lang['calendar']['name'] = 'Calendario';
-$lang['calendar']['description'] = 'Calendario de mÛdulo, cada usuario puede agregar, editar o eliminar citas. Incluso los nombramientos de otros usuarios se pueden ver y modificar si es necesario.';
+$lang['calendar']['description'] = 'Calendario de m√≥dulo, cada usuario puede agregar, editar o eliminar citas. Incluso los nombramientos de otros usuarios se pueden ver y modificar si es necesario.';
 
 $lang['link_type'][1]='Cita';
 
@@ -17,13 +17,13 @@ $lang['calendar']['allTogether'] = 'Juntos';
 
 $lang['calendar']['location']='Place';
 
-$lang['calendar']['invited']='Usted est· invitado a la siguiente evento';
+$lang['calendar']['invited']='Usted est√° invitado a la siguiente evento';
 $lang['calendar']['acccept_question']='Aceptar este evento?';
 
 $lang['calendar']['accept']='Aceptar';
 $lang['calendar']['decline']='Rechazar';
 
-$lang['calendar']['bad_event']='El caso de que no hay m·s';
+$lang['calendar']['bad_event']='El caso de que no hay m√°s';
 
 $lang['calendar']['subject']='Objeto';
 $lang['calendar']['status']='Estado';
@@ -36,14 +36,14 @@ $lang['calendar']['statuses']['DECLINED'] = 'Rechazada';
 $lang['calendar']['statuses']['TENTATIVE'] = 'Provisional';
 $lang['calendar']['statuses']['DELEGATED'] = 'Delegado';
 $lang['calendar']['statuses']['COMPLETED'] = 'Completo';
-$lang['calendar']['statuses']['IN-PROCESS'] = 'TransformaciÛn';
+$lang['calendar']['statuses']['IN-PROCESS'] = 'Transformaci√≥n';
 
 
 $lang['calendar']['accept_mail_subject'] = 'Convocatoria para \'%s\' aceptada';
-$lang['calendar']['accept_mail_body'] = '%s ha aceptado su invitaciÛn a:';
+$lang['calendar']['accept_mail_body'] = '%s ha aceptado su invitaci√≥n a:';
 
 $lang['calendar']['decline_mail_subject'] = 'Convocatoria para \'%s\' negado';
-$lang['calendar']['decline_mail_body'] = '%s ha rechazado su invitaciÛn a:';
+$lang['calendar']['decline_mail_body'] = '%s ha rechazado su invitaci√≥n a:';
 
 $lang['calendar']['location']='Place';
 $lang['calendar']['and']='e';
@@ -57,9 +57,9 @@ $lang['calendar']['not_invited']='Usted no se ha invitado a este evento. Puede q
 
 
 $lang['calendar']['accept_title']='Aceptado';
-$lang['calendar']['accept_confirm']='El propietario ser· notificado de que ha aceptado Evento';
+$lang['calendar']['accept_confirm']='El propietario ser√° notificado de que ha aceptado Evento';
 
 $lang['calendar']['decline_title']='Rechazada';
-$lang['calendar']['decline_confirm']='El propietario ser· notificado de que se han negado Evento';
+$lang['calendar']['decline_confirm']='El propietario ser√° notificado de que se han negado Evento';
 
-$lang['calendar']['cumulative']='Imperio de la repeticiÛn no v·lida. El prÛximo evento no puede comenzar antes de que el anterior se ha completado.';
+$lang['calendar']['cumulative']='Imperio de la repetici√≥n no v√°lida. El pr√≥ximo evento no puede comenzar antes de que el anterior se ha completado.';
