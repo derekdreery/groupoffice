@@ -17,7 +17,9 @@ td{
 	color: black;
 }
 
-a.menu:link,a.menu:active,a.menu:visited{
+
+
+div.menu, a.menu:link,a.menu:active,a.menu:visited{
 display:block;
 line-height:20px;
 border-bottom: 1px black dashed;
@@ -34,7 +36,7 @@ background-color:#efeffa;
 }
 
 
-a.menu_active:link,a.menu_active:active,a.menu_active:visited{
+div.menu_active, a.menu_active:link,a.menu_active:active,a.menu_active:visited{
 display:block;
 line-height:20px;
 border-bottom: 1px black dashed;

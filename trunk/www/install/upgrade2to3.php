@@ -10,6 +10,8 @@
  *
  */
 
+define('NOTINSTALLED', true);
+
 require_once('../Group-Office.php');
 
 ini_set('max_execution_time', '360');
@@ -78,11 +80,6 @@ function add_time($time)
 	return $time;	
 }
 
-
-
-
-
-
 $db = new db();
 $db2 = new db();
 $db->halt_on_error = 'report';
@@ -91,14 +88,21 @@ $db2->halt_on_error = 'report';
 $db3 = new db();
 $db3->halt_on_error = 'report';
 
+echo 'Upgrading '.$GO_CONFIG->db_name.'<br />';
+
+$db->query("SHOW TABLES");
+while($record=$db->next_record(DB_BOTH))
+{
+	if($record[0]=='go_users')
+	{
+		die('It seems that database has already been upgraded to version 3.0.');
+	}
+}
+
 echo 'Framework updates<br />';
 flush();
 
-$sql = "SELECT * FROM go_modules";
-if(!$db->query($sql))
-	die('<br /><b>Error: </b> You must first run RENAME TABLE `modules`  TO `go_modules` ;');
-	
-
+$db->query("RENAME TABLE `modules`  TO `go_modules` ;");
 $db2->query("UPDATE go_modules SET id='files' WHERE id='filesystem'");
 
 $sql = "SELECT * FROM go_modules";
@@ -1159,9 +1163,17 @@ $db->query("update ab_contacts set salutation=CONCAT('".$lang['common']['default
 //lot of people didn't have latest 2.18
 $db->query("alter table go_users add auth_md5_pass varchar(100) not null;");
 
+$timezone = date_default_timezone_get();
+if(empty($timezone))
+{
+	$timezone = 'GMT';
+}
+
+$db->query("UPDATE go_users SET timezone='$timezone'");
+
 echo 'Done<br /><br />';
 
-echo '<a target="_blank" href="upgrade.php">Click here to process latest updates for version 3.00</a>';
+echo '<a target="_blank" href="index.php">Click here to run the installer and complete the whole proces</a>';
 
 echo '<br /><br /><a target="_blank" href="../modules/tools/dbcheck.php">After that run a database check and rebuild the search index</a>';
 

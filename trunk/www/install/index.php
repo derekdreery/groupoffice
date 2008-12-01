@@ -90,7 +90,7 @@ function print_head()
 		$class = $task == $GLOBALS['task'] ? 'menu_active' : 'menu';
 		if(isset($GLOBALS['menu_language'][$task]))
 		{
-			echo '<a class="'.$class.'" href="'.$_SERVER['PHP_SELF'].'?task='.$task.'">'.$GLOBALS['menu_language'][$task].'</a>';
+			echo '<div class="'.$class.'">'.$GLOBALS['menu_language'][$task].'</div>';
 		}
 	}
 	echo '</td><td valign="top" style="padding:10px;width:100%;">';
@@ -273,9 +273,6 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 				$GO_USERS->debug=true;
 				$GO_USERS->add_user($user,$user_groups,array($GO_CONFIG->group_everyone));
 				//filesystem::mkdir_recursive($GO_CONFIG->file_storage_path.'users/admin/');
-				
-				
-
 				$task = $nexttask;
 			}
 			break;
@@ -322,11 +319,6 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 			$GO_CONFIG->cmd_xml2wbxml = whereis('xml2wbxml') ? whereis('xml2wbxml') : '/usr/bin/xml2wbxml';
 			$GO_CONFIG->cmd_wbxml2xml = whereis('wbxml2xml') ? whereis('wbxml2xml') : '/usr/bin/wbxml2xml';
 			$GO_CONFIG->cmd_tnef = whereis('tnef') ? whereis('tnef') : '/usr/bin/tnef';
-			
-		
-
-			
-			
 
 			if (save_config($GO_CONFIG) && !isset($feedback))
 			{
@@ -836,6 +828,7 @@ switch($task)
 		}else
 		{
 			$settings_exist = false;
+			$is_old_go=false;
 			$db->query("SHOW TABLES");
 			if ($db->num_rows() > 0)
 			{
@@ -845,6 +838,11 @@ switch($task)
 					if ($db->f(0) == 'go_settings')
 					{
 						$settings_exist = true;
+						break;
+					}
+					if($db->f(0)=='users')
+					{
+						$is_old_go=true;
 						break;
 					}
 				}
@@ -904,7 +902,15 @@ switch($task)
 					<?php
 					print_foot();
 					exit();
-			}else
+			}else if($is_old_go)
+			{
+				print_head();
+				?>
+				Group-Office has detected an older version of Group-Office. The installer can't automatically upgrade this database.
+				<a href="../INSTALL.TXT">Read this for upgrade instructions</a>
+				<?php
+				print_foot();
+			}else			
 			{
 				print_head();
 				echo 	'<input type="hidden" name="task" value="database_structure" />';
@@ -1033,7 +1039,7 @@ switch($task)
 		<table>
 		<tr>
 			<td colspan="2">
-			Group-Office needs a place to store user data. Create a writable path for this purpose now and enter it in the box below.<br />
+			Group-Office needs a place to store proteced data. This folder should not be accessible through the webserver. Create a writable path for this purpose now and enter it in the box below.<br />
 			The path should be have 0777 permissions or should be owned by the webserver user. You probably need to be root to do the last.
 			<br />Also enter a maximum number of bytes to upload and a valid octal value for the file permissions.
 			<br /><br />
@@ -1049,7 +1055,7 @@ switch($task)
 		<?php
 		$userdir = isset($_POST['userdir']) ? $_POST['userdir'] : $GO_CONFIG->file_storage_path;
 		?>
-		<td>User home directory:</td>
+		<td>Protected files directory:</td>
 		<td><input type="text" size="50" name="userdir" value="<?php echo $userdir; ?>" /></td>
 		</tr>
 		<tr>
@@ -1066,19 +1072,14 @@ switch($task)
 		echo $GO_CONFIG->max_file_size; ?>"  />
 		(Current PHP configuration allows <?php echo $max_ini; ?> bytes)
 		</td>
-		</tr>
-		
+		</tr>		
 		<?php
-
-
 		if($GO_CONFIG->local_path == '')
 		{
 			$GO_CONFIG->local_path = $GO_CONFIG->root_path.'local/';
 			$GO_CONFIG->local_url = $GO_CONFIG->host.'local/';
-		}
-
-	?>
-			
+		}	
+		?>			
 		<tr>
 			<td colspan="2">
 			<br /><br />
@@ -1094,7 +1095,7 @@ switch($task)
 		</td>
 		</tr>
 		<tr>
-			<td>Local path:</td>
+			<td>Public files path:</td>
 			<?php
 			$local_path = isset($_POST['local_path']) ? $_POST['local_path'] : $GO_CONFIG->local_path;
 			?>
@@ -1102,7 +1103,7 @@ switch($task)
 		</tr>
 		<tr>
 		<tr>
-			<td>Local URL:</td>
+			<td>Public files URL:</td>
 			<?php
 			$local_url = isset($_POST['local_url']) ? $_POST['local_url'] : $GO_CONFIG->local_url;
 			?>
@@ -1111,13 +1112,13 @@ switch($task)
 		<tr>
 			<td colspan="2">	
 			<br /><br />
-		Group-Office needs a place to store temporarily data such as session data or file uploads. Create a writable path for this purpose now and enter it in the box below.<br />
+		Group-Office needs a place to store temporary data such as session data or file uploads. Create a writable path for this purpose now and enter it in the box below.<br />
 		The /tmp directory is a good option.
 		<br /><br />
 		</td>
 	</tr>
 	<tr>
-		<td>Temporarily files directory:</td>
+		<td>Temporary files directory:</td>
 		<?php
 		$tmpdir = isset($_POST['tmpdir']) ? $_POST['tmpdir'] : $GO_CONFIG->tmpdir;
 		?>

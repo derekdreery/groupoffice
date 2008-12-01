@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `fs_files`;
 CREATE TABLE IF NOT EXISTS `fs_files` (
   `id` int(11) NOT NULL,
   `path` varchar(255) NOT NULL default '',
-  `locked_user_id` int(11) NOT NULL,
+  `locked_user_id` int(11) NOT NULL default '0',
   `status_id` int(11) NOT NULL default '0',
   `ctime` int(11) NOT NULL default '0',
   `mtime` int(11) NOT NULL default '0',
