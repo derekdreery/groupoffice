@@ -872,17 +872,17 @@ switch($task)
 					Group-Office has detected a previous installation of Group-Office. By pressing continue the database will be upgraded. This may take some time
 					and you should <b>backup your database before you continue with this step!</b>
 					<?php
-					if (!$db_version)
+					/*if (!$db_version)
 					{
 						echo '<br /><br />Group-Office was unable to detect your old Group-Office version.'.
 						'The installer needs your old version number to determine updates that might apply.<br />'.
 						'Please enter the version number below if you wish to perform an upgrade.';
-					}
+					}*/
 				?>
 					<br /><br />
 					<table width="100%" style="border-width: 0px;font-family: Arial,Helvetica; font-size: 12px;">
 					<?php
-					if (!$db_version)
+					/*if (!$db_version)
 					{
 						echo '<tr><td>Version:</td><td>';
 						$db_version = isset($db_version) ? $db_version : $GO_CONFIG->db_version;
@@ -890,7 +890,7 @@ switch($task)
 					}else
 					{
 						echo '<input type="hidden" name="db_version" value="'.$db_version.'" />';
-					}
+					}*/
 				?>
 					<tr>
 					<td colspan="2" align="right">
