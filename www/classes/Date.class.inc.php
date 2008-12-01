@@ -581,6 +581,10 @@ class Date
 
 	public static function format($time, $with_time=true, $timezone='GMT')
 	{
+		if(empty($time) || $time=='0000-00-00')
+		{
+			return '';
+		}
 		$d = new DateTime($time, new DateTimeZone($timezone));
 
 

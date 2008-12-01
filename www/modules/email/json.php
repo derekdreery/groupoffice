@@ -759,7 +759,7 @@ try{
 				for ($i = 0; $i < count($attachments); $i ++) {
 					if (
 					(
-					eregi("ATTACHMENT", $attachments[$i]["disposition"])  ||
+					//eregi("ATTACHMENT", $attachments[$i]["disposition"])  ||
 					($attachments[$i]["name"] != '' && empty($attachments[$i]["id"])
 					)
 					&& !($attachments[$i]['type']=='APPLEDOUBLE' && $attachments[$i]['mime']== 'application/APPLEFILE')
