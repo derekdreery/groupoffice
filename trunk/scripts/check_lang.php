@@ -60,7 +60,7 @@ function check_encoding($file)
 			{
 				echo '<p style="color:red">Warning, corrected encoding of '.str_replace($GO_CONFIG->root_path, '', $file).' from '.$enc.' to UTF-8</p>';
 				
-				$str = mb_convert_encoding($str,'UTF-8', $enc);
+				$str = iconv($enc, 'UTF-8', $str);//mb_convert_encoding($str,'UTF-8', $enc);
 				file_put_contents($file, $str);
 			}else
 			{
