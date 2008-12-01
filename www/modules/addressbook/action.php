@@ -99,11 +99,11 @@ try
 						$result['files_path']='contacts/'.$contact_id;
 						$full_path = $GO_CONFIG->file_storage_path.$result['files_path'];
 						$fs->check_share($full_path, $GO_SECURITY->user_id, $addressbook['acl_read'], $addressbook['acl_write'],true);
-					}
-				} else {
-						
-					$contact_credentials['id'] = $contact_id;
-						
+					}					
+					$insert=true;
+					
+				} else {						
+					$contact_credentials['id'] = $contact_id;						
 
 					if($old_contact['addressbook_id']!=$contact_credentials['addressbook_id'])
 					{
@@ -114,16 +114,18 @@ try
 						$result['feedback'] = $lang['comon']['saveError'];
 						$result['success'] = false;
 					}
+					
+					$insert=false;
 				}
-
 
 				if(isset($GO_MODULES->modules['customfields']))
 				{
 					require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
 					$cf = new customfields();
 						
-					$cf->update_fields($GO_SECURITY->user_id, $contact_id, 2, $_POST);
+					$cf->update_fields($GO_SECURITY->user_id, $contact_id, 2, $_POST, $insert);
 				}
+			
 
 				if(isset($GO_MODULES->modules['mailings']))
 				{
@@ -202,6 +204,7 @@ try
 						$full_path = $GO_CONFIG->file_storage_path.$result['files_path'];
 						$fs->check_share($full_path, $GO_SECURITY->user_id, $addressbook['acl_read'], $addressbook['acl_write'],true);
 					}
+					$insert=true;
 
 				} else {
 					# update
@@ -213,6 +216,7 @@ try
 					}
 
 					$ab->update_company($company_credentials);
+					$insert=false;
 
 				}
 					
@@ -221,7 +225,7 @@ try
 					require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
 					$cf = new customfields();
 
-					$cf->update_fields($GO_SECURITY->user_id, $company_id, 3, $_POST);
+					$cf->update_fields($GO_SECURITY->user_id, $company_id, 3, $_POST, $insert);
 				}
 					
 					
