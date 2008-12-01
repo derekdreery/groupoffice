@@ -46,13 +46,9 @@ Now your database can be converted to a Group-Office 3.0 database.
 
 Put your old config.php file in the root of the new Group-Office 3.0 directory. Adjust the paths in the file if necessary.
 
-Run this query on your database:
-
-RENAME TABLE `modules`  TO `go_modules` ;
-
 Then it's wise to create another backup in case anything goes wrong in the upgrade2to3.php script.
 
-Do not run install/index.php! Run install/upgrade2to3.php in your browser. This will take some time but 
+Run install/upgrade2to3.php in your browser. This will take some time but 
 when it's finished without problems, you are ready to run Group-Office 3.0!
 
 If you see errors because of a duplicate entry like this:

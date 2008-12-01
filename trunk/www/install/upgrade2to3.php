@@ -1,8 +1,6 @@
 <?php
 /*
- * Fisrt convert the old database to UTF8 as described in the INSTALL.TXT file
- * 
- * Then run RENAME TABLE `modules`  TO `go_modules` ;
+ * First convert the old database to UTF8 as described in the INSTALL.TXT file
  * 
  * Then it's wise to create another backup in case anything goes wrong in this script.
  *
@@ -118,6 +116,8 @@ while($db->next_record())
 	}
 }
 
+$GO_MODULES->load_modules();
+
 
 $db->query("CREATE TABLE `state` (
 `user_id` INT NOT NULL ,
@@ -199,10 +199,6 @@ $db->query("ALTER TABLE `go_reminders` ADD `link_type` INT NOT NULL AFTER `link_
 $db->query("UPDATE `go_modules` SET version = ''");
 $db->query("ALTER TABLE `go_modules` CHANGE `version` `version` INT NOT NULL");
 $db->query("ALTER TABLE `go_modules` DROP `path`");
-
-
-
-
 
 
 
@@ -1133,7 +1129,7 @@ ALTER TABLE `go_links` ADD INDEX ( `link_id1`, `type1` );
  */
 
 
-$GO_MODULES->load_modules();
+
 
 echo 'Clearing search cache<br />';
 
