@@ -302,10 +302,6 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 			]
 		});
 		
-
-
-		
-		
 		this.tabPanel = new Ext.TabPanel({
 				activeTab: 0,
 				deferredRender:false,
@@ -359,9 +355,6 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 		
 		this.tabPanel.setActiveTab(0);
 		
-		
-		
-		
 		if (this.addressbook_id == 0)
 		{	
 			this.propertiesPanel.form.reset();
@@ -395,6 +388,7 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 		switch(this.addressbookImportPanel.form.items.items[2].getValue())
 		{
 			case 'contacts':	
+				var type="2";
 				this.defaultCSVField = {
 					'title':  GO.lang['strTitle'], 'first_name': GO.lang['strFirstName'], 
 					'middle_name': GO.lang['strMiddleName'], 'last_name': GO.lang['strLastName'], 
@@ -410,8 +404,10 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 					'department': GO.lang['strDepartment'], 'function': GO.lang['strFunction'],
 					'salutation': GO.lang['strSalutation'], 'comment': GO.lang['strComment']
 				};
+				
 			break;
 			case 'companies':
+				var type="3";
 				this.defaultCSVField = {
 					'name':  GO.lang['strName'], 'email':  GO.lang['strEmail'], 'phone': GO.lang['strPhone'], 
 					'fax': GO.lang['strFax'], 'country': GO.lang['strCountry'], 
@@ -425,12 +421,29 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 				};					
 			break;
 		}
+		
+		if(GO.customfields && GO.customfields.types[type] && GO.customfields.types[type].panels)
+		{
+			for(var p=0;p<GO.customfields.types[type].panels.length;p++)
+			{
+				var fields = GO.customfields.types[type].panels[p].customfields;
 
-		this.defaultCSVField_keys = Array();
+				for(var f=0;f<fields.length;f++)
+				{
+					if(fields[f].datatype!='heading' && fields[f].datatype!='function')
+					{
+						this.defaultCSVField[fields[f].name]=fields[f].label;
+					}
+				}
+			}
+		}
+
+
+		/*this.defaultCSVField_keys = Array();
 		for (var key in this.defaultCSVFieldContacts)
 		{
 			this.defaultCSVField_keys.push(key);
-		}
+		}*/
 		
 		this.addressbookImportData = new Ext.form.FormPanel({
 			waitMsgTarget:true,

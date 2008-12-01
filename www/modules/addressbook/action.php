@@ -1,12 +1,12 @@
 <?php
-/** 
+/**
  * Copyright Intermesh
- * 
+ *
  * This file is part of Group-Office. You should have received a copy of the
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
- * 
+ *
  * If you have questions write an e-mail to info@intermesh.nl
- * 
+ *
  * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
@@ -41,10 +41,10 @@ try
 				{
 					$contact_credentials[$key] = isset($_REQUEST[$key]) ? $_REQUEST[$key] : '';
 				}
-				
+
 				$contact_credentials['company_id'] = !empty($_REQUEST['company_id']) ? $_REQUEST['company_id'] : 0;
-				
-				
+
+
 				$addressbook = $ab->get_addressbook($contact_credentials['addressbook_id']);
 				if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $addressbook['acl_write']))
 				{
@@ -59,11 +59,11 @@ try
 					{
 						throw new AccessDeniedException();
 					}
-				}					
+				}
 
 				$result['success'] = true;
-				$result['feedback'] = $feedback;					
-			
+				$result['feedback'] = $feedback;
+					
 				if(!empty($contact_credentials['company']) && empty($contact_credentials['company_id']))
 				{
 					if(!$contact_credentials['company_id'] = $ab->get_company_id_by_name($contact_credentials['company'], $contact_credentials['addressbook_id']))
@@ -74,13 +74,13 @@ try
 						$contact_credentials['company_id'] = $ab->add_company($company);
 					}
 				}
-				
+
 				if(!empty($contact_credentials['birthday']))
-					$contact_credentials['birthday'] = Date::to_db_date($contact_credentials['birthday'], false);
-				
+				$contact_credentials['birthday'] = Date::to_db_date($contact_credentials['birthday'], false);
+
 				unset($contact_credentials['company']);
 				if ($contact_id < 1)
-				{					
+				{
 					$contact_id = $ab->add_contact($contact_credentials);
 
 					if(!$contact_id)
@@ -90,20 +90,20 @@ try
 					} else {
 						$result['contact_id'] =  $contact_id;
 					}
-					
+						
 					if($GO_MODULES->modules['files'])
 					{
 						require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
 						$fs = new files();
-	
-						$result['files_path']='contacts/'.$contact_id;							
+
+						$result['files_path']='contacts/'.$contact_id;
 						$full_path = $GO_CONFIG->file_storage_path.$result['files_path'];
-						$fs->check_share($full_path, $GO_SECURITY->user_id, $addressbook['acl_read'], $addressbook['acl_write'],true);					
+						$fs->check_share($full_path, $GO_SECURITY->user_id, $addressbook['acl_read'], $addressbook['acl_write'],true);
 					}
 				} else {
-					
+						
 					$contact_credentials['id'] = $contact_id;
-					
+						
 
 					if($old_contact['addressbook_id']!=$contact_credentials['addressbook_id'])
 					{
@@ -115,28 +115,28 @@ try
 						$result['success'] = false;
 					}
 				}
-				
-				
+
+
 				if(isset($GO_MODULES->modules['customfields']))
 				{
 					require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
 					$cf = new customfields();
-					
+						
 					$cf->update_fields($GO_SECURITY->user_id, $contact_id, 2, $_POST);
 				}
-				
+
 				if(isset($GO_MODULES->modules['mailings']))
 				{
 					require($GO_MODULES->modules['mailings']['class_path'].'mailings.class.inc.php');
 					$ml = new mailings();
 					$ml2 = new mailings();
-					
+						
 					$ml->get_authorized_mailing_groups('write', $GO_SECURITY->user_id, 0,0);
 					while($ml->next_record())
 					{
 						$is_in_group = $ml2->contact_is_in_group($contact_id, $ml->f('id'));
 						$should_be_in_group = isset($_POST['mailing_'.$ml->f('id')]);
-						
+
 						if($is_in_group && !$should_be_in_group)
 						{
 							$ml2->remove_contact_from_group($contact_id, $ml->f('id'));
@@ -144,10 +144,10 @@ try
 						if(!$is_in_group && $should_be_in_group)
 						{
 							$ml2->add_contact_to_mailing_group($contact_id, $ml->f('id'));
-						}						
-					}					
+						}
+					}
 				}
-				
+
 
 				echo json_encode($result);
 				break;
@@ -160,103 +160,103 @@ try
 				'fax','email','homepage','bank_no','vat_no','comment'
 				);
 					
-			$company_credentials['email_allowed']=isset($_POST['email_allowed']) ? '1' : '0';
-			foreach($credentials as $key)
-			{
-				$company_credentials[$key] = isset($_REQUEST[$key]) ? ($_REQUEST[$key]) : null;
-			}
-			
-			$addressbook = $ab->get_addressbook($company_credentials['addressbook_id']);
+				$company_credentials['email_allowed']=isset($_POST['email_allowed']) ? '1' : '0';
+				foreach($credentials as $key)
+				{
+					$company_credentials[$key] = isset($_REQUEST[$key]) ? ($_REQUEST[$key]) : null;
+				}
 					
-			if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $addressbook['acl_write']))
-			{
-				throw new AccessDeniedException();
-			}
-			
-			if($company_id > 0)
-			{
-				$old_company = $ab->get_company($company_id);
-
-				if(($old_company['addressbook_id'] != $company_credentials['addressbook_id']) && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_company['acl_write']))
-				{				
+				$addressbook = $ab->get_addressbook($company_credentials['addressbook_id']);
+					
+				if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $addressbook['acl_write']))
+				{
 					throw new AccessDeniedException();
 				}
-			}
-			
 					
-			$result['success'] = true;
-			$result['feedback'] = $feedback;
-
-			if ($company_id < 1)
-			{
-				# insert
-				$result['company_id'] = $company_id = $ab->add_company($company_credentials);
-				
-				
-				if($GO_MODULES->modules['files'])
+				if($company_id > 0)
 				{
-					require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
-					$fs = new files();
+					$old_company = $ab->get_company($company_id);
 
-					$result['files_path']='companies/'.$company_id;						
-					$full_path = $GO_CONFIG->file_storage_path.$result['files_path'];
-					$fs->check_share($full_path, $GO_SECURITY->user_id, $addressbook['acl_read'], $addressbook['acl_write'],true);
-				}
-				
-			} else {
-				# update
-				$company_credentials['id'] = $company_id;
-
-				if($old_company['addressbook_id'] != $company_credentials['addressbook_id'])
-				{
-					$ab->move_contacts_company($company_credentials['id'], $old_company['addressbook_id'], $company_credentials['addressbook_id']);
-				}
-
-				$ab->update_company($company_credentials);
-				
-			}
-			
-			if(isset($GO_MODULES->modules['customfields']))
-			{
-				require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
-				$cf = new customfields();
-				
-				$cf->update_fields($GO_SECURITY->user_id, $company_id, 3, $_POST);
-			}
-			
-			
-			if(isset($GO_MODULES->modules['mailings']))
-			{
-				require($GO_MODULES->modules['mailings']['class_path'].'mailings.class.inc.php');
-				$ml = new mailings();
-				$ml2 = new mailings();
-				
-				$ml->get_authorized_mailing_groups('write', $GO_SECURITY->user_id, 0,0);
-				while($ml->next_record())
-				{
-					$is_in_group = $ml2->company_is_in_group($company_id, $ml->f('id'));
-					$should_be_in_group = isset($_POST['mailing_'.$ml->f('id')]);
-					
-					if($is_in_group && !$should_be_in_group)
+					if(($old_company['addressbook_id'] != $company_credentials['addressbook_id']) && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_company['acl_write']))
 					{
-						$ml2->remove_company_from_group($company_id, $ml->f('id'));
+						throw new AccessDeniedException();
 					}
-					if(!$is_in_group && $should_be_in_group)
+				}
+					
+					
+				$result['success'] = true;
+				$result['feedback'] = $feedback;
+
+				if ($company_id < 1)
+				{
+					# insert
+					$result['company_id'] = $company_id = $ab->add_company($company_credentials);
+
+
+					if($GO_MODULES->modules['files'])
 					{
-						$ml2->add_company_to_mailing_group($company_id, $ml->f('id'));
-					}						
-				}					
-			}
-		
-				
-			echo json_encode($result);
-			break;
-			
+						require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
+						$fs = new files();
+
+						$result['files_path']='companies/'.$company_id;
+						$full_path = $GO_CONFIG->file_storage_path.$result['files_path'];
+						$fs->check_share($full_path, $GO_SECURITY->user_id, $addressbook['acl_read'], $addressbook['acl_write'],true);
+					}
+
+				} else {
+					# update
+					$company_credentials['id'] = $company_id;
+
+					if($old_company['addressbook_id'] != $company_credentials['addressbook_id'])
+					{
+						$ab->move_contacts_company($company_credentials['id'], $old_company['addressbook_id'], $company_credentials['addressbook_id']);
+					}
+
+					$ab->update_company($company_credentials);
+
+				}
+					
+				if(isset($GO_MODULES->modules['customfields']))
+				{
+					require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+					$cf = new customfields();
+
+					$cf->update_fields($GO_SECURITY->user_id, $company_id, 3, $_POST);
+				}
+					
+					
+				if(isset($GO_MODULES->modules['mailings']))
+				{
+					require($GO_MODULES->modules['mailings']['class_path'].'mailings.class.inc.php');
+					$ml = new mailings();
+					$ml2 = new mailings();
+
+					$ml->get_authorized_mailing_groups('write', $GO_SECURITY->user_id, 0,0);
+					while($ml->next_record())
+					{
+						$is_in_group = $ml2->company_is_in_group($company_id, $ml->f('id'));
+						$should_be_in_group = isset($_POST['mailing_'.$ml->f('id')]);
+							
+						if($is_in_group && !$should_be_in_group)
+						{
+							$ml2->remove_company_from_group($company_id, $ml->f('id'));
+						}
+						if(!$is_in_group && $should_be_in_group)
+						{
+							$ml2->add_company_to_mailing_group($company_id, $ml->f('id'));
+						}
+					}
+				}
+
+
+				echo json_encode($result);
+				break;
+					
 		case 'save_addressbook':
 			$addressbook_id = isset($_REQUEST['addressbook_id']) ? ($_REQUEST['addressbook_id']) : 0;
 			$user_id = isset($_REQUEST['user_id']) ? ($_REQUEST['user_id']) : $GO_SECURITY->user_id;
 			$name = isset($_REQUEST['name']) ? ($_REQUEST['name']) : null;
-				
+
 			$result['success'] = true;
 			$result['feedback'] = $feedback;
 
@@ -286,7 +286,7 @@ try
 					{
 						throw new AccessDeniedException();
 					}
-						
+
 					$addressbook = $ab->add_addressbook($user_id, $name);
 					$result['addressbook_id'] = $addressbook['addressbook_id'];
 					$result['acl_read'] = $addressbook['acl_read'];
@@ -296,7 +296,7 @@ try
 					if ($existing_ab && $existing_ab['id'] != $addressbook_id)
 					{
 						throw new Exception($lang['common']['addressbookAlreadyExists']);
-					}			
+					}
 
 					if($existing_ab['user_id'] != $user_id)
 					{
@@ -317,17 +317,17 @@ try
 			$import_file = isset($_FILES['import_file']['tmp_name']) ? ($_FILES['import_file']['tmp_name']) : null;
 			$seperator	= isset($_REQUEST['seperator']) ? ($_REQUEST['seperator']) : ',';
 			$quote	= isset($_REQUEST['quote']) ? ($_REQUEST['quote']) : '"';
-				
+
 			$result['success'] = true;
 			//$result['feedback'] = $feedback;
-				
+
 			//go_log(LOG_DEBUG, var_export($_FILES,true));
 			//go_log(LOG_DEBUG, var_export($_POST,true));
-				
+
 			$_SESSION['GO_SESSION']['addressbook']['import_file'] = $GO_CONFIG->tmpdir.uniqid(time());
-				
+
 			move_uploaded_file($import_file, $_SESSION['GO_SESSION']['addressbook']['import_file']);
-				
+
 			switch($import_filetype)
 			{
 				case 'vcf':
@@ -336,7 +336,7 @@ try
 					$result['success'] = $vcard->import($_SESSION['GO_SESSION']['addressbook']['import_file'], $GO_SECURITY->user_id, ($_POST['addressbook_id']));
 					break;
 				case 'csv':
-						
+
 					$fp = fopen($_SESSION['GO_SESSION']['addressbook']['import_file'], 'r');
 
 					if (!$fp || !$addressbook = $ab->get_addressbook($addressbook_id)) {
@@ -362,8 +362,8 @@ try
 					}
 					break;
 			}
-			
-			
+				
+				
 
 			echo json_encode($result);
 			break;
@@ -373,18 +373,18 @@ try
 					$quote	= isset($_REQUEST['quote']) ? ($_REQUEST['quote']) : '"';
 					$import_type = isset($_REQUEST['import_type']) ? ($_REQUEST['import_type']) : '';
 					$import_filetype = isset($_REQUEST['import_filetype']) ? ($_REQUEST['import_filetype']) : '';
-						
+
 					$result['success'] = true;
 					$result['feedback'] = $feedback;
-						
+
 					switch($import_filetype)
 					{
 						case 'vcf':
-								
+
 							break;
 						case 'csv':
 							$fp = fopen($_SESSION['GO_SESSION']['addressbook']['import_file'], "r");
-								
+
 							if (!$fp || !$addressbook = $ab->get_addressbook($addressbook_id))
 							{
 								unlink($_SESSION['GO_SESSION']['addressbook']['import_file']);
@@ -395,6 +395,8 @@ try
 							while (!feof($fp))
 							{
 								$record = fgetcsv($fp, 4096, $seperator, $quote);
+
+								$new_id=0;
 
 								if ($import_type == 'contacts')
 								{
@@ -429,20 +431,21 @@ try
 
 										if ($company_name != '') {
 											$contact['company_id'] = $ab->get_company_id_by_name($company_name, $addressbook_id);
-											
+												
 											if(!$contact['company_id'])
 											{
 												$company['addressbook_id']=$addressbook_id;
 												$company['name']=$company_name;
-												
+
 												$contact['company_id']=$ab->add_company($company);
-											}											
-										}else {											
+											}
+										}else {
 											$contact['company_id']=0;
 										}
 
 										$contact['addressbook_id'] = $addressbook_id;
-										$ab->add_contact($contact);
+										$new_id=$ab->add_contact($contact);
+										$new_type=2;
 									}
 								} else {
 									if (isset ($record[$_POST['name']]) && $record[$_POST['name']] != '')
@@ -471,8 +474,27 @@ try
 											$company['vat_no'] = isset ($record[$_POST['vat_no']]) ? trim($record[$_POST['vat_no']]) : '';
 											$company['addressbook_id']  = $_POST['addressbook_id'];
 
-											$ab->add_company($company);
+											$new_id=$ab->add_company($company);
+											$new_type=3;
 										}
+									}
+								}
+
+								if($new_id>0)
+								{
+									if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
+									{
+										require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+										$cf = new customfields();
+										$customfields = $cf->get_authorized_fields($GO_SECURITY->user_id, $new_type);
+											
+										$cf_record=array('link_id'=>$new_id);
+										foreach($customfields as $field)
+										{
+											if(isset($_POST[$field['name']]))
+												$cf_record[$field['name']]=$record[$_POST[$field['name']]];
+										}
+										$cf->insert_row('cf_'.$new_type,$cf_record);
 									}
 								}
 							}
