@@ -15,4 +15,7 @@ $lang['tasks']['statuses']['TENTATIVE']= 'Intento';
 $lang['tasks']['statuses']['DELEGATED']= 'Delegado';
 $lang['tasks']['statuses']['COMPLETED']= 'Completo';
 $lang['tasks']['statuses']['IN-PROCESS']= 'En curso';
+
+$lang['tasks']['scheduled_call']='Pianificato alle %s';
+$lang['tasks']['call']='Chiamata';
 ?>

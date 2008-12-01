@@ -14,3 +14,7 @@ $lang['users']['error_username_exists']='Questo username esiste già';
 $lang['users']['error_email_exists']='Questo indirizzo e-mail è già registrato. You can use the forgotten password feature to recover your password.';
 $lang['users']['error_match_pass']='La password è errata';
 $lang['users']['error_email']='L\'indirizzo e-mail non è valido';
+
+$lang['users']['imported']='importati %s utenti';
+$lang['users']['failed']='Fallito';
+$lang['users']['incorrectFormat']='Il file non è in un formato CSV corretto';

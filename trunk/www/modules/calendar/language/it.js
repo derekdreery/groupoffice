@@ -1,5 +1,5 @@
 
-
+GO.calendar.lang.addressbook='Rubrica';
 GO.calendar.lang.appointment = 'Appuntamento';
 GO.calendar.lang.appointments = 'Appuntamenti';
 GO.calendar.lang.recurrence = 'Ricorrenza';

@@ -74,3 +74,9 @@ GO.users.lang.userSettings = 'Impostazioni utente';
 GO.users.lang.maxUsersReached='Il massimo numero di utenti è stato raggiunto. Vai nella scheda servizi per estendere il numero di utenti.';
 
 GO.users.lang.group='Gruppo';
+
+GO.users.lang.userIsMemberOf= 'L\’utente è membro di';
+GO.users.lang.userVisibleTo= 'L\’utente è visibile da';
+GO.users.lang.muteSound='Muto';
+GO.users.lang.downloadSampleCSV='Scarica CSV di esempio';
+GO.users.lang.importText='Puoi importare gli utenti utilizzando un file CSV. Per sapere come il file CSV deve essere formattato scarica il file di esempio.<br />La prima riga deve contenere il nome delle colonne. I campi obbligatori per ogni utente sono:<br /><br />username, password, first_name, last_name, email';

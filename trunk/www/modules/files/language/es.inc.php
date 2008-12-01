@@ -30,3 +30,6 @@ Los siguientes cambios fueron realizados por %s:
 $lang['files']['modified']='Modificado';
 $lang['files']['new']='Nuevo';
 $lang['files']['deleted']='Eliminados';
+
+$lang['files']['file']='File';
+$lang['files']['folder']='Cartella';
