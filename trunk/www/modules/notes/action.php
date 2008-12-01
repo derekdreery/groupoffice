@@ -73,7 +73,7 @@ try{
 			{
 				$notes->update_note($note);
 				$response['success']=true;
-
+				$insert=false;
 			}else
 			{
 				$note['user_id']=$GO_SECURITY->user_id;
@@ -92,6 +92,7 @@ try{
 
 				$response['note_id']=$note_id;
 				$response['success']=true;
+				$insert=true;
 			}
 			
 			
@@ -99,7 +100,7 @@ try{
 			{
 				require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
 				$cf = new customfields();
-				$cf->update_fields($GO_SECURITY->user_id, $note_id, 4, $_POST);
+				$cf->update_fields($GO_SECURITY->user_id, $note_id, 4, $_POST, $insert);
 			}			
 				
 			if(!empty($_POST['link']))

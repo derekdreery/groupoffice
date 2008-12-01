@@ -1,3 +1,8 @@
+2008/? Version 3.00-stable-2
+- Bug fixes
+- Import/export of custom fields in addressbook (pro)
+- Add /delete mail folders by right clicking the tree menu
+
 2008/11/24 Version 3.00-stable-1
 - Last known bugs were fixed
 - New caching system for the e-mail to impove performance.
