@@ -69,6 +69,20 @@ if($file_type == 'vcf') {
 	if ($_POST['export_type'] == 'contacts')
 	{
 		$headings = array($lang['common']['title'], $lang['common']['firstName'], $lang['common']['middleName'], $lang['common']['lastName'], $lang['common']['initials'], $lang['common']['sex'], $lang['common']['birthday'], $lang['common']['email'], $lang['common']['email'].' 2', $lang['common']['email'].' 3', $lang['common']['country'], $lang['common']['state'], $lang['common']['city'], $lang['common']['zip'], $lang['common']['address'], $lang['common']['addressNo'], $lang['common']['phone'], $lang['common']['workphone'], $lang['common']['fax'], $lang['common']['workFax'], $lang['common']['cellular'], $lang['common']['company'], $lang['common']['department'], $lang['common']['function'], $lang['addressbook']['comment'], $lang['addressbook']['contactsGroup'], $lang['common']['salutation']);
+		
+		if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
+		{
+			require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+			$cf = new customfields();
+			$customfields = $cf->get_authorized_fields($GO_SECURITY->user_id, 2);
+			
+			foreach($customfields as $field)
+			{
+				if($field['datatype']!='heading' && $field['datatype']!='function')
+					$headings[]=$field['label'];
+			}			
+		}
+		
 		$headings = $quote.implode($quote.$seperator.$quote, $headings).$quote;
 		echo $headings;
 		echo $crlf;
@@ -77,12 +91,37 @@ if($file_type == 'vcf') {
 		while ($ab->next_record())
 		{	
 			$record = array($ab->f("title"), $ab->f("first_name"),$ab->f("middle_name"), $ab->f("last_name"), $ab->f("initials"), $ab->f("sex"), $ab->f('birthday'), $ab->f("email"), $ab->f("email2"), $ab->f("email3"), $ab->f("country")/* $country['name']*/, $ab->f("state"), $ab->f("city"), $ab->f("zip"), $ab->f("address"), $ab->f("address_no"), $ab->f("home_phone"), $ab->f("work_phone"), $ab->f("fax"), $ab->f("work_fax"), $ab->f("cellular"), $ab->f("company"), $ab->f("department"), $ab->f("function"), $ab->f("comment"), $ab->f("group_name"), $ab->f("salutation"));
+			
+			if(isset($cf))
+			{
+				$customvalues = $cf->get_values($GO_SECURITY->user_id, 2, $ab->f('id'));
+				foreach($customfields as $field)
+				{
+					if($field['datatype']!='heading' && $field['datatype']!='function')
+						$record[]=$customvalues[$field['name']];
+				}
+			}
+			
 			$record = $quote.implode($quote.$seperator.$quote, $record).$quote;
 			echo $record;
 			echo $crlf;
 		}
 	} else {
-		$headings = array($lang['common']['name'], $lang['common']['country'], $lang['common']['state'], $lang['common']['city'], $lang['common']['zip'], $lang['common']['address'], $lang['common']['addressNo'], $lang['common']['postCountry'], $lang['common']['postState'], $lang['common']['postCity'], $lang['common']['postZip'], $lang['common']['postAddress'], $lang['common']['postAddressNo'],  $lang['common']['email'], $lang['common']['phone'], $lang['common']['fax'], $lang['common']['homepage'], $lang['addressbook']['bankNo'], $lang['addressbook']['vatNo']);
+		$headings = array($lang['common']['name'], $lang['common']['country'], $lang['common']['state'], $lang['common']['city'], $lang['common']['zip'], $lang['common']['address'], $lang['common']['addressNo'], $lang['common']['postCountry'], $lang['common']['postState'], $lang['common']['postCity'], $lang['common']['postZip'], $lang['common']['postAddress'], $lang['common']['postAddressNo'],  $lang['common']['email'], $lang['common']['phone'], $lang['common']['fax'], $lang['common']['homepage'], $lang['addressbook']['bankNo'], $lang['addressbook']['vatNo'], $lang['addressbook']['comment']);
+		
+		if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
+		{
+			require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+			$cf = new customfields();
+			$customfields = $cf->get_authorized_fields($GO_SECURITY->user_id, 3);
+			
+			foreach($customfields as $field)
+			{
+				if($field['datatype']!='heading' && $field['datatype']!='function')
+					$headings[]=$field['label'];
+			}			
+		}
+		
 		$headings = $quote.implode($quote.$seperator.$quote, $headings).$quote;
 		echo $headings;
 		echo $crlf;
@@ -90,17 +129,23 @@ if($file_type == 'vcf') {
 		$ab->get_companies($addressbook_id);
 
 		while($ab->next_record())
-		{
-			#$country = $GO_USERS->get_country($ab->f('country'));
-			#$post_country = $GO_USERS->get_country($ab->f('post_country'));
-			
+		{			
 			require($GO_LANGUAGE->get_base_language_file('countries'));
 			$country=isset($countries[$ab->f('country')]) ? $countries[$ab->f('country')] : $ab->f('country');
 			$post_country=isset($countries[$ab->f('post_country')]) ? $countries[$ab->f('post_country')] : $ab->f('post_country');
 			
+			$record = array($ab->f("name"), $country,$ab->f("state"), $ab->f("city"), $ab->f("zip"), $ab->f("address"), $ab->f("address_no"), $post_country, $ab->f("post_state"), $ab->f("post_city"), $ab->f("post_zip"), $ab->f("post_address"), $ab->f("post_address_no"),$ab->f("email"), $ab->f("phone"), $ab->f("fax"), $ab->f("homepage"), $ab->f("bank_no"), $ab->f('vat_no'), $ab->f('comment'));
 			
+			if(isset($cf))
+			{
+				$customvalues = $cf->get_values($GO_SECURITY->user_id, 3, $ab->f('id'));
+				foreach($customfields as $field)
+				{
+					if($field['datatype']!='heading' && $field['datatype']!='function')
+						$record[]=$customvalues[$field['name']];
+				}
+			}
 			
-			$record = array($ab->f("name"), $country,$ab->f("state"), $ab->f("city"), $ab->f("zip"), $ab->f("address"), $ab->f("address_no"), $post_country, $ab->f("post_state"), $ab->f("post_city"), $ab->f("post_zip"), $ab->f("post_address"), $ab->f("post_address_no"),$ab->f("email"), $ab->f("phone"), $ab->f("fax"), $ab->f("homepage"), $ab->f("bank_no"), $ab->f('vat_no'));
 			$record = $quote.implode($quote.$seperator.$quote, $record).$quote;
 			echo $record;
 			echo $crlf;
