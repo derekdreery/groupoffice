@@ -1,5 +1,5 @@
 
-
+GO.summary.lang.expires="Scadenza";
 GO.summary.lang.summary = 'Sommario';
 GO.summary.lang.noItems = 'You don\'t have any items on your startpage.';
 GO.summary.lang.selectPortlet = 'Select portlet';

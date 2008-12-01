@@ -271,7 +271,7 @@ GO.Checker = function(){
 
 Ext.extend(GO.Checker, Ext.util.Observable, {
 			
-	interval : 120000,
+	interval : 300000,
 	
 	init : function(){
 		

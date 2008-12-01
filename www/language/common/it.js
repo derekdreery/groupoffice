@@ -11,7 +11,11 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-
+GO.lang.strCommunityForum='Forum';
+GO.lang.moduleRequired='Questa caratteristica richiede il modulo \'{module}\' . Questo modulo non è disponibile.';
+GO.lang.completeProfile= 'Completa il tuo profilo';
+GO.lang.cmdImport='Importa';
+GO.lang.countries["CN"]= "Cina";
 GO.lang.fullscreen='Modalità schermo intero';
 GO.lang.popupBlocker = 'Il tuo browser blocca un popup di Group-Office. Disabilita il blocco-popup per questo sito';
 

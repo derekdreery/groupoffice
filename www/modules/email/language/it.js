@@ -108,3 +108,9 @@ GO.email.lang.viewSource='Vedi sorgente';
 GO.email.lang.sendNotification='Il mittente di questo messaggio ha richiesto una notifica di lettura per il messaggio: %s. Vuoi inviare una conferma?';
 
 GO.email.lang.searchOnSender='Visualizza i messaggi';
+
+GO.email.lang.blocked= '{blocked_images} immagini esterne bloccate per sicurezza.';
+GO.email.lang.unblock= 'Clicca qui per sbloccare';
+GO.email.lang.loadEmailFirst= 'Per usare questa funzione devi prima aprire l’email cliccando sul tab e-mail';
+GO.email.lang.confirmEmptySubject='Non è stato messo alcun oggetto. Sei sicuro di voler inviare il messaggio senza alcun oggetto?';
+GO.email.lang.usage='Utilizzo disco';

@@ -4,6 +4,9 @@ require($GO_LANGUAGE->get_fallback_language_file('calendar'));
 $lang['calendar']['name'] = 'Calendario';
 $lang['calendar']['description'] = 'Modulo calendario; Ogni utente può aggiungere, modificare o cancellare appuntamenti. Anche gli appuntamenti degli altri utenti possono essere visualizzati e modificati se necessario.';
 
+$lang['calendar']['already_accepted']='Hai già accettato questo evento.';
+$lang['calendar']['private']='Privato';
+
 $lang['link_type'][1]='Appuntamento';
 
 $lang['calendar']['groupView'] = 'Visualizza in gruppi';
