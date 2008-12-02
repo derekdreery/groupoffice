@@ -1,5 +1,15 @@
 <?php
-require_once("../www/Group-Office.php");
+if(file_exists('Group-Office.php'))
+{
+	require_once("Group-Office.php");
+}elseif(file_exists('../www/Group-Office.php'))
+{
+	require_once("../www/Group-Office.php");	
+}else
+{
+	exit('Could not find Group-Office.php! Put this script in the root of Group-Office.');
+}
+
 
 $modules = $GO_MODULES->get_modules_with_locations();
 $lang1 = (isset($_GET['lang1']))? $_GET['lang1'] : 'en';

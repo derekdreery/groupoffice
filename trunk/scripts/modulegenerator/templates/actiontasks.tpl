@@ -23,7 +23,7 @@
 			{
 				${module}->update_{friendly_single}(${friendly_single});
 				$response['success']=true;
-
+				$insert=false;
 			}else
 			{
 				${friendly_single}['user_id']=$GO_SECURITY->user_id;
@@ -48,6 +48,8 @@
 
 				$response['{friendly_single}_id']=${friendly_single}_id;
 				$response['success']=true;
+				
+				$insert=true;
 			}
 			
 			<gotpl if="$link_type&gt;0">
@@ -55,7 +57,7 @@
 			{
 				require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
 				$cf = new customfields();
-				$cf->update_fields($GO_SECURITY->user_id, ${friendly_single}_id, {link_type}, $_POST);
+				$cf->update_fields($GO_SECURITY->user_id, ${friendly_single}_id, {link_type}, $_POST, $insert);
 			}			
 				
 			if(!empty($_POST['link']))
