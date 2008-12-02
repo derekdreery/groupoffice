@@ -103,7 +103,7 @@ require($GO_LANGUAGE->get_base_language_file('common'));
 if ( $GO_CONFIG->log ) {
 	$username = isset($_SESSION['GO_SESSION']['username']) ? $_SESSION['GO_SESSION']['username'] : 'notloggedin';
 	define_syslog_variables();
-	openlog('[Group-Office]['.date('Ymd G:i').']['.$username.']', LOG_PERROR, LOG_LOCAL0);
+	openlog('[Group-Office]['.date('Ymd G:i').']['.$username.']', LOG_PERROR, LOG_USER);
 }
 
 
