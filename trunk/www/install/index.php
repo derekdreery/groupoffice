@@ -818,15 +818,22 @@ switch($task)
 	case 'database_structure':
 		$db = new db();
 		$db->halt_on_error = 'no';
+		print_head();
 		if (!@$db->connect($GO_CONFIG->db_name, $GO_CONFIG->db_host, $GO_CONFIG->db_user, $GO_CONFIG->db_pass))
 		{
-			print_head();
+			
 			echo 'Can\'t connect to database!';
 			echo '<br /><br />Correct this and refresh this page.';
-			print_foot();
-			exit();
+			
 		}else
-		{
+		{			
+			$db->query("SELECT @@session.sql_mode;");
+			$record = $db->next_record(MYSQL_BOTH);
+			if(strstr($record[0], 'STRICT')!==false)
+			{
+				echo '<p style="color:red">The sql-mode setting in the MySQL config my.cnf is set to STRICT_TRANS_TABLES, STRICT_ALL_TABLES or TRADITIONAL. Group-Office does not yet work with this setting. You might want this setting enabled if you are a developer, but for production use you should disable it.</p>';
+			}
+			
 			$settings_exist = false;
 			$is_old_go=false;
 			$db->query("SHOW TABLES");
@@ -862,11 +869,7 @@ switch($task)
 				{
 					$db_version = false;
 				}
-				print_head();
-				if (isset($feedback))
-				{
-					echo $feedback.'<br /><br />';
-				}
+			
 				?>
 					<input type="hidden" name="task" value="upgrade" />
 					Group-Office has detected a previous installation of Group-Office. By pressing continue the database will be upgraded. This may take some time
@@ -900,30 +903,25 @@ switch($task)
 					</tr>
 					</table>
 					<?php
-					print_foot();
-					exit();
 			}else if($is_old_go)
 			{
-				print_head();
 				?>
 				Group-Office has detected an older version of Group-Office. The installer can't automatically upgrade this database.
 				<a href="../INSTALL.TXT">Read this for upgrade instructions</a>
 				<?php
-				print_foot();
 			}else			
 			{
-				print_head();
 				echo 	'<input type="hidden" name="task" value="database_structure" />';
-
-
+				
 				echo 'Group-Office succesfully connected to your database!<br />'.
 				'Click on \'Continue\' to create the tables for the Group-Office '.
-				'base system. This can take some time. Don\'t interupt this process.<br /><br />';
-				echo '<div align="right"><input type="submit" value="Continue" /></div>';
-				print_foot();
-				exit();
+				'base system. This can take some time. Don\'t interupt this process.<br /><br />';		
+				
+				echo '<div align="right"><input type="submit" value="Continue" /></div>';				
 			}
 		}
+		print_foot();
+		exit();
 		break;
 
 	case 'upgrade':

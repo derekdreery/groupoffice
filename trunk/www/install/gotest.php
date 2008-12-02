@@ -51,6 +51,8 @@ if(!function_exists('format_size'))
 
 function test_system(){
 
+	global $GO_CONFIG;
+	
 	$tests=array();
 
 	$test['name']='PHP version';
@@ -206,6 +208,22 @@ function test_system(){
 	$test['fatal']=true;
 
 	$tests[]=$test;
+	
+	
+	if(!empty($GO_CONFIG->db_name))
+	{
+		$test['name']='Public files path';
+		$test['pass']=is_writable($GO_CONFIG->local_path);
+		$test['feedback']='Fatal error: the local_path setting in config.php is not writable. You must correct this.';
+		$test['fatal']=true;
+		$tests[]=$test;
+		
+		$test['name']='Protected files path';
+		$test['pass']=is_writable($GO_CONFIG->file_storage_path);
+		$test['feedback']='Fatal error: the file_storage_path setting in config.php is not writable. You must correct this.';
+		$test['fatal']=true;
+		$tests[]=$test;
+	}	
 	
 	return $tests;
 }
