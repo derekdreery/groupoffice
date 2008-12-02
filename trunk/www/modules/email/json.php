@@ -461,7 +461,7 @@ try{
 				if (isset($content))
 				{
 					$header_om .= "<b>".$lang['email']['subject'].":&nbsp;</b>".$subject."<br />";
-					$header_om .= '<b>'.$lang['email']['from'].": &nbsp;</b>".$content['from'].' &lt;'.$content["sender"]."&gt;<br />";
+					$header_om .= '<b>'.$lang['email']['from'].": &nbsp;</b>".htmlspecialchars($content['from'], ENT_QUOTES, 'UTF-8')."<br />";
 					if (isset($content['to']))
 					{
 						for ($i=0;$i<sizeof($content["to"]);$i++)
