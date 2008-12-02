@@ -381,7 +381,7 @@ class Swift_Plugin_FileEmbedder implements Swift_Events_BeforeSendListener
       $this->registerFile($path, $cid, $registered["obj"]);
       return $matches[1] . $cid . $matches[4];
     }
-    $filename = utf8_basename($path);
+    $filename = basename($path);
     $att = new Swift_Message_EmbeddedFile(new Swift_File($path), $filename, $this->getType($ext));
     $id = $this->message->attach($att);
     $this->registerFile($path, $id, $att);
