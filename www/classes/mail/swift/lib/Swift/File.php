@@ -87,7 +87,7 @@ class Swift_File
     }
     else
     {
-      return utf8_basename($this->getPath());
+      return basename($this->getPath());
     }
   }
   /**
