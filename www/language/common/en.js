@@ -18,10 +18,6 @@ GO.lang = {};
 /**
  * Copy everything below for translations
  */
-GO.lang.strCommunityForum='Comunidad forum';
-GO.lang.moduleRequired=' Esta característica obliga a la \'{module}\' modulo. Este módulo no está disponible.';
-GO.lang.completeProfile= ' Por favor, complete su perfil ';
-GO.lang.cmdImport=' importación';
 
 
 GO.lang.strCommunityForum='Community forum';
