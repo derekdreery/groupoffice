@@ -793,7 +793,7 @@ class addressbook extends db {
 		if($link_type==3)
 		{
 			$this->delete_company($id);
-		}else
+		}elseif($link_type==2)
 		{
 			$this->delete_contact($id);
 		}

@@ -1212,7 +1212,10 @@ class calendar extends db
 			$this->query($sql);
 			$sql = "DELETE FROM cal_exceptions WHERE event_id='$event_id'";
 			$this->query($sql);
-
+			
+			require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
+			$search = new search();
+			$search->delete_search_result($event_id, 1);
 		}
 	}
 
@@ -1300,7 +1303,7 @@ class calendar extends db
 		$event['status'] = isset($object['STATUS']['value']) ? $object['STATUS']['value'] : 'NEEDS-ACTION';
 		
 		$event['all_day_event'] = (isset($object['DTSTART']['params']['VALUE']) &&
-			strtoupper($object['DTSTART']['params']['VALUE']) == 'DATE') ? true : false;
+			strtoupper($object['DTSTART']['params']['VALUE']) == 'DATE') ? '1' : '0';
 
 
 		if(isset($object['DTSTART']))
@@ -1841,6 +1844,23 @@ class calendar extends db
 			}
 		}
 		echo 'Done<br /><br />';*/
+	}
+	
+	/**
+	 * When a an item gets deleted in a panel with links. Group-Office attempts
+	 * to delete the item by finding the associated module class and this function
+	 *
+	 * @param int $id The id of the linked item
+	 * @param int $link_type The link type of the item. See /classes/base/links.class.inc
+	 */
+
+	function __on_delete_link($id, $link_type)
+	{
+		//echo $id.':'.$link_type;
+		if($link_type==1)
+		{
+			return $this->delete_event($id);
+		}
 	}
 
 }
