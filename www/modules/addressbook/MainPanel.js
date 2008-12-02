@@ -51,12 +51,14 @@ GO.addressbook.MainPanel = function(config)
 	
 	this.contactEastPanel = new GO.addressbook.ContactReadPanel({
 		region : 'east',
-		title: GO.addressbook.lang['cmdPanelContact']
+		title: GO.addressbook.lang['cmdPanelContact'],
+		width:400
 	});
 	
 	this.companyEastPanel = new GO.addressbook.CompanyReadPanel({
 		region : 'east',
-		title: GO.addressbook.lang['cmdPanelCompany']
+		title: GO.addressbook.lang['cmdPanelCompany'],
+		width:400
 	});	
 	
 	this.contactsPanel = new Ext.Panel({
