@@ -16,3 +16,4 @@ GO.files.lang.notifyChanges = 'Comunicami se ci sono modifiche in questa cartell
 GO.files.lang.comments = 'Note';
 GO.files.lang.downloadGOTA = 'Scarica con GOTA';
 GO.files.lang.fileBrowser = 'Sfoglia file';
+GO.files.lang.thumbnails= 'Miniaturas';

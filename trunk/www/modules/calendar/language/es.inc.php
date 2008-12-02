@@ -63,3 +63,5 @@ $lang['calendar']['decline_title']='Rechazada';
 $lang['calendar']['decline_confirm']='El propietario será notificado de que se han negado Evento';
 
 $lang['calendar']['cumulative']='Imperio de la repetición no válida. El próximo evento no puede comenzar antes de que el anterior se ha completado.';
+$lang['calendar']['already_accepted']='Usted ya aceptó este evento.';
+$lang['calendar']['private']='Privado';

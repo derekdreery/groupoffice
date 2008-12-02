@@ -18,4 +18,6 @@ $lang['tasks']['statuses']['IN-PROCESS']= 'En curso';
 
 $lang['tasks']['scheduled_call']='Pianificato alle %s';
 $lang['tasks']['call']='Chiamata';
+$lang['tasks']['scheduled_call']='Prevista en la palabra %s';
+$lang['tasks']['call']='Llamar';
 ?>

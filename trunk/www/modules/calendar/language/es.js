@@ -1,4 +1,4 @@
-
+GO.calendar.lang.addressbook='Direcciones';
 
 GO.calendar.lang.appointment = 'Cita';
 GO.calendar.lang.appointments = 'Citas';

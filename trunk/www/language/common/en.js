@@ -18,6 +18,10 @@ GO.lang = {};
 /**
  * Copy everything below for translations
  */
+GO.lang.strCommunityForum='Comunidad forum';
+GO.lang.moduleRequired=' Esta característica obliga a la \'{module}\' modulo. Este módulo no está disponible.';
+GO.lang.completeProfile= ' Por favor, complete su perfil ';
+GO.lang.cmdImport=' importación';
 
 
 GO.lang.strCommunityForum='Community forum';
@@ -319,6 +323,7 @@ GO.lang.countries["BF"] = "Burkina Faso";
 GO.lang.countries["BI"] = "Burundi";
 GO.lang.countries["KH"] = "Cambodia";
 GO.lang.countries["CM"] = "Cameroon";
+
 GO.lang.countries["CA"] = "Canada";
 GO.lang.countries["CV"] = "Cape Verde";
 GO.lang.countries["KY"] = "Cayman Islands";

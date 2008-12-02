@@ -1,5 +1,4 @@
-
-
+GO.tasks.lang.reminder= 'Recordatorio';
 GO.tasks.lang.task = 'Actividad';
 GO.tasks.lang.noTask = 'No hay actividades para mostrar';
 GO.tasks.lang.tasks = 'Actividad';

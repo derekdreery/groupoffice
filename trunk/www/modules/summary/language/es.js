@@ -1,4 +1,10 @@
-
+GO.summary.lang.host="Host";
+GO.summary.lang.ip="Ip";
+GO.summary.lang.linkId="ID vinculo";
+GO.summary.lang.expires="Expira";
+GO.summary.lang.upgrades="Actualizaciones";
+GO.summary.lang.notified="Notificados";
+GO.summary.lang.content="Contenido";
 
 GO.summary.lang.summary = 'Contenido';
 GO.summary.lang.noItems = 'No tienen ningún elemento en su inicio.';

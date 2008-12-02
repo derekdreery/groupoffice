@@ -1,11 +1,14 @@
+GO.users.lang.userIsMemberOf= 'El usuario es miembro del';
+GO.users.lang.userVisibleTo= 'El usuario es visible a';
+GO.users.lang.muteSound='Silenciador';
+GO.users.lang.downloadSampleCSV=' Descargar muestra CSV';
+GO.users.lang.importText= 'Usted puede importar los usuarios mediante un archivo CSV. Para conocer la forma en que el archivo CSV debe ser formateado, descargue el archivo de ejemplo. <br /> La primera línea debe contener los nombres de columna. Los siguientes campos son obligatorios para cada usuario: <br /> <br /> nombre de usuario, contraseña, nombre, apellidos, dirección de correo electrónico.';
 
 
 GO.users.lang.cmdCheckColumnRead= 'Lectura';
 GO.users.lang.cmdCheckColumnWrite= 'Escribir';
 GO.users.lang.cmdHeaderColumnName= 'Nombre de la forma';
 GO.users.lang.cmdHeaderGridUserHasAccess = 'El usuario tiene acceso a ';
-GO.users.lang.cmdHeaderGridUserIsMemberOf = 'El usuario es un miembro del';
-GO.users.lang.cmdHeaderGridUserVisibleTo = 'El usuario es un visible a ';
 
 GO.users.lang.cmdPanelPersonal = 'Personal';
 GO.users.lang.cmdPanelPassword= 'Contraseña';
