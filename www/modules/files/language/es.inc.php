@@ -31,5 +31,6 @@ $lang['files']['modified']='Modificado';
 $lang['files']['new']='Nuevo';
 $lang['files']['deleted']='Eliminados';
 
-$lang['files']['file']='File';
-$lang['files']['folder']='Cartella';
+
+$lang['files']['file']='Archivo';
+$lang['files']['folder']='Carpeta';

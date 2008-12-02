@@ -30,3 +30,8 @@ $lang['email']['attachments']='Adjuntos';
 
 $lang['email']['notification_subject']='Leer: %s';
 $lang['email']['notification_body']='u mensaje con el asunto "%s" se muestra a %s';
+$lang['email']['feedbackDeleteFolderFailed']= 'No se ha podido eliminar la carpeta';
+$lang['email']['errorGettingMessage']='No se pudo obtener mensaje de server';
+$lang['email']['no_recipients_drafts']='No hay receptores';
+$lang['email']['usage_limit']= '%s de %s usado';
+$lang['email']['usage']= '%s usado';

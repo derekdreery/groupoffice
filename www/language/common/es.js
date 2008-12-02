@@ -11,6 +11,10 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
+GO.lang.strCommunityForum='Comunidad forum';
+GO.lang.moduleRequired=' Esta característica obliga a la \'{module}\' modulo. Este módulo no está disponible.';
+GO.lang.completeProfile= ' Por favor, complete su perfil ';
+GO.lang.cmdImport=' importación';
 
 GO.lang.fullscreen='Modo de pantalla completa';
 GO.lang.popupBlocker = 'Su navegador bloquea pop de un grupo de ejercicio. Deshabilitar bloquear pop-ups en este sitio';
@@ -199,13 +203,6 @@ GO.lang.strLoggedInAs= 'Acceso a cabo por';
 GO.lang.strErrorsInForm= 'Hay errores en el formulario. Los campos marcados son nulas.';
 
 
-
-Ext.MessageBox.buttonText.yes = GO.lang['cmdYes'];
-Ext.MessageBox.buttonText.no = GO.lang['cmdNo'];
-Ext.MessageBox.buttonText.ok = GO.lang['cmdOk'];
-Ext.MessageBox.buttonText.cancel = GO.lang['cmdCancel'];
-
-
 GO.lang.strMinute="Minuto";
 GO.lang.strMinutes="Minutos";
 GO.lang.strHour="Hora";
@@ -316,6 +313,7 @@ GO.lang.countries["KY"] = "Isole Cayman";
 GO.lang.countries["CF"] = "Repubblica Centrafricana";
 GO.lang.countries["TD"] = "Chad";
 GO.lang.countries["CL"] = "Cile";
+GO.lang.countries["CN"]= "China";
 GO.lang.countries["CX"] = "Isole Christmas";
 GO.lang.countries["CC"] = "Isole Cocos";
 GO.lang.countries["CO"] = "Colombia";

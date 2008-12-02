@@ -1,4 +1,8 @@
-
+GO.email.lang.blocked= '{blocked_images} imágenes externas fueron bloqueados para su seguridad.';
+GO.email.lang.unblock= ' aga clic aquí para desbloquear ellos';
+GO.email.lang.loadEmailFirst= ' Para utilizar esta función, usted debe cargar su dirección de e-mail presionando en primer lugar por el e-mail ficha';
+GO.email.lang.confirmEmptySubject=' Usted no llenar en un tema. ¿Estás seguro de que desea enviar este mensaje sin asunto?';
+GO.email.lang.usage='Disco uso';
 
 GO.email.lang.messages='Mensaje';
 GO.email.lang.message='Mensajes';
