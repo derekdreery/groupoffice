@@ -43,6 +43,9 @@ if ( isset( $GO_INCLUDES ) ) {
 	}
 }
 
+if(function_exists('mb_internal_encoding'))
+	mb_internal_encoding("UTF-8");
+
 //start session
 session_name('groupoffice');
 session_start();

@@ -248,6 +248,7 @@ class cached_imap extends imap{
 					$message['subject']=substr($message['subject'],0,100);
 					$message['from']=substr($message['from'],0,100);					
 					$message['reply_to']=substr($message['reply_to'],0,100);
+					$message['udate']=intval($message['udate']);
 					
 					$messages[$message['uid']]=$message;
 					$messages[$message['uid']]['cached']=false;

@@ -63,6 +63,28 @@ class Swift_Message_Encoder
         
     return $ret;
   }
+  
+  /**
+   * Merijn: Created this function to chunk UTF-8 encoded strings
+   */
+  
+  public function mb_chunk_split($string, $chunklen, $end)
+  {  	
+  	if(!function_exists('mb_substr'))
+  	{
+  		return chunk_split($string, $chunklen, $end);
+  	}else
+  	{
+  		$pos=0;
+  		$chunked = '';
+  		while($pos<mb_strlen($string, 'UTF-8'))
+  		{
+  			$chunked .= mb_substr($string, $pos, $chunklen, 'UTF-8').$end;
+  			$pos += $chunklen;
+  		}
+  		return $chunked;
+  	}
+  }
   /**
    * Break a string apart at every occurence of <xxxyyy> and return an array
    * This method does NOT remove any characters like a preg_split() would do.
@@ -125,7 +147,8 @@ class Swift_Message_Encoder
         }
         elseif ($init_chunk) $ret .= $le;
         
-        $ret .= trim(chunk_split($string, $chunk, $le)) . $le;
+        //Merijn: use mb_chunk_split for UTF-8 subjects here
+        $ret .= trim($this->mb_chunk_split($string, $chunk, $le)) . $le;
       }
       $init_chunk = 0;
     }
