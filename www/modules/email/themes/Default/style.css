@@ -1,6 +1,7 @@
 .message-body  blockquote {  
 	display: block;  
   margin: 1em 40px;  
+  padding:0px 10px;
 }
 
 
