@@ -2,7 +2,8 @@
 - Bug fixes
 - Import/export of custom fields in addressbook (pro)
 - Add /delete mail folders by right clicking the tree menu
-- Added spanish translation
+- Added Spanish translation
+- Added Brazilan Portugese translation
 
 2008/11/24 Version 3.00-stable-1
 - Last known bugs were fixed
