@@ -189,8 +189,22 @@ class imap{
 		return $this->conn;
 	}
 	
+	/**
+	 * Returns an array of integer values pertaining to the specified user mailbox. All values contain a key based upon the resource name, and a corresponding array with the usage and limit values within.
+	 * 
+	 * This function will return FALSE in the case of call failure, and an array of information about the connection upon an un-parsable response from the server. 
+	 *
+	 * @return unknown
+	 */
+	
 	function get_quota(){		
-		return @imap_get_quotaroot($this->conn, $this->mailbox);		 
+		if(!$this->is_imap())
+		{
+			return false;
+		}else
+		{
+			return @imap_get_quotaroot($this->conn, $this->mailbox);
+		}		 
 	}
 
 	/**
