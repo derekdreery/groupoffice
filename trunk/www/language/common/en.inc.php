@@ -120,7 +120,7 @@ $lang['common']['date']='Date';
 
 $lang['common']['default_salutation']['M']='Dear sir';
 $lang['common']['default_salutation']['F']='Dear madame';
-
+$lang['common']['default_salutation']['unknown']='Dear sir/madame';
 
 $lang['common']['mins'] = 'Mins';
 $lang['common']['hour'] = 'hour';
