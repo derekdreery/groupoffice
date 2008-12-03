@@ -41,6 +41,9 @@ GO.addressbook.SelectContactDialog = function(config){
 		tbar: [
     GO.lang['strSearch']+': ', ' ', this.searchField
     ]});
+    
+  //dont filter on address lists when selecting
+  delete this.grid.store.baseParams.enable_mailings_filter;
 		
 	this.searchField.store=this.grid.store;
 	
