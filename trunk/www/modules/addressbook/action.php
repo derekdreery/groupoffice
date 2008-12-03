@@ -118,7 +118,7 @@ try
 					$insert=false;
 				}
 
-				if(isset($GO_MODULES->modules['customfields']))
+				if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
 				{
 					require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
 					$cf = new customfields();
@@ -127,7 +127,7 @@ try
 				}
 			
 
-				if(isset($GO_MODULES->modules['mailings']))
+				if(isset($GO_MODULES->modules['mailings']) && $GO_MODULES->modules['mailings']['read_permission'])
 				{
 					require($GO_MODULES->modules['mailings']['class_path'].'mailings.class.inc.php');
 					$ml = new mailings();
@@ -220,7 +220,7 @@ try
 
 				}
 					
-				if(isset($GO_MODULES->modules['customfields']))
+				if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
 				{
 					require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
 					$cf = new customfields();
@@ -229,7 +229,7 @@ try
 				}
 					
 					
-				if(isset($GO_MODULES->modules['mailings']))
+				if(isset($GO_MODULES->modules['mailings']) && $GO_MODULES->modules['mailings']['read_permission'])
 				{
 					require($GO_MODULES->modules['mailings']['class_path'].'mailings.class.inc.php');
 					$ml = new mailings();

@@ -249,24 +249,16 @@ try
 				
 			if(isset($_POST['add_contacts']))
 			{
-				try{
-					$add_contacts = json_decode(($_POST['add_contacts']));
+				$add_contacts = json_decode(($_POST['add_contacts']));
 
-					foreach($add_contacts as $id)
-					{
-						$contact['id']=$id;
-						$contact['company_id']=$company_id;
-
-						$ab->update_contact($contact);
-					}
-				}
-				catch (Exception $e)
+				foreach($add_contacts as $id)
 				{
+					$contact['id']=$id;
+					$contact['company_id']=$company_id;
 
-				}
+					$ab->update_contact($contact);
+				}			
 			}
-				
-				
 				
 			$response['results'] = array();
 			$response['total'] = $ab->get_company_contacts($company_id, $field, $dir, $start, $limit);
@@ -341,13 +333,12 @@ try
 	
 					$full_path = $GO_CONFIG->file_storage_path.$response['data']['files_path'];
 					$fs->check_share($full_path, $GO_SECURITY->user_id, $response['data']['acl_read'], $response['data']['acl_write'],true);				
-				}				
-			
+				}			
 			}
 				
 			if($task == 'load_contact')
 			{
-				if(isset($GO_MODULES->modules['customfields']))
+				if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
 				{
 					require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
 					$cf = new customfields();
@@ -355,26 +346,27 @@ try
 					$response['data']=array_merge($response['data'], $values);
 				}
 
-				if(isset($GO_MODULES->modules['mailings']))
+				if(isset($GO_MODULES->modules['mailings']) && $GO_MODULES->modules['mailings']['read_permission'])
 				{
 					require($GO_MODULES->modules['mailings']['class_path'].'mailings.class.inc.php');
 					
 					$ml = new mailings();
 					$ml2 = new mailings();
 						
-					$ml->get_authorized_mailing_groups('write', $GO_SECURITY->user_id, 0,0);
+					$count = $ml->get_authorized_mailing_groups('write', $GO_SECURITY->user_id, 0,0);
+
+					
 					while($ml->next_record())
-					{
-						$response['data']['mailing_'.$ml->f('id')]=$ml2->contact_is_in_group($contact_id, $ml->f('id'));
+					{						
+						$response['data']['mailing_'.$ml->f('id')]=$ml2->contact_is_in_group($contact_id, $ml->f('id')) ? true : false;
 					}
 				}
 
 				echo json_encode($response);
 				break;
-			}
+			}			
 			
-			
-			if(isset($GO_MODULES->modules['customfields']))
+			if(isset($GO_MODULES->modules['customfields'])  && $GO_MODULES->modules['customfields']['read_permission'])
 			{
 				require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
 				$cf = new customfields();
@@ -406,8 +398,7 @@ try
 			}else
 			{
 				$response['data']['files']=array();				
-			}
-				
+			}			
 				
 			echo json_encode($response);
 			break;
@@ -476,7 +467,7 @@ try
 					$ml->get_authorized_mailing_groups('write', $GO_SECURITY->user_id, 0,0);
 					while($ml->next_record())
 					{
-						$response['data']['mailing_'.$ml->f('id')]=$ml2->company_is_in_group($company_id, $ml->f('id'));
+						$response['data']['mailing_'.$ml->f('id')]=$ml2->company_is_in_group($company_id, $ml->f('id')) ? true : false;
 					}
 				}
 				echo json_encode($response);
