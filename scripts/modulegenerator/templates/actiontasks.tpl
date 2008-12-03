@@ -53,7 +53,7 @@
 			}
 			
 			<gotpl if="$link_type&gt;0">
-			if(isset($GO_MODULES->modules['customfields']))
+			if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
 			{
 				require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
 				$cf = new customfields();
