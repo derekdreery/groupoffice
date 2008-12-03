@@ -82,6 +82,10 @@
 
 
 
+.em-statusbar-body{
+line-height:21px !important;
+padding-left:2px;
+}
 
 
 .em-blocked{

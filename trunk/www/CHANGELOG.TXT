@@ -1,4 +1,4 @@
-2008/12/02 Version 3.00-stable-2
+2008/12/03 Version 3.00-stable-2
 - Bug fixes
 - Import/export of custom fields in addressbook (pro)
 - Add /delete mail folders by right clicking the tree menu

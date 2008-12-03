@@ -37,9 +37,7 @@ GO.email.AccountsTree = function(config){
 	config.enableDrop=true;
 	config.ddGroup='EmailDD';
 	
-	config.bbar=this.statusBar = new Ext.StatusBar({
-		cls:'go-paging-tb'		
-	});
+	config.bbar=new Ext.Toolbar({cls:'go-paging-tb',items:[this.statusBar = new Ext.Panel({height:20, baseCls:'em-statusbar',border:false, plain:true})]});
 
 	GO.email.AccountsTree.superclass.constructor.call(this, config);	
 	
@@ -56,20 +54,8 @@ GO.email.AccountsTree = function(config){
 	
 }
 
-Ext.extend(GO.email.AccountsTree, Ext.tree.TreePanel, {
-	
-	setUsage : function(usage){
-		
-		this.bbar.setVisibilityMode(Ext.Element.DISPLAY);
-		
-		if(usage!='')
-		{
-			this.bbar.show()
-			this.statusBar.setText(usage);
-		}else
-		{
-			this.bbar.hide()
-		}
-    this.syncSize();	
+Ext.extend(GO.email.AccountsTree, Ext.tree.TreePanel, {	
+	setUsage : function(usage){		
+			this.statusBar.body.update(usage);
 	}
 });

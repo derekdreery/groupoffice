@@ -85,6 +85,12 @@
 margin:5px 2px;
 }
 
+.em-statusbar-body{
+line-height:21px !important;
+padding-left:2px;
+}
+
+
 #ml-notify{
 	float:left;
 	padding-left:20px;
