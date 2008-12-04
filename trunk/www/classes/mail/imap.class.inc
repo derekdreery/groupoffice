@@ -184,7 +184,7 @@ class imap{
 		if ($flags != 0) {
 			$this->conn = @ imap_open("{".$this->connectstring."}".$this->mailbox, $username, $password, $flags, 1);
 		} else {
-			$this->conn = @ imap_open("{".$this->connectstring."}".$this->mailbox, $username, $password,null,1);
+			$this->conn = @ imap_open("{".$this->connectstring."}".$this->mailbox, $username, $password);
 		}
 		return $this->conn;
 	}
