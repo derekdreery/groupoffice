@@ -20,6 +20,7 @@ GO.email.EmailClient = function(config){
 		config = {};
 	}	
 	
+		
 	var messagesGridConfig = {};
 
 	if(screen.width>1024)
@@ -608,7 +609,8 @@ GO.email.EmailClient = function(config){
 					region:'center',
 					autoScroll:true,
 					titlebar: false,
-					border:true
+					border:true,
+					attachmentContextMenu: new GO.email.AttachmentContextMenu({emailClient:this})
 				})
 			]
   	}];
@@ -760,24 +762,69 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		}
 	},
 	
-	openAttachment :  function(attachment, panel)
+	saveAttachment : function(attachment)
 	{
-		
+		if(!GO.files.saveAsDialog)
+  	{
+  		GO.files.saveAsDialog = new GO.files.SaveAsDialog();
+  	}
+  	GO.files.saveAsDialog.show({
+  		filename: attachment.name,
+  		handler:function(dialog, path){
+  			dialog.el.mask(GO.lang.waitMsgLoad);
+  			Ext.Ajax.request({
+  				url: GO.settings.modules.email.url+'action.php',
+  				params:{
+  					task:'save_attachment',
+  					uid: this.previewedUid,
+  					mailbox: this.mailbox, 
+		  			part: attachment.number,
+		  			transfer: attachment.transfer,
+		  			mime: attachment.mime,
+		  			account_id: this.account_id,
+		  			path: path
+  				},
+  				callback: function(options, success, response)
+					{	
+						dialog.el.unmask();
+						if(!success)
+						{
+							alert( GO.lang['strRequestError']);
+						}else
+						{
+							var responseParams = Ext.decode(response.responseText);
+							if(!responseParams.success)
+							{
+								alert( responseParams.feedback);
+							}else
+							{
+								dialog.hide();
+							}						
+						}
+					},
+					scope:this				
+  			});
+  		},
+  		scope:this
+  	});
+	},
+	
+	openAttachment :  function(attachment, panel)
+	{		
 		if(attachment.mime.indexOf('message')>-1)
   	{
   		GO.linkHandlers[9].call(this, 0, {
   			uid: this.previewedUid, 
   			mailbox: this.mailbox, 
   			part: attachment.number,
-  			transfer: this.transfer,
+  			transfer: attachment.transfer,
   			mime: attachment.mime,
   			account_id: this.account_id
   			});	
   	}else
   	{	
 			switch(attachment.extension)
-			{
-				
+			{				
 				case 'dat':
 					document.location.href=GO.settings.modules.email.url+
 						'tnef.php?account_id='+this.account_id+
@@ -1082,6 +1129,8 @@ GO.mainLayout.onReady(function(){
 	
 	//contextmenu when an e-mail address is clicked
 	GO.email.addressContextMenu=new GO.email.AddressContextMenu();
+	
+	
 });
 
 
@@ -1112,6 +1161,9 @@ GO.linkHandlers[9] = function(id, remoteMessage){
   }, this);
   
   messagePanel.on('attachmentClicked', function(attachment, panel){
+  	
+  	
+  	
   	
   	if(attachment.mime.indexOf('message')>-1)
   	{

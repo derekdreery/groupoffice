@@ -592,6 +592,7 @@ class files extends filesystem
 		
 		$file['ctime']=$file['mtime']=time();
 		$file['id']=$this->nextid('fs_files');
+		$file['user_id']=$GLOBALS['GO_SECURITY']->user_id;
 		$this->insert_row('fs_files', $file);
 		
 		$this->cache_file($file['path']);

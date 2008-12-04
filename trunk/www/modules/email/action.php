@@ -60,7 +60,24 @@ $response =array('success'=>false);
 try{
 	switch($_REQUEST['task'])
 	{
-		
+		case 'save_attachment':
+
+			$account = connect($_POST['account_id'], $_POST['mailbox']);			
+			$data = $imap->view_part($_REQUEST['uid'], $_REQUEST['part'], $_REQUEST['transfer']);
+			$imap->close();
+			
+			if(empty($data))
+			{
+				throw new Exception('Could not fetch message from IMAP server');
+			}
+			
+			if(!file_put_contents($GO_CONFIG->file_storage_path.$_POST['path'], $data))
+			{
+				throw new Exception('Could not create file');
+			}
+			$response['success']=true;
+			break;
+			
 		case 'check_mail':			
 			$email2 = new email();
 			$count = $email2->get_accounts($GO_SECURITY->user_id);

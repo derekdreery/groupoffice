@@ -174,6 +174,11 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		{
 			this.attachmentsEl = Ext.get(this.attachmentsId);			
 			this.attachmentsEl.on('click', this.openAttachment, this);
+			
+			if(this.attachmentContextMenu)
+			{			
+				this.attachmentsEl.on('contextmenu', this.onAttachmentContextMenu, this);
+			}
 		}
 		
 		this.body.scrollTo('top',0);
@@ -195,6 +200,26 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				});
 			}
 		}
+	},
+	
+	onAttachmentContextMenu : function (e, target){
+		
+		
+		if(target.id.substr(0,this.attachmentsId.length)==this.attachmentsId)
+		{			
+			var attachment_no = target.id.substr(this.attachmentsId.length+1);
+			
+			if(attachment_no=='zipofall')
+			{
+				//this.fireEvent('zipOfAttachmentsClicked');				
+			}else
+			{
+				e.preventDefault();
+				var attachment = this.data.attachments[attachment_no];				
+				this.attachmentContextMenu.showAt(e.getXY(), attachment);
+			} 
+		}
+			
 	},
 	
 	openAttachment :  function(e, target)
