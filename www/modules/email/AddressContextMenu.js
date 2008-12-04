@@ -45,7 +45,6 @@ GO.email.AddressContextMenu = function(config)
 					iconCls: 'btn-search',
 					text: GO.email.lang.searchGO,
 					cls: 'x-btn-text-icon',
-					disabled:!GO.mainLayout.tabPanel,
 					handler: function(){
 						var searchPanel = new GO.grid.SearchPanel(
 							{query: this.address}
