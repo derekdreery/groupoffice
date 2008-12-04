@@ -1078,6 +1078,9 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 
 GO.mainLayout.onReady(function(){
 	GO.email.Composer = new GO.email.EmailComposer();
+	
+	//contextmenu when an e-mail address is clicked
+	GO.email.addressContextMenu=new GO.email.AddressContextMenu();
 });
 
 
@@ -1087,16 +1090,20 @@ GO.moduleManager.addModule('email', GO.email.EmailClient, {
 });
 
 
+GO.email.showAddressMenu = function(e, email, name)
+{
+	var e = Ext.EventObject.setEvent(e);
+	e.preventDefault();
+	GO.email.addressContextMenu.showAt(e.getXY(), email, name);
+}	
+
 
 GO.linkHandlers[9] = function(id, remoteMessage){
-	
-	
 	
 	var messagePanel = new GO.email.MessagePanel({
 			border:false,
 			autoScroll:true
-		});
-		
+		});		
 		
 	messagePanel.on('linkClicked', function(href){
   	var win = window.open(href);

@@ -13,3 +13,4 @@ modules/email/UnknownRecipientsDialog.js
 modules/email/AddressbookDialog.js
 modules/email/EmailComposer.js
 modules/email/EmailClient.js
+modules/email/AddressContextMenu.js

@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-//require($GO_LANGUAGE->get_fallback_language_file('email'));
+require($GO_LANGUAGE->get_fallback_language_file('email'));
 $lang['email']['name'] = 'Email';
 $lang['email']['description'] = 'Webový e-mailový klient. Každý uživatel může  posílat a přijímat e-maily nebo přeposílat.';
 

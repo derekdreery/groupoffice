@@ -762,7 +762,7 @@ class email extends db
 			$folder['attributes'] = $mailbox['attributes'];
 			$folder['name'] = $mailbox['name'];
 
-			$folder['subscribed']=in_array($mailbox['name'], $subscribed);
+			$folder['subscribed']=in_array($mailbox['name'], $subscribed) ? '1' : '0';
 			//$folder['subscribed']='1';
 			$folder['delimiter'] = $mailbox['delimiter'];
 			/*if($status = $mail->status($mailbox['name'], SA_UNSEEN+SA_MESSAGES))

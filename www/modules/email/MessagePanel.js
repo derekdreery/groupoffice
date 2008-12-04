@@ -34,14 +34,8 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		var templateStr = '<div class="message-header">'+
 			'<table class="message-header-table">'+
 			'<tr><td style="width:70px"><b>'+GO.email.lang.from+'</b></td>'+			
-			'<td>: {full_from} (<a class="normal-link" onclick="GO.email.searchSender(\'{sender}\');" href="#">'+GO.email.lang.searchOnSender+'</a>';
-		
-		if(GO.addressbook)
-		{
-			templateStr += ' | <a class="normal-link" onclick="GO.addressbook.searchSender(\'{sender}\', \'{from}\');" href="#">'+GO.addressbook.lang.searchOnSender+'</a>';
-		}
-			
-		templateStr += ')</td></tr><tr><td><b>'+GO.email.lang.subject+'</b></td><td>: {subject}</td></tr>'+
+			'<td>: {from} &lt;<a class="normal-link" href="#" oncontextmenu="GO.email.showAddressMenu(event, \'{sender}\', \'{from}\');">{sender}</a>&gt;</td></tr>'+
+			'<tr><td><b>'+GO.email.lang.subject+'</b></td><td>: {subject}</td></tr>'+
 			'<tr><td><b>'+GO.lang.strDate+'</b></td><td>: {date}</td></tr>'+
 			//'<tr><td><b>'+GO.lang.strSize+'</b></td><td>: {size}</td></tr>'+
 			'<tr><td><b>'+GO.email.lang.to+'</b></td><td>: {to}</td></tr>'+
@@ -70,7 +64,10 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			'</div>'+
 			'<div id="'+this.bodyId+'" class="message-body">{body}</div>';
 		
-		this.template = new Ext.XTemplate(templateStr);		
+		this.template = new Ext.XTemplate(templateStr,{
+			
+					
+		});		
 		this.template.compile();	
 	},
 	
@@ -159,6 +156,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		
 		this.messageBodyEl = Ext.get(this.bodyId);		
 		this.messageBodyEl.on('click', this.onMessageBodyClick, this);
+		this.messageBodyEl.on('contextmenu', this.onMessageBodyContextMenu, this);
 		
 		if(data.attachments.length)
 		{
@@ -206,6 +204,40 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		}
 	},
 	
+	onMessageBodyContextMenu :  function(e, target){
+		
+		e.preventDefault();
+		
+		if(target.tagName!='A')
+		{
+			target = Ext.get(target).findParent('A', 10);
+			if(!target)
+				return false;
+		}
+		
+		if(target.tagName=='A')
+		{
+			var href=target.attributes['href'].value;
+			
+			if(href.substr(0,6)=='mailto')
+			{
+				var indexOf = href.indexOf('?');
+				if(indexOf>0)
+				{
+					var email = href.substr(7, indexOf-8);
+				}else
+				{
+					var email = href.substr(7);
+				}				
+
+				GO.email.addressContextMenu.showAt(e.getXY(), email);
+			}else
+			{
+				
+			}
+		}		
+	},
+	
 	onMessageBodyClick :  function(e, target){
 		
 		e.preventDefault();
@@ -230,16 +262,13 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				}else
 				{
 					var email = href.substr(7);
-				}
-				
-				
+				}				
 				this.fireEvent('emailClicked', email);
 			
 			}else
 			{
 				this.fireEvent('linkClicked', href);
 			}
-		}
-		
+		}		
 	}
 });

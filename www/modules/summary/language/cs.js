@@ -1,8 +1,3 @@
-Ext.namespace('GO.summary');
-Ext.namespace('GO.portlets');
-
-GO.summary.lang={};
-
 GO.summary.lang.summary = 'Přehled';
 GO.summary.lang.noItems = 'Nemáte žádné položky na Vaší počáteční stránce.';
 GO.summary.lang.selectPortlet = 'Vyberte portlet';

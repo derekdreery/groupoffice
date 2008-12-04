@@ -1,7 +1,3 @@
-Ext.namespace('GO.groups');
-
-GO.groups.lang={};
-
 GO.groups.lang.groups = 'Skupiny';
 GO.groups.lang.owner = 'Vlastník';
 GO.groups.lang.lblNew = 'Název';

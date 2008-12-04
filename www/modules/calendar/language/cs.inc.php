@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-//require($GO_LANGUAGE->get_fallback_language_file('calendar'));
+require($GO_LANGUAGE->get_fallback_language_file('calendar'));
 $lang['calendar']['name'] = 'Kalendář';
 $lang['calendar']['description'] = 'Každý uživatel může přidat, upravit nebo smazat činnosti. Má také možnost prohlížet činnosti od ostatní uživatelů a v případě nutnosti je změnit.';
 

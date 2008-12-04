@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-//require_once($GO_LANGUAGE->get_fallback_language_file('users'));
+require($GO_LANGUAGE->get_fallback_language_file('users'));
 $lang['users']['name'] = 'Uživatelé';
 $lang['users']['description'] = 'Administrátorské prostředí pro úpravu uživatelů.';
 

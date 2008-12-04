@@ -1,7 +1,3 @@
-Ext.namespace('GO.modules');
-
-GO.modules.lang={};
-
 GO.modules.lang.cmdSaveChanges = 'Uložit změny',
 GO.modules.lang.cmdInstall = 'Nainstalovat',
 GO.modules.lang.cmdUninstall = 'Odinstalovat',
