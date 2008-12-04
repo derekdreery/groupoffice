@@ -161,15 +161,19 @@ GO.files.FileBrowser = function(config){
 					dataIndex: 'mtime',
 					sortable:true
 				}],						
-			view:new  Ext.grid.GridView({
+			view:new Ext.grid.GridView({
 				autoFill:true,
-				forceFit:true
+				forceFit:true		
 			}),
 			sm: new Ext.grid.RowSelectionModel(),
 			loadMask: true,
 			enableDragDrop: true,
 			ddGroup : 'FilesDD'		
 		});
+		
+	this.gridPanel.on('delayedrowselect', function (grid, rowIndex, r){
+		this.fireEvent('fileselected', this, r);
+	}, this);
 		
 	
 	this.gridPanel.on('render', function(){
@@ -303,69 +307,83 @@ GO.files.FileBrowser = function(config){
 					},
 					scope: this
 				});
+				
+	var tbar = [];
+	
+	if(!config.hideActionButtons)
+	{
+		tbar.push(this.newButton);
+		tbar.push(this.uploadButton);
+		tbar.push('-');
+	}
+	tbar.push(this.upButton);
+	tbar.push({            
+      iconCls: "btn-refresh",
+      text:GO.lang.cmdRefresh,      
+      handler: function(){
+      	this.rootNode.reload();
+      	this.setPath(this.path);	
+      },
+      scope:this
+  });
+  
+  if(!config.hideActionButtons)
+	{
+		tbar.push('-');			
+		tbar.push(this.copyButton);
+		tbar.push(this.cutButton);
+		tbar.push(this.pasteButton);
+		tbar.push('-');
+		tbar.push(this.deleteButton);
+		tbar.push('-');
+	}				
+	
+	tbar.push(this.thumbsToggle = new Ext.Button({
+			text: GO.files.lang.thumbnails,
+			iconCls: 'btn-thumbnails',
+      enableToggle: true,
+      toggleHandler: function(item, pressed){
+      	if(pressed)
+		  	{
+		  		this.thumbsPanel.setStore(this.gridStore);	        		    		
+		  		this.cardPanel.getLayout().setActiveItem(1);
+		  	}else
+		  	{
+		  		this.thumbsPanel.setStore(false);	        		
+		  		this.cardPanel.getLayout().setActiveItem(0);
+		  	}        	
+      	
+      	var thumbs = this.gridStore.reader.jsonData.thumbs=='1';
+      	if(thumbs!=pressed)
+        	Ext.Ajax.request({
+        		url:GO.settings.modules.files.url+'action.php',
+        		params: {
+        			task:'set_view',
+        			path: this.path,
+        			thumbs: pressed ? '1' : '0'
+        		}
+      	});
+      },
+      scope:this
+		}));	
 	
 	config['layout']='border';
 	config['tbar']=new Ext.Toolbar({		
 			cls:'go-head-tb',
-			items: [
-				
-				this.newButton,
-				this.uploadButton,	
-				new Ext.Toolbar.Separator(),
-				this.upButton,{            
-			      iconCls: "btn-refresh",
-			      text:GO.lang.cmdRefresh,      
-			      handler: function(){
-			      	this.rootNode.reload();
-			      	this.setPath(this.path);	
-			      },
-			      scope:this
-			  },		
-				new Ext.Toolbar.Separator(),				
-				this.copyButton,
-				this.cutButton,
-				this.pasteButton,
-				new Ext.Toolbar.Separator(),				
-				this.deleteButton,
-				'-',
-				this.thumbsToggle = new Ext.Button({
-					text: GO.files.lang.thumbnails,
-					iconCls: 'btn-thumbnails',
-	        enableToggle: true,
-	        toggleHandler: function(item, pressed){
-	        	if(pressed)
-				  	{
-				  		this.thumbsPanel.setStore(this.gridStore);	        		    		
-				  		this.cardPanel.getLayout().setActiveItem(1);
-				  	}else
-				  	{
-				  		this.thumbsPanel.setStore(false);	        		
-				  		this.cardPanel.getLayout().setActiveItem(0);
-				  	}        	
-	        	
-	        	var thumbs = this.gridStore.reader.jsonData.thumbs=='1';
-	        	if(thumbs!=pressed)
-		        	Ext.Ajax.request({
-		        		url:GO.settings.modules.files.url+'action.php',
-		        		params: {
-		        			task:'set_view',
-		        			path: this.path,
-		        			thumbs: pressed ? '1' : '0'
-		        		}
-	        	});
-	        	
-	        	//this.getActiveGridStore().load();
-	        },
-	        scope:this
-				})				
-				
-			]});
+			items: tbar});
 
 	this.thumbsPanel = new GO.files.ThumbsPanel();
+	
+	this.thumbsPanel.view.on('click', function(view, index,node,e){
+		var record = view.store.getAt(index);
+		this.fireEvent('fileselected', this, record);
+	}, this);
 	
 	this.thumbsPanel.view.on('dblclick', function(view, index, node, e){
 		
 		var record = view.store.getAt(index);
+		
+		this.fireEvent('filedblclicked', this, record);
 		
 		if(record.data.extension=='folder')
 		{
@@ -374,7 +392,7 @@ GO.files.FileBrowser = function(config){
 		{
 			if(this.fileClickHandler)
 			{
-				this.fileClickHandler.call(this.scope);
+				this.fileClickHandler.call(this.scope, record);
 			}else
 			{
 				GO.files.openFile(record.data.path, this.getActiveGridStore());
@@ -416,6 +434,11 @@ GO.files.FileBrowser = function(config){
 	config['items']=[this.locationPanel, this.treePanel,this.cardPanel];
 	
 	GO.files.FileBrowser.superclass.constructor.call(this, config);
+	
+	this.addEvents({
+		fileselected : true,
+		filedblclicked : true
+	});
 }
 
 Ext.extend(GO.files.FileBrowser, Ext.Panel,{
@@ -433,8 +456,6 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		this.setWritePermission(store.reader.jsonData.write_permission);
 		
 		this.thumbsToggle.toggle(store.reader.jsonData.thumbs=='1');
-		
-		
 		
 		var lastIndexOf = this.path.lastIndexOf('/');
 		this.parentPath = this.path.substr(0, lastIndexOf);
@@ -471,20 +492,16 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	},
 
 	
-	afterRender : function(){
-		
+	afterRender : function(){		
 		GO.files.FileBrowser.superclass.afterRender.call(this);
 		
 		if(!this.loadDelayed && !this.loaded)
 		{			
 			this.loadFiles();
-		}
-		
-		
+		}	
 	},
 	
-	loadFiles : function(path){
-		
+	loadFiles : function(path){		
 		this.buildNewMenu();		
 		this.setRootNode(this.root, path);
 		this.loaded=true;
@@ -502,8 +519,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	},
 	
 	setRootNode : function(id, path)
-	{
-		
+	{		
 		this.rootNode.id=id;
 		this.rootNode.attributes.id=id;
 		//delete this.rootNode.children;
@@ -1218,6 +1234,8 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		var selectionModel = grid.getSelectionModel();
 		var record = selectionModel.getSelected();
 		
+		this.fireEvent('filedblclicked', this, record);
+		
 		if(record.data.extension=='folder')
 		{
 			this.setPath(record.data.path, true);	
@@ -1225,7 +1243,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		{
 			if(this.fileClickHandler)
 			{
-				this.fileClickHandler.call(this.scope);
+				this.fileClickHandler.call(this.scope, record);
 			}else
 			{
 				GO.files.openFile(record.data.path, this.getActiveGridStore());

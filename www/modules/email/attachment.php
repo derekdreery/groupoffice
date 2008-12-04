@@ -49,9 +49,7 @@ if ($mail->open($account['host'], $account['type'],$account['port'],$account['us
 		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 		header('Pragma: public');
 	}else
-	{
-		
-		
+	{		
 		$mime = File::get_mime($filename);
 		
 		header('Content-Type: '.$mime);
