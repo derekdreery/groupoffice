@@ -625,26 +625,46 @@ try{
 				$response['sender']=isset($address[0]['email']) ? $address[0]['email'] : '';
 				$response['from']=isset($address[0]['personal']) ? $address[0]['personal'] : '';
 				
+				
+				if(!empty($response['to']))
+				{
+					$to=array();
+					foreach($response['to'] as $address)
+					{
+						$address=$RFC822->parse_address_list($address);
+						$to[] = array('email'=>htmlspecialchars($address[0]['email'], ENT_QUOTES, 'UTF-8'),
+						'name'=>htmlspecialchars($address[0]['personal'], ENT_QUOTES, 'UTF-8'));
+					}
+					$response['to']=$to;
+				}else
+				{
+					$response['to']=array('email'=>'', 'name'=> $lang['email']['no_recipients']);
+				}
+						
 
-				if (isset ($response['to'])) {
-					$to = implode(', ',$response['to']);
+				$cc=array();
+				if(!empty($response['cc']))
+				{					
+					foreach($response['cc'] as $address)
+					{
+						$address=$RFC822->parse_address_list($address);
+						$cc[] = array('email'=>htmlspecialchars($address[0]['email'], ENT_QUOTES, 'UTF-8'),
+						'name'=>htmlspecialchars($address[0]['personal'], ENT_QUOTES, 'UTF-8'));
+					}					
 				}
-				if (empty($to)) {
-					$to = $lang['email']['no_recipients'];
+				$response['cc']=$cc;
+				
+				$bcc=array();
+				if(!empty($response['bcc']))
+				{					
+					foreach($response['bcc'] as $address)
+					{
+						$address=$RFC822->parse_address_list($address);
+						$bcc[] = array('email'=>htmlspecialchars($address[0]['email'], ENT_QUOTES, 'UTF-8'),
+						'name'=>htmlspecialchars($address[0]['personal'], ENT_QUOTES, 'UTF-8'));
+					}					
 				}
-				$response['to'] = htmlspecialchars($to, ENT_QUOTES, 'UTF-8');
-
-				$cc='';
-				if (isset ($response['cc'])) {
-					$cc = implode(', ',$response['cc']);
-				}
-				$response['cc'] = htmlspecialchars($cc, ENT_QUOTES, 'UTF-8');
-
-				$bcc='';
-				if (isset ($response['bcc'])) {
-					$bcc = implode(', ',$response['bcc']);
-				}
-				$response['bcc'] = htmlspecialchars($bcc, ENT_QUOTES, 'UTF-8');
+				$response['bcc']=$bcc;
 
 				$response['date']=date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], $response['udate']);
 				//$response['size']=Number::format_size($response['size']);

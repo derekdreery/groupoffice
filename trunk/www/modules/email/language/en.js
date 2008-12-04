@@ -116,7 +116,7 @@ GO.email.lang.viewSource='View source';
 
 GO.email.lang.sendNotification='The sender of this messages likes a read notification by you at: %s. Do you want to send a read notification now?';
 
-GO.email.lang.searchOnSender='Show messages';
+GO.email.lang.searchOnSender='Show messages in current folder';
 
 GO.email.lang.blocked = '{blocked_images} external images were blocked for your security.';
 GO.email.lang.unblock = 'Click here to unblock them';
@@ -126,3 +126,4 @@ GO.email.lang.loadEmailFirst = 'To use this function you must load your e-mail f
 GO.email.lang.confirmEmptySubject='You didn\'t fill in a subject. Are you sure you want to send this message without a subject?';
 
 GO.email.lang.usage='Disk usage';
+GO.email.lang.searchGO='Search through Group-Office';
