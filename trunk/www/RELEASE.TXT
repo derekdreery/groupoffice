@@ -1,7 +1,7 @@
 2008/11/24 Version 3.00 stable
 
 After more then one and a half year of development time and testing it's finally there! 
-We are proud to present Group-Office 3.0, Group-Office needed to be modernised. 
+We are proud to present Group-Office 3.0, Group-Office needed to be modernized. 
 New web techniques have been developed and are ready to use in a professional platform 
 such as Group-Office. We completely rewrote the interface of Group-Office. It feels much 
 more like a desktop application now with drag and drop features, flexible information panels

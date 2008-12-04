@@ -1,7 +1,3 @@
-Ext.namespace('GO.tasks');
-
-GO.tasks.lang={};
-
 GO.tasks.lang.task = 'Úkol';
 GO.tasks.lang.noTask = 'Žádné úkoly k zobrazení';
 GO.tasks.lang.tasks = 'Úkoly';

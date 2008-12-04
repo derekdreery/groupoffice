@@ -12,13 +12,6 @@
  */
 
 /**
- * Don't copy the next lines into a translation
- */
-Ext.namespace('GO.addressbook');
-Ext.namespace('GO.addressbook.plugins');
-GO.addressbook.lang={};
-
-/**
  * Copy everything below for translations
  */
 

@@ -1,7 +1,3 @@
-Ext.namespace('GO.users');
-
-GO.users.lang={};
-
 GO.users.lang.cmdCheckColumnRead= 'Čtení';
 GO.users.lang.cmdCheckColumnWrite= 'Zápis';
 GO.users.lang.cmdHeaderColumnName= 'Název modulu';

@@ -1,11 +1,4 @@
 /**
- * Don't copy the next line into a translation
- */
-Ext.namespace('GO.calendar');
-Ext.namespace("GO.calendar.dd");
-
-GO.calendar.lang={};
-/**
  * Copy everything below for translations
  */
  

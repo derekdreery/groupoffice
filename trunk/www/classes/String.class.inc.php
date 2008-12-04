@@ -510,8 +510,8 @@ class String {
 		if($convert_links)
 		{
 			$text = preg_replace("/(?:^|\b)(((http(s?):\/\/)|(www\.-))([\w\.-]+)([,:;%#&\/?=\w+\.\-@]+))(?:\b|$)/is", "<a href=\"http$4://$5$6$7\" target=\"_blank\" class=\"normal-link\">$1</a>", $text);
-			$text = preg_replace("/(\A|\s)([\w\.\-]+)(@)([\w\.-]+)([A-Za-z]{2,3})\b/i", "\\1<a href=\"mailto:\\2\\3\\4\\5\">\\2\\3\\4\\5</a>", $text);
-
+			//$text = preg_replace("/(\A|\s)([\w\.\-]+)(@)([\w\.-]+)([A-Za-z]{2,3})\b/i", "\\1<a href=\"mailto:\\2\\3\\4\\5\">\\2\\3\\4\\5</a>", $text);
+			$text = preg_replace("/\b[a-z0-9\._\-]+@[a-z0-9\.-_]+\.[a-z]{2,3}\b/", "<a href=\"mailto:$0\">$0</a>", $text);
 		}
 		$text = nl2br($text);
 		$text = str_replace("\r", "", $text);
