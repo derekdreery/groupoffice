@@ -38,12 +38,24 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			'<tr><td><b>'+GO.email.lang.subject+'</b></td><td>: {subject}</td></tr>'+
 			'<tr><td><b>'+GO.lang.strDate+'</b></td><td>: {date}</td></tr>'+
 			//'<tr><td><b>'+GO.lang.strSize+'</b></td><td>: {size}</td></tr>'+
-			'<tr><td><b>'+GO.email.lang.to+'</b></td><td>: {to}</td></tr>'+
+			'<tr><td><b>'+GO.email.lang.to+'</b></td><td>: '+
+			'<tpl for="to">'+
+			'{name} <tpl if="email.length">&lt;<a class="normal-link" href="#" oncontextmenu="GO.email.showAddressMenu(event, \'{email}\', \'{name}\');">{email}</a>&gt;; </tpl>'+	
+			'</tpl>'+
+			'</td></tr>'+
 			'<tpl if="cc.length">'+
-				'<tr><td><b>'+GO.email.lang.cc+'</b></td><td>: {cc}</td></tr>'+
+				'<tr><td><b>'+GO.email.lang.cc+'</b></td><td>: '+
+				'<tpl for="cc">'+
+				'{name} <tpl if="email.length">&lt;<a class="normal-link" href="#" oncontextmenu="GO.email.showAddressMenu(event, \'{email}\', \'{name}\');">{email}</a>&gt;; </tpl>'+	
+				'</tpl>'+
+				'</td></tr>'+
 			'</tpl>'+
 			'<tpl if="bcc.length">'+
-				'<tr><td><b>'+GO.email.lang.bcc+'</b></td><td>: {bcc}</td></tr>'+
+				'<tr><td><b>'+GO.email.lang.bcc+'</b></td><td>: '+
+				'<tpl for="bcc">'+
+				'{name} <tpl if="email.length">&lt;<a class="normal-link" href="#" oncontextmenu="GO.email.showAddressMenu(event, \'{email}\', \'{name}\');">{email}</a>&gt;; </tpl>'+	
+				'</tpl>'+
+				'</td></tr>'+
 			'</tpl>'+
 			'</table>'+
 			'<tpl if="attachments.length">'+
@@ -206,8 +218,6 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 	
 	onMessageBodyContextMenu :  function(e, target){
 		
-		e.preventDefault();
-		
 		if(target.tagName!='A')
 		{
 			target = Ext.get(target).findParent('A', 10);
@@ -230,6 +240,8 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 					var email = href.substr(7);
 				}				
 
+				e.preventDefault();
+				
 				GO.email.addressContextMenu.showAt(e.getXY(), email);
 			}else
 			{
@@ -239,9 +251,6 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 	},
 	
 	onMessageBodyClick :  function(e, target){
-		
-		e.preventDefault();
-		
 		if(target.tagName!='A')
 		{
 			target = Ext.get(target).findParent('A', 10);
@@ -251,6 +260,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		
 		if(target.tagName=='A')
 		{
+			e.preventDefault();
 			var href=target.attributes['href'].value;
 			
 			if(href.substr(0,6)=='mailto')
@@ -262,11 +272,10 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				}else
 				{
 					var email = href.substr(7);
-				}				
-				this.fireEvent('emailClicked', email);
-			
+				}						
+				this.fireEvent('emailClicked', email);			
 			}else
-			{
+			{				
 				this.fireEvent('linkClicked', href);
 			}
 		}		

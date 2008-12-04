@@ -101,7 +101,7 @@ GO.email.lang.viewSource='Bron weergeven';
 
 
 GO.email.lang.sendNotification='De afzender van dit bericht wil graag een bevestiging dat dit bericht is aangekomen op: %s. Wilt u deze bevestiging nu versturen?';
-GO.email.lang.searchOnSender='Toon berichten';
+GO.email.lang.searchOnSender='Toon berichten in huidige map';
 
 GO.email.lang.blocked = '{blocked_images} externe afbeeldingen werden voor uw veiligheid geblokkeerd.';
 GO.email.lang.unblock = 'Klik hier om de blokkade op te heffen';
@@ -111,3 +111,5 @@ GO.email.lang.loadEmailFirst = 'Om deze functie te gebruiken moet u eerst uw e-m
 GO.email.lang.confirmEmptySubject='U heeft geen onderwerp ingevuld. Weet u zeker dat u dit bericht zonder onderwerp wilt verzenden?';
 
 GO.email.lang.usage='Schijfgebruik';
+
+GO.email.lang.searchGO='Group-Office doorzoeken';

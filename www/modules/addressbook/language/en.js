@@ -98,5 +98,5 @@ GO.addressbook.lang.addressbook = 'Addressbook';
 GO.addressbook.lang.addressbooks = 'Addressbooks';
 GO.addressbook.lang.sendMailing='Send mailing';
 GO.addressbook.lang.importSuccess='Data imported successfully';
-GO.addressbook.lang.searchOnSender='Lookup';
+GO.addressbook.lang.searchOnSender='Lookup in addressbook';
 GO.addressbook.lang.confirmCreate='Contact doesn\'t exist. Do you wish to create a new contact?';

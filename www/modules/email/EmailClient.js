@@ -660,7 +660,8 @@ GO.email.EmailClient = function(config){
 			this.messagesGrid.store.baseParams.query='FROM "'+sender+'"';
 			this.messagesGrid.store.load({params:{start:0}});
 			
-			GO.mainLayout.tabPanel.setActiveTab(this.id);
+			if(GO.mainLayout.tabPanel)
+				GO.mainLayout.tabPanel.setActiveTab(this.id);
 		}else
 		{
 			alert(GO.email.lang.loadEmailFirst);
