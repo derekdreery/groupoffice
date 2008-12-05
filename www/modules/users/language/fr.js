@@ -42,7 +42,7 @@ GO.users.lang.cmdNotificationWindowTitle= 'Editer l\'e-mail d\'invitation';
 GO.users.lang.cmdMaskSaving= 'Sauvegarde';
 	
 GO.users.lang.cmdFormLabelSubject = 'Sujet';
-GO.users.lang.cmdFormLabelUsername = 'Nom d\utilisateur';
+GO.users.lang.cmdFormLabelUsername = 'Nom d\'utilisateur';
 GO.users.lang.cmdFormLabelName = 'Nom';
 GO.users.lang.cmdFormLabelPassword = 'Mot de passe';
 GO.users.lang.cmdFormLabelConfirm = 'Confirmer';
@@ -90,7 +90,7 @@ GO.users.lang.monday = 'Lundi';
 GO.users.lang.regionalSettings = 'Paramètres régionaux';
 GO.users.lang.userSettings = 'Paramètres utilisateur';
 
-GO.users.lang.maxUsersReached='Le nombre maximum d\'utilisateur a été atteint. Allez dans l\'onglet service afin d\'augmenter le nombre d\utilisateur maximum.';
+GO.users.lang.maxUsersReached='Le nombre maximum d\'utilisateur a été atteint. Allez dans l\'onglet service afin d\'augmenter le nombre d\'utilisateur maximum.';
 
 // 3.0-14
 GO.users.lang.group='Groupe';
