@@ -110,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `fs_templates` (
   `name` varchar(50) default NULL,
   `acl_read` int(11) NOT NULL,
   `acl_write` int(11) NOT NULL,
-  `content` blob NOT NULL,
+  `content` MEDIUMBLOB NOT NULL,
   `extension` char(4) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
