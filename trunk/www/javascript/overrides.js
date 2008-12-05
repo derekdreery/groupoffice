@@ -186,3 +186,90 @@ Ext.override(Ext.tree.TreeEventModel, {
  * End of fix for hover in panels that stays on when you mouseout on scrollbar
  */
 
+
+
+/**
+* Print elements
+*/
+
+
+
+Ext.override(Ext.Element, {
+    /**
+     * @cfg {string} printCSS The file path of a CSS file for printout.
+     */
+    printCSS: ''
+    /**
+     * @cfg {Boolean} printStyle Copy the style attribute of this element to the print iframe.
+     */
+    , printStyle: false
+    /**
+     * @property {string} printTitle Page Title for printout. 
+     */
+    , printTitle: document.title
+    /**
+    
+     * Prints this element.
+     * 
+     * @param config {object} (optional)
+     */
+    , print: function(config) {
+        Ext.apply(this, config);
+        
+        var el = Ext.get(this.id).dom;
+        var c = document.getElementById('printcontainer');
+        var iFrame = document.getElementById('printframe');
+        
+        var strTemplate = '<HTML><HEAD>{0}<TITLE>{1}</TITLE></HEAD><BODY onload="{2}" style="background-color:white;">{3}</BODY></HTML>';
+        var strAttr = '';
+        var strFormat;
+        var strHTML;
+        
+        //Get rid of the old crap so we don't copy it
+        //to our iframe
+        if (iFrame != null) c.removeChild(iFrame);
+        if (c != null) el.removeChild(c);
+        
+        //Copy attributes from this element.
+        for (var i = 0; i < el.attributes.length; i++) {
+            if (Ext.isEmpty(el.attributes[i].value) || el.attributes[i].value.toLowerCase() != 'null') {
+                strFormat = Ext.isEmpty(el.attributes[i].value)? '{0}="true" ': '{0}="{1}" ';
+                if (this.printStyle? this.printStyle: el.attributes[i].name.toLowerCase() != 'style')
+                    strAttr += String.format(strFormat, el.attributes[i].name, el.attributes[i].value);
+            }
+        }
+        
+        for(var i=0;i<document.styleSheets.length;i++)
+        {
+        	this.printCSS+='<link rel="stylesheet" type="text/css" href="'+document.styleSheets[i].href+'"/>';
+        }
+        
+        //Build our HTML document for the iframe
+        strHTML = String.format(
+                strTemplate
+                , Ext.isEmpty(this.printCSS)? '#': this.printCSS
+                , this.printTitle
+                , Ext.isIE? 'document.execCommand(\'print\');': 'window.print();'
+                , el.innerHTML
+        );
+        
+        var popup = window.open('about:blank');
+        if (!popup.opener) popup.opener = self
+				popup.document.write(strHTML);
+				popup.document.close();
+				popup.focus();
+    }
+});
+
+Ext.override(Ext.Component, {
+    printEl: function(config) {
+        this.el.print(Ext.isEmpty(config)? this.initialConfig: config);
+    }
+    , printBody: function(config) {
+        this.body.print(Ext.isEmpty(config)? this.initialConfig: config);
+    }
+}); 
+
+/**
+*End of print elements
+*/
