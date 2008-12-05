@@ -15,9 +15,9 @@
  * Date : September, 05 2008
  */
 
-Ext.namespace('GO.tasks');
 
-GO.tasks.lang={};
+
+
 
 GO.tasks.lang.task = 'Tâche';
 GO.tasks.lang.noTask = 'Aucune tâche à afficher';

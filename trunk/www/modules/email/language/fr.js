@@ -15,9 +15,9 @@
  * Date : September, 04 2008
  */
 
-Ext.namespace('GO.email');
 
-GO.email.lang={};
+
+
 
 GO.email.lang.messages='Messages';
 GO.email.lang.message='Message';

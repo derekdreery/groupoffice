@@ -15,9 +15,9 @@
  * Date : September, 05 2008
  */
 
-Ext.namespace('GO.users');
 
-GO.users.lang={};
+
+
 
 GO.users.lang.cmdCheckColumnRead= 'Lecture';
 GO.users.lang.cmdCheckColumnWrite= 'Ecriture';

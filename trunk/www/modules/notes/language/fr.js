@@ -15,9 +15,9 @@
  * Date : September, 05 2008
  */
 
-Ext.namespace('GO.notes');
 
-GO.notes.lang={};
+
+
 
 /* new table: no_categories */
 GO.notes.lang.category="Catégorie";

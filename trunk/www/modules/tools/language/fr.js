@@ -15,9 +15,9 @@
  * Date : September, 05 2008
  */
 
-Ext.namespace('GO.tools');
 
-GO.tools.lang = {};
+
+
 
 GO.tools.lang.tools='Outils d\'administration';
 GO.tools.lang.description='Cliquez sur un des liens ci-dessous pour l\'exécuter.';

@@ -15,10 +15,10 @@
  * Date : September, 04 2008
  */
 
-Ext.namespace('GO.calendar');
-Ext.namespace("GO.calendar.dd");
 
-GO.calendar.lang={};
+
+
+
 
 GO.calendar.lang.appointment = 'Rendez-vous';
 GO.calendar.lang.appointments = 'Rendez-vous';
