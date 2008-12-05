@@ -1,6 +1,6 @@
-Ext.namespace('GO.tasks');
 
-GO.tasks.lang={};
+
+
 
 GO.tasks.lang.task = '任务';
 GO.tasks.lang.noTask = '没有任务显示';

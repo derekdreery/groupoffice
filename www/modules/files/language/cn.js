@@ -1,6 +1,6 @@
-Ext.namespace('GO.files');
 
-GO.files.lang={};
+
+
 
 GO.files.lang.files='文件';
 
