@@ -15,9 +15,9 @@
  * Date : September, 04 2008
  */
 
-Ext.namespace('GO.files');
 
-GO.files.lang={};
+
+
 
 GO.files.lang.files='Fichiers';
 

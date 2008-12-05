@@ -55,7 +55,7 @@ GO.lang.strDefault = 'Padrão';
 GO.lang.strUsername = 'Usuário';
 GO.lang.strPassword = 'Senha';
 
-GO.lang.strFirstName = 'Primeito nome';
+GO.lang.strFirstName = 'Primeiro nome';
 GO.lang.strMiddleName = 'Nome do meio';
 GO.lang.strNo = 'Nro.';
 GO.lang.strLastName = 'Último nome';
@@ -78,7 +78,7 @@ GO.lang.strHomepage = 'Homepage';
 GO.lang.strCompany = 'Empresa';
 GO.lang.strDepartment = 'Departamento';
 GO.lang.strFunction = 'Função';
-GO.lang.strSalutation = 'Saldação';
+GO.lang.strSalutation = 'Saudação';
 GO.lang.strComment = 'Comentário';
 GO.lang.strWorkAddress = 'Endereço (trabalho)';
 GO.lang.strWorkAddressNo = 'Número da casa (trabalho)';
@@ -99,7 +99,7 @@ GO.lang.locations = 'Localização';
 GO.lang.folder = 'Pasta';
 GO.lang.folders = 'Pastas';
 
-GO.lang.up = 'Up';
+GO.lang.up = 'Subir';
 GO.lang.fileExists = 'Arquivo existente';
 GO.lang.overwriteFile = 'Deseja sobrepor o arquivo \'{file}\'?';
 
@@ -160,9 +160,9 @@ GO.lang.cut = 'Cortar';
 GO.lang.copy = 'Copiar';
 GO.lang.compress = 'Comprimir';
 GO.lang.decompress = 'Descomprimir';
-GO.lang.upload = 'Upload';
-GO.lang.download = 'Download';
-GO.lang.uploadFiles = 'Upload arquivos';
+GO.lang.upload = 'Enviar';
+GO.lang.download = 'Baixar';
+GO.lang.uploadFiles = 'Enviar arquivos';
 
 GO.lang.displayingItems = 'Exibir itens {0} - {1} of {2}';
 GO.lang.strNoItems = 'Sem itens para exibir';
@@ -175,7 +175,7 @@ GO.lang.strPleaseSelect = 'Por favor selecione...';
 GO.lang.strProperties = 'Propriedades';
 
 GO.lang.strConfirm= 'Confirme';
-GO.lang.strSuccess= 'Succeso';
+GO.lang.strSuccess= 'Sucesso';
 GO.lang.strError= 'Erro';
 GO.lang.waitMsgSave= 'Salvando...';
 GO.lang.waitMsgLoad= 'Carregando...';
@@ -224,7 +224,7 @@ GO.lang.strTime='Tempo';
 
 GO.lang.shortDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex','Sab'];
 
-GO.lang.noRecurrence = 'Sem recorrência';
+GO.lang.noRecurrence = 'Sem periodicidade';
 GO.lang.monthsByDate = 'Meses por data';
 GO.lang.monthsByDay = 'Meses por dia';
 

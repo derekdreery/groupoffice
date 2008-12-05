@@ -15,9 +15,9 @@
  * Date : September, 05 2008
  */
 
-Ext.namespace('GO.modules');
 
-GO.modules.lang={};
+
+
 
 GO.modules.lang.cmdSaveChanges = 'Savegarder les changements',
 GO.modules.lang.cmdInstall = 'Installer',

@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-//require($GO_LANGUAGE->get_fallback_language_file('notes'));
+require($GO_LANGUAGE->get_fallback_language_file('notes'));
 
 $modules['notes']['name']='Notas';
 $modules['notes']['description']='Coloque uma descrição';

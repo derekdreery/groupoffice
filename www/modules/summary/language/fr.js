@@ -15,10 +15,10 @@
  * Date : September, 05 2008
  */
 
-Ext.namespace('GO.summary');
-Ext.namespace('GO.portlets');
 
-GO.summary.lang={};
+
+
+
 
 GO.summary.lang.summary = 'Sommaire';
 GO.summary.lang.noItems = 'Vous n\'avez aucun élément sur votre page de démarrage.';

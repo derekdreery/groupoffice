@@ -1,10 +1,10 @@
 /**
  * Don't copy the next line into a translation
  */
-Ext.namespace('GO.calendar');
-Ext.namespace("GO.calendar.dd");
 
-GO.calendar.lang={};
+
+
+
 /**
  * Copy everything below for translations
  */
@@ -14,7 +14,7 @@ GO.calendar.lang.addressbook='Contatos';
 
 GO.calendar.lang.appointment = 'Compromisso';
 GO.calendar.lang.appointments = 'Compromissos';
-GO.calendar.lang.recurrence = 'Recorrente';
+GO.calendar.lang.recurrence = 'Periodicidade';
 GO.calendar.lang.options = 'Opções';
 GO.calendar.lang.repeatForever = 'repetir para sempre';
 GO.calendar.lang.repeatEvery = 'Repetir a cada';
@@ -27,7 +27,7 @@ GO.calendar.lang.fiveDays = '5 Dias';
 GO.calendar.lang.sevenDays = '7 Dias';
 GO.calendar.lang.month = 'Mês';
 GO.calendar.lang.recurringEvent = 'Recurring event';
-GO.calendar.lang.deleteRecurringEvent = 'Você quer apagar um evento simples ou todos os eventos recorrentes?';
+GO.calendar.lang.deleteRecurringEvent = 'Você quer apagar um evento simples ou toda a série de eventos?';
 GO.calendar.lang.singleOccurence = 'Evento simples';
 GO.calendar.lang.entireSeries = 'Série de eventos';
 GO.calendar.lang.calendar = 'Calendário';
@@ -39,7 +39,7 @@ GO.calendar.lang.accepted = 'Aceito';
 GO.calendar.lang.declined = 'Negado';
 GO.calendar.lang.tentative = 'Tentativa';
 GO.calendar.lang.delegated = 'Delegado';
-GO.calendar.lang.noRecurrence = 'Sem recorrência';
+GO.calendar.lang.noRecurrence = 'Sem periodicidade';
 GO.calendar.lang.notRespondedYet = 'Sem resposta';
 GO.calendar.lang.days = 'dias';
 GO.calendar.lang.weeks = 'semanas';
@@ -60,7 +60,7 @@ GO.calendar.lang.previousDay = 'Dia anterior';
 GO.calendar.lang.nextDay = 'Próximo dia';
 GO.calendar.lang.noAppointmentsToDisplay = 'Sem compromissos para mostrar';
 GO.calendar.lang.selectCalendar = 'Selecione calendário';
-GO.calendar.lang.selectCalendarForAppointment = 'Selecion o calendário para colocar esse compromisso:';
-GO.calendar.lang.closeWindow = 'O compromisso foi aceito e agendade. Você pode fechar essa janela.';
+GO.calendar.lang.selectCalendarForAppointment = 'Selecione o calendário para colocar esse compromisso:';
+GO.calendar.lang.closeWindow = 'O compromisso foi aceito e agendado. Você pode fechar essa janela.';
 GO.calendar.lang.list='Lista';
-GO.calendar.lang.editRecurringEvent='você deseja editar esta ocorrência ou a série de ocorrências?';
+GO.calendar.lang.editRecurringEvent='você deseja editar este evento ou a série de eventos?';

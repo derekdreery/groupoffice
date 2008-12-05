@@ -16,9 +16,9 @@
  */
 
 
-Ext.namespace('GO.addressbook');
-Ext.namespace('GO.addressbook.plugins');
-GO.addressbook.lang={};
+
+
+
 
 GO.addressbook.lang.selectMailingGroup='Selectionner un groupe de mailing';
 

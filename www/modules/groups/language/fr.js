@@ -15,9 +15,9 @@
  * Date : September, 05 2008
  */
 
-Ext.namespace('GO.groups');
 
-GO.groups.lang={};
+
+
 
 GO.groups.lang.groups = 'Groupes';
 GO.groups.lang.owner = 'Propriétaire';
