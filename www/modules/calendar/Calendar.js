@@ -306,23 +306,8 @@ GO.calendar.MainPanel = function(config){
 								iconCls: 'btn-print',
 								text: GO.lang.cmdPrint,
 								cls: 'x-btn-text-icon',
-								handler: function(){
-									var popup = window.open('about:blank');
-			        		if (!popup.opener) popup.opener = self;        		
-			        		
-			        		popup.document.write('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\n'+
-										'<html>\n'+
-										'<head>\n'+
-										'<title>Group-Office</title>'+							
-										'<link href="'+GO.settings.config.theme_url+'images/favicon.ico" rel="shotcut icon" />'+
-										'<link href="'+BaseHref+'ext/resources/css/ext-all.css" type="text/css" rel="stylesheet" />'+
-										'<link href="'+GO.settings.config.theme_url+'style.css" type="text/css" rel="stylesheet" />'+
-										'<link href="'+GO.settings.modules.calendar.url+'themes/'+GO.settings.theme+'/style.css" type="text/css" rel="stylesheet" />'+
-										'<style>.x-calGrid-grid-container{overflow:visible !important}}</style>'+
-										'</head><body>'+this.getActivePanel().body.dom.innerHTML+'</body></html>');
-									popup.document.close();
-									popup.focus();						
-															
+								handler: function(){									
+									this.getActivePanel().body.print({printCSS:'<style>.x-calGrid-grid-container{overflow:visible !important}}</style>'});								
 								},
 								scope: this
 							})					

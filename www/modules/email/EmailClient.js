@@ -528,7 +528,7 @@ GO.email.EmailClient = function(config){
 					text: GO.lang.cmdPrint,
 					cls: 'x-btn-text-icon',
 					handler: function(){
-						var popup = window.open('about:blank');
+						/*var popup = window.open('about:blank');
         		if (!popup.opener) popup.opener = self;        		
         		
         		popup.document.write('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\n'+
@@ -541,7 +541,9 @@ GO.email.EmailClient = function(config){
 							'<link href="'+GO.settings.modules.email.url+'themes/'+GO.settings.theme+'/style.css" type="text/css" rel="stylesheet" />'+
 							'</head><body>'+this.messagePanel.body.dom.innerHTML+'</body></html>');
 						popup.document.close();
-						popup.focus();						
+						popup.focus();		*/
+						
+						this.messagePanel.body.print();				
 												
 					},
 					scope: this

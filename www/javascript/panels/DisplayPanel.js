@@ -77,6 +77,14 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 	      handler: this.reload,
 	      scope:this
 	  });
+	  tbar.push({            
+	      iconCls: "btn-print",
+	      tooltip:GO.lang.cmdPrint,
+	 			handler: function(){
+					this.body.print();		
+				},
+				scope:this
+	  });
 	  
 	  return tbar;
 	},	
