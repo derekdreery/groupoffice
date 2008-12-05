@@ -1,6 +1,6 @@
-Ext.namespace('GO.groups');
 
-GO.groups.lang={};
+
+
 
 GO.groups.lang.group = '组';
 GO.groups.lang.groups = '组';

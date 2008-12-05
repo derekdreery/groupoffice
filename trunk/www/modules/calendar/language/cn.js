@@ -1,7 +1,7 @@
-Ext.namespace('GO.calendar');
-Ext.namespace("GO.calendar.dd");
 
-GO.calendar.lang={};
+
+
+
 
 GO.calendar.lang.appointment = '约会';
 GO.calendar.lang.appointments = '约会';

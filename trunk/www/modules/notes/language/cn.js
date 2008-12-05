@@ -1,6 +1,6 @@
-Ext.namespace('GO.notes');
 
-GO.notes.lang={};
+
+
 
 /* new table: no_categories */
 GO.notes.lang.category="分类";

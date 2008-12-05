@@ -1,6 +1,6 @@
-Ext.namespace('GO.modules');
 
-GO.modules.lang={};
+
+
 
 GO.modules.lang.cmdSaveChanges = '保存更改',
 GO.modules.lang.cmdInstall = '安装',

@@ -1,6 +1,6 @@
-Ext.namespace('GO.users');
 
-GO.users.lang={};
+
+
 
 GO.users.lang.cmdCheckColumnRead= '读';
 GO.users.lang.cmdCheckColumnWrite= '写';

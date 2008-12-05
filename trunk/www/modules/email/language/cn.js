@@ -1,6 +1,6 @@
-Ext.namespace('GO.email');
 
-GO.email.lang={};
+
+
 
 GO.email.lang.messages='消息';
 GO.email.lang.message='消息';
