@@ -13,7 +13,6 @@
  * This is a translation by hodrag. If you have questions please e-mail to hodrag@gmail.com
  */
 
-GO.lang = {};
 
 
 GO.lang.completeProfile = '请完成你的个人资料';

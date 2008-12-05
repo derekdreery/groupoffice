@@ -11,7 +11,7 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-GO.lang = {};
+
 GO.lang.strCommunityForum='Společenské fórum';
 GO.lang.moduleRequired='Tato funkce vyžaduje \'{module}\' modul. Tento modul není k dispozici.';
 

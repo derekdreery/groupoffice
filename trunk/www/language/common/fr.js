@@ -15,8 +15,6 @@
  * Date : September, 04 2008
  */
 
-GO.lang = {};
-
 GO.lang.browse='Parcourir...';
 GO.lang.largeUpload='Gros fichiers/dossiers (Java nécessaire)';
 GO.lang.smallUpload='Petits fichiers';
