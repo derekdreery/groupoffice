@@ -1,4 +1,6 @@
 <?php
+require($GO_LANGUAGE->get_fallback_language_file('summary'));
+
 $lang['summary']['name']='概要';
 $lang['summary']['description']='在这里输入说明';
 

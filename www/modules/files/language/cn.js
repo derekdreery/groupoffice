@@ -1,3 +1,7 @@
+Ext.namespace('GO.files');
+
+GO.files.lang={};
+
 GO.files.lang.files='文件';
 
 GO.files.lang.template = '模板'

@@ -11,9 +11,9 @@ $lang['tasks']['status']='状态';
 
 $lang['tasks']['statuses']['NEEDS-ACTION'] = '需要做的';
 $lang['tasks']['statuses']['ACCEPTED'] = '接受';
-$lang['tasks']['statuses']['DECLINED'] = '放弃';
-$lang['tasks']['statuses']['TENTATIVE'] = 'Tentative';
-$lang['tasks']['statuses']['DELEGATED'] = 'Delegated';
+$lang['tasks']['statuses']['DECLINED'] = '拒绝';
+$lang['tasks']['statuses']['TENTATIVE'] = '未确定';
+$lang['tasks']['statuses']['DELEGATED'] = '委派';
 $lang['tasks']['statuses']['COMPLETED'] = '已完成';
-$lang['tasks']['statuses']['IN-PROCESS'] = 'In process';
+$lang['tasks']['statuses']['IN-PROCESS'] = '排队';
 ?>
