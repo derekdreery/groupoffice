@@ -15,3 +15,5 @@ GO.files.lang.comments = 'Commentaren';
 GO.files.lang.downloadGOTA = 'Download met GOTA';
 GO.files.lang.fileBrowser = 'Bestands verkenner';
 GO.files.lang.thumbnails = 'Pictogrammen';
+GO.files.lang.saveFile='Bestand opslaan';
+GO.files.lang.confirmOverwrite='{filename} bestaat al, wilt u dit bestand overschrijven?';

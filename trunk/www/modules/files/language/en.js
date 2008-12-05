@@ -25,3 +25,5 @@ GO.files.lang.comments = 'Comments';
 GO.files.lang.downloadGOTA = 'Download with GOTA';
 GO.files.lang.fileBrowser = 'File browser';
 GO.files.lang.thumbnails = 'Thumbnails';
+GO.files.lang.saveFile='Save file';
+GO.files.lang.confirmOverwrite='{filename} already exists, do you want to overwrite the file?';
