@@ -28,7 +28,7 @@ class Swift_Message_Headers
    * The encoding format used for the body of the document
    * @var string format
    */
-  protected $encoding = "B";
+  protected $encoding = "Q";
   /**
    * The charset used in the headers
    * @var string
