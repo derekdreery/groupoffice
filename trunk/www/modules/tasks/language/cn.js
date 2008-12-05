@@ -1,3 +1,6 @@
+Ext.namespace('GO.tasks');
+
+GO.tasks.lang={};
 
 GO.tasks.lang.task = '任务';
 GO.tasks.lang.noTask = '没有任务显示';
@@ -12,10 +15,10 @@ GO.tasks.lang.dueAt = '到期于';
 GO.tasks.lang.needsAction = '需要做的';
 GO.tasks.lang.accepted = '接受';
 GO.tasks.lang.declined = '放弃';
-GO.tasks.lang.tentative = '暂定';
-GO.tasks.lang.delegated = 'Delegated';
+GO.tasks.lang.tentative = '未确定';
+GO.tasks.lang.delegated = '委派';
 GO.tasks.lang.completed = '已完成';
-GO.tasks.lang.inProcess = 'In process';
+GO.tasks.lang.inProcess = '排队';
 GO.tasks.lang.repeatEvery = '重复';
 GO.tasks.lang.atDays = '在哪几天';
 GO.tasks.lang.repeatUntil = '重复至';

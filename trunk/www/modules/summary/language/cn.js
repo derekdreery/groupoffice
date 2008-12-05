@@ -1,3 +1,8 @@
+Ext.namespace('GO.summary');
+Ext.namespace('GO.portlets');
+
+GO.summary.lang={};
+
 GO.summary.lang.summary = '摘要';
 GO.summary.lang.noItems = '您的首页没有组件.';
 GO.summary.lang.selectPortlet = '请选择portlet';

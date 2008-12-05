@@ -1,9 +1,13 @@
+Ext.namespace('GO.users');
+
+GO.users.lang={};
+
 GO.users.lang.cmdCheckColumnRead= '读';
 GO.users.lang.cmdCheckColumnWrite= '写';
 GO.users.lang.cmdHeaderColumnName= '模块名称';
 GO.users.lang.cmdHeaderGridUserHasAccess = '用户访问';
-GO.users.lang.userIsMemberOf = '用户成员';
-GO.users.lang.userVisibleTo = '用户可见';
+GO.users.lang.cmdHeaderGridUserIsMemberOf = '用户成员';
+GO.users.lang.cmdHeaderGridUserVisibleTo = '用户可见';
 
 GO.users.lang.cmdPanelPersonal = '个人';
 GO.users.lang.cmdPanelPassword= '密码';

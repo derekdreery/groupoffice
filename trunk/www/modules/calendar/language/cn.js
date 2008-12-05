@@ -1,3 +1,8 @@
+Ext.namespace('GO.calendar');
+Ext.namespace("GO.calendar.dd");
+
+GO.calendar.lang={};
+
 GO.calendar.lang.appointment = '约会';
 GO.calendar.lang.appointments = '约会';
 GO.calendar.lang.recurrence = '重复';
@@ -23,8 +28,8 @@ GO.calendar.lang.administration = '管理';
 GO.calendar.lang.needsAction = '需要做的';
 GO.calendar.lang.accepted = '接受';
 GO.calendar.lang.declined = '拒绝';
-GO.calendar.lang.tentative = 'Tentative';
-GO.calendar.lang.delegated = 'Delegated';
+GO.calendar.lang.tentative = '未确定';
+GO.calendar.lang.delegated = '委派';
 GO.calendar.lang.noRecurrence = '不重复';
 GO.calendar.lang.notRespondedYet = '尚未答复';
 GO.calendar.lang.days = '天';

@@ -1,3 +1,22 @@
+/** 
+ * Copyright Intermesh
+ * 
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ * 
+ * If you have questions write an e-mail to info@intermesh.nl
+ * 
+ * @copyright Copyright Intermesh
+ * @version $Id: en.js 1088 2008-10-07 13:02:06Z mschering $
+ * @author Merijn Schering <mschering@intermesh.nl>
+ */
+
+
+Ext.namespace('GO.addressbook');
+Ext.namespace('GO.addressbook.plugins');
+GO.addressbook.lang={};
+
+
 GO.addressbook.lang.selectMailingGroup='选择邮件组';
 
 GO.addressbook.lang.cmdFormLabelAddressBooks = '通讯录';

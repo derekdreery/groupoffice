@@ -21,7 +21,7 @@ $lang['calendar']['invited']='邀请您参加下列活动';
 $lang['calendar']['acccept_question']='你要接受此安排？';
 
 $lang['calendar']['accept']='接受';
-$lang['calendar']['decline']='谢绝';
+$lang['calendar']['decline']='拒绝';
 
 $lang['calendar']['bad_event']='该活动已不存在';
 
@@ -32,11 +32,11 @@ $lang['calendar']['status']='状态';
 
 $lang['calendar']['statuses']['NEEDS-ACTION'] = '需要做的';
 $lang['calendar']['statuses']['ACCEPTED'] = '接受';
-$lang['calendar']['statuses']['DECLINED'] = '谢绝';
-$lang['calendar']['statuses']['TENTATIVE'] = 'Tentative';
-$lang['calendar']['statuses']['DELEGATED'] = 'Delegated';
+$lang['calendar']['statuses']['DECLINED'] = '拒绝';
+$lang['calendar']['statuses']['TENTATIVE'] = '未确定';
+$lang['calendar']['statuses']['DELEGATED'] = '委派';
 $lang['calendar']['statuses']['COMPLETED'] = '完成';
-$lang['calendar']['statuses']['IN-PROCESS'] = 'In process';
+$lang['calendar']['statuses']['IN-PROCESS'] = '排队';
 
 
 $lang['calendar']['accept_mail_subject'] = '邀请 \'%s\' 接受';
@@ -59,7 +59,7 @@ $lang['calendar']['not_invited']='您没有被邀请参加此活动。您可能�
 $lang['calendar']['accept_title']='接受';
 $lang['calendar']['accept_confirm']='你接受了此活动，发起人将得到通知';
 
-$lang['calendar']['decline_title']='谢绝';
+$lang['calendar']['decline_title']='拒绝';
 $lang['calendar']['decline_confirm']='你拒绝了此活动，发起人将得到通知';
 
 $lang['calendar']['cumulative']='重复规则无效，下一次可能在未发生前就已经结束。';

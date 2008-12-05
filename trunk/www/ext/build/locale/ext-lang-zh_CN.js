@@ -1,7 +1,7 @@
 /*
  * Simplified Chinese translation
- * By DavidHu
- * 09 April 2007
+ * By hodrag
+ * 2008-11-19
  */
 
 Ext.UpdateManager.defaults.indicatorText = '<div class="loading-indicator">加载中...</div>';
@@ -88,13 +88,17 @@ if(Ext.PagingToolbar){
       beforePageText : "页",
       afterPageText  : "页共 {0} 页",
       firstText      : "第一页",
-      prevText       : "前一页",
+      prevText       : "上一页",
       nextText       : "下一页",
-      lastText       : "最后页",
+      lastText       : "最末页",
       refreshText    : "刷新",
       displayMsg     : "显示 {0} - {1}，共 {2} 条",
-      emptyMsg       : '没有数据需要显示'
+      emptyMsg       : '没有需要显示的数据'
    });
+}
+
+if(Ext.form.Field){
+  Ext.form.Field.prototype.invalidText = "输入值非法";
 }
 
 if(Ext.form.TextField){
@@ -128,7 +132,7 @@ if(Ext.form.DateField){
 
 if(Ext.form.ComboBox){
    Ext.apply(Ext.form.ComboBox.prototype, {
-      loadingText       : "加载...",
+      loadingText       : "加载中...",
       valueNotFoundText : undefined
    });
 }
@@ -142,6 +146,88 @@ if(Ext.form.VTypes){
    });
 }
 
+if(Ext.form.HtmlEditor){
+  Ext.apply(Ext.form.HtmlEditor.prototype, {
+    createLinkText : '请输入链接地址:',
+    buttonTips : {
+      bold : {
+        title: '粗体 (Ctrl+B)',
+        text: '所选文字设为粗体.',
+        cls: 'x-html-editor-tip'
+      },
+      italic : {
+        title: '斜体 (Ctrl+I)',
+        text: '所选文字设为斜体.',
+        cls: 'x-html-editor-tip'
+      },
+      underline : {
+        title: '下划线 (Ctrl+U)',
+        text: '所选文字添加下划线.',
+        cls: 'x-html-editor-tip'
+      },
+      increasefontsize : {
+        title: '放大文字',
+        text: '放大字号.',
+        cls: 'x-html-editor-tip'
+      },
+      decreasefontsize : {
+        title: '缩小文字',
+        text: '缩小字号.',
+        cls: 'x-html-editor-tip'
+      },
+      backcolor : {
+        title: '文字背景颜色',
+        text: '更改所选文字背景颜色.',
+        cls: 'x-html-editor-tip'
+      },
+      forecolor : {
+        title: '字体颜色',
+        text: '更改所选文字颜色.',
+        cls: 'x-html-editor-tip'
+      },
+      justifyleft : {
+        title: '左对齐',
+        text: '文字左对齐.',
+        cls: 'x-html-editor-tip'
+      },
+      justifycenter : {
+        title: '居中',
+        text: '文字居中.',
+        cls: 'x-html-editor-tip'
+      },
+      justifyright : {
+        title: '右对齐',
+        text: '文字右对齐.',
+        cls: 'x-html-editor-tip'
+      },
+      insertunorderedlist : {
+        title: '项目编号列单',
+        text: '项目编号列单起始.',
+        cls: 'x-html-editor-tip'
+      },
+      insertorderedlist : {
+        title: '编号',
+        text: '编号起始.',
+        cls: 'x-html-editor-tip'
+      },
+      createlink : {
+        title: '超级链接',
+        text: '为所选文字创建超级链接.',
+        cls: 'x-html-editor-tip'
+      },
+      sourceedit : {
+        title: '代码编辑',
+        text: '切换到代码编辑模式.',
+        cls: 'x-html-editor-tip'
+      }
+    }
+  });
+}
+
+if(Ext.form.BasicForm){
+  Ext.form.BasicForm.prototype.waitTitle = "Please wait...";
+}
+
 if(Ext.grid.GridView){
    Ext.apply(Ext.grid.GridView.prototype, {
       sortAscText  : "正序",
@@ -150,6 +236,14 @@ if(Ext.grid.GridView){
       unlockText   : "解锁列",
       columnsText  : "列"
    });
+}
+
+if(Ext.grid.GroupingView){
+  Ext.apply(Ext.grid.GroupingView.prototype, {
+    emptyGroupText : '(None)',
+    groupByText    : '按此列分组',
+    showGroupsText : '显示组'
+  });
 }
 
 if(Ext.grid.PropertyColumnModel){
