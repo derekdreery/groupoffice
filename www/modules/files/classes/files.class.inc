@@ -204,7 +204,7 @@ class files extends filesystem
 	function remove_notification($path, $user_id)
 	{	
 		$sql = "DELETE FROM fs_notifications WHERE path=? AND user_id=?";
-		return $this->query($sql, 'si', $path, $user_id);
+		return $this->query($sql, 'si', array($path, $user_id));
 	}
 	
 	function remove_notifications($path)
@@ -217,7 +217,13 @@ class files extends filesystem
 	{
 		$sql = "SELECT * FROM fs_notifications WHERE path='".$this->escape($path)."' AND user_id=".$this->escape($user_id);
 		$this->query($sql);
-		return $this->next_record();
+		if($this->next_record())
+		{
+			return true;
+		}else
+		{
+			return false;
+		}
 	}
 	
 	function move_notifications($old_path, $new_path)
