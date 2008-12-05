@@ -33,3 +33,4 @@ $lang['email']['errorGettingMessage']='Kon bericht niet ophalen van server';
 $lang['email']['no_recipients_drafts']='Geen ontvangers';
 $lang['email']['usage_limit'] = '%s van %s gebruikt';
 $lang['email']['usage'] = '%s gebruikt';
+$lang['email']['feedbackDeleteFolderFailed']= 'Failed to delete folder';
