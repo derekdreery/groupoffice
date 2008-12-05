@@ -9,7 +9,15 @@ if(file_exists('Group-Office.php'))
 {
 	exit('Could not find Group-Office.php! Put this script in the root of Group-Office.');
 }
-
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<title>Language checker</title>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+</head>
+<body>
+<?php
 
 $modules = $GO_MODULES->get_modules_with_locations();
 $lang1 = (isset($_GET['lang1']))? $_GET['lang1'] : 'en';
@@ -80,6 +88,65 @@ function check_encoding($file)
 	}
 }
 
+function check_namespace($file)
+{
+	global $GO_CONFIG;
+	
+	$invalid_regs=array(
+		'/GO\.[\w]+\.lang\s*=\s*\{.*\};/',
+		'/Ext.namespace\s*\([^\)]*\);/'
+	);
+	
+	$allmatches = array();
+	$str = file_get_contents($file);
+	foreach($invalid_regs as $reg)
+	{	
+		if(preg_match_all($reg,$str,$matches))
+		{
+			foreach($matches[0] as $match)
+				$allmatches[]=$match;
+		}
+	}
+	
+	if(is_writable($file))
+	{
+		$changed=false;
+		if(count($allmatches))
+		{
+			$changed = true;
+			echo '<p style="color:red">Warning, removed invalid lines from '.str_replace($GO_CONFIG->root_path, '', $file).': <br /><br /> '.implode('<br />',$allmatches).'</p>';
+			
+			foreach($allmatches as $match)
+			{
+				$str = str_replace($match, '', $str);
+			}
+		}
+		
+		if(strstr($str, '//require'))
+		{
+			$changed = true;
+			
+			$str = str_replace('//require', 'require', $str);			
+			echo '<p style="color:red">Warning, uncommented //require($GO_LANGUAGE->get_fallback_language_file(\'module\'));</p>';
+		}
+		if($changed)
+		{
+			file_put_contents($file, $str);
+		}
+	}else
+	{
+		if(count($allmatches))
+		{
+			echo '<p style="color:red">Warning, '.str_replace($GO_CONFIG->root_path, '', $file).' contains: <br /><br /> '.implode('<br />',$allmatches).'<br /><br /> These lines must be removed in translations. Make the language files writable to automatically remove them.</p>';
+		}
+		
+		if(strstr($str, '//require'))
+		{
+				echo '<p style="color:red">Warning, you must uncomment //require($GO_LANGUAGE->get_fallback_language_file(\'module\')); make the language files writable to let this script correct it.</p>';
+		}
+	}
+}
+
 function compare_files($file1, $file2, $type)
 {
 	global $GO_CONFIG;
@@ -96,6 +163,8 @@ function compare_files($file1, $file2, $type)
 	{
 		check_encoding($file1);
 		check_encoding($file2);
+		
+		check_namespace($file2);
 	
 		compare_arrays($content1, $content2, $file2);
 		compare_arrays($content2, $content1, $file1);
@@ -122,3 +191,5 @@ foreach($modules as $module)
 }
 echo '</font></body></html>';
 ?>
+</body>
+</html>
