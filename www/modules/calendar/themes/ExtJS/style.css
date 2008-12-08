@@ -273,7 +273,6 @@ a:link, a:visited, a:active{
 }
 
 .x-calGrid-event-container {
-
 	cursor:default;	
 	position:absolute;	
 	border:1px solid #C3DAF9;	
@@ -281,6 +280,7 @@ a:link, a:visited, a:active{
 	text-overflow: ellipsis;
 	font:normal 11px tahoma,arial,helvetica;
 	color:#000;
+	padding:1px 2px;
 }
 
 .x-calGrid-all-day-event-container {
@@ -289,12 +289,9 @@ a:link, a:visited, a:active{
 	margin:1px;
 	background-color:#ffffcc;
 	border:1px solid #666666;
-	padding:1px;
+	padding:1px 2px;
 }
 
-.x-calGrid-event-body{
-	padding:0 2px;
-}
 
 .x-calGrid-selected {
 	/*background-color: #B8CFEE !important;*/
