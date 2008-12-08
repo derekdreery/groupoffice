@@ -96,6 +96,7 @@ GO.calendar.MainPanel = function(config){
 		id: 'month-grid',
 		store: this.monthGridStore,
 		border: false,
+		layout:'fit',
 		firstWeekday: parseInt(GO.settings.first_weekday)
 		
 	});

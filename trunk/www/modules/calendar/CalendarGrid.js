@@ -746,7 +746,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		if(startDay!=endDay)
 		{
 			var format = GO.settings.date_format+' '+GO.settings.time_format;
-			text = '<span class="x-calGrid-event-time">'+eventData.startDate.format(format)+'</span> '+eventData.name;
+			text = '<span class="x-calGrid-event-time">'+eventData.startDate.format(format)+'</span>&nbsp;'+eventData.name;
 		}else
 		{
 			text=eventData.name;
@@ -778,7 +778,8 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 					cls: "x-calGrid-all-day-event-container", 
 					style:"background-color:#"+eventData.background,
 					html: text , 
-					qtip: eventData.tooltip
+					qtip: eventData.tooltip,
+					qtitle:eventData.name
 				}, true);
 			
 			//add the event to the appointments array		
@@ -830,7 +831,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 	
 	addGridEvent : function (eventData, day, startRow, endRow, recalculateAppointments)
 	{		
-		var text = '<span class="x-calGrid-event-time">'+eventData.startDate.format(GO.settings.time_format)+"</span> "+eventData.name;
+		var text = '<span class="x-calGrid-event-time">'+eventData.startDate.format(GO.settings.time_format)+"</span>&nbsp;"+eventData.name;
 		
 		if(eventData.location!='')
 		{
@@ -853,6 +854,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				cls: "x-calGrid-event-container",		
 				style:"background-color:#"+eventData.background,	 
 				qtip: eventData.tooltip,
+				qtitle:eventData.name,
 				html:text
 			});
 			
