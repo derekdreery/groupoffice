@@ -56,11 +56,16 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 	selected : Array(),
 	
 	writePermission : false,
+	
+	/**
+   * The amount of space to reserve for the scrollbar (defaults to 19 pixels)
+   * @type Number
+   */
+  scrollOffset: 19,
 
 	// private
-    initComponent : function(){
-        GO.grid.MonthGrid.superclass.initComponent.call(this);
-	
+  initComponent : function(){	
+		this.autoScroll=true;	
 		this.addEvents({
 	        /**
 		     * @event click
@@ -79,9 +84,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 		    "eventResize" : true,	    
 		    "eventDblClick" : true
 	
-	    });
-	    
-    
+	    });    
     
 	    if(this.store){
 	        this.setStore(this.store, true);
@@ -95,12 +98,14 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 		}
 		
 		this.configuredDate=this.startDate;
-    },
+		
+		GO.grid.MonthGrid.superclass.initComponent.call(this);
+  },
 
 	//build the html grid
-	onRender : function(ct, position){
+	afterRender : function(){
 		
-		GO.grid.MonthGrid.superclass.onRender.apply(this, arguments);
+		GO.grid.MonthGrid.superclass.afterRender.call(this);
 		
 		//important to do here. Don't remember why :S
 		this.setDate(this.startDate, false);
@@ -108,7 +113,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 
 		
 		//if this is not set the grid does not display well when I put a load mask on it.
-		this.body.setStyle("overflow", "hidden");
+		//this.body.setStyle("overflow", "hidden");
 		
 		//Don't select things inside the grid
 		this.body.unselectable();
@@ -121,20 +126,27 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 	},
 	
 	renderMonthView : function()
-	{
-	
-		this.body.update('');
-		
-		
+	{	
+		this.body.update('');		
 		
 		var currentMonthStr = this.configuredDate.format('Ym');
 		var currentDate = new Date();
 		var currentDateStr = currentDate.format('Ymd');
 		
-		
 		//get content size of element
 		var ctSize = this.container.getSize(true);
 		
+		this.rowHeight = ctSize['height']/(this.days/7);
+		if(this.rowHeight<100)
+			this.rowHeight=100;
+								
+		
+		this.cellWidth = ctSize['width']/7;
+		if(this.cellWidth<100)
+			this.cellWidth=100;
+			
+		var ctWidth = this.cellWidth*7;
+		var ctHeight = this.cellHeight*7;
 		
 		
 		this.monthGridTable = Ext.DomHelper.append(this.body,
@@ -142,7 +154,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 				tag: 'table', 
 				id: Ext.id(), 
 				cls: "x-monthGrid-table", 
-				style: "width:"+ctSize['width']+"px;height:"+ctSize['height']+"px;"
+				style: "width:"+ctWidth+"px;height:"+ctHeight+"px;"
 				
 			},true);
 		
@@ -160,7 +172,10 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 		var cellClass = '';
 		var dateFormat;
 		
-		var rowHeight = 100/(this.days/7);
+		
+			
+		var rowHeight = this.rowHeight+'px';
+		var cellWidth= this.cellWidth+'px';
 		
 		this.gridCells={};
 		for(var day=0;day<this.days;day++)
@@ -204,7 +219,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 					tag: 'td', 
 					id: id, 
 					cls: cellClass, 
-					style:'height:'+rowHeight+'%',
+					style:'height:'+rowHeight+';width:'+cellWidth,
 					children:[{
 						tag: 'div',
 						cls: 'x-monthGrid-cell-day-text',
@@ -272,9 +287,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 									remoteEvent.start_time = remoteEvent.startDate.format('U');
 									remoteEvent.end_time = remoteEvent.endDate.format('U');									
 									this.addMonthGridEvent(remoteEvent);
-								}
-            		
-            		
+								}           		
             	},
             scope : this
         });
@@ -283,14 +296,14 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 
 
     
-  onResize : function(adjWidth, adjHeight, rawWidth, rawHeight){
+  /*onResize : function(adjWidth, adjHeight, rawWidth, rawHeight){
     //Ext.grid.GridPanel.superclass.onResize.apply(this, arguments);
 
 		if(this.monthGridTable)
 		{
 			this.monthGridTable.setSize(adjWidth, adjHeight);
 		}	
-  },
+  },*/
 	setStore : function(store, initial){
     if(!initial && this.store){
     	this.store.un("beforeload", this.reload);
@@ -408,21 +421,25 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 			
 			if(col)
 			{
-				var text = eventData.startDate.format('H:i')+' '+eventData['name'];
+				var text = '';
+				if(eventData.startDate.format('G')!='0')
+				{
+					text += eventData.startDate.format(GO.settings.time_format)+'&nbsp;';
+				}				
+				text += eventData['name'];
 			
 				var event = Ext.DomHelper.append(col,
 					{
 						tag: 'div', 
 						id: eventData.domId, 
 						cls: "x-calGrid-month-event-container", 
-						style:"background-color:#"+eventData.background,
+						style:"background-color:#"+eventData.background+';width:'+this.cellWidth+'px',
 						html: text, 						
-						qtip: eventData['tooltip'] 
+						qtip: eventData['tooltip'],
+						qtitle:eventData.name
 					}, true);			
 					
-				this.registerEvent(eventData.domId, eventData);
-				
-				
+				this.registerEvent(eventData.domId, eventData);				
 				
 				event.on('mousedown', function(e, eventEl){
 				
@@ -444,8 +461,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 					{
 						this.handleRecurringEvent("eventDblClick", event, {});
 					}else
-					{
-						
+					{						
 						this.fireEvent("eventDblClick", this, event, {singleInstance : this.writePermission});
 					}
 					
@@ -472,9 +488,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 				
 				this.unregisterDomId(ids[i]);
 			}			
-		}
-	
-		
+		}		
 	},
 	
 	unregisterDomId : function(domId)
@@ -499,49 +513,9 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 				break;
 			}
 		}
-		
-		/*found=false;
-		
-		for(var e in this.eventIdToDomId)
-		{
-			for(var i=0;i<this.eventIdToDomId[e].length;i++)
-			{
-				if(this.eventIdToDomId[e][i]==domId)
-				{
-					this.eventIdToDomId[e].splice(i,1);
-					found=true;
-					break;
-				}
-			}
-			if(found)
-			{
-				break;
-			}
-		}*/
 	},
 	
-	/*
-	 * Removes all dom elements associated with an remote id
-	 
-	
-	removeRemoteEvent : function(event_id){
-		
-		var ids = this.eventIdToDomId[event_id];
-		if(ids)
-		{
-			for(var i=0;i<ids.length;i++)
-			{
-				var el = Ext.get(ids[i]);
-				el.removeAllListeners();
-				el.remove();
-				
-				delete this.remoteEvents[ids[i]];
-			}
-		}
-		delete this.eventIdToDomId[event_id];
-		delete this.domIds[event_id];    	
-	},
-	*/
+
 	setNewEventId : function(dom_id, new_event_id){	
 		this.remoteEvents[dom_id].event_id=new_event_id;
   },
@@ -570,9 +544,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 						text: GO.calendar.lang.singleOccurence,
 						handler: function(){
 							
-							this.currentActionData.singleInstance=true;
-							
-							
+							this.currentActionData.singleInstance=true;						
 							
 							var remoteEvent = this.currentRecurringEvent;
 							
@@ -589,8 +561,6 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 								this.addMonthGridEvent(remoteEvent);
 							}
 							
-							
-							
 							this.recurrenceDialog.hide();
 						},
 						scope: this
@@ -604,8 +574,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 							this.recurrenceDialog.hide();
 						},
 						scope: this
-		   			}]
-				
+		   			}]				
 			});
 		}
 		this.recurrenceDialog.show();
@@ -617,14 +586,11 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 		this.domIds=Array();
 	},	
   setDate : function(date, load)
-  {    	
-  	
+  {      	
   	var oldStartDate = this.startDate;
-  	var oldEndDate = this.endDate;
+  	var oldEndDate = this.endDate;  	
   	
-  	
-  	this.configuredDate = date;
-    	
+  	this.configuredDate = date;    	
 
   	//calculate first date of month
   	var firstDateOfMonth = date.getFirstDateOfMonth();

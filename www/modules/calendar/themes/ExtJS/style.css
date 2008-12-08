@@ -277,7 +277,7 @@ a:link, a:visited, a:active{
 	position:absolute;	
 	border:1px solid #C3DAF9;	
 	background-color:#99BBE8;
-	text-overflow: ellipsis;
+	overflow: hidden;
 	font:normal 11px tahoma,arial,helvetica;
 	color:#000;
 	padding:1px 2px;
@@ -290,6 +290,7 @@ a:link, a:visited, a:active{
 	background-color:#ffffcc;
 	border:1px solid #666666;
 	padding:1px 2px;
+	overflow: hidden;
 }
 
 
@@ -346,6 +347,7 @@ a:link, a:visited, a:active{
 	background-color:#f1f1f1;
 	vertical-align:top;
 	border-right:3px solid #f1f1f1;
+	
 }
 
 
@@ -382,6 +384,7 @@ a:link, a:visited, a:active{
 	border:1px solid #c3daf9;
 	margin:1px;
 	background-color:#ffffcc;
+	overflow: hidden;
 }
 
 .x-calGrid-month-event-proxy {
