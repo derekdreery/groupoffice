@@ -429,30 +429,25 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		this.snapCol = {'x':FirstCol['size']['width'], 'y': FirstCol['size']['height']};
     },
     
-    syncSize : function() {
+    /*syncSize : function() {
 	    this.autoSizeGrid();	        
 			this.cacheGridCells();
 			
 			var FirstCol = this.gridCells[0][0];
 			this.snapCol = {'x':FirstCol['size']['width'], 'y': FirstCol['size']['height']};
 			
-    },
+    },*/
     
-    autoSizeGrid : function() {
-/*
+	autoSizeGrid : function() {
 		//calculate gridContainer size
-		var headingsHeight = this.headingsContainer.getHeight();
-		var allDayHeight = this.allDayContainer.getHeight();
-		var containerSize = this.container.getSize(true);
+		var headingsHeight = this.headingsTable.getHeight();
+		var allDayHeight = this.allDayTable.getHeight();		
 		
-		var gridContainerHeight = containerSize['height']-headingsHeight-allDayHeight;
-		this.gridContainer.setSize(containerSize['width'], gridContainerHeight);
-		
-		this.gridTable.setWidth(containerSize['width']-this.scrollOffset);		
-*/
+		var gridContainerHeight = this.ownerCt.body.getHeight()-headingsHeight-allDayHeight-2;
+		this.gridContainer.setHeight(gridContainerHeight);
 	},
 	
-	increaseAllDayContainer : function()
+/*	increaseAllDayContainer : function()
 	{
 		var allDayContainerSize = this.allDayContainer.getHeight();
 		var gridContainerSize = this.gridContainer.getHeight();
@@ -475,9 +470,8 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			this.allDayEventRows=0;
 			
 			this.allDayAppointments=Array();
-		}
-		
-	},
+		}		
+	},*/
     
   onResize : function(adjWidth, adjHeight, rawWidth, rawHeight){
       //Ext.grid.GridPanel.superclass.onResize.apply(this, arguments);
@@ -485,7 +479,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 
 		if(this.daysRendered==this.days)
 		{
-  		//this.syncSize();	
+  		//this.autoSizeGrid();	
   		
   		if(this.loaded)
   		{
@@ -973,11 +967,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			}, this);	
 		}
 		
-		var ctSize = this.container.getSize();
-		var headingsHeight = this.headingsTable.getHeight();
-
-		var gridContainerHeight = ctSize['height']-headingsHeight;
-		this.gridContainer.setSize(ctSize['width'],gridContainerHeight );
+		
 		
 		return domId;
 	},
@@ -1506,6 +1496,10 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 	
 			this.addDaysGridEvent(eventData);
     }
+    
+    this.autoSizeGrid();
+    
+    
     for(var i=0;i<this.days;i++)
 		{		 	
     	this.calculateAppointments(i);

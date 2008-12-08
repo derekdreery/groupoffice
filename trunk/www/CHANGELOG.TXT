@@ -1,3 +1,8 @@
+2008/12/?? Version 3.00-stable-4
+- Right click menu added on e-mail addresses in email module with useful options
+- Right click on e-mail attachment offers Save as option in the files module
+- Bug fixes
+
 2008/12/03 Version 3.00-stable-2
 - Bug fixes
 - Import/export of custom fields in addressbook (pro)

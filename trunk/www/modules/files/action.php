@@ -186,7 +186,7 @@ try{
 				throw new Exception($lang['files']['folderExists']);
 			}
 			if (!@ mkdir($full_path.'/'.$name, $GO_CONFIG->folder_create_mode)) {
-				throw new Exception($lang['comon']['saveError']);
+				throw new Exception($lang['common']['saveError']);
 			} else {
 				//$GO_LOGGER->log('filesystem', 'NEW FOLDER '.$fs->strip_file_storage_path($fv->path.'/'.$name));
 				
