@@ -427,17 +427,8 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		
 		var FirstCol = this.gridCells[0][0];
 		this.snapCol = {'x':FirstCol['size']['width'], 'y': FirstCol['size']['height']};
-    },
-    
-    /*syncSize : function() {
-	    this.autoSizeGrid();	        
-			this.cacheGridCells();
-			
-			var FirstCol = this.gridCells[0][0];
-			this.snapCol = {'x':FirstCol['size']['width'], 'y': FirstCol['size']['height']};
-			
-    },*/
-    
+  },
+
 	autoSizeGrid : function() {
 		//calculate gridContainer size
 		var headingsHeight = this.headingsTable.getHeight();
@@ -446,36 +437,9 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		var gridContainerHeight = this.ownerCt.body.getHeight()-headingsHeight-allDayHeight-2;
 		this.gridContainer.setHeight(gridContainerHeight);
 	},
-	
-/*	increaseAllDayContainer : function()
-	{
-		var allDayContainerSize = this.allDayContainer.getHeight();
-		var gridContainerSize = this.gridContainer.getHeight();
-		
-		this.allDayContainer.setHeight(allDayContainerSize+20);
-		this.gridContainer.setHeight(gridContainerSize-20);
-		
-		this.allDayEventRows++;		
-	},
-	resetAllDayContainer : function(){
-		
-		if(this.allDayEventRows>0)
-		{
-			var allDayContainerSize = this.allDayContainer.getHeight();
-			var gridContainerSize = this.gridContainer.getHeight();
-			
-			this.allDayContainer.setHeight(0);
-			this.gridContainer.setHeight(gridContainerSize+allDayContainerSize);
-			
-			this.allDayEventRows=0;
-			
-			this.allDayAppointments=Array();
-		}		
-	},*/
-    
+
   onResize : function(adjWidth, adjHeight, rawWidth, rawHeight){
       //Ext.grid.GridPanel.superclass.onResize.apply(this, arguments);
-
 
 		if(this.daysRendered==this.days)
 		{
@@ -485,8 +449,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
   		{
   			this.load();
   		}
-		}
-	
+		}	
  },
 	
 	setStore : function(store, initial){
@@ -517,9 +480,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
   
   setStoreBaseParams : function(){
   	this.store.baseParams['start_time']=this.startDate.format(this.dateTimeFormat);
-    this.store.baseParams['end_time']=this.endDate.format(this.dateTimeFormat);    
-      
-      
+    this.store.baseParams['end_time']=this.endDate.format(this.dateTimeFormat);          
   },
 	
 	getFirstDateOfWeek : function(date)
