@@ -96,12 +96,9 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		     */
 		    "move" : true,	    
 		    "eventResize" : true,	    
-		    "eventDblClick" : true
-	
+		    "eventDblClick" : true	
 	    });
-	    
-	    
-	    
+
 	    if(this.store){
 	        this.setStore(this.store, true);
 	    }
@@ -179,8 +176,6 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 					cls: "x-calGrid-heading"
 				}
 			}, true);
-
-			
 			
 		this.allDayTable = Ext.DomHelper.append(this.body,
 			{
@@ -211,10 +206,8 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		for(var day=0;day<this.days;day++)
 		{	
 			var dt = this.startDate.add(Date.DAY, day);
+			
 			//create grid heading
-			
-			
-			
 			var heading = Ext.DomHelper.append(this.headingsRow,
 				{tag: 'td', cls: "x-calGrid-heading", style: "width:"+(columnWidth)+"px", html: dt.format(dateFormat) });	
 				
@@ -222,8 +215,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				{tag: 'td', id: 'all_day_'+day, cls: "x-calGrid-all-day-container", style: "width:"+(columnWidth)+"px;height:0px"}, true);
 				
 			this.allDayColumns.push(allDayColumn);
-		}
-		
+		}		
 
 		//for the scrollbar
 		Ext.DomHelper.append(this.headingsRow,
@@ -240,29 +232,16 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 					cls: "x-calGrid-all-day-container"
 				});	
 		
-		
-		
 		//create container for the grid
 		this.gridContainer = Ext.DomHelper.append(this.body,
 				{tag: 'div', cls: "x-calGrid-grid-container"}, true);
-				
-		
 
 		//calculate gridContainer size
 		var headingsHeight = this.headingsTable.getHeight();
 
 		var gridContainerHeight = ctSize['height']-headingsHeight;
 		this.gridContainer.setSize(ctSize['width'],gridContainerHeight );
-		
-		
-		
-		/*this.gridTableWrap=Ext.DomHelper.append(this.gridContainer,
-				{
-					tag: 'div'
-				}, true);*/	
-		
-		
-		
+
 		this.gridTable = Ext.DomHelper.append(this.gridContainer,
 			{
 				tag: 'table', 
@@ -270,26 +249,20 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				cls: "x-calGrid-table", 
 				style: "width:"+ctSize['width']-this.scrollWidth+"px;"
 				
-			},true);
-			
-		
-			
+			},true);			
 		
 		this.tbody = Ext.DomHelper.append(this.gridTable,
 			{
 				tag: 'tbody'
 			}, true); 
 		
-		this.gridTable.on("mousedown", this.startSelection, this);//, {delay:250});
-		
+		this.gridTable.on("mousedown", this.startSelection, this);//, {delay:250});		
 		
 		//create an overlay to track the mousemovement
 		this.gridContainer.on("mousemove", this.onEventDragMouseMove, this);			   
 		this.body.on("mouseup", this.onEventDragMouseUp, this);
 		this.allDayTable.on("mousemove", this.onAllDayEventDragMouseMove, this);	
 		this.body.on("mouseup", this.onAllDayEventDragMouseUp, this);
- 
-
 		
 		var gridRow =  Ext.DomHelper.append(this.tbody,
 		{
@@ -344,11 +317,9 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				var cell = Ext.DomHelper.append(dayColumn,
 					{tag: 'div', id: 'day'+day+'_row'+i, cls: className}, true);
 				
-				this.gridCells[day].push(cell);
-						
+				this.gridCells[day].push(cell);						
 			}	
 		}	
-
 
 		//the start of the grid
 		//var position = FirstCol.getXY();
@@ -358,40 +329,17 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		//save scroll postion because it get's lost when you switch tabs
 		this.gridContainer.on('scroll', this.storeScrollPosition,this);
 		
-
-		
-		this.daysRendered=this.days;
-		
+		this.daysRendered=this.days;		
 		
 		//create the selection proxy
 		this.selector = Ext.DomHelper.append(this.body,
 				{tag: 'div', id: Ext.id(), cls: "x-calGrid-selector"}, true);			
 	
-		this.cacheGridCells();
-		
-		this.gridTableHeight = this.gridTable.getHeight();
-		
-    },
-
-    createHeadings : function()
-	{
-		
-		/*var columnWidth = 100/this.days;
-		
-		this.headingsContainer.update('');
-		for(var day=0;day<this.days;day++)
-		{	
-			var dt = this.startDate.add(Date.DAY, day);
-			//create grid heading
-			var heading = Ext.DomHelper.append(this.headingsContainer,
-				{tag: 'div', id: Ext.id(), cls: "x-calGrid-heading", style: "float:left;width:"+columnWidth+"%", html: dt.format('D m-d') }, true);
-		}*/
-	},
+		this.cacheGridCells();		
+		this.gridTableHeight = this.gridTable.getHeight();		
+  },
     
-    
-    cacheGridCells : function(){
-
-
+	cacheGridCells : function(){
  		this.gridTable.xy = this.gridTable.getXY();   	
   	var columnsContainerY = this.gridTable.getY();
   	
@@ -408,10 +356,6 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			for (var i = 0;i<48;i++)
 			{	
 				var currentY = y+(i*cellSize['height']);
-				
-				//this.gridCells[day][i].xy=this.gridCells[day][i].getXY();
-				//this.gridCells[day][i].xy[1]-=columnsContainerY;
-				//this.gridCells[day][i].size=this.gridCells[day][i].getSize();
 				
 				if(this.gridCells[day])
 				{
@@ -443,8 +387,6 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 
 		if(this.daysRendered==this.days)
 		{
-  		//this.autoSizeGrid();	
-  		
   		if(this.loaded)
   		{
   			this.load();
@@ -453,29 +395,15 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
  },
 	
 	setStore : function(store, initial){
-      if(!initial && this.store){
-      	this.store.un("beforeload", this.mask, this);	
-          this.store.un("datachanged", this.reload);
-          //this.store.un("add", this.onAdd);
-          //this.store.un("remove", this.onRemove);
-          //this.store.un("update", this.onUpdate);
-         // this.store.un("clear", this.reload);
-      }
-      if(store){
-      	store.on("beforeload", this.mask, this);
-          store.on("datachanged", this.reload, this);
-          //store.on("add", this.onAdd, this);
-         // store.on("remove", this.onRemove, this);
-         // store.on("update", this.onUpdate, this);
-          //store.on("clear", this.reload, this);
-          
-          
-          
-      }
-      this.store = store;
-      if(store){
-          //this.refresh();
-      }
+    if(!initial && this.store){
+    	this.store.un("beforeload", this.mask, this);	
+      this.store.un("datachanged", this.reload);
+    }
+    if(store){
+    	store.on("beforeload", this.mask, this);
+        store.on("datachanged", this.reload, this);
+    }
+    this.store = store;
   },
   
   setStoreBaseParams : function(){
@@ -493,7 +421,6 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			offset-=7;
 		}
 		return date.add(Date.DAY, offset);
-
 	},
 	
 	mask : function()
@@ -510,19 +437,12 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		{
 			this.body.unmask();
 		}
-	},
-	
+	},	
 		
 	getSnap : function()
 	{
-		/*var FirstCol = Ext.get("day0_row0");
-		//snap on each row and column
-		var snap = FirstCol.getSize();		
-
-		return {'x':snap['width'], 'y': snap['height']};*/
 		return this.snapCol;
 	},
-
 	
 	getGridXY : function()
 	{
@@ -556,7 +476,6 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		return Math.floor((x-gridPosition[0]-40)/snap["x"]);
 	},
 	startSelection : function (e){
-	//alert('mousedown on grid');
 		//check if we are not dragging an event
 		if(this.writePermission && !this.dragEvent)
 		{
@@ -566,13 +485,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			this.clickedRow = this.getRowNumberByY(coords[1]);
 			
 			this.dragSnap = this.getSnap(); 
-			//determine the day and hour the user clicked on
-			//var arr = row.split('_');		
-			//this.clickedDay = parseInt(arr[0].replace("day",""));
-			//this.clickedRow = parseInt(arr[1].replace("row",""));
-		
-			
-		
+
 			//get position of the row the user clicked on
 			this.selectorStartRow = Ext.get("day"+this.clickedDay+"_row"+this.clickedRow);
 			
@@ -580,8 +493,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			{
 				var position = this.selectorStartRow.getXY();
 				
-				var size=this.selectorStartRow.getSize();
-				
+				var size=this.selectorStartRow.getSize();				
 				
 				//display the selector proxy
 				//this.selector.setOpacity(.4);
@@ -679,21 +591,16 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			if(endRow<startRow)
 			{
 				endRow=startRow;
-			}
-	
+			}	
 			
 			if(startRow && endRow && (day==endDay))
-			{
-				
+			{				
 				return this.addGridEvent(eventData, day, startRow, endRow, recalculateAppointments);
 			}else
-			{
-				
+			{				
 				return this.addAllDayEvent(eventData, day, endDay);
 			}
-		}
-		
-		
+		}	
 	},	
 	
 	getSelectedEvent : function()
@@ -738,11 +645,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				var element = Ext.get(elements[i]);
 				element.addClass('x-calGrid-selected');
 				this.selected.push(element);
-			}
-		
-			//eventEl.addClass('x-calGrid-selected');
-			//this.selected.push(eventEl);
-			
+			}			
 		}
 	},
 	
@@ -819,8 +722,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 	},
 	
 	addAllDayEvent : function (eventData, startDay, endDay)
-	{
-		
+	{		
 		eventData.allDay=true;
 		eventData.daySpan = endDay-startDay+1;
 		
@@ -829,9 +731,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		if(startDay < 0)
 		{
 			startDay=0;
-		}
-		
-		
+		}		
 		
 		if(endDay > this.days-1)
 		{
@@ -841,8 +741,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		//var allDayColumn = Ext.get("all_day_"+startDay);
 		//var size = allDayColumn.getSize();
 		
-		var snap = this.getSnap();
-		
+		var snap = this.getSnap();		
 		
 		if(startDay!=endDay)
 		{
@@ -893,10 +792,8 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			
 			//add events
 			
-			event.on('mousedown', function(e, eventEl){
-				
-				eventEl = Ext.get(eventEl).findParent('div.x-calGrid-all-day-event-container', 2, true);
-					
+			event.on('mousedown', function(e, eventEl){				
+				eventEl = Ext.get(eventEl).findParent('div.x-calGrid-all-day-event-container', 2, true);					
 			
 				this.selectEventElement(eventEl);	
 				
@@ -919,16 +816,13 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				}else
 				{
 					this.fireEvent("eventDblClick", this, event, actionData);
-				}
-				
+				}				
 			}, this);	
 			
 			event.on('mouseup', function(){
 				this.eventMouseUp=true;
 			}, this);	
 		}
-		
-		
 		
 		return domId;
 	},
@@ -944,8 +838,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		}
 		
 		var domId = Ext.id();		
-		this.registerEvent(domId, eventData);
-		
+		this.registerEvent(domId, eventData);		
 		
 		var snap = this.getSnap();		
 		
@@ -960,11 +853,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				cls: "x-calGrid-event-container",		
 				style:"background-color:#"+eventData.background,	 
 				qtip: eventData.tooltip,
-				children:{
-					tag : 'div',
-					cls : 'x-calGrid-event-body',
-					html: text
-				}
+				html:text
 			});
 			
 
@@ -1083,23 +972,6 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		this.calculateAppointments(day);		
 	},
 
-	
-	/*removeEventFromArray : function (day, event_id)
-	{
-		for(var i=0;i<this.appointments[day].length;i++)
-		{
-			if(this.appointments[day][i].id==event_id)
-			{
-				return this.appointments[day].splice(i,1);				
-			}
-		}
-		return false;
-	},
-	*/
-	
-	
-	
-	
 	calculateAppointments :  function (day)
 	{
 		if(typeof(this.appointments[day])!='undefined')
@@ -1137,7 +1009,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				if(rowId==0)
 				{
 					//add 1 px for border
-					dayColumnLeft=row.xy[0]+1;
+					dayColumnLeft=row.xy[0];
 				}
 				
 				if(typeof(this.rows[rowId]) == 'undefined')
@@ -1147,8 +1019,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				
 				//check how many appointments are in the row area
 				for(var i=0;i<this.appointments[day].length;i++)
-				{
-										
+				{										
 					if(!this.appointments[day][i].xy)
 					{
 						this.appointments[day][i].xy=this.appointments[day][i].getXY();
@@ -1265,13 +1136,13 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			{
 				if(typeof(this.rows[startRowId+r][rowPosition])!='undefined')
 				{					
-					return eventWidth-3;
+					return eventWidth-2;
 				}
 			}
 			eventWidth+=posWidth;
 			rowPosition++;
 		}
-		return eventWidth-3;
+		return eventWidth-2;
 	},
 	
 	inAppointmentsArray : function (id, appointments)
@@ -1602,33 +1473,10 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 	onShow : function(){
 		GO.grid.CalendarGrid.superclass.onShow.call(this);
 		
-		this.scrollToLastPosition();
-		
-	}
-    /*,
+		this.scrollToLastPosition();		
+	},
 
-    // private
-    destroy : function(){
-    	
-    	this.gridContainer.un('scroll', this.storeScrollPosition,this);
-    	
-    	this.store.un("beforeload", this.reload, this);
-        this.store.un("datachanged", this.reload, this);
-        this.store.un("clear", this.reload, this);
-    	
-		
-		this.el.update('');
-		
-        GO.grid.CalendarGrid.superclass.destroy.call(this);
-        
-        delete this.el;
-        
-        this.rendered=false;
-    }*/
-    
-   ,
-    
-   startEventDrag : function(e, eventId) {
+  startEventDrag : function(e, eventId) {
 		//don't start dragging when a doubleclick is recorded
 		if(this.writePermission && !this.eventMouseUp)
 		{		
