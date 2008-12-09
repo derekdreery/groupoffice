@@ -350,6 +350,7 @@ a:link, a:visited, a:active{
 	border:1px solid #c3daf9;
 	vertical-align:top;
 	text-align:right;
+	overflow:hidden;
 	font:normal 11px arial, tahoma, helvetica, sans-serif;
 }
 .x-monthGrid-cell-current{
