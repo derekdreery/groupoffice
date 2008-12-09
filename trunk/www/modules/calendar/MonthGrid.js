@@ -271,7 +271,6 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 			
 			if(!scrollOffsetUsed)
 			{
-				console.log('ja');
 				this.calcCellSize(ctSize, true);
 			}
 		}
@@ -280,9 +279,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
   syncSize : function(){
   	
   	if(this.monthGridTable)
-		{
-			console.log('onresize');
-						
+		{					
 			//get content size of element
 			var ctSize = this.container.getSize(true);			
 			this.calcCellSize(ctSize);				
