@@ -421,7 +421,9 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			this.state = Ext.decode(this.state);
 		}
 		
-		this.state.displayType='days';
+		if(this.state.displayType=='view')
+			this.state.displayType='days';
+			
 		this.state.calendar_id=GO.calendar.defaultCalendar.id;
 		this.state.view_id=0;
 				

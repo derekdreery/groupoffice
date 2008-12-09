@@ -343,13 +343,13 @@ a:link, a:visited, a:active{
 
 .x-monthGrid-table{
 	border-collapse: collapse;
+	table-layout: fixed;
 }
 
 .x-monthGrid-table td {
 	border:1px solid #c3daf9;
 	vertical-align:top;
 	/*width:14.28571429%;*/
-	overflow:hidden;
 	text-align:right;
 	font:normal 11px arial, tahoma, helvetica, sans-serif;
 }

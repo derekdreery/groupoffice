@@ -62,6 +62,9 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
    * @type Number
    */
   scrollOffset: 19,
+  
+  events : [],
+
 
 	// private
   initComponent : function(){	
@@ -133,29 +136,24 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 		var currentDate = new Date();
 		var currentDateStr = currentDate.format('Ymd');
 		
+		/*
 		//get content size of element
 		var ctSize = this.container.getSize(true);
 		
 		this.rowHeight = ctSize['height']/(this.days/7);
 		if(this.rowHeight<100)
-			this.rowHeight=100;
-								
+			this.rowHeight=100;								
 		
 		this.cellWidth = ctSize['width']/7;
 		if(this.cellWidth<100)
-			this.cellWidth=100;
-			
-		var ctWidth = this.cellWidth*7;
-		var ctHeight = this.cellHeight*7;
-		
+			this.cellWidth=100;*/
+	
 		
 		this.monthGridTable = Ext.DomHelper.append(this.body,
 			{
 				tag: 'table', 
 				id: Ext.id(), 
-				cls: "x-monthGrid-table", 
-				style: "width:"+ctWidth+"px;height:"+ctHeight+"px;"
-				
+				cls: "x-monthGrid-table"	
 			},true);
 		
 		this.tbody = Ext.DomHelper.append(this.monthGridTable,
@@ -218,8 +216,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 				{
 					tag: 'td', 
 					id: id, 
-					cls: cellClass, 
-					style:'height:'+rowHeight+';width:'+cellWidth,
+					cls: cellClass,
 					children:[{
 						tag: 'div',
 						cls: 'x-monthGrid-cell-day-text',
@@ -233,7 +230,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 			//});
 			
 				
-			this.gridCells[dateStr]=(cell);
+			this.gridCells[dateStr]=cell;
 				
 			weekDay++
 			if(weekDay==7)
@@ -245,9 +242,64 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 				}, true);
 			}
 		}
+		this.syncSize();
+	},	
+		    
+  onResize : function(adjWidth, adjHeight, rawWidth, rawHeight){
+    Ext.grid.GridPanel.superclass.onResize.apply(this, arguments);
+
+		this.syncSize();
+  },
+  
+  calcCellSize : function (ctSize, scrollOffsetUsed)
+  {
+  	this.rowHeight = ctSize['height']/(this.days/7);
+		if(this.rowHeight<100)
+		{
+			this.rowHeight=100;
+			if(!scrollOffsetUsed)
+			{
+				ctSize['width']-= this.scrollOffset;
+			}
+		}									
 		
-		
-	},
+		this.cellWidth = ctSize['width']/7;
+		if(this.cellWidth<100)
+		{
+			this.cellWidth=100;
+			ctSize['height']-= this.scrollOffset;
+			
+			if(!scrollOffsetUsed)
+			{
+				console.log('ja');
+				this.calcCellSize(ctSize, true);
+			}
+		}
+  },
+  
+  syncSize : function(){
+  	
+  	if(this.monthGridTable)
+		{
+			console.log('onresize');
+						
+			//get content size of element
+			var ctSize = this.container.getSize(true);			
+			this.calcCellSize(ctSize);				
+
+			for(var i in this.gridCells)
+			{
+				this.gridCells[i].setSize(this.cellWidth, this.rowHeight+1);
+			}
+			
+			this.monthGridTable.setWidth(this.cellWidth*7);
+			
+			for(var i=0;i<this.events.length;i++)
+			{
+				this.events[i].setWidth(this.cellWidth-3);
+			}
+		}	
+  },
 	
 	initDD :  function(){
 		
@@ -292,18 +344,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
             scope : this
         });
 	},
-	
-
-
-    
-  /*onResize : function(adjWidth, adjHeight, rawWidth, rawHeight){
-    //Ext.grid.GridPanel.superclass.onResize.apply(this, arguments);
-
-		if(this.monthGridTable)
-		{
-			this.monthGridTable.setSize(adjWidth, adjHeight);
-		}	
-  },*/
+  
 	setStore : function(store, initial){
     if(!initial && this.store){
     	this.store.un("beforeload", this.reload);
@@ -433,12 +474,14 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 						tag: 'div', 
 						id: eventData.domId, 
 						cls: "x-calGrid-month-event-container", 
-						style:"background-color:#"+eventData.background+';width:'+this.cellWidth+'px',
+						style:"background-color:#"+eventData.background+';width:'+(this.eventWidth)+'px',
 						html: text, 						
 						qtip: eventData['tooltip'],
 						qtitle:eventData.name
 					}, true);			
 					
+				this.events.push(event);
+				
 				this.registerEvent(eventData.domId, eventData);				
 				
 				event.on('mousedown', function(e, eventEl){
@@ -581,6 +624,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 	},
   clearGrid : function()
 	{
+		this.events=Array();
 		this.appointments=Array();		
 		this.remoteEvents=Array();
 		this.domIds=Array();
