@@ -471,7 +471,12 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 			
 			if(col)
 			{
-				var text = eventData.startDate.format(GO.settings.time_format)+' '+eventData['name'];
+				var text = '';
+				if(eventData.startDate.format('G')!='0')
+				{
+					text += eventData.startDate.format(GO.settings.time_format)+'&nbsp;';
+				}				
+				text += eventData['name'];
 			
 				var event = Ext.DomHelper.append(col,
 					{

@@ -288,7 +288,7 @@ a:link, a:visited, a:active{
 	cursor:default;
 	margin:1px;
 	background-color:#ffffcc;
-	border:1px solid #666666;
+	border:1px solid #C3DAF9;
 	padding:1px 2px;
 	overflow: hidden;
 }
@@ -296,7 +296,7 @@ a:link, a:visited, a:active{
 
 .x-calGrid-selected {
 	/*background-color: #B8CFEE !important;*/
-	border: 1px solid #666666;	
+	border: 1px solid #666666 !important;	
 	z-index:1100 !important;
 }
 
@@ -354,12 +354,12 @@ a:link, a:visited, a:active{
 
 .x-monthGrid-table{
 	border-collapse: collapse;
+	table-layout: fixed;
 }
 
 .x-monthGrid-table td {
 	border:1px solid #c3daf9;
 	vertical-align:top;
-	width:14.28571429%;
 	text-align:right;
 	font:normal 11px arial, tahoma, helvetica, sans-serif;
 }
@@ -381,10 +381,11 @@ a:link, a:visited, a:active{
 .x-calGrid-month-event-container {
 	text-align:left;
 	cursor:default;
-	border:1px solid #c3daf9;
+	border:1px solid #C3DAF9;
 	margin:1px;
 	background-color:#ffffcc;
 	overflow: hidden;
+	padding:1px 2px;
 }
 
 .x-calGrid-month-event-proxy {
@@ -435,9 +436,10 @@ a:link, a:visited, a:active{
 .x-viewGrid-event-container {
 	text-align:left;
 	cursor:default;
-	border:1px solid #c3daf9;
+	border:1px solid #C3DAF9;
 	margin:1px;
 	background-color:#ffffcc;
+	padding:1px 2px;
 }
 
 .x-viewGrid-event-proxy {
