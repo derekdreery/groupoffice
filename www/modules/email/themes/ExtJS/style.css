@@ -80,6 +80,9 @@
    display: list-item;  
  }  
 
+.message-body p {  
+   margin:10px 0px;  
+ }    
 
 .em-blocked{
 margin:5px 2px;

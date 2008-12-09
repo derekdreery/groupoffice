@@ -78,7 +78,11 @@
    
 .message-body li {  
    display: list-item;  
- }  
+ }
+ 
+.message-body p {  
+   margin:10px 0px;  
+ }    
 
 
 
