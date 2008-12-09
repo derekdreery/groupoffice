@@ -65,7 +65,7 @@ GO.email.EmailClient = function(config){
 		if(this.messagesGrid.store.reader.jsonData.drafts)
 		{
 			GO.email.Composer.show({
-				uid: this.previewedUid, 
+				uid: this.messagePanel.uid, 
 				task: 'opendraft',
 				template_id: 0,
 				mailbox: this.mailbox,
@@ -87,18 +87,18 @@ GO.email.EmailClient = function(config){
 
 	//this.messagesGrid.getSelectionModel().on("rowselect",function(sm, rowIndex, r){
 	this.messagesGrid.on("delayedrowselect",function(grid, rowIndex, r){
-		if(r.data['uid']!=this.previewedUid)
+		if(r.data['uid']!=this.messagePanel.uid)
 		{
-			this.previewedUid=r.data['uid'];			
+			this.messagePanel.uid=r.data['uid'];			
 			this.messagePanel.loadMessage(r.data.uid, this.mailbox, this.account_id);			
 		}
 	}, this);
 	
 	/*this.messagesGrid.on('rowclick', function(grid, rowIndex, e ){
 		var r = grid.store.getAt(rowIndex);
-		if(r.data['uid']!=this.previewedUid)
+		if(r.data['uid']!=this.messagePanel.uid)
 		{
-			this.previewedUid=r.data['uid'];			
+			this.messagePanel.uid=r.data['uid'];			
 			this.messagePanel.loadMessage(r.data.uid, this.mailbox, this.account_id);			
 		}
 	}, this);*/
@@ -484,7 +484,7 @@ GO.email.EmailClient = function(config){
 					handler: function(){
 						
 						GO.email.Composer.show({
-							uid: this.previewedUid, 
+							uid: this.messagePanel.uid, 
 							task: 'reply',
 							mailbox: this.mailbox,
 							account_id: this.account_id
@@ -498,7 +498,7 @@ GO.email.EmailClient = function(config){
 					cls: 'x-btn-text-icon',
 					handler: function(){
 						GO.email.Composer.show({
-							uid: this.previewedUid, 
+							uid: this.messagePanel.uid, 
 							task: 'reply_all',
 							mailbox: this.mailbox,
 							account_id: this.account_id
@@ -513,7 +513,7 @@ GO.email.EmailClient = function(config){
 					cls: 'x-btn-text-icon',
 					handler: function(){
 						GO.email.Composer.show({
-							uid: this.previewedUid, 
+							uid: this.messagePanel.uid, 
 							task: 'forward',
 							mailbox: this.mailbox,
 							account_id: this.account_id
@@ -620,17 +620,17 @@ GO.email.EmailClient = function(config){
   this.messagePanel.on('load', function(options, success, response){
   	if(!success)
 		{
-			this.previewedUid=0;
+			this.messagePanel.uid=0;
 		}else
 		{
-			//this.previewedUid=record.data['uid'];
+			//this.messagePanel.uid=record.data['uid'];
 			
 			this.replyAllButton.setDisabled(false);
 			this.replyButton.setDisabled(false);
 			this.forwardButton.setDisabled(false);
 			this.printButton.setDisabled(false);
 			
-			var record = this.messagesGrid.store.getById(this.previewedUid);			
+			var record = this.messagesGrid.store.getById(this.messagePanel.uid);			
 			if(record.data['new']==1)
 			{		
 				this.incrementFolderStatus(this.folder_id, -1);
@@ -688,7 +688,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 				var keys = Ext.decode(config.params.delete_keys);				
 				for(var i=0;i<keys.length;i++)
 				{
-					if(this.previewedUid==keys[i])
+					if(this.messagePanel.uid==keys[i])
 					{
 						this.messagePanel.reset();
 					}
@@ -778,7 +778,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
   				url: GO.settings.modules.email.url+'action.php',
   				params:{
   					task:'save_attachment',
-  					uid: this.previewedUid,
+  					uid: this.messagePanel.uid,
   					mailbox: this.mailbox, 
 		  			part: attachment.number,
 		  			transfer: attachment.transfer,
@@ -816,7 +816,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		if(attachment.mime.indexOf('message')>-1)
   	{
   		GO.linkHandlers[9].call(this, 0, {
-  			uid: this.previewedUid, 
+  			uid: this.messagePanel.uid, 
   			mailbox: this.mailbox, 
   			part: attachment.number,
   			transfer: attachment.transfer,
@@ -831,7 +831,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 					document.location.href=GO.settings.modules.email.url+
 						'tnef.php?account_id='+this.account_id+
 						'&mailbox='+escape(this.mailbox)+
-						'&uid='+this.previewedUid+
+						'&uid='+this.messagePanel.uid+
 						'&part='+attachment.number+
 						'&transfer='+attachment.transfer+
 						'&mime='+attachment.mime+
@@ -869,7 +869,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 									src: GO.settings.modules.email.url+
 									'attachment.php?account_id='+this.account_id+
 									'&mailbox='+escape(this.mailbox)+
-									'&uid='+this.previewedUid+
+									'&uid='+this.messagePanel.uid+
 									'&part='+r.number+
 									'&transfer='+r.transfer+
 									'&mime='+r.mime+
@@ -891,7 +891,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 					document.location.href=GO.settings.modules.email.url+
 						'attachment.php?account_id='+this.account_id+
 						'&mailbox='+escape(this.mailbox)+
-						'&uid='+this.previewedUid+
+						'&uid='+this.messagePanel.uid+
 						'&part='+attachment.number+
 						'&transfer='+attachment.transfer+
 						'&mime='+attachment.mime+
@@ -906,7 +906,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		document.location.href=GO.settings.modules.email.url+
 		'zip_attachments.php?account_id='+this.account_id+
 		'&mailbox='+escape(this.mailbox)+
-		'&uid='+this.previewedUid;	
+		'&uid='+this.messagePanel.uid;	
 	},
 	
 	showComposer : function(values)
