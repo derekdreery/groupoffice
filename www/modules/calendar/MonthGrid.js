@@ -63,7 +63,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
    */
   scrollOffset: 19,
   
-  gridEvents : [],
+  gridEvents : {},
 
 
 	// private
@@ -292,9 +292,10 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 			
 			this.monthGridTable.setWidth(this.cellWidth*7);
 			
-			for(var i=0;i<this.gridEvents.length;i++)
+			for(var d in this.gridEvents)
 			{
-				this.gridEvents[i].setWidth(this.cellWidth-3);
+				for(var i=0;i<this.gridEvents[d].length;i++)
+					this.gridEvents[d][i].setWidth(this.cellWidth-3);
 			}
 		}	
   },
@@ -476,19 +477,23 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 						html: text, 						
 						qtip: eventData['tooltip'],
 						qtitle:eventData.name
-					}, true);			
+					}, true);				
 					
-				this.gridEvents.push(event);
+				var dateStr = date.format('Ymd');
+				if(!this.gridEvents[dateStr])
+				{
+					this.gridEvents[dateStr]=[];
+				}
+				
+				this.gridEvents[dateStr].push(event);
 				
 				this.registerEvent(eventData.domId, eventData);				
 				
-				event.on('mousedown', function(e, eventEl){
-				
+				event.on('mousedown', function(e, eventEl){				
 					eventEl = Ext.get(eventEl).findParent('div.x-calGrid-month-event-container', 2, true);
 					
 					this.selectEventElement(eventEl);					
-					this.clickedEventId=eventEl.id;
-		
+					this.clickedEventId=eventEl.id;		
 				}, this);
 				
 				event.on('dblclick', function(e, eventEl){
@@ -622,7 +627,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 	},
   clearGrid : function()
 	{
-		this.gridEvents=Array();
+		this.gridEvents={};
 		this.appointments=Array();		
 		this.remoteEvents=Array();
 		this.domIds=Array();
