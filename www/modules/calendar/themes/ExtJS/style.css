@@ -374,9 +374,13 @@ a:link, a:visited, a:active{
 	background-color: #ffffcc;
 }
 
-.x-monthGrid-cell-day-text{
-		
+a.x-monthGrid-cell-day-text:link, a.x-monthGrid-cell-day-text:visited,a.x-monthGrid-cell-day-text:active{
+	font-size:12px;		
 }
+a.x-monthGrid-cell-day-text:hover{
+	color: blue;
+}
+
 
 .x-calGrid-month-event-container {
 	text-align:left;

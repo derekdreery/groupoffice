@@ -363,8 +363,12 @@ a:link, a:visited, a:active{
 	background-color: #ffffcc;
 }
 
-.x-monthGrid-cell-day-text{
-		
+a.x-monthGrid-cell-day-text:link, a.x-monthGrid-cell-day-text:visited,a.x-monthGrid-cell-day-text:active{
+	font-size:12px;	
+	color:black;	
+}
+a.x-monthGrid-cell-day-text:hover{
+	color: #26687C;
 }
 
 .x-calGrid-month-event-container {

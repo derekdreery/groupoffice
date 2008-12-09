@@ -858,7 +858,6 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		
 		
 		this.daysGrid.on("create", function(CalGrid, newEvent){
-				//daysGrid.mask();
 				var formValues={};
 				
 				formValues['start_date'] = newEvent['startDate'];//.format(GO.settings['date_format']);					
@@ -868,7 +867,6 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				formValues['end_date'] = newEvent['endDate'];//.format(GO.settings['date_format']);
 				formValues['end_hour'] = newEvent['endDate'].format("H");
 				formValues['end_min'] = newEvent['endDate'].format("i");
-				//formValues['calendar_id']=this.calendar_id;
 				
 				GO.calendar.eventDialog.show({
 					values: formValues,
@@ -876,6 +874,26 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					calendar_name: this.calendar_name
 				});
 				
+			}, this);		
+			
+		this.monthGrid.on("create", function(grid, date){
+
+				var now = new Date();
+				
+				var formValues={
+					start_date: date,
+					end_date: date,
+					start_hour: now.format('H'),
+					end_hour: now.add(Date.HOUR, 1).format('H'),
+					start_min: '00',
+					end_min: '00'
+				};	
+				
+				GO.calendar.eventDialog.show({
+					values: formValues,
+					calendar_id: this.calendar_id,
+					calendar_name: this.calendar_name
+				});				
 			}, this);		
 		
 			

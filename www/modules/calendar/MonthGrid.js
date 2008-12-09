@@ -63,7 +63,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
    */
   scrollOffset: 19,
   
-  events : [],
+  gridEvents : [],
 
 
 	// private
@@ -186,8 +186,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 			}else
 			{
 				dateFormat = 'j';
-			}
-			
+			}			
 			
 			var weekday = dt.format('w');
 			
@@ -216,20 +215,22 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 				{
 					tag: 'td', 
 					id: id, 
-					cls: cellClass,
-					children:[{
-						tag: 'div',
-						cls: 'x-monthGrid-cell-day-text',
-						html: dt.format(dateFormat)
-					}]
+					cls: cellClass
 				}, true);
-				
-			//var dropTarget = new GO.calendar.dd.MonthDropTarget(cell, {
-			//	ddGroup: 'month-grid',
-			//	overClass: 'dd-over'
-			//});
 			
-				
+			var dayLink = Ext.DomHelper.append(cell,{
+						tag: 'a',
+						cls: 'x-monthGrid-cell-day-text',
+						href: '#',
+						html: dt.format(dateFormat)
+					}, true);
+					
+			dayLink.on('click', function(e, target){			
+				var cell = Ext.get(target).findParent('td', 3);				
+				var date = Date.parseDate(cell.id.substring(1, cell.id.length),'Ymd');
+				this.fireEvent('create', this, date);
+			}, this);
+			
 			this.gridCells[dateStr]=cell;
 				
 			weekDay++
@@ -291,9 +292,9 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 			
 			this.monthGridTable.setWidth(this.cellWidth*7);
 			
-			for(var i=0;i<this.events.length;i++)
+			for(var i=0;i<this.gridEvents.length;i++)
 			{
-				this.events[i].setWidth(this.cellWidth-3);
+				this.gridEvents[i].setWidth(this.cellWidth-3);
 			}
 		}	
   },
@@ -477,7 +478,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 						qtitle:eventData.name
 					}, true);			
 					
-				this.events.push(event);
+				this.gridEvents.push(event);
 				
 				this.registerEvent(eventData.domId, eventData);				
 				
@@ -621,7 +622,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 	},
   clearGrid : function()
 	{
-		this.events=Array();
+		this.gridEvents=Array();
 		this.appointments=Array();		
 		this.remoteEvents=Array();
 		this.domIds=Array();
