@@ -811,7 +811,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
   	});
 	},
 	
-	openAttachment :  function(attachment, panel)
+	openAttachment :  function(attachment, panel, forceDownload)
 	{		
 		if(attachment.mime.indexOf('message')>-1)
   	{
@@ -844,7 +844,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 				case 'jpg':
 				case 'jpeg':
 				
-				if(GO.files)
+				if(GO.files && !forceDownload)
 				{
 					if(!this.imageViewer)
 					{
