@@ -812,6 +812,30 @@ class imap{
 			array_unshift($this->message["parts"], $tmp);
 		}
 	}
+	/**
+	 * Check if a part is an attachment
+	 *
+	 * @param array $part returned by get_message or get_parts
+	 * @return bool 
+	 */
+	function part_is_attachment($part)
+	{
+		return (eregi("ATTACHMENT", $part["disposition"]) || ($part["name"] != '' && empty($attachments[$i]["id"]))
+		&& 
+		!($part['type']=='APPLEDOUBLE' && $part['mime']== 'application/APPLEFILE'));
+	}
+	
+	/*function is_attachment($part)
+	{
+		return	(
+		eregi("attachment", $part["disposition"]) ||
+		($part['name']!='' && !eregi("inline", $part["disposition"])) ||
+		($part["id"] == '' && eregi("inline", $part["disposition"]))
+			
+		)
+		&& !eregi("message/RFC822", $part["mime"]);
+	}*/
+	
 	/*
 		function print_structure($mimeobj, $depth = 0, $section = 0)
 		{
@@ -1000,16 +1024,6 @@ class imap{
 
 
 
-	function is_attachment($part)
-	{
-		return	(
-		eregi("attachment", $part["disposition"]) ||
-		($part['name']!='' && !eregi("inline", $part["disposition"])) ||
-		($part["id"] == '' && eregi("inline", $part["disposition"]))
-			
-		)
-		&& !eregi("message/RFC822", $part["mime"]);
-	}
 
 
 	/**

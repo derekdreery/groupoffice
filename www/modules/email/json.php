@@ -347,7 +347,7 @@ try{
 					for ($i=0;$i<count($parts);$i++)
 					{
 						//var_dump($parts[$i]);
-						if($imap->is_attachment($parts[$i]))
+						if($imap->part_is_attachment($parts[$i]))
 						{
 							$file = $imap->view_part($uid, $parts[$i]["number"], $parts[$i]["transfer"]);
 
@@ -778,22 +778,14 @@ try{
 				$response['attachments']=array();
 				$index=0;
 				for ($i = 0; $i < count($attachments); $i ++) {
-					if (
-					(
-					eregi("ATTACHMENT", $attachments[$i]["disposition"])  ||
-					($attachments[$i]["name"] != '' && empty($attachments[$i]["id"])
-					)
-					&& !($attachments[$i]['type']=='APPLEDOUBLE' && $attachments[$i]['mime']== 'application/APPLEFILE')
-					)
-					){
-
+					if ($imap->part_is_attachment($attachments[$i])){
+						
 						$attachment = $attachments[$i];
 
 						$attachment['index']=$index;
 						$attachment['extension']=File::get_extension($attachments[$i]["name"]);
 						$response['attachments'][]=$attachment;
-						$index++;
-						//}elseif (eregi("inline",$attachments[$i]["disposition"]) && !empty($attachments[$i]["id"]))
+						$index++;						
 					}
 					
 					if (!empty($attachments[$i]["id"]))
