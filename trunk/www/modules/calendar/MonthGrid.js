@@ -245,6 +245,9 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 				this.calcCellSize(ctSize, true);
 			}
 		}
+		
+		this.cellHeight=Math.floor(this.cellHeight);
+		this.cellWidth=Math.floor(this.cellWidth);
   },
   
   checkOverflow : function(){
@@ -257,8 +260,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 		this.overflowIndicators=[];
 		
   	for(var i in this.gridCells)
-		{
-			
+		{			
 			if(this.gridCells[i].dom.scrollHeight>this.gridCells[i].dom.clientHeight)
 			{				
 				var el = Ext.DomHelper.append(this.gridCells[i],
@@ -286,7 +288,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 			var ctSize = this.container.getSize(true);			
 			this.calcCellSize(ctSize);	
 			
-			this.cellWrap.setSize((this.cellWidth)*7, (this.cellHeight)*(this.days/7));			
+			this.cellWrap.setSize(this.cellWidth*7, this.cellHeight*(this.days/7));			
 
 			for(var i in this.gridCells)
 			{
