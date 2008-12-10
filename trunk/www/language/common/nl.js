@@ -11,7 +11,7 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-
+GO.lang.more='Meer';
 GO.lang.strCommunityForum='Community forum';
 
 GO.lang.moduleRequired='Deze functie vereist de \'{module}\' module. Deze module is niet beschikbaar.';

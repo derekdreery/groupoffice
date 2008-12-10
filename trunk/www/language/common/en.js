@@ -19,7 +19,7 @@ GO.lang = {};
  * Copy everything below for translations
  */
 
-
+GO.lang.more='More';
 GO.lang.strCommunityForum='Community forum';
 GO.lang.moduleRequired='This feature requires the \'{module}\' module. This module is not available.';
 

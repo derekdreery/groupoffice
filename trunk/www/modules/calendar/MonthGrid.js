@@ -70,6 +70,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
   initComponent : function(){	
 		this.autoScroll=true;	
 		this.addEvents({
+				'showday' :true,
 	        /**
 		     * @event click
 		     * Fires when this button is clicked
@@ -136,43 +137,13 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 		var currentDate = new Date();
 		var currentDateStr = currentDate.format('Ymd');
 		
-		/*
-		//get content size of element
-		var ctSize = this.container.getSize(true);
-		
-		this.rowHeight = ctSize['height']/(this.days/7);
-		if(this.rowHeight<100)
-			this.rowHeight=100;								
-		
-		this.cellWidth = ctSize['width']/7;
-		if(this.cellWidth<100)
-			this.cellWidth=100;*/
-	
-		
-		this.monthGridTable = Ext.DomHelper.append(this.body,
-			{
-				tag: 'table', 
-				id: Ext.id(), 
-				cls: "x-monthGrid-table"	
-			},true);
-		
-		this.tbody = Ext.DomHelper.append(this.monthGridTable,
-			{
-				tag: 'tbody'
-			}); 
-		
-		var currentRow = Ext.DomHelper.append(this.tbody,
-			{
-				tag: 'tr'
-			});
-	
 		var weekDay=0;
 		var cellClass = '';
 		var dateFormat;
 		
-		
+		this.cellWrap = Ext.DomHelper.append(this.body,{tag:'div'}, true);
 			
-		var rowHeight = this.rowHeight+'px';
+		var cellHeight = this.cellHeight+'px';
 		var cellWidth= this.cellWidth+'px';
 		
 		this.gridCells={};
@@ -196,24 +167,23 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 			
 			if(dateStr==currentDateStr)
 			{
-				cellClass = 'x-monthGrid-cell-today';
+				cellClass = 'cal-monthGrid-cell x-monthGrid-cell-today';
 			}else if(monthStr==currentMonthStr && (weekday==0 || weekday==6))
 			{
-				cellClass = 'x-monthGrid-cell-weekend';
+				cellClass = 'cal-monthGrid-cell x-monthGrid-cell-weekend';
 			}else if (monthStr==currentMonthStr)
 			{
-				cellClass = 'x-monthGrid-cell-current';
+				cellClass = 'cal-monthGrid-cell x-monthGrid-cell-current';
 			}else
 			{
-				cellClass = '';
-			}
+				cellClass = 'cal-monthGrid-cell';
+			}			
 			
+			var id = 'd'+dateStr;			
 			
-			var id = 'd'+dateStr;
-			
-			var cell = Ext.DomHelper.append(currentRow,
+			var cell = Ext.DomHelper.append(this.cellWrap,
 				{
-					tag: 'td', 
+					tag: 'div', 
 					id: id, 
 					cls: cellClass
 				}, true);
@@ -225,46 +195,46 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 						html: dt.format(dateFormat)
 					}, true);
 					
-			dayLink.on('click', function(e, target){			
-				var cell = Ext.get(target).findParent('td', 3);				
-				var date = Date.parseDate(cell.id.substring(1, cell.id.length),'Ymd');
-				this.fireEvent('create', this, date);
-			}, this);
+			dayLink.on('click', this.onAddClick, this);
 			
 			this.gridCells[dateStr]=cell;
-				
-			weekDay++
-			if(weekDay==7)
-			{
-				weekDay = 0;
-				var currentRow = Ext.DomHelper.append(this.tbody,
-				{
-					tag: 'tr'		
-				}, true);
-			}
 		}
 		this.syncSize();
-	},	
+	},
+	
+	onMoreClick : function(e, target)
+	{
+		var cell = Ext.get(target).findParent('div.cal-monthGrid-cell', 3);				
+		var date = Date.parseDate(cell.id.substring(1, cell.id.length),'Ymd');
+		this.fireEvent('showday', this, date);
+	},
+	
+	onAddClick : function(e, target){			
+		var cell = Ext.get(target).findParent('div.cal-monthGrid-cell', 3);				
+		var date = Date.parseDate(cell.id.substring(1, cell.id.length),'Ymd');
+		this.fireEvent('create', this, date);
+	},
 		    
   onResize : function(adjWidth, adjHeight, rawWidth, rawHeight){
     Ext.grid.GridPanel.superclass.onResize.apply(this, arguments);
 
 		this.syncSize();
+		this.checkOverflow();
   },
   
   calcCellSize : function (ctSize, scrollOffsetUsed)
   {
-  	this.rowHeight = ctSize['height']/(this.days/7);
-		if(this.rowHeight<100)
+  	this.cellHeight = (ctSize['height']/(this.days/7));
+		if(this.cellHeight<100)
 		{
-			this.rowHeight=100;
+			this.cellHeight=100;
 			if(!scrollOffsetUsed)
 			{
 				ctSize['width']-= this.scrollOffset;
 			}
 		}									
 		
-		this.cellWidth = ctSize['width']/7;
+		this.cellWidth = (ctSize['width']/7);
 		if(this.cellWidth<100)
 		{
 			this.cellWidth=100;
@@ -277,20 +247,51 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 		}
   },
   
-  syncSize : function(){
+  checkOverflow : function(){
+  	if(this.overflowIndicators)
+		{
+			for(var i=0;i<this.overflowIndicators.length;i++)
+				this.overflowIndicators[i].remove();
+		}
+		
+		this.overflowIndicators=[];
+		
+  	for(var i in this.gridCells)
+		{
+			
+			if(this.gridCells[i].dom.scrollHeight>this.gridCells[i].dom.clientHeight)
+			{				
+				var el = Ext.DomHelper.append(this.gridCells[i],
+				{
+					tag: 'a', 
+					cls: 'cal-overflow-indicator',
+					href: '#',
+					html: GO.lang.more+'...'
+				}, true);
+				
+				el.on('click', this.onMoreClick, this);
+				
+				var pos = this.gridCells[i].getXY();				
+				el.setXY(pos);					
+				this.overflowIndicators.push(el);
+			}
+		}
+  },
+  
+  syncSize : function(){  
   	
-  	if(this.monthGridTable)
-		{					
+  	if(this.cellWrap)
+		{			
 			//get content size of element
 			var ctSize = this.container.getSize(true);			
-			this.calcCellSize(ctSize);				
+			this.calcCellSize(ctSize);	
+			
+			this.cellWrap.setSize((this.cellWidth)*7, (this.cellHeight)*(this.days/7));			
 
 			for(var i in this.gridCells)
 			{
-				this.gridCells[i].setSize(this.cellWidth, this.rowHeight+1);
+				this.gridCells[i].setSize(this.cellWidth, this.cellHeight);
 			}
-			
-			this.monthGridTable.setWidth(this.cellWidth*7);
 			
 			for(var d in this.gridEvents)
 			{
@@ -515,6 +516,9 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 			}
 		}
 		
+		if(!this.loading)
+			this.checkOverflow();
+		
 		return eventData.domId;
 	},
 	
@@ -535,6 +539,8 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 				this.unregisterDomId(ids[i]);
 			}			
 		}		
+		
+		this.checkOverflow();
 	},
 	
 	unregisterDomId : function(domId)
@@ -686,6 +692,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
   {		
   	if(this.rendered)
   	{
+  		this.loading=true;
   		this.clearGrid();
   		this.renderMonthView();
   		
@@ -700,13 +707,16 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 				
 				var eventData = records[i].data;
 				eventData['startDate']=startDate;
-				eventData['endDate']=endDate;
-			
+				eventData['endDate']=endDate;			
 				
 				this.addMonthGridEvent (eventData);            
     	}
+    	
+    	this.checkOverflow();
+    	
     	this.unmask();
       
+      this.loading=false;
     	this.loadRequired=false;
   	}
   
