@@ -293,11 +293,11 @@ Ext.extend(GO.addressbook.MainPanel, Ext.Panel,{
 			if(panel.id=='ab-contacts-grid')
 			{
 				this.companiesGrid.loaded=false;
-				this.contactsGrid.store.reload();
+				this.contactsGrid.store.load();
 			}else
 			{
 				this.contactsGrid.loaded=false;
-				this.companiesGrid.store.reload();
+				this.companiesGrid.store.load();
 			}
 		},
 		
