@@ -339,6 +339,17 @@ try{
 											
 										$show_completed=isset($_POST['show_completed']) && $_POST['show_completed']=='true';
 										$show_inactive=isset($_POST['show_inactive']) && $_POST['show_inactive']=='true';
+										
+										if(isset($_POST['show_completed']))
+										{
+											$GO_CONFIG->save_setting('tasks_show_completed', $_POST['show_completed'], $GO_SECURITY->user_id);
+										}
+										if(isset($_POST['show_inactive']))
+										{
+											$GO_CONFIG->save_setting('tasks_show_inactive', $_POST['show_inactive'], $GO_SECURITY->user_id);
+										}
+										$show_completed=$GO_CONFIG->get_setting('tasks_show_completed', $GO_SECURITY->user_id);
+										$show_inactive=$GO_CONFIG->get_setting('tasks_show_inactive', $GO_SECURITY->user_id);
 											
 										$response['total'] = $tasks->get_tasks($tasklists,$user_id, $show_completed, $sort, $dir, $start, $limit,$show_inactive);
 										$response['results']=array();
