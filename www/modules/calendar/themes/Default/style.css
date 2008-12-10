@@ -341,8 +341,8 @@ a:link, a:visited, a:active{
 
 
 .cal-monthGrid-cell{
-	border-right:1px solid #c3daf9;
-	border-bottom:1px solid #c3daf9;
+	border-right:1px solid #C0C0C0;
+	border-bottom:1px solid #C0C0C0;
 	vertical-align:top;
 	text-align:right;
 	overflow:hidden;
@@ -350,23 +350,11 @@ a:link, a:visited, a:active{
 	float:left;
 }
 .cal-overflow-indicator{
-font-style:italic;
-position:absolute;
-padding:1px 2px;
+	font-style:italic;
+	position:absolute;
+	padding:1px 2px;
 }
 
-.x-monthGrid-table{
-	border-collapse: collapse;
-	table-layout: fixed;
-}
-
-.x-monthGrid-table td {
-	border:1px solid #c3daf9;
-	vertical-align:top;
-	text-align:right;
-	overflow:hidden;
-	font:normal 11px arial, tahoma, helvetica, sans-serif;
-}
 .x-monthGrid-cell-current{
 	background-color: #FFF7EB;
 }
