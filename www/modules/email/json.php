@@ -780,7 +780,7 @@ try{
 				for ($i = 0; $i < count($attachments); $i ++) {
 					if (
 					(
-					//eregi("ATTACHMENT", $attachments[$i]["disposition"])  ||
+					eregi("ATTACHMENT", $attachments[$i]["disposition"])  ||
 					($attachments[$i]["name"] != '' && empty($attachments[$i]["id"])
 					)
 					&& !($attachments[$i]['type']=='APPLEDOUBLE' && $attachments[$i]['mime']== 'application/APPLEFILE')
@@ -794,7 +794,9 @@ try{
 						$response['attachments'][]=$attachment;
 						$index++;
 						//}elseif (eregi("inline",$attachments[$i]["disposition"]) && !empty($attachments[$i]["id"]))
-					}elseif (!empty($attachments[$i]["id"]))
+					}
+					
+					if (!empty($attachments[$i]["id"]))
 					{
 						//when an image has an id it belongs somewhere in the text we gathered above so replace the
 						//source id with the correct link to display the image.
