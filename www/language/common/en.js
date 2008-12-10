@@ -319,7 +319,6 @@ GO.lang.countries["BF"] = "Burkina Faso";
 GO.lang.countries["BI"] = "Burundi";
 GO.lang.countries["KH"] = "Cambodia";
 GO.lang.countries["CM"] = "Cameroon";
-
 GO.lang.countries["CA"] = "Canada";
 GO.lang.countries["CV"] = "Cape Verde";
 GO.lang.countries["KY"] = "Cayman Islands";
