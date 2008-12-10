@@ -399,7 +399,7 @@ class tasks extends db
 		
 		if(empty($show_inactive))
 		{
-			$now = time();
+			$now = mktime(0,0,0);
 			if($where)
 			{
 				$sql .= " AND ";
