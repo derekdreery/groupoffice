@@ -896,6 +896,13 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				});				
 			}, this);		
 		
+		this.monthGrid.on('showday', function(grid, date){
+			this.setDisplay({
+				displayType:'days',
+				days:1,
+				date: date
+				});
+		}, this);
 			
 		this.daysGrid.on("eventDblClick", this.onDblClick, this);
 		this.monthGrid.on("eventDblClick", this.onDblClick, this);
