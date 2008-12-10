@@ -45,23 +45,27 @@ GO.tasks.MainPanel = function(config){
 				
 	var showCompletedCheck = new Ext.form.Checkbox({		
 		boxLabel: GO.tasks.lang.showCompletedTasks,
-		hideLabel: true				
+		hideLabel: true,
+		checked:GO.tasks.showCompleted
 	});
 	
 	showCompletedCheck.on('check', function(cb, checked){		
-		this.gridPanel.store.baseParams['show_completed']=checked;
+		this.gridPanel.store.baseParams['show_completed']=checked? '1' : '0';
 		this.gridPanel.store.reload();
+		delete this.gridPanel.store.baseParams['show_completed'];
 	}, this);
 	
 	
 	var showInactiveCheck = new Ext.form.Checkbox({		
 		boxLabel: GO.tasks.lang.showInactiveTasks,
-		hideLabel: true				
+		hideLabel: true,
+		checked:GO.tasks.showInactive
 	});
 	
 	showInactiveCheck.on('check', function(cb, checked){		
-		this.gridPanel.store.baseParams['show_inactive']=checked;
+		this.gridPanel.store.baseParams['show_inactive']=checked? '1' : '0';
 		this.gridPanel.store.reload();
+		delete this.gridPanel.store.baseParams['show_inactive'];
 	}, this);
 	
 				

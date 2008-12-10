@@ -362,12 +362,12 @@ class tasks extends db
 		}
 
 		$where=false;
-		
-		if(!$show_completed)
+
+		if(empty($show_completed))
 		{
-			$where=true;
-			
+			$where=true;			
 			$sql .= ' WHERE completion_time=0';
+
 		}
 		
 
@@ -397,7 +397,7 @@ class tasks extends db
 			
 		}
 		
-		if(!$show_inactive)
+		if(empty($show_inactive))
 		{
 			$now = time();
 			if($where)
