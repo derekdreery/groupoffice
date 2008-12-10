@@ -25,7 +25,7 @@ GO.email.AttachmentContextMenu = function(config)
 					text: GO.lang.download,
 					cls: 'x-btn-text-icon',
 					handler: function(){						
-						this.emailClient.openAttachment(this.attachment, this.emailClient.messagePanel);
+						this.emailClient.openAttachment(this.attachment, this.emailClient.messagePanel, true);
 					},
 					scope: this
 				});
