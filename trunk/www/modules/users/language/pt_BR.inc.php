@@ -1,21 +1,21 @@
 <?php
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_language_file('users'));
-$lang['users']['name'] = 'Users';
-$lang['users']['description'] = 'Admin module; Managing system users.';
+$lang['users']['name'] = 'Usuários';
+$lang['users']['description'] = 'Módulo de administração; Administra usuários do sistema.';
 
-$lang['users']['deletePrimaryAdmin'] = 'You can\t delete the primary administrator';
-$lang['users']['deleteYourself'] = 'You can\'t delete yourself';
+$lang['users']['deletePrimaryAdmin'] = 'Você não pode apagar o usuário administrador';
+$lang['users']['deleteYourself'] = 'Você não pode apagar a si próprio';
 
-$link_type[8]=$us_user = 'User';
+$link_type[8]=$us_user = 'Usuário';
 
-$lang['users']['error_username']='You have invalid characters in the username';
-$lang['users']['error_username_exists']='Sorry, that username already exists';
-$lang['users']['error_email_exists']='Sorry, that e-mail address is already registered here.';
-$lang['users']['error_match_pass']='The passwords didn\'t match';
-$lang['users']['error_email']='You entered an invalid e-mail address';
+$lang['users']['error_username']='Você colocou caracteres inválidos no nome';
+$lang['users']['error_username_exists']='Desculpe, esse nome já existe';
+$lang['users']['error_email_exists']='Desculpe, esse e-mail já está registrado.';
+$lang['users']['error_match_pass']='Senha não informada';
+$lang['users']['error_email']='Você informou um endereço de e-mail inválido';
 
-$lang['users']['imported']='Imported %s users';
-$lang['users']['failed']='Failed';
+$lang['users']['imported']='Importados %s usuários';
+$lang['users']['failed']='Falhou';
 
-$lang['users']['incorrectFormat']='File was not in correct CSV format';
+$lang['users']['incorrectFormat']='Arquivo não tem o formato CSV correto';

@@ -11,7 +11,7 @@ $lang['email']['feedbackSMTPProblem'] = 'Houve um problema de comunicação com 
 $lang['email']['feedbackUnexpectedError'] = 'Houve um erro inesperado durante a elaboração do e-mail: ';
 $lang['email']['feedbackCreateFolderFailed'] = 'Falha ao criar a pasta';
 $lang['email']['feedbackSubscribeFolderFailed'] = 'Falha ao inscrever a pasta';
-$lang['email']['feedbackUnsubscribeFolderFailed'] = 'Failed ao desinscrever a pasta';
+$lang['email']['feedbackUnsubscribeFolderFailed'] = 'Falha ao desinscrever a pasta';
 $lang['email']['feedbackCannotConnect'] = 'Não pôde se conectar a %1$s na porta %3$s<br /><br />O servidor retornou: %2$s';
 $lang['email']['inbox'] = 'Entrada';
 

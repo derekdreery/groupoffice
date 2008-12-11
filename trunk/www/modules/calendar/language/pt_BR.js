@@ -1,9 +1,3 @@
-/**
- * Don't copy the next line into a translation
- */
-
-
-
 
 /**
  * Copy everything below for translations
@@ -26,7 +20,7 @@ GO.calendar.lang.oneDay = '1 Dia';
 GO.calendar.lang.fiveDays = '5 Dias';
 GO.calendar.lang.sevenDays = '7 Dias';
 GO.calendar.lang.month = 'Mês';
-GO.calendar.lang.recurringEvent = 'Recurring event';
+GO.calendar.lang.recurringEvent = 'Evento recorrente';
 GO.calendar.lang.deleteRecurringEvent = 'Você quer apagar um evento simples ou toda a série de eventos?';
 GO.calendar.lang.singleOccurence = 'Evento simples';
 GO.calendar.lang.entireSeries = 'Série de eventos';
@@ -63,4 +57,4 @@ GO.calendar.lang.selectCalendar = 'Selecione calendário';
 GO.calendar.lang.selectCalendarForAppointment = 'Selecione o calendário para colocar esse compromisso:';
 GO.calendar.lang.closeWindow = 'O compromisso foi aceito e agendado. Você pode fechar essa janela.';
 GO.calendar.lang.list='Lista';
-GO.calendar.lang.editRecurringEvent='você deseja editar este evento ou a série de eventos?';
+GO.calendar.lang.editRecurringEvent='Você deseja editar este evento ou a série de eventos?';

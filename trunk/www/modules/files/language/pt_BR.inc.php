@@ -18,7 +18,7 @@ $lang['files']['general']='Geral';
 
 
 $lang['files']['folder_modified_subject']='Mudar para pasta do Group-Office';
-$lang['files']['folder_modified_body']='Sua solicitação de mudançao foi feita para:
+$lang['files']['folder_modified_body']='Sua solicitação de mudança foi feita para:
 
 %s
 
