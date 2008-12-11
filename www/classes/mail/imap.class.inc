@@ -1350,7 +1350,7 @@ class imap{
 	function expunge()
 	{
 		imap_expunge($this->conn);
-		debug('Expunged');
+		//debug('Expunged');
 	}
 
 	/**
