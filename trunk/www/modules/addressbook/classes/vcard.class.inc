@@ -892,17 +892,19 @@ class vcard_property {
 				case "email" :
 					$this->name = "EMAIL";
 					$this->parm_types[0] = "INTERNET";
-					$this->parm_types[1] = "PREF";
+					$this->parm_types[1] = "PREF";					
 					$this->values[0] = $value;
 					break;
 				case "email2":
 					$this->name = "EMAIL";
 					$this->parm_types[0] = "INTERNET";
+					$this->parm_types[1] = "WORK";
 					$this->values[0] = $value;
 				break;
 				case "email3":
 					$this->name = "EMAIL";
 					$this->parm_types[0] = "INTERNET";
+					$this->parm_types[1] = "HOME";
 					$this->values[0] = $value;
 				break;
 				case "function" :

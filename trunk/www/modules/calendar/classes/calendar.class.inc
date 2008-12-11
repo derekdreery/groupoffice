@@ -750,10 +750,10 @@ class calendar extends db
 			$event['mtime']  =  $event['ctime'];
 		}
 
-		/*if(!isset($event['background']) || $event['background'] == '')
-		 {
-			$event['background']  =  'FFFFCC';
-			}*/
+		if(!isset($event['background']) || $event['background'] == '')
+		{
+			$event['background']  =  'EBF1E2';
+		}
 
 
 		if(!isset($event['status']))
