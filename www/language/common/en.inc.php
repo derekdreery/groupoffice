@@ -118,9 +118,9 @@ $lang['common']['default']='Default';
 $lang['common']['description']='Description';
 $lang['common']['date']='Date';
 
-$lang['common']['default_salutation']['M']='Dear sir';
-$lang['common']['default_salutation']['F']='Dear madame';
-$lang['common']['default_salutation']['unknown']='Dear sir/madame';
+$lang['common']['default_salutation']['M']='Dear Mr';
+$lang['common']['default_salutation']['F']='Dear Ms';
+$lang['common']['default_salutation']['unknown']='Dear Mr / Ms';
 
 $lang['common']['mins'] = 'Mins';
 $lang['common']['hour'] = 'hour';
