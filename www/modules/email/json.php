@@ -679,13 +679,12 @@ try{
 				 */
 				$html_alternative=false;
 				for($i=0;$i<count($parts);$i++)
-				{
+				{					
 					if(eregi('html', $parts[$i]['mime']) && (strtolower($parts[$i]['type'])=='alternative' || strtolower($parts[$i]['type'])=='related'))
 					{
-						$html_alternative=true;
+						$html_alternative=true;						
 					} 
 				}
-
 
 				$response['body']='';
 
@@ -714,23 +713,20 @@ try{
 				{
 					$block=false;
 				}
-				
-				
+	
 				while($part = array_shift($parts))
 				{
-					$mime = isset($part["mime"]) && $part_count>1 ? strtolower($part["mime"]) : $default_mime;
+					$mime = isset($part["mime"]) /*&& $part_count>1*/ ? strtolower($part["mime"]) : $default_mime;
 					
 					//some clients just send html
 					if($mime=='html')
 					{
 						$mime = 'text/html';
 					}
-					
 
-					if (empty($response['body']) && ($part["name"] == '' || eregi('inline', $part["disposition"]))  && (eregi('html', $mime) ||
-					(eregi('plain', $mime) && (!$html_alternative || strtolower($part['type'])!='alternative')) ||
-					$mime == "text/enriched" ||
-					$mime == "unknown/unknown"))
+					if (empty($response['body']) && 
+						(empty($part["name"]) || eregi('inline', $part["disposition"])) && 
+						(eregi('html', $mime) ||(eregi('plain', $mime) && (!$html_alternative || strtolower($part['type'])!='alternative')) || $mime == "text/enriched" || $mime == "unknown/unknown"))
 					{
 						$part_body = $imap->view_part($uid, $part["number"], $part["transfer"], $part["charset"]);
 
@@ -738,7 +734,6 @@ try{
 						{
 							case 'unknown/unknown':
 							case 'text/plain':
-
 								$part_body = String::text_to_html($part_body);
 
 								break;
@@ -1001,7 +996,7 @@ try{
 																$usage .= '/'.Number::format_size($server_response['data']['quota']*1024).' ('.$percentage.'%)';
 															}	
 														}*/
-														
+				
 														$quota = $imap->get_quota();
 														if(isset($quota['usage']))
 														{

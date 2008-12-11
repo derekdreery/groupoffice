@@ -598,6 +598,7 @@ class imap{
 			if($fetchstructure)
 			{
 				$structure = imap_fetchstructure($this->conn, $this->message['uid'], FT_UID);
+				//debug($structure);
 				$this->get_parts($structure);
 			}
 
@@ -820,7 +821,7 @@ class imap{
 	 */
 	function part_is_attachment($part)
 	{
-		return (eregi("ATTACHMENT", $part["disposition"]) || ($part["name"] != '' && empty($attachments[$i]["id"]))
+		return (eregi("ATTACHMENT", $part["disposition"]) || ($part["name"] != '' && empty($part["id"]))
 		&& 
 		!($part['type']=='APPLEDOUBLE' && $part['mime']== 'application/APPLEFILE'));
 	}
@@ -1043,6 +1044,7 @@ class imap{
 		$charset='UTF-8';
 
 		$str = imap_fetchbody($this->conn, $uid, $part_no, FT_UID);
+
 		if ($transfer == 'BASE64')
 		{
 			$str = imap_base64($str);
