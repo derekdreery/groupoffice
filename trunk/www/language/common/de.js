@@ -41,10 +41,10 @@ GO.lang.strOpenOffice = 'OpenOffice.org Dokument';
 
 GO.lang.strDefault = 'Standard';
 GO.lang.strUsername = 'Benutzername';
-GO.lang.strPassword = 'Passwordt';
+GO.lang.strPassword = 'Passwort';
 
 GO.lang.strFirstName = 'Vorname';
-GO.lang.strMiddleName = 'Zwischenname';
+GO.lang.strMiddleName = '2. Vorname';
 GO.lang.strNo = 'Nr.';
 GO.lang.strLastName = 'Nachname';
 GO.lang.strTitle = 'Titel';
@@ -68,14 +68,14 @@ GO.lang.strDepartment = 'Abteilung';
 GO.lang.strFunction = 'Funktion';
 GO.lang.strSalutation = 'Anrede';
 GO.lang.strComment = 'Kommentar';
-GO.lang.strWorkAddress = 'Strasse (Arbeit)';
-GO.lang.strWorkAddressNo = 'Hausnr. (Arbeit)';
-GO.lang.strWorkZip = 'PLZ (Arbeit)';
-GO.lang.strWorkCity = 'Stadt (Arbeit)';
-GO.lang.strWorkState = 'Bundesland (Arbeit)';
-GO.lang.strWorkCountry = 'Land (Arbeit)',	
-GO.lang.strWorkPhone = 'Telefon (Arbeit)';
-GO.lang.strWorkFax = 'Telefax (Arbeit)';
+GO.lang.strWorkAddress = 'Strasse (dienstl.)';
+GO.lang.strWorkAddressNo = 'Hausnr. (dienstl.)';
+GO.lang.strWorkZip = 'PLZ (dienstl.)';
+GO.lang.strWorkCity = 'Stadt (dienstl.)';
+GO.lang.strWorkState = 'Bundesland (dienstl.)';
+GO.lang.strWorkCountry = 'Land (dienstl.)',	
+GO.lang.strWorkPhone = 'Telefon (dienstl.)';
+GO.lang.strWorkFax = 'Telefax (dienstl.)';
 GO.lang.strPostAddress = 'Strasse';
 GO.lang.strPostAddressNo = 'Hausnr.';
 GO.lang.strPostCity = 'Stadt';
@@ -83,7 +83,7 @@ GO.lang.strPostState = 'Bundesland';
 GO.lang.strPostCountry = 'Land';
 GO.lang.strPostZip = 'PLZ';
 
-GO.lang.locations = 'Locations';
+GO.lang.locations = 'Standorte';
 GO.lang.folder = 'Ordner';
 GO.lang.folders = 'Ordner';
 
@@ -151,7 +151,7 @@ GO.lang.upload = 'Hochladen';
 GO.lang.download = 'Herunterladen';
 GO.lang.uploadFiles = 'Dateien hochladen';
 
-GO.lang.displayingItems = 'Element anzeigen {0} - {1} of {2}';
+GO.lang.displayingItems = 'Element anzeigen {0} - {1} von {2}';
 GO.lang.strNoItems = 'Keine Elemente zum anzeigen';
 
 GO.lang.strLinkItems = 'Suche nach Elementen für Verlinkung';
@@ -174,10 +174,10 @@ GO.lang.noItemSelected= 'Sie haben kein Element ausgewählt.';
 GO.lang.strDeleteSelectedItems= 'Sind Sie sicher, dass Sie {count} Elemente löschen möchten?';
 GO.lang.strDeleteSelectedItem= 'Sind Sie sicher, dass Sie das ausgewählte Element löschen möchten?';
 
-GO.lang.strNoWritePermissions = 'Sie haben keine Erlaubnis um das Element zu bearbeiten.';
+GO.lang.strNoWritePermissions = 'Sie haben keine Erlaubnis das Element zu bearbeiten.';
 
 GO.lang.strUnauthorized= 'Nicht autorisiert';
-GO.lang.strUnauthorizedText= 'Sie haben nicht die Erlaubnis um diese Aktion auszuführen';
+GO.lang.strUnauthorizedText= 'Sie haben nicht die Erlaubnis diese Aktion auszuführen';
 GO.lang.strReadPermissions = 'Leseberechtigungen';
 GO.lang.strWritePermissions = 'Schreibberechtigungen';
 GO.lang.strPermissions = 'Berechtigungen';
@@ -218,7 +218,7 @@ GO.lang.monthsByDay = 'Monate nach Wochentag';
 
 GO.lang.strSelectFiles='Dateien wählen';
 GO.lang.strFiles='Dateien';
-GO.lang.strSubject='Subkect';
+GO.lang.strSubject='Betreff';
 GO.lang.strLocation='Ort';
 GO.lang.strStart='Start';
 GO.lang.strEnd='Ende';
@@ -239,25 +239,25 @@ GO.lang.customer = 'Kunde';
 
 GO.lang.strNoCountrySelected='Kein Land ausgewählt';
 GO.lang.menu = 'Menü';
-GO.lang.root = 'Root';
+GO.lang.root = 'Wurzel';
 GO.lang.left = 'Links';
 GO.lang.right = 'Rechts';
 
 GO.lang.noFilesModule = 'Für diese Funktion wird das Dateimodul benötigt';
 
 
-GO.lang.remindPassword='Meine Login Daten auf diesem Computer speichern';
+GO.lang.remindPassword='Login Daten auf diesem Computer merken';
 
 GO.lang.reminders = 'Erinnerungen';
 GO.lang.dismiss='Ablehnen';
-GO.lang.snooze='Snooze';
+GO.lang.snooze='Schlummern';
 
 GO.lang.strMax = 'Maximum';
 
 GO.lang.settings='Einstellungen';
 
-GO.lang.latestLinks='Latest links'
-GO.lang.cmdBrowseLinks = 'Browse links';
+GO.lang.latestLinks='Letzte Links'
+GO.lang.cmdBrowseLinks = 'Links durchsuchen';
 
 
 
