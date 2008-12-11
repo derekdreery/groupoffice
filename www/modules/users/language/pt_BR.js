@@ -1,90 +1,84 @@
 /**
- * Don't copy the next lines into a translation
- */
-
-
-
-/**
  * Copy everything below for translations
  */
 
-GO.users.lang.cmdCheckColumnRead= 'Read';
-GO.users.lang.cmdCheckColumnWrite= 'Write';
-GO.users.lang.cmdHeaderColumnName= 'Module name';
-GO.users.lang.cmdHeaderGridUserHasAccess = 'User has access to';
-GO.users.lang.userIsMemberOf = 'User is member of';
-GO.users.lang.userVisibleTo = 'User is visible to';
+GO.users.lang.cmdCheckColumnRead= 'Ler';
+GO.users.lang.cmdCheckColumnWrite= 'Gravar';
+GO.users.lang.cmdHeaderColumnName= 'Nome do módulo';
+GO.users.lang.cmdHeaderGridUserHasAccess = 'Usuário tem acesso a';
+GO.users.lang.userIsMemberOf = 'Usuário é membro de';
+GO.users.lang.userVisibleTo = 'Usuário é visível para';
 
-GO.users.lang.cmdPanelPersonal = 'Personal';
-GO.users.lang.cmdPanelPassword= 'Password';
-GO.users.lang.cmdPanelCompany = 'Company';
-GO.users.lang.cmdPanelPermissions = 'Permissions';
+GO.users.lang.cmdPanelPersonal = 'Pessoal';
+GO.users.lang.cmdPanelPassword= 'Senha';
+GO.users.lang.cmdPanelCompany = 'Empresa';
+GO.users.lang.cmdPanelPermissions = 'Permissão';
 GO.users.lang.cmdPanelLogin = 'Login';
-GO.users.lang.cmdPanelLookFeel = 'Look & Feel';
-GO.users.lang.cmdPanelSettings = 'Settings';
-GO.users.lang.cmdPanelEnabledMail = 'Email for new enabled users';
-GO.users.lang.cmdPanelDisabledMail = 'Email for new disabled users';
+GO.users.lang.cmdPanelLookFeel = 'Aparência';
+GO.users.lang.cmdPanelSettings = 'Configurações';
+GO.users.lang.cmdPanelEnabledMail = 'E-mail para novos usuários habilitados';
+GO.users.lang.cmdPanelDisabledMail = 'E-mail para novos usuários desabilitados';
 	
-GO.users.lang.cmdFieldSetPersonal = 'Personal';	
-GO.users.lang.cmdUserWindowTitle= 'Edit User';
-GO.users.lang.cmdNotificationWindowTitle= 'Edit user invitation email';
-GO.users.lang.cmdMaskSaving= 'Saving';
+GO.users.lang.cmdFieldSetPersonal = 'Pessoal';	
+GO.users.lang.cmdUserWindowTitle= 'Editar usuário';
+GO.users.lang.cmdNotificationWindowTitle= 'Editar e-mail convite';
+GO.users.lang.cmdMaskSaving= 'Salvando';
 	
-GO.users.lang.cmdFormLabelSubject = 'Subject';
-GO.users.lang.cmdFormLabelUsername = 'Username';
-GO.users.lang.cmdFormLabelName = 'Name';
-GO.users.lang.cmdFormLabelPassword = 'Password';
-GO.users.lang.cmdFormLabelConfirm = 'Confirm';
-GO.users.lang.cmdBoxLabelEnabled = 'Enabled';
+GO.users.lang.cmdFormLabelSubject = 'Assunto';
+GO.users.lang.cmdFormLabelUsername = 'Nome usuário';
+GO.users.lang.cmdFormLabelName = 'Nome';
+GO.users.lang.cmdFormLabelPassword = 'Senha';
+GO.users.lang.cmdFormLabelConfirm = 'Confirmar';
+GO.users.lang.cmdBoxLabelEnabled = 'Habilitar';
 	
 GO.users.lang.cmdFormLabelHomepage = 'Homepage';
-GO.users.lang.cmdFormLabelRegistrationTime = 'Registration time';
-GO.users.lang.cmdFormLabelLastLogin = 'Last Login';
-GO.users.lang.cmdFormLabelTotalLogins = 'Total Logins';
-GO.users.lang.numberOfLogins = 'Number of logins';
-GO.users.lang.cmdFormLabelTheme = 'Theme';
-GO.users.lang.cmdFormLabelStartModule = 'Start in module';
-GO.users.lang.cmdFormLabelMaximunRows = 'Maximum number of rows in lists';
-GO.users.lang.cmdFormLabelSortNamesBy = 'Last name';
-GO.users.lang.cmdFormLabelLanguage = 'Language';
-GO.users.lang.cmdFormLabelTimezone = 'Timezone';
-GO.users.lang.cmdFormLabelAdjustDaylight = 'Automatically adjust time to Daylight Savings Time';
-GO.users.lang.cmdFormLabelDateFormat = 'Date Format';
-GO.users.lang.cmdFormLabelDateSeperator = 'Date Seperator';
-GO.users.lang.timeFormat = 'Time Format';
-GO.users.lang.cmdFormLabelFirstWeekday = 'First weekday';
-GO.users.lang.cmdFormLabelThousandSeperator = 'Thousand Seperator';
-GO.users.lang.cmdFormLabelDecimalSeperator = 'Decimal Seperator';
-GO.users.lang.cmdFormLabelCurrency = 'Currency'
+GO.users.lang.cmdFormLabelRegistrationTime = 'Hora de registro';
+GO.users.lang.cmdFormLabelLastLogin = 'Último Login';
+GO.users.lang.cmdFormLabelTotalLogins = 'Total de Logins';
+GO.users.lang.numberOfLogins = 'Número de logins';
+GO.users.lang.cmdFormLabelTheme = 'Thema';
+GO.users.lang.cmdFormLabelStartModule = 'Inicia no módulo';
+GO.users.lang.cmdFormLabelMaximunRows = 'Número máximo de linha na lista';
+GO.users.lang.cmdFormLabelSortNamesBy = 'Último nome';
+GO.users.lang.cmdFormLabelLanguage = 'Língua';
+GO.users.lang.cmdFormLabelTimezone = 'Fuzo horário';
+GO.users.lang.cmdFormLabelAdjustDaylight = 'Ajusta hora automaticamente ao horário de verão';
+GO.users.lang.cmdFormLabelDateFormat = 'Formato da data';
+GO.users.lang.cmdFormLabelDateSeperator = 'Seperador da data';
+GO.users.lang.timeFormat = 'Formato da hora';
+GO.users.lang.cmdFormLabelFirstWeekday = 'Primeiro dia da semana';
+GO.users.lang.cmdFormLabelThousandSeperator = 'Seperador de milhar';
+GO.users.lang.cmdFormLabelDecimalSeperator = 'Seperador de decimal';
+GO.users.lang.cmdFormLabelCurrency = 'Moeda'
 
-GO.users.lang.account = 'Account';
-GO.users.lang.confirmPassword = 'Confirm password';
-GO.users.lang.companyProfile = 'Company profile';
-GO.users.lang.loginInfo = 'Login information';
-GO.users.lang.changePassword = 'Change password';
-GO.users.lang.currentPassword = 'Current password';
-GO.users.lang.newPassword = 'New password';
-GO.users.lang.confirmPassword = 'Confirm password';
-GO.users.lang.moduleAccess = 'Module access';
-GO.users.lang.groupMembership = 'Group membership';
-GO.users.lang.profile = 'Personal profile';
-GO.users.lang.settings = 'Personal settings';
-GO.users.lang.dmy = 'Day-Month-Year';
-GO.users.lang.mdy = 'Month-Day-Year';
-GO.users.lang.jmd = 'Year-Month-Day';
-GO.users.lang.fullhourformat = '24 hour format';
-GO.users.lang.halfhourformat = '12 hour format';
-GO.users.lang.sunday = 'Sunday';
-GO.users.lang.monday = 'Monday';
-GO.users.lang.regionalSettings = 'Regional settings';
-GO.users.lang.userSettings = 'User settings';
+GO.users.lang.account = 'Conta';
+GO.users.lang.confirmPassword = 'Confirme senha';
+GO.users.lang.companyProfile = 'Perfil da empresa';
+GO.users.lang.loginInfo = 'Informação de login';
+GO.users.lang.changePassword = 'Mudar senha';
+GO.users.lang.currentPassword = 'Senha atual';
+GO.users.lang.newPassword = 'Nova senha';
+GO.users.lang.confirmPassword = 'Confirme senha';
+GO.users.lang.moduleAccess = 'Módule de acesso';
+GO.users.lang.groupMembership = 'Membro do grupo';
+GO.users.lang.profile = 'Perfil pessoal';
+GO.users.lang.settings = 'Configurações pessoais';
+GO.users.lang.dmy = 'Dia-Mês-Ano';
+GO.users.lang.mdy = 'Mês-Dia-Ano';
+GO.users.lang.jmd = 'Ano-Mês-Dia';
+GO.users.lang.fullhourformat = '24 horas';
+GO.users.lang.halfhourformat = '12 horas';
+GO.users.lang.sunday = 'Domingo';
+GO.users.lang.monday = 'Segunda';
+GO.users.lang.regionalSettings = 'Configurações regionais';
+GO.users.lang.userSettings = 'Configurações do usuário';
 
-GO.users.lang.maxUsersReached='The maximum number of users has been reached. Go to the service tab to extend your maximum number of users.';
+GO.users.lang.maxUsersReached='O número máximo de usuários foi atingido. Vá na aba serviços para aumentar o número máximo de usuários.';
 
-GO.users.lang.group='Group';
+GO.users.lang.group='Grupo';
 
-GO.users.lang.muteSound='Mute sound';
+GO.users.lang.muteSound='Sem som';
 
-GO.users.lang.downloadSampleCSV='Download sample CSV';
+GO.users.lang.downloadSampleCSV='Baixar CSV exemplo';
 
-GO.users.lang.importText='You can import users using a CSV file. To know how the CSV file should be formatted, download the sample file.<br />The first line must contain the column names. The following fields are required for each user:<br /><br />username, password, first_name, last_name, email';
+GO.users.lang.importText='Você pode importar usuários usando um arquivo CSV. Para conhecer o formato, baixe o arquivo exemplo.<br />A primeira linha deve conter o nome das colunas. Os campos seguintes são exigências para cada usuário:<br /><br />nome, senha, primeiro_nome, último_nome, e-mail';

@@ -29,7 +29,7 @@ insertdate_desc:"Insira data",
 inserttime_desc:"Insira hora",
 months_long:"Janeiro,Fevereiro,Março,Abril,Maio,Junho,Julho,Agosto,Setembro,Outubro,Novembro,Dezembro",
 months_short:"Jan,Fev,Mar,Abr,Mai,Jun,Jul,Ago,Set,Out,Nov,Dez",
-day_long:"Domingo,Segunda,Terça,Quarta,Quinta,Sexta,Sábado,Domingo",
+day_long:"Domingo,Segunda,Terça,Quarta,Quinta,Sexta,Sabado,Domingo",
 day_short:"Dom,Seg,Ter,Qua,Qui,Sex,Sab,Dom"
 },
 print:{

@@ -14,29 +14,29 @@
 
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_language_file('addressbook'));
-$lang['addressbook']['name'] = 'Addressbook';
-$lang['addressbook']['description'] = 'Module to manage all contacts.';
+$lang['addressbook']['name'] = 'Contatos';
+$lang['addressbook']['description'] = 'Módulo para administrar todos os contatos.';
 
 
 
-$lang['addressbook']['allAddressbooks'] = 'All Addressbooks';
-$lang['common']['addressbookAlreadyExists'] = 'The addressbook you are trying to create already exists';
-$lang['addressbook']['notIncluded'] = 'Do not import';
+$lang['addressbook']['allAddressbooks'] = 'Todos os contatos';
+$lang['common']['addressbookAlreadyExists'] = 'O contato que você está criando já existe';
+$lang['addressbook']['notIncluded'] = 'Não importe';
 
-$lang['addressbook']['comment'] = 'Comment';
-$lang['addressbook']['bankNo'] = 'Bank number'; 
-$lang['addressbook']['vatNo'] = 'VAT number';
-$lang['addressbook']['contactsGroup'] = 'Group';
+$lang['addressbook']['comment'] = 'Comentário';
+$lang['addressbook']['bankNo'] = 'Nro. banco'; 
+$lang['addressbook']['vatNo'] = 'Nro. VAT';
+$lang['addressbook']['contactsGroup'] = 'Grupo';
 
-$lang['link_type'][2]=$lang['addressbook']['contact'] = 'Contact';
-$lang['link_type'][3]=$lang['addressbook']['company'] = 'Company';
+$lang['link_type'][2]=$lang['addressbook']['contact'] = 'Contato';
+$lang['link_type'][3]=$lang['addressbook']['company'] = 'Empresa';
 
-$lang['addressbook']['customers'] = 'Customers';
-$lang['addressbook']['suppliers'] = 'Suppliers';
-$lang['addressbook']['prospects'] = 'Prospects';
+$lang['addressbook']['customers'] = 'Clientes';
+$lang['addressbook']['suppliers'] = 'Fornecedores';
+$lang['addressbook']['prospects'] = 'Prospectos';
 
 
-$lang['addressbook']['contacts'] = 'Contacts';
-$lang['addressbook']['companies'] = 'Companies';
+$lang['addressbook']['contacts'] = 'Contatos';
+$lang['addressbook']['companies'] = 'Empresas';
 
 ?>

@@ -136,7 +136,7 @@ $lang['common']['group_internal']='Internos';
 
 $lang['common']['admin']='Administrador';
 
-$lang['common']['beginning']='Saldações';
+$lang['common']['beginning']='Saudações';
 
 $lang['common']['max_emails_reached']= "O número máximo de e-mail para o servidor SMTP %s de %s por dia foi atingido.";
 $lang['common']['usage_stats']='Uso de dico por %s';

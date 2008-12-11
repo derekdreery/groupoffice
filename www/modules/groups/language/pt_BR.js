@@ -2,7 +2,6 @@
  * Copy everything below for translations
  */
 
-
 GO.groups.lang.group = 'Grupo';
 GO.groups.lang.groups = 'Grupos';
 GO.groups.lang.owner = 'Dono';
