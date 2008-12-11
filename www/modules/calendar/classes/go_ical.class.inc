@@ -94,7 +94,7 @@ class go_ical extends calendar
 			//$name_part .= ";ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:=\n";
 			$name_part .= ";ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:";
 			//$qp_value_part = ' '.str_replace("\n", "\n ", $qp_value_part);
-			$qp_value_part = str_replace('=0A', "=0D=0A", $qp_value_part)."\n";
+			//$qp_value_part = str_replace('=0A', "=0D=0A", $qp_value_part)."\n";
 
 			return explode("\n", $name_part.$qp_value_part);
 		}else
@@ -145,12 +145,12 @@ class go_ical extends calendar
 		{
 			$line = "DTSTART:".date($this->datetime_format, $event['start_time']);
 			$lines[] = $line;
-			
+				
 			//if($event['all_day_event']=='0')
 			//{
-				$line = "DTEND:";
-				$line .= date($this->datetime_format, $event['end_time']);
-				$lines[] = $line;
+			$line = "DTEND:";
+			$line .= date($this->datetime_format, $event['end_time']);
+			$lines[] = $line;
 			//}
 
 		}else
@@ -194,7 +194,7 @@ class go_ical extends calendar
 
 		if(!empty($event['rrule']))
 		{
-			
+				
 			if($this->version != '1.0')
 			{
 					
@@ -238,9 +238,9 @@ class go_ical extends calendar
 				if(isset($rrule['BYDAY']))
 				{
 					$days =Date::byday_to_days($rrule['BYDAY']);
-					
+						
 					$days = Date::shift_days_to_local($days, date('G', $event['start_time']), Date::get_timezone_offset($event['start_time']));
-					
+						
 				}
 
 				switch($rrule['FREQ'])
@@ -430,8 +430,38 @@ class go_ical extends calendar
 		$lines[]= "DTSTAMP:".date($this->datetime_format, $event['ctime']);
 		$lines[] = "END:VEVENT";
 
-		return implode("\n", $lines)."\n";
+		$vevent = '';
+		foreach ($lines as $line) {
+			$line_parts = array();
+			while(strlen($line)>76)
+			{
+				$test = substr($line,0,76);
+
+				for($i=strlen($test)-1;$i>=0;$i--)
+				{
+					$char=$test[$i];
+					if($char==' ' || $char==';' || $char==':' || $char=='=')
+					{
+						$line_parts[] = substr($line, 0, $i+1);
+						$line = substr($line, $i+1);
+						break;
+					}
+				}
+			}
+			$line_parts[] = $line;
+
+			for($i=0;$i<count($line_parts);$i++)
+			{
+				if(!empty($line_parts[$i]))
+				{
+					if($i>0)
+					{
+						$vevent .= chr(32);
+					}
+					$vevent .= $line_parts[$i]."\r\n";
+				}
+			}
+		}
+		return $vevent;
 	}
-
-
 }

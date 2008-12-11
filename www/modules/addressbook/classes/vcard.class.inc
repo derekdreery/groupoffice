@@ -545,7 +545,7 @@ class vcard extends addressbook {
 		{
 			//$name_part .= ";ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:=\n";
 			$name_part .= ";ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:";
-			$qp_value_part = str_replace('=0A', '=0D=0A', $qp_value_part);
+			//$qp_value_part = str_replace('=0A', '=0D=0A', $qp_value_part);
 			
 			return explode("\n", $name_part.$qp_value_part);
 		}else
