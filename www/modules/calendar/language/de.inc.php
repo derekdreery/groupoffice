@@ -25,7 +25,7 @@ $lang['calendar']['decline']='Ablehnen';
 
 $lang['calendar']['bad_event']='Der Termin ist nicht mehr vorhanden';
 
-$lang['calendar']['subject']='Subjekt';
+$lang['calendar']['subject']='Betreff';
 $lang['calendar']['status']='Status';
 
 

@@ -6,9 +6,9 @@ $lang['common']['htmldirection']= 'ltr';
 
 $lang['common']['errorsInForm'] = 'Es sind Fehler im Formular, bitte korrigieren Sie diese und versuchen es erneut.';
 
-$lang['common']['loadingCore']= 'Basissystemn wird geladen';
+$lang['common']['loadingCore']= 'Basissystem wird geladen';
 $lang['common']['loadingLogin'] = 'Logindialog wird geladen';
-$lang['common']['renderInterface']='Rendering interface';
+$lang['common']['renderInterface'] = 'Oberfläche wird aufgebaut';
 $lang['common']['loadingModule'] = 'Module werden geladen';
 
 $lang['common']['loggedInAs'] = "Eingeloggt als ";
@@ -30,7 +30,7 @@ $lang['common']['missingField'] = 'Sie haben nicht alle benötigten Felder ausge
 $lang['common']['salutation']='Anrede';
 $lang['common']['firstName'] = 'Vorname';
 $lang['common']['lastName'] = 'Nachname';
-$lang['common']['middleName'] = 'Zwischenname';
+$lang['common']['middleName'] = '2. Vorname';
 $lang['common']['sirMadam']['M'] = 'Herr';
 $lang['common']['sirMadam']['F'] = 'Frau';
 $lang['common']['initials'] = 'Initialen';
@@ -40,15 +40,15 @@ $lang['common']['sexes']['M'] = 'männlich';
 $lang['common']['sexes']['F'] = 'weiblich';
 $lang['common']['title'] = 'Titel';
 $lang['common']['addressNo'] = 'Hausnr.';
-$lang['common']['workAddressNo'] = 'Hausnr. (Arbeit)';
+$lang['common']['workAddressNo'] = 'Hausnr. (dienstl.)';
 $lang['common']['postAddress'] = 'Strasse';
 $lang['common']['postAddressNo'] = 'Hausnr.';
 $lang['common']['postCity'] = 'Stadt';
 $lang['common']['postState'] = 'Bundesland';
 $lang['common']['postCountry'] = 'Land';
 $lang['common']['postZip'] = 'PLZ';
-$lang['common']['visitAddress'] = 'Visit address';
-$lang['common']['postAddress'] = 'Post address';
+$lang['common']['visitAddress'] = 'Besucheranschrift';
+$lang['common']['postAddress'] = 'Postanschrift';
 $lang['common']['name'] = 'Name';
 $lang['common']['user'] = 'Benutzer';
 $lang['common']['username'] = 'Benutzername';
@@ -61,7 +61,7 @@ $lang['common']['zip'] = 'PLZ';
 $lang['common']['address'] = 'Strasse';
 $lang['common']['email'] = 'E-Mail';
 $lang['common']['phone'] = 'Telefon';
-$lang['common']['workphone'] = 'Telefon Arbeit';
+$lang['common']['workphone'] = 'Telefon dienstl.';
 $lang['common']['cellular'] = 'Mobiltelefon';
 $lang['common']['company'] = 'Firma';
 $lang['common']['department'] = 'Abteilung';
@@ -71,16 +71,16 @@ $lang['common']['answer'] = 'Antwort';
 $lang['common']['fax'] = 'Telefax';
 $lang['common']['workFax'] = 'Telefax Arbeit';
 $lang['common']['homepage'] = 'Website';
-$lang['common']['workAddress'] = 'Adresse Arbeit';
-$lang['common']['workZip'] = 'PLZ Arbeit';
-$lang['common']['workCountry'] = 'Land Arbeit';
-$lang['common']['workState'] = 'Bundesland Arbeit';
-$lang['common']['workCity'] = 'Stadt Arbeit';
+$lang['common']['workAddress'] = 'Strasse dienstl.';
+$lang['common']['workZip'] = 'PLZ dienstl.';
+$lang['common']['workCountry'] = 'Land dienstl.';
+$lang['common']['workState'] = 'Bundesland dienstl.';
+$lang['common']['workCity'] = 'Stadt dienstl.';
 $lang['common']['today'] = 'Heute';
 $lang['common']['tomorrow'] = 'Morgen';
 
 $lang['common']['SearchAll'] = 'Alle Felder';
-$lang['common']['total'] = 'total';
+$lang['common']['total'] = 'Summe';
 $lang['common']['results'] = 'Ergebnisse';
 
 
@@ -114,7 +114,7 @@ $lang['common']['full_days'][4] = "Donnerstag";
 $lang['common']['full_days'][5]= "Freitag";
 $lang['common']['full_days'][6] = "Samstag";
 
-$lang['common']['default']='Default';
+$lang['common']['default']='Standard';
 $lang['common']['description']='Beschreibung';
 $lang['common']['date']='Datum';
 
@@ -138,7 +138,7 @@ $lang['common']['admin']='Administrator';
 
 $lang['common']['beginning']='Anrede';
 
-$lang['common']['max_emails_reached']= "Die maximale E-Mail-Anzahl pro Tag für SMTP-Host %s von %s sind erreicht.";
+$lang['common']['max_emails_reached']= "Die maximale E-Mail-Anzahl pro Tag für SSMTP-Host %s von %s sind erreicht.";
 $lang['common']['usage_stats']='Festplattenspeicher Nutzung pro %s';
 $lang['common']['usage_text']='Diese Gruppe-Office-Installation verwendet';
 
@@ -158,6 +158,6 @@ Benutzername: %s<br />
 Passwort: %s';
 
 $lang['common']['lost_password_error']='Die angegebende E-Mail-Adresse konnte nicht gefunden werden.';
-$lang['common']['lost_password_success']='An Ihre E-Mail-Adresse wurde ein neues Passwort versandt.';
+$lang['common']['lost_password_success']='An Ihre E-Mail-Adresse wurde ein neues Passwort gesendet.';
 
 $lang['common']['postAddressHead']= 'Adresse';
