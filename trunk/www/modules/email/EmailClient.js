@@ -395,7 +395,7 @@ GO.email.EmailClient = function(config){
 	this.treePanel.on('click', function(node)	{		
 		if(node.attributes.folder_id>0)
 		{		
-			var usage=false;
+			var usage='';
 			var cnode = node;
 			while(cnode.parentNode && usage===false)
 			{
