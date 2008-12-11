@@ -93,7 +93,7 @@ class export_tasks
 			//$name_part .= ";ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:=\n";
 			$name_part .= ";ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:";
 			//$qp_value_part = ' '.str_replace("\n", "\n ", $qp_value_part);
-			$qp_value_part = str_replace('=0A', "=0D=0A", $qp_value_part)."\n";
+			//$qp_value_part = str_replace('=0A', "=0D=0A", $qp_value_part)."\n";
 
 			return explode("\n", $name_part.$qp_value_part);
 		}else
@@ -395,7 +395,41 @@ class export_tasks
 		$lines[]= "DTSTAMP:".date($this->datetime_format, $task['ctime']);
 		$lines[] = "END:VTODO";
 
-		return implode("\n", $lines)."\n";
+		//return implode("\n", $lines)."\n";
+		
+		$vtodo = '';
+		foreach ($lines as $line) {
+			$line_parts = array();
+			while(strlen($line)>76)
+			{
+				$test = substr($line,0,76);
+
+				for($i=strlen($test)-1;$i>=0;$i--)
+				{
+					$char=$test[$i];
+					if($char==' ' || $char==';' || $char==':' || $char=='=')
+					{
+						$line_parts[] = substr($line, 0, $i+1);
+						$line = substr($line, $i+1);
+						break;
+					}
+				}
+			}
+			$line_parts[] = $line;
+
+			for($i=0;$i<count($line_parts);$i++)
+			{
+				if(!empty($line_parts[$i]))
+				{
+					if($i>0)
+					{
+						$vtodo .= ' ';
+					}
+					$vtodo .= $line_parts[$i]."\r\n";
+				}
+			}
+		}
+		return $vtodo;
 	}
 
 

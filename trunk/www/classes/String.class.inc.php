@@ -626,7 +626,10 @@ class String {
 
 	function quoted_printable_encode($sText,$bEmulate_imap_8bit=true) {
 		// split text into lines
-		$aLines=explode(chr(13).chr(10),$sText);
+		
+		$sText = str_replace("\r", '', $sText);
+		
+		$aLines=explode("\n",$sText);
 
 		for ($i=0;$i<count($aLines);$i++) {
 			$sLine =& $aLines[$i];
@@ -664,9 +667,9 @@ class String {
 			// and why not encode any x20 around chr(10) or chr(13)
 			if ($bEmulate_imap_8bit) {
 				$sLine=str_replace(' =0D','=20=0D',$sLine);
-				//$sLine=str_replace(' =0A','=20=0A',$sLine);
-				//$sLine=str_replace('=0D ','=0D=20',$sLine);
-				//$sLine=str_replace('=0A ','=0A=20',$sLine);
+				$sLine=str_replace(' =0A','=20=0A',$sLine);
+				$sLine=str_replace('=0D ','=0D=20',$sLine);
+				$sLine=str_replace('=0A ','=0A=20',$sLine);
 			}
 
 			//merijn$sLine  = str_replace(' ','=20',$sLine);
@@ -676,12 +679,13 @@ class String {
 			// at the very first character of the line
 			// and after soft linebreaks, as well,
 			// but this wouldn't be caught by such an easy RegExp
-			preg_match_all( '/.{1,73}([^=]{0,2})?/', $sLine, $aMatch );
-			$sLine = implode( '=' . chr(13).chr(10), $aMatch[0] ); // add soft crlf's
+			
+			//preg_match_all( '/.{1,73}([^=]{0,2})?/', $sLine, $aMatch );
+			//$sLine = implode( '=' . chr(13).chr(10), $aMatch[0] ); // add soft crlf's
 		}
 
 		// join lines into text
-		return implode(chr(13).chr(10),$aLines);
+		return implode('=0D=0A',$aLines);
 	}
 
 
