@@ -88,7 +88,7 @@ GO.calendar.CalendarDialog = function(config)
 				text:GO.lang.cmdImport,
 				handler: function(){						
 					this.importTab.form.submit({
-						//waitMsg:GO.lang.waitMsgUpload,
+						waitMsg:GO.lang.waitMsgUpload,
 						url:GO.settings.modules.calendar.url+'action.php',
 						params: {task: 'import', calendar_id:this.calendar_id},
 						success: function(form,action)
@@ -177,20 +177,24 @@ Ext.extend(GO.calendar.CalendarDialog, Ext.Window, {
 		if(!this.rendered)
 			this.render(Ext.getBody());
 			
-		this.exportButton.setDisabled(true);
-		this.importTab.setDisabled(true);
+		this.propertiesTab.show();
 		
 		if(calendar_id > 0)
 		{
 			if(calendar_id!=this.calendar_id)
 			{
 				this.loadCalendar(calendar_id);
+			}else
+			{
+				GO.calendar.CalendarDialog.superclass.show.call(this);
 			}
 		}else
 		{
 			this.calendar_id=0;
 			this.propertiesTab.form.reset();
-			this.propertiesTab.show();
+			
+			this.exportButton.setDisabled(true);
+			this.importTab.setDisabled(true);	
 
 			this.readPermissionsTab.setDisabled(true);
 			this.writePermissionsTab.setDisabled(true);
@@ -240,6 +244,8 @@ Ext.extend(GO.calendar.CalendarDialog, Ext.Window, {
 					this.calendar_id=action.result.calendar_id;
 					this.readPermissionsTab.setAcl(action.result.acl_read);
 					this.writePermissionsTab.setAcl(action.result.acl_write);
+					this.exportButton.setDisabled(false);
+					this.importTab.setDisabled(false);
 					//this.loadAccount(this.calendar_id);
 				}
 				

@@ -64,13 +64,13 @@ class export_tasks
 	{
 		$ics = $this->export_tasklist_header();
 
-	/*	$cal = new tasks();
+		$tasks= new tasks();
 
-		$cal->get_events(false,true,false, $tasklist_id);
-		while($cal->next_record())
+		$tasks->get_tasks(array($tasklist_id),0,true,'id','ASC',0,0,true);
+		while($record = $tasks->next_record())
 		{
-			$ics .= $this->convert_event($cal->record);
-		}*/
+			$ics .= $this->convert_task($record);
+		}
 
 		$ics .= $this->export_tasklist_footer();
 		return $ics;
@@ -78,22 +78,13 @@ class export_tasks
 
 	function format_line($name_part, $value_part)
 	{
-
-
 		$value_part = str_replace("\r\n","\n", $value_part);
-
-		/*if(!strpos($value_part, "\n"))
-		 {
-			return array($name_part.';CHARSET='.$charset.":".$value_part);
-			}*/
 		$qp_value_part = String::quoted_printable_encode($value_part);
 
 		if($value_part != $qp_value_part)
 		{
-			//$name_part .= ";ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:=\n";
 			$name_part .= ";ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:";
-			//$qp_value_part = ' '.str_replace("\n", "\n ", $qp_value_part);
-			//$qp_value_part = str_replace('=0A', "=0D=0A", $qp_value_part)."\n";
+			$qp_value_part = str_replace('=0A', "=0D=0A", $qp_value_part)."\n";
 
 			return explode("\n", $name_part.$qp_value_part);
 		}else

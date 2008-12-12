@@ -804,7 +804,7 @@ class calendar extends db
 					$this->add_exception($exception);
 				}
 			}
-				
+
 			$this->cache_event($event['id']);
 
 			return $event['id'];
@@ -1193,7 +1193,7 @@ class calendar extends db
 		if($event = $this->get_event($event_id))
 		{
 			$event_id = $this->escape($event_id);
-				
+
 			global $GO_LINKS, $GO_CONFIG;
 			$GO_LINKS->delete_link($event['id'],1);
 
@@ -1212,7 +1212,7 @@ class calendar extends db
 			$this->query($sql);
 			$sql = "DELETE FROM cal_exceptions WHERE event_id='$event_id'";
 			$this->query($sql);
-				
+
 			require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
 			$search = new search();
 			$search->delete_search_result($event_id, 1);
@@ -1361,8 +1361,8 @@ class calendar extends db
 			//for Nokia. It doesn't send all day event in any way. If the local times are equal and the
 			//time is 0:00 hour then this is probably an all day event.
 
-				
-				
+
+
 			if($event['end_time'] == $event['start_time'] || (date('G', $event['end_time'])==23 && date('G', $event['end_time'])==0))
 			{
 				$event['all_day_event'] = '1';
@@ -1421,7 +1421,7 @@ class calendar extends db
 
 				if(isset($rrule['BYDAY']))
 				{
-						
+
 					$month_time=1;
 					if($rrule['FREQ']=='MONTHLY')
 					{
@@ -1442,12 +1442,12 @@ class calendar extends db
 					$days['sat'] = in_array('SA', $days_arr) ? '1' : '0';
 
 					$days=Date::shift_days_to_gmt($days, date('G', $event['start_time']), Date::get_timezone_offset($event['start_time']));
-						
+
 					$event['rrule']=Date::build_rrule(Date::ical_freq_to_repeat_type($rrule['FREQ']), $rrule['INTERVAL'], $event['repeat_end_time'], $days, $month_time);
 				}
 			}
-				
-				
+
+
 
 			if(isset($object['EXDATE']['value']))
 			{
@@ -1507,70 +1507,40 @@ class calendar extends db
 	function import_ical_string($ical_string, $calendar_id)
 	{
 		global $GO_MODULES, $GO_CONFIG;
+		
+		$count=0;
 
 		require_once($GO_CONFIG->class_path.'ical2array.class.inc');
 		$this->ical2array = new ical2array();
 
 		$vcalendar = $this->ical2array->parse_string($ical_string);
 
-		while($object = array_shift($vcalendar[0]['objects']))
+		if(isset($vcalendar[0]['objects']))
 		{
-			if($object['type'] == 'VEVENT' || $object['type'] == 'VTODO')
+			while($object = array_shift($vcalendar[0]['objects']))
 			{
-				if($event = $this->get_event_from_ical_object($object))
+				if($object['type'] == 'VEVENT')
 				{
-					$exceptions=isset($event['exceptions']) ? $event['exceptions'] : array();
-					unset($event['exceptions']);
-					$event = $event;
-					$event = array_map('trim', $event);
-					$event['exceptions']=$exceptions;
-
-					if ($event_id = $this->add_event($event))
+					if($event = $this->get_event_from_ical_object($object))
 					{
-						$this->subscribe_event($event_id, $calendar_id);
-						return $event_id;
-					}
-				}
-			}
-		}
-		return false;
-	}
-
-
-	//TODO: attendee support
-	function import_ical_file($ical_file, $calendar_id)
-	{
-		global $GO_CONFIG, $GO_MODULES;
-		$count = 0;
-
-		if ($calendar = $this->get_calendar($calendar_id))
-		{
-			require_once($GO_CONFIG->class_path.'ical2array.class.inc');
-			$this->ical2array = new ical2array();
-
-			$vcalendar = $this->ical2array->parse_file($ical_file);
-			
-			if(isset($vcalendar[0]['objects']))
-			{			
-				while($object = array_shift($vcalendar[0]['objects']))
-				{
-					if($object['type'] == 'VEVENT')
-					{
-						
-						if($event = $this->get_event_from_ical_object($object))
-						{						
-							$event['calendar_id']=$calendar_id;
-							
-							if ($event_id = $this->add_event($event))
-							{
-								$count++;
-							}
+						$event['calendar_id']=$calendar_id;
+						if ($event_id = $this->add_event($event))
+						{
+							$count++;
 						}
 					}
 				}
 			}
 		}
 		return $count;
+	}
+
+
+	//TODO: attendee support
+	function import_ical_file($ical_file, $calendar_id)
+	{
+		$data = file_get_contents($ical_file);
+		return $this->import_ical_string($data, $calendar_id);
 	}
 
 	function get_conflicts($start_time, $end_time, $calendars, $participants)
@@ -1721,7 +1691,7 @@ class calendar extends db
 		if($event && !empty($event['rrule']))
 		{
 			$reminder['time'] = Date::get_next_recurrence_time($event['start_time'], time(),$event['rrule']);
-				
+
 			if($reminder['time'])
 			{
 				$rm = new reminder();
@@ -1864,7 +1834,7 @@ class calendar extends db
 	{
 		//for IE
 		if(empty($event['background']))
-			$event['background']='EBF1E2';
+		$event['background']='EBF1E2';
 			
 		$event['subject']=$event['name'];
 
@@ -1935,9 +1905,9 @@ class calendar extends db
 							$day = substr($rrule['BYDAY'], 1);
 
 							$days = Date::byday_to_days($day);
-								
+
 							$days = Date::shift_days_to_local($days, date('G', $event['start_time']), Date::get_timezone_offset($event['start_time']));
-								
+
 
 							$event['repeat_days_0'] = $days['sun'];
 							$event['repeat_days_1'] = $days['mon'];
@@ -1946,7 +1916,7 @@ class calendar extends db
 							$event['repeat_days_4'] = $days['thu'];
 							$event['repeat_days_5'] = $days['fri'];
 							$event['repeat_days_6'] = $days['sat'];
-						
+
 						}else
 						{
 							$event['repeat_type'] = REPEAT_MONTH_DATE;
@@ -1983,7 +1953,7 @@ class calendar extends db
 				}
 			}
 		}
-		
+
 		return $event;
 	}
 
