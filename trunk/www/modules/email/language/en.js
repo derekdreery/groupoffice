@@ -127,3 +127,4 @@ GO.email.lang.confirmEmptySubject='You didn\'t fill in a subject. Are you sure y
 
 GO.email.lang.usage='Disk usage';
 GO.email.lang.searchGO='Search through Group-Office';
+GO.email.lang.toggleWindowPosition = 'Toggle message window position';

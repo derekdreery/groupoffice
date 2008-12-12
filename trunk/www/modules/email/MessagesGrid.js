@@ -19,23 +19,7 @@ GO.email.MessagesGrid = function(config){
 	}
 	
 	config.layout='fit';
-	config.autoScroll=true;
-	
-	config.store = new GO.data.JsonStore({
-		url: GO.settings.modules.email.url+'json.php',
-		baseParams: {
-			"node": '',
-			"type": 'messages'
-		},
-		root: 'results',
-		totalProperty: 'total',
-		id: 'uid',
-		fields:['uid','icon','flagged','attachments','new','subject','from','size','date', 'priority','answered'],
-		remoteSort: true
-	});
-	
-	config.store.setDefaultSort('date', 'DESC');
-	
+	config.autoScroll=true;		
 	config.paging=true;
 
 	if(config.region=='north')
@@ -102,33 +86,21 @@ GO.email.MessagesGrid = function(config){
 	}
 	config.cm.defaultSortable = true;
 	
-	
-	
 	config.sm=new Ext.grid.RowSelectionModel();
-	config.loadMask=true;
-	
+	config.loadMask=true;	
 			
 	config.border=false;	
 	config.split= true;
-	
-	config.minSize= 200;
-	
 		
 	config.enableDragDrop= true;
 	config.ddGroup = 'EmailDD';
+	config.animCollapse=false;
 	
-
-
-
-	
-	
-	GO.email.MessagesGrid.superclass.constructor.call(this, config);
-	
-	
+	GO.email.MessagesGrid.superclass.constructor.call(this, config);	
 };
 
 Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
-	
+
 	renderMessageSmallRes : function(value, p, record){
 		
 		if(record.data['new']=='1')

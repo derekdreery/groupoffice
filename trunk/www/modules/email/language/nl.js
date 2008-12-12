@@ -113,3 +113,5 @@ GO.email.lang.confirmEmptySubject='U heeft geen onderwerp ingevuld. Weet u zeker
 GO.email.lang.usage='Schijfgebruik';
 
 GO.email.lang.searchGO='Group-Office doorzoeken';
+
+GO.email.lang.toggleWindowPosition = 'Verander berichtvenster positie';

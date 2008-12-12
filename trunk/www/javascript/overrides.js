@@ -273,3 +273,34 @@ Ext.override(Ext.Component, {
 /**
 *End of print elements
 */
+
+/**
+ * Width and height not restored in grid
+ */
+Ext.override(Ext.grid.GridPanel,{
+ applyState : function(state){
+        var cm = this.colModel;
+        var cs = state.columns;
+        if(cs){
+            for(var i = 0, len = cs.length; i < len; i++){
+                var s = cs[i];
+                var c = cm.getColumnById(s.id);
+                if(c){
+                    c.hidden = s.hidden;
+                    c.width = s.width;
+                    var oldIndex = cm.getIndexById(s.id);
+                    if(oldIndex != i){
+                        cm.moveColumn(oldIndex, i);
+                    }
+                }
+            }
+        }
+        if(state.sort){
+            this.store[this.store.remoteSort ? 'setDefaultSort' : 'sort'](state.sort.field, state.sort.direction);
+        }
+        Ext.apply(this, state);
+    }
+});
+/**
+ * End Width and height not restored in grid
+ */
