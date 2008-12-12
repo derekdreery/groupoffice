@@ -214,169 +214,17 @@ try{
 				throw new DatabaseSelectException();
 			}
 			$calendar = $cal->get_calendar($event['calendar_id']);
-
-			$response['data']=$event;
-
+			
 			$response['data']['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_write']);
 			if((!$response['data']['write_permission'] && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_read'])) ||
 			($event['private']=='1' && $event['user_id']!=$GO_SECURITY->user_id))
 			{
 				throw new AccessDeniedException();
 			}
-
-			//for IE
-			if(empty($response['data']['background']))
-				$response['data']['background']='EBF1E2';
-
-
+			
+			$response['data']=array_merge($response['data'], $cal->event_to_json_response($event));
 			$response['data']['calendar_name']=$calendar['name'];
-			$response['data']['subject']=$response['data']['name'];
-
-			$start_time = $response['data']['start_time'];
-			$end_time = $response['data']['end_time'];
-
-			$response['data']['start_date']=date($_SESSION['GO_SESSION']['date_format'], $start_time);
-			$response['data']['start_hour'] = date('G', $start_time);
-			$response['data']['start_min'] = date('i', $start_time);
-
-			$response['data']['end_date']=date($_SESSION['GO_SESSION']['date_format'], $end_time);
-			$response['data']['end_hour'] = date('G', $end_time);
-			$response['data']['end_min'] = date('i', $end_time);
-				
-				
-				
-			$response['data']['repeat_every'] = 1;
-			$response['data']['repeat_forever'] = 0;
-			$response['data']['repeat_type'] = REPEAT_NONE;
-			$response['data']['repeat_end_time'] = 0;
-			$response['data']['month_time'] = 1;
-
-			if (!empty($response['data']['rrule']) && $rrule = ical2array::parse_rrule($response['data']['rrule']))
-			{				
-				if(isset($rrule['FREQ']))
-				{
-					if (isset($rrule['UNTIL']))
-					{
-						$response['data']['repeat_end_time'] = ical2array::parse_date($rrule['UNTIL']);						
-					}elseif(isset($rrule['COUNT']))
-					{
-						//go doesn't support this
-					}else
-					{
-						$response['data']['repeat_forever'] = 1;
-					}
-
-					$response['data']['repeat_every'] = $rrule['INTERVAL'];
-					switch($rrule['FREQ'])
-					{
-						case 'DAILY':
-							$response['data']['repeat_type'] = REPEAT_DAILY;
-							break;
-
-						case 'WEEKLY':
-							$response['data']['repeat_type'] = REPEAT_WEEKLY;
-
-							$days = Date::byday_to_days($rrule['BYDAY']);
-							
-							$days = Date::shift_days_to_local($days, date('G', $response['data']['start_time']), Date::get_timezone_offset($response['data']['start_time']));
-								
-							
-							$response['data']['repeat_days_0'] = $days['sun'];
-							$response['data']['repeat_days_1'] = $days['mon'];
-							$response['data']['repeat_days_2'] = $days['tue'];
-							$response['data']['repeat_days_3'] = $days['wed'];
-							$response['data']['repeat_days_4'] = $days['thu'];
-							$response['data']['repeat_days_5'] = $days['fri'];
-							$response['data']['repeat_days_6'] = $days['sat'];
-							break;
-
-						case 'MONTHLY':
-							if (isset($rrule['BYDAY']))
-							{
-								$response['data']['repeat_type'] = REPEAT_MONTH_DAY;
-
-								$response['data']['month_time'] = $rrule['BYDAY'][0];
-								$day = substr($rrule['BYDAY'], 1);
-								
-								$days = Date::byday_to_days($day);
-							
-								$days = Date::shift_days_to_local($days, date('G', $response['data']['start_time']), Date::get_timezone_offset($response['data']['start_time']));
-									
-								
-								$response['data']['repeat_days_0'] = $days['sun'];
-								$response['data']['repeat_days_1'] = $days['mon'];
-								$response['data']['repeat_days_2'] = $days['tue'];
-								$response['data']['repeat_days_3'] = $days['wed'];
-								$response['data']['repeat_days_4'] = $days['thu'];
-								$response['data']['repeat_days_5'] = $days['fri'];
-								$response['data']['repeat_days_6'] = $days['sat'];
-/*
-								switch($day)
-								{
-									case 'MO':
-										$response['data']['repeat_days_1'] = 1;
-										break;
-
-									case 'TU':
-										$response['data']['repeat_days_2'] = 1;
-										break;
-
-									case 'WE':
-										$response['data']['repeat_days_3'] = 1;
-										break;
-
-									case 'TH':
-										$response['data']['repeat_days_4'] = 1;
-										break;
-
-									case 'FR':
-										$response['data']['repeat_days_5'] = 1;
-										break;
-
-									case 'SA':
-										$response['data']['repeat_days_6'] = 1;
-										break;
-
-									case 'SU':
-										$response['data']['repeat_days_0'] = 1;
-										break;
-								}*/
-							}else
-							{
-								$response['data']['repeat_type'] = REPEAT_MONTH_DATE;
-							}
-							break;
-
-						case 'YEARLY':
-							$response['data']['repeat_type'] = REPEAT_YEARLY;							
-							break;
-					}
-				}
-			}
-				
-			$response['data']['repeat_end_date']=$response['data']['repeat_end_time']>0 ? date($_SESSION['GO_SESSION']['date_format'], $response['data']['repeat_end_time']) : '';
-
-
-			$multipliers[] = 604800;
-			$multipliers[] = 86400;
-			$multipliers[] = 3600;
-			$multipliers[] = 60;
-
-			$response['data']['reminder_multiplier'] = 60;
-			$response['data']['reminder_value'] = 0;
-
-			if($response['data']['reminder'] != 0)
-			{
-				for ($i = 0; $i < count($multipliers); $i ++) {
-					$devided = $response['data']['reminder'] / $multipliers[$i];
-					$match = (int) $devided;
-					if ($match == $devided) {
-						$response['data']['reminder_multiplier'] = $multipliers[$i];
-						$response['data']['reminder_value'] = $devided;
-						break;
-					}
-				}
-			}
+			
 			if(isset($GO_MODULES->modules['files']))
 			{
 				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');

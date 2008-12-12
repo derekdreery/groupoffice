@@ -6,6 +6,8 @@ $lang['common']['htmldirection']= 'ltr';
 
 $lang['common']['errorsInForm'] = 'There were errors in the form. Correct them and try again.';
 
+$lang['common']['moduleRequired']='The %s module is required for this function';
+
 $lang['common']['loadingCore']= 'Loading base system';
 $lang['common']['loadingLogin'] = 'Loading login dialog';
 $lang['common']['renderInterface']='Rendering interface';

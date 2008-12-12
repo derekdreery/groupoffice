@@ -515,6 +515,44 @@ try{
 	{
 		switch($_REQUEST['task'])
 		{
+			case 'icalendar_attachment':
+				$account = connect($_REQUEST['account_id'], $_REQUEST['mailbox']);
+				$data = $imap->view_part($_REQUEST['uid'], $_REQUEST['part'], $_REQUEST['transfer']);
+				
+				if(!isset($GO_MODULES->modules['calendar']) || !$GO_MODULES->modules['calendar']['read_permission'])
+				{
+					throw new Exception(sprintf($lang['common']['moduleRequired'], $lang['email']['calendar']));
+				}
+				
+				require_once($GO_CONFIG->class_path.'Date.class.inc.php');
+				require_once($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc');
+				$cal = new calendar();
+				
+				
+				require_once($GO_CONFIG->class_path.'ical2array.class.inc');
+				$ical2array = new ical2array();
+
+				$vcalendar = $ical2array->parse_string($data);
+
+				$event=false;
+				while($object = array_shift($vcalendar[0]['objects']))
+				{
+					if($object['type'] == 'VEVENT')
+					{
+						$event = $cal->get_event_from_ical_object($object);					
+						break;	
+					}
+				}
+				
+				if(!$event)
+				{
+					throw new Exception($lang['common']['selectError']);
+				}
+				
+				$response=$cal->event_to_json_response($event);	
+				$response['success']=true;
+				break;
+			
 			case 'attachments':
 
 				while($file = array_shift($_SESSION['GO_SESSION']['just_uploaded_attachments']))
@@ -571,16 +609,9 @@ try{
 				break;
 				
 			case 'message_attachment':
-			$account_id = ($_REQUEST['account_id']);
-			$mailbox = ($_REQUEST['mailbox']);
-			$uid = $_REQUEST['uid'];
-			$transfer = $_REQUEST['transfer'];
-			$part = $_REQUEST['part'];
-			$part_number = isset($_REQUEST['part_number']) ? ($_REQUEST['part_number']) : "";
-
-			$account = connect($account_id, $mailbox);
-
-			$data = $imap->view_part($uid, $part, $transfer);
+			$account = connect($_REQUEST['account_id'], $_REQUEST['mailbox']);
+			$data = $imap->view_part($_REQUEST['uid'], $_REQUEST['part'], $_REQUEST['transfer']);
+			
 			$response=array();
 			$inline_url = $GO_MODULES->modules['mailings']['url'].'mimepart.php?account_id='.$_REQUEST['account_id'].'&mailbox='.urlencode(($_REQUEST['mailbox'])).'&uid='.($_REQUEST['uid']).'&part='.$_REQUEST['part'].'&transfer='.urlencode($_REQUEST['transfer']);
 		
@@ -770,9 +801,16 @@ try{
 
 				//debug(var_export($attachments, true));
 
+				//$response['event']=false;
 				$response['attachments']=array();
 				$index=0;
 				for ($i = 0; $i < count($attachments); $i ++) {
+					
+					if(eregi('calendar',$attachments[$i]['mime']) && empty($attachments[$i]['name']))
+					{
+						$attachments[$i]['name']=$lang['email']['event'].'.ics';
+					}
+					
 					if ($imap->part_is_attachment($attachments[$i])){
 						
 						$attachment = $attachments[$i];

@@ -4,6 +4,7 @@ require($GO_LANGUAGE->get_fallback_base_language_file('common'));
 $lang['common']['htmldirection']='ltr';
 
 $lang['common']['errorsInForm'] = "Er zaten fouten in het formulier. Corrigeer ze en probeer het opnieuw";
+$lang['common']['moduleRequired']='De %s module is vereist voor deze functie';
 
 $lang['common']['loadingCore']='Laden van het basissyteem';
 $lang['common']['renderInterface']='Renderen van de interface';

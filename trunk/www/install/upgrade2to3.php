@@ -119,7 +119,7 @@ while($db->next_record())
 	}
 }
 
-$GO_MODULES->load_modules();
+
 
 
 $db->query("CREATE TABLE `state` (
@@ -195,6 +195,9 @@ $db->query("DELETE FROM go_settings");
 //REMINDERS
 $db->query("ALTER TABLE `go_reminders` DROP `url`");
 $db->query("ALTER TABLE `go_reminders` ADD `link_type` INT NOT NULL AFTER `link_id` ;");
+
+
+$GO_MODULES->load_modules();
 
 //end framework updates
 

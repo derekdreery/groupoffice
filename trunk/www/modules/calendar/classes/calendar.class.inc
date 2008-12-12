@@ -85,7 +85,7 @@ class calendar extends db
 			$ical2array = new ical2array();
 
 			$rrule = $ical2array->parse_rrule($event['rrule']);
-				
+
 			if (isset($rrule['UNTIL']))
 			{
 				if($event['repeat_end_time'] = $ical2array->parse_date($rrule['UNTIL']))
@@ -111,7 +111,7 @@ class calendar extends db
 			}
 
 			$event['repeat_every']=$rrule['INTERVAL'];
-				
+
 			if(isset($rrule['BYDAY']))
 			{
 				$days = explode(',', $rrule['BYDAY']);
@@ -124,7 +124,7 @@ class calendar extends db
 				$event['fri'] = in_array('FR', $days) ? '1' : '0';
 				$event['sat'] = in_array('SA', $days) ? '1' : '0';
 			}
-				
+
 
 			$html .= '<tr><td colspan="2">';
 			switch($rrule['FREQ'])
@@ -132,8 +132,8 @@ class calendar extends db
 				case 'WEEKLY':
 					$event = Date::shift_days_to_local($event, date('G', $event['start_time']),Date::get_timezone_offset($event['start_time']));
 
-						
-						
+
+
 					$days=array();
 					if($event['sun']=='1')
 					{
@@ -446,7 +446,7 @@ class calendar extends db
 		$vc['view_id']=$view_id;
 		$vc['calendar_id']=$calendar_id;
 		$vc['background']=$background;
-		
+
 		return $this->insert_row('cal_views_calendars', $vc);
 	}
 
@@ -804,7 +804,7 @@ class calendar extends db
 					$this->add_exception($exception);
 				}
 			}
-			
+				
 			$this->cache_event($event['id']);
 
 			return $event['id'];
@@ -816,7 +816,7 @@ class calendar extends db
 	function is_duplicate_event($event, $calendar_id)
 	{
 		unset($event['exceptions']);
-		
+
 		$sql = "SELECT id FROM cal_events WHERE ".
 		"name='".$this->escape($record['name'])."' AND ".
 		"start_time='".$this->escape($record['start_time'])."' AND ".
@@ -863,9 +863,9 @@ class calendar extends db
 		}
 
 		$r = $this->update_row('cal_events', 'id', $event);
-		
+
 		$this->cache_event($event['id']);
-		
+
 		return $r;
 	}
 
@@ -1116,14 +1116,14 @@ class calendar extends db
 
 			$first_occurrence_time=$event['start_time'];
 			$start_time=$interval_start_time;
-				
+
 			//calculate the next occurrence from the start_time minus one second because an event
 			//may start exactly on the start of display.
 			$calculated_event['start_time']=$interval_start_time-1;
-				
+
 			//echo date('Ymd G:i', $first_occurrence_time).'<br />';
-				
-		//go_log(LOG_DEBUG, $calculated_event['name'].': '.date('Ymd G:i', $first_occurrence_time));
+
+			//go_log(LOG_DEBUG, $calculated_event['name'].': '.date('Ymd G:i', $first_occurrence_time));
 
 			$loops = 0;
 			while($calculated_event['start_time'] = Date::get_next_recurrence_time($first_occurrence_time, $calculated_event['start_time'], $event['rrule']))
@@ -1132,13 +1132,13 @@ class calendar extends db
 
 				//echo date('Ymd G:i', $calculated_event['start_time']).'<br />';
 
-			//	go_log(LOG_DEBUG, $calculated_event['name'].': '.date('Ymd G:i', $calculated_event['start_time']));
+				//	go_log(LOG_DEBUG, $calculated_event['name'].': '.date('Ymd G:i', $calculated_event['start_time']));
 
 				$calculated_event['end_time'] = $calculated_event['start_time']+$duration;
 
 				if($calculated_event['start_time'] > $interval_end_time || $calculated_event['end_time'] < $interval_start_time)
 				break;
-				
+
 				if(!$cal->is_exception($calculated_event['id'],$calculated_event['start_time']))
 				{
 					$this->events[] = $calculated_event;
@@ -1189,15 +1189,15 @@ class calendar extends db
 
 
 	function delete_event($event_id)
-	{		
+	{
 		if($event = $this->get_event($event_id))
 		{
 			$event_id = $this->escape($event_id);
-			
+				
 			global $GO_LINKS, $GO_CONFIG;
 			$GO_LINKS->delete_link($event['id'],1);
 
-				
+
 			if(file_exists($GO_CONFIG->file_storage_path.'events/'.$event_id.'/'))
 			{
 				require_once($GO_CONFIG->class_path.'filesystem.class.inc');
@@ -1212,7 +1212,7 @@ class calendar extends db
 			$this->query($sql);
 			$sql = "DELETE FROM cal_exceptions WHERE event_id='$event_id'";
 			$this->query($sql);
-			
+				
 			require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
 			$search = new search();
 			$search->delete_search_result($event_id, 1);
@@ -1235,7 +1235,7 @@ class calendar extends db
 	function move_exceptions($event_id, $diff)
 	{
 		$event_id = $this->escape($event_id);
-		
+
 		$sql = "UPDATE cal_exceptions SET time=time+".$this->escape($diff)." WHERE event_id=$event_id";
 		return $this->query($sql);
 	}
@@ -1301,9 +1301,9 @@ class calendar extends db
 		}
 
 		$event['status'] = isset($object['STATUS']['value']) ? $object['STATUS']['value'] : 'NEEDS-ACTION';
-		
+
 		$event['all_day_event'] = (isset($object['DTSTART']['params']['VALUE']) &&
-			strtoupper($object['DTSTART']['params']['VALUE']) == 'DATE') ? '1' : '0';
+		strtoupper($object['DTSTART']['params']['VALUE']) == 'DATE') ? '1' : '0';
 
 
 		if(isset($object['DTSTART']))
@@ -1361,25 +1361,25 @@ class calendar extends db
 			//for Nokia. It doesn't send all day event in any way. If the local times are equal and the
 			//time is 0:00 hour then this is probably an all day event.
 
-			
-			
+				
+				
 			if($event['end_time'] == $event['start_time'] || (date('G', $event['end_time'])==23 && date('G', $event['end_time'])==0))
 			{
 				$event['all_day_event'] = '1';
-				
+
 				//make sure times are 0 - 23
-				
+
 				$start_date = getdate($event['start_time']);
 				$end_date = getdate($event['end_time']);
-				
+
 				$event['start_time']=mktime(0,0,0,$start_date['mon'], $start_date['mday'], $start_date['year']);
 				$event['end_time']=mktime(23,59,0,$end_date['mon'], $end_date['mday'], $end_date['year']);
-				
+
 				//$event['start_time'] = $event['start_time']);
 			}
 
 			/*if($event['all_day_event'])
-			{
+			 {
 				//TODO DST!
 				//$event['end_time'] = $event['end_time']+86340;
 				//dont do this for symbian
@@ -1395,7 +1395,7 @@ class calendar extends db
 				$day = date('j', $local_start_time);
 				$event['end_time'] = mktime(0,-1,0,$month, $day+$duration_days+1, $year);
 
-			}*/
+				}*/
 			if(isset($object['CLASS']['value']) && $object['CLASS']['value'] == 'PRIVATE')
 			{
 				$event['private'] = '1';
@@ -1417,11 +1417,11 @@ class calendar extends db
 					{
 						$event['repeat_end_time'] = mktime(0,0,0, date('n', $event['repeat_end_time']), date('j', $event['repeat_end_time'])+1, date('Y', $event['repeat_end_time']));
 					}
-				}			
-				
+				}
+
 				if(isset($rrule['BYDAY']))
 				{
-					
+						
 					$month_time=1;
 					if($rrule['FREQ']=='MONTHLY')
 					{
@@ -1430,9 +1430,9 @@ class calendar extends db
 						$days_arr =array($day);
 					}else
 					{
-						$days_arr = explode(',', $rrule['BYDAY']);	
+						$days_arr = explode(',', $rrule['BYDAY']);
 					}
-	
+
 					$days['sun'] = in_array('SU', $days_arr) ? '1' : '0';
 					$days['mon'] = in_array('MO', $days_arr) ? '1' : '0';
 					$days['tue'] = in_array('TU', $days_arr) ? '1' : '0';
@@ -1440,14 +1440,14 @@ class calendar extends db
 					$days['thu'] = in_array('TH', $days_arr) ? '1' : '0';
 					$days['fri'] = in_array('FR', $days_arr) ? '1' : '0';
 					$days['sat'] = in_array('SA', $days_arr) ? '1' : '0';
-	
-					$days=Date::shift_days_to_gmt($days, date('G', $event['start_time']), Date::get_timezone_offset($event['start_time']));					
-					
-					$event['rrule']=Date::build_rrule(Date::ical_freq_to_repeat_type($rrule['FREQ']), $rrule['INTERVAL'], $event['repeat_end_time'], $days, $month_time);					
-				}				
+
+					$days=Date::shift_days_to_gmt($days, date('G', $event['start_time']), Date::get_timezone_offset($event['start_time']));
+						
+					$event['rrule']=Date::build_rrule(Date::ical_freq_to_repeat_type($rrule['FREQ']), $rrule['INTERVAL'], $event['repeat_end_time'], $days, $month_time);
+				}
 			}
-			
-			
+				
+				
 
 			if(isset($object['EXDATE']['value']))
 			{
@@ -1506,9 +1506,9 @@ class calendar extends db
 
 	function import_ical_string($ical_string, $calendar_id)
 	{
-		global $GO_MODULES;
+		global $GO_MODULES, $GO_CONFIG;
 
-		require_once($GO_MODULES->modules['calendar']['class_path'].'ical2array.class.inc');
+		require_once($GO_CONFIG->class_path.'ical2array.class.inc');
 		$this->ical2array = new ical2array();
 
 		$vcalendar = $this->ical2array->parse_string($ical_string);
@@ -1653,7 +1653,7 @@ class calendar extends db
 		$calendar['user_id']=$user['id'];
 		$calendar['acl_read']=$GO_SECURITY->get_new_acl('category', $user['id']);
 		$calendar['acl_write']=$GO_SECURITY->get_new_acl('category', $user['id']);
-		
+
 		$GO_SECURITY->add_group_to_acl($GO_CONFIG->group_internal, $calendar['acl_write']);
 
 		$calendar_id = $this->add_calendar($calendar);
@@ -1665,20 +1665,20 @@ class calendar extends db
 		if($this->next_record())
 		{
 			$view_id = $this->f('id');
-				
+
 			$count = $this->get_view_calendars($view_id);
-				
+
 			if($count<=20)
 			$this->add_calendar_to_view($calendar_id, '', $view_id);
 		}
 	}
-	
-	
+
+
 
 	function cache_event($event_id)
 	{
 		global $GO_CONFIG, $GO_LANGUAGE;
-		
+
 		require_once($GO_CONFIG->class_path.'/base/search.class.inc.php');
 		$search = new search();
 
@@ -1687,7 +1687,7 @@ class calendar extends db
 		$sql  = "SELECT DISTINCT cal_events.*, cal_calendars.acl_read, cal_calendars.acl_write FROM cal_events ".
 		"INNER JOIN cal_calendars ON cal_events.calendar_id=cal_calendars.id ".
 		"WHERE cal_events.id=?";
-		
+
 		$this->query($sql, 'i', $event_id);
 		$record = $this->next_record();
 		if($record)
@@ -1708,29 +1708,29 @@ class calendar extends db
 		}
 	}
 	public function __on_build_search_index()
-	{				
+	{
 		$sql = "SELECT id FROM cal_events";
-		$this->query($sql);		
+		$this->query($sql);
 		$cal = new calendar();
 		while($record = $this->next_record())
 		{
 			$cal->cache_event($record['id']);
 		}
-/* {ON_BUILD_SEARCH_INDEX_FUNCTION} */
+		/* {ON_BUILD_SEARCH_INDEX_FUNCTION} */
 	}
-	
+
 	function __on_reminder_dismissed($reminder)
 	{
 		$event = $this->get_event($reminder['link_id']);
 		if($event && !empty($event['rrule']))
 		{
 			$reminder['time'] = Date::get_next_recurrence_time($event['start_time'], time(),$event['rrule']);
-			
+				
 			if($reminder['time'])
 			{
 				$rm = new reminder();
 				$rm->add_reminder($reminder);
-			}		
+			}
 		}
 	}
 
@@ -1766,14 +1766,14 @@ class calendar extends db
 				{
 					$event['end_time']=$dayend;
 				}
-	
+
 				if($event['start_time'] < $daystart)
 				{
 					$event['start_time']=$daystart;
 				}
 				$event_start = getdate($event['start_time']);
 				$event_end = getdate($event['end_time']);
-	
+
 				if($event_start['minutes']<15)
 				{
 					$minutes=0;
@@ -1787,13 +1787,13 @@ class calendar extends db
 				{
 					$minutes=45;
 				}
-	
+
 				$start_minutes = $minutes+($event_start['hours']*60);
 				$end_minutes = $event_end['minutes']+($event_end['hours']*60);
-	
+
 				//echo $start_minutes.' -> '.$end_minutes.'<br>';
 				//go_log(LOG_DEBUG, $event['name'].' '.Date::get_timestamp($event['start_time']).' -> '.$end_minutes);
-	
+
 				for($i=$start_minutes;$i<$end_minutes;$i+=15)
 				{
 					$freebusy[$i]=1;
@@ -1823,29 +1823,29 @@ class calendar extends db
 		}
 		return false;
 	}
-	
+
 	function __on_check_database(){
 		global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE;
-		
-	/*	echo 'Checking calendar folder permissions<br />';
+
+		/*	echo 'Checking calendar folder permissions<br />';
 
 		if(isset($GO_MODULES->modules['files']))
 		{
-			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
-			$fs = new files();
+		require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
+		$fs = new files();
 
-			$sql = "SELECT e.name,e.id, c.acl_read, c.acl_write, c.user_id FROM cal_events e INNER JOIN cal_calendars c ON c.id=e.calendar_id";
-			$this->query($sql);
-			while($this->next_record())
-			{
-				echo 'Checking '.$this->f('name').'<br />';				
-				$full_path = $GO_CONFIG->file_storage_path.'events/'.$this->f('id');
-				$fs->check_share($full_path, $this->f('user_id'), $this->f('acl_read'), $this->f('acl_write'));
-			}
+		$sql = "SELECT e.name,e.id, c.acl_read, c.acl_write, c.user_id FROM cal_events e INNER JOIN cal_calendars c ON c.id=e.calendar_id";
+		$this->query($sql);
+		while($this->next_record())
+		{
+		echo 'Checking '.$this->f('name').'<br />';
+		$full_path = $GO_CONFIG->file_storage_path.'events/'.$this->f('id');
+		$fs->check_share($full_path, $this->f('user_id'), $this->f('acl_read'), $this->f('acl_write'));
+		}
 		}
 		echo 'Done<br /><br />';*/
 	}
-	
+
 	/**
 	 * When a an item gets deleted in a panel with links. Group-Office attempts
 	 * to delete the item by finding the associated module class and this function
@@ -1861,6 +1861,134 @@ class calendar extends db
 		{
 			return $this->delete_event($id);
 		}
+	}
+
+
+	function event_to_json_response($event)
+	{
+		//for IE
+		if(empty($event['background']))
+			$event['background']='EBF1E2';
+			
+		$event['subject']=$event['name'];
+
+		$start_time = $event['start_time'];
+		$end_time = $event['end_time'];
+
+		$event['start_date']=date($_SESSION['GO_SESSION']['date_format'], $start_time);
+		$event['start_hour'] = date('G', $start_time);
+		$event['start_min'] = date('i', $start_time);
+
+		$event['end_date']=date($_SESSION['GO_SESSION']['date_format'], $end_time);
+		$event['end_hour'] = date('G', $end_time);
+		$event['end_min'] = date('i', $end_time);
+
+
+
+		$event['repeat_every'] = 1;
+		$event['repeat_forever'] = 0;
+		$event['repeat_type'] = REPEAT_NONE;
+		$event['repeat_end_time'] = 0;
+		$event['month_time'] = 1;
+
+		if (!empty($event['rrule']) && $rrule = ical2array::parse_rrule($event['rrule']))
+		{
+			if(isset($rrule['FREQ']))
+			{
+				if (isset($rrule['UNTIL']))
+				{
+					$event['repeat_end_time'] = ical2array::parse_date($rrule['UNTIL']);
+				}elseif(isset($rrule['COUNT']))
+				{
+					//go doesn't support this
+				}else
+				{
+					$event['repeat_forever'] = 1;
+				}
+
+				$event['repeat_every'] = $rrule['INTERVAL'];
+				switch($rrule['FREQ'])
+				{
+					case 'DAILY':
+						$event['repeat_type'] = REPEAT_DAILY;
+						break;
+
+					case 'WEEKLY':
+						$event['repeat_type'] = REPEAT_WEEKLY;
+
+						$days = Date::byday_to_days($rrule['BYDAY']);
+							
+						$days = Date::shift_days_to_local($days, date('G', $event['start_time']), Date::get_timezone_offset($event['start_time']));
+
+							
+						$event['repeat_days_0'] = $days['sun'];
+						$event['repeat_days_1'] = $days['mon'];
+						$event['repeat_days_2'] = $days['tue'];
+						$event['repeat_days_3'] = $days['wed'];
+						$event['repeat_days_4'] = $days['thu'];
+						$event['repeat_days_5'] = $days['fri'];
+						$event['repeat_days_6'] = $days['sat'];
+						break;
+
+					case 'MONTHLY':
+						if (isset($rrule['BYDAY']))
+						{
+							$event['repeat_type'] = REPEAT_MONTH_DAY;
+
+							$event['month_time'] = $rrule['BYDAY'][0];
+							$day = substr($rrule['BYDAY'], 1);
+
+							$days = Date::byday_to_days($day);
+								
+							$days = Date::shift_days_to_local($days, date('G', $event['start_time']), Date::get_timezone_offset($event['start_time']));
+								
+
+							$event['repeat_days_0'] = $days['sun'];
+							$event['repeat_days_1'] = $days['mon'];
+							$event['repeat_days_2'] = $days['tue'];
+							$event['repeat_days_3'] = $days['wed'];
+							$event['repeat_days_4'] = $days['thu'];
+							$event['repeat_days_5'] = $days['fri'];
+							$event['repeat_days_6'] = $days['sat'];
+						
+						}else
+						{
+							$event['repeat_type'] = REPEAT_MONTH_DATE;
+						}
+						break;
+
+					case 'YEARLY':
+						$event['repeat_type'] = REPEAT_YEARLY;
+						break;
+				}
+			}
+		}
+
+		$event['repeat_end_date']=$event['repeat_end_time']>0 ? date($_SESSION['GO_SESSION']['date_format'], $event['repeat_end_time']) : '';
+
+
+		$multipliers[] = 604800;
+		$multipliers[] = 86400;
+		$multipliers[] = 3600;
+		$multipliers[] = 60;
+
+		$event['reminder_multiplier'] = 60;
+		$event['reminder_value'] = 0;
+
+		if(!empty($event['reminder']))
+		{
+			for ($i = 0; $i < count($multipliers); $i ++) {
+				$devided = $event['reminder'] / $multipliers[$i];
+				$match = (int) $devided;
+				if ($match == $devided) {
+					$event['reminder_multiplier'] = $multipliers[$i];
+					$event['reminder_value'] = $devided;
+					break;
+				}
+			}
+		}
+		
+		return $event;
 	}
 
 }
