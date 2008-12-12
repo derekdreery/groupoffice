@@ -31,7 +31,7 @@ GO.form.UploadFile = function(config) {
 	
 	GO.form.UploadFile.superclass.constructor.call(this, config);
 	
-	
+	this.addEvents({fileAdded:true});
 };
 
 
@@ -152,6 +152,8 @@ Ext.extend(GO.form.UploadFile, Ext.BoxComponent, {
 			this.setDisabled(true);
 		}
 		
+		this.fireEvent('filesChanged',this, this.inputs);
+		
 	},
 	/**
 		* Appends row to the queue table to display the file
@@ -206,7 +208,8 @@ Ext.extend(GO.form.UploadFile, Ext.BoxComponent, {
 		this.inputs.removeKey(id);
 		
 		this.setDisabled(false);
-
+		
+		this.fireEvent('filesChanged',this, this.inputs);
 	},
 	
 	getFileCls: function(name) {

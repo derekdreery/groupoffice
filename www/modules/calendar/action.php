@@ -124,6 +124,24 @@ try{
 	switch($_REQUEST['task'])
 	{
 			
+		case 'import':
+
+			if (!file_exists($_FILES['ical_file']['tmp_name'][0]))
+			{
+				throw new Exception($lang['common']['noFileUploaded']);
+			}else
+			{
+				if($count = $cal->import_ical_file($_FILES['ical_file']['tmp_name'][0], $_POST['calendar_id']))
+				{
+					$response['feedback'] = sprintf($lang['calendar']['import_success'], $count);
+					$response['success']=true;					
+				}else
+				{
+					throw new Exception($lang['common']['saveError']);
+				}
+				unlink($_FILES['ical_file']['tmp_name'][0]);
+			}
+			break;
 		case 'delete_event':
 			
 			$event_id=$_POST['event_id'];

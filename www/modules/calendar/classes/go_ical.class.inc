@@ -67,7 +67,7 @@ class go_ical extends calendar
 
 		$cal = new calendar();
 
-		$cal->get_events(false,true,false, $calendar_id);
+		$cal->get_events(array($calendar_id));
 		while($cal->next_record())
 		{
 			$ics .= $this->convert_event($cal->record);
