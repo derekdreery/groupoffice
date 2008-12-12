@@ -20,20 +20,23 @@ function update_link($old_link_id, $id, $link_type)
 {
 	global $module_ids;
 	
-	$db = new db();
-	$db->halt_on_error = 'report';
+	if(!empty($id) && !empty($old_link_id))
+	{	
+		$db = new db();
+		$db->halt_on_error = 'report';
+		
+		$sql = "UPDATE go_links SET link_id1=".$id.", link_id1_converted='1' WHERE link_id1=".$old_link_id." AND type1=$link_type AND link_id1_converted='0'";
+		$db->query($sql);
 	
-	$sql = "UPDATE go_links SET link_id1=".$id.", link_id1_converted='1' WHERE link_id1=".$old_link_id." AND type1=$link_type AND link_id1_converted='0'";
-	$db->query($sql);
-
-	$sql = "UPDATE go_links SET link_id2=".$id.", link_id2_converted='1' WHERE link_id2=".$old_link_id." AND type2=$link_type AND link_id2_converted='0'";
-	$db->query($sql);	
-	
-	if(in_array('custom_fields', $module_ids) && in_array($link_type, array(2,3,4,5,8)))
-	{
-		//custom fields conversion	
-		$sql = "UPDATE cf_$link_type SET link_id=$id, link_id_converted='1' WHERE link_id=$old_link_id AND link_id_converted='0'";
-		$db->query($sql);		
+		$sql = "UPDATE go_links SET link_id2=".$id.", link_id2_converted='1' WHERE link_id2=".$old_link_id." AND type2=$link_type AND link_id2_converted='0'";
+		$db->query($sql);	
+		
+		if(in_array('custom_fields', $module_ids) && in_array($link_type, array(2,3,4,5,8)))
+		{
+			//custom fields conversion	
+			$sql = "UPDATE cf_$link_type SET link_id=$id, link_id_converted='1' WHERE link_id=$old_link_id AND link_id_converted='0'";
+			$db->query($sql);		
+		}
 	}
 }
 
