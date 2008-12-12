@@ -67,3 +67,5 @@ $lang['calendar']['cumulative']='Invalid recurrence rule. The next occurence may
 $lang['calendar']['already_accepted']='You already accepted this event.';
 
 $lang['calendar']['private']='Private';
+
+$lang['calendar']['import_success']='%s events were imported';

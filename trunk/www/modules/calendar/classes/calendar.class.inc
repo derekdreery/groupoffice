@@ -1538,37 +1538,33 @@ class calendar extends db
 
 
 	//TODO: attendee support
-	function import_ical_file($user_id, $ical_file, $calendar_id, $return_event_id=false)
+	function import_ical_file($ical_file, $calendar_id)
 	{
 		global $GO_CONFIG, $GO_MODULES;
 		$count = 0;
 
-		$cal_module = $GO_MODULES->get_module('calendar');
-
-		if ($calendar = $this->get_calendar($calendar_id) && $cal_module)
+		if ($calendar = $this->get_calendar($calendar_id))
 		{
-			require_once($cal_module['class_path'].'ical2array.class.inc');
+			require_once($GO_CONFIG->class_path.'ical2array.class.inc');
 			$this->ical2array = new ical2array();
 
 			$vcalendar = $this->ical2array->parse_file($ical_file);
-
-			while($object = array_shift($vcalendar[0]['objects']))
-			{
-				if($object['type'] == 'VEVENT' || $object['type'] == 'VTODO')
+			
+			if(isset($vcalendar[0]['objects']))
+			{			
+				while($object = array_shift($vcalendar[0]['objects']))
 				{
-					if($event = $this->get_event_from_ical_object($object))
+					if($object['type'] == 'VEVENT')
 					{
-
-						$exceptions=isset($event['exceptions']) ? $event['exceptions'] : array();
-						unset($event['exceptions']);
-						$event = $event;
-						$event = array_map('trim', $event);
-						$event['exceptions']=$exceptions;
-
-						if ($event_id = $this->add_event($event))
-						{
-							$count++;
-							$this->subscribe_event($event_id, $calendar_id);
+						
+						if($event = $this->get_event_from_ical_object($object))
+						{						
+							$event['calendar_id']=$calendar_id;
+							
+							if ($event_id = $this->add_event($event))
+							{
+								$count++;
+							}
 						}
 					}
 				}

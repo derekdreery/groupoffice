@@ -64,3 +64,4 @@ GO.calendar.lang.selectCalendarForAppointment = 'Select the calendar to put this
 GO.calendar.lang.closeWindow = 'The appointment has been accepted and scheduled. You can close this window.';
 GO.calendar.lang.list='List';
 GO.calendar.lang.editRecurringEvent='Do you want to edit this occurence or the entire series?';
+GO.calendar.lang.selectIcalendarFile='Select an icalendar (*.ics) file';

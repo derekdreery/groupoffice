@@ -50,3 +50,4 @@ $lang['calendar']['decline_title']='Afgewezen';
 $lang['calendar']['decline_confirm']='De eigenaar zal op de hoogte gebracht worden van uw afwijzing voor deze gebeurtenis';
 $lang['calendar']['cumulative']='Ongeldige herhaling. De volgende herhaling mag niet plaatsvinden voor de vorige is geeindigd.';
 $lang['calendar']['private']='Privé';
+$lang['calendar']['import_success']='%s afspraken werden geïmporteerd';

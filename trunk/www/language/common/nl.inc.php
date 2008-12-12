@@ -24,6 +24,7 @@ $lang['common']['saveError']='Fout bij het opslaan van de gegevens';
 $lang['common']['deleteError']='Fout bij het verwijderen van de gegevens ';
 $lang['common']['selectError']='Fout tijdens het lezen van de gegevens';
 $lang['common']['missingField'] = 'U heeft niet alle vereiste velden ingevuld';
+$lang['common']['noFileUploaded']='Bestand was niet ontvangen';
 
 $lang['common']['name']='Naam';
 $lang['common']['user']='Gebruiker';
