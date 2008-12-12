@@ -65,7 +65,7 @@ GO.email.EmailClient = function(config){
 	
 	if(!this.topMessagesGrid.hidden)
   {
-  	this.messagesGrid=this.leftMessagesGrid;
+  	this.messagesGrid=this.topMessagesGrid;
   }else
   {
   	this.messagesGrid=this.leftMessagesGrid;
@@ -96,7 +96,7 @@ GO.email.EmailClient = function(config){
 
 
 
-	var gridContextMenu = new Ext.menu.Menu({
+	this.gridContextMenu = new Ext.menu.Menu({
 		shadow: "frame",
 		minWidth: 180,
 		items: [
@@ -155,10 +155,7 @@ GO.email.EmailClient = function(config){
 	});
 
 
-	this.messagesGrid.on("rowcontextmenu", function(grid, rowIndex, e) {
-		var coords = e.getXY();
-		gridContextMenu.showAt([coords[0], coords[1]]);
-	},this);
+	
 
 	this.treePanel = new GO.email.AccountsTree({
 		id:'email-tree-panel',
@@ -691,6 +688,11 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	
 	addGridHandlers : function(grid)
 	{		
+		grid.on("rowcontextmenu", function(grid, rowIndex, e) {
+			var coords = e.getXY();
+			this.gridContextMenu.showAt([coords[0], coords[1]]);
+		},this);
+		
 		grid.on('collapse', function(){
 			this.closeMessageButton.setVisible(true);
 		}, this);
@@ -875,6 +877,8 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
   	{	
 			switch(attachment.extension)
 			{				
+				
+				
 				case 'dat':
 					document.location.href=GO.settings.modules.email.url+
 						'tnef.php?account_id='+this.account_id+
@@ -885,6 +889,41 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 						'&mime='+attachment.mime+
 						'&filename='+escape(attachment.name);
 				break;
+				
+				case 'ics':
+					if(!forceDownload)
+					{
+						Ext.Ajax.request({
+							url: GO.settings.modules.email.url+'json.php',
+							params: {
+								task: 'icalendar_attachment',
+								account_id: this.account_id,
+								mailbox: this.mailbox,
+								uid: this.messagePanel.uid,
+								part: attachment.number,
+								transfer: attachment.transfer
+							},
+							callback: function(options, success, response)
+							{
+								if(success)
+								{
+									var values = Ext.decode(response.responseText);
+									
+									if(!values.success)
+									{
+										alert(values.feedback);
+									}else
+									{																		
+										GO.calendar.eventDialog.show({
+											values: values
+										});
+									}
+								}
+							},
+							scope: this
+						});	
+						break;
+					}
 				
 				case 'bmp':
 				case 'png':

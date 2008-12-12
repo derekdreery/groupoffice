@@ -804,8 +804,21 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 
     sendMail : function(draft){
     	
+    	if(this.uploadDialog && this.uploadDialog.isVisible())
+    	{
+    		alert(GO.email.lang.closeUploadDialog);
+    		this.attachmentsDialog.show();
+    		this.uploadDialog.show();
+    		return false;
+    	}    	
+    	
     	if(this.subjectField.getValue()!='' || confirm(GO.email.lang.confirmEmptySubject))
     	{    	
+    		if(this.attachmentsDialog && this.attachmentsDialog.isVisible())
+	    	{
+	    		this.attachmentsDialog.hide();
+	    	}
+	    	
 	    	if(this.attachmentsStore && this.attachmentsStore.data.keys.length)
 	    	{
 	    		this.sendParams['attachments']=Ext.encode(this.attachmentsStore.data.keys);    		
