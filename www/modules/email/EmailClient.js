@@ -20,23 +20,56 @@ GO.email.EmailClient = function(config){
 		config = {};
 	}	
 	
-		
-	var messagesGridConfig = {};
+	
+	var messagesStore = new GO.data.JsonStore({
+		url: GO.settings.modules.email.url+'json.php',
+		baseParams: {
+			"node": '',
+			"type": 'messages'
+		},
+		root: 'results',
+		totalProperty: 'total',
+		id: 'uid',
+		fields:['uid','icon','flagged','attachments','new','subject','from','size','date', 'priority','answered'],
+		remoteSort: true
+	});
+	
+	messagesStore.setDefaultSort('date', 'DESC');
 
-	if(screen.width>1024)
+	var messagesAtTop = Ext.state.Manager.get('em-msgs-top');		
+	if(messagesAtTop)
 	{
-		messagesGridConfig.region = 'west';
-		messagesGridConfig.width=420;
+		messagesAtTop = Ext.decode(messagesAtTop);
 	}else
 	{
-		messagesGridConfig.region = 'north';
-		messagesGridConfig.height=250;
+		messagesAtTop =screen.width<1024;
 	}
-	
-	messagesGridConfig.id='email-grid-panel-'+messagesGridConfig.region;
-	
-	this.messagesGrid = new GO.email.MessagesGrid(messagesGridConfig);
 
+	this.leftMessagesGrid = new GO.email.MessagesGrid({
+		id:'em-pnl-west',
+		store:messagesStore,
+		width: 420,
+		region:'west',
+		hidden:messagesAtTop
+	});	
+	this.addGridHandlers(this.leftMessagesGrid);
+	
+	this.topMessagesGrid = new GO.email.MessagesGrid({
+		id:'em-pnl-north',
+		store:messagesStore,
+		height: 250,
+		region:'north',
+		hidden:!messagesAtTop
+	});
+	this.addGridHandlers(this.topMessagesGrid);
+	
+	if(!this.topMessagesGrid.hidden)
+  {
+  	this.messagesGrid=this.leftMessagesGrid;
+  }else
+  {
+  	this.messagesGrid=this.leftMessagesGrid;
+  }
 	this.messagesGrid.store.on('load',function(){
 		
 		var unseen = this.messagesGrid.store.reader.jsonData.unseen;
@@ -61,47 +94,6 @@ GO.email.EmailClient = function(config){
 		}					
 	}, this);	
 
-	this.messagesGrid.on("rowdblclick", function(){		
-		if(this.messagesGrid.store.reader.jsonData.drafts)
-		{
-			GO.email.Composer.show({
-				uid: this.messagePanel.uid, 
-				task: 'opendraft',
-				template_id: 0,
-				mailbox: this.mailbox,
-				account_id: this.account_id
-			});
-		}else
-		{	
-			this.messagesGrid.collapse();
-		}
-	}, this);
-
-	this.messagesGrid.on('collapse', function(){
-		this.closeMessageButton.setVisible(true);
-	}, this);
-	
-	this.messagesGrid.on('expand', function(){
-		this.closeMessageButton.setVisible(false);
-	}, this);	
-
-	//this.messagesGrid.getSelectionModel().on("rowselect",function(sm, rowIndex, r){
-	this.messagesGrid.on("delayedrowselect",function(grid, rowIndex, r){
-		if(r.data['uid']!=this.messagePanel.uid)
-		{
-			this.messagePanel.uid=r.data['uid'];			
-			this.messagePanel.loadMessage(r.data.uid, this.mailbox, this.account_id);			
-		}
-	}, this);
-	
-	/*this.messagesGrid.on('rowclick', function(grid, rowIndex, e ){
-		var r = grid.store.getAt(rowIndex);
-		if(r.data['uid']!=this.messagePanel.uid)
-		{
-			this.messagePanel.uid=r.data['uid'];			
-			this.messagePanel.loadMessage(r.data.uid, this.mailbox, this.account_id);			
-		}
-	}, this);*/
 
 
 	var gridContextMenu = new Ext.menu.Menu({
@@ -438,13 +430,27 @@ GO.email.EmailClient = function(config){
 					scope: this
 				},new Ext.Toolbar.Separator(),
 				{
-					iconCls: 'btn-accounts',
-					text: GO.email.lang.accounts,
-					cls: 'x-btn-text-icon',
-					handler: function(){
-						this.showAccountsDialog();
-					},
-					scope: this
+					iconCls: 'btn-settings',
+					text:GO.lang.cmdSettings,
+					menu: {
+          	items: [{
+							iconCls: 'btn-accounts',
+							text: GO.email.lang.accounts,
+							cls: 'x-btn-text-icon',
+							handler: function(){
+								this.showAccountsDialog();
+							},
+							scope: this
+						},{
+							iconCls:'btn-toggle-window',
+							text: GO.email.lang.toggleWindowPosition,
+							cls: 'x-btn-text-icon',
+							handler: function(){
+								this.moveGrid();								
+							},
+							scope: this
+						}]
+					}				
 				},{					
 					iconCls: 'btn-refresh',
 					text: GO.lang.cmdRefresh,
@@ -528,23 +534,7 @@ GO.email.EmailClient = function(config){
 					text: GO.lang.cmdPrint,
 					cls: 'x-btn-text-icon',
 					handler: function(){
-						/*var popup = window.open('about:blank');
-        		if (!popup.opener) popup.opener = self;        		
-        		
-        		popup.document.write('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\n'+
-							'<html>\n'+
-							'<head>\n'+
-							'<title>Group-Office</title>'+							
-							'<link href="'+GO.settings.config.theme_url+'images/favicon.ico" rel="shotcut icon" />'+
-							'<link href="'+BaseHref+'ext/resources/css/ext-all.css" type="text/css" rel="stylesheet" />'+
-							'<link href="'+GO.settings.config.theme_url+'style.css" type="text/css" rel="stylesheet" />'+
-							'<link href="'+GO.settings.modules.email.url+'themes/'+GO.settings.theme+'/style.css" type="text/css" rel="stylesheet" />'+
-							'</head><body>'+this.messagePanel.body.dom.innerHTML+'</body></html>');
-						popup.document.close();
-						popup.focus();		*/
-						
-						this.messagePanel.body.print();				
-												
+						this.messagePanel.body.print();												
 					},
 					scope: this
 				})];
@@ -589,15 +579,23 @@ GO.email.EmailClient = function(config){
 					},
 					scope: this
 				}));
-				
+
 	
 	config.layout='border';
 	config.tbar=new Ext.Toolbar({		
 			cls:'go-head-tb',
 			items: tbar
 			});
-				
-				
+
+	this.messagePanel = new GO.email.MessagePanel({
+					id:'email-message-panel',
+					region:'center',
+					autoScroll:true,
+					titlebar: false,
+					border:true,
+					attachmentContextMenu: new GO.email.AttachmentContextMenu({emailClient:this})
+				});				
+
 	config.items=[
 		this.treePanel,
 		{
@@ -605,17 +603,12 @@ GO.email.EmailClient = function(config){
       titlebar: false,
       layout:'border',														
 			items: [
-				this.messagesGrid,
-				this.messagePanel = new GO.email.MessagePanel({
-					id:'email-message-panel',
-					region:'center',
-					autoScroll:true,
-					titlebar: false,
-					border:true,
-					attachmentContextMenu: new GO.email.AttachmentContextMenu({emailClient:this})
-				})
+				this.messagePanel,
+				this.topMessagesGrid,
+				this.leftMessagesGrid				
 			]
   	}];
+
   	
   this.messagePanel.on('load', function(options, success, response){
   	if(!success)
@@ -677,6 +670,61 @@ GO.email.EmailClient = function(config){
 };
 
 Ext.extend(GO.email.EmailClient, Ext.Panel,{	
+	
+	moveGrid : function(){		
+		if(this.topMessagesGrid.isVisible())
+		{
+			this.messagesGrid=this.leftMessagesGrid;
+			this.topMessagesGrid.hide();
+	    
+		}else
+		{			
+			this.messagesGrid=this.topMessagesGrid;
+			this.leftMessagesGrid.hide();	   
+		}
+		//this.messagesGridContainer.add(this.messagesGrid);
+    this.messagesGrid.show();
+    this.messagesGrid.ownerCt.doLayout();
+    
+    Ext.state.Manager.set('em-msgs-top', Ext.encode(this.topMessagesGrid.isVisible()));
+	},
+	
+	addGridHandlers : function(grid)
+	{		
+		grid.on('collapse', function(){
+			this.closeMessageButton.setVisible(true);
+		}, this);
+		
+		grid.on('expand', function(){
+			this.closeMessageButton.setVisible(false);
+		}, this);	
+		
+		grid.on("rowdblclick", function(){		
+			if(this.messagesGrid.store.reader.jsonData.drafts)
+			{
+				GO.email.Composer.show({
+					uid: this.messagePanel.uid, 
+					task: 'opendraft',
+					template_id: 0,
+					mailbox: this.mailbox,
+					account_id: this.account_id
+				});
+			}else
+			{	
+				this.messagesGrid.collapse();
+			}
+		}, this);	
+
+		//this.messagesGrid.getSelectionModel().on("rowselect",function(sm, rowIndex, r){
+		grid.on("delayedrowselect",function(grid, rowIndex, r){
+			if(r.data['uid']!=this.messagePanel.uid)
+			{
+				this.messagePanel.uid=r.data['uid'];			
+				this.messagePanel.loadMessage(r.data.uid, this.mailbox, this.account_id);			
+			}
+		}, this);		
+	},
+	
 	checkMailInterval : 300000,
 	//checkMailInterval : 10000,
 	
