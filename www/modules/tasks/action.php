@@ -25,6 +25,26 @@ $response =array('success'=>false);
 try{
 	switch($_REQUEST['task'])
 	{	
+		case 'import':
+			require_once ($GO_LANGUAGE->get_language_file('tasks'));
+			
+			if (!file_exists($_FILES['ical_file']['tmp_name'][0]))
+			{
+				throw new Exception($lang['common']['noFileUploaded']);
+			}else
+			{
+				if($count = $tasks->import_ical_file($_FILES['ical_file']['tmp_name'][0], $_POST['tasklist_id']))
+				{
+					$response['feedback'] = sprintf($lang['tasks']['import_success'], $count);
+					$response['success']=true;					
+				}else
+				{
+					throw new Exception($lang['common']['saveError']);
+				}
+				unlink($_FILES['ical_file']['tmp_name'][0]);
+			}
+			break;
+			
 		case 'schedule_call':
 			
 			//$tasklist = $tasks->get_tasklist();

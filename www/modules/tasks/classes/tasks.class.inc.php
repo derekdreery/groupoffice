@@ -645,7 +645,7 @@ class tasks extends db
 
 		while($object = array_shift($vtask[0]['objects']))
 		{
-			if($object['type'] == 'Vtask' || $object['type'] == 'VTODO')
+			if($object['type'] == 'VTODO')
 			{
 				if($task = $this->get_task_from_ical_object($object))
 				{
@@ -656,69 +656,42 @@ class tasks extends db
 		return false;
 	}
 
-	function import_ical_string($ical_string, $task_id)
+	function import_ical_string($ical_string, $tasklist_id)
 	{
-		global $GO_MODULES;
-
-		require_once($GO_MODULES->modules['task']['class_path'].'ical2array.class.inc');
-		$this->ical2array = new ical2array();
-
-		$vtask = $this->ical2array->parse_string($ical_string);
-
-		while($object = array_shift($vtask[0]['objects']))
-		{
-			if($object['type'] == 'VTODO')
-			{
-				if($task = $this->get_task_from_ical_object($object))
-				{
-					$exceptions=isset($task['exceptions']) ? $task['exceptions'] : array();
-					unset($task['exceptions']);
-					$task = $task;
-					$task = array_map('trim', $task);
-					$task['exceptions']=$exceptions;
-
-					$task_id = $this->add_task($task);
-				}
-			}
-		}
-		return false;
-	}
-
-
-	//TODO: attendee support
-	function import_ical_file($user_id, $ical_file, $task_id, $return_task_id=false)
-	{
-		global $GO_CONFIG, $GO_MODULES;
+		global $GO_MODULES, $GO_CONFIG;
 		$count = 0;
 
-		$cal_module = $GO_MODULES->get_module('task');
+		require_once($GO_CONFIG->class_path.'ical2array.class.inc');
+		$this->ical2array = new ical2array();
 
-		if ($task = $this->get_task($task_id) && $cal_module)
-		{
-			require_once($cal_module['class_path'].'ical2array.class.inc');
-			$this->ical2array = new ical2array();
-
-			$vtask = $this->ical2array->parse_file($ical_file);
-
-			while($object = array_shift($vtask[0]['objects']))
+		$vcalendar = $this->ical2array->parse_string($ical_string);
+			
+		if(isset($vcalendar[0]['objects']))
+		{			
+			while($object = array_shift($vcalendar[0]['objects']))
 			{
-				if($object['type'] == 'Vtask' || $object['type'] == 'VTODO')
+				if($object['type'] == 'VTODO')
 				{
 					if($task = $this->get_task_from_ical_object($object))
 					{
-						$exceptions=isset($task['exceptions']) ? $task['exceptions'] : array();
-						unset($task['exceptions']);
-						$task = $task;
-						$task = array_map('trim', $task);
-						$task['exceptions']=$exceptions;
-
-						$task_id = $this->add_task($task);						
-						$count++;
+						$task['tasklist_id']=$tasklist_id;	
+						if($task_id = $this->add_task($task))
+						{
+							$count++;
+						}
 					}
 				}
 			}
 		}
 		return $count;
+	}
+
+
+	//TODO: attendee support
+	function import_ical_file($ical_file, $tasklist_id)
+	{
+		$data = file_get_contents($ical_file);
+		return $this->import_ical_string($data, $tasklist_id);
 	}
 	
 	
