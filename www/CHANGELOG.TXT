@@ -1,4 +1,7 @@
 2008/12/?? Version 3.00-stable-4
+- icalendar import for tasks and calendar
+- message panel horizontal or vertical as preference
+- Improved month view
 - Import icalendar attachments in e-mail
 - Right click menu added on e-mail addresses in email module with useful options
 - Right click on e-mail attachment offers Save as option in the files module
