@@ -418,7 +418,7 @@ class email extends db
 
 	function get_mailboxes($account_id, $folder_id=-1)
 	{
-		$sql = "SELECT * FROM em_folders WHERE account_id='".$this->escape($account_id)."'";
+		$sql = "SELECT id,account_id,name,subscribed,parent_id,delimiter,attributes,sort_order,msgcount,unseen FROM em_folders WHERE account_id='".$this->escape($account_id)."'";
 
 		if ($folder_id > -1)
 		{
@@ -432,7 +432,7 @@ class email extends db
 
 	function get_folders($account_id, $folder_id=-1)
 	{
-		$sql = "SELECT * FROM em_folders";
+		$sql = "SELECT id,account_id,name,subscribed,parent_id,delimiter,attributes,sort_order,msgcount,unseen FROM em_folders";
 
 		if($account_id>0)
 		{
