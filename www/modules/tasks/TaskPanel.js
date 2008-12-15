@@ -49,7 +49,7 @@ GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
 						'<td>'+GO.lang.strStatus+':</td>'+
 						'<td>{status_text}</td>'+
 					'</tr>'+
-					'<tpl if="description.length">'+
+					'<tpl if="this.notEmpty(description)">'+
 						'<tr>'+
 							'<td colspan="2" class="display-panel-heading">'+GO.lang.strDescription+'</td>'+
 						'</tr>'+
@@ -62,14 +62,6 @@ GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
 				
 		this.template += GO.linksTemplate;
 												
-				/*if(GO.customfields)
-				{
-					template +=GO.customfields.displayPanelTemplate;
-				}*/
-				
-					    	
-	  this.templateConfig = {};
-		
 				
 		if(GO.files)
 		{

@@ -44,8 +44,6 @@ GO.{module}.{friendly_single_ucfirst}Panel = Ext.extend(GO.DisplayPanel,{
 				{
 					this.template +=GO.customfields.displayPanelTemplate;
 				}</gotpl>
-	    	
-	  this.templateConfig = {};
 		
 		<gotpl if="$files">		
 		if(GO.files)

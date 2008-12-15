@@ -37,13 +37,9 @@ GO.notes.NotePanel = Ext.extend(GO.DisplayPanel,{
 					'<tr>'+
 						'<td colspan="2" class="display-panel-heading">{name}</td>'+
 					'</tr>'+
-
-					'<tpl if="content.length">'+
-						'<tr>'+
-							'<td colspan="2">{content}</td>'+
-						'</tr>'+
-					'</tpl>'+
-									
+					'<tr>'+
+						'<td colspan="2">{content}</td>'+
+					'</tr>'+									
 				'</table>';																		
 				
 		this.template += GO.linksTemplate;
@@ -52,8 +48,6 @@ GO.notes.NotePanel = Ext.extend(GO.DisplayPanel,{
 		{
 			this.template +=GO.customfields.displayPanelTemplate;
 		}	
-	    	
-	  this.templateConfig = {};		
 				
 		if(GO.files)
 		{
