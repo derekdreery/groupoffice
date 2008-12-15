@@ -30,28 +30,28 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 								//NAME
 								'<tr>'+
 									'<td>' +
-									'<tpl if="title.length">'+
+									'<tpl if="this.notEmpty(title)">'+
 									'{title} '+
 									'</tpl>'+
 									'{full_name}'+
 								
 									//ADDRESS															
-									'<tpl if="address.length || address_no.length">'+
+									'<tpl if="this.notEmpty(address) || this.notEmpty(address_no)">'+
 										'<br />{[this.GoogleMapsCityStreet(values)]}'+															
 									'</tpl>'+
 									
 									//ZIP							
-									'<tpl if="zip.length || city.length">'+
+									'<tpl if="this.notEmpty(zip) || this.notEmpty(city)">'+
 										'<br />{zip} {city}'+			
 									'</tpl>'+
 									
 									//STATE							
-									'<tpl if="state.length">'+
+									'<tpl if="this.notEmpty(state)">'+
 										'<br />{state}'+						
 									'</tpl>'+
 									
 									//COUNTRY							
-									'<tpl if="country.length">'+
+									'<tpl if="this.notEmpty(country)">'+
 										'<br />{country}'+						
 									'</tpl>'+
 									'</td>'+
@@ -64,14 +64,14 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 							'<table cellpadding="0" cellspacing="0" border="0">'+
 								
 								//INITIALS
-								'<tpl if="initials.length">'+
+								'<tpl if="this.notEmpty(initials)">'+
 									'<tr>'+
 										'<td>' + GO.lang['strInitials'] + ':</td><td> {initials}</td>'+
 									'</tr>'+						
 								'</tpl>'+
 	
 								//BIRTHDAY							
-								'<tpl if="birthday.length">'+
+								'<tpl if="this.notEmpty(birthday)">'+
 									'<tr>'+
 										'<td>' + GO.lang['strBirthday'] + ':</td><td> {birthday}</td>'+
 									'</tr>'+						
@@ -94,21 +94,21 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 								'<table cellpadding="0" cellspacing="0" border="0">'+
 									
 									//EMAIL							
-									'<tpl if="email.length">'+
+									'<tpl if="this.notEmpty(email)">'+
 										'<tr>'+
 											'<td class="contactCompanyLabelWidth">' + GO.lang['strEmail'] + ':</td><td><a href="#" onclick="GO.email.Composer.show({values : {to: \'{email}\'}})">{email}</a></td>'+
 										'</tr>'+						
 									'</tpl>'+
 		
 									//EMAIL2							
-									'<tpl if="email2.length">'+
+									'<tpl if="this.notEmpty(email2)">'+
 										'<tr>'+
 											'<td class="contactCompanyLabelWidth">' + GO.lang['strEmail'] + ' 2:</td><td><a href="#" onclick="GO.email.Composer.show({values : {to: \'{email2}\'}})">{email2}</a></td>'+
 										'</tr>'+						
 									'</tpl>'+
 		
 									//EMAIL3							
-									'<tpl if="email3.length">'+
+									'<tpl if="this.notEmpty(email3)">'+
 										'<tr>'+
 											'<td class="contactCompanyLabelWidth">' + GO.lang['strEmail'] + ' 3:</td><td><a href="#" onclick="GO.email.Composer.show({values : {to: \'{email3}\'}})">{email3}</a></td>'+
 										'</tr>'+						
@@ -118,21 +118,21 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 										'<tr><td colspan="2">&nbsp;</td></tr>'+
 										
 										//PHONE							
-										'<tpl if="home_phone.length">'+
+										'<tpl if="this.notEmpty(home_phone)">'+
 											'<tr>'+
 												'<td class="contactCompanyLabelWidth">' + GO.lang['strPhone'] + ':</td><td><a href="callto:{home_phone}+type=phone">{home_phone}</a></td>'+
 											'</tr>'+						
 										'</tpl>'+
 
 										//CELLULAR							
-										'<tpl if="cellular.length">'+
+										'<tpl if="this.notEmpty(cellular)">'+
 											'<tr>'+
 												'<td class="contactCompanyLabelWidth">' + GO.lang['strCellular'] + ':</td><td><a href="callto:{cellular}+type=phone">{cellular}</a></td>'+
 											'</tr>'+						
 										'</tpl>'+
 													
 										//FAX							
-										'<tpl if="fax.length">'+
+										'<tpl if="this.notEmpty(fax)">'+
 											'<tr>'+
 												'<td class="contactCompanyLabelWidth">' + GO.lang['strFax'] + ':</td><td>{fax}</td>'+
 											'</tr>'+						
@@ -149,14 +149,14 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 									'<table cellpadding="0" cellspacing="0" border="0">'+
 										
 										//PHONE WORK							
-										'<tpl if="work_phone.length">'+
+										'<tpl if="this.notEmpty(work_phone)">'+
 											'<tr>'+
 												'<td class="contactCompanyLabelWidth">' + GO.lang['strWorkPhone'] + ':</td><td><a href="callto:{work_phone}+type=phone">{work_phone}</a></td>'+
 											'</tr>'+						
 										'</tpl>'+
 			
 										//FAX WORK							
-										'<tpl if="work_fax.length">'+
+										'<tpl if="this.notEmpty(work_fax)">'+
 											'<tr>'+
 												'<td class="contactCompanyLabelWidth">' + GO.lang['strWorkFax'] + ':</td><td>{work_fax}</td>'+
 											'</tr>'+						
@@ -186,21 +186,21 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 								'<table cellpadding="0" cellspacing="0" border="0">'+
 								
 									//COMPANY							
-									'<tpl if="company_name.length">'+
+									'<tpl if="this.notEmpty(company_name)">'+
 										'<tr>'+
 											'<td class="contactCompanyLabelWidth">' + GO.lang['strCompany'] + ':</td><td><a href="#" onclick="GO.linkHandlers[3].call(this,{company_id});">{company_name}</a></td>'+
 										'</tr>'+						
 									'</tpl>'+
 
 									//FUNCTION							
-									'<tpl if="values[\'function\'].length">'+
+									'<tpl if="this.notEmpty(values[\'function\'])">'+
 										'<tr>'+
 											'<td class="contactCompanyLabelWidth">' + GO.lang['strFunction'] + ':</td><td>{function}</td>'+
 										'</tr>'+						
 									'</tpl>'+
 
 									//DEPARTMENT							
-									'<tpl if="department.length">'+
+									'<tpl if="this.notEmpty(department)">'+
 										'<tr>'+
 											'<td class="contactCompanyLabelWidth">' + GO.lang['strDepartment'] + ':</td><td>{department}</td>'+
 										'</tr>'+						
@@ -212,7 +212,7 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 				
 				'</tpl>'+
 				
-				'<tpl if="values[\'comment\'].length">'+
+				'<tpl if="this.notEmpty(values[\'comment\'])">'+
 
 				//WORK DETAILS
 				'<tr>'+
@@ -232,7 +232,7 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 				}
 				
 			
-		this.templateConfig = {
+		Ext.apply(this.templateConfig, {
 			isContactFieldset: function(values){
 				if(values['email'].length ||
 					values['email2'].length ||
@@ -296,7 +296,7 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 					return values['address'] + ' ' + values['address_no'];
 				}
 			}
-		};		
+		});		
 		
 		Ext.apply(this.templateConfig, GO.linksTemplateConfig);
 		

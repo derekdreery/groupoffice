@@ -365,7 +365,12 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 	{
 		//Calculate the first day of the week		
 		var weekday = date.getDay();
-		return date.add(Date.DAY, this.firstWeekday-weekday);
+		var offset = this.firstWeekday-weekday;
+		if(offset>0)
+		{
+			offset-=7;
+		}
+		return date.add(Date.DAY, offset);
 	},
 	
 	mask : function()
