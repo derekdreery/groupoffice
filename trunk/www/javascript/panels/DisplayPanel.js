@@ -6,7 +6,15 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 	
 	template : '',
 	
-	templateConfig : {},
+	templateConfig : {
+		
+		notEmpty : function(v){
+			if(v && v.length)
+			{
+				return true;
+			}
+		}
+	},
 	
 	loadParams : {},
 	

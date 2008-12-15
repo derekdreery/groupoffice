@@ -156,10 +156,13 @@ Ext.extend(GO.calendar.ListGrid, Ext.grid.GridPanel, {
 	{
 		//Calculate the first day of the week		
 		var weekday = date.getDay();
-		return date.add(Date.DAY, this.firstWeekday-weekday);
-
+		var offset = this.firstWeekday-weekday;
+		if(offset>0)
+		{
+			offset-=7;
+		}
+		return date.add(Date.DAY, offset);
 	},
-	
 	setDays : function(days, load)
 	{
 		this.setDate(this.configuredDate, 7, load);		

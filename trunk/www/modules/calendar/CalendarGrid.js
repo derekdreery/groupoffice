@@ -415,6 +415,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 	{
 		//Calculate the first day of the week		
 		var weekday = date.getDay();
+		
 		var offset = this.firstWeekday-weekday;
 		if(offset>0)
 		{
