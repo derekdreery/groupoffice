@@ -386,7 +386,7 @@ GO.email.EmailClient = function(config){
 		{		
 			var usage='';
 			var cnode = node;
-			while(cnode.parentNode && usage===false)
+			while(cnode.parentNode && usage=='')
 			{
 				if(cnode.attributes.usage)
 				{
