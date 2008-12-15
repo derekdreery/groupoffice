@@ -164,7 +164,7 @@ GO.lang.upload = 'Enviar';
 GO.lang.download = 'Baixar';
 GO.lang.uploadFiles = 'Enviar arquivos';
 
-//GO.lang.displayingItems = 'Exibir itens {0} - {1} of {2}';
+GO.lang.displayingItems = 'Exibir itens {0} - {1} of {2}';
 GO.lang.strNoItems = 'Sem itens para exibir';
 
 GO.lang.strLinkItems = 'Procurar itens para o link';

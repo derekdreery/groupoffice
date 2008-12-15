@@ -174,7 +174,7 @@ GO.lang.upload = 'Закачать';
 GO.lang.download = 'Скачать';
 GO.lang.uploadFiles = 'Закачать файлы';
 
-//GO.lang.displayingItems = 'Отображено {0} - {1} из {2}';
+GO.lang.displayingItems = 'Отображено {0} - {1} из {2}';
 GO.lang.strNoItems = 'Ничего не найдено';
 
 GO.lang.strLinkItems = 'Искать свяки.';

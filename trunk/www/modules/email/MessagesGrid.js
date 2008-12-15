@@ -77,6 +77,14 @@ GO.email.MessagesGrid = function(config){
 					width:65,
 					align:'right'
 				}]);
+		config.bbar = new Ext.PagingToolbar({
+  					cls: 'go-paging-tb',
+	          store: config.store,
+	          pageSize: parseInt(GO.settings['max_rows_list']),
+	          displayInfo: true,
+	          displayMsg: GO.lang.displayingItemsShort,
+	          emptyMsg: GO.lang['strNoItems']
+	      });
 				
 		config.autoExpandColumn=1;
 		

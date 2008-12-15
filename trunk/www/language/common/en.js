@@ -168,8 +168,7 @@ GO.lang.upload = 'Upload';
 GO.lang.download = 'Download';
 GO.lang.uploadFiles = 'Upload files';
 
-//GO.lang.displayingItems = 'Displaying items {0} - {1} of {2}';
-GO.lang.displayingItems = 'Total: {2}';
+GO.lang.displayingItems = 'Displaying items {0} - {1} of {2}';
 GO.lang.strNoItems = 'No items to display';
 
 GO.lang.strLinkItems = 'Search for items to link';
@@ -513,3 +512,7 @@ GO.lang.countries["ZR"] = "Zaire";
 GO.lang.countries["ZM"] = "Zambia";
 GO.lang.countries["ZW"] = "Zimbabwe";
 GO.lang.countries["SA"] = "Saudi Arabia";
+
+
+
+GO.lang.displayingItemsShort='Total: {2}';
