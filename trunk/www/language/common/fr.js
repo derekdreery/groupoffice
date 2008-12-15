@@ -153,7 +153,7 @@ GO.lang.upload = 'Envoyer';
 GO.lang.download = 'Télécharger';
 GO.lang.uploadFiles = 'Envoyer des fichiers';
 
-GO.lang.displayingItems = 'Affichage des éléments {0} - {1} sur {2}';
+GO.lang.displayingItems = 'Total: {2}';
 GO.lang.strNoItems = 'Pas d\'élément à afficher';
 
 GO.lang.strLinkItems = 'Rechercher des éléments à lier';
