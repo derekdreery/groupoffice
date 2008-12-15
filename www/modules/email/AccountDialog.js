@@ -580,8 +580,8 @@ Ext.extend(GO.email.AccountDialog, Ext.Window, {
 		    this.account_id=account_id;
 				this.selectUser.setRemoteValue(action.result.data.user_id, action.result.data.user_name);
 				
-				this.foldersTab.setDisabled(false);
-				this.filtersTab.setDisabled(false);
+				this.foldersTab.setDisabled(action.result.data.type=='pop3');
+				this.filtersTab.setDisabled(action.result.data.type=='pop3');
 				this.vacationPanel.setDisabled(typeof(action.result.data.vacation_subject)=='undefined');
 		    },
 		    scope: this

@@ -172,7 +172,7 @@ GO.email.EmailClient = function(config){
 	
 	this.treeContextMenu = new Ext.menu.Menu({		
 		
-		items: [{
+		items: [this.addFolderButton = new Ext.menu.Item({
 			iconCls: 'btn-add',
 			text: GO.email.lang.addFolder,
 			handler: function(){
@@ -216,7 +216,7 @@ GO.email.EmailClient = function(config){
 				}, this);
 			},
 			scope:this
-		},'-',
+		}),'-',
 		{
 			iconCls: 'btn-delete', 
 			text: GO.email.lang.emptyFolder, 
@@ -306,8 +306,9 @@ GO.email.EmailClient = function(config){
 		}
 		
 		var coords = e.getXY();
-		
-		this.treeContextMenu.showAt([coords[0], coords[1]]);
+		console.log(node.attributes);
+		this.addFolderButton.setDisabled(!node.attributes.canHaveChildren);
+		this.treeContextMenu.showAt([coords[0], coords[1]]);		
 	}, this);
 	
 

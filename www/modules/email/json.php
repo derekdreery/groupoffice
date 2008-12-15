@@ -55,6 +55,7 @@ function get_all_mailbox_nodes($account_id, $folder_id){
 				'folder_id'=>$email->f('id'),
 				'mailbox'=>$email->f('name'),
 				'expanded'=>true,
+				'canHaveChildren'=>($email->f('attributes') > LATT_NOINFERIORS),
 				'children'=>get_all_mailbox_nodes($account_id, $email->f('id')),
 				'checked'=>$email->f('subscribed')=='1'
 				);
@@ -128,6 +129,7 @@ function get_mailbox_nodes($account_id, $folder_id){
 				'iconCls'=>'folder-default',
 				'account_id'=>$email->f('account_id'),
 				'folder_id'=>$email->f('id'),
+				'canHaveChildren'=>$email->f('attributes') > LATT_NOINFERIORS,	
 				'unseen'=>$unseen,
 				'mailbox'=>$email->f('name')
 			);
@@ -139,6 +141,7 @@ function get_mailbox_nodes($account_id, $folder_id){
 				'account_id'=>$email->f('account_id'),
 				'folder_id'=>$email->f('id'),
 				'mailbox'=>$email->f('name'),
+				'canHaveChildren'=>$email->f('attributes') > LATT_NOINFERIORS,
 				'unseen'=>$unseen,
 				'expanded'=>true,
 				'children'=>array()
@@ -1066,6 +1069,7 @@ try{
 														'folder_id'=>0,
 														'mailbox'=>'INBOX',
 														'children'=>$children,
+														'canHaveChildren'=>$email2->f('type')=='imap',
 														'inbox_new'=>$inbox_new,
 														'usage'=>$usage
 													);
