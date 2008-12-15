@@ -129,7 +129,7 @@ GO.lang.cmdNo = 'Nee';
 GO.lang.strLinks = 'Koppelingen';
 
 
-GO.lang.displayingItems = 'Totaal: {2}';
+GO.lang.displayingItems = 'Toont items {0} - {1} van {2}';
 GO.lang.strNoItems = 'Geen items om weer te geven';
 
 GO.lang.strLinkItems = 'Zoeken naar items om te koppelen';
@@ -492,6 +492,7 @@ GO.lang.countries["ZM"]= "Zambia";
 GO.lang.countries["ZW"]= "Zimbabwe";
 
 
+GO.lang.displayingItemsShort='Totaal: {2}';
 
 if(Ext.form.BasicForm)
 {

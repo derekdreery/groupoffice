@@ -159,7 +159,7 @@ GO.lang.upload = 'Carica';
 GO.lang.download = 'Scarica';
 GO.lang.uploadFiles = 'Carica file';
 
-//GO.lang.displayingItems = 'Visualizzati {0} - {1} di {2}';
+GO.lang.displayingItems = 'Visualizzati {0} - {1} di {2}';
 GO.lang.strNoItems = 'Non ci sono oggetti da visualizzare';
 
 GO.lang.strLinkItems = 'Ricerca di oggetti da collegare';

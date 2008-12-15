@@ -151,7 +151,7 @@ GO.lang.upload = 'Hochladen';
 GO.lang.download = 'Herunterladen';
 GO.lang.uploadFiles = 'Dateien hochladen';
 
-
+GO.lang.displayingItems = 'Element anzeigen {0} - {1} von {2}';
 GO.lang.strNoItems = 'Keine Elemente zum anzeigen';
 
 GO.lang.strLinkItems = 'Suche nach Elementen für Verlinkung';
