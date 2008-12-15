@@ -159,7 +159,7 @@ GO.lang.upload = 'Subir';
 GO.lang.download = 'Descargar';
 GO.lang.uploadFiles = 'Subir Archivios';
 
-GO.lang.displayingItems = 'Viendo {0} - {1} di {2}';
+//GO.lang.displayingItems = 'Viendo {0} - {1} di {2}';
 GO.lang.strNoItems = 'No hay artículos para mostrar';
 
 GO.lang.strLinkItems = 'Buscar los temas a ser conectados';
