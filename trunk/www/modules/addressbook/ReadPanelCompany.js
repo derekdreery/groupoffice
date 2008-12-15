@@ -49,21 +49,21 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 							'<table cellpadding="0" cellspacing="0" border="0">'+						
 								
 								//PHONE							
-								'<tpl if="phone.length">'+
+								'<tpl if="this.notEmpty(phone)">'+
 									'<tr>'+
 										'<td class="contactCompanyLabelWidth">' + GO.lang['strPhone'] + ':</td><td><a href="callto:{phone}+type=phone">{phone}</a></td>'+
 									'</tr>'+						
 								'</tpl>'+
 
 								//FAX							
-								'<tpl if="fax.length">'+
+								'<tpl if="this.notEmpty(fax)">'+
 									'<tr>'+
 										'<td class="contactCompanyLabelWidth">' + GO.lang['strFax'] + ':</td><td>{fax}</td>'+
 									'</tr>'+						
 								'</tpl>'+								
 								
 								//EMAIL							
-								'<tpl if="email.length">'+
+								'<tpl if="this.notEmpty(email)">'+
 									'<tr>'+
 										'<td class="contactCompanyLabelWidth">' + GO.lang['strEmail'] + ':</td><td><a href="#" onclick="GO.email.Composer.show({values : {to: \'{email}\'}})">{email}</a></td>'+
 									'</tr>'+						
@@ -73,7 +73,7 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 								'<tr><td colspan="2">&nbsp;</td></tr>'+																
 											
 								//HOMEPAGE							
-								'<tpl if="homepage.length">'+
+								'<tpl if="this.notEmpty(homepage)">'+
 									'<tr>'+
 										'<td class="contactCompanyLabelWidth">' + GO.lang['strHomepage'] + ':</td><td>&nbsp;<a href="{homepage}" target="_blank">{homepage}</a></td>'+
 									'</tr>'+						
@@ -87,14 +87,14 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 								'<table cellpadding="0" cellspacing="0" border="0">'+												
 									
 									//BANK_NO
-									'<tpl if="bank_no.length">'+
+									'<tpl if="this.notEmpty(bank_no)">'+
 										'<tr>'+
 											'<td>' + GO.addressbook.lang['cmdFormLabelBankNo'] + ':</td><td>&nbsp;{bank_no}</td>'+
 										'</tr>'+						
 									'</tpl>'+
 		
 									//VAT_NO							
-									'<tpl if="vat_no.length">'+
+									'<tpl if="this.notEmpty(vat_no)">'+
 										'<tr>'+
 											'<td>' + GO.addressbook.lang['cmdFormLabelVatNo'] + ':</td><td> {vat_no}</td>'+
 										'</tr>'+						
@@ -147,22 +147,22 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 										'<tr>'+
 											'<td>'+
 										//ADDRESS															
-										'<tpl if="address.length || address_no.length">'+
+										'<tpl if="this.notEmpty(address) || this.notEmpty(address_no)">'+
 											'{[this.GoogleMapsCityStreet(values)]}'+				
 										'</tpl>'+
 										
 										//ZIP							
-										'<tpl if="zip.length || city.length">'+
+										'<tpl if="this.notEmpty(zip) || this.notEmpty(city)">'+
 											'<br />{zip} {city}'+						
 										'</tpl>'+
 										
 										//STATE							
-										'<tpl if="state.length">'+
+										'<tpl if="this.notEmpty(state)">'+
 											'<br />{state}'+						
 										'</tpl>'+
 										
 										//COUNTRY							
-										'<tpl if="country.length">'+
+										'<tpl if="this.notEmpty(country)">'+
 											'<br />{country}'+						
 										'</tpl>'+
 
@@ -191,22 +191,22 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 											'<td>'+							
 										
 										//ADDRESS															
-										'<tpl if="post_address.length || post_address_no.length">'+
+										'<tpl if="this.notEmpty(post_address) || this.notEmpty(post_address_no)">'+
 											'{post_address} {post_address_no}'+
 										'</tpl>'+
 										
 										//ZIP							
-										'<tpl if="post_zip.length || post_city.length">'+
+										'<tpl if="this.notEmpty(post_zip) || this.notEmpty(post_city)">'+
 											'<br />{post_zip} {post_city}'+
 										'</tpl>'+
 										
 										//STATE							
-										'<tpl if="post_state.length">'+
+										'<tpl if="this.notEmpty(post_state)">'+
 											'<br />{post_state}'+
 										'</tpl>'+
 										
 										//COUNTRY							
-										'<tpl if="post_country.length">'+
+										'<tpl if="this.notEmpty(post_country)">'+
 											'<br />{post_country}'+				
 										'</tpl>'+
 
@@ -218,7 +218,7 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 					
 					'</table>'+		
 
-					'<tpl if="comment.length">'+						
+					'<tpl if="this.notEmpty(comment)">'+						
 						'<table cellpadding="0" cellspacing="0" border="0" class="display-panel">'+
 						'<tr>'+
 							'<td class="display-panel-heading">' + GO.addressbook.lang['cmdFormLabelComment'] + '</td>'+
@@ -259,7 +259,7 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 			this.template +=GO.customfields.displayPanelTemplate;
 		}
 	    	
-	  this.templateConfig =	{
+	  Ext.apply(this.templateConfig,{
 			isCompanySecondColumn : function(values)
 			{
 				if(
@@ -354,7 +354,7 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 					return values['address'] + ' ' + values['address_no'];
 				}
 			}
-		};
+		});
 		
 		Ext.apply(this.templateConfig, GO.linksTemplateConfig);		
 		
