@@ -123,7 +123,7 @@ function test_system(){
 
 	$tests[]=$test;
 	$test['name']='Error display';
-	$test['pass']=ini_get('display_errors')=='0';
+	$test['pass']=ini_get('display_errors')!='1';
 	$test['feedback']='Warning: PHP error display is enabled in php.ini. It\'s recommended that this feature is disabled because it can cause unnessecary interface crashes.';
 	$test['fatal']=false;
 
