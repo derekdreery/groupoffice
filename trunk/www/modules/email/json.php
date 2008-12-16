@@ -624,7 +624,7 @@ try{
 			
 			$response['blocked_images']=0;
 			
-			$response = array_merge($response, $go2mime->mime2GO($data, $inline_url,false, $part_number));
+			$response = array_merge($response, $go2mime->mime2GO($data, $inline_url,false,''));
 
 			break;
 
