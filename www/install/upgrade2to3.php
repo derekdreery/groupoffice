@@ -327,8 +327,17 @@ if(in_array('calendar', $module_ids))
 	
 	//now update all the new calendar_id fields
 	echo 'Updating calendar_id fields in cal_events'.$line_break;
-	$sql = "UPDATE cal_events SET calendar_id=(SELECT calendar_id FROM cal_events_calendars WHERE event_id=cal_events.id)";
-	$db->query($sql);
+	
+	//very slow:
+	//$sql = "UPDATE cal_events SET calendar_id=(SELECT calendar_id FROM cal_events_calendars WHERE event_id=cal_events.id)";
+	//$db->query($sql);
+	
+	$db->query("SELECT DISTINCT calendar_id, event_id FROM cal_events_calendars");
+	while($db->next_record())
+	{
+		$event = array('id'=>$db->f('event_id'), 'calendar_id'=>$db->f('calendar_id'));
+		$db2->update_row('cal_events', 'id', $event);
+	}
 	
 
 	echo 'Converting tasks to new separate tasks module'.$line_break;
