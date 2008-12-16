@@ -85,10 +85,10 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 	},
 	
 	loadMessage : function(uid, mailbox, account_id)
-	{
-		this.uid=uid;
+	{		
 		if(uid)
 		{
+			this.uid=uid;
 			this.params = {
 					uid: uid,
 					mailbox: mailbox,
