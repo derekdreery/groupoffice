@@ -891,6 +891,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 						'&filename='+escape(attachment.name);
 				break;
 				
+				case 'vcs':
 				case 'ics':
 					if(!forceDownload)
 					{
