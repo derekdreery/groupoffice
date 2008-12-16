@@ -234,14 +234,14 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 			
 		Ext.apply(this.templateConfig, {
 			isContactFieldset: function(values){
-				if(values['email'].length ||
-					values['email2'].length ||
-					values['email3'].length ||
-					values['home_phone'].length ||
-					values['fax'].length ||
-					values['cellular'].length ||
-					values['work_phone'].length ||
-					values['work_fax'].length	)
+				if(this.notEmpty(values['email']) ||
+					this.notEmpty(values['email2']) ||
+					this.notEmpty(values['email3']) ||
+					this.notEmpty(values['home_phone']) ||
+					this.notEmpty(values['fax']) ||
+					this.notEmpty(values['cellular']) ||
+					this.notEmpty(values['work_phone']) ||
+					this.notEmpty(values['work_fax'])	)
 				{
 					return true;
 				} else {
@@ -250,9 +250,9 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 			},			
 		isPhoneFieldset : function(values)
 			{
-				if(values['home_phone'].length ||
-					values['fax'].length ||
-					values['cellular'].length )
+				if(this.notEmpty(values['home_phone']) ||
+					this.notEmpty(values['fax']) ||
+					this.notEmpty(values['cellular']) )
 				{
 					return true;
 				} else {
@@ -261,8 +261,8 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 			},
 			isWorkPhoneFieldset : function(values)
 			{
-				if(values['work_phone'].length ||
-					values['work_fax'].length )
+				if(this.notEmpty(values['work_phone']) ||
+					this.notEmpty(values['work_fax']) )
 				{
 					return true;
 				} else {
@@ -271,9 +271,9 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 			},
 			isWorkFieldset : function(values)
 			{
-				if(values['company_name'].length ||
-					values['function'].length ||
-					values['department'].length )
+				if(this.notEmpty(values['company_name']) ||
+					this.notEmpty(values['function']) ||
+					this.notEmpty(values['department']))
 				{
 					return true;
 				} else {
@@ -284,9 +284,9 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 			{
 				var google_url = 'http://maps.google.com/maps?q=';
 				
-				if(values['address'].length && values['city'].length)
+				if(this.notEmpty(values['address']) && this.notEmpty(values['city']))
 				{
-					if(values['address_no'].length)
+					if(this.notEmpty(values['address_no']))
 					{
 						return '<a href="' + google_url + values['address'] + '+' + values['address_no'] + '+' + values['city'] + '" target="_blank" >' + values['address'] + ' ' + values['address_no'] + '</a>';	
 					} else {
