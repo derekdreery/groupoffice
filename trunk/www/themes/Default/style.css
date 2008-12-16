@@ -140,6 +140,10 @@ a.normal-link:hover{
 	background-repeat: no-repeat;
 }
 
+.filetype-eml {
+	background-image:url('images/16x16/filetypes/mail.png') !important;
+}
+
 .filetype-folder {
 	background-image:url('images/16x16/filetypes/folder.png') !important;
 	background-repeat: no-repeat;
