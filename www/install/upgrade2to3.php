@@ -4,7 +4,9 @@
  * 
  * Then it's wise to create another backup in case anything goes wrong in this script.
  *
- * Then run this script.
+ * Then run this script in the browser or on the command line:
+ * 
+ * php upgrade2to3.php | tee upgrade.log
  *
  */
 
