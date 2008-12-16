@@ -52,21 +52,7 @@ class filesystem extends db
 	function mkdir_recursive($path) {
 	  global $GO_CONFIG;
 	
-	  $dirs_to_create = array ();
-	  while (!is_writable($path)) {
-	    $dirs_to_create[] = $path;
-	    if(dirname($path) == $path)
-	    {
-	     	exit('Failed to create folder(s) '.var_export($dirs_to_create, true));
-	    }
-	    $path = dirname($path);
-	  }
-	  while ($dir = array_pop($dirs_to_create)) {
-	    if (@ !mkdir($dir, $GO_CONFIG->folder_create_mode)) {
-	      die("Failed creating required directory ".$dir);
-	    }
-	  }
-	  return true;
+	  return mkdir($path, $GO_CONFIG->folder_create_mode, true);	  
 	}
 
 
