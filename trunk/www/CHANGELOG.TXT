@@ -1,4 +1,5 @@
 2008/12/16 Version 3.00-stable-4
+- Detailed report printing in Projects module
 - Improved support for Nexthaus syncml clients
 - icalendar import for tasks and calendar
 - message panel horizontal or vertical as preference
