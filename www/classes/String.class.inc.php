@@ -240,7 +240,7 @@ class String {
 	 * @return	string
 	 */
 	function get_email_validation_regex() {
-		return "^([a-z0-9]+)([._-]([a-z0-9]+))*[@]([a-z0-9]+)([._-]([a-z0-9]+))*[.]([a-z0-9]){2,6}$";
+		return "/^[a-z0-9\._\-]+@[a-z0-9\.\-_]+\.[a-z]{2,4}$/";
 	}
 
 
@@ -252,7 +252,7 @@ class String {
 	 * @return bool
 	 */
 	function validate_email($email) {
-		return eregi(String::get_email_validation_regex(), $email);
+		return preg_match(String::get_email_validation_regex(), $email);
 	}
 
 	/**
@@ -447,9 +447,9 @@ class String {
 		{
 			$enriched = preg_replace("/(?:^|\b)(((http(s?):\/\/)|(www\.-))([\w\.-]+)([,:;%#&\/?=\w+\.\-@]+))(?:\b|$)/is", "<a href=\"http$4://$5$6$7\" target=\"_blank\" class=\"blue\">$1</a>", $enriched);
 			if ($_SESSION['GO_SESSION']['mail_client'] == 1) {
-				$enriched = preg_replace("/(\A|\s)([\w\.\-]+)(@)([\w\.-]+)([A-Za-z]{2,3})\b/i", "\\1<a href=\"javascript:top.main.popup('".$module['url']."send.php?mail_to=\\2\\3\\4\\5','".$GO_CONFIG->composer_width."','".$GO_CONFIG->composer_height."')\" class=\"blue\">\\2\\3\\4\\5</a>", $enriched);
+				$enriched = preg_replace("/(\A|\s)([\w\.\-]+)(@)([\w\.-]+)([A-Za-z]{2,4})\b/i", "\\1<a href=\"javascript:top.main.popup('".$module['url']."send.php?mail_to=\\2\\3\\4\\5','".$GO_CONFIG->composer_width."','".$GO_CONFIG->composer_height."')\" class=\"blue\">\\2\\3\\4\\5</a>", $enriched);
 			} else {
-				$enriched = preg_replace("/(\A|\s)([\w\.\-]+)(@)([\w\.-]+)([A-Za-z]{2,3})\b/i", "\\1<a href=\"mailto:\\2\\3\\4\\5\" class=\"blue\">\\2\\3\\4\\5</a>", $enriched);
+				$enriched = preg_replace("/(\A|\s)([\w\.\-]+)(@)([\w\.-]+)([A-Za-z]{2,4})\b/i", "\\1<a href=\"mailto:\\2\\3\\4\\5\" class=\"blue\">\\2\\3\\4\\5</a>", $enriched);
 			}
 		}
 
@@ -511,7 +511,7 @@ class String {
 		{
 			$text = preg_replace("/(?:^|\b)(((http(s?):\/\/)|(www\.-))([\w\.-]+)([,:;%#&\/?=\w+\.\-@]+))(?:\b|$)/is", "<a href=\"http$4://$5$6$7\" target=\"_blank\" class=\"normal-link\">$1</a>", $text);
 			//$text = preg_replace("/(\A|\s)([\w\.\-]+)(@)([\w\.-]+)([A-Za-z]{2,3})\b/i", "\\1<a href=\"mailto:\\2\\3\\4\\5\">\\2\\3\\4\\5</a>", $text);
-			$text = preg_replace("/\b[a-z0-9\._\-]+@[a-z0-9\.\-_]+\.[a-z]{2,3}\b/", "<a href=\"mailto:$0\">$0</a>", $text);
+			$text = preg_replace("/\b[a-z0-9\._\-]+@[a-z0-9\.\-_]+\.[a-z]{2,4}\b/", "<a href=\"mailto:$0\">$0</a>", $text);
 		}
 		$text = nl2br($text);
 		$text = str_replace("\r", "", $text);
