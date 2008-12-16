@@ -275,8 +275,8 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 			isBankVat : function(values)
 			{
 				if(
-					values['bank_no'].length ||
-					values['vat_no'].length 				
+					this.notEmpty(values['bank_no']) ||
+					this.notEmpty(values['vat_no']) 				
 				)
 				{
 					return true;
@@ -287,18 +287,18 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 			isAddress : function(values)
 			{
 				if(
-					values['address'].length ||
-					values['address_no'].length ||
-					values['zip'].length ||
-					values['city'].length ||
-					values['state'].length ||
-					values['country'].length ||
-					values['post_address'].length ||
-					values['post_address_no'].length ||
-					values['post_zip'].length ||
-					values['post_city'].length ||
-					values['post_state'].length ||
-					values['post_country'].length
+					this.notEmpty(values['address']) ||
+					this.notEmpty(values['address_no']) ||
+					this.notEmpty(values['zip']) ||
+					this.notEmpty(values['city']) ||
+					this.notEmpty(values['state']) ||
+					this.notEmpty(values['country']) ||
+					this.notEmpty(values['post_address']) ||
+					this.notEmpty(values['post_address_no']) ||
+					this.notEmpty(values['post_zip']) ||
+					this.notEmpty(values['post_city']) ||
+					this.notEmpty(values['post_state']) ||
+					this.notEmpty(values['post_country'])
 				)
 				{
 					return true;
@@ -309,12 +309,12 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 			isAddressVisit : function(values)
 			{
 				if(
-					values['address'].length ||
-					values['address_no'].length ||
-					values['zip'].length ||
-					values['city'].length ||
-					values['state'].length ||
-					values['country'].length
+					this.notEmpty(values['address']) ||
+					this.notEmpty(values['address_no']) ||
+					this.notEmpty(values['zip']) ||
+					this.notEmpty(values['city']) ||
+					this.notEmpty(values['state']) ||
+					this.notEmpty(values['country'])
 				)
 				{
 					return true;
@@ -325,12 +325,12 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 			isAddressPost : function(values)
 			{
 				if(
-					values['post_address'].length ||
-					values['post_address_no'].length ||
-					values['post_zip'].length ||
-					values['post_city'].length ||
-					values['post_state'].length ||
-					values['post_country'].length					
+					this.notEmpty(values['post_address']) ||
+					this.notEmpty(values['post_address_no']) ||
+					this.notEmpty(values['post_zip']) ||
+					this.notEmpty(values['post_city']) ||
+					this.notEmpty(values['post_state']) ||
+					this.notEmpty(values['post_country'])					
 				)
 				{
 					return true;
@@ -342,9 +342,9 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 			{
 				var google_url = 'http://maps.google.com/maps?q=';
 				
-				if(values['address'].length && values['city'].length)
+				if(this.notEmpty(values['address']) && this.notEmpty(values['city']))
 				{
-					if(values['address_no'].length)
+					if(this.notEmpty(values['address_no']))
 					{
 						return '<a href="' + google_url + values['address'] + '+' + values['address_no'] + '+' + values['city'] + '" target="_blank" >' + values['address'] + ' ' + values['address_no'] + '</a>';	
 					} else {

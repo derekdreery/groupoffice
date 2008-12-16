@@ -8,6 +8,13 @@
  *
  */
 
+$line_break=isset($_SERVER['SERVER_NAME']) ? $line_break : "\n";
+
+if(isset($argv[1]))
+{
+	define('CONFIG_FILE', $argv[1]);
+}
+
 define('NOTINSTALLED', true);
 
 require_once('../Group-Office.php');
@@ -18,10 +25,12 @@ ini_set('display_errors', 'On');
 
 function update_link($old_link_id, $id, $link_type)
 {
-	global $module_ids;
+	global $module_ids, $line_break;
 	
 	if(!empty($id) && !empty($old_link_id))
 	{	
+		echo 'Changing old link_id='.$old_link_id.' into '.$id.' with link_type='.$link_type.$line_break;
+		
 		$db = new db();
 		$db->halt_on_error = 'report';
 		
@@ -89,7 +98,7 @@ $db2->halt_on_error = 'report';
 $db3 = new db();
 $db3->halt_on_error = 'report';
 
-echo 'Upgrading '.$GO_CONFIG->db_name.'<br />';
+echo 'Upgrading '.$GO_CONFIG->db_name.$line_break;
 
 $db->query("SHOW TABLES");
 while($record=$db->next_record(DB_BOTH))
@@ -100,7 +109,7 @@ while($record=$db->next_record(DB_BOTH))
 	}
 }
 
-echo 'Framework updates<br />';
+echo 'Framework updates'.$line_break;
 flush();
 
 $db->query("RENAME TABLE `modules`  TO `go_modules` ;");
@@ -115,7 +124,7 @@ while($db->next_record())
 		$module_ids[]=$db->f('id');
 		$modules[$db->f('id')]=$db->record;
 		
-		echo $db->f('id').'<br />';
+		echo $db->f('id').$line_break;
 	}
 }
 
@@ -210,7 +219,7 @@ $db->query("ALTER TABLE `go_modules` DROP `path`");
 
 if(in_array('calendar', $module_ids))
 {
-	echo 'Calendar updates<br />';
+	echo 'Calendar updates'.$line_break;
 	flush();
 
 	require_once('../modules/calendar/classes/calendar.class.inc');
@@ -241,7 +250,7 @@ if(in_array('calendar', $module_ids))
 		$db2->query($sql);
 		if($event = $db2->next_record())
 		{		
-			echo 'Duplicating event '.$event['name'].'<br />';
+			echo 'Duplicating event '.$event['name'].$line_break;
 			flush();
 			
 			$sql = "SELECT * FROM cal_events_calendars WHERE event_id=".$event['id'];
@@ -262,7 +271,7 @@ if(in_array('calendar', $module_ids))
 	}
 	
 
-	echo 'Updating calendar links<br />';
+	echo 'Updating calendar links'.$line_break;
 	flush();
 
 	//update links
@@ -275,7 +284,8 @@ if(in_array('calendar', $module_ids))
 	
 	
 	
-	//correct timezone bug in 2.x
+	echo 'Correcting timezone bug in 2.x'.$line_break;
+	
 	$sql = "SELECT id, start_time, end_time, repeat_end_time FROM cal_events";
 	
 	$db->query($sql);
@@ -290,17 +300,13 @@ if(in_array('calendar', $module_ids))
 		$update['repeat_end_time']=$update['repeat_end_time']>86400? add_time($update['repeat_end_time']) : 0;
 		
 		$db2->update_row('cal_events', 'id', $update);	
-	}
-	
-	
-	
-	
-	
+	}	
 	
 	
 	require('../modules/calendar/classes/go_ical.class.inc');
 	
 
+	echo 'Converting recurrence rules'.$line_break;
 	//new rrule
 	$db->query("ALTER TABLE `cal_events` ADD `rrule` VARCHAR( 50 ) NOT NULL ;");
 	$db->query("UPDATE cal_events SET repeat_end_time=0 WHERE repeat_end_time<86400");
@@ -320,13 +326,12 @@ if(in_array('calendar', $module_ids))
 	$db->query("ALTER TABLE `cal_events` ADD INDEX ( `rrule` )");
 	
 	//now update all the new calendar_id fields
+	echo 'Updating calendar_id fields in cal_events'.$line_break;
 	$sql = "UPDATE cal_events SET calendar_id=(SELECT calendar_id FROM cal_events_calendars WHERE event_id=cal_events.id)";
 	$db->query($sql);
 	
 
-	
-//convert todos
-
+	echo 'Converting tasks to new separate tasks module'.$line_break;
 	require_once($GO_CONFIG->root_path.'modules/tasks/classes/tasks.class.inc.php');
 	$tasks = new tasks();
 
@@ -346,7 +351,7 @@ if(in_array('calendar', $module_ids))
 	while($db->next_record())
 	{
 		if(isset($tasklists[$db->f('cal_user_id')]))
-		{
+		{		
 			$todo['tasklist_id']=$tasklists[$db->f('cal_user_id')];
 			$todo['user_id']=$db->f('cal_user_id');
 			$todo['ctime']=$db->f('ctime');
@@ -380,11 +385,12 @@ if(in_array('calendar', $module_ids))
 		
 			$count++;
 			
+			echo 'Created task '.$todo['name'].$line_break;
+			
 		}else
 		{
-			echo 'Warning! Could not move task :'.$todo['name'].' '.date('Ymd G:i', $todo['start_time']).'<br />';
-		}
-		
+			echo 'Warning! Task didn\'t have a calendar :'.$todo['name'].' '.date('Ymd G:i', $todo['start_time']).$line_break;
+		}		
 	}
 	
 
@@ -428,7 +434,7 @@ if(in_array('calendar', $module_ids))
 
 if(in_array('cms', $module_ids))
 {
-	echo 'CMS updates<br />';
+	echo 'CMS updates'.$line_break;
 	flush();
 	
 
@@ -497,7 +503,7 @@ if(in_array('cms', $module_ids))
 
 if(in_array('summary', $module_ids))
 {
-	echo 'Summary updates<br />';
+	echo 'Summary updates'.$line_break;
 	flush();
 	
 	$db->query("CREATE TABLE `su_rss_feeds` (
@@ -518,7 +524,7 @@ PRIMARY KEY ( `user_id` )
 
 if(in_array('notes', $module_ids))
 {
-	echo 'Notes updates<br />';
+	echo 'Notes updates'.$line_break;
 	flush();
 	
 	//update links
@@ -571,7 +577,7 @@ if(in_array('notes', $module_ids))
 
 if(in_array('projects', $module_ids))
 {
-	echo 'Projects updates<br />';
+	echo 'Projects updates'.$line_break;
 	flush();
 	
 	//update links
@@ -636,7 +642,7 @@ if(in_array('projects', $module_ids))
 
 if(in_array('billing', $module_ids))
 {
-	echo 'Billing updates<br />';
+	echo 'Billing updates'.$line_break;
 	flush();
 	
 	
@@ -725,7 +731,7 @@ PRIMARY KEY ( `link_id` )
 
 if(in_array('users', $module_ids))
 {
-	echo 'Users updates<br />';
+	echo 'Users updates'.$line_break;
 	flush();
 	
 	//update links
@@ -769,7 +775,7 @@ if(in_array('timeregistration', $module_ids))
 
 if(in_array('updateserver', $module_ids))
 {
-	echo 'Updateserver updates<br />';
+	echo 'Updateserver updates'.$line_break;
 	flush();
 	
 	
@@ -785,7 +791,7 @@ if(in_array('updateserver', $module_ids))
 
 if(in_array('addressbook', $module_ids))
 {
-	echo 'Addressbook updates<br />';
+	echo 'Addressbook updates'.$line_break;
 	flush();
 	
 	
@@ -879,7 +885,7 @@ WHERE id = t.id ) ;");
 
 if(in_array('email', $module_ids))
 {
-	echo 'E-mail updates<br />';
+	echo 'E-mail updates'.$line_break;
 	flush();
 	
 	$db->query('ALTER TABLE `em_links` ADD `ctime` INT NOT NULL ;');
@@ -911,13 +917,8 @@ ADD `smtp_password` VARCHAR( 50 ) NOT NULL ;");
 
 if(in_array('files', $module_ids))
 {
-	echo 'Files updates<br />';
+	echo 'Files updates'.$line_break;
 	flush();
-	
-
-	
-
-
 
 	$db->query('CREATE TABLE IF NOT EXISTS `fs_file_handlers` (
 		`user_id` INT NOT NULL ,
@@ -969,7 +970,7 @@ if(in_array('files', $module_ids))
 
 }
 
-echo 'Custom fields updates<br />';
+echo 'Custom fields updates'.$line_break;
 	flush();
 	
 if(in_array('custom_fields', $module_ids))
@@ -1064,7 +1065,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `go_link_folders` (
 
 //SYNC
 
-echo 'Sync updates<br />';
+echo 'Sync updates'.$line_break;
 flush();
 	
 
@@ -1137,15 +1138,12 @@ ALTER TABLE `go_links` ADD INDEX ( `link_id1`, `type1` );
 
 
 
-echo 'Clearing search cache<br />';
+echo 'Clearing search cache'.$line_break;
 
 require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
 $search = new search();
 $search->reset();
 flush();
-
-//echo 'Building search cache<br />';
-//$search->update_search_cache(true);
 
 
 
@@ -1173,10 +1171,17 @@ if(empty($timezone))
 
 $db->query("UPDATE go_users SET timezone='$timezone'");
 
-echo 'Done<br /><br />';
+echo 'Done'.$line_break.$line_break;
 
-echo '<a target="_blank" href="index.php">Click here to run the installer and complete the whole proces</a>';
+if(isset($_SERVER['SERVER_NAME']))
+{
+	echo '<a target="_blank" href="index.php">Click here to run the installer and complete the whole proces</a>';
 
-echo '<br /><br /><a target="_blank" href="../modules/tools/dbcheck.php">After that run a database check and rebuild the search index</a>';
+	echo '<br /><br /><a target="_blank" href="../modules/tools/dbcheck.php">After that run a database check to rebuild the search index</a>';
+}else
+{
+	echo 'Now run the installer in a browser at: '.$GO_CONFIG->host.'install/'."\n\n";
+	echo 'After that run the database check to rebuild the search index at: '.$GO_CONFIG->host.'modules/tools/dbcheck.php'."\n\n";
+}
 
 ?>
