@@ -320,7 +320,7 @@ GO.email.EmailClient = function(config){
 
 			if(this.account_id != e.target.attributes['account_id'])
 			{
-				Ext.MessageBox.alert(GO.lang['strError'], GO.email.lang['cross_account_move']);
+				Ext.MessageBox.alert(GO.lang['strError'], GO.email.lang.crossAccountMove);
 				return false
 			}else if(this.mailbox == e.target.mailbox)
 			{
