@@ -1125,10 +1125,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		if(!this.accountsDialog)
 		{
 			this.accountsDialog = new GO.email.AccountsDialog();
-			this.accountsDialog.accountsGrid.store.on('load',function(){
-				this.accountsDialog.accountsGrid.store.on('load', this.refresh, this);
-			}, this);
-			
+			this.accountsDialog.accountsGrid.accountDialog.on('save', this.refresh, this);			
 			this.accountsDialog.accountsGrid.store.load();				
 		}
 		this.accountsDialog.show();
