@@ -551,8 +551,8 @@ try{
 				{
 					throw new Exception($lang['common']['selectError']);
 				}
-				
-				$response=$cal->event_to_json_response($event);	
+				$response=$cal->event_to_json_response($event);
+				//debug($response);	
 				$response['success']=true;
 				break;
 			
