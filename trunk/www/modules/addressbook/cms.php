@@ -1,0 +1,129 @@
+<?php
+/**
+ * Copyright Intermesh
+ *
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ *
+ * @version $Id: action.php 1524 2008-12-03 09:35:45Z mschering $
+ * @copyright Copyright Intermesh
+ * @author Merijn Schering <mschering@intermesh.nl>
+ */
+
+require_once("../../Group-Office.php");
+require_once($GO_LANGUAGE->get_language_file('addressbook'));
+require($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc');
+$ab = new addressbook();
+
+$task = isset($_REQUEST['task']) ? $_REQUEST['task'] : null;
+
+try
+{
+	switch($task)
+	{
+		case 'add_contact':
+			$contact_id = isset($_REQUEST['contact_id']) ? ($_REQUEST['contact_id']) : 0;
+				
+			$addressbook = $ab->get_addressbook_by_name($_POST['addressbook']);
+			if(!$addressbook)
+			{
+				throw new Exception('Addressbook not found!');
+			}
+
+			$credentials = array (
+				'first_name','middle_name','last_name','title','initials','sex','email',
+				'email2','email3','home_phone','fax','cellular','comment','address','address_no',
+				'zip','city','state','country','company','department','function','work_phone',
+				'work_fax','salutation'
+				);
+
+				$contact_credentials['email_allowed']='1';
+				
+				foreach($credentials as $key)
+				{
+					$contact_credentials[$key] = isset($_REQUEST[$key]) ? $_REQUEST[$key] : '';
+				}
+				
+				//$required=array('email', 'first_name', 'last_name');
+				foreach($_POST['required'] as $key)
+				{
+					if(empty($contact_credentials[$key]))
+					{
+						throw new Exception($lang['common']['missingField']);
+					}
+				}
+				
+				$contact_credentials['addressbook_id']=$addressbook['id'];
+
+				$response['success'] = true;
+					
+				if(!empty($contact_credentials['company']) && empty($contact_credentials['company_id']))
+				{
+					if(!$contact_credentials['company_id'] = $ab->get_company_id_by_name($contact_credentials['company'], $contact_credentials['addressbook_id']))
+					{
+						$company['addressbook_id'] = $contact_credentials['addressbook_id'];
+						$company['name'] = $contact_credentials['company']; // bedrijfsnaam
+						$company['user_id'] = $GO_SECURITY->user_id;
+						$contact_credentials['company_id'] = $ab->add_company($company);
+					}
+				}
+
+				if(!empty($contact_credentials['birthday']))
+				$contact_credentials['birthday'] = Date::to_db_date($contact_credentials['birthday'], false);
+
+				unset($contact_credentials['company']);
+
+				$response['contact_id'] = $contact_id = $ab->add_contact($contact_credentials);
+				if(!$contact_id)
+				{
+					throw new Exception($lang['comon']['saveError']);
+				}
+					
+				if($GO_MODULES->modules['files'])
+				{
+					require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
+					$fs = new files();
+
+					$response['files_path']='contacts/'.$contact_id;
+					$full_path = $GO_CONFIG->file_storage_path.$response['files_path'];
+					$fs->check_share($full_path, $GO_SECURITY->user_id, $addressbook['acl_read'], $addressbook['acl_write'],true);
+				}
+
+				if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
+				{
+					require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+					$cf = new customfields();
+
+					$cf->update_fields($GO_SECURITY->user_id, $contact_id, 2, $_POST, true);
+				}
+
+				if(isset($GO_MODULES->modules['mailings']) && $GO_MODULES->modules['mailings']['read_permission'] && isset($_POST['mailings']))
+				{
+					require($GO_MODULES->modules['mailings']['class_path'].'mailings.class.inc.php');
+					$ml = new mailings();
+						
+					foreach($_POST['mailings'] as $mailing_name)
+					{
+						$mailing=$ml->get_mailing_group_by_name($mailing_name);
+						if(!$mailing)
+						{
+							throw new Exception('Address list not found!');
+						}
+						$ml->add_contact_to_mailing_group($contact_id, $mailing['id']);
+					}
+				}
+
+				break;
+
+	}
+}
+catch(Exception $e)
+{
+	$response['feedback']=$e->getMessage();
+	$response['success']= false;
+}
+
+echo json_encode($response);
+?>
