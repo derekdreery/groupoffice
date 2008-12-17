@@ -39,4 +39,7 @@ $lang['addressbook']['prospects'] = 'Prospects';
 $lang['addressbook']['contacts'] = 'Contacts';
 $lang['addressbook']['companies'] = 'Companies';
 
+$lang['addressbook']['newContactAdded']='New contact added';
+$lang['addressbook']['newContactFromSite']='A new contact was added through a website form.';
+$lang['addressbook']['clickHereToView']='Click here to view the contact';
 ?>

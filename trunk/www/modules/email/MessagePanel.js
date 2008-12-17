@@ -271,9 +271,6 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				e.preventDefault();
 				
 				GO.email.addressContextMenu.showAt(e.getXY(), email);
-			}else
-			{
-				
 			}
 		}		
 	},
@@ -302,8 +299,13 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 					var email = href.substr(7);
 				}						
 				this.fireEvent('emailClicked', email);			
-			}else
-			{				
+			}else if(href.substr(0,3)=='go:')
+			{
+				e.preventDefault();
+				
+				var cmd = 'GO.mailFunctions.'+href.substr(3);
+				eval(cmd); 
+			}else	{				
 				this.fireEvent('linkClicked', href);
 			}
 		}		
