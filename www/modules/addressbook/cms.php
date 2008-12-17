@@ -13,6 +13,12 @@
  */
 
 require_once("../../Group-Office.php");
+
+if(isset($_POST['language']))
+{
+	$GO_LANGUAGE->set_language($_POST['language']);
+}
+
 require_once($GO_LANGUAGE->get_language_file('addressbook'));
 require($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc');
 $ab = new addressbook();
@@ -23,7 +29,8 @@ try
 {
 	switch($task)
 	{
-		case 'add_contact':
+		case 'add_contact':			
+			
 			$contact_id = isset($_REQUEST['contact_id']) ? ($_REQUEST['contact_id']) : 0;
 				
 			$addressbook = $ab->get_addressbook_by_name($_POST['addressbook']);
@@ -45,6 +52,16 @@ try
 				{
 					$contact_credentials[$key] = isset($_REQUEST[$key]) ? $_REQUEST[$key] : '';
 				}
+
+				if(is_array($contact_credentials['comment']))
+				{
+					$comments='';
+					foreach($contact_credentials['comment'] as $key=>$value)
+					{
+						$comments .= trim($key).":\n".trim($value)."\n\n";
+					}
+					$contact_credentials['comment']=$comments;
+				}
 				
 				//$required=array('email', 'first_name', 'last_name');
 				foreach($_POST['required'] as $key)
@@ -53,7 +70,7 @@ try
 					{
 						throw new Exception($lang['common']['missingField']);
 					}
-				}
+				}			
 				
 				$contact_credentials['addressbook_id']=$addressbook['id'];
 
@@ -114,7 +131,15 @@ try
 						$ml->add_contact_to_mailing_group($contact_id, $mailing['id']);
 					}
 				}
+				
+				$user = $GO_USERS->get_user($addressbook['user_id']);
+				
+				$body = $lang['addressbook']['newContactFromSite'].'<br /><a href="go:showContact('.$contact_id.');">'.$lang['addressbook']['clickHereToView'].'</a>';
 
+				require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
+				$swift = new GoSwift($user['email'], $lang['addressbook']['newContactAdded']);
+				$swift->set_body($body);
+				$swift->sendmail($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
 				break;
 
 	}

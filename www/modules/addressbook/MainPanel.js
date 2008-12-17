@@ -383,7 +383,7 @@ GO.moduleManager.addModule('addressbook', GO.addressbook.MainPanel, {
 	iconCls : 'go-tab-icon-addressbook'
 });
 
-GO.linkHandlers[2]=function(id){
+GO.linkHandlers[2]=GO.mailFunctions.showContact=function(id){
 		//GO.addressbook.contactDialog.show(id);
 		
 	var contactPanel = new GO.addressbook.ContactReadPanel();
