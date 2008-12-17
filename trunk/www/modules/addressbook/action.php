@@ -513,8 +513,6 @@ catch(Exception $e)
 	$response['feedback']=$e->getMessage();
 	$response['success']= false;
 
-	go_log(LOG_DEBUG, json_encode($response));
-
 	echo json_encode($response);
 
 }
