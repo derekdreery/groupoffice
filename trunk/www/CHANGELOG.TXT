@@ -1,3 +1,8 @@
+2008/12/18 Version 3.00-stable-5
+- Dragging in calendar caused errors sometimes
+- Rightclick menu on e-mail tree folder was broken
+- Small problem with HTML to text conversion in e-mail
+
 2008/12/16 Version 3.00-stable-4
 - Detailed report printing in Projects module
 - Improved support for Nexthaus syncml clients
