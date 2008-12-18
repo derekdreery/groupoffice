@@ -590,6 +590,18 @@ class GO_CONFIG
 	 * @var unknown_type
 	 */
 	var $phpMyAdminUrl='';
+	
+	/**
+	 * Comma separated list of scripts that are unsafe for whatever reason. 
+	 * For example: A form on a website that will add a contact to an addressbook. 
+	 * It can add addressbook entries without authentication but can still be very useful
+	 * 
+	 * Scripts can be separated with a comma: modules/addressbook/cms.php,modules/cms/example.php
+	 *
+	 * @var string
+	 */
+	
+	var $allow_unsafe_scripts='';
 
 	/*//////////////////////////////////////////////////////////////////////////////
 	 //////////      Variables that are not configured by config.php   //////////////
