@@ -250,9 +250,11 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 			for(var i=0;i<ids.length;i++)
 			{
 				var el = Ext.get(ids[i]);
-				el.removeAllListeners();
-				el.remove();
-				
+				if(el)
+				{
+					el.removeAllListeners();
+					el.remove();
+				}					
 				this.unregisterDomId(ids[i]);
 			}			
 		}
@@ -337,7 +339,8 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 					{
 						this.fireEvent("move", this, remoteEvent, actionData);
 						
-						this.removeEvent(remoteEvent.domId);			
+						this.removeEvent(remoteEvent.domId);		
+						delete remoteEvent.domId;	
 						remoteEvent.repeats=false;
 						remoteEvent.calendar_id=data.calendar_id;						
 						remoteEvent.startDate = remoteEvent.startDate.add(Date.DAY, offsetDays);
@@ -432,8 +435,11 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 			for (var i=0;i<elements.length;i++)
 			{			
 				var element = Ext.get(elements[i]);
-				element.addClass('x-calGrid-selected');
-				this.selected.push(element);
+				if(element)
+				{
+					element.addClass('x-calGrid-selected');
+					this.selected.push(element);
+				}
 			}
 		}
 
@@ -826,34 +832,24 @@ Ext.extend(GO.calendar.dd.ViewDragZone, Ext.dd.DragZone, {
 	    for(var i=0;i<this.eventDomElements.length;i++)
 	    {
 	    	this.eventProxies.push(Ext.DomHelper.append(document.body,
-			{
-				tag: 'div', 
-				id: Ext.id(), 
-				cls: "x-viewGrid-event-proxy", 
-				style: "width:"+this.ddel.style.width+"px;"				
-			},true));
+					{
+						tag: 'div', 
+						id: Ext.id(), 
+						cls: "x-viewGrid-event-proxy", 
+						style: "width:"+this.ddel.style.width+"px;"				
+					},true));
 			
 	    	if (this.eventDomElements[i]==this.dragData.item.id)
 	    	{
 	    		this.proxyDragPos=i;
 	    	}else
 	    	{	 
-	    	   	//hide event element
-	    	   	Ext.get(this.eventDomElements[i]).setStyle({'position' : 'absolute', 'top':-10000, 'display':'none'});
-	    	}
-	    	   	
+    	   	//hide event element
+    	   	var el = Ext.get(this.eventDomElements[i]);
+			  	if(el)
+						el.setStyle({'position' : 'absolute', 'top':-10000, 'display':'none'});
+	    	}	    	   	
 	    }
-	    
-	    
-	    /*this.eventProxy =  Ext.DomHelper.append(document.body,
-			{
-				tag: 'div', 
-				id: Ext.id(), 
-				cls: "x-calGrid-view-event-proxy", 
-				style: "width:"+this.ddel.style.width+"px;"				
-			},true);
-		var target = this.dragData.item.findParent('td', 10, true);
-		this.lastTargetId=target.id;*/
 	},
 	
 	removeEventProxies : function(){
@@ -863,14 +859,15 @@ Ext.extend(GO.calendar.dd.ViewDragZone, Ext.dd.DragZone, {
 			Ext.get(proxies[i]).remove();
 		}
 		
-		delete this.lastTdOverId;
-		
+		delete this.lastTdOverId;		
 		
 		//unhide event elements
 		for(var i=0;i<this.eventDomElements.length;i++)
-	    {
-			Ext.get(this.eventDomElements[i]).setStyle({'position' : 'static', 'top': '', 'display':'block'});
-	    }
+	  {
+	  	var el = Ext.get(this.eventDomElements[i]);
+	  	if(el)
+				el.setStyle({'position' : 'static', 'top': '', 'display':'block'});
+	  }
 	},
 	
 	afterRepair : function(){
@@ -892,8 +889,6 @@ Ext.extend(GO.calendar.dd.ViewDragZone, Ext.dd.DragZone, {
 	    
 	    var dateIndex = td.id.indexOf('_day')+4;    
 	    var calendar_id = td.id.substr(3,dateIndex-7);
-	    
-	    
 	    
 	    if(!this.viewGrid.remoteEvents[target.id]['private'] && this.viewGrid.jsonData[calendar_id].write_permission)
 	    {
@@ -960,16 +955,14 @@ Ext.extend(GO.calendar.dd.ViewDropTarget, Ext.dd.DropTarget, {
     },
     
     notifyOver : function(dd, e, data){
-        var tdOver = Ext.get(e.getTarget()).findParent('td', 10, true);
-    
-		    
-        
+        var tdOver = Ext.get(e.getTarget()).findParent('td.x-viewGrid-cell', 10, true);
+         
         if(tdOver)
         {
         	var dateIndex = tdOver.id.indexOf('_day');    
 			    var calendar_id = tdOver.id.substr(3,dateIndex-3);
 			    
-			    if(this.scope.jsonData[calendar_id].write_permission)
+			    if(this.scope.jsonData[calendar_id] && this.scope.jsonData[calendar_id].write_permission)
 			    {
 		        if(dd.lastTdOverId!=tdOver.id)
 		        {
@@ -978,7 +971,7 @@ Ext.extend(GO.calendar.dd.ViewDropTarget, Ext.dd.DropTarget, {
 		        	{
 		        		if(currentTd)
 		        		{
-			        		var nextTd = currentTd.prev('td');		        		
+			        		var nextTd = currentTd.prev('td.x-viewGrid-cell');		        		
 			        		currentTd = nextTd; 
 		        		}	        		
 		        		if(nextTd)
@@ -989,9 +982,7 @@ Ext.extend(GO.calendar.dd.ViewDropTarget, Ext.dd.DropTarget, {
 		        		}else
 		        		{
 		        			dd.eventProxies[i].setStyle({'position' : 'absolute', 'top':-10000, 'display':'none'});
-		        		}        			
-	        		
-		        		    		
+		        		} 		
 		        	}
 		        	
 		        	tdOver.insertFirst(dd.eventProxies[i].id);
@@ -1001,7 +992,7 @@ Ext.extend(GO.calendar.dd.ViewDropTarget, Ext.dd.DropTarget, {
 		        	{
 		        		if(currentTd)
 		        		{
-			        		var nextTd = currentTd.next('td');		        		
+			        		var nextTd = currentTd.next('td.x-viewGrid-cell');		        		
 			        		currentTd = nextTd;
 		        		}
 		        		
@@ -1010,7 +1001,7 @@ Ext.extend(GO.calendar.dd.ViewDropTarget, Ext.dd.DropTarget, {
 		        			//dd.eventProxies[i].insertAfter(nextTd.first());
 		        			nextTd.insertFirst(dd.eventProxies[i].id); 
 		        			 			
-		   					dd.eventProxies[i].setStyle({'position' : 'static', 'top': '', 'display':'block'});
+		   						dd.eventProxies[i].setStyle({'position' : 'static', 'top': '', 'display':'block'});
 		        		}else
 		        		{
 		        			dd.eventProxies[i].setStyle({'position' : 'absolute', 'top':-10000, 'display':'none'});
