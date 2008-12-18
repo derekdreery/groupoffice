@@ -14,6 +14,12 @@
 
 require_once("../../Group-Office.php");
 
+$allowed_scripts = explode(',',$GO_CONFIG->allow_unsafe_scripts);
+if(!in_array('modules/addressbook/cms.php', $allowed_scripts))
+{
+	die('Access denied');
+}
+
 if(isset($_POST['language']))
 {
 	$GO_LANGUAGE->set_language($_POST['language']);
