@@ -49,7 +49,7 @@ try{
 						'notreloadable'=>true			
 						);
 
-						$db_folder = $fs->get_folder($folder['path']);
+						$db_folder = $fs->get_folder($node['id']);
 						if($db_folder['acl_read']>0)
 						{
 							$node['iconCls']='folder-shared';
@@ -184,7 +184,7 @@ try{
 						'id'=>$fs->strip_server_path($folder['path'])
 						);
 
-						$db_folder = $fs->get_folder($folder['path']);
+						$db_folder = $fs->get_folder($node['id']);
 						if($db_folder['acl_read']>0)
 						{
 							$node['iconCls']='folder-shared';
@@ -408,16 +408,17 @@ try{
 						$folders = $fs->get_folders_sorted($path, 'utf8_basename', $dir);
 						foreach($folders as $folder)
 						{
-							$db_folder = $fs->get_folder($folder['path']);
+							$db_folder = $fs->get_folder($fs->strip_server_path($folder['path']));
 							if($db_folder['acl_read']>0)
 							{
+								$folder['thumb_url']=$GO_THEME->image_url.'128x128/filetypes/folder_public.png';
 								$class='folder-shared';
 							}else
 							{
+								$folder['thumb_url']=$GO_THEME->image_url.'128x128/filetypes/folder.png';
 								$class='filetype-folder';
 							}
 							
-							$folder['thumb_url']=$GO_THEME->image_url.'128x128/filetypes/folder.png';							
 							$folder['thumbs']=$db_folder['thumbs'];
 							$folder['path']=$fs->strip_server_path($folder['path']);
 							$folder['grid_display']='<div class="go-grid-icon '.$class.'">'.$folder['name'].'</div>';
