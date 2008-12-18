@@ -39,7 +39,7 @@ try
 			
 			$contact_id = isset($_REQUEST['contact_id']) ? ($_REQUEST['contact_id']) : 0;
 				
-			$addressbook = $ab->get_addressbook_by_name($_POST['addressbook']);
+			$addressbook = $ab->get_addressbook_by_name($_REQUEST['addressbook']);
 			if(!$addressbook)
 			{
 				throw new Exception('Addressbook not found!');
@@ -70,7 +70,7 @@ try
 				}
 				
 				//$required=array('email', 'first_name', 'last_name');
-				foreach($_POST['required'] as $key)
+				foreach($_REQUEST['required'] as $key)
 				{
 					if(empty($contact_credentials[$key]))
 					{
@@ -119,15 +119,15 @@ try
 					require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
 					$cf = new customfields();
 
-					$cf->update_fields($GO_SECURITY->user_id, $contact_id, 2, $_POST, true);
+					$cf->update_fields($GO_SECURITY->user_id, $contact_id, 2, $_REQUEST, true);
 				}
 
-				if(isset($GO_MODULES->modules['mailings']) && $GO_MODULES->modules['mailings']['read_permission'] && isset($_POST['mailings']))
+				if(isset($GO_MODULES->modules['mailings']) && $GO_MODULES->modules['mailings']['read_permission'] && isset($_REQUEST['mailings']))
 				{
 					require($GO_MODULES->modules['mailings']['class_path'].'mailings.class.inc.php');
 					$ml = new mailings();
 						
-					foreach($_POST['mailings'] as $mailing_name)
+					foreach($_REQUEST['mailings'] as $mailing_name)
 					{
 						$mailing=$ml->get_mailing_group_by_name($mailing_name);
 						if(!$mailing)

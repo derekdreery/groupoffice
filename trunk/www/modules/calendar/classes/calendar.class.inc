@@ -813,16 +813,14 @@ class calendar extends db
 	}
 
 
-	function is_duplicate_event($event, $calendar_id)
+	function is_duplicate_event($event)
 	{
-		unset($event['exceptions']);
-
 		$sql = "SELECT id FROM cal_events WHERE ".
-		"name='".$this->escape($record['name'])."' AND ".
-		"start_time='".$this->escape($record['start_time'])."' AND ".
-		"end_time='".$this->escape($record['end_time'])."' AND ".
-		"calendar_id='".$this->escape($calendar_id)."' AND ".
-		"user_id='".$this->escape($record['user_id'])."'";
+		"name='".$this->escape($event['name'])."' AND ".
+		"start_time='".$this->escape($event['start_time'])."' AND ".
+		"end_time='".$this->escape($event['end_time'])."' AND ".
+		"calendar_id='".$this->escape($event['calendar_id'])."' AND ".
+		"user_id='".$this->escape($event['user_id'])."'";
 
 		$this->query($sql);
 		if($this->next_record())

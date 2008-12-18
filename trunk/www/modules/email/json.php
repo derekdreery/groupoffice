@@ -947,7 +947,7 @@ try{
 									if(!empty($address[0]['personal']))
 									{
 										$message['from']=$address[0]['personal'];
-									}else
+									}else if(!empty($address[0]))
 									{
 										$message['from']=$address[0]['email'];
 									}
