@@ -221,14 +221,14 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		Ext.DomHelper.append(this.headingsRow,
 				{
 					tag: 'td', 
-					style: "width:"+(this.scrollOffset-3)+"px;height:0px",
+					style: "width:"+(this.scrollOffset)+"px;height:0px",
 					cls: "x-calGrid-heading"
 				});		
 				
 		Ext.DomHelper.append(this.allDayRow,
 				{
 					tag: 'td', 
-					style: "width:"+(this.scrollOffset-3)+"px;height:0px", 
+					style: "width:"+(this.scrollOffset)+"px;height:0px", 
 					cls: "x-calGrid-all-day-container"
 				});	
 		
