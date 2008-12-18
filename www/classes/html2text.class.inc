@@ -152,6 +152,7 @@ class html2text
         '/<h[123][^>]*>(.*?)<\/h[123]>[ \t]*/ie',      // H1 - H3
         '/<h[456][^>]*>(.*?)<\/h[456]>[ \t]*/ie',      // H4 - H6
         '/<p[^>]*>(.*?)<\/p>[ \t]*/i',                           // <P>
+        '/<\/div[^>]*>[ \t]*/i',                           // <div>
         '/<br[^>]*>[ \t]*/i',                          // <br>
         '/<b[^>]*>(.*?)<\/b>/ie',                // <b>
         '/<strong[^>]*>(.*?)<\/strong>/ie',      // <strong>
@@ -204,6 +205,7 @@ class html2text
         "strtoupper(\"\n\n\\1\n\")",          // H1 - H3
         "ucwords(\"\n\n\\1\n\")",             // H4 - H6
         "\n\n\\1\n\n",                               // <P>
+        "\n",                               // </div>
         "\n",                                   // <br>
         'strtoupper("\\1")',                    // <b>
         'strtoupper("\\1")',                    // <strong>
@@ -420,7 +422,7 @@ class html2text
         
         $text = html_entity_decode(trim($this->html), ENT_QUOTES, 'UTF-8');
 				$text = str_replace("\r", '', $text);
-        $text = str_replace("\n", '', $text);        
+        $text = str_replace("\n", ' ', $text);        
         
         // Run our defined search-and-replace
         $text = preg_replace($this->search, $this->replace, $text);
@@ -441,7 +443,7 @@ class html2text
         // for PHP versions >= 4.0.2. Default width is 75
         // If width is 0 or less, don't wrap the text.
         if ( $this->width > 0 ) {
-            $text = wordwrap($text, $this->width);
+           $text = wordwrap($text, $this->width);
         }
 
         $this->text = $text;
