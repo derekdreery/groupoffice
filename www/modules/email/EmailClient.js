@@ -105,8 +105,7 @@ GO.email.EmailClient = function(config){
 			handler: function(){
 					this.doTaskOnMessages('mark_as_read');
 				},
-			scope:this
-			
+			scope:this			
 		},
 		{ 
 			text: GO.email.lang.markAsUnread, 
@@ -306,7 +305,7 @@ GO.email.EmailClient = function(config){
 		}
 		
 		var coords = e.getXY();
-		console.log(node.attributes);
+
 		this.addFolderButton.setDisabled(!node.attributes.canHaveChildren);
 		this.treeContextMenu.showAt([coords[0], coords[1]]);		
 	}, this);
