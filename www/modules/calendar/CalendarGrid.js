@@ -545,8 +545,6 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 
 	addDaysGridEvent : function (eventData, recalculateAppointments)
 	{	
-		
-		console.log(eventData);
 		//the start of the day the event starts
 		var eventStartDay = Date.parseDate(eventData.startDate.format('Ymd'),'Ymd');
 		var eventEndDay = Date.parseDate(eventData.endDate.format('Ymd'),'Ymd');
@@ -595,11 +593,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			{
 				endRow=startRow;
 			}	
-			console.log(startRow);
-			console.log(endRow);
-			console.log(day);
-			console.log(endDay);
-			
+
 			if(startRow && endRow && (day==endDay))
 			{				
 				return this.addGridEvent(eventData, day, startRow, endRow, recalculateAppointments);
