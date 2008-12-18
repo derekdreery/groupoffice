@@ -335,6 +335,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 									this.fireEvent("move", this, remoteEvent, actionData);
 									
 									this.removeEvent(remoteEvent.domId);
+									delete remoteEvent.domId;
 									remoteEvent.repeats=false;
 									remoteEvent.startDate = remoteEvent.startDate.add(Date.DAY, offsetDays);
 									remoteEvent.endDate = remoteEvent.endDate.add(Date.DAY, offsetDays);
@@ -424,8 +425,11 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 			for (var i=0;i<elements.length;i++)
 			{			
 				var element = Ext.get(elements[i]);
-				element.addClass('x-calGrid-selected');
-				this.selected.push(element);
+				if(element)
+				{
+					element.addClass('x-calGrid-selected');
+					this.selected.push(element);
+				}
 			}
 		}
 
@@ -535,9 +539,11 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 			for(var i=0;i<ids.length;i++)
 			{
 				var el = Ext.get(ids[i]);
-				el.removeAllListeners();
-				el.remove();
-				
+				if(el)
+				{
+					el.removeAllListeners();
+					el.remove();
+				}					
 				this.unregisterDomId(ids[i]);
 			}			
 		}		
@@ -787,20 +793,17 @@ Ext.extend(GO.calendar.dd.MonthDragZone, Ext.dd.DragZone, {
 		{
 			return false;
 		}else
-		{
-		
+		{		
 	    this.ddel.innerHTML = this.dragData.item.dom.innerHTML;
 	    this.ddel.className = this.dragData.item.dom.className;
 	    this.ddel.style.width = this.dragData.item.getWidth() + "px";
 	    this.proxy.update(this.ddel);
 	    
 	    this.eventDomElements = this.monthGrid.getRelatedDomElements(this.dragData.item.id);
-	    
 
-	    var td = Ext.get(this.dragData.item).findParent('td', 10, true);
+	    var td = Ext.get(this.dragData.item).findParent('div.cal-monthGrid-cell', 3, true);
 	    
 	   	//this.proxyCount = eventDomElements.length;
-	    
 	    this.eventProxies=[];
 	    this.proxyDragPos = 0;
 	    for(var i=0;i<this.eventDomElements.length;i++)
@@ -818,22 +821,15 @@ Ext.extend(GO.calendar.dd.MonthDragZone, Ext.dd.DragZone, {
 	    		this.proxyDragPos=i;
 	    	}else
 	    	{	 
-	    	   	//hide event element
-	    	   	Ext.get(this.eventDomElements[i]).setStyle({'position' : 'absolute', 'top':-10000, 'display':'none'});
-	    	}
-	    	   	
+    	   	//hide event element
+    	   	var el = Ext.get(this.eventDomElements[i]);
+    	   	if(el)
+    	   	{
+    	   		el.setStyle({'position' : 'absolute', 'top':-10000, 'display':'none'});
+    	   	}
+	    	}	    	   	
 	    }
 		}
-	    
-	    /*this.eventProxy =  Ext.DomHelper.append(document.body,
-			{
-				tag: 'div', 
-				id: Ext.id(), 
-				cls: "x-calGrid-month-event-proxy", 
-				style: "width:"+this.ddel.style.width+"px;"				
-			},true);
-		var target = this.dragData.item.findParent('td', 10, true);
-		this.lastTargetId=target.id;*/
 	},
 	
 	removeEventProxies : function(){
@@ -843,14 +839,17 @@ Ext.extend(GO.calendar.dd.MonthDragZone, Ext.dd.DragZone, {
 			Ext.get(proxies[i]).remove();
 		}
 		
-		delete this.lastTdOverId;
-		
+		delete this.lastTdOverId;		
 		
 		//unhide event elements
 		for(var i=0;i<this.eventDomElements.length;i++)
-	    {
-			Ext.get(this.eventDomElements[i]).setStyle({'position' : 'static', 'top': '', 'display':'block'});
-	    }
+	  {
+	  	var el = Ext.get(this.eventDomElements[i]);
+	   	if(el)
+	   	{
+				el.setStyle({'position' : 'static', 'top': '', 'display':'block'});
+	   	}
+	  }
 	},
 	
 	afterRepair : function(){
@@ -875,8 +874,6 @@ Ext.extend(GO.calendar.dd.MonthDragZone, Ext.dd.DragZone, {
       var dragDate = Date.parseDate(td.id.substr(1),'Ymd');
       
       if(target.hasClass('x-calGrid-month-event-container') && !this.monthGrid.remoteEvents[target.id]['private']) { 
-      	
-        
         return {
         	ddel:this.ddel, 
         	item:target,
@@ -902,7 +899,7 @@ Ext.extend(GO.calendar.dd.MonthDropTarget, Ext.dd.DropTarget, {
  					return false;
  				}else
  				{
-			 		var target = Ext.get(e.getTarget()).findParent('td', 10, true);
+			 		var target = Ext.get(e.getTarget()).findParent('div.cal-monthGrid-cell', 3, true);
 			 		
 			 		data.dropDate = Date.parseDate(target.id.substr(1),'Ymd');
 			 		
@@ -910,7 +907,6 @@ Ext.extend(GO.calendar.dd.MonthDropTarget, Ext.dd.DropTarget, {
 	 		   	
 	        this.el.removeClass(this.overClass);
 	        target.appendChild(data.item);
-	        
 	        
 	        if(this.onNotifyDrop)
 					{
@@ -922,14 +918,12 @@ Ext.extend(GO.calendar.dd.MonthDropTarget, Ext.dd.DropTarget, {
 						var onNotifyDrop = this.onNotifyDrop.createDelegate(this.scope);
 						onNotifyDrop.call(this, dd, e, data);
 					}
-	        
-	        
 	        return true;
  				}
     },
     
     notifyOver : function(dd, e, data){
-        var tdOver = Ext.get(e.getTarget()).findParent('td', 10, true);
+        var tdOver = Ext.get(e.getTarget()).findParent('div.cal-monthGrid-cell', 3, true);
         
         if(tdOver)
         {
@@ -940,33 +934,17 @@ Ext.extend(GO.calendar.dd.MonthDropTarget, Ext.dd.DropTarget, {
 	        	{
 	        		if(currentTd)
 	        		{
-		        		var nextTd = currentTd.prev('td');
-		        		if(!nextTd)
-		        		{
-		        			//try to find td on previous row
-		        			var tr = currentTd.parent();
-		        			tr = tr.prev('tr');
-		        			if(tr)
-		        			{
-		        				var nextTd = tr.last();
-		        				if(nextTd)
-		        				{
-		        					nextTd = Ext.get(nextTd);
-		        				}
-		        			}
-		        		}  
+		        		var nextTd = currentTd.prev('div.cal-monthGrid-cell');		        		
 		        		currentTd = nextTd; 
 	        		}	        		
 	        		if(nextTd)
 	        		{	    
 	        			dd.eventProxies[i].insertAfter(nextTd.first());		
-	   					dd.eventProxies[i].setStyle({'position' : 'static', 'top': '', 'display':'block'});
+	   						dd.eventProxies[i].setStyle({'position' : 'static', 'top': '', 'display':'block'});
 	        		}else
 	        		{
 	        			dd.eventProxies[i].setStyle({'position' : 'absolute', 'top':-10000, 'display':'none'});
-	        		}        			
-        		
-	        		    		
+	        		}	    		
 	        	}
 	        	
 	        	dd.eventProxies[i].insertAfter(tdOver.first());	
@@ -975,21 +953,7 @@ Ext.extend(GO.calendar.dd.MonthDropTarget, Ext.dd.DropTarget, {
 	        	{
 	        		if(currentTd)
 	        		{
-		        		var nextTd = currentTd.next('td');
-		        		if(!nextTd)
-		        		{
-		        			//try to find td on next row
-		        			var tr = currentTd.parent();
-		        			tr = tr.next('tr');
-		        			if(tr)
-		        			{
-		        				var nextTd = tr.first();
-		        				if(nextTd)
-		        				{
-		        					nextTd = Ext.get(nextTd);
-		        				}
-		        			}
-		        		}
+		        		var nextTd = currentTd.next('div.cal-monthGrid-cell');
 		        		
 		        		currentTd = nextTd;
 	        		}
