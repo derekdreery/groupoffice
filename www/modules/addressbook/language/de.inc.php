@@ -37,4 +37,10 @@ $lang['addressbook']['prospects'] = 'Aussichten';
 $lang['addressbook']['contacts'] = 'Kontakte';
 $lang['addressbook']['companies'] = 'Firmen';
 
+
+
+$lang['addressbook']['newContactAdded']='Neuen Kontakt erstelt'; 
+
+$lang['addressbook']['newContactFromSite']='Sie haben einen neuen Kontakt über das Webseitenformular erhalten'; 
+$lang['addressbook']['clickHereToView']='Klicken Sie hier zum Kontakt ansehen'; 
 ?>
