@@ -545,6 +545,8 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 
 	addDaysGridEvent : function (eventData, recalculateAppointments)
 	{	
+		
+		console.log(eventData);
 		//the start of the day the event starts
 		var eventStartDay = Date.parseDate(eventData.startDate.format('Ymd'),'Ymd');
 		var eventEndDay = Date.parseDate(eventData.endDate.format('Ymd'),'Ymd');
@@ -593,6 +595,10 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			{
 				endRow=startRow;
 			}	
+			console.log(startRow);
+			console.log(endRow);
+			console.log(day);
+			console.log(endDay);
 			
 			if(startRow && endRow && (day==endDay))
 			{				
@@ -651,7 +657,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 	},
 	
 	removeEvent : function(domId){
-		if(this.appointmentsMap[domId])
+		if(this.appointmentsMap[domId] && this.appointments[day])
 		{
 			var day = this.appointmentsMap[domId].day;
 			var newAppointments = [];
@@ -664,7 +670,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			}			
 			this.appointments[day]=newAppointments;
 			
-		}else if(this.allDayAppointmentsMap[domId])
+		}else if(this.allDayAppointmentsMap[domId] && this.appointments[day])
 		{		
 			var day = this.allDayAppointmentsMap[domId];
 			var newAppointments = [];
@@ -684,8 +690,11 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			for(var i=0;i<ids.length;i++)
 			{
 				var el = Ext.get(ids[i]);
-				el.removeAllListeners();
-				el.remove();
+				if(el)
+				{
+					el.removeAllListeners();
+					el.remove();
+				}
 				
 				this.unregisterDomId(ids[i]);
 			}
@@ -1710,8 +1719,12 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 						
 						this.removeEvent(this.allDayDragEvent.id);
 						
-						//alert(dropDay+event.daySpan-1);
-						this.addAllDayEvent(event, dropDay, dropDay+event.daySpan-1);						
+						event.startDate = Date.parseDate(event.start_time, this.dateTimeFormat).add(Date.DAY, offsetDays);
+						event.endDate = Date.parseDate(event.end_time, this.dateTimeFormat).add(Date.DAY, offsetDays);						
+						event.start_time=event.startDate.format(this.dateTimeFormat);
+						event.end_time=event.endDate.format(this.dateTimeFormat);
+						
+						this.addDaysGridEvent(event);												
 					}
 				}
 			}			
