@@ -537,7 +537,8 @@ class imap{
 		$message['subject'] = isset($values['subject']) ? $this->enc_utf8($values['subject']) : '';
 
 		$message["notification"]=isset($values['disposition-notification-to']) ? $this->enc_utf8($values['disposition-notification-to']) : false;
-		$message['content_type']=isset($values['content-type']) ? $values['content-type'] : false;;
+		$message['content_type']=isset($values['content-type']) ? $values['content-type'] : false;
+		$message['content_transfer_encoding']=isset($values['content-transfer-encoding']) ? $values['content-transfer-encoding'] : '';
 
 		return $message;
 	}
@@ -1042,6 +1043,8 @@ class imap{
 		global $GO_CONFIG;
 
 		$charset='UTF-8';
+		
+		$transfer=strtoupper($transfer);
 
 		$str = imap_fetchbody($this->conn, $uid, $part_no, FT_UID);
 

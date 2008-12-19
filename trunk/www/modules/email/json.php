@@ -724,7 +724,7 @@ try{
 
 				$attachments=array();
 
-				if(/*count($parts)==0 && */eregi('html', $response['content_type']))
+				if(eregi('html', $response['content_type']))
 				{
 					$default_mime = 'text/html';
 				}else
@@ -733,6 +733,15 @@ try{
 				}
 
 				$part_count = count($parts);
+				if($part_count==1)
+				{
+					//if there's only one part use the message parameters.
+					if(eregi('plain', $parts[0]['mime']))
+						$parts[0]['mime']=$default_mime;
+						
+					if(!empty($response['content_transfer_encoding']))
+						$parts[0]['transfer']=$response['content_transfer_encoding'];					
+				}
 				
 				//block remote URL's if contacts is unknown
 				$response['blocked_images']=0;				
@@ -747,10 +756,10 @@ try{
 				{
 					$block=false;
 				}
-	
+
 				while($part = array_shift($parts))
 				{
-					$mime = isset($part["mime"]) /*&& $part_count>1*/ ? strtolower($part["mime"]) : $default_mime;
+					$mime = isset($part["mime"]) ? strtolower($part["mime"]) : $default_mime;
 					
 					//some clients just send html
 					if($mime=='html')
