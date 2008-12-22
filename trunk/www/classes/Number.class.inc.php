@@ -36,7 +36,7 @@ class Number {
 
 	function format($number, $decimals=2)
 	{
-		return number_format($number, $decimals, $_SESSION['GO_SESSION']['decimal_seperator'], $_SESSION['GO_SESSION']['thousands_seperator']);
+		return number_format($number, $decimals, $_SESSION['GO_SESSION']['decimal_separator'], $_SESSION['GO_SESSION']['thousands_separator']);
 
 	}
 
@@ -51,8 +51,8 @@ class Number {
 
 	function to_phpnumber($number)
 	{
-		$number = str_replace($_SESSION['GO_SESSION']['thousands_seperator'],'', $number);
-		return str_replace($_SESSION['GO_SESSION']['decimal_seperator'],'.',$number);
+		$number = str_replace($_SESSION['GO_SESSION']['thousands_separator'],'', $number);
+		return str_replace($_SESSION['GO_SESSION']['decimal_separator'],'.',$number);
 	}
 
 	/**
@@ -71,22 +71,22 @@ class Number {
 		
 		switch ($size) {
 			case ($size > 1073741824) :
-				$size = number_format($size / 1073741824, $decimals, $_SESSION['GO_SESSION']['decimal_seperator'], $_SESSION['GO_SESSION']['thousands_seperator']);
+				$size = number_format($size / 1073741824, $decimals, $_SESSION['GO_SESSION']['decimal_separator'], $_SESSION['GO_SESSION']['thousands_separator']);
 				$size .= " GB";
 				break;
 
 			case ($size > 1048576) :
-				$size = number_format($size / 1048576, $decimals, $_SESSION['GO_SESSION']['decimal_seperator'], $_SESSION['GO_SESSION']['thousands_seperator']);
+				$size = number_format($size / 1048576, $decimals, $_SESSION['GO_SESSION']['decimal_separator'], $_SESSION['GO_SESSION']['thousands_separator']);
 				$size .= " MB";
 				break;
 
 			case ($size > 1024) :
-				$size = number_format($size / 1024, $decimals, $_SESSION['GO_SESSION']['decimal_seperator'], $_SESSION['GO_SESSION']['thousands_seperator']);
+				$size = number_format($size / 1024, $decimals, $_SESSION['GO_SESSION']['decimal_separator'], $_SESSION['GO_SESSION']['thousands_separator']);
 				$size .= " KB";
 				break;
 
 			default :
-				$size = number_format($size, $decimals, $_SESSION['GO_SESSION']['decimal_seperator'], $_SESSION['GO_SESSION']['thousands_seperator']);
+				$size = number_format($size, $decimals, $_SESSION['GO_SESSION']['decimal_separator'], $_SESSION['GO_SESSION']['thousands_separator']);
 				$size .= " bytes";
 				break;
 		}

@@ -236,7 +236,7 @@ Languages that are known to be complete:
 PLEASE READ IF YOU DON"T WANT TO LOSE DATA!!!
 
 This installer will upgrade your database automatically. This release
-features a new addressbook where contacts and companies are seperated.
+features a new addressbook where contacts and companies are separated.
 The company fields from your contacts will therefore be DELETED.
 Because of this you should export your contacts first to CSV using
 Group-Office. After upgrading you should first import companies from
@@ -279,7 +279,7 @@ Group-Office now can authenticate users against LDAP or mail servers so
 implementing Group-Office in your existing user environment was never easier.
 
 Group-Office ships only with the English and Dutch language now. Other 
-langugaes have to be downloaded seperately.
+langugaes have to be downloaded separately.
 
 See the notes in the file 'INSTALL' on how to migrate to the new addressbook.
 

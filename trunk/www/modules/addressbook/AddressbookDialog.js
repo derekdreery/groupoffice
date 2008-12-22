@@ -252,7 +252,7 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 				this.importfileInput,
 				this.importContactsCompaniesCombo,
 				this.importValueSeperator = new Ext.form.TextField(
-					{fieldLabel: GO.addressbook.lang['cmdFormLabelValueSeperated'], name: 'seperator', anchor: '', width: 100, value: ',', allowBlank: false}),
+					{fieldLabel: GO.addressbook.lang['cmdFormLabelValueSeperated'], name: 'separator', anchor: '', width: 100, value: ',', allowBlank: false}),
 				this.importValueIncluded = new Ext.form.TextField(
 					{fieldLabel: GO.addressbook.lang['cmdFormLabelValueIncluded'], name: 'quote', anchor: '', width: 100, value: '"', allowBlank: false})									
 			]
@@ -276,7 +276,7 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 			this.exportValueSeperator = new Ext.form.TextField(
 				{
 					fieldLabel: GO.addressbook.lang['cmdFormLabelValueSeperated'], 
-					name: 'seperator', 
+					name: 'separator', 
 					anchor: '', 
 					width: 100, 
 					value: ',',
@@ -607,8 +607,8 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 			{
 				task : 'import',
 				addressbook_id : this.addressbook_id,
-				seperator: this.addressbookImportPanel.form.items.items[3].value,
-				quote: this.addressbookImportPanel.form.items.items[4].value,
+				separator: this.addressbookImportPanel.form.findField('separator').value,
+				quote: this.addressbookImportPanel.form.findField('quote').value,
 				import_type: this.addressbookImportPanel.form.items.items[2].getValue(),
 				import_filetype: this.addressbookImportPanel.form.items.items[0].getValue()
 			},

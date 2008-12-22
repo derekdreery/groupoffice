@@ -107,12 +107,12 @@ class GO_CONFIG
 	var $default_date_format='dmY';
 
 	/**
-	 * Default date seperator
+	 * Default date separator
 	 *
 	 * @var     string
 	 * @access  public
 	 */
-	var $default_date_seperator='-';
+	var $default_date_separator='-';
 
 	/**
 	 * Default time format
@@ -131,20 +131,20 @@ class GO_CONFIG
 	var $default_first_weekday=1;
 
 	/**
-	 * Default decimal seperator for numbers
+	 * Default decimal separator for numbers
 	 *
 	 * @var     string
 	 * @access  public
 	 */
-	var $default_decimal_seperator=',';
+	var $default_decimal_separator=',';
 
 	/**
-	 * Default thousands seperator for numbers
+	 * Default thousands separator for numbers
 	 *
 	 * @var     string
 	 * @access  public
 	 */
-	var $default_thousands_seperator='.';
+	var $default_thousands_separator='.';
 
 	/**
 	 * Default theme
@@ -221,7 +221,7 @@ class GO_CONFIG
 
 	/**
 	 * Grant read permissions for these modules to new self-registered users.
-	 * Module names are seperated by a comma.
+	 * Module names are separated by a comma.
 	 *
 	 * @var     string
 	 * @access  public
@@ -230,7 +230,7 @@ class GO_CONFIG
 
 	/**
 	 * Grant write permissions for these modules to new self-registered users.
-	 * Module names are seperated by a comma.
+	 * Module names are separated by a comma.
 	 *
 	 * @var     string
 	 * @access  public
@@ -240,7 +240,7 @@ class GO_CONFIG
 
 	/**
 	 * Add self-registered users to these user groups
-	 * Group names are seperated by a comma.
+	 * Group names are separated by a comma.
 	 *
 	 * @var     string
 	 * @access  public
@@ -249,7 +249,7 @@ class GO_CONFIG
 
 	/**
 	 * Self-registered users will be visible to these user groups
-	 * Group names are seperated by a comma.
+	 * Group names are separated by a comma.
 	 *
 	 * @var     string
 	 * @access  public
@@ -677,13 +677,13 @@ class GO_CONFIG
       );
 
       /**
-       * Date seperators to be used.
+       * Date separators to be used.
        *
        * @var     string
        * @access  public
        */
        
-      var $date_seperators = array(
+      var $date_separators = array(
   	'-', 
   	'.',
   	'/'
@@ -1035,10 +1035,10 @@ class GO_CONFIG
 
       		$response['theme']=$_SESSION['GO_SESSION']['theme'];
 
-      		$response['thousands_seperator']=$_SESSION['GO_SESSION']['thousands_seperator'];
-      		$response['decimal_seperator']=$_SESSION['GO_SESSION']['decimal_seperator'];
+      		$response['thousands_separator']=$_SESSION['GO_SESSION']['thousands_separator'];
+      		$response['decimal_separator']=$_SESSION['GO_SESSION']['decimal_separator'];
       		$response['date_format']=$_SESSION['GO_SESSION']['date_format'];
-      		$response['date_seperator']=$_SESSION['GO_SESSION']['date_seperator'];
+      		$response['date_separator']=$_SESSION['GO_SESSION']['date_separator'];
       		$response['time_format']=$_SESSION['GO_SESSION']['time_format'];
       		$response['timezone']=$_SESSION['GO_SESSION']['timezone'];
       		$response['start_module']=$_SESSION['GO_SESSION']['start_module'];
@@ -1058,11 +1058,11 @@ class GO_CONFIG
       		$response['name']='';
       		$response['email']='';
 
-      		$response['thousands_seperator']=$this->default_thousands_seperator;
+      		$response['thousands_separator']=$this->default_thousands_separator;
       		$response['country']=$this->default_country;
-      		$response['decimal_seperator']=$this->default_decimal_seperator;
+      		$response['decimal_separator']=$this->default_decimal_separator;
       		$response['date_format']=$this->default_date_format;
-      		$response['date_seperator']=$this->default_date_seperator;
+      		$response['date_separator']=$this->default_date_separator;
       		$response['time_format']=$this->default_time_format;
       		$response['timezone']=$this->default_timezone;
       		$response['start_module']='';

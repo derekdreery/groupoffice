@@ -483,6 +483,7 @@ GO.lang.countries["SY"] = "Syrian Arab Republic";
 GO.lang.countries["TW"] = "Taiwan";
 GO.lang.countries["TJ"] = "Tajikistan";
 GO.lang.countries["TZ"] = "Tanzania, United Republic of";
+GO.lang.countries["TH"] = "Thailand";
 GO.lang.countries["TG"] = "Togo";
 GO.lang.countries["TK"] = "Tokelau";
 GO.lang.countries["TO"] = "Tonga";

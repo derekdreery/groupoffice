@@ -42,21 +42,21 @@ class GO_USERS extends db
 	{
 		global $GO_CONFIG;
 		
-		if(!isset($_SESSION['GO_SESSION']['decimal_seperator']))
+		if(!isset($_SESSION['GO_SESSION']['decimal_separator']))
 		{		
-			$_SESSION['GO_SESSION']['decimal_seperator'] = $GO_CONFIG->default_decimal_seperator;
+			$_SESSION['GO_SESSION']['decimal_separator'] = $GO_CONFIG->default_decimal_separator;
 		}		
-		if(!isset($_SESSION['GO_SESSION']['thousands_seperator']))
+		if(!isset($_SESSION['GO_SESSION']['thousands_separator']))
 		{		
-			$_SESSION['GO_SESSION']['thousands_seperator'] = $GO_CONFIG->default_thousands_seperator;
+			$_SESSION['GO_SESSION']['thousands_separator'] = $GO_CONFIG->default_thousands_separator;
 		}
-		if(!isset($_SESSION['GO_SESSION']['date_seperator']))
+		if(!isset($_SESSION['GO_SESSION']['date_separator']))
 		{		
-			$_SESSION['GO_SESSION']['date_seperator'] = $GO_CONFIG->default_date_seperator;
+			$_SESSION['GO_SESSION']['date_separator'] = $GO_CONFIG->default_date_separator;
 		}		
 		if(!isset($_SESSION['GO_SESSION']['date_format']))
 		{		
-			$_SESSION['GO_SESSION']['date_format'] = Date::get_dateformat( $GO_CONFIG->default_date_format, $_SESSION['GO_SESSION']['date_seperator']);
+			$_SESSION['GO_SESSION']['date_format'] = Date::get_dateformat( $GO_CONFIG->default_date_format, $_SESSION['GO_SESSION']['date_separator']);
 		}
 		if(!isset($_SESSION['GO_SESSION']['time_format']))
 		{		
@@ -121,10 +121,10 @@ class GO_USERS extends db
 			$_SESSION['GO_SESSION']['country'] = $userdata['country'];
 			$_SESSION['GO_SESSION']['email'] = $userdata['email'];
 
-			$_SESSION['GO_SESSION']['thousands_seperator'] = $userdata['thousands_seperator'];
-			$_SESSION['GO_SESSION']['decimal_seperator'] = $userdata['decimal_seperator'];
-			$_SESSION['GO_SESSION']['date_format'] = Date::get_dateformat($userdata['date_format'], $userdata['date_seperator']);
-			$_SESSION['GO_SESSION']['date_seperator'] = $userdata['date_seperator'];
+			$_SESSION['GO_SESSION']['thousands_separator'] = $userdata['thousands_separator'];
+			$_SESSION['GO_SESSION']['decimal_separator'] = $userdata['decimal_separator'];
+			$_SESSION['GO_SESSION']['date_format'] = Date::get_dateformat($userdata['date_format'], $userdata['date_separator']);
+			$_SESSION['GO_SESSION']['date_separator'] = $userdata['date_separator'];
 			$_SESSION['GO_SESSION']['time_format'] = $userdata['time_format'];
 			$_SESSION['GO_SESSION']['currency'] = $userdata['currency'];
 			$_SESSION['GO_SESSION']['lastlogin'] = isset ($userdata['lastlogin']) ? $userdata['lastlogin'] : time();
@@ -491,9 +491,9 @@ class GO_USERS extends db
 		$this->query( $sql );
 		if ($this->next_record(DB_ASSOC))
 		{
-			if($this->record['date_seperator']=='')
+			if($this->record['date_separator']=='')
 			{
-				$this->record['date_seperator']=' ';
+				$this->record['date_separator']=' ';
 			}
 			return $this->record;
 		}
@@ -780,11 +780,11 @@ class GO_USERS extends db
 		if(!isset($user['currency']))
 	 		$user['currency'] = $GO_CONFIG->default_currency;
 	 		
-	 	if(!isset($user['decimal_seperator']))
-			$user['decimal_seperator'] = $GO_CONFIG->default_decimal_seperator;
+	 	if(!isset($user['decimal_separator']))
+			$user['decimal_separator'] = $GO_CONFIG->default_decimal_separator;
 			
-		if(!isset($user['thousands_seperator']))
-			$user['thousands_seperator'] = $GO_CONFIG->default_thousands_seperator;
+		if(!isset($user['thousands_separator']))
+			$user['thousands_separator'] = $GO_CONFIG->default_thousands_separator;
 			
 		if(!isset($user['time_format']))
 			$user['time_format'] = $GO_CONFIG->default_time_format;
@@ -792,8 +792,8 @@ class GO_USERS extends db
 		if(!isset($user['date_format']))
 			$user['date_format'] = $GO_CONFIG->default_date_format;
 			
-		if(!isset($user['date_seperator']))
-			$user['date_seperator'] = $GO_CONFIG->default_date_seperator;
+		if(!isset($user['date_separator']))
+			$user['date_separator'] = $GO_CONFIG->default_date_separator;
 		
 		if(!isset($user['first_weekday']))
 			$user['first_weekday'] = $GO_CONFIG->default_first_weekday;

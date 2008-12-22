@@ -203,6 +203,7 @@ $countries['SY'] = 'Syrian Arab Republic';
 $countries['TW'] = 'Taiwan';
 $countries['TJ'] = 'Tajikistan';
 $countries['TZ'] = 'Tanzania, United Republic of';
+$countries['TH'] = 'Thailand';
 $countries['TG'] = 'Togo';
 $countries['TK'] = 'Tokelau';
 $countries['TO'] = 'Tonga';

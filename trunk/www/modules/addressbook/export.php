@@ -64,7 +64,7 @@ if($file_type == 'vcf') {
 	$crlf = str_replace('\\r', "\015", $crlf);
 	$crlf = str_replace('\\n', "\012", $crlf);
 	$crlf = str_replace('\\t', "\011", $crlf);
-	$seperator = ($_POST['seperator']);
+	$separator = ($_POST['separator']);
 
 	if ($_POST['export_type'] == 'contacts')
 	{
@@ -83,7 +83,7 @@ if($file_type == 'vcf') {
 			}			
 		}
 		
-		$headings = $quote.implode($quote.$seperator.$quote, $headings).$quote;
+		$headings = $quote.implode($quote.$separator.$quote, $headings).$quote;
 		echo $headings;
 		echo $crlf;
 
@@ -102,7 +102,7 @@ if($file_type == 'vcf') {
 				}
 			}
 			
-			$record = $quote.implode($quote.$seperator.$quote, $record).$quote;
+			$record = $quote.implode($quote.$separator.$quote, $record).$quote;
 			echo $record;
 			echo $crlf;
 		}
@@ -122,7 +122,7 @@ if($file_type == 'vcf') {
 			}			
 		}
 		
-		$headings = $quote.implode($quote.$seperator.$quote, $headings).$quote;
+		$headings = $quote.implode($quote.$separator.$quote, $headings).$quote;
 		echo $headings;
 		echo $crlf;
 
@@ -146,7 +146,7 @@ if($file_type == 'vcf') {
 				}
 			}
 			
-			$record = $quote.implode($quote.$seperator.$quote, $record).$quote;
+			$record = $quote.implode($quote.$separator.$quote, $record).$quote;
 			echo $record;
 			echo $crlf;
 		}
