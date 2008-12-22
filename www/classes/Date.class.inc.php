@@ -430,18 +430,18 @@ class Date
 	 * that can be read by strtotime related PHP functions
 	 *
 	 * @param string $date_string
-	 * @param string $date_seperator
+	 * @param string $date_separator
 	 * @param string $date_format
 	 * @return string
 	 */
 
-	public static function to_input_format($date_string, $date_seperator=null, $date_format=null)
+	public static function to_input_format($date_string, $date_separator=null, $date_format=null)
 	{
 		if(!isset($date_format))
 			$date_format=$_SESSION['GO_SESSION']['date_format'];
 
-		if(!isset($date_seperator))
-			$date_seperator=$_SESSION['GO_SESSION']['date_seperator'];
+		if(!isset($date_separator))
+			$date_separator=$_SESSION['GO_SESSION']['date_separator'];
 
 		$date_string = trim($date_string);
 		
@@ -451,13 +451,13 @@ class Date
 
 			$date = isset ($datetime_array[0]) ?
 			$datetime_array[0] :
-    	'0000'.$date_seperator.
-    	'00'.$date_seperator.'00';
+    	'0000'.$date_separator.
+    	'00'.$date_separator.'00';
 
-			$date_array = explode($date_seperator, $datetime_array[0]);
+			$date_array = explode($date_separator, $datetime_array[0]);
 			//$year = isset ($date_array[2]) ? $date_array[2] : date('Y');
 
-			$format = str_replace($date_seperator,'',$date_format);
+			$format = str_replace($date_separator,'',$date_format);
 
 			$year_pos = strpos($format, 'Y');
 			$month_pos = strpos($format, 'm');
@@ -542,18 +542,18 @@ class Date
 	 * Takes two Group-Office settings like Ymd and - and converts this into Y-m-d
 	 *
 	 * @param	string $format Any format accepted by php's date function
-	 * @param	string $seperator A seperate like - / or .
+	 * @param	string $separator A separate like - / or .
 	 * @access public
 	 * @return int unix timestamp
 	 */
 
-	public static function get_dateformat($format, $seperator)
+	public static function get_dateformat($format, $separator)
 	{
 		$newformat = '';
 		$end = strlen($format)-1;
 		for($i=0;$i<$end;$i++)
 		{
-			$newformat .= $format[$i].$seperator;
+			$newformat .= $format[$i].$separator;
 		}
 		$newformat .= $format[$i];
 		return $newformat;

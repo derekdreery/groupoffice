@@ -319,7 +319,7 @@ try
 			$addressbook_id = isset($_REQUEST['addressbook_id']) ? ($_REQUEST['addressbook_id']) : 0;
 			$import_filetype = isset($_REQUEST['import_filetype']) ? ($_REQUEST['import_filetype']) : null;
 			$import_file = isset($_FILES['import_file']['tmp_name']) ? ($_FILES['import_file']['tmp_name']) : null;
-			$seperator	= isset($_REQUEST['seperator']) ? ($_REQUEST['seperator']) : ',';
+			$separator	= isset($_REQUEST['separator']) ? ($_REQUEST['separator']) : ',';
 			$quote	= isset($_REQUEST['quote']) ? ($_REQUEST['quote']) : '"';
 
 			$result['success'] = true;
@@ -349,7 +349,7 @@ try
 					} else {
 						//fgets($fp, 4096);
 
-						if (!$record = fgetcsv($fp, 4096, $seperator, $quote))
+						if (!$record = fgetcsv($fp, 4096, $separator, $quote))
 						{
 							throw new Exception($contacts_import_incompatible);
 						}
@@ -373,7 +373,7 @@ try
 			break;
 				case'import':
 					$addressbook_id = isset($_REQUEST['addressbook_id']) ? ($_REQUEST['addressbook_id']) : 0;
-					$seperator	= isset($_REQUEST['seperator']) ? ($_REQUEST['seperator']) : ',';
+					$separator	= isset($_REQUEST['separator']) ? ($_REQUEST['separator']) : ',';
 					$quote	= isset($_REQUEST['quote']) ? ($_REQUEST['quote']) : '"';
 					$import_type = isset($_REQUEST['import_type']) ? ($_REQUEST['import_type']) : '';
 					$import_filetype = isset($_REQUEST['import_filetype']) ? ($_REQUEST['import_filetype']) : '';
@@ -398,7 +398,7 @@ try
 							fgets($fp, 4096);
 							while (!feof($fp))
 							{
-								$record = fgetcsv($fp, 4096, $seperator, $quote);
+								$record = fgetcsv($fp, 4096, $separator, $quote);
 
 								$new_id=0;
 

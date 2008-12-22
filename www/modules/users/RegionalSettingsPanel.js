@@ -34,9 +34,9 @@ GO.users.RegionalSettingsPanel = function(config)
 		]
 	});
 
-	/* dateseperator */
+	/* dateseparator */
 	var dateSeperatorData = new Ext.data.SimpleStore({
-		fields: ['id', 'date_seperator'],
+		fields: ['id', 'date_separator'],
 		data : [
 		['-', '-'],
 		['.', '.'],
@@ -121,12 +121,12 @@ var dateFormat = GO.settings.date_format.substring(0,1)+GO.settings.date_format.
 		}),
 		new Ext.form.ComboBox({
 			fieldLabel: GO.users.lang['cmdFormLabelDateSeperator'],
-			name: 'date_seperator_name',
+			name: 'date_separator_name',
 			store: dateSeperatorData,
-			displayField: 'date_seperator',			
-			value: GO.settings.date_seperator,
+			displayField: 'date_separator',			
+			value: GO.settings.date_separator,
 			valueField: 'id',
-			hiddenName: 'date_seperator',
+			hiddenName: 'date_separator',
 			mode: 'local',
 			triggerAction: 'all',
 			editable: false,
@@ -165,14 +165,14 @@ var dateFormat = GO.settings.date_format.substring(0,1)+GO.settings.date_format.
 		{
 			xtype: 'textfield', 
 			fieldLabel: GO.users.lang['cmdFormLabelThousandSeperator'], 
-			name: 'thousands_seperator',
-			value: GO.settings.thousands_seperator
+			name: 'thousands_separator',
+			value: GO.settings.thousands_separator
 		},
 		{
 			xtype: 'textfield', 
 			fieldLabel: GO.users.lang['cmdFormLabelDecimalSeperator'], 
-			name: 'decimal_seperator',
-			value: GO.settings.decimal_seperator
+			name: 'decimal_separator',
+			value: GO.settings.decimal_separator
 		},
 		{
 			xtype: 'textfield', 

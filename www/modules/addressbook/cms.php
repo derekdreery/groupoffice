@@ -64,6 +64,10 @@ try
 					$comments='';
 					foreach($contact_credentials['comment'] as $key=>$value)
 					{
+						if($value=='date')
+						{
+							$value = date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format']);
+						}
 						$comments .= trim($key).":\n".trim($value)."\n\n";
 					}
 					$contact_credentials['comment']=$comments;

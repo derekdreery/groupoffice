@@ -130,7 +130,7 @@ if($task !='test')
 		echo 'The configuration file does not exist. You must create an empty writable file at one of the following locations:<br />';
 		echo '<ol><li>'.$config_location1.'</li><li>'.$config_location2.'</li>';
 		echo '<li>'.$config_location3.'</li></ol></i></font>';
-		echo 'The first two locations are more secure because the sensitive information is kept outside the document root but it does require root privileges on this machine.<br />The second advantage is that you will be able to seperate the source from the configuration. This can be very usefull with multiple installations on one machine.';
+		echo 'The first two locations are more secure because the sensitive information is kept outside the document root but it does require root privileges on this machine.<br />The second advantage is that you will be able to separate the source from the configuration. This can be very usefull with multiple installations on one machine.';
 		echo '<br /><br />If you choose the third location then you have to make sure that in Apache\'s httpd.conf the following is set:<br /><br />';
 		echo '<font color="#003399">';
 		echo '<i>UseCanonicalName On</i></font><br />';
@@ -391,11 +391,11 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 			$GO_CONFIG->default_timezone = ($_POST['default_timezone']);
 			$GO_CONFIG->default_currency = ($_POST['default_currency']);
 			$GO_CONFIG->default_date_format = ($_POST['default_date_format']);
-			$GO_CONFIG->default_date_seperator = ($_POST['default_date_seperator']);
+			$GO_CONFIG->default_date_separator = ($_POST['default_date_separator']);
 			$GO_CONFIG->default_time_format = ($_POST['default_time_format']);
 			$GO_CONFIG->default_first_weekday = ($_POST['default_first_weekday']);
-			$GO_CONFIG->default_decimal_seperator = ($_POST['default_decimal_seperator']);
-			$GO_CONFIG->default_thousands_seperator = ($_POST['default_thousands_seperator']);
+			$GO_CONFIG->default_decimal_separator = ($_POST['default_decimal_separator']);
+			$GO_CONFIG->default_thousands_separator = ($_POST['default_thousands_separator']);
 			
 
 			if (save_config($GO_CONFIG))
@@ -1216,8 +1216,8 @@ switch($task)
 				$friendly[strpos($format, 'm')]='Month';
 				$friendly[strpos($format, 'd')]='Day';
 	
-				$strFriendly = $friendly[0].$GO_CONFIG->default_date_seperator.
-				$friendly[1].$GO_CONFIG->default_date_seperator.
+				$strFriendly = $friendly[0].$GO_CONFIG->default_date_separator.
+				$friendly[1].$GO_CONFIG->default_date_separator.
 				$friendly[2];
 			
 				echo '<option value="'.$format.'"';
@@ -1231,15 +1231,15 @@ switch($task)
 			</td>
 		</tr>
 		<tr>
-			<td>Date seperator:</td>
+			<td>Date separator:</td>
 			<td>
-			<select name="default_date_seperator">
+			<select name="default_date_separator">
 			<?php
 		
-			foreach($GO_CONFIG->date_seperators as $ds)
+			foreach($GO_CONFIG->date_separators as $ds)
 			{
 				echo '<option value="'.$ds.'"';
-				if($ds==$GO_CONFIG->default_date_seperator)
+				if($ds==$GO_CONFIG->default_date_separator)
 				{
 					echo ' selected';
 				}				
@@ -1289,14 +1289,14 @@ switch($task)
 
 	
 		<tr>
-			<td>Thousands seperator:</td>
-			<td><input name="default_thousands_seperator" maxlength="1" type="text" value="<?php echo $GO_CONFIG->default_thousands_seperator; ?>" /></td>
+			<td>Thousands separator:</td>
+			<td><input name="default_thousands_separator" maxlength="1" type="text" value="<?php echo $GO_CONFIG->default_thousands_separator; ?>" /></td>
 		</tr>
 
 
 		<tr>
-			<td>Decimal seperator:</td>
-			<td><input name="default_decimal_seperator" maxlength="1" type="text" value="<?php echo $GO_CONFIG->default_decimal_seperator; ?>" /></td>
+			<td>Decimal separator:</td>
+			<td><input name="default_decimal_separator" maxlength="1" type="text" value="<?php echo $GO_CONFIG->default_decimal_separator; ?>" /></td>
 		</tr>
 		
 

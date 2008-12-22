@@ -234,9 +234,9 @@ try
 				$user['language']=$_POST['language'];
 				$user['first_weekday'] = $_POST["first_weekday"];
 				$user['date_format'] = $_POST["date_format"];
-				$user['date_seperator'] = $_POST["date_seperator"];
-				$user['decimal_seperator'] = $_POST["decimal_seperator"];
-				$user['thousands_seperator'] = $_POST["thousands_seperator"];
+				$user['date_separator'] = $_POST["date_separator"];
+				$user['decimal_separator'] = $_POST["decimal_separator"];
+				$user['thousands_separator'] = $_POST["thousands_separator"];
 				$user['time_format'] = $_POST["time_format"];
 				$user['timezone'] = $_POST["timezone"];
 				$user['currency'] = $_POST["currency"];

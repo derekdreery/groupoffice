@@ -104,7 +104,7 @@ For example:
 <image> must be the last item. Dimensions must be the second-
 last item. As many key/value pairs for parameters can be
 passed before those last two items, with each pair joined by
-equals ("=") and seperated by semicolon (";")
+equals ("=") and separated by semicolon (";")
 
 
 ==============================================
@@ -297,7 +297,7 @@ fltr = filter system. Call as an array as follows:
          Where <b> is the color band(s) to display, from back
          to front (one or more of "rgba*" for Red Green Blue
          Alpha and Grayscale respectively);
-         <c> is a semicolon-seperated list of hex colors to
+         <c> is a semicolon-separated list of hex colors to
          use for each graph band (defaults to FF0000, 00FF00,
          0000FF, 999999, FFFFFF respectively);
          <w> and <h> are the width and height of the overlaid
@@ -319,7 +319,7 @@ fltr = filter system. Call as an array as follows:
          (default is 0 for overlay and 10% for underlay);
          <o> is opacity (0 = transparent, 100 = opaque)
              (requires PHP v4.3.2, otherwise 100% opaque);
-         (thanks raynerapeØgmail*com, shabazz3Ømsu*edu)
+         (thanks raynerapeï¿½gmail*com, shabazz3ï¿½msu*edu)
        - "wmi" (WaterMarkImage)
          [ex: &fltr[]=wmi|<f>|<a>|<o>|<m>] where
          <f> is the filename of the image to overlay;

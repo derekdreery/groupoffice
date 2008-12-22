@@ -241,24 +241,24 @@ GO.util.getFlashMovieObject = function(movieName)
 }
 
 
-GO.util.unlocalizeNumber = function (number, decimal_seperator, thousands_seperator)
+GO.util.unlocalizeNumber = function (number, decimal_separator, thousands_separator)
 {
 	
-	if(!decimal_seperator)
+	if(!decimal_separator)
 	{
-		decimal_seperator=GO.settings.decimal_seperator;
+		decimal_separator=GO.settings.decimal_separator;
 	}
 	
-	if(!thousands_seperator)
+	if(!thousands_separator)
 	{
-		thousands_seperator=GO.settings.thousands_seperator;
+		thousands_separator=GO.settings.thousands_separator;
 	}
 	
 	number = number+"";
 		
-	var re = new RegExp('['+thousands_seperator+']', 'g');	
+	var re = new RegExp('['+thousands_separator+']', 'g');	
 	number = number.replace(re, "");
-	return number.replace(decimal_seperator, ".");	
+	return number.replace(decimal_separator, ".");	
 }
 
 String.prototype.regexpEscape = function() {
@@ -275,21 +275,21 @@ String.prototype.regexpEscape = function() {
 
 
 
-GO.util.numberFormat = function (number, decimals, decimal_seperator, thousands_seperator)
+GO.util.numberFormat = function (number, decimals, decimal_separator, thousands_separator)
 {
 	if(typeof(decimals)=='undefined')
 	{
 		decimals=2;
 	}
 	
-	if(!decimal_seperator)
+	if(!decimal_separator)
 	{
-		decimal_seperator=GO.settings.decimal_seperator;
+		decimal_separator=GO.settings.decimal_separator;
 	}
 	
-	if(!thousands_seperator)
+	if(!thousands_separator)
 	{
-		thousands_seperator=GO.settings.thousands_seperator;
+		thousands_separator=GO.settings.thousands_separator;
 	}
 
 	if(number=='')
@@ -299,8 +299,8 @@ GO.util.numberFormat = function (number, decimals, decimal_seperator, thousands_
 	
 /*	if(localized)
 	{
-		var internal_number = number.replace(thousands_seperator, "");
-		internal_number = internal_number.replace(decimal_seperator, ".");
+		var internal_number = number.replace(thousands_separator, "");
+		internal_number = internal_number.replace(decimal_separator, ".");
 	}else
 	{
 		var internal_number=number;
@@ -326,7 +326,7 @@ GO.util.numberFormat = function (number, decimals, decimal_seperator, thousands_
 		{
 			numberFloat = numberFloat+"0";
 		}
-		var formattedNumber = decimal_seperator+numberFloat.substring(dotIndex+1);
+		var formattedNumber = decimal_separator+numberFloat.substring(dotIndex+1);
 		
 		var dec = decimals;
 		while(formattedNumber.substring(formattedNumber.length-1)=='0' && dec>decimals)
@@ -350,7 +350,7 @@ GO.util.numberFormat = function (number, decimals, decimal_seperator, thousands_
 	{		
 		if(counter==3 && numberFloat.substr(i,1)!='-')
 		{
-			formattedNumber= thousands_seperator+formattedNumber; 
+			formattedNumber= thousands_separator+formattedNumber; 
 			counter=0;
 		}
 		formattedNumber = numberFloat.substr(i,1)+formattedNumber;
@@ -359,7 +359,7 @@ GO.util.numberFormat = function (number, decimals, decimal_seperator, thousands_
 	}	
 	if(formattedNumber==',NaN')
 	{
-		formattedNumber = GO.util.numberFormat('0', decimals, decimal_seperator, thousands_seperator);
+		formattedNumber = GO.util.numberFormat('0', decimals, decimal_separator, thousands_separator);
 	}
 	return formattedNumber;
 }

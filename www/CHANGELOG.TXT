@@ -306,7 +306,7 @@ Languages updated:
 -Synthesis clients support for Synchronization (Palm client too!) (Pro version)
 -Improved SyncML support. Better support for slow sync and recovery when something
  goes wrong (Pro version)
--Custom fields for projects too. Moved custom fields into a seperate module. (Pro version)
+-Custom fields for projects too. Moved custom fields into a separate module. (Pro version)
 -Mailing groups can be selected from the composer screen (Pro version)
 -Small GUI enhancements
 -A lot of small bug fixes
@@ -442,7 +442,7 @@ Languages updated:
 2005/03/12 Version 2.12
 -Database doesn't use persistant connections anymore
 -Configuration options are moved from Group-Office.php to config.php. This way it's easier
- to seperate source from local configuration options with symlinks.
+ to separate source from local configuration options with symlinks.
 -Added password recovery
 -Fixed issue with PHP < 4.2. People could not delete objects.
 
@@ -459,7 +459,7 @@ Languages updated:
  The CSS was also cleaned up.
 -Added JUpload java applet to Group-Office controls. It allows to upload multiple files at once
  and shows a progressbar. It's integrated into the email and filesystem module.
--Changed the way attachments are handled in the e-mail module. They now load into a seperate
+-Changed the way attachments are handled in the e-mail module. They now load into a separate
  popup window so you can keep on typing while attaching files.
 
 2004/11/11 version 2.10
@@ -606,7 +606,7 @@ Languages updated:
 2004/02/11 version 1.97
 -Completely restyled interface
 -Automatically checks for reminders and email now and pops up a new window.
--Addressbook redesigned and seperated companies from contacts
+-Addressbook redesigned and separated companies from contacts
 -Bug with email account creation fixed.
 
 2004/01/25 version 1.96
@@ -671,7 +671,7 @@ Languages updated:
 -HTMLarea 3.0 beta implemented and ability to restrict it to styles in a
  stylesheet.
 -Group-Office will be released with only the English and Dutch language. Other
- language packs will be released seperately.
+ language packs will be released separately.
 
 2003/08/07 version 1.12
 -Added Portugese and Spanish
