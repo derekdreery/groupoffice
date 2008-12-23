@@ -90,7 +90,7 @@ GO.calendar.SummaryGroupPanel = function(config)
 		
 	config.view=  new Ext.grid.GroupingView({
     hideGroupedColumn:true,
-    groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Items" : "Item"]})',
+    groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "'+GO.lang.item+'" : "'+GO.lang.items+'"]})',
    	emptyText: GO.calendar.lang.noAppointmentsToDisplay,
    	showGroupName:false
 	});

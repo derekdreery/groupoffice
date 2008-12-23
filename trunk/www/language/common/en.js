@@ -517,3 +517,6 @@ GO.lang.countries["SA"] = "Saudi Arabia";
 
 
 GO.lang.displayingItemsShort='Total: {2}';
+
+GO.lang.item='item';
+GO.lang.items='items';
