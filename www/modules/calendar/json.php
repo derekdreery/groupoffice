@@ -496,15 +496,10 @@ try{
 												$count++;
 											}
 										}
-
-
-
-
 										break;
 
 
 									case 'calendars':
-
 
 										$response['total'] = $cal->get_authorized_calendars($GO_SECURITY->user_id);
 										if(!$response['total'])
