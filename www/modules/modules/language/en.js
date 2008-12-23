@@ -8,6 +8,7 @@ GO.modules.lang={};
  * Copy everything below for translations
  */
 
+GO.modules.lang.modules='Modules';
 GO.modules.lang.cmdSaveChanges = 'Save changes',
 GO.modules.lang.cmdInstall = 'Install',
 GO.modules.lang.cmdUninstall = 'Uninstall',

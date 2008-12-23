@@ -39,7 +39,7 @@ GO.form.SelectLink = function(config){
   config.triggerAction='all';
 	config.width=400;
 	config. selectOnFocus=false;
-  config.fieldLabel='Link';
+  config.fieldLabel=GO.lang.cmdLink;
 	config.pageSize=parseInt(GO.settings['max_rows_list']);
 	GO.form.SelectLink.superclass.constructor.call(this, config);
 	
