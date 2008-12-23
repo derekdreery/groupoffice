@@ -640,9 +640,9 @@ GO.email.EmailClient = function(config){
   this.messagePanel.on('zipOfAttachmentsClicked', this.openZipOfAttachments, this);
   
   
-  this.messagePanel.on('emailClicked', function(email){
+  /*this.messagePanel.on('emailClicked', function(email){
   	this.showComposer({to: email});
-  }, this);
+  }, this);*/
   
   /*
    * for email seaching on sender from message panel
@@ -1279,11 +1279,11 @@ GO.linkHandlers[9] = function(id, remoteMessage){
   }, this);
   messagePanel.on('zipOfAttachmentsClicked', function(){}, this);
   
-  messagePanel.on('emailClicked', function(email){
+  /*messagePanel.on('emailClicked', function(email){
   	GO.email.Composer.show({ 
   		values : {to: email} 
   		});
-  }, this);
+  }, this);*/
 	
 	var win = new Ext.Window({
 			maximizable:true,
