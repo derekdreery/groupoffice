@@ -35,26 +35,26 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		var templateStr = '<div class="message-header">'+
 			'<table class="message-header-table">'+
 			'<tr><td style="width:70px"><b>'+GO.email.lang.from+'</b></td>'+			
-			'<td>: {from} &lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{sender}\', \'{from}\');" oncontextmenu="GO.email.showAddressMenu(event, \'{sender}\', \'{from}\');">{sender}</a>&gt;</td></tr>'+
+			'<td>: {from} &lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{sender}\', \'{[this.addSlashes(values.from)]}\');">{sender}</a>&gt;</td></tr>'+
 			'<tr><td><b>'+GO.email.lang.subject+'</b></td><td>: {subject}</td></tr>'+
 			'<tr><td><b>'+GO.lang.strDate+'</b></td><td>: {date}</td></tr>'+
 			//'<tr><td><b>'+GO.lang.strSize+'</b></td><td>: {size}</td></tr>'+
 			'<tr><td><b>'+GO.email.lang.to+'</b></td><td>: '+
 			'<tpl for="to">'+
-			'{name} <tpl if="email.length">&lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{email}\', \'{name}\');" oncontextmenu="GO.email.showAddressMenu(event, \'{email}\', \'{name}\');">{email}</a>&gt;; </tpl>'+	
+			'{name} <tpl if="email.length">&lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{email}\', \'{[this.addSlashes(values.name)]}\');">{email}</a>&gt;; </tpl>'+	
 			'</tpl>'+
 			'</td></tr>'+
 			'<tpl if="cc.length">'+
 				'<tr><td><b>'+GO.email.lang.cc+'</b></td><td>: '+
 				'<tpl for="cc">'+
-				'{name} <tpl if="email.length">&lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{email}\', \'{name}\');" oncontextmenu="GO.email.showAddressMenu(event, \'{email}\', \'{name}\');">{email}</a>&gt;; </tpl>'+	
+				'{name} <tpl if="email.length">&lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{email}\', \'{[this.addSlashes(values.name)]}\');">{email}</a>&gt;; </tpl>'+	
 				'</tpl>'+
 				'</td></tr>'+
 			'</tpl>'+
 			'<tpl if="bcc.length">'+
 				'<tr><td><b>'+GO.email.lang.bcc+'</b></td><td>: '+
 				'<tpl for="bcc">'+
-				'{name} <tpl if="email.length">&lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{email}\', \'{name}\');" oncontextmenu="GO.email.showAddressMenu(event, \'{email}\', \'{name}\');">{email}</a>&gt;; </tpl>'+	
+				'{name} <tpl if="email.length">&lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{email}\', \'{[this.addSlashes(values.name)]}\');">{email}</a>&gt;; </tpl>'+	
 				'</tpl>'+
 				'</td></tr>'+
 			'</tpl>'+
@@ -78,8 +78,13 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			'<div id="'+this.bodyId+'" class="message-body">{body}</div>';
 		
 		this.template = new Ext.XTemplate(templateStr,{
-			
-					
+			addSlashes : function(str)
+			{
+				str = GO.util.html_entity_decode(str, 'ENT_QUOTES');
+				str = GO.util.add_slashes(str);
+				return str;
+			}
+
 		});		
 		this.template.compile();	
 	},
@@ -138,8 +143,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 	},
 	
 	setMessage : function(data)
-	{		
-		
+	{
 		this.data = data;
 		
 		//remove old listeners

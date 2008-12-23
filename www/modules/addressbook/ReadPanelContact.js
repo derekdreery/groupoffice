@@ -96,21 +96,21 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 									//EMAIL							
 									'<tpl if="this.notEmpty(email)">'+
 										'<tr>'+
-											'<td class="contactCompanyLabelWidth">' + GO.lang['strEmail'] + ':</td><td><a href="#" onclick="GO.email.Composer.show({values : {to: \'{email}\'}})">{email}</a></td>'+
+											'<td class="contactCompanyLabelWidth">' + GO.lang['strEmail'] + ':</td><td>{[this.mailTo(values.email, values.full_name)]}</td>'+
 										'</tr>'+						
 									'</tpl>'+
 		
 									//EMAIL2							
 									'<tpl if="this.notEmpty(email2)">'+
 										'<tr>'+
-											'<td class="contactCompanyLabelWidth">' + GO.lang['strEmail'] + ' 2:</td><td><a href="#" onclick="GO.email.Composer.show({values : {to: \'{email2}\'}})">{email2}</a></td>'+
+											'<td class="contactCompanyLabelWidth">' + GO.lang['strEmail'] + ' 2:</td><td>{[this.mailTo(values.email2, values.full_name)]}</td>'+
 										'</tr>'+						
 									'</tpl>'+
 		
 									//EMAIL3							
 									'<tpl if="this.notEmpty(email3)">'+
 										'<tr>'+
-											'<td class="contactCompanyLabelWidth">' + GO.lang['strEmail'] + ' 3:</td><td><a href="#" onclick="GO.email.Composer.show({values : {to: \'{email3}\'}})">{email3}</a></td>'+
+											'<td class="contactCompanyLabelWidth">' + GO.lang['strEmail'] + ' 3:</td><td>{[this.mailTo(values.email3, values.full_name)]}</td>'+
 										'</tr>'+						
 									'</tpl>'+
 									
@@ -233,6 +233,23 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 				
 			
 		Ext.apply(this.templateConfig, {
+			addSlashes : function(str)
+			{
+				str = GO.util.html_entity_decode(str, 'ENT_QUOTES');
+				str = GO.util.add_slashes(str);
+				return str;
+			},
+			mailTo : function(email, name) {
+			
+				if(GO.email && GO.settings.modules.email.read_permission)
+				{
+					return '<a href="#" onclick="GO.email.showAddressMenu(event, \''+this.addSlashes(email)+'\',\''+this.addSlashes(name)+'\');">'+email+'</a>';
+				}else
+				{
+					return '<a href="mailto:'+email+'">'+email+'</a>';
+				}
+			},
+			
 			isContactFieldset: function(values){
 				if(this.notEmpty(values['email']) ||
 					this.notEmpty(values['email2']) ||
