@@ -7,10 +7,10 @@
 
 /**
  * Don't copy the next lines into a translation
-Ext.namespace('GO.summary');
-Ext.namespace('GO.portlets');
 
-GO.summary.lang={};
+
+
+
 */
  
 /**
