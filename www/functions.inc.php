@@ -27,6 +27,17 @@ function __autoload($class_name) {
 }
 
 /**
+ * Get the current server time in microseconds
+ *
+ * @access public
+ * @return int
+ */
+function getmicrotime() {
+	list ($usec, $sec) = explode(" ", microtime());
+	return ((float) $usec + (float) $sec);
+}
+
+/**
  * Get's the last file or directory name of a filesystem path and works
  * with UTF-8 too unlike the basename function in PHP.
  *

@@ -180,11 +180,13 @@ class imap{
 		if ($novalidate_cert) {
 			$this->connectstring .= '/novalidate-cert';
 		}
+		
+		debug($this->connectstring);
 
 		if ($flags != 0) {
-			$this->conn = @ imap_open("{".$this->connectstring."}".$this->mailbox, $username, $password, $flags, 1);
+			$this->conn = @imap_open("{".$this->connectstring."}".$this->mailbox, $username, $password, $flags, 1);
 		} else {
-			$this->conn = @ imap_open("{".$this->connectstring."}".$this->mailbox, $username, $password);
+			$this->conn = @imap_open("{".$this->connectstring."}".$this->mailbox, $username, $password);
 		}
 		return $this->conn;
 	}
