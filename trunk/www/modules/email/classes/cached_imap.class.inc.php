@@ -52,15 +52,27 @@ class cached_imap extends imap{
 	 * @return mixed	The recource ID on success or false on failure
 	 */
 	function open($account, $mailbox='INBOX') {
-		
+		$start_time = getmicrotime();
+	
 		$this->account = $account;
 		
-		$conn = parent::open($account['host'], $account['type'], $account['port'], $account['username'], $account['password'], $mailbox, null, $account['use_ssl'], $account['novalidate_cert']);
+		//cache DNS in session. Seems to be faster with gmail somehow.
+		if(empty($_SESSION['cached_imap'][$account['host']]))
+		{
+			$_SESSION['cached_imap'][$account['host']]=gethostbyname($account['host']);
+		}
+		
+		
+		$conn = parent::open($_SESSION['cached_imap'][$account['host']], $account['type'], $account['port'], $account['username'], $account['password'], $mailbox, null, $account['use_ssl'], $account['novalidate_cert']);
 		
 		$this->folder = $this->email->get_folder($this->account['id'],$mailbox);
 		
 		if($this->folder)
 			$this->folder_sort_cache=json_decode($this->folder['sort'], true);
+			
+		
+		$end_time = getmicrotime();
+		debug('IMAP connect took '.($end_time-$start_time).'s');
 		
 		return $conn;
 	}
@@ -196,6 +208,8 @@ class cached_imap extends imap{
 			$this->email->query($sql, 'ii', array($affected_rows, $this->folder['id']));
 			debug('Adding '.$operator.$affected_rows.' unseen');		
 		}
+		
+		return $affected_rows;
 	}
 	
 	function set_flagged_cache($uids, $flagged)
@@ -205,7 +219,38 @@ class cached_imap extends imap{
 		$sql = "UPDATE em_messages_cache SET flagged='".$new_val."' WHERE folder_id=".$this->email->escape($this->folder['id'])." AND uid IN(".$this->email->escape(implode(',',$uids)).")";
 		$this->email->query($sql);
 	}
+	
+	function get_message_uids($first, $offset, $sort_type = SORTDATE, $reverse = "1", $query = '')
+	{
+		//get the unseen and total messages
 
+		if(imap_num_recent($this->conn))
+		{
+			$status = $this->status($this->mailbox, SA_UNSEEN+SA_MESSAGES);
+			if($status)
+			{
+				$this->unseen = $status->unseen;
+				$this->count = $status->messages;
+			}else
+			{
+				$this->unseen = $this->count = 0;
+			}
+		}else
+		{
+			$this->unseen = $this->folder['unseen'];
+			$this->count = $this->folder['msgcount'];
+			debug('Used cached folder status');
+		}
+		$this->query = $query;
+		$this->first = $first;
+		$this->offset = $offset;
+		
+		//sort the uid's
+		$this->sort($sort_type, $reverse, $query);
+		
+		return $this->get_uids_subset($first, $offset);
+	}
+	
 	function get_message_headers($start, $limit, $sort_field , $sort_order, $query)
 	{
 		$uids = $this->get_message_uids($start, $limit, $sort_field , $sort_order, $query);
