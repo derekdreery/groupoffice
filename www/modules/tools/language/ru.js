@@ -6,9 +6,9 @@
 */
 /**
  * Don't copy the next lines into a translation
-Ext.namespace('GO.tools');
 
-GO.tools.lang = {};
+
+
  */
 /**
  * Copy everything below for translations

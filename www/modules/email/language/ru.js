@@ -7,9 +7,9 @@
 /**
  * Don't copy the next lines into a translation
  
-Ext.namespace('GO.email');
 
-GO.email.lang={};
+
+
  */
 /**
  * Copy everything below for translations
