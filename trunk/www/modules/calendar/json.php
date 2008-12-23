@@ -474,19 +474,23 @@ try{
 												if ($event['description'] != '') {
 													$tooltip .= "<br /><br />". nl2br(htmlspecialchars($event['description']));
 												}
+												
+												$private = ($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']);
+												$name = $private ? $lang['calendar']['private'] : htmlspecialchars($event['name'],ENT_COMPAT,'UTF-8');
+												
 
 												$response[$cal->f('id')]['events'][] = array(
 					'id'=>$count,
 					'calendar_id'=>$cal->f('id'),
 					'event_id'=> $event['id'],
-					'name'=> htmlspecialchars($event['name'],ENT_COMPAT,'UTF-8'),
+					'name'=> $name,
 					'start_time'=> date('Y-m-d H:i', $event['start_time']),
 					'end_time'=> date('Y-m-d H:i', $event['end_time']),
 					'tooltip'=>$tooltip,
 					'location'=>$event['location'],
 					'background'=>$event['background'],
 					'repeats'=>!empty($event['rrule']),
-					'private'=>($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']),
+					'private'=>$private,
 					'write_permission'=>$response[$cal->f('id')]['write_permission']
 												);
 												$count++;
