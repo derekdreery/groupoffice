@@ -764,7 +764,7 @@ try{
 				{
 					$block=false;
 				}
-
+				
 				while($part = array_shift($parts))
 				{
 					$mime = isset($part["mime"]) ? strtolower($part["mime"]) : $default_mime;

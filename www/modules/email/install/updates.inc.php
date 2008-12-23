@@ -24,4 +24,7 @@ $updates[]="ALTER TABLE `em_folders` ADD `sort` LONGTEXT NOT NULL ;";
 
 $updates[]="update `em_filters` set field='from' where field='sender';";
 
+$updates[]="ALTER TABLE `em_messages_cache` ADD `notification` VARCHAR( 100 ) NOT NULL ,
+ADD `content_type` VARCHAR( 100 ) NOT NULL ,
+ADD `content_transfer_encoding` VARCHAR( 50 ) NOT NULL ;";
 ?>

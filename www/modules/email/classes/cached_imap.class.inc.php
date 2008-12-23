@@ -251,6 +251,75 @@ class cached_imap extends imap{
 		return $this->get_uids_subset($first, $offset);
 	}
 	
+/**
+	 * Get one message with the structure
+	 *
+	 * @param int $uid The unique identifier of the
+	 * @param string $part Get a specific part of a message
+	 * @access public
+	 * @return array The E-mail message elements
+	 */
+	function get_message($uid, $fetchstructure=true, $nocache=false) {
+		if($nocache)
+		{
+			return parent::get_message($uid, $fetchstructure);
+		}
+		if ($this->conn) {
+			
+			unset ($this->message);
+
+			if(is_object($uid))
+			{
+				$uids = array($uid->uid);				
+			}else
+			{
+				$uids = array($uid);
+			}
+			$this->get_cached_messages($this->folder['id'], $uids);			
+			$this->message=$values=$this->email->next_record();	
+			
+	
+			debug('Got cached message');
+
+				
+			$RFC822 = new RFC822();
+	
+			$this->message["to"]=array();
+			if(isset($values['to']))
+			{
+				$to = $RFC822->parse_address_list($values['to']);
+				foreach($to as $address)
+				{
+					$this->message['to'][]=$RFC822->write_address($this->enc_utf8($address['personal']), $address['email']);
+				}
+			}
+	
+			$this->message["cc"]=array();
+			if(isset($values['cc']))
+			{
+				$cc = $RFC822->parse_address_list($values['cc']);
+				foreach($cc as $address)
+				{
+					$this->message['cc'][]=$RFC822->write_address($this->enc_utf8($address['personal']), $address['email']);
+				}
+			}
+			
+			
+			$this->message["parts"] = array();
+			if($fetchstructure)
+			{
+				$structure = imap_fetchstructure($this->conn, $this->message['uid'], FT_UID);
+				//debug($structure);
+				$this->get_parts($structure);
+			}
+
+
+			return $this->message;
+		} else {
+			return false;
+		}
+	}
+	
 	function get_message_headers($start, $limit, $sort_field , $sort_order, $query)
 	{
 		$uids = $this->get_message_uids($start, $limit, $sort_field , $sort_order, $query);

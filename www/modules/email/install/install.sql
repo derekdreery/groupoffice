@@ -136,6 +136,9 @@ CREATE TABLE IF NOT EXISTS `em_messages_cache` (
   `answered` enum('0','1') NOT NULL,
   `priority` tinyint(4) NOT NULL,
   `to` varchar(100) default NULL,
+  `notification` varchar(100) NOT NULL,
+  `content_type` varchar(100) NOT NULL,
+  `content_transfer_encoding` varchar(50) NOT NULL,
   PRIMARY KEY  (`folder_id`,`uid`),
   KEY `account_id` (`account_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

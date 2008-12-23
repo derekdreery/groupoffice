@@ -38,6 +38,7 @@
  */
 GO.data.Connection = Ext.extend(Ext.data.Connection, {
 	
+	 timeout : 60000,
 	/**
      * Sends an HTTP request to a remote server.<p>
      * <b>Important:<b> Ajax server requests are asynchronous, and this call will
