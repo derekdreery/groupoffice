@@ -651,14 +651,16 @@ try{
 				{
 					$response['subject']= $lang['email']['no_subject'];
 				}
+				$response['subject']= htmlspecialchars($response['subject'], ENT_QUOTES, 'UTF-8');;
+				
 
 				$response['account_id']=$account_id;
 				$response['full_from']=htmlspecialchars($response['from'], ENT_QUOTES, 'UTF-8');
 				
 				$RFC822 = new RFC822();
 				$address = $RFC822->parse_address_list($response['from']);
-				$response['sender']=isset($address[0]['email']) ? $address[0]['email'] : '';
-				$response['from']=isset($address[0]['personal']) ? $address[0]['personal'] : '';
+				$response['sender']=isset($address[0]['email']) ? htmlspecialchars($address[0]['email'], ENT_QUOTES, 'UTF-8') : '';
+				$response['from']=isset($address[0]['personal']) ? htmlspecialchars($address[0]['personal'], ENT_QUOTES, 'UTF-8') : '';
 				
 				
 				if(!empty($response['to']))

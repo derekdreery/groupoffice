@@ -52,7 +52,11 @@ class filesystem extends db
 	function mkdir_recursive($path) {
 	  global $GO_CONFIG;
 	
-	  return mkdir($path, $GO_CONFIG->folder_create_mode, true);	  
+	  if(!is_dir($path))
+	  {
+	  	return mkdir($path, $GO_CONFIG->folder_create_mode, true);
+	  }
+	  return true;	  
 	}
 
 
