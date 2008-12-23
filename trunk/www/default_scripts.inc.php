@@ -168,7 +168,7 @@ if(!$GO_CONFIG->debug)
 		}
 	
 		
-		$file = $GO_SECURITY->user_id.'-'.md5(filemtime($GO_CONFIG->root_path.'javascript/go-all-min.js').':'.$GO_LANGUAGE->language.':'.implode(':', $modules)).'.js';
+		$file = $GO_SECURITY->user_id.'-'.md5($GO_CONFIG->mtime.filemtime($GO_CONFIG->root_path.'javascript/go-all-min.js').':'.$GO_LANGUAGE->language.':'.implode(':', $modules)).'.js';
 		$path = $GO_CONFIG->local_path.'cache/'.$file;
 		$url = $GO_CONFIG->local_url.'cache/'.$file;
 		
