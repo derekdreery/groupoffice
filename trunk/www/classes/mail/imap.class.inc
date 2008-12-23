@@ -436,7 +436,7 @@ class imap{
 		$overviews = imap_fetch_overview($this->conn, $get, FT_UID);
 		foreach($overviews as $overview)
 		{
-			$message = $this->get_message($overview, false);			
+			$message = $this->get_message($overview, false, true);			
 			
 			//$cached_message['folder_id']=$folder_id;
 			$cached_message['uid']=$message['uid'];
@@ -450,7 +450,11 @@ class imap{
 			$cached_message['priority']=empty($message['priority']) ? 3 : intval($message['priority']);			
 			$cached_message['from']=$message['from'];
 			$cached_message['reply_to']=$message['reply_to'];
-			$cached_message['to']=implode(',', $message['to']);	
+			$cached_message['to']=implode(',', $message['to']);
+
+			$cached_message['notification']=$message['notification'];
+			$cached_message['content_type']=$message['content_type'];
+			$cached_message['content_transfer_encoding']=$message['content_transfer_encoding'];
 
 			$messages[$message['uid']]=$cached_message;
 		}
@@ -560,14 +564,14 @@ class imap{
 	 * @access public
 	 * @return array The E-mail message elements
 	 */
-	function get_message($uid, $fetchstructure=true) {
+	function get_message($uid, $fetchstructure=true, $nocache=false) {
 		if ($this->conn) {
 			unset ($this->message);
 
 			if(is_object($uid))
 			{
 				$this->message['uid'] = $uid->uid;
-				$this->message['number'] = $uid->msgno;
+				//$this->message['number'] = $uid->msgno;
 				$this->message['new'] = (!$uid->seen && $this->is_imap());
 				$this->message["flagged"] = $uid->flagged;
 				$this->message["size"] = $uid->size;
@@ -575,7 +579,7 @@ class imap{
 			}else
 			{
 				$this->message['uid'] = $uid;
-				$this->message['number'] = imap_msgno($this->conn, $uid);
+				//$this->message['number'] = imap_msgno($this->conn, $uid);
 
 				/*if(!@$headerinfo = imap_headerinfo($this->conn, $this->message['number']))
 				{
@@ -586,16 +590,7 @@ class imap{
 				$this->message["flagged"] = $headerinfo->Flagged=='F';
 				$this->message["size"] = $headerinfo->Size;
 				$this->message["answered"] = $headerinfo->Answered=='A';*/
-			}
-
-			/*for ($i = 0; $i < sizeof($this->sort); $i ++) {
-				if ($this->message['uid'] == $this->sort[$i]) {
-					$this->message["next"] = ($i -1 >= 0) ? $this->sort[$i -1] : 0;
-					$this->message["previous"] = ($i +1 < sizeof($this->sort)) ? $this->sort[$i +1] : 0;
-					break;
-				}
-			}*/
-				
+			}				
 			$this->message["parts"] = array();
 
 			if($fetchstructure)
