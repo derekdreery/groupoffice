@@ -20,9 +20,9 @@
 /**
  * Don't copy the next lines into a translation
  
-
-
-
+Ext.namespace('GO.addressbook');
+Ext.namespace('GO.addressbook.plugins');
+GO.addressbook.lang={};
 */
 /**
  * Copy everything below for translations
@@ -44,7 +44,7 @@ GO.addressbook.lang.cmdFormSearchFirst = 'Искать в= ';
 GO.addressbook.lang.cmdFormSearchSecond = ' в= ';
 GO.addressbook.lang.cmdFormSearchThird = ' для= ';
 GO.addressbook.lang.cmdFormSearchFourth = '(Используйте \'%\' как разделитель) ';
-GO.addressbook.lang.cmdFormLabelTitleInitials = 'Title/Инициалы';
+GO.addressbook.lang.cmdFormLabelTitleInitials = 'Заголовок/Инициалы';
 GO.addressbook.lang.cmdFormLabelSalutation = 'Обращение';
 GO.addressbook.lang.cmdFormLabelComment = 'Коментарий';
 GO.addressbook.lang.cmdFormCompanyEmptyText = 'Пожалуйста выберите компанию';
@@ -66,8 +66,8 @@ GO.addressbook.lang.cmdLInkFieldset = 'Ссылки';
 GO.addressbook.lang.company= 'Компания';
 GO.addressbook.lang.cmdCompanyDetailsFor= 'Подробная информация для';
 GO.addressbook.lang.cmdPanelCompany = 'Подробная информация о компании';
-GO.addressbook.lang.cmdFormLabelBankNo = 'Bank number';
-GO.addressbook.lang.cmdFormLabelVatNo = 'VAT number';
+GO.addressbook.lang.cmdFormLabelBankNo = 'Банковские реквизиты';
+GO.addressbook.lang.cmdFormLabelVatNo = 'Банковские реквизиты2';
 GO.addressbook.lang.cmdFieldsetCompanyDetails = 'Подробная информация о компании';
 GO.addressbook.lang.cmdFieldsetVisitAddress = 'Адрес нахождения';
 GO.addressbook.lang.cmdFieldsetPostAddress = 'Почтовый адрес';
@@ -89,7 +89,7 @@ GO.addressbook.lang.cmdFormLabelFile= 'Файл';
 GO.addressbook.lang.cmdFormLabelValueSeperated= 'Значения разделяются';
 GO.addressbook.lang.cmdFormLabelValueIncluded= 'Значения объединяются';
 GO.addressbook.lang.cmdFormLabelLinesEnded= 'Сроки оканчиваются';
-GO.addressbook.lang.cmdUpload= 'Закачать';
+GO.addressbook.lang.cmdUpload= 'Разместить на сервере';
 GO.addressbook.lang.cmdImport= 'Импортировать';
 GO.addressbook.lang.cmdExport= 'Экспортировать';
 GO.addressbook.lang.cmdType= 'Тип';

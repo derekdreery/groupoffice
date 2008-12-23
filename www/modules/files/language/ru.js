@@ -6,9 +6,9 @@
 */
 /**
  * Don't copy the next lines into a translation
+Ext.namespace('GO.files');
 
-
-
+GO.files.lang={};
  */
 /**
  * Copy everything below for translations
@@ -28,6 +28,6 @@ GO.files.lang.errorOneItem = 'Пожалуйста выберите только
 GO.files.lang.activateSharing = 'Активировать совместное использование';
 GO.files.lang.notifyChanges = 'Уведомлять меня об изменениях сделанных в этой папке';
 GO.files.lang.comments = 'Коментарии';
-GO.files.lang.downloadGOTA = 'Закачать с помощью GOTA';
+GO.files.lang.downloadGOTA = 'Разместить на сервере с помощью GOTA';
 GO.files.lang.fileBrowser = 'Просмотр файлов';
 GO.files.lang.thumbnails = 'Предпросмотр';

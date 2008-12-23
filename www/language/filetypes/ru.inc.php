@@ -7,7 +7,7 @@
 //Uncomment this line in new translations!
 //require($GO_LANGUAGE->get_fallback_base_language_file('filetypes'));
 
-$lang['filetypes']['unknown'] = 'Неизвестный тип фала';
+$lang['filetypes']['unknown'] = 'Неизвестный тип файла';
 $lang['filetypes']['txt'] = 'Текстовый файл';
 $lang['filetypes']['sxw'] = 'OpenOffice.Org текст';
 $lang['filetypes']['ott'] = 'OpenOffice.Org шаблон';

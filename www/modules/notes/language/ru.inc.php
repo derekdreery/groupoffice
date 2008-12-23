@@ -9,7 +9,7 @@
 require($GO_LANGUAGE->get_fallback_language_file('notes'));
 
 $modules['notes']['name']='Заметки';
-$modules['notes']['description']='Введите описание';
+$modules['notes']['description']='Модуль для ведения заметок';
 $lang['notes']['note']='Заметка';
 $lang['notes']['name']='Заметки';
 $lang['notes']['description']='Введите описание';

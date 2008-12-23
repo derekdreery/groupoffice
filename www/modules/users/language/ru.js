@@ -6,9 +6,9 @@
 */
 /**
  * Don't copy the next lines into a translation
+Ext.namespace('GO.users');
 
-
-
+GO.users.lang={};
  */
 /**
  * Copy everything below for translations
@@ -29,10 +29,10 @@ GO.users.lang.cmdPanelLogin = 'Имя пользователя';
 GO.users.lang.cmdPanelLookFeel = 'Вид';
 GO.users.lang.cmdPanelSettings = 'Настройки';
 GO.users.lang.cmdPanelEnabledMail = 'Email для вновь подключаемых пользователей';
-GO.users.lang.cmdPanelDisabledMail = 'Email для вновь откльченых пользователей';
+GO.users.lang.cmdPanelDisabledMail = 'Email для отключеных пользователей';
 	
-GO.users.lang.cmdFieldSetPersonal = 'Kbxyjt';	
-GO.users.lang.cmdUserWindowTitle= 'Htlfrnbhjdfnm gjkmpjdfntkz';
+GO.users.lang.cmdFieldSetPersonal = 'Личное';	
+GO.users.lang.cmdUserWindowTitle= 'Редактировать пользователя';
 GO.users.lang.cmdNotificationWindowTitle= 'редактирование пригласительного письма';
 GO.users.lang.cmdMaskSaving= 'Запись';
 	
@@ -49,18 +49,18 @@ GO.users.lang.cmdFormLabelLastLogin = 'Последний вход';
 GO.users.lang.cmdFormLabelTotalLogins = 'Всего входов';
 GO.users.lang.numberOfLogins = 'Количество входов';
 GO.users.lang.cmdFormLabelTheme = 'Тема';
-GO.users.lang.cmdFormLabelStartModule = 'начальный модуль';
-GO.users.lang.cmdFormLabelMaximunRows = 'Максимально количество сторок в списке';
+GO.users.lang.cmdFormLabelStartModule = 'Начальный модуль';
+GO.users.lang.cmdFormLabelMaximunRows = 'Максимальное количество сторок в списке';
 GO.users.lang.cmdFormLabelSortNamesBy = 'Фамилия';
 GO.users.lang.cmdFormLabelLanguage = 'Язык';
 GO.users.lang.cmdFormLabelTimezone = 'Временная зона';
-GO.users.lang.cmdFormLabelAdjustDaylight = 'Автоматически изменять время при перходе на Летнне/Зимнее время';
+GO.users.lang.cmdFormLabelAdjustDaylight = 'Автоматически изменять время при перходе на летнне/зимнее время';
 GO.users.lang.cmdFormLabelDateFormat = 'Формат даты';
 GO.users.lang.cmdFormLabelDateSeperator = 'Разделитель для даты';
 GO.users.lang.timeFormat = 'Формат времени';
 GO.users.lang.cmdFormLabelFirstWeekday = 'Начало недели';
 GO.users.lang.cmdFormLabelThousandSeperator = 'Разделитель тысяч';
-GO.users.lang.cmdFormLabelDecimalSeperator = 'Разделитель дробной чати';
+GO.users.lang.cmdFormLabelDecimalSeperator = 'Разделитель дробной части';
 GO.users.lang.cmdFormLabelCurrency = 'Валюта'
 
 GO.users.lang.account = 'Учетная запись';
@@ -82,7 +82,7 @@ GO.users.lang.fullhourformat = '24 часовой формат';
 GO.users.lang.halfhourformat = '12 часовой формат';
 GO.users.lang.sunday = 'Воскресенье';
 GO.users.lang.monday = 'Понедельник';
-GO.users.lang.regionalSettings = 'региональные установки';
+GO.users.lang.regionalSettings = 'Региональные установки';
 GO.users.lang.userSettings = 'Пользовательские установки';
 
 GO.users.lang.maxUsersReached='В системе достигнуто максимальное количество пользователей. Перейдите на закладку "Сервис" и увеличьте максимальное количество пользователей в системе.';
@@ -93,4 +93,4 @@ GO.users.lang.muteSound='Выключить звук';
 
 GO.users.lang.downloadSampleCSV='Загрузить пример CSV файла';
 
-GO.users.lang.importText='Вы можете импортировать ползователей используя CSV файл. Чтобы узнать как должен быть сформатирован CSV файл, загрузите файл с примером.<br />Первая строка должна содержать имена колонок. Необходимо наличие следующих полей дял каждого ползователя:<br /><br />username, password, first_name, last_name, email';
+GO.users.lang.importText='Вы можете импортировать пользователей используя CSV файл. Чтобы узнать как должен быть сформатирован CSV файл, загрузите файл с примером.<br />Первая строка должна содержать имена колонок. Необходимо наличие следующих полей для каждого ползователя:<br /><br />username, password, first_name, last_name, email';

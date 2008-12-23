@@ -30,8 +30,8 @@ $lang['common']['addressbookAlreadyExists'] = 'Адресная книга, ко
 $lang['addressbook']['notIncluded'] = 'Не загружается';
 
 $lang['addressbook']['comment'] = 'Коментарий';
-$lang['addressbook']['bankNo'] = 'Bank number'; 
-$lang['addressbook']['vatNo'] = 'VAT number';
+$lang['addressbook']['bankNo'] = 'Банковские реквизиты'; 
+$lang['addressbook']['vatNo'] = 'Банковские реквизиты2';
 $lang['addressbook']['contactsGroup'] = 'Группа';
 
 $lang['link_type'][2]=$lang['addressbook']['contact'] = 'Контакт';

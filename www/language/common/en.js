@@ -19,7 +19,7 @@ GO.lang = {};
  * Copy everything below for translations
  */
 
-GO.lang.more='More';
+
 GO.lang.strCommunityForum='Community forum';
 GO.lang.moduleRequired='This feature requires the \'{module}\' module. This module is not available.';
 
@@ -483,7 +483,6 @@ GO.lang.countries["SY"] = "Syrian Arab Republic";
 GO.lang.countries["TW"] = "Taiwan";
 GO.lang.countries["TJ"] = "Tajikistan";
 GO.lang.countries["TZ"] = "Tanzania, United Republic of";
-GO.lang.countries["TH"] = "Thailand";
 GO.lang.countries["TG"] = "Togo";
 GO.lang.countries["TK"] = "Tokelau";
 GO.lang.countries["TO"] = "Tonga";
@@ -513,10 +512,3 @@ GO.lang.countries["ZR"] = "Zaire";
 GO.lang.countries["ZM"] = "Zambia";
 GO.lang.countries["ZW"] = "Zimbabwe";
 GO.lang.countries["SA"] = "Saudi Arabia";
-
-
-
-GO.lang.displayingItemsShort='Total: {2}';
-
-GO.lang.item='item';
-GO.lang.items='items';

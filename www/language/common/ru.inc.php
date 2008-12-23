@@ -10,7 +10,7 @@ require($GO_LANGUAGE->get_fallback_base_language_file('common'));
 
 $lang['common']['htmldirection']= 'ltr';
 
-$lang['common']['errorsInForm'] = 'В представленных данных на форме содержатся ошибки. Исправьте их и попробуйте еще раз.';
+$lang['common']['errorsInForm'] = 'Невено заполнена форма. Исправьте ошибки и попробуйте еще раз.';
 
 $lang['common']['loadingCore']= 'Загрузка основной системы';
 $lang['common']['loadingLogin'] = 'Загрузка диалога входа в систему';
@@ -120,7 +120,7 @@ $lang['common']['full_days'][4] = "Четверг";
 $lang['common']['full_days'][5]= "Пятница";
 $lang['common']['full_days'][6] = "Суббота";
 
-$lang['common']['default']='По умочанию';
+$lang['common']['default']='По умолчанию';
 $lang['common']['description']='Описание';
 $lang['common']['date']='Дата';
 
