@@ -7,9 +7,9 @@
 /**
  * Don't copy the next lines into a translation
 
+Ext.namespace('GO.tasks');
 
-
-
+GO.tasks.lang={};
  */
 /**
  * Copy everything below for translations

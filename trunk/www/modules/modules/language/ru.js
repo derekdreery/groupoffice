@@ -6,9 +6,9 @@
 */
 /**
  * Don't copy the next lines into a translation
+Ext.namespace('GO.modules');
 
-
-
+GO.modules.lang={};
  */
 /**
  * Copy everything below for translations

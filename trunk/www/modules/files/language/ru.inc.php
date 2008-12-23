@@ -13,7 +13,7 @@ $lang['files']['description'] = 'Модуль Фалы; Модуль для со
 $lang['files']['fileNotFound'] = 'Файл не найден';
 $lang['files']['folderExists'] = 'Папка уже существует';
 $lang['files']['filenameExists'] = 'Имя файла уже существует';
-$lang['files']['uploadedSucces'] = 'Файл выгружен без ошибок';
+$lang['files']['uploadedSucces'] = 'Файл размещен на сервере без ошибок';
 
 $lang['files']['ootextdoc']='Open-Office Text документ';
 $lang['files']['wordtextdoc']='Microsoft Word документ';
@@ -34,7 +34,7 @@ $lang['files']['folder_modified_body']='Вы запрашивали уведом
 ';
 
 $lang['files']['modified']='Изменен';
-$lang['files']['new']='Новый';
+$lang['files']['new']='Создать';
 $lang['files']['deleted']='Удален';
 
 $lang['files']['file']='Файл';

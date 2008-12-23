@@ -1,4 +1,4 @@
-/** 
+/**
  * Copyright Intermesh
  * 
  * This file is part of Group-Office. You should have received a copy of the
@@ -51,7 +51,7 @@ GO.lang.strUsage='Статистика использования';
 
 GO.lang.strName = 'Имя';
 GO.lang.strDescription = 'Описание';
-GO.lang.strEmail = 'E-mail';
+GO.lang.strEmail = 'Почта';
 GO.lang.strUser = 'Пользователь';
 GO.lang.users = 'Пользователи';
 GO.lang.strOwner = 'Владелец';
@@ -61,7 +61,7 @@ GO.lang.strLanguage='Язык';
 
 GO.lang.strOpenOffice = 'документ OpenOffice.org';
 
-GO.lang.strDefault = 'Default';
+GO.lang.strDefault = 'Стандартный';
 GO.lang.strUsername = 'Имя пользователя';
 GO.lang.strPassword = 'Пароль';
 
@@ -73,7 +73,7 @@ GO.lang.strTitle = 'Заголовок';
 GO.lang.strInitials = 'Инициалы';
 GO.lang.strSex = 'Пол';
 GO.lang.strBirthday = 'День рождения';
-GO.lang.strEmail = 'E-mail';
+GO.lang.strEmail = 'Почта';
 
 GO.lang.strPhone = 'Телефон';
 GO.lang.strFax = 'Факс';
@@ -87,7 +87,7 @@ GO.lang.strCountry = 'Страна';
 GO.lang.strHomepage = 'WEB-страница';
 GO.lang.strCompany = 'Компания';
 GO.lang.strDepartment = 'Отдел';
-GO.lang.strFunction = 'Функция';
+GO.lang.strFunction = 'Должность';
 GO.lang.strSalutation = 'Приветствие';
 GO.lang.strComment = 'Коментарий';
 GO.lang.strWorkAddress = 'Адрес (рабочий)';
@@ -132,8 +132,8 @@ GO.lang.strNA = 'Н/Д';
 
 GO.lang.cmdDelete = 'Удалить';
 GO.lang.cmdAdd = 'Добавить';
-GO.lang.cmdAddPlusNew = 'Добавить + new';
-GO.lang.cmdSavePlusNew='Сохранить + new';
+GO.lang.cmdAddPlusNew = 'Добавить + новый';
+GO.lang.cmdSavePlusNew='Сохранить + новый';
 GO.lang.cmdSave = 'Сохранить';
 GO.lang.cmdEdit = 'Редактировать';
 GO.lang.cmdLink = 'Ccылкa';
@@ -150,7 +150,7 @@ GO.lang.cmdActions = 'Действия';
 GO.lang.cmdNext='Вперед';
 GO.lang.cmdPrevious='Назад';
 
-GO.lang.cmdNew = 'Новый';
+GO.lang.cmdNew = 'Создать';
 GO.lang.cmdOk = 'Ok';
 GO.lang.cmdCancel = 'Отмена';
 
@@ -170,14 +170,14 @@ GO.lang.cut = 'Вырезать';
 GO.lang.copy = 'Копировать';
 GO.lang.compress = 'Сжать';
 GO.lang.decompress = 'Разжать';
-GO.lang.upload = 'Закачать';
+GO.lang.upload = 'Разместить';
 GO.lang.download = 'Скачать';
-GO.lang.uploadFiles = 'Закачать файлы';
+GO.lang.uploadFiles = 'Разместить файлы';
 
 GO.lang.displayingItems = 'Отображено {0} - {1} из {2}';
 GO.lang.strNoItems = 'Ничего не найдено';
 
-GO.lang.strLinkItems = 'Искать свяки.';
+GO.lang.strLinkItems = 'Искать связи.';
 GO.lang.strSearchResults= 'Результат поиска.';
 GO.lang.strSearch= 'Поиск';
 
@@ -215,7 +215,7 @@ GO.lang.strLogin= 'Необходимо подключиться';
 
 GO.lang.strLoggedInAs= 'Подключены как ';
 
-GO.lang.strErrorsInForm= 'В Вашей форме имеются ошибки. Неверно заполненные поля отмечены.';
+GO.lang.strErrorsInForm= 'Неверно заполнена форма. Неверно заполненные поля отмечены.';
 
 
 

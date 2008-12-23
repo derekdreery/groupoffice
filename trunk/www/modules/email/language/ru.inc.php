@@ -10,12 +10,13 @@ require($GO_LANGUAGE->get_fallback_language_file('email'));
 $lang['email']['name'] = 'Почта';
 $lang['email']['description'] = 'Модуль Почта; Небольшой e-mail клиент. Любой пользователь может отправлять, принимать и перенаправлять почтовые сообщения';
 
-$lang['link_type'][9]='E-mail';
+$lang['link_type'][9]='Почта';
 
 $lang['email']['feedbackNoReciepent'] = 'Вы не указали получателя';
 $lang['email']['feedbackSMTPProblem'] = 'Невозможно связаться с SMTP сервером: ';
 $lang['email']['feedbackUnexpectedError'] = 'Произошла непредвиденная ошибка при формировании почтового сообщения: ';
 $lang['email']['feedbackCreateFolderFailed'] = 'Невозможно создать папку';
+$lang['email']['feedbackDeleteFolderFailed'] = 'Невозможно удалить папку';
 $lang['email']['feedbackSubscribeFolderFailed'] = 'Failed to subscribe folder';
 $lang['email']['feedbackUnsubscribeFolderFailed'] = 'Failed to unsubscribe folder';
 $lang['email']['feedbackCannotConnect'] = 'Невозможно соедениться с %1$ по порту %3$s<br /><br />ПОчтовый сервер вернул: %2$s';
