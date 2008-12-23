@@ -391,7 +391,7 @@ class go_ical extends calendar
 				}
 				$line = 'EXDATE:';
 
-				$count=1;
+				//$count=1;
 				$exception_count = count($exceptions);
 				for($i=0;$i<$exception_count;$i++)
 				{
@@ -400,13 +400,13 @@ class go_ical extends calendar
 					{
 						$line .=';';
 					}
-					$count++;
+					/*$count++;
 					if($count=='3')
 					{
 						$lines[]=$line;
 						$line='  ';
 						$count=0;
-					}
+					}*/
 				}
 				if(!empty($line))
 				{
