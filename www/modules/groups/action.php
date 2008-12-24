@@ -10,12 +10,13 @@
  * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
- * @author Boy Wijnmaalen <bwijnmaalen@intermesh.nl>
  */
 
 require_once("../../Group-Office.php");
 $GO_SECURITY->json_authenticate('groups');
 require_once($GO_LANGUAGE->get_language_file('groups'));
+
+require_once ($GO_LANGUAGE->get_language_file('groups'));
 
 $action = isset($_REQUEST['action']) ? ($_REQUEST['action']) : null;
 

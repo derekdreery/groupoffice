@@ -16,6 +16,8 @@
 require_once("../../Group-Office.php");
 $GO_SECURITY->json_authenticate('groups');
 
+require_once ($GO_LANGUAGE->get_language_file('groups'));
+
 $sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'name';
 $dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'ASC';
 $start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
@@ -29,8 +31,6 @@ $search_field = isset($_REQUEST['search_field']) ? ($_REQUEST['search_field']) :
 switch ($action)
 {
 	case 'groups':
-
-
 		if(isset($_POST['delete_keys']))
 		{
 			try{
@@ -84,6 +84,10 @@ switch ($action)
 
 				foreach($users as $user_id)
 				{
+					if($group_id==1 && $user_id==1)
+					{
+						throw new Exception($lang['groups']['dontRemoveAdmin']);
+					}
 					$GO_GROUPS->delete_user_from_group($user_id, $group_id);
 				}
 			}catch(Exception $e)
