@@ -1000,7 +1000,7 @@ try{
 										$response['unseen'][$imap->folder['id']]=$imap->unseen;
 									}else
 									{
-										$response=array();
+										//$response=array();
 										$status = $imap->status($touched_folder, SA_UNSEEN);
 										$folder = $email->get_folder($account_id, $touched_folder);
 
