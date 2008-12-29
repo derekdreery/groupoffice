@@ -240,7 +240,7 @@ try{
 
 			$results=array();
 
-			$query = isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '%';
+			$query = isset($_REQUEST['query']) ? '%'.trim($_REQUEST['query']).'%' : '%';
 
 			if(isset($GO_MODULES->modules['addressbook']) && $GO_MODULES->modules['addressbook']['read_permission'])
 			{
@@ -248,9 +248,7 @@ try{
 				$ab = new addressbook();
 				$ab->search_email($GO_SECURITY->user_id, $query);
 
-					
-
-				while($ab->next_record(DB_ASSOC))
+				while($ab->next_record())
 				{
 					$name = String::format_name($ab->f('last_name'),$ab->f('first_name'),$ab->f('middle_name'),'first_name');
 					$rfc_email =$RFC822->write_address($name, $ab->f('email'));
