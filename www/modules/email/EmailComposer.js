@@ -311,24 +311,13 @@ GO.email.EmailComposer = function(config) {
 							this.addressbookDialog = new GO.email.AddressbookDialog();
 							this.addressbookDialog.on('addrecipients',
 									function(fieldName, selections) {
-										var field = this.formPanel.form
-												.findField(fieldName);
-
-										var emails = [];
-
-										for (var i = 0; i < selections.length; i++) {
-											emails.push('"'
-													+ selections[i].data.name
-													+ '" <'
-													+ selections[i].data.email
-													+ '>');
-										}
-
+										var field = this.formPanel.form.findField(fieldName);
+										
 										var currentVal = field.getValue();
 										if (currentVal != '')
 											currentVal += ',';
 
-										currentVal += emails.join(',');
+										currentVal += selections;
 
 										field.setValue(currentVal);
 

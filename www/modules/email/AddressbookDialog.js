@@ -58,7 +58,6 @@ GO.email.AddressbookDialog = function(config) {
 			});
 
 	this.usersGrid = new GO.grid.GridPanel({
-				id : 'select-users-grid',
 				title : GO.addressbook.lang.users,
 				paging : true,
 				border : false,
@@ -112,7 +111,6 @@ GO.email.AddressbookDialog = function(config) {
 				});
 
 		this.contactsGrid = new GO.grid.GridPanel({
-					id : 'select-contacts-grid',
 					title : GO.addressbook.lang.contacts,
 					paging : true,
 					border : false,
@@ -160,7 +158,6 @@ GO.email.AddressbookDialog = function(config) {
 				});
 
 		this.companyGrid = new GO.grid.GridPanel({
-					id : 'select-companies-grid',
 					title : GO.addressbook.lang.companies,
 					paging : true,
 					border : false,
@@ -192,6 +189,31 @@ GO.email.AddressbookDialog = function(config) {
 		items.push(this.contactsGrid);
 		items.push(this.companyGrid);
 
+	}
+
+	if (GO.mailings) {
+		this.mailingsGrid = new GO.grid.GridPanel({
+					title : GO.mailings.lang.cmdPanelMailings,
+					paging : true,
+					border : false,
+					store : GO.mailings.readableMailingsStore,
+					view : new Ext.grid.GridView({
+								autoFill : true,
+								forceFit : true
+							}),
+					columns : [{
+								header : GO.lang['strName'],
+								dataIndex : 'name',
+								css : 'white-space:normal;',
+								sortable : true
+							}],
+					sm : new Ext.grid.RowSelectionModel()
+				});
+		this.mailingsGrid.on('show', function() {
+					GO.mailings.readableMailingsStore.load();
+				}, this);
+
+		items.push(this.mailingsGrid);
 	}
 
 	this.tabPanel = new Ext.TabPanel({
@@ -241,27 +263,48 @@ GO.email.AddressbookDialog = function(config) {
 };
 
 Ext.extend(GO.email.AddressbookDialog, Ext.Window, {
-
-			// private
 			addRecipients : function(field) {
-
-				var activeGrid;
-
-				switch (this.tabPanel.getLayout().activeItem.id) {
-					case 'select-users-grid' :
-						activeGrid = this.usersGrid;
-						break;
-
-					case 'select-contacts-grid' :
-						activeGrid = this.contactsGrid;
-						break;
-
-					case 'select-companies-grid' :
-						activeGrid = this.companiesGrid;
-						break;
-				}
-
+				var str="";
+				var activeGrid = this.tabPanel.getLayout().activeItem;
 				var selections = activeGrid.selModel.getSelections();
-				this.fireEvent('addrecipients', field, selections);
+				
+				if (this.mailingsGrid && activeGrid == this.mailingsGrid) {
+					
+					var mailing_groups = [];
+					
+					for(var i=0;i<selections.length;i++)
+					{
+						mailing_groups.push(selections[i].data.id);
+					}
+					
+					this.el.mask(GO.lang.waitMsgLoad);
+					Ext.Ajax.request({
+						url: GO.settings.modules.mailings.url+'json.php',
+						params: {
+								task:'mailing_group_string',
+								mailing_groups: mailing_groups.join(',')
+							},
+						callback: function(options, success, response)
+						{
+							str = response.responseText;
+							this.fireEvent('addrecipients', field, str);
+							this.el.unmask();
+						},
+						scope:this
+					});
+
+				} else {
+
+					var emails = [];
+
+					for (var i = 0; i < selections.length; i++) {
+						emails.push('"' + selections[i].data.name + '" <'
+								+ selections[i].data.email + '>');
+					}
+					
+					str=emails.join(',');
+					this.fireEvent('addrecipients', field, str);
+				}
+				
 			}
 		});
