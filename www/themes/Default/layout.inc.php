@@ -85,7 +85,6 @@ if($GO_SECURITY->logged_in() && trim($_SESSION['GO_SESSION']['name']) != '' && !
 	if(isset($popup_groupoffice))
 	{
 		echo 'Ext.onReady(function(){
-			//GO.mainLayout.login.defer(10000, GO.mainLayout);
 			GO.mainLayout.login();
 			GO.mainLayout.launchFullscreen("'.$popup_groupoffice.'");
 		}, GO.mainLayout.login);';
@@ -102,7 +101,7 @@ if($GO_SECURITY->logged_in() && trim($_SESSION['GO_SESSION']['name']) != '' && !
 	<?php	
 }
 
-if(!empty($_SESSION['GO_SESSION']['mute_sound']))
+if(empty($_SESSION['GO_SESSION']['mute_sound']))
 {
 ?>
 	<object width="0" height="0" id="alarmSound">
