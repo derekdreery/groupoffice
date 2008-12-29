@@ -314,8 +314,8 @@ GO.email.EmailComposer = function(config) {
 										var field = this.formPanel.form.findField(fieldName);
 										
 										var currentVal = field.getValue();
-										if (currentVal != '')
-											currentVal += ',';
+										if (currentVal != '' && currentVal.substring(currentVal.length-1,currentVal.length) != ',' && currentVal.substring(currentVal.length-2,currentVal.length-1)!=',')
+											currentVal += ', ';
 
 										currentVal += selections;
 

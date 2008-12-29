@@ -42,6 +42,7 @@ $contact['user_id']=1;
 $contact['company_id']=$ab->add_company($company);
 $contact['addressbook_id']=$addressbook['addressbook_id'];
 $contact['first_name']='Merijn';
+$contact['middle_name']='';
 $contact['last_name']='Schering';
 $contact['title']='Ing.';
 $contact['initials']='M.K.';

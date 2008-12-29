@@ -302,7 +302,7 @@ Ext.extend(GO.email.AddressbookDialog, Ext.Window, {
 								+ selections[i].data.email + '>');
 					}
 					
-					str=emails.join(',');
+					str=emails.join(', ');
 					this.fireEvent('addrecipients', field, str);
 				}
 				
