@@ -262,7 +262,7 @@ class cached_imap extends imap{
 	 * @access public
 	 * @return array The E-mail message elements
 	 */
-	function get_message($uid, $fetchstructure=true, $nocache=false) {
+	/*function get_message($uid, $fetchstructure=true, $nocache=false) {
 		if($nocache)
 		{
 			return parent::get_message($uid, $fetchstructure);
@@ -306,7 +306,16 @@ class cached_imap extends imap{
 					$this->message['cc'][]=$RFC822->write_address($this->enc_utf8($address['personal']), $address['email']);
 				}
 			}
-				
+			
+			$this->message["bcc"]=array();
+			if(isset($values['bcc']))
+			{
+				$cc = $RFC822->parse_address_list($values['bcc']);
+				foreach($cc as $address)
+				{
+					$this->message['bcc'][]=$RFC822->write_address($this->enc_utf8($address['personal']), $address['email']);
+				}
+			}
 				
 			$this->message["parts"] = array();
 			if($fetchstructure)
@@ -321,7 +330,7 @@ class cached_imap extends imap{
 		} else {
 			return false;
 		}
-	}
+	}*/
 
 	function get_message_headers($start, $limit, $sort_field , $sort_order, $query)
 	{

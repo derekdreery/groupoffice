@@ -532,6 +532,16 @@ class imap{
 				$message['cc'][]=$RFC822->write_address($this->enc_utf8($address['personal']), $address['email']);
 			}
 		}
+		
+		$message["bcc"]=array();
+		if(isset($values['bcc']))
+		{
+			$cc = $RFC822->parse_address_list($values['bcc']);
+			foreach($cc as $address)
+			{
+				$message['bcc'][]=$RFC822->write_address($this->enc_utf8($address['personal']), $address['email']);
+			}
+		}
 			
 		if(!isset($values['from']))
 		$values['from']='';
