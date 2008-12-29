@@ -57,13 +57,13 @@ class cached_imap extends imap{
 		$this->account = $account;
 
 		//cache DNS in session. Seems to be faster with gmail somehow.
-		if(empty($_SESSION['cached_imap'][$account['host']]))
+		/*if(empty($_SESSION['cached_imap'][$account['host']]))
 		{
 			$_SESSION['cached_imap'][$account['host']]=gethostbyname($account['host']);
-		}
+		}*/
 
 
-		$conn = parent::open($_SESSION['cached_imap'][$account['host']], $account['type'], $account['port'], $account['username'], $account['password'], $mailbox, null, $account['use_ssl'], $account['novalidate_cert']);
+		$conn = parent::open($account['host'], $account['type'], $account['port'], $account['username'], $account['password'], $mailbox, null, $account['use_ssl'], $account['novalidate_cert']);
 
 		$this->folder = $this->email->get_folder($this->account['id'],$mailbox);
 
@@ -188,8 +188,8 @@ class cached_imap extends imap{
 			
 		$up_folder['id'] = $this->folder['id'];
 		$up_folder['sort']=json_encode($this->folder_sort_cache);
-		$up_folder['unseen']=$this->unseen;
-		$up_folder['msgcount']=$this->count;
+		//$up_folder['unseen']=$this->unseen;
+		//$up_folder['msgcount']=$this->count;
 			
 		$this->email->__update_folder($up_folder);
 	}
@@ -227,8 +227,8 @@ class cached_imap extends imap{
 	{
 		//get the unseen and total messages
 
-		if(imap_num_recent($this->conn))
-		{
+		//if(imap_num_recent($this->conn))
+		//{
 			$status = $this->status($this->mailbox, SA_UNSEEN+SA_MESSAGES);
 			if($status)
 			{
@@ -238,12 +238,12 @@ class cached_imap extends imap{
 			{
 				$this->unseen = $this->count = 0;
 			}
-		}else
+		/*}else
 		{
 			$this->unseen = $this->folder['unseen'];
 			$this->count = $this->folder['msgcount'];
 			debug('Used cached folder status');
-		}
+		}*/
 		$this->query = $query;
 		$this->first = $first;
 		$this->offset = $offset;
