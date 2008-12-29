@@ -227,7 +227,7 @@ try{
 
 			//fill in the header fields
 			$subject = isset($content['subject']) ? $content['subject'] : $lang['email']['no_subject'];
-				
+
 			$response['attachments']=array();
 
 			switch($task)
@@ -330,6 +330,25 @@ try{
 										$response['data']['cc'] .= ',';
 									}
 									$response['data']['cc'] .= $content["cc"][$i];
+								}
+							}
+						}
+						unset($first);
+						if (isset($content["bcc"]))
+						{
+							$response['data']['bcc']='';
+							for ($i=0;$i<sizeof($content["bcc"]);$i++)
+							{
+								if ($content["bcc"][$i] != "")
+								{
+									if (!isset($first))
+									{
+										$first = true;
+									}else
+									{
+										$response['data']['bcc'] .= ',';
+									}
+									$response['data']['bcc'] .= $content["bcc"][$i];
 								}
 							}
 						}
@@ -500,7 +519,7 @@ try{
 				$response['data']['body'] = '<br /><blockquote style="border:0;border-left: 2px solid #22437f; padding:0px; margin:0px; padding-left:5px; margin-left: 5px; ">'.$header_om.$response['data']['body'].'</blockquote>';
 			}
 
-				
+
 			$response['data']['inline_attachments']=$url_replacements;
 
 
@@ -644,7 +663,7 @@ try{
 					{
 						$imap->set_message_flag($mailbox, array($uid), "\\Seen");
 					}
-				}	
+				}
 					
 				if(!$response)
 				{
@@ -757,18 +776,18 @@ try{
 				{
 					require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc');
 					$ab = new addressbook();
-						
+
 					$contact = $ab->get_contact_by_email($response['sender'], $GO_SECURITY->user_id);
 					$block = !is_array($contact);
 				}else
 				{
 					$block=false;
 				}
-				
+
 				while($part = array_shift($parts))
 				{
 					$mime = isset($part["mime"]) ? strtolower($part["mime"]) : $default_mime;
-						
+
 					//some clients just send html
 					if($mime=='html')
 					{
@@ -825,12 +844,12 @@ try{
 				$response['attachments']=array();
 				$index=0;
 				for ($i = 0; $i < count($attachments); $i ++) {
-						
+
 					if(eregi('calendar',$attachments[$i]['mime']) && empty($attachments[$i]['name']))
 					{
 						$attachments[$i]['name']=$lang['email']['event'].'.ics';
 					}
-						
+
 					if ($imap->part_is_attachment($attachments[$i])){
 
 						$attachment = $attachments[$i];
@@ -840,7 +859,7 @@ try{
 						$response['attachments'][]=$attachment;
 						$index++;
 					}
-						
+
 					if (!empty($attachments[$i]["id"]))
 					{
 						//when an image has an id it belongs somewhere in the text we gathered above so replace the
@@ -870,10 +889,10 @@ try{
 								$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : 0;
 								$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : 30;
 
-								
+
 								$account = connect($account_id, $mailbox);
-								
-								
+
+
 								$response['drafts']=$imap->utf7_imap_encode($account['drafts'])==$mailbox;
 
 								if(isset($_POST['delete_keys']))
@@ -935,8 +954,8 @@ try{
 								$day_end = mktime(0,0,0,date('m'),date('d')+1);
 
 								$messages = $imap->get_message_headers($start, $limit, $sort_field , $sort_order, $query);
-								
-								
+
+
 								//filtering might have changed the uid list
 								$uids = $imap->get_uids_subset($start, $limit);
 
@@ -1035,7 +1054,7 @@ try{
 												while($email2->next_record())
 												{
 													$account = connect($email2->f('id'), 'INBOX', false);
-														
+
 													$usage = '';
 													$inbox_new=0;
 													if($account)
@@ -1052,7 +1071,7 @@ try{
 														 if(isset($server_response['success']))
 														 {
 															$usage .= Number::format_size($server_response['data']['usage']*1024);
-																
+
 															if($server_response['data']['quota']>0)
 															{
 															$percentage = ceil($server_response['data']['usage']*100/$server_response['data']['quota']);
