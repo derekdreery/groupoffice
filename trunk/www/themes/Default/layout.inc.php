@@ -101,13 +101,18 @@ if($GO_SECURITY->logged_in() && trim($_SESSION['GO_SESSION']['name']) != '' && !
 	</div>
 	<?php	
 }
+
+if(!empty($_SESSION['GO_SESSION']['mute_sound']))
+{
 ?>
-<object width="0" height="0" id="alarmSound">
-<param name="movie" value="<?php echo $GO_THEME->theme_url; ?>reminder.swf">
-<param name="loop" value="false">
-<param name="autostart" value="false">
-<embed src="<?php echo $GO_THEME->theme_url; ?>reminder.swf" autostart=false loop="false" width="0" height="0" name="alarmSound">
-</embed>
-</object>
+	<object width="0" height="0" id="alarmSound">
+	<param name="movie" value="<?php echo $GO_THEME->theme_url; ?>reminder.swf" />
+	<param name="loop" value="false" />
+	<param name="autostart" value="false" />
+	<embed src="<?php echo $GO_THEME->theme_url; ?>reminder.swf" autostart=false loop="false" width="0" height="0" name="alarmSound"></embed>
+	</object>
+<?php
+} 
+?>
 </body>
 </html>
