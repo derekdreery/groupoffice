@@ -1705,9 +1705,9 @@ switch($task)
 	<br />
 	Read this to get started with Group-Office: <a href="http://www.group-office.com/wiki/Getting_started" target="_blank">http://www.group-office.com/wiki/Getting_started</a>
 	<ul>
-	<li>Navigate to the menu: Administrator menu -> Modules and remove the modules you do not wish to use.</li>
-	<li>Navigate to the menu: Administrator menu -> User groups and create user groups.</li>
-	<li>Navigate to the menu: Administrator menu -> Users users to add new users.</li>
+	<li>Navigate to the menu: Administrator menu -&gt; Modules and remove the modules you do not wish to use.</li>
+	<li>Navigate to the menu: Administrator menu -&gt; User groups and create user groups.</li>
+	<li>Navigate to the menu: Administrator menu -&gt; Users users to add new users.</li>
 	</ul>
 	<br />
 	You can also configure external authentication servers such as an IMAP or POP-3.
