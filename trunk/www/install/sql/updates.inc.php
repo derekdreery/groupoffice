@@ -32,5 +32,7 @@ $updates[]='script:4_set_null_allowed.inc.php';
 
 $updates[]="ALTER TABLE `go_users` CHANGE `thousands_seperator` `thousands_separator` CHAR( 1 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '.'";
 $updates[]="ALTER TABLE `go_users` CHANGE `decimal_seperator` `decimal_separator` CHAR( 1 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ','";
-$updates[]="ALTER TABLE `go_users` CHANGE `date_seperator` `date_separator` CHAR( 1 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '-'";  
+$updates[]="ALTER TABLE `go_users` CHANGE `date_seperator` `date_separator` CHAR( 1 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '-'";
+
+$updates[]='script:5_warn_separator.inc.php';
 ?>
