@@ -190,7 +190,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		
 		this.body.scrollTo('top',0);
 		
-		if(this.data['new'] && this.data.notification)
+		if(this.data['new']=='1' && this.data.notification)
 		{
 			if(confirm(GO.email.lang.sendNotification.replace('%s', this.data.notification)))
 			{
