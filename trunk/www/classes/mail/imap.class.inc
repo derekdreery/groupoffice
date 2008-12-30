@@ -591,7 +591,7 @@ class imap{
 				$this->message['uid'] = $uid;
 				//$this->message['number'] = imap_msgno($this->conn, $uid);
 
-				if(!@$headerinfo = imap_headerinfo($this->conn, $this->message['number']))
+				/*if(!@$headerinfo = imap_headerinfo($this->conn, $this->message['number']))
 				{
 					//message doesn't exist
 					return false;
@@ -599,7 +599,7 @@ class imap{
 				$this->message['new'] = (($headerinfo->Recent == 'N' || $headerinfo->Unseen == 'U')  && $this->is_imap());
 				$this->message["flagged"] = $headerinfo->Flagged=='F';
 				$this->message["size"] = $headerinfo->Size;
-				$this->message["answered"] = $headerinfo->Answered=='A';
+				$this->message["answered"] = $headerinfo->Answered=='A';*/
 			}				
 			$this->message["parts"] = array();
 
