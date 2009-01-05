@@ -64,23 +64,22 @@ if($GO_SECURITY->logged_in() && trim($_SESSION['GO_SESSION']['name']) != '' && !
 	
 	<script type="text/javascript">Ext.get("load-status").update("<?php echo $lang['common']['renderInterface']; ?>");</script>	
 	<script type="text/javascript">
+	window.onbeforeunload=function(){
+		return "<?php echo addslashes($lang['common']['confirm_leave']); ?>";
+	};
 	Ext.onReady(GO.mainLayout.init, GO.mainLayout);
 	</script>
 <?php
 }else
 {
-	if(isset($popup_groupoffice))
-	{
-		?>
-		<script type="text/javascript">
-		
-		</script>
-		<?php
-	}
+
 	?>
 	<div id="checker-icon"></div>
 	<script type="text/javascript">Ext.get("load-status").update("<?php echo $lang['common']['loadingLogin']; ?>");</script>
 	<script type="text/javascript">	
+
+	
+	
 	<?php
 	if(isset($popup_groupoffice))
 	{
