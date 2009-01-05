@@ -901,7 +901,7 @@ try{
 
 									$imap->set_message_flag($mailbox, $messages, "\\Seen");
 
-									if($mailbox != $account['trash'])
+									if($imap->is_imap() && $mailbox != $account['trash'])
 									{
 										$response['deleteSuccess']=$imap->move($imap->utf7_imap_encode($account['trash']), $messages);
 									}else {
