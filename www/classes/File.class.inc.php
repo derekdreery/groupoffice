@@ -63,6 +63,10 @@ class File
 	}
 
 
+	function get_filetype_description_by_path($path)
+	{
+		return File::get_filetype_description(File::get_extension($path));
+	}
 
 
 	function get_filetype_description($extension=null) {

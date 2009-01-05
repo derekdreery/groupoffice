@@ -15,9 +15,12 @@
 require('../../Group-Office.php');
 
 $GO_SECURITY->json_authenticate('files');
-
+require_once($GO_CONFIG->class_path.'File.class.inc.php');
 require_once ($GO_MODULES->modules['files']['class_path']."files.class.inc");
 $fs = new files();
+
+
+
 
 require($GO_LANGUAGE->get_language_file('files'));
 
@@ -208,6 +211,8 @@ try{
 			break;
 
 				case 'grid':
+					
+					
 
 					$response['results']=array();
 					
@@ -392,7 +397,7 @@ try{
 								$sort = 'filemtime';
 								break;
 							case 'type':
-								$sort = 'File::get_extension';
+								$sort = 'File::get_filetype_description_by_path';
 								break;
 							case 'size':
 								$sort = 'filesize';

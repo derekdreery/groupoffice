@@ -628,7 +628,19 @@ class filesystem extends db
 		{
 			$url = str_replace($GO_CONFIG->root_path, $GO_CONFIG->host, $path);
 		}
-		$sort_field = function_exists($sort_field) ? $sort_field : 'utf8_basename';
+		
+		if($pos = strpos($sort_field, '::'))
+		{
+			$class = substr($sort_field,0, $pos);
+			$method = substr($sort_field,$pos+2);
+			$sort_function = method_exists($class, $method) ? array($class, $method) : 'utf8_basename';
+		}else
+		{
+			$sort_function = function_exists($sort_field) ? $sort_field : 'utf8_basename';
+		}
+		
+		
+		
 		if (is_dir($path))
 		{
 			$sorted_list = array();
@@ -642,7 +654,7 @@ class filesystem extends db
 					($gethidden || !(strpos($item,".") === 0)))
 					{
 						$key_id = 0;
-						$first_key = strtolower($sort_field($file));
+						$first_key = strtolower(call_user_func($sort_function, $file));
 						$key = $first_key;
 						while (array_key_exists($key, $sorted_list))
 						{
