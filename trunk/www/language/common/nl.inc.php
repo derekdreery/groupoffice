@@ -152,3 +152,5 @@ Wachtwoord: %s';
 $lang['common']['lost_password_error']='Het e-mail adres is onbekend.';
 $lang['common']['lost_password_success']='Een nieuw wachtwoord is naar uw e-mail adres verzonden.';
 
+$lang['common']['confirm_leave']='Wanneer u Group-Office verlaat gaat onopgeslagen werk verloren.';
+

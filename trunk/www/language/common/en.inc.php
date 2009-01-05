@@ -163,3 +163,5 @@ Password: %s';
 $lang['common']['lost_password_error']='Could not find the supplied e-mail address.';
 $lang['common']['lost_password_success']='A new password has been sent to your e-mail address.';
 
+$lang['common']['confirm_leave']='If you leave Group-Office you will loose unsaved changes';
+
