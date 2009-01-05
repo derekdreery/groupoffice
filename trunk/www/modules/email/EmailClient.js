@@ -136,7 +136,7 @@ GO.email.EmailClient = function(config){
 				var record = this.messagesGrid.selModel.getSelected();
 				if(record)
 				{				
-					var win = window.open(GO.settings.modules.email.url+'source.php?account_id='+this.account_id+'&mailbox='+escape(this.mailbox)+'&uid='+escape(record.data.uid));
+					var win = window.open(GO.settings.modules.email.url+'source.php?account_id='+this.account_id+'&mailbox='+encodeURIComponent(this.mailbox)+'&uid='+encodeURIComponent(record.data.uid));
 					win.focus();
 				}
 				
@@ -882,12 +882,12 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 				case 'dat':
 					document.location.href=GO.settings.modules.email.url+
 						'tnef.php?account_id='+this.account_id+
-						'&mailbox='+escape(this.mailbox)+
+						'&mailbox='+encodeURIComponent(this.mailbox)+
 						'&uid='+this.messagePanel.uid+
 						'&part='+attachment.number+
 						'&transfer='+attachment.transfer+
 						'&mime='+attachment.mime+
-						'&filename='+escape(attachment.name);
+						'&filename='+encodeURIComponent(attachment.name);
 				break;
 				
 				case 'vcs':
@@ -956,12 +956,12 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 									name: r.name, 
 									src: GO.settings.modules.email.url+
 									'attachment.php?account_id='+this.account_id+
-									'&mailbox='+escape(this.mailbox)+
+									'&mailbox='+encodeURIComponent(this.mailbox)+
 									'&uid='+this.messagePanel.uid+
 									'&part='+r.number+
 									'&transfer='+r.transfer+
 									'&mime='+r.mime+
-									'&filename='+escape(r.name)
+									'&filename='+encodeURIComponent(r.name)
 									});
 							}
 							if(r.name==attachment.name)
@@ -978,12 +978,12 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 				default:
 					document.location.href=GO.settings.modules.email.url+
 						'attachment.php?account_id='+this.account_id+
-						'&mailbox='+escape(this.mailbox)+
+						'&mailbox='+encodeURIComponent(this.mailbox)+
 						'&uid='+this.messagePanel.uid+
 						'&part='+attachment.number+
 						'&transfer='+attachment.transfer+
 						'&mime='+attachment.mime+
-						'&filename='+escape(attachment.name);
+						'&filename='+ encodeURIComponent(attachment.name);
 					break;
 			}
   	}
@@ -993,7 +993,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	{
 		document.location.href=GO.settings.modules.email.url+
 		'zip_attachments.php?account_id='+this.account_id+
-		'&mailbox='+escape(this.mailbox)+
+		'&mailbox='+encodeURIComponent(this.mailbox)+
 		'&uid='+this.messagePanel.uid;	
 	},
 	
@@ -1262,14 +1262,14 @@ GO.linkHandlers[9] = function(id, remoteMessage){
 	  	{
 	  		document.location.href=GO.settings.modules.email.url+
 	  			'mimepart.php?path='+
-	  			escape(panel.data.path)+'&part_number='+attachment.number;
+	  			encodeURIComponent(panel.data.path)+'&part_number='+attachment.number;
 	  	}else
 	  	{
 	  		document.location.href=GO.settings.modules.email.url+
 	  			'mimepart.php?uid='+remoteMessage.uid+'' +
 	  			'&account_id='+remoteMessage.account_id+'' +
 	  			'&transfer='+attachment.transfer+'' +
-	  			'&mailbox='+escape(remoteMessage.mailbox)+'' +
+	  			'&mailbox='+encodeURIComponent(remoteMessage.mailbox)+'' +
 	  			'&part='+remoteMessage.part+'' +
 	  			'&part_number='+attachment.number;
 	  	}

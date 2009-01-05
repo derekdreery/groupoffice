@@ -64,9 +64,9 @@ if($GO_SECURITY->logged_in() && trim($_SESSION['GO_SESSION']['name']) != '' && !
 	
 	<script type="text/javascript">Ext.get("load-status").update("<?php echo $lang['common']['renderInterface']; ?>");</script>	
 	<script type="text/javascript">
-	window.onbeforeunload=function(){
+	/*window.onbeforeunload=function(){
 		return "<?php echo addslashes($lang['common']['confirm_leave']); ?>";
-	};
+	};*/
 	Ext.onReady(GO.mainLayout.init, GO.mainLayout);
 	</script>
 <?php

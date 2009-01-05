@@ -153,7 +153,7 @@ Ext.extend(GO.plugins.HtmlEditorImageInsert, Ext.util.Observable, {
 		if(records.length)
 		{
 			this.selectedPath = records[0].data.path;
-			this.selectedUrl = GO.settings.modules.files.url+'download.php?path='+escape(this.selectedPath);
+			this.selectedUrl = GO.settings.modules.files.url+'download.php?path='+encodeURIComponent(this.selectedPath);
 				
 			var html = '<img src="'+this.selectedUrl+'" border="0" />';
 								
