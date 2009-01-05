@@ -304,3 +304,22 @@ Ext.override(Ext.grid.GridPanel,{
 /**
  * End Width and height not restored in grid
  */
+
+
+
+/**
+ * Allows adding of components after rendering table layout
+ */
+ Ext.override(Ext.layout.TableLayout, {
+    onLayout : function(ct, target){
+        var cs = ct.items.items, len = cs.length, c, i;
+
+        if(!this.table){
+            target.addClass('x-table-layout-ct');
+
+            this.table = target.createChild(
+                {tag:'table', cls:'x-table-layout', cellspacing: 0, cn: {tag: 'tbody'}}, null, true);
+        }
+        this.renderAll(ct, target);
+    }
+});
