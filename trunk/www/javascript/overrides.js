@@ -310,7 +310,7 @@ Ext.override(Ext.grid.GridPanel,{
 /**
  * Allows adding of components after rendering table layout
  */
- Ext.override(Ext.layout.TableLayout, {
+Ext.override(Ext.layout.TableLayout, {
     onLayout : function(ct, target){
         var cs = ct.items.items, len = cs.length, c, i;
 

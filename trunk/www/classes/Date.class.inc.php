@@ -765,6 +765,13 @@ class Date
 
 		return substr($rrule,0,-1);
 	}
+	
+	
+	function get_last_sunday($time)
+	{
+		$date = getdate($time);		
+		return mktime(0,0,0,$date['mon'],$date['mday']-$date['wday'], $date['year']);
+	}
 
 
 
