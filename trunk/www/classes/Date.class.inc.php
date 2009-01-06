@@ -574,7 +574,7 @@ class Date
 	public static function get_timestamp($utime, $with_time=true, $timezone='GMT')
 	{
 		if(empty($utime))
-		$utime=0;
+			return '';
 			
 		return Date::format('@'.$utime, $with_time, $timezone);
 	}

@@ -16,30 +16,16 @@
   * param user_id: the initial user_id 
   */
  
- GO.form.SelectUser = function(config){
-	
+ GO.form.SelectUser = function(config){	
 	Ext.apply(this, config);
 	
-	
-	
-	this.store = new Ext.data.Store({
-
-		proxy: new Ext.data.HttpProxy({
-			url: GO.settings.modules.users.url+'json.php'
-		}),
+	this.store = new GO.data.JsonStore({
+		url: GO.settings.modules.users.url+'non_admin_json.php',
 		baseParams: {'task':'users'},
-
-		reader: new Ext.data.JsonReader({
-			root: 'results',
-			totalProperty: 'total',
-			id: 'id'
-		}, [
-		{name: 'id'},
-		{name: 'name'},
-		{name: 'email'},
-		{name: 'username'}
-		]),
-		// turn on remote sorting
+		root: 'results',
+		totalProperty: 'total',
+		id: 'id',
+		fields:['id','name','email','username'],
 		remoteSort: true
 	});
 	this.store.setDefaultSort('name', 'asc');
@@ -73,8 +59,7 @@ Ext.extend(GO.form.SelectUser, GO.form.ComboBox,{
 		this.store.add(loggedInUserRecord);
 		
 		this.setValue(user_id);
-	}
-	
+	}	
 });
 
 Ext.reg('selectuser', GO.form.SelectUser);
