@@ -1,4 +1,4 @@
-/** 
+﻿/** 
  * Copyright Intermesh
  * 
  * This file is part of Group-Office. You should have received a copy of the
@@ -18,7 +18,7 @@ GO.lang.smallUpload='Kleine Dateien';
 
 
 GO.lang.lostPassword='Passwort vergessen?';
-GO.lang.lostPasswordText='Um Ihr Passwort wiederherzustellen, müssen Sie Ihre E-Mail ausserhalb von Group-Office öffnen können. Wenn Sie Ihre E-Mail-Adresse eingeben, wird Ihnen ein neues Passwort zugesandt.<br /><br />Geben Sie ihre E-Mail-Adresse ein:';
+GO.lang.lostPasswordText='Um Ihr Passwort wiederherzustellen, müssen Sie Ihre E-Mail ausserhalb von Group-Office abrufen können. Wenn Sie Ihre E-Mail-Adresse eingeben, wird Ihnen ein neues Passwort zugesandt.<br /><br />Geben Sie ihre E-Mail-Adresse ein:';
 
 GO.lang.noJava='Java Webstart ist nicht installiert. Java ermöglich ein einfacheres bearbeiten und hochladen der Dateien. Gehen Sie auf <a class="normal-link" href="http://www.java.com/download" target="_blank">http://www.java.com/download</a> um Java zu installieren.';
 
@@ -210,7 +210,7 @@ GO.lang.strYear="Jahr";
 GO.lang.strYears="Jahre";
 GO.lang.strTime='Zeit';
 
-GO.lang.shortDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri','Sat'];
+GO.lang.shortDays = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr','Sa'];
 
 GO.lang.noRecurrence = 'Keine Wiederholung';
 GO.lang.monthsByDate = 'Monate nach Datum';
@@ -246,7 +246,7 @@ GO.lang.right = 'Rechts';
 GO.lang.noFilesModule = 'Für diese Funktion wird das Dateimodul benötigt';
 
 
-GO.lang.remindPassword='Login Daten auf diesem Computer merken';
+GO.lang.remindPassword='Login-Daten auf diesem Computer merken';
 
 GO.lang.reminders = 'Erinnerungen';
 GO.lang.dismiss='Ablehnen';
@@ -277,7 +277,7 @@ GO.lang.countries["AM"] = "Armenien";
 GO.lang.countries["AW"] = "Aruba";
 GO.lang.countries["AU"] = "Australien";
 GO.lang.countries["AT"] = "Österreich";
-GO.lang.countries["AZ"] = "Azerbaidschan";
+GO.lang.countries["AZ"] = "Aserbaidschan";
 GO.lang.countries["BS"] = "Bahamas";
 GO.lang.countries["BH"] = "Bahrain";
 GO.lang.countries["BD"] = "Bangladesh";
@@ -331,7 +331,7 @@ GO.lang.countries["ER"] = "Eritrea";
 GO.lang.countries["EE"] = "Estland";
 GO.lang.countries["ET"] = "Äthopien";
 GO.lang.countries["FK"] = "Falklandinseln (Malvinas)";
-GO.lang.countries["FO"] = "Färöer-Inseln";
+GO.lang.countries["FO"] = "Färöer";
 GO.lang.countries["FJ"] = "Fidschi";
 GO.lang.countries["FI"] = "Finnland";
 GO.lang.countries["FR"] = "Frankreich";
@@ -443,7 +443,7 @@ GO.lang.countries["SA"] = "Saudi Arabien";
 GO.lang.countries["SN"] = "Senegal";
 GO.lang.countries["SC"] = "Seychellen";
 GO.lang.countries["SL"] = "Sierra Leone";
-GO.lang.countries["SK"] = "Slovakai (Slovakische Republik)";
+GO.lang.countries["SK"] = "Slowakai (Slowakische Republik)";
 GO.lang.countries["SI"] = "Slowenien";
 GO.lang.countries["SB"] = "Solomon-Inseln";
 GO.lang.countries["SO"] = "Somalia";

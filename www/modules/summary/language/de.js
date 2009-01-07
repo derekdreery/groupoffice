@@ -1,4 +1,4 @@
-﻿GO.summary.lang.summary = 'Zusammenfassung';
+GO.summary.lang.summary = 'Zusammenfassung';
 GO.summary.lang.noItems = 'Sie haben keine Punkte auf Ihrer Startseite';
 GO.summary.lang.selectPortlet = 'Wähle Portlet';
 GO.summary.lang.hotTopics = 'Interessante Themen';

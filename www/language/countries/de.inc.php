@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_base_language_file('countries'));
 
@@ -70,7 +70,7 @@ $countries["ER"] = "Eritrea";
 $countries["EE"] = "Estland";
 $countries["ET"] = "Äthopien";
 $countries["FK"] = "Falklandinseln (Malvinas)";
-$countries["FO"] = "Färöer-Inseln";
+$countries["FO"] = "Färöer";
 $countries["FJ"] = "Fidschi";
 $countries["FI"] = "Finnland";
 $countries["FR"] = "Frankreich";
@@ -182,7 +182,7 @@ $countries["SA"] = "Saudi Arabien";
 $countries["SN"] = "Senegal";
 $countries["SC"] = "Seychellen";
 $countries["SL"] = "Sierra Leone";
-$countries["SK"] = "Slovakai (Slovakische Republik)";
+$countries["SK"] = "Slowakai (Slowakische Republik)";
 $countries["SI"] = "Slowenien";
 $countries["SB"] = "Solomon-Inseln";
 $countries["SO"] = "Somalia";
