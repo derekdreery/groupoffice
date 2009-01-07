@@ -15,6 +15,7 @@ modules/users/LookAndFeelPanel.js
 modules/users/PasswordPanel.js
 modules/users/Settings.js
 
+javascript/windows/Window.js
 javascript/windows/AboutDialog.js
 javascript/windows/LoginDialog.js
 javascript/data/Connection.js
