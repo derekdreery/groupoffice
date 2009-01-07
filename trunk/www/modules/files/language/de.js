@@ -1,4 +1,4 @@
-﻿GO.files.lang.files='Dateien';
+GO.files.lang.files='Dateien';
 
 GO.files.lang.template = 'Vorlage'
 GO.files.lang.manageTemplates = 'Vorlagen verwalten';

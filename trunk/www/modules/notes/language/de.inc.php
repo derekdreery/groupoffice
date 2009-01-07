@@ -8,7 +8,7 @@ $lang['notes']['note']='Notiz';
 $lang['notes']['name']='Notizen';
 $lang['notes']['description']='Beschreibung hier eingeben';
 
-$lang['notes']['category']='Kategoire';
+$lang['notes']['category']='Kategorie';
 $lang['notes']['categories']='Kategorien';
 $lang['link_type'][4]=$lang['notes']['note']='Notiz';
 $lang['notes']['notes']='Notizen';

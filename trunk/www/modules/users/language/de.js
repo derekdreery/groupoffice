@@ -1,4 +1,4 @@
-GO.users.lang.cmdCheckColumnRead= 'Lesen';
+﻿GO.users.lang.cmdCheckColumnRead= 'Lesen';
 GO.users.lang.cmdCheckColumnWrite= 'Schreiben';
 GO.users.lang.cmdCheckColumnGroups= 'Gruppen';
 GO.users.lang.cmdHeaderColumnName= 'Modulname';
@@ -14,8 +14,8 @@ GO.users.lang.cmdPanelPermissions = 'Berechtigungen';
 GO.users.lang.cmdPanelLogin = 'Anmelden';
 GO.users.lang.cmdPanelLookFeel = 'Look & Feel';
 GO.users.lang.cmdPanelSettings = 'Einstellungen';
-GO.users.lang.cmdPanelEnabledMail = 'Email for new enabled users';
-GO.users.lang.cmdPanelDisabledMail = 'Email for new disabled users';
+GO.users.lang.cmdPanelEnabledMail = 'E-Mail für neue Benutzer aktiviert';
+GO.users.lang.cmdPanelDisabledMail = 'E-Mail für neue Benutzer deaktiviert';
 	
 GO.users.lang.cmdFieldSetPersonal = 'Persönlich';	
 GO.users.lang.cmdUserWindowTitle= 'Bearbeite Benutzer';
@@ -30,7 +30,7 @@ GO.users.lang.cmdFormLabelConfirm = 'Bestätigen';
 GO.users.lang.cmdBoxLabelEnabled = 'Aktiviert';
 	
 GO.users.lang.cmdFormLabelHomepage = 'Homepage';
-GO.users.lang.cmdFormLabelRegistrationTime = 'Registrierungszeit';
+GO.users.lang.cmdFormLabelRegistrationTime = 'Registrierungsdatum';
 GO.users.lang.cmdFormLabelLastLogin = 'Letzte Anmeldung';
 GO.users.lang.cmdFormLabelTotalLogins = 'Gesamte Anmeldungen';
 GO.users.lang.numberOfLogins = 'Anzahl der Anmeldungen';

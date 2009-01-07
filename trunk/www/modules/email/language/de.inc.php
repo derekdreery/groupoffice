@@ -12,7 +12,7 @@ $lang['email']['feedbackUnexpectedError'] = 'Es gab ein unerwartetes Problem mit
 $lang['email']['feedbackCreateFolderFailed'] = 'Ordner konnte nicht erstellt werden';
 $lang['email']['feedbackSubscribeFolderFailed'] = 'Fehler beim Ordner abonnieren';
 $lang['email']['feedbackUnsubscribeFolderFailed'] = 'Fehler beim Ordner abmelden';
-$lang['email']['feedbackCannotConnect'] = 'Es konnte keine Verbindung zu %1$s erstellt wereden<br /><br />Der Mail-Server hat folgende Antwort gesandt: %2$s';
+$lang['email']['feedbackCannotConnect'] = 'Es konnte keine Verbindung zu %1$s erstellt werden<br /><br />Der Mail-Server hat folgende Antwort gesandt: %2$s';
 $lang['email']['inbox'] = 'Eingang';
 
 $lang['email']['spam']='Spam';

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 //Translated with Group-Office translate module
 require($GO_LANGUAGE->get_fallback_base_language_file('filetypes'));
 $lang['filetypes']['unknown']='Unbekannter Dateityp';
@@ -11,8 +11,8 @@ $lang['filetypes']['odf']='OpenOffice.Org Formel';
 $lang['filetypes']['odg']='OpenOffice.Org Grafik';
 $lang['filetypes']['otg']='OpenOffice.Org Grafik Template';
 $lang['filetypes']['odi']='OpenOffice.Org Bild';
-$lang['filetypes']['odp']='OpenOffice.Org PrÃ¤sentation';
-$lang['filetypes']['otp']='OpenOffice.Org PrÃ¤sentationsvorlage';
+$lang['filetypes']['odp']='OpenOffice.Org Präsentation';
+$lang['filetypes']['otp']='OpenOffice.Org Präsentationsvorlage';
 $lang['filetypes']['ods']='OpenOffice.Org Tabellenkalkulation';
 $lang['filetypes']['ots']='OpenOffice.Org Tabellenvorlage';
 $lang['filetypes']['odt']='OpenOffice.Org Text';
@@ -21,8 +21,8 @@ $lang['filetypes']['oth']='OpenOffice.Org Website';
 $lang['filetypes']['doc']='filetypes[\'dot\'] = \'Microsoft Word Dokument';
 $lang['filetypes']['xls']='filetypes[\'xlt\'] = \'Microsoft Excel Tabellenkalkulation';
 $lang['filetypes']['mdb']='Microsoft Access Datenbank';
-$lang['filetypes']['ppt']='filetypes[\'pps\'] = \'Microsoft Powerpoint PrÃ¤sentation';
-$lang['filetypes']['pps']='Microsoft Powerpoint PrÃ¤sentation.';
+$lang['filetypes']['ppt']='filetypes[\'pps\'] = \'Microsoft Powerpoint Präsentation';
+$lang['filetypes']['pps']='Microsoft Powerpoint Präsentation.';
 $lang['filetypes']['sxc']='OpenOffice.Org Calc Tabellenkalkulation';
 $lang['filetypes']['tar']='Tar Archiv';
 $lang['filetypes']['zip']='ZIP komprimiertes Archiv';

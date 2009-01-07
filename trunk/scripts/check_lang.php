@@ -154,8 +154,6 @@ function compare_files($file1, $file2, $type)
 	$content1 = get_contents($file1);
 	$content2 = get_contents($file2);
 	
-	
-	
 	if($content1 && !$content2)
 		echo '<i><font color="red">Could not compare '.str_replace($GO_CONFIG->root_path, '', $file1).', because the translation doesn\'t exist!</font></i><br />';
 	

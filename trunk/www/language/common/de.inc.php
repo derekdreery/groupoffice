@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_base_language_file('common'));
 
@@ -69,7 +69,7 @@ $lang['common']['function'] = 'Funktion';
 $lang['common']['question'] = 'Geheime Frage';
 $lang['common']['answer'] = 'Antwort';
 $lang['common']['fax'] = 'Telefax';
-$lang['common']['workFax'] = 'Telefax Arbeit';
+$lang['common']['workFax'] = 'Telefax dienstl.';
 $lang['common']['homepage'] = 'Website';
 $lang['common']['workAddress'] = 'Strasse dienstl.';
 $lang['common']['workZip'] = 'PLZ dienstl.';
@@ -111,7 +111,7 @@ $lang['common']['full_days'][1] = "Montag";
 $lang['common']['full_days'][2] = "Dienstag";
 $lang['common']['full_days'][3] = "Mittwoch";
 $lang['common']['full_days'][4] = "Donnerstag";
-$lang['common']['full_days'][5]= "Freitag";
+$lang['common']['full_days'][5] = "Freitag";
 $lang['common']['full_days'][6] = "Samstag";
 
 $lang['common']['default']='Standard';
@@ -138,7 +138,7 @@ $lang['common']['admin']='Administrator';
 
 $lang['common']['beginning']='Anrede';
 
-$lang['common']['max_emails_reached']= "Die maximale E-Mail-Anzahl pro Tag für SSMTP-Host %s von %s sind erreicht.";
+$lang['common']['max_emails_reached']= "Die maximale E-Mail-Anzahl pro Tag für SMTP-Host %s von %s ist erreicht.";
 $lang['common']['usage_stats']='Festplattenspeicher Nutzung pro %s';
 $lang['common']['usage_text']='Diese Gruppe-Office-Installation verwendet';
 

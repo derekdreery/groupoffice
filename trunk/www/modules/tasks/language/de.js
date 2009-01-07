@@ -1,4 +1,4 @@
-﻿GO.tasks.lang.task = 'Aufgabe';
+GO.tasks.lang.task = 'Aufgabe';
 GO.tasks.lang.noTask = 'Keine Aufgaben zum anzeigen';
 GO.tasks.lang.tasks = 'Aufgaben';
 GO.tasks.lang.addTask = 'Aufgabe hinzufügen...';
