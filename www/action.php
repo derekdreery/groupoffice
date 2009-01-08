@@ -27,6 +27,7 @@ try{
 			
 			$user['id']=$GO_SECURITY->user_id;
 			$user['first_name']=$_POST['first_name'];
+			$user['middle_name']=$_POST['middle_name'];
 			$user['last_name']=$_POST['last_name'];
 			
 			$GO_USERS->update_profile($user, true);
