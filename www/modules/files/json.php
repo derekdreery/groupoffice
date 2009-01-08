@@ -38,6 +38,21 @@ try{
 
 			switch($node)
 			{
+				case 'projects':				
+					require($GO_MODULES->modules['projects']['class_path'].'projects.class.inc.php');
+					$projects = new projects();
+					
+					$projects->get_authorized_projects('read',$GO_SECURITY->user_id, 'name', 'ASC', 0,0,'',array(), true);
+					while($projects->next_record())
+					{
+						$node= array(
+						'text'=>$projects->f('name'),
+						'id'=>'projects/'.$projects->f('id'),
+						'iconCls'=>'folder-default'	
+						);
+						$response[]=$node;
+					}
+				break;
 				case 'root':
 						
 					/*Home folder with children */
@@ -131,6 +146,17 @@ try{
 					'notreloadable'=>true				*/	
 					);
 					$response[]=$node;
+					
+					
+					if(isset($GO_MODULES->modules['projects']) && $GO_MODULES->modules['projects']['read_permission'])
+					{
+						$node= array(
+							'text'=>'Projects',
+							'id'=>'projects',
+							'iconCls'=>'go-link-icon-5'
+							);
+							$response[]=$node;
+					}
 
 					break;
 
@@ -222,8 +248,30 @@ try{
 						
 						$_SESSION['GO_SESSION']['files']['jupload_new_files']=array();
 					}
+					
+					if($_POST['path'] == 'projects')
+					{
+						$response['write_permission']=false;
+						
+						require($GO_MODULES->modules['projects']['class_path'].'projects.class.inc.php');
+						$projects = new projects();
+						
+						$projects->get_authorized_projects('read',$GO_SECURITY->user_id, 'name', 'ASC', 0,0,'',array(), true);
+						while($projects->next_record())
+						{
+							$path = 'projects/'.$projects->f('id');
+							$folder['name']=$projects->f('name');
+							$folder['thumb_url']=$GO_THEME->image_url.'128x128/filetypes/folder.png';										
+							$folder['path']=$path;
+							$folder['grid_display']='<div class="go-grid-icon filetype-folder">'.$projects->f('name').'</div>';
+							$folder['type']=$lang['files']['folder'];
+							$folder['mtime']=Date::get_timestamp(filemtime($GO_CONFIG->file_storage_path.$path));
+							$folder['size']='-';
+							$folder['extension']='folder';
+							$response['results'][]=$folder;
+						}
 
-					if($_POST['path'] == 'shared')
+					}elseif($_POST['path'] == 'shared')
 					{
 						$response['write_permission']=false;
 						$share_count = $fs->get_authorized_shares($GO_SECURITY->user_id);
@@ -240,10 +288,10 @@ try{
 									if (!$is_sub_dir)
 									{
 										$last_folder = $share_path;
-											
+										$folder['name']=utf8_basename($share_path);
 										$folder['thumb_url']=$GO_THEME->image_url.'128x128/filetypes/folder.png';										
 										$folder['path']=$fs->f('path');
-										$folder['grid_display']='<div class="go-grid-icon filetype-folder">'.utf8_basename($share_path).'</div>';
+										$folder['grid_display']='<div class="go-grid-icon filetype-folder">'.$folder['name'].'</div>';
 										$folder['type']=$lang['files']['folder'];
 										$folder['mtime']=Date::get_timestamp(filemtime($share_path));
 										$folder['size']='-';
