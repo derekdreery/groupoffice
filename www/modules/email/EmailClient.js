@@ -1284,15 +1284,13 @@ GO.linkHandlers[9] = function(id, remoteMessage){
 			width: 600,
 			layout:'fit',
 			items: messagePanel,		
-			tbar:[{
-					disabled: true,					
+			tbar:[{		
 					iconCls: 'btn-print',
 					text: GO.lang.cmdPrint,
 					cls: 'x-btn-text-icon',
 					handler: function(){
-						this.body.print();												
-					},
-					scope: this
+						messagePanel.body.print();												
+					}
 				}],
 			buttons:[{
 				text:GO.lang.cmdClose,
