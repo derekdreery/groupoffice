@@ -967,6 +967,7 @@ try{
 								foreach($uids as $uid)
 								{
 									$message = $messages[$uid];
+									unset($message['content_type'], $message['reply_to'], $message['content_transfer_encoding'], $message['notification']);
 									if($message['udate']>$day_start && $message['udate']<$day_end)
 									{
 										$message['date'] = date($_SESSION['GO_SESSION']['time_format'],$message['udate']);

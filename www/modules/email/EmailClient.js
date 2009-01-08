@@ -1247,11 +1247,7 @@ GO.linkHandlers[9] = function(id, remoteMessage){
   	win.focus();
   }, this);
   
-  messagePanel.on('attachmentClicked', function(attachment, panel){
-  	
-  	
-  	
-  	
+  messagePanel.on('attachmentClicked', function(attachment, panel){ 	
   	if(attachment.mime.indexOf('message')>-1)
   	{
   		remoteMessage.part_number=attachment.number+".0";
@@ -1279,11 +1275,6 @@ GO.linkHandlers[9] = function(id, remoteMessage){
   }, this);
   messagePanel.on('zipOfAttachmentsClicked', function(){}, this);
   
-  /*messagePanel.on('emailClicked', function(email){
-  	GO.email.Composer.show({ 
-  		values : {to: email} 
-  		});
-  }, this);*/
 	
 	var win = new Ext.Window({
 			maximizable:true,
@@ -1292,7 +1283,17 @@ GO.linkHandlers[9] = function(id, remoteMessage){
 			height: 400,
 			width: 600,
 			layout:'fit',
-			items: messagePanel,			
+			items: messagePanel,		
+			tbar:[{
+					disabled: true,					
+					iconCls: 'btn-print',
+					text: GO.lang.cmdPrint,
+					cls: 'x-btn-text-icon',
+					handler: function(){
+						this.body.print();												
+					},
+					scope: this
+				}],
 			buttons:[{
 				text:GO.lang.cmdClose,
 				handler:function(){
@@ -1304,26 +1305,7 @@ GO.linkHandlers[9] = function(id, remoteMessage){
 	
 	win.show();
 	messagePanel.el.mask(GO.lang.strWaitMsgLoad);
-	
-/*	
-	if(id>0)
-	{
-		var params = {
-				id: id,
-				task:'linked_message'
-			};
-	}else
-	{
-		var params = {
-				uid: remoteMessage.uid,
-				mailbox: remoteMessage.mailbox,
-				account_id: remoteMessage.account_id,
-				part: remoteMessage.part,
-				transfer: remoteMessage.transfer,
-				task:'linked_message'
-			}
-	}*/
-	
+
 	if(!remoteMessage)
 		remoteMessage={};
 	
