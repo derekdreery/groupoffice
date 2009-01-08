@@ -7,16 +7,23 @@
  * If you have questions write an e-mail to info@intermesh.nl
  * 
  * @copyright Copyright Intermesh
- * @version $Id: en.js 2942 2008-09-02 12:24:54Z mschering $
+ * @version $Id: en.js 1591 2008-12-15 09:34:29Z mschering $
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
+/**
+ * Don't copy the next line into a translation
+ */
+GO.lang = {};
+/**
+ * Copy everything below for translations
+ */
 
+GO.lang.more='Více';
 GO.lang.strCommunityForum='Společenské fórum';
 GO.lang.moduleRequired='Tato funkce vyžaduje \'{module}\' modul. Tento modul není k dispozici.';
 
 GO.lang.completeProfile = 'Vyplňte si svůj profil';
-
 GO.lang.fullscreen='Celá obrazovka';
 GO.lang.popupBlocker = 'Váš prohlížeč blokuje vyskakávání nových oken. Prosím povolte v něm vyskakování oken pro tuto adresu.';
 
@@ -203,6 +210,10 @@ GO.lang.strLogin= 'Přihlášení do pošty';
 GO.lang.strLoggedInAs= 'Přihlášen jako';
 
 GO.lang.strErrorsInForm= 'Vyskytly se problémy ve formuláři. Neplatné údaje jsou označeny.';
+
+
+
+
 
 GO.lang.strMinute="Minuta";
 GO.lang.strMinutes="Minut";
@@ -501,3 +512,7 @@ GO.lang.countries["ZR"] = "Zaire";
 GO.lang.countries["ZM"] = "Zambia";
 GO.lang.countries["ZW"] = "Zimbabwe";
 GO.lang.countries["SA"] = "Saudi Arabia";
+
+
+
+GO.lang.displayingItemsShort='Total: {2}';

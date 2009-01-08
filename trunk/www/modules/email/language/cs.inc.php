@@ -36,3 +36,6 @@ $lang['email']['errorGettingMessage']='Nelze přijmout zprávy ze serveru';
 $lang['email']['no_recipients_drafts']='Žádný příjemce';
 $lang['email']['usage_limit'] = '%s z %s používáno';
 $lang['email']['usage'] = '%s používáno';
+
+$lang['email']['event']='Událost';
+$lang['email']['calendar']='kalendář';

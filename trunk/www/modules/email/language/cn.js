@@ -89,7 +89,7 @@ GO.email.lang.read='读';
 GO.email.lang.NA='N/A';
 
 GO.email.lang.emptyFolder='清空文件夹';
-GO.email.lang.emptyFolderConfirm='你确定要清空 \'{mailbox}\'?';
+GO.email.lang.emptyFolderConfirm='你确定要清空 \'{name}\'?';
 GO.email.lang.addUnknownRecipients='添加一未知收件人';
 GO.email.lang.addUnknownRecipientsText='您刚发的 e-mail 里有一个或多个收件人不在您的通讯录中。发果您想添加联系人请单击名字，或者关闭窗口';
 GO.email.lang.attachFilesPC='从电脑上添加';

@@ -6,6 +6,8 @@ $lang['common']['htmldirection']= 'ltr';
 
 $lang['common']['errorsInForm'] = 'Vyskytly se problémy ve formuláři. Opravte jej a zkuste to znovu.';
 
+$lang['common']['moduleRequired']='Modul %s je potřebný pro tuto funkci.';
+
 $lang['common']['loadingCore']= 'Nahravání systému';
 $lang['common']['loadingLogin'] = 'Nahrávání přihlašovacího dialogu';
 $lang['common']['renderInterface']='Zobrazování rozhraní';
@@ -26,6 +28,7 @@ $lang['common']['saveError']='Chyba při ukládání dat';
 $lang['common']['deleteError']='Chyba při vymazávání dat';
 $lang['common']['selectError']='Chyba při pokusu o čtení dat';
 $lang['common']['missingField'] = 'Nevyplnili jste všechna povinná pole.';
+$lang['common']['noFileUploaded']='Žádný soubor nebyl odeslán ';
 
 $lang['common']['salutation']='Oslovení';
 $lang['common']['firstName'] = 'Křestní jméno';

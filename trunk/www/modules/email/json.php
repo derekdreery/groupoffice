@@ -125,6 +125,7 @@ function get_mailbox_nodes($account_id, $folder_id){
 		{
 			$response[] = array(
 				'text'=>$folder_name.$status_html,
+				'name'=>$folder_name,
 				'id'=>'folder_'.$email->f('id'),
 				'iconCls'=>'folder-default',
 				'account_id'=>$email->f('account_id'),
@@ -136,6 +137,7 @@ function get_mailbox_nodes($account_id, $folder_id){
 		}else {
 			$response[] = array(
 				'text'=>$folder_name.$status_html,
+				'name'=>$folder_name,
 				'id'=>'folder_'.$email->f('id'),
 				'iconCls'=>'folder-default',
 				'account_id'=>$email->f('account_id'),
@@ -900,11 +902,11 @@ try{
 									$messages = json_decode(($_POST['delete_keys']));
 
 									$imap->set_message_flag($mailbox, $messages, "\\Seen");
-
-									if($imap->is_imap() && $mailbox != $account['trash'])
+									if($imap->is_imap() && $imap->utf7_imap_decode($mailbox) != $account['trash'])
 									{
 										$response['deleteSuccess']=$imap->move($imap->utf7_imap_encode($account['trash']), $messages);
 									}else {
+										
 										$response['deleteSuccess']=$imap->delete($messages);
 									}
 									if(!$response['deleteSuccess'])
@@ -1103,6 +1105,7 @@ try{
 
 													$response[] = array(
 														'text'=>$text,
+														'name'=>$email2->f('email'),
 														'id'=>'account_'.$email2->f('id'),
 														'iconCls'=>'folder-account',
 														'expanded'=>true,

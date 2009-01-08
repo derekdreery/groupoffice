@@ -2,8 +2,8 @@ GO.users.lang.cmdCheckColumnRead= 'Čtení';
 GO.users.lang.cmdCheckColumnWrite= 'Zápis';
 GO.users.lang.cmdHeaderColumnName= 'Název modulu';
 GO.users.lang.cmdHeaderGridUserHasAccess = 'Uživatel má přístup k';
-GO.users.lang.cmdHeaderGridUserIsMemberOf = 'Uživatel je členem';
-GO.users.lang.cmdHeaderGridUserVisibleTo = 'Uživatel je viditelný pro skupiny';
+GO.users.lang.userIsMemberOf = 'Uživatel je členem';
+GO.users.lang.userVisibleTo = 'Uživatel je viditelný pro skupiny';
 
 GO.users.lang.cmdPanelPersonal = 'Osobní';
 GO.users.lang.cmdPanelPassword= 'Heslo';
@@ -72,3 +72,9 @@ GO.users.lang.userSettings = 'Uživatelské nastavení';
 GO.users.lang.maxUsersReached='Byl překročen maximální počet uživatelů. Jděte na záložku služby a rozšiřte maximální počet uživatelů.';
 
 GO.users.lang.group='Skupina';
+
+GO.users.lang.muteSound='Vypnout zvuk';
+
+GO.users.lang.downloadSampleCSV='Stáhnout ukázkový CSV soubor';
+
+GO.users.lang.importText='Můžete importovat uživatele pomocí souboru ve formátu CSV. Chcete-li vědět, jaký by CSV soubor měl mít formát, stáhněte si ukázkový soubor..<br />První řádek musí obsahovat jména sloupců. Následujicí pole jsou potřebné pro každého uživatele:<br /><br />username, password, first_name, last_name, email';

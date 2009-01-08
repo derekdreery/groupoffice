@@ -85,7 +85,7 @@ GO.email.lang.read='Lesen';
 GO.email.lang.NA='N/A';
 
 GO.email.lang.emptyFolder='Ordner leeren';
-GO.email.lang.emptyFolderConfirm='Möchten Sie wirklich den Ordner \'{mailbox}\'leeren ?';
+GO.email.lang.emptyFolderConfirm='Möchten Sie wirklich den Ordner \'{name}\' leeren ?';
 GO.email.lang.addUnknownRecipients='Unbekannten Empfänger hinzufügen';
 GO.email.lang.addUnknownRecipientsText='Sie haben eine E-Mail zu einem oder mehreren Empfängern gesandt, die nicht in Ihrem Adressbuch vorhanden sind. Klicken Sie auf den Namen, wenn Sie diesen Empfänger zu Ihrem Adressbuch hinzufügen möchten oder schliessen Sie das Fenster.';
 GO.email.lang.attachFilesPC='Vom PC hinzufügen';

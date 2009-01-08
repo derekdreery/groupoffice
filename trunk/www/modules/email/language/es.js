@@ -91,7 +91,7 @@ GO.email.lang.read='Leer';
 GO.email.lang.NA='N/A';
 
 GO.email.lang.emptyFolder='Carpeta vacÃ­a';
-GO.email.lang.emptyFolderConfirm='Â¿EstÃ¡ usted seguro de que deseas CLEARED \'{mailbox}\'?';
+GO.email.lang.emptyFolderConfirm='Â¿EstÃ¡ usted seguro de que deseas CLEARED \'{name}\'?';
 GO.email.lang.addUnknownRecipients='AÃ±adir destinatarios desconocidos';
 GO.email.lang.addUnknownRecipientsText='Usted acaba de enviarse a e-mail a uno o mÃ¡s destinatarios no en su libreta de direcciones. Haga clic en el nombre si usted desea agregar a la persona o cerrar esta ventana.';
 GO.email.lang.attachFilesPC='AÃ±adir por PC';

@@ -89,7 +89,7 @@ GO.email.lang.read='Lido';
 GO.email.lang.NA='N/A';
 
 GO.email.lang.emptyFolder='Pasta vazia';
-GO.email.lang.emptyFolderConfirm='Deseja LIMPAR a pasta \'{mailbox}\'?';
+GO.email.lang.emptyFolderConfirm='Deseja LIMPAR a pasta \'{name}\'?';
 GO.email.lang.addUnknownRecipients='Adicionar destinatários desconhecido';
 GO.email.lang.addUnknownRecipientsText='Você mandou um e-mail para um ou mais destinatários que não fazem parte dos seus contatos. Clique no nome se deseja adicionar ou feche essa janela.';
 GO.email.lang.attachFilesPC='Adicionar do PC';

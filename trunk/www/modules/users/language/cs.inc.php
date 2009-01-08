@@ -14,3 +14,8 @@ $lang['users']['error_username_exists']='Omlouváme se, ale toto uživatelské j
 $lang['users']['error_email_exists']='Omlouváme se, ale tato emailová adresa již v systému existuje. Pokud jste zapomněli své heslo, můžete si ho nechat znovu poslat.';
 $lang['users']['error_match_pass']='Hesla se neshodují';
 $lang['users']['error_email']='Byla vložena špatná emailová adresa';
+
+$lang['users']['imported']='Importováno %s uživatelů';
+$lang['users']['failed']='Selhání';
+
+$lang['users']['incorrectFormat']='Soubor nemá správný CSV formát';
