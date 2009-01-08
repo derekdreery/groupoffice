@@ -446,7 +446,7 @@ try{
 					
 					if($imap->create_folder($new_folder_name, $delimiter))
 					{
-						if($email->add_folder($account['id'], $new_folder_name, $parent_id, 1,$delimiter))
+						if($email->add_folder($account['id'], $new_folder_name, $parent_id, 1,$delimiter,64))
 						{
 							$response['success']=true;
 						}
