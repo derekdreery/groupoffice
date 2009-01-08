@@ -96,7 +96,7 @@ GO.email.lang.read='Read';
 GO.email.lang.NA='N/A';
 
 GO.email.lang.emptyFolder='Empty folder';
-GO.email.lang.emptyFolderConfirm='Are you sure you want to EMPTY \'{mailbox}\'?';
+GO.email.lang.emptyFolderConfirm='Are you sure you want to EMPTY \'{name}\'?';
 GO.email.lang.addUnknownRecipients='Add unknown recipients';
 GO.email.lang.addUnknownRecipientsText='You just sent an e-mail to one or more recipients that are not in your addressbook. Click on a name if you want to add that person or close this window.';
 GO.email.lang.attachFilesPC='Add from PC';

@@ -1,3 +1,4 @@
+GO.groups.lang.group = 'Skupina';
 GO.groups.lang.groups = 'Skupiny';
 GO.groups.lang.owner = 'Vlastník';
 GO.groups.lang.lblNew = 'Název';

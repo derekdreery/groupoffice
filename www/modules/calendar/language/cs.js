@@ -57,3 +57,4 @@ GO.calendar.lang.selectCalendarForAppointment = 'Vyberte kalendář pro vložen�
 GO.calendar.lang.closeWindow = 'Činnost byla přijata a naplánována. Můžete zavřít toto okno.';
 GO.calendar.lang.list='Přehled';
 GO.calendar.lang.editRecurringEvent='Přejete si upravit tuto událost nebo celou sérii?';
+GO.calendar.lang.selectIcalendarFile='Vyberte icalendar (*.ics) soubor';

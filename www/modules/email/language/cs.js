@@ -89,7 +89,7 @@ GO.email.lang.read='Přečtené';
 GO.email.lang.NA='Neznámé';
 
 GO.email.lang.emptyFolder='Vyprázdnit složku';
-GO.email.lang.emptyFolderConfirm='Jste si jisti, že chcete vymazat obsah složky \'{mailbox}\'?';
+GO.email.lang.emptyFolderConfirm='Jste si jisti, že chcete vymazat obsah složky \'{name}\'?';
 GO.email.lang.addUnknownRecipients='Přidat neznámého příjemce';
 GO.email.lang.addUnknownRecipientsText='Právě jste poslali email na jednoho nebo více příjemců, kteří nejsou ve Vašem adresáři. Kliknutím na jméno můžete dotyčného přidat do adresáře nebo zavřít toto okno';
 GO.email.lang.attachFilesPC='Přidat z počítače';
@@ -119,3 +119,6 @@ GO.email.lang.loadEmailFirst = 'Pro použití této funkce musíte nejdříve kl
 GO.email.lang.confirmEmptySubject='Nebyl zadán předmět. Opravdu chcete odeslat zprávu bez předmětu?';
 
 GO.email.lang.usage='Využití místa';
+GO.email.lang.searchGO='Hledat pomocí Group-Office';
+GO.email.lang.toggleWindowPosition = 'Změnit pozici oken';
+GO.email.lang.closeUploadDialog='Zavřít okno s nahráváním ihned nebo čekat na dokončení nahrávání';

@@ -67,3 +67,5 @@ $lang['calendar']['cumulative']='Neplatné opakování. Další činnost nesmí 
 $lang['calendar']['already_accepted']='Již byla potvrzena tato údalost.';
 
 $lang['calendar']['private']='Osobní';
+
+$lang['calendar']['import_success']='%s událostí bylo importováno';

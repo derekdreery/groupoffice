@@ -87,7 +87,7 @@ GO.email.lang.read='Leggi';
 GO.email.lang.NA='N/A';
 
 GO.email.lang.emptyFolder='Cartella vuota';
-GO.email.lang.emptyFolderConfirm='Sei sicuro di voler SVUOTARE \'{mailbox}\'?';
+GO.email.lang.emptyFolderConfirm='Sei sicuro di voler SVUOTARE \'{name}\'?';
 GO.email.lang.addUnknownRecipients='Aggiungi destinatari sconosciuti';
 GO.email.lang.addUnknownRecipientsText='Hai appena inviato un\'e-mail a uno o più destinatari non presenti nella tua rubrica. Clicca sul nome se vuoi aggiungere la persona o chiudi questa finestra.';
 GO.email.lang.attachFilesPC='Aggiungi dal PC';

@@ -102,7 +102,7 @@ GO.email.lang.read='Прочитано';
 GO.email.lang.NA='Нет данных';
 
 GO.email.lang.emptyFolder='Очистить папку';
-GO.email.lang.emptyFolderConfirm='Вы уверенны что хотите очистить\'{mailbox}\'?';
+GO.email.lang.emptyFolderConfirm='Вы уверенны что хотите очистить\'{name}\'?';
 GO.email.lang.addUnknownRecipients='Добавить получателя';
 GO.email.lang.addUnknownRecipientsText='Только что Вы отправили письмо один из получателей которого отсутствует в адресной книге. Нажмите на его имени если Вы хотите добавить его или закройте это окно.';
 GO.email.lang.attachFilesPC='Присоеденить файлы с компьютера';

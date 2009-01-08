@@ -106,7 +106,7 @@ GO.email.lang.read='Lu';
 GO.email.lang.NA='N/R';
 
 GO.email.lang.emptyFolder='Dossier vide';
-GO.email.lang.emptyFolderConfirm='etes-vous sûr de vouloir VIDER \'{mailbox}\'?';
+GO.email.lang.emptyFolderConfirm='etes-vous sûr de vouloir VIDER \'{name}\'?';
 GO.email.lang.addUnknownRecipients='Ajouter les destinataires inconnus';
 GO.email.lang.addUnknownRecipientsText='Vous venez juste d\'envoyer un message à un destinataire qui ne figure pas dans votre carnet d`adresses. Cliquez sur le nom si vous voulez l\'ajouter ou fermez cette fenêtre.';
 GO.email.lang.attachFilesPC='Ajouter depuis le PC';

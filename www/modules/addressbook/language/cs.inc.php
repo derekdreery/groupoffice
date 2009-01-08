@@ -39,4 +39,7 @@ $lang['addressbook']['prospects'] = 'Perspektivy';
 $lang['addressbook']['contacts'] = 'Kontakty';
 $lang['addressbook']['companies'] = 'Společnosti';
 
+$lang['addressbook']['newContactAdded']='Nový kontakt přidán';
+$lang['addressbook']['newContactFromSite']='Nový kontakt byl přidán přes webový formulář.';
+$lang['addressbook']['clickHereToView']='Klikni zde pro zobrazení kontaktu';
 ?>
