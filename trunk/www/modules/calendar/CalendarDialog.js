@@ -34,7 +34,7 @@ GO.calendar.CalendarDialog = function(config)
 		items: [
 			this.selectUser = new GO.form.SelectUser({
 				fieldLabel: GO.lang.strUser,
-				disabled: !GO.settings.modules['email']['write_permission'],
+				disabled: !GO.settings.modules['calendar']['write_permission'],
 				value: GO.settings.user_id,
 				anchor: '100%'
 			}),

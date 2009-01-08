@@ -76,7 +76,7 @@ GO.calendar.ViewDialog = function(config)
 			items: [
 			this.selectUser = new GO.form.SelectUser({
 				fieldLabel: GO.lang.strUser,
-				disabled: !GO.settings.modules['email']['write_permission']
+				disabled: !GO.settings.modules['calendar']['write_permission']
 			}),
 			{
 				fieldLabel: GO.lang.strName,

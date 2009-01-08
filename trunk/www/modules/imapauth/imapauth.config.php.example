@@ -6,7 +6,7 @@
 $config[] = 
 	array(			
 	'proto' => 'imap',
-	'domains' => 'intermesh.nl, intermeshdev.nl',
+	'domains' => 'intermesh.nl,intermeshdev.nl',
 	'host' => 'mail.imfoss.nl',
 	'port' => '143',
 	'ssl' => false,
