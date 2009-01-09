@@ -44,6 +44,7 @@ function update_link($old_link_id, $id, $link_type)
 		
 		if(in_array('custom_fields', $module_ids) && in_array($link_type, array(2,3,4,5,8)))
 		{
+			echo 'Updating custom fields'.$line_break;
 			//custom fields conversion	
 			$sql = "UPDATE cf_$link_type SET link_id=$id, link_id_converted='1' WHERE link_id=$old_link_id AND link_id_converted='0'";
 			$db->query($sql);		
@@ -121,7 +122,11 @@ $sql = "SELECT * FROM go_modules";
 $db->query($sql);
 while($db->next_record())
 {
-	if(is_dir($GO_CONFIG->root_path.'modules/'.$db->f('id')))
+	$module_name = $db->f('id');
+	if($module_name=='custom_fields')
+		$module_name='customfields';
+		
+	if(is_dir($GO_CONFIG->root_path.'modules/'.$module_name))
 	{
 		$module_ids[]=$db->f('id');
 		$modules[$db->f('id')]=$db->record;
