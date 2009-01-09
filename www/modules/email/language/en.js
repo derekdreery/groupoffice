@@ -129,3 +129,5 @@ GO.email.lang.usage='Disk usage';
 GO.email.lang.searchGO='Search through Group-Office';
 GO.email.lang.toggleWindowPosition = 'Toggle message window position';
 GO.email.lang.closeUploadDialog='Close the upload dialog first or wait for the upload to finish';
+
+GO.email.lang.signature='Signature';

@@ -116,3 +116,4 @@ GO.email.lang.searchGO='Group-Office doorzoeken';
 
 GO.email.lang.toggleWindowPosition = 'Verander berichtvenster positie';
 GO.email.lang.closeUploadDialog='Sluit eerst het upload venster of wacht tot de upload klaar is.';
+GO.email.lang.signature='Handtekening';

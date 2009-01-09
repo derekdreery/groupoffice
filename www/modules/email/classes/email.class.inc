@@ -274,7 +274,7 @@ class email extends db
 
 	function _update_account($account)
 	{
-		return $this->update_row('em_accounts', 'id', $account);
+		return $this->update_row('em_accounts', 'id', $account,'', false);
 	}
 
 	function update_account($account)
@@ -304,7 +304,7 @@ class email extends db
 				
 			$this->mail->close();
 				
-			return $this->update_row('em_accounts','id',$account);
+			return $this->_update_account($account);
 		}
 		return false;
 	}

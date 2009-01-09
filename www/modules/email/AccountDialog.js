@@ -219,7 +219,12 @@ GO.email.AccountDialog = function(config){
               fieldLabel: GO.lang.strEmail,
               name: 'email',
               allowBlank:false
-          }
+          },
+          {
+						xtype: 'textarea',
+					  name: 'signature',
+					  fieldLabel: GO.email.lang.signature
+					}
 		]	            
 	};
 	
@@ -389,7 +394,18 @@ GO.email.AccountDialog = function(config){
 		});
 	
 
-	
+	var items = [
+      	propertiesTab,
+      	
+      	this.foldersTab,
+      	this.filtersTab,
+      	this.vacationPanel
+				];
+				
+	if(GO.settings.modules.email.write_permission)
+	{
+		items.splice(1,0,incomingTab,outgoingTab);
+	}
 
 	
 	this.propertiesPanel = new Ext.form.FormPanel({
@@ -405,14 +421,7 @@ GO.email.AccountDialog = function(config){
       	activeTab: 0,
       	border:false,
       	anchor: '100% 100%',
-      	items:[
-      	propertiesTab,
-      	incomingTab,
-      	outgoingTab,
-      	this.foldersTab,
-      	this.filtersTab,
-      	this.vacationPanel
-				]
+      	items: items
        })]
 	
 

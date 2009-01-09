@@ -20,9 +20,36 @@ GO.calendar.EventDialog = function(calendar){
 		this.subjectField.focus();
 	}
 	
+	var tbar = [
+		this.linkBrowseButton = new Ext.Button({
+			iconCls: 'btn-link', 
+			cls: 'x-btn-text-icon', 
+			text: GO.lang.cmdBrowseLinks,
+			disabled:true,
+			handler: function(){
+				GO.linkBrowser.show({link_id: this.event_id,link_type: "1",folder_id: "0"});				
+			},
+			scope: this
+		})];
+		
+		if(GO.files)
+		{		
+			tbar.push(this.fileBrowseButton = new Ext.Button({
+				iconCls: 'go-menu-icon-files', 
+				cls: 'x-btn-text-icon', 
+				text: GO.files.lang.files,
+				handler: function(){
+					GO.files.openFolder(this.files_path);				
+				},
+				scope: this,
+				disabled: true
+			}));
+		}
+	
 	this.win = new Ext.Window({
 			layout:'fit',
 			modal:false,
+			tbar:tbar,
 			resizable:false,
 			width:560,
 			height:400,
@@ -60,6 +87,7 @@ GO.calendar.EventDialog = function(calendar){
 
 Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 
+	files_path : '',
 	
 	show : function (config) {
 		if(config.oldDomId)
@@ -100,6 +128,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 					
 					this.selectCalendar.setRemoteText(action.result.data.calendar_name);
 					this.selectCalendar.container.up('div.x-form-item').setDisplayed(true);
+					
+					this.files_path = action.result.data.files_path;
 					
 				},
 				failure:function(form, action)
@@ -243,6 +273,12 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 		this.participantsStore.baseParams['event_id']=event_id;
 		
 		this.selectLinkField.container.up('div.x-form-item').setDisplayed(event_id==0);
+		
+		this.linkBrowseButton.setDisabled(event_id<1);
+		if(GO.files)
+		{
+			this.fileBrowseButton.setDisabled(event_id<1);
+		}
 	},
 	
 	setCurrentDate : function()
@@ -272,6 +308,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 				
 				if(action.result.event_id)
 				{
+					this.files_path = action.result.files_path;
+					
 					this.setEventId(action.result.event_id);
 					this.participants_event_id=action.result.event_id;
 					//this.participantsPanel.setDisabled(false);

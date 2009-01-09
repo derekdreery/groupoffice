@@ -601,40 +601,40 @@ try{
 
 
 					$account['mbroot'] = isset($_POST['mbroot']) ? $imap->utf7_imap_encode(($_POST['mbroot'])) : '';
-					if ($_POST['name'] == "" ||
-					$_POST['email'] == "" ||
-					$_POST['port'] == "" ||
-					$_POST['username'] == "" ||
-					$_POST['password'] == "" ||
-					$_POST['host'] == "" ||
-					$_POST['smtp_host'] == "" ||
-					$_POST['smtp_port'] == "")
+					if ($_POST['name'] == "" ||	$_POST['email'] == "" ||
+							($GO_MODULES->modules['email']['write_permission'] && ($_POST['port'] == "" ||
+						$_POST['username'] == "" ||
+						$_POST['password'] == "" ||
+						$_POST['host'] == "" ||
+						$_POST['smtp_host'] == "" ||
+						$_POST['smtp_port'] == "")))						
 					{
 						$response['feedback'] = $lang['common']['missingField'];
-
 					}else
 					{
 						$account['id']=isset($_POST['account_id']) ? ($_POST['account_id']) : 0;
-						$account['mbroot'] = isset($_POST['mbroot']) ? ($_POST['mbroot']) : '';
-						$account['use_ssl'] = isset($_REQUEST['use_ssl'])  ? '1' : '0';
-						$account['novalidate_cert'] = isset($_REQUEST['novalidate_cert']) ? '1' : '0';
-						$account['examine_headers'] = isset($_POST['examine_headers']) ? '1' : '0';
-						$account['type']=$_POST['type'];
-						$account['host']=$_POST['host'];
-						$account['port']=$_POST['port'];
-						$account['username']=$_POST['username'];
-						$account['password']=$_POST['password'];
+						
+						if(isset($_POST['type']))
+						{
+							$account['mbroot'] = isset($_POST['mbroot']) ? ($_POST['mbroot']) : '';
+							$account['use_ssl'] = isset($_REQUEST['use_ssl'])  ? '1' : '0';
+							$account['novalidate_cert'] = isset($_REQUEST['novalidate_cert']) ? '1' : '0';
+							$account['examine_headers'] = isset($_POST['examine_headers']) ? '1' : '0';							
+							$account['type']=$_POST['type'];
+							$account['host']=$_POST['host'];
+							$account['port']=$_POST['port'];
+							$account['username']=$_POST['username'];
+							$account['password']=$_POST['password'];
+							
+							$account['smtp_host']=$_POST['smtp_host'];
+							$account['smtp_port']=$_POST['smtp_port'];
+							$account['smtp_encryption']=$_POST['smtp_encryption'];
+							$account['smtp_username']=$_POST['smtp_username'];
+							$account['smtp_password']=$_POST['smtp_password'];							
+						}
 						$account['name']=$_POST['name'];
 						$account['email']=$_POST['email'];
-						//$account['signature']=$_POST['signature'];
-
-						$account['smtp_host']=$_POST['smtp_host'];
-						$account['smtp_port']=$_POST['smtp_port'];
-						$account['smtp_encryption']=$_POST['smtp_encryption'];
-						$account['smtp_username']=$_POST['smtp_username'];
-						$account['smtp_password']=$_POST['smtp_password'];
-
-
+						$account['signature']=$_POST['signature'];
 
 						if ($account['id'] > 0)
 						{
@@ -646,14 +646,22 @@ try{
 							$account['sent']=$_POST['sent'];
 							$account['drafts']=$_POST['drafts'];
 							$account['trash']=$_POST['trash'];
-
-							if(!$email->update_account($account))
+							
+							if($GO_MODULES->modules['email']['write_permission'])
 							{
-								$response['feedback'] = sprintf($lang['email']['feedbackCannotConnect'],$_POST['host'], $imap->last_error(), $_POST['port']);
+								if(!$email->update_account($account))
+								{
+									throw new Exception(sprintf($lang['email']['feedbackCannotConnect'],$_POST['host'], $imap->last_error(), $_POST['port']));
+								}
 							}else
 							{
-								$response['success']=true;
+								if(!$email->_update_account($account))
+								{
+									throw new DatabaseUpdateException();
+								}
 							}
+							
+							$response['success']=true;
 
 
 							if(isset($GO_MODULES->modules['serverclient']))
@@ -663,6 +671,11 @@ try{
 
 								foreach($sc->domains as $domain)
 								{
+									
+									if(!$GO_MODULES->modules['email']['write_permission'])
+									{
+										$account = $email->get_account($account['id']);
+									}
 
 									//go_log(LOG_DEBUG, $account['username'].' -> '.$domain);
 									if(strpos($account['username'], '@'.$domain))

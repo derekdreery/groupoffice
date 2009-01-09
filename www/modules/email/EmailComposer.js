@@ -113,7 +113,7 @@ GO.email.EmailComposer = function(config) {
 													"task" : 'accounts',
 													personal_only : true
 												},
-												fields : ['id', 'email'],
+												fields : ['id', 'email', 'signature'],
 												root : 'results',
 												totalProperty : 'total',
 												id : 'id'
@@ -471,6 +471,10 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			} else {
 				this.fromCombo.setValue(this.fromCombo.store.data.items[0].id);
 			}
+			
+			
+			
+			
 
 			if (config.values) {
 				this.formPanel.form.setValues(config.values);
@@ -553,12 +557,20 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 						if (this.toCombo.getValue() == '') {
 							this.toCombo.focus();
 						} else {
+							
+							var accountRecord = this.fromCombo.store.getById(this.fromCombo.getValue());
+							this.htmlEditor.setValue(accountRecord.data.signature+this.htmlEditor.getValue());
+							
 							this.htmlEditor.focus();
 						}
 					},
 					scope : this
 				});
 
+			}else
+			{
+				var accountRecord = this.fromCombo.store.getById(this.fromCombo.getValue());
+				this.htmlEditor.setValue(accountRecord.data.signature+this.htmlEditor.getValue());
 			}
 
 			// somehow on render fails???
