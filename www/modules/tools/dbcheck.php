@@ -141,6 +141,27 @@ require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
 $search = new search();
 
 
+
+
+echo 'Start of module checks<br />';
+
+$GO_MODULES->fire_event('check_database');
+
+
+echo 'Clearing search cache<br />';
+
+
+$search->reset();
+flush();
+
+echo 'Building search cache<br />';
+
+$search->update_search_cache(true);
+
+echo 'Done<br /><br />';
+
+
+
 echo 'Removing dead links<br />';
 
 for($i=1;$i<=13;$i++)
@@ -167,23 +188,6 @@ for($i=1;$i<=13;$i++)
 	
 	echo 'Removed '.$count.' from table go_links_'.$i.'<br />';
 }
-
-echo 'Done<br /><br />';
-
-echo 'Start of module checks<br />';
-
-$GO_MODULES->fire_event('check_database');
-
-
-echo 'Clearing search cache<br />';
-
-
-$search->reset();
-flush();
-
-echo 'Building search cache<br />';
-
-$search->update_search_cache(true);
 
 echo 'Done<br /><br />';
 

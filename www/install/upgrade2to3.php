@@ -1062,8 +1062,6 @@ for($link_type=1;$link_type<13;$link_type++)
 	
 	$sql = "DROP table go_links_tmp_$link_type";
 	$db->query($sql);
-	
-	
 }
 
 $db->query("CREATE TABLE IF NOT EXISTS `go_link_folders` (
