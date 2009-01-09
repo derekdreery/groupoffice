@@ -88,7 +88,7 @@ GO.addressbook.CompanyProfilePanel = function(config)
 		fieldLabel: GO.lang['strCountry'],
 		name: 'country_text',
 		hiddenName: 'country',
-		value:GO.settings.country,
+		//value:GO.settings.country,
 		listeners: {
 			change:function(field, v)
 			{
@@ -140,8 +140,8 @@ GO.addressbook.CompanyProfilePanel = function(config)
 	this.formPostCountry = new GO.form.SelectCountry({
 		fieldLabel: GO.lang['strCountry'],
 		name:'post_country_text',
-		hiddenName: 'post_country',
-		value:GO.settings.country
+		hiddenName: 'post_country'//,
+		//value:GO.settings.country
 	});														
 	
 					 

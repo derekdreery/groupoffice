@@ -29,6 +29,19 @@ GO.email.UnknownRecipientsDialog = Ext.extend(Ext.Window, {
 				{
 					GO.addressbook.contactDialog = new GO.addressbook.ContactDialog();
 				}
+				
+				var email = record.data.email;
+				var tldi = email.lastIndexOf('.');
+				if(tldi)
+				{
+					var tld = email.substring(tldi+1, email.length).toUpperCase();
+					console.log(tld);					
+					if(GO.lang.countries[tld])
+					{
+						record.data.country=tld;
+					}
+				}
+				
 				GO.addressbook.contactDialog.show();
 				GO.addressbook.contactDialog.formPanel.form.setValues(record.data);
 				
