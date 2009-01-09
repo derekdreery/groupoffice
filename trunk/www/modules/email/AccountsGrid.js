@@ -66,7 +66,9 @@ GO.email.AccountsGrid = function(config){
 	config.enableDragDrop= true;
 	config.ddGroup = 'EmailAccountsDD';
 	
-	config.tbar= [{
+	if(GO.settings.modules.email.write_permission)
+	{
+		config.tbar= [{
 						iconCls: 'btn-add',
 						text: GO.lang.cmdAdd,
 						cls: 'x-btn-text-icon',
@@ -83,7 +85,7 @@ GO.email.AccountsGrid = function(config){
 						},
 						scope:this						
 					}];
-			
+	}	
 	
 	GO.email.AccountsGrid.superclass.constructor.call(this, config);
 

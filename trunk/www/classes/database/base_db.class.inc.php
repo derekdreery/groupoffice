@@ -463,7 +463,7 @@ class base_db{
 	  	{
 	  		if(!in_array($key, $index))
 	  		{
-	  			$updates[] = "`$key`='".$this->escape($value)."'";
+	  			$updates[] = "`$key`='".$this->escape($value, $trim)."'";
 	  		}
 	  	}
 	  	if(isset($updates))
@@ -485,13 +485,13 @@ class base_db{
 				if(!in_array($key, $index))
 				{
 					$updates[] = "`$key`=?";
-					$field_values[] = $value;
+					$field_values[] = $trim ? trim($value) : $value;
 					$field_types.=$types[$count];
 				}else
 				{
 					$indexes[]="`$key`=?";
 					$index_types.=$types[$count];
-					$index_values[] = $value;
+					$index_values[] = $trim ? trim($value) : $value;
 				}
 				$count++;
 			}

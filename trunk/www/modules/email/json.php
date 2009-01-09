@@ -1196,7 +1196,8 @@ try{
 					'user_name'=>String::format_name($user),
 					'user_id'=>$email->f('user_id'),
 					'host'=>$email->f('host'),
-					'type'=>$email->f('type')
+					'type'=>$email->f('type'),
+					'signature'=>String::text_to_html($email->f('signature'))
 												);
 											}
 											break;
