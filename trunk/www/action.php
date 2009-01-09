@@ -157,7 +157,7 @@ try{
 			
 			//$response['fullscreen']=isset($_POST['fullscreen']);
 				
-			$response['settings'] = $GO_CONFIG->get_client_settings();
+			//$response['settings'] = $GO_CONFIG->get_client_settings();
 			
 			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 			$fs = new filesystem();
