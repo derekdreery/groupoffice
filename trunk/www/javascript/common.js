@@ -184,39 +184,31 @@ GO.deleteItems = function(config)
 				params: config.params,
 				callback: function(options, success, response)
 				{
-
-					if(!success)
+					var responseParams = Ext.decode(response.responseText);
+					if(!responseParams.success)
 					{
-						alert( GO.lang['strRequestError']);
+						if(config.failure)
+						{
+							callback = config.failure.createDelegate(config.scope);
+							callback.call(this, responseParams);
+						}
+						alert( responseParams.feedback);
 					}else
 					{
-						
-						
-						var responseParams = Ext.decode(response.responseText);
-						if(!responseParams.success)
+						if(config.success)
 						{
-							if(config.failure)
-							{
-								callback = config.failure.createDelegate(config.scope);
-								callback.call(this, responseParams);
-							}
-							alert( responseParams.feedback);
-						}else
-						{
-							if(config.success)
-							{
-								callback = config.success.createDelegate(config.scope);
-								callback.call(this, responseParams);
-							}
-						}
-						
-						if(config.callback)
-						{
-							callback = config.callback.createDelegate(config.scope);
+							callback = config.success.createDelegate(config.scope);
 							callback.call(this, responseParams);
 						}
 					}
-				}				
+					
+					if(config.callback)
+					{
+						callback = config.callback.createDelegate(config.scope);
+						callback.call(this, responseParams);
+					}
+				}
+							
 			});
 		}	
 	}
