@@ -142,8 +142,7 @@ GO.dialog.LoginDialog = function(config){
 											{
 												Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
 											}else
-											{												
-												
+											{
 												var responseParams = Ext.decode(response.responseText);
 												if(!responseParams.success)
 												{
@@ -154,8 +153,7 @@ GO.dialog.LoginDialog = function(config){
 												}
 											}
 										}				
-									});
-					        
+									});					        
 					    }
 					})
 					
@@ -198,14 +196,14 @@ Ext.extend(GO.dialog.LoginDialog, Ext.Window, {
 			success:function(form, action){
 				
 				//Another user logs in after a session expire			
-				if(action.result.user_id!=GO.settings.user_id)
+				if(GO.settings.user_id>0 && action.result.user_id!=GO.settings.user_id)
 				{
 					document.location=document.location;
 					return true;
 				}
 				
 				
-				if(GO.settings.name=='')
+				if(action.result.name=='')
 				{
 					this.completeProfileDialog();
 				}else
