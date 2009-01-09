@@ -548,10 +548,19 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 							this.sendParams['replace_personal_fields'] = '1';
 						}
 
-						if (action.result.data.cc) {
+						/*if (action.result.data.cc) {
 							this.ccFieldCheck.setChecked(true);
 						} else {
 							this.ccFieldCheck.setChecked(false);
+						}*/
+						
+						if(this.bccCombo.getValue()!='')
+						{
+							this.bccFieldCheck.setChecked(true);
+						}
+						if(this.ccCombo.getValue()!='')
+						{
+							this.ccFieldCheck.setChecked(true);
 						}
 
 						if (this.toCombo.getValue() == '') {
@@ -571,17 +580,25 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			{
 				var accountRecord = this.fromCombo.store.getById(this.fromCombo.getValue());
 				this.htmlEditor.setValue(accountRecord.data.signature+this.htmlEditor.getValue());
+				
+				
 			}
-
 			// somehow on render fails???
 			if (!this.showed) {
 				this.showed = true;
 				this.ccCombo.getEl().up('.x-form-item').setDisplayed(false);
 				this.bccCombo.getEl().up('.x-form-item').setDisplayed(false);
 			}
-			// this.setEditorHeight();
+			
+			if(this.bccCombo.getValue()!='')
+			{
+				this.bccFieldCheck.setChecked(true);
+			}
+			if(this.ccCombo.getValue()!='')
+			{
+				this.ccFieldCheck.setChecked(true);
+			}
 		}
-
 	},
 
 	showAttachmentsDialog : function() {
