@@ -197,14 +197,19 @@ Ext.extend(GO.dialog.LoginDialog, Ext.Window, {
 			waitMsg:GO.lang.waitMsgLoad,
 			success:function(form, action){
 				
-				//reload user settings
-				window.GO.settings=action.result.settings;				
+				//Another user logs in after a session expire			
+				if(action.result.user_id!=GO.settings.user_id)
+				{
+					document.location=document.location;
+					return true;
+				}
+				
 				
 				if(GO.settings.name=='')
 				{
 					this.completeProfileDialog();
 				}else
-				{				
+				{					
 					this.handleCallbacks();
 				}
 				
