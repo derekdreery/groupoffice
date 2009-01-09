@@ -549,7 +549,22 @@ class imap{
 		//$from = $RFC822->parse_address_list($values['from']);
 		$message["from"] = isset($values['from']) ? $this->enc_utf8($values['from']) : '';
 		//$message["sender"] = isset($from[0]['email']) ? $this->enc_utf8($from[0]['email']) : '';
-		$message['udate'] = isset($values['date']) ? strtotime($values['date']) : 0;
+		if(isset($values['date'])){
+			
+			//a popular mail client sends the time incorrect. Here's a hack to make it work
+			if(substr($values['date'],-2)=='UT')
+			{
+				$values['date'].='C';
+			}
+			
+			$message['udate']=strtotime($values['date']);
+		}else
+		{
+			$message['udate']=0;
+		}
+		
+		
+		
 		$message['subject'] = isset($values['subject']) ? $this->enc_utf8($values['subject']) : '';
 
 		$message["notification"]=isset($values['disposition-notification-to']) ? $this->enc_utf8($values['disposition-notification-to']) : false;
