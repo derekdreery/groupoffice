@@ -278,6 +278,7 @@ GO.lang.settings='Settings';
 GO.lang.latestLinks='Latest links'
 GO.lang.cmdBrowseLinks = 'Links';
 
+GO.lang.today='Today';
 
 
 

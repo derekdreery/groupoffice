@@ -260,7 +260,7 @@ GO.lang.settings='Instellingen';
 
 GO.lang.popupBlocker= 'Uw browser blokkeerd een popup van Group-Office. Schakel de popup blokkering uit voor Group-Office a.u.b.';
 GO.lang.strUsage='Gebruiksstatistieken';
-
+GO.lang.today='Vandaag';
 
 GO.lang.countries["AF"]= "Afghanistan";
 GO.lang.countries["AL"]= "Albania";

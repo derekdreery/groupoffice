@@ -46,7 +46,7 @@ GO.playAlarm = function(){
 
 GO.util.nl2br = function (v)
 {
-	return v.replace(/([^>])\n/g, '$1<br />\n');
+	return v.replace(/\n/g, '<br />');
 }
 
 GO.util.clone = function(o) {
