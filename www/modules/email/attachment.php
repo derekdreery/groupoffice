@@ -35,29 +35,34 @@ if ($mail->open($account['host'], $account['type'],$account['port'],$account['us
 {
 	$file = $mail->view_part($_REQUEST['uid'], $_REQUEST['part'], $_REQUEST['transfer']);
 	$mail->close();
+	
+	if($_REQUEST['uuencoded_partnumber']>0)
+	{
+		$attachments = $mail->extract_uuencoded_attachments($file);
+		
+		$file = convert_uudecode($attachments[$_REQUEST['uuencoded_partnumber']-1]['data']);
+	}
 
-	$filename = ($_REQUEST['filename']);
 	$browser = detect_browser();
-
 	
 	//header('Content-Length: '.strlen($file));
 	header('Expires: '.gmdate('D, d M Y H:i:s') . ' GMT');
 	if ($browser['name'] == 'MSIE')
 	{
 		header('Content-Type: application/download');
-		header('Content-Disposition: attachment; filename="'.rawurlencode($filename).'";');
+		header('Content-Disposition: attachment; filename="'.rawurlencode($_REQUEST['filename']).'";');
 		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 		header('Pragma: public');
 	}else
 	{		
-		$mime = File::get_mime($filename);
+		$mime = File::get_mime($_REQUEST['filename']);
 		
 		header('Content-Type: '.$mime);
 		header('Pragma: no-cache');
-		header('Content-Disposition: attachment; filename="'.$filename.'"');
+		header('Content-Disposition: attachment; filename="'.$_REQUEST['filename'].'"');
 	}
 	header('Content-Transfer-Encoding: binary');
-	echo ($file);
+	echo $file;
 }else
 {
 	echo $lang['comon']['selectError'];

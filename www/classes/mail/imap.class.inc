@@ -1557,6 +1557,43 @@ class imap{
 		}
 		return utf8_encode(@imap_utf7_decode($input));
 	}
+	
+	
+	function extract_uuencoded_attachments(&$body)
+	{
+		$body = str_replace("\r", '', $body);
+		$regex = "/(begin ([0-7]{3}) (.+))\n(.+)\nend/Us";
+    
+		preg_match_all($regex, $body, $matches);
+      
+    $attachments = array();
+        
+    for ($i = 0; $i < count($matches[3]); $i++) {
+			$boundary	= $matches[1][$i];
+			$fileperm	= $matches[2][$i];
+			$filename	= $matches[3][$i];
+			
+			$size = strlen($matches[4][$i]);
+			
+			$attachments[]=array(
+				'boundary'=>$matches[1][$i],				
+				'permissions'=>$matches[2][$i],
+				'name'=>$matches[3][$i],
+				'data'=>$matches[4][$i],
+				'disposition'=>'ATTACHMENT',
+				'type'=>'',
+				'size'=>$size,
+				'human_size'=>Number::format_size($size),
+				'mime'=>File::get_mime($matches[3][$i])			
+			);
+    }
+    
+    //remove it from the body.
+    $body = preg_replace($regex, "", $body);
+    //debug($body);
+    
+    return $attachments;
+	}
 
 
 

@@ -834,6 +834,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		  			transfer: attachment.transfer,
 		  			mime: attachment.mime,
 		  			account_id: this.account_id,
+		  			uuencoded_partnumber: attachment.uuencoded_partnumber,
 		  			path: path
   				},
   				callback: function(options, success, response)
@@ -887,6 +888,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 						'&part='+attachment.number+
 						'&transfer='+attachment.transfer+
 						'&mime='+attachment.mime+
+						'&uuencoded_partnumber='+attachment.uuencoded_partnumber+
 						'&filename='+encodeURIComponent(attachment.name);
 				break;
 				
@@ -902,6 +904,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 								mailbox: this.mailbox,
 								uid: this.messagePanel.uid,
 								part: attachment.number,
+								uuencoded_partnumber: attachment.uuencoded_partnumber,
 								transfer: attachment.transfer
 							},
 							callback: function(options, success, response)
@@ -961,6 +964,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 									'&part='+r.number+
 									'&transfer='+r.transfer+
 									'&mime='+r.mime+
+									'&uuencoded_partnumber='+attachment.uuencoded_partnumber+
 									'&filename='+encodeURIComponent(r.name)
 									});
 							}
@@ -983,6 +987,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 						'&part='+attachment.number+
 						'&transfer='+attachment.transfer+
 						'&mime='+attachment.mime+
+						'&uuencoded_partnumber='+attachment.uuencoded_partnumber+
 						'&filename='+ encodeURIComponent(attachment.name);
 					break;
 			}
