@@ -1,3 +1,12 @@
+3.00-stable-6
+- Bug fixes
+- Select addresslist from e-mail composer window
+- E-mail menu with options to lookup in addressbook, compose and search
+- Works with Gmail now, but the IMAP connection is often slow
+- Support for UUencoded e-mail attachments
+- New timesheet in projects module for easier time registration
+- Better display of project information and subprojects
+
 2008/12/18 Version 3.00-stable-5
 - Dragging in calendar caused errors sometimes
 - Rightclick menu on e-mail tree folder was broken
