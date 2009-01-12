@@ -34,8 +34,7 @@ GO.email.UnknownRecipientsDialog = Ext.extend(Ext.Window, {
 				var tldi = email.lastIndexOf('.');
 				if(tldi)
 				{
-					var tld = email.substring(tldi+1, email.length).toUpperCase();
-					console.log(tld);					
+					var tld = email.substring(tldi+1, email.length).toUpperCase();	
 					if(GO.lang.countries[tld])
 					{
 						record.data.country=tld;

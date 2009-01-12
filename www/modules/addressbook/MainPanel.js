@@ -363,6 +363,17 @@ GO.addressbook.searchSender = function(sender, name){
 							params.last_name=names[1];
 						}
 						
+						
+						var tldi = sender.lastIndexOf('.');
+						if(tldi)
+						{
+							var tld = sender.substring(tldi+1, sender.length).toUpperCase();	
+							if(GO.lang.countries[tld])
+							{
+								params.country=tld;
+							}
+						}
+						
 						GO.addressbook.contactDialog.formPanel.form.setValues(params);				
 					}
 				}else
