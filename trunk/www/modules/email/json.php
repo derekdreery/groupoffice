@@ -752,7 +752,7 @@ try{
 				$response['body']='';
 
 				$attachments=array();
-
+				
 				if(eregi('html', $response['content_type']))
 				{
 					$default_mime = 'text/html';
@@ -805,8 +805,19 @@ try{
 						switch($mime)
 						{
 							case 'unknown/unknown':
-							case 'text/plain':
+							case 'text/plain':								
+								$uuencoded_attachments = $imap->extract_uuencoded_attachments($part_body);								
 								$part_body = String::text_to_html($part_body);
+
+								for($i=0;$i<count($uuencoded_attachments);$i++)
+								{
+									$attachment = $uuencoded_attachments[$i];
+									$attachment['number']=$part['number'];
+									unset($attachment['data']);
+									$attachment['uuencoded_partnumber']=$i+1;
+									
+									$attachments[]=$attachment;
+								}
 
 								break;
 
