@@ -101,10 +101,12 @@ class File
 			return 'application/octet-stream';
 		}
 		
-		$pos = strpos($types, $extension);
+		$pos = strpos($types, ' '.$extension);
 		
 		if($pos)
 		{
+			$pos++;
+			
 			$start_of_line = String::rstrpos($types, "\n", $pos);			
 			$end_of_mime = strpos($types, ' ', $start_of_line);
 			$mime = substr($types, $start_of_line+1, $end_of_mime-$start_of_line-1);
