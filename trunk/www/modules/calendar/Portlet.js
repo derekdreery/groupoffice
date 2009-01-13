@@ -120,8 +120,12 @@ Ext.extend(GO.calendar.SummaryGroupPanel, Ext.grid.GridPanel, {
     	var event_id = grid.selModel.selections.keys[0];			 
 			GO.calendar.eventDialog.show({event_id: event_id});
 		}, this);		  
-			
-		this.store.load();
+		
+		Ext.TaskMgr.start({
+		    run: this.store.load,
+		    scope:this.store,
+		    interval:90000
+		});  
 	}
 	
 });

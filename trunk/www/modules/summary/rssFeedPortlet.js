@@ -132,7 +132,12 @@ Ext.extend(GO.portlets.rssFeedPortlet, Ext.grid.GridPanel, {
         this.store.baseParams = {
             feed: url
         };
-        this.store.load();
+        
+        Ext.TaskMgr.start({
+				    run: this.store.load,
+				    scope:this.store,
+				    interval:180000
+				});       
     },
 
     // within this function "this" is actually the GridView

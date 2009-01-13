@@ -68,7 +68,12 @@ GO.summary.AnnouncementsViewGrid = function(config){
 Ext.extend(GO.summary.AnnouncementsViewGrid, GO.grid.GridPanel,{
 	afterRender : function(){
 		GO.summary.AnnouncementsViewGrid.superclass.afterRender.call(this);
-		this.store.load();
+		
+		Ext.TaskMgr.start({
+		    run: this.store.load,
+		    scope:this.store,
+		    interval:180000
+		});  
 	}
 	
 });

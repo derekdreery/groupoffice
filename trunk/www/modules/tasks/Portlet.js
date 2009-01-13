@@ -95,7 +95,11 @@ Ext.extend(GO.tasks.SimpleTasksPanel, GO.grid.GridPanel, {
 				GO.tasks.taskDialog.show({ task_id: grid.selModel.selections.keys[0]});
 			}, this);		  
 			
-		this.store.load();
+		Ext.TaskMgr.start({
+		    run: this.store.load,
+		    scope:this.store,
+		    interval:90000
+		});
 	}
 	
 });
