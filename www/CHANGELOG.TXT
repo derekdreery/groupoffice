@@ -1,4 +1,4 @@
-3.00-stable-6
+2009/01/13 Version 3.00-stable-6
 - Select addresslist from e-mail composer window
 - Simple e-mail signature
 - E-mail menu with options to lookup in addressbook, compose and search
