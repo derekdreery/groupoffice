@@ -67,7 +67,8 @@ GO.modules.MainPanel = function(config) {
 	config.cm = new Ext.grid.ColumnModel([{
 				header : GO.lang['strName'],
 				dataIndex : 'name',
-				renderer : this.iconRenderer
+				renderer : this.iconRenderer,
+				width:250
 			}, {
 				header : GO.lang['strDescription'],
 				dataIndex : 'description'
