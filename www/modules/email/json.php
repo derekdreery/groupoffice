@@ -972,6 +972,8 @@ try{
 								//filtering might have changed the uid list
 								$uids = $imap->get_uids_subset($start, $limit);
 
+								//debug($uids);
+								//debug($messages);
 
 								$response['results']=array();
 

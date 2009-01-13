@@ -100,6 +100,7 @@ class cached_imap extends imap{
 				$this->sort = $this->folder_sort_cache[$sort_type.'_'.$reverse];
 			}else
 			{
+				debug('Got sort from IMAP server: '.$this->folder['msgcount'].' = '.$this->count.' && '.$this->folder['unseen'].' = '.$this->unseen);
 				$this->sort = imap_sort($this->conn, $sort_type, $reverse, SE_UID+SE_NOPREFETCH);
 				$this->folder_sort_cache[$sort_type.'_'.$reverse]=$this->sort;
 
@@ -174,22 +175,28 @@ class cached_imap extends imap{
 				if($total==$removed || !in_array($uid, $uids))
 				{
 					$this->folder_sort_cache[$key][]=$uid;
-					$removed++;
+					
 				}else
 				{
+					$removed++;
 					debug('Removed '.$uid.' from sort cache '.$key);
 				}
 			}
 		}
 		if(isset($this->sort_type))
 		{
+			debug('Updated sort');
 			$this->sort=$this->folder_sort_cache[$this->sort_type.'_'.$this->sort_reverse];
 		}
 			
 		$up_folder['id'] = $this->folder['id'];
 		$up_folder['sort']=json_encode($this->folder_sort_cache);
-		//$up_folder['unseen']=$this->unseen;
-		//$up_folder['msgcount']=$this->count;
+		
+		//test
+		$this->folder['unseen']=$up_folder['unseen']=$this->unseen;
+		$this->folder['msgcount']=$up_folder['msgcount']=$this->count;
+		
+		
 			
 		$this->email->__update_folder($up_folder);
 	}
@@ -348,14 +355,17 @@ class cached_imap extends imap{
 
 			if(count($this->filtered))
 			{
-				debug('Extra messages start '.($this->first+$this->offset-count($this->filtered)));
-				debug('Extra messages offset '.count($this->filtered));
-					
-				$extra_messages = $this->get_message_headers($this->first+$this->offset-count($this->filtered), count($this->filtered), $sort_field , $sort_order, $query);
+				debug('Filtered messages:'.count($this->filtered));
+
+				$newstart = count($messages);
+				$newlimit = $newstart+count($this->filtered);
+				
+				$extra_messages = $this->get_message_headers($newstart, $newlimit, $sort_field , $sort_order, $query);
 				foreach($extra_messages as $uid=>$message)
 				{
 					$messages[$uid]=$message;
 				}
+				$this->filtered=array();
 			}
 		}
 		return $messages;
@@ -370,6 +380,10 @@ class cached_imap extends imap{
 	{
 		$messages=array();
 		$this->filtered=array();
+		for ($i=0;$i<sizeof($this->filters);$i++)
+		{
+			$this->filters[$i]['uids']=array();
+		}
 
 		$new_messages = parent::get_message_headers($uids);
 		if(strtoupper($this->mailbox)!='INBOX')
@@ -385,9 +399,6 @@ class cached_imap extends imap{
 
 				for ($i=0;$i<sizeof($this->filters);$i++)
 				{
-					if(!isset($this->filters[$i]['uids']))
-					$this->filters[$i]['uids']=array();
-
 					$field = $message[$this->filters[$i]["field"]];
 
 					if (eregi($this->filters[$i]["keyword"], $field))
@@ -429,6 +440,7 @@ class cached_imap extends imap{
 
 			$this->unseen-=count($this->filtered);
 			$this->count-=count($this->filtered);
+			
 
 			$this->delete_cached_messages($this->filtered);
 		}
