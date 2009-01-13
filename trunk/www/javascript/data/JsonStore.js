@@ -64,9 +64,6 @@ GO.data.JsonStore = function(config) {
 				if(this.reader.jsonData && this.reader.jsonData.feedback)
 				{
 					msg += '<br /><br />'+this.reader.jsonData.feedback;
-				}else
-				{
-					console.log(this.reader);
 				}
 				//user is logged in. An unknown error has occurred			
 				Ext.Msg.show({
