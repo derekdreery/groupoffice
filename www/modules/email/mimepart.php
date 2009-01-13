@@ -38,7 +38,7 @@ if(isset($_REQUEST['path']))
 
 	if ($mail->open($account['host'], $account['type'],$account['port'],$account['username'],$account['password'], $_REQUEST['mailbox'], null, $account['use_ssl'], $account['novalidate_cert']))
 	{
-		$params['input'] = $mail->view_part($_REQUEST['uid'], $_REQUEST['part'], $_REQUEST['transfer']);
+		 $params['input'] = $mail->view_part($_REQUEST['uid'], $_REQUEST['part'], $_REQUEST['transfer']);
 		$mail->close();
 	}
 }
