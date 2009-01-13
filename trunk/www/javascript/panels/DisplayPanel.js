@@ -136,6 +136,7 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 		}
 		
 		if(data.write_permission)
+		{
 			this.newMenuButton.setLinkConfig({
 				id:this.data.id,
 				type:this.link_type,
@@ -143,6 +144,10 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 				callback:this.reload,
 				scope:this
 			});
+		}else
+		{
+			this.newMenuButton.setDisabled(true);
+		}
 		
 		
 		this.xtemplate.overwrite(this.body, data);	

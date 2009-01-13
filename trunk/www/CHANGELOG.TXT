@@ -6,6 +6,7 @@
 - Support for UUencoded e-mail attachments
 - New timesheet in projects module for easier time registration
 - Better display of project information and subprojects
+- Sort project statuses by drag and drop
 - Bug fixes
 
 2008/12/18 Version 3.00-stable-5

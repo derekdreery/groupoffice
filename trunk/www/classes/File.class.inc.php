@@ -45,6 +45,10 @@ class File
 
 		return $size;
 	}
+	
+	function strip_invalid_chars($filename){
+		return trim(preg_replace('/[&\/:\*\?"<>|\\\]/','', $filename));
+	}
 
 	function get_filetype_image($extension=null) {
 

@@ -127,7 +127,7 @@ try{
 			$ical = new go_ical();
 			$ics_string = $ical->export_event($event_id);
 
-			$name = $event['name'].'.ics';
+			$name = File::strip_invalid_chars($event['name']).'.ics';
 
 			$dir=$GO_CONFIG->tmpdir.'attachments/';
 			filesystem::mkdir_recursive($dir);

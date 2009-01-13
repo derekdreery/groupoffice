@@ -137,7 +137,7 @@ GO.calendar.CalendarDialog = function(config)
 					modal:false,
 					height:500,
 					width:450,
-						
+					closeAction:'hide',
 					items: this.tabPanel,
 					buttons:[
 					{
