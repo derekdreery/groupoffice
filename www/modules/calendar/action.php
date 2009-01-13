@@ -343,15 +343,8 @@ try{
 			break;
 
 		case 'save_event':
-
-
-
 			$event = get_posted_event();
-			
-			
 			$event_id=$event['id'];
-			
-
 			//throw new Exception(nl2br(var_export($event, true)));
 
 			/*

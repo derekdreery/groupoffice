@@ -150,8 +150,9 @@ try{
 					
 					if(isset($GO_MODULES->modules['projects']) && $GO_MODULES->modules['projects']['read_permission'])
 					{
+						require($GO_LANGUAGE->get_language_file('projects'));
 						$node= array(
-							'text'=>'Projects',
+							'text'=>$lang['projects']['projects'],
 							'id'=>'projects',
 							'iconCls'=>'go-link-icon-5'
 							);
@@ -251,6 +252,12 @@ try{
 					
 					if($_POST['path'] == 'projects')
 					{
+						if(isset($_POST['delete_keys']))
+						{
+							$response['deleteSuccess']=false;
+							$response['deleteFeedback']=$lang['common']['accessDenied'];
+						}
+						
 						$response['write_permission']=false;
 						
 						require($GO_MODULES->modules['projects']['class_path'].'projects.class.inc.php');
@@ -273,6 +280,11 @@ try{
 
 					}elseif($_POST['path'] == 'shared')
 					{
+						if(isset($_POST['delete_keys']))
+						{
+							$response['deleteSuccess']=false;
+							$response['deleteFeedback']=$lang['common']['accessDenied'];
+						}
 						$response['write_permission']=false;
 						$share_count = $fs->get_authorized_shares($GO_SECURITY->user_id);
 

@@ -1258,6 +1258,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		this.uploadButton.setDisabled(!writePermission);	
 		this.cutButton.setDisabled(!writePermission);	
 		this.pasteButton.setDisabled(!writePermission || !this.pasteSelections.length);	
+		//this.filesContextMenu.deleteButton.setDisabled(!writePermission);
 	},
 	
 	setPath : function(path, expand, createPath)
