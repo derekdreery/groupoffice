@@ -117,7 +117,10 @@ try{
 			$cal->get_participants($event_id);
 			while($cal->next_record())
 			{
-				$participants[] = $RFC822->write_address($cal->f('name'), $cal->f('email'));
+				if($cal->f('user_id')!=$GO_SECURITY->user_id)
+				{
+					$participants[] = $RFC822->write_address($cal->f('name'), $cal->f('email'));
+				}
 			}
 
 			$response['data']['to']=implode(',', $participants);
