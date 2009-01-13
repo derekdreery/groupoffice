@@ -213,19 +213,14 @@ class Go2Mime
 	{
 		global $GO_CONFIG;
 
-
 		if (isset($structure->parts))
 		{
 			$part_number=0;
 			foreach ($structure->parts as $part_number=>$part) {
-
-
-
 				//text part and no attachment so it must be the body
 				if($structure->ctype_primary=='multipart' && $structure->ctype_secondary=='alternative' &&
 				$part->ctype_primary == 'text' && $part->ctype_secondary=='plain')
 				{
-
 					continue;
 				}
 
@@ -236,7 +231,7 @@ class Go2Mime
 						$content_part = nl2br($part->body);
 					}else
 					{
-						$content_part = $part->body;
+						$content_part = String::convert_html($part->body);
 					}
 					if(isset($part->ctype_parameters['charset']) && strtoupper($part->ctype_parameters['charset'])!='UTF-8')
 					{
