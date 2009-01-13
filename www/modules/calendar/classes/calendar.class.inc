@@ -1698,10 +1698,24 @@ class calendar extends db
 		}
 	}
 
-	function is_available($user_id, $start, $end)
+	function is_available($user_id, $start, $end, $ignore_event_id=0)
 	{
 		$events = $this->get_events_in_array(array(), $user_id, $start, $end, true);
-		return count($events) > 1 ? false : true;
+
+		if($ignore_event_id>0)
+		{
+			$newevents=array();
+			foreach($events as $event)
+			{
+				if($event['id']!=$ignore_event_id)
+				{
+					$newevents[]=$event;
+				}
+			}
+			$events = $newevents;
+		}
+		
+		return count($events) > 0 ? false : true;
 	}
 
 

@@ -701,7 +701,7 @@ try{
 				$user=$GO_USERS->get_user_by_email($participant['email']);
 				if($user)
 				{
-					$participant['available']=$cal2->is_available($user['id'], $event['start_time'], $event['end_time']) ? '1' : '0';
+					$participant['available']=$cal2->is_available($user['id'], $event['start_time'], $event['end_time'], $event['id']) ? '1' : '0';
 				}
 
 				$response['results'][]=$participant;
