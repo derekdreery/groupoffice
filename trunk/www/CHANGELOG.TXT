@@ -1,3 +1,6 @@
+2009/01/14 Version 3.00-stable-7
+- A bug was causing the e-mail to fail in other languages then Dutch.
+
 2009/01/13 Version 3.00-stable-6
 - Select addresslist from e-mail composer window
 - Simple e-mail signature
