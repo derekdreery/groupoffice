@@ -280,7 +280,7 @@ GO.lang.cmdBrowseLinks = 'Links';
 
 GO.lang.today='Today';
 
-
+GO.lang.displayingItemsShort='Total: {2}';
 
 GO.lang.countries={};
 GO.lang.countries["AF"] = "Afghanistan";
