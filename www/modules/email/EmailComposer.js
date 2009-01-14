@@ -106,7 +106,7 @@ GO.email.EmailComposer = function(config) {
 				defaultType : 'textfield',
 				items : [
 						this.fromCombo = new Ext.form.ComboBox({
-									store : new Ext.data.JsonStore({
+									store : new GO.data.JsonStore({
 												url : BaseHref
 														+ 'modules/email/json.php',
 												baseParams : {
@@ -562,14 +562,13 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 						{
 							this.ccFieldCheck.setChecked(true);
 						}
-
+						
+						var accountRecord = this.fromCombo.store.getById(this.fromCombo.getValue());
+						this.htmlEditor.setValue(accountRecord.data.signature+this.htmlEditor.getValue());
+						
 						if (this.toCombo.getValue() == '') {
 							this.toCombo.focus();
 						} else {
-							
-							var accountRecord = this.fromCombo.store.getById(this.fromCombo.getValue());
-							this.htmlEditor.setValue(accountRecord.data.signature+this.htmlEditor.getValue());
-							
 							this.htmlEditor.focus();
 						}
 					},

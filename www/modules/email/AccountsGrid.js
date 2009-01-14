@@ -81,17 +81,32 @@ GO.email.AccountsGrid = function(config){
 						text: GO.lang.cmdDelete,
 						cls: 'x-btn-text-icon',
 						handler: function(){
-							this.deleteSelected();					
+							this.deleteSelected({
+								callback: function(){										 
+									if(GO.email.Composer && GO.email.Composer.fromCombo.store.loaded)
+									{
+										GO.email.Composer.fromCombo.store.reload();
+									}
+									this.fireEvent('delete', this);
+								},
+								scope: this
+							});					
 						},
 						scope:this						
 					}];
 	}	
 	
 	GO.email.AccountsGrid.superclass.constructor.call(this, config);
+	
+	this.addEvents({'delete':true});
 
 	this.accountDialog = new GO.email.AccountDialog();
 	this.accountDialog.on('save', function(){   
-			this.store.reload();	    			    			
+			this.store.reload();	 
+			if(GO.email.Composer && GO.email.Composer.fromCombo.store.loaded)
+			{
+				GO.email.Composer.fromCombo.store.reload();
+			}
 	}, this);
 	
 	this.on('rowdblclick', function(grid, rowIndex){

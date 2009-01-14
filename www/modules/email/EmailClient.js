@@ -21,7 +21,7 @@ GO.email.EmailClient = function(config){
 	}	
 	
 	
-	var messagesStore = new GO.data.JsonStore({
+	this.messagesStore = new GO.data.JsonStore({
 		url: GO.settings.modules.email.url+'json.php',
 		baseParams: {
 			"node": '',
@@ -34,7 +34,7 @@ GO.email.EmailClient = function(config){
 		remoteSort: true
 	});
 	
-	messagesStore.setDefaultSort('date', 'DESC');
+	this.messagesStore.setDefaultSort('date', 'DESC');
 
 	var messagesAtTop = Ext.state.Manager.get('em-msgs-top');		
 	if(messagesAtTop)
@@ -47,7 +47,7 @@ GO.email.EmailClient = function(config){
 
 	this.leftMessagesGrid = new GO.email.MessagesGrid({
 		id:'em-pnl-west',
-		store:messagesStore,
+		store:this.messagesStore,
 		width: 420,
 		region:'west',
 		hidden:messagesAtTop
@@ -56,7 +56,7 @@ GO.email.EmailClient = function(config){
 	
 	this.topMessagesGrid = new GO.email.MessagesGrid({
 		id:'em-pnl-north',
-		store:messagesStore,
+		store:this.messagesStore,
 		height: 250,
 		region:'north',
 		hidden:!messagesAtTop
@@ -1122,6 +1122,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	{		
 		this.treePanel.loader.baseParams.refresh=true;
 		this.treePanel.root.reload();
+		this.messagesStore.removeAll();
 		delete this.treePanel.loader.baseParams.refresh;
 	},
 
@@ -1130,7 +1131,8 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		if(!this.accountsDialog)
 		{
 			this.accountsDialog = new GO.email.AccountsDialog();
-			this.accountsDialog.accountsGrid.accountDialog.on('save', this.refresh, this);			
+			this.accountsDialog.accountsGrid.accountDialog.on('save', this.refresh, this);	
+			this.accountsDialog.accountsGrid.on('delete', this.refresh, this);
 			this.accountsDialog.accountsGrid.store.load();				
 		}
 		this.accountsDialog.show();
