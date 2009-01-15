@@ -71,11 +71,15 @@ function get_mailbox_nodes($account_id, $folder_id){
 
 	$response = array();
 
-	$email->get_subscribed($account_id, $folder_id);
+	$count = $email->get_subscribed($account_id, $folder_id);
 	while($email->next_record())
 	{
 		if($email->f('name') == 'INBOX')
 		{
+			if($count==1 && $email->f('attributes') > LATT_NOINFERIORS)
+			{
+				$children=get_mailbox_nodes(0, $email->f('id'));
+			}
 			$folder_name = $lang['email']['inbox'];
 		}else
 		{
@@ -132,7 +136,9 @@ function get_mailbox_nodes($account_id, $folder_id){
 				'folder_id'=>$email->f('id'),
 				'canHaveChildren'=>$email->f('attributes') > LATT_NOINFERIORS,	
 				'unseen'=>$unseen,
-				'mailbox'=>$email->f('name')
+				'mailbox'=>$email->f('name'),
+				'expanded'=>isset($children),
+				'children'=>isset($children) ? $children : null
 			);
 		}else {
 			$response[] = array(
@@ -1107,8 +1113,24 @@ try{
 																$usage = sprintf($lang['email']['usage'], Number::format_size($quota['usage']*1024));
 															}
 														}
+														
+														/*$root_folder=false;
+														if(!empty($account['mbroot']))
+														{
+															$lastchar = substr($account['mbroot'],-1);
+															if($lastchar=='.' || $lastchar == '/')
+															{
+																$root_folder = $email->get_folder($account['id'], substr($account['mbroot'],0,-1));
+															}
+														}
 
-														$children = get_mailbox_nodes($email2->f('id'), 0);
+														if($root_folder)
+														{
+															$children = get_mailbox_nodes(0, $root_folder['id']);
+														}else
+														{*/
+															$children = get_mailbox_nodes($email2->f('id'), 0);															
+														//}
 
 														$imap->close();
 													}else

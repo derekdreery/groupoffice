@@ -506,7 +506,7 @@ class String {
 
 		$module = isset ($GO_MODULES->modules['email']) ? $GO_MODULES->modules['email'] : false;
 
-		$text = htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+		$text = htmlspecialchars($text, ENT_QUOTES, 'UTF-8')."\n";
 		if($convert_links)
 		{
 			//$text = preg_replace("/(?:^|\b)(((http(s?):\/\/)|(www\.-))([\w\.-]+)([,:;%#&\/?=\w+\.\-@]+))(?:\b|$)/is", "<a href=\"http$4://$5$6$7\" target=\"_blank\" class=\"normal-link\">$1</a>", $text);
