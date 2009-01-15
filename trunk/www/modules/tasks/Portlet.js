@@ -98,7 +98,7 @@ Ext.extend(GO.tasks.SimpleTasksPanel, GO.grid.GridPanel, {
 		Ext.TaskMgr.start({
 		    run: this.store.load,
 		    scope:this.store,
-		    interval:90000
+		    interval:960000
 		});
 	}
 	
