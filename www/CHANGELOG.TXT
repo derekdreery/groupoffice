@@ -1,3 +1,8 @@
+2009/01/15 Version 3.00-stable-8
+- Czech language was missing
+- Corruption in some German language files
+- If you didn't have access to the parent project of a project you had permission to book hours on, you couldn't access the project.
+
 2009/01/14 Version 3.00-stable-7
 - A bug was causing the e-mail to fail in other languages then Dutch.
 
