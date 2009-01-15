@@ -146,6 +146,14 @@ class db extends base_db{
 				$param_args[]=$params[$i];
 			}
 			call_user_func_array(array(&$this->result, 'bind_param'), $param_args);
+			
+			$pos = 0;
+			$keys = array_keys($params);
+			while($pos = strpos($types,'b', $pos+1))
+			{			
+				//debug('Send long data:'.$keys[$pos]);
+				$this->result->send_long_data($pos, $params[$keys[$pos]]);				
+			}
 
 			$ret = $this->result->execute();
 			if(!$ret)
