@@ -296,6 +296,11 @@ class GO_MODULES extends db {
 	 */
 	function add_module($module_id) {
 		global $GO_CONFIG, $GO_SECURITY;
+		
+		if(!is_dir($GO_CONFIG->root_path.'modules/'.$module_id))
+		{
+			return false;
+		}
 
 		$module['id']=$module_id;
 		$module['sort_order'] = count($this->modules)+1;
