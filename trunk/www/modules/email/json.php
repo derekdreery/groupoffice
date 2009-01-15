@@ -947,6 +947,9 @@ try{
 								}
 
 								$sort_field=isset($_POST['sort']) && $_POST['sort']=='from' ? SORTFROM : SORTDATE;
+								if($sort_field == SORTDATE && $imap->is_imap())
+									$sort_field = SORTARRIVAL;
+									
 								$sort_order=isset($_POST['dir']) && $_POST['dir']=='ASC' ? 0 : 1;
 									
 								//$uids = $imap->get_message_uids();
