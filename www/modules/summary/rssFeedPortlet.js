@@ -136,7 +136,7 @@ Ext.extend(GO.portlets.rssFeedPortlet, Ext.grid.GridPanel, {
         Ext.TaskMgr.start({
 				    run: this.store.load,
 				    scope:this.store,
-				    interval:180000
+				    interval:1800000
 				});       
     },
 
