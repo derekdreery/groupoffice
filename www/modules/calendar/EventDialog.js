@@ -16,11 +16,21 @@ GO.calendar.EventDialog = function(calendar){
 	
 	this.buildForm();	
 	
-	var focusSubject = function(){
-		this.subjectField.focus();
-	}
+	this.initWindow();
 	
-	var tbar = [
+		
+	this.addEvents({'save' : true});
+	
+}
+
+Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
+	
+	initWindow : function(){
+		var focusSubject = function(){
+			this.subjectField.focus();
+		}
+		
+		var tbar = [
 		this.linkBrowseButton = new Ext.Button({
 			iconCls: 'btn-link', 
 			cls: 'x-btn-text-icon', 
@@ -81,11 +91,7 @@ GO.calendar.EventDialog = function(calendar){
 
 		this.win.render(Ext.getBody());
 		
-		this.addEvents({'save' : true});
-	
-}
-
-Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
+	},
 
 	files_path : '',
 	
