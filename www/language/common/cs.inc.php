@@ -163,3 +163,4 @@ Heslo: %s';
 $lang['common']['lost_password_error']='Nelze nalézt email příjemce.';
 $lang['common']['lost_password_success']='Nové heslo bylo zasláno na Vaši e-mailovou adresu.';
 
+$lang['common']['confirm_leave']='Pokud opustíte Group-Office, neuložené změny budou ztraceny';

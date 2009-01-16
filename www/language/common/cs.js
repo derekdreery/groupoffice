@@ -19,7 +19,7 @@ GO.lang = {};
  * Copy everything below for translations
  */
 
-GO.lang.more='Více';
+
 GO.lang.strCommunityForum='Společenské fórum';
 GO.lang.moduleRequired='Tato funkce vyžaduje \'{module}\' modul. Tento modul není k dispozici.';
 
@@ -176,7 +176,7 @@ GO.lang.strSearchResults= 'Výsledky hledání';
 GO.lang.strSearch= 'Hledat';
 
 GO.lang.strPleaseSelect = 'Prosím vyberte...';
-GO.lang.strProperties = 'Nastavení';
+GO.lang.strProperties = 'Vlastnosti';
 
 GO.lang.strConfirm= 'Potvrdit';
 GO.lang.strSuccess= 'V pořádku';
@@ -278,8 +278,9 @@ GO.lang.settings='Nastavení';
 GO.lang.latestLinks='Poslední odkaz'
 GO.lang.cmdBrowseLinks = 'Procházet odkazy';
 
+GO.lang.today='Today';
 
-
+GO.lang.displayingItemsShort='Total: {2}';
 
 GO.lang.countries={};
 GO.lang.countries["AF"] = "Afghanistan";
@@ -483,6 +484,7 @@ GO.lang.countries["SY"] = "Syrian Arab Republic";
 GO.lang.countries["TW"] = "Taiwan";
 GO.lang.countries["TJ"] = "Tajikistan";
 GO.lang.countries["TZ"] = "Tanzania, United Republic of";
+GO.lang.countries["TH"] = "Thailand";
 GO.lang.countries["TG"] = "Togo";
 GO.lang.countries["TK"] = "Tokelau";
 GO.lang.countries["TO"] = "Tonga";
@@ -512,7 +514,3 @@ GO.lang.countries["ZR"] = "Zaire";
 GO.lang.countries["ZM"] = "Zambia";
 GO.lang.countries["ZW"] = "Zimbabwe";
 GO.lang.countries["SA"] = "Saudi Arabia";
-
-
-
-GO.lang.displayingItemsShort='Total: {2}';
