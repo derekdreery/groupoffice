@@ -134,7 +134,7 @@ function get_mailbox_nodes($account_id, $folder_id){
 				'iconCls'=>'folder-default',
 				'account_id'=>$email->f('account_id'),
 				'folder_id'=>$email->f('id'),
-				'canHaveChildren'=>$email->f('attributes') > LATT_NOINFERIORS,	
+				'canHaveChildren'=>$email->f('attributes') > LATT_NOINFERIORS,
 				'unseen'=>$unseen,
 				'mailbox'=>$email->f('name'),
 				'expanded'=>isset($children),
@@ -397,7 +397,7 @@ try{
 							'tmp_name'=>$tmp_file,
 							'name'=>$name,
 							'size'=>$parts[$i]["size"],
-							'type'=>File::get_filetype_description(File::get_extension($name))					
+							'type'=>File::get_filetype_description(File::get_extension($name))
 							);
 
 						}
@@ -582,7 +582,7 @@ try{
 				//debug($response);
 				$response['success']=true;
 				break;
-					
+
 			case 'attachments':
 
 				while($file = array_shift($_SESSION['GO_SESSION']['just_uploaded_attachments']))
@@ -591,7 +591,7 @@ try{
 						'tmp_name'=>$file,
 						'name'=>utf8_basename($file),
 						'size'=>Number::format_size(filesize($file)),
-						'type'=>File::get_filetype_description(File::get_extension($file))					
+						'type'=>File::get_filetype_description(File::get_extension($file))
 					);
 				}
 				$response['total']=count($files);
@@ -641,16 +641,16 @@ try{
 			case 'message_attachment':
 				$account = connect($_REQUEST['account_id'], $_REQUEST['mailbox']);
 				$data = $imap->view_part($_REQUEST['uid'], $_REQUEST['part'], $_REQUEST['transfer']);
-					
+
 				$response=array();
 				$inline_url = $GO_MODULES->modules['mailings']['url'].'mimepart.php?account_id='.$_REQUEST['account_id'].'&mailbox='.urlencode(($_REQUEST['mailbox'])).'&uid='.($_REQUEST['uid']).'&part='.$_REQUEST['part'].'&transfer='.urlencode($_REQUEST['transfer']);
 
 
 				require_once($GO_CONFIG->class_path.'mail/Go2Mime.class.inc.php');
 				$go2mime = new Go2Mime();
-					
+
 				$response['blocked_images']=0;
-					
+
 				$response = array_merge($response, $go2mime->mime2GO($data, $inline_url,false,''));
 
 				break;
@@ -672,7 +672,7 @@ try{
 						$imap->set_message_flag($mailbox, array($uid), "\\Seen");
 					}
 				}
-					
+
 				if(!$response)
 				{
 					throw new Exception($lang['email']['errorGettingMessage']);
@@ -740,7 +740,7 @@ try{
 				//$response['size']=Number::format_size($response['size']);
 
 				$parts = array_reverse($imap->f("parts"));
-
+debug($parts);
 
 				/*
 				 * Sometimes clients send multipart/alternative but there's only a text part. FIrst check if there's
@@ -758,7 +758,7 @@ try{
 				$response['body']='';
 
 				$attachments=array();
-				
+
 				if(eregi('html', $response['content_type']))
 				{
 					$default_mime = 'text/html';
@@ -803,7 +803,7 @@ try{
 					}
 
 					if (empty($response['body']) &&
-					(empty($part["name"]) || eregi('inline', $part["disposition"])) &&
+					(!eregi('attachment', $part["disposition"])) &&
 					(eregi('html', $mime) ||(eregi('plain', $mime) && (!$html_alternative || strtolower($part['type'])!='alternative')) || $mime == "text/enriched" || $mime == "unknown/unknown"))
 					{
 						$part_body = $imap->view_part($uid, $part["number"], $part["transfer"], $part["charset"]);
@@ -811,8 +811,8 @@ try{
 						switch($mime)
 						{
 							case 'unknown/unknown':
-							case 'text/plain':								
-								$uuencoded_attachments = $imap->extract_uuencoded_attachments($part_body);								
+							case 'text/plain':
+								$uuencoded_attachments = $imap->extract_uuencoded_attachments($part_body);
 								$part_body = String::text_to_html($part_body);
 
 								for($i=0;$i<count($uuencoded_attachments);$i++)
@@ -821,7 +821,7 @@ try{
 									$attachment['number']=$part['number'];
 									unset($attachment['data']);
 									$attachment['uuencoded_partnumber']=$i+1;
-									
+
 									$attachments[]=$attachment;
 								}
 
@@ -923,7 +923,7 @@ try{
 									{
 										$response['deleteSuccess']=$imap->move($imap->utf7_imap_encode($account['trash']), $messages);
 									}else {
-										
+
 										$response['deleteSuccess']=$imap->delete($messages);
 									}
 									if(!$response['deleteSuccess'])
@@ -949,9 +949,9 @@ try{
 								$sort_field=isset($_POST['sort']) && $_POST['sort']=='from' ? SORTFROM : SORTDATE;
 								if($sort_field == SORTDATE && $imap->is_imap())
 									$sort_field = SORTARRIVAL;
-									
+
 								$sort_order=isset($_POST['dir']) && $_POST['dir']=='ASC' ? 0 : 1;
-									
+
 								//$uids = $imap->get_message_uids();
 
 								//apply filters
@@ -1036,7 +1036,7 @@ try{
 
 								$response['folder_id']=$imap->folder['id'];
 								$response['total'] = count($imap->sort);
-									
+
 								foreach($imap->touched_folders as $touched_folder)
 								{
 									if($touched_folder==$mailbox)
@@ -1116,7 +1116,7 @@ try{
 																$usage = sprintf($lang['email']['usage'], Number::format_size($quota['usage']*1024));
 															}
 														}
-														
+
 														/*$root_folder=false;
 														if(!empty($account['mbroot']))
 														{
@@ -1132,7 +1132,7 @@ try{
 															$children = get_mailbox_nodes(0, $root_folder['id']);
 														}else
 														{*/
-															$children = get_mailbox_nodes($email2->f('id'), 0);															
+															$children = get_mailbox_nodes($email2->f('id'), 0);
 														//}
 
 														$imap->close();
@@ -1227,7 +1227,7 @@ try{
 											while($email->next_record())
 											{
 												$user = $GO_USERS->get_user($email->f('user_id'));
-												
+
 												$sig = $email->f('signature')=='' ? '' : String::text_to_html($email->f('signature'));
 
 												$response['results'][] = array(
