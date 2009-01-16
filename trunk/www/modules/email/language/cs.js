@@ -122,3 +122,5 @@ GO.email.lang.usage='Využití místa';
 GO.email.lang.searchGO='Hledat pomocí Group-Office';
 GO.email.lang.toggleWindowPosition = 'Změnit pozici oken';
 GO.email.lang.closeUploadDialog='Zavřít okno s nahráváním ihned nebo čekat na dokončení nahrávání';
+
+GO.email.lang.signature='Podpis';
