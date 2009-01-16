@@ -1227,15 +1227,17 @@ try{
 											while($email->next_record())
 											{
 												$user = $GO_USERS->get_user($email->f('user_id'));
+												
+												$sig = $email->f('signature')=='' ? '' : String::text_to_html($email->f('signature'));
 
 												$response['results'][] = array(
-					'id'=>$email->f('id'),
-					'email'=>$email->f('email'),
-					'user_name'=>String::format_name($user),
-					'user_id'=>$email->f('user_id'),
-					'host'=>$email->f('host'),
-					'type'=>$email->f('type'),
-					'signature'=>String::text_to_html($email->f('signature'))
+															'id'=>$email->f('id'),
+															'email'=>$email->f('email'),
+															'user_name'=>String::format_name($user),
+															'user_id'=>$email->f('user_id'),
+															'host'=>$email->f('host'),
+															'type'=>$email->f('type'),
+															'signature'=>$sig
 												);
 											}
 											break;
