@@ -1013,6 +1013,8 @@ class files extends filesystem
 
 		$fs = new files();
 		
+		$path = $this->strip_server_path($path);
+		
 		$sql = "SELECT * FROM fs_files WHERE $index=?;";
 		$this->query($sql, 's', $path);
 		$file = $this->next_record();
@@ -1025,7 +1027,7 @@ class files extends filesystem
 			$cache['user_id']=$file['user_id'];
 			$cache['name'] = utf8_basename($path);
 			$cache['link_type']=6;
-			$cache['description']=substr($path, strlen($GO_CONFIG->file_storage_path));
+			$cache['description']=$path;
 			$cache['type']=$lang['files']['file'];
 			$cache['module']='files';
 			$cache['keywords']=$file['comments'].','.$cache['name'].','.$cache['type'];
@@ -1042,12 +1044,13 @@ class files extends filesystem
 	 */
 	public function __on_build_search_index()
 	{				
+		global $GO_CONFIG;
 		$sql = "SELECT path FROM fs_files";		
 		$this->query($sql);
 		$fs = new files();
 		while($record = $this->next_record())
 		{
-			$fs->cache_file($record['path']);
+			$fs->cache_file($GO_CONFIG->file_storage_path.$record['path']);
 		}
 /* {ON_BUILD_SEARCH_INDEX_FUNCTION} */
 	}
