@@ -173,8 +173,8 @@ class GO_LINKS extends db
 	
 	function delete_link($link_id1, $type1, $link_id2=0, $type2=0)
 	{		
-		if($link_id1>0)
-		{
+		//if($link_id1>0)
+		//{
 			if($link_id2>0)
 			{
 				$sql = "DELETE FROM go_links_$type1 WHERE id=".$this->escape($link_id1)." AND link_type=".$this->escape($type2)." AND link_id=".$this->escape($link_id2);
@@ -193,10 +193,9 @@ class GO_LINKS extends db
 				{
 					$db->query("DELETE FROM go_links_".$this->f('link_type')." WHERE link_id=".$this->escape($link_id1)." AND link_type=".$this->escape($type1));					
 				}
-				
 				$this->query("DELETE FROM go_links_$type1 WHERE id=".$this->escape($link_id1));
 			}
-		}
+		//}
 		return true;
 	}
 	

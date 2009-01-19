@@ -38,9 +38,11 @@ class search extends db {
 	public function update_search_cache($verbose=false)
 	{
 		global $GO_MODULES;
+		
+		$line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
+		
 		foreach($GO_MODULES->modules as $module)
-		{
-			
+		{			
 			$file = $module['class_path'].$module['id'].'.class.inc';
 
 			if(!file_exists($file))
@@ -58,7 +60,7 @@ class search extends db {
 					{
 						if($verbose)
 						{
-							echo 'Caching items from '.$module['id'].'<br />';
+							echo 'Caching items from '.$module['id'].$line_break;
 							flush();
 						}
 						$class->__on_build_search_index();

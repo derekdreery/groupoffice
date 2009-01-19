@@ -15,10 +15,21 @@
  * @subpackage DB check
  */
 
+if(isset($argv[1]))
+{
+	define('CONFIG_FILE', $argv[1]);
+}
+
+chdir(dirname(__FILE__));
+
 require_once("../../Group-Office.php");
+
+$line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
 //$GO_SECURITY->html_authenticate('tools');
 
 ini_set('max_execution_time', 360);
+
+
 
 $db2 = new db();
 $db3 = new db();
@@ -36,7 +47,7 @@ while($record = $db->next_record())
 
 if(count($acls))
 {
-	echo "Correcting module permissions...<br />";
+	echo "Correcting module permissions...$line_break";
 	foreach($acls as $acl_read)
 	{
 		$sql = "SELECT * FROM go_modules WHERE acl_read='$acl_read'";
@@ -52,11 +63,11 @@ if(count($acls))
 		}
 	}
 	$GO_MODULES->load_modules();
-	echo "Done<br /><br />";
+	echo "Done$line_break$line_break";
 }
 
 
-echo 'Checking ACL...<br />';
+echo 'Checking ACL...'.$line_break;
 
 $sql = "SELECT * FROM go_acl_items";
 $db->query($sql);
@@ -64,20 +75,20 @@ while($db->next_record())
 {
 	if(!$GO_SECURITY->group_in_acl($GO_CONFIG->group_root, $db->f('id')))
 	{
-		echo 'Adding admin group to '.$db->f('id').'<br />';
+		echo 'Adding admin group to '.$db->f('id').$line_break;
 		$GO_SECURITY->add_group_to_acl($GO_CONFIG->group_root, $db->f('id'));
 	}
 	if(!$GO_SECURITY->user_in_acl($db->f('user_id'), $db->f('id')))
 	{
-		echo 'Adding owner to '.$db->f('id').'<br />';
+		echo 'Adding owner to '.$db->f('id').$line_break;
 		$GO_SECURITY->add_user_to_acl($db->f('user_id'), $db->f('id'));
 	}
 }
-echo 'Done<br /><br />';
+echo 'Done'.$line_break.$line_break;
 
 flush();
 
-echo 'Resetting DB sequence...<br />';
+echo 'Resetting DB sequence...'.$line_break;
 
 $db->query("SHOW TABLES");
 
@@ -106,23 +117,23 @@ foreach($tables as $table)
 	$db->query($sql);
 	$db->next_record(DB_BOTH);
 	$max = $db->f(0);
-//echo $table.':'.$max.'<br />';	
+//echo $table.':'.$max.$line_break;	
 	if(!empty($max))
 	{
 		$sql = "REPLACE INTO go_db_sequence VALUES ('".$db->escape($table)."', '".$db->escape($max)."');";
 		$db->query($sql);
 
-		echo 'Setting '.$table.'='.$max.'<br />';
+		echo 'Setting '.$table.'='.$max.$line_break;
 	}
 }
-echo 'Done<br /><br />';
+echo 'Done'.$line_break.$line_break;
 
 flush();
 
 
 
 
-echo 'Optimizing tables<br />';
+echo 'Optimizing tables'.$line_break;
 
 $db->query("SHOW TABLES");
 
@@ -130,10 +141,10 @@ $tables = array();
 
 while($record = $db->next_record(DB_BOTH))
 {
-	echo 'Optimizing: '.$db->f(0).'<br />';
+	echo 'Optimizing: '.$db->f(0).$line_break;
 	$db2->query('OPTIMIZE TABLE `'.$db->f(0).'`');
 }
-echo 'Done<br /><br />';
+echo 'Done'.$line_break.$line_break;
 
 
 
@@ -143,26 +154,26 @@ $search = new search();
 
 
 
-echo 'Start of module checks<br />';
+echo 'Start of module checks'.$line_break;
 
 $GO_MODULES->fire_event('check_database');
 
 
-echo 'Clearing search cache<br />';
+echo 'Clearing search cache'.$line_break;
 
 
 $search->reset();
 flush();
 
-echo 'Building search cache<br />';
+echo 'Building search cache'.$line_break;
 
 $search->update_search_cache(true);
 
-echo 'Done<br /><br />';
+echo 'Done'.$line_break.$line_break;
 
 
 
-echo 'Removing dead links<br />';
+echo 'Removing dead links'.$line_break;
 
 for($i=1;$i<=13;$i++)
 {
@@ -186,11 +197,11 @@ for($i=1;$i<=13;$i++)
 		$GO_LINKS->delete_link($search->f('id'), $i);
 	}
 	
-	echo 'Removed '.$count.' from table go_links_'.$i.'<br />';
+	echo 'Removed '.$count.' from table go_links_'.$i.$line_break;
 }
 
-echo 'Done<br /><br />';
+echo 'Done'.$line_break.$line_break;
 
 
 
-echo 'All Done!<br />';
+echo 'All Done!'.$line_break;

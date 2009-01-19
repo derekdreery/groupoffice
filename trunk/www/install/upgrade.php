@@ -1,12 +1,13 @@
 <?php
 $quiet=false;
-$line_break=isset($_SERVER['SERVER_NAME']) ? '<br />' : "\n";
+$line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
 
 if(isset($argv[1]))
 {
 	define('CONFIG_FILE', $argv[1]);
 }
 
+chdir(dirname(__FILE__));
 
 require_once('../Group-Office.php');
 ini_set('max_execution_time', '3600');
