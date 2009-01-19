@@ -387,7 +387,7 @@ try{
 
 							filesystem::mkdir_recursive($dir);
 
-							$tmp_file = $dir.$name;
+							$tmp_file = $dir.File::strip_invalid_chars($name);
 
 							$fp = fopen($tmp_file,"wb");
 							fwrite ($fp,$file);
