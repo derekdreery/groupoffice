@@ -14,10 +14,10 @@ GO.files.filesTemplate = '<tpl if="files.length">'+
 		'<tpl for="files">'+
 			'<tr>'+
 				'<tpl if="values.extension==\'folder\'">'+										
-					'<td><a href="#" onclick="GO.files.openFolder(\'{[this.getPath(values.path)]}\');">{grid_display}</a></td>'+
+					'<td><a href="#" onclick="GO.files.openFolder(\'{[GO.util.add_slashes(values.path)]}\');">{grid_display}</a></td>'+
 				'</tpl>'+							
 				'<tpl if="values.extension!=\'folder\'">'+										
-					'<td><a href="#" onclick="GO.files.openFile(\'{[this.getPath(values.path)]}\');">{grid_display}</a></td>'+
+					'<td><a href="#" onclick="GO.files.openFile(\'{[GO.util.add_slashes(values.path)]}\');">{grid_display}</a></td>'+
 				'</tpl>'+
 				'<td style="white-space:nowrap">{mtime}</td>'+
 			'</tr>'+
