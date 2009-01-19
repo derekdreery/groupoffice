@@ -72,6 +72,10 @@ GO.email.EmailClient = function(config){
   }
 	this.messagesGrid.store.on('load',function(){
 		
+		var cm = this.topMessagesGrid.getColumnModel();
+		var header = this.messagesGrid.store.reader.jsonData.sent ? GO.email.lang.from : GO.email.lang.to;
+		cm.setColumnHeader(1, header);
+		
 		var unseen = this.messagesGrid.store.reader.jsonData.unseen;
 		for(var folder_id in unseen)
 			this.updateFolderStatus(folder_id,unseen[folder_id]);
@@ -721,7 +725,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		grid.on("delayedrowselect",function(grid, rowIndex, r){
 			if(r.data['uid']!=this.messagePanel.uid)
 			{
-				this.messagePanel.uid=r.data['uid'];			
+				//this.messagePanel.uid=r.data['uid'];			
 				this.messagePanel.loadMessage(r.data.uid, this.mailbox, this.account_id);			
 			}
 		}, this);		

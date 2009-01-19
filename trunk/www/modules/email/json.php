@@ -913,6 +913,7 @@ debug($parts);
 
 
 								$response['drafts']=$imap->utf7_imap_encode($account['drafts'])==$mailbox;
+								$response['sent']=$imap->utf7_imap_encode($account['sent'])==$mailbox;
 
 								if(isset($_POST['delete_keys']))
 								{

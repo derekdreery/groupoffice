@@ -563,8 +563,11 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 							this.ccFieldCheck.setChecked(true);
 						}
 						
-						var accountRecord = this.fromCombo.store.getById(this.fromCombo.getValue());
-						this.htmlEditor.setValue(accountRecord.data.signature+this.htmlEditor.getValue());
+						if(params.task!='opendraft')
+						{
+							var accountRecord = this.fromCombo.store.getById(this.fromCombo.getValue());
+							this.htmlEditor.setValue(accountRecord.data.signature+this.htmlEditor.getValue());
+						}
 						
 						if (this.toCombo.getValue() == '') {
 							this.toCombo.focus();
