@@ -661,6 +661,7 @@ class GO_USERS extends db
 	 * @param string $password
 	 * 
 	 * @return bool True on success
+	 */
 	
 	function update_password($user_id, $password)
 	{
@@ -674,7 +675,7 @@ class GO_USERS extends db
 			return true;
 		}
 		return false;
-	} */
+	} 
 	/**
 	 * This function returns all userdata based on the user's name.
 	 * 
