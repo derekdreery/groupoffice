@@ -50,7 +50,7 @@ GO.linksTemplateConfig = {
 			return "GO.linkBrowser.show({link_id: "+values.parent_link_id+",link_type: "+values.parent_link_type+",folder_id: "+values.id+"});";
 		}else
 		{
-			return "GO.linkHandlers["+values.link_type+"].call(this, "+values.id+");";
+			return "GO.files.openFile('"+GO.util.add_slashes(values.description)+"');"
 		}
 	}
 	
