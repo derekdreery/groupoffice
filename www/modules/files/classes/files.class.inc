@@ -869,8 +869,10 @@ class files extends filesystem
 	{
 		global $GO_USERS, $GO_CONFIG, $GO_SECURITY;
 		
+		$line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
+		
 		$fs2 = new files();
-		echo 'Deleting invalid folders in database<br />';
+		echo 'Deleting invalid folders in database'.$line_break;
 		$sql = "SELECT * FROM fs_folders";
 		$this->query($sql);
 		while($folder = $this->next_record())
@@ -882,7 +884,7 @@ class files extends filesystem
 			}
 		}
 		
-		echo 'Deleting invalid files in database<br />';
+		echo 'Deleting invalid files in database'.$line_break;
 		
 		$sql = "SELECT * FROM fs_files";
 		$this->query($sql);
@@ -895,7 +897,7 @@ class files extends filesystem
 			}
 		}
 		
-		echo "Checking user home directories<br />";
+		echo "Checking user home directories$line_break";
 		
 		$GO_USERS->get_users();
 		
@@ -905,14 +907,14 @@ class files extends filesystem
 			if(!is_dir($home_dir))
 			{
 				mkdir($home_dir, $GO_CONFIG->folder_create_mode,true);
-				echo "Creating users/".$GO_USERS->f('username')."<br />";
+				echo "Creating users/".$GO_USERS->f('username').$line_break;
 			}
 			
 			$folder = $this->get_folder($this->strip_server_path($home_dir));
 			
 			if(empty($folder['acl_read']))
 			{
-				echo "Sharing users/".$GO_USERS->f('username')."<br />";
+				echo "Sharing users/".$GO_USERS->f('username').$line_break;
 				
 				$up_folder['id']=$folder['id'];
 				$up_folder['user_id']=$GO_USERS->f('id');
