@@ -30,6 +30,13 @@ class File
 	function __construct($path){
 		$this->path = $path;
 	}
+	
+	
+	function is_full_path($path)
+	{
+		return ($path[0]=='/' || substr($path, 1, 2) == ':/');
+	}
+	
 	function get_directory_size($dir)
 	{
 		$cmd = 'du -sk "'.$dir.'" 2>/dev/null';

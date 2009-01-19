@@ -293,7 +293,7 @@ try{
 							foreach($inline_attachments as $inlineAttachment)
 							{
 								$tmp_name = $inlineAttachment['tmp_file'];
-								if($tmp_name[0]!='/')
+								if(!File::is_full_path($tmp_name))
 								{
 									$tmp_name = $GO_CONFIG->file_storage_path.$tmp_name;
 								}
@@ -315,7 +315,7 @@ try{
 
 								foreach($attachments as $tmp_name)
 								{
-									if($tmp_name[0]!='/')
+									if(!File::is_full_path($tmp_name[0]))
 									{
 										$tmp_name = $GO_CONFIG->file_storage_path.$tmp_name;
 									}
