@@ -1,3 +1,7 @@
+2009/01/20 Version 3.00-stable-11
+- Filter on types (Contact, Company, Project etc.) when searching
+- Bug fixes
+
 2009/01/15 Version 3.00-stable-8
 - Czech language was missing
 - Corruption in some German language files

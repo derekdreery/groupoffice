@@ -986,7 +986,14 @@ class GO_USERS extends db
 	 * 
 	 * @return string
 	 */
-	function random_password( $characters_allow = 'a-z,1-9', $characters_disallow = 'i,o', $password_length = 4, $repeat = 0 ) {
+	function random_password( $characters_allow = 'a-z,1-9', $characters_disallow = 'i,o', $password_length = 0, $repeat = 0 ) {
+
+		if($password_length==0)
+		{
+			global $GO_CONFIG;
+			$password_length=$GO_CONFIG->default_password_length;
+		}
+		
 		// Generate array of allowable characters.
 		$characters_allow = explode(',', $characters_allow);
 	
