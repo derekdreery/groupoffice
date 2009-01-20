@@ -602,6 +602,13 @@ class GO_CONFIG
 	 */
 	
 	var $allow_unsafe_scripts='';
+	
+	/**
+	 * Length of the password generated when a user uses the lost password option
+	 * 
+	 * @var int
+	 */
+	var $default_password_length=6;
 
 	/*//////////////////////////////////////////////////////////////////////////////
 	 //////////      Variables that are not configured by config.php   //////////////
@@ -614,7 +621,7 @@ class GO_CONFIG
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '3.00-stable-10';
+	var $version = '3.00-stable-11';
 
 
 	/**
@@ -624,7 +631,7 @@ class GO_CONFIG
 	 * @access  public
 	 */
 
-	var $mtime = '20090116';
+	var $mtime = '20090120';
 
 	/* The permissions mode to use when creating files
 	 *
