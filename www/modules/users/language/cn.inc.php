@@ -7,7 +7,7 @@ $lang['users']['description'] = '管理模块; 管理系统用户';
 $lang['users']['deletePrimaryAdmin'] = '你不能删除主管理员';
 $lang['users']['deleteYourself'] = '不能删除自己';
 
-$link_type[8]=$us_user = '用户';
+$lang['link_type'][8]=$us_user = '用户';
 
 $lang['users']['error_username']='用户名中含有无效字符';
 $lang['users']['error_username_exists']='用户名已存在';

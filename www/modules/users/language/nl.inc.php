@@ -8,7 +8,7 @@ $lang['users']['description'] = 'Beheer module; Beheren van de users.';
 $lang['users']['deletePrimaryAdmin'] = 'U kunt de primaire Administrator niet verwijderen';
 $lang['users']['deleteYourself'] = 'U kunt zichzelf niet verwijderen';
 
-$link_type[8]=$us_user = 'Gebruiker';
+$lang['link_type'][8]=$us_user = 'Gebruiker';
 
 $lang['users']['error_username']='Er staan ongeldige tekens in de gebruikersnaam';
 $lang['users']['error_username_exists']='Sorry, die gebruikersnaam bestaat al';

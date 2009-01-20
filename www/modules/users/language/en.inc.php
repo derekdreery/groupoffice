@@ -7,7 +7,7 @@ $lang['users']['description'] = 'Admin module; Managing system users.';
 $lang['users']['deletePrimaryAdmin'] = 'You can\t delete the primary administrator';
 $lang['users']['deleteYourself'] = 'You can\'t delete yourself';
 
-$link_type[8]=$us_user = 'User';
+$lang['link_type'][8]=$us_user = 'User';
 
 $lang['users']['error_username']='You have invalid characters in the username';
 $lang['users']['error_username_exists']='Sorry, that username already exists';

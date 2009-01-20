@@ -13,7 +13,7 @@ $lang['users']['description'] = 'Модуль администрирования
 $lang['users']['deletePrimaryAdmin'] = 'Вы не можете удалить певичного администратора';
 $lang['users']['deleteYourself'] = 'Вы не можете удалить самого себя';
 
-$link_type[8]=$us_user = 'Пользователь';
+$lang['link_type'][8]=$us_user = 'Пользователь';
 
 $lang['users']['error_username']='Вы ввели недопустимый символ в имени пользователя';
 $lang['users']['error_username_exists']='Такое имя пользователя уже существует';

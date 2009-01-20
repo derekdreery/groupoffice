@@ -7,7 +7,7 @@ $lang['users']['description'] = 'Módulo de administración; sistema de gestión
 $lang['users']['deletePrimaryAdmin'] = 'Usted no puede borrar l\'Administrador Principal';
 $lang['users']['deleteYourself'] = 'Usted no puede borrar su';
 
-$link_type[8]=$us_user = 'Usuario';
+$lang['link_type'][8]=$us_user = 'Usuario';
 
 $lang['users']['error_username']='Hay caracteres no válidos en el nombre de usuario';
 $lang['users']['error_username_exists']='Este nombre de usuario ya existe';

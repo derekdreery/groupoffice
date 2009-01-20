@@ -12,7 +12,7 @@ $lang['users']['description'] = 'Module Admin. Gérer les utilisateurs de Group-
 $lang['users']['deletePrimaryAdmin'] = 'Vous ne pouvez pas supprimer l\'administrateur principal';
 $lang['users']['deleteYourself'] = 'Vous ne pouvez pas vous supprimer !';
 
-$link_type[8]=$us_user = 'Utilisateur';
+$lang['link_type'][8]=$us_user = 'Utilisateur';
 
 $lang['users']['error_username']='Il y a des caractères invalides dans votre nom d\'utilisateur';
 $lang['users']['error_username_exists']='Désolé, ce nom d\'utilisateur existe déjà';

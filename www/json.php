@@ -337,6 +337,35 @@ try{
 				}
 			}
 			break;
+			
+		case 'link_types': 
+			
+			foreach($GO_MODULES->modules as $module)
+			{				
+				if($lang_file = $GO_LANGUAGE->get_language_file($module['id']))
+				{
+
+					require($lang_file);
+				}
+			}
+		
+			$response['total'] = count($lang['link_type']);
+			$response['results']=array();
+				
+			$types = $GO_CONFIG->get_setting('link_type_filter', $GO_SECURITY->user_id);
+			$types = empty($types) ? array() : explode(',', $types);
+				
+			asort($lang['link_type']);
+			foreach($lang['link_type'] as $id=>$name)
+			{
+				$type['id']=$id;
+				$type['name']=$name;
+				$type['checked']=in_array($id, $types);
+				$response['results'][] = $type;
+			}
+			break;
+			
+		break;
 
 		case 'links':
 
@@ -417,6 +446,21 @@ try{
 			$link_type = isset($_REQUEST['link_type']) ? ($_REQUEST['link_type']) : 0;
 			$folder_id = isset($_REQUEST['folder_id']) ? ($_REQUEST['folder_id']) : 0;
 			$query = isset($_POST['query']) ? ($_REQUEST['query']) : '';
+			
+			
+			$types=array();
+			if(!empty($_POST['type_filter']))
+			{
+				if(isset($_POST['types']))
+				{
+					$types= json_decode($_POST['types'], true);
+					$GO_CONFIG->save_setting('link_type_filter', implode(',',$types), $GO_SECURITY->user_id);
+				}else
+				{
+					$types = $GO_CONFIG->get_setting('link_type_filter', $GO_SECURITY->user_id);
+					$types = empty($types) ? array() : explode(',', $types);
+				}
+			}
 				
 			
 
@@ -435,7 +479,7 @@ try{
 				}
 			}
 
-			$links_response = $search->get_links_json($GO_SECURITY->user_id, $query, $start, $limit, $sort,$dir, array(), $link_id, $link_type,$folder_id);
+			$links_response = $search->get_links_json($GO_SECURITY->user_id, $query, $start, $limit, $sort,$dir, $types, $link_id, $link_type,$folder_id);
 			
 			/*
 			 * Do this after search otherwise the new search result might not be present
