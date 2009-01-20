@@ -124,49 +124,57 @@ if(!empty($_SESSION['global_search']['query']))
 
 
 	//$search->reset();
-	$count = $search->global_search($GO_SECURITY->user_id, $query,$datatable->start, $datatable->offset, $datatable->sort_index, $datatable->sql_sort_order,$selected_types);
+	$search->global_search($GO_SECURITY->user_id, $query,$datatable->start, $datatable->offset, $datatable->sort_index, $datatable->sql_sort_order,$selected_types);
 
-	$datatable->set_pagination($count);
+	
 
-	if($count==1)
+	
+
+
+
+	while($search->next_record())
 	{
-		$form->add_html_element(new html_element('p', $count.' '.$search_result));
-	}else {
-		$form->add_html_element(new html_element('p', $count.' '.$search_results));
-	}
-
-	if($count>0)
-	{
-
-		while($search->next_record())
+		$row = new table_row($search->f('link_id'));
+		$cell = new table_cell($search->f('name'));
+		if($search->f('description')!='')
 		{
-			$row = new table_row($search->f('link_id'));
-			$cell = new table_cell($search->f('name'));
-			if($search->f('description')!='')
-			{
-				$cell->innerHTML .= '<p style="font-size:10px;margin-top:0px">'.$search->f('description').'</p>';
-			}
-			
-			$row->add_cell($cell);
-			$row->add_cell(new table_cell($search->f('type')));
-			$row->add_cell(new table_cell(get_timestamp($search->f('mtime'))));
-
-
-			if(empty($handler))
-			{
-				$row->set_attribute('ondblclick', "javascript:document.location='".add_params_to_url($search->f('url'),'return_to='.urlencode($link_back))."';");
-			}else {
-				$row->set_attribute('ondblclick', 'javascript:submit_to_handler();');
-			}
-
-			$datatable->add_row($row);
+			$cell->innerHTML .= '<p style="font-size:10px;margin-top:0px">'.$search->f('description').'</p>';
 		}
-	}else {
+		
+		$row->add_cell($cell);
+		$row->add_cell(new table_cell($search->f('type')));
+		$row->add_cell(new table_cell(get_timestamp($search->f('mtime'))));
+
+
+		if(empty($handler))
+		{
+			$row->set_attribute('ondblclick', "javascript:document.location='".add_params_to_url($search->f('url'),'return_to='.urlencode($link_back))."';");
+		}else {
+			$row->set_attribute('ondblclick', 'javascript:submit_to_handler();');
+		}
+
+		$datatable->add_row($row);
+	}
+	
+	$search->query("SELECT FOUND_ROWS() as found;");
+	$search->next_record();
+	$count = $search->f('found');
+			
+	$datatable->set_pagination($count);
+	
+	if($count==0){
 		$row = new table_row();
 		$cell = new table_cell($strNoItems);
 		$cell->set_attribute('colspan','99');
 		$row->add_cell($cell);
 		$datatable->add_row($row);
+	}
+	
+	if($count==1)
+	{
+		$form->add_html_element(new html_element('p', $count.' '.$search_result));
+	}else {
+		$form->add_html_element(new html_element('p', $count.' '.$search_results));
 	}
 
 	$form->add_html_element($datatable);
