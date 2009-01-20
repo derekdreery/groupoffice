@@ -28,7 +28,7 @@ GO.linksTemplate = '<tpl if="links.length">'+
 		'<tpl for="links">'+
 			'<tr>'+
 				'<td><div class="go-icon {iconCls}"></div></td>'+
-				'<td><a href="#" onclick="{[this.openLink(values)]}">{name}</a></td>'+
+				'<td><a href="#link_{[xindex-1]}">{name}</a></td>'+
 				'<td>{type}</td>'+
 				'<td>{mtime}</td>'+
 			'</tr>'+
@@ -50,7 +50,9 @@ GO.linksTemplateConfig = {
 			return "GO.linkBrowser.show({link_id: "+values.parent_link_id+",link_type: "+values.parent_link_type+",folder_id: "+values.id+"});";
 		}else
 		{
-			return "GO.files.openFile('"+GO.util.add_slashes(values.description)+"');"
+			
+			return "GO.linkHandlers["+values.link_type+"].call(this, "+values.id+", "+GO.util.add_slashes(Ext.encode({data: values}))+");";
+//		return "GO.files.openFile('"+GO.util.add_slashes(values.description)+"');"
 		}
 	}
 	
