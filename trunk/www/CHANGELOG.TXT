@@ -1,3 +1,6 @@
+2009/01/20 Version 3.00-stable-12
+- Opening links was broken. A quick new release.
+
 2009/01/20 Version 3.00-stable-11
 - Filter on types (Contact, Company, Project etc.) when searching
 - Bug fixes

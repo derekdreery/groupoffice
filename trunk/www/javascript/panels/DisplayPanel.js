@@ -121,6 +121,8 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 	
 	setData : function(data)
 	{
+		this.body.removeAllListeners();
+		
 		data.link_type=this.link_type;
 		this.data=data;
 		this.editButton.setDisabled(!data.write_permission);
@@ -151,6 +153,32 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 		
 		
 		this.xtemplate.overwrite(this.body, data);	
+		
+		
+		this.body.on('click', this.onBodyClick, this);		
+	},
+	
+	onBodyClick :  function(e, target){
+		if(target.tagName!='A')
+		{
+			target = Ext.get(target).findParent('A', 10);
+			if(!target)
+				return false;
+		}
+		
+		if(target.tagName=='A')
+		{			
+			var href=target.attributes['href'].value;
+			
+			if(href.substr(0,6)=='#link_')
+			{
+				e.preventDefault();
+				
+				var index = href.substr(6, href.length);		
+				var link = this.data.links[index];				
+				GO.linkHandlers[link.link_type].call(this, link.id, {data: link});		
+			}
+		}		
 	},
 	
 	load : function(id, reload)
