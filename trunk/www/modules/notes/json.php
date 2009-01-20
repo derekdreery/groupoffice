@@ -30,6 +30,7 @@ try{
 			$category = $notes->get_category(($_REQUEST['category_id']));
 			$user = $GO_USERS->get_user($category['user_id']);
 			$category['user_name']=String::format_name($user);
+			$category['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_write']);
 			$response['data']=$category;
 			$response['success']=true;		
 			break;
