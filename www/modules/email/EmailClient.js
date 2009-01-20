@@ -1017,9 +1017,10 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	
 	setAccount : function(account_id,folder_id,mailbox, usage)
 	{
-		if(account_id!=this.account_id)
+		if(folder_id!=this.folder_id)
 		{
 			this.messagePanel.reset();
+			this.messagesGrid.getSelectionModel().clearSelections();
 		}
 		
 		this.messagesGrid.expand();
