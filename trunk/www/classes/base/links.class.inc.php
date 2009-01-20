@@ -45,17 +45,7 @@
  */
 
 class GO_LINKS extends db
-{
-	function __construct() 
-	{
-		parent::__construct();
-	}
-	
-	function get_link_id()
-	{
-		return $this->nextid('links');
-	}
-	
+{	
 	function add_folder($folder)
 	{
 		$folder['id']=$this->nextid('go_link_folders');
@@ -110,7 +100,11 @@ class GO_LINKS extends db
 		$this->query($sql);
 		
 		$sql = "DELETE FROM go_link_folders WHERE id=".$this->escape($folder_id);
-		$this->query($sql);
+		$this->query($sql);		
+	}
+	
+	function get_link_types()
+	{
 		
 	}
 	

@@ -7,7 +7,7 @@ $lang['users']['description'] = 'Administrátorské prostředí pro úpravu uži
 $lang['users']['deletePrimaryAdmin'] = 'Nemůžete smazat hlavního administrátora';
 $lang['users']['deleteYourself'] = 'Nemůžete smazat svůj účet';
 
-$link_type[8]=$us_user = 'Uživatel';
+$lang['link_type'][8]=$us_user = 'Uživatel';
 
 $lang['users']['error_username']='Byly použity nevhodné znaky v uživatelském jménu';
 $lang['users']['error_username_exists']='Omlouváme se, ale toto uživatelské jméno již existuje';

@@ -8,7 +8,7 @@ $lang['users']['description'] = 'Admin-Modul; Systemverwaltung';
 $lang['users']['deletePrimaryAdmin'] = 'Sie können den Super-Administrator nicht löschen';
 $lang['users']['deleteYourself'] = 'Sie können sich nicht selbst löschen';
 
-$link_type[8]=$us_user = 'Benutzer';
+$lang['link_type'][8]=$us_user = 'Benutzer';
 
 $lang['users']['error_username']='Ihr Benutzername enthält ungültige Zeichen';
 $lang['users']['error_username_exists']='Der Benutzername ist bereits registriert';

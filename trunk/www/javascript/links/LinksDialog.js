@@ -15,11 +15,12 @@ GO.dialog.LinksDialog = function(config){
 	
 	Ext.apply(this, config);
 	
-	this.grid = new GO.grid.LinksGrid({
-						
+	this.grid = new GO.grid.SearchPanel({
+			noTitle:true,
+			noOpenLinks:true
 		});
 
-	this.grid.on('rowdblclick', this.linkItems, this);
+	this.grid.searchGrid.on('rowdblclick', this.linkItems, this);
 		
 	var focusSearch = function(){
 		this.grid.searchField.focus(true);		
@@ -31,8 +32,8 @@ GO.dialog.LinksDialog = function(config){
 		modal:false,
 		minWidth:300,
 		minHeight:300,
-		height:400,
-		width:600,
+		height:500,
+		width:700,
 		border:false,
 		plain:true,
 		closeAction:'hide',
@@ -61,14 +62,6 @@ Ext.extend(GO.dialog.LinksDialog, Ext.Window, {
 	
 	folder_id : 0,
 	
-	show : function(){		
-		GO.dialog.LinksDialog.superclass.show.call(this);
-		if(!this.grid.store.loaded)
-		{
-			//this.grid.store.load();
-		}
-	},
-	
 	setLinkRecords : function(gridRecords)
 	{
 		this.fromLinks = [];
@@ -83,7 +76,7 @@ Ext.extend(GO.dialog.LinksDialog, Ext.Window, {
 	},
 	
 	linkItems : function()	{
-		var selectionModel = this.grid.getSelectionModel();
+		var selectionModel = this.grid.searchGrid.getSelectionModel();
 		var records = selectionModel.getSelections();
 
 		var tolinks = [];

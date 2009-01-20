@@ -7,7 +7,7 @@ $lang['users']['description'] = 'Módulo de administração; Administra usuário
 $lang['users']['deletePrimaryAdmin'] = 'Você não pode apagar o usuário administrador';
 $lang['users']['deleteYourself'] = 'Você não pode apagar a si próprio';
 
-$link_type[8]=$us_user = 'Usuário';
+$lang['link_type'][8]=$us_user = 'Usuário';
 
 $lang['users']['error_username']='Você colocou caracteres inválidos no nome';
 $lang['users']['error_username_exists']='Desculpe, esse nome já existe';

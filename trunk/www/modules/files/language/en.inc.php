@@ -4,6 +4,8 @@
 $lang['files']['name'] = 'Files';
 $lang['files']['description'] = 'Files module; Module for sharing files.';
 
+$lang['link_type'][6]='File';
+
 $lang['files']['fileNotFound'] = 'File not found';
 $lang['files']['folderExists'] = 'The folder already exists';
 $lang['files']['filenameExists'] = 'Filename already exists';

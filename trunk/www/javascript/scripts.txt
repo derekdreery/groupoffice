@@ -62,6 +62,7 @@ javascript/links/LinksTemplate.js
 javascript/links/LinksContextMenu.js
 javascript/links/LinkBrowser.js
 javascript/links/LinkViewWindow.js
+javascript/links/LinkTypeFilterPanel.js
 
 javascript/panels/SearchPanel.js
 
