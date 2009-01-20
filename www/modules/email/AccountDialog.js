@@ -223,7 +223,8 @@ GO.email.AccountDialog = function(config){
           {
 						xtype: 'textarea',
 					  name: 'signature',
-					  fieldLabel: GO.email.lang.signature
+					  fieldLabel: GO.email.lang.signature,
+					  height:100
 					}
 		]	            
 	};
@@ -388,7 +389,8 @@ GO.email.AccountDialog = function(config){
 				xtype: 'textarea',
 			  name: 'vacation_body',
 				anchor: '-20',
-			  fieldLabel: GO.email.lang.vacationBody
+			  fieldLabel: GO.email.lang.vacationBody,
+			  height:160
 			}]
 				
 		});
