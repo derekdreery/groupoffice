@@ -71,7 +71,7 @@ GO.grid.SearchPanel = function(config){
 				text: GO.lang['cmdDelete'],
 				cls: 'x-btn-text-icon',
 				handler: function(){
-					this.deleteSelected();
+					this.searchGrid.deleteSelected();
 				},
 				scope: this
 			}

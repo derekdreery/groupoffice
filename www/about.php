@@ -18,7 +18,7 @@ require('Group-Office.php');
 	<br />	
 	Version: <?php echo $GO_CONFIG->version ?>
 	<br /><br />
-	Copyright (c) 2003-2008, Intermesh<br />
+	Copyright (c) 2003-2009, Intermesh<br />
 	All rights reserved.<br />
 	<br />
 	This program is protected by copyright law and the Group-Office license.<br />
