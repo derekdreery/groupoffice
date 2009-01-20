@@ -36,7 +36,7 @@ if ($mail->open($account['host'], $account['type'],$account['port'],$account['us
 	$file = $mail->view_part($_REQUEST['uid'], $_REQUEST['part'], $_REQUEST['transfer']);
 	$mail->close();
 	
-	if(!empty($_REQUEST['uuencoded_partnumber']))
+	if(!empty($_REQUEST['uuencoded_partnumber']) && $_REQUEST['uuencoded_partnumber']!='undefined')
 	{
 		$attachments = $mail->extract_uuencoded_attachments($file);
 		
