@@ -57,7 +57,7 @@ class FCKeditor
 	{
 		$HtmlValue = htmlspecialchars( $this->Value ) ;
 
-		$Html = '<div style="height:100%">' ;
+		$Html = '<div style="height:'.$this->Height.'">' ;
 
 		if ( $this->IsCompatible() )
 		{
