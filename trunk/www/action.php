@@ -142,13 +142,13 @@ try{
 			}
 			if (isset($_POST['remind']))
 			{
-				SetCookie("GO_UN",$username,time()+3600*24*30,"/",'',0);
-				SetCookie("GO_PW",$password,time()+3600*24*30,"/",'',0);
+				SetCookie("GO_UN",$username,time()+3600*24*30,"/",'',!empty($_SERVER['HTTPS']),false);
+				SetCookie("GO_PW",$password,time()+3600*24*30,"/",'',!empty($_SERVER['HTTPS']),false);
 			}
 			
 			$fullscreen = isset($_POST['fullscreen']) ? '1' : '0';
 			
-			SetCookie("GO_FULLSCREEN",$fullscreen,time()+3600*24*30,"/",'',0);
+			SetCookie("GO_FULLSCREEN",$fullscreen,time()+3600*24*30,"/",'',!empty($_SERVER['HTTPS']),false);
 				
 			$response['user_id']=$GO_SECURITY->user_id;
 			$response['name']=$_SESSION['GO_SESSION']['name'];
@@ -177,9 +177,7 @@ try{
 
 		case 'logout':
 			$GO_SECURITY->logout();
-				
-			SetCookie("GO_UN","",time()-3600,"/","",0);
-			SetCookie("GO_PW","",time()-3600,"/","",0);
+
 			unset($_SESSION);
 			unset($_COOKIE);
 

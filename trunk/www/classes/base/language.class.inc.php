@@ -98,7 +98,7 @@ class GO_LANGUAGE {
 			if(!isset($_COOKIE['GO_LANGUAGE']) || $_COOKIE['GO_LANGUAGE']!=$this->language)
 			{
 				$_COOKIE['GO_LANGUAGE']=$this->language;
-				SetCookie("GO_LANGUAGE",$language,time()+3600*24*30,"/",'',0);
+				SetCookie("GO_LANGUAGE",$language,time()+3600*24*30,"/",'',!empty($_SERVER['HTTPS']),false);
 			}
 				
 			return true;

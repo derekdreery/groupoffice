@@ -115,8 +115,8 @@ class GO_SECURITY extends db {
 		$username = isset($_SESSION['GO_SESSION']['username']) ? $_SESSION['GO_SESSION']['username'] : 'notloggedin';
 		go_log(LOG_DEBUG, 'LOGOUT Username: '.$username.'; IP: '.$_SERVER['REMOTE_ADDR']);
 		
-		SetCookie("GO_UN","",time()-3600,"/","",0);
-		SetCookie("GO_PW","",time()-3600,"/","",0);
+		SetCookie("GO_UN","",time()-3600,"/","",!empty($_SERVER['HTTPS']),false);
+		SetCookie("GO_PW","",time()-3600,"/","",!empty($_SERVER['HTTPS']),false);
 
 		unset($_SESSION, $_COOKIE['GO_UN'], $_COOKIE['GO_PW']);
 		
