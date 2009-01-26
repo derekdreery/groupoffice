@@ -651,7 +651,8 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 	},
 	
 	removeEvent : function(domId){
-		if(this.appointmentsMap[domId] && this.appointments[day])
+	
+		if(this.appointmentsMap[domId] && this.appointments[this.appointmentsMap[domId].day])
 		{
 			var day = this.appointmentsMap[domId].day;
 			var newAppointments = [];
@@ -664,7 +665,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			}			
 			this.appointments[day]=newAppointments;
 			
-		}else if(this.allDayAppointmentsMap[domId] && this.appointments[day])
+		}else if(this.allDayAppointmentsMap[domId] && this.appointments[this.allDayAppointmentsMap[domId].day])
 		{		
 			var day = this.allDayAppointmentsMap[domId];
 			var newAppointments = [];
