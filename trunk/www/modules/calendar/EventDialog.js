@@ -449,25 +449,32 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
     	});
     	
     var checkDateInput = function(){
+    	
+    	var eD = endDate.getValue();
+    	var sD = startDate.getValue();
     
-    	if(startDate.getValue()>endDate.getValue())
+    	if(sD>eD)
     	{
-    		endDate.setValue(startDate.getValue());
+    		endDate.setValue(sD);
     	}
     	
-    	var sH = startHour.getValue();
-    	var eH = endHour.getValue();
-    	var sM = startMin.getValue();
-    	var eM = endMin.getValue();
-    	
-    	if(sH>eH)
+    	if(sD.getElapsed(eD)==0)
     	{
-    		endHour.setValue(sH);
-    	}
-    	
-    	if(sH==eH && sM>eM)
-    	{
-    		endMin.setValue(sM);
+	    	var sH = startHour.getValue();
+	    	var eH = endHour.getValue();
+	    	var sM = startMin.getValue();
+	    	var eM = endMin.getValue();
+	    	
+	    	if(sH>eH)
+	    	{
+	    		eH=sH;
+	    		endHour.setValue(sH);
+	    	}
+	    	
+	    	if(sH==eH && sM>eM)
+	    	{
+	    		endMin.setValue(sM);
+	    	}
     	}
     	
     	
@@ -478,7 +485,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
     			repeatForever.setValue(true);
     		}else
     		{
-    			var eD = endDate.getValue();
+    			
     			if(repeatEndDate.getValue()<eD)
     			{
     				repeatEndDate.setValue(eD.add(Date.DAY,1));
