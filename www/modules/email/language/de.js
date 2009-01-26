@@ -66,7 +66,7 @@ GO.email.lang.cantEditFolder='Sie können diesen Ordner nicht ändern';
 GO.email.lang.cantDeleteInboxFolder='Sie können den Ordner POSTEINGANG nicht löschen';
 GO.email.lang.enterFolderName='Geben Sie einen Ordnernamen ein:';
 GO.email.lang.addFolder='Neuen Ordner erstellen';
-GO.email.lang.to='Zu';
+GO.email.lang.to='An';
 GO.email.lang.downloadAllAsZip='Alles als ZIP-Datei herunterladen';
 GO.email.lang.body='Body';
 GO.email.lang.recievedBefore='Empfangen vor';
@@ -106,3 +106,17 @@ GO.email.lang.viewSource='Quelle anzeigen';
 
 GO.email.lang.sendNotification='Der Sender hat eine Lesebestätigung angefordert. %s. Möchten Sie eine Lesebestätigung senden?';
 GO.email.lang.searchOnSender='Nachrichten anzeigen';
+
+GO.email.lang.blocked = '{blocked_images} externe Bilder wurden aus Sicherheitsgründen blockiert.';
+GO.email.lang.unblock = 'Zum Freigeben hier klicken';
+
+GO.email.lang.loadEmailFirst = 'Um diese Funktion zu nutzen, müssen Sie zuerst Ihre Email durch drücken des E-Mail Tab laden';
+
+GO.email.lang.confirmEmptySubject='Sie haben keinen Betreff eingetragen. Sind Sie sicher, dass die Mitteilung ohne Betreff gesendet werden soll?';
+
+GO.email.lang.usage='belegter Speicherplatz';
+GO.email.lang.searchGO='durchsuche Group-Office';
+GO.email.lang.toggleWindowPosition = 'Email Ansicht ändern';
+GO.email.lang.closeUploadDialog='Schließen Sie zuerst den Upload-Dialog oder warten Sie, bis der Upload beendet ist';
+
+GO.email.lang.signature='Signatur';
