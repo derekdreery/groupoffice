@@ -727,7 +727,7 @@ class calendar extends db
 	 Times in GMT!
 	 */
 
-	function add_event($event)
+	function add_event($event, $calendar=false)
 	{
 
 		if(empty($event['calendar_id']))
@@ -806,6 +806,27 @@ class calendar extends db
 			}
 
 			$this->cache_event($event['id']);
+						
+			if(!empty($event['reminder']))
+			{			
+				global $GO_CONFIG;
+			
+				require_once($GO_CONFIG->class_path.'base/reminder.class.inc.php');
+				$rm = new reminder();
+				
+				if(!$calendar)
+				{
+					$calendar = $this->get_calendar($event['calendar_id']);
+				}
+			
+				$reminder['user_id']=$calendar['user_id'];
+				$reminder['name']=$event['name'];
+				$reminder['link_type']=1;
+				$reminder['link_id']=$event['id'];
+				$reminder['time']=$event['start_time']-$event['reminder'];
+				
+				$rm->add_reminder($reminder);
+			}
 
 			return $event['id'];
 		}
@@ -830,7 +851,7 @@ class calendar extends db
 		return false;
 	}
 
-	function update_event($event)
+	function update_event($event, $calendar=false)
 	{
 		unset($event['read_permission'], $event['write_permission']);
 		if(!isset($event['mtime']) || $event['mtime'] == 0)
@@ -863,6 +884,65 @@ class calendar extends db
 		$r = $this->update_row('cal_events', 'id', $event);
 
 		$this->cache_event($event['id']);
+		
+		
+		if(isset($event['start_time']))
+		{
+			
+			if(!isset($event['reminder']))
+			{
+				$oldevent = $this->get_event($event['id']);
+				$event['reminder']=$oldevent['reminder'];
+			}
+			
+			global $GO_CONFIG;
+			
+			require_once($GO_CONFIG->class_path.'base/reminder.class.inc.php');
+			$rm = new reminder();
+			
+			$rm->get_reminders_by_link_id($event['id'], 1);
+			$existing_reminder = $rm->next_record(); 
+
+			if(empty($event['reminder']) && $existing_reminder)
+			{
+				$rm->delete_reminder($existing_reminder['id']);
+			}
+			
+			if(!empty($event['reminder']))
+			{	
+				if(!$calendar)
+				{
+					if(empty($event['calendar_id']))
+					{
+						if(!isset($oldevent))						
+							$oldevent = $this->get_event($event['id']);
+							
+						$event['calendar_id']=$oldevent['calendar_id'];
+					}
+					$calendar = $this->get_calendar($event['calendar_id']);
+				}
+
+				
+				
+				$reminder['id']=$existing_reminder['id'];
+				$reminder['user_id']=$calendar['user_id'];
+				if(isset($event['name']))
+					$reminder['name']=$event['name'];
+					
+				$reminder['link_type']=1;
+				$reminder['link_id']=$event['id'];
+				$reminder['time']=$event['start_time']-$event['reminder'];
+				
+				if($existing_reminder)
+				{
+					$rm->update_reminder($reminder);
+				}else
+				{
+					$rm->add_reminder($reminder);
+				}
+			}
+		}
+		
 
 		return $r;
 	}
@@ -1214,6 +1294,18 @@ class calendar extends db
 			require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
 			$search = new search();
 			$search->delete_search_result($event_id, 1);
+			
+			
+			global $GO_CONFIG;
+			
+			require_once($GO_CONFIG->class_path.'base/reminder.class.inc.php');
+			$rm = new reminder();
+			$rm2 = new reminder();
+			$rm->get_reminders_by_link_id($event_id, 1);
+			while($r = $rm->next_record())
+			{
+				$rm2->delete_reminder($r['id']);
+			}
 		}
 	}
 
