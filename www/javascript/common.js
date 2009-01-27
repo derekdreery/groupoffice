@@ -13,6 +13,28 @@
  
 Ext.namespace('GO.util');
 
+GO.util.empty = function(v)
+{
+	if(!v)
+	{
+		return true;
+	}
+	if(v=='')
+	{
+		return true;
+	}
+	
+	if(v=='undefined')
+	{
+		return true;
+	}
+	
+	if(v=='null')
+	{
+		return true;
+	}
+}
+
 GO.mailTo = function(email){
 	
 	if(GO.email && GO.settings.modules.email.read_permission)
