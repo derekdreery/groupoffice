@@ -399,13 +399,13 @@ try{
 
 			if($event['id']>0)
 			{
-				$cal->update_event($event);
+				$cal->update_event($event, $calendar);
 				$response['success']=true;
 
 			}else
 			{
 
-				$event_id= $cal->add_event($event);
+				$event_id= $cal->add_event($event, $calendar);
 				if($event_id)
 				{
 					$calendar_user = $GO_USERS->get_user($calendar['user_id']);
@@ -462,33 +462,7 @@ try{
 					
 			}
 			
-			require($GO_CONFIG->class_path.'base/reminder.class.inc.php');
-			$rm = new reminder();
-			
-			$existing_reminder = $rm->get_reminder_by_link_id($calendar['user_id'], $event_id, 1);
-
-			if(empty($event['reminder']) && $existing_reminder)
-			{
-				$rm->delete_reminder($existing_reminder['id']);
-			}
-			
-			if(!empty($event['reminder']))
-			{			
-				$reminder['id']=$existing_reminder['id'];
-				$reminder['user_id']=$calendar['user_id'];
-				$reminder['name']=$event['name'];
-				$reminder['link_type']=1;
-				$reminder['link_id']=$event_id;
-				$reminder['time']=$event['start_time']-$event['reminder'];
-				
-				if($existing_reminder)
-				{
-					$rm->update_reminder($reminder);
-				}else
-				{
-					$rm->add_reminder($reminder);
-				}
-			}
+		
 			
 			break;
 

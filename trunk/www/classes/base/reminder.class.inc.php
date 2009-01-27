@@ -109,6 +109,21 @@ class reminder extends db
 		return false;
 	}
 	
+ /**
+	* Get a reminders record by a link ID
+	*
+	* @param Int $link_id ID of the reminder
+	*
+	* @access public
+	* @return Array Record properties
+	*/
+	
+	function get_reminders_by_link_id($link_id, $link_type)
+	{
+		$this->query("SELECT * FROM go_reminders WHERE link_id=".$this->escape($link_id)." AND link_type=".$this->escape($link_type));
+		return $this->num_rows();
+	}
+	
 
 	
 	
