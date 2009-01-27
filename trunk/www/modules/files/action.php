@@ -373,7 +373,5 @@ catch(Exception $e)
 {
 	$response['feedback']=$e->getMessage();
 	$response['success']=false;
-	
-	debug($e->getTraceAsString());
 }
 echo json_encode($response);

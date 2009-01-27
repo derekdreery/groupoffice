@@ -59,7 +59,11 @@ while($file = array_shift($_FILES))
 				move_uploaded_file($file['tmp_name'], $filepath);
 
 
-				$complete_dir = $path.'/'.($_POST['relpathinfo'][$count]).'/';
+				$complete_dir = $path.'/';				
+				if(!empty($_POST['relpathinfo'][$count]))
+				{
+					$complete_dir .= $_POST['relpathinfo'][$count].'/';
+				}
 				$filepath = File::checkfilename($complete_dir.$file['name']);
 
 				$fp = fopen($filepath, 'a+');
@@ -71,15 +75,21 @@ while($file = array_shift($_FILES))
 					unlink($part);
 				}
 				
-				$fs->add_file($filepath);
+				$relpath = $fs->strip_server_path($filepath);
+				$fs->add_file($relpath);
 				
-				$_SESSION['GO_SESSION']['files']['jupload_new_files'][]=($_POST['relpathinfo'][$count]).'/'.utf8_basename($filepath);
+				$_SESSION['GO_SESSION']['files']['jupload_new_files'][]=$relpath;
 				fclose($fp);
 				continue;
 			}
 		}else
 		{
-			$dir = $path.'/'.($_POST['relpathinfo'][$count]).'/';
+			$dir = $path.'/';				
+			if(!empty($_POST['relpathinfo'][$count]))
+			{
+				$dir .= $_POST['relpathinfo'][$count].'/';
+			}
+				
 			$filepath = $dir.$file['name'];
 		}
 			
@@ -91,12 +101,14 @@ while($file = array_shift($_FILES))
 		if(!isset($_POST['jupart']))
 		{
 			$filepath = File::checkfilename($filepath);
+			$relpath = $fs->strip_server_path($filepath);
 			
-			$_SESSION['GO_SESSION']['files']['jupload_new_files'][]=($_POST['relpathinfo'][$count]).'/'.utf8_basename($filepath);
+			$_SESSION['GO_SESSION']['files']['jupload_new_files'][]=$relpath;
+			$fs->add_file($relpath);
 		}
 		
 		move_uploaded_file($file['tmp_name'], $filepath);
-		$fs->add_file($filepath);
+		
 	}
 	$count++;
 }

@@ -19,7 +19,7 @@ $lang['files']['general']='Allgemein';
 
 
 $lang['folder_modified_subject']='Änderungen an Group-Office-Ordner';
-$lang['folder_modified_body']='Sie wollten benachrichtigt werden, wenn Änderungen gemacht wurden in:
+$lang['folder_modified_body']='Sie haben eine Nachricht angefordert, wenn eine Änderung erfolgt:
 
 %s
 
@@ -33,4 +33,3 @@ $lang['files']['new']='Neu';
 $lang['files']['deleted']='Gelöscht';
 
 $lang['files']['folder_modified_subject']='Änderungen im Group-Office Ordner';
-$lang['files']['folder_modified_body']='Sie haben eine Nachricht angefordert, wenn eine Änderung erfolgt:';
