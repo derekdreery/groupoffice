@@ -21,6 +21,7 @@ GO.notes.MainPanel = function(config){
 
 	this.westPanel = new GO.notes.CategoriesGrid({
     region:'west',
+    id:'no-west-panel',
     title:GO.lang.menu,
 		autoScroll:true,				
 		width: 150,
@@ -57,6 +58,7 @@ GO.notes.MainPanel = function(config){
 
 	this.centerPanel = new GO.notes.NotesGrid({
 		region:'center',
+		id:'no-center-panel',
 		border:true
 	});
 	
