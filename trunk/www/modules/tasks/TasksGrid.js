@@ -61,8 +61,11 @@ GO.tasks.TasksPanel = function(config)
 			header:GO.lang['strName'],
 			dataIndex: 'name',
 			renderer:function(value, p, record){
+				if(!GO.util.empty(record.data.description))
+				{
 		     p.attr = 'ext:qtip="'+record.data.description+'"';
-		     return value;
+				}
+		    return value;
 			}
 		},{
 			header:GO.tasks.lang.dueDate,
