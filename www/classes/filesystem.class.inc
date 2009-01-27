@@ -241,7 +241,7 @@ class filesystem extends db
 				}else
 				{
 					$this->copy($source_path, $destination_path);
-					return unlink($source_path);				
+					return $this->delete($source_path);				
 				}
 			}
 		}

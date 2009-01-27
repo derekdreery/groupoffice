@@ -550,47 +550,65 @@ class files extends filesystem
 	}
 	
 	function move_file($source_path, $destination_path)
-	{
-		$source_path=$this->strip_server_path($source_path);
-		$destination_path=$this->strip_server_path($destination_path);
-		
-		$file = $this->get_file($source_path);
-		$up_file['id']=$file['id'];
-		$up_file['path']=$destination_path;
-		$this->update_file($up_file);			
+	{	
+		global $GO_CONFIG;
+		if($this->is_sub_dir($source_path, $GO_CONFIG->file_storage_path))
+		{
+			$file = $this->get_file($this->strip_server_path($source_path));
+			
+			$up_file['id']=$file['id'];
+			$up_file['path']=$this->strip_server_path($destination_path);
+			$this->update_file($up_file);
+			
+		}elseif($this->is_sub_dir($destination_path, $GO_CONFIG->file_storage_path))
+		{
+			$file = $this->get_file($this->strip_server_path($destination_path));
+			$up_file['id']=$file['id'];		
+			$up_file['path']=$this->strip_server_path($destination_path);
+			$this->update_file($up_file);	
+		}
 	}
 	
 	function move_folder($source_path, $destination_path)
 	{
-		$source_path=$this->strip_server_path($source_path);
-		$destination_path=$this->strip_server_path($destination_path);
-		
-		$folder = $this->get_folder($source_path);
-		$up_folder['id']=$folder['id'];
-		$up_folder['path']=$destination_path;
-		$this->update_folder($up_folder);
-						
-		$this->move_notifications($source_path, $destination_path);			
+		global $GO_CONFIG;
+		if($this->is_sub_dir($source_path, $GO_CONFIG->file_storage_path))
+		{
+			$source_path=$this->strip_server_path($source_path);
+			$destination_path=$this->strip_server_path($destination_path);
+			
+			$folder = $this->get_folder($source_path);
+			$up_folder['id']=$folder['id'];
+			$up_folder['path']=$destination_path;
+			$this->update_folder($up_folder);
+							
+			$this->move_notifications($source_path, $destination_path);
+		}			
 	}
 	
 	function delete_file($path)
 	{
 		global $GO_CONFIG;
-		
-		$path = $this->strip_server_path($path);
-				
-		require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
-		$search = new search();
-		
-		$file = $this->get_file($path);
-		$search->delete_search_result($file['id'], 6);		
-		
-		$sql = "DELETE FROM fs_files WHERE path=?";
-		$this->query($sql, 's', $path);
+
+		if($this->is_sub_dir($path, $GO_CONFIG->file_storage_path))
+		{
+			$path = $this->strip_server_path($path);
+					
+			require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
+			$search = new search();
+			
+			$file = $this->get_file($path);
+			$search->delete_search_result($file['id'], 6);		
+			
+			$sql = "DELETE FROM fs_files WHERE path=?";
+			$this->query($sql, 's', $path);
+		}
 	}
 
 	function add_file($file)
 	{
+		global $GO_CONFIG;
+
 		if(!is_array($file))
 		{
 			$file = array('path'=>$file);
@@ -601,14 +619,14 @@ class files extends filesystem
 		$file['user_id']=$GLOBALS['GO_SECURITY']->user_id;
 		$this->insert_row('fs_files', $file);
 		
-		$this->cache_file($file['path']);
+		$this->cache_file($GO_CONFIG->file_storage_path.$file['path']);
 		
 		return $file['id'];
 	}
 
 	function update_file($file)
 	{
-		if(isset($folder['id']))
+		if(isset($file['id']))
 		{
 			$index = 'id';
 		}else

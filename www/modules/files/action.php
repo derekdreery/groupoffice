@@ -246,15 +246,15 @@ try{
 					}
 				}else
 				{
+					$fs->move($tmp_file, $new_path);		
+					
 					if(file_exists($new_path))
-					{
+					{										
 						$modified[]=utf8_basename($new_path);
 					}else
 					{
 						$new[]=utf8_basename($new_path);
-					}
-					$fs->move($tmp_file, $new_path);						
-					$fs->add_file($fs->strip_server_path($new_path));
+					}					
 				}
 				if($command != 'yestoall' && $command != 'notoall')
 				{
@@ -373,5 +373,7 @@ catch(Exception $e)
 {
 	$response['feedback']=$e->getMessage();
 	$response['success']=false;
+	
+	debug($e->getTraceAsString());
 }
 echo json_encode($response);
