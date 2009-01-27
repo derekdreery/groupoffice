@@ -72,13 +72,15 @@ class addressbook extends db {
 			}else
 			{
 				$user = $GO_USERS->get_user($GO_SECURITY->user_id);
-				$new_ab_name = String::format_name($user['last_name'], $user['first_name'], $user['middle_name'], 'last_name');
+				$name = String::format_name($user['last_name'], $user['first_name'], $user['middle_name'], 'last_name');
+				$new_ab_name = $name;
 				$x = 1;
 				while ($this->get_addressbook_by_name($new_ab_name)) {
-					$new_ab_name = $_SESSION['GO_SESSION']['name'].' ('.$x.')';
+					$new_ab_name = $name.' ('.$x.')';
 					$x ++;
 				}
-				$addressbook_id = $this->add_addressbook($GO_SECURITY->user_id, $new_ab_name);
+				$addressbook = $this->add_addressbook($GO_SECURITY->user_id, $new_ab_name);
+				$addressbook=$addressbook['id'];
 			}
 		}
 		$sql = "SELECT * FROM ab_addressbooks WHERE id='".$this->escape($addressbook_id)."'";
@@ -696,7 +698,7 @@ class addressbook extends db {
 
 		$result['id'] = $this->nextid('ab_addressbooks');
 		$result['acl_read'] = $GO_SECURITY->get_new_acl('addressbook', $user_id);
-		$result['acl_write'] = $GO_SECURITY->get_new_acl('addressbook'.$result['id'], $user_id);
+		$result['acl_write'] = $GO_SECURITY->get_new_acl('addressbook', $user_id);
 		$result['user_id']=$user_id;
 		$result['name']=$name;
 		
