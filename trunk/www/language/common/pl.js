@@ -15,14 +15,6 @@
  * Date : January, 20 2009
 */
 
-/**
- * Don't copy the next line into a translation
- */
-//GO.lang = {};
-/**
- * Copy everything below for translations
- */
-
 GO.lang.more='Więcej';
 GO.lang.strCommunityForum='Forum';
 GO.lang.moduleRequired='Ta funkcja wymaga modułu \'{module}\'. Moduł nie jest dostępny.';

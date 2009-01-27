@@ -17,14 +17,6 @@
  * 10 December 2008
 */
 
-/**
- * Don't copy the next line into a translation
-GO.lang = {};
- */
-/**
- * Copy everything below for translations
- */
-
 
 GO.lang.strCommunityForum='Форум поддержки:';
 GO.lang.moduleRequired='Необходимо наличие модуля: \'{module}\'. Данный модуль недоступен.';
