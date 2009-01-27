@@ -194,14 +194,13 @@ Ext.extend(GO.dialog.LoginDialog, Ext.Window, {
 			params: {'task' : 'login'},	
 			waitMsg:GO.lang.waitMsgLoad,
 			success:function(form, action){
-				
+
 				//Another user logs in after a session expire			
 				if(GO.settings.user_id>0 && action.result.user_id!=GO.settings.user_id)
 				{
 					document.location=document.location;
 					return true;
-				}
-				
+				}				
 				
 				if(action.result.name=='')
 				{

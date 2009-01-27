@@ -27,11 +27,6 @@
 
 class GO_AUTH extends db
 {
-	
-	public function __construct(){
-		
-		parent::__construct();
-	}
 	/**
 	 * Authenticate the user against the Group-Office SQL database.
 	 * 
