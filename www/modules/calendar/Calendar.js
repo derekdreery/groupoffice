@@ -225,7 +225,7 @@ GO.calendar.MainPanel = function(config){
 									iconCls: 'btn-refresh',
 									text: GO.lang['cmdRefresh'],
 									cls: 'x-btn-text-icon',
-									handler: this.refresh,
+									handler: this.init,
 									scope: this
 								},{
 									iconCls: 'btn-settings',
@@ -427,6 +427,11 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		this.state.calendar_id=GO.calendar.defaultCalendar.id;
 		this.state.view_id=0;
 				
+		this.init();	
+		this.createDaysGrid();			
+	},
+	
+	init : function(){
 		this.calendarsStore.load({
 			callback:function(){				
 				if(this.state.displayType!='view')
@@ -452,8 +457,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				
 			},
 			scope:this			
-		});		
-		this.createDaysGrid();			
+		});	
 	},
 	
 	deleteHandler : function(){

@@ -11,15 +11,6 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-/**
- * Don't copy the next line into a translation
- */
-GO.lang = {};
-/**
- * Copy everything below for translations
- */
-
-
 GO.lang.strCommunityForum='Společenské fórum';
 GO.lang.moduleRequired='Tato funkce vyžaduje \'{module}\' modul. Tento modul není k dispozici.';
 
