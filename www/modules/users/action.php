@@ -408,10 +408,6 @@ try
 
 			//end permissions
 
-
-
-
-
 			echo json_encode($response);
 			break;
 
