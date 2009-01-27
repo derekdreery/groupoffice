@@ -75,8 +75,10 @@ try
 					}
 				}
 
-				if(!empty($contact_credentials['birthday']))
-				$contact_credentials['birthday'] = Date::to_db_date($contact_credentials['birthday'], false);
+				if(!empty($_POST['birthday']))
+				$contact_credentials['birthday'] = Date::to_db_date($_POST['birthday'], false);
+				
+
 
 				unset($contact_credentials['company']);
 				if ($contact_id < 1)
