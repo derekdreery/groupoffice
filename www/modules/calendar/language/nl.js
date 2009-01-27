@@ -52,3 +52,7 @@ GO.calendar.lang.closeWindow = 'De afspraak is geaccepteerd en ingepland. U kunt
 GO.calendar.lang.list='Lijst';
 GO.calendar.lang.editRecurringEvent='Wilt u alleen dit exemplaar bewerken of alle afspraken van deze herhalende reeks?';
 GO.calendar.lang.selectIcalendarFile='Selecteer een icalendar (*.ics) bestand';
+
+GO.calendar.lang.location='Locatie';
+GO.calendar.lang.startsAt='Start op';
+GO.calendar.lang.endsAt='Eindigt op';

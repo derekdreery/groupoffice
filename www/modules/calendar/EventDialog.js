@@ -344,7 +344,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 					end_time : endDate.format('U'),
 					startDate : startDate,
 					endDate : endDate,
-					tooltip : '',
+					description : GO.util.nl2br(this.formPanel.form.findField('description').getValue()),
 					background: this.formPanel.form.findField('background').getValue(),
 					location : this.formPanel.form.findField('location').getValue(),
 					repeats : this.formPanel.form.findField('repeat_type').getValue()>0,

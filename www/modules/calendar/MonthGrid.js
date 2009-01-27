@@ -482,7 +482,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 						cls: "x-calGrid-month-event-container", 
 						style:"background-color:#"+eventData.background+';width:'+(this.eventWidth)+'px',
 						html: text, 						
-						qtip: eventData['tooltip'],
+						qtip: GO.calendar.formatQtip(eventData),
 						qtitle:eventData.name
 					}, true);				
 					

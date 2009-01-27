@@ -30,7 +30,8 @@ GO.calendar.SummaryGroupPanel = function(config)
 						'time',
 						'start_time',
 						'end_time',
-						'tooltip',
+						'description',
+						'location',
 						'private',
 						'repeats',
 						'day'			
@@ -79,7 +80,7 @@ GO.calendar.SummaryGroupPanel = function(config)
 		{
 			header:GO.lang.strTime,
 			dataIndex: 'time',
-			width:50
+			width:70
 		},		
 		{
 			id:'summary-calendar-name-heading',
@@ -90,7 +91,7 @@ GO.calendar.SummaryGroupPanel = function(config)
 		
 	config.view=  new Ext.grid.GroupingView({
     hideGroupedColumn:true,
-    groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "'+GO.lang.item+'" : "'+GO.lang.items+'"]})',
+    groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "'+GO.lang.items+'" : "'+GO.lang.item+'"]})',
    	emptyText: GO.calendar.lang.noAppointmentsToDisplay,
    	showGroupName:false
 	});
@@ -107,7 +108,7 @@ Ext.extend(GO.calendar.SummaryGroupPanel, Ext.grid.GridPanel, {
 	
 	renderName : function(grid, value, record)
 	{		
-		return '<div style="font-weight:bold">'+record.data.name+'</div>'+record.data.tooltip;		
+		return '<div style="font-weight:bold">'+record.data.name+'</div>'+GO.calendar.formatQtip(record.data);		
 	},
 		
 	afterRender : function()
