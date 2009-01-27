@@ -95,7 +95,8 @@ Ext.extend(GO.plugins.HtmlEditorImageInsert, Ext.util.Observable, {
             scope: this,
             handler:function(){ this.showFileBrowser(); },
             clickEvent:'mousedown',
-            tabIndex:-1
+            tabIndex:-1,
+            tooltip:{title:GO.lang.image, text:GO.lang.insertImage}
         });
     }
 	},
