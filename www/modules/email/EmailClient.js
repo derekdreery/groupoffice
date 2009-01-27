@@ -732,7 +732,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	},
 	
 	checkMailInterval : 300000,
-	//checkMailInterval : 10000,
+	//checkMailInterval : 5000,
 	
 	justMarkedUnread : 0, 
 	
@@ -1057,7 +1057,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		if(statusEl && statusEl.dom)
 		{
 			var statusText = statusEl.dom.innerHTML;
-			var current = parseInt(statusText.substring(1, statusText.length-1));
+			var current = statusText=='' ? 0 : parseInt(statusText.substring(1, statusText.length-1));
 			
 			if(current != unseen)
 			{		
