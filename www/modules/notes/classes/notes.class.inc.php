@@ -61,9 +61,8 @@ class notes extends db {
 	 */
 
 	function delete_category($category_id)
-	{
-				
-		
+	{				
+		$this->query("DELETE FROM no_notes WHERE category_id=".$this->escape($category_id));
 		return $this->query("DELETE FROM no_categories WHERE id=".$this->escape($category_id));
 	}
 
