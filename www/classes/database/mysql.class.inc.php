@@ -308,6 +308,11 @@ class db extends base_db{
 	public function escape($value, $trim=true)
 	{
 		$this->connect();
+		
+		if($this->debug && is_array($value))
+		{
+			var_dump($value);
+		}
 
 		if($trim)
 		$value = trim($value);
