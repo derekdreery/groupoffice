@@ -174,7 +174,7 @@ GO.lang.strErrorsInForm= 'U heeft het formulier onvolledig of foutief ingevuld. 
 
 GO.lang.strLocation='Locatie';
 
-GO.lang.remindPassword='Onthoud mijn login op deze PC';
+GO.lang.remindPassword='Onthoud mijn login op deze PC tot ik op uitloggen druk';
 
 GO.lang.users= 'Gebruikers';
 GO.lang.strContacts= 'Contacten';

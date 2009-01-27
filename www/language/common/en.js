@@ -265,7 +265,7 @@ GO.lang.right = 'Right';
 GO.lang.noFilesModule = 'The files module is required for this function';
 
 
-GO.lang.remindPassword='Remember my login on this computer';
+GO.lang.remindPassword='Remember my login on this computer until I press logout';
 
 GO.lang.reminders = 'Reminders';
 GO.lang.dismiss='Dismiss';
