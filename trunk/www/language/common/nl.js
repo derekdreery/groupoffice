@@ -262,6 +262,9 @@ GO.lang.popupBlocker= 'Uw browser blokkeerd een popup van Group-Office. Schakel 
 GO.lang.strUsage='Gebruiksstatistieken';
 GO.lang.today='Vandaag';
 
+GO.lang.image='Afbeelding';
+GO.lang.insertImage='Afbeelding invoegen in de tekst';
+
 GO.lang.countries["AF"]= "Afghanistan";
 GO.lang.countries["AL"]= "Albania";
 GO.lang.countries["DZ"]= "Algeria";

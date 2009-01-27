@@ -282,6 +282,9 @@ GO.lang.today='Today';
 
 GO.lang.displayingItemsShort='Total: {2}';
 
+GO.lang.image='Image';
+GO.lang.insertImage='Insert image in the text';
+
 GO.lang.countries={};
 GO.lang.countries["AF"] = "Afghanistan";
 GO.lang.countries["AL"] = "Albania";
