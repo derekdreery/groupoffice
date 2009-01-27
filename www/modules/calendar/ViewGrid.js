@@ -78,7 +78,8 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 		     */
 		    "move" : true,	    
 		    "eventResize" : true,	    
-		    "eventDblClick" : true
+		    "eventDblClick" : true,
+		    "zoom" : true
 	
 	    });
 	    
@@ -214,12 +215,24 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 				tag: 'tr'
 			});
 			
+			
+			
 			var cell = Ext.DomHelper.append(gridRow, {
 				tag: 'td', 
-				cls: 'x-viewGrid-calendar-name-cell',
-				html:this.jsonData[calendar_id].name,
+				cls: 'x-viewGrid-calendar-name-cell',				
 				style:'width:150px'
 			}, true);			
+			
+			var link = Ext.DomHelper.append(cell, {
+				tag: 'a', 
+				href: '#'+calendar_id,
+				cls:'normal-link',
+				html:this.jsonData[calendar_id].name				
+			}, true);
+			
+			link.on('click', function(e, target){			
+				this.fireEvent('zoom', {calendar_id: target.attributes.href.value.substring(1)});				
+			}, this);
 			
 			this.gridCells[calendar_id]={};
 			
@@ -495,7 +508,8 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 						id: domId, 
 						cls: "x-viewGrid-event-container", 
 						style:"background-color:#"+eventData.background,
-						html: text, 						
+						html: text, 		
+						qtitle:eventData.name,
 						qtip: GO.calendar.formatQtip(eventData)
 					}, true);			
 					

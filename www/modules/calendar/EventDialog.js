@@ -62,7 +62,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 			tbar:tbar,
 			resizable:false,
 			width:560,
-			height:400,
+			height:420,
 			closeAction:'hide',
 			title: GO.calendar.lang.appointment,					
 			items: this.formPanel,

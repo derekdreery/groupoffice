@@ -139,6 +139,12 @@ GO.calendar.MainPanel = function(config){
 		firstWeekday: parseInt(GO.settings.first_weekday)
 	});
 	
+	this.viewGrid.on('zoom', function(conf){	
+		this.viewsList.clearSelections();
+		this.calendarList.select('calendar-'+conf.calendar_id);
+		this.setDisplay(conf);
+	}, this);
+	
 	
 	this.listGrid = new GO.calendar.ListGrid({
 		id: 'list-grid',
@@ -240,7 +246,7 @@ GO.calendar.MainPanel = function(config){
 									handler: function(){
 							
 										GO.calendar.eventDialog.show({
-											calendar_id: this.calendar_id
+											calendar_id: this.displayType != 'view' ? this.calendar_id : 0
 										});
 										
 									},
