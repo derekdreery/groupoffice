@@ -10,6 +10,38 @@
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
+ 
+GO.calendar.formatQtip = function(data)
+{
+	var df = 'Y-m-d H:i';
+	
+	if(!data.startDate)
+		data.startDate = Date.parseDate(data.start_time, df);
+	
+	if(!data.endDate)
+		data.endDate = Date.parseDate(data.end_time, df);
+	
+	var new_df = GO.settings.time_format;
+	if(data.startDate.format('Ymd')!=data.endDate.format('Ymd'))
+	{
+		new_df = GO.settings.date_format+' '+GO.settings.time_format;
+	}
+
+	var str = GO.calendar.lang.startsAt+': '+data.startDate.format(new_df)+'<br />'+
+		GO.calendar.lang.endsAt+': '+data.endDate.format(new_df);
+	
+	if(data.location!='')
+	{
+		str += '<br />'+GO.calendar.lang.location+': '+data.location;
+	}
+	
+	if(data.description!='')
+	{
+		str += '<br /><br />'+data.description;
+	}
+	
+	return str;
+}
 
 GO.calendar.MainPanel = function(config){
 	
@@ -72,7 +104,7 @@ GO.calendar.MainPanel = function(config){
 		baseParams: {task: 'events'},
 		root: 'results',
 		id: 'id',
-		fields:['id','event_id','name','start_time','end_time','tooltip', 'repeats', 'private','location', 'background']
+		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background']
 	});
 	
 	this.monthGridStore = new GO.data.JsonStore({
@@ -81,7 +113,7 @@ GO.calendar.MainPanel = function(config){
 		baseParams: {task: 'events'},
 		root: 'results',
 		id: 'id',
-		fields:['id','event_id','name','start_time','end_time','tooltip', 'repeats', 'private','location', 'background']
+		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background']
 	});
 
 	this.daysGrid = new GO.grid.CalendarGrid(

@@ -285,6 +285,9 @@ GO.lang.displayingItemsShort='Total: {2}';
 GO.lang.image='Image';
 GO.lang.insertImage='Insert image in the text';
 
+GO.lang.item='item';
+GO.lang.items='items';
+
 GO.lang.countries={};
 GO.lang.countries["AF"] = "Afghanistan";
 GO.lang.countries["AL"] = "Albania";

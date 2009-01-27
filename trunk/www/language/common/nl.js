@@ -30,7 +30,8 @@ GO.lang.lostPasswordText='Om uw wachtwoord opnieuw in te stellen heeft u toegang
 
 
 GO.lang.noJava='Java Webstart is niet geïnstalleerd. Java maakt het mogelijk om gemakkelijk bestanden te uploaden en te bewerken. Ga naar <a class="normal-link" href="http://www.java.com/download" target="_blank">http://www.java.com/download</a> om Java op uw computer te installeren.';
-
+GO.lang.item='item';
+GO.lang.items='items';
  
 GO.lang.strDefault = 'Standaard';
 

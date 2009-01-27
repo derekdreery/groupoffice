@@ -60,18 +60,7 @@ try{
 						$date_format = $_SESSION['GO_SESSION']['time_format'];
 					}
 				}
-
-					
-				$tooltip = $lang['calendar']['startsAt'].': '.date($date_format, $event['start_time']).
-					'<br />'.$lang['calendar']['endsAt'].': '.date($date_format, $event['end_time']);
-
-				if ($event['location'] != '') {
-					$tooltip .= "<br />".$lang['calendar']['location'].": ".htmlspecialchars($event['location']);
-				}
-				if ($event['description'] != '') {
-					$tooltip .= "<br /><br />". nl2br(htmlspecialchars($event['description']));
-				}
-
+				
 				$response['results'][] = array(
 					'id'=>$response['count'],
 					'event_id'=> $event['id'],
@@ -79,8 +68,8 @@ try{
 					'time'=>date($date_format, $event['start_time']),
 					'start_time'=> date('Y-m-d H:i', $event['start_time']),
 					'end_time'=> date('Y-m-d H:i', $event['end_time']),
-					'tooltip'=>$tooltip,
-					'location'=>$event['location'],
+					'location'=>htmlspecialchars($event['location'], ENT_COMPAT, 'UTF-8'),
+					'description'=>htmlspecialchars($event['description'], ENT_COMPAT, 'UTF-8'),
 					'private'=>($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']),
 					'repeats'=>!empty($event['rrule']),
 					'day'=>$event['start_time']<$today_end ? $lang['common']['today'] : $lang['common']['tomorrow']
@@ -286,30 +275,24 @@ try{
 					}
 				}
 
-				//go_log(LOG_DEBUG, date_default_timezone_get());
-
-				$tooltip = $lang['calendar']['startsAt'].': '.date($date_format, $event['start_time']).
-'<br />'.$lang['calendar']['endsAt'].': '.date($date_format, $event['end_time']);
-
-				if ($event['location'] != '') {
-					$tooltip .= "<br />".$lang['calendar']['location'].": ".htmlspecialchars($event['location']);
-				}
-				if ($event['description'] != '') {
-					$tooltip .= "<br /><br />". nl2br(htmlspecialchars($event['description']));
-				}
-
+			
 				$private = ($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']);
-				$name = $private ? $lang['calendar']['private'] : htmlspecialchars($event['name'],ENT_COMPAT,'UTF-8');
+				if($private)
+				{
+					$event['name']=$lang['calendar']['private'];
+					$event['description']='';
+					$event['location']='';					
+				}
 
 				$response['results'][] = array(
 'id'=>$response['count'],
 'event_id'=> $event['id'],
-'name'=> $name,
+'name'=> htmlspecialchars($event['name'], ENT_COMPAT, 'UTF-8'),
 'time'=>date($date_format, $event['start_time']),
 'start_time'=> date('Y-m-d H:i', $event['start_time']),
 'end_time'=> date('Y-m-d H:i', $event['end_time']),
-'tooltip'=>$tooltip,
-'location'=>$event['location'],
+'location'=>htmlspecialchars($event['location'], ENT_COMPAT, 'UTF-8'),
+'description'=>nl2br(htmlspecialchars($event['description'], ENT_COMPAT, 'UTF-8')),
 'background'=>$event['background'],
 'private'=>($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']),
 'repeats'=>!empty($event['rrule']),
@@ -461,29 +444,25 @@ try{
 						}
 					}
 
-					$tooltip = $lang['calendar']['startsAt'].': '.date($date_format, $event['start_time']).
-						'<br />'.$lang['calendar']['endsAt'].': '.date($date_format, $event['end_time']);
-
-					if ($event['location'] != '') {
-						$tooltip .= "<br />".$lang['calendar']['location'].": ".htmlspecialchars($event['location']);
+		
+					$private = ($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']);				
+					if($private)
+					{
+						$event['name']=$lang['calendar']['private'];
+						$event['description']='';
+						$event['location']='';					
 					}
-					if ($event['description'] != '') {
-						$tooltip .= "<br /><br />". nl2br(htmlspecialchars($event['description']));
-					}
-
-					$private = ($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']);
-					$name = $private ? $lang['calendar']['private'] : htmlspecialchars($event['name'],ENT_COMPAT,'UTF-8');
 
 
 					$response[$cal->f('id')]['events'][] = array(
 					'id'=>$count,
 					'calendar_id'=>$cal->f('id'),
 					'event_id'=> $event['id'],
-					'name'=> $name,
+					'name'=>htmlspecialchars($event['name'], ENT_COMPAT, 'UTF-8'),
 					'start_time'=> date('Y-m-d H:i', $event['start_time']),
 					'end_time'=> date('Y-m-d H:i', $event['end_time']),
-					'tooltip'=>$tooltip,
-					'location'=>$event['location'],
+					'location'=>htmlspecialchars($event['location'], ENT_COMPAT, 'UTF-8'),
+					'description'=>nl2br(htmlspecialchars($event['description'], ENT_COMPAT, 'UTF-8')),
 					'background'=>$event['background'],
 					'repeats'=>!empty($event['rrule']),
 					'private'=>$private,

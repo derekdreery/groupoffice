@@ -10,6 +10,9 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
+ 
+ 
+
 
 GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 	/**
@@ -751,7 +754,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		if(startDay!=endDay)
 		{
 			var format = GO.settings.date_format+' '+GO.settings.time_format;
-			text = '<span class="x-calGrid-event-time">'+eventData.startDate.format(format)+'</span>&nbsp;'+eventData.name;
+			text = eventData.startDate.format(format)+'&nbsp;'+eventData.name;
 		}else
 		{
 			text=eventData.name;
@@ -783,7 +786,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 					cls: "x-calGrid-all-day-event-container", 
 					style:"background-color:#"+eventData.background,
 					html: text , 
-					qtip: eventData.tooltip,
+					qtip: GO.calendar.formatQtip(eventData),
 					qtitle:eventData.name
 				}, true);
 			
@@ -858,7 +861,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				id: domId, 
 				cls: "x-calGrid-event-container",		
 				style:"background-color:#"+eventData.background,	 
-				qtip: eventData.tooltip,
+				qtip: GO.calendar.formatQtip(eventData),
 				qtitle:eventData.name,
 				html:text
 			});
@@ -1577,6 +1580,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				if(timeEl)
 				{
 					timeEl.update(event.startDate.format(GO.settings.time_format));
+					element.set({'ext:qtip': GO.calendar.formatQtip(event)});
 				}
 				
 				if(this.remoteEvents[this.dragEvent.id]['repeats'])
