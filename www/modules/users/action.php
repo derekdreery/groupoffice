@@ -371,38 +371,38 @@ try
 
 				foreach($permissions['group_member'] as $group)
 				{
-					if ($group['group_permission'])
+					if($group['id']!=$GO_CONFIG->group_everyone)
 					{
-						if(!$GO_GROUPS->is_in_group($user_id, $group['id']))
+						if ($group['group_permission'])
 						{
-							$GO_GROUPS->add_user_to_group($user_id, $group['id']);
-						}
-					} else {
-						if($GO_GROUPS->is_in_group($user_id, $group['id']))
-						{
-							$GO_GROUPS->delete_user_from_group($user_id, $group['id']);
+							if(!$GO_GROUPS->is_in_group($user_id, $group['id']))
+							{
+								$GO_GROUPS->add_user_to_group($user_id, $group['id']);
+							}
+						} else {
+							if($GO_GROUPS->is_in_group($user_id, $group['id']))
+							{
+								$GO_GROUPS->delete_user_from_group($user_id, $group['id']);
+							}
 						}
 					}
 				}
 
 
 				foreach($permissions['groups_visible'] as $group)
-				{
-					if($group['id']!=$GO_CONFIG->group_everyone)
+				{				
+					if ($group['visible_permission'])
 					{
-						if ($group['visible_permission'])
+						if(!$GO_SECURITY->group_in_acl($group['id'], $old_user['acl_id']))
 						{
-							if(!$GO_SECURITY->group_in_acl($group['id'], $old_user['acl_id']))
-							{
-								$GO_SECURITY->add_group_to_acl($group['id'], $old_user['acl_id']);
-							}
-						} else {
-							if($GO_SECURITY->group_in_acl($group['id'], $old_user['acl_id']))
-							{
-								$GO_SECURITY->delete_group_from_acl($group['id'], $old_user['acl_id']);
-							}
+							$GO_SECURITY->add_group_to_acl($group['id'], $old_user['acl_id']);
 						}
-					}
+					} else {
+						if($GO_SECURITY->group_in_acl($group['id'], $old_user['acl_id']))
+						{
+							$GO_SECURITY->delete_group_from_acl($group['id'], $old_user['acl_id']);
+						}
+					}					
 				}
 			}
 
