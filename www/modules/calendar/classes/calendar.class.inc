@@ -1799,7 +1799,7 @@ class calendar extends db
 			$newevents=array();
 			foreach($events as $event)
 			{
-				if($event['id']!=$ignore_event_id)
+				if($event['id']!=$ignore_event_id && $event['participants_event_id']!=$ignore_event_id)
 				{
 					$newevents[]=$event;
 				}
