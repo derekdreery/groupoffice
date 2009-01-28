@@ -1,3 +1,10 @@
+2009/01/28 Version 3.00-stable-15
+- A lot of bugs in the projects module were fixed
+- Better navigation in calendar views
+- Added Polish translation
+- Fixed bugs with file linking and searching
+- Other small bugs were fixed
+
 2009/01/20 Version 3.00-stable-13
 - Opening links and some attachments was broken. A quick new release.
 
