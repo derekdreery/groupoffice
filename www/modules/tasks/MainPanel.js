@@ -16,6 +16,7 @@ GO.tasks.MainPanel = function(config){
 
 
 	this.taskListsPanel= new GO.grid.GridPanel({
+			id:'ta-tasksgrid',
 			region:'center',
 			store: this.taskListsStore,
 			cls:'go-grid3-hide-headers',
