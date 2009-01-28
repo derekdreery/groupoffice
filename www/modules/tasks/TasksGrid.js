@@ -13,7 +13,8 @@ GO.tasks.TasksPanel = function(config)
 		root: 'results',
 		totalProperty: 'total',
 		id: 'id',
-		fields:['id', 'name','completed','due_time', 'late', 'description']
+		fields:['id', 'name','completed','due_time', 'late', 'description'],
+		remoteSort:true
 	});
 	
 	
@@ -66,11 +67,13 @@ GO.tasks.TasksPanel = function(config)
 		     p.attr = 'ext:qtip="'+record.data.description+'"';
 				}
 		    return value;
-			}
+			},
+			sortable:true
 		},{
 			header:GO.tasks.lang.dueDate,
 			dataIndex: 'due_time',
-			width:100
+			width:100,
+			sortable:true
 		}];
 	config.view=new Ext.grid.GridView({
 		//autoFill: true,
