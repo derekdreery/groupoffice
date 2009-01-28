@@ -192,8 +192,15 @@ try{
 			$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'DESC';
 			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
 			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
-
-			$response['total'] = $notes->get_notes($category_id, $sort, $dir, $start, $limit);
+			$query = !empty($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
+			
+			if(!empty($query))
+			{
+				$category_id=0;
+			}
+			
+			
+			$response['total'] = $notes->get_notes($query, $category_id, $sort, $dir, $start, $limit);
 			$response['results']=array();
 			while($notes->next_record())
 			{

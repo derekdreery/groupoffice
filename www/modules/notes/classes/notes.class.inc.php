@@ -356,10 +356,30 @@ class notes extends db {
 	 * @access public
 	 * @return Int Number of records found
 	 */
-	function get_notes($category_id, $sortfield='id', $sortorder='ASC', $start=0, $offset=0)
+	function get_notes($query, $category_id, $sortfield='id', $sortorder='ASC', $start=0, $offset=0)
 	{
-		$sql = "SELECT * FROM no_notes WHERE category_id=".$this->escape($category_id)." ORDER BY ".$this->escape($sortfield." ".$sortorder);
+		$sql = "SELECT * FROM no_notes n";
+		
+		if($category_id>0)
+		{
+			 $sql .= " WHERE n.category_id=".$this->escape($category_id);
+		}else
+		{
+			global $GO_SECURITY;
+			
+			$sql .= " INNER JOIN no_categories c ON n.category_id=c.id ".
+ 				"INNER JOIN go_acl a ON (c.acl_read = a.acl_id OR c.acl_write = a.acl_id) ".	
+				"LEFT JOIN go_users_groups ug ON (a.group_id = ug.group_id) WHERE ((".
+ 				"ug.user_id = ".$GO_SECURITY->user_id.") OR (a.user_id = ".$GO_SECURITY->user_id."))";
+		}
 
+		if(!empty($query))
+		{
+			$sql .= " AND n.name LIKE '".$this->escape($query)."' OR n.content LIKE '".$this->escape($query)."' ";
+			
+		}
+		$sql .= " ORDER BY n.".$this->escape($sortfield." ".$sortorder);
+		
 		$this->query($sql);
 		$count = $this->num_rows();
 
