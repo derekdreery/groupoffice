@@ -4,7 +4,7 @@ require_once("../../Group-Office.php");
 require_once($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc');
 
 $cal = new calendar();
-require_once($GO_LANGUAGE->get_language_file('calendar'));
+require($GO_LANGUAGE->get_language_file('calendar'));
 
 $calendar_id = isset($_REQUEST['calendar_id']) ? $_REQUEST['calendar_id'] : 0;
 $email = isset($_REQUEST['email']) ? ($_REQUEST['email']) : "";
