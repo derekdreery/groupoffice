@@ -19,7 +19,7 @@ GO.lang = {};
  * Copy everything below for translations
  */
 
-
+GO.lang.changesWillBeLost='You made changes in the current screen. Press cancel and save changes or Ok to continue and delete your changes.';
 GO.lang.strCommunityForum='Community forum';
 GO.lang.moduleRequired='This feature requires the \'{module}\' module. This module is not available.';
 
