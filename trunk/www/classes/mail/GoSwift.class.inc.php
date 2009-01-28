@@ -145,14 +145,11 @@ class GoSwift extends Swift{
 
 		$this->message =& new Swift_Message($subject, $plain_text_body);
 		$this->message->setPriority($priority);
-
+		
 		$this->message->headers->set("X-Mailer", "Group-Office ".$GO_CONFIG->version);
 		$this->message->headers->set("X-MimeOLE", "Produced by Group-Office ".$GO_CONFIG->version);
 
-
-		
 		$this->set_to($email_to);
-
 	}
 	
 	function set_to($email_to)

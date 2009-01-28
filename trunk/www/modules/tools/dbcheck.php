@@ -37,6 +37,13 @@ $db3 = new db();
 $db = new db();
 $db->halt_on_error = 'no';
 
+
+echo "Correcting timezone$line_break";
+
+$db->query("update go_users set timezone='".$db->escape($GO_CONFIG->default_timezone)."' where length(timezone)<3");
+
+
+
 $acls=array();
 
 $db->query("SELECT acl_read FROM `go_modules` GROUP BY acl_read HAVING count( * )>1");
