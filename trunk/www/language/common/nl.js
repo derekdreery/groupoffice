@@ -11,6 +11,7 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
+GO.lang.changesWillBeLost='U heeft wijzigingen in het huidige scherm gemaakt. Druk op annuleren en sla de wijzigingen op of druk op Ok om door te gaan en uw wijzigingen te verwijderen.';
 GO.lang.more='Meer';
 GO.lang.strCommunityForum='Community forum';
 
