@@ -943,6 +943,16 @@ class files extends filesystem
 				$this->update_folder($up_folder);
 			}
 		}
+		
+		echo 'Correcting id=0'.$line_break;
+		
+		$sql = "SELECT path FROM fs_folders WHERE id=0";
+		$this->query($sql);
+		while($r = $this->next_record())
+		{
+			$r['id']=$fs2->nextid('fs_folders');
+			$fs2->update_row('fs_folders', 'path', $r);
+		}
 	}
 	
 	function crawl($path)
