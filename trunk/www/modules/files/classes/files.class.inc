@@ -941,7 +941,27 @@ class files extends filesystem
 				$up_folder['visible']='1';
 				
 				$this->update_folder($up_folder);
-			}	
+			}
+		}
+	}
+	
+	function crawl($path)
+	{
+		$line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
+		
+		echo 'Crawling folder '.$path.$line_break;
+		$files = $this->get_files($path);
+		while($file = array_shift($files))
+		{
+			$this->get_file($this->strip_server_path($file['path']));
+		}
+		
+		$this->get_folder($this->strip_server_path($path));
+		
+		$folders = $this->get_folders($path);
+		while($folder = array_shift($folders))
+		{
+			$this->crawl($folder['path']);
 		}
 	}
 

@@ -15,6 +15,11 @@ try{
 				$response['results']=array();				
 				$response['results'][]=array('name'=>$lang['tools']['dbcheck'], 'script'=>$GO_MODULES->modules['tools']['url'].'dbcheck.php');
 				$response['results'][]=array('name'=>$lang['tools']['rm_duplicates'], 'script'=>$GO_MODULES->modules['tools']['url'].'rm_duplicates.php');
+				
+				if(isset($GO_MODULES->modules['files']))
+				{
+					$response['results'][]=array('name'=>'Index all files', 'script'=>$GO_MODULES->modules['files']['url'].'crawl.php');
+				}
 				//$response['results'][]=array('name'=>$lang['tools']['backupdb'], 'script'=>$GO_MODULES->modules['tools']['url'].'backupdb.php');
 				if(!empty($GO_CONFIG->phpMyAdminUrl))
 					$response['results'][]=array('name'=>'PhpMyAdmin', 'script'=>$GO_MODULES->modules['tools']['url'].'phpmyadmin.php');
