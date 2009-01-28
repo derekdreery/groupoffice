@@ -356,10 +356,13 @@ try{
 										throw new AccessDeniedException();
 									}
 									
-									$fs->delete($GO_CONFIG->file_storage_path.$delete_path);
+									if(!$fs->delete($GO_CONFIG->file_storage_path.$delete_path))
+									{
+										throw new AccessDeniedException();
+									}
 									
 									$deleted[]=utf8_basename($delete_path);
-								}								
+								}
 								
 								$fs->notify_users($_POST['path'], $GO_SECURITY->user_id, array(), array(), $deleted);
 			
