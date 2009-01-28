@@ -231,6 +231,7 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 			}, true);
 			
 			link.on('click', function(e, target){			
+				e.preventDefault();
 				this.fireEvent('zoom', {calendar_id: target.attributes.href.value.substring(1)});				
 			}, this);
 			
