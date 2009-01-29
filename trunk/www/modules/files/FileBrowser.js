@@ -872,7 +872,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 						Ext.MessageBox.alert(GO.lang['strError'], responseParams.feedback);
 					}
 				},
-				scope:this								
+				scope:this			
 			});
 		}else
 		{
@@ -1001,7 +1001,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
     	this.upForm = new Ext.form.FormPanel({
     			fileUpload:true,
     			waitMsgTarget:true,
-    			items: [this.uploadFile, new Ext.Button({
+    			items: [this.uploadFile, new Ext.Button( {
     				text:GO.lang.largeUpload,
     				handler: function(){
     					if(!deployJava.isWebStartInstalled('1.6.0'))
@@ -1114,8 +1114,8 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 					var pasteDestination = this.overwriteParams.paste_destination;
 					
 					
-					delete params.paste_sources;
-					delete params.paste_destination;
+					//delete params.paste_sources;
+					//delete params.paste_destination;
 					
 					if(!success)
 					{
@@ -1127,6 +1127,10 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 						
 						if(!responseParams.success && !responseParams.file_exists)
 						{
+							if(this.overwriteDialog)
+							{
+								this.overwriteDialog.hide();
+							}	
 							Ext.MessageBox.alert(GO.lang['strError'], responseParams.feedback);
 							this.refresh();							
 						}else
@@ -1198,7 +1202,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 								if(pasteDestination==this.path)
 								{
 									store.reload();
-								}else
+								}else if(pasteSources)
 								{
 									for(var i=0;i<pasteSources.length;i++)
 									{										
@@ -1213,21 +1217,23 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 								
 								
 								var destinationNode = this.treePanel.getNodeById(pasteDestination);
-								delete destinationNode.attributes.children;								
-								destinationNode.reload();
-								
-								
-								for(var i=0;i<pasteSources.length;i++)
+								if(destinationNode)
 								{
-									var node = this.treePanel.getNodeById(pasteSources[i]);
-									node.remove();
-									/*if(node)
-									{										
-										node.id=destinationNode.id+'/'+GO.util.basename(node.id);
-										destinationNode.appendChild(node);
-									}*/
+									delete destinationNode.attributes.children;								
+									destinationNode.reload();
 								}
-					
+								
+								if(pasteSources)
+								{
+									for(var i=0;i<pasteSources.length;i++)
+									{
+										var node = this.treePanel.getNodeById(pasteSources[i]);
+										if(node)
+										{
+											node.remove();
+										}
+									}	
+								}
 								
 								if(this.overwriteDialog)
 								{

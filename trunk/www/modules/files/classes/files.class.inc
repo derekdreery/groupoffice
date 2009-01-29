@@ -554,7 +554,8 @@ class files extends filesystem
 		global $GO_CONFIG;
 		if($this->is_sub_dir($source_path, $GO_CONFIG->file_storage_path))
 		{
-			$file = $this->get_file($this->strip_server_path($source_path));
+			$file = $this->get_file($this->strip_server_path($source_path));		
+			$this->delete_file($GO_CONFIG->file_storage_path.$destination_path);
 			
 			$up_file['id']=$file['id'];
 			$up_file['path']=$this->strip_server_path($destination_path);
@@ -574,6 +575,8 @@ class files extends filesystem
 		global $GO_CONFIG;
 		if($this->is_sub_dir($source_path, $GO_CONFIG->file_storage_path))
 		{
+			$this->delete_folder($destination_path);
+			
 			$source_path=$this->strip_server_path($source_path);
 			$destination_path=$this->strip_server_path($destination_path);
 			

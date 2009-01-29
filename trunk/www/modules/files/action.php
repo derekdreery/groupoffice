@@ -269,7 +269,10 @@ try{
 			break;
 
 		case 'paste':
-			if(isset($_POST['paste_sources']) && isset($_POST['paste_destination']))
+			
+			$command = isset($_POST['command']) ? $_POST['command'] : 'ask';
+			
+			if($command=='ask' && isset($_POST['paste_sources']) && isset($_POST['paste_destination']))
 			{
 				$_SESSION['GO_SESSION']['files']['paste_sources']= json_decode($_POST['paste_sources']);
 				$_SESSION['GO_SESSION']['files']['paste_destination']= $_POST['paste_destination'];
@@ -284,12 +287,26 @@ try{
 					throw new AccessDeniedException();
 				}
 
-				$command = isset($_POST['command']) ? $_POST['command'] : 'ask';
+				
 
 				while($paste_source = array_shift($_SESSION['GO_SESSION']['files']['paste_sources']))
 				{
 					$destination = $GO_CONFIG->file_storage_path.$_SESSION['GO_SESSION']['files']['paste_destination'].'/'.utf8_basename($paste_source);
-
+					
+					if($_POST['paste_mode']=='copy')
+					{
+						if($GO_CONFIG->file_storage_path.$paste_source==$destination)
+						{
+							$name = $destination;
+							$x=0;						
+							while(file_exists($destination))
+							{
+								$x++;
+								$destination=File::strip_extension($name).'_'.$x.'.'.File::get_extension($name);								
+							}
+						}
+					}
+					
 					if(file_exists($destination) && $command!='yes' && $command!='yestoall')
 					{
 						if($command!='no' && $command != 'notoall')

@@ -196,12 +196,12 @@ class filesystem extends db
 
 		global $GO_CONFIG, $GO_MODULES;
 		
-		if (strpos($destination_path.'/', $source_path.'/')===0)
+		if (strpos($destination_path, $source_path.'/')===0)
 		{
 			throw new Exception('The destination is located inside the source directory');
 		}elseif($source_path == $destination_path)
 		{
-			throw new Exception('The source and destionation are the same');
+			return true;
 		}else
 		{
 			if (is_dir($source_path))
@@ -232,6 +232,8 @@ class filesystem extends db
 			{
 				$this->move_file($source_path,$destination_path);
 				
+				return rename($source_path, $destination_path);
+				/*
 				//rename fails when moving accross partitions
 				if(isset($_SESSION['GO_SESSION']['username']) && strstr($source_path, $GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/') &&
 				strstr($destination_path, $GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/')
@@ -242,7 +244,7 @@ class filesystem extends db
 				{
 					$this->copy($source_path, $destination_path);
 					return $this->delete($source_path);				
-				}
+				}*/
 			}
 		}
 	}
@@ -285,13 +287,15 @@ class filesystem extends db
 	{
 		$source_path = dirname($source_path).'/'.utf8_basename($source_path);
 		$destination_path = dirname($destination_path).'/'.utf8_basename($destination_path);
+		
+		
 
 		global $GO_CONFIG;
 		
 		if($source_path == $destination_path)
 		{
 			return true;
-		}elseif (strpos($destination_path, $source_path) === 0)
+		}elseif (strpos($destination_path, $source_path.'/') === 0)
 		{
 			throw new Exception("Destination path is inside the source path");
 		}else
@@ -368,7 +372,7 @@ class filesystem extends db
 		if (is_dir($path))
 		{
 			
-			$children = $this->get_folders($path);
+			$children = $this->get_folders($path,true);
 			
 			while ($child = array_shift($children))
 			{
@@ -378,7 +382,7 @@ class filesystem extends db
 				}
 			}
 
-			$files = $this->get_files($path);
+			$files = $this->get_files($path,true);
 			while ($file = array_shift($files))
 			{
 				if (!$this->delete($file['path']))
