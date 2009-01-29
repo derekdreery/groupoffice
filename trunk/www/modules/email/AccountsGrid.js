@@ -49,7 +49,7 @@ GO.email.AccountsGrid = function(config){
 						header:GO.email.lang.host,
 						dataIndex: 'host'
 					}]);
-	columnModel.defaultSortable = true;
+	columnModel.defaultSortable = false;
 	config.cm=columnModel;
 	
 	config.view=new Ext.grid.GridView({

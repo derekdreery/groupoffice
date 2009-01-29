@@ -329,6 +329,14 @@ try{
 								
 							if(!empty($_POST['draft']))
 							{
+								if($swift->account['type']!='imap')
+								{
+									throw new Exception($lang['email']['noSaveWithPop3']);
+								}
+								if(empty($swift->account['drafts']))
+								{
+									throw new Exception($lang['email']['draftsDisabled']);
+								}
 								if ($imap->open($swift->account)){					
 
 									$response['success']=$imap->append_message($imap->utf7_imap_encode($swift->account['drafts']), $swift->get_data(),"\\Seen");
