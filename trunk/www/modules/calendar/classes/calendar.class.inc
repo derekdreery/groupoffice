@@ -851,7 +851,7 @@ class calendar extends db
 		return false;
 	}
 
-	function update_event($event, $calendar=false)
+	function update_event($event, $calendar=false, $update_related=true)
 	{
 		unset($event['read_permission'], $event['write_permission']);
 		if(!isset($event['mtime']) || $event['mtime'] == 0)
@@ -921,8 +921,6 @@ class calendar extends db
 					}
 					$calendar = $this->get_calendar($event['calendar_id']);
 				}
-
-				
 				
 				$reminder['id']=$existing_reminder['id'];
 				$reminder['user_id']=$calendar['user_id'];
@@ -943,6 +941,18 @@ class calendar extends db
 			}
 		}
 		
+		if($update_related  && !empty($event['id']))
+		{
+			unset($event['user_id'], $event['calendar_id'], $event['participants_event_id']);
+			$cal = new calendar();
+			$sql = "SELECT id FROM cal_events WHERE participants_event_id=".$this->escape($event['id']);
+			$cal->query($sql);
+			while($cal->next_record())
+			{
+				$event['id']=$cal->f('id');
+				$this->update_event($event,false,false);
+			}	
+		}
 
 		return $r;
 	}
@@ -1266,7 +1276,7 @@ class calendar extends db
 	}
 
 
-	function delete_event($event_id)
+	function delete_event($event_id, $delete_related=true)
 	{
 		if($event = $this->get_event($event_id))
 		{
@@ -1305,6 +1315,17 @@ class calendar extends db
 			while($r = $rm->next_record())
 			{
 				$rm2->delete_reminder($r['id']);
+			}
+			
+			if($delete_related && !empty($event_id))
+			{
+				$cal = new calendar();
+				$sql = "SELECT id FROM cal_events WHERE participants_event_id=".$this->escape($event_id);
+				$cal->query($sql);
+				while($cal->next_record())
+				{
+					$this->delete_event($cal->f('id'),false);
+				}	
 			}
 		}
 	}
