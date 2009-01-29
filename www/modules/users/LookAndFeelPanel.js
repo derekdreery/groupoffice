@@ -62,7 +62,6 @@ GO.users.LookAndFeelPanel = function(config)
 			store: themesStore,
 			displayField:'theme',
 			valueField: 'theme',		
-			id: 'theme',	
 			mode:'remote',
 			triggerAction:'all',
 			editable: false,
