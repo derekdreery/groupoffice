@@ -159,7 +159,7 @@ a.normal-link:hover{
 	background-image:url('images/16x16/filetypes/pdf.png') !important;
 }
 
-.filetype-doc, .filetype-sxw, .filetype-odt {
+.filetype-docx,.filetype-doc, .filetype-sxw, .filetype-odt {
 	background-image:url('images/16x16/filetypes/document.png') !important;
 }
 
@@ -173,6 +173,23 @@ a.normal-link:hover{
 .filetype-vcf {
 	background-image:url('images/16x16/filetypes/vcard.png') !important;
 }
+
+.filetype-txt {
+	background-image:url('images/16x16/filetypes/txt.png') !important;
+}
+
+.filetype-odp, .filetype-pps, .filetype-ppsx  {
+	background-image:url('images/16x16/filetypes/pps.png') !important;
+}
+
+.filetype-html, .filetype-htm {
+	background-image:url('images/16x16/filetypes/html.png') !important;
+}
+
+.filetype-odc, .filetype-xls, .filetype-xlsx  {
+	background-image:url('images/16x16/filetypes/spreadsheet.png') !important;
+}
+
 /* end filetypes */
 
 
