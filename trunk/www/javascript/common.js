@@ -610,3 +610,22 @@ GO.util.add_slashes = function(str)
 	return (str+'').replace(/([\\"'])/g, "\\$1").replace(/\0/g, "\\0");
 }
 
+GO.util.basename = function(path)
+{
+	var pos = path.lastIndexOf('/');
+	if(pos)
+	{
+		path = path.substring(pos+1);
+	}
+	return path;
+}
+
+GO.util.dirname = function(path)
+{
+	var pos = path.lastIndexOf('/');
+	if(pos)
+	{
+		path = path.substring(0, pos-1);
+	}
+	return path;
+}
