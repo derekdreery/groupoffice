@@ -173,8 +173,9 @@ Ext.extend(GO.files.FilePropertiesDialog, Ext.Window, {
 			success:function(form, action){
 				if(action.result.path)
 				{
+					var oldpath = this.path;
 					this.path=action.result.path;
-					this.fireEvent('rename', this);
+					this.fireEvent('rename', this, oldpath, this.path);
 				}
 				
 				if(hide)

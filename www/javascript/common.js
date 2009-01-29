@@ -625,7 +625,7 @@ GO.util.dirname = function(path)
 	var pos = path.lastIndexOf('/');
 	if(pos)
 	{
-		path = path.substring(0, pos-1);
+		path = path.substring(0, pos);
 	}
 	return path;
 }

@@ -216,9 +216,11 @@ Ext.extend(GO.files.FolderPropertiesDialog, Ext.Window, {
 				}
 				
 				if(action.result.path)
-				{
+				{					
+					var oldpath = this.path;
 					this.path=action.result.path;
-					this.fireEvent('rename', this);
+					this.fireEvent('rename', this, oldpath, this.path);
+					
 				}
 				
 				if(hide)
