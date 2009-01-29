@@ -843,7 +843,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	},
 	
 	onDelete : function(clickedAt){		
-				
+
 		if(clickedAt=='tree')
 		{
 			var records = this.getSelectedTreeRecords();
@@ -851,25 +851,22 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 				url:GO.settings.modules.files.url+'action.php',
 				params:{
 					task:'delete',
-					path: records[0]	
+					path: records[0].data.path	
 				},
 				count:1,
 				callback:function(responseParams){
 					
 					if(responseParams.success)
 					{
-						var treeNode = this.treePanel.getNodeById(this.contextTreePath);
+						var treeNode = this.treePanel.getNodeById(records[0].data.path);
 						if(treeNode)
 						{
-							if(this.path.indexOf(this.contextTreePath)>-1 || (treeNode.parentNode && treeNode.parentNode.id==this.path))
+							if(this.path.indexOf(records[0].data.path)>-1 || (treeNode.parentNode && treeNode.parentNode.id==this.path))
 							{
 								this.setPath(treeNode.parentNode.id);
 							}
 							treeNode.remove();
 						}
-					}else
-					{
-						Ext.MessageBox.alert(GO.lang['strError'], responseParams.feedback);
 					}
 				},
 				scope:this			
@@ -961,7 +958,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			var selections = grid.getSelectionModel().getSelections();	
 			
 			var coords = e.getXY();
-			this.filesContextMenu.showAt(coords, selections);
+			this.filesContextMenu.showAt(coords, selections, 'grid');
 	},
 	
 	paste : function(pasteMode, destination, records)
