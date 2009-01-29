@@ -225,14 +225,15 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 			
 			var link = Ext.DomHelper.append(cell, {
 				tag: 'a', 
-				href: '#'+calendar_id,
+				id: 'view_cal_'+calendar_id,
+				href:'#',
 				cls:'normal-link',
 				html:this.jsonData[calendar_id].name				
 			}, true);
 			
 			link.on('click', function(e, target){			
 				e.preventDefault();
-				this.fireEvent('zoom', {calendar_id: target.attributes.href.value.substring(1)});				
+				this.fireEvent('zoom', {calendar_id: target.id.substring(9)});				
 			}, this);
 			
 			this.gridCells[calendar_id]={};
