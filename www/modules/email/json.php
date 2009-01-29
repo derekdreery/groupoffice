@@ -920,7 +920,7 @@ debug($parts);
 									$messages = json_decode(($_POST['delete_keys']));
 
 									$imap->set_message_flag($mailbox, $messages, "\\Seen");
-									if($imap->is_imap() && $imap->utf7_imap_decode($mailbox) != $account['trash'])
+									if($imap->is_imap() && !empty($account['trash']) && $imap->utf7_imap_decode($mailbox) != $account['trash'])
 									{
 										$response['deleteSuccess']=$imap->move($imap->utf7_imap_encode($account['trash']), $messages);
 									}else {
@@ -929,7 +929,14 @@ debug($parts);
 									}
 									if(!$response['deleteSuccess'])
 									{
-										$response['deleteFeedback']=$lang['common']['deleteError'];
+										$lasterror = $imap->last_error();
+										if(eregi('quota', $lasterror))
+										{
+											$response['deleteFeedback']=$lang['email']['quotaError'];
+										}else
+										{										
+											$response['deleteFeedback']=$lang['common']['deleteError'].':<br /><br />'.$lasterror;
+										}
 									}
 								}
 

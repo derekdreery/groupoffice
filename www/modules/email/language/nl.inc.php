@@ -37,3 +37,5 @@ $lang['email']['feedbackDeleteFolderFailed']= 'Failed to delete folder';
 
 $lang['email']['event']='Afspraak';
 $lang['email']['calendar']='agenda';
+
+$lang['email']['quotaError']="Uw mailbox is vol. Leeg eerst uw 'Prullenbak' map. Indien die map al leeg is en uw mailbox is nog steeds vol, dan dient u de 'Prullenbak' map uit te schakelen om berichten uit andere mappen te kunnen verwijderen. U kunt de map uitschakkelen bij:\n\nInstellingen -> Accounts -> Dubbelklik account -> Mappen.";
