@@ -39,3 +39,5 @@ $lang['email']['usage'] = '%s used';
 
 $lang['email']['event']='Appointment';
 $lang['email']['calendar']='calendar';
+
+$lang['email']['quotaError']="Your mailbox is full. Empty your trash folder first. If it is already empty and your mailbox is still full, you must disable the Trash folder to delete messages from other folders. You can disable it at:\n\nSettings -> Accounts -> Double click account -> Folders.";
