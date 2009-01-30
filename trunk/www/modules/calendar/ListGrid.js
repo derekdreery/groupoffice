@@ -213,10 +213,10 @@ Ext.extend(GO.calendar.ListGrid, Ext.grid.GridPanel, {
   	
   	if(load)
   	{
-    	if(!oldEndDate || !oldStartDate || oldEndDate.getElapsed(this.endDate)!=0 || oldStartDate.getElapsed(this.startDate)!=0)
-    	{    			     		
+    	//if(!oldEndDate || !oldStartDate || oldEndDate.getElapsed(this.endDate)!=0 || oldStartDate.getElapsed(this.startDate)!=0)
+    	//{    			     		
 	    	this.store.reload();    			    	
-    	}
+    	//}
   	}
   },
   
