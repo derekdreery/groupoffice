@@ -1196,7 +1196,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 							{
 								//this.getActiveGridStore().reload();
 								var store = this.getActiveGridStore();
-								if(pasteDestination==this.path)
+								if(!pasteDestination || pasteDestination==this.path)
 								{
 									store.reload();
 								}else if(pasteSources)
