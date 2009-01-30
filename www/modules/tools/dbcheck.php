@@ -37,6 +37,14 @@ $db3 = new db();
 $db = new db();
 $db->halt_on_error = 'no';
 
+if($GO_CONFIG->quota>0)
+{
+	echo 'Recalculating quota'.$line_break;
+	$usage = File::get_directory_size($GO_CONFIG->file_storage_path);
+	$GO_CONFIG->save_setting('usage', $usage);
+	echo 'Done'.$line_break.$line_break;
+}
+flush();
 
 echo "Correcting timezone$line_break";
 
