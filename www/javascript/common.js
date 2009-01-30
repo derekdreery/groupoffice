@@ -33,6 +33,7 @@ GO.util.empty = function(v)
 	{
 		return true;
 	}
+	return false;
 }
 
 GO.mailTo = function(email){
@@ -109,7 +110,6 @@ GO.jsonAuthHandler = function(json, callback, scope)
 			case 'UNAUTHORIZED':
 				alert(GO.lang['strUnauthorizedText']);
 				return false;
-			break;
 			
 			case 'NOTLOGGEDIN':			
 				
@@ -120,7 +120,6 @@ GO.jsonAuthHandler = function(json, callback, scope)
 							
 				GO.loginDialog.show();
 				return false;
-			break;
 		}
 	}
 	return true;
@@ -139,7 +138,6 @@ GO.deleteItems = function(config)
 		case 0:
 			alert( GO.lang['noItemSelected']);
 			return false;
-		break;
 		
 		case 1:
 			var strConfirm = GO.lang['strDeleteSelectedItem'];
