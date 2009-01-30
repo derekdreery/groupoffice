@@ -85,7 +85,7 @@ class imapauth extends db
 				$config['novalidate_cert']))
 			{
 				$imap->close();
-	
+
 				if ($user = $GO_USERS->get_user_by_username( $go_username ) ) {
 					
 					//user exists. See if the password is accurate				
