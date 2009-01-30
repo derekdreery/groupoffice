@@ -263,7 +263,12 @@ GO.calendar.MainPanel = function(config){
 									iconCls: 'btn-refresh',
 									text: GO.lang['cmdRefresh'],
 									cls: 'x-btn-text-icon',
-									handler: this.init,
+									handler: function(){
+										/*this.calendarsStore.load();	
+										this.viewsStore.load();
+										this.setDisplay();*/
+										this.init();
+									},
 									scope: this
 								},{
 									iconCls: 'btn-settings',
@@ -470,6 +475,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	},
 	
 	init : function(){
+
 		this.calendarsStore.load({
 			callback:function(){				
 				if(this.state.displayType!='view')
@@ -719,6 +725,11 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		{
 			config = {};
 		}
+
+		//when refresh is clicked remember state
+		Ext.apply(this.state, config);
+		delete this.state.saveState;
+		
 		if(config.displayType)
 		{							
 			this.displayType=config.displayType;
@@ -729,6 +740,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		{
 			this.displayType='view';
 		}
+		
+		this.state.displayType=this.displayType;
 		
 	//	if(config.days && this.displayType=='month')
 	//	{
