@@ -32,6 +32,12 @@ if($GO_CONFIG->debug)
 <script	src="<?php echo $GO_CONFIG->host; ?>javascript/namespaces.js<?php echo $suffix; ?>"	type="text/javascript"></script>
 
 <script type="text/javascript">
+
+if(typeof(Ext)=='undefined')
+{
+	alert('The Group-Office javascripts were not loaded. Your local_url and local_path configuration properties are probably configured incorrectly');
+}
+
 var BaseHref = '<?php echo $GO_CONFIG->host; ?>';
 Ext.BLANK_IMAGE_URL = '<?php echo $GO_CONFIG->host; ?>ext/resources/images/default/s.gif';
 
