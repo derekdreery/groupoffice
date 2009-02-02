@@ -358,7 +358,7 @@ class notes extends db {
 	 */
 	function get_notes($query, $category_id, $sortfield='id', $sortorder='ASC', $start=0, $offset=0)
 	{
-		$sql = "SELECT * FROM no_notes n";
+		$sql = "SELECT n.* FROM no_notes n";
 		
 		if($category_id>0)
 		{
