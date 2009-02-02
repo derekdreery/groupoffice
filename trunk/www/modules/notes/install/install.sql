@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS `no_notes` (
   `user_id` int(11) NOT NULL default '0',
   `ctime` int(11) NOT NULL default '0',
   `mtime` int(11) NOT NULL default '0',
-  `name` varchar(50) default NULL,
+  `name` varchar(100) default NULL,
   `content` text,
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`),
