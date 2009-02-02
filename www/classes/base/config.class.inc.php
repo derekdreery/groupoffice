@@ -807,6 +807,11 @@ class GO_CONFIG
 
       	$config = array();
       	
+      	if(file_exists('/etc/groupoffice/globalconfig.inc.php'))
+      	{
+      		require('/etc/groupoffice/globalconfig.inc.php');      		
+      	}      	
+      	
       	$config_file = $this->get_config_file();      	
 
       	@include($config_file);
