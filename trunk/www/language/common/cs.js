@@ -10,7 +10,8 @@
  * @version $Id: en.js 1591 2008-12-15 09:34:29Z mschering $
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-
+GO.lang.disabled='Zakázáno';
+GO.lang.changesWillBeLost='Byly provedeny změny v tomto vzhledu. Stiskněte zrušit a uložit změny nebo Ok pro pokračování a smazání provedených změn.';
 GO.lang.strCommunityForum='Společenské fórum';
 GO.lang.moduleRequired='Tato funkce vyžaduje \'{module}\' modul. Tento modul není k dispozici.';
 
@@ -272,6 +273,12 @@ GO.lang.cmdBrowseLinks = 'Procházet odkazy';
 GO.lang.today='Today';
 
 GO.lang.displayingItemsShort='Total: {2}';
+
+GO.lang.image='Obrázek';
+GO.lang.insertImage='Vložit obrázek do textu';
+
+GO.lang.item='položka';
+GO.lang.items='položky';
 
 GO.lang.countries={};
 GO.lang.countries["AF"] = "Afghanistan";
