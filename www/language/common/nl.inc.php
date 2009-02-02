@@ -6,7 +6,7 @@ $lang['common']['htmldirection']='ltr';
 $lang['common']['errorsInForm'] = "Er zaten fouten in het formulier. Corrigeer ze en probeer het opnieuw";
 $lang['common']['moduleRequired']='De %s module is vereist voor deze functie';
 
-$lang['common']['loadingCore']='Laden van het basissyteem';
+$lang['common']['loadingCore']='Laden van het basissysteem';
 $lang['common']['renderInterface']='Renderen van de interface';
 $lang['common']['loadingModule'] = 'Laden van module';
 $lang['common']['loadingLogin'] ='Laden van inlogscherm';
