@@ -170,11 +170,12 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 		{			
 			var href=target.attributes['href'].value;
 			
-			if(href.substr(0,6)=='#link_')
+			var pos = href.indexOf('#link_');
+			if(pos>-1)
 			{
 				e.preventDefault();
 				
-				var index = href.substr(6, href.length);		
+				var index = href.substr(pos+6, href.length);		
 				var link = this.data.links[index];				
 				GO.linkHandlers[link.link_type].call(this, link.id, {data: link});		
 			}
