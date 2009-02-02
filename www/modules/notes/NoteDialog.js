@@ -188,6 +188,7 @@ Ext.extend(GO.notes.NoteDialog, Ext.Window,{
 				  name: 'name',
 				  width:300,
 					anchor: '100%',
+					maxLength: 100,
 				  allowBlank:false,
 				  fieldLabel: GO.lang.strName
 				},this.selectCategory = new GO.form.ComboBox({
