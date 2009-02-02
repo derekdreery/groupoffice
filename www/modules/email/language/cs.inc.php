@@ -39,3 +39,8 @@ $lang['email']['usage'] = '%s používáno';
 
 $lang['email']['event']='Událost';
 $lang['email']['calendar']='kalendář';
+
+$lang['email']['quotaError']="Vaše schránka je plná. Nejdříve vyprázdněte koš. Když je koš prázdný a pořád máte plnou schránku, musíte zakázat složku koše pro mazání zpráv z ostatních složek. Zakázat složku můžete zde:\n\nNastavení -> Účty -> Váš účet -> Složky.";
+
+$lang['email']['draftsDisabled']="Zpráve nemůže být uložena, protože složka 'Koncept' je zakázaná.<br /><br />Jděte do Nastavení -> Účty -> Váš účet -> Složky a nakonfigurujte ji.";
+$lang['email']['noSaveWithPop3']='Zpráva nemůže být uložena, protože Váš POP3 účet tuto funkci nepodporuje.';

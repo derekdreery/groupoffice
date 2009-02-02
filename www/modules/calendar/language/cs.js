@@ -58,3 +58,7 @@ GO.calendar.lang.closeWindow = 'Činnost byla přijata a naplánována. Můžete
 GO.calendar.lang.list='Přehled';
 GO.calendar.lang.editRecurringEvent='Přejete si upravit tuto událost nebo celou sérii?';
 GO.calendar.lang.selectIcalendarFile='Vyberte icalendar (*.ics) soubor';
+
+GO.calendar.lang.location='Umístění';
+GO.calendar.lang.startsAt='Začátek v';
+GO.calendar.lang.endsAt='Konec v';
