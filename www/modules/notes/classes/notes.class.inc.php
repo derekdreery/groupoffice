@@ -375,8 +375,8 @@ class notes extends db {
 
 		if(!empty($query))
 		{
-			$sql .= " AND n.name LIKE '".$this->escape($query)."' OR n.content LIKE '".$this->escape($query)."' ";
-			
+			//$sql .= " AND (n.name LIKE '".$this->escape($query)."' OR MATCH (n.content) AGAINST ('".$this->escape($query)."')) ";
+			$sql .= " AND (n.name LIKE '".$this->escape($query)."' OR n.content LIKE '".$this->escape($query)."') ";
 		}
 		$sql .= " ORDER BY n.".$this->escape($sortfield." ".$sortorder);
 		
