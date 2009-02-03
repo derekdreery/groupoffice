@@ -39,9 +39,11 @@ $db->halt_on_error = 'no';
 
 if($GO_CONFIG->quota>0)
 {
+	require_once($GO_CONFIG->class_path.'base/quota.class.inc.php');
+	$quota = new quota();
+			
 	echo 'Recalculating quota'.$line_break;
-	$usage = File::get_directory_size($GO_CONFIG->file_storage_path);
-	$GO_CONFIG->save_setting('usage', $usage);
+	$quota->reset();
 	echo 'Done'.$line_break.$line_break;
 }
 flush();

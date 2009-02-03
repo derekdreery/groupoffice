@@ -4,6 +4,7 @@
 
 $lang['common']['htmldirection']= 'ltr';
 
+$lang['common']['quotaExceeded']='You don\'t have anymore diskspace left. Please delete some files or contact your provider to raise the quota';
 $lang['common']['errorsInForm'] = 'There were errors in the form. Correct them and try again.';
 
 $lang['common']['moduleRequired']='The %s module is required for this function';

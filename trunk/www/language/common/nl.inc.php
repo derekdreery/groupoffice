@@ -3,6 +3,7 @@
 require($GO_LANGUAGE->get_fallback_base_language_file('common'));
 $lang['common']['htmldirection']='ltr';
 
+$lang['common']['quotaExceeded']='U heeft geen schijfruimte meer over. Verwijder bestanden of neem contact op met uw provider om het limiet te verhogen.';
 $lang['common']['errorsInForm'] = "Er zaten fouten in het formulier. Corrigeer ze en probeer het opnieuw";
 $lang['common']['moduleRequired']='De %s module is vereist voor deze functie';
 

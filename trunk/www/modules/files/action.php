@@ -227,6 +227,9 @@ try{
 
 		case 'overwrite':
 			
+			require_once($GO_CONFIG->class_path.'base/quota.class.inc.php');
+			$quota = new quota();
+			
 			$new = array();
 			$modified=array();
 
@@ -246,7 +249,18 @@ try{
 					}
 				}else
 				{
-					$fs->move($tmp_file, $new_path);		
+					$size = filesize($tmp_file)/1024;
+					if(!$quota->check($size))
+					{
+						throw new Exception($lang['common']['quotaExceeded']);
+					}
+					
+					if(!$fs->move($tmp_file, $new_path))
+					{
+						throw new Exception($lang['common']['saveError']);
+					}
+					
+					$quota->add($size);
 					
 					if(file_exists($new_path))
 					{										

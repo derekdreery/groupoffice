@@ -345,6 +345,10 @@ try{
 						if(isset($_POST['delete_keys']))
 						{
 							try{
+								
+								require_once($GO_CONFIG->class_path.'base/quota.class.inc.php');
+								$quota = new quota();
+								
 								$response['deleteSuccess']=true;
 								$delete_paths = json_decode(($_POST['delete_keys']));
 
@@ -355,6 +359,8 @@ try{
 									{
 										throw new AccessDeniedException();
 									}
+									
+									$quota->delete($path);
 									
 									if(!$fs->delete($GO_CONFIG->file_storage_path.$delete_path))
 									{
