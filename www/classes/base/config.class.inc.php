@@ -312,6 +312,14 @@ class GO_CONFIG
 	 * @access  public
 	 */
 	var $max_users = 0;
+	
+	/**
+	 * The maximum number KB this Group-Office installation may use. 0 will allow unlimited usage of disk space.
+	 *
+	 * @var     int
+	 * @access  public
+	 */
+	var $quota = 0;
 
 
 	#database configuration
