@@ -1,6 +1,9 @@
-3009/02/? Version 3.00-stable-16
+3009/02/04 Version 3.00-stable-16
+- Added extra customer information field at invoices
 - Links didn't work in IE
 - Added Danish translation
+- Added Finnish - Suomi translation
+- Support for quota on the entire installation
 - Fixed some minor bugs
 
 2009/01/30 Version 3.00-stable-15
