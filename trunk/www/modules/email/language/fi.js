@@ -96,7 +96,7 @@ GO.email.lang.read='Lue';
 GO.email.lang.NA='N/A';
 
 GO.email.lang.emptyFolder='Tyhjennä hakemisto';
-GO.email.lang.emptyFolderConfirm='Oletko varma, että haluat TYHJENTÄÄ \'{name}\ hakemiston'?';
+GO.email.lang.emptyFolderConfirm='Oletko varma, että haluat TYHJENTÄÄ \'{name}\' hakemiston?';
 GO.email.lang.addUnknownRecipients='Lisää tuntemattomat vastaanottajat';
 GO.email.lang.addUnknownRecipientsText='Lähetit juuri sähköpostia useammalle vastaanottajalle, kuin mitä osoitekirjassasi on. Paina nimeä, jos haluat lisätä henkilön tai sulje tämä ikkuna.';
 GO.email.lang.attachFilesPC='Lisää miltä tahansa tietokoneelta';
