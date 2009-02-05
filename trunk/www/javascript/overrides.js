@@ -190,6 +190,8 @@ Ext.override(Ext.Component, {
 
 /**
  * Width and height not restored in grid
+ * 
+ * http://extjs.com/forum/showthread.php?t=55086
  */
 Ext.override(Ext.grid.GridPanel,{
  applyState : function(state){
