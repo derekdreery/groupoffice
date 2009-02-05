@@ -815,7 +815,8 @@ class GO_CONFIG
 
       	$config = array();
       	
-      	if(file_exists('/etc/groupoffice/globalconfig.inc.php'))
+      	//suppress error for open_basedir warnings etc
+      	if(@file_exists('/etc/groupoffice/globalconfig.inc.php'))
       	{
       		require('/etc/groupoffice/globalconfig.inc.php');      		
       	}      	
