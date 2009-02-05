@@ -15,9 +15,10 @@ Ext.namespace('GO.util');
 
 
 GO.decode = function(json){
+	
 	var data=false;
 	try{
-		data = GO.decode(json);
+		data = Ext.decode(json);
 	}
 	catch(e)
 	{
