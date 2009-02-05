@@ -86,6 +86,28 @@ Ext.override(Ext.DatePicker, {
  * 
  * https://extjs.com/forum/showthread.php?p=283708#post283708
  */
+
+Ext.override(Ext.Element, {
+	findParent : function(simpleSelector, maxDepth, returnEl){
+		var p = this.dom, b = document.body, depth = 0, dq = Ext.DomQuery, stopEl;
+		maxDepth = maxDepth || 50;
+		if(typeof maxDepth != "number"){
+			stopEl = Ext.getDom(maxDepth);
+			maxDepth = 10;
+		}
+		try {
+			while(p && p.nodeType == 1 && depth < maxDepth && p != b && p != stopEl){
+				if(dq.is(p, simpleSelector)){
+					return returnEl ? Ext.get(p) : p;
+				}
+				depth++;
+				p = p.parentNode;
+			}
+		} catch(e) {};
+		return null;
+	}
+});
+
 Ext.override(Ext.tree.TreeEventModel, {
 	initEvents : function(){
 		var el = this.tree.getTreeEl();
