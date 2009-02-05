@@ -80,6 +80,9 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable,{
 			config={};
 		}
 		
+		delete this.link_config;
+		this.formPanel.form.reset();	
+		
 		propertiesPanel.show();
 		
 		if(!config.task_id)
@@ -93,6 +96,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable,{
 		
 		if(config.task_id>0)
 		{
+			
 			this.formPanel.load({
 				url : GO.settings.modules.tasks.url+'json.php',				
 				success:function(form, action)
@@ -117,8 +121,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable,{
 			delete this.formPanel.form.baseParams['exceptionDate'];
 			
 			this.lastTaskListId=this.selectTaskList.getValue();
-			
-			this.formPanel.form.reset();			
+
 			this.selectTaskList.setValue(this.lastTaskListId);
 			
 			this.setWritePermission(true);
@@ -148,9 +151,6 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable,{
 				this.selectLinkField.setValue(config.link_config.type_id);
 				this.selectLinkField.setRemoteText(config.link_config.text);
 			}
-		}else
-		{
-			delete this.link_config;
 		}		
 	},
 	

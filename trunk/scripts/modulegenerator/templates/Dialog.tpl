@@ -70,6 +70,11 @@ Ext.extend(GO.{module}.{friendly_single_ucfirst}Dialog, Ext.Window,{
 			this.render(Ext.getBody());
 		}
 		
+		<gotpl if="$link_type &gt; 0">
+		delete this.link_config;
+		</gotpl>
+		this.formPanel.form.reset();
+		
 		this.tabPanel.setActiveTab(0);
 		
 		if(!{friendly_single}_id)
@@ -105,7 +110,6 @@ Ext.extend(GO.{module}.{friendly_single_ucfirst}Dialog, Ext.Window,{
 			});
 		}else 
 		{
-			this.formPanel.form.reset();
 			<gotpl if="$authenticate">
 			this.setWritePermission(true);
 			this.readPermissionsTab.setAcl(0);
@@ -124,9 +128,6 @@ Ext.extend(GO.{module}.{friendly_single_ucfirst}Dialog, Ext.Window,{
 				this.selectLinkField.setValue(config.link_config.type_id);
 				this.selectLinkField.setRemoteText(config.link_config.text);
 			}
-		}else
-		{
-			delete this.link_config;
 		}
 		</gotpl>
 	},

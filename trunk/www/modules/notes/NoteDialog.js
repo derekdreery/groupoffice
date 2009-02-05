@@ -72,6 +72,9 @@ Ext.extend(GO.notes.NoteDialog, Ext.Window,{
 			note_id=0;			
 		}
 		
+		delete this.link_config;
+		this.formPanel.form.reset();	
+		
 		this.propertiesPanel.show();
 			
 		this.setNoteId(note_id);
@@ -93,8 +96,6 @@ Ext.extend(GO.notes.NoteDialog, Ext.Window,{
 			});
 		}else 
 		{		
-			this.formPanel.form.reset();
-			
 			if(!config.category_id)
 			{
 				config.category_id=GO.notes.defaultCategory.id;
@@ -118,9 +119,6 @@ Ext.extend(GO.notes.NoteDialog, Ext.Window,{
 				this.selectLinkField.setValue(config.link_config.type_id);
 				this.selectLinkField.setRemoteText(config.link_config.text);
 			}
-		}else
-		{
-			delete this.link_config;
 		}
 	},
 

@@ -105,12 +105,14 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 		}
 		//propertiesPanel.show();
 		
+		delete this.link_config;
+		this.formPanel.form.reset();	
+		
 		this.tabPanel.setActiveTab(0);
 
 		if(!config.event_id)
 		{
-			config.event_id=0;
-			
+			config.event_id=0;			
 		}		
 		this.selectCalendar.container.up('div.x-form-item').setDisplayed(false);
 	
@@ -181,8 +183,6 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 		{
 			delete this.formPanel.form.baseParams['exception_event_id'];
 			delete this.formPanel.form.baseParams['exceptionDate'];
-			
-			this.formPanel.form.reset();
 				
 			//this.participantsPanel.setDisabled(true);
 			this.setWritePermission(true);
@@ -245,9 +245,6 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 				
 				this.setValues({subject: config.link_config.text});
 			}
-		}else
-		{
-			delete this.link_config;
 		}
 	},
 	
