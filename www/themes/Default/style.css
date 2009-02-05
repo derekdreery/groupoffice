@@ -302,6 +302,9 @@ a.normal-link:hover{
 	background-image:url('images/16x16/forum.png') !important;
 }
 
+.btn-support {
+	background-image:url('images/16x16/support.png') !important;
+}
 /* end buttons */
 
 /*start edit buttons */

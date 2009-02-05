@@ -287,7 +287,8 @@ class GO_CONFIG
 	 * @access  public
 	 */
 	var $webmaster_email = 'webmaster@example.com';
-
+	
+	
 	/**
 	 * The path to the root of Group-Office with slash on end
 	 *
@@ -1098,6 +1099,7 @@ class GO_CONFIG
       	$response['config']['theme']=$GO_THEME->theme;
       	$response['config']['host']=$this->host;
       	$response['config']['local_url']=$this->local_url;
+      	$response['config']['webmaster_email']=$this->webmaster_email;
       	
       	$response['config']['allow_password_change']=$this->allow_password_change;
       	$response['config']['allow_themes']=$this->allow_themes;

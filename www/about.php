@@ -13,37 +13,21 @@
  */
 require('Group-Office.php');
 ?>
-<div style="padding:5px;">
+<div style="padding:10px;line-height:16px">
 	<img src="<?php echo $GO_THEME->theme_url; ?>images/groupoffice.gif" /><br />
-	<br />	
-	Version: <?php echo $GO_CONFIG->version ?>
-	<br /><br />
-	Copyright (c) 2003-2009, Intermesh<br />
-	All rights reserved.<br />
 	<br />
-	This program is protected by copyright law and the Group-Office license.<br />
-	<br />
-	For more information about Group-Office visit:<br />
-	<br />
-	<a class="normal-link" href="http://www.group-office.com" target="_blank">http://www.group-office.com</a><br />
-	<br />
-	Group-Office is created by Intermesh. For more information about Intermesh visit:<br />
-	<br />
-	<a class="normal-link" href="http://www.intermesh.nl" target="_blank">http://www.intermesh.nl</a>
+	<?php	
+	echo String::text_to_html(sprintf($lang['common']['about'], $GO_CONFIG->version, $GO_CONFIG->webmaster_email));
 	
-	<?php
 	$usage_date = $GO_CONFIG->get_setting('usage_date');
 	if($usage_date){
 		$mailbox_usage = floatval($GO_CONFIG->get_setting('mailbox_usage'));
 		$file_storage_usage = floatval($GO_CONFIG->get_setting('file_storage_usage'));
 		$database_usage = floatval($GO_CONFIG->get_setting('database_usage'));	
-	?>	
-		<br /><br />	
-		<h1><?php echo sprintf($lang['common']['usage_stats'], Date::get_timestamp($usage_date)); ?></h1>	
-		<br />
-		<p><?php echo $lang['common']['usage_text']; ?>:</p>
-		<br />
-		<table class="about">
+	?>
+		<h1 style="margin-top:10px;"><?php echo sprintf($lang['common']['usage_stats'], Date::get_timestamp($usage_date)); ?></h1>	
+		<p style="margin-top:5px;margin-bottom:5px;"><?php echo $lang['common']['usage_text']; ?>:</p>
+		<table class="about" cellspacing=0>
 		<tr>
 			<td><?php echo $lang['common']['database']; ?>:</td>
 			<td><?php echo Number::format_size($database_usage*1024); ?></td>

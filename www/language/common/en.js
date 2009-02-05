@@ -19,6 +19,8 @@ GO.lang = {};
  * Copy everything below for translations
  */
 
+GO.lang.contactSupportDesk='Contact support desk';
+
 GO.lang.disabled='Disabled';
 GO.lang.changesWillBeLost='You made changes in the current screen. Press cancel and save changes or Ok to continue and delete your changes.';
 GO.lang.strCommunityForum='Community forum';

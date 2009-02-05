@@ -2,6 +2,21 @@
 //Uncomment this line in new translations!
 //require($GO_LANGUAGE->get_fallback_base_language_file('common'));
 
+$lang['common']['about']='Version: %s
+
+Copyright (c) 2003-2009, Intermesh
+All rights reserved.
+This program is protected by copyright law and the Group-Office license.
+
+For support questions contact your webmaster:
+%s
+
+For more information about Group-Office visit:
+http://www.group-office.com
+
+Group-Office is created by Intermesh. For more information about Intermesh visit:
+http://www.intermesh.nl/en/';
+
 $lang['common']['htmldirection']= 'ltr';
 
 $lang['common']['quotaExceeded']='You don\'t have anymore diskspace left. Please delete some files or contact your provider to raise the quota';

@@ -133,7 +133,6 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
       
       for(var i=0;i<adminModulePanels.length;i++)
       {
-
 					adminMenu.add({
 						moduleName:adminModulePanels[i].moduleName,
 						text:adminModulePanels[i].title,
@@ -202,8 +201,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	    				var win = window.open('http://www.group-office.com/wiki/');
 	    				win.focus();
 	    			},
-	    			scope:this
-	    			
+	    			scope:this	    			
 	    		},{
 	    			iconCls:'btn-forum',
 	    			text:GO.lang.strCommunityForum,
@@ -213,6 +211,29 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	    			},
 	    			scope:this
 	    			
+	    		},'-',{
+	    			iconCls: 'btn-support',
+	    			text: GO.lang.contactSupportDesk,
+	    			handler: function(){
+	    				GO.supportLink=GO.settings.config.webmaster_email;
+	    				if(Ext.form.VTypes.email(GO.supportLink))
+	    				{
+	    					if(GO.email && GO.settings.modules.email.read_permission)
+	    					{
+	    						GO.email.Composer.show({
+										values : {to: GO.supportLink}							
+									});
+	    					}else
+	    					{
+	    						document.location='mailto:'+GO.supportLink;
+	    					}
+	    				}else
+	    				{
+	    					window.open(GO.supportLink);
+	    				}
+	    			},
+	    			scope:this
+	    		
 	    		},{
 	    			iconCls:'btn-report-bug',
 	    			text:GO.lang.strReportBug,
