@@ -1,6 +1,22 @@
 <?php
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_base_language_file('common'));
+
+$lang['common']['about']='Versie: %s
+
+Copyright (c) 2003-2009, Intermesh
+Alle rechten voorbehouden
+Dit programma is beschermd door de auteurswet en de Group-Office licentie.
+
+Voor ondersteuning neem contact op met de helpdesk:
+%s
+
+Voor meer informatie over Group-Office ga naar:
+http://www.group-office.com
+
+Group-Office is gemaakt door Intermesh. Voor meer informatie over Intermesh ga naar:
+http://www.intermesh.nl/';
+
 $lang['common']['htmldirection']='ltr';
 
 $lang['common']['quotaExceeded']='U heeft geen schijfruimte meer over. Verwijder bestanden of neem contact op met uw provider om het limiet te verhogen.';

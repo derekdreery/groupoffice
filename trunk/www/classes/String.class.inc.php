@@ -504,7 +504,7 @@ class String {
 	function text_to_html($text, $convert_links=true) {
 		global $GO_CONFIG, $GO_MODULES;
 
-		$module = isset ($GO_MODULES->modules['email']) ? $GO_MODULES->modules['email'] : false;
+		$email_module = isset($GO_MODULES->modules['email']) && $GO_MODULES->modules['email']['read_permission'];
 
 		$text = htmlspecialchars($text, ENT_QUOTES, 'UTF-8')."\n";
 		if($convert_links)
@@ -512,7 +512,13 @@ class String {
 			//$text = preg_replace("/(?:^|\b)(((http(s?):\/\/)|(www\.-))([\w\.-]+)([,:;%#&\/?=\w+\.\-@]+))(?:\b|$)/is", "<a href=\"http$4://$5$6$7\" target=\"_blank\" class=\"normal-link\">$1</a>", $text);
 			$text = preg_replace("/\b(https?:\/\/[^\s]*)(\s)/i", '<a href="$1" target="_blank" class="normal-link">$1</a>$2', $text);
 			//$text = preg_replace("/(\A|\s)([\w\.\-]+)(@)([\w\.-]+)([A-Za-z]{2,3})\b/i", "\\1<a href=\"mailto:\\2\\3\\4\\5\">\\2\\3\\4\\5</a>", $text);
-			$text = preg_replace("/\b([\w0-9\._\-]+@[\w0-9\.\-_]+\.[a-z]{2,4})(\s)/i", "<a href=\"mailto:$1\">$1</a>$2", $text);
+			if($email_module)
+			{
+				$text = preg_replace("/\b([\w0-9\._\-]+@[\w0-9\.\-_]+\.[a-z]{2,4})(\s)/i", "<a class=\"normal-link\" onclick=\"GO.email.showAddressMenu(event, '$1','');\" href=\"#\">$1</a>$2", $text);
+			}else
+			{
+				$text = preg_replace("/\b([\w0-9\._\-]+@[\w0-9\.\-_]+\.[a-z]{2,4})(\s)/i", "<a class=\"normal-link\" href=\"mailto:$1\">$1</a>$2", $text);
+			}
 		}
 		$text = nl2br($text);
 		$text = str_replace("\r", "", $text);

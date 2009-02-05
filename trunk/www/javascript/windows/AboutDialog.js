@@ -34,18 +34,19 @@ GO.dialog.AboutDialog = function(config){
 	Ext.apply(this, config);
 
 	GO.dialog.AboutDialog.superclass.constructor.call(this, {
+		modal:false,
 		layout:'fit',
-		modal:true,
-		height:480,
-		width:500,
+		height:500,
+		width:520,
 		resizable: false,
-		autoScroll:true,
 		closeAction:'hide',
 		title:GO.lang.strAbout,
 		iconCls: 'btn-info',
 		items: new Ext.Panel({
 			border:false,
-			autoLoad:'about.php'
+			layout:'fit',
+			autoLoad:'about.php',
+			autoScroll:true
 			}),		
 		buttons: [
 			{				
