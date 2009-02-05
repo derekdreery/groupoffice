@@ -8,7 +8,7 @@ Copyright (c) 2003-2009, Intermesh
 Alle rechten voorbehouden
 Dit programma is beschermd door de auteurswet en de Group-Office licentie.
 
-Voor ondersteuning neem contact op met de helpdesk:
+Neem voor ondersteuning contact op met de helpdesk:
 %s
 
 Voor meer informatie over Group-Office ga naar:
