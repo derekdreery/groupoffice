@@ -1870,7 +1870,7 @@ jQuery.event = {
 		// event in IE.
 		handle.elem = elem;
 			
-			// Handle multiple events separated by a space
+			// Handle multiple events seperated by a space
 			// jQuery(...).bind("mouseover mouseout", fn);
 			jQuery.each(types.split(/\s+/), function(index, type) {
 				// Namespaced event handlers
@@ -1931,7 +1931,7 @@ jQuery.event = {
 					types = types.type;
 				}
 				
-				// Handle multiple events separated by a space
+				// Handle multiple events seperated by a space
 				// jQuery(...).unbind("mouseover mouseout", fn);
 				jQuery.each(types.split(/\s+/), function(index, type){
 					// Namespaced event handlers
