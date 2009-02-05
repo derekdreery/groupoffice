@@ -342,7 +342,7 @@ GO.addressbook.searchSender = function(sender, name){
 			}else
 			{	
 				
-				var responseParams = Ext.decode(response.responseText);
+				var responseParams = GO.decode(response.responseText);
 				if(!responseParams.contact_id)
 				{
 					if(confirm(GO.addressbook.lang.confirmCreate))

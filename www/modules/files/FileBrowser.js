@@ -636,7 +636,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 								scope: this
 							});
 					
-					var responseParams = Ext.decode(response.responseText);
+					var responseParams = GO.decode(response.responseText);
 					
 					if(responseParams.results.length)
 					{
@@ -1107,7 +1107,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 				params:this.overwriteParams,
 				callback: function(options, success, response){				
 					
-					var pasteSources = Ext.decode(this.overwriteParams.paste_sources);
+					var pasteSources = GO.decode(this.overwriteParams.paste_sources);
 					var pasteDestination = this.overwriteParams.paste_destination;
 					
 					
@@ -1120,7 +1120,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 					}else
 					{				
 						
-						var responseParams = Ext.decode(response.responseText);
+						var responseParams = GO.decode(response.responseText);
 						
 						if(!responseParams.success && !responseParams.file_exists)
 						{

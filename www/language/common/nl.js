@@ -11,6 +11,8 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
+GO.lang.serverError='Er is een fout opgetreden op de webserver. Neem contact op met uw systeembeheerder geef de gedetailleerde foutmelding.';
+GO.lang.errorDetails='Gedetailleerde foutmelding';
 GO.lang.contactSupportDesk='Neem contact op met de helpdesk';
 GO.lang.disabled='Uitgeschakeld';
 GO.lang.changesWillBeLost='U heeft wijzigingen in het huidige scherm gemaakt. Druk op annuleren en sla de wijzigingen op of druk op Ok om door te gaan en uw wijzigingen te verwijderen.';
