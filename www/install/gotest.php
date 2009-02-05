@@ -118,14 +118,14 @@ function test_system(){
 	$tests[]=$test;
 	$test['name']='Error logging';
 	$test['pass']=ini_get('log_errors')=='1';
-	$test['feedback']='Warning: PHP error logging is disabled in php.ini. It\'s recommended that this feature is enabled and display_errors is disabled in a production environment.';
+	$test['feedback']='Warning: PHP error logging is disabled in php.ini. It\'s recommended that this feature is enabled in a production environment.';
 	$test['fatal']=false;
 
-	$tests[]=$test;
+	/*$tests[]=$test;
 	$test['name']='Error display';
 	$test['pass']=ini_get('display_errors')!='1';
 	$test['feedback']='Warning: PHP error display is enabled in php.ini. It\'s recommended that this feature is disabled because it can cause unnessecary interface crashes.';
-	$test['fatal']=false;
+	$test['fatal']=false;*/
 
 	$tests[]=$test;
 	$test['name']='libwbxml';
