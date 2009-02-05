@@ -12,6 +12,9 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
+if(isset($argv[1]))
+	define('CONFIG_FILE', $argv[1]);
+
 require('config.inc.php');
 
 $module_dir=$GO_CONFIG->root_path.'modules/'.$module.'/';
