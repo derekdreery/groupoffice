@@ -476,6 +476,12 @@ overflow:hidden !important;
 }
 
 
+.go-error-dialog .x-panel-body{
+	background:url('images/32x32/error.png') no-repeat 10px 10px;
+	padding:18px 5px 18px 52px;	
+}
+
+
 /* sets the padding for panels with forms or text in it */
 .go-form-panel .x-panel-body{
 	padding: 5px;

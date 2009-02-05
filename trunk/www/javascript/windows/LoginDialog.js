@@ -143,7 +143,7 @@ GO.dialog.LoginDialog = function(config){
 												Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
 											}else
 											{
-												var responseParams = Ext.decode(response.responseText);
+												var responseParams = GO.decode(response.responseText);
 												if(!responseParams.success)
 												{
 													Ext.MessageBox.alert(GO.lang['strError'], responseParams.feedback);

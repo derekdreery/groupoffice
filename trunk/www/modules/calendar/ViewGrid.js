@@ -725,7 +725,7 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 					Ext.MessageBox.alert(GO.lang.strError, response.result.feedback);
 				}else
 				{					
-					this.jsonData = Ext.decode(response.responseText);
+					this.jsonData = GO.decode(response.responseText);
 					
 					this.clearGrid();
 					

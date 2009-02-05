@@ -19,6 +19,8 @@ GO.lang = {};
  * Copy everything below for translations
  */
 
+GO.lang.serverError='An error occurred on the webserver. Contact your system administrator and supply the detailed error.';
+GO.lang.errorDetails='Detailed error';
 GO.lang.contactSupportDesk='Contact support desk';
 
 GO.lang.disabled='Disabled';

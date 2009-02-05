@@ -55,30 +55,23 @@ GO.data.JsonStore = function(config) {
 	}, this);
 	
 	this.on('loadexception',	
-		function(){
+		function(proxy, store, response, e){
 			
 			if(!this.reader.jsonData || GO.jsonAuthHandler(this.reader.jsonData, this.load, this))
 			{
-				var msg = 'An error occurred on the webserver and supplied invalid JSON data. Contact your system administrator or check the webserver error log.';
+				var msg = GO.lang.serverError;
 							
 				if(this.reader.jsonData && this.reader.jsonData.feedback)
 				{
 					msg += '<br /><br />'+this.reader.jsonData.feedback;
-				}
-				//user is logged in. An unknown error has occurred			
-				Ext.Msg.show({
-				   title:GO.lang['strError'],
-				   msg: msg,
-				   buttons: Ext.Msg.OK,
-				   icon: Ext.MessageBox.ERROR
-				});
+				}				
+				GO.errorDialog.show(msg, response.responseText);			
 			}
 		}
 		,this);
 };
 
 Ext.extend(GO.data.JsonStore, Ext.data.JsonStore, {
-	loaded : false
-	
+	loaded : false	
 });
 	

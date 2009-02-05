@@ -200,7 +200,7 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 						Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
 					}else
 					{
-						var responseParams = Ext.decode(response.responseText);
+						var responseParams = GO.decode(response.responseText);
 						this.setData(responseParams.data);
 					}				
 				},
