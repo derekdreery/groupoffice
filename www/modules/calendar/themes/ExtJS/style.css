@@ -156,7 +156,7 @@ a:link, a:visited, a:active{
 	margin-bottom:2px;
 	text-decoration:none;
 	line-height:18px;
-	cursor-default;
+	cursor: default;
 }
 
 #calendarList .calendar-wrap{
@@ -196,7 +196,7 @@ a:link, a:visited, a:active{
 	margin-bottom:2px;
 	text-decoration:none;
 	line-height:18px;
-	cursor-default;
+	cursor: default;
 }
 
 #viewList .view-wrap{
@@ -240,6 +240,7 @@ a:link, a:visited, a:active{
 
 .x-calGrid-table{
 	border-collapse: collapse;
+	cursor:default;
 }
 
 .x-calGrid-evenRow{

@@ -1,4 +1,4 @@
-3009/02/04 Version 3.00-stable-16
+2009/02/04 Version 3.00-stable-16
 - Added extra customer information field at invoices
 - Links didn't work in IE
 - Added Danish translation
