@@ -1,3 +1,10 @@
+2009/02/05 Version 3.00-stable-17
+- Check for global config file caused error with open_basedir set
+- Better error reporting dialog.
+- Upgraded to ExtJS 2.2.1
+- Fixed minor bugs
+
+
 2009/02/04 Version 3.00-stable-16
 - Added extra customer information field at invoices
 - Links didn't work in IE
