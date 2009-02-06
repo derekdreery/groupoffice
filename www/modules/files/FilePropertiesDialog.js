@@ -25,9 +25,12 @@ GO.files.FilePropertiesDialog = function(config){
     defaultType: 'textfield',
     items: [
     		{
-            fieldLabel: GO.lang['strName'],
-            name: 'name',
-            anchor: '100%'
+          fieldLabel: GO.lang['strName'],
+          name: 'name',
+          anchor: '100%',
+					validator:function(v){
+						return !v.match(/[&\/:\*\?"<>|\\]/);
+					} 
         },{
         	xtype: 'plainfield',
         	fieldLabel: 'Path',
