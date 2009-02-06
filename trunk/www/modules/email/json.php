@@ -747,11 +747,14 @@ debug($parts);
 				 * a html alternative to display
 				 */
 				$html_alternative=false;
-				for($i=0;$i<count($parts);$i++)
+				if(empty($_POST['plaintext']))
 				{
-					if(eregi('html', $parts[$i]['mime']) && (strtolower($parts[$i]['type'])=='alternative' || strtolower($parts[$i]['type'])=='related'))
+					for($i=0;$i<count($parts);$i++)
 					{
-						$html_alternative=true;
+						if(eregi('html', $parts[$i]['mime']) && (strtolower($parts[$i]['type'])=='alternative' || strtolower($parts[$i]['type'])=='related'))
+						{
+							$html_alternative=true;
+						}
 					}
 				}
 
@@ -804,7 +807,7 @@ debug($parts);
 
 					if (empty($response['body']) &&
 					(!eregi('attachment', $part["disposition"])) &&
-					(eregi('html', $mime) ||(eregi('plain', $mime) && (!$html_alternative || strtolower($part['type'])!='alternative')) || $mime == "text/enriched" || $mime == "unknown/unknown"))
+					((eregi('html', $mime) && empty($_POST['plaintext'])) ||(eregi('plain', $mime) && (!$html_alternative || strtolower($part['type'])!='alternative')) || $mime == "text/enriched" || $mime == "unknown/unknown"))
 					{
 						$part_body = $imap->view_part($uid, $part["number"], $part["transfer"], $part["charset"]);
 
@@ -813,7 +816,7 @@ debug($parts);
 							case 'unknown/unknown':
 							case 'text/plain':
 								$uuencoded_attachments = $imap->extract_uuencoded_attachments($part_body);
-								$part_body = String::text_to_html($part_body);
+								$part_body = empty($_POST['plaintext']) ? String::text_to_html($part_body) : $part_body;
 
 								for($i=0;$i<count($uuencoded_attachments);$i++)
 								{

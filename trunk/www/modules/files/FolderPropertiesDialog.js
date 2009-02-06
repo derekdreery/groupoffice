@@ -28,7 +28,10 @@
     		{
           fieldLabel: GO.lang['strName'],
           name: 'name',
-          anchor: '100%'
+          anchor: '100%',
+					validator:function(v){
+						return !v.match(/[&\/:\*\?"<>|\\]/);
+					} 
         },{
         	xtype: 'plainfield',
         	fieldLabel: 'Path',

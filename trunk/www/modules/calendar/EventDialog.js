@@ -189,36 +189,40 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable,{
 			
 			this.win.show();
 			
-			if(!config.values)
+			config.values=config.values || {};
+			
+			var date = new Date();
+
+			
+			var i = parseInt(date.format("i"));
+			
+			if(i>45)
 			{
-				var date = new Date();
-				
-				config.values = {};
-				
-				var i = parseInt(date.format("i"));
-				
-				if(i>45)
-				{
-					i = '45';
-				}else if(i>30)
-				{
-					i = '30';
-				}else if(i>15)
-				{
-					i = '15';
-				}else
-				{
-					i='00';				
-				}
-				
-				config.values['start_date'] = new Date();					
-				config.values['start_hour'] = date.format("H");
-				config.values['start_min'] = i;
-				
-				config.values['end_date'] = new Date();
-				config.values['end_hour'] = date.add(Date.HOUR,1).format("H");
-				config.values['end_min'] = i;
+				i = '45';
+			}else if(i>30)
+			{
+				i = '30';
+			}else if(i>15)
+			{
+				i = '15';
+			}else
+			{
+				i='00';				
 			}
+		
+			if(!config.values.start_date)			
+				config.values['start_date'] = new Date();				
+			if(!config.values.start_hour)	
+				config.values['start_hour'] = date.format("H");
+			if(!config.values.start_min)	
+				config.values['start_min'] = i;
+			if(!config.values.end_date)	
+				config.values['end_date'] = new Date();
+			if(!config.values.end_hour)	
+				config.values['end_hour'] = date.add(Date.HOUR,1).format("H");
+			if(!config.values.end_min)	
+				config.values['end_min'] = i;
+			
 			this.setValues(config.values);
 			
 			
