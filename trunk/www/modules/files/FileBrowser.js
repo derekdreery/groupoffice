@@ -1254,7 +1254,10 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	          name: 'name',
 	          value: 'New folder',
 	          allowBlank:false,
-	          anchor:'100%'   
+	          anchor:'100%',
+						validator:function(v){
+							return !v.match(/[&\/:\*\?"<>|\\]/);
+						}   
 	      });
 			this.newFolderFormPanel = new Ext.form.FormPanel({
 					url: GO.settings.modules.files.url+'action.php',
@@ -1525,6 +1528,15 @@ GO.files.openFile = function(path, store)
 			}
 		break;
 		
+		case 'eml':
+			if(GO.mailings)
+			{
+				GO.linkHandlers[9].call(this, 0, {
+						path: path
+					});
+				break;
+			}
+		
 		default:
 			window.location.href=GO.settings.modules.files.url+'download.php?mode=download&path='+encodeURIComponent(path);
 		break;	
@@ -1578,4 +1590,3 @@ GO.moduleManager.addModule('files', GO.files.FileBrowser, {
 	title : GO.files.lang.files,
 	iconCls : 'go-tab-icon-files'
 });
-
