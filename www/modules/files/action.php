@@ -31,6 +31,8 @@ try{
 
 	switch($task)
 	{
+		
+		
 		case 'set_view':
 			
 			$up_folder['path']=$_POST['path'];

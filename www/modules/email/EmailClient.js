@@ -98,9 +98,14 @@ GO.email.EmailClient = function(config){
 		}					
 	}, this);	
 
+	GO.email.saveAsItems = GO.email.saveAsItems || [];
+	
+	for(var i=0;i<GO.email.saveAsItems.length;i++)
+	{
+		GO.email.saveAsItems[i].scope=this;
+	}
 
-
-	this.gridContextMenu = new Ext.menu.Menu({
+	this.gridContextMenu = new GO.menu.RecordsContextMenu({
 		shadow: "frame",
 		minWidth: 180,
 		items: [
@@ -109,28 +114,32 @@ GO.email.EmailClient = function(config){
 			handler: function(){
 					this.doTaskOnMessages('mark_as_read');
 				},
-			scope:this			
+			scope:this,
+			multiple:true
 		},
 		{ 
 			text: GO.email.lang.markAsUnread, 
 			handler: function(){
 					this.doTaskOnMessages('mark_as_unread');
 				},
-			scope: this
+			scope: this,
+			multiple:true
 		},
 		{ 
 			text: GO.email.lang.flag, 
 			handler: function(){
 				this.doTaskOnMessages('flag');
 			},
-			scope: this
+			scope: this,
+			multiple:true
 		},
 		{ 
 			text: GO.email.lang.unflag, 
 			handler: function(){
 				this.doTaskOnMessages('unflag');
 			},
-			scope: this
+			scope: this,
+			multiple:true
 		},
 		'-',
 		{
@@ -152,9 +161,15 @@ GO.email.EmailClient = function(config){
 			text: GO.lang.cmdDelete,
 			cls: 'x-btn-text-icon',
 			handler: this.deleteMessages,
-			scope: this
-		}
-		]
+			scope: this,
+			multiple:true
+		},{
+			iconCls: 'btn-save',
+			text:GO.lang.cmdSaveAs,
+			menu:{
+				items:GO.email.saveAsItems
+			}
+		}]
 	});
 
 
@@ -694,7 +709,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	{		
 		grid.on("rowcontextmenu", function(grid, rowIndex, e) {
 			var coords = e.getXY();
-			this.gridContextMenu.showAt([coords[0], coords[1]]);
+			this.gridContextMenu.showAt([coords[0], coords[1]], grid.getSelectionModel().getSelections());
 		},this);
 		
 		grid.on('collapse', function(){

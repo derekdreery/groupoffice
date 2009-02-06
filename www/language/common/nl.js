@@ -112,6 +112,7 @@ GO.lang.strUser = 'Gebruiker';
 GO.lang.cmdDelete = 'Verwijderen';
 GO.lang.cmdAdd = 'Toevoegen';
 GO.lang.cmdSave = 'Opslaan';
+GO.lang.cmdSaveAs = 'Opslaan als';
 GO.lang.cmdEdit = 'Bewerken';
 GO.lang.cmdLink = 'Koppelen';
 GO.lang.cmdUnlink = 'Ontkoppelen';

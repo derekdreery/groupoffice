@@ -22,3 +22,4 @@ Ext.namespace("GO.dialog");
 Ext.namespace("GO.users");
 Ext.namespace('GO.layout');
 Ext.namespace('GO.mailFunctions');
+Ext.namespace('GO.menu');

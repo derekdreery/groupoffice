@@ -66,7 +66,10 @@ GO.files.SaveAsDialog = Ext.extend(Ext.Window, {
 		this.nameField = new Ext.form.TextField({				
 				fieldLabel:GO.lang.strName,
 				name:'filename',
-				anchor:'100%'
+				anchor:'100%',
+				validator:function(v){
+					return !v.match(/[&\/:\*\?"<>|\\]/);
+				}
 			});
 			
 		var focusField = function(){
@@ -88,8 +91,7 @@ GO.files.SaveAsDialog = Ext.extend(Ext.Window, {
 	},
 	
 	show : function(config){
-		
-		this.nameField.setValue(config.filename);
+		this.nameField.setValue(config.filename.replace(/[&\/:\*\?"<>|\\]/g, ""));
 		
 		var extension = GO.util.getFileExtension(config.filename);
 		this.fb.setFilesFilter(extension);		
@@ -104,9 +106,7 @@ GO.files.SaveAsDialog = Ext.extend(Ext.Window, {
 		
 		GO.files.SaveAsDialog.superclass.show.call(this);
 		
-		this.fb.loadFiles();
-		
-	
+		this.fb.loadFiles();	
 	}
 	
 });

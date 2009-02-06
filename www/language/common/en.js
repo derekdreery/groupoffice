@@ -134,6 +134,7 @@ GO.lang.cmdAdd = 'Add';
 GO.lang.cmdAddPlusNew = 'Add + new';
 GO.lang.cmdSavePlusNew='Save + new';
 GO.lang.cmdSave = 'Save';
+GO.lang.cmdSaveAs = 'Save as'; 
 GO.lang.cmdEdit = 'Edit';
 GO.lang.cmdLink = 'Link';
 GO.lang.cmdUnlink = 'Unlink';
