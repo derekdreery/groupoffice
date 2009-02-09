@@ -313,7 +313,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				
 				var cmd = 'GO.mailFunctions.'+href.substr(3);
 				eval(cmd); 
-			}else	{				
+			}else	if(href.substr(href.length-1)!='#'){				
 				this.fireEvent('linkClicked', href);
 			}
 		}		

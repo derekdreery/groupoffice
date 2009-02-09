@@ -12,4 +12,5 @@ $languages['nl']='Nederlands';
 $languages['pl']='Polski';
 $languages['pt_BR']='Português - Brazil';
 $languages['ru']='Русский';
+$languages['ro']='Romanian';
 $languages['fi']='Suomi - Finland';
