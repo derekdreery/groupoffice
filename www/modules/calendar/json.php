@@ -140,62 +140,7 @@ try{
 
 
 			break;
-		case 'availability':
-			$event_id = ($_REQUEST['event_id']);
-			$date = Date::to_unixtime($_REQUEST['date']);
-
-			//echo date('Ymd G:i', $date);
-			$cal2 = new calendar();
-			$cal->get_participants($event_id);
-
-			$merged_free_busy=array();
-			for($i=0;$i<1440;$i+=15)
-			{
-				$merged_free_busy[$i]=0;
-			}
-
-			$response['participants']=array();
-			while($cal->next_record(DB_ASSOC))
-			{
-				$participant=$cal->record;
-
-				$user = $GO_USERS->get_user_by_email($cal->f('email'));
-
-				if($user)
-				{
-					$freebusy=$cal2->get_free_busy($user['id'], $date, ($_POST['event_id']));
-
-					$participant['freebusy']=array();
-
-					foreach($freebusy as $min=>$busy)
-					{
-						if($busy=='1')
-						{
-							$merged_free_busy[$min]=1;
-						}
-						$participant['freebusy'][]=array(
-							'time'=>date('G:i', mktime(0,$min)),
-							'busy'=>$busy);
-					}
-				}
-				$response['participants'][]=$participant;
-			}
-
-			$participant['name']=$lang['calendar']['allTogether'];
-			$participant['email']='';
-			$participant['freebusy']=array();
-
-			foreach($merged_free_busy as $min=>$busy)
-			{
-				$participant['freebusy'][]=array(
-					'time'=>date($_SESSION['GO_SESSION']['time_format'], mktime(0,$min)),
-					'busy'=>$busy);
-			}
-
-			$response['participants'][]=$participant;
-
-
-			break;
+		
 
 		case 'event':
 
@@ -710,6 +655,63 @@ try{
 
 				}
 		break;
+		
+		case 'availability':
+			$event_id = ($_REQUEST['event_id']);
+			$date = Date::to_unixtime($_REQUEST['date']);
+
+			//echo date('Ymd G:i', $date);
+			$cal2 = new calendar();
+			$cal->get_participants($event_id);
+
+			$merged_free_busy=array();
+			for($i=0;$i<1440;$i+=15)
+			{
+				$merged_free_busy[$i]=0;
+			}
+
+			$response['participants']=array();
+			while($cal->next_record(DB_ASSOC))
+			{
+				$participant=$cal->record;
+
+				$user = $GO_USERS->get_user_by_email($cal->f('email'));
+
+				if($user)
+				{
+					$freebusy=$cal2->get_free_busy($user['id'], $date, ($_POST['event_id']));
+
+					$participant['freebusy']=array();
+
+					foreach($freebusy as $min=>$busy)
+					{
+						if($busy=='1')
+						{
+							$merged_free_busy[$min]=1;
+						}
+						$participant['freebusy'][]=array(
+							'time'=>date('G:i', mktime(0,$min)),
+							'busy'=>$busy);
+					}
+				}
+				$response['participants'][]=$participant;
+			}
+
+			$participant['name']=$lang['calendar']['allTogether'];
+			$participant['email']='';
+			$participant['freebusy']=array();
+
+			foreach($merged_free_busy as $min=>$busy)
+			{
+				$participant['freebusy'][]=array(
+					'time'=>date($_SESSION['GO_SESSION']['time_format'], mktime(0,$min)),
+					'busy'=>$busy);
+			}
+
+			$response['participants'][]=$participant;
+
+
+			break;
 	}
 }catch(Exception $e)
 {
