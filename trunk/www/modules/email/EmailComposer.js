@@ -211,6 +211,8 @@ GO.email.EmailComposer = function(config) {
 									plugins : imageInsertPlugin
 								})]
 			});
+			
+
 
 	// store for attachments needs to be created here because a forward action
 	// might attachments

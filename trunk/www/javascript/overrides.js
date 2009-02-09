@@ -261,3 +261,17 @@ Ext.override(Ext.layout.TableLayout, {
         this.renderAll(ct, target);
     }
 }); */
+
+/**
+ * Catch JSON parsing errors and show error dialog
+ * @type 
+ */
+Ext.decode = Ext.util.JSON.decode = function(json){
+	try{
+	 return eval("(" + json + ')');
+	}
+	catch (e)
+	{
+		GO.errorDialog.show(GO.lang.serverError, json);
+	}
+};

@@ -1,4 +1,4 @@
-GO.calendar.AvailabilityWindow = function(config) {
+GO.calendar.AvailabilityCheckWindow = function(config) {
 	config = config || {};
 
 	var tpl = new Ext.XTemplate(
@@ -100,6 +100,7 @@ GO.calendar.AvailabilityWindow = function(config) {
 							baseParams : {
 								task : 'availability',
 								emails:'',
+								names:'',
 								event_id:0,
 								date: ''
 							}
@@ -111,67 +112,13 @@ GO.calendar.AvailabilityWindow = function(config) {
 				overClass : 'time-over'
 			});
 
-	dataView.on('click', function(dataview, index, node) {
-				var time = node.id.substr(4);
-
-				var colonIndex = time.indexOf(':');
-
-				var minutes = time.substr(colonIndex + 1);
-				var hours = time.substr(0, colonIndex);
-
-				var frmStartHour = this.formPanel.form.findField('start_hour');
-				var frmStartMin = this.formPanel.form.findField('start_min');
-				var frmStartDate = this.formPanel.form.findField('start_date');
-
-				var frmEndHour = this.formPanel.form.findField('end_hour');
-				var frmEndMin = this.formPanel.form.findField('end_min');
-				var frmEndDate = this.formPanel.form.findField('end_date');
-
-				var hourDiff = parseInt(frmEndHour.getValue())
-						- parseInt(frmStartHour.getValue());
-				var minDiff = parseInt(frmEndMin.getValue())
-						- parseInt(frmStartMin.getValue());
-
-				if (minDiff < 0) {
-					minDiff += 60;
-					hourDiff--;
-				}
-
-				if (minutes < 10) {
-					minutes = '0' + minutes;
-				}
-
-				alert(minutes);
-
-				frmStartHour.setValue(hours);
-				frmStartMin.setValue(minutes);
-				frmStartDate.setValue(Date.parseDate(
-						this.availabilityStore.baseParams.date,
-						GO.settings.date_format));
-
-				var endHour = parseInt(hours) + hourDiff;
-				var endMin = parseInt(minutes) + minDiff;
-				if (endMin > 60) {
-					endMin -= 60;
-					endHour++;
-				}
-				if (endMin < 10) {
-					endMin = "0" + endMin;
-				}
-
-				frmEndHour.setValue(endHour);
-				frmEndMin.setValue(endMin);
-				frmEndDate.setValue(Date.parseDate(
-						this.availabilityStore.baseParams.date,
-						GO.settings.date_format));
-
-				this.tabPanel.setActiveTab(0);
-				this.availabilityWindow.hide();
+	this.dataView.on('click', function(dataview, index, node) {
+				this.fireEvent('select', dataview, index, node);
 			}, this);
 
 	this.dataView.store.on('load', function() {
 				Ext.get("availability_date")
-						.update(this.availabilityStore.baseParams.date);
+						.update(this.dataView.store.baseParams.date);
 			}, this);
 
 	Ext.apply(config, {
@@ -185,7 +132,7 @@ GO.calendar.AvailabilityWindow = function(config) {
 					layout : 'fit',
 					cls : 'go-form-panel',
 					waitMsgTarget : true,
-					items : dataView,
+					items : this.dataView,
 					autoScroll : true
 				},
 				tbar : [{
@@ -224,18 +171,21 @@ GO.calendar.AvailabilityWindow = function(config) {
 						}]
 			});
 
-	GO.calendar.AvailabilityWindow.superclass.call(this, config);
+	GO.calendar.AvailabilityCheckWindow.superclass.constructor.call(this, config);
+	
+	this.addEvents({'select' : true});
 }
 
-Ext.extend(GO.calendar.AvailabilityWindow, GO.Window, {
+Ext.extend(GO.calendar.AvailabilityCheckWindow, GO.Window, {
 
 		show : function(config){
 			this.dataView.store.baseParams.date=config.date;
 			this.dataView.store.baseParams.event_id=config.event_id;
-			this.dataView.store.baseParams.emails=config.email;
+			this.dataView.store.baseParams.emails=config.emails;
+			this.dataView.store.baseParams.names=config.names;
 			this.dataView.store.load();
 			
-			GO.calendar.AvailabilityWindow.superclass.show.call(this);
+			GO.calendar.AvailabilityCheckWindow.superclass.show.call(this);
 		}
 
 });
