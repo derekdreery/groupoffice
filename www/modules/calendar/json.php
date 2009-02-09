@@ -79,7 +79,7 @@ try{
 
 			break;
 
-		case 'invitation':
+		/*case 'invitation':
 
 			require_once($GO_CONFIG->class_path.'mail/RFC822.class.inc');
 			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
@@ -139,7 +139,7 @@ try{
 
 
 
-			break;
+			break;*/
 		
 
 		case 'event':
