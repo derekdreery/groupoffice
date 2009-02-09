@@ -7,3 +7,4 @@ modules/calendar/CalendarDialog.js
 modules/calendar/ViewDialog.js
 modules/calendar/Calendar.js
 modules/calendar/Portlet.js
+modules/calendar/ParticipantsPanel.js

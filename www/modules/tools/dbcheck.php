@@ -53,6 +53,20 @@ echo "Correcting timezone$line_break";
 $db->query("update go_users set timezone='".$db->escape($GO_CONFIG->default_timezone)."' where length(timezone)<3");
 
 
+flush();
+echo 'Adding everyone to the everyone group'.$line_break;
+
+$GO_USERS->get_users();
+
+while($GO_USERS->next_record())
+{
+	if(!$GO_GROUPS->is_in_group($GO_USERS->f('id'), $GO_CONFIG->group_everyone))
+		$GO_GROUPS->add_user_to_group($GO_USERS->f('id'), $GO_CONFIG->group_everyone);
+}
+echo 'Done'.$line_break.$line_break;
+
+flush();
+
 
 $acls=array();
 

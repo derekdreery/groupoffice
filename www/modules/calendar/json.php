@@ -689,6 +689,27 @@ try{
 				$response['results'][]=$participant;
 			}
 			break;
+			
+		case 'check_availability':
+				$event_id = empty($_REQUEST['event_id']) ? 0 : $_REQUEST['event_id'];
+				
+				$emails=explode(',', $_REQUEST['emails']);
+				
+				$response=array();
+				foreach($emails as $email)
+				{
+				 	$user=$GO_USERS->get_user_by_email($email);
+	
+					if($user)
+					{
+						$response[$email]=$cal->is_available($user['id'], $_REQUEST['start_time'], $_REQUEST['end_time'], $event_id) ? '1' : '0';
+					}else
+					{
+						$response[$email]='?';
+					}
+
+				}
+		break;
 	}
 }catch(Exception $e)
 {
