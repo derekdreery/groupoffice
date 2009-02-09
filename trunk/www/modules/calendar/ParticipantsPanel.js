@@ -263,6 +263,15 @@ Ext.extend(GO.calendar.ParticipantsPanel, GO.grid.GridPanel, {
 			});
 		}
 		this.addParticipantsDialog.show();
+	},
+	checkAvailability : function() {
+		if (!this.availabilityWindow) {
+			this.availabilityWindow = new GO.calendar.AvailabilityCheckWindow();
+		}
+		this.availabilityWindow.show({
+			date: this.startDate.getRawValue(),
+			event_id: this.event_id
+		});
 	}
 
 });
