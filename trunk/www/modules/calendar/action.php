@@ -404,11 +404,11 @@ try{
 
 			}else
 			{
-
+				
 				$event_id= $cal->add_event($event, $calendar);
 				if($event_id)
 				{
-					$calendar_user = $GO_USERS->get_user($calendar['user_id']);
+					/*$calendar_user = $GO_USERS->get_user($calendar['user_id']);
 					
 					if($calendar_user)
 					{
@@ -419,7 +419,7 @@ try{
 						$participant['status']=1;
 						
 						$cal->add_participant($participant);
-					}
+					}*/
 					
 
 					if(!empty($_POST['link']))
@@ -431,8 +431,6 @@ try{
 						$event_id,
 						1);
 					}
-
-
 
 					if(isset($_REQUEST['exception_event_id']) && $_REQUEST['exception_event_id'] > 0)
 					{
@@ -458,14 +456,30 @@ try{
 					
 					$response['event_id']=$event_id;
 					$response['success']=true;
-				}
-					
+				}					
 			}
 			
-		
-			
+			if(!empty($_POST['participants']))
+			{
+				$ids=array();
+				$participants = json_decode($_POST['participants'], true);
+				foreach($participants as $p)
+				{										
+					if(substr($p['id'], 0,4)=='new_')
+					{
+						$participant['event_id']=$event_id;
+						$participant['name']=$p['name'];
+						$participant['email']=$p['email'];
+						
+						$ids[]=$cal->add_participant($participant);					
+					}else
+					{
+						$ids[]=$p['id'];
+					}
+				}
+				$cal->delete_other_participants($event_id, $ids);
+			}			
 			break;
-
 
 		case 'save_calendar':
 

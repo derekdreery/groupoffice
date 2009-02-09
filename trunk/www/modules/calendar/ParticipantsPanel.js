@@ -178,6 +178,8 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 
 Ext.extend(GO.calendar.ParticipantsPanel, GO.grid.GridPanel, {
 
+	event_id : 0,
+	
 	loaded : false,
 
 	/*
@@ -189,15 +191,14 @@ Ext.extend(GO.calendar.ParticipantsPanel, GO.grid.GridPanel, {
 	 */
 
 	setEventId : function(event_id) {
-		this.store.baseParams.event_id = event_id;
-		this.loaded = false;
+		this.event_id = this.store.baseParams.event_id = event_id;
+		this.store.loaded = false;
 	},
 
 	onShow : function() {
-		if (!this.loaded && this.store.baseParams.event_id > 0) {
+		if (!this.store.loaded && this.store.baseParams.event_id > 0) {
 			this.store.load();
 		}
-		this.loaded = true;
 		GO.calendar.ParticipantsPanel.superclass.onShow.call(this);
 	},
 
@@ -241,8 +242,7 @@ Ext.extend(GO.calendar.ParticipantsPanel, GO.grid.GridPanel, {
 									Ext.MessageBox.alert(GO.lang['strError'],
 											GO.lang['strRequestError']);
 								} else {
-									var responseParams = GO
-											.decode(response.responseText);
+									var responseParams = Ext.decode(response.responseText);
 											
 											//not used yet
 									if(!this.newId)
@@ -301,8 +301,7 @@ Ext.extend(GO.calendar.ParticipantsPanel, GO.grid.GridPanel, {
 							Ext.MessageBox.alert(GO.lang['strError'],
 									GO.lang['strRequestError']);
 						} else {
-							var responseParams = GO
-									.decode(response.responseText);
+							var responseParams = Ext.decode(response.responseText);
 	
 							for (var i = 0; i < selections.length; i++) {									
 								selections[i].set('available', responseParams[selections[i].get('email')]);				
@@ -320,57 +319,55 @@ Ext.extend(GO.calendar.ParticipantsPanel, GO.grid.GridPanel, {
 		if (!this.availabilityWindow) {
 			this.availabilityWindow = new GO.calendar.AvailabilityCheckWindow();
 			this.availabilityWindow.on('select', function(dataview, index, node) {
+				var d = this.eventDialog;				
+				var time = node.id.substr(4);
 
-				var d = this.eventDialog;
+				var colonIndex = time.indexOf(':');
+
+				var minutes = time.substr(colonIndex + 1);
+				var hours = time.substr(0, colonIndex);
+
+				var hourDiff = parseInt(d.endHour.getValue())
+						- parseInt(d.startHour.getValue());
+				var minDiff = parseInt(d.endMin.getValue())
+						- parseInt(d.startMin.getValue());
+
+				if (minDiff < 0) {
+					minDiff += 60;
+					hourDiff--;
+				}
+
+				if (minutes < 10) {
+					minutes = '0' + minutes;
+				}
+
+				d.startHour.setValue(hours);
+				d.startMin.setValue(minutes);
+				d.startDate.setValue(Date.parseDate(
+						dataview.store.baseParams.date,
+						GO.settings.date_format));
+
+				var endHour = parseInt(hours) + hourDiff;
+				var endMin = parseInt(minutes) + minDiff;
 				
-						var time = node.id.substr(4);
+				if (endMin > 60) {
+					endMin -= 60;
+					endHour++;
+				}
+				if (endMin < 10) {
+					endMin = "0" + endMin;
+				}
 
-						var colonIndex = time.indexOf(':');
+				d.endHour.setValue(endHour);
+				d.endMin.setValue(endMin);
+				d.endDate.setValue(Date.parseDate(
+						dataview.store.baseParams.date,
+						GO.settings.date_format));
 
-						var minutes = time.substr(colonIndex + 1);
-						var hours = time.substr(0, colonIndex);
-
-						var hourDiff = parseInt(d.endHour.getValue())
-								- parseInt(d.startHour.getValue());
-						var minDiff = parseInt(d.endMin.getValue())
-								- parseInt(d.startMin.getValue());
-
-						if (minDiff < 0) {
-							minDiff += 60;
-							hourDiff--;
-						}
-
-						if (minutes < 10) {
-							minutes = '0' + minutes;
-						}
-
-						d.startHour.setValue(hours);
-						d.startMin.setValue(minutes);
-						d.startDate.setValue(Date.parseDate(
-								dataview.store.baseParams.date,
-								GO.settings.date_format));
-
-						var endHour = parseInt(hours) + hourDiff;
-						var endMin = parseInt(minutes) + minDiff;
-						
-						if (endMin > 60) {
-							endMin -= 60;
-							endHour++;
-						}
-						if (endMin < 10) {
-							endMin = "0" + endMin;
-						}
-
-						d.endHour.setValue(endHour);
-						d.endMin.setValue(endMin);
-						d.endDate.setValue(Date.parseDate(
-								dataview.store.baseParams.date,
-								GO.settings.date_format));
-
-						d.tabPanel.setActiveTab(0);
-						this.reloadAvailability();
-						this.availabilityWindow.hide();
-					}, this);
+				d.tabPanel.setActiveTab(0);
+				this.reloadAvailability();
+				this.availabilityWindow.hide();
+			}, this);
 		}
 		var records = this.store.getRange();
 		var emails = [];
