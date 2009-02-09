@@ -1,4 +1,5 @@
 <?php
+header('Content-Type: text/html; charset=UTF-8');
 if(file_exists('Group-Office.php'))
 {
 	require_once("Group-Office.php");
