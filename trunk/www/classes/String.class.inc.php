@@ -506,11 +506,12 @@ class String {
 
 		$email_module = isset($GO_MODULES->modules['email']) && $GO_MODULES->modules['email']['read_permission'];
 
-		$text = htmlspecialchars($text, ENT_QUOTES, 'UTF-8')."\n";
+		//$text = htmlspecialchars($text, ENT_QUOTES, 'UTF-8')."\n";
 		if($convert_links)
 		{
+			//
 			//$text = preg_replace("/(?:^|\b)(((http(s?):\/\/)|(www\.-))([\w\.-]+)([,:;%#&\/?=\w+\.\-@]+))(?:\b|$)/is", "<a href=\"http$4://$5$6$7\" target=\"_blank\" class=\"normal-link\">$1</a>", $text);
-			$text = preg_replace("/\b(https?:\/\/[^\s]*)(\s)/i", '<a href="$1" target="_blank" class="normal-link">$1</a>$2', $text);
+			$text = preg_replace("/\b(https?:\/\/[a-z0-9\.&\-\/@#;`~=%?]+)/i", '<a href="$1" target="_blank" class="normal-link">$1</a>', $text);
 			//$text = preg_replace("/(\A|\s)([\w\.\-]+)(@)([\w\.-]+)([A-Za-z]{2,3})\b/i", "\\1<a href=\"mailto:\\2\\3\\4\\5\">\\2\\3\\4\\5</a>", $text);
 			if($email_module)
 			{
