@@ -584,7 +584,7 @@ try{
 
 			$event_id=$_REQUEST['event_id'];
 
-			if(isset($_REQUEST['delete_keys']))
+			/*if(isset($_REQUEST['delete_keys']))
 			{
 				try{
 					$response['deleteSuccess']=true;
@@ -612,28 +612,48 @@ try{
 
 					$cal->add_participant($participant);
 				}
-			}
+			}*/
 
-			$cal2 = new calendar();
-
-			$event = $cal->get_event($event_id);
-
-			$response['total'] = $cal->get_participants($event_id);
-			$response['results']=array();
-			while($cal->next_record(DB_ASSOC))
+			if($event_id>0)
 			{
-				$participant = $cal->record;
-
-				$participant['available']='?';
-				$user=$GO_USERS->get_user_by_email($participant['email']);
-				if($user)
+				$cal2 = new calendar();		
+	
+				$event = $cal->get_event($event_id);
+	
+				$response['total'] = $cal->get_participants($event_id);
+				$response['results']=array();
+				while($cal->next_record(DB_ASSOC))
 				{
-					$participant['available']=$cal2->is_available($user['id'], $event['start_time'], $event['end_time'], $event['id']) ? '1' : '0';
+					$participant = $cal->record;
+	
+					$participant['available']='?';
+					$user=$GO_USERS->get_user_by_email($participant['email']);
+					if($user)
+					{
+						$participant['available']=$cal2->is_available($user['id'], $event['start_time'], $event['end_time'], $event['id']) ? '1' : '0';
+					}
+	
+					$response['results'][]=$participant;
 				}
-
-				$response['results'][]=$participant;
+			}else
+			{
+				
 			}
 			break;
+		case 'get_default_participant':
+				$calendar = $cal->get_calendar($_REQUEST['calendar_id']);
+				$calendar_user = $GO_USERS->get_user($calendar['user_id']);
+				
+				if($calendar_user)
+				{
+					$response['user_id']=$calendar_user['id'];
+					$response['name']=String::format_name($calendar_user);
+					$response['email']=$calendar_user['email'];
+					$response['status']="1";
+					$response['available']=$cal->is_available($response['user_id'], $_REQUEST['start_time'], $_REQUEST['end_time'], 0) ? '1' : '0';
+				}
+			break;
+		
 			
 		case 'check_availability':
 				$event_id = empty($_REQUEST['event_id']) ? 0 : $_REQUEST['event_id'];

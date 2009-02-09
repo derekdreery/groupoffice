@@ -188,10 +188,6 @@ try{
 					throw new AccessDeniedException();
 				}
 
-				
-				
-
-
 				if(isset($_POST['createException']) && $_POST['createException'] =='true')
 				{
 
@@ -478,7 +474,21 @@ try{
 					}
 				}
 				$cal->delete_other_participants($event_id, $ids);
-			}			
+			}elseif(isset($response['event_id']))
+			{
+				$calendar_user = $GO_USERS->get_user($calendar['user_id']);
+					
+				if($calendar_user)
+				{
+					$participant['user_id']=$calendar_user['id'];
+					$participant['event_id']=$event_id;
+					$participant['name']=String::format_name($calendar_user);
+					$participant['email']=$calendar_user['email'];
+					$participant['status']=1;
+					
+					$cal->add_participant($participant);
+				}
+			}	
 			break;
 
 		case 'save_calendar':
