@@ -8,7 +8,7 @@ GO.ErrorDialog = function(config) {
 		closeAction : 'hide',
 		plain : true,
 		border : false,
-		closable : false,
+		closable : true,
 		title : GO.lang.strError,
 		modal : false,
 		items : [this.messagePanel = new Ext.Panel({
