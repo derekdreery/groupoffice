@@ -499,6 +499,12 @@ class calendar extends db
 		$sql = "DELETE FROM cal_participants WHERE id='".$this->escape($participant_id)."'";
 		return $this->query($sql);
 	}
+	
+	function delete_other_participants($event_id, $keep_ids)
+	{
+		$sql = "DELETE FROM cal_participants WHERE event_id=".$this->escape($event_id)." AND id NOT IN (".$this->escape(implode(',', $keep_ids)).")";
+		return $this->query($sql);
+	}
 
 	function remove_participants($event_id)
 	{

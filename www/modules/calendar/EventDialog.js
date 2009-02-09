@@ -130,8 +130,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					this.setValues(config.values);
 					// this.participantsPanel.setDisabled(false);
 
-					this
-							.setWritePermission(action.result.data.write_permission);
+					this.setWritePermission(action.result.data.write_permission);
 
 					this.selectCalendar
 							.setRemoteText(action.result.data.calendar_name);
@@ -297,11 +296,17 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 	},
 
 	submitForm : function(hide, config) {
+		
+		var params = {'task' : 'save_event'};
+		
+		if(this.participantsPanel.store.loaded)
+		{
+			params.participants=Ext.encode(this.participantsPanel.getGridData());
+		}
+		
 		this.formPanel.form.submit({
 			url : GO.settings.modules.calendar.url + 'action.php',
-			params : {
-				'task' : 'save_event'
-			},
+			params : params,
 			waitMsg : GO.lang.waitMsgSave,
 			success : function(form, action) {
 
