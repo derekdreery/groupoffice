@@ -11,21 +11,22 @@ GO.ErrorDialog = function(config) {
 		closable : true,
 		title : GO.lang.strError,
 		modal : false,
-		items : [this.messagePanel = new Ext.Panel({
+		items : [
+				this.messagePanel = new Ext.FormPanel({
 							region : 'center',
 							cls : 'go-error-dialog',
 							autoHeight:true,
 							html : ''
-						}), this.detailPanel = new Ext.Panel({
+						}), 
+				this.detailPanel = new Ext.Panel({
 					region : 'south',
 					collapsible : true,
-					collapsed : true,
-					autoScroll : true,
+					collapsed:true,
 					height : 150,
 					title : GO.lang.errorDetails,
-					//frame:true,
 					titleCollapse:true,
-					html : ''
+					autoScroll:true,
+					html:''
 				})],
 		buttons : [{
 					text : GO.lang.cmdClose,
@@ -49,7 +50,7 @@ Ext.extend(GO.ErrorDialog, GO.Window, {
 				this.detailPanel.collapse();
 
 				this.messagePanel.body.update(error);
-				this.detailPanel.body.update(details);
+				this.detailPanel.body.update('<pre>'+details+'</pre>');
 
 				GO.ErrorDialog.superclass.show.call(this);
 			}
