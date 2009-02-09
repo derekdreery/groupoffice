@@ -36,7 +36,7 @@ GO.calendar.Participant = Ext.data.Record.create([
 GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 
 	this.eventDialog = eventDialog;
-	
+
 	if (!config) {
 		config = {};
 	}
@@ -105,7 +105,8 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 							},
 							root : 'results',
 							id : 'id',
-							fields : ['id', 'name', 'email', 'available','status']
+							fields : ['id', 'name', 'email', 'available',
+									'status']
 						}),
 				border : false,
 				columns : [{
@@ -220,42 +221,54 @@ Ext.extend(GO.calendar.ParticipantsPanel, GO.grid.GridPanel, {
 							this.newId++;
 
 						var participants = [];
-						
-						for (var i = 0; i < selections.length; i++) {
-							participants.push(selections[i].get('email'));							
-						}
-						
-						Ext.Ajax.request({
-								url : GO.settings.modules.calendar.url
-										+ 'json.php',
-								params : {
-									task : 'check_availability',
-									emails : participants.join(','),
-									start_time : this.eventDialog.getStartDate().format('U'),
-									end_time : this.eventDialog.getEndDate().format('U')
-								},
-								callback : function(options, success, response) {
-									if (!success) {
-										Ext.MessageBox.alert(
-												GO.lang['strError'],
-												GO.lang['strRequestError']);
-									} else {
-										var responseParams = GO.decode(response.responseText);
 
-										for (var i = 0; i < selections.length; i++) {
-											var p = new GO.calendar.Participant({
-												id : 0,
-												name : selections[i].get('name'),
-												email : selections[i].get('email'),
-												status : 0,
-												available : responseParams[selections[i].get('email')]
-											});
-											this.store.insert(this.store.getCount(), p);
-										}
+						for (var i = 0; i < selections.length; i++) {
+							participants.push(selections[i].get('email'));
+						}
+
+						Ext.Ajax.request({
+							url : GO.settings.modules.calendar.url + 'json.php',
+							params : {
+								task : 'check_availability',
+								emails : participants.join(','),
+								start_time : this.eventDialog.getStartDate()
+										.format('U'),
+								end_time : this.eventDialog.getEndDate()
+										.format('U')
+							},
+							callback : function(options, success, response) {
+								if (!success) {
+									Ext.MessageBox.alert(GO.lang['strError'],
+											GO.lang['strRequestError']);
+								} else {
+									var responseParams = GO
+											.decode(response.responseText);
+											
+											//not used yet
+									if(!this.newId)
+									{
+										this.newId=0;
+									}else
+									{
+										this.newId++;
 									}
-								},
-								scope : this
-							})
+
+									for (var i = 0; i < selections.length; i++) {
+										var p = new GO.calendar.Participant({
+											id : 'new_'+this.newId,
+											name : selections[i].get('name'),
+											email : selections[i].get('email'),
+											status : "0",
+											available : responseParams[selections[i]
+													.get('email')]
+										});
+										this.store.insert(
+												this.store.getCount(), p);
+									}
+								}
+							},
+							scope : this
+						});
 
 					}
 				},
@@ -264,14 +277,114 @@ Ext.extend(GO.calendar.ParticipantsPanel, GO.grid.GridPanel, {
 		}
 		this.addParticipantsDialog.show();
 	},
+	
+	reloadAvailability : function(){
+		
+		var selections = this.store.getRange();
+		if(selections.length)
+		{
+			var participants = [];
+			for (var i = 0; i < selections.length; i++) {
+				participants.push(selections[i].get('email'));
+			}
+			
+			Ext.Ajax.request({
+				url : GO.settings.modules.calendar.url + 'json.php',
+					params : {
+						task : 'check_availability',
+						emails : participants.join(','),
+						start_time : this.eventDialog.getStartDate().format('U'),
+						end_time : this.eventDialog.getEndDate().format('U')
+					},
+					callback : function(options, success, response) {
+						if (!success) {
+							Ext.MessageBox.alert(GO.lang['strError'],
+									GO.lang['strRequestError']);
+						} else {
+							var responseParams = GO
+									.decode(response.responseText);
+	
+							for (var i = 0; i < selections.length; i++) {									
+								selections[i].set('available', responseParams[selections[i].get('email')]);				
+								
+							}
+							this.store.commitChanges();
+						}
+					},
+					scope : this
+				});
+		}
+	},
+	
 	checkAvailability : function() {
 		if (!this.availabilityWindow) {
 			this.availabilityWindow = new GO.calendar.AvailabilityCheckWindow();
+			this.availabilityWindow.on('select', function(dataview, index, node) {
+
+				var d = this.eventDialog;
+				
+						var time = node.id.substr(4);
+
+						var colonIndex = time.indexOf(':');
+
+						var minutes = time.substr(colonIndex + 1);
+						var hours = time.substr(0, colonIndex);
+
+						var hourDiff = parseInt(d.endHour.getValue())
+								- parseInt(d.startHour.getValue());
+						var minDiff = parseInt(d.endMin.getValue())
+								- parseInt(d.startMin.getValue());
+
+						if (minDiff < 0) {
+							minDiff += 60;
+							hourDiff--;
+						}
+
+						if (minutes < 10) {
+							minutes = '0' + minutes;
+						}
+
+						d.startHour.setValue(hours);
+						d.startMin.setValue(minutes);
+						d.startDate.setValue(Date.parseDate(
+								dataview.store.baseParams.date,
+								GO.settings.date_format));
+
+						var endHour = parseInt(hours) + hourDiff;
+						var endMin = parseInt(minutes) + minDiff;
+						
+						if (endMin > 60) {
+							endMin -= 60;
+							endHour++;
+						}
+						if (endMin < 10) {
+							endMin = "0" + endMin;
+						}
+
+						d.endHour.setValue(endHour);
+						d.endMin.setValue(endMin);
+						d.endDate.setValue(Date.parseDate(
+								dataview.store.baseParams.date,
+								GO.settings.date_format));
+
+						d.tabPanel.setActiveTab(0);
+						this.reloadAvailability();
+						this.availabilityWindow.hide();
+					}, this);
+		}
+		var records = this.store.getRange();
+		var emails = [];
+		var names = [];
+		for (var i = 0; i < records.length; i++) {
+			emails.push(records[i].get('email'));
+			names.push(records[i].get('name'));
 		}
 		this.availabilityWindow.show({
-			date: this.startDate.getRawValue(),
-			event_id: this.event_id
-		});
+					date : this.eventDialog.startDate.getRawValue(),
+					event_id : this.event_id,
+					emails : emails.join(','),
+					names : names.join(',')
+				});
 	}
 
 });

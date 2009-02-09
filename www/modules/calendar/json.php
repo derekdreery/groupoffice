@@ -657,12 +657,11 @@ try{
 		break;
 		
 		case 'availability':
-			$event_id = ($_REQUEST['event_id']);
+			$event_id = empty($_REQUEST['event_id']) ? 0 : $_REQUEST['event_id'];
 			$date = Date::to_unixtime($_REQUEST['date']);
+			$emails = explode(',',$_REQUEST['emails']);
+			$names = isset($_REQUEST['names']) ? explode(',',$_REQUEST['names']) : $emails;
 
-			//echo date('Ymd G:i', $date);
-			$cal2 = new calendar();
-			$cal->get_participants($event_id);
 
 			$merged_free_busy=array();
 			for($i=0;$i<1440;$i+=15)
@@ -671,18 +670,16 @@ try{
 			}
 
 			$response['participants']=array();
-			while($cal->next_record(DB_ASSOC))
+			while($email = array_shift($emails))
 			{
-				$participant=$cal->record;
-
-				$user = $GO_USERS->get_user_by_email($cal->f('email'));
-
+				$participant['name']=array_shift($names);
+				$participant['email']=$email;
+				$participant['freebusy']=array();
+				
+				$user = $GO_USERS->get_user_by_email($email);				
 				if($user)
 				{
-					$freebusy=$cal2->get_free_busy($user['id'], $date, ($_POST['event_id']));
-
-					$participant['freebusy']=array();
-
+					$freebusy=$cal->get_free_busy($user['id'], $date, $event_id);
 					foreach($freebusy as $min=>$busy)
 					{
 						if($busy=='1')
@@ -696,6 +693,7 @@ try{
 				}
 				$response['participants'][]=$participant;
 			}
+			
 
 			$participant['name']=$lang['calendar']['allTogether'];
 			$participant['email']='';

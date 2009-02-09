@@ -429,8 +429,9 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					this.repeatEndDate.setValue(eD.add(Date.DAY, 1));
 				}
 			}
-
 		}
+		
+		this.participantsPanel.reloadAvailability();
 	},
 
 	buildForm : function() {
