@@ -13,21 +13,6 @@
  
 Ext.namespace('GO.util');
 
-
-GO.decode = function(json){
-	
-	var data=false;
-	try{
-		data = Ext.decode(json);
-	}
-	catch(e)
-	{
-		GO.errorDialog.show(GO.lang.serverError, json);
-	}
-	
-	return data;
-}
-
 GO.util.empty = function(v)
 {
 	if(!v)
@@ -219,7 +204,7 @@ GO.deleteItems = function(config)
 				params: config.params,
 				callback: function(options, success, response)
 				{
-					var responseParams = GO.decode(response.responseText);
+					var responseParams = Ext.decode(response.responseText);
 					if(!responseParams.success)
 					{
 						if(config.failure)

@@ -24,7 +24,7 @@
  	
  	if(state)
  	{
- 		state=GO.decode(state);
+ 		state=Ext.decode(state);
  		if(!state[0] || state[0].col=='undefined')
 	 	{
 	 		state=false;
