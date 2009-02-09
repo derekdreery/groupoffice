@@ -293,7 +293,7 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
 						//silently ignore
 					}else
 					{				
-						var data = GO.decode(response.responseText);
+						var data = Ext.decode(response.responseText);
 						
 						if(data)
 						{

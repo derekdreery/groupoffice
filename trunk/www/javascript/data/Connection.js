@@ -155,7 +155,7 @@ GO.data.Connection = Ext.extend(Ext.data.Connection, {
 		{
 			if(response.responseText.substr(0,1)=='{')
 			{
-				var data = GO.decode(response.responseText);
+				var data = Ext.decode(response.responseText);
 			}else
 			{
 				var data = {};

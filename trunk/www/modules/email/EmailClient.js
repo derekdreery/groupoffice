@@ -39,7 +39,7 @@ GO.email.EmailClient = function(config){
 	var messagesAtTop = Ext.state.Manager.get('em-msgs-top');		
 	if(messagesAtTop)
 	{
-		messagesAtTop = GO.decode(messagesAtTop);
+		messagesAtTop = Ext.decode(messagesAtTop);
 	}else
 	{
 		messagesAtTop =screen.width<1024;
@@ -215,7 +215,7 @@ GO.email.EmailClient = function(config){
 									Ext.MessageBox.alert(GO.lang.strError, response.result.errors);
 								}else
 								{
-									var responseParams = GO.decode(response.responseText);
+									var responseParams = Ext.decode(response.responseText);
 									if(responseParams.success)
 									{
 										//remove preloaded children otherwise it won't request the server
@@ -754,7 +754,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	deleteMessages : function(){ 
 		this.messagesGrid.deleteSelected({
 			callback : function(config){
-				var keys = GO.decode(config.params.delete_keys);				
+				var keys = Ext.decode(config.params.delete_keys);				
 				for(var i=0;i<keys.length;i++)
 				{
 					if(this.messagePanel.uid==keys[i])
@@ -864,7 +864,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 							alert( GO.lang['strRequestError']);
 						}else
 						{
-							var responseParams = GO.decode(response.responseText);
+							var responseParams = Ext.decode(response.responseText);
 							if(!responseParams.success)
 							{
 								alert( responseParams.feedback);
@@ -930,7 +930,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 							{
 								if(success)
 								{
-									var values = GO.decode(response.responseText);
+									var values = Ext.decode(response.responseText);
 									
 									if(!values.success)
 									{
@@ -1118,7 +1118,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 			{
 				if(success)
 				{
-					var responseParams = GO.decode(response.responseText);
+					var responseParams = Ext.decode(response.responseText);
 					
 					for(var folder_id in responseParams.status)
 					{
@@ -1182,7 +1182,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 					}else
 					{							
 						
-						var responseParams = GO.decode(response.responseText);
+						var responseParams = Ext.decode(response.responseText);
 						if(!responseParams.success)
 						{
 							Ext.MessageBox.alert(GO.lang['strError'], responseParams.feedback);
@@ -1354,7 +1354,7 @@ GO.linkHandlers[9] = function(id, remoteMessage){
 			scope: this,
 			callback: function(options, success, response)
 			{
-				var data = GO.decode(response.responseText);
+				var data = Ext.decode(response.responseText);
 				messagePanel.setMessage(data);				
 				messagePanel.el.unmask();				
 			}

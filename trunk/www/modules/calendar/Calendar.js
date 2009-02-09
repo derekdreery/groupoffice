@@ -461,7 +461,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			};
 		}else
 		{
-			this.state = GO.decode(this.state);
+			this.state = Ext.decode(this.state);
 		}
 		
 		if(this.state.displayType=='view')
@@ -694,7 +694,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 						Ext.MessageBox.alert(GO.lang.strError, GO.lang.strRequestError);
 					}else
 					{
-						var responseParams = GO.decode(response.responseText);
+						var responseParams = Ext.decode(response.responseText);
 						if(!responseParams.success)
 						{						
 							Ext.MessageBox.alert(GO.lang.strError, responseParams.feedback);
@@ -894,7 +894,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					params: params,
 					callback: function(options, success, response)
 					{
-    				var responseParams = GO.decode(response.responseText);
+    				var responseParams = Ext.decode(response.responseText);
 						if(!responseParams.success)
 						{
 							Ext.MessageBox.alert(GO.lang.strError, responseParams.feedback);
@@ -998,7 +998,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					params: params,
 					callback: function(options, success, response)
 					{
-	  				var responseParams = GO.decode(response.responseText);
+	  				var responseParams = Ext.decode(response.responseText);
 						if(!responseParams.success)
 						{
 							Ext.MessageBox.alert(GO.lang.strError, responseParams.feedback);
@@ -1077,7 +1077,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				params: params,
 				callback: function(options, success, response)
 				{
-  				var responseParams = GO.decode(response.responseText);
+  				var responseParams = Ext.decode(response.responseText);
 					if(!responseParams.success)
 					{
 						Ext.MessageBox.alert(GO.lang.strError, responseParams.feedback);

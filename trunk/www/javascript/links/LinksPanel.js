@@ -297,7 +297,7 @@ Ext.extend(GO.grid.LinksPanel, Ext.Panel, {
 					Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
 				}else
 				{
-					var responseParams = GO.decode(response.responseText);
+					var responseParams = Ext.decode(response.responseText);
 					
 					if(responseParams.moved_links)
 					{

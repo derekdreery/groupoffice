@@ -29,7 +29,7 @@
    
    For example if you have a PHP array of settings you can do this in the document head:
    
-   var ExtState = GO.decode('<?php echo json_encode($state); ?>'); 
+   var ExtState = Ext.decode('<?php echo json_encode($state); ?>'); 
    
     
    The $state PHP variable holds all the values that you can pull from a database
