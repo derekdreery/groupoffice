@@ -239,28 +239,28 @@ class email extends db
 
 				if($this->_add_folder($account['mbroot'].$lang['email']['trash'], $mailbox_names, $subscribed_names))
 				{
-					$account['trash'] = $account['mbroot'].$this->mail->utf7_imap_encode($lang['email']['trash']);
+					$account['trash'] = $account['mbroot'].$lang['email']['trash'];
 				}elseif($account['mbroot'] = $this->mail->check_mbroot($mailbox_names[0]))
 				{
-					if($this->_add_folder($account['mbroot'].$this->mail->utf7_imap_encode($lang['email']['trash']), $mailbox_names, $subscribed_names))
+					if($this->_add_folder($account['mbroot'].$lang['email']['trash'], $mailbox_names, $subscribed_names))
 					{
-						$account['trash'] = $account['mbroot'].$this->mail->utf7_imap_encode($lang['email']['trash']);
+						$account['trash'] = $account['mbroot'].$lang['email']['trash'];
 					}
 				}
 
-				if($this->_add_folder($account['mbroot'].$this->mail->utf7_imap_encode($lang['email']['sent']), $mailbox_names, $subscribed_names))
+				if($this->_add_folder($account['mbroot'].$lang['email']['sent'], $mailbox_names, $subscribed_names))
 				{
-					$account['sent'] = $account['mbroot'].$this->mail->utf7_imap_encode($lang['email']['sent']);
+					$account['sent'] = $account['mbroot'].$lang['email']['sent'];
 				}
 
-				if($this->_add_folder($account['mbroot'].$this->mail->utf7_imap_encode($lang['email']['drafts']), $mailbox_names, $subscribed_names))
+				if($this->_add_folder($account['mbroot'].$lang['email']['drafts'], $mailbox_names, $subscribed_names))
 				{
-					$account['drafts'] = $account['mbroot'].$this->mail->utf7_imap_encode($lang['email']['drafts']);
+					$account['drafts'] = $account['mbroot'].$lang['email']['drafts'];
 				}
 
-				if($this->_add_folder($account['mbroot'].$this->mail->utf7_imap_encode('Spam'), $mailbox_names, $subscribed_names))
+				if($this->_add_folder($account['mbroot'].'Spam', $mailbox_names, $subscribed_names))
 				{
-					$account['spam']= $account['mbroot'].$this->mail->utf7_imap_encode('Spam');
+					$account['spam']= $account['mbroot'].'Spam';
 				}
 			}
 			$this->mail->close();
@@ -311,6 +311,7 @@ class email extends db
 
 	function _add_folder($name, $mailbox_names, $subscribed_names)
 	{
+		$name = $this->mail->utf7_imap_encode($name);
 		if (!in_array($name, $mailbox_names))
 		{
 			return @$this->mail->create_folder($name);
@@ -771,19 +772,21 @@ class email extends db
 				$folder['unseen'] = $status->unseen;
 			}*/
 
-			if($mailbox['name'] == 'INBOX')
+			$unenc_name = $mail->utf7_imap_decode($mailbox['name']);
+			
+			if($unenc_name == 'INBOX')
 			{
 				$folder['sort_order'] = 0;
-			}elseif($mailbox['name'] == $account['sent'])
+			}elseif($unenc_name == $account['sent'])
 			{
 				$folder['sort_order'] = 1;
-			}elseif($mailbox['name'] == $account['drafts'])
+			}elseif($unenc_name == $account['drafts'])
 			{
 				$folder['sort_order'] = 2;
-			}elseif($mailbox['name'] == $account['trash'])
+			}elseif($unenc_name == $account['trash'])
 			{
 				$folder['sort_order'] = 3;
-			}elseif($mailbox['name'] == $account['spam'])
+			}elseif($unenc_name == $account['spam'])
 			{
 				$folder['sort_order'] = 4;
 			}else
