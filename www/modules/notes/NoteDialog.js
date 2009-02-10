@@ -64,6 +64,8 @@ Ext.extend(GO.notes.NoteDialog, Ext.Window,{
 	
 	show : function (note_id, config) {
 
+		config = config || {};
+		
 		if(!this.rendered)
 			this.render(Ext.getBody());
 		

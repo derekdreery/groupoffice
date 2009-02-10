@@ -1,3 +1,5 @@
+- Save e-mail as file, task, appointment and note (pro version)
+
 2009/02/06 Version 3.00-stable-18
 - Problem in billing module that asked for book selection each time
 - Autofill values when you create an invoice from a contact or company
