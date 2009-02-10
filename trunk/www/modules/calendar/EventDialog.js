@@ -660,7 +660,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					this.subjectField, 
 					this.locationField, 
 					this.selectLinkField,
-					this.description, {
+					 {
 						border : false,
 						layout : 'table',
 						defaults : {
@@ -734,6 +734,18 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 						allowBlank : false
 					})]
 
+		});
+		
+		this.descriptionPanel = new Ext.Panel({
+			title: GO.lang.strDescription,
+			layout: 'fit',
+			border:false,
+			items:[{
+					xtype:'textarea',
+					name : 'description',
+					anchor:'100% 100%',
+					hideLabel:true
+				}]
 		});
 
 		// Start of recurrence tab
@@ -1148,6 +1160,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 		var items = [
 			this.propertiesPanel, 
+			this.descriptionPanel,
 			this.recurrencePanel, 
 			this.optionsPanel,
 			this.participantsPanel
