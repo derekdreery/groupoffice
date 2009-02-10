@@ -464,7 +464,7 @@ class addressbook extends db {
 
 		if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
 		{
-			$sql .= "LEFT JOIN cf_2 ON cf_2.link_id=ab_contacts.link_id ";
+			$sql .= "LEFT JOIN cf_2 ON cf_2.link_id=ab_contacts.id ";
 		}
 		
 		if(count($mailings_filter))
@@ -598,7 +598,7 @@ class addressbook extends db {
 		if(isset($GO_MODULES->modules['customfields']))
 		{
 			$sql .= "ab_companies.*, cf_3.* FROM ab_companies ".
-				"LEFT JOIN cf_3 ON cf_3.link_id=ab_companies.link_id ";
+				"LEFT JOIN cf_3 ON cf_3.link_id=ab_companies.id ";
 		}else {
 			$sql .= "ab_companies.* FROM ab_companies ";
 		}

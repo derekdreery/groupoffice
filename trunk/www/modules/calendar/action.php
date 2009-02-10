@@ -507,49 +507,51 @@ try{
 						$participants[] = $RFC822->write_address($cal->f('name'), $cal->f('email'));
 					}
 				}
-				
-				$swift = new GoSwift(
-					implode(',', $participants), 
-					$lang['calendar']['appointment'].$event['name']);
-				
-				class Replacements extends Swift_Plugin_Decorator_Replacements {
-					function getReplacementsFor($address) {
-						return array('%email%'=>$address);
-					}
-				}
-				//Load the plugin with the extended replacements class
-				$swift->attachPlugin(new Swift_Plugin_Decorator(new Replacements()), "decorator");
-					
-				$swift->set_body('<p>'.$lang['calendar']['invited'].'</p>'.
-					$cal->event_to_html($event).
-					'<p>'.$lang['calendar']['acccept_question'].'</p>'.
-					'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$event_id.'&task=accept&email=%email%">'.$lang['calendar']['accept'].'</a>'.
-					'&nbsp;|&nbsp;'.
-					'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$event_id.'&task=decline&email=%email%">'.$lang['calendar']['decline'].'</a>');
-
-				//create ics attachment
-				require_once ($GO_MODULES->modules['calendar']['class_path'].'go_ical.class.inc');
-				$ical = new go_ical();
-				$ics_string = $ical->export_event($event_id);
-	
-				$name = File::strip_invalid_chars($event['name']).'.ics';
-	
-				$dir=$GO_CONFIG->tmpdir.'attachments/';
-				filesystem::mkdir_recursive($dir);
-	
-				$tmp_file = $dir.$name;
-	
-				$fp = fopen($tmp_file,"wb");
-				fwrite ($fp,$ics_string);
-				fclose($fp);
-				
-				$file =& new Swift_File($tmp_file);
-				$attachment =& new Swift_Message_Attachment($file,utf8_basename($tmp_file), File::get_mime($tmp_file));
-				$swift->message->attach($attachment);
-				
-				if(!$swift->sendmail($_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name']))
+				if(count($participants))
 				{
-					throw new Exception('Could not send invitaition\n'.var_export($swift, true));
+					$swift = new GoSwift(
+						implode(',', $participants), 
+						$lang['calendar']['appointment'].$event['name']);
+					
+					class Replacements extends Swift_Plugin_Decorator_Replacements {
+						function getReplacementsFor($address) {
+							return array('%email%'=>$address);
+						}
+					}
+					//Load the plugin with the extended replacements class
+					$swift->attachPlugin(new Swift_Plugin_Decorator(new Replacements()), "decorator");
+						
+					$swift->set_body('<p>'.$lang['calendar']['invited'].'</p>'.
+						$cal->event_to_html($event).
+						'<p>'.$lang['calendar']['acccept_question'].'</p>'.
+						'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$event_id.'&task=accept&email=%email%">'.$lang['calendar']['accept'].'</a>'.
+						'&nbsp;|&nbsp;'.
+						'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$event_id.'&task=decline&email=%email%">'.$lang['calendar']['decline'].'</a>');
+	
+					//create ics attachment
+					require_once ($GO_MODULES->modules['calendar']['class_path'].'go_ical.class.inc');
+					$ical = new go_ical();
+					$ics_string = $ical->export_event($event_id);
+		
+					$name = File::strip_invalid_chars($event['name']).'.ics';
+		
+					$dir=$GO_CONFIG->tmpdir.'attachments/';
+					filesystem::mkdir_recursive($dir);
+		
+					$tmp_file = $dir.$name;
+		
+					$fp = fopen($tmp_file,"wb");
+					fwrite ($fp,$ics_string);
+					fclose($fp);
+					
+					$file =& new Swift_File($tmp_file);
+					$attachment =& new Swift_Message_Attachment($file,utf8_basename($tmp_file), File::get_mime($tmp_file));
+					$swift->message->attach($attachment);
+					
+					if(!$swift->sendmail($_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name']))
+					{
+						throw new Exception('Could not send invitaition');
+					}
 				}
 			}
 			

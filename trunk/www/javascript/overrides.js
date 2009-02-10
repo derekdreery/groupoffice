@@ -275,3 +275,35 @@ Ext.decode = Ext.util.JSON.decode = function(json){
 		GO.errorDialog.show(GO.lang.serverError, json);
 	}
 };
+
+
+/**
+ * Don't position tooltip outside the screen
+ */
+
+Ext.override(Ext.ToolTip,{
+
+	adjustPosition : function(x, y){
+    // keep the position from being under the mouse
+    var ay = this.targetXY[1], h = this.getSize().height;
+    if(this.constrainPosition && y <= ay && (y+h) >= ay){
+        y = ay-h-5;
+    }
+    
+    var body = Ext.getBody();
+    var bodyHeight = body.getHeight();
+    var tipSize = this.getSize();
+    
+    if(y+tipSize.height>bodyHeight)
+    {
+    	y=bodyHeight-tipSize.height-5;
+    }
+    
+    if(y<0)
+    {
+    	y=5;
+    }
+    
+    return {x : x, y: y};
+  }    
+}); 
