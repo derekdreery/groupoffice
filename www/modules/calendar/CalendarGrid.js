@@ -392,7 +392,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		{
   		if(this.loaded)
   		{
-  			this.load();
+  			this.store.reload();
   		}
 		}	
  },

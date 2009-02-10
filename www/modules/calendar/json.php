@@ -22,6 +22,7 @@ require($GO_LANGUAGE->get_language_file('calendar'));
 require_once ($GO_MODULES->modules['calendar']['class_path']."calendar.class.inc");
 $cal = new calendar();
 
+$max_description_length=1000;
 
 $task=isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
 
@@ -69,7 +70,7 @@ try{
 					'start_time'=> date('Y-m-d H:i', $event['start_time']),
 					'end_time'=> date('Y-m-d H:i', $event['end_time']),
 					'location'=>htmlspecialchars($event['location'], ENT_COMPAT, 'UTF-8'),
-					'description'=>htmlspecialchars($event['description'], ENT_COMPAT, 'UTF-8'),
+					'description'=>ml2br(htmlspecialchars(String::cut_string($event['description'],$max_description_length)), ENT_COMPAT, 'UTF-8'),
 					'private'=>($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']),
 					'repeats'=>!empty($event['rrule']),
 					'day'=>$event['start_time']<$today_end ? $lang['common']['today'] : $lang['common']['tomorrow']
@@ -237,7 +238,7 @@ try{
 'start_time'=> date('Y-m-d H:i', $event['start_time']),
 'end_time'=> date('Y-m-d H:i', $event['end_time']),
 'location'=>htmlspecialchars($event['location'], ENT_COMPAT, 'UTF-8'),
-'description'=>nl2br(htmlspecialchars($event['description'], ENT_COMPAT, 'UTF-8')),
+'description'=>nl2br(htmlspecialchars(String::cut_string($event['description'],$max_description_length), ENT_COMPAT, 'UTF-8')),
 'background'=>$event['background'],
 'private'=>($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']),
 'repeats'=>!empty($event['rrule']),
@@ -407,7 +408,7 @@ try{
 					'start_time'=> date('Y-m-d H:i', $event['start_time']),
 					'end_time'=> date('Y-m-d H:i', $event['end_time']),
 					'location'=>htmlspecialchars($event['location'], ENT_COMPAT, 'UTF-8'),
-					'description'=>nl2br(htmlspecialchars($event['description'], ENT_COMPAT, 'UTF-8')),
+					'description'=>nl2br(htmlspecialchars(String::cut_string($event['description'],$max_description_length), ENT_COMPAT, 'UTF-8')),
 					'background'=>$event['background'],
 					'repeats'=>!empty($event['rrule']),
 					'private'=>$private,
