@@ -782,7 +782,7 @@ class tasks extends db
 			$cache['name'] = '<span class="'.$class.'">'.$this->f('name').' ['.$status.']</span>';
 			//$cache['link_id'] = $this->f('link_id');
 			$cache['link_type']=12;
-			$cache['description']='';
+			$cache['description']=sprintf($lang['tasks']['dueAtdate'], Date::get_timestamp($record['due_time'],false));
 			$cache['type']=$lang['link_type'][12];
 			$cache['keywords']=$search->record_to_keywords($this->record).','.$cache['type'];
 			$cache['mtime']=$this->f('mtime');

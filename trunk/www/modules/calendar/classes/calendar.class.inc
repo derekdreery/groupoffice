@@ -502,6 +502,9 @@ class calendar extends db
 	
 	function delete_other_participants($event_id, $keep_ids)
 	{
+		if(!count($keep_ids))
+			return true;
+			
 		$sql = "DELETE FROM cal_participants WHERE event_id=".$this->escape($event_id)." AND id NOT IN (".$this->escape(implode(',', $keep_ids)).")";
 		return $this->query($sql);
 	}
@@ -1780,7 +1783,7 @@ class calendar extends db
 			$cache['name'] = $this->f('name');
 			$cache['link_type']=1;
 			$cache['module']='calendar';
-			$cache['description']=$this->f('description');
+			$cache['description']='';
 			$cache['type']=$lang['calendar']['event'];
 			$cache['keywords']=$search->record_to_keywords($this->record).','.$cache['type'];
 			$cache['mtime']=$this->f('mtime');

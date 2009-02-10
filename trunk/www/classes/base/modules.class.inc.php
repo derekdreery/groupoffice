@@ -120,6 +120,18 @@ class GO_MODULES extends db {
 	}
 	
 	/**
+	 * Checks if the current logged in user has access to a module
+	 * 
+	 * @param $module
+	 * @return bool
+	 */
+	
+	public function has_module($module)
+	{
+		return isset($this->modules[$module]) && ($this->modules[$module]['read_permission'] || $this->modules[$module]['write_permission']);
+	}
+	
+	/**
 	 * Will call a function in all main module classes
 	 * For example fire_event('delete_user', $arguments) will
 	 * call the function __on_delete_user in all modules.
