@@ -14,7 +14,7 @@
 /**
  * Don't copy the next line into a translation
  */
-GO.lang = {};
+
 /**
  * Copy everything below for translations
  */
