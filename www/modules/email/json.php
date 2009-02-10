@@ -694,6 +694,16 @@ try{
 				$address = $RFC822->parse_address_list($response['from']);
 				$response['sender']=isset($address[0]['email']) ? htmlspecialchars($address[0]['email'], ENT_QUOTES, 'UTF-8') : '';
 				$response['from']=isset($address[0]['personal']) ? htmlspecialchars($address[0]['personal'], ENT_QUOTES, 'UTF-8') : '';
+				
+				$response['sender_contact_id']=0;
+				if(!empty($_POST['get_contact_id']) && $GO_MODULES->has_module('addressbook'))
+				{
+					require($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc');
+					$ab = new addressbook();
+					
+					$contact = $ab->get_contact_by_email($response['sender'], $GO_SECURITY->user_id);
+					$response['sender_contact_id']=intval($contact['id']);
+				}
 
 
 				if(!empty($response['to']))

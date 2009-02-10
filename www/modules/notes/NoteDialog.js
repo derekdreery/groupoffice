@@ -109,6 +109,8 @@ Ext.extend(GO.notes.NoteDialog, Ext.Window,{
 				this.selectCategory.setRemoteText(config.category_name);
 			}
 			
+			this.formPanel.form.setValues(config.values);
+			
 			GO.notes.NoteDialog.superclass.show.call(this);
 		}
 		

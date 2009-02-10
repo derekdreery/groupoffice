@@ -21,4 +21,5 @@ $lang['tasks']['statuses']['IN-PROCESS']='Wordt aan gewerkt';
 $lang['tasks']['call']='Bellen';
 
 $lang['tasks']['import_success']='%s taken werden geïmporteerd';
+$lang['tasks']['dueAtdate']='Verloopt op %s';
 ?>
