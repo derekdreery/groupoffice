@@ -1,7 +1,6 @@
 modules/email/FoldersDialog.js
 modules/email/AccountDialog.js
 modules/email/SearchDialog.js
-modules/email/LinksDialog.js
 modules/email/MessagePanel.js
 
 modules/email/AccountsDialog.js
