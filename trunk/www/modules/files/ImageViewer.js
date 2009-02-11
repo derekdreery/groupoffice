@@ -40,7 +40,24 @@ GO.files.ImageViewer = Ext.extend(Ext.Window, {
 				document.location.replace(this.imgEl.dom.src);
 			},
 			scope: this
-		}];
+		}/*,'-',
+		{
+			iconCls: 'btn-save',
+			text: 'Ware grootte',
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				this.imgEl.setSize(this.originalImgSize.width, this.originalImgSize.height);
+			},
+			scope: this
+		},{
+			iconCls: 'btn-save',
+			text: 'Passend',
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				this.syncImgSize();
+			},
+			scope: this
+		}*/];
 		
 		GO.files.ImageViewer.superclass.initComponent.call(this);
 		this.on('resize', this.syncImgSize, this);
