@@ -750,7 +750,6 @@ try{
 				//$response['size']=Number::format_size($response['size']);
 
 				$parts = array_reverse($imap->f("parts"));
-debug($parts);
 
 				/*
 				 * Sometimes clients send multipart/alternative but there's only a text part. FIrst check if there's
@@ -869,6 +868,17 @@ debug($parts);
 						$attachments[]=$part;
 					}
 				}
+				
+				//When a mail is saved as a task/appointment/etc. the attachments will be saved temporarily
+				if(!empty($_POST['create_temporary_attachments']))
+				{
+					$tmp_dir = $GO_CONFIG->tmpdir.'temporary_attachments/';
+					if(!is_dir($tmp_dir))
+					{
+						mkdir($tmp_dir);
+					}	
+				}			
+				
 
 				//debug(var_export($attachments, true));
 
@@ -888,8 +898,22 @@ debug($parts);
 
 						$attachment['index']=$index;
 						$attachment['extension']=File::get_extension($attachments[$i]["name"]);
+						
+						if(!empty($_POST['create_temporary_attachments']))
+						{
+							$tmp_file = $tmp_dir.uniqid(time());
+							$data = $imap->view_part($uid, $attachment['number'], $attachment['transfer']);	
+							if($data && file_put_contents($tmp_file, $data))
+							{
+								$attachment['tmp_file']=$tmp_file;
+							}
+						}
+						
+						
 						$response['attachments'][]=$attachment;
 						$index++;
+						
+						
 					}
 
 					if (!empty($attachments[$i]["id"]))

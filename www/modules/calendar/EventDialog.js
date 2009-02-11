@@ -106,6 +106,10 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		// propertiesPanel.show();
 
 		delete this.link_config;
+		
+		//tmpfiles on the server ({name:'Name',tmp_file:/tmp/name.ext} will be attached)
+		this.formPanel.baseParams.tmp_files = config.tmp_files ? Ext.encode(config.tmp_files) : '';
+		
 		this.formPanel.form.reset();
 
 		this.tabPanel.setActiveTab(0);

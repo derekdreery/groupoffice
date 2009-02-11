@@ -506,7 +506,7 @@ class String {
 
 		$email_module = isset($GO_MODULES->modules['email']) && $GO_MODULES->modules['email']['read_permission'];
 
-		//$text = htmlspecialchars($text, ENT_QUOTES, 'UTF-8')."\n";
+		$text = htmlspecialchars($text, ENT_QUOTES, 'UTF-8')."\n";
 		if($convert_links)
 		{
 			//

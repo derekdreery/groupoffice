@@ -64,7 +64,7 @@ GO.tasks.TasksPanel = function(config)
 			renderer:function(value, p, record){
 				if(!GO.util.empty(record.data.description))
 				{
-		     p.attr = 'ext:qtip="'+record.data.description+'"';
+		     p.attr = 'ext:qtip="'+Ext.util.Format.htmlEncode(record.data.description)+'"';
 				}
 		    return value;
 			},
