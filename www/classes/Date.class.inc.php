@@ -494,8 +494,13 @@ class Date
 		{
 			return 0;
 		}
-		$d = new DateTime(Date::to_input_format($date_string));
-		return $d->format('U');
+		try{
+			$d = new DateTime(Date::to_input_format($date_string));
+			return $d->format('U');
+		}catch(Exception $e)
+		{
+			return false;
+		}
 	}
 
 	/**
@@ -515,6 +520,10 @@ class Date
 			return '0000-00-00';
 		}
 		$time = Date::to_unixtime($date_string);
+		if(!$time)
+		{
+			return '0000-00-00';
+		}
 		$date_format = $with_time ? 'Y-m-d H:i' : 'Y-m-d';
 		return date($date_format, $time);
 	}
