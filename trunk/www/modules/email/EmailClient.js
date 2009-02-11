@@ -162,7 +162,7 @@ GO.email.EmailClient = function(config){
 			multiple:true
 		}];
 	
-	if(GO.email.saveAsItems)
+	if(GO.email.saveAsItems && GO.email.saveAsItems.length)
 	{
 		this.saveAsMenu = new Ext.menu.Menu({
 			items:GO.email.saveAsItems
