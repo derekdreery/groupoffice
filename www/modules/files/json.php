@@ -19,9 +19,6 @@ require_once($GO_CONFIG->class_path.'File.class.inc.php');
 require_once ($GO_MODULES->modules['files']['class_path']."files.class.inc");
 $fs = new files();
 
-
-
-
 require($GO_LANGUAGE->get_language_file('files'));
 
 $task=isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
