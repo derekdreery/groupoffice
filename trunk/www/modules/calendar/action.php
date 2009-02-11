@@ -457,10 +457,13 @@ try{
 			
 			if(!empty($_POST['tmp_files']) && $GO_MODULES->has_module('files'))
 			{
+				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
+				$fs = new files();
+					
 				$tmp_files = json_decode($_POST['tmp_files'], true);
 				while($tmp_file = array_shift($tmp_files))
 				{
-					$fs->move($tmp_file['tmp_file'], $GO_CONFIG->file_storage_path.'/events/'.$event_id.'/'.$tmp_file['name']);
+					$fs->move($tmp_file['tmp_file'], $GO_CONFIG->file_storage_path.'events/'.$event_id.'/'.$tmp_file['name']);
 				}
 			}
 			

@@ -80,7 +80,7 @@ try{
 				
 				$note_id= $notes->add_note($note);
 				
-				if($GO_MODULES->modules['files'])
+				if($GO_MODULES->has_module('files'))
 				{
 					require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
 					$fs = new files();
@@ -102,6 +102,18 @@ try{
 				$cf = new customfields();
 				$cf->update_fields($GO_SECURITY->user_id, $note_id, 4, $_POST, $insert);
 			}			
+			
+			if(!empty($_POST['tmp_files']) && $GO_MODULES->has_module('files'))
+			{
+				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
+				$fs = new files();
+					
+				$tmp_files = json_decode($_POST['tmp_files'], true);
+				while($tmp_file = array_shift($tmp_files))
+				{
+					$fs->move($tmp_file['tmp_file'], $GO_CONFIG->file_storage_path.'notes/'.$note_id.'/'.$tmp_file['name']);
+				}
+			}
 				
 			if(!empty($_POST['link']))
 			{

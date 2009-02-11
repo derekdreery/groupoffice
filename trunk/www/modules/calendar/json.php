@@ -24,6 +24,7 @@ $cal = new calendar();
 
 $max_description_length=1000;
 
+
 $task=isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
 
 try{

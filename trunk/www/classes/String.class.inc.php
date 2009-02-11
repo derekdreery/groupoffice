@@ -378,6 +378,25 @@ class String {
 		}
 	}
 
+	/**
+	 * Trim plain text to a maximum number of lines
+	 * 
+	 * @param $string
+	 * @param $maxlines
+	 * @return String
+	 */
+	function limit_lines($string,$maxlines)
+	{
+		$string = str_replace("\r", '', $string);
+		$lines = explode("\n", $string, $maxlines);
+		$new_string =  implode("\n", $lines);
+		
+		if(strlen($new_string)<strlen($string))
+		{
+			$new_string .= "\n...";
+		}
+		return $new_string;
+	}
 
 
 
