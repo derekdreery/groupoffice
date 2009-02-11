@@ -66,6 +66,9 @@ Ext.extend(GO.notes.NoteDialog, Ext.Window,{
 
 		config = config || {};
 		
+		//tmpfiles on the server ({name:'Name',tmp_file:/tmp/name.ext} will be attached)
+		this.formPanel.baseParams.tmp_files = config.tmp_files ? Ext.encode(config.tmp_files) : '';
+				
 		if(!this.rendered)
 			this.render(Ext.getBody());
 		
