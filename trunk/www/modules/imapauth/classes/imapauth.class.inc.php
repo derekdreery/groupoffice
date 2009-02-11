@@ -50,6 +50,7 @@ class imapauth extends db
 	
 	public function __on_before_login($arguments)
 	{
+		debug('IMAP auth module active');
 		$arr = explode('@', $arguments['username']);
 		
 		$email = trim($arguments['username']);
@@ -73,6 +74,8 @@ class imapauth extends db
 				$mail_username = $mailbox;
 			}
 			
+			debug('Attempt IMAP login');
+			
 			if ($imap->open(
 				$config['host'], 
 				$config['proto'], 
@@ -84,6 +87,7 @@ class imapauth extends db
 				$config['ssl'], 
 				$config['novalidate_cert']))
 			{
+				debug('IMAP auth module logged in');
 				$imap->close();
 
 				if ($user = $GO_USERS->get_user_by_username( $go_username ) ) {
@@ -157,6 +161,7 @@ class imapauth extends db
 				}
 			}else
 			{
+				debug('IMAP auth failed '.$imap->last_error());
 				$imap->clear_errors();
 			}
 		}
