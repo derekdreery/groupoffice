@@ -73,6 +73,9 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 			config = {};
 		}
 
+		//tmpfiles on the server ({name:'Name',tmp_file:/tmp/name.ext} will be attached)
+		this.formPanel.baseParams.tmp_files = config.tmp_files ? Ext.encode(config.tmp_files) : '';
+		
 		delete this.link_config;
 		this.formPanel.form.reset();
 

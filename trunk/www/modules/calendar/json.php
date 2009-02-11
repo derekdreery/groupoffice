@@ -70,7 +70,7 @@ try{
 					'start_time'=> date('Y-m-d H:i', $event['start_time']),
 					'end_time'=> date('Y-m-d H:i', $event['end_time']),
 					'location'=>htmlspecialchars($event['location'], ENT_COMPAT, 'UTF-8'),
-					'description'=>ml2br(htmlspecialchars(String::cut_string($event['description'],$max_description_length)), ENT_COMPAT, 'UTF-8'),
+					'description'=>nl2br(htmlspecialchars(String::cut_string($event['description'],$max_description_length), ENT_COMPAT, 'UTF-8')),
 					'private'=>($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']),
 					'repeats'=>!empty($event['rrule']),
 					'day'=>$event['start_time']<$today_end ? $lang['common']['today'] : $lang['common']['tomorrow']

@@ -362,7 +362,7 @@ try{
 											$task['completed']=$tasks->f('completion_time')>0;
 											$task['late']=!$task['completed'] && $task['due_time']<$now;	
 											$task['due_time']=date($_SESSION['GO_SESSION']['date_format'], $tasks->f('due_time'));
-											
+											$task['description']=String::text_to_html(String::cut_string($task['description'],500));
 											$response['results'][] = $task;
 										}
 
