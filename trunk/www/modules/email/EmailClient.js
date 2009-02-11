@@ -104,11 +104,8 @@ GO.email.EmailClient = function(config){
 	{
 		GO.email.saveAsItems[i].scope=this;
 	}
-
-	this.gridContextMenu = new GO.menu.RecordsContextMenu({
-		shadow: "frame",
-		minWidth: 180,
-		items: [
+	
+	var contextItems = [
 		{ 
 			text: GO.email.lang.markAsRead, 
 			handler: function(){
@@ -163,13 +160,37 @@ GO.email.EmailClient = function(config){
 			handler: this.deleteMessages,
 			scope: this,
 			multiple:true
-		},{
+		}];
+	
+	if(GO.email.saveAsItems)
+	{
+		this.saveAsMenu = new Ext.menu.Menu({
+			items:GO.email.saveAsItems
+		});
+		
+		this.saveAsMenu.on('show', function(menu){			
+			var sm = this.messagesGrid.getSelectionModel();
+			var multiple = sm.getSelections().length>1;
+	
+			for(var i=0;i<menu.items.getCount();i++)
+			{			
+				var item = menu.items.get(i);
+				item.setDisabled(!item.multiple && multiple);
+			}
+		}, this);
+		
+		contextItems.push({
 			iconCls: 'btn-save',
 			text:GO.lang.cmdSaveAs,
-			menu:{
-				items:GO.email.saveAsItems
-			}
-		}]
+			menu:this.saveAsMenu,
+			multiple:true
+		});
+	}
+
+	this.gridContextMenu = new GO.menu.RecordsContextMenu({
+		shadow: "frame",
+		minWidth: 180,
+		items: contextItems
 	});
 
 
@@ -186,6 +207,9 @@ GO.email.EmailClient = function(config){
 		draggable:false
 	});
 	this.treePanel.setRootNode(root);
+	
+	
+	
 	
 	
 	this.treeContextMenu = new Ext.menu.Menu({		
@@ -559,25 +583,9 @@ GO.email.EmailClient = function(config){
 				if(GO.mailings)
 				{
 					tbar.push({
-					iconCls: 'btn-link',
-					text: GO.lang.cmdLink,
-					cls: 'x-btn-text-icon',
-					handler: function(){
-						
-						if(!this.messagesGrid.selModel.selections.keys.length)
-						{
-							Ext.MessageBox.alert(GO.lang['strError'], GO.lang['noItemSelected']);
-						}else
-						{
-							
-							this.linksDialog = new GO.email.LinksDialog({
-								messagesGrid : this.messagesGrid							
-							});
-							
-							this.linksDialog.show();
-						}
-					},
-					scope: this
+						iconCls: 'btn-save',
+						text:GO.lang.cmdSaveAs,
+						menu:this.saveAsMenu
 					});
 				}
 				
