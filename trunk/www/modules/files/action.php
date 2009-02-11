@@ -19,22 +19,16 @@ $GO_SECURITY->json_authenticate('files');
 require_once ($GO_MODULES->modules['files']['class_path']."files.class.inc");
 $fs = new files();
 
-
 require($GO_LANGUAGE->get_language_file('files'));
 
 $task=isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
 
 $response=array();
 
-
 try{
-
 	switch($task)
-	{
-		
-		
-		case 'set_view':
-			
+	{	
+		case 'set_view':			
 			$up_folder['path']=$_POST['path'];
 			$up_folder['thumbs']=$_POST['thumbs'];
 			
@@ -117,7 +111,7 @@ try{
 				$fs->remove_notification($_POST['path'], $GO_SECURITY->user_id);
 			}
 
-			if($fs->is_owner($GO_SECURITY->user_id, $_POST['path']))
+			if($fs->is_owner($GO_SECURITY->user_id, $_POST['path']) || $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
 			{
 				$folder = $fs->get_folder($_POST['path']);
 				
@@ -128,8 +122,7 @@ try{
 					
 					$up_folder['acl_read']=$GO_SECURITY->get_new_acl();
 					$up_folder['acl_write']=$GO_SECURITY->get_new_acl();
-					$up_folder['visible']='1';
-					
+					$up_folder['visible']='1';					
 
 					$response['acl_read']=$up_folder['acl_read'];
 					$response['acl_write']=$up_folder['acl_write'];
@@ -141,8 +134,6 @@ try{
 					$GO_SECURITY->delete_acl($folder['acl_read']);
 					$GO_SECURITY->delete_acl($folder['acl_write']);					
 				}
-				
-				
 				
 				$fs->update_folder($up_folder);
 					
