@@ -540,7 +540,7 @@ class String {
 				$text = preg_replace("/\b([\w0-9\._\-]+@[\w0-9\.\-_]+\.[a-z]{2,4})(\s)/i", "<a class=\"normal-link\" href=\"mailto:$1\">$1</a>$2", $text);
 			}
 		}
-		$text = nl2br($text);
+		$text = nl2br(trim($text));
 		$text = str_replace("\r", "", $text);
 		$text = str_replace("\n", "", $text);
 
