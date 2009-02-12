@@ -373,7 +373,7 @@ try{
 						}
 					}
 
-					//reattach non-online attachments
+					//reattach non-inline attachments
 					for ($i=0;$i<count($parts);$i++)
 					{
 						//var_dump($parts[$i]);
@@ -417,7 +417,7 @@ try{
 					$dir=$GO_CONFIG->tmpdir.'attachments/';
 					filesystem::mkdir_recursive($dir);
 
-					$tmp_file = !empty($parts[$i]["name"]) ? $dir.$parts[$i]["name"] : $dir.uniqid(time());
+					$tmp_file = !empty($parts[$i]["name"]) ? $dir.File::strip_invalid_chars($parts[$i]["name"]) : $dir.uniqid(time());
 
 					$fp = fopen($tmp_file,"wb");
 					fwrite ($fp,$file);

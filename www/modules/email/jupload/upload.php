@@ -56,7 +56,7 @@ while($file = array_shift($_FILES))
 
 
 				$complete_dir = $path.'/'.($_POST['relpathinfo'][$count]).'/';
-				$filepath = File::checkfilename($complete_dir.$file['name']);
+				$filepath = File::checkfilename($complete_dir.File::strip_invalid_chars($file['name']));
 
 
 				$fp = fopen($filepath, 'a+');
