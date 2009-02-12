@@ -33,7 +33,7 @@ GO.files.FilePropertiesDialog = function(config){
 					} 
         },{
         	xtype: 'plainfield',
-        	fieldLabel: 'Path',
+        	fieldLabel: GO.lang.strLocation,
         	name: 'path'
         },
         new GO.form.HtmlComponent({
