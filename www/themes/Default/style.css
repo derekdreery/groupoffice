@@ -215,7 +215,9 @@ a.normal-link:hover{
 	background-image:url('images/16x16/bug.png') !important;
 }
 
-
+.btn-select-all {
+	background-image:url('images/16x16/actions.png') !important;
+}
 .btn-search {
 	background-image:url('images/16x16/search.png') !important;
 }

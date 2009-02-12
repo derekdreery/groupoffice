@@ -104,8 +104,7 @@ GO.CheckerWindow = function(config){
 	config.tbar=[{
 		iconCls:'btn-delete',
 		text:GO.lang.dismiss,
-		handler: function(){
-			
+		handler: function(){			
 			this.doTask('dismiss_reminders');
 		},
 		scope: this
@@ -114,6 +113,14 @@ GO.CheckerWindow = function(config){
 		iconCls:'btn-dismiss',
 		text:GO.lang.snooze,
 		menu:snoozeMenu
+	},'-',
+	{
+		iconCls:'btn-select-all',
+		text:GO.lang.selectAll,
+		handler: function(){			
+			this.checkerGrid.getSelectionModel().selectAll();
+		},
+		scope: this
 	}
 	];
 	
@@ -157,6 +164,9 @@ Ext.extend(GO.CheckerWindow, Ext.Window,{
 	  			for (var i = 0; i < selected.length;  i++)
 			  	{			    	
 						this.checkerGrid.store.remove(selected[i]);
+			  	}
+			  	if(!this.checkerGrid.store.getRange().length){
+			  		this.hide();
 			  	}
 	  		},
 	  		scope: this

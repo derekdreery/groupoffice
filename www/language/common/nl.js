@@ -255,6 +255,7 @@ GO.lang.left= 'Links';
 GO.lang.right= 'Rechts';
 GO.lang.reminders= 'Herinneringen';
 GO.lang.dismiss='Verwerp';
+GO.lang.selectAll='Selecteer alles';
 GO.lang.snooze='Uitstel';
 GO.lang.latestLinks='Nieuwste links'
 GO.lang.cmdBrowseLinks= 'Koppelingen';
