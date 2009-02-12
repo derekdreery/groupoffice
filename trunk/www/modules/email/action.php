@@ -173,12 +173,12 @@ try{
 					{
 						if (is_uploaded_file($_FILES['attachments']['tmp_name'][$n]))
 						{
-							$tmp_file = $dir.($_FILES['attachments']['name'][$n]);
+							$tmp_file = $dir.File::strip_invalid_chars($_FILES['attachments']['name'][$n]);
 							move_uploaded_file($_FILES['attachments']['tmp_name'][$n], $tmp_file);
 
 							$response['files'][] = array(
 					'tmp_name'=>$tmp_file,
-					'name'=>($_FILES['attachments']['name'][$n]),
+					'name'=>File::strip_invalid_chars($_FILES['attachments']['name'][$n]),
 					'size'=>Number::format_size($_FILES['attachments']['size'][$n]),
 					'type'=>File::get_filetype_description(File::get_extension($_FILES['attachments']['name'][$n]))					
 							);
@@ -289,7 +289,7 @@ try{
 							$body = $_POST['body'];
 														
 							//process inline attachments
-							$inline_attachments = json_decode(($_POST['inline_attachments']), true);
+							$inline_attachments = json_decode($_POST['inline_attachments'], true);
 							foreach($inline_attachments as $inlineAttachment)
 							{
 								$tmp_name = $inlineAttachment['tmp_file'];
