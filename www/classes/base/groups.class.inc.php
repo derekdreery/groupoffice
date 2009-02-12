@@ -320,7 +320,7 @@ class GO_GROUPS extends db
 			$this->query($sql);
 		}
 
-		return $this->num_rows();
+		return $count;
 	}
 
 	/**
