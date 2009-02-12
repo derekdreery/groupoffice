@@ -59,6 +59,10 @@ line-height:20px;
 	background-image:url('images/16x16/edit.png') !important;
 }
 
+.btn-select-all {
+	background-image:url('images/16x16/actions.png') !important;
+}
+
 .btn-report-bug {
 	background-image:url('images/16x16/bug.png') !important;
 }

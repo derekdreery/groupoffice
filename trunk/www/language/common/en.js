@@ -275,6 +275,7 @@ GO.lang.remindPassword='Remember my login on this computer until I press logout'
 
 GO.lang.reminders = 'Reminders';
 GO.lang.dismiss='Dismiss';
+GO.lang.selectAll='Select all';
 GO.lang.snooze='Snooze';
 
 GO.lang.strMax = 'Maximum';
