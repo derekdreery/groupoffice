@@ -553,7 +553,7 @@ try{
 								$response['data']['mtime']=Date::get_timestamp(filemtime($path));
 								$response['data']['ctime']=Date::get_timestamp(filectime($path));
 								$response['data']['atime']=Date::get_timestamp(fileatime($path));
-								$response['data']['type']='<div class="go-grid-icon filetype-folder">Folder</div>';
+								$response['data']['type']='<div class="go-grid-icon filetype-folder">'.$lang['files']['folder'].'</div>';
 								$response['data']['size']=Number::format_size(filesize($path));
 								$response['data']['write_permission']=$admin || $fs->is_owner($GO_SECURITY->user_id, $_POST['path']);
 								$response['data']['is_home_dir']=utf8_basename(dirname($path)) == 'users';
