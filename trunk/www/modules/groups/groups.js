@@ -27,6 +27,7 @@
 	    baseParams: {action: 'groups'},
 	    root: 'results',
 	    id: 'id',
+	    totalProperty:'total',
 	    fields: ['id', 'name', 'user_id', 'user_name'],
 	    remoteSort: true
 	});			
