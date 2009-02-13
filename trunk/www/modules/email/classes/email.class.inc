@@ -1046,7 +1046,7 @@ class email extends db
 	function cache_message($message_id)
 	{
 		global $GO_MODULES, $GO_CONFIG, $GO_LANGUAGE;
-		require_once($GO_CONFIG->class_path.'/base/search.class.inc.php');
+		require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
 		$search = new search();
 
 		require($GO_LANGUAGE->get_language_file('email'));

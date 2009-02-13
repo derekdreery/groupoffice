@@ -998,6 +998,11 @@ if(in_array('custom_fields', $module_ids))
 	$db->query("DELETE FROM cf_5 WHERE link_id_converted='0'");
 	$db->query("DELETE FROM cf_8 WHERE link_id_converted='0'");
 }
+//email doesn't need conversion
+$db->query("UPDATE go_links SET link_id1_converted='1' WHERE type1=9");
+$db->query("UPDATE go_links SET link_id2_converted='1' WHERE type2=9");
+
+//remove dead links
 $db->query("DELETE FROM go_links WHERE link_id1_converted='0' OR link_id2_converted='0'");
 
 //remove temporary fields
