@@ -608,10 +608,10 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				});
 
 		this.allDayCB.on('check', function(checkbox, checked) {
-					startHour.setDisabled(checked);
-					endHour.setDisabled(checked);
-					startMin.setDisabled(checked);
-					endMin.setDisabled(checked);
+					this.startHour.setDisabled(checked);
+					this.endHour.setDisabled(checked);
+					this.startMin.setDisabled(checked);
+					this.endMin.setDisabled(checked);
 				}, this);
 
 		this.eventStatus = new Ext.form.ComboBox({

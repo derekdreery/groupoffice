@@ -446,6 +446,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 		
 		//ceil required because of DST changes!
 		var daySpan = Math.round((eventEndTime-eventStartTime)/86400)+1;
+		//var daySpan = Math.round((eventEndTime-eventStartTime)/86400);
 		
 		
 		for(var i=0;i<daySpan;i++)

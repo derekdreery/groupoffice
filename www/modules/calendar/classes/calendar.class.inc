@@ -26,11 +26,6 @@ class calendar extends db
 	var $all_day_events = array();
 	var $backgrounds = array();
 
-	function calendar()
-	{
-		parent::__construct();
-	}
-
 	function event_to_html($event)
 	{
 		global $GO_LANGUAGE, $GO_CONFIG, $lang;
@@ -1446,6 +1441,11 @@ class calendar extends db
 		{
 			$timezone_id = isset($object['DUE']['params']['TZID']) ? $object['DUE']['params']['TZID'] : '';
 			$event['end_time'] = $this->ical2array->parse_date($object['DUE']['value'],  $timezone_id);
+		}
+		
+		if($event['all_day_event']=='1')
+		{
+			$event['end_time']-=60;
 		}
 
 		//reminder

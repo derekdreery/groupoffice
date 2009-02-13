@@ -560,7 +560,7 @@ try{
 					$attachment =& new Swift_Message_Attachment($file,utf8_basename($tmp_file), File::get_mime($tmp_file));
 					$swift->message->attach($attachment);
 					
-					if(!$swift->sendmail($_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name']))
+					if(!$swift->sendmail($_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name'], true))
 					{
 						throw new Exception('Could not send invitaition');
 					}

@@ -117,6 +117,11 @@ class go_ical extends calendar
 		}
 
 		$lines = array();
+		
+		if($event['all_day_event']=='1')
+		{
+			$event['end_time']+=60;
+		}
 
 		$lines[] = "BEGIN:VEVENT";
 		$lines[] = "UID:".$event['id'];
