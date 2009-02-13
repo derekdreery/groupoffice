@@ -1,3 +1,36 @@
+2009/02/13 Version 3.01
+
+Since the initial 3.0 release we have actively been developing new features. The most 
+important new features since the first version are:
+
+-Importing and exporting of custom fields in the addressbook
+-Improved Synchronization. It now supports the Blackberry Funambol and Nexthaus client.
+-New timesheet in projects for easier time registration
+-Support for subprojects and more intutive display of project information
+-Save e-mail as tasks, files, appointments and notes option. When you save an e-mail as 
+an appointment for example it automatically adds the recipients as participants and it 
+saves attachments as files to the appointment.
+
+A lot of transations were made too. Group-Office is currently available in:
+
+-Chinese Simplified
+-Čeština
+-Dansk
+-Deutsch
+-English
+-Español
+-Francais
+-Italiano
+-Nederlands
+-Polski
+-Português - Brazil
+-Русский
+-Romanian
+-Suomi - Finland
+
+Check out the demo now!
+
+
 2008/11/24 Version 3.00 stable
 
 After more then one and a half year of development time and testing it's finally there! 

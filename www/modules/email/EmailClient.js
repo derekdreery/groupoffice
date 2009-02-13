@@ -171,11 +171,12 @@ GO.email.EmailClient = function(config){
 		this.saveAsMenu.on('show', function(menu){			
 			var sm = this.messagesGrid.getSelectionModel();
 			var multiple = sm.getSelections().length>1;
+			var none = sm.getSelections().length==0;
 	
 			for(var i=0;i<menu.items.getCount();i++)
 			{			
 				var item = menu.items.get(i);
-				item.setDisabled(!item.multiple && multiple);
+				item.setDisabled(none || (!item.multiple && multiple));
 			}
 		}, this);
 		
