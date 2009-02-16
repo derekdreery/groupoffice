@@ -1,8 +1,9 @@
-2009/02/13 Version 3.01
+2009/02/16 Version 3.01
 
 Since the initial 3.0 release we have actively been developing new features. The most 
 important new features since the first version are:
 
+-GO can be setup as a complete mail server that handles multiple domains and vacation autoresponse
 -Importing and exporting of custom fields in the addressbook
 -Improved Synchronization. It now supports the Blackberry Funambol and Nexthaus client.
 -New timesheet in projects for easier time registration
