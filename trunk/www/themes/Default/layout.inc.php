@@ -57,7 +57,7 @@ if($GO_SECURITY->logged_in() && trim($_SESSION['GO_SESSION']['name']) != '' && !
 				<?php echo $lang['common']['settings']; ?>&nbsp;&nbsp;|</a>
 			<a href="#" id="help-link">
 				<?php echo $lang['common']['help']; ?>&nbsp;&nbsp;|</a>
-			<a href="<?php echo $GO_CONFIG->host; ?>index.php?task=logout" target="_top">
+			<a href="javascript:GO.mainLayout.logout();">
 				<?php echo $lang['common']['logout']; ?></a>
 		</div>
 	</div>
