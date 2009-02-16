@@ -170,8 +170,8 @@ Ext.extend(GO.postfixadmin.DomainDialog, Ext.Window,{
 	
 	setBackupMX : function(backupmx)
 	{
-		this.mailboxesGrid.setDisabled(backupmx);
-		this.aliasesGrid.setDisabled(backupmx);
+		this.mailboxesGrid.setDisabled(backupmx || !this.domain_id);
+		this.aliasesGrid.setDisabled(backupmx || !this.domain_id);
 		
 		var f = this.formPanel.form;
 		
