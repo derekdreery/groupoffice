@@ -514,7 +514,7 @@ try{
 				$cal->get_participants($event_id);
 				while($cal->next_record())
 				{
-					if($cal->f('user_id')!=$GO_SECURITY->user_id)
+					if($cal->f('email')!=$_SESSION['GO_SESSION']['email'])
 					{
 						$participants[] = $RFC822->write_address($cal->f('name'), $cal->f('email'));
 					}
