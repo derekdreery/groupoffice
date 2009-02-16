@@ -52,6 +52,17 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		this.removeLoadMask();		
 	},
 	
+	logout : function(first){
+		
+		if(!first || Ext.Ajax.isLoading())
+		{
+			this.logout.defer(300, this, [true]);
+		}else
+		{
+			document.location=GO.settings.config.host+"index.php?task=logout";
+		}
+	},
+	
 	createLoginCallback : function(){
 		
 		GO.loginDialog.addCallback(function(){
