@@ -114,6 +114,7 @@ GO.users.MainPanel = function(config)
    if(GO.settings.config.max_users>0)
    {
 	   config.bbar = new Ext.PagingToolbar({
+	   			cls: 'go-paging-tb',
 	        store: config.store,
 	        pageSize: parseInt(GO.settings['max_rows_list']),
 	        displayInfo: true,
