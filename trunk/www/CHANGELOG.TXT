@@ -1,4 +1,7 @@
+2009/02/16 Version 3.01-stable-1
+- Use GO as complete mailserver solution for multiple domains and with vacation support
 - Save e-mail as file, task, appointment and note (pro version)
+- Improved inviting participants. It now sends a mail automatically.
 
 2009/02/06 Version 3.00-stable-18
 - Problem in billing module that asked for book selection each time
