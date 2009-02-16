@@ -1,4 +1,4 @@
-2009/02/16 Version 3.01-stable-1
+2009/02/16 Version 3.01-stable-2
 - Use GO as complete mailserver solution for multiple domains and with vacation support
   see: http://www.group-office.com/wiki/Mailserver for instructions
   
