@@ -15,6 +15,34 @@ GO.calendar.EventDialog = function(calendar) {
 	this.calendar = calendar;
 
 	this.buildForm();
+	
+	this.beforeInit();
+	
+	
+	this.tabPanel = new Ext.TabPanel({
+				activeTab : 0,
+				deferredRender : false,
+				border : false,
+				anchor : '100% 100%',
+				hideLabel : true,
+				items : [
+					this.propertiesPanel, 
+					this.descriptionPanel,
+					this.recurrencePanel, 
+					this.optionsPanel,
+					this.participantsPanel
+					]
+			});
+	
+	this.formPanel = new Ext.form.FormPanel({
+				waitMsgTarget : true,
+				url : GO.settings.modules.calendar.url + 'action.php',
+				border : false,
+				baseParams : {
+					task : 'event'
+				},
+				items : this.tabPanel
+			});
 
 	this.initWindow();
 
@@ -26,6 +54,9 @@ GO.calendar.EventDialog = function(calendar) {
 
 Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
+	beforeInit : function(){
+	},
+	
 	initWindow : function() {
 		var focusSubject = function() {
 			this.subjectField.focus();
@@ -477,12 +508,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					fieldLabel : GO.lang.strLocation
 				});
 
-		this.description = new Ext.form.TextArea({
-					name : 'description',
-					height : 100,
-					allowBlank : true,
-					fieldLabel : GO.lang.strDescription
-				});
+		
 
 		this.startDate = new Ext.form.DateField({
 					name : 'start_date',
@@ -1161,49 +1187,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 							this.privateCB]
 				});
 
-		var items = [
-			this.propertiesPanel, 
-			this.descriptionPanel,
-			this.recurrencePanel, 
-			this.optionsPanel,
-			this.participantsPanel
-			];
-
-		this.tabPanel = new Ext.TabPanel({
-					activeTab : 0,
-					deferredRender : false,
-					border : false,
-					anchor : '100% 100%',
-					hideLabel : true,
-					items : items
-				});
-
-		/*this.tabPanel.on('beforetabchange', function(tabpanel, newTab,
-						currentTab) {
-					if (newTab == this.participantsPanel) {
-						if (this.event_id == 0) {
-							this.submitForm(false, {
-										callback : function(panel, success) {
-											if (success) {
-												panel.participantsPanel.show();
-											}
-										}
-									});
-							return false;
-						}
-					}
-
-				}, this);*/
-
-		this.formPanel = new Ext.form.FormPanel({
-					waitMsgTarget : true,
-					url : GO.settings.modules.calendar.url + 'action.php',
-					border : false,
-					baseParams : {
-						task : 'event'
-					},
-					items : this.tabPanel
-				});
+		
 	},
 	
 
