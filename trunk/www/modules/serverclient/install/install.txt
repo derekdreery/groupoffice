@@ -1,7 +1,7 @@
 Put these config values in config.php:
 
 #GO will connect to this installation to add a mailbox
-$config['serverclient_server_url']='http://localhost/professional/www/';
+$config['serverclient_server_url']='http://localhost/groupoffice/';
 $config['serverclient_username']='administrator';
 $config['serverclient_password']='somepass';
 

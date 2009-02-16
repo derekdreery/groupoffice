@@ -150,10 +150,10 @@ Ext.extend(GO.users.UserDialog, Ext.Window,{
 			if(GO.serverclient && GO.serverclient.domains)
 			{				
 				this.serverclientFieldSet = new Ext.form.FieldSet({
-					title: 'Mailboxes', 
+					title: GO.serverclient.lang.mailboxes, 
 					autoHeight:true,
 					items:new GO.form.HtmlComponent({
-						html:'<p class="go-form-text">Create a mailbox for domain:</p>'
+						html:'<p class="go-form-text">'+GO.serverclient.lang.createMailbox+':</p>'
 					})
 				});
 				
