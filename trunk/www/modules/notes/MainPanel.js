@@ -68,6 +68,7 @@ GO.notes.MainPanel = function(config){
 	
 	this.eastPanel = new GO.notes.NotePanel({
 		region:'east',
+		id:'no-east-panel',
 		width:400,
 		border:true
 	});
