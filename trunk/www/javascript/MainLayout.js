@@ -56,7 +56,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		
 		if(!first || Ext.Ajax.isLoading())
 		{
-			this.logout.defer(300, this, [true]);
+			this.logout.defer(200, this, [true]);
 		}else
 		{
 			document.location=GO.settings.config.host+"index.php?task=logout";

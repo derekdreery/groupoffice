@@ -23,8 +23,6 @@ try{
 	switch($_REQUEST['task'])
 	{
 		case 'save_note':
-			
-			sleep(3);
 			$note['user_id']=$GO_SECURITY->user_id;
 			$note['text']=$_POST['text'];
 			$summary->update_note($note);
