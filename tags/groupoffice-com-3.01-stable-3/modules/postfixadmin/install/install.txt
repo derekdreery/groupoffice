@@ -1,0 +1,12 @@
+To install postfix admin you need to setup postfix to handle virtual domains with MySQL.
+On a debian system the setup.sh script should take care of that and a lot other stuff. You must edit the database and domain setting in this script first.
+After that you must add the automatic reply domain to config.php:
+
+$config['postfixadmin_autoreply_domain']='autoreply.intermeshdev.nl';
+$config['postfixadmin_vmail_root']='/vmail/';
+
+You might need to add this domain to /etc/hosts
+
+The first part must be 'autoreply' and the latter must match the domain configured in setup.sh.
+
+Now everything should work.
