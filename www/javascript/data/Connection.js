@@ -140,6 +140,7 @@ GO.data.Connection = Ext.extend(Ext.data.Connection, {
 		
 	authHandler : function(options, success, response)
 	{
+
 		if(GO.checkerIcon)
 		{
 			GO.checkerIcon.setDisplayed(false);			
@@ -149,7 +150,7 @@ GO.data.Connection = Ext.extend(Ext.data.Connection, {
 		
 		if(!success)
 		{
-			//Ext.Msg.alert(GO.lang['strError'], String.format(GO.lang['strRequestError'], response.status));
+			//Ext.Msg.alert(GO.lang['strError'], String.format(GO.lang['strRequestError'], response.status));			
 			Ext.callback(options.originalCallback, options.scope, [options, success, response]);
 		}else
 		{

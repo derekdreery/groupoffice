@@ -190,7 +190,7 @@ GO.lang.strError= 'Error';
 GO.lang.waitMsgSave= 'Saving...';
 GO.lang.waitMsgLoad= 'Loading...';
 GO.lang.waitMsgUpload= 'Uploading...';
-GO.lang.strRequestError= 'Could not send request. Server returned status {0}';
+GO.lang.strRequestError= 'Could not connect to the server. Please check your internet connection.';
 
 GO.lang.strSelected = 'Selected';
 GO.lang.noItemSelected= 'You didn\'t select an item.';

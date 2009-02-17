@@ -50,7 +50,15 @@ Ext.extend(GO.ErrorDialog, GO.Window, {
 				this.detailPanel.collapse();
 
 				this.messagePanel.body.update(error);
-				this.detailPanel.body.update('<pre>'+details+'</pre>');
+				
+				if(GO.util.empty(details))
+				{
+					this.detailPanel.hide();
+				}else
+				{
+					this.detailPanel.show();
+					this.detailPanel.body.update('<pre>'+details+'</pre>');
+				}
 
 				GO.ErrorDialog.superclass.show.call(this);
 			}

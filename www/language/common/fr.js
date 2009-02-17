@@ -169,7 +169,7 @@ GO.lang.strError= 'Erreur';
 GO.lang.waitMsgSave= 'Sauvegarde...';
 GO.lang.waitMsgLoad= 'Chargement...';
 GO.lang.waitMsgUpload= 'Envoie...';
-GO.lang.strRequestError= 'Impossible d\'envoyer la demande. Le serveur à retourner le statut {0}';
+
 
 GO.lang.strSelected = 'Sélectionné';
 GO.lang.noItemSelected= 'Vous n\'avez pas sélectionné un élément.';

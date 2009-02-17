@@ -167,7 +167,6 @@ GO.lang.strError= 'Fehler';
 GO.lang.waitMsgSave= 'Speichern...';
 GO.lang.waitMsgLoad= 'Laden...';
 GO.lang.waitMsgUpload= 'Hochladen...';
-GO.lang.strRequestError= 'Anfrage konnte nicht gesendet werden. Server antwortet mit Status {0}';
 
 GO.lang.strSelected = 'Ausgewählt';
 GO.lang.noItemSelected= 'Sie haben kein Element ausgewählt.';

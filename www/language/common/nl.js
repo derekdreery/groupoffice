@@ -152,7 +152,7 @@ GO.lang.strError= 'Fout';
 GO.lang.waitMsgSave= 'Bezig met opslaan...';
 GO.lang.waitMsgLoad= 'Bezig met laden...';
 
-GO.lang.strRequestError= 'Kon verzoek niet verzenden. De server gaf de volgende status code: {0}';
+GO.lang.strRequestError= 'Kon geen verbinding maken met de server. Controleer uw internet verbinding a.u.b.';
 
 GO.lang.noItemSelected= 'U heeft niets geselecteerd';
 GO.lang.strDeleteSelectedItems= 'Weet u zeker dat u de {count} geselecteerde items wilt verwijderen?';
