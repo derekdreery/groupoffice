@@ -22,4 +22,6 @@ $lang['tasks']['statuses']['IN-PROCESS'] = 'V procesu';
 $lang['tasks']['import_success']='%s úkolů bylo importováno';
 
 $lang['tasks']['call']='Připomenutí';
+
+$lang['tasks']['dueAtdate']='Vzhledem k %s';
 ?>
