@@ -1183,11 +1183,11 @@ try{
 														$imap->close();
 													}else
 													{
-														$text = $email2->f('email').' (Error!)';
+														$text = $email2->f('email').' ('.$lang['common']['error'].')';
 														$children=array();
 													}
 
-													$response[] = array(
+													$node =  array(
 														'text'=>$text,
 														'name'=>$email2->f('email'),
 														'id'=>'account_'.$email2->f('id'),
@@ -1199,8 +1199,14 @@ try{
 														'children'=>$children,
 														'canHaveChildren'=>$email2->f('type')=='imap',
 														'inbox_new'=>$inbox_new,
-														'usage'=>$usage
+														'usage'=>$usage														
 													);
+													if(!$account)
+													{
+														$node['qtipCfg'] = array('title'=>$lang['common']['error'], 'text' =>htmlspecialchars($imap->last_error(), ENT_QUOTES, 'UTF-8'));
+													}
+													
+													$response[]=$node;
 												}
 											}elseif($node_type=='account')
 											{

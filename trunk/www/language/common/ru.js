@@ -182,7 +182,7 @@ GO.lang.strError= 'Ошибка';
 GO.lang.waitMsgSave= 'Сохранение...';
 GO.lang.waitMsgLoad= 'Загрузка...';
 GO.lang.waitMsgUpload= 'Скачивание...';
-GO.lang.strRequestError= 'Невозможно отправить запрос. Сервер вернул ошибку {0}';
+
 
 GO.lang.strSelected = 'Выбраны';
 GO.lang.noItemSelected= 'Вы не произвели выбор.';

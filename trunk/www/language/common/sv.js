@@ -181,7 +181,6 @@ GO.lang.strError= 'Fel';
 GO.lang.waitMsgSave= 'Sparar ...';
 GO.lang.waitMsgLoad= 'Laddar ...';
 GO.lang.waitMsgUpload= 'Uppladdning ...';
-GO.lang.strRequestError= 'Kunde inte skicka begäran. Server returnerar status {0}';
 
 GO.lang.strSelected = 'Vald';
 GO.lang.noItemSelected= 'Du valde inte ett objekt.';

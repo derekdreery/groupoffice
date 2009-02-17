@@ -9,7 +9,7 @@ $lang['email']['feedbackUnexpectedError'] = 'Er was een onverwacht probleem bij 
 $lang['email']['feedbackCreateFolderFailed'] = 'Map kan niet worden gemaakt';
 $lang['email']['feedbackSubscribeFolderFailed'] = 'Fout bij het opslaan van de gegevens';
 $lang['email']['feedbackUnsubscribeFolderFailed'] = 'Fout bij het opslaan van de gegevens';
-$lang['email']['feedbackCannotConnect'] = 'Kan geen verbinding maken met %1$s op poort %3$s<br /><br />De mail server antwoordde: %2$s';
+$lang['email']['feedbackCannotConnect'] = 'Kan geen verbinding maken met %1$s op poort %3$s<br /><br />De mail server antwoorde: %2$s';
 $lang['email']['inbox'] = 'Postvak in';
 
 $lang['email']['spam']='Spam';

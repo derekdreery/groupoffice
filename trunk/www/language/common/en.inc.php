@@ -45,6 +45,7 @@ $lang['common']['deleteError']='Error while deleting the data';
 $lang['common']['selectError']='Error trying to read the data';
 $lang['common']['missingField'] = 'You didn\'t fill in all the required fields.';
 $lang['common']['noFileUploaded']='No file was recieved';
+$lang['common']['error']='Error';
 
 $lang['common']['salutation']='Salutation';
 $lang['common']['firstName'] = 'First name';

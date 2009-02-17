@@ -176,8 +176,6 @@ GO.lang.strError= 'Problém';
 GO.lang.waitMsgSave= 'Ukládání...';
 GO.lang.waitMsgLoad= 'Nahrávání...';
 GO.lang.waitMsgUpload= 'Nahrávání...';
-GO.lang.strRequestError= 'Nelze odeslat požadavek. Server vrátil status {0}';
-
 GO.lang.strSelected = 'Vybrané';
 GO.lang.noItemSelected= 'Nevybrali jste žádnou položku.';
 GO.lang.strDeleteSelectedItems= 'Opravdu chcete smazat tyto položky ({count})?';

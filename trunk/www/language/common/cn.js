@@ -175,7 +175,6 @@ GO.lang.strError= '错误';
 GO.lang.waitMsgSave= 'Saving...';
 GO.lang.waitMsgLoad= 'Loading...';
 GO.lang.waitMsgUpload= 'Uploading...';
-GO.lang.strRequestError= '不能发送请求。服务器返回 {0}';
 
 GO.lang.strSelected = '选择';
 GO.lang.noItemSelected= '你没有选择项目.';

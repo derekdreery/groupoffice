@@ -180,7 +180,7 @@ GO.lang.strError= 'Błąd';
 GO.lang.waitMsgSave= 'Zapisywanie ...';
 GO.lang.waitMsgLoad= 'Ładowanie ...';
 GO.lang.waitMsgUpload= 'Wysyłanie ...';
-GO.lang.strRequestError= 'Nie można wysłać żądania. Serwer zwrócił status {0}';
+
 
 GO.lang.strSelected = 'Wybrane';
 GO.lang.noItemSelected= 'Nie wybrano żadnych pozycji.';

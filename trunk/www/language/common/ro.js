@@ -180,7 +180,7 @@ GO.lang.strError= 'Eroare';
 GO.lang.waitMsgSave= 'Salvare în curs...';
 GO.lang.waitMsgLoad= 'Încărcare în curs...';
 GO.lang.waitMsgUpload= 'Încărcare...';
-GO.lang.strRequestError= 'Imposibilă trimiterea cererii. Serverul ia forma iniţială {0}';
+
 
 GO.lang.strSelected = 'Selecţionat';
 GO.lang.noItemSelected= 'Nu ai selecţionat nici un  obiect.';

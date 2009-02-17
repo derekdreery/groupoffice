@@ -56,8 +56,11 @@ GO.data.JsonStore = function(config) {
 	
 	this.on('loadexception',	
 		function(proxy, store, response, e){
-			
-			if(!this.reader.jsonData || GO.jsonAuthHandler(this.reader.jsonData, this.load, this))
+
+			if(response.status==0)
+			{
+				GO.errorDialog.show(GO.lang.strRequestError, "");
+			}else	if(!this.reader.jsonData || GO.jsonAuthHandler(this.reader.jsonData, this.load, this))
 			{
 				var msg = GO.lang.serverError;
 							

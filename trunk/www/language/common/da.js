@@ -176,7 +176,6 @@ GO.lang.strError= 'Fejl';
 GO.lang.waitMsgSave= 'Gemmer...';
 GO.lang.waitMsgLoad= 'Indlæser...';
 GO.lang.waitMsgUpload= 'Uploader...';
-GO.lang.strRequestError= 'Kunne ikke sende anmodning. Server returnerede status {0}';
 
 GO.lang.strSelected = 'Valgt';
 GO.lang.noItemSelected= 'Du valgte ikke et emne.';

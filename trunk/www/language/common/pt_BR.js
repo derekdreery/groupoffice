@@ -180,7 +180,7 @@ GO.lang.strError= 'Erro';
 GO.lang.waitMsgSave= 'Salvando...';
 GO.lang.waitMsgLoad= 'Carregando...';
 GO.lang.waitMsgUpload= 'Enviando...';
-GO.lang.strRequestError= 'Não pode executar a solicitação. Servidor retornou status {0}';
+
 
 GO.lang.strSelected = 'Selecionado';
 GO.lang.noItemSelected= 'Você não pode selecionar um item.';

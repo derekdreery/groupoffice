@@ -185,7 +185,7 @@ GO.lang.strError= 'Virhe';
 GO.lang.waitMsgSave= 'Tallennetaan...';
 GO.lang.waitMsgLoad= 'Ladataan...';
 GO.lang.waitMsgUpload= 'Lähetetään...';
-GO.lang.strRequestError= 'Pyyntöä ei voitu toteuttaa. Palvelin lähetti statusviestin {0}';
+
 
 GO.lang.strSelected = 'Valittu';
 GO.lang.noItemSelected= 'Et valinnut mitään.';

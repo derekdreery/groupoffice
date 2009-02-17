@@ -84,12 +84,18 @@ try{
 			$response['unseen']=array();
 			while($email2->next_record())
 			{
-				$account = connect($email2->f('id'), 'INBOX', false);				
-				$inbox = $email->get_folder($email2->f('id'), 'INBOX');
-				
-				$status = $imap->status('INBOX', SA_UNSEEN+SA_MESSAGES);
-				$response['status'][$inbox['id']]['unseen'] = isset($status->unseen) ? $status->unseen : 0;
-				$response['status'][$inbox['id']]['messages'] = isset($status->messages) ? $status->messages : 0;
+				$account = connect($email2->f('id'), 'INBOX', false);	
+				if($account)
+				{			
+					$inbox = $email->get_folder($email2->f('id'), 'INBOX');
+					
+					$status = $imap->status('INBOX', SA_UNSEEN+SA_MESSAGES);
+					$response['status'][$inbox['id']]['unseen'] = isset($status->unseen) ? $status->unseen : 0;
+					$response['status'][$inbox['id']]['messages'] = isset($status->messages) ? $status->messages : 0;
+				}else
+				{
+					$imap->clear_errors();
+				}
 			}
 			$response['success']=true;
 			break;

@@ -175,7 +175,6 @@ GO.lang.strError= 'Error';
 GO.lang.waitMsgSave= 'Rescate en curso...';
 GO.lang.waitMsgLoad= 'Cargando...';
 GO.lang.waitMsgUpload= 'Cargando...';
-GO.lang.strRequestError= 'No se ha podido enviar la solicitud. El servidor devuelve el estado {0}';
 
 GO.lang.strSelected = 'Selección';
 GO.lang.noItemSelected= 'No ha seleccionado ningún tema.';
