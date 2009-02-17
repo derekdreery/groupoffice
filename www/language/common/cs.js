@@ -10,6 +10,10 @@
  * @version $Id: en.js 1591 2008-12-15 09:34:29Z mschering $
  * @author Merijn Schering <mschering@intermesh.nl>
  */
+GO.lang.serverError='Došlo k chybě na webserverhu. Kontaktujte Vašeho správce systému a poskytněte mu podrobnosti o chybě.';
+GO.lang.errorDetails='Podrobnosti chyby';
+GO.lang.contactSupportDesk='Kontaktovat podporu'; 
+ 
 GO.lang.disabled='Zakázáno';
 GO.lang.changesWillBeLost='Byly provedeny změny v tomto vzhledu. Stiskněte zrušit a uložit změny nebo Ok pro pokračování a smazání provedených změn.';
 GO.lang.strCommunityForum='Společenské fórum';
@@ -121,6 +125,7 @@ GO.lang.cmdAdd = 'Přidat';
 GO.lang.cmdAddPlusNew = 'Přidat + nový';
 GO.lang.cmdSavePlusNew='Uložit + nový';
 GO.lang.cmdSave = 'Uložit';
+GO.lang.cmdSaveAs = 'Uložit jako'; 
 GO.lang.cmdEdit = 'Upravit';
 GO.lang.cmdLink = 'Odkaz';
 GO.lang.cmdUnlink = 'Zrušit odkaz';
@@ -176,6 +181,8 @@ GO.lang.strError= 'Problém';
 GO.lang.waitMsgSave= 'Ukládání...';
 GO.lang.waitMsgLoad= 'Nahrávání...';
 GO.lang.waitMsgUpload= 'Nahrávání...';
+
+
 GO.lang.strSelected = 'Vybrané';
 GO.lang.noItemSelected= 'Nevybrali jste žádnou položku.';
 GO.lang.strDeleteSelectedItems= 'Opravdu chcete smazat tyto položky ({count})?';
@@ -259,6 +266,7 @@ GO.lang.remindPassword='Zapamatovat přihlašení pro tento počítač';
 
 GO.lang.reminders = 'Upomínky';
 GO.lang.dismiss='Zamítnutí';
+GO.lang.selectAll='Označit vše';
 GO.lang.snooze='Snooze';
 
 GO.lang.strMax = 'Maximum';

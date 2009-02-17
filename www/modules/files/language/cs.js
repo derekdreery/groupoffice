@@ -21,3 +21,4 @@ GO.files.lang.fileBrowser = 'Prohlížení souborů';
 GO.files.lang.thumbnails = 'Miniatury';
 GO.files.lang.saveFile='Uložit soubor';
 GO.files.lang.confirmOverwrite='{filename} již existuje, chcete přepsat tento soubor?';
+GO.files.lang.file='Soubor';

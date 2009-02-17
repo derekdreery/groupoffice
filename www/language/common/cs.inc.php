@@ -2,7 +2,11 @@
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_base_language_file('common'));
 
+$lang['common']['about']='Verze: %s';
+
 $lang['common']['htmldirection']= 'ltr';
+
+$lang['common']['quotaExceeded']='Bohužel už nemáte žádné volné místo. Prosím smažte některé soubory nebo se obraťte na Vašeho poskytovatele.';
 
 $lang['common']['errorsInForm'] = 'Vyskytly se problémy ve formuláři. Opravte jej a zkuste to znovu.';
 
