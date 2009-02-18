@@ -139,7 +139,7 @@ class search extends db {
 		
 		if(count($selected_types))
 		{
-			$sql .= " AND link_type IN (".implode(',', $selected_types).") ";
+			$sql .= " AND sc.link_type IN (".implode(',', $selected_types).") ";
 		}
 		
 		foreach($conditions as $condition)
