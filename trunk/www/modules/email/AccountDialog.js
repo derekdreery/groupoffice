@@ -507,8 +507,11 @@ Ext.extend(GO.email.AccountDialog, Ext.Window, {
 						var error = '';
 						if (action.failureType == 'client') {
 							error = GO.lang.strErrorsInForm;
-						} else {
+						} else if(action.result){
 							error = action.result.feedback;
+						}else
+						{
+							error = GO.lang.strRequestError;
 						}
 
 						Ext.MessageBox.alert(GO.lang.strError, error);

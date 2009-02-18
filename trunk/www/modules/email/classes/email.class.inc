@@ -211,6 +211,7 @@ class email extends db
 			{
 				$account['mbroot'] = '';
 			}
+			
 			$account['spamtag']='***SPAM***';
 			$account['trash'] = '';
 			$account['sent'] = '';
@@ -267,6 +268,9 @@ class email extends db
 
 			$account['id'] = $this->nextid("em_accounts");
 			$this->insert_row('em_accounts', $account);
+			
+			$this->_synchronize_folders($account, $mailboxes, $subscribed);
+			
 			return $account['id'];
 		}
 	}
@@ -724,46 +728,28 @@ class email extends db
 		$this->next_record();
 		return $this->f(0);
 	}
-
-
-	function synchronize_folders($account, $mail=false)
+	
+	function _synchronize_folders($account, $mailboxes, $subscribed)
 	{
-		if(!$mail)
-		{
-			$mail = new imap();
-	
-	
-			if (!$mail->open(
-			$account['host'],
-			$account['type'],
-			$account['port'],
-			$account['username'],
-			$account['password'],
-			'INBOX',
-			0,
-			$account['use_ssl'],
-			$account['novalidate_cert']))
-			{
-				return false;
-			}
-			
-			$close_connection = true;
-		}
-			
-		$subscribed =  $mail->get_subscribed('', true);
-		$mailboxes =  $mail->get_mailboxes('');
-
+		$mail = new imap();
+		
 		$mailbox_names = array();
-
+		
+		$subscribed_names = array();
+		while($mailbox = array_shift($subscribed))
+		{
+			$subscribed_names[]=$mailbox['name'];
+		}
+		
 		foreach($mailboxes as $mailbox)
 		{
 			$mailbox_names[] = $mailbox['name'];
 			$folder['account_id'] = $account['id'];
-			$folder['parent_id'] = $this->get_parent_id($account['id'], $mailbox['name'], 	$mailbox['delimiter']);
+			$folder['parent_id'] = $this->get_parent_id($account['id'], $mailbox['name'], $mailbox['delimiter']);
 			$folder['attributes'] = $mailbox['attributes'];
 			$folder['name'] = $mailbox['name'];
 
-			$folder['subscribed']=in_array($mailbox['name'], $subscribed) ? '1' : '0';
+			$folder['subscribed']=in_array($mailbox['name'], $subscribed_names) ? '1' : '0';
 			//$folder['subscribed']='1';
 			$folder['delimiter'] = $mailbox['delimiter'];
 			/*if($status = $mail->status($mailbox['name'], SA_UNSEEN+SA_MESSAGES))
@@ -847,6 +833,37 @@ class email extends db
 				$emailobj->delete_folder($account['id'], $this->f('name'));
 			}
 		}
+	}
+
+
+	function synchronize_folders($account, $mail=false)
+	{
+		if(!$mail)
+		{
+			$mail = new imap();
+	
+			if (!$mail->open(
+			$account['host'],
+			$account['type'],
+			$account['port'],
+			$account['username'],
+			$account['password'],
+			'INBOX',
+			0,
+			$account['use_ssl'],
+			$account['novalidate_cert']))
+			{
+				return false;
+			}			
+			$close_connection = true;
+		}
+			
+		$subscribed =  $mail->get_subscribed('');
+		$mailboxes =  $mail->get_mailboxes('');
+		
+		//debug($subscribed);
+		
+		$this->_synchronize_folders($account, $mailboxes, $subscribed);		
 		
 		if(isset($close_connection))
 		{
