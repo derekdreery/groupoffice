@@ -1235,11 +1235,12 @@ try{
 												$folder_id=$node[1];
 											}else
 											{
-												$folder_id=0;
-												$email->synchronize_folders($account);
+												$folder_id=0;												
 											}
 
 											$account = $email->get_account($account_id);
+											if($folder_id==0)
+												$email->synchronize_folders($account);
 											
 
 											$response = get_all_mailbox_nodes($account_id, $folder_id);
