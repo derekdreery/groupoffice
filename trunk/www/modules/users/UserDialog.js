@@ -53,7 +53,8 @@ GO.users.UserDialog = function(config){
 
 	config.layout='fit';
 	config.modal=false;
-	config.resizable=false;
+	config.resizable=true;
+	config.maximizable=true;
 	config.width=750;
 	config.collapsible=true;
 	config.height=430;
