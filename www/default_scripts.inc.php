@@ -86,6 +86,9 @@ foreach($languages as $code=>$language)
 
 </script>
 <?php
+
+if(!isset($lang['common']['extjs_lang'])) $lang['common']['extjs_lang'] = $GO_LANGUAGE->language;
+
 if(!$GO_CONFIG->debug)
 {
 	if(!is_dir($GO_CONFIG->local_path.'cache'))
@@ -105,9 +108,9 @@ if(!$GO_CONFIG->debug)
 			$scripts[] =$GO_CONFIG->root_path.'language/common/'.$GO_LANGUAGE->language.'.js';
 		}
 
-		if(file_exists($GO_CONFIG->root_path.'ext/build/locale/ext-lang-'.$GO_LANGUAGE->language.'.js'))
+		if(file_exists($GO_CONFIG->root_path.'ext/build/locale/ext-lang-'.$lang['common']['extjs_lang'].'.js'))
 		{
-			$scripts[]=$GO_CONFIG->root_path.'ext/build/locale/ext-lang-'.$GO_LANGUAGE->language.'.js';
+			$scripts[]=$GO_CONFIG->root_path.'ext/build/locale/ext-lang-'.$lang['common']['extjs_lang'].'.js';
 		}
 
 		if(file_exists($GO_MODULES->modules['users']['path'].'language/'.$GO_LANGUAGE->language.'.js'))
@@ -225,10 +228,10 @@ if(!$GO_CONFIG->debug)
 			echo '<script type="text/javascript" src="'.$GO_CONFIG->host.'language/common/'.$GO_LANGUAGE->language.'.js'.$suffix.'"></script>';
 			echo "\n";
 		}
-
-		if(file_exists($GO_CONFIG->root_path.'ext/build/locale/ext-lang-'.$GO_LANGUAGE->language.'.js'))
+	
+		if(file_exists($GO_CONFIG->root_path.'ext/build/locale/ext-lang-'.$lang['common']['extjs_lang'].'.js'))
 		{
-			echo '<script type="text/javascript" src="'.$GO_CONFIG->host.'ext/build/locale/ext-lang-'.$GO_LANGUAGE->language.'.js'.$suffix.'"></script>';
+			echo '<script type="text/javascript" src="'.$GO_CONFIG->host.'ext/build/locale/ext-lang-'.$lang['common']['extjs_lang'].'.js'.$suffix.'"></script>';
 			echo "\n";
 		}
 
