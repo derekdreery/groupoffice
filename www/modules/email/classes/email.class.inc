@@ -227,13 +227,13 @@ class email extends db
 				$subscribed =  $this->mail->get_subscribed($account['mbroot']);
 
 				$mailbox_names = array();
-				while($mailbox = array_shift($mailboxes))
+				foreach($mailboxes  as $mailbox)
 				{
 					$mailbox_names[]=$mailbox['name'];
 				}
 
 				$subscribed_names = array();
-				while($mailbox = array_shift($subscribed))
+				foreach($subscribed as $mailbox)
 				{
 					$subscribed_names[]=$mailbox['name'];
 				}
@@ -269,7 +269,10 @@ class email extends db
 			$account['id'] = $this->nextid("em_accounts");
 			$this->insert_row('em_accounts', $account);
 			
-			$this->_synchronize_folders($account, $mailboxes, $subscribed);
+			if ($account['type']=='imap')
+			{
+				$this->_synchronize_folders($account, $mailboxes, $subscribed);
+			}
 			
 			return $account['id'];
 		}
@@ -740,6 +743,7 @@ class email extends db
 		{
 			$subscribed_names[]=$mailbox['name'];
 		}
+
 		
 		foreach($mailboxes as $mailbox)
 		{

@@ -495,7 +495,7 @@ Ext.extend(GO.email.AccountDialog, Ext.Window, {
 							this.loadAccount(this.account_id);
 						}
 
-						this.fireEvent('save', this);
+						this.fireEvent('save', this, action.result);
 
 						if (hide) {
 							this.hide();
