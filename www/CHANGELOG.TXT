@@ -1,3 +1,8 @@
+2009/02/18 Version 3.01-stable-4
+- Fixed problem with IMAP connections. Some people were having trouble connecting to 
+  an IMAP server. GO would get in an endless loop because these servers returned the
+  INBOX folder as a child of itself.
+
 2009/02/16 Version 3.01-stable-2
 - Use GO as complete mailserver solution for multiple domains and with vacation support
   see: http://www.group-office.com/wiki/Mailserver for instructions
