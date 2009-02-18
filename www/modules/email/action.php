@@ -734,7 +734,7 @@ try{
 							}else
 							{
 								$account = $email->get_account($account['id']);
-								$email->synchronize_folders($account);
+								//$email->synchronize_folders($account);
 
 								$response['success']=true;
 								$response['account_id']=$account['id'];

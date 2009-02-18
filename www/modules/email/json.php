@@ -1235,10 +1235,11 @@ try{
 											}else
 											{
 												$folder_id=0;
+												$email->synchronize_folders($account);
 											}
 
 											$account = $email->get_account($account_id);
-											$email->synchronize_folders($account);
+											
 
 											$response = get_all_mailbox_nodes($account_id, $folder_id);
 											break;
