@@ -1129,8 +1129,9 @@ try{
 													$inbox_new=0;
 													if($account)
 													{
-														if(isset($_POST['refresh']))
+														if(!empty($_POST['refresh']))
 														{
+															debug('refreshing');
 															$email->synchronize_folders($account, $imap);
 															$imap->clear_cache();
 														}

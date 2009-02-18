@@ -497,7 +497,7 @@ GO.email.EmailClient = function(config){
 					text: GO.lang.cmdRefresh,
 					cls: 'x-btn-text-icon',
 					handler: function(){
-						this.refresh();
+						this.refresh(true);
 					},
 					scope: this
 				},
@@ -1147,12 +1147,16 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	},
 
 
-	refresh : function()
+	refresh : function(refresh)
 	{		
-		this.treePanel.loader.baseParams.refresh=true;
+		if(refresh)
+			this.treePanel.loader.baseParams.refresh=true;
+			
 		this.treePanel.root.reload();
 		this.messagesStore.removeAll();
-		delete this.treePanel.loader.baseParams.refresh;
+		
+		if(refresh)
+			delete this.treePanel.loader.baseParams.refresh;
 	},
 
 	showAccountsDialog : function()
@@ -1160,8 +1164,13 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		if(!this.accountsDialog)
 		{
 			this.accountsDialog = new GO.email.AccountsDialog();
-			this.accountsDialog.accountsGrid.accountDialog.on('save', this.refresh, this);	
-			this.accountsDialog.accountsGrid.on('delete', this.refresh, this);
+			this.accountsDialog.accountsGrid.accountDialog.on('save', function(grid, result){
+					if(result.account_id){
+						this.refresh();
+					}
+				}, this);
+				
+			this.accountsDialog.accountsGrid.on('delete', function(){this.refresh();}, this);
 			this.accountsDialog.accountsGrid.store.load();				
 		}
 		this.accountsDialog.show();
