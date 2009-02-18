@@ -2,6 +2,7 @@
 //This is a translation by hodrag. If you have questions please e-mail to hodrag@gmail.com
 require($GO_LANGUAGE->get_fallback_base_language_file('common'));
 
+$lang['common']['extjs_lang']='zh_CN';
 $lang['common']['htmldirection']= 'ltr';
 
 $lang['common']['errorsInForm'] = '提交的数据有错误，请更正后重试。';
