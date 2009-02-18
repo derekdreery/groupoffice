@@ -311,7 +311,6 @@ class GO_GROUPS extends db
 		$sql .= 'ORDER BY '.$sort.' '.$direction;
 		$this->query($sql);
 
-		$this->query($sql);
 		$count = $this->num_rows();
 
 		if ($offset != 0)
