@@ -280,7 +280,7 @@ try{
 
 											$tasklist = $tasks->get_tasklist($tasklist_id);
 
-											if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_read']))
+											if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_read']) && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_write']))
 											{
 												throw new AccessDeniedException();
 											}
