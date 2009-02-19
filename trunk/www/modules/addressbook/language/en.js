@@ -100,3 +100,5 @@ GO.addressbook.lang.sendMailing='Send mailing';
 GO.addressbook.lang.importSuccess='Data imported successfully';
 GO.addressbook.lang.searchOnSender='Lookup in addressbook';
 GO.addressbook.lang.confirmCreate='Contact doesn\'t exist. Do you wish to create a new contact?';
+
+GO.addressbook.lang.matchFields='Match the fields';

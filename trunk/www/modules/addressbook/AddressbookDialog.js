@@ -152,8 +152,7 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 			fieldLabel : 'Select file',
 			name: 'import_file',
 			inputType: 'file',
-			cls: 'x-form-file x-form-field',
-			allowBlank: false	
+			cls: 'x-form-file x-form-field'
 		});
 		
 		this.exportfileTypeCombo = new Ext.form.ComboBox({
@@ -463,8 +462,9 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 			id: 'addressbook-default-import-data-window',
 			labelWidth: 125,
   		border: false,
-			defaults: { anchor:'100%' },
-			cls: 'go-form-panel'
+			defaults: { anchor:'-20' },
+			cls: 'go-form-panel',
+			autoScroll:true
 		});
 		
 		this.csvFieldStore = new Ext.data.JsonStore({
@@ -523,14 +523,10 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 		];
 		
 		this.csvFieldDialog = new Ext.Window({
-			autoScroll: true,
-			//layout: 'fit',
-			modal:false,
-			shadow: false,
+			layout: 'fit',
 			height: 400,
 			width: 400,
-			plain: true,
-			title: GO.addressbook.lang['cmdAddressbookDialog'],
+			title: GO.addressbook.lang.matchFields,
 			items: [
 				this.addressbookImportData							
 			],
