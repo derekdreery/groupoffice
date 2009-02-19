@@ -15,7 +15,6 @@ GO.summary.Portal = Ext.extend(Ext.Panel, {
     autoScroll:true,
     cls:'x-portal',
     defaultType: 'portalcolumn',
-
     initComponent : function(){
         GO.summary.Portal.superclass.initComponent.call(this);
         this.addEvents({

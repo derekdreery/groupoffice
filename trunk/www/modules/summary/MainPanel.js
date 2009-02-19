@@ -44,9 +44,6 @@
  	}
  	
  	
- 		
- 	
- 	
  	this.columns=[/*{
 				columnWidth:.33,
 	      style:'padding:10px 0 10px 10px',
@@ -59,7 +56,7 @@
 	  	},
 	  	{
 				columnWidth:.5,
-	      style:'padding:10px 0 10px 10px',
+	      style:'padding:10px 10px 10px 10px',
 	      border:false
 	  	}];
 	  	
