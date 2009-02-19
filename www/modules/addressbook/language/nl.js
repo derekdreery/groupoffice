@@ -90,3 +90,5 @@ GO.addressbook.lang.confirmCreate='Contactpersoon niet gevonden. Wilt u een nieu
 GO.addressbook.lang.selectMailingGroup='Selecteer adreslijst';
 GO.addressbook.lang.strSelectContact= 'Selecteer contactpersoon';
 GO.addressbook.lang.strSelectCompany= 'Selecteer bedrijf';
+
+GO.addressbook.lang.matchFields='Koppel de velden';
