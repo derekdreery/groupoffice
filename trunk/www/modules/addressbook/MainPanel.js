@@ -256,7 +256,8 @@ Ext.extend(GO.addressbook.MainPanel, Ext.Panel,{
 			
 			if(GO.mailings)
 			{
-				GO.mailings.ooTemplatesStore.load();			
+				if(!GO.mailings.ooTemplatesStore.loaded)
+					GO.mailings.ooTemplatesStore.load();			
 				GO.mailings.writableMailingsStore.load();
 			}
 

@@ -355,6 +355,9 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 	setData : function(data)
 	{
 		GO.addressbook.ContactReadPanel.superclass.setData.call(this, data);
+		
+		if(GO.mailings && !GO.mailings.ooTemplatesStore.loaded)
+					GO.mailings.ooTemplatesStore.load();
 				
 		if(data.write_permission)
 		{

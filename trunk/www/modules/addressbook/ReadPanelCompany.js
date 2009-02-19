@@ -399,5 +399,12 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 				this.newOODoc.setDisabled(GO.mailings.ooTemplatesStore.getCount() == 0);
 			}, this);
 		}
-	}	
+	},
+	setData : function(data)
+	{
+		GO.addressbook.CompanyReadPanel.superclass.setData.call(this, data);
+		
+		if(GO.mailings && !GO.mailings.ooTemplatesStore.loaded)
+					GO.mailings.ooTemplatesStore.load();
+	}
 });
