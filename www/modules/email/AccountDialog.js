@@ -420,9 +420,11 @@ GO.email.AccountDialog = function(config) {
 
 	sslCb.on('check', function(checkbox, checked) {
 				if (typeField.getValue() == 'imap') {
-					this.propertiesPanel.form.findField('port').setValue(993);
+					var port = checked ? 993 : 143;
+					this.propertiesPanel.form.findField('port').setValue(port);
 				} else {
-					this.propertiesPanel.form.findField('port').setValue(995);
+					var port = checked ? 995 : 110;
+					this.propertiesPanel.form.findField('port').setValue(port);
 				}
 			}, this)
 
