@@ -18,20 +18,34 @@ $end_time = Date::date_add($start_time,7);
 */
 
 
-
-$calendar = $cal->get_calendar($_REQUEST['calendar_id']);
-$events = $cal->get_events_in_array(array(1), 0, $_REQUEST['start_time'], $_REQUEST['end_time']);
-
-
 $pdf = new PDF();
 
-//$pdf->H1($lang['calendar']['name'].' '.date($_SESSION['GO_SESSION']['date_format'], $_REQUEST['start_time']).' - '.date($_SESSION['GO_SESSION']['date_format'], $_REQUEST['end_time']));
-//$pdf->H2($calendar['name']);
+if(!empty($_REQUEST['view_id']))
+{
+	
+	$view = $cal->get_view($_REQUEST['view_id']);
+	$title=$view['name'];
+	$pdf->setParams($view['name'], $_REQUEST['start_time'], $_REQUEST['end_time']);
+	$pdf->AddPage();
+	$cal->get_view_calendars($view['id']);
+	$cal2 = new calendar();
+	while($cal->next_record())
+	{		
+		$events = $cal2->get_events_in_array(array($cal->f('id')), 0, $_REQUEST['start_time'], $_REQUEST['end_time']);
+		$pdf->H3($cal->f('name'));
+		$pdf->addCalendar($events, false);
+	}
+}else
+{
+	$calendar = $cal->get_calendar($_REQUEST['calendar_id']);
+	$title=$calendar['name'];
+	$pdf->setParams($calendar['name'], $_REQUEST['start_time'], $_REQUEST['end_time']);
+	$events = $cal->get_events_in_array(array($_REQUEST['calendar_id']), 0, $_REQUEST['start_time'], $_REQUEST['end_time']);
+	$pdf->AddPage();
+	$pdf->addCalendar($events);
+}
 
-//$pdf->setTitle($calendar['name']);
-$pdf->addDays($calendar['name'], $_REQUEST['start_time'], $_REQUEST['end_time'], $events);
-
-$filename = $lang['calendar']['name'];
+$filename = File::strip_invalid_chars($lang['calendar']['name'].' '.$title);
 
 
 $browser = detect_browser();
