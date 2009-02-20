@@ -71,6 +71,6 @@ $lang['calendar']['private']='Private';
 $lang['calendar']['import_success']='%s events were imported';
 
 $lang['calendar']['printTimeFormat']='From %s till %s';
-$lang['calendar']['printLocationFormat']=' at %s';
+$lang['calendar']['printLocationFormat']=' at location "%s"';
 $lang['calendar']['printPage']='Page %s of %s';
 $lang['calendar']['printList']='List of appointments';
