@@ -11,20 +11,27 @@ $cal = new calendar();
 
 $date = getdate();
 
+/*
+$calendar_id=1;
 $start_time = mktime(0,0,0,$date['mon'], $date['mday']-$date['wday']+1,$date['year']);
-$end_time = Date::date_add($start_time,5);
+$end_time = Date::date_add($start_time,7);
+*/
 
-$calendar = $cal->get_calendar(1);
-$events = $cal->get_events_in_array(array(1), 0, $start_time, $end_time);
+
+
+$calendar = $cal->get_calendar($_REQUEST['calendar_id']);
+$events = $cal->get_events_in_array(array(1), 0, $_REQUEST['start_time'], $_REQUEST['end_time']);
 
 
 $pdf = new PDF();
-$pdf->AddPage();
-$pdf->H1('Agenda '.date($_SESSION['GO_SESSION']['date_format'], $start_time).' - '.date($_SESSION['GO_SESSION']['date_format'], $end_time));
-$pdf->H2($calendar['name']);
-$pdf->addDays($start_time, $end_time, $events);
 
-$filename = 'Calendar';
+//$pdf->H1($lang['calendar']['name'].' '.date($_SESSION['GO_SESSION']['date_format'], $_REQUEST['start_time']).' - '.date($_SESSION['GO_SESSION']['date_format'], $_REQUEST['end_time']));
+//$pdf->H2($calendar['name']);
+
+//$pdf->setTitle($calendar['name']);
+$pdf->addDays($calendar['name'], $_REQUEST['start_time'], $_REQUEST['end_time'], $events);
+
+$filename = $lang['calendar']['name'];
 
 
 $browser = detect_browser();
