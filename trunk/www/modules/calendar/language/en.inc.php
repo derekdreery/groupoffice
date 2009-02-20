@@ -74,3 +74,6 @@ $lang['calendar']['printTimeFormat']='From %s till %s';
 $lang['calendar']['printLocationFormat']=' at location "%s"';
 $lang['calendar']['printPage']='Page %s of %s';
 $lang['calendar']['printList']='List of appointments';
+
+$lang['calendar']['printAllDaySingle']='All day';
+$lang['calendar']['printAllDayMultiple']='All day from %s till %s';
