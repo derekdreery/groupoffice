@@ -264,15 +264,19 @@ class email extends db
 					$account['spam']= $account['mbroot'].'Spam';
 				}
 			}
+			
+			$mailboxes =  $this->mail->get_mailboxes($account['mbroot']);
+			$subscribed =  $this->mail->get_subscribed($account['mbroot']);
+			
 			$this->mail->close();
+			
+			
 
 			$account['id'] = $this->nextid("em_accounts");
 			$this->insert_row('em_accounts', $account);
 			
-			if ($account['type']=='imap')
-			{
-				$this->_synchronize_folders($account, $mailboxes, $subscribed);
-			}
+			
+			$this->_synchronize_folders($account, $mailboxes, $subscribed);
 			
 			return $account['id'];
 		}
