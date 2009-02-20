@@ -95,7 +95,7 @@ class imapauth extends db
 					//user exists. See if the password is accurate				
 					if(md5($arguments['password']) != $user['password'])
 					{
-						$GO_USERS->update_password($user_id, $arguments['password']);	
+						$GO_USERS->update_password($user['id'], $arguments['password']);	
 						if(isset($GO_MODULES->modules['email']))
 						{
 							require_once($GO_MODULES->modules['email']['class_path']."email.class.inc");
