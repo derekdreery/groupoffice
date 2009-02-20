@@ -372,6 +372,9 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 	{
 		//Calculate the first day of the week		
 		var weekday = date.getDay();
+		if(weekday<this.firstWeekday)
+			weekday=7;
+			
 		return date.add(Date.DAY, this.firstWeekday-weekday);
 	},	
 	mask : function()
@@ -656,7 +659,6 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 
   	//calculate first date of month
   	var firstDateOfMonth = date.getFirstDateOfMonth();
-
 		var lastDateOfMonth = date.getLastDateOfMonth();
 		
 		//start at the monday of the week the current month starts in
