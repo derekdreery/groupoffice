@@ -356,7 +356,16 @@ GO.calendar.MainPanel = function(config){
 									var sD = this.getActivePanel().startDate;
 									var eD = this.getActivePanel().endDate;
 									
-									document.location=GO.settings.modules.calendar.url+'print.php?calendar_id='+this.calendar_id+'&view_id='+this.view_id+'&start_time='+sD.format('U')+'&end_time='+eD.format('U');
+									var l = GO.settings.modules.calendar.url+'print.php?start_time='+sD.format('U')+'&end_time='+eD.format('U');
+									
+									if(this.displayType=='view')
+									{
+										l+='&view_id='+this.view_id;
+									}else
+									{
+										l+='&calendar_id='+this.calendar_id;
+									}
+									document.location=l;
 								},
 								scope: this
 							})					
