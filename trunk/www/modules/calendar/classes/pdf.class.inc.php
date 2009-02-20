@@ -29,6 +29,8 @@ class PDF extends TCPDF
 	function Footer(){
 		global $GO_CONFIG, $lang;
 
+		$this->setDefaultTextColor();
+		$this->SetFont($this->font,'',$this->font_size);
 		$this->SetY(-20);
 		$pW=$this->getPageWidth()-$this->lMargin-$this->rMargin;
 		$this->Cell($pW/2, 10, 'Group-Office '.$GO_CONFIG->version, 0, 0, 'L');
@@ -42,11 +44,11 @@ class PDF extends TCPDF
 		$this->SetY(30);
 		
 		$this->SetTextColor(50,135,172);
-		$this->SetFont($this->font,'B',18);
-		$this->Write(18, $lang['calendar']['name'].' ');
+		$this->SetFont($this->font,'B',16);
+		$this->Write(16, $lang['calendar']['name'].' ');
 		$this->SetTextColor(125,162,180);
 		$this->SetFont($this->font,'',12);
-		$this->setY($this->getY()+5.5, false);
+		$this->setY($this->getY()+3.5, false);
 		$this->Write(12, $this->title);
 			
 			
@@ -76,9 +78,9 @@ class PDF extends TCPDF
 
 	function H1($title)
 	{
-		$this->SetFont($this->font,'B',18);
+		$this->SetFont($this->font,'B',16);
 		$this->SetTextColor(50,135,172);
-		$this->Cell($this->getPageWidth()-$this->lMargin-$this->rMargin,30, $title,0,1);
+		$this->Cell($this->getPageWidth()-$this->lMargin-$this->rMargin,20, $title,0,1);
 		$this->setDefaultTextColor();
 		$this->SetFont($this->font,'',$this->font_size);
 	}
