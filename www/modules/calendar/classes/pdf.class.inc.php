@@ -142,8 +142,6 @@ class PDF extends TCPDF
 			$cellIndex = floor(($event['start_time']-$this->start_time)/86400);
 			$cellEvents[$cellIndex][]=$event;
 		}
-			
-
 		
 
 		if($this->days>1 || !$list)
@@ -190,7 +188,8 @@ class PDF extends TCPDF
 				//while($event = array_shift($cellEvents[$i]))
 				foreach($cellEvents[$i] as $event)
 				{
-					$this->MultiCell($timeColWidth, $this->font_size, date($_SESSION['GO_SESSION']['time_format'],$event['start_time']), 0, 'L',0,0, '', '', true, 0, false, false, 0);
+					$time = $event['all_day_event']=='1' ? '-' : date($_SESSION['GO_SESSION']['time_format'],$event['start_time']);
+					$this->MultiCell($timeColWidth, $this->font_size, $time, 0, 'L',0,0, '', '', true, 0, false, false, 0);
 					$this->MultiCell($cellWidth-$timeColWidth, $this->font_size, $event['name'], 0, 1, 0, 1, '', '', true, 0, false, false, 0);
 					$this->setX($this->lMargin+($pos*$cellWidth));					
 				}
@@ -283,8 +282,24 @@ class PDF extends TCPDF
 					{
 
 						$this->H4($event['name']);
-						$date_format = date('Ymd', $event['start_time'])==date('Ymd', $event['end_time']) ? $_SESSION['GO_SESSION']['time_format'] : $_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'];
-						$text = sprintf($lang['calendar']['printTimeFormat'], date($_SESSION['GO_SESSION']['time_format'],$event['start_time']), date($date_format,$event['end_time']));
+						
+						if(empty($event['all_day_event']))
+						{
+							$date_format = date('Ymd', $event['start_time'])==date('Ymd', $event['end_time']) ? $_SESSION['GO_SESSION']['time_format'] : $_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'];
+							$text = sprintf($lang['calendar']['printTimeFormat'], date($_SESSION['GO_SESSION']['time_format'],$event['start_time']), date($date_format,$event['end_time']));
+						}else
+						{
+							$start_date = date($_SESSION['GO_SESSION']['date_format'],$event['start_time']); 
+							$end_date = date($_SESSION['GO_SESSION']['date_format'],$event['end_time']);
+							
+							if($start_date==$end_date)
+							{
+								$text = sprintf($lang['calendar']['printAllDaySingle']);
+							}else
+							{
+								$text = sprintf($lang['calendar']['printAllDayMultiple'], $start_date, $end_date);
+							}
+						}
 
 						if(!empty($event['location']))
 						$text .= sprintf($lang['calendar']['printLocationFormat'], $event['location']);

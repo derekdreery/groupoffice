@@ -56,3 +56,6 @@ $lang['calendar']['printTimeFormat']='Van %s tot %s';
 $lang['calendar']['printLocationFormat']=' op lokatie "%s"';
 $lang['calendar']['printPage']='Pagina %s van %s';
 $lang['calendar']['printList']='Afsprakenlijst';
+
+$lang['calendar']['printAllDaySingle']='Hele dag';
+$lang['calendar']['printAllDayMultiple']='Hele dag van %s tot %s';
