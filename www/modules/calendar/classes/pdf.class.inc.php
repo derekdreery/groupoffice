@@ -38,11 +38,11 @@ class PDF extends TCPDF
 	}
 
 	function Header(){
-		
+
 		global $lang;
-		
+
 		$this->SetY(30);
-		
+
 		$this->SetTextColor(50,135,172);
 		$this->SetFont($this->font,'B',16);
 		$this->Write(16, $lang['calendar']['name'].' ');
@@ -118,148 +118,195 @@ class PDF extends TCPDF
 	{
 		$this->SetTextColor(40,40,40);
 	}
+	
+	function setParams($title, $start_time, $end_time)
+	{
+		$this->start_time=$start_time;
+		$this->end_time=$end_time;
+		$this->title=$title;
+		$this->days = ceil(($end_time-$start_time)/86400);		
+		$this->date_range_text = $this->days > 1 ? date($_SESSION['GO_SESSION']['date_format'], $start_time).' - '.date($_SESSION['GO_SESSION']['date_format'], $end_time) : date($_SESSION['GO_SESSION']['date_format'], $start_time);		
+	}
 
-	function addDays($title, $start_time, $end_time, $events)
+	function addCalendar($events, $list=true)
 	{
 		global $lang;
-		$days = ceil(($end_time-$start_time)/86400);
-
-		$this->title=$title;
-		$this->date_range_text = $days > 1 ? date($_SESSION['GO_SESSION']['date_format'], $start_time).' - '.date($_SESSION['GO_SESSION']['date_format'], $end_time) : date($_SESSION['GO_SESSION']['date_format'], $start_time);
-
-		for($i=0;$i<$days;$i++)
+		
+		for($i=0;$i<$this->days;$i++)
 		{
 			$cellEvents[$i]=array();
 		}
 
 		while($event = array_shift($events))
 		{
-			$cellIndex = floor(($event['start_time']-$start_time)/86400);
+			$cellIndex = floor(($event['start_time']-$this->start_time)/86400);
 			$cellEvents[$cellIndex][]=$event;
 		}
 			
 
-		$this->AddPage();
 		
-		if($days>1)
-		{	
+
+		if($this->days>1 || !$list)
+		{
 			//green border
 			$this->SetDrawColor(125,165, 65);
-				
-			$maxCells = $days>7 ? 7 : $days;
+
+			$maxCells = $this->days>7 ? 7 : $this->days;
 			$cellWidth = $this->pageWidth/$maxCells;
 			$timeColWidth=30;
 
 			$this->SetFillColor(248, 248, 248);
-			$time = $start_time;
-				
-				
+			$time = $this->start_time;
+
+
 			for($i=0;$i<$maxCells;$i++)
 			{
-				$label = $days>$maxCells ? $lang['common']['full_days'][date('w', $time)] : $lang['common']['full_days'][date('w', $time)].', '.date($_SESSION['GO_SESSION']['date_format'], $time);
+				$label = $this->days>$maxCells ? $lang['common']['full_days'][date('w', $time)] : $lang['common']['full_days'][date('w', $time)].', '.date($_SESSION['GO_SESSION']['date_format'], $time);
 				$this->Cell($cellWidth, 20, $label, 1,0,'L', 1);
 				$time = Date::date_add($time, 1);
 			}
 			$this->Ln();
-				
+
 			$this->SetFont($this->font,'',$this->font_size);
-				
-			$cellStartY = $maxY= $this->getY();				
-				
 
-			$daysDone=0;
+			$cellStartY = $maxY= $this->getY();
+			$pageStart = $this->PageNo();
+			
+			$this->daysDone=0;
 			$weekCounter = 0;
-			for($i=0;$i<$days;$i++)
+			for($i=0;$i<$this->days;$i++)
 			{
-				$time = Date::date_add($start_time, $i);
-
-				$pos = $i-$daysDone;
+				$pos = $i-$this->daysDone;
+				$this->setPage($pageStart);
 				$this->setXY($this->lMargin+($pos*$cellWidth), $cellStartY);
 
-				$this->Cell($cellWidth, $this->font_size, date('d',$time),0,1,'R');
-				$this->setX($this->lMargin+($pos*$cellWidth));
+				if($this->days>7)
+				{
+					$time = Date::date_add($this->start_time, $i);
+					$this->Cell($cellWidth, $this->font_size, date('d',$time),0,1,'R');
+					$this->setX($this->lMargin+($pos*$cellWidth));
+				}
 
 				//while($event = array_shift($cellEvents[$i]))
 				foreach($cellEvents[$i] as $event)
 				{
 					$this->MultiCell($timeColWidth, $this->font_size, date($_SESSION['GO_SESSION']['time_format'],$event['start_time']), 0, 'L',0,0, '', '', true, 0, false, false, 0);
 					$this->MultiCell($cellWidth-$timeColWidth, $this->font_size, $event['name'], 0, 1, 0, 1, '', '', true, 0, false, false, 0);
-					$this->setX($this->lMargin+($pos*$cellWidth));
+					$this->setX($this->lMargin+($pos*$cellWidth));					
 				}
-
-				if($this->getY()>$maxY)
-				$maxY=$this->getY();
+				
+				
+				$y = $this->getY();
+				if($y<$cellStartY)
+				{
+					//went to next page so we must add the page height.
+					$y+=$this->h;
+				}
+				if($y>$maxY)
+					$maxY=$y;
+				
 					
 				$weekCounter++;
 				if($weekCounter==$maxCells)
 				{
+					$this->setPage($pageStart);
+					
 					$weekCounter=0;
-					$daysDone+=$maxCells;
-						
+					$this->daysDone+=$maxCells;
+
 					//miniumum cell height
 					$cellHeight = $maxY-$cellStartY;
 					if($cellHeight<70)
 					$cellHeight=70;
-
-					for($n=0;$n<$maxCells;$n++)
+					
+					if($cellHeight+$this->getY()>$this->h-$this->bMargin)
 					{
-						$this->setXY($this->lMargin+($n*$cellWidth), $cellStartY);
-						$this->Cell($cellWidth, $cellHeight,'',1,1);
+						$cellHeight1=$this->h-$this->getY()-$this->bMargin;
+						
+						$cellHeight2=$cellHeight-$cellHeight1-$this->tMargin-$this->bMargin;
+						
+						$this->setXY($this->lMargin, $cellStartY);
+						for($n=0;$n<$maxCells;$n++)
+						{														
+							$this->Cell($cellWidth, $cellHeight1,'','LTR',0);
+						}
+						$this->ln();
+
+						for($n=0;$n<$maxCells;$n++)
+						{				
+							$this->Cell($cellWidth, $cellHeight2,'','LBR',0);
+						}
+						$this->ln();
+						
+					}else
+					{
+						$this->setXY($this->lMargin, $cellStartY);
+						for($n=0;$n<$maxCells;$n++)
+						{			
+							$this->Cell($cellWidth, $cellHeight,'',1,0);
+						}
+						$this->ln();
 					}
-					$this->Ln(0);
+					
 					$cellStartY = $maxY= $this->getY();
+					$pageStart = $this->PageNo();
 				}
 			}
 
 			$this->ln(20);
 		}
 
-		$this->CurOrientation='P';
-		//$this->AddPage();
-		
-		//$this->realW=$this->w;
-		$this->w=595.28;
-		//list
-
-		$this->H1($lang['calendar']['printList']);
-
-		$time = $start_time;
-		for($i=0;$i<$days;$i++)
+		if($list)
 		{
-			if(count($cellEvents[$i]))
+			$this->CurOrientation='P';
+
+			if($this->days>7){
+				$this->AddPage();
+			}else
 			{
-				$this->ln(10);
-				$this->H3($lang['common']['full_days'][date('w', $time)].', '.date($_SESSION['GO_SESSION']['date_format'], $time));
-				$time = Date::date_add($time, 1);
+				$this->w=595.28;
+			}
 
-				$this->SetFont($this->font,'',$this->font_size);
-				while($event = array_shift($cellEvents[$i]))
+			$this->H1($lang['calendar']['printList']);
+
+			$time = $this->start_time;
+			for($i=0;$i<$this->days;$i++)
+			{
+				if(count($cellEvents[$i]))
 				{
-
-					$this->H4($event['name']);
-					$date_format = date('Ymd', $event['start_time'])==date('Ymd', $event['end_time']) ? $_SESSION['GO_SESSION']['time_format'] : $_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'];
-					$text = sprintf($lang['calendar']['printTimeFormat'], date($_SESSION['GO_SESSION']['time_format'],$event['start_time']), date($date_format,$event['end_time']));
-						
-					if(!empty($event['location']))
-					$text .= sprintf($lang['calendar']['printLocationFormat'], $event['location']);
-
-					$pW=$this->getPageWidth()-$this->lMargin-$this->rMargin;
-						
-					$this->Cell($pW,10, $text, 0, 1);
-					if(!empty($event['description']))
-					{
-						$this->ln(4);
-						$this->MultiCell($pW,10, $event['description'],0,'L',0,1);
-					}
-						
 					$this->ln(10);
-					$lineStyle = array(
+					$this->H3($lang['common']['full_days'][date('w', $time)].', '.date($_SESSION['GO_SESSION']['date_format'], $time));
+					$time = Date::date_add($time, 1);
+
+					$this->SetFont($this->font,'',$this->font_size);
+					while($event = array_shift($cellEvents[$i]))
+					{
+
+						$this->H4($event['name']);
+						$date_format = date('Ymd', $event['start_time'])==date('Ymd', $event['end_time']) ? $_SESSION['GO_SESSION']['time_format'] : $_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'];
+						$text = sprintf($lang['calendar']['printTimeFormat'], date($_SESSION['GO_SESSION']['time_format'],$event['start_time']), date($date_format,$event['end_time']));
+
+						if(!empty($event['location']))
+						$text .= sprintf($lang['calendar']['printLocationFormat'], $event['location']);
+
+						$pW=$this->getPageWidth()-$this->lMargin-$this->rMargin;
+
+						$this->Cell($pW,10, $text, 0, 1);
+						if(!empty($event['description']))
+						{
+							$this->ln(4);
+							$this->MultiCell($pW,10, $event['description'],0,'L',0,1);
+						}
+
+						$this->ln(10);
+						$lineStyle = array(
 						'color'=>array(40,40,40),
 						'width'=>.5				
-					);
-					$this->Line($this->lMargin+$this->cMargin,$this->getY(), $this->getPageWidth()-$this->rMargin-$this->cMargin,$this->getY(), $lineStyle);
-					$this->ln(10);
+						);
+						$this->Line($this->lMargin+$this->cMargin,$this->getY(), $this->getPageWidth()-$this->rMargin-$this->cMargin,$this->getY(), $lineStyle);
+						$this->ln(10);
 
+					}
 				}
 			}
 		}
