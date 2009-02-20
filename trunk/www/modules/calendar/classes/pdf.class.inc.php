@@ -17,7 +17,7 @@ class PDF extends TCPDF
 		$this->AliasNbPages();
 
 		$this->setJPEGQuality(100);
-		$this->SetMargins(30,30,30);
+		$this->SetMargins(30,60,30);
 
 		$this->SetFont($this->font,'',$this->font_size);
 
@@ -36,7 +36,26 @@ class PDF extends TCPDF
 	}
 
 	function Header(){
-
+		
+		global $lang;
+		
+		$this->SetY(30);
+		
+		$this->SetTextColor(50,135,172);
+		$this->SetFont($this->font,'B',18);
+		$this->Write(18, $lang['calendar']['name'].' ');
+		$this->SetTextColor(125,162,180);
+		$this->SetFont($this->font,'',12);
+		$this->setY($this->getY()+5.5, false);
+		$this->Write(12, $this->title);
+			
+			
+		$this->setY($this->getY()+2.5, false);
+			
+		$this->SetFont($this->font,'B',$this->font_size);
+		$this->setDefaultTextColor();
+			
+		$this->Cell($this->getPageWidth()-$this->getX()-$this->rMargin,12,$this->date_range_text,0,0,'R');
 	}
 
 	function calcMultiCellHeight($w, $h, $text)
@@ -103,7 +122,8 @@ class PDF extends TCPDF
 		global $lang;
 		$days = ceil(($end_time-$start_time)/86400);
 
-		$date_range_text = $days > 1 ? date($_SESSION['GO_SESSION']['date_format'], $start_time).' - '.date($_SESSION['GO_SESSION']['date_format'], $end_time) : date($_SESSION['GO_SESSION']['date_format'], $start_time);
+		$this->title=$title;
+		$this->date_range_text = $days > 1 ? date($_SESSION['GO_SESSION']['date_format'], $start_time).' - '.date($_SESSION['GO_SESSION']['date_format'], $end_time) : date($_SESSION['GO_SESSION']['date_format'], $start_time);
 
 		for($i=0;$i<$days;$i++)
 		{
@@ -117,29 +137,10 @@ class PDF extends TCPDF
 		}
 			
 
+		$this->AddPage();
+		
 		if($days>1)
-		{
-
-			$this->AddPage();
-				
-			$this->SetTextColor(50,135,172);
-			$this->SetFont($this->font,'B',18);
-			$this->Write(18, $lang['calendar']['name'].' ');
-			$this->SetTextColor(125,162,180);
-			$this->SetFont($this->font,'',12);
-			$this->setY($this->getY()+5.5, false);
-			$this->Write(12, $title);
-				
-				
-			$this->setY($this->getY()+2.5, false);
-				
-			$this->SetFont($this->font,'B',$this->font_size);
-			$this->setDefaultTextColor();
-				
-			$this->Cell($this->getPageWidth()-$this->getX()-$this->rMargin,12,$date_range_text,0,0,'R');
-				
-			$this->ln(30);				
-				
+		{	
 			//green border
 			$this->SetDrawColor(125,165, 65);
 				
@@ -212,29 +213,13 @@ class PDF extends TCPDF
 		}
 
 		$this->CurOrientation='P';
-		$this->AddPage();
+		//$this->AddPage();
+		
+		//$this->realW=$this->w;
+		$this->w=595.28;
 		//list
 
-		$this->SetTextColor(50,135,172);
-		$this->SetFont($this->font,'B',18);
-		$this->Write(18, $lang['calendar']['printList'].' ');
-		$this->SetTextColor(125,162,180);
-		$this->SetFont($this->font,'',12);
-		$this->setY($this->getY()+5.5, false);
-		$this->Write(12, $title);
-
-
-		$this->setY($this->getY()+2.5, false);
-
-		$this->SetFont($this->font,'B',$this->font_size);
-		$this->setDefaultTextColor();
-
-		$this->Cell($this->getPageWidth()-$this->getX()-$this->rMargin,12,$date_range_text,0,0,'R');
-
-		$this->ln(30);
-
-
-
+		$this->H1($lang['calendar']['printList']);
 
 		$time = $start_time;
 		for($i=0;$i<$days;$i++)
