@@ -157,7 +157,10 @@ class PDF extends TCPDF
 
 			$maxCells = $this->days>7 ? 7 : $this->days;
 			$cellWidth = $this->pageWidth/$maxCells;
-			$timeColWidth=30;
+			$timeColWidth=$this->GetStringWidth(date($_SESSION['GO_SESSION']['time_format'], mktime(23,59,0)), $this->font, '', $this->font_size)+5;
+			
+			$time_format = str_replace('G', 'H',$_SESSION['GO_SESSION']['time_format']);
+			$time_format = str_replace('g', 'h',$time_format);
 
 			$this->SetFillColor(248, 248, 248);
 			$time = $this->start_time;
@@ -194,8 +197,8 @@ class PDF extends TCPDF
 				//while($event = array_shift($cellEvents[$i]))
 				foreach($cellEvents[$i] as $event)
 				{
-					$time = $event['all_day_event']=='1' ? '-' : date($_SESSION['GO_SESSION']['time_format'],$event['start_time']);
-					$this->MultiCell($timeColWidth, $this->font_size, $time, 0, 'L',0,0, '', '', true, 0, false, false, 0);
+					$time = $event['all_day_event']=='1' ? '-' : date($time_format,$event['start_time']);
+					$this->Cell($timeColWidth, $this->font_size, $time, 0, 0, 'L');
 					$this->MultiCell($cellWidth-$timeColWidth, $this->font_size, $event['name'], 0, 1, 0, 1, '', '', true, 0, false, false, 0);
 					$this->setX($this->lMargin+($pos*$cellWidth));					
 				}
