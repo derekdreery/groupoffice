@@ -351,7 +351,12 @@ GO.calendar.MainPanel = function(config){
 								text: GO.lang.cmdPrint,
 								cls: 'x-btn-text-icon',
 								handler: function(){									
-									this.getActivePanel().body.print({printCSS:'<style>.x-calGrid-grid-container{overflow:visible !important}}</style>'});								
+									//this.getActivePanel().body.print({printCSS:'<style>.x-calGrid-grid-container{overflow:visible !important}}</style>'});
+									
+									var sD = this.getActivePanel().startDate;
+									var eD = this.getActivePanel().endDate;
+									
+									document.location=GO.settings.modules.calendar.url+'print.php?calendar_id='+this.calendar_id+'&view_id='+this.view_id+'&start_time='+sD.format('U')+'&end_time='+eD.format('U');
 								},
 								scope: this
 							})					

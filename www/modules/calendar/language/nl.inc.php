@@ -8,7 +8,7 @@ $lang['calendar']['description'] = 'Agenda module; Iedere gebruiker kan afsprake
 $lang['calendar']['groupView'] = 'Groepsoverzicht';
 $lang['calendar']['event']='Afspraak';
 $lang['calendar']['startsAt']='Begint op';
-$lang['calendar']['endsAt']='Eindigd op';
+$lang['calendar']['endsAt']='Eindigt op';
 
 $lang['calendar']['exceptionNoCalendarID'] = 'FATAAL: Geen agenda ID!';
 $lang['calendar']['appointment'] = 'Afspraak: ';
