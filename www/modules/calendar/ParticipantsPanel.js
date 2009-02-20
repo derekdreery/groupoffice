@@ -378,7 +378,8 @@ Ext.extend(GO.calendar.ParticipantsPanel, GO.grid.GridPanel, {
 					hourDiff--;
 				}
 
-				if (minutes < 10) {
+				minutes = minutes+"";
+				if (minutes.length==1) {
 					minutes = '0' + minutes;
 				}
 
@@ -391,12 +392,14 @@ Ext.extend(GO.calendar.ParticipantsPanel, GO.grid.GridPanel, {
 				var endHour = parseInt(hours) + hourDiff;
 				var endMin = parseInt(minutes) + minDiff;
 				
-				if (endMin > 60) {
+				if (endMin >= 60) {
 					endMin -= 60;
 					endHour++;
 				}
-				if (endMin < 10) {
-					endMin = "0" + endMin;
+				
+				endMin = endMin+"";
+				if (endMin.length==1) {
+					endMin = '0' + endMin;
 				}
 
 				d.endHour.setValue(endHour);
