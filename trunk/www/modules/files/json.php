@@ -137,6 +137,7 @@ try{
 					$node= array(
 					'text'=>$lang['files']['shared'],
 					'id'=>'shared',
+					'readonly'=>true,
 					'iconCls'=>'folder-shares'/*,
 					'expanded'=>true,
 					'children'=>$children,
@@ -151,6 +152,7 @@ try{
 						$node= array(
 							'text'=>$lang['projects']['projects'],
 							'id'=>'projects',
+							'readonly'=>true,
 							'iconCls'=>'go-link-icon-5'
 							);
 							$response[]=$node;
