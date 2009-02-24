@@ -37,7 +37,7 @@ $sql = "SELECT *
 	
 $db->query($sql);
 
-require('../../modules/addressbook/classes/addressbook.class.inc');
+require('../../modules/addressbook/classes/addressbook.class.inc.php');
 $ab = new addressbook();
 
 $counter = 0;

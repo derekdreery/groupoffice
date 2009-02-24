@@ -15,7 +15,7 @@
 require_once("../../Group-Office.php");
 $GO_SECURITY->json_authenticate('addressbook');
 
-require($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc');
+require($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
 $ab = new addressbook;
 
 $sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'name';
@@ -330,7 +330,7 @@ try
 				
 				if(isset($GO_MODULES->modules['files']))
 				{
-					require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
+					require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 					$fs = new files();
 	
 					$response['data']['files_path']='contacts/'.$response['data']['id'];
@@ -443,7 +443,7 @@ try
 				
 				if(isset($GO_MODULES->modules['files']))
 				{
-					require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
+					require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 					$fs = new files();
 	
 					$response['data']['files_path']='companies/'.$response['data']['id'];	

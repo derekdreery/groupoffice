@@ -244,7 +244,7 @@ try{
 
 			if(isset($GO_MODULES->modules['addressbook']) && $GO_MODULES->modules['addressbook']['read_permission'])
 			{
-				require_once ($GO_MODULES->modules['addressbook']['class_path']."addressbook.class.inc");
+				require_once ($GO_MODULES->modules['addressbook']['class_path']."addressbook.class.inc.php");
 				$ab = new addressbook();
 				$ab->search_email($GO_SECURITY->user_id, $query);
 

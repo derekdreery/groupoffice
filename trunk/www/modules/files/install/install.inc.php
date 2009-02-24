@@ -5,7 +5,7 @@ global $GO_LANGUAGE, $lang, $GO_SECURITY, $GO_USERS, $GO_CONFIG;
 
 require($GO_LANGUAGE->get_language_file('files'));
 
-require_once($module['class_path'].'files.class.inc');
+require_once($module['class_path'].'files.class.inc.php');
 $files = new files();
 
 $template['name']=$lang['files']['ootextdoc'];

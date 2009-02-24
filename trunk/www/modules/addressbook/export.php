@@ -18,7 +18,7 @@ $GO_MODULES->authenticate('addressbook');
 require_once($GO_LANGUAGE->get_language_file('addressbook'));
 
 //load contact management class
-require_once($GO_MODULES->class_path."addressbook.class.inc");
+require_once($GO_MODULES->class_path."addressbook.class.inc.php");
 $ab = new addressbook();
 
 $addressbook_id = isset($_REQUEST['addressbook_id']) ? $_REQUEST['addressbook_id'] : 0;
@@ -53,7 +53,7 @@ if ($browser['name'] == 'MSIE')
 }
 
 if($file_type == 'vcf') {
-	require_once($GO_MODULES->path."classes/vcard.class.inc");
+	require_once($GO_MODULES->path."classes/vcard.class.inc.php");
 	$vcard = new vcard();
 	if($vcard->export_addressbook($addressbook_id)) {
 		echo $vcard->vcf;

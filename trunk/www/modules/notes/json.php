@@ -101,7 +101,7 @@ try{
 			
 			if(isset($GO_MODULES->modules['files']))
 			{
-				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
+				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 				$fs = new files();
 
 				$response['data']['files_path']='notes/'.$response['data']['id'];

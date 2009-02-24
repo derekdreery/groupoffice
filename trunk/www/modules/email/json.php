@@ -165,7 +165,7 @@ function load_template($template_id, $to, $keep_tags=false)
 	global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE, $GO_SECURITY, $GO_USERS;
 
 	require_once ($GO_CONFIG->class_path.'mail/mimeDecode.class.inc');
-	require($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc');
+	require($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
 	require($GO_MODULES->modules['mailings']['class_path'].'templates.class.inc.php');
 
 	$ab = new addressbook();
@@ -698,7 +698,7 @@ try{
 				$response['sender_contact_id']=0;
 				if(!empty($_POST['get_contact_id']) && $GO_MODULES->has_module('addressbook'))
 				{
-					require($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc');
+					require($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
 					$ab = new addressbook();
 					
 					$contact = $ab->get_contact_by_email($response['sender'], $GO_SECURITY->user_id);
@@ -794,7 +794,7 @@ try{
 				$response['blocked_images']=0;
 				if(!isset($_POST['unblock']))
 				{
-					require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc');
+					require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
 					$ab = new addressbook();
 
 					$contact = $ab->get_contact_by_email($response['sender'], $GO_SECURITY->user_id);

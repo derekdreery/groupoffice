@@ -510,7 +510,7 @@ class notes extends db {
 
 		if(isset($GO_MODULES->modules['files']))
 		{
-			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$fs = new files();
 
 			$sql = "SELECT e.name,e.id, c.acl_read, c.acl_write, c.user_id FROM no_notes e INNER JOIN no_categories c ON c.id=e.category_id";

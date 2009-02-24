@@ -15,7 +15,7 @@
 require_once("../../Group-Office.php");
 $GO_SECURITY->json_authenticate('addressbook');
 require_once($GO_LANGUAGE->get_language_file('addressbook'));
-require($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc');
+require($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
 $ab = new addressbook;
 
 $feedback = null;
@@ -95,7 +95,7 @@ try
 						
 					if($GO_MODULES->modules['files'])
 					{
-						require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
+						require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 						$fs = new files();
 
 						$result['files_path']='contacts/'.$contact_id;
@@ -199,7 +199,7 @@ try
 
 					if($GO_MODULES->modules['files'])
 					{
-						require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
+						require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 						$fs = new files();
 
 						$result['files_path']='companies/'.$company_id;
@@ -337,7 +337,7 @@ try
 			switch($import_filetype)
 			{
 				case 'vcf':
-					require_once ($GO_MODULES->path."classes/vcard.class.inc");
+					require_once ($GO_MODULES->path."classes/vcard.class.inc.php");
 					$vcard = new vcard();
 					$result['success'] = $vcard->import($_SESSION['GO_SESSION']['addressbook']['import_file'], $GO_SECURITY->user_id, ($_POST['addressbook_id']));
 					break;
