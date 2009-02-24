@@ -56,7 +56,7 @@ GO.newMenuItems=[];
 
 if(isset($_REQUEST['after_login_url']))
 {
-	echo 'GO.afterLoginUrl="'.smart_stripslashes($_REQUEST['after_login_url']).'";';
+	echo 'GO.afterLoginUrl="'.$_REQUEST['after_login_url'].'";';
 }
 
 
