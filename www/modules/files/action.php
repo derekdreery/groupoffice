@@ -111,7 +111,7 @@ try{
 				$fs->remove_notification($_POST['path'], $GO_SECURITY->user_id);
 			}
 
-			if($fs->is_owner($GO_SECURITY->user_id, $_POST['path']) || $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
+			if(utf8_basename(dirname($_POST['path'])) != 'users' && ($fs->is_owner($GO_SECURITY->user_id, $_POST['path']) || $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id)))
 			{
 				$folder = $fs->get_folder($_POST['path']);
 				
@@ -137,19 +137,20 @@ try{
 				
 				$fs->update_folder($up_folder);
 					
-				$new_name = $_POST['name'];
-					
-				if(empty($new_name))
+				if(isset($_POST['name']))
 				{
-					throw new MissingFieldException();
-				}
-					
-				if($new_name != utf8_basename($_POST['path']))
-				{
-					$new_path = dirname($_POST['path']).'/'.$new_name;
-
-					$fs->move($GO_CONFIG->file_storage_path.$_POST['path'], $GO_CONFIG->file_storage_path.$new_path);
-					$response['path']=$new_path;
+					if(empty($_POST['name']))
+					{
+						throw new MissingFieldException();
+					}
+						
+					if($_POST['name'] != utf8_basename($_POST['path']))
+					{
+						$new_path = dirname($_POST['path']).'/'.$_POST['name'];
+	
+						$fs->move($GO_CONFIG->file_storage_path.$_POST['path'], $GO_CONFIG->file_storage_path.$new_path);
+						$response['path']=$new_path;
+					}
 				}
 			}
 			$response['success']=true;
