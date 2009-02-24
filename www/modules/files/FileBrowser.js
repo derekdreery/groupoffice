@@ -1388,6 +1388,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 					var activeNode = this.treePanel.getNodeById(path);
 					if(activeNode)
 					{
+						this.treePanel.getSelectionModel().select(activeNode);
 						activeNode.expand();			
 					}
 				}	
