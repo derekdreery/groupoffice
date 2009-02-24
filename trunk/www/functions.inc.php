@@ -60,7 +60,14 @@ function utf8_basename($path)
 	{
 		return '';
 	}
-	return mb_substr($path, mb_strrpos($path, '/')+1);
+	$pos = mb_strrpos($path, '/');
+	if($pos===false)
+	{
+		return $path;
+	}else
+	{
+		return mb_substr($path, $pos+1);
+	}
 }
 
 /**

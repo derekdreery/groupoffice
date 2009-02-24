@@ -27,27 +27,27 @@ $response=array();
 
 try{
 	switch($task)
-	{	
-		case 'set_view':			
+	{
+		case 'set_view':
 			$up_folder['path']=$_POST['path'];
 			$up_folder['thumbs']=$_POST['thumbs'];
-			
+				
 			$fs->update_folder($up_folder);
-			
+				
 			$response['success']=true;
-			
+				
 			break;
 		case 'delete':
-			
+				
 			$delete_path = $GO_CONFIG->file_storage_path.$_POST['path'];
 
 			if(!$fs->has_write_permission($GO_SECURITY->user_id, $delete_path))
 			{
 				throw new AccessDeniedException();
 			}
-			
+				
 			$fs->notify_users($_POST['path'], $GO_SECURITY->user_id, array(), array(), array(utf8_basename($delete_path)));
-			
+				
 			$response['success']=$fs->delete($delete_path);
 			break;
 		case 'file_properties':
@@ -60,27 +60,25 @@ try{
 			{
 				throw new AccessDeniedException();
 			}
-			
+				
 			$up_file['path']=$_POST['path'];
 			$up_file['comments']=$_POST['comments'];
 			$fs->update_file($up_file);
 
-
-			$new_name = $_POST['name'];
-
-			if(empty($new_name))
+				
+			if(empty($_POST['name']))
 			{
 				throw new MissingFieldException();
 			}
 			$extension = File::get_extension($path);
 			if(!empty($extension))
 			{
-				$new_name .= '.'.$extension;
+				$_POST['name'] .= '.'.$extension;
 			}
 
-			if($new_name != utf8_basename($path))
+			if($_POST['name'] != utf8_basename($path))
 			{
-				$new_path = dirname($path).'/'.$new_name;
+				$new_path = dirname($path).'/'.$_POST['name'];
 
 				$fs->move($path, $new_path);
 				$response['path']=str_replace($GO_CONFIG->file_storage_path,'',$new_path);
@@ -110,49 +108,50 @@ try{
 			{
 				$fs->remove_notification($_POST['path'], $GO_SECURITY->user_id);
 			}
+				
+			$folder = $fs->get_folder($_POST['path']);
+
+			$up_folder['path']=$_POST['path'];
+			$up_folder['comments']=$_POST['comments'];
 
 			if(utf8_basename(dirname($_POST['path'])) != 'users' && ($fs->is_owner($GO_SECURITY->user_id, $_POST['path']) || $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id)))
 			{
-				$folder = $fs->get_folder($_POST['path']);
-				
-				$up_folder['path']=$_POST['path'];
-				$up_folder['comments']=$_POST['comments'];
-				
 				if (isset ($_POST['share']) && $folder['acl_read']==0) {
-					
+						
 					$up_folder['acl_read']=$GO_SECURITY->get_new_acl();
 					$up_folder['acl_write']=$GO_SECURITY->get_new_acl();
-					$up_folder['visible']='1';					
+					$up_folder['visible']='1';
 
 					$response['acl_read']=$up_folder['acl_read'];
 					$response['acl_write']=$up_folder['acl_write'];
 				}
 				if (!isset ($_POST['share']) && $folder['acl_read']) {
 					$up_folder['acl_read']=0;
-					$up_folder['acl_write']=0;					
+					$up_folder['acl_write']=0;
 
 					$GO_SECURITY->delete_acl($folder['acl_read']);
-					$GO_SECURITY->delete_acl($folder['acl_write']);					
-				}
-				
-				$fs->update_folder($up_folder);
-					
-				if(isset($_POST['name']))
-				{
-					if(empty($_POST['name']))
-					{
-						throw new MissingFieldException();
-					}
-						
-					if($_POST['name'] != utf8_basename($_POST['path']))
-					{
-						$new_path = dirname($_POST['path']).'/'.$_POST['name'];
-	
-						$fs->move($GO_CONFIG->file_storage_path.$_POST['path'], $GO_CONFIG->file_storage_path.$new_path);
-						$response['path']=$new_path;
-					}
+					$GO_SECURITY->delete_acl($folder['acl_write']);
 				}
 			}
+
+			$fs->update_folder($up_folder);
+				
+			if(isset($_POST['name']))
+			{
+				if(empty($_POST['name']))
+				{
+					throw new MissingFieldException();
+				}
+
+				if($_POST['name'] != utf8_basename($_POST['path']))
+				{
+					$new_path = dirname($_POST['path']).'/'.$_POST['name'];
+
+					$fs->move($GO_CONFIG->file_storage_path.$_POST['path'], $GO_CONFIG->file_storage_path.$new_path);
+					$response['path']=$new_path;
+				}
+			}
+				
 			$response['success']=true;
 
 			break;
@@ -183,11 +182,11 @@ try{
 				throw new Exception($lang['common']['saveError']);
 			} else {
 				//$GO_LOGGER->log('filesystem', 'NEW FOLDER '.$fs->strip_file_storage_path($fv->path.'/'.$name));
-				
+
 				$folder['path']=$_POST['path'].'/'.$name;
 				$folder['visible']='1';
 				$folder['user_id']=$GO_SECURITY->user_id;
-				
+
 				$fs->add_folder($folder);
 			}
 
@@ -212,7 +211,7 @@ try{
 					$tmp_file = $GO_CONFIG->tmpdir.'files_upload/'.($_FILES['attachments']['name'][$n]);
 					move_uploaded_file($_FILES['attachments']['tmp_name'][$n], $tmp_file);
 					chmod($tmp_file, $GO_CONFIG->file_create_mode);
-	
+
 					$_SESSION['GO_SESSION']['files']['uploaded_files'][]=$tmp_file;
 				}
 			}
@@ -220,10 +219,10 @@ try{
 			break;
 
 		case 'overwrite':
-			
+				
 			require_once($GO_CONFIG->class_path.'base/quota.class.inc.php');
 			$quota = new quota();
-			
+				
 			$new = array();
 			$modified=array();
 
@@ -248,28 +247,28 @@ try{
 					{
 						throw new Exception($lang['common']['quotaExceeded']);
 					}
-					
+						
 					if(!$fs->move($tmp_file, $new_path))
 					{
 						throw new Exception($lang['common']['saveError']);
 					}
-					
+						
 					$quota->add($size);
-					
+						
 					if(file_exists($new_path))
-					{										
+					{
 						$modified[]=utf8_basename($new_path);
 					}else
 					{
 						$new[]=utf8_basename($new_path);
-					}					
+					}
 				}
 				if($command != 'yestoall' && $command != 'notoall')
 				{
 					$command='ask';
-				}			
+				}
 			}
-			
+				
 			$fs->notify_users($_POST['path'], $GO_SECURITY->user_id, $modified, $new);
 
 			$response['success']=true;
@@ -277,9 +276,9 @@ try{
 			break;
 
 		case 'paste':
-			
+				
 			$command = isset($_POST['command']) ? $_POST['command'] : 'ask';
-			
+				
 			if($command=='ask' && isset($_POST['paste_sources']) && isset($_POST['paste_destination']))
 			{
 				$_SESSION['GO_SESSION']['files']['paste_sources']= json_decode($_POST['paste_sources']);
@@ -295,26 +294,26 @@ try{
 					throw new AccessDeniedException();
 				}
 
-				
+
 
 				while($paste_source = array_shift($_SESSION['GO_SESSION']['files']['paste_sources']))
 				{
 					$destination = $GO_CONFIG->file_storage_path.$_SESSION['GO_SESSION']['files']['paste_destination'].'/'.utf8_basename($paste_source);
-					
+						
 					if($_POST['paste_mode']=='copy')
 					{
 						if($GO_CONFIG->file_storage_path.$paste_source==$destination)
 						{
 							$name = $destination;
-							$x=0;						
+							$x=0;
 							while(file_exists($destination))
 							{
 								$x++;
-								$destination=File::strip_extension($name).'_'.$x.'.'.File::get_extension($name);								
+								$destination=File::strip_extension($name).'_'.$x.'.'.File::get_extension($name);
 							}
 						}
 					}
-					
+						
 					if(file_exists($destination) && $command!='yes' && $command!='yestoall')
 					{
 						if($command!='no' && $command != 'notoall')
@@ -349,24 +348,24 @@ try{
 
 			}
 			break;
-				
-				
+
+
 		case 'save_template':
-				
+
 			$template['id']=isset($_POST['template_id']) ? ($_POST['template_id']) : 0;
 			$template['name']=$_POST['name'];
-			
+				
 			$types = 'is';
-			
+				
 			if (is_uploaded_file($_FILES['file']['tmp_name'][0]))
 			{
 				$fp = fopen($_FILES['file']['tmp_name'][0], "rb");
 				$template['content'] = fread($fp, $_FILES['file']['size'][0]);
 				fclose($fp);
-				
+
 				$template['extension']=File::get_extension($_FILES['file']['name'][0]);
 				$types .= 'bs';
-			}		
+			}
 
 			if(isset($_POST['user_id']))
 			{
@@ -382,15 +381,15 @@ try{
 			{
 				if(empty($template['user_id']))
 				{
-						$template['user_id']=$GO_SECURITY->user_id;
+					$template['user_id']=$GO_SECURITY->user_id;
 				}
 				$response['acl_read']=$template['acl_read']=$GO_SECURITY->get_new_acl();
 				$response['acl_write']=$template['acl_write']=$GO_SECURITY->get_new_acl();
 				$types .= 'ii';
-				$response['template_id']=$fs->add_template($template, $types);				
+				$response['template_id']=$fs->add_template($template, $types);
 			}
 			$response['success']=true;
-				
+
 			break;
 	}
 }
