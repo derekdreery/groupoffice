@@ -19,7 +19,7 @@ if(isset($_REQUEST['sid']))
 }
 require_once("../../Group-Office.php");
 
-require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
+require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 $fs = new files();
 
 $path = $GO_CONFIG->file_storage_path.($_REQUEST['path']);

@@ -26,7 +26,7 @@ if(isset($_POST['language']))
 }
 
 require_once($GO_LANGUAGE->get_language_file('addressbook'));
-require($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc');
+require($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
 $ab = new addressbook();
 
 $task = isset($_REQUEST['task']) ? $_REQUEST['task'] : null;
@@ -110,7 +110,7 @@ try
 					
 				if($GO_MODULES->modules['files'])
 				{
-					require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
+					require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 					$fs = new files();
 
 					$response['files_path']='contacts/'.$contact_id;

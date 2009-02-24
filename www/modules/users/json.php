@@ -125,7 +125,7 @@ switch($task)
 		
 		if(isset($GO_MODULES->modules['files']))
 		{
-			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$fs = new files();		
 			$result['data']['files_path']='users/'.$user_id;						
 			$full_path = $GO_CONFIG->file_storage_path.$result['data']['files_path'];

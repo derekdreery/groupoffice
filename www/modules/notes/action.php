@@ -82,7 +82,7 @@ try{
 				
 				if($GO_MODULES->has_module('files'))
 				{
-					require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
+					require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 					$fs = new files();
 
 					$response['files_path']='notes/'.$note_id;						
@@ -105,7 +105,7 @@ try{
 			
 			if(!empty($_POST['tmp_files']) && $GO_MODULES->has_module('files'))
 			{
-				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
+				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 				$fs = new files();
 					
 				$tmp_files = json_decode($_POST['tmp_files'], true);

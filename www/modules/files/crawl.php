@@ -29,7 +29,7 @@ $line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
 
 ini_set('max_execution_time', 360);
 
-require($GO_MODULES->modules['files']['class_path'].'files.class.inc');
+require($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 $fs = new files();
 
 echo "Crawling all user files and store them in the database".$line_break.$line_break;

@@ -958,7 +958,7 @@ class addressbook extends db {
 
 		if(isset($GO_MODULES->modules['files']))
 		{
-			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$fs = new files();
 
 			$sql = "SELECT c.*, a.acl_read, a.acl_write, a.user_id AS a_user_id FROM ab_contacts c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id";

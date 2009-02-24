@@ -158,7 +158,7 @@ class users extends db
 
 		if(isset($GO_MODULES->modules['files']))
 		{
-			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc');
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$fs = new files();
 
 			$sql = "SELECT last_name, id FROM go_users";

@@ -7,7 +7,7 @@ if(!$GO_SECURITY->logged_in())
 	die('Unauthorized');
 }
 
-require_once ($GO_MODULES->modules['files']['class_path']."files.class.inc");
+require_once ($GO_MODULES->modules['files']['class_path']."files.class.inc.php");
 $fs = new files();
 
 $path = $GO_CONFIG->file_storage_path.urldecode(($_REQUEST['path']));

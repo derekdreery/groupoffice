@@ -3,7 +3,7 @@ $module = $this->get_module('addressbook');
 global $GO_LANGUAGE, $lang;
 require($GLOBALS['GO_LANGUAGE']->get_language_file('addressbook'));
 
-require_once($module['class_path'].'addressbook.class.inc');
+require_once($module['class_path'].'addressbook.class.inc.php');
 $ab = new addressbook();
 
 require_once($GO_CONFIG->class_path.'mail/Go2Mime.class.inc.php');

@@ -6,7 +6,7 @@ $fs_module = $mod->get_module('files');
 
 require($GO_LANGUAGE->get_language_file('files'));
 
-require_once($fs_module['class_path'].'files.class.inc');
+require_once($fs_module['class_path'].'files.class.inc.php');
 $files = new files();
 
 while($GO_USERS->next_record())
