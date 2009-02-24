@@ -64,12 +64,21 @@
 				Ext.ux.TinyMCE.initTinyMCE({ language: this.tinymceSettings.language });
 			},
 			
+			reInit : function(){
+				//tinyMCE.remove( this.ed );
+				tinyMCE.execCommand('mceRemoveControl',false,this.textareaEl.id); 
+				this.initTinyMce();
+				this.onResize();
+			},
+			
 			/** ----------------------------------------------------------
 			*/        
 			onRender : function( ct, position ){ 
 				Ext.ux.TinyMCE.superclass.onRender.call( this, ct, position );
 				
-				var self = this;
+				//var self = this;
+
+				
 				
 				// Fix size if it was specified in config
 				var el = this.getEl();
@@ -83,13 +92,19 @@
 				}
 
 				// Fetch reference to <textarea> element
-				var textarea = el.child( "textarea" );
-				this.textareaEl = textarea;
-				if( this.name ) textarea.set({ name: this.name });
-				var id = textarea.id;
+				this.textareaEl = el.child( "textarea" );
+
+				if( this.name ) this.textareaEl.set({ name: this.name });
 				
+				this.initTinyMce();
+			},
+			
+			initTinyMce : function(){
+				
+				
+			
 				// Create TinyMCE editor.
-				this.ed = new tinymce.Editor( id, this.tinymceSettings );
+				this.ed = new tinymce.Editor( this.textareaEl.id, this.tinymceSettings );
 				
 				this.ed.onBeforeRenderUI.add( function( ed, controlManager ){
 					// Replace control manager
