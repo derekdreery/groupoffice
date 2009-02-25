@@ -53,7 +53,7 @@ $lang['calendar']['private']='Privé';
 $lang['calendar']['import_success']='%s afspraken werden geïmporteerd';
 
 $lang['calendar']['printTimeFormat']='Van %s tot %s';
-$lang['calendar']['printLocationFormat']=' op lokatie "%s"';
+$lang['calendar']['printLocationFormat']=' op locatie "%s"';
 $lang['calendar']['printPage']='Pagina %s van %s';
 $lang['calendar']['printList']='Afsprakenlijst';
 

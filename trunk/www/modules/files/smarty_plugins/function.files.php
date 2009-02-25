@@ -1,7 +1,11 @@
 <?php
+
 function smarty_function_files($params, &$smarty)
-{
-	global $co, $GO_CONFIG;
+{	
+	global $co, $GO_CONFIG, $GO_MODULES;
+	
+	require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+	
 
 	if(empty($params['path']))
 	{
@@ -11,7 +15,7 @@ function smarty_function_files($params, &$smarty)
 		
 		if(!is_dir($path))
 		{
-			return 'Could not find path: '.$path;
+			return '';//Could not find path: '.$path;
 		}		
 	}else
 	{
@@ -23,7 +27,7 @@ function smarty_function_files($params, &$smarty)
 		return 'No template specified in files function!';
 	}
 
-	$fs = new filesystem();
+	$fs = new files();
 
 	$files = $fs->get_files_sorted($path);
 
@@ -35,11 +39,12 @@ function smarty_function_files($params, &$smarty)
 	for($i=0;$i<count($files);$i++)
 	{
 		$files[$i]['friendly_name']=str_replace('_', ' ', File::strip_extension($files[$i]['name']));
+		$files[$i]['relpath']=$fs->strip_server_path($files[$i]['path']);
 		
 		$s->assign('index', $i);
 		$s->assign('file', $files[$i]);
 		$s->assign('even', $uneven ? 'uneven' : 'even');
-
+		
 		$html .= $s->fetch($params['template']);
 		
 		$uneven=!$uneven;
