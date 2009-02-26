@@ -18,7 +18,7 @@ class serverclient extends db
 	var $server_username;
 	var $server_password;
 	var $domains=array();
-
+	var $ch = false;
 
 	function __construct()
 	{
@@ -30,11 +30,9 @@ class serverclient extends db
 			$this->server_url = $GO_CONFIG->serverclient_server_url;
 			$this->server_username = $GO_CONFIG->serverclient_username;
 			$this->server_password = $GO_CONFIG->serverclient_password;
+			$this->ch = curl_init();
 		}
-
-		$this->domains = empty($GO_CONFIG->serverclient_domains) ? array() : explode(',',$GO_CONFIG->serverclient_domains);
-
-		$this->ch = curl_init();
+		$this->domains = empty($GO_CONFIG->serverclient_domains) ? array() : explode(',',$GO_CONFIG->serverclient_domains);		
 	}
 
 	function __on_before_add_user($params)
@@ -290,7 +288,10 @@ class serverclient extends db
 
 		global $GO_CONFIG, $GO_SECURITY;
 
-		curl_close ($this->ch);
+		if($this->ch)
+		{
+			curl_close ($this->ch);
+		}
 
 		if(file_exists($GO_CONFIG->tmpdir.'cookie_'.$GO_SECURITY->user_id.'.txt'))
 		{
