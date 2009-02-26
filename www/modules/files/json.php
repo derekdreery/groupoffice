@@ -557,7 +557,9 @@ try{
 								$response['data']['atime']=Date::get_timestamp(fileatime($path));
 								$response['data']['type']='<div class="go-grid-icon filetype-folder">'.$lang['files']['folder'].'</div>';
 								$response['data']['size']=Number::format_size(filesize($path));
-								$response['data']['write_permission']=$admin || $fs->is_owner($GO_SECURITY->user_id, $_POST['path']);
+								//$response['data']['write_permission']=$admin || $fs->is_owner($GO_SECURITY->user_id, $_POST['path']);
+								$response['data']['write_permission']=$fs->has_write_permission($GO_SECURITY->user_id, $path);
+								$response['data']['is_owner']=$admin || $fs->is_owner($GO_SECURITY->user_id, $_POST['path']);
 								$response['data']['is_home_dir']=utf8_basename(dirname($path)) == 'users';
 								$response['data']['notify']=$fs->is_notified($_POST['path'], $GO_SECURITY->user_id);
 

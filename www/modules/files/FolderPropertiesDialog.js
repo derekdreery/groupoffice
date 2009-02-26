@@ -176,7 +176,7 @@ Ext.extend(GO.files.FolderPropertiesDialog, Ext.Window, {
 				this.readPermissionsTab.setAcl(action.result.data.acl_read);
 				this.writePermissionsTab.setAcl(action.result.data.acl_write);				
 				
-				this.setWritePermission(action.result.data.is_home_dir, action.result.data.write_permission);
+				this.setWritePermission(action.result.data.is_home_dir, action.result.data.write_permission, action.result.data.is_owner);
 
 				this.tabPanel.setActiveTab(0);
 				
@@ -191,11 +191,11 @@ Ext.extend(GO.files.FolderPropertiesDialog, Ext.Window, {
 		
 	},
 	
-	setWritePermission : function(is_home_dir, writePermission)
+	setWritePermission : function(is_home_dir, writePermission, is_owner)
 	{
 		var form = this.formPanel.form;
 		form.findField('name').setDisabled(is_home_dir || !writePermission);
-		form.findField('share').setDisabled(is_home_dir || !writePermission);
+		form.findField('share').setDisabled(is_home_dir || !is_owner);
 		this.readPermissionsTab.setDisabled(!writePermission || this.readPermissionsTab.acl_id==0);
 		this.writePermissionsTab.setDisabled(!writePermission || this.writePermissionsTab.acl_id==0);		
 	},

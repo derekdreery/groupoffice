@@ -1386,9 +1386,17 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			callback:function(){
 				delete this.gridStore.baseParams['create_path'];
 				
-				if(expand)
+				var activeNode = this.treePanel.getNodeById(path);
+				if(createPath)
 				{
-					var activeNode = this.treePanel.getNodeById(path);
+					if(!activeNode)
+					{
+						this.refresh();
+					}										
+				}
+				
+				if(expand)
+				{					
 					if(activeNode)
 					{
 						this.treePanel.getSelectionModel().select(activeNode);
