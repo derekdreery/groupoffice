@@ -52,13 +52,13 @@ GO.addressbook.MainPanel = function(config)
 	this.contactEastPanel = new GO.addressbook.ContactReadPanel({
 		region : 'east',
 		title: GO.addressbook.lang['cmdPanelContact'],
-		width:400
+		width:420
 	});
 	
 	this.companyEastPanel = new GO.addressbook.CompanyReadPanel({
 		region : 'east',
 		title: GO.addressbook.lang['cmdPanelCompany'],
-		width:400
+		width:420
 	});	
 	
 	this.contactsPanel = new Ext.Panel({
@@ -231,6 +231,9 @@ GO.addressbook.MainPanel = function(config)
 					if(!this.selectMailingGroupWindow)
 					{
 						this.selectMailingGroupWindow=new GO.mailings.SelectMailingGroupWindow();
+						this.selectMailingGroupWindow.on("select", function(win, mailing_group_id){
+							GO.email.Composer.show({mailing_group_id:mailing_group_id});
+						}, this);
 					}	
 					this.selectMailingGroupWindow.show();
 				}, 

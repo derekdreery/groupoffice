@@ -147,6 +147,7 @@ class go_template_parser
 		{
 			$value = isset($this->values[$field]) ? $this->values[$field] : '';
 			$content = str_replace('{'.$field.'}', $value, $content);
+			$content = str_replace('%'.$field.'%', $value, $content);
 		}
 	}
 	
