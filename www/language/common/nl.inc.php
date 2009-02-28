@@ -171,3 +171,5 @@ $lang['common']['lost_password_success']='Een nieuw wachtwoord is naar uw e-mail
 
 $lang['common']['confirm_leave']='Wanneer u Group-Office verlaat gaat onopgeslagen werk verloren.';
 
+$lang['common']['dataSaved']='De gegevens zijn succesvol opgeslagen';
+
