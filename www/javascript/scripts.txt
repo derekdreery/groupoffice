@@ -1,3 +1,6 @@
+
+javascript/form/TinyMCE.js
+
 javascript/overrides.js
 
 javascript/Date.js
