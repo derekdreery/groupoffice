@@ -751,7 +751,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 												width : 640,
 												height : 500
 											});*/
-									window.open(GO.settings.modules.email.url+'jupload/index.php?path='+encodeURIComponent(this.path));
+									window.open(GO.settings.modules.email.url+'jupload/index.php');
 
 									this.uploadDialog.hide();
 									// for refreshing by popup

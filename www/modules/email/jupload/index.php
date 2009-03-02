@@ -23,7 +23,6 @@ $GO_SECURITY->html_authenticate('email');
 	            alt="The java pugin must be installed.">
             <param name="postURL" value="upload.php" />
             <param name="afterUploadURL" value="javascript:opener.GO.attachmentsStore.load({add:true});if(%success%){window.close();}" />
-            <param name="lookAndFeel" value="system" />
             <param name="showLogWindow" value="true" />
             <param name="maxChunkSize" value="1048576" />    
             <param name="maxFileSize" value="<?php echo intval($GO_CONFIG->max_file_size); ?>" />
