@@ -648,7 +648,7 @@ class addressbook extends db {
 					$fields_sql = "SHOW FIELDS FROM cf_3";
 					$this->query($fields_sql);
 					while ($this->next_record()) {
-						if (eregi('varchar', $this->f('Type')) || $this->f('Field')=='id') {
+						//if (eregi('varchar', $this->f('Type')) || $this->f('Field')=='id') {
 							if (isset ($first)) {
 								$sql .= ' OR ';
 							} else {
@@ -656,7 +656,7 @@ class addressbook extends db {
 								$sql .= '(';
 							}
 							$sql .= "cf_3.".$this->f('Field')." $query_type '$query'";
-						}
+						//}
 					}
 
 				}
