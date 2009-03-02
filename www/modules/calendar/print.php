@@ -30,6 +30,7 @@ if(!empty($_REQUEST['view_id']))
 	$cal->get_view_calendars($view['id']);
 	$cal2 = new calendar();
 	$first = true;
+	$even=false;
 	while($cal->next_record())
 	{		
 		$events = $cal2->get_events_in_array(array($cal->f('id')), 0, $_REQUEST['start_time'], $_REQUEST['end_time']);
