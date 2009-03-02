@@ -10,7 +10,7 @@
  * @version $Id: en.js 1591 2008-12-15 09:34:29Z mschering $
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-GO.lang.serverError='Došlo k chybě na webserverhu. Kontaktujte Vašeho správce systému a poskytněte mu podrobnosti o chybě.';
+GO.lang.serverError='Došlo k chybě na webserveru. Kontaktujte Vašeho správce systému a poskytněte mu podrobnosti o chybě.';
 GO.lang.errorDetails='Podrobnosti chyby';
 GO.lang.contactSupportDesk='Kontaktovat podporu'; 
  
@@ -181,6 +181,7 @@ GO.lang.strError= 'Problém';
 GO.lang.waitMsgSave= 'Ukládání...';
 GO.lang.waitMsgLoad= 'Nahrávání...';
 GO.lang.waitMsgUpload= 'Nahrávání...';
+GO.lang.strRequestError= 'Nelze se připojit k serveru. Prosím zkontrolujte Vaše připojení k internetu.';
 
 
 GO.lang.strSelected = 'Vybrané';
@@ -276,9 +277,9 @@ GO.lang.settings='Nastavení';
 GO.lang.latestLinks='Poslední odkaz'
 GO.lang.cmdBrowseLinks = 'Procházet odkazy';
 
-GO.lang.today='Today';
+GO.lang.today='Dnes';
 
-GO.lang.displayingItemsShort='Total: {2}';
+GO.lang.displayingItemsShort='Celkem: {2}';
 
 GO.lang.image='Obrázek';
 GO.lang.insertImage='Vložit obrázek do textu';
