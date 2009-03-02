@@ -735,7 +735,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 				items : [uploadFile, new Ext.Button({
 							text : GO.lang.largeUpload,
 							handler : function() {
-								if (!deployJava.isWebStartInstalled('1.6.0')) {
+								if (!deployJava.isWebStartInstalled('1.5.0')) {
 									Ext.MessageBox.alert(GO.lang.strError,
 											GO.lang.noJava);
 								} else {
