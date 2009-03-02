@@ -109,6 +109,14 @@
 		require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
 		$search = new search();
 		$search->delete_search_result(${friendly_single}_id, {link_type});
+		
+		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+		$fs = new filesystem();
+		if(file_exists($GO_CONFIG->file_storage_path.'{friendly_multiple}/'.${friendly_single}_id.'/'))
+		{
+			$fs->delete($GO_CONFIG->file_storage_path.'{friendly_multiple}/'.${friendly_single}_id.'/');
+		}
+				
 		</gotpl>		
 		
 		return $this->query("DELETE FROM {prefix}_{friendly_multiple} WHERE id=?", 'i', ${friendly_single}_id);
