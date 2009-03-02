@@ -891,6 +891,30 @@ try{
 					{
 						$attachments[$i]['name']=$lang['email']['event'].'.ics';
 					}
+					
+					if (!empty($attachments[$i]["id"]))
+					{
+						//when an image has an id it belongs somewhere in the text we gathered above so replace the
+						//source id with the correct link to display the image.
+
+						$tmp_id = $attachments[$i]["id"];
+						if (strpos($tmp_id,'>'))
+						{
+							$tmp_id = substr($attachments[$i]["id"], 1,strlen($attachments[$i]["id"])-2);
+						}
+						$id = "cid:".$tmp_id;
+
+						$url = $GO_MODULES->modules['email']['url']."attachment.php?account_id=".$account['id']."&mailbox=".urlencode($mailbox)."&amp;uid=".$uid."&amp;part=".$attachments[$i]["number"]."&amp;transfer=".$attachments[$i]["transfer"]."&amp;mime=".$attachments[$i]["mime"]."&amp;filename=".urlencode($attachments[$i]["name"]);
+						
+						if(preg_match('/'.preg_quote($id).'/', $response['body']))
+						{
+							$response['body'] = str_replace($id, $url, $response['body']);
+						}else
+						{
+							//id was not found in body so add it as attachment later
+							unset($attachments[$i]['id']);
+						}						
+					}
 
 					if ($imap->part_is_attachment($attachments[$i])){
 
@@ -916,23 +940,7 @@ try{
 						
 					}
 
-					if (!empty($attachments[$i]["id"]))
-					{
-						//when an image has an id it belongs somewhere in the text we gathered above so replace the
-						//source id with the correct link to display the image.
-						if ($attachments[$i]["id"] != '')
-						{
-							$tmp_id = $attachments[$i]["id"];
-							if (strpos($tmp_id,'>'))
-							{
-								$tmp_id = substr($attachments[$i]["id"], 1,strlen($attachments[$i]["id"])-2);
-							}
-							$id = "cid:".$tmp_id;
-
-							$url = $GO_MODULES->modules['email']['url']."attachment.php?account_id=".$account['id']."&mailbox=".urlencode($mailbox)."&amp;uid=".$uid."&amp;part=".$attachments[$i]["number"]."&amp;transfer=".$attachments[$i]["transfer"]."&amp;mime=".$attachments[$i]["mime"]."&amp;filename=".urlencode($attachments[$i]["name"]);
-							$response['body'] = str_replace($id, $url, $response['body']);
-						}
-					}
+					
 				}
 				break;
 
