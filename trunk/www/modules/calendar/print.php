@@ -29,11 +29,13 @@ if(!empty($_REQUEST['view_id']))
 	$pdf->AddPage();
 	$cal->get_view_calendars($view['id']);
 	$cal2 = new calendar();
+	$first = true;
 	while($cal->next_record())
 	{		
 		$events = $cal2->get_events_in_array(array($cal->f('id')), 0, $_REQUEST['start_time'], $_REQUEST['end_time']);
-		$pdf->H3($cal->f('name'));
-		$pdf->addCalendar($events, false);
+		//$pdf->H3($cal->f('name'));
+		$pdf->addCalendar($events, false,$first, $cal->f('name'));
+		$first=false;
 	}
 }else
 {
