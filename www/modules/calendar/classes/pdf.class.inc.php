@@ -9,6 +9,7 @@ class PDF extends TCPDF
 	var $pageWidth;
 
 	var $font_size=9;
+	var $cell_height=12;
 
 	function __construct()
 	{
@@ -128,7 +129,7 @@ class PDF extends TCPDF
 		$this->date_range_text = $this->days > 1 ? date($_SESSION['GO_SESSION']['date_format'], $start_time).' - '.date($_SESSION['GO_SESSION']['date_format'], $end_time) : date($_SESSION['GO_SESSION']['date_format'], $start_time);		
 	}
 
-	function addCalendar($events, $list=true)
+	function addCalendar($events, $list=true, $headers=true, $calendar_name='')
 	{
 		global $lang;
 		
@@ -156,7 +157,9 @@ class PDF extends TCPDF
 			$this->SetDrawColor(125,165, 65);
 
 			$maxCells = $this->days>7 ? 7 : $this->days;
-			$cellWidth = $this->pageWidth/$maxCells;
+			
+			$nameColWidth =100;
+			$cellWidth = !empty($calendar_name) ? ($this->pageWidth-$nameColWidth)/$maxCells : $this->pageWidth/$maxCells;
 			$timeColWidth=$this->GetStringWidth(date($_SESSION['GO_SESSION']['time_format'], mktime(23,59,0)), $this->font, '', $this->font_size)+5;
 			
 			$time_format = str_replace('G', 'H',$_SESSION['GO_SESSION']['time_format']);
@@ -166,13 +169,20 @@ class PDF extends TCPDF
 			$time = $this->start_time;
 
 
-			for($i=0;$i<$maxCells;$i++)
+			if($headers)
 			{
-				$label = $this->days>$maxCells ? $lang['common']['full_days'][date('w', $time)] : $lang['common']['full_days'][date('w', $time)].', '.date($_SESSION['GO_SESSION']['date_format'], $time);
-				$this->Cell($cellWidth, 20, $label, 1,0,'L', 1);
-				$time = Date::date_add($time, 1);
+				if(!empty($calendar_name))
+				{
+					$this->Cell($nameColWidth, 20, '', 1,0,'L', 1);
+				}
+				for($i=0;$i<$maxCells;$i++)
+				{
+					$label = $this->days>$maxCells ? $lang['common']['full_days'][date('w', $time)] : $lang['common']['full_days'][date('w', $time)].', '.date($_SESSION['GO_SESSION']['date_format'], $time);
+					$this->Cell($cellWidth, 20, $label, 1,0,'L', 1);
+					$time = Date::date_add($time, 1);
+				}
+				$this->Ln();
 			}
-			$this->Ln();
 
 			$this->SetFont($this->font,'',$this->font_size);
 
@@ -181,26 +191,40 @@ class PDF extends TCPDF
 			
 			$this->daysDone=0;
 			$weekCounter = 0;
+			
+			$tableLeftMargin = $this->lMargin;		
+			if(!empty($calendar_name))
+			{
+				//$this->SetTextColor(125,165, 65);
+				$this->SetTextColor(0,0,0);
+				$this->Cell($nameColWidth, $this->cell_height, $calendar_name, 0,0,'L');
+				$tableLeftMargin+=$nameColWidth;
+				$this->setDefaultTextColor();
+			}
+			
+			
 			for($i=0;$i<$this->days;$i++)
 			{
+				
+				
 				$pos = $i-$this->daysDone;
 				$this->setPage($pageStart);
-				$this->setXY($this->lMargin+($pos*$cellWidth), $cellStartY);
+				$this->setXY($tableLeftMargin+($pos*$cellWidth), $cellStartY);
 
 				if($this->days>7)
 				{
 					$time = Date::date_add($this->start_time, $i);
-					$this->Cell($cellWidth, $this->font_size, date('d',$time),0,1,'R');
-					$this->setX($this->lMargin+($pos*$cellWidth));
-				}
+					$this->Cell($cellWidth, $this->cell_height, date('d',$time),0,1,'R');
+					$this->setX($tableLeftMargin+($pos*$cellWidth));
+				}				
 
 				//while($event = array_shift($cellEvents[$i]))
 				foreach($cellEvents[$i] as $event)
 				{
 					$time = $event['all_day_event']=='1' ? '-' : date($time_format,$event['start_time']);
-					$this->Cell($timeColWidth, $this->font_size, $time, 0, 0, 'L');
-					$this->MultiCell($cellWidth-$timeColWidth, $this->font_size, $event['name'], 0, 1, 0, 1, '', '', true, 0, false, false, 0);
-					$this->setX($this->lMargin+($pos*$cellWidth));					
+					$this->Cell($timeColWidth, $this->cell_height, $time, 0, 0, 'L');
+					$this->MultiCell($cellWidth-$timeColWidth,$this->cell_height, $event['name'], 0, 1, 0, 1, '', '', true, 0, false, false, 0);
+					$this->setX($tableLeftMargin+($pos*$cellWidth));					
 				}
 				
 				
@@ -224,22 +248,29 @@ class PDF extends TCPDF
 
 					//miniumum cell height
 					$cellHeight = $maxY-$cellStartY;
-					if($cellHeight<70)
-					$cellHeight=70;
+					if($cellHeight<$this->cell_height)
+						$cellHeight=$this->cell_height;
 					
 					if($cellHeight+$this->getY()>$this->h-$this->bMargin)
 					{
-						$cellHeight1=$this->h-$this->getY()-$this->bMargin;
-						
+						$cellHeight1=$this->h-$this->getY()-$this->bMargin;						
 						$cellHeight2=$cellHeight-$cellHeight1-$this->tMargin-$this->bMargin;
 						
 						$this->setXY($this->lMargin, $cellStartY);
+						if(!empty($calendar_name))
+						{
+							$this->Cell($nameColWidth, $cellHeight1, '','LTR',0);
+						}
 						for($n=0;$n<$maxCells;$n++)
 						{														
 							$this->Cell($cellWidth, $cellHeight1,'','LTR',0);
 						}
 						$this->ln();
 
+						if(!empty($calendar_name))
+						{
+							$this->Cell($nameColWidth, $cellHeight2, '', 'LBR',0);
+						}
 						for($n=0;$n<$maxCells;$n++)
 						{				
 							$this->Cell($cellWidth, $cellHeight2,'','LBR',0);
@@ -249,6 +280,10 @@ class PDF extends TCPDF
 					}else
 					{
 						$this->setXY($this->lMargin, $cellStartY);
+						if(!empty($calendar_name))
+						{
+							$this->Cell($nameColWidth, $cellHeight, '', 1,0);
+						}
 						for($n=0;$n<$maxCells;$n++)
 						{			
 							$this->Cell($cellWidth, $cellHeight,'',1,0);
@@ -259,13 +294,14 @@ class PDF extends TCPDF
 					$cellStartY = $maxY= $this->getY();
 					$pageStart = $this->PageNo();
 				}
-			}
-
-			$this->ln(20);
+			}			
 		}
 
 		if($list)
 		{
+			if($this->days>1)			
+				$this->ln(20);
+			
 			$this->CurOrientation='P';
 
 			if($this->days>7){
