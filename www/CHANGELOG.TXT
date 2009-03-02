@@ -1,3 +1,5 @@
+2009/03/03 Version 3.01-stable-5
+
 2009/02/18 Version 3.01-stable-4
 - Fixed problem with IMAP connections. Some people were having trouble connecting to 
   an IMAP server. GO would get in an endless loop because these servers returned the
