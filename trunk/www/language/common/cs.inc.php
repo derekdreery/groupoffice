@@ -33,6 +33,7 @@ $lang['common']['deleteError']='Chyba při vymazávání dat';
 $lang['common']['selectError']='Chyba při pokusu o čtení dat';
 $lang['common']['missingField'] = 'Nevyplnili jste všechna povinná pole.';
 $lang['common']['noFileUploaded']='Žádný soubor nebyl odeslán ';
+$lang['common']['error']='Chyba';
 
 $lang['common']['salutation']='Oslovení';
 $lang['common']['firstName'] = 'Křestní jméno';
