@@ -172,4 +172,4 @@ $lang['common']['lost_password_success']='Een nieuw wachtwoord is naar uw e-mail
 $lang['common']['confirm_leave']='Wanneer u Group-Office verlaat gaat onopgeslagen werk verloren.';
 
 $lang['common']['dataSaved']='De gegevens zijn succesvol opgeslagen';
-
+$lang['common']['uploadMultipleFiles'] = 'Klik op \'Bladeren\' om bestanden en/of mappen van uw PC te selecteren. Klik daarna op \'Upload\' om de bestanden naar Group-Office te verzenden. Dit venster zal automatisch sluiten als de upload voltooid is.';

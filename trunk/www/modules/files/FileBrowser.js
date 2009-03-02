@@ -1009,13 +1009,15 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
     						Ext.MessageBox.alert(GO.lang.strError, GO.lang.noJava);
 							}else
 							{ 					
-	    					GO.util.popup({
+	    					/*var p = GO.util.popup({
 	    						url: GO.settings.modules.files.url+'jupload/index.php?path='+encodeURIComponent(this.path), 
 	    						width : 640,
 	    						height: 500,
 	    						target: 'jupload'
-	    					});
-	    							
+	    					});*/
+								
+								window.open(GO.settings.modules.files.url+'jupload/index.php?path='+encodeURIComponent(this.path));
+	    					
 	    					this.uploadDialog.hide();
 	    					//for refreshing by popup
 	    					GO.currentFilesStore = this.getActiveGridStore();

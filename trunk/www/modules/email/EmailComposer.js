@@ -680,9 +680,10 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 						scope : this
 					});
 
-			this.attachmentsGrid = new Ext.grid.GridPanel({
+			this.attachmentsGrid = new GO.grid.GridPanel({
 						id : 'groups-grid-overview-users',
 						store : this.attachmentsStore,
+						loadMask:true,
 						columns : [{
 									header : GO.lang.strName,
 									dataIndex : 'name'
@@ -742,12 +743,15 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 											? 'true'
 											: false;
 
-									GO.util.popup({
+									/*
+									 * crashes firefox in ubuntu
+									 GO.util.popup({
 												url : GO.settings.modules.email.url
 														+ 'jupload/index.php',
 												width : 640,
 												height : 500
-											});
+											});*/
+									window.open(GO.settings.modules.email.url+'jupload/index.php?path='+encodeURIComponent(this.path));
 
 									this.uploadDialog.hide();
 									// for refreshing by popup
