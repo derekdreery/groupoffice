@@ -28,17 +28,6 @@
 
 class GO_GROUPS extends db
 {
-	/**
-	 * Constructor. Calls parent class base_groups constructor
-	 *
-	 * @access public
-	 * @return void
-	 */
-	function __construct()
-	{
-		parent::__construct();
-	}
-
 	function groupnames_to_ids($groupnames)
 	{
 
@@ -304,8 +293,11 @@ class GO_GROUPS extends db
 
 		if($user_id > 0)
 		{
+			global $GO_CONFIG;
+			
 			$sql .= "INNER JOIN go_users_groups ON go_groups.id=go_users_groups.group_id ".
-							"AND go_users_groups.user_id='".$this->escape($user_id)."' ";
+							"AND go_users_groups.user_id='".$this->escape($user_id)."' ".
+							"AND go_groups.id!=".$GO_CONFIG->group_everyone." ";
 		}
 
 		$sql .= 'ORDER BY '.$sort.' '.$direction;

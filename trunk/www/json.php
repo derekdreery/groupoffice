@@ -67,7 +67,8 @@ try{
 
 			//used by /javascript/dialog/SelectGroups.js
 		case 'groups':
-			$response['total']=$GO_GROUPS->get_groups(null, $start, $limit, $sort, $dir);
+			$user_id = $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id) ? 0 : $GO_SECURITY->user_id;
+			$response['total']=$GO_GROUPS->get_groups($user_id, $start, $limit, $sort, $dir);
 
 			$response['results']=array();
 			while($GO_GROUPS->next_record())
