@@ -150,6 +150,8 @@ class PDF extends TCPDF
 			
 		}
 		
+		
+		
 
 		if($this->days>1 || !$list)
 		{
@@ -157,6 +159,7 @@ class PDF extends TCPDF
 			$this->SetDrawColor(125,165, 65);
 
 			$maxCells = $this->days>7 ? 7 : $this->days;
+			$minHeight=$this->days>$maxCells ? 70 : $this->cell_height;
 			
 			$nameColWidth =100;
 			$cellWidth = !empty($calendar_name) ? ($this->pageWidth-$nameColWidth)/$maxCells : $this->pageWidth/$maxCells;
@@ -248,8 +251,8 @@ class PDF extends TCPDF
 
 					//miniumum cell height
 					$cellHeight = $maxY-$cellStartY;
-					if($cellHeight<$this->cell_height)
-						$cellHeight=$this->cell_height;
+					if($cellHeight<$minHeight)
+						$cellHeight=$minHeight;
 					
 					if($cellHeight+$this->getY()>$this->h-$this->bMargin)
 					{
