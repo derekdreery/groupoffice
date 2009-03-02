@@ -298,6 +298,13 @@ class notes extends db {
 		require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
 		$search = new search();
 		$search->delete_search_result($note_id, 4);
+		
+		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+		$fs = new filesystem();
+		if(file_exists($GO_CONFIG->file_storage_path.'notes/'.$note_id.'/'))
+		{
+			$fs->delete($GO_CONFIG->file_storage_path.'notes/'.$note_id.'/');
+		}
 				
 		
 		return $this->query("DELETE FROM no_notes WHERE id=".$this->escape($note_id));

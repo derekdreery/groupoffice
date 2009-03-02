@@ -398,7 +398,7 @@ class filesystem extends db
 			{
 				return false;
 			}
-		}else
+		}elseif(file_exists($path))
 		{
 			$this->delete_file($path);				
 				
