@@ -594,7 +594,7 @@ try{
 						'type'=>File::get_filetype_description(File::get_extension($file))
 					);
 				}
-				$response['total']=count($files);
+				$response['total']=count($response['results']);
 
 				break;
 

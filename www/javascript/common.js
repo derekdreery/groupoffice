@@ -396,6 +396,7 @@ GO.util.popup = function (config)
 
 	var popup = window.open(config.url, config.target, centered);
 	
+	
 	if(!popup)
 	{
 		alert(GO.lang.popupBlocker);
