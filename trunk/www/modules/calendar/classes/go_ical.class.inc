@@ -467,10 +467,10 @@ class go_ical extends calendar
 			{
 				if(!empty($line_parts[$i]))
 				{
-					if($i>0)
+					/*if($i>0)
 					{
 						$vevent .= ' ';
-					}
+					}*/
 					$vevent .= trim($line_parts[$i])."=\r\n";
 				}
 			}
