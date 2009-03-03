@@ -79,13 +79,12 @@ class export_tasks
 	function format_line($name_part, $value_part)
 	{
 		$value_part = str_replace("\r\n","\n", $value_part);
+
 		$qp_value_part = String::quoted_printable_encode($value_part);
 
 		if($value_part != $qp_value_part)
 		{
 			$name_part .= ";ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:";
-			$qp_value_part = str_replace('=0A', "=0D=0A", $qp_value_part)."\n";
-
 			return explode("\n", $name_part.$qp_value_part);
 		}else
 		{
@@ -390,35 +389,8 @@ class export_tasks
 		
 		$vtodo = '';
 		foreach ($lines as $line) {
-			$line_parts = array();
-			while(strlen($line)>76)
-			{
-				$test = substr($line,0,76);
-
-				for($i=strlen($test)-1;$i>=0;$i--)
-				{
-					$char=$test[$i];
-					if($char==' ' || $char==';' || $char==':' || $char=='=')
-					{
-						$line_parts[] = substr($line, 0, $i+1);
-						$line = substr($line, $i+1);
-						break;
-					}
-				}
-			}
-			$line_parts[] = $line;
-
-			for($i=0;$i<count($line_parts);$i++)
-			{
-				if(!empty($line_parts[$i]))
-				{
-					if($i>0)
-					{
-						$vtodo .= ' ';
-					}
-					$vtodo .= $line_parts[$i]."\r\n";
-				}
-			}
+		 preg_match_all( '/.{1,73}([^=]{0,2})?/', $line, $matches);
+		 $vtodo .= implode( '=' . chr(13).chr(10), $matches[0] )."\r\n"; // add soft crlf's
 		}
 		return $vtodo;
 	}
