@@ -448,18 +448,8 @@ class go_ical extends calendar
 			$line_parts = array();
 			while(strlen($line)>76)
 			{
-				$test = substr($line,0,76);
-
-				for($i=strlen($test)-1;$i>=0;$i--)
-				{
-					$char=$test[$i];
-					if($char==' ' || $char==';' || $char==':' || $char=='=')
-					{
-						$line_parts[] = substr($line, 0, $i+1);
-						$line = substr($line, $i+1);
-						break;
-					}
-				}
+				$line_parts[] = substr($line,0,76);
+				$line = substr($line, 76+1);
 			}
 			$line_parts[] = $line;
 
