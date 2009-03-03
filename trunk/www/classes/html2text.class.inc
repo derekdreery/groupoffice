@@ -162,7 +162,7 @@ class html2text
         '/(<ol[^>]*>|<\/ol>)[\s]*/i',                 // <ol> and </ol>
         '/<li[^>]*>(.*?)<\/li>[\s]*/i',               // <li> and </li>
         '/<li[^>]*>/i',                          // <li>
-        //'/<a [^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/ie',
+        '/<a [^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/ie',
                                                  // <a href="">
         '/<hr[^>]*>/i',                          // <hr>
         '/(<table[^>]*>|<\/table>)/i',           // <table> and </table>
@@ -215,7 +215,7 @@ class html2text
         "\n\n",                                 // <ol> and </ol>
         "\t* \\1\n",                            // <li> and </li>
         "\n\t* ",                               // <li>
-        //'$this->_build_link_list("\\1", "\\2")',
+        '$this->_build_link_list("\\1", "\\2")',
                                                 // <a href="">
         "\n-------------------------\n",        // <hr>
         "\n\n",                                 // <table> and </table>
@@ -435,9 +435,9 @@ class html2text
         $text = preg_replace("/[\n]{3,}/", "\n\n", $text);
 
         // Add link list
-        /*if ( !empty($this->_link_list) ) {
+        if ( !empty($this->_link_list) ) {
             $text .= "\n\nLinks:\n------\n" . $this->_link_list;
-        }*/
+        }
 
         // Wrap the text to a readable format
         // for PHP versions >= 4.0.2. Default width is 75

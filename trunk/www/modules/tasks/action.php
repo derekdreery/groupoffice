@@ -22,6 +22,9 @@ $tasks = new tasks();
 //we are unsuccessfull by default
 $response =array('success'=>false);
 
+//for servers with register_globals on
+unset($task);
+
 try{
 	switch($_REQUEST['task'])
 	{	
@@ -46,8 +49,6 @@ try{
 			break;
 			
 		case 'schedule_call':
-			
-			//$tasklist = $tasks->get_tasklist();
 			
 			$task['name']=$_POST['name'];
 			$task['start_time']=$task['due_time']=Date::to_unixtime($_POST['date']);
@@ -101,8 +102,7 @@ try{
 		case 'save_task':
 			$conflicts=array();
 
-			//for servers with register_globals on
-			unset($task);
+			
 			
 			$task_id=$task['id']=isset($_POST['task_id']) ? ($_POST['task_id']) : 0;
 				
