@@ -559,6 +559,10 @@ class imap{
 				$values['date'].='C';
 			}
 			
+			//some clients put a (+0100) behind the date.
+			$values['date']=trim(preg_replace('/\(.+\)/', '', $values['date']));
+			
+			
 			$message['udate']=strtotime($values['date']);
 		}else
 		{
