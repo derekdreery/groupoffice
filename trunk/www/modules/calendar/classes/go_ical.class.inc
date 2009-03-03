@@ -76,7 +76,7 @@ class go_ical extends calendar
 		$ics .= $this->export_calendar_footer();
 		return $ics;
 	}
-	
+
 
 	function format_line($name_part, $value_part)
 	{
@@ -98,19 +98,19 @@ class go_ical extends calendar
 		}
 		return array($name_part.$value_part);
 	}
-	
+
 	/*function format_line($name_part, $value_part)
-	{
+	 {
 		$value_part = str_replace("\r\n","\n", $value_part);
 		$value_part = str_replace("\n",'\n', $value_part);
-		
+
 		$value_part = str_replace(',','\,', $value_part);
 		$value_part = str_replace('"','\"', $value_part);
-		$value_part = str_replace('\'',"\'", $value_part);		
+		$value_part = str_replace('\'',"\'", $value_part);
 
 		$name_part .= ';CHARSET=UTF-8:';
 		return array($name_part.$value_part);
-	}*/
+		}*/
 
 	function convert_event($event)
 	{
@@ -125,7 +125,7 @@ class go_ical extends calendar
 		}
 
 		$lines = array();
-		
+
 		if($event['all_day_event']=='1')
 		{
 			$event['end_time']+=60;
@@ -158,7 +158,7 @@ class go_ical extends calendar
 		{
 			$line = "DTSTART:".date($this->datetime_format, $event['start_time']);
 			$lines[] = $line;
-				
+
 			//if($event['all_day_event']=='0')
 			//{
 			$line = "DTEND:";
@@ -207,7 +207,7 @@ class go_ical extends calendar
 
 		if(!empty($event['rrule']))
 		{
-				
+
 			if($this->version != '1.0')
 			{
 					
@@ -251,9 +251,9 @@ class go_ical extends calendar
 				if(isset($rrule['BYDAY']))
 				{
 					$days =Date::byday_to_days($rrule['BYDAY']);
-						
+
 					$days = Date::shift_days_to_local($days, date('G', $event['start_time']), Date::get_timezone_offset($event['start_time']));
-						
+
 				}
 
 				switch($rrule['FREQ'])
@@ -414,12 +414,12 @@ class go_ical extends calendar
 						$line .=';';
 					}
 					/*$count++;
-					if($count=='3')
-					{
+					 if($count=='3')
+					 {
 						$lines[]=$line;
 						$line='  ';
 						$count=0;
-					}*/
+						}*/
 				}
 				if(!empty($line))
 				{
@@ -445,26 +445,8 @@ class go_ical extends calendar
 
 		$vevent = '';
 		foreach ($lines as $line) {
-			$line_parts = array();
-			while(strlen($line)>76)
-			{
-				$line_parts[] = substr($line,0,76);
-				$line = substr($line, 76+1);
-			}
-			$line_parts[] = $line;
-
-			for($i=0;$i<count($line_parts)-1;$i++)
-			{
-				if(!empty($line_parts[$i]))
-				{
-					/*if($i>0)
-					{
-						$vevent .= ' ';
-					}*/
-					$vevent .= trim($line_parts[$i])."=\r\n";
-				}
-			}
-			$vevent .= $line_parts[count($line_parts)-1]."\r\n";
+		 preg_match_all( '/.{1,73}([^=]{0,2})?/', $line, $matches);
+		 $vevent .= implode( '=' . chr(13).chr(10), $matches[0] )."\r\n"; // add soft crlf's
 		}
 		return $vevent;
 	}
