@@ -638,7 +638,7 @@ class String {
 			// for EBCDIC safeness encode !"#$@[\]^`{|}~,
 			// for complete safeness encode every character :)
 			if ($bEmulate_imap_8bit)
-			$sRegExp = '/[^\x20\x21-\x3C\x3E-\x7E]/e';
+			$sRegExp = '/[^\x21-\x3C\x3E-\x7E]/e';
 
 			$sReplmt = 'sprintf( "=%02X", ord ( "$0" ) ) ;';
 			$sLine = preg_replace( $sRegExp, $sReplmt, $sLine );
