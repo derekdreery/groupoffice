@@ -482,38 +482,6 @@ class String {
 
 
 	/**
-	 * Returns an array with RGB color (e.g. R128 G126 B124) from a hex html color code (e.g. #F7F7F7)
-	 *
-	 * @param  string $html_color HTML color code: e.g. #FFFFFF
-	 * @access public
-	 * @return array RGB color code: e.g. R:102 G:102 B:102
-	 */
-	function hex2dec($html_color) {
-		$R = hexdec(substr($html_color, 1, 2));
-		$G = hexdec(substr($html_color, 3, 2));
-		$B = hexdec(substr($html_color, 5, 2));
-		$color = array ();
-		$color['R'] = $R;
-		$color['G'] = $G;
-		$color['B'] = $B;
-		return $color;
-	}
-
-	/**
-	 * Used by enriched_to_html() to create colors
-	 *
-	 * @param	array $colors
-	 * @access private
-	 * @return string HTML formatted string
-	 */
-	function colorize($colors) {
-		for ($i = 1; $i < 4; $i ++) {
-			$colors[$i] = sprintf('%02X', round(hexdec($colors[$i]) / 255));
-		}
-		return '<span style="color: #'.$colors[1].$colors[2].$colors[3].'">'.$colors[4].'</span>';
-	}
-
-	/**
 	 * Convert plain text to HTML
 	 *
 	 * @param	string $text Plain text string
