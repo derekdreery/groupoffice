@@ -89,12 +89,19 @@ GO.tasks.MainPanel = function(config){
 		this.taskPanel.load(r.data.id);
 	}, this);
 			
+	this.gridPanel.store.on('load', function(store){
+		this.deleteButton.setDisabled(!store.reader.jsonData.write_permission);		
+		this.addButton.setDisabled(!store.reader.jsonData.write_permission);
+	}, this);
+	
 	this.taskPanel = new GO.tasks.TaskPanel({
 		title:GO.tasks.lang.task,
 		region:'east',
 		width:400,
 		border:true
 	});
+	
+
 			
 	config.layout='border';
 	//config.tbar=;
@@ -105,7 +112,7 @@ GO.tasks.MainPanel = function(config){
 				baseCls:'x-plain',
 				tbar:new Ext.Toolbar({		
 					cls:'go-head-tb',
-					items: [{
+					items: [this.addButton = new Ext.Button({
 								iconCls: 'btn-add',							
 								text: GO.lang['cmdAdd'],
 								cls: 'x-btn-text-icon',
@@ -127,8 +134,7 @@ GO.tasks.MainPanel = function(config){
 									
 								},
 								scope: this
-							},{
-		
+							}),this.deleteButton = new Ext.Button({		
 								iconCls: 'btn-delete',							
 								text: GO.lang['cmdDelete'],
 								cls: 'x-btn-text-icon',
@@ -136,7 +142,7 @@ GO.tasks.MainPanel = function(config){
 									this.gridPanel.deleteSelected();
 								},
 								scope: this
-							},{
+							}),{
 								iconCls: 'btn-settings',
 								text: GO.lang['cmdSettings'],
 								cls: 'x-btn-text-icon',

@@ -159,6 +159,8 @@ Ext.extend(GO.tasks.TasklistDialog, Ext.Window, {
 		if(!this.rendered)
 			this.render(Ext.getBody());
 			
+		this.propertiesTab.show();
+			
 		if(tasklist_id > 0)
 		{
 			if(tasklist_id!=this.tasklist_id)
@@ -172,7 +174,7 @@ Ext.extend(GO.tasks.TasklistDialog, Ext.Window, {
 		{
 			this.tasklist_id=0;
 			this.propertiesTab.form.reset();
-			this.propertiesTab.show();
+			
 
 			this.readPermissionsTab.setDisabled(true);
 			this.writePermissionsTab.setDisabled(true);

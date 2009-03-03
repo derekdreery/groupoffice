@@ -105,20 +105,17 @@ try{
 			
 			
 			$task_id=$task['id']=isset($_POST['task_id']) ? ($_POST['task_id']) : 0;
-				
-			if($task_id>0)
-			{
-				$old_task = $tasks->get_task($task_id);
-				if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_task['acl_write']))
-				{
-					throw new AccessDeniedException();
-				}
-			}
-				
+
 			$task['name']=$_POST['name'];
 			$task['due_time']=Date::to_unixtime($_POST['due_date']);
 			$task['start_time']=Date::to_unixtime($_POST['start_date']);
 			$task['tasklist_id']=$_POST['tasklist_id'];
+			
+			$tasklist = $tasks->get_tasklist($task['tasklist_id']);
+			if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_write']))
+			{
+				throw new AccessDeniedException();
+			}
 			
 			if(isset($_POST['status']))
 				$task['status']=$_POST['status'];
@@ -167,14 +164,6 @@ try{
 			if(isset($_POST['repeat_type']) && $_POST['repeat_type']>0)
 			{
 				$task['rrule']=Date::build_rrule($_POST['repeat_type'], $repeat_every,$task['repeat_end_time'], $days, $month_time);
-			}
-
-
-			$tasklist = $tasks->get_tasklist($task['tasklist_id']);
-
-			if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_write']))
-			{
-				throw new AccessDeniedException();
 			}
 
 			if(empty($task['name']) || empty($task['due_time']))

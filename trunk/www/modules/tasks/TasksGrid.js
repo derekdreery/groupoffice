@@ -18,14 +18,14 @@ GO.tasks.TasksPanel = function(config)
 	});
 	
 	
-	var checkColumn = new GO.grid.CheckColumn({
+	this.checkColumn = new GO.grid.CheckColumn({
      header: '',
      dataIndex: 'completed',
      width: 30,
      header: '<div class="tasks-complete-icon"></div>'
   });
   
-  checkColumn.on('change', function(record, checked){
+  this.checkColumn.on('change', function(record, checked){
   	this.store.baseParams['completed_task_id']=record.data.id;
   	this.store.baseParams['checked']=checked;
   	
@@ -51,13 +51,13 @@ GO.tasks.TasksPanel = function(config)
 	
 	
 	config.paging=true,			
-	config.plugins=checkColumn;
+	config.plugins=this.checkColumn;
 	config.autoExpandColumn=1;
 	config.autoExpandMax=2500;
 	config.enableColumnHide=false;
   config.enableColumnMove=false;
 	config.columns=[
-		checkColumn,
+		this.checkColumn,
 		{
 			header:GO.lang['strName'],
 			dataIndex: 'name',
@@ -223,15 +223,17 @@ Ext.extend(GO.tasks.TasksPanel, GO.grid.GridPanel, {
 								due_date: due.format(GO.settings.date_format)
 							},
 							callback: function(options, success, response)
-							{
-			
-								if(!success)
+							{			
+								
+								var reponseParams = Ext.decode(response.responseText);
+								if(!reponseParams.success)
 								{
-									Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
+									alert(reponseParams.feedback);
 								}else
 								{
 									this.store.reload();
 								}
+								
 							},
 							scope:this		
 						});

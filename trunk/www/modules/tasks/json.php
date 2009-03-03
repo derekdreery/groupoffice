@@ -270,7 +270,7 @@ try{
 											
 									case 'tasks':
 											
-											
+										$response['write_permission']=true;
 										if(isset($_REQUEST['tasklist_id']))
 										{
 											$tasklist_id = ($_REQUEST['tasklist_id']);
@@ -280,7 +280,9 @@ try{
 
 											$tasklist = $tasks->get_tasklist($tasklist_id);
 
-											if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_read']) && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_write']))
+											$response['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_write']);
+											
+											if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_read']) && !$response['write_permission'])
 											{
 												throw new AccessDeniedException();
 											}
@@ -290,10 +292,15 @@ try{
 											{
 												try{
 													$response['deleteSuccess']=true;
-													$delete_tasks = json_decode(($_POST['delete_keys']));
+													$delete_tasks = json_decode($_POST['delete_keys']);
 
 													foreach($delete_tasks as $task_id)
 													{
+														$old_task = $tasks->get_task($task_id);
+														if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_task['acl_write']))
+														{
+															throw new AccessDeniedException();
+														}
 														$tasks->delete_task($task_id);
 													}
 												}catch(Exception $e)
@@ -313,6 +320,12 @@ try{
 										{
 											$task=array();
 											$task['id']=$_POST['completed_task_id'];
+											
+											$old_task = $tasks->get_task($task['id']);
+											if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_task['acl_write']))
+											{
+												throw new AccessDeniedException();
+											}
 
 											if($_POST['checked']=='1')
 											{
