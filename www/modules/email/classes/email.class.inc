@@ -57,7 +57,7 @@ class email extends db
 	function get_servermanager_mailbox_info($account)
 	{
 		global $GO_CONFIG, $GO_MODULES;
-		
+
 		if(isset($GO_MODULES->modules['serverclient']))
 		{
 			require_once($GO_MODULES->modules['serverclient']['class_path'].'serverclient.class.inc.php');
@@ -76,15 +76,15 @@ class email extends db
 					);
 					$server_response = $sc->send_request($GO_CONFIG->serverclient_server_url.'modules/postfixadmin/json.php', $params);
 					//go_log(LOG_DEBUG, var_export($server_response, true));
-					return json_decode($server_response, true);					
+					return json_decode($server_response, true);
 				}
 			}
 		}
 		return false;
 	}
-	
-	
-	
+
+
+
 
 	function get_accounts($user_id=0, $start=0, $offset=0)
 	{
@@ -126,13 +126,13 @@ class email extends db
 	function delete_linked_message($link_id)
 	{
 		global $GO_CONFIG;
-		
+
 		require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
 		$search = new search();
 		$search->delete_search_result($link_id, 9);
-		
+
 		$message = $this->get_linked_message($link_id);
-		
+
 		@unlink($GO_CONFIG->file_storage_path.$message['path']);
 
 		$sql ="DELETE FROM em_links WHERE link_id=".$this->escape($link_id);
@@ -167,7 +167,7 @@ class email extends db
 		}else
 		{
 			global $GO_MODULES;
-				
+
 			$addressbook_id=0;
 			if(isset($GO_MODULES->modules['addressbook']) && $GO_MODULES->modules['addressbook']['read_permission'])
 			{
@@ -179,7 +179,7 @@ class email extends db
 					$addressbook_id=$addressbook['id'];
 				}
 			}
-				
+
 			$this->query("INSERT INTO em_settings (user_id, send_format, add_recievers, add_senders, request_notification, charset, beep, auto_check) VALUES ('$user_id', 'text/HTML', $addressbook_id, '0', '0', 'UTF-8','1','1')");
 			return $this->get_settings($user_id);
 		}
@@ -211,76 +211,87 @@ class email extends db
 			{
 				$account['mbroot'] = '';
 			}
-			
+
 			$account['spamtag']='***SPAM***';
 			$account['trash'] = '';
 			$account['sent'] = '';
 			$account['drafts'] = '';
 			$account['spam'] = '';
-				
+
 
 			if ($account['type']=='imap')
 			{
-				require($GO_LANGUAGE->get_language_file('email'));
+
+
+				$account=$this->set_default_folders($account);
 
 				$mailboxes =  $this->mail->get_mailboxes($account['mbroot']);
 				$subscribed =  $this->mail->get_subscribed($account['mbroot']);
-
-				$mailbox_names = array();
-				foreach($mailboxes  as $mailbox)
-				{
-					$mailbox_names[]=$mailbox['name'];
-				}
-
-				$subscribed_names = array();
-				foreach($subscribed as $mailbox)
-				{
-					$subscribed_names[]=$mailbox['name'];
-				}
-
-				if($this->_add_folder($account['mbroot'].$lang['email']['trash'], $mailbox_names, $subscribed_names))
-				{
-					$account['trash'] = $account['mbroot'].$lang['email']['trash'];
-				}elseif($account['mbroot'] = $this->mail->check_mbroot($mailbox_names[0]))
-				{
-					if($this->_add_folder($account['mbroot'].$lang['email']['trash'], $mailbox_names, $subscribed_names))
-					{
-						$account['trash'] = $account['mbroot'].$lang['email']['trash'];
-					}
-				}
-
-				if($this->_add_folder($account['mbroot'].$lang['email']['sent'], $mailbox_names, $subscribed_names))
-				{
-					$account['sent'] = $account['mbroot'].$lang['email']['sent'];
-				}
-
-				if($this->_add_folder($account['mbroot'].$lang['email']['drafts'], $mailbox_names, $subscribed_names))
-				{
-					$account['drafts'] = $account['mbroot'].$lang['email']['drafts'];
-				}
-
-				if($this->_add_folder($account['mbroot'].'Spam', $mailbox_names, $subscribed_names))
-				{
-					$account['spam']= $account['mbroot'].'Spam';
-				}
 			}
-			
-			$mailboxes =  $this->mail->get_mailboxes($account['mbroot']);
-			$subscribed =  $this->mail->get_subscribed($account['mbroot']);
-			
 			$this->mail->close();
-			
-			
 
 			$account['id'] = $this->nextid("em_accounts");
 			$this->insert_row('em_accounts', $account);
-			
-			
+				
+				
 			$this->_synchronize_folders($account, $mailboxes, $subscribed);
-			
+				
 			return $account['id'];
+				
 		}
 	}
+
+	function set_default_folders($account){
+			
+		global $GO_LANGUAGE;
+
+		require($GO_LANGUAGE->get_language_file('email'));
+
+		$mailboxes =  $this->mail->get_mailboxes($account['mbroot']);
+		$subscribed =  $this->mail->get_subscribed($account['mbroot']);
+
+		$mailbox_names = array();
+		foreach($mailboxes  as $mailbox)
+		{
+			$mailbox_names[]=$mailbox['name'];
+		}
+
+		$subscribed_names = array();
+		foreach($subscribed as $mailbox)
+		{
+			$subscribed_names[]=$mailbox['name'];
+		}
+
+		if($this->_add_folder($account['mbroot'].$lang['email']['trash'], $mailbox_names, $subscribed_names))
+		{
+			$account['trash'] = $account['mbroot'].$lang['email']['trash'];
+		}elseif($account['mbroot'] = $this->mail->check_mbroot($mailbox_names[0]))
+		{
+			if($this->_add_folder($account['mbroot'].$lang['email']['trash'], $mailbox_names, $subscribed_names))
+			{
+				$account['trash'] = $account['mbroot'].$lang['email']['trash'];
+			}
+		}
+
+		if($this->_add_folder($account['mbroot'].$lang['email']['sent'], $mailbox_names, $subscribed_names))
+		{
+			$account['sent'] = $account['mbroot'].$lang['email']['sent'];
+		}
+
+		if($this->_add_folder($account['mbroot'].$lang['email']['drafts'], $mailbox_names, $subscribed_names))
+		{
+			$account['drafts'] = $account['mbroot'].$lang['email']['drafts'];
+		}
+
+		if($this->_add_folder($account['mbroot'].'Spam', $mailbox_names, $subscribed_names))
+		{
+			$account['spam']= $account['mbroot'].'Spam';
+		}
+
+		return $account;
+	}
+
+
 
 
 	function _update_account($account)
@@ -294,6 +305,8 @@ class email extends db
 
 		require_once($GO_CONFIG->class_path."mail/imap.class.inc");
 		$this->mail= new imap();
+
+		$oldaccount = $this->get_account($account['id']);
 
 
 		if ($this->mail->open(
@@ -313,8 +326,23 @@ class email extends db
 				$account['mbroot'] = '';
 			}
 				
-			$this->mail->close();
+			if($oldaccount['type']=='pop3' && $account['type']=='imap')
+			{
+				$account=$this->set_default_folders($account);
+				$mailboxes =  $this->mail->get_mailboxes($account['mbroot']);
+				$subscribed =  $this->mail->get_subscribed($account['mbroot']);
+				$this->_synchronize_folders($account, $mailboxes, $subscribed);
+			}elseif($oldaccount['type']=='imap' && $account['type']=='pop3')
+			{
+				$this->delete_folders($account['id']);
 				
+				$mailboxes =  $this->mail->get_mailboxes($account['mbroot']);
+				$subscribed =  $this->mail->get_subscribed($account['mbroot']);
+				$this->_synchronize_folders($account, $mailboxes, $subscribed);
+			}
+
+			$this->mail->close();
+
 			return $this->_update_account($account);
 		}
 		return false;
@@ -625,17 +653,34 @@ class email extends db
 		"WHERE account_id='".$this->escape($account_id)."' AND name='".$this->escape($name)."'");
 	}
 
+	function is_mbroot($folder_name, $delimiter, $mbroot)
+	{
+		if(substr($mbroot,-1,1)==$delimiter)
+		{
+			$mbroot = substr($mbroot, 0, -1);
+		}
+		return $mbroot==$folder_name;
+	}
+
 	/*
 	 Gets the parent_id from a folder path
 	 */
-	function get_parent_id($account_id, $path, $delimiter)
+	function get_parent_id($account, $path, $delimiter)
 	{
+		$mbroot = $account['mbroot'];
+
 		if ($pos = strrpos($path, $delimiter))
 		{
 			$parent_name = substr($path, 0, $pos);
-			if ($parent_folder = $this->get_folder($account_id, $parent_name))
+			if ($parent_folder = $this->get_folder($account['id'], $parent_name))
 			{
-				return $parent_folder['id'];
+				if($this->is_mbroot($parent_folder['name'],$delimiter, $account['mbroot']))
+				{
+					return 0;
+				}else
+				{
+					return $parent_folder['id'];
+				}
 			}
 		}else
 		{
@@ -703,7 +748,7 @@ class email extends db
 					$email->__update_folder($folder);
 				}
 			}
-				
+
 		}
 		$mail->close();
 	}
@@ -735,25 +780,24 @@ class email extends db
 		$this->next_record();
 		return $this->f(0);
 	}
-	
+
 	function _synchronize_folders($account, $mailboxes, $subscribed)
 	{
 		$mail = new imap();
-		
+
 		$mailbox_names = array();
-		
+
 		$subscribed_names = array();
 		while($mailbox = array_shift($subscribed))
 		{
 			$subscribed_names[]=$mailbox['name'];
 		}
 
-		
 		foreach($mailboxes as $mailbox)
 		{
 			$mailbox_names[] = $mailbox['name'];
 			$folder['account_id'] = $account['id'];
-			$folder['parent_id'] = $this->get_parent_id($account['id'], $mailbox['name'], $mailbox['delimiter']);
+			$folder['parent_id'] = $this->get_parent_id($account, $mailbox['name'], $mailbox['delimiter']);
 			$folder['attributes'] = $mailbox['attributes'];
 			$folder['name'] = $mailbox['name'];
 
@@ -761,13 +805,13 @@ class email extends db
 			//$folder['subscribed']='1';
 			$folder['delimiter'] = $mailbox['delimiter'];
 			/*if($status = $mail->status($mailbox['name'], SA_UNSEEN+SA_MESSAGES))
-			{
+			 {
 				$folder['msgcount'] = $status->messages;
 				$folder['unseen'] = $status->unseen;
-			}*/
+				}*/
 
 			$unenc_name = $mail->utf7_imap_decode($mailbox['name']);
-			
+
 			if($unenc_name == 'INBOX')
 			{
 				$folder['sort_order'] = 0;
@@ -809,11 +853,13 @@ class email extends db
 			$folder['sort_order']=0;
 			$folder['subscribed']=true;
 			$folder['delimiter'] = '';
+			$folder['parent_id']=0;
+			$folder['attributes']='';
 			/*if($status = $mail->status('INBOX', SA_UNSEEN+SA_MESSAGES))
-			{
+			 {
 				$folder['msgcount'] = $status->messages;
 				$folder['unseen'] = $status->unseen;
-			}*/
+				}*/
 
 			if ($existing_folder = $this->get_folder($account['id'],'INBOX'))
 			{
@@ -849,7 +895,7 @@ class email extends db
 		if(!$mail)
 		{
 			$mail = new imap();
-	
+
 			if (!$mail->open(
 			$account['host'],
 			$account['type'],
@@ -862,17 +908,17 @@ class email extends db
 			$account['novalidate_cert']))
 			{
 				return false;
-			}			
+			}
 			$close_connection = true;
 		}
 			
-		$subscribed =  $mail->get_subscribed('');
-		$mailboxes =  $mail->get_mailboxes('');
-		
-		//debug($subscribed);
-		
-		$this->_synchronize_folders($account, $mailboxes, $subscribed);		
-		
+
+		$subscribed =  $mail->get_subscribed($account['mbroot']);
+		$mailboxes =  $mail->get_mailboxes($account['mbroot']);
+
+
+		$this->_synchronize_folders($account, $mailboxes, $subscribed);
+
 		if(isset($close_connection))
 		{
 			$mail->close();
@@ -995,7 +1041,7 @@ class email extends db
 			 eregi("INLINE", $message['parts'][$i]["disposition"]) &&
 			 !empty($message['parts'][$i]["name"])) ||
 			 !empty($message['parts'][$i]["name"])){*/
-				
+
 			if (
 			(
 			eregi("ATTACHMENT", $message['parts'][$i]["disposition"])  ||
@@ -1046,7 +1092,7 @@ class email extends db
 			return false;
 		}
 	}
-	
+
 	function __on_delete_link($id, $link_type)
 	{
 
@@ -1094,7 +1140,7 @@ class email extends db
 			$cache['mtime']=$this->f('time');
 			$cache['acl_read']=$GO_MODULES->modules['email']['acl_read'];
 			$cache['acl_write']=$GO_MODULES->modules['email']['acl_write'];
-				
+
 			$search->cache_search_result($cache);
 		}
 	}

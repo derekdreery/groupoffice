@@ -135,20 +135,44 @@ GO.email.AccountDialog = function(config) {
 							triggerAction : 'all',
 							editable : false,
 							selectOnFocus : true,
-							forceSelection : true
+							forceSelection : true,
+							listeners:{
+								change:function(){
+									this.refreshNeeded=true;
+								},
+								scope:this
+							}
 						}), new Ext.form.TextField({
 							fieldLabel : GO.email.lang.host,
 							name : 'host',
-							allowBlank : false
+							allowBlank : false,
+							listeners:{
+								change:function(){
+									this.refreshNeeded=true;
+								},
+								scope:this
+							}
 						}), new Ext.form.TextField({
 							fieldLabel : GO.lang.strUsername,
 							name : 'username',
-							allowBlank : false
+							allowBlank : false,
+							listeners:{
+								change:function(){
+									this.refreshNeeded=true;
+								},
+								scope:this
+							}
 						}), new Ext.form.TextField({
 							fieldLabel : GO.lang.strPassword,
 							name : 'password',
 							inputType : 'password',
-							allowBlank : false
+							allowBlank : false,
+							listeners:{
+								change:function(){
+									this.refreshNeeded=true;
+								},
+								scope:this
+							}
 						}), {
 					xtype : 'fieldset',
 					title : GO.email.lang.advanced,
@@ -211,7 +235,13 @@ GO.email.AccountDialog = function(config) {
 		}, {
 			fieldLabel : GO.lang.strEmail,
 			name : 'email',
-			allowBlank : false
+			allowBlank : false,
+			listeners:{
+				change:function(){
+					this.refreshNeeded=true;
+				},
+				scope:this
+			}
 		}, {
 			xtype : 'textarea',
 			name : 'signature',
@@ -491,12 +521,14 @@ Ext.extend(GO.email.AccountDialog, Ext.Window, {
 					waitMsg : GO.lang['waitMsgSave'],
 					success : function(form, action) {
 
+						action.result.refreshNeeded = this.refreshNeeded || this.account_id==0;
 						if (action.result.account_id) {
 							this.account_id = action.result.account_id;
 							// this.foldersTab.setDisabled(false);
 							this.loadAccount(this.account_id);
-						}
-
+						}						
+						
+						this.refreshNeeded=false;
 						this.fireEvent('save', this, action.result);
 
 						if (hide) {
@@ -563,6 +595,7 @@ Ext.extend(GO.email.AccountDialog, Ext.Window, {
 			},
 			waitMsg : GO.lang.waitMsgLoad,
 			success : function(form, action) {
+				this.refreshNeeded=false;
 				this.account_id = account_id;
 				this.selectUser.setRemoteValue(action.result.data.user_id,
 						action.result.data.user_name);

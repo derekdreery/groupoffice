@@ -444,9 +444,13 @@ try{
 					$parent_id=$_REQUEST['folder_id'];
 					if($parent_id>0)
 					{
-						if($folder = $email->get_folder_by_id(($parent_id)))
+						if($folder = $email->get_folder_by_id($parent_id))
 						{
-							$new_folder_name=$folder['name'].$delimiter.$imap->utf7_imap_encode(($_POST['new_folder_name']));
+							if($email->is_mbroot($folder['name'],$delimiter, $account['mbroot']))
+							{
+								$parent_id=0;
+							}
+							$new_folder_name=$folder['name'].$delimiter.$imap->utf7_imap_encode($_POST['new_folder_name']);
 						}else {
 							$response['feedback']=false;
 							$response['errors']=$lang['comon']['selectError'];
@@ -455,7 +459,7 @@ try{
 						}
 
 					}else {
-						$new_folder_name=$imap->utf7_imap_encode(($_POST['new_folder_name']));
+						$new_folder_name=$account['mbroot'].$imap->utf7_imap_encode($_POST['new_folder_name']);
 					}
 					
 					if($imap->create_folder($new_folder_name, $delimiter))
@@ -469,7 +473,7 @@ try{
 
 					if(!$response['success'])
 					{
-						$response['feedback']=$lang['email']['feedbackCreateFolderFailed'];
+						$response['feedback']=$lang['email']['feedbackCreateFolderFailed'].' '.$new_folder_name;
 					}
 
 					break;
@@ -612,9 +616,8 @@ try{
 
 				case 'save_account_properties':
 
-
-
-					$account['mbroot'] = isset($_POST['mbroot']) ? $imap->utf7_imap_encode(($_POST['mbroot'])) : '';
+					$account['mbroot'] = isset($_POST['mbroot']) ? $imap->utf7_imap_encode($_POST['mbroot']) : '';
+					
 					if ($_POST['name'] == "" ||	$_POST['email'] == "" ||
 							($GO_MODULES->modules['email']['write_permission'] && ($_POST['port'] == "" ||
 						$_POST['username'] == "" ||
@@ -630,7 +633,7 @@ try{
 						
 						if(isset($_POST['type']))
 						{
-							$account['mbroot'] = isset($_POST['mbroot']) ? ($_POST['mbroot']) : '';
+							$account['mbroot'] = isset($_POST['mbroot']) ? $_POST['mbroot'] : '';
 							$account['use_ssl'] = isset($_REQUEST['use_ssl'])  ? '1' : '0';
 							$account['novalidate_cert'] = isset($_REQUEST['novalidate_cert']) ? '1' : '0';
 							$account['examine_headers'] = isset($_POST['examine_headers']) ? '1' : '0';							

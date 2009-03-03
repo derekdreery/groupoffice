@@ -1164,8 +1164,8 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		if(!this.accountsDialog)
 		{
 			this.accountsDialog = new GO.email.AccountsDialog();
-			this.accountsDialog.accountsGrid.accountDialog.on('save', function(grid, result){
-					if(result.account_id){
+			this.accountsDialog.accountsGrid.accountDialog.on('save', function(dialog, result){
+					if(result.refreshNeeded){
 						this.refresh();
 					}
 				}, this);
