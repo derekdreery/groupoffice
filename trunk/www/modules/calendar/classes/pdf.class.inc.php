@@ -200,9 +200,11 @@ class PDF extends TCPDF
 			{
 				//$this->SetTextColor(125,165, 65);
 				$this->SetTextColor(0,0,0);
-				$this->Cell($nameColWidth, $this->cell_height, $calendar_name, 0,0,'L');
+				$this->MultiCell($nameColWidth, $this->cell_height, $calendar_name, 0,'L');
 				$tableLeftMargin+=$nameColWidth;
 				$this->setDefaultTextColor();
+				
+				$maxY= $this->getY();
 			}
 			
 			
