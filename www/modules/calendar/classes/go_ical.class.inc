@@ -76,17 +76,14 @@ class go_ical extends calendar
 		$ics .= $this->export_calendar_footer();
 		return $ics;
 	}
+	
 
-	function format_line($name_part, $value_part)
+	/*function format_line($name_part, $value_part)
 	{
 
 
 		$value_part = str_replace("\r\n","\n", $value_part);
 
-		/*if(!strpos($value_part, "\n"))
-		 {
-			return array($name_part.';CHARSET='.$charset.":".$value_part);
-			}*/
 		$qp_value_part = String::quoted_printable_encode($value_part);
 
 		if($value_part != $qp_value_part)
@@ -101,6 +98,19 @@ class go_ical extends calendar
 		{
 			$name_part .= ';CHARSET=UTF-8:';
 		}
+		return array($name_part.$value_part);
+	}*/
+	
+	function format_line($name_part, $value_part)
+	{
+		$value_part = str_replace("\r\n","\n", $value_part);
+		$value_part = str_replace("\n",'\n', $value_part);
+		
+		$value_part = str_replace(',','\,', $value_part);
+		$value_part = str_replace('"','\"', $value_part);
+		$value_part = str_replace('\'',"\'", $value_part);		
+
+		$name_part .= ';CHARSET=UTF-8:';
 		return array($name_part.$value_part);
 	}
 
@@ -461,7 +471,7 @@ class go_ical extends calendar
 				{
 					if($i>0)
 					{
-						$vevent .= chr(32);
+						$vevent .= ' ';
 					}
 					$vevent .= $line_parts[$i]."\r\n";
 				}

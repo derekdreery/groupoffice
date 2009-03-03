@@ -625,6 +625,8 @@ class String {
 		$sText = str_replace("\r", '', $sText);
 		
 		$aLines=explode("\n",$sText);
+		
+		//var_dump($aLines);
 
 		for ($i=0;$i<count($aLines);$i++) {
 			$sLine =& $aLines[$i];
