@@ -1035,6 +1035,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 					modal:false,
 					height:300,
 					width:300,		
+					closeAction:'hide',
 					items: this.upForm,
 					buttons:[
 						{

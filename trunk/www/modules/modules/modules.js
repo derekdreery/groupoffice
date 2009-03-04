@@ -316,6 +316,7 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
 							modal : false,
 							height : 500,
 							width : 400,
+							closeAction:'hide',
 							items : [this.tabPanel],
 							buttons : [{
 										text : GO.lang['cmdClose'],

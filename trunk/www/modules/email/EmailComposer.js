@@ -770,6 +770,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 				height : 300,
 				width : 300,
 				items : this.upForm,
+				closeAction:'hide',
 				buttons : [{
 					text : GO.email.lang.startTransfer,
 					handler : function() {
