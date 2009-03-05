@@ -25,7 +25,7 @@ try{
 			$response['domains']=array();
 			foreach($domains as $domain)
 			{
-				$path = $GO_CONFIG->postfixadmin_vmail_root.$domain;
+				$path = isset($GO_CONFIG->postfixadmin_vmail_root) ? $GO_CONFIG->postfixadmin_vmail_root.$domain : '/vmail/'.$domain;
 				
 				$domain = $postfixadmin->get_domain_by_domain($domain);
 				
