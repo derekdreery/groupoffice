@@ -237,7 +237,10 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 				$available_modules=array();
 				foreach($module_folders as $folder)
 				{
-					$available_modules[]=$folder['name'];
+					if(!file_exists($folder['path'].'/install/noautoinstall'))
+					{
+						$available_modules[]=$folder['name'];
+					}
 				}				
 				$priority_modules=array('summary','email','calendar','tasks','addressbook','files', 'notes', 'projects');
 
