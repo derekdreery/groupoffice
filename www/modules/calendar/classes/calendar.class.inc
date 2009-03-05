@@ -26,6 +26,83 @@ class calendar extends db
 	var $all_day_events = array();
 	var $backgrounds = array();
 
+
+	function reminder_seconds_to_form_input($reminder)
+	{
+		$multipliers[] = 604800;
+		$multipliers[] = 86400;
+		$multipliers[] = 3600;
+		$multipliers[] = 60;
+
+		$settings['reminder_multiplier'] = 60;
+		$settings['reminder_value'] = 0;
+
+		if(!empty($reminder))
+		{
+			for ($i = 0; $i < count($multipliers); $i ++) {
+				$devided = $reminder / $multipliers[$i];
+				$match = (int) $devided;
+				if ($match == $devided) {
+					$settings['reminder_multiplier'] = $multipliers[$i];
+					$settings['reminder_value'] = $devided;
+					break;
+				}
+			}
+		}	
+		return $settings;
+	}
+
+	function __on_load_settings(&$response)
+	{
+		global $GO_MODULES, $GO_CONFIG;
+
+		$settings = $this->get_settings($_POST['user_id']);
+		
+		$settings = array_merge($settings, $this->reminder_seconds_to_form_input($settings['reminder']));
+			
+		
+		$response['data']=array_merge($response['data'], $settings);
+	}
+
+	function __on_save_settings(){
+
+		global $GO_MODULES;
+
+		if($GO_MODULES->has_module('calendar'))
+		{
+			$settings['user_id']=$_POST['user_id'];			
+			$settings['background']=$_POST['background'];
+			$settings['reminder']=$_POST['reminder_multiplier'] * $_POST['reminder_value'];
+			
+			$this->update_settings($settings);
+		}
+	}
+	
+	function get_settings($user_id)
+	{
+		$this->query("SELECT * FROM cal_settings WHERE user_id='".$this->escape($user_id)."'");
+		if ($this->next_record(DB_ASSOC))
+		{
+			return $this->record;
+		}else
+		{
+			$this->query("INSERT INTO cal_settings (user_id, background) VALUES ('".$this->escape($user_id)."', 'EBF1E2')");
+			return $this->get_settings($user_id);
+		}
+	}
+
+	function update_settings($settings)
+	{
+		if(!isset($settings['user_id']))
+		{
+			global $GO_SECURITY;
+			$settings['user_id'] = $GO_SECURITY->user_id;
+		}
+		return $this->update_row('cal_settings', 'user_id', $settings);
+	}
+
+
+
 	function event_to_html($event)
 	{
 		global $GO_LANGUAGE, $GO_CONFIG, $lang;
@@ -494,11 +571,11 @@ class calendar extends db
 		$sql = "DELETE FROM cal_participants WHERE id='".$this->escape($participant_id)."'";
 		return $this->query($sql);
 	}
-	
+
 	function delete_other_participants($event_id, $keep_ids)
 	{
 		if(!count($keep_ids))
-			return true;
+		return true;
 			
 		$sql = "DELETE FROM cal_participants WHERE event_id=".$this->escape($event_id)." AND id NOT IN (".$this->escape(implode(',', $keep_ids)).")";
 		return $this->query($sql);
@@ -542,28 +619,7 @@ class calendar extends db
 		return $this->query($sql);
 	}
 
-	function get_settings($user_id)
-	{
-		$this->query("SELECT * FROM cal_settings WHERE user_id='".$this->escape($user_id)."'");
-		if ($this->next_record(DB_ASSOC))
-		{
-			return $this->record;
-		}else
-		{
-			$this->query("INSERT INTO cal_settings (user_id) VALUES ('".$this->escape($user_id)."')");
-			return $this->get_settings($user_id);
-		}
-	}
-
-	function update_settings($settings)
-	{
-		if(!isset($settings['user_id']))
-		{
-			global $GO_SECURITY;
-			$settings['user_id'] = $GO_SECURITY->user_id;
-		}
-		return $this->update_row('cal_settings', 'user_id', $settings);
-	}
+	
 
 	function add_calendar($calendar)
 	{
@@ -810,25 +866,25 @@ class calendar extends db
 			}
 
 			$this->cache_event($event['id']);
-						
+
 			if(!empty($event['reminder']))
-			{			
+			{
 				global $GO_CONFIG;
-			
+					
 				require_once($GO_CONFIG->class_path.'base/reminder.class.inc.php');
 				$rm = new reminder();
-				
+
 				if(!$calendar)
 				{
 					$calendar = $this->get_calendar($event['calendar_id']);
 				}
-			
+					
 				$reminder['user_id']=$calendar['user_id'];
 				$reminder['name']=$event['name'];
 				$reminder['link_type']=1;
 				$reminder['link_id']=$event['id'];
 				$reminder['time']=$event['start_time']-$event['reminder'];
-				
+
 				$rm->add_reminder($reminder);
 			}
 
@@ -888,53 +944,53 @@ class calendar extends db
 		$r = $this->update_row('cal_events', 'id', $event);
 
 		$this->cache_event($event['id']);
-		
-		
+
+
 		if(isset($event['start_time']))
 		{
-			
+				
 			if(!isset($event['reminder']))
 			{
 				$oldevent = $this->get_event($event['id']);
 				$event['reminder']=$oldevent['reminder'];
 			}
-			
+				
 			global $GO_CONFIG;
-			
+				
 			require_once($GO_CONFIG->class_path.'base/reminder.class.inc.php');
 			$rm = new reminder();
-			
+				
 			$rm->get_reminders_by_link_id($event['id'], 1);
-			$existing_reminder = $rm->next_record(); 
+			$existing_reminder = $rm->next_record();
 
 			if(empty($event['reminder']) && $existing_reminder)
 			{
 				$rm->delete_reminder($existing_reminder['id']);
 			}
-			
+				
 			if(!empty($event['reminder']))
-			{	
+			{
 				if(!$calendar)
 				{
 					if(empty($event['calendar_id']))
 					{
-						if(!isset($oldevent))						
-							$oldevent = $this->get_event($event['id']);
+						if(!isset($oldevent))
+						$oldevent = $this->get_event($event['id']);
 							
 						$event['calendar_id']=$oldevent['calendar_id'];
 					}
 					$calendar = $this->get_calendar($event['calendar_id']);
 				}
-				
+
 				$reminder['id']=$existing_reminder['id'];
 				$reminder['user_id']=$calendar['user_id'];
 				if(isset($event['name']))
-					$reminder['name']=$event['name'];
+				$reminder['name']=$event['name'];
 					
 				$reminder['link_type']=1;
 				$reminder['link_id']=$event['id'];
 				$reminder['time']=$event['start_time']-$event['reminder'];
-				
+
 				if($existing_reminder)
 				{
 					$rm->update_reminder($reminder);
@@ -944,7 +1000,7 @@ class calendar extends db
 				}
 			}
 		}
-		
+
 		if($update_related  && !empty($event['id']))
 		{
 			unset($event['user_id'], $event['calendar_id'], $event['participants_event_id']);
@@ -955,7 +1011,7 @@ class calendar extends db
 			{
 				$event['id']=$cal->f('id');
 				$this->update_event($event,false,false);
-			}	
+			}
 		}
 
 		return $r;
@@ -1308,10 +1364,10 @@ class calendar extends db
 			require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
 			$search = new search();
 			$search->delete_search_result($event_id, 1);
-			
-			
+				
+				
 			global $GO_CONFIG;
-			
+				
 			require_once($GO_CONFIG->class_path.'base/reminder.class.inc.php');
 			$rm = new reminder();
 			$rm2 = new reminder();
@@ -1320,7 +1376,7 @@ class calendar extends db
 			{
 				$rm2->delete_reminder($r['id']);
 			}
-			
+				
 			if($delete_related && !empty($event_id))
 			{
 				$cal = new calendar();
@@ -1329,7 +1385,7 @@ class calendar extends db
 				while($cal->next_record())
 				{
 					$this->delete_event($cal->f('id'),false);
-				}	
+				}
 			}
 		}
 	}
@@ -1442,7 +1498,7 @@ class calendar extends db
 			$timezone_id = isset($object['DUE']['params']['TZID']) ? $object['DUE']['params']['TZID'] : '';
 			$event['end_time'] = $this->ical2array->parse_date($object['DUE']['value'],  $timezone_id);
 		}
-		
+
 		if($event['all_day_event']=='1')
 		{
 			$event['end_time']-=60;
@@ -1627,7 +1683,7 @@ class calendar extends db
 	function import_ical_string($ical_string, $calendar_id)
 	{
 		global $GO_MODULES, $GO_CONFIG;
-		
+
 		$count=0;
 
 		require_once($GO_CONFIG->class_path.'ical2array.class.inc');
@@ -1836,7 +1892,7 @@ class calendar extends db
 			}
 			$events = $newevents;
 		}
-		
+
 		return count($events) > 0 ? false : true;
 	}
 
@@ -2066,28 +2122,7 @@ class calendar extends db
 
 		$event['repeat_end_date']=$event['repeat_end_time']>0 ? date($_SESSION['GO_SESSION']['date_format'], $event['repeat_end_time']) : '';
 
-
-		$multipliers[] = 604800;
-		$multipliers[] = 86400;
-		$multipliers[] = 3600;
-		$multipliers[] = 60;
-
-		$event['reminder_multiplier'] = 60;
-		$event['reminder_value'] = 0;
-
-		if(!empty($event['reminder']))
-		{
-			for ($i = 0; $i < count($multipliers); $i ++) {
-				$devided = $event['reminder'] / $multipliers[$i];
-				$match = (int) $devided;
-				if ($match == $devided) {
-					$event['reminder_multiplier'] = $multipliers[$i];
-					$event['reminder_value'] = $devided;
-					break;
-				}
-			}
-		}
-
+		$event = array_merge($event, $this->reminder_seconds_to_form_input($event['reminder']));
 		return $event;
 	}
 

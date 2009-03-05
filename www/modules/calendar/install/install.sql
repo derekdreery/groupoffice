@@ -16,6 +16,14 @@
 -- Tabel structuur voor tabel `cal_calendars`
 -- 
 
+DROP TABLE IF EXISTS `cal_settings`;
+CREATE TABLE `cal_settings` (
+`user_id` INT NOT NULL ,
+`reminder` INT NOT NULL ,
+`color` CHAR( 6 ) NOT NULL ,
+PRIMARY KEY ( `user_id` )
+) ENGINE = MYISAM DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS `cal_calendars`;
 CREATE TABLE IF NOT EXISTS `cal_calendars` (
   `id` int(11) NOT NULL default '0',
