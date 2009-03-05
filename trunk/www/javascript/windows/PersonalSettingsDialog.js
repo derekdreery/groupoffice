@@ -135,6 +135,17 @@ Ext.extend(GO.PersonalSettingsDialog, Ext.Window,{
 				
 				this.fireEvent('save', this);	
 				
+					for(var i=0;i<this.tabPanel.items.getCount();i++)
+					{
+						var panel = this.tabPanel.items.itemAt(i);
+						if(panel.onSaveSettings)
+						{
+							var func = panel.onSaveSettings.createDelegate(panel, [action]);
+							func.call();							 
+						}
+					}
+				
+				
 				if(this.reload)
 				{
 					document.location=GO.settings.config.host;

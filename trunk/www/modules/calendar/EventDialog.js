@@ -971,7 +971,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					width : 148,
 					forceSelection : true,
 					mode : 'local',
-					value : '0',
+					value : GO.calendar.defaultReminderValue,
 					valueField : 'value',
 					displayField : 'text',
 					store : new Ext.data.SimpleStore({
@@ -988,7 +988,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					width : 148,
 					forceSelection : true,
 					mode : 'local',
-					value : '60',
+					value : GO.calendar.defaultReminderMultiplier,
 					valueField : 'value',
 					displayField : 'text',
 					store : new Ext.data.SimpleStore({
@@ -1044,10 +1044,9 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 										}, {
 											items : this.reminderMultiplier
 										}]
-							}, {
-								xtype : 'colorfield',
+							}, this.colorField = new GO.form.ColorField({
 								fieldLabel : GO.lang.color,
-								value : 'EBF1E2',
+								value : GO.calendar.defaultBackground,
 								name : 'background',
 								colors : [
 										'EBF1E2',
@@ -1183,7 +1182,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 										/* Line 16 */
 										'FFFFFF', '949494', '808080', '6B6B6B',
 										'545454', '404040', '292929', '000000']
-							}, 
+							}), 
 							this.privateCB]
 				});
 
