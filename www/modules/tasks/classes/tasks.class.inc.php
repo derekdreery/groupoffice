@@ -14,6 +14,56 @@
 
 class tasks extends db
 {
+	function __on_load_settings(&$response)
+	{
+		global $GO_MODULES, $GO_CONFIG;
+
+		$settings = $this->get_settings($_POST['user_id']);
+
+		$response['data']=array_merge($response['data'], $settings);
+	}
+
+	function __on_save_settings(){
+
+		global $GO_MODULES;
+
+		if($GO_MODULES->has_module('tasks'))
+		{
+			$settings['remind']=isset($_POST['remind']) ? '1' : '0';
+			$settings['user_id']=$_POST['user_id'];
+			if(isset($_POST['reminder_days']))					
+				$settings['reminder_days']=$_POST['reminder_days'];
+				
+			if(isset($_POST['reminder_time']))
+				$settings['reminder_time']=$_POST['reminder_time'];
+			
+			$this->update_settings($settings);
+		}
+	}
+	
+	function get_settings($user_id)
+	{
+		$this->query("SELECT * FROM ta_settings WHERE user_id='".$this->escape($user_id)."'");
+		if ($this->next_record(DB_ASSOC))
+		{
+			return $this->record;
+		}else
+		{			
+			$this->query("INSERT INTO ta_settings (user_id, reminder_time) VALUES ('".$this->escape($user_id)."', '".date($_SESSION['GO_SESSION']['time_format'],mktime(8,0))."')");
+			return $this->get_settings($user_id);
+		}
+	}
+
+	function update_settings($settings)
+	{
+		if(!isset($settings['user_id']))
+		{
+			global $GO_SECURITY;
+			$settings['user_id'] = $GO_SECURITY->user_id;
+		}
+		return $this->update_row('ta_settings', 'user_id', $settings);
+	}
+
 	
 	function is_duplicate_task($task, $tasklist_id)
 	{

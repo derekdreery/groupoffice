@@ -241,8 +241,9 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 				}
 			}
 
-			formPanel.form.findField('remind_date').setValue(startDate
-					.getValue());
+			var remindDate = startDate.getValue().add(Date.DAY, -GO.tasks.reminderDaysBefore);
+			
+			formPanel.form.findField('remind_date').setValue(remindDate);
 
 			if (repeatType.getValue() > 0) {
 				if (repeatEndDate.getValue() == '') {
@@ -521,8 +522,8 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 							}]
 				});
 
-		var eight = Date.parseDate(now.format('Y-m-d') + ' 08:00', 'Y-m-d G:i');
-
+		var remindDate = now.add(Date.DAY, -GO.tasks.reminderDaysBefore);
+		
 		// start other options tab
 		var optionsPanel = new Ext.Panel({
 
@@ -539,6 +540,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 						boxLabel : GO.tasks.lang.remindMe,
 						hideLabel : true,
 						name : 'remind',
+						value: GO.tasks.reminde=='1',
 						listeners : {
 							'check' : function(field, checked) {
 								this.formPanel.form.findField('remind_date')
@@ -552,14 +554,14 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 						xtype : 'datefield',
 						name : 'remind_date',
 						format : GO.settings.date_format,
-						value : now.format(GO.settings['date_format']),
+						value : remindDate.format(GO.settings['date_format']),
 						fieldLabel : GO.lang.strDate,
 						disabled : true
 					}, {
 						xtype : 'timefield',
 						name : 'remind_time',
 						format : GO.settings.time_format,
-						value : eight.format(GO.settings['time_format']),
+						value : GO.tasks.reminderTime,
 						fieldLabel : GO.lang.strTime,
 						disabled : true
 					}]

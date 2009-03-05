@@ -6,3 +6,4 @@ modules/tasks/TasksGrid.js
 modules/tasks/SelectTasklist.js
 modules/tasks/MainPanel.js
 modules/tasks/Portlet.js
+modules/tasks/Settings.js

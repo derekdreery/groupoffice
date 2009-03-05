@@ -12,4 +12,12 @@ $updates[]="CREATE TABLE IF NOT EXISTS `go_links_12` (
 $updates[]="ALTER TABLE `ta_tasks` CHANGE `completion_time` `completion_time` INT( 11 ) NULL";
 $updates[]="ALTER TABLE `ta_tasks` CHANGE `completion_time` `completion_time` INT( 11 ) NOT NULL DEFAULT '0'";
 $updates[]="ALTER TABLE `ta_tasks` CHANGE `rrule` `rrule` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL";
+
+$updates[]="CREATE TABLE IF NOT EXISTS `ta_settings` (
+  `user_id` int(11) NOT NULL,
+  `reminder_days` int(11) NOT NULL,
+  `reminder_time`  VARCHAR( 10 ) NOT NULL,
+  `remind` enum('0','1') NOT NULL,
+  PRIMARY KEY  (`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 ?>
