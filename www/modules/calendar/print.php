@@ -44,6 +44,7 @@ if(!empty($_REQUEST['view_id']))
 	$title=$calendar['name'];
 	$pdf->setParams($calendar['name'], $_REQUEST['start_time'], $_REQUEST['end_time']);
 	$events = $cal->get_events_in_array(array($_REQUEST['calendar_id']), 0, $_REQUEST['start_time'], $_REQUEST['end_time']);
+	//var_dump($events);
 	$pdf->AddPage();
 	$pdf->addCalendar($events);
 }
