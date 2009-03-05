@@ -56,3 +56,5 @@ GO.calendar.lang.selectIcalendarFile='Selecteer een icalendar (*.ics) bestand';
 GO.calendar.lang.location='Locatie';
 GO.calendar.lang.startsAt='Start op';
 GO.calendar.lang.endsAt='Eindigt op';
+
+GO.calendar.lang.eventDefaults='Standaard instellingen voor afspraken';
