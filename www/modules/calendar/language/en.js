@@ -69,3 +69,4 @@ GO.calendar.lang.selectIcalendarFile='Select an icalendar (*.ics) file';
 GO.calendar.lang.location='Location';
 GO.calendar.lang.startsAt='Starts at';
 GO.calendar.lang.endsAt='Ends at';
+GO.calendar.lang.eventDefaults='Defaults settings for appointments';

@@ -25,31 +25,37 @@ GO.tasks.SettingsPanel = function(config) {
 	config.title = GO.tasks.lang.tasks;
 	config.hideMode='offsets';
 	config.layout = 'form';
-	config.bodyStyle = 'padding:5px',
-	config.items = [this.remindCheck=new Ext.form.Checkbox({
-			boxLabel : GO.tasks.lang.remindMe,
-			hideLabel : true,
-			name : 'remind',
-			listeners : {
-				'check' : function(field, checked) {
-					this.numberField.setDisabled(!checked);
-					this.timeField.setDisabled(!checked);
-				},
-				scope : this
-			}
-		}), this.numberField = new GO.form.NumberField({
-			decimals:0,
-			name : 'reminder_days',			
-			value : '0',
-			fieldLabel : 'Days before start',
-			disabled : true
-		}),this.timeField = new Ext.form.TimeField({
-			name : 'reminder_time',
-			format : GO.settings.time_format,
-			value : eight.format(GO.settings['time_format']),
-			fieldLabel : GO.lang.strTime,
-			disabled : true
-		})];
+	config.bodyStyle='padding:5px;';
+	config.items = {
+		xtype:'fieldset',
+		autoHeight:true,
+		layout:'form',
+		title:GO.tasks.lang.taskDefaults,
+		items:[this.remindCheck=new Ext.form.Checkbox({
+				boxLabel : GO.tasks.lang.remindMe,
+				hideLabel : true,
+				name : 'remind',
+				listeners : {
+					'check' : function(field, checked) {
+						this.numberField.setDisabled(!checked);
+						this.timeField.setDisabled(!checked);
+					},
+					scope : this
+				}
+			}), this.numberField = new GO.form.NumberField({
+				decimals:0,
+				name : 'reminder_days',			
+				value : '0',
+				fieldLabel : 'Days before start',
+				disabled : true
+			}),this.timeField = new Ext.form.TimeField({
+				name : 'reminder_time',
+				format : GO.settings.time_format,
+				value : eight.format(GO.settings['time_format']),
+				fieldLabel : GO.lang.strTime,
+				disabled : true
+			})]
+		};
 	
 	GO.tasks.SettingsPanel.superclass.constructor.call(this, config);
 };

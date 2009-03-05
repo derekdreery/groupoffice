@@ -27,3 +27,4 @@ GO.tasks.lang.startsAt='Start op';
 GO.tasks.lang.showInactiveTasks='Toon inactive taken';
 GO.tasks.lang.scheduleCall='Telefoongesprek plannen';
 GO.tasks.lang.call='Bellen';
+GO.tasks.lang.taskDefaults='Standaard instellingen voor taken';
