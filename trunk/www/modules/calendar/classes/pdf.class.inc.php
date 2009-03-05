@@ -141,7 +141,7 @@ class PDF extends TCPDF
 		while($event = array_shift($events))
 		{
 			$index_time = $event['start_time'];
-			while($index_time<$event['end_time'] && $index_time<$this->end_time)
+			while($index_time<=$event['end_time'] && $index_time<$this->end_time)
 			{
 				$cellIndex = floor(($index_time-$this->start_time)/86400);
 				$index_time = Date::date_add($index_time,1);
@@ -321,11 +321,13 @@ class PDF extends TCPDF
 			$time = $this->start_time;
 			for($i=0;$i<$this->days;$i++)
 			{
+				
+				
 				if(count($cellEvents[$i]))
 				{
 					$this->ln(10);
 					$this->H3($lang['common']['full_days'][date('w', $time)].', '.date($_SESSION['GO_SESSION']['date_format'], $time));
-					$time = Date::date_add($time, 1);
+					
 
 					$this->SetFont($this->font,'',$this->font_size);
 					while($event = array_shift($cellEvents[$i]))
@@ -373,6 +375,7 @@ class PDF extends TCPDF
 
 					}
 				}
+				$time = Date::date_add($time, 1);
 			}
 		}
 	}
