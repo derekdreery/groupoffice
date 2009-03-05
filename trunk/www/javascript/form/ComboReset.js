@@ -30,6 +30,8 @@ GO.form.ComboBoxReset = Ext.extend(GO.form.ComboBox, {
           {tag: "img", src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger " + this.trigger1Class},
           {tag: "img", src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger " + this.trigger2Class}
       ]};
+      
+      this.addEvents ({'reset' : true});
   },
 
   getTrigger : function(index){
@@ -65,6 +67,7 @@ GO.form.ComboBoxReset = Ext.extend(GO.form.ComboBox, {
 
   onTrigger1Click : function(){      
       this.reset();
+      this.fireEvent('reset', this);
       this.hasSearch = false;
   },
 
