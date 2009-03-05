@@ -18,6 +18,14 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 --
 -- Tabel structuur voor tabel `ta_lists`
 --
+DROP TABLE IF EXISTS `ta_settings`;
+CREATE TABLE IF NOT EXISTS `ta_settings` (
+  `user_id` int(11) NOT NULL,
+  `reminder_days` int(11) NOT NULL,
+  `reminder_time`  VARCHAR( 10 ) NOT NULL,
+  `remind` enum('0','1') NOT NULL,
+  PRIMARY KEY  (`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `ta_lists`;
 CREATE TABLE IF NOT EXISTS `ta_lists` (
