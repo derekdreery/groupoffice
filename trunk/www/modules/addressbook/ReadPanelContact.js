@@ -336,6 +336,8 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 		if(GO.mailings)
 		{	
 			this.newOODoc = new GO.mailings.NewOODocumentMenuItem();
+			this.newOODoc.on('create', function(){this.reload();}, this);
+			
 			this.newMenuButton.menu.add(this.newOODoc);		
 			
 			GO.mailings.ooTemplatesStore.on('load', function(){
