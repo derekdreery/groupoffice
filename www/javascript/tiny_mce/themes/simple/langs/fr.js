@@ -1,17 +1,11 @@
-/** 
- * French Translation v1.0
- * Author : Lionel JULLIEN
- * Date : September, 11 2008
- */
-
 tinyMCE.addI18n('fr.simple',{
 bold_desc:"Gras (Ctrl+B)",
 italic_desc:"Italique (Ctrl+I)",
-underline_desc:"Souligné (Ctrl+U)",
-striketrough_desc:"Barré",
-bullist_desc:"Liste non ordonnée",
-numlist_desc:"Liste ordonnée",
+underline_desc:"Soulign\u00E9 (Ctrl+U)",
+striketrough_desc:"Barr\u00E9",
+bullist_desc:"Liste non-num\u00E9rot\u00E9e",
+numlist_desc:"Liste num\u00E9rot\u00E9e",
 undo_desc:"Annuler (Ctrl+Z)",
-redo_desc:"Refaire (Ctrl+Y)",
-cleanup_desc:"Nettoyer le code"
+redo_desc:"R\u00E9tablir (Ctrl+Y)",
+cleanup_desc:"Nettoyer le code non propre"
 });

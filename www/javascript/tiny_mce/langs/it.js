@@ -1,35 +1,35 @@
-tinyMCE.addI18n({en:{
+tinyMCE.addI18n({it:{
 common:{
-edit_confirm:"Vuoi usare la modalità WYSIWYG per questa area di testo?",
+edit_confirm:"Usare la modalit\u00E0 WYSIWYG per questa textarea?",
 apply:"Applica",
 insert:"Inserisci",
 update:"Aggiorna",
-cancel:"Cancella",
+cancel:"Annulla",
 close:"Chiudi",
 browse:"Sfoglia",
 class_name:"Classe",
 not_set:"-- Non impostato --",
-clipboard_msg:"Copia/Taglia/Incolla non è disponibile in Mozilla e Firefox.\nVuoi maggiori informazioni su questo problema?",
-clipboard_no_support:"Attualmente non è supportato dal tuo browser, usa la combinazione di tasti veloci da tastiera.",
-popup_blocked:"Il blocco-popup ha disattivato una finestra che fornisce funzionalità di applicazione. Devi disabilitare il blocco-popup su questo sito per utilizzare integralmente questo strumento.",
-invalid_data:"Errore: Immessi valori non validi, questi sono contrassegnati in rosso.",
+clipboard_msg:"Copia/Taglia/Incolla non \u00E8 disponibile in Mozilla e Firefox.\nSi desidera avere maggiori informazioni su questo problema?",
+clipboard_no_support:"Attualmente non supportato dal  browser in uso, usare le scorciatoie da tastiera.",
+popup_blocked:"Spiacente, ma il blocco delle popup ha disabilitato una finestra che fornisce funzionalit\u00E0 dell'applicazione. Si deve disabilitare il blocco delle popup per questo sito per poter utlizzare appieno questo strumento.",
+invalid_data:"Errore: valori inseriti non validi, sono marcati in rosso.",
 more_colors:"Colori aggiuntivi"
 },
 contextmenu:{
 align:"Allineamento",
-left:"Sinistra",
-center:"Centrato",
-right:"Destra",
-full:"Giustificato"
+left:"Allinea a sinistra",
+center:"Centra",
+right:"Allinea a destra",
+full:"Giustifica"
 },
 insertdatetime:{
 date_fmt:"%Y-%m-%d",
 time_fmt:"%H:%M:%S",
-insertdate_desc:"Inserisci la data",
-inserttime_desc:"Inserisci l\'ora",
+insertdate_desc:"Inserisci data",
+inserttime_desc:"Inserisci ora",
 months_long:"Gennaio,Febbraio,Marzo,Aprile,Maggio,Giugno,Luglio,Agosto,Settembre,Ottobre,Novembre,Dicembre",
 months_short:"Gen,Feb,Mar,Apr,Mag,Giu,Lug,Ago,Set,Ott,Nov,Dic",
-day_long:"Domenica,Lunedì,Martedì,Mercoledì,Giovedì,Venerdì,Sabato,Domenica",
+day_long:"Domenica,Luned\u00EC,Marted\u00EC,Mercoled\u00EC,Gioved\u00EC,Venerd\u00EC,Sabato,Domenica",
 day_short:"Dom,Lun,Mar,Mer,Gio,Ven,Sab,Dom"
 },
 print:{
@@ -43,28 +43,28 @@ ltr_desc:"Direzione da sinistra a destra",
 rtl_desc:"Direzione da destra a sinistra"
 },
 layer:{
-insertlayer_desc:"Inserisci una nuova etichetta",
-forward_desc:"Sposta avanti",
-backward_desc:"Sposta indietro",
-absolute_desc:"Posizionamento assoluto",
-content:"Nuova etichetta..."
+insertlayer_desc:"Inserisci nuovo layer",
+forward_desc:"Porta in rilievo",
+backward_desc:"Porta in sfondo",
+absolute_desc:"Attiva/Disattiva posizionamento assoluto",
+content:"Nuovo layer..."
 },
 save:{
-save_desc:"Salva",
+save_desc:"Save",
 cancel_desc:"Cancella tutte le modifiche"
 },
 nonbreaking:{
-nonbreaking_desc:"Inserisci un carattere di non spaziatura"
+nonbreaking_desc:"Inserisci uno spazio"
 },
 iespell:{
-iespell_desc:"Esegui il controllo ortografico",
-download:"ieSpell non trovato. Vuoi installarlo adesso?"
+iespell_desc:"Esegui controllo ortografico",
+download:"ieSpell non rilevato. Installarlo ora?"
 },
 advhr:{
-advhr_desc:"Righello orizzontale"
+advhr_desc:"Riga orizzontale"
 },
 emotions:{
-emotions_desc:"Emotions"
+emotions_desc:"Faccine"
 },
 searchreplace:{
 search_desc:"Trova",
@@ -80,38 +80,38 @@ xhtmlxtras:{
 cite_desc:"Citazione",
 abbr_desc:"Abbreviazione",
 acronym_desc:"Acronimo",
-del_desc:"Eliminazione",
+del_desc:"Cancellamento",
 ins_desc:"Inserimento",
-attribs_desc:"Inserisci/Modifica Attributi"
+attribs_desc:"Inserisci/modifica attributi"
 },
 style:{
-desc:"Modifica lo stile CSS"
+desc:"Modifica stile CSS"
 },
 paste:{
-paste_text_desc:"Incolla come Testo Semplice",
+paste_text_desc:"Incolla come testo semplice",
 paste_word_desc:"Incolla da Word",
-selectall_desc:"Seleziona Tutto"
+selectall_desc:"Seleziona tutto"
 },
 paste_dlg:{
-text_title:"Usa CTRL+V sulla tastiera per incollare il testo dentro la finestra.",
-text_linebreaks:"Mantieni interruzione di linea",
-word_title:"Usa CTRL+V sulla tastiera per incollare il testo dentro la finestra."
+text_title:"Premere CTRL+V sulla tastiera per incollare il testo nella finestra.",
+text_linebreaks:"Mantieni interruzioni di riga",
+word_title:"Premere CTRL+V sulla tastiera per incollare il testo nella finestra."
 },
 table:{
 desc:"Inserisci una nuova tabella",
-row_before_desc:"Inserisci riga sopra",
-row_after_desc:"Inserisci riga sotto",
+row_before_desc:"Inserisci riga prima",
+row_after_desc:"Inserisci riga dopo",
 delete_row_desc:"Elimina riga",
-col_before_desc:"Inserisci colonna a sinistra",
-col_after_desc:"Inserisci colonna a destra",
+col_before_desc:"Inserisci colonna prima",
+col_after_desc:"Inserisci colonna dopo",
 delete_col_desc:"Elimina colonna",
-split_cells_desc:"Dividi celle",
+split_cells_desc:"Separa celle",
 merge_cells_desc:"Unisci celle",
-row_desc:"Proprietà riga",
-cell_desc:"Proprietà cella",
-props_desc:"Proprietà tabella",
-paste_row_before_desc:"Incolla riga sopra",
-paste_row_after_desc:"Incolla riga sotto",
+row_desc:"Propriet\u00E0 riga",
+cell_desc:"Propriet\u00E0 cella",
+props_desc:"Propriet\u00E0 tabella",
+paste_row_before_desc:"Incolla riga prima",
+paste_row_after_desc:"Incolla riga dopo",
 cut_row_desc:"Taglia riga",
 copy_row_desc:"Copia riga",
 del:"Elimina tabella",
@@ -120,35 +120,35 @@ col:"Colonna",
 cell:"Cella"
 },
 autosave:{
-unload_msg:"Le modifiche andranno perse abbandonado questa pagina."
+unload_msg:"I cambiamenti effettuati saranno persi se si abbandona la pagina corrente."
 },
 fullscreen:{
-desc:"Imposta modalità a schermo intero"
+desc:"Attiva/disattiva modalit\u00E0 a tutto schermo"
 },
 media:{
-desc:"Inserici / modifica embedded media",
-edit:"Modifica i contenuti integrati"
+desc:"Inserisci/modifica file multimediale",
+edit:"Modifica file multimediale"
 },
 fullpage:{
-desc:"Proprietà documento"
+desc:"Propriet\u00E0 Documento"
 },
 template:{
-desc:"Inserisci un modello di contenuti predefinito"
+desc:"Inserisci contenuto da modello predefinito"
 },
 visualchars:{
-desc:"Caratteri di controllo visivo on/off."
+desc:"Attiva/disattiva caratteri di controllo visuale."
 },
 spellchecker:{
-desc:"Imposta controllo ortografico",
-menu:"Opzioni correttore ortografico",
+desc:"Attiva/disattiva controllo ortografico",
+menu:"Impostazioni controllo ortografico",
 ignore_word:"Ignora parola",
 ignore_words:"Ignora tutto",
 langs:"Lingue",
-wait:"Attendere...",
-sug:"Suggerimento",
+wait:"Attendere prego...",
+sug:"Suggerimenti",
 no_sug:"Nessun suggerimento",
-no_mpell:"Nessun errore di ortografia trovato."
+no_mpell:"Nessun errore rilevato."
 },
 pagebreak:{
-desc:"Inserisci interruzione di pagina."
+desc:"Inserisci intterruzione di pagina."
 }}});

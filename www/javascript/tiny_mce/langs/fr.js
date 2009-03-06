@@ -1,40 +1,34 @@
-/** 
- * French Translation v1.0
- * Author : Lionel JULLIEN
- * Date : September, 11 2008
- */
-
 tinyMCE.addI18n({fr:{
 common:{
-edit_confirm:"Voulez-vous utiliser le mode WYSIWYG pour cette zone de texte ?",
+edit_confirm:"Voulez-vous utiliser le mode WYSIWYG pour cette zone de texte\u00A0?",
 apply:"Appliquer",
-insert:"Insérer",
-update:"Mettre à jour",
+insert:"Ins\u00E9rer",
+update:"Mettre \u00E0 jour",
 cancel:"Annuler",
 close:"Fermer",
-browse:"Parcourir",
+browse:"Naviguer",
 class_name:"Classe",
-not_set:"-- Pas définie --",
-clipboard_msg:"Copier/couper/coller n\'est pas disponible dans Firefox et Mozilla.\nVoulez-vous plus d\informations concernant ce problème ?",
-clipboard_no_support:"Non supporté par votre navigateur, utilisez plutôt les raccourcis clavier.",
-popup_blocked:"Désolé, nous avons remarqué que votre navigateur bloque les fenêtres popup. Une fenêtre qui fournit des fonctionnalités a été bloquée. Vous devez désactiver le bloquage des fenêtres popup pour ce site afin d\'utiliser pleinement cet outil.",
-invalid_data:"ERREUR : Valeurs saisis invalides (ces dernières sont marquées en rouge).",
+not_set:"-- Non init. --",
+clipboard_msg:"Copier/Couper/Coller n'est pas disponible sous Mozilla et sous Firefox.\nVoulez-vous plus d'information sur ce probl\u00E8me\u00A0?",
+clipboard_no_support:"Actuellement non support\u00E9 par votre navigateur, utilisez les raccourcis clavier \u00E0 ma place.",
+popup_blocked:"D\u00E9sol\u00E9, nous avons d\u00E9tect\u00E9 que votre bloqueur de popup a bloqu\u00E9 une fen\u00EAtre dont l'application a besoin. Vous devez d\u00E9sactiver votre bloqueur de popup pour pouvoir utiliser cet outil.",
+invalid_data:"Erreur : Valeurs incorrectes entr\u00E9es, elles sont marqu\u00E9es en rouge.",
 more_colors:"Plus de couleurs"
 },
 contextmenu:{
 align:"Alignement",
 left:"Gauche",
-center:"Centrer",
+center:"Centr\u00E9",
 right:"Droite",
-full:"Complet"
+full:"Justifi\u00E9"
 },
 insertdatetime:{
-date_fmt:"%Y-%m-%d",
+date_fmt:"%d-%m-%Y",
 time_fmt:"%H:%M:%S",
-insertdate_desc:"Inserer date",
-inserttime_desc:"Inserer heure",
-months_long:"Janvier,Février,Mars,Avril,Mai,Juin,Juillet,Août,Septembre,Octobre,Novembre,Décembre",
-months_short:"Jan,Fev,Mar,Avr,Mai,Jui,Juil,Aou,Sep,Oct,Nov,Dec",
+insertdate_desc:"Ins\u00E9rer date",
+inserttime_desc:"Ins\u00E9rer heure",
+months_long:"Janvier,F\u00E9vrier,Mars,Avril,Mai,Juin,Juillet,Ao\u00FBt,Septembre,Octobre,Novembre,D\u00E9cembre",
+months_short:"Jan,F\u00E9v,Mar,Avr,Mai,Juin,Juil,Ao\u00FBt,Sep,Oct,Nov,D\u00E9c",
 day_long:"Dimanche,Lundi,Mardi,Mercredi,Jeudi,Vendredi,Samedi,Dimanche",
 day_short:"Dim,Lun,Mar,Mer,Jeu,Ven,Sam,Dim"
 },
@@ -42,119 +36,119 @@ print:{
 print_desc:"Imprimer"
 },
 preview:{
-preview_desc:"Prévisualisation"
+preview_desc:"Pr\u00E9visualiser"
 },
 directionality:{
-ltr_desc:"Direction - gauche vers droite",
-rtl_desc:"Direction - droite vers gauche"
+ltr_desc:"\u00C9criture de gauche \u00E0 droite",
+rtl_desc:"\u00C9criture de droite \u00E0 gauche"
 },
 layer:{
-insertlayer_desc:"Insérer un nouveau calque",
-forward_desc:"Avancer",
-backward_desc:"Reculer",
-absolute_desc:"Basculer le positionnement absolu",
-content:"Nouveau calque..."
+insertlayer_desc:"Ins\u00E9rer une nouvelle couche",
+forward_desc:"D\u00E9placer vers l'avant",
+backward_desc:"D\u00E9placer vers l'arri\u00E8re",
+absolute_desc:"Activer le positionnement absolu",
+content:"Nouvelle couche..."
 },
 save:{
-save_desc:"Sauvegarder",
+save_desc:"Sauver",
 cancel_desc:"Annuler tous les changements"
 },
 nonbreaking:{
-nonbreaking_desc:"Insérer un espace insécable"
+nonbreaking_desc:"Ins\u00E9rer un espace ins\u00E9cable"
 },
 iespell:{
-iespell_desc:"Lancer la vérification orthographique",
-download:"ieSpell introuvable. Voulez-vous l\'installer maintenant ?"
+iespell_desc:"Lancer le v\u00E9rificateur d'orthographe",
+download:"ieSpell non install\u00E9, voulez-vous l'installer maintenant\u00A0?"
 },
 advhr:{
-advhr_desc:"Règle horizontale"
+advhr_desc:"Ins\u00E9rer trait horizontal"
 },
 emotions:{
-emotions_desc:"Emotions"
+emotions_desc:"\u00C9motions"
 },
 searchreplace:{
 search_desc:"Chercher",
 replace_desc:"Chercher/Remplacer"
 },
 advimage:{
-image_desc:"Insérer/Editer une image"
+image_desc:"Ins\u00E9rer/\u00C9diter image"
 },
 advlink:{
-link_desc:"Insérer/Editer un lien"
+link_desc:"Ins\u00E9rer/\u00C9diter lien"
 },
 xhtmlxtras:{
 cite_desc:"Citation",
-abbr_desc:"Abbreviation",
+abbr_desc:"Abr\u00E9viation",
 acronym_desc:"Acronyme",
-del_desc:"Suppression",
+del_desc:"Effacement",
 ins_desc:"Insertion",
-attribs_desc:"Insérer/Editer des attributs"
+attribs_desc:"Ins\u00E9rer/\u00C9diter les attributs"
 },
 style:{
-desc:"Editer le style CSS"
+desc:"\u00C9diter la feuille de style CSS"
 },
 paste:{
-paste_text_desc:"Coller en tant que texte plein",
-paste_word_desc:"Coller depuis Word",
-selectall_desc:"Sélectionner tout"
+paste_text_desc:"Coller en tant que texte brut",
+paste_word_desc:"Coller au d\u00E9part d'un texte cr\u00E9\u00E9 sous Word",
+selectall_desc:"Selectioner tout"
 },
 paste_dlg:{
-text_title:"Utilisez CTRL+V sur votre clavier pour coller le texte dans la fenêtre.",
-text_linebreaks:"Conserver les sauts de lignes",
-word_title:"Utilisez CTRL+V sur votre clavier pour coller le texte dans la fenêtre."
+text_title:"Utilisez CTRL+V sur votre clavier pour coller le texte dans la fen\u00EAtre.",
+text_linebreaks:"Conserver les sauts de ligne",
+word_title:"Utilisez CTRL+V sur votre clavier pour coller le texte dans la fen\u00EAtre."
 },
 table:{
-desc:"Insérer un nouveau tableau",
-row_before_desc:"Insérer une ligne avant",
-row_after_desc:"Insérer une ligne après",
-delete_row_desc:"Supprimer la ligne",
-col_before_desc:"Insérer une colonne avant",
-col_after_desc:"Insérer une colonne après",
-delete_col_desc:"Supprimer la colonne",
-split_cells_desc:"Défusionner les cellules",
+desc:"Ins\u00E9rer un nouveau tableau",
+row_before_desc:"Ins\u00E9rer ligne avant",
+row_after_desc:"Ins\u00E9rer ligne apr\u00E8s",
+delete_row_desc:"Effacer ligne",
+col_before_desc:"Ins\u00E9rer colonne avant",
+col_after_desc:"Ins\u00E9rer colonne apr\u00E8s",
+delete_col_desc:"Effacer colonne",
+split_cells_desc:"Scinder les cellules fusionn\u00E9es",
 merge_cells_desc:"Fusionner les cellules",
-row_desc:"Propriétés - Ligne",
-cell_desc:"Propriétés - Cellule",
-props_desc:"Propriétés - Tableau",
+row_desc:"Propri\u00E9t\u00E9s de la ligne",
+cell_desc:"Propri\u00E9t\u00E9s de la cellule",
+props_desc:"Propri\u00E9t\u00E9s du tableau",
 paste_row_before_desc:"Coller la ligne avant",
-paste_row_after_desc:"Coller la ligne après",
+paste_row_after_desc:"Coller la ligne apr\u00E8s",
 cut_row_desc:"Couper la ligne",
 copy_row_desc:"Copier la ligne",
-del:"Supprimer le tableau",
+del:"Effacer tableau",
 row:"Ligne",
 col:"Colonne",
 cell:"Cellule"
 },
 autosave:{
-unload_msg:"Les changements que vous avez fait vont être perdus si vous quitter cette page."
+unload_msg:"Les changements que vous avez faits seront perdus si vous changez de page."
 },
 fullscreen:{
-desc:"Basculer en mode plein écran"
+desc:"Passer en mode plein \u00E9cran"
 },
 media:{
-desc:"Insérer/Editer un média intégré",
-edit:"Editer un media intégré"
+desc:"Ins\u00E9rer/\u00C9diter un fichier m\u00E9dia",
+edit:"\u00C9diter un fichier m\u00E9dia"
 },
 fullpage:{
-desc:"Propriétés du document"
+desc:"Propri\u00E9t\u00E9s du document"
 },
 template:{
-desc:"Insérer un modèle de contenu prédéfini"
+desc:"Ins\u00E9rer un mod\u00E8le pr\u00E9d\u00E9fini."
 },
 visualchars:{
-desc:"Caractères de control visuel on/off."
+desc:"Activer les caract\u00E8res de mise en page."
 },
 spellchecker:{
-desc:"Basculer en vérification orthographique",
-menu:"Paramètres du vérificateur orthographique",
-ignore_word:"Ignorer le mot",
+desc:"Activer le v\u00E9rificateur d'orthographe",
+menu:"Param\u00E8tres du v\u00E9rificateur d'orthographe",
+ignore_word:"Ignorer mot",
 ignore_words:"Ignorer tout",
-langs:"Langages",
-wait:"veuillez patienter...",
+langs:"Langues",
+wait:"Patientez svp...",
 sug:"Suggestions",
-no_sug:"Aucune suggestion",
-no_mpell:"Aucune faute d\'orthographe."
+no_sug:"Aucune suggestions",
+no_mpell:"Aucune erreur trouv\u00E9e."
 },
 pagebreak:{
-desc:"Insérer un saut de page."
+desc:"Ins\u00E9rer saut de page."
 }}});
