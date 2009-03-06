@@ -94,23 +94,12 @@ function get_posted_event()
 	return $event;
 }
 
-function round_half_hours($time)
+function round_quarters($time)
 {
 	$date = getdate($time);
 	
-	if($date['minutes']>0 && $date['minutes']!=30)
-	{
-		if($date['minutes']>30)
-		{
-			$date['hours']++;
-			$date['minutes']=0;
-		}elseif($date['minutes']<30)
-		{
-			$date['minutes']=30;
-		}
-		
-		$time = mktime($date['hours'], $date['minutes'], 0, $date['mon'], $date['mday'], $date['year']);
-	}
+	$mins = ceil($date['minutes']/15)*15;	
+	$time = mktime($date['hours'], $mins, 0, $date['mon'], $date['mday'], $date['year']);
 	
 	return $time;
 }
@@ -215,7 +204,7 @@ try{
 						$offset = ($_POST['offset']);
 
 
-						$update_event['start_time']=round_half_hours($update_event['start_time']+$offset);
+						$update_event['start_time']=round_quarters($update_event['start_time']+$offset);
 						$update_event['end_time']=$update_event['end_time']+$offset;
 
 					}
@@ -234,7 +223,7 @@ try{
 					{
 						//change duration
 						$duration = ($_POST['duration']);
-						$update_event['end_time']=round_half_hours($update_event['start_time']+$duration);
+						$update_event['end_time']=round_quarters($update_event['start_time']+$duration);
 					}
 
 					if(isset($_POST['update_calendar_id']))
@@ -252,7 +241,7 @@ try{
 						$offset = ($_POST['offset']);
 
 
-						$update_event['start_time']=round_half_hours($old_event['start_time']+$offset);
+						$update_event['start_time']=round_quarters($old_event['start_time']+$offset);
 						$update_event['end_time']=$old_event['end_time']+$offset;
 					}
 
@@ -270,7 +259,7 @@ try{
 						$duration = ($_POST['duration']);
 
 						$update_event['start_time']=$old_event['start_time'];
-						$update_event['end_time']=round_half_hours($old_event['start_time']+$duration);
+						$update_event['end_time']=round_quarters($old_event['start_time']+$duration);
 					}
 					
 					if(isset($_POST['update_calendar_id']))

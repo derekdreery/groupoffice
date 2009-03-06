@@ -66,6 +66,10 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 	//amount of days to display
 	days : 1,
 	
+	scale : 96,
+	
+	hourHeight : 40,
+	
 	loaded : false,
 	
 	writePermission : false,
@@ -114,6 +118,9 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		}
 		
 		this.configuredDate=this.startDate;
+		
+		this.rowsPerHour=this.scale/24;
+		this.rowHeight = this.hourHeight/this.rowsPerHour;
   },	
 
 
@@ -275,21 +282,13 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		var timeCol = Ext.DomHelper.append(gridRow,
 			{tag: 'td', style: 'width:40px'}, true);
 	
-		var even = true;
-		for (var i = 0;i<48;i++)
+		
+
+		for (var i = 0;i<this.scale;i+=this.rowsPerHour)
 		{	
-			if(even)
-			{
-				var timeformat = GO.settings.time_format.substr(0,1)=='G' ? 'G:i' : 'g a';
+			var timeformat = GO.settings.time_format.substr(0,1)=='G' ? 'G:i' : 'g a';
 				Ext.DomHelper.append(timeCol,
-					{tag: 'div', id: 'head'+i, cls: "x-calGrid-timeHead", html: Date.parseDate(i/2, "G").format(timeformat), style: 'width:40px'}, true);
-				even=false;
-			}else
-			{
-				Ext.DomHelper.append(timeCol,
-					{tag: 'div', id: 'head'+i, cls: "x-calGrid-timeHead", style: 'width:40px'}, true);
-				even=true;
-			}			
+					{tag: 'div', id: 'head'+i, cls: "x-calGrid-timeHead", html: Date.parseDate(i/this.rowsPerHour, "G").format(timeformat), style: 'width:40px;height:'+(((this.rowHeight+1)*this.rowsPerHour)-1)+'px'}, true);
 		}
 		
 		this.gridCells=[];
@@ -302,25 +301,33 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			var dayColumn = Ext.DomHelper.append(gridRow,
 				{tag: 'td', id: 'dayCol'+day, style:'width:'+columnWidth+'px'}, true);
 		
-			var even = true;
-			var className = "x-calGrid-evenRow";		
+
+			var className = "x-calGrid-hourRow";		
 	
-			for (var i = 0;i<48;i++)
+			var hourCounter=0;
+			for (var i = 0;i<this.scale;i++)
 			{
-				if(even)
+				if(hourCounter==0)
 				{
-					className= "x-calGrid-evenRow";
-					even=false;
-				}else
+					className= "x-calGrid-hourRow";
+				}else if(this.rowsPerHour/hourCounter==2)
 				{					
-					className = "x-calGrid-unevenRow";
-					even=true;
+					className = "x-calGrid-halfhourRow";
+				}else
+				{
+					className = "x-calGrid-blankRow";
 				}
 				
 				var cell = Ext.DomHelper.append(dayColumn,
-					{tag: 'div', id: 'day'+day+'_row'+i, cls: className}, true);
+					{tag: 'div', id: 'day'+day+'_row'+i, cls: className, style: 'height:'+this.rowHeight+'px'}, true);
 				
-				this.gridCells[day].push(cell);						
+				this.gridCells[day].push(cell);		
+				
+				hourCounter++;
+				if(hourCounter==this.rowsPerHour)
+				{
+					hourCounter=0;
+				}
 			}	
 		}	
 
@@ -356,7 +363,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		{	
 			//var currentX = x+(day*(cellSize['width']-0.5));
 			var currentX = x+(day*cellSize['width']);
-			for (var i = 0;i<48;i++)
+			for (var i = 0;i<this.scale;i++)
 			{	
 				var currentY = y+(i*cellSize['height']);
 				
@@ -367,7 +374,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				}else
 				{
 					//should never come here
-					alert('hoi');
+					alert('error');
 				}
 			}
 		}
@@ -569,29 +576,17 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			endDay=this.days-1;
 
 		if(day<this.days && endDay> -1)
-		{
+		{			
+			var startRow = eventData.startDate.getHours()*this.rowsPerHour;
+			var endRow = eventData.endDate.getHours()*this.rowsPerHour-1;
 			
-			var startRow = eventData.startDate.getHours()*2;
-			var endRow = eventData.endDate.getHours()*2-1;
-			
+			var gridPrecision = 60/this.rowsPerHour;
 			var startMin = eventData.startDate.getMinutes();
-			if(startMin>30)
-			{
-				startRow +=2;
-			}else if(startMin>0)
-			{
-				startRow++;
-			}
+			startRow += Math.ceil(startMin/gridPrecision);
 			
 			var endMin = eventData.endDate.getMinutes();
-			if(endMin>30)
-			{
-				endRow +=2;
-			}else if(endMin>0)
-			{
-				endRow++;
-			}
-			
+			endRow += Math.ceil(endMin/gridPrecision);
+						
 			if(endRow<startRow)
 			{
 				endRow=startRow;
@@ -851,9 +846,9 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		
 		var snap = this.getSnap();		
 		
-		if(endRow>47)
+		if(endRow>(this.scale-1))
 		{
-			endRow=47;
+			endRow=this.scale-1;
 		}
 		var event = this.gridContainer.insertFirst(
 			{
@@ -1010,7 +1005,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			//create an array of rows with their positions
 			this.rows=Array();
 
-			for(var rowId=0;rowId<48;rowId++)
+			for(var rowId=0;rowId<this.scale;rowId++)
 			{
 				//cached rows
 				var row = this.gridCells[day][rowId];
@@ -1443,9 +1438,11 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		var day = this.getDayByX(position[0]);
 
 		var date = this.startDate.add(Date.DAY, day);
+		
+		var gridPrecision = 60/this.rowsPerHour;
 
-		var startDate = date.add(Date.MINUTE,startRow*30);
-		var endDate = date.add(Date.MINUTE,endRow*30);
+		var startDate = date.add(Date.MINUTE,startRow*gridPrecision);
+		var endDate = date.add(Date.MINUTE,endRow*gridPrecision);
 				
 		return { 'startDate': startDate, 'endDate':endDate, 'day':day};	
 	},
@@ -1524,7 +1521,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			
 			//adjust with offsets so event will not jump to mouse position
 			var x = this.snapPos(this.dragappointmentstartPos[0],mouseEventPos[0]-this.dragXoffset,this.dragSnap["x"],this.days);
-			var y = this.snapPos(this.dragappointmentstartPos[1],mouseEventPos[1]-this.dragYoffset,this.dragSnap["y"],48);
+			var y = this.snapPos(this.dragappointmentstartPos[1],mouseEventPos[1]-this.dragYoffset,this.dragSnap["y"],this.scale);
 			
 			//var gridRight = (this.gridX+this.days*this.dragSnap["x"]);
 			//var gridBottom = (this.gridY+48*this.dragSnap["y"]);
