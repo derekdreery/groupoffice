@@ -377,8 +377,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					end_time : endDate.format('U'),
 					startDate : startDate,
 					endDate : endDate,
-					description : GO.util.nl2br(this.formPanel.form
-							.findField('description').getValue()),
+					description : Ext.util.Format.htmlEncode(GO.util.nl2br(this.formPanel.form
+							.findField('description').getValue()).replace(/\n/g,'')),
 					background : this.formPanel.form.findField('background')
 							.getValue(),
 					location : this.formPanel.form.findField('location')
@@ -387,6 +387,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 							.getValue() > 0,
 					'private' : false
 				};
+				
 
 				this.fireEvent('save', newEvent, this.oldDomId);
 
