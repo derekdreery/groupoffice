@@ -19,7 +19,8 @@ function smarty_function_files($params, &$smarty)
 		}		
 	}else
 	{
-		$path = $GO_CONFIG->file_storage_path.$params['path'];
+		//$path = $GO_CONFIG->file_storage_path.$params['path'];
+		$path = $params['path'];
 	}
 
 	if(empty($params['template']))
@@ -33,6 +34,8 @@ function smarty_function_files($params, &$smarty)
 
 	//var_dump($files);
 	$html = '';
+	
+	$item_name = isset($params['item_name']) ? $params['item_name'] : 'file'; 
 
 	$uneven=true;
 	$s = new cms_smarty($co);
@@ -42,7 +45,7 @@ function smarty_function_files($params, &$smarty)
 		$files[$i]['relpath']=$fs->strip_server_path($files[$i]['path']);
 		
 		$s->assign('index', $i);
-		$s->assign('file', $files[$i]);
+		$s->assign($item_name, $files[$i]);
 		$s->assign('even', $uneven ? 'uneven' : 'even');
 		
 		$html .= $s->fetch($params['template']);
