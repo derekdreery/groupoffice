@@ -26,7 +26,11 @@ First backup your database!
 
 Upgrading from version 2 is a little bit trickier. There is a special upgrade script 
 for version 2.18 only. So if you run a version prior to version 2.18 you must first 
-download 2.18 from Sourceforge and upgrade to that version. It doesn't matter if you 
+download 2.18 from Sourceforge:
+
+https://sourceforge.net/project/showfiles.php?group_id=76359&package_id=77805
+
+and upgrade to that version. It doesn't matter if you 
 use the Professional or the Community version. You can always use the 2.18 Community 
 version for the upgrade purpose.
 
@@ -38,7 +42,7 @@ You should see utf8_general_ci encoding and not latin1_swedish_ci or any other.
 To convert latin encoding to utf8 run the script install/convertDbToUTF8.sh
 
 eg.: 
-./convertDbToUTF8.sh datautf8_basename "-u root --password=yourmysqlpass"
+./convertDbToUTF8.sh databasename "-u root --password=yourmysqlpass"
 
 This should convert it for you.
 
