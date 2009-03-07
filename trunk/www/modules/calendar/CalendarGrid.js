@@ -1466,7 +1466,8 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
     			this.gridContainer.scrollTo('top', this.scrollPosition['top']);
     		}else
     		{
-    			this.scrollToRow(14);
+    			//scroll to 7am
+    			this.scrollToRow(7*this.rowsPerHour);
     		}	
     	}
     },
