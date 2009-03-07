@@ -6,6 +6,9 @@
 - Calendar scale with 15 minute interval
 - Compose multiple e-mails at once
 - Autosave mail
+- PhpBB3 module: The PhpBB3 module will integrate PhpBB3 into Group-Office. When a 
+	Group-Office user goes to phpbb3 it will automatically copy the user and log the 
+	user in.
 
 2009/03/03 Version 3.01-stable-5
 - Updated Czech translation
