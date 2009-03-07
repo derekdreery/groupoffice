@@ -148,7 +148,8 @@ switch($task)
 				$record = array(
 		 			'id' => $module['id'],
 		 			'name' => $module['humanName'],
-	 				'disabled' => ($user_id && $GO_SECURITY->has_admin_permission($user_id)), 
+	 				'read_disabled' => ($user_id && $GO_SECURITY->has_permission($user_id, $module['acl_read'], true)), 
+					'write_disabled' => ($user_id && $GO_SECURITY->has_permission($user_id, $module['acl_write'], true)),
 	 				'read_permission'=> $user_id > 0 ? $GO_SECURITY->has_permission($user_id, $module['acl_read']) : in_array($module['id'], $modules_read),
 	 				'write_permission'=> $user_id > 0 ? $GO_SECURITY->has_permission($user_id, $module['acl_write']) : in_array($module['id'], $modules_write)
 				);
