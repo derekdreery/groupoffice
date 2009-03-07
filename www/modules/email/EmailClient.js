@@ -1295,6 +1295,19 @@ GO.email.showComposer = function(config){
 					record.set('answered',true);
 				}
 			}
+			
+			if(GO.email.messagesGrid.store.reader.jsonData.sent || (GO.email.messagesGrid.store.reader.jsonData.drafts && composer.sendParams.draft_uid && composer.sendParams.draft_uid>0))
+			{
+				GO.email.messagesGrid.store.reload();
+			}
+		});
+		
+		availableComposer.on('save', function(composer){			
+
+			if(GO.email.messagesGrid.store.reader.jsonData.drafts)
+			{
+				GO.email.messagesGrid.store.reload();
+			}
 		});
 		
 		GO.email.composers.push(availableComposer);
