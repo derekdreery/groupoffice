@@ -35,14 +35,14 @@ GO.users.PermissionsPanel = function(config)
 	/* module permissions grid */
 	
 	var moduleReadPermissionColumn = new GO.grid.CheckColumn({
-		header: GO.users.lang['cmdCheckColumnRead'],
+		header: GO.users.lang.useModule,
 		dataIndex: 'read_permission',
 		width: 55,
 		disabled_field:'read_disabled'
 	});
 
 	var moduleWritePermissionColumn = new GO.grid.CheckColumn({
-		header: GO.users.lang['cmdCheckColumnWrite'],
+		header: GO.users.lang.manageModule,
 		dataIndex: 'write_permission',
 		width: 55,
 		disabled_field:'write_disabled'

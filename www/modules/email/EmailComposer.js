@@ -425,6 +425,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 							this.render(Ext.getBody());
 
 							this.show(config);
+							return;
 
 						} else {
 
@@ -594,6 +595,12 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 				this.showed = true;
 				this.ccCombo.getEl().up('.x-form-item').setDisplayed(false);
 				this.bccCombo.getEl().up('.x-form-item').setDisplayed(false);
+				
+				if(config.move)
+				{
+					var pos = this.getPosition();
+			 		this.setPagePosition(pos[0]+config.move, pos[1]+config.move);
+				}
 			}
 			
 			if(this.bccCombo.getValue()!='')
@@ -605,6 +612,8 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 				this.ccFieldCheck.setChecked(true);
 			}
 		}
+		
+		
 	},
 
 	showAttachmentsDialog : function() {
