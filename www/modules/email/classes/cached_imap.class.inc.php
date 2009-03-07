@@ -94,7 +94,13 @@ class cached_imap extends imap{
 		if ($query != '') {
 			parent::sort($sort_type, $reverse, $query);
 		} else {
-			if($this->folder['msgcount']==$this->count && $this->folder['unseen']==$this->unseen && isset($this->folder_sort_cache[$sort_type.'_'.$reverse]))
+			if($this->folder['msgcount']==$this->count && $this->folder['unseen']==$this->unseen)
+			{
+				debug('Cleared sort cache');
+				$this->folder_sort_cache=array();
+			}
+			
+			if(isset($this->folder_sort_cache[$sort_type.'_'.$reverse]))
 			{
 				debug('Used cached sort info');
 				$this->sort = $this->folder_sort_cache[$sort_type.'_'.$reverse];

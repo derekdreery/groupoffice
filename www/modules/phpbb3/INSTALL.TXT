@@ -1,3 +1,6 @@
+The PHPBB3 module will integrate PhpBB3 into Group-Office. When a Group-Office user 
+goes to phpbb3 it will automatically copy the user and log the user in.
+
 Installation instructions:
 
 1. Install phpbb3 anywhere you like as long as it is on the same server. 
