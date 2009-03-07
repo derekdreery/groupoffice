@@ -35,7 +35,7 @@ GO.email.AddressContextMenu = function(config)
 					text: GO.email.lang.compose,
 					cls: 'x-btn-text-icon',
 					handler: function(){
-						GO.email.Composer.show({
+						GO.email.showComposer({
 							values : {to: this.address}							
 						});
 					},

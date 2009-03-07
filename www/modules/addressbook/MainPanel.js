@@ -232,7 +232,7 @@ GO.addressbook.MainPanel = function(config)
 					{
 						this.selectMailingGroupWindow=new GO.mailings.SelectMailingGroupWindow();
 						this.selectMailingGroupWindow.on("select", function(win, mailing_group_id){
-							GO.email.Composer.show({mailing_group_id:mailing_group_id});
+							GO.email.showComposer({mailing_group_id:mailing_group_id});
 						}, this);
 					}	
 					this.selectMailingGroupWindow.show();

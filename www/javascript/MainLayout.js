@@ -231,7 +231,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	    				{
 	    					if(GO.email && GO.settings.modules.email.read_permission)
 	    					{
-	    						GO.email.Composer.show({
+	    						GO.email.showComposer({
 										values : {to: GO.supportLink}							
 									});
 	    					}else

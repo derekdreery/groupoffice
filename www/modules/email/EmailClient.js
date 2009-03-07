@@ -70,6 +70,10 @@ GO.email.EmailClient = function(config){
   {
   	this.messagesGrid=this.leftMessagesGrid;
   }
+  
+  //for global access by composers
+  GO.email.messagesGrid=this.messagesGrid;
+  
 	this.messagesGrid.store.on('load',function(){
 		
 		var cm = this.topMessagesGrid.getColumnModel();
@@ -458,7 +462,7 @@ GO.email.EmailClient = function(config){
 					cls: 'x-btn-text-icon',
 					handler: function(){
 						
-						GO.email.Composer.show({
+						GO.email.showComposer({
 							account_id: this.account_id
 						});
 					},
@@ -530,7 +534,7 @@ GO.email.EmailClient = function(config){
 					cls: 'x-btn-text-icon',
 					handler: function(){
 						
-						GO.email.Composer.show({
+						GO.email.showComposer({
 							uid: this.messagePanel.uid, 
 							task: 'reply',
 							mailbox: this.mailbox,
@@ -544,7 +548,7 @@ GO.email.EmailClient = function(config){
 					text: GO.email.lang.replyAll,
 					cls: 'x-btn-text-icon',
 					handler: function(){
-						GO.email.Composer.show({
+						GO.email.showComposer({
 							uid: this.messagePanel.uid, 
 							task: 'reply_all',
 							mailbox: this.mailbox,
@@ -559,7 +563,7 @@ GO.email.EmailClient = function(config){
 					text: GO.email.lang.forward,
 					cls: 'x-btn-text-icon',
 					handler: function(){
-						GO.email.Composer.show({
+						GO.email.showComposer({
 							uid: this.messagePanel.uid, 
 							task: 'forward',
 							mailbox: this.mailbox,
@@ -732,7 +736,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		grid.on("rowdblclick", function(){		
 			if(this.messagesGrid.store.reader.jsonData.drafts)
 			{
-				GO.email.Composer.show({
+				GO.email.showComposer({
 					uid: this.messagePanel.uid, 
 					task: 'opendraft',
 					template_id: 0,
@@ -777,16 +781,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	},
 	
 	afterRender : function(){
-		GO.email.Composer.on('send', function(composer){			
-			if(composer.sendParams.reply_uid && composer.sendParams.reply_uid>0)
-			{
-				var record = this.messagesGrid.store.getById(composer.sendParams.reply_uid);
-				if(record)
-				{
-					record.set('answered',true);
-				}
-			}
-		}, this);
+		
 		
 		GO.email.EmailClient.superclass.afterRender.call(this);		
 		
@@ -1032,7 +1027,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	
 	showComposer : function(values)
 	{
-		GO.email.Composer.show(
+		GO.email.showComposer(
 		{
 			account_id: this.account_id,
 			values : values
@@ -1257,13 +1252,54 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 });
 
 GO.mainLayout.onReady(function(){
-	GO.email.Composer = new GO.email.EmailComposer();
+	//GO.email.Composer = new GO.email.EmailComposer();
 	
 	//contextmenu when an e-mail address is clicked
 	GO.email.addressContextMenu=new GO.email.AddressContextMenu();
 	
 	
 });
+
+
+/**
+ * Function that will open an email composer. If a composer is already open it will create a new one. Otherwise it will reuse an already created one.
+ */
+GO.email.showComposer = function(config){
+	
+	config = config || {};
+	
+	GO.email.composers = GO.email.composers || [];
+	
+	var availableComposer;
+	
+	for(var i=0;i<GO.email.composers.length;i++)
+	{
+		if(!GO.email.composers[i].isVisible())
+		{
+			availableComposer=GO.email.composers[i];
+			break;
+		}
+	}
+	
+	if(!availableComposer)
+	{
+		availableComposer = new GO.email.EmailComposer();
+		availableComposer.on('send', function(composer){			
+			if(composer.sendParams.reply_uid && composer.sendParams.reply_uid>0)
+			{
+				var record = GO.email.messagesGrid.store.getById(composer.sendParams.reply_uid);
+				if(record)
+				{
+					record.set('answered',true);
+				}
+			}
+		});
+		
+		GO.email.composers.push(availableComposer);
+	}
+	
+	availableComposer.show(config);
+}
 
 
 GO.moduleManager.addModule('email', GO.email.EmailClient, {
