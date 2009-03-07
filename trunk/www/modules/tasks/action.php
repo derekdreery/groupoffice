@@ -122,11 +122,17 @@ try{
 			if(isset($_POST['description']))
 				$task['description']=$_POST['description'];
 				
-			if(isset($task['status']) && $task['status']=='COMPLETED')
+			if(isset($task['status']))
 			{
-				if(!isset($old_task) || $old_task['completion_time']==0)
+				$old_task = $task_id>0 ? $tasks->get_task($task_id) : false;
+				if($task['status']=='COMPLETED' && (!$old_task || $old_task['completion_time']==0))
 				{
 					$task['completion_time']=time();
+				}
+				
+				if($task['status']!='COMPLETED' && $old_task && $old_task['completion_time']>0)
+				{
+					$task['completion_time']=0;
 				}
 			}
 			
