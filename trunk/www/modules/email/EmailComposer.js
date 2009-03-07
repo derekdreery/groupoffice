@@ -920,7 +920,9 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 						this.hide();
 					}else
 					{
-						this.sendParams.draft_uid = action.result.draft_uid; 
+						this.sendParams.draft_uid = action.result.draft_uid;
+						
+						this.fireEvent('save', this);
 					}
 				},
 
