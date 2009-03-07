@@ -659,28 +659,33 @@ class GO_SECURITY extends db {
 	 *
 	 * @param	int			$user_id	The user that needs authentication
 	 * @param	int			$acl_id	The ACL to check
+	 * @param bool 		$groups_only only check user groups and no individual access
 	 * @access private
 	 * @return bool	 True on success
 	 */
 
-	function has_permission($user_id, $acl_id) {
+	function has_permission($user_id, $acl_id, $groups_only=false) {
 		global $GO_CONFIG;
 
 		if ($user_id > 0 && $acl_id > 0) {
-			$sql = "SELECT acl_id FROM go_acl WHERE ".
-				"acl_id='".$this->escape($acl_id)."' AND user_id='".$this->escape($user_id)."'";
-			$this->query($sql);
-
-			if ($this->num_rows() > 0) {
-				return true;
+			
+			if(!$groups_only)
+			{
+				$sql = "SELECT acl_id FROM go_acl WHERE ".
+					"acl_id='".$this->escape($acl_id)."' AND user_id='".$this->escape($user_id)."'";
+				$this->query($sql);
+				if($this->next_record())
+				{
+					return true;
+				}
 			}
 
 			$sql = "SELECT go_acl.acl_id FROM go_acl, go_users_groups	WHERE ".
 				"go_acl.acl_id='".$this->escape($acl_id)."' AND go_acl.group_id=go_users_groups.group_id AND ".
 				"go_users_groups.user_id='".$this->escape($user_id)."'";
 			$this->query($sql);
-
-			if ($this->num_rows() > 0) {
+			if($this->next_record())
+			{
 				return true;
 			}
 		}

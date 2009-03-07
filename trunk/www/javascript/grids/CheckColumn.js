@@ -26,6 +26,8 @@ GO.grid.CheckColumn = function(config){
 
 Ext.extend(GO.grid.CheckColumn, Ext.util.Observable, {
 
+		disabled_field : 'disabled',
+	
     init : function(grid){
         this.grid = grid;
         this.grid.on('render', function(){
@@ -40,7 +42,9 @@ Ext.extend(GO.grid.CheckColumn, Ext.util.Observable, {
             var index = this.grid.getView().findRowIndex(t);
             var record = this.grid.store.getAt(index);
             
-            if (!record.data.disabled)
+            var disabled = record.get(this.disabled_field);
+            
+            if (!disabled)
             {
            		var newValue = record.data[this.dataIndex]=='1' ? '0' : '1';
            		record.set(this.dataIndex, newValue);
@@ -53,16 +57,18 @@ Ext.extend(GO.grid.CheckColumn, Ext.util.Observable, {
     renderer : function(v, p, record){
         p.css += ' x-grid3-check-col-td';
         
+        var disabled = record.get(this.disabled_field);
+
         if (v == '1')
         {
-        	if (record.data.disabled)
+        	if (disabled)
         	{
         		var on = '-on x-item-disabled';
         	} else {
         		var on = '-on';
         	}
         } else {
-        	if (record.data.disabled)
+        	if (disabled)
         	{
         		var on = ' x-item-disabled';
         	} else {

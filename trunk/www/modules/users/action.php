@@ -344,7 +344,7 @@ try
 
 					if (!empty($module['read_permission']))
 					{
-						if(!$GO_SECURITY->user_in_acl($user_id, $mod['acl_read']))
+						if(!$GO_SECURITY->has_permission($user_id, $mod['acl_read']))
 						{
 							$GO_SECURITY->add_user_to_acl($user_id, $mod['acl_read']);
 						}
@@ -357,7 +357,7 @@ try
 
 					if (!empty($module['write_permission']))
 					{
-						if(!$GO_SECURITY->user_in_acl($user_id, $mod['acl_write']))
+						if(!$GO_SECURITY->has_permission($user_id, $mod['acl_write']))
 						{
 							$GO_SECURITY->add_user_to_acl($user_id, $mod['acl_write']);
 						}

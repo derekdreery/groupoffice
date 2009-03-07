@@ -37,19 +37,21 @@ GO.users.PermissionsPanel = function(config)
 	var moduleReadPermissionColumn = new GO.grid.CheckColumn({
 		header: GO.users.lang['cmdCheckColumnRead'],
 		dataIndex: 'read_permission',
-		width: 55
+		width: 55,
+		disabled_field:'read_disabled'
 	});
 
 	var moduleWritePermissionColumn = new GO.grid.CheckColumn({
 		header: GO.users.lang['cmdCheckColumnWrite'],
 		dataIndex: 'write_permission',
-		width: 55
+		width: 55,
+		disabled_field:'write_disabled'
 	});
 	
 	this.modulePermissionsStore = new GO.data.JsonStore({
 		url:GO.settings.modules.users.url+'json.php',
 		baseParams: {user_id: 0, task: 'modules' },
-		fields: ['id', 'name', 'disabled', 'read_permission', 'write_permission'],
+		fields: ['id', 'name', 'read_disabled', 'write_disabled', 'read_permission', 'write_permission'],
 		root: 'results'		
 	});		
 	
