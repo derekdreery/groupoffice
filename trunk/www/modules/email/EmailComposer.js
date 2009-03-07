@@ -13,9 +13,11 @@
 
 GO.email.EmailComposer = function(config) {
 	Ext.apply(config);
+	
+	var priorityGroup = Ext.id();
 
 	this.optionsMenu = new Ext.menu.Menu({
-				id : 'optionsMenu',
+				//id : 'optionsMenu',
 				items : [
 						this.notifyCheck = new Ext.menu.CheckItem({
 									text : GO.email.lang.notification,
@@ -33,7 +35,7 @@ GO.email.EmailComposer = function(config) {
 								+ GO.email.lang.priority + '</div>', {
 							text : GO.email.lang.high,
 							checked : false,
-							group : 'priority',
+							group : priorityGroup,
 							checkHandler : function() {
 								this.sendParams['priority'] = '1';
 							},
@@ -41,7 +43,7 @@ GO.email.EmailComposer = function(config) {
 						}, this.normalPriorityCheck = new Ext.menu.CheckItem({
 									text : GO.email.lang.normal,
 									checked : true,
-									group : 'priority',
+									group : priorityGroup,
 									checkHandler : function() {
 										this.sendParams['priority'] = '3';
 									},
@@ -49,7 +51,7 @@ GO.email.EmailComposer = function(config) {
 								}), {
 							text : GO.email.lang.low,
 							checked : false,
-							group : 'priority',
+							group : priorityGroup,
 							checkHandler : function() {
 								this.sendParams['priority'] = '5';
 							},
@@ -58,23 +60,23 @@ GO.email.EmailComposer = function(config) {
 			});
 
 	this.showMenu = new Ext.menu.Menu({
-				id : 'showMenu',
+				//id : 'showMenu',
 				items : [this.formFieldCheck = new Ext.menu.CheckItem({
-									id : 'fromFieldCheck',
+									//id : 'fromFieldCheck',
 									text : GO.email.lang.sender,
 									checked : true,
 									checkHandler : this.onShowFieldCheck,
 									scope : this
 								}),
 						this.ccFieldCheck = new Ext.menu.CheckItem({
-									id : 'ccFieldCheck',
+									//id : 'ccFieldCheck',
 									text : GO.email.lang.ccField,
 									checked : false,
 									checkHandler : this.onShowFieldCheck,
 									scope : this
 								}),
 						this.bccFieldCheck = new Ext.menu.CheckItem({
-									id : 'bccFieldCheck',
+									//id : 'bccFieldCheck',
 									text : GO.email.lang.bccField,
 									checked : false,
 									checkHandler : this.onShowFieldCheck,
@@ -149,7 +151,7 @@ GO.email.EmailComposer = function(config) {
 
 						this.ccCombo = new GO.form.ComboBoxMulti({
 									sep : ',',
-									id : 'cc',
+									//id : 'cc',
 									fieldLabel : GO.email.lang.cc,
 									name : 'cc',
 									anchor : '100%',
@@ -172,7 +174,7 @@ GO.email.EmailComposer = function(config) {
 
 						this.bccCombo = new GO.form.ComboBoxMulti({
 									sep : ',',
-									id : 'bcc',
+									//id : 'bcc',
 									fieldLabel : GO.email.lang.bcc,
 									name : 'bcc',
 									anchor : '100%', // anchor width by
@@ -610,7 +612,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			var tbar = [];
 
 			tbar.push({
-						id : 'add-local',
+						//id : 'add-local',
 						iconCls : 'btn-add',
 						text : GO.email.lang.attachFilesPC,
 						cls : 'x-btn-text-icon',
@@ -623,7 +625,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 
 			if (GO.files) {
 				tbar.push({
-					id : 'add-remote',
+					//id : 'add-remote',
 					iconCls : 'btn-add',
 					text : GO.email.lang.attachFilesGO,
 					cls : 'x-btn-text-icon',
@@ -665,7 +667,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			}
 
 			tbar.push({
-						id : 'delete',
+						//id : 'delete',
 						iconCls : 'btn-delete',
 						text : GO.lang.cmdDelete,
 						cls : 'x-btn-text-icon',
@@ -681,7 +683,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 					});
 
 			this.attachmentsGrid = new GO.grid.GridPanel({
-						id : 'groups-grid-overview-users',
+						//id : 'groups-grid-overview-users',
 						store : this.attachmentsStore,
 						loadMask:true,
 						columns : [{
@@ -916,15 +918,15 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 
 	onShowFieldCheck : function(check, checked) {
 		switch (check.id) {
-			case 'fromFieldCheck' :
+			case this.formFieldCheck.id :
 				this.fromCombo.getEl().up('.x-form-item').setDisplayed(checked);
 				break;
 
-			case 'ccFieldCheck' :
+			case this.ccFieldCheck.id :
 				this.ccCombo.getEl().up('.x-form-item').setDisplayed(checked);
 				break;
 
-			case 'bccFieldCheck' :
+			case this.bccFieldCheck.id :
 				this.bccCombo.getEl().up('.x-form-item').setDisplayed(checked);
 				break;
 		}

@@ -1,8 +1,11 @@
-2009/03/? Version 3.01-stable-5
+2009/03/? Version 3.01-stable-6
 - Fixed bug in PDF printing
 - Default reminder and background color for appointments and tasks
 - When a new OpenOffice document is created from a template in the addressbook it is
   saved at the contact and the GOTA is launched.
+- Calendar scale with 15 minute interval
+- Compose multiple e-mails at once
+- Autosave mail
 
 2009/03/03 Version 3.01-stable-5
 - Updated Czech translation
