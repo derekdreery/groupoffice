@@ -392,6 +392,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			'task' : 'sendmail',
 			notification : 'false',
 			priority : '3',
+			draft_uid : 0,
 			inline_attachments : {}
 		};
 		this.inline_attachments = Array();
@@ -491,6 +492,9 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 				if (!config.task) {
 					config.task = 'template';
 				}
+				
+				if(config.task=='opendraft')
+					this.sendParams.draft_uid = config.uid; 
 
 				var params = config.loadParams ? config.loadParams : {
 					uid : config.uid,
@@ -887,30 +891,37 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 						this.account_id = action.result.account_id;
 					}
 
-					if (this.callback) {
-						if (!this.scope) {
-							this.scope = this;
+					if(!draft)
+					{
+						if (this.callback) {
+							if (!this.scope) {
+								this.scope = this;
+							}
+	
+							var callback = this.callback.createDelegate(this.scope);
+							callback.call();
 						}
-
-						var callback = this.callback.createDelegate(this.scope);
-						callback.call();
+						// this.reset();
+	
+						if (GO.addressbook && action.result.unknown_recipients
+								&& action.result.unknown_recipients.length) {
+							if (!GO.email.unknownRecipientsDialog)
+								GO.email.unknownRecipientsDialog = new GO.email.UnknownRecipientsDialog();
+	
+							GO.email.unknownRecipientsDialog.store.loadData({
+										recipients : action.result.unknown_recipients
+									});
+	
+							GO.email.unknownRecipientsDialog.show();
+						}
+	
+						this.fireEvent('send', this);
+					
+						this.hide();
+					}else
+					{
+						this.sendParams.draft_uid = action.result.draft_uid; 
 					}
-					// this.reset();
-
-					if (GO.addressbook && action.result.unknown_recipients
-							&& action.result.unknown_recipients.length) {
-						if (!GO.email.unknownRecipientsDialog)
-							GO.email.unknownRecipientsDialog = new GO.email.UnknownRecipientsDialog();
-
-						GO.email.unknownRecipientsDialog.store.loadData({
-									recipients : action.result.unknown_recipients
-								});
-
-						GO.email.unknownRecipientsDialog.show();
-					}
-
-					this.fireEvent('send', this);
-					this.hide();
 				},
 
 				failure : function(form, action) {

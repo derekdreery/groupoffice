@@ -90,6 +90,15 @@ class GoSwift extends Swift{
 	 * @access private
 	 */
 	private $reply_uid;
+	
+	/**
+	 * When repied to a message it flags the orignal message with ANSWERED
+	 *
+	 * @var String
+	 * @access private
+	 */
+	private $draft_uid;
+	
 
 	/**
 	 * The account record as an array. see table em_accounts
@@ -213,6 +222,11 @@ class GoSwift extends Swift{
 		$this->reply_mailbox=$reply_mailbox;
 	}
 	
+	function set_draft($draft_uid)
+	{
+		$this->draft_uid=$draft_uid;
+	}
+	
 	
 	function get_mime($email_from=null, $name_from=null)
 	{
@@ -300,9 +314,11 @@ class GoSwift extends Swift{
 			
 			require_once ($GO_CONFIG->class_path."mail/imap.class.inc");
 			require_once ($GO_MODULES->modules['email']['class_path']."cached_imap.class.inc.php");
-			$imap = new cached_imap();				
+			$imap = new cached_imap();		
+
+			$mailbox = empty($this->draft_uid) ? 'INBOX' : $this->account['drafts'];
 				
-			if ($imap->open($this->account,'INBOX')) {
+			if ($imap->open($this->account,$mailbox)) {
 									
 				$this->data = $this->message->build();
 				$this->data = $this->data->readFull();
@@ -317,9 +333,15 @@ class GoSwift extends Swift{
 						$cached_message['folder_id']=$imap->folder['id'];
 						$cached_message['uid']=$this->reply_uid;
 						$cached_message['answered']='1';
-						$imap->update_cached_message($cached_message);
-						
+						$imap->update_cached_message($cached_message);						
 					}
+					
+					if(!empty($this->draft_uid))
+					{
+						$imap->delete(array($this->draft_uid));
+					}
+					
+					
 					$imap->close();
 				}
 			}
