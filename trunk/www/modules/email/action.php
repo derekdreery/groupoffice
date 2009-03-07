@@ -343,22 +343,36 @@ try{
 								{
 									throw new Exception($lang['email']['draftsDisabled']);
 								}
-								if ($imap->open($swift->account)){					
+								if ($imap->open($swift->account, $swift->account['drafts'])){	
 
-									$response['success']=$imap->append_message($imap->utf7_imap_encode($swift->account['drafts']), $swift->get_data(),"\\Seen");
+									$status = $imap->status($swift->account['drafts'], SA_UIDNEXT);
+									if(!empty($status->uidnext))	
+									{								
+										$response['success']=$imap->append_message($imap->utf7_imap_encode($swift->account['drafts']), $swift->get_data(),"\\Seen");
+										$response['draft_uid']=$status->uidnext;
+									}
 									
 									if(!$response['success'])
 									{
 										$response['feedback']=$imap->last_error();
 									}
 									
-									$imap->close();
+									if(!empty($_POST['draft_uid']))
+									{
+										$imap->delete(array($_POST['draft_uid']));
+									}
 									
+									$imap->close();									
 								}
 							}else
 							{
 								$log =& Swift_LogContainer::getLog();
 								$log->setLogLevel(2);
+								
+								if(!empty($_POST['draft_uid']))
+								{
+									$swift->set_draft($_POST['draft_uid']);									
+								}
 
 								$response['success']=$swift->sendmail(null,null, isset($_POST['replace_personal_fields']));
 
