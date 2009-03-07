@@ -94,7 +94,7 @@ class cached_imap extends imap{
 		if ($query != '') {
 			parent::sort($sort_type, $reverse, $query);
 		} else {
-			if($this->folder['msgcount']==$this->count && $this->folder['unseen']==$this->unseen)
+			if($this->folder['msgcount']!=$this->count || $this->folder['unseen']!=$this->unseen)
 			{
 				debug('Cleared sort cache');
 				$this->folder_sort_cache=array();
