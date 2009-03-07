@@ -8,8 +8,8 @@ GO.users.lang={};
  * Copy everything below for translations
  */
 
-GO.users.lang.cmdCheckColumnRead= 'Read';
-GO.users.lang.cmdCheckColumnWrite= 'Write';
+GO.users.lang.cmdCheckColumnRead= 'Use';
+GO.users.lang.cmdCheckColumnWrite= 'Manage';
 GO.users.lang.cmdHeaderColumnName= 'Module name';
 GO.users.lang.cmdHeaderGridUserHasAccess = 'User has access to';
 GO.users.lang.userIsMemberOf = 'User is member of';
@@ -88,3 +88,6 @@ GO.users.lang.muteSound='Mute sound';
 GO.users.lang.downloadSampleCSV='Download sample CSV';
 
 GO.users.lang.importText='You can import users using a CSV file. To know how the CSV file should be formatted, download the sample file.<br />The first line must contain the column names. The following fields are required for each user:<br /><br />username, password, first_name, last_name, email';
+
+GO.users.lang.useModule= 'Use';
+GO.users.lang.manageModule= 'Manage';

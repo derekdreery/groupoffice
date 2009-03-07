@@ -1271,7 +1271,7 @@ GO.email.showComposer = function(config){
 	GO.email.composers = GO.email.composers || [];
 	
 	var availableComposer;
-	
+
 	for(var i=0;i<GO.email.composers.length;i++)
 	{
 		if(!GO.email.composers[i].isVisible())
@@ -1283,6 +1283,8 @@ GO.email.showComposer = function(config){
 	
 	if(!availableComposer)
 	{
+		config.move=30*GO.email.composers.length;
+		
 		availableComposer = new GO.email.EmailComposer();
 		availableComposer.on('send', function(composer){			
 			if(composer.sendParams.reply_uid && composer.sendParams.reply_uid>0)
@@ -1296,9 +1298,10 @@ GO.email.showComposer = function(config){
 		});
 		
 		GO.email.composers.push(availableComposer);
-	}
+	}	
 	
 	availableComposer.show(config);
+	
 }
 
 
