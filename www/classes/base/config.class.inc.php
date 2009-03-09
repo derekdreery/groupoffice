@@ -790,8 +790,10 @@ class GO_CONFIG
        * @access public
        * @return void
        */
-      function GO_CONFIG()
+      function __construct()
       {
+      	
+      
 
       	if($this->root_path == '')
       	{
@@ -851,6 +853,14 @@ class GO_CONFIG
 
       	// url to user configuration apps
       	$this->configuration_url = $this->host.$this->configuration_url.'/';
+      	
+      	
+	      if($this->debug)
+				{
+					$this->loadstart = getmicrotime();
+					$_SESSION['connect_count']=0;
+					$_SESSION['query_count']=0;
+				}
 
       	// database class library      	
 				require_once($this->class_path.'database/base_db.class.inc.php');
@@ -875,6 +885,14 @@ class GO_CONFIG
 
       	$this->set_full_url();      	
       }
+      
+ 			function __destruct(){ 				
+      	if($this->debug)
+				{					
+					debug('Connected '.$_SESSION['connect_count'].' times to the database', $this);
+					debug('Page load took: '.(getmicrotime()-$this->loadstart).'ms', $this);
+				}      
+      }     
 
       /**
        * Get's the location of a configuration file.
