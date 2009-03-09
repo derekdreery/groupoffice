@@ -15,7 +15,7 @@ GO.summary.AnnouncementsViewGrid = function(config){
 	{
 		config = {};
 	}
-	config.cls='go-grid3-hide-headers';
+	config.cls='go-grid3-hide-headers go-html-formatted';
 	config.border=false;
 	//config.layout='fit';
 	config.autoHeight=true;

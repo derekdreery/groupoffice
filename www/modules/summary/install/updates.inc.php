@@ -12,3 +12,6 @@ $updates[]="CREATE TABLE IF NOT EXISTS `su_announcements` (
   PRIMARY KEY  (`id`),
   KEY `due_time` (`due_time`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates[]="DELETE FROM go_state WHERE name='summary-active-portlets';";
+$updates[]="script:1_add_announcement.inc.php";
