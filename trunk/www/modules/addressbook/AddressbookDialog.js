@@ -612,6 +612,7 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 	{
 		this.addressbookImportData.form.submit({
 			url:GO.settings.modules.addressbook.url+ 'action.php',
+			waitMsg:GO.lang['waitMsgSave'],
 			params:
 			{
 				task : 'import',

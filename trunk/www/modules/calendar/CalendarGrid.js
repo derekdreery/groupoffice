@@ -211,17 +211,26 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			
 		var yearPos = GO.settings.date_format.indexOf('Y');
 		var dateFormat = 'D '+GO.settings.date_format.substring(0, yearPos-1);
-			
+		
+		var now = new Date();
+		var nowStr = now.format(dateFormat);
+		var dt, dtStr, heading, allDayColumn, cls;	
+		
 		this.allDayColumns=Array();
 		for(var day=0;day<this.days;day++)
 		{	
-			var dt = this.startDate.add(Date.DAY, day);
+			dt = this.startDate.add(Date.DAY, day);
+			
+			dtStr = dt.format(dateFormat);
+			
+			cls = dtStr==nowStr ? 'x-calGrid-heading x-calGrid-heading-today' :  "x-calGrid-heading";
+			
 			
 			//create grid heading
-			var heading = Ext.DomHelper.append(this.headingsRow,
-				{tag: 'td', cls: "x-calGrid-heading", style: "width:"+(columnWidth)+"px", html: dt.format(dateFormat) });	
+			heading = Ext.DomHelper.append(this.headingsRow,
+				{tag: 'td', children:[{tag:'div',cls: cls, style: "width:"+(columnWidth)+"px", html: dt.format(dateFormat) }]});	
 				
-			var allDayColumn = Ext.DomHelper.append(this.allDayRow,
+			allDayColumn = Ext.DomHelper.append(this.allDayRow,
 				{tag: 'td', id: 'all_day_'+day, cls: "x-calGrid-all-day-container", style: "width:"+(columnWidth)+"px;height:0px"}, true);
 				
 			this.allDayColumns.push(allDayColumn);
@@ -282,27 +291,29 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		var timeCol = Ext.DomHelper.append(gridRow,
 			{tag: 'td', style: 'width:40px'}, true);
 	
-		
+		var timeFormat;
 
 		for (var i = 0;i<this.scale;i+=this.rowsPerHour)
 		{	
-			var timeformat = GO.settings.time_format.substr(0,1)=='G' ? 'G:i' : 'g a';
+			timeformat = GO.settings.time_format.substr(0,1)=='G' ? 'G:i' : 'g a';
 				Ext.DomHelper.append(timeCol,
 					{tag: 'div', id: 'head'+i, cls: "x-calGrid-timeHead", html: Date.parseDate(i/this.rowsPerHour, "G").format(timeformat), style: 'width:40px;height:'+(((this.rowHeight+1)*this.rowsPerHour)-1)+'px'}, true);
 		}
 		
 		this.gridCells=[];
 		
+		var dayColumn, className, cell;
+		
 		for(var day=0;day<this.days;day++)
 		{	
 			//create array to cache all grid cells later
 			this.gridCells[day]=[];
 			
-			var dayColumn = Ext.DomHelper.append(gridRow,
+			dayColumn = Ext.DomHelper.append(gridRow,
 				{tag: 'td', id: 'dayCol'+day, style:'width:'+columnWidth+'px'}, true);
 		
 
-			var className = "x-calGrid-hourRow";		
+			className = "x-calGrid-hourRow";		
 	
 			var hourCounter=0;
 			for (var i = 0;i<this.scale;i++)
@@ -318,7 +329,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 					className = "x-calGrid-blankRow";
 				}
 				
-				var cell = Ext.DomHelper.append(dayColumn,
+				cell = Ext.DomHelper.append(dayColumn,
 					{tag: 'div', id: 'day'+day+'_row'+i, cls: className, style: 'height:'+this.rowHeight+'px'}, true);
 				
 				this.gridCells[day].push(cell);		
