@@ -630,7 +630,7 @@ class GO_CONFIG
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '3.01-stable-8';
+	var $version = '3.01-stable-9';
 
 
 	/**
