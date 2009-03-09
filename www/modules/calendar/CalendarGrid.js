@@ -496,35 +496,36 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			this.clickedRow = this.getRowNumberByY(coords[1]);
 			
 			this.dragSnap = this.getSnap(); 
-
+			
 			//get position of the row the user clicked on
-			this.selectorStartRow = Ext.get("day"+this.clickedDay+"_row"+this.clickedRow);
+			this.selectorStartRow = this.gridCells[this.clickedDay][this.clickedRow];
 			
 			if(this.selectorStartRow)
 			{
-				var position = this.selectorStartRow.getXY();
+				//var position = this.selectorStartRow.getXY();
+				//console.log(this.columnsContainerY);
 				
-				var size=this.selectorStartRow.getSize();				
-				
-				//display the selector proxy
-				//this.selector.setOpacity(.4);
-				this.selector.setVisible(true,false);
-				this.selector.setXY(position);
-				//substract double border
-				this.selector.setSize(size['width']-3, size['height']);
+				var columnsContainerY = this.gridTable.getY(); 
+
+				var position = [this.selectorStartRow.xy[0],this.selectorStartRow.xy[1]+columnsContainerY];
 				
 				
 				//create an overlay to track the mousemovement
 				if(!this.overlay){
-			    this.overlay = this.body.createProxy({tag: "div", cls: "x-resizable-overlay", html: "&#160;"});
+			    this.overlay = Ext.getBody().createProxy({tag: "div", cls: "x-resizable-overlay", html: "&#160;"});
 			    this.overlay.unselectable();
 			    this.overlay.enableDisplayMode("block");	
 			    this.overlay.on("mousemove", this.onSelectionMouseMove, this);
 					this.overlay.on("mouseup", this.onSelectionMouseUp, this);	    
 				}				
 				    
-				this.overlay.setSize(Ext.lib.Dom.getViewWidth(true), Ext.lib.Dom.getViewHeight(true));
+				//this.overlay.setSize(Ext.lib.Dom.getViewWidth(true), Ext.lib.Dom.getViewHeight(true));
 				this.overlay.show();
+				
+				this.selector.setXY(position);
+				//substract double border
+				this.selector.setSize(this.snapCol['x']-3, this.snapCol['y']);
+				this.selector.setVisible(true,false);
 			}
 		}
 	},	
