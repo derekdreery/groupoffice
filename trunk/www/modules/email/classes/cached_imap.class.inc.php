@@ -407,7 +407,7 @@ class cached_imap extends imap{
 				{
 					$field = $message[$this->filters[$i]["field"]];
 
-					if (preg_match('/'.preg_quote($this->filters[$i]["keyword"]).'/i', $field))
+					if (stripos($field,$this->filters[$i]["keyword"])!==false)// ('/'.preg_quote($this->filters[$i]["keyword"]).'/i', $field))
 					{
 						$this->filters[$i]['uids'][]=$message['uid'];
 						$continue=true;
