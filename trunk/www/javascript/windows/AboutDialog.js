@@ -41,7 +41,6 @@ GO.dialog.AboutDialog = function(config){
 		resizable: false,
 		closeAction:'hide',
 		title:GO.lang.strAbout,
-		iconCls: 'btn-info',
 		items: new Ext.Panel({
 			border:false,
 			layout:'fit',
@@ -56,8 +55,6 @@ GO.dialog.AboutDialog = function(config){
 			}
 		]
     });
-    
-    
 };
 
 Ext.extend(GO.dialog.AboutDialog, Ext.Window, {
