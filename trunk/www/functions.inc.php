@@ -111,7 +111,7 @@ function debug($text, $config=false)
 	if(!$config)
 		$config=$GLOBALS['GO_CONFIG'];
 	
-	if($config->log)
+	if($config->debug)
 	{
 		if(!is_string($text))
 		{

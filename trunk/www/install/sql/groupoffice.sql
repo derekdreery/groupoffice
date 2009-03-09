@@ -124,12 +124,13 @@ CREATE TABLE IF NOT EXISTS `go_link_folders` (
 DROP TABLE IF EXISTS `go_log`;
 CREATE TABLE IF NOT EXISTS `go_log` (
   `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `module` varchar(50) default NULL,
+  `link_id` int(11) NOT NULL,
+  `link_type` int(11) NOT NULL,
   `time` int(11) NOT NULL,
-  `link_id` int(255) NOT NULL,
-  `text` varchar(255) default NULL,
-  PRIMARY KEY  (`id`)
+  `user_id` int(11) NOT NULL,
+  `text` varchar(100) NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `link_type` (`link_type`,`time`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

@@ -15,6 +15,9 @@
  * @subpackage DB check
  */
 
+//otherwise log module will log all items as added.
+defined('NOLOG', true);
+
 if(isset($argv[1]))
 {
 	define('CONFIG_FILE', $argv[1]);

@@ -51,13 +51,12 @@ class db extends base_db{
 
 	public function connect()
 	{
-		global $GO_CONFIG;
-		
+
 		if(!$this->link)
 		{			
 			@$this->link = new MySQLi($this->host, $this->user, $this->password, $this->database, $this->port, $this->socket);
 		
-			if($GO_CONFIG->debug)
+			if(isset($_SESSION['connect_count']))
 			{
 				$_SESSION['connect_count']++;
 			}
