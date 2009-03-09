@@ -483,7 +483,6 @@ try{
 							$response['success']=true;
 						}
 					}
-					//$imap->close();
 
 					if(!$response['success'])
 					{
@@ -494,13 +493,12 @@ try{
 
 				case 'subscribe':
 
-					$account = connect(($_REQUEST['account_id']));
-					//$mailbox = $imap->utf7_imap_encode(($_POST['mailbox']));
+					$account = connect($_REQUEST['account_id']);
 					if($imap->subscribe($_POST['mailbox']))
 					{
 						$response['success']=$email->subscribe($account['id'], $_POST['mailbox']);
 					}
-					//$imap->close();
+
 
 					if(!$response['success'])
 					{
@@ -510,13 +508,12 @@ try{
 
 				case 'unsubscribe':
 
-					$account = connect(($_REQUEST['account_id']));
-					//$mailbox = $imap->utf7_imap_encode(($_POST['mailbox']));
+					$account = connect($_REQUEST['account_id']);
 					if($imap->unsubscribe($_POST['mailbox']))
 					{
 						$response['success']=$email->unsubscribe($account['id'], $_POST['mailbox']);
 					}
-					//$imap->close();
+
 
 					if(!$response['success'])
 					{
