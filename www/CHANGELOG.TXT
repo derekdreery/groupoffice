@@ -1,4 +1,4 @@
-2009/03/? Version 3.01-stable-6
+2009/03/09 Version 3.01-stable-7
 - Fixed bug in PDF printing
 - Default reminder and background color for appointments and tasks
 - When a new OpenOffice document is created from a template in the addressbook it is

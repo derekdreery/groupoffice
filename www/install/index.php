@@ -14,6 +14,8 @@
 
 define('NOTINSTALLED', true);
 
+header('Content-Type: text/html; charset=UTF-8');
+
 //config file exists now so require it to get the properties.
 require_once('../Group-Office.php');
 
