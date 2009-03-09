@@ -20,7 +20,7 @@ DROP TABLE IF EXISTS `cal_settings`;
 CREATE TABLE `cal_settings` (
 `user_id` INT NOT NULL ,
 `reminder` INT NOT NULL ,
-`color` CHAR( 6 ) NOT NULL ,
+`background` CHAR( 6 ) NOT NULL ,
 PRIMARY KEY ( `user_id` )
 ) ENGINE = MYISAM DEFAULT CHARSET=utf8;
 
