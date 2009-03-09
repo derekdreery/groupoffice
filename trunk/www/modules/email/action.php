@@ -466,8 +466,8 @@ try{
 							}
 							$new_folder_name=$folder['name'].$delimiter.$imap->utf7_imap_encode($_POST['new_folder_name']);
 						}else {
-							$response['feedback']=false;
-							$response['errors']=$lang['comon']['selectError'];
+							$response['success']=false;
+							$response['feedback']=$lang['comon']['selectError'];
 							echo json_encode($response);
 							exit();
 						}
