@@ -495,10 +495,10 @@ try{
 				case 'subscribe':
 
 					$account = connect(($_REQUEST['account_id']));
-					$mailbox = $imap->utf7_imap_encode(($_POST['mailbox']));
-					if($imap->subscribe($mailbox))
+					//$mailbox = $imap->utf7_imap_encode(($_POST['mailbox']));
+					if($imap->subscribe($_POST['mailbox']))
 					{
-						$response['success']=$email->subscribe($account['id'], $mailbox);
+						$response['success']=$email->subscribe($account['id'], $_POST['mailbox']);
 					}
 					//$imap->close();
 
@@ -511,10 +511,10 @@ try{
 				case 'unsubscribe':
 
 					$account = connect(($_REQUEST['account_id']));
-					$mailbox = $imap->utf7_imap_encode(($_POST['mailbox']));
-					if($imap->unsubscribe($mailbox))
+					//$mailbox = $imap->utf7_imap_encode(($_POST['mailbox']));
+					if($imap->unsubscribe($_POST['mailbox']))
 					{
-						$response['success']=$email->unsubscribe($account['id'], $mailbox);
+						$response['success']=$email->unsubscribe($account['id'], $_POST['mailbox']);
 					}
 					//$imap->close();
 
