@@ -23,10 +23,10 @@ function connect($account_id, $mailbox='INBOX', $halt_on_error=true)
 		exit();
 	}
 
-	if($account['user_id']!=$GO_SECURITY->user_id)
+	if($account['user_id']!=$GO_SECURITY->user_id && !$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
 	{
 		$response['success']=false;
-		$response['feedback']=$strAccessDenied;
+		$response['feedback']=$lang['common']['accessDenied'];
 		echo json_encode($response);
 		exit();
 	}
