@@ -240,7 +240,7 @@ class String {
 	 * @return	string
 	 */
 	function get_email_validation_regex() {
-		return "/^[a-z0-9\._\-]+@[a-z0-9\.\-_]+\.[a-z]{2,4}$/";
+		return "/^[a-z0-9\._\-]+@[a-z0-9\.\-_]+\.[a-z]{2,4}$/i";
 	}
 
 
