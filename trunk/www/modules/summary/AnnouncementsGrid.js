@@ -15,6 +15,7 @@ GO.summary.AnnouncementsGrid = function(config){
 	{
 		config = {};
 	}
+	
 	config.border=false;
 	config.layout='fit';
 	config.autoScroll=true;

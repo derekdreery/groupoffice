@@ -140,20 +140,23 @@ GO.mainLayout.onReady(function(){
 	
 	
 	GO.summary.announcementsPanel = new GO.summary.AnnouncementsViewGrid();
-
+	GO.summary.announcementsPanel.store.on('load', function(){
+		if(GO.summary.announcementsPanel.store.getCount())
+		{
+			GO.summary.portlets['portlet-announcements'].show();
+			GO.summary.portlets['portlet-announcements'].doLayout();
+		}
+			
+	},this);
 	
 	GO.summary.portlets['portlet-announcements']=new GO.summary.Portlet({
 		id: 'portlet-announcements',
 	 	title: GO.summary.lang.announcements,
 		layout:'fit',
-		tools: [{
-	        id:'close',
-	        handler: function(e, target, panel){
-	            panel.removePortlet();
-	        }
-	    }],
 		items: GO.summary.announcementsPanel,
 		autoHeight:true
 	});
+	
+	GO.summary.portlets['portlet-announcements'].hide();
 
 });

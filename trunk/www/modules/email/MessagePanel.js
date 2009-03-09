@@ -75,7 +75,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			'<div class="go-warning-msg em-blocked">'+GO.email.lang.blocked+' <a id="em-unblock" href="#" class="normal-link">'+GO.email.lang.unblock+'</a></div>'+
 			'</tpl>'+
 			'</div>'+
-			'<div id="'+this.bodyId+'" class="message-body">{body}</div>';
+			'<div id="'+this.bodyId+'" class="message-body go-html-formatted">{body}</div>';
 		
 		this.template = new Ext.XTemplate(templateStr,{
 			addSlashes : function(str)
