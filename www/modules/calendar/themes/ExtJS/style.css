@@ -326,17 +326,22 @@ a:link, a:visited, a:active{
 .x-calGrid-headings-table {
 	border-collapse:collapse;
 	background-image:url(../../../../ext/resources/images/default/layout/panel-title-light-bg.gif);
+	border-bottom:1px solid #98C0F4;	
 }
 
 .x-calGrid-heading{
 	
 	font:normal 11px arial, tahoma, helvetica, sans-serif;
-	margin-top:6px;
 	vertical-align:middle;
 	text-align:center;	
-	border-bottom:1px solid #98C0F4;	
+
 	color:black;
-	height:24px;
+	line-height:22px;
+	margin:1px;
+}
+
+.x-calGrid-heading-today{
+	font-weight:bold;
 }
 
 
