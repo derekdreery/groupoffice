@@ -214,6 +214,7 @@ GO.email.EmailComposer = function(config) {
 								})]
 			});
 			
+	this.htmlEditor.on('change', function(){this.changesMadeForAutoSave=true}, this);
 
 
 	// store for attachments needs to be created here because a forward action
@@ -368,10 +369,41 @@ GO.email.EmailComposer = function(config) {
 
 Ext.extend(GO.email.EmailComposer, Ext.Window, {
 
+	autoSaveTask : {},
+	
+	lastAutoSave : false,
+	
+	autoSave : function(){		
+		if(this.lastAutoSave && this.lastAutoSave!=this.htmlEditor.getValue())
+		{
+			this.sendMail(true,true);			
+		}
+		this.lastAutoSave=this.htmlEditor.getValue();
+	},
+	
+	startAutoSave : function(){	
+
+		this.lastAutoSave=false;
+		Ext.TaskMgr.start(this.autoSaveTask);
+	},
+	
+	stopAutoSave : function(){
+		Ext.TaskMgr.stop(this.autoSaveTask);
+	},
+	
 	afterRender : function() {
 		GO.email.EmailComposer.superclass.afterRender.call(this);
 
 		this.on('resize', this.setEditorHeight, this);
+		
+		this.autoSaveTask={
+		    run: this.autoSave,
+		    scope:this,
+		    interval:12000
+		};
+		
+		this.on('hide', this.stopAutoSave, this);
+		
 	},
 
 	toComboVisible : true,
@@ -487,6 +519,29 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			}
 
 			GO.email.EmailComposer.superclass.show.call(this);
+			
+			this.ccCombo.getEl().up('.x-form-item').setDisplayed(false);
+			this.bccCombo.getEl().up('.x-form-item').setDisplayed(false);
+				
+			if(config.move)
+			{
+				var pos = this.getPosition();
+		 		this.setPagePosition(pos[0]+config.move, pos[1]+config.move);
+			}		
+			
+			if(this.bccCombo.getValue()!='')
+			{
+				this.bccFieldCheck.setChecked(true);
+			}
+			if(this.ccCombo.getValue()!='')
+			{
+				this.ccFieldCheck.setChecked(true);
+			}
+			
+			
+			this.startAutoSave();
+			
+			
 
 			if (config.uid || config.template_id || config.loadUrl) {
 				if (!config.task) {
@@ -594,27 +649,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 				
 				
 			}
-			// somehow on render fails???
-			if (!this.showed) {
-				this.showed = true;
-				this.ccCombo.getEl().up('.x-form-item').setDisplayed(false);
-				this.bccCombo.getEl().up('.x-form-item').setDisplayed(false);
-				
-				if(config.move)
-				{
-					var pos = this.getPosition();
-			 		this.setPagePosition(pos[0]+config.move, pos[1]+config.move);
-				}
-			}
 			
-			if(this.bccCombo.getValue()!='')
-			{
-				this.bccFieldCheck.setChecked(true);
-			}
-			if(this.ccCombo.getValue()!='')
-			{
-				this.ccFieldCheck.setChecked(true);
-			}
 		}
 		
 		
@@ -853,7 +888,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 
 	},
 
-	sendMail : function(draft) {
+	sendMail : function(draft, autoSave) {
 
 		if (this.uploadDialog && this.uploadDialog.isVisible()) {
 			alert(GO.email.lang.closeUploadDialog);
@@ -862,7 +897,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			return false;
 		}
 
-		if (this.subjectField.getValue() != ''
+		if (autoSave || this.subjectField.getValue() != ''
 				|| confirm(GO.email.lang.confirmEmptySubject)) {
 			if (this.attachmentsDialog && this.attachmentsDialog.isVisible()) {
 				this.attachmentsDialog.hide();
@@ -884,8 +919,8 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			this.formPanel.form.submit({
 				url : this.sendURL,
 				params : this.sendParams,
-				waitMsg : GO.lang.waitMsgSave,
-				waitMsgTarget : this.formPanel.body,
+				waitMsg : autoSave ? null : GO.lang.waitMsgSave,
+				waitMsgTarget : autoSave ? null : this.formPanel.body,
 				success : function(form, action) {
 					if (action.result.account_id) {
 						this.account_id = action.result.account_id;
@@ -927,8 +962,11 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 				},
 
 				failure : function(form, action) {
-					Ext.MessageBox.alert(GO.lang.strError,
+					if(!autoSave)
+					{
+						Ext.MessageBox.alert(GO.lang.strError,
 							action.result.feedback);
+					}
 				},
 				scope : this
 

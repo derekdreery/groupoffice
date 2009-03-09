@@ -5,7 +5,8 @@
   saved at the contact and the GOTA is launched.
 - Calendar scale with 15 minute interval
 - Compose multiple e-mails at once
-- When e-mail is saved to drafts it will replace the existing draft and is removed when sent
+- Autosave. When e-mail is saved to drafts it will replace the existing draft and is removed when sent.
+	Every 2 minutes the mail will automatically be saved to drafts.
 - PhpBB3 module: The PhpBB3 module will integrate PhpBB3 into Group-Office. When a 
 	Group-Office user goes to phpbb3 it will automatically copy the user and log the 
 	user in.
