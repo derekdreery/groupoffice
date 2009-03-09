@@ -889,7 +889,9 @@ class GO_CONFIG
  			function __destruct(){ 				
       	if($this->debug)
 				{					
-					debug('Connected '.$_SESSION['connect_count'].' times to the database', $this);
+					if(isset($_SESSION['connect_count']))
+						debug('Connected '.$_SESSION['connect_count'].' times to the database', $this);
+						
 					debug('Page load took: '.(getmicrotime()-$this->loadstart).'ms', $this);
 				}      
       }     

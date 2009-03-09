@@ -405,12 +405,18 @@ class search extends db {
 	
 	function delete_search_result($id, $link_type)
 	{
-		$sql = "DELETE FROM go_search_cache WHERE id=".$this->escape($id)." AND link_type=".$this->escape($link_type);
-		$this->query($sql);
-		
-		global $GO_LINKS;
-		
-		$GO_LINKS->delete_link($id, $link_type);
+		$sr = $this->get_search_result($id, $link_type);
+		if($sr)
+		{
+			$sql = "DELETE FROM go_search_cache WHERE id=".$this->escape($id)." AND link_type=".$this->escape($link_type);
+			$this->query($sql);
+			
+			$this->log($id, $link_type, 'Deleted '.strip_tags($sr['name']));
+			
+			global $GO_LINKS;
+			
+			$GO_LINKS->delete_link($id, $link_type);
+		}
 	}
 	
 	/**
@@ -421,10 +427,8 @@ class search extends db {
 
 	function cache_search_result($result)
 	{
-		//$this->replace_row('go_search_cache', $result);
+		global $lang;
 		
-	//	go_log(LOG_DEBUG, var_export($result, true));
-	
 		if(isset($result['keywords']) && strlen($result['keywords'])>255)
 		{
 			$result['keywords']=substr($result['keywords'],0,255);
@@ -432,16 +436,33 @@ class search extends db {
 		
 		if($this->get_search_result($result['id'], $result['link_type']))
  		{
- 			//go_log(LOG_DEBUG, 'UPDATE');
  			$this->update_row('go_search_cache',array('id', 'link_type'), $result);
- 		}else {
- 			
- 			//go_log(LOG_DEBUG, 'INSERT');
- 			
+			$this->log($result['id'], $result['link_type'], 'Updated '.strip_tags($result['name']));
+ 		}else {		
  			$cache['ctime']=time();
  			$this->insert_row('go_search_cache',$result);
+ 			$this->log($result['id'], $result['link_type'], 'Added '.strip_tags($result['name']));
  		}
 	}
+	
+	function log($link_id, $link_type, $text)
+	{
+		global $GO_MODULES;
+		
+		if(isset($GO_MODULES->modules['log']) && !defined('NOLOG'))
+		{
+			$log['link_id']=$link_id;
+			$log['link_type']=$link_type;
+			$log['time']=time();
+			$log['text']=$text;
+			$log['user_id']=$GLOBALS['GO_SECURITY']->user_id;
+			$log['id']=$this->nextid('go_log');
+			
+			$this->insert_row('go_log', $log);
+		}
+	}
+	
+
 	
 	/**
 	 * Get a string of search keyword from an array of a database record

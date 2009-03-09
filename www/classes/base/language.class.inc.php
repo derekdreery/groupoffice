@@ -204,4 +204,16 @@ class GO_LANGUAGE {
 			return false;
 		}
 	}
+	
+	function get_all()
+	{
+		global $lang, $GO_MODULES, $GO_LANGUAGE;
+		
+		foreach($GO_MODULES->modules as $module)
+		{
+			$lang_file = $this->get_language_file($module['id']);
+			if($lang_file)
+				require($lang_file);
+		}	
+	}
 }

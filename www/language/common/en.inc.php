@@ -185,3 +185,4 @@ $lang['common']['confirm_leave']='If you leave Group-Office you will loose unsav
 $lang['common']['dataSaved']='The data was saved succesfully';
 
 $lang['common']['uploadMultipleFiles'] = 'Click at \'Browse\' to select files and/or folders from your computer. Click at \'Upload\' to transfer the files to Group-Office. This window will automatically close when the transfer is completed.';
+

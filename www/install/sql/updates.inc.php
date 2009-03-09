@@ -35,4 +35,17 @@ $updates[]="ALTER TABLE `go_users` CHANGE `decimal_seperator` `decimal_separator
 $updates[]="ALTER TABLE `go_users` CHANGE `date_seperator` `date_separator` CHAR( 1 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '-'";
 
 $updates[]='script:5_warn_separator.inc.php';
+
+
+$updates[]='DROP TABLE `go_log`';
+$updates[]="CREATE TABLE IF NOT EXISTS `go_log` (
+  `id` int(11) NOT NULL,
+  `link_id` int(11) NOT NULL,
+  `link_type` int(11) NOT NULL,
+  `time` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `text` varchar(100) NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `link_type` (`link_type`,`time`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";  
 ?>
