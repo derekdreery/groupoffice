@@ -105,11 +105,13 @@ function set_debug_log($file)
  * @param string $text log entry
  */
 
-function debug($text)
+function debug($text, $config=false)
 {
-	global $GO_CONFIG;
 	
-	if($GO_CONFIG->log)
+	if(!$config)
+		$config=$GLOBALS['GO_CONFIG'];
+	
+	if($config->log)
 	{
 		if(!is_string($text))
 		{
@@ -117,7 +119,7 @@ function debug($text)
 		}
 		
 		if(!isset($_SESSION['GO_SESION']['debug_log']))
-			$_SESSION['GO_SESION']['debug_log']=$GO_CONFIG->file_storage_path.'debug.log';
+			$_SESSION['GO_SESION']['debug_log']=$config->file_storage_path.'debug.log';
 	
 		$text = '['.date('Y-m-d G:i').'] '.$text;
 	

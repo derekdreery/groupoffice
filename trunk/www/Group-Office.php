@@ -26,7 +26,13 @@
  * @access public
  */
 
-require(dirname(__FILE__).'/classes/base/config.class.inc.php');
+//start session
+session_name('groupoffice');
+session_start();
+$root = dirname(__FILE__).'/';
+
+require_once($root.'functions.inc.php');
+require($root.'classes/base/config.class.inc.php');
 
 //load configuration
 $GO_CONFIG = new GO_CONFIG();
@@ -46,14 +52,12 @@ if ( isset( $GO_INCLUDES ) ) {
 if(function_exists('mb_internal_encoding'))
 	mb_internal_encoding("UTF-8");
 
-//start session
-session_name('groupoffice');
-session_start();
+
 
 //ini_set('display_errors', 'off');
 //ini_set('log_errors', 'on');
 
-require_once($GO_CONFIG->root_path.'functions.inc.php');
+
 if(!isset($_SESSION['DIR_CHECK']))
 {
 	$_SESSION['DIR_CHECK'] = $GO_CONFIG->root_path;
@@ -66,10 +70,7 @@ if(!isset($_SESSION['DIR_CHECK']))
 	unset($_SESSION);
 }
 
-if($GO_CONFIG->debug)
-{
-	$_SESSION['query_count']=0;
-}
+
 
 require_once($GO_CONFIG->class_path.'base/exceptions.class.inc.php');
 require_once($GO_CONFIG->class_path.'base/auth.class.inc.php');
