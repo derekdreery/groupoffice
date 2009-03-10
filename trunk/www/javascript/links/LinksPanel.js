@@ -258,7 +258,7 @@ GO.grid.LinksPanel = function(config){
 			})
 		];
 		
-	if(GO.links.LinkDescriptionsGrid)
+	if(GO.links && GO.links.LinkDescriptionsGrid)
 	{
 		config.tbar.push('-');
 		
