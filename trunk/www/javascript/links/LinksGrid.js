@@ -47,7 +47,7 @@ GO.grid.LinksGrid = function(config){
 			root: 'results',
 			totalProperty: 'total',
 			id: 'link_and_type',
-			fields: ['icon','link_and_type', 'link_type','name','type','url','mtime','id','module', 'description', 'iconCls'],
+			fields: ['icon','link_and_type', 'link_type','name','type','url','mtime','id','module', 'description', 'iconCls', 'link_description'],
 			remoteSort: true
 		});
 	config['store'].setDefaultSort('mtime', 'desc');
@@ -61,13 +61,14 @@ GO.grid.LinksGrid = function(config){
 	            GO.lang['strSearch']+': ', ' ',this.searchField
 	            ];
 	
-	
+	config.clicksToEdit = 1;
 
 	config.enableDragDrop=true;
 	config.ddGroup='LinksDD';
 	
 	config['columns'] = [{
 		      header: "",
+		      hideable:false,
 		      width:28,
 					dataIndex: 'icon',
 					renderer: this.iconRenderer
@@ -77,26 +78,42 @@ GO.grid.LinksGrid = function(config){
 					css: 'white-space:normal;',
 					sortable: true
 		    },{
+			    header: GO.lang['strDescription'],
+					dataIndex: 'link_description',
+			    sortable:true,
+			    editor : new GO.form.LinkDescriptionField()
+		   	},{
 			    header: GO.lang['strType'],
 					dataIndex: 'type',
 			    sortable:true,
-			    width:100
+			    hidden:true			    
 		   	},{
 		      header: GO.lang['strMtime'],
 					dataIndex: 'mtime',
 		      sortable:true,
-		      width:100
+		      width:80
 		    }];
 		    
 		    
 	
-	config.autoExpandMax=2500;
-	config.autoExpandColumn=1;	
-	config['paging']=true;
+	//config.autoExpandMax=2500;
+	//config.autoExpandColumn=1;	
+	
+	config.bbar = new Ext.PagingToolbar({
+  					cls: 'go-paging-tb',
+	          store: config.store,
+	          pageSize: parseInt(GO.settings['max_rows_list']),
+	          displayInfo: true,
+	          displayMsg: GO.lang['displayingItems'],
+	          emptyMsg: GO.lang['strNoItems']
+	      });
+	      
 	config['layout']='fit';
 	config['view']=new Ext.grid.GridView({
 		enableRowBody:true,
-		showPreview:true,			
+		showPreview:true,		
+		autoFill:true,
+		forceFit:true,
 		emptyText:GO.lang.strNoItems,	
 		getRowClass : function(record, rowIndex, p, store){
 	    if(this.showPreview && record.data.description.length){
@@ -120,7 +137,7 @@ GO.grid.LinksGrid = function(config){
   	
 }
 
-Ext.extend(GO.grid.LinksGrid, GO.grid.GridPanel, {
+Ext.extend(GO.grid.LinksGrid, Ext.grid.EditorGridPanel, {
 	
 	write_permission : false,
 	
@@ -135,6 +152,34 @@ Ext.extend(GO.grid.LinksGrid, GO.grid.GridPanel, {
 			notifyOver : this.onGridNotifyOver,
 			notifyDrop : this.onGridNotifyDrop.createDelegate(this)
 		});
+		
+		this.on('afteredit', function(e) {
+			
+			Ext.Ajax.request({
+				url:GO.settings.config.host+'action.php',
+				params:{
+					task:'updatelink',
+					link_id1: this.store.baseParams.link_id,
+					link_type1: this.store.baseParams.link_type,
+					link_id2:e.record.get("id"),
+					link_type2:e.record.get("link_type"),
+					description:e.record.get("link_description")
+				},
+				success: function(response, options)
+				{
+					var responseParams = Ext.decode(response.responseText);
+					if(!responseParams.success)
+					{	
+						alert(responseParams.feedback);
+					}else
+					{
+						this.store.commitChanges();
+					}				
+				},
+				scope:this				
+			})
+			
+		}, this);
 		
 	},
 	

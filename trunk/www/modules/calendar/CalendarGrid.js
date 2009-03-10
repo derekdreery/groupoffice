@@ -513,24 +513,21 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			
 			if(this.selectorStartRow)
 			{
-				//var position = this.selectorStartRow.getXY();
-				//console.log(this.columnsContainerY);
 				
-				var columnsContainerY = this.gridTable.getY(); 
-
+				var columnsContainerY = this.gridTable.getY();
 				var position = [this.selectorStartRow.xy[0],this.selectorStartRow.xy[1]+columnsContainerY];
-				
+
 				
 				//create an overlay to track the mousemovement
 				if(!this.overlay){
-			    this.overlay = Ext.getBody().createProxy({tag: "div", cls: "x-resizable-overlay", html: "&#160;"});
+			    this.overlay = this.body.createProxy({tag: "div", cls: "x-resizable-overlay", html: "&#160;"});
 			    this.overlay.unselectable();
 			    this.overlay.enableDisplayMode("block");	
 			    this.overlay.on("mousemove", this.onSelectionMouseMove, this);
 					this.overlay.on("mouseup", this.onSelectionMouseUp, this);	    
 				}				
 				    
-				//this.overlay.setSize(Ext.lib.Dom.getViewWidth(true), Ext.lib.Dom.getViewHeight(true));
+				this.overlay.setSize(Ext.lib.Dom.getViewWidth(true), Ext.lib.Dom.getViewHeight(true));
 				this.overlay.show();
 				
 				this.selector.setXY(position);

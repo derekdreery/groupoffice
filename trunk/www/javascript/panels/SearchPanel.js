@@ -60,8 +60,7 @@ GO.grid.SearchPanel = function(config){
 		width:320
   });
 	
-	
-	this.searchGrid = new GO.grid.GridPanel({
+  var gridConfig = {
 		border:true,
 		region:'center',
 		tbar:[
@@ -74,8 +73,7 @@ GO.grid.SearchPanel = function(config){
 					this.searchGrid.deleteSelected();
 				},
 				scope: this
-			}
-	    ],
+			}],
 		store:this.store,
 		columns:[{
 	      header: "",
@@ -116,7 +114,16 @@ GO.grid.SearchPanel = function(config){
 		}),
 		loadMask:{msg: GO.lang['waitMsgLoad']},
 		sm:new Ext.grid.RowSelectionModel({})
-	});
+	};
+	
+	if(config.noOpenLinks)
+	{
+		/*gridConfig.bbar = [GO.lang.strDescription+': ',' ',new GO.form.LinkDescriptionField({
+				name:'description'
+			})];*/
+	}
+	
+	this.searchGrid = new GO.grid.GridPanel(gridConfig);
 	
 	this.searchGrid.store.setDefaultSort('mtime', 'desc');
 	if(!config.noTitle)
