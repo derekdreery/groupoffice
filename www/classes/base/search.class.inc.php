@@ -292,8 +292,9 @@ class search extends db {
 		
 		
 		$response['results']=array();
-		if($link_id>0 && $folder_id>-1)
+		if($link_id>0)
 		{
+			//$_folder_id = $folder_id>-1 ? $folder_id : 0;
 			$GO_LINKS->get_folders($link_id, $link_type, $folder_id);
 			while($GO_LINKS->next_record())
 			{

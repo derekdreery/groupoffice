@@ -218,4 +218,97 @@ class GO_LINKS extends db
 			$GO_LINKS2->add_link($dst_link_id, $src_link_type, $dst_link_type, $link['link_id'], $link['type']);
 		}
 	}*/
+	
+	
+	
+	/**
+	 * Add a LinkDescription
+	 *
+	 * @param Array $link_description Associative array of record fields
+	 *
+	 * @access public
+	 * @return int New record ID created
+	 */
+	function add_link_description($link_description)
+	{
+		$link_description['id']=$this->nextid('li_link_descriptions');
+		if($this->insert_row('go_link_descriptions', $link_description))
+		{
+			return $link_description['id'];
+		}
+		return false;
+	}
+	/**
+	 * Update a LinkDescription
+	 *
+	 * @param Array $link_description Associative array of record fields
+	 *
+	 * @access public
+	 * @return bool True on success
+	 */
+	function update_link_description($link_description)
+	{
+		$r = $this->update_row('go_link_descriptions', 'id', $link_description);
+		return $r;
+	}
+	/**
+	 * Delete a LinkDescription
+	 *
+	 * @param Int $link_description_id ID of the link_description
+	 *
+	 * @access public
+	 * @return bool True on success
+	 */
+	function delete_link_description($link_description_id)
+	{
+		return $this->query("DELETE FROM go_link_descriptions WHERE id=?", 'i', $link_description_id);
+	}
+	/**
+	 * Gets a LinkDescription record
+	 *
+	 * @param Int $link_description_id ID of the link_description
+	 *
+	 * @access public
+	 * @return Array Record properties
+	 */
+	function get_link_description($link_description_id)
+	{
+		$this->query("SELECT * FROM go_link_descriptions WHERE id=?", 'i', $link_description_id);
+		return $this->next_record();		
+	}
+
+	/**
+	 * Gets all LinkDescriptions
+	 *
+	 * @param Int $start First record of the total record set to return
+	 * @param Int $offset Number of records to return
+	 * @param String $sortfield The field to sort on
+	 * @param String $sortorder The sort order
+	 *
+	 * @access public
+	 * @return Int Number of records found
+	 */
+	function get_link_descriptions($query, $sortfield='id', $sortorder='ASC', $start=0, $offset=0)
+	{
+		$sql = "SELECT ";		
+		if($offset>0)
+		{
+			$sql .= "SQL_CALC_FOUND_ROWS ";
+		}		
+		$sql .= "* FROM go_link_descriptions ";
+		$types='';
+		$params=array();
+		if(!empty($query))
+ 		{
+ 			$sql .= " WHERE description LIKE ?";
+ 			$types .= 's';
+ 			$params[]=$query;
+ 		} 		
+		$sql .= " ORDER BY ".$this->escape($sortfield.' '.$sortorder);	
+		if($offset>0)
+		{
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
+		}
+		return $this->query($sql, $types, $params);
+	}
 }

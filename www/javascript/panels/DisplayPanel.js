@@ -178,8 +178,14 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 				e.preventDefault();
 				
 				var index = href.substr(pos+6, href.length);		
-				var link = this.data.links[index];				
-				GO.linkHandlers[link.link_type].call(this, link.id, {data: link});		
+				var link = this.data.links[index];			
+				if(link.link_type=='folder')
+				{
+					GO.linkBrowser.show({link_id: link.parent_link_id,link_type: link.parent_link_type,folder_id: link.id});
+				}else
+				{
+					GO.linkHandlers[link.link_type].call(this, link.id, {data: link});
+				}
 			}
 		}		
 	},
