@@ -1,3 +1,6 @@
+2009/03/10 Version 3.01-stable-10
+- Problem with synchronization in stable-9 fixed
+
 2009/03/09 Version 3.01-stable-9
 - Fixed bug in PDF printing
 - Default reminder and background color for appointments and tasks
