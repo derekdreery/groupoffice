@@ -276,14 +276,14 @@ GO.email.EmailComposer = function(config) {
 				});
 	}
 
-	var tbar = [{
+	var tbar = [this.sendButton = new Ext.Button({
 				text : GO.email.lang.send,
 				iconCls : 'btn-send',
 				handler : function() {
 					this.sendMail();
 				},
 				scope : this
-			}, {
+			}), {
 				text : GO.email.lang.extraOptions,
 				iconCls : 'btn-settings',
 				menu : this.optionsMenu
@@ -399,7 +399,8 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 		this.autoSaveTask={
 		    run: this.autoSave,
 		    scope:this,
-		    interval:12000
+		    interval:120000
+		    //interval:5000
 		};
 		
 		this.on('hide', this.stopAutoSave, this);
@@ -889,6 +890,10 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 	},
 
 	sendMail : function(draft, autoSave) {
+		
+		this.saveButton.setDisabled(true);
+		this.sendButton.setDisabled(true);
+		
 
 		if (this.uploadDialog && this.uploadDialog.isVisible()) {
 			alert(GO.email.lang.closeUploadDialog);
@@ -922,6 +927,10 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 				waitMsg : autoSave ? null : GO.lang.waitMsgSave,
 				waitMsgTarget : autoSave ? null : this.formPanel.body,
 				success : function(form, action) {
+					
+					this.saveButton.setDisabled(false);
+					this.sendButton.setDisabled(false);
+					
 					if (action.result.account_id) {
 						this.account_id = action.result.account_id;
 					}
@@ -967,6 +976,8 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 						Ext.MessageBox.alert(GO.lang.strError,
 							action.result.feedback);
 					}
+					this.saveButton.setDisabled(false);
+					this.sendButton.setDisabled(false);
 				},
 				scope : this
 
