@@ -640,7 +640,7 @@ class GO_CONFIG
 	 * @access  public
 	 */
 
-	var $mtime = '200903101';
+	var $mtime = '200903102';
 
 	/* The permissions mode to use when creating files
 	 *
