@@ -16,7 +16,7 @@
  */
 
 //otherwise log module will log all items as added.
-defined('NOLOG', true);
+define('NOLOG', true);
 
 if(isset($argv[1]))
 {
