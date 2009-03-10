@@ -573,13 +573,14 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		var eventStartTime = eventStartDay.format('U');
 		
 		//ceil required because of DST changes!
-		var day = Math.round((eventStartTime-gridStartTime)/86400);
+		var day, originalDay, endDay, originalEndDay;
+		day = originalDay= Math.round((eventStartTime-gridStartTime)/86400);
 		
 		if(day<0)
 			day=0;
 		
 		var eventEndTime = eventEndDay.format('U');
-		var endDay = Math.round((eventEndTime-gridStartTime)/86400);
+		endDay = originalEndDay = Math.round((eventEndTime-gridStartTime)/86400);
 		
 		if(endDay>this.days)
 			endDay=this.days-1;
@@ -601,7 +602,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				endRow=startRow;
 			}	
 
-			if(startRow && endRow && (day==endDay))
+			if(startRow && endRow && (originalDay==originalEndDay))
 			{				
 				return this.addGridEvent(eventData, day, startRow, endRow, recalculateAppointments);
 			}else
