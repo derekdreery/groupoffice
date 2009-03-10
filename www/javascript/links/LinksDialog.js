@@ -39,6 +39,7 @@ GO.dialog.LinksDialog = function(config){
 		closeAction:'hide',
 		title:GO.lang['strLinkItems'],
 		items: this.grid,
+		
 		buttons: [
 			{
 				text: GO.lang['cmdOk'],
@@ -90,7 +91,9 @@ Ext.extend(GO.dialog.LinksDialog, Ext.Window, {
 			url: BaseHref+'action.php',
 			params: {
 				task: 'link', 
-				fromLinks: Ext.encode(this.fromLinks), toLinks: Ext.encode(tolinks),
+				fromLinks: Ext.encode(this.fromLinks), 
+				toLinks: Ext.encode(tolinks),
+				description:this.grid.linkDescriptionField.getValue(),
 				folder_id: this.folder_id
 				},
 			callback: function(options, success, response)

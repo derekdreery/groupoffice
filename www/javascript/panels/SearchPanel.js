@@ -118,9 +118,10 @@ GO.grid.SearchPanel = function(config){
 	
 	if(config.noOpenLinks)
 	{
-		/*gridConfig.bbar = [GO.lang.strDescription+': ',' ',new GO.form.LinkDescriptionField({
-				name:'description'
-			})];*/
+		gridConfig.bbar = [GO.lang.strDescription+': ',' ',this.linkDescriptionField = new GO.form.LinkDescriptionField({
+				name:'description',
+				width:320
+			})];
 	}
 	
 	this.searchGrid = new GO.grid.GridPanel(gridConfig);
