@@ -68,6 +68,7 @@ javascript/links/LinksContextMenu.js
 javascript/links/LinkBrowser.js
 javascript/links/LinkViewWindow.js
 javascript/links/LinkTypeFilterPanel.js
+javascript/links/LinkDescriptionField.js
 
 javascript/panels/SearchPanel.js
 

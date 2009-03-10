@@ -22,6 +22,23 @@ try{
 
 	switch($_REQUEST['task'])
 	{
+		case 'updatelink': 
+			
+			$link['id']=$_POST['link_id1'];
+			$link['link_id']=$_POST['link_id2'];
+			$link['link_type']=$_POST['link_type2'];
+			$link['description']=$_POST['description'];
+
+			$GO_LINKS->update_link($_POST['link_type1'],$link);
+			
+			$link['id']=$_POST['link_id2'];
+			$link['link_id']=$_POST['link_id1'];
+			$link['link_type']=$_POST['link_type1'];
+
+			$GO_LINKS->update_link($_POST['link_type2'],$link);
+			
+			$response['success']=true;
+		break;
 		
 		case 'complete_profile':
 			

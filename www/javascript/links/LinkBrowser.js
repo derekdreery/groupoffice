@@ -25,7 +25,7 @@ GO.LinkBrowser = function(config){
 		minWidth:300,
 		minHeight:300,
 		height:500,
-		width:700,
+		width:750,
 		border:false,
 		plain:true,
 		maximizable:true,

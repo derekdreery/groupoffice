@@ -88,7 +88,12 @@ class search extends db {
 	 */
 	function global_search($user_id, $query, $start, $offset, $sort_index='name', $sort_order='ASC', $selected_types=array(), $link_id=0, $link_type=0, $link_folder_id=0, $conditions=array())
 	{
-		$sql = "SELECT DISTINCT sc.user_id,sc.id, sc.module, sc.name, sc.description,sc.link_type, sc.type, sc.mtime FROM go_search_cache sc ".
+		$sql = "SELECT DISTINCT sc.user_id,sc.id, sc.module, sc.name, sc.description,sc.link_type, sc.type, sc.mtime";
+		if($link_id>0)
+		{
+			$sql .= ",l.description AS link_description";
+		}
+		$sql .= " FROM go_search_cache sc ".
 			"INNER JOIN go_acl a ON (sc.acl_read=a.acl_id OR sc.acl_write=a.acl_id) ".
 			"LEFT JOIN go_users_groups ug ON (ug.group_id=a.group_id) ";
 				
@@ -300,7 +305,8 @@ class search extends db {
 					'link_and_type'=>'folder:'.$GO_LINKS->f('id'),					
 					'name'=>$GO_LINKS->f('name'),
 					'type'=>'Folder',
-					'description'=>'',					
+					'description'=>'',
+					'link_description'=>'',					
 					'mtime'=>'-',
 					'iconCls'=>'filetype-folder'		
 					);
@@ -323,6 +329,7 @@ class search extends db {
 				'name'=>htmlspecialchars($this->f('name'), ENT_QUOTES, 'utf-8'),
 				'type'=>$this->f('type'),
 				'description'=>htmlspecialchars($this->f('description'), ENT_QUOTES, 'utf-8'),
+				'link_description'=>htmlspecialchars($this->f('link_description'), ENT_QUOTES, 'utf-8'),
 			//'url'=>$search->f('url'),
 				'mtime'=>Date::get_timestamp($this->f('mtime')),
 				'module'=>$this->f('module')//,
