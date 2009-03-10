@@ -48,4 +48,10 @@ $updates[]="CREATE TABLE IF NOT EXISTS `go_log` (
   PRIMARY KEY  (`id`),
   KEY `link_type` (`link_type`,`time`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";  
+
+$updates[]="CREATE TABLE IF NOT EXISTS `go_link_descriptions` (
+  `id` int(11) NOT NULL,
+  `description` varchar(100) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 ?>

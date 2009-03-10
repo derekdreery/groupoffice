@@ -13,6 +13,13 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- Database: `imfoss_nl`
 -- 
 
+DROP TABLE IF EXISTS `go_link_descriptions`;
+CREATE TABLE IF NOT EXISTS `go_link_descriptions` (
+  `id` int(11) NOT NULL,
+  `description` varchar(100) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 --
 -- Tabel structuur voor tabel `go_acl`
 --
