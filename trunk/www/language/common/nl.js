@@ -107,7 +107,7 @@ GO.lang.strCtime = 'Gemaakt op';
 GO.lang.strText = 'Tekst';
 GO.lang.strDate = 'Datum';
 GO.lang.strUser = 'Gebruiker';
-
+GO.lang.newFolder='Nieuwe map';
 
 GO.lang.cmdDelete = 'Verwijderen';
 GO.lang.cmdAdd = 'Toevoegen';

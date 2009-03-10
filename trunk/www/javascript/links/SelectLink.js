@@ -13,14 +13,9 @@
  
 GO.form.SelectLink = function(config){
 	
-	if(!config)
-	{
-		config={};
-	}
+	config = config || {};
 	
-	
-	config.store = new GO.data.JsonStore({
-				
+	config.store = new GO.data.JsonStore({				
 				url: BaseHref+'json.php',			
 				baseParams: {
 						query: '',

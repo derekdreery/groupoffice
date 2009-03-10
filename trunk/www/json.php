@@ -25,6 +25,36 @@ $limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 try{
 	switch($_REQUEST['task'])
 	{
+		case 'link_descriptions':
+			if(isset($_POST['delete_keys']))
+			{
+				try{
+					$response['deleteSuccess']=true;
+					$delete_link_descriptions = json_decode($_POST['delete_keys']);
+					foreach($delete_link_descriptions as $link_description_id)
+					{
+						$GO_LINKS->delete_link_description(addslashes($link_description_id));
+					}
+				}catch(Exception $e)
+				{
+					$response['deleteSuccess']=false;
+					$response['deleteFeedback']=$e->getMessage();
+				}
+			}
+			$sort = isset($_REQUEST['sort']) ? $_REQUEST['sort'] : 'id';
+			$dir = isset($_REQUEST['dir']) ? $_REQUEST['dir'] : 'DESC';
+			$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : '0';
+			$limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : '0';
+			$query = isset($_REQUEST['query']) ? '%'.$_REQUEST['query'].'%' : '';
+			$GO_LINKS->get_link_descriptions( $query, $sort, $dir, $start, $limit);
+			$response['results']=array();
+			while($link_description = $GO_LINKS->next_record())
+			{
+				$response['results'][] = $link_description;
+			}
+			$response['total'] = $GO_LINKS->found_rows();
+			break;
+			
 		case 'settings':
 			$response['data']=array();
 				

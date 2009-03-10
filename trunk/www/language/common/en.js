@@ -107,6 +107,7 @@ GO.lang.strPostZip = 'ZIP/Postal (post)';
 GO.lang.locations = 'Locations';
 GO.lang.folder = 'Folder';
 GO.lang.folders = 'Folders';
+GO.lang.newFolder='New folder';
 
 GO.lang.up = 'Up';
 GO.lang.fileExists = 'File exists';
