@@ -1,5 +1,7 @@
-2009/03/10 Version 3.01-stable-10
+2009/03/10 Version 3.01-stable-12
 - Problem with synchronization in stable-9 fixed
+- Link descriptions added
+- Problem with creating appointments in the calendar
 
 2009/03/09 Version 3.01-stable-9
 - Fixed bug in PDF printing
