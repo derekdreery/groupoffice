@@ -55,8 +55,9 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 			iconCls: 'btn-link', 
 			cls: 'x-btn-text-icon', 
 			text: GO.lang.cmdBrowseLinks,
-			handler: function(){
-				GO.linkBrowser.show({link_id: this.data.id,link_type: this.link_type,folder_id: "0"});				
+			handler: function(){				
+				GO.linkBrowser.show({link_id: this.data.id,link_type: this.link_type,folder_id: "0"});
+				GO.linkBrowser.on('hide', this.reload, this,{single:true});
 			},
 			disabled: true,
 			scope: this
@@ -68,8 +69,9 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 				iconCls: 'go-menu-icon-files', 
 				cls: 'x-btn-text-icon', 
 				text: GO.files.lang.files,
-				handler: function(){
-					GO.files.openFolder(this.data.files_path);				
+				handler: function(){					
+					GO.files.openFolder(this.data.files_path);
+					GO.files.fileBrowserWin.on('hide', this.reload, this, {single:true});
 				},
 				scope: this,
 				disabled: true

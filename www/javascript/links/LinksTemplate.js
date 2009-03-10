@@ -19,18 +19,17 @@ GO.linksTemplate = '<tpl if="links.length">'+
 		'</tr>'+
 		
 		'<tr>'+
-			'<td width="16" class="display-panel-links-header">&nbsp;</td>'+
-			'<td class="table_header_links">' + GO.lang['strName'] + '</td>'+
-			'<td class="table_header_links">' + GO.lang['strType'] + '</td>'+
-			'<td class="table_header_links">' + GO.lang['strMtime'] + '</td>'+
+			'<td style="width:16px" class="display-panel-links-header">&nbsp;</td>'+
+			'<td style="width: 100%" class="table_header_links">' + GO.lang['strName'] + '</td>'+
+			/*'<td class="table_header_links">' + GO.lang['strType'] + '</td>'+*/
+			'<td class="table_header_links" style="white-space:nowrap">' + GO.lang['strMtime'] + '</td>'+
 		'</tr>'+	
 							
 		'<tpl for="links">'+
 			'<tr>'+
-				'<td><div class="go-icon {iconCls}"></div></td>'+
-				'<td><a href="#link_{[xindex-1]}">{name}</a></td>'+
-				'<td>{type}</td>'+
-				'<td>{mtime}</td>'+
+				'<td><div class="go-icon {iconCls}" ext:qtip="{type}"></div></td>'+
+				'<td><a href="#link_{[xindex-1]}">{name}</a><tpl if="link_description.length"><br />{link_description}</tpl></td>'+
+				'<td style="white-space:nowrap">{mtime}</td>'+
 			'</tr>'+
 			'<tpl if="description.length">'+
 				'<tr class="display-panel-link-description">'+
