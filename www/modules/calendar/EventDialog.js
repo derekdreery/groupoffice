@@ -826,7 +826,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 							}),
 					hideLabel : true,
 					listeners : {
-						'change' : this.checkDateInput
+						'change' : this.checkDateInput,
+						scope: this
 					}
 
 				});
