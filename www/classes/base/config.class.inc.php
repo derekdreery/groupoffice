@@ -857,9 +857,7 @@ class GO_CONFIG
       	
 	      if($this->debug)
 				{
-					$this->loadstart = getmicrotime();
-					$_SESSION['connect_count']=0;
-					$_SESSION['query_count']=0;
+					$this->loadstart = getmicrotime();					
 				}
 
       	// database class library      	
