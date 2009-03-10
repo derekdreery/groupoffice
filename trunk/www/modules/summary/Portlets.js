@@ -141,10 +141,13 @@ GO.mainLayout.onReady(function(){
 	
 	GO.summary.announcementsPanel = new GO.summary.AnnouncementsViewGrid();
 	GO.summary.announcementsPanel.store.on('load', function(){
-		if(GO.summary.announcementsPanel.store.getCount())
+		if(GO.summary.announcementsPanel.store.getCount() && !GO.summary.portlets['portlet-announcements'].isVisible())
 		{
 			GO.summary.portlets['portlet-announcements'].show();
 			GO.summary.portlets['portlet-announcements'].doLayout();
+		}else
+		{
+			GO.summary.portlets['portlet-announcements'].hide();
 		}
 			
 	},this);

@@ -26,11 +26,9 @@
  * @access public
  */
 
-//start session
-session_name('groupoffice');
-session_start();
-$root = dirname(__FILE__).'/';
 
+
+$root = dirname(__FILE__).'/';
 require_once($root.'functions.inc.php');
 require($root.'classes/base/config.class.inc.php');
 
@@ -49,13 +47,19 @@ if ( isset( $GO_INCLUDES ) ) {
 	}
 }
 
+//start session
+session_name('groupoffice');
+session_start();
+
+if($GO_CONFIG->debug)
+{
+	$_SESSION['connect_count']=0;
+	$_SESSION['query_count']=0;
+}
+
+
 if(function_exists('mb_internal_encoding'))
 	mb_internal_encoding("UTF-8");
-
-
-
-//ini_set('display_errors', 'off');
-//ini_set('log_errors', 'on');
 
 
 if(!isset($_SESSION['DIR_CHECK']))
