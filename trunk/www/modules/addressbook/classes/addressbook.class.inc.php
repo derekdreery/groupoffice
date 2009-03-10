@@ -330,14 +330,16 @@ class addressbook extends db {
 		$sql = "UPDATE ab_contacts SET company_id=0 WHERE company_id=$company_id";
 		$this->query($sql);
 			
+		require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
+		$search = new search();
+		$search->delete_search_result($company_id, 3);
+		
 		$sql = "DELETE FROM ab_companies WHERE id='$company_id'";
 		if ($this->query($sql)) {
 			return true;
 		}
 
-		require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
-		$search = new search();
-		$search->delete_search_result($company_id, 3);
+		
 	}
 
 	function add_contact($contact) {
