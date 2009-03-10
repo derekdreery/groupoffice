@@ -476,7 +476,7 @@ class notes extends db {
 			$cache['id']=$this->f('id');
 			$cache['user_id']=$this->f('user_id');
 			$cache['module']='notes';
-			$cache['name'] = $this->f('name');
+			$cache['name'] = htmlspecialchars($this->f('name'), ENT_QUOTES, 'utf-8');
 			$cache['link_type']=4;
 			$cache['description']='';			
 			$cache['type']=$lang['notes']['note'];

@@ -854,7 +854,7 @@ class addressbook extends db {
 		{		
 			$cache['id']=$this->f('id');
 			$cache['user_id']=$this->f('user_id');
-			$cache['name'] = $this->f('name');
+			$cache['name'] = htmlspecialchars($this->f('name'), ENT_QUOTES, 'utf-8');
 			$cache['link_type']=3;
 			$cache['module']='addressbook';
 			$cache['description']='';

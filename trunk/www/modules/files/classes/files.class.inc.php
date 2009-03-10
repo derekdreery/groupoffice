@@ -1076,7 +1076,7 @@ class files extends filesystem
 		{
 			$cache['id']=$file['id'];
 			$cache['user_id']=$file['user_id'];
-			$cache['name'] = utf8_basename($path);
+			$cache['name'] = htmlspecialchars(utf8_basename($path), ENT_QUOTES, 'utf-8');
 			$cache['link_type']=6;
 			$cache['description']=$path;
 			$cache['type']=$lang['files']['file'];
