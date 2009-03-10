@@ -22,23 +22,7 @@ try{
 
 	switch($_REQUEST['task'])
 	{
-		case 'updatelink': 
-			
-			$link['id']=$_POST['link_id1'];
-			$link['link_id']=$_POST['link_id2'];
-			$link['link_type']=$_POST['link_type2'];
-			$link['description']=$_POST['description'];
 
-			$GO_LINKS->update_link($_POST['link_type1'],$link);
-			
-			$link['id']=$_POST['link_id2'];
-			$link['link_id']=$_POST['link_id1'];
-			$link['link_type']=$_POST['link_type1'];
-
-			$GO_LINKS->update_link($_POST['link_type2'],$link);
-			
-			$response['success']=true;
-		break;
 		
 		case 'complete_profile':
 			
@@ -210,12 +194,29 @@ try{
 			{
 				foreach($toLinks as $toLink)
 				{
-					$GO_LINKS->add_link($fromLink['link_id'], $fromLink['link_type'], $toLink['link_id'], $toLink['link_type'],$from_folder_id);
+					$GO_LINKS->add_link($fromLink['link_id'], $fromLink['link_type'], $toLink['link_id'], $toLink['link_type'],$from_folder_id, $_POST['description'], $_POST['description']);
 				}
 			}
 
 			$response['success']=true;
 				break;
+		case 'updatelink': 
+			
+			$link['id']=$_POST['link_id1'];
+			$link['link_id']=$_POST['link_id2'];
+			$link['link_type']=$_POST['link_type2'];
+			$link['description']=$_POST['description'];
+
+			$GO_LINKS->update_link($_POST['link_type1'],$link);
+			
+			$link['id']=$_POST['link_id2'];
+			$link['link_id']=$_POST['link_id1'];
+			$link['link_type']=$_POST['link_type1'];
+
+			$GO_LINKS->update_link($_POST['link_type2'],$link);
+			
+			$response['success']=true;
+		break;
 		
 		case 'move_links':
 			

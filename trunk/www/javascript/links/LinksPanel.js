@@ -424,12 +424,11 @@ Ext.extend(GO.grid.LinksPanel, Ext.Panel, {
 		{
 			this.setDisabled(true);
 		}
-		if(this.link_id!=link_id)
+		
+		if(this.link_id!=link_id || this.link_type!=link_type)
 		{	
-			this.link_type=link_type;
-			this.link_id=link_id;
-			this.linksGrid.store.baseParams["link_id"]=link_id;
-			this.linksGrid.store.baseParams["link_type"]=link_type;			
+			this.link_id=this.linksGrid.store.baseParams["link_id"]=link_id;
+			this.link_type=this.linksGrid.store.baseParams["link_type"]=link_type;			
 			this.linksGrid.store.baseParams["folder_id"]=folder_id;
 			
 			this.linksTree.loadLinks(link_id, link_type);
