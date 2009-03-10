@@ -829,7 +829,7 @@ class tasks extends db
 			//$cache['table']='cal_tasks';
 			$cache['id']=$this->f('id');
 			$cache['user_id']=$this->f('user_id');
-			$cache['name'] = '<span class="'.$class.'">'.$this->f('name').' ['.$status.']</span>';
+			$cache['name'] = '<span class="'.$class.'">'.htmlspecialchars($this->f('name'), ENT_QUOTES, 'utf-8').' ['.$status.']</span>';
 			//$cache['link_id'] = $this->f('link_id');
 			$cache['link_type']=12;
 			$cache['description']=sprintf($lang['tasks']['dueAtdate'], Date::get_timestamp($record['due_time'],false));

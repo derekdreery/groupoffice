@@ -1132,7 +1132,7 @@ class email extends db
 			$cache['id']=$this->f('link_id');
 			$cache['user_id']=$this->f('user_id');
 			$cache['module']='email';
-			$cache['name'] = $this->f('subject');
+			$cache['name'] = htmlspecialchars($this->f('subject'), ENT_QUOTES, 'utf-8');
 			$cache['link_type']=9;
 			$cache['description']=$lang['email']['from'].': '.$this->f('from');
 			$cache['type']=$lang['link_type'][9];

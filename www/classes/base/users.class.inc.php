@@ -1081,7 +1081,7 @@ class GO_USERS extends db
 		{	
 			$cache['id']=$this->f('id');
 			$cache['user_id']=1;
-			$cache['name'] = String::format_name($this->f('last_name'),$this->f('first_name'),$this->f('middle_name'));
+			$cache['name'] = htmlspecialchars(String::format_name($this->f('last_name'),$this->f('first_name'),$this->f('middle_name')), ENT_QUOTES, 'utf-8');;
 			$cache['link_type']=8;
 			$cache['description']='';
 			$cache['type']=$us_user;

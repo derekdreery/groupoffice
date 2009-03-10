@@ -298,7 +298,7 @@ class search extends db {
 					'parent_link_type'=>$link_type,
 					'link_type'=>'folder',
 					'link_and_type'=>'folder:'.$GO_LINKS->f('id'),					
-					'name'=>htmlspecialchars($GO_LINKS->f('name'), ENT_QUOTES, 'utf-8'),
+					'name'=>$GO_LINKS->f('name'),
 					'type'=>'Folder',
 					'description'=>'',					
 					'mtime'=>'-',

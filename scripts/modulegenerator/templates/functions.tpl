@@ -78,7 +78,7 @@
 			$cache['id']=$record['id'];
 			$cache['user_id']=$record['user_id'];
 			$cache['module']='{module}';
-			$cache['name'] = $record['name'];
+			$cache['name'] = htmlspecialchars($record['name'], ENT_QUOTES, 'utf-8');
 			$cache['link_type']={link_type};
 			$cache['description']='';			
 			$cache['type']=$lang['{module}']['{friendly_single}'];
