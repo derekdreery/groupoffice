@@ -7,8 +7,8 @@ GO.files.filesTemplate = '<tpl if="files.length">'+
 		'</tr>'+
 		
 		'<tr>'+							
-			'<td class="table_header_links">' + GO.lang['strName'] + '</td>'+							
-			'<td class="table_header_links">' + GO.lang['strMtime'] + '</td>'+
+			'<td class="table_header_links" style="width:100%">' + GO.lang['strName'] + '</td>'+							
+			'<td class="table_header_links" style="white-space:nowrap">' + GO.lang['strMtime'] + '</td>'+
 		'</tr>'+	
 							
 		'<tpl for="files">'+

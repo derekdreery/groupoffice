@@ -593,7 +593,7 @@ overflow:hidden !important;
 }
 
 .go-links-panel-description {
-	padding-left:34px;	
+	padding-left:5px;	
 }
 
 
@@ -673,6 +673,7 @@ table.display-panel{
 
 table.display-panel td{
 	padding:3px;
+	vertical-align:top;
 }
 
 table.display-panel a:link,
