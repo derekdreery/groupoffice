@@ -140,17 +140,15 @@ class PDF extends TCPDF
 
 		while($event = array_shift($events))
 		{
-			$index_time = $event['start_time'];
+			$date = getdate($event['start_time']);			
+			$index_time = mktime(0,0,0,$date['mon'], $date['mday'], $date['year']);			
 			while($index_time<=$event['end_time'] && $index_time<$this->end_time)
 			{
 				$cellIndex = floor(($index_time-$this->start_time)/86400);
 				$index_time = Date::date_add($index_time,1);
 				$cellEvents[$cellIndex][]=$event;
 			}			
-			
 		}
-		
-		
 		
 
 		if($this->days>1 || !$list)
