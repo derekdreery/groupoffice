@@ -17,4 +17,5 @@ modules/addressbook/SearchPanel.js
 modules/addressbook/ContactProfilePanel.js
 modules/addressbook/CompanyProfilePanel.js
 modules/addressbook/EmployeesPanel.js
+modules/addressbook/AdvancedSearchWindow.js
 modules/addressbook/MainPanel.js

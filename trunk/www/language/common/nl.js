@@ -247,6 +247,7 @@ GO.lang.strAvailable='Beschikbaar';
 GO.lang.strAvailability='Beschikbaarheid';
 GO.lang.strView='Beeld';
 GO.lang.field= 'Veld';
+GO.lang.value = 'Waarde';
 GO.lang.customer= 'Klant';
 GO.lang.strNoCountrySelected='Geen land geselecteerd';
 GO.lang.menu= 'Menu';
@@ -502,6 +503,8 @@ GO.lang.countries["ZR"]= "Zaire";
 GO.lang.countries["ZM"]= "Zambia";
 GO.lang.countries["ZW"]= "Zimbabwe";
 
+GO.lang.on ='Aan';
+GO.lang.off ='Uit';
 
 GO.lang.displayingItemsShort='Totaal: {2}';
 

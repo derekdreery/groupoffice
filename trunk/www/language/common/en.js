@@ -260,6 +260,7 @@ GO.lang.strAvailability='Availability';
 GO.lang.strView='View';
 
 GO.lang.field = 'Field';
+GO.lang.value = 'Value';
 
 GO.lang.customer = 'Customer';
 
@@ -528,3 +529,6 @@ GO.lang.countries["ZR"] = "Zaire";
 GO.lang.countries["ZM"] = "Zambia";
 GO.lang.countries["ZW"] = "Zimbabwe";
 GO.lang.countries["SA"] = "Saudi Arabia";
+
+GO.lang.on ='On';
+GO.lang.off ='Off';
