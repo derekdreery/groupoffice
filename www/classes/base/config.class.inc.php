@@ -857,7 +857,8 @@ class GO_CONFIG
       	
 	      if($this->debug)
 				{
-					$this->loadstart = getmicrotime();					
+					list ($usec, $sec) = explode(" ", microtime());
+					$this->loadstart = ((float) $usec + (float) $sec);										
 				}
 
       	// database class library      	
