@@ -440,7 +440,7 @@ class addressbook extends db {
 				
 	}
 
-	function search_contacts($user_id, $query, $field = 'last_name', $addressbook_id = 0, $start=0, $offset=0, $require_email=false, $sort_index='name', $sort_order='ASC', $writable_only=false, $query_type='LIKE', $mailings_filter=array()) {
+	function search_contacts($user_id, $query, $field = 'last_name', $addressbook_id = 0, $start=0, $offset=0, $require_email=false, $sort_index='name', $sort_order='ASC', $writable_only=false, $query_type='LIKE', $mailings_filter=array(), $advanced_query='') {
 		global $GO_MODULES;
 		//$query = str_replace('*', '%', $query);
 
@@ -568,6 +568,11 @@ class addressbook extends db {
 		{
 			$sql .= " AND mc.group_id IN (".implode(',', $mailings_filter).")";
 		}
+		
+		if(!empty($advanced_query))
+		{
+			$sql .= $advanced_query;
+		}
 
 		$sql .= " ORDER BY $sort_index $sort_order";
 
@@ -584,7 +589,7 @@ class addressbook extends db {
 		return $count;
 	}
 
-	function search_companies($user_id, $query, $field = 'name', $addressbook_id = 0, $start=0, $offset=0, $require_email=false, $sort_index='name', $sort_order='ASC', $query_type='LIKE', $mailings_filter=array()) {
+	function search_companies($user_id, $query, $field = 'name', $addressbook_id = 0, $start=0, $offset=0, $require_email=false, $sort_index='name', $sort_order='ASC', $query_type='LIKE', $mailings_filter=array(), $advanced_query='') {
 		global $GO_MODULES;
 
 		//$query = str_replace('*', '%', $query);
@@ -676,6 +681,11 @@ class addressbook extends db {
 		if(count($mailings_filter))
 		{
 			$sql .= " AND mc.group_id IN (".implode(',', $mailings_filter).")";
+		}
+		
+		if(!empty($advanced_query))
+		{
+			$sql .= $advanced_query;
 		}
 
 		$sql .= " ORDER BY $sort_index $sort_order";

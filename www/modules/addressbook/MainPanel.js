@@ -30,6 +30,10 @@ GO.addressbook.MainPanel = function(config)
   //this.contactsGrid.getSelectionModel().on("rowselect",function(sm, rowIndex, r){
 				this.contactEastPanel.load(r.get('id'));
 		}, this);
+		
+	this.contactsGrid.store.on('load', function(){
+		this.setAdvancedSearchNotification(this.contactsGrid.store);
+	}, this);
 	
   this.companiesGrid = new GO.addressbook.CompaniesGrid({
   	layout: 'fit',
@@ -39,10 +43,18 @@ GO.addressbook.MainPanel = function(config)
   
   this.companiesGrid.on("delayedrowselect",function(grid, rowIndex, r){
 			this.companyEastPanel.load(r.get('id'));			
-		}, this); 
+		}, this);
+		
+		
+	this.companiesGrid.store.on('load', function(){
+		this.setAdvancedSearchNotification(this.companiesGrid.store);		
+	}, this);
+		
+		
 	  
 	this.searchPanel = new GO.addressbook.SearchPanel({
-		region: 'north'
+		region: 'north',
+		ab:this
 	});
 	
 	this.searchPanel.on('queryChange', function(params){		
@@ -70,7 +82,10 @@ GO.addressbook.MainPanel = function(config)
   		this.contactEastPanel
   	]		    	
   });		
-	this.contactsPanel.on("show", this.contactsGrid.onGridShow, this.contactsGrid);
+	this.contactsPanel.on("show", function(){
+		this.contactsGrid.onGridShow();
+		this.setAdvancedSearchNotification(this.contactsGrid.store);
+	}, this);
 	
 	this.companyPanel = new Ext.Panel({
 	    	id: 'ab-company-grid',
@@ -83,6 +98,11 @@ GO.addressbook.MainPanel = function(config)
 	    });
 	
 	this.companyPanel.on("show",this.companiesGrid.onGridShow, this.companiesGrid);
+	
+	this.companyPanel.on("show", function(){
+		this.companiesGrid.onGridShow();
+		this.setAdvancedSearchNotification(this.companiesGrid.store);
+	}, this);
 	
 	
 	this.addressbooksGrid = new GO.addressbook.AddresbooksGrid({
@@ -250,7 +270,23 @@ GO.addressbook.MainPanel = function(config)
 };
 
 Ext.extend(GO.addressbook.MainPanel, Ext.Panel,{
-		
+	
+		setAdvancedSearchNotification : function (store)
+		{
+			if(!GO.util.empty(store.baseParams.advancedQuery))
+			{
+				this.searchPanel.queryField.setValue("[ "+GO.addressbook.lang.advancedSearch+" ]");
+				this.searchPanel.queryField.setDisabled(true);
+			}else
+			{
+				if(this.searchPanel.queryField.getValue()=="[ "+GO.addressbook.lang.advancedSearch+" ]")
+				{
+					this.searchPanel.queryField.setValue("");
+				}
+				this.searchPanel.queryField.setDisabled(false);
+			}
+		},
+	
 		afterRender : function()
 		{
 			GO.addressbook.MainPanel.superclass.afterRender.call(this);
@@ -287,13 +323,21 @@ Ext.extend(GO.addressbook.MainPanel, Ext.Panel,{
 
 		setSearchParams : function(params)
 		{
+			var panel = this.tabPanel.getActiveTab();		
+			
 			for(var name in params)
 			{
-				this.contactsGrid.store.baseParams[name] = params[name];
-				this.companiesGrid.store.baseParams[name] = params[name];
+				if(name!='advancedQuery' || panel.id=='ab-contacts-grid')
+				{
+					this.contactsGrid.store.baseParams[name] = params[name];
+				}
+				if(name!='advancedQuery' || panel.id!='ab-contacts-grid')
+				{
+					this.companiesGrid.store.baseParams[name] = params[name];
+				}
 			}
 			
-			var panel = this.tabPanel.getActiveTab();		
+			
 			if(panel.id=='ab-contacts-grid')
 			{
 				this.companiesGrid.loaded=false;

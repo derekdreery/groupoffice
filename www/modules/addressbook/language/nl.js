@@ -92,3 +92,5 @@ GO.addressbook.lang.strSelectContact= 'Selecteer contactpersoon';
 GO.addressbook.lang.strSelectCompany= 'Selecteer bedrijf';
 
 GO.addressbook.lang.matchFields='Koppel de velden';
+
+GO.addressbook.lang.advancedSearch='Geavanceerd zoeken';

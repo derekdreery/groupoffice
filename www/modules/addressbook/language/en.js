@@ -32,8 +32,6 @@ GO.addressbook.lang.btnAddContact = 'Add Contact'	;
 GO.addressbook.lang.btnAddCompany = 'Add Company';
 GO.addressbook.lang.btnManage = 'Manage';
 GO.addressbook.lang.btnDownload = 'Download File';
-GO.addressbook.lang.btnSearch = 'Search';
-GO.addressbook.lang.btnReset = 'Reset';
 GO.addressbook.lang.cmdFormSearchFirst = 'Search in= ';
 GO.addressbook.lang.cmdFormSearchSecond = ' on= ';
 GO.addressbook.lang.cmdFormSearchThird = ' for= ';
@@ -102,3 +100,5 @@ GO.addressbook.lang.searchOnSender='Lookup in addressbook';
 GO.addressbook.lang.confirmCreate='Contact doesn\'t exist. Do you wish to create a new contact?';
 
 GO.addressbook.lang.matchFields='Match the fields';
+
+GO.addressbook.lang.advancedSearch='Advanced search';

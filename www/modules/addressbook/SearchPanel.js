@@ -80,7 +80,7 @@ GO.addressbook.SearchPanel = function(config)
  	config.items=[{
  						items: this.alphabetView
  					},{
-		        html: "Search:"
+		        html: GO.lang.strSearch+":"
 			    },{
 		        items: this.queryField
 			    }, 	
@@ -92,7 +92,25 @@ GO.addressbook.SearchPanel = function(config)
 								this.alphabetView.clearSelections();
 								this.fireQueryEvent();									
 							},
-							text: GO.addressbook.lang['btnSearch'],
+							text: GO.lang.strSearch,
+							scope: this				          
+		        })
+			    },{
+		        items: new Ext.Button({
+							handler: function()
+							{					
+								if(!this.advancedSearchWindow)
+								{
+									this.advancedSearchWindow = new GO.addressbook.AdvancedSearchWindow();
+									this.advancedSearchWindow.on('ok', function(win){
+										
+										this.fireEvent('queryChange', {advancedQuery:Ext.encode(win.getGridData())});										
+									}, this)
+								}
+								var type = this.ab.tabPanel.getActiveTab().id=='ab-contacts-grid' ? 'contacts' : 'companies';
+								this.advancedSearchWindow.show(type);
+							},
+							text: GO.addressbook.lang.advancedSearch,
 							scope: this				          
 		        })
 			    },{
@@ -105,7 +123,7 @@ GO.addressbook.SearchPanel = function(config)
 									
 									this.fireQueryEvent();
 								},
-								text: GO.addressbook.lang['btnReset'],
+								text: GO.lang.cmdReset,
 								scope: this				          
 			        })
 			    },{
@@ -123,7 +141,8 @@ Ext.extend(GO.addressbook.SearchPanel, Ext.Panel, {
 	fireQueryEvent : function(){
 		var params = {
 			clicked_letter : this.selectedLetter,
-			query : this.queryField.getValue()
+			query : this.queryField.getValue(),
+			advancedQuery : ''
 		};
 		
 		this.fireEvent('queryChange', params);

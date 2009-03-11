@@ -38,6 +38,103 @@ try
 {
 	switch($task)
 	{
+		
+		case 'fields':
+			
+			require($GO_LANGUAGE->get_language_file('addressbook'));
+			
+			if($_POST['type']=='contacts')
+			{			
+				$response['results']=array(
+					array('field'=>'ab_contacts.name', 'label'=>$lang['common']['name'], 'type'=>'text'),
+					array('field'=>'ab_contacts.title', 'label'=>$lang['common']['title'], 'type'=>'text'),
+					array('field'=>'ab_contacts.first_name', 'label'=>$lang['common']['firstName'], 'type'=>'text'),
+					array('field'=>'ab_contacts.middle_name', 'label'=>$lang['common']['middleName'], 'type'=>'text'),
+					array('field'=>'ab_contacts.last_name', 'label'=>$lang['common']['lastName'], 'type'=>'text'),
+					array('field'=>'ab_contacts.initials', 'label'=>$lang['common']['initials'], 'type'=>'text'),
+					array('field'=>'ab_contacts.sex', 'label'=>$lang['common']['sex'], 'type'=>'text'),
+					array('field'=>'ab_contacts.birthday', 'label'=>$lang['common']['birthday'], 'type'=>'date'),
+					array('field'=>'ab_contacts.email', 'label'=>$lang['common']['email'], 'type'=>'text'),
+					array('field'=>'ab_contacts.country', 'label'=>$lang['common']['country'], 'type'=>'country'),
+					array('field'=>'ab_contacts.state', 'label'=>$lang['common']['state'], 'type'=>'text'),
+					array('field'=>'ab_contacts.city', 'label'=>$lang['common']['city'], 'type'=>'text'),
+					array('field'=>'ab_contacts.zip', 'label'=>$lang['common']['zip'], 'type'=>'text'),
+					array('field'=>'ab_contacts.address', 'label'=>$lang['common']['address'], 'type'=>'text'),
+					array('field'=>'ab_contacts.address_no', 'label'=>$lang['common']['addressNo'], 'type'=>'text'),
+					array('field'=>'ab_contacts.home_phone', 'label'=>$lang['common']['phone'], 'type'=>'text'),
+					array('field'=>'ab_contacts.work_phone', 'label'=>$lang['common']['workphone'], 'type'=>'text'),
+					array('field'=>'ab_contacts.fax', 'label'=>$lang['common']['name'], 'fax'=>'text'),
+					array('field'=>'ab_contacts.work_fax', 'label'=>$lang['common']['workFax'], 'type'=>'text'),
+					array('field'=>'ab_contacts.cellular', 'label'=>$lang['common']['cellular'], 'type'=>'text'),
+					array('field'=>'ab_contacts.company', 'label'=>$lang['common']['company'], 'type'=>'text'),
+					array('field'=>'ab_contacts.department', 'label'=>$lang['common']['department'], 'type'=>'text'),
+					array('field'=>'ab_contacts.function', 'label'=>$lang['common']['function'], 'type'=>'text'),
+					array('field'=>'ab_contacts.comment', 'label'=>$lang['addressbook']['comment'], 'type'=>'textarea'),
+					array('field'=>'ab_contacts.salutation', 'label'=>$lang['common']['salutation'], 'type'=>'text')			
+				);
+				
+				$link_type=2;
+			}else
+			{
+				$response['results']=array(
+					array('field'=>'ab_companies.name', 'label'=>$lang['common']['name'], 'type'=>'text'),
+					array('field'=>'ab_companies.title', 'label'=>$lang['common']['title'], 'type'=>'text'),
+					array('field'=>'ab_companies.email', 'label'=>$lang['common']['email'], 'type'=>'text'),
+					array('field'=>'ab_companies.country', 'label'=>$lang['common']['country'], 'type'=>'country'),
+					array('field'=>'ab_companies.state', 'label'=>$lang['common']['state'], 'type'=>'text'),
+					array('field'=>'ab_companies.city', 'label'=>$lang['common']['city'], 'type'=>'text'),
+					array('field'=>'ab_companies.zip', 'label'=>$lang['common']['zip'], 'type'=>'text'),
+					array('field'=>'ab_companies.address', 'label'=>$lang['common']['address'], 'type'=>'text'),
+					array('field'=>'ab_companies.address_no', 'label'=>$lang['common']['addressNo'], 'type'=>'text'),
+					
+						array('field'=>'ab_companies.post_country', 'label'=>$lang['common']['postCountry'], 'type'=>'country'),
+					array('field'=>'ab_companies.post_state', 'label'=>$lang['common']['postState'], 'type'=>'text'),
+					array('field'=>'ab_companies.post_city', 'label'=>$lang['common']['postCity'], 'type'=>'text'),
+					array('field'=>'ab_companies.post_zip', 'label'=>$lang['common']['postZip'], 'type'=>'text'),
+					array('field'=>'ab_companies.post_address', 'label'=>$lang['common']['postAddress'], 'type'=>'text'),
+					array('field'=>'ab_companies.post_address_no', 'label'=>$lang['common']['postAddressNo'], 'type'=>'text'),
+					
+					array('field'=>'ab_companies.phone', 'label'=>$lang['common']['phone'], 'type'=>'text'),
+					array('field'=>'ab_companies.fax', 'label'=>$lang['common']['name'], 'fax'=>'text'),
+					
+					array('field'=>'ab_companies.comment', 'label'=>$lang['addressbook']['comment'], 'type'=>'textarea')
+								
+				);
+				$link_type=3;
+			}
+			
+			if($GO_MODULES->has_module('customfields'))
+			{
+				
+				require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+				$cf = new customfields();
+				
+				$fields = $cf->get_authorized_fields($GO_SECURITY->user_id, $link_type);
+				while($field = array_shift($fields))
+				{
+					if($field['datatype']!='heading' && $field['datatype']!='function')
+					{
+						$f = array('field'=>'cf_'.$link_type.'.'.$field['name'], 'label'=>$field['label'], 'type'=>$field['datatype']);
+						
+						if($f['type']=='select')
+						{
+							$f['type']=$field['name'];
+							$f['options']=array();
+							$cf->get_select_options($field['id']);
+							while($cf->next_record())
+							{
+								$f['options'][]=array($cf->f('text'));
+							}
+						}
+						
+						$response['results'][]=$f;
+					}
+				}
+			}
+			
+			echo json_encode($response);
+			break;
+		
 		case 'search_sender':
 			
 			$email = ($_POST['email']);
@@ -111,6 +208,20 @@ try
 				$field = '';
 				$query = !empty($query) ? '%'.$query.'%' : '';
 			}
+			
+			$advancedQuery = '';
+			if(!empty($_POST['advancedQuery']))
+			{
+				$aq = json_decode($_POST['advancedQuery'], true);				
+				foreach($aq as $field=>$value)
+				{
+					if(empty($advancedQuery))
+					{
+						$advancedQuery .= ' AND ';
+					}
+					$advancedQuery .= $ab->escape($field).' LIKE \''.$ab->escape($value).'\'';
+				}			
+			}
 				
 				
 			$response['results']=array();
@@ -126,7 +237,8 @@ try
 			$dir,
 			false,
 			$query_type,
-			$mailings_filter
+			$mailings_filter,
+			$advancedQuery
 			);
 
 			while($ab->next_record())
@@ -195,6 +307,20 @@ try
 				$field = '';
 				$query = '%'.$query.'%';
 			}
+			
+			$advancedQuery = '';
+			if(!empty($_POST['advancedQuery']))
+			{
+				$aq = json_decode($_POST['advancedQuery'], true);				
+				foreach($aq as $field=>$value)
+				{
+					if(empty($advancedQuery))
+					{
+						$advancedQuery .= ' AND ';
+					}
+					$advancedQuery .= $ab->escape($field).' LIKE \''.$ab->escape($value).'\'';
+				}			
+			}
 
 			$response['results'] = array();
 			$response['total'] = $ab->search_companies(
@@ -208,7 +334,8 @@ try
 			$sort,
 			$dir,
 			$query_type,
-			$mailings_filter
+			$mailings_filter,
+			$advancedQuery
 			);
 
 			while($ab->next_record())
