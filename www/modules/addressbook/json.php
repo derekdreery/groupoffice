@@ -63,7 +63,7 @@ try
 				$mailings_filter=array();
 			}elseif(isset($_POST['mailings_filter']))
 			{
-				$mailings_filter = json_decode(($_POST['mailings_filter']), true);				
+				$mailings_filter = json_decode($_POST['mailings_filter'], true);				
 				$GO_CONFIG->save_setting('mailings_filter', implode(',',$mailings_filter), $GO_SECURITY->user_id);
 			}else
 			{	
