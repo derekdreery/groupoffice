@@ -751,6 +751,8 @@ try{
 
 				$parts = array_reverse($imap->f("parts"));
 
+			//	debug($parts);
+				
 				/*
 				 * Sometimes clients send multipart/alternative but there's only a text part. FIrst check if there's
 				 * a html alternative to display
@@ -784,10 +786,10 @@ try{
 				{
 					//if there's only one part use the message parameters.
 					if(eregi('plain', $parts[0]['mime']))
-					$parts[0]['mime']=$default_mime;
+						$parts[0]['mime']=$default_mime;
 
-					if(!empty($response['content_transfer_encoding']))
-					$parts[0]['transfer']=$response['content_transfer_encoding'];
+					if(empty($parts[0]['transfer']))
+						$parts[0]['transfer']=$response['content_transfer_encoding'];
 				}
 
 				//block remote URL's if contacts is unknown
@@ -803,6 +805,8 @@ try{
 				{
 					$block=false;
 				}
+				
+				
 
 				while($part = array_shift($parts))
 				{
@@ -818,7 +822,9 @@ try{
 					(!eregi('attachment', $part["disposition"])) &&
 					((eregi('html', $mime) && empty($_POST['plaintext'])) ||(eregi('plain', $mime) && (!$html_alternative || strtolower($part['type'])!='alternative')) || $mime == "text/enriched" || $mime == "unknown/unknown"))
 					{
+						
 						$part_body = $imap->view_part($uid, $part["number"], $part["transfer"], $part["charset"]);
+						//$part_body = $imap->view_part($uid, "1.1", $part["transfer"], $part["charset"]);
 
 						switch($mime)
 						{
