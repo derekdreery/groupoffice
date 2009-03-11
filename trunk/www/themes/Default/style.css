@@ -242,7 +242,7 @@ a.normal-link:hover{
 	width:16px;*/
 }
 
-.filetype-jpg, .filetype-gif, .filetype-bmp, .filetype-tif {
+.filetype-jpg, .filetype-gif, .filetype-bmp, .filetype-tif, .filetype-png, .filetype-tiff {
 	background-image:url('images/16x16/filetypes/images.png') !important;
 }
 
