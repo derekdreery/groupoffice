@@ -98,6 +98,7 @@ GO.lang.strPostZip = 'PSČ (poštovní)';
 GO.lang.locations = 'Lokality';
 GO.lang.folder = 'Složka';
 GO.lang.folders = 'Složky';
+GO.lang.newFolder='Nová složka';
 
 GO.lang.up = 'nahoru';
 GO.lang.fileExists = 'Soubor existuje';

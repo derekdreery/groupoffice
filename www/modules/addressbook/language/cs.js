@@ -93,3 +93,5 @@ GO.addressbook.lang.sendMailing='Rozeslání zpráv';
 GO.addressbook.lang.importSuccess='Data byly v pořádku importována';
 GO.addressbook.lang.searchOnSender='Najít';
 GO.addressbook.lang.confirmCreate='Kontakt neexistuje. Chcete založit nový?';
+
+GO.addressbook.lang.matchFields='Shodné údaje';

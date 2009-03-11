@@ -69,3 +69,11 @@ $lang['calendar']['already_accepted']='Již byla potvrzena tato údalost.';
 $lang['calendar']['private']='Osobní';
 
 $lang['calendar']['import_success']='%s událostí bylo importováno';
+
+$lang['calendar']['printTimeFormat']='Od %s dp %s';
+$lang['calendar']['printLocationFormat']=' v umístění "%s"';
+$lang['calendar']['printPage']='Strana %s z %s';
+$lang['calendar']['printList']='Seznam událostí';
+
+$lang['calendar']['printAllDaySingle']='Celý den';
+$lang['calendar']['printAllDayMultiple']='Celý den od %s do %s';
