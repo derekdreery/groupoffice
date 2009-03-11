@@ -78,3 +78,6 @@ GO.users.lang.muteSound='Vypnout zvuk';
 GO.users.lang.downloadSampleCSV='Stáhnout ukázkový CSV soubor';
 
 GO.users.lang.importText='Můžete importovat uživatele pomocí souboru ve formátu CSV. Chcete-li vědět, jaký by CSV soubor měl mít formát, stáhněte si ukázkový soubor..<br />První řádek musí obsahovat jména sloupců. Následujicí pole jsou potřebné pro každého uživatele:<br /><br />username, password, first_name, last_name, email';
+
+GO.users.lang.useModule= 'Použít';
+GO.users.lang.manageModule= 'Upravit';

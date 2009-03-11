@@ -62,3 +62,5 @@ GO.calendar.lang.selectIcalendarFile='Vyberte icalendar (*.ics) soubor';
 GO.calendar.lang.location='Umístění';
 GO.calendar.lang.startsAt='Začátek v';
 GO.calendar.lang.endsAt='Konec v';
+
+GO.calendar.lang.eventDefaults='Základní nastavení událostí';

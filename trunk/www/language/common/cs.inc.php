@@ -32,6 +32,7 @@ $lang['common']['saveError']='Chyba při ukládání dat';
 $lang['common']['deleteError']='Chyba při vymazávání dat';
 $lang['common']['selectError']='Chyba při pokusu o čtení dat';
 $lang['common']['missingField'] = 'Nevyplnili jste všechna povinná pole.';
+$lang['common']['invalidEmailError']='E-mailová adresa není správná';
 $lang['common']['noFileUploaded']='Žádný soubor nebyl odeslán ';
 $lang['common']['error']='Chyba';
 
@@ -169,3 +170,6 @@ $lang['common']['lost_password_error']='Nelze nalézt email příjemce.';
 $lang['common']['lost_password_success']='Nové heslo bylo zasláno na Vaši e-mailovou adresu.';
 
 $lang['common']['confirm_leave']='Pokud opustíte Group-Office, neuložené změny budou ztraceny';
+$lang['common']['dataSaved']='Data byla v pořádku uložena';
+
+$lang['common']['uploadMultipleFiles'] = 'Klikněte na \'Přidat z počítače\' pro výběr souboru a/nebo složky z Vašeho počítače. Klikněte na \'Přidat z pošty\' pro přenos souborů z Group-Office. Okno bude automaticky zavřeno po kompletním přenosu.';
