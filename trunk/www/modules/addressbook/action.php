@@ -15,7 +15,7 @@
 require_once("../../Group-Office.php");
 $GO_SECURITY->json_authenticate('addressbook');
 require_once($GO_LANGUAGE->get_language_file('addressbook'));
-require($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
+require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
 $ab = new addressbook;
 
 $feedback = null;
