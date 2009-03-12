@@ -146,8 +146,8 @@ try{
 
 		case 'event':
 
-			require($GO_CONFIG->class_path.'ical2array.class.inc');
-			require($GO_CONFIG->class_path.'Date.class.inc.php');
+			require_once($GO_CONFIG->class_path.'ical2array.class.inc');
+			require_once($GO_CONFIG->class_path.'Date.class.inc.php');
 				
 			$event = $cal->get_event(($_REQUEST['event_id']));
 				

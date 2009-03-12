@@ -224,7 +224,7 @@ try{
 						try {
 							if(isset($GO_MODULES->modules['addressbook']) && $GO_MODULES->modules['addressbook']['read_permission'])
 							{
-								require($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
+								require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
 								$ab = new addressbook();
 								$response['unknown_recipients']=array();
 							}
