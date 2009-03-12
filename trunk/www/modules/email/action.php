@@ -304,7 +304,7 @@ try{
 									$tmp_name = $GO_CONFIG->file_storage_path.$tmp_name;
 								}
 
-								$img =& new Swift_Message_Image(new Swift_File($tmp_name),utf8_basename($tmp_name), File::get_mime($tmp_name));
+								$img =& new Swift_Message_EmbeddedFile(new Swift_File($tmp_name),utf8_basename($tmp_name), File::get_mime($tmp_name));
 								$src_id = $swift->message->attach($img);
 								
 								//Browsers reformat URL's so a pattern match
