@@ -1347,7 +1347,7 @@ switch($task)
 		<input type="hidden" name="task" value="allow_password_change" />	
 		<input type="checkbox" name="allow_themes" value="1" <?php if(isset($_POST['allow_themes']) ? true : $GO_CONFIG->allow_themes) echo 'checked'; ?> />Allow users to change the theme
 		<br />
-		<input type="checkbox" name="allow_password_change" value="1" <?php if(isset($_POST['allow_password_change']) ? true : $GO_CONFIG->allow_password_change) echo 'checked'; ?> />Allow users to change thier password
+		<input type="checkbox" name="allow_password_change" value="1" <?php if(isset($_POST['allow_password_change']) ? true : $GO_CONFIG->allow_password_change) echo 'checked'; ?> />Allow users to change their password
 		<br />
 		<input type="checkbox" name="allow_registration" value="1" <?php if(isset($_POST['allow_registration']) ? true : $GO_CONFIG->allow_registration) echo 'checked'; ?> />Allow anybody to register
 		<br />
