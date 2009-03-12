@@ -18,12 +18,12 @@ class GO_EVENTS
 					
 		foreach($GO_MODULES->modules as $module)
 		{			
-			$file = $module['class_path'].$module['id'].'.class.inc';
+			/*$file = $module['class_path'].$module['id'].'.class.inc';
 
 			if(!file_exists($file))
-			{
+			{*/
 				$file = $module['class_path'].$module['id'].'.class.inc.php';
-			}
+			//}
 			if(file_exists($file))
 			{
 				require_once($file);
