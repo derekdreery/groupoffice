@@ -15,6 +15,8 @@ class GO_EVENTS
 	
 	public function load_listeners(){
 		global $GO_MODULES;
+		
+		$this->listeners = array();
 					
 		foreach($GO_MODULES->modules as $module)
 		{			
