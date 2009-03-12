@@ -255,6 +255,8 @@ try
 						}
 					}
 				}
+				
+				$GO_EVENTS->fire_event('save_company', $company_credentials);
 
 
 				echo json_encode($result);
