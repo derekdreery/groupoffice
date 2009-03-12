@@ -373,8 +373,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					calendar_id : this.selectCalendar.getValue(),
 					event_id : this.event_id,
 					name : Ext.util.Format.htmlEncode(this.subjectField.getValue()),
-					start_time : startDate.format('U'),
-					end_time : endDate.format('U'),
+					start_time : startDate.format('Y-m-d H:i'),
+					end_time : endDate.format('Y-m-d H:i'),
 					startDate : startDate,
 					endDate : endDate,
 					description : Ext.util.Format.htmlEncode(GO.util.nl2br(this.formPanel.form
