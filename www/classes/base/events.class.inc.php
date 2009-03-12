@@ -6,7 +6,7 @@ class GO_EVENTS
 	public function __construct(){
 		if(!isset($_SESSION['GO_SESSION']['event_listeners']))
 		{
-			$this->load_listeners();
+			//$this->load_listeners();
 		}else
 		{
 			$this->listeners=$_SESSION['GO_SESSION']['event_listeners'];
