@@ -12,7 +12,7 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-require('../../Group-Office.php');
+require_once('../../Group-Office.php');
 
 $GO_SECURITY->json_authenticate('{module}');
 

@@ -534,7 +534,8 @@ try{
 			if(isset($_POST['template_id']) && $_POST['template_id']>0)
 			{
 				$template_id = ($_POST['template_id']);
-				$template = load_template($template_id, $response['data']['to']);
+				$to = isset($response['data']['to']) ? $response['data']['to'] : '';
+				$template = load_template($template_id, $to);
 
 				$response['data']['body'] = $template['data']['body'].$response['data']['body'];
 				$response['data']['inline_attachments']=array_merge($response['data']['inline_attachments'], $template['data']['inline_attachments']);
