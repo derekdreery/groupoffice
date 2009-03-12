@@ -36,7 +36,7 @@ try{
 			switch($node)
 			{
 				case 'projects':				
-					require($GO_MODULES->modules['projects']['class_path'].'projects.class.inc.php');
+					require_once($GO_MODULES->modules['projects']['class_path'].'projects.class.inc.php');
 					$projects = new projects();
 					
 					$projects->get_authorized_projects('read',$GO_SECURITY->user_id, 'name', 'ASC', 0,0,'',array(), true);
@@ -259,7 +259,7 @@ try{
 						
 						$response['write_permission']=false;
 						
-						require($GO_MODULES->modules['projects']['class_path'].'projects.class.inc.php');
+						require_once($GO_MODULES->modules['projects']['class_path'].'projects.class.inc.php');
 						$projects = new projects();
 						
 						$projects->get_authorized_projects('read',$GO_SECURITY->user_id, 'name', 'ASC', 0,0,'',array(), true);

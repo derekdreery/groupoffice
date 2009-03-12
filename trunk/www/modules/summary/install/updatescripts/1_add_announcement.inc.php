@@ -1,5 +1,5 @@
 <?php 
-require($GO_MODULES->modules['summary']['class_path'].'summary.class.inc.php');
+require_once($GO_MODULES->modules['summary']['class_path'].'summary.class.inc.php');
 $summary = new summary();
 
 $announcement['due_time']=Date::date_add(time(),2);

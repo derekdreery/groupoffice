@@ -129,9 +129,9 @@ try
 				}
 			
 
-				if(isset($GO_MODULES->modules['mailings']) && $GO_MODULES->modules['mailings']['read_permission'])
+				if($GO_MODULES->has_module('mailings'))
 				{
-					require($GO_MODULES->modules['mailings']['class_path'].'mailings.class.inc.php');
+					require_once($GO_MODULES->modules['mailings']['class_path'].'mailings.class.inc.php');
 					$ml = new mailings();
 					$ml2 = new mailings();
 						
@@ -233,9 +233,9 @@ try
 				}
 					
 					
-				if(isset($GO_MODULES->modules['mailings']) && $GO_MODULES->modules['mailings']['read_permission'])
+				if($GO_MODULES->has_module('mailings'))
 				{
-					require($GO_MODULES->modules['mailings']['class_path'].'mailings.class.inc.php');
+					require_once($GO_MODULES->modules['mailings']['class_path'].'mailings.class.inc.php');
 					$ml = new mailings();
 					$ml2 = new mailings();
 

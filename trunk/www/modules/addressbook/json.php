@@ -477,9 +477,9 @@ try
 					$response['data']=array_merge($response['data'], $values);
 				}
 
-				if(isset($GO_MODULES->modules['mailings']) && $GO_MODULES->modules['mailings']['read_permission'])
+				if($GO_MODULES->has_module('mailings'))
 				{
-					require($GO_MODULES->modules['mailings']['class_path'].'mailings.class.inc.php');
+					require_once($GO_MODULES->modules['mailings']['class_path'].'mailings.class.inc.php');
 					
 					$ml = new mailings();
 					$ml2 = new mailings();
@@ -497,14 +497,14 @@ try
 				break;
 			}			
 			
-			if(isset($GO_MODULES->modules['customfields'])  && $GO_MODULES->modules['customfields']['read_permission'])
+			if($GO_MODULES->has_module('customfields'))
 			{
 				require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
 				$cf = new customfields();
 				$response['data']['customfields']=$cf->get_all_fields_with_values($GO_SECURITY->user_id, 2, $contact_id);
 			}
 			
-			if(isset($GO_MODULES->modules['comments']))
+			if($GO_MODULES->has_module('comments'))
 			{
 				require_once ($GO_MODULES->modules['comments']['class_path'].'comments.class.inc.php');
 				$comments = new comments();
@@ -581,7 +581,7 @@ try
 				
 			if($task == 'load_company')
 			{
-				if(isset($GO_MODULES->modules['customfields']))
+				if($GO_MODULES->has_module('customfields'))
 				{
 					require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
 					$cf = new customfields();
@@ -589,9 +589,9 @@ try
 					$response['data']=array_merge($response['data'], $values);
 				}
 				
-				if(isset($GO_MODULES->modules['mailings']))
+				if($GO_MODULES->has_module('mailings'))
 				{
-					require($GO_MODULES->modules['mailings']['class_path'].'mailings.class.inc.php');
+					require_once($GO_MODULES->modules['mailings']['class_path'].'mailings.class.inc.php');
 					$ml = new mailings();
 					$ml2 = new mailings();
 						
@@ -607,7 +607,7 @@ try
 				
 			
 				
-			if(isset($GO_MODULES->modules['customfields']))
+			if($GO_MODULES->has_module('customfields'))
 			{
 				require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
 				$cf = new customfields();
@@ -649,7 +649,7 @@ try
 			}
 			
 			
-			if(isset($GO_MODULES->modules['comments']))
+			if($GO_MODULES->has_module('comments'))
 			{
 				require_once ($GO_MODULES->modules['comments']['class_path'].'comments.class.inc.php');
 				$comments = new comments();

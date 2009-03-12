@@ -15,7 +15,7 @@ if(!isset($GO_MODULES->modules['postfixadmin']))
 
 
 
-require($GO_MODULES->modules['postfixadmin']['class_path'].'postfixadmin.class.inc.php');
+require_once($GO_MODULES->modules['postfixadmin']['class_path'].'postfixadmin.class.inc.php');
 $pa = new postfixadmin();
 $pa2 = new postfixadmin();
 
