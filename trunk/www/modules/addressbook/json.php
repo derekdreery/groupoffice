@@ -432,6 +432,9 @@ try
 				if($task == 'load_contact_with_items')
 				{
 					$response['data']['comment']=String::text_to_html($response['data']['comment']);
+					require($GO_LANGUAGE->get_base_language_file('countries'));
+					$response['data']['country']=isset($countries[$response['data']['country']]) ? $countries[$response['data']['country']] : $response['data']['country'];
+					
 				}
 
 				if($response['data']['birthday'] == '0000-00-00')
@@ -442,9 +445,7 @@ try
 				}
 				
 				
-				require($GO_LANGUAGE->get_base_language_file('countries'));
-				$response['data']['country']=isset($countries[$response['data']['country']]) ? $countries[$response['data']['country']] : $response['data']['country'];
-
+				
 				if($response['data']['company_id'] > 0 && $company = $ab->get_company($response['data']['company_id']))
 				{					
 					$response['data']['company_name'] = $company['name'];
@@ -557,12 +558,13 @@ try
 				if($task == 'load_company_with_items')
 				{
 					$response['data']['comment']=String::text_to_html($response['data']['comment']);
+					
+					require($GO_LANGUAGE->get_base_language_file('countries'));
+					$response['data']['country']=isset($countries[$response['data']['country']]) ? $countries[$response['data']['country']] : $response['data']['country'];
+					$response['data']['post_country']=isset($countries[$response['data']['post_country']]) ? $countries[$response['data']['post_country']] : $response['data']['post_country'];				
 				}
 
-				require($GO_LANGUAGE->get_base_language_file('countries'));
-				$response['data']['country']=isset($countries[$response['data']['country']]) ? $countries[$response['data']['country']] : $response['data']['country'];
-				$response['data']['post_country']=isset($countries[$response['data']['post_country']]) ? $countries[$response['data']['post_country']] : $response['data']['post_country'];
-			
+				
 				$response['data']['links'] = array();
 				$response['success']=true;
 				
