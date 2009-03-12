@@ -457,6 +457,9 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 							}
 
 							this.render(Ext.getBody());
+							
+							this.ccCombo.getEl().up('.x-form-item').setDisplayed(false);
+							this.bccCombo.getEl().up('.x-form-item').setDisplayed(false);
 
 							this.show(config);
 							return;
@@ -521,8 +524,8 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 
 			GO.email.EmailComposer.superclass.show.call(this);
 			
-			this.ccCombo.getEl().up('.x-form-item').setDisplayed(false);
-			this.bccCombo.getEl().up('.x-form-item').setDisplayed(false);
+		//	this.ccCombo.getEl().up('.x-form-item').setDisplayed(false);
+			//this.bccCombo.getEl().up('.x-form-item').setDisplayed(false);
 				
 			if(config.move)
 			{
@@ -530,14 +533,10 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 		 		this.setPagePosition(pos[0]+config.move, pos[1]+config.move);
 			}		
 			
-			if(this.bccCombo.getValue()!='')
-			{
-				this.bccFieldCheck.setChecked(true);
-			}
-			if(this.ccCombo.getValue()!='')
-			{
-				this.ccFieldCheck.setChecked(true);
-			}
+		
+			this.bccFieldCheck.setChecked(this.bccCombo.getValue()!='');
+			this.ccFieldCheck.setChecked(this.ccCombo.getValue()!='');
+
 			
 			
 			this.startAutoSave();
@@ -618,15 +617,10 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 						} else {
 							this.ccFieldCheck.setChecked(false);
 						}*/
-						
-						if(this.bccCombo.getValue()!='')
-						{
-							this.bccFieldCheck.setChecked(true);
-						}
-						if(this.ccCombo.getValue()!='')
-						{
-							this.ccFieldCheck.setChecked(true);
-						}
+	
+						this.bccFieldCheck.setChecked(this.bccCombo.getValue()!='');
+						this.ccFieldCheck.setChecked(this.ccCombo.getValue()!='');
+					
 						
 						if(params.task!='opendraft')
 						{
@@ -1015,14 +1009,12 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 
 		for (var i = 0; i < this.showMenu.items.items.length; i++) {
 			if (this.showMenu.items.items[i].checked) {
-				switch (this.showMenu.items.items[i].id) {
-					case 'fromFieldCheck' :
-						height += this.fromCombo.el.getHeight() + 3;
-						break;
-
-					default :
-						height += this.toCombo.el.getHeight() + 3;
-						break;
+				if(i==0)
+				{
+					height += this.fromCombo.el.getHeight() + 3;
+				}else
+				{
+					height += this.toCombo.el.getHeight() + 3;
 				}
 			}
 		}
