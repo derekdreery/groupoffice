@@ -1725,9 +1725,9 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 						this.fireEvent("move", this, event, actionData);
 						
 						this.removeEvent(this.allDayDragEvent.id);
-						
-						event.startDate = Date.parseDate(event.start_time, "U").add(Date.DAY, offsetDays);
-						event.endDate = Date.parseDate(event.end_time, "U").add(Date.DAY, offsetDays);						
+							
+						event.startDate = Date.parseDate(event.start_time, this.dateTimeFormat).add(Date.DAY, offsetDays);
+						event.endDate = Date.parseDate(event.end_time, this.dateTimeFormat).add(Date.DAY, offsetDays);						
 						event.start_time=event.startDate.format(this.dateTimeFormat);
 						event.end_time=event.endDate.format(this.dateTimeFormat);
 						
