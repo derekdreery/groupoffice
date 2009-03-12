@@ -85,6 +85,7 @@ require_once($GO_CONFIG->class_path.'base/modules.class.inc.php');
 require_once($GO_CONFIG->class_path.'base/language.class.inc.php');
 require_once($GO_CONFIG->class_path.'base/theme.class.inc.php');
 require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+require_once($GO_CONFIG->class_path.'base/events.class.inc.php');
 
 $GO_THEME = new GO_THEME();
 $GO_AUTH = new GO_AUTH();
@@ -100,6 +101,8 @@ $GO_LANGUAGE = new GO_LANGUAGE();
 $GO_MODULES = new GO_MODULES();
 $GO_SECURITY = new GO_SECURITY();
 $GO_LINKS = new GO_LINKS();
+$GO_EVENTS = new GO_EVENTS();
+
 
 if (isset($_REQUEST['SET_LANGUAGE'])){
 	$GO_LANGUAGE->set_language($_REQUEST['SET_LANGUAGE']);

@@ -151,6 +151,8 @@ try
 						}
 					}
 				}
+				
+				$GO_EVENTS->fire_event('save_contact', $contact_credentials);
 
 
 				echo json_encode($result);
