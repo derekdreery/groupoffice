@@ -2,11 +2,9 @@
 //Uncomment this line in new translations!
 //require($GO_LANGUAGE->get_fallback_language_file('notes'));
 
-$modules['notes']['name']='Notes';
-$modules['notes']['description']='Put a description here';
 $lang['notes']['note']='Note';
 $lang['notes']['name']='Notes';
-$lang['notes']['description']='Put a description here';
+$lang['notes']['description']='A module to make to notes';
 
 $lang['notes']['category']='Category';
 $lang['notes']['categories']='Categories';

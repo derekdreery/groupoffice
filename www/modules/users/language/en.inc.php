@@ -2,7 +2,7 @@
 //Uncomment this line in new translations!
 //require($GO_LANGUAGE->get_fallback_language_file('users'));
 $lang['users']['name'] = 'Users';
-$lang['users']['description'] = 'Admin module; Managing system users.';
+$lang['users']['description'] = 'Admin module. Managing system users.';
 
 $lang['users']['deletePrimaryAdmin'] = 'You can\t delete the primary administrator';
 $lang['users']['deleteYourself'] = 'You can\'t delete yourself';
