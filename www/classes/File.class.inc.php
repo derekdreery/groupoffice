@@ -54,7 +54,12 @@ class File
 	}
 	
 	function strip_invalid_chars($filename){
-		return trim(preg_replace('/[&\/:\*\?"<>|\\\]/','', $filename));
+		$filename = trim(preg_replace('/[\/:\*\?"<>|\\\]/','', $filename));
+		
+		//IE likes to change a double white space to a single space
+		//We must do this ourselves so the filenames will match.
+		return preg_replace('/\s+/', ' ', $filename);
+		
 	}
 
 	function get_filetype_image($extension=null) {

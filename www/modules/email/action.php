@@ -184,12 +184,11 @@ try{
 
 							$response['files'][] = array(
 					'tmp_name'=>$tmp_file,
-					'name'=>File::strip_invalid_chars($_FILES['attachments']['name'][$n]),
+					'name'=>utf8_basename($tmp_file),
 					'size'=>Number::format_size($_FILES['attachments']['size'][$n]),
 					'type'=>File::get_filetype_description(File::get_extension($_FILES['attachments']['name'][$n]))					
-							);
+							);							
 						}
-
 					}
 					echo json_encode($response);
 					exit();
@@ -325,6 +324,7 @@ try{
 									{
 										$tmp_name = $GO_CONFIG->file_storage_path.$tmp_name;
 									}
+									debug($tmp_name);
 									$file =& new Swift_File($tmp_name);
 									//$file = file_get_contents($tmp_name);
 									$attachment =& new Swift_Message_Attachment($file,utf8_basename($tmp_name), File::get_mime($tmp_name));

@@ -903,8 +903,17 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			}
 
 			if (this.attachmentsStore && this.attachmentsStore.data.keys.length) {
-				this.sendParams['attachments'] = Ext
-						.encode(this.attachmentsStore.data.keys);
+				
+				var attachments = [];
+				
+				var records = this.attachmentsStore.getRange();
+				for(var i=0;i<records.length;i++)
+				{
+					attachments.push(Ext.util.Format.htmlDecode(records[i].get('tmp_name')));
+				}
+				
+				
+				this.sendParams['attachments'] = Ext.encode(attachments);
 			}
 
 			this.sendParams['inline_attachments'] = Ext
