@@ -1314,7 +1314,7 @@ try{
 										case 'account':
 											$email = new email();
 											$response['success']=false;
-											$response['data']=$email->get_account(($_POST['account_id']));
+											$response['data']=$email->get_account($_POST['account_id']);
 
 											if($response['data'])
 											{
