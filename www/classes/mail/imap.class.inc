@@ -1542,10 +1542,14 @@ class imap{
 				$input=preg_replace("/&ACY /","&- ",$input);
 				$input=preg_replace("/&ACY/","&",$input);
 				$input=preg_replace("/&AF8(-)?/","_",$input);
-				$input=preg_replace("/&ADs(-)?/",";",$input);
+				$input=preg_replace("/&ADs(-)?/",";",$input);				
+				$input=preg_replace("/&AFs(-)?/","[",$input);
+				$input=preg_replace("/&AF0(-)?/","]",$input);
 				return $input;
 			}
 		}
+		
+		//doesnt work well with UTF-8
 		return @imap_utf7_encode(utf8_decode($input));
 	}
 
