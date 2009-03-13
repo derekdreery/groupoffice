@@ -313,7 +313,7 @@ class tasks extends db
 		$rm = new reminder();
 		$existing_reminder = $rm->get_reminder_by_link_id($tasklist['user_id'], $task['id'], 12);
 
-		if(empty($event['reminder']) && $existing_reminder)
+		if(empty($task['reminder']) && $existing_reminder)
 		{
 			$rm->delete_reminder($existing_reminder['id']);
 		}
@@ -328,6 +328,7 @@ class tasks extends db
 			
 			if($existing_reminder)
 			{
+				$reminder['id']=$existing_reminder['id'];
 				$rm->update_reminder($reminder);
 			}else
 			{
