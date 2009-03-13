@@ -451,7 +451,7 @@ class imap{
 			$cached_message['answered']=$message['answered'] ? '1' : '0';
 			$cached_message['priority']=empty($message['priority']) ? 3 : intval($message['priority']);			
 			$cached_message['from']=$message['from'];
-			$cached_message['reply_to']=$message['reply_to'];
+			$cached_message['reply_to']=$message['reply-to'];
 			$cached_message['to']=implode(',', $message['to']);
 
 			$cached_message['notification']=$message['notification'];
@@ -636,9 +636,9 @@ class imap{
 
 			$this->message = array_merge($this->message, $values);
 
-			if(!isset($this->message["reply_to"]))
+			if(!isset($this->message["reply-to"]))
 			{
-				$this->message["reply_to"] = $this->message['from'];
+				$this->message["reply-to"] = $this->message['from'];
 			}
 			return $this->message;
 		} else {
