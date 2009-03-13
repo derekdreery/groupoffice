@@ -3,7 +3,7 @@
 require($GO_LANGUAGE->get_fallback_language_file('users'));
 
 $lang['users']['name'] = 'Gebruikers';
-$lang['users']['description'] = 'Beheer module; Beheren van de users.';
+$lang['users']['description'] = 'Beheren van de gebruikers';
 
 $lang['users']['deletePrimaryAdmin'] = 'U kunt de primaire Administrator niet verwijderen';
 $lang['users']['deleteYourself'] = 'U kunt zichzelf niet verwijderen';
