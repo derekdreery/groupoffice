@@ -185,7 +185,7 @@ class go_template_parser
 					$start_pos = strpos($tag, $this->close_tag_symbol);					
 					$tagcontent = substr($tag, $start_pos+strlen($this->close_tag_symbol));					
 					$tagcontent = substr($tagcontent,0, strlen($tagcontent)-strlen($this->open_tag_symbol.'/'.$tagname.$this->close_tag_symbol));	
-					$this->parse_tags($tagcontent, $conditions);					
+					$this->parse_tags($tagcontent);					
 				}else
 				{
 					$tagcontent = '';
