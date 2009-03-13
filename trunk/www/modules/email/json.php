@@ -241,7 +241,7 @@ try{
 			switch($task)
 			{
 				case "reply":
-					$response['data']['to'] = $content["reply_to"];
+					$response['data']['to'] = $content["reply-to"];
 					if(!eregi('Re:', $subject))
 					{
 						$response['data']['subject'] = 'Re: '.$subject;
@@ -253,7 +253,7 @@ try{
 
 				case "reply_all":
 
-					$response['data']['to'] = $content["reply_to"];
+					$response['data']['to'] = $content["reply-to"];
 					if(!eregi('Re:', $subject))
 					{
 						$response['data']['subject'] = 'Re: '.$subject;
