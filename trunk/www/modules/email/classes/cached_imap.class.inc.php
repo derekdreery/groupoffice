@@ -15,7 +15,7 @@ class cached_imap extends imap{
 	 */
 	var $folder;
 
-	var $folder_sort_cache;
+	var $folder_sort_cache = array();
 
 	/**
 	 * E-mail account record
