@@ -622,7 +622,7 @@ class GO_USERS extends db
 		
 		$user['mtime']=time();
 
-		
+		$params = array($user);
 		
 		$ret = false;
 		if(!empty($user['password']))
@@ -644,10 +644,14 @@ class GO_USERS extends db
 		if($complete_profile)
 		{
 			$user=$this->get_user($user['id']);
+			if(isset($params[0]['password']))
+			{
+				$user['password']=$params[0]['password'];
+			}
 			$GO_EVENTS->fire_event('add_user', array($user));
 		}else
 		{
-			$GO_EVENTS->fire_event('update_user', array($user));
+			$GO_EVENTS->fire_event('update_user', $params);
 		}
 		
 		return $ret;
@@ -956,7 +960,7 @@ class GO_USERS extends db
 				
 				$search->delete_search_result($user_id, 8);				
 				
-				$GO_MODULES->fire_event('user_delete', array($user));
+				$GO_MODULES->fire_event('user_delete', $user);
 
 				$sql = "DELETE FROM go_acl WHERE user_id=".$this->escape($user_id).";";
 				$this->query($sql);

@@ -14,7 +14,12 @@
 
 class users extends db
 {
-	function __on_load_settings(&$response)
+	public function __on_load_listeners($events){
+		$events->add_listener('load_settings', __FILE__, 'users', 'load_settings');
+		$events->add_listener('save_settings', __FILE__, 'users', 'save_settings');
+	}
+	
+	function load_settings($response)
 	{
 		global $GO_USERS, $GO_MODULES;
 		
@@ -28,7 +33,7 @@ class users extends db
 		$response['data']['lastlogin'] = Date::get_timestamp($response['data']['lastlogin']);
 	}
 
-	function __on_save_settings()
+	function save_settings()
 	{
 		global $GO_USERS, $lang;
 		
