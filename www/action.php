@@ -111,7 +111,7 @@ try{
 				
 				//other modules can do something when a reminder is dismissed
 				//eg. The calendar module sets a next reminder for a recurring event.
-				$GO_MODULES->fire_event('reminder_dismissed', $reminder);
+				$GO_EVENTS->fire_event('reminder_dismissed', array($reminder));
 				$rm->delete_reminder($reminder_id);
 			}
 			
