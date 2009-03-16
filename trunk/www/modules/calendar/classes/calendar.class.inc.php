@@ -29,6 +29,7 @@ class calendar extends db
 	public function __on_load_listeners($events){
 		$events->add_listener('load_settings', __FILE__, 'calendar', 'load_settings');
 		$events->add_listener('save_settings', __FILE__, 'calendar', 'save_settings');
+		$events->add_listener('reminder_dismissed', __FILE__, 'calendar', 'reminder_dismissed');
 	}
 	
 	public static function load_settings($response)
@@ -56,6 +57,23 @@ class calendar extends db
 			
 			$cal = new calendar();
 			$cal->update_settings($settings);
+		}
+	}
+	
+	public static function reminder_dismissed($reminder)
+	{
+		$cal = new calendar();
+		
+		$event = $cal->get_event($reminder['link_id']);
+		if($event && !empty($event['rrule']))
+		{
+			$reminder['time'] = Date::get_next_recurrence_time($event['start_time'], time(),$event['rrule']);
+
+			if($reminder['time'])
+			{
+				$rm = new reminder();
+				$rm->add_reminder($reminder);
+			}
 		}
 	}
 
@@ -1870,20 +1888,7 @@ class calendar extends db
 		/* {ON_BUILD_SEARCH_INDEX_FUNCTION} */
 	}
 
-	function __on_reminder_dismissed($reminder)
-	{
-		$event = $this->get_event($reminder['link_id']);
-		if($event && !empty($event['rrule']))
-		{
-			$reminder['time'] = Date::get_next_recurrence_time($event['start_time'], time(),$event['rrule']);
-
-			if($reminder['time'])
-			{
-				$rm = new reminder();
-				$rm->add_reminder($reminder);
-			}
-		}
-	}
+	
 
 	function is_available($user_id, $start, $end, $ignore_event_id=0)
 	{
