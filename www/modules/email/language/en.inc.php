@@ -44,3 +44,5 @@ $lang['email']['quotaError']="Your mailbox is full. Empty your trash folder firs
 
 $lang['email']['draftsDisabled']="Message could not be saved because the 'Drafts' folder is disabled.<br /><br />Go to Settings -> Accounts -> Double click account -> Folders to configure it.";
 $lang['email']['noSaveWithPop3']='Message could not be saved because a POP3 account does not support this.';
+
+$lang['email']['goAlreadyStarted']='Group-Office was al gestart. Het e-mailscherm wordt nu geladen in Group-Office. Sluit dit venster en stel uw bericht op in Group-Office.';
