@@ -4,7 +4,9 @@ class GO_EVENTS
 	var $listeners;
 	
 	public function __construct(){
-		if(!isset($_SESSION['GO_SESSION']['event_listeners']))
+		global $GO_CONFIG;
+		
+		if(!isset($_SESSION['GO_SESSION']['event_listeners']) || $GO_CONFIG->debug)
 		{
 			$this->load_listeners();
 		}else
@@ -65,7 +67,7 @@ class GO_EVENTS
 			foreach($this->listeners[$event] as $listener)
 			{		
 				require_once($listener['file']);
-				$class = new $listener['class'];
+				//$class = new $listener['class'];
 				
 				call_user_func_array(array($listener['class'], $listener['method']),$args);
 			}		
