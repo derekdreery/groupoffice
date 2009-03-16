@@ -343,12 +343,13 @@ try{
 								{
 									throw new Exception($lang['email']['draftsDisabled']);
 								}
-								if ($imap->open($swift->account, $swift->account['drafts'])){	
+								$drafts_folder = $imap->utf7_imap_encode($swift->account['drafts']);
+								if ($imap->open($swift->account, $drafts_folder)){	
 
-									$status = $imap->status($swift->account['drafts'], SA_UIDNEXT);
+									$status = $imap->status($drafts_folder, SA_UIDNEXT);
 									if(!empty($status->uidnext))	
 									{								
-										$response['success']=$imap->append_message($imap->utf7_imap_encode($swift->account['drafts']), $swift->get_data(),"\\Seen");
+										$response['success']=$imap->append_message($drafts_folder, $swift->get_data(),"\\Seen");
 										$response['draft_uid']=$status->uidnext;
 									}
 									

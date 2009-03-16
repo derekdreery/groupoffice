@@ -986,6 +986,8 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 
 			});
 		} else {
+			this.saveButton.setDisabled(false);
+			this.sendButton.setDisabled(false);
 			this.subjectField.focus();
 		}
 	},
