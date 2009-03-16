@@ -25,6 +25,39 @@ class calendar extends db
 	var $events_sort = array(); //used to sort the events at start_time
 	var $all_day_events = array();
 	var $backgrounds = array();
+	
+	public function __on_load_listeners($events){
+		$events->add_listener('load_settings', __FILE__, 'calendar', 'load_settings');
+		$events->add_listener('save_settings', __FILE__, 'calendar', 'save_settings');
+	}
+	
+	public static function load_settings($response)
+	{	
+		global $GO_MODULES;
+
+		if($GO_MODULES->has_module('calendar'))
+		{
+			$cal = new calendar();
+			$settings = $cal->get_settings($_POST['user_id']);		
+			$settings = array_merge($settings, $cal->reminder_seconds_to_form_input($settings['reminder']));		
+			$response['data']=array_merge($response['data'], $settings);
+		}
+	}
+
+	public static function save_settings(){
+
+		global $GO_MODULES;
+
+		if($GO_MODULES->has_module('calendar'))
+		{
+			$settings['user_id']=$_POST['user_id'];			
+			$settings['background']=$_POST['background'];
+			$settings['reminder']=$_POST['reminder_multiplier'] * $_POST['reminder_value'];
+			
+			$cal = new calendar();
+			$cal->update_settings($settings);
+		}
+	}
 
 
 	function reminder_seconds_to_form_input($reminder)
@@ -52,31 +85,7 @@ class calendar extends db
 		return $settings;
 	}
 
-	function __on_load_settings(&$response)
-	{
-		global $GO_MODULES, $GO_CONFIG;
-
-		$settings = $this->get_settings($_POST['user_id']);
-		
-		$settings = array_merge($settings, $this->reminder_seconds_to_form_input($settings['reminder']));
-			
-		
-		$response['data']=array_merge($response['data'], $settings);
-	}
-
-	function __on_save_settings(){
-
-		global $GO_MODULES;
-
-		if($GO_MODULES->has_module('calendar'))
-		{
-			$settings['user_id']=$_POST['user_id'];			
-			$settings['background']=$_POST['background'];
-			$settings['reminder']=$_POST['reminder_multiplier'] * $_POST['reminder_value'];
-			
-			$this->update_settings($settings);
-		}
-	}
+	
 	
 	function get_settings($user_id)
 	{
