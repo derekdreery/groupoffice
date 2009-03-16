@@ -36,7 +36,7 @@ class GO_EVENTS
 					$class = new $module['id'];
 					$method = '__on_load_listeners';
 					if(method_exists($class, $method))
-					{
+					{						
 						$class->$method($this);						
 					}
 				}
@@ -55,6 +55,8 @@ class GO_EVENTS
 			'class'=>$class,
 			'method'=>$method
 		);
+		
+		//debug('Adding listener: '.$class.'::'.$method);
 	}
 	
 	public function fire_event($event, $args=array())
@@ -68,6 +70,7 @@ class GO_EVENTS
 			foreach($this->listeners[$event] as $listener)
 			{
 				require_once($listener['file']);
+				debug('Firing listener: '.$listener['class'].'::'.$listener['method']);
 				call_user_func_array(array($listener['class'], $listener['method']),$args);
 			}		
 		}		

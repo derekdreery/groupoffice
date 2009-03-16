@@ -15,6 +15,7 @@ class summary extends db{
 	
 	public function __on_load_listeners($events){
 		$events->add_listener('add_user', __FILE__, 'summary', 'add_user');
+		$events->add_listener('user_delete', __FILE__, 'summary', 'user_delete');
 	}
 	
 	public static function add_user($user)
@@ -29,6 +30,13 @@ class summary extends db{
 		$su = new summary();
 		
 		$su->add_feed($feed);
+	}
+	
+	public static function user_delete($user)
+	{			
+		$su = new summary();
+		$su->query("DELETE FROM su_rss_feeds WHERE user_id=".$user['id']);		
+		$su->query("DELETE FROM su_notes WHERE user_id=".$user['id']);
 	}
 	
 	
