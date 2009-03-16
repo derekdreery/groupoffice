@@ -58,7 +58,8 @@ try{
 		case 'settings':
 			$response['data']=array();
 				
-			$GO_MODULES->fire_event('load_settings', $response);
+			$params['response']=&$response;
+			$GO_EVENTS->fire_event('load_settings', $params);
 				
 			$response['success']=true;
 			break;

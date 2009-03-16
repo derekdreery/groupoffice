@@ -152,7 +152,7 @@ try
 					}
 				}
 				
-				$GO_EVENTS->fire_event('save_contact', $contact_credentials);
+				$GO_EVENTS->fire_event('save_contact', array($contact_credentials));
 
 
 				echo json_encode($result);
@@ -256,7 +256,7 @@ try
 					}
 				}
 				
-				$GO_EVENTS->fire_event('save_company', $company_credentials);
+				$GO_EVENTS->fire_event('save_company', array($company_credentials));
 
 
 				echo json_encode($result);

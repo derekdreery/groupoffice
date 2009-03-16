@@ -57,21 +57,19 @@ class GO_EVENTS
 		);
 	}
 	
-	public function fire_event($event)
-	{
-		$args = func_get_args();
-		array_shift($args);
+	public function fire_event($event, $args=array())
+	{		
+		//didn't work with references :(
+		//$args = func_get_args();
+		//array_shift($args);
 		
 		if(isset($this->listeners[$event]))
 		{
 			foreach($this->listeners[$event] as $listener)
 			{		
 				require_once($listener['file']);
-				//$class = new $listener['class'];
-				
 				call_user_func_array(array($listener['class'], $listener['method']),$args);
 			}		
 		}		
 	}
 }
-?>

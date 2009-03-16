@@ -644,10 +644,10 @@ class GO_USERS extends db
 		if($complete_profile)
 		{
 			$user=$this->get_user($user['id']);
-			$GO_EVENTS->fire_event('add_user', $user);
+			$GO_EVENTS->fire_event('add_user', array($user));
 		}else
 		{
-			$GO_EVENTS->fire_event('update_user', $user);
+			$GO_EVENTS->fire_event('update_user', array($user));
 		}
 		
 		return $ret;
@@ -670,7 +670,7 @@ class GO_USERS extends db
 		$sql = "UPDATE go_users SET password='".md5($password)."' WHERE id='$user_id'";
 		if ($this->query($sql))
 		{
-			$GO_EVENTS->fire_event('change_user_password', $user_id, $password);
+			$GO_EVENTS->fire_event('change_user_password', array($user_id, $password));
 			
 			return true;
 		}
@@ -833,7 +833,7 @@ class GO_USERS extends db
 		
 	
 		
-		$GO_EVENTS->fire_event('before_add_user', $user);
+		$GO_EVENTS->fire_event('before_add_user', array($user));
 		
 		$unencrypted_password = $user['password'];
 		if(!empty($user['password']))
@@ -896,7 +896,7 @@ class GO_USERS extends db
 			//delay add user event because name must be supplied first.
 			if(!empty($user['first_name']) && !empty($user['first_name']))
 			{			
-				$GO_EVENTS->fire_event('add_user', $user);
+				$GO_EVENTS->fire_event('add_user', array($user));
 			}
 
 			return $user['id'];
@@ -956,7 +956,7 @@ class GO_USERS extends db
 				
 				$search->delete_search_result($user_id, 8);				
 				
-				$GO_MODULES->fire_event('user_delete', $user);
+				$GO_MODULES->fire_event('user_delete', array($user));
 
 				$sql = "DELETE FROM go_acl WHERE user_id=".$this->escape($user_id).";";
 				$this->query($sql);

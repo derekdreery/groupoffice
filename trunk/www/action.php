@@ -76,7 +76,7 @@ try{
 		
 		case 'save_settings':			
 
-			$GO_MODULES->fire_event('save_settings');
+			$GO_EVENTS->fire_event('save_settings');
 
 			$response['success']=true;
 			break;
