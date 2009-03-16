@@ -28,5 +28,5 @@ GO.tasks.lang.createLink = 'Crează o legătură';
 GO.tasks.lang.startsAt='Începe să';
 GO.tasks.lang.showInactiveTasks='Arată activităţile inactive';
 GO.tasks.lang.remindMe= 'Promemoria';
-GO.tasks.lang.scheduleCall=Planifică telefon';
+GO.tasks.lang.scheduleCall='Planifică telefon';
 GO.tasks.lang.call='Telefon';
