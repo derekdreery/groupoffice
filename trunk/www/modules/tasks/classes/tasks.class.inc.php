@@ -14,21 +14,33 @@
 
 class tasks extends db
 {
-	function __on_load_settings(&$response)
+	public function __on_load_listeners($events){
+		$events->add_listener('load_settings', __FILE__, 'tasks', 'load_settings');
+		$events->add_listener('save_settings', __FILE__, 'tasks', 'save_settings');
+	}
+	
+	
+	function load_settings($response)
 	{
-		global $GO_MODULES, $GO_CONFIG;
+		global $GO_MODULES;
 
-		$settings = $this->get_settings($_POST['user_id']);
-
-		$response['data']=array_merge($response['data'], $settings);
+		if($GO_MODULES->has_module('tasks'))
+		{
+			$tasks = new tasks();
+			
+			$settings = $tasks->get_settings($_POST['user_id']);
+			$response['data']=array_merge($response['data'], $settings);
+		}
 	}
 
-	function __on_save_settings(){
+	function save_settings(){
 
 		global $GO_MODULES;
 
 		if($GO_MODULES->has_module('tasks'))
 		{
+			$tasks = new tasks();
+			
 			$settings['remind']=isset($_POST['remind']) ? '1' : '0';
 			$settings['user_id']=$_POST['user_id'];
 			if(isset($_POST['reminder_days']))					
@@ -37,7 +49,7 @@ class tasks extends db
 			if(isset($_POST['reminder_time']))
 				$settings['reminder_time']=$_POST['reminder_time'];
 			
-			$this->update_settings($settings);
+			$tasks->update_settings($settings);
 		}
 	}
 	
