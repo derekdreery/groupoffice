@@ -30,6 +30,9 @@ class calendar extends db
 		$events->add_listener('load_settings', __FILE__, 'calendar', 'load_settings');
 		$events->add_listener('save_settings', __FILE__, 'calendar', 'save_settings');
 		$events->add_listener('reminder_dismissed', __FILE__, 'calendar', 'reminder_dismissed');
+		$events->add_listener('user_delete', __FILE__, 'calendar', 'user_delete');
+		$events->add_listener('add_user', __FILE__, 'calendar', 'add_user');
+		$events->add_listener('build_search_index', __FILE__, 'calendar', 'build_search_index');
 	}
 	
 	public static function load_settings($response)
@@ -1792,31 +1795,35 @@ class calendar extends db
 	}
 
 
-	function __on_user_delete($user)
+	function user_delete($user)
 	{
+		$cal = new calendar();
+		
 		$delete = new calendar();
-		$sql = "SELECT * FROM cal_calendars WHERE user_id='".$this->escape($user['id'])."'";
-		$this->query($sql);
-		while($this->next_record())
+		$sql = "SELECT * FROM cal_calendars WHERE user_id='".$cal->escape($user['id'])."'";
+		$cal->query($sql);
+		while($cal->next_record())
 		{
-			$delete->delete_calendar($this->f('id'));
+			$delete->delete_calendar($cal->f('id'));
 		}
 
 
-		$this->get_user_views($user['id']);
+		$cal->get_user_views($user['id']);
 
-		while($this->next_record())
+		while($cal->next_record())
 		{
-			$delete->delete_view($this->f('id'));
+			$delete->delete_view($cal->f('id'));
 		}
 
 	}
 
-	function __on_add_user($params)
+	public static function add_user($user)
 	{
 		global $GO_SECURITY, $GO_LANGUAGE, $GO_CONFIG;
 
-		$user = $params['user'];
+		$cal2 = new calendar();
+		
+		$cal = new calendar();
 
 		$calendar['name']=String::format_name($user);
 		$calendar['user_id']=$user['id'];
@@ -1825,20 +1832,20 @@ class calendar extends db
 
 		$GO_SECURITY->add_group_to_acl($GO_CONFIG->group_internal, $calendar['acl_write']);
 
-		$calendar_id = $this->add_calendar($calendar);
+		$calendar_id = $cal->add_calendar($calendar);
 
 		require($GO_LANGUAGE->get_language_file('calendar'));
 
-		$sql = "SELECT * FROM cal_views WHERE name LIKE '".$this->escape($lang['calendar']['groupView'])."'";
-		$this->query($sql);
-		if($this->next_record())
+		$sql = "SELECT * FROM cal_views WHERE name LIKE '".$cal->escape($lang['calendar']['groupView'])."'";
+		$cal->query($sql);
+		if($cal->next_record())
 		{
-			$view_id = $this->f('id');
+			$view_id = $cal->f('id');
 
-			$count = $this->get_view_calendars($view_id);
+			$count = $cal2->get_view_calendars($view_id);
 
 			if($count<=20)
-			$this->add_calendar_to_view($calendar_id, '', $view_id);
+				$cal2->add_calendar_to_view($calendar_id, '', $view_id);
 		}
 	}
 
@@ -1876,14 +1883,16 @@ class calendar extends db
 			$search->cache_search_result($cache);
 		}
 	}
-	public function __on_build_search_index()
-	{
-		$sql = "SELECT id FROM cal_events";
-		$this->query($sql);
+	public function build_search_index()
+	{	
 		$cal = new calendar();
-		while($record = $this->next_record())
+		$cal2 = new calendar();	
+		$sql = "SELECT id FROM cal_events";
+		$cal->query($sql);
+		
+		while($record = $cal->next_record())
 		{
-			$cal->cache_event($record['id']);
+			$cal2->cache_event($record['id']);
 		}
 		/* {ON_BUILD_SEARCH_INDEX_FUNCTION} */
 	}
@@ -1994,10 +2003,10 @@ class calendar extends db
 		return false;
 	}
 
-	function __on_check_database(){
+	/*function __on_check_database(){
 		global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE;
 
-		/*	echo 'Checking calendar folder permissions<br />';
+			echo 'Checking calendar folder permissions<br />';
 
 		if(isset($GO_MODULES->modules['files']))
 		{
@@ -2013,9 +2022,9 @@ class calendar extends db
 		$fs->check_share($full_path, $this->f('user_id'), $this->f('acl_read'), $this->f('acl_write'));
 		}
 		}
-		echo 'Done<br /><br />';*/
+		echo 'Done<br /><br />';
 	}
-
+*/
 	/**
 	 * When a an item gets deleted in a panel with links. Group-Office attempts
 	 * to delete the item by finding the associated module class and this function

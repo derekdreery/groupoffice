@@ -635,46 +635,4 @@ class postfixadmin extends db {
 		return $this->query($sql);
 	}	
 	
-	/* {CLASSFUNCTIONS} */
-	
-	
-	/**
-	 * When a an item gets deleted in a panel with links. Group-Office attempts
-	 * to delete the item by finding the associated module class and this function
-	 *
-	 * @param int $id The id of the linked item
-	 * @param int $link_type The link type of the item. See /classes/base/links.class.inc
-	 */
-	
-	function __on_delete_link($id, $link_type)
-	{		
-		/* {ON_DELETE_LINK_FUNCTION} */	
-	}
-	
-	/**
-	 * This function is called when a user is deleted	
-	 *
-	 * @param int $user_id
-	 */
-	 
-	public function __on_user_delete($user)
-	{
-		
-	}
-	
-	/**
-	 * When a global search action is performed this function will be called for each module
-	 *
-	 * @param int $last_sync_time The time this function was called last
-	 */
-	
-	public function __on_search($last_sync_time=0)
-	{
-		global $GO_MODULES, $GO_LANGUAGE;
-		
-		require($GO_LANGUAGE->get_language_file('postfixadmin'));
-		
-		/* {ON_SEARCH_FUNCTION} */
-	}
-	
 }

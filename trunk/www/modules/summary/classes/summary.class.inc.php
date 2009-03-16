@@ -13,21 +13,22 @@
  */
 class summary extends db{
 	
-	function __construct()
-	{
-		parent::__construct();
+	public function __on_load_listeners($events){
+		$events->add_listener('add_user', __FILE__, 'summary', 'add_user');
 	}
 	
-	function __on_add_user($params)
+	public static function add_user($user)
 	{
 		global $GO_SECURITY, $GO_LANGUAGE, $GO_CONFIG;
 
 		require($GO_LANGUAGE->get_language_file('summary'));
 		
-		$feed['user_id']=$params['user']['id'];
+		$feed['user_id']=$user['id'];
 		$feed['url']=$lang['summary']['default_rss_url'];
 		
-		$this->add_feed($feed);
+		$su = new summary();
+		
+		$su->add_feed($feed);
 	}
 	
 	

@@ -66,7 +66,7 @@ class GO_EVENTS
 		if(isset($this->listeners[$event]))
 		{
 			foreach($this->listeners[$event] as $listener)
-			{		
+			{
 				require_once($listener['file']);
 				call_user_func_array(array($listener['class'], $listener['method']),$args);
 			}		

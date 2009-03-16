@@ -884,19 +884,27 @@ class files extends filesystem
 
 	}
 
+	public function __on_load_listeners($events){
+		$events->add_listener('check_database', __FILE__, 'files', 'check_database');
+		$events->add_listener('user_delete', __FILE__, 'files', 'user_delete');
+		$events->add_listener('user_delete', __FILE__, 'files', 'user_delete');
+		$events->add_listener('add_user', __FILE__, 'files', 'add_user');
+		$events->add_listener('build_search_index', __FILE__, 'files', 'build_search_index');
+	}
 
-
-	function __on_check_database()
+	public static function check_database()
 	{
 		global $GO_USERS, $GO_CONFIG, $GO_SECURITY;
 
 		$line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
+		
+		$fs = new files();
 
 		$fs2 = new files();
 		echo 'Deleting invalid folders in database'.$line_break;
 		$sql = "SELECT * FROM fs_folders";
-		$this->query($sql);
-		while($folder = $this->next_record())
+		$fs->query($sql);
+		while($folder = $fs->next_record())
 		{
 			$full_path = $GO_CONFIG->file_storage_path.$folder['path'];
 			if(!is_dir($full_path))
@@ -908,8 +916,8 @@ class files extends filesystem
 		echo 'Deleting invalid files in database'.$line_break;
 
 		$sql = "SELECT * FROM fs_files";
-		$this->query($sql);
-		while($file = $this->next_record())
+		$fs->query($sql);
+		while($file = $fs->next_record())
 		{
 			$full_path = $GO_CONFIG->file_storage_path.$file['path'];
 			if(!file_exists($full_path))
@@ -931,7 +939,7 @@ class files extends filesystem
 				echo "Creating users/".$GO_USERS->f('username').$line_break;
 			}
 				
-			$folder = $this->get_folder($this->strip_server_path($home_dir));
+			$folder = $fs->get_folder($fs->strip_server_path($home_dir));
 				
 			if(empty($folder['acl_read']))
 			{
@@ -943,15 +951,15 @@ class files extends filesystem
 				$up_folder['acl_write']=$GO_SECURITY->get_new_acl('files', $GO_USERS->f('id'));
 				$up_folder['visible']='1';
 
-				$this->update_folder($up_folder);
+				$fs->update_folder($up_folder);
 			}
 		}
 
 		echo 'Correcting id=0'.$line_break;
 
 		$sql = "SELECT path FROM fs_folders WHERE id=0";
-		$this->query($sql);
-		while($r = $this->next_record())
+		$fs->query($sql);
+		while($r = $fs->next_record())
 		{
 			$r['id']=$fs2->nextid('fs_folders');
 			$fs2->update_row('fs_folders', 'path', $r);
@@ -1020,11 +1028,11 @@ class files extends filesystem
 		return $this->search_results;
 	}
 
-	function __on_add_user($params)
+	public static function add_user($user)
 	{
 		global $GO_CONFIG, $GO_SECURITY;
-
-		$user=$params['user'];
+		
+		$fs = new files();
 
 		$userdir = $GO_CONFIG->file_storage_path.'users/'.$user['username'];
 
@@ -1033,7 +1041,7 @@ class files extends filesystem
 			mkdir($userdir, $GO_CONFIG->folder_create_mode, true);
 		}
 			
-		$folder = $this->get_folder('users/'.$user['username']);
+		$folder = $fs->get_folder('users/'.$user['username']);
 		if(empty($folder['acl_read']))
 		{
 			$up_folder['id']=$folder['id'];
@@ -1042,16 +1050,18 @@ class files extends filesystem
 			$up_folder['acl_write']=$GO_SECURITY->get_new_acl('files', $user['id']);
 			$up_folder['visible']='1';
 				
-			$this->update_folder($up_folder);
+			$fs->update_folder($up_folder);
 		}
 	}
 
-	function __on_user_delete($user)
+	function user_delete($user)
 	{
 		global $GO_CONFIG;
+		
+		$fs = new files();
 
-		$this->delete($GO_CONFIG->file_storage_path.'users/'.$user['username']);
-		$this->delete($GO_CONFIG->file_storage_path.'users/'.$user['id']);
+		$fs->delete($GO_CONFIG->file_storage_path.'users/'.$user['username']);
+		$fs->delete($GO_CONFIG->file_storage_path.'users/'.$user['id']);
 	}
 
 	function cache_file($path, $index='path')
@@ -1093,16 +1103,18 @@ class files extends filesystem
 	/**
 	 * When a global search action is performed this function will be called for each module
 	 */
-	public function __on_build_search_index()
+	public static function build_search_index()
 	{
 		global $GO_CONFIG;
-		$sql = "SELECT path FROM fs_files";
-		$this->query($sql);
+		
 		$fs = new files();
-		while($record = $this->next_record())
+		
+		$sql = "SELECT path FROM fs_files";
+		$fs->query($sql);
+		$fs1 = new files();
+		while($record = $fs->next_record())
 		{
-			$fs->cache_file($GO_CONFIG->file_storage_path.$record['path']);
+			$fs1->cache_file($GO_CONFIG->file_storage_path.$record['path']);
 		}
-		/* {ON_BUILD_SEARCH_INDEX_FUNCTION} */
 	}
 }

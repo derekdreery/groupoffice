@@ -34,6 +34,9 @@ ini_set('max_execution_time', 360);
 
 
 
+
+
+
 $db2 = new db();
 $db3 = new db();
 
@@ -182,9 +185,22 @@ echo 'Done'.$line_break.$line_break;
 
 
 
+
+echo 'Clearing search cache'.$line_break;
+
 require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
 $search = new search();
 
+$search->reset();
+flush();
+
+echo 'Building search cache'.$line_break;
+
+$GO_EVENTS->fire_event('build_search_index');
+
+//$search->update_search_cache(true);
+
+echo 'Done'.$line_break.$line_break;
 
 
 
@@ -193,17 +209,7 @@ echo 'Start of module checks'.$line_break;
 $GO_EVENTS->fire_event('check_database');
 
 
-echo 'Clearing search cache'.$line_break;
 
-
-$search->reset();
-flush();
-
-echo 'Building search cache'.$line_break;
-
-$search->update_search_cache(true);
-
-echo 'Done'.$line_break.$line_break;
 
 
 
