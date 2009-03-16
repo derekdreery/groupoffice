@@ -23,7 +23,7 @@ $uid = ($_REQUEST['uid']);
 
 require_once($GO_LANGUAGE->get_language_file('email'));
 require_once($GO_CONFIG->class_path."mail/imap.class.inc");
-require_once($GO_MODULES->modules['email']['class_path']."email.class.inc");
+require_once($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
 
 $imap = new imap();
 $email = new email();

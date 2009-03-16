@@ -126,7 +126,7 @@ class GoSwift extends Swift{
 
 		if($account_id>0)
 		{
-			require_once ($GO_MODULES->modules['email']['class_path']."email.class.inc");
+			require_once ($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
 			$email = new email();
 
 			$this->account = $email->get_account($account_id);

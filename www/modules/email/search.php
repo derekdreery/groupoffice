@@ -22,7 +22,7 @@ load_control('dropbox');
 load_control('radio_list');
 
 require_once($GO_CONFIG->class_path."mail/imap.class.inc");
-require_once($GO_MODULES->class_path."email.class.inc");
+require_once($GO_MODULES->class_path."email.class.inc.php");
 require_once($GO_LANGUAGE->get_language_file('email'));
 $mail = new imap();
 $email = new email();

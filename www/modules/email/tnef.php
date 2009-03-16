@@ -17,7 +17,7 @@ $GO_SECURITY->authenticate();
 $GO_MODULES->authenticate('email');
 
 require_once($GO_CONFIG->class_path."mail/imap.class.inc");
-require_once($GO_MODULES->class_path."email.class.inc");
+require_once($GO_MODULES->class_path."email.class.inc.php");
 $mail = new imap();
 $email = new email();
 
