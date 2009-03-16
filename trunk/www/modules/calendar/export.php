@@ -7,7 +7,7 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: calendar.class.inc 1584 2008-12-12 13:26:00Z mschering $
+ * @version $Id: calendar.class.inc.php 1584 2008-12-12 13:26:00Z mschering $
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
@@ -18,7 +18,7 @@ require_once("../../Group-Office.php");
 $GO_SECURITY->authenticate();
 $GO_MODULES->authenticate('calendar');
 
-require_once($GO_MODULES->class_path.'calendar.class.inc');
+require_once($GO_MODULES->class_path.'calendar.class.inc.php');
 require_once($GO_MODULES->class_path.'go_ical.class.inc');
 $ical = new go_ical();
 

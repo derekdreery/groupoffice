@@ -229,7 +229,7 @@ if(in_array('calendar', $module_ids))
 	echo 'Calendar updates'.$line_break;
 	flush();
 
-	require_once('../modules/calendar/classes/calendar.class.inc');
+	require_once('../modules/calendar/classes/calendar.class.inc.php');
 	
 	$db->query('ALTER TABLE `cal_events` ADD `calendar_id` INT NOT NULL AFTER `id` ;');
 	$db->query('ALTER TABLE `cal_events` ADD `status` VARCHAR( 20 ) NOT NULL ;');

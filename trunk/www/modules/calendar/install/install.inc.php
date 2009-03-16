@@ -3,7 +3,7 @@ $module = $this->get_module('calendar');
 
 global $GO_USERS, $GO_LANGUAGE, $GO_SECURITY;
 
-require_once($module['class_path'].'calendar.class.inc');
+require_once($module['class_path'].'calendar.class.inc.php');
 $cal = new calendar();
 
 require($GO_LANGUAGE->get_language_file('calendar'));
