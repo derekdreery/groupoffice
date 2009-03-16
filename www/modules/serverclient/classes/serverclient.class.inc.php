@@ -12,19 +12,24 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-class serverclient extends db
+class serverclient
 {
 	var $server_url;
 	var $server_username;
 	var $server_password;
 	var $domains=array();
 	var $ch = false;
+	
+	public function __on_load_listeners($events){
+		$events->add_listener('before_add_user', __FILE__, 'serverclient', 'before_add_user');
+		$events->add_listener('update_user', __FILE__, 'serverclient', 'update_user');
+		$events->add_listener('add_user', __FILE__, 'serverclient', 'add_user');
+	}
 
-	function __construct()
+	public function __construct()
 	{
 		global $GO_CONFIG;
 
-		parent::__construct();
 		if(isset($GO_CONFIG->serverclient_server_url))
 		{
 			$this->server_url = $GO_CONFIG->serverclient_server_url;
@@ -35,15 +40,15 @@ class serverclient extends db
 		$this->domains = empty($GO_CONFIG->serverclient_domains) ? array() : explode(',',$GO_CONFIG->serverclient_domains);		
 	}
 
-	function __on_before_add_user($params)
+	public static function before_add_user($user)
 	{
 		global $GO_CONFIG, $GO_USERS;
-
-		$user = $params['user'];
+		
+		$sc = new serverclient();
 
 		if(isset($_POST['serverclient_domains']))
 		{
-			$this->login();
+			$sc->login();
 				
 			foreach($_POST['serverclient_domains'] as $domain)
 			{
@@ -61,7 +66,7 @@ class serverclient extends db
 					'vacation_body'=>''					
 					);
 
-				$response = $this->send_request($this->server_url.'modules/postfixadmin/action.php', $params);
+				$response = $sc->send_request($sc->server_url.'modules/postfixadmin/action.php', $params);
 				$response = json_decode($response, true);
 					
 				//debug($response, true);
@@ -74,15 +79,15 @@ class serverclient extends db
 		}
 	}
 
-	function __on_update_user($params)
+	public static function update_user($user)
 	{
 		global $GO_USERS, $GO_CONFIG, $GO_MODULES;
 
-		$user = $params['user'];
+		$sc = new serverclient();
 
 		if(!empty($user['password']) && !empty($GO_CONFIG->serverclient_domains))
 		{
-			$this->login();
+			$sc->login();
 				
 			$new_password = $user['password'];
 			$domains = explode(',', $GO_CONFIG->serverclient_domains);
@@ -97,7 +102,7 @@ class serverclient extends db
 					'username'=>$user['username'].'@'.$domain,
 					'password'=>$new_password);
 					
-				$response = $this->send_request($this->server_url.'modules/postfixadmin/action.php', $params);
+				$response = $sc->send_request($sc->server_url.'modules/postfixadmin/action.php', $params);
 				$response = json_decode($response, true);
 
 				if(is_array($response) && $response['success'] && isset($GO_MODULES->modules['email']))
@@ -112,11 +117,11 @@ class serverclient extends db
 	}
 
 
-	function __on_user_delete($user)
+	/*function __on_user_delete($user)
 	{
 		global $GO_CONFIG;
 
-		/*if(!empty($GO_CONFIG->serverclient_domains))
+		if(!empty($GO_CONFIG->serverclient_domains))
 		 {
 		 	
 			if(!$this->login())
@@ -137,8 +142,8 @@ class serverclient extends db
 			}
 
 			//debug(var_export($response, true));
-			}*/
-	}
+			}
+	}*/
 
 	function check_servermanager($index){
 
@@ -181,11 +186,10 @@ class serverclient extends db
 		}
 	}
 
-	function __on_add_user($params)
+	function add_user($user)
 	{
 		global $GO_MODULES, $GO_CONFIG;
-
-		$user = $params['user'];
+		
 
 		if(isset($_POST['serverclient_domains']) && isset($GO_MODULES->modules['email']))
 		{
@@ -207,8 +211,6 @@ class serverclient extends db
 				$account['password']=$user['password'];
 				$account['name']=String::format_name($user);
 				$account['email']=$user['email'];
-
-
 				$account['smtp_host']=$GO_CONFIG->serverclient_smtp_host;
 				$account['smtp_port']=$GO_CONFIG->serverclient_smtp_port;
 				$account['smtp_encryption']=$GO_CONFIG->serverclient_smtp_encryption;
