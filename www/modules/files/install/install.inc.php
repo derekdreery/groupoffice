@@ -66,7 +66,7 @@ if(!is_dir($share_dir))
 	mkdir($share_dir, $GO_CONFIG->folder_create_mode, true);
 }
 
-$folder = $files->get_folder($share_dir);
+$folder = $files->get_folder('users/admin/'.$lang['files']['general']);
 
 if(empty($folder['acl_read']))
 {

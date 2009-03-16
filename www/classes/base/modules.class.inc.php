@@ -138,19 +138,14 @@ class GO_MODULES extends db {
 	 *
 	 * @param string $name
 	 * @param array $arguments Passed by reference so the functions can alter the value and return something in this way
-	 */
 	
 	public function fire_event($name, &$arguments=array())
 	{
 		foreach($this->modules as $module)
-		{
-			
-			/*$file = $module['class_path'].$module['id'].'.class.inc';
+		{		
 
-			if(!file_exists($file))
-			{*/
-				$file = $module['class_path'].$module['id'].'.class.inc.php';
-			//}
+			$file = $module['class_path'].$module['id'].'.class.inc.php';
+
 			if(file_exists($file))
 			{
 				require_once($file);
@@ -165,7 +160,8 @@ class GO_MODULES extends db {
 				}
 			}
 		}
-	}
+	} */
+	
 
 	/**
 	 * Load the modules into the modules array
@@ -346,7 +342,6 @@ class GO_MODULES extends db {
 			require($install_script);
 		}
 		$params = array('module'=>$module);
-		$this->fire_event('install_module', $arams);
 		
 		$this->load_modules();
 
@@ -385,16 +380,13 @@ class GO_MODULES extends db {
 	function delete_module( $module_id ) {
 		global $GO_SECURITY, $GO_CONFIG;
 		if ( $module = $this->get_module($module_id)) {
-			
-			$this->fire_event('uninstall_module', $module);
-			
+						
 			$uninstall_script = $GO_CONFIG->root_path.'modules/'.$module_id.'/install/uninstall.inc.php';
 			if(file_exists($uninstall_script))
 			{
 				require($uninstall_script);
 			}			
-			
-			
+						
 			$GO_SECURITY->delete_acl($module['acl_read']);
 			$GO_SECURITY->delete_acl($module['acl_write']);
 			$sql = "DELETE FROM go_modules WHERE id='".$module_id."'";
@@ -408,8 +400,7 @@ class GO_MODULES extends db {
 						}
 					}
 				}
-			}
-			
+			}	
 			
 			return true;
 		}

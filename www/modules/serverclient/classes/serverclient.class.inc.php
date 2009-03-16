@@ -231,13 +231,6 @@ class serverclient
 		}
 	}
 
-	function __on_uninstall_module($module)
-	{
-		/*if($module['id']=='serverclient')
-		 {
-			throw new Exception('You may not uninstall this module');
-			}*/
-	}
 
 
 	function login()
