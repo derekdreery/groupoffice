@@ -1009,6 +1009,11 @@ try{
 								$sort_field=isset($_POST['sort']) && $_POST['sort']=='from' ? SORTFROM : SORTDATE;
 								if($sort_field == SORTDATE && $imap->is_imap())
 									$sort_field = SORTARRIVAL;
+									
+								if($account['sent']==$mailbox && $sort_field==SORTFROM)
+								{
+									$sort_field=SORTTO;
+								}
 
 								$sort_order=isset($_POST['dir']) && $_POST['dir']=='ASC' ? 0 : 1;
 
