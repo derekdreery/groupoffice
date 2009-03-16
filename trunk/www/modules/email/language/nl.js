@@ -117,3 +117,7 @@ GO.email.lang.searchGO='Group-Office doorzoeken';
 GO.email.lang.toggleWindowPosition = 'Verander berichtvenster positie';
 GO.email.lang.closeUploadDialog='Sluit eerst het upload venster of wacht tot de upload klaar is.';
 GO.email.lang.signature='Handtekening';
+
+
+GO.email.defaultProgram='Standaard e-mail programma';
+GO.email.defaultProgramInstructions ='<p>Lees a.u.b. <a class="normal-link" href="http://www.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client" target="_blank">de instructies</a> om Group-Office als uw standaard e-mail programma in te stellen.</p><p>Als u Windows gebruikt dan moet u <a class="normal-link" href="'+GO.settings.modules.email.url+'register_email.php">het registerbestand</a> uitvoeren.</p>';

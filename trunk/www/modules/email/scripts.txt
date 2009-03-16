@@ -14,3 +14,4 @@ modules/email/EmailComposer.js
 modules/email/EmailClient.js
 modules/email/AddressContextMenu.js
 modules/email/AttachmentContextMenu.js
+modules/email/Settings.js

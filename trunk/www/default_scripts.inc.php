@@ -43,6 +43,7 @@ if(typeof(Ext)=='undefined')
 var BaseHref = '<?php echo $GO_CONFIG->host; ?>';
 Ext.BLANK_IMAGE_URL = '<?php echo $GO_CONFIG->host; ?>ext/resources/images/default/s.gif';
 
+
 <?php
 $settings = $GO_CONFIG->get_client_settings();	
 ?>
@@ -64,6 +65,11 @@ if(isset($_REQUEST['after_login_url']))
 
 $fullscreen = isset($_COOKIE['GO_FULLSCREEN']) && $_COOKIE['GO_FULLSCREEN']=='1' ? 'true' : 'false';
 echo 'GO.fullscreen='.$fullscreen.';';
+
+if($fullscreen=='false')
+{
+	echo 'window.name="groupoffice";';
+}
 
 /*
  * If fullscreen mode is enabled and the user is already logged in we set $popup_groupoffice with the URL to load Group-Office

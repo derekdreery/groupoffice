@@ -69,7 +69,8 @@ GO.calendar.SettingsPanel = function(config) {
 	config.title = GO.calendar.lang.calendar;
 	config.hideMode = 'offsets';
 	config.layout = 'form';
-	config.bodyStyle = 'padding:5px', config.items = {
+	config.bodyStyle = 'padding:5px';
+	config.items = {
 		xtype : 'fieldset',
 		autoHeight : true,
 		layout : 'form',

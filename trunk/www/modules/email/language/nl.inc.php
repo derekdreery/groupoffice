@@ -41,3 +41,5 @@ $lang['email']['calendar']='agenda';
 $lang['email']['quotaError']="Uw mailbox is vol. Leeg eerst uw 'Prullenbak' map. Indien die map al leeg is en uw mailbox is nog steeds vol, dan dient u de 'Prullenbak' map uit te schakelen om berichten uit andere mappen te kunnen verwijderen. U kunt de map uitschakkelen bij:\n\nInstellingen -> Accounts -> Dubbelklik account -> Mappen.";
 $lang['email']['draftsDisabled']="Het bericht kon niet worden opgeslagen omdat de 'Concepten' map is uitgeschakeld.<br /><br />Ga naar Instellingen -> Accounts -> Dubbelklik account -> Mappen om deze in te stellen.";
 $lang['email']['noSaveWithPop3']='Het bericht kon niet worden opgeslagen omdat POP3 accounts dit niet ondersteunen.';
+
+$lang['email']['goAlreadyStarted']='Group-Office was already started. The e-mail composer is now loaded in Group-Office. Close this window and compose your message in Group-Office.';
