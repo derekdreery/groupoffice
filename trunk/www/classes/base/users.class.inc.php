@@ -618,10 +618,10 @@ class GO_USERS extends db
 	 */
 	function update_profile($user, $complete_profile=false)
 	{
-		global $GO_MODULES;
-		$user['mtime']=time();
+		global $GO_EVENTS;
 		
-		$params = array('user'=>$user);
+		$user['mtime']=time();
+
 		
 		
 		$ret = false;
@@ -643,11 +643,11 @@ class GO_USERS extends db
 		
 		if($complete_profile)
 		{
-			$params['user']=$this->get_user($user['id']);
-			$GO_MODULES->fire_event('add_user', $params);
+			$user=$this->get_user($user['id']);
+			$GO_EVENTS->fire_event('add_user', $user);
 		}else
 		{
-			$GO_MODULES->fire_event('update_user', $params);
+			$GO_EVENTS->fire_event('update_user', $user);
 		}
 		
 		return $ret;
@@ -665,12 +665,12 @@ class GO_USERS extends db
 	
 	function update_password($user_id, $password)
 	{
+		global $GO_EVENTS;
+		
 		$sql = "UPDATE go_users SET password='".md5($password)."' WHERE id='$user_id'";
 		if ($this->query($sql))
 		{
-			
-			$params = array('user_id'=>$user_id, 'password'=>$password);
-			$GO_MODULES->fire_event('change_user_password', $params);
+			$GO_EVENTS->fire_event('change_user_password', $user_id, $password);
 			
 			return true;
 		}
@@ -751,7 +751,7 @@ class GO_USERS extends db
 	$modules_write=array(),
 	$acl=array())
 	{
-		global $GO_CONFIG, $GO_LANGUAGE, $GO_SECURITY, $GO_GROUPS, $GO_MODULES;
+		global $GO_CONFIG, $GO_LANGUAGE, $GO_SECURITY, $GO_GROUPS, $GO_MODULES, $GO_EVENTS;
 
 		// We check if we are able to add a new user. If we already have too much
 		// of them we do not want new ones ;)
@@ -833,8 +833,7 @@ class GO_USERS extends db
 		
 	
 		
-		$params = array('user'=>$user);
-		$GO_MODULES->fire_event('before_add_user', $params);
+		$GO_EVENTS->fire_event('before_add_user', $user);
 		
 		$unencrypted_password = $user['password'];
 		if(!empty($user['password']))
@@ -897,7 +896,7 @@ class GO_USERS extends db
 			//delay add user event because name must be supplied first.
 			if(!empty($user['first_name']) && !empty($user['first_name']))
 			{			
-				$GO_MODULES->fire_event('add_user', $params);
+				$GO_EVENTS->fire_event('add_user', $user);
 			}
 
 			return $user['id'];
