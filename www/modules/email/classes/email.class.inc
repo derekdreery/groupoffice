@@ -1104,13 +1104,14 @@ class email extends db
 		/* {ON_DELETE_LINK_FUNCTION} */
 	}
 
-	function __on_user_delete($user)
+	function user_delete($user)
 	{
-		$del = new email;
-		$this->get_accounts($user['id']);
-		while ($this->next_record())
+		$email = new email();
+		$del = new email();
+		$email->get_accounts($user['id']);
+		while ($email->next_record())
 		{
-			$del->delete_account($user['id'],$this->f("id"));
+			$del->delete_account($user['id'],$email->f("id"));
 		}
 	}
 
@@ -1150,12 +1151,13 @@ class email extends db
 	 *
 	 * @param int $last_sync_time The time this function was called last
 	 */
-	public function __on_build_search_index()
+	public function build_search_index()
 	{
+		$email2 = new email();
 		$sql = "SELECT link_id FROM em_links";
-		$this->query($sql);
+		$email2->query($sql);
 		$email = new email();
-		while($record = $this->next_record())
+		while($record = $email2->next_record())
 		{
 			$email->cache_message($record['link_id']);
 		}

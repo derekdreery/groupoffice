@@ -34,7 +34,7 @@ class search extends db {
 	 * classes
 	 *
 	 * @param boolean $verbose If you want to output some debuggin informatin
-	 */
+	 
 	public function update_search_cache($verbose=false)
 	{
 		global $GO_MODULES;
@@ -69,7 +69,7 @@ class search extends db {
 				}
 			}
 		}
-	}
+	}*/
 
 	/**
 	 * Search the search cache table for any item 

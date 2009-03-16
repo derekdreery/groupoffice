@@ -17,6 +17,7 @@ class users extends db
 	public function __on_load_listeners($events){
 		$events->add_listener('load_settings', __FILE__, 'users', 'load_settings');
 		$events->add_listener('save_settings', __FILE__, 'users', 'save_settings');
+		$events->add_listener('build_search_index', __FILE__, 'users', 'build_search_index');
 	}
 	
 	function load_settings($response)
@@ -141,40 +142,19 @@ class users extends db
 
 	}
 	
-	public function __on_build_search_index()
+	public function build_search_index()
 	{
 		global $GO_USERS;
 		
-		$sql = "SELECT id FROM go_users";
-		$this->query($sql);
+		$users = new users();
 		
-		while($record=$this->next_record())
+		$sql = "SELECT id FROM go_users";
+		$users->query($sql);
+		
+		while($record=$users->next_record())
 		{
 			$GO_USERS->cache_user($record['id']);
 		}
-
-		/* {ON_BUILD_SEARCH_INDEX_FUNCTION} */
 	}
-	
-	function __on_check_database(){
-		/*global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE;
-		
-		echo 'Checking users folder permissions<br />';
 
-		if(isset($GO_MODULES->modules['files']))
-		{
-			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
-			$fs = new files();
-
-			$sql = "SELECT last_name, id FROM go_users";
-			$this->query($sql);
-			while($this->next_record())
-			{
-				echo 'Checking '.$this->f('last_name').'<br />';				
-				$full_path = $GO_CONFIG->file_storage_path.'users/'.$this->f('id');
-				$fs->check_share($full_path, 1, $GO_MODULES->modules['users']['acl_read'], $GO_MODULES->modules['users']['acl_write']);
-			}
-		}
-		echo 'Done<br /><br />';>*/
-	}
 }

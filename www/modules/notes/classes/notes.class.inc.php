@@ -13,6 +13,12 @@
  */
 
 class notes extends db {
+	
+	public function __on_load_listeners($events){
+		$events->add_listener('user_delete', __FILE__, 'notes', 'user_delete');
+		$events->add_listener('add_user', __FILE__, 'notes', 'add_user');
+		$events->add_listener('build_search_index', __FILE__, 'notes', 'build_search_index');
+	}
 		
 	/**
 	 * Add a Category
@@ -25,8 +31,6 @@ class notes extends db {
 
 	function add_category($category)
 	{
-		
-		
 		$category['id']=$this->nextid('no_categories');
 		if($this->insert_row('no_categories', $category))
 		{
@@ -45,8 +49,7 @@ class notes extends db {
 	 */
 
 	function update_category($category)
-	{
-		
+	{		
 		return $this->update_row('no_categories', 'id', $category);
 	}
 
@@ -158,9 +161,16 @@ class notes extends db {
 	 * @access public
 	 * @return Int Number of records found
 	 */
-	function get_categories($sortfield='id', $sortorder='ASC', $start=0, $offset=0)
+	function get_categories($sortfield='id', $sortorder='ASC', $start=0, $offset=0, $user_id=0)
 	{
-		$sql = "SELECT * FROM no_categories ORDER BY ".$this->escape($sortfield." ".$sortorder);
+		$sql = "SELECT * FROM no_categories ";
+		
+		if($user_id>0)
+		{
+			$sql .= "WHERE user_id=$user_id ";
+		}
+		
+		$sql .= "ORDER BY ".$this->escape($sortfield." ".$sortorder);
 
 		$this->query($sql);
 		$count = $this->num_rows();
@@ -423,22 +433,26 @@ class notes extends db {
 		/* {ON_DELETE_LINK_FUNCTION} */	
 	}
 	
-	/**
-	 * This function is called when a user is deleted	
-	 *
-	 * @param int $user_id
-	 */
-	 
-	public function __on_user_delete($user)
-	{
-		
-	}
-	
-	public function __on_add_user($params)
+	public static function user_delete($user)
 	{
 		global $GO_SECURITY;
 		
-		$user = $params['user'];
+		$notes = new notes();
+		$notes2 = new notes();
+
+		$notes->get_categories('id','ASC', 0,0, $user['id']);
+		while($notes->next_record())
+		{
+			$notes2->delete_category($notes->f('id'));
+		}	
+	}
+
+	
+	public static function add_user($user)
+	{
+		global $GO_SECURITY;
+		
+		$notes = new notes();
 		
 		if(!empty($user['first_name']) && !empty($user['last_name']))
 		{			
@@ -447,7 +461,7 @@ class notes extends db {
 			$category['acl_read']=$GO_SECURITY->get_new_acl('category',$user['id']);
 			$category['acl_write']=$GO_SECURITY->get_new_acl('category',$user['id']);
 			
-			$this->add_category($category);
+			$notes->add_category($category);
 		}
 	}
 	
@@ -496,40 +510,18 @@ class notes extends db {
 	 * @param int $last_sync_time The time this function was called last
 	 */
 
-	public function __on_build_search_index()
+	public function build_search_index()
 	{
-		$sql = "SELECT id FROM no_notes";
-		$this->query($sql);	
-		
 		$notes = new notes();
-		while($record=$this->next_record())
-		{
-			$notes->cache_note($record['id']);
-		}
-
-		/* {ON_BUILD_SEARCH_INDEX_FUNCTION} */
-	}
-	
-	function __on_check_database(){
-		/*global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE;
 		
-		echo 'Checking notes folder permissions<br />';
-
-		if(isset($GO_MODULES->modules['files']))
+		$sql = "SELECT id FROM no_notes";
+		$notes->query($sql);	
+		
+		$notes2= new notes();
+		while($record=$notes->next_record())
 		{
-			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
-			$fs = new files();
-
-			$sql = "SELECT e.name,e.id, c.acl_read, c.acl_write, c.user_id FROM no_notes e INNER JOIN no_categories c ON c.id=e.category_id";
-			$this->query($sql);
-			while($this->next_record())
-			{
-				echo 'Checking '.$this->f('name').'<br />';				
-				$full_path = $GO_CONFIG->file_storage_path.'notes/'.$this->f('id');
-				$fs->check_share($full_path, $this->f('user_id'), $this->f('acl_read'), $this->f('acl_write'));
-			}
+			$notes2->cache_note($record['id']);
 		}
-		echo 'Done<br /><br />';*/
 	}
 	
 }

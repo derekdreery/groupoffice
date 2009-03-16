@@ -13,7 +13,11 @@
  */
 class log extends db {
 	
-	function __on_login()
+	public function __on_load_listeners($events){
+		$events->add_listener('login', __FILE__, 'log', 'login');
+	}
+	
+	public static function login()
 	{
 		$sql = "DELETE FROM go_log WHERE time<".Date::date_add(time(),0,-3);
 		$this->query($sql);	

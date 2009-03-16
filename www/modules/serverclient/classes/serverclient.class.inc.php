@@ -186,7 +186,7 @@ class serverclient
 		}
 	}
 
-	function add_user($user)
+	public static function add_user($user)
 	{
 		global $GO_MODULES, $GO_CONFIG;
 		

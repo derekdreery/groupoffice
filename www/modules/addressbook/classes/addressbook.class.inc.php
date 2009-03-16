@@ -14,6 +14,12 @@
 
 class addressbook extends db {
 
+	public function __on_load_listeners($events){
+		$events->add_listener('user_delete', __FILE__, 'addressbook', 'user_delete');
+		//$events->add_listener('add_user', __FILE__, 'addressbook', 'add_user');
+		$events->add_listener('build_search_index', __FILE__, 'addressbook', 'build_search_index');
+	}
+
 	function is_duplicate_contact($contact)
 	{
 		$contact = $contact;
@@ -144,7 +150,7 @@ class addressbook extends db {
 		{
 			$sql .= " WHERE ab_contacts.addressbook_id='".$this->escape($addressbook_id)."'";
 		}
-		
+
 		$sql .= 	" ORDER BY $sort $direction";
 
 		$this->query($sql);
@@ -211,12 +217,12 @@ class addressbook extends db {
 		if (!isset($company['mtime']) || $company['mtime'] == 0) {
 			$company['mtime'] = $company['ctime'];
 		}
-		
+
 		$company['id'] = $this->nextid("ab_companies");
-		$this->insert_row('ab_companies', $company);				
+		$this->insert_row('ab_companies', $company);
 		$this->cache_company($company['id']);
-				
-		return $company['id'];		
+
+		return $company['id'];
 	}
 
 	function update_company($company)
@@ -238,7 +244,7 @@ class addressbook extends db {
 		{
 			$sql .= " WHERE addressbook_id='$addressbook_id'";
 		}
-		
+
 		$sql .= " ORDER BY $sort $direction";
 		$this->query($sql);
 		$count = $this->num_rows();
@@ -326,20 +332,20 @@ class addressbook extends db {
 		{
 			$fs->delete($GO_CONFIG->file_storage_path.'companies/'.$company_id.'/');
 		}
-		
+
 		$sql = "UPDATE ab_contacts SET company_id=0 WHERE company_id=$company_id";
 		$this->query($sql);
 			
 		require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
 		$search = new search();
 		$search->delete_search_result($company_id, 3);
-		
+
 		$sql = "DELETE FROM ab_companies WHERE id='$company_id'";
 		if ($this->query($sql)) {
 			return true;
 		}
 
-		
+
 	}
 
 	function add_contact($contact) {
@@ -359,13 +365,13 @@ class addressbook extends db {
 		if (isset($contact['sex']) && $contact['sex'] == '') {
 			$contact['sex'] = 'M';
 		}
-		
+
 		$contact['id'] = $this->nextid("ab_contacts");
 
 		$this->insert_row('ab_contacts', $contact);
-		
+
 		$this->cache_contact($contact['id']);
-		
+
 		return $contact['id'];
 	}
 
@@ -380,7 +386,7 @@ class addressbook extends db {
 		}
 
 		$r = $this->update_row('ab_contacts', 'id', $contact);
-		
+
 		$this->cache_contact($contact['id']);
 		return $r;
 	}
@@ -435,9 +441,9 @@ class addressbook extends db {
 		require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
 		$search = new search();
 		$search->delete_search_result($contact_id, 2);
-		
+
 		return $this->query("DELETE FROM ab_contacts WHERE id='".$this->escape($contact_id)."'");
-				
+
 	}
 
 	function search_contacts($user_id, $query, $field = 'last_name', $addressbook_id = 0, $start=0, $offset=0, $require_email=false, $sort_index='name', $sort_order='ASC', $writable_only=false, $query_type='LIKE', $mailings_filter=array(), $advanced_query='') {
@@ -460,7 +466,7 @@ class addressbook extends db {
 		{
 			$sql = "SELECT ";
 		}
-		
+
 		$sql .= "ab_contacts.*, ab_companies.name AS company_name FROM ab_contacts ".
 		"LEFT JOIN ab_companies ON ab_contacts.company_id=ab_companies.id ";
 
@@ -468,7 +474,7 @@ class addressbook extends db {
 		{
 			$sql .= "LEFT JOIN cf_2 ON cf_2.link_id=ab_contacts.id ";
 		}
-		
+
 		if(count($mailings_filter))
 		{
 			$sql .= "INNER JOIN ml_mailing_contacts mc ON mc.contact_id=ab_contacts.id ";
@@ -502,7 +508,7 @@ class addressbook extends db {
 			$sql .= " AND ";
 
 			if(!is_array($field))
-			{				
+			{
 				if($field == '')
 				{
 					$fields=array('name');
@@ -563,12 +569,12 @@ class addressbook extends db {
 		{
 			$sql .= " AND ab_contacts.email != ''";
 		}
-		
+
 		if(count($mailings_filter))
 		{
 			$sql .= " AND mc.group_id IN (".implode(',', $mailings_filter).")";
 		}
-		
+
 		if(!empty($advanced_query))
 		{
 			$sql .= $advanced_query;
@@ -593,7 +599,7 @@ class addressbook extends db {
 		global $GO_MODULES;
 
 		//$query = str_replace('*', '%', $query);
-		
+
 		if(count($mailings_filter))
 		{
 			$sql = "SELECT DISTINCT ";
@@ -609,7 +615,7 @@ class addressbook extends db {
 		}else {
 			$sql .= "ab_companies.* FROM ab_companies ";
 		}
-		
+
 		if(count($mailings_filter))
 		{
 			$sql .= "INNER JOIN ml_mailing_companies mc ON mc.company_id=ab_companies.id ";
@@ -656,13 +662,13 @@ class addressbook extends db {
 					$this->query($fields_sql);
 					while ($this->next_record()) {
 						//if (eregi('varchar', $this->f('Type')) || $this->f('Field')=='id') {
-							if (isset ($first)) {
-								$sql .= ' OR ';
-							} else {
-								$first = true;
-								$sql .= '(';
-							}
-							$sql .= "cf_3.".$this->f('Field')." $query_type '$query'";
+						if (isset ($first)) {
+							$sql .= ' OR ';
+						} else {
+							$first = true;
+							$sql .= '(';
+						}
+						$sql .= "cf_3.".$this->f('Field')." $query_type '$query'";
 						//}
 					}
 
@@ -677,12 +683,12 @@ class addressbook extends db {
 		{
 			$sql .= " AND ab_companies.email != ''";
 		}
-		
+
 		if(count($mailings_filter))
 		{
 			$sql .= " AND mc.group_id IN (".implode(',', $mailings_filter).")";
 		}
-		
+
 		if(!empty($advanced_query))
 		{
 			$sql .= $advanced_query;
@@ -713,10 +719,10 @@ class addressbook extends db {
 		$result['acl_write'] = $GO_SECURITY->get_new_acl('addressbook', $user_id);
 		$result['user_id']=$user_id;
 		$result['name']=$name;
-		
+
 		$this->insert_row('ab_addressbooks', $result);
 		$result['addressbook_id']=$result['id'];
-		return $result;		
+		return $result;
 	}
 
 	function update_addressbook($addressbook_id, $user_id, $name) {
@@ -812,7 +818,7 @@ class addressbook extends db {
 			$this->delete_contact($id);
 		}
 	}
-	
+
 
 	/**
 	 * Adds or updates a note in the search cache table
@@ -824,14 +830,14 @@ class addressbook extends db {
 		global $GO_CONFIG, $GO_LANGUAGE;
 		require_once($GO_CONFIG->class_path.'/base/search.class.inc.php');
 		$search = new search();
-		
+
 		require($GO_LANGUAGE->get_language_file('addressbook'));
-		
+
 		$sql = "SELECT c.*,a.acl_read,a.acl_write FROM ab_contacts c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id WHERE c.id=?";
 		$this->query($sql, 'i', $contact_id);
 		$record = $this->next_record();
 		if($record)
-		{		
+		{
 			$cache['id']=$this->f('id');
 			$cache['user_id']=$this->f('user_id');
 			$cache['module']='addressbook';
@@ -843,11 +849,11 @@ class addressbook extends db {
 			$cache['mtime']=$this->f('mtime');
 			$cache['acl_read']=$this->f('acl_read');
 			$cache['acl_write']=$this->f('acl_write');
-			
-	 		$search->cache_search_result($cache);
+				
+			$search->cache_search_result($cache);
 		}
 	}
-	
+
 	/**
 	 * Adds or updates a note in the search cache table
 	 *
@@ -863,7 +869,7 @@ class addressbook extends db {
 		$this->query($sql, 'i', $company_id);
 		$record = $this->next_record();
 		if($record)
-		{		
+		{
 			$cache['id']=$this->f('id');
 			$cache['user_id']=$this->f('user_id');
 			$cache['name'] = htmlspecialchars($this->f('name'), ENT_QUOTES, 'utf-8');
@@ -875,8 +881,8 @@ class addressbook extends db {
 			$cache['mtime']=$this->f('mtime');
 			$cache['acl_read']=$this->f('acl_read');
 			$cache['acl_write']=$this->f('acl_write');
-			
-	 		$search->cache_search_result($cache);
+				
+			$search->cache_search_result($cache);
 		}
 	}
 
@@ -886,21 +892,22 @@ class addressbook extends db {
 	 * @param int $last_sync_time The time this function was called last
 	 */
 
-	function __on_build_search_index()
+	public static function build_search_index()
 	{
 		$ab = new addressbook();
-		
-		$sql = "SELECT id FROM ab_contacts";		
-		$this->query($sql);
-		
-		while($record = $this->next_record())
+		$ab2 = new addressbook();
+
+		$sql = "SELECT id FROM ab_contacts";
+		$ab2->query($sql);
+
+		while($record = $ab2->next_record())
 		{
 			$ab->cache_contact($record['id']);
 		}
-		
+
 		$sql = "SELECT id FROM ab_companies";
-		$this->query($sql);		
-		while($record = $this->next_record())
+		$ab2->query($sql);
+		while($record = $ab2->next_record())
 		{
 			$ab->cache_company($record['id']);
 		}
@@ -912,16 +919,19 @@ class addressbook extends db {
 	 * @param int $user_id
 	 */
 
-	function __on_user_delete($user) {
-		$sql = "UPDATE ab_contacts SET source_id='0' WHERE source_id='".$this->escape($user['id'])."'";
-		$this->query($sql);
+	public static function user_delete($user) {
+
+		$ab2 = new addressbook();
+
+		$sql = "UPDATE ab_contacts SET source_id='0' WHERE source_id='".$ab2->escape($user['id'])."'";
+		$ab2->query($sql);
 
 		$ab = new addressbook();
 
-		$sql = "SELECT id FROM ab_addressbooks WHERE user_id='".$this->escape($user['id'])."'";
-		$this->query($sql);
-		while ($this->next_record()) {
-			$ab->delete_addressbook($this->f('id'));
+		$sql = "SELECT id FROM ab_addressbooks WHERE user_id='".$ab2->escape($user['id'])."'";
+		$ab2->query($sql);
+		while ($ab2->next_record()) {
+			$ab->delete_addressbook($ab2->f('id'));
 		}
 	}
 
@@ -959,38 +969,5 @@ class addressbook extends db {
 		return $this->record;
 		else
 		return false;
-	}
-	
-	
-	
-	function __on_check_database(){
-		global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE;
-		
-		/*echo 'Checking addressbook folder permissions<br />';
-
-		if(isset($GO_MODULES->modules['files']))
-		{
-			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
-			$fs = new files();
-
-			$sql = "SELECT c.*, a.acl_read, a.acl_write, a.user_id AS a_user_id FROM ab_contacts c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id";
-			$this->query($sql);
-			while($this->next_record())
-			{
-				echo 'Checking '.$this->f('last_name').'<br />';				
-				$full_path = $GO_CONFIG->file_storage_path.'contacts/'.$this->f('id');
-				$fs->check_share($full_path, $this->f('a_user_id'), $this->f('acl_read'), $this->f('acl_write'));
-			}
-			
-			$sql = "SELECT c.*, a.acl_read, a.acl_write, a.user_id AS a_user_id FROM ab_companies c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id";
-			$this->query($sql);
-			while($this->next_record())
-			{
-				echo 'Checking '.$this->f('name').'<br />';				
-				$full_path = $GO_CONFIG->file_storage_path.'companies/'.$this->f('id');
-				$fs->check_share($full_path, $this->f('a_user_id'), $this->f('acl_read'), $this->f('acl_write'));
-			}
-		}
-		echo 'Done<br /><br />';*/
 	}
 }

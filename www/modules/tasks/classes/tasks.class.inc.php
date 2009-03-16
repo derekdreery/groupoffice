@@ -17,6 +17,9 @@ class tasks extends db
 	public function __on_load_listeners($events){
 		$events->add_listener('load_settings', __FILE__, 'tasks', 'load_settings');
 		$events->add_listener('save_settings', __FILE__, 'tasks', 'save_settings');
+		$events->add_listener('user_delete', __FILE__, 'tasks', 'user_delete');
+		$events->add_listener('add_user', __FILE__, 'tasks', 'add_user');
+		$events->add_listener('build_search_index', __FILE__, 'tasks', 'build_search_index');
 	}
 	
 	
@@ -758,31 +761,32 @@ class tasks extends db
 	}
 	
 	
-	function __on_add_user($params)
+	public static function add_user($user)
 	{
 		global $GO_SECURITY;
-
-		$user = $params['user'];
+		
+		$tasks = new tasks();
 
 		$tasklist['name']=String::format_name($user);
 		$tasklist['user_id']=$user['id'];
 		$tasklist['acl_read']=$GO_SECURITY->get_new_acl('tasks', $user['id']);
 		$tasklist['acl_write']=$GO_SECURITY->get_new_acl('tasks', $user['id']);
 
-		$tasklist_id = $this->add_tasklist($tasklist);
+		$tasklist_id = $tasks->add_tasklist($tasklist);
 	}
 
 
 
 
-	function __on_user_delete($user)
+	public static function user_delete($user)
 	{
+		$tasks = new tasks();
 		$delete = new tasks();
-		$sql = "SELECT * FROM ta_lists WHERE user_id='".$this->escape($user['id'])."'";
-		$this->query($sql);
-		while($this->next_record())
+		$sql = "SELECT * FROM ta_lists WHERE user_id='".$tasks->escape($user['id'])."'";
+		$tasks->query($sql);
+		while($tasks->next_record())
 		{
-			$delete->delete_tasklist($this->f('id'));
+			$delete->delete_tasklist($tasks->f('id'));
 		}
 	}
 	
@@ -792,18 +796,18 @@ class tasks extends db
 	 * @param int $last_sync_time The time this function was called last
 	 */
 
-	public function __on_build_search_index()
+	public static function build_search_index()
 	{
-		$sql = "SELECT id FROM ta_tasks";
-		$this->query($sql);
-		
 		$tasks = new tasks();
-		while($record=$this->next_record())
+		
+		$sql = "SELECT id FROM ta_tasks";
+		$tasks->query($sql);
+		
+		$tasks2 = new tasks();
+		while($record=$tasks->next_record())
 		{
-			$tasks->cache_task($record['id']);
+			$tasks2->cache_task($record['id']);
 		}
-
-		/* {ON_BUILD_SEARCH_INDEX_FUNCTION} */
 	}
 	
 
@@ -854,27 +858,5 @@ class tasks extends db
 				
 			$search->cache_search_result($cache);
 		}
-	}
-	
-	function __on_check_database(){
-	/*	global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE;
-		
-		echo 'Checking tasks folder permissions<br />';
-
-		if(isset($GO_MODULES->modules['files']))
-		{
-			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
-			$fs = new files();
-
-			$sql = "SELECT e.name,e.id, c.acl_read, c.acl_write, c.user_id FROM ta_tasks e INNER JOIN ta_lists c ON c.id=e.tasklist_id";
-			$this->query($sql);
-			while($this->next_record())
-			{
-				echo 'Checking '.$this->f('name').'<br />';				
-				$full_path = $GO_CONFIG->file_storage_path.'tasks/'.$this->f('id');
-				$fs->check_share($full_path, $this->f('user_id'), $this->f('acl_read'), $this->f('acl_write'));
-			}
-		}
-		echo 'Done<br /><br />';*/
 	}
 }

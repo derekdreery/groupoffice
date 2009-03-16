@@ -943,7 +943,7 @@ class GO_USERS extends db
 	 */
 	function delete_user($user_id)
 	{
-		global $GO_CONFIG,$GO_SECURITY, $GO_MODULES, $GO_GROUPS;
+		global $GO_CONFIG,$GO_SECURITY, $GO_EVENTS, $GO_GROUPS;
 
 		if($user = $this->get_user($user_id))
 		{
@@ -960,7 +960,7 @@ class GO_USERS extends db
 				
 				$search->delete_search_result($user_id, 8);				
 				
-				$GO_MODULES->fire_event('user_delete', $user);
+				$GO_EVENTS->fire_event('user_delete', $user);
 
 				$sql = "DELETE FROM go_acl WHERE user_id=".$this->escape($user_id).";";
 				$this->query($sql);
