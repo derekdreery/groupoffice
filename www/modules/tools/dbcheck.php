@@ -190,7 +190,7 @@ $search = new search();
 
 echo 'Start of module checks'.$line_break;
 
-$GO_MODULES->fire_event('check_database');
+$GO_EVENTS->fire_event('check_database');
 
 
 echo 'Clearing search cache'.$line_break;
