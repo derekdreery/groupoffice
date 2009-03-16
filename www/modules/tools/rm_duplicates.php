@@ -60,7 +60,7 @@ echo 'Deleted '.$counter.' duplicate contacts<br /><hr /><br />';
 
 
 
-require('../../modules/calendar/classes/calendar.class.inc');
+require('../../modules/calendar/classes/calendar.class.inc.php');
 $cal = new calendar();
 
 function is_duplicate_event($record)

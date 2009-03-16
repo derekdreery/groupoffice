@@ -1,5 +1,5 @@
 <?php
-require_once($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc');
+require_once($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc.php');
 $cal = new calendar();
 
 $calendar = $cal->get_calendar();

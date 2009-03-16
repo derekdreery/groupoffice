@@ -15,7 +15,7 @@
 require_once("../../Group-Office.php");
 $GO_SECURITY->json_authenticate('calendar');
 
-require_once ($GO_MODULES->modules['calendar']['class_path']."calendar.class.inc");
+require_once ($GO_MODULES->modules['calendar']['class_path']."calendar.class.inc.php");
 require_once ($GO_MODULES->modules['calendar']['class_path']."go_ical.class.inc");
 require_once ($GO_LANGUAGE->get_language_file('calendar'));
 $cal = new calendar();
