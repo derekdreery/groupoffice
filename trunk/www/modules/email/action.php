@@ -486,7 +486,7 @@ try{
 
 					if(!$response['success'])
 					{
-						$response['feedback']=$lang['email']['feedbackCreateFolderFailed'].' '.$new_folder_name;
+						$response['feedback']=$lang['email']['feedbackCreateFolderFailed'];
 					}
 
 					break;

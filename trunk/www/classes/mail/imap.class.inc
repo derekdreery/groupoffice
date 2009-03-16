@@ -1534,9 +1534,14 @@ class imap{
 	function utf7_imap_encode($input)
 	{
 		$charset = 'UTF-8';
-		if (extension_loaded('iconv')) {
+		
+		if(function_exists('mb_convert_encoding'))
+		{
+			return mb_convert_encoding($input,"UTF7-IMAP",$charset);
+		}elseif (function_exists('iconv')) {
 			if($converted_input = @iconv($charset, 'UTF-7', $input))
 			{
+				$input=preg_replace("/&/","&-",$converted_input);
 				$input=preg_replace("/&/","&-",$converted_input);
 				$input=preg_replace("/\+A/","&A",$input);
 				$input=preg_replace("/&ACY /","&- ",$input);
@@ -1548,7 +1553,7 @@ class imap{
 				return $input;
 			}
 		}
-		
+				
 		//doesnt work well with UTF-8
 		return @imap_utf7_encode(utf8_decode($input));
 	}
@@ -1559,7 +1564,10 @@ class imap{
 	{
 		$charset='UTF-8';
 
-		if (extension_loaded('iconv')) {
+		if(function_exists('mb_convert_encoding'))
+		{
+			return mb_convert_encoding($input,$charset, "UTF7-IMAP");
+		}elseif (function_exists('iconv')) {
 			$input=preg_replace("/&A/","+A",$input);
 			$input=preg_replace("/&-/","&",$input);
 

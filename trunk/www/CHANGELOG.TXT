@@ -1,3 +1,9 @@
+2009/03/16 Version 3.01-stable-14
+- Configure Group-Office as the default e-mail program
+- Fixed errors in Romanian translation
+- New PHP events system
+- Bug fixes
+
 2009/03/10 Version 3.01-stable-13
 - Problem with synchronization in stable-9 fixed
 - Link descriptions added
