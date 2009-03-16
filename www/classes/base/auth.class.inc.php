@@ -224,7 +224,7 @@ class GO_AUTH extends db
 		// user management backend database.
 		global $GO_USERS, $GO_EVENTS, $GO_SECURITY;
 		
-		$GO_EVENTS->fire_event('before_login', $username, $password);
+		$GO_EVENTS->fire_event('before_login', array($username, $password));
 
 		// This variable is used to set the id of the user that is currently
 		// logged in. Since we try to login a (maybe new) user, we have to
@@ -265,7 +265,7 @@ class GO_AUTH extends db
 			
 			go_log(LOG_DEBUG, 'LOGIN Username: '.$username.'; IP: '.$_SERVER['REMOTE_ADDR']);
 			
-			$GO_EVENTS->fire_event('before_login', $username, $password, $user);
+			$GO_EVENTS->fire_event('before_login', array($username, $password, $user));
 			
 			$user_id = $user['id'];
 		}
