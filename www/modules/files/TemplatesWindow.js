@@ -119,14 +119,14 @@ Ext.extend(GO.files.TemplateWindow,Ext.Window, {
         waitMsgTarget:true,
         labelWidth: 85,
         defaultType: 'textfield',
-        fileUpload: true,
-        defaults: { allowBlank: false },
+        fileUpload: true,        
     			items:[				
 					{							
 		        fieldLabel: GO.lang['strName'],
 			   		name: 'name',
 			   		id: 'template-name',
-		        anchor: '100%'
+		        anchor: '100%',
+		        allowBlank: false 
 				  },
 		     
 					this.selectUser = new GO.form.SelectUser({
@@ -142,7 +142,7 @@ Ext.extend(GO.files.TemplateWindow,Ext.Window, {
 					new GO.form.HtmlComponent({
 						html: '<br />'
 					}),
-					this.downloadButton,
+					this.downloadButton
 				]
 			});
 			
