@@ -15,7 +15,7 @@ GO.users.lang.cmdPanelLogin = 'Acces';
 GO.users.lang.cmdPanelLookFeel = 'Look & Feel';
 GO.users.lang.cmdPanelSettings = 'Impostari';
 GO.users.lang.cmdPanelEnabledMail = 'E-mail pentru noi utilizatori abilitaţi';
-GO.users.lang.cmdPanelDisabledMail = 'E-mail pentru noi utilizzatori neabilitaţi;
+GO.users.lang.cmdPanelDisabledMail = 'E-mail pentru noi utilizzatori neabilitaţi';
 	
 GO.users.lang.cmdFieldSetPersonal = 'Personal';	
 GO.users.lang.cmdUserWindowTitle= 'Modifică utilizator';
@@ -39,14 +39,14 @@ GO.users.lang.cmdFormLabelStartModule = 'Start în modul';
 GO.users.lang.cmdFormLabelMaximunRows = 'Numărul maxim de linii in liste';
 GO.users.lang.cmdFormLabelSortNamesBy = 'Prenume';
 GO.users.lang.cmdFormLabelLanguage = 'Limbă';
-GO.users.lang.cmdFormLabelTimezone = 'Fus orar;
+GO.users.lang.cmdFormLabelTimezone = 'Fus orar';
 GO.users.lang.cmdFormLabelAdjustDaylight = 'Treci automatic la ora legală';
 GO.users.lang.cmdFormLabelDateFormat = 'Format dată';
 GO.users.lang.cmdFormLabelDateSeperator = 'Separator dată';
 GO.users.lang.timeFormat = 'Format timp';
 GO.users.lang.cmdFormLabelFirstWeekday = 'Prima zi a săptămânii';
 GO.users.lang.cmdFormLabelThousandSeperator = 'Separator de mii';
-GO.users.lang.cmdFormLabelDecimalSeperator = 'Separator de zecimi;
+GO.users.lang.cmdFormLabelDecimalSeperator = 'Separator de zecimi';
 GO.users.lang.cmdFormLabelCurrency = 'Valută'
 
 GO.users.lang.account = 'Cont';
@@ -75,8 +75,8 @@ GO.users.lang.maxUsersReached='Numărul maxim de utilizzatori a fost ajuns. Se p
 
 GO.users.lang.group='Grup';
 
-GO.users.lang.userIsMemberOf= 'Utilizatorul e membru de;
-GO.users.lang.userVisibleTo= 'Utilizatorul e vizibil de la;
+GO.users.lang.userIsMemberOf= 'Utilizatorul e membru de';
+GO.users.lang.userVisibleTo= 'Utilizatorul e vizibil de la';
 GO.users.lang.muteSound='Mut';
 GO.users.lang.downloadSampleCSV='Descarcă CSV din exemplul';
 GO.users.lang.importText='Poţi importa utilizzatori utiliznd un dosar CSV. Pentru a ști cum dosarul CSV trebuie formatat descarcă dosarul din exemplul.<br />Prima linie trebuie să conţină numele coloanelor. Câmpurile obligatorii pentru fiecare utilizator sunt:<br /><br />username, password, first_name, last_name, email';
