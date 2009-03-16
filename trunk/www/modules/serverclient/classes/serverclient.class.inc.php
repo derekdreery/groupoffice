@@ -107,7 +107,7 @@ class serverclient
 
 				if(is_array($response) && $response['success'] && isset($GO_MODULES->modules['email']))
 				{
-					require_once($GO_MODULES->modules['email']['class_path'].'email.class.inc');
+					require_once($GO_MODULES->modules['email']['class_path'].'email.class.inc.php');
 					$email = new email();
 						
 					$email->update_password($GO_CONFIG->serverclient_host,$user['username'].'@'.$domain,$new_password);
@@ -193,7 +193,7 @@ class serverclient
 
 		if(isset($_POST['serverclient_domains']) && isset($GO_MODULES->modules['email']))
 		{
-			require_once($GO_MODULES->modules['email']['class_path'].'email.class.inc');
+			require_once($GO_MODULES->modules['email']['class_path'].'email.class.inc.php');
 
 			$email = new email();
 				

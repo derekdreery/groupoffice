@@ -96,7 +96,7 @@ class imapauth
 						$GO_USERS->update_password($user['id'], $password);
 						if(isset($GO_MODULES->modules['email']))
 						{
-							require_once($GO_MODULES->modules['email']['class_path']."email.class.inc");
+							require_once($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
 							$email_client = new email();
 							$email_client->update_password($config['host'], $mail_username, $arguments['password']);
 						}
@@ -122,7 +122,7 @@ class imapauth
 						{
 							if(isset($GO_MODULES->modules['email']))
 							{
-								require_once($GO_MODULES->modules['email']['class_path']."email.class.inc");
+								require_once($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
 								require_once($GO_LANGUAGE->get_language_file('email'));
 								$email_client = new email();
 
