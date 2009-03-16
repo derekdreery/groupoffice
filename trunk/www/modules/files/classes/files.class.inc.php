@@ -43,6 +43,14 @@ class files extends filesystem
 		}
 	}
 
+	public function __on_load_listeners($events){
+		$events->add_listener('check_database', __FILE__, 'files', 'check_database');
+		$events->add_listener('user_delete', __FILE__, 'files', 'user_delete');
+		$events->add_listener('user_delete', __FILE__, 'files', 'user_delete');
+		$events->add_listener('add_user', __FILE__, 'files', 'add_user');
+		$events->add_listener('build_search_index', __FILE__, 'files', 'build_search_index');
+	}
+	
 
 	function get_thumb_url($path)
 	{
@@ -884,14 +892,7 @@ class files extends filesystem
 
 	}
 
-	public function __on_load_listeners($events){
-		$events->add_listener('check_database', __FILE__, 'files', 'check_database');
-		$events->add_listener('user_delete', __FILE__, 'files', 'user_delete');
-		$events->add_listener('user_delete', __FILE__, 'files', 'user_delete');
-		$events->add_listener('add_user', __FILE__, 'files', 'add_user');
-		$events->add_listener('build_search_index', __FILE__, 'files', 'build_search_index');
-	}
-
+	
 	public static function check_database()
 	{
 		global $GO_USERS, $GO_CONFIG, $GO_SECURITY;
