@@ -297,11 +297,11 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
 		if (record.length > 0) {
 			if (!this.permissionsWin) {
 				this.readPermissionsTab = new GO.grid.PermissionsPanel({
-							title : GO.lang['strReadPermissions']
+							title : GO.users.lang.useModule
 						});
 
 				this.writePermissionsTab = new GO.grid.PermissionsPanel({
-							title : GO.lang['strWritePermissions']
+							title : GO.users.lang.manageModule
 						});
 
 				this.tabPanel = new Ext.TabPanel({
