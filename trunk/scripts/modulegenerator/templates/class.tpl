@@ -14,6 +14,12 @@
 
 class {module} extends db {
 
+	public function __on_load_listeners($events){
+		$events->add_listener('on_user_delete', __FILE__, '{module}', 'user_delete');
+		$events->add_listener('on_build_search_index', __FILE__, '{module}', 'build_search_index');
+	}
+
+
 /* {CLASSFUNCTIONS} */
 	
 	
@@ -36,7 +42,7 @@ class {module} extends db {
 	 * @param int $user_id
 	 */
 	 
-	public function __on_user_delete($user)
+	public function on_user_delete($user)
 	{
 		
 	}
@@ -46,7 +52,7 @@ class {module} extends db {
 	 * it will rebuild the search results.
 	 */
 	
-	public function __on_build_search_index()
+	public function on_build_search_index()
 	{				
 /* {ON_BUILD_SEARCH_INDEX_FUNCTION} */
 	}
