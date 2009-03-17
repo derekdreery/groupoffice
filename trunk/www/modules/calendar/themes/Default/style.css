@@ -301,7 +301,7 @@ background-color: #F1F1F1 !important;
 }
 
 .x-calGrid-selected {
-	/*background-color: #deebca !important;*/	
+	background-color: #deebca !important;
 	z-index:1100 !important;
 	border:1px solid #669900 !important;
 }

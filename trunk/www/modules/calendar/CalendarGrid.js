@@ -1684,12 +1684,15 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				this.allDayDragEvent= Ext.get(eventId);
 				this.allDayDragEvent.size=this.allDayDragEvent.getSize();
 				this.dragappointmentstartPos=this.allDayDragEvent.getXY();
+				this.currentDragDay = this.getDayByX(this.dragappointmentstartPos[0]+1);
 				this.dragXoffset = this.dragClickEventPosition[0]-this.dragappointmentstartPos[0];
 			
 				this.dragSnap = this.getSnap();
 			}
 		}		
 	},
+	
+	currentDragDay : false,
 	
 	onAllDayEventDragMouseMove : function (e){
 		
@@ -1706,9 +1709,9 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			
 			//var gridLeft = this.gridCells[0][0].xy[0]-4;
 			//var gridRight=this.gridCells[this.days-1][47].xy[0]+4;
-			if(this.allDayColumns[day])
+			if(this.currentDragDay != day && this.allDayColumns[day])
 			{
-				
+				this.currentDragDay=day;
 				this.allDayColumns[day].appendChild(this.allDayDragEvent);
 			}
 		}
