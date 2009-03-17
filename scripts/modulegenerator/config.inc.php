@@ -2,10 +2,10 @@
 require('../../www/Group-Office.php');
 
 //name of the module. No spaces or strange characters.
-$module = 'links';
+$module = 'userhtml';
 
 //Short name of the module. The prefix of the database tables.
-$prefix = 'li';
+$prefix = 'uh';
 
 $tables=array();
 //Tables to create an interface for
@@ -14,12 +14,12 @@ $tables=array();
 $westpanel = array(
 	'mainpanel_tag'=> 'GRID',
 	'template'=>'GridPanel.tpl',
-	'name'=>'go_link_descriptions', 
-	'friendly_single'=>'link_description', 
-	'friendly_multiple'=>'link_descriptions',
+	'name'=>'uh_pages', 
+	'friendly_single'=>'userpage', 
+	'friendly_multiple'=>'userpages',
 	'authenticate'=>false,
 	'paging'=>true,
-	'autoload'=>true,
+	'autoload'=>false,
 	'files'=>false);
 
 $tables[] = $westpanel;
