@@ -18,7 +18,10 @@ $data = 'REGEDIT4
 [HKEY_LOCAL_MACHINE\SOFTWARE\Clients\Mail\Group-Office\Protocols\mailto\shell\open]
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Clients\Mail\Group-Office\Protocols\mailto\shell\open\command]
-@="rundll32.exe url.dll,FileProtocolHandler '.$GO_MODULES->modules['email']['full_url'].'mailto.php?mail_to=%1"';
+@="rundll32.exe url.dll,FileProtocolHandler '.$GO_MODULES->modules['email']['full_url'].'mailto.php?mail_to=%1"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Clients\Mail]
+@="Group-Office"';
 
 header('Content-Type: application/download');
 header('Content-Length: '.strlen($data));
