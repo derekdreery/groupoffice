@@ -171,21 +171,24 @@ class cached_imap extends imap{
 		$sql = "DELETE FROM em_messages_cache WHERE folder_id=".$this->email->escape($this->folder['id'])." AND uid IN(".$this->email->escape(implode(',',$uids)).")";
 		$this->email->query($sql);
 		debug('Deleted '.implode(',', $uids).' from cache');
-		foreach($this->folder_sort_cache as $key=>$sort)
+		if(is_array($this->folder_sort_cache))
 		{
-			$this->folder_sort_cache[$key]=array();
-			$removed=0;
-			$total = count($uids);
-			foreach($sort as $uid)
+			foreach($this->folder_sort_cache as $key=>$sort)
 			{
-				if($total==$removed || !in_array($uid, $uids))
+				$this->folder_sort_cache[$key]=array();
+				$removed=0;
+				$total = count($uids);
+				foreach($sort as $uid)
 				{
-					$this->folder_sort_cache[$key][]=$uid;
-					
-				}else
-				{
-					$removed++;
-					debug('Removed '.$uid.' from sort cache '.$key);
+					if($total==$removed || !in_array($uid, $uids))
+					{
+						$this->folder_sort_cache[$key][]=$uid;
+						
+					}else
+					{
+						$removed++;
+						debug('Removed '.$uid.' from sort cache '.$key);
+					}
 				}
 			}
 		}
