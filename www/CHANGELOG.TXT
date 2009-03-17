@@ -1,3 +1,7 @@
+2009/03/17 Version 3.01-stable-16
+- Fixed bug that caused strange behaviour when you have a lot of all day events on
+	some screen resolutions
+
 2009/03/17 Version 3.01-stable-15
 - Fixed bug that caused sync to fail
 
