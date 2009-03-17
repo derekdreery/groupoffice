@@ -235,7 +235,9 @@ a:link, a:visited, a:active{
 
 
 
-
+.x-calGrid-panel .x-panel-body{
+background-color: #F1F1F1 !important;
+}
 
 
 .x-calGrid-table{
@@ -345,9 +347,12 @@ a:link, a:visited, a:active{
 }
 
 
+.x-calGrid-all-day-table-container{
+	overflow:auto;
+}
 .x-calGrid-all-day-table {
 	border-collapse:collapse;
-	
+	table-layout:fixed;
 	background-image:url(../../../../ext/resources/images/default/layout/panel-title-light-bg.gif);
 }
 

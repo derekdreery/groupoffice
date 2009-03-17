@@ -84,6 +84,8 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 
 	// private
     initComponent : function(){
+    	
+    	this.cls='x-calGrid-panel';
 
 		GO.grid.CalendarGrid.superclass.initComponent.call(this);
 	
@@ -160,7 +162,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		var ctSize = this.container.getSize(true);		
 		
 		//column width is the container size minus the time column width
-		var columnWidth = (ctSize['width']-40-this.scrollOffset)/this.days;		
+		var columnWidth = ((ctSize['width']-40-this.scrollOffset)/this.days);		
 		columnWidth = Math.floor(columnWidth);		
         
     //generate table for headings and all day events
@@ -169,7 +171,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				tag: 'table', 
 				id: Ext.id(), 
 				cls: "x-calGrid-headings-table", 
-				style: "width:"+ctSize['width']+"px;"
+				style: "width:"+(ctSize['width'])+"px;"
 				
 			},true);
 			
@@ -187,12 +189,17 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				}
 			}, true);
 			
-		this.allDayTable = Ext.DomHelper.append(this.body,
+			
+		//create container for the grid
+		this.allDayTableContainer = Ext.DomHelper.append(this.body,
+				{tag: 'div', cls: "x-calGrid-all-day-table-container"}, true);
+			
+		this.allDayTable = Ext.DomHelper.append(this.allDayTableContainer,
 			{
 				tag: 'table', 
 				id: Ext.id(), 
 				cls: "x-calGrid-all-day-table", 
-				style: "width:"+ctSize['width']+"px;"
+				style: "width:"+(ctSize['width']-this.scrollOffset)+"px;"
 				
 			},true);
 		var tbody = Ext.DomHelper.append(this.allDayTable,
@@ -228,10 +235,10 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			
 			//create grid heading
 			heading = Ext.DomHelper.append(this.headingsRow,
-				{tag: 'td', children:[{tag:'div',cls: cls, style: "width:"+(columnWidth)+"px", html: dt.format(dateFormat) }]});	
+				{tag: 'td', children:[{tag:'div',cls: cls, style: "width:"+(columnWidth-3)+"px", html: dt.format(dateFormat) }]});	
 				
 			allDayColumn = Ext.DomHelper.append(this.allDayRow,
-				{tag: 'td', id: 'all_day_'+day, cls: "x-calGrid-all-day-container", style: "width:"+(columnWidth)+"px;height:0px"}, true);
+				{tag: 'td', id: 'all_day_'+day, cls: "x-calGrid-all-day-container", style: "width:"+(columnWidth-3)+"px;height:0px"}, true);
 				
 			this.allDayColumns.push(allDayColumn);
 		}		
@@ -243,13 +250,13 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 					style: "width:"+(this.scrollOffset)+"px;height:0px",
 					cls: "x-calGrid-heading"
 				});		
-				
+				/*
 		Ext.DomHelper.append(this.allDayRow,
 				{
 					tag: 'td', 
 					style: "width:"+(this.scrollOffset)+"px;height:0px", 
 					cls: "x-calGrid-all-day-container"
-				});	
+				});	*/
 		
 		//create container for the grid
 		this.gridContainer = Ext.DomHelper.append(this.body,
@@ -258,8 +265,9 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		//calculate gridContainer size
 		var headingsHeight = this.headingsTable.getHeight();
 
-		var gridContainerHeight = ctSize['height']-headingsHeight;
-		this.gridContainer.setSize(ctSize['width'],gridContainerHeight );
+		//var gridContainerHeight = ctSize['height']-headingsHeight;
+
+		//this.gridContainer.setSize(ctSize['width'],gridContainerHeight );
 
 		this.gridTable = Ext.DomHelper.append(this.gridContainer,
 			{
@@ -396,10 +404,19 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 
 	autoSizeGrid : function() {
 		//calculate gridContainer size
-		var headingsHeight = this.headingsTable.getHeight();
-		var allDayHeight = this.allDayTable.getHeight();		
 		
-		var gridContainerHeight = this.ownerCt.body.getHeight()-headingsHeight-allDayHeight-2;
+		var ownerHeight = this.ownerCt.body.getHeight();
+		
+		var headingsHeight = this.headingsTable.getHeight();
+		var allDayHeight = this.allDayTableContainer.getHeight();		
+		
+		if(allDayHeight>(ownerHeight/2))
+		{
+			allDayHeight=ownerHeight/2;
+			this.allDayTableContainer.setHeight(allDayHeight);	
+		}
+		
+		var gridContainerHeight = ownerHeight-headingsHeight-allDayHeight-2;		
 		this.gridContainer.setHeight(gridContainerHeight);
 	},
 
@@ -1331,7 +1348,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		this.clearGrid();
 		
 		this.renderDaysGrid();
-  	this.scrollToLastPosition();
+  	
 
     for(var i = 0, len = records.length; i < len; i++){
       var startDate = Date.parseDate(records[i].data['start_time'], this.dateTimeFormat);
@@ -1345,6 +1362,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
     }
     
     this.autoSizeGrid();
+    this.scrollToLastPosition();
     
     
     for(var i=0;i<this.days;i++)
@@ -1734,6 +1752,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 						this.addDaysGridEvent(event);												
 					}
 				}
+				this.autoSizeGrid();
 			}			
 			this.allDayDragEvent=false;
 		}
