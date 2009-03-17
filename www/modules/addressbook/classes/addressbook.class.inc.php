@@ -947,20 +947,26 @@ class addressbook extends db {
 		}
 	}
 
-	function get_contact_by_email($email, $user_id) {
+	function get_contact_by_email($email, $user_id, $addressbook_id=0) {
 		$email = $this->escape(String::get_email_from_string($email));
 		$sql = "SELECT * FROM ab_contacts ";
 
-		$user_ab = $this->get_user_addressbook_ids($user_id);
-		if(count($user_ab) > 1)
+		if($addressbook_id>0)
 		{
-			$sql .= "WHERE addressbook_id IN (".implode(",",$user_ab).") AND ";
-		}elseif(count($user_ab)==1)
-		{
-			$sql .= "WHERE addressbook_id=".$user_ab[0]." AND ";
+			$sql .= "WHERE addressbook_id=".$addressbook_id." AND ";
 		}else
 		{
-			return false;
+			$user_ab = $this->get_user_addressbook_ids($user_id);
+			if(count($user_ab) > 1)
+			{
+				$sql .= "WHERE addressbook_id IN (".implode(",",$user_ab).") AND ";
+			}elseif(count($user_ab)==1)
+			{
+				$sql .= "WHERE addressbook_id=".$user_ab[0]." AND ";
+			}else
+			{
+				return false;
+			}
 		}
 		$sql .= " (email='$email' OR email2='$email' OR email3='$email')";
 
