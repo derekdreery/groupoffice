@@ -1,3 +1,6 @@
+2009/03/18 Version 3.01-stable-17
+- New module to process forms from website that can add contacts and send mails.
+
 2009/03/17 Version 3.01-stable-16
 - Fixed bug that caused strange behaviour when you have a lot of all day events on
 	some screen resolutions
