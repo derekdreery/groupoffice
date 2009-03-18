@@ -825,24 +825,25 @@ class calendar extends db
 			return false;
 		}
 
-		if (!isset($event['user_id']) || $event['user_id'] == 0) {
+		if (empty($event['user_id'])) {
 			global $GO_SECURITY;
 			$event['user_id'] = $GO_SECURITY->user_id;
 		}
 
-		if(!isset($event['ctime']) || $event['ctime'] == 0)
+		if(!empty($event['ctime']))
 		{
 			$event['ctime']  =  time();
 		}
 
-		if(!isset($event['mtime']) || $event['mtime'] == 0)
+		if(empty($event['mtime']))
 		{
 			$event['mtime']  =  $event['ctime'];
 		}
 
-		if(!isset($event['background']) || $event['background'] == '')
+		if(empty($event['background']))
 		{
-			$event['background']  =  'EBF1E2';
+			$settings = $this->get_settings($event['user_id']);			
+			$event['background']  =  $settings ? $settings['background'] : 'EBF1E2';
 		}
 
 
@@ -944,7 +945,7 @@ class calendar extends db
 	function update_event($event, $calendar=false, $update_related=true)
 	{
 		unset($event['read_permission'], $event['write_permission']);
-		if(!isset($event['mtime']) || $event['mtime'] == 0)
+		if(empty($event['mtime']))
 		{
 			$event['mtime']  = time();
 		}
