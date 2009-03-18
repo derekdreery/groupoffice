@@ -1520,7 +1520,7 @@ class calendar extends db
 
 		}elseif(isset($object['DURATION']['value']))
 		{
-			$duration = $this->ical2array->parse_date($object['DURATION']['value']);
+			$duration = $this->ical2array->parse_duration($object['DURATION']['value']);
 			$event['end_time'] = $event['start_time']+$duration;
 
 		}elseif(isset($object['DUE']['value']))
