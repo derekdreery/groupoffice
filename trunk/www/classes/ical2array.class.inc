@@ -590,12 +590,13 @@ class ical2array
 	
 	function parse_duration($duration)
 	{
-	 	ereg ('^P([0-9]{1,2}[W])?([0-9]{1,2}[D])?([T]{0,1})?([0-9]{1,2}[H])?([0-9]{1,2}[M])?([0-9]{1,2}[S])?', $data, $output); 
-		$weeks 			= ereg_replace('W', '', $duration[1]); 
-		$days 			= ereg_replace('D', '', $duration[2]); 
-		$hours 			= ereg_replace('H', '', $duration[4]); 
-		$minutes 		= ereg_replace('M', '', $duration[5]); 
-		$seconds 		= ereg_replace('S', '', $duration[6]); 
+	 	ereg ('^P([0-9]{1,3}[W])?([0-9]{1,3}[D])?([T]{0,3})?([0-9]{1,3}[H])?([0-9]{1,3}[M])?([0-9]{1,3}[S])?', $duration, $output); 
+
+		$weeks 			= ereg_replace('W', '', $output[1]); 
+		$days 			= ereg_replace('D', '', $output[2]); 
+		$hours 			= ereg_replace('H', '', $output[4]); 
+		$minutes 		= ereg_replace('M', '', $output[5]); 
+		$seconds 		= ereg_replace('S', '', $output[6]); 
 		return ($weeks * 60 * 60 * 24 * 7) + ($days * 60 * 60 * 24) + ($hours * 60 * 60) + ($minutes * 60) + ($seconds);	
 	}
 
