@@ -1,8 +1,0 @@
-<?php
-$module['logviewer']['description'] = 'A simple module to view log entries';
-$module['logviewer']['version'] = '1.0';
-$module['logviewer']['release_date'] = '2007-10-23';
-$module['logviewer']['status'] = 'Stable';
-$module['logviewer']['authors'][] = array('name'=>'Merijn Schering', 'email'=>'mschering@intermesh.nl');
-$module['logviewer']['admin_menu'] = true;
-$module['logviewer']['sort_order'] = 1000;
