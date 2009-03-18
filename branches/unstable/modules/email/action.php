@@ -236,13 +236,13 @@ try{
 								$_POST['account_id'],
 								$_POST['priority']
 							);
-
+							
 							if(!empty($_POST['reply_uid']))
-							$swift->set_reply_to(($_POST['reply_uid']),($_POST['reply_mailbox']));
+								$swift->set_reply_to($_POST['reply_uid'],$_POST['reply_mailbox']);
 
 							$RFC822 = new RFC822();
 
-							$to_addresses = $RFC822->parse_address_list(($_POST['to']));
+							$to_addresses = $RFC822->parse_address_list($_POST['to']);
 
 							foreach($to_addresses as $address)
 							{
@@ -252,28 +252,33 @@ try{
 
 							if(!empty($_POST['cc']))
 							{
-								$cc_addresses = $RFC822->parse_address_list(($_POST['cc']));
+								$cc_addresses = $RFC822->parse_address_list($_POST['cc']);
 									
+								$swift_addresses=array();
 								foreach($cc_addresses as $address)
 								{
-									add_unknown_recipient($address['email'], $address['personal']);
-									$swift->recipients->addCc($address['email'], $address['personal']);
+									add_unknown_recipient($address['email'], $address['personal']);								
+									$swift_addresses[$address['email']]=$address['personal'];
 								}
+								$swift->message->setCc($swift_addresses);
 							}
+							
+							
 							if(!empty($_POST['bcc']))
 							{
-								$bcc_addresses = $RFC822->parse_address_list(($_POST['bcc']));
-
+								$bcc_addresses = $RFC822->parse_address_list($_POST['bcc']);
+								$swift_addresses=array();
 								foreach($bcc_addresses as $address)
 								{
 									add_unknown_recipient($address['email'], $address['personal']);
-									$swift->recipients->addBcc($address['email'], $address['personal']);
+									$swift_addresses[$address['email']]=$address['personal'];
 								}
+								$swift->message->setBcc($swift_addresses);
 							}
 
-							if(isset($_POST['replace_personal_fields']))
+							/*if(isset($_POST['replace_personal_fields']))
 							{
-								require_once $GO_CONFIG->class_path.'mail/swift/lib/Swift/Plugin/Decorator.php';
+								require_once $GO_CONFIG->class_path.'mail/swift/lib/classes/Swift/plugins/DecoratorPlugin.php';
 
 								class Replacements extends Swift_Plugin_Decorator_Replacements {
 									function getReplacementsFor($address) {
@@ -282,13 +287,13 @@ try{
 								}
 
 								//Load the plugin with the extended replacements class
-								$swift->attachPlugin(new Swift_Plugin_Decorator(new Replacements()), "decorator");
+								$swift->attachPlugin(new Swift_Plugins_DecoratorPlugin(new Replacements()), "decorator");
 
-							}
+							}*/
 
 							if($_POST['notification']=='true')
-							{
-								$swift->message->requestReadReceipt($swift->account['email']);
+							{								
+								$swift->message->setReadReceiptTo($swift->account['email']);
 							}
 														
 							$body = $_POST['body'];
@@ -303,8 +308,9 @@ try{
 									$tmp_name = $GO_CONFIG->file_storage_path.$tmp_name;
 								}
 
-								$img =& new Swift_Message_EmbeddedFile(new Swift_File($tmp_name),utf8_basename($tmp_name), File::get_mime($tmp_name));
-								$src_id = $swift->message->attach($img);
+								$img = Swift_EmbeddedFile::fromPath($tmp_name);
+								$img->setContentType(File::get_mime($tmp_name));
+								$src_id = $swift->message->embed($img);
 								
 								//Browsers reformat URL's so a pattern match
 								//$body = str_replace($inlineAttachment['url'], $src_id, $body);			
@@ -323,13 +329,9 @@ try{
 									if(!File::is_full_path($tmp_name[0]))
 									{
 										$tmp_name = $GO_CONFIG->file_storage_path.$tmp_name;
-									}
-									debug($tmp_name);
-									$file =& new Swift_File($tmp_name);
-									//$file = file_get_contents($tmp_name);
-									$attachment =& new Swift_Message_Attachment($file,utf8_basename($tmp_name), File::get_mime($tmp_name));
+									}									
+									$attachment = Swift_Attachment::fromPath($tmp_name,File::get_mime($tmp_name)); 
 									$swift->message->attach($attachment);
-
 								}
 							}
 								
@@ -349,7 +351,7 @@ try{
 									$status = $imap->status($drafts_folder, SA_UIDNEXT);
 									if(!empty($status->uidnext))	
 									{								
-										$response['success']=$imap->append_message($drafts_folder, $swift->get_data(),"\\Seen");
+										$response['success']=$imap->append_message($drafts_folder, $swift->message->toString(),"\\Seen");
 										$response['draft_uid']=$status->uidnext;
 									}
 									
@@ -367,8 +369,8 @@ try{
 								}
 							}else
 							{
-								$log =& Swift_LogContainer::getLog();
-								$log->setLogLevel(2);
+								//$log =& Swift_LogContainer::getLog();
+							//	$log->setLogLevel(2);
 								
 								if(!empty($_POST['draft_uid']))
 								{
@@ -391,15 +393,13 @@ try{
 
 								if(!$response['success'])
 								{
-									$response['feedback']='An error ocurred. The server returned: <br /><br />';
-									$response['feedback'].=nl2br($log->dump(true));
+									$response['feedback']='An error ocurred. ';//The server returned: <br /><br />';
+									//$response['feedback'].=nl2br($log->dump(true));
 								}
 							}
 
-						} catch (Swift_ConnectionException $e) {
+						} catch (Exception $e) {
 							$response['feedback'] = $lang['email']['feedbackSMTPProblem'] . $e->getMessage();
-						} catch (Swift_Message_MimeException $e) {
-							$response['feedback'] = $lang['email']['feedbackUnexpectedError'] . $e->getMessage();
 						}
 					}
 					break;

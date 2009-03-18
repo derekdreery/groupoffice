@@ -18,8 +18,7 @@
  * Require all mail classes that are used by this class
  */
 require_once $GO_CONFIG->class_path.'mail/RFC822.class.inc';
-require_once $GO_CONFIG->class_path.'mail/swift/lib/Swift.php';
-require_once $GO_CONFIG->class_path.'mail/swift/lib/Swift/Connection/SMTP.php';
+require_once $GO_CONFIG->class_path.'mail/swift/lib/swift_required.php';
 require_once($GO_CONFIG->class_path."html2text.class.inc");
 require_once($GO_CONFIG->class_path."mail/mimeDecode.class.inc");
 require_once($GO_CONFIG->class_path.'filesystem.class.inc');
