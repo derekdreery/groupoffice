@@ -1,9 +1,0 @@
-<?php
-$module['tools']['description'] = 'Administrative tools for Group-Office.';
-$module['tools']['version'] = '0.1';
-$module['tools']['release_date'] = '2007-04-17';
-$module['tools']['status'] = 'Alpha';
-$module['tools']['authors'][] = array('name'=>'Merijn Schering', 'email'=>'mschering@intermesh.nl');
-$module['tools']['sort_order'] = '130';
-$module['tools']['admin_menu'] = true;
-?>
