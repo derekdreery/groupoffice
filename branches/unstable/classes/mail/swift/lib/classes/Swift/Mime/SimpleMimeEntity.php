@@ -67,7 +67,7 @@ class Swift_Mime_SimpleMimeEntity implements Swift_Mime_MimeEntity
   private $_children = array();
   
   /** The maximum line length of the body of this entity */
-  private $_maxLineLength = 78;
+  private $_maxLineLength = 76;
   
   /** The order in which alternative mime types should appear */
   private $_alternativePartOrder = array(
