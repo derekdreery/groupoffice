@@ -21,6 +21,8 @@
 //@require 'Swift/Events/SendListener.php';
 //@require 'Swift/Events/SendEvent.php';
 
+require_once dirname(__FILE__) . "/Decorator/Replacements.php";
+
 /**
  * Allows customization of Messages on-the-fly.
  * @package Swift
@@ -31,11 +33,11 @@ class Swift_Plugins_DecoratorPlugin implements Swift_Events_SendListener
 {
 
   /**
-   * The replacement map.
+   * The replacement object.
    * @var array
    * @access private
    */
-  private $_replacements = array();
+  private $_replacements;
 
   /**
    * The body as it was before replacements.
@@ -71,7 +73,7 @@ class Swift_Plugins_DecoratorPlugin implements Swift_Events_SendListener
    */
   public function __construct($replacements = array())
   {
-    $this->_replacements = $replacements;
+    $this->setReplacements($replacements);
   }
 
   /**
@@ -84,24 +86,25 @@ class Swift_Plugins_DecoratorPlugin implements Swift_Events_SendListener
     $this->_restoreMessage($message);
     $to = array_keys($message->getTo());
     $address = array_shift($to);
-    if (isset($this->_replacements[$address]))
+    
+    $replacements = $this->_replacements->getReplacementsFor($address);
+
+    if (count($replacements))
     {
-      $replacements = $this->_replacements[$address];
+      
       $body = $message->getBody();
-      $search = array_keys($replacements);
-      $replace = array_values($replacements);
-      $bodyReplaced = str_replace(
-        $search, $replace, $body
-        );
+      //$search = array_keys($replacements);
+      //$replace = array_values($replacements);
+      $bodyReplaced = $this->replace($replacements, $body); 
+      
       if ($body != $bodyReplaced)
       {
         $this->_originalBody = $body;
         $message->setBody($bodyReplaced);
       }
       $subject = $message->getSubject();
-      $subjectReplaced = str_replace(
-        $search, $replace, $subject
-        );
+      $subjectReplaced = $this->replace($replacements, $subject);
+      
       if ($subject != $subjectReplaced)
       {
         $this->_originalSubject = $subject;
@@ -114,9 +117,7 @@ class Swift_Plugins_DecoratorPlugin implements Swift_Events_SendListener
         if ('text' == $type)
         {
           $body = $child->getBody();
-          $bodyReplaced = str_replace(
-            $search, $replace, $body
-            );
+          $bodyReplaced =  $this->replace($replacements, $body);
           if ($body != $bodyReplaced)
           {
             $child->setBody($bodyReplaced);
@@ -126,6 +127,17 @@ class Swift_Plugins_DecoratorPlugin implements Swift_Events_SendListener
       }
       $this->_lastMessage = $message;
     }
+  }
+  
+	/**
+   * Perform a str_replace() over the given value.
+   * @param array The list of replacements as (search => replacement)
+   * @param string The string to replace
+   * @return string
+   */
+  protected function replace($replacements, $value)
+  {
+    return str_replace(array_keys($replacements), array_values($replacements), $value);
   }
 
   /**
@@ -173,6 +185,41 @@ class Swift_Plugins_DecoratorPlugin implements Swift_Events_SendListener
       }
       $this->_lastMessage = null;
     }
+  }
+  
+  
+ /**
+   * Set the replacements as a 2-d array or an instance of Swift_Plugin_Decorator_Replacements.
+   * @param mixed Array or Swift_Plugin_Decorator_Replacements
+   */
+  public function setReplacements($replacements)
+  {
+    if ($replacements === null)
+    {
+      $r = array();
+      $this->_replacements = new Swift_Plugins_DecoratorPluginReplacements($r);
+    }
+    elseif (is_array($replacements))
+    {
+      $this->_replacements = new Swift_Plugins_DecoratorPluginReplacements($replacements);
+    }
+    elseif ($replacements instanceof Swift_Plugins_DecoratorPluginReplacements)
+    {
+      $this->_replacements = $replacements;
+    }
+    else
+    {
+      throw new Exception(
+        "Decorator replacements must be array or instance of Swift_Plugin_Decorator_Replacements.");
+    }
+  }
+  /**
+   * Get the replacements object.
+   * @return Swift_Plugin_Decorator_Replacements
+   */
+  public function getReplacements()
+  {
+    return $this->_replacements;
   }
 
 }

@@ -56,14 +56,13 @@ class GoSwift extends Swift_Mailer{
 	 * @var Swift_Message
 	 */
 	public $message;
-
+	
+	
 	/**
-	 * The Swift recipients list
-	 *
-	 * @var Swift_RecipientList
+	 * Array with failed e-mail addresses after send.
+	 * @var Array
 	 */
-
-	public $recipients;
+	public $failed_recipients = array();
 
 	/**
 	 * The raw message data to store in the sent folder or for a linked message
@@ -260,20 +259,22 @@ class GoSwift extends Swift_Mailer{
 		}		
 		
 		
-
+		$this->failed_recipients=array();
 		if($batch)
 		{
 			//$send_success = parent::batchSend($this->message,$this->recipients, new Swift_Address($email_from, $name_from));
 			
-			$this->batch =& new Swift_BatchMailer($this);	
+			/*$this->batch =& new Swift_BatchMailer($this);	
 			$this->batch->setSleepTime(10);
 			$this->batch->setMaxTries(2);
 			$this->batch->setMaxSuccessiveFailures(10);		
-			$send_success=$this->batch->send($this->message, $this->recipients, new Swift_Address($email_from, $name_from));
+			$send_success=$this->batch->send($this->message, $this->recipients, new Swift_Address($email_from, $name_from));*/
+			
+			$send_success = parent::batchSend($this->message,$this->failed_recipients);
 			
 		}else
 		{
-			$send_success = parent::send($this->message);
+			$send_success = parent::send($this->message,$this->failed_recipients);
 		}		
 		
 		if($send_success && $this->account && $this->account['type']=='imap' && !empty($this->account['sent']))
@@ -314,9 +315,24 @@ class GoSwift extends Swift_Mailer{
 		}
 		return $send_success;
 	}
-
-	//TODO
-
+	
+	function implodeSwiftAddressArray($swiftArr)
+	{
+		$fromArr=array();
+		foreach($swiftArr as $address=>$personal)
+		{
+			if(empty($personal))
+			{
+				$fromArr[]=$address;
+			}else
+			{
+				$fromArr[]=RFC822::write_address($address, $personal);
+			}
+		}
+		
+		return implode(',',$fromArr);
+	}
+	
 	/**
 	 * Links the message to items in Group-Office. Must be called after send()
 	 *
@@ -344,18 +360,11 @@ class GoSwift extends Swift_Mailer{
 		fclose($fp);
 
 		$email = new email();
-
-		$link_message['from']=$this->message->headers->get('from');
 		
-		$to=$this->recipients->getTo();
-		foreach ($to as $key => $value)
-    {
-      $to[$key] = $value->build();
-    }
 
-		
-		$link_message['to']=implode(',',$to);
-		$link_message['subject']=$this->message->headers->get('subject');
+		$link_message['from']=$this->implodeSwiftAddressArray($this->message->getFrom());
+		$link_message['to']=$this->implodeSwiftAddressArray($this->message->getTo());
+		$link_message['subject']=$this->message->getSubject();
 		$link_message['ctime']=$link_message['time']=time();
 		$link_message['link_id'] = $email->link_message($link_message);
 
@@ -476,13 +485,14 @@ class GoSwiftImport extends GoSwift{
 						{
 							$content_id = substr($part->headers['content-id'], 1,strlen($part->headers['content-id'])-2);
 						}
-						$img =& new Swift_Message_Image(new Swift_File($tmp_file),utf8_basename($tmp_file), $mime_type,$content_id);
-						$this->message->attach($img);					
+						$img = Swift_EmbeddedFile::fromPath($tmp_file);
+						$img->setContentType(File::get_mime($mime_type));
+						$img->setId($content_id);					
+						$this->message->embed($img);						
 					}else
-					{
-						$file =& new Swift_File($tmp_file);
-						$attachment =& new Swift_Message_Attachment($file,utf8_basename($tmp_file), $mime_type);
-						$this->message->attach($attachment);
+					{						
+						$attachment = Swift_Attachment::fromPath($tmp_file,File::get_mime($tmp_file)); 
+						$swift->message->attach($attachment);
 					}
 				}
 

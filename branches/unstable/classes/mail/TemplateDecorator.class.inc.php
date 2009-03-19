@@ -33,7 +33,7 @@ require_once($GO_MODULES->modules['mailings']['class_path'].'templates.class.inc
  * @since Group-Office 3.0
  */
 
-class Swift_Plugin_Template_Decorator extends Swift_Plugin_Decorator 
+class Swift_Plugins_TemplateDecoratorPlugin extends Swift_Plugins_DecoratorPlugin
 {
 	
 	public function __construct($replacements=null)
