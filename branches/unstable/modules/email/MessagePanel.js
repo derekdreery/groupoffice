@@ -113,7 +113,11 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				
 				if(success)					
 				{
-					var data = Ext.decode(response.responseText);						
+					var data = Ext.decode(response.responseText);	
+					if(data.feedback)
+					{
+						GO.errorDialog.show(data.feedback);
+					}
 					this.setMessage(data);						
 					this.el.unmask();
 				}				

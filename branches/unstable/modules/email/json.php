@@ -949,6 +949,34 @@ try{
 
 					
 				}
+				
+				if($GO_MODULES->has_module('gnupg'))
+				{
+					require_once($GO_MODULES->modules['gnupg']['class_path'].'gnupg.class.inc.php');
+					$gnupg = new gnupg();
+					
+					if(strpos($response['body'],'-----BEGIN PGP MESSAGE-----'))
+					{
+						preg_match('/-----BEGIN PGP MESSAGE-----.*-----END PGP MESSAGE-----/', $response['body'], $matches);
+						
+						$encrypted = preg_replace(
+							"'<br[^>]*>[\s]*'i",
+							"\n",
+							$matches[0]);
+						
+						$passphrase = isset($_POST['passphrase']) ? $_POST['passphrase'] : '';
+							
+						$decrypted = $gnupg->decode($encrypted, $passphrase);
+						
+						if(!$decrypted)
+						{
+							throw new Exception($gnupg->error);							
+						}
+						$response['body'] =str_replace($matches[0], $decrypted,$response['body']);
+						
+					}
+				}
+				
 				break;
 
 							case 'messages':
