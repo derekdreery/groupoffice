@@ -529,6 +529,17 @@ class tasks extends db
 
 			$sql = "DELETE FROM ta_tasks WHERE id='".$this->escape($task_id)."'";
 			$this->query($sql);
+			
+			global $GO_CONFIG;
+				
+			require_once($GO_CONFIG->class_path.'base/reminder.class.inc.php');
+			$rm = new reminder();
+			$rm2 = new reminder();
+			$rm->get_reminders_by_link_id($task_id, 12);
+			while($r = $rm->next_record())
+			{
+				$rm2->delete_reminder($r['id']);
+			}
 						
 			require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
 			$search = new search();
