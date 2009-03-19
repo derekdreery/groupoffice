@@ -44,11 +44,6 @@ class Go2Mime
 	var $inline_attachments=array();
 	var $notification=false;
 
-	public function __construct()
-	{
-
-	}
-
 	public function set_body($body)
 	{
 		$this->body=$body;
@@ -73,10 +68,10 @@ class Go2Mime
 	{
 		global $GO_CONFIG;
 
-		$message =& new Swift_Message('', '');
+		$message = Swift_Message::newInstance();
 		if($this->notification)
 		{
-			$message->requestReadReceipt($this->notification);
+			$message->setReadReceiptTo($this->notification);
 		}
 
 		//var_dump($this->inline_attachments);
@@ -84,18 +79,16 @@ class Go2Mime
 		{
 			if(isset($inline_attachment['data']))
 			{
-				$src_id = $message->attach(
-				new Swift_Message_EmbeddedFile(
-				$inline_attachment['data'],
+				$img = Swift_EmbeddedFile::newInstance($inline_attachment['data'],
 				$inline_attachment['filename'],
-				$inline_attachment['content_type']
-				)
-				);
+				$inline_attachment['content_type']);								
+				
 			}else
 			{
-				$img =& new Swift_Message_Image(new Swift_File($inline_attachment['tmp_file']));
-				$src_id = $message->attach($img);
+				$img = Swift_EmbeddedFile::fromPath($inline_attachment['tmp_file']);
+				$img->setContentType(File::get_mime($inline_attachment['tmp_file']));				
 			}
+			$src_id = $message->embed($img);
 				
 			//Browsers reformat URL's so a pattern match
 			//$this->body = str_replace($inline_attachment['url'], $src_id, $this->body);
@@ -103,10 +96,9 @@ class Go2Mime
 			$this->body = preg_replace('/="[^"]*'.preg_quote($just_filename).'"/', '="'.$src_id.'"', $this->body);
 		}
 
-		$body =& new Swift_Message_Part($this->body, "text/html", null, "UTF-8");
-		$message->attach($body);
+		$message->setBody($this->body, "text/html");
 
-		return $message->build()->readFull();
+		return $message->toString();
 	}
 
 
