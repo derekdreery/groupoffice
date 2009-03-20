@@ -15,10 +15,8 @@ GO.email.EmailComposer = function(config) {
 	Ext.apply(config);
 	
 	var priorityGroup = Ext.id();
-
-	this.optionsMenu = new Ext.menu.Menu({
-				//id : 'optionsMenu',
-				items : [
+	
+	var optionsMenuItems = [
 						this.notifyCheck = new Ext.menu.CheckItem({
 									text : GO.email.lang.notification,
 									checked : false,
@@ -56,7 +54,26 @@ GO.email.EmailComposer = function(config) {
 								this.sendParams['priority'] = '5';
 							},
 							scope : this
-						}]
+						}];
+						
+		if(GO.gnupg)
+		{
+			optionsMenuItems.push('-');
+			
+			optionsMenuItems.push({
+				text:'Encrypt message',
+				checked: false,
+				checkHandler : function(check, checked) {
+					this.sendParams['encrypt'] = checked
+							? '1'
+							: '0';
+				},
+				scope:this
+			});
+		}
+
+	this.optionsMenu = new Ext.menu.Menu({
+				items : optionsMenuItems
 			});
 
 	this.showMenu = new Ext.menu.Menu({
