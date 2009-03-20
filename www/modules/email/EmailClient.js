@@ -1296,7 +1296,7 @@ GO.email.showComposer = function(config){
 				}
 			}
 			
-			if(GO.email.messagesGrid.store.reader.jsonData.sent || (GO.email.messagesGrid.store.reader.jsonData.drafts && composer.sendParams.draft_uid && composer.sendParams.draft_uid>0))
+			if(GO.email.messagesGrid.loaded && (GO.email.messagesGrid.store.reader.jsonData.sent || (GO.email.messagesGrid.store.reader.jsonData.drafts && composer.sendParams.draft_uid && composer.sendParams.draft_uid>0)))
 			{
 				GO.email.messagesGrid.store.reload();
 			}
@@ -1304,7 +1304,7 @@ GO.email.showComposer = function(config){
 		
 		availableComposer.on('save', function(composer){			
 
-			if(GO.email.messagesGrid.store.reader.jsonData.drafts)
+			if(GO.email.messagesGrid.loaded && (GO.email.messagesGrid.store.reader.jsonData.drafts))
 			{
 				GO.email.messagesGrid.store.reload();
 			}
