@@ -54,7 +54,14 @@ GO.email.EmailComposer = function(config) {
 								this.sendParams['priority'] = '5';
 							},
 							scope : this
-						}];
+						},'-',this.htmlCheck = new Ext.menu.CheckItem({
+							text:'HTML markup',
+							checked: true,
+							checkHandler : function(check, checked) {
+								this.setContentTypeHtml(checked);
+							},
+							scope:this							
+						})];
 						
 		if(GO.gnupg)
 		{
@@ -223,11 +230,11 @@ GO.email.EmailComposer = function(config) {
 								}), this.htmlEditor = new Ext.form.HtmlEditor({
 									hideLabel : true,
 									name : 'body',
-									anchor : '100% -130', // anchor width by
-									// percentage and
-									// height by raw
-									// adjustment
+									anchor : '100% -130',
 									plugins : imageInsertPlugin
+								}), this.textEditor = new Ext.form.TextArea({
+									name: 'textbody',
+									anchor : '100% -130'
 								})]
 			});
 			
@@ -390,12 +397,31 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 	
 	lastAutoSave : false,
 	
+	setContentTypeHtml : function(checked){
+		this.sendParams['content-type'] = checked
+					? 'html'
+					: 'plain';
+					
+		this.htmlCheck.setChecked(checked);
+					
+		if(checked)
+		{
+			this.htmlEditor.show();
+			this.textEditor.hide();
+		}else
+		{
+			this.htmlEditor.hide();
+			this.textEditor.show();
+		}		
+		this.editor = checked ? this.htmlEditor : this.textEditor;
+	},
+	
 	autoSave : function(){		
-		if(this.lastAutoSave && this.lastAutoSave!=this.htmlEditor.getValue())
+		if(this.lastAutoSave && this.lastAutoSave!=this.editor.getValue())
 		{
 			this.sendMail(true,true);			
 		}
-		this.lastAutoSave=this.htmlEditor.getValue();
+		this.lastAutoSave=this.editor.getValue();
 	},
 	
 	startAutoSave : function(){	
@@ -475,6 +501,8 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 
 							this.render(Ext.getBody());
 							
+							
+							
 							this.ccCombo.getEl().up('.x-form-item').setDisplayed(false);
 							this.bccCombo.getEl().up('.x-form-item').setDisplayed(false);
 
@@ -538,8 +566,12 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			if (config.values) {
 				this.formPanel.form.setValues(config.values);
 			}
+			
+			
 
 			GO.email.EmailComposer.superclass.show.call(this);
+			
+			this.setContentTypeHtml(true);
 			
 		//	this.ccCombo.getEl().up('.x-form-item').setDisplayed(false);
 			//this.bccCombo.getEl().up('.x-form-item').setDisplayed(false);
@@ -642,13 +674,13 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 						if(params.task!='opendraft')
 						{
 							var accountRecord = this.fromCombo.store.getById(this.fromCombo.getValue());
-							this.htmlEditor.setValue(accountRecord.data.signature+this.htmlEditor.getValue());
+							this.editor.setValue(accountRecord.data.signature+this.htmlEditor.getValue());
 						}
 						
 						if (this.toCombo.getValue() == '') {
 							this.toCombo.focus();
 						} else {
-							this.htmlEditor.focus();
+							this.editor.focus();
 						}
 					},
 					scope : this
@@ -657,7 +689,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			}else
 			{
 				var accountRecord = this.fromCombo.store.getById(this.fromCombo.getValue());
-				this.htmlEditor.setValue(accountRecord.data.signature+this.htmlEditor.getValue());
+				this.editor.setValue(accountRecord.data.signature+this.editor.getValue());
 				
 				
 			}
@@ -1053,6 +1085,10 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 		this.htmlEditor.setHeight(newHeight);
 		this.htmlEditor.setWidth(this.getInnerWidth() - 10);
 		this.htmlEditor.syncSize();
+		
+		this.textEditor.setHeight(newHeight);
+		this.textEditor.setWidth(this.getInnerWidth() - 10);
+		this.textEditor.syncSize();
 	}
 });
 

@@ -305,50 +305,53 @@ try{
 							}
 														
 							$body = $_POST['body'];
-														
-							//process inline attachments
-							$inline_attachments = json_decode($_POST['inline_attachments'], true);
-							foreach($inline_attachments as $inlineAttachment)
-							{
-								$tmp_name = $inlineAttachment['tmp_file'];
-								if(!File::is_full_path($tmp_name))
+							
+							if($_POST['content-type']=='html')
+							{														
+								//process inline attachments
+								$inline_attachments = json_decode($_POST['inline_attachments'], true);
+								foreach($inline_attachments as $inlineAttachment)
 								{
-									$tmp_name = $GO_CONFIG->file_storage_path.$tmp_name;
+									$tmp_name = $inlineAttachment['tmp_file'];
+									if(!File::is_full_path($tmp_name))
+									{
+										$tmp_name = $GO_CONFIG->file_storage_path.$tmp_name;
+									}
+	
+									$img = Swift_EmbeddedFile::fromPath($tmp_name);
+									$img->setContentType(File::get_mime($tmp_name));
+									$src_id = $swift->message->embed($img);
+									
+									//Browsers reformat URL's so a pattern match
+									//$body = str_replace($inlineAttachment['url'], $src_id, $body);			
+									$just_filename = utf8_basename($inlineAttachment['url']);	
+									$body = preg_replace('/="[^"]*'.preg_quote($just_filename).'"/', '="'.$src_id.'"', $body);	
 								}
-
-								$img = Swift_EmbeddedFile::fromPath($tmp_name);
-								$img->setContentType(File::get_mime($tmp_name));
-								$src_id = $swift->message->embed($img);
-								
-								//Browsers reformat URL's so a pattern match
-								//$body = str_replace($inlineAttachment['url'], $src_id, $body);			
-								$just_filename = utf8_basename($inlineAttachment['url']);	
-								$body = preg_replace('/="[^"]*'.preg_quote($just_filename).'"/', '="'.$src_id.'"', $body);	
 							}	
 
-							if($GO_MODULES->has_module('gnupg'))
+							if($GO_MODULES->has_module('gnupg') && empty($_POST['draft']))
 							{
 								require_once ($GO_MODULES->modules['gnupg']['class_path'].'gnupg.class.inc.php');
 								$gnupg = new gnupg();
 								
-								$htmlToText = new Html2Text ($body);
-								$textbody = $htmlToText->get_text();								
+								//$htmlToText = new Html2Text ($body);
+								//$textbody = $htmlToText->get_text();								
 	
+								//$body = $gnupg->encode($body, $all_recipients, $swift->account['email']);
 								$body = $gnupg->encode($body, $all_recipients, $swift->account['email']);
-								$textbody = $gnupg->encode($textbody, $all_recipients, $swift->account['email']);
 								
 								$swift->message->setMaxLineLength(1000);
-								$swift->message->setBody(nl2br($body), 'text/html');
+								$swift->message->setBody($body, 'text/plain');
 								require_once($GO_CONFIG->class_path.'mail/swift/lib/classes/Swift/Mime/ContentEncoder/RawContentEncoder.php');
 								$swift->message->setEncoder(new Swift_Mime_ContentEncoder_RawContentEncoder('8bit'));
 								
-								$textpart = Swift_MimePart::newInstance($textbody, 'text/plain', 'UTF-8');
+								/*$textpart = Swift_MimePart::newInstance($textbody, 'text/plain', 'UTF-8');
 								$textpart->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder('8bit'));
 						    $textpart->setMaxLineLength(1000);								
-								$swift->message->attach($textpart);
+								$swift->message->attach($textpart);*/
 							}else
 							{
-								$swift->set_body($body);
+								$swift->set_body($body, $_POST['content-type']);
 							}
 
 							if(isset($_POST['attachments']))
