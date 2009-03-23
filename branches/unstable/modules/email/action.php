@@ -338,14 +338,14 @@ try{
 								$textbody = $gnupg->encode($textbody, $all_recipients, $swift->account['email']);
 								
 								$swift->message->setMaxLineLength(1000);
-								$swift->message->setBody($body, 'text/html');
+								$swift->message->setBody(nl2br($body), 'text/html');
 								require_once($GO_CONFIG->class_path.'mail/swift/lib/classes/Swift/Mime/ContentEncoder/RawContentEncoder.php');
 								$swift->message->setEncoder(new Swift_Mime_ContentEncoder_RawContentEncoder('8bit'));
 								
-								//$textpart = Swift_MimePart::newInstance($textbody, 'text/plain', 'UTF-8');
-								//$textpart>setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder());
-						   // $textpart->setMaxLineLength(1000);								
-								//$swift->message->attach($textpart);  
+								$textpart = Swift_MimePart::newInstance($textbody, 'text/plain', 'UTF-8');
+								$textpart->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder('8bit'));
+						    $textpart->setMaxLineLength(1000);								
+								$swift->message->attach($textpart);
 							}else
 							{
 								$swift->set_body($body);

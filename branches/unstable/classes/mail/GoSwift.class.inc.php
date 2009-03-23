@@ -151,7 +151,8 @@ class GoSwift extends Swift_Mailer{
 		parent::__construct($transport);
 
 
-		$this->message =  Swift_Message::newInstance($subject, $plain_text_body);
+		//$this->message =  $pgp ? Swift_Pgp_Message::newInstance($subject, $plain_text_body) :  Swift_Message::newInstance($subject, $plain_text_body);
+		$this->message = Swift_Message::newInstance($subject, $plain_text_body);
 		$this->message->setPriority($priority);
 		
 		if($account_id>0)
