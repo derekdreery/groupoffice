@@ -59,6 +59,11 @@ GO.email.EmailComposer = function(config) {
 							checked: true,
 							checkHandler : function(check, checked) {
 								this.setContentTypeHtml(checked);
+								
+								/**
+								 * reload dialog for text or html
+								 */
+								this.show(this.showConfig);
 							},
 							scope:this							
 						})];
@@ -127,6 +132,7 @@ GO.email.EmailComposer = function(config) {
 				border : false,
 				labelWidth : 100,
 				waitMsgTarget : true,
+				baseParams: {content_type:'html'},
 				cls : 'go-form-panel',
 				url : 'save-form.php',
 				defaultType : 'textfield',
@@ -159,8 +165,7 @@ GO.email.EmailComposer = function(config) {
 									sep : ',',
 									fieldLabel : GO.email.lang.sendTo,
 									name : 'to',
-									anchor : '100%', // anchor width by
-									// percentage
+									anchor : '100%',
 									height : 50,
 									store : new Ext.data.JsonStore({
 												url : BaseHref + 'json.php',
@@ -175,7 +180,6 @@ GO.email.EmailComposer = function(config) {
 
 						this.ccCombo = new GO.form.ComboBoxMulti({
 									sep : ',',
-									//id : 'cc',
 									fieldLabel : GO.email.lang.cc,
 									name : 'cc',
 									anchor : '100%',
@@ -198,11 +202,9 @@ GO.email.EmailComposer = function(config) {
 
 						this.bccCombo = new GO.form.ComboBoxMulti({
 									sep : ',',
-									//id : 'bcc',
 									fieldLabel : GO.email.lang.bcc,
 									name : 'bcc',
-									anchor : '100%', // anchor width by
-									// percentage
+									anchor : '100%',
 									height : 50,
 									store : new Ext.data.JsonStore({
 												url : BaseHref + 'json.php',
@@ -212,11 +214,7 @@ GO.email.EmailComposer = function(config) {
 												fields : ['full_email'],
 												root : 'persons'
 											}),
-									displayField : 'full_email', // I'm
-									// interested
-									// in
-									// technology
-									// 'name'
+									displayField : 'full_email',
 									hideTrigger : true,
 									minChars : 2,
 									triggerAction : 'all',
@@ -234,7 +232,8 @@ GO.email.EmailComposer = function(config) {
 									plugins : imageInsertPlugin
 								}), this.textEditor = new Ext.form.TextArea({
 									name: 'textbody',
-									anchor : '100% -130'
+									anchor : '100% -130',
+									hideLabel : true
 								})]
 			});
 			
@@ -392,27 +391,23 @@ GO.email.EmailComposer = function(config) {
 };
 
 Ext.extend(GO.email.EmailComposer, Ext.Window, {
+	
+	showConfig : {},
 
 	autoSaveTask : {},
 	
 	lastAutoSave : false,
 	
 	setContentTypeHtml : function(checked){
-		this.sendParams['content-type'] = checked
+		this.formPanel.baseParams.content_type = checked
 					? 'html'
 					: 'plain';
 					
 		this.htmlCheck.setChecked(checked);
-					
-		if(checked)
-		{
-			this.htmlEditor.show();
-			this.textEditor.hide();
-		}else
-		{
-			this.htmlEditor.hide();
-			this.textEditor.show();
-		}		
+
+		this.htmlEditor.getEl().up('.x-form-item').setDisplayed(checked);
+		this.textEditor.getEl().up('.x-form-item').setDisplayed(!checked);
+
 		this.editor = checked ? this.htmlEditor : this.textEditor;
 	},
 	
@@ -437,6 +432,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 	afterRender : function() {
 		GO.email.EmailComposer.superclass.afterRender.call(this);
 
+		
 		this.on('resize', this.setEditorHeight, this);
 		
 		this.autoSaveTask={
@@ -489,6 +485,8 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 	},
 
 	show : function(config) {
+		
+		this.showConfig=config;
 
 		if (!this.rendered) {
 
@@ -501,7 +499,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 
 							this.render(Ext.getBody());
 							
-							
+							this.setContentTypeHtml(true);
 							
 							this.ccCombo.getEl().up('.x-form-item').setDisplayed(false);
 							this.bccCombo.getEl().up('.x-form-item').setDisplayed(false);
@@ -558,39 +556,20 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			} else {
 				this.fromCombo.setValue(this.fromCombo.store.data.items[0].id);
 			}
-			
-			
-			
-			
 
 			if (config.values) {
 				this.formPanel.form.setValues(config.values);
 			}
-			
-			
 
 			GO.email.EmailComposer.superclass.show.call(this);
 			
-			this.setContentTypeHtml(true);
-			
-		//	this.ccCombo.getEl().up('.x-form-item').setDisplayed(false);
-			//this.bccCombo.getEl().up('.x-form-item').setDisplayed(false);
-				
 			if(config.move)
 			{
 				var pos = this.getPosition();
 		 		this.setPagePosition(pos[0]+config.move, pos[1]+config.move);
-			}		
-			
-		
-			this.bccFieldCheck.setChecked(this.bccCombo.getValue()!='');
-			this.ccFieldCheck.setChecked(this.ccCombo.getValue()!='');
-
-			
+			}			
 			
 			this.startAutoSave();
-			
-			
 
 			if (config.uid || config.template_id || config.loadUrl) {
 				if (!config.task) {
@@ -661,12 +640,6 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 							this.sendParams['replace_personal_fields'] = '1';
 						}
 
-						/*if (action.result.data.cc) {
-							this.ccFieldCheck.setChecked(true);
-						} else {
-							this.ccFieldCheck.setChecked(false);
-						}*/
-	
 						this.bccFieldCheck.setChecked(this.bccCombo.getValue()!='');
 						this.ccFieldCheck.setChecked(this.ccCombo.getValue()!='');
 					
@@ -691,12 +664,10 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 				var accountRecord = this.fromCombo.store.getById(this.fromCombo.getValue());
 				this.editor.setValue(accountRecord.data.signature+this.editor.getValue());
 				
-				
-			}
-			
-		}
-		
-		
+				this.bccFieldCheck.setChecked(this.bccCombo.getValue()!='');
+				this.ccFieldCheck.setChecked(this.ccCombo.getValue()!='');
+			}			
+		}		
 	},
 
 	showAttachmentsDialog : function() {
