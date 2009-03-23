@@ -243,9 +243,13 @@ try{
 							$RFC822 = new RFC822();
 
 							$to_addresses = $RFC822->parse_address_list($_POST['to']);
+							
+							//used for gpg encryption
+							$all_recipients = array();
 
 							foreach($to_addresses as $address)
 							{
+								$all_recipients[]=$address['email'];
 								add_unknown_recipient($address['email'], $address['personal']);
 							}
 
@@ -257,6 +261,8 @@ try{
 								$swift_addresses=array();
 								foreach($cc_addresses as $address)
 								{
+									$all_recipients[]=$address['email'];
+									
 									add_unknown_recipient($address['email'], $address['personal']);								
 									$swift_addresses[$address['email']]=$address['personal'];
 								}
@@ -266,6 +272,8 @@ try{
 							
 							if(!empty($_POST['bcc']))
 							{
+								$all_recipients[]=$address['email'];
+								
 								$bcc_addresses = $RFC822->parse_address_list($_POST['bcc']);
 								$swift_addresses=array();
 								foreach($bcc_addresses as $address)
@@ -316,9 +324,32 @@ try{
 								//$body = str_replace($inlineAttachment['url'], $src_id, $body);			
 								$just_filename = utf8_basename($inlineAttachment['url']);	
 								$body = preg_replace('/="[^"]*'.preg_quote($just_filename).'"/', '="'.$src_id.'"', $body);	
-							}						
+							}	
 
-							$swift->set_body($body);
+							if($GO_MODULES->has_module('gnupg'))
+							{
+								require_once ($GO_MODULES->modules['gnupg']['class_path'].'gnupg.class.inc.php');
+								$gnupg = new gnupg();
+								
+								$htmlToText = new Html2Text ($body);
+								$textbody = $htmlToText->get_text();								
+	
+								$body = $gnupg->encode($body, $all_recipients, $swift->account['email']);
+								$textbody = $gnupg->encode($textbody, $all_recipients, $swift->account['email']);
+								
+								$swift->message->setMaxLineLength(1000);
+								$swift->message->setBody($body, 'text/html');
+								require_once($GO_CONFIG->class_path.'mail/swift/lib/classes/Swift/Mime/ContentEncoder/RawContentEncoder.php');
+								$swift->message->setEncoder(new Swift_Mime_ContentEncoder_RawContentEncoder('8bit'));
+								
+								//$textpart = Swift_MimePart::newInstance($textbody, 'text/plain', 'UTF-8');
+								//$textpart>setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder());
+						   // $textpart->setMaxLineLength(1000);								
+								//$swift->message->attach($textpart);  
+							}else
+							{
+								$swift->set_body($body);
+							}
 
 							if(isset($_POST['attachments']))
 							{

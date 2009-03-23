@@ -54,8 +54,6 @@ class gnupg{
 							"\n",
 			$matches[0]);
 
-
-
 			$decrypted = $this->decode($encrypted, $passphrase);
 
 			if(!$decrypted)
@@ -67,12 +65,11 @@ class gnupg{
 		return $data;
 	}
 
-
-
-
 	public function decode($data, $passphrase){
 
 		global $GO_CONFIG;
+		
+		debug($data);
 
 		$command = '-d';
 		$this->run_cmd($command, $unencrypted, $errorcode, $data, $passphrase);
@@ -81,16 +78,23 @@ class gnupg{
 	}
 
 	public function encode($data, $recipient, $user=null){
-		$command = '-a  -e -r "'.$recipient.'"';
+		$command = '-a  -e';
+
+		if(!is_array($recipient))
+		{
+			$recipient = array($recipient);
+		}
+		$command .= ' -r '.escapeshellcmd(implode(' -r ', $recipient));		
+		
 		if(!empty($user))
 		{
-			$command .= ' -u "'.$user.'"';
+			$command .= ' -u '.escapeshellcmd($user);
 		}
 		$this->run_cmd($command, $encrypted, $errorcode,$data);
 
 		if(ereg("-----BEGIN PGP MESSAGE-----.*-----END PGP MESSAGE-----",$encrypted))
 		{
-			return $encrypted;
+			return str_replace("\r", '', $encrypted);
 		}else
 		{
 			return false;
