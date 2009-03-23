@@ -75,3 +75,5 @@ GO.form.ComboBoxReset = Ext.extend(GO.form.ComboBox, {
       this.onTriggerClick();
   }
 });
+
+Ext.reg('comboboxreset', GO.form.ComboBoxReset);
