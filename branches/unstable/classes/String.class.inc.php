@@ -513,7 +513,11 @@ class String {
 		$text = str_replace("\n", "", $text);
 
 		return ($text);
-
+	}
+	
+	function html_to_text($text){
+		$htmlToText = new Html2Text ($text);
+		return $htmlToText->get_text();	
 	}
 
 	/**

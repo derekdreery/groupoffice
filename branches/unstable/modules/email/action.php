@@ -304,9 +304,9 @@ try{
 								$swift->message->setReadReceiptTo($swift->account['email']);
 							}
 														
-							$body = $_POST['body'];
+							$body = $_POST['content_type']=='html' ? $_POST['body'] : $_POST['textbody'];
 							
-							if($_POST['content-type']=='html')
+							if($_POST['content_type']=='html')
 							{														
 								//process inline attachments
 								$inline_attachments = json_decode($_POST['inline_attachments'], true);
@@ -329,7 +329,7 @@ try{
 								}
 							}	
 
-							if($GO_MODULES->has_module('gnupg') && empty($_POST['draft']))
+							if(!empty($_POST['encrypt']) && empty($_POST['draft']))
 							{
 								require_once ($GO_MODULES->modules['gnupg']['class_path'].'gnupg.class.inc.php');
 								$gnupg = new gnupg();
@@ -339,10 +339,9 @@ try{
 	
 								//$body = $gnupg->encode($body, $all_recipients, $swift->account['email']);
 								$body = $gnupg->encode($body, $all_recipients, $swift->account['email']);
-								
+																
 								$swift->message->setMaxLineLength(1000);
-								$swift->message->setBody($body, 'text/plain');
-								require_once($GO_CONFIG->class_path.'mail/swift/lib/classes/Swift/Mime/ContentEncoder/RawContentEncoder.php');
+								$swift->message->setBody($body, 'text/plain');								
 								$swift->message->setEncoder(new Swift_Mime_ContentEncoder_RawContentEncoder('8bit'));
 								
 								/*$textpart = Swift_MimePart::newInstance($textbody, 'text/plain', 'UTF-8');
@@ -351,7 +350,7 @@ try{
 								$swift->message->attach($textpart);*/
 							}else
 							{
-								$swift->set_body($body, $_POST['content-type']);
+								$swift->set_body($body, $_POST['content_type']);
 							}
 
 							if(isset($_POST['attachments']))

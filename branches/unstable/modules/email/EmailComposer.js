@@ -619,6 +619,10 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 					url : url,
 					params : params,
 					waitMsg : GO.lang.waitMsgLoad,
+					failure:function(form, action)
+					{
+						Ext.Msg.alert(GO.lang['strError'], action.result.feedback)
+					},
 					success : function(form, action) {
 
 						if (config.task == 'reply'
@@ -636,9 +640,9 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 									}, true);
 						}
 
-						if (action.result.replace_personal_fields) {
+						/*if (action.result.replace_personal_fields) {
 							this.sendParams['replace_personal_fields'] = '1';
-						}
+						}*/
 
 						this.bccFieldCheck.setChecked(this.bccCombo.getValue()!='');
 						this.ccFieldCheck.setChecked(this.ccCombo.getValue()!='');
@@ -647,7 +651,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 						if(params.task!='opendraft')
 						{
 							var accountRecord = this.fromCombo.store.getById(this.fromCombo.getValue());
-							this.editor.setValue(accountRecord.data.signature+this.htmlEditor.getValue());
+							this.editor.setValue(accountRecord.data.signature+this.editor.getValue());
 						}
 						
 						if (this.toCombo.getValue() == '') {

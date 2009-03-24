@@ -43,11 +43,17 @@ class gnupg{
 
 
 
-	public function replace_encoded($data, $passphrase)
+	public function replace_encoded($data, $passphrase, $convert_to_html=true)
 	{
+		$data = trim(str_replace("\r", "", $data));
+		
 		if(strpos($data,'-----BEGIN PGP MESSAGE-----')!==false)
 		{
-			preg_match('/-----BEGIN PGP MESSAGE-----.*-----END PGP MESSAGE-----/', $data, $matches);
+			preg_match('/-----BEGIN PGP MESSAGE-----.*-----END PGP MESSAGE-----/s', $data, $matches);
+			if(!isset($matches[0]))
+			{
+				throw new Exception('PGP message is malformated!');
+			}
 
 			$encrypted = preg_replace(
 							"'<br[^>]*>[\s]*'i",
@@ -59,6 +65,10 @@ class gnupg{
 			if(!$decrypted)
 			{
 				throw new Exception($this->error);
+			}
+			if($convert_to_html)
+			{
+				$decrypted=String::text_to_html($decrypted);
 			}
 			$data = str_replace($matches[0], $decrypted,$data);
 		}
@@ -229,6 +239,12 @@ class gnupg{
 		$complete_cmd .= ' '.$cmd;
 
 		$p = proc_open($complete_cmd,$this->fd, $pipes);
+		
+		foreach($pipes as $pipe)
+		{
+			//stream_set_blocking($pipe,0);
+		}
+		
 		if(!is_resource($p))
 		{
 			throw new Exception('Could not open proc!');
