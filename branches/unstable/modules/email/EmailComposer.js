@@ -55,17 +55,25 @@ GO.email.EmailComposer = function(config) {
 							},
 							scope : this
 						},'-',this.htmlCheck = new Ext.menu.CheckItem({
-							text:'HTML markup',
-							checked: true,
-							checkHandler : function(check, checked) {
-								this.setContentTypeHtml(checked);
-								
-								/**
-								 * reload dialog for text or html
-								 */
-								this.show(this.showConfig);
-							},
-							scope:this							
+							text:GO.email.lang.htmlMarkup,
+							checked:true,
+							listeners : {				
+								 checkchange: function(check, checked) {
+									
+									if(this.bodyContentAtWindowOpen==this.editor.getValue() || confirm(GO.email.lang.confirmLostChanges))
+									{
+										this.setContentTypeHtml(checked);									
+										/**
+										 * reload dialog for text or html
+										 */
+										this.show(this.showConfig);
+									}else
+									{
+										check.setChecked(!checked, false);
+									}
+								},
+								scope:this		
+							}
 						})];
 						
 		if(GO.gnupg)
@@ -73,14 +81,34 @@ GO.email.EmailComposer = function(config) {
 			optionsMenuItems.push('-');
 			
 			optionsMenuItems.push({
-				text:'Encrypt message',
+				text:GO.gnupg.lang.encryptMessage,
 				checked: false,
-				checkHandler : function(check, checked) {
-					this.sendParams['encrypt'] = checked
-							? '1'
-							: '0';
-				},
+				listeners : {				
+					checkchange: function(check, checked) {					
+						if(this.formPanel.baseParams.content_type=='html')
+						{				
+							if(!confirm(GO.gnupg.lang.confirmChangeToText))
+							{
+								check.setChecked(!checked, false);
+								return false;
+							}else
+							{
+								this.setContentTypeHtml(false);
+								this.htmlCheck.setChecked(false, true);							
+								this.show(this.showConfig);
+							}						
+						}
+						
+						this.htmlCheck.setDisabled(checked);
+						
+						this.sendParams['encrypt'] = checked
+								? '1'
+								: '0';
+								
+						return true;
+					},
 				scope:this
+				}
 			});
 		}
 
@@ -89,29 +117,24 @@ GO.email.EmailComposer = function(config) {
 			});
 
 	this.showMenu = new Ext.menu.Menu({
-				//id : 'showMenu',
 				items : [this.formFieldCheck = new Ext.menu.CheckItem({
-									//id : 'fromFieldCheck',
 									text : GO.email.lang.sender,
 									checked : true,
 									checkHandler : this.onShowFieldCheck,
 									scope : this
 								}),
 						this.ccFieldCheck = new Ext.menu.CheckItem({
-									//id : 'ccFieldCheck',
 									text : GO.email.lang.ccField,
 									checked : false,
 									checkHandler : this.onShowFieldCheck,
 									scope : this
 								}),
 						this.bccFieldCheck = new Ext.menu.CheckItem({
-									//id : 'bccFieldCheck',
 									text : GO.email.lang.bccField,
 									checked : false,
 									checkHandler : this.onShowFieldCheck,
 									scope : this
 								})
-
 				]
 			});
 
@@ -398,12 +421,14 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 	
 	lastAutoSave : false,
 	
+	bodyContentAtWindowOpen : false,
+	
 	setContentTypeHtml : function(checked){
 		this.formPanel.baseParams.content_type = checked
 					? 'html'
 					: 'plain';
 					
-		this.htmlCheck.setChecked(checked);
+		//this.htmlCheck.setChecked(checked, true);
 
 		this.htmlEditor.getEl().up('.x-form-item').setDisplayed(checked);
 		this.textEditor.getEl().up('.x-form-item').setDisplayed(!checked);
@@ -419,8 +444,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 		this.lastAutoSave=this.editor.getValue();
 	},
 	
-	startAutoSave : function(){	
-
+	startAutoSave : function(){		
 		this.lastAutoSave=false;
 		Ext.TaskMgr.start(this.autoSaveTask);
 	},
@@ -439,7 +463,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 		    run: this.autoSave,
 		    scope:this,
 		    interval:120000
-		    //interval:5000
+		    // interval:5000
 		};
 		
 		this.on('hide', this.stopAutoSave, this);
@@ -640,9 +664,9 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 									}, true);
 						}
 
-						/*if (action.result.replace_personal_fields) {
-							this.sendParams['replace_personal_fields'] = '1';
-						}*/
+						/*
+						 * if (action.result.replace_personal_fields) {
+						 * this.sendParams['replace_personal_fields'] = '1'; }
 
 						this.bccFieldCheck.setChecked(this.bccCombo.getValue()!='');
 						this.ccFieldCheck.setChecked(this.ccCombo.getValue()!='');
@@ -659,19 +683,37 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 						} else {
 							this.editor.focus();
 						}
+						 */
+						
+						this.afterShowAndLoad(params.task!='opendraft');
 					},
 					scope : this
 				});
 
 			}else
 			{
-				var accountRecord = this.fromCombo.store.getById(this.fromCombo.getValue());
-				this.editor.setValue(accountRecord.data.signature+this.editor.getValue());
-				
-				this.bccFieldCheck.setChecked(this.bccCombo.getValue()!='');
-				this.ccFieldCheck.setChecked(this.ccCombo.getValue()!='');
+				this.afterShowAndLoad(true);
 			}			
 		}		
+	},
+	
+	afterShowAndLoad : function(addSignature){
+
+		this.bccFieldCheck.setChecked(this.bccCombo.getValue()!='');
+		this.ccFieldCheck.setChecked(this.ccCombo.getValue()!='');
+				
+		if(addSignature)
+		{
+			var accountRecord = this.fromCombo.store.getById(this.fromCombo.getValue());
+			this.editor.setValue(accountRecord.data.signature+this.editor.getValue());
+		}
+		this.bodyContentAtWindowOpen=this.editor.getValue();	
+		
+		if (this.toCombo.getValue() == '') {
+			this.toCombo.focus();
+		} else {
+			this.editor.focus();
+		}
 	},
 
 	showAttachmentsDialog : function() {
@@ -679,7 +721,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			var tbar = [];
 
 			tbar.push({
-						//id : 'add-local',
+						// id : 'add-local',
 						iconCls : 'btn-add',
 						text : GO.email.lang.attachFilesPC,
 						cls : 'x-btn-text-icon',
@@ -692,7 +734,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 
 			if (GO.files) {
 				tbar.push({
-					//id : 'add-remote',
+					// id : 'add-remote',
 					iconCls : 'btn-add',
 					text : GO.email.lang.attachFilesGO,
 					cls : 'x-btn-text-icon',
@@ -734,7 +776,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			}
 
 			tbar.push({
-						//id : 'delete',
+						// id : 'delete',
 						iconCls : 'btn-delete',
 						text : GO.lang.cmdDelete,
 						cls : 'x-btn-text-icon',
@@ -750,7 +792,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 					});
 
 			this.attachmentsGrid = new GO.grid.GridPanel({
-						//id : 'groups-grid-overview-users',
+						// id : 'groups-grid-overview-users',
 						store : this.attachmentsStore,
 						loadMask:true,
 						columns : [{
@@ -813,13 +855,11 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 											: false;
 
 									/*
-									 * crashes firefox in ubuntu
-									 GO.util.popup({
-												url : GO.settings.modules.email.url
-														+ 'jupload/index.php',
-												width : 640,
-												height : 500
-											});*/
+									 * crashes firefox in ubuntu GO.util.popup({
+									 * url : GO.settings.modules.email.url +
+									 * 'jupload/index.php', width : 640, height :
+									 * 500 });
+									 */
 									window.open(GO.settings.modules.email.url+'jupload/index.php');
 
 									this.uploadDialog.hide();

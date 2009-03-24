@@ -18,12 +18,12 @@
 /**
  * Require all mail classes that are used by this class
  */
-require_once($GO_CONFIG->class_path.'mail/swift/lib/classes/Swift/Mime/ContentEncoder/RawContentEncoder.php');
+
 require_once($GO_CONFIG->class_path."html2text.class.inc");
 require_once $GO_CONFIG->class_path.'mail/RFC822.class.inc';
 require_once $GO_CONFIG->class_path.'mail/mimeDecode.class.inc';
 require_once $GO_CONFIG->class_path.'mail/swift/lib/swift_required.php';
-
+require_once($GO_CONFIG->class_path.'mail/swift/lib/classes/Swift/Mime/ContentEncoder/RawContentEncoder.php');
 require_once $GO_CONFIG->class_path.'mail/smtp_restrict.class.inc.php';
 
 //HOWTO DO THIS WITH 4?
