@@ -1,1 +1,1 @@
-go.phpbb3.lang.forum='phpBB';
+GO.phpbb3.lang.forum='phpBB';
