@@ -602,6 +602,24 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			}			
 			
 			this.startAutoSave();
+			
+			
+			// for mailings plugin
+			if (config.mailing_group_id > 0) {
+				this.sendURL = GO.settings.modules.mailings.url
+						+ 'action.php';
+
+				this.toComboVisible = false;
+				this.showMenuButton.setDisabled(true);
+				this.toCombo.getEl().up('.x-form-item').setDisplayed(false);
+				this.ccCombo.getEl().up('.x-form-item').setDisplayed(false);
+				this.bccCombo.getEl().up('.x-form-item').setDisplayed(false);
+
+				this.sendParams.mailing_group_id = config.mailing_group_id;
+
+				this.saveButton.setDisabled(true);
+			}
+
 
 			if (config.uid || config.template_id || config.loadUrl) {
 				if (!config.task) {
@@ -618,6 +636,11 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 					mailbox : config.mailbox,
 					template_id : config.template_id
 				};
+				
+				if (config.mailing_group_id > 0) {
+					// so that template loading won't replace fields
+					params.mailing_group_id = config.mailing_group_id;
+				}
 
 				if (config.template_id > 0) {
 					params.to = this.toCombo.getValue();
@@ -626,26 +649,6 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 				var url = config.loadUrl
 						? config.loadUrl
 						: GO.settings.modules.email.url + 'json.php';
-
-				// for mailings plugin
-				if (config.mailing_group_id > 0) {
-					this.sendURL = GO.settings.modules.mailings.url
-							+ 'action.php';
-
-					this.toComboVisible = false;
-					this.showMenuButton.setDisabled(true);
-					this.toCombo.getEl().up('.x-form-item').setDisplayed(false);
-					this.ccCombo.getEl().up('.x-form-item').setDisplayed(false);
-					this.bccCombo.getEl().up('.x-form-item')
-							.setDisplayed(false);
-
-					this.sendParams.mailing_group_id = config.mailing_group_id;
-
-					// so that template loading won't replace fields
-					params.mailing_group_id = config.mailing_group_id;
-
-					this.saveButton.setDisabled(true);
-				}
 
 				this.formPanel.form.load({
 					url : url,
@@ -671,27 +674,6 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 										results : action.result.data.attachments
 									}, true);
 						}
-
-						/*
-						 * if (action.result.replace_personal_fields) {
-						 * this.sendParams['replace_personal_fields'] = '1'; }
-
-						this.bccFieldCheck.setChecked(this.bccCombo.getValue()!='');
-						this.ccFieldCheck.setChecked(this.ccCombo.getValue()!='');
-					
-						
-						if(params.task!='opendraft')
-						{
-							var accountRecord = this.fromCombo.store.getById(this.fromCombo.getValue());
-							this.editor.setValue(accountRecord.data.signature+this.editor.getValue());
-						}
-						
-						if (this.toCombo.getValue() == '') {
-							this.toCombo.focus();
-						} else {
-							this.editor.focus();
-						}
-						 */
 						
 						this.afterShowAndLoad(params.task!='opendraft');
 					},
