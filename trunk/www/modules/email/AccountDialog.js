@@ -61,11 +61,13 @@ GO.email.AccountDialog = function(config) {
 				title : GO.email.lang.filters,
 				layout : 'fit',
 				border : true,
+				loadMask:true,
 				ds : this.filtersDS,
 				cm : cm,
 				view : new Ext.grid.GridView({
 							autoFill : true,
-							forceFit : true
+							forceFit : true,
+							emptyText: GO.lang.strNoItems	
 						}),
 				sm : new Ext.grid.RowSelectionModel(),
 				tbar : [{
