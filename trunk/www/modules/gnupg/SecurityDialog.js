@@ -1,0 +1,70 @@
+/** 
+ * Copyright Intermesh
+ * 
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ * 
+ * If you have questions write an e-mail to info@intermesh.nl
+ * 
+ * @copyright Copyright Intermesh
+ * @version $Id: SettingsDialog.js 3107 2008-09-27 22:30:36Z mschering $
+ * @author Merijn Schering <mschering@intermesh.nl>
+ */
+
+
+ 
+GO.gnupg.SecurityDialog = function(config){
+	
+	
+	if(!config)
+	{
+		config={};
+	}
+		
+	this.keysGrid = new GO.gnupg.KeysGrid();
+	
+	var items = [
+			this.keysGrid
+			];
+	
+	
+	this.tabPanel = new Ext.TabPanel({
+		activeTab:0,
+		border:false,
+		items:items 
+	})
+
+	config.maximizable=true;
+	config.layout='fit';
+	config.modal=false;
+	config.resizable=false;
+	config.width=600;
+	config.height=400;
+	config.closeAction='hide';
+	config.title= 'Security settings';					
+	config.items=this.tabPanel;
+	config.buttons=[{
+			text: GO.lang['cmdClose'],
+			handler: function(){
+				this.hide();				
+			},
+			scope:this
+		}					
+	];
+	
+	GO.gnupg.SecurityDialog.superclass.constructor.call(this, config);
+}
+
+Ext.extend(GO.gnupg.SecurityDialog, Ext.Window,{
+	
+	show : function(){
+		
+		//if(!this.keysGrid.store.loaded)
+		//{
+			this.keysGrid.store.load();
+		//}
+		GO.gnupg.SecurityDialog.superclass.show.call(this);
+	
+	}
+
+});

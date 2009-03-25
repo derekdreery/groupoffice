@@ -89,7 +89,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		this.template.compile();	
 	},
 	
-	loadMessage : function(uid, mailbox, account_id)
+	loadMessage : function(uid, mailbox, account_id, passphrase)
 	{		
 		if(uid)
 		{
@@ -100,6 +100,10 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 					account_id: account_id,
 					task:'message'
 				};
+			if(passphrase)
+			{
+				this.params.passphrase=passphrase;
+			}
 		}
 				
 		this.el.mask(GO.lang.waitMsgLoad);				
@@ -113,9 +117,33 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				
 				if(success)					
 				{
-					var data = Ext.decode(response.responseText);						
-					this.setMessage(data);						
-					this.el.unmask();
+					var data = Ext.decode(response.responseText);
+					
+					
+					
+					if(data.askPassphrase)
+					{
+						Ext.Msg.prompt('Passphrapse for descryption', 'Passphrase', 
+							function(id, passphrase){ 
+								if(id=='cancel')
+								{
+									this.reset();
+									this.el.unmask();
+								}else
+								{									
+									this.loadMessage(uid, mailbox, account_id, passphrase);
+								}
+							},this);
+					}else
+					{						
+						this.setMessage(data);						
+						this.el.unmask();
+					}
+					
+					if(data.feedback)
+					{
+						GO.errorDialog.show(data.feedback);
+					}
 				}				
 			}
 		});

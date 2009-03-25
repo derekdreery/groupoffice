@@ -134,3 +134,7 @@ GO.email.lang.signature='Signature';
 
 GO.email.defaultProgram='Default e-mail program';
 GO.email.defaultProgramInstructions ='<p>To set Group-Office as your default e-mail program please <a class="normal-link" href="http://www.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client" target="_blank">read the instructions</a>.</p><p>Then if you are using Windows you must download and run <a class="normal-link" href="'+GO.settings.modules.email.url+'register_email.php">this register file</a></p>';
+
+
+GO.email.lang.htmlMarkup = 'Use HTML markup';
+GO.email.lang.confirmLostChanges = 'Changes will be lost. Are you sure?';

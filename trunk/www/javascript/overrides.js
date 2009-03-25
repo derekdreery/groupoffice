@@ -11,6 +11,20 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
  
+ 
+ Ext.apply(Ext.form.VTypes, {    
+    password : function(val, field) {
+        if (field.initialPassField) {
+            var pwd = Ext.getCmp(field.initialPassField);
+            return (val == pwd.getValue());
+        }
+        return true;
+    },
+
+    passwordText : GO.lang.passwordMatchError
+});
+
+ 
 //override Ext functions here
 /* bug in 2.2 
 Ext.form.TriggerField.override({
