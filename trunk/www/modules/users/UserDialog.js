@@ -185,6 +185,9 @@ Ext.extend(GO.users.UserDialog, Ext.Window,{
 		
 		this.accountTab.show();
 
+		//reset form
+		this.formPanel.form.reset();
+		
 		this.setUserId(user_id);
 		
 		if(user_id>0)
@@ -210,8 +213,7 @@ Ext.extend(GO.users.UserDialog, Ext.Window,{
 			});
 		}else
 		{
-			//reset form
-			this.formPanel.form.reset();
+			
 			GO.users.UserDialog.superclass.show.call(this);
 			
 			this.setUserId(0);
