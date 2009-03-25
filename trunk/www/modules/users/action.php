@@ -331,9 +331,9 @@ try
 
 			if(isset($_POST['modules']))
 			{
-				$permissions['modules'] = json_decode(($_POST['modules']), true);
-				$permissions['group_member'] = json_decode(($_POST['group_member']), true);
-				$permissions['groups_visible'] = json_decode(($_POST['groups_visible']), true);
+				$permissions['modules'] = json_decode($_POST['modules'], true);
+				$permissions['group_member'] = json_decode($_POST['group_member'], true);
+				$permissions['groups_visible'] = json_decode($_POST['groups_visible'], true);
 
 				foreach($permissions['modules'] as $module)
 				{

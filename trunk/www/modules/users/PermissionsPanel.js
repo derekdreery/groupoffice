@@ -38,21 +38,24 @@ GO.users.PermissionsPanel = function(config)
 		header: GO.users.lang.useModule,
 		dataIndex: 'read_permission',
 		width: 55,
-		disabled_field:'read_disabled'
+		disabled_field:'read_disabled',
+		menuDisabled:true
 	});
 
 	var moduleWritePermissionColumn = new GO.grid.CheckColumn({
 		header: GO.users.lang.manageModule,
 		dataIndex: 'write_permission',
 		width: 55,
-		disabled_field:'write_disabled'
+		disabled_field:'write_disabled',
+		menuDisabled:true
 	});
 	
 	this.modulePermissionsStore = new GO.data.JsonStore({
 		url:GO.settings.modules.users.url+'json.php',
-		baseParams: {user_id: 0, task: 'modules' },
+		baseParams: {user_id: -1, task: 'modules' },
 		fields: ['id', 'name', 'read_disabled', 'write_disabled', 'read_permission', 'write_permission'],
-		root: 'results'		
+		root: 'results',
+		menuDisabled:true		
 	});		
 	
 	var moduleAccessGrid = new GO.grid.GridPanel({		
@@ -63,7 +66,8 @@ GO.users.PermissionsPanel = function(config)
 				{
 					header: GO.users.lang['cmdHeaderColumnName'], 
 					dataIndex: 'name', 
-					renderer: this.iconRenderer
+					renderer: this.iconRenderer,
+					menuDisabled:true
 				},
 				moduleReadPermissionColumn,
 				moduleWritePermissionColumn
@@ -83,13 +87,14 @@ GO.users.PermissionsPanel = function(config)
 	var groupsMemberOfColumn = new GO.grid.CheckColumn({
 		header: '',
 		dataIndex: 'group_permission',
-		width: 55
+		width: 55,
+		menuDisabled:true
 	});
 	
 	
 	this.groupMemberStore = new GO.data.JsonStore({
 		url:GO.settings.modules.users.url+'json.php',
-		baseParams: {user_id: 0, task: 'groups' },
+		baseParams: {user_id: -1, task: 'groups' },
 		fields: ['id', 'disabled', 'group', 'group_permission'],
 		root: 'results'		
 	});		
@@ -101,7 +106,8 @@ GO.users.PermissionsPanel = function(config)
 		columns: [
 				{
 					header: GO.users.lang.group, 
-					dataIndex: 'group'
+					dataIndex: 'group',
+					menuDisabled:true
 				},
 				groupsMemberOfColumn
 			],
@@ -122,14 +128,15 @@ GO.users.PermissionsPanel = function(config)
 	var groupsVisibleToColumn = new GO.grid.CheckColumn({
 		header: '',
 		dataIndex: 'visible_permission',
-		width: 55
+		width: 55,
+		menuDisabled:true
 	});
 	
 	
 	
 	this.groupVisibleStore = new GO.data.JsonStore({
 		url:GO.settings.modules.users.url+'json.php',
-		baseParams: {user_id: 0, task: 'visible' },
+		baseParams: {user_id: -1, task: 'visible' },
 		fields: ['id', 'disabled', 'group', 'visible_permission'],
 		root: 'results'		
 	});		
@@ -141,12 +148,12 @@ GO.users.PermissionsPanel = function(config)
 		columns: [
 				{
 					header: GO.users.lang.group, 
-					dataIndex: 'group'
+					dataIndex: 'group',
+					menuDisabled:true
 				},
 				groupsVisibleToColumn
 			],
 		ds: this.groupVisibleStore,
-		//sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
 		plugins: groupsVisibleToColumn,
 		autoExpandColumn:0		
 	});
@@ -170,8 +177,18 @@ Ext.extend(GO.users.PermissionsPanel, Ext.Panel,{
 		return '<div class="go-module-icon-'+reader.data.id+'" style="height:16px;padding-left:22px;background-repeat:no-repeat;">'+name+'</div>';
 	},
 	
-	setUserId : function(user_id)
+	setUserId : function(user_id, reset)
 	{
+		if(!this.isVisible() && user_id!=this.user_id)
+		{
+			this.groupMemberStore.removeAll();
+			this.modulePermissionsStore.removeAll();
+			this.groupVisibleStore.removeAll();
+			
+			this.modulePermissionsStore.baseParams.user_id=-1;
+			this.groupMemberStore.baseParams.user_id=-1;
+			this.groupVisibleStore.baseParams.user_id=-1;
+		}
 		this.user_id=user_id;	
 		//this.setDisabled(this.user_id==0);
 	},
@@ -179,8 +196,8 @@ Ext.extend(GO.users.PermissionsPanel, Ext.Panel,{
 	onShow : function(){
 		GO.users.PermissionsPanel.superclass.onShow.call(this);
 				
-		//if(this.groupMemberStore.baseParams.user_id!=this.user_id)
-		//{
+		if(this.groupMemberStore.baseParams.user_id!=this.user_id)
+		{
 			this.modulePermissionsStore.baseParams.user_id=this.user_id;
 			this.groupMemberStore.baseParams.user_id=this.user_id;
 			this.groupVisibleStore.baseParams.user_id=this.user_id;
@@ -188,7 +205,7 @@ Ext.extend(GO.users.PermissionsPanel, Ext.Panel,{
 			this.groupMemberStore.load();
 			this.modulePermissionsStore.load();
 			this.groupVisibleStore.load();
-		//}
+		}
 	},
 	
 	getPermissionParameters : function(){
