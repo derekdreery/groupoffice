@@ -1,0 +1,1 @@
+go.phpbb3.lang.forum='phpBB';
