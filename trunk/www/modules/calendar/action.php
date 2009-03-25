@@ -495,7 +495,8 @@ try{
 			if(!empty($_POST['invitation']))
 			{
 				require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
-				require_once $GO_CONFIG->class_path.'mail/swift/lib/Swift/Plugin/Decorator.php';
+				require_once $GO_CONFIG->class_path.'mail/swift/lib/classes/Swift/Plugins/DecoratorPlugin.php';
+				require_once $GO_CONFIG->class_path.'mail/swift/lib/classes/Swift/Plugins/Decorator/Replacements.php';
 				
 				$RFC822 = new RFC822();
 				
@@ -514,13 +515,14 @@ try{
 						implode(',', $participants), 
 						$lang['calendar']['appointment'].$event['name']);
 					
-					class Replacements extends Swift_Plugin_Decorator_Replacements {
+					
+					class Replacements implements Swift_Plugins_Decorator_Replacements {
 						function getReplacementsFor($address) {
 							return array('%email%'=>$address);
 						}
 					}
 					//Load the plugin with the extended replacements class
-					$swift->attachPlugin(new Swift_Plugin_Decorator(new Replacements()), "decorator");
+					$swift->registerPlugin(new Swift_Plugins_DecoratorPlugin(new Replacements()));
 						
 					$swift->set_body('<p>'.$lang['calendar']['invited'].'</p>'.
 						$cal->event_to_html($event).
@@ -536,7 +538,7 @@ try{
 		
 					$name = File::strip_invalid_chars($event['name']).'.ics';
 		
-					$dir=$GO_CONFIG->tmpdir.'attachments/';
+					/*$dir=$GO_CONFIG->tmpdir.'attachments/';
 					filesystem::mkdir_recursive($dir);
 		
 					$tmp_file = $dir.$name;
@@ -546,10 +548,12 @@ try{
 					fclose($fp);
 					
 					$file =& new Swift_File($tmp_file);
-					$attachment =& new Swift_Message_Attachment($file,utf8_basename($tmp_file), File::get_mime($tmp_file));
-					$swift->message->attach($attachment);
+					$attachment =& new Swift_Message_Attachment($file,utf8_basename($tmp_file), File::get_mime($tmp_file));*/
 					
-					if(!$swift->sendmail($_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name'], true))
+					$swift->message->attach(Swift_Attachment::newInstance($ics_string, $name,File::get_mime($name)));
+					$swift->set_from($_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name']);
+					
+					if(!$swift->sendmail(true))
 					{
 						throw new Exception('Could not send invitaition');
 					}

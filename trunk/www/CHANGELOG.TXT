@@ -1,3 +1,7 @@
+2009/? Version 3.01-stable-19
+- Plain text e-mail possible
+- Folder templates in projects module
+
 2009/03/24 Version 3.01-stable-18
 - Small bug fixes
 

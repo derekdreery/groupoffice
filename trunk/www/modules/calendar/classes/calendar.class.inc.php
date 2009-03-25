@@ -830,7 +830,7 @@ class calendar extends db
 			$event['user_id'] = $GO_SECURITY->user_id;
 		}
 
-		if(!empty($event['ctime']))
+		if(empty($event['ctime']))
 		{
 			$event['ctime']  =  time();
 		}
@@ -2146,7 +2146,10 @@ class calendar extends db
 
 		$event['repeat_end_date']=$event['repeat_end_time']>0 ? date($_SESSION['GO_SESSION']['date_format'], $event['repeat_end_time']) : '';
 
-		$event = array_merge($event, $this->reminder_seconds_to_form_input($event['reminder']));
+		if(isset($event['reminder']))
+		{
+			$event = array_merge($event, $this->reminder_seconds_to_form_input($event['reminder']));
+		}
 		return $event;
 	}
 
