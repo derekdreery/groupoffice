@@ -12,7 +12,7 @@
  */
 
 
-GO.addressbook.lang.selectMailingGroup='Mailinggruppe auswählen';
+GO.addressbook.lang.selectMailingGroup='Mailing-Gruppe auswählen';
 
 GO.addressbook.lang.cmdFormLabelAddressBooks = 'Adressbuch';
 GO.addressbook.lang.alphabet = 'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z';
@@ -21,8 +21,8 @@ GO.addressbook.lang.btnAddContact = 'Kontakt hinzufügen'	;
 GO.addressbook.lang.btnAddCompany = 'Firma hinzufügen';
 GO.addressbook.lang.btnManage = 'Verwalten';
 GO.addressbook.lang.btnDownload = 'Datei herunterladen';
-GO.addressbook.lang.btnSearch = 'Suche';
-GO.addressbook.lang.btnReset = 'Reset';
+GO.addressbook.lang.btnSearch = 'Suchen';
+GO.addressbook.lang.btnReset = 'Zurücksetzen';
 GO.addressbook.lang.cmdFormSearchFirst = 'Suche in= ';
 GO.addressbook.lang.cmdFormSearchSecond = ' an= ';
 GO.addressbook.lang.cmdFormSearchThird = ' für= ';
@@ -39,6 +39,7 @@ GO.addressbook.lang.cmdFieldsetWork = 'Arbeit';
 GO.addressbook.lang.cmdPanelContact = 'Kontaktinformationen';
 GO.addressbook.lang.cmdPanelComments = 'Kommentar';
 GO.addressbook.lang.cmdContactDialog = 'Kontakt bearbeiten';
+GO.addressbook.lang.contact= 'Kontakt';
 GO.addressbook.lang.cmdContact= 'Kontakt';
 GO.addressbook.lang.cmdSalutation= 'Sehr geehrte/r';
 GO.addressbook.lang.cmdMadam= 'Frau';
@@ -46,10 +47,11 @@ GO.addressbook.lang.cmdSir= 'Herr';
 GO.addressbook.lang.btnDownloadTextDocument = 'Text-Dokument herunterladen';
 GO.addressbook.lang.cmdContactDetailsFor= 'Persönliche Informationen für';
 GO.addressbook.lang.cmdLInkFieldset = 'Links';
-GO.addressbook.lang.cmdCompany= 'Firmen';
+GO.addressbook.lang.company= 'Firma';
+GO.addressbook.lang.cmdCompany= 'Firma';
 GO.addressbook.lang.cmdCompanyDetailsFor= 'Informationen für';
 GO.addressbook.lang.cmdPanelCompany = 'Firmeninformationen';
-GO.addressbook.lang.cmdFormLabelBankNo = 'Banknummer';
+GO.addressbook.lang.cmdFormLabelBankNo = 'Kontonummer';
 GO.addressbook.lang.cmdFormLabelVatNo = 'Steuernummer';
 GO.addressbook.lang.cmdFieldsetCompanyDetails = 'Firmeninformationen';
 GO.addressbook.lang.cmdFieldsetVisitAddress = 'Besucheranschrift';
@@ -65,7 +67,7 @@ GO.addressbook.lang.cmdAddAddressBook= 'Adressbuch hinzufügen';
 GO.addressbook.lang.cmdDeleteAddressbook= 'Adressbuch löschen';
 GO.addressbook.lang.cmdOwner= 'Eigentümer';
 GO.addressbook.lang.cmdPanelAddressbook= 'Adressbücher';
-GO.addressbook.lang.cmdPanelProperties= 'Besitzer';
+GO.addressbook.lang.cmdPanelProperties= 'Eigenschaften';
 GO.addressbook.lang.cmdContactDialog= 'Kontakt bearbeiten';
 GO.addressbook.lang.cmdFormLabelFileType= 'Dateityp';
 GO.addressbook.lang.cmdFormLabelFile= 'Datei';	
@@ -76,7 +78,7 @@ GO.addressbook.lang.cmdUpload= 'Hochladen';
 GO.addressbook.lang.cmdImport= 'Import';
 GO.addressbook.lang.cmdExport= 'Export';
 GO.addressbook.lang.cmdType= 'Typ';
-GO.addressbook.lang.contacts= 'Kontakt';
+GO.addressbook.lang.contacts= 'Kontakte';
 GO.addressbook.lang.companies= 'Firmen';
 GO.addressbook.lang.users= 'Benutzer';
 GO.addressbook.lang.strSelectContact= 'Kontakt auswählen';
@@ -86,9 +88,10 @@ GO.addressbook.lang.moveAll = 'Die Firma und alle Mitarbeiter werden in das neue
 GO.addressbook.lang.addressbook = 'Adressbuch';
 GO.addressbook.lang.addressbooks = 'Adressbücher';
 GO.addressbook.lang.sendMailing='Nachricht senden';
-
-GO.addressbook.lang.contact= 'Kontakt';
-GO.addressbook.lang.company= 'Firma';
 GO.addressbook.lang.importSuccess='Datenimport erfolgreich';
-GO.addressbook.lang.searchOnSender='Lookup';
+GO.addressbook.lang.searchOnSender='Suche im Adressbuch';
 GO.addressbook.lang.confirmCreate='Der Kontakt ist nicht vorhanden, möchten Sie einen Neuen anlegen?';
+
+GO.addressbook.lang.matchFields='Match the fields';
+
+GO.addressbook.lang.advancedSearch='Erweiterte Suche';
