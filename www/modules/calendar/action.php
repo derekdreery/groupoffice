@@ -314,11 +314,13 @@ try{
 				require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 				$swift = new GoSwift($owner['email'], sprintf($lang['calendar']['accept_mail_subject'],$event['name']));
 				
+				$swift->set_from($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
+				
 				$body = sprintf($lang['calendar']['accept_mail_body'],$_SESSION['GO_SESSION']['email']);		
 				$body .= '<br /><br />'.$cal->event_to_html($event);
 				
 				$swift->set_body($body);
-				$swift->sendmail($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
+				$swift->sendmail();
 			}
 				
 

@@ -93,7 +93,7 @@ GO.email.AccountDialog = function(config) {
 				var selectionModel = this.filtersTab.getSelectionModel();
 				var record = selectionModel.getSelected();
 				filter.showDialog(record.data.id, this.account_id,
-						this.filtersDS);
+						this.filtersDS, GO.email.subscribedFoldersStore);
 			}, this);
 
 	this.filtersTab.on('show', function() {
@@ -301,7 +301,7 @@ GO.email.AccountDialog = function(config) {
 						})]
 	};
 
-	this.subscribedFoldersStore = new GO.data.JsonStore({
+	GO.email.subscribedFoldersStore = new GO.data.JsonStore({
 
 				url : GO.settings.modules.email.url + 'json.php',
 				baseParams : {
@@ -340,7 +340,7 @@ GO.email.AccountDialog = function(config) {
 				items : [new GO.form.ComboBoxReset({
 									fieldLabel : GO.email.lang.sendItemsFolder,
 									hiddenName : 'sent',
-									store : this.subscribedFoldersStore,
+									store : GO.email.subscribedFoldersStore,
 									valueField : 'name',
 									displayField : 'name',
 									typeAhead : true,
@@ -353,7 +353,7 @@ GO.email.AccountDialog = function(config) {
 								}), new GO.form.ComboBoxReset({
 									fieldLabel : GO.email.lang.trashFolder,
 									hiddenName : 'trash',
-									store : this.subscribedFoldersStore,
+									store : GO.email.subscribedFoldersStore,
 									valueField : 'name',
 									displayField : 'name',
 									typeAhead : true,
@@ -366,7 +366,7 @@ GO.email.AccountDialog = function(config) {
 								}), new GO.form.ComboBoxReset({
 									fieldLabel : GO.email.lang.draftsFolder,
 									hiddenName : 'drafts',
-									store : this.subscribedFoldersStore,
+									store : GO.email.subscribedFoldersStore,
 									valueField : 'name',
 									displayField : 'name',
 									typeAhead : true,
@@ -562,8 +562,8 @@ Ext.extend(GO.email.AccountDialog, Ext.Window, {
 
 		if (account_id) {
 			this.loadAccount(account_id);
-			this.subscribedFoldersStore.baseParams.account_id = account_id;
-			this.subscribedFoldersStore.load();
+			GO.email.subscribedFoldersStore.baseParams.account_id = account_id;
+			GO.email.subscribedFoldersStore.load();
 		} else {
 			this.propertiesPanel.form.reset();
 			this.account_id = 0;
@@ -613,18 +613,7 @@ Ext.extend(GO.email.AccountDialog, Ext.Window, {
 filter = function() {
 	return {
 		showDialog : function(filter_id, account_id, ds) {
-			if (!this.win) {
-				var subscribedFoldersStore = new Ext.data.JsonStore({
-
-							url : GO.settings.modules.email.url + 'json.php',
-							baseParams : {
-								task : 'subscribed_folders',
-								hideInbox : 'true',
-								account_id : account_id
-							},
-							root : 'data',
-							fields : ['id', 'name']
-						});
+			if (!this.win) {		
 
 				this.formPanel = new Ext.form.FormPanel({
 					layout : 'form',
@@ -669,11 +658,11 @@ filter = function() {
 					}, new Ext.form.ComboBox({
 								fieldLabel : GO.email.lang.moveToFolder,
 								hiddenName : 'folder',
-								store : subscribedFoldersStore,
+								store : GO.email.subscribedFoldersStore,
 								valueField : 'name',
 								displayField : 'name',
 								typeAhead : true,
-								mode : 'remote',
+								mode : 'local',
 								triggerAction : 'all',
 								editable : false,
 								selectOnFocus : true,
@@ -700,7 +689,6 @@ filter = function() {
 					closeAction : 'hide',
 					items : this.formPanel,
 					buttons : [{
-						id : 'ok',
 						text : GO.lang.cmdOk,
 						handler : function() {
 
@@ -739,7 +727,6 @@ filter = function() {
 						},
 						scope : this
 					}, {
-						id : 'close',
 						text : GO.lang.cmdClose,
 						handler : function() {
 							this.win.hide();

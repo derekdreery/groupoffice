@@ -289,7 +289,8 @@ class files extends filesystem
 				$user = $GO_USERS->get_user($this->f('user_id'));
 
 				$swift = new GoSwift($user['email'], $lang['files']['folder_modified_subject'],0,'3',$body);
-				$swift->sendmail($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
+				$swift->set_from($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
+				$swift->sendmail();
 			}
 		}
 	}

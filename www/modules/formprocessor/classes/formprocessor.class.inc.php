@@ -240,7 +240,8 @@ class formprocessor{
 				require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 				$swift = new GoSwift(implode(',', $mail_to), $lang['addressbook']['newContactAdded']);
 				$swift->set_body($body);
-				$swift->sendmail($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
+				$swift->set_from($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
+				$swift->sendmail();
 			}
 		}
 
@@ -261,7 +262,8 @@ class formprocessor{
 			require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 			$swift = new GoSwift($_POST['email'], $subject);
 			$swift->set_body($body);
-			$swift->sendmail($this->site['webmaster'], $this->site['name']);
+			$swift->set_from($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
+			$swift->sendmail();
 		}
 	}
 }
