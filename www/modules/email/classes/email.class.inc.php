@@ -53,6 +53,23 @@ class email extends db
 {
 	var $last_error;
 	var $mail;
+	
+	public function __on_load_listeners($events){
+		$events->add_listener('user_delete', __FILE__, 'email', 'user_delete');
+		$events->add_listener('build_search_index', __FILE__, 'email', 'build_search_index');
+		$events->add_listener('save_settings', __FILE__, 'email', 'save_settings');
+	}
+	
+	public static function save_settings(){
+
+		global $GO_MODULES, $GO_CONFIG, $GO_SECURITY;
+
+		if($GO_MODULES->has_module('email'))
+		{
+			$value = isset($POST['use_html_markup']) ? '0' : '1';
+			$GO_CONFIG->save_setting('email_use_plain_text_markup', $value, $GO_SECURITY->user_id);
+		}
+	}
 
 	function get_servermanager_mailbox_info($account)
 	{

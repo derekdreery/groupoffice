@@ -456,6 +456,40 @@ GO.email.EmailClient = function(config){
 	
 	this.searchDialog = new GO.email.SearchDialog({store:this.messagesGrid.store});
 	
+	var settingsMenu = [{
+		iconCls: 'btn-accounts',
+		text: GO.email.lang.accounts,
+		cls: 'x-btn-text-icon',
+		handler: function(){
+			this.showAccountsDialog();
+		},
+		scope: this
+	},{
+		iconCls:'btn-toggle-window',
+		text: GO.email.lang.toggleWindowPosition,
+		cls: 'x-btn-text-icon',
+		handler: function(){
+			this.moveGrid();								
+		},
+		scope: this
+	}];
+	
+	if(GO.gnupg)
+	{
+		settingsMenu.push('-');
+		settingsMenu.push({
+			text:GO.gnupg.lang.encryptionSettings,
+			handler:function(){
+				if(!this.securityDialog)
+				{
+					this.securityDialog = new GO.gnupg.SecurityDialog();
+				}
+				this.securityDialog.show();
+			},
+			scope:this
+		});
+	}
+	
 	var tbar =[{
 					iconCls: 'btn-compose',
 					text: GO.email.lang['compose'],
@@ -478,23 +512,7 @@ GO.email.EmailClient = function(config){
 					iconCls: 'btn-settings',
 					text:GO.lang.cmdSettings,
 					menu: {
-          	items: [{
-							iconCls: 'btn-accounts',
-							text: GO.email.lang.accounts,
-							cls: 'x-btn-text-icon',
-							handler: function(){
-								this.showAccountsDialog();
-							},
-							scope: this
-						},{
-							iconCls:'btn-toggle-window',
-							text: GO.email.lang.toggleWindowPosition,
-							cls: 'x-btn-text-icon',
-							handler: function(){
-								this.moveGrid();								
-							},
-							scope: this
-						}]
+          	items: settingsMenu
 					}				
 				},{					
 					iconCls: 'btn-refresh',

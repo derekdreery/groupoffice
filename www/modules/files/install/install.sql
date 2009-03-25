@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS `fs_files` (
   `mtime` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL,
   `comments` text,
+  `workflow_id` in(11) NOT NULL default '0',
   PRIMARY KEY  (`path`,`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

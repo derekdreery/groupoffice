@@ -19,7 +19,7 @@ GO.form.ComboBox = Ext.extend(Ext.form.ComboBox, {
 	},
 	
 	selectFirst : function(){		
-		if(this.store.reader.jsonData.results.length>0)
+		if(this.store.loaded && this.store.reader.jsonData.results.length>0)
 		{
 			this.setValue(this.store.reader.jsonData.results[0].id);
 		}

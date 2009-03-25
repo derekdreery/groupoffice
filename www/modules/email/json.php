@@ -204,6 +204,11 @@ function load_template($template_id, $to, $keep_tags=false)
 		}
 		$tp->replace_fields($response['data']['body'], $values);
 	}
+	
+	if($_POST['content_type']=='plain')
+	{
+		$response['data']['body']=String::html_to_text($response['data']['body']);
+	}
 
 	//$response['data']['to']=$to;
 
@@ -439,37 +444,67 @@ try{
 				}
 			}
 
-
+	
 
 			$response['data']['body']='';
+			
+			//remove alternative body part
+			$new_parts=array();
+			for($i=0;$i<count($parts);$i++)
+			{
+				$mime = strtolower($parts[$i]["mime"]);
+			
+				if(strpos($mime, $_POST['content_type']) || strtolower($parts[$i]['type'])!='alternative')
+				{
+					$new_parts[]=$parts[$i];
+				}
+			}
 
-			$html_message_count = 0;
+			$parts=$new_parts;
+			
+			if($GO_MODULES->has_module('gnupg'))
+			{
+				require_once($GO_MODULES->modules['gnupg']['class_path'].'gnupg.class.inc.php');
+				$gnupg = new gnupg();
+				$sender = String::get_email_from_string($content['from']);
+				$passphrase = !empty($_SESSION['GO_SESSION']['gnupg']['passwords'][$sender]) ? $_SESSION['GO_SESSION']['gnupg']['passwords'][$sender] : '';
+			}
+			
+
+			//$html_message_count = 0;
 			for ($i=0;$i<count($parts);$i++)
 			{
 				$mime = strtolower($parts[$i]["mime"]);
 
-				if (!eregi("attachment", $parts[$i]["disposition"]))
+				if (!$imap->part_is_attachment($parts[$i]))
 				{
 					switch ($mime)
 					{
 						case 'text/plain':
-							if(strtolower($parts[$i]['type'])!='alternative')
-							{
-								$html_part = String::text_to_html($imap->view_part($uid,
-								$parts[$i]["number"], $parts[$i]["transfer"], $parts[$i]['charset']), false);
-								$response['data']['body'] .= $html_part;
-							}
+							$text_part = $imap->view_part($uid, $parts[$i]["number"], $parts[$i]["transfer"], $parts[$i]['charset']);
+							if($GO_MODULES->has_module('gnupg'))
+								$text_part = $gnupg->replace_encoded($text_part,$passphrase,false);							
+							
+							$response['data']['body'] .= $_POST['content_type']=='html' ? String::text_to_html($text_part, false) : $text_part;
 							break;
 
 						case 'text/html':
-							$html_part = String::convert_html($imap->view_part($uid,
-							$parts[$i]["number"], $parts[$i]["transfer"], $parts[$i]['charset']));
+							$html_part = $imap->view_part($uid, $parts[$i]["number"], $parts[$i]["transfer"], $parts[$i]['charset']);
+
+							if($GO_MODULES->has_module('gnupg'))
+								$html_part = $gnupg->replace_encoded($html_part,$passphrase);
+
+							$html_part = String::convert_html($html_part);
+								
 							$response['data']['body'] .= $html_part;
 							break;
 
 						case 'text/enriched':
-							$html_part = String::enriched_to_html($imap->view_part($uid,
-							$parts[$i]["number"], $parts[$i]["transfer"], $parts[$i]['charset']), false);
+							$html_part = String::enriched_to_html($imap->view_part($uid,$parts[$i]["number"], $parts[$i]["transfer"], $parts[$i]['charset']), false);
+							
+							if($GO_MODULES->has_module('gnupg'))
+								$html_part = $gnupg->replace_encoded($html_part,$passphrase);
+							
 							$response['data']['body'] .= $html_part;
 							break;
 					}
@@ -484,47 +519,49 @@ try{
 					$response['data']['body'] = str_replace('cid:'.$url_replacements[$i]['id'], $url_replacements[$i]['url'], $response['data']['body']);
 				}
 			}
+			
+
 
 			if($task!='opendraft')
 			{
-				$header_om  = '<font face="verdana" size="2">'.$lang['email']['original_message']."<br />";
-				$om_to = '';
-				if (isset($content))
+				$om_to = isset($content['to']) ? implode(',',$content["to"]) : $lang['email']['no_recipients'];
+				$om_cc = isset($content['cc']) ? implode(',',$content["cc"]) : '';
+								
+				if($_POST['content_type']== 'html')
 				{
-					$header_om .= "<b>".$lang['email']['subject'].":&nbsp;</b>".$subject."<br />";
+					$header_om  = '<font face="verdana" size="2">'.$lang['email']['original_message']."<br />";
+					$header_om .= "<b>".$lang['email']['subject'].":&nbsp;</b>".htmlspecialchars($subject, ENT_QUOTES, 'UTF-8')."<br />";
 					$header_om .= '<b>'.$lang['email']['from'].": &nbsp;</b>".htmlspecialchars($content['from'], ENT_QUOTES, 'UTF-8')."<br />";
-					if (isset($content['to']))
+					$header_om .= "<b>".$lang['email']['to'].":&nbsp;</b>".htmlspecialchars($om_to, ENT_QUOTES, 'UTF-8')."<br />";
+					if(!empty($om_cc))
 					{
-						for ($i=0;$i<sizeof($content["to"]);$i++)
-						{
-							if ($i!=0)	$om_to .= ',';
-							$om_to .= $content["to"][$i];
-						}
-					}else
-					{
-						$om_to=$lang['email']['no_recipients'];
-					}
-					$header_om .= "<b>".$lang['email']['to'].":&nbsp;</b>".htmlspecialchars($om_to)."<br />";
-					$om_cc = '';
-					if (isset($content['cc']))
-					{
-						for ($i=0;$i<sizeof($content["cc"]);$i++)
-						{
-							if ($i!=0)	$om_cc .= ',';
-							$om_cc .= $content["cc"][$i];
-						}
-					}
-					if($om_cc != '')
-					{
-						$header_om .= "<b>CC:&nbsp;</b>".htmlspecialchars($om_cc)."<br />";
+						$header_om .= "<b>CC:&nbsp;</b>".htmlspecialchars($om_cc, ENT_QUOTES, 'UTF-8')."<br />";
 					}
 
 					$header_om .= "<b>".$lang['common']['date'].":&nbsp;</b>".date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'],$content["udate"])."<br />";
+				
+					$header_om .= "</font><br /><br />";
+
+					$response['data']['body'] = '<br /><blockquote style="border:0;border-left: 2px solid #22437f; padding:0px; margin:0px; padding-left:5px; margin-left: 5px; ">'.$header_om.$response['data']['body'].'</blockquote>';
+				}else
+				{
+					$header_om  = $lang['email']['original_message']."\n";
+					$header_om .= $lang['email']['subject'].": ".$subject."\n";
+					$header_om .= $lang['email']['from'].": ".$content['from']."\n";
+					$header_om .= $lang['email']['to'].": ".$om_to."\n";
+					if(!empty($om_cc))
+					{
+						$header_om .= "CC: ".$om_cc."\n";
+					}
+
+					$header_om .= $lang['common']['date'].": ".date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'],$content["udate"])."\n";
+					$header_om .= "\n\n";
+
+					$response['data']['body'] = str_replace("\r",'',$response['data']['body']);
+					$response['data']['body'] = '> '.str_replace("\n","\n> ",$response['data']['body']);
+					
+					$response['data']['body'] = $header_om.$response['data']['body'];
 				}
-				$header_om .= "</font><br /><br />";
-
-
-				$response['data']['body'] = '<br /><blockquote style="border:0;border-left: 2px solid #22437f; padding:0px; margin:0px; padding-left:5px; margin-left: 5px; ">'.$header_om.$response['data']['body'].'</blockquote>';
 			}
 
 
@@ -540,6 +577,13 @@ try{
 				$response['data']['body'] = $template['data']['body'].$response['data']['body'];
 				$response['data']['inline_attachments']=array_merge($response['data']['inline_attachments'], $template['data']['inline_attachments']);
 			}
+			
+			if($_POST['content_type']=='plain')
+			{
+				$response['data']['textbody']=$response['data']['body'];
+				unset($response['data']['body']);
+			}
+			
 			$response['success']=true;
 		}
 	}else
@@ -604,6 +648,12 @@ try{
 				$to=$_REQUEST['to'];
 
 				$response = load_template($template_id, $to, isset($_POST['mailing_group_id']) && $_POST['mailing_group_id']>0);
+				
+				if($_POST['content_type']=='plain')
+				{
+					$response['data']['textbody']=$response['data']['body'];
+					unset($response['data']['body']);
+				}
 
 				$response['success']=true;
 				break;
@@ -886,6 +936,37 @@ try{
 					}	
 				}			
 				
+				
+				if($GO_MODULES->has_module('gnupg'))
+				{
+					require_once($GO_MODULES->modules['gnupg']['class_path'].'gnupg.class.inc.php');
+					$gnupg = new gnupg();
+					$passphrase = !empty($_SESSION['GO_SESSION']['gnupg']['passwords'][$response['sender']]) ? $_SESSION['GO_SESSION']['gnupg']['passwords'][$response['sender']] : '';
+					if(isset($_POST['passphrase']))
+					{
+						$passphrase=$_SESSION['GO_SESSION']['gnupg']['passwords'][$response['sender']]=$_POST['passphrase'];
+					}
+					try{
+						$response['body'] = $gnupg->replace_encoded($response['body'],$passphrase);
+					}
+					catch(Exception $e)
+					{
+						$m = $e->getMessage();
+						
+						if(strpos($m, 'bad passphrase'))
+						{
+							$response['askPassphrase']=true;							
+							if(isset($_POST['passphrase']))
+							{
+								throw new Exception('Wrong passphrase!');
+							}
+						}else
+						{						
+							throw new Exception($m);
+						}
+					}
+				}
+				
 
 				//debug(var_export($attachments, true));
 
@@ -949,6 +1030,9 @@ try{
 
 					
 				}
+				
+				
+				
 				break;
 
 							case 'messages':
