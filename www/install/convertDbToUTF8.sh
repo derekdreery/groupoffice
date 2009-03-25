@@ -12,8 +12,9 @@ cp db.sql bak/$1-$mydate.sql
 echo String replacing latin1 with utf8
 cat db.sql | replace CHARSET=latin1 CHARSET=utf8 > db2.sql
  
-echo String replacing latin1 with utf8
-cat db2.sql | replace COLLATE=latin1_german1_ci "" > db.sql
+echo String replace COLLATE
+#cat db2.sql | replace COLLATE=latin1_german1_ci "" > db.sql
+sed -e 's/\(ENGINE=.*\) COLLATE=[a-z1-9_]*;/\1;/g' db2.sql > db.sql
  
 iconv -c -f utf8 -t iso-8859-15 db.sql > utf8.sql
 
