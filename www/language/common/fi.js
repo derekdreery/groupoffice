@@ -11,14 +11,6 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-/**
- * Don't copy the next line into a translation
- */
-
-/**
- * Copy everything below for translations
- */
-
 GO.lang.disabled='Pois käytöstä';
 GO.lang.changesWillBeLost='Olet tehnyt muutoksia nykyisessä näytössä. Paina cancel ja talleta muutokset tai OK jatkaaksesi ja poistaaksesi muutokset.';
 GO.lang.strCommunityForum='Yhteisön foorumi';
@@ -35,7 +27,7 @@ GO.lang.smallUpload='Pienet tiedostot';
 
 
 GO.lang.lostPassword='Salasana hukassa?';
-GO.lang.lostPasswordText='Saadaksesi uuden salasanasi tietoosi, tulee sinun kyetä lukemaan sähköpostiiasi ilman pääsyä Group-Officeen. Jos syötät sähköpostiiosoitteesi, uusi salasana lähetetään sähköpostiiosoitteeseesi.<br /><br />Syötä sähköpostiiosoitteesi:';
+GO.lang.lostPasswordText='Saadaksesi uuden salasanasi tietoosi, tulee sinun pystyä lukemaan sähköpostiasi ilman pääsyä Group-Officeen. Jos syötät sähköpostiosoitteesi, uusi salasana lähetetään sähköpostiosoitteeseesi.<br /><br />Syötä sähköpostiosoitteesi:';
 
 GO.lang.noJava='Java Webstartia ei ole asennetu. Java tekee tiedostojen editoimisesta ja palvelimelle tallentamisesta helpompaa. Mene osoitteeseen <a class="normal-link" href="http://www.java.com/download" target="_blank">http://www.java.com/download</a> asentaaksesi sen.';
 
@@ -46,7 +38,7 @@ GO.lang.strUsage='Käyttöstatistiikka';
 
 GO.lang.strName = 'Nimi';
 GO.lang.strDescription = 'Kuvaus';
-GO.lang.strEmail = 'Sähköpostii';
+GO.lang.strEmail = 'Sähköposti';
 GO.lang.strUser = 'Käyttäjä';
 GO.lang.users = 'Käyttäjät';
 GO.lang.strOwner = 'Omistaja';
@@ -68,7 +60,7 @@ GO.lang.strTitle = 'Titteli';
 GO.lang.strInitials = 'Nimikirjaimet';
 GO.lang.strSex = 'Sukupuoli';
 GO.lang.strBirthday = 'Syntymäpäivä';
-GO.lang.strEmail = 'Sähköpostii';
+GO.lang.strEmail = 'Sähköposti';
 
 GO.lang.strPhone = 'Puhelin';
 GO.lang.strFax = 'Faxi';
@@ -286,8 +278,8 @@ GO.lang.displayingItemsShort='Yhteensä: {2}';
 GO.lang.image='Kuva';
 GO.lang.insertImage='Lisää luva tekstiin';
 
-GO.lang.item='esine';
-GO.lang.items='esineet';
+GO.lang.item='merkintä';
+GO.lang.items='merkintää';
 
 GO.lang.countries={};
 GO.lang.countries["AF"] = "Afghanistan";
