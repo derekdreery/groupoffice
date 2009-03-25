@@ -516,6 +516,9 @@ class String {
 	}
 	
 	function html_to_text($text){
+		global $GO_CONFIG;
+		require_once($GO_CONFIG->class_path.'html2text.class.inc');
+		
 		$htmlToText = new Html2Text ($text);
 		return $htmlToText->get_text();	
 	}
