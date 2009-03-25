@@ -2,9 +2,27 @@
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_base_language_file('common'));
 
+$lang['common']['about']='Version: %s
+
+Copyright (c) 2003-2009, Intermesh
+All rights reserved.
+This program is protected by copyright law and the Group-Office license.
+
+For support questions contact your webmaster:
+%s
+
+For more information about Group-Office visit:
+http://www.group-office.com
+
+Group-Office is created by Intermesh. For more information about Intermesh visit:
+http://www.intermesh.nl/en/';
+
 $lang['common']['htmldirection']= 'ltr';
 
-$lang['common']['errorsInForm'] = 'Es sind Fehler im Formular, bitte korrigieren Sie diese und versuchen es erneut.';
+$lang['common']['quotaExceeded']='Ihr Speicherplatz ist verbraucht. Please delete some files or contact your provider to raise the quota';
+$lang['common']['errorsInForm'] = 'Es sind Fehler im Formular, bitte korrigieren Sie diese und versuchen Sie es erneut.';
+
+$lang['common']['moduleRequired']='Diese Funktion erfordert folgendes Modul: %s';
 
 $lang['common']['loadingCore']= 'Basissystem wird geladen';
 $lang['common']['loadingLogin'] = 'Logindialog wird geladen';
@@ -26,6 +44,9 @@ $lang['common']['saveError']='Fehler beim Speichern der Daten';
 $lang['common']['deleteError']='Fehler beim Löschen der Daten';
 $lang['common']['selectError']='Fehler beim Lesen der Daten';
 $lang['common']['missingField'] = 'Sie haben nicht alle benötigten Felder ausgefüllt.';
+$lang['common']['invalidEmailError']='Die E-Mail-Adresse war ungültig';
+$lang['common']['noFileUploaded']='Es wurde keine Datei empfangen';
+$lang['common']['error']='Fehler';
 
 $lang['common']['salutation']='Anrede';
 $lang['common']['firstName'] = 'Vorname';
@@ -36,8 +57,8 @@ $lang['common']['sirMadam']['F'] = 'Frau';
 $lang['common']['initials'] = 'Initialen';
 $lang['common']['sex'] = 'Geschlecht';
 $lang['common']['birthday'] = 'Geburtstag';
-$lang['common']['sexes']['M'] = 'männlich';
-$lang['common']['sexes']['F'] = 'weiblich';
+$lang['common']['sexes']['M'] = 'Männlich';
+$lang['common']['sexes']['F'] = 'Weiblich';
 $lang['common']['title'] = 'Titel';
 $lang['common']['addressNo'] = 'Hausnr.';
 $lang['common']['workAddressNo'] = 'Hausnr. (dienstl.)';
@@ -48,7 +69,7 @@ $lang['common']['postState'] = 'Bundesland';
 $lang['common']['postCountry'] = 'Land';
 $lang['common']['postZip'] = 'PLZ';
 $lang['common']['visitAddress'] = 'Besucheranschrift';
-$lang['common']['postAddress'] = 'Postanschrift';
+$lang['common']['postAddressHead'] = 'Postanschrift';
 $lang['common']['name'] = 'Name';
 $lang['common']['user'] = 'Benutzer';
 $lang['common']['username'] = 'Benutzername';
@@ -61,7 +82,7 @@ $lang['common']['zip'] = 'PLZ';
 $lang['common']['address'] = 'Strasse';
 $lang['common']['email'] = 'E-Mail';
 $lang['common']['phone'] = 'Telefon';
-$lang['common']['workphone'] = 'Telefon dienstl.';
+$lang['common']['workphone'] = 'Telefon (dienstl.)';
 $lang['common']['cellular'] = 'Mobiltelefon';
 $lang['common']['company'] = 'Firma';
 $lang['common']['department'] = 'Abteilung';
@@ -69,18 +90,18 @@ $lang['common']['function'] = 'Funktion';
 $lang['common']['question'] = 'Geheime Frage';
 $lang['common']['answer'] = 'Antwort';
 $lang['common']['fax'] = 'Telefax';
-$lang['common']['workFax'] = 'Telefax dienstl.';
-$lang['common']['homepage'] = 'Website';
-$lang['common']['workAddress'] = 'Strasse dienstl.';
-$lang['common']['workZip'] = 'PLZ dienstl.';
-$lang['common']['workCountry'] = 'Land dienstl.';
-$lang['common']['workState'] = 'Bundesland dienstl.';
-$lang['common']['workCity'] = 'Stadt dienstl.';
+$lang['common']['workFax'] = 'Telefax (dienstl.)';
+$lang['common']['homepage'] = 'Webseite';
+$lang['common']['workAddress'] = 'Strasse (dienstl.)';
+$lang['common']['workZip'] = 'PLZ (dienstl.)';
+$lang['common']['workCountry'] = 'Land (dienstl.)';
+$lang['common']['workState'] = 'Bundesland (dienstl.)';
+$lang['common']['workCity'] = 'Stadt (dienstl.)';
 $lang['common']['today'] = 'Heute';
 $lang['common']['tomorrow'] = 'Morgen';
 
 $lang['common']['SearchAll'] = 'Alle Felder';
-$lang['common']['total'] = 'Summe';
+$lang['common']['total'] = 'Gesamt';
 $lang['common']['results'] = 'Ergebnisse';
 
 
@@ -120,7 +141,7 @@ $lang['common']['date']='Datum';
 
 $lang['common']['default_salutation']['M']='Sehr geehrter Herr';
 $lang['common']['default_salutation']['F']='Sehr geehrte Frau';
-
+$lang['common']['default_salutation']['unknown']='Sehr geehrte(r) Frau / Herr';
 
 $lang['common']['mins'] = 'Minuten';
 $lang['common']['hour'] = 'Stunde';
@@ -140,12 +161,11 @@ $lang['common']['beginning']='Anrede';
 
 $lang['common']['max_emails_reached']= "Die maximale E-Mail-Anzahl pro Tag für SMTP-Host %s von %s ist erreicht.";
 $lang['common']['usage_stats']='Festplattenspeicher Nutzung pro %s';
-$lang['common']['usage_text']='Diese Gruppe-Office-Installation verwendet';
+$lang['common']['usage_text']='Diese GroupOffice-Installation verwendet';
 
 $lang['common']['database']='Datenbank';
 $lang['common']['files']='Dateien';
 $lang['common']['email']='E-Mail';
-$lang['common']['total']='Total';
 
 $lang['common']['lost_password_subject']='Neues Passwort';
 $lang['common']['lost_password_body']='%s,<br />
@@ -160,4 +180,7 @@ Passwort: %s';
 $lang['common']['lost_password_error']='Die angegebende E-Mail-Adresse konnte nicht gefunden werden.';
 $lang['common']['lost_password_success']='An Ihre E-Mail-Adresse wurde ein neues Passwort gesendet.';
 
-$lang['common']['postAddressHead']= 'Adresse';
+$lang['common']['confirm_leave']='If you leave GroupOffice you will loose unsaved changes';
+$lang['common']['dataSaved']='Daten wurden erfolgreich gespeichert';
+
+$lang['common']['uploadMultipleFiles'] = 'Click at \'Browse\' to select files and/or folders from your computer. Click at \'Upload\' to transfer the files to Group-Office. This window will automatically close when the transfer is completed.';

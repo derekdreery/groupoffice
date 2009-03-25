@@ -1,9 +1,10 @@
-﻿GO.modules.lang.cmdSaveChanges = 'Änderungen speichern',
-GO.modules.lang.cmdInstall = 'Installieren',
-GO.modules.lang.cmdUninstall = 'Deinstallieren',
+﻿GO.modules.lang.modules='Module';
+GO.modules.lang.cmdSaveChanges = 'Änderungen speichern',
+GO.modules.lang.cmdInstall = 'Hinzufügen',
+GO.modules.lang.cmdUninstall = 'Entfernen',
 GO.modules.lang.cmdAvailableModules = 'Verfügbare Module',
-GO.modules.lang.cmdModuleName = 'Modulname',
+GO.modules.lang.cmdModuleName = 'Name',
 GO.modules.lang.cmdModuleDescription = 'Beschreibung',
-GO.modules.lang.cmdGridColumnModuleName = 'Modulname',
-GO.modules.lang.cmdUninstallMessage = 'ACHTUNG! Wenn Sie das Modul deinstallieren werden alle Daten gelöscht! Möchten Sie wirklich das "{0}" Modul deinstallieren?',
-GO.modules.lang.cmdModulesCannotBeDeleted = 'Das Modul "Module" kann nicht deinstalliert werden!.'
+GO.modules.lang.cmdGridColumnModuleName = 'Name',
+GO.modules.lang.cmdUninstallMessage = 'ACHTUNG! Wenn Sie dieses Modul entfernen, werden alle zugehörigen Daten gelöscht! Möchten Sie "{0}" wirklich entfernen?',
+GO.modules.lang.cmdModulesCannotBeDeleted = 'Dieses Modul kann nicht entfernt werden!'

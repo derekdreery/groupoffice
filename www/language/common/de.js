@@ -11,20 +11,33 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
+GO.lang.serverError='An error occurred on the webserver. Contact your system administrator and supply the detailed error.';
+GO.lang.errorDetails='Fehlerdetails';
+GO.lang.contactSupportDesk='Support anfordern';
 
+GO.lang.disabled='Deaktiviert';
+GO.lang.changesWillBeLost='You made changes in the current screen. Press cancel and save changes or Ok to continue and delete your changes.';
+GO.lang.strCommunityForum='Anwenderforum';
+GO.lang.moduleRequired='This feature requires the \'{module}\' module. This module is not available.';
+
+GO.lang.completeProfile = 'Bitte vervollständigen Sie Ihr Profil';
+GO.lang.fullscreen='Vollbildmodus';
+GO.lang.popupBlocker= 'Ihr Browser blockiert ein Popup von GroupOffice. Bitte deaktivieren Sie Ihren Popupblocker für diese Seite.';
+
+GO.lang.color='Farbe';
 GO.lang.browse='Durchsuchen...';
 GO.lang.largeUpload='Große Dateien/Ordner (Java benötigt)';
 GO.lang.smallUpload='Kleine Dateien';
 
 
 GO.lang.lostPassword='Passwort vergessen?';
-GO.lang.lostPasswordText='Um Ihr Passwort wiederherzustellen, müssen Sie Ihre E-Mail ausserhalb von Group-Office abrufen können. Wenn Sie Ihre E-Mail-Adresse eingeben, wird Ihnen ein neues Passwort zugesandt.<br /><br />Geben Sie ihre E-Mail-Adresse ein:';
+GO.lang.lostPasswordText='Um Ihr Passwort wiederherzustellen, müssen Sie Ihre E-Mail ausserhalb von GroupOffice abrufen können. Wenn Sie Ihre E-Mail-Adresse eingeben, wird Ihnen ein neues Passwort zugesandt.<br /><br />Geben Sie ihre E-Mail-Adresse ein:';
 
-GO.lang.noJava='Java Webstart ist nicht installiert. Java ermöglich ein einfacheres bearbeiten und hochladen der Dateien. Gehen Sie auf <a class="normal-link" href="http://www.java.com/download" target="_blank">http://www.java.com/download</a> um Java zu installieren.';
+GO.lang.noJava='Java ist nicht installiert. Java ermöglich ein einfacheres bearbeiten und hochladen der Dateien. Gehen Sie auf <a class="normal-link" href="http://www.java.com/download" target="_blank">http://www.java.com/download</a>, um Java zu installieren.';
 
 GO.lang.strHelpContents='Hilfeinhalt';
 GO.lang.strReportBug='Einen Fehler melden';
-GO.lang.strAbout='Über Group-Office';
+GO.lang.strAbout='Über GroupOffice';
 GO.lang.strUsage='Nutzungsstatistiken';
 
 GO.lang.strName = 'Name';
@@ -37,7 +50,7 @@ GO.lang.strContacts = 'Kontakte';
 
 GO.lang.strLanguage='Sprache';
 
-GO.lang.strOpenOffice = 'OpenOffice.org Dokument';
+GO.lang.strOpenOffice = 'OpenOffice Dokument';
 
 GO.lang.strDefault = 'Standard';
 GO.lang.strUsername = 'Benutzername';
@@ -62,7 +75,7 @@ GO.lang.strZip = 'PLZ';
 GO.lang.strCity = 'Stadt';
 GO.lang.strState = 'Bundesland';
 GO.lang.strCountry = 'Land';
-GO.lang.strHomepage = 'Website';
+GO.lang.strHomepage = 'Webseite';
 GO.lang.strCompany = 'Firma';
 GO.lang.strDepartment = 'Abteilung';
 GO.lang.strFunction = 'Funktion';
@@ -86,25 +99,26 @@ GO.lang.strPostZip = 'PLZ';
 GO.lang.locations = 'Standorte';
 GO.lang.folder = 'Ordner';
 GO.lang.folders = 'Ordner';
+GO.lang.newFolder='Neuer Ordner';
 
-GO.lang.up = 'Auf';
+GO.lang.up = 'Hoch';
 GO.lang.fileExists = 'Datei existiert';
 GO.lang.overwriteFile = 'Möchten Sie die Datei überschreiben \'{file}\'?';
 
 GO.lang.url = 'URL';
 
-GO.lang.strMale = 'männlich';
-GO.lang.strFemale = 'weiblich';
+GO.lang.strMale = 'Männlich';
+GO.lang.strFemale = 'Weiblich';
 
 GO.lang.strMtime = 'Geändert am';
 GO.lang.strCtime = 'Erstellt am';
-GO.lang.Atime = 'Zugriff auf';
+GO.lang.Atime = 'Zugriff am';
 GO.lang.strText = 'Text';
 GO.lang.texts = 'Texte';
 GO.lang.strDate = 'Datum';
 GO.lang.strUser = 'Benutzer';
 
-GO.lang.strSize = 'Größe';
+GO.lang.strSize = 'Grösse';
 GO.lang.strType = 'Typ';
 GO.lang.strNA = 'N/A';
 
@@ -114,18 +128,19 @@ GO.lang.cmdAddPlusNew = 'Hinzufügen + Neu';
 GO.lang.cmdSavePlusNew='Speichern + Neu';
 GO.lang.cmdSave = 'Speichern';
 GO.lang.cmdEdit = 'Bearbeiten';
-GO.lang.cmdLink = 'Link';
-GO.lang.cmdUnlink = 'Trennen';
+GO.lang.cmdLink = 'Verknüpfen';
+GO.lang.cmdUnlink = 'Verknüpfung entfernen';
 GO.lang.cmdClose = 'Schliessen';
 GO.lang.cmdSettings = 'Einstellungen';
-GO.lang.cmdReset = 'Neustart';
-GO.lang.cmdExport='Export';
+GO.lang.cmdReset = 'Zurücksetzen';
+GO.lang.cmdExport='Exportieren';
 GO.lang.cmdPrint='Drucken';
+GO.lang.cmdImport='Importieren';
 
 GO.lang.cmdActions = 'Aktionen';
 
-GO.lang.cmdNext='Nächste';
-GO.lang.cmdPrevious='Vorherige';
+GO.lang.cmdNext='Weiter';
+GO.lang.cmdPrevious='Zurück';
 
 GO.lang.cmdNew = 'Neu';
 GO.lang.cmdOk = 'OK';
@@ -139,22 +154,22 @@ GO.lang.cmdYesToAll = 'Ja für Alle';
 GO.lang.cmdNo = 'Nein';
 GO.lang.cmdNoToAll = 'Nein für Alle';
 
-GO.lang.strLinks = 'Links';
-GO.lang.author = 'Autor';
+GO.lang.strLinks = 'Verknüpfungen';
+GO.lang.author = 'Verfasser';
 
 GO.lang.paste = 'Einfügen';
 GO.lang.cut = 'Ausschneiden';
 GO.lang.copy = 'Kopieren';
 GO.lang.compress = 'Komprimieren';
-GO.lang.decompress = 'Dekomprimieren';
+GO.lang.decompress = 'Entpacken';
 GO.lang.upload = 'Hochladen';
 GO.lang.download = 'Herunterladen';
 GO.lang.uploadFiles = 'Dateien hochladen';
 
-GO.lang.displayingItems = 'Element anzeigen {0} - {1} von {2}';
-GO.lang.strNoItems = 'Keine Elemente zum anzeigen';
+GO.lang.displayingItems = 'Zeige Einträge {0} - {1} von {2}';
+GO.lang.strNoItems = 'Keine Einträge zum Anzeigen';
 
-GO.lang.strLinkItems = 'Suche nach Elementen für Verlinkung';
+GO.lang.strLinkItems = 'Suche nach verknüpfbaren Elementen';
 GO.lang.strSearchResults= 'Suchergebnisse';
 GO.lang.strSearch= 'Suche';
 
@@ -167,16 +182,17 @@ GO.lang.strError= 'Fehler';
 GO.lang.waitMsgSave= 'Speichern...';
 GO.lang.waitMsgLoad= 'Laden...';
 GO.lang.waitMsgUpload= 'Hochladen...';
+GO.lang.strRequestError= 'Could not connect to the server. Please check your internet connection.';
 
 GO.lang.strSelected = 'Ausgewählt';
-GO.lang.noItemSelected= 'Sie haben kein Element ausgewählt.';
-GO.lang.strDeleteSelectedItems= 'Sind Sie sicher, dass Sie {count} Elemente löschen möchten?';
-GO.lang.strDeleteSelectedItem= 'Sind Sie sicher, dass Sie das ausgewählte Element löschen möchten?';
+GO.lang.noItemSelected= 'Sie haben keinen Eintrag ausgewählt.';
+GO.lang.strDeleteSelectedItems= 'Sind Sie sicher, dass Sie {count} Einträge löschen möchten?';
+GO.lang.strDeleteSelectedItem= 'Sind Sie sicher, dass Sie den ausgewählten Eintrag löschen möchten?';
 
-GO.lang.strNoWritePermissions = 'Sie haben keine Erlaubnis das Element zu bearbeiten.';
+GO.lang.strNoWritePermissions = 'Sie haben keine Befugnis, diesen Eintrag zu bearbeiten.';
 
 GO.lang.strUnauthorized= 'Nicht autorisiert';
-GO.lang.strUnauthorizedText= 'Sie haben nicht die Erlaubnis diese Aktion auszuführen';
+GO.lang.strUnauthorizedText= 'Sie haben nicht die für diese Aktion erforderlichen Rechte';
 GO.lang.strReadPermissions = 'Leseberechtigungen';
 GO.lang.strWritePermissions = 'Schreibberechtigungen';
 GO.lang.strPermissions = 'Berechtigungen';
@@ -191,7 +207,9 @@ GO.lang.strLogin= 'Login benötigt';
 
 GO.lang.strLoggedInAs= 'Eingeloggt als';
 
-GO.lang.strErrorsInForm= 'Es sind Fehler im Formular, bitte korrigieren Sie diese und versuchen es erneut.';
+GO.lang.strErrorsInForm= 'Sie haben Fehler im Formular. Die entsprechenden Felder wurden markiert.';
+
+
 
 
 
@@ -219,7 +237,7 @@ GO.lang.strSelectFiles='Dateien wählen';
 GO.lang.strFiles='Dateien';
 GO.lang.strSubject='Betreff';
 GO.lang.strLocation='Ort';
-GO.lang.strStart='Start';
+GO.lang.strStart='Beginn';
 GO.lang.strEnd='Ende';
 
 GO.lang.strFirst='Ersten';
@@ -228,11 +246,12 @@ GO.lang.strThird='Dritten';
 GO.lang.strFourth='Vierten';
 
 GO.lang.strStatus='Status';
-GO.lang.strAvailable='verfügbar';
+GO.lang.strAvailable='Verfügbar';
 GO.lang.strAvailability='Verfügbarkeit';
 GO.lang.strView='Ansicht';
 
 GO.lang.field = 'Feld';
+GO.lang.value = 'Wert';
 
 GO.lang.customer = 'Kunde';
 
@@ -242,24 +261,32 @@ GO.lang.root = 'Wurzel';
 GO.lang.left = 'Links';
 GO.lang.right = 'Rechts';
 
-GO.lang.noFilesModule = 'Für diese Funktion wird das Dateimodul benötigt';
+GO.lang.noFilesModule = 'Für diese Funktion wird das Datei-Modul benötigt';
 
 
 GO.lang.remindPassword='Login-Daten auf diesem Computer merken';
 
 GO.lang.reminders = 'Erinnerungen';
 GO.lang.dismiss='Ablehnen';
+GO.lang.selectAll='Alles auswählen';
 GO.lang.snooze='Schlummern';
 
 GO.lang.strMax = 'Maximum';
 
 GO.lang.settings='Einstellungen';
 
-GO.lang.latestLinks='Letzte Links'
-GO.lang.cmdBrowseLinks = 'Links durchsuchen';
+GO.lang.latestLinks='Neue Verknüpfungen'
+GO.lang.cmdBrowseLinks = 'Verknüpfungen durchsuchen';
 
+GO.lang.today='Heute';
 
+GO.lang.displayingItemsShort='Gesamt: {2}';
 
+GO.lang.image='Bild';
+GO.lang.insertImage='Bild in Text einfügen';
+
+GO.lang.item='Element';
+GO.lang.items='Elemente';
 
 GO.lang.countries={};
 GO.lang.countries["AF"] = "Afghanistan";
@@ -305,6 +332,7 @@ GO.lang.countries["KY"] = "Kaimaninseln";
 GO.lang.countries["CF"] = "Zentralafrikanische Republik";
 GO.lang.countries["TD"] = "Tschad";
 GO.lang.countries["CL"] = "Chile";
+GO.lang.countries["CN"] = "China";
 GO.lang.countries["CX"] = "Weihnachtsinseln";
 GO.lang.countries["CC"] = "Cocosinseln";
 GO.lang.countries["CO"] = "Kolumbien";
@@ -462,6 +490,7 @@ GO.lang.countries["SY"] = "Arabische Republik Syrien";
 GO.lang.countries["TW"] = "Taiwan";
 GO.lang.countries["TJ"] = "Tadschikistan";
 GO.lang.countries["TZ"] = "Vereinigte Republik Tansania";
+GO.lang.countries["TH"] = "Thailand";
 GO.lang.countries["TG"] = "Togo";
 GO.lang.countries["TK"] = "Tokelau";
 GO.lang.countries["TO"] = "Tonga";
@@ -488,10 +517,9 @@ GO.lang.countries["EH"] = "Westsahara";
 GO.lang.countries["YE"] = "Republik Jemen";
 GO.lang.countries["YU"] = "Jugoslawien";
 GO.lang.countries["ZR"] = "Demokratische Republik Kongo";
-GO.lang.countries["ZM"] = "sambia";
-GO.lang.countries["ZW"] = "simbabwe";
+GO.lang.countries["ZM"] = "Sambia";
+GO.lang.countries["ZW"] = "Simbabwe";
 GO.lang.countries["SA"] = "Saudi-Arabien";
 
-GO.lang.fullscreen='Vollbildmodus';
-GO.lang.popupBlocker= 'Ihr Browser blockiert ein Popup von Group-Office. Bitte deaktivieren Sie Ihren Popupblocker für die Seite';
-GO.lang.color='Farbe';
+GO.lang.on ='An';
+GO.lang.off ='Aus';

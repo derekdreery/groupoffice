@@ -12,17 +12,17 @@ GO.users.lang.cmdPanelPassword= 'Passwort';
 GO.users.lang.cmdPanelCompany = 'Firma';
 GO.users.lang.cmdPanelPermissions = 'Berechtigungen';
 GO.users.lang.cmdPanelLogin = 'Anmelden';
-GO.users.lang.cmdPanelLookFeel = 'Look & Feel';
+GO.users.lang.cmdPanelLookFeel = 'Erscheinungsbild';
 GO.users.lang.cmdPanelSettings = 'Einstellungen';
 GO.users.lang.cmdPanelEnabledMail = 'E-Mail für neue Benutzer aktiviert';
 GO.users.lang.cmdPanelDisabledMail = 'E-Mail für neue Benutzer deaktiviert';
 	
 GO.users.lang.cmdFieldSetPersonal = 'Persönlich';	
 GO.users.lang.cmdUserWindowTitle= 'Bearbeite Benutzer';
-GO.users.lang.cmdNotificationWindowTitle= 'Bearbeite Benutzer Einladungsemail';
+GO.users.lang.cmdNotificationWindowTitle= 'Benutzer-Einladung (E-Mail) bearbeiten';
 GO.users.lang.cmdMaskSaving= 'Speichern';
 	
-GO.users.lang.cmdFormLabelSubject = 'Subject';
+GO.users.lang.cmdFormLabelSubject = 'Betreff';
 GO.users.lang.cmdFormLabelUsername = 'Benutername';
 GO.users.lang.cmdFormLabelName = 'Name';
 GO.users.lang.cmdFormLabelPassword = 'Passwort';
@@ -32,22 +32,22 @@ GO.users.lang.cmdBoxLabelEnabled = 'Aktiviert';
 GO.users.lang.cmdFormLabelHomepage = 'Homepage';
 GO.users.lang.cmdFormLabelRegistrationTime = 'Registrierungsdatum';
 GO.users.lang.cmdFormLabelLastLogin = 'Letzte Anmeldung';
-GO.users.lang.cmdFormLabelTotalLogins = 'Gesamte Anmeldungen';
+GO.users.lang.cmdFormLabelTotalLogins = 'Anmeldungen gesamt';
 GO.users.lang.numberOfLogins = 'Anzahl der Anmeldungen';
-GO.users.lang.cmdFormLabelTheme = 'Thema';
-GO.users.lang.cmdFormLabelStartModule = 'Beginne in Modul';
-GO.users.lang.cmdFormLabelMaximunRows = 'Maximale Anzahl von Zeilen in Listen';
-GO.users.lang.cmdFormLabelSortNamesBy = 'Nachnahme';
+GO.users.lang.cmdFormLabelTheme = 'Design';
+GO.users.lang.cmdFormLabelStartModule = 'Beginne mit Modul';
+GO.users.lang.cmdFormLabelMaximunRows = 'Max. Zeilen in Listen';
+GO.users.lang.cmdFormLabelSortNamesBy = 'Nachname';
 GO.users.lang.cmdFormLabelLanguage = 'Sprache';
 GO.users.lang.cmdFormLabelTimezone = 'Zeitzone';
-GO.users.lang.cmdFormLabelAdjustDaylight = 'Automatische Anpassung der Zeit auf Sommerzeit';
-GO.users.lang.cmdFormLabelDateFormat = 'Datumsformat';
+GO.users.lang.cmdFormLabelAdjustDaylight = 'Automatisch an Sommerzeit Anpassung';
+GO.users.lang.cmdFormLabelDateFormat = 'Datum';
 GO.users.lang.cmdFormLabelDateSeperator = 'Datums-Trennzeichen';
-GO.users.lang.timeFormat = 'zeitformat';
+GO.users.lang.timeFormat = 'Uhrzeit';
 GO.users.lang.cmdFormLabelFirstWeekday = 'Erster Wochentag';
 GO.users.lang.cmdFormLabelThousandSeperator = 'Tausender-Trennzeichen';
 GO.users.lang.cmdFormLabelDecimalSeperator = 'Dezimal-Trennzeichen';
-GO.users.lang.cmdFormLabelCurrency = 'Währung'
+GO.users.lang.cmdFormLabelCurrency = 'Währung';
 
 GO.users.lang.account = 'Konto';
 GO.users.lang.confirmPassword = 'Passwort bestätigen';
@@ -55,7 +55,7 @@ GO.users.lang.companyProfile = 'Firmenprofil';
 GO.users.lang.loginInfo = 'Login-Daten';
 GO.users.lang.changePassword = 'Passwort ändern';
 GO.users.lang.currentPassword = 'Aktuelles Passwort';
-GO.users.lang.newPassword = 'Neues passwort';
+GO.users.lang.newPassword = 'Neues Passwort';
 GO.users.lang.confirmPassword = 'Passwort bestätigen';
 GO.users.lang.moduleAccess = 'Modulzugriff';
 GO.users.lang.groupMembership = 'Gruppen-Mitgliedschaft';
@@ -74,3 +74,12 @@ GO.users.lang.userSettings = 'Benutzer-Einstellungen';
 GO.users.lang.group='Gruppe';
 
 GO.users.lang.maxUsersReached='Die maximale Anzahl von Benutzern wurde erreicht. Gehen Sie zu der Registerkarte um die maximale Benutzeranzahl zu erhöhen.';
+
+GO.users.lang.muteSound='Keine Sounds für Ereignisse nutzen';
+
+GO.users.lang.downloadSampleCSV='Beispiel-CSV herunterladen';
+
+GO.users.lang.importText='You can import users using a CSV file. To know how the CSV file should be formatted, download the sample file.<br />The first line must contain the column names. The following fields are required for each user:<br /><br />username, password, first_name, last_name, email';
+
+GO.users.lang.useModule= 'Nutzungs-Rechte';
+GO.users.lang.manageModule= 'Verwaltungs-Rechte';

@@ -2,7 +2,7 @@
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_language_file('calendar'));
 $lang['calendar']['name'] = 'Kalender';
-$lang['calendar']['description'] = 'Kalendermodul; Jeder Benutzer kann Termine hinzufügen, ändern und löschen. Es können auch Termine von anderen Benutzern angeschaut und wenn nötig geändert werden.';
+$lang['calendar']['description'] = 'Modul zum Verwalten von Terminen';
 
 $lang['link_type'][1]='Termin';
 
@@ -62,4 +62,18 @@ $lang['calendar']['accept_confirm']='Der Eigentümer wird informiert, dass Sie d
 $lang['calendar']['decline_title']='Abgelehnt';
 $lang['calendar']['decline_confirm']='Der Eigentümer wird informiert, dass Sie den Termin abgelehnt haben';
 
-$lang['calendar']['cumulative']='Falsche Wiederholung. Die Wiederholung kann nicht starten, bevor die vorherige beendet ist.';
+$lang['calendar']['cumulative']='Falsche Wiederholung. Die Wiederholung kann nicht starten, bevor die Vorherige beendet ist.';
+
+$lang['calendar']['already_accepted']='Sie haben diesen Termin schon akzeptiert.';
+
+$lang['calendar']['private']='Privat';
+
+$lang['calendar']['import_success']='%s Termine wurden importiert';
+
+$lang['calendar']['printTimeFormat']='Von %s bis %s';
+$lang['calendar']['printLocationFormat']=' at location "%s"';
+$lang['calendar']['printPage']='Seite %s von %s';
+$lang['calendar']['printList']='List of appointments';
+
+$lang['calendar']['printAllDaySingle']='All day';
+$lang['calendar']['printAllDayMultiple']='All day from %s till %s';
