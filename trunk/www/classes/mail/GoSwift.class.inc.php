@@ -117,7 +117,7 @@ class GoSwift extends Swift_Mailer{
 	 * @param Int $account_id The account id from the em_accounts table. Used for smtp server and sent items
 	 * @param String $priority The priority can be 3 for normal, 1 for high or 5 for low.
 	 */
-	function __construct($email_to, $subject, $account_id=0, $priority = '3', $plain_text_body=null, $pgp=true)
+	function __construct($email_to, $subject, $account_id=0, $priority = '3', $plain_text_body=null)
 	{
 		global $GO_CONFIG, $GO_MODULES;
 

@@ -62,7 +62,8 @@ try{
 				require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 				$swift = new GoSwift($user['email'], $lang['common']['lost_password_subject']);
 				$swift->set_body($mail_body);
-				$swift->sendmail($GO_CONFIG->webmaster_email, $GO_CONFIG->title);				
+				$swift->set_from($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
+				$swift->sendmail();				
 				
 				$response['success']=true;
 				$response['feedback']=$lang['common']['lost_password_success'];
