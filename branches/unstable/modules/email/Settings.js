@@ -16,9 +16,13 @@ GO.email.SettingsPanel = function(config) {
 		xtype:'fieldset',
 		title:GO.email.defaultProgram,
 		autoHeight:true,		
-			html:GO.email.defaultProgramInstructions
-			
-	}];
+		html:GO.email.defaultProgramInstructions			
+	},this.useHtml = new Ext.form.Checkbox({
+		boxLabel:GO.email.lang.htmlMarkup,
+		hideLabel:true,
+		checked:GO.email.useHtmlMarkup,
+		name:'use_html_markup'
+	})];
 
 
 	GO.calendar.SettingsPanel.superclass.constructor.call(this, config);
@@ -30,6 +34,7 @@ Ext.extend(GO.email.SettingsPanel, Ext.Panel, {
 	},
 
 	onSaveSettings : function() {
+		GO.email.useHtmlMarkup=this.useHtml.getValue();
 	}
 
 });

@@ -56,7 +56,7 @@ GO.email.EmailComposer = function(config) {
 							scope : this
 						},'-',this.htmlCheck = new Ext.menu.CheckItem({
 							text:GO.email.lang.htmlMarkup,
-							checked:true,
+							checked:GO.email.useHtmlMarkup,
 							listeners : {				
 								 checkchange: function(check, checked) {
 									
@@ -66,10 +66,11 @@ GO.email.EmailComposer = function(config) {
 										/**
 										 * reload dialog for text or html
 										 */
+										this.showConfig.keepEditingMode=true;
 										this.show(this.showConfig);
 									}else
 									{
-										check.setChecked(!checked, false);
+										check.setChecked(!checked, true);
 									}
 								},
 								scope:this		
@@ -89,12 +90,13 @@ GO.email.EmailComposer = function(config) {
 						{				
 							if(!confirm(GO.gnupg.lang.confirmChangeToText))
 							{
-								check.setChecked(!checked, false);
+								check.setChecked(!checked, true);
 								return false;
 							}else
 							{
 								this.setContentTypeHtml(false);
-								this.htmlCheck.setChecked(false, true);							
+								this.htmlCheck.setChecked(false, true);
+								this.showConfig.keepEditingMode=true;
 								this.show(this.showConfig);
 							}						
 						}
@@ -523,7 +525,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 
 							this.render(Ext.getBody());
 							
-							this.setContentTypeHtml(true);
+							
 							
 							this.ccCombo.getEl().up('.x-form-item').setDisplayed(false);
 							this.bccCombo.getEl().up('.x-form-item').setDisplayed(false);
@@ -584,7 +586,13 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			if (config.values) {
 				this.formPanel.form.setValues(config.values);
 			}
-
+			
+			if(!config.keepEditingMode)
+			{
+				this.setContentTypeHtml(GO.email.useHtmlMarkup);
+				this.htmlCheck.setChecked(GO.email.useHtmlMarkup, true);
+			}
+			
 			GO.email.EmailComposer.superclass.show.call(this);
 			
 			if(config.move)
