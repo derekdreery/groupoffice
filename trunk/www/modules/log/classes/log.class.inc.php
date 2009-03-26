@@ -19,8 +19,9 @@ class log extends db {
 	
 	public static function login()
 	{
+		$log = new log();
 		$sql = "DELETE FROM go_log WHERE time<".Date::date_add(time(),0,-3);
-		$this->query($sql);	
+		$log->query($sql);	
 	}
 	
 	/**
