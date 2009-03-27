@@ -1,7 +1,7 @@
 <?php
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_language_file('email'));
-$lang['email']['name'] = 'Email';
+$lang['email']['name'] = 'E-mail';
 $lang['email']['description'] = 'Webový e-mailový klient. Každý uživatel může  posílat a přijímat e-maily nebo přeposílat.';
 
 $lang['link_type'][9]='E-mail';
@@ -44,3 +44,5 @@ $lang['email']['quotaError']="Vaše schránka je plná. Nejdříve vyprázdněte
 
 $lang['email']['draftsDisabled']="Zpráve nemůže být uložena, protože složka 'Koncept' je zakázaná.<br /><br />Jděte do Nastavení -> Účty -> Váš účet -> Složky a nakonfigurujte ji.";
 $lang['email']['noSaveWithPop3']='Zpráva nemůže být uložena, protože Váš POP3 účet tuto funkci nepodporuje.';
+
+$lang['email']['goAlreadyStarted']='Group-Office byl spuštěn a zpráva byla vytvořena. Nyní můžete toto okno zavřít a přejít do Group-office k úpravě zprávy.';

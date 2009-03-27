@@ -124,3 +124,6 @@ GO.email.lang.toggleWindowPosition = 'Změnit pozici oken';
 GO.email.lang.closeUploadDialog='Zavřít okno s nahráváním ihned nebo čekat na dokončení nahrávání';
 
 GO.email.lang.signature='Podpis';
+
+GO.email.defaultProgram='Základní e-mailový program';
+GO.email.defaultProgramInstructions ='<p>Pro nastavení Group-Office jako základní e-mailový program si prosím <a class="normal-link" href="http://www.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client" target="_blank">přečtěte pokyny</a>.</p><p>Pokud používáte Windows, musíte stáhnout a spustit <a class="normal-link" href="'+GO.settings.modules.email.url+'register_email.php">tento registrační soubor</a>.</p>';
