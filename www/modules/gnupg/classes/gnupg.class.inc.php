@@ -21,6 +21,8 @@ class gnupg{
 	PASSPHRASE_FD => array( 'pipe', 'r' )
 	);
 
+	var $pipes;
+
 	public function __construct($home=null)
 	{
 		if(!isset($home) && isset($_SESSION['GO_SESSION']['username']))
@@ -46,7 +48,7 @@ class gnupg{
 	public function replace_encoded($data, $passphrase, $convert_to_html=true)
 	{
 		$data = trim(str_replace("\r", "", $data));
-		
+
 		if(strpos($data,'-----BEGIN PGP MESSAGE-----')!==false)
 		{
 			preg_match('/-----BEGIN PGP MESSAGE-----.*-----END PGP MESSAGE-----/s', $data, $matches);
@@ -78,49 +80,111 @@ class gnupg{
 	public function decode($data, $passphrase){
 
 		global $GO_CONFIG;
-		
-		debug($data);
+
+		//debug($data);
 
 		$command = '-d';
 		$this->run_cmd($command, $unencrypted, $errorcode, $data, $passphrase);
 
 		return $unencrypted;
 	}
+	
+	public function decode_file($file, $outfile, $passphrase){
+
+		global $GO_CONFIG;
+
+		//debug($data);
+		if(file_exists($outfile))
+		{
+			unlink($outfile);
+		}	
+
+		$command = '-o \''.$outfile.'\' -d \''.$file.'\'';
+		$this->run_cmd($command, $unencrypted, $errorcode, null, $passphrase);
+		
+		if(!file_exists($outfile))
+		{
+			throw new Exception($this->error);
+		}
+
+		return true;
+	}
 
 	public function encode($data, $recipient, $user=null){
-		$command = '-a  -e';
+		$command = '--always-trust -a  -e';
+		
+		debug($data);
 
 		if(!is_array($recipient))
 		{
 			$recipient = array($recipient);
 		}
-		$command .= ' -r '.escapeshellcmd(implode(' -r ', $recipient));		
-		
+		$command .= ' -r '.escapeshellcmd(implode(' -r ', $recipient));
+
 		if(!empty($user))
 		{
 			$command .= ' -u '.escapeshellcmd($user);
 		}
 		$this->run_cmd($command, $encrypted, $errorcode,$data);
 
+
 		if(ereg("-----BEGIN PGP MESSAGE-----.*-----END PGP MESSAGE-----",$encrypted))
 		{
 			return str_replace("\r", '', $encrypted);
 		}else
 		{
-			return false;
+			throw new Exception($this->error);
 		}
+	}
+	
+	public function encode_file($file, $recipient, $user=null){
+		
+		if(file_exists($file.'.gpg'))
+		{
+			unlink($file.'.gpg');
+		}
+		
+		$command = '--always-trust  -e';
+		
+		if(!is_array($recipient))
+		{
+			$recipient = array($recipient);
+		}
+		$command .= ' -r '.escapeshellcmd(implode(' -r ', $recipient));
+
+		if(!empty($user))
+		{
+			$command .= ' -u '.escapeshellcmd($user);
+		}
+		
+		$command .= ' '.escapeshellarg($file);
+		$this->run_cmd($command, $encrypted, $errorcode);
+
+
+		if(!file_exists($file.'.gpg'))
+		{
+			throw new Exception($this->error);
+		}
+		return $file.'.gpg';
 	}
 
 	public function export($fingerprint)
 	{
 		$this->run_cmd('--armor --export '.$fingerprint, $key);
-		
+
 		return $key;
 	}
-	
+
+	public function sign_key($private_fpr, $public_fpr,$passphrase)
+	{
+		$cmd = '--default-key '.$private_fpr.' --sign-key '.$public_fpr;
+		$this->run_cmd($cmd, $output, $errorcode,null,$passphrase);
+	}
+
 	function import($data)
 	{
 		$this->run_cmd('--armor --import', $output, $errorval, $data);
+		//debug($this->error);
 	}
 
 	public function list_keys(){
@@ -145,6 +209,13 @@ class gnupg{
 			}
 		}
 		return $pubkeys;
+	}
+
+	public function list_private_keys(){
+
+		$this->run_cmd('-K --fingerprint', $output);
+
+		return $this->parse_keys_output($output);
 	}
 
 	private function parse_keys_output($output)
@@ -236,45 +307,63 @@ class gnupg{
 		{
 			$complete_cmd .= ' --command-fd '.PASSPHRASE_FD;
 		}
+
+		$complete_cmd .= ' --status-fd '.STATUS_FD;
+
 		$complete_cmd .= ' '.$cmd;
 
-		$p = proc_open($complete_cmd,$this->fd, $pipes);
+		debug($complete_cmd);
 		
-		foreach($pipes as $pipe)
+		
+		if(isset($passphrase))
+		{
+			$this->passphrase=$passphrase;
+		}else
+		{
+			$this->passphrase='';
+		}
+
+		$p = proc_open($complete_cmd,$this->fd, $this->pipes);
+
+		foreach($this->pipes as $pipe)
 		{
 			//stream_set_blocking($pipe,0);
 		}
-		
+		//stream_set_blocking($this->pipes[STATUS_FD], 0);
+		//stream_set_blocking($this->pipes[GPGSTDOUT],0 );
+
 		if(!is_resource($p))
 		{
 			throw new Exception('Could not open proc!');
 		}
 
+		$this->output='';
+
 		if(!empty($data))
 		{
-			fwrite($pipes[GPGSTDIN], $data);			
-			fclose($pipes[GPGSTDIN]);			
-
-			//echo 'Status:'.stream_get_contents($pipes[STATUS_FD])."\n\n";
-				
-			if(isset($passphrase))
-			{
-				fwrite($pipes[PASSPHRASE_FD], $passphrase."\n");
-				fclose($pipes[PASSPHRASE_FD]);				
-			}
-			
-			//echo $this->error = stream_get_contents($pipes[STATUS_FD]);
-			//echo 'Status:'.stream_get_contents($pipes[STATUS_FD])."\n\n";
+			$this->write_data($data, GPGSTDIN);
 		}
-		//echo 'Status:'.stream_get_contents($pipes[STATUS_FD])."\n\n";
+		fclose($this->pipes[GPGSTDIN]);
 
-		$output = stream_get_contents($pipes[GPGSTDOUT]);
-		fclose($pipes[GPGSTDOUT]);
-		$this->error = stream_get_contents($pipes[GPGSTDERR]);
+		$this->read_status();
 
-		//echo 'Status:'.stream_get_contents($pipes[STATUS_FD])."\n\n";
+
+		$this->output .= stream_get_contents($this->pipes[GPGSTDOUT]);
 		
-		fclose($pipes[STATUS_FD]);				
+		$output = $this->output;
+		debug($this->output);
+
+		$this->error = stream_get_contents($this->pipes[GPGSTDERR]);
+		debug('Error :'.$this->error);
+		
+		
+
+
+
+		//fclose($this->pipes[STATUS_FD]);
+		//fclose($this->pipes[PASSPHRASE_FD]);
+		//fclose($this->pipes[GPGSTDOUT]);
+		//fclose($this->pipes[GPGSTDERR]);
 
 		$ret = proc_close($p);
 
@@ -284,5 +373,56 @@ class gnupg{
 		}
 
 		return $ret;
+	}
+
+	function write_data($data, $pipe=GPGSTDIN)
+	{
+		debug('Writing '.$data.' to '.$pipe);
+		$write_pipes = array($this->pipes[$pipe]);
+		$numWrite=stream_select($read=NULL,$write_pipes,$except=NULL,5);
+
+		if ($numWrite !==false) {
+			fwrite($this->pipes[$pipe], $data);
+			fflush($this->pipes[$pipe]);
+			$this->read_status();
+		}
+	}
+
+	function read_status(){
+		while(!feof($this->pipes[STATUS_FD])) {
+			$read_array = array($this->pipes[STATUS_FD], $this->pipes[GPGSTDOUT]);
+			$num_read = stream_select($read_array, $write=NULL, $except=NULL, 0, 10000);
+			if ($num_read == false) {
+				break;
+			}else
+			{
+				foreach ($read_array as $pipe) {
+
+					if ($this->pipes[STATUS_FD] == $pipe) {
+						stream_set_blocking($this->pipes[STATUS_FD],0);
+						
+						//debug('Reading status FD');
+					
+						$status = fgets( $this->pipes[ STATUS_FD ]);							
+						debug('Status :'.$status);
+
+						if(strpos($status, 'okay')!==false)
+						{
+							$this->write_data("Y\n", PASSPHRASE_FD);
+						}elseif(strpos($status, 'passphrase.enter'))
+						{
+							$this->write_data($this->passphrase."\n", PASSPHRASE_FD);
+						}
+					}
+
+					if ($this->pipes[GPGSTDOUT] == $pipe) {
+						debug('Read output');
+						stream_set_blocking($this->pipes[GPGSTDOUT],0);						
+						$this->output .= stream_get_contents($this->pipes[GPGSTDOUT]);
+
+					}
+				}
+			}
+		}
 	}
 }

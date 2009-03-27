@@ -81,7 +81,7 @@ GO.email.EmailComposer = function(config) {
 		{
 			optionsMenuItems.push('-');
 			
-			optionsMenuItems.push({
+			optionsMenuItems.push(this.encryptCheck = new Ext.menu.CheckItem({
 				text:GO.gnupg.lang.encryptMessage,
 				checked: false,
 				listeners : {				
@@ -111,7 +111,7 @@ GO.email.EmailComposer = function(config) {
 					},
 				scope:this
 				}
-			});
+			}));
 		}
 
 	this.optionsMenu = new Ext.menu.Menu({
@@ -596,6 +596,8 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			{
 				this.setContentTypeHtml(GO.email.useHtmlMarkup);
 				this.htmlCheck.setChecked(GO.email.useHtmlMarkup, true);
+				if(this.encryptCheck)
+					this.encryptCheck.setChecked(false, true);
 			}
 			
 			GO.email.EmailComposer.superclass.show.call(this);

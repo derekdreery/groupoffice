@@ -43,6 +43,29 @@ if ($mail->open($account['host'], $account['type'],$account['port'],$account['us
 		$file = convert_uudecode($attachments[$_REQUEST['uuencoded_partnumber']-1]['data']);
 	}
 
+	
+	if($GO_MODULES->has_module('gnupg'))
+	{
+		$extension = File::get_extension($_REQUEST['filename']);
+		if($extension=='pgp' || $extension=='asc' || $extension=='gpg')
+		{
+			require_once ($GO_MODULES->modules['gnupg']['class_path'].'gnupg.class.inc.php');
+			$gnupg = new gnupg();
+								
+			$tmpfile = $GO_CONFIG->tmpdir.$_REQUEST['filename'];
+			$_REQUEST['filename']=File::strip_extension($_REQUEST['filename']);
+			$outfile = $GO_CONFIG->tmpdir.$_REQUEST['filename'];
+			
+			file_put_contents($tmpfile, $file);			
+			
+			$passphrase=$_SESSION['GO_SESSION']['gnupg']['passwords'][$_REQUEST['sender']];
+			
+			$gnupg->decode_file($tmpfile, $outfile, $passphrase);
+			
+			$file = file_get_contents($outfile);
+		}
+	}
+
 	$browser = detect_browser();
 	
 	//header('Content-Length: '.strlen($file));

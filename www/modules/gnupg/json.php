@@ -1,12 +1,12 @@
 <?php
-/** 
+/**
  * Copyright Intermesh
- * 
+ *
  * This file is part of Group-Office. You should have received a copy of the
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
- * 
+ *
  * If you have questions write an e-mail to info@intermesh.nl
- * 
+ *
  * @version $Id: json.tpl 2030 2008-06-04 10:12:13Z mschering $
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
@@ -19,8 +19,8 @@ $task=isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
 try{
 	switch($task)
 	{
-		case 'keys':					
-			
+		case 'keys':
+				
 			if(isset($_POST['delete_keys']))
 			{
 				try{
@@ -36,17 +36,30 @@ try{
 					$response['deleteFeedback']=$e->getMessage();
 				}
 			}
-			
-			$keys = $gnupg->list_keys(true);
+				
+			$keys = $gnupg->list_keys();
 			$response['results']=array();
 			while($key = array_shift($keys))
 			{
 				$key['uid']=htmlspecialchars($key['uid'], ENT_QUOTES,'UTF-8');
 				$response['results'][]=$key;
-			}			
+			}
 			$response['total'] = count($response['results']);
 			break;
-/* {TASKSWITCH} */
+				
+		case 'private_keys':
+			$keys = $gnupg->list_private_keys();
+			$response['results']=array();
+			while($key = array_shift($keys))
+			{
+				$key['uid']=htmlspecialchars($key['uid'], ENT_QUOTES,'UTF-8');
+				$response['results'][]=$key;
+			}
+			$response['total'] = count($response['results']);
+
+			break;
+
+			/* {TASKSWITCH} */
 	}
 }catch(Exception $e)
 {
