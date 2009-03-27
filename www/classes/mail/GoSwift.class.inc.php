@@ -408,9 +408,10 @@ class GoSwiftImport extends GoSwift{
 			//$mail->ConfirmReadingTo = $structure->headers['disposition-notification-to'];
 		}
 		
-		$to = isset($structure->headers['to']) ? $structure->headers['to'] : '';
-		$cc = isset($structure->headers['cc']) ? $structure->headers['cc'] : '';
-		$bcc = isset($structure->headers['bcc']) ? $structure->headers['bcc'] : '';
+		$to = isset($structure->headers['to']) && strpos($structure->headers['to'],'undisclosed')===false ? $structure->headers['to'] : '';
+		$cc = isset($structure->headers['cc']) && strpos($structure->headers['cc'],'undisclosed')===false ? $structure->headers['cc'] : '';
+		$bcc = isset($structure->headers['bcc']) && strpos($structure->headers['bcc'],'undisclosed')===false ? $structure->headers['bcc'] : '';
+
 		
 		parent::__construct($to, $subject);
 		
