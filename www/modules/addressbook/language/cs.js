@@ -25,8 +25,6 @@ GO.addressbook.lang.btnAddContact = 'Přidat kontakt'	;
 GO.addressbook.lang.btnAddCompany = 'Přidat společnost';
 GO.addressbook.lang.btnManage = 'Upravit';
 GO.addressbook.lang.btnDownload = 'Nahrát soubor';
-GO.addressbook.lang.btnSearch = 'Hledat';
-GO.addressbook.lang.btnReset = 'Vymazat';
 GO.addressbook.lang.cmdFormSearchFirst = 'Hledat v= ';
 GO.addressbook.lang.cmdFormSearchSecond = ' on= ';
 GO.addressbook.lang.cmdFormSearchThird = ' for= ';
@@ -95,3 +93,5 @@ GO.addressbook.lang.searchOnSender='Najít';
 GO.addressbook.lang.confirmCreate='Kontakt neexistuje. Chcete založit nový?';
 
 GO.addressbook.lang.matchFields='Shodné údaje';
+
+GO.addressbook.lang.advancedSearch='Rozšířené vyhledávání';

@@ -252,6 +252,7 @@ GO.lang.strAvailability='Dostupnost';
 GO.lang.strView='Zobrazit';
 
 GO.lang.field = 'Pole';
+GO.lang.value = 'Hodnota';
 
 GO.lang.customer = 'Zákazník';
 
@@ -520,3 +521,6 @@ GO.lang.countries["ZR"] = "Zaire";
 GO.lang.countries["ZM"] = "Zambia";
 GO.lang.countries["ZW"] = "Zimbabwe";
 GO.lang.countries["SA"] = "Saudi Arabia";
+
+GO.lang.on ='Zapnuto';
+GO.lang.off ='Vypnuto';
