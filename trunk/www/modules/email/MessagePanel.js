@@ -123,7 +123,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 					
 					if(data.askPassphrase)
 					{
-						Ext.Msg.prompt('Passphrapse for descryption', 'Passphrase', 
+						Ext.Msg.prompt(GO.lang.decryptPasswordRequired, GO.lang.strPassword, 
 							function(id, passphrase){ 
 								if(id=='cancel')
 								{

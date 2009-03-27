@@ -78,7 +78,7 @@ GO.gnupg.KeysGrid = function(config){
 		},
 		scope: this
 	},{
-		iconCls:'',
+		iconCls:'btn-export',
 		text:GO.lang.cmdExport,
 		cls: 'x-btn-text-icon',
 		handler: function(){
@@ -91,6 +91,29 @@ GO.gnupg.KeysGrid = function(config){
 			}else
 			{
 				document.location=GO.settings.modules.gnupg.url+'export.php?fingerprint='+record.get('fingerprint');
+			}
+		},
+		scope: this
+	
+	},{
+		iconCls:'btn-sign-key',
+		text:GO.gnupg.lang.signKey,
+		cls: 'x-btn-text-icon',
+		handler: function(){
+			
+			var record = this.getSelectionModel().getSelected();
+			
+			if(!record)
+			{
+				alert( GO.lang['noItemSelected']);
+			}else
+			{
+				if(!this.signKeyDialog)
+    		{
+    			this.signKeyDialog = new GO.gnupg.SignKeyDialog();
+    			this.signKeyDialog.on('save', function(){this.store.reload();}, this);
+    		}
+    		this.signKeyDialog.show(record.get('uid'));
 			}
 		},
 		scope: this

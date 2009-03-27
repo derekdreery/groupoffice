@@ -478,6 +478,8 @@ GO.email.EmailClient = function(config){
 	{
 		settingsMenu.push('-');
 		settingsMenu.push({
+			iconCls:'go-menu-icon-gnupg',
+			cls: 'x-btn-text-icon',
 			text:GO.gnupg.lang.encryptionSettings,
 			handler:function(){
 				if(!this.securityDialog)
@@ -925,7 +927,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 					document.location.href=GO.settings.modules.email.url+
 						'tnef.php?account_id='+this.account_id+
 						'&mailbox='+encodeURIComponent(this.mailbox)+
-						'&uid='+this.messagePanel.uid+
+						'&uid='+this.messagePanel.uid+						
 						'&part='+attachment.number+
 						'&transfer='+attachment.transfer+
 						'&mime='+attachment.mime+
@@ -1025,6 +1027,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 						'attachment.php?account_id='+this.account_id+
 						'&mailbox='+encodeURIComponent(this.mailbox)+
 						'&uid='+this.messagePanel.uid+
+						'&sender='+this.messagePanel.data.sender+
 						'&part='+attachment.number+
 						'&transfer='+attachment.transfer+
 						'&mime='+attachment.mime+

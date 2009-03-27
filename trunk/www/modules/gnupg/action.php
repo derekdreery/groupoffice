@@ -20,6 +20,12 @@ $task=isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
 try{
 	switch($task)
 	{
+		case 'sign_key':
+
+			$gnupg->sign_key($_POST['private_key'], String::get_email_from_string($_POST['public_key']), $_POST['passphrase']);
+			$response['success']=true;
+		
+		break;
 		case 'gen_key':
 
 			require_once($GO_MODULES->modules['email']['class_path'].'email.class.inc.php');

@@ -339,7 +339,9 @@ try{
 	
 								//$body = $gnupg->encode($body, $all_recipients, $swift->account['email']);
 								$body = $gnupg->encode($body, $all_recipients, $swift->account['email']);
-																
+
+								debug($body);
+								
 								$swift->message->setMaxLineLength(1000);
 								$swift->message->setBody($body, 'text/plain');								
 								$swift->message->setEncoder(new Swift_Mime_ContentEncoder_RawContentEncoder('8bit'));
@@ -363,7 +365,15 @@ try{
 									{
 										$tmp_name = $GO_CONFIG->file_storage_path.$tmp_name;
 									}									
-									$attachment = Swift_Attachment::fromPath($tmp_name,File::get_mime($tmp_name)); 
+									if(!empty($_POST['encrypt']) && empty($_POST['draft']))
+									{										
+										$encoded = $gnupg->encode_file($tmp_name, $all_recipients, $swift->account['email']);
+										
+										$attachment = Swift_Attachment::fromPath($encoded,'application/pgp-encoded');
+									}else
+									{
+										$attachment = Swift_Attachment::fromPath($tmp_name,File::get_mime($tmp_name));
+									}
 									$swift->message->attach($attachment);
 								}
 							}

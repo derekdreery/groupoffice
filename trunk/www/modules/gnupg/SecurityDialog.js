@@ -41,7 +41,7 @@ GO.gnupg.SecurityDialog = function(config){
 	config.width=600;
 	config.height=400;
 	config.closeAction='hide';
-	config.title= 'Security settings';					
+	config.title= GO.gnupg.lang.encryptionSettings;					
 	config.items=this.tabPanel;
 	config.buttons=[{
 			text: GO.lang['cmdClose'],
