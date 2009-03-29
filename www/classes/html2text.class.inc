@@ -169,7 +169,7 @@ class html2text
         '/(<tr[^>]*>|<\/tr>)/i',                 // <tr> and </tr>
         '/<td[^>]*>(.*?)<\/td>/i',               // <td> and </td>
         '/<th[^>]*>(.*?)<\/th>/ie',              // <th> and </th>
-				'/<img [^>]*alt="([^"]+)"[^>]*>/ie', //img with alt text
+				'/<img [^>]*alt="([^"]+)"[^>]*>/i', //img with alt text		
 	/*'/&(nbsp|#160);/i',                      // Non-breaking space
 	'/&(quot|rdquo|ldquo|#8220|#8221|#147|#148);/i',
 	// Double quotes
@@ -216,14 +216,14 @@ class html2text
         "\n\n",                                 // <ol> and </ol>
         "\t* \\1\n",                            // <li> and </li>
         "\n\t* ",                               // <li>
-        '$this->_build_link_list("\\1", "\\2")',
-	// <a href="">
+        '$this->_build_link_list("\\1", "\\2")',// <a href="">
         "\n-------------------------\n",        // <hr>
         "\n\n",                                 // <table> and </table>
         "\n",                                   // <tr> and </tr>
         "\t\t\\1\n",                            // <td> and </td>
         "strtoupper(\"\t\t\\1\n\")",            // <th> and </th>
-				'trim("\\1")', //img with alt text
+				"\\1", //img with alt text
+				
 	/*' ',                                    // Non-breaking space
 	'"',                                    // Double quotes
 	"'",                                    // Single quotes
