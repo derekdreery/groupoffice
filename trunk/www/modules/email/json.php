@@ -802,7 +802,7 @@ try{
 
 				$parts = array_reverse($imap->f("parts"));
 
-			//	debug($parts);
+				//debug($parts);
 				
 				/*
 				 * Sometimes clients send multipart/alternative but there's only a text part. FIrst check if there's
@@ -1049,11 +1049,11 @@ try{
 
 
 								$response['drafts']=$imap->utf7_imap_encode($account['drafts'])==$mailbox;
-								$response['sent']=$imap->utf7_imap_encode($account['sent'])==$mailbox;
+								$response['sent']=strpos($mailbox, $imap->utf7_imap_encode($account['sent']))!==false;
 
 								if(isset($_POST['delete_keys']))
 								{
-									$messages = json_decode(($_POST['delete_keys']));
+									$messages = json_decode($_POST['delete_keys']);
 
 									$imap->set_message_flag($mailbox, $messages, "\\Seen");
 									if($imap->is_imap() && !empty($account['trash']) && $imap->utf7_imap_decode($mailbox) != $account['trash'])
@@ -1094,7 +1094,7 @@ try{
 								if($sort_field == SORTDATE && $imap->is_imap())
 									$sort_field = SORTARRIVAL;
 									
-								if($account['sent']==$mailbox && $sort_field==SORTFROM)
+								if($response['sent'] && $sort_field==SORTFROM)
 								{
 									$sort_field=SORTTO;
 								}
@@ -1153,7 +1153,7 @@ try{
 										$message['subject']=$lang['email']['no_subject'];
 									}
 
-									$message['from'] = ($mailbox == $account['sent'] || $mailbox == $account['drafts']) ? $message['to'] : $message['from'];
+									$message['from'] = ($response['sent'] || $response['drafts']) ? $message['to'] : $message['from'];
 
 									$RFC822 = new RFC822();
 									$address = $RFC822->parse_address_list($message['from']);

@@ -655,6 +655,9 @@ class imap{
 	 * @return void
 	 */
 	function get_parts($mimeobj, $section = 0, $parttype='') {
+		
+		//debug($mimeobj);
+		
 		if (isset ($mimeobj->type)) {
 			$type = $this->get_mime_type($mimeobj->type);
 		} else {
@@ -672,7 +675,30 @@ class imap{
 			$name = $this->enc_utf8($mimeobj->description);
 		}else
 		{
-			if (isset ($mimeobj->dparameters)) {
+			if (isset ($mimeobj->parameters)) {
+				$params = $mimeobj->parameters;
+				for ($x = 0; $x < count($params); $x ++) {
+					if(is_object($params) && isset($params->$x))
+					{
+						$param = $params->$x;
+					}elseif(is_array($params) && isset($params[$x]))
+					{
+						$param = $params[$x];
+					}else
+					{
+						$param = null;
+					}
+
+					if(isset($param))
+					{
+						if ((substr(strtolower($param->attribute),0,4) == 'name') && $param->value != '') {
+							$name .= $param->value;//$this->enc_utf8($param->value);
+						}
+					}
+				}
+			}
+			
+			if (empty($name) && isset ($mimeobj->dparameters)) {
 				$params = $mimeobj->dparameters;
 				for ($x = 0; $x < count($params); $x ++) {
 					if(is_object($params) && isset($params->$x))
@@ -696,28 +722,7 @@ class imap{
 				}
 			}
 
-			if (empty($name) && isset ($mimeobj->parameters)) {
-				$params = $mimeobj->parameters;
-				for ($x = 0; $x < count($params); $x ++) {
-					if(is_object($params) && isset($params->$x))
-					{
-						$param = $params->$x;
-					}elseif(is_array($params) && isset($params[$x]))
-					{
-						$param = $params[$x];
-					}else
-					{
-						$param = null;
-					}
-
-					if(isset($param))
-					{
-						if ((substr(strtolower($param->attribute),0,4) == 'name') && $param->value != '') {
-							$name .= $param->value;//$this->enc_utf8($param->value);
-						}
-					}
-				}
-			}
+			
 
 			if(substr($name,0,2)=='=?')
 			{
