@@ -545,7 +545,7 @@ try{
 					$response['data']['body'] = '<br /><blockquote style="border:0;border-left: 2px solid #22437f; padding:0px; margin:0px; padding-left:5px; margin-left: 5px; ">'.$header_om.$response['data']['body'].'</blockquote>';
 				}else
 				{
-					$header_om  = $lang['email']['original_message']."\n";
+					$header_om  = "\n\n".$lang['email']['original_message']."\n";
 					$header_om .= $lang['email']['subject'].": ".$subject."\n";
 					$header_om .= $lang['email']['from'].": ".$content['from']."\n";
 					$header_om .= $lang['email']['to'].": ".$om_to."\n";
@@ -555,7 +555,7 @@ try{
 					}
 
 					$header_om .= $lang['common']['date'].": ".date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'],$content["udate"])."\n";
-					$header_om .= "\n\n";
+					$header_om .= ">\n>\n";
 
 					$response['data']['body'] = str_replace("\r",'',$response['data']['body']);
 					$response['data']['body'] = '> '.str_replace("\n","\n> ",$response['data']['body']);
