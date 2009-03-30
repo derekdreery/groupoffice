@@ -164,6 +164,8 @@ try{
 					'text'=>$lang['files']['new'].' ('.$num_new_files.')',
 					'id'=>'new',
 					'readonly'=>true,
+					'children'=>array(),
+					'expanded'=>true,
 					'iconCls'=>'folder-new'
 					);
 					$response[]=$node;
