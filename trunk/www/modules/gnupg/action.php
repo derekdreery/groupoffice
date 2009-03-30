@@ -20,6 +20,42 @@ $task=isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
 try{
 	switch($task)
 	{
+		case 'check_public_key_attachment':
+			
+			require_once ($GO_CONFIG->class_path."mail/imap.class.inc");
+			require_once ($GO_MODULES->modules['email']['class_path']."cached_imap.class.inc.php");
+			require_once ($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
+			
+			$email = new email();
+			$imap = new cached_imap();
+
+			$account = connect($_REQUEST['account_id'], $_REQUEST['mailbox']);
+			$data = $imap->view_part($_REQUEST['uid'], $_REQUEST['part'], $_REQUEST['transfer']);
+			
+			$response['success']=true;
+			$response['is_public_key']=$gnupg->is_public_key($data);
+			
+			if($response['is_public_key'])
+			{
+				$_SESSION['GO_SESSION']['gnupg']['public_key_attachment']=$data;
+			}
+			
+			$imap->close();
+		break;
+		
+		case 'import_public_key_attachment': 
+			$gnupg->import($_SESSION['GO_SESSION']['gnupg']['public_key_attachment']);
+
+			unset($_SESSION['GO_SESSION']['gnupg']['public_key_attachment']);
+			
+			require($GO_LANGUAGE->get_language_file('gnupg'));
+			
+			$response['feedback']=$lang['gnupg']['importSuccessful'];
+			$response['success']=true;		
+		
+		break;
+		
+		
 		case 'sign_key':
 
 			$gnupg->sign_key($_POST['private_key'], String::get_email_from_string($_POST['public_key']), $_POST['passphrase']);

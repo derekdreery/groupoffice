@@ -538,14 +538,16 @@ try{
 		switch($_REQUEST['task'])
 		{
 			case 'icalendar_attachment':
-				$account = connect($_REQUEST['account_id'], $_REQUEST['mailbox']);
-				$data = $imap->view_part($_REQUEST['uid'], $_REQUEST['part'], $_REQUEST['transfer']);
-
 				if(!isset($GO_MODULES->modules['calendar']) || !$GO_MODULES->modules['calendar']['read_permission'])
 				{
 					throw new Exception(sprintf($lang['common']['moduleRequired'], $lang['email']['calendar']));
 				}
+				
+				
+				$account = connect($_REQUEST['account_id'], $_REQUEST['mailbox']);
+				$data = $imap->view_part($_REQUEST['uid'], $_REQUEST['part'], $_REQUEST['transfer']);
 
+				
 				require_once($GO_CONFIG->class_path.'Date.class.inc.php');
 				require_once($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc.php');
 				$cal = new calendar();
