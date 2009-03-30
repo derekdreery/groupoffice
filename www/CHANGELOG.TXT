@@ -3,6 +3,7 @@
 - Folder templates in projects module
 - GnuPG encryption
 - Upgrade SwiftMailer to version 4.0.3
+- Updated German and Czech translations
 - Bug fixes
 
 2009/03/24 Version 3.01-stable-18
