@@ -16,4 +16,6 @@ GO.gnupg.lang.key='Key';
 
 GO.gnupg.lang.signKey='Sign key';
 
-GO.lang.decryptPasswordRequired='A password is required to decrypt this message';
+GO.gnupg.lang.decryptPasswordRequired='A password is required to decrypt this message';
+
+GO.gnupg.lang.sendPublicKey='Send public key';

@@ -20,6 +20,33 @@ $task=isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
 try{
 	switch($task)
 	{
+		case 'send_key': 
+			
+			require_once ($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
+		
+			$tmp_file = $GO_CONFIG->tmpdir.'public_key.asc';
+			
+			$data = $gnupg->export($_REQUEST['fingerprint']);
+			file_put_contents($tmp_file, $data);
+			
+			
+			$response = load_template($_REQUEST['template_id'], '');
+			$response['success']=true;
+				
+			$response['data']['attachments'][] = array(
+					'tmp_name'=>$tmp_file,
+					'name'=>'public_key.asc',
+					'size'=>filesize($tmp_file),
+					'type'=>'text/plain'
+			);
+			
+			if($_POST['content_type']=='plain')
+			{
+				$response['data']['textbody']=$response['data']['body'];
+				unset($response['data']['body']);
+			}
+		break;
+		
 		case 'keys':
 				
 			if(isset($_POST['delete_keys']))

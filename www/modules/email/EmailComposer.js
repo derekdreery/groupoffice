@@ -530,8 +530,6 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 
 							this.render(Ext.getBody());
 							
-							
-							
 							this.ccCombo.getEl().up('.x-form-item').setDisplayed(false);
 							this.bccCombo.getEl().up('.x-form-item').setDisplayed(false);
 
@@ -640,8 +638,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 					uid : config.uid,
 					account_id : this.fromCombo.getValue(),
 					task : config.task,
-					mailbox : config.mailbox,
-					template_id : config.template_id
+					mailbox : config.mailbox
 				};
 				
 				if (config.mailing_group_id > 0) {
@@ -650,6 +647,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 				}
 
 				if (config.template_id > 0) {
+					params.template_id=config.template_id;
 					params.to = this.toCombo.getValue();
 				}
 

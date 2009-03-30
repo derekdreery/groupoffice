@@ -42,8 +42,17 @@ class gnupg{
 		$this->home = $home;
 		putenv("HOME=".$home);
 	}
+	
+	public function is_pgp_data($data)
+	{
+		return preg_match('/-----BEGIN PGP MESSAGE-----.*-----END PGP MESSAGE-----/s', $data);
+	}
 
-
+	public function is_public_key($data)
+	{
+		return preg_match('/-----BEGIN PGP PUBLIC KEY BLOCK-----.*-----END PGP PUBLIC KEY BLOCK-----/s', $data);
+	}
+	
 
 	public function replace_encoded($data, $passphrase, $convert_to_html=true)
 	{
