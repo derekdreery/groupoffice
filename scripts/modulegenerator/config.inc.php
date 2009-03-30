@@ -2,10 +2,10 @@
 require('../../../unstable/Group-Office.php');
 
 //name of the module. No spaces or strange characters.
-$module = 'projects';
+$module = 'workflow';
 
 //Short name of the module. The prefix of the database tables.
-$prefix = 'pm';
+$prefix = 'wf';
 
 $tables=array();
 //Tables to create an interface for

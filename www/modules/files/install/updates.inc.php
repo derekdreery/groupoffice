@@ -14,7 +14,7 @@ $updates[]="ALTER TABLE `fs_folders` CHANGE `comments` `comments` TEXT CHARACTER
 $updates[]="ALTER TABLE `fs_files` CHANGE `comments` `comments` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL";  
 $updates[]="ALTER TABLE `fs_files` CHANGE `locked_user_id` `locked_user_id` INT( 11 ) NOT NULL DEFAULT '0'";
 $updates[]="ALTER TABLE `fs_templates` CHANGE `content` `content` MEDIUMBLOB NOT NULL";
-$updates[]="ALTER TABLE `fs_files` ADD `workflow_id` INT NOT NULL ;";
+
 $updates[]="CREATE TABLE IF NOT EXISTS `fs_new_files` (
   `file_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
