@@ -1,5 +1,5 @@
 <?php
-require('../../../unstable/Group-Office.php');
+require('../../www/Group-Office.php');
 
 //name of the module. No spaces or strange characters.
 $module = 'workflow';
@@ -14,13 +14,41 @@ $tables=array();
 $westpanel = array(
 	'mainpanel_tag'=> 'GRID',
 	'template'=>'GridPanel.tpl',
-	'name'=>'pm_templates', 
-	'friendly_single'=>'template', 
-	'friendly_multiple'=>'templates',
+	'name'=>'wf_processes', 
+	'friendly_single'=>'process', 
+	'friendly_multiple'=>'processes',
 	'authenticate'=>true,
 	'paging'=>true,
 	'autoload'=>false,
-	'files'=>true);
+	'files'=>false);
 
 $tables[] = $westpanel;
+
+$westpanel = array(
+	'mainpanel_tag'=> 'GRID',
+	'template'=>'GridPanel.tpl',
+	'name'=>'wf_steps', 
+	'friendly_single'=>'step', 
+	'friendly_multiple'=>'steps',
+	'authenticate'=>false,
+	'paging'=>true,
+	'autoload'=>false,
+	'files'=>false);
+
+$tables[] = $westpanel;
+
+$westpanel = array(
+	'mainpanel_tag'=> 'GRID',
+	'template'=>'GridPanel.tpl',
+	'name'=>'wf_step_history', 
+	'friendly_single'=>'step_history_item', 
+	'friendly_multiple'=>'step_history',
+	'authenticate'=>false,
+	'paging'=>true,
+	'autoload'=>false,
+	'files'=>false);
+
+$tables[] = $westpanel;
+
+$main_template='SimpleMainPanel.tpl'; //The template for MainPanel.js
 
