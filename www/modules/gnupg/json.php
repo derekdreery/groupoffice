@@ -20,8 +20,7 @@ $task=isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
 try{
 	switch($task)
 	{
-		case 'send_key': 
-			
+		case 'send_key': 			
 			require_once ($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
 		
 			$tmp_file = $GO_CONFIG->tmpdir.'public_key.asc';
