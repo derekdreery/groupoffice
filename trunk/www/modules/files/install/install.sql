@@ -127,7 +127,7 @@ CREATE TABLE IF NOT EXISTS `fs_new_files` (
   `file_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   KEY `file_id` (`file_id`,`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
