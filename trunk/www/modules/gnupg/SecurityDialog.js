@@ -22,17 +22,6 @@ GO.gnupg.SecurityDialog = function(config){
 	}
 		
 	this.keysGrid = new GO.gnupg.KeysGrid();
-	
-	var items = [
-			this.keysGrid
-			];
-	
-	
-	this.tabPanel = new Ext.TabPanel({
-		activeTab:0,
-		border:false,
-		items:items 
-	})
 
 	config.maximizable=true;
 	config.layout='fit';
@@ -42,7 +31,7 @@ GO.gnupg.SecurityDialog = function(config){
 	config.height=400;
 	config.closeAction='hide';
 	config.title= GO.gnupg.lang.encryptionSettings;					
-	config.items=this.tabPanel;
+	config.items=this.keysGrid;
 	config.buttons=[{
 			text: GO.lang['cmdClose'],
 			handler: function(){

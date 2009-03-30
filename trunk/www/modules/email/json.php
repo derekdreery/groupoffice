@@ -160,60 +160,7 @@ function get_mailbox_nodes($account_id, $folder_id){
 }
 
 
-function load_template($template_id, $to, $keep_tags=false)
-{
-	global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE, $GO_SECURITY, $GO_USERS;
 
-	require_once ($GO_CONFIG->class_path.'mail/mimeDecode.class.inc');
-	require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
-	require_once($GO_MODULES->modules['mailings']['class_path'].'templates.class.inc.php');
-
-	$ab = new addressbook();
-	$tp = new templates();
-
-	$template_body = '';
-
-	$template = $tp->get_template($template_id);
-
-	require_once($GO_CONFIG->class_path.'mail/Go2Mime.class.inc.php');
-	$go2mime = new Go2Mime();
-	$response['data'] = $go2mime->mime2GO($template['content'], $GO_MODULES->modules['mailings']['url'].'mimepart.php?template_id='.$template_id, true);
-	unset($response['data']['to'],$response['data']['cc'], $response['data']['bcc'],$response['data']['subject']);
-
-	if(!$keep_tags)
-	{
-		$values=array();
-		$contact_id=0;
-		//if contact_id is not set but email is check if there's contact info available
-		if (!empty($to)) {
-
-			if ($contact = $ab->get_contact_by_email($to, $GO_SECURITY->user_id)) {
-
-				$values = array_map('htmlspecialchars', $contact);
-			}elseif($user = $GO_USERS->get_user_by_email($to))
-			{
-				$values = array_map('htmlspecialchars', $user);
-			}else
-			{
-				$ab->search_companies($GO_SECURITY->user_id, $to, 'email');
-				if($ab->next_record())
-				{
-					$values = array_map('htmlspecialchars', $ab->record);
-				}
-			}
-		}
-		$tp->replace_fields($response['data']['body'], $values);
-	}
-	
-	if($_POST['content_type']=='plain')
-	{
-		$response['data']['body']=String::html_to_text($response['data']['body']);
-	}
-
-	//$response['data']['to']=$to;
-
-	return $response;
-}
 
 try{
 

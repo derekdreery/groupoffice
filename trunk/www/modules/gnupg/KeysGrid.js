@@ -5,7 +5,6 @@ GO.gnupg.KeysGrid = function(config){
 		config = {};
 	}
 	
-	config.title = GO.gnupg.lang.keys;
 	config.layout='fit';
 	config.autoScroll=true;
 	config.split=true;
@@ -96,6 +95,26 @@ GO.gnupg.KeysGrid = function(config){
 		scope: this
 	
 	},{
+			iconCls: 'btn-email',
+			text: GO.gnupg.lang.sendPublicKey,
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				var record = this.getSelectionModel().getSelected();
+				
+				if(!record)
+				{
+					alert( GO.lang['noItemSelected']);
+				}else
+				{
+					GO.email.showComposer({
+						loadUrl: GO.settings.modules.gnupg.url+'json.php',
+						loadParams:{task:'send_key',fingerprint: record.get('fingerprint')}		
+					});
+				}
+				
+			},
+			scope:this						
+		}/*,{
 		iconCls:'btn-sign-key',
 		text:GO.gnupg.lang.signKey,
 		cls: 'x-btn-text-icon',
@@ -118,7 +137,7 @@ GO.gnupg.KeysGrid = function(config){
 		},
 		scope: this
 	
-	}];
+	}*/];
 	
 	GO.gnupg.KeysGrid.superclass.constructor.call(this, config);
 };

@@ -155,6 +155,9 @@ line-height:20px;
 	background-image:url('images/16x16/forum.png') !important;
 }
 
+.btn-email {
+	background-image:url('images/16x16/email.png') !important;
+}
 
 /* end buttons */
 

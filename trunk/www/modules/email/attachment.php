@@ -47,7 +47,7 @@ if ($mail->open($account['host'], $account['type'],$account['port'],$account['us
 	if($GO_MODULES->has_module('gnupg'))
 	{
 		$extension = File::get_extension($_REQUEST['filename']);
-		if($extension=='pgp' || $extension=='asc' || $extension=='gpg')
+		if($extension=='pgp' || $extension=='gpg')
 		{
 			require_once ($GO_MODULES->modules['gnupg']['class_path'].'gnupg.class.inc.php');
 			$gnupg = new gnupg();
@@ -58,7 +58,7 @@ if ($mail->open($account['host'], $account['type'],$account['port'],$account['us
 			
 			file_put_contents($tmpfile, $file);			
 			
-			$passphrase=$_SESSION['GO_SESSION']['gnupg']['passwords'][$_REQUEST['sender']];
+			$passphrase=isset($_SESSION['GO_SESSION']['gnupg']['passwords'][$_REQUEST['sender']]) ? $_SESSION['GO_SESSION']['gnupg']['passwords'][$_REQUEST['sender']] : '';
 			
 			$gnupg->decode_file($tmpfile, $outfile, $passphrase);
 			
