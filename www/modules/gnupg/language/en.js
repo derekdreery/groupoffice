@@ -19,3 +19,5 @@ GO.gnupg.lang.signKey='Sign key';
 GO.gnupg.lang.decryptPasswordRequired='A password is required to decrypt this message';
 
 GO.gnupg.lang.sendPublicKey='Send public key';
+
+GO.gnupg.lang.importPublicKeyAttachment='This is a public key to encrypt e-mails to this recipient. Do you want to import it?';

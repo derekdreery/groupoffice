@@ -683,7 +683,7 @@ GO.email.EmailClient = function(config){
   }, this);
   	
   
-  this.messagePanel.on('linkClicked', function(href){
+  this.messagePanel.on('linkClicked', function(href){ 	
   	var win = window.open(href);
   	win.focus();
   }, this);
@@ -935,6 +935,67 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 						'&filename='+encodeURIComponent(attachment.name);
 				break;
 				
+				case 'asc':
+				
+					if(!forceDownload && GO.gnupg)
+					{
+						Ext.Ajax.request({
+							url: GO.settings.modules.gnupg.url+'action.php',
+							params: {
+								task: 'check_public_key_attachment',
+								account_id: this.account_id,
+								mailbox: this.mailbox,
+								uid: this.messagePanel.uid,
+								part: attachment.number,
+								uuencoded_partnumber: attachment.uuencoded_partnumber,
+								transfer: attachment.transfer
+							},
+							callback: function(options, success, response)
+							{
+								if(success)
+								{
+									var rParams = Ext.decode(response.responseText);
+									
+									if(!rParams.is_public_key)
+									{
+										document.location.href=GO.settings.modules.email.url+
+											'attachment.php?account_id='+this.account_id+
+											'&mailbox='+encodeURIComponent(this.mailbox)+
+											'&uid='+this.messagePanel.uid+
+											'&sender='+this.messagePanel.data.sender+
+											'&part='+attachment.number+
+											'&transfer='+attachment.transfer+
+											'&mime='+attachment.mime+
+											'&uuencoded_partnumber='+attachment.uuencoded_partnumber+
+											'&filename='+ encodeURIComponent(attachment.name);
+									}else
+									{																		
+										if(confirm(GO.gnupg.lang.importPublicKeyAttachment))
+										{
+											Ext.Ajax.request({
+												url: GO.settings.modules.gnupg.url+'action.php',
+												params: {task: 'import_public_key_attachment'},
+												callback: function(options, success, response){													
+													if(success)
+													{
+														var rParams = Ext.decode(response.responseText);														
+														alert(rParams.feedback);														
+													}else
+													{
+														alert(GO.lang.strRequestError);
+													}
+												}
+											});
+										}
+									}
+								}
+							},
+							scope: this
+						});	
+						
+						break;
+					}
+				
 				case 'vcs':
 				case 'ics':
 					if(!forceDownload)
@@ -965,6 +1026,9 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 											values: values
 										});
 									}
+								}else
+								{
+									alert( GO.lang.strRequestError);
 								}
 							},
 							scope: this
