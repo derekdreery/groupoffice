@@ -266,7 +266,7 @@ class GO_AUTH extends db
 			go_log(LOG_DEBUG, 'LOGIN Username: '.$username.'; IP: '.$_SERVER['REMOTE_ADDR']);
 			
 			$GO_EVENTS->fire_event('login', array($username, $password, $user));
-			
+
 			$user_id = $user['id'];
 		}
 

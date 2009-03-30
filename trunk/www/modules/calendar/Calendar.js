@@ -227,19 +227,8 @@ GO.calendar.MainPanel = function(config){
 							key:Ext.EventObject.ENTER,
 							fn: function(){alert('hoi');}
 						}];
-		
-		
-	config.layout='border';
-	config.border=false;
-	//config.tbar=;
-	config.items=[
-				new Ext.Panel({
-					region:'north',
-					height:32,
-					baseCls:'x-plain',
-					tbar:new Ext.Toolbar({		
-						cls:'go-head-tb',
-						items: [{
+						
+	var tbar = [{
 									iconCls: 'btn-add',							
 									text: GO.lang['cmdAdd'],
 									cls: 'x-btn-text-icon',
@@ -368,9 +357,28 @@ GO.calendar.MainPanel = function(config){
 									document.location=l;
 								},
 								scope: this
-							})					
-								]})
-					
+							})
+							
+						];
+	for(var i=0;i<GO.calendar.extraToolbarItems.length;i++)
+	{
+		tbar.push(GO.calendar.extraToolbarItems[i]);
+	}
+		
+		
+	config.layout='border';
+	config.border=false;
+	//config.tbar=;
+	config.items=[
+				new Ext.Panel({
+					region:'north',
+					height:32,
+					baseCls:'x-plain',
+					tbar:new Ext.Toolbar({		
+						cls:'go-head-tb',
+						items: tbar
+						})
+
 				}),
 				
        new Ext.Panel({
@@ -397,6 +405,8 @@ GO.calendar.MainPanel = function(config){
        this.displayPanel
        ];
 	
+	
+		
 	GO.calendar.MainPanel.superclass.constructor.call(this, config);
 	
 	//this.createCalendarList();
@@ -413,7 +423,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	state : {},
 	calendarId : 0,
 	viewId : 0,
-	
+
+		
 	onShow : function(){
 		GO.calendar.MainPanel.superclass.onShow.call(this);
 		this.daysGrid.scrollToLastPosition();
@@ -1382,3 +1393,6 @@ GO.newMenuItems.push({
 		});
 	}
 });
+
+
+GO.calendar.extraToolbarItems = [];

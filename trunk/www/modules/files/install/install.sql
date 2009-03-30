@@ -117,6 +117,17 @@ CREATE TABLE IF NOT EXISTS `fs_templates` (
   KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
+--
+-- Tabel structuur voor tabel `fs_new_files`
+--
+
+CREATE TABLE IF NOT EXISTS `fs_new_files` (
+  `file_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  KEY `file_id` (`file_id`,`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 

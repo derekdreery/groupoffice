@@ -145,7 +145,6 @@ try{
 					);
 					$response[]=$node;
 					
-					
 					if(isset($GO_MODULES->modules['projects']) && $GO_MODULES->modules['projects']['read_permission'])
 					{
 						require($GO_LANGUAGE->get_language_file('projects'));
@@ -157,6 +156,17 @@ try{
 							);
 							$response[]=$node;
 					}
+					
+					
+					$num_new_files = $fs->get_num_new_files($GO_SECURITY->user_id);
+					
+					$node= array(
+					'text'=>$lang['files']['new'].' ('.$num_new_files.')',
+					'id'=>'new',
+					'readonly'=>true,
+					'iconCls'=>'folder-new'
+					);
+					$response[]=$node;
 
 					break;
 
@@ -194,6 +204,11 @@ try{
 						}
 										
 					}
+					break;
+					
+				case 'new' :
+					
+					$response['success'] = true;
 					break;
 
 				default:
@@ -312,6 +327,35 @@ try{
 								}
 							}
 						}
+					}elseif($_POST['path'] == 'new')
+					{
+						require_once($GO_CONFIG->control_path.'phpthumb/phpThumb.config.php');
+
+						$sort = isset($_POST['sort']) ? $_POST['sort'] : 'mtime';
+						$dir = isset($_POST['dir']) ? $_POST['dir'] : 'DESC';
+						
+						if($sort == 'grid_display') $sort = 'name';
+
+						$files = $fs->get_new_files($GO_SECURITY->user_id, $sort, $dir);
+						foreach($files as $file)
+						{
+							$extension = File::get_extension($file['name']);
+						
+							$file['thumb_url']=$fs->get_thumb_url($file['path']);						
+							$file['extension']=$extension;
+							$file['path']=$fs->strip_server_path($file['path']);
+							$file['grid_display']='<div class="go-grid-icon filetype filetype-'.$extension.'">'.$file['name'].'</div>';
+							$file['type']=File::get_filetype_description($extension);
+							$file['timestamp']=$file['mtime'];
+							$file['mtime']=Date::get_timestamp($file['mtime']);
+							$file['size']=Number::format_size($file['size']);
+							$response['results'][]=$file;
+						}
+						
+						$response['write_permission'] = false;
+						$response['thumbs']=0;
+						$response['num_files'] = count($files);
+						
 					}else
 					{
 						$path = $GO_CONFIG->file_storage_path.$_POST['path'];						

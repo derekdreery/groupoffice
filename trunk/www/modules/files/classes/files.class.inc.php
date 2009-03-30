@@ -49,6 +49,7 @@ class files extends filesystem
 		$events->add_listener('user_delete', __FILE__, 'files', 'user_delete');
 		$events->add_listener('add_user', __FILE__, 'files', 'add_user');
 		$events->add_listener('build_search_index', __FILE__, 'files', 'build_search_index');
+		$events->add_listener('login', __FILE__, 'files', 'login');
 	}
 	
 
@@ -514,6 +515,7 @@ class files extends filesystem
 
 		$users=array();
 		$share= $this->find_share($path);
+		
 		if($share)
 		{
 			$users = $GO_SECURITY->get_authorized_users_in_acl($share['acl_read']);
@@ -526,6 +528,7 @@ class files extends filesystem
 				}
 			}
 		}
+
 		return $users;
 	}
 
@@ -614,6 +617,8 @@ class files extends filesystem
 				
 			$sql = "DELETE FROM fs_files WHERE path=?";
 			$this->query($sql, 's', $path);
+			
+			$this->delete_new_filelink($file['id']);
 		}
 	}
 
@@ -631,11 +636,13 @@ class files extends filesystem
 		$file['user_id']=$GLOBALS['GO_SECURITY']->user_id;
 		$this->insert_row('fs_files', $file);
 
-		$this->cache_file($GO_CONFIG->file_storage_path.$file['path']);
+		$this->cache_file($GO_CONFIG->file_storage_path.$file['path']);	
 
+		$this->add_new_filelink($file);
+		
 		return $file['id'];
-	}
-
+	}	
+	
 	function update_file($file)
 	{
 		if(isset($file['id']))
@@ -831,6 +838,131 @@ class files extends filesystem
 
 
 
+	// NEW FUNCTIONS
+	function add_new_filelink($file)
+	{
+		$users = $this->get_users_in_share($file['path']);
+	
+		for($i=0; $i<count($users); $i++)
+		{			
+			if($users[$i] != $file['user_id'])
+			{
+				$this->insert_row('fs_new_files', array('file_id' => $file['id'], 'user_id' => $users[$i]));
+			}
+		}	
+	}
+	
+	function check_existing_filelink($file_id, $user_id)
+	{
+		$this->query("SELECT * FROM fs_new_files WHERE user_id = ? AND file_id = ?", 'ii', array($user_id, $file_id));
+		return $this->num_rows();
+	}
+	
+	function delete_all_new_filelinks($user_id)
+	{
+		$this->query("DELETE FROM fs_new_files WHERE user_id = ?", 'i', $user_id);
+		return $this->num_rows();
+	}
+	function delete_new_filelink($file_id, $user_id=0)
+	{
+		if($user_id > 0)
+		{
+			$this->query("DELETE FROM fs_new_files WHERE file_id = ? AND user_id = ?", 'ii', array($file_id, $user_id));
+		} else {
+			$this->query("DELETE FROM fs_new_files WHERE file_id = ?", 'i', $file_id);
+		}
+	}
+	
+	function get_num_new_files($user_id)
+	{
+		$this->query("SELECT id FROM fs_new_files AS fn, fs_files AS ff WHERE fn.file_id = ff.id AND fn.user_id = ?", 'i', $user_id);
+		return $this->num_rows();
+	}
+	
+	function get_new_files($user_id, $sort='name', $dir='DESC')
+	{		
+		global $GO_CONFIG;
+
+		$this->query("SELECT path FROM fs_new_files AS fn, fs_files AS ff WHERE fn.file_id = ff.id AND fn.user_id = ?", 'i', $user_id);
+					
+		$files = array();
+		while($item = $this->next_record())
+		{			
+			$file = array();
+			$file['path'] = $GO_CONFIG->file_storage_path.$item['path'];
+			$file['name'] = utf8_basename($file['path']);
+			$file['mtime'] = filemtime($file['path']);
+			$file['size'] = filesize($file['path']);
+			$file['type'] = File::get_mime($file['path']);
+
+			$files[] = $file;
+		}
+
+		if(count($files) > 1)
+		{
+			// only sort when there is something to sort
+			return $this->sksort($files, $sort, $dir);
+		} else
+		{
+			return $files;
+		}
+	}
+
+	public static function login($username, $password, $user)
+	{		
+		// Default timeout: 30 days
+		$timeout = 60*60*24*30;
+		$deltime = time() - $timeout;
+
+		$fs = new files();
+		
+		$fs->query("SELECT ff.id FROM fs_new_files AS fn, fs_files AS ff 
+			WHERE fn.file_id = ff.id AND ctime < ? AND fn.user_id = ?", 'ii', array($deltime, $user['id']));
+		
+		$files = array();
+		if($fs->num_rows() > 0)
+		{
+			while($file = $fs->next_record())
+			{
+				$files[] = $file['id'];
+			}
+			$fs->query("DELETE FROM fs_new_files WHERE file_id IN (".implode(',', $files).") ");
+		}	
+	}
+	
+	function sksort($array, $sort='name', $dir='DESC') 
+	{
+	    if (count($array)) 
+	    {
+	        $temp_array[key($array)] = array_shift($array);
+	    }
+	
+	    foreach($array as $key => $val)
+	    {
+	        $offset = 0;
+	        $found = false;
+	        foreach($temp_array as $tmp_key => $tmp_val)
+	        {
+	            if(!$found and strtolower($val[$sort]) > strtolower($tmp_val[$sort]))
+	            {
+	                $temp_array = array_merge((array)array_slice($temp_array,0,$offset), array($key => $val), array_slice($temp_array,$offset));
+	                $found = true;
+	            }
+	            $offset++;
+	        }
+	        if(!$found)
+	        {
+	        	$temp_array = array_merge($temp_array, array($key => $val));
+	        }
+	    }
+	
+	    $array = ($dir == 'DESC') ? $temp_array : array_reverse($temp_array);
+	   
+	    return $array;
+	}
+	// END NEW FUNCTIONS
+	
+	
 
 	function strip_server_path($path)
 	{
