@@ -25,10 +25,15 @@ class gnupg{
 
 	public function __construct($home=null)
 	{
+		global $GO_CONFIG;
+		
+		if(isset($GO_CONFIG->cmd_gpg))
+		{
+			$this->gpg = $GO_CONFIG->cmd_gpg;
+		}
+		
 		if(!isset($home) && isset($_SESSION['GO_SESSION']['username']))
 		{
-			//$home = '/home/mschering';
-			global $GO_CONFIG;
 			$home = $GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'];
 		}
 		if(isset($home))
