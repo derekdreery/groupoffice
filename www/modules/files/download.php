@@ -31,7 +31,6 @@ $mode = isset($_REQUEST['mode'])  ? $_REQUEST['mode'] : 'download';
  */
 $cache = $fs->is_sub_dir($path, $GO_CONFIG->file_storage_path.'public');
 
-
 /*
 //add timestamp for caching
 if(!isset($_REQUEST['mtime']))
@@ -42,6 +41,12 @@ if(!isset($_REQUEST['mtime']))
 
 if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_permission($GO_SECURITY->user_id, $path))
 {
+	/*
+	 * Remove new_filelink
+	 */
+	$fs->get_file($_REQUEST['path']);
+	$fs->delete_new_filelink($fs->f('id'), $GO_SECURITY->user_id);
+		
 	/*if($GO_LOGGER->enabled)
 	{
 		$link_id=$fs->get_link_id_by_path($path);

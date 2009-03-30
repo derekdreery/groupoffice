@@ -189,7 +189,7 @@ GO.files.FileBrowser = function(config){
 			sm: new Ext.grid.RowSelectionModel(),
 			loadMask: true,
 			enableDragDrop: true,
-			ddGroup : 'FilesDD'		
+			ddGroup : 'FilesDD'
 		});
 		
 	this.gridPanel.on('delayedrowselect', function (grid, rowIndex, r){
@@ -328,6 +328,16 @@ GO.files.FileBrowser = function(config){
 					},
 					scope: this
 				});
+	this.emptyListButton = new Ext.Button({
+					iconCls: 'btn-refresh',
+					text: GO.files.lang.emptyList,
+					cls: 'x-btn-text-icon',
+					hidden:true,
+					handler: function(){
+						this.emptyList();
+					},
+					scope: this
+				});
 				
 	var tbar = [];
 	
@@ -385,7 +395,14 @@ GO.files.FileBrowser = function(config){
       	});
       },
       scope:this
-		}));	
+		}));
+		
+	if(!config.hideActionButtons)
+	{
+		tbar.push('-');
+		tbar.push(this.emptyListButton);
+			
+	}
 	
 		
 	/*tbar.push({
@@ -475,6 +492,26 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	fileClickHandler : false,
 	scope : this,
 	
+	emptyList : function()
+	{
+		Ext.Ajax.request({
+			url: GO.settings.modules.files.url+'action.php',
+			params: {
+				task: 'emptyList'
+			},
+			callback: function(options, success, response)
+			{
+				if(!success)
+				{
+					Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
+				} else 
+				{
+					this.refresh();
+				}
+			},
+			scope: this
+		})
+	},
 	pasteSelections : Array(),
 	/*
 	 * cut or copy
@@ -485,6 +522,15 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		this.setWritePermission(store.reader.jsonData.write_permission);
 		
 		this.thumbsToggle.toggle(store.reader.jsonData.thumbs=='1');
+		
+		if(this.path=='new')
+		{
+			var num_files = store.reader.jsonData.num_files;
+			var activeNode = this.treePanel.getNodeById('new');
+			activeNode.setText(GO.files.lang.newFiles + " (" + num_files + ")");	
+		}
+		
+		this.emptyListButton.setVisible(this.path=='new' && num_files > 0);
 		
 		var lastIndexOf = this.path.lastIndexOf('/');
 		this.parentPath = this.path.substr(0, lastIndexOf);
@@ -530,7 +576,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		}	
 	},
 	
-	loadFiles : function(path){		
+	loadFiles : function(path){
 		this.buildNewMenu();		
 		this.setRootNode(this.root, path);
 		this.loaded=true;
@@ -554,7 +600,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		//delete this.rootNode.children;
 		//this.rootNode.expanded=false;
 		//this.rootNode.childrenRendered=false;
-		
+
 		if(id=='root' && !path)
 		{
 			this.rootNode.on('load', function(node)
@@ -1348,7 +1394,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	onGridDoubleClick : function(grid, rowClicked, e){
 		var selectionModel = grid.getSelectionModel();
 		var record = selectionModel.getSelected();
-		
+
 		this.fireEvent('filedblclicked', this, record);
 		
 		if(record.data.extension=='folder')
@@ -1372,7 +1418,8 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		this.deleteButton.setDisabled(!writePermission);	
 		this.uploadButton.setDisabled(!writePermission);	
 		this.cutButton.setDisabled(!writePermission);	
-		this.pasteButton.setDisabled(!writePermission || !this.pasteSelections.length);	
+		this.pasteButton.setDisabled(!writePermission || !this.pasteSelections.length);
+					
 		//this.filesContextMenu.deleteButton.setDisabled(!writePermission);
 	},
 	
@@ -1397,15 +1444,15 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 						this.refresh();
 					}										
 				}
-				
+
 				if(expand)
 				{					
 					if(activeNode)
 					{
 						this.treePanel.getSelectionModel().select(activeNode);
-						activeNode.expand();			
+						activeNode.expand();
 					}
-				}	
+				}				
 			},
 			scope:this
 		});	

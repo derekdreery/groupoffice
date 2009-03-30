@@ -28,6 +28,14 @@ $response=array();
 try{
 	switch($task)
 	{
+		case 'emptyList':
+			
+			$user_id = $GO_SECURITY->user_id;
+			
+			$fs->delete_all_new_filelinks($user_id);
+			
+			break;
+			
 		case 'set_view':
 			$up_folder['path']=$_POST['path'];
 			$up_folder['thumbs']=$_POST['thumbs'];

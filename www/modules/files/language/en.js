@@ -28,3 +28,5 @@ GO.files.lang.thumbnails = 'Thumbnails';
 GO.files.lang.saveFile='Save file';
 GO.files.lang.confirmOverwrite='{filename} already exists, do you want to overwrite the file?';
 GO.files.lang.file='File';
+GO.files.lang.emptyList='Empty list';
+GO.files.lang.newFiles='New';

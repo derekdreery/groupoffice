@@ -96,6 +96,9 @@ margin:auto;
 .x-tree-node img.folder-shares, .x-tree-node-collapsed img.img.folder-shares, .x-tree-node-expanded img.folder-shares{
     background-image:  url("images/network.png");
 }
+.x-tree-node img.folder-new, .x-tree-node-collapsed img.img.folder-new, .x-tree-node-expanded img.folder-new{
+    background-image:  url("images/folder_new.png");
+}
 
 
 
