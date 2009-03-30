@@ -18,3 +18,5 @@ GO.files.lang.thumbnails = 'Pictogrammen';
 GO.files.lang.saveFile='Bestand opslaan';
 GO.files.lang.confirmOverwrite='{filename} bestaat al, wilt u dit bestand overschrijven?';
 GO.files.lang.file='Bestand';
+GO.files.lang.emptyList='Leeg lijst';
+GO.files.lang.newFiles='Nieuw';
