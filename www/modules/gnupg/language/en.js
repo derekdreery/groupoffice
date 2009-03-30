@@ -1,6 +1,14 @@
+/**
+ * Don't copy the next lines into a translation
+ */
+
 Ext.namespace('GO.gnupg');
 
 GO.gnupg.lang={};
+/**
+ * Copy everything below for translations
+ */
+
 
 GO.gnupg.lang.encryptionSettings='Encryption settings';
 GO.gnupg.lang.keys='Keys';
@@ -20,4 +28,4 @@ GO.gnupg.lang.decryptPasswordRequired='A password is required to decrypt this me
 
 GO.gnupg.lang.sendPublicKey='Send public key';
 
-GO.gnupg.lang.importPublicKeyAttachment='This is a public key to encrypt e-mails to this recipient. Do you want to import it?';
+GO.gnupg.lang.importPublicKeyAttachment='This is a public key to encrypt e-mails to this sender. Only import this key when you are sure the key belongs to the sender. Do you want to import it?';
