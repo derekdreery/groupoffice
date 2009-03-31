@@ -1263,11 +1263,15 @@ class calendar extends db
 		}
 
 		asort($this->events_sort);
+		
+		//debug($this->events_sort);
+		
 		$sorted_events=array();
 		foreach($this->events_sort as $key=>$value)
 		{
 			$sorted_events[] = &$this->events[$key];
 		}
+		//debug($sorted_events);
 		return $sorted_events;
 	}
 
@@ -1281,7 +1285,7 @@ class calendar extends db
 			if($event['start_time'] < $interval_end_time && $event['end_time'] > $interval_start_time)
 			{
 				$this->events[] = $event;
-				$this->events_sort[] = $event['start_time'];
+				$this->events_sort[] = $event['start_time'].$event['name'];
 			}
 		}else
 		{
@@ -1321,7 +1325,7 @@ class calendar extends db
 				if(!$cal->is_exception($calculated_event['id'],$calculated_event['start_time']))
 				{
 					$this->events[] = $calculated_event;
-					$this->events_sort[] = $calculated_event['start_time'];
+					$this->events_sort[] = $calculated_event['start_time'].$calculated_event['name'];
 				}
 
 				if($loops==100)
