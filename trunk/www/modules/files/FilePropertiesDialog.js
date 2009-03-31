@@ -96,10 +96,11 @@ GO.files.FilePropertiesDialog = function(config){
 	this.tabPanel =new Ext.TabPanel({
 			activeTab: 0,
 			deferredRender:false,
+			doLayoutOnTabChange:true,
 		  border:false,
 		  anchor:'100% 100%',
 		  hideLabel:true,
-			items:items		
+			items:items
 		});
 		
 	this.formPanel = new Ext.form.FormPanel(
@@ -146,6 +147,8 @@ Ext.extend(GO.files.FilePropertiesDialog, Ext.Window, {
 		
 		if(!this.rendered)
 			this.render(Ext.getBody());
+			
+		this.formPanel.form.reset();
 		
 		this.formPanel.form.load({
 			url: GO.settings.modules.files.url+'json.php', 

@@ -636,6 +636,11 @@ try{
 								$response['data']['type']='<div class="go-grid-icon filetype filetype-'.$extension.'">'.File::get_filetype_description($extension).'</div>';
 								$response['data']['size']=Number::format_size(filesize($path));
 								$response['data']['write_permission']=$fs->has_write_permission($GO_SECURITY->user_id, dirname($path));
+								
+								$params['response']=&$response;
+								
+								$GO_EVENTS->fire_event('load_file_properties', $params);
+								
 								break;
 
 							case 'templates':

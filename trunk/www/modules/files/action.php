@@ -91,6 +91,8 @@ try{
 				$fs->move($path, $new_path);
 				$response['path']=str_replace($GO_CONFIG->file_storage_path,'',$new_path);
 			}
+					
+			$GO_EVENTS->fire_event('save_file_properties', array(&$response,$up_file));
 
 			$response['success']=true;
 
