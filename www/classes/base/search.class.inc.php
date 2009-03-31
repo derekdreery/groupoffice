@@ -88,7 +88,7 @@ class search extends db {
 	 */
 	function global_search($user_id, $query, $start, $offset, $sort_index='name', $sort_order='ASC', $selected_types=array(), $link_id=0, $link_type=0, $link_folder_id=0, $conditions=array())
 	{
-		$sql = "SELECT DISTINCT sc.user_id,sc.id, sc.module, sc.name, sc.description,sc.link_type, sc.type, sc.mtime";
+		$sql = "SELECT DISTINCT sc.acl_read,sc.acl_write, sc.user_id,sc.id, sc.module, sc.name, sc.description,sc.link_type, sc.type, sc.mtime";
 		if($link_id>0)
 		{
 			$sql .= ",l.description AS link_description";
