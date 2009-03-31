@@ -998,7 +998,7 @@ try{
 
 
 								$response['drafts']=$imap->utf7_imap_encode($account['drafts'])==$mailbox;
-								$response['sent']=strpos($mailbox, $imap->utf7_imap_encode($account['sent']))!==false;
+								$response['sent']=!empty($account['sent']) && strpos($mailbox, $imap->utf7_imap_encode($account['sent']))!==false;
 
 								if(isset($_POST['delete_keys']))
 								{
