@@ -572,6 +572,8 @@ class files extends filesystem
 			$up_file['id']=$file['id'];
 			$up_file['path']=$this->strip_server_path($destination_path);
 			$this->update_file($up_file);
+			
+			$this->cache_file($destination_path);
 				
 		}elseif($this->is_sub_dir($destination_path, $GO_CONFIG->file_storage_path))
 		{
@@ -579,6 +581,8 @@ class files extends filesystem
 			$up_file['id']=$file['id'];
 			$up_file['path']=$this->strip_server_path($destination_path);
 			$this->update_file($up_file);
+			
+			$this->cache_file($destination_path);
 		}
 	}
 

@@ -84,13 +84,22 @@ GO.files.FilePropertiesDialog = function(config){
 		
 	});
 	
+	var items = [this.propertiesPanel, this.commentsPanel];
+
+	
+	if(GO.workflow)
+	{
+		this.workflowPanel = new GO.workflow.FilePropertiesPanel();
+		items.push(this.workflowPanel);
+	}
+	
 	this.tabPanel =new Ext.TabPanel({
 			activeTab: 0,
 			deferredRender:false,
 		  border:false,
 		  anchor:'100% 100%',
 		  hideLabel:true,
-			items:[this.propertiesPanel, this.commentsPanel]		
+			items:items		
 		});
 		
 	this.formPanel = new Ext.form.FormPanel(
