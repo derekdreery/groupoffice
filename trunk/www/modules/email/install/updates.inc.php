@@ -32,3 +32,6 @@ $updates[]="ALTER TABLE `em_accounts`
   DROP `enable_vacation`,
   DROP `vacation_subject`,
   DROP `vacation_text`;";
+
+$updates[]="ALTER TABLE `em_links` ADD `acl_read` INT NOT NULL ,
+ADD `acl_write` INT NOT NULL ;";

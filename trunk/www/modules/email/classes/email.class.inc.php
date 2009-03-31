@@ -113,6 +113,8 @@ class email extends db
 		$events->add_listener('user_delete', __FILE__, 'email', 'user_delete');
 		$events->add_listener('build_search_index', __FILE__, 'email', 'build_search_index');
 		$events->add_listener('save_settings', __FILE__, 'email', 'save_settings');
+		$events->add_listener('check_database', __FILE__, 'email', 'check_database');
+
 	}
 	
 	public static function save_settings(){
@@ -1211,8 +1213,8 @@ class email extends db
 			$cache['type']=$lang['link_type'][9];
 			$cache['keywords']=$search->record_to_keywords($this->record).','.$cache['type'];
 			$cache['mtime']=$this->f('time');
-			$cache['acl_read']=$GO_MODULES->modules['email']['acl_read'];
-			$cache['acl_write']=$GO_MODULES->modules['email']['acl_write'];
+			$cache['acl_read']=$this->f('acl_read');
+			$cache['acl_write']=$this->f('acl_write');
 
 			$search->cache_search_result($cache);
 		}
@@ -1223,7 +1225,7 @@ class email extends db
 	 *
 	 * @param int $last_sync_time The time this function was called last
 	 */
-	public function build_search_index()
+	public static function build_search_index()
 	{
 		$email2 = new email();
 		$sql = "SELECT link_id FROM em_links";
@@ -1234,6 +1236,32 @@ class email extends db
 			$email->cache_message($record['link_id']);
 		}
 		/* {ON_BUILD_SEARCH_INDEX_FUNCTION} */
+	}
+	
+	public static function check_database(){
+		
+		global $GO_CONFIG, $GO_LINKS;
+		
+		require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
+		$search = new search();
+			
+		$sql = "SELECT link_id FROM em_links";
+		$email = new email();
+		$email2 = new email();
+		$email->query($sql);
+		while($record = $email->next_record())
+		{
+			$search->global_search(1, '', 0, 1, 'name','ASC', array(), $record['link_id'], 9,-1);
+			$sr = $search->next_record();
+			if($sr)
+			{
+				$record['acl_read']=$sr['acl_read'];
+				$record['acl_write']=$sr['acl_write'];
+				$email2->update_row('em_links', 'link_id', $record);
+			}
+		}
+		
+		$email->build_search_index();
 	}
 
 }
