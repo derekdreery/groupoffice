@@ -295,12 +295,14 @@ class email extends db
 
 			if ($account['type']=='imap')
 			{
-
-
 				$account=$this->set_default_folders($account);
 
 				$mailboxes =  $this->mail->get_mailboxes($account['mbroot']);
 				$subscribed =  $this->mail->get_subscribed($account['mbroot']);
+			}else
+			{
+				$mailboxes = array();
+				$subscribed = array();
 			}
 			$this->mail->close();
 
