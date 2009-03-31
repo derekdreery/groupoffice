@@ -1,3 +1,79 @@
+4.5.035 (2009-03-28)
+	- Bug #2717436 "writeHTML rowspan problem (continued)" was fixed.
+	- Bug #2719090 "writeHTML fix follow up" was fixed.
+	- The method _putuserrights() was changed to avoid Adobe Reader 9.1 crash. This broken the 'trick' used to display forms in Acrobat Reader.
+	
+4.5.034 (2009-03-27)
+	- Bug #2716914 "Bug writeHTML of a table in body and footer related with pb" was fixed.
+	- Bug #2717056 ] "writeHTML problem when setting tr style" was fixed.
+	- The signature of the Cell() method was changed.
+	
+4.5.033 (2009-03-27)
+	- The support for rowspan/colspan on HTML tables was improved (see example n. 48).
+	
+4.5.032 (2009-03-23)
+	- setPrintFooter(false) bug was fixed.
+	
+4.5.031 (2009-03-20)
+	- Table header support was extended to multiple pages.
+	
+4.5.030 (2009-03-20)
+	- thead tag is now supported on HTML tables (header rows are repeated after page breaks).
+	- The startTransaction() was improved to autocommit.
+	- List bullets now uses the foreground color (putHtmlListBullet()).
+	
+4.5.029 (2009-03-19)
+	- The following methods were added to UNDO commands (see example 47): startTransaction(), commitTransaction(), rollbackTransaction().
+	- All examples were updated.
+
+4.5.028 (2009-03-18)
+	- Bug #2690945 "List Bugs" was fixed.
+	- HTML text alignment on lists was fixed.
+	- The constant PDF_FONT_MONOSPACED was added to the configuration file to define the default monospaced font.
+	- The following methods were fixed: getPageWidth(), getPageHeight(), getBreakMargin().
+	- All examples were updated.
+
+4.5.027 (2009-03-16)
+	- Method getPageDimensions() was added to get page dimensions.
+	- The signature of the following methos were changed: getPageWidth(), getPageHeight(), getBreakMargin().
+	- _parsepng() method was fixed for PNG URL images (fread bug).
+
+4.5.026 (2009-03-11)
+	- Bug #2681793 affecting URL images with spaces was fixed.
+
+4.5.025 (2009-03-10)
+	- A small bug affecting hyphenation support was fixed.
+	- The method SetDefaultMonospacedFont() was added to define the default monospaced font.
+
+4.5.024 (2009-03-07)
+	- The bug #2666493 was fixed "Footer corrupts document".
+
+4.5.023 (2009-03-06)
+	- The bug #2666688 was fixed "Rowspan in tables".
+
+4.5.022 (2009-03-05)
+	- The bug #2659676 was fixed "refer to #2157099 test 4 < BR > problem still not fixed".
+	- addTOC() function bug was fixed.
+
+4.5.020 (2009-03-03)
+	- The following bug was fixed: "function removeSHY corrupts unicode".
+
+4.5.019 (2009-02-28)
+	- The problem of decimal separator using different locale was fixed.
+	- The text hyphenation is now supported (see example n. 46).
+	
+4.5.018 (2009-02-26)
+	- The _destroy() method was added to unset all class variables and frees memory.
+	- Now it's possible to call Output() method multiple times.
+	
+4.5.017 (2009-02-24)
+	- A minor bug that raises a PHP warning was fixed.
+	
+4.5.016 (2009-02-24)
+	- Bug item #2631200 "getNumLines() counts wrong" was fixed.
+	- Multiple attachments bug was fixed.
+	- All class variables are now cleared on Output() for memory otpimization.
+	
 4.5.015 (2009-02-18)
 	- Bug item #2612553 "function Write() must not break a line on &nbsp;  character" was fixed.
 	
