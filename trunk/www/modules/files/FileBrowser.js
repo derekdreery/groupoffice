@@ -652,10 +652,13 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	
 	showFilePropertiesDialog : function(path)
 	{
-		this.filePropertiesDialog = new GO.files.FilePropertiesDialog();
-		this.filePropertiesDialog.on('rename', function(){
-			this.getActiveGridStore().load();	
-		}, this);
+		if(!this.filePropertiesDialog)
+		{
+			this.filePropertiesDialog = new GO.files.FilePropertiesDialog();
+			this.filePropertiesDialog.on('rename', function(){
+				this.getActiveGridStore().load();	
+			}, this);
+		}
 		this.filePropertiesDialog.show(path);
 	},
 	
