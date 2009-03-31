@@ -71,7 +71,7 @@ while($GO_USERS->next_record())
 }
 echo 'Done'.$line_break.$line_break;
 
-if($GO_GROUPS->is_in_group(1, $GO_CONFIG->group_root))
+if(!$GO_GROUPS->is_in_group(1, $GO_CONFIG->group_root))
 {
 	echo 'Adding admin to admins group'.$line_break;
 	$GO_GROUPS->add_user_to_group(1, $GO_CONFIG->group_root);
@@ -219,7 +219,9 @@ $GO_EVENTS->fire_event('check_database');
 
 
 
-
+/*
+ * Dangerous if search cache is not built correctly.
+ 
 echo 'Removing dead links'.$line_break;
 
 for($i=1;$i<=13;$i++)
@@ -246,7 +248,7 @@ for($i=1;$i<=13;$i++)
 	
 	echo 'Removed '.$count.' from table go_links_'.$i.$line_break;
 }
-
+*/
 echo 'Done'.$line_break.$line_break;
 
 
