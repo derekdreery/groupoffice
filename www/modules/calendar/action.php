@@ -20,8 +20,6 @@ require_once ($GO_MODULES->modules['calendar']['class_path']."go_ical.class.inc"
 require_once ($GO_LANGUAGE->get_language_file('calendar'));
 $cal = new calendar();
 
-//ini_set('display_errors','off');
-
 function get_posted_event()
 {
 
