@@ -944,8 +944,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 
 	sendMail : function(draft, autoSave) {
 		
-		this.saveButton.setDisabled(true);
-		this.sendButton.setDisabled(true);
+		
 		
 
 		if (this.uploadDialog && this.uploadDialog.isVisible()) {
@@ -954,6 +953,8 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			this.uploadDialog.show();
 			return false;
 		}
+		
+		
 
 		if (autoSave || this.subjectField.getValue() != ''
 				|| confirm(GO.email.lang.confirmEmptySubject)) {
@@ -982,6 +983,9 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 
 			// extra sync to make sure all is in there.
 			this.htmlEditor.syncValue();
+			
+			this.saveButton.setDisabled(true);
+			this.sendButton.setDisabled(true);
 
 			this.formPanel.form.submit({
 				url : this.sendURL,
@@ -1045,8 +1049,6 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 
 			});
 		} else {
-			this.saveButton.setDisabled(false);
-			this.sendButton.setDisabled(false);
 			this.subjectField.focus();
 		}
 	},

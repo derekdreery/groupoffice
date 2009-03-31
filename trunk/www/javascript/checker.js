@@ -31,6 +31,24 @@ GO.CheckerWindow = function(config){
 	var snoozeMenu = new Ext.menu.Menu({
   	items:[
   		{
+  			text: '5 '+GO.lang.strMinutes,
+  			handler:function(){
+  				this.doTask('snooze_reminders', 1800);
+  			},
+  			scope: this  			
+  		},{
+  			text: '10 '+GO.lang.strMinutes,
+  			handler:function(){
+  				this.doTask('snooze_reminders', 1800);
+  			},
+  			scope: this  			
+  		},{
+  			text: '20 '+GO.lang.strMinutes,
+  			handler:function(){
+  				this.doTask('snooze_reminders', 1800);
+  			},
+  			scope: this  			
+  		},{
   			text: '30 '+GO.lang.strMinutes,
   			handler:function(){
   				this.doTask('snooze_reminders', 1800);
