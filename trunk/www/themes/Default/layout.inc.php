@@ -48,8 +48,9 @@ if($GO_SECURITY->logged_in() && trim($_SESSION['GO_SESSION']['name']) != '' && !
 			
 				
 			<img src="<?php echo $GO_CONFIG->host; ?>themes/Default/images/16x16/icon-search.png" style="border:0px;margin-left:10px;margin-right:1px;vertical-align:middle" />
-			<input type="text" name="search_query" value="<?php echo $lang['common']['search']; ?>..." id="search_query" onfocus="javascript:this.value='';" onblur="javascript:this.value='<?php echo $lang['common']['search']; ?>...';" onkeypress="return GO.mainLayout.search(event);" class="textbox" />
-	
+			
+			<span id="search_query"></span>
+			
 			
 			&nbsp;&nbsp;<a id="admin-menu-link" href="#"><?php echo $lang['common']['adminMenu']; ?>&nbsp;&nbsp;|</a>		
 			

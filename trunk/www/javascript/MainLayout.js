@@ -284,7 +284,9 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
   	if(!activeTab)
    		this.tabPanel.setActiveTab(0);
    		
-		this.removeLoadMask();		
+   	
+   		
+				
 		
 		GO.checker = new GO.Checker();
 		GO.checker.init.defer(2000,GO.checker);
@@ -294,27 +296,23 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
    			Ext.get('notification-area').update(data.notification_area);
    		}
    	}, this);
-	},
-	
-	search :function(e)
-	{
-    var keynum;
-    var input;
-    input = Ext.get("search_query");
-
-    if(window.event) // IE
-    {
-      keynum = e.keyCode
-    }else if(e.which) // Netscape/Firefox/Opera
-    {
-			keynum = e.which
-    }
-
-    if(keynum==13)
-    {
-			this.addSearchPanel(input.getValue());
-    }
-    return true;
+   	
+   	
+   	var searchField = new Ext.form.TextField({
+  		name:'search_query',
+  		emptyText:GO.lang.strSearch+'...',
+  		listeners:{
+  			scope:this,
+  			keypress:function(field, e){
+		  		if(e.getKey()==Ext.EventObject.ENTER){
+		  			this.addSearchPanel(field.getValue());
+		  		}
+	  		}	
+  		},
+  		renderTo:"search_query"  		
+   	});
+   	
+   	this.removeLoadMask();
 	},
 	
 	setAdminMenu : function()
