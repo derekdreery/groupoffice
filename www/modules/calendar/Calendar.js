@@ -990,14 +990,14 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				});				
 			}, this);		
 		
-		this.monthGrid.on('showday', function(grid, date){
+		this.monthGrid.on('changeview', function(grid, days, date){
 			this.setDisplay({
 				displayType:'days',
-				days:1,
+				days:days,
 				date: date
 				});
 		}, this);
-			
+		
 		this.daysGrid.on("eventDblClick", this.onDblClick, this);
 		this.monthGrid.on("eventDblClick", this.onDblClick, this);
 		this.viewGrid.on("eventDblClick", this.onDblClick, this);

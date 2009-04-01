@@ -367,6 +367,14 @@ background-color: #F1F1F1 !important;
 	font:normal 11px arial, tahoma, helvetica, sans-serif;
 	float:left;
 }
+.cal-monthgrid-week-no{
+	border-right:1px solid #C0C0C0;
+	border-bottom:1px solid #C0C0C0;
+	vertical-align:top;
+	background-color:#d9e3e6;
+	float:left;
+	text-align:center;
+}
 .cal-overflow-indicator{
 	font-style:italic;
 	position:absolute;

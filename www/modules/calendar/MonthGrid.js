@@ -64,6 +64,8 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
   scrollOffset: 19,
   
   gridEvents : {},
+  
+  weekNumberWidth : 16,
 
 
 	// private
@@ -143,10 +145,10 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 		
 		this.cellWrap = Ext.DomHelper.append(this.body,{tag:'div'}, true);
 			
-		var cellHeight = this.cellHeight+'px';
-		var cellWidth= this.cellWidth+'px';
-		
+	
 		this.gridCells={};
+		this.weekNumberCells=[];
+		
 		for(var day=0;day<this.days;day++)
 		{	
 			var dt = this.startDate.add(Date.DAY, day);
@@ -160,10 +162,35 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 			}			
 			
 			var weekday = dt.format('w');
-			
-			var monthStr = dt.format('Ym');
-			
+			var monthStr = dt.format('Ym');			
 			var dateStr = dt.format('Ymd');
+			
+			
+			if(weekday==this.firstWeekday)
+			{
+				var weekNo = dt.format('W');
+				
+				var cell = Ext.DomHelper.append(this.cellWrap,
+				{
+					tag: 'div',
+					style: 'width:'+(this.weekNumberWidth-1)+'px',
+					cls: 'cal-monthgrid-week-no'
+				}, true);
+				
+				var weekLink = Ext.DomHelper.append(cell,{
+						tag: 'a',
+						cls: 'x-monthGrid-cell-day-text',
+						href: '#',
+						id:'wl-'+dateStr,
+						html: weekNo
+					}, true);
+					
+				weekLink.on('click', this.onWeekClick, this);
+				
+				this.weekNumberCells.push(cell);
+			}
+			
+			
 			
 			if(dateStr==currentDateStr)
 			{
@@ -179,7 +206,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 				cellClass = 'cal-monthGrid-cell';
 			}			
 			
-			var id = 'd'+dateStr;			
+			var id = 'd'+dateStr;
 			
 			var cell = Ext.DomHelper.append(this.cellWrap,
 				{
@@ -206,7 +233,12 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 	{
 		var cell = Ext.get(target).findParent('div.cal-monthGrid-cell', 3);				
 		var date = Date.parseDate(cell.id.substring(1, cell.id.length),'Ymd');
-		this.fireEvent('showday', this, date);
+		this.fireEvent('changeview', this, 1, date);
+	},
+	
+	onWeekClick : function(e, target){				
+		var date = Date.parseDate(target.id.substring(3, target.id.length),'Ymd');
+		this.fireEvent('changeview', this, 7, date);
 	},
 	
 	onAddClick : function(e, target){			
@@ -234,7 +266,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 			}
 		}									
 		
-		this.cellWidth = (ctSize['width']/7);
+		this.cellWidth = ((ctSize['width']-this.weekNumberWidth)/7);
 		if(this.cellWidth<100)
 		{
 			this.cellWidth=100;
@@ -248,6 +280,8 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 		
 		this.cellHeight=Math.floor(this.cellHeight);
 		this.cellWidth=Math.floor(this.cellWidth);
+		
+		
   },
   
   checkOverflow : function(){
@@ -288,11 +322,16 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 			var ctSize = this.container.getSize(true);			
 			this.calcCellSize(ctSize);	
 			
-			this.cellWrap.setSize(this.cellWidth*7, this.cellHeight*(this.days/7));			
+			this.cellWrap.setSize(this.cellWidth*7+this.weekNumberWidth, this.cellHeight*(this.days/7));			
 
 			for(var i in this.gridCells)
 			{
 				this.gridCells[i].setSize(this.cellWidth, this.cellHeight);
+			}
+			
+			for(var i=0;i<this.weekNumberCells.length;i++)
+			{
+				this.weekNumberCells[i].setHeight(this.cellHeight);
 			}
 			
 			for(var d in this.gridEvents)
@@ -300,6 +339,8 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 				for(var i=0;i<this.gridEvents[d].length;i++)
 					this.gridEvents[d][i].setWidth(this.cellWidth-3);
 			}
+			
+			
 		}	
   },
 	
