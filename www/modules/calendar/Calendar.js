@@ -83,20 +83,32 @@ GO.calendar.MainPanel = function(config){
 	
 	this.calendarList.on('click', function(dataview, index){		
 			this.viewsList.clearSelections();		
+			
 			this.setDisplay({
 					calendar_id: dataview.store.data.items[index].id,
 					saveState:true				
 				});		
 		}, this);
 	
+		this.calendarList.on('selectionchange', function(dv, selections){
+			if(selections.length)
+				this.calendarTitle.td.innerHTML=selections[0].innerHTML;			
+		}, this);
 	
 	this.viewsList.on('click', function(dataview, index){	
+
 			this.calendarList.clearSelections();							
 			this.setDisplay({
 					view_id: dataview.store.data.items[index].id,
 					saveState:true				
 				});
 		}, this);
+		
+	this.viewsList.on('selectionchange', function(dv, selections){
+			if(selections.length)
+				this.calendarTitle.td.innerHTML=selections[0].innerHTML;			
+		}, this);
+	
 	
 	this.daysGridStore = new GO.data.JsonStore({
 
@@ -173,7 +185,9 @@ GO.calendar.MainPanel = function(config){
 					border: true,
 					split: true,
 					cls: 'cal-display-panel',
-					tbar: [{
+					tbar: [this.calendarTitle = new Ext.Toolbar.TextItem({
+						text:'Calendar'
+					}),'-',{
 						iconCls: 'btn-left-arrow',
 						text: GO.lang.cmdPrevious,
 						cls: 'x-btn-text-icon',
@@ -424,7 +438,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	calendarId : 0,
 	viewId : 0,
 
-		
+
 	onShow : function(){
 		GO.calendar.MainPanel.superclass.onShow.call(this);
 		this.daysGrid.scrollToLastPosition();
