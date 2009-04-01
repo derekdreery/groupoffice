@@ -91,3 +91,8 @@ GO.users.lang.importText='You can import users using a CSV file. To know how the
 
 GO.users.lang.useModule= 'Use';
 GO.users.lang.manageModule= 'Manage';
+
+GO.users.lang.numberFormat ='Number format';
+GO.users.lang.importExport ='Import / Export';
+GO.users.lang.listSeparator='List separator';
+GO.users.lang.textSeparator='Text separator';

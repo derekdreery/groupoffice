@@ -118,6 +118,9 @@ class users extends db
 			$user['time_format'] = ($_POST["time_format"]);
 			$user['timezone'] = ($_POST["timezone"]);
 			$user['currency'] = ($_POST["currency"]);
+			
+			$user['list_separator'] = $_POST["list_separator"];
+			$user['text_separator'] = $_POST["text_separator"];
 		}
 
 

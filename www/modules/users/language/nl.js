@@ -80,3 +80,8 @@ GO.users.lang.importText='U kunt gebruikers importeren met een CSV bestand. Om t
 
 GO.users.lang.useModule= 'Gebruiken';
 GO.users.lang.manageModule= 'Beheren';
+
+GO.users.lang.numberFormat ='Nummerformaat';
+GO.users.lang.importExport ='Import / Export';
+GO.users.lang.listSeparator='Lijstscheidingsteken';
+GO.users.lang.textSeparator='Tekstschedingsteken';

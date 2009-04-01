@@ -1064,11 +1064,11 @@ class GO_CONFIG
 
       	$response['state_index'] = 'go';
 
-
+				$response['language']=$GO_LANGUAGE->language;
       	$response['state']=array();
       	if($GO_SECURITY->logged_in())
       	{
-      		$response['user_id']=$GO_SECURITY->user_id;
+      		/*$response['user_id']=$GO_SECURITY->user_id;
       		$response['username']=$_SESSION['GO_SESSION']['username'];
       		$response['name']=trim($_SESSION['GO_SESSION']['name']);
       		$response['email']=$_SESSION['GO_SESSION']['email'];
@@ -1087,14 +1087,14 @@ class GO_CONFIG
       		$response['sort_name']=$_SESSION['GO_SESSION']['sort_name'];
       		$response['max_rows_list']=$_SESSION['GO_SESSION']['max_rows_list'];
       		$response['currency']=$_SESSION['GO_SESSION']['currency'];
-      		$response['mute_sound']=$_SESSION['GO_SESSION']['mute_sound']=='1';
+      		$response['mute_sound']=$_SESSION['GO_SESSION']['mute_sound']=='1';*/
 
-      		$response['language']=$GO_LANGUAGE->language;
+      		
       		//state for Ext components
       		$response['state'] = $this->get_state($GO_SECURITY->user_id, $response['state_index']);
       	}else
       	{
-      		$response['user_id']=0;
+      		/*$response['user_id']=0;
       		$response['username']='';
       		$response['name']='';
       		$response['email']='';
@@ -1111,8 +1111,15 @@ class GO_CONFIG
       		$response['sort_name']='first_name';
       		$response['max_rows_list']=30;
       		$response['language']=$GO_LANGUAGE->language;
-      		$response['mute_sound']=false;
+      		$response['mute_sound']=false;*/
       	}
+ 				foreach($_SESSION['GO_SESSION'] as $key=>$value)
+ 				{
+ 					if(!is_array($value))
+ 					{
+ 						$response[$key]=$value;
+ 					}
+ 				}
       	$response['modules']=$GO_MODULES->modules;
       	$response['config']['theme_url']=$GO_THEME->theme_url;
       	$response['config']['theme']=$GO_THEME->theme;
