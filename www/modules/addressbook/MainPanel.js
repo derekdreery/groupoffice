@@ -136,7 +136,7 @@ GO.addressbook.MainPanel = function(config)
 			region:'center'
 		});
 		
-		GO.mailings.readableMailingsStore.on('load', function(){
+		/*GO.mailings.readableMailingsStore.on('load', function(){
 			if(GO.mailings.readableMailingsStore.getCount()==0)
 			{
 				this.mailingsFilterPanel.hide();
@@ -144,7 +144,7 @@ GO.addressbook.MainPanel = function(config)
 			{
 				this.mailingsFilterPanel.show();
 			}
-		}, this);
+		}, this);*/
 		
 		this.mailingsFilterPanel.on('change', function(grid, mailings_filter){
 			var panel = this.tabPanel.getActiveTab();		
