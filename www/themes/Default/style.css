@@ -167,6 +167,11 @@ display:block;margin-bottom:15px;
 }
 .go-top-panel .x-form-text {
 	color: #666 !important;	
+	background:#dedede !important;
+	border:1px solid #dedede !important;
+	padding-left:2px !important;	
+	vertical-align:middle !important;
+	height:15px !important;
 }
 
 #checker-loading{
