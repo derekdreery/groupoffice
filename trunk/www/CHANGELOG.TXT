@@ -1,6 +1,11 @@
+2009/04/01 Version 3.01-stable-20
+- Small bug fixes
+- Weeknumbers in calendar monthview
+
 2009/03/31 Version 3.01-stable-19
 - Plain text e-mail option
 - GnuPG encryption
+- Show new files uploaded by others in the files module
 - Folder templates in projects module
 - Upgrade SwiftMailer to version 4.0.3
 - Updated German and Czech translations
