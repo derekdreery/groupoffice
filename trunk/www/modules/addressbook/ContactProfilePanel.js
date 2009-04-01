@@ -6,8 +6,18 @@ GO.addressbook.ContactProfilePanel = function(config)
 	{
 		fieldLabel: GO.lang['strFirstName'], 
 		name: 'first_name', 
-		id: 'first_name',
-		allowBlank: false
+		panel: this,
+		validateValue: function(val) {
+      var bool = (val!='' || this.panel.formLastName.getValue()!='');
+      if(!bool)
+      {
+      	this.markInvalid(this.blankText);
+      }else
+      {
+      	this.panel.formLastName.clearInvalid();
+      }
+      return bool;
+    }
 	});
 	
 	this.formMiddleName = new Ext.form.TextField(
@@ -20,7 +30,18 @@ GO.addressbook.ContactProfilePanel = function(config)
 	{	
 		fieldLabel: GO.lang.strLastName,	
 		name: 'last_name',
-		allowBlank: false
+		panel: this,
+		validateValue: function(val) {
+			var bool = (val!='' || this.panel.formFirstName.getValue()!='');      
+      if(!bool)
+      {
+      	this.markInvalid(this.blankText);
+      }else
+      {
+      	this.panel.formFirstName.clearInvalid();
+      }
+      return bool;
+    }
 	});
 	
 	this.formTitle = new Ext.form.TextField(

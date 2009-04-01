@@ -111,9 +111,11 @@ GO.addressbook.CompanyDialog = function(config)
 				scope: this 
 			}
 		];
-	this.focus= function(){
-		Ext.get('companyName').focus();
-	}					
+		
+	var focusFirstField = function(){
+		this.companyForm.form.findField('name').focus(true);
+	};
+	this.focus= focusFirstField.createDelegate(this);			
 
 
 	GO.addressbook.CompanyDialog.superclass.constructor.call(this);
