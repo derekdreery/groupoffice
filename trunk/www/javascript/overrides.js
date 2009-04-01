@@ -10,7 +10,7 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
- 
+
  
  Ext.apply(Ext.form.VTypes, {    
     password : function(val, field) {

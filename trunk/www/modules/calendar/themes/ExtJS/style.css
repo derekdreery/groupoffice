@@ -380,6 +380,16 @@ background-color: #F1F1F1 !important;
 	font:normal 11px arial, tahoma, helvetica, sans-serif;
 	float:left;
 }
+
+.cal-monthgrid-week-no{
+	border-right:1px solid #c3daf9;
+	border-bottom:1px solid #c3daf9;
+	vertical-align:top;
+	background-color:#DFE8F6;
+	float:left;
+	text-align:center;
+}
+
 .cal-overflow-indicator{
 	font-style:italic;
 	position:absolute;
