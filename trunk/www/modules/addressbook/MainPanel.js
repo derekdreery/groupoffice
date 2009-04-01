@@ -207,19 +207,6 @@ GO.addressbook.MainPanel = function(config)
 			scope: this
 		},
 		{
-			iconCls: 'btn-addressbook-manage', 
-			text: GO.addressbook.lang['btnManage'], 
-			cls: 'x-btn-text-icon', 
-			handler:function(){
-				if(!this.manageDialog)
-				{
-					this.manageDialog = new GO.addressbook.ManageDialog();
-				}
-				this.manageDialog.show();
-			},  
-			scope: this
-		},
-		{
 			iconCls: 'btn-delete', 
 			text: GO.lang['cmdDelete'], 
 			cls: 'x-btn-text-icon', 
@@ -237,12 +224,46 @@ GO.addressbook.MainPanel = function(config)
 				}	
 			}, 
 			scope: this
+		},
+		'-',
+		{
+			iconCls: 'btn-addressbook-manage', 
+			text: GO.addressbook.lang['btnManage'], 
+			cls: 'x-btn-text-icon', 
+			handler:function(){
+				if(!this.manageDialog)
+				{
+					this.manageDialog = new GO.addressbook.ManageDialog();
+				}
+				this.manageDialog.show();
+			},  
+			scope: this
+		},{
+			iconCls: 'btn-export', 
+			text: GO.lang.cmdExport, 
+			cls: 'x-btn-text-icon', 
+			handler:function(){
+				var activetab = this.tabPanel.getActiveTab();
+				var export_query;
+				switch(activetab.id)
+				{
+					case 'ab-contacts-grid':
+						export_query='search_contacts';
+					break;
+					case 'ab-company-grid':					
+						export_query='search_companies';
+					break;				
+				}	
+				document.location.href=BaseHref+'export_query.php?query='+export_query;
+			},  
+			scope: this		
 		}
 		
 	];
 
 	if(GO.mailings)
 	{
+		tbar.push('-');
 		tbar.push({
 				iconCls: 'ml-btn-mailings', 
 				text: GO.addressbook.lang.sendMailing, 
