@@ -20,3 +20,10 @@ $updates[]="CREATE TABLE IF NOT EXISTS `fs_new_files` (
   `user_id` int(11) NOT NULL,
   KEY `file_id` (`file_id`,`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+//twice on purpose
+$updates[]="CREATE TABLE IF NOT EXISTS `fs_new_files` (
+  `file_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  KEY `file_id` (`file_id`,`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";

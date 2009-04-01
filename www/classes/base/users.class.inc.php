@@ -137,6 +137,9 @@ class GO_USERS extends db
 			$_SESSION['GO_SESSION']['mute_sound'] = $userdata['mute_sound'];
 			$_SESSION['GO_SESSION']['first_weekday'] = $userdata['first_weekday'];
 			$_SESSION['GO_SESSION']['sort_name'] = !empty($userdata['sort_name']) ? $userdata['sort_name'] : 'first_name';
+			
+			$_SESSION['GO_SESSION']['list_separator'] = $userdata['list_separator'];
+			$_SESSION['GO_SESSION']['text_separator'] = $userdata['text_separator'];
 			return true;
 		}
 		return false;

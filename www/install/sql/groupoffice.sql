@@ -277,7 +277,7 @@ CREATE TABLE IF NOT EXISTS `go_users` (
   `initials` varchar(10) default NULL,
   `title` varchar(10) default NULL,
   `sex` enum('M','F') NOT NULL default 'M',
-  `birthday` date NULL default NULL,
+  `birthday` date default NULL,
   `email` varchar(100) default NULL,
   `company` varchar(50) default NULL,
   `department` varchar(50) default NULL,
@@ -321,6 +321,8 @@ CREATE TABLE IF NOT EXISTS `go_users` (
   `bank_no` varchar(50) default NULL,
   `mtime` int(11) NOT NULL default '0',
   `mute_sound` enum('0','1') NOT NULL,
+  `list_separator` char(3) NOT NULL default ';',
+  `text_separator` char(3) NOT NULL default '"',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

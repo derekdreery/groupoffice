@@ -467,10 +467,16 @@ class addressbook extends db {
 			$sql = "SELECT ";
 		}
 
-		$sql .= "ab_contacts.*, ab_companies.name AS company_name FROM ab_contacts ".
-		"LEFT JOIN ab_companies ON ab_contacts.company_id=ab_companies.id ";
+		$sql .= "ab_contacts.*, ab_companies.name AS company_name";
+		
+		if($GO_MODULES->has_module('customfields'))
+		{
+			$sql .= ",cf_2.*";
+		}
+		
+		$sql .= " FROM ab_contacts LEFT JOIN ab_companies ON ab_contacts.company_id=ab_companies.id ";
 
-		if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
+		if($GO_MODULES->has_module('customfields'))
 		{
 			$sql .= "LEFT JOIN cf_2 ON cf_2.link_id=ab_contacts.id ";
 		}
@@ -581,6 +587,8 @@ class addressbook extends db {
 		}
 
 		$sql .= " ORDER BY $sort_index $sort_order";
+		
+		$_SESSION['GO_SESSION']['export_queries']['search_contacts']=$sql;
 
 		$this->query($sql);
 		$count = $this->num_rows();
@@ -693,6 +701,8 @@ class addressbook extends db {
 		{
 			$sql .= $advanced_query;
 		}
+		
+		$_SESSION['GO_SESSION']['export_queries']['search_companies']=$sql;
 
 		$sql .= " ORDER BY $sort_index $sort_order";
 

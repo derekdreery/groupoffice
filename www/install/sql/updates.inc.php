@@ -54,4 +54,7 @@ $updates[]="CREATE TABLE IF NOT EXISTS `go_link_descriptions` (
   `description` varchar(100) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates[]="ALTER TABLE `go_users` ADD `list_separator` CHAR( 3 ) NOT NULL DEFAULT ';',
+ADD `text_separator` CHAR( 3 ) NOT NULL DEFAULT '\"'";
 ?>
