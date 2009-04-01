@@ -147,7 +147,6 @@ GO.addressbook.CompanyProfilePanel = function(config)
 					 
 	this.formName = new Ext.form.TextField(
 	{
-		id:'companyName',
 		fieldLabel: GO.lang['strName'], 
 		name: 'name'
 	});

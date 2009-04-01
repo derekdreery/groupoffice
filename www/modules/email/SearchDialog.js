@@ -18,8 +18,7 @@ GO.email.SearchDialog = function(config){
 			        
 					items: [{
 			                fieldLabel: GO.email.lang.subject,
-			                name: 'subject',
-			                id:'search-subject'
+			                name: 'subject'
 				            },
 				            {
 				                fieldLabel: GO.email.lang.from,
@@ -148,8 +147,8 @@ GO.email.SearchDialog = function(config){
 			            scope:this
 			        }],
 	        focus: function(){
-	        	Ext.get('search-subject').focus(true);			        	
-	        }
+	        	this.formPanel.form.findField('subject').focus(true);			        	
+	        }.createDelegate(this)
 				}
 				);	
 				

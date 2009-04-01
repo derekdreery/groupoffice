@@ -20,7 +20,6 @@
         }
         return true;
     },
-
     passwordText : GO.lang.passwordMatchError
 });
 

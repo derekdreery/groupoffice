@@ -123,9 +123,12 @@ GO.addressbook.ContactDialog = function(config)
 			scope: this 
 		}
 	];
-	this.focus= function(){
-		Ext.get('first_name').focus();
-	}
+	
+	var focusFirstField = function(){
+		this.formPanel.form.findField('first_name').focus(true);
+	};
+	
+	this.focus= focusFirstField.createDelegate(this);
 	
 	
 	GO.addressbook.ContactDialog.superclass.constructor.call(this);
