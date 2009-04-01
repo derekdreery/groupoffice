@@ -1,0 +1,15 @@
+<?php
+/**
+ * Russian translation
+ * By Valery Yanchenko (utf-8 encoding)
+ * vajanchenko@hotmail.com
+ * 10 December 2008
+*/
+//Uncomment this line in new translations!
+require($GO_LANGUAGE->get_fallback_language_file('files'));
+$lang['groups']['name'] = 'Группы';
+$lang['groups']['description'] = 'Модуль администрирования; Управления группами пользователей.';
+$lang['groups']['noDeleteAdmins'] = 'Вы не можете удалить группу Администраторы';
+$lang['groups']['noDeleteEveryone'] = 'Вы не можете удалить группу Все';
+$lang['groups']['groupNameAlreadyExists'] = 'Группа с таким именем уже существует';
+?>
