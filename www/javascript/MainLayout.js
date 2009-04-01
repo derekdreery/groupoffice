@@ -300,6 +300,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
    	
    	var searchField = new Ext.form.TextField({
   		name:'search_query',
+  		enableKeyEvents:true,
   		emptyText:GO.lang.strSearch+'...',
   		listeners:{
   			scope:this,
@@ -307,7 +308,10 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		  		if(e.getKey()==Ext.EventObject.ENTER){
 		  			this.addSearchPanel(field.getValue());
 		  		}
-	  		}	
+	  		},
+	  		blur:function(field){
+	  			field.reset();
+	  		}
   		},
   		renderTo:"search_query"  		
    	});
@@ -319,8 +323,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	{
 		var adminMenuLink = Ext.get("adminMenuLink");
 		if(adminMenuLink)
-		{
-			
+		{			
 			adminMenuLink.on("click", function(){
 
 				var x = adminMenuLink.getX();
