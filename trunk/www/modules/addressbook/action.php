@@ -171,6 +171,11 @@ try
 				{
 					$company_credentials[$key] = isset($_REQUEST[$key]) ? ($_REQUEST[$key]) : null;
 				}
+				
+				if(isset($company_credentials['homepage']) && !strpos($company_credentials['homepage'],'://'))
+				{
+					$company_credentials['homepage']='http://'.$company_credentials['homepage'];
+				}
 					
 				$addressbook = $ab->get_addressbook($company_credentials['addressbook_id']);
 					
