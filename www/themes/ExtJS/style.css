@@ -35,11 +35,12 @@ vertical-align:middle;
 color: white !important;
 line-height:20px;
 }
-.go-top-panel input {
-	color:white;	
-	background:#0000aa url(images/hd-sprite.gif) repeat-x 0px -83px;
+.go-top-panel .x-form-text {
+	color:white !important;	
+	background:#0000aa url(images/hd-sprite.gif) repeat-x 0px -83px !important;
 	border:1px solid white;
 	padding-left:2px;
+	height:15px !important;
 }
 
 /* start buttons */

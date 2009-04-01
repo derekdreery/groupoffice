@@ -165,13 +165,8 @@ display:block;margin-bottom:15px;
 	margin-right:6px;
 	text-decoration:none;
 }
-.go-top-panel input {
-	color: #666;	
-	/*background:#0000aa url(images/hd-sprite.gif) repeat-x 0px -92px;*/
-	background-color:#dedede;
-	border:1px solid #dedede;
-	padding-left:2px;	
-	vertical-align:middle;
+.go-top-panel .x-form-text {
+	color: #666 !important;	
 }
 
 #checker-loading{
