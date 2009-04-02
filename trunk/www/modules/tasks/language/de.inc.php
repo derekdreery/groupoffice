@@ -3,12 +3,12 @@
 require($GO_LANGUAGE->get_fallback_language_file('tasks'));
 
 $lang['tasks']['name']='Aufgaben';
-$lang['tasks']['description']='Beschreibung hier eingeben';
+$lang['tasks']['description']='Modul zur Verwaltung von Aufgaben';
 
 $lang['link_type'][12]=$lang['tasks']['task']='Aufgabe';
 $lang['tasks']['status']='Status';
 
-$lang['tasks']['scheduled_call']='Scheduled call at %s';
+$lang['tasks']['scheduled_call']='Geplanter Anruf um %s';
 
 $lang['tasks']['statuses']['NEEDS-ACTION']= 'Benötigt Aktion';
 $lang['tasks']['statuses']['ACCEPTED']= 'Akzeptiert';

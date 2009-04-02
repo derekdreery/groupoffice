@@ -5,7 +5,7 @@ GO.users.lang.cmdHeaderColumnName= 'Modulname';
 GO.users.lang.cmdHeaderColumnGroups= 'Gruppen';
 GO.users.lang.cmdHeaderGridUserHasAccess = 'Der Benutzer hat Zugriff auf';
 GO.users.lang.userIsMemberOf = 'Der Benutzer ist Mitglied von';
-GO.users.lang.userVisibleTo = 'Der Benutzer ist für folgende Gruppen sichtbar';
+GO.users.lang.userVisibleTo = 'Der Benutzer ist sichtbar für';
 
 GO.users.lang.cmdPanelPersonal = 'Persönlich';
 GO.users.lang.cmdPanelPassword= 'Passwort';
@@ -29,7 +29,7 @@ GO.users.lang.cmdFormLabelPassword = 'Passwort';
 GO.users.lang.cmdFormLabelConfirm = 'Bestätigen';
 GO.users.lang.cmdBoxLabelEnabled = 'Aktiviert';
 	
-GO.users.lang.cmdFormLabelHomepage = 'Homepage';
+GO.users.lang.cmdFormLabelHomepage = 'Webseite';
 GO.users.lang.cmdFormLabelRegistrationTime = 'Registrierungsdatum';
 GO.users.lang.cmdFormLabelLastLogin = 'Letzte Anmeldung';
 GO.users.lang.cmdFormLabelTotalLogins = 'Anmeldungen gesamt';
@@ -40,7 +40,7 @@ GO.users.lang.cmdFormLabelMaximunRows = 'Max. Zeilen in Listen';
 GO.users.lang.cmdFormLabelSortNamesBy = 'Nachname';
 GO.users.lang.cmdFormLabelLanguage = 'Sprache';
 GO.users.lang.cmdFormLabelTimezone = 'Zeitzone';
-GO.users.lang.cmdFormLabelAdjustDaylight = 'Automatisch an Sommerzeit Anpassung';
+GO.users.lang.cmdFormLabelAdjustDaylight = 'Automatisch auf Sommerzeit umstellen';
 GO.users.lang.cmdFormLabelDateFormat = 'Datum';
 GO.users.lang.cmdFormLabelDateSeperator = 'Datums-Trennzeichen';
 GO.users.lang.timeFormat = 'Uhrzeit';
@@ -71,15 +71,20 @@ GO.users.lang.monday = 'Montag';
 GO.users.lang.regionalSettings = 'Regionale Einstellungen';
 GO.users.lang.userSettings = 'Benutzer-Einstellungen';
 
-GO.users.lang.group='Gruppe';
-
 GO.users.lang.maxUsersReached='Die maximale Anzahl von Benutzern wurde erreicht. Gehen Sie zu der Registerkarte um die maximale Benutzeranzahl zu erhöhen.';
+
+GO.users.lang.group='Gruppe';
 
 GO.users.lang.muteSound='Keine Sounds für Ereignisse nutzen';
 
 GO.users.lang.downloadSampleCSV='Beispiel-CSV herunterladen';
 
-GO.users.lang.importText='You can import users using a CSV file. To know how the CSV file should be formatted, download the sample file.<br />The first line must contain the column names. The following fields are required for each user:<br /><br />username, password, first_name, last_name, email';
+GO.users.lang.importText='Sie können Benutzer mittels einer CSV-Datei importieren. Um die nötige Formatierung dieser Date einzuhalten, laden Sie sich die Beispieldatei herunter.<br />Die erste Zeile muss die Spaltenbezeichnungen enthalten. Folgende Felder sind für jeden neuen Benutzer erforderlich:<br /><br />username, password, first_name, last_name, email';
 
 GO.users.lang.useModule= 'Nutzungs-Rechte';
 GO.users.lang.manageModule= 'Verwaltungs-Rechte';
+
+GO.users.lang.numberFormat ='Nummernformat';
+GO.users.lang.importExport ='Import / Export';
+GO.users.lang.listSeparator='Listenfeld-Trennzeichen';
+GO.users.lang.textSeparator='Textfeld-Trennzeichen';

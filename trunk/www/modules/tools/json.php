@@ -18,7 +18,7 @@ try{
 				
 				if(isset($GO_MODULES->modules['files']))
 				{
-					$response['results'][]=array('name'=>'Index all files', 'script'=>$GO_MODULES->modules['files']['url'].'crawl.php');
+					$response['results'][]=array('name'=>$lang['tools']['index_files'], 'script'=>$GO_MODULES->modules['files']['url'].'crawl.php');
 				}
 				//$response['results'][]=array('name'=>$lang['tools']['backupdb'], 'script'=>$GO_MODULES->modules['tools']['url'].'backupdb.php');
 				if(!empty($GO_CONFIG->phpMyAdminUrl))
