@@ -114,8 +114,8 @@ GO.files.FilePropertiesDialog = function(config){
 	GO.files.FilePropertiesDialog.superclass.constructor.call(this,{
 		title:GO.lang['strProperties'],
 		layout:'fit',
-		width:440,
-		height:400,
+		width:600,
+		height:500,
 		closeAction:'hide',
 		items:this.formPanel,
 		buttons:[
@@ -141,24 +141,33 @@ GO.files.FilePropertiesDialog = function(config){
 
 Ext.extend(GO.files.FilePropertiesDialog, Ext.Window, {
 	
-	show : function(path)
+	show : function(path, config)
 	{
+		config = config || {};
+		
 		this.path = path;
 		
 		if(!this.rendered)
 			this.render(Ext.getBody());
 			
 		this.formPanel.form.reset();
+		this.tabPanel.setActiveTab(0);
+		
+		var params = {
+				path: path, 
+				task: 'file_properties'
+			};
+			
+		if(config.loadParams)
+		{
+			Ext.apply(params, config.loadParams);
+		}
 		
 		this.formPanel.form.load({
 			url: GO.settings.modules.files.url+'json.php', 
-			params: {
-				path: path, 
-				task: 'file_properties'
-			},			
+			params: params,			
 			success: function(form, action) {				
-				this.setWritePermission(action.result.data.write_permission);
-				this.tabPanel.setActiveTab(0);
+				this.setWritePermission(action.result.data.write_permission);			
 				
 		    GO.files.FilePropertiesDialog.superclass.show.call(this);
 	    },
