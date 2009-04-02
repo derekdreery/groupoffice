@@ -79,7 +79,7 @@ GO.users.lang.muteSound='Keine Sounds für Ereignisse nutzen';
 
 GO.users.lang.downloadSampleCSV='Beispiel-CSV herunterladen';
 
-GO.users.lang.importText='Sie können Benutzer mittels einer CSV-Datei importieren. Um die nötige Formatierung dieser Date einzuhalten, laden Sie sich die Beispieldatei herunter.<br />Die erste Zeile muss die Spaltenbezeichnungen enthalten. Folgende Felder sind für jeden neuen Benutzer erforderlich:<br /><br />username, password, first_name, last_name, email';
+GO.users.lang.importText='Sie können Benutzer mittels einer CSV-Datei importieren. Um die nötige Formatierung dieser Datei einzuhalten, laden Sie sich zum Vergleich bitte die Beispieldatei herunter.<br />Die erste Zeile muss die Spaltenbezeichnungen enthalten und für jeden neuen Benutzer müssen die folgenden Daten angegeben werden:<br /><br />username, password, first_name, last_name, email';
 
 GO.users.lang.useModule= 'Nutzungs-Rechte';
 GO.users.lang.manageModule= 'Verwaltungs-Rechte';
