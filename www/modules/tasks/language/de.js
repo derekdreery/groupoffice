@@ -21,13 +21,12 @@ GO.tasks.lang.repeatUntil = 'Bis zum';
 GO.tasks.lang.repeatForever = 'ewig';
 GO.tasks.lang.recurrence = 'Wiederholungen';
 GO.tasks.lang.reminder = 'Erinnerung';
+GO.tasks.lang.remindMe= 'Erinnerung';
+GO.tasks.lang.remindDays= 'Tag(e) vorher';
 GO.tasks.lang.options = 'Extras';
 GO.tasks.lang.createLink = 'Verknüpfung hinzufügen';
 GO.tasks.lang.startsAt='Beginnt am';
 GO.tasks.lang.showInactiveTasks='Zeige inaktive Aufgaben';
-
-GO.tasks.lang.remindMe= 'Erinnerung';
-GO.tasks.lang.remindDays= 'Tag(e) vorher';
 GO.tasks.lang.scheduleCall='Erinnnerungsruf';
 GO.tasks.lang.call='Anruf';
 GO.tasks.lang.taskDefaults='Standardeinstellungen für Aufgaben';

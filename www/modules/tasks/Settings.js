@@ -46,7 +46,7 @@ GO.tasks.SettingsPanel = function(config) {
 				decimals:0,
 				name : 'reminder_days',			
 				value : '0',
-				fieldLabel : 'Days before start',
+				fieldLabel : GO.tasks.lang.daysBeforeStart,
 				disabled : true
 			}),this.timeField = new Ext.form.TimeField({
 				name : 'reminder_time',
