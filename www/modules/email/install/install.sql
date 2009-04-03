@@ -41,12 +41,13 @@ CREATE TABLE IF NOT EXISTS `em_accounts` (
   `forward_local_copy` enum('0','1') NOT NULL,
   `smtp_host` varchar(100) default NULL,
   `smtp_port` int(11) NOT NULL,
-  `smtp_encryption` tinyint(4) NOT NULL,
+  `smtp_encryption` char(3) NOT NULL,
   `smtp_username` varchar(50) default NULL,
   `smtp_password` varchar(50) default NULL,
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 
 -- --------------------------------------------------------
 
