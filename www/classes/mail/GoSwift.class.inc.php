@@ -141,8 +141,10 @@ class GoSwift extends Swift_Mailer{
 			}
 		}else
 		{
+			$encryption = empty($GO_CONFIG->smtp_encryption) ? null : $GO_CONFIG->smtp_encryption;
+			
 			$this->smtp_host=$GO_CONFIG->smtp_server;
-			$transport=new Swift_SmtpTransport($GO_CONFIG->smtp_server, $GO_CONFIG->smtp_port);
+			$transport=new Swift_SmtpTransport($GO_CONFIG->smtp_server, $GO_CONFIG->smtp_port, $encryption);
 			if(!empty($GO_CONFIG->smtp_username))
 			{
 				$transport->setUsername($GO_CONFIG->smtp_username)

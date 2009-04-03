@@ -560,6 +560,17 @@ class files extends filesystem
 			return $this->get_file($path);
 		}
 	}
+	
+	function get_file_by_id($file_id)
+	{
+		$sql = "SELECT * FROM fs_files WHERE id='".$this->escape($file_id)."';";
+		$this->query($sql);
+		if($this->next_record())
+		{
+			return $this->record;
+		}
+		return false;
+	}
 
 	function move_file($source_path, $destination_path)
 	{
