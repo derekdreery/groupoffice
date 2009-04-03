@@ -273,13 +273,12 @@ GO.email.AccountDialog = function(config) {
 							store : new Ext.data.SimpleStore({
 										fields : ['value', 'text'],
 										data : [
-												[
-														'8',
-														GO.email.lang.noEncryption],
-												['2', 'TLS'], ['4', 'SSL']]
-
+												['',GO.email.lang.noEncryption],
+												['tls', 'TLS'], 
+												['ssl', 'SSL']
+											]
 									}),
-							value : '8',
+							value : '',
 							valueField : 'value',
 							displayField : 'text',
 							typeAhead : true,
@@ -445,7 +444,7 @@ GO.email.AccountDialog = function(config) {
 			}, this);
 
 	this.encryptionField.on('select', function(combo, record, index) {
-				var value = record.data.value == 8 ? '25' : '465';
+				var value = record.data.value == '' ? '25' : '465';
 				this.propertiesPanel.form.findField('smtp_port')
 						.setValue(value);
 			}, this);

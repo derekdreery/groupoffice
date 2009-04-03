@@ -35,3 +35,9 @@ $updates[]="ALTER TABLE `em_accounts`
 
 $updates[]="ALTER TABLE `em_links` ADD `acl_read` INT NOT NULL ,
 ADD `acl_write` INT NOT NULL ;";
+
+$updates[]="ALTER TABLE `em_accounts` CHANGE `smtp_encryption` `smtp_encryption` CHAR( 3 ) NOT NULL";  
+$updates[]="UPDATE em_accounts SET smtp_encryption='' WHERE smtp_encryption='8'";
+$updates[]="UPDATE em_accounts SET smtp_encryption='tls' WHERE smtp_encryption='2'";
+$updates[]="UPDATE em_accounts SET smtp_encryption='ssl' WHERE smtp_encryption='4'";
+$updates[]="UPDATE em_accounts SET smtp_encryption='' WHERE smtp_encryption='0'";

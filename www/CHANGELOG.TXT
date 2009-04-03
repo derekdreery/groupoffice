@@ -1,3 +1,6 @@
+2009/04/03 Version 3.01-stable-22
+- SMTP with SSL or TLS didn't work anymore
+
 2009/04/01 Version 3.01-stable-20
 - Small bug fixes
 - Weeknumbers in calendar monthview
