@@ -546,6 +546,7 @@ class String {
 	"'<head[^>]*>.*?</head>'si",
 	"'<style[^>]*>.*?</style>'si",
 	"'<script[^>]*>.*?</script>'si",
+	"'<iframe[^>]*>.*?</iframe>'si",
 	"'<object[^>]*>.*?</object>'si",
 	"'<embed[^>]*>.*?</embed>'si",
 	"'<applet[^>]*>.*?</applet>'si",
