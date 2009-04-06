@@ -843,7 +843,7 @@ class addressbook extends db {
 
 		require($GO_LANGUAGE->get_language_file('addressbook'));
 
-		$sql = "SELECT c.*,a.acl_read,a.acl_write FROM ab_contacts c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id WHERE c.id=?";
+		$sql = "SELECT c.*,a.acl_read,a.acl_write, a.name AS addressbook_name FROM ab_contacts c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id WHERE c.id=?";
 		$this->query($sql, 'i', $contact_id);
 		$record = $this->next_record();
 		if($record)
@@ -851,7 +851,7 @@ class addressbook extends db {
 			$cache['id']=$this->f('id');
 			$cache['user_id']=$this->f('user_id');
 			$cache['module']='addressbook';
-			$cache['name'] = String::format_name($this->f('last_name'),$this->f('first_name'),$this->f('middle_name'));
+			$cache['name'] = htmlspecialchars(String::format_name($this->f('last_name'),$this->f('first_name'),$this->f('middle_name')).' ('.$this->f('addressbook_name').')', ENT_QUOTES,'UTF-8');
 			$cache['link_type']=2;
 			$cache['description']='';
 			$cache['type']=$lang['addressbook']['contact'];
@@ -875,14 +875,14 @@ class addressbook extends db {
 		require_once($GO_CONFIG->class_path.'/base/search.class.inc.php');
 		$search = new search();
 		require($GO_LANGUAGE->get_language_file('addressbook'));
-		$sql = "SELECT c.*, a.acl_read, a.acl_write FROM ab_companies c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id WHERE c.id=?";
+		$sql = "SELECT c.*, a.acl_read, a.acl_write, a.name AS addressbook_name FROM ab_companies c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id WHERE c.id=?";
 		$this->query($sql, 'i', $company_id);
 		$record = $this->next_record();
 		if($record)
 		{
 			$cache['id']=$this->f('id');
 			$cache['user_id']=$this->f('user_id');
-			$cache['name'] = htmlspecialchars($this->f('name'), ENT_QUOTES, 'utf-8');
+			$cache['name'] = htmlspecialchars($this->f('name').' ('.$this->f('addressbook_name').')', ENT_QUOTES, 'utf-8');
 			$cache['link_type']=3;
 			$cache['module']='addressbook';
 			$cache['description']='';
