@@ -383,7 +383,7 @@ class gnupg{
 
 		if($ret>0)
 		{
-			throw new Exception($this->error);
+			throw new Exception(nl2br($this->error));
 		}
 
 		return $ret;
