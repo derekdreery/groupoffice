@@ -120,3 +120,14 @@ while($GO_MODULES->next_record())
 }
 echo 'Database is up to date now!'.$line_break.$line_break;
 
+if(is_dir($GO_CONFIG->local_path.'cache'))
+{
+	echo 'Removing cached javascripts from '.$GO_CONFIG->local_path.'cache ...'.$line_break;
+	
+	require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+	$fs = new filesystem();
+	
+	$fs->delete($GO_CONFIG->local_path.'cache');
+	echo 'Done!'.$line_break.$line_break;
+}
+
