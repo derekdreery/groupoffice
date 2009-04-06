@@ -223,7 +223,7 @@ try{
 										{
 											try{
 												$response['deleteSuccess']=true;
-												$tasklists = json_decode(($_POST['delete_keys']));
+												$tasklists = json_decode($_POST['delete_keys']);
 
 												foreach($tasklists as $tasklist_id)
 												{
@@ -258,10 +258,11 @@ try{
 											$response['total'] = $tasks->get_authorized_tasklists($auth_type, $query, $GO_SECURITY->user_id, $start, $limit, $sort, $dir);
 										}
 										$response['results']=array();
-										while($tasks->next_record(DB_ASSOC))
+										while($tasklist = $tasks->next_record(DB_ASSOC))
 										{
-											$tasklist = $tasks->record;
 											$tasklist['dom_id']='tl-'.$tasks->f('id');
+											$user = $GO_USERS->get_user($tasklist['user_id']);
+											$tasklist['user_name']=String::format_name($user);
 											$response['results'][] = $tasklist;
 										}
 
