@@ -169,22 +169,39 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 		}
 		
 		if(target.tagName=='A')
-		{			
+		{	
 			var href=target.attributes['href'].value;
-			
-			var pos = href.indexOf('#link_');
-			if(pos>-1)
+			if(href.substr(0,6)=='mailto')
 			{
-				e.preventDefault();
-				
-				var index = href.substr(pos+6, href.length);		
-				var link = this.data.links[index];			
-				if(link.link_type=='folder')
+				var indexOf = href.indexOf('?');
+				if(indexOf>0)
 				{
-					GO.linkBrowser.show({link_id: link.parent_link_id,link_type: link.parent_link_type,folder_id: link.id});
+					var email = href.substr(7, indexOf-8);
 				}else
 				{
-					GO.linkHandlers[link.link_type].call(this, link.id, {data: link});
+					var email = href.substr(7);
+				}				
+
+				e.preventDefault();
+				
+				GO.email.addressContextMenu.showAt(e.getXY(), email);					
+				//this.fireEvent('emailClicked', email);			
+			}else 
+			{			
+				var pos = href.indexOf('#link_');
+				if(pos>-1)
+				{
+					e.preventDefault();
+					
+					var index = href.substr(pos+6, href.length);		
+					var link = this.data.links[index];			
+					if(link.link_type=='folder')
+					{
+						GO.linkBrowser.show({link_id: link.parent_link_id,link_type: link.parent_link_type,folder_id: link.id});
+					}else
+					{
+						GO.linkHandlers[link.link_type].call(this, link.id, {data: link});
+					}
 				}
 			}
 		}		
