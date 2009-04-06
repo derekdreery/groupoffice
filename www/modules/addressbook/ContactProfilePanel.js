@@ -219,35 +219,19 @@ GO.addressbook.ContactProfilePanel = function(config)
 	
 	this.formAddressBooks.on('beforeselect', function(combo, record) 	
 	{
-		if(this.formCompany.getValue()>0)
+		if(this.formCompany.getValue()==0 || confirm(GO.addressbook.lang.moveAll))
 		{
-			if(confirm(GO.addressbook.lang.moveAll))
-			{
-				this.setAddressbookID(record.data.id);
-				return true;
-			}else
-			{
-				return false;
-			}
-		}
-		
-		
-		
+			this.setAddressbookID(record.data.id);
+			return true;
+		}else
+		{
+			return false;
+		}	
 	}, this);
-	
-	/*this.formAddressBooks.on('load', function()
-	{
-		this.formAddressBooks.isLoaded = true;
-		this.formAddressBooks.setValue(task.result.data.addressbook_id);
-	}, 
-	this);*/		
-	
 
 	this.formMiddleName.on('blur', this.setSalutation, this);
 	this.formLastName.on('blur', this.setSalutation, this);
 	this.sexCombo.on('change', this.setSalutation, this);
-	
-
 	 
 	this.addressbookFieldset = 
 	{
@@ -365,5 +349,7 @@ Ext.extend(GO.addressbook.ContactProfilePanel, Ext.Panel,{
 	{
 		this.formAddressBooks.setValue(addressbook_id);		
 		this.formCompany.store.baseParams['addressbook_id'] = addressbook_id;
+		this.formCompany.clearLastSearch();
+		
 	}
 });

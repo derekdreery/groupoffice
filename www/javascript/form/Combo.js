@@ -23,6 +23,11 @@ GO.form.ComboBox = Ext.extend(Ext.form.ComboBox, {
 		{
 			this.setValue(this.store.reader.jsonData.results[0].id);
 		}
+	},
+	
+	clearLastSearch : function(){
+		this.lastQuery=false;
+		this.hasSearch=false;
 	}
 });
 
