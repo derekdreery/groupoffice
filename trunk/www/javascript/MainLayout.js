@@ -96,6 +96,18 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
         layoutOnTabChange:true
     	});
 	},
+	
+	getModulePanel : function(moduleName){
+		var panelId = 'go-module-panel-'+moduleName;
+							
+		if(this.tabPanel.items.map[panelId])
+		{								
+			return this.tabPanel.items.map[panelId];
+		}else
+		{
+			return false;
+		}
+	},
 
 	init : function(){  
           

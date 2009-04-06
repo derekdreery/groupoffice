@@ -814,15 +814,18 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		{
 			this.notificationEl = notificationArea.createChild({
 				id: 'ml-notify',
-				tag:'div',
-				html:'',
+				tag:'a',
+				href:'#',
 				style:'display:none'				
 			});
+			this.notificationEl.on('click', function(){
+				//GO.mainLayout.getModulePanel('email').show();
+				this.show();
+			}, this);
 		}
 	},
 	
-	onShow : function(){
-		
+	onShow : function(){		
 		if(this.notificationEl){
 			this.notificationEl.setDisplayed(false);
 		}
