@@ -205,7 +205,7 @@ Ext.extend(GO.calendar.ParticipantsPanel, GO.grid.GridPanel, {
 			this.store.removeAll();
 		}
 		this.newId=0;
-		this.inviteCheckbox.setValue(this.event_id==0);
+		this.inviteCheckbox.setValue(false);
 	},
 
 	onShow : function() {
