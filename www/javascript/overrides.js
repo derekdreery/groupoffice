@@ -11,6 +11,8 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
+
+Ext.override(Ext.grid.GridView, {scrollOffset:20});
  
  Ext.apply(Ext.form.VTypes, {    
     password : function(val, field) {
