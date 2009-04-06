@@ -493,24 +493,34 @@ class String {
 
 		$email_module = isset($GO_MODULES->modules['email']) && $GO_MODULES->modules['email']['read_permission'];
 
-		$text = htmlspecialchars($text, ENT_QUOTES, 'UTF-8')."\n";
+		
+		//debug($text);
 		if($convert_links)
 		{
 			//
 			//$text = preg_replace("/(?:^|\b)(((http(s?):\/\/)|(www\.-))([\w\.-]+)([,:;%#&\/?=\w+\.\-@]+))(?:\b|$)/is", "<a href=\"http$4://$5$6$7\" target=\"_blank\" class=\"normal-link\">$1</a>", $text);
-			$text = preg_replace("/\b(https?:\/\/[a-z0-9\.&\-\/@#;`~=%?:_\+]+)/i", '<a href="$1" target="_blank" class="normal-link">$1</a>', $text);
+			
 			//$text = preg_replace("/(\A|\s)([\w\.\-]+)(@)([\w\.-]+)([A-Za-z]{2,3})\b/i", "\\1<a href=\"mailto:\\2\\3\\4\\5\">\\2\\3\\4\\5</a>", $text);
+			
+			$text = preg_replace("/\b(https?:\/\/[\pL0-9\.&\-\/@#;`~=%?:_\+]+)/ui", '{lt}a href="$1" target="_blank" class="normal-link"{gt}$1{lt}/a{gt}', $text);
+			//$text = preg_replace("/\b(https?:\/\/[^\b]+)/ui", '<a href="$1" target="_blank" class="normal-link">$1</a>', $text);
 			if($email_module)
 			{
-				$text = preg_replace("/\b([\w0-9\._\-]+@[\w0-9\.\-_]+\.[a-z]{2,4})(\s)/i", "<a class=\"normal-link\" onclick=\"GO.email.showAddressMenu(event, '$1','');\" href=\"#\">$1</a>$2", $text);
+				$text = preg_replace("/\b([\pL0-9\._\-]+@[\pL0-9\.\-_]+\.[a-z]{2,4})(\s)/i", "{lt}a class=\"normal-link\" onclick=\"GO.email.showAddressMenu(event, '$1','');\" href=\"#\"{gt}$1{lt}/a{gt}$2", $text);
 			}else
 			{
-				$text = preg_replace("/\b([\w0-9\._\-]+@[\w0-9\.\-_]+\.[a-z]{2,4})(\s)/i", "<a class=\"normal-link\" href=\"mailto:$1\">$1</a>$2", $text);
+				$text = preg_replace("/\b([\pL0-9\._\-]+@[\pL0-9\.\-_]+\.[a-z]{2,4})(\s)/i", "{lt}a class=\"normal-link\" href=\"mailto:$1\"{gt$1{lt}/a{gt}$2", $text);
 			}
 		}
+		$text = htmlspecialchars($text, ENT_QUOTES, 'UTF-8')."\n";
 		$text = nl2br(trim($text));
 		$text = str_replace("\r", "", $text);
 		$text = str_replace("\n", "", $text);
+		
+		//we dont use < and > directly with the preg functions because htmlspecialchars will screw it up. We don't want to use
+		//htmlspecialchars before the pcre functions because email address like <mschering@intermesh.nl> will fail.
+		$text = str_replace("{lt}", "<", $text);
+		$text = str_replace("{gt}", ">", $text);
 
 		return ($text);
 	}
