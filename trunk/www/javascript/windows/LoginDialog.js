@@ -76,7 +76,6 @@ GO.dialog.LoginDialog = function(config){
         items: [new GO.LogoComponent(),
         		langCombo,
         		{
-        				id: 'username',
                 fieldLabel: GO.lang.strUsername,
                 name: 'username',
                 allowBlank:false,
@@ -113,8 +112,8 @@ GO.dialog.LoginDialog = function(config){
 		title:GO.lang['strLogin'],
 		closable: false,
 		focus: function(){
- 		    Ext.get('username').focus();
-		},
+ 		    this.formPanel.form.findField('username').focus(true);
+		}.createDelegate(this),
 
 		items: [
 			
@@ -218,7 +217,9 @@ Ext.extend(GO.dialog.LoginDialog, Ext.Window, {
 			failure: function(form, action) {
 				if(action.result)
 				{
-					Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback);
+					Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback, function(){
+						this.formPanel.form.findField('username').focus(true);
+					},this);
 				}
 			},
 			scope: this
