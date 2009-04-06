@@ -123,17 +123,21 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 					
 					if(data.askPassphrase)
 					{
-						Ext.Msg.prompt(GO.gnupg.lang.decryptPasswordRequired, GO.lang.strPassword, 
-							function(id, passphrase){ 
-								if(id=='cancel')
-								{
-									this.reset();
-									this.el.unmask();
-								}else
-								{									
-									this.loadMessage(uid, mailbox, account_id, passphrase);
-								}
-							},this);
+						if(!this.gnupgPasswordDialog)
+						{
+							this.gnupgPasswordDialog = new GO.gnupg.PasswordDialog();							
+						}
+						this.gnupgPasswordDialog.on('buttonpressed', function(button, passphrase){
+							if(button=='cancel')
+							{
+								this.reset();
+								this.el.unmask();
+							}else
+							{									
+								this.loadMessage(uid, mailbox, account_id, passphrase);
+							}
+						},this, {single:true});
+						this.gnupgPasswordDialog.show();
 					}else
 					{						
 						this.setMessage(data);						
