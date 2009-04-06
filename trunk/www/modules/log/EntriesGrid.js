@@ -14,6 +14,7 @@ GO.log.EntriesGrid = function(config) {
 	if (!config) {
 		config = {};
 	}
+	
 	config.title = GO.log.lang.log;
 	config.layout = 'fit';
 	config.autoScroll = true;
@@ -58,7 +59,13 @@ GO.log.EntriesGrid = function(config) {
 	config.sm = new Ext.grid.RowSelectionModel();
 	config.loadMask = true;
 
-	
+	this.searchField = new GO.form.SearchField({
+			store : config.store,
+			width : 320
+		});
+		
+	config.tbar=[GO.lang['strSearch'] + ':', this.searchField];
+			
 	GO.log.EntriesGrid.superclass.constructor.call(this, config);
 };
 Ext.extend(GO.log.EntriesGrid, GO.grid.GridPanel, {
