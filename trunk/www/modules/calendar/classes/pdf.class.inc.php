@@ -13,7 +13,14 @@ class PDF extends TCPDF
 
 	function __construct()
 	{
-		parent::__construct('L', 'pt', 'A4', true, 'UTF-8');
+		global $GO_CONFIG;
+		
+		if(!empty($GO_CONFIG->tcpdf_font))
+		{
+			$this->font = $GO_CONFIG->tcpdf_font;
+		}
+		
+		parent::__construct('L', 'pt', 'A4', true, 'UTF-8');		
 
 		$this->AliasNbPages();
 
