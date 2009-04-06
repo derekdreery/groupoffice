@@ -82,9 +82,11 @@ GO.addressbook.EmployeesPanel = function(config)
 						delete this.store.baseParams.add_contacts
 					},
 					scope: this
-				});
+				});				
 			}
+			this.selectContactDialog.grid.store.baseParams.addressbook_id=this.ownerCt.ownerCt.ownerCt.companyForm.form.findField('addressbook_id').getValue();
 			this.selectContactDialog.show();
+			
 		},
 		scope: this
 	},{

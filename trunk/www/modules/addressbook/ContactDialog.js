@@ -174,7 +174,9 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 						if(this.personalPanel.formAddressBooks.getValue()<1)
 						{
 							this.personalPanel.formAddressBooks.selectFirst();
+							this.personalPanel.setAddressbookID(this.personalPanel.formAddressBooks.getValue());
 						}			
+						
 					},
 					scope:this
 				});
