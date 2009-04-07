@@ -61,6 +61,7 @@ GO.form.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
 			GO.form.SearchField.superclass.setValue.call(this, v);
 			if(v!='')
 			{					
+				this.hasSearch=true;
 				this.triggers[0].show();
 			}
 		}
