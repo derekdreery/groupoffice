@@ -1,3 +1,7 @@
+2009/04/03 Version 3.01-stable-24
+- IE 8 compatibility
+- Small bug fixes
+
 2009/04/03 Version 3.01-stable-23
 - SMTP with SSL or TLS didn't work anymore
 
