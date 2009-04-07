@@ -216,10 +216,16 @@ GO.addressbook.MainPanel = function(config)
 				switch(activetab.id)
 				{
 					case 'ab-contacts-grid':
-						this.contactsGrid.deleteSelected();
+						this.contactsGrid.deleteSelected({
+								callback : this.contactEastPanel.gridDeleteCallback,
+								scope: this.contactEastPanel
+							});
 					break;
 					case 'ab-company-grid':					
-						this.companiesGrid.deleteSelected();
+						this.companiesGrid.deleteSelected({
+								callback : this.companyEastPanel.gridDeleteCallback,
+								scope: this.companyEastPanel
+							});
 					break;				
 				}	
 			}, 

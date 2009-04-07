@@ -139,7 +139,10 @@ GO.tasks.MainPanel = function(config){
 								text: GO.lang['cmdDelete'],
 								cls: 'x-btn-text-icon',
 								handler: function(){
-									this.gridPanel.deleteSelected();
+									this.gridPanel.deleteSelected({
+										callback : this.taskPanel.gridDeleteCallback,
+										scope: this.taskPanel
+									});
 								},
 								scope: this
 							}),{
