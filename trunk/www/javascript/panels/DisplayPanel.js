@@ -59,7 +59,6 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 				GO.linkBrowser.show({link_id: this.data.id,link_type: this.link_type,folder_id: "0"});
 				GO.linkBrowser.on('hide', this.reload, this,{single:true});
 			},
-			disabled: true,
 			scope: this
 		}));
 		
@@ -73,8 +72,7 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 					GO.files.openFolder(this.data.files_path);
 					GO.files.fileBrowserWin.on('hide', this.reload, this, {single:true});
 				},
-				scope: this,
-				disabled: true
+				scope: this
 			}));
 		}
 		
@@ -109,6 +107,11 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 		GO.DisplayPanel.superclass.initComponent.call(this);		
 	},
 	
+	afterRender : function(){		
+		this.getTopToolbar().setDisabled(true);
+		GO.DisplayPanel.superclass.afterRender.call(this);
+	},
+	
 	getLinkName : function(){
 		return this.data.name;
 	},
@@ -139,16 +142,7 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 		this.body.removeAllListeners();
 		this.body.update("");
 		
-		this.editButton.setDisabled(true);
-		if(GO.files)
-		{
-			this.fileBrowseButton.setDisabled(true);
-		}
-		this.newMenuButton.setDisabled(true);
-		if(this.link_type>0)
-		{
-			this.linkBrowseButton.setDisabled(true);
-		}
+		this.getTopToolbar().setDisabled(true);
 	},
 	
 	setData : function(data)
@@ -157,18 +151,10 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 		
 		data.link_type=this.link_type;
 		this.data=data;
+		
+		this.getTopToolbar().setDisabled(false);
 	
 		this.editButton.setDisabled(!data.write_permission);
-		
-		if(this.link_type>0)
-		{
-			this.linkBrowseButton.setDisabled(false);
-		}
-		
-		if(GO.files)
-		{
-			this.fileBrowseButton.setDisabled(false);
-		}
 		
 		if(data.write_permission)
 		{
@@ -182,11 +168,9 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 		}else
 		{
 			this.newMenuButton.setDisabled(true);
-		}
+		}		
 		
-		
-		this.xtemplate.overwrite(this.body, data);	
-		
+		this.xtemplate.overwrite(this.body, data);			
 		
 		this.body.on('click', this.onBodyClick, this);		
 	},
