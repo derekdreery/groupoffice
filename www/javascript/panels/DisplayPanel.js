@@ -121,6 +121,20 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 		}
 	},
 	
+	gridDeleteCallback : function(config){
+		if(this.data)
+		{
+			var keys = Ext.decode(config.params.delete_keys);				
+			for(var i=0;i<keys.length;i++)
+			{
+				if(this.data.id==keys[i])
+				{
+					this.reset();
+				}
+			}
+		}
+	},
+	
 	reset : function(){
 		this.body.removeAllListeners();
 		this.body.update("");
