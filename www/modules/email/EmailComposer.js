@@ -435,10 +435,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 		this.htmlEditor.getEl().up('.x-form-item').setDisplayed(checked);
 		this.textEditor.getEl().up('.x-form-item').setDisplayed(!checked);
 		
-		if(checked)
-		{
-			this.setEditorHeight();
-		}
+		this.setEditorHeight();
 
 		this.editor = checked ? this.htmlEditor : this.textEditor;
 	},
@@ -1067,11 +1064,12 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 				this.bccCombo.getEl().up('.x-form-item').setDisplayed(checked);
 				break;
 		}
-		// this.doLayout();
+		//this.doLayout();
 		this.setEditorHeight();
 	},
 
-	setEditorHeight : function() {
+	setEditorHeight : function() {		
+		
 		var height = this.subjectField.el.getHeight()
 				+ this.selectLinkField.el.getHeight();
 		// this.tbar.getHeight()
@@ -1098,9 +1096,9 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 		this.htmlEditor.setWidth(this.getInnerWidth() - 10);
 		this.htmlEditor.syncSize();
 		
-		/*this.textEditor.setHeight(newHeight);
-		this.textEditor.setWidth(this.getInnerWidth() - 10);
-		this.textEditor.syncSize();*/
+		this.textEditor.setHeight(newHeight-20);
+		this.textEditor.setWidth(this.getInnerWidth() - 12);
+		this.textEditor.syncSize();
 	}
 });
 
