@@ -119,6 +119,7 @@ GO.email.EmailComposer = function(config) {
 			});
 
 	this.showMenu = new Ext.menu.Menu({
+				
 				items : [this.formFieldCheck = new Ext.menu.CheckItem({
 									text : GO.email.lang.sender,
 									checked : true,
