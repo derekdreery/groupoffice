@@ -12,8 +12,35 @@
  */
 
 
+/**
+* for Ubuntu new wave theme
+*/
+
 Ext.override(Ext.grid.GridView, {scrollOffset:20});
- 
+
+
+
+/* for IE8 menu's*/
+
+Ext.override(Ext.menu.Menu, {
+    autoWidth : function(){
+        var el = this.el, ul = this.ul;
+        if(!el){
+            return;
+        }
+        var w = this.width;
+        if(w){
+            el.setWidth(w);
+        }else if(Ext.isIE && !Ext.isIE8){
+            el.setWidth(this.minWidth);
+            var t = el.dom.offsetWidth; // force recalc
+            el.setWidth(ul.getWidth()+el.getFrameWidth("lr"));
+        }
+    }
+});
+
+
+/* password vtype */ 
  Ext.apply(Ext.form.VTypes, {    
     password : function(val, field) {
         if (field.initialPassField) {
