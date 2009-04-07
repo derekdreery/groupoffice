@@ -37,6 +37,9 @@ GO.form.ComboBoxReset = Ext.extend(GO.form.ComboBox, {
 				{					
 					this.triggers[0].show();
 				}
+			},afterRender:function(){
+				GO.form.ComboBoxReset.superclass.afterRender.call(this);
+				if(Ext.isIE8)this.el.setTop(1);
 			}
 			
 		});
