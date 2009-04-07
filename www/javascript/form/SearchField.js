@@ -57,5 +57,11 @@ GO.form.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
     },afterRender:function(){
 			GO.form.SearchField.superclass.afterRender.call(this);
 			if(Ext.isIE8)this.el.setTop(1);
+		},setValue : function(v){
+			GO.form.SearchField.superclass.setValue.call(this, v);
+			if(v!='')
+			{					
+				this.triggers[0].show();
+			}
 		}
 });
