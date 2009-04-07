@@ -321,7 +321,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		
 		if(target.tagName=='A')
 		{
-			e.preventDefault();
+			
 			var href=target.attributes['href'].value;
 			
 			if(href.substr(0,6)=='mailto')
@@ -345,8 +345,16 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				
 				var cmd = 'GO.mailFunctions.'+href.substr(3);
 				eval(cmd); 
-			}else	if(href.substr(href.length-1)!='#'){				
-				this.fireEvent('linkClicked', href);
+			}else
+			{
+				if (target.href && target.href.indexOf('#') != -1 && target.pathname == document.location.pathname){
+					//internal link, do default
+					
+				}else
+				{
+					e.preventDefault();
+					this.fireEvent('linkClicked', href);
+				}
 			}
 		}		
 	}
