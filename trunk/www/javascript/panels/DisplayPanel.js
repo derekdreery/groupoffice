@@ -121,12 +121,29 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 		}
 	},
 	
+	reset : function(){
+		this.body.removeAllListeners();
+		this.body.update("");
+		
+		this.editButton.setDisabled(true);
+		if(GO.files)
+		{
+			this.fileBrowseButton.setDisabled(true);
+		}
+		this.newMenuButton.setDisabled(true);
+		if(this.link_type>0)
+		{
+			this.linkBrowseButton.setDisabled(true);
+		}
+	},
+	
 	setData : function(data)
 	{
 		this.body.removeAllListeners();
 		
 		data.link_type=this.link_type;
 		this.data=data;
+	
 		this.editButton.setDisabled(!data.write_permission);
 		
 		if(this.link_type>0)
