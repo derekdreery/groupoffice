@@ -365,20 +365,32 @@ class GoSwift extends Swift_Mailer{
 
 		$email = new email();
 		
+		require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
+		$search = new search();
+		
 
 		$link_message['from']=$this->implodeSwiftAddressArray($this->message->getFrom());
 		$link_message['to']=$this->implodeSwiftAddressArray($this->message->getTo());
 		$link_message['subject']=$this->message->getSubject();
 		$link_message['ctime']=$link_message['time']=time();
-		$link_message['link_id'] = $email->link_message($link_message);
+		
+		
 
 		foreach($links as $link)
 		{
-			$GO_LINKS->add_link(
-			$link['link_id'],
-			$link['link_type'],
-			$link_message['link_id'],
-			9);
+			$sr = $search->get_search_result($link['link_id'], $link['link_type']);					
+			if($sr)
+			{
+				$link_message['acl_read']=$sr['acl_read'];
+				$link_message['acl_write']=$sr['acl_write'];		
+				$link_message['link_id'] = $email->link_message($link_message);
+			
+				$GO_LINKS->add_link(
+				$link['link_id'],
+				$link['link_type'],
+				$link_message['link_id'],
+				9);
+			}
 		}
 	}
 }

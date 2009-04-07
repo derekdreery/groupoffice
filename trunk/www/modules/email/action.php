@@ -420,18 +420,12 @@ try{
 									$swift->set_draft($_POST['draft_uid']);									
 								}
 
-								$response['success']=$swift->sendmail(null,null, isset($_POST['replace_personal_fields']));
+								$response['success']=$swift->sendmail();
 
 								if(!empty($_POST['link']))
 								{
 									$link_props = explode(':', $_POST['link']);
-									$swift->link_to(array(
-									array(
-											'link_id'=>($link_props[1]),
-											'link_type'=>($link_props[0])
-									)
-									)
-									);
+									$swift->link_to(array(array('link_id'=>$link_props[1],'link_type'=>$link_props[0])));
 								}
 
 								if(!$response['success'])
