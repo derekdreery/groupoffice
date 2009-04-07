@@ -94,7 +94,10 @@ GO.notes.MainPanel = function(config){
 			text: GO.lang['cmdDelete'],
 			cls: 'x-btn-text-icon',
 			handler: function(){
-				this.centerPanel.deleteSelected();
+				this.centerPanel.deleteSelected({
+					callback : this.eastPanel.gridDeleteCallback,
+					scope: this.eastPanel
+				});
 			},
 			scope: this
 		},{
