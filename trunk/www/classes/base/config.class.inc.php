@@ -287,8 +287,8 @@ class GO_CONFIG
 	 * @access  public
 	 */
 	var $webmaster_email = 'webmaster@example.com';
-	
-	
+
+
 	/**
 	 * The path to the root of Group-Office with slash on end
 	 *
@@ -313,7 +313,7 @@ class GO_CONFIG
 	 * @access  public
 	 */
 	var $max_users = 0;
-	
+
 	/**
 	 * The maximum number KB this Group-Office installation may use. 0 will allow unlimited usage of disk space.
 	 *
@@ -359,15 +359,15 @@ class GO_CONFIG
 	 * @access  public
 	 */
 	var $db_pass = '';
-	
+
 	/**
-	 * Specifies the port number to attempt to connect to the MySQL server. 
+	 * Specifies the port number to attempt to connect to the MySQL server.
 	 *
 	 * @var     string
 	 * @access  public
 	 */
 	var $db_port = 3306;
-	
+
 	/**
 	 * Specifies the socket or named pipe that should be used.
 	 *
@@ -587,6 +587,14 @@ class GO_CONFIG
 	var $cmd_tnef = '/usr/bin/tnef';
 
 	/**
+	 * Command to execute the php command line interface
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $cmd_php = 'php';
+
+	/**
 	 * If this URL is set and PhpMyAdmin is configured to allow authentication
 	 * with signon. You can edit the database in the admin tools module.
 	 *
@@ -599,22 +607,22 @@ class GO_CONFIG
 	 * @var unknown_type
 	 */
 	var $phpMyAdminUrl='';
-	
+
 	/**
-	 * Comma separated list of scripts that are unsafe for whatever reason. 
-	 * For example: A form on a website that will add a contact to an addressbook. 
+	 * Comma separated list of scripts that are unsafe for whatever reason.
+	 * For example: A form on a website that will add a contact to an addressbook.
 	 * It can add addressbook entries without authentication but can still be very useful
-	 * 
+	 *
 	 * Scripts can be separated with a comma: modules/addressbook/cms.php,modules/cms/example.php
 	 *
 	 * @var string
 	 */
-	
+
 	var $allow_unsafe_scripts='';
-	
+
 	/**
 	 * Length of the password generated when a user uses the lost password option
-	 * 
+	 *
 	 * @var int
 	 */
 	var $default_password_length=6;
@@ -648,7 +656,7 @@ class GO_CONFIG
 	 * @access  public
 	 */
 	var $file_create_mode = '0644';
-	
+
 	/* The permissions mode to use when creating folders
 	 *
 	 * @var     string
@@ -698,9 +706,9 @@ class GO_CONFIG
        * @var     string
        * @access  public
        */
-       
+
       var $date_separators = array(
-  	'-', 
+  	'-',
   	'.',
   	'/'
   	);
@@ -792,8 +800,8 @@ class GO_CONFIG
        */
       function __construct()
       {
-      	
-      
+
+
 
       	if($this->root_path == '')
       	{
@@ -801,13 +809,13 @@ class GO_CONFIG
       		//$this->root_path = str_replace('classes/base/config.class.inc','',__FILE__);
       		$this->root_path = str_replace('\\','/',dirname(dirname(dirname(__FILE__)))).'/';
       		$this->host = dirname(dirname($_SERVER['PHP_SELF']));
-      		
+
       		if(substr($this->host,-1) != '/')
       		{
       			$this->host .= '/';
       		}
-      		
-      		
+
+
       		$this->full_url = 'http://'.$_SERVER['SERVER_NAME'].dirname(dirname($_SERVER['PHP_SELF'])).'/';
 
       		$this->local_path = $this->root_path.'local/';
@@ -817,14 +825,14 @@ class GO_CONFIG
       	}
 
       	$config = array();
-      	
+
       	//suppress error for open_basedir warnings etc
       	if(@file_exists('/etc/groupoffice/globalconfig.inc.php'))
       	{
-      		require('/etc/groupoffice/globalconfig.inc.php');      		
-      	}      	
-      	
-      	$config_file = $this->get_config_file();      	
+      		require('/etc/groupoffice/globalconfig.inc.php');
+      	}
+
+      	$config_file = $this->get_config_file();
 
       	@include($config_file);
 
@@ -853,25 +861,25 @@ class GO_CONFIG
 
       	// url to user configuration apps
       	$this->configuration_url = $this->host.$this->configuration_url.'/';
-      	
-      	
+
+
 	      if($this->debug)
 				{
 					list ($usec, $sec) = explode(" ", microtime());
-					$this->loadstart = ((float) $usec + (float) $sec);										
+					$this->loadstart = ((float) $usec + (float) $sec);
 				}
 
-      	// database class library      	
+      	// database class library
 				require_once($this->class_path.'database/base_db.class.inc.php');
       	require_once($this->class_path.'database/'.$this->db_type.'.class.inc.php');
 
-      	$this->db = new db($this);      	
+      	$this->db = new db($this);
 
       	if(is_string($this->file_create_mode))
       	{
       		$this->file_create_mode=octdec($this->file_create_mode);
       	}
-      	
+
      		if(is_string($this->folder_create_mode))
       	{
       		$this->folder_create_mode=octdec($this->folder_create_mode);
@@ -882,18 +890,18 @@ class GO_CONFIG
       		$this->log=true;
       	}
 
-      	$this->set_full_url();      	
+      	$this->set_full_url();
       }
-      
- 			function __destruct(){ 				
+
+ 			function __destruct(){
       	if($this->debug)
-				{					
+				{
 					if(isset($_SESSION['connect_count']))
 						debug('Connected '.$_SESSION['connect_count'].' times to the database', $this);
-						
+
 					debug('Page load took: '.(getmicrotime()-$this->loadstart).'ms', $this);
-				}      
-      }     
+				}
+      }
 
       /**
        * Get's the location of a configuration file.
@@ -912,7 +920,7 @@ class GO_CONFIG
       {
       	if(defined('CONFIG_FILE'))
       	return CONFIG_FILE;
-      	 
+
       	if(isset($_SESSION['GO_SESSION']['config_file']))
       	{
       		return $_SESSION['GO_SESSION']['config_file'];
@@ -926,7 +934,7 @@ class GO_CONFIG
       		}
       		if(isset($_SERVER['SCRIPT_FILENAME']) && isset($_SERVER['PHP_SELF']))
       		{
-	      		$config_file = dirname(substr($_SERVER['SCRIPT_FILENAME'], 0 ,-strlen($_SERVER['PHP_SELF']))).'/config.php';      		
+	      		$config_file = dirname(substr($_SERVER['SCRIPT_FILENAME'], 0 ,-strlen($_SERVER['PHP_SELF']))).'/config.php';
 	      		if(@file_exists($config_file))
 	      		{
 	      			$_SESSION['GO_SESSION']['config_file']=$config_file;
@@ -944,8 +952,8 @@ class GO_CONFIG
 
 	/**
 	 * Sets Full URL to reach Group-Office with slash on end
-	 * 
-	 * This function checks wether or not Group-Office runs on a 
+	 *
+	 * This function checks wether or not Group-Office runs on a
 	 * default http or https port and stores the full url in a variable
 	 *
 	 * @access public
@@ -1089,7 +1097,7 @@ class GO_CONFIG
       		$response['currency']=$_SESSION['GO_SESSION']['currency'];
       		$response['mute_sound']=$_SESSION['GO_SESSION']['mute_sound']=='1';*/
 
-      		
+
       		//state for Ext components
       		$response['state'] = $this->get_state($GO_SECURITY->user_id, $response['state_index']);
       	}else
@@ -1126,7 +1134,7 @@ class GO_CONFIG
       	$response['config']['host']=$this->host;
       	$response['config']['local_url']=$this->local_url;
       	$response['config']['webmaster_email']=$this->webmaster_email;
-      	
+
       	$response['config']['allow_password_change']=$this->allow_password_change;
       	$response['config']['allow_themes']=$this->allow_themes;
 
