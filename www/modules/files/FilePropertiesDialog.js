@@ -84,7 +84,9 @@ GO.files.FilePropertiesDialog = function(config){
 		
 	});
 	
-	var items = [this.propertiesPanel, this.commentsPanel];
+	this.versionsGrid = new GO.files.VersionsGrid();
+	
+	var items = [this.propertiesPanel, this.commentsPanel, this.versionsGrid];
 
 	
 	if(GO.workflow)
@@ -118,6 +120,29 @@ GO.files.FilePropertiesDialog = function(config){
 		height:500,
 		closeAction:'hide',
 		items:this.formPanel,
+		tbar:[{
+					iconCls: 'btn-download',
+					text: GO.lang.download,
+					cls: 'x-btn-text-icon',
+					handler: function(){
+						window.location.href=GO.settings.modules.files.url+'download.php?mode=download&path='+encodeURIComponent(this.path);
+					},
+					scope: this
+				},{
+					iconCls: 'btn-download-gota',
+					text: GO.files.lang.downloadGOTA,
+					cls: 'x-btn-text-icon',
+					handler: function(){
+						if(!deployJava.isWebStartInstalled('1.6.0'))
+						{
+							Ext.MessageBox.alert(GO.lang.strError, GO.lang.noJava);
+						}else
+						{		
+							window.location.href=GO.settings.modules.gota.url+'jnlp.php?path='+encodeURIComponent(this.path);
+						}
+					},
+					scope: this
+				}],
 		buttons:[
 			{
 				text:GO.lang['cmdOk'],
@@ -162,6 +187,8 @@ Ext.extend(GO.files.FilePropertiesDialog, Ext.Window, {
 		{
 			Ext.apply(params, config.loadParams);
 		}
+		
+		this.versionsGrid.setPath(path);
 		
 		this.formPanel.form.load({
 			url: GO.settings.modules.files.url+'json.php', 
