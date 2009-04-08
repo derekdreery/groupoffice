@@ -171,7 +171,7 @@ GO.email.EmailComposer = function(config) {
 													"task" : 'accounts',
 													personal_only : true
 												},
-												fields : ['id', 'email', 'signature'],
+												fields : ['id', 'email', 'html_signature', 'plain_signature'],
 												root : 'results',
 												totalProperty : 'total',
 												id : 'id'
@@ -698,7 +698,19 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 		if(addSignature)
 		{
 			var accountRecord = this.fromCombo.store.getById(this.fromCombo.getValue());
-			this.editor.setValue(accountRecord.data.signature+this.editor.getValue());
+			
+			var sig = accountRecord.get(this.formPanel.baseParams.content_type+"_signature");
+			
+			if(this.formPanel.baseParams.content_type=='plain')
+			{
+				sig = "\n"+sig+"\n";
+			}else
+			{
+				sig += '<br />'+sig+'<br />';
+			}
+			
+			
+			this.editor.setValue(sig+this.editor.getValue());
 		}
 		this.bodyContentAtWindowOpen=this.editor.getValue();	
 		
