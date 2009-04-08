@@ -1,4 +1,8 @@
-2009/04/03 Version 3.01-stable-24
+2009/04/08 Version 3.01-stable-25
+- Fixed error in German GnuPG translation
+- E-mail signature in plain text mode
+
+2009/04/07 Version 3.01-stable-24
 - IE 8 compatibility
 - Small bug fixes
 
