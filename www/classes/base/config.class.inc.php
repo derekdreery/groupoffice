@@ -638,7 +638,7 @@ class GO_CONFIG
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '3.01-stable-24';
+	var $version = '3.01-stable-25';
 
 
 	/**
@@ -648,7 +648,7 @@ class GO_CONFIG
 	 * @access  public
 	 */
 
-	var $mtime = '20090407';
+	var $mtime = '20090408';
 
 	/* The permissions mode to use when creating files
 	 *

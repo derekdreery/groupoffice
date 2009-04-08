@@ -1,4 +1,6 @@
 <?php
+require($GO_LANGUAGE->get_fallback_language_file('tools'));
+
 $lang['tools']['name']='工具';
 $lang['tools']['description']='执行管理任务的模块.';
 
