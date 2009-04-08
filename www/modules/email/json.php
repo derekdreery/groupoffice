@@ -1330,11 +1330,8 @@ try{
 
 											$response['total'] = $email->get_accounts($user_id);
 
-
 											while($record = $email->next_record())
 											{
-												$sig = $email->f('signature')=='' ? '' : String::text_to_html($email->f('signature'));
-
 												$response['results'][] = array(
 															'id'=>$email->f('id'),
 															'email'=>$email->f('email'),
@@ -1342,7 +1339,8 @@ try{
 															'user_id'=>$email->f('user_id'),
 															'host'=>$email->f('host'),
 															'type'=>$email->f('type'),
-															'signature'=>$sig
+															'html_signature'=>String::text_to_html($email->f('signature')),
+															'plain_signature'=>$email->f('signature')
 												);
 											}
 											break;
