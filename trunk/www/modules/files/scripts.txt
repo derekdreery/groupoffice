@@ -7,3 +7,4 @@ modules/files/FilesTemplate.js
 modules/files/ImageViewer.js
 modules/files/ThumbsPanel.js
 modules/files/SaveAsDialog.js
+modules/files/VersionsGrid.js

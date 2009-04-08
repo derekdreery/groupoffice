@@ -17,6 +17,8 @@ require_once($GLOBALS['GO_CONFIG']->class_path.'filesystem.class.inc');
 class files extends filesystem
 {
 
+	var $enable_versioning=true;
+	
 	var $reabable_paths = array();
 	var $writable_paths = array();
 
@@ -575,36 +577,38 @@ class files extends filesystem
 	
 	function move_version($source_path, $destination_path){
 		
-		//no db functions apply to this move
-		$fs = new filesystem();
-			
-		$filename = utf8_basename($destination_path);
-		$versions_dir = dirname($destination_path).'/.'.$filename;
-		
-		$source_filename = utf8_basename($source_path);
-		$source_versions_dir = dirname($source_path).'/.'.$source_filename;
-		if($source_versions_dir!=$versions_dir && is_dir($source_versions_dir))
-		{
-			
-			debug($source_versions_dir);
-			debug($versions_dir);
-			
-			$fs->move($source_versions_dir, $versions_dir);
-		}
-		
-		if(file_exists($destination_path))
-		{
-			if(!is_dir($versions_dir))
-			{
-				global $GO_CONFIG;
-				mkdir($versions_dir, $GO_CONFIG->folder_create_mode);
-			}		
-			
+		if($this->enable_versioning){
+			//no db functions apply to this move
+			$fs = new filesystem();
+				
 			$filename = utf8_basename($destination_path);
-			$version_filepath = $versions_dir.'/'.date('YmdGi').'_'.$filename;
-		
-			$fs->move($destination_path, $version_filepath);
-		}		
+			$versions_dir = dirname($destination_path).'/.'.$filename;
+			
+			$source_filename = utf8_basename($source_path);
+			$source_versions_dir = dirname($source_path).'/.'.$source_filename;
+			if($source_versions_dir!=$versions_dir && is_dir($source_versions_dir))
+			{
+				
+				debug($source_versions_dir);
+				debug($versions_dir);
+				
+				$fs->move($source_versions_dir, $versions_dir);
+			}
+			
+			if(file_exists($destination_path))
+			{
+				if(!is_dir($versions_dir))
+				{
+					global $GO_CONFIG;
+					mkdir($versions_dir, $GO_CONFIG->folder_create_mode);
+				}		
+				
+				$filename = utf8_basename($destination_path);
+				$version_filepath = $versions_dir.'/'.date('YmdGi').'_'.$_SESSION['GO_SESSION']['username'].'_'.$filename;
+			
+				$fs->move($destination_path, $version_filepath);
+			}		
+		}
 	}
 		
 
@@ -613,7 +617,7 @@ class files extends filesystem
 		global $GO_CONFIG;
 		if($this->is_sub_dir($source_path, $GO_CONFIG->file_storage_path))
 		{			
-			//$this->move_version($source_path, $destination_path);
+			$this->move_version($source_path, $destination_path);
 			
 			
 			$file = $this->get_file($this->strip_server_path($source_path));
@@ -627,7 +631,7 @@ class files extends filesystem
 				
 		}elseif($this->is_sub_dir($destination_path, $GO_CONFIG->file_storage_path))
 		{
-			//$this->move_version($source_path, $destination_path);
+			$this->move_version($source_path, $destination_path);
 			
 			$file = $this->get_file($this->strip_server_path($destination_path));
 			$up_file['id']=$file['id'];

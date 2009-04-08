@@ -30,3 +30,5 @@ GO.files.lang.confirmOverwrite='{filename} already exists, do you want to overwr
 GO.files.lang.file='File';
 GO.files.lang.emptyList='Empty list';
 GO.files.lang.newFiles='New';
+
+GO.files.lang.olderVersions='Older versions';
