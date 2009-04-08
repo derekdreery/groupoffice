@@ -1331,16 +1331,14 @@ try{
 											$response['total'] = $email->get_accounts($user_id);
 
 
-											while($email->next_record())
+											while($record = $email->next_record())
 											{
-												$user = $GO_USERS->get_user($email->f('user_id'));
-
 												$sig = $email->f('signature')=='' ? '' : String::text_to_html($email->f('signature'));
 
 												$response['results'][] = array(
 															'id'=>$email->f('id'),
 															'email'=>$email->f('email'),
-															'user_name'=>String::format_name($user),
+															'user_name'=>String::format_name($record),
 															'user_id'=>$email->f('user_id'),
 															'host'=>$email->f('host'),
 															'type'=>$email->f('type'),
