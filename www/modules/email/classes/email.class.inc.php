@@ -162,14 +162,16 @@ class email extends db
 
 	function get_accounts($user_id=0, $start=0, $offset=0)
 	{
-		$sql = "SELECT * FROM em_accounts";
+		$sql = "SELECT a.*,u.first_name, u.middle_name, u.last_name FROM em_accounts a ".
+			"INNER JOIN go_users u on u.id=a.user_id ";
 
 		if($user_id > 0)
 		{
 			$sql .= " WHERE user_id='".$this->escape($user_id)."'";
 			$sql .= " ORDER BY standard ASC";
 		}else {
-			$sql .= " ORDER BY email ASC, standard ASC";
+			$sql = 
+			$sql .= " ORDER BY u.first_name ASC, u.last_name ASC, standard ASC";
 		}
 
 
