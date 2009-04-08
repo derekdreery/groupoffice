@@ -1,4 +1,6 @@
 <?php
+require($GO_LANGUAGE->get_fallback_language_file('tools'));
+
 $lang['tools']['name']='Herramientas';
 $lang['tools']['description']='Un módulo para realizar tareas administrativas.';
 

@@ -3,6 +3,8 @@
 //Author : Lionel JULLIEN
 //Date : September, 05 2008
 
+require($GO_LANGUAGE->get_fallback_language_file('tools'));
+
 $lang['tools']['name']='Outils d\'administration';
 $lang['tools']['description']='Outils d\'administration. Gérer les tâche système de Group-Office.';
 

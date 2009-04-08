@@ -1,4 +1,4 @@
-go.gnupg.lang.encryptionSettings='Verschlüsselungsoptionen';
+GO.gnupg.lang.encryptionSettings='Verschlüsselungsoptionen';
 GO.gnupg.lang.keys='Schlüssel';
 GO.gnupg.lang.comment='Kommentar';
 GO.gnupg.lang.genKey='Neues Schlüsselpaar generieren';

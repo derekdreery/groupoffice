@@ -230,8 +230,7 @@ class filesystem extends db
 				return rmdir($source_path);
 			}else
 			{
-				$this->move_file($source_path,$destination_path);
-				
+				$this->move_file($source_path,$destination_path);				
 				return rename($source_path, $destination_path);
 				/*
 				//rename fails when moving accross partitions
@@ -248,6 +247,10 @@ class filesystem extends db
 			}
 		}
 	}
+	
+	
+
+	
 	
 	/**
 	 * Abstract method that is called when a file is moved
