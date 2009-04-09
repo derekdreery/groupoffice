@@ -1,3 +1,6 @@
+2009/04/09 Version 3.01-stable-26
+- E-mail content type preference was not saved correctly.
+
 2009/04/08 Version 3.01-stable-25
 - Fixed error in German GnuPG translation
 - E-mail signature in plain text mode
