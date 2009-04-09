@@ -161,8 +161,7 @@ class html2text
         '/(<ul[^>]*>|<\/ul>)[\s]*/i',                 // <ul> and </ul>
         '/(<ol[^>]*>|<\/ol>)[\s]*/i',                 // <ol> and </ol>
         '/<li[^>]*>(.*?)<\/li>[\s]*/i',               // <li> and </li>
-        '/<li[^>]*>/i',                          // <li>
-        '/<a [^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/ie',	// <a href="">
+        '/<li[^>]*>/i',                          // <li>        
         '/<hr[^>]*>/i',                          // <hr>
         '/(<table[^>]*>|<\/table>)/i',           // <table> and </table>
         '/(<tr[^>]*>|<\/tr>)/i',                 // <tr> and </tr>
@@ -214,8 +213,7 @@ class html2text
         "\n\n",                                 // <ul> and </ul>
         "\n\n",                                 // <ol> and </ol>
         "\t* \\1\n",                            // <li> and </li>
-        "\n\t* ",                               // <li>
-        '$this->_build_link_list("\\1", "\\2")',// <a href="">
+        "\n\t* ",                               // <li>        
         "\n-------------------------\n",        // <hr>
         "\n\n",                                 // <table> and </table>
         "\n",                                   // <tr> and </tr>
@@ -412,6 +410,12 @@ class html2text
 		$text = html_entity_decode(trim($this->html), ENT_QUOTES, 'UTF-8');
 		$text = str_replace("\r", '', $text);
 		$text = str_replace("\n", ' ', $text);
+		
+		if($link_list)
+		{
+			$this->search[]='/<a [^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/ie';
+			$this->replace[]='$this->_build_link_list("\\1", "\\2")';
+		}
 
 		// Run our defined search-and-replace
 		$text = preg_replace($this->search, $this->replace, $text);
@@ -424,7 +428,7 @@ class html2text
 		$text = preg_replace("/[\n]{3,}/", "\n\n", $text);
 
 		// Add link list
-		if ($link_list && !empty($this->_link_list) ) {
+		if (!empty($this->_link_list) ) {
 			$text .= "\n\nLinks:\n------\n" . $this->_link_list;
 		}
 
