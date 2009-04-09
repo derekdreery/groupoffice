@@ -177,7 +177,7 @@ Ext.extend(GO.files.FilePropertiesDialog, Ext.Window, {
 	{
 		config = config || {};
 		
-		this.path = path;
+		this.setPath(path);
 		
 		if(!this.rendered)
 			this.render(Ext.getBody());
@@ -195,7 +195,7 @@ Ext.extend(GO.files.FilePropertiesDialog, Ext.Window, {
 			Ext.apply(params, config.loadParams);
 		}
 		
-		this.versionsGrid.setPath(path);
+		
 		
 		this.formPanel.form.load({
 			url: GO.settings.modules.files.url+'json.php', 
@@ -210,6 +210,12 @@ Ext.extend(GO.files.FilePropertiesDialog, Ext.Window, {
 			},
 	    scope: this
 		});		
+	},
+	
+	setPath : function(path)
+	{
+		this.path = path;
+		this.versionsGrid.setPath(path);
 	},
 	
 	setWritePermission : function(writePermission)
@@ -232,7 +238,7 @@ Ext.extend(GO.files.FilePropertiesDialog, Ext.Window, {
 				if(action.result.path)
 				{
 					var oldpath = this.path;
-					this.path=action.result.path;
+					this.setPath(action.result.path);
 					this.fireEvent('rename', this, oldpath, this.path);
 				}
 				

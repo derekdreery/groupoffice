@@ -77,9 +77,7 @@ Ext.extend(GO.files.VersionsGrid, GO.grid.GridPanel, {
 
 			onShow : function() {
 				GO.files.VersionsGrid.superclass.onShow.call(this);
-
-				if (!this.store.loaded)
-					this.store.load();
+				this.store.load();
 			},
 
 			setPath : function(path) {
