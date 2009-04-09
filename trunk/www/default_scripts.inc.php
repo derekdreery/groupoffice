@@ -56,12 +56,28 @@ GO.linkHandlers={};
 GO.newMenuItems=[];
 
 <?php
-
 if(isset($_REQUEST['after_login_url']))
 {
-	echo 'GO.afterLoginUrl="'.$_REQUEST['after_login_url'].'";';
+	$after_login_url = $_REQUEST['after_login_url'];
+}else
+{
+	$after_login_url = $_SERVER['PHP_SELF'];
+	
+	$params = array(); 
+	foreach($_GET as $key=>$value)
+	{
+		if($key!='task' || $value!='logout')
+		{
+			$params[] =$key.'='.urlencode($value); 
+		}
+	}
+	
+	if(count($params))
+	{
+		$after_login_url .= '?'.implode('&', $params);
+	}
 }
-
+echo 'GO.afterLoginUrl="'.$after_login_url.'";';
 
 $fullscreen = isset($_COOKIE['GO_FULLSCREEN']) && $_COOKIE['GO_FULLSCREEN']=='1' ? 'true' : 'false';
 echo 'GO.fullscreen='.$fullscreen.';';
