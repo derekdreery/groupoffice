@@ -590,13 +590,12 @@ class files extends filesystem
 			$versions_dir = $this->get_versions_dir($destination_path);
 			
 			$source_filename = utf8_basename($source_path);
-			$source_versions_dir = $this->get_versions_dir($source_filename);
+			$source_versions_dir = $this->get_versions_dir($source_path);
+			debug($source_versions_dir);
+			debug($versions_dir);
+				
 			if($source_versions_dir!=$versions_dir && is_dir($source_versions_dir))
 			{
-				
-				debug($source_versions_dir);
-				debug($versions_dir);
-				
 				$fs->move($source_versions_dir, $versions_dir);
 			}
 			
@@ -635,9 +634,6 @@ class files extends filesystem
 		global $GO_CONFIG;
 		if($this->is_sub_dir($source_path, $GO_CONFIG->file_storage_path))
 		{			
-			$this->move_version($source_path, $destination_path);
-			
-			
 			$file = $this->get_file($this->strip_server_path($source_path));
 			$this->delete_file($GO_CONFIG->file_storage_path.$destination_path);
 				
@@ -646,10 +642,12 @@ class files extends filesystem
 			$this->update_file($up_file);
 			
 			$this->cache_file($destination_path);
+			
+			$this->move_version($source_path, $destination_path);
 				
 		}elseif($this->is_sub_dir($destination_path, $GO_CONFIG->file_storage_path))
 		{
-			$this->move_version($source_path, $destination_path);
+			
 			
 			$file = $this->get_file($this->strip_server_path($destination_path));
 			$up_file['id']=$file['id'];
@@ -657,6 +655,8 @@ class files extends filesystem
 			$this->update_file($up_file);
 			
 			$this->cache_file($destination_path);
+			
+			$this->move_version($source_path, $destination_path);
 		}
 	}
 
