@@ -24,7 +24,7 @@ $js = json_encode($vars);
 function launchGO(){
 	var win = window.open('', "groupoffice");
 
-	if(win.GO)
+	if(win.GO && win.GO.email)
 	{
 		win.GO.email.showComposer({
 			values: <?php echo $js; ?>
@@ -32,7 +32,7 @@ function launchGO(){
 		
 	}else
 	{		
-		win.location.href="<?php echo $GO_CONFIG->host; ?>?mail_to=<?php echo $_GET['mail_to']; ?>&after_login_url=<?php echo urlencode($GO_CONFIG->host.'?mail_to='.$_GET['mail_to']); ?>";
+		win.location.href="<?php echo $GO_CONFIG->host; ?>?mail_to=<?php echo $_GET['mail_to']; ?>";
 	}	
 	win.focus();	
 }
