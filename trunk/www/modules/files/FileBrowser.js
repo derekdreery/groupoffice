@@ -1495,7 +1495,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	{
 		if(record.data.extension=='folder')
 		{
-			GO.files.folderPropertiesDialog.show(path);
+			GO.files.folderPropertiesDialog.show(record.data.path);
 		}else
 		{
 			GO.files.filePropertiesDialog.show(record.data.path);			
