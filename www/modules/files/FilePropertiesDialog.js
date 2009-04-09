@@ -201,7 +201,12 @@ Ext.extend(GO.files.FilePropertiesDialog, Ext.Window, {
 			url: GO.settings.modules.files.url+'json.php', 
 			params: params,			
 			success: function(form, action) {				
-				this.setWritePermission(action.result.data.write_permission);			
+				this.setWritePermission(action.result.data.write_permission);		
+				
+				if(action.result.data.path)
+				{
+					this.setPath(action.result.data.path);
+				}
 				
 		    GO.files.FilePropertiesDialog.superclass.show.call(this);
 	    },
@@ -245,7 +250,7 @@ Ext.extend(GO.files.FilePropertiesDialog, Ext.Window, {
 				if(hide)
 				{
 					this.hide();
-				}								
+				}
 			},	
 			failure: function(form, action) {
 				var error = '';

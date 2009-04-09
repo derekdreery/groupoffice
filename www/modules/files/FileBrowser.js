@@ -1640,7 +1640,7 @@ GO.files.openFolder = function(path)
 
 
 GO.linkHandlers[6]=function(id, record){
-	GO.files.filePropertiesDialog.show(record.data.description);
+	GO.files.filePropertiesDialog.show(id);
 }
 
 

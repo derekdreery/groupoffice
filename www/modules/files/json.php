@@ -613,12 +613,21 @@ try{
 
 
 							case 'file_properties':
-
+								
+								if(is_numeric($_POST['path']))
+								{
+									$response['data'] = $fs->get_file_by_id($_POST['path']);
+									if(!$response['data'])
+									{
+										throw new DatabaseSelectException();
+									}
+									$_POST['path']=$response['data']['path'];
+								}
 								$path = $GO_CONFIG->file_storage_path.$_POST['path'];
 
 								if(!file_exists($path))
 								{
-									throw new Exception('File not found');
+									throw new Exception('File not found: '.$_POST['path']);
 								}elseif(!$fs->has_read_permission($GO_SECURITY->user_id, $path))
 								{
 									throw new AccessDeniedException();
@@ -627,9 +636,12 @@ try{
 								$extension=File::get_extension($path);
 
 								$response['success']=true;
-								$response['data'] = $fs->get_file($_POST['path']);
+								if(!isset($response['data']))
+								{
+									$response['data'] = $fs->get_file($_POST['path']);
+								}
 								$response['data']['name']=File::strip_extension(utf8_basename($_POST['path']));
-								$response['data']['path']=$_POST['path'];
+								//$response['data']['path']=$_POST['path'];
 								$response['data']['mtime']=Date::get_timestamp(filemtime($path));
 								$response['data']['ctime']=Date::get_timestamp(filectime($path));
 								$response['data']['atime']=Date::get_timestamp(fileatime($path));
