@@ -20,3 +20,4 @@ GO.files.lang.confirmOverwrite='{filename} bestaat al, wilt u dit bestand oversc
 GO.files.lang.file='Bestand';
 GO.files.lang.emptyList='Leeg lijst';
 GO.files.lang.newFiles='Nieuw';
+GO.files.lang.olderVersions='Oudere versies';
