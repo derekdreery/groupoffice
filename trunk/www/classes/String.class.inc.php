@@ -522,12 +522,12 @@ class String {
 		return ($text);
 	}
 	
-	function html_to_text($text){
+	function html_to_text($text, $link_list=true){
 		global $GO_CONFIG;
 		require_once($GO_CONFIG->class_path.'html2text.class.inc');
 		
 		$htmlToText = new Html2Text ($text);
-		return $htmlToText->get_text();	
+		return $htmlToText->get_text($link_list);	
 	}
 
 	/**
