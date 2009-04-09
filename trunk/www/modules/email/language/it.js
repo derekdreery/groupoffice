@@ -38,7 +38,6 @@ GO.email.lang.port='Porta';
 GO.email.lang.rootMailbox='Root cassetta postale';
 GO.email.lang.manageFolders='Gestisci cartelle';
 GO.email.lang.sendItemsFolder='Cartella posta inviata';
-GO.email.lang.trashFolder='Posta indesiderata';
 GO.email.lang.draftsFolder='Cartella bozze';
 GO.email.lang.sender='Campo Da';
 GO.email.lang.subject='Oggetto';
@@ -86,7 +85,8 @@ GO.email.lang.priority='Priorità';
 GO.email.lang.read='Leggi';
 GO.email.lang.NA='N/A';
 
-GO.email.lang.emptyFolder='Cartella vuota';
+GO.email.lang.emptyFolder='Svuota Cartella';
+GO.email.lang.trashFolder='Cartella Cestino';
 GO.email.lang.emptyFolderConfirm='Sei sicuro di voler SVUOTARE \'{name}\'?';
 GO.email.lang.addUnknownRecipients='Aggiungi destinatari sconosciuti';
 GO.email.lang.addUnknownRecipientsText='Hai appena inviato un\'e-mail a uno o più destinatari non presenti nella tua rubrica. Clicca sul nome se vuoi aggiungere la persona o chiudi questa finestra.';
