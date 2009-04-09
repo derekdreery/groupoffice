@@ -149,20 +149,9 @@ GO.email.EmailComposer = function(config) {
 							url : plugin.selectedUrl
 						});
 			}, this);
-
-	this.selectLinkField = new GO.form.SelectLink({
-				anchor : '100%'
-			});
-
-	this.formPanel = new Ext.form.FormPanel({
-				border : false,
-				labelWidth : 100,
-				waitMsgTarget : true,
-				baseParams: {content_type:'html'},
-				cls : 'go-form-panel',
-				url : 'save-form.php',
-				defaultType : 'textfield',
-				items : [
+			
+			
+	var items = [
 						this.fromCombo = new Ext.form.ComboBox({
 									store : new GO.data.JsonStore({
 												url : BaseHref
@@ -246,21 +235,49 @@ GO.email.EmailComposer = function(config) {
 									triggerAction : 'all',
 									selectOnFocus : false
 
-								}), this.selectLinkField,
-						this.subjectField = new Ext.form.TextField({
+								})];
+								
+				var anchor = -130;
+						
+				if(GO.mailings)
+				{
+					this.selectLinkField = new GO.form.SelectLink({
+						anchor : '100%'
+					});
+					
+					anchor+=30;
+					items.push(this.selectLinkField);
+				}
+				
+				items.push(this.subjectField = new Ext.form.TextField({
 									fieldLabel : GO.email.lang.subject,
 									name : 'subject',
 									anchor : '100%'
-								}), this.htmlEditor = new Ext.form.HtmlEditor({
+								}));
+				
+				items.push(this.htmlEditor = new Ext.form.HtmlEditor({
 									hideLabel : true,
 									name : 'body',
-									anchor : '100% -130',
+									anchor : '100% '+anchor,
 									plugins : imageInsertPlugin
-								}), this.textEditor = new Ext.form.TextArea({
+								}));
+				
+				items.push(this.textEditor = new Ext.form.TextArea({
 									name: 'textbody',
-									anchor : '100% -130',
+									anchor : '100% '+anchor,
 									hideLabel : true
-								})]
+								}));
+						
+
+	this.formPanel = new Ext.form.FormPanel({
+				border : false,
+				labelWidth : 100,
+				waitMsgTarget : true,
+				baseParams: {content_type:'html'},
+				cls : 'go-form-panel',
+				url : 'save-form.php',
+				defaultType : 'textfield',
+				items : items
 			});
 			
 	this.htmlEditor.on('change', function(){this.changesMadeForAutoSave=true}, this);
@@ -1091,21 +1108,23 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 
 	setEditorHeight : function() {		
 		
-		var height = this.subjectField.el.getHeight()
-				+ this.selectLinkField.el.getHeight();
-		// this.tbar.getHeight()
+		var height = this.subjectField.el.getHeight();
+		
+		if(GO.mailings)
+				height += this.selectLinkField.el.getHeight()+2;
+	
 		if (this.toComboVisible) {
-			height += this.toCombo.el.getHeight() + 3;
+			height += this.toCombo.el.getHeight() + 2;
 		}
 
 		for (var i = 0; i < this.showMenu.items.items.length; i++) {
 			if (this.showMenu.items.items[i].checked) {
 				if(i==0)
 				{
-					height += this.fromCombo.el.getHeight() + 3;
+					height += this.fromCombo.el.getHeight() + 2;
 				}else
 				{
-					height += this.toCombo.el.getHeight() + 3;
+					height += this.toCombo.el.getHeight() + 4;
 				}
 			}
 		}
@@ -1113,7 +1132,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 		var innerHeight = this.getInnerHeight();
 		var newHeight = innerHeight - height;
 
-		this.htmlEditor.setHeight(newHeight);
+		this.htmlEditor.setHeight(newHeight+10);
 		this.htmlEditor.setWidth(this.getInnerWidth() - 10);
 		this.htmlEditor.syncSize();
 		
