@@ -57,6 +57,8 @@ GO.dialog.SelectGroups = function(config){
 		    sm: new Ext.grid.RowSelectionModel()			
 		});
 		
+	this.grid.on('rowdblclick', function(){this.callHandler(true);}, this);
+		
 	this.store.load();
 
 	
