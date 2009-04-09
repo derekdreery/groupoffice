@@ -84,9 +84,9 @@ GO.files.FilePropertiesDialog = function(config){
 		
 	});
 	
-	this.versionsGrid = new GO.files.VersionsGrid();
+	//this.versionsGrid = new GO.files.VersionsGrid();
 	
-	var items = [this.propertiesPanel, this.commentsPanel, this.versionsGrid];
+	var items = [this.propertiesPanel, this.commentsPanel];//, this.versionsGrid];
 
 	
 	if(GO.workflow)
@@ -114,7 +114,7 @@ GO.files.FilePropertiesDialog = function(config){
 	});
 	
 	var tbar = [{
-					iconCls: 'btn-download',
+					iconCls: 'btn-save',
 					text: GO.lang.download,
 					cls: 'x-btn-text-icon',
 					handler: function(){
@@ -126,7 +126,7 @@ GO.files.FilePropertiesDialog = function(config){
 	if(GO.settings.modules.gota && GO.settings.modules.gota.read_permission)
 	{
 		tbar.push({
-					iconCls: 'btn-download-gota',
+					iconCls: 'btn-edit',
 					text: GO.files.lang.downloadGOTA,
 					cls: 'x-btn-text-icon',
 					handler: function(){
@@ -195,7 +195,7 @@ Ext.extend(GO.files.FilePropertiesDialog, Ext.Window, {
 			Ext.apply(params, config.loadParams);
 		}
 		
-		this.versionsGrid.setPath(path);
+		//this.versionsGrid.setPath(path);
 		
 		this.formPanel.form.load({
 			url: GO.settings.modules.files.url+'json.php', 

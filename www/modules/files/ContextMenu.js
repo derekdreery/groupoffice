@@ -21,7 +21,7 @@ GO.files.FilesContextMenu = function(config)
 	config['minWidth']=180;
 	
 	this.downloadButton = new Ext.menu.Item({
-					iconCls: 'btn-download',
+					iconCls: 'btn-save',
 					text: GO.lang.download,
 					cls: 'x-btn-text-icon',
 					handler: function(){
@@ -33,7 +33,7 @@ GO.files.FilesContextMenu = function(config)
 				});
 				
 	this.gotaButton = new Ext.menu.Item({
-					iconCls: 'btn-download-gota',
+					iconCls: 'btn-edit',
 					text: GO.files.lang.downloadGOTA,
 					cls: 'x-btn-text-icon',
 					handler: function(){
