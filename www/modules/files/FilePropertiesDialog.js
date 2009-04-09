@@ -84,9 +84,9 @@ GO.files.FilePropertiesDialog = function(config){
 		
 	});
 	
-	//this.versionsGrid = new GO.files.VersionsGrid();
+	this.versionsGrid = new GO.files.VersionsGrid();
 	
-	var items = [this.propertiesPanel, this.commentsPanel];//, this.versionsGrid];
+	var items = [this.propertiesPanel, this.commentsPanel, this.versionsGrid];
 
 	
 	if(GO.workflow)
@@ -195,7 +195,7 @@ Ext.extend(GO.files.FilePropertiesDialog, Ext.Window, {
 			Ext.apply(params, config.loadParams);
 		}
 		
-		//this.versionsGrid.setPath(path);
+		this.versionsGrid.setPath(path);
 		
 		this.formPanel.form.load({
 			url: GO.settings.modules.files.url+'json.php', 

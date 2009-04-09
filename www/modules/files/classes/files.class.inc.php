@@ -17,7 +17,7 @@ require_once($GLOBALS['GO_CONFIG']->class_path.'filesystem.class.inc');
 class files extends filesystem
 {
 
-	var $enable_versioning=false;
+	var $enable_versioning=true;
 	
 	var $reabable_paths = array();
 	var $writable_paths = array();
@@ -575,6 +575,11 @@ class files extends filesystem
 		return false;
 	}
 	
+	function get_versions_dir($filepath)
+	{
+		return dirname($filepath).'/.'.utf8_basename($filepath);
+	}
+	
 	function move_version($source_path, $destination_path){
 		
 		if($this->enable_versioning){
@@ -582,10 +587,10 @@ class files extends filesystem
 			$fs = new filesystem();
 				
 			$filename = utf8_basename($destination_path);
-			$versions_dir = dirname($destination_path).'/.'.$filename;
+			$versions_dir = $this->get_versions_dir($destination_path);
 			
 			$source_filename = utf8_basename($source_path);
-			$source_versions_dir = dirname($source_path).'/.'.$source_filename;
+			$source_versions_dir = $this->get_versions_dir($source_filename);
 			if($source_versions_dir!=$versions_dir && is_dir($source_versions_dir))
 			{
 				
@@ -608,6 +613,19 @@ class files extends filesystem
 			
 				$fs->move($destination_path, $version_filepath);
 			}		
+		}
+	}
+	
+	function delete_versions($filepath)
+	{
+		if($this->enable_versioning){			
+			$versions_dir = $this->get_versions_dir($filepath);
+			if(is_dir($versions_dir))
+			{
+				//no db functions apply to this move
+				$fs = new filesystem();
+				$fs->delete($versions_dir);
+			}
 		}
 	}
 		
@@ -679,6 +697,8 @@ class files extends filesystem
 			$this->query($sql, 's', $path);
 			
 			$this->delete_new_filelink($file['id']);
+			
+			$this->delete_versions($path);
 		}
 	}
 

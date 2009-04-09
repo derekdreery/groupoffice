@@ -33,27 +33,32 @@ GO.files.VersionsGrid = function(config) {
 						'grid_display', 'extension', 'timestamp', 'thumb_url'],
 				remoteSort : true
 			});
+			
+	var nameId = Ext.id();
 
 	config.paging = true;
 	var columnModel = new Ext.grid.ColumnModel([{
 				header : GO.lang['strName'],
 				dataIndex : 'grid_display',
-				sortable : true
+				sortable : true,
+				id: nameId
 			}, {
 				header : GO.lang.strSize,
 				dataIndex : 'size',
+				width:80,
 				sortable : true
 			}, {
 				header : GO.lang.strMtime,
 				dataIndex : 'mtime',
-				sortable : true
+				sortable : true,
+				width:100
 			}]);
 	columnModel.defaultSortable = true;
 	config.cm = columnModel;
+	
+	config.autoExpandColumn=nameId;
 
 	config.view = new Ext.grid.GridView({
-				autoFill : true,
-				forceFit : true,
 				emptyText : GO.lang['strNoItems']
 			});
 	config.sm = new Ext.grid.RowSelectionModel();
