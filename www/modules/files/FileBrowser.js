@@ -570,6 +570,28 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	afterRender : function(){		
 		GO.files.FileBrowser.superclass.afterRender.call(this);
 		
+		GO.files.filePropertiesDialog.on('rename', function(dlg, oldpath, newpath){
+				if(this.path==GO.util.dirname(newpath))
+				{
+					this.getActiveGridStore().load();
+				}
+			}, this);
+		
+
+		GO.files.folderPropertiesDialog.on('rename', function(dlg, oldpath, newpath){				
+					var parent = GO.util.dirname(oldpath);					
+					if(parent==this.path)
+					{
+						this.setPath(parent);
+					}
+					var node = this.treePanel.getNodeById(parent);
+					if(node)
+					{			
+						delete node.attributes.children;
+						node.reload();
+					}
+			}, this);
+		
 		if(!this.loadDelayed && !this.loaded)
 		{			
 			this.loadFiles();
@@ -626,41 +648,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	},
 	
 	
-	showFolderPropertiesDialog : function (path)
-	{
-		if(!this.folderPropertiesDialog)
-		{
-			this.folderPropertiesDialog = new GO.files.FolderPropertiesDialog();
-				this.folderPropertiesDialog.on('rename', function(dlg, oldpath, newpath){
-				
-					var parent = GO.util.dirname(oldpath);
-					
-					if(parent==this.path)
-					{
-						this.setPath(parent);
-					}
-					var node = this.treePanel.getNodeById(parent);
-					if(node)
-					{			
-						delete node.attributes.children;
-						node.reload();
-					}
-			}, this);
-		}
-		this.folderPropertiesDialog.show(path);
-	},
 	
-	showFilePropertiesDialog : function(path)
-	{
-		if(!this.filePropertiesDialog)
-		{
-			this.filePropertiesDialog = new GO.files.FilePropertiesDialog();
-			this.filePropertiesDialog.on('rename', function(){
-				this.getActiveGridStore().load();	
-			}, this);
-		}
-		this.filePropertiesDialog.show(path);
-	},
 	
 	buildNewMenu : function(){
 		
@@ -1507,14 +1495,19 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	{
 		if(record.data.extension=='folder')
 		{
-			this.showFolderPropertiesDialog(record.data.path);
+			GO.files.folderPropertiesDialog.show(path);
 		}else
 		{
-			this.showFilePropertiesDialog(record.data.path);			
+			GO.files.filePropertiesDialog.show(record.data.path);			
 		}
 	}
 });
 
+
+GO.mainLayout.onReady(function(){
+	GO.files.filePropertiesDialog = new GO.files.FilePropertiesDialog();
+	GO.files.folderPropertiesDialog = new GO.files.FolderPropertiesDialog();
+});
 
 GO.files.openFile = function(path, store)
 {
@@ -1647,7 +1640,7 @@ GO.files.openFolder = function(path)
 
 
 GO.linkHandlers[6]=function(id, record){
-	GO.files.openFile(record.data.description);
+	GO.files.filePropertiesDialog.show(record.data.description);
 }
 
 
