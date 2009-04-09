@@ -85,6 +85,9 @@ GO.dialog.SelectEmail = function(config) {
 	this.usersGrid.on('show', function() {
 				this.usersStore.load();
 			}, this);
+			
+	this.usersGrid.on('rowdblclick', function(){this.callHandler(true);}, this);
+	
 	/*
 	 * this.usersGrid.on('afterRender', function(){
 	 * if(this.usersGrid.isVisible()) { this.onShow(); } }, this);
@@ -140,6 +143,8 @@ GO.dialog.SelectEmail = function(config) {
 		this.contactsGrid.on('show', function() {
 					this.contactsStore.load();
 				}, this);
+				
+		this.contactsGrid.on('rowdblclick', function(){this.callHandler(true);}, this);
 
 		this.companiesStore = new GO.data.JsonStore({
 					url : GO.settings.modules.addressbook.url + 'json.php',
@@ -188,6 +193,8 @@ GO.dialog.SelectEmail = function(config) {
 		this.companyGrid.on('show', function() {
 					this.companiesStore.load();
 				}, this);
+		
+		this.companyGrid.on('rowdblclick', function(){this.callHandler(true);}, this);
 
 		items.push(this.contactsGrid);
 		items.push(this.companyGrid);

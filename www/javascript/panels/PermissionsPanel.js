@@ -60,7 +60,7 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 					columns : [{
 								header : GO.lang['strName'],
 								dataIndex : 'name',
-								sortable : true
+								menuDisabled:true
 							}],
 					view : new Ext.grid.GridView({
 								autoFill : true,
@@ -115,7 +115,7 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 					columns : [{
 								header : GO.lang['strName'],
 								dataIndex : 'name',
-								sortable : true
+								menuDisabled:true
 							}],
 					view : new Ext.grid.GridView({
 								autoFill : true,

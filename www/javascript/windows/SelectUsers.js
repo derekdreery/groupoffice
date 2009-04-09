@@ -70,6 +70,8 @@ GO.dialog.SelectUsers = function(config){
 	        ]		
 		});
 		
+	this.grid.on('rowdblclick', function(){this.callHandler(true);}, this);
+		
 	var focusSearchField = function(){
 		this.searchField.focus(true);
 	};
