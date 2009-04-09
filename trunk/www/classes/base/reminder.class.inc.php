@@ -90,6 +90,20 @@ class reminder extends db
 		return $this->query("DELETE FROM go_reminders WHERE user_id=".$this->escape($user_id));
 	}
 	
+/**
+	* Gets a reminder record by a link ID
+	*
+	* @param Int $link_id ID of the reminder
+	*
+	* @access public
+	* @return Array Record properties
+	*/
+	
+	function delete_reminders_by_link_id($link_id, $link_type)
+	{
+		return $this->query("DELETE FROM go_reminders WHERE link_id=".$this->escape($link_id)." AND link_type=".$this->escape($link_type));		
+	}
+	
 	/**
 	* Gets a reminder record by a link ID
 	*

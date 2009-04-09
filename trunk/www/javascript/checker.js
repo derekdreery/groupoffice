@@ -213,6 +213,7 @@ GO.CheckerPanel = Ext.extend(function(config){
 	    fields:[
 	    'id',
 	    'name', 
+	    'description',
 	    'link_id', 
 	    'link_type',
 	    'link_type_name',
