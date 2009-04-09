@@ -706,12 +706,15 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			
 			var sig = accountRecord.get(this.formPanel.baseParams.content_type+"_signature");
 			
-			if(this.formPanel.baseParams.content_type=='plain')
+			if(!GO.util.empty(sig))
 			{
-				sig = "\n"+sig+"\n";
-			}else
-			{
-				sig = '<br />'+sig+'<br />';
+				if(this.formPanel.baseParams.content_type=='plain')
+				{
+					sig = "\n"+sig+"\n";
+				}else
+				{
+					sig = '<br />'+sig+'<br />';
+				}
 			}
 			
 			
