@@ -112,15 +112,8 @@ GO.files.FilePropertiesDialog = function(config){
 		defaultType: 'textfield',
 		items:this.tabPanel
 	});
-		
-	GO.files.FilePropertiesDialog.superclass.constructor.call(this,{
-		title:GO.lang['strProperties'],
-		layout:'fit',
-		width:600,
-		height:500,
-		closeAction:'hide',
-		items:this.formPanel,
-		tbar:[{
+	
+	var tbar = [{
 					iconCls: 'btn-download',
 					text: GO.lang.download,
 					cls: 'x-btn-text-icon',
@@ -128,7 +121,11 @@ GO.files.FilePropertiesDialog = function(config){
 						window.location.href=GO.settings.modules.files.url+'download.php?mode=download&path='+encodeURIComponent(this.path);
 					},
 					scope: this
-				},{
+				}];
+				
+	if(GO.settings.modules.gota && GO.settings.modules.gota.read_permission)
+	{
+		tbar.push({
 					iconCls: 'btn-download-gota',
 					text: GO.files.lang.downloadGOTA,
 					cls: 'x-btn-text-icon',
@@ -142,7 +139,17 @@ GO.files.FilePropertiesDialog = function(config){
 						}
 					},
 					scope: this
-				}],
+				});
+	}
+		
+	GO.files.FilePropertiesDialog.superclass.constructor.call(this,{
+		title:GO.lang['strProperties'],
+		layout:'fit',
+		width:600,
+		height:500,
+		closeAction:'hide',
+		items:this.formPanel,
+		tbar:tbar,
 		buttons:[
 			{
 				text:GO.lang['cmdOk'],

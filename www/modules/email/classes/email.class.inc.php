@@ -96,7 +96,7 @@ function load_template($template_id, $to, $keep_tags=false)
 	
 	if($_POST['content_type']=='plain')
 	{
-		$response['data']['body']=String::html_to_text($response['data']['body']);
+		$response['data']['body']=String::html_to_text($response['data']['body'], false);
 	}
 
 	//$response['data']['to']=$to;
@@ -123,7 +123,7 @@ class email extends db
 
 		if($GO_MODULES->has_module('email'))
 		{
-			$value = isset($POST['use_html_markup']) ? '0' : '1';
+			$value = isset($_POST['use_html_markup']) ? '0' : '1';
 			$GO_CONFIG->save_setting('email_use_plain_text_markup', $value, $GO_SECURITY->user_id);
 		}
 	}

@@ -162,8 +162,7 @@ class html2text
         '/(<ol[^>]*>|<\/ol>)[\s]*/i',                 // <ol> and </ol>
         '/<li[^>]*>(.*?)<\/li>[\s]*/i',               // <li> and </li>
         '/<li[^>]*>/i',                          // <li>
-        '/<a [^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/ie',
-	// <a href="">
+        '/<a [^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/ie',	// <a href="">
         '/<hr[^>]*>/i',                          // <hr>
         '/(<table[^>]*>|<\/table>)/i',           // <table> and </table>
         '/(<tr[^>]*>|<\/tr>)/i',                 // <tr> and </tr>
@@ -334,10 +333,10 @@ class html2text
 	 *  @access public
 	 *  @return string
 	 */
-	function get_text()
+	function get_text($link_list=true)
 	{
 		if ( !$this->_converted ) {
-			$this->_convert();
+			$this->_convert($link_list);
 		}
 
 		return $this->text;
@@ -349,21 +348,9 @@ class html2text
 	 *  @access public
 	 *  @return void
 	 */
-	function print_text()
+	function print_text($link_list=true)
 	{
-		print $this->get_text();
-	}
-
-	/**
-	 *  Alias to print_text(), operates identically.
-	 *
-	 *  @access public
-	 *  @return void
-	 *  @see print_text()
-	 */
-	function p()
-	{
-		print $this->get_text();
+		print $this->get_text($link_list);
 	}
 
 	/**
@@ -416,7 +403,7 @@ class html2text
 	 *  @access private
 	 *  @return void
 	 */
-	function _convert()
+	function _convert($link_list=true)
 	{
 		// Variables used for building the link list
 		$this->_link_count = 0;
@@ -437,7 +424,7 @@ class html2text
 		$text = preg_replace("/[\n]{3,}/", "\n\n", $text);
 
 		// Add link list
-		if ( !empty($this->_link_list) ) {
+		if ($link_list && !empty($this->_link_list) ) {
 			$text .= "\n\nLinks:\n------\n" . $this->_link_list;
 		}
 
