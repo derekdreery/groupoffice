@@ -189,7 +189,7 @@ class filesystem extends db
 	 * @return bool true on success
 	 */
 
-	function move($source_path, $destination_path)
+	function move($source_path, $destination_path, $uploaded_file=false)
 	{
 		$source_path = dirname($source_path).'/'.utf8_basename($source_path);
 		$destination_path = dirname($destination_path).'/'.utf8_basename($destination_path);
@@ -230,8 +230,15 @@ class filesystem extends db
 				return rmdir($source_path);
 			}else
 			{
-				$this->move_file($source_path,$destination_path);				
-				return rename($source_path, $destination_path);
+				
+				$this->move_file($source_path,$destination_path);
+				if($uploaded_file)
+				{
+					return move_uploaded_file($source_path, $destination_path);
+				}	else
+				{			
+					return rename($source_path, $destination_path);
+				}
 				/*
 				//rename fails when moving accross partitions
 				if(isset($_SESSION['GO_SESSION']['username']) && strstr($source_path, $GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/') &&
