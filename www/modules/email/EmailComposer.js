@@ -631,8 +631,8 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 				
 				if(config.task=='opendraft')
 					this.sendParams.draft_uid = config.uid; 
+
 					
-					console.log(config.loadParams);
 
 				var params = config.loadParams ? config.loadParams : {
 					uid : config.uid,
@@ -654,9 +654,9 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 				var url = config.loadUrl
 						? config.loadUrl
 						: GO.settings.modules.email.url + 'json.php';
-						
-						console.log(params);
-						console.log(this.formPanel.baseParams);
+
+				//sometimes this is somehow copied from the baseparams
+				delete params.content_type;
 
 				this.formPanel.form.load({
 					url : url,
