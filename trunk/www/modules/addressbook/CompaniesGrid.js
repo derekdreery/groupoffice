@@ -60,6 +60,12 @@ GO.addressbook.CompaniesGrid = function(config){
 	
 	GO.addressbook.CompaniesGrid.superclass.constructor.call(this, config);
 	
+	this.on('rowdblclick', function(grid, rowIndex){
+		var record = grid.getStore().getAt(rowIndex);			
+		
+		GO.addressbook.companyDialog.show(record.data.id);
+		}, this);
+	
 };
 
 
