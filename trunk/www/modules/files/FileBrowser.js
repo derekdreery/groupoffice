@@ -1508,9 +1508,12 @@ GO.mainLayout.onReady(function(){
 	GO.files.filePropertiesDialog = new GO.files.FilePropertiesDialog();
 	GO.files.folderPropertiesDialog = new GO.files.FolderPropertiesDialog();
 	
-	GO.workflowLinkHandlers[6]=function(id, process_file_id){
-		GO.files.filePropertiesDialog.show(id+"", {loadParams:{process_file_id:process_file_id}});
-		GO.files.filePropertiesDialog.tabPanel.setActiveTab(3);
+	if(GO.workflowLinkHandlers)
+	{
+		GO.workflowLinkHandlers[6]=function(id, process_file_id){
+			GO.files.filePropertiesDialog.show(id+"", {loadParams:{process_file_id:process_file_id}});
+			GO.files.filePropertiesDialog.tabPanel.setActiveTab(3);
+		}
 	}
 });
 
