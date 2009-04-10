@@ -87,7 +87,7 @@ GO.email.lang.NA='N/A';
 GO.email.lang.emptyFolder='Ordner leeren';
 GO.email.lang.emptyFolderConfirm='Möchten Sie den Ordner \'{name}\' wirklich leeren ?';
 GO.email.lang.addUnknownRecipients='Unbekannten Empfänger hinzufügen';
-GO.email.lang.addUnknownRecipientsText='Sie haben eine E-Mail zu einem oder mehreren Empfängern gesandt, der oder die nicht in Ihrem Adressbuch sind. Klicken Sie auf den Namen, wenn Sie Empfänger zu Ihrem Adressbuch hinzufügen möchten oder schliessen Sie das Fenster.';
+GO.email.lang.addUnknownRecipientsText='Sie haben eine E-Mail zu einem oder mehreren Empfängern gesandt, der oder die nicht in Ihrem Adressbuch sind. Klicken Sie auf den Namen, wenn Sie den Empfänger zu Ihrem Adressbuch hinzufügen möchten oder schließen Sie das Fenster.';
 GO.email.lang.attachFilesPC='Vom PC hinzufügen';
 GO.email.lang.attachFilesGO='Von GroupOffice hinzufügen';
 
@@ -123,3 +123,7 @@ GO.email.lang.signature='Signatur';
 
 GO.email.defaultProgram='Standard E-Mail-Programm';
 GO.email.defaultProgramInstructions ='<p>To set Group-Office as your default e-mail program please <a class="normal-link" href="http://www.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client" target="_blank">read the instructions</a>.</p><p>Then if you are using Windows you must download and run <a class="normal-link" href="'+GO.settings.modules.email.url+'register_email.php">this register file</a></p>';
+
+
+GO.email.lang.htmlMarkup = 'HTML-Formatierung verwenden';
+GO.email.lang.confirmLostChanges = 'Änderungen werden verloren gehen. Sind Sie sicher?';

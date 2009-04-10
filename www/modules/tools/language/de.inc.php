@@ -7,7 +7,7 @@ $lang['tools']['description']='Modul zur Durchführung administrativer Aufgaben'
 
 $lang['tools']['dbcheck']='Datenbank überprüfen';
 $lang['tools']['rm_duplicates']='Doppelte Kontakte und Termine löschen';
-$lang['tools']['index_files']='Alle Daten neu indizieren';
 
 $lang['tools']['backupdb']='Datenbank sichern';
+$lang['tools']['index_files']='Alle Daten neu indizieren';
 ?>

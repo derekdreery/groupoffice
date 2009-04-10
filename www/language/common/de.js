@@ -11,14 +11,15 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-GO.lang.serverError='An error occurred on the webserver. Contact your system administrator and supply the detailed error.';
+GO.lang.passwordMatchError='Die Passwörter stimmen nicht überein.';
+GO.lang.serverError='Auf dem Webserver ist ein Fehler aufgetreten. Kontaktieren Sie bitte Ihren Systemadministrator und informieren Sie ihn hierüber.';
 GO.lang.errorDetails='Fehlerdetails';
 GO.lang.contactSupportDesk='Support anfordern';
 
 GO.lang.disabled='Deaktiviert';
-GO.lang.changesWillBeLost='You made changes in the current screen. Press cancel and save changes or Ok to continue and delete your changes.';
+GO.lang.changesWillBeLost='Sie haben bereits Änderungen im aktuellen Fenster vorgenommen. Brechen Sie den Vorgang ab und speichern Sie zuerst Ihre Änderungen. Wenn Sie jetzt OK drücken werden Ihre Änderungen verworfen.';
 GO.lang.strCommunityForum='Anwenderforum';
-GO.lang.moduleRequired='This feature requires the \'{module}\' module. This module is not available.';
+GO.lang.moduleRequired='Diese Funktion erfordert das \'{module}\' Modul. Dieses Modul ist nicht verfügbar.';
 
 GO.lang.completeProfile = 'Bitte vervollständigen Sie Ihr Profil';
 GO.lang.fullscreen='Vollbildmodus';
@@ -26,14 +27,14 @@ GO.lang.popupBlocker= 'Ihr Browser blockiert ein Popup von GroupOffice. Bitte de
 
 GO.lang.color='Farbe';
 GO.lang.browse='Durchsuchen...';
-GO.lang.largeUpload='Große Dateien/Ordner (Java benötigt)';
+GO.lang.largeUpload='Große Dateien/Ordner (Java erforderlich)';
 GO.lang.smallUpload='Kleine Dateien';
 
 
 GO.lang.lostPassword='Passwort vergessen?';
 GO.lang.lostPasswordText='Um Ihr Passwort wiederherzustellen, müssen Sie Ihre E-Mail ausserhalb von GroupOffice abrufen können. Wenn Sie Ihre E-Mail-Adresse eingeben, wird Ihnen ein neues Passwort zugesandt.<br /><br />Geben Sie ihre E-Mail-Adresse ein:';
 
-GO.lang.noJava='Java ist nicht installiert. Java ermöglich ein einfacheres bearbeiten und hochladen der Dateien. Gehen Sie auf <a class="normal-link" href="http://www.java.com/download" target="_blank">http://www.java.com/download</a>, um Java zu installieren.';
+GO.lang.noJava='Java ist nicht installiert. Java ermöglicht ein einfacheres Bearbeiten und Hochladen von Dateien. Gehen Sie auf <a class="normal-link" href="http://www.java.com/download" target="_blank">http://www.java.com/download</a>, um Java zu installieren.';
 
 GO.lang.strHelpContents='Hilfeinhalt';
 GO.lang.strReportBug='Einen Fehler melden';
@@ -69,7 +70,7 @@ GO.lang.strEmail = 'E-Mail';
 GO.lang.strPhone = 'Telefon';
 GO.lang.strFax = 'Telefax';
 GO.lang.strCellular = 'Mobiltelefon';
-GO.lang.strAddress = 'Strasse';
+GO.lang.strAddress = 'Straße';
 GO.lang.strAddressNo = 'Hausnr.';
 GO.lang.strZip = 'PLZ';
 GO.lang.strCity = 'Stadt';
@@ -81,7 +82,7 @@ GO.lang.strDepartment = 'Abteilung';
 GO.lang.strFunction = 'Funktion';
 GO.lang.strSalutation = 'Anrede';
 GO.lang.strComment = 'Kommentar';
-GO.lang.strWorkAddress = 'Strasse (dienstl.)';
+GO.lang.strWorkAddress = 'Straße (dienstl.)';
 GO.lang.strWorkAddressNo = 'Hausnr. (dienstl.)';
 GO.lang.strWorkZip = 'PLZ (dienstl.)';
 GO.lang.strWorkCity = 'Stadt (dienstl.)';
@@ -89,7 +90,7 @@ GO.lang.strWorkState = 'Bundesland (dienstl.)';
 GO.lang.strWorkCountry = 'Land (dienstl.)',	
 GO.lang.strWorkPhone = 'Telefon (dienstl.)';
 GO.lang.strWorkFax = 'Telefax (dienstl.)';
-GO.lang.strPostAddress = 'Strasse';
+GO.lang.strPostAddress = 'Straße';
 GO.lang.strPostAddressNo = 'Hausnr.';
 GO.lang.strPostCity = 'Stadt';
 GO.lang.strPostState = 'Bundesland';
@@ -118,7 +119,7 @@ GO.lang.texts = 'Texte';
 GO.lang.strDate = 'Datum';
 GO.lang.strUser = 'Benutzer';
 
-GO.lang.strSize = 'Grösse';
+GO.lang.strSize = 'Größe';
 GO.lang.strType = 'Typ';
 GO.lang.strNA = 'N/A';
 
@@ -130,7 +131,7 @@ GO.lang.cmdSave = 'Speichern';
 GO.lang.cmdEdit = 'Bearbeiten';
 GO.lang.cmdLink = 'Verknüpfen';
 GO.lang.cmdUnlink = 'Verknüpfung entfernen';
-GO.lang.cmdClose = 'Schliessen';
+GO.lang.cmdClose = 'Schließen';
 GO.lang.cmdSettings = 'Einstellungen';
 GO.lang.cmdReset = 'Zurücksetzen';
 GO.lang.cmdExport='Exportieren';
@@ -182,12 +183,12 @@ GO.lang.strError= 'Fehler';
 GO.lang.waitMsgSave= 'Speichern...';
 GO.lang.waitMsgLoad= 'Laden...';
 GO.lang.waitMsgUpload= 'Hochladen...';
-GO.lang.strRequestError= 'Could not connect to the server. Please check your internet connection.';
+GO.lang.strRequestError= 'Es konnte keine Verbindung zum Server aufgebaut werden. Bitte überprüfen Sie ihre Internetverbindung.';
 
 GO.lang.strSelected = 'Ausgewählt';
 GO.lang.noItemSelected= 'Sie haben keinen Eintrag ausgewählt.';
-GO.lang.strDeleteSelectedItems= 'Sind Sie sicher, dass Sie {count} Einträge löschen möchten?';
-GO.lang.strDeleteSelectedItem= 'Sind Sie sicher, dass Sie den ausgewählten Eintrag löschen möchten?';
+GO.lang.strDeleteSelectedItems= 'Sind Sie sicher, daß Sie {count} Einträge löschen möchten?';
+GO.lang.strDeleteSelectedItem= 'Sind Sie sicher, daß Sie den ausgewählten Eintrag löschen möchten?';
 
 GO.lang.strNoWritePermissions = 'Sie haben keine Befugnis, diesen Eintrag zu bearbeiten.';
 
@@ -475,7 +476,7 @@ GO.lang.countries["SI"] = "Slowenien";
 GO.lang.countries["SB"] = "Solomon-Inseln";
 GO.lang.countries["SO"] = "Somalia";
 GO.lang.countries["ZA"] = "Südafrika";
-GO.lang.countries["GS"] = "South Georgia und die Süd Sandwich Inseln";
+GO.lang.countries["GS"] = "South Georgia und die südlichen Sandwich Inseln";
 GO.lang.countries["ES"] = "Spanien";
 GO.lang.countries["LK"] = "Sri Lanka";
 GO.lang.countries["SH"] = "St. Helena";
