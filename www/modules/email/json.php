@@ -429,6 +429,7 @@ try{
 					{
 						case 'text/plain':
 							$text_part = $imap->view_part($uid, $parts[$i]["number"], $parts[$i]["transfer"], $parts[$i]['charset']);
+							
 							if($GO_MODULES->has_module('gnupg'))
 								$text_part = $gnupg->replace_encoded($text_part,$passphrase,false);							
 							
@@ -826,9 +827,7 @@ try{
 				}else
 				{
 					$block=false;
-				}
-				
-				
+				}				
 
 				while($part = array_shift($parts))
 				{
@@ -843,10 +842,8 @@ try{
 					if (empty($response['body']) &&
 					(!eregi('attachment', $part["disposition"])) &&
 					((eregi('html', $mime) && empty($_POST['plaintext'])) ||(eregi('plain', $mime) && (!$html_alternative || strtolower($part['type'])!='alternative')) || $mime == "text/enriched" || $mime == "unknown/unknown"))
-					{
-						
+					{						
 						$part_body = $imap->view_part($uid, $part["number"], $part["transfer"], $part["charset"]);
-						//$part_body = $imap->view_part($uid, "1.1", $part["transfer"], $part["charset"]);
 
 						switch($mime)
 						{
@@ -868,8 +865,8 @@ try{
 								break;
 
 							case 'text/html':
+								//$part_body= iconv("UTF-8","UTF-8//IGNORE",$part_body); 
 								$part_body = String::convert_html($part_body, $block, $response['blocked_images']);
-								//	$part = convert_links($part);
 								break;
 
 							case 'text/enriched':
@@ -1458,5 +1455,6 @@ if(defined('IMAP_CONNECTED'))
 {
 	$imap->close();
 }
+
 
 echo json_encode($response);
