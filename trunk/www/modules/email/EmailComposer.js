@@ -67,6 +67,7 @@ GO.email.EmailComposer = function(config) {
 										 * reload dialog for text or html
 										 */
 										this.showConfig.keepEditingMode=true;
+										delete this.showConfig.move;
 										this.show(this.showConfig);
 									}else
 									{
