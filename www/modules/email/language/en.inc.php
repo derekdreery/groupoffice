@@ -46,3 +46,6 @@ $lang['email']['draftsDisabled']="Message could not be saved because the 'Drafts
 $lang['email']['noSaveWithPop3']='Message could not be saved because a POP3 account does not support this.';
 
 $lang['email']['goAlreadyStarted']='Group-Office was al gestart. Het e-mailscherm wordt nu geladen in Group-Office. Sluit dit venster en stel uw bericht op in Group-Office.';
+
+//At Tuesday, 07-04-2009 on 8:58 Group-Office Administrator <test@intermeshdev.nl> wrote:
+$lang['email']['replyHeader']='At %s, %s on %s %s wrote:';

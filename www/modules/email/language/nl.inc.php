@@ -43,3 +43,6 @@ $lang['email']['draftsDisabled']="Het bericht kon niet worden opgeslagen omdat d
 $lang['email']['noSaveWithPop3']='Het bericht kon niet worden opgeslagen omdat POP3 accounts dit niet ondersteunen.';
 
 $lang['email']['goAlreadyStarted']='Group-Office was already started. The e-mail composer is now loaded in Group-Office. Close this window and compose your message in Group-Office.';
+
+//At Tuesday, 07-04-2009 on 8:58 Group-Office Administrator <test@intermeshdev.nl> wrote:
+$lang['email']['replyHeader']='Op %s, %s om %s schreef %s:';

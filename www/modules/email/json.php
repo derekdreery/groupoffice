@@ -469,7 +469,7 @@ try{
 			
 
 
-			if($task!='opendraft')
+			if($task=='forward')
 			{
 				$om_to = isset($content['to']) ? implode(',',$content["to"]) : $lang['email']['no_recipients'];
 				$om_cc = isset($content['cc']) ? implode(',',$content["cc"]) : '';
@@ -489,7 +489,8 @@ try{
 				
 					$header_om .= "</font><br /><br />";
 
-					$response['data']['body'] = '<br /><blockquote style="border:0;border-left: 2px solid #22437f; padding:0px; margin:0px; padding-left:5px; margin-left: 5px; ">'.$header_om.$response['data']['body'].'</blockquote>';
+					$response['data']['body']=$header_om.$response['data']['body'];
+					//$response['data']['body'] = '<br /><blockquote style="border:0;border-left: 2px solid #22437f; padding:0px; margin:0px; padding-left:5px; margin-left: 5px; ">'.$header_om.$response['data']['body'].'</blockquote>';
 				}else
 				{
 					$header_om  = "\n\n".$lang['email']['original_message']."\n";
@@ -505,9 +506,28 @@ try{
 					$header_om .= ">\n>\n";
 
 					$response['data']['body'] = str_replace("\r",'',$response['data']['body']);
-					$response['data']['body'] = '> '.str_replace("\n","\n> ",$response['data']['body']);
+					//$response['data']['body'] = '> '.str_replace("\n","\n> ",$response['data']['body']);
 					
 					$response['data']['body'] = $header_om.$response['data']['body'];
+				}
+			}elseif($task=='reply' || $task=='reply_all')
+			{
+				$header_om = sprintf($lang['email']['replyHeader'],
+					$lang['common']['full_days'][date('w', $content["udate"])], 
+					date($_SESSION['GO_SESSION']['date_format'],$content["udate"]),
+					date($_SESSION['GO_SESSION']['time_format'],$content["udate"]),
+					$content['from']);
+					
+				if($_POST['content_type']== 'html')
+				{
+					
+					$response['data']['body'] = '<br />'.htmlspecialchars($header_om, ENT_QUOTES, 'UTF-8').'<br /><blockquote style="border:0;border-left: 2px solid #22437f; padding:0px; margin:0px; padding-left:5px; margin-left: 5px; ">'.$response['data']['body'].'</blockquote>';
+				}else
+				{
+					$response['data']['body'] = str_replace("\r",'',$response['data']['body']);
+					$response['data']['body'] = '> '.str_replace("\n","\n> ",$response['data']['body']);
+					
+					$response['data']['body'] = "\n".$header_om."\n".$response['data']['body'];
 				}
 			}
 
