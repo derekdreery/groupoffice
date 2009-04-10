@@ -460,6 +460,8 @@ try{
 
 			if($response['data']['body'] != '')
 			{
+				$response['data']['body']=trim($response['data']['body']);
+				
 				//replace inline images with the url to display the part by Group-Office
 				for ($i=0;$i<count($url_replacements);$i++)
 				{
@@ -503,7 +505,7 @@ try{
 					}
 
 					$header_om .= $lang['common']['date'].": ".date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'],$content["udate"])."\n";
-					$header_om .= ">\n>\n";
+					$header_om .= "\n\n";
 
 					$response['data']['body'] = str_replace("\r",'',$response['data']['body']);
 					//$response['data']['body'] = '> '.str_replace("\n","\n> ",$response['data']['body']);

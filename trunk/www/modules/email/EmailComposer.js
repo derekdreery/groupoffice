@@ -280,7 +280,12 @@ GO.email.EmailComposer = function(config) {
 				items : items
 			});
 			
+	
+	
+			
 	this.htmlEditor.on('change', function(){this.changesMadeForAutoSave=true}, this);
+	
+	
 
 
 	// store for attachments needs to be created here because a forward action
@@ -738,6 +743,15 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			this.editor.setValue(sig+this.editor.getValue());
 		}
 		this.bodyContentAtWindowOpen=this.editor.getValue();	
+		
+		if(this.formPanel.baseParams.content_type=='plain')
+		{
+			//set cursor at top
+			this.editor.selectText(0,0);
+		}else if(!this.editor.activated)
+		{
+			this.editor.updateToolbar();
+		}
 		
 		if (this.toCombo.getValue() == '') {
 			this.toCombo.focus();
