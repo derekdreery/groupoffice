@@ -6,7 +6,7 @@ GO.gnupg.lang.importKey='Neuen Schlüssel generieren';
 GO.gnupg.lang.selectKeyFile='Schlüsseldatei auswählen';
 
 GO.gnupg.lang.encryptMessage='Nachricht verschlüsseln';
-GO.gnupg.lang.confirmChangeToText='Encryption can only be used with plain text e-mails. Changes made in the current e-mail will be lost if you continue to plain text mode now. Are you sure you want to switch to plain text editing mode now?';
+GO.gnupg.lang.confirmChangeToText='Verschlüsselung kann nur mit reinen Textnachrichten verwendet werden. Changes made in the current e-mail will be lost if you continue to plain text mode now. Are you sure you want to switch to plain text editing mode now?';
 
 GO.gnupg.lang.key='Schlüssel';
 
