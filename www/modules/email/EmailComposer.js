@@ -280,12 +280,7 @@ GO.email.EmailComposer = function(config) {
 				items : items
 			});
 			
-	
-	
-			
 	this.htmlEditor.on('change', function(){this.changesMadeForAutoSave=true}, this);
-	
-	
 
 
 	// store for attachments needs to be created here because a forward action
