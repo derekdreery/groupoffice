@@ -20,6 +20,7 @@ $js = json_encode($vars);
 ?>
 <html>
 <head>
+<title>Group-Office</title>
 <script>
 function launchGO(){
 	var win = window.open('', "groupoffice");
