@@ -351,8 +351,8 @@ try{
 										$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
 										$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 											
-										$show_completed=isset($_POST['show_completed']) && $_POST['show_completed']=='true';
-										$show_inactive=isset($_POST['show_inactive']) && $_POST['show_inactive']=='true';
+										//$show_completed=isset($_POST['show_completed']) && $_POST['show_completed']=='true';
+										//$show_inactive=isset($_POST['show_inactive']) && $_POST['show_inactive']=='true';
 										
 										if(isset($_POST['show_completed']))
 										{
