@@ -85,10 +85,9 @@ GO.tasks.TasksPanel = function(config)
     getRowClass : function(record, rowIndex, p, store){
 		   if(record.data.late){
 		    return 'tasks-late';
-		   }
-		   
+		   }		   
 		}
-	}),
+	});
 	config.sm=new Ext.grid.RowSelectionModel();
 	config.loadMask=true;
 
