@@ -474,8 +474,10 @@ a.normal-link:hover{
 	background-image: none;;
 }
 
-/* Group-Office logo displayed in the login screen */
-.go-app-logo{
+/* Group-Office logo displayed in the login screen 
+and about screen. Please leave the about screen logo original!
+*/
+.go-app-logo, .go-about-logo{
 	background: url('images/groupoffice.gif');
 	width:200px;
 	height:40px;
