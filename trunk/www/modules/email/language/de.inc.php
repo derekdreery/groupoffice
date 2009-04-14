@@ -10,6 +10,7 @@ $lang['email']['feedbackNoReciepent'] = 'Sie haben keinen Empfänger eingegeben'
 $lang['email']['feedbackSMTPProblem'] = 'Es gab ein Problem bei der Kommunikation mit SMTP: ';
 $lang['email']['feedbackUnexpectedError'] = 'Es gab ein unerwartetes Problem mit der E-Mail: ';
 $lang['email']['feedbackCreateFolderFailed'] = 'Ordner konnte nicht erstellt werden';
+$lang['email']['feedbackDeleteFolderFailed'] = 'Ordner konnte nicht gelöscht werden';
 $lang['email']['feedbackSubscribeFolderFailed'] = 'Fehler beim Ordner abonnieren';
 $lang['email']['feedbackUnsubscribeFolderFailed'] = 'Fehler beim Ordner abmelden';
 $lang['email']['feedbackCannotConnect'] = 'Es konnte keine Verbindung zu %1$s erstellt werden<br /><br />Der Mail-Server hat folgende Antwort gesandt: %2$s';
@@ -39,11 +40,12 @@ $lang['email']['usage'] = '%s genutzt';
 $lang['email']['event']='Termin';
 $lang['email']['calendar']='Kalender';
 
-$lang['email']['quotaError']="Ihre Mailbox ist voll. Leeren Sie zuerst ihren Papierkorb. If it is already empty and your mailbox is still full, you must disable the Trash folder to delete messages from other folders. You can disable it at:\n\nSettings -> Accounts -> Double click account -> Folders.";
+$lang['email']['quotaError']="Ihre Mailbox ist voll. Leeren Sie zuerst ihren Papierkorb. Wurde dieser schon geleert aber ihre Mailbox bleibt voll, so deaktivieren Sie den Papierkorb, um Nachrichten aus anderen Ordnern zu löschen. You can disable it at:\n\nSettings -> Accounts -> Double click account -> Folders.";
 
-$lang['email']['draftsDisabled']="Message could not be saved because the 'Drafts' folder is disabled.<br /><br />Go to Settings -> Accounts -> Double click account -> Folders to configure it.";
-$lang['email']['noSaveWithPop3']='Message could not be saved because a POP3 account does not support this.';
+$lang['email']['draftsDisabled']="Die Nachricht konnte nicht gespeichert werden, da der Ordner 'Entwürfe' nicht aktiviert wurde.<br /><br />Go to Settings -> Accounts -> Double click account -> Folders to configure it.";
+$lang['email']['noSaveWithPop3']='Die Nachricht konnte nicht gespeichert werden, da ein POP3-Konto diese Funktion nicht unterstützt.';
 
-$lang['email']['goAlreadyStarted']='GroupOffice wurde bereits gestartet. Die E-Mail-Oberfläche wird nun in GroupOffice geladen. Schliessen Sie dieses Fenster und schreiben Sie Ihre Nachricht in GroupOffice.';
+$lang['email']['goAlreadyStarted']='GroupOffice wurde bereits gestartet. Die E-Mail-Oberfläche wird nun in GroupOffice geladen. Schließen Sie dieses Fenster und schreiben Sie Ihre Nachricht in GroupOffice.';
+
 //At Tuesday, 07-04-2009 on 8:58 Group-Office Administrator <test@intermeshdev.nl> wrote:
-$lang['email']['replyHeader']='Am %s, %s um %s %s schrieb:';
+$lang['email']['replyHeader']='Am %s, den %s um %s schrieb %s:';
