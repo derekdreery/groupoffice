@@ -1,3 +1,6 @@
+2009/04/14 Version 3.01-stable-28
+- Small bug fixes
+
 2009/04/10 Version 3.01-stable-27
 - E-mail quote style improved
 - Updated German translation
