@@ -550,6 +550,7 @@ class imap{
 			
 		//$from = $RFC822->parse_address_list($values['from']);
 		$message["from"] = isset($values['from']) ? $this->enc_utf8($values['from']) : '';
+		$message["reply-to"] = isset($values['reply-to']) ? $this->enc_utf8($values['reply-to']) : $message["from"];
 		//$message["sender"] = isset($from[0]['email']) ? $this->enc_utf8($from[0]['email']) : '';
 		if(isset($values['date'])){
 			
@@ -627,19 +628,14 @@ class imap{
 			if($fetchstructure)
 			{
 				$structure = imap_fetchstructure($this->conn, $this->message['uid'], FT_UID);
-				//debug($structure);
 				$this->get_parts($structure);
 			}
 
 			$header = imap_fetchheader($this->conn, $this->message['uid'], FT_UID);
 			$values = $this->get_header_values($header);
-
+			
 			$this->message = array_merge($this->message, $values);
 
-			if(!isset($this->message["reply-to"]))
-			{
-				$this->message["reply-to"] = $this->message['from'];
-			}
 			return $this->message;
 		} else {
 			return false;
