@@ -6,6 +6,7 @@
 	padding:2px;	
 }
 
+
 .go-top-panel .x-panel-body{
 	 padding:3px;
    border:0px none;
@@ -22,7 +23,10 @@
 }
 #headerLeft{
 float:left;
-background:transparant;
+background: url('images/go_logo.gif') 1px 1px no-repeat;
+height:20px;
+padding-left:22px;
+line-height:20px;
 }
 #headerRight{
 float:right;
