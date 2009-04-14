@@ -206,7 +206,8 @@ GO.addressbook.CompanyProfilePanel = function(config)
     triggerAction:'all',
     editable: false,
 		selectOnFocus:true,
-    forceSelection: true    			
+    forceSelection: true,
+    anchor:'100%'
 	});
 	this.formAddressBooks.on('beforeselect', function(combo, record) 	
 	{
@@ -233,7 +234,6 @@ GO.addressbook.CompanyProfilePanel = function(config)
 	  		autoHeight: true,
 	  		border: true,
 	  		collapsed: false,
-	    	defaults: { anchor:'100%' },
 				items:this.formAddressBooks
 						
 			},{			    		
