@@ -117,19 +117,14 @@ if ( $GO_CONFIG->log ) {
 	openlog('[Group-Office]['.date('Ymd G:i').']['.$username.']', LOG_PERROR, LOG_USER);
 }
 
-
-require_once($GO_CONFIG->class_path.'filesystem.class.inc');
-$fs = new filesystem();
+//require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+//$fs = new filesystem();
 
 if($GO_SECURITY->user_id>0)
 {
 	$GO_CONFIG->tmpdir=$GO_CONFIG->tmpdir.$GO_SECURITY->user_id.'/';
 }
 
-if(!is_dir($GO_CONFIG->tmpdir))
-{
-	mkdir($GO_CONFIG->tmpdir,0755, true);
-}
 
 unset($type);
 

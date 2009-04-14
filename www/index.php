@@ -12,9 +12,6 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-
-
-
 require_once("Group-Office.php");
 
 if(isset($_REQUEST['task']) && $_REQUEST['task']=='logout')
@@ -30,12 +27,17 @@ if(isset($_REQUEST['task']) && $_REQUEST['task']=='logout')
 		exit();
 	}
 }
-
 //$config_file = $GO_CONFIG->get_config_file();
 if(empty($GO_CONFIG->db_user))
 {
 	header('Location: install/');
 	exit();
 }
+
+if(!is_dir($GO_CONFIG->tmpdir))
+{
+	mkdir($GO_CONFIG->tmpdir,0755, true);
+}
+
 
 require_once($GO_THEME->theme_path."layout.inc.php");
