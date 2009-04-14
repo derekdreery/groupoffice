@@ -323,9 +323,9 @@ class String {
 
 		if(is_array($last))
 		{
-			$first = $last['first_name'];
-			$middle = $last['middle_name'];
-			$last = $last['last_name'];
+			$first = isset($last['first_name']) ? $last['first_name'] : '';
+			$middle = isset($last['middle_name']) ? $last['middle_name'] : '';
+			$last = isset($last['last_name']) ? $last['last_name'] : '';
 		}
 
 		$sort_name = $sort_name == '' ? $_SESSION['GO_SESSION']['sort_name'] : $sort_name;

@@ -1,6 +1,6 @@
 <?php
 /**
- * For more information visit: http://www.group-office.com/wiki/IMAP_Authentication
+ * For more information visit: http://www.group-office.com/wiki/IMAP_or_LDAP_authentication
  */
  
 $config[] = 
@@ -23,6 +23,8 @@ $config[] =
 	'smtp_port'=>'25',
 	'smtp_encryption'=>'',
 	'smtp_username'=>'',
-	'smtp_password'=>''
+	'smtp_password'=>'',
+		
+	'ldap_use_email_as_imap_username'=>false
 	);
 ?>
