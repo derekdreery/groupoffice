@@ -1,3 +1,6 @@
+2009/04/14 Version 3.01-stable-29
+- LDAP authentication module
+
 2009/04/14 Version 3.01-stable-28
 - Small bug fixes
 
