@@ -521,10 +521,7 @@ class GO_USERS extends db
 		global $GO_MODULES, $GO_SECURITY, $GO_GROUPS;
 
 		if($this->update_profile($user))
-		{
-			
-			$this->cache_user($user['id']);
-			
+		{			
 			$GO_MODULES->get_modules();
 			while ($GO_MODULES->next_record())
 			{
@@ -651,7 +648,7 @@ class GO_USERS extends db
 			{
 				$user['password']=$params[0]['password'];
 			}
-			$GO_EVENTS->fire_event('add_user', array($user));
+			$GO_EVENTS->fire_event('add_user', array($user));						
 		}else
 		{
 			$GO_EVENTS->fire_event('update_user', $params);
@@ -814,6 +811,9 @@ class GO_USERS extends db
 			
 		if(!isset($user['max_rows_list']))
 			$user['max_rows_list'] = 30;
+			
+		if(!isset($user['sex']))			
+			$user['sex'] = 'M';
 
 
 		if (empty($user['id'])){
