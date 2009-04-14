@@ -7,10 +7,11 @@
  * If you have questions write an e-mail to info@intermesh.nl
  * 
  * @copyright Copyright Intermesh
- * @version $Id: en.js 2942 2008-09-02 12:24:54Z mschering $
+ * @version $Id: en.js 2312 2009-04-10 10:24:28Z mschering $
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
+GO.lang.pleaseApplyFirst='Bitte erst mit einem Klick auf \'Anwenden\' abspeichern';
 GO.lang.passwordMatchError='Die Passwörter stimmen nicht überein.';
 GO.lang.serverError='Auf dem Webserver ist ein Fehler aufgetreten. Kontaktieren Sie bitte Ihren Systemadministrator und informieren Sie ihn hierüber.';
 GO.lang.errorDetails='Fehlerdetails';
@@ -128,6 +129,7 @@ GO.lang.cmdAdd = 'Hinzufügen';
 GO.lang.cmdAddPlusNew = 'Hinzufügen + Neu';
 GO.lang.cmdSavePlusNew='Speichern + Neu';
 GO.lang.cmdSave = 'Speichern';
+GO.lang.cmdSaveAs = 'Speichern als';
 GO.lang.cmdEdit = 'Bearbeiten';
 GO.lang.cmdLink = 'Verknüpfen';
 GO.lang.cmdUnlink = 'Verknüpfung entfernen';
