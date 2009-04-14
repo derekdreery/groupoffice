@@ -12,7 +12,6 @@ require($GO_THEME->theme_path.'default_head.inc.php');
 <div id="loading-mask" style="width:100%;height:100%;background:#f1f1f1;position:absolute;z-index:20000;left:0;top:0;">&#160;</div>
 <div id="loading">
 	<div class="loading-indicator">
-	<img class="loading-logo" src="<?php echo $GO_THEME->theme_url; ?>images/groupoffice.gif" />
 	<img src="<?php echo $GO_CONFIG->host; ?>ext/resources/images/default/grid/loading.gif" style="width:16px;height:16px;vertical-align:middle" />&#160;<span id="load-status"><?php echo $lang['common']['loadingCore']; ?></span>
 	<div style="font-size:10px; font-weight:normal;margin-top:15px;">Copyright &copy; Intermesh 2003-2009</div>
 	</div>
@@ -35,7 +34,6 @@ if($GO_SECURITY->logged_in() && trim($_SESSION['GO_SESSION']['name']) != '' && !
 	?>
 	<div id="mainNorthPanel">
 		<div id="headerLeft">
-			<img class="go_logo" src="<?php echo $GO_THEME->theme_url; ?>images/go_logo.gif" />
 			<?php echo $lang['common']['loggedInAs'].' '.htmlspecialchars($_SESSION['GO_SESSION']['name']); ?>
 		</div>
 		<div id="headerRight">

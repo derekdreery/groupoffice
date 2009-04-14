@@ -14,8 +14,7 @@
 require('Group-Office.php');
 ?>
 <div style="padding:10px;line-height:16px">
-	<img src="<?php echo $GO_THEME->theme_url; ?>images/groupoffice.gif" /><br />
-	<br />
+	<div class="go-app-logo"></div>
 	<?php	
 	echo String::text_to_html(sprintf($lang['common']['about'], $GO_CONFIG->version, $GO_CONFIG->webmaster_email));
 	
