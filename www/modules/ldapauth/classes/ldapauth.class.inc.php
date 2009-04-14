@@ -45,10 +45,6 @@ class ldapauth extends imapauth
 		'work_city'	=> 'l',
 		'work_fax'	=> 'facsimiletelephonenumber',
 		'currency'	=> 'gocurrency',
-		'mail_client'	=> 'gomailclient',
-		'logins'	=> 'gologins',
-		'lastlogin'	=> 'golastlogin',
-		'registration_time'	=> 'goregistrationtime',
 		'max_rows_list'	=> 'gomaxrowslist',
 		'timezone'	=> 'gotimezone',
 		'start_module'=> 'gostartmodule',
@@ -66,6 +62,12 @@ class ldapauth extends imapauth
 	public static function before_login($username, $password)
 	{
 		global $GO_CONFIG, $GO_USERS, $GO_MODULES;
+		
+		if(!isset($GO_CONFIG->ldap_host))
+		{
+			trigger_error('ldapauth module is installed but not configured', E_USER_NOTICE);
+			return false;
+		}
 
 		$ldap = new ldap(
 		$GO_CONFIG->ldap_host,
@@ -133,7 +135,9 @@ class ldapauth extends imapauth
 						$config = $la->get_domain_config($domain);
 						if($config)
 						{
-							$la->create_email_account($config, $user_id, $username, $password,$user['email']);
+							$mail_username = empty($config['ldap_use_email_as_imap_username']) ? $username : $user['email'];
+							
+							$la->create_email_account($config, $user_id, $mail_username, $password,$user['email']);
 						}
 					}
 				}
