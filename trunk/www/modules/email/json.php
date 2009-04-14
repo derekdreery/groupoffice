@@ -428,7 +428,7 @@ try{
 					switch ($mime)
 					{
 						case 'text/plain':
-							$text_part = $imap->view_part($uid, $parts[$i]["number"], $parts[$i]["transfer"], $parts[$i]['charset']);
+							$text_part = trim($imap->view_part($uid, $parts[$i]["number"], $parts[$i]["transfer"], $parts[$i]['charset']));
 							
 							if($GO_MODULES->has_module('gnupg'))
 								$text_part = $gnupg->replace_encoded($text_part,$passphrase,false);							
@@ -437,7 +437,7 @@ try{
 							break;
 
 						case 'text/html':
-							$html_part = $imap->view_part($uid, $parts[$i]["number"], $parts[$i]["transfer"], $parts[$i]['charset']);
+							$html_part = trim($imap->view_part($uid, $parts[$i]["number"], $parts[$i]["transfer"], $parts[$i]['charset']));
 
 							if($GO_MODULES->has_module('gnupg'))
 								$html_part = $gnupg->replace_encoded($html_part,$passphrase);
@@ -448,7 +448,7 @@ try{
 							break;
 
 						case 'text/enriched':
-							$html_part = String::enriched_to_html($imap->view_part($uid,$parts[$i]["number"], $parts[$i]["transfer"], $parts[$i]['charset']), false);
+							$html_part = String::enriched_to_html(trim($imap->view_part($uid,$parts[$i]["number"], $parts[$i]["transfer"], $parts[$i]['charset'])), false);
 							
 							if($GO_MODULES->has_module('gnupg'))
 								$html_part = $gnupg->replace_encoded($html_part,$passphrase);
@@ -460,9 +460,7 @@ try{
 			}
 
 			if($response['data']['body'] != '')
-			{
-				$response['data']['body']=trim($response['data']['body']);
-				
+			{				
 				//replace inline images with the url to display the part by Group-Office
 				for ($i=0;$i<count($url_replacements);$i++)
 				{
@@ -479,7 +477,7 @@ try{
 								
 				if($_POST['content_type']== 'html')
 				{
-					$header_om  = '<font face="verdana" size="2">'.$lang['email']['original_message']."<br />";
+					$header_om  = '<br /><br /><font face="verdana" size="2">'.$lang['email']['original_message']."<br />";
 					$header_om .= "<b>".$lang['email']['subject'].":&nbsp;</b>".htmlspecialchars($subject, ENT_QUOTES, 'UTF-8')."<br />";
 					$header_om .= '<b>'.$lang['email']['from'].": &nbsp;</b>".htmlspecialchars($content['from'], ENT_QUOTES, 'UTF-8')."<br />";
 					$header_om .= "<b>".$lang['email']['to'].":&nbsp;</b>".htmlspecialchars($om_to, ENT_QUOTES, 'UTF-8')."<br />";
@@ -524,13 +522,13 @@ try{
 				if($_POST['content_type']== 'html')
 				{
 					
-					$response['data']['body'] = '<br />'.htmlspecialchars($header_om, ENT_QUOTES, 'UTF-8').'<br /><blockquote style="border:0;border-left: 2px solid #22437f; padding:0px; margin:0px; padding-left:5px; margin-left: 5px; ">'.$response['data']['body'].'</blockquote>';
+					$response['data']['body'] = '<br /><br />'.htmlspecialchars($header_om, ENT_QUOTES, 'UTF-8').'<br /><blockquote style="border:0;border-left: 2px solid #22437f; padding:0px; margin:0px; padding-left:5px; margin-left: 5px; ">'.$response['data']['body'].'</blockquote>';
 				}else
 				{
 					$response['data']['body'] = str_replace("\r",'',$response['data']['body']);
 					$response['data']['body'] = '> '.str_replace("\n","\n> ",$response['data']['body']);
 					
-					$response['data']['body'] = "\n".$header_om."\n".$response['data']['body'];
+					$response['data']['body'] = "\n\n".$header_om."\n".$response['data']['body'];
 				}
 			}
 
