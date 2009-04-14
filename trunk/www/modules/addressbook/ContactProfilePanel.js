@@ -214,7 +214,8 @@ GO.addressbook.ContactProfilePanel = function(config)
     editable: false,
 		selectOnFocus:true,
     forceSelection: true,
-    allowBlank: false			
+    allowBlank: false,
+    anchor:'100%'
 	});
 	
 	this.formAddressBooks.on('beforeselect', function(combo, record) 	
