@@ -208,6 +208,7 @@ class GO_USERS extends db
 
 		if($user_id > 0)
 		{
+			$where=true;
 			$sql = "SELECT DISTINCT go_users.*";
 		/*	if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
 			{
@@ -223,76 +224,82 @@ class GO_USERS extends db
 			}*/
 			
 			$sql .= "WHERE (go_acl.user_id=".$this->escape($user_id)." ".
-			"OR go_users_groups.user_id=".$this->escape($user_id).") AND ";
+			"OR go_users_groups.user_id=".$this->escape($user_id).")";
 		}else
 		{
-			$sql = "SELECT * FROM go_users ";
+			$where=false;
+			$sql = "SELECT * FROM go_users";
 			/*if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
 			{
 				$sql .= "LEFT JOIN cf_8 ON cf_8.link_id=users.link_id ";
 			}*/
-			$sql .= "WHERE ";
+			
 			
 		}
 		
-		if(!is_array($field))
+		if(!empty($query))
 		{
-			$fields=array();
-			if($field == '')
+			$sql .= $where ? " AND " : " WHERE ";
+			
+			if(!is_array($field))
 			{
-				$fields_sql = "SHOW FIELDS FROM go_users";
-				$this->query($fields_sql);
-				while($this->next_record())
+				$fields=array();
+				if($field == '')
 				{
-					if(eregi('varchar', $this->f('Type')))
-					{
-						$fields[]='go_users.'.$this->f('Field');
-					}
-				}
-				/*if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
-				{
-					$fields_sql = "SHOW FIELDS FROM cf_8";
+					$fields_sql = "SHOW FIELDS FROM go_users";
 					$this->query($fields_sql);
-					while ($this->next_record()) {
-						$fields[]='cf_8.'.$this->f('Field');
+					while($this->next_record())
+					{
+						if(eregi('varchar', $this->f('Type')))
+						{
+							$fields[]='go_users.'.$this->f('Field');
+						}
 					}
-					
-				}*/
+					/*if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
+					{
+						$fields_sql = "SHOW FIELDS FROM cf_8";
+						$this->query($fields_sql);
+						while ($this->next_record()) {
+							$fields[]='cf_8.'.$this->f('Field');
+						}
+						
+					}*/
+				}else {
+					$fields[]=$field;
+				}
 			}else {
-				$fields[]=$field;
+				$fields=$field;
 			}
-		}else {
-			$fields=$field;
-		}
-		
-		foreach($fields as $field)
-		{
-			if(count($fields)>1)
+			
+			foreach($fields as $field)
 			{
-				if(isset($first))
+				if(count($fields)>1)
 				{
-					$sql .= ' OR ';
+					if(isset($first))
+					{
+						$sql .= ' OR ';
+					}else
+					{
+						$first = true;
+						$sql .= '(';
+					}				
+				}
+				
+				if($field=='name')
+				{
+					$sql .= "CONCAT(first_name,middle_name,last_name) LIKE '".$this->escape(str_replace(' ','%', $query))."' ";
 				}else
 				{
-					$first = true;
-					$sql .= '(';
-				}				
+					$sql .= "$field LIKE '".$this->escape($query)."' ";
+				}
 			}
-			
-			if($field=='name')
+			if(count($fields)>1)
 			{
-				$sql .= "CONCAT(first_name,middle_name,last_name) LIKE '".$this->escape(str_replace(' ','%', $query))."' ";
-			}else
-			{
-				$sql .= "$field LIKE '".$this->escape($query)."' ";
+				$sql .= ')';
 			}
-		}
-		if(count($fields)>1)
-		{
-			$sql .= ')';
 		}	
 
-		$sql .= " ORDER BY $sort $sort_direction";
+	 	$sql .= " ORDER BY $sort $sort_direction";
 		$this->query($sql);
 		$count = $this->num_rows();
 
