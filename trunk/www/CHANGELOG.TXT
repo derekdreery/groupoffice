@@ -1,3 +1,6 @@
+2009/04/15 Version 3.01-stable-31
+- URL rewrite didnt work for plain text
+
 2009/04/15 Version 3.01-stable-30
 - LDAP authentication module
 - htmlspecialchars was accidently removed from plain text e-mails
