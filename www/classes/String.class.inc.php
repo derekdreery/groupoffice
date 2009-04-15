@@ -493,8 +493,8 @@ class String {
 
 		if($convert_links)
 		{
-			$text = preg_replace("/\b(https?:\/\/[\pL0-9\.&\-\/@#;`~=%?:_\+]+)/ui", '{lt}a href="$1" target="_blank" class="normal-link"{gt}$1{lt}/a{gt}', $text);
-			$text = preg_replace("/\b([\pL0-9\._\-]+@[\pL0-9\.\-_]+\.[a-z]{2,4})(\s)/ui", "{lt}a class=\"normal-link\" href=\"mailto:$1\"{gt}$1{lt}/a{gt}$2", $text);
+			$text = preg_replace("/\b(https?:\/\/[\pL0-9\.&\-\/@#;`~=%?:_\+]+)\b/ui", '{lt}a href={quot}$1{quot} target={quot}_blank{quot} class={quot}normal-link{quot}{gt}$1{lt}/a{gt}', $text);
+			$text = preg_replace("/\b([\pL0-9\._\-]+@[\pL0-9\.\-_]+\.[a-z]{2,4})(\s)/ui", "{lt}a class={quot}normal-link{quot} href={quot}mailto:$1{quot}{gt}$1{lt}/a{gt}$2", $text);
 		}
 
 		$text = htmlspecialchars($text, ENT_COMPAT, 'UTF-8');
@@ -505,6 +505,7 @@ class String {
 		//we dont use < and > directly with the preg functions because htmlspecialchars will screw it up. We don't want to use
 		//htmlspecialchars before the pcre functions because email address like <mschering@intermesh.nl> will fail.
 		
+		$text = str_replace("{quot}", '"', $text);
 		$text = str_replace("{lt}", "<", $text);
 		$text = str_replace("{gt}", ">", $text);
 
