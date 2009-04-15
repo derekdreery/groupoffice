@@ -612,7 +612,7 @@ overflow:hidden !important;
 
 /* form field that is read only and only shows a value */
 .x-form-plainfield {
-	height: 22px;
+	/*height: 22px;*/
 	line-height: 18px;
 	vertical-align: middle;
 	overflow: hidden;

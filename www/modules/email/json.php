@@ -1345,7 +1345,9 @@ try{
 
 											$user_id = !isset($_POST['personal_only']) && $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id) ? 0 : $GO_SECURITY->user_id;
 
-											$response['total'] = $email->get_accounts($user_id);
+											$start = isset ( $_POST['start'] ) ? $_POST['start'] : 0;
+											$limit = isset ( $_POST['limit'] ) ? $_POST['limit'] : 0;
+											$response['total'] = $email->get_accounts($user_id,$start, $limit);
 
 											while($record = $email->next_record())
 											{
