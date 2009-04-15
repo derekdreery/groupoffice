@@ -16,7 +16,7 @@ class addressbook extends db {
 
 	public function __on_load_listeners($events){
 		$events->add_listener('user_delete', __FILE__, 'addressbook', 'user_delete');
-		//$events->add_listener('add_user', __FILE__, 'addressbook', 'add_user');
+		$events->add_listener('add_user', __FILE__, 'addressbook', 'add_user');
 		$events->add_listener('build_search_index', __FILE__, 'addressbook', 'build_search_index');
 	}
 
@@ -61,16 +61,38 @@ class addressbook extends db {
 		}
 		return $address_arr;
 	}
+	
+	public static function add_user($user){
+		$ab = new addressbook();
+		$ab->create_default_addressbook($user);
+	}
+	
+	function create_default_addressbook($user){
+		$name = String::format_name($user);
+		$new_ab_name = $name;
+		$x = 1;
+		while ($this->get_addressbook_by_name($new_ab_name)) {
+			$new_ab_name = $name.' ('.$x.')';
+			$x ++;
+		}
+		$addressbook = $this->add_addressbook($user['id'], $new_ab_name);
+		$addressbook=$addressbook['id'];
+		return $addressbook;
+	}
 
-	function get_addressbook($addressbook_id=0) {
+	function get_addressbook($addressbook_id=0, $user_addressbook=false) {
 		if($addressbook_id == 0)
 		{
 			global $GO_SECURITY, $GO_USERS;
 
-			//$sql = "SELECT * FROM ab_addressbooks WHERE user_id=".$GO_SECURITY->user_id;
-			//$this->query($sql);
-
-			$this->get_writable_addressbooks($GO_SECURITY->user_id);
+			if($user_addressbook)
+			{
+				$sql = "SELECT * FROM ab_addressbooks WHERE user_id=".$GO_SECURITY->user_id." ORDER BY id ASC";
+				$this->query($sql);				
+			}else
+			{
+				$this->get_writable_addressbooks($GO_SECURITY->user_id);
+			}
 
 			if($this->next_record())
 			{
@@ -78,15 +100,8 @@ class addressbook extends db {
 			}else
 			{
 				$user = $GO_USERS->get_user($GO_SECURITY->user_id);
-				$name = String::format_name($user['last_name'], $user['first_name'], $user['middle_name'], 'last_name');
-				$new_ab_name = $name;
-				$x = 1;
-				while ($this->get_addressbook_by_name($new_ab_name)) {
-					$new_ab_name = $name.' ('.$x.')';
-					$x ++;
-				}
-				$addressbook = $this->add_addressbook($GO_SECURITY->user_id, $new_ab_name);
-				$addressbook=$addressbook['id'];
+				$addressbook = $this->create_default_addressbook($user);
+				$addressbook_id=$addressbook['id'];
 			}
 		}
 		$sql = "SELECT * FROM ab_addressbooks WHERE id='".$this->escape($addressbook_id)."'";
@@ -932,9 +947,6 @@ class addressbook extends db {
 	public static function user_delete($user) {
 
 		$ab2 = new addressbook();
-
-		$sql = "UPDATE ab_contacts SET source_id='0' WHERE source_id='".$ab2->escape($user['id'])."'";
-		$ab2->query($sql);
 
 		$ab = new addressbook();
 
