@@ -117,8 +117,8 @@ if ( $GO_CONFIG->log ) {
 	openlog('[Group-Office]['.date('Ymd G:i').']['.$username.']', LOG_PERROR, LOG_USER);
 }
 
-//require_once($GO_CONFIG->class_path.'filesystem.class.inc');
-//$fs = new filesystem();
+require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+$fs = new filesystem();
 
 if($GO_SECURITY->user_id>0)
 {
