@@ -1,5 +1,6 @@
-2009/04/14 Version 3.01-stable-29
+2009/04/15 Version 3.01-stable-29
 - LDAP authentication module
+- htmlspecialchars was accidently removed from plain text e-mails
 
 2009/04/14 Version 3.01-stable-28
 - Small bug fixes

@@ -497,12 +497,14 @@ class String {
 			$text = preg_replace("/\b([\pL0-9\._\-]+@[\pL0-9\.\-_]+\.[a-z]{2,4})(\s)/ui", "{lt}a class=\"normal-link\" href=\"mailto:$1\"{gt}$1{lt}/a{gt}$2", $text);
 		}
 
+		$text = htmlspecialchars($text, ENT_COMPAT, 'UTF-8');
 		$text = nl2br(trim($text));
-		$text = str_replace("\r", "", $text);
-		$text = str_replace("\n", "", $text);
+		//$text = str_replace("\r", "", $text);
+		//$text = str_replace("\n", "", $text);
 		
 		//we dont use < and > directly with the preg functions because htmlspecialchars will screw it up. We don't want to use
 		//htmlspecialchars before the pcre functions because email address like <mschering@intermesh.nl> will fail.
+		
 		$text = str_replace("{lt}", "<", $text);
 		$text = str_replace("{gt}", ">", $text);
 
