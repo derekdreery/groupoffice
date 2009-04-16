@@ -111,9 +111,12 @@ class calendar extends db
 	function get_settings($user_id)
 	{
 		$this->query("SELECT * FROM cal_settings WHERE user_id='".$this->escape($user_id)."'");
-		if ($this->next_record(DB_ASSOC))
+		if ($record=$this->next_record(DB_ASSOC))
 		{
-			return $this->record;
+			if(empty($record['background']))
+				$record['background']='EBF1E2';
+				
+			return $record;
 		}else
 		{
 			$this->query("INSERT INTO cal_settings (user_id, background) VALUES ('".$this->escape($user_id)."', 'EBF1E2')");
