@@ -167,7 +167,11 @@ class html2text
         '/(<tr[^>]*>|<\/tr>)/i',                 // <tr> and </tr>
         '/<td[^>]*>(.*?)<\/td>/i',               // <td> and </td>
         '/<th[^>]*>(.*?)<\/th>/ie',              // <th> and </th>
-				'/<img [^>]*alt="([^"]+)"[^>]*>/i', //img with alt text		
+				'/<img [^>]*alt="([^"]+)"[^>]*>/i', 		 //img with alt text				
+				"/\n\s+\n/",														 //multiple blank lines
+				"/[\n]{3,}/",														 //multiple blank lines
+				'/<blockquote[^>]*>(.*?)<\/blockquote>/sie'
+	
 	/*'/&(nbsp|#160);/i',                      // Non-breaking space
 	'/&(quot|rdquo|ldquo|#8220|#8221|#147|#148);/i',
 	// Double quotes
@@ -219,7 +223,10 @@ class html2text
         "\n",                                   // <tr> and </tr>
         "\t\t\\1\n",                            // <td> and </td>
         "strtoupper(\"\t\t\\1\n\")",            // <th> and </th>
-				"\\1", //img with alt text
+				"\\1", 																	//img with alt text			
+				"\n\n",
+				"\n\n",
+				'$this->blockquote("\\1")'
 				
 	/*' ',                                    // Non-breaking space
 	'"',                                    // Double quotes
@@ -407,9 +414,10 @@ class html2text
 		$this->_link_count = 0;
 		$this->_link_list = '';
 
-		$text = html_entity_decode(trim($this->html), ENT_QUOTES, 'UTF-8');
-		$text = str_replace("\r", '', $text);
+		
+		$text = str_replace("\r", '', trim($this->html));
 		$text = str_replace("\n", ' ', $text);
+	
 		
 		if($link_list)
 		{
@@ -420,12 +428,17 @@ class html2text
 		// Run our defined search-and-replace
 		$text = preg_replace($this->search, $this->replace, $text);
 
+		
+
 		// Strip any other HTML tags
-		$text = strip_tags($text, $this->allowed_tags);
+		//$text = strip_tags($text, $this->allowed_tags);
+		
+		//convert html codes to normal characters
+		$text = html_entity_decode($text, ENT_QUOTES, 'UTF-8');
 
 		// Bring down number of empty lines to 2 max
-		$text = preg_replace("/\n\s+\n/", "\n\n", $text);
-		$text = preg_replace("/[\n]{3,}/", "\n\n", $text);
+		//$text = preg_replace("/\n\s+\n/", "\n\n", $text);
+		//$text = preg_replace("/[\n]{3,}/", "\n\n", $text);
 
 		// Add link list
 		if (!empty($this->_link_list) ) {
@@ -436,12 +449,16 @@ class html2text
 		// for PHP versions >= 4.0.2. Default width is 75
 		// If width is 0 or less, don't wrap the text.
 		if ( $this->width > 0 ) {
-			$text = wordwrap($text, $this->width);
+			//$text = wordwrap($text, $this->width);
 		}
 
 		$this->text = $text;
 
 		$this->_converted = true;
+	}
+	
+	function blockquote($text){
+		return "\n&gt; ".str_replace("\n","\n&gt; ",$text)."\n";		
 	}
 
 	/**
