@@ -12,4 +12,5 @@ PRIMARY KEY ( `user_id` )
 ) ENGINE = MYISAM DEFAULT CHARSET=utf8;"; 
 
 $updates[]="ALTER TABLE `cal_settings` CHANGE `color` `background` CHAR( 6 ) CHARACTER SET utf8 COLLATE utf8_general_ci";
+$updates[]="ALTER TABLE `cal_events` CHANGE `rrule` `rrule` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL";  
 ?>
