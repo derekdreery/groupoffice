@@ -27,7 +27,7 @@ GO.form.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
     validateOnBlur:false,
     trigger1Class:'x-form-clear-trigger',
     trigger2Class:'x-form-search-trigger',
-    hideTrigger1:true,
+    //hideTrigger1:true,
     width:180,
     hasSearch : false,
     paramName : 'query',
@@ -38,7 +38,7 @@ GO.form.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
             this.store.baseParams[this.paramName]='';
             this.store.load();
             this.el.dom.value = '';
-            this.triggers[0].hide();
+            //this.triggers[0].hide();
             this.hasSearch = false;
         }
     },
@@ -53,7 +53,7 @@ GO.form.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
         this.store.baseParams[this.paramName]=v;
         this.store.load();
         this.hasSearch = true;
-        this.triggers[0].show();
+        //this.triggers[0].show();
     },afterRender:function(){
 			GO.form.SearchField.superclass.afterRender.call(this);
 			if(Ext.isIE8)this.el.setTop(1);
@@ -62,7 +62,10 @@ GO.form.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
 			if(v!='')
 			{					
 				this.hasSearch=true;
-				this.triggers[0].show();
+				if(this.rendered)
+				{
+					//this.triggers[0].show();
+				}
 			}
 		}
 });

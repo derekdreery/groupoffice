@@ -16,32 +16,31 @@ GO.form.ComboBoxReset = Ext.extend(GO.form.ComboBox, {
 			getTrigger : Ext.form.TwinTriggerField.prototype.getTrigger,
 			initTrigger : Ext.form.TwinTriggerField.prototype.initTrigger,
 			trigger1Class : 'x-form-clear-trigger',
-			hideTrigger1 : true,
-			reset : Ext.form.Field.prototype.reset.createSequence(function() {
-					this.triggers[0].hide();
-			}),
+			//hideTrigger1 : true,
 			onViewClick : Ext.form.ComboBox.prototype.onViewClick.createSequence(function() {
-								this.triggers[0].show();
-							}),
+				//this.triggers[0].setDisplayed(true);
+			}),
 			onTrigger2Click : function() {
 				this.onTriggerClick();
 			},
 			onTrigger1Click : function() {
 				this.clearValue();
-				this.triggers[0].hide();
+				//this.triggers[0].setDisplayed(false);
 				this.fireEvent('clear', this);
 			},
 			setValue : function(v){
 				GO.form.ComboBoxReset.superclass.setValue.call(this, v);
-				if(v!='')
+				if(this.rendered)
 				{					
-					this.triggers[0].show();
+					//this.triggers[0].setDisplayed(v!='');					
 				}
-			},afterRender:function(){
+			},
+			afterRender:function(){
 				GO.form.ComboBoxReset.superclass.afterRender.call(this);
 				if(Ext.isIE8)this.el.setTop(1);
-			}
-			
+				
+				//this.on('resize', function(combo, adjWidth, adjHeight, rawWidth, rawHeight ){console.log(adjWidth);}, this);
+			}			
 		});
 
 Ext.reg('comboboxreset', GO.form.ComboBoxReset);

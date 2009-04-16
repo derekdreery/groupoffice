@@ -373,7 +373,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		);
 		this.tabPanel.add(searchPanel);
 		searchPanel.show();
-	},		
+	}/*,		
 	
 	showSearchRecord : function(recordData)
 	{
@@ -388,7 +388,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		
 			this.showPanel(recordData['module'], recordData['url']);
 		}
-	}
+	}*/
 });
 
 GO.mainLayout = new GO.MainLayout();
