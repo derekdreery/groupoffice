@@ -1,7 +1,10 @@
+2009/04/16 Version 3.01-stable-32
 - User delete didn't work correctly. Module items were not removed.
+- Empty search panels bug
+- Sometimes comboboxes lost their size
 
 2009/04/15 Version 3.01-stable-31
-- URL rewrite didnt work for plain text
+- URL rewrite didn't work for plain text
 
 2009/04/15 Version 3.01-stable-30
 - LDAP authentication module

@@ -401,6 +401,12 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 				this.newOODoc.setDisabled(GO.mailings.ooTemplatesStore.getCount() == 0);
 			}, this);
 		}
+		
+		if(GO.tasks)
+		{
+			this.scheduleCallItem = new GO.tasks.ScheduleCallMenuItem();
+			this.newMenuButton.menu.add(this.scheduleCallItem);
+		}
 	},
 	setData : function(data)
 	{
@@ -408,5 +414,25 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 		
 		if(GO.mailings && !GO.mailings.ooTemplatesStore.loaded)
 					GO.mailings.ooTemplatesStore.load();
+					
+		if(data.write_permission)
+		{
+			if(this.scheduleCallItem)
+			{				
+				var name = this.data.name;
+				
+				if(this.data.phone!='')
+				{
+					name += ' ('+this.data.phone+')';
+				}
+				
+				this.scheduleCallItem.setLinkConfig({
+					name: name,
+					links:[{link_id: this.data.id, link_type:3}],
+					callback:this.reload,
+					scope: this
+				});
+			}
+		}
 	}
 });
