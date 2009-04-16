@@ -12,6 +12,9 @@
  */
 GO.summary.Portal = Ext.extend(Ext.Panel, {
     layout: 'column',
+    layoutConfig: {
+		  scrollOffset: Ext.isIE ? 20 : 0
+		},
     autoScroll:true,
     cls:'x-portal',
     defaultType: 'portalcolumn',

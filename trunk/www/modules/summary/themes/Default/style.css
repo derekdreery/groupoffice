@@ -13,9 +13,9 @@
 	background-image: url('images/note.png') !important;	
 }
 
-.x-portal .x-column-layout-ct{
+/*.x-portal .x-column-layout-ct{
 overflow-y:scroll !important;
-}
+}*/
 
 .x-portal .x-panel-dd-spacer {
     margin-bottom:10px;
