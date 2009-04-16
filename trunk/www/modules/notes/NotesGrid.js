@@ -46,10 +46,12 @@
 		{
 			header: GO.lang.strOwner, 
 			dataIndex: 'user_name',
-		  sortable: false
+		  sortable: false,
+			hidden:true
 		},		{
 			header: GO.lang.strCtime, 
-			dataIndex: 'ctime'
+			dataIndex: 'ctime',
+			hidden:true
 		},		{
 			header: GO.lang.strMtime, 
 			dataIndex: 'mtime'
