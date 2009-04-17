@@ -400,11 +400,9 @@ try{
 			for($i=0;$i<count($parts);$i++)
 			{
 				$mime = strtolower($parts[$i]["mime"]);
-			
-				if(strpos($mime, $_POST['content_type']) || strtolower($parts[$i]['type'])!='alternative')
-				{
-					$new_parts[]=$parts[$i];
-				}
+							
+				if(strpos($mime, $_POST['content_type']) || (strtolower($parts[$i]['type'])!='alternative' &&  strtolower($parts[$i]['type'])!='related'))				
+					$new_parts[]=$parts[$i];				
 			}
 
 			$parts=$new_parts;
@@ -441,10 +439,8 @@ try{
 
 							if($GO_MODULES->has_module('gnupg'))
 								$html_part = $gnupg->replace_encoded($html_part,$passphrase);
-
-							$html_part = String::convert_html($html_part);
 								
-							$response['data']['body'] .= $html_part;
+							$response['data']['body'] .= $_POST['content_type']=='html' ? String::convert_html($html_part) : String::html_to_text($html_part);
 							break;
 
 						case 'text/enriched':
