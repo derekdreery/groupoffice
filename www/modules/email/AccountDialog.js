@@ -253,7 +253,7 @@ GO.email.AccountDialog = function(config) {
 			height : 100,
 			anchor : '100%'
 		}, this.aliasesButton = new Ext.Button({
-			text : 'Manage sender aliases',
+			text : GO.email.lang.manageAliases,
 			handler : function() {
 				if (!this.aliasesDialog) {
 					this.aliasesDialog = new GO.email.AliasesDialog();
@@ -571,11 +571,13 @@ Ext.extend(GO.email.AccountDialog, Ext.Window, {
 
 		this.tabPanel.setActiveTab(0);
 
+		this.aliasesButton.setDisabled(true);
 		if (account_id) {
 			this.loadAccount(account_id);
 			GO.email.subscribedFoldersStore.baseParams.account_id = account_id;
 			GO.email.subscribedFoldersStore.load();
 		} else {
+			
 			this.propertiesPanel.form.reset();
 			this.account_id = 0;
 			this.foldersTab.setDisabled(true);
@@ -610,6 +612,8 @@ Ext.extend(GO.email.AccountDialog, Ext.Window, {
 				this.account_id = account_id;
 				this.selectUser.setRemoteValue(action.result.data.user_id,
 						action.result.data.user_name);
+						
+				this.aliasesButton.setDisabled(false);
 
 				this.foldersTab.setDisabled(action.result.data.type == 'pop3');
 				this.filtersTab.setDisabled(action.result.data.type == 'pop3');
