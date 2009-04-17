@@ -402,7 +402,7 @@ class GoSwiftImport extends GoSwift{
 	
 	var $body='';
 
-	public function __construct($mime, $add_body=true)
+	public function __construct($mime, $add_body=true, $alias_id=0)
 	{
 		
 		$RFC822 = new RFC822();
@@ -429,7 +429,7 @@ class GoSwiftImport extends GoSwift{
 		$bcc = isset($structure->headers['bcc']) && strpos($structure->headers['bcc'],'undisclosed')===false ? $structure->headers['bcc'] : '';
 
 		
-		parent::__construct($to, $subject);
+		parent::__construct($to, $subject,0,$alias_id);
 		
 		
 		if(isset($structure->headers['from']) )

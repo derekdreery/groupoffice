@@ -151,3 +151,5 @@ GO.email.lang.aliases="Aliases";
 GO.email.lang.accountId="Account id";
 GO.email.lang.email="Email";
 GO.email.lang.signature="Signature";
+
+GO.email.lang.manageAliases='Manage sender aliases';

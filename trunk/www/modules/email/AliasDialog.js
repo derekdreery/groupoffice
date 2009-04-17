@@ -18,8 +18,6 @@ GO.email.AliasDialog = function(config) {
 	var focusFirstField = function() {
 		this.formPanel.items.items[0].focus();
 	};
-	config.collapsible = true;
-	config.maximizable = true;
 	config.layout = 'fit';
 	config.modal = false;
 	config.resizable = false;
