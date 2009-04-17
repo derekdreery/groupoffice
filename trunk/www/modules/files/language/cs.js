@@ -22,3 +22,7 @@ GO.files.lang.thumbnails = 'Miniatury';
 GO.files.lang.saveFile='Uložit soubor';
 GO.files.lang.confirmOverwrite='{filename} již existuje, chcete přepsat tento soubor?';
 GO.files.lang.file='Soubor';
+GO.files.lang.emptyList='Prádzný seznam';
+GO.files.lang.newFiles='Nový';
+
+GO.files.lang.olderVersions='Starší verze';

@@ -28,3 +28,4 @@ GO.tasks.lang.showInactiveTasks='Zobrazit neaktivní úkoly';
 GO.tasks.lang.scheduleCall='Plánované volání';
 GO.tasks.lang.call='Volání';
 GO.tasks.lang.taskDefaults='Základní nastavení úkolů';
+GO.tasks.lang.daysBeforeStart='Dnů před zahájením';

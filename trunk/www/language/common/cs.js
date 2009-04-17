@@ -10,6 +10,8 @@
  * @version $Id: en.js 1591 2008-12-15 09:34:29Z mschering $
  * @author Merijn Schering <mschering@intermesh.nl>
  */
+GO.lang.pleaseApplyFirst='Prosím nejdříve uložte pomocí kliknutí na \'Použít\'';
+GO.lang.passwordMatchError='Hesla se neshodují';
 GO.lang.serverError='Došlo k chybě na webserveru. Kontaktujte Vašeho správce systému a poskytněte mu podrobnosti o chybě.';
 GO.lang.errorDetails='Podrobnosti chyby';
 GO.lang.contactSupportDesk='Kontaktovat podporu'; 

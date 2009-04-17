@@ -81,3 +81,8 @@ GO.users.lang.importText='Můžete importovat uživatele pomocí souboru ve form
 
 GO.users.lang.useModule= 'Použít';
 GO.users.lang.manageModule= 'Upravit';
+
+GO.users.lang.numberFormat ='Číselný formát';
+GO.users.lang.importExport ='Import / Export';
+GO.users.lang.listSeparator='Seznamový oddělovač';
+GO.users.lang.textSeparator='Textový oddělovač';

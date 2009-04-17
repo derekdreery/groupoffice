@@ -46,3 +46,6 @@ $lang['email']['draftsDisabled']="Zpráve nemůže být uložena, protože slož
 $lang['email']['noSaveWithPop3']='Zpráva nemůže být uložena, protože Váš POP3 účet tuto funkci nepodporuje.';
 
 $lang['email']['goAlreadyStarted']='Group-Office byl spuštěn a zpráva byla vytvořena. Nyní můžete toto okno zavřít a přejít do Group-office k úpravě zprávy.';
+
+//At Tuesday, 07-04-2009 on 8:58 Group-Office Administrator <test@intermeshdev.nl> wrote:
+$lang['email']['replyHeader']='Dne %s, %s v %s %s napsal:';
