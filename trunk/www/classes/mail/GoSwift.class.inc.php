@@ -128,7 +128,7 @@ class GoSwift extends Swift_Mailer{
 			$email = new email();
 
 			$this->account = $email->get_account($account_id, $alias_id);
-
+			
 			$this->smtp_host=$this->account['smtp_host'];			
 
 			$encryption = empty($this->account['smtp_encryption']) ? null : $this->account['smtp_encryption'];
