@@ -532,39 +532,43 @@ class String {
 	function convert_html($html, $block_external_images=false, &$replace_count=0) {
 
 		$html = str_replace("\r", '', $html);
-		$html = str_replace("\n",' ', $html);
+		$html = str_replace("\n",' ', $html);		
+
+		//remove strange white spaces in tags first
+		//sometimes things like this happen <style> </ style >
+		$html = preg_replace("'</[\s]*([\w]*)[\s]*>'","</$1>", $html);
 
 		$to_removed_array = array (
-	"'<html[^>]*>'si",
-	"'</html>'si",
-	"'<body[^>]*>'si",
-	"'</body>'si",
-	"'<meta[^>]*>'si",
-	"'<head[^>]*>.*?</head>'si",
-	"'<style[^>]*>.*?</style>'si",
-	"'<script[^>]*>.*?</script>'si",
-	"'<iframe[^>]*>.*?</iframe>'si",
-	"'<object[^>]*>.*?</object>'si",
-	"'<embed[^>]*>.*?</embed>'si",
-	"'<applet[^>]*>.*?</applet>'si",
-	"'<form[^>]*>'si",
-	"'<input[^>]*>'si",
-	"'<select[^>]*>.*?</select>'si",
-	"'<textarea[^>]*>.*?</textarea>'si",
-	"'</form>'si"
-	);
-
-	$html = preg_replace($to_removed_array, '', $html);
-	$html = preg_replace("/([\"']?)javascript:/i", "$1removed_script:", $html);
-
-	if($block_external_images)
-	{
-		//$html = preg_replace("/<img(.*)src=([\"']?)http([^>])/", "<img$1src=$2blocked:http$3", $html);
-		//$html = preg_replace("/<([^=]*)=[\"']?http[^\"'\s>]*/", "<$1=\"blocked\"", $html);
-		$html = preg_replace("/<([^aA]{1})([^>]*)https?:([^>]*)/", "<$1$2blocked:$3", $html, -1, $replace_count);
-	}
-
-	return $html;
+		"'<html[^>]*>'si",
+		"'</html>'si",
+		"'<body[^>]*>'si",
+		"'</body>'si",
+		"'<meta[^>]*>'si",
+		"'<head[^>]*>.*?</head>'si",
+		"'<style[^>]*>.*?</style>'si",
+		"'<script[^>]*>.*?</script>'si",
+		"'<iframe[^>]*>.*?</iframe>'si",
+		"'<object[^>]*>.*?</object>'si",
+		"'<embed[^>]*>.*?</embed>'si",
+		"'<applet[^>]*>.*?</applet>'si",
+		"'<form[^>]*>'si",
+		"'<input[^>]*>'si",
+		"'<select[^>]*>.*?</select>'si",
+		"'<textarea[^>]*>.*?</textarea>'si",
+		"'</form>'si"
+		);
+	
+		$html = preg_replace($to_removed_array, '', $html);
+		$html = preg_replace("/([\"']?)javascript:/i", "$1removed_script:", $html);
+	
+		if($block_external_images)
+		{
+			//$html = preg_replace("/<img(.*)src=([\"']?)http([^>])/", "<img$1src=$2blocked:http$3", $html);
+			//$html = preg_replace("/<([^=]*)=[\"']?http[^\"'\s>]*/", "<$1=\"blocked\"", $html);
+			$html = preg_replace("/<([^aA]{1})([^>]*)https?:([^>]*)/", "<$1$2blocked:$3", $html, -1, $replace_count);
+		}
+	
+		return $html;
 	}
 
 	/**
