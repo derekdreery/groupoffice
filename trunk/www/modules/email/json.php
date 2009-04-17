@@ -210,7 +210,7 @@ function find_alias_and_recipients()
 			{
 				if(isset($aliases[$address]))
 				{
-					$response['data']['alias_id']=$aliases['email'];
+					$response['data']['alias_id']=$aliases[$address];
 				}elseif($fill_to){									
 					if (!$first)
 					{
