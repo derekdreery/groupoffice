@@ -117,17 +117,17 @@ class GoSwift extends Swift_Mailer{
 	 * @param Int $account_id The account id from the em_accounts table. Used for smtp server and sent items
 	 * @param String $priority The priority can be 3 for normal, 1 for high or 5 for low.
 	 */
-	function __construct($email_to, $subject, $account_id=0, $priority = '3', $plain_text_body=null)
+	function __construct($email_to, $subject, $account_id=0, $alias_id=0, $priority = '3', $plain_text_body=null)
 	{
 		global $GO_CONFIG, $GO_MODULES;
 
 
-		if($account_id>0)
+		if($account_id>0 || $alias_id>0)
 		{
 			require_once ($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
 			$email = new email();
 
-			$this->account = $email->get_account($account_id);
+			$this->account = $email->get_account($account_id, $alias_id);
 
 			$this->smtp_host=$this->account['smtp_host'];			
 
@@ -141,6 +141,7 @@ class GoSwift extends Swift_Mailer{
 			}
 		}else
 		{
+			$this->account=false;
 			$encryption = empty($GO_CONFIG->smtp_encryption) ? null : $GO_CONFIG->smtp_encryption;
 			
 			$this->smtp_host=$GO_CONFIG->smtp_server;
@@ -158,7 +159,7 @@ class GoSwift extends Swift_Mailer{
 		$this->message = Swift_Message::newInstance($subject, $plain_text_body);
 		$this->message->setPriority($priority);
 		
-		if($account_id>0)
+		if($this->account)
 		{
 			$this->message->setFrom(array($this->account['email']=>$this->account['name']));
 		}
@@ -182,6 +183,7 @@ class GoSwift extends Swift_Mailer{
 		{
 			$recipients[$address['email']]=$address['personal'];			
 		}
+		
 		$this->message->setTo($recipients);	
 	}
 	

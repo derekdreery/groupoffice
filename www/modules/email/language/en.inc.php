@@ -49,3 +49,7 @@ $lang['email']['goAlreadyStarted']='Group-Office was al gestart. Het e-mailscher
 
 //At Tuesday, 07-04-2009 on 8:58 Group-Office Administrator <test@intermeshdev.nl> wrote:
 $lang['email']['replyHeader']='At %s, %s on %s %s wrote:';
+$lang['email']['alias']='Alias';
+$lang['email']['aliases']='Aliases';
+$lang['email']['alias']='Alias';
+$lang['email']['aliases']='Aliases';

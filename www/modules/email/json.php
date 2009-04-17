@@ -160,6 +160,72 @@ function get_mailbox_nodes($account_id, $folder_id){
 }
 
 
+function find_alias_and_recipients()
+{
+	global $email, $account_id, $response, $content, $task;
+	$aliases = array();
+	$email->get_aliases($account_id, true);
+	while($alias=$email->next_record())
+	{
+		$aliases[$alias['email']]=$alias['id'];
+	}
+	
+	$fill_to = $task=='reply_all' || $task=='opendraft';
+	
+	//add all recievers from this email
+	if (isset($content["to"]))
+	{
+		$first = !empty($response['data']['to']);
+		for ($i=0;$i<sizeof($content["to"]);$i++)
+		{
+			$address = String::get_email_from_string($content["to"][$i]);							
+			if (!empty($email))
+			{
+				if(isset($aliases[$address]))
+				{
+					$response['data']['alias_id']=$aliases[$address];
+				}
+				
+				if($fill_to && (!isset($aliases[$address]) || $task=='opendraft')){		
+					if (!$first)
+					{
+						$first = true;
+					}else
+					{
+						$response['data']['to'] .= ',';
+					}							
+					$response['data']['to'] .= $content["to"][$i];									
+				}							
+			}
+		}
+	}
+	if (isset($content["cc"]) && count($content["cc"]) > 0)
+	{
+		$response['data']['cc']='';
+		$first=false;
+		for ($i=0;$i<sizeof($content["cc"]);$i++)
+		{
+			$address = String::get_email_from_string($content["cc"][$i]);												
+			if (!empty($address))
+			{
+				if(isset($aliases[$address]))
+				{
+					$response['data']['alias_id']=$aliases['email'];
+				}elseif($fill_to){									
+					if (!$first)
+					{
+						$first = true;
+					}else
+					{
+						$response['data']['cc'] .= ',';
+					}		
+					$response['data']['cc'] .= $content["cc"][$i];									
+				}							
+			}
+		}
+	}
+}
+
 
 
 try{
@@ -167,14 +233,16 @@ try{
 	$task = $_REQUEST['task'];
 	if($task == 'reply' || $task =='reply_all' || $task == 'forward' || $task=='opendraft')
 	{
-		$account_id = ($_POST['account_id']);
-		$uid = ($_POST['uid']);
-		$mailbox = ($_POST['mailbox']);
+		$account_id = $_POST['account_id'];
+		$uid = $_POST['uid'];
+		$mailbox = $_POST['mailbox'];
 
 		$url_replacements=array();
 
 		$account = connect($account_id, $mailbox);
-
+		
+		
+	
 		if(!$account)
 		{
 			$response['success']=false;
@@ -200,7 +268,7 @@ try{
 					}else
 					{
 						$response['data']['subject'] = $subject;
-					}
+					}					
 					break;
 
 				case "reply_all":
@@ -213,41 +281,6 @@ try{
 					{
 						$response['data']['subject'] = $subject;
 					}
-
-					//add all recievers from this email
-					if (isset($content["to"]))
-					{
-						for ($i=0;$i<sizeof($content["to"]);$i++)
-						{
-							$email = String::get_email_from_string($content["to"][$i]);
-
-							if ($content["to"][$i] != "" && $account['email']!=$email)
-							{
-								$response['data']['to'] .= ",".$content["to"][$i];
-							}
-						}
-					}
-					if (isset($content["cc"]) && count($content["cc"]) > 0)
-					{
-						$response['data']['cc']='';
-						for ($i=0;$i<sizeof($content["cc"]);$i++)
-						{
-							$email = String::get_email_from_string($content["cc"][$i]);
-
-							if ($content["cc"][$i] != "" && $account['email']!=$email)
-							{
-								if (!isset($first))
-								{
-									$first = true;
-								}else
-								{
-									$response['data']['cc'] .= ',';
-								}
-								$response['data']['cc'] .= $content["cc"][$i];
-							}
-						}
-					}
-
 					break;
 
 				case "opendraft":
@@ -256,62 +289,6 @@ try{
 					if($task == 'opendraft')
 					{
 						$response['data']['to']='';
-						if (isset($content["to"]))
-						{
-							for ($i=0;$i<sizeof($content["to"]);$i++)
-							{
-
-								if ($content["to"][$i] != "")
-								{
-									if (!isset($first))
-									{
-										$first = true;
-									}else
-									{
-										$response['data']['to'] .= ',';
-									}
-									$response['data']['to'] .= $content["to"][$i];
-								}
-							}
-						}
-						unset($first);
-						if (isset($content["cc"]))
-						{
-							$response['data']['cc']='';
-							for ($i=0;$i<sizeof($content["cc"]);$i++)
-							{
-								if ($content["cc"][$i] != "")
-								{
-									if (!isset($first))
-									{
-										$first = true;
-									}else
-									{
-										$response['data']['cc'] .= ',';
-									}
-									$response['data']['cc'] .= $content["cc"][$i];
-								}
-							}
-						}
-						unset($first);
-						if (isset($content["bcc"]))
-						{
-							$response['data']['bcc']='';
-							for ($i=0;$i<sizeof($content["bcc"]);$i++)
-							{
-								if ($content["bcc"][$i] != "")
-								{
-									if (!isset($first))
-									{
-										$first = true;
-									}else
-									{
-										$response['data']['bcc'] .= ',';
-									}
-									$response['data']['bcc'] .= $content["bcc"][$i];
-								}
-							}
-						}
 						$response['data']['subject'] = $subject;
 
 					}else
@@ -323,7 +300,7 @@ try{
 						{
 							$response['data']['subject'] = $subject;
 						}
-					}
+					}				
 
 					//reattach non-inline attachments
 					for ($i=0;$i<count($parts);$i++)
@@ -357,6 +334,8 @@ try{
 
 					break;
 			}
+			
+			find_alias_and_recipients();
 
 
 			//reatach inline attachements
@@ -1010,7 +989,7 @@ try{
 								$account = connect($account_id, $mailbox);
 
 
-								$response['drafts']=$imap->utf7_imap_encode($account['drafts'])==$mailbox;
+								$response['drafts']=!empty($account['drafts']) && strpos($mailbox, $imap->utf7_imap_encode($account['drafts']))!==false;
 								$response['sent']=!empty($account['sent']) && strpos($mailbox, $imap->utf7_imap_encode($account['sent']))!==false;
 
 								if(isset($_POST['delete_keys']))
@@ -1056,7 +1035,7 @@ try{
 								if($sort_field == SORTDATE && $imap->is_imap())
 									$sort_field = SORTARRIVAL;
 									
-								if($response['sent'] && $sort_field==SORTFROM)
+								if(($response['sent'] || $response['drafts']) && $sort_field==SORTFROM)
 								{
 									$sort_field=SORTTO;
 								}
@@ -1439,6 +1418,52 @@ try{
 											$response['success']=true;
 
 											break;
+										
+											
+		case 'alias':
+			$alias = $email->get_alias($_REQUEST['alias_id']);
+			$response['data']=$alias;
+			$response['success']=true;
+			break;
+		case 'aliases':
+			if(isset($_POST['delete_keys']))
+			{
+				try{
+					$response['deleteSuccess']=true;
+					$delete_aliases = json_decode($_POST['delete_keys']);
+					foreach($delete_aliases as $alias_id)
+					{
+						$email->delete_alias(addslashes($alias_id));
+					}
+				}catch(Exception $e)
+				{
+					$response['deleteSuccess']=false;
+					$response['deleteFeedback']=$e->getMessage();
+				}
+			}
+	
+			$response['total'] = $email->get_aliases($_POST['account_id']);
+			$response['results']=array();
+			while($alias = $email->next_record())
+			{
+				$response['results'][] = $alias;
+			}
+			break;
+		case 'all_aliases':
+
+			$response['total'] = $email->get_all_aliases($GO_SECURITY->user_id);
+			$response['results']=array();
+			while($alias = $email->next_record())
+			{
+				$alias['name']='"'.$alias['name'].'" <'.$alias['email'].'>';
+				$alias['html_signature']=String::text_to_html($email->f('signature'));
+				$alias['plain_signature']=$email->f('signature');
+				unset($alias['signature']);
+				$response['results'][] = $alias;
+			}
+			break;
+		
+/* {TASKSWITCH} */
 		}
 	}
 }catch(Exception $e)

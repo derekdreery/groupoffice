@@ -1355,6 +1355,18 @@ GO.mainLayout.onReady(function(){
 	
 });
 
+GO.email.aliasesStore = new GO.data.JsonStore({
+	    url: GO.settings.modules.email.url+ 'json.php',
+	    baseParams: {
+	    	task: 'all_aliases'
+	    	},
+	    root: 'results',
+	    id: 'id',
+	    totalProperty:'total',
+	    fields: ['id','account_id','name','email','html_signature', 'plain_signature'],
+	    remoteSort: true
+	});
+
 
 /**
  * Function that will open an email composer. If a composer is already open it will create a new one. Otherwise it will reuse an already created one.

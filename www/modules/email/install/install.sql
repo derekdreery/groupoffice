@@ -49,6 +49,19 @@ CREATE TABLE IF NOT EXISTS `em_accounts` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
+DROP TABLE IF EXISTS `em_aliases`;
+CREATE TABLE IF NOT EXISTS `em_aliases` (
+  `id` int(11) NOT NULL,
+  `account_id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `signature` text NOT NULL,
+  `default` enum('0','1') NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `account_id` (`account_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
 -- --------------------------------------------------------
 
 --

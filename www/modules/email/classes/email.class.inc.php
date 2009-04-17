@@ -157,13 +157,11 @@ class email extends db
 		return false;
 	}
 
-
-
-
 	function get_accounts($user_id=0, $start=0, $offset=0)
 	{
-		$sql = "SELECT a.*,u.first_name, u.middle_name, u.last_name FROM em_accounts a ".
-			"INNER JOIN go_users u on u.id=a.user_id ";
+		$sql = "SELECT al.name, al.email, al.signature, al.id AS default_alias_id, a.*,u.first_name, u.middle_name, u.last_name FROM em_accounts a ".
+			"INNER JOIN go_users u on u.id=a.user_id ".
+			"INNER JOIN em_aliases al ON (al.account_id=a.id AND al.`default`='1') ";
 
 		if($user_id > 0)
 		{
@@ -173,7 +171,6 @@ class email extends db
 			$sql = 
 			$sql .= " ORDER BY u.first_name ASC, u.last_name ASC, standard ASC";
 		}
-
 
 		$this->query($sql);
 		$count =  $this->num_rows();
@@ -309,6 +306,18 @@ class email extends db
 			$this->mail->close();
 
 			$account['id'] = $this->nextid("em_accounts");
+			
+			
+			$alias['default']='1';
+			$alias['account_id']=$account['id'];
+			$alias['name']=$account['name'];
+			$alias['email']=$account['email'];
+			$alias['signature']=$account['signature'];
+			
+			$this->add_alias($alias);				
+			
+			unset($account['name'],$account['email'],$account['signature']);
+					
 			$this->insert_row('em_accounts', $account);
 				
 				
@@ -374,6 +383,19 @@ class email extends db
 
 	function _update_account($account)
 	{
+		if(isset($account['name']))
+		{
+			$alias['default']='1';
+			$alias['account_id']=$account['id'];
+			$alias['name']=$account['name'];
+			$alias['email']=$account['email'];
+			$alias['signature']=$account['signature'];
+			
+			$this->update_row('em_aliases',array('account_id', 'default'), $alias);
+			
+			unset($account['name'],$account['email'],$account['signature']);
+		}
+		
 		return $this->update_row('em_accounts', 'id', $account,'', false);
 	}
 
@@ -462,16 +484,16 @@ class email extends db
 		return $this->update_row('em_accounts', 'id', $account);
 	}
 
-	function get_account($id = 0)
+	function get_account($account_id, $alias_id=0)
 	{
-		if ($id == 0)
+		$sql = "SELECT a.*, al.name, al.email, al.signature, al.id AS default_alias_id FROM em_accounts a INNER JOIN em_aliases al ON ";
+		if(empty($alias_id))
 		{
-			$sql = "SELECT * FROM em_accounts WHERE standard='1' AND user_id='".
-			$_SESSION['GO_SESSION']['user_id']."'";
+			$sql .= "(al.account_id=a.id AND al.`default`='1') WHERE a.id=".$this->escape($account_id);
 		}else
 		{
-			$sql = "SELECT * FROM em_accounts WHERE id='".$this->escape($id)."'";
-		}
+			$sql .= "al.account_id=a.id WHERE al.id=".$this->escape($alias_id);
+		}	
 
 		$this->query($sql);
 		if ($this->next_record(DB_ASSOC))
@@ -491,6 +513,8 @@ class email extends db
 		$sql = "DELETE FROM em_accounts WHERE id='$id'";
 		if ($this->query($sql))
 		{
+			$sql = "DELETE FROM em_aliases WHERE account_id='$id'";
+			$this->query($sql);
 			$sql = "DELETE FROM em_folders WHERE account_id='$id'";
 			$this->query($sql);
 			$sql = "DELETE FROM em_filters WHERE account_id='$id'";
@@ -1267,5 +1291,124 @@ class email extends db
 		
 		$email->build_search_index();
 	}
+	
+		/**
+	 * Add a Alias
+	 *
+	 * @param Array $alias Associative array of record fields
+	 *
+	 * @access public
+	 * @return int New record ID created
+	 */
+	function add_alias($alias)
+	{
+		$alias['id']=$this->nextid('em_aliases');
+		if($this->insert_row('em_aliases', $alias))
+		{
+			return $alias['id'];
+		}
+		return false;
+	}
+	/**
+	 * Update a Alias
+	 *
+	 * @param Array $alias Associative array of record fields
+	 *
+	 * @access public
+	 * @return bool True on success
+	 */
+	function update_alias($alias)
+	{
+		$r = $this->update_row('em_aliases', 'id', $alias);
+		return $r;
+	}
+	/**
+	 * Delete a Alias
+	 *
+	 * @param Int $alias_id ID of the alias
+	 *
+	 * @access public
+	 * @return bool True on success
+	 */
+	function delete_alias($alias_id)
+	{
+		return $this->query("DELETE FROM em_aliases WHERE id=?", 'i', $alias_id);
+	}
+	/**
+	 * Gets a Alias record
+	 *
+	 * @param Int $alias_id ID of the alias
+	 *
+	 * @access public
+	 * @return Array Record properties
+	 */
+	function get_alias($alias_id)
+	{
+		$this->query("SELECT * FROM em_aliases WHERE id=?", 'i', $alias_id);
+		return $this->next_record();		
+	}
+	/**
+	 * Gets a Alias record by the name field
+	 *
+	 * @param String $name Name of the alias
+	 *
+	 * @access public
+	 * @return Array Record properties
+	 */
+	function get_alias_by_name($name)
+	{
+		$this->query("SELECT * FROM em_aliases WHERE name=?", 's', $name);
+		return $this->next_record();		
+	}
+	/**
+	 * Gets all Aliases
+	 *
+	 * @param Int $start First record of the total record set to return
+	 * @param Int $offset Number of records to return
+	 * @param String $sortfield The field to sort on
+	 * @param String $sortorder The sort order
+	 *
+	 * @access public
+	 * @return Int Number of records found
+	 */
+	function get_aliases($account_id, $all=false)
+	{
+		$sql = "SELECT * FROM em_aliases WHERE account_id=".$this->escape($account_id);
+		
+		if(!$all)
+		{
+			$sql .= " AND `default`!='1'";
+		}
+		
+		$sql .= " ORDER BY name ASC, email ASC";
+		
+		debug($sql);
+			
+		$this->query($sql);
+		return $this->num_rows();
+	}
+	
+/**
+	 * Gets all Aliases
+	 *
+	 * @param Int $start First record of the total record set to return
+	 * @param Int $offset Number of records to return
+	 * @param String $sortfield The field to sort on
+	 * @param String $sortorder The sort order
+	 *
+	 * @access public
+	 * @return Int Number of records found
+	 */
+	function get_all_aliases($user_id)
+	{
+		$sql = "SELECT a.* FROM em_aliases a INNER JOIN em_accounts e ON e.id=a.account_id WHERE e.user_id=".$this->escape($user_id);		
+		$sql .= " ORDER BY `standard` ASC, `default` DESC, name ASC";
+			
+		$this->query($sql);
+		return $this->num_rows();
+	}
+	
+	
+/* {CLASSFUNCTIONS} */
 
 }
