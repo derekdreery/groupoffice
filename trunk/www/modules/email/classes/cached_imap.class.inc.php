@@ -72,7 +72,7 @@ class cached_imap extends imap{
 			
 
 		$end_time = getmicrotime();
-		debug('IMAP connect took '.($end_time-$start_time).'s');
+		//debug('IMAP connect took '.($end_time-$start_time).'s');
 
 		return $conn;
 	}
@@ -96,17 +96,17 @@ class cached_imap extends imap{
 		} else {
 			if($this->folder['msgcount']!=$this->count || $this->folder['unseen']!=$this->unseen)
 			{
-				debug('Cleared sort cache');
+				//debug('Cleared sort cache');
 				$this->folder_sort_cache=array();
 			}
 				
 			if(isset($this->folder_sort_cache[$sort_type.'_'.$reverse]))
 			{
-				debug('Used cached sort info');
+				//debug('Used cached sort info');
 				$this->sort = $this->folder_sort_cache[$sort_type.'_'.$reverse];
 			}else
 			{
-				debug('Got sort from IMAP server: '.$this->folder['msgcount'].' = '.$this->count.' && '.$this->folder['unseen'].' = '.$this->unseen);
+				//debug('Got sort from IMAP server: '.$this->folder['msgcount'].' = '.$this->count.' && '.$this->folder['unseen'].' = '.$this->unseen);
 				$this->sort = imap_sort($this->conn, $sort_type, $reverse, SE_UID+SE_NOPREFETCH);
 				$this->folder_sort_cache[$sort_type.'_'.$reverse]=$this->sort;
 
@@ -172,7 +172,7 @@ class cached_imap extends imap{
 		{
 			$sql = "DELETE FROM em_messages_cache WHERE folder_id=".$this->email->escape($this->folder['id'])." AND uid IN(".$this->email->escape(implode(',',$uids)).")";
 			$this->email->query($sql);
-			debug('Deleted '.implode(',', $uids).' from cache');
+			//debug('Deleted '.implode(',', $uids).' from cache');
 			if(is_array($this->folder_sort_cache))
 			{
 				foreach($this->folder_sort_cache as $key=>$sort)
@@ -189,14 +189,14 @@ class cached_imap extends imap{
 						}else
 						{
 							$removed++;
-							debug('Removed '.$uid.' from sort cache '.$key);
+							//debug('Removed '.$uid.' from sort cache '.$key);
 						}
 					}
 				}
 			}
 			if(isset($this->sort_type))
 			{
-				debug('Updated sort');
+				//debug('Updated sort');
 				$this->sort=$this->folder_sort_cache[$this->sort_type.'_'.$this->sort_reverse];
 			}
 				
@@ -228,7 +228,7 @@ class cached_imap extends imap{
 
 			$sql = "UPDATE em_folders SET unseen=unseen$operator? WHERE id=?";
 			$this->email->query($sql, 'ii', array($affected_rows, $this->folder['id']));
-			debug('Adding '.$operator.$affected_rows.' unseen');
+			//debug('Adding '.$operator.$affected_rows.' unseen');
 		}
 
 		return $affected_rows;
@@ -315,7 +315,7 @@ class cached_imap extends imap{
 	{
 		$uids = $this->get_message_uids($start, $limit, $sort_field , $sort_order, $query);
 
-		debug($uids);
+		//debug($uids);
 
 		$messages=array();
 		$this->filtered=array();
@@ -331,7 +331,7 @@ class cached_imap extends imap{
 				$messages[$message['uid']]=$message;
 			}
 
-			debug('Got '.count($messages).' from cache');
+			//debug('Got '.count($messages).' from cache');
 
 			$uncached_uids=array();
 			for($i=0;$i<count($uids);$i++)
@@ -363,11 +363,11 @@ class cached_imap extends imap{
 					$this->add_cached_message($message);
 				}
 			}
-			debug('Got '.count($uncached_uids).' from IMAP server');
+			//debug('Got '.count($uncached_uids).' from IMAP server');
 
 			if(count($this->filtered))
 			{
-				debug('Filtered messages:'.count($this->filtered));
+				//debug('Filtered messages:'.count($this->filtered));
 
 				$newstart = count($messages);
 				$newlimit = $newstart+count($this->filtered);

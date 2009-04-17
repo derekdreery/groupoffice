@@ -181,7 +181,7 @@ class imap{
 			$this->connectstring .= '/novalidate-cert';
 		}
 		
-		debug($this->connectstring);
+		//debug($this->connectstring);
 
 		if ($flags != 0) {
 			$this->conn = @imap_open("{".$this->connectstring."}".$this->mailbox, $username, $password, $flags, 1);
@@ -189,7 +189,7 @@ class imap{
 			$this->conn = @imap_open("{".$this->connectstring."}".$this->mailbox, $username, $password);
 		}
 		
-		debug('Connected to IMAP server');
+		//debug('Connected to IMAP server');
 		return $this->conn;
 	}
 	
@@ -619,10 +619,12 @@ class imap{
 			if($fetchstructure)
 			{
 				$structure = imap_fetchstructure($this->conn, $this->message['uid'], FT_UID);
+				
 				$this->get_parts($structure);
 			}
 
 			$header = imap_fetchheader($this->conn, $this->message['uid'], FT_UID);
+
 			$values = $this->get_header_values($header);
 			
 			$this->message = array_merge($this->message, $values);
