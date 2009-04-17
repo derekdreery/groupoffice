@@ -26,7 +26,8 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			zipOfAttachmentsClicked : true,
 			linkClicked : true,
 			emailClicked : true,
-			load : true
+			load : true,
+			reset : true
 		});
 		
 		this.bodyId = Ext.id();
@@ -172,6 +173,8 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		}
 		
 		this.body.update('');
+		
+		this.fireEvent('reset', this);
 	},
 	
 	setMessage : function(data)

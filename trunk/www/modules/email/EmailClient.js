@@ -681,6 +681,13 @@ GO.email.EmailClient = function(config){
 		}		
   	
   }, this);
+  
+  this.messagePanel.on('reset', function(){
+  	this.replyAllButton.setDisabled(true);
+		this.replyButton.setDisabled(true);
+		this.forwardButton.setDisabled(true);
+		this.printButton.setDisabled(true);
+  }, this);
   	
   
   this.messagePanel.on('linkClicked', function(href){ 	
