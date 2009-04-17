@@ -168,6 +168,8 @@ class html2text
         '/<td[^>]*>(.*?)<\/td>/i',               // <td> and </td>
         '/<th[^>]*>(.*?)<\/th>/ie',              // <th> and </th>
 				'/<img [^>]*alt="([^"]+)"[^>]*>/i', //img with alt text		
+				'/<blockquote[^>]*>/i',                          // <blockquote>
+				'/<\/blockquote[^>]*>/i',                          // <blockquote>
 	/*'/&(nbsp|#160);/i',                      // Non-breaking space
 	'/&(quot|rdquo|ldquo|#8220|#8221|#147|#148);/i',
 	// Double quotes
@@ -220,6 +222,8 @@ class html2text
         "\t\t\\1\n",                            // <td> and </td>
         "strtoupper(\"\t\t\\1\n\")",            // <th> and </th>
 				"\\1", //img with alt text
+				"\n\n",																	// blockquote start
+				"\n\n"																	// blockquote closing
 				
 	/*' ',                                    // Non-breaking space
 	'"',                                    // Double quotes
@@ -283,6 +287,14 @@ class html2text
 	 *  @see _build_link_list()
 	 */
 	var $_link_count = 0;
+	
+	/**
+	 * Contains a map of links to a number. It is used to use a link reference multiple times
+	 * 
+	 * @var Array
+	 */
+	
+	var $refmap = array();
 
 	/**
 	 *  Constructor.
@@ -404,8 +416,9 @@ class html2text
 	function _convert($link_list=true)
 	{
 		// Variables used for building the link list
-		$this->_link_count = 0;
+		$this->_link_count = 1;
 		$this->_link_list = '';
+		$this->refmap=array();
 
 		$text = html_entity_decode(trim($this->html), ENT_QUOTES, 'UTF-8');
 		$text = str_replace("\r", '', $text);
@@ -466,25 +479,24 @@ class html2text
 		{
 			//ignore it
 			$additional = '';
-		}else if ( substr($link, 0, 7) == 'http://' || substr($link, 0, 8) == 'https://' ||
-		substr($link, 0, 7) == 'mailto:' ) {
-			$this->_link_count++;
-			$this->_link_list .= "[" . $this->_link_count . "] $link\n";
-			$additional = ' [' . $this->_link_count . ']';
-		} elseif ( substr($link, 0, 11) == 'javascript:' ) {
+		}elseif ( substr($link, 0, 11) == 'javascript:' ) {
 			// Don't count the link; ignore it
 			$additional = '';
 			// what about href="#anchor" ?
-		} else {
-			$this->_link_count++;
-			$this->_link_list .= "[" . $this->_link_count . "] " . $this->url;
-			if ( substr($link, 0, 1) != '/' ) {
-				$this->_link_list .= '/';
-			}
-			$this->_link_list .= "$link\n";
-			$additional = ' [' . $this->_link_count . ']';
+		}else
+		{
+			if(!isset($this->refmap[$link]))
+			{
+				$this->refmap[$link]=$this->_link_count;
+				$ref = $this->_link_count;				
+				$this->_link_count++;
+				$this->_link_list .= "[" . $ref . "] $link\n";
+			}else
+			{
+				$ref = $this->refmap[$link];
+			}			
+			$additional = ' [' . $ref . ']';
 		}
-
 		return $display . $additional;
 	}
 
