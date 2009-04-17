@@ -61,13 +61,13 @@ GO.email.AccountDialog = function(config) {
 				title : GO.email.lang.filters,
 				layout : 'fit',
 				border : true,
-				loadMask:true,
+				loadMask : true,
 				ds : this.filtersDS,
 				cm : cm,
 				view : new Ext.grid.GridView({
 							autoFill : true,
 							forceFit : true,
-							emptyText: GO.lang.strNoItems	
+							emptyText : GO.lang.strNoItems
 						}),
 				sm : new Ext.grid.RowSelectionModel(),
 				tbar : [{
@@ -138,42 +138,42 @@ GO.email.AccountDialog = function(config) {
 							editable : false,
 							selectOnFocus : true,
 							forceSelection : true,
-							listeners:{
-								change:function(){
-									this.refreshNeeded=true;
+							listeners : {
+								change : function() {
+									this.refreshNeeded = true;
 								},
-								scope:this
+								scope : this
 							}
 						}), new Ext.form.TextField({
 							fieldLabel : GO.email.lang.host,
 							name : 'host',
 							allowBlank : false,
-							listeners:{
-								change:function(){
-									this.refreshNeeded=true;
+							listeners : {
+								change : function() {
+									this.refreshNeeded = true;
 								},
-								scope:this
+								scope : this
 							}
 						}), new Ext.form.TextField({
 							fieldLabel : GO.lang.strUsername,
 							name : 'username',
 							allowBlank : false,
-							listeners:{
-								change:function(){
-									this.refreshNeeded=true;
+							listeners : {
+								change : function() {
+									this.refreshNeeded = true;
 								},
-								scope:this
+								scope : this
 							}
 						}), new Ext.form.TextField({
 							fieldLabel : GO.lang.strPassword,
 							name : 'password',
 							inputType : 'password',
 							allowBlank : false,
-							listeners:{
-								change:function(){
-									this.refreshNeeded=true;
+							listeners : {
+								change : function() {
+									this.refreshNeeded = true;
 								},
-								scope:this
+								scope : this
 							}
 						}), {
 					xtype : 'fieldset',
@@ -219,37 +219,49 @@ GO.email.AccountDialog = function(config) {
 		title : GO.lang.strProperties,
 		layout : 'form',
 		anchor : '100% 100%',
-		defaults : {
-			anchor : '100%'
-		},
 		defaultType : 'textfield',
 		autoHeight : true,
 		cls : 'go-form-panel',
 		labelWidth : 100,
-		items : [this.selectUser = new GO.form.SelectUser({
+		items : [
+		
+		this.selectUser = new GO.form.SelectUser({
 					fieldLabel : GO.lang.strUser,
-					disabled : !GO.settings.modules['email']['write_permission']
-				}), {
+					disabled : !GO.settings.modules['email']['write_permission'],
+					anchor : '100%'
+				}), 
+		{
 			fieldLabel : GO.lang.strName,
 			name : 'name',
-			allowBlank : false
-
+			allowBlank : false,
+			anchor : '100%'
 		}, {
 			fieldLabel : GO.lang.strEmail,
 			name : 'email',
 			allowBlank : false,
-			listeners:{
-				change:function(){
-					this.refreshNeeded=true;
+			listeners : {
+				change : function() {
+					this.refreshNeeded = true;
 				},
-				scope:this
-			}
+				scope : this
+			},
+			anchor : '100%'
 		}, {
 			xtype : 'textarea',
 			name : 'signature',
 			fieldLabel : GO.email.lang.signature,
-			height : 100
-		}]
+			height : 100,
+			anchor : '100%'
+		}, this.aliasesButton = new Ext.Button({
+			text : 'Manage sender aliases',
+			handler : function() {
+				if (!this.aliasesDialog) {
+					this.aliasesDialog = new GO.email.AliasesDialog();
+				}
+				this.aliasesDialog.show(this.account_id);
+			},
+			scope : this
+		})]
 	};
 
 	var outgoingTab = {
@@ -273,10 +285,8 @@ GO.email.AccountDialog = function(config) {
 							store : new Ext.data.SimpleStore({
 										fields : ['value', 'text'],
 										data : [
-												['',GO.email.lang.noEncryption],
-												['tls', 'TLS'], 
-												['ssl', 'SSL']
-											]
+												['', GO.email.lang.noEncryption],
+												['tls', 'TLS'], ['ssl', 'SSL']]
 									}),
 							value : '',
 							valueField : 'value',
@@ -350,7 +360,7 @@ GO.email.AccountDialog = function(config) {
 									editable : false,
 									selectOnFocus : true,
 									forceSelection : true,
-									emptyText: GO.lang.disabled
+									emptyText : GO.lang.disabled
 								}), new GO.form.ComboBoxReset({
 									fieldLabel : GO.email.lang.trashFolder,
 									hiddenName : 'trash',
@@ -363,7 +373,7 @@ GO.email.AccountDialog = function(config) {
 									editable : false,
 									selectOnFocus : true,
 									forceSelection : true,
-									emptyText: GO.lang.disabled
+									emptyText : GO.lang.disabled
 								}), new GO.form.ComboBoxReset({
 									fieldLabel : GO.email.lang.draftsFolder,
 									hiddenName : 'drafts',
@@ -376,7 +386,7 @@ GO.email.AccountDialog = function(config) {
 									editable : false,
 									selectOnFocus : true,
 									forceSelection : true,
-									emptyText: GO.lang.disabled
+									emptyText : GO.lang.disabled
 								})]
 
 			});
@@ -522,14 +532,15 @@ Ext.extend(GO.email.AccountDialog, Ext.Window, {
 					waitMsg : GO.lang['waitMsgSave'],
 					success : function(form, action) {
 
-						action.result.refreshNeeded = this.refreshNeeded || this.account_id==0;
+						action.result.refreshNeeded = this.refreshNeeded
+								|| this.account_id == 0;
 						if (action.result.account_id) {
 							this.account_id = action.result.account_id;
 							// this.foldersTab.setDisabled(false);
 							this.loadAccount(this.account_id);
-						}						
-						
-						this.refreshNeeded=false;
+						}
+
+						this.refreshNeeded = false;
 						this.fireEvent('save', this, action.result);
 
 						if (hide) {
@@ -542,10 +553,9 @@ Ext.extend(GO.email.AccountDialog, Ext.Window, {
 						var error = '';
 						if (action.failureType == 'client') {
 							error = GO.lang.strErrorsInForm;
-						} else if(action.result){
+						} else if (action.result) {
 							error = action.result.feedback;
-						}else
-						{
+						} else {
 							error = GO.lang.strRequestError;
 						}
 
@@ -596,7 +606,7 @@ Ext.extend(GO.email.AccountDialog, Ext.Window, {
 			},
 			waitMsg : GO.lang.waitMsgLoad,
 			success : function(form, action) {
-				this.refreshNeeded=false;
+				this.refreshNeeded = false;
 				this.account_id = account_id;
 				this.selectUser.setRemoteValue(action.result.data.user_id,
 						action.result.data.user_name);
@@ -614,7 +624,7 @@ Ext.extend(GO.email.AccountDialog, Ext.Window, {
 filter = function() {
 	return {
 		showDialog : function(filter_id, account_id, ds) {
-			if (!this.win) {		
+			if (!this.win) {
 
 				this.formPanel = new Ext.form.FormPanel({
 					layout : 'form',

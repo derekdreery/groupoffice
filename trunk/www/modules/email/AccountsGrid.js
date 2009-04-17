@@ -83,9 +83,9 @@ GO.email.AccountsGrid = function(config){
 						handler: function(){
 							this.deleteSelected({
 								callback: function(){										 
-									if(GO.email.Composer && GO.email.Composer.fromCombo.store.loaded)
+									if(GO.email.aliasesStore.loaded)
 									{
-										GO.email.Composer.fromCombo.store.reload();
+										GO.email.aliasesStore.reload();
 									}
 									this.fireEvent('delete', this);
 								},
@@ -103,9 +103,9 @@ GO.email.AccountsGrid = function(config){
 	this.accountDialog = new GO.email.AccountDialog();
 	this.accountDialog.on('save', function(){   
 			this.store.reload();	 
-			if(GO.email.Composer && GO.email.Composer.fromCombo.store.loaded)
+			if(GO.email.aliasesStore.loaded)
 			{
-				GO.email.Composer.fromCombo.store.reload();
+				GO.email.aliasesStore.reload();
 			}
 	}, this);
 	

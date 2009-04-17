@@ -62,33 +62,33 @@ try{
 	{
 		case 'save_attachment':
 
-			$account = connect($_POST['account_id'], $_POST['mailbox']);			
+			$account = connect($_POST['account_id'], $_POST['mailbox']);
 			$data = $imap->view_part($_REQUEST['uid'], $_REQUEST['part'], $_REQUEST['transfer']);
 			$imap->close();
-			
+				
 			if(empty($data))
 			{
 				throw new Exception('Could not fetch message from IMAP server');
 			}
-			
+				
 			if(!file_put_contents($GO_CONFIG->file_storage_path.$_POST['path'], $data))
 			{
 				throw new Exception('Could not create file');
 			}
 			$response['success']=true;
 			break;
-			
-		case 'check_mail':			
+				
+		case 'check_mail':
 			$email2 = new email();
 			$count = $email2->get_accounts($GO_SECURITY->user_id);
 			$response['unseen']=array();
 			while($email2->next_record())
 			{
-				$account = connect($email2->f('id'), 'INBOX', false);	
+				$account = connect($email2->f('id'), 'INBOX', false);
 				if($account)
-				{			
+				{
 					$inbox = $email->get_folder($email2->f('id'), 'INBOX');
-					
+						
 					$status = $imap->status('INBOX', SA_UNSEEN+SA_MESSAGES);
 					$response['status'][$inbox['id']]['unseen'] = isset($status->unseen) ? $status->unseen : 0;
 					$response['status'][$inbox['id']]['messages'] = isset($status->messages) ? $status->messages : 0;
@@ -123,7 +123,7 @@ try{
 			$mailbox = isset ($_REQUEST['mailbox']) ? ($_REQUEST['mailbox']) : 'INBOX';
 
 
-			$account = connect($account_id, $mailbox);		
+			$account = connect($account_id, $mailbox);
 
 			$messages = json_decode($_POST['messages']);
 			switch($_POST['action'])
@@ -187,7 +187,7 @@ try{
 					'name'=>utf8_basename($tmp_file),
 					'size'=>Number::format_size($_FILES['attachments']['size'][$n]),
 					'type'=>File::get_filetype_description(File::get_extension($_FILES['attachments']['name'][$n]))					
-							);							
+							);
 						}
 					}
 					echo json_encode($response);
@@ -199,12 +199,12 @@ try{
 
 					require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 
-					$body = sprintf($lang['email']['notification_body'], ($_POST['subject']), Date::get_timestamp(time()));
+					$body = sprintf($lang['email']['notification_body'], $_POST['subject'], Date::get_timestamp(time()));
 
 					$swift =& new GoSwift(
-					($_POST['notification_to']),
-					sprintf($lang['email']['notification_subject'],($_POST['subject'])),
-					($_POST['account_id']),
+					$_POST['notification_to'],
+					sprintf($lang['email']['notification_subject'],$_POST['subject']),
+					$_POST['account_id'],
 					3,
 					$body
 					);
@@ -227,23 +227,24 @@ try{
 								$ab = new addressbook();
 								$response['unknown_recipients']=array();
 							}
-							
+								
 							require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 
 							$swift =& new GoSwift(
-								$_POST['to'],
-								$_POST['subject'],
-								$_POST['account_id'],
-								$_POST['priority']
+							$_POST['to'],
+							$_POST['subject'],
+							0,
+							$_POST['alias_id'],
+							$_POST['priority']
 							);
-							
+								
 							if(!empty($_POST['reply_uid']))
-								$swift->set_reply_to($_POST['reply_uid'],$_POST['reply_mailbox']);
+							$swift->set_reply_to($_POST['reply_uid'],$_POST['reply_mailbox']);
 
 							$RFC822 = new RFC822();
 
 							$to_addresses = $RFC822->parse_address_list($_POST['to']);
-							
+								
 							//used for gpg encryption
 							$all_recipients = array();
 
@@ -262,18 +263,18 @@ try{
 								foreach($cc_addresses as $address)
 								{
 									$all_recipients[]=$address['email'];
-									
-									add_unknown_recipient($address['email'], $address['personal']);								
+										
+									add_unknown_recipient($address['email'], $address['personal']);
 									$swift_addresses[$address['email']]=$address['personal'];
 								}
 								$swift->message->setCc($swift_addresses);
 							}
-							
-							
+								
+								
 							if(!empty($_POST['bcc']))
 							{
 								$all_recipients[]=$address['email'];
-								
+
 								$bcc_addresses = $RFC822->parse_address_list($_POST['bcc']);
 								$swift_addresses=array();
 								foreach($bcc_addresses as $address)
@@ -285,29 +286,29 @@ try{
 							}
 
 							/*if(isset($_POST['replace_personal_fields']))
-							{
+							 {
 								require_once $GO_CONFIG->class_path.'mail/swift/lib/classes/Swift/plugins/DecoratorPlugin.php';
 
 								class Replacements extends Swift_Plugin_Decorator_Replacements {
-									function getReplacementsFor($address) {
-										return array('%email%'=>$address);
-									}
+								function getReplacementsFor($address) {
+								return array('%email%'=>$address);
+								}
 								}
 
 								//Load the plugin with the extended replacements class
 								$swift->attachPlugin(new Swift_Plugins_DecoratorPlugin(new Replacements()), "decorator");
 
-							}*/
+								}*/
 
 							if($_POST['notification']=='true')
-							{								
+							{
 								$swift->message->setReadReceiptTo($swift->account['email']);
 							}
-														
+
 							$body = $_POST['content_type']=='html' ? $_POST['body'] : $_POST['textbody'];
-							
+								
 							if($_POST['content_type']=='html')
-							{														
+							{
 								//process inline attachments
 								$inline_attachments = json_decode($_POST['inline_attachments'], true);
 								foreach($inline_attachments as $inlineAttachment)
@@ -317,39 +318,39 @@ try{
 									{
 										$tmp_name = $GO_CONFIG->file_storage_path.$tmp_name;
 									}
-	
+
 									$img = Swift_EmbeddedFile::fromPath($tmp_name);
 									$img->setContentType(File::get_mime($tmp_name));
 									$src_id = $swift->message->embed($img);
-									
+										
 									//Browsers reformat URL's so a pattern match
-									//$body = str_replace($inlineAttachment['url'], $src_id, $body);			
-									$just_filename = utf8_basename($inlineAttachment['url']);	
-									$body = preg_replace('/="[^"]*'.preg_quote($just_filename).'"/', '="'.$src_id.'"', $body);	
+									//$body = str_replace($inlineAttachment['url'], $src_id, $body);
+									$just_filename = utf8_basename($inlineAttachment['url']);
+									$body = preg_replace('/="[^"]*'.preg_quote($just_filename).'"/', '="'.$src_id.'"', $body);
 								}
-							}	
+							}
 
 							if(!empty($_POST['encrypt']) && empty($_POST['draft']))
 							{
 								require_once ($GO_MODULES->modules['gnupg']['class_path'].'gnupg.class.inc.php');
 								$gnupg = new gnupg();
-								
+
 								//$htmlToText = new Html2Text ($body);
-								//$textbody = $htmlToText->get_text();								
-	
+								//$textbody = $htmlToText->get_text();
+
 								//$body = $gnupg->encode($body, $all_recipients, $swift->account['email']);
 								$body = $gnupg->encode($body, $all_recipients, $swift->account['email']);
 
 								debug($body);
-								
+
 								$swift->message->setMaxLineLength(1000);
-								$swift->message->setBody($body, 'text/plain');								
+								$swift->message->setBody($body, 'text/plain');
 								$swift->message->setEncoder(new Swift_Mime_ContentEncoder_RawContentEncoder('8bit'));
-								
+
 								/*$textpart = Swift_MimePart::newInstance($textbody, 'text/plain', 'UTF-8');
-								$textpart->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder('8bit'));
-						    $textpart->setMaxLineLength(1000);								
-								$swift->message->attach($textpart);*/
+								 $textpart->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder('8bit'));
+								 $textpart->setMaxLineLength(1000);
+								 $swift->message->attach($textpart);*/
 							}else
 							{
 								$swift->set_body($body, $_POST['content_type']);
@@ -364,11 +365,11 @@ try{
 									if(!File::is_full_path($tmp_name[0]))
 									{
 										$tmp_name = $GO_CONFIG->file_storage_path.$tmp_name;
-									}									
+									}
 									if(!empty($_POST['encrypt']) && empty($_POST['draft']))
-									{										
+									{
 										$encoded = $gnupg->encode_file($tmp_name, $all_recipients, $swift->account['email']);
-										
+
 										$attachment = Swift_Attachment::fromPath($encoded,'application/pgp-encoded');
 									}else
 									{
@@ -377,7 +378,7 @@ try{
 									$swift->message->attach($attachment);
 								}
 							}
-								
+
 							if(!empty($_POST['draft']))
 							{
 								if($swift->account['type']!='imap')
@@ -389,35 +390,35 @@ try{
 									throw new Exception($lang['email']['draftsDisabled']);
 								}
 								$drafts_folder = $imap->utf7_imap_encode($swift->account['drafts']);
-								if ($imap->open($swift->account, $drafts_folder)){	
+								if ($imap->open($swift->account, $drafts_folder)){
 
 									$status = $imap->status($drafts_folder, SA_UIDNEXT);
-									if(!empty($status->uidnext))	
-									{								
+									if(!empty($status->uidnext))
+									{
 										$response['success']=$imap->append_message($drafts_folder, $swift->message->toString(),"\\Seen");
 										$response['draft_uid']=$status->uidnext;
 									}
-									
+										
 									if(!$response['success'])
 									{
 										$response['feedback']=$imap->last_error();
 									}
-									
+										
 									if(!empty($_POST['draft_uid']))
 									{
 										$imap->delete(array($_POST['draft_uid']));
 									}
-									
-									$imap->close();									
+										
+									$imap->close();
 								}
 							}else
 							{
 								//$log =& Swift_LogContainer::getLog();
-							//	$log->setLogLevel(2);
-								
+								//	$log->setLogLevel(2);
+
 								if(!empty($_POST['draft_uid']))
 								{
-									$swift->set_draft($_POST['draft_uid']);									
+									$swift->set_draft($_POST['draft_uid']);
 								}
 
 								$response['success']=$swift->sendmail();
@@ -440,7 +441,7 @@ try{
 						}
 					}
 					break;
-						
+
 				case 'save_filter':
 
 					$filter['id']=$_POST['filter_id'];
@@ -513,7 +514,7 @@ try{
 					}else {
 						$new_folder_name=$account['mbroot'].$imap->utf7_imap_encode($_POST['new_folder_name']);
 					}
-					
+						
 					if($imap->create_folder($new_folder_name, $delimiter))
 					{
 						if($email->add_folder($account['id'], $new_folder_name, $parent_id, 1,$delimiter,64))
@@ -666,37 +667,37 @@ try{
 				case 'save_account_properties':
 
 					$account['mbroot'] = isset($_POST['mbroot']) ? $imap->utf7_imap_encode($_POST['mbroot']) : '';
-					
+						
 					if ($_POST['name'] == "" ||	$_POST['email'] == "" ||
-							($GO_MODULES->modules['email']['write_permission'] && ($_POST['port'] == "" ||
-						$_POST['username'] == "" ||
-						$_POST['password'] == "" ||
-						$_POST['host'] == "" ||
-						$_POST['smtp_host'] == "" ||
-						$_POST['smtp_port'] == "")))						
+					($GO_MODULES->modules['email']['write_permission'] && ($_POST['port'] == "" ||
+					$_POST['username'] == "" ||
+					$_POST['password'] == "" ||
+					$_POST['host'] == "" ||
+					$_POST['smtp_host'] == "" ||
+					$_POST['smtp_port'] == "")))
 					{
 						$response['feedback'] = $lang['common']['missingField'];
 					}else
 					{
 						$account['id']=isset($_POST['account_id']) ? ($_POST['account_id']) : 0;
-						
+
 						if(isset($_POST['type']))
 						{
 							$account['mbroot'] = isset($_POST['mbroot']) ? $_POST['mbroot'] : '';
 							$account['use_ssl'] = isset($_REQUEST['use_ssl'])  ? '1' : '0';
 							$account['novalidate_cert'] = isset($_REQUEST['novalidate_cert']) ? '1' : '0';
-							$account['examine_headers'] = isset($_POST['examine_headers']) ? '1' : '0';							
+							$account['examine_headers'] = isset($_POST['examine_headers']) ? '1' : '0';
 							$account['type']=$_POST['type'];
 							$account['host']=$_POST['host'];
 							$account['port']=$_POST['port'];
 							$account['username']=$_POST['username'];
 							$account['password']=$_POST['password'];
-							
+								
 							$account['smtp_host']=$_POST['smtp_host'];
 							$account['smtp_port']=$_POST['smtp_port'];
 							$account['smtp_encryption']=$_POST['smtp_encryption'];
 							$account['smtp_username']=$_POST['smtp_username'];
-							$account['smtp_password']=$_POST['smtp_password'];							
+							$account['smtp_password']=$_POST['smtp_password'];
 						}
 						$account['name']=$_POST['name'];
 						$account['email']=$_POST['email'];
@@ -712,7 +713,7 @@ try{
 							$account['sent']=$_POST['sent'];
 							$account['drafts']=$_POST['drafts'];
 							$account['trash']=$_POST['trash'];
-							
+								
 							if($GO_MODULES->modules['email']['write_permission'])
 							{
 								if(!$email->update_account($account))
@@ -726,7 +727,7 @@ try{
 									throw new DatabaseUpdateException();
 								}
 							}
-							
+								
 							$response['success']=true;
 
 
@@ -737,7 +738,7 @@ try{
 
 								foreach($sc->domains as $domain)
 								{
-									
+										
 									if(!$GO_MODULES->modules['email']['write_permission'])
 									{
 										$account = $email->get_account($account['id']);
@@ -794,6 +795,27 @@ try{
 						}
 					}
 					break;
+				case 'save_alias':
+					$alias_id=$alias['id']=isset($_POST['alias_id']) ? $_POST['alias_id'] : 0;
+					
+					$alias['name']=$_POST['name'];
+					$alias['email']=$_POST['email'];
+					$alias['signature']=$_POST['signature'];
+					if($alias['id']>0)
+					{
+						$email->update_alias($alias);
+						$response['success']=true;
+						$insert=false;
+					}else
+					{
+						$alias['account_id']=$_POST['account_id'];
+						$alias_id= $email->add_alias($alias);
+						$response['alias_id']=$alias_id;
+						$response['success']=true;
+						$insert=true;
+					}
+					break;
+					/* {TASKSWITCH} */
 	}
 }catch(Exception $e)
 {

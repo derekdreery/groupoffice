@@ -138,3 +138,16 @@ GO.email.defaultProgramInstructions ='<p>To set Group-Office as your default e-m
 
 GO.email.lang.htmlMarkup = 'Use HTML markup';
 GO.email.lang.confirmLostChanges = 'Changes will be lost. Are you sure?';
+/* table: em_aliases */
+GO.email.lang.alias="Alias";
+GO.email.lang.aliases="Aliases";
+GO.email.lang.accountId="Account id";
+GO.email.lang.email="Email";
+GO.email.lang.signature="Signature";
+
+/* table: em_aliases */
+GO.email.lang.alias="Alias";
+GO.email.lang.aliases="Aliases";
+GO.email.lang.accountId="Account id";
+GO.email.lang.email="Email";
+GO.email.lang.signature="Signature";

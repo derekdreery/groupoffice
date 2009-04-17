@@ -41,3 +41,18 @@ $updates[]="UPDATE em_accounts SET smtp_encryption='' WHERE smtp_encryption='8'"
 $updates[]="UPDATE em_accounts SET smtp_encryption='tls' WHERE smtp_encryption='2'";
 $updates[]="UPDATE em_accounts SET smtp_encryption='ssl' WHERE smtp_encryption='4'";
 $updates[]="UPDATE em_accounts SET smtp_encryption='' WHERE smtp_encryption='0'";
+
+$updates[]="CREATE TABLE IF NOT EXISTS `em_aliases` (
+  `id` int(11) NOT NULL,
+  `account_id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `signature` text NOT NULL,
+  `default` enum('0','1') NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `account_id` (`account_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates[]="script:1_sender_aliases.inc.php";
+
+$updates[]="ALTER TABLE `em_accounts` DROP `name` , DROP `email` ;";

@@ -154,27 +154,35 @@ GO.email.EmailComposer = function(config) {
 			
 	var items = [
 						this.fromCombo = new Ext.form.ComboBox({
-									store : new GO.data.JsonStore({
-												url : BaseHref
-														+ 'modules/email/json.php',
-												baseParams : {
-													"task" : 'accounts',
-													personal_only : true
-												},
-												fields : ['id', 'email', 'html_signature', 'plain_signature'],
-												root : 'results',
-												totalProperty : 'total',
-												id : 'id'
-											}),
+									store : GO.email.aliasesStore,
 									fieldLabel : GO.email.lang.from,
-									name : 'account_name',
+									name : 'alias_name',
 									anchor : '100%',
-									displayField : 'email',
+									displayField : 'name',
 									valueField : 'id',
-									hiddenName : 'account_id',
+									hiddenName : 'alias_id',
 									forceSelection : true,
 									triggerAction : 'all',
-									mode : 'local'
+									mode : 'local',
+									tpl: '<tpl for="."><div class="x-combo-list-item">{name:htmlEncode}</div></tpl>',
+									listeners:{
+										 beforeselect: function(cb, newAccountRecord){
+											var oldAccountRecord = cb.store.getById(cb.getValue());
+											
+											var oldSig = oldAccountRecord.get(this.formPanel.baseParams.content_type+"_signature");
+											var newSig = newAccountRecord.get(this.formPanel.baseParams.content_type+"_signature");
+
+											var editorValue = this.editor.getValue();
+											if(GO.util.empty(oldSig))
+											{
+												this.addSignature(newAccountRecord);
+											}else
+											{
+												this.editor.setValue(editorValue.replace(oldSig,newSig));
+											}
+										},
+										scope:this
+									}
 								}),
 
 						this.toCombo = new GO.form.ComboBoxMulti({
@@ -538,7 +546,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 						var records = this.fromCombo.store.getRange();
 						if (records.length) {
 							if (!config.account_id) {
-								config.account_id = records[0].data.id;
+								config.account_id = records[0].data.account_id;
 							}
 
 							this.render(Ext.getBody());
@@ -593,11 +601,16 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			this.attachmentsStore.removeAll();
 			this.inline_attachments = [];
 			this.reset();
+			
+			var index=-1;
 			if (config.account_id) {
-				this.fromCombo.setValue(config.account_id);
-			} else {
-				this.fromCombo.setValue(this.fromCombo.store.data.items[0].id);
+				index = this.fromCombo.store.find('account_id', config.account_id);				
+			} 
+			if(index==-1)
+			{
+				index=0;
 			}
+			this.fromCombo.setValue(this.fromCombo.store.data.items[index].id);
 
 			if (config.values) {
 				this.formPanel.form.setValues(config.values);
@@ -617,9 +630,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			{
 				var pos = this.getPosition();
 		 		this.setPagePosition(pos[0]+config.move, pos[1]+config.move);
-			}			
-			
-			
+			}
 			
 			
 			// for mailings plugin
@@ -638,7 +649,6 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 				this.saveButton.setDisabled(true);
 			}
 
-
 			if (config.uid || config.template_id || config.loadUrl) {
 				if (!config.task) {
 					config.task = 'template';
@@ -646,12 +656,12 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 				
 				if(config.task=='opendraft')
 					this.sendParams.draft_uid = config.uid; 
-
-					
+				
+				var fromRecord = this.fromCombo.store.getById(this.fromCombo.getValue());
 
 				var params = config.loadParams ? config.loadParams : {
 					uid : config.uid,
-					account_id : this.fromCombo.getValue(),
+					account_id : fromRecord.get('account_id'),
 					task : config.task,
 					mailbox : config.mailbox
 				};
@@ -711,31 +721,13 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 	},
 	
 	afterShowAndLoad : function(addSignature){
-
-		this.bccFieldCheck.setChecked(this.bccCombo.getValue()!='');
-		this.ccFieldCheck.setChecked(this.ccCombo.getValue()!='');
-				
 		
+		this.bccFieldCheck.setChecked(this.bccCombo.getValue()!='');
+		this.ccFieldCheck.setChecked(this.ccCombo.getValue()!='');		
 		
 		if(addSignature)
 		{
-			var accountRecord = this.fromCombo.store.getById(this.fromCombo.getValue());
-			
-			var sig = accountRecord.get(this.formPanel.baseParams.content_type+"_signature");
-			
-			if(!GO.util.empty(sig))
-			{
-				if(this.formPanel.baseParams.content_type=='plain')
-				{
-					sig = "\n"+sig+"\n";
-				}else
-				{
-					sig = '<br />'+sig+'<br />';
-				}
-			}
-			
-			
-			this.editor.setValue(sig+this.editor.getValue());
+			this.addSignature();
 		}
 		this.bodyContentAtWindowOpen=this.editor.getValue();	
 		
@@ -743,9 +735,6 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 		{
 			//set cursor at top
 			this.editor.selectText(0,0);
-		}else if(!this.editor.activated)
-		{
-			this.editor.updateToolbar();
 		}
 		
 		if (this.toCombo.getValue() == '') {
@@ -754,9 +743,33 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			this.editor.focus();
 		}
 		
+		if(this.formPanel.baseParams.content_type=='html' && !this.editor.activated)
+		{
+			//this.editor.updateToolbar();
+		}
+		
 		this.setEditorHeight();
 		
 		this.startAutoSave();
+	},
+	
+	addSignature : function(accountRecord){
+		accountRecord = accountRecord || this.fromCombo.store.getById(this.fromCombo.getValue());
+			
+		var sig = accountRecord.get(this.formPanel.baseParams.content_type+"_signature");
+		
+		if(!GO.util.empty(sig))
+		{
+			if(this.formPanel.baseParams.content_type=='plain')
+			{
+				sig = "\n"+sig+"\n";
+			}else
+			{
+				sig = '<br />'+sig+'<br />';
+			}
+		}		
+		
+		this.editor.setValue(sig+this.editor.getValue());
 	},
 
 	showAttachmentsDialog : function() {

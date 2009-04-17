@@ -511,6 +511,7 @@ try{
 				}
 				if(count($participants))
 				{
+					
 					$swift = new GoSwift(
 						implode(',', $participants), 
 						$lang['calendar']['appointment'].$event['name']);
@@ -551,7 +552,12 @@ try{
 					$attachment =& new Swift_Message_Attachment($file,utf8_basename($tmp_file), File::get_mime($tmp_file));*/
 					
 					$swift->message->attach(Swift_Attachment::newInstance($ics_string, $name,File::get_mime($name)));
+					
+					
+					
 					$swift->set_from($_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name']);
+					
+					
 					
 					if(!$swift->sendmail(true))
 					{
