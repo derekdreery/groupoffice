@@ -46,3 +46,5 @@ $lang['email']['goAlreadyStarted']='Group-Office was already started. The e-mail
 
 //At Tuesday, 07-04-2009 on 8:58 Group-Office Administrator <test@intermeshdev.nl> wrote:
 $lang['email']['replyHeader']='Op %s, %s om %s schreef %s:';
+
+$lang['email']['noUidNext']='Uw mailserver ondersteund geen UIDNEXT. De \'Concepten\' map is nu automatisch uitgeschakeld voor deze account.';
