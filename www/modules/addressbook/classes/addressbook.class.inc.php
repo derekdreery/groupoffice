@@ -968,8 +968,13 @@ class addressbook extends db {
 			}
 		}
 	}
+	
+	function get_contact_by_email($email, $user_id, $addressbook_id=0){
+		$this->get_contacts_by_email($email, $user_id, $addressbook_id=0);
+		return $this->next_record();
+	}
 
-	function get_contact_by_email($email, $user_id, $addressbook_id=0) {
+	function get_contacts_by_email($email, $user_id, $addressbook_id=0) {
 		$email = $this->escape(String::get_email_from_string($email));
 		$sql = "SELECT * FROM ab_contacts ";
 
@@ -993,9 +998,6 @@ class addressbook extends db {
 		$sql .= " (email='$email' OR email2='$email' OR email3='$email')";
 
 		$this->query($sql);
-		if ($this->next_record())
-		return $this->record;
-		else
-		return false;
+		return $this->num_rows();
 	}
 }

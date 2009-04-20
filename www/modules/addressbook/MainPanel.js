@@ -401,25 +401,23 @@ GO.mainLayout.onReady(function(){
 });
 			
 
+GO.addressbook.searchSenderStore = new GO.data.JsonStore({
+		url: GO.settings.modules.addressbook.url+ 'json.php',
+		baseParams: {'task': 'search_sender', email:''},
+		root: 'results',
+		totalProperty: 'total',
+		id: 'id',
+		fields:['id','name'],
+		remoteSort:true
+	});
+
 GO.addressbook.searchSender = function(sender, name){
-	
-	Ext.Ajax.request({
-		url: GO.settings.modules.addressbook.url+'json.php',
-		params: {
-			task:'search_sender',
-			email: sender			
-		},
-		callback: function(options, success, response)
-		{
-			if(!success)
+	GO.addressbook.searchSenderStore.baseParams.email=sender;
+	GO.addressbook.searchSenderStore.load({
+		callback:function(){
+			switch(GO.addressbook.searchSenderStore.getCount())
 			{
-				alert( GO.lang['strRequestError']);
-			}else
-			{	
-				
-				var responseParams = Ext.decode(response.responseText);
-				if(!responseParams.contact_id)
-				{
+				case 0:
 					if(confirm(GO.addressbook.lang.confirmCreate))
 					{
 						GO.addressbook.contactDialog.show();
@@ -451,14 +449,51 @@ GO.addressbook.searchSender = function(sender, name){
 						
 						GO.addressbook.contactDialog.formPanel.form.setValues(params);				
 					}
-				}else
-				{
-					GO.linkHandlers[2].call(this, responseParams.contact_id);
-				}			
-			}
-		}	
-			
-		
+					
+				break;
+				case 1:								
+					var r = GO.addressbook.searchSenderStore.getAt(0);
+					GO.linkHandlers[2].call(this, r.get('id'));
+				break;
+				default:
+					if(!GO.addressbook.searchSenderWin)
+					{
+						var list = new GO.grid.SimpleSelectList({
+								store: GO.addressbook.searchSenderStore
+							});
+						
+						list.on('click', function(dataview, index){	
+								var contact_id = dataview.store.data.items[index].id;								
+								list.clearSelections();
+								GO.addressbook.searchSenderWin.hide();								
+								GO.linkHandlers[2].call(this, contact_id);								
+						}, this);
+						GO.addressbook.searchSenderWin=new GO.Window({
+							title:GO.addressbook.lang.strSelectContact,
+							items:{
+								autoScroll:true,
+								items: list,		
+								cls:'go-form-panel'
+							},
+							layout:'fit',
+							autoScroll:true,
+							closeAction:'hide',
+							closeable:true,
+							height:400,
+							width:400,
+							buttons:[{
+								text: GO.lang['cmdClose'],
+								handler: function(){
+									GO.addressbook.searchSenderWin.hide();
+								}
+							}]
+						});
+					}
+					GO.addressbook.searchSenderWin.show();
+				break;		
+			}				
+		},
+		scope:this
 	});
 	
 }
