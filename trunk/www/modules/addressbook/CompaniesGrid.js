@@ -8,7 +8,7 @@ GO.addressbook.CompaniesGrid = function(config){
 	config.paging=true;
 	
 	var fields ={
-		fields:['id', 'name', 'homepage', 'email', 'phone', 'fax'],
+		fields:['id', 'name', 'homepage', 'email', 'phone', 'fax','ctime','mtime'],
 		columns:[
 		  {
 		  	header: GO.lang['strName'], 
@@ -34,8 +34,18 @@ GO.addressbook.CompaniesGrid = function(config){
 		  {
 		  	header: GO.lang['strFax'], 
 		  	dataIndex: 'fax' , 
-		  	width: 100,
+		  	width: 80,
 		  	hidden:true
+		  },{
+		  	header: GO.lang.strMtime,
+		  	dataIndex:'mtime',
+		  	hidden:true,
+		  	width:80		  	
+		  },{
+		  	header: GO.lang.strCtime,
+		  	dataIndex:'ctime',
+		  	hidden:true,
+		  	width:80	  	
 		  }
 		]
 	};

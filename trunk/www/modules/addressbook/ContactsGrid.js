@@ -13,7 +13,7 @@ GO.addressbook.ContactsGrid = function(config){
 	
 	
 	var fields ={
-		fields : ['id', 'name', 'company_name', 'email', 'home_phone', 'work_phone', 'work_fax','cellular','function','department'],
+		fields : ['id', 'name', 'company_name', 'email', 'home_phone', 'work_phone', 'work_fax','cellular','function','department','ctime','mtime'],
 		columns : [
 		  {
 		  	header: GO.lang['strName'], 
@@ -64,6 +64,16 @@ GO.addressbook.ContactsGrid = function(config){
 		  	dataIndex: 'department', 
 		  	width: 100,
 		  	hidden:true
+		  },{
+		  	header: GO.lang.strMtime,
+		  	dataIndex:'mtime',
+		  	hidden:true,
+		  	width:80		  	
+		  },{
+		  	header: GO.lang.strCtime,
+		  	dataIndex:'ctime',
+		  	hidden:true,
+		  	width:80
 		  }
 		]
 	}
