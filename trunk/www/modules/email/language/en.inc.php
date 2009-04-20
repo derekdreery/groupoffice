@@ -53,3 +53,5 @@ $lang['email']['alias']='Alias';
 $lang['email']['aliases']='Aliases';
 $lang['email']['alias']='Alias';
 $lang['email']['aliases']='Aliases';
+
+$lang['email']['noUidNext']='Your mail server does not support UIDNEXT. The \'Drafts\' folder is disabled automatically for this account now.';

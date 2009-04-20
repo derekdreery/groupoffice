@@ -65,19 +65,19 @@ try{
 			$account = connect($_POST['account_id'], $_POST['mailbox']);
 			$data = $imap->view_part($_REQUEST['uid'], $_REQUEST['part'], $_REQUEST['transfer']);
 			$imap->close();
-				
+
 			if(empty($data))
 			{
 				throw new Exception('Could not fetch message from IMAP server');
 			}
-				
+
 			if(!file_put_contents($GO_CONFIG->file_storage_path.$_POST['path'], $data))
 			{
 				throw new Exception('Could not create file');
 			}
 			$response['success']=true;
 			break;
-				
+
 		case 'check_mail':
 			$email2 = new email();
 			$count = $email2->get_accounts($GO_SECURITY->user_id);
@@ -88,7 +88,7 @@ try{
 				if($account)
 				{
 					$inbox = $email->get_folder($email2->f('id'), 'INBOX');
-						
+
 					$status = $imap->status('INBOX', SA_UNSEEN+SA_MESSAGES);
 					$response['status'][$inbox['id']]['unseen'] = isset($status->unseen) ? $status->unseen : 0;
 					$response['status'][$inbox['id']]['messages'] = isset($status->messages) ? $status->messages : 0;
@@ -186,7 +186,7 @@ try{
 					'tmp_name'=>$tmp_file,
 					'name'=>utf8_basename($tmp_file),
 					'size'=>Number::format_size($_FILES['attachments']['size'][$n]),
-					'type'=>File::get_filetype_description(File::get_extension($_FILES['attachments']['name'][$n]))					
+					'type'=>File::get_filetype_description(File::get_extension($_FILES['attachments']['name'][$n]))
 							);
 						}
 					}
@@ -227,7 +227,7 @@ try{
 								$ab = new addressbook();
 								$response['unknown_recipients']=array();
 							}
-								
+
 							require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 
 							$swift =& new GoSwift(
@@ -237,14 +237,14 @@ try{
 							$_POST['alias_id'],
 							$_POST['priority']
 							);
-								
+
 							if(!empty($_POST['reply_uid']))
 							$swift->set_reply_to($_POST['reply_uid'],$_POST['reply_mailbox']);
 
 							$RFC822 = new RFC822();
 
 							$to_addresses = $RFC822->parse_address_list($_POST['to']);
-								
+
 							//used for gpg encryption
 							$all_recipients = array();
 
@@ -258,19 +258,19 @@ try{
 							if(!empty($_POST['cc']))
 							{
 								$cc_addresses = $RFC822->parse_address_list($_POST['cc']);
-									
+
 								$swift_addresses=array();
 								foreach($cc_addresses as $address)
 								{
 									$all_recipients[]=$address['email'];
-										
+
 									add_unknown_recipient($address['email'], $address['personal']);
 									$swift_addresses[$address['email']]=$address['personal'];
 								}
 								$swift->message->setCc($swift_addresses);
 							}
-								
-								
+
+
 							if(!empty($_POST['bcc']))
 							{
 								$all_recipients[]=$address['email'];
@@ -306,7 +306,7 @@ try{
 							}
 
 							$body = $_POST['content_type']=='html' ? $_POST['body'] : $_POST['textbody'];
-								
+
 							if($_POST['content_type']=='html')
 							{
 								//process inline attachments
@@ -322,7 +322,7 @@ try{
 									$img = Swift_EmbeddedFile::fromPath($tmp_name);
 									$img->setContentType(File::get_mime($tmp_name));
 									$src_id = $swift->message->embed($img);
-										
+
 									//Browsers reformat URL's so a pattern match
 									//$body = str_replace($inlineAttachment['url'], $src_id, $body);
 									$just_filename = utf8_basename($inlineAttachment['url']);
@@ -398,17 +398,21 @@ try{
 										$response['success']=$imap->append_message($drafts_folder, $swift->message->toString(),"\\Seen");
 										$response['draft_uid']=$status->uidnext;
 									}
-										
+
 									if(!$response['success'])
 									{
-										$response['feedback']=$imap->last_error();
+										$up_account['id']=$swift->account['id'];
+										$up_account['drafts']='';
+										$email->_update_account($up_account);
+
+										$response['feedback']=$lang['email']['noUidNext'];
 									}
-										
+
 									if(!empty($_POST['draft_uid']))
 									{
 										$imap->delete(array($_POST['draft_uid']));
 									}
-										
+
 									$imap->close();
 								}
 							}else
@@ -514,7 +518,7 @@ try{
 					}else {
 						$new_folder_name=$account['mbroot'].$imap->utf7_imap_encode($_POST['new_folder_name']);
 					}
-						
+
 					if($imap->create_folder($new_folder_name, $delimiter))
 					{
 						if($email->add_folder($account['id'], $new_folder_name, $parent_id, 1,$delimiter,64))
@@ -667,7 +671,7 @@ try{
 				case 'save_account_properties':
 
 					$account['mbroot'] = isset($_POST['mbroot']) ? $imap->utf7_imap_encode($_POST['mbroot']) : '';
-						
+
 					if ($_POST['name'] == "" ||	$_POST['email'] == "" ||
 					($GO_MODULES->modules['email']['write_permission'] && ($_POST['port'] == "" ||
 					$_POST['username'] == "" ||
@@ -692,7 +696,7 @@ try{
 							$account['port']=$_POST['port'];
 							$account['username']=$_POST['username'];
 							$account['password']=$_POST['password'];
-								
+
 							$account['smtp_host']=$_POST['smtp_host'];
 							$account['smtp_port']=$_POST['smtp_port'];
 							$account['smtp_encryption']=$_POST['smtp_encryption'];
@@ -713,7 +717,7 @@ try{
 							$account['sent']=$_POST['sent'];
 							$account['drafts']=$_POST['drafts'];
 							$account['trash']=$_POST['trash'];
-								
+
 							if($GO_MODULES->modules['email']['write_permission'])
 							{
 								if(!$email->update_account($account))
@@ -727,7 +731,7 @@ try{
 									throw new DatabaseUpdateException();
 								}
 							}
-								
+
 							$response['success']=true;
 
 
@@ -738,7 +742,7 @@ try{
 
 								foreach($sc->domains as $domain)
 								{
-										
+
 									if(!$GO_MODULES->modules['email']['write_permission'])
 									{
 										$account = $email->get_account($account['id']);
@@ -756,7 +760,7 @@ try{
 									'password'=>$account['password'],
 									'vacation_active'=>isset($_POST['vacation_active']) ? '1' : '0',
 									'vacation_subject'=>($_POST['vacation_subject']),
-									'vacation_body'=>($_POST['vacation_body'])													
+									'vacation_body'=>($_POST['vacation_body'])
 										);
 
 										//go_log(LOG_DEBUG, var_export($params, true));
@@ -797,7 +801,7 @@ try{
 					break;
 				case 'save_alias':
 					$alias_id=$alias['id']=isset($_POST['alias_id']) ? $_POST['alias_id'] : 0;
-					
+
 					$alias['name']=$_POST['name'];
 					$alias['email']=$_POST['email'];
 					$alias['signature']=$_POST['signature'];
