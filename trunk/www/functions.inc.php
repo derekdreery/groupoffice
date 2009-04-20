@@ -1,7 +1,7 @@
 <?php
 /**
  * This file holds global functions for use inside Group-Office
- *  
+ *
  * @package go.global
  * @copyright Copyright Intermesh
  * @version $Id$
@@ -17,13 +17,13 @@
  */
 
 function __autoload($class_name) {
-		global $GO_CONFIG;
-		
-		/*if(!file_exists($GO_CONFIG->class_path. $class_name.'.class.inc.php'))
+	global $GO_CONFIG;
+
+	/*if(!file_exists($GO_CONFIG->class_path. $class_name.'.class.inc.php'))
 		{
-			debug_print_backtrace();
+		debug_print_backtrace();
 		}*/
-    require_once $GO_CONFIG->class_path. $class_name.'.class.inc.php';
+	require_once $GO_CONFIG->class_path. $class_name.'.class.inc.php';
 }
 
 /**
@@ -107,27 +107,27 @@ function set_debug_log($file)
 
 function debug($text, $config=false)
 {
-	
+
 	if(!$config)
-		$config=$GLOBALS['GO_CONFIG'];
-	
+	$config=$GLOBALS['GO_CONFIG'];
+
 	if($config->debug)
 	{
 		if(!is_string($text))
 		{
 			$text = var_export($text, true);
 		}
-		
+
 		if(!isset($_SESSION['GO_SESION']['debug_log']))
-			$_SESSION['GO_SESION']['debug_log']=$config->file_storage_path.'debug.log';
-	
+		$_SESSION['GO_SESION']['debug_log']=$config->file_storage_path.'debug.log';
+
 		$text = '['.date('Y-m-d G:i').'] '.$text;
-	
-	
+
+
 		file_put_contents($_SESSION['GO_SESION']['debug_log'], $text."\n\n", FILE_APPEND);
-		
+
 		//go_log(LOG_DEBUG, $text);
-	}	
+	}
 }
 
 
@@ -163,5 +163,126 @@ function detect_browser() {
 		$browser['name'] = 'OTHER';
 	}
 	return $browser;
+}
+
+
+function export_query($fp){
+
+
+	$db = new db();
+
+	$q = $_SESSION['GO_SESSION']['export_queries'][$_REQUEST['query']];
+
+	$params = array();
+	$types='';
+
+
+	if(is_array($q))
+	{
+		$extra_sql=array();
+		$sql = $q['query'];
+		if(isset($q['extra_params']))
+		{
+			foreach($q['extra_params'] as $param=>$sqlpart)
+			{
+				if(!empty($_REQUEST[$param]))
+				{
+					$params[] = $_REQUEST[$param];
+					$extra_sql[]=$sqlpart;
+				}
+			}
+		}
+		if(count($params))
+		{
+			$insert = ' ';
+			if(!strpos($sql, 'WHERE'))
+			{
+				$insert .= 'WHERE ';
+			}else
+			{
+				$insert .= ' AND ';
+			}
+			$insert .= implode(' AND ', $extra_sql);
+
+			$pos = strpos($sql, 'ORDER');
+
+			if(!$pos)
+			{
+				$sql .= $insert;
+			}else
+			{
+				$sql = substr($sql, 0, $pos).$insert.' '.substr($sql, $pos);
+			}
+
+			$types=str_repeat('s',count($params));
+		}
+	}else
+	{
+		$sql = $q;
+
+		$params=array();
+
+	}
+
+	$db->query($sql,$types,$params);
+
+
+	
+
+	$columns=array();
+	$headers=array();
+	if(isset($_REQUEST['columns']))
+	{
+		$indexesAndHeaders = explode(',', $_REQUEST['columns']);
+
+		foreach($indexesAndHeaders as $i)
+		{
+			$indexAndHeader = explode(':', $i);
+
+			$headers[]=$indexAndHeader[1];
+			$columns[]=$indexAndHeader[0];
+		}
+
+		fwrite($fp, $_SESSION['GO_SESSION']['text_separator'].implode($_SESSION['GO_SESSION']['text_separator'].$_SESSION['GO_SESSION']['list_separator'].$_SESSION['GO_SESSION']['text_separator'], $headers).$_SESSION['GO_SESSION']['text_separator']."\r\n");
+	}
+
+
+	while($record = $db->next_record())
+	{
+		if(!count($columns))
+		{
+
+			foreach($record as $key=>$value)
+			{
+				$columns[]=$key;
+				$headers[]=$key;
+			}
+
+			fwrite($fp,  $_SESSION['GO_SESSION']['text_separator'].implode($_SESSION['GO_SESSION']['text_separator'].$_SESSION['GO_SESSION']['list_separator'].$_SESSION['GO_SESSION']['text_separator'], $headers).$_SESSION['GO_SESSION']['text_separator']."\r\n");
+
+		}
+
+		if(is_array($q))
+		{
+			if(!empty($q['require']))
+			{
+				require_once($q['require']);
+			}
+			call_user_func_array(array($q['class'], $q['method']),array(&$record));
+		}
+
+		if(isset($record['user_id']) && isset($columns['user_id']))
+		{
+			$user = $GO_USERS->get_user($record['user_id']);
+			$record['user_id']=$user['username'];
+		}
+		$values=array();
+		foreach($columns as $index)
+		{
+			$values[] = $record[$index];
+		}
+		fwrite($fp, $_SESSION['GO_SESSION']['text_separator'].implode($_SESSION['GO_SESSION']['text_separator'].$_SESSION['GO_SESSION']['list_separator'].$_SESSION['GO_SESSION']['text_separator'], $values).$_SESSION['GO_SESSION']['text_separator']."\r\n");
+	}
+
 }
 

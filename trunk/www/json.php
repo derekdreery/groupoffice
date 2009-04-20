@@ -25,6 +25,27 @@ $limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 try{
 	switch($_REQUEST['task'])
 	{
+		
+		case 'email_export_query': 
+		
+			$tmp_file = $GO_CONFIG->tmpdir.$_POST['query'].'.csv';
+			
+			$fp = fopen($tmp_file, 'w+');			
+			export_query($fp);
+			fclose($fp);
+
+			$response['data']['attachments'][] = array(
+					'tmp_name'=>$tmp_file,
+					'name'=>$_POST['query'].'.csv',
+					'size'=>filesize($tmp_file),
+					'type'=>File::get_filetype_description('csv')				
+			);
+			$response['success']=true;
+			
+			
+			
+		break;
+		
 		case 'link_descriptions':
 			if(isset($_POST['delete_keys']))
 			{
