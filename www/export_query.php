@@ -22,17 +22,24 @@ $first_record = $db->next_record();
 
 if($first_record)
 {
-	$headings = array();
-	foreach($first_record as $key=>$value)
-	{
-		$headings[]=$key;
-	}	
-	
-	echo $_SESSION['GO_SESSION']['text_separator'].implode($_SESSION['GO_SESSION']['text_separator'].$_SESSION['GO_SESSION']['list_separator'].$_SESSION['GO_SESSION']['text_separator'], $headings).$_SESSION['GO_SESSION']['text_separator']."\r\n";
-	echo $_SESSION['GO_SESSION']['text_separator'].implode($_SESSION['GO_SESSION']['text_separator'].$_SESSION['GO_SESSION']['list_separator'].$_SESSION['GO_SESSION']['text_separator'], $first_record).$_SESSION['GO_SESSION']['text_separator']."\r\n";
-	
 	while($record = $db->next_record())
 	{
+		if(!isset($first))
+		{
+			$headings = array();
+			foreach($record as $key=>$value)
+			{
+				$headings[]=$key;
+			}			
+			echo $_SESSION['GO_SESSION']['text_separator'].implode($_SESSION['GO_SESSION']['text_separator'].$_SESSION['GO_SESSION']['list_separator'].$_SESSION['GO_SESSION']['text_separator'], $headings).$_SESSION['GO_SESSION']['text_separator']."\r\n";
+			$first=true;	
+		}
+		
+		if(isset($record['user_id']))
+		{
+			$user = $GO_USERS->get_user($record['user_id']);
+			$record['user_id']=$user['username'];
+		}
 		echo $_SESSION['GO_SESSION']['text_separator'].implode($_SESSION['GO_SESSION']['text_separator'].$_SESSION['GO_SESSION']['list_separator'].$_SESSION['GO_SESSION']['text_separator'], $record).$_SESSION['GO_SESSION']['text_separator']."\r\n";
 	}
 }
