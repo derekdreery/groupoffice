@@ -4,6 +4,47 @@ GO.addressbook.CompaniesGrid = function(config){
 	{
 		config = {};
 	}
+	config.border=false;
+	config.paging=true;
+	
+	var fields ={
+		fields:['id', 'name', 'homepage', 'email', 'phone', 'fax'],
+		columns:[
+		  {
+		  	header: GO.lang['strName'], 
+		  	dataIndex: 'name'
+		  },
+		  {
+		  	header: GO.lang['strEmail'], 
+		  	dataIndex: 'email' , 
+		  	width: 150,
+		  	hidden:true
+		  },
+		  {
+		  	header: GO.lang['strHomepage'], 
+		  	dataIndex: 'homepage' , 
+		  	width: 100,
+		  	hidden:true
+		  },
+		  {
+		  	header: GO.lang['strPhone'], 
+		  	dataIndex: 'phone' , 
+		  	width: 100
+		  },
+		  {
+		  	header: GO.lang['strFax'], 
+		  	dataIndex: 'fax' , 
+		  	width: 100,
+		  	hidden:true
+		  }
+		]
+	};
+
+	
+	if(GO.customfields)
+	{
+		GO.customfields.addColumns(3, fields);
+	}
 	
 	config.store = new GO.data.JsonStore({
 	    url: GO.settings.modules.addressbook.url+ 'json.php',
@@ -11,42 +52,11 @@ GO.addressbook.CompaniesGrid = function(config){
 	    root: 'results',
 	    id: 'id',
 	    totalProperty:'total',
-	    fields: ['id', 'name', 'homepage', 'email', 'phone', 'fax'],
+	    fields: fields.fields,
 	    remoteSort: true
 	});
-	
-	config.border=false;
-	config.paging=true;
 
-	var companiesColumnModel =  new Ext.grid.ColumnModel([
-	  {
-	  	header: GO.lang['strName'], 
-	  	dataIndex: 'name'
-	  },
-	  {
-	  	header: GO.lang['strEmail'], 
-	  	dataIndex: 'email' , 
-	  	width: 150,
-	  	hidden:true
-	  },
-	  {
-	  	header: GO.lang['strHomepage'], 
-	  	dataIndex: 'homepage' , 
-	  	width: 100,
-	  	hidden:true
-	  },
-	  {
-	  	header: GO.lang['strPhone'], 
-	  	dataIndex: 'phone' , 
-	  	width: 100
-	  },
-	  {
-	  	header: GO.lang['strFax'], 
-	  	dataIndex: 'fax' , 
-	  	width: 100,
-	  	hidden:true
-	  }
-	]);
+	var companiesColumnModel =  new Ext.grid.ColumnModel(fields.columns);
 	companiesColumnModel.defaultSortable = true;
 	config.cm=companiesColumnModel;
 	
