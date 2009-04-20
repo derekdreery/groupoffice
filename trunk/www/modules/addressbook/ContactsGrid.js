@@ -11,7 +11,7 @@ GO.addressbook.ContactsGrid = function(config){
 	    root: 'results',
 	    id: 'id',
 	    totalProperty:'total',
-	    fields: ['id', 'name', 'company_name', 'email', 'home_phone', 'work_phone', 'cellular'],
+	    fields: ['id', 'name', 'company_name', 'email', 'home_phone', 'work_phone', 'work_fax','cellular','function','department'],
 	    remoteSort: true
 	});
 
@@ -54,6 +54,18 @@ GO.addressbook.ContactsGrid = function(config){
 	  {
 	  	header: GO.lang['strCellular'], 
 	  	dataIndex: 'cellular' , 
+	  	width: 100,
+	  	hidden:true
+	  },
+	  {
+	  	header: GO.lang['strFunction'], 
+	  	dataIndex: 'function' , 
+	  	width: 100,
+	  	hidden:true
+	  },
+	  {
+	  	header: GO.lang['strDepartment'], 
+	  	dataIndex: 'department', 
 	  	width: 100,
 	  	hidden:true
 	  }
