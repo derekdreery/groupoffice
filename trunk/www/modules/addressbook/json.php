@@ -137,22 +137,22 @@ try
 		
 		case 'search_sender':
 			
-			$email = ($_POST['email']);
+			$response['results']=array();
+			$response['total'] = $ab->get_contacts_by_email($_POST['email'], $GO_SECURITY->user_id);
 			
-			$contact = $ab->get_contact_by_email($email, $GO_SECURITY->user_id);
-			
-			if($contact)
+			$ab2 = new addressbook();
+			while($record=$ab->next_record())
 			{
-				$response['contact_id']=$contact['id'];
-			}else
-			{
-				$response['contact_id']=0;
+				$addressbook = $ab2->get_addressbook($record['addressbook_id']);
+				$contact['id']=$record['id'];
+				$contact['name']=String::format_name($record).' ('.$addressbook['name'].')';
+				
+				$response['results'][]=$contact;
 			}
-			$response['success']=true;
 			echo json_encode($response);
 			break;
 		
-		/* all-contacts */
+
 		case 'contacts':
 			
 			if(!isset($_POST['enable_mailings_filter']))
@@ -251,7 +251,6 @@ try
 			echo json_encode($response);
 			break;
 
-			/* all compagnies */
 		case 'companies':
 			
 			if(!isset($_POST['enable_mailings_filter']))
