@@ -22,6 +22,19 @@ GO.{module}.{friendly_multiple_ucfirst}Grid = function(config){
 	config.layout='fit';
 	config.autoScroll=true;
 	config.split=true;
+	
+	
+	var fields ={
+		fields:[{STOREFIELDS}],
+		columns:[{COLUMNS}]
+	};
+	
+	<gotpl if="$link_type &gt; 0">	if(GO.customfields)
+	{
+		GO.customfields.addColumns({link_type}, fields);
+	}</gotpl>
+	
+	
 	config.store = new GO.data.JsonStore({
 	    url: GO.settings.modules.{module}.url+ 'json.php',
 	    baseParams: {
@@ -32,16 +45,14 @@ GO.{module}.{friendly_multiple_ucfirst}Grid = function(config){
 	    root: 'results',
 	    id: 'id',
 	    totalProperty:'total',
-	    fields: [{STOREFIELDS}],
+	    fields: fields.fields,
 	    remoteSort: true
 	});
 
 	
 	<gotpl if="$paging">config.paging=true;</gotpl>
 
-	var columnModel =  new Ext.grid.ColumnModel([
-	   {COLUMNS}
-	]);
+	var columnModel =  new Ext.grid.ColumnModel(fields.columns);
 	columnModel.defaultSortable = true;
 	config.cm=columnModel;
 	
