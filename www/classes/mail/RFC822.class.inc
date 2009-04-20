@@ -56,6 +56,15 @@ class RFC822
 	var $quote = false;
 	
 	/**
+	* Bool to check if we already processed an e-mail address
+	*
+	* @var     bool
+	* @access  private
+	*/
+	var $in_email = false;
+	
+	
+	/**
 	* Parses an RFC822 formatted string 
 	* (eg. "Merijn Schering" <mschering@intermesh.nl>)
 	*
