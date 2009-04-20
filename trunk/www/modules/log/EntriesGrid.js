@@ -64,7 +64,15 @@ GO.log.EntriesGrid = function(config) {
 			width : 320
 		});
 		
-	config.tbar=[GO.lang['strSearch'] + ':', this.searchField];
+	config.tbar=[GO.lang['strSearch'] + ':', this.searchField,'-',{
+			iconCls: 'btn-export', 
+			text: GO.lang.cmdExport, 
+			cls: 'x-btn-text-icon', 
+			handler:function(){				
+				document.location.href=BaseHref+'export_query.php?query=log';
+			},  
+			scope: this		
+		}];
 			
 	GO.log.EntriesGrid.superclass.constructor.call(this, config);
 };

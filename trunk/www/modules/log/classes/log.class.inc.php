@@ -52,6 +52,9 @@ class log extends db {
  			$params[]=$query;
  		} 		
 		$sql .= " ORDER BY ".$this->escape($sortfield.' '.$sortorder);	
+		
+		$_SESSION['GO_SESSION']['export_queries']['log']=$sql;
+		
 		if($offset>0)
 		{
 			$sql .= " LIMIT ".intval($start).",".intval($offset);
