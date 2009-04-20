@@ -244,7 +244,8 @@ try
 			while($ab->next_record())
 			{
 				$ab->record['name'] = String::format_name($ab->f('last_name'), $ab->f('first_name'), $ab->f('middle_name'));
-
+				$ab->record['ctime']=Date::get_timestamp($ab->record['ctime']);
+				$ab->record['mtime']=Date::get_timestamp($ab->record['mtime']);
 				$response['results'][] = $ab->record;
 			}
 
@@ -339,6 +340,8 @@ try
 
 			while($ab->next_record())
 			{
+				$ab->record['ctime']=Date::get_timestamp($ab->record['ctime']);
+				$ab->record['mtime']=Date::get_timestamp($ab->record['mtime']);
 				$response['results'][] = $ab->record;
 			}
 
