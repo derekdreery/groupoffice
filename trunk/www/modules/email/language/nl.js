@@ -127,3 +127,5 @@ GO.email.lang.htmlMarkup = 'Gebruik HTML opmaak';
 GO.email.lang.confirmLostChanges = 'Uw wijzigingen gaan verloren. Weet u het zeker?';
 
 GO.email.lang.manageAliases='Beheer afzendaliassen';
+
+GO.email.lang.addSendersTo='Voeg afzenders toe aan...';

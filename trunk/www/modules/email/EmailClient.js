@@ -30,7 +30,7 @@ GO.email.EmailClient = function(config){
 		root: 'results',
 		totalProperty: 'total',
 		id: 'uid',
-		fields:['uid','icon','flagged','attachments','new','subject','from','size','date', 'priority','answered'],
+		fields:['uid','icon','flagged','attachments','new','subject','from','sender','size','date', 'priority','answered'],
 		remoteSort: true
 	});
 	
@@ -164,7 +164,32 @@ GO.email.EmailClient = function(config){
 			handler: this.deleteMessages,
 			scope: this,
 			multiple:true
+		},'-',{
+			iconCls: 'btn-add',
+			text: GO.email.lang.addSendersTo,
+			cls: 'x-btn-text-icon',
+			menu: {
+				items:[{
+					text:GO.email.lang.to,
+					field:'to',
+					handler:this.addSendersTo,
+					scope:this
+				},{
+					text:'CC',
+					field:'cc',
+					handler:this.addSendersTo,
+					scope:this
+				},{
+					text:'BCC',
+					field:'bcc',
+					handler:this.addSendersTo,
+					scope:this
+				}]
+			},
+			multiple:true			
 		}];
+		
+		
 	
 	if(GO.email.saveAsItems && GO.email.saveAsItems.length)
 	{
@@ -198,9 +223,6 @@ GO.email.EmailClient = function(config){
 		items: contextItems
 	});
 
-
-	
-
 	this.treePanel = new GO.email.AccountsTree({
 		id:'email-tree-panel',
 		region:'west'
@@ -212,10 +234,6 @@ GO.email.EmailClient = function(config){
 		draggable:false
 	});
 	this.treePanel.setRootNode(root);
-	
-	
-	
-	
 	
 	this.treeContextMenu = new Ext.menu.Menu({		
 		
@@ -808,8 +826,6 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	},
 	
 	afterRender : function(){
-		
-		
 		GO.email.EmailClient.superclass.afterRender.call(this);		
 		
 		this.body.mask(GO.lang.waitMsgLoad);
@@ -930,9 +946,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
   	}else
   	{	
 			switch(attachment.extension)
-			{				
-				
-				
+			{		
 				case 'dat':
 					document.location.href=GO.settings.modules.email.url+
 						'tnef.php?account_id='+this.account_id+
@@ -1342,6 +1356,47 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 			});
 		
 		}
+	},
+	
+	addSendersTo : function(menuItem){
+		var records = this.messagesGrid.getSelectionModel().getSelections();
+		
+		var emails=[];
+		for(var i=0;i<records.length;i++)
+		{
+			emails.push('"'+records[i].get('from')+'" <'+records[i].get('sender')+'>');
+		}
+		
+		var activeComposer=false;
+		if(GO.email.composers)
+		{
+			for(var i=GO.email.composers.length-1;i>=0;i--)
+			{
+				if(GO.email.composers[i].isVisible())
+				{
+					activeComposer=GO.email.composers[i];
+					break;
+				}
+			}
+		}
+		
+		if(activeComposer)
+		{
+			var f = activeComposer.formPanel.form.findField(menuItem.field);
+			var v = f.getValue();
+			if(v!='')
+			{
+				v+=', ';
+			}
+			v+=emails.join(', ');
+			f.setValue(v);
+			activeComposer.focus();
+		}else
+		{
+			var config={values:{}}		
+			config.values[menuItem.field]=emails.join(', ');		
+			GO.email.showComposer(config);
+		}
 	}
 	
 });
@@ -1368,6 +1423,8 @@ GO.email.aliasesStore = new GO.data.JsonStore({
 	});
 
 
+
+	
 /**
  * Function that will open an email composer. If a composer is already open it will create a new one. Otherwise it will reuse an already created one.
  */
@@ -1422,6 +1479,7 @@ GO.email.showComposer = function(config){
 	
 	availableComposer.show(config);
 	
+	return availableComposer;	
 }
 
 

@@ -1106,6 +1106,8 @@ try{
 									{
 										$message['from']=$address[0]['email'];
 									}
+									
+									$message['sender'] = empty($address[0]) ? '' : $address[0]['email'];
 
 									$message['from']=htmlspecialchars($message['from'], ENT_QUOTES, 'UTF-8');
 									$message['subject']=htmlspecialchars($message['subject'], ENT_QUOTES, 'UTF-8');
