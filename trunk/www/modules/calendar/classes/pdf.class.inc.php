@@ -256,7 +256,7 @@ class PDF extends TCPDF
 					$weekCounter=0;
 					$this->daysDone+=$maxCells;
 
-					//miniumum cell height
+					//minimum cell height
 					$cellHeight = $maxY-$cellStartY;
 					if($cellHeight<$minHeight)
 						$cellHeight=$minHeight;
