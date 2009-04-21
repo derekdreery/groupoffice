@@ -535,6 +535,22 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 					});
 		}
 	},
+	
+	showCC : function(show){
+		this.ccCombo.getEl().up('.x-form-item').setDisplayed(show);
+		if(show)
+		{
+			this.ccCombo.onResize();
+		}
+	},
+	
+	showBCC : function(show){
+		this.bccCombo.getEl().up('.x-form-item').setDisplayed(show);
+		if(show)
+		{
+			this.bccCombo.onResize();
+		}
+	},
 
 	show : function(config) {
 		
@@ -551,8 +567,8 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 
 							this.render(Ext.getBody());
 							
-							this.ccCombo.getEl().up('.x-form-item').setDisplayed(false);
-							this.bccCombo.getEl().up('.x-form-item').setDisplayed(false);
+							this.showCC(false);
+							this.showBCC(false);
 
 							this.show(config);
 							return;
@@ -641,8 +657,8 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 				this.toComboVisible = false;
 				this.showMenuButton.setDisabled(true);
 				this.toCombo.getEl().up('.x-form-item').setDisplayed(false);
-				this.ccCombo.getEl().up('.x-form-item').setDisplayed(false);
-				this.bccCombo.getEl().up('.x-form-item').setDisplayed(false);
+				this.showCC(false);
+				this.showBCC(false);
 
 				this.sendParams.mailing_group_id = config.mailing_group_id;
 
@@ -1121,11 +1137,11 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 				break;
 
 			case this.ccFieldCheck.id :
-				this.ccCombo.getEl().up('.x-form-item').setDisplayed(checked);
+				this.showCC(checked);
 				break;
 
 			case this.bccFieldCheck.id :
-				this.bccCombo.getEl().up('.x-form-item').setDisplayed(checked);
+				this.showBCC.setDisplayed(checked);
 				break;
 		}
 		this.setEditorHeight();
