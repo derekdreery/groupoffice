@@ -49,7 +49,7 @@ function connect($account_id, $mailbox='INBOX', $halt_on_error=true)
 
 }
 
-function load_template($template_id, $to, $keep_tags=false)
+function load_template($template_id, $to='', $keep_tags=false)
 {
 	global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE, $GO_SECURITY, $GO_USERS;
 

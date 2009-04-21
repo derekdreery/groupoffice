@@ -960,19 +960,12 @@ try{
 							{
 								$attachment['tmp_file']=$tmp_file;
 							}
-						}
-						
+						}					
 						
 						$response['attachments'][]=$attachment;
-						$index++;
-						
-						
-					}
-
-					
-				}
-				
-				
+						$index++;						
+					}				
+				}			
 				
 				break;
 
