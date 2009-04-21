@@ -82,6 +82,9 @@ class export_query extends TCPDF
 			$this->SetFont($this->font,'',$this->font_size);
 			$this->Ln(20);			
 			$this->MultiCell($this->getPageWidth(), 12, $_REQUEST['text']);
+		}else
+		{
+			$this->Ln();
 		}
 		
 		$this->SetTopMargin($this->getY()+10);

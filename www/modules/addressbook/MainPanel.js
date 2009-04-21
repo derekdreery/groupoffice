@@ -250,17 +250,37 @@ GO.addressbook.MainPanel = function(config)
 			cls: 'x-btn-text-icon', 
 			handler:function(){
 				var activetab = this.tabPanel.getActiveTab();
-				var export_query;
+				var config = {};
 				switch(activetab.id)
 				{
 					case 'ab-contacts-grid':
-						export_query='search_contacts';
+						config.query='search_contacts';
+						config.colModel = this.contactsGrid.getColumnModel();
+						
 					break;
 					case 'ab-company-grid':					
-						export_query='search_companies';
+						config.query='search_companies';
+						config.colModel = this.companiesGrid.getColumnModel();
 					break;				
 				}	
-				document.location.href=BaseHref+'export_query.php?query='+export_query;
+				
+				
+				config.title = activetab.title;
+				var query = this.searchPanel.queryField.getValue();
+				if(!GO.util.empty(query))
+				{
+					config.subtitle= GO.lang.searchQuery+': '+query;
+				}else
+				{
+					config.subtile='';
+				}
+				
+				if(!this.exportDialog)
+				{
+					this.exportDialog = new GO.ExportQueryDialog();
+				}			
+				this.exportDialog.show(config);
+
 			},  
 			scope: this		
 		}

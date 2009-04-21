@@ -21,7 +21,7 @@ try{
 	{
 		case 'entries':		
 
-			$GO_LANGUAGE->get_all();
+			
 			
 			$sort = isset($_REQUEST['sort']) ? $_REQUEST['sort'] : 'id';
 			$dir = isset($_REQUEST['dir']) ? $_REQUEST['dir'] : 'DESC';
@@ -34,10 +34,7 @@ try{
 			$response['results']=array();
 			while($entry = $log->next_record())
 			{
-				$user = $GO_USERS->get_user($entry['user_id']);
-				$entry['user_name']=String::format_name($user);
-				$entry['time']=Date::get_timestamp($entry['time']);
-				$entry['link_type']=$lang['link_type'][$entry['link_type']];
+				log::format_log_entry($entry);
 				$response['results'][] = $entry;
 			}
 			$response['total'] = $log->found_rows();

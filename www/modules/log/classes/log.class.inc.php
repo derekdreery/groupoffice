@@ -20,7 +20,7 @@ class log extends db {
 	public static function login()
 	{
 		$log = new log();
-		$sql = "DELETE FROM go_log WHERE time<".Date::date_add(time(),0,-3);
+		$sql = "DELETE FROM go_log WHERE time<".Date::date_add(time(),0,-1);
 		$log->query($sql);	
 	}
 	
@@ -53,12 +53,32 @@ class log extends db {
  		} 		
 		$sql .= " ORDER BY ".$this->escape($sortfield.' '.$sortorder);	
 		
-		$_SESSION['GO_SESSION']['export_queries']['log']=$sql;
+		$_SESSION['GO_SESSION']['export_queries']['log']=array(
+			'query'=>$sql,
+			'method'=>'format_log_entry',
+			'class'=>'log',
+			'require'=>__FILE__);
 		
 		if($offset>0)
 		{
 			$sql .= " LIMIT ".intval($start).",".intval($offset);
 		}
 		return $this->query($sql, $types, $params);
+	}
+	
+	function format_log_entry(&$entry)
+	{
+		global $lang, $GO_USERS;
+		
+		if(!isset($lang['link_type']))
+		{
+			global $GO_LANGUAGE;
+			$GO_LANGUAGE->get_all();
+		}
+		
+		$user = $GO_USERS->get_user($entry['user_id']);
+		$entry['user_name']=String::format_name($user);
+		$entry['time']=Date::get_timestamp($entry['time']);
+		$entry['link_type']=$lang['link_type'][$entry['link_type']];
 	}
 }
