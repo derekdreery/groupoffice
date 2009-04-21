@@ -18,6 +18,8 @@ GO.lang = {};
 /**
  * Copy everything below for translations
  */
+
+GO.lang.searchQuery='search query';
 GO.lang.pleaseApplyFirst='Please save first by clicking \'Apply\'';
 GO.lang.passwordMatchError='The passwords didn\'t match';
 GO.lang.serverError='An error occurred on the webserver. Contact your system administrator and supply the detailed error.';

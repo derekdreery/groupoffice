@@ -17,6 +17,8 @@ http://www.group-office.com
 Group-Office is created by Intermesh. For more information about Intermesh visit:
 http://www.intermesh.nl/en/';
 
+$lang['common']['printPage']='Page %s of %s';
+
 $lang['common']['htmldirection']= 'ltr';
 
 $lang['common']['quotaExceeded']='You don\'t have anymore diskspace left. Please delete some files or contact your provider to raise the quota';

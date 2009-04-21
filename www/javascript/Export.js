@@ -16,6 +16,8 @@ GO.exportQueryDialog = Ext.extend(Ext.Window, {
 						text : GO.lang.strEmail,
 						handler : function() {
 							this.hide();
+
+							this.beforeRequest();
 							GO.email.showComposer({
 										loadUrl : BaseHref + 'json.php',
 										loadParams : this.loadParams
@@ -25,19 +27,20 @@ GO.exportQueryDialog = Ext.extend(Ext.Window, {
 					}, {
 						text : GO.lang.download,
 						handler : function() {
-							var downloadUrl='';
+
+							this.beforeRequest();
+
+							var downloadUrl = '';
 							for (var name in this.loadParams) {
-								
-								if(downloadUrl=='')
-								{
-									downloadUrl = BaseHref + 'export_query.php?';
-								}else
-								{
+
+								if (downloadUrl == '') {
+									downloadUrl = BaseHref
+											+ 'export_query.php?';
+								} else {
 									downloadUrl += '&';
 								}
-								
-								downloadUrl +=
-										name
+
+								downloadUrl += name
 										+ '='
 										+ encodeURIComponent(this.loadParams[name]);
 							}
@@ -84,6 +87,9 @@ GO.exportQueryDialog = Ext.extend(Ext.Window, {
 
 		Ext.apply(this, config);
 
+	},
+
+	beforeRequest : function() {
 		var columns = [];
 
 		if (this.colModel) {
@@ -94,16 +100,25 @@ GO.exportQueryDialog = Ext.extend(Ext.Window, {
 			}
 		}
 
-		console.log(config);
+		if (GO.util.empty(this.title))
+			this.title = this.query
 
 		this.loadParams = {
 			task : 'email_export_query',
 			query : this.query,
-			columns : columns.join(',')
+			columns : columns.join(','),
+			title : this.title
 		};
+
+		if (this.subtitle) {
+			this.loadParams.subtitle = this.subtitle;
+		}
+
+		if (this.text) {
+			this.loadParams.text = this.text;
+		}
 
 		var values = this.formPanel.form.getValues();
 		Ext.apply(this.loadParams, values);
 	}
-
 });
