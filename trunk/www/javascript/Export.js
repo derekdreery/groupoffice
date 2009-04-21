@@ -1,4 +1,4 @@
-GO.exportQueryDialog = Ext.extend(Ext.Window, {
+GO.ExportQueryDialog = Ext.extend(Ext.Window, {
 
 	initComponent : function() {
 		Ext.apply(this, {
@@ -57,7 +57,7 @@ GO.exportQueryDialog = Ext.extend(Ext.Window, {
 					}]
 		});
 
-		GO.exportQueryDialog.superclass.initComponent.call(this);
+		GO.ExportQueryDialog.superclass.initComponent.call(this);
 	},
 
 	loadParams : {},
@@ -81,7 +81,7 @@ GO.exportQueryDialog = Ext.extend(Ext.Window, {
 
 	show : function(config) {
 
-		GO.exportQueryDialog.superclass.show.call(this);
+		GO.ExportQueryDialog.superclass.show.call(this);
 
 		var config = config || {};
 

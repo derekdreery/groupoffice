@@ -69,7 +69,25 @@ GO.log.EntriesGrid = function(config) {
 			text: GO.lang.cmdExport, 
 			cls: 'x-btn-text-icon', 
 			handler:function(){				
-				document.location.href=BaseHref+'export_query.php?query=log';
+				var config = {};			
+				config.query='log';
+				config.colModel = this.getColumnModel();				
+				config.title = this.ownerCt.title;
+				
+				var query = this.searchField.getValue();
+				if(!GO.util.empty(query))
+				{
+					config.subtitle= GO.lang.searchQuery+': '+query;
+				}else
+				{
+					config.subtile='';
+				}
+				
+				if(!this.exportDialog)
+				{
+					this.exportDialog = new GO.ExportQueryDialog();
+				}			
+				this.exportDialog.show(config);
 			},  
 			scope: this		
 		}];

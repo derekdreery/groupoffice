@@ -603,7 +603,13 @@ class addressbook extends db {
 
 		$sql .= " ORDER BY $sort_index $sort_order";
 		
-		$_SESSION['GO_SESSION']['export_queries']['search_contacts']=$sql;
+		
+		$_SESSION['GO_SESSION']['export_queries']['search_contacts']=array(
+			'query'=>$sql,
+			'method'=>'format_contact_record',
+			'class'=>'addressbook',
+			'require'=>__FILE__);
+		
 
 		$this->query($sql);
 		$count = $this->num_rows();
@@ -616,6 +622,18 @@ class addressbook extends db {
 
 		//debug($sql);
 		return $count;
+	}
+	
+	function format_contact_record(&$record){
+		$record['name'] = String::format_name($record['last_name'], $record['first_name'], $record['middle_name']);
+		$record['ctime']=Date::get_timestamp($record['ctime']);
+		$record['mtime']=Date::get_timestamp($record['mtime']);		
+	}
+	
+	
+	function format_company_record(&$record){
+		$record['ctime']=Date::get_timestamp($record['ctime']);
+		$record['mtime']=Date::get_timestamp($record['mtime']);		
 	}
 
 	function search_companies($user_id, $query, $field = 'name', $addressbook_id = 0, $start=0, $offset=0, $require_email=false, $sort_index='name', $sort_order='ASC', $query_type='LIKE', $mailings_filter=array(), $advanced_query='') {
@@ -716,8 +734,12 @@ class addressbook extends db {
 		{
 			$sql .= $advanced_query;
 		}
-		
-		$_SESSION['GO_SESSION']['export_queries']['search_companies']=$sql;
+				
+		$_SESSION['GO_SESSION']['export_queries']['search_companies']=array(
+			'query'=>$sql,
+			'method'=>'format_company_record',
+			'class'=>'addressbook',
+			'require'=>__FILE__);
 
 		$sql .= " ORDER BY $sort_index $sort_order";
 
