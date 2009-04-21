@@ -7,6 +7,10 @@ class export_query extends TCPDF
 {
 	var $db;
 
+	var $q;
+
+	var $totals;
+
 	var $font = 'helvetica';
 	var $pageWidth;
 
@@ -60,7 +64,7 @@ class export_query extends TCPDF
 		$this->SetTextColor(50,135,172);
 		$this->SetFont($this->font,'B',16);
 		$this->Write(16, $_REQUEST['title']);
-		
+
 		if(!empty($_REQUEST['subtitle']))
 		{
 			$this->SetTextColor(125,162,180);
@@ -76,19 +80,19 @@ class export_query extends TCPDF
 		$this->setDefaultTextColor();
 			
 		$this->Cell($this->getPageWidth()-$this->getX()-$this->rMargin,12,Date::get_timestamp(time()),0,0,'R');
-		
+
 		if(!empty($_REQUEST['text']))
 		{
 			$this->SetFont($this->font,'',$this->font_size);
-			$this->Ln(20);			
+			$this->Ln(20);
 			$this->MultiCell($this->getPageWidth(), 12, $_REQUEST['text']);
 		}else
 		{
 			$this->Ln();
 		}
-		
+
 		$this->SetTopMargin($this->getY()+10);
-		
+
 	}
 
 	function calcMultiCellHeight($w, $h, $text)
@@ -159,6 +163,22 @@ class export_query extends TCPDF
 
 		if(is_array($this->q))
 		{
+			if(!empty($this->q['require']))
+			{
+				require_once($this->q['require']);
+			}
+
+			$this->totals=array();
+			if(isset($this->q['totalize_columns']))
+			{
+				foreach($this->q['totalize_columns'] as $column){
+					$this->totals[$column]=0;
+				}
+			}else
+			{
+				unset($this->totals);
+			}
+
 			$extra_sql=array();
 			$sql = $this->q['query'];
 			if(isset($this->q['extra_params']))
@@ -201,7 +221,6 @@ class export_query extends TCPDF
 			$sql = $this->q;
 
 			$params=array();
-
 		}
 
 		$this->db->query($sql,$types,$params);
@@ -257,11 +276,12 @@ class export_query extends TCPDF
 		{
 			$this->Cell($this->cellWidth, 20, $headers[$i], 1,0,'L', 1);
 		}
+		$this->Ln();
 	}
 
 	function export_to_pdf($fp){
-		global $GO_USERS;
-		
+		global $GO_USERS, $lang;
+
 		$this->query();
 
 		$this->AddPage();
@@ -291,6 +311,11 @@ class export_query extends TCPDF
 
 		while($record = $this->db->next_record())
 		{
+			foreach($this->totals as $field=>$value)
+			{
+				$this->totals[$field]+=$record[$field];
+			}
+
 			if(!count($columns))
 			{
 				foreach($record as $key=>$value)
@@ -301,12 +326,8 @@ class export_query extends TCPDF
 				$this->print_column_headers($headers);
 			}
 
-			if(is_array($this->q))
+			if(is_array($this->q) && isset($this->q['method']))
 			{
-				if(!empty($this->q['require']))
-				{
-					require_once($this->q['require']);
-				}
 				call_user_func_array(array($this->q['class'], $this->q['method']),array(&$record));
 			}
 
@@ -316,21 +337,43 @@ class export_query extends TCPDF
 				$record['user_id']=$user['username'];
 			}
 
+			$lines=1;
+			foreach($columns as $index)
+			{
+				$new_lines = $this->getNumLines($record[$index],$this->cellWidth);
+				if($new_lines>$lines)
+				{
+					$lines = $new_lines;
+				}
+			}	
+			
+			foreach($columns as $index)
+			{
+				$this->MultiCell($this->cellWidth,$lines*($this->font_size+8), $record[$index],1,'L',0,0);				
+			}
+			$this->Ln();
+		}
+
+
+		if(count($this->totals))
+		{
+			$this->Ln();
+			$this->Cell($this->getPageWidth(),20,$lang['common']['totals'].':');
 			$this->Ln();
 			foreach($columns as $index)
 			{
-				$this->Cell($this->cellWidth, 20, $record[$index], 1,0,'L');			
-			}			
-			
+				$value = isset($this->totals[$index]) ? Number::format($this->totals[$index]) : '';
+				$this->Cell($this->cellWidth, 20, $value, 'T',0,'L');
+			}
 		}
-		
+
 		fwrite($fp, $this->Output('export.pdf', 'S'));
 	}
 
 	function export_to_csv($fp){
 
-		global $GO_USERS;
-		
+		global $GO_USERS, $lang;
+
 		$this->query();
 
 		$columns=array();
@@ -351,6 +394,8 @@ class export_query extends TCPDF
 		}
 
 
+
+
 		while($record = $this->db->next_record())
 		{
 			if(!count($columns))
@@ -366,12 +411,8 @@ class export_query extends TCPDF
 
 			}
 
-			if(is_array($this->q))
+			if(is_array($this->q) && isset($this->q['method']))
 			{
-				if(!empty($this->q['require']))
-				{
-					require_once($this->q['require']);
-				}
 				call_user_func_array(array($this->q['class'], $this->q['method']),array(&$record));
 			}
 
