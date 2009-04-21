@@ -345,11 +345,17 @@ class export_query extends TCPDF
 				{
 					$lines = $new_lines;
 				}
-			}	
+			}
+			
+			if($lines*($this->font_size+2)+8+$this->getY()>$this->h-$this->bMargin)
+			{
+				$this->AddPage();
+				$this->print_column_headers($headers);
+			}
 			
 			foreach($columns as $index)
 			{
-				$this->MultiCell($this->cellWidth,$lines*($this->font_size+8), $record[$index],1,'L',0,0);				
+				$this->MultiCell($this->cellWidth,$lines*($this->font_size+2)+8, $record[$index],1,'L',0,0);				
 			}
 			$this->Ln();
 		}
