@@ -52,7 +52,7 @@ class export_query extends TCPDF
 		$this->SetY(-20);
 		$pW=$this->getPageWidth();
 		$this->Cell($pW/2, 10, 'Group-Office '.$GO_CONFIG->version, 0, 0, 'L');
-		$this->Cell($pW/2, 10, sprintf($lang['common']['printPage'], $this->getAliasNumPage(), $this->getAliasNbPages()), 0, 0, 'R');
+		$this->Cell(($pW/2)-$this->rMargin, 10, sprintf($lang['common']['printPage'], $this->getAliasNumPage(), $this->getAliasNbPages()), 0, 0, 'R');
 	}
 
 	function Header(){
