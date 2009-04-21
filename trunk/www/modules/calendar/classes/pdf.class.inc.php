@@ -40,7 +40,7 @@ class PDF extends TCPDF
 		$this->setDefaultTextColor();
 		$this->SetFont($this->font,'',$this->font_size);
 		$this->SetY(-20);
-		$pW=$this->getPageWidth()-$this->lMargin-$this->rMargin;
+		$pW=$this->getPageWidth();
 		$this->Cell($pW/2, 10, 'Group-Office '.$GO_CONFIG->version, 0, 0, 'L');
 		$this->Cell($pW/2, 10, sprintf($lang['calendar']['printPage'], $this->getAliasNumPage(), $this->getAliasNbPages()), 0, 0, 'R');
 	}

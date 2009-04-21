@@ -27,18 +27,21 @@ try{
 	{
 		
 		case 'email_export_query': 
+			
+			require_once($GO_CONFIG->class_path.'export_query.class.inc.php');
+			$eq = new export_query();
 		
-			$tmp_file = $GO_CONFIG->tmpdir.$_POST['query'].'.csv';
+			$tmp_file = $GO_CONFIG->tmpdir.File::strip_invalid_chars($_POST['title']).'.'.strtolower($_POST['type']);
 			
 			$fp = fopen($tmp_file, 'w+');			
-			export_query($fp);
+			$eq->export($fp);
 			fclose($fp);
 
 			$response['data']['attachments'][] = array(
 					'tmp_name'=>$tmp_file,
-					'name'=>$_POST['query'].'.csv',
+					'name'=>utf8_basename($tmp_file),
 					'size'=>filesize($tmp_file),
-					'type'=>File::get_filetype_description('csv')				
+					'type'=>File::get_filetype_description(strtolower($_POST['type']))				
 			);
 			$response['success']=true;
 			

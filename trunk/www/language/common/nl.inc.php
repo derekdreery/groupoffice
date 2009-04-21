@@ -17,6 +17,8 @@ http://www.group-office.com
 Group-Office is gemaakt door Intermesh. Voor meer informatie over Intermesh ga naar:
 http://www.intermesh.nl/';
 
+$lang['common']['printPage']='Pagina %s van %s';
+
 $lang['common']['htmldirection']='ltr';
 
 $lang['common']['quotaExceeded']='U heeft geen schijfruimte meer over. Verwijder bestanden of neem contact op met uw provider om het limiet te verhogen.';
