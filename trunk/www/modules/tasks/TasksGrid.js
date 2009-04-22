@@ -29,7 +29,13 @@ GO.tasks.TasksPanel = function(config)
   	this.store.baseParams['completed_task_id']=record.data.id;
   	this.store.baseParams['checked']=checked;
   	
-  	this.store.reload();
+  	//dirty, but it works for updating all the grids
+  	this.store.reload({
+  		callback:function(){
+  			GO.tasks.taskDialog.fireEvent('save', GO.tasks.taskDialog, record.data.id);
+  		},
+  		scope:this
+  	});
   	
   	delete this.store.baseParams['completed_task_id'];
   	delete this.store.baseParams['checked'];
@@ -230,6 +236,9 @@ Ext.extend(GO.tasks.TasksPanel, GO.grid.GridPanel, {
 									alert(reponseParams.feedback);
 								}else
 								{
+									//dirty, but it works for updating other grids like on the summary
+									GO.tasks.taskDialog.fireEvent('save', GO.tasks.taskDialog, reponseParams.task_id);
+									
 									this.store.reload();
 								}
 								
