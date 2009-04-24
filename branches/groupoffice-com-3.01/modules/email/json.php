@@ -956,7 +956,7 @@ try{
 
 						$url = $GO_MODULES->modules['email']['url']."attachment.php?account_id=".$account['id']."&mailbox=".urlencode($mailbox)."&amp;uid=".$uid."&amp;part=".$attachments[$i]["number"]."&amp;transfer=".$attachments[$i]["transfer"]."&amp;mime=".$attachments[$i]["mime"]."&amp;filename=".urlencode($attachments[$i]["name"]);
 						
-						if(preg_match('/'.preg_quote($id).'/', $response['body']))
+						if(strpos($response['body'], $id))
 						{
 							$response['body'] = str_replace($id, $url, $response['body']);
 						}else
