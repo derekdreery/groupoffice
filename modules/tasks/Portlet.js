@@ -30,7 +30,13 @@ GO.tasks.SimpleTasksPanel = function(config)
   	this.store.baseParams['completed_task_id']=record.data.id;
   	this.store.baseParams['checked']=checked;
   	
-  	this.store.reload();
+  	//dirty, but it works for updating all the grids
+  	this.store.reload({
+  		callback:function(){
+  			GO.tasks.taskDialog.fireEvent('save', GO.tasks.taskDialog, record.data.id);
+  		},
+  		scope:this
+  	});
   	
   	delete this.store.baseParams['completed_task_id'];
   	delete this.store.baseParams['checked'];
@@ -82,21 +88,14 @@ Ext.extend(GO.tasks.SimpleTasksPanel, GO.grid.GridPanel, {
 	afterRender : function()
 	{
 		GO.tasks.SimpleTasksPanel.superclass.afterRender.call(this);
+		
+		GO.tasks.taskDialog.on('save', function(){
+					this.store.reload();
+				}, this);
     
-    this.on("rowdblclick", function(grid, rowClicked, e){
-	    	if(!GO.tasks.taskDialog)
-				{
-					GO.tasks.taskDialog = new GO.tasks.TaskDialog();		
-				}
-				if(!this.saveListenerAdded)
-				{
-					this.saveListenerAdded=true;
-					GO.tasks.taskDialog.on('save', function(){
-						this.store.reload();
-					}, this);
-				}
+    this.on("rowdblclick", function(grid, rowClicked, e){	    
 				GO.tasks.taskDialog.show({ task_id: grid.selModel.selections.keys[0]});
-			}, this);		  
+			}, this);
 			
 		Ext.TaskMgr.start({
 		    run: this.store.load,
