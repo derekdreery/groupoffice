@@ -59,7 +59,7 @@ GO.email.EmailComposer = function(config) {
 							checked:GO.email.useHtmlMarkup,
 							listeners : {				
 								 checkchange: function(check, checked) {
-									
+								 	
 									if(this.bodyContentAtWindowOpen==this.editor.getValue() || confirm(GO.email.lang.confirmLostChanges))
 									{
 										this.setContentTypeHtml(checked);									
@@ -288,9 +288,13 @@ GO.email.EmailComposer = function(config) {
 				defaultType : 'textfield',
 				items : items
 			});
-			
-	this.htmlEditor.on('change', function(){this.changesMadeForAutoSave=true}, this);
 
+	//the html markup from a signature changes when the editor is initialized. The initialize event fires too soon.
+	//The first push event does the trick of changing the html.
+	this.htmlEditor.on('push', function(){
+		this.bodyContentAtWindowOpen=this.htmlEditor.getValue();		
+	}, this, {single:true});
+		
 
 	// store for attachments needs to be created here because a forward action
 	// might attachments
@@ -743,9 +747,8 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 		
 		if(addSignature)
 		{
-			this.addSignature();
-		}
-		this.bodyContentAtWindowOpen=this.editor.getValue();	
+			this.addSignature();	
+		}			
 		
 		if(this.formPanel.baseParams.content_type=='plain')
 		{
@@ -758,15 +761,10 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 		} else {
 			this.editor.focus();
 		}
-		
-		if(this.formPanel.baseParams.content_type=='html' && !this.editor.activated)
-		{
-			//this.editor.updateToolbar();
-		}
-		
-		this.setEditorHeight();
-		
-		this.startAutoSave();
+
+		this.setEditorHeight();		
+		this.startAutoSave();		
+		this.bodyContentAtWindowOpen=this.editor.getValue();
 	},
 	
 	addSignature : function(accountRecord){
@@ -1020,18 +1018,13 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 	},
 
 	sendMail : function(draft, autoSave) {
-		
-		
-		
 
 		if (this.uploadDialog && this.uploadDialog.isVisible()) {
 			alert(GO.email.lang.closeUploadDialog);
 			this.attachmentsDialog.show();
 			this.uploadDialog.show();
 			return false;
-		}
-		
-		
+		}		
 
 		if (autoSave || this.subjectField.getValue() != ''
 				|| confirm(GO.email.lang.confirmEmptySubject)) {
@@ -1047,8 +1040,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 				for(var i=0;i<records.length;i++)
 				{
 					attachments.push(Ext.util.Format.htmlDecode(records[i].get('tmp_name')));
-				}
-				
+				}			
 				
 				this.sendParams['attachments'] = Ext.encode(attachments);
 			}
@@ -1175,14 +1167,11 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 				}
 				height += el.getHeight()+el.getMargins('tb');
 			}
-		}
-		
+		}		
 		height+=4;
 		
 		var newAnchor = "100% -"+height;
-		
-		//console.log(newAnchor);
-		
+
 		//reset anchor and delete cached anchorSpec
 		this.htmlEditor.anchor=newAnchor;
 		delete this.htmlEditor.anchorSpec;

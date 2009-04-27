@@ -20,6 +20,7 @@
 		this.text=GO.lang.cmdNew;
 		this.iconCls='btn-add';			
 		this.disabled=true;
+		this.hidden=GO.newMenuItems.length==0;
 			
 		GO.NewMenuButton.superclass.initComponent.call(this);		
 	},
