@@ -535,3 +535,5 @@ GO.lang.countries["SA"] = "Saudi Arabia";
 
 GO.lang.on ='On';
 GO.lang.off ='Off';
+
+GO.lang.keyword='Keyword';

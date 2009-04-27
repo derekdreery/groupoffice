@@ -2,10 +2,10 @@
 require('../../www/Group-Office.php');
 
 //name of the module. No spaces or strange characters.
-$module = 'email';
+$module = 'tenders';
 
 //Short name of the module. The prefix of the database tables.
-$prefix = 'em';
+$prefix = 'te';
 
 $tables=array();
 //Tables to create an interface for
@@ -14,9 +14,9 @@ $tables=array();
 $westpanel = array(
 	'mainpanel_tag'=> 'GRID',
 	'template'=>'GridPanel.tpl',
-	'name'=>'em_aliases', 
-	'friendly_single'=>'alias', 
-	'friendly_multiple'=>'aliases',
+	'name'=>'te_tenders', 
+	'friendly_single'=>'tender', 
+	'friendly_multiple'=>'tenders',
 	'authenticate'=>false,
 	'paging'=>true,
 	'autoload'=>false,
@@ -24,4 +24,4 @@ $westpanel = array(
 
 $tables[] = $westpanel;
 
-//$main_template='SimpleMainPanel.tpl'; //The template for MainPanel.js
+$main_template='SimpleMainPanel.tpl'; //The template for MainPanel.js
