@@ -273,14 +273,14 @@ try
 
 				$user['password'] = $_POST["password1"];
 				$password2 = $_POST["password2"];
-				$user['username'] = $_POST['username'];
+				$user['username'] = trim($_POST['username']);
 
 				if (empty($user['username']) || empty($user['password']) || empty($password2))
 				{
 					throw new MissingFieldException();
 				}
 
-				if (!$GO_USERS->check_username($user['username'])) {
+				if (empty($user['username']) || !$GO_USERS->check_username($user['username'])) {
 					throw new Exception($lang['users']['error_username']);
 				}
 
