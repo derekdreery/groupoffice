@@ -338,6 +338,11 @@ a.normal-link:hover{
 	background-image:url('images/16x16/gnome-logout.png') !important;
 }
 
+.btn-download{
+	background-image:url('images/16x16/download.png') !important;
+}
+
+
 .btn-dismiss{
 	background-image:url('images/16x16/clock.png') !important;
 }
