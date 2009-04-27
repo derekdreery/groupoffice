@@ -26,6 +26,11 @@ $path = $GO_CONFIG->file_storage_path.($_REQUEST['path']);
 
 $mode = isset($_REQUEST['mode'])  ? $_REQUEST['mode'] : 'download';
 
+if(!file_exists($path))
+{
+	die('File not found');
+}
+
 /*
  * Enable browser caching for public files. They expire in one day.
  */
@@ -44,22 +49,17 @@ if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_per
 	/*
 	 * Remove new_filelink
 	 */
-	$fs->get_file($_REQUEST['path']);
-	$fs->delete_new_filelink($fs->f('id'), $GO_SECURITY->user_id);
-		
-	/*if($GO_LOGGER->enabled)
+	if(!$cache)
 	{
-		$link_id=$fs->get_link_id_by_path($path);
-		$GO_LOGGER->log('filesystem', 'VIEW '.$path, $link_id);
-	}*/
-	
+		$fs->get_file($_REQUEST['path']);
+		$fs->delete_new_filelink($fs->f('id'), $GO_SECURITY->user_id);
+	}
+		
 	$browser = detect_browser();
 
 	$filename = utf8_basename($path);
 	$extension = File::get_extension($filename);
 
-	//$mtime = Date::date_add(filemtime($path),1);
-	
 	
 	header('Content-Length: '.filesize($path));
 	header('Content-Transfer-Encoding: binary');
