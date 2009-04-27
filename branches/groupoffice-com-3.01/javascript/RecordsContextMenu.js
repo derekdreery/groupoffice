@@ -33,6 +33,6 @@ GO.menu.RecordsContextMenu=Ext.extend(Ext.menu.Menu,{
 			item.setDisabled(!item.multiple && multiple);
 		}
 		
-		GO.files.FilesContextMenu.superclass.showAt.call(this, xy);
+		GO.menu.RecordsContextMenu.superclass.showAt.call(this, xy);
 	}	
 });

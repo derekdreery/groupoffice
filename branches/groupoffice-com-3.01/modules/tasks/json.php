@@ -287,9 +287,6 @@ try{
 											{
 												throw new AccessDeniedException();
 											}
-
-
-												
 										}else
 										{
 											$user_id = $_REQUEST['user_id'];
