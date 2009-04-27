@@ -1273,8 +1273,14 @@ class files extends filesystem
 		
 		$fs = new files();
 
-		$fs->delete($GO_CONFIG->file_storage_path.'users/'.$user['username']);
-		$fs->delete($GO_CONFIG->file_storage_path.'users/'.$user['id']);
+		if(!empty($user['username']))
+		{
+			$fs->delete($GO_CONFIG->file_storage_path.'users/'.$user['username']);
+		}
+		if(!empty($user['id']))
+		{
+			$fs->delete($GO_CONFIG->file_storage_path.'users/'.$user['id']);
+		}
 	}
 
 	function cache_file($path, $index='path')
