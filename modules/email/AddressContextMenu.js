@@ -20,15 +20,7 @@ GO.email.AddressContextMenu = function(config)
 	config['shadow']='frame';
 	config['minWidth']=180;
 	
-	this.lookUpButton = new Ext.menu.Item({
-					iconCls: 'btn-addressbook',
-					text: GO.addressbook.lang.searchOnSender,
-					cls: 'x-btn-text-icon',
-					handler: function(){
-						GO.addressbook.searchSender(this.address, this.personal);
-					},
-					scope: this
-				});
+	
 				
 	this.composeButton = new Ext.menu.Item({
 					iconCls: 'btn-compose',
@@ -70,7 +62,19 @@ GO.email.AddressContextMenu = function(config)
 	this.searchMessagesButton];
 	
 	if(GO.addressbook)
-		config.items.push(this.lookUpButton);		
+	{
+		this.lookUpButton = new Ext.menu.Item({
+					iconCls: 'btn-addressbook',
+					text: GO.addressbook.lang.searchOnSender,
+					cls: 'x-btn-text-icon',
+					handler: function(){
+						GO.addressbook.searchSender(this.address, this.personal);
+					},
+					scope: this
+				});
+	
+		config.items.push(this.lookUpButton);
+	}
 
 					
 	GO.email.AddressContextMenu.superclass.constructor.call(this, config);	
