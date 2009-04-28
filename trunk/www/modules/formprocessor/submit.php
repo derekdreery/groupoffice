@@ -32,7 +32,7 @@ catch(Exception $e)
 	$response['feedback']=$e->getMessage();
 	$response['success']= false;
 	
-	$return_to = String::add_params_to_url($return_to, 'feedback='.base64_encode($e->getMessage()));
+	$_POST['feedback']=$e->getMessage();
 }
 
 if($ajax)
@@ -40,6 +40,21 @@ if($ajax)
 	echo json_encode($response);
 }else
 {
-	header('Location: '.$return_to);
+	?>
+	<html>
+	<body onload="document.return.submit();">
+	<form method="POST" name="return" action="<?php echo $return_to; ?>">
+	<input type="hidden" name="submitted" value="true" />
+	<?php 
+	foreach($_POST as $key=>$value)
+	{
+		if(is_string($value))
+			echo '<input type="hidden" name="'.htmlspecialchars($key, ENT_QUOTES, 'UTF-8').'" value="'.htmlspecialchars($value, ENT_QUOTES, 'UTF-8').'" />';
+	}
+	?>
+	</form>
+	</body>
+	</html>
+	<?php 	
 }
 ?>
