@@ -25,7 +25,7 @@ GO.email.SettingsPanel = function(config) {
 	})];
 
 
-	GO.calendar.SettingsPanel.superclass.constructor.call(this, config);
+	GO.email.SettingsPanel.superclass.constructor.call(this, config);
 };
 
 Ext.extend(GO.email.SettingsPanel, Ext.Panel, {
