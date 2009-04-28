@@ -1,2 +1,0 @@
-modules/log/EntriesGrid.js
-modules/log/MainPanel.js
