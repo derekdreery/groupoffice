@@ -992,7 +992,7 @@ class addressbook extends db {
 	}
 	
 	function get_contact_by_email($email, $user_id, $addressbook_id=0){
-		$this->get_contacts_by_email($email, $user_id, $addressbook_id=0);
+		$this->get_contacts_by_email($email, $user_id, $addressbook_id);
 		return $this->next_record();
 	}
 
