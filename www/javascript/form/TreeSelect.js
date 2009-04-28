@@ -34,7 +34,7 @@ GO.form.TreeSelectWindow = Ext.extend(function(config){
 	config.items=[this.treePanel];
 	
 	config.modal=true;
-	config.width=500;
+	config.width=640;
 	config.height=400;
 	config.closeAction='hide';
 	config.closable=true;
