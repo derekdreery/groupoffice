@@ -19,7 +19,14 @@
 	<?php 
 	if(isset($_REQUEST['feedback']))
 	{
-		echo '<p style="color:red">'.base64_decode($_REQUEST['feedback']).'</p>';
+		echo '<p style="color:red">'.$_REQUEST['feedback'].'</p>';
+	}
+	
+	if(isset($_POST['submitted']))
+	{
+		echo '<p>You submitted:</p>';
+		
+		echo nl2br(var_export($_POST, true));
 	}
 	
 	?>
@@ -71,19 +78,9 @@
 		<td><textarea class="textbox" name="comment[Opmerking]" ></textarea></td>
 	</tr>
 	<tr>
-		<td colspan="2">	
-						
-			<div style="float:right" class="button" onmouseover="this.className='button-active';"  onmouseout="this.className='button';">
-				<div class="button-right">
-					<a class="button-center" href="javascript:document.forms[0].submit();">verzenden &gt;&gt;</a>
-				</div>
-
-			</div>	
-			<div style="float:right" class="button" onmouseover="this.className='button-active';"  onmouseout="this.className='button';">
-				<div class="button-right">
-					<a class="button-center" href="/contact">&lt;&lt; terug</a>
-				</div>
-			</div>		
+		<td></td>
+		<td>			
+				<input type="submit />	
 		</td>
 	</tr>
 	</table>
