@@ -481,6 +481,11 @@ class addressbook extends db {
 		{
 			$sql = "SELECT ";
 		}
+		
+		if($offset>0)
+		{
+			$sql .= "SQL_CALC_FOUND_ROWS ";
+		}
 
 		$sql .= "ab_contacts.*, ab_companies.name AS company_name";
 		
@@ -610,18 +615,13 @@ class addressbook extends db {
 			'class'=>'addressbook',
 			'require'=>__FILE__);
 		
-
-		$this->query($sql);
-		$count = $this->num_rows();
-
 		if($offset > 0)
 		{
-			$sql .= " LIMIT ".$this->escape($start.",".$offset);
-			$this->query($sql);
+			$sql .= " LIMIT ".$this->escape($start.",".$offset);			
 		}
 
 		//debug($sql);
-		return $count;
+		return $this->query($sql);
 	}
 	
 	function format_contact_record(&$record){
@@ -647,6 +647,11 @@ class addressbook extends db {
 		}else
 		{
 			$sql = "SELECT ";
+		}
+		
+		if($offset>0)
+		{
+			$sql .= "SQL_CALC_FOUND_ROWS ";
 		}
 
 		if(isset($GO_MODULES->modules['customfields']))
@@ -743,19 +748,11 @@ class addressbook extends db {
 
 		$sql .= " ORDER BY $sort_index $sort_order";
 
-		$this->query($sql);
-		$count = $this->num_rows();
-
 		if($offset > 0 )
 		{
 			$sql .= " LIMIT ".$this->escape($start.",".$offset);
-			//echo $sql;
-			$this->query($sql);
-			return $count;
-		}else
-		{
-			return $count;
 		}
+		$this->query($sql);
 	}
 
 	function add_addressbook($user_id, $name) {
@@ -992,13 +989,20 @@ class addressbook extends db {
 	}
 	
 	function get_contact_by_email($email, $user_id, $addressbook_id=0){
-		$this->get_contacts_by_email($email, $user_id, $addressbook_id);
+		$this->get_contacts_by_email($email, $user_id, $addressbook_id,0,1);
 		return $this->next_record();
 	}
 
-	function get_contacts_by_email($email, $user_id, $addressbook_id=0) {
+	function get_contacts_by_email($email, $user_id, $addressbook_id=0, $start=0, $offset=0, $count=false) {
 		$email = $this->escape(String::get_email_from_string($email));
-		$sql = "SELECT * FROM ab_contacts ";
+		$sql = "SELECT";
+		
+		if($count && $offset>0)
+		{
+			$sql .= " SQL_CALC_FOUND_ROWS";
+		}
+
+		$sql .= " * FROM ab_contacts ";
 
 		if($addressbook_id>0)
 		{
@@ -1018,8 +1022,12 @@ class addressbook extends db {
 			}
 		}
 		$sql .= " (email='$email' OR email2='$email' OR email3='$email')";
+		
+		if($offset > 0)
+		{
+			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+		}
 
-		$this->query($sql);
-		return $this->num_rows();
+		return $this->query($sql);
 	}
 }
