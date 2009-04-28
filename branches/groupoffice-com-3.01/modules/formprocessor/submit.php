@@ -18,7 +18,7 @@ require_once($GO_CONFIG->root_path.'modules/formprocessor/classes/formprocessor.
 
 $ajax = !isset($_POST['return_to']);
 
-$return_to = isset($_POST['return_to']) ? isset($_POST['return_to']) : '';
+$return_to = isset($_POST['return_to']) ? $_POST['return_to'] : '';
 
 $fp = new formprocessor();
 
@@ -32,7 +32,7 @@ catch(Exception $e)
 	$response['feedback']=$e->getMessage();
 	$response['success']= false;
 	
-	$return_to = String::add_params_to_url($return_to, 'feedback='+base64_encode($e->getMessage()));
+	$return_to = String::add_params_to_url($return_to, 'feedback='.base64_encode($e->getMessage()));
 }
 
 if($ajax)
