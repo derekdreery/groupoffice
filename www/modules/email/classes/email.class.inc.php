@@ -84,7 +84,7 @@ function load_template($template_id, $to='', $keep_tags=false)
 				$values = array_map('htmlspecialchars', $user);
 			}else
 			{
-				$ab->search_companies($GO_SECURITY->user_id, $to, 'email');
+				$ab->search_companies($GO_SECURITY->user_id, $to, 'email',0,0,1);
 				if($ab->next_record())
 				{
 					$values = array_map('htmlspecialchars', $ab->record);
