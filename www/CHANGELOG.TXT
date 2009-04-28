@@ -1,3 +1,7 @@
+2009/04/28 Version 3.01-stable-34
+- Added Greek translation
+- Minor bug fixes
+
 2009/04/17 Version 3.01-stable-33
 - Some e-mails could affect the Group-Office CSS styles
 
