@@ -105,7 +105,10 @@ class formprocessor{
 					{
 						$value = date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format']);
 					}
-					$comments .= trim($key).":\n".trim($value)."\n\n";
+					if(!empty($value))
+					{
+						$comments .= trim($key).":\n".trim($value)."\n\n";
+					}
 				}
 				$contact_credentials['comment']=$comments;
 			}

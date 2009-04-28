@@ -9,13 +9,20 @@
 						
 	<form method="POST" action="submit.php">
 	
-	<input type="hidden" name="return_to" value="testform.html" />
-	<!-- <input type="hidden" name="addressbook" value="Communicatie & Co - Kandidaten" /> -->
-	<input type="hidden" name="addressbook" value="Commco" />
-	<input type="hidden" name="mailings[]" value="blabla" />
+	<input type="hidden" name="return_to" value="<?php echo $_SERVER['PHP_SELF']; ?>" />
+	<input type="hidden" name="addressbook" value="Globaal" />
+	<!-- <input type="hidden" name="mailings[]" value="blabla" /> -->
+	<input type="hidden" name="notify_users" value="1,2" />
 	
 	<input type="hidden" name="notify_addressbook_owner" value="0" />
 	
+	<?php 
+	if(isset($_REQUEST['feedback']))
+	{
+		echo '<p style="color:red">'.base64_decode($_REQUEST['feedback']).'</p>';
+	}
+	
+	?>
 
 
 	<table class="formulier" cellpadding="0" cellspacing="2">

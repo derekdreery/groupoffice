@@ -94,7 +94,6 @@ class RFC822
 				case '<':
 					$this->personal = trim($this->buffer);
 					$this->buffer = '';
-					$this->in_email=true;
 				break;
 				
 				case '>':
@@ -102,7 +101,7 @@ class RFC822
 				break;							
 				
 				case ',':			
-					if($this->quote || !$this->in_email)
+					if($this->quote)
 					{
 						$this->buffer .= $char;				
 					}else
