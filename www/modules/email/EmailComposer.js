@@ -1133,7 +1133,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 				break;
 
 			case this.bccFieldCheck.id :
-				this.showBCC.setDisplayed(checked);
+				this.showBCC(checked);
 				break;
 		}
 		this.setEditorHeight();
