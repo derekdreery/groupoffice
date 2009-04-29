@@ -1,0 +1,16 @@
+.go-module-icon-users, .go-menu-icon-users{
+	background:url('images/16x16/icon-users.png');
+}
+.go-tab-icon-users {
+	background-image: none !important;
+}
+
+.go-link-icon-8 {
+	background-image: url('images/16x16/icon-users.png') !important;
+	width:16px;
+	height:16px;
+}
+
+.input-form-setting {
+	padding: 5px 5px 1px 5px;
+}
