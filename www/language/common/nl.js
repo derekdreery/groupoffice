@@ -121,7 +121,7 @@ GO.lang.cmdLink = 'Koppelen';
 GO.lang.cmdUnlink = 'Ontkoppelen';
 GO.lang.cmdClose = 'Sluiten';
 GO.lang.cmdSettings = 'Instellingen';
-GO.lang.cmdReset = 'Resetten';
+GO.lang.cmdReset = 'Wissen';
 GO.lang.cmdImport='Importeren';
 
 GO.lang.cmdActions = 'Acties';
@@ -270,7 +270,7 @@ GO.lang.strMax= 'Maximum';
 GO.lang.settings='Instellingen';
 
 
-GO.lang.popupBlocker= 'Uw browser blokkeerd een popup van Group-Office. Schakel de popup blokkering uit voor Group-Office a.u.b.';
+GO.lang.popupBlocker= 'Uw browser blokkeert een popup van Group-Office. Schakel de popup blokkering uit voor Group-Office a.u.b.';
 GO.lang.strUsage='Gebruiksstatistieken';
 GO.lang.today='Vandaag';
 
