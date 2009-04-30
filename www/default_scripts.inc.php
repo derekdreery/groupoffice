@@ -30,9 +30,6 @@ if($GO_CONFIG->debug)
 }
 ?>
 <script	src="<?php echo $GO_CONFIG->host; ?>javascript/namespaces.js<?php echo $suffix; ?>"	type="text/javascript"></script>
-
-<script	src="<?php echo $GO_CONFIG->host; ?>javascript/tiny_mce/tiny_mce.js<?php echo $suffix; ?>" type="text/javascript"></script>
-
 <script type="text/javascript">
 
 if(typeof(Ext)=='undefined')
