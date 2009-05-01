@@ -46,7 +46,7 @@ class users extends db
 			$user['middle_name'] = $_POST['middle_name'];
 			$user['last_name'] = $_POST['last_name'];
 			$user['email'] = $_POST["email"];
-			$user['enabled'] = isset($_POST['enabled']) ? '1' : '0' ;
+			//$user['enabled'] = isset($_POST['enabled']) ? '1' : '0' ;
 			$user['title'] = $_POST["title"];
 
 
