@@ -306,7 +306,10 @@ class String {
 			$address .= $object['city'].$linebreak;
 		}
 		if ($object['country'] != '') {
-			$address .= $object['country'].$linebreak;
+			global $lang;
+			require_once($GLOBALS['GO_LANGUAGE']->get_base_language_file('countries'));
+			
+			$address .= $countries[$object['country']].$linebreak;
 		}
 		return $address;
 
