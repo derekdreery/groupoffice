@@ -36,7 +36,7 @@ class users extends db
 
 	function save_settings()
 	{
-		global $GO_USERS, $lang;
+		global $GO_USERS, $lang, $GO_CONFIG;
 		
 		$user['id'] = isset($_POST['user_id']) ? (trim($_POST['user_id'])) : 0;
 		
@@ -56,7 +56,7 @@ class users extends db
 			$user['home_phone'] = $_POST["home_phone"];
 			$user['fax'] = $_POST["fax"];
 			$user['cellular'] = $_POST["cellular"];
-			$user['country_id'] = $_POST["country_id"];
+			$user['country'] = $_POST["country"];
 			$user['state'] = $_POST["state"];
 			$user['city'] = $_POST["city"];
 			$user['zip'] = $_POST["zip"];
@@ -65,7 +65,7 @@ class users extends db
 			$user['department'] = $_POST["department"];
 			$user['function'] = $_POST["function"];
 			$user['company'] = $_POST["company"];
-			$user['work_country_id'] = $_POST["work_country_id"];
+			$user['work_country'] = $_POST["work_country"];
 			$user['work_state'] = $_POST["work_state"];
 			$user['work_city'] = $_POST["work_city"];
 			$user['work_zip'] = $_POST["work_zip"];
@@ -81,15 +81,14 @@ class users extends db
 			}
 
 			if (!String::validate_email($user['email'])) {
-				throw new Exception($error_email);
+				throw new Exception($lang['common']['invalidEmailError']);
 			}
 
 			$existing_email_user = $GO_CONFIG->allow_duplicate_email ? false : $GO_USERS->get_user_by_email($user['email']);
 
-			if ($existing_email_user && ($user_id == 0 || $existing_email_user['id'] != $user_id)) {
-				{
-					throw new Exception($error_email_exists);
-				}
+			if ($existing_email_user && ($user['id'] == 0 || $existing_email_user['id'] != $user['id'])) {
+				require($GLOBALS['GO_LANGUAGE']->get_language_file('users'));				
+				throw new Exception($lang['users']['error_email_exists']);				
 			}
 		}
 
@@ -107,7 +106,7 @@ class users extends db
 			$user['mute_sound'] = isset($_POST["mute_sound"]) ? '1' : '0';
 		}
 
-		if($_POST['language'])
+		if(isset($_POST['language']))
 		{
 			$user['language']=$_POST['language'];
 			$user['first_weekday'] = ($_POST["first_weekday"]);

@@ -411,7 +411,7 @@ try
 			echo json_encode($response);
 			break;
 
-		case 'save_setting':
+		/*case 'save_setting':
 			$email['confirmed'] = $_POST["confirmed"];
 			$email['unconfirmed'] = $_POST["unconfirmed"];
 			$email['confirmed_subject'] = $_POST["confirmed_subject"];
@@ -421,7 +421,7 @@ try
 			$GO_CONFIG->save_setting('registration_confirmation_subject', $email['confirmed_subject']);
 			$GO_CONFIG->save_setting('registration_unconfirmed', $email['unconfirmed']);
 			$GO_CONFIG->save_setting('registration_unconfirmed_subject', $email['unconfirmed_subject']);
-			break;
+			break;*/
 	}
 }
 catch(Exception $e)
