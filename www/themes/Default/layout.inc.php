@@ -97,7 +97,7 @@ if($GO_SECURITY->logged_in() && trim($_SESSION['GO_SESSION']['name']) != '' && !
 	<?php	
 }
 
-if(empty($_SESSION['GO_SESSION']['mute_sound']))
+if($GO_SECURITY->logged_in() && empty($_SESSION['GO_SESSION']['mute_sound']))
 {
 ?>
 	<object width="0" height="0" id="alarmSound">

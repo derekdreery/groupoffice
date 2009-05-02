@@ -511,6 +511,8 @@ GO.lang.off ='Uit';
 
 GO.lang.displayingItemsShort='Totaal: {2}';
 
+GO.lang.keyword='Trefwoord';
+
 if(Ext.form.BasicForm)
 {
 	Ext.form.BasicForm.prototype.waitTitle = "Even wachten a.u.b...";
