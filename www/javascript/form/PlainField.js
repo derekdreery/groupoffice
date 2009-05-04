@@ -33,6 +33,13 @@ GO.form.PlainField = Ext.extend(Ext.form.Field, {
 	// private
 	initComponent: function() {
 		GO.form.PlainField.superclass.initComponent.call(this);
+		
+		if(this.boxLabel && GO.util.empty(this.fieldLabel))
+		{
+			this.fieldLabel=this.boxLabel;
+			this.hideLabel=false;
+		}
+		
 		this.addEvents(
 			/**
 			 * @event load
@@ -58,6 +65,18 @@ GO.form.PlainField = Ext.extend(Ext.form.Field, {
   },
 	
 	setValue : function(v){
+		
+		if(this.boxLabel)
+		{
+			if(GO.util.empty(v))
+			{
+				v = GO.lang.cmdNo;
+			}else
+			{
+				v = GO.lang.cmdYes;
+			}
+		}
+		
 		this.value = v;
     if(this.rendered){
         this.el.update(v);
