@@ -13,7 +13,7 @@ GO.tasks.TasksPanel = function(config)
 		root: 'results',
 		totalProperty: 'total',
 		id: 'id',
-		fields:['id', 'name','completed','due_time', 'late', 'description'],
+		fields:['id', 'name','completed','due_time', 'late', 'description', 'status'],
 		remoteSort:true
 	});
 	
