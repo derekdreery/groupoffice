@@ -68,12 +68,12 @@ GO.form.PlainField = Ext.extend(Ext.form.Field, {
 		
 		if(this.boxLabel)
 		{
-			if(GO.util.empty(v))
-			{
-				v = GO.lang.cmdNo;
-			}else
+			if(v=='1')
 			{
 				v = GO.lang.cmdYes;
+			}else
+			{
+				v = GO.lang.cmdNo;
 			}
 		}
 		
