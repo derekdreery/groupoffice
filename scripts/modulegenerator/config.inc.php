@@ -15,8 +15,8 @@ $westpanel = array(
 	'mainpanel_tag'=> 'GRID',
 	'template'=>'GridPanel.tpl',
 	'name'=>'te_tenders', 
-	'friendly_single'=>'tender', 
-	'friendly_multiple'=>'tenders',
+	'friendly_single'=>'search', 
+	'friendly_multiple'=>'searches',
 	'authenticate'=>false,
 	'paging'=>true,
 	'autoload'=>false,
@@ -24,4 +24,4 @@ $westpanel = array(
 
 $tables[] = $westpanel;
 
-$main_template='SimpleMainPanel.tpl'; //The template for MainPanel.js
+//$main_template='SimpleMainPanel.tpl'; //The template for MainPanel.js
