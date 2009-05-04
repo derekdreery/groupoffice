@@ -43,7 +43,7 @@ overflow-y:scroll !important;
     background:white;
 }
 .x-portlet .x-panel-mc {
-    padding-top:2px;
+    padding-top:0px;
 }
 .x-portlet .x-panel-bc .x-panel-footer {
     padding-bottom:2px;
