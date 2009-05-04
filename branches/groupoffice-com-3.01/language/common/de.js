@@ -279,7 +279,7 @@ GO.lang.strMax = 'Maximum';
 GO.lang.settings='Einstellungen';
 
 GO.lang.latestLinks='Neue Verknüpfungen'
-GO.lang.cmdBrowseLinks = 'Verknüpfungen durchsuchen';
+GO.lang.cmdBrowseLinks = 'Verknüpfungen';
 
 GO.lang.today='Heute';
 
