@@ -16,4 +16,4 @@ GO.gnupg.lang.decryptPasswordRequired='Zur Entschlüsselung dieser Nachricht ist
 
 GO.gnupg.lang.sendPublicKey='Öffentlichen Schlüssel senden';
 
-GO.gnupg.lang.importPublicKeyAttachment='This is a public key to encrypt e-mails to this sender. Only import this key when you are sure the key belongs to the sender. Do you want to import it?';
+GO.gnupg.lang.importPublicKeyAttachment='Dies ist ein öffentlicher Schlüssel, um Nachrichten an diesen Absender zu verschlüsseln. Importieren Sie diesen Schlüssel nur, wenn Sie sicher sind, daß der Schlüssel auch zu diesem Absender gehört. Wollen Sie den Schlüssel nun importieren?';
