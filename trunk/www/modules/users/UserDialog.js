@@ -93,11 +93,13 @@ GO.users.UserDialog = function(config){
 	GO.users.UserDialog.superclass.constructor.call(this, config);
 	
 	
-	this.addEvents({'save' : true});	
+	this.addEvents({'save' : true, 'set_id' : true});	
 }
 
 Ext.extend(GO.users.UserDialog, Ext.Window,{
 
+	user_id : 0,
+	
 	files_path : '',
 	
 	setUserId : function(user_id){
@@ -117,7 +119,9 @@ Ext.extend(GO.users.UserDialog, Ext.Window,{
 		if(GO.files)
 		{
 			this.fileBrowseButton.setDisabled(user_id<1);
-		}		
+		}
+
+		this.fireEvent('set_id', this);
 	},
 	
 	serverclientDomainCheckboxes : [],
@@ -212,11 +216,8 @@ Ext.extend(GO.users.UserDialog, Ext.Window,{
 				
 			});
 		}else
-		{
-			
+		{			
 			GO.users.UserDialog.superclass.show.call(this);
-			
-			this.setUserId(0);
 		}
 	},
 	
