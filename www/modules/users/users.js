@@ -155,13 +155,6 @@ Ext.extend(GO.users.MainPanel, GO.grid.GridPanel,{
 	}
 });
 
-
-GO.moduleManager.addAdminModule('users', GO.users.MainPanel, {
-	title : GO.lang.users,
-	iconCls : 'go-tab-icon-users',
-	closable:true
-});
-
 GO.mainLayout.onReady(function(){
 	GO.users.userDialog = new GO.users.UserDialog();
 });
@@ -170,4 +163,10 @@ GO.mainLayout.onReady(function(){
 GO.linkHandlers[8]=function(id){
 	GO.users.userDialog.show(id);
 };
+
+GO.moduleManager.addAdminModule('users', GO.users.MainPanel, {
+	title : GO.lang.users,
+	iconCls : 'go-tab-icon-users',
+	closable:true
+});
 

@@ -80,7 +80,6 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	},
 	
 	fireReady : function(){
-		
 		this.fireEvent('ready', this);
 	 	this.ready=true;		
 	},

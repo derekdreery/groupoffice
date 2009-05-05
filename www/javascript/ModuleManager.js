@@ -35,6 +35,8 @@ GO.ModuleManager = Ext.extend(function(){
 	settingsPanelConfigs : {},
 	settingsSortOrder : Array(),
 	
+	readyFunctions : {},
+	
 	
 	addSettingsPanel : function(panelID, panelClass, panelConfig)
 	{		
@@ -74,16 +76,34 @@ GO.ModuleManager = Ext.extend(function(){
 			this.panelConfigs[moduleName] = panelConfig;
 			this.sortOrder.push(moduleName);
 		}
+		this.onAddModule(moduleName);
 		
-		this.fireEvent('moduleReady', moduleName);
+	},
+	
+	onAddModule : function(moduleName)
+	{
+		if(this.readyFunctions[moduleName])
+		{
+			for(var i=0;i<this.readyFunctions[moduleName].length;i++)
+			{
+				var c = this.readyFunctions[moduleName][i];
+				c.fn.call(c.fn.scope,moduleName,this);
+			}
+		}
 	},
 	
 	onModuleReady : function(module, fn, scope)
 	{
-		if(!this.modules[module]){
-			this.on('moduleReady', fn, scope);
+		scope=scope||window;
+
+		if(!this.modules[module]){			
+			this.readyFunctions[module] = this.readyFunctions[module] || [];			
+			this.readyFunctions[module].push({
+				fn:fn,
+				scope: scope				
+			});
 		}else{
-			fn.call(scope, module);
+			fn.call(scope, module, this);
 		}
 	},
 	
@@ -96,6 +116,8 @@ GO.ModuleManager = Ext.extend(function(){
 		this.adminModulePanels[moduleName] = panelClass;
 		this.adminPanelConfigs[moduleName] = panelConfig;
 		this.adminSortOrder.push(moduleName);
+		
+		this.onAddModule(moduleName);
 	},
 	
 	getAdminPanel : function(moduleName)
