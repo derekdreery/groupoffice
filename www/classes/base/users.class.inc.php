@@ -504,9 +504,9 @@ class GO_USERS extends db
 			if($this->record['date_separator']=='')
 			{
 				$this->record['date_separator']=' ';
-			}
+			}			
 			return $this->record;
-		}
+		}		
 		return false;
 	}
 
@@ -655,7 +655,8 @@ class GO_USERS extends db
 			{
 				$user['password']=$params[0]['password'];
 			}
-			$GO_EVENTS->fire_event('add_user', array($user));						
+			$params = array($user);
+			$GO_EVENTS->fire_event('add_user', $params);						
 		}else
 		{
 			$GO_EVENTS->fire_event('update_user', $params);
