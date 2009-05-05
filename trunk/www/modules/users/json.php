@@ -107,7 +107,7 @@ switch($task)
 
 	case 'user':
 		$result['success'] = false;
-		$result['data'] = $GO_USERS->get_user(($user_id));
+		$result['data'] = $GO_USERS->get_user($user_id);
 
 		$result['data']['birthday']=Date::format($result['data']['birthday'], false);
 	
@@ -131,6 +131,10 @@ switch($task)
 			$full_path = $GO_CONFIG->file_storage_path.$result['data']['files_path'];
 			$fs->check_share($full_path, 1, $GO_MODULES->modules['users']['acl_read'], $GO_MODULES->modules['users']['acl_write']);
 		}
+		
+		$params['response']=&$result;
+		
+		$GO_EVENTS->fire_event('load_user', $params);
 		
 		echo json_encode($result);
 		break;
