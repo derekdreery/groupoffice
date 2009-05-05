@@ -184,7 +184,7 @@ td.x-grid3-hd-over,td.sort-desc,td.sort-asc,td.x-grid3-hd-menu-open{border-left:
 .x-resizable-over .x-resizable-handle-north,.x-resizable-pinned .x-resizable-handle-north{background:url(images/extjs/sizer/s-handle.gif);background-position:top;}
 
 
-.x-form-text {color:black !important;}
+/*.x-form-text {color:black !important;}*/
 /*.x-combo-list-item{font:normal 12px "Lucida Sans Unicode","Lucida Grande","Mukti Narrow", sans-serif;padding:2px;border:1px solid #fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}*/
 .x-combo-list .x-combo-selected{border:1px dotted #669900!important;background:#ebf1e2;cursor:pointer;}
 .x-combo-list-small .x-combo-list-item{font:normal 12px tahoma,arial,helvetica,sans-serif;}
