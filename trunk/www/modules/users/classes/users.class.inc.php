@@ -52,7 +52,7 @@ class users extends db
 
 			$user['initials'] = $_POST["initials"];
 			$user['birthday'] = Date::to_db_date($_POST['birthday']);
-			$user['work_phone'] = $_POST["work_phone"];
+			//$user['work_phone'] = $_POST["work_phone"];
 			$user['home_phone'] = $_POST["home_phone"];
 			$user['fax'] = $_POST["fax"];
 			$user['cellular'] = $_POST["cellular"];
@@ -62,17 +62,17 @@ class users extends db
 			$user['zip'] = $_POST["zip"];
 			$user['address'] = $_POST["address"];
 			$user['address_no'] = $_POST["address_no"];
-			$user['department'] = $_POST["department"];
-			$user['function'] = $_POST["function"];
+			//$user['department'] = $_POST["department"];
+			//$user['function'] = $_POST["function"];
 			$user['company'] = $_POST["company"];
-			$user['work_country'] = $_POST["work_country"];
+			/*$user['work_country'] = $_POST["work_country"];
 			$user['work_state'] = $_POST["work_state"];
 			$user['work_city'] = $_POST["work_city"];
 			$user['work_zip'] = $_POST["work_zip"];
 			$user['work_address'] = $_POST["work_address"];
 			$user['work_address_no'] = $_POST["work_address_no"];
 			$user['work_fax'] = $_POST["work_fax"];
-			$user['homepage'] = $_POST["homepage"];
+			$user['homepage'] = $_POST["homepage"];*/
 			$user['sex'] = $_POST["sex"];
 
 			if(empty($user['email']) || empty($user['first_name']) || empty($user['last_name']))

@@ -112,6 +112,7 @@ class GO_USERS extends db
 			
 			$_SESSION['GO_SESSION']['username'] = $userdata['username'];
 			$_SESSION['GO_SESSION']['name'] = trim($userdata['first_name'].' '.$middle_name.$userdata['last_name']);
+			$_SESSION['GO_SESSION']['company'] = $userdata['company'];
 			$_SESSION['GO_SESSION']['function'] = $userdata['function'];
 			$_SESSION['GO_SESSION']['department'] = $userdata['department'];
 			
