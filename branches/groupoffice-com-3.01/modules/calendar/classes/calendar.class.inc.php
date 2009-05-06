@@ -160,6 +160,7 @@ class calendar extends db
 
 		//don't calculate timezone offset for all day events
 		$timezone_offset_string = Date::get_timezone_offset($event['start_time']);
+		var_dump($timezone_offset_string);
 		if ($timezone_offset_string > 0) {
 			$gmt_string = '(\G\M\T +'.$timezone_offset_string.')';
 		}
