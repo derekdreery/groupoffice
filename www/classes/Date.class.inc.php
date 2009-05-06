@@ -628,7 +628,12 @@ class Date
 
 	public static function get_timezone_offset($utime)
 	{
-		$d = new DateTime('@'.$utime, new DateTimeZone(date_default_timezone_get()));
+		$d = new DateTime('@'.$utime, new DateTimeZone('GMT'));
+		$tz = new DateTimeZone(date_default_timezone_get());
+		if($tz)
+		{
+				$d->setTimezone($tz);
+		}
 		return $d->getOffset()/3600;
 	}
 
