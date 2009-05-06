@@ -186,7 +186,7 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 		if(target.tagName=='A')
 		{	
 			var href=target.attributes['href'].value;
-			if(href.substr(0,6)=='mailto')
+			if(GO.email && href.substr(0,6)=='mailto')
 			{
 				var indexOf = href.indexOf('?');
 				if(indexOf>0)

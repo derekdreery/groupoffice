@@ -34,7 +34,7 @@ if($GO_CONFIG->debug)
 
 if(typeof(Ext)=='undefined')
 {
-	alert('The Group-Office javascripts were not loaded. Your local_url and local_path configuration properties are probably configured incorrectly');
+	alert('The ExtJS javascripts were not loaded. Your host configuration properties are probably configured incorrectly');
 }
 
 var BaseHref = '<?php echo $GO_CONFIG->host; ?>';
@@ -320,6 +320,11 @@ if(!$GO_CONFIG->debug)
 }
 ?>
 <script type="text/javascript">
+if(!GO.state.HttpProvider)
+{
+	alert('The Group-Office javascripts were not loaded. Your local_url or local_path configuration properties are probably configured incorrectly');
+}
+
 Ext.state.Manager.setProvider(new GO.state.HttpProvider({url: BaseHref+'state.php'}));
 Ext.QuickTips.init();
 </script>

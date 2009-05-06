@@ -99,7 +99,7 @@ class imapauth
 						{
 							require_once($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
 							$email_client = new email();
-							$email_client->update_password($config['host'], $mail_username, $arguments['password']);
+							$email_client->update_password($config['host'], $mail_username, $password);
 						}
 					}
 
@@ -126,6 +126,8 @@ class imapauth
 			{
 				debug('IMAP auth failed '.$imap->last_error());
 				$imap->clear_errors();
+				
+				throw new Exception($GLOBALS['lang']['common']['badLogin']);
 			}
 		}
 	}
