@@ -167,37 +167,40 @@ try{
 			break;
 
 		case 'new_folder':
-
-			$full_path = $GO_CONFIG->file_storage_path.$_POST['path'];
-			if(!file_exists($full_path))
+			
+			$parent = $fs->get_folder($_POST['folder_id']);
+			
+			if(!$parent)
 			{
-				throw new Exception($lang['files']['fileNotFound']);
-			}elseif(!$fs->has_write_permission($GO_SECURITY->user_id, $full_path))
+				throw new Exception('Folder not found');
+			}
+
+			if(!$fs->has_write_permission($GO_SECURITY->user_id, $parent))
 			{
 				throw new AccessDeniedException();
 			}
-
-			$response['success']=true;
-
-
-			$name = $_POST['name'];
-			if ($name == '') {
+			$response['success']=true;	
+			
+			if (empty($_POST['name'])) {
 				throw new Exception($lang['common']['missingField']);
 			}
+			
+			$response['rel_path']=$fs->build_path($parent);
+			$full_path = $GO_CONFIG->file_storage_path.$response['rel_path'];
 
-			if (file_exists($full_path.'/'.$name)) {
+			if (file_exists($full_path.'/'.$_POST['name'])) {
 				throw new Exception($lang['files']['folderExists']);
 			}
-			if (!@ mkdir($full_path.'/'.$name, $GO_CONFIG->folder_create_mode)) {
+			if (!@ mkdir($full_path.'/'.$_POST['name'], $GO_CONFIG->folder_create_mode)) {
 				throw new Exception($lang['common']['saveError']);
 			} else {
-				//$GO_LOGGER->log('filesystem', 'NEW FOLDER '.$fs->strip_file_storage_path($fv->path.'/'.$name));
-
-				$folder['path']=$_POST['path'].'/'.$name;
 				$folder['visible']='1';
 				$folder['user_id']=$GO_SECURITY->user_id;
+				$folder['parent_id']=$parent['id'];
+				$folder['name']=$_POST['name'];
+				$folder['ctime']=time();
 
-				$fs->add_folder($folder);
+				$response['folder_id']=$fs->add_folder($folder);
 			}
 
 			break;
