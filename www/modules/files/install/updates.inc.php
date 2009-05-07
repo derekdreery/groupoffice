@@ -27,3 +27,12 @@ $updates[]="CREATE TABLE IF NOT EXISTS `fs_new_files` (
   `user_id` int(11) NOT NULL,
   KEY `file_id` (`file_id`,`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+
+$updates[]="ALTER TABLE `fs_folders` ADD `parent_id` INT NOT NULL AFTER `id` ,
+ADD `name` INT NOT NULL AFTER `parent_id`;";
+
+$updates[]="ALTER TABLE `fs_folders` ADD `ctime` INT NOT NULL ,
+ADD `mtime` INT NOT NULL";
+
+
