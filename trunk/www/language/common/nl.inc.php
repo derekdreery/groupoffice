@@ -29,6 +29,7 @@ $lang['common']['moduleRequired']='De %s module is vereist voor deze functie';
 $lang['common']['loadingCore']='Laden van het basissysteem';
 $lang['common']['renderInterface']='Renderen van de interface';
 $lang['common']['loadingModule'] = 'Laden van module';
+$lang['common']['loadingModules']='Laden van modules';
 $lang['common']['loadingLogin'] ='Laden van inlogscherm';
 
 $lang['common']['loggedInAs'] = "Ingelogd als ";

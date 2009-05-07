@@ -30,6 +30,7 @@ $lang['common']['moduleRequired']='The %s module is required for this function';
 $lang['common']['loadingCore']= 'Loading base system';
 $lang['common']['loadingLogin'] = 'Loading login dialog';
 $lang['common']['renderInterface']='Rendering interface';
+$lang['common']['loadingModules']='Loading modules';
 $lang['common']['loadingModule'] = 'Loading module';
 
 $lang['common']['loggedInAs'] = "Logged in as ";
