@@ -80,7 +80,7 @@
 	<tr>
 		<td></td>
 		<td>			
-				<input type="submit />	
+				<input type="submit" />	
 		</td>
 	</tr>
 	</table>
