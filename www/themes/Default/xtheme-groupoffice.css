@@ -113,7 +113,7 @@ ul.x-tab-strip-top{padding-top:1px;background:#f7f6f1 repeat-x bottom;border-bot
 /*.x-btn button{border:0 none;background:transparent;font:normal 11px tahoma,arial,helvetica,sans-serif;color:#fff;padding-left:3px;padding-right:3px;cursor:pointer;margin:0;overflow:visible;width:auto;-moz-outline:0 none;outline:0 none;}*/
 
 
-.x-toolbar td,.x-toolbar span,.x-toolbar input,.x-toolbar div,.x-toolbar select,.x-toolbar label{white-space:nowrap;font:normal 12px tahoma,arial,helvetica,sans-serif;color:white}
+.x-toolbar td,.x-toolbar span,.x-toolbar div,.x-toolbar select,.x-toolbar label{white-space:nowrap;font:normal 12px tahoma,arial,helvetica,sans-serif;color:white}
 .x-toolbar .ytb-sep{background-image:url(images/extjs/grid/grid-blue-split.gif);background-position:center;background-repeat:no-repeat;display:block;font-size:1px;height:16px;width:20px;overflow:hidden;cursor:default;margin:0 2px 0;border:0;}
 .x-toolbar{border-color:#a9bfd3;border-style:solid;border-width:0 0 1px 0;display:block;padding:2px;background:#d0def0 url(images/extjs/toolbar/bg.gif) repeat-x top left;position:relative;zoom:1;}
 .x-toolbar .x-btn-over .x-btn-left{background:url(images/extjs/toolbar/tb-btn-sprite.gif) no-repeat 0 0;}
