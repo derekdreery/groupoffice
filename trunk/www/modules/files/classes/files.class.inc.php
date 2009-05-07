@@ -767,6 +767,8 @@ class files extends filesystem
 		}
 
 		$this->insert_row('fs_folders', $folder);
+		
+		return $folder['id'];
 	}
 
 	function update_folder($folder)
