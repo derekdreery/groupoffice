@@ -9,7 +9,9 @@ chdir(dirname(__FILE__));
 
 $updates[]="ALTER TABLE `fs_files` ADD `folder_id` INT NOT NULL AFTER `id`";
 $updates[]="ALTER TABLE `fs_files` ADD `name` VARCHAR( 255 ) NOT NULL AFTER `folder_id`";
-$updates[]="ALTER TABLE `fs_folders` ADD `name` VARCHAR( 255 ) NOT NULL AFTER `parent_id`";  
+$updates[]="ALTER TABLE `fs_folders` ADD `parent_id` INT( 11 ) NOT NULL AFTER `id`;";
+$updates[]="ALTER TABLE `fs_folders` ADD `name` VARCHAR( 255 ) NOT NULL AFTER `parent_id`";
+$updates[]="ALTER TABLE `fs_folders` ADD `ctime` INT NOT NULL";  
 
 require('../../../../Group-Office.php');
 
@@ -103,5 +105,7 @@ foreach($folders as $folder)
 {
 	crawl($folder['path'], 0);
 }
+
+$fsdb->query("DELETE FROM fs_folders WHERE name=''");
 
 ?>

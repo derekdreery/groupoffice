@@ -20,13 +20,24 @@ if(isset($_REQUEST['sid']))
 require_once("../../Group-Office.php");
 
 require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
-$fs = new files();
+$files = new files();
+$fs = new filesystem();
 
-$path = $GO_CONFIG->file_storage_path.($_REQUEST['path']);
+if(!empty($_REQUEST['id']))
+{
+	$file = $files->get_file($_REQUEST['id']);
+	$path = $files->build_path($file['folder_id']).'/'.$file['name'];
+}else
+{
+	$path = $_REQUEST['path'];
+	$file = $files->resolve_path($_REQUEST['path']);
+}
+
+$path = $GO_CONFIG->file_storage_path.$path;
 
 $mode = isset($_REQUEST['mode'])  ? $_REQUEST['mode'] : 'download';
 
-if(!file_exists($path))
+if(!$file || !file_exists($path))
 {
 	die('File not found');
 }
@@ -43,23 +54,19 @@ if(!isset($_REQUEST['mtime']))
 	header('Location: '.$_SERVER['PHP_SELF'].'?path='.urlencode($_REQUEST['path']).'&mode='.$mode.'&mtime='.filemtime($path));
 	exit();
 }*/
-
-if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_permission($GO_SECURITY->user_id, $path))
+if ($fs->has_read_permission($GO_SECURITY->user_id, $file['folder_id']))
 {
 	/*
 	 * Remove new_filelink
 	 */
 	if(!$cache)
-	{
-		$fs->get_file($_REQUEST['path']);
-		$fs->delete_new_filelink($fs->f('id'), $GO_SECURITY->user_id);
+	{		
+		$files->delete_new_filelink($file['id'], $GO_SECURITY->user_id);
 	}
 		
 	$browser = detect_browser();
-
-	$filename = utf8_basename($path);
-	$extension = File::get_extension($filename);
-
+	
+	$extension = File::get_extension($file['name']);
 	
 	header('Content-Length: '.filesize($path));
 	header('Content-Transfer-Encoding: binary');
@@ -80,10 +87,10 @@ if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_per
 		header('Content-Type: application/download');
 		if($mode == 'download')
 		{
-			header('Content-Disposition: attachment; filename="'.$filename.'"');
+			header('Content-Disposition: attachment; filename="'.$file['name'].'"');
 		}else
 		{
-			header('Content-Disposition: inline; filename="'.$filename.'"');
+			header('Content-Disposition: inline; filename="'.$file['name'].'"');
 		}
 		if(!$cache)
 		{
@@ -95,10 +102,10 @@ if ($fs->has_read_permission($GO_SECURITY->user_id, $path) || $fs->has_write_per
 		header('Content-Type: '.File::get_mime($path));
 		if($mode == 'download')
 		{			
-			header('Content-Disposition: attachment; filename="'.$filename.'"');
+			header('Content-Disposition: attachment; filename="'.$file['name'].'"');
 		}else
 		{			
-			header('Content-Disposition: inline; filename="'.$filename.'"');
+			header('Content-Disposition: inline; filename="'.$file['name'].'"');
 		}
 		if(!$cache)
 		{
