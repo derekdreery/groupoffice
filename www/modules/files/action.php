@@ -17,7 +17,7 @@ require('../../Group-Office.php');
 $GO_SECURITY->json_authenticate('files');
 
 require_once ($GO_MODULES->modules['files']['class_path']."files.class.inc.php");
-$fs = new files();
+$files = new files();
 
 require($GO_LANGUAGE->get_language_file('files'));
 
@@ -32,46 +32,46 @@ try{
 			
 			$user_id = $GO_SECURITY->user_id;
 			
-			$fs->delete_all_new_filelinks($user_id);
+			$files->delete_all_new_filelinks($user_id);
 			
 			break;
 			
 		case 'set_view':
-			$up_folder['path']=$_POST['path'];
+			$up_folder['id']=$_POST['id'];
 			$up_folder['thumbs']=$_POST['thumbs'];
 				
-			$fs->update_folder($up_folder);
+			$files->update_folder($up_folder);
 				
 			$response['success']=true;
 				
 			break;
-		case 'delete':
+		/*case 'delete':
 				
 			$delete_path = $GO_CONFIG->file_storage_path.$_POST['path'];
 
-			if(!$fs->has_write_permission($GO_SECURITY->user_id, $delete_path))
+			if(!$files->has_write_permission($GO_SECURITY->user_id, $delete_path))
 			{
 				throw new AccessDeniedException();
 			}
 				
-			$fs->notify_users($_POST['path'], $GO_SECURITY->user_id, array(), array(), array(utf8_basename($delete_path)));
+			$files->notify_users($_POST['path'], $GO_SECURITY->user_id, array(), array(), array(utf8_basename($delete_path)));
 				
-			$response['success']=$fs->delete($delete_path);
-			break;
+			$response['success']=$files->delete($delete_path);
+			break;*/
 		case 'file_properties':
 			$path = $GO_CONFIG->file_storage_path.$_POST['path'];
 
 			if(!file_exists($path))
 			{
 				throw new Exception($lang['files']['fileNotFound']);
-			}elseif(!$fs->has_write_permission($GO_SECURITY->user_id, $path))
+			}elseif(!$files->has_write_permission($GO_SECURITY->user_id, $path))
 			{
 				throw new AccessDeniedException();
 			}
 				
 			$up_file['path']=$_POST['path'];
 			$up_file['comments']=$_POST['comments'];
-			$fs->update_file($up_file);
+			$files->update_file($up_file);
 
 				
 			if(empty($_POST['name']))
@@ -88,7 +88,7 @@ try{
 			{
 				$new_path = dirname($path).'/'.$_POST['name'];
 
-				$fs->move($path, $new_path);
+				$files->move($path, $new_path);
 				$response['path']=str_replace($GO_CONFIG->file_storage_path,'',$new_path);
 			}
 					
@@ -99,34 +99,40 @@ try{
 			break;
 
 		case 'folder_properties':
-			if(!file_exists($GO_CONFIG->file_storage_path.$_POST['path']))
+			$folder = $files->get_folder($_POST['folder_id']);
+			if(!$folder)
 			{
-				throw new Exception($lang['files']['fileNotFound']);
-			}elseif(!$fs->has_write_permission($GO_SECURITY->user_id, $GO_CONFIG->file_storage_path.$_POST['path']))
+				throw new FileNotFoundException();
+			}elseif(!$files->has_write_permission($GO_SECURITY->user_id, $folder))
 			{
 				throw new AccessDeniedException();
 			}
+			
+			if(isset($_POST['name']) && empty($_POST['name']))
+			{
+				throw new MissingFieldException();
+			}
 
 			$new_notify = isset($_POST['notify']);
-			$old_notify = $fs->is_notified($_POST['path'], $GO_SECURITY->user_id);
+			$old_notify = $files->is_notified($_POST['folder_id'], $GO_SECURITY->user_id);
 
 			if($new_notify && !$old_notify)
 			{
-				$fs->add_notification($_POST['path'], $GO_SECURITY->user_id);
+				$files->add_notification($_POST['folder_id'], $GO_SECURITY->user_id);
 			}
 			if(!$new_notify && $old_notify)
 			{
-				$fs->remove_notification($_POST['path'], $GO_SECURITY->user_id);
+				$files->remove_notification($_POST['folder_id'], $GO_SECURITY->user_id);
 			}
-				
-			$folder = $fs->get_folder($_POST['path']);
 
-			$up_folder['path']=$_POST['path'];
+			$up_folder['id']=$_POST['folder_id'];
 			$up_folder['comments']=$_POST['comments'];
+			
+			$usersfolder = $files->resolve_path('users');
 
-			if(utf8_basename(dirname($_POST['path'])) != 'users' && ($fs->is_owner($GO_SECURITY->user_id, $_POST['path']) || $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id)))
+			if($folder['parent_id']!=$usersfolder['id'] && ($files->is_owner($folder) || $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id)))
 			{
-				if (isset ($_POST['share']) && $folder['acl_read']==0) {
+				if (isset($_POST['share']) && $folder['acl_read']==0) {
 						
 					$up_folder['acl_read']=$GO_SECURITY->get_new_acl();
 					$up_folder['acl_write']=$GO_SECURITY->get_new_acl();
@@ -143,24 +149,26 @@ try{
 					$GO_SECURITY->delete_acl($folder['acl_write']);
 				}
 			}
-
-			$fs->update_folder($up_folder);
+			
+			$files->update_folder($up_folder);
 				
 			if(isset($_POST['name']))
 			{
-				if(empty($_POST['name']))
+				if($_POST['name'] != $folder['name'])
 				{
-					throw new MissingFieldException();
-				}
+					$path=$files->build_path($folder);
+					$newpath = dirname($path).'/'.$_POST['name'];
+					
+					$fs = new filesystem();
+					$fs->move($GO_CONFIG->file_storage_path.$path, $GO_CONFIG->file_storage_path.$newpath);
 
-				if($_POST['name'] != utf8_basename($_POST['path']))
-				{
-					$new_path = dirname($_POST['path']).'/'.$_POST['name'];
-
-					$fs->move($GO_CONFIG->file_storage_path.$_POST['path'], $GO_CONFIG->file_storage_path.$new_path);
-					$response['path']=$new_path;
+					$up_folder['name']=$_POST['name'];
+					
+					$response['path']=$newpath;
 				}
 			}
+			
+			$files->update_folder($up_folder);
 				
 			$response['success']=true;
 
@@ -168,56 +176,16 @@ try{
 
 		case 'new_folder':
 			
-			$folder=$fs->mkdir($_POST['folder_id'], $_POST['name']);
+			$folder=$files->mkdir($_POST['folder_id'], $_POST['name']);
 			$response['folder_id']=$folder['id'];
 			$response['success']=true;
-			/*
-			$parent = $fs->get_folder($_POST['folder_id']);
-			
-			if(!$parent)
-			{
-				throw new Exception('Folder not found');
-			}
-
-			if(!$fs->has_write_permission($GO_SECURITY->user_id, $parent))
-			{
-				throw new AccessDeniedException();
-			}
-			$response['success']=true;	
-			
-			if (empty($_POST['name'])) {
-				throw new Exception($lang['common']['missingField']);
-			}
-			
-			$response['rel_path']=$fs->build_path($parent);
-			$full_path = $GO_CONFIG->file_storage_path.$response['rel_path'];
-
-			if (file_exists($full_path.'/'.$_POST['name'])) {
-				throw new Exception($lang['files']['folderExists']);
-			}
-			if (!@ mkdir($full_path.'/'.$_POST['name'], $GO_CONFIG->folder_create_mode)) {
-				throw new Exception($lang['common']['saveError']);
-			} else {
-				$folder['visible']='1';
-				$folder['user_id']=$GO_SECURITY->user_id;
-				$folder['parent_id']=$parent['id'];
-				$folder['name']=$_POST['name'];
-				$folder['ctime']=time();
-
-				$response['folder_id']=$fs->add_folder($folder);
-			}*/
 
 			break;
 
 		case 'upload':
-			//var_dump($_FILES);
 			$response['success']=true;
-			$full_path = $GO_CONFIG->file_storage_path.$_POST['path'];
-
-			if(!file_exists($GO_CONFIG->tmpdir.'files_upload'))
-			{
-				$fs->mkdir_recursive($GO_CONFIG->tmpdir.'files_upload');
-			}
+			$fs = new filesystem();
+			$fs->mkdir_recursive($GO_CONFIG->tmpdir.'files_upload');
 
 			$_SESSION['GO_SESSION']['files']['uploaded_files']=array();
 
@@ -225,7 +193,7 @@ try{
 			{
 				if (is_uploaded_file($_FILES['attachments']['tmp_name'][$n]))
 				{
-					$tmp_file = $GO_CONFIG->tmpdir.'files_upload/'.($_FILES['attachments']['name'][$n]);
+					$tmp_file = $GO_CONFIG->tmpdir.'files_upload/'.$_FILES['attachments']['name'][$n];
 					move_uploaded_file($_FILES['attachments']['tmp_name'][$n], $tmp_file);
 					chmod($tmp_file, $GO_CONFIG->file_create_mode);
 
@@ -239,16 +207,31 @@ try{
 				
 			require_once($GO_CONFIG->class_path.'base/quota.class.inc.php');
 			$quota = new quota();
+			
+			$fs = new filesystem();
 				
 			$new = array();
 			$modified=array();
 
-			$command = isset($_POST['command']) ? $_POST['command'] : 'ask';
-			$full_path = $GO_CONFIG->file_storage_path.$_POST['path'];
+			$command = isset($_POST['command']) ? $_POST['command'] : 'ask';			
+			
+			$folder = $files->get_folder($_POST['folder_id']);
+			if(!$folder)
+			{
+				throw new FileNotFoundException();
+			}
+			if(!$files->has_write_permission($GO_SECURITY->user_id, $folder))
+			{
+				throw new AccessDeniedException();
+			}
+						
+			$rel_path = $files->build_path($folder);
+			$full_path = $GO_CONFIG->file_storage_path.$rel_path;
 
 			while($tmp_file = array_shift($_SESSION['GO_SESSION']['files']['uploaded_files']))
 			{
-				$new_path = $full_path.'/'.utf8_basename($tmp_file);
+				$filename = utf8_basename($tmp_file);
+				$new_path = $full_path.'/'.$filename;
 				if(file_exists($new_path) && $command!='yes' && $command!='yestoall')
 				{
 					if($command!='no' && $command != 'notoall')
@@ -260,25 +243,33 @@ try{
 				}else
 				{
 					$size = filesize($tmp_file)/1024;
-					if(!$quota->check($size))
+					/*if(!$quota->check($size))
 					{
 						throw new Exception($lang['common']['quotaExceeded']);
+					}*/
+					
+					$update=file_exists($new_path);
+					if($update)
+					{						
+						$modified[]=$filename;
+					}else
+					{
+						$new[]=$filename;
 					}
 						
 					if(!$fs->move($tmp_file, $new_path))
 					{
 						throw new Exception($lang['common']['saveError']);
 					}
-						
-					$quota->add($size);
-						
-					if(file_exists($new_path))
+
+					if(!$update || !$files->sync_file($new_path, $folder['id']))
 					{
-						$modified[]=utf8_basename($new_path);
-					}else
-					{
-						$new[]=utf8_basename($new_path);
+						$files->import_file($new_path, $folder['id']);
 					}
+						
+					//$quota->add($size);
+						
+					
 				}
 				if($command != 'yestoall' && $command != 'notoall')
 				{
@@ -286,7 +277,7 @@ try{
 				}
 			}
 				
-			$fs->notify_users($_POST['path'], $GO_SECURITY->user_id, $modified, $new);
+			$files->notify_users($folder, $GO_SECURITY->user_id, $modified, $new);
 
 			$response['success']=true;
 
@@ -306,53 +297,98 @@ try{
 			{
 				$response['success']=true;
 
-				if(!$fs->has_write_permission($GO_SECURITY->user_id, $GO_CONFIG->file_storage_path.$_SESSION['GO_SESSION']['files']['paste_destination']))
+				if(!$files->has_write_permission($GO_SECURITY->user_id, $_SESSION['GO_SESSION']['files']['paste_destination']))
 				{
 					throw new AccessDeniedException();
 				}
 
-
-
 				while($paste_source = array_shift($_SESSION['GO_SESSION']['files']['paste_sources']))
 				{
-					$destination = $GO_CONFIG->file_storage_path.$_SESSION['GO_SESSION']['files']['paste_destination'].'/'.utf8_basename($paste_source);
+					$destfolder = $files->get_folder($_SESSION['GO_SESSION']['files']['paste_destination']);
+					$destpath = $GO_CONFIG->file_storage_path.$files->build_path($destfolder);
+					
+					$type_id = explode(':',$paste_source);
+					
+					if($type_id[0]=='d')
+					{
+						$sourcefolder = $files->get_folder($type_id[1]);						
+						$sourcepath = $GO_CONFIG->file_storage_path.$files->build_path($sourcefolder);
+						$destpath .= '/'.$sourcefolder['name'];
+					}else
+					{
+						$sourcefile = $files->get_file($type_id[1]);
+						$sourcepath = $GO_CONFIG->file_storage_path.$files->build_path($sourcefile['folder_id']).'/'.$sourcefile['name'];
+						$destpath .= '/'.$sourcefile['name'];
+					}
+					
+					$fs = new filesystem();
+					
+					debug($sourcepath);
+					debug($destpath);
 						
 					if($_POST['paste_mode']=='copy')
 					{
-						if($GO_CONFIG->file_storage_path.$paste_source==$destination)
+						if($sourcepath==$destpath)
 						{
-							$name = $destination;
+							$name = $destpath;
 							$x=0;
-							while(file_exists($destination))
+							while(file_exists($destpath))
 							{
 								$x++;
-								$destination=File::strip_extension($name).'_'.$x.'.'.File::get_extension($name);
+								if($type_id[0]=='d')
+								{
+									$destpath=$name.' ('.$x.')';
+								}else
+								{
+									$destpath=File::strip_extension($name).' ('.$x.').'.File::get_extension($name);
+								}
 							}
 						}
 					}
 						
-					if(file_exists($destination) && $command!='yes' && $command!='yestoall')
+					$exists = file_exists($destpath);
+					if($exists && $command!='yes' && $command!='yestoall')
 					{
 						if($command!='no' && $command != 'notoall')
 						{
 							array_unshift($_SESSION['GO_SESSION']['files']['paste_sources'], $paste_source);
-							$response['file_exists']=utf8_basename($destination);
+							$response['file_exists']=utf8_basename($destpath);
 							throw new Exception('File exists');
 						}
 					}else
 					{
 						if($_POST['paste_mode']=='cut')
-						{
-							if(!$fs->has_write_permission($GO_SECURITY->user_id, $GO_CONFIG->file_storage_path.$paste_source))
+						{					
+							if($type_id[0]=='d')
 							{
-								throw new AccessDeniedException();
-							}
-							$fs->move($GO_CONFIG->file_storage_path.$paste_source,
-							$destination);
+								if(!$files->has_write_permission($GO_SECURITY->user_id, $sourcefolder))
+								{
+									throw new AccessDeniedException();
+								}
+								
+								$fs->move($sourcepath, $destpath);							
+								$files->move_folder($sourcefolder, $destfolder);
+							}else
+							{								
+								if(!$files->has_write_permission($GO_SECURITY->user_id, $sourcefile['folder_id']))
+								{
+									throw new AccessDeniedException();
+								}
+								
+								$fs->move($sourcepath, $destpath);
+								$files->move_file($sourcefile, $destfolder);								
+							}					
 						}else
 						{
-							$fs->copy($GO_CONFIG->file_storage_path.$paste_source,
-							$destination);
+							//todo check if exists on import
+							$fs->copy($sourcepath, $destpath);	
+							if($type_id[0]=='d')
+							{
+								$files->import_folder($destpath,$destfolder['id']);
+							}else
+							{
+								$files->import_file($destpath,$destfolder['id']);
+							}					
 						}
 					}
 
@@ -392,7 +428,7 @@ try{
 
 			if($template['id']>0)
 			{
-				$fs->update_template($template, $types);
+				$files->update_template($template, $types);
 				$response['success']=true;
 			}else
 			{
@@ -403,7 +439,7 @@ try{
 				$response['acl_read']=$template['acl_read']=$GO_SECURITY->get_new_acl();
 				$response['acl_write']=$template['acl_write']=$GO_SECURITY->get_new_acl();
 				$types .= 'ii';
-				$response['template_id']=$fs->add_template($template, $types);
+				$response['template_id']=$files->add_template($template, $types);
 			}
 			$response['success']=true;
 

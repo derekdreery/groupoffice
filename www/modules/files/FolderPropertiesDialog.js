@@ -155,9 +155,10 @@
 }
 
 Ext.extend(GO.files.FolderPropertiesDialog, Ext.Window, {
-	show : function(path)
+	parent_id : 0,
+	show : function(folder_id)
 	{
-		this.path = path;
+		this.folder_id = folder_id;
 		
 		if(!this.rendered)
 			this.render(Ext.getBody());
@@ -165,13 +166,15 @@ Ext.extend(GO.files.FolderPropertiesDialog, Ext.Window, {
 		this.formPanel.form.load({
 			url: GO.settings.modules.files.url+'json.php', 
 			params: {
-				path: path, 
+				folder_id: folder_id, 
 				task: 'folder_properties'
 			},			
 			success: function(form, action) {
 
 				var shareField = this.formPanel.form.findField('share');
 				shareField.setValue(action.result.data.acl_read>0);
+				
+				this.parent_id=action.result.data.parent_id;
 								
 				this.readPermissionsTab.setAcl(action.result.data.acl_read);
 				this.writePermissionsTab.setAcl(action.result.data.acl_write);				
@@ -206,7 +209,7 @@ Ext.extend(GO.files.FolderPropertiesDialog, Ext.Window, {
 						
 			url:GO.settings.modules.files.url+'action.php',
 			params: {
-				path: this.path, 
+				folder_id: this.folder_id, 
 				task: 'folder_properties'
 			},
 			waitMsg:GO.lang['waitMsgSave'],
@@ -219,11 +222,9 @@ Ext.extend(GO.files.FolderPropertiesDialog, Ext.Window, {
 				}
 				
 				if(action.result.path)
-				{					
-					var oldpath = this.path;
-					this.path=action.result.path;
-					this.fireEvent('rename', this, oldpath, this.path);
-					
+				{
+					this.formPanel.form.findField('path').setValue(action.result.path);
+					this.fireEvent('rename', this, this.parent_id);				
 				}
 				
 				if(hide)

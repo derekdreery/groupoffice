@@ -112,7 +112,7 @@ GO.files.ThumbsPanel = Ext.extend(Ext.Panel, {
 		var records = this.view.getSelectedRecords();
 		for(var i=0;i<records.length;i++)
 		{
-			selectedRows.push(records[i].data.path);
+			selectedRows.push(records[i].data.type_id);
 		}
 		
 		var params={}
@@ -154,7 +154,7 @@ GO.files.ThumbsPanel = Ext.extend(Ext.Panel, {
 					
 			if(dropRecord && dropRecord.data.extension=='folder')
 			{
-				this.fireEvent('drop', dropRecord.data.path, data.selections);
+				this.fireEvent('drop', dropRecord.data.id, data.selections);
 				return true;
 			}
 		}

@@ -92,7 +92,7 @@ GO.files.NewFolderDialog = function(config){
 				
 	GO.files.NewFolderDialog.superclass.constructor.call(this, config);
 	
-	this.addEvents({save:true})
+	this.addEvents({save:true});
 }
 Ext.extend(GO.files.NewFolderDialog, Ext.Window,{
 	show : function (folder_id) {
