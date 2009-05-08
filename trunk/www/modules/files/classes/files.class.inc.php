@@ -126,45 +126,30 @@ class files extends db
 	 * @access public
 	 * @return bool
 	 */
-	function is_home_path($user_id, $path)
+	function is_owner($folder)
 	{
-		global $GO_CONFIG, $GO_USERS;
-
-		if ($user = $GO_USERS->get_user($user_id))
-		{
-			$home_path = $GO_CONFIG->file_storage_path.'users/'.$user['username'];
-
-			if (dirname($path).utf8_basename($path) == dirname($home_path).utf8_basename($home_path))
-			{
-				return true;
-			}
-		}
-		return false;
+		$home = 'users/'.$_SESSION['GO_SESSION']['username'];
+		$homefolder = $this->resolve_path($home);
+		if(!$homefolder)
+			return false;
+			
+		return $this->is_sub_dir($folder, $homefolder);
+		
 	}
 
-	/**
-	 * Check if a user owns a path
-	 *
-	 * @param int $user_id Group-Office user ID
-	 * @param string $path The path to check
-	 *
-	 * @access public
-	 * @return bool
-	 */
-	function is_owner($user_id, $path)
+	
+	function is_sub_dir($sub, $parent)
 	{
-		global $GO_CONFIG, $GO_USERS;
-
-		if(!empty($_SESSION['GO_SESSION']['username']))
+		if($sub['parent_id']==0)
 		{
-			$home_path = 'users/'.$_SESSION['GO_SESSION']['username'];
-
-			if (strpos($path, $home_path) === 0)
-			{
-				return true;
-			}
+			return false;
 		}
-		return false;
+		if($sub['parent_id']==$parent['id'])
+		{
+			return true;
+		}
+		$next = $this->get_folder($sub['parent_id']);
+		return $this->is_sub_dir($next, $parent);
 	}
 
 	function check_share($full_path, $user_id, $acl_read, $acl_write, $quiet=true)
@@ -204,29 +189,29 @@ class files extends db
 		}
 	}
 
-	function add_notification($path, $user_id)
+	function add_notification($folder_id, $user_id)
 	{
-		$notification['path']=$path;
+		$notification['folder_id']=$folder_id;
 		$notification['user_id']=$user_id;
 
 		$this->insert_row('fs_notifications', $notification);
 	}
 
-	function remove_notification($path, $user_id)
+	function remove_notification($folder_id, $user_id)
 	{
-		$sql = "DELETE FROM fs_notifications WHERE path=? AND user_id=?";
-		return $this->query($sql, 'si', array($path, $user_id));
+		$sql = "DELETE FROM fs_notifications WHERE folder_id=? AND user_id=?";
+		return $this->query($sql, 'ii', array($folder_id, $user_id));
 	}
 
-	function remove_notifications($path)
+	function remove_notifications($folder_id)
 	{
-		$sql = "DELETE FROM fs_notifications WHERE path='".$this->escape($path)."'";
+		$sql = "DELETE FROM fs_notifications WHERE folder_id='".$this->escape($folder_id)."'";
 		return $this->query($sql);
 	}
 
-	function is_notified($path, $user_id)
+	function is_notified($folder_id, $user_id)
 	{
-		$sql = "SELECT * FROM fs_notifications WHERE path='".$this->escape($path)."' AND user_id=".$this->escape($user_id);
+		$sql = "SELECT * FROM fs_notifications WHERE folder_id=".$this->escape($folder_id)." AND user_id=".$this->escape($user_id);
 		$this->query($sql);
 		if($this->next_record())
 		{
@@ -237,21 +222,17 @@ class files extends db
 		}
 	}
 
-	function move_notifications($old_path, $new_path)
-	{
-		$sql = "UPDATE fs_notifications SET path='".$this->escape($new_path)."' WHERE path='".$this->escape($old_path)."'";
-		return $this->query($sql);
-	}
 
-
-	function get_users_to_notify($path)
+	function get_users_to_notify($folder_id)
 	{
-		$sql = "SELECT user_id FROM fs_notifications WHERE path='".$this->escape($path)."'";
+		return false;
+		
+		$sql = "SELECT user_id FROM fs_notifications WHERE folder_id=".$this->escape($folder_id);
 		$this->query($sql);
 		return $this->num_rows();
 	}
 
-	function notify_users($path, $modified_by_user_id, $modified=array(), $new=array(), $deleted=array())
+	function notify_users($folder, $modified_by_user_id, $modified=array(), $new=array(), $deleted=array())
 	{
 		global $GO_USERS, $GO_LANGUAGE, $GO_CONFIG, $GO_SECURITY;
 
@@ -278,13 +259,13 @@ class files extends db
 		}
 
 		$body = sprintf($lang['files']['folder_modified_body'],
-		$path,
+		$this->build_path($folder),
 		$modified_by_user_name,
 		$changes);
 			
 
 		$users=array();
-		$this->get_users_to_notify($path);
+		$this->get_users_to_notify($folder['id']);
 		while($this->next_record())
 		{
 			if($this->f('user_id')!=$GO_SECURITY->user_id)
@@ -605,54 +586,57 @@ class files extends db
 	}
 
 
-	function move_file($source_path, $destination_path)
+	function move_file($sourcefile, $destfolder)
 	{
-		global $GO_CONFIG;
-		if($this->is_sub_dir($source_path, $GO_CONFIG->file_storage_path))
-		{
-			$file = $this->get_file($this->strip_server_path($source_path));
-			$this->delete_file($GO_CONFIG->file_storage_path.$destination_path);
-
-			$up_file['id']=$file['id'];
-			$up_file['path']=$this->strip_server_path($destination_path);
-			$this->update_file($up_file);
-
-			$this->cache_file($destination_path);
-
-			$this->move_version($source_path, $destination_path);
-
-		}elseif($this->is_sub_dir($destination_path, $GO_CONFIG->file_storage_path))
-		{
-
-
-			$file = $this->get_file($this->strip_server_path($destination_path));
-			$up_file['id']=$file['id'];
-			$up_file['path']=$this->strip_server_path($destination_path);
-			$this->update_file($up_file);
-
-			$this->cache_file($destination_path);
-
-			$this->move_version($source_path, $destination_path);
-		}
+		$sql = "DELETE FROM fs_files WHERE folder_id=? AND name COLLATE utf8_bin LIKE ?";
+		$this->query($sql,'is',array($destfolder['id'], $sourcefile['name']));
+		
+		$up_file['id']=$sourcefile['id'];
+		$up_file['folder_id']=$destfolder['id'];								
+		$this->update_file($up_file);
 	}
 
-	function move_folder($source_path, $destination_path)
+	function move_folder($sourcefolder, $destfolder)
 	{
-		global $GO_CONFIG;
-		if($this->is_sub_dir($source_path, $GO_CONFIG->file_storage_path))
+		debug('Moving');
+		debug($sourcefolder);
+		
+		debug('Into');
+		debug($destfolder);
+		
+		$existing_folder = $this->folder_exists($destfolder['id'], $sourcefolder['name']);
+		if($existing_folder)
 		{
-			$this->delete_folder($destination_path);
-
-			$source_path=$this->strip_server_path($source_path);
-			$destination_path=$this->strip_server_path($destination_path);
-
-			$folder = $this->get_folder($source_path);
-			$up_folder['id']=$folder['id'];
-			$up_folder['path']=$destination_path;
-			$this->update_folder($up_folder);
-
-			$this->move_notifications($source_path, $destination_path);
+			debug('Folder exists');
+			$newfolder = $sourcefolder;
+			$newfolder['id']=$existing_folder['id'];
+			$newfolder['parent_id']=$existing_folder['parent_id'];
+			$this->update_folder($newfolder);
+			debug($newfolder);
+		}else
+		{
+			debug('Created');
+			$newfolder=$sourcefolder;
+			$newfolder['parent_id']=$destfolder['id'];
+			$newfolder['id']=$this->add_folder($newfolder);
+			debug($newfolder);
 		}
+		$files = new files();
+		
+		$this->get_files($sourcefolder['id']);
+		while($file = $this->next_record())
+		{
+			$files->move_file($file, $newfolder);
+		}
+		
+		$this->get_folders($sourcefolder['id']);
+		while($folder = $this->next_record())
+		{
+			$files->move_folder($folder, $newfolder);
+		}
+		
+		$sql = "DELETE FROM fs_folders WHERE id=?";
+		$this->query($sql, 'i', $sourcefolder['id']);
 	}
 
 
@@ -661,37 +645,80 @@ class files extends db
 	{
 		global $GO_CONFIG;
 
-		if(!is_array($file))
-		{
-			$file = array('path'=>$file);
-		}
-
-		$file['ctime']=$file['mtime']=time();
 		$file['id']=$this->nextid('fs_files');
 		$file['user_id']=$GLOBALS['GO_SECURITY']->user_id;
 		$this->insert_row('fs_files', $file);
 
-		$this->cache_file($GO_CONFIG->file_storage_path.$file['path']);
+		$this->cache_file($file);
 
 		$this->add_new_filelink($file);
 
 		return $file['id'];
 	}
+	
+	function sync_file($path, $parent_id)
+	{
+		$file = $this->file_exists($parent_id, utf8_basename($path));
+		if(!$file)
+		{
+			return false;
+		}
+		$file['ctime']=@filectime($path);
+		$file['mtime']=@filemtime($path);
+		$file['size']=filesize($path);
+		return $this->update_file($file);
+	}
+	
+	function import_file($path, $parent_id)
+	{	
+		$file['name']=utf8_basename($path);
+		$file['ctime']=@filectime($path);
+		$file['mtime']=@filemtime($path);
+		$file['folder_id']=$parent_id;
+		$file['size']=filesize($path);
+		return $this->add_file($file);	
+	}
+	
+	function import_folder($path, $parent_id)
+	{	
+		global $GO_SECURITY;
+		
+		$fs = new filesystem();
+		
+		
+
+		$folder['visible']='1';
+		$folder['user_id']=$GO_SECURITY->user_id;
+		$folder['parent_id']=$parent_id;
+		$folder['name']=utf8_basename($path);
+		$folder['ctime']=filemtime($path);		
+		$folder['id']=$this->add_folder($folder);
+			
+		if(!$folder['id'])
+		{
+			throw new Exception('Could not create folder: '.$path);
+		}
+		
+		$files = $fs->get_files($path);
+		while($fs_file = array_shift($files))
+		{
+			$this->import_file($fs_file['path'], $folder['id']);
+		}
+		
+		$folders = $fs->get_folders($path);
+		while($fs_folder=array_shift($folders))
+		{
+			$this->import_folder($fs_folder['path'], $folder['id']);
+		}		
+	}
+	
 
 	function update_file($file)
 	{
-		if(isset($file['id']))
-		{
-			$index = 'id';
-		}else
-		{
-			$index=  'path';
-		}
+		$this->cache_file($file['id']);
 
-		$this->cache_file($file['path'], $index);
-
-		$file['mtime']=time();
-		$this->update_row('fs_files', $index, $file);
+		//$file['mtime']=time();
+		$this->update_row('fs_files', 'id', $file);
 	}
 
 	function get_folder($id)
@@ -1079,23 +1106,23 @@ class files extends db
 		}	
 
 			
-		if (empty($_POST['name'])) {
+		if (empty($name)) {
 			throw new Exception($lang['common']['missingField']);
 		}
 			
 		$rel_path=$this->build_path($parent);
 		$full_path = $GO_CONFIG->file_storage_path.$rel_path;
 
-		if (file_exists($full_path.'/'.$_POST['name'])) {
+		if (file_exists($full_path.'/'.$name)) {
 			throw new Exception($lang['files']['folderExists']);
 		}
-		if (!@ mkdir($full_path.'/'.$_POST['name'], $GO_CONFIG->folder_create_mode)) {
+		if (!@ mkdir($full_path.'/'.$name, $GO_CONFIG->folder_create_mode)) {
 			throw new Exception($lang['common']['saveError']);
 		} else {
 			$folder['visible']='1';
 			$folder['user_id']=$GO_SECURITY->user_id;
 			$folder['parent_id']=$parent['id'];
-			$folder['name']=$_POST['name'];
+			$folder['name']=$name;
 			$folder['ctime']=time();
 			if($share)
 			{
@@ -1131,7 +1158,7 @@ class files extends db
 		if(!$folder)
 		return $path;
 
-		$path = $folder['name'].'/'.$path;
+		$path = empty($path) ? $folder['name'] : $folder['name'].'/'.$path;
 		return $this->build_path($folder['parent_id'], $path);
 	}
 
@@ -1445,7 +1472,7 @@ class files extends db
 		}
 	}
 
-	function cache_file($path, $index='path')
+	function cache_file($file)
 	{
 		global $GO_CONFIG, $GO_LANGUAGE;
 		require_once($GO_CONFIG->class_path.'/base/search.class.inc.php');
@@ -1455,30 +1482,33 @@ class files extends db
 
 		$fs = new files();
 
-		$path = $this->strip_server_path($path);
-
-		$sql = "SELECT * FROM fs_files WHERE $index=?;";
-		$this->query($sql, 's', $path);
-		$file = $this->next_record();
-			
-		//$share = $fs->find_share(dirname($path));
-		$share=true;
-
-		if($file && $share)
+		if(is_numeric($file))
 		{
-			$cache['id']=$file['id'];
-			$cache['user_id']=$file['user_id'];
-			$cache['name'] = htmlspecialchars(utf8_basename($path), ENT_QUOTES, 'utf-8');
-			$cache['link_type']=6;
-			$cache['description']=$path;
-			$cache['type']=$lang['files']['file'];
-			$cache['module']='files';
-			$cache['keywords']=$file['comments'].','.$cache['name'].','.$cache['type'];
-			$cache['mtime']=$file['mtime'];
-			$cache['acl_read']=0;
-			$cache['acl_write']=0;
-
-			$search->cache_search_result($cache);
+			$file = $this->get_file($file);
+		}
+		if($file)
+		{			
+			$share = $fs->find_share($file['folder_id']);
+			
+			if(!isset($file['comments']))
+				$file['comments']='';
+			
+			if($share)
+			{
+				$cache['id']=$file['id'];
+				$cache['user_id']=$file['user_id'];
+				$cache['name'] = htmlspecialchars($file['name'], ENT_QUOTES, 'utf-8');
+				$cache['link_type']=6;
+				$cache['description']='';
+				$cache['type']=$lang['files']['file'];
+				$cache['module']='files';
+				$cache['keywords']=$file['comments'].','.$cache['name'].','.$cache['type'];
+				$cache['mtime']=$file['mtime'];
+				$cache['acl_read']=$share['acl_read'];
+				$cache['acl_write']=$share['acl_read'];
+	
+				$search->cache_search_result($cache);
+			}
 		}
 	}
 

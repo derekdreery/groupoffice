@@ -9,6 +9,7 @@ chdir(dirname(__FILE__));
 
 $updates[]="ALTER TABLE `fs_files` ADD `folder_id` INT NOT NULL AFTER `id`";
 $updates[]="ALTER TABLE `fs_files` ADD `name` VARCHAR( 255 ) NOT NULL AFTER `folder_id`";
+$updates[]="ALTER TABLE `fs_files` ADD `size` INT NOT NULL AFTER `mtime`";
 $updates[]="ALTER TABLE `fs_folders` ADD `parent_id` INT( 11 ) NOT NULL AFTER `id`;";
 $updates[]="ALTER TABLE `fs_folders` ADD `name` VARCHAR( 255 ) NOT NULL AFTER `parent_id`";
 $updates[]="ALTER TABLE `fs_folders` ADD `ctime` INT NOT NULL";  
@@ -17,6 +18,13 @@ $updates[]="ALTER TABLE `fs_files` DROP PRIMARY KEY ,ADD PRIMARY KEY ( `id` )";
 $updates[]="ALTER TABLE `fs_folders` DROP PRIMARY KEY ,ADD PRIMARY KEY ( `id` ) ";
 $updates[]="ALTER TABLE `fs_folders` DROP INDEX `link_id_2`"; 
 $updates[]="ALTER TABLE `fs_folders` DROP INDEX `visible`"; 
+
+$updates[]="ALTER TABLE `fs_notifications` ADD `folder_id` INT NOT NULL FIRST";
+$updates[]="update fs_notifications n set folder_id=(select path from fs_folders where path=n.path);";
+
+$updates[]="ALTER TABLE `fs_notifications` DROP PRIMARY KEY , ADD PRIMARY KEY ( `folder_id` , `user_id` ) ;";
+
+
 
 require('../../../../Group-Office.php');
 
@@ -44,6 +52,7 @@ function get_file($path, $parent_id)
 		$file['name']=utf8_basename($path);
 		$file['ctime']=@filectime($GO_CONFIG->file_storage_path.$path);
 		$file['mtime']=@filemtime($GO_CONFIG->file_storage_path.$path);
+		$file['size']=@filesize($GO_CONFIG->file_storage_path.$path);
 		$file['folder_id']=$parent_id;		
 		
 		return $fsdb->add_file($file);

@@ -34,7 +34,7 @@ GO.files.FilePropertiesDialog = function(config){
         },{
         	xtype: 'plainfield',
         	fieldLabel: GO.lang.strLocation,
-        	name: 'path'
+        	name: 'file_id'
         },
         new GO.form.HtmlComponent({
         	html:'<hr />'        	
@@ -118,7 +118,7 @@ GO.files.FilePropertiesDialog = function(config){
 					text: GO.lang.download,
 					cls: 'x-btn-text-icon',
 					handler: function(){
-						window.location.href=GO.settings.modules.files.url+'download.php?mode=download&path='+encodeURIComponent(this.path);
+						window.location.href=GO.settings.modules.files.url+'download.php?mode=download&file_id='+encodeURIComponent(this.file_id);
 					},
 					scope: this
 				}];
@@ -135,7 +135,7 @@ GO.files.FilePropertiesDialog = function(config){
 							Ext.MessageBox.alert(GO.lang.strError, GO.lang.noJava);
 						}else
 						{		
-							window.location.href=GO.settings.modules.gota.url+'jnlp.php?path='+encodeURIComponent(this.path);
+							window.location.href=GO.settings.modules.gota.url+'jnlp.php?file_id='+encodeURIComponent(this.file_id);
 						}
 					},
 					scope: this
@@ -175,11 +175,11 @@ GO.files.FilePropertiesDialog = function(config){
 
 Ext.extend(GO.files.FilePropertiesDialog, Ext.Window, {
 	
-	show : function(path, config)
+	show : function(file_id, config)
 	{
 		config = config || {};
 		
-		this.setPath(path);
+		this.setfile_id(file_id);
 		
 		if(!this.rendered)
 			this.render(Ext.getBody());
@@ -188,7 +188,7 @@ Ext.extend(GO.files.FilePropertiesDialog, Ext.Window, {
 		this.tabPanel.setActiveTab(0);
 		
 		var params = {
-				path: path, 
+				file_id: file_id, 
 				task: 'file_properties'
 			};
 			
@@ -205,9 +205,9 @@ Ext.extend(GO.files.FilePropertiesDialog, Ext.Window, {
 			success: function(form, action) {				
 				this.setWritePermission(action.result.data.write_permission);		
 				
-				if(action.result.data.path)
+				if(action.result.data.file_id)
 				{
-					this.setPath(action.result.data.path);
+					this.setfile_id(action.result.data.file_id);
 				}
 				
 		    GO.files.FilePropertiesDialog.superclass.show.call(this);
@@ -219,10 +219,10 @@ Ext.extend(GO.files.FilePropertiesDialog, Ext.Window, {
 		});		
 	},
 	
-	setPath : function(path)
+	setfile_id : function(file_id)
 	{
-		this.path = path;
-		this.versionsGrid.setPath(path);
+		this.file_id = file_id;
+		this.versionsGrid.setfile_id(file_id);
 	},
 	
 	setWritePermission : function(writePermission)
@@ -237,16 +237,16 @@ Ext.extend(GO.files.FilePropertiesDialog, Ext.Window, {
 						
 			url:GO.settings.modules.files.url+'action.php',
 			params: {
-				path: this.path, 
+				file_id: this.file_id, 
 				task: 'file_properties'
 			},
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){
-				if(action.result.path)
+				if(action.result.file_id)
 				{
-					var oldpath = this.path;
-					this.setPath(action.result.path);
-					this.fireEvent('rename', this, oldpath, this.path);
+					var oldfile_id = this.file_id;
+					this.setfile_id(action.result.file_id);
+					this.fireEvent('rename', this, oldfile_id, this.file_id);
 				}
 				
 				if(hide)

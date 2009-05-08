@@ -17,7 +17,7 @@ require('../../Group-Office.php');
 $GO_SECURITY->json_authenticate('files');
 require_once($GO_CONFIG->class_path.'File.class.inc.php');
 require_once ($GO_MODULES->modules['files']['class_path']."files.class.inc.php");
-$fs = new files();
+$files = new files();
 
 require($GO_LANGUAGE->get_language_file('files'));
 
@@ -33,7 +33,7 @@ try{
 			$fs2= new files();
 			
 			$home_id = 'users/'.$_SESSION['GO_SESSION']['username'];
-			$home_folder=$fs->resolve_path($home_id);
+			$home_folder=$files->resolve_path($home_id);
 			$node = isset($_POST['node']) ? ($_POST['node']) : 'root';
 
 			switch($node)
@@ -41,10 +41,10 @@ try{
 				case 'root':
 						
 					/*Home folder with children */
-					$folders = $fs->get_folders($home_folder['id']);
+					$folders = $files->get_folders($home_folder['id']);
 
 					$children = array();
-					while($folder=$fs->next_record())
+					while($folder=$files->next_record())
 					{
 						$node= array(
 						'text'=>$folder['name'],
@@ -89,28 +89,28 @@ try{
 						
 						
 						
-				/*	$share_count = $fs->get_authorized_shares($GO_SECURITY->user_id);
+				/*	$share_count = $files->get_authorized_shares($GO_SECURITY->user_id);
 					$children = array();
-					while ($fs->next_record())
+					while ($files->next_record())
 					{
-						$share_id = $fs->f('id');
+						$share_id = $files->f('id');
 						if (file_exists($share_id))
 						{
 							if (is_dir($share_id))
 							{
-								$is_sub_dir = isset($last_folder) ? $fs->is_sub_dir($share_id, $last_folder) : false;
+								$is_sub_dir = isset($last_folder) ? $files->is_sub_dir($share_id, $last_folder) : false;
 
 								if (!$is_sub_dir)
 								{
-									$last_folder = $fs->f('id');
+									$last_folder = $files->f('id');
 
 									$node = array(
-											'text'=>utf8_basename($fs->f('id')),
-											'id'=>$fs->strip_server_id($fs->f('id')),
+											'text'=>utf8_basename($files->f('id')),
+											'id'=>$files->strip_server_id($files->f('id')),
 											'iconCls'=>'folder-default',
 											'reloadable'=>false
 											);
-											if(!$fs->get_folders($fs->f('id')))
+											if(!$files->get_folders($files->f('id')))
 											{
 												$node['children']=array();
 												$node['expanded']=true;
@@ -146,7 +146,7 @@ try{
 					}
 					
 					
-					$num_new_files = $fs->get_num_new_files($GO_SECURITY->user_id);
+					$num_new_files = $files->get_num_new_files($GO_SECURITY->user_id);
 					
 					$node= array(
 					'text'=>$lang['files']['new'].' ('.$num_new_files.')',
@@ -163,28 +163,28 @@ try{
 
 				case 'shared':
 
-					$share_count = $fs->get_authorized_shares($GO_SECURITY->user_id);
+					$share_count = $files->get_authorized_shares($GO_SECURITY->user_id);
 
 					$count = 0;
-					while ($fs->next_record())
+					while ($files->next_record())
 					{
-						$share_id = $GO_CONFIG->file_storage_id.$fs->f('id');
+						$share_id = $GO_CONFIG->file_storage_id.$files->f('id');
 
 						if (is_dir($share_id))
 						{
-							$is_sub_dir = isset($last_folder) ? $fs->is_sub_dir($share_id, $last_folder) : false;
+							$is_sub_dir = isset($last_folder) ? $files->is_sub_dir($share_id, $last_folder) : false;
 
 							if (!$is_sub_dir)
 							{									
 								$last_folder = $share_id;
 
 								$node = array(
-										'text'=>utf8_basename($fs->f('id')),
-										'id'=>$fs->f('id'),
+										'text'=>utf8_basename($files->f('id')),
+										'id'=>$files->f('id'),
 										'iconCls'=>'folder-default',
 										'notreloadable'=>true
 										);
-										if(!$fs->get_folders($share_id))
+										if(!$files->get_folders($share_id))
 										{
 											$node['children']=array();
 											$node['expanded']=true;
@@ -203,16 +203,16 @@ try{
 
 				default:
 
-					$folder = $fs->get_folder($_POST['node']);
-					if(!$fs->has_read_permission($GO_SECURITY->user_id, $folder))
+					$folder = $files->get_folder($_POST['node']);
+					if(!$files->has_read_permission($GO_SECURITY->user_id, $folder))
 					{
 						throw new AccessDeniedException();
 					}
 					
-					$folders = $fs->get_folders($_POST['node']);
+					$folders = $files->get_folders($_POST['node']);
 
 					$children = array();
-					while($folder=$fs->next_record())
+					while($folder=$files->next_record())
 					{
 						$node= array(
 						'text'=>$folder['name'],
@@ -251,7 +251,7 @@ try{
 					
 					if(isset($_SESSION['GO_SESSION']['files']['jupload_new_files']) && count($_SESSION['GO_SESSION']['files']['jupload_new_files']))
 					{						
-						$fs->notify_users($_POST['id'],$GO_SECURITY->user_id, array(), $_SESSION['GO_SESSION']['files']['jupload_new_files']);
+						$files->notify_users($_POST['id'],$GO_SECURITY->user_id, array(), $_SESSION['GO_SESSION']['files']['jupload_new_files']);
 						
 						$_SESSION['GO_SESSION']['files']['jupload_new_files']=array();
 					}
@@ -264,16 +264,16 @@ try{
 							$response['deleteFeedback']=$lang['common']['accessDenied'];
 						}
 						$response['write_permission']=false;
-						$share_count = $fs->get_authorized_shares($GO_SECURITY->user_id);
+						$share_count = $files->get_authorized_shares($GO_SECURITY->user_id);
 
-						while ($fs->next_record())
+						while ($files->next_record())
 						{
-							$share_id = $GO_CONFIG->file_storage_id.$fs->f('id');
+							$share_id = $GO_CONFIG->file_storage_id.$files->f('id');
 							if (file_exists($share_id))
 							{
 								if (is_dir($share_id))
 								{
-									$is_sub_dir = isset($last_folder) ? $fs->is_sub_dir($share_id, $last_folder) : false;
+									$is_sub_dir = isset($last_folder) ? $files->is_sub_dir($share_id, $last_folder) : false;
 
 									if (!$is_sub_dir)
 									{
@@ -281,7 +281,7 @@ try{
 										$folder['type_id']='d:'.$folder['id'];
 										$folder['name']=utf8_basename($share_id);
 										$folder['thumb_url']=$GO_THEME->image_url.'128x128/filetypes/folder.png';										
-										$folder['id']=$fs->f('id');
+										$folder['id']=$files->f('id');
 										$folder['grid_display']='<div class="go-grid-icon filetype-folder">'.$folder['name'].'</div>';
 										$folder['type']=$lang['files']['folder'];
 										$folder['mtime']=Date::get_timestamp(filemtime($share_id));
@@ -301,13 +301,13 @@ try{
 						
 						if($sort == 'grid_display') $sort = 'name';
 
-						$files = $fs->get_new_files($GO_SECURITY->user_id, $sort, $dir);
+						$files = $files->get_new_files($GO_SECURITY->user_id, $sort, $dir);
 						foreach($files as $file)
 						{
 							$extension = File::get_extension($file['name']);
 						
 							$file['type_id']='f:'.$file['id'];
-							$file['thumb_url']=$fs->get_thumb_url($file['id']);						
+							$file['thumb_url']=$files->get_thumb_url($file['id']);						
 							$file['extension']=$extension;
 							$file['grid_display']='<div class="go-grid-icon filetype filetype-'.$extension.'">'.$file['name'].'</div>';
 							$file['type']=File::get_filetype_description($extension);
@@ -323,7 +323,7 @@ try{
 						
 					}else
 					{					
-						$curfolder = $fs->get_folder($_POST['id']);						
+						$curfolder = $files->get_folder($_POST['id']);						
 						$response['thumbs']=$curfolder['thumbs'];
 						$response['parent_id']=$curfolder['parent_id'];
 						
@@ -332,7 +332,7 @@ try{
 							$up_folder['id']=$db_folder['id'];
 							$up_folder['thumbs']='1';
 							
-							$fs->update_folder($up_folder);
+							$files->update_folder($up_folder);
 							$response['thumbs']='1';
 							
 						}*/
@@ -342,8 +342,8 @@ try{
 							mkdir($id, 0755, true);
 						}*/
 
-						$response['write_permission']=$fs->has_write_permission($GO_SECURITY->user_id, $curfolder);
-						if(!$response['write_permission'] && !$fs->has_read_permission($GO_SECURITY->user_id, $curfolder))
+						$response['write_permission']=$files->has_write_permission($GO_SECURITY->user_id, $curfolder);
+						if(!$response['write_permission'] && !$files->has_read_permission($GO_SECURITY->user_id, $curfolder))
 						{
 							throw new AccessDeniedException();
 						}						
@@ -369,15 +369,15 @@ try{
 										{
 											throw new AccessDeniedException();
 										}
-										$fs->delete_file($ti[1]);
+										$files->delete_file($ti[1]);
 									}else
 									{
-										$fs->delete_folder($ti[1]);
+										$files->delete_folder($ti[1]);
 									}									
 									//$deleted[]=utf8_basename($delete_id);
 								}
 								
-								//$fs->notify_users($_POST['id'], $GO_SECURITY->user_id, array(), array(), $deleted);
+								//$files->notify_users($_POST['id'], $GO_SECURITY->user_id, array(), array(), $deleted);
 			
 							}catch(Exception $e)
 							{
@@ -390,12 +390,12 @@ try{
 						{
 							if(!empty($_POST['template_id']) && !empty($_POST['template_name']))
 							{
-								$template = $fs->get_template($_POST['template_id'], true);
+								$template = $files->get_template($_POST['template_id'], true);
 
 								$new_id = $id.'/'.$_POST['template_name'].'.'.$template['extension'];
 								file_put_contents($new_id, $template['content']);
 
-								$response['new_id']=$fs->strip_server_id($new_id);
+								$response['new_id']=$files->strip_server_id($new_id);
 							}
 
 							try{
@@ -471,8 +471,8 @@ try{
 
 						require_once($GO_CONFIG->control_path.'phpthumb/phpThumb.config.php');
 
-						$fs->get_folders($curfolder['id'],$sort,$dir);
-						while($folder = $fs->next_record())
+						$files->get_folders($curfolder['id'],$sort,$dir);
+						while($folder = $files->next_record())
 						{							
 							if($folder['acl_read']>0)
 							{
@@ -501,15 +501,15 @@ try{
 						}
 						
 
-						$files = $fs->get_files($curfolder['id'], $sort, $dir);
-						while($file = $fs->next_record())
+						$files->get_files($curfolder['id'], $sort, $dir);
+						while($file = $files->next_record())
 						{
 							$extension = File::get_extension($file['name']);
 							
 							if(!isset($extensions) || in_array($extension, $extensions))
 							{		
 								$file['type_id']='f:'.$file['id'];
-								$file['thumb_url']=$fs->get_thumb_url($file['id']);								
+								$file['thumb_url']=$files->get_thumb_url($file['id']);								
 								$file['extension']=$extension;								
 								$file['grid_display']='<div class="go-grid-icon filetype filetype-'.$extension.'">'.$file['name'].'</div>';
 								$file['type']=File::get_filetype_description($extension);
@@ -526,12 +526,12 @@ try{
 
 							case 'folder_properties':
 
-								$id = $GO_CONFIG->file_storage_id.$_POST['id'];
-
-								if(!file_exists($id))
+		
+								$folder = $files->get_folder($_POST['folder_id']);
+								if(!$folder)
 								{
-									throw new Exception($lang['files']['fileNotFound']);
-								}elseif(!$fs->has_read_permission($GO_SECURITY->user_id, $id))
+									throw new FileNotFoundException();
+								}elseif(!$files->has_read_permission($GO_SECURITY->user_id, $folder))
 								{
 									throw new AccessDeniedException();
 								}
@@ -540,19 +540,22 @@ try{
 								
 								$admin = $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id);
 									
-								$response['data'] = $fs->get_folder($_POST['id']);
-								$response['data']['name']=utf8_basename($_POST['id']);
-								$response['data']['id']=$_POST['id'];
-								$response['data']['mtime']=Date::get_timestamp(filemtime($id));
-								$response['data']['ctime']=Date::get_timestamp(filectime($id));
-								$response['data']['atime']=Date::get_timestamp(fileatime($id));
+								$response['data'] = $folder;
+								$path=$files->build_path($folder);
+								$response['data']['path']=$path;
+								$response['data']['ctime']=Date::get_timestamp(filectime($GO_CONFIG->file_storage_path.$path));
+								$response['data']['mtime']=Date::get_timestamp(fileatime($GO_CONFIG->file_storage_path.$path));
+								$response['data']['atime']=Date::get_timestamp(filemtime($GO_CONFIG->file_storage_path.$path));
+
 								$response['data']['type']='<div class="go-grid-icon filetype-folder">'.$lang['files']['folder'].'</div>';
-								$response['data']['size']=Number::format_size(filesize($id));
-								//$response['data']['write_permission']=$admin || $fs->is_owner($GO_SECURITY->user_id, $_POST['id']);
-								$response['data']['write_permission']=$fs->has_write_permission($GO_SECURITY->user_id, $id);
-								$response['data']['is_owner']=$admin || $fs->is_owner($GO_SECURITY->user_id, $_POST['id']);
-								$response['data']['is_home_dir']=utf8_basename(dirname($id)) == 'users';
-								$response['data']['notify']=$fs->is_notified($_POST['id'], $GO_SECURITY->user_id);
+								$response['data']['size']='-';
+		
+								$response['data']['write_permission']=$files->has_write_permission($GO_SECURITY->user_id, $folder);
+								$response['data']['is_owner']=$admin || $files->is_owner($folder);
+								
+								$usersfolder = $files->resolve_path('users');
+								$response['data']['is_home_dir']=$folder['parent_id']==$usersfolder['id'];
+								$response['data']['notify']=$files->is_notified($folder['id'], $GO_SECURITY->user_id);
 
 								break;
 
@@ -561,7 +564,7 @@ try{
 								
 								if(is_numeric($_POST['id']))
 								{
-									$response['data'] = $fs->get_file_by_id($_POST['id']);
+									$response['data'] = $files->get_file_by_id($_POST['id']);
 									if(!$response['data'])
 									{
 										throw new DatabaseSelectException();
@@ -573,7 +576,7 @@ try{
 								if(!file_exists($id))
 								{
 									throw new Exception('File not found: '.$_POST['id']);
-								}elseif(!$fs->has_read_permission($GO_SECURITY->user_id, $id))
+								}elseif(!$files->has_read_permission($GO_SECURITY->user_id, $id))
 								{
 									throw new AccessDeniedException();
 								}
@@ -583,7 +586,7 @@ try{
 								$response['success']=true;
 								if(!isset($response['data']))
 								{
-									$response['data'] = $fs->get_file($_POST['id']);
+									$response['data'] = $files->get_file($_POST['id']);
 								}
 								$response['data']['name']=File::strip_extension(utf8_basename($_POST['id']));
 								//$response['data']['id']=$_POST['id'];
@@ -592,7 +595,7 @@ try{
 								$response['data']['atime']=Date::get_timestamp(fileatime($id));
 								$response['data']['type']='<div class="go-grid-icon filetype filetype-'.$extension.'">'.File::get_filetype_description($extension).'</div>';
 								$response['data']['size']=Number::format_size(filesize($id));
-								$response['data']['write_permission']=$fs->has_write_permission($GO_SECURITY->user_id, dirname($id));
+								$response['data']['write_permission']=$files->has_write_permission($GO_SECURITY->user_id, dirname($id));
 								
 								$params['response']=&$response;
 								
@@ -609,7 +612,7 @@ try{
 
 										foreach($templates as $template_id)
 										{
-											$fs->delete_template($template_id);
+											$files->delete_template($template_id);
 										}
 									}catch(Exception $e)
 									{
@@ -620,27 +623,27 @@ try{
 
 								if(isset($_POST['writable_only']))
 								{
-									$response['total'] = $fs->get_writable_templates($GO_SECURITY->user_id);
+									$response['total'] = $files->get_writable_templates($GO_SECURITY->user_id);
 								}else
 								{
-									$response['total'] = $fs->get_authorized_templates($GO_SECURITY->user_id);
+									$response['total'] = $files->get_authorized_templates($GO_SECURITY->user_id);
 								}
 								$response['results']=array();
-								while($fs->next_record(DB_ASSOC))
+								while($files->next_record(DB_ASSOC))
 								{
-									$user = $GO_USERS->get_user($fs->f('user_id'));
+									$user = $GO_USERS->get_user($files->f('user_id'));
 
 
-									$fs->record['user_name'] = String::format_name($user);
-									$fs->record['type'] = File::get_filetype_description($fs->f('extension'));
-									$fs->record['grid_display']='<div class="go-grid-icon filetype filetype-'.$fs->f('extension').'">'.$fs->f('name').'</div>';
-									$response['results'][] = $fs->record;
+									$files->record['user_name'] = String::format_name($user);
+									$files->record['type'] = File::get_filetype_description($files->f('extension'));
+									$files->record['grid_display']='<div class="go-grid-icon filetype filetype-'.$files->f('extension').'">'.$files->f('name').'</div>';
+									$response['results'][] = $files->record;
 								}
 
 								break;
 
 							case 'template':
-								$response['data']=$fs->get_template(($_POST['template_id']));
+								$response['data']=$files->get_template(($_POST['template_id']));
 								$user = $GO_USERS->get_user($response['data']['user_id']);
 								$response['data']['user_name']=String::format_name($user);
 								$response['success']=true;
