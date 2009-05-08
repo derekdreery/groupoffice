@@ -138,8 +138,8 @@ GO.files.FileBrowser = function(config){
 		baseParams: {'task': 'grid'},
 		root: 'results',
 		totalProperty: 'total',
-		id: 'id',
-		fields:['id','name','type', 'size', 'mtime', 'grid_display', 'extension', 'timestamp', 'thumb_url'],
+		id: 'type_id',
+		fields:['type_id', 'id','name','type', 'size', 'mtime', 'grid_display', 'extension', 'timestamp', 'thumb_url'],
 		remoteSort:true
 	});
 	
@@ -1501,7 +1501,7 @@ GO.files.openFile = function(record, store)
 					window.location.href=GO.settings.modules.files.url+'download.php?mode=download&id='+record.data.id;
 				}else
 				{
-					window.location.href=GO.settings.modules.gota.url+'jnlp.php?id='+id;
+					window.location.href=GO.settings.modules.gota.url+'jnlp.php?id='+record.data.id;
 				}
 			}else
 			{

@@ -146,3 +146,10 @@ class MissingFieldException extends Exception
 		parent::__construct($GLOBALS['lang']['common']['missingField']);
 	}
 }
+
+class FileNotFoundException extends Exception
+{
+	public function __construct() {
+		parent::__construct('File not found');
+	}
+}

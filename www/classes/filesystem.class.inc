@@ -212,9 +212,7 @@ class filesystem extends db
 					{
 						throw new Exception('Failed to create direcory');
 					}
-				}
-				
-				$this->move_folder($source_path,$destination_path);				
+				}	
 				
 				$files = $this->get_files($source_path, true);
 				while ($file = array_shift($files))
@@ -230,8 +228,7 @@ class filesystem extends db
 				return rmdir($source_path);
 			}else
 			{
-				
-				$this->move_file($source_path,$destination_path);
+			
 				if($uploaded_file)
 				{
 					return move_uploaded_file($source_path, $destination_path);
@@ -256,34 +253,6 @@ class filesystem extends db
 	}
 	
 	
-
-	
-	
-	/**
-	 * Abstract method that is called when a file is moved
-	 *
-	 * @param string $source_path
-	 * @param string $destination_path
-	 */
-	
-	function move_file($source_path, $destination_path)
-	{
-
-				
-	}
-	
-	/**
-	 * Abstract method that is called when a folder is moved
-	 *
-	 * @param string $source_path
-	 * @param string $destination_path
-	 */
-	
-	function move_folder($source_path, $destination_path)
-	{
-
-				
-	}
 	
 	/**
 	 * Copy a file or folder
@@ -402,15 +371,13 @@ class filesystem extends db
 			}
 			if ($this->has_write_permission($GO_SECURITY->user_id, $path))
 			{
-				$this->delete_folder($path);
 				return rmdir($path);
 			}else
 			{
 				return false;
 			}
 		}elseif(file_exists($path))
-		{
-			$this->delete_file($path);				
+		{	
 				
 			if ($this->has_write_permission($GO_SECURITY->user_id, $path))
 			{
@@ -422,27 +389,6 @@ class filesystem extends db
 		}
 	}
 	
-	/**
-	 * Abstract method that is called when a file is deleted
-	 *
-	 * @param string $path
-	 */
-	
-	function delete_file($path)
-	{
-		
-	}
-	
-	/**
-	 * Abstract method that is called when a folder is deleted
-	 *
-	 * @param string $path
-	 */
-	
-	function delete_folder($path)
-	{
-		
-	}
 	
 	/**
 	 * Get the parent path of a file or folder

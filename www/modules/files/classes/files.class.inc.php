@@ -511,12 +511,12 @@ class files extends db
 		$this->insert_row('fs_status_history',$status);
 	}
 
-	function get_users_in_share($path)
+	function get_users_in_share($folder_id)
 	{
 		global $GO_SECURITY;
 
 		$users=array();
-		$share= $this->find_share($path);
+		$share= $this->find_share($folder_id);
 
 		if($share)
 		{
@@ -533,6 +533,8 @@ class files extends db
 
 		return $users;
 	}
+
+	
 
 
 	function get_latest_files()
@@ -562,7 +564,7 @@ class files extends db
 
 			$filename = utf8_basename($destination_path);
 			$versions_dir = $this->get_versions_dir($destination_path);
-				
+
 			$source_filename = utf8_basename($source_path);
 			$source_versions_dir = $this->get_versions_dir($source_path);
 			debug($source_versions_dir);
@@ -572,7 +574,7 @@ class files extends db
 			{
 				$fs->move($source_versions_dir, $versions_dir);
 			}
-				
+
 			if(file_exists($destination_path))
 			{
 				if(!is_dir($versions_dir))
@@ -614,22 +616,22 @@ class files extends db
 			$up_file['id']=$file['id'];
 			$up_file['path']=$this->strip_server_path($destination_path);
 			$this->update_file($up_file);
-				
+
 			$this->cache_file($destination_path);
-				
+
 			$this->move_version($source_path, $destination_path);
 
 		}elseif($this->is_sub_dir($destination_path, $GO_CONFIG->file_storage_path))
 		{
-				
-				
+
+
 			$file = $this->get_file($this->strip_server_path($destination_path));
 			$up_file['id']=$file['id'];
 			$up_file['path']=$this->strip_server_path($destination_path);
 			$this->update_file($up_file);
-				
+
 			$this->cache_file($destination_path);
-				
+
 			$this->move_version($source_path, $destination_path);
 		}
 	}
@@ -765,7 +767,7 @@ class files extends db
 
 	function has_write_permission($user_id, $folder)
 	{
-		if(is_int($folder))
+		if(is_numeric($folder))
 		{
 			$folder = $this->get_folder($folder);
 		}
@@ -791,7 +793,7 @@ class files extends db
 
 	function has_read_permission($user_id, $folder)
 	{
-		if(is_int($folder))
+		if(is_numeric($folder))
 		{
 			$folder = $this->get_folder($folder);
 		}
@@ -806,7 +808,7 @@ class files extends db
 				return false;
 			}
 			$parent = $this->get_folder($folder['parent_id']);
-			return $this->has_write_permission($user_id, $parent);
+			return $this->has_read_permission($user_id, $parent);
 		}else
 		{
 			global $GO_SECURITY;
@@ -815,11 +817,9 @@ class files extends db
 	}
 
 
-
-	// NEW FUNCTIONS
 	function add_new_filelink($file)
 	{
-		$users = $this->get_users_in_share($file['path']);
+		$users = $this->get_users_in_share($file['folder_id']);
 
 		for($i=0; $i<count($users); $i++)
 		{
@@ -962,7 +962,7 @@ class files extends db
 		$sql .= " WHERE folder_id=?";
 		$types .= 'i';
 		$params[]=$folder_id;
-		 
+			
 		$sql .= " ORDER BY ".$this->escape($sortfield.' '.$sortorder);
 		if($offset>0)
 		{
@@ -985,7 +985,7 @@ class files extends db
 		$sql .= " WHERE parent_id=?";
 		$types .= 'i';
 		$params[]=$folder_id;
-		 
+			
 		$sql .= " ORDER BY ".$this->escape($sortfield.' '.$sortorder);
 		if($offset>0)
 		{
@@ -994,7 +994,7 @@ class files extends db
 		return $this->query($sql, $types, $params);
 	}
 
-	function resolve_path($path, $folder_id=0)
+	function resolve_path($path,$create_folders=false, $folder_id=0)
 	{
 		if(substr($path,-1)=='/')
 		{
@@ -1006,10 +1006,15 @@ class files extends db
 		if(count($parts))
 		{
 			$folder = $this->folder_exists($folder_id, $first_part);
+				
+			if(!$folder && $create_folders)
+			{
+				$this->mkdir($folder_id, $first_part);
+			}
 
 			if($folder)
 			{
-				return $this->resolve_path(implode('/', $parts), $folder['id']);
+				return $this->resolve_path(implode('/', $parts),$create_folders,$folder['id']);
 			}else
 			{
 				return false;
@@ -1019,12 +1024,90 @@ class files extends db
 			$file = $this->file_exists($folder_id, $first_part);
 			if(!$file)
 			{
-				return $this->folder_exists($folder_id, $first_part);
+				$folder = $this->folder_exists($folder_id, $first_part);
+				if(!$folder && $create_folders)
+				{
+					$this->mkdir($folder_id, $first_part);
+				}
+				return $folder;
 			}else{
 				return $file;
 			}
 		}
 	}
+	
+	function find_share($folder_id)
+	{		
+		$folder = $this->get_folder($folder_id);
+
+		if ($folder && $folder['acl_read']>0)
+		{
+			return $folder;
+		}elseif($folder['parent_id']>0)
+		{
+			return $this->find_share($folder['parent_id']);
+		}else
+		{
+			return false;
+		}
+	}
+
+
+	function mkdir($parent, $name, $share=false){
+
+		global $GO_SECURITY, $GO_CONFIG, $lang;
+
+		if($parent==0)
+		{
+			if(!$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
+			{
+				throw new AccessDeniedException();
+			}
+		}else
+		{
+			if(is_numeric($parent)){
+				$parent = $this->get_folder($parent);
+			}
+			if(!$parent)
+			{
+				throw new FileNotFoundException();
+			}
+			if(!$this->has_write_permission($GO_SECURITY->user_id, $parent))
+			{
+				throw new AccessDeniedException();
+			}
+		}	
+
+			
+		if (empty($_POST['name'])) {
+			throw new Exception($lang['common']['missingField']);
+		}
+			
+		$rel_path=$this->build_path($parent);
+		$full_path = $GO_CONFIG->file_storage_path.$rel_path;
+
+		if (file_exists($full_path.'/'.$_POST['name'])) {
+			throw new Exception($lang['files']['folderExists']);
+		}
+		if (!@ mkdir($full_path.'/'.$_POST['name'], $GO_CONFIG->folder_create_mode)) {
+			throw new Exception($lang['common']['saveError']);
+		} else {
+			$folder['visible']='1';
+			$folder['user_id']=$GO_SECURITY->user_id;
+			$folder['parent_id']=$parent['id'];
+			$folder['name']=$_POST['name'];
+			$folder['ctime']=time();
+			if($share)
+			{
+				$folder['acl_read']=$GO_SECURITY->get_new_acl('files', $user['id']);
+				$folder['acl_write']=$GO_SECURITY->get_new_acl('files', $user['id']);
+			}
+			$folder['id']=$this->add_folder($folder);
+			return $folder;
+		}
+	}
+
+
 	/**
 	 *
 	 * @param $folder_id folder id or record
@@ -1068,26 +1151,28 @@ class files extends db
 
 	function delete_folder($folder)
 	{
-		if(is_int($folder))
+		global $GO_SECURITY;
+		
+		if(is_numeric($folder))
 		{
 			$folder = $this->get_folder($folder);
 			if(!$folder)
 			{
-				throw new AccessDeniedException();
+				throw new FileNotFoundException();
 			}
 		}
 		$files = new files();
 		$this->get_folders($folder['id']);
-		while($this->next_record())
+		while($subfolder = $this->next_record())
 		{
-			return $files->delete_folder($folder);
+			return $files->delete_folder($subfolder);
 		}
 
-		if(!$fs->has_write_permission($GO_SECURITY->user_id, $folder))
+		if(!$this->has_write_permission($GO_SECURITY->user_id, $folder))
 		{
 			throw new AccessDeniedException();
 		}
-		
+
 		$this->get_files($folder['id']);
 		while($file=$this->next_record())
 		{
@@ -1099,13 +1184,23 @@ class files extends db
 		$this->query($sql, 'i', $folder['id']);
 
 		$path = $GLOBALS['GO_CONFIG']->file_storage_path.$this->build_path($folder);
-		unlink($path);
+		$fs = new filesystem();
+		$fs->delete($path);
 	}
 
 	function delete_file($file)
 	{
 		global $GO_CONFIG;
 		
+		if(is_numeric($file))
+		{
+			$file = $this->get_file($file);
+			if(!$file)
+			{
+				throw new FileNotFoundException();
+			}
+		}
+
 		require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
 		$search = new search();
 
@@ -1113,11 +1208,11 @@ class files extends db
 
 		$sql = "DELETE FROM fs_files WHERE id=?";
 		$this->query($sql, 'i', $file['id']);
-				
+
 		$this->delete_new_filelink($file['id']);
-		
+
 		$path = $GO_CONFIG->file_storage_path.$this->build_path($file['folder_id']).'/'.$file['name'];
-					
+			
 		//$this->delete_versions($path);
 		return unlink($path);
 	}
@@ -1186,69 +1281,64 @@ class files extends db
 		$fs = new files();
 
 		$fs2 = new files();
-		echo 'Deleting invalid folders in database'.$line_break;
-		$sql = "SELECT * FROM fs_folders";
-		$fs->query($sql);
-		while($folder = $fs->next_record())
-		{
+		/*echo 'Deleting invalid folders in database'.$line_break;
+		 $sql = "SELECT * FROM fs_folders";
+		 $fs->query($sql);
+		 while($folder = $fs->next_record())
+		 {
 			$full_path = $GO_CONFIG->file_storage_path.$folder['path'];
 			if(!is_dir($full_path))
 			{
-				$fs2->delete_folder($full_path);
+			$fs2->delete_folder($full_path);
 			}
-		}
+			}
 
-		echo 'Deleting invalid files in database'.$line_break;
+			echo 'Deleting invalid files in database'.$line_break;
 
-		$sql = "SELECT * FROM fs_files";
-		$fs->query($sql);
-		while($file = $fs->next_record())
-		{
+			$sql = "SELECT * FROM fs_files";
+			$fs->query($sql);
+			while($file = $fs->next_record())
+			{
 			$full_path = $GO_CONFIG->file_storage_path.$file['path'];
 			if(!file_exists($full_path))
 			{
-				$fs2->delete_file($full_path);
+			$fs2->delete_file($full_path);
 			}
-		}
+			}*/
 
 		echo "Checking user home directories$line_break";
+
+
 
 		$GO_USERS->get_users();
 
 		while($GO_USERS->next_record())
 		{
-			$home_dir = $GO_CONFIG->file_storage_path.'users/'.$GO_USERS->f('username');
-			if(!is_dir($home_dir))
-			{
-				mkdir($home_dir, $GO_CONFIG->folder_create_mode,true);
-				echo "Creating users/".$GO_USERS->f('username').$line_break;
-			}
-
-			$folder = $fs->get_folder($fs->strip_server_path($home_dir));
+			$home_dir = 'users/'.$GO_USERS->f('username');
+				
+			$folder = $fs->resolve_path($home_dir);
 
 			if(empty($folder['acl_read']))
 			{
 				echo "Sharing users/".$GO_USERS->f('username').$line_break;
 
 				$up_folder['id']=$folder['id'];
-				$up_folder['user_id']=$GO_USERS->f('id');
 				$up_folder['acl_read']=$GO_SECURITY->get_new_acl('files', $GO_USERS->f('id'));
 				$up_folder['acl_write']=$GO_SECURITY->get_new_acl('files', $GO_USERS->f('id'));
-				$up_folder['visible']='1';
 
 				$fs->update_folder($up_folder);
 			}
 		}
 
-		echo 'Correcting id=0'.$line_break;
+		/*echo 'Correcting id=0'.$line_break;
 
 		$sql = "SELECT path FROM fs_folders WHERE id=0";
 		$fs->query($sql);
 		while($r = $fs->next_record())
 		{
-			$r['id']=$fs2->nextid('fs_folders');
-			$fs2->update_row('fs_folders', 'path', $r);
-		}
+		$r['id']=$fs2->nextid('fs_folders');
+		$fs2->update_row('fs_folders', 'path', $r);
+		}*/
 	}
 
 	function crawl($path)
@@ -1372,6 +1462,7 @@ class files extends db
 		$file = $this->next_record();
 			
 		//$share = $fs->find_share(dirname($path));
+		$share=true;
 
 		if($file && $share)
 		{
