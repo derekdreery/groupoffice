@@ -13,6 +13,11 @@ $updates[]="ALTER TABLE `fs_folders` ADD `parent_id` INT( 11 ) NOT NULL AFTER `i
 $updates[]="ALTER TABLE `fs_folders` ADD `name` VARCHAR( 255 ) NOT NULL AFTER `parent_id`";
 $updates[]="ALTER TABLE `fs_folders` ADD `ctime` INT NOT NULL";  
 
+$updates[]="ALTER TABLE `fs_files` DROP PRIMARY KEY ,ADD PRIMARY KEY ( `id` )"; 
+$updates[]="ALTER TABLE `fs_folders` DROP PRIMARY KEY ,ADD PRIMARY KEY ( `id` ) ";
+$updates[]="ALTER TABLE `fs_folders` DROP INDEX `link_id_2`"; 
+$updates[]="ALTER TABLE `fs_folders` DROP INDEX `visible`"; 
+
 require('../../../../Group-Office.php');
 
 $fs = new filesystem();

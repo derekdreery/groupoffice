@@ -168,6 +168,10 @@ try{
 
 		case 'new_folder':
 			
+			$folder=$fs->mkdir($_POST['folder_id'], $_POST['name']);
+			$response['folder_id']=$folder['id'];
+			$response['success']=true;
+			/*
 			$parent = $fs->get_folder($_POST['folder_id']);
 			
 			if(!$parent)
@@ -201,7 +205,7 @@ try{
 				$folder['ctime']=time();
 
 				$response['folder_id']=$fs->add_folder($folder);
-			}
+			}*/
 
 			break;
 

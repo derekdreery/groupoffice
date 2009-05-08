@@ -54,7 +54,7 @@ if(!isset($_REQUEST['mtime']))
 	header('Location: '.$_SERVER['PHP_SELF'].'?path='.urlencode($_REQUEST['path']).'&mode='.$mode.'&mtime='.filemtime($path));
 	exit();
 }*/
-if ($fs->has_read_permission($GO_SECURITY->user_id, $file['folder_id']))
+if ($files->has_read_permission($GO_SECURITY->user_id, $file['folder_id']))
 {
 	/*
 	 * Remove new_filelink

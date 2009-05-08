@@ -65,7 +65,7 @@ class ldapauth extends imapauth
 		
 		if(!isset($GO_CONFIG->ldap_host))
 		{
-			trigger_error('ldapauth module is installed but not configured', E_USER_NOTICE);
+			//trigger_error('ldapauth module is installed but not configured', E_USER_NOTICE);
 			return false;
 		}
 

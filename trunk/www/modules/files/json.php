@@ -278,6 +278,7 @@ try{
 									if (!$is_sub_dir)
 									{
 										$last_folder = $share_id;
+										$folder['type_id']='d:'.$folder['id'];
 										$folder['name']=utf8_basename($share_id);
 										$folder['thumb_url']=$GO_THEME->image_url.'128x128/filetypes/folder.png';										
 										$folder['id']=$fs->f('id');
@@ -305,9 +306,9 @@ try{
 						{
 							$extension = File::get_extension($file['name']);
 						
+							$file['type_id']='f:'.$file['id'];
 							$file['thumb_url']=$fs->get_thumb_url($file['id']);						
 							$file['extension']=$extension;
-							$file['id']=$fs->strip_server_id($file['id']);
 							$file['grid_display']='<div class="go-grid-icon filetype filetype-'.$extension.'">'.$file['name'].'</div>';
 							$file['type']=File::get_filetype_description($extension);
 							$file['timestamp']=$file['mtime'];
@@ -321,9 +322,7 @@ try{
 						$response['num_files'] = count($files);
 						
 					}else
-					{
-												
-						
+					{					
 						$curfolder = $fs->get_folder($_POST['id']);						
 						$response['thumbs']=$curfolder['thumbs'];
 						$response['parent_id']=$curfolder['parent_id'];
@@ -360,24 +359,25 @@ try{
 								$delete_ids = json_decode($_POST['delete_keys']);
 
 								$deleted = array();
-								foreach($delete_ids as $delete_id)
+								foreach($delete_ids as $delete_type_id)
 								{
-									if(!$fs->has_write_permission($GO_SECURITY->user_id, $delete_id))
+									$ti = explode(':',$delete_type_id);
+									
+									if($ti[0]=='f')
 									{
-										throw new AccessDeniedException();
-									}
-									
-									//$quota->delete($id);
-									
-									if(!$fs->delete($GO_CONFIG->file_storage_id.$delete_id))
+										if(!$response['write_permission'])
+										{
+											throw new AccessDeniedException();
+										}
+										$fs->delete_file($ti[1]);
+									}else
 									{
-										throw new AccessDeniedException();
-									}
-									
-									$deleted[]=utf8_basename($delete_id);
+										$fs->delete_folder($ti[1]);
+									}									
+									//$deleted[]=utf8_basename($delete_id);
 								}
 								
-								$fs->notify_users($_POST['id'], $GO_SECURITY->user_id, array(), array(), $deleted);
+								//$fs->notify_users($_POST['id'], $GO_SECURITY->user_id, array(), array(), $deleted);
 			
 							}catch(Exception $e)
 							{
@@ -484,6 +484,7 @@ try{
 								$class='filetype-folder';
 							}							
 							
+							$folder['type_id']='d:'.$folder['id'];
 							$folder['grid_display']='<div class="go-grid-icon '.$class.'">'.$folder['name'].'</div>';
 							$folder['type']=$lang['files']['folder'];
 							$folder['timestamp']=$folder['ctime'];
@@ -507,6 +508,7 @@ try{
 							
 							if(!isset($extensions) || in_array($extension, $extensions))
 							{		
+								$file['type_id']='f:'.$file['id'];
 								$file['thumb_url']=$fs->get_thumb_url($file['id']);								
 								$file['extension']=$extension;								
 								$file['grid_display']='<div class="go-grid-icon filetype filetype-'.$extension.'">'.$file['name'].'</div>';
