@@ -463,11 +463,10 @@ try
 				{
 					require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 					$fs = new files();
-	
-					$response['data']['files_path']='contacts/'.$response['data']['id'];
-	
-					$full_path = $GO_CONFIG->file_storage_path.$response['data']['files_path'];
-					$fs->check_share($full_path, $GO_SECURITY->user_id, $response['data']['acl_read'], $response['data']['acl_write'],true);				
+					
+					$full_path = $GO_CONFIG->file_storage_path.'contacts/'.$response['data']['id'];
+					$folder = $fs->check_share($full_path, $GO_SECURITY->user_id, $response['data']['acl_read'], $response['data']['acl_write'],true);
+					$response['data']['files_folder_id']=$folder['id'];
 				}			
 			}
 				
@@ -529,7 +528,7 @@ try
 			
 			if(isset($GO_MODULES->modules['files']))
 			{
-				$response['data']['files']=$fs->get_content_json($full_path);
+				$response['data']['files']=$fs->get_content_json($response['data']['files_folder_id']);
 			}else
 			{
 				$response['data']['files']=array();				

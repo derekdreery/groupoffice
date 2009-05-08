@@ -39,7 +39,6 @@ GO.files.FileBrowser = function(config){
     split:true,
 		autoScroll:true,
 		width: 200,
-		idSeparator:'\\',		
 		animate:true,
 		loader: new Ext.tree.TreeLoader(
 		{
@@ -55,10 +54,8 @@ GO.files.FileBrowser = function(config){
 		containerScroll: true,
 		ddGroup : 'FilesDD',
 		enableDD:true,
-		selModel:new Ext.tree.MultiSelectionModel()
-		
+		selModel:new Ext.tree.MultiSelectionModel()		
 	});
-	
 
 
 	// set the root node
@@ -68,8 +65,17 @@ GO.files.FileBrowser = function(config){
 		id: config.root,
 		iconCls : 'folder-default'
 	});
-	this.treePanel.setRootNode(this.rootNode);
 	
+	//select the first inbox to be displayed in the messages grid
+	this.rootNode.on('load', function(node)
+	{	
+		if(node.childNodes[0])
+		{		
+			this.setFolderID(node.childNodes[0].id);
+		}
+	}, this);
+	
+	this.treePanel.setRootNode(this.rootNode);
 	
 	this.treePanel.on('click', function(node)	{
 		this.setFolderID(node.id, true);
@@ -147,7 +153,7 @@ GO.files.FileBrowser = function(config){
 		root: 'results',
 		totalProperty: 'total',
 		id: 'type_id',
-		fields:['type_id', 'id','name','type', 'size', 'mtime', 'grid_display', 'extension', 'timestamp', 'thumb_url'],
+		fields:['type_id', 'id','name','type', 'size', 'mtime', 'extension', 'timestamp', 'thumb_url'],
 		remoteSort:true
 	});
 	
@@ -174,12 +180,16 @@ GO.files.FileBrowser = function(config){
 			},
 			columns:[{
 					header:GO.lang['strName'],
-					dataIndex: 'grid_display',
+					dataIndex: 'name',
+					renderer:function(v, meta, r){
+						return '<div class="go-grid-icon filetype filetype-'+r.get('extension')+'">'+v+'</div>';
+					
+					},
 					sortable:true
 				},{
 					header:GO.lang.strType,
 					dataIndex: 'type',
-					sortable:true
+					sortable:false
 				},{
 					header:GO.lang.strSize,
 					dataIndex: 'size',
@@ -554,7 +564,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		}		
 	},
 	
-	onShow : function(){
+	/*onShow : function(){
 		
 		GO.files.FileBrowser.superclass.onShow.call(this);
 		
@@ -563,7 +573,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			this.loadFiles();
 		}
 				
-	},
+	},*/
 	
 	setFileClickHandler : function(handler, scope)
 	{
@@ -574,20 +584,19 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	setFilesFilter : function(filter)
 	{
 		this.gridStore.baseParams['files_filter']=filter;
-		//this.thumbsStore.baseParams['files_filter']=filter;
 	},
 
 	
 	afterRender : function(){		
 		GO.files.FileBrowser.superclass.afterRender.call(this);
 		
-		GO.files.filePropertiesDialog.on('rename', function(dlg, oldid, newid){
-				if(this.folder_id==GO.util.dirname(newid))
+		GO.files.filePropertiesDialog.on('rename', function(dlg, folder_id){
+				if(this.folder_id==folder_id)
 				{
 					this.getActiveGridStore().load();
 				}
 			}, this);
-		
+
 
 		GO.files.folderPropertiesDialog.on('rename', function(dlg, parent_id){					
 					if(parent_id==this.folder_id)
@@ -602,19 +611,21 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 					}
 			}, this);
 		
-		if(!this.loadDelayed && !this.loaded)
+		this.buildNewMenu();	
+		
+		/*f(!this.loadDelayed && !this.loaded)
 		{			
 			this.loadFiles();
-		}	
+		}	*/
 	},
-	
+	/*
 	loadFiles : function(id){
 		this.buildNewMenu();		
 		this.setRootNode(this.root, id);
 		this.loaded=true;
-	},
+	},*/
 	
-	setRootID : function(rootID, loadNow)
+	/*setRootID : function(rootID, loadNow)
 	{
 		this.root = rootID;
 		this.loaded=false;		
@@ -650,7 +661,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		//this.setFolderID(id);
 	
 		this.rootNode.reload();		
-	},	
+	},	*/
 	
 	buildNewMenu : function(){		
 	
@@ -698,9 +709,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 							});
 							
 							this.newMenu.add(menuItem);						
-						}
-						
-						
+						}						
 					}
 					
 					if(GO.settings.modules.files.write_permission)
@@ -1289,7 +1298,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 				
 	},
 	
-	expandID : function(id){
+	/*expandID : function(id){
 		var folders = split('/', id);
 		
 		var curID = folders[0];
@@ -1309,7 +1318,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 				node.expand();
 			}
 		}		
-	},
+	},*/
 
 	
 	showGridPropertiesDialog  : function(){		
@@ -1345,6 +1354,8 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 GO.mainLayout.onReady(function(){
 	GO.files.filePropertiesDialog = new GO.files.FilePropertiesDialog();
 	GO.files.folderPropertiesDialog = new GO.files.FolderPropertiesDialog();
+	
+	
 	
 	if(GO.workflowLinkHandlers)
 	{

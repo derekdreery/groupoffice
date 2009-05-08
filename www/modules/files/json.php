@@ -282,7 +282,7 @@ try{
 										$folder['name']=utf8_basename($share_id);
 										$folder['thumb_url']=$GO_THEME->image_url.'128x128/filetypes/folder.png';										
 										$folder['id']=$files->f('id');
-										$folder['grid_display']='<div class="go-grid-icon filetype-folder">'.$folder['name'].'</div>';
+										//$folder['grid_display']='<div class="go-grid-icon filetype-folder">'.$folder['name'].'</div>';
 										$folder['type']=$lang['files']['folder'];
 										$folder['mtime']=Date::get_timestamp(filemtime($share_id));
 										$folder['size']='-';
@@ -309,7 +309,7 @@ try{
 							$file['type_id']='f:'.$file['id'];
 							$file['thumb_url']=$files->get_thumb_url($file['id']);						
 							$file['extension']=$extension;
-							$file['grid_display']='<div class="go-grid-icon filetype filetype-'.$extension.'">'.$file['name'].'</div>';
+							//$file['grid_display']='<div class="go-grid-icon filetype filetype-'.$extension.'">'.$file['name'].'</div>';
 							$file['type']=File::get_filetype_description($extension);
 							$file['timestamp']=$file['mtime'];
 							$file['mtime']=Date::get_timestamp($file['mtime']);
@@ -369,15 +369,19 @@ try{
 										{
 											throw new AccessDeniedException();
 										}
-										$files->delete_file($ti[1]);
+										$file = $files->get_file($ti[1]);
+										$deleted[]=$file['name'];
+										$files->delete_file($file);
 									}else
 									{
-										$files->delete_folder($ti[1]);
+										$folder = $files->get_folder($ti[1]);
+										$files->delete_folder($folder);
+										$deleted[]=$file['name'];
 									}									
-									//$deleted[]=utf8_basename($delete_id);
+									
 								}
 								
-								//$files->notify_users($_POST['id'], $GO_SECURITY->user_id, array(), array(), $deleted);
+								$files->notify_users($_POST['id'], $GO_SECURITY->user_id, array(), array(), $deleted);
 			
 							}catch(Exception $e)
 							{
@@ -391,11 +395,18 @@ try{
 							if(!empty($_POST['template_id']) && !empty($_POST['template_name']))
 							{
 								$template = $files->get_template($_POST['template_id'], true);
+								
+								$path = $files->build_path($curfolder);
 
-								$new_id = $id.'/'.$_POST['template_name'].'.'.$template['extension'];
-								file_put_contents($new_id, $template['content']);
+								$new_path = $GO_CONFIG->file_storage_path.$files->build_path($curfolder).'/'.$_POST['template_name'].'.'.$template['extension'];
+								file_put_contents($new_path, $template['content']);
+								/*$fp = fopen($new_path, "w+");
+								fputs($fp, $template['content']);
+								fclose($fp);*/
+								
+								$file = $files->import_file($new_path,$curfolder['id']);
 
-								$response['new_id']=$files->strip_server_id($new_id);
+								$response['new_id']=$file['id'];
 							}
 
 							try{
@@ -464,14 +475,19 @@ try{
 							}
 						}
 
-						$sort = isset($_POST['sort']) ? $_POST['sort'] : 'name';
+						$fsort = isset($_POST['sort']) ? $_POST['sort'] : 'name';
+						$dsort = isset($_POST['sort']) ? $_POST['sort'] : 'name';
+						if($dsort=='size')
+						{
+							$dsort='name';
+						}
 						$dir = isset($_POST['dir']) ? $_POST['dir'] : 'ASC';
 
 						
 
 						require_once($GO_CONFIG->control_path.'phpthumb/phpThumb.config.php');
 
-						$files->get_folders($curfolder['id'],$sort,$dir);
+						$files->get_folders($curfolder['id'],$dsort,$dir);
 						while($folder = $files->next_record())
 						{							
 							if($folder['acl_read']>0)
@@ -501,7 +517,7 @@ try{
 						}
 						
 
-						$files->get_files($curfolder['id'], $sort, $dir);
+						$files->get_files($curfolder['id'], $fsort, $dir);
 						while($file = $files->next_record())
 						{
 							$extension = File::get_extension($file['name']);
@@ -562,43 +578,32 @@ try{
 
 							case 'file_properties':
 								
-								if(is_numeric($_POST['id']))
+								$file = $files->get_file($_POST['file_id']);
+								$folder = $files->get_folder($file['folder_id']);
+								if(!$folder)
 								{
-									$response['data'] = $files->get_file_by_id($_POST['id']);
-									if(!$response['data'])
-									{
-										throw new DatabaseSelectException();
-									}
-									$_POST['id']=$response['data']['id'];
-								}
-								$id = $GO_CONFIG->file_storage_id.$_POST['id'];
-
-								if(!file_exists($id))
-								{
-									throw new Exception('File not found: '.$_POST['id']);
-								}elseif(!$files->has_read_permission($GO_SECURITY->user_id, $id))
+									throw new FileNotFoundException();
+								}elseif(!$files->has_read_permission($GO_SECURITY->user_id, $folder))
 								{
 									throw new AccessDeniedException();
 								}
 
-								$extension=File::get_extension($id);
+								$extension=File::get_extension($file['name']);
 
 								$response['success']=true;
-								if(!isset($response['data']))
-								{
-									$response['data'] = $files->get_file($_POST['id']);
-								}
-								$response['data']['name']=File::strip_extension(utf8_basename($_POST['id']));
-								//$response['data']['id']=$_POST['id'];
-								$response['data']['mtime']=Date::get_timestamp(filemtime($id));
-								$response['data']['ctime']=Date::get_timestamp(filectime($id));
-								$response['data']['atime']=Date::get_timestamp(fileatime($id));
+					
+								$response['data'] = $file;
+								$path=$files->build_path($folder).'/'.$file['name'];
+								$response['data']['path']=$path;
+								$response['data']['name']=File::strip_extension($file['name']);
+								$response['data']['ctime']=Date::get_timestamp(filectime($GO_CONFIG->file_storage_path.$path));
+								$response['data']['mtime']=Date::get_timestamp(fileatime($GO_CONFIG->file_storage_path.$path));
+								$response['data']['atime']=Date::get_timestamp(filemtime($GO_CONFIG->file_storage_path.$path));
 								$response['data']['type']='<div class="go-grid-icon filetype filetype-'.$extension.'">'.File::get_filetype_description($extension).'</div>';
-								$response['data']['size']=Number::format_size(filesize($id));
-								$response['data']['write_permission']=$files->has_write_permission($GO_SECURITY->user_id, dirname($id));
+								$response['data']['size']=Number::format_size($file['size']);
+								$response['data']['write_permission']=$files->has_write_permission($GO_SECURITY->user_id, $folder);
 								
-								$params['response']=&$response;
-								
+								$params['response']=&$response;								
 								$GO_EVENTS->fire_event('load_file_properties', $params);
 								
 								break;

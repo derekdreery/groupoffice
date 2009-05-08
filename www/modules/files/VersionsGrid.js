@@ -80,9 +80,8 @@ Ext.extend(GO.files.VersionsGrid, GO.grid.GridPanel, {
 				this.store.load();
 			},
 
-			setPath : function(path) {
-				this.store.baseParams.path = GO.util.dirname(path)
-						+ '/.'+GO.util.basename(path);
+			setFileID : function(file_id) {
+				this.store.baseParams.file_id = file_id
 				this.store.loaded = false;
 			}
 

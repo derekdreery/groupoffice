@@ -69,7 +69,7 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 				cls: 'x-btn-text-icon', 
 				text: GO.files.lang.files,
 				handler: function(){					
-					GO.files.openFolder(this.data.files_path);
+					GO.files.openFolder(this.data.files_folder_id);
 					GO.files.fileBrowserWin.on('hide', this.reload, this, {single:true});
 				},
 				scope: this
