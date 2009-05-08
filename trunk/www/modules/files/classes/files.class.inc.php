@@ -154,39 +154,30 @@ class files extends db
 
 	function check_share($full_path, $user_id, $acl_read, $acl_write, $quiet=true)
 	{
-		if(!file_exists($full_path))
-		{
-			$this->mkdir_recursive($full_path);
-		}
-
+		global $GO_LANGUAGE, $lang;
+		
+		require($GO_LANGUAGE->get_language_file('files'));
+		
+		$fs = new filesystem();
+		$fs->mkdir_recursive($full_path);	
+		
 		$path = $this->strip_server_path($full_path);
-		$folder = $this->get_folder($path);
-		if(!$folder)
+		$folder = $this->resolve_path($path,true,1);
+		
+		if($folder['acl_read']!=$acl_read || $folder['acl_write']!=$acl_write)
 		{
-			$folder['user_id']=$user_id;
-			$folder['path']=$path;
-			$folder['visible']='0';
-			$folder['acl_read']=$acl_read;
-			$folder['acl_write']=$acl_write;
+			$up_folder['id']=$folder['id'];
+			$up_folder['user_id']=$user_id;
+			$up_folder['acl_read']=$acl_read;
+			$up_folder['acl_write']=$acl_write;
 
-			$this->add_folder($folder);
-
+			$this->update_folder($up_folder);
 			if(!$quiet)
-			echo 'Adding '.$path.'<br />';
-		}else
-		{
-			if($folder['acl_read']!=$acl_read || $folder['acl_write']!=$acl_write)
-			{
-				$up_folder['id']=$folder['id'];
-				$up_folder['user_id']=$user_id;
-				$up_folder['acl_read']=$acl_read;
-				$up_folder['acl_write']=$acl_write;
-
-				$this->update_folder($up_folder);
-				if(!$quiet)
-				echo 'Updating '.$path.'<br />';
-			}
+			echo 'Updating '.$path.'<br />';
 		}
+		
+		return $folder;
+		
 	}
 
 	function add_notification($folder_id, $user_id)
@@ -224,9 +215,7 @@ class files extends db
 
 
 	function get_users_to_notify($folder_id)
-	{
-		return false;
-		
+	{		
 		$sql = "SELECT user_id FROM fs_notifications WHERE folder_id=".$this->escape($folder_id);
 		$this->query($sql);
 		return $this->num_rows();
@@ -262,7 +251,6 @@ class files extends db
 		$this->build_path($folder),
 		$modified_by_user_name,
 		$changes);
-			
 
 		$users=array();
 		$this->get_users_to_notify($folder['id']);
@@ -299,7 +287,7 @@ class files extends db
 
 		$template['id']=$this->nextid('fs_templates');
 
-		if($this->insert_row('fs_templates', $template, $types))
+		if($this->insert_row('fs_templates', $template))
 		{
 			return $template['id'];
 		}
@@ -317,7 +305,7 @@ class files extends db
 
 	function update_template($template, $types='')
 	{
-		return $this->update_row('fs_templates', 'id', $template, $types);
+		return $this->update_row('fs_templates', 'id', $template);
 	}
 
 
@@ -672,6 +660,11 @@ class files extends db
 	function import_file($path, $parent_id)
 	{	
 		$file['name']=utf8_basename($path);
+		
+		$sql = "DELETE FROM fs_files WHERE folder_id=? AND name COLLATE utf8_bin LIKE ?";
+		$this->query($sql,'is',array($parent_id, $file['name']));		
+		
+		$file['name']=utf8_basename($path);
 		$file['ctime']=@filectime($path);
 		$file['mtime']=@filemtime($path);
 		$file['folder_id']=$parent_id;
@@ -685,14 +678,22 @@ class files extends db
 		
 		$fs = new filesystem();
 		
-		
-
+		$folder['name']=utf8_basename($path);
 		$folder['visible']='1';
 		$folder['user_id']=$GO_SECURITY->user_id;
-		$folder['parent_id']=$parent_id;
-		$folder['name']=utf8_basename($path);
+		$folder['parent_id']=$parent_id;		
 		$folder['ctime']=filemtime($path);		
-		$folder['id']=$this->add_folder($folder);
+		
+		$existing_folder = $this->folder_exists($parent_id, $folder['name']);
+		if($existing_folder)
+		{
+			$folder['id']=$existing_folder['id'];
+			$folder['parent_id']=$existing_folder['parent_id'];
+			$this->update_folder($folder);
+		}else
+		{
+			$folder['id']=$this->add_folder($folder);
+		}		
 			
 		if(!$folder['id'])
 		{
@@ -794,51 +795,55 @@ class files extends db
 
 	function has_write_permission($user_id, $folder)
 	{
+		global $GO_SECURITY;
+		
 		if(is_numeric($folder))
 		{
 			$folder = $this->get_folder($folder);
 		}
 		if(!$folder)
 		{
-			return false;
+			return $GO_SECURITY->has_admin_permission($user_id);
 		}
 
 		if(empty($folder['acl_write']))
 		{
 			if(empty($folder['parent_id']))
 			{
-				return false;
+				return $GO_SECURITY->has_admin_permission($user_id);
 			}
 			$parent = $this->get_folder($folder['parent_id']);
 			return $this->has_write_permission($user_id, $parent);
 		}else
 		{
-			global $GO_SECURITY;
+			
 			return $GO_SECURITY->has_permission($user_id, $folder['acl_write']);
 		}
 	}
 
 	function has_read_permission($user_id, $folder)
 	{
+		global $GO_SECURITY;
+		
 		if(is_numeric($folder))
 		{
 			$folder = $this->get_folder($folder);
 		}
 		if(!$folder)
 		{
-			return false;
+			return $GO_SECURITY->has_admin_permission($user_id);
 		}
 		if(empty($folder['acl_write']))
 		{
 			if(empty($folder['parent_id']))
 			{
-				return false;
+				return $GO_SECURITY->has_admin_permission($user_id);
 			}
 			$parent = $this->get_folder($folder['parent_id']);
 			return $this->has_read_permission($user_id, $parent);
 		}else
 		{
-			global $GO_SECURITY;
+			
 			return $GO_SECURITY->has_permission($user_id, $folder['acl_read']) || $GO_SECURITY->has_permission($user_id, $folder['acl_write']);
 		}
 	}
@@ -1021,7 +1026,7 @@ class files extends db
 		return $this->query($sql, $types, $params);
 	}
 
-	function resolve_path($path,$create_folders=false, $folder_id=0)
+	function resolve_path($path,$create_folders=false, $user_id=0, $folder_id=0)
 	{
 		if(substr($path,-1)=='/')
 		{
@@ -1036,12 +1041,12 @@ class files extends db
 				
 			if(!$folder && $create_folders)
 			{
-				$this->mkdir($folder_id, $first_part);
+				$this->mkdir($folder_id, $first_part,false, $user_id, true);
 			}
 
 			if($folder)
 			{
-				return $this->resolve_path(implode('/', $parts),$create_folders,$folder['id']);
+				return $this->resolve_path(implode('/', $parts),$create_folders,$user_id,$folder['id']);
 			}else
 			{
 				return false;
@@ -1054,7 +1059,7 @@ class files extends db
 				$folder = $this->folder_exists($folder_id, $first_part);
 				if(!$folder && $create_folders)
 				{
-					$this->mkdir($folder_id, $first_part);
+					$this->mkdir($folder_id, $first_part,false, $user_id, true);
 				}
 				return $folder;
 			}else{
@@ -1080,13 +1085,22 @@ class files extends db
 	}
 
 
-	function mkdir($parent, $name, $share=false){
+	function mkdir($parent, $name, $share=false, $user_id=0, $ignore_existing_filesystem_folder=false){
 
 		global $GO_SECURITY, $GO_CONFIG, $lang;
+		
+		if($user_id==0)
+		{
+			$user_id=$GO_SECURITY->user_id;
+		}
+		
+		debug($parent);
+		debug($user_id);
+		debug($name);
 
 		if($parent==0)
 		{
-			if(!$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
+			if(!$GO_SECURITY->has_admin_permission($user_id))
 			{
 				throw new AccessDeniedException();
 			}
@@ -1099,7 +1113,7 @@ class files extends db
 			{
 				throw new FileNotFoundException();
 			}
-			if(!$this->has_write_permission($GO_SECURITY->user_id, $parent))
+			if(!$this->has_write_permission($user_id, $parent))
 			{
 				throw new AccessDeniedException();
 			}
@@ -1113,21 +1127,22 @@ class files extends db
 		$rel_path=$this->build_path($parent);
 		$full_path = $GO_CONFIG->file_storage_path.$rel_path;
 
-		if (file_exists($full_path.'/'.$name)) {
+		if (!$ignore_existing_filesystem_folder && file_exists($full_path.'/'.$name)) {
 			throw new Exception($lang['files']['folderExists']);
 		}
-		if (!@ mkdir($full_path.'/'.$name, $GO_CONFIG->folder_create_mode)) {
+	
+		if (!file_exists($full_path.'/'.$name) && !@ mkdir($full_path.'/'.$name, $GO_CONFIG->folder_create_mode)) {
 			throw new Exception($lang['common']['saveError']);
 		} else {
 			$folder['visible']='1';
-			$folder['user_id']=$GO_SECURITY->user_id;
+			$folder['user_id']=$user_id;
 			$folder['parent_id']=$parent['id'];
 			$folder['name']=$name;
 			$folder['ctime']=time();
 			if($share)
 			{
-				$folder['acl_read']=$GO_SECURITY->get_new_acl('files', $user['id']);
-				$folder['acl_write']=$GO_SECURITY->get_new_acl('files', $user['id']);
+				$folder['acl_read']=$GO_SECURITY->get_new_acl('files', $user_id);
+				$folder['acl_write']=$GO_SECURITY->get_new_acl('files', $user_id);
 			}
 			$folder['id']=$this->add_folder($folder);
 			return $folder;
@@ -1244,15 +1259,14 @@ class files extends db
 		return unlink($path);
 	}
 
-	function get_content_json($path, $sort='utf8_basename', $dir='ASC', $filter=null)
+	function get_content_json($folder_id, $sort='name', $dir='ASC', $filter=null)
 	{
 		$results = array();
 
-		$folders = $this->get_folders_sorted($path, 'utf8_basename', $dir);
-		foreach($folders as $folder)
+		$folders = $this->get_folders($folder_id, 'name', $dir);
+		while($folder=$this->next_record())
 		{
-			$db_folder = $this->get_folder($folder['path']);
-			if($db_folder['acl_read']>0)
+			if($folder['acl_read']>0)
 			{
 				$class='folder-shared';
 			}else
@@ -1260,7 +1274,7 @@ class files extends db
 				$class='filetype-folder';
 			}
 
-			$folder['path']=$this->strip_server_path($folder['path']);
+			$folder['type_id']='d:'.$folder['id'];
 			$folder['grid_display']='<div class="go-grid-icon '.$class.'">'.$folder['name'].'</div>';
 			$folder['type']='Folder';
 			$folder['mtime']=Date::get_timestamp($folder['mtime']);
@@ -1276,15 +1290,15 @@ class files extends db
 		}
 
 
-		$files = $this->get_files_sorted($path, $sort, $dir);
-		foreach($files as $file)
+		$files = $this->get_files($folder_id, $sort, $dir);
+		while($file=$this->next_record())
 		{
 			$extension = File::get_extension($file['name']);
 
 			if(!isset($extensions) || in_array($extension, $extensions))
 			{
 				$file['extension']=$extension;
-				$file['path']=$this->strip_server_path($file['path']);
+				$file['type_id']='f:'.$file['id'];
 				$file['grid_display']='<div class="go-grid-icon filetype filetype-'.$extension.'">'.$file['name'].'</div>';
 				$file['type']=File::get_filetype_description($extension);
 				$file['mtime']=Date::get_timestamp($file['mtime']);
