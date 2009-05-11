@@ -99,17 +99,7 @@ try{
 				throw new AccessDeniedException();
 			}
 			
-			if(isset($GO_MODULES->modules['files']))
-			{
-				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
-				$fs = new files();
 
-				$response['data']['files_path']='notes/'.$response['data']['id'];
-
-				$full_path = $GO_CONFIG->file_storage_path.$response['data']['files_path'];
-				$fs->check_share($full_path, $response['data']['user_id'], $category['acl_read'], $category['acl_write'],true);
-			}
-						
 			$response['success']=true;
 			
 			
@@ -146,7 +136,9 @@ try{
 				
 				if(isset($GO_MODULES->modules['files']))
 				{
-					$response['data']['files']=$fs->get_content_json($full_path);
+					require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+					$files = new files();	
+					$response['data']['files']=$files->get_content_json($response['data']['files_folder_id']);
 				}else
 				{
 					$response['data']['files']=array();				

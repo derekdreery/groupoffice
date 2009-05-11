@@ -31,7 +31,18 @@ class notes extends db {
 
 	function add_category($category)
 	{
+		global $GO_MODULES;
+		
 		$category['id']=$this->nextid('no_categories');
+		
+		if(isset($GO_MODULES->modules['files']))
+		{
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();
+			
+			$files->check_share('notes/'.File::strip_invalid_chars($category['name']),$category['user_id'], $category['acl_read'], $category['acl_write']);
+		}		
+		
 		if($this->insert_row('no_categories', $category))
 		{
 			return $category['id'];
@@ -65,6 +76,20 @@ class notes extends db {
 
 	function delete_category($category_id)
 	{				
+		global $GO_MODULES;
+		
+		$category = $this->get_category($category_id);
+		if(isset($GO_MODULES->modules['files']))
+		{
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();
+			
+			$folder = $files->resolve_path('notes/'.File::strip_invalid_chars($category['name']));			
+			if($folder){
+				$files->delete_folder($folder);
+			}
+		}	
+		
 		$this->query("DELETE FROM no_notes WHERE category_id=".$this->escape($category_id));
 		return $this->query("DELETE FROM no_categories WHERE id=".$this->escape($category_id));
 	}
@@ -256,9 +281,27 @@ class notes extends db {
 	 * @return int New record ID created
 	 */
 
-	function add_note($note)
+	function add_note($note, $category=false)
 	{		
+		global $GO_MODULES;
+		
 		$note['ctime']=$note['mtime']=time();		
+		
+		if(!isset($note['files_folder_id']) && isset($GO_MODULES->modules['files']))
+		{
+			global $GO_CONFIG;
+			
+			if(!$category)
+			{
+				$category = $this->get_category($note['addressbook_id']);				
+			}
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();			
+
+			$new_path = 'notes/'.$category['name'].'/'.date('Y', $note['ctime']).'/'.File::strip_invalid_chars($note['name']);			
+			$folder = $files->resolve_path($new_path,true);			
+			$note['files_folder_id']=$folder['id'];			
+		}
 		
 		$note['id']=$this->nextid('no_notes');
 		if($this->insert_row('no_notes', $note))
@@ -301,21 +344,23 @@ class notes extends db {
 	 */
 
 	function delete_note($note_id)
-	{
-		
-		global $GO_CONFIG;
+	{		
+		global $GO_CONFIG, $GO_MODULES;
 		
 		require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
 		$search = new search();
-		$search->delete_search_result($note_id, 4);
+		$search->delete_search_result($note_id, 4);		
 		
-		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
-		$fs = new filesystem();
-		if(file_exists($GO_CONFIG->file_storage_path.'notes/'.$note_id.'/'))
+		if(isset($GO_MODULES->modules['files']))
 		{
-			$fs->delete($GO_CONFIG->file_storage_path.'notes/'.$note_id.'/');
-		}
-				
+			$note = $this->get_note($note_id);
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();
+			try{
+				$files->delete_folder($note['files_folder_id']);
+			}
+			catch(Exception $e){}
+		}				
 		
 		return $this->query("DELETE FROM no_notes WHERE id=".$this->escape($note_id));
 	}
