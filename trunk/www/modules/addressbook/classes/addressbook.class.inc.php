@@ -814,13 +814,22 @@ class addressbook extends db {
 	}
 
 	function add_addressbook($user_id, $name) {
-		global $GO_SECURITY;
+		global $GO_SECURITY, $GO_MODULES;
 
 		$result['id'] = $this->nextid('ab_addressbooks');
 		$result['acl_read'] = $GO_SECURITY->get_new_acl('addressbook', $user_id);
 		$result['acl_write'] = $GO_SECURITY->get_new_acl('addressbook', $user_id);
 		$result['user_id']=$user_id;
 		$result['name']=$name;
+		
+		if(isset($GO_MODULES->modules['files']))
+		{
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();
+			
+			$files->check_share('contacts/'.File::strip_invalid_chars($name),$result['user_id'], $result['acl_read'], $result['acl_write']);
+			$files->check_share('companies/'.File::strip_invalid_chars($name),$result['user_id'], $result['acl_read'], $result['acl_write']);
+		}		
 
 		$this->insert_row('ab_addressbooks', $result);
 		$result['addressbook_id']=$result['id'];

@@ -1135,6 +1135,10 @@ class files extends db
 			{
 				$folder['acl_read']=$GO_SECURITY->get_new_acl('files', $user_id);
 				$folder['acl_write']=$GO_SECURITY->get_new_acl('files', $user_id);
+			}else
+			{
+				$folder['acl_read']=0;
+				$folder['acl_write']=0;
 			}
 			$folder['id']=$this->add_folder($folder);
 			return $folder;
