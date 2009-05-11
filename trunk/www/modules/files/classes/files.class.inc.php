@@ -1203,7 +1203,7 @@ class files extends db
 		$this->get_folders($folder['id']);
 		while($subfolder = $this->next_record())
 		{
-			return $files->delete_folder($subfolder);
+			$files->delete_folder($subfolder);
 		}
 
 		if(!$this->has_write_permission($GO_SECURITY->user_id, $folder))
@@ -1223,7 +1223,7 @@ class files extends db
 
 		$path = $GLOBALS['GO_CONFIG']->file_storage_path.$this->build_path($folder);
 		$fs = new filesystem();
-		$fs->delete($path);
+		return $fs->delete($path);
 	}
 
 	function delete_file($file)
