@@ -42,3 +42,7 @@ $updates[] = "ALTER TABLE `ab_contacts` CHANGE `work_phone` `work_phone` VARCHAR
 $updates[] = "ALTER TABLE `ab_contacts` CHANGE `fax` `fax` VARCHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL";
 $updates[] = "ALTER TABLE `ab_contacts` CHANGE `work_fax` `work_fax` VARCHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL";
 $updates[] = "ALTER TABLE `ab_contacts` CHANGE `cellular` `cellular` VARCHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL";
+
+
+$updates[]="ALTER TABLE `ab_contacts` ADD `files_folder_id` INT NOT NULL;";
+$updates[]="ALTER TABLE `ab_companies` ADD `files_folder_id` INT NOT NULL;";

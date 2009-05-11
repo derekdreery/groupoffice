@@ -131,13 +131,13 @@ class files extends db
 		$home = 'users/'.$_SESSION['GO_SESSION']['username'];
 		$homefolder = $this->resolve_path($home);
 		if(!$homefolder)
-			return false;
+		return false;
 			
 		return $this->is_sub_dir($folder, $homefolder);
-		
+
 	}
 
-	
+
 	function is_sub_dir($sub, $parent)
 	{
 		if($sub['parent_id']==0)
@@ -152,18 +152,18 @@ class files extends db
 		return $this->is_sub_dir($next, $parent);
 	}
 
-	function check_share($full_path, $user_id, $acl_read, $acl_write, $quiet=true)
+	function check_share($path, $user_id, $acl_read, $acl_write, $quiet=true)
 	{
-		global $GO_LANGUAGE, $lang;
+		global $GO_LANGUAGE, $lang, $GO_CONFIG;
 		
+		$full_path = $GO_CONFIG->file_storage_path.$path;
+
 		require($GO_LANGUAGE->get_language_file('files'));
-		
 		$fs = new filesystem();
-		$fs->mkdir_recursive($full_path);	
-		
-		$path = $this->strip_server_path($full_path);
+		$fs->mkdir_recursive($full_path);
+
 		$folder = $this->resolve_path($path,true,1);
-		
+
 		if($folder['acl_read']!=$acl_read || $folder['acl_write']!=$acl_write)
 		{
 			$up_folder['id']=$folder['id'];
@@ -175,9 +175,9 @@ class files extends db
 			if(!$quiet)
 			echo 'Updating '.$path.'<br />';
 		}
-		
+
 		return $folder;
-		
+
 	}
 
 	function add_notification($folder_id, $user_id)
@@ -215,7 +215,7 @@ class files extends db
 
 
 	function get_users_to_notify($folder_id)
-	{		
+	{
 		$sql = "SELECT user_id FROM fs_notifications WHERE folder_id=".$this->escape($folder_id);
 		$this->query($sql);
 		return $this->num_rows();
@@ -503,7 +503,7 @@ class files extends db
 		return $users;
 	}
 
-	
+
 
 
 	function get_latest_files()
@@ -578,53 +578,45 @@ class files extends db
 	{
 		$sql = "DELETE FROM fs_files WHERE folder_id=? AND name COLLATE utf8_bin LIKE ?";
 		$this->query($sql,'is',array($destfolder['id'], $sourcefile['name']));
-		
+
 		$up_file['id']=$sourcefile['id'];
-		$up_file['folder_id']=$destfolder['id'];								
+		$up_file['folder_id']=$destfolder['id'];
 		$this->update_file($up_file);
 	}
 
 	function move_folder($sourcefolder, $destfolder)
 	{
-		debug('Moving');
-		debug($sourcefolder);
-		
-		debug('Into');
-		debug($destfolder);
-		
 		$existing_folder = $this->folder_exists($destfolder['id'], $sourcefolder['name']);
 		if($existing_folder)
 		{
-			debug('Folder exists');
 			$newfolder = $sourcefolder;
 			$newfolder['id']=$existing_folder['id'];
 			$newfolder['parent_id']=$existing_folder['parent_id'];
 			$this->update_folder($newfolder);
-			debug($newfolder);
 		}else
 		{
-			debug('Created');
 			$newfolder=$sourcefolder;
 			$newfolder['parent_id']=$destfolder['id'];
 			$newfolder['id']=$this->add_folder($newfolder);
-			debug($newfolder);
 		}
 		$files = new files();
-		
+
 		$this->get_files($sourcefolder['id']);
 		while($file = $this->next_record())
 		{
 			$files->move_file($file, $newfolder);
 		}
-		
+
 		$this->get_folders($sourcefolder['id']);
 		while($folder = $this->next_record())
 		{
 			$files->move_folder($folder, $newfolder);
 		}
-		
+
 		$sql = "DELETE FROM fs_folders WHERE id=?";
 		$this->query($sql, 'i', $sourcefolder['id']);
+
+		return $newfolder['id'];
 	}
 
 
@@ -643,7 +635,7 @@ class files extends db
 
 		return $file['id'];
 	}
-	
+
 	function sync_file($path, $parent_id)
 	{
 		$file = $this->file_exists($parent_id, utf8_basename($path));
@@ -656,34 +648,34 @@ class files extends db
 		$file['size']=filesize($path);
 		return $this->update_file($file);
 	}
-	
+
 	function import_file($path, $parent_id)
-	{	
+	{
 		$file['name']=utf8_basename($path);
-		
+
 		$sql = "DELETE FROM fs_files WHERE folder_id=? AND name COLLATE utf8_bin LIKE ?";
-		$this->query($sql,'is',array($parent_id, $file['name']));		
-		
+		$this->query($sql,'is',array($parent_id, $file['name']));
+
 		$file['name']=utf8_basename($path);
 		$file['ctime']=@filectime($path);
 		$file['mtime']=@filemtime($path);
 		$file['folder_id']=$parent_id;
 		$file['size']=filesize($path);
-		return $this->add_file($file);	
+		return $this->add_file($file);
 	}
-	
+
 	function import_folder($path, $parent_id)
-	{	
+	{
 		global $GO_SECURITY;
-		
+
 		$fs = new filesystem();
-		
+
 		$folder['name']=utf8_basename($path);
 		$folder['visible']='1';
 		$folder['user_id']=$GO_SECURITY->user_id;
-		$folder['parent_id']=$parent_id;		
-		$folder['ctime']=filemtime($path);		
-		
+		$folder['parent_id']=$parent_id;
+		$folder['ctime']=filemtime($path);
+
 		$existing_folder = $this->folder_exists($parent_id, $folder['name']);
 		if($existing_folder)
 		{
@@ -693,26 +685,26 @@ class files extends db
 		}else
 		{
 			$folder['id']=$this->add_folder($folder);
-		}		
+		}
 			
 		if(!$folder['id'])
 		{
 			throw new Exception('Could not create folder: '.$path);
 		}
-		
+
 		$files = $fs->get_files($path);
 		while($fs_file = array_shift($files))
 		{
 			$this->import_file($fs_file['path'], $folder['id']);
 		}
-		
+
 		$folders = $fs->get_folders($path);
 		while($fs_folder=array_shift($folders))
 		{
 			$this->import_folder($fs_folder['path'], $folder['id']);
-		}		
+		}
 	}
-	
+
 
 	function update_file($file)
 	{
@@ -796,7 +788,7 @@ class files extends db
 	function has_write_permission($user_id, $folder)
 	{
 		global $GO_SECURITY;
-		
+
 		if(is_numeric($folder))
 		{
 			$folder = $this->get_folder($folder);
@@ -816,7 +808,7 @@ class files extends db
 			return $this->has_write_permission($user_id, $parent);
 		}else
 		{
-			
+				
 			return $GO_SECURITY->has_permission($user_id, $folder['acl_write']);
 		}
 	}
@@ -824,7 +816,7 @@ class files extends db
 	function has_read_permission($user_id, $folder)
 	{
 		global $GO_SECURITY;
-		
+
 		if(is_numeric($folder))
 		{
 			$folder = $this->get_folder($folder);
@@ -843,7 +835,7 @@ class files extends db
 			return $this->has_read_permission($user_id, $parent);
 		}else
 		{
-			
+				
 			return $GO_SECURITY->has_permission($user_id, $folder['acl_read']) || $GO_SECURITY->has_permission($user_id, $folder['acl_write']);
 		}
 	}
@@ -1038,10 +1030,10 @@ class files extends db
 		if(count($parts))
 		{
 			$folder = $this->folder_exists($folder_id, $first_part);
-				
+
 			if(!$folder && $create_folders)
 			{
-				$this->mkdir($folder_id, $first_part,false, $user_id, true);
+				$folder = $this->mkdir($folder_id, $first_part,false, $user_id, true);
 			}
 
 			if($folder)
@@ -1059,7 +1051,7 @@ class files extends db
 				$folder = $this->folder_exists($folder_id, $first_part);
 				if(!$folder && $create_folders)
 				{
-					$this->mkdir($folder_id, $first_part,false, $user_id, true);
+					$folder = $this->mkdir($folder_id, $first_part,false, $user_id, true);
 				}
 				return $folder;
 			}else{
@@ -1067,9 +1059,9 @@ class files extends db
 			}
 		}
 	}
-	
+
 	function find_share($folder_id)
-	{		
+	{
 		$folder = $this->get_folder($folder_id);
 
 		if ($folder && $folder['acl_read']>0)
@@ -1088,12 +1080,12 @@ class files extends db
 	function mkdir($parent, $name, $share=false, $user_id=0, $ignore_existing_filesystem_folder=false){
 
 		global $GO_SECURITY, $GO_CONFIG, $lang;
-		
+
 		if($user_id==0)
 		{
 			$user_id=$GO_SECURITY->user_id;
 		}
-		
+
 		debug($parent);
 		debug($user_id);
 		debug($name);
@@ -1117,7 +1109,7 @@ class files extends db
 			{
 				throw new AccessDeniedException();
 			}
-		}	
+		}
 
 			
 		if (empty($name)) {
@@ -1130,9 +1122,9 @@ class files extends db
 		if (!$ignore_existing_filesystem_folder && file_exists($full_path.'/'.$name)) {
 			throw new Exception($lang['files']['folderExists']);
 		}
-	
-		if (!file_exists($full_path.'/'.$name) && !@ mkdir($full_path.'/'.$name, $GO_CONFIG->folder_create_mode)) {
-			throw new Exception($lang['common']['saveError']);
+
+		if (!file_exists($full_path.'/'.$name) && !mkdir($full_path.'/'.$name, $GO_CONFIG->folder_create_mode)) {
+			throw new Exception($lang['common']['saveError'].$full_path.'/'.$name);
 		} else {
 			$folder['visible']='1';
 			$folder['user_id']=$user_id;
@@ -1194,7 +1186,7 @@ class files extends db
 	function delete_folder($folder)
 	{
 		global $GO_SECURITY;
-		
+
 		if(is_numeric($folder))
 		{
 			$folder = $this->get_folder($folder);
@@ -1233,7 +1225,7 @@ class files extends db
 	function delete_file($file)
 	{
 		global $GO_CONFIG;
-		
+
 		if(is_numeric($file))
 		{
 			$file = $this->get_file($file);
@@ -1262,52 +1254,52 @@ class files extends db
 	function get_content_json($folder_id, $sort='name', $dir='ASC', $filter=null)
 	{
 		$results = array();
-
-		$folders = $this->get_folders($folder_id, 'name', $dir);
-		while($folder=$this->next_record())
+		if($folder_id>0)
 		{
-			if($folder['acl_read']>0)
+
+			$folders = $this->get_folders($folder_id, 'name', $dir);
+			while($folder=$this->next_record())
 			{
-				$class='folder-shared';
-			}else
-			{
-				$class='filetype-folder';
+				if($folder['acl_read']>0)
+				{
+					$class='folder-shared';
+				}else
+				{
+					$class='filetype-folder';
+				}
+
+				$folder['type_id']='d:'.$folder['id'];
+				$folder['type']='Folder';
+				$folder['mtime']=Date::get_timestamp($folder['mtime']);
+				$folder['size']='-';
+				$folder['extension']='folder';
+				$results[]=$folder;
 			}
 
-			$folder['type_id']='d:'.$folder['id'];
-			$folder['type']='Folder';
-			$folder['mtime']=Date::get_timestamp($folder['mtime']);
-			$folder['size']='-';
-			$folder['extension']='folder';
-			$results[]=$folder;
-		}
 
-
-		if(isset($filter))
-		{
-			$extensions = explode(',',$filter);
-		}
-
-
-		$files = $this->get_files($folder_id, $sort, $dir);
-		while($file=$this->next_record())
-		{
-			$extension = File::get_extension($file['name']);
-
-			if(!isset($extensions) || in_array($extension, $extensions))
+			if(isset($filter))
 			{
-				$file['extension']=$extension;
-				$file['type_id']='f:'.$file['id'];
-				$file['type']=File::get_filetype_description($extension);
-				$file['mtime']=Date::get_timestamp($file['mtime']);
-				$file['size']=Number::format_size($file['size']);
-				$results[]=$file;
+				$extensions = explode(',',$filter);
 			}
-		}
 
+
+			$files = $this->get_files($folder_id, $sort, $dir);
+			while($file=$this->next_record())
+			{
+				$extension = File::get_extension($file['name']);
+
+				if(!isset($extensions) || in_array($extension, $extensions))
+				{
+					$file['extension']=$extension;
+					$file['type_id']='f:'.$file['id'];
+					$file['type']=File::get_filetype_description($extension);
+					$file['mtime']=Date::get_timestamp($file['mtime']);
+					$file['size']=Number::format_size($file['size']);
+					$results[]=$file;
+				}
+			}			
+		}
 		return $results;
-
-
 	}
 
 
@@ -1354,7 +1346,7 @@ class files extends db
 		while($GO_USERS->next_record())
 		{
 			$home_dir = 'users/'.$GO_USERS->f('username');
-				
+
 			$folder = $fs->resolve_path($home_dir);
 
 			if(empty($folder['acl_read']))
@@ -1499,12 +1491,12 @@ class files extends db
 			$file = $this->get_file($file);
 		}
 		if($file)
-		{			
+		{
 			$share = $fs->find_share($file['folder_id']);
-			
+				
 			if(!isset($file['comments']))
-				$file['comments']='';
-			
+			$file['comments']='';
+				
 			if($share)
 			{
 				$cache['id']=$file['id'];
@@ -1518,7 +1510,7 @@ class files extends db
 				$cache['mtime']=$file['mtime'];
 				$cache['acl_read']=$share['acl_read'];
 				$cache['acl_write']=$share['acl_read'];
-	
+
 				$search->cache_search_result($cache);
 			}
 		}
