@@ -456,18 +456,7 @@ try
 					$response['data']['company_name'] = '';
 				}
 					
-				$response['success']=true;
-				
-				
-				if(isset($GO_MODULES->modules['files']))
-				{
-					require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
-					$fs = new files();
-					
-					$full_path = $GO_CONFIG->file_storage_path.'contacts/'.$response['data']['id'];
-					$folder = $fs->check_share($full_path, $GO_SECURITY->user_id, $response['data']['acl_read'], $response['data']['acl_write'],true);
-					$response['data']['files_folder_id']=$folder['id'];
-				}			
+				$response['success']=true;	
 			}
 				
 			if($task == 'load_contact')
@@ -528,6 +517,12 @@ try
 			
 			if(isset($GO_MODULES->modules['files']))
 			{
+				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+				$fs = new files();
+				
+				$full_path = $GO_CONFIG->file_storage_path.'contacts/'.$response['data']['id'];
+				$folder = $fs->check_share($full_path, $GO_SECURITY->user_id, $response['data']['acl_read'], $response['data']['acl_write'],true);
+				$response['data']['files_folder_id']=$folder['id'];				
 				$response['data']['files']=$fs->get_content_json($response['data']['files_folder_id']);
 			}else
 			{
