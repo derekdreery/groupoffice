@@ -112,16 +112,21 @@ class tasks extends db
 		}
 
 		$dst_task = $dst_task;
-
 		return $this->add_task($dst_task);
-
 	}
-
-
 
 	function add_tasklist($list)
 	{
-		$list['id'] = $this->nextid("ta_lists");
+		global $GO_MODULES;
+		if(isset($GO_MODULES->modules['files']))
+		{
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();
+			
+			$files->check_share('tasks/'.File::strip_invalid_chars($list['name']),$list['user_id'], $list['acl_read'], $list['acl_write']);
+		}	
+		
+		$list['id'] = $this->nextid("ta_lists");	
 		$this->insert_row('ta_lists',$list);
 		return $list['id'];
 	}
@@ -151,6 +156,18 @@ class tasks extends db
 		
 		$GO_SECURITY->delete_acl($tasklist['acl_read']);
 		$GO_SECURITY->delete_acl($tasklist['acl_write']);
+		
+		global $GO_MODULES;
+		if(isset($GO_MODULES->modules['files']))
+		{
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();
+			
+			$folder = $files->resolve_path('tasks/'.File::strip_invalid_chars($tasklist['name']));			
+			if($folder){
+				$files->delete_folder($folder);
+			}
+		}	
 
 	}
 
@@ -281,7 +298,7 @@ class tasks extends db
 		return $count;
 	}
 
-	function add_task($task)
+	function add_task($task, $tasklist=false)
 	{
 		if(empty($task['tasklist_id']))
 		{
@@ -307,6 +324,23 @@ class tasks extends db
 		{
 			$task['status'] = 'ACCEPTED';
 		}	
+		
+		global $GO_MODULES;
+		if(!isset($task['files_folder_id']) && isset($GO_MODULES->modules['files']))
+		{
+			global $GO_CONFIG;
+			
+			if(!$tasklist)
+			{
+				$tasklist = $this->get_tasklist($task['tasklist_id']);				
+			}
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();			
+
+			$new_path = 'tasks/'.File::strip_invalid_chars($tasklist['name']).'/'.date('Y', $task['due_time']).'/'.File::strip_invalid_chars($task['name']);			
+			$folder = $files->resolve_path($new_path,true);			
+			$task['files_folder_id']=$folder['id'];			
+		}
 
 		$task['id'] = $this->nextid("ta_tasks");		
 		$this->insert_row('ta_tasks', $task);		
@@ -518,14 +552,17 @@ class tasks extends db
 	{
 		if($task = $this->get_task($task_id))
 		{
-			global $GO_CONFIG;
-			
-			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
-			$fs = new filesystem();
-			if(file_exists($GO_CONFIG->file_storage_path.'tasks/'.$task_id.'/'))
+			global $GO_CONFIG,$GO_MODULES;
+
+			if(isset($GO_MODULES->modules['files']))
 			{
-				$fs->delete($GO_CONFIG->file_storage_path.'tasks/'.$task_id.'/');
-			}
+				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+				$files = new files();
+				try{
+					$files->delete_folder($task['files_folder_id']);
+				}
+				catch(Exception $e){}
+			}				
 
 			$sql = "DELETE FROM ta_tasks WHERE id='".$this->escape($task_id)."'";
 			$this->query($sql);

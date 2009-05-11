@@ -96,12 +96,18 @@ try{
 			if(!empty($_POST['tmp_files']) && $GO_MODULES->has_module('files'))
 			{
 				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
-				$fs = new files();
+				$files = new files();
+				$fs = new filesystem();
+				
+				$note = $notes->get_note($note_id);
+				$path = $files->build_path($note['files_folder_id']);
 					
 				$tmp_files = json_decode($_POST['tmp_files'], true);
 				while($tmp_file = array_shift($tmp_files))
 				{
-					$fs->move($tmp_file['tmp_file'], $GO_CONFIG->file_storage_path.'notes/'.$note_id.'/'.$tmp_file['name']);
+					$new_path = $GO_CONFIG->file_storage_path.$path.'/'.$tmp_file['name'];
+					$fs->move($tmp_file['tmp_file'], $new_path);
+					$files->import_file($new_path, $note['files_folder_id']);
 				}
 			}
 				

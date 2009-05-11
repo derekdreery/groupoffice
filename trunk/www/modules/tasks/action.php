@@ -185,20 +185,9 @@ try{
 			}else
 			{
 				$task['user_id']=$GO_SECURITY->user_id;
-				$task_id= $tasks->add_task($task);
+				$task_id= $tasks->add_task($task, $tasklist);
 				if($task_id)
-				{
-					if($GO_MODULES->has_module('files'))
-					{
-						require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
-						$fs = new files();
-
-						$response['files_path']='tasks/'.$task_id;
-							
-						$full_path = $GO_CONFIG->file_storage_path.$response['files_path'];
-						$fs->check_share($full_path, $GO_SECURITY->user_id, $tasklist['acl_read'], $tasklist['acl_write'],true);
-					}
-
+				{					
 					$response['task_id']=$task_id;
 					$response['success']=true;
 				}					
@@ -207,12 +196,19 @@ try{
 			if(!empty($_POST['tmp_files']) && $GO_MODULES->has_module('files'))
 			{
 				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
-				$fs = new files();
+				$files = new files();
+				$fs = new filesystem();
+				
+				$task = $tasks->get_task($task_id);
+				$path = $files->build_path($task['files_folder_id']);
 					
+
 				$tmp_files = json_decode($_POST['tmp_files'], true);
 				while($tmp_file = array_shift($tmp_files))
 				{
-					$fs->move($tmp_file['tmp_file'], $GO_CONFIG->file_storage_path.'tasks/'.$task_id.'/'.$tmp_file['name']);
+					$new_path = $GO_CONFIG->file_storage_path.$path.'/'.$tmp_file['name'];
+					$fs->move($tmp_file['tmp_file'], $new_path);
+					$files->import_file($new_path, $task['files_folder_id']);
 				}
 			}
 
