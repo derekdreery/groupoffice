@@ -68,7 +68,7 @@ GO.files.FileBrowser = function(config){
 
 	// set the root node
 	this.rootNode = new Ext.tree.AsyncTreeNode({
-		text: GO.lang.folders,
+		text: '',
 		draggable:false,
 		id: 'root',
 		iconCls : 'folder-default'
@@ -1243,7 +1243,10 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 				if(activeNode)
 				{
 					this.treePanel.getSelectionModel().select(activeNode);
-					this.locationTextField.setValue(activeNode.getPath('text'));	
+					var path = new String();				
+					path = activeNode.getPath('text');
+					path = path.substring(2);
+					this.locationTextField.setValue(path);	
 				}
 				
 				if(createID)
