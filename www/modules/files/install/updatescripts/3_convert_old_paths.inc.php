@@ -316,7 +316,7 @@ if(isset($GO_MODULES->modules['billing']))
 		$old_path = 'billing/'.$order['id'];
 		$folder = $fsdb->resolve_path($old_path);
 
-		$new_folder_name = File::strip_invalid_chars($order['name']);
+		$new_folder_name = File::strip_invalid_chars($order['id'].' '.$order['customer_name']);
 		
 		if($folder && !empty($new_folder_name))
 		{			
