@@ -244,9 +244,6 @@ try{
 			break;
 
 				case 'grid':
-					
-					
-
 					$response['results']=array();
 					
 					if(isset($_SESSION['GO_SESSION']['files']['jupload_new_files']) && count($_SESSION['GO_SESSION']['files']['jupload_new_files']))
