@@ -393,6 +393,8 @@ try{
 				$event_id= $cal->add_event($event, $calendar);
 				if($event_id)
 				{
+					
+					$response['files_folder_id']=$event['files_folder_id'];
 					/*$calendar_user = $GO_USERS->get_user($calendar['user_id']);
 					
 					if($calendar_user)
@@ -428,16 +430,6 @@ try{
 						$cal->update_event($update_event);
 
 					}
-
-					if($GO_MODULES->has_module('files'))
-					{
-						require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
-						$fs = new files();
-							
-						$response['files_path']='events/'.$event_id;
-						$full_path = $GO_CONFIG->file_storage_path.$response['files_path'];
-						$fs->check_share($full_path, $GO_SECURITY->user_id, $calendar['acl_read'], $calendar['acl_write'],true);						
-					}
 					
 					$response['event_id']=$event_id;
 					$response['success']=true;
@@ -448,11 +440,17 @@ try{
 			{
 				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 				$fs = new files();
+				$fs = new filesystem();
+				
+				//event = $cal->get_event($event_id);
+				$path = $files->build_path($event['files_folder_id']);				
 					
 				$tmp_files = json_decode($_POST['tmp_files'], true);
 				while($tmp_file = array_shift($tmp_files))
-				{
-					$fs->move($tmp_file['tmp_file'], $GO_CONFIG->file_storage_path.'events/'.$event_id.'/'.$tmp_file['name']);
+				{					
+					$new_path = $GO_CONFIG->file_storage_path.$path.'/'.$tmp_file['name'];
+					$fs->move($tmp_file['tmp_file'], $new_path);
+					$files->import_file($new_path, $event['files_folder_id']);
 				}
 			}
 			

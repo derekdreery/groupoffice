@@ -83,7 +83,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 						cls : 'x-btn-text-icon',
 						text : GO.files.lang.files,
 						handler : function() {
-							GO.files.openFolder(this.files_path);
+							GO.files.openFolder(this.files_folder_id);
 						},
 						scope : this,
 						disabled : true
@@ -126,7 +126,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 	},
 
-	files_path : '',
+	files_folder_id : 0,
 
 	show : function(config) {
 		if (config.oldDomId) {
@@ -172,7 +172,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					this.selectCalendar.container.up('div.x-form-item')
 							.setDisplayed(true);
 
-					this.files_path = action.result.data.files_path;
+					this.files_folder_id = action.result.data.files_folder_id;
 
 				},
 				failure : function(form, action) {
@@ -346,7 +346,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			success : function(form, action) {
 
 				if (action.result.event_id) {
-					this.files_path = action.result.files_path;
+					this.files_folder_id = action.result.files_folder_id;
 					this.setEventId(action.result.event_id);
 				}
 
