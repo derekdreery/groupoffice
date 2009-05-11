@@ -855,13 +855,30 @@ class addressbook extends db {
 
 		$addressbook = $this->get_addressbook($addressbook_id);
 
-		global $GO_SECURITY;
+		global $GO_SECURITY, $GO_MODULES;
+		
+		if(isset($GO_MODULES->modules['files']))
+		{
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();
+			
+			$folder = $files->resolve_path('contacts/'.File::strip_invalid_chars($addressbook['name']));
+			
+			if($folder){
+				$files->delete_folder($folder);
+			}
+
+			$folder = $files->resolve_path('companies/'.File::strip_invalid_chars($addressbook['name']));
+			if($folder){
+				$files->delete_folder($folder);
+			}
+		}	
 
 		$GO_SECURITY->delete_acl($addressbook['acl_read']);
 		$GO_SECURITY->delete_acl($addressbook['acl_write']);
 
 		$ab = new addressbook();
-
+		
 		$this->get_contacts($addressbook_id);
 		while($this->next_record())
 		{
@@ -876,6 +893,8 @@ class addressbook extends db {
 
 		$sql = "DELETE FROM ab_addressbooks WHERE id='".$this->escape($addressbook_id)."'";
 		$this->query($sql);
+		
+	
 
 	}
 
