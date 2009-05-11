@@ -72,7 +72,8 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 					GO.files.openFolder(this.data.files_folder_id);
 					GO.files.fileBrowserWin.on('hide', this.reload, this, {single:true});
 				},
-				scope: this
+				scope: this,
+				disabled:true
 			}));
 		}
 		
@@ -170,6 +171,11 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 			this.newMenuButton.setDisabled(true);
 		}		
 		
+		if(GO.files)
+		{
+			this.fileBrowseButton.setDisabled(data.files_folder_id<1);
+		}
+		
 		this.xtemplate.overwrite(this.body, data);			
 		
 		this.body.on('click', this.onBodyClick, this);		
@@ -220,16 +226,19 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 				}else
 				{
 					pos = href.indexOf('#files_');
-					var index = href.substr(pos+7, href.length);		
-					var file = this.data.files[index];			
-					if(file.extension=='folder')
+					if(pos>-1)
 					{
-						var fb = GO.files.openFolder(this.data.files_folder_id, file.id);
-						
-					}else
-					{
-						var record = new GO.files.FileRecord(file);
-						GO.files.openFile(record);
+						var index = href.substr(pos+7, href.length);		
+						var file = this.data.files[index];			
+						if(file.extension=='folder')
+						{
+							var fb = GO.files.openFolder(this.data.files_folder_id, file.id);
+							
+						}else
+						{
+							var record = new GO.files.FileRecord(file);
+							GO.files.openFile(record);
+						}
 					}
 				}
 			}

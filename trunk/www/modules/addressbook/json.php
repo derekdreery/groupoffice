@@ -518,11 +518,7 @@ try
 			if(isset($GO_MODULES->modules['files']))
 			{
 				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
-				$fs = new files();
-				
-				$full_path = $GO_CONFIG->file_storage_path.'contacts/'.$response['data']['id'];
-				$folder = $fs->check_share($full_path, $GO_SECURITY->user_id, $response['data']['acl_read'], $response['data']['acl_write'],true);
-				$response['data']['files_folder_id']=$folder['id'];				
+				$fs = new files();						
 				$response['data']['files']=$fs->get_content_json($response['data']['files_folder_id']);
 			}else
 			{
@@ -563,19 +559,7 @@ try
 
 				
 				$response['data']['links'] = array();
-				$response['success']=true;
-				
-				
-				
-				if(isset($GO_MODULES->modules['files']))
-				{
-					require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
-					$fs = new files();
-	
-					$response['data']['files_path']='companies/'.$response['data']['id'];	
-					$full_path = $GO_CONFIG->file_storage_path.$response['data']['files_path'];
-					$fs->check_share($full_path, $GO_SECURITY->user_id, $response['data']['acl_read'], $response['data']['acl_write'],true);					
-				}				
+				$response['success']=true;		
 			}		
 				
 			if($task == 'load_company')
@@ -602,17 +586,14 @@ try
 				}
 				echo json_encode($response);
 				break;
-			}
-				
-			
+			}			
 				
 			if($GO_MODULES->has_module('customfields'))
 			{
 				require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
 				$cf = new customfields();
 				$response['data']['customfields']=$cf->get_all_fields_with_values($GO_SECURITY->user_id, 3, $company_id);
-			}
-				
+			}				
 
 			$ab->get_company_contacts($response['data']['id']);
 			$response['data']['employees']=array();
@@ -641,12 +622,13 @@ try
 			
 			if(isset($GO_MODULES->modules['files']))
 			{
-				$response['data']['files']=$fs->get_content_json($full_path);
+				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+				$fs = new files();	
+				$response['data']['files']=$fs->get_content_json($response['data']['files_folder_id']);
 			}else
 			{
 				$response['data']['files']=array();				
-			}
-			
+			}			
 			
 			if($GO_MODULES->has_module('comments'))
 			{

@@ -28,6 +28,9 @@ $updates[]="ALTER TABLE `fs_notifications` DROP PRIMARY KEY , ADD PRIMARY KEY ( 
 
 require('../../../../Group-Office.php');
 
+$db = new db();
+$db->halt_on_error='report';
+
 $fs = new filesystem();
 
 require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
@@ -113,6 +116,7 @@ function crawl($path, $parent_id)
 	}
 }
 
+/*
 $folders = $fs->get_folders($GO_CONFIG->file_storage_path);
 
 foreach($folders as $folder)
@@ -121,5 +125,87 @@ foreach($folders as $folder)
 }
 
 $fsdb->query("DELETE FROM fs_folders WHERE name=''");
+*/
+
+if(isset($GO_MODULES->modules['addressbook']))
+{
+	$db->query("ALTER TABLE `ab_contacts` ADD `files_folder_id` INT NOT NULL;");
+	$db->query("SELECT c.*,a.name AS addressbook_name,a.acl_read,a.acl_write FROM ab_contacts c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id");
+	while($contact = $db->next_record())
+	{
+		$old_path = 'contacts/'.$contact['id'];
+		$folder = $fsdb->resolve_path('contacts/'.$contact['id']);
+
+		$new_folder_name = File::strip_invalid_chars(String::format_name($contact));
+		
+		if($folder && !empty($new_folder_name))
+		{
+			$last_part = strtoupper($contact['last_name'][0]);
+			$new_path = 'contacts/'.File::strip_invalid_chars($contact['addressbook_name']);
+			if(!empty($last_part))
+			{
+				$new_path .= '/'.$last_part;
+			}
+						
+			//echo $new_path."\n";
+			$destination = $fsdb->resolve_path($new_path, true, 1);
+			
+			
+			$fs->mkdir_recursive($GO_CONFIG->file_storage_path.$new_path);
+			
+			$fs->move($GO_CONFIG->file_storage_path.$old_path, $GO_CONFIG->file_storage_path.$new_path.'/'.$new_folder_name);
+			$new_folder_id = $fsdb->move_folder($folder, $destination);
+			
+			$up_folder['id']=$new_folder_id;
+			$up_folder['name']=File::strip_invalid_chars(String::format_name($contact));
+			$up_folder['acl_read']=0;
+			$up_folder['acl_write']=0;
+
+			$fsdb->update_folder($up_folder);
+			
+			$up_contact['id']=$contact['id'];
+			$up_contact['files_folder_id']=$new_folder_id;
+			
+			$fsdb->update_row('ab_contacts', 'id', $up_contact);
+		}		
+	}
+	
+	$db->query("ALTER TABLE `ab_companies` ADD `files_folder_id` INT NOT NULL;");
+	$db->query("SELECT c.*,a.name AS addressbook_name,a.acl_read,a.acl_write FROM ab_companies c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id");
+	while($company = $db->next_record())
+	{
+		$old_path = 'companies/'.$company['id'];
+		$folder = $fsdb->resolve_path('companies/'.$company['id']);
+
+		$new_folder_name = File::strip_invalid_chars($company['name']);
+		
+		if($folder && !empty($new_folder_name))
+		{
+			$last_part = strtoupper($company['name'][0]);
+			$new_path = 'companies/'.File::strip_invalid_chars($company['addressbook_name']);
+			if(!empty($last_part))
+			{
+				$new_path .= '/'.$last_part;
+			}
+						
+			$destination = $fsdb->resolve_path($new_path, true, 1);
+			
+			$fs->move($GO_CONFIG->file_storage_path.$old_path, $GO_CONFIG->file_storage_path.$new_path.'/'.$new_folder_name);
+			$new_folder_id = $fsdb->move_folder($folder, $destination);
+			
+			$up_folder['id']=$new_folder_id;
+			$up_folder['name']=File::strip_invalid_chars($company['name']);
+			$up_folder['acl_read']=0;
+			$up_folder['acl_write']=0;
+			
+			$fsdb->update_folder($up_folder);
+			
+			$up_company['id']=$company['id'];
+			$up_company['files_folder_id']=$new_folder_id;
+			
+			$fsdb->update_row('ab_companies', 'id', $up_company);
+		}		
+	}
+}
 
 ?>

@@ -83,7 +83,7 @@ try
 				unset($contact_credentials['company']);
 				if ($contact_id < 1)
 				{
-					$contact_id = $ab->add_contact($contact_credentials);
+					$contact_id = $ab->add_contact($contact_credentials, $addressbook);
 
 					if(!$contact_id)
 					{
@@ -93,15 +93,7 @@ try
 						$result['contact_id'] =  $contact_id;
 					}
 						
-					if($GO_MODULES->modules['files'])
-					{
-						require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
-						$fs = new files();
-
-						$result['files_path']='contacts/'.$contact_id;
-						$full_path = $GO_CONFIG->file_storage_path.$result['files_path'];
-						$fs->check_share($full_path, $GO_SECURITY->user_id, $addressbook['acl_read'], $addressbook['acl_write'],true);
-					}					
+		
 					$insert=true;
 					
 				} else {						
@@ -201,18 +193,7 @@ try
 				if ($company_id < 1)
 				{
 					# insert
-					$result['company_id'] = $company_id = $ab->add_company($company_credentials);
-
-
-					if($GO_MODULES->modules['files'])
-					{
-						require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
-						$fs = new files();
-
-						$result['files_path']='companies/'.$company_id;
-						$full_path = $GO_CONFIG->file_storage_path.$result['files_path'];
-						$fs->check_share($full_path, $GO_SECURITY->user_id, $addressbook['acl_read'], $addressbook['acl_write'],true);
-					}
+					$result['company_id'] = $company_id = $ab->add_company($company_credentials, $addressbook);
 					$insert=true;
 
 				} else {

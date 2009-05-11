@@ -219,7 +219,7 @@ class addressbook extends db {
 		return $count;
 	}
 
-	function add_company($company) {
+	function add_company($company, $addressbook=false) {
 
 		if (!isset($company['user_id']) || $company['user_id'] == 0) {
 			global $GO_SECURITY;
@@ -231,6 +231,33 @@ class addressbook extends db {
 		}
 		if (!isset($company['mtime']) || $company['mtime'] == 0) {
 			$company['mtime'] = $company['ctime'];
+		}
+		
+		global $GO_MODULES;
+		if(!isset($company['files_folder_id']) && isset($GO_MODULES->modules['files']))
+		{
+			global $GO_CONFIG;
+			
+			if(!$addressbook)
+			{
+				$addressbook = $this->get_addressbook($company['addressbook_id']);				
+			}
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();
+			
+			$new_folder_name = File::strip_invalid_chars($company['name']);
+			if(!empty($new_folder_name))
+			{
+				$last_part = strtoupper($new_folder_name[0]);
+				$new_path = 'contacts/'.File::strip_invalid_chars($addressbook['name']);
+				if(!empty($last_part))
+				{
+					$new_path .= '/'.$last_part;
+				}
+				$new_path .= '/'.$new_folder_name;
+				$folder = $files->resolve_path($new_path,true);			
+				$company['files_folder_id']=$folder['id'];
+			}		
 		}
 
 		$company['id'] = $this->nextid("ab_companies");
@@ -335,17 +362,16 @@ class addressbook extends db {
 	}
 
 	function delete_company($company_id) {
-		global $GO_CONFIG, $GO_LINKS;
-
-		//$company=$this->get_company($company_id);
-
-		#$GO_LINKS->delete_link($company['link_id']);
-
-		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
-		$fs = new filesystem();
-		if(file_exists($GO_CONFIG->file_storage_path.'companies/'.$company_id.'/'))
+		global $GO_CONFIG, $GO_LINKS,$GO_MODULES;
+		
+		if(isset($GO_MODULES->modules['files']))
 		{
-			$fs->delete($GO_CONFIG->file_storage_path.'companies/'.$company_id.'/');
+			$company=$this->get_company($company_id);
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();
+			try{
+				$files->delete_folder($company['files_folder_id']);
+			}catch(Exception $e){}
 		}
 
 		$sql = "UPDATE ab_contacts SET company_id=0 WHERE company_id=$company_id";
@@ -363,7 +389,9 @@ class addressbook extends db {
 
 	}
 
-	function add_contact($contact) {
+	function add_contact($contact, $addressbook=false) {
+		
+		global $GO_MODULES;
 
 		if (!isset($contact['user_id']) || $contact['user_id'] == 0) {
 			global $GO_SECURITY;
@@ -380,7 +408,34 @@ class addressbook extends db {
 		if (isset($contact['sex']) && $contact['sex'] == '') {
 			$contact['sex'] = 'M';
 		}
-
+		
+		if(!isset($contact['files_folder_id']) && isset($GO_MODULES->modules['files']))
+		{
+			global $GO_CONFIG;
+			
+			if(!$addressbook)
+			{
+				$addressbook = $this->get_addressbook($contact['addressbook_id']);				
+			}
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();
+			
+			$new_folder_name = File::strip_invalid_chars(String::format_name($contact));
+			if(!empty($new_folder_name))
+			{
+				$last_part = strtoupper(File::strip_invalid_chars($contact['last_name'][0]));
+				$new_path = 'contacts/'.File::strip_invalid_chars($addressbook['name']);
+				if(!empty($last_part))
+				{
+					$new_path .= '/'.$last_part;
+				}
+				$new_path .= '/'.$new_folder_name;
+				$folder = $files->resolve_path($new_path,true);			
+				$contact['files_folder_id']=$folder['id'];
+			}		
+		}
+		
+		
 		$contact['id'] = $this->nextid("ab_contacts");
 
 		$this->insert_row('ab_contacts', $contact);
@@ -440,11 +495,14 @@ class addressbook extends db {
 
 		#$GO_LINKS->delete_link($contact['link_id']);
 
-		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
-		$fs = new filesystem(true);
-		if(file_exists($GO_CONFIG->file_storage_path.'contacts/'.$contact_id.'/'))
+		if(isset($GO_MODULES->modules['files']))
 		{
-			$fs->delete($GO_CONFIG->file_storage_path.'contacts/'.$contact_id.'/');
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();
+			try{
+				$files->delete_folder($contact['files_folder_id']);
+			}
+			catch(Exception $e){}
 		}
 			
 		if(isset($GO_MODULES->modules['mailings']))
