@@ -114,8 +114,8 @@ class calendar extends db
 		if ($record=$this->next_record(DB_ASSOC))
 		{
 			if(empty($record['background']))
-				$record['background']='EBF1E2';
-				
+			$record['background']='EBF1E2';
+
 			return $record;
 		}else
 		{
@@ -658,6 +658,16 @@ class calendar extends db
 	function add_calendar($calendar)
 	{
 		$calendar['id'] = $this->nextid("cal_calendars");
+
+		global $GO_MODULES;
+		if(isset($GO_MODULES->modules['files']))
+		{
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();
+				
+			$files->check_share('events/'.File::strip_invalid_chars($calendar['name']),$category['user_id'], $calendar['acl_read'], $calendar['acl_write']);
+		}
+
 		$this->insert_row('cal_calendars',$calendar);
 		return $calendar['id'];
 	}
@@ -672,6 +682,18 @@ class calendar extends db
 		if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_write']))
 		{
 			throw new AccessDeniedException();
+		}
+
+		global $GO_MODULES;
+		if(isset($GO_MODULES->modules['files']))
+		{
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();
+				
+			$folder = $files->resolve_path('calendar/'.File::strip_invalid_chars($calendar['name']));
+			if($folder){
+				$files->delete_folder($folder);
+			}
 		}
 
 		$sql = "SELECT * FROM cal_events WHERE calendar_id='".$this->escape($calendar_id)."'";
@@ -752,7 +774,7 @@ class calendar extends db
 			return $this->get_default_calendar($GO_SECURITY->user_id);
 		}
 	}
-	
+
 	function get_calendar_by_name($name, $user_id=0)
 	{
 		$sql = "SELECT * FROM cal_calendars WHERE name='".$this->escape($name)."'";
@@ -833,7 +855,7 @@ class calendar extends db
 	 Times in GMT!
 	 */
 
-	function add_event($event, $calendar=false)
+	function add_event(&$event, $calendar=false)
 	{
 
 		if(empty($event['calendar_id']))
@@ -893,6 +915,23 @@ class calendar extends db
 		if(!isset($event['participants_event_id']))
 		{
 			$event['participants_event_id']=$event['id'];
+		}
+
+		global $GO_MODULES;
+		if(!isset($event['files_folder_id']) && isset($GO_MODULES->modules['files']))
+		{
+			global $GO_CONFIG;
+				
+			if(!$calendar)
+			{
+				$calendar = $this->get_calendar($event['calendar_id']);
+			}
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();
+
+			$new_path = 'events/'.File::strip_invalid_chars($calendar['name']).'/'.date('Y', $event['ctime']).'/'.File::strip_invalid_chars($event['name']);
+			$folder = $files->resolve_path($new_path,true);
+			$event['files_folder_id']=$folder['id'];
 		}
 
 
@@ -1393,16 +1432,17 @@ class calendar extends db
 		{
 			$event_id = $this->escape($event_id);
 
-			global $GO_LINKS, $GO_CONFIG;
-			$GO_LINKS->delete_link($event['id'],1);
-
-
-			if(file_exists($GO_CONFIG->file_storage_path.'events/'.$event_id.'/'))
+			global $GO_MODULES,$GO_CONFIG;
+			if(isset($GO_MODULES->modules['files']))
 			{
-				require_once($GO_CONFIG->class_path.'filesystem.class.inc');
-				$fs = new filesystem();
-				$fs->delete($GO_CONFIG->file_storage_path.'events/'.$event_id.'/');
-			}
+				$note = $this->get_note($note_id);
+				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+				$files = new files();
+				try{
+					$files->delete_folder($note['files_folder_id']);
+				}
+				catch(Exception $e){}
+			}		
 
 
 			$sql = "DELETE FROM cal_events WHERE id='$event_id'";
@@ -1415,9 +1455,6 @@ class calendar extends db
 			require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
 			$search = new search();
 			$search->delete_search_result($event_id, 1);
-
-
-			global $GO_CONFIG;
 
 			require_once($GO_CONFIG->class_path.'base/reminder.class.inc.php');
 			$rm = new reminder();

@@ -114,7 +114,7 @@ if(isset($GO_MODULES->modules['addressbook']))
 	while($contact = $db->next_record())
 	{
 		$old_path = 'contacts/'.$contact['id'];
-		$folder = $fsdb->resolve_path('contacts/'.$contact['id']);
+		$folder = $fsdb->resolve_path($old_path);
 
 		$new_folder_name = File::strip_invalid_chars(String::format_name($contact));
 		
@@ -155,7 +155,7 @@ if(isset($GO_MODULES->modules['addressbook']))
 	while($company = $db->next_record())
 	{
 		$old_path = 'companies/'.$company['id'];
-		$folder = $fsdb->resolve_path('companies/'.$company['id']);
+		$folder = $fsdb->resolve_path($old_path);
 
 		$new_folder_name = File::strip_invalid_chars($company['name']);
 		
@@ -195,7 +195,7 @@ if(isset($GO_MODULES->modules['notes']))
 	while($note = $db->next_record())
 	{
 		$old_path = 'notes/'.$note['id'];
-		$folder = $fsdb->resolve_path('notes/'.$note['id']);
+		$folder = $fsdb->resolve_path($old_path);
 
 		$new_folder_name = File::strip_invalid_chars($note['name']);
 		
@@ -213,7 +213,7 @@ if(isset($GO_MODULES->modules['notes']))
 			$new_folder_id = $fsdb->move_folder($folder, $destination);
 			
 			$up_folder['id']=$new_folder_id;
-			$up_folder['name']=File::strip_invalid_chars(String::format_name($note));
+			$up_folder['name']=File::strip_invalid_chars($note['name']);
 			$up_folder['acl_read']=0;
 			$up_folder['acl_write']=0;
 
@@ -235,7 +235,7 @@ if(isset($GO_MODULES->modules['tasks']))
 	while($task = $db->next_record())
 	{
 		$old_path = 'tasks/'.$task['id'];
-		$folder = $fsdb->resolve_path('tasks/'.$task['id']);
+		$folder = $fsdb->resolve_path($old_path);
 
 		$new_folder_name = File::strip_invalid_chars($task['name']);
 		
@@ -252,7 +252,7 @@ if(isset($GO_MODULES->modules['tasks']))
 			$new_folder_id = $fsdb->move_folder($folder, $destination);
 			
 			$up_folder['id']=$new_folder_id;
-			$up_folder['name']=File::strip_invalid_chars(String::format_name($task));
+			$up_folder['name']=File::strip_invalid_chars($task['name']);
 			$up_folder['acl_read']=0;
 			$up_folder['acl_write']=0;
 
@@ -266,4 +266,85 @@ if(isset($GO_MODULES->modules['tasks']))
 	}
 }
 
+
+
+if(isset($GO_MODULES->modules['calendar']))
+{
+	$db->query("ALTER TABLE `cal_events` ADD `files_folder_id` INT NOT NULL;");
+	$db->query("SELECT e.*,c.name AS calendar_name,c.acl_read,c.acl_write FROM cal_events e INNER JOIN cal_calendars c ON c.id=e.calendar_id");
+	while($event = $db->next_record())
+	{
+		$old_path = 'events/'.$event['id'];
+		$folder = $fsdb->resolve_path($old_path);
+
+		$new_folder_name = File::strip_invalid_chars($event['name']);
+		
+		if($folder && !empty($new_folder_name))
+		{			
+			$new_path = 'events/'.File::strip_invalid_chars($event['calendar_name']).'/'.date('Y', $event['due_time']);
+						
+			//echo $new_path."\n";
+			$destination = $fsdb->resolve_path($new_path, true, 1);			
+			
+			$fs->mkdir_recursive($GO_CONFIG->file_storage_path.$new_path);
+			
+			$fs->move($GO_CONFIG->file_storage_path.$old_path, $GO_CONFIG->file_storage_path.$new_path.'/'.$new_folder_name);
+			$new_folder_id = $fsdb->move_folder($folder, $destination);
+			
+			$up_folder['id']=$new_folder_id;
+			$up_folder['name']=File::strip_invalid_chars($event['name']);
+			$up_folder['acl_read']=0;
+			$up_folder['acl_write']=0;
+
+			$fsdb->update_folder($up_folder);
+			
+			$up_event['id']=$event['id'];
+			$up_event['files_folder_id']=$new_folder_id;
+			
+			$fsdb->update_row('cal_events', 'id', $up_event);
+		}		
+	}
+}
+
+
+if(isset($GO_MODULES->modules['billing']))
+{
+	$db->query("ALTER TABLE `bs_orders` ADD `files_folder_id` INT NOT NULL;");
+	$db->query("SELECT e.*,c.name AS book_name,c.acl_read,c.acl_write FROM bs_orders e INNER JOIN bs_books c ON c.id=e.book_id");
+	while($order = $db->next_record())
+	{
+		$old_path = 'billing/'.$order['id'];
+		$folder = $fsdb->resolve_path($old_path);
+
+		$new_folder_name = File::strip_invalid_chars($order['name']);
+		
+		if($folder && !empty($new_folder_name))
+		{			
+			$new_path = 'billing/'.File::strip_invalid_chars($order['book_name']).'/'.date('Y', $order['btime']);
+						
+			$destination = $fsdb->resolve_path($new_path, true, 1);			
+			
+			$fs->mkdir_recursive($GO_CONFIG->file_storage_path.$new_path);
+			
+			$fs->move($GO_CONFIG->file_storage_path.$old_path, $GO_CONFIG->file_storage_path.$new_path.'/'.$new_folder_name);
+			$new_folder_id = $fsdb->move_folder($folder, $destination);
+			
+			$up_folder['id']=$new_folder_id;
+			$up_folder['name']=File::strip_invalid_chars($order['name']);
+			$up_folder['acl_read']=0;
+			$up_folder['acl_write']=0;
+
+			$fsdb->update_folder($up_folder);
+			
+			$up_order['id']=$order['id'];
+			$up_order['files_folder_id']=$new_folder_id;
+			
+			$fsdb->update_row('cbs_orders', 'id', $up_order);
+		}		
+	}
+}
+
+if(isset($GO_MODULES->modules['projects']))
+{
+}
 ?>

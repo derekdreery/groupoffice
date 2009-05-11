@@ -149,7 +149,7 @@ try{
 			require_once($GO_CONFIG->class_path.'ical2array.class.inc');
 			require_once($GO_CONFIG->class_path.'Date.class.inc.php');
 				
-			$event = $cal->get_event(($_REQUEST['event_id']));
+			$event = $cal->get_event($_REQUEST['event_id']);
 				
 			if(!$event)
 			{
@@ -166,17 +166,6 @@ try{
 				
 			$response['data']=array_merge($response['data'], $cal->event_to_json_response($event));
 			$response['data']['calendar_name']=$calendar['name'];
-				
-			if(isset($GO_MODULES->modules['files']))
-			{
-				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
-				$fs = new files();
-
-				$response['data']['files_path']='events/'.$response['data']['id'];
-
-				$full_path = $GO_CONFIG->file_storage_path.$response['data']['files_path'];
-				$fs->check_share($full_path, $GO_SECURITY->user_id, $calendar['acl_read'], $calendar['acl_write'],true);
-			}
 			$response['success']=true;
 
 			break;

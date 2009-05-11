@@ -90,11 +90,10 @@ class notes extends db {
 	 */
 
 	function add_note($note, $category=false)
-	{		
-		global $GO_MODULES;
-		
+	{	
 		$note['ctime']=$note['mtime']=time();		
 		
+		global $GO_MODULES;
 		if(!isset($note['files_folder_id']) && isset($GO_MODULES->modules['files']))
 		{
 			global $GO_CONFIG;
