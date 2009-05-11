@@ -50,7 +50,7 @@ class files extends db
 		$events->add_listener('user_delete', __FILE__, 'files', 'user_delete');
 		$events->add_listener('add_user', __FILE__, 'files', 'add_user');
 		$events->add_listener('build_search_index', __FILE__, 'files', 'build_search_index');
-		$events->add_listener('login', __FILE__, 'files', 'login');
+		$events->add_listener('login', __FILE__, 'files', 'login');		
 	}
 
 
@@ -807,8 +807,7 @@ class files extends db
 			$parent = $this->get_folder($folder['parent_id']);
 			return $this->has_write_permission($user_id, $parent);
 		}else
-		{
-				
+		{				
 			return $GO_SECURITY->has_permission($user_id, $folder['acl_write']);
 		}
 	}
@@ -1204,12 +1203,7 @@ class files extends db
 		while($subfolder = $this->next_record())
 		{
 			$files->delete_folder($subfolder);
-		}
-
-		if(!$this->has_write_permission($GO_SECURITY->user_id, $folder))
-		{
-			throw new AccessDeniedException();
-		}
+		}		
 
 		$this->get_files($folder['id']);
 		while($file=$this->next_record())

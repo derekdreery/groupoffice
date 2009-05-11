@@ -211,7 +211,7 @@ if(isset($GO_MODULES->modules['addressbook']))
 if(isset($GO_MODULES->modules['notes']))
 {
 	$db->query("ALTER TABLE `no_notes` ADD `files_folder_id` INT NOT NULL;");
-	$db->query("SELECT n.*,c.name AS category_name,c.acl_read,c.acl_write FROM no_notes c INNER JOIN no_categories c ON c.id=n.category_id");
+	$db->query("SELECT n.*,c.name AS category_name,c.acl_read,c.acl_write FROM no_notes n INNER JOIN no_categories c ON c.id=n.category_id");
 	while($note = $db->next_record())
 	{
 		$old_path = 'notes/'.$note['id'];
@@ -221,7 +221,7 @@ if(isset($GO_MODULES->modules['notes']))
 		
 		if($folder && !empty($new_folder_name))
 		{			
-			$new_path = 'notes/'.$note['category_name'].'/'.date('Y', $note['ctime']);
+			$new_path = 'notes/'.File::strip_invalid_chars($note['category_name']).'/'.date('Y', $note['ctime']);
 						
 			//echo $new_path."\n";
 			$destination = $fsdb->resolve_path($new_path, true, 1);
@@ -243,6 +243,45 @@ if(isset($GO_MODULES->modules['notes']))
 			$up_note['files_folder_id']=$new_folder_id;
 			
 			$fsdb->update_row('ab_notes', 'id', $up_note);
+		}		
+	}
+}
+
+
+if(isset($GO_MODULES->modules['tasks']))
+{
+	$db->query("ALTER TABLE `ta_tasks` ADD `files_folder_id` INT NOT NULL;");
+	$db->query("SELECT t.*,l.name AS tasklist_name,l.acl_read,l.acl_write FROM ta_tasks t INNER JOIN ta_lists l ON l.id=t.tasklist_id");
+	while($task = $db->next_record())
+	{
+		$old_path = 'tasks/'.$task['id'];
+		$folder = $fsdb->resolve_path('tasks/'.$task['id']);
+
+		$new_folder_name = File::strip_invalid_chars($task['name']);
+		
+		if($folder && !empty($new_folder_name))
+		{			
+			$new_path = 'tasks/'.File::strip_invalid_chars($task['tasklist_name']).'/'.date('Y', $task['due_time']);
+						
+			//echo $new_path."\n";
+			$destination = $fsdb->resolve_path($new_path, true, 1);			
+			
+			$fs->mkdir_recursive($GO_CONFIG->file_storage_path.$new_path);
+			
+			$fs->move($GO_CONFIG->file_storage_path.$old_path, $GO_CONFIG->file_storage_path.$new_path.'/'.$new_folder_name);
+			$new_folder_id = $fsdb->move_folder($folder, $destination);
+			
+			$up_folder['id']=$new_folder_id;
+			$up_folder['name']=File::strip_invalid_chars(String::format_name($task));
+			$up_folder['acl_read']=0;
+			$up_folder['acl_write']=0;
+
+			$fsdb->update_folder($up_folder);
+			
+			$up_task['id']=$task['id'];
+			$up_task['files_folder_id']=$new_folder_id;
+			
+			$fsdb->update_row('ta_tasks', 'id', $up_task);
 		}		
 	}
 }

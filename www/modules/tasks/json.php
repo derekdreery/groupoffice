@@ -164,17 +164,6 @@ try{
 				$response['data']['remind_time']=date($_SESSION['GO_SESSION']['time_format'], 28800);
 			}
 
-			if($GO_MODULES->modules['files'])
-			{
-				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
-				$fs = new files();
-
-				$response['data']['files_path']='tasks/'.$response['data']['id'];
-
-				$full_path = $GO_CONFIG->file_storage_path.$response['data']['files_path'];
-				$fs->check_share($full_path, $response['data']['user_id'], $tasklist['acl_read'], $tasklist['acl_write'],true);
-			}
-
 			if($_task!='task')
 			{
 				$response['data']['description']=String::text_to_html($response['data']['description']);
@@ -187,7 +176,9 @@ try{
 
 				if(isset($GO_MODULES->modules['files']))
 				{
-					$response['data']['files']=$fs->get_content_json($full_path);
+					require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+					$files = new files();
+					$response['data']['files']=$files->get_content_json($response['data']['files_folder_id']);
 				}else
 				{
 					$response['data']['files']=array();
