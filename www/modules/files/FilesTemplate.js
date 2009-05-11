@@ -12,13 +12,8 @@ GO.files.filesTemplate = '<tpl if="files.length">'+
 		'</tr>'+	
 							
 		'<tpl for="files">'+
-			'<tr>'+
-				'<tpl if="values.extension==\'folder\'">'+										
-					'<td><a class="go-grid-icon filetype-folder" href="#" onclick="GO.files.openFolder(\'{[GO.util.add_slashes(values.path)]}\');">{name}</a></td>'+
-				'</tpl>'+							
-				'<tpl if="values.extension!=\'folder\'">'+										
-					'<td><a class="go-grid-icon filetype-{extension}" href="#" onclick="GO.files.openFile(\'{[GO.util.add_slashes(values.path)]}\');">{name}</a></td>'+
-				'</tpl>'+
+			'<tr>'+											
+				'<td><a class="go-grid-icon filetype-{extension}" href="#files_{[xindex-1]}">{name}</a></td>'+
 				'<td style="white-space:nowrap">{mtime}</td>'+
 			'</tr>'+
 		'</tpl>'+

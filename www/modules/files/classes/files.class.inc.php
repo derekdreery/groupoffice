@@ -1275,7 +1275,6 @@ class files extends db
 			}
 
 			$folder['type_id']='d:'.$folder['id'];
-			$folder['grid_display']='<div class="go-grid-icon '.$class.'">'.$folder['name'].'</div>';
 			$folder['type']='Folder';
 			$folder['mtime']=Date::get_timestamp($folder['mtime']);
 			$folder['size']='-';
@@ -1299,7 +1298,6 @@ class files extends db
 			{
 				$file['extension']=$extension;
 				$file['type_id']='f:'.$file['id'];
-				$file['grid_display']='<div class="go-grid-icon filetype filetype-'.$extension.'">'.$file['name'].'</div>';
 				$file['type']=File::get_filetype_description($extension);
 				$file['mtime']=Date::get_timestamp($file['mtime']);
 				$file['size']=Number::format_size($file['size']);

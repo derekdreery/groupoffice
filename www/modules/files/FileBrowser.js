@@ -14,6 +14,17 @@
 
 Ext.namespace("GO.files");
 
+GO.files.FileRecord = Ext.data.Record.create([
+				 {name: 'type_id', type: 'string'},
+         {name: 'id', type: 'string'},
+         {name: 'name', type: 'string'},
+         {name: 'type', type: 'string'},
+         {name: 'mtime'},
+         {name: 'extension'},
+         {name: 'timestamp'},
+         {name: 'thumb_url', type: 'string'} 
+    ]);
+
 /*
  * 
  * if config.treeRootVisible == false (default) then the tree will load automatically!
@@ -27,10 +38,12 @@ GO.files.FileBrowser = function(config){
 		config = {};
 	}
 	
-	if(!config.root)
-	{
-		config.root='root';
-	}
+	this.treeLoader = new Ext.tree.TreeLoader(
+		{
+			dataUrl:GO.settings.modules.files.url+'json.php',
+			baseParams:{task: 'tree',root_folder_id:0},
+			preloadChildren:true
+		});
 
 	this.treePanel = new Ext.tree.TreePanel({
 		region:'west',
@@ -40,15 +53,10 @@ GO.files.FileBrowser = function(config){
 		autoScroll:true,
 		width: 200,
 		animate:true,
-		loader: new Ext.tree.TreeLoader(
-		{
-			dataUrl:GO.settings.modules.files.url+'json.php',
-			baseParams:{task: 'tree'},
-			preloadChildren:true
-		}),
+		loader: this.treeLoader,
 		collapsed: config.treeCollapsed,
+		rootVisible:false,
 		containerScroll: true,
-		rootVisible: config.treeRootVisible,
 		collapsible:true,
 		ddAppendOnly: true,
 		containerScroll: true,
@@ -62,17 +70,20 @@ GO.files.FileBrowser = function(config){
 	this.rootNode = new Ext.tree.AsyncTreeNode({
 		text: GO.lang.folders,
 		draggable:false,
-		id: config.root,
+		id: 'root',
 		iconCls : 'folder-default'
 	});
 	
 	//select the first inbox to be displayed in the messages grid
 	this.rootNode.on('load', function(node)
 	{	
-		if(node.childNodes[0])
-		{		
-			this.setFolderID(node.childNodes[0].id);
+		//var grid_id = !this.treePanel.rootVisible && node.childNodes[0] ? node.childNodes[0].id : node.id;
+		if(!this.folder_id)
+		{
+			this.folder_id=node.childNodes[0].id;
 		}
+		this.setFolderID(this.folder_id);
+		
 	}, this);
 	
 	this.treePanel.setRootNode(this.rootNode);
@@ -612,56 +623,15 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			}, this);
 		
 		this.buildNewMenu();	
-		
-		/*f(!this.loadDelayed && !this.loaded)
-		{			
-			this.loadFiles();
-		}	*/
 	},
-	/*
-	loadFiles : function(id){
-		this.buildNewMenu();		
-		this.setRootNode(this.root, id);
-		this.loaded=true;
-	},*/
-	
-	/*setRootID : function(rootID, loadNow)
-	{
-		this.root = rootID;
-		this.loaded=false;		
-		
-		if(loadNow)
-		{
-			this.loadFiles();	
-		}
-	},
-	
-	setRootNode : function(id)
-	{		
-		this.rootNode.id=id;
-		//delete this.rootNode.children;
-		//this.rootNode.expanded=false;
-		//this.rootNode.childrenRendered=false;
 
-		if(id=='root' && !id)
-		{
-			this.rootNode.on('load', function(node)
-			{
-				if(node.childNodes[0])
-				{
-					var firstAccountNode = node.childNodes[0];
-					this.setFolderID(firstAccountNode.id);
-				}				
-			}, this, {single:true});
-		}else
-		{						
-			this.setFolderID(id, true, true);
-		}
-		
-		//this.setFolderID(id);
 	
+	setRootID : function(rootID, folder_id)
+	{	
+		this.folder_id=folder_id;
+		this.treeLoader.baseParams.root_folder_id=rootID;
 		this.rootNode.reload();		
-	},	*/
+	},
 	
 	buildNewMenu : function(){		
 	
@@ -1451,7 +1421,7 @@ GO.files.openFile = function(record, store)
 }
 
 
-GO.files.openFolder = function(id)
+GO.files.openFolder = function(id, folder_id)
 {
 	if(!GO.files.fileBrowser)
 	{	
@@ -1482,9 +1452,10 @@ GO.files.openFolder = function(id)
 			]							        				
 		});		
 	}
-	GO.files.fileBrowser.setRootID(id, true);
+	GO.files.fileBrowser.setRootID(id, folder_id);
 	GO.files.fileBrowserWin.show();
 	
+	return GO.files.fileBrowser;
 }
 
 

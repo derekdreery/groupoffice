@@ -217,6 +217,20 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 					{
 						GO.linkHandlers[link.link_type].call(this, link.id, {data: link});
 					}
+				}else
+				{
+					pos = href.indexOf('#files_');
+					var index = href.substr(pos+7, href.length);		
+					var file = this.data.files[index];			
+					if(file.extension=='folder')
+					{
+						var fb = GO.files.openFolder(this.data.files_folder_id, file.id);
+						
+					}else
+					{
+						var record = new GO.files.FileRecord(file);
+						GO.files.openFile(record);
+					}
 				}
 			}
 		}		
