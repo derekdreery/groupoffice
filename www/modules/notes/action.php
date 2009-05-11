@@ -78,17 +78,7 @@ try{
 			{
 				$note['user_id']=$GO_SECURITY->user_id;
 				
-				$note_id= $notes->add_note($note);
-				
-				if($GO_MODULES->has_module('files'))
-				{
-					require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
-					$fs = new files();
-
-					$response['files_path']='notes/'.$note_id;						
-					$full_path = $GO_CONFIG->file_storage_path.$response['files_path'];
-					$fs->check_share($full_path, $GO_SECURITY->user_id, $category['acl_read'], $category['acl_write'],true);
-				}			
+				$note_id= $notes->add_note($note, $category);
 
 				$response['note_id']=$note_id;
 				$response['success']=true;
