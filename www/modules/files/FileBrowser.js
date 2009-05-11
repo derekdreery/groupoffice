@@ -1005,18 +1005,15 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	
 		var activeNode = this.treePanel.getNodeById(this.folder_id);
 
+		this.expandPath=false;
 		if(activeNode)
 		{
-			var expandPath = activeNode.getPath();
-		}
-		this.rootNode.reload();
-
-		
-  	this.setFolderID(this.folder_id);
-  	if(expandPath)
-  	{
-  		this.treePanel.expandPath(expandPath);
-  	}
+			this.expandPath = activeNode.getPath();
+		}		
+		this.rootNode.reload((function(){
+				if(this.expandPath)
+					this.treePanel.expandPath(this.expandPath);
+			}).createDelegate(this));
 	},
 	
 	sendOverwrite : function(params){
