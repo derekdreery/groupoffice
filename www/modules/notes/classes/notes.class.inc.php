@@ -96,8 +96,6 @@ class notes extends db {
 		global $GO_MODULES;
 		if(!isset($note['files_folder_id']) && isset($GO_MODULES->modules['files']))
 		{
-			global $GO_CONFIG;
-			
 			if(!$category)
 			{
 				$category = $this->get_category($note['category_id']);				
@@ -105,7 +103,7 @@ class notes extends db {
 			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();			
 
-			$new_path = 'notes/'.File::strip_invalid_chars($category['name']).'/'.date('Y', $note['ctime']).'/'.File::strip_invalid_chars($note['name']);			
+			$new_path = $this->build_note_files_path($note, $category);			
 			$folder = $files->resolve_path($new_path,true);			
 			$note['files_folder_id']=$folder['id'];			
 		}
@@ -118,6 +116,47 @@ class notes extends db {
 			return $note['id'];
 		}
 		return false;
+	}
+	
+	function build_note_files_path($note, $category)
+	{
+		return 'notes/'.File::strip_invalid_chars($category['name']).'/'.date('Y', $note['ctime']).'/'.File::strip_invalid_chars($note['name']);
+	}
+	
+	/**
+	 * Update a Note
+	 *
+	 * @param Array $note Associative array of record fields
+	 *
+	 * @access public
+	 * @return bool True on success
+	 */
+
+	function update_note($note, $category=false)
+	{		
+		$note['mtime']=time();
+		
+		global $GO_MODULES;
+		if(isset($GO_MODULES->modules['files']) && isset($note['category_id']))
+		{			
+			if(!$category)
+			{
+				$category = $this->get_category($note['category_id']);				
+			}
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();			
+			
+			$old_note = $this->get_note($note['id']);
+			$note['ctime']=$old_note['ctime'];
+			$new_path = $this->build_note_files_path($note, $category);			
+			$note['files_folder_id']=$files->check_folder_location($old_note['files_folder_id'], $new_path);			
+		}
+		
+		$r = $this->update_row('no_notes', 'id', $note);
+		
+		$this->cache_note($note['id']);
+		
+		return $r;
 	}
 	
 	/**
@@ -348,25 +387,7 @@ class notes extends db {
 		
 
 
-	/**
-	 * Update a Note
-	 *
-	 * @param Array $note Associative array of record fields
-	 *
-	 * @access public
-	 * @return bool True on success
-	 */
-
-	function update_note($note)
-	{		
-		$note['mtime']=time();
-		
-		$r = $this->update_row('no_notes', 'id', $note);
-		
-		$this->cache_note($note['id']);
-		
-		return $r;
-	}
+	
 
 
 	

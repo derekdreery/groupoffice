@@ -71,7 +71,7 @@ try{
 
 			if($note['id']>0)
 			{
-				$notes->update_note($note);
+				$notes->update_note($note, $category);
 				$response['success']=true;
 				$insert=false;
 			}else

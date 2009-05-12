@@ -339,7 +339,7 @@ if(isset($GO_MODULES->modules['billing']))
 			$up_order['id']=$order['id'];
 			$up_order['files_folder_id']=$new_folder_id;
 			
-			$fsdb->update_row('cbs_orders', 'id', $up_order);
+			$fsdb->update_row('bs_orders', 'id', $up_order);
 		}		
 	}
 }

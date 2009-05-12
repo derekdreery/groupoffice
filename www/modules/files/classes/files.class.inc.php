@@ -151,6 +151,32 @@ class files extends db
 		$next = $this->get_folder($sub['parent_id']);
 		return $this->is_sub_dir($next, $parent);
 	}
+	
+	function check_folder_location($folder_id, $path)
+	{			
+		$new_folder_id=$folder_id;
+		$current_path = $this->build_path($folder_id);
+		if($current_path != $path)
+		{
+			global $GO_CONFIG;
+			
+			$fs = new filesystem();
+			$fs->move($GO_CONFIG->file_storage_path.$current_path, $GO_CONFIG->file_storage_path.$path);
+			
+			$destfolder = $this->resolve_path(dirname($path),true);
+			$sourcefolder = $this->get_folder($folder_id);
+			$new_folder_id = $this->move_folder($sourcefolder, $destfolder);
+			
+			$new_folder_name = utf8_basename($path);
+			if($new_folder_name!=$sourcefolder['name'])
+			{
+				$up_folder['id']=$new_folder_id;
+				$up_folder['name']=$new_folder_name;
+				$this->update_folder($up_folder);
+			}
+		}
+		return $new_folder_id;		
+	}
 
 	function check_share($path, $user_id, $acl_read, $acl_write, $quiet=true)
 	{
@@ -586,6 +612,10 @@ class files extends db
 
 	function move_folder($sourcefolder, $destfolder)
 	{
+		if($sourcefolder['parent_id']==$destfolder['id'])
+		{
+			return $sourcefolder['id'];
+		}
 		$existing_folder = $this->folder_exists($destfolder['id'], $sourcefolder['name']);
 		if($existing_folder)
 		{
@@ -1167,6 +1197,8 @@ class files extends db
 		}
 		if(!$folder)
 		return $path;
+		
+		//array_unshift($pathinfo, $folder);
 
 		$path = empty($path) ? $folder['name'] : $folder['name'].'/'.$path;
 		return $this->build_path($folder['parent_id'], $path);

@@ -208,7 +208,7 @@ class filesystem extends db
 			{
 				if (!file_exists($destination_path))
 				{
-					if (!mkdir($destination_path, $GO_CONFIG->folder_create_mode))
+					if (!mkdir($destination_path, $GO_CONFIG->folder_create_mode,true))
 					{
 						throw new Exception('Failed to create direcory');
 					}
