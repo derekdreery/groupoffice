@@ -617,36 +617,31 @@ class files extends db
 			return $sourcefolder['id'];
 		}
 		$existing_folder = $this->folder_exists($destfolder['id'], $sourcefolder['name']);
+
+		$sourcefolder['parent_id']=$destfolder['id'];
+		$this->update_folder($sourcefolder);		
+		
 		if($existing_folder)
-		{
-			$newfolder = $sourcefolder;
-			$newfolder['id']=$existing_folder['id'];
-			$newfolder['parent_id']=$existing_folder['parent_id'];
-			$this->update_folder($newfolder);
-		}else
-		{
-			$newfolder=$sourcefolder;
-			$newfolder['parent_id']=$destfolder['id'];
-			$newfolder['id']=$this->add_folder($newfolder);
-		}
-		$files = new files();
-
-		$this->get_files($sourcefolder['id']);
-		while($file = $this->next_record())
-		{
-			$files->move_file($file, $newfolder);
-		}
-
-		$this->get_folders($sourcefolder['id']);
-		while($folder = $this->next_record())
-		{
-			$files->move_folder($folder, $newfolder);
+		{		
+			$files = new files();
+	
+			$this->get_files($existing_folder['id']);
+			while($file = $this->next_record())
+			{
+				$files->move_file($file, $sourcefolder);
+			}
+	
+			$this->get_folders($existing_folder['id']);
+			while($folder = $this->next_record())
+			{
+				$files->move_folder($folder, $sourcefolder);
+			}
+	
+			$sql = "DELETE FROM fs_folders WHERE id=?";
+			$this->query($sql, 'i', $existing_folder['id']);
 		}
 
-		$sql = "DELETE FROM fs_folders WHERE id=?";
-		$this->query($sql, 'i', $sourcefolder['id']);
-
-		return $newfolder['id'];
+		return $sourcefolder['id'];
 	}
 
 
