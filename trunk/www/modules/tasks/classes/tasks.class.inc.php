@@ -388,7 +388,7 @@ class tasks extends db
 	
 	function build_task_files_path($task, $tasklist)
 	{
-		return 'tasks/'.File::strip_invalid_chars($tasklist['name']).'/'.date('Y', $task['due_time']).'/'.File::strip_invalid_chars($task['name']);
+		return 'tasks/'.date('Y', $task['due_time']).'/'.File::strip_invalid_chars($tasklist['name']).'/'.File::strip_invalid_chars($task['name']);
 	}
 
 
@@ -410,11 +410,10 @@ class tasks extends db
 			$this->set_reminder($task);
 		}
 		
-		$r = $this->update_row('ta_tasks', 'id', $task);
 		
 		
 		global $GO_MODULES;
-		if(isset($GO_MODULES->modules['files']) && isset($task['tasklist_id']))
+		if(isset($GO_MODULES->modules['files']))
 		{
 			if(!$old_task)
 			{
@@ -431,10 +430,17 @@ class tasks extends db
 			{
 				$task['due_time']=$old_task['due_time'];
 			}
+			if(!isset($task['tasklist_id']))
+			{
+				$task['tasklist_id']=$old_task['tasklist_id'];
+			}
 			
 			$new_path = $this->build_task_files_path($task, $tasklist);			
 			$task['files_folder_id']=$files->check_folder_location($old_task['files_folder_id'], $new_path);			
 		}	
+		
+		$r = $this->update_row('ta_tasks', 'id', $task);
+		
 		
 		$this->cache_task($task['id']);
 		return $r;

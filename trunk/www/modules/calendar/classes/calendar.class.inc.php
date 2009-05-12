@@ -854,6 +854,10 @@ class calendar extends db
 	/*
 	 Times in GMT!
 	 */
+	
+	function build_event_files_path($event, $calendar){
+		return 'events/'.date('Y', $event['ctime']).'/'.File::strip_invalid_chars($calendar['name']).'/'.File::strip_invalid_chars($event['name']);
+	}
 
 	function add_event(&$event, $calendar=false)
 	{
@@ -929,7 +933,7 @@ class calendar extends db
 			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 
-			$new_path = 'events/'.File::strip_invalid_chars($calendar['name']).'/'.date('Y', $event['ctime']).'/'.File::strip_invalid_chars($event['name']);
+			$new_path = $this->build_event_files_path($event, $calendar);
 			$folder = $files->resolve_path($new_path,true);
 			$event['files_folder_id']=$folder['id'];
 		}
@@ -997,7 +1001,7 @@ class calendar extends db
 		return false;
 	}
 
-	function update_event($event, $calendar=false, $update_related=true)
+	function update_event(&$event, $calendar=false, $old_event=false, $update_related=true)
 	{
 		unset($event['read_permission'], $event['write_permission']);
 		if(empty($event['mtime']))
@@ -1026,6 +1030,33 @@ class calendar extends db
 			}
 			unset($event['exceptions']);
 		}
+		
+		global $GO_MODULES;
+		if(isset($GO_MODULES->modules['files']))
+		{
+			if(!$old_event)
+			{
+				$old_event = $this->get_event($event['id']);
+			}			
+			if(!$calendar)
+			{
+				$calendar = $this->get_calendar($event['calendar_id']);				
+			}
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();
+			
+			if(!isset($event['ctime']))
+			{
+				$event['ctime']=$old_event['ctime'];
+			}
+			if(!isset($event['calendar_id']))
+			{
+				$event['calendar_id']=$old_event['calendar_id'];
+			}
+			
+			$new_path = $this->build_event_files_path($event, $calendar);			
+			$event['files_folder_id']=$files->check_folder_location($old_event['files_folder_id'], $new_path);			
+		}	
 
 		$r = $this->update_row('cal_events', 'id', $event);
 
@@ -1091,14 +1122,16 @@ class calendar extends db
 		{
 			unset($event['user_id'], $event['calendar_id'], $event['participants_event_id']);
 			$cal = new calendar();
-			$sql = "SELECT id FROM cal_events WHERE participants_event_id=".$this->escape($event['id']);
+			$sql = "SELECT * FROM cal_events WHERE participants_event_id=".$this->escape($event['id']);
 			$cal->query($sql);
-			while($cal->next_record())
+			while($old_event = $cal->next_record())
 			{
 				$event['id']=$cal->f('id');
-				$this->update_event($event,false,false);
+				$this->update_event($event,$calendar,$old_event, false);
 			}
 		}
+		
+		
 
 		return $r;
 	}
@@ -1435,11 +1468,11 @@ class calendar extends db
 			global $GO_MODULES,$GO_CONFIG;
 			if(isset($GO_MODULES->modules['files']))
 			{
-				$note = $this->get_note($note_id);
+				
 				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 				$files = new files();
 				try{
-					$files->delete_folder($note['files_folder_id']);
+					$files->delete_folder($event['files_folder_id']);
 				}
 				catch(Exception $e){}
 			}		

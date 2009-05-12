@@ -22,8 +22,6 @@ $cal = new calendar();
 
 function get_posted_event()
 {
-
-	
 	$gmt_tz = new DateTimeZone('GMT');
 	
 	$event['id']=$_POST['event_id'];
@@ -385,6 +383,7 @@ try{
 			if($event['id']>0)
 			{
 				$cal->update_event($event, $calendar);
+				$response['files_folder_id']=$event['files_folder_id'];
 				$response['success']=true;
 
 			}else
@@ -429,6 +428,7 @@ try{
 						$update_event['id']=$_REQUEST['exception_event_id'];
 						$cal->update_event($update_event);
 
+						
 					}
 					
 					$response['event_id']=$event_id;

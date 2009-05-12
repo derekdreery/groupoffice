@@ -120,7 +120,7 @@ class notes extends db {
 	
 	function build_note_files_path($note, $category)
 	{
-		return 'notes/'.File::strip_invalid_chars($category['name']).'/'.date('Y', $note['ctime']).'/'.File::strip_invalid_chars($note['name']);
+		return 'notes/'.date('Y', $note['ctime']).'/'.File::strip_invalid_chars($category['name']).'/'.File::strip_invalid_chars($note['name']);
 	}
 	
 	/**
