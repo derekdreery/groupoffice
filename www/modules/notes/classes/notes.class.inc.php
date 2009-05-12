@@ -37,8 +37,7 @@ class notes extends db {
 		if(isset($GO_MODULES->modules['files']))
 		{
 			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
-			$files = new files();
-			
+			$files = new files();			
 			$files->check_share('notes/'.File::strip_invalid_chars($category['name']),$category['user_id'], $category['acl_read'], $category['acl_write']);
 		}		
 		
@@ -47,6 +46,33 @@ class notes extends db {
 			return $category['id'];
 		}
 		return false;
+	}
+	
+	/**
+	 * Update a Category
+	 *
+	 * @param Array $category Associative array of record fields
+	 *
+	 * @access public
+	 * @return bool True on success
+	 */
+
+	function update_category($category, $old_category)
+	{		
+		/*global $GO_MODULES;
+		if(isset($GO_MODULES->modules['files']) && $category['name']!=$old_category['name'])
+		{
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();			
+			$folder = $files->resolve_path('notes/'.$old_category['name']);
+			if($folder)
+			{
+				$folder['name']=$category['name'];
+				$files->update_folder($folder);
+			}						
+		}	*/	
+		
+		return $this->update_row('no_categories', 'id', $category);
 	}
 
 
@@ -198,19 +224,7 @@ class notes extends db {
 	
 	
 
-	/**
-	 * Update a Category
-	 *
-	 * @param Array $category Associative array of record fields
-	 *
-	 * @access public
-	 * @return bool True on success
-	 */
-
-	function update_category($category)
-	{		
-		return $this->update_row('no_categories', 'id', $category);
-	}
+	
 
 
 	/**

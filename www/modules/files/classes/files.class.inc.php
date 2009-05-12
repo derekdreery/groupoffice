@@ -1041,6 +1041,24 @@ class files extends db
 		}
 		return $this->query($sql, $types, $params);
 	}
+	
+	function move_by_paths($sourcepath, $destpath){
+		global $GO_CONFIG;
+		
+		$source = $this->resolve_path($sourcepath);
+		
+		
+				
+		if(isset($source['extension']))
+		{
+			
+		}else
+		{
+			
+		}
+			
+		$folder = $files->resolve_path('notes/'.$old_category['name']);
+	}
 
 	function resolve_path($path,$create_folders=false, $user_id=0, $folder_id=0)
 	{
