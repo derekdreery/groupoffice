@@ -76,7 +76,12 @@ class notes extends db {
 			}
 		}	
 		
-		$this->query("DELETE FROM no_notes WHERE category_id=".$this->escape($category_id));
+		$notes = new notes();
+		$this->query("SELECT * FROM no_notes WHERE category_id=".$this->escape($category_id));
+		while($note = $this->next_record())
+		{
+			$notes->delete_note($note['id']);
+		}
 		return $this->query("DELETE FROM no_categories WHERE id=".$this->escape($category_id));
 	}
 	
@@ -120,7 +125,7 @@ class notes extends db {
 	
 	function build_note_files_path($note, $category)
 	{
-		return 'notes/'.date('Y', $note['ctime']).'/'.File::strip_invalid_chars($category['name']).'/'.File::strip_invalid_chars($note['name']);
+		return 'notes/'.File::strip_invalid_chars($category['name']).'/'.date('Y', $note['ctime']).'/'.File::strip_invalid_chars($note['name']);
 	}
 	
 	/**

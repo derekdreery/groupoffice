@@ -856,7 +856,7 @@ class calendar extends db
 	 */
 	
 	function build_event_files_path($event, $calendar){
-		return 'events/'.date('Y', $event['ctime']).'/'.File::strip_invalid_chars($calendar['name']).'/'.File::strip_invalid_chars($event['name']);
+		return 'events/'.File::strip_invalid_chars($calendar['name']).'/'.date('Y', $event['ctime']).'/'.File::strip_invalid_chars($event['name']);
 	}
 
 	function add_event(&$event, $calendar=false)

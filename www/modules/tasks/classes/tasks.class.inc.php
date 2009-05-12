@@ -388,7 +388,7 @@ class tasks extends db
 	
 	function build_task_files_path($task, $tasklist)
 	{
-		return 'tasks/'.date('Y', $task['due_time']).'/'.File::strip_invalid_chars($tasklist['name']).'/'.File::strip_invalid_chars($task['name']);
+		return 'tasks/'.File::strip_invalid_chars($tasklist['name']).'/'.date('Y', $task['due_time']).'/'.File::strip_invalid_chars($task['name']);
 	}
 
 
@@ -419,10 +419,7 @@ class tasks extends db
 			{
 				$old_task = $this->get_task($task['id']);
 			}			
-			if(!$tasklist)
-			{
-				$tasklist = $this->get_tasklist($task['tasklist_id']);				
-			}
+			
 			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 			
@@ -433,6 +430,10 @@ class tasks extends db
 			if(!isset($task['tasklist_id']))
 			{
 				$task['tasklist_id']=$old_task['tasklist_id'];
+			}
+			if(!$tasklist)
+			{
+				$tasklist = $this->get_tasklist($task['tasklist_id']);				
 			}
 			
 			$new_path = $this->build_task_files_path($task, $tasklist);			

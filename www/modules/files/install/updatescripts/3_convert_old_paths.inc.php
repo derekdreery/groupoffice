@@ -346,5 +346,41 @@ if(isset($GO_MODULES->modules['billing']))
 
 if(isset($GO_MODULES->modules['projects']))
 {
+	require_once($GO_MODULES->modules['projects']['class_path'].'projects.class.inc.php');
+	$projects = new projects();
+	
+	$db->query("ALTER TABLE `pm_projects` ADD `files_folder_id` INT NOT NULL;");
+	$db->query("SELECT e.*,c.name AS type_name,c.acl_read,c.acl_write FROM pm_projects e INNER JOIN pm_types c ON c.id=e.type_id");
+	while($project = $db->next_record())
+	{
+		$old_path = 'projects/'.$project['id'];
+		$folder = $fsdb->resolve_path($old_path);
+
+		$new_folder_name = File::strip_invalid_chars($project['name']);
+		
+		if($folder && !empty($new_folder_name))
+		{			
+			$new_path = $projects->build_project_files_path($project, array('type'=>$project['type_name']));
+			
+			$destination = $fsdb->resolve_path($new_path, true, 1);			
+			
+			$fs->mkdir_recursive($GO_CONFIG->file_storage_path.$new_path);
+			
+			$fs->move($GO_CONFIG->file_storage_path.$old_path, $GO_CONFIG->file_storage_path.$new_path.'/'.$new_folder_name);
+			$new_folder_id = $fsdb->move_folder($folder, $destination);
+			
+			$up_folder['id']=$new_folder_id;
+			$up_folder['name']=File::strip_invalid_chars($project['name']);
+			$up_folder['acl_read']=0;
+			$up_folder['acl_write']=0;
+
+			$fsdb->update_folder($up_folder);
+			
+			$up_project['id']=$project['id'];
+			$up_project['files_folder_id']=$new_folder_id;
+			
+			$fsdb->update_row('pm_projects', 'id', $up_project);
+		}		
+	}
 }
 ?>
