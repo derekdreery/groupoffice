@@ -38,7 +38,14 @@ try{
 
 			if($category['id']>0)
 			{
-				$notes->update_category($category);
+				$old_category = $notes->get_category($category['id']);
+				
+				if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_category['acl_write']))
+				{
+					throw new AccessDeniedException();
+				}
+				
+				$notes->update_category($category, $old_category);
 				$response['success']=true;
 
 			}else
