@@ -97,13 +97,9 @@ try
 					$insert=true;
 					
 				} else {						
-					$contact_credentials['id'] = $contact_id;						
-
-					if($old_contact['addressbook_id']!=$contact_credentials['addressbook_id'])
-					{
-						$ab->move_contacts_company($contact_credentials['company_id'], $old_contact['addressbook_id'], $contact_credentials['addressbook_id']);
-					}
-					if(!$ab->update_contact($contact_credentials))
+					$contact_credentials['id'] = $contact_id;
+										
+					if(!$ab->update_contact($contact_credentials, $addressbook, $old_contact))
 					{
 						$result['feedback'] = $lang['comon']['saveError'];
 						$result['success'] = false;
@@ -199,13 +195,8 @@ try
 				} else {
 					# update
 					$company_credentials['id'] = $company_id;
-
-					if($old_company['addressbook_id'] != $company_credentials['addressbook_id'])
-					{
-						$ab->move_contacts_company($company_credentials['id'], $old_company['addressbook_id'], $company_credentials['addressbook_id']);
-					}
-
-					$ab->update_company($company_credentials);
+					
+					$ab->update_company($company_credentials, $addressbook, $old_company);
 					$insert=false;
 
 				}

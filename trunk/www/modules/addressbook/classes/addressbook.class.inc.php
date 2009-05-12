@@ -245,16 +245,9 @@ class addressbook extends db {
 			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 			
-			$new_folder_name = File::strip_invalid_chars($company['name']);
-			if(!empty($new_folder_name))
+			$new_path = $this->build_company_files_path($company, $addressbook);
+			if($new_path)
 			{
-				$last_part = strtoupper($new_folder_name[0]);
-				$new_path = 'contacts/'.File::strip_invalid_chars($addressbook['name']);
-				if(!empty($last_part))
-				{
-					$new_path .= '/'.$last_part;
-				}
-				$new_path .= '/'.$new_folder_name;
 				$folder = $files->resolve_path($new_path,true);			
 				$company['files_folder_id']=$folder['id'];
 			}		
@@ -267,12 +260,40 @@ class addressbook extends db {
 		return $company['id'];
 	}
 
-	function update_company($company)
+	function update_company($company, $addressbook=false, $old_company=false)
 	{
 		if (!isset($company['mtime']) || $company['mtime'] == 0) {
 			$company['mtime'] = time();
 		}
+		
+		if(!$old_company)
+		{
+			$old_company = $this->get_company($company['id']);
+		}
+		
+		global $GO_MODULES;
+		if(isset($GO_MODULES->modules['files']) && isset($company['addressbook_id']))
+		{			
+			if(!$addressbook)
+			{
+				$addressbook = $this->get_addressbook($company['addressbook_id']);				
+			}
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();			
+			
+			
+	
+			$new_path = $this->build_company_files_path($company, $addressbook);			
+			$company['files_folder_id']=$files->check_folder_location($old_company['files_folder_id'], $new_path);			
+		}
+		
 		$r = $this->update_row('ab_companies', 'id', $company);
+		
+		if(isset($company['addressbook_id']) && $old_company['addressbook_id'] != $company['addressbook_id'])
+		{
+			$this->move_contacts_company($company['id'], $old_company['addressbook_id'], $company['addressbook_id']);
+		}
+		
 		$this->cache_company($company['id']);
 		return $r;
 	}
@@ -420,32 +441,47 @@ class addressbook extends db {
 			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 			
-			$new_folder_name = File::strip_invalid_chars(String::format_name($contact));
-			if(!empty($new_folder_name))
+			$new_path = $this->build_contact_files_path($contact, $addressbook);
+			if($new_path)
 			{
-				$last_part = strtoupper(File::strip_invalid_chars($contact['last_name'][0]));
-				$new_path = 'contacts/'.File::strip_invalid_chars($addressbook['name']);
-				if(!empty($last_part))
-				{
-					$new_path .= '/'.$last_part;
-				}
-				$new_path .= '/'.$new_folder_name;
 				$folder = $files->resolve_path($new_path,true);			
 				$contact['files_folder_id']=$folder['id'];
-			}		
-		}
-		
+			}					
+		}		
 		
 		$contact['id'] = $this->nextid("ab_contacts");
-
 		$this->insert_row('ab_contacts', $contact);
-
 		$this->cache_contact($contact['id']);
-
 		return $contact['id'];
 	}
+	
+	function build_contact_files_path($contact, $addressbook)
+	{
+		$new_folder_name = File::strip_invalid_chars(String::format_name($contact));
+		$last_part = strtoupper(File::strip_invalid_chars($contact['last_name'][0]));
+		$new_path = 'contacts/'.File::strip_invalid_chars($addressbook['name']);
+		if(!empty($last_part))
+		{
+			$new_path .= '/'.$last_part;
+		}
+		$new_path .= '/'.$new_folder_name;
+		return $new_path;
+	}
+	
+	function build_company_files_path($company, $addressbook)
+	{
+		$new_folder_name = File::strip_invalid_chars($company['name']);
+		$last_part = strtoupper(File::strip_invalid_chars($company['name'][0]));
+		$new_path = 'companies/'.File::strip_invalid_chars($addressbook['name']);
+		if(!empty($last_part))
+		{
+			$new_path .= '/'.$last_part;
+		}
+		$new_path .= '/'.$new_folder_name;
+		return $new_path;
+	}
 
-	function update_contact($contact)
+	function update_contact($contact, $addressbook=false, $old_contact=false)
 	{
 		if (!isset($contact['mtime']) || $contact['mtime'] == 0) {
 			$contact['mtime'] = time();
@@ -454,8 +490,32 @@ class addressbook extends db {
 		if (isset($contact['sex']) && $contact['sex'] == '') {
 			$contact['sex'] = 'M';
 		}
+		
+		if(!$old_contact)
+		{
+			$old_contact = $this->get_contact($contact['id']);
+		}
+		
+		global $GO_MODULES;
+		if(isset($GO_MODULES->modules['files']) && isset($contact['addressbook_id']))
+		{			
+			if(!$addressbook)
+			{
+				$addressbook = $this->get_addressbook($contact['addressbook_id']);				
+			}
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();
+
+			$new_path = $this->build_contact_files_path($contact, $addressbook);			
+			$contact['files_folder_id']=$files->check_folder_location($old_contact['files_folder_id'], $new_path);			
+		}		
 
 		$r = $this->update_row('ab_contacts', 'id', $contact);
+		
+		if(isset($contact['addressbook_id']) && $old_contact['addressbook_id']!=$contact['addressbook_id'])
+		{
+			$this->move_contacts_company($contact['company_id'], $old_contact['addressbook_id'], $contact['addressbook_id']);
+		}
 
 		$this->cache_contact($contact['id']);
 		return $r;

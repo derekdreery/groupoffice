@@ -337,7 +337,7 @@ class tasks extends db
 			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();			
 
-			$new_path = 'tasks/'.File::strip_invalid_chars($tasklist['name']).'/'.date('Y', $task['due_time']).'/'.File::strip_invalid_chars($task['name']);			
+			$new_path = $this->build_task_files_path($task,$tasklist);			
 			$folder = $files->resolve_path($new_path,true);			
 			$task['files_folder_id']=$folder['id'];			
 		}
@@ -385,9 +385,14 @@ class tasks extends db
 			}
 		}
 	}
+	
+	function build_task_files_path($task, $tasklist)
+	{
+		return 'tasks/'.File::strip_invalid_chars($tasklist['name']).'/'.date('Y', $task['due_time']).'/'.File::strip_invalid_chars($task['name']);
+	}
 
 
-	function update_task($task)
+	function update_task($task, $tasklist=false, $old_task=false)
 	{
 		if(!isset($task['mtime']) || $task['mtime'] == 0)
 		{
@@ -406,6 +411,31 @@ class tasks extends db
 		}
 		
 		$r = $this->update_row('ta_tasks', 'id', $task);
+		
+		
+		global $GO_MODULES;
+		if(isset($GO_MODULES->modules['files']) && isset($task['tasklist_id']))
+		{
+			if(!$old_task)
+			{
+				$old_task = $this->get_task($task['id']);
+			}			
+			if(!$tasklist)
+			{
+				$tasklist = $this->get_tasklist($task['tasklist_id']);				
+			}
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();
+			
+			if(!isset($task['due_time']))
+			{
+				$task['due_time']=$old_task['due_time'];
+			}
+			
+			$new_path = $this->build_task_files_path($task, $tasklist);			
+			$task['files_folder_id']=$files->check_folder_location($old_task['files_folder_id'], $new_path);			
+		}	
+		
 		$this->cache_task($task['id']);
 		return $r;
 	}

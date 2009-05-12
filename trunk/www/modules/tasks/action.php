@@ -122,9 +122,10 @@ try{
 			if(isset($_POST['description']))
 				$task['description']=$_POST['description'];
 				
+			$old_task = $task_id>0 ? $tasks->get_task($task_id) : false;
 			if(isset($task['status']))
 			{
-				$old_task = $task_id>0 ? $tasks->get_task($task_id) : false;
+				
 				if($task['status']=='COMPLETED' && (!$old_task || $old_task['completion_time']==0))
 				{
 					$task['completion_time']=time();
@@ -148,14 +149,11 @@ try{
 			if(empty($task['tasklist_id']))
 			{
 				throw new Exception('FATAL: No tasklist ID!');
-			}
-				
-				
+			}			
 
 			$repeat_every = isset ($_POST['repeat_every']) ? $_POST['repeat_every'] : '1';
 			$task['repeat_end_time'] = (isset ($_POST['repeat_forever']) || !isset($_POST['repeat_end_date'])) ? '0' : Date::to_unixtime($_POST['repeat_end_date']);
 			$month_time = isset ($_POST['month_time']) ? $_POST['month_time'] : '0';
-
 
 			$days['mon'] = isset ($_POST['repeat_days_1']) ? '1' : '0';
 			$days['tue'] = isset ($_POST['repeat_days_2']) ? '1' : '0';
@@ -179,7 +177,7 @@ try{
 
 			if($task['id']>0)
 			{
-				$tasks->update_task($task);
+				$tasks->update_task($task, $tasklist, $old_task);
 				$response['success']=true;
 
 			}else
