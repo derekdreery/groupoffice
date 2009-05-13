@@ -59,6 +59,7 @@ CREATE TABLE IF NOT EXISTS `ta_tasks` (
   `repeat_end_time` int(11) NOT NULL,
   `reminder` int(11) NOT NULL,
   `rrule` varchar(50) NOT NULL,
+  `files_folder_id` INT NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `list_id` (`tasklist_id`),
   KEY `rrule` (`rrule`)

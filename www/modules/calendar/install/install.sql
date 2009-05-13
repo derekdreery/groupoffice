@@ -69,6 +69,7 @@ CREATE TABLE IF NOT EXISTS `cal_events` (
   `private` enum('0','1') NOT NULL,
   `rrule` varchar(100) NOT NULL,
   `background` char(6) NOT NULL default 'ebf1e2',
+  `files_folder_id` INT NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `start_time` (`start_time`),
   KEY `end_time` (`end_time`),
