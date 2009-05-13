@@ -241,7 +241,7 @@ try
 					
 		case 'save_addressbook':
 			$addressbook_id = isset($_REQUEST['addressbook_id']) ? ($_REQUEST['addressbook_id']) : 0;
-			$user_id = isset($_REQUEST['user_id']) ? ($_REQUEST['user_id']) : $GO_SECURITY->user_id;
+			
 			$name = isset($_REQUEST['name']) ? ($_REQUEST['name']) : null;
 
 			$result['success'] = true;
@@ -273,6 +273,8 @@ try
 					{
 						throw new AccessDeniedException();
 					}
+					
+					$user_id = isset($_REQUEST['user_id']) ? ($_REQUEST['user_id']) : $GO_SECURITY->user_id;
 
 					$addressbook = $ab->add_addressbook($user_id, $name);
 					$result['addressbook_id'] = $addressbook['addressbook_id'];
@@ -284,15 +286,14 @@ try
 					{
 						throw new Exception($lang['common']['addressbookAlreadyExists']);
 					}
-
-					if($existing_ab['user_id'] != $user_id)
-					{
-						$GO_SECURITY->chown_acl($existing_ab['acl_read'], $user_id);
-						$GO_SECURITY->chown_acl($existing_ab['acl_write'], $user_id);
-					}
-
-					$ab->update_addressbook($addressbook_id, $user_id, $name);
-					//$result['addressbook_id'] = $addressbook_id;
+					
+					$addresbook['id']=$addressbook_id;
+					
+					if(isset($_REQUEST['user_id']))
+						$addresbook['user_id']=$user_id;
+						
+					$addresbook['name']=$name;
+					$ab->update_addressbook($addressbook);					
 				}
 			}
 

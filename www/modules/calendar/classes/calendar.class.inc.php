@@ -665,7 +665,7 @@ class calendar extends db
 			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 				
-			$files->check_share('events/'.File::strip_invalid_chars($calendar['name']),$category['user_id'], $calendar['acl_read'], $calendar['acl_write']);
+			$files->check_share('events/'.File::strip_invalid_chars($calendar['name']),$calendar['user_id'], $calendar['acl_read'], $calendar['acl_write']);
 		}
 
 		$this->insert_row('cal_calendars',$calendar);
@@ -713,8 +713,26 @@ class calendar extends db
 		$GO_SECURITY->delete_acl($calendar['acl_write']);
 	}
 
-	function update_calendar($calendar)
+	function update_calendar($calendar, $old_calendar=false)
 	{
+		if(!$old_calendar)$old_calendar=$this->get_calendar($calendar['id']);
+
+		global $GO_MODULES;
+		if(isset($GO_MODULES->modules['files']) && $old_calendar &&  $calendar['name']!=$old_calendar['name'])
+		{
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();			
+			$files->move_by_paths('events/'.File::strip_invalid_chars($old_calendar['name']), 'events/'.File::strip_invalid_chars($calendar['name']));
+		}
+		
+		global $GO_SECURITY;
+		//user id of the calendar changed. Change the owner of the ACL as well
+		if(isset($calendar['user_id']) && $old_calendar['user_id'] != $calendar['user_id'])
+		{
+			$GO_SECURITY->chown_acl($old_calendar['acl_read'], $calendar['user_id']);
+			$GO_SECURITY->chown_acl($old_calendar['acl_write'], $calendar['user_id']);
+		}
+		
 		return $this->update_row('cal_calendars','id', $calendar);
 	}
 

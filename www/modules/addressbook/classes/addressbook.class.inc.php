@@ -896,9 +896,29 @@ class addressbook extends db {
 		return $result;
 	}
 
-	function update_addressbook($addressbook_id, $user_id, $name) {
-		$sql = "UPDATE ab_addressbooks SET name='".$this->escape($name)."', user_id='".$this->escape($user_id)."' WHERE id='".$this->escape($addressbook_id)."'";
-		return $this->query($sql);
+	function update_addressbook($addressbook, $old_addressbook=false) {
+		
+		if(!$old_addressbook)$old_addressbook=$this->get_addressbook($addressbook['id']);
+
+		global $GO_MODULES;
+		if(isset($GO_MODULES->modules['files']) && $old_addressbook &&  $addressbook['name']!=$old_addressbook['name'])
+		{
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();			
+			$files->move_by_paths('contacts/'.File::strip_invalid_chars($old_addressbook['name']), 'contacts/'.File::strip_invalid_chars($addressbook['name']));
+			$files->move_by_paths('companies/'.File::strip_invalid_chars($old_addressbook['name']), 'companies/'.File::strip_invalid_chars($addressbook['name']));
+		}
+		
+		global $GO_SECURITY;
+		//user id of the addressbook changed. Change the owner of the ACL as well
+		if(isset($addressbook['user_id']) && $old_addressbook['user_id'] != $addressbook['user_id'])
+		{
+			$GO_SECURITY->chown_acl($old_addressbook['acl_read'], $addressbook['user_id']);
+			$GO_SECURITY->chown_acl($old_addressbook['acl_write'], $addressbook['user_id']);
+		}
+		
+		return $this->update_row('ab_addressbooks', 'id', $addressbook);
+		
 	}
 
 	function get_addressbook_by_name($name) {
