@@ -675,24 +675,32 @@ class files extends db
 		return $this->update_file($file);
 	}
 
-	function import_file($path, $parent_id)
+	function import_file($path, $parent_id=false)
 	{
+		global $GO_CONFIG;
+		
+		if(!$parent_id)
+		{
+			$parent = $this->resolve_path(dirname($path),true);
+			$parent_id=$parent['id'];
+		}
+		
 		$file['name']=utf8_basename($path);
 
 		$sql = "DELETE FROM fs_files WHERE folder_id=? AND name COLLATE utf8_bin LIKE ?";
 		$this->query($sql,'is',array($parent_id, $file['name']));
 
 		$file['name']=utf8_basename($path);
-		$file['ctime']=@filectime($path);
-		$file['mtime']=@filemtime($path);
+		$file['ctime']=filectime($GO_CONFIG->file_storage_path.$path);
+		$file['mtime']=filemtime($GO_CONFIG->file_storage_path.$path);
 		$file['folder_id']=$parent_id;
-		$file['size']=filesize($path);
+		$file['size']=filesize($GO_CONFIG->file_storage_path.$path);
 		return $this->add_file($file);
 	}
 
 	function import_folder($path, $parent_id)
 	{
-		global $GO_SECURITY;
+		global $GO_SECURITY, $GO_CONFIG;
 
 		$fs = new filesystem();
 
@@ -700,7 +708,7 @@ class files extends db
 		$folder['visible']='1';
 		$folder['user_id']=$GO_SECURITY->user_id;
 		$folder['parent_id']=$parent_id;
-		$folder['ctime']=filemtime($path);
+		$folder['ctime']=filectime($GO_CONFIG->file_storage_path.$path);
 
 		$existing_folder = $this->folder_exists($parent_id, $folder['name']);
 		if($existing_folder)

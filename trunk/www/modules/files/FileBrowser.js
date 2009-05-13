@@ -335,7 +335,8 @@ GO.files.FileBrowser = function(config){
 								});				
 							},this);
 					  }
-					  this.uploadDialog.show();	
+					  GO.currentFilesStore=this.gridStore;
+					  this.uploadDialog.show(this.folder_id);	
 					},
 					scope: this
 				});

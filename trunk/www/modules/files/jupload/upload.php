@@ -8,14 +8,12 @@ if(!$GO_SECURITY->logged_in())
 }
 
 require_once ($GO_MODULES->modules['files']['class_path']."files.class.inc.php");
-$fs = new files();
+$files = new files();
 
-$path = $GO_CONFIG->file_storage_path.urldecode(($_REQUEST['path']));
+$folder = $files->get_folder($_REQUEST['id']);
 
-if(substr($path,-1,1)=='/')
-{
-	$path = substr($path, 0, -1);
-}
+$path = $GO_CONFIG->file_storage_path.$files->build_path($folder);
+
 
 if(!isset($_SESSION['GO_SESSION']['files']['jupload_new_files']))
 {
@@ -73,10 +71,9 @@ while($file = array_shift($_FILES))
 					$part = $dir.$file['name'].'.part'.$i;
 					fwrite($fp, file_get_contents($part));
 					unlink($part);
-				}
+				}				
 				
-				$relpath = $fs->strip_server_path($filepath);
-				$fs->add_file($relpath);
+				$files->import_file($files->strip_server_path($filepath));
 				
 				$_SESSION['GO_SESSION']['files']['jupload_new_files'][]=$relpath;
 				fclose($fp);
@@ -95,19 +92,24 @@ while($file = array_shift($_FILES))
 			
 		if(!is_dir($dir))
 		{
-			mkdir($dir,0755,true);
+			mkdir($dir,$GO_CONFIG->folder_create_mode,true);
 		}
 
 		if(!isset($_POST['jupart']))
 		{
 			$filepath = File::checkfilename($filepath);
-			$relpath = $fs->strip_server_path($filepath);
-			
-			$_SESSION['GO_SESSION']['files']['jupload_new_files'][]=$relpath;
-			$fs->add_file($relpath);
-		}
+		}	
 		
 		move_uploaded_file($file['tmp_name'], $filepath);
+		
+		if(!isset($_POST['jupart']))
+		{
+			$relpath = $files->strip_server_path($filepath);
+			
+			$_SESSION['GO_SESSION']['files']['jupload_new_files'][]=$relpath;
+			$files->import_file($relpath);	
+		}
+		
 		
 	}
 	$count++;

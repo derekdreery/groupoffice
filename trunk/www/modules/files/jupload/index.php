@@ -24,7 +24,7 @@ $GO_SECURITY->html_authenticate('files');
             echo isset($lang['jupload_lang']) ? $lang['jupload_lang'] : $GO_LANGUAGE->language;            
             ?>" />
             <param name="lookAndFeel" value="system" />
-            <param name="postURL" value="upload.php?path=<?php echo urlencode($_REQUEST['path']); ?>" />
+            <param name="postURL" value="upload.php?id=<?php echo $_REQUEST['id']; ?>" />
             <param name="afterUploadURL" value="javascript:opener.GO.currentFilesStore.reload();if(%success%){window.close();}" />
             <param name="showLogWindow" value="true" />
             <param name="maxChunkSize" value="1048576" />    
