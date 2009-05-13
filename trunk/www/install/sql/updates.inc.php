@@ -57,4 +57,6 @@ $updates[]="CREATE TABLE IF NOT EXISTS `go_link_descriptions` (
 
 $updates[]="ALTER TABLE `go_users` ADD `list_separator` CHAR( 3 ) NOT NULL DEFAULT ';',
 ADD `text_separator` CHAR( 3 ) NOT NULL DEFAULT '\"'";
+
+$updates[]="ALTER TABLE `go_users` ADD `files_folder_id` INT NOT NULL;";
 ?>

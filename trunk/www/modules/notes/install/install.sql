@@ -75,6 +75,7 @@ CREATE TABLE IF NOT EXISTS `no_notes` (
   `mtime` int(11) NOT NULL default '0',
   `name` varchar(100) default NULL,
   `content` text,
+  `files_folder_id` INT NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`),
   KEY `category_id` (`category_id`),

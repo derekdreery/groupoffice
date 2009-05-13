@@ -14,5 +14,6 @@ PRIMARY KEY ( `user_id` )
 $updates[]="ALTER TABLE `cal_settings` CHANGE `color` `background` CHAR( 6 ) CHARACTER SET utf8 COLLATE utf8_general_ci";
 $updates[]="ALTER TABLE `cal_events` CHANGE `rrule` `rrule` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL";
 
+$updates[]="ALTER TABLE `cal_events` ADD `files_folder_id` INT NOT NULL;";
 //$updates[]="script:1_shift_days.inc.php";
 ?>
