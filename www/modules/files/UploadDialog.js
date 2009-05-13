@@ -43,12 +43,9 @@ GO.files.UploadDialog = function(config) {
 									window
 											.open(GO.settings.modules.files.url
 													+ 'jupload/index.php?id='
-													+ encodeURIComponent(this.folder_id));
+													+ this.folder_id);
 
-									this.uploadDialog.hide();
-									// for refreshing by popup
-									GO.currentFilesStore = this
-											.getActiveGridStore();
+									this.hide();									
 								}
 							},
 							scope : this
@@ -84,10 +81,11 @@ GO.files.UploadDialog = function(config) {
 			});
 }
 Ext.extend(GO.files.UploadDialog, Ext.Window, {
-	show : function() {
+	show : function(folder_id) {
 		if (!this.rendered) {
 			this.render(Ext.getBody());
 		}
+		this.folder_id=folder_id;
 		GO.files.UploadDialog.superclass.show.call(this);
 	},
 	uploadHandler : function(){
