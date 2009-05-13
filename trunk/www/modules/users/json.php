@@ -123,15 +123,6 @@ switch($task)
 			$result['success']=true;
 		}
 		
-		if(isset($GO_MODULES->modules['files']))
-		{
-			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
-			$fs = new files();		
-			$result['data']['files_path']='users/'.$user_id;						
-			$full_path = $GO_CONFIG->file_storage_path.$result['data']['files_path'];
-			$fs->check_share($full_path, 1, $GO_MODULES->modules['users']['acl_read'], $GO_MODULES->modules['users']['acl_write']);
-		}
-		
 		$params['response']=&$result;
 		
 		$GO_EVENTS->fire_event('load_user', $params);

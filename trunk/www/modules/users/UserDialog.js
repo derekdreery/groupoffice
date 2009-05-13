@@ -43,7 +43,7 @@ GO.users.UserDialog = function(config){
 				cls: 'x-btn-text-icon', 
 				text: GO.files.lang.files,
 				handler: function(){
-					GO.files.openFolder(this.files_path);				
+					GO.files.openFolder(this.files_folder_id);				
 				},
 				scope: this,
 				disabled: true
@@ -100,7 +100,7 @@ Ext.extend(GO.users.UserDialog, Ext.Window,{
 
 	user_id : 0,
 	
-	files_path : '',
+	files_folder_id : '',
 	
 	setUserId : function(user_id){
 		this.formPanel.form.baseParams['user_id']=user_id;
@@ -204,7 +204,7 @@ Ext.extend(GO.users.UserDialog, Ext.Window,{
 					this.loaded=true;
 					GO.users.UserDialog.superclass.show.call(this);
 					
-					this.files_path = action.result.data.files_path;
+					this.files_folder_id = action.result.data.files_folder_id;
 					
 					this.lookAndFeelTab.startModuleField.setRemoteText(action.result.data.start_module_name);
 				},
@@ -280,7 +280,7 @@ Ext.extend(GO.users.UserDialog, Ext.Window,{
 				{
 					this.setUserId(action.result.user_id);
 					
-					this.files_path = action.result.files_path;
+					this.files_folder_id = action.result.files_folder_id;
 				}
 			},		
 			failure: function(form, action) {

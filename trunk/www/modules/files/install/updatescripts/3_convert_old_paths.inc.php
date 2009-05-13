@@ -360,7 +360,7 @@ if(isset($GO_MODULES->modules['projects']))
 		
 		if($folder && !empty($new_folder_name))
 		{			
-			$new_path = $projects->build_project_files_path($project, array('type'=>$project['type_name']));
+			$new_path = $projects->build_project_files_path($project, array('name'=>$project['type_name']));
 			
 			$destination = $fsdb->resolve_path($new_path, true, 1);			
 			
@@ -370,7 +370,7 @@ if(isset($GO_MODULES->modules['projects']))
 			$new_folder_id = $fsdb->move_folder($folder, $destination);
 			
 			$up_folder['id']=$new_folder_id;
-			$up_folder['name']=File::strip_invalid_chars($project['name']);
+			$up_folder['name']=$new_folder_name;
 			$up_folder['acl_read']=0;
 			$up_folder['acl_write']=0;
 
@@ -383,4 +383,40 @@ if(isset($GO_MODULES->modules['projects']))
 		}		
 	}
 }
+
+global $GO_USERS;
+$db->query("ALTER TABLE `go_users` ADD `files_folder_id` INT NOT NULL;");
+$GO_USERS->get_users();
+while($user = $GO_USERS->next_record())
+{
+	$old_path = 'users/'.$user['id'];
+	$folder = $fsdb->resolve_path($old_path);
+
+	$new_folder_name = $user['username'];
+	
+	if($folder && !empty($new_folder_name))
+	{			
+		$new_path = 'adminusers/'.$user['username'];
+		
+		$destination = $fsdb->resolve_path($new_path, true, 1);			
+		
+		$fs->mkdir_recursive($GO_CONFIG->file_storage_path.$new_path);
+		
+		$fs->move($GO_CONFIG->file_storage_path.$old_path, $GO_CONFIG->file_storage_path.$new_path.'/'.$new_folder_name);
+		$new_folder_id = $fsdb->move_folder($folder, $destination);
+		
+		$up_folder['id']=$new_folder_id;
+		$up_folder['name']=$new_folder_name;
+		$up_folder['acl_read']=0;
+		$up_folder['acl_write']=0;
+
+		$fsdb->update_folder($up_folder);
+		
+		$up_user['id']=$user['id'];
+		$up_user['files_folder_id']=$new_folder_id;
+		
+		$fsdb->update_row('go_users', 'id', $up_user);
+	}		
+}
+
 ?>

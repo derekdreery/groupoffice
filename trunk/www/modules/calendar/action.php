@@ -591,14 +591,7 @@ try{
 				{
 					throw new AccessDeniedException();
 				}
-				$cal->update_calendar($calendar);
-
-				//user id of the calendar changed. Change the owner of the ACL as well
-				if($old_calendar['user_id'] != $calendar['user_id'])
-				{
-					$GO_SECURITY->chown_acl($old_calendar['acl_read'], $calendar['user_id']);
-					$GO_SECURITY->chown_acl($old_calendar['acl_write'], $calendar['user_id']);
-				}
+				$cal->update_calendar($calendar, $existing_calendar);
 			}else
 			{
 				if(!$GO_MODULES->modules['calendar']['write_permission'])

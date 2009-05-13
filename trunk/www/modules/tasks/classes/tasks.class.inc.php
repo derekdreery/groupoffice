@@ -171,8 +171,26 @@ class tasks extends db
 
 	}
 
-	function update_tasklist($tasklist)
+	function update_tasklist($tasklist, $old_tasklist=false)
 	{
+		if(!$old_tasklist)$old_tasklist=$this->get_tasklist($tasklist['id']);
+
+		global $GO_MODULES;
+		if(isset($GO_MODULES->modules['files']) && $old_tasklist &&  $tasklist['name']!=$old_tasklist['name'])
+		{
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();			
+			$files->move_by_paths('tasks/'.File::strip_invalid_chars($old_tasklist['name']), 'tasks/'.File::strip_invalid_chars($tasklist['name']));
+		}
+		
+		global $GO_SECURITY;
+		//user id of the tasklist changed. Change the owner of the ACL as well
+		if(isset($tasklist['user_id']) && $old_tasklist['user_id'] != $tasklist['user_id'])
+		{
+			$GO_SECURITY->chown_acl($old_tasklist['acl_read'], $tasklist['user_id']);
+			$GO_SECURITY->chown_acl($old_tasklist['acl_write'], $tasklist['user_id']);
+		}
+		
 		return $this->update_row('ta_lists','id', $tasklist);
 	}
 	

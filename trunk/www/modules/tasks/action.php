@@ -247,14 +247,7 @@ try{
 				{
 					throw new AccessDeniedException();
 				}
-				$tasks->update_tasklist($tasklist);
-
-				//user id of the tasklist changed. Change the owner of the ACL as well
-				if($old_tasklist['user_id'] != $tasklist['user_id'])
-				{
-					$GO_SECURITY->chown_acl($old_tasklist['acl_read'], $tasklist['user_id']);
-					$GO_SECURITY->chown_acl($old_tasklist['acl_write'], $tasklist['user_id']);
-				}
+				$tasks->update_tasklist($tasklist, $old_tasklist);
 			}else
 			{
 				if(!$GO_MODULES->modules['tasks']['write_permission'])

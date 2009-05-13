@@ -48,12 +48,10 @@ class files extends db
 	public function __on_load_listeners($events){
 		$events->add_listener('check_database', __FILE__, 'files', 'check_database');
 		$events->add_listener('user_delete', __FILE__, 'files', 'user_delete');
-		$events->add_listener('add_user', __FILE__, 'files', 'add_user');
+		//$events->add_listener('add_user', __FILE__, 'files', 'add_user');
 		$events->add_listener('build_search_index', __FILE__, 'files', 'build_search_index');
 		$events->add_listener('login', __FILE__, 'files', 'login');		
 	}
-
-
 
 	function get_thumb_url($path)
 	{
@@ -1047,20 +1045,38 @@ class files extends db
 	
 	function move_by_paths($sourcepath, $destpath){
 		global $GO_CONFIG;
-		
-		$source = $this->resolve_path($sourcepath);
-		
-		
-				
-		if(isset($source['extension']))
+
+		$destination = dirname($destpath);
+		if(file_exists($GO_CONFIG->file_storage_path.$sourcepath) && file_exists($GO_CONFIG->file_storage_path.$destination))
 		{
+			$fs = new filesystem();
+			$fs->move($GO_CONFIG->file_storage_path.$sourcepath, $GO_CONFIG->file_storage_path.$destpath);
 			
-		}else
-		{
+			$source = $this->resolve_path($sourcepath);
+			$dest = $this->resolve_path($destination);
+	
+			$new_filename = utf8_basename($destpath);
 			
+			if(is_dir($GO_CONFIG->file_storage_path.$destpath))
+			{
+				$this->move_folder($source, $dest);
+				if($new_filename!=$source['name'])
+				{
+					$up_folder['name']=$new_filename;
+					$up_folder['id']=$source['id'];
+					$this->update_folder($up_folder);
+				}	
+			}else
+			{
+				$this->move_file($source, $dest);
+				if($new_filename!=$source['name'])
+				{
+					$up_file['name']=$new_filename;
+					$up_file['id']=$source['id'];
+					$this->update_file($up_file);
+				}
+			}		
 		}
-			
-		$folder = $files->resolve_path('notes/'.$old_category['name']);
 	}
 
 	function resolve_path($path,$create_folders=false, $user_id=0, $folder_id=0)
@@ -1122,7 +1138,7 @@ class files extends db
 	}
 
 
-	function mkdir($parent, $name, $share=false, $user_id=0, $ignore_existing_filesystem_folder=false){
+	function mkdir($parent, $name, $share_user_id=0, $user_id=0, $ignore_existing_filesystem_folder=false){
 
 		global $GO_SECURITY, $GO_CONFIG, $lang;
 
@@ -1131,9 +1147,6 @@ class files extends db
 			$user_id=$GO_SECURITY->user_id;
 		}
 
-		debug($parent);
-		debug($user_id);
-		debug($name);
 
 		if($parent==0)
 		{
@@ -1176,10 +1189,10 @@ class files extends db
 			$folder['parent_id']=$parent['id'];
 			$folder['name']=$name;
 			$folder['ctime']=time();
-			if($share)
+			if($share_user_id)
 			{
-				$folder['acl_read']=$GO_SECURITY->get_new_acl('files', $user_id);
-				$folder['acl_write']=$GO_SECURITY->get_new_acl('files', $user_id);
+				$folder['acl_read']=$GO_SECURITY->get_new_acl('files', $share_user_id);
+				$folder['acl_write']=$GO_SECURITY->get_new_acl('files', $share_user_id);
 			}else
 			{
 				$folder['acl_read']=0;
@@ -1316,7 +1329,7 @@ class files extends db
 
 				$folder['type_id']='d:'.$folder['id'];
 				$folder['type']='Folder';
-				$folder['mtime']=Date::get_timestamp($folder['mtime']);
+				$folder['mtime']='-';
 				$folder['size']='-';
 				$folder['extension']='folder';
 				$results[]=$folder;
@@ -1480,45 +1493,23 @@ class files extends db
 		return $this->search_results;
 	}
 
-	public static function add_user($user)
-	{
-		global $GO_CONFIG, $GO_SECURITY;
-
-		$fs = new files();
-
-		$userdir = $GO_CONFIG->file_storage_path.'users/'.$user['username'];
-
-		if(!is_dir($userdir))
-		{
-			mkdir($userdir, $GO_CONFIG->folder_create_mode, true);
-		}
-			
-		$folder = $fs->get_folder('users/'.$user['username']);
-		if(empty($folder['acl_read']))
-		{
-			$up_folder['id']=$folder['id'];
-			$up_folder['user_id']=$user['id'];
-			$up_folder['acl_read']=$GO_SECURITY->get_new_acl('files', $user['id']);
-			$up_folder['acl_write']=$GO_SECURITY->get_new_acl('files', $user['id']);
-			$up_folder['visible']='1';
-
-			$fs->update_folder($up_folder);
-		}
-	}
 
 	function user_delete($user)
 	{
 		global $GO_CONFIG;
 
-		$fs = new files();
+		$files = new files();
 
 		if(!empty($user['username']))
-		{
-			$fs->delete($GO_CONFIG->file_storage_path.'users/'.$user['username']);
-		}
-		if(!empty($user['id']))
-		{
-			$fs->delete($GO_CONFIG->file_storage_path.'users/'.$user['id']);
+		{			
+			$folder = $files->resolve_path('users/'.$user['username']);			
+			if($folder){
+				$files->delete_folder($folder);
+			}
+			$folder = $files->resolve_path('adminusers/'.$user['username']);			
+			if($folder){
+				$files->delete_folder($folder);
+			}
 		}
 	}
 

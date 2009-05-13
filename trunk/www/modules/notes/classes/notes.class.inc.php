@@ -40,7 +40,7 @@ class notes extends db {
 			$files = new files();			
 			$files->check_share('notes/'.File::strip_invalid_chars($category['name']),$category['user_id'], $category['acl_read'], $category['acl_write']);
 		}		
-		
+			
 		if($this->insert_row('no_categories', $category))
 		{
 			return $category['id'];
@@ -59,18 +59,21 @@ class notes extends db {
 
 	function update_category($category, $old_category)
 	{		
-		/*global $GO_MODULES;
+		global $GO_MODULES;
 		if(isset($GO_MODULES->modules['files']) && $category['name']!=$old_category['name'])
 		{
 			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();			
-			$folder = $files->resolve_path('notes/'.$old_category['name']);
-			if($folder)
-			{
-				$folder['name']=$category['name'];
-				$files->update_folder($folder);
-			}						
-		}	*/	
+			$files->move_by_paths('notes/'.File::strip_invalid_chars($old_category['name']), 'notes/'.File::strip_invalid_chars($category['name']));
+		}
+		
+		global $GO_SECURITY;
+		//user id of the category changed. Change the owner of the ACL as well
+		if(isset($category['user_id']) && $old_category['user_id'] != $category['user_id'])
+		{
+			$GO_SECURITY->chown_acl($old_category['acl_read'], $category['user_id']);
+			$GO_SECURITY->chown_acl($old_category['acl_write'], $category['user_id']);
+		}
 		
 		return $this->update_row('no_categories', 'id', $category);
 	}

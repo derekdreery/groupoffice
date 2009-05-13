@@ -757,7 +757,7 @@ class GO_USERS extends db
 	 */
 
 	function add_user(
-	$user,
+	&$user,
 	$user_groups=array(),
 	$visible_user_groups=array(),
 	$modules_read=array(),
@@ -857,6 +857,21 @@ class GO_USERS extends db
 			$unencrypted_password = $user['password'];
 			$user['password'] = md5($user['password']);
 		}
+	
+		if(isset($GO_MODULES->modules['files']))
+		{
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();
+			
+			$usersdir = $files->resolve_path('users',true, 1);
+			$admindir = $files->resolve_path('adminusers',true, 1);
+		
+			$files->mkdir($usersdir, $user['username'], $user['id'], 1,true);
+			$folder = $files->mkdir($admindir, $user['username'], 1, 1,true);
+			if($folder)
+				$user['files_folder_id']=$folder['id'];			
+		}
+		
 
 		if ($user['id'] > 0 && $this->insert_row('go_users', $user))
 		{
@@ -914,6 +929,9 @@ class GO_USERS extends db
 			{			
 				$GO_EVENTS->fire_event('add_user', array($user));
 			}
+			
+		
+			
 
 			return $user['id'];
 		} else {
