@@ -156,11 +156,14 @@ class files extends db
 	{			
 		$new_folder_id=$folder_id;
 		$current_path = $this->build_path($folder_id);
-		if($current_path != $path)
+		if($current_path && $current_path != $path)
 		{
 			global $GO_CONFIG;
 			
 			$fs = new filesystem();
+			
+			//debug($current_path.' -> '.$path);
+			
 			$fs->move($GO_CONFIG->file_storage_path.$current_path, $GO_CONFIG->file_storage_path.$path);
 			
 			$destfolder = $this->resolve_path(dirname($path),true);
