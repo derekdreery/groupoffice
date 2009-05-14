@@ -49,7 +49,7 @@ GO.files.FileBrowser = function(config){
 		region:'west',
 		title:GO.lang.locations,
 		layout:'fit',
-    split:true,
+        split:true,
 		autoScroll:true,
 		width: 200,
 		animate:true,

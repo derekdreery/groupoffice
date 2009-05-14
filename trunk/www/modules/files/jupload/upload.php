@@ -73,7 +73,7 @@ while($file = array_shift($_FILES))
 					unlink($part);
 				}				
 				
-				$files->import_file($files->strip_server_path($filepath));
+				$files->import_file($filepath);
 				
 				$_SESSION['GO_SESSION']['files']['jupload_new_files'][]=$relpath;
 				fclose($fp);
@@ -107,7 +107,7 @@ while($file = array_shift($_FILES))
 			$relpath = $files->strip_server_path($filepath);
 			
 			$_SESSION['GO_SESSION']['files']['jupload_new_files'][]=$relpath;
-			$files->import_file($relpath);	
+			$files->import_file($filepath);	
 		}
 		
 		
