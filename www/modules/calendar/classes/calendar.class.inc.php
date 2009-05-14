@@ -33,6 +33,58 @@ class calendar extends db
 		$events->add_listener('user_delete', __FILE__, 'calendar', 'user_delete');
 		$events->add_listener('add_user', __FILE__, 'calendar', 'add_user');
 		$events->add_listener('build_search_index', __FILE__, 'calendar', 'build_search_index');
+		$events->add_listener('check_database', __FILE__, 'calendar', 'check_database');
+	}
+	
+	public static function check_database(){
+		global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE;
+
+		$line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
+
+		echo 'Calendar folders'.$line_break;
+
+		if(isset($GO_MODULES->modules['files']))
+		{
+			$cal = new calendar();
+			$db = new db();
+
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();
+			
+
+			$sql = "SELECT * FROM cal_calendars";
+			$db->query($sql);
+			while($calendar = $db->next_record())
+			{
+				try{
+					$files->check_share('events/'.$calendar['name'], $calendar['user_id'], $calendar['acl_read'], $calendar['acl_write'], false);
+				}
+				catch(Exception $e){
+					echo $e->getMessage().$line_break;
+				}
+			}
+		
+
+			$db->query("SELECT c.*,a.name AS calendar_name,a.acl_read,a.acl_write FROM cal_events c INNER JOIN cal_calendars a ON a.id=c.calendar_id");
+			while($event = $db->next_record())
+			{
+				try{
+					$path = $cal->build_event_files_path($event, array('name'=>$event['calendar_name']));
+					$up_event['files_folder_id']=$files->check_folder_location($event['files_folder_id'], $path);
+	
+					if($up_event['files_folder_id']!=$event['files_folder_id']){
+						$up_event['id']=$event['id'];
+						$cal->update_row('cal_events', 'id', $up_event);
+					}
+					$files->set_readonly($up_event['files_folder_id']);
+				}
+				catch(Exception $e){
+					echo $e->getMessage().$line_break;
+				}
+			}
+		}
+		echo 'Done'.$line_break.$line_break;
+
 	}
 
 	public static function load_settings($response)

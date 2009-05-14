@@ -18,6 +18,62 @@ class users extends db
 		$events->add_listener('load_settings', __FILE__, 'users', 'load_settings');
 		$events->add_listener('save_settings', __FILE__, 'users', 'save_settings');
 		$events->add_listener('build_search_index', __FILE__, 'users', 'build_search_index');
+		$events->add_listener('check_database', __FILE__, 'users', 'check_database');
+	}
+	
+	public static function check_database(){
+		global $GO_CONFIG, $GO_MODULES, $GO_USERS, $GO_SECURITY;
+
+		$line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
+
+		echo 'User folders'.$line_break;
+
+		
+	
+		if(isset($GO_MODULES->modules['files']))
+		{
+
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();
+			$GO_USERS->get_users();
+			
+			while($GO_USERS->next_record())
+			{
+				$home_dir = 'users/'.$GO_USERS->f('username');
+					
+				$folder = $files->resolve_path($home_dir,true,1,'1');
+			
+				if(empty($folder['acl_read']))
+				{
+					echo "Sharing users/".$GO_USERS->f('username').$line_break;
+			
+					$up_folder['id']=$folder['id'];
+					$up_folder['acl_read']=$GO_SECURITY->get_new_acl('files', $GO_USERS->f('id'));
+					$up_folder['acl_write']=$GO_SECURITY->get_new_acl('files', $GO_USERS->f('id'));
+			
+					$files->update_folder($up_folder);
+				}
+				$files->set_readonly($folder['id']);
+				
+				$home_dir = 'adminusers/'.$GO_USERS->f('username');				
+				$folder = $files->resolve_path($home_dir,true,1,'1');
+			
+				if(empty($folder['acl_read']))
+				{
+					echo "Sharing adminusers/".$GO_USERS->f('username').$line_break;
+			
+					$up_folder['id']=$folder['id'];
+					$up_folder['acl_read']=$GO_SECURITY->get_new_acl('files', 1);
+					$up_folder['acl_write']=$GO_SECURITY->get_new_acl('files', 1);
+			
+					$files->update_folder($up_folder);
+				}
+				$files->set_readonly($folder['id']);
+			}
+		}
+
+		
+		echo 'Done'.$line_break.$line_break;
 	}
 	
 	function load_settings($response)

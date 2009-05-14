@@ -39,14 +39,21 @@ class addressbook extends db {
             $db->query($sql);
             while($addressbook = $db->next_record())
             {
+            	try{
                 $files->check_share('contacts/'.$addressbook['name'], $addressbook['user_id'], $addressbook['acl_read'], $addressbook['acl_write'], false);
                 $files->check_share('companies/'.$addressbook['name'], $addressbook['user_id'], $addressbook['acl_read'], $addressbook['acl_write'], false);
+            	}
+							catch(Exception $e){
+								echo $e->getMessage().$line_break;
+							}
+            	
             }
 
 
             $db->query("SELECT c.*,a.name AS addressbook_name,a.acl_read,a.acl_write FROM ab_contacts c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id");
             while($contact = $db->next_record())
             {
+            	try{
                 $path = $ab->build_contact_files_path($contact, array('name'=>$contact['addressbook_name']));
                 $up_contact['files_folder_id']=$files->check_folder_location($contact['files_folder_id'], $path);
 
@@ -56,11 +63,16 @@ class addressbook extends db {
                 }
 
                 $files->set_readonly($up_contact['files_folder_id']);
+            	}
+							catch(Exception $e){
+								echo $e->getMessage().$line_break;
+							}
             }
 
             $db->query("SELECT c.*,a.name AS addressbook_name,a.acl_read,a.acl_write FROM ab_companies c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id");
             while($company = $db->next_record())
             {
+            	try{
                 $path = $ab->build_company_files_path($company, array('name'=>$company['addressbook_name']));
                 $up_company['files_folder_id']=$files->check_folder_location($company['files_folder_id'], $path);
 
@@ -69,6 +81,10 @@ class addressbook extends db {
                     $ab->update_row('ab_companies', 'id', $up_company);
                 }
                 $files->set_readonly($up_company['files_folder_id']);
+            	}
+							catch(Exception $e){
+								echo $e->getMessage().$line_break;
+							}
             }
 
         }
