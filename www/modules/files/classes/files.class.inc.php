@@ -153,8 +153,13 @@ class files extends db
 	function check_folder_location($folder_id, $path)
 	{			
 		$new_folder_id=$folder_id;
+
 		$current_path = $this->build_path($folder_id);
-		if($current_path && $current_path != $path)
+        if(!$current_path)
+        {
+          $new_folder = $this->resolve_path($path,true,1,'1');
+          return $new_folder['id'];
+        }elseif($current_path != $path)
 		{
 			global $GO_CONFIG;
 			
@@ -173,11 +178,18 @@ class files extends db
 			{
 				$up_folder['id']=$new_folder_id;
 				$up_folder['name']=$new_folder_name;
+                $up_folder['readonly']='1';
 				$this->update_folder($up_folder);
 			}
 		}
 		return $new_folder_id;		
 	}
+
+    function set_readonly($folder_id){
+        $up_folder['readonly']='1';
+        $up_folder['id']=$folder_id;
+        $this->update_folder($up_folder);
+    }
 
 	function check_share($path, $user_id, $acl_read, $acl_write, $quiet=true)
 	{
@@ -191,12 +203,13 @@ class files extends db
 
 		$folder = $this->resolve_path($path,true,1);
 
-		if($folder['acl_read']!=$acl_read || $folder['acl_write']!=$acl_write)
+		if($folder['acl_read']!=$acl_read || $folder['acl_write']!=$acl_write || $folder['readonly']!='1')
 		{
 			$up_folder['id']=$folder['id'];
 			$up_folder['user_id']=$user_id;
 			$up_folder['acl_read']=$acl_read;
 			$up_folder['acl_write']=$acl_write;
+            $up_folder['readonly']='1';
 
 			$this->update_folder($up_folder);
 			if(!$quiet)
@@ -1031,18 +1044,37 @@ class files extends db
 		return $this->query($sql, $types, $params);
 	}
 
-	function get_folders($folder_id, $sortfield='name', $sortorder='ASC', $start=0, $offset=0)
+	function get_folders($folder_id, $sortfield='name', $sortorder='ASC', $start=0, $offset=0, $authenticate=false)
 	{
+        global $GO_SECURITY;
+        
 		$sql = "SELECT ";
+        if($authenticate)
+        {
+            $sql .= "DISTINCT ";
+        }
 		if($offset>0)
 		{
 			$sql .= "SQL_CALC_FOUND_ROWS ";
 		}
-		$sql .= "* FROM fs_folders ";
+
+		$sql .= "f.* FROM fs_folders f ";
+
+        if($authenticate)
+        {
+            $sql .= "INNER JOIN go_acl a ON (a.acl_id=f.acl_read OR a.acl_id=f.acl_write) ".
+			"LEFT JOIN go_users_groups ug ON a.group_id=ug.group_id ".
+			"WHERE (a.user_id=".$this->escape($GO_SECURITY->user_id)." OR ug.user_id=".$this->escape($GO_SECURITY->user_id).") AND ";
+        }else
+        {
+            $sql .= " WHERE ";
+        }
+
+
 		$types='';
 		$params=array();
 
-		$sql .= " WHERE parent_id=?";
+		$sql .= "parent_id=? ";
 		$types .= 'i';
 		$params[]=$folder_id;
 			
@@ -1090,7 +1122,7 @@ class files extends db
 		}
 	}
 
-	function resolve_path($path,$create_folders=false, $user_id=0, $folder_id=0)
+	function resolve_path($path,$create_folders=false, $user_id=0, $readonly='0', $folder_id=0)
 	{
 		if(substr($path,-1)=='/')
 		{
@@ -1105,12 +1137,12 @@ class files extends db
 
 			if(!$folder && $create_folders)
 			{
-				$folder = $this->mkdir($folder_id, $first_part,false, $user_id, true);
+				$folder = $this->mkdir($folder_id, $first_part,false, $user_id, true,$readonly);
 			}
 
 			if($folder)
 			{
-				return $this->resolve_path(implode('/', $parts),$create_folders,$user_id,$folder['id']);
+				return $this->resolve_path(implode('/', $parts),$create_folders,$user_id,$readonly,$folder['id']);
 			}else
 			{
 				return false;
@@ -1123,7 +1155,7 @@ class files extends db
 				$folder = $this->folder_exists($folder_id, $first_part);
 				if(!$folder && $create_folders)
 				{
-					$folder = $this->mkdir($folder_id, $first_part,false, $user_id, true);
+					$folder = $this->mkdir($folder_id, $first_part,false, $user_id, true,'1');
 				}
 				return $folder;
 			}else{
@@ -1149,7 +1181,7 @@ class files extends db
 	}
 
 
-	function mkdir($parent, $name, $share_user_id=0, $user_id=0, $ignore_existing_filesystem_folder=false){
+	function mkdir($parent, $name, $share_user_id=0, $user_id=0, $ignore_existing_filesystem_folder=false, $readonly='0'){
 
 		global $GO_SECURITY, $GO_CONFIG, $lang;
 
@@ -1195,6 +1227,7 @@ class files extends db
 		if (!file_exists($full_path.'/'.$name) && !mkdir($full_path.'/'.$name, $GO_CONFIG->folder_create_mode,true)) {
 			throw new Exception($lang['common']['saveError'].$full_path.'/'.$name);
 		} else {
+            $folder['readonly']=$readonly;
 			$folder['visible']='0';
 			$folder['user_id']=$user_id;
 			$folder['parent_id']=$parent['id'];

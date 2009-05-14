@@ -356,7 +356,7 @@ class tasks extends db
 			$files = new files();			
 
 			$new_path = $this->build_task_files_path($task,$tasklist);			
-			$folder = $files->resolve_path($new_path,true);			
+			$folder = $files->resolve_path($new_path,true,0,'1');
 			$task['files_folder_id']=$folder['id'];			
 		}
 

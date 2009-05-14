@@ -18,40 +18,46 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 --
 -- Tabel structuur voor tabel `fs_files`
 --
-
 DROP TABLE IF EXISTS `fs_files`;
 CREATE TABLE IF NOT EXISTS `fs_files` (
   `id` int(11) NOT NULL,
+  `folder_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
   `path` varchar(255) NOT NULL default '',
   `locked_user_id` int(11) NOT NULL default '0',
   `status_id` int(11) NOT NULL default '0',
   `ctime` int(11) NOT NULL default '0',
   `mtime` int(11) NOT NULL default '0',
+  `size` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `comments` text,
-  PRIMARY KEY  (`path`,`id`)
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 -- --------------------------------------------------------
 
 --
 -- Tabel structuur voor tabel `fs_folders`
 --
 
+
 DROP TABLE IF EXISTS `fs_folders`;
 CREATE TABLE IF NOT EXISTS `fs_folders` (
   `user_id` int(11) NOT NULL default '0',
   `id` int(11) NOT NULL,
+  `parent_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
   `path` varchar(255) NOT NULL default '',
   `visible` enum('0','1') NOT NULL,
   `acl_read` int(11) NOT NULL default '0',
   `acl_write` int(11) NOT NULL default '0',
   `comments` text,
   `thumbs` enum('0','1') NOT NULL default '0',
-  PRIMARY KEY  (`path`),
-  KEY `link_id_2` (`id`),
-  KEY `visible` (`visible`)
+  `ctime` int(11) NOT NULL,
+  `mtime` int(11) NOT NULL,
+  `readonly` enum('0','1') NOT NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 
 -- --------------------------------------------------------
 
