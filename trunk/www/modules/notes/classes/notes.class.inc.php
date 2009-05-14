@@ -18,6 +18,56 @@ class notes extends db {
 		$events->add_listener('user_delete', __FILE__, 'notes', 'user_delete');
 		$events->add_listener('add_user', __FILE__, 'notes', 'add_user');
 		$events->add_listener('build_search_index', __FILE__, 'notes', 'build_search_index');
+		$events->add_listener('check_database', __FILE__, 'notes', 'check_database');
+	}
+	
+	public static function check_database(){
+		global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE;
+
+		$line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
+
+		echo 'Note folders'.$line_break;
+
+		if(isset($GO_MODULES->modules['files']))
+		{
+			$notes = new notes();
+			$db = new db();
+
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();
+
+			$sql = "SELECT * FROM no_categories";
+			$db->query($sql);
+			while($category = $db->next_record())
+			{
+				try{
+					$files->check_share('notes/'.$category['name'], $category['user_id'], $category['acl_read'], $category['acl_write'], false);
+				}
+				catch(Exception $e){
+					echo $e->getMessage().$line_break;
+				}
+			}
+
+			$db->query("SELECT c.*,a.name AS category_name,a.acl_read,a.acl_write FROM no_notes c INNER JOIN no_categories a ON a.id=c.category_id");
+			while($note = $db->next_record())
+			{
+				try{
+					$path = $notes->build_note_files_path($note, array('name'=>$note['category_name']));
+					$up_note['files_folder_id']=$files->check_folder_location($note['files_folder_id'], $path);
+	
+					if($up_note['files_folder_id']!=$note['files_folder_id']){
+						$up_note['id']=$note['id'];
+						$notes->update_row('no_notes', 'id', $up_note);
+					}
+					$files->set_readonly($up_note['files_folder_id']);
+				}
+				catch(Exception $e){
+					echo $e->getMessage().$line_break;
+				}
+			}
+		}
+		echo 'Done'.$line_break.$line_break;
+
 	}
 		
 	/**
