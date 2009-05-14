@@ -751,6 +751,7 @@ class files extends db
 		{
 			$this->import_folder($fs_folder['path'], $folder['id']);
 		}
+		return $folder['id'];
 	}
 
 
