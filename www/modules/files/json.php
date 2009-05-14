@@ -84,7 +84,7 @@ try{
 							'text'=>$folder['name'],
 							'id'=>$folder['id'],
 							'expanded'=>true,
-                            'draggable'=>false,
+               'draggable'=>false,
 							'iconCls'=>'folder-default',
 							'children'=>get_node_children($folder['id']),
 							'notreloadable'=>true	
@@ -133,7 +133,7 @@ try{
                             $node= array(
                             'text'=>$lang['projects']['projects'],
                             'id'=>$projects_folder['id'],
-                            'iconCls'=>'folder-projects',
+                            'iconCls'=>'folder-default',
                             'draggable'=>false,
                             'allowDrop'=>false,
                             'notreloadable'=>true
