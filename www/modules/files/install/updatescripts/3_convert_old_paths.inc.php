@@ -391,6 +391,31 @@ if(isset($GO_MODULES->modules['projects']))
 	}
 }
 
+if(isset($GO_MODULES->modules['cms']))
+{
+	$db->query("ALTER TABLE `cms_sites` ADD `files_folder_id` INT NOT NULL"); 
+	$folder = $fsdb->resolve_path('public/cms',true,1);
+	$sql = "SELECT * FROM cms_sites";
+	$db->query($sql);
+	$db2 = new db();
+	while($site = $db->next_record())
+	{	
+		$new_path = 'public/cms/'.$site['name'];
+		$old_path = 'public/cms/'.$site['id'];
+		
+		
+		if(is_dir($GO_CONFIG->file_storage_path.$old_path))
+		{			
+			$fs->mkdir_recursive($GO_CONFIG->file_storage_path.dirname($new_path));
+			$fs->move($GO_CONFIG->file_storage_path.$old_path, $GO_CONFIG->file_storage_path.$new_path);			
+		}
+		$up_site['files_folder_id']=$fsdb->import_folder($GO_CONFIG->file_storage_path.$new_path, $folder['id']);
+		$up_site['id']=$site['id'];
+		
+		$db2->update_row('cms_sites','id', $up_site);
+	}
+}
+
 global $GO_USERS;
 $db->query("ALTER TABLE `go_users` ADD `files_folder_id` INT NOT NULL;");
 $GO_USERS->get_users();
