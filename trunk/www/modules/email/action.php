@@ -61,6 +61,9 @@ try{
 	switch($_REQUEST['task'])
 	{
 		case 'save_attachment':
+			
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();
 
 			$account = connect($_POST['account_id'], $_POST['mailbox']);
 			$data = $imap->view_part($_REQUEST['uid'], $_REQUEST['part'], $_REQUEST['transfer']);
@@ -70,11 +73,21 @@ try{
 			{
 				throw new Exception('Could not fetch message from IMAP server');
 			}
+			$folder = $files->get_folder($_POST['folder_id']);
+			$path = $files->build_path($folder);
+			if(!$path)
+			{
+				throw new FileNotFoundException();
+			}
+			
+			$path.='/'.$_POST['filename'];
 
-			if(!file_put_contents($GO_CONFIG->file_storage_path.$_POST['path'], $data))
+			if(!file_put_contents($GO_CONFIG->file_storage_path.$path, $data))
 			{
 				throw new Exception('Could not create file');
 			}
+			$files->import_file($GO_CONFIG->file_storage_path.$path,$folder['id']);
+			
 			$response['success']=true;
 			break;
 
@@ -355,6 +368,12 @@ try{
 							{
 								$swift->set_body($body, $_POST['content_type']);
 							}
+							
+							if($GO_MODULES->has_module('files'))
+							{
+								require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+								$files = new files();
+							}
 
 							if(isset($_POST['attachments']))
 							{
@@ -362,10 +381,17 @@ try{
 
 								foreach($attachments as $tmp_name)
 								{
-									if(!File::is_full_path($tmp_name[0]))
+									if(is_numeric($tmp_name))
 									{
-										$tmp_name = $GO_CONFIG->file_storage_path.$tmp_name;
+										$file = $files->get_file($tmp_name);
+										$folder = $files->get_folder($file['folder_id']);
+										if(!$file || !$folder)
+										{
+											throw new FileNotFoundException();
+										}
+										$tmp_name = $GO_CONFIG->file_storage_path.$files->build_path($folder).'/'.$file['name'];
 									}
+									
 									if(!empty($_POST['encrypt']) && empty($_POST['draft']))
 									{
 										$encoded = $gnupg->encode_file($tmp_name, $all_recipients, $swift->account['email']);

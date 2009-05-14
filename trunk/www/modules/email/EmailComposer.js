@@ -817,7 +817,6 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 									});
 
 							this.fileBrowserWindow = new Ext.Window({
-
 										title : GO.lang.strSelectFiles,
 										height : 480,
 										width : 680,
@@ -991,6 +990,8 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 
 		var AttachmentRecord = Ext.data.Record.create([{
 					name : 'tmp_name'
+				},{
+					name : 'id'
 				}, {
 					name : 'name'
 				}, {
@@ -1003,8 +1004,8 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 
 		for (var i = 0; i < selections.length; i++) {
 			var newRecord = new AttachmentRecord({
-						id : selections[i].data.path,
-						tmp_name : selections[i].data.path,
+						id : selections[i].data.id,
+						tmp_name : selections[i].data.id,
 						name : selections[i].data.name,
 						type : selections[i].data.type,
 						size : selections[i].data.size

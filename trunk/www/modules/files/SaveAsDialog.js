@@ -35,7 +35,7 @@ GO.files.SaveAsDialog = Ext.extend(Ext.Window, {
 							}
 						}
 						
-						this.handler.call(this.scope, this, this.fb.path+'/'+this.nameField.getValue());
+						this.handler.call(this.scope, this, this.fb.folder_id, this.nameField.getValue());
 					}, 
 					scope: this 
 				},{
@@ -105,8 +105,6 @@ GO.files.SaveAsDialog = Ext.extend(Ext.Window, {
 		}
 		
 		GO.files.SaveAsDialog.superclass.show.call(this);
-		
-		this.fb.loadFiles();	
 	}
 	
 });

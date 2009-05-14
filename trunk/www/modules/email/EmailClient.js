@@ -891,7 +891,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
   	}
   	GO.files.saveAsDialog.show({
   		filename: attachment.name,
-  		handler:function(dialog, path){
+  		handler:function(dialog, folder_id, filename){
   			dialog.el.mask(GO.lang.waitMsgLoad);
   			Ext.Ajax.request({
   				url: GO.settings.modules.email.url+'action.php',
@@ -904,7 +904,8 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		  			mime: attachment.mime,
 		  			account_id: this.account_id,
 		  			uuencoded_partnumber: attachment.uuencoded_partnumber,
-		  			path: path
+		  			folder_id: folder_id,
+		  			filename: filename
   				},
   				callback: function(options, success, response)
 					{	
