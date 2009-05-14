@@ -53,3 +53,4 @@ $updates[]="update fs_notifications n set folder_id=(select path from fs_folders
 
 $updates[]="ALTER TABLE `fs_notifications` DROP PRIMARY KEY , ADD PRIMARY KEY ( `folder_id` , `user_id` ) ;";
 
+$updates[]="ALTER TABLE `fs_folders` ADD `readonly` ENUM( '0', '1' ) NOT NULL ";

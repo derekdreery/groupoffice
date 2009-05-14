@@ -140,6 +140,7 @@ if(isset($GO_MODULES->modules['addressbook']))
 			$up_folder['name']=File::strip_invalid_chars(String::format_name($contact));
 			$up_folder['acl_read']=0;
 			$up_folder['acl_write']=0;
+            $up_folder['readonly']='1';
 
 			$fsdb->update_folder($up_folder);
 			
@@ -177,6 +178,7 @@ if(isset($GO_MODULES->modules['addressbook']))
 			$up_folder['name']=File::strip_invalid_chars($company['name']);
 			$up_folder['acl_read']=0;
 			$up_folder['acl_write']=0;
+            $up_folder['readonly']='1';
 			
 			$fsdb->update_folder($up_folder);
 			
@@ -216,6 +218,7 @@ if(isset($GO_MODULES->modules['notes']))
 			$up_folder['name']=File::strip_invalid_chars($note['name']);
 			$up_folder['acl_read']=0;
 			$up_folder['acl_write']=0;
+            $up_folder['readonly']='1';
 
 			$fsdb->update_folder($up_folder);
 			
@@ -255,6 +258,7 @@ if(isset($GO_MODULES->modules['tasks']))
 			$up_folder['name']=File::strip_invalid_chars($task['name']);
 			$up_folder['acl_read']=0;
 			$up_folder['acl_write']=0;
+            $up_folder['readonly']='1';
 
 			$fsdb->update_folder($up_folder);
 			
@@ -295,6 +299,7 @@ if(isset($GO_MODULES->modules['calendar']))
 			$up_folder['name']=File::strip_invalid_chars($event['name']);
 			$up_folder['acl_read']=0;
 			$up_folder['acl_write']=0;
+            $up_folder['readonly']='1';
 
 			$fsdb->update_folder($up_folder);
 			
@@ -333,6 +338,7 @@ if(isset($GO_MODULES->modules['billing']))
 			$up_folder['name']=File::strip_invalid_chars($order['name']);
 			$up_folder['acl_read']=0;
 			$up_folder['acl_write']=0;
+            $up_folder['readonly']='1';
 
 			$fsdb->update_folder($up_folder);
 			
@@ -373,6 +379,7 @@ if(isset($GO_MODULES->modules['projects']))
 			$up_folder['name']=$new_folder_name;
 			$up_folder['acl_read']=0;
 			$up_folder['acl_write']=0;
+            $up_folder['readonly']='1';
 
 			$fsdb->update_folder($up_folder);
 			
@@ -409,6 +416,7 @@ while($user = $GO_USERS->next_record())
 		$up_folder['name']=$new_folder_name;
 		$up_folder['acl_read']=0;
 		$up_folder['acl_write']=0;
+        $up_folder['readonly']='1';
 
 		$fsdb->update_folder($up_folder);
 		

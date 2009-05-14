@@ -32,12 +32,12 @@ try{
 
 			$fs2= new files();	
 						
-			function get_node_children($folder_id)
+			function get_node_children($folder_id, $authenticate=false)
 			{
 				global $files,$fs2;
 				
 				$children = array();
-				$files->get_folders($folder_id);
+				$files->get_folders($folder_id,'name','ASC', 0,0, $authenticate);
 				while($folder=$files->next_record())
 				{
 					$node= array(
@@ -45,6 +45,11 @@ try{
 						'id'=>$folder['id'],
 						'notreloadable'=>true			
 					);
+
+                    if($folder['readonly']=='1')
+                    {
+                        $node['draggable']=false;
+                    }
 			
 					if($folder['acl_read']>0)
 					{
@@ -79,6 +84,7 @@ try{
 							'text'=>$folder['name'],
 							'id'=>$folder['id'],
 							'expanded'=>true,
+                            'draggable'=>false,
 							'iconCls'=>'folder-default',
 							'children'=>get_node_children($folder['id']),
 							'notreloadable'=>true	
@@ -99,6 +105,7 @@ try{
 						'id'=>$home_folder['id'],
 						'iconCls'=>'folder-home',
 						'expanded'=>true,
+                        'draggable'=>false,
 						'children'=>get_node_children($home_folder['id']),
 						'notreloadable'=>true			
 						);
@@ -109,6 +116,8 @@ try{
 						'text'=>$lang['files']['shared'],
 						'id'=>'shared',
 						'readonly'=>true,
+                        'draggable'=>false,
+                        'allowDrop'=>false,
 						'iconCls'=>'folder-shares'/*,
 						'expanded'=>true,
 						'children'=>$children,
@@ -116,14 +125,58 @@ try{
 						);
 						$response[]=$node;
 
+                        if($GO_MODULES->has_module('projects'))
+                        {
+                            require($GO_LANGUAGE->get_language_file('projects'));
+
+                            $projects_folder = $files->resolve_path('projects');
+                            $node= array(
+                            'text'=>$lang['projects']['projects'],
+                            'id'=>$projects_folder['id'],
+                            'iconCls'=>'folder-projects',
+                            'draggable'=>false,
+                            'allowDrop'=>false,
+                            'notreloadable'=>true
+                            );
+                            $response[]=$node;
+                        }
+
+
+                        if($GO_MODULES->has_module('addressbook'))
+                        {
+                            require($GO_LANGUAGE->get_language_file('addressbook'));
+                            $contacts_folder = $files->resolve_path('contacts');
+                            $node= array(
+                            'text'=>$lang['addressbook']['contacts'],
+                            'id'=>$contacts_folder['id'],
+                            'iconCls'=>'folder-default',
+                            'draggable'=>false,
+                            'allowDrop'=>false,
+                            'notreloadable'=>true
+                            );
+                            $response[]=$node;
+
+                            $companies_folder = $files->resolve_path('companies');
+                            $node= array(
+                            'text'=>$lang['addressbook']['companies'],
+                            'id'=>$companies_folder['id'],
+                            'iconCls'=>'folder-default',
+                            'draggable'=>false,
+                            'allowDrop'=>false,
+                            'notreloadable'=>true
+                            );
+                            $response[]=$node;
+                        }
+
 						$num_new_files = $files->get_num_new_files($GO_SECURITY->user_id);
 
 						$node= array(
 						'text'=>$lang['files']['new'].' ('.$num_new_files.')',
 						'id'=>'new',
-						'readonly'=>true,
+						'allowDrop'=>false,
 						'children'=>array(),
 						'expanded'=>true,
+                        'draggable'=>false,
 						'iconCls'=>'folder-new'
 						);
 						$response[]=$node;
@@ -183,11 +236,9 @@ try{
 				default:
 
 					$folder = $files->get_folder($_POST['node']);
-					if(!$files->has_read_permission($GO_SECURITY->user_id, $folder))
-					{
-						throw new AccessDeniedException();
-					}
-					$response = get_node_children($_POST['node']);			
+					$authenticate = !$files->has_read_permission($GO_SECURITY->user_id, $folder);
+					
+					$response = get_node_children($_POST['node'], $authenticate);
 						
 					break;
 			}
@@ -212,34 +263,50 @@ try{
 							$response['deleteFeedback']=$lang['common']['accessDenied'];
 						}
 						$response['write_permission']=false;
-						$share_count = $files->get_authorized_shares($GO_SECURITY->user_id);
 
-						while ($files->next_record())
-						{
-							$share_id = $GO_CONFIG->file_storage_path.$files->f('id');
-							if (file_exists($share_id))
-							{
-								if (is_dir($share_id))
-								{
-									$is_sub_dir = isset($last_folder) ? $files->is_sub_dir($share_id, $last_folder) : false;
+                        $fs2 = new files();
 
-									if (!$is_sub_dir)
-									{
-										$last_folder = $share_id;
-										$folder['type_id']='d:'.$folder['id'];
-										$folder['name']=utf8_basename($share_id);
-										$folder['thumb_url']=$GO_THEME->image_url.'128x128/filetypes/folder.png';
-										$folder['id']=$files->f('id');
-										//$folder['grid_display']='<div class="go-grid-icon filetype-folder">'.$folder['name'].'</div>';
-										$folder['type']=$lang['files']['folder'];
-										$folder['mtime']=Date::get_timestamp(filemtime($share_id));
-										$folder['size']='-';
-										$folder['extension']='folder';
-										$response['results'][]=$folder;
-									}
-								}
-							}
-						}
+
+                        $share_count = $files->get_authorized_shares($GO_SECURITY->user_id);
+
+                        $folders=array();
+
+                        $count = 0;
+                        while ($folder = $files->next_record())
+                        {
+                            $path = $fs2->build_path($folder);
+                            $folders[$path]=$folder;
+                        }
+                        ksort($folders);
+
+                        $fs = new filesystem();
+
+
+                        foreach($folders as $path=>$folder)
+                        {
+                            $is_sub_dir = isset($last_path) ? $fs->is_sub_dir($path, $last_path) : false;
+                            if(!$is_sub_dir)
+                            {
+                                 $folder['thumb_url']=$GO_THEME->image_url.'128x128/filetypes/folder.png';
+                                $class='filetype-folder';
+
+                                $folder['type_id']='d:'.$folder['id'];
+                                $folder['grid_display']='<div class="go-grid-icon '.$class.'">'.$folder['name'].'</div>';
+                                $folder['type']=$lang['files']['folder'];
+                                $folder['timestamp']=$folder['ctime'];
+                                $folder['mtime']=Date::get_timestamp($folder['ctime']);
+                                $folder['size']='-';
+                                $folder['extension']='folder';
+                                if($folder['readonly']=='1')
+                                {
+                                    $folder['draggable']=false;
+                                }
+                                $response['results'][]=$folder;
+
+                                $last_path=$path;
+                            }
+                        }
+
 					}elseif($_POST['id'] == 'new')
 					{
 						require_once($GO_CONFIG->control_path.'phpthumb/phpThumb.config.php');
@@ -293,10 +360,8 @@ try{
 							}*/
 
 						$response['write_permission']=$files->has_write_permission($GO_SECURITY->user_id, $curfolder);
-						if(!$response['write_permission'] && !$files->has_read_permission($GO_SECURITY->user_id, $curfolder))
-						{
-							throw new AccessDeniedException();
-						}
+						$authenticate=(!$response['write_permission'] && !$files->has_read_permission($GO_SECURITY->user_id, $curfolder));
+						
 
 						if(isset($_POST['delete_keys']))
 						{
@@ -437,7 +502,7 @@ try{
 
 						require_once($GO_CONFIG->control_path.'phpthumb/phpThumb.config.php');
 
-						$files->get_folders($curfolder['id'],$dsort,$dir);
+						$files->get_folders($curfolder['id'],$dsort,$dir,0,0,$authenticate);
 						while($folder = $files->next_record())
 						{
 							if($folder['acl_read']>0)

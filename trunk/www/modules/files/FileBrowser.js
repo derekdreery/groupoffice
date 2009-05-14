@@ -132,8 +132,6 @@ GO.files.FileBrowser = function(config){
 		
 		if(!dragEvent.dropNode)
 		{
-			if(dragEvent.target.attributes.readonly)
-				return false;
 				
 			//comes from grid, don't allow it to paste it into a child
 			for(var i=0;i<dragEvent.data.selections.length;i++)
