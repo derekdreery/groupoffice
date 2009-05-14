@@ -136,35 +136,43 @@ try{
 
 					$share_count = $files->get_authorized_shares($GO_SECURITY->user_id);
 
+                    $nodes=array();
+
 					$count = 0;
-					while ($files->next_record())
-					{
-						$share_id = $GO_CONFIG->file_storage_id.$files->f('id');
+					while ($folder = $files->next_record())
+					{						
+                        //$is_sub_dir = isset($last_folder) ? $files->is_sub_dir($share_id, $last_folder) : false;
 
-						if (is_dir($share_id))
-						{
-							$is_sub_dir = isset($last_folder) ? $files->is_sub_dir($share_id, $last_folder) : false;
+                        $node = array(
+                                'text'=>$folder['name'],
+                                'id'=>$folder['id'],
+                                'iconCls'=>'folder-default',
+                                'notreloadable'=>true
+                        );
 
-							if (!$is_sub_dir)
-							{
-								$last_folder = $share_id;
+                        $path = $fs2->build_path($folder);
+                        $nodes[$path]=$node;
+                    }
+                    ksort($nodes);
 
-								$node = array(
-										'text'=>utf8_basename($files->f('id')),
-										'id'=>$files->f('id'),
-										'iconCls'=>'folder-default',
-										'notreloadable'=>true
-								);
-								if(!$files->get_folders($share_id))
-								{
-									$node['children']=array();
-									$node['expanded']=true;
-								}
-								$response[]=$node;
-							}
-						}
+                    $fs = new filesystem();
 
-					}
+                   
+                    foreach($nodes as $path=>$node)
+                    {
+                        $is_sub_dir = isset($last_path) ? $fs->is_sub_dir($path, $last_path) : false;
+                        if(!$is_sub_dir)
+                        {
+                            if(!$fs2->get_folders($files->f('id')))
+                            {
+                                $node['children']=array();
+                                $node['expanded']=true;
+                            }
+                            $response[]=$node;
+                            $last_path=$path;
+                        }
+                    }
+					
 					break;
 						
 				case 'new' :
@@ -208,7 +216,7 @@ try{
 
 						while ($files->next_record())
 						{
-							$share_id = $GO_CONFIG->file_storage_id.$files->f('id');
+							$share_id = $GO_CONFIG->file_storage_path.$files->f('id');
 							if (file_exists($share_id))
 							{
 								if (is_dir($share_id))
@@ -239,27 +247,29 @@ try{
 						$sort = isset($_POST['sort']) ? $_POST['sort'] : 'mtime';
 						$dir = isset($_POST['dir']) ? $_POST['dir'] : 'DESC';
 
-						if($sort == 'grid_display') $sort = 'name';
+						//if($sort == 'grid_display') $sort = 'name';
 
-						$files = $files->get_new_files($GO_SECURITY->user_id, $sort, $dir);
-						foreach($files as $file)
+						$response['num_files'] = $files->get_new_files($GO_SECURITY->user_id, $sort, $dir);
+                        while($file = $files->next_record())
 						{
 							$extension = File::get_extension($file['name']);
 
-							$file['type_id']='f:'.$file['id'];
-							$file['thumb_url']=$files->get_thumb_url($file['id']);
-							$file['extension']=$extension;
-							//$file['grid_display']='<div class="go-grid-icon filetype filetype-'.$extension.'">'.$file['name'].'</div>';
-							$file['type']=File::get_filetype_description($extension);
-							$file['timestamp']=$file['mtime'];
-							$file['mtime']=Date::get_timestamp($file['mtime']);
-							$file['size']=Number::format_size($file['size']);
-							$response['results'][]=$file;
+							if(!isset($extensions) || in_array($extension, $extensions))
+							{
+								$file['type_id']='f:'.$file['id'];
+								$file['thumb_url']=$files->get_thumb_url($file['id']);
+								$file['extension']=$extension;
+								$file['grid_display']='<div class="go-grid-icon filetype filetype-'.$extension.'">'.$file['name'].'</div>';
+								$file['type']=File::get_filetype_description($extension);
+								$file['timestamp']=$file['mtime'];
+								$file['mtime']=Date::get_timestamp($file['mtime']);
+								//$file['size']=Number::format_size($file['size']);
+								$response['results'][]=$file;
+							}
 						}
 
 						$response['write_permission'] = false;
 						$response['thumbs']=0;
-						$response['num_files'] = count($files);
 
 					}else
 					{
@@ -358,7 +368,7 @@ try{
 									function strip_id($client_id)
 									{
 										global $id, $GO_CONFIG;
-										return '.'.substr($GO_CONFIG->file_storage_id.$client_id, strlen($id));
+										return '.'.substr($GO_CONFIG->file_storage_path.$client_id, strlen($id));
 									}
 
 									$compress_sources=array_map('strip_id', $compress_sources);
@@ -390,16 +400,16 @@ try{
 										switch(File::get_extension($file))
 										{
 											case 'zip':
-												exec($GO_CONFIG->cmd_unzip.' "'.$GO_CONFIG->file_storage_id.$file.'"');
+												exec($GO_CONFIG->cmd_unzip.' "'.$GO_CONFIG->file_storage_path.$file.'"');
 												break;
 
 											case 'gz':
 											case 'tgz':
-												exec($GO_CONFIG->cmd_tar.' zxf "'.$GO_CONFIG->file_storage_id.$file.'"');
+												exec($GO_CONFIG->cmd_tar.' zxf "'.$GO_CONFIG->file_storage_path.$file.'"');
 												break;
 
 											case 'tar':
-												exec($GO_CONFIG->cmd_tar.' xf "'.$GO_CONFIG->file_storage_id.$file.'"');
+												exec($GO_CONFIG->cmd_tar.' xf "'.$GO_CONFIG->file_storage_path.$file.'"');
 												break;
 										}
 

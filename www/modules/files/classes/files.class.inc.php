@@ -662,53 +662,54 @@ class files extends db
 		return $file['id'];
 	}
 
-	function sync_file($path, $parent_id)
+	function sync_file($full_path, $parent_id)
 	{
-		$file = $this->file_exists($parent_id, utf8_basename($path));
+		global $GO_CONFIG;
+		
+		$file = $this->file_exists($parent_id, utf8_basename($full_path));
+
 		if(!$file)
 		{
 			return false;
 		}
-		$file['ctime']=@filectime($path);
-		$file['mtime']=@filemtime($path);
-		$file['size']=filesize($path);
+		$file['ctime']=filectime($full_path);
+		$file['mtime']=filemtime($full_path);
+		$file['size']=filesize($full_path);
 		return $this->update_file($file);
 	}
 
-	function import_file($path, $parent_id=false)
-	{
-		global $GO_CONFIG;
-		
+	function import_file($full_path, $parent_id=false)
+	{		
 		if(!$parent_id)
 		{
-			$parent = $this->resolve_path(dirname($path),true);
+			$parent = $this->resolve_path(dirname($full_path),true);
 			$parent_id=$parent['id'];
 		}
 		
-		$file['name']=utf8_basename($path);
+		$file['name']=utf8_basename($full_path);
 
 		$sql = "DELETE FROM fs_files WHERE folder_id=? AND name COLLATE utf8_bin LIKE ?";
 		$this->query($sql,'is',array($parent_id, $file['name']));
 
-		$file['name']=utf8_basename($path);
-		$file['ctime']=filectime($GO_CONFIG->file_storage_path.$path);
-		$file['mtime']=filemtime($GO_CONFIG->file_storage_path.$path);
+		$file['name']=utf8_basename($full_path);
+		$file['ctime']=filectime($full_path);
+		$file['mtime']=filemtime($full_path);
 		$file['folder_id']=$parent_id;
-		$file['size']=filesize($GO_CONFIG->file_storage_path.$path);
+		$file['size']=filesize($full_path);
 		return $this->add_file($file);
 	}
 
-	function import_folder($path, $parent_id)
+	function import_folder($full_path, $parent_id)
 	{
 		global $GO_SECURITY, $GO_CONFIG;
 
 		$fs = new filesystem();
 
-		$folder['name']=utf8_basename($path);
-		$folder['visible']='1';
+		$folder['name']=utf8_basename($full_path);
+		$folder['visible']='0';
 		$folder['user_id']=$GO_SECURITY->user_id;
 		$folder['parent_id']=$parent_id;
-		$folder['ctime']=filectime($GO_CONFIG->file_storage_path.$path);
+		$folder['ctime']=filectime($full_path);
 
 		$existing_folder = $this->folder_exists($parent_id, $folder['name']);
 		if($existing_folder)
@@ -723,16 +724,16 @@ class files extends db
 			
 		if(!$folder['id'])
 		{
-			throw new Exception('Could not create folder: '.$path);
+			throw new Exception('Could not create folder: '.$full_path);
 		}
 
-		$files = $fs->get_files($path);
+		$files = $fs->get_files($full_path);
 		while($fs_file = array_shift($files))
 		{
 			$this->import_file($fs_file['path'], $folder['id']);
 		}
 
-		$folders = $fs->get_folders($path);
+		$folders = $fs->get_folders($full_path);
 		while($fs_folder=array_shift($folders))
 		{
 			$this->import_folder($fs_folder['path'], $folder['id']);
@@ -742,6 +743,7 @@ class files extends db
 
 	function update_file($file)
 	{
+		
 		$this->cache_file($file['id']);
 
 		//$file['mtime']=time();
@@ -795,7 +797,7 @@ class files extends db
 		{
 			$sql .= "AND f.visible='1' ";
 		}
-		$sql .= "ORDER BY path ASC";
+		$sql .= "ORDER BY name ASC";
 
 		$this->query($sql);
 		return $this->num_rows();
@@ -916,11 +918,11 @@ class files extends db
 
 	function get_new_files($user_id, $sort='name', $dir='DESC')
 	{
-		global $GO_CONFIG;
+		//global $GO_CONFIG;
 
-		$this->query("SELECT path FROM fs_new_files AS fn, fs_files AS ff WHERE fn.file_id = ff.id AND fn.user_id = ?", 'i', $user_id);
+		$this->query("SELECT ff.* FROM fs_new_files AS fn, fs_files AS ff WHERE fn.file_id = ff.id AND fn.user_id = ?", 'i', $user_id);
 			
-		$files = array();
+		/*$files = array();
 		while($item = $this->next_record())
 		{
 			$file = array();
@@ -940,7 +942,8 @@ class files extends db
 		} else
 		{
 			return $files;
-		}
+		}*/
+        return $this->num_rows();
 	}
 
 	public static function login($username, $password, $user)
@@ -1192,7 +1195,7 @@ class files extends db
 		if (!file_exists($full_path.'/'.$name) && !mkdir($full_path.'/'.$name, $GO_CONFIG->folder_create_mode,true)) {
 			throw new Exception($lang['common']['saveError'].$full_path.'/'.$name);
 		} else {
-			$folder['visible']='1';
+			$folder['visible']='0';
 			$folder['user_id']=$user_id;
 			$folder['parent_id']=$parent['id'];
 			$folder['name']=$name;
