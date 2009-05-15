@@ -5,7 +5,7 @@ function smarty_function_files($params, &$smarty)
 	global $co, $GO_CONFIG, $GO_MODULES;
 	
 	require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
-	$files = new files();
+	$fsdb = new files();
 
 	if(empty($params['path']))
 	{
@@ -29,10 +29,8 @@ function smarty_function_files($params, &$smarty)
 	}
 
 	$fs = new filesystem();
-
 	$files = $fs->get_files_sorted($path);
 
-	//var_dump($files);
 	$html = '';
 	
 	$item_name = isset($params['item_name']) ? $params['item_name'] : 'file'; 
@@ -42,7 +40,7 @@ function smarty_function_files($params, &$smarty)
 	for($i=0;$i<count($files);$i++)
 	{
 		$files[$i]['friendly_name']=str_replace('_', ' ', File::strip_extension($files[$i]['name']));
-		$files[$i]['relpath']=$files->strip_server_path($files[$i]['path']);
+		$files[$i]['relpath']=$fsdb->strip_server_path($files[$i]['path']);
 		
 		$s->assign('index', $i);
 		$s->assign($item_name, $files[$i]);
