@@ -33,6 +33,8 @@ try{
 				require_once($GO_MODULES->modules['email']['class_path'].'email.class.inc.php');
 				$response = load_template($_POST['template_id']);
 			}
+
+            
 							
 			require_once($GO_CONFIG->class_path.'export_query.class.inc.php');
 			$eq = new export_query();
