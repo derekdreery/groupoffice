@@ -1,5 +1,5 @@
 <?php 
-if(isset($argv[1]))
+/*if(isset($argv[1]))
 {
 	define('CONFIG_FILE', $argv[1]);
 }
@@ -9,7 +9,7 @@ chdir(dirname(__FILE__));
 require('../../../../Group-Office.php');
 
 $db = new db();
-$db->halt_on_error='report';
+$db->halt_on_error='report';*/
 
 $fs = new filesystem();
 
@@ -96,7 +96,7 @@ function crawl($path, $parent_id)
 	}
 }
 
-/*
+
 $folders = $fs->get_folders($GO_CONFIG->file_storage_path);
 
 foreach($folders as $folder)
@@ -105,7 +105,7 @@ foreach($folders as $folder)
 }
 
 $fsdb->query("DELETE FROM fs_folders WHERE name=''");
-*/
+
 
 if(isset($GO_MODULES->modules['addressbook']))
 {
