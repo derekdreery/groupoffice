@@ -275,9 +275,6 @@ class notes extends db {
 		return $this->query("DELETE FROM no_notes WHERE id=".$this->escape($note_id));
 	}
 	
-	
-
-	
 
 
 	/**

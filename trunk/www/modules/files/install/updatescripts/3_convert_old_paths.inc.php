@@ -393,7 +393,8 @@ if(isset($GO_MODULES->modules['projects']))
 
 if(isset($GO_MODULES->modules['cms']))
 {
-	$db->query("ALTER TABLE `cms_sites` ADD `files_folder_id` INT NOT NULL"); 
+	$db->query("ALTER TABLE `cms_sites` ADD `files_folder_id` INT NOT NULL");
+    $db->query("ALTER TABLE `cms_files` ADD `files_folder_id` INT NOT NULL");
 	$folder = $fsdb->resolve_path('public/cms',true,1);
 	$sql = "SELECT * FROM cms_sites";
 	$db->query($sql);
@@ -414,6 +415,8 @@ if(isset($GO_MODULES->modules['cms']))
 		
 		$db2->update_row('cms_sites','id', $up_site);
 	}
+
+    
 }
 
 global $GO_USERS;
