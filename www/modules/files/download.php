@@ -30,14 +30,23 @@ if(!empty($_REQUEST['id']))
 }else
 {
 	$path = $_REQUEST['path'];
-	$file = $files->resolve_path($_REQUEST['path']);
+
+    $public = substr($path,0,6)=='public';
+
+    if(!$public)
+    {
+        $file = $files->resolve_path($_REQUEST['path']);
+    }else
+    {
+        $file['name']=utf8_basename($path);
+    }
 }
 
 $path = $GO_CONFIG->file_storage_path.$path;
 
 $mode = isset($_REQUEST['mode'])  ? $_REQUEST['mode'] : 'download';
 
-if(!$file || !file_exists($path))
+if(!$public && (!$file || !file_exists($path)))
 {
 	die('File not found: '.$path);
 }
@@ -45,7 +54,7 @@ if(!$file || !file_exists($path))
 /*
  * Enable browser caching for public files. They expire in one day.
  */
-$cache = $fs->is_sub_dir($path, $GO_CONFIG->file_storage_path.'public');
+
 
 /*
 //add timestamp for caching
@@ -54,12 +63,12 @@ if(!isset($_REQUEST['mtime']))
 	header('Location: '.$_SERVER['PHP_SELF'].'?path='.urlencode($_REQUEST['path']).'&mode='.$mode.'&mtime='.filemtime($path));
 	exit();
 }*/
-if ($files->has_read_permission($GO_SECURITY->user_id, $file['folder_id']))
+if ($public || $files->has_read_permission($GO_SECURITY->user_id, $file['folder_id']))
 {
 	/*
 	 * Remove new_filelink
 	 */
-	if(!$cache)
+	if(!$public)
 	{		
 		$files->delete_new_filelink($file['id'], $GO_SECURITY->user_id);
 	}
@@ -75,7 +84,7 @@ if ($files->has_read_permission($GO_SECURITY->user_id, $file['folder_id']))
 	header("ETag: ".md5_file($path));
 	
 		
-	if($cache)
+	if($public)
 	{
 		header("Expires: " . date("D, j M Y G:i:s ", time()+86400) . 'GMT');//expires in 1 day	
 		header('Cache-Control: cache');

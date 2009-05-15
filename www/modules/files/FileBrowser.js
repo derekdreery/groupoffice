@@ -162,7 +162,7 @@ GO.files.FileBrowser = function(config){
 		root: 'results',
 		totalProperty: 'total',
 		id: 'type_id',
-		fields:['type_id', 'id','name','type', 'size', 'mtime', 'extension', 'timestamp', 'thumb_url'],
+		fields:['type_id', 'id','name','type', 'size', 'mtime', 'extension', 'timestamp', 'thumb_url','path'],
 		remoteSort:true
 	});
 	
