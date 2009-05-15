@@ -361,7 +361,8 @@ try{
 
 						$response['write_permission']=$files->has_write_permission($GO_SECURITY->user_id, $curfolder);
 						$authenticate=(!$response['write_permission'] && !$files->has_read_permission($GO_SECURITY->user_id, $curfolder));
-						
+
+                        $path = $files->build_path($curfolder);
 
 						if(isset($_POST['delete_keys']))
 						{
@@ -410,8 +411,6 @@ try{
 							if(!empty($_POST['template_id']) && !empty($_POST['template_name']))
 							{
 								$template = $files->get_template($_POST['template_id'], true);
-
-								$path = $files->build_path($curfolder);
 
 								$new_path = $GO_CONFIG->file_storage_path.$files->build_path($curfolder).'/'.$_POST['template_name'].'.'.$template['extension'];
 								file_put_contents($new_path, $template['content']);
@@ -514,7 +513,8 @@ try{
 								$folder['thumb_url']=$GO_THEME->image_url.'128x128/filetypes/folder.png';
 								$class='filetype-folder';
 							}
-								
+
+                            $folder['path']=$path.'/'.$folder['name'];
 							$folder['type_id']='d:'.$folder['id'];
 							$folder['grid_display']='<div class="go-grid-icon '.$class.'">'.$folder['name'].'</div>';
 							$folder['type']=$lang['files']['folder'];
@@ -539,6 +539,7 @@ try{
 								
 							if(!isset($extensions) || in_array($extension, $extensions))
 							{
+                                $file['path']=$path.'/'.$file['name'];
 								$file['type_id']='f:'.$file['id'];
 								$file['thumb_url']=$files->get_thumb_url($file['id']);
 								$file['extension']=$extension;
