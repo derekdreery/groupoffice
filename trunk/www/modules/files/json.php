@@ -246,6 +246,13 @@ try{
 			break;
 
 				case 'grid':
+
+                    if(empty($_POST['id']))
+                    {
+                        throw new Exception('No location given');
+                    }
+
+
 					$response['results']=array();
 						
 					if(isset($_SESSION['GO_SESSION']['files']['jupload_new_files']) && count($_SESSION['GO_SESSION']['files']['jupload_new_files']))

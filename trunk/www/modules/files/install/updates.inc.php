@@ -29,11 +29,8 @@ $updates[]="CREATE TABLE IF NOT EXISTS `fs_new_files` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
 
-$updates[]="ALTER TABLE `fs_folders` ADD `parent_id` INT NOT NULL AFTER `id` ,
-ADD `name` INT NOT NULL AFTER `parent_id`;";
 
-$updates[]="ALTER TABLE `fs_folders` ADD `ctime` INT NOT NULL ,
-ADD `mtime` INT NOT NULL";
+
 
 
 $updates[]="ALTER TABLE `fs_files` ADD `folder_id` INT NOT NULL AFTER `id`";
@@ -41,7 +38,8 @@ $updates[]="ALTER TABLE `fs_files` ADD `name` VARCHAR( 255 ) NOT NULL AFTER `fol
 $updates[]="ALTER TABLE `fs_files` ADD `size` INT NOT NULL AFTER `mtime`";
 $updates[]="ALTER TABLE `fs_folders` ADD `parent_id` INT( 11 ) NOT NULL AFTER `id`;";
 $updates[]="ALTER TABLE `fs_folders` ADD `name` VARCHAR( 255 ) NOT NULL AFTER `parent_id`";
-$updates[]="ALTER TABLE `fs_folders` ADD `ctime` INT NOT NULL";  
+$updates[]="ALTER TABLE `fs_folders` ADD `ctime` INT NOT NULL ,
+ADD `mtime` INT NOT NULL";
 
 $updates[]="ALTER TABLE `fs_files` DROP PRIMARY KEY ,ADD PRIMARY KEY ( `id` )"; 
 $updates[]="ALTER TABLE `fs_folders` DROP PRIMARY KEY ,ADD PRIMARY KEY ( `id` ) ";
