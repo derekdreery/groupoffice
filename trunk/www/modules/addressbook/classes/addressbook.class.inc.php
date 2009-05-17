@@ -40,8 +40,8 @@ class addressbook extends db {
             while($addressbook = $db->next_record())
             {
             	try{
-                $files->check_share('contacts/'.$addressbook['name'], $addressbook['user_id'], $addressbook['acl_read'], $addressbook['acl_write'], false);
-                $files->check_share('companies/'.$addressbook['name'], $addressbook['user_id'], $addressbook['acl_read'], $addressbook['acl_write'], false);
+                $files->check_share('contacts/'.File::strip_invalid_chars($addressbook['name']), $addressbook['user_id'], $addressbook['acl_read'], $addressbook['acl_write'], false);
+                $files->check_share('companies/'.File::strip_invalid_chars($addressbook['name'], $addressbook['user_id']), $addressbook['acl_read'], $addressbook['acl_write'], false);
             	}
 							catch(Exception $e){
 								echo $e->getMessage().$line_break;
