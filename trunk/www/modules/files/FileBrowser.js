@@ -748,7 +748,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		var decompress_sources = [];		
 		for(var i=0;i<records.length;i++)
 		{
-			decompress_sources.push(records[i].data.id);
+			decompress_sources.push(records[i].data.path);
 		}
 				
 		if(decompress_sources.length)
@@ -775,7 +775,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		var compress_sources = [];		
 		for(var i=0;i<records.length;i++)
 		{
-			compress_sources.push(records[i].data.id);
+			compress_sources.push(records[i].data.path);
 		}		
 		
 		if(compress_sources.length)

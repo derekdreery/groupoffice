@@ -683,7 +683,7 @@ class files extends db
 
 		if(!$file)
 		{
-			return false;
+            return $this->import_file($full_path, $parent_id);
 		}
 		$file['ctime']=filectime($full_path);
 		$file['mtime']=filemtime($full_path);
@@ -695,7 +695,7 @@ class files extends db
 	{		
 		if(!$parent_id)
 		{
-			$parent = $this->resolve_path(dirname($full_path),true);
+            $parent = $this->resolve_path(dirname($this->strip_server_path($full_path)),true);
 			$parent_id=$parent['id'];
 		}
 		
@@ -743,7 +743,7 @@ class files extends db
 		$files = $fs->get_files($full_path);
 		while($fs_file = array_shift($files))
 		{
-			$this->import_file($fs_file['path'], $folder['id']);
+			$this->sync_file($fs_file['path'], $folder['id']);
 		}
 
 		$folders = $fs->get_folders($full_path);
@@ -1317,11 +1317,18 @@ class files extends db
 			$files->delete_file($file);
 		}
 
-		//$this->remove_notifications($path);
+        $subpath = $this->build_path($folder);
+
+        if(!$subpath)
+        {
+            throw new FileNotFoundException();
+        }
+
+        $this->remove_notifications($folder['id']);
 		$sql = "DELETE FROM fs_folders WHERE id=?";
 		$this->query($sql, 'i', $folder['id']);
 
-		$path = $GLOBALS['GO_CONFIG']->file_storage_path.$this->build_path($folder);
+		$path = $GLOBALS['GO_CONFIG']->file_storage_path.$subpath;
 		$fs = new filesystem();
 		return $fs->delete($path);
 	}
