@@ -399,7 +399,7 @@ try{
 									{
 										$folder = $files->get_folder($ti[1]);
 										$files->delete_folder($folder);
-										$deleted[]=$file['name'];
+										$deleted[]=$folder['name'];
 									}
 										
 								}
@@ -436,25 +436,29 @@ try{
 									$compress_sources = json_decode($_POST['compress_sources'],true);
 									$archive_name = $_POST['archive_name'].'.zip';
 
-									function strip_id($client_id)
-									{
-										global $id, $GO_CONFIG;
-										return '.'.substr($GO_CONFIG->file_storage_path.$client_id, strlen($id));
-									}
+                                    $full_path = $GO_CONFIG->file_storage_path.$path;
 
-									$compress_sources=array_map('strip_id', $compress_sources);
-
-									//var_dump($compress_sources);
-									if(file_exists($id.'/'.$archive_name))
+									if(file_exists($full_path.'/'.$archive_name))
 									{
 										throw new Exception($lang['files']['filenameExists']);
 									}
 
-									chdir($id);
-									//echo $GO_CONFIG->cmd_zip.' -r "'.$archive_name.'" "'.implode('" "',$compress_sources).'"';
-									exec($GO_CONFIG->cmd_zip.' -r "'.$archive_name.'" "'.implode('" "',$compress_sources).'"');
+                                    $compress_sources = array_map('utf8_basename', $compress_sources);
 
-									$response['compress_success']=true;
+									chdir($full_path);
+
+                                    $cmd = $GO_CONFIG->cmd_zip.' -r "'.$archive_name.'" "'.implode('" "',$compress_sources).'"';
+									
+									exec($cmd, $output);
+                                    
+                                    if(!file_exists($full_path.'/'.$archive_name))
+                                    {
+                                        throw new Exception('Command failed: '.$cmd."<br /><br />".implode("<br />", $output));
+                                    }
+
+									$response['compress_success']=true;;
+                                    $files->import_file($full_path.'/'.$archive_name,$curfolder['id']);
+                                    
 								}
 							}catch(Exception $e)
 							{
@@ -465,8 +469,10 @@ try{
 							try{
 								if(isset($_POST['decompress_sources']))
 								{
-									chdir($id);
-									$decompress_sources = json_decode(($_POST['decompress_sources']));
+                                    $full_path=$GO_CONFIG->file_storage_path.$path;
+                                    
+									chdir($full_path);
+									$decompress_sources = json_decode($_POST['decompress_sources']);
 									while ($file = array_shift($decompress_sources)) {
 										switch(File::get_extension($file))
 										{
@@ -485,6 +491,9 @@ try{
 										}
 
 									}
+
+                                    //TODO sync only missing files
+                                    $files->import_folder($full_path, $curfolder['parent_id']);
 
 									//TODO error handling
 									$response['decompress_success']=true;
