@@ -42,16 +42,19 @@ class log extends db {
 		{
 			$sql .= "SQL_CALC_FOUND_ROWS ";
 		}		
-		$sql .= "* FROM go_log ";
+		$sql .= "gl.* FROM go_log gl, go_users gu WHERE gl.user_id = gu.id ";
 		$types='';
 		$params=array();
-		if(!empty($query))
+			
+ 		if(!empty($query))
  		{
- 			$sql .= " WHERE text LIKE ?";
- 			$types .= 's';
- 			$params[]=$query;
- 		} 		
-		$sql .= " ORDER BY ".$this->escape($sortfield.' '.$sortorder);	
+ 			$sql .= " AND (text LIKE ? OR first_name LIKE ? OR middle_name LIKE ? OR last_name LIKE ? "
+ 					. "OR CONCAT(first_name, middle_name, last_name) LIKE ?) ";
+ 			$types .= 'sssss';
+ 			$params = array($query, $query, $query, $query, str_replace(' ','',$query));
+ 		}
+		
+		$sql .= " ORDER BY ".$this->escape("gl.".$sortfield.' '.$sortorder);	
 		
 		$_SESSION['GO_SESSION']['export_queries']['log']=array(
 			'query'=>$sql,
