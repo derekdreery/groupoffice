@@ -53,4 +53,12 @@ $updates[]="ALTER TABLE `fs_notifications` DROP PRIMARY KEY , ADD PRIMARY KEY ( 
 
 $updates[]="ALTER TABLE `fs_folders` ADD `readonly` ENUM( '0', '1' ) NOT NULL ";
 
+
+$updates[] = "ALTER TABLE `fs_folders` ADD INDEX ( `name` ) ;";
+$updates[] = "ALTER TABLE `fs_files` ADD INDEX ( `folder_id` ) ";
+$updates[] = "ALTER TABLE `fs_files` ADD INDEX ( `name` )";
+$updates[] = "ALTER TABLE `fs_folders` ADD INDEX ( `parent_id` ) ";
+
 $updates[] = "script:3_convert_old_paths.inc.php";
+
+
