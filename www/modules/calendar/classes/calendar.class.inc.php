@@ -70,6 +70,7 @@ class calendar extends db
 			{
 				try{
 					$path = $cal->build_event_files_path($event, array('name'=>$event['calendar_name']));
+                    echo $path.$line_break;
 					$up_event['files_folder_id']=$files->check_folder_location($event['files_folder_id'], $path);
 	
 					if($up_event['files_folder_id']!=$event['files_folder_id']){
