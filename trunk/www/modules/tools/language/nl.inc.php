@@ -10,4 +10,7 @@ $lang['tools']['rm_duplicates']='Verwijder dubbele contacten en afspraken';
 $lang['tools']['backupdb']='Backup database';
 
 $lang['tools']['index_files']='Indexeer alle bestanden';
+
+$lang['tools']['buildsearchcache']='Maak zoek index';
+$lang['tools']['checkmodules']='Controleer modules';
 ?>
