@@ -20,14 +20,12 @@ try{
 	switch($task)
 	{
 		case 'entries':		
-
-			
 			
 			$sort = isset($_REQUEST['sort']) ? $_REQUEST['sort'] : 'id';
 			$dir = isset($_REQUEST['dir']) ? $_REQUEST['dir'] : 'DESC';
 			$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : '0';
 			$limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : '0';
-			$query = isset($_REQUEST['query']) ? '%'.$_REQUEST['query'].'%' : '';
+			$query = isset($_REQUEST['query']) ? '%'.trim($_REQUEST['query']).'%' : '';
 			
 			$log->get_entries($query, $sort, $dir, $start, $limit);
 			
@@ -39,6 +37,7 @@ try{
 			}
 			$response['total'] = $log->found_rows();
 			break;
+			
 /* {TASKSWITCH} */
 	}
 }catch(Exception $e)
