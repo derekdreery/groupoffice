@@ -56,7 +56,6 @@ while($file = array_shift($_FILES))
 
 				move_uploaded_file($file['tmp_name'], $filepath);
 
-
 				$complete_dir = $path.'/';				
 				if(!empty($_POST['relpathinfo'][$count]))
 				{
@@ -98,8 +97,8 @@ while($file = array_shift($_FILES))
 		if(!isset($_POST['jupart']))
 		{
 			$filepath = File::checkfilename($filepath);
-		}	
-		
+		}
+        
 		move_uploaded_file($file['tmp_name'], $filepath);
 		
 		if(!isset($_POST['jupart']))
@@ -107,10 +106,8 @@ while($file = array_shift($_FILES))
 			$relpath = $files->strip_server_path($filepath);
 			
 			$_SESSION['GO_SESSION']['files']['jupload_new_files'][]=$relpath;
-			$files->import_file($filepath);	
-		}
-		
-		
+			$files->import_file($filepath);
+		}	
 	}
 	$count++;
 }

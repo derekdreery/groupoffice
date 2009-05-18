@@ -24,7 +24,7 @@ GO.files.VersionsGrid = function(config) {
 	config.store = new GO.data.JsonStore({
 				url : GO.settings.modules.files.url + 'json.php',
 				baseParams : {
-					'task' : 'grid'
+					'task' : 'versions'
 				},
 				root : 'results',
 				totalProperty : 'total',
@@ -68,7 +68,7 @@ GO.files.VersionsGrid = function(config) {
 
 	this.on('rowdblclick', function(grid, rowIndex) {
 				var record = grid.getStore().getAt(rowIndex);
-				GO.files.openFile(record.data.path);
+				GO.files.openFile(record);
 			}, this);
 
 };

@@ -132,7 +132,6 @@ class files extends db
 		return false;
 			
 		return $this->is_sub_dir($folder, $homefolder);
-
 	}
 
 
@@ -560,24 +559,25 @@ class files extends db
 		return $this->next_record();
 	}
 
-	function get_versions_dir($filepath)
+	function get_versions_dir($file_id)
 	{
-		return dirname($filepath).'/.'.utf8_basename($filepath);
+		global $GO_CONFIG;
+
+        $path = $GO_CONFIG->file_storage_path.'versioning/'.$file_id;
+        if(!is_dir($path))
+            mkdir($path, $GO_CONFIG->folder_create_mode,true);
+            
+        return $path;
+
 	}
 
-	function move_version($source_path, $destination_path){
+	function move_version($file){
 
 		if($this->enable_versioning){
 			//no db functions apply to this move
 			$fs = new filesystem();
 
-			$filename = utf8_basename($destination_path);
-			$versions_dir = $this->get_versions_dir($destination_path);
-
-			$source_filename = utf8_basename($source_path);
-			$source_versions_dir = $this->get_versions_dir($source_path);
-			debug($source_versions_dir);
-			debug($versions_dir);
+			$versions_dir = $this->get_versions_dir($file['id']);
 
 			if($source_versions_dir!=$versions_dir && is_dir($source_versions_dir))
 			{
@@ -600,24 +600,16 @@ class files extends db
 		}
 	}
 
-	function delete_versions($filepath)
-	{
-		if($this->enable_versioning){
-			$versions_dir = $this->get_versions_dir($filepath);
-			if(is_dir($versions_dir))
-			{
-				//no db functions apply to this move
-				$fs = new filesystem();
-				$fs->delete($versions_dir);
-			}
-		}
-	}
 
 
 	function move_file($sourcefile, $destfolder)
 	{
-		$sql = "DELETE FROM fs_files WHERE folder_id=? AND name COLLATE utf8_bin LIKE ?";
-		$this->query($sql,'is',array($destfolder['id'], $sourcefile['name']));
+        $existing_file = $this->file_exists($destfolder['id'], $sourcefile['name']);
+        if($existing_file)
+        {
+            $this->delete_file($existing_file);
+        }
+
 
 		$up_file['id']=$sourcefile['id'];
 		$up_file['folder_id']=$destfolder['id'];
@@ -675,19 +667,12 @@ class files extends db
 		return $file['id'];
 	}
 
-	function sync_file($full_path, $parent_id)
+	function sync_file($file, $full_path)
 	{
-		global $GO_CONFIG;
-		
-		$file = $this->file_exists($parent_id, utf8_basename($full_path));
-
-		if(!$file)
-		{
-            return $this->import_file($full_path, $parent_id);
-		}
 		$file['ctime']=filectime($full_path);
 		$file['mtime']=filemtime($full_path);
 		$file['size']=filesize($full_path);
+        
 		return $this->update_file($file);
 	}
 
@@ -698,18 +683,26 @@ class files extends db
             $parent = $this->resolve_path(dirname($this->strip_server_path($full_path)),true);
 			$parent_id=$parent['id'];
 		}
-		
-		$file['name']=utf8_basename($full_path);
 
-		$sql = "DELETE FROM fs_files WHERE folder_id=? AND name COLLATE utf8_bin LIKE ?";
-		$this->query($sql,'is',array($parent_id, $file['name']));
+        $file['name']=utf8_basename($full_path);
+
+        $existing_file = $this->file_exists($parent_id, $file['name']);
 
 		$file['name']=utf8_basename($full_path);
 		$file['ctime']=filectime($full_path);
 		$file['mtime']=filemtime($full_path);
 		$file['folder_id']=$parent_id;
 		$file['size']=filesize($full_path);
-		return $this->add_file($file);
+
+        if($existing_file)
+        {            
+            $file['id']=$existing_file['id'];
+            $this->update_file($file);
+            return $file['id'];
+        }else
+        {
+            return $this->add_file($file);
+        }
 	}
 
 	function import_folder($full_path, $parent_id)
@@ -743,7 +736,7 @@ class files extends db
 		$files = $fs->get_files($full_path);
 		while($fs_file = array_shift($files))
 		{
-			$this->sync_file($fs_file['path'], $folder['id']);
+			$this->import_file($fs_file['path'], $folder['id']);
 		}
 
 		$folders = $fs->get_folders($full_path);
@@ -1355,6 +1348,18 @@ class files extends db
 		$this->query($sql, 'i', $file['id']);
 
 		$this->delete_new_filelink($file['id']);
+
+
+        if($this->enable_versioning){
+			$versions_dir = $this->get_versions_dir($file['id']);
+			if(is_dir($versions_dir))
+			{
+				//no db functions apply to this move
+				$fs = new filesystem();
+				$fs->delete($versions_dir);
+			}
+		}
+
 
 		$path = $GO_CONFIG->file_storage_path.$this->build_path($file['folder_id']).'/'.$file['name'];
 			

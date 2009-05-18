@@ -557,7 +557,7 @@ try{
 							{
                                 $file['path']=$path.'/'.$file['name'];
 								$file['type_id']='f:'.$file['id'];
-								$file['thumb_url']=$files->get_thumb_url($file['id']);
+								$file['thumb_url']=$files->get_thumb_url($file['path']);
 								$file['extension']=$extension;
 								$file['grid_display']='<div class="go-grid-icon filetype filetype-'.$extension.'">'.$file['name'].'</div>';
 								$file['type']=File::get_filetype_description($extension);
@@ -571,6 +571,32 @@ try{
 					}
 
 					break;
+
+
+                case 'versions':
+
+                    $path = $files->get_versions_dir($_POST['file_id']);
+
+                    $fs = new filesystem();
+                    $fs_files = $fs->get_files($path);
+
+                    $response['results']=array();
+                    $response['total']=count($fs_files);
+                    while($file=array_shift($fs_files))
+                    {
+                        $extension = File::get_extension($file['name']);
+                        $file['path']=$files->strip_server_path($file['path']);
+                        $file['extension']=$extension;
+                        $file['grid_display']='<div class="go-grid-icon filetype filetype-'.$extension.'">'.$file['name'].'</div>';
+                        $file['type']=File::get_filetype_description($extension);
+                        $file['timestamp']=$file['mtime'];
+                        $file['mtime']=Date::get_timestamp($file['mtime']);
+                        $file['size']=Number::format_size($file['size']);
+                        $response['results'][]=$file;
+                    }
+
+
+                    break;
 
 											case 'folder_properties':
 

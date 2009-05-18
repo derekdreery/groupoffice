@@ -23,6 +23,8 @@ require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 $files = new files();
 $fs = new filesystem();
 
+
+
 if(!empty($_REQUEST['id']))
 {
     $file = $files->get_file($_REQUEST['id']);
@@ -30,7 +32,18 @@ if(!empty($_REQUEST['id']))
 }else
 {
     $path = $_REQUEST['path'];
-    $file = $files->resolve_path($_REQUEST['path']);
+    $versioning = substr($path,0,10)=='versioning';
+
+    if($versioning)
+    {
+        $path_parts = explode('/', $path);
+        $file_id = $path_parts[1];
+        $file = $files->get_file($file_id);
+        $file['name']=utf8_basename($path);
+    }else
+    {       
+        $file = $files->resolve_path($_REQUEST['path']);
+    }
 }
 $public = substr($path,0,6)=='public';
 
