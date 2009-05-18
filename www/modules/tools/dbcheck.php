@@ -193,28 +193,6 @@ echo 'Done'.$line_break.$line_break;
 
 
 
-echo 'Clearing search cache'.$line_break;
-
-require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
-$search = new search();
-
-$search->reset();
-flush();
-
-echo 'Building search cache'.$line_break;
-
-$GO_EVENTS->fire_event('build_search_index');
-
-//$search->update_search_cache(true);
-
-echo 'Done'.$line_break.$line_break;
-
-
-
-echo 'Start of module checks'.$line_break;
-
-$GO_EVENTS->fire_event('check_database');
-
 
 
 
@@ -249,7 +227,7 @@ for($i=1;$i<=13;$i++)
 	echo 'Removed '.$count.' from table go_links_'.$i.$line_break;
 }
 */
-echo 'Done'.$line_break.$line_break;
+
 
 
 
