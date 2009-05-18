@@ -1337,7 +1337,8 @@ GO.mainLayout.onReady(function(){
 
 GO.files.openFile = function(record, store)
 {
-	
+	var index = record.data.id ? 'id' : 'path';
+
 	switch(record.data.extension)
 	{
 		case 'bmp':
@@ -1353,7 +1354,7 @@ GO.files.openFile = function(record, store)
 			});
 		}
 		
-		var index = 0;
+		var imgindex = 0;
 		var images = Array();
 		if(store)
 		{
@@ -1363,19 +1364,19 @@ GO.files.openFile = function(record, store)
 				
 				if(r.extension=='jpg' || r.extension=='png' || r.extension=='gif' || r.extension=='bmp' || r.extension=='jpeg')
 				{
-					images.push({name: r.name, src: GO.settings.modules.files.url+'download.php?mode=download&id='+r.id})
+					images.push({name: r.name, src: GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+r[index]})
 				}
-				if(r.id==id)
+				if(r[index]==record.get(index))
 				{
-					index=images.length-1;
+					imgindex=images.length-1;
 				}
 			}
 		}else
 		{
-			images.push({name: record.get('name'), src: GO.settings.modules.files.url+'download.php?mode=download&id='+record.data.id})
+			images.push({name: record.get('name'), src: GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.get(index)})
 		}
 		
-		this.imageViewer.show(images, index);
+		this.imageViewer.show(images, imgindex);
 			
 		break;
 		
@@ -1387,20 +1388,20 @@ GO.files.openFile = function(record, store)
 		case 'ppt':
 		case 'odp':
 		case 'txt':				
-			if(GO.settings.modules.gota && GO.settings.modules.gota.read_permission)
+			if(index == 'id' && GO.settings.modules.gota && GO.settings.modules.gota.read_permission)
 			{
 				if(!GO.files.noJavaNotified && !deployJava.isWebStartInstalled('1.6.0'))
 				{
 					GO.files.noJavaNotified=true;
 					Ext.MessageBox.alert(GO.lang.strError, GO.lang.noJava);					
-					window.location.href=GO.settings.modules.files.url+'download.php?mode=download&id='+record.data.id;
+					window.location.href=GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.get(index);
 				}else
 				{
-					window.location.href=GO.settings.modules.gota.url+'jnlp.php?id='+record.data.id;
+					window.location.href=GO.settings.modules.gota.url+'jnlp.php?'+index+'='+record.get('id');
 				}
 			}else
 			{
-				window.location.href=GO.settings.modules.files.url+'download.php?mode=download&id='+record.data.id;
+				window.location.href=GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.get(index);
 			}
 		break;
 		
@@ -1414,7 +1415,7 @@ GO.files.openFile = function(record, store)
 			}
 		
 		default:
-			window.location.href=GO.settings.modules.files.url+'download.php?mode=download&id='+record.data.id;
+			window.location.href=GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.get(index);
 		break;	
 	}	
 }

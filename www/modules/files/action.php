@@ -256,25 +256,28 @@ try{
 						throw new Exception($lang['common']['quotaExceeded']);
 						}*/
 						
-					$update=file_exists($new_path);
-					if($update)
+					$existing_file = $files->file_exists($folder['id'], $filename);
+					if($existing_file)
 					{
 						$modified[]=$filename;
 					}else
 					{
 						$new[]=$filename;
 					}
+                    
+                    if($existing_file)
+                    {
+                        $version_filepath = $files->get_versions_dir($existing_file['id']).'/'.date('YmdGi',filectime($new_path)).'_'.$_SESSION['GO_SESSION']['username'].'_'.$filename;
+                        $fs->move($new_path, $version_filepath);
+                    }
 
 					if(!$fs->move($tmp_file, $new_path))
 					{
 						throw new Exception($lang['common']['saveError']);
 					}
 
-					if(!$update || !$files->sync_file($new_path, $folder['id']))
-					{
-						$files->import_file($new_path, $folder['id']);
-					}
-
+					$files->import_file($new_path, $folder['id']);
+                    
 					//$quota->add($size);
 
 						
