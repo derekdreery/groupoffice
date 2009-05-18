@@ -192,6 +192,8 @@ class files extends db
 	function check_share($path, $user_id, $acl_read, $acl_write, $quiet=true)
 	{
 		global $GO_LANGUAGE, $lang, $GO_CONFIG;
+
+		$line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
 		
 		$full_path = $GO_CONFIG->file_storage_path.$path;
 
@@ -211,7 +213,7 @@ class files extends db
 
 			$this->update_folder($up_folder);
 			if(!$quiet)
-			echo 'Updating '.$path.'<br />';
+			echo 'Updating '.$path.$line_break;
 		}
 
 		return $folder;
