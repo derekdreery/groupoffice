@@ -39,52 +39,54 @@ class addressbook extends db {
             $db->query($sql);
             while($addressbook = $db->next_record())
             {
-            	try{
-                $files->check_share('contacts/'.File::strip_invalid_chars($addressbook['name']), $addressbook['user_id'], $addressbook['acl_read'], $addressbook['acl_write'], false);
-                $files->check_share('companies/'.File::strip_invalid_chars($addressbook['name'], $addressbook['user_id']), $addressbook['acl_read'], $addressbook['acl_write'], false);
-            	}
-							catch(Exception $e){
-								echo $e->getMessage().$line_break;
-							}
-            	
+                try{
+                    $files->check_share('contacts/'.File::strip_invalid_chars($addressbook['name']), $addressbook['user_id'], $addressbook['acl_read'], $addressbook['acl_write'], false);
+                    $files->check_share('companies/'.File::strip_invalid_chars($addressbook['name'], $addressbook['user_id']), $addressbook['acl_read'], $addressbook['acl_write'], false);
+                }
+                catch(Exception $e){
+                    echo $e->getMessage().$line_break;
+                }
             }
-
+            flush();
 
             $db->query("SELECT c.*,a.name AS addressbook_name,a.acl_read,a.acl_write FROM ab_contacts c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id");
             while($contact = $db->next_record())
             {
-            	try{
-                $path = $ab->build_contact_files_path($contact, array('name'=>$contact['addressbook_name']));
-                $up_contact['files_folder_id']=$files->check_folder_location($contact['files_folder_id'], $path);
+                try{
+                    $path = $ab->build_contact_files_path($contact, array('name'=>$contact['addressbook_name']));
+                    echo $path.$line_break;
+                    $up_contact['files_folder_id']=$files->check_folder_location($contact['files_folder_id'], $path);
 
-                if($up_contact['files_folder_id']!=$contact['files_folder_id']){
-                    $up_contact['id']=$contact['id'];
-                    $ab->update_row('ab_contacts', 'id', $up_contact);
+                    if($up_contact['files_folder_id']!=$contact['files_folder_id']){
+                        $up_contact['id']=$contact['id'];
+                        $ab->update_row('ab_contacts', 'id', $up_contact);
+                    }
+
+                    $files->set_readonly($up_contact['files_folder_id']);
                 }
-
-                $files->set_readonly($up_contact['files_folder_id']);
-            	}
-							catch(Exception $e){
-								echo $e->getMessage().$line_break;
-							}
+                catch(Exception $e){
+                    echo $e->getMessage().$line_break;
+                }
+                flush();
             }
 
             $db->query("SELECT c.*,a.name AS addressbook_name,a.acl_read,a.acl_write FROM ab_companies c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id");
             while($company = $db->next_record())
             {
-            	try{
-                $path = $ab->build_company_files_path($company, array('name'=>$company['addressbook_name']));
-                $up_company['files_folder_id']=$files->check_folder_location($company['files_folder_id'], $path);
+                try{
+                    $path = $ab->build_company_files_path($company, array('name'=>$company['addressbook_name']));
+                    $up_company['files_folder_id']=$files->check_folder_location($company['files_folder_id'], $path);
 
-                if($up_company['files_folder_id']!=$company['files_folder_id']){
-                    $up_company['id']=$company['id'];
-                    $ab->update_row('ab_companies', 'id', $up_company);
+                    if($up_company['files_folder_id']!=$company['files_folder_id']){
+                        $up_company['id']=$company['id'];
+                        $ab->update_row('ab_companies', 'id', $up_company);
+                    }
+                    $files->set_readonly($up_company['files_folder_id']);
                 }
-                $files->set_readonly($up_company['files_folder_id']);
-            	}
-							catch(Exception $e){
-								echo $e->getMessage().$line_break;
-							}
+                catch(Exception $e){
+                    echo $e->getMessage().$line_break;
+                }
+                flush();
             }
 
         }
@@ -530,7 +532,7 @@ class addressbook extends db {
     function build_contact_files_path($contact, $addressbook)
     {
         $new_folder_name = File::strip_invalid_chars(String::format_name($contact));
-        $last_part = strtoupper(File::strip_invalid_chars($contact['last_name'][0]));
+        $last_part = !empty($contact['last_name']) ? strtoupper(substr(File::strip_invalid_chars($contact['last_name']),0,1)) : '';
         $new_path = 'contacts/'.File::strip_invalid_chars($addressbook['name']);
         if(!empty($last_part))
         {
