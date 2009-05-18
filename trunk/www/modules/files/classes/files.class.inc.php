@@ -16,7 +16,6 @@ require_once($GLOBALS['GO_CONFIG']->class_path.'filesystem.class.inc');
 
 class files extends db
 {
-
 	var $enable_versioning=true;
 
 	var $reabable_paths = array();
