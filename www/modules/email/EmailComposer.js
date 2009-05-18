@@ -320,7 +320,7 @@ GO.email.EmailComposer = function(config) {
 					root : 'results',
 					totalProperty : 'total',
 					id : 'id',
-					fields : ['id', 'name'],
+					fields : ['id', 'name', 'default'],
 					remoteSort : true
 				});
 
@@ -328,31 +328,53 @@ GO.email.EmailComposer = function(config) {
 					store : this.templatesStore
 				});
 
-		this.templatesList.on('click', function(dataview, index) {
-
-					this.showConfig.template_id = index > 0
-							? dataview.store.data.items[index - 1].id
-							: 0;
-					this.show(this.showConfig);
-					this.templatesWindow.hide();
-					this.templatesList.clearSelections();
-
-				}, this);
-
+		this.templatesList.on('click', function(dataview, index)
+		{
+			this.showConfig.template_id = index > 0
+					? dataview.store.data.items[index - 1].id
+					: 0;
+					
+			if(this.templateDefault.checked)
+			{
+				this.saveDefaultTemplate(this.showConfig.template_id);
+			}
+			
+			this.show(this.showConfig);
+			this.templatesWindow.hide();
+			this.templatesList.clearSelections();
+	
+		}, this);
+				
+		
+		this.defaultTemplatePanel = new Ext.FormPanel({
+	        autoHeight:true,
+	        border:false,
+	        bodyStyle:'padding:7px',
+	        labelWidth:125,
+	        items:[
+	        this.templateDefault = new Ext.form.Checkbox({
+				name:'templateDefault',
+				boxLabel:GO.email.lang.defaultTemplate,
+				anchor:'100%',
+				hideLabel:true,
+				checked:false
+			})]
+		});
+				
 		this.templatesWindow = new Ext.Window({
-					title : GO.email.lang.selectTemplate,
-					layout : 'fit',
-					modal : false,
-					height : 400,
-					width : 600,
-					closable : true,
-					closeAction : 'hide',
-					items : new Ext.Panel({
-								autoScroll : true,
-								items : this.templatesList,
-								cls : 'go-form-panel'
-							})
-				});
+			title : GO.email.lang.selectTemplate,
+			layout : 'fit',
+			modal : false,
+			height : 400,
+			width : 600,
+			closable : true,
+			closeAction : 'hide',
+			items : new Ext.Panel({
+				autoScroll : true,
+				items : [this.templatesList, this.defaultTemplatePanel], 
+				cls : 'go-form-panel'
+			})
+		});
 	}
 
 	var tbar = [this.sendButton = new Ext.Button({
@@ -538,6 +560,29 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 						results : []
 					});
 		}
+	},
+	
+	saveDefaultTemplate : function(template_id)
+	{
+		Ext.Ajax.request({
+			url: GO.settings.modules.mailings.url+'action.php',
+			params: {
+				template_id: template_id,
+				task: 'default_template'
+			},
+			scope: this,
+			callback: function(options, success, response)
+			{
+				var data = Ext.decode(response.responseText);				
+				if (!data.success)
+				{					
+					Ext.Msg.alert(GO.lang['strError'], data.feedback)
+				}else
+				{
+					
+				}
+			}
+		});
 	},
 	
 	showCC : function(show){
@@ -1189,8 +1234,8 @@ GO.email.TemplatesList = function(config) {
 	Ext.apply(config);
 	var tpl = new Ext.XTemplate(
 			'<div id="template-0" class="go-item-wrap">No template</div>',
-			'<tpl for=".">',
-			'<div id="template-{id}" class="go-item-wrap">{name}</div>',
+			'<tpl for=".">',			
+			'<div id="template-{id}" class="go-item-wrap {default}">{name}</div>',
 			'</tpl>');
 
 	GO.email.TemplatesList.superclass.constructor.call(this, {

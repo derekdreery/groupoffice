@@ -129,3 +129,5 @@ GO.email.lang.confirmLostChanges = 'Uw wijzigingen gaan verloren. Weet u het zek
 GO.email.lang.manageAliases='Beheer afzendaliassen';
 
 GO.email.lang.addSendersTo='Voeg afzenders toe aan...';
+
+GO.email.lang.defaultTemplate='Stel sjabloon in als standaard';
