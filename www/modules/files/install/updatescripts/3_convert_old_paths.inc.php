@@ -96,7 +96,7 @@ function crawl($path, $parent_id)
 	}
 }
 
-
+/*
 $folders = $fs->get_folders($GO_CONFIG->file_storage_path);
 
 foreach($folders as $folder)
@@ -389,7 +389,7 @@ if(isset($GO_MODULES->modules['projects']))
 			$fsdb->update_row('pm_projects', 'id', $up_project);
 		}		
 	}
-}
+}*/
 
 if(isset($GO_MODULES->modules['cms']))
 {
