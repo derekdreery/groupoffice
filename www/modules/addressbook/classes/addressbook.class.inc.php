@@ -322,7 +322,7 @@ class addressbook extends db {
             $new_path = $this->build_company_files_path($company, $addressbook);
             if($new_path)
             {
-                $folder = $files->resolve_path($new_path,true,0,'1');
+                $folder = $files->resolve_path($new_path,true,1,'1');
                 $company['files_folder_id']=$folder['id'];
             }
         }
@@ -518,7 +518,7 @@ class addressbook extends db {
             $new_path = $this->build_contact_files_path($contact, $addressbook);
             if($new_path)
             {
-                $folder = $files->resolve_path($new_path,true,0,'1');
+                $folder = $files->resolve_path($new_path,true,1,'1');
                 $contact['files_folder_id']=$folder['id'];
             }
         }
