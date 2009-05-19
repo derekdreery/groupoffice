@@ -264,6 +264,7 @@ try{
 						
 					if($_POST['id'] == 'shared')
 					{
+						$response['parent_id']=0;
 						if(isset($_POST['delete_keys']))
 						{
 							$response['deleteSuccess']=false;
@@ -316,6 +317,8 @@ try{
 
 					}elseif($_POST['id'] == 'new')
 					{
+						$response['parent_id']=0;
+						
 						require_once($GO_CONFIG->control_path.'phpthumb/phpThumb.config.php');
 
 						$sort = isset($_POST['sort']) ? $_POST['sort'] : 'mtime';
