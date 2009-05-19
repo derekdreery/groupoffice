@@ -1005,7 +1005,7 @@ class calendar extends db
 			$files = new files();
 
 			$new_path = $this->build_event_files_path($event, $calendar);
-			$folder = $files->resolve_path($new_path,true,0,'1');
+			$folder = $files->resolve_path($new_path,true,1,'1');
 			$event['files_folder_id']=$folder['id'];
 		}
 

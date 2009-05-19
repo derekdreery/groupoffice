@@ -20,8 +20,58 @@ class tasks extends db
 		$events->add_listener('user_delete', __FILE__, 'tasks', 'user_delete');
 		$events->add_listener('add_user', __FILE__, 'tasks', 'add_user');
 		$events->add_listener('build_search_index', __FILE__, 'tasks', 'build_search_index');
+		$events->add_listener('check_database', __FILE__, 'tasks', 'check_database');
 	}
-	
+
+	public static function check_database(){
+		global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE;
+
+		$line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
+
+		echo 'Task folders'.$line_break;
+
+		if(isset($GO_MODULES->modules['files']))
+		{
+			$ta = new tasks();
+			$db = new db();
+
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();
+
+			$sql = "SELECT * FROM ta_lists";
+			$db->query($sql);
+			while($tasklist = $db->next_record())
+			{
+				try{
+					$files->check_share('tasks/'.$tasklist['name'], $tasklist['user_id'], $tasklist['acl_read'], $tasklist['acl_write'], false);
+				}
+				catch(Exception $e){
+					echo $e->getMessage().$line_break;
+				}
+			}
+
+			$db->query("SELECT c.*,a.name AS tasklist_name,a.acl_read,a.acl_write FROM ta_tasks c INNER JOIN ta_tasklist a ON a.id=c.tasklist_id");
+			while($task = $db->next_record())
+			{
+				try{
+					$path = $ta->build_task_files_path($task, array('name'=>$task['tasklist_name']));
+                    echo $path.$line_break;
+					$up_task['files_folder_id']=$files->check_folder_location($task['files_folder_id'], $path);
+
+					if($up_task['files_folder_id']!=$task['files_folder_id']){
+						$up_task['id']=$task['id'];
+						$ta->update_row('ta_tasks', 'id', $up_task);
+					}
+					$files->set_readonly($up_task['files_folder_id']);
+				}
+				catch(Exception $e){
+					echo $e->getMessage().$line_break;
+				}
+			}
+		}
+		echo 'Done'.$line_break.$line_break;
+	}
+
 	
 	function load_settings($response)
 	{
@@ -356,7 +406,7 @@ class tasks extends db
 			$files = new files();			
 
 			$new_path = $this->build_task_files_path($task,$tasklist);			
-			$folder = $files->resolve_path($new_path,true,0,'1');
+			$folder = $files->resolve_path($new_path,true,1,'1');
 			$task['files_folder_id']=$folder['id'];			
 		}
 

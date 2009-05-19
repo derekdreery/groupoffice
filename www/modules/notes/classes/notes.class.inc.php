@@ -161,6 +161,11 @@ class notes extends db {
 		{
 			$notes->delete_note($note['id']);
 		}
+
+		global $GO_SECURITY;
+		$GO_SECURITY->delete_acl($category['acl_read']);
+		$GO_SECURITY->delete_acl($category['acl_write']);
+
 		return $this->query("DELETE FROM no_categories WHERE id=".$this->escape($category_id));
 	}
 	
