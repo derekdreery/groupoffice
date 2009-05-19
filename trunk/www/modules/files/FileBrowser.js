@@ -1004,12 +1004,17 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	
 		var activeNode = this.treePanel.getNodeById(this.folder_id);
 
+		this.treeLoader.baseParams.refresh_folder_id=this.folder_id;
+
 		this.expandPath=false;
 		if(activeNode)
 		{
 			this.expandPath = activeNode.getPath();
 		}		
 		this.rootNode.reload((function(){
+
+				delete this.treeLoader.baseParams.refresh_folder_id;
+
 				if(this.expandPath)
 					this.treePanel.expandPath(this.expandPath);
 			}).createDelegate(this));
@@ -1231,8 +1236,6 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		
 		this.getActiveGridStore().load({
 			callback:function(){
-
-				
 				var activeNode = this.treePanel.getNodeById(id);
 				if(activeNode)
 				{

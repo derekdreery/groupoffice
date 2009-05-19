@@ -30,6 +30,12 @@ try{
 	{
 		case 'tree':
 
+			if(!empty($_POST['refresh_folder_id']))
+			{
+				$files->sync_folder($_POST['refresh_folder_id']);
+			}
+
+
 			$fs2= new files();	
 						
 			function get_node_children($folder_id, $authenticate=false)
