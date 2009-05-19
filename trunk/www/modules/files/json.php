@@ -522,8 +522,6 @@ try{
 						}
 						$dir = isset($_POST['dir']) ? $_POST['dir'] : 'ASC';
 
-
-
 						require_once($GO_CONFIG->control_path.'phpthumb/phpThumb.config.php');
 
 						$files->get_folders($curfolder['id'],$dsort,$dir,0,0,$authenticate);
@@ -532,16 +530,16 @@ try{
 							if($folder['acl_read']>0)
 							{
 								$folder['thumb_url']=$GO_THEME->image_url.'128x128/filetypes/folder_public.png';
-								$class='folder-shared';
+								//$class='folder-shared';
 							}else
 							{
 								$folder['thumb_url']=$GO_THEME->image_url.'128x128/filetypes/folder.png';
-								$class='filetype-folder';
+								//$class='filetype-folder';
 							}
 
-                            $folder['path']=$path.'/'.$folder['name'];
+              $folder['path']=$path.'/'.$folder['name'];
 							$folder['type_id']='d:'.$folder['id'];
-							$folder['grid_display']='<div class="go-grid-icon '.$class.'">'.$folder['name'].'</div>';
+							//$folder['grid_display']='<div class="go-grid-icon '.$class.'">'.$folder['name'].'</div>';
 							$folder['type']=$lang['files']['folder'];
 							$folder['timestamp']=$folder['ctime'];
 							$folder['mtime']=Date::get_timestamp($folder['ctime']);
@@ -633,7 +631,7 @@ try{
 												$response['data']['type']='<div class="go-grid-icon filetype-folder">'.$lang['files']['folder'].'</div>';
 												$response['data']['size']='-';
 
-												$response['data']['write_permission']=$files->has_write_permission($GO_SECURITY->user_id, $folder);
+												$response['data']['write_permission']=empty($response['data']['readonly']) && $files->has_write_permission($GO_SECURITY->user_id, $folder);
 												$response['data']['is_owner']=$admin || $files->is_owner($folder);
 
 												$usersfolder = $files->resolve_path('users');

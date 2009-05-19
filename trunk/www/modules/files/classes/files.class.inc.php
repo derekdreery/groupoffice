@@ -149,7 +149,7 @@ class files extends db {
 
 			$fs = new filesystem();
 
-			//debug($current_path.' -> '.$path);
+			debug($current_path.' -> '.$path);
 
 			$fs->move($GO_CONFIG->file_storage_path.$current_path, $GO_CONFIG->file_storage_path.$path);
 
