@@ -162,7 +162,7 @@ GO.files.FileBrowser = function(config){
 		root: 'results',
 		totalProperty: 'total',
 		id: 'type_id',
-		fields:['type_id', 'id','name','type', 'size', 'mtime', 'extension', 'timestamp', 'thumb_url','path'],
+		fields:['type_id', 'id','name','type', 'size', 'mtime', 'extension', 'timestamp', 'thumb_url','path','acl_read'],
 		remoteSort:true
 	});
 	
@@ -191,8 +191,8 @@ GO.files.FileBrowser = function(config){
 					header:GO.lang['strName'],
 					dataIndex: 'name',
 					renderer:function(v, meta, r){
-						return '<div class="go-grid-icon filetype filetype-'+r.get('extension')+'">'+v+'</div>';
-					
+						var cls = r.get('acl_read')>0 ? 'folder-shared' : 'filetype filetype-'+r.get('extension');
+						return '<div class="go-grid-icon '+cls+'">'+v+'</div>';
 					},
 					sortable:true
 				},{

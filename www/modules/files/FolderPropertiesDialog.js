@@ -198,7 +198,7 @@ Ext.extend(GO.files.FolderPropertiesDialog, Ext.Window, {
 	{
 		var form = this.formPanel.form;
 		form.findField('name').setDisabled(is_home_dir || !writePermission);
-		form.findField('share').setDisabled(is_home_dir || !is_owner);
+		form.findField('share').setDisabled(is_home_dir || !is_owner || !writePermission);
 		this.readPermissionsTab.setDisabled(!writePermission || this.readPermissionsTab.acl_id==0);
 		this.writePermissionsTab.setDisabled(!writePermission || this.writePermissionsTab.acl_id==0);		
 	},
