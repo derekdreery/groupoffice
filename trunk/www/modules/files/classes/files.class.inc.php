@@ -59,7 +59,7 @@ class files extends db {
 			case 'jpeg';
 			case 'png';
 			case 'gif';
-				return phpThumbURL('src='.$path.'&w=100&h=100&zc=1');
+				return phpThumbURL('src='.$GO_CONFIG->file_storage_path.$path.'&w=100&h=100&zc=1');
 				break;
 
 			case 'pdf':
@@ -1230,7 +1230,7 @@ class files extends db {
 	}
 
 	function delete_file($file) {
-		global $GO_CONFIG;
+		global $GO_CONFIG, $GO_MODULES;
 
 		if(is_numeric($file)) {
 			$file = $this->get_file($file);
@@ -1259,10 +1259,21 @@ class files extends db {
 			}
 		}
 
+		if(isset($GO_MODULES->modules['workflow']))
+		{
+			require_once ($GO_MODULES->modules['workflow']['class_path'].'workflow.class.inc.php');
+			$workflow = new workflow();
+			$workflow2 = new workflow();
+
+			$workflow->get_linked_process_files($file['id'], 6);
+			while($r = $workflow->next_record())
+			{
+				$workflow2->delete_process_file($r['id']);
+			}
+		}
+
 
 		$path = $GO_CONFIG->file_storage_path.$this->build_path($file['folder_id']).'/'.$file['name'];
-
-		//$this->delete_versions($path);
 		return unlink($path);
 	}
 
