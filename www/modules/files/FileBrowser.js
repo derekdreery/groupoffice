@@ -565,7 +565,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		this.emptyListButton.setVisible(this.folder_id=='new' && num_files > 0);
 		
 		this.parentID = store.reader.jsonData.parent_id;
-		if(this.parentID=='users' || this.folder_id==this.rootNode.id)
+		if(this.parentID==0 || !this.treePanel.getNodeById(this.parentID))
 		{		
 			this.upButton.setDisabled(true);			
 		}else
@@ -1222,18 +1222,16 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		//this.filesContextMenu.deleteButton.setDisabled(!writePermission);
 	},
 	
-	setFolderID : function(id, expand, createID)
+	setFolderID : function(id, expand)
 	{
 		this.folder_id = id;
 		
 		//this.gridStore.baseParams['id']=this.thumbsStore.baseParams['id']=id;
 		this.gridStore.baseParams['id']=id;
-		//this.gridStore.baseParams['create_id']=this.thumbsStore.baseParams['create_id']=createID;
-		this.gridStore.baseParams['create_id']=createID;
 		
 		this.getActiveGridStore().load({
 			callback:function(){
-				delete this.gridStore.baseParams['create_id'];
+
 				
 				var activeNode = this.treePanel.getNodeById(id);
 				if(activeNode)
@@ -1243,14 +1241,6 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 					path = activeNode.getPath('text');
 					path = path.substring(2);
 					this.locationTextField.setValue(path);	
-				}
-				
-				if(createID)
-				{
-					if(!activeNode)
-					{
-						this.refresh();
-					}										
 				}
 
 				if(expand)
