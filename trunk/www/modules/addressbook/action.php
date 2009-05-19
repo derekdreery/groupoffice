@@ -287,12 +287,12 @@ try
 						throw new Exception($lang['common']['addressbookAlreadyExists']);
 					}
 					
-					$addresbook['id']=$addressbook_id;
+					$addressbook['id']=$addressbook_id;
 					
 					if(isset($_REQUEST['user_id']))
-						$addresbook['user_id']=$user_id;
+						$addressbook['user_id']=$user_id;
 						
-					$addresbook['name']=$name;
+					$addressbook['name']=$name;
 					$ab->update_addressbook($addressbook);					
 				}
 			}
