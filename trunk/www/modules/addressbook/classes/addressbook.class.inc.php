@@ -1047,9 +1047,6 @@ class addressbook extends db {
 
         $sql = "DELETE FROM ab_addressbooks WHERE id='".$this->escape($addressbook_id)."'";
         $this->query($sql);
-
-
-
     }
 
     function search_email($user_id, $query)
