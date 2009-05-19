@@ -166,6 +166,7 @@ try{
 			{
 				$update_event_id=$_POST['update_event_id'];
 				$old_event = $cal->get_event($update_event_id);
+				$calendar = $cal->get_calendar($old_event['calendar_id']);
 				
 				//an event is moved or resized
 				if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id,$old_event['acl_write']))
@@ -264,7 +265,7 @@ try{
 					}
 					
 					$update_event['id']=$update_event_id;
-					$cal->update_event($update_event);
+					$cal->update_event($update_event, $calendar, $old_event);
 
 					//move the exceptions if a recurrent event is moved
 					if(!empty($old_event['rrule']) && isset($offset))
