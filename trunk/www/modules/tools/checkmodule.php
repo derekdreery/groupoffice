@@ -11,7 +11,7 @@ chdir(dirname(__FILE__));
 
 require_once("../../Group-Office.php");
 
-require($GO_MODULES->modules[$argv[1]]['class_path'].$argv[1].'.class.inc.php');
+require_once($GO_MODULES->modules[$argv[1]]['class_path'].$argv[1].'.class.inc.php');
 
 $cls = new $argv[1];
 
