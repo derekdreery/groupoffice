@@ -50,7 +50,7 @@ class tasks extends db
 				}
 			}
 
-			$db->query("SELECT c.*,a.name AS tasklist_name,a.acl_read,a.acl_write FROM ta_tasks c INNER JOIN ta_tasklist a ON a.id=c.tasklist_id");
+			$db->query("SELECT c.*,a.name AS tasklist_name,a.acl_read,a.acl_write FROM ta_tasks c INNER JOIN ta_lists a ON a.id=c.tasklist_id");
 			while($task = $db->next_record())
 			{
 				try{
