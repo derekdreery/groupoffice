@@ -71,9 +71,10 @@ CREATE TABLE `fs_folders` (
 
 DROP TABLE IF EXISTS `fs_notifications`;
 CREATE TABLE IF NOT EXISTS `fs_notifications` (
+  `folder_id` int(11) NOT NULL,
   `path` varchar(255) NOT NULL default '',
   `user_id` int(11) NOT NULL,
-  PRIMARY KEY  (`path`,`user_id`)
+  PRIMARY KEY  (`folder_id`,`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
