@@ -379,7 +379,6 @@ GO.email.EmailComposer = function(config) {
 			closeAction : 'hide',
 			items : [new Ext.Panel({
 				region:'center',
-				layout:'fit',
 				autoScroll : true,
 				items : [this.templatesList],
 				cls : 'go-form-panel'
