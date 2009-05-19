@@ -185,7 +185,7 @@ class files extends db {
 		$fs = new filesystem();
 		$fs->mkdir_recursive($full_path);
 
-		$folder = $this->resolve_path($path,true,1);
+		$folder = $this->resolve_path($path,true,1,'1');
 
 		if($folder['acl_read']!=$acl_read || $folder['acl_write']!=$acl_write || $folder['readonly']!='1') {
 			$up_folder['id']=$folder['id'];
@@ -1108,9 +1108,9 @@ class files extends db {
 
 
 		if($parent==0) {
-			if(!$GO_SECURITY->has_admin_permission($user_id)) {
+			/*if(!$GO_SECURITY->has_admin_permission($user_id)) {
 				throw new AccessDeniedException();
-			}
+			}*/
 		}else {
 			if(is_numeric($parent)) {
 				$parent = $this->get_folder($parent);
@@ -1118,9 +1118,9 @@ class files extends db {
 			if(!$parent) {
 				throw new FileNotFoundException();
 			}
-			if(!$this->has_write_permission($user_id, $parent)) {
+			/*if(!$this->has_write_permission($user_id, $parent)) {
 				throw new AccessDeniedException();
-			}
+			}*/
 		}
 
 
