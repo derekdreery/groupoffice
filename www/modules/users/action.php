@@ -81,7 +81,7 @@ try
 				throw new Exception('Could not open uploaded file');
 			}
 
-			$record = fgetcsv($fp, 4096, ',', '"');
+			$record = fgetcsv($fp, 4096, $_SESSION['GO_SESSION']['list_separator'], $_SESSION['GO_SESSION']['text_separator']);
 			for($i=0;$i<count($cols);$i++)
 			{
 				if(empty($record[$i]) || $record[$i]!=$cols[$i])
@@ -104,7 +104,7 @@ try
 
 			$success_count = 0;
 
-			while($record = fgetcsv($fp, 4096, ',', '"'))
+			while($record = fgetcsv($fp, 4096, $_SESSION['GO_SESSION']['list_separator'], $_SESSION['GO_SESSION']['text_separator']))
 			{
 				$user = array();
 
