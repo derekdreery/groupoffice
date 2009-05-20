@@ -341,7 +341,7 @@ try
 			while($record = $ab->next_record())
 			{
 				addressbook::format_company_record($record);
-				$response['results'][] = $ab->record;
+				$response['results'][] = $record;
 			}
 			
 			$response['total'] = $ab->found_rows();
