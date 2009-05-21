@@ -193,8 +193,10 @@ class notes extends db {
 			$files = new files();			
 
 			$new_path = $this->build_note_files_path($note, $category);			
-			$folder = $files->resolve_path($new_path,true,0,'1');
-			$note['files_folder_id']=$folder['id'];			
+			if($folder=$files->create_unique_folder($new_path))
+			{
+				$note['files_folder_id']=$folder['id'];
+			}
 		}
 		
 		$note['id']=$this->nextid('no_notes');

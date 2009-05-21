@@ -320,9 +320,8 @@ class addressbook extends db {
             $files = new files();
 
             $new_path = $this->build_company_files_path($company, $addressbook);
-            if($new_path)
+            if($folder=$files->create_unique_folder($new_path))
             {
-                $folder = $files->resolve_path($new_path,true,1,'1');
                 $company['files_folder_id']=$folder['id'];
             }
         }
@@ -516,10 +515,9 @@ class addressbook extends db {
             $files = new files();
 
             $new_path = $this->build_contact_files_path($contact, $addressbook);
-            if($new_path)
+            if($folder=$files->create_unique_folder($new_path))
             {
-                $folder = $files->resolve_path($new_path,true,1,'1');
-                $contact['files_folder_id']=$folder['id'];
+							$contact['files_folder_id']=$folder['id'];
             }
         }
 
