@@ -634,6 +634,8 @@ try{
 												$response['data']['is_home_dir']=$folder['parent_id']==$usersfolder['id'];
 												$response['data']['notify']=$files->is_notified($folder['id'], $GO_SECURITY->user_id);
 
+												$params['response']=&$response;
+												$GO_EVENTS->fire_event('load_folder_properties', $params);
 												break;
 
 

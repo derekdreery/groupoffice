@@ -176,6 +176,8 @@ try{
 				
 			$files->update_folder($up_folder);
 
+			$GO_EVENTS->fire_event('save_folder_properties', array(&$response,$up_folder));
+
 			$response['success']=true;
 
 			break;
@@ -265,18 +267,30 @@ try{
 						$new[]=$filename;
 					}
                     
-                    if($existing_file)
-                    {
-                        $version_filepath = $files->get_versions_dir($existing_file['id']).'/'.date('YmdGi',filectime($new_path)).'_'.$_SESSION['GO_SESSION']['username'].'_'.$filename;
-                        $fs->move($new_path, $version_filepath);
-                    }
+					if($existing_file)
+					{
+							$version_filepath = $files->get_versions_dir($existing_file['id']).'/'.date('YmdGi',filectime($new_path)).'_'.$_SESSION['GO_SESSION']['username'].'_'.$filename;
+							$fs->move($new_path, $version_filepath);
+					}
 
 					if(!$fs->move($tmp_file, $new_path))
 					{
 						throw new Exception($lang['common']['saveError']);
 					}
 
-					$files->import_file($new_path, $folder['id']);
+					$file_id = $files->import_file($new_path, $folder['id']);
+
+					if(!$existing_file && $GO_MODULES->has_module('workflow'))
+					{
+						require_once($GO_MODULES->modules['workflow']['class_path'].'workflow.class.inc.php');
+						$wf = new workflow();
+
+						$wf_folder = $wf->get_folder($folder['id']);
+						if(!empty($wf_folder['default_process_id']))
+						{
+							$wf->enable_workflow_process($file_id, $wf_folder['default_process_id']);
+						}
+					}
                     
 					//$quota->add($size);
 

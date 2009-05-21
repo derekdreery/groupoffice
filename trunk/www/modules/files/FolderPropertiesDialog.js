@@ -114,6 +114,12 @@
 		  hideLabel:true,
 			items:[this.propertiesPanel, this.commentsPanel, this.readPermissionsTab, this.writePermissionsTab]		
 		});
+
+	if(GO.workflow)
+	{
+		this.workflowPanel = new GO.workflow.FolderPropertiesPanel();
+		this.tabPanel.insert(2,this.workflowPanel);
+	}
 		
 	this.formPanel = new Ext.form.FormPanel(
 	{
@@ -125,7 +131,7 @@
 	GO.files.FolderPropertiesDialog.superclass.constructor.call(this,{
 		title:GO.lang['strProperties'],
 		layout:'fit',
-		width:440,
+		width:500,
 		height:400,
 		closeAction:'hide',
 		items:this.formPanel,
