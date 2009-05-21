@@ -47,6 +47,11 @@ if(!empty($_REQUEST['id']))
 }
 $public = substr($path,0,6)=='public';
 
+if($public && !$file)
+{
+	$file=array('name'=>utf8_basename($path));
+}
+
 $path = $GO_CONFIG->file_storage_path.$path;
 
 $mode = isset($_REQUEST['mode'])  ? $_REQUEST['mode'] : 'download';
