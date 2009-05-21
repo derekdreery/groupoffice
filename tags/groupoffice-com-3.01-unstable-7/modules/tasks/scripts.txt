@@ -1,0 +1,9 @@
+modules/tasks/TaskPanel.js
+modules/tasks/ScheduleCallDialog.js
+modules/tasks/TasklistDialog.js
+modules/tasks/TaskDialog.js
+modules/tasks/TasksGrid.js
+modules/tasks/SelectTasklist.js
+modules/tasks/MainPanel.js
+modules/tasks/Portlet.js
+modules/tasks/Settings.js
