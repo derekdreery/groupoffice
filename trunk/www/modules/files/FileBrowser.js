@@ -374,7 +374,9 @@ GO.files.FileBrowser = function(config){
 					cls: 'x-btn-text-icon',
 					hidden:true,
 					handler: function(){
-						this.emptyList();
+						this.gridStore.baseParams.empty_new_files=true;
+						this.gridStore.load();
+						delete this.gridStore.baseParams.empty_new_files;
 					},
 					scope: this
 				});
@@ -523,27 +525,6 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		
 	fileClickHandler : false,
 	scope : this,
-	
-	emptyList : function()
-	{
-		Ext.Ajax.request({
-			url: GO.settings.modules.files.url+'action.php',
-			params: {
-				task: 'emptyList'
-			},
-			callback: function(options, success, response)
-			{
-				if(!success)
-				{
-					Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
-				} else 
-				{
-					this.refresh();
-				}
-			},
-			scope: this
-		})
-	},
 	pasteSelections : Array(),
 	/*
 	 * cut or copy
@@ -559,7 +540,8 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		{
 			var num_files = store.reader.jsonData.num_files;
 			var activeNode = this.treePanel.getNodeById('new');
-			activeNode.setText(GO.files.lang.newFiles + " (" + num_files + ")");	
+			if(activeNode)
+				activeNode.setText(GO.files.lang.newFiles + " (" + num_files + ")");
 		}
 		
 		this.emptyListButton.setVisible(this.folder_id=='new' && num_files > 0);
