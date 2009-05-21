@@ -141,31 +141,69 @@ class files extends db {
 		$new_folder_id=$folder_id;
 
 		$current_path = $this->build_path($folder_id);
+
+		//strip the (n) part at the end of the path that is added when a duplicate
+		//is found.		
+		$check_current_path=preg_replace('/ \([0-9]+\)$/', '', $current_path);
+
+
 		if(!$current_path) {
 			$new_folder = $this->resolve_path($path,true,1,'1');
 			return $new_folder['id'];
-		}elseif($current_path != $path) {
+		}elseif($check_current_path != $path) {
 			global $GO_CONFIG;
 
 			$fs = new filesystem();
 
-			debug($current_path.' -> '.$path);
+			
 
-			$fs->move($GO_CONFIG->file_storage_path.$current_path, $GO_CONFIG->file_storage_path.$path);
-
-			$destfolder = $this->resolve_path(dirname($path),true);
-			$sourcefolder = $this->get_folder($folder_id);
-			$new_folder_id = $this->move_folder($sourcefolder, $destfolder);
-
-			$new_folder_name = utf8_basename($path);
-			if($new_folder_name!=$sourcefolder['name']) {
-				$up_folder['id']=$new_folder_id;
-				$up_folder['name']=$new_folder_name;
-				$up_folder['readonly']='1';
-				$this->update_folder($up_folder);
+			$destfolder_path = dirname($path);
+			$destfolder = $this->resolve_path($destfolder_path,true);
+			$base = $folder_name = utf8_basename($path);
+			$count=1;
+			while($existing_folder = $this->folder_exists($destfolder['id'], $folder_name))
+			{
+				$folder_name = $base.' ('.$count.')';
+				$count++;
 			}
+
+			debug($current_path.' -> '.$destfolder_path.'/'.$folder_name);
+
+			if(is_dir($GO_CONFIG->file_storage_path.$current_path))
+			{
+				$fs->move($GO_CONFIG->file_storage_path.$current_path, $GO_CONFIG->file_storage_path.$destfolder_path.'/'.$folder_name);
+			}else
+			{
+				$fs->mkdir_recursive($GO_CONFIG->file_storage_path.$destfolder_path.'/'.$folder_name);
+			}
+			
+			$sourcefolder = $this->get_folder($folder_id);
+
+			$up_folder['id']=$new_folder_id;
+			$up_folder['parent_id']=$destfolder['id'];
+			$up_folder['name']=$folder_name;
+			$up_folder['readonly']='1';
+			$this->update_folder($up_folder);
 		}
 		return $new_folder_id;
+	}
+
+	function create_unique_folder($new_path){
+		if(empty($new_path))
+		{
+			return false;
+		}
+		$parent = dirname($new_path);
+		$base = $folder_name = utf8_basename($new_path);
+		$parent_folder = $this->resolve_path($parent,true,1,'1');
+
+		$count=1;
+		while($existing_folder = $this->folder_exists($parent_folder['id'], $folder_name))
+		{
+			$folder_name = $base.' ('.$count.')';
+			$count++;
+		}
+		return $this->mkdir($parent_folder, $folder_name, false,1,true,'1');
 	}
 
 	function set_readonly($folder_id) {
@@ -702,6 +740,7 @@ class files extends db {
 				$this->import_folder($fsfolder['path'], $folder_id);
 			}
 		}
+
 		foreach($dbfolders as $dbfolder)
 		{
 			if(!is_dir($full_path.'/'.$dbfolder['name']))
@@ -1096,6 +1135,8 @@ class files extends db {
 			return false;
 		}
 	}
+
+	
 
 
 	function mkdir($parent, $name, $share_user_id=0, $user_id=0, $ignore_existing_filesystem_folder=false, $readonly='0') {

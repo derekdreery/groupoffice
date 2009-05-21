@@ -406,8 +406,10 @@ class tasks extends db
 			$files = new files();			
 
 			$new_path = $this->build_task_files_path($task,$tasklist);			
-			$folder = $files->resolve_path($new_path,true,1,'1');
-			$task['files_folder_id']=$folder['id'];			
+			if($folder=$files->create_unique_folder($new_path))
+			{
+				$task['files_folder_id']=$folder['id'];
+			}
 		}
 
 		$task['id'] = $this->nextid("ta_tasks");		
