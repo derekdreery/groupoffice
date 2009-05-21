@@ -72,7 +72,19 @@ while($file = array_shift($_FILES))
 					unlink($part);
 				}				
 				
-				$files->import_file($filepath);
+				$file_id = $files->import_file($filepath, $folder['id']);
+
+				if($GO_MODULES->has_module('workflow'))
+				{
+					require_once($GO_MODULES->modules['workflow']['class_path'].'workflow.class.inc.php');
+					$wf = new workflow();
+
+					$wf_folder = $wf->get_folder($folder['id']);
+					if(!empty($wf_folder['default_process_id']))
+					{
+						$wf->enable_workflow_process($file_id, $wf_folder['default_process_id']);
+					}
+				}
 				
 				$_SESSION['GO_SESSION']['files']['jupload_new_files'][]=$relpath;
 				fclose($fp);
@@ -106,7 +118,19 @@ while($file = array_shift($_FILES))
 			$relpath = $files->strip_server_path($filepath);
 			
 			$_SESSION['GO_SESSION']['files']['jupload_new_files'][]=$relpath;
-			$files->import_file($filepath);
+			$file_id = $files->import_file($filepath, $folder['id']);
+
+			if($GO_MODULES->has_module('workflow'))
+			{
+				require_once($GO_MODULES->modules['workflow']['class_path'].'workflow.class.inc.php');
+				$wf = new workflow();
+
+				$wf_folder = $wf->get_folder($folder['id']);
+				if(!empty($wf_folder['default_process_id']))
+				{
+					$wf->enable_workflow_process($file_id, $wf_folder['default_process_id']);
+				}
+			}
 		}	
 	}
 	$count++;
