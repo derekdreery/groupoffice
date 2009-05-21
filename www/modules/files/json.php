@@ -30,7 +30,8 @@ try{
 	{
 		case 'tree':
 
-			if(!empty($_POST['refresh_folder_id']))
+
+			if(!empty($_POST['refresh_folder_id']) && is_numeric($_POST['refresh_folder_id']))
 			{
 				$files->sync_folder($_POST['refresh_folder_id']);
 			}
@@ -253,11 +254,15 @@ try{
 
 				case 'grid':
 
-                    if(empty($_POST['id']))
-                    {
-                        throw new Exception('No location given');
-                    }
+					if(empty($_POST['id']))
+					{
+							throw new Exception('No location given');
+					}
 
+					if(!empty($_POST['empty_new_files']))
+					{
+						$files->delete_all_new_filelinks($GO_SECURITY->user_id);
+					}
 
 					$response['results']=array();
 						
