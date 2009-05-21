@@ -43,6 +43,7 @@ javascript/form/ComboBoxMulti.js
 javascript/form/UploadFile.js
 javascript/form/PlainField.js
 javascript/form/SelectUser.js
+javascript/form/SelectGroup.js
 javascript/form/SelectCountry.js
 javascript/form/FileUploadField.js
 
