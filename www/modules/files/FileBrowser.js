@@ -1402,7 +1402,7 @@ GO.files.openFile = function(record, store)
 			if(GO.mailings)
 			{
 				GO.linkHandlers[9].call(this, 0, {
-						id: record.data.id
+						path: record.data.path
 					});
 				break;
 			}
