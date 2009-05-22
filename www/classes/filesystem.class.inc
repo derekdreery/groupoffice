@@ -233,21 +233,19 @@ class filesystem extends db
 				{
 					return move_uploaded_file($source_path, $destination_path);
 				}	else
-				{			
-					return rename($source_path, $destination_path);
+				{				
+					//rename fails when moving accross partitions
+					if(isset($_SESSION['GO_SESSION']['username']) && strstr($source_path, $GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/') &&
+					strstr($destination_path, $GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/')
+					)
+					{
+						return rename($source_path, $destination_path);
+					}else
+					{
+						$this->copy($source_path, $destination_path);
+						return $this->delete($source_path);
+					}
 				}
-				/*
-				//rename fails when moving accross partitions
-				if(isset($_SESSION['GO_SESSION']['username']) && strstr($source_path, $GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/') &&
-				strstr($destination_path, $GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/')
-				)
-				{
-					return rename($source_path, $destination_path);
-				}else
-				{
-					$this->copy($source_path, $destination_path);
-					return $this->delete($source_path);				
-				}*/
 			}
 		}
 	}
