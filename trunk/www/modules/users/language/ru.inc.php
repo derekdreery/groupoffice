@@ -10,7 +10,7 @@ require($GO_LANGUAGE->get_fallback_language_file('users'));
 $lang['users']['name'] = 'Пользователи';
 $lang['users']['description'] = 'Модуль администрирования; Управление системными пользователями.';
 
-$lang['users']['deletePrimaryAdmin'] = 'Вы не можете удалить певичного администратора';
+$lang['users']['deletePrimaryAdmin'] = 'Вы не можете удалить главного администратора';
 $lang['users']['deleteYourself'] = 'Вы не можете удалить самого себя';
 
 $lang['link_type'][8]=$us_user = 'Пользователь';
