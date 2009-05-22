@@ -456,6 +456,14 @@ class GO_CONFIG
 	var $smtp_password = '';
 
 	/**
+	 * Leave blank or set to tls or ssl
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $smtp_encryption = '';
+
+	/**
 	 * A comma separated list of smtp server IP addresses that you
 	 * want to restrict.
 	 *

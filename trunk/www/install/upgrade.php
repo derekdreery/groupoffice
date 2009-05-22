@@ -12,10 +12,12 @@ chdir(dirname(__FILE__));
 require_once('../Group-Office.php');
 ini_set('max_execution_time', '3600');
 
-//login event can cause problems
-SetCookie("GO_UN","",time()-3600,"/","",!empty($_SERVER['HTTPS']),false);
-SetCookie("GO_PW","",time()-3600,"/","",!empty($_SERVER['HTTPS']),false);
-
+if(!defined('NOTINSTALLED'))
+{
+	//login event can cause problems
+	SetCookie("GO_UN","",time()-3600,"/","",!empty($_SERVER['HTTPS']),false);
+	SetCookie("GO_PW","",time()-3600,"/","",!empty($_SERVER['HTTPS']),false);
+}
 
 if(!$quiet)
 echo 'Updating Group-Office database: '.$GO_CONFIG->db_name.$line_break;
