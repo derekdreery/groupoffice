@@ -10,6 +10,8 @@ require($GO_LANGUAGE->get_fallback_language_file('files'));
 $lang['files']['name'] = 'Файлы';
 $lang['files']['description'] = 'Модуль Фалы; Модуль для совместного использования файлов.';
 
+$lang['link_type'][6]='Файл';
+
 $lang['files']['fileNotFound'] = 'Файл не найден';
 $lang['files']['folderExists'] = 'Папка уже существует';
 $lang['files']['filenameExists'] = 'Имя файла уже существует';

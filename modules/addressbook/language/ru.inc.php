@@ -45,4 +45,7 @@ $lang['addressbook']['prospects'] = 'Предварительно';
 $lang['addressbook']['contacts'] = 'Контакты';
 $lang['addressbook']['companies'] = 'Компании';
 
+$lang['addressbook']['newContactAdded']='Добавлен новый контакт';
+$lang['addressbook']['newContactFromSite']='Добавлен новый контакт через WEB-форму.';
+$lang['addressbook']['clickHereToView']='Нажмите здесь для просмотра контакта';
 ?>

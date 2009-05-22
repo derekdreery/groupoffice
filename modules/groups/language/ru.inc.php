@@ -8,8 +8,9 @@
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_language_file('files'));
 $lang['groups']['name'] = 'Группы';
-$lang['groups']['description'] = 'Модуль администрирования; Управления группами пользователей.';
+$lang['groups']['description'] = 'Модуль администрирования; Управление группами пользователей.';
 $lang['groups']['noDeleteAdmins'] = 'Вы не можете удалить группу Администраторы';
 $lang['groups']['noDeleteEveryone'] = 'Вы не можете удалить группу Все';
 $lang['groups']['groupNameAlreadyExists'] = 'Группа с таким именем уже существует';
+$lang['groups']['dontRemoveAdmin']='Вы не можете удалить основного Администратора из группы Администраторы';
 ?>

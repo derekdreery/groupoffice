@@ -10,7 +10,10 @@ require($GO_LANGUAGE->get_fallback_base_language_file('common'));
 
 $lang['common']['htmldirection']= 'ltr';
 
-$lang['common']['errorsInForm'] = 'Невено заполнена форма. Исправьте ошибки и попробуйте еще раз.';
+$lang['common']['quotaExceeded']='Закончилось место на диске. Пожалуйста удалите какие-нибуть файлы или попростите Вашего провайдера увеличить объем дискового пространства.';
+$lang['common']['errorsInForm'] = 'Неверно заполнена форма. Исправьте ошибки и попробуйте еще раз.';
+
+$lang['common']['moduleRequired']='Для этой функции требуется модуль %s';
 
 $lang['common']['loadingCore']= 'Загрузка основной системы';
 $lang['common']['loadingLogin'] = 'Загрузка диалога входа в систему';
@@ -30,8 +33,12 @@ $lang['common']['passwordMatchError']='Пароли не совпадают';
 $lang['common']['accessDenied']='Доступ запрещен';
 $lang['common']['saveError']='Ошибка во время сохранения данных';
 $lang['common']['deleteError']='Ошибка во время удаления данных';
-$lang['common']['selectError']='Ошибка во время чтенияданных';
+$lang['common']['selectError']='Ошибка во время чтения данных';
 $lang['common']['missingField'] = 'Вы не заполнили все необходимые поля.';
+$lang['common']['invalidEmailError']='Не верный e-mail адрес';
+$lang['common']['noFileUploaded']='Файл не принят';
+$lang['common']['error']='Ошибка';
+
 
 $lang['common']['salutation']='приветствие';
 $lang['common']['firstName'] = 'Имя';
@@ -70,7 +77,7 @@ $lang['common']['phone'] = 'Тел.';
 $lang['common']['workphone'] = 'Тел. (рабочий)';
 $lang['common']['cellular'] = 'Тел. моб.';
 $lang['common']['company'] = 'Компания';
-$lang['common']['department'] = 'ПОдразделение';
+$lang['common']['department'] = 'Подразделение';
 $lang['common']['function'] = 'Должность';
 $lang['common']['question'] = 'Секретный вопрос';
 $lang['common']['answer'] = 'Ответ';
@@ -124,9 +131,9 @@ $lang['common']['default']='По умолчанию';
 $lang['common']['description']='Описание';
 $lang['common']['date']='Дата';
 
-$lang['common']['default_salutation']['M']='Дорогой';
-$lang['common']['default_salutation']['F']='Дорогая';
-
+$lang['common']['default_salutation']['M']='Уважаемый';
+$lang['common']['default_salutation']['F']='Уважаемая';
+$lang['common']['default_salutation']['unknown']='Уважаемый/Уважаемая';
 
 $lang['common']['mins'] = 'Мин.';
 $lang['common']['hour'] = 'час';

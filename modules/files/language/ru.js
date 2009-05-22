@@ -31,3 +31,10 @@ GO.files.lang.comments = 'Коментарии';
 GO.files.lang.downloadGOTA = 'Разместить на сервере с помощью GOTA';
 GO.files.lang.fileBrowser = 'Просмотр файлов';
 GO.files.lang.thumbnails = 'Предпросмотр';
+GO.files.lang.saveFile='Сохранить файл';
+GO.files.lang.confirmOverwrite='{filename} уже существует, хотите перезаписать этот файл?';
+GO.files.lang.file='Файл';
+GO.files.lang.emptyList='Постой список';
+GO.files.lang.newFiles='Новый';
+
+GO.files.lang.olderVersions='Старые версии';

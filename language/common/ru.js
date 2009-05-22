@@ -18,6 +18,14 @@
 */
 
 
+GO.lang.pleaseApplyFirst='Пожалуйста сохраните изменения нажав \'Применить\'';
+GO.lang.passwordMatchError='Пароли не совпадают';
+GO.lang.serverError='На WEB-сервере возникла ошибка. Сообщите об этом системному администратору и предоставьте ему подробное описание ошибки.';
+GO.lang.errorDetails='Подробное описание:';
+GO.lang.contactSupportDesk='Позвоните в службу поддержки';
+
+GO.lang.disabled='Отключено';
+GO.lang.changesWillBeLost='Вы сделали изменения. Нажмите Отмена и сохраните свои изменения или Ок для удаления изменений.';
 GO.lang.strCommunityForum='Форум поддержки:';
 GO.lang.moduleRequired='Необходимо наличие модуля: \'{module}\'. Данный модуль недоступен.';
 
@@ -32,7 +40,7 @@ GO.lang.smallUpload='Маленькие файлы';
 
 
 GO.lang.lostPassword='Забыли пароль?';
-GO.lang.lostPasswordText='Чтобы восстановить Ваш пароль у Вас должна быть возможность читать Ваши электронные письма без доступа Group-Office. Если вы введете Ваш e-mail адрес новый пароль будет выслан Вам на Ваш e-mail.<br /><br />Введите Ваш e-mail:';
+GO.lang.lostPasswordText='Чтобы восстановить Ваш пароль у Вас должна быть возможность читать Ваши электронные письма без доступа к Group-Office. Если вы введете Ваш e-mail адрес новый пароль будет выслан Вам на Ваш e-mail.<br /><br />Введите Ваш e-mail:';
 
 GO.lang.noJava='Java Webstart не установлен. Java позволяет Вам проще редактировать и загружать файлы. Посетите сайт <a class="normal-link" href="http://www.java.com/download" target="_blank">http://www.java.com/download</a> и установите ее.';
 
@@ -100,6 +108,7 @@ GO.lang.strPostZip = 'Почтовый индекс (почтовый адрес
 GO.lang.locations = 'Места';
 GO.lang.folder = 'Папка';
 GO.lang.folders = 'Папки';
+GO.lang.newFolder='Создать папку';
 
 GO.lang.up = 'Вверх';
 GO.lang.fileExists = 'Файл уже существует.';
@@ -127,6 +136,7 @@ GO.lang.cmdAdd = 'Добавить';
 GO.lang.cmdAddPlusNew = 'Добавить + новый';
 GO.lang.cmdSavePlusNew='Сохранить + новый';
 GO.lang.cmdSave = 'Сохранить';
+GO.lang.cmdSaveAs = 'Сохранить как'; 
 GO.lang.cmdEdit = 'Редактировать';
 GO.lang.cmdLink = 'Ccылкa';
 GO.lang.cmdUnlink = 'Убрать связь';
@@ -251,6 +261,7 @@ GO.lang.strAvailability='Доступность';
 GO.lang.strView='Просмотр';
 
 GO.lang.field = 'Поле';
+GO.lang.value = 'Значение';
 
 GO.lang.customer = 'Клиент';
 
@@ -267,6 +278,7 @@ GO.lang.remindPassword='Запомнить меня на этом компьют
 
 GO.lang.reminders = 'Напоминания';
 GO.lang.dismiss='Отклонить';
+GO.lang.selectAll='Выбрать все';
 GO.lang.snooze='Отложить';
 
 GO.lang.strMax = 'Максимум';
@@ -276,8 +288,15 @@ GO.lang.settings='Настройки';
 GO.lang.latestLinks='Ссылки'
 GO.lang.cmdBrowseLinks = 'Ссылки';
 
+GO.lang.today='Сегодня';
 
+GO.lang.displayingItemsShort='Итого: {2}';
 
+GO.lang.image='Изображение';
+GO.lang.insertImage='Вставить изображение в текст';
+
+GO.lang.item='пункт';
+GO.lang.items='пунктов';
 
 GO.lang.countries={};
 GO.lang.countries["AF"] = "Афганистан";
@@ -510,3 +529,6 @@ GO.lang.countries["ZR"] = "Заир";
 GO.lang.countries["ZM"] = "Замбия";
 GO.lang.countries["ZW"] = "Зимбабве";
 GO.lang.countries["SA"] = "Саудовская Аравия";
+
+GO.lang.on ='Вкл';
+GO.lang.off ='Выкл';
