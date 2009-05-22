@@ -77,6 +77,11 @@ GO.ExportQueryDialog = Ext.extend(Ext.Window, {
 							name : 'type',
 							inputValue : 'PDF'
 						}]
+			},{
+				xtype:'checkbox',
+				name:'export_hidden',
+				hideLabel:true,
+				boxLabel:GO.lang.exportHiddenColumns
 			}],
 
 	show : function(config) {
@@ -92,10 +97,12 @@ GO.ExportQueryDialog = Ext.extend(Ext.Window, {
 	beforeRequest : function() {
 		var columns = [];
 
+		var exportHidden = this.formPanel.form.findField('export_hidden').getValue();
+
 		if (this.colModel) {
 			for (var i = 0; i < this.colModel.getColumnCount(); i++) {
 				var c = this.colModel.config[i];
-				if (!c.hidden)
+				if (exportHidden || !c.hidden)
 					columns.push(c.dataIndex + ':' + c.header);
 			}
 		}
