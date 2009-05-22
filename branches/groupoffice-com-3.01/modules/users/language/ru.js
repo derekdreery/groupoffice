@@ -14,12 +14,12 @@
  * Copy everything below for translations
  */
 
-GO.users.lang.cmdCheckColumnRead= 'Читать';
+GO.users.lang.cmdCheckColumnRead= 'Пользоваться';
 GO.users.lang.cmdCheckColumnWrite= 'Изменять';
 GO.users.lang.cmdHeaderColumnName= 'Имя модуля';
 GO.users.lang.cmdHeaderGridUserHasAccess = 'Пользователь имеет доступ к';
 GO.users.lang.userIsMemberOf = 'Пользователь входит в';
-GO.users.lang.userVisibleTo = 'Пользователь виден';
+GO.users.lang.userVisibleTo = 'Пользователь виден в';
 
 GO.users.lang.cmdPanelPersonal = 'Личное';
 GO.users.lang.cmdPanelPassword= 'Пароль';
@@ -94,3 +94,11 @@ GO.users.lang.muteSound='Выключить звук';
 GO.users.lang.downloadSampleCSV='Загрузить пример CSV файла';
 
 GO.users.lang.importText='Вы можете импортировать пользователей используя CSV файл. Чтобы узнать как должен быть сформатирован CSV файл, загрузите файл с примером.<br />Первая строка должна содержать имена колонок. Необходимо наличие следующих полей для каждого ползователя:<br /><br />username, password, first_name, last_name, email';
+
+GO.users.lang.useModule= 'Использовать';
+GO.users.lang.manageModule= 'Управлять';
+
+GO.users.lang.numberFormat ='Формат чимел';
+GO.users.lang.importExport ='Импорт / Экспорт';
+GO.users.lang.listSeparator='Раздельтель в списках';
+GO.users.lang.textSeparator='Разделитель в тексте';

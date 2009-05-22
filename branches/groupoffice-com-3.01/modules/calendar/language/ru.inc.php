@@ -8,9 +8,9 @@
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_language_file('calendar'));
 $lang['calendar']['name'] = 'Календарь';
-$lang['calendar']['description'] = 'Модуль Календарь; Каждый пользователь может добавить, редактировать или удалить дела. Можно просматривать дела других пользователей, и в случае необходимости можно их изменять.';
+$lang['calendar']['description'] = 'Модуль Календарь; Каждый пользователь может добавить, редактировать или удалить события. Можно просматривать события других пользователей, и в случае необходимости можно их изменять.';
 
-$lang['link_type'][1]='Дело';
+$lang['link_type'][1]='Встреча';
 
 $lang['calendar']['groupView'] = 'Просмотр для группы';
 $lang['calendar']['event']='Событие';
@@ -57,9 +57,9 @@ $lang['calendar']['and']='и';
 $lang['calendar']['repeats'] = 'Повторять каждый %s';
 $lang['calendar']['repeats_at'] = 'Повторять каждый %s в %s';//eg. Repeats every month at the first monday
 $lang['calendar']['repeats_at_not_every'] = 'Повторять каждый %s %s в %s';//eg. Repeats every 2 weeks at monday
-$lang['calendar']['until']='until'; 
+$lang['calendar']['until']='пока'; 
 
-$lang['calendar']['not_invited']='Вы не приглашены на это событие. Возможно Вам необходимо подклюиться под другим пользователем.';
+$lang['calendar']['not_invited']='Вы не приглашены на это событие. Возможно Вам необходимо войти в систему под другим пользователем.';
 
 
 $lang['calendar']['accept_title']='Принято';
@@ -73,3 +73,13 @@ $lang['calendar']['cumulative']='Неверно задано правило по
 $lang['calendar']['already_accepted']='Вы уже приняли приглашение на это событие.';
 
 $lang['calendar']['private']='Личное';
+
+$lang['calendar']['import_success']='%s событий импортировано';
+
+$lang['calendar']['printTimeFormat']='От %s до %s';
+$lang['calendar']['printLocationFormat']=' в "%s"';
+$lang['calendar']['printPage']='Стр. %s из %s';
+$lang['calendar']['printList']='Список событий';
+
+$lang['calendar']['printAllDaySingle']='Весь день';
+$lang['calendar']['printAllDayMultiple']='Весь день с %s по %s';

@@ -106,3 +106,7 @@ GO.addressbook.lang.sendMailing='Отправить сообщение';
 GO.addressbook.lang.importSuccess='Данные импортированы без ошибок';
 GO.addressbook.lang.searchOnSender='Поиск';
 GO.addressbook.lang.confirmCreate='Не найден контакт. Хотите создать новый контакт?';
+
+GO.addressbook.lang.matchFields='Совпадения в полях';
+
+GO.addressbook.lang.advancedSearch='Расширенный поиск';
