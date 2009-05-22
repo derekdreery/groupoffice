@@ -469,15 +469,6 @@ class GO_CONFIG
 	var $restrict_smtp_hosts = '';
 
 	/**
-	 * Connection string options to append to the hostname when connecting to IMAP
-	 * servers using the PHP imap extension. Some distributions require /notls here.
-	 *
-	 * @var     string
-	 * @access  public
-	 */
-	var $email_connectstring_options = '';
-
-	/**
 	 * The maximum size of e-mail attachments the browser attempts to upload.
 	 * Be aware that the php.ini file must be set accordingly (http://www.php.net).
 	 *
@@ -525,42 +516,6 @@ class GO_CONFIG
 	 * @access  public
 	 */
 	var $cmd_sudo = '/usr/bin/sudo';
-
-	/**
-	 * Command to get user quota's. Used by passwd.users.class.inc.
-	 * Leave empty to disable. SUDO must be set up!
-	 *
-	 * @var     string
-	 * @access  public
-	 */
-	var $cmd_quota = '';
-
-	/**
-	 * Command to set user quota's. Used by passwd.users.class.inc.
-	 * Leave empty to disable. SUDO must be set up!
-	 *
-	 * @var     string
-	 * @access  public
-	 */
-	var $cmd_edquota = '';
-
-	/**
-	 * Command to script to set a postfix alias
-	 *
-	 * @var     string
-	 * @access  public
-	 */
-	var $cmd_alias = '/usr/local/bin/alias.sh';
-
-	/**
-	 * If $quota_protouser is set, a default quota will be set from that user with
-	 * `edquota -p QUOTAUSER newuser
-	 *
-	 * @var     string
-	 * @access  public
-	 */
-	var $quota_protouser = '';
-
 
 	/**
 	 * Command to convert xml to wbxml
@@ -627,6 +582,20 @@ class GO_CONFIG
 	 */
 	var $default_password_length=6;
 
+	/* The permissions mode to use when creating files
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $file_create_mode = '0644';
+
+	/* The permissions mode to use when creating folders
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $folder_create_mode = '0755';
+
 	/*//////////////////////////////////////////////////////////////////////////////
 	 //////////      Variables that are not configured by config.php   //////////////
 	 //////////////////////////////////////////////////////////////////////////////*/
@@ -649,20 +618,6 @@ class GO_CONFIG
 	 */
 
 	var $mtime = '20090428';
-
-	/* The permissions mode to use when creating files
-	 *
-	 * @var     string
-	 * @access  public
-	 */
-	var $file_create_mode = '0644';
-
-	/* The permissions mode to use when creating folders
-	 *
-	 * @var     string
-	 * @access  public
-	 */
-	var $folder_create_mode = '0755';
 
 	#group configuration
 	/**
@@ -800,9 +755,6 @@ class GO_CONFIG
        */
       function __construct()
       {
-
-
-
       	if($this->root_path == '')
       	{
       		//Detect some default values for installation if root_path is not set yet
@@ -815,8 +767,7 @@ class GO_CONFIG
       			$this->host .= '/';
       		}
 
-
-      		$this->full_url = 'http://'.$_SERVER['SERVER_NAME'].dirname(dirname($_SERVER['PHP_SELF'])).'/';
+      		$this->full_url = 'http://'.$_SERVER['SERVER_NAME'].$this->host;
 
       		$this->local_path = $this->root_path.'local/';
       		$this->local_url = $this->host.'local/';
@@ -942,6 +893,12 @@ class GO_CONFIG
 	      		}
       		}
       		$config_file = '/etc/groupoffice/'.$_SERVER['SERVER_NAME'].'/config.php';
+      		if(@file_exists($config_file))
+      		{
+      			$_SESSION['GO_SESSION']['config_file']=$config_file;
+      			return $config_file;
+      		}
+					$config_file = '/etc/groupoffice/config.php';
       		if(@file_exists($config_file))
       		{
       			$_SESSION['GO_SESSION']['config_file']=$config_file;
