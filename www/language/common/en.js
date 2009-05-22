@@ -19,6 +19,7 @@ GO.lang = {};
  * Copy everything below for translations
  */
 
+GO.lang.exportHiddenColumns='Export hidden columns too';
 GO.lang.searchQuery='search query';
 GO.lang.pleaseApplyFirst='Please save first by clicking \'Apply\'';
 GO.lang.passwordMatchError='The passwords didn\'t match';

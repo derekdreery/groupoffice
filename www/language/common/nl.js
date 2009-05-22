@@ -10,8 +10,9 @@
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
- 
- GO.lang.searchQuery='zoekterm';
+
+GO.lang.exportHiddenColumns='Exporteer verborgen kolommen ook';
+GO.lang.searchQuery='zoekterm';
 GO.lang.pleaseApplyFirst='Sla eerst op aub. door op \'Toepassen\' te klikken';
 GO.lang.passwordMatchError='De wachtwoorden kwamen niet overeen';
 GO.lang.serverError='Er is een fout opgetreden op de webserver. Neem contact op met uw systeembeheerder geef de gedetailleerde foutmelding.';
