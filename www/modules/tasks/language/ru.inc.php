@@ -25,6 +25,10 @@ $lang['tasks']['statuses']['DELEGATED'] = 'Делегировано';
 $lang['tasks']['statuses']['COMPLETED'] = 'Выполнено';
 $lang['tasks']['statuses']['IN-PROCESS'] = 'В процессе';
 
+$lang['tasks']['import_success']='%s задач импортированно';
 
 $lang['tasks']['call']='Позвонить';
+
+$lang['tasks']['dueAtdate']='До %s';
+
 ?>

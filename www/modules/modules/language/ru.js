@@ -13,11 +13,11 @@
 /**
  * Copy everything below for translations
  */
-
+GO.modules.lang.modules='Модули';
 GO.modules.lang.cmdSaveChanges = 'Сохранить',
 GO.modules.lang.cmdInstall = 'Установить',
 GO.modules.lang.cmdUninstall = 'Удалить',
-GO.modules.lang.cmdAvailableModules = 'Дуступные модули',
+GO.modules.lang.cmdAvailableModules = 'Доступные модули',
 GO.modules.lang.cmdModuleName = 'Имя модуля',
 GO.modules.lang.cmdModuleDescription = 'Описание',
 GO.modules.lang.cmdGridColumnModuleName = 'Имя модуля',
