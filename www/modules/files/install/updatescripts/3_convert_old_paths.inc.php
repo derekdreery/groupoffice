@@ -316,7 +316,7 @@ if(isset($GO_MODULES->modules['calendar']))
 
             if($folder && !empty($new_folder_name))
             {
-                $new_path = 'events/'.File::strip_invalid_chars($event['calendar_name']).'/'.date('Y', $event['due_time']);
+                $new_path = 'events/'.File::strip_invalid_chars($event['calendar_name']).'/'.date('Y', $event['start_time']);
 
                 //echo $new_path."\n";
                 $destination = $fsdb->resolve_path($new_path, true, 1);
