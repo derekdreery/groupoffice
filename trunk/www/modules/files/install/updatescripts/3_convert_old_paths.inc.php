@@ -87,7 +87,11 @@ function crawl($path, $parent_id)
     //var_dump($folders);
     while($folder = array_shift($folders))
     {
-        crawl($folder['path'], $folder_id);
+			if(basename($path)=='billing' && $folder['name']=='notifications')
+			{
+				continue;
+			}
+      crawl($folder['path'], $folder_id);
     }
 
 
