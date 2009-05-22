@@ -73,6 +73,7 @@ $menu_language['send_info'] = 'Send information';
 
 
 
+
 function print_head()
 {
 	echo '<html><head>'.
@@ -468,10 +469,11 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 
 			$GO_CONFIG->smtp_username= isset($_POST['smtp_username']) ? (trim($_POST['smtp_username'])) : '';
 			$GO_CONFIG->smtp_password= isset($_POST['smtp_password']) ? (trim($_POST['smtp_password'])) : '';
+			$GO_CONFIG->smtp_encryption= isset($_POST['smtp_password']) ? (trim($_POST['smtp_encryption'])) : '';
 
 
 			$GO_CONFIG->max_attachment_size= (trim($_POST['max_attachment_size']));
-			$GO_CONFIG->email_connectstring_options = (trim($_POST['email_connectstring_options']));
+			//$GO_CONFIG->email_connectstring_options = (trim($_POST['email_connectstring_options']));
 			if (save_config($GO_CONFIG) && !isset($feedback))
 			{
 				$task = $nexttask;
@@ -572,6 +574,19 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 }
 //Store all options in config array during install
 
+
+$lasttask = 'test';
+foreach($tasks as $_task)
+{
+	if($task==$_task)
+	{
+		break;
+	}
+	$lasttask=$_task;
+}
+
+
+
 switch($task)
 {
 	case 'test':
@@ -599,7 +614,7 @@ switch($task)
 		echo '<input type="hidden" name="task" value="license" />';
 		echo 'Do you agree to the terms of the license agreement?<br /><br />';
 		echo '<iframe style="width: 100%; height: 300px; background: #ffffff;" src="../LICENSE.TXT"></iframe>';
-		echo '<br /><br /><div align="right"><input type="submit" value="I agree to these terms" /></div>';
+		echo '<br /><br /><div align="right"><input type="button" onclick="document.location=\''.$_SERVER['PHP_SELF'].'?task='.$lasttask.'\';" value="Back" />&nbsp;&nbsp;<input type="submit" value="I agree to these terms" /></div>';
 		print_foot();
 		exit();
 		break;
@@ -609,7 +624,8 @@ switch($task)
 		echo '<input type="hidden" name="task" value="release_notes" />';
 		echo 'Please read the release notes<br /><br />';
 		echo '<iframe style="width: 100%; height: 300px; background: #ffffff;" src="../RELEASE.TXT"></iframe>';
-		echo '<br /><br /><div align="right"><input type="submit" value="Continue" /></div>';
+		
+		echo '<br /><br /><div align="right"><input type="button" onclick="document.location=\''.$_SERVER['PHP_SELF'].'?task='.$lasttask.'\';" value="Back" />&nbsp;&nbsp;<input type="submit" value="Continue" /></div>';
 		print_foot();
 		exit();
 		break;
@@ -618,7 +634,7 @@ switch($task)
 		print_head();
 		echo 'Do you wish to create a new database and user (Requires MySQL administration privileges) or do you want to use an existing database and user?<br /><br />';
 		echo '<input type="hidden" name="task" value="new_database" />';
-		echo '<div style="text-align:right"><input type="button" onclick="javascript:_go(\'create_database\');" value="Create new database" />&nbsp;&nbsp;';
+		echo '<div style="text-align:right"><input type="button" onclick="document.location=\''.$_SERVER['PHP_SELF'].'?task='.$lasttask.'\';" value="Back" />&nbsp;&nbsp;<input type="button" onclick="javascript:_go(\'create_database\');" value="Create new database" />&nbsp;&nbsp;';
 		echo '<input type="button" onclick="javascript:_go(\'database_connection\');" value="Use existing database" /></div>';
 		echo '<script type="text/javascript">';
 		echo 'function _go(task){document.forms[0].task.value=task;document.forms[0].submit();}</script>';
@@ -727,7 +743,9 @@ switch($task)
 					</td>
 					</tr>
 					</table>
-					<div style="text-align:right"><input type="submit" value="Continue" /></div>
+					<div style="text-align:right">
+						<?php echo '<input type="button" onclick="document.location=\''.$_SERVER['PHP_SELF'].'?task=new_database\';" value="Back" />&nbsp;&nbsp;'; ?>
+						<input type="submit" value="Continue" /></div>
 					<?php
 					print_foot();
 					exit();
@@ -810,7 +828,9 @@ switch($task)
 			</td>
 			</tr>
 			</table>
-			<div style="text-align:right"><input type="submit" value="Continue" /></div>
+			<div style="text-align:right">
+				<?php echo '<input type="button" onclick="document.location=\''.$_SERVER['PHP_SELF'].'?task=new_database\';" value="Back" />&nbsp;&nbsp;'; ?>
+				<input type="submit" value="Continue" /></div>
 
 			<?php
 			print_foot();
@@ -902,6 +922,7 @@ switch($task)
 				?>
 					<tr>
 					<td colspan="2" align="right">
+					<?php echo '<input type="button" onclick="document.location=\''.$_SERVER['PHP_SELF'].'?task=existing_database\';" value="Back" />&nbsp;&nbsp;'; ?>
 					<input type="submit" value="Continue" />
 					&nbsp;&nbsp;
 					</td>
@@ -987,6 +1008,7 @@ switch($task)
 		</tr>
 		</table><br />
 		<div align="right">
+		<?php echo '<input type="button" onclick="document.location=\''.$_SERVER['PHP_SELF'].'?task='.$lasttask.'\';" value="Back" />&nbsp;&nbsp;'; ?>
 		<input type="submit" value="Continue" />
 		</div>
 		<?php
@@ -1022,6 +1044,7 @@ switch($task)
 		</tr>
 		</table><br />
 		<div align="right">
+		<?php echo '<input type="button" onclick="document.location=\''.$_SERVER['PHP_SELF'].'?task='.$lasttask.'\';" value="Back" />&nbsp;&nbsp;'; ?>
 		<input type="submit" value="Continue" />
 		</div>
 		<?php
@@ -1042,7 +1065,7 @@ switch($task)
 		<table>
 		<tr>
 			<td colspan="2">
-			Group-Office needs a place to store proteced data. This folder should not be accessible through the webserver. Create a writable path for this purpose now and enter it in the box below.<br />
+			Group-Office needs a place to store protected data. This folder should not be accessible through the webserver. Create a writable path for this purpose now and enter it in the box below.<br />
 			The path should be have 0777 permissions or should be owned by the webserver user. You probably need to be root to do the last.
 			<br />Also enter a maximum number of bytes to upload and a valid octal value for the file permissions.
 			<br /><br />
@@ -1130,6 +1153,7 @@ switch($task)
 		</table><br />
 		
 		<div align="right">
+		<?php echo '<input type="button" onclick="document.location=\''.$_SERVER['PHP_SELF'].'?task='.$lasttask.'\';" value="Back" />&nbsp;&nbsp;'; ?>
 		<input type="submit" value="Continue" />
 		</div>
 		<?php
@@ -1330,6 +1354,7 @@ switch($task)
 		</tr>
 		</table><br />
 		<div align="right">
+		<?php echo '<input type="button" onclick="document.location=\''.$_SERVER['PHP_SELF'].'?task='.$lasttask.'\';" value="Back" />&nbsp;&nbsp;'; ?>
 		<input type="submit" value="Continue" />
 		</div>
 		<?php
@@ -1395,6 +1420,7 @@ switch($task)
 		?>
 		<br />
 		<div align="right">
+		<?php echo '<input type="button" onclick="document.location=\''.$_SERVER['PHP_SELF'].'?task='.$lasttask.'\';" value="Back" />&nbsp;&nbsp;'; ?>
 		<input type="submit" value="Continue" />
 		</div>
 		<?php
@@ -1464,6 +1490,7 @@ switch($task)
 		?>
 		<br />
 		<div align="right">
+		<?php echo '<input type="button" onclick="document.location=\''.$_SERVER['PHP_SELF'].'?task='.$lasttask.'\';" value="Back" />&nbsp;&nbsp;'; ?>
 		<input type="submit" value="Continue" />
 		</div>
 		<?php
@@ -1521,6 +1548,7 @@ switch($task)
 		?>
 		<br />
 		<div align="right">
+		<?php echo '<input type="button" onclick="document.location=\''.$_SERVER['PHP_SELF'].'?task='.$lasttask.'\';" value="Back" />&nbsp;&nbsp;'; ?>
 		<input type="submit" value="Continue" />
 		</div>
 		<?php
@@ -1537,8 +1565,7 @@ switch($task)
 		}
 	?>
 		<input type="hidden" name="task" value="smtp" />
-		Group-Office has the ability to send and receive e-mail. Please configure your SMTP server. <br />
-		Leave this blank use the php mail() function but then you won't be able use CC and BCC headers!
+		Group-Office needs to connect to an SMTP server to send and receive e-mail.
 		<br />
 		<br />
 		<table>		
@@ -1582,6 +1609,30 @@ switch($task)
 		<input type="text" size="40" name="smtp_password" value="<?php echo $GO_CONFIG->smtp_password; ?>" />
 		</td>
 		</tr>
+
+		<tr>
+		<td>
+		Encryption:
+		</td>
+		<td>
+		<select name="smtp_encryption">
+			<?php
+
+			$encryptions = array(
+				''=>'No encryption',
+				'ssl'=>'SSL',
+				'tls'=>'TLS');
+
+			foreach($encryptions as $key => $value)
+			{
+				echo '<option value="'.$key.'"';
+				if($key==$GO_CONFIG->smtp_encryption)
+				{
+					echo ' selected';
+				}
+				echo '>'.$value.'</option>';
+			}
+			?></select>
 		
 		
 		<tr><td colspan="2">&nbsp;</td></tr>
@@ -1599,26 +1650,9 @@ switch($task)
 		Current PHP configuration allows <?php echo $max_ini; ?> bytes
 		</td>
 		</tr>
-		<tr>
-		<td colspan="2">
-		<br />
-		Some servers require some connection string options when connecting
-		to an IMAP or POP-3 server using the PHP IMAP extension. For example most Redhat systems
-		require '/notls' or '/novalidate-cert'.
-		If you are not sure then leave this field blank.
-		<br /><br />
-		</td>
-		</tr>
-		<tr>
-		<td>
-		Connection options:
-		</td>
-		<td>
-		<input type="text" size="40" name="email_connectstring_options" value="<?php echo $GO_CONFIG->email_connectstring_options; ?>" />
-		</td>
-		</tr>
 		</table><br />
 		<div align="right">
+		<?php echo '<input type="button" onclick="document.location=\''.$_SERVER['PHP_SELF'].'?task='.$lasttask.'\';" value="Back" />&nbsp;&nbsp;'; ?>
 		<input type="submit" value="Continue" />
 		</div>
 		<?php
@@ -1676,6 +1710,7 @@ switch($task)
 			</tr>
 			</table><br />
 			<div align="right">
+			<?php echo '<input type="button" onclick="document.location=\''.$_SERVER['PHP_SELF'].'?task='.$lasttask.'\';" value="Back" />&nbsp;&nbsp;'; ?>
 			<input type="submit" value="Continue" />
 			</div>
 			<?php
@@ -1715,14 +1750,15 @@ switch($task)
 	<li>Navigate to the menu: Administrator menu -&gt; Users users to add new users.</li>
 	</ul>
 	<br />
-	You can also configure external authentication servers such as an IMAP or POP-3.
-	Read more about it here: <a target="_blank" href="http://www.group-office.com/wiki/IMAP_authentication">http://www.group-office.com/wiki/IMAP_authentication</a>
+	You can also configure external authentication servers such as an LDAP,IMAP or POP-3 server.
+	Read more about it here: <a target="_blank" href="http://www.group-office.com/wiki/IMAP_or_LDAP_authentication">http://www.group-office.com/wiki/IMAP_or_LDAP_authentication</a>
 	<br />
 	<br />
 	For troubleshooting please visit <a target="_blank" href="http://www.group-office.com/wiki/Troubleshooting">http://www.group-office.com/wiki/Troubleshooting</a><br /> 
 	If that doesn't help post on the <a target="_blank" href="http://www.group-office.com/forum/">forums</a>.<br />
 	<br /><br />
 	<div align="right">
+	<?php echo '<input type="button" onclick="document.location=\''.$_SERVER['PHP_SELF'].'?task='.$lasttask.'\';" value="Back" />&nbsp;&nbsp;'; ?>
 	<input type="button" value="Launch Group-Office!" onclick="javascript:window.location='<?php echo $GO_CONFIG->host; ?>';" />
 	</div>
 	<?php
