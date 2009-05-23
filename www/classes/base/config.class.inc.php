@@ -602,6 +602,13 @@ class GO_CONFIG
 	 //////////      Variables that are not touched by the installer   /////////////
 	 //////////////////////////////////////////////////////////////////////////////*/
 
+	/**
+	 * The Group-Office version number
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $version = '3.01-stable-34';
 
 
 	/* The permissions mode to use when creating files
@@ -617,15 +624,7 @@ class GO_CONFIG
 	 * @access  public
 	 */
 	var $folder_create_mode = '0755';
-
-
-	/**
-	 * The Group-Office version number
-	 *
-	 * @var     string
-	 * @access  public
-	 */
-	var $version = '3.01-stable-34';
+	
 
 
 	/**
