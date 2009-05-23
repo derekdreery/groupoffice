@@ -35,11 +35,43 @@ $tasks[] = 'license';
 $tasks[] = 'release_notes';
 $tasks[] = 'title';
 $tasks[] = 'theme';
-$tasks[] = 'url';
-$tasks[] = 'userdir';
-$tasks[] = 'new_database';
-$tasks[] = 'create_database';
-$tasks[] = 'database_connection';
+//$tasks[] = 'url';
+
+if (!@is__writable($GO_CONFIG->file_storage_path) || !@is__writable($GO_CONFIG->local_path) || !@is__writable($GO_CONFIG->tmpdir))
+{
+	$tasks[] = 'userdir';
+}
+
+if($CONFIG_FILE=='/etc/groupoffice/config.php' && @file_exists('/etc/groupoffice/config-db.php'))
+{
+	require('/etc/groupoffice/config-db.php');
+
+	$GO_CONFIG->db_host = empty($dbserver) ? 'localhost' : $dbserver;
+	$GO_CONFIG->db_name = $dbname;
+	$GO_CONFIG->db_user = $dbuser;
+	$GO_CONFIG->db_pass = $dbpass;
+	$GO_CONFIG->db_port = empty($dbport) ? 3306 : intval($dbport);
+
+	$db = new db();
+	$db->halt_on_error = 'no';
+	$db->set_config($GO_CONFIG);
+
+	if(@$db->connect())
+	{
+		if (save_config($GO_CONFIG)){
+
+			$dbconn=true;
+		}
+	}
+}
+
+if(!isset($dbconn))
+{
+	$tasks[] = 'new_database';
+	$tasks[] = 'create_database';
+	$tasks[] = 'database_connection';
+}
+
 $tasks[] = 'database_structure';
 //$tasks[] = 'allow_password_change';
 $tasks[] = 'default_module_access';
@@ -58,7 +90,6 @@ $tasks[] = 'completed';
 $menu_language['test'] = 'System test';
 $menu_language['license'] = 'License';
 $menu_language['release_notes'] = 'Release notes';
-$menu_language['new_database'] = 'Database configuration';
 $menu_language['new_database'] = 'Database creation/upgrade';
 $menu_language['title'] = 'Title';
 $menu_language['url'] = 'URL configuration';
@@ -473,7 +504,12 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 
 
 			$GO_CONFIG->max_attachment_size= (trim($_POST['max_attachment_size']));
-			//$GO_CONFIG->email_connectstring_options = (trim($_POST['email_connectstring_options']));
+
+
+			//LAST STEP
+			$GO_CONFIG->installed=true;
+
+			
 			if (save_config($GO_CONFIG) && !isset($feedback))
 			{
 				$task = $nexttask;

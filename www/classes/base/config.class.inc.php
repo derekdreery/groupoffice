@@ -42,6 +42,14 @@ class GO_CONFIG
 	var $enabled = true;
 
 	/**
+	 * Enable this Group-Office installation?
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $installed = false;
+
+	/**
 	 * The Group-Office server ID
 	 *
 	 * @var     string
@@ -590,6 +598,12 @@ class GO_CONFIG
 	 */
 	var $default_password_length=6;
 
+	/*//////////////////////////////////////////////////////////////////////////////
+	 //////////      Variables that are not touched by the installer   /////////////
+	 //////////////////////////////////////////////////////////////////////////////*/
+
+
+
 	/* The permissions mode to use when creating files
 	 *
 	 * @var     string
@@ -603,10 +617,6 @@ class GO_CONFIG
 	 * @access  public
 	 */
 	var $folder_create_mode = '0755';
-
-	/*//////////////////////////////////////////////////////////////////////////////
-	 //////////      Variables that are not configured by config.php   //////////////
-	 //////////////////////////////////////////////////////////////////////////////*/
 
 
 	/**
@@ -763,13 +773,14 @@ class GO_CONFIG
        */
       function __construct()
       {
-      	if($this->root_path == '')
+      	if(!$this->installed)
       	{
       		//Detect some default values for installation if root_path is not set yet
       		//$this->root_path = str_replace('classes/base/config.class.inc','',__FILE__);
       		$this->root_path = str_replace('\\','/',dirname(dirname(dirname(__FILE__)))).'/';
       		$this->host = dirname(dirname($_SERVER['PHP_SELF']));
 
+					
       		if(substr($this->host,-1) != '/')
       		{
       			$this->host .= '/';
