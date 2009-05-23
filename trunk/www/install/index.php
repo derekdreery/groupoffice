@@ -28,7 +28,9 @@ require_once(dirname(dirname(__FILE__)).'/classes/filesystem.class.inc');
 $task = isset($_REQUEST['task']) ? $_REQUEST['task'] : 'test';
 
 if($task=='test')
+{
 	@session_destroy();
+}
 
 $tasks[] = 'test';
 $tasks[] = 'license';
