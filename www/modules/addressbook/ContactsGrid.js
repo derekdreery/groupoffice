@@ -104,6 +104,9 @@ GO.addressbook.ContactsGrid = function(config){
 	config.sm=new Ext.grid.RowSelectionModel();
 	config.loadMask=true;
 	
+	config.enableDragDrop=true;
+	config.ddGroup='AddressBooksDD';
+	
 	GO.addressbook.ContactsGrid.superclass.constructor.call(this, config);
 	
 	this.on('rowdblclick', function(grid, rowIndex){
@@ -128,8 +131,8 @@ Ext.extend(GO.addressbook.ContactsGrid, GO.grid.GridPanel, {
 			this.onGridShow();
 		}
 	},
-	
-	onGridShow : function(){
+	onGridShow : function()
+	{
 		if(!this.loaded && this.rendered)
 		{
 			this.store.load();

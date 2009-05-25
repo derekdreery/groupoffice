@@ -490,6 +490,83 @@ try
 					}
 					echo json_encode($result);
 					break;
+					
+					
+				case 'save_contacts':							
+					
+					$contacts = json_decode(($_POST['items']));
+					$abook_id = isset($_REQUEST['book_id']) ? ($_REQUEST['book_id']) : 0;
+					
+					$addressbook = $ab->get_addressbook($abook_id);
+					if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $addressbook['acl_write']))
+					{
+						throw new AccessDeniedException();
+					}
+
+					$result['success'] = true;
+					$result['feedback'] = $feedback;
+				
+					for($i=0; $i<count($contacts); $i++)
+					{
+						$contact['id'] = $contacts[$i];
+						if($contact['id'] > 0)
+						{
+							$old_contact = $ab->get_contact($contact['id']);
+							if(($old_contact['addressbook_id'] != $abook_id) && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_contact['acl_write']))
+							{
+								throw new AccessDeniedException();
+							}
+							$contact['addressbook_id'] = $abook_id;
+							$contact['company_id'] = $old_contact['company_id'];
+							$contact['last_name'] = $old_contact['last_name'];
+							
+							if(!$ab->update_contact($contact, $addressbook))
+							{
+								$result['feedback'] = $lang['common']['saveError'];
+								$result['success'] = false;
+							}							
+						}						
+					}					
+					echo json_encode($result);
+					break;
+					
+				case 'save_companies':							
+					
+					$companies = json_decode(($_POST['items']));
+					$abook_id = isset($_REQUEST['book_id']) ? ($_REQUEST['book_id']) : 0;
+				
+					$addressbook = $ab->get_addressbook($abook_id);
+					if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $addressbook['acl_write']))
+					{
+						throw new AccessDeniedException();
+					}
+
+					$result['success'] = true;
+					$result['feedback'] = $feedback;
+				
+					for($i=0; $i<count($companies); $i++)
+					{
+						$company['id'] = $companies[$i];
+						if($company['id'] > 0)
+						{
+							$old_company = $ab->get_company($company_id);							
+							if(($old_company['addressbook_id'] != $abook_id) && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_company['acl_write']))
+							{
+								throw new AccessDeniedException();
+							}
+						
+							$company['addressbook_id'] = $abook_id;
+							$company['last_name'] = $old_company['last_name'];							
+							if(!$ab->update_company($company, $addressbook))
+							{
+								$result['feedback'] = $lang['common']['saveError'];
+								$result['success'] = false;
+							}							
+						}						
+					}					
+					echo json_encode($result);
+					break;
+				
 	}
 }
 catch(Exception $e)
