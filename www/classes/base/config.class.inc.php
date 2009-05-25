@@ -1051,50 +1051,8 @@ class GO_CONFIG
       	$response['state']=array();
       	if($GO_SECURITY->logged_in())
       	{
-      		/*$response['user_id']=$GO_SECURITY->user_id;
-      		$response['username']=$_SESSION['GO_SESSION']['username'];
-      		$response['name']=trim($_SESSION['GO_SESSION']['name']);
-      		$response['email']=$_SESSION['GO_SESSION']['email'];
-      		$response['country']=$_SESSION['GO_SESSION']['country'];
-
-      		$response['theme']=$_SESSION['GO_SESSION']['theme'];
-
-      		$response['thousands_separator']=$_SESSION['GO_SESSION']['thousands_separator'];
-      		$response['decimal_separator']=$_SESSION['GO_SESSION']['decimal_separator'];
-      		$response['date_format']=$_SESSION['GO_SESSION']['date_format'];
-      		$response['date_separator']=$_SESSION['GO_SESSION']['date_separator'];
-      		$response['time_format']=$_SESSION['GO_SESSION']['time_format'];
-      		$response['timezone']=$_SESSION['GO_SESSION']['timezone'];
-      		$response['start_module']=$_SESSION['GO_SESSION']['start_module'];
-      		$response['first_weekday']=$_SESSION['GO_SESSION']['first_weekday'];
-      		$response['sort_name']=$_SESSION['GO_SESSION']['sort_name'];
-      		$response['max_rows_list']=$_SESSION['GO_SESSION']['max_rows_list'];
-      		$response['currency']=$_SESSION['GO_SESSION']['currency'];
-      		$response['mute_sound']=$_SESSION['GO_SESSION']['mute_sound']=='1';*/
-
-
       		//state for Ext components
       		$response['state'] = $this->get_state($GO_SECURITY->user_id, $response['state_index']);
-      	}else
-      	{
-      		/*$response['user_id']=0;
-      		$response['username']='';
-      		$response['name']='';
-      		$response['email']='';
-
-      		$response['thousands_separator']=$this->default_thousands_separator;
-      		$response['country']=$this->default_country;
-      		$response['decimal_separator']=$this->default_decimal_separator;
-      		$response['date_format']=$this->default_date_format;
-      		$response['date_separator']=$this->default_date_separator;
-      		$response['time_format']=$this->default_time_format;
-      		$response['timezone']=$this->default_timezone;
-      		$response['start_module']='';
-      		$response['first_weekday']=$this->default_first_weekday;
-      		$response['sort_name']='first_name';
-      		$response['max_rows_list']=30;
-      		$response['language']=$GO_LANGUAGE->language;
-      		$response['mute_sound']=false;*/
       	}
  				foreach($_SESSION['GO_SESSION'] as $key=>$value)
  				{
@@ -1115,8 +1073,6 @@ class GO_CONFIG
 
       	$response['config']['max_users']=$this->max_users;
 
-
       	return $response;
-
       }
 }
