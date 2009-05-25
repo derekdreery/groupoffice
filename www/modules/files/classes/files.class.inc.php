@@ -155,8 +155,6 @@ class files extends db {
 
 			$fs = new filesystem();
 
-			
-
 			$destfolder_path = dirname($path);
 			$destfolder = $this->resolve_path($destfolder_path,true);
 			$base = $folder_name = utf8_basename($path);
@@ -166,8 +164,6 @@ class files extends db {
 				$folder_name = $base.' ('.$count.')';
 				$count++;
 			}
-
-			debug($current_path.' -> '.$destfolder_path.'/'.$folder_name);
 
 			if(is_dir($GO_CONFIG->file_storage_path.$current_path))
 			{
