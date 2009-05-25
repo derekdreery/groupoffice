@@ -535,7 +535,10 @@ class addressbook extends db {
         if(!empty($last_part))
         {
             $new_path .= '/'.$last_part;
-        }
+        }else
+				{
+					$new_path .= '/0 no last name';
+				}
         $new_path .= '/'.$new_folder_name;
         return $new_path;
     }
