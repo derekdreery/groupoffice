@@ -1,0 +1,36 @@
+Group-Office groupware license
+
+Copyright (c) 2003-2009, Intermesh
+All rights reserved.
+
+This program is protected by copyright law and the Group-Office license.
+
+If you have any questions about licensing you can send an e-mail to:
+
+info@intermesh.nl
+
+or write to:   
+
+Intermesh
+Reitscheweg 37
+5232BX Den Bosch
+The Netherlands   
+
+tel. +31 (0) 73 644 55 08
+http://www.group-office.com
+
+
+Open Source License
+------------------------------------------------------------------------------------------
+Group-Office is licensed under the terms of GNU Affero General Public License.
+Some Group-Office modules may have a different license. 
+
+http://www.gnu.org/licenses/agpl.html
+
+
+Professional License
+------------------------------------------------------------------------------------------
+If you are using Group-Office for business purposes, we encourage you to purchase
+a professional license. By buying a professional license you'll support the project and 
+you'll get extra interesting features. Please see
+http://www.group-office.com/data/License+agreement for the terms.
