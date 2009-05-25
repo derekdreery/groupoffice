@@ -6,7 +6,7 @@ class GO_EVENTS
 	public function __construct(){
 		global $GO_CONFIG;
 		
-		if(!isset($_SESSION['GO_SESSION']['event_listeners']) || $GO_CONFIG->debug)
+		if(!defined('NO_EVENTS') && (!isset($_SESSION['GO_SESSION']['event_listeners']) || $GO_CONFIG->debug))
 		{
 			$this->load_listeners();
 		}else
