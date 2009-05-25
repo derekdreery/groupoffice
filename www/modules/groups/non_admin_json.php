@@ -28,13 +28,16 @@ switch ($_POST['task'])
 		$response['results']=array();
 		while($GO_GROUPS->next_record())
 		{
-			$record = array(
-				'id' => $GO_GROUPS->f('id'),
-				'name' => $GO_GROUPS->f('name'),
-				'user_id' => $GO_GROUPS->f('user_id'),
-				'user_name' => String::format_name($GO_GROUPS->f('last_name'), $GO_GROUPS->f('first_name'), $GO_GROUPS->f('middle_name'))
-			);
-			$response['results'][] = $record;
+			if ($GO_GROUPS->f('id') != 2)
+			{
+				$record = array(
+					'id' => $GO_GROUPS->f('id'),
+					'name' => $GO_GROUPS->f('name'),
+					'user_id' => $GO_GROUPS->f('user_id'),
+					'user_name' => String::format_name($GO_GROUPS->f('last_name'), $GO_GROUPS->f('first_name'), $GO_GROUPS->f('middle_name'))
+				);
+				$response['results'][] = $record;
+			}
 		}
 
 		echo json_encode($response);
