@@ -41,6 +41,13 @@ $updates[]="ALTER TABLE `fs_folders` ADD `name` VARCHAR( 255 ) NOT NULL AFTER `p
 $updates[]="ALTER TABLE `fs_folders` ADD `ctime` INT NOT NULL ,
 ADD `mtime` INT NOT NULL";
 
+//sometimes id wan't unique
+$updates[]="RENAME TABLE `fs_files`  TO `fs_files_old` ;";
+$updates[]="CREATE TABLE fs_files SELECT * FROM fs_files_old GROUP BY id;";
+$updates[]="RENAME TABLE `fs_folders`  TO `fs_folders_old` ;";
+$updates[]="CREATE TABLE fs_folders SELECT * FROM fs_folder_old GROUP BY id;";
+
+
 $updates[]="ALTER TABLE `fs_files` DROP PRIMARY KEY ,ADD PRIMARY KEY ( `id` )"; 
 $updates[]="ALTER TABLE `fs_folders` DROP PRIMARY KEY ,ADD PRIMARY KEY ( `id` ) ";
 $updates[]="ALTER TABLE `fs_folders` DROP INDEX `link_id_2`"; 
