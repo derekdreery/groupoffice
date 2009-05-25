@@ -10,6 +10,8 @@ GO.addressbook.AddresbooksGrid = function(config){
 	config.autoScroll=true;
 	config.split=true;
 	config.store = GO.addressbook.readableAddressbooksStore;
+	config.ddGroup='AddressBooksDD';
+	config.enableDD=true;
 	
 	GO.addressbook.readableAddressbooksStore.on('load', function(){
 		this.selModel.selectFirstRow();
@@ -33,9 +35,62 @@ GO.addressbook.AddresbooksGrid = function(config){
 	}),
 	config.sm=new Ext.grid.RowSelectionModel();
 	config.loadMask=true;
+
 	
 	GO.addressbook.AddresbooksGrid.superclass.constructor.call(this, config);
 };
 
 
-Ext.extend(GO.addressbook.AddresbooksGrid, GO.grid.GridPanel);
+Ext.extend(GO.addressbook.AddresbooksGrid, GO.grid.GridPanel, {
+	
+	afterRender : function()
+	{	
+		GO.addressbook.AddresbooksGrid.superclass.afterRender.call(this);		
+
+		var DDtarget = new Ext.dd.DropTarget(this.getView().mainBody, {
+			ddGroup : 'AddressBooksDD',
+			notifyDrop : this.onNotifyDrop.createDelegate(this)
+		});	
+	},
+	onNotifyDrop : function(source, e, data)
+	{	
+		var selections = source.dragData.selections;
+        var dropRowIndex = this.getView().findRowIndex(e.target);
+        var book_id = this.getView().grid.store.data.items[dropRowIndex].id;
+
+		var company_id = 0;
+		var move_items = [];
+		var task = 'save_companies';
+		for(var i=0; i<selections.length; i++)
+		{
+			console.debug(selections[i].json);
+			move_items.push(selections[i].id);
+			if(selections[i].json.company_id > 0)
+			{
+				company_id = selections[i].json.company_id;
+			}
+			if(selections[i].json.id > 0)
+			{
+				contact_id = selections[i].json.id;
+				task = 'save_contacts';
+			}			
+		}
+			
+		if(book_id > 0 && (company_id == 0 || confirm(GO.addressbook.lang.moveAll)))
+		{
+			Ext.Ajax.request({
+				url: GO.settings.modules.addressbook.url+'action.php',
+				params: {
+					task:task,
+					book_id:book_id,
+					items:Ext.encode(move_items)
+				}
+			});
+			return true;
+		}else
+		{
+			return false;
+		}	
+	}
+	
+});

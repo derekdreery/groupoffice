@@ -78,6 +78,9 @@ GO.addressbook.CompaniesGrid = function(config){
 	config.sm=new Ext.grid.RowSelectionModel();
 	config.loadMask=true;
 	
+	config.enableDragDrop=true;
+	config.ddGroup='AddressBooksDD';
+	
 	GO.addressbook.CompaniesGrid.superclass.constructor.call(this, config);
 	
 	this.on('rowdblclick', function(grid, rowIndex){

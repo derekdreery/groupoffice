@@ -104,9 +104,10 @@ GO.addressbook.MainPanel = function(config)
 		this.setAdvancedSearchNotification(this.companiesGrid.store);
 	}, this);
 	
-	
+
 	this.addressbooksGrid = new GO.addressbook.AddresbooksGrid({
 		region:'west',
+		id:'ab-addressbook-grid',
 		width:180
 	});
 	
@@ -114,7 +115,7 @@ GO.addressbook.MainPanel = function(config)
 			var record = grid.getStore().getAt(rowIndex);
 			this.setSearchParams({addressbook_id : record.get("id")});			
 	}, this);
-
+	
 	
 	this.tabPanel = new Ext.TabPanel({
     region : 'center',
@@ -366,7 +367,6 @@ Ext.extend(GO.addressbook.MainPanel, Ext.Panel,{
 			}, this);
 			
 		},
-		
 
 		setSearchParams : function(params)
 		{
