@@ -235,6 +235,7 @@ try{
 			{
 				$filename = utf8_basename($tmp_file);
 				$new_path = $full_path.'/'.$filename;
+
 				if(file_exists($new_path) && $command!='yes' && $command!='yestoall')
 				{
 					if($command!='no' && $command != 'notoall')
@@ -338,6 +339,8 @@ try{
 						$sourcepath = $GO_CONFIG->file_storage_path.$files->build_path($sourcefile['folder_id']).'/'.$sourcefile['name'];
 						$destpath .= '/'.$sourcefile['name'];
 					}
+
+					
 						
 					$fs = new filesystem();
 
@@ -358,6 +361,12 @@ try{
 									$destpath=File::strip_extension($name).' ('.$x.').'.File::get_extension($name);
 								}
 							}
+						}
+					}else
+					{
+						if($destpath==$sourcepath)
+						{
+							continue;
 						}
 					}
 

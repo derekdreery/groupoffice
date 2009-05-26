@@ -171,7 +171,8 @@ GO.files.FileBrowser = function(config){
 	if(config.filesFilter)
 	{		
 		this.setFilesFilter(config.filesFilter);
-	}	
+	}
+
 	
 	this.gridPanel = new GO.grid.GridPanel( {
 			layout:'fit',
@@ -445,6 +446,31 @@ GO.files.FileBrowser = function(config){
 		tbar.push(this.emptyListButton);
 			
 	}
+
+	config.keys=[{
+					ctrl:true,
+					key: Ext.EventObject.C,
+					fn:function(){
+						var records = this.getSelectedGridRecords();
+						this.onCutCopy('copy', records);
+					},
+					scope:this
+			},{
+					ctrl:true,
+					key: Ext.EventObject.X,
+					fn:function(){
+						var records = this.getSelectedGridRecords();
+						this.onCutCopy('cut', records);
+					},
+					scope:this
+			},{
+					ctrl:true,
+					key: Ext.EventObject.V,
+					fn:function(){
+						this.onPaste();
+					},
+					scope:this
+			}];
 	
 	
 	config['layout']='border';
@@ -824,7 +850,6 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	},
 	
 	onCutCopy : function(pasteMode, records){		
-		console.log(records);
 		this.pasteSelections=records;
 		this.pasteMode=pasteMode;
 		if(this.pasteSelections.length)
@@ -1234,7 +1259,9 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 					{
 						activeNode.expand();
 					}
-				}				
+				}
+
+				this.focus();
 			},
 			scope:this
 		});	
