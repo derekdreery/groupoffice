@@ -64,6 +64,7 @@ GO.notes.ManageCategoriesGrid = function(config){
 			iconCls: 'btn-add',							
 			text: GO.lang['cmdAdd'],
 			cls: 'x-btn-text-icon',
+			disabled:!GO.settings.notes.write_permission,
 			handler: function(){				
 	    	this.categoryDialog.show();	    	
 			},
@@ -73,6 +74,7 @@ GO.notes.ManageCategoriesGrid = function(config){
 			iconCls: 'btn-delete',
 			text: GO.lang['cmdDelete'],
 			cls: 'x-btn-text-icon',
+			disabled:!GO.settings.notes.write_permission,
 			handler: function(){
 				this.deleteSelected();
 				this.changed=true;				
