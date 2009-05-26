@@ -45,11 +45,11 @@ ADD `mtime` INT NOT NULL";
 $updates[]="RENAME TABLE `fs_files`  TO `fs_files_old` ;";
 $updates[]="CREATE TABLE fs_files SELECT * FROM fs_files_old GROUP BY id;";
 $updates[]="RENAME TABLE `fs_folders`  TO `fs_folders_old` ;";
-$updates[]="CREATE TABLE fs_folders SELECT * FROM fs_folder_old GROUP BY id;";
+$updates[]="CREATE TABLE fs_folders SELECT * FROM fs_folders_old GROUP BY id;";
 
 
-$updates[]="ALTER TABLE `fs_files` DROP PRIMARY KEY ,ADD PRIMARY KEY ( `id` )"; 
-$updates[]="ALTER TABLE `fs_folders` DROP PRIMARY KEY ,ADD PRIMARY KEY ( `id` ) ";
+$updates[]="ALTER TABLE `fs_files` ADD PRIMARY KEY ( `id` )"; 
+$updates[]="ALTER TABLE `fs_folders` ADD PRIMARY KEY ( `id` ) ";
 $updates[]="ALTER TABLE `fs_folders` DROP INDEX `link_id_2`"; 
 $updates[]="ALTER TABLE `fs_folders` DROP INDEX `visible`"; 
 
