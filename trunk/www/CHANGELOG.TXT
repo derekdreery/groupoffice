@@ -1,3 +1,13 @@
+2009/05/?
+- Changed files module. It uses the database instead of the filesystem now to
+  store files. All the modules store the files in logical paths now.
+  eg. The files of a contact are in contacts/Addressbook name/S/Merijn Schering
+
+- Multiple e-mail sender aliases per mailbox can be defined now.
+- Store a default e-mail template so it always shows on top.
+- PDF export / mail function for the addressbook and billing module
+- Projects treeview for easier navigation
+
 2009/04/28 Version 3.01-stable-34
 - Added Greek translation
 - Minor bug fixes
