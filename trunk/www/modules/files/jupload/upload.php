@@ -72,7 +72,7 @@ while($file = array_shift($_FILES))
 					unlink($part);
 				}				
 				
-				$file_id = $files->import_file($filepath, $folder['id']);
+				$file_id = $files->import_file($filepath);
 
 				if($GO_MODULES->has_module('workflow'))
 				{
@@ -118,7 +118,7 @@ while($file = array_shift($_FILES))
 			$relpath = $files->strip_server_path($filepath);
 			
 			$_SESSION['GO_SESSION']['files']['jupload_new_files'][]=$relpath;
-			$file_id = $files->import_file($filepath, $folder['id']);
+			$file_id = $files->import_file($filepath);
 
 			if($GO_MODULES->has_module('workflow'))
 			{
