@@ -43,14 +43,10 @@ class log extends db {
 			$sql .= "SQL_CALC_FOUND_ROWS ";
 		}		
 		$sql .= "gl.* FROM go_log gl, go_users gu WHERE gl.user_id = gu.id";
-		$types='';
-		$params=array();	
  		if(!empty($query))
  		{
- 			$sql .= " AND (text LIKE ? OR first_name LIKE ? OR middle_name LIKE ? OR last_name LIKE ? "
+ 			$sql .= " AND (text LIKE '".$this->escape($query)."' OR first_name LIKE '".$this->escape($query)."' OR middle_name LIKE '".$this->escape($query)."' OR last_name LIKE '".$this->escape($query)."' "
  					. "OR CONCAT(first_name, middle_name, last_name) LIKE ?) ";
- 			$types .= 'sssss';
- 			$params = array($query, $query, $query, $query, str_replace(' ','',$query));
  		}		
 		$sql .= " ORDER BY ".$this->escape("gl.".$sortfield.' '.$sortorder);	
 		
@@ -64,7 +60,7 @@ class log extends db {
 		{
 			$sql .= " LIMIT ".intval($start).",".intval($offset);
 		}
-		return $this->query($sql, $types, $params);
+		return $this->query($sql);
 	}
 	
 	function format_log_entry(&$entry)
