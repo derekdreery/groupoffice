@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require($GO_LANGUAGE->get_fallback_language_file('files'));
+require($GO_LANGUAGE->get_fallback_language_file('groups'));
 $lang['groups']['name'] = 'Ryhmät';
 $lang['groups']['description'] = 'Hanllintamoduuli; Käyttäjäryhmien hallinta.';
 $lang['groups']['noDeleteAdmins'] = 'Et voi poistaa ryhmää Pääkäyttäjät (Admins)';
