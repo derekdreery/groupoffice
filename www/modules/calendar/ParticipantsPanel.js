@@ -237,8 +237,8 @@ Ext.extend(GO.calendar.ParticipantsPanel, GO.grid.GridPanel, {
 
 						var participants = [];
 
-						for (var i = 0; i < selections.length; i++) {
-							participants.push(selections[i].get('email'));
+						for (var i = 0; i < selections.length; i++) {							
+								participants.push(selections[i].get('email'));							
 						}
 
 						Ext.Ajax.request({
@@ -259,12 +259,24 @@ Ext.extend(GO.calendar.ParticipantsPanel, GO.grid.GridPanel, {
 									var responseParams = Ext.decode(response.responseText);
 
 									for (var i = 0; i < selections.length; i++) {
-										this.addParticipant({
-											name : selections[i].get('name'),
-											email : selections[i].get('email'),
-											status : "0",
-											available : responseParams[selections[i].get('email')]
-										});										
+										var record = this.store.findBy(function(record, id){
+											if(record.get('email')==selections[i].get('email'))
+											{
+												return true;
+											}else
+											{
+												return false;
+											}
+										});
+										
+										if(record==-1){
+											this.addParticipant({
+												name : selections[i].get('name'),
+												email : selections[i].get('email'),
+												status : "0",
+												available : responseParams[selections[i].get('email')]
+											});
+										}
 									}
 								}
 							},
