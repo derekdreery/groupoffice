@@ -411,6 +411,10 @@ a.normal-link:hover{
 .btn-email {
 	background-image:url('images/16x16/email.png') !important;
 }
+
+.btn-folder{
+	background-image:url('images/16x16/folder.png') !important;
+}
 /* end buttons */
 
 /*start edit buttons */
