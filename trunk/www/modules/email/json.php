@@ -1025,8 +1025,8 @@ try{
 								}
 
 								$sort_field=isset($_POST['sort']) && $_POST['sort']=='from' ? SORTFROM : SORTDATE;
-								if($sort_field == SORTDATE && $imap->is_imap())
-									$sort_field = SORTARRIVAL;
+								//if($sort_field == SORTDATE && $imap->is_imap())
+									//$sort_field = SORTARRIVAL;
 									
 								if(($response['sent'] || $response['drafts']) && $sort_field==SORTFROM)
 								{
