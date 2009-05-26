@@ -326,6 +326,12 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
   		},
   		renderTo:"search_query"  		
    	});
+
+		Ext.QuickTips.init();
+		Ext.apply(Ext.QuickTips.getQuickTip(), {
+				dismissDelay:0,
+				maxWidth:500
+		});
    	
    	this.removeLoadMask();
 	},

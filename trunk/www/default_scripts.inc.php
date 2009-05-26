@@ -326,7 +326,8 @@ if(!GO.state.HttpProvider)
 }
 
 Ext.state.Manager.setProvider(new GO.state.HttpProvider({url: BaseHref+'state.php'}));
-Ext.QuickTips.init();
+
+
 </script>
 <?php
 
