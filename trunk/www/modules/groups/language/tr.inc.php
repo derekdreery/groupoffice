@@ -1,5 +1,5 @@
 <?php
-require($GO_LANGUAGE->get_fallback_language_file('files'));
+require($GO_LANGUAGE->get_fallback_language_file('groups'));
 $lang['groups']['name'] = 'Guruplar';
 $lang['groups']['description'] = 'Yönetim modülü; Kullanıcı gurupları yönetilir.';
 $lang['groups']['noDeleteAdmins'] = 'Admins(Yöneticiler) gurubunu silemezssiniz';

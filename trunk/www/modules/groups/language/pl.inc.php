@@ -5,7 +5,7 @@
 //Date : January, 20 2009
 
 //Uncomment this line in new translations!
-require($GO_LANGUAGE->get_fallback_language_file('files'));
+require($GO_LANGUAGE->get_fallback_language_file('groups'));
 
 $lang['groups']['name'] = 'Grupy';
 $lang['groups']['description'] = 'Moduł Admina; Managing user groups.';

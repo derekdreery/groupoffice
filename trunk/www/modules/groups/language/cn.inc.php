@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require($GO_LANGUAGE->get_fallback_language_file('files'));
+require($GO_LANGUAGE->get_fallback_language_file('groups'));
 $lang['groups']['name'] = '组';
 $lang['groups']['description'] = '管理模块; 管理用户组。';
 $lang['groups']['noDeleteAdmins'] = '不能删除 Admins 组';

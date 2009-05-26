@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require($GO_LANGUAGE->get_fallback_language_file('files'));
+require($GO_LANGUAGE->get_fallback_language_file('groups'));
 $lang['groups']['name'] = 'Grupuri';
 $lang['groups']['description'] = 'Modul Administrator; Gestiunea de grupuri si utilizatori.';
 $lang['groups']['noDeleteAdmins'] = 'Nu se poate şterge grupul Admins';

@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-//require($GO_LANGUAGE->get_fallback_language_file('files'));
+//require($GO_LANGUAGE->get_fallback_language_file('groups'));
 $lang['groups']['name'] = 'Groups';
 $lang['groups']['description'] = 'Admin module; Managing user groups.';
 $lang['groups']['noDeleteAdmins'] = 'You can\'t delete the group Admins';

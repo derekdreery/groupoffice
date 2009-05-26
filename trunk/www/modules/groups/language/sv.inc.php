@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require($GO_LANGUAGE->get_fallback_language_file('files'));
+require($GO_LANGUAGE->get_fallback_language_file('groups'));
 $lang['groups']['name'] = 'Grupper';
 $lang['groups']['description'] = 'Admin modul; Hantera användargrupper.';
 $lang['groups']['noDeleteAdmins'] = 'Du kan inte radera gruppen Administratörer';
