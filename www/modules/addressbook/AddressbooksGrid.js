@@ -63,7 +63,6 @@ Ext.extend(GO.addressbook.AddresbooksGrid, GO.grid.GridPanel, {
 		var task = 'save_companies';
 		for(var i=0; i<selections.length; i++)
 		{
-			console.debug(selections[i].json);
 			move_items.push(selections[i].id);
 			if(selections[i].json.company_id > 0)
 			{
