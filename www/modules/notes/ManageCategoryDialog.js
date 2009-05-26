@@ -21,7 +21,6 @@ GO.notes.ManageCategoriesDialog = function(config){
 		
 	this.categoriesGrid = new GO.notes.ManageCategoriesGrid();
 
-	config.iconCls='no-btn-categories';
 	config.maximizable=true;
 	config.layout='fit';
 	config.modal=false;
