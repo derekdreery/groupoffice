@@ -24,8 +24,6 @@ CREATE TABLE IF NOT EXISTS `em_accounts` (
   `novalidate_cert` enum('0','1') NOT NULL default '0',
   `username` varchar(50) default NULL,
   `password` varchar(64) default NULL,
-  `name` varchar(100) default NULL,
-  `email` varchar(100) default NULL,
   `signature` text,
   `standard` tinyint(4) NOT NULL default '0',
   `mbroot` varchar(30) default NULL,

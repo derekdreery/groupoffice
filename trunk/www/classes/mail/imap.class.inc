@@ -777,10 +777,14 @@ class imap{
 					//$nsection .= ".0";
 				}
 
-				if(strtolower($full_mime_type) != 'message/rfc822')
+				//added section is 0 check because novell uses message/rfc822 in the main headers
+				if($section==0 || strtolower($full_mime_type) != 'message/rfc822')
 				{
 					$this->get_parts($mimeobj->parts[$x], $nsection, $mimeobj->subtype);
-				}/*else {
+				}
+			
+				/*
+				 * else {
 					
 				if (strtolower($mimeobj->parts[$x]->subtype) == 'mixed') {
 				$section .= ".2";
@@ -814,7 +818,8 @@ class imap{
 				}
 			}
 
-			if(empty($name) && strtolower($full_mime_type) == 'message/rfc822')
+			//don't make an attachment for section=0 and type message/rfc822
+			if(empty($name) && !empty($section) && strtolower($full_mime_type) == 'message/rfc822')
 			{
 				$name='Message.eml';
 			}

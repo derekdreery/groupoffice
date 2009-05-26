@@ -127,16 +127,21 @@ class Go2Mime
 				$structure = $structure->parts[$parts_arr[$i]];
 			}
 		}
+		
+		$RFC822 = new RFC822();
+
+		$from = isset($structure->headers['from']) ? $structure->headers['from'] : '';
+		$addresses = $RFC822->parse_address_list($from);
 
 		$this->response['notification'] = isset($structure->headers['disposition-notification-to']) ? true : false;
 		$this->response['subject']= empty($structure->headers['subject']) ? '' : $structure->headers['subject'];
-		$this->response['from'] = isset($structure->headers['from']) ? htmlspecialchars($structure->headers['from'],ENT_QUOTES, 'UTF-8') : '';
-		$this->response['sender']= isset($structure->headers['from']) ? htmlspecialchars(String::get_email_from_string($structure->headers['from']),ENT_QUOTES, 'UTF-8') : '';
+		$this->response['from'] = isset($addresses[0]['personal']) ? htmlspecialchars($addresses[0]['personal'],ENT_QUOTES, 'UTF-8') : '';
+		$this->response['sender']= isset($addresses[0]['email']) ? htmlspecialchars($addresses[0]['email'],ENT_QUOTES, 'UTF-8') : '';
 		$this->response['to'] = isset($structure->headers['to']) ? $structure->headers['to'] : '';
 		$this->response['cc'] = isset($structure->headers['cc']) ? $structure->headers['cc'] : '';
 		$this->response['bcc'] = isset($structure->headers['bcc']) ? $structure->headers['bcc'] : '';
 		
-		$RFC822 = new RFC822();
+		
 		if(!empty($this->response['to']))
 		{
 			$addresses=$RFC822->parse_address_list($this->response['to']);
