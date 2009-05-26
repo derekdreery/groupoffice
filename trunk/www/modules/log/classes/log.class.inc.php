@@ -46,7 +46,7 @@ class log extends db {
  		if(!empty($query))
  		{
  			$sql .= " AND (text LIKE '".$this->escape($query)."' OR first_name LIKE '".$this->escape($query)."' OR middle_name LIKE '".$this->escape($query)."' OR last_name LIKE '".$this->escape($query)."' "
- 					. "OR CONCAT(first_name, middle_name, last_name) LIKE ?) ";
+ 					. "OR CONCAT(first_name, middle_name, last_name) LIKE '".$this->escape($query)."') ";
  		}		
 		$sql .= " ORDER BY ".$this->escape("gl.".$sortfield.' '.$sortorder);	
 		
