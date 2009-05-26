@@ -746,8 +746,6 @@ try{
 				//$response['size']=Number::format_size($response['size']);
 
 				$parts = array_reverse($imap->f("parts"));
-
-				//debug($parts);
 				
 				/*
 				 * Sometimes clients send multipart/alternative but there's only a text part. FIrst check if there's
