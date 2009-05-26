@@ -101,7 +101,7 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 				},
 				this.selectUser = new GO.form.SelectUser({
 					fieldLabel: GO.lang['strUser'],
-					disabled: !GO.settings.modules['email']['write_permission'],
+					disabled: !GO.settings.modules['addressbook']['write_permission'],
 					allowBlank: false
 				})
 			]
