@@ -164,6 +164,10 @@ line-height:20px;
 	background-image:url('images/16x16/email.png') !important;
 }
 
+.btn-folder{
+	background-image:url('images/16x16/folder.png') !important;
+}
+
 /* end buttons */
 
 /*start edit buttons */
