@@ -288,7 +288,7 @@ GO.addressbook.MainPanel = function(config)
 		
 	];
 
-	if(GO.mailings)
+	if(GO.mailings && GO.email)
 	{
 		tbar.push('-');
 		tbar.push({
