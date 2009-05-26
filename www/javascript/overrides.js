@@ -321,7 +321,7 @@ Ext.decode = Ext.util.JSON.decode = function(json){
 
 /**
  * Don't position tooltip outside the screen
- */
+
 
 Ext.override(Ext.ToolTip,{
 
@@ -348,4 +348,4 @@ Ext.override(Ext.ToolTip,{
     
     return {x : x, y: y};
   }    
-}); 
+}); */
