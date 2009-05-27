@@ -492,7 +492,7 @@ try
 					break;
 					
 					
-				case 'save_contacts':							
+				case 'drop_contact':							
 					
 					$contacts = json_decode(($_POST['items']));
 					$abook_id = isset($_REQUEST['book_id']) ? ($_REQUEST['book_id']) : 0;
@@ -530,7 +530,7 @@ try
 					echo json_encode($result);
 					break;
 					
-				case 'save_companies':							
+				case 'drop_company':							
 					
 					$companies = json_decode(($_POST['items']));
 					$abook_id = isset($_REQUEST['book_id']) ? ($_REQUEST['book_id']) : 0;
@@ -549,19 +549,19 @@ try
 						$company['id'] = $companies[$i];
 						if($company['id'] > 0)
 						{
-							$old_company = $ab->get_company($company_id);							
+							$old_company = $ab->get_company($company['id']);							
 							if(($old_company['addressbook_id'] != $abook_id) && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_company['acl_write']))
 							{
 								throw new AccessDeniedException();
 							}
 						
 							$company['addressbook_id'] = $abook_id;
-							$company['last_name'] = $old_company['last_name'];							
+							$company['name'] = $old_company['name'];
 							if(!$ab->update_company($company, $addressbook))
 							{
 								$result['feedback'] = $lang['common']['saveError'];
 								$result['success'] = false;
-							}							
+							}						
 						}						
 					}					
 					echo json_encode($result);
