@@ -38,10 +38,10 @@ function set_value($file, $str)
 echo "Configuring Postfix\n";
 
 
-$DBCONN="user = $mysql_root_user
-password = $mysql_root_password
+$DBCONN="user = $dbuser
+password = $dbpass
 hosts = localhost
-dbname = $servermanager_database";
+dbname = $dbname";
 
 
 $content="$DBCONN
