@@ -75,7 +75,7 @@
 my $db_type = 'mysql';
 #my $db_type = 'mysql';
 
-require "/etc/groupoffice/config-db.pl"
+require "/etc/groupoffice/vacation.pl"
 
 # leave empty for connection via UNIX socket
 #my $db_host = '';
@@ -86,13 +86,6 @@ require "/etc/groupoffice/config-db.pl"
 #my $db_name     = '{db_name}';
 
 my $syslog = 1;
-
-# path to logfile, when empty logging is supressed
-my $logfile='';
-#my $logfile = "/var/log/vacation.log";
-# path to file for debugging, debug supressed when empty
-my $debugfile='';
-#my $debugfile = "/var/log/vacation-debug.log";
 
 # =========== end configuration ===========
 
