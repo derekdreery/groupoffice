@@ -79,7 +79,7 @@ class wbxml
 		fclose($fp);
 		//convert temp file
 
-		if(strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')
+		if(is_windows())
 		{
 			$cmd = $GO_CONFIG->cmd_wbxml2xml.' -o '.$this->xmlfile.' '.$this->wbxmlfile;
 		}else
@@ -123,7 +123,7 @@ class wbxml
 		fclose($fp);
 
 
-		if(strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')
+		if(is_windows())
 		{
 			$cmd = $GO_CONFIG->cmd_xml2wbxml.' -v 1.2 -o '.$this->wbxmlfile.' '.$this->xmlfile;
 		}else

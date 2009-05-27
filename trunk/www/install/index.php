@@ -506,11 +506,6 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 
 
 			$GO_CONFIG->max_attachment_size= (trim($_POST['max_attachment_size']));
-
-
-			//LAST STEP
-			$GO_CONFIG->installed=true;
-
 			
 			if (save_config($GO_CONFIG) && !isset($feedback))
 			{
@@ -1029,6 +1024,9 @@ switch($task)
 		</tr>
 		<tr>
 		<?php
+		if(empty($GO_CONFIG->title))
+			$GO_CONFIG->title='Group-Office';
+			
 		$title = isset($_POST['title']) ? $_POST['title'] : $GO_CONFIG->title;
 		$webmaster_email = isset($_POST['webmaster_email']) ? $_POST['webmaster_email'] : $GO_CONFIG->webmaster_email;
 	?>
