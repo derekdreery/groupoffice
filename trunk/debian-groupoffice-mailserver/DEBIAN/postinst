@@ -1,2 +1,30 @@
-#!/usr/bin/php
+#!/bin/sh
+
+# Use debconf.
+. /usr/share/debconf/confmodule
+
+DATE=`date +%Y%m%d`
+
+
+
+
+db_version 2.0
+
+db_get groupoffice-mailserver/domain
+domain="$RET"
+
+db_get groupoffice-mailserver/domain
+domain="$RET"
+
+db_go
+
+echo "\$domain='$domain';\n" >> /etc/groupoffice/config-mailserver.inc.php
+cat /etc/groupoffice/config-db.php >> /etc/groupoffice/config-mailserver.inc.php
+
+#invoke-rc.d spamassassin restart
+#invoke-rc.d apache2 restart
+#invoke-rc.d dovecot restart
+#invoke-rc.d postfix restart
+
+
 
