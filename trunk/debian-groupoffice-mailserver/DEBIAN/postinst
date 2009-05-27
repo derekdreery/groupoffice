@@ -11,8 +11,8 @@ echo Configuring Postfix
 touch /etc/postfix/main.cf
 cp /etc/postfix/main.cf /etc/postfix/main.cf.gobak_$DATE
 
-postconf -e 'recipient_delimiter = +'
-postconf -e 'inet_interfaces = all'
+#postconf -e 'recipient_delimiter = +'
+#postconf -e 'inet_interfaces = all'
 postconf -e 'proxy_read_maps = $local_recipient_maps $mydestination $virtual_alias_maps $virtual_alias_domains $virtual_mailbox_maps $virtual_mailbox_domains $relay_recipient_maps $relay_domains $canonical_maps $sender_canonical_maps $recipient_canonical_maps $relocated_maps $transport_maps $mynetworks $virtual_mailbox_limit_maps'
 postconf -e 'virtual_alias_domains ='
 postconf -e 'virtual_alias_maps = proxy:mysql:$config_directory/mysql_virtual_alias_maps.cf'
@@ -66,47 +66,6 @@ chown spamd:spamd /var/lib/spamassassin
 postconf -e virtual_transport=dovecot
 postconf -e dovecot_destination_recipient_limit=1
 
-a2enmod ssl
-
-if [ ! -e /etc/ssl/certs/groupoffice.crt ]; then
-	echo Generating test SSL certificate
-
-	openssl genrsa -out groupoffice.key 1024
-	openssl req -new -key groupoffice.key -out groupoffice.csr
-	openssl x509 -req -days 365 -in groupoffice.csr -signkey groupoffice.key -out groupoffice.crt
-
-	mv groupoffice.csr /etc/ssl/certs
-	mv groupoffice.crt /etc/ssl/certs
-	mv groupoffice.key /etc/ssl/private
-fi
-
-
-echo "Setting up Postfix TLS"
-echo Note that "Common Name (eg, YOUR name)" MUST match the name of the server.
-
-if [ ! -e /etc/ssl/mailserver/mail-key.pem ]; then
-	mkdir -p /etc/ssl/mailserver/
-	cd /etc/ssl/mailserver/
-	openssl genrsa 1024 > mail-key.pem
-	chmod 400 mail-key.pem
-	openssl req -new -x509 -nodes -sha1 -days 365 -key mail-key.pem > mail-cert.pem
-fi
-
-
-
-postconf -e 'smtpd_sasl_auth_enable = yes'
-postconf -e 'smtpd_sasl_security_options = noanonymous'
-postconf -e 'broken_sasl_auth_clients = yes'
-postconf -e 'smtpd_sasl_type = dovecot'
-postconf -e 'smtpd_sasl_path = private/auth'
-
-postconf -e 'smtpd_tls_cert_file = /etc/ssl/mailserver/mail-cert.pem'
-postconf -e 'smtpd_tls_key_file = /etc/ssl/mailserver/mail-key.pem'
-postconf -e 'smtpd_tls_session_cache_database = btree:/var/spool/postfix/smtpd_tls_session_cache'
-postconf -e 'smtpd_tls_security_level = encrypt'
-postconf -e 'smptd_tls_received_header = no'
-postconf -e 'smtpd_tls_loglevel = 0'
-postconf -e 'tls_random_source = dev:/dev/urandom'
 
 
 cp /etc/default/spamassassin /etc/spamassassin/spamassassin.gobak_$DATE
