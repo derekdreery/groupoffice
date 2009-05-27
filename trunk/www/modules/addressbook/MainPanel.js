@@ -85,6 +85,7 @@ GO.addressbook.MainPanel = function(config)
 	this.contactsPanel.on("show", function(){
 		this.contactsGrid.onGridShow();
 		this.setAdvancedSearchNotification(this.contactsGrid.store);
+		this.addressbooksGrid.setType('contact');
 	}, this);
 	
 	this.companyPanel = new Ext.Panel({
@@ -102,6 +103,7 @@ GO.addressbook.MainPanel = function(config)
 	this.companyPanel.on("show", function(){
 		this.companiesGrid.onGridShow();
 		this.setAdvancedSearchNotification(this.companiesGrid.store);
+		this.addressbooksGrid.setType('company');
 	}, this);
 	
 
@@ -116,6 +118,17 @@ GO.addressbook.MainPanel = function(config)
 			this.setSearchParams({addressbook_id : record.get("id")});			
 	}, this);
 	
+	
+	this.addressbooksGrid.on('drop', function(type)
+	{
+		if(type == 'company')
+		{
+			this.companiesGrid.store.reload();
+		}else
+		{
+			this.contactsGrid.store.reload();
+		}		
+	}, this);
 	
 	this.tabPanel = new Ext.TabPanel({
     region : 'center',

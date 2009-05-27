@@ -335,6 +335,7 @@ class addressbook extends db {
 
     function update_company($company, $addressbook=false, $old_company=false)
     {
+    	
         if (!isset($company['mtime']) || $company['mtime'] == 0) {
             $company['mtime'] = time();
         }
@@ -345,6 +346,7 @@ class addressbook extends db {
         }
 
         global $GO_MODULES;
+
         if(isset($GO_MODULES->modules['files']) && isset($company['addressbook_id']))
         {
             if(!$addressbook)
@@ -1215,13 +1217,19 @@ class addressbook extends db {
     }
 
     function move_contacts_company($company_id, $old_addressbook_id, $addressbook_id, $update_company=true)
-    {
+    {    	    	 
         if($company_id>0)
         {
-            $this->query('UPDATE ab_contacts SET addressbook_id="'.$this->escape($addressbook_id).'" WHERE company_id="'.$this->escape($company_id).'" AND addressbook_id="'.$this->escape($old_addressbook_id).'"');
+        	$this->query("SELECT * FROM ab_contacts WHERE company_id=? AND addressbook_id=?", 'ii', array($company_id, $old_addressbook_id));
+        	while($contact = $this->next_record())
+        	{
+        		$contact['addressbook_id'] = $addressbook_id;
+        		$this->update_contact($contact);
+        	}
+                    
             if($update_company)
             {
-                $this->query('UPDATE ab_companies SET addressbook_id="'.$this->escape($addressbook_id).'" WHERE id="'.$this->escape($company_id).'"');
+                $this->query('UPDATE ab_companies SET addressbook_id=? WHERE id=?', 'ii', array($addressbook_id, $company_id));
             }
         }
     }

@@ -43,6 +43,7 @@ GO.addressbook.AddresbooksGrid = function(config){
 
 Ext.extend(GO.addressbook.AddresbooksGrid, GO.grid.GridPanel, {
 	
+	type: '',
 	afterRender : function()
 	{	
 		GO.addressbook.AddresbooksGrid.superclass.afterRender.call(this);		
@@ -52,39 +53,46 @@ Ext.extend(GO.addressbook.AddresbooksGrid, GO.grid.GridPanel, {
 			notifyDrop : this.onNotifyDrop.createDelegate(this)
 		});	
 	},
+	setType : function(type)
+	{
+		this.type = type;
+	},
 	onNotifyDrop : function(source, e, data)
 	{	
 		var selections = source.dragData.selections;
         var dropRowIndex = this.getView().findRowIndex(e.target);
         var book_id = this.getView().grid.store.data.items[dropRowIndex].id;
 
-		var company_id = 0;
+		var show_confirm = false;
 		var move_items = [];
-		var task = 'save_companies';
 		for(var i=0; i<selections.length; i++)
 		{
 			move_items.push(selections[i].id);
 			if(selections[i].json.company_id > 0)
 			{
+				show_confirm = true;
 				company_id = selections[i].json.company_id;
 			}
-			if(selections[i].json.id > 0)
-			{
-				contact_id = selections[i].json.id;
-				task = 'save_contacts';
-			}			
+		}
+		
+		if(!show_confirm && this.type == 'company')
+		{
+			show_confirm = true;
 		}
 			
-		if(book_id > 0 && (company_id == 0 || confirm(GO.addressbook.lang.moveAll)))
+		if(book_id > 0 && (!show_confirm || confirm(GO.addressbook.lang.moveAll)))
 		{
 			Ext.Ajax.request({
 				url: GO.settings.modules.addressbook.url+'action.php',
 				params: {
-					task:task,
+					task:'drop_' + this.type,
 					book_id:book_id,
 					items:Ext.encode(move_items)
 				}
-			});
+			});			
+			
+			this.fireEvent('drop', this.type);
+			
 			return true;
 		}else
 		{
