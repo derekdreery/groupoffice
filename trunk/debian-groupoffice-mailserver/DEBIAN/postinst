@@ -96,3 +96,5 @@ invoke-rc.d spamassassin restart
 invoke-rc.d apache2 restart
 invoke-rc.d dovecot restart
 invoke-rc.d postfix restart
+
+exit 0
