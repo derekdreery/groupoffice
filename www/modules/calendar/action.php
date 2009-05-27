@@ -560,7 +560,7 @@ try{
 					
 					if(!$swift->sendmail(true))
 					{
-						throw new Exception('Could not send invitaition');
+						throw new Exception('Could not send invitation');
 					}
 				}
 			}
