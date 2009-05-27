@@ -28,7 +28,7 @@ if(isset($_REQUEST['task']) && $_REQUEST['task']=='logout')
 	}
 }
 //$config_file = $GO_CONFIG->get_config_file();
-if(empty($GO_CONFIG->installed))
+if(empty($GO_CONFIG->title))
 {
 	header('Location: install/');
 	exit();

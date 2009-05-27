@@ -286,7 +286,7 @@ class GO_CONFIG
 	 * @var     string
 	 * @access  public
 	 */
-	var $title = 'Group-Office';
+	var $title = '';
 
 	/**
 	 * The e-mail of the webmaster
@@ -772,7 +772,7 @@ class GO_CONFIG
        */
       function __construct()
       {
-      	if(!$this->installed)
+      	if(empty($this->title))
       	{
       		//Detect some default values for installation if root_path is not set yet
       		//$this->root_path = str_replace('classes/base/config.class.inc','',__FILE__);
@@ -858,6 +858,14 @@ class GO_CONFIG
       	{
       		$this->log=true;
       	}
+
+				if(is_windows())
+				{
+					$this->cmd_zip=$this->root_path.'controls/win32/zip.exe';
+					$this->cmd_unzip=$this->root_path.'controls/win32/unzip.exe';
+					$this->cmd_xml2wbxml=$this->root_path.'controls/win32/libwbxml/xml2wbxml.exe';
+					$this->cmd_wbxml2xml=$this->root_path.'controls/win32/libwbxml/wbxml2xml.exe';
+				}
 
       	$this->set_full_url();
       }

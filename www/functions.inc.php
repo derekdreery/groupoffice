@@ -26,6 +26,11 @@ function __autoload($class_name) {
 	require_once $GO_CONFIG->class_path. $class_name.'.class.inc.php';
 }
 
+
+function is_windows(){
+	return strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
+}
+
 /**
  * Get the current server time in microseconds
  *
