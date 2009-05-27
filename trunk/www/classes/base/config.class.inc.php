@@ -624,7 +624,7 @@ class GO_CONFIG
 	 * @access  public
 	 */
 	var $folder_create_mode = '0755';
-	
+
 
 
 	/**
@@ -779,7 +779,7 @@ class GO_CONFIG
       		$this->root_path = str_replace('\\','/',dirname(dirname(dirname(__FILE__)))).'/';
       		$this->host = dirname(dirname($_SERVER['PHP_SELF']));
 
-					
+
       		if(substr($this->host,-1) != '/')
       		{
       			$this->host .= '/';
@@ -949,6 +949,7 @@ class GO_CONFIG
       			$url .= $_SERVER["SERVER_NAME"].$this->host;
       		}
       		$this->full_url=$url;
+
       	}
       }
 
