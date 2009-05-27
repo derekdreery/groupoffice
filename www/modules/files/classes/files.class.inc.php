@@ -138,6 +138,9 @@ class files extends db {
 	}
 
 	function check_folder_location($folder_id, $path) {
+
+		global $GO_CONFIG;
+		
 		$new_folder_id=$folder_id;
 
 		$current_path = $this->build_path($folder_id);
@@ -151,7 +154,6 @@ class files extends db {
 			$new_folder = $this->resolve_path($path,true,1,'1');
 			return $new_folder['id'];
 		}elseif($check_current_path != $path) {
-			global $GO_CONFIG;
 
 			$fs = new filesystem();
 
@@ -180,6 +182,12 @@ class files extends db {
 			$up_folder['name']=$folder_name;
 			$up_folder['readonly']='1';
 			$this->update_folder($up_folder);
+		}else
+		{
+			if(!is_dir($GO_CONFIG->file_storage_path.$current_path))
+			{
+				mkdir($GO_CONFIG->file_storage_path.$current_path, $GO_CONFIG->folder_create_mode, true);
+			}
 		}
 		return $new_folder_id;
 	}
