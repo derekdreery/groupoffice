@@ -163,7 +163,7 @@ class imap{
 		
 		$this->touched_folders[]=$this->mailbox;
 		
-		$this->connectstring = $host.":".$port."/".$this->servertype.$GO_CONFIG->email_connectstring_options;
+		$this->connectstring = $host.":".$port."/".$this->servertype;
 
 		if ($ssl) {
 			$this->connectstring .= '/ssl';
