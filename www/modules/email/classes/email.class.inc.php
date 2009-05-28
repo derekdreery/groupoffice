@@ -312,7 +312,8 @@ class email extends db
 			$alias['account_id']=$account['id'];
 			$alias['name']=$account['name'];
 			$alias['email']=$account['email'];
-			$alias['signature']=$account['signature'];
+			if(!empty($account['signature']))
+				$alias['signature']=$account['signature'];
 			
 			$this->add_alias($alias);				
 			
