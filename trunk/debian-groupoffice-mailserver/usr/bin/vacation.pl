@@ -73,19 +73,26 @@
 
 # db_type - uncomment one of these
 my $db_type = 'mysql';
-#my $db_type = 'mysql';
 
-require "/etc/groupoffice/vacation.pl"
-
-# leave empty for connection via UNIX socket
-#my $db_host = '';
+our $db_host = '';
 
 # connection details
-#my $db_username = '{db_user}';
-#my $db_password = '{db_pass}';
-#my $db_name     = '{db_name}';
+our $db_username = '';
+our $db_password = '';
+our $db_name     = '';
+
+# path to logfile, when empty logging is supressed
+our $logfile='';
+#my $logfile = "/var/log/vacation.log";
+# path to file for debugging, debug supressed when empty
+our $debugfile='';
+#my $debugfile = "/var/log/vacation-debug.log";
 
 my $syslog = 1;
+
+do "/etc/groupoffice/vacation.pl";
+
+
 
 # =========== end configuration ===========
 
