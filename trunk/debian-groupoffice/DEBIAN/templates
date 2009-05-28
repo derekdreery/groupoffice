@@ -1,0 +1,6 @@
+Template: groupoffice/completed
+Type: note
+Description: Group-Office is now installed.
+ To complete the installation launch your browser and go to
+ http://localhost/groupoffice/ or replace localhost with the hostname / IP of
+ this machine.
