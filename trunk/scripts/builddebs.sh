@@ -1,5 +1,17 @@
 #!/bin/sh
 
+PRG="$0"
+OLDPWD=`pwd`
+P=`dirname $PRG`
+cd $P
+if [ `pwd` != "/" ]
+then
+FULLPATH=`pwd`
+else
+FULLPATH=''
+fi
+
+
 cd /tmp
 
 rm -Rf godebs
@@ -17,5 +29,5 @@ chmod 775 debian-groupoffice-mailserver/DEBIAN/postinst
 dpkg --build debian-groupoffice
 dpkg --build debian-groupoffice-mailserver
 
-mv debian-groupoffice.deb /var/www/trunk/scripts/groupoffice.deb
-mv debian-groupoffice-mailserver.deb /var/www/trunk/scripts/groupoffice-mailserver.deb
+mv debian-groupoffice.deb $FULLPATH/groupoffice.deb
+mv debian-groupoffice-mailserver.deb $FULLPATH/groupoffice-mailserver.deb

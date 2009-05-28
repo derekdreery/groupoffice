@@ -23,7 +23,6 @@ $config['allow_duplicate_email']=false;
 $config['auto_activate_accounts']=false;
 $config['notify_admin_of_registration']=true;
 $config['host']="/groupoffice/";
-$config['title']="Group-Office";
 $config['root_path']="/usr/share/groupoffice/";
 $config['tmpdir']="/tmp/";
 $config['max_users']="0";
