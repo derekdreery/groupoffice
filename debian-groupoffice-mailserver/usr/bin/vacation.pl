@@ -340,7 +340,8 @@ if (!$from || !$to || !$messageid) { exit (0); }
 
 $from = lc ($from);
 
-if (!Email::Valid->address($from,-mxcheck => 1)) { do_debug("Invalid from email address: $from; exiting."); exit(0); }
+#if (!Email::Valid->address($from,-mxcheck => 1)) { do_debug("Invalid from email address: $from; exiting."); exit(0); }
+if (!Email::Valid->address($from)) { do_debug("Invalid from email address: $from; exiting."); exit(0); }
 
 # Check if it's an obvious sender, exit
 if ($from =~ /([\w\-.%]+\@[\w.-]+)/) { $from = $1; }

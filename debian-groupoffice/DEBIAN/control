@@ -8,3 +8,7 @@ Depends: libapache2-mod-php5, php5 (>=5.2), php5-mysql (>=5.2), php5-imap (>=5.2
 Suggests: zip, tnef, libwbxml2-utils
 Maintainer: Merijn Schering <mschering@intermesh.nl
 Description: Groupware application
+ Take your office online
+ Share projects, calendars, files and e-mail online with co-workers and clients.
+ Easy to use and fully customizable, Group-Office takes online collaboration
+ to the next level.

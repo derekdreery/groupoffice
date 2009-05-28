@@ -12,6 +12,7 @@ cp /etc/postfix/main.cf /etc/postfix/main.cf.gobak
 
 #postconf -e 'recipient_delimiter = +'
 #postconf -e 'inet_interfaces = all'
+postconf -e 'mydestination = $myhostname, localhost, localhost.localdomain'
 postconf -e 'proxy_read_maps = $local_recipient_maps $mydestination $virtual_alias_maps $virtual_alias_domains $virtual_mailbox_maps $virtual_mailbox_domains $relay_recipient_maps $relay_domains $canonical_maps $sender_canonical_maps $recipient_canonical_maps $relocated_maps $transport_maps $mynetworks $virtual_mailbox_limit_maps'
 postconf -e 'virtual_alias_domains ='
 postconf -e 'virtual_alias_maps = proxy:mysql:$config_directory/mysql_virtual_alias_maps.cf'
@@ -52,6 +53,7 @@ touch /var/log/vacation.log /var/log/vacation-debug.log
 chown vacation:vacation /var/log/vacation*
 
 chown vacation:vacation /usr/bin/vacation.pl
+chmod 700 /usr/bin/vacation.pl
 
 postconf -e 'transport_maps = hash:/etc/postfix/transport';
 postconf -e 'vacation_destination_recipient_limit = 1';
