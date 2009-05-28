@@ -140,13 +140,13 @@ class files extends db {
 	function check_folder_location($folder_id, $path) {
 
 		global $GO_CONFIG;
-		
+
 		$new_folder_id=$folder_id;
 
 		$current_path = $this->build_path($folder_id);
 
 		//strip the (n) part at the end of the path that is added when a duplicate
-		//is found.		
+		//is found.
 		$check_current_path=preg_replace('/ \([0-9]+\)$/', '', $current_path);
 
 
@@ -174,7 +174,7 @@ class files extends db {
 			{
 				$fs->mkdir_recursive($GO_CONFIG->file_storage_path.$destfolder_path.'/'.$folder_name);
 			}
-			
+
 			$sourcefolder = $this->get_folder($folder_id);
 
 			$up_folder['id']=$new_folder_id;
@@ -720,7 +720,7 @@ class files extends db {
 		{
 			throw new FileNotFoundException();
 		}
-		
+
 		$full_path = $GO_CONFIG->file_storage_path.$this->build_path($folder);
 		if(!is_dir($full_path))
 		{
@@ -736,6 +736,9 @@ class files extends db {
 			$dbfolders[]=$dbfolder;
 		}
 		$fsfolders = $fs->get_folders($full_path);
+
+		debug($fsfolders);
+		debug($dbfolders);
 
 		foreach($fsfolders as $fsfolder)
 		{
@@ -1140,7 +1143,7 @@ class files extends db {
 		}
 	}
 
-	
+
 
 
 	function mkdir($parent, $name, $share_user_id=0, $user_id=0, $ignore_existing_filesystem_folder=false, $readonly='0') {

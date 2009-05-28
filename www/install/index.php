@@ -1,12 +1,12 @@
 <?php
-/** 
+/**
  * Copyright Intermesh
- * 
+ *
  * This file is part of Group-Office. You should have received a copy of the
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
- * 
+ *
  * If you have questions write an e-mail to info@intermesh.nl
- * 
+ *
  * @copyright Copyright Intermesh
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
@@ -174,7 +174,7 @@ if($task !='test')
 		echo '<br /><br /><font color="#003399">';
 		echo '<i>$ touch config.php (Or FTP an empty config.php to the server)<br />';
 		echo '$ chmod 666 config.php</i></font>';
-		echo '<br /><br />If it does exist and you still see this message then it might be that safe_mode is enabled and the config.php is owned by another user then the Group-Office files.';		
+		echo '<br /><br />If it does exist and you still see this message then it might be that safe_mode is enabled and the config.php is owned by another user then the Group-Office files.';
 		echo '<br /><br /><div style="text-align: right;"><input type="submit" value="Continue" /></div>';
 		print_foot();
 		exit();
@@ -210,7 +210,7 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 			$GO_CONFIG->db_pass = $_POST['db_pass'];
 			$GO_CONFIG->db_port = $_POST['db_port'];
 			$GO_CONFIG->db_socket = $_POST['db_socket'];
-			
+
 			$db->set_config($GO_CONFIG);
 
 			if(@$db->connect())
@@ -230,7 +230,7 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 			$db->halt_on_error = 'report';
 
 			$db->set_config($GO_CONFIG);
-			
+
 			if (!$db->connect())
 			{
 				print_head();
@@ -246,12 +246,12 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 				while ($query = array_shift($queries))
 				{
 					$db->query($query);
-				}				
-				
+				}
+
 				require($GO_CONFIG->root_path."install/sql/updates.inc.php");
 				//store the version number for future upgrades
 				$GO_CONFIG->save_setting('version', count($updates));
-				
+
 				$user['id'] = $GO_USERS->nextid("go_users");
 
 				$GO_GROUPS->query("DELETE FROM go_db_sequence WHERE seq_name='groups'");
@@ -260,16 +260,16 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 				$admin_group_id = $GO_GROUPS->add_group($user['id'], $lang['common']['group_admins']);
 				$everyone_group_id = $GO_GROUPS->add_group($user['id'], $lang['common']['group_everyone']);
 				$internal_group_id = $GO_GROUPS->add_group($user['id'], $lang['common']['group_internal']);
-				
+
 				$user_groups = array($admin_group_id, $everyone_group_id, $internal_group_id);
-				
+
 				$GO_MODULES->load_modules();
-				
+
 				$fs = new filesystem();
-			
+
 				//install all modules
-				$module_folders = $fs->get_folders($GO_CONFIG->root_path.'modules/');				
-				
+				$module_folders = $fs->get_folders($GO_CONFIG->root_path.'modules/');
+
 				$available_modules=array();
 				foreach($module_folders as $folder)
 				{
@@ -277,7 +277,7 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 					{
 						$available_modules[]=$folder['name'];
 					}
-				}				
+				}
 				$priority_modules=array('summary','email','calendar','tasks','addressbook','files', 'notes', 'projects');
 
 				for($i=0;$i<count($priority_modules);$i++)
@@ -294,9 +294,9 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 						$GO_MODULES->add_module($available_modules[$i]);
 					}
 				}
-				
 
-				
+
+
 				$user['language'] = $GO_LANGUAGE->language;
 				$user['first_name']='Group-Office';
 				$user['middle_name']='';
@@ -346,10 +346,10 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 
 			if (substr($tmpdir, -1) != '/') $tmpdir = $tmpdir.'/';
 			$GO_CONFIG->tmpdir=$tmpdir;
-			
-			
+
+
 			//autodetect helper program locations
-			
+
 			$GO_CONFIG->cmd_zip = whereis('zip') ? whereis('zip') : '/usr/bin/zip';
 			$GO_CONFIG->cmd_unzip = whereis('unzip') ? whereis('unzip') : '/usr/bin/unzip';
 			$GO_CONFIG->cmd_tar = whereis('tar') ? whereis('tar') : '/bin/tar';
@@ -406,7 +406,7 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 					if (substr($host , 0, 1) != '/') $host  = '/'.$host;
 				}
 
-			
+
 				$GO_CONFIG->host = $host;
 				if (save_config($GO_CONFIG))
 				{
@@ -421,11 +421,11 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 
 		case 'theme':
 			$GO_CONFIG->language = $_POST['language'];
-			
+
 			$GO_LANGUAGE->set_language($GO_CONFIG->language);
-			
+
 			$GO_CONFIG->theme = ($_POST['theme']);
-			
+
 			$GO_CONFIG->default_country = ($_POST['default_country']);
 			$GO_CONFIG->default_timezone = ($_POST['default_timezone']);
 			$GO_CONFIG->default_currency = ($_POST['default_currency']);
@@ -435,7 +435,7 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 			$GO_CONFIG->default_first_weekday = ($_POST['default_first_weekday']);
 			$GO_CONFIG->default_decimal_separator = ($_POST['default_decimal_separator']);
 			$GO_CONFIG->default_thousands_separator = ($_POST['default_thousands_separator']);
-			
+
 
 			if (save_config($GO_CONFIG))
 			{
@@ -450,38 +450,38 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 
 			$GO_CONFIG->allow_password_change =  isset($_POST['allow_password_change']) ? true : false;
 			$GO_CONFIG->allow_themes =  isset($_POST['allow_themes']) ? true : false;
-			
+
 			$GO_CONFIG->registration_fields = isset($_POST['registration_fields']) ? implode(',',$_POST['registration_fields']) : '';
 			$GO_CONFIG->required_registration_fields = isset($_POST['required_registration_fields']) ? implode(',',$_POST['required_registration_fields']) : '';
-			
+
 			if (save_config($GO_CONFIG))
 			{
 				$task = $nexttask;
 			}
 
 			break;
-			
+
 		case 'default_module_access':
-			
+
 			$GO_CONFIG->allow_password_change =  isset($_POST['allow_password_change']) ? true : false;
 			$GO_CONFIG->allow_themes =  isset($_POST['allow_themes']) ? true : false;
-			
-			
+
+
 			$GO_CONFIG->register_modules_read = isset($_POST['register_modules_read']) ? implode(',',$_POST['register_modules_read']) : '';
 			$GO_CONFIG->register_modules_write = isset($_POST['register_modules_write']) ? implode(',',$_POST['register_modules_write']) : '';
-			
+
 			if (save_config($GO_CONFIG))
 			{
 				$task = $nexttask;
 			}
 
 			break;
-			
+
 		case 'default_groups':
-			
+
 			$GO_CONFIG->register_user_groups = isset($_POST['register_user_groups']) ? implode(',',$_POST['register_user_groups']) : '';
 			$GO_CONFIG->register_visible_user_groups = isset($_POST['register_visible_user_groups']) ? implode(',',$_POST['register_visible_user_groups']) : '';
-			
+
 			if (save_config($GO_CONFIG))
 			{
 				$task = $nexttask;
@@ -506,7 +506,7 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 
 
 			$GO_CONFIG->max_attachment_size= (trim($_POST['max_attachment_size']));
-			
+
 			if (save_config($GO_CONFIG) && !isset($feedback))
 			{
 				$task = $nexttask;
@@ -552,7 +552,7 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 				$GO_CONFIG->db_pass = $_POST['db_pass1'];
 				$GO_CONFIG->db_port = $_POST['db_port'];
 				$GO_CONFIG->db_socket = $_POST['db_socket'];
-				
+
 				$db->set_parameters($_POST['db_host'], null, $_POST['admin_user'], $_POST['admin_pass'], $_POST['db_port'], $_POST['db_socket']);
 
 				if($db->connect())
@@ -590,16 +590,16 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 			}
 			break;
 		case 'database_connection':
-			
+
 			break;
 		case 'create_database':
-			
+
 			break;
 		case 'upgrade':
-			
+
 			break;
-			
-		default: 
+
+		default:
 			$task = $nexttask;
 			break;
 
@@ -625,7 +625,7 @@ switch($task)
 	case 'test':
 		print_head();
 		echo '<input type="hidden" name="task" value="test" />';
-		
+
 		echo '<h1>Welcome!</h1><p>Thank you for installing Group-Office. This page checks if your system meets the requirements to run Group-Office.</p>'.
 			'<p>If this page prints errors or warnings, please visit this page for more information: <a target="_blank" href="http://www.group-office.com/wiki/Installation">http://www.group-office.com/wiki/Installation</a></p>';
 
@@ -657,7 +657,7 @@ switch($task)
 		echo '<input type="hidden" name="task" value="release_notes" />';
 		echo 'Please read the release notes<br /><br />';
 		echo '<iframe style="width: 100%; height: 300px; background: #ffffff;" src="../RELEASE.TXT"></iframe>';
-		
+
 		echo '<br /><br /><div align="right"><input type="button" onclick="document.location=\''.$_SERVER['PHP_SELF'].'?task='.$lasttask.'\';" value="Back" />&nbsp;&nbsp;<input type="submit" value="Continue" /></div>';
 		print_foot();
 		exit();
@@ -794,16 +794,16 @@ switch($task)
 			echo $feedback.'<br /><br />';
 		}
 		?>
-			<input type="hidden" name="task" value="post_database_connection" />		
+			<input type="hidden" name="task" value="post_database_connection" />
 			Create a database now and fill in the values to connect to your database.<br />
 			The database user should have permission to perform select-, insert-, update- and delete queries. It must also be able to lock tables.<br /><br />
-			
+
 			If you are upgrading then now is the last time to back up your database! Fill in the fields and click at 'Continue' to upgrade your database structure.
 			<br /><br />
 
 			<font color="#003399"><i>
 			$ mysql -u root -p<br />
-			mysql&#62; CREATE DATABASE groupoffice;<br />			
+			mysql&#62; CREATE DATABASE groupoffice;<br />
 			mysql&#62; GRANT ALL PRIVILEGES ON groupoffice.* TO 'groupoffice'@'localhost'<br />
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&#62; IDENTIFIED BY 'some_pass' WITH GRANT OPTION;<br />
 			mysql&#62; quit;<br />
@@ -879,19 +879,19 @@ switch($task)
 		print_head();
 		if (!@$db->connect($GO_CONFIG->db_name, $GO_CONFIG->db_host, $GO_CONFIG->db_user, $GO_CONFIG->db_pass))
 		{
-			
+
 			echo 'Can\'t connect to database!';
 			echo '<br /><br />Correct this and refresh this page.';
-			
+
 		}else
-		{			
+		{
 			$db->query("SELECT @@session.sql_mode;");
 			$record = $db->next_record(MYSQL_BOTH);
 			if(strstr($record[0], 'STRICT')!==false)
 			{
 				echo '<p style="color:red">The sql-mode setting in the MySQL config my.cnf is set to STRICT_TRANS_TABLES, STRICT_ALL_TABLES or TRADITIONAL. Group-Office does not yet work with this setting. You might want this setting enabled if you are a developer, but for production use you should disable it.</p>';
 			}
-			
+
 			$settings_exist = false;
 			$is_old_go=false;
 			$db->query("SHOW TABLES");
@@ -927,7 +927,7 @@ switch($task)
 				{
 					$db_version = false;
 				}
-			
+
 				?>
 					<input type="hidden" name="task" value="upgrade" />
 					Group-Office has detected a previous installation of Group-Office. By pressing continue the database will be upgraded. This may take some time
@@ -968,15 +968,15 @@ switch($task)
 				Group-Office has detected an older version of Group-Office. The installer can't automatically upgrade this database.
 				<a href="../INSTALL.TXT">Read this for upgrade instructions</a>
 				<?php
-			}else			
+			}else
 			{
 				echo 	'<input type="hidden" name="task" value="database_structure" />';
-				
+
 				echo 'Group-Office succesfully connected to your database!<br />'.
 				'Click on \'Continue\' to create the tables for the Group-Office '.
-				'base system. This can take some time. Don\'t interupt this process.<br /><br />';		
-				
-				echo '<div align="right"><input type="submit" value="Continue" /></div>';				
+				'base system. This can take some time. Don\'t interupt this process.<br /><br />';
+
+				echo '<div align="right"><input type="submit" value="Continue" /></div>';
 			}
 		}
 		print_foot();
@@ -1026,7 +1026,7 @@ switch($task)
 		<?php
 		if(empty($GO_CONFIG->title))
 			$GO_CONFIG->title='Group-Office';
-			
+
 		$title = isset($_POST['title']) ? $_POST['title'] : $GO_CONFIG->title;
 		$webmaster_email = isset($_POST['webmaster_email']) ? $_POST['webmaster_email'] : $GO_CONFIG->webmaster_email;
 	?>
@@ -1125,7 +1125,7 @@ switch($task)
 		Maximum upload size:
 		</td>
 		<td>
-		<input type="text" size="50" name="max_file_size" value="<?php 
+		<input type="text" size="50" name="max_file_size" value="<?php
 		$max_ini = return_bytes(ini_get('upload_max_filesize'));
 		if($GO_CONFIG->max_file_size > $max_ini)
 		{
@@ -1134,18 +1134,20 @@ switch($task)
 		echo $GO_CONFIG->max_file_size; ?>"  />
 		(Current PHP configuration allows <?php echo $max_ini; ?> bytes)
 		</td>
-		</tr>		
+		</tr>
 		<?php
 		if($GO_CONFIG->local_path == '')
 		{
 			$GO_CONFIG->local_path = $GO_CONFIG->root_path.'local/';
 			$GO_CONFIG->local_url = $GO_CONFIG->host.'local/';
-		}	
-		?>			
+		}
+		?>
 		<tr>
 			<td colspan="2">
 			<br /><br />
-			Group-Office needs a place to store that is available through a webbrowser so please provide the URL to access this path too.
+			Group-Office needs a place to store that is available through a webbrowser so please provide the URL to access this path too. The default path is inside the
+			Group-Office directory. It is probably better to place it somewhere outside this directory if you have the means to do so. This way configuration data
+			is separated from the Group-Office source.
 			<br /><br />
 			<font color="#003399"><i>
 			$ su<br />
@@ -1172,7 +1174,7 @@ switch($task)
 			<td><input type="text" size="50" name="local_url" value="<?php echo $local_url; ?>" /></td>
 		</tr>
 		<tr>
-			<td colspan="2">	
+			<td colspan="2">
 			<br /><br />
 		Group-Office needs a place to store temporary data such as session data or file uploads. Create a writable path for this purpose now and enter it in the box below.<br />
 		The /tmp directory is a good option.
@@ -1187,7 +1189,7 @@ switch($task)
 		<td><input type="text" size="50" name="tmpdir" value="<?php echo $tmpdir; ?>" /></td>
 		</tr>
 		</table><br />
-		
+
 		<div align="right">
 		<?php echo '<input type="button" onclick="document.location=\''.$_SERVER['PHP_SELF'].'?task='.$lasttask.'\';" value="Back" />&nbsp;&nbsp;'; ?>
 		<input type="submit" value="Continue" />
@@ -1211,7 +1213,7 @@ switch($task)
 		It would be nice if you added your missing language to the language/languages.inc file and send it to
 		info@intermesh.nl!
 		<br /><br />
-		
+
 		<table>
 		<tr>
 			<td>Country:</td>
@@ -1219,14 +1221,14 @@ switch($task)
 			<select name="default_country">
 			<?php
 			require($GO_LANGUAGE->get_base_language_file('countries'));
-			
+
 			foreach($countries as $key => $country)
 			{
 				echo '<option value="'.$key.'"';
 				if($key==$GO_CONFIG->default_country)
 				{
 					echo ' selected';
-				}				
+				}
 				echo '>'.$country.'</option>';
 			}
 			?></select>
@@ -1237,14 +1239,14 @@ switch($task)
 			<td><select name="language">
 			<?php
 			require($GO_CONFIG->root_path.'language/languages.inc.php');
-			
+
 			foreach($languages as $key => $language)
 			{
 				echo '<option value="'.$key.'"';
 				if($key==$GO_CONFIG->language)
 				{
 					echo ' selected';
-				}				
+				}
 				echo '>'.$language.'</option>';
 			}
 			?></select></td>
@@ -1254,7 +1256,7 @@ switch($task)
 			<td>
 			<select name="default_timezone">
 			<?php
-			
+
 			$timezone_identifiers = DateTimeZone::listIdentifiers();
 			foreach($timezone_identifiers as $timezone)
 			{
@@ -1262,34 +1264,34 @@ switch($task)
 				if($timezone==$GO_CONFIG->default_timezone)
 				{
 					echo ' selected';
-				}				
+				}
 				echo '>'.$timezone.'</option>';
 			}
 			?></select>
 			</td>
 		</tr>
-		
+
 		<tr>
 			<td>Date format:</td>
 			<td>
 			<select name="default_date_format">
 			<?php
-		
+
 			foreach($GO_CONFIG->date_formats as $format)
 			{
 				$friendly[strpos($format, 'Y')]='Year';
 				$friendly[strpos($format, 'm')]='Month';
 				$friendly[strpos($format, 'd')]='Day';
-	
+
 				$strFriendly = $friendly[0].$GO_CONFIG->default_date_separator.
 				$friendly[1].$GO_CONFIG->default_date_separator.
 				$friendly[2];
-			
+
 				echo '<option value="'.$format.'"';
 				if($format==$GO_CONFIG->default_date_format)
 				{
 					echo ' selected';
-				}				
+				}
 				echo '>'.$strFriendly.'</option>';
 			}
 			?></select>
@@ -1300,59 +1302,59 @@ switch($task)
 			<td>
 			<select name="default_date_separator">
 			<?php
-		
+
 			foreach($GO_CONFIG->date_separators as $ds)
 			{
 				echo '<option value="'.$ds.'"';
 				if($ds==$GO_CONFIG->default_date_separator)
 				{
 					echo ' selected';
-				}				
+				}
 				echo '>'.$ds.'</option>';
 			}
 			?></select>
 			</td>
 		</tr>
-		
+
 		<tr>
 			<td>Time format:</td>
 			<td>
 			<select name="default_time_format">
 			<?php
-		
+
 			foreach($GO_CONFIG->time_formats as $tf)
 			{
 				echo '<option value="'.$tf.'"';
 				if($tf==$GO_CONFIG->default_time_format)
 				{
 					echo ' selected';
-				}				
+				}
 				echo '>'.$tf.'</option>';
 			}
 			?></select>
 			</td>
 		</tr>
-		
+
 		<tr>
 			<td>'First day of the week:</td>
 			<td>
 			<select name="default_first_weekday">
 			<?php
 			echo '<option value="0"';
-			if($GO_CONFIG->default_first_weekday=='0')			
+			if($GO_CONFIG->default_first_weekday=='0')
 				echo ' selected';
-			
+
 			echo '>Sunday</option>';
 			echo '<option value="1"';
-			if($GO_CONFIG->default_first_weekday=='1')			
+			if($GO_CONFIG->default_first_weekday=='1')
 				echo ' selected';
-				
+
 			echo '>Monday</option>';
 			?></select>
 			</td>
 		</tr>
 
-	
+
 		<tr>
 			<td>Thousands separator:</td>
 			<td><input name="default_thousands_separator" maxlength="1" type="text" value="<?php echo $GO_CONFIG->default_thousands_separator; ?>" /></td>
@@ -1363,7 +1365,7 @@ switch($task)
 			<td>Decimal separator:</td>
 			<td><input name="default_decimal_separator" maxlength="1" type="text" value="<?php echo $GO_CONFIG->default_decimal_separator; ?>" /></td>
 		</tr>
-		
+
 
 		<tr>
 			<td>Currency:</td>
@@ -1377,12 +1379,12 @@ switch($task)
 			$themes = $GO_THEME->get_themes();
 			foreach($themes as $theme)
 			{
-	
+
 				echo '<option value="'.$theme.'"';
 				if($theme==$GO_CONFIG->theme)
 				{
 					echo ' selected';
-				}				
+				}
 				echo '>'.$theme.'</option>';
 			}
 			?></select>
@@ -1405,7 +1407,7 @@ switch($task)
 			echo $feedback.'<br /><br />';
 		}
 	?>
-		<input type="hidden" name="task" value="allow_password_change" />	
+		<input type="hidden" name="task" value="allow_password_change" />
 		<input type="checkbox" name="allow_themes" value="1" <?php if(isset($_POST['allow_themes']) ? true : $GO_CONFIG->allow_themes) echo 'checked'; ?> />Allow users to change the theme
 		<br />
 		<input type="checkbox" name="allow_password_change" value="1" <?php if(isset($_POST['allow_password_change']) ? true : $GO_CONFIG->allow_password_change) echo 'checked'; ?> />Allow users to change their password
@@ -1415,13 +1417,13 @@ switch($task)
 		<input type="checkbox" name="auto_activate_accounts" value="1" <?php if(isset($_POST['auto_activate_accounts']) ? true : $GO_CONFIG->auto_activate_accounts) echo 'checked'; ?> />Automatically activate accounts. If not the administrator needs to confirm them
 		<br />
 		<input type="checkbox" name="notify_admin_of_registration" value="1" <?php if(isset($_POST['notify_admin_of_registration']) ? true : $GO_CONFIG->notify_admin_of_registration) echo 'checked'; ?> />Notify the administrator of new accounts
-		<?php 
+		<?php
 		echo '<p>The following user data fields can be enabled or disabled in the registration form.</p>';
-		
+
 		$available_fields = explode(',', 'title_initials,sex,birthday,address,home_phone,fax,cellular,company,department,function,work_address,work_phone,work_fax,homepage');
 		$enabled_fields = explode(',',$GO_CONFIG->registration_fields);
 		$required_fields = explode(',',$GO_CONFIG->required_registration_fields);
-		
+
 		$names['title_initials']='Title/Initials';
 		$names['sex']='Sex';
 		$names['birthday']='Birthday';
@@ -1436,8 +1438,8 @@ switch($task)
 		$names['work_phone']='Work phone';
 		$names['work_fax']='Work fax';
 		$names['homepage']='Homepage';
-		
-		echo '<table><tr><td><b>Field</b></td><td><b>Enable</b></td><td><b>Required</b></td></tr>';		
+
+		echo '<table><tr><td><b>Field</b></td><td><b>Enable</b></td><td><b>Required</b></td></tr>';
 		foreach($available_fields as $field)
 		{
 			echo '<tr><td>'.$names[$field].'</td><td><input type="checkbox" name="registration_fields[]" value="'.$field.'"';
@@ -1450,7 +1452,7 @@ switch($task)
 			{
 				echo ' checked';
 			}
-			echo ' /></td></tr>';	
+			echo ' /></td></tr>';
 		}
 		echo '</table>';
 		?>
@@ -1479,13 +1481,13 @@ switch($task)
 		<input type="checkbox" name="allow_themes" value="1" <?php if(isset($_POST['allow_themes']) ? true : $GO_CONFIG->allow_themes) echo 'checked'; ?> />Allow users to change the theme
 		<br />
 		<input type="checkbox" name="allow_password_change" value="1" <?php if(isset($_POST['allow_password_change']) ? true : $GO_CONFIG->allow_password_change) echo 'checked'; ?> />Allow users to change thier password
-		
+
 		<?php
 		echo '<p>New users will automatically have access to the following modules</p>';
 
-		
-		echo '<table><tr><td><b>Module</b></td><td><b>Use</b></td><td><b>Manage</b></td></tr>';		
-		
+
+		echo '<table><tr><td><b>Module</b></td><td><b>Use</b></td><td><b>Manage</b></td></tr>';
+
 		$module_count = $GO_MODULES->get_modules('0');
 		while($GO_MODULES->next_record())
 		{
@@ -1499,16 +1501,16 @@ switch($task)
 
 			$lang_var = isset($lang[$GO_MODULES->f('id')]['name']) ? $lang[$GO_MODULES->f('id')]['name'] : $GO_MODULES->f('id');
 
-		
+
 			echo '<tr><td>'.$lang_var.'</td><td>';
 
 
 			$modules_read = isset($_POST['register_modules_read']) ? $_POST['register_modules_read'] : explode(',', $GO_CONFIG->register_modules_read);
 			$read_check = in_array($GO_MODULES->f('id'), $modules_read);
-			
+
 			$modules_write = isset($_POST['register_modules_write']) ? $_POST['modules_write'] : explode(',', $GO_CONFIG->register_modules_write);
 			$write_check = in_array($GO_MODULES->f('id'), $modules_write);
-			
+
 			echo '<input type="checkbox" name="register_modules_read[]" value="'.$GO_MODULES->f('id').'"';
 			if($read_check)
 			{
@@ -1541,20 +1543,20 @@ switch($task)
 		{
 			echo $feedback.'<br /><br />';
 		}
-		
+
 		echo '<p>New users will automatically be "member of"/"visible to" the selected groups.</p>';
 
 		echo '<input type="hidden" name="task" value="default_groups" />';
-		
-		
+
+
 
 		$GO_GROUPS->get_groups();
-		
+
 		$register_user_groups = explode(',',$GO_CONFIG->register_user_groups);
 		$register_visible_user_groups = explode(',',$GO_CONFIG->register_visible_user_groups);
 
-		
-		echo '<table><tr><td><b>Group</b></td><td><b>Member</b></td><td><b>Visible</b></td></tr>';		
+
+		echo '<table><tr><td><b>Group</b></td><td><b>Member</b></td><td><b>Visible</b></td></tr>';
 
 		while($GO_GROUPS->next_record())
 		{
@@ -1569,7 +1571,7 @@ switch($task)
 				echo ' checked';
 			}
 			echo ' /></td><td>';
-			
+
 			echo '<input type="checkbox" name="register_visible_user_groups[]" value="'.$GO_MODULES->f('name').'"';
 			if($GO_GROUPS->f('id')==$GO_CONFIG->group_root)
 			{
@@ -1578,7 +1580,7 @@ switch($task)
 			{
 				echo ' checked';
 			}
-			echo ' /></td></tr>';	
+			echo ' /></td></tr>';
 		}
 		echo '</table>';
 		?>
@@ -1604,7 +1606,7 @@ switch($task)
 		Group-Office needs to connect to an SMTP server to send and receive e-mail.
 		<br />
 		<br />
-		<table>		
+		<table>
 		<tr>
 		<td>
 		SMTP server:
@@ -1621,14 +1623,14 @@ switch($task)
 		<input type="text" size="40" name="smtp_port" value="<?php echo $GO_CONFIG->smtp_port; ?>" />
 		</td>
 		</tr>
-		
+
 		<tr><td colspan="2">&nbsp;</td></tr>
 		<tr>
 		<td colspan="2">
 		If your SMTP server requires authentication please fill in the username and password.
 		</td>
 		</tr>
-		
+
 		<tr>
 		<td>
 		SMTP username:
@@ -1669,17 +1671,17 @@ switch($task)
 				echo '>'.$value.'</option>';
 			}
 			?></select>
-		
-		
+
+
 		<tr><td colspan="2">&nbsp;</td></tr>
-		
+
 		<tr>
 		<td valign="top">
-		
+
 		Maximum size of attachments:
 		</td>
 		<td>
-		<input type="text" size="40" name="max_attachment_size" value="<?php 
+		<input type="text" size="40" name="max_attachment_size" value="<?php
 		$max_ini  = return_bytes(ini_get('upload_max_filesize'));
 		if($GO_CONFIG->max_attachment_size > $max_ini) $GO_CONFIG->max_attachment_size = $max_ini;
 		echo $GO_CONFIG->max_attachment_size; ?>" /><br />
@@ -1714,7 +1716,7 @@ switch($task)
 			<tr>
 			<td>Username:</td>
 			<td>
-			<?php 
+			<?php
 			$username = isset($_POST['username']) ? (htmlspecialchars($_POST['username'])) : 'admin';
 		?>
 			<input name="username" type="text" value="<?php echo $username; ?>" />
@@ -1754,7 +1756,7 @@ switch($task)
 			exit();
 			break;
 
-	
+
 	case 'completed':
 
 		print_head();
@@ -1771,7 +1773,7 @@ switch($task)
 	If you don't have shell access then you should download <?php echo $CONFIG_FILE; ?>, delete <?php echo $CONFIG_FILE; ?>
 	from the server and upload it back to the server. This way you change the ownership to your account.
 	<br />
-	<br /> 
+	<br />
 	If this is a fresh install you can login with the default administrator account:<br />
 	<br />
 	<b>Username: admin<br />
@@ -1790,7 +1792,7 @@ switch($task)
 	Read more about it here: <a target="_blank" href="http://www.group-office.com/wiki/IMAP_or_LDAP_authentication">http://www.group-office.com/wiki/IMAP_or_LDAP_authentication</a>
 	<br />
 	<br />
-	For troubleshooting please visit <a target="_blank" href="http://www.group-office.com/wiki/Troubleshooting">http://www.group-office.com/wiki/Troubleshooting</a><br /> 
+	For troubleshooting please visit <a target="_blank" href="http://www.group-office.com/wiki/Troubleshooting">http://www.group-office.com/wiki/Troubleshooting</a><br />
 	If that doesn't help post on the <a target="_blank" href="http://www.group-office.com/forum/">forums</a>.<br />
 	<br /><br />
 	<div align="right">
