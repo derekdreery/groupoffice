@@ -1,0 +1,11 @@
+#!/bin/sh -e
+
+# Use debconf.
+. /usr/share/debconf/confmodule
+
+db_get groupoffice-mailserver/domain
+db_go
+domain="$RET"
+
+cat /etc/groupoffice/config-db.php > /etc/groupoffice/config-mailserver.inc.php
+echo "\$domain='$domain';\n" >> /etc/groupoffice/config-mailserver.inc.php
