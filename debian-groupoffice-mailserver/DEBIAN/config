@@ -3,7 +3,7 @@
 # Use debconf.
 . /usr/share/debconf/confmodule
 
-db_input medium groupoffice-mailserver/domain
+db_input high groupoffice-mailserver/domain
 db_go
 
 db_get groupoffice-mailserver/domain
