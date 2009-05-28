@@ -92,10 +92,10 @@ echo "\$domain='$domain';\n" >> /etc/groupoffice/config-mailserver.inc.php
 
 /usr/share/groupoffice-mailserver/configure.php
 
-#invoke-rc.d spamassassin restart 3>/dev/null || true
-#invoke-rc.d apache2 restart 3>/dev/null || true
-#invoke-rc.d dovecot restart 3>/dev/null || true
-#invoke-rc.d postfix restart 3>/dev/null || true
+invoke-rc.d spamassassin restart >/dev/null || true
+invoke-rc.d apache2 restart >/dev/null || true
+invoke-rc.d dovecot restart >/dev/null || true
+invoke-rc.d postfix restart >/dev/null || true
 
 
 exit 0
