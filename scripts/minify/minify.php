@@ -8,7 +8,7 @@ if(!isset($argv[1]))
 $delete = isset($argv[2]) && $argv[2]=='delete';
 
 $full_path = dirname(__FILE__);
-$compressor="/usr/lib/jvm/java-6-sun/bin/java -jar $full_path/yuicompressor-2.3.5/build/yuicompressor-2.3.5.jar";
+$compressor="java -jar $full_path/yuicompressor-2.3.5/build/yuicompressor-2.3.5.jar";
 
 //chdir($full_path);
 
