@@ -202,8 +202,8 @@ class serverclient
 
 				$account['user_id']=$user['id'];
 				$account['mbroot'] = $GO_CONFIG->serverclient_mbroot;
-				$account['use_ssl'] = $GO_CONFIG->serverclient_mbroot;
-				$account['novalidate_cert'] = $GO_CONFIG->serverclient_mbroot;
+				$account['use_ssl'] = $GO_CONFIG->serverclient_use_ssl;
+				$account['novalidate_cert'] = $GO_CONFIG->serverclient_novalidate_cert;
 				$account['type']=$GO_CONFIG->serverclient_type;
 				$account['host']=$GO_CONFIG->serverclient_host;
 				$account['port']=$GO_CONFIG->serverclient_port;
