@@ -15,7 +15,7 @@ if [ "$1" = "purge" ]; then
     if which ucf >/dev/null 2>&1; then
     	ucf --purge /etc/groupoffice/config-db.php
     fi
-
+		db_purge
 fi
 
 
