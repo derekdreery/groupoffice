@@ -99,5 +99,6 @@ create_file('/etc/groupoffice/vacation.pl','tpl/etc/groupoffice/vacation.pl', $r
 echo "Configuring groupoffice\n";
 create_file('/etc/groupoffice/globalconfig.inc.php','tpl/etc/groupoffice/globalconfig.inc.php', $replacements);
 
+set_value('/etc/groupoffice/config.php', '$config[\'serverclient_domains\']="'.$domain.'";');
 
 ?>
