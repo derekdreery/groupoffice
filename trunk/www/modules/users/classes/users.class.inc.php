@@ -1,12 +1,12 @@
 <?php
-/** 
+/**
  * Copyright Intermesh
- * 
+ *
  * This file is part of Group-Office. You should have received a copy of the
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
- * 
+ *
  * If you have questions write an e-mail to info@intermesh.nl
- * 
+ *
  * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
@@ -20,7 +20,7 @@ class users extends db
 		$events->add_listener('build_search_index', __FILE__, 'users', 'build_search_index');
 		$events->add_listener('check_database', __FILE__, 'users', 'check_database');
 	}
-	
+
 	public static function check_database(){
 		global $GO_CONFIG, $GO_MODULES, $GO_USERS, $GO_SECURITY;
 
@@ -28,58 +28,69 @@ class users extends db
 
 		echo 'User folders'.$line_break;
 
-		
-	
+
+
 		if(isset($GO_MODULES->modules['files']))
 		{
 
 			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 			$GO_USERS->get_users();
-			
+
 			while($GO_USERS->next_record())
 			{
 				$home_dir = 'users/'.$GO_USERS->f('username');
-					
+
+				if(!is_dir($GO_CONFIG->file_storage_path.$home_dir))
+				{
+					mkdir($GO_CONFIG->file_storage_path.$home_dir, $GO_CONFIG->folder_create_mode, true);
+				}
+
 				$folder = $files->resolve_path($home_dir,true,1,'1');
-			
+
 				if(empty($folder['acl_read']))
 				{
 					echo "Sharing users/".$GO_USERS->f('username').$line_break;
-			
+
 					$up_folder['id']=$folder['id'];
 					$up_folder['acl_read']=$GO_SECURITY->get_new_acl('files', $GO_USERS->f('id'));
 					$up_folder['acl_write']=$GO_SECURITY->get_new_acl('files', $GO_USERS->f('id'));
-			
+
 					$files->update_folder($up_folder);
 				}
 				$files->set_readonly($folder['id']);
-				
-				$home_dir = 'adminusers/'.$GO_USERS->f('username');				
+
+				$home_dir = 'adminusers/'.$GO_USERS->f('username');
+
+				if(!is_dir($GO_CONFIG->file_storage_path.$home_dir))
+				{
+					mkdir($GO_CONFIG->file_storage_path.$home_dir, $GO_CONFIG->folder_create_mode, true);
+				}
+
 				$folder = $files->resolve_path($home_dir,true,1,'1');
-			
+
 				if(empty($folder['acl_read']))
 				{
 					echo "Sharing adminusers/".$GO_USERS->f('username').$line_break;
-			
+
 					$up_folder['id']=$folder['id'];
 					$up_folder['acl_read']=$GO_SECURITY->get_new_acl('files', 1);
 					$up_folder['acl_write']=$GO_SECURITY->get_new_acl('files', 1);
-			
+
 					$files->update_folder($up_folder);
 				}
 				$files->set_readonly($folder['id']);
 			}
 		}
 
-		
+
 		echo 'Done'.$line_break.$line_break;
 	}
-	
+
 	function load_settings($response)
 	{
 		global $GO_USERS, $GO_MODULES;
-		
+
 		$user_id = isset($_REQUEST['user_id']) ? ($_REQUEST['user_id']) : 0;
 
 		$user = $GO_USERS->get_user($user_id);
@@ -93,9 +104,9 @@ class users extends db
 	function save_settings()
 	{
 		global $GO_USERS, $lang, $GO_CONFIG;
-		
+
 		$user['id'] = isset($_POST['user_id']) ? (trim($_POST['user_id'])) : 0;
-		
+
 		if(isset($_POST['first_name']))
 		{
 			$user['first_name'] = $_POST['first_name'];
@@ -143,8 +154,8 @@ class users extends db
 			$existing_email_user = $GO_CONFIG->allow_duplicate_email ? false : $GO_USERS->get_user_by_email($user['email']);
 
 			if ($existing_email_user && ($user['id'] == 0 || $existing_email_user['id'] != $user['id'])) {
-				require($GLOBALS['GO_LANGUAGE']->get_language_file('users'));				
-				throw new Exception($lang['users']['error_email_exists']);				
+				require($GLOBALS['GO_LANGUAGE']->get_language_file('users'));
+				throw new Exception($lang['users']['error_email_exists']);
 			}
 		}
 
@@ -153,7 +164,7 @@ class users extends db
 		{
 			if(isset($_POST['theme']))
 				$user['theme'] = $_POST["theme"];
-				
+
 
 			$user['language'] = ($_POST["language"]);
 			$user['max_rows_list'] = ($_POST["max_rows_list"]);
@@ -173,7 +184,7 @@ class users extends db
 			$user['time_format'] = ($_POST["time_format"]);
 			$user['timezone'] = ($_POST["timezone"]);
 			$user['currency'] = ($_POST["currency"]);
-			
+
 			$user['list_separator'] = $_POST["list_separator"];
 			$user['text_separator'] = $_POST["text_separator"];
 		}
@@ -199,16 +210,16 @@ class users extends db
 		$GO_USERS->update_user($user);
 
 	}
-	
+
 	public function build_search_index()
 	{
 		global $GO_USERS;
-		
+
 		$users = new users();
-		
+
 		$sql = "SELECT id FROM go_users";
 		$users->query($sql);
-		
+
 		while($record=$users->next_record())
 		{
 			$GO_USERS->cache_user($record['id']);

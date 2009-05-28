@@ -37,12 +37,12 @@ try{
 			}
 
 
-			$fs2= new files();	
-						
+			$fs2= new files();
+
 			function get_node_children($folder_id, $authenticate=false)
 			{
 				global $files,$fs2;
-				
+
 				$children = array();
 				$files->get_folders($folder_id,'name','ASC', 0,0, $authenticate);
 				while($folder=$files->next_record())
@@ -50,14 +50,14 @@ try{
 					$node= array(
 						'text'=>$folder['name'],
 						'id'=>$folder['id'],
-						'notreloadable'=>true			
+						'notreloadable'=>true
 					);
 
                     if($folder['readonly']=='1')
                     {
                         $node['draggable']=false;
                     }
-			
+
 					if($folder['acl_read']>0)
 					{
 						$node['iconCls']='folder-shared';
@@ -65,18 +65,18 @@ try{
 					{
 						$node['iconCls']='folder-default';
 					}
-			
+
 					$fs2->get_folders($folder['id']);
 					if(!$fs2->found_rows())
 					{
 						$node['children']=array();
 						$node['expanded']=true;
-					}			
+					}
 					$children[]=$node;
-				}	
-				return $children;		
-			}				
-				
+				}
+				return $children;
+			}
+
 			$node = isset($_POST['node']) ? $_POST['node'] : 'root';
 
 			switch($node)
@@ -94,7 +94,7 @@ try{
                'draggable'=>false,
 							'iconCls'=>'folder-default',
 							'children'=>get_node_children($folder['id']),
-							'notreloadable'=>true	
+							'notreloadable'=>true
 						);
 						$response[]=$node;
 
@@ -104,8 +104,8 @@ try{
 						$home_id = 'users/'.$_SESSION['GO_SESSION']['username'];
 						$home_folder=$files->resolve_path($home_id);
 
-						$folders = $files->get_folders($home_folder['id']);						
-							
+						$folders = $files->get_folders($home_folder['id']);
+
 
 						$node= array(
 						'text'=>$lang['files']['personal'],
@@ -114,11 +114,11 @@ try{
 						'expanded'=>true,
                         'draggable'=>false,
 						'children'=>get_node_children($home_folder['id']),
-						'notreloadable'=>true			
+						'notreloadable'=>true
 						);
 						$response[]=$node;
-							
-							
+
+
 						$node= array(
 						'text'=>$lang['files']['shared'],
 						'id'=>'shared',
@@ -200,7 +200,7 @@ try{
 
 					$count = 0;
 					while ($folder = $files->next_record())
-					{						
+					{
                         //$is_sub_dir = isset($last_folder) ? $files->is_sub_dir($share_id, $last_folder) : false;
 
                         $node = array(
@@ -217,7 +217,7 @@ try{
 
                     $fs = new filesystem();
 
-                   
+
                     foreach($nodes as $path=>$node)
                     {
                         $is_sub_dir = isset($last_path) ? $fs->is_sub_dir($path, $last_path) : false;
@@ -232,11 +232,11 @@ try{
                             $last_path=$path;
                         }
                     }
-					
+
 					break;
-						
+
 				case 'new' :
-						
+
 					$response['success'] = true;
 					break;
 
@@ -244,9 +244,9 @@ try{
 
 					$folder = $files->get_folder($_POST['node']);
 					$authenticate = !$files->has_read_permission($GO_SECURITY->user_id, $folder);
-					
+
 					$response = get_node_children($_POST['node'], $authenticate);
-						
+
 					break;
 			}
 
@@ -265,14 +265,14 @@ try{
 					}
 
 					$response['results']=array();
-						
+
 					if(isset($_SESSION['GO_SESSION']['files']['jupload_new_files']) && count($_SESSION['GO_SESSION']['files']['jupload_new_files']))
 					{
 						$files->notify_users($_POST['id'],$GO_SECURITY->user_id, array(), $_SESSION['GO_SESSION']['files']['jupload_new_files']);
 
 						$_SESSION['GO_SESSION']['files']['jupload_new_files']=array();
 					}
-						
+
 					if($_POST['id'] == 'shared')
 					{
 						$response['parent_id']=0;
@@ -329,7 +329,7 @@ try{
 					}elseif($_POST['id'] == 'new')
 					{
 						$response['parent_id']=0;
-						
+
 						require_once($GO_CONFIG->control_path.'phpthumb/phpThumb.config.php');
 
 						$sort = isset($_POST['sort']) ? $_POST['sort'] : 'mtime';
@@ -369,10 +369,10 @@ try{
 						 {
 							$up_folder['id']=$db_folder['id'];
 							$up_folder['thumbs']='1';
-								
+
 							$files->update_folder($up_folder);
 							$response['thumbs']='1';
-								
+
 							}*/
 
 
@@ -395,7 +395,7 @@ try{
 								foreach($delete_ids as $delete_type_id)
 								{
 									$ti = explode(':',$delete_type_id);
-										
+
 									if($ti[0]=='f')
 									{
 										if(!$response['write_permission'])
@@ -411,11 +411,11 @@ try{
 										$files->delete_folder($folder);
 										$deleted[]=$folder['name'];
 									}
-										
+
 								}
 
 								$files->notify_users($_POST['id'], $GO_SECURITY->user_id, array(), array(), $deleted);
-									
+
 							}catch(Exception $e)
 							{
 								$response['deleteSuccess']=false;
@@ -458,9 +458,9 @@ try{
 									chdir($full_path);
 
                                     $cmd = $GO_CONFIG->cmd_zip.' -r "'.$archive_name.'" "'.implode('" "',$compress_sources).'"';
-									
+
 									exec($cmd, $output);
-                                    
+
                                     if(!file_exists($full_path.'/'.$archive_name))
                                     {
                                         throw new Exception('Command failed: '.$cmd."<br /><br />".implode("<br />", $output));
@@ -468,7 +468,7 @@ try{
 
 									$response['compress_success']=true;;
                                     $files->import_file($full_path.'/'.$archive_name,$curfolder['id']);
-                                    
+
 								}
 							}catch(Exception $e)
 							{
@@ -480,7 +480,7 @@ try{
 								if(isset($_POST['decompress_sources']))
 								{
                                     $full_path=$GO_CONFIG->file_storage_path.$path;
-                                    
+
 									chdir($full_path);
 									$decompress_sources = json_decode($_POST['decompress_sources']);
 									while ($file = array_shift($decompress_sources)) {
@@ -525,6 +525,8 @@ try{
 
 						require_once($GO_CONFIG->control_path.'phpthumb/phpThumb.config.php');
 
+						//$response['path']=$path;
+
 						$files->get_folders($curfolder['id'],$dsort,$dir,0,0,$authenticate);
 						while($folder = $files->next_record())
 						{
@@ -560,7 +562,7 @@ try{
 						while($file = $files->next_record())
 						{
 							$extension = File::get_extension($file['name']);
-								
+
 							if(!isset($extensions) || in_array($extension, $extensions))
 							{
                                 $file['path']=$path.'/'.$file['name'];
@@ -575,7 +577,7 @@ try{
 								$response['results'][]=$file;
 							}
 						}
-							
+
 					}
 
 					break;
@@ -621,7 +623,7 @@ try{
 												$response['success']=true;
 
 												$admin = $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id);
-													
+
 												$response['data'] = $folder;
 												$path=$files->build_path($folder);
 												$response['data']['path']=$path;
@@ -659,7 +661,7 @@ try{
 												$extension=File::get_extension($file['name']);
 
 												$response['success']=true;
-													
+
 												$response['data'] = $file;
 												$path=$files->build_path($folder).'/'.$file['name'];
 												$response['data']['path']=$path;

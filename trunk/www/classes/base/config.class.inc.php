@@ -42,14 +42,6 @@ class GO_CONFIG
 	var $enabled = true;
 
 	/**
-	 * Enable this Group-Office installation?
-	 *
-	 * @var     string
-	 * @access  public
-	 */
-	var $installed = false;
-
-	/**
 	 * The Group-Office server ID
 	 *
 	 * @var     string
@@ -791,7 +783,20 @@ class GO_CONFIG
       		$this->local_url = $this->host.'local/';
 
       		$this->db_host='localhost';
+
+      		if(is_windows())
+      		{
+      			$this->file_storage_path = substr($this->root_path,0,3).'groupoffice/';
+      			$this->tmpdir=substr($this->root_path,0,3).'temp';
+      		}
+
+      		if(function_exists('sys_get_temp_dir'))
+      		{
+      			$this->tmpdir = str_replace('\\','/', sys_get_temp_dir());
+      		}
       	}
+
+
 
       	$config = array();
 
