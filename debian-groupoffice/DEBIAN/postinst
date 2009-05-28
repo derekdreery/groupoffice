@@ -18,7 +18,7 @@ ln -s /var/www/community/trunk/www /usr/share/groupoffice
 /etc/init.d/apache2 reload > /dev/null || true
 
 
-db_input groupoffice/completed || true
+db_input high groupoffice/completed || true
 db_go
 
 exit 0
