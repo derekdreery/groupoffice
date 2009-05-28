@@ -41,41 +41,6 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 		config = {};
 	}
 
-	var tbar = [{
-				iconCls : 'btn-add',
-				text : GO.lang.cmdAdd,
-				cls : 'x-btn-text-icon',
-				handler : function() {
-					this.showAddParticipantsDialog();
-				},
-				scope : this
-			}, {
-				iconCls : 'btn-delete',
-				text : GO.lang.cmdDelete,
-				cls : 'x-btn-text-icon',
-				handler : function() {
-					var selectedRows = this.selModel.getSelections();
-					for (var i = 0; i < selectedRows.length; i++) {
-						selectedRows[i].commit();
-						this.store.remove(selectedRows[i]);
-					}
-				},
-				scope : this
-			}, {
-				iconCls : 'btn-availability',
-				text : GO.calendar.lang.checkAvailability,
-				cls : 'x-btn-text-icon',
-				handler : function() {
-					this.checkAvailability();
-				},
-				scope : this
-			},'-',this.inviteCheckbox = new Ext.form.Checkbox({
-				name:'invitation',
-				boxLabel:GO.calendar.lang.sendInvitation
-			})];
-			
-
-
 	/*if (GO.email) {
 		tbar.push({
 			iconCls : 'btn-invite',
@@ -101,79 +66,150 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 		});
 	}*/
 
+	config.store = new GO.data.JsonStore({
+		url : GO.settings.modules.calendar.url + 'json.php',
+		baseParams : {
+			task : "participants"
+		},
+		root : 'results',
+		id : 'id',
+		fields : ['id', 'name', 'email', 'available',
+				'status']
+	});
+		
+	var tbar = [{
+		iconCls : 'btn-add',
+		text : GO.lang.cmdAdd,
+		cls : 'x-btn-text-icon',
+		handler : function() {
+			this.showAddParticipantsDialog();
+		},
+		scope : this
+	}, {
+		iconCls : 'btn-delete',
+		text : GO.lang.cmdDelete,
+		cls : 'x-btn-text-icon',
+		handler : function() {
+			var selectedRows = this.gridPanel.selModel.getSelections();
+			for (var i = 0; i < selectedRows.length; i++) {
+				selectedRows[i].commit();
+				this.store.remove(selectedRows[i]);
+			}
+		},
+		scope : this
+	}, {
+		iconCls : 'btn-availability',
+		text : GO.calendar.lang.checkAvailability,
+		cls : 'x-btn-text-icon',
+		handler : function() {
+			this.checkAvailability();
+		},
+		scope : this
+	}];
+
+
+	this.inviteCheckbox = new Ext.form.Checkbox({
+		name:'invitation',
+		boxLabel:GO.calendar.lang.sendInvitation,
+		hideLabel:true		
+	})
+	this.importCheckbox = new Ext.form.Checkbox({
+		name:'import',
+		boxLabel:GO.calendar.lang.importToCalendar,
+		hideLabel:true		
+	})
+	
+	this.checkPanel = new Ext.Panel({
+		border : false,
+		region:'north',
+		autoHeight:true,
+		bodyStyle:'padding:10px',
+		labelWidth:110,		
+		defaults:{border:false},
+		items:[{
+	    	layout:'column',
+	    	defaults:{border:false},
+        	items:[{
+          		columnWidth:.5,
+                items:[this.inviteCheckbox]
+            },{
+                columnWidth:.5,
+                bodyStyle:'padding-left:10px',                
+                items:[this.importCheckbox]
+        	}]
+        }]			
+	});
+	
+	this.gridPanel = new GO.grid.GridPanel(
+	{
+		store: config.store,
+		border : false,
+		region:'center',
+		columns : [{
+			header : GO.lang.strName,
+			dataIndex : 'name',
+			sortable : true
+		}, {
+			header : GO.lang.strEmail,
+			dataIndex : 'email',
+			sortable : true
+		}, {
+			header : GO.lang.strStatus,
+			dataIndex : 'status',
+			sortable : true,
+			renderer : function(v) {
+				switch (v) {
+					case '2' :
+						return GO.calendar.lang.declined;
+						break;
+
+					case '1' :
+						return GO.calendar.lang.accepted;
+						break;
+
+					case '0' :
+						return GO.calendar.lang.notRespondedYet;
+						break;
+				}
+			}
+		}, {
+			header : GO.lang.strAvailable,
+			dataIndex : 'available',
+			sortable : false,
+			renderer : function(v) {
+
+				var className = 'img-unknown';
+				switch (v) {
+					case '1' :
+						className = 'img-available';
+						break;
+
+					case '0' :
+						className = 'img-unavailable';
+						break;
+				}
+
+				return '<div class="' + className + '"></div>';
+			}
+		}],
+		view : new Ext.grid.GridView({
+			autoFill : true,
+			forceFit : true
+		}),
+		loadMask : {
+			msg : GO.lang.waitMsgLoad
+		},
+		sm : new Ext.grid.RowSelectionModel({}),
+	});
+		
+	
 	Ext.apply(config, {
-				title : GO.calendar.lang.participants,
-				store : new GO.data.JsonStore({
-							url : GO.settings.modules.calendar.url + 'json.php',
-							baseParams : {
-								task : "participants"
-							},
-							root : 'results',
-							id : 'id',
-							fields : ['id', 'name', 'email', 'available',
-									'status']
-						}),
-				border : false,
-				columns : [{
-							header : GO.lang.strName,
-							dataIndex : 'name',
-							sortable : true
-						}, {
-							header : GO.lang.strEmail,
-							dataIndex : 'email',
-							sortable : true
-						}, {
-							header : GO.lang.strStatus,
-							dataIndex : 'status',
-							sortable : true,
-							renderer : function(v) {
-								switch (v) {
-									case '2' :
-										return GO.calendar.lang.declined;
-										break;
-
-									case '1' :
-										return GO.calendar.lang.accepted;
-										break;
-
-									case '0' :
-										return GO.calendar.lang.notRespondedYet;
-										break;
-								}
-							}
-						}, {
-							header : GO.lang.strAvailable,
-							dataIndex : 'available',
-							sortable : false,
-							renderer : function(v) {
-
-								var className = 'img-unknown';
-								switch (v) {
-									case '1' :
-										className = 'img-available';
-										break;
-
-									case '0' :
-										className = 'img-unavailable';
-										break;
-								}
-
-								return '<div class="' + className + '"></div>';
-							}
-						}],
-				view : new Ext.grid.GridView({
-							autoFill : true,
-							forceFit : true
-						}),
-				loadMask : {
-					msg : GO.lang.waitMsgLoad
-				},
-				sm : new Ext.grid.RowSelectionModel({}),
-				// paging:true,
-				layout : 'fit',
-				tbar : tbar
-
-			});
+		title : GO.calendar.lang.participants,
+		border : false,
+		tbar:tbar,
+		layout : 'border',
+		items:[this.checkPanel, this.gridPanel]
+	});
 
 	config.store.setDefaultSort('name', 'ASC');
 
@@ -181,7 +217,7 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 
 };
 
-Ext.extend(GO.calendar.ParticipantsPanel, GO.grid.GridPanel, {
+Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 
 	event_id : 0,
 	
@@ -197,6 +233,10 @@ Ext.extend(GO.calendar.ParticipantsPanel, GO.grid.GridPanel, {
 	 * this.loaded=true; },
 	 */
 
+	getGridData : function(){
+		return this.gridPanel.getGridData();
+	},
+	
 	setEventId : function(event_id) {
 		this.event_id = this.store.baseParams.event_id = event_id;
 		this.store.loaded = false;
@@ -204,10 +244,11 @@ Ext.extend(GO.calendar.ParticipantsPanel, GO.grid.GridPanel, {
 		{
 			this.store.removeAll();
 		}
-		this.newId=0;
+		this.newId=0;		
 		this.inviteCheckbox.setValue(false);
+		this.importCheckbox.setValue(false);
 	},
-
+	
 	onShow : function() {
 		if (!this.store.loaded) {
 			if(this.store.baseParams.event_id > 0)
@@ -274,6 +315,7 @@ Ext.extend(GO.calendar.ParticipantsPanel, GO.grid.GridPanel, {
 												name : selections[i].get('name'),
 												email : selections[i].get('email'),
 												status : "0",
+												user_id : selections[i].get('id'),
 												available : responseParams[selections[i].get('email')]
 											});
 										}
@@ -292,7 +334,6 @@ Ext.extend(GO.calendar.ParticipantsPanel, GO.grid.GridPanel, {
 	},
 	
 	addDefaultParticipant : function(){
-		
 		this.body.mask(GO.lang.waitMsgLoad);
 		Ext.Ajax.request({
 			url : GO.settings.modules.calendar.url + 'json.php',
@@ -309,11 +350,11 @@ Ext.extend(GO.calendar.ParticipantsPanel, GO.grid.GridPanel, {
 							GO.lang['strRequestError']);
 				} else {
 					var responseParams = Ext.decode(response.responseText);							
-
 					this.addParticipant({
 						name : responseParams.name,
 						email : responseParams.email,
 						status :  responseParams.status,
+						user_id : responseParams.user_id,
 						available : responseParams.available
 					});
 				}

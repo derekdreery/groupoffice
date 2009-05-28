@@ -69,6 +69,7 @@ GO.calendar.SettingsPanel = function(config) {
 	config.title = GO.calendar.lang.calendar;
 	config.hideMode = 'offsets';
 	config.layout = 'form';
+	config.labelWidth=140;
 	config.bodyStyle = 'padding:5px';
 	config.items = {
 		xtype : 'fieldset',
@@ -226,7 +227,35 @@ GO.calendar.SettingsPanel = function(config) {
 									/* Line 16 */
 									'FFFFFF', '949494', '808080', '6B6B6B',
 									'545454', '404040', '292929', '000000']
-						})]
+						}),	
+						this.selectCalendar = new GO.form.ComboBox({
+							fieldLabel : GO.calendar.lang.default_calendar,
+							hiddenName : 'calendar_id',
+							anchor : '-20',
+							emptyText : GO.lang.strPleaseSelect,
+							store : new GO.data.JsonStore({
+								url : GO.settings.modules.calendar.url + 'json.php',
+								baseParams : {
+									task : 'writable_calendars'
+								},
+								root : 'results',
+								id : 'id',
+								totalProperty : 'total',
+								fields : ['id', 'name'],
+								remoteSort : true
+							}),
+							pageSize : parseInt(GO.settings.max_rows_list),
+							valueField : 'id',
+							displayField : 'name',
+							typeAhead : true,
+							mode : 'remote',
+							triggerAction : 'all',
+							editable : false,
+							selectOnFocus : true,
+							forceSelection : true,
+							allowBlank : false
+						})					
+					]
 	};
 
 	GO.calendar.SettingsPanel.superclass.constructor.call(this, config);
@@ -234,7 +263,7 @@ GO.calendar.SettingsPanel = function(config) {
 
 Ext.extend(GO.calendar.SettingsPanel, Ext.Panel, {
 	onLoadSettings : function(action) {
-
+		this.selectCalendar.setRemoteText(action.result.data.calendar_name);
 	},
 
 	onSaveSettings : function() {

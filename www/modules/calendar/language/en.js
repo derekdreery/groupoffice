@@ -70,3 +70,6 @@ GO.calendar.lang.location='Location';
 GO.calendar.lang.startsAt='Starts at';
 GO.calendar.lang.endsAt='Ends at';
 GO.calendar.lang.eventDefaults='Defaults settings for appointments';
+
+GO.calendar.lang.importToCalendar='Add to calendar';
+GO.calendar.lang.default_calendar='Default calendar';

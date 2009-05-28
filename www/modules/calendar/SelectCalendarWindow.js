@@ -49,7 +49,39 @@ SelectCalendarWindow = function(){
 
 	return {
 
-		show : function(event_id){
+		accept : function(event_id)
+		{
+			Ext.Ajax.request({
+				url: 'action.php',
+				params:{
+					task: 'accept', 
+					event_id: event_id,
+					event_exists: 1
+				},
+				callback: function(options, success, response){
+					
+					if(!success)
+					{
+						Ext.MessageBox.alert(GO.lang.strError, GO.lang.strRequestError);
+					}else
+					{						
+						var responseParams = Ext.decode(response.responseText);
+						if(responseParams.success)
+						{
+							Ext.MessageBox.alert(GO.lang.strSuccess, GO.calendar.lang.closeWindow);
+							this.window.close();
+						}else
+						{
+							Ext.MessageBox.alert(GO.lang.strError, responseParams.feedback);
+							
+						}
+					}
+											
+				},
+				scope: this		
+			});
+		},
+		show : function(event_id, event_exists){
 			
 			this.calendarsStore = new GO.data.JsonStore({
 				url: 'json.php',
@@ -116,7 +148,13 @@ SelectCalendarWindow = function(){
 					})
 				});
 			
-			this.window.show();
+			if(!event_exists)
+			{
+				this.window.show();
+			}else
+			{
+				this.accept(event_id);
+			}
 			
 		}
 	}
