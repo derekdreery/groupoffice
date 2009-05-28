@@ -11,3 +11,4 @@ if(!isset($GO_MODULES->modules['serverclient']))
 {
 	$GO_MODULES->add_module('serverclient');
 }
+
