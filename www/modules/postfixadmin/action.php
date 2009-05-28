@@ -19,8 +19,7 @@ $postfixadmin = new postfixadmin();
 
 try{
 	switch($_REQUEST['task'])
-	{
-		
+	{		
 		case 'serverclient_delete_installation':
 				$postfixadmin->get_installation_mailboxes(($_POST['go_installation_id']));
 				
