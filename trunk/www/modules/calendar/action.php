@@ -286,24 +286,30 @@ try{
 		case 'accept':
 
 			$event_id = ($_REQUEST['event_id']);
-			$calendar_id = ($_REQUEST['calendar_id']);
-			
+			$calendar_id = isset($_REQUEST['calendar_id']) ? $_REQUEST['calendar_id'] : 0;
+						
+			$event_exists = isset($_REQUEST['event_exists']) ? 1 : 0;
 
+			if(!$cal->is_participant($event_id, $_SESSION['GO_SESSION']['email']))
+			{
+				throw new Exception($lang['calendar']['not_invited']);
+			}
+				
 			$event = $cal->get_event($event_id);
-			if($event['calendar_id']!=$calendar_id)
+			
+			if(!$event_exists && ($event['calendar_id']!=$calendar_id))
 			{	
-				if(!$cal->is_participant($event_id, $_SESSION['GO_SESSION']['email']))
-				{
-					throw new Exception($lang['calendar']['not_invited']);
-				}
-	
 				$new_event['user_id']=$GO_SECURITY->user_id;
 				$new_event['calendar_id']=$calendar_id;
 				$new_event['participants_event_id']=$event_id;
 	
 				$cal->copy_event($event_id, $new_event);
 				
-				
+				$event_exists = true;
+			}
+
+			if($event_exists)
+			{
 				$cal->set_event_status($event_id, '1', $_SESSION['GO_SESSION']['email']);
 				
 				$owner = $GO_USERS->get_user($event['user_id']);
@@ -319,16 +325,15 @@ try{
 				$swift->set_body($body);
 				$swift->sendmail();
 			}
-				
 
 			$response['success']=true;
-
 
 			break;
 
 		case 'save_event':
 			$event = get_posted_event();
 			$event_id=$event['id'];
+			$calendar_id = $event['calendar_id'];
 			//throw new Exception(nl2br(var_export($event, true)));
 
 			/*
@@ -466,13 +471,42 @@ try{
 						$participant['event_id']=$event_id;
 						$participant['name']=$p['name'];
 						$participant['email']=$p['email'];
-						
-						$ids[]=$cal->add_participant($participant);					
+						$participant['user_id']=(isset($p['user_id'])) ? $p['user_id'] : 0;
+						$participant['status']=(isset($_POST['invitation'])) ? $p['status'] : 1;
+						$ids[]=$cal->add_participant($participant);
+												
+						if(isset($_POST['import']) && $participant['user_id'] > 0)
+						{
+							$calendar = $cal->get_default_import_calendar($participant['user_id']);
+							 
+							if($calendar_id != $calendar['id'])
+							{
+								$response['cal'] = $calendar;
+								if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_write']))
+								{
+									throw new AccessDeniedException();
+								}
+	
+								$event['calendar_id'] = $calendar['id'];
+								$event['event_id'] = $event_id;
+								
+								if(!isset($event['participants_event_id']))
+								{
+									$event['participants_event_id'] = $event_id;
+								}
+								
+								unset($event['files_folder_id']);
+
+								$cal->add_event($event, $calendar);
+							}											
+						}
 					}else
 					{
 						$ids[]=$p['id'];
 					}
 				}
+				$response['event_id'] = $event_id;
+				$response['id'] = $ids;
 				$cal->delete_other_participants($event_id, $ids);
 			}elseif(isset($response['event_id']))
 			{
@@ -497,7 +531,7 @@ try{
 				require_once $GO_CONFIG->class_path.'mail/swift/lib/classes/Swift/Plugins/DecoratorPlugin.php';
 				require_once $GO_CONFIG->class_path.'mail/swift/lib/classes/Swift/Plugins/Decorator/Replacements.php';
 				
-				$RFC822 = new RFC822();
+				$RFC822 = new RFC822();				
 				
 				$participants=array();
 				$cal->get_participants($event_id);
@@ -510,6 +544,8 @@ try{
 				}
 				if(count($participants))
 				{
+					
+					$import = (isset($_POST['import'])) ? '1' : '0';
 					
 					$swift = new GoSwift(
 						implode(',', $participants), 
@@ -527,9 +563,9 @@ try{
 					$swift->set_body('<p>'.$lang['calendar']['invited'].'</p>'.
 						$cal->event_to_html($event).
 						'<p>'.$lang['calendar']['acccept_question'].'</p>'.
-						'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$event_id.'&task=accept&email=%email%">'.$lang['calendar']['accept'].'</a>'.
+						'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$event_id.'&task=accept&email=%email%&import='.$import.'">'.$lang['calendar']['accept'].'</a>'.
 						'&nbsp;|&nbsp;'.
-						'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$event_id.'&task=decline&email=%email%">'.$lang['calendar']['decline'].'</a>');
+						'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$event_id.'&task=decline&email=%email%&import='.$import.'">'.$lang['calendar']['decline'].'</a>');
 	
 					//create ics attachment
 					require_once ($GO_MODULES->modules['calendar']['class_path'].'go_ical.class.inc');

@@ -110,6 +110,7 @@ class calendar extends db
 			$settings['user_id']=$_POST['user_id'];
 			$settings['background']=$_POST['background'];
 			$settings['reminder']=$_POST['reminder_multiplier'] * $_POST['reminder_value'];
+			$settings['calendar_id']=$_POST['calendar_id'];
 
 			$cal = new calendar();
 			$cal->update_settings($settings);
@@ -159,20 +160,20 @@ class calendar extends db
 		return $settings;
 	}
 
-
-
+	
 	function get_settings($user_id)
 	{
 		$this->query("SELECT * FROM cal_settings WHERE user_id='".$this->escape($user_id)."'");
 		if ($record=$this->next_record(DB_ASSOC))
 		{
 			if(empty($record['background']))
-			$record['background']='EBF1E2';
+				$record['background']='EBF1E2';
 
+			$record['calendar_name'] = $this->get_calendar_name($record['calendar_id']);
 			return $record;
 		}else
 		{
-			$this->query("INSERT INTO cal_settings (user_id, background) VALUES ('".$this->escape($user_id)."', 'EBF1E2')");
+			$this->query("INSERT INTO cal_settings (user_id, background) VALUES ('".$this->escape($user_id)."', 'EBF1E2')");			
 			return $this->get_settings($user_id);
 		}
 	}
@@ -660,11 +661,12 @@ class calendar extends db
 	}
 
 	function delete_other_participants($event_id, $keep_ids)
-	{
-		if(!count($keep_ids))
-		return true;
+	{			
+		$sql = "DELETE FROM cal_participants WHERE event_id=".$this->escape($event_id);
+
+		if(count($keep_ids))
+			$sql .= " AND id NOT IN (".$this->escape(implode(',', $keep_ids)).")";
 			
-		$sql = "DELETE FROM cal_participants WHERE event_id=".$this->escape($event_id)." AND id NOT IN (".$this->escape(implode(',', $keep_ids)).")";
 		return $this->query($sql);
 	}
 
@@ -676,7 +678,7 @@ class calendar extends db
 
 	function is_participant($event_id, $email)
 	{
-		$sql = "SELECT id FROM cal_participants WHERE event_id='".$this->escape($event_id)."' AND email='".$this->escape($email)."'";
+		$sql = "SELECT id, user_id FROM cal_participants WHERE event_id='".$this->escape($event_id)."' AND email='".$this->escape($email)."'";
 		$this->query($sql);
 		return $this->next_record();
 	}
@@ -789,10 +791,34 @@ class calendar extends db
 		return $this->update_row('cal_calendars','id', $calendar);
 	}
 
+	
+	function get_default_import_calendar($user_id)
+	{
+		$settings = $this->get_settings($user_id);
+		$calendar_id = $settings['calendar_id'];
+				
+		if($calendar_id)
+		{
+			$this->query("SELECT * FROM cal_calendars WHERE user_id = ? AND id=?", 'ii', array($user_id, $calendar_id));
+			if($this->next_record(DB_ASSOC))
+			{
+				return $this->record;
+			}			
+		}
+		
+		$this->get_user_calendars($user_id, 0, 1);			
+		if($this->next_record(DB_ASSOC))
+		{
+			return $this->record;
+		}
+
+		return false;	
+	}
+	
 	function get_default_calendar($user_id)
 	{
-		$this->get_user_calendars($user_id, 0, 1);
-		if ($this->next_record(DB_ASSOC))
+		$this->get_user_calendars($user_id, 0, 1);		
+		if($this->next_record(DB_ASSOC))
 		{
 			return $this->record;
 		}else
@@ -864,17 +890,44 @@ class calendar extends db
 		}
 	}
 
+	function get_calendar_name($calendar_id)
+	{
+		$this->query("SELECT name FROM cal_calendars WHERE id=?", 'i', array($calendar_id));
+		if ($this->next_record(DB_ASSOC))
+		{
+			return $this->f('name');
+		}else		
+			return '';
+	}
+	
 	function get_user_calendars($user_id,$start=0,$offset=0)
 	{
-		$sql = "SELECT * FROM cal_calendars WHERE user_id='".$this->escape($user_id)."' ORDER BY id ASC";
+		$sql = "SELECT * FROM cal_calendars WHERE user_id='".$this->escape($user_id)."' ORDER BY id ASC";	
 		$this->query($sql);
 		$count= $this->num_rows();
+		
 		if($offset>0)
 		{
 			$sql .= " LIMIT ".$this->escape($start.",".$offset);
 			$this->query($sql);
 		}
 		return $count;
+	}
+	
+	function get_default_user_calendar($user_id)
+	{
+		$this->query("SELECT value FROM go_settings WHERE user_id=? AND name='calendar_default_calendar'", 'i', array($user_id));
+		$deb = $this->next_record();
+		$calendar_id = $this->f('value');
+		if($calendar_id > 0)
+		{
+			$this->query("SELECT * FROM cal_calendars WHERE user_id = ? AND id=?", 'ii', array($user_id, $calendar_id));
+			return $this->num_rows();
+		}else
+		{
+			return $this->get_user_calendars($user_id, 0, 1);				
+		}
+		return false;
 	}
 
 	function get_calendars()
@@ -1074,7 +1127,7 @@ class calendar extends db
 	}
 
 	function update_event(&$event, $calendar=false, $old_event=false, $update_related=true)
-	{
+	{			
 		unset($event['read_permission'], $event['write_permission']);
 		if(empty($event['mtime']))
 		{
@@ -1195,20 +1248,20 @@ class calendar extends db
 		}
 
 		if($update_related  && !empty($event['id']))
-		{
+		{			
 			unset($event['user_id'], $event['calendar_id'], $event['participants_event_id']);
+			
 			$cal = new calendar();
 			$sql = "SELECT * FROM cal_events WHERE participants_event_id=".$this->escape($event['id']);
 			$cal->query($sql);
 			while($old_event = $cal->next_record())
 			{
 				$event['id']=$cal->f('id');
-				$this->update_event($event,$calendar,$old_event, false);
+				$event['calendar_id'] = $cal->f('calendar_id');
+				$this->update_event($event,false,$old_event, false);
 			}
-		}
-		
-		
-
+		}		
+	
 		return $r;
 	}
 

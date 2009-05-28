@@ -16,4 +16,8 @@ $updates[]="ALTER TABLE `cal_events` CHANGE `rrule` `rrule` VARCHAR( 100 ) CHARA
 
 $updates[]="ALTER TABLE `cal_events` ADD `files_folder_id` INT NOT NULL;";
 //$updates[]="script:1_shift_days.inc.php";
+
+$updates[]="ALTER TABLE `cal_settings` ADD `calendar_id` INT NOT NULL;";
+$updates[]="ALTER TABLE `cal_settings` ADD INDEX ( `calendar_id` )";
+
 ?>

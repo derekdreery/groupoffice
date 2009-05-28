@@ -58,3 +58,6 @@ GO.calendar.lang.startsAt='Start op';
 GO.calendar.lang.endsAt='Eindigt op';
 
 GO.calendar.lang.eventDefaults='Standaard instellingen voor afspraken';
+
+GO.calendar.lang.importToCalendar='Toevoegen aan agenda';
+GO.calendar.lang.default_calendar='Standaard agenda';

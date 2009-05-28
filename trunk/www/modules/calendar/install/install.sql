@@ -21,7 +21,9 @@ CREATE TABLE `cal_settings` (
 `user_id` INT NOT NULL ,
 `reminder` INT NOT NULL ,
 `background` CHAR( 6 ) NOT NULL ,
-PRIMARY KEY ( `user_id` )
+`calendar_id` int(11) NOT NULL,
+PRIMARY KEY ( `user_id` ),
+  KEY `calendar_id` (`calendar_id`)
 ) ENGINE = MYISAM DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `cal_calendars`;
