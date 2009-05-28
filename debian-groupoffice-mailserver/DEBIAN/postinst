@@ -1,16 +1,14 @@
-#!/bin/sh -x
+#!/bin/sh -e
 
 
 # Use debconf.
 . /usr/share/debconf/confmodule
 
-DATE=`date +%Y%m%d`
-
 
 echo Configuring Postfix
 
 touch /etc/postfix/main.cf
-cp /etc/postfix/main.cf /etc/postfix/main.cf.gobak_$DATE
+cp /etc/postfix/main.cf /etc/postfix/main.cf.gobak
 
 #postconf -e 'recipient_delimiter = +'
 #postconf -e 'inet_interfaces = all'
@@ -71,28 +69,20 @@ postconf -e dovecot_destination_recipient_limit=1
 
 
 
-cp /etc/default/spamassassin /etc/spamassassin/spamassassin.gobak_$DATE
+cp /etc/default/spamassassin /etc/spamassassin/spamassassin.gobak
 cp /usr/share/groupoffice-mailserver/tpl/etc/default/spamassassin /etc/default/spamassassin
 
-cp /etc/spamassassin/local.cf /etc/spamassassin/local.cf.gobak_$DATE
+cp /etc/spamassassin/local.cf /etc/spamassassin/local.cf.gobak
 cp /usr/share/groupoffice-mailserver/tpl/etc/spamassassin/local.cf /etc/spamassassin
 
-cp /etc/dovecot/dovecot.conf /etc/dovecot/dovecot.conf.gobak_$DATE
+cp /etc/dovecot/dovecot.conf /etc/dovecot/dovecot.conf.gobak
 cp /usr/share/groupoffice-mailserver/tpl/etc/dovecot/dovecot.conf /etc/dovecot
 
-cp /etc/postfix/master.cf /etc/postfix/master.cf.gobak_$DATE
+cp /etc/postfix/master.cf /etc/postfix/master.cf.gobak
 cp /usr/share/groupoffice-mailserver/tpl/etc/postfix/master.cf /etc/postfix
 
-db_version 2.0
-
-db_get groupoffice-mailserver/domain
-db_go
-domain="$RET"
 
 
-
-cat /etc/groupoffice/config-db.php > /etc/groupoffice/config-mailserver.inc.php
-echo "\$domain='$domain';\n" >> /etc/groupoffice/config-mailserver.inc.php
 
 /usr/share/groupoffice-mailserver/configure.php
 /usr/share/groupoffice-mailserver/installpostfixadmin.php
