@@ -3,8 +3,10 @@
 # Use debconf.
 . /usr/share/debconf/confmodule
 
-db_get groupoffice-mailserver/domain
+db_input medium groupoffice-mailserver/domain
 db_go
+
+db_get groupoffice-mailserver/domain
 domain="$RET"
 
 cat /etc/groupoffice/config-db.php > /etc/groupoffice/config-mailserver.inc.php
