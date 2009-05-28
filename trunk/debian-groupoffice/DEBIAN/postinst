@@ -13,7 +13,7 @@ dbc_generate_include=php:/etc/groupoffice/config-db.php
 dbc_go groupoffice $@
 
 #for testing
-ln -s /var/www/trunk/www /usr/share/groupoffice
+ln -s /var/www/community/trunk/www /usr/share/groupoffice
 
 /etc/init.d/apache2 reload > /dev/null || true
 
