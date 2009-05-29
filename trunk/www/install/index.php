@@ -36,7 +36,6 @@ $tasks[] = 'test';
 $tasks[] = 'license';
 $tasks[] = 'release_notes';
 $tasks[] = 'title';
-$tasks[] = 'theme';
 //$tasks[] = 'url';
 
 if (!@is__writable($GO_CONFIG->file_storage_path) || !@is__writable($GO_CONFIG->local_path) || !@is__writable($GO_CONFIG->tmpdir))
@@ -66,6 +65,8 @@ if($CONFIG_FILE=='/etc/groupoffice/config.php' && @file_exists('/etc/groupoffice
 		}
 	}
 }
+
+$tasks[] = 'theme';
 
 if(!isset($dbconn))
 {
@@ -370,7 +371,7 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 						filesystem::mkdir_recursive($GO_CONFIG->file_storage_path.'users/'.$GO_USERS->f('username'));
 					}
 				}*/
-				$task = $nexttask;
+				$task = 'theme';
 			}
 
 			break;
