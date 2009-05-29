@@ -28,6 +28,7 @@ function get_file($path, $parent_id)
     {
         $file['name']=utf8_basename($path);
         $file['folder_id']=$parent_id;
+				$file['size']=@filesize($GO_CONFIG->file_storage_path.$path);
         $fsdb->update_file($file);
 
         return $file['id'];
@@ -362,7 +363,7 @@ if(isset($GO_MODULES->modules['billing']))
 
             if($folder && !empty($new_folder_name))
             {
-                $new_path = 'billing/'.File::strip_invalid_chars($order['book_name']).'/'.date('Y', $order['btime']).'/'.File::strip_invalid_chars($order['id'].' '.$order['customer_name']);
+                $new_path = 'billing/'.File::strip_invalid_chars($order['book_name']).'/'.date('Y', $order['btime']);
 
                 $destination = $fsdb->resolve_path($new_path, true, 1);
 
@@ -372,7 +373,7 @@ if(isset($GO_MODULES->modules['billing']))
                 $new_folder_id = $fsdb->move_folder($folder, $destination);
 
                 $up_folder['id']=$new_folder_id;
-                $up_folder['name']=File::strip_invalid_chars($order['name']);
+                $up_folder['name']=File::strip_invalid_chars($order['id'].' '.$order['customer_name']);
                 $up_folder['acl_read']=0;
                 $up_folder['acl_write']=0;
                 $up_folder['readonly']='1';

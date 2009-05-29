@@ -198,7 +198,7 @@ try{
 							$response['files'][] = array(
 					'tmp_name'=>$tmp_file,
 					'name'=>utf8_basename($tmp_file),
-					'size'=>Number::format_size($_FILES['attachments']['size'][$n]),
+					'size'=>$_FILES['attachments']['size'][$n],
 					'type'=>File::get_filetype_description(File::get_extension($_FILES['attachments']['name'][$n]))
 							);
 						}
