@@ -168,9 +168,20 @@ class files extends db {
 				$count++;
 			}
 
-			if(is_dir($GO_CONFIG->file_storage_path.$current_path))
+			$full_source_path = $GO_CONFIG->file_storage_path.$current_path;
+			$full_dest_path = $GO_CONFIG->file_storage_path.$destfolder_path.'/'.$folder_name;
+
+			if(is_dir($full_source_path))
 			{
-				$fs->move($GO_CONFIG->file_storage_path.$current_path, $GO_CONFIG->file_storage_path.$destfolder_path.'/'.$folder_name);
+				if($fs->is_sub_dir($full_dest_path, $full_source_path))
+				{
+					//moving into it's own sub path? Strange we must create a new folder
+					$folder = $this->create_unique_folder($this->strip_server_path($full_dest_path));
+					return $folder['id'];
+				}else
+				{
+					$fs->move($full_source_path,$full_dest_path);
+				}
 			}else
 			{
 				$fs->mkdir_recursive($GO_CONFIG->file_storage_path.$destfolder_path.'/'.$folder_name);
