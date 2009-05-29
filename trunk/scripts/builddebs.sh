@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 PRG="$0"
 OLDPWD=`pwd`
@@ -25,8 +25,7 @@ svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-offi
 
 svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/trunk/debian-groupoffice
 
-if [[ $1 == "true" ]]
-then
+if [ $1 == "real" ]; then
 	svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/trunk/www
 	mv www debian-groupoffice/usr/share/groupoffice
 fi
