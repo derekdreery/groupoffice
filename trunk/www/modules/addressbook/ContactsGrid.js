@@ -4,16 +4,12 @@ GO.addressbook.ContactsGrid = function(config){
 	{
 		config = {};
 	}
-	
-
-
-	
+		
 	config.paging=true;
 	config.border=false;
 	
-	
 	var fields ={
-		fields : ['id', 'name', 'company_name', 'email', 'home_phone', 'work_phone', 'work_fax','cellular','function','department','ctime','mtime'],
+		fields : ['id','name','company_name','first_name','middle_name','last_name','initials','sex','birthday','email','email2','email3','home_phone','work_phone','work_fax','cellular','fax','address','address_no','zip','city','state','country','function','department','salutation','ctime','mtime'],
 		columns : [
 		  {
 		  	header: GO.lang['strName'], 
@@ -24,47 +20,129 @@ GO.addressbook.ContactsGrid = function(config){
 		  	dataIndex: 'company_name'
 		  },
 		  {
+		  	header: GO.lang['strFirstName'], 
+		  	dataIndex: 'first_name',
+		  	hidden:true
+		  },
+		  {
+		  	header: GO.lang['strMiddleName'], 
+		  	dataIndex: 'middle_name',
+		  	hidden:true
+		  },
+		  {
+		  	header: GO.lang['strLastName'], 
+		  	dataIndex: 'last_name',
+		  	hidden:true
+		  },
+		  {
+		  	header: GO.lang['strInitials'], 
+		  	dataIndex: 'initials',
+		  	hidden:true
+		  },
+		  {
+		  	header: GO.lang['strSex'], 
+		  	dataIndex: 'sex',
+		  	hidden:true
+		  },
+		  {
+		  	header: GO.lang['strBirthday'], 
+		  	dataIndex: 'birthday',
+		  	hidden:true
+		  },
+		  {
 		  	header: GO.lang['strEmail'], 
-		  	dataIndex: 'email' , 
+		  	dataIndex: 'email', 
+		  	width: 150,
+		  	hidden:true
+		  },
+		  {
+		  	header: GO.lang['strEmail'] + ' 2', 
+		  	dataIndex: 'email2', 
+		  	width: 150,
+		  	hidden:true
+		  },
+		  {
+		  	header: GO.lang['strEmail'] + ' 3', 
+		  	dataIndex: 'email3', 
 		  	width: 150,
 		  	hidden:true
 		  },
 		  {
 		  	header: GO.lang['strPhone'], 
-		  	dataIndex: 'home_phone' , 
+		  	dataIndex: 'home_phone', 
 		  	width: 100,
 		  	hidden:true
 		  },
 		  {
 		  	header: GO.lang['strWorkPhone'], 
-		  	dataIndex: 'work_phone' , 
+		  	dataIndex: 'work_phone', 
 		  	width: 100,
 		  	hidden:true
 		  },
 		  {
 		  	header: GO.lang['strWorkFax'], 
-		  	dataIndex: 'work_fax' , 
+		  	dataIndex: 'work_fax', 
 		  	width: 100,
 		  	hidden:true
 		  },
 		  {
 		  	header: GO.lang['strCellular'], 
-		  	dataIndex: 'cellular' , 
+		  	dataIndex: 'cellular', 
 		  	width: 100,
 		  	hidden:true
 		  },
 		  {
-		  	header: GO.lang['strFunction'], 
-		  	dataIndex: 'function' , 
+		  	header: GO.lang['strFax'], 
+		  	dataIndex: 'fax', 
 		  	width: 100,
+		  	hidden:true
+		  },
+		  {
+		  	header: GO.lang['strAddress'], 
+		  	dataIndex: 'address', 
+		  	hidden:true
+		  },
+		  {
+		  	header: GO.lang['strAddressNo'], 
+		  	dataIndex: 'address_no', 
+		  	hidden:true
+		  },
+		  {
+		  	header: GO.lang['strZip'], 
+		  	dataIndex: 'zip', 
+		  	hidden:true
+		  },
+		  {
+		  	header: GO.lang['strCity'], 
+		  	dataIndex: 'city', 
+		  	hidden:true
+		  },
+		  {
+		  	header: GO.lang['strState'], 
+		  	dataIndex: 'state', 
+		  	hidden:true
+		  },
+		  {
+		  	header: GO.lang['strCountry'], 
+		  	dataIndex: 'country', 
+		  	hidden:true
+		  },		  
+		  {
+		  	header: GO.lang['strFunction'], 
+		  	dataIndex: 'function', 
 		  	hidden:true
 		  },
 		  {
 		  	header: GO.lang['strDepartment'], 
 		  	dataIndex: 'department', 
-		  	width: 100,
 		  	hidden:true
-		  },{
+		  },
+		  {
+		  	header: GO.lang['strSalutation'], 
+		  	dataIndex: 'salutation', 
+		  	hidden:true
+		  },		  
+		  {
 		  	header: GO.lang.strMtime,
 		  	dataIndex:'mtime',
 		  	hidden:true,

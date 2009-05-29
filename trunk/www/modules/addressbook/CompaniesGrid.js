@@ -8,7 +8,7 @@ GO.addressbook.CompaniesGrid = function(config){
 	config.paging=true;
 	
 	var fields ={
-		fields:['id', 'name', 'homepage', 'email', 'phone', 'fax','ctime','mtime'],
+		fields:['id','name','homepage','email','phone','fax','address','address_no','zip','city','state','country','post_address','post_address_no','post_city','post_state','post_country','post_zip','bank_no','vat_no','ctime','mtime'],
 		columns:[
 		  {
 		  	header: GO.lang['strName'], 
@@ -16,27 +16,100 @@ GO.addressbook.CompaniesGrid = function(config){
 		  },
 		  {
 		  	header: GO.lang['strEmail'], 
-		  	dataIndex: 'email' , 
+		  	dataIndex: 'email', 
 		  	width: 150,
 		  	hidden:true
 		  },
 		  {
 		  	header: GO.lang['strHomepage'], 
-		  	dataIndex: 'homepage' , 
+		  	dataIndex: 'homepage', 
 		  	width: 100,
 		  	hidden:true
 		  },
 		  {
 		  	header: GO.lang['strPhone'], 
-		  	dataIndex: 'phone' , 
+		  	dataIndex: 'phone', 
 		  	width: 100
 		  },
 		  {
 		  	header: GO.lang['strFax'], 
-		  	dataIndex: 'fax' , 
+		  	dataIndex: 'fax', 
 		  	width: 80,
 		  	hidden:true
-		  },{
+		  },
+		  {
+		  	header: GO.lang['strAddress'], 
+		  	dataIndex: 'address', 
+		  	hidden:true
+		  },
+		  {
+		  	header: GO.lang['strAddressNo'], 
+		  	dataIndex: 'address_no', 
+		  	hidden:true
+		  },
+		  {
+		  	header: GO.lang['strZip'], 
+		  	dataIndex: 'zip', 
+		  	hidden:true
+		  },
+		  {
+		  	header: GO.lang['strCity'], 
+		  	dataIndex: 'city', 
+		  	hidden:true
+		  },
+		  {
+		  	header: GO.lang['strState'], 
+		  	dataIndex: 'state', 
+		  	width: 80,
+		  	hidden:true
+		  },
+		  {
+		  	header: GO.lang['strCountry'], 
+		  	dataIndex: 'country', 
+		  	hidden:true
+		  },
+		  {
+		  	header: GO.lang['strPostAddress'], 
+		  	dataIndex: 'post_address', 
+		  	hidden:true
+		  },
+		  {
+		  	header: GO.lang['strPostAddressNo'], 
+		  	dataIndex: 'post_address_no', 
+		  	hidden:true
+		  },
+		  {
+		  	header: GO.lang['strPostZip'], 
+		  	dataIndex: 'post_zip', 
+		  	hidden:true
+		  },
+		  {
+		  	header: GO.lang['strPostCity'], 
+		  	dataIndex: 'post_city',
+		  	hidden:true
+		  },
+		  {
+		  	header: GO.lang['strPostState'], 
+		  	dataIndex: 'post_state',
+		  	width: 80,
+		  	hidden:true
+		  },
+		  {
+		  	header: GO.lang['strPostCountry'], 
+		  	dataIndex: 'post_country',
+		  	hidden:true
+		  },
+		  {
+		  	header: GO.addressbook.lang['cmdFormLabelBankNo'], 
+		  	dataIndex: 'bank_no',
+		  	hidden:true
+		  },
+		  {
+		  	header: GO.addressbook.lang['cmdFormLabelVatNo'], 
+		  	dataIndex: 'vat_no',
+		  	hidden:true
+		  },
+		  {
 		  	header: GO.lang.strMtime,
 		  	dataIndex:'mtime',
 		  	hidden:true,
