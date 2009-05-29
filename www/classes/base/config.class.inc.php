@@ -766,6 +766,8 @@ class GO_CONFIG
       {
 				$config = array();
 
+				$this->root_path = str_replace('\\','/',dirname(dirname(dirname(__FILE__)))).'/';
+
       	//suppress error for open_basedir warnings etc
       	if(@file_exists('/etc/groupoffice/globalconfig.inc.php'))
       	{
@@ -785,10 +787,7 @@ class GO_CONFIG
 				if(empty($this->title))
       	{
       		//Detect some default values for installation if root_path is not set yet
-      		//$this->root_path = str_replace('classes/base/config.class.inc','',__FILE__);
-      		$this->root_path = str_replace('\\','/',dirname(dirname(dirname(__FILE__)))).'/';
       		$this->host = dirname(dirname($_SERVER['PHP_SELF']));
-
 
       		if(substr($this->host,-1) != '/')
       		{
