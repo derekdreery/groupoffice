@@ -26,6 +26,7 @@ svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-offi
 svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/trunk/debian-groupoffice
 
 if [[ $1 == "true" ]]
+then
 	svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/trunk/www
 	mv www debian-groupoffice/usr/share/groupoffice
 fi
