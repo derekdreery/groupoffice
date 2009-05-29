@@ -764,7 +764,25 @@ class GO_CONFIG
        */
       function __construct()
       {
-      	if(empty($this->title))
+				$config = array();
+
+      	//suppress error for open_basedir warnings etc
+      	if(@file_exists('/etc/groupoffice/globalconfig.inc.php'))
+      	{
+      		require('/etc/groupoffice/globalconfig.inc.php');
+      	}
+
+      	$config_file = $this->get_config_file();
+
+      	@include($config_file);
+
+      	foreach($config as $key=>$value)
+      	{
+      		$this->$key=$value;
+      	}
+
+
+				if(empty($this->title))
       	{
       		//Detect some default values for installation if root_path is not set yet
       		//$this->root_path = str_replace('classes/base/config.class.inc','',__FILE__);
@@ -788,7 +806,12 @@ class GO_CONFIG
       		{
       			$this->file_storage_path = substr($this->root_path,0,3).'groupoffice/';
       			$this->tmpdir=substr($this->root_path,0,3).'temp';
-      		}
+
+						$this->cmd_zip=$this->root_path.'controls/win32/zip.exe';
+						$this->cmd_unzip=$this->root_path.'controls/win32/unzip.exe';
+						$this->cmd_xml2wbxml=$this->root_path.'controls/win32/libwbxml/xml2wbxml.exe';
+						$this->cmd_wbxml2xml=$this->root_path.'controls/win32/libwbxml/wbxml2xml.exe';
+					}
 
       		if(function_exists('sys_get_temp_dir'))
       		{
@@ -797,23 +820,6 @@ class GO_CONFIG
       	}
 
 
-
-      	$config = array();
-
-      	//suppress error for open_basedir warnings etc
-      	if(@file_exists('/etc/groupoffice/globalconfig.inc.php'))
-      	{
-      		require('/etc/groupoffice/globalconfig.inc.php');
-      	}
-
-      	$config_file = $this->get_config_file();
-
-      	@include($config_file);
-
-      	foreach($config as $key=>$value)
-      	{
-      		$this->$key=$value;
-      	}
 
       	// path to classes
       	$this->class_path = $this->root_path.$this->class_path.'/';
@@ -864,13 +870,7 @@ class GO_CONFIG
       		$this->log=true;
       	}
 
-				if(is_windows())
-				{
-					$this->cmd_zip=$this->root_path.'controls/win32/zip.exe';
-					$this->cmd_unzip=$this->root_path.'controls/win32/unzip.exe';
-					$this->cmd_xml2wbxml=$this->root_path.'controls/win32/libwbxml/xml2wbxml.exe';
-					$this->cmd_wbxml2xml=$this->root_path.'controls/win32/libwbxml/wbxml2xml.exe';
-				}
+				
 
       	$this->set_full_url();
       }
