@@ -20,30 +20,36 @@ if(!empty($GO_CONFIG->serverclient_domains))
 
 				$user = $GO_USERS->get_user(1);
 
-				$account['user_id']=1;
-				$account['mbroot'] = $GO_CONFIG->serverclient_mbroot;
-				$account['use_ssl'] = $GO_CONFIG->serverclient_use_ssl;
-				$account['novalidate_cert'] = $GO_CONFIG->serverclient_novalidate_cert;
-				$account['type']=$GO_CONFIG->serverclient_type;
-				$account['host']=$GO_CONFIG->serverclient_host;
-				$account['port']=$GO_CONFIG->serverclient_port;
-				$account['username']='admin@'.$domain;
-				$account['password']='admin';
-				$account['name']=String::format_name($user);
-				$account['email']='admin@'.$domain;
-				$account['smtp_host']=$GO_CONFIG->serverclient_smtp_host;
-				$account['smtp_port']=$GO_CONFIG->serverclient_smtp_port;
-				$account['smtp_encryption']=$GO_CONFIG->serverclient_smtp_encryption;
-				$account['smtp_username']=$GO_CONFIG->serverclient_smtp_username;
-				$account['smtp_password']=$GO_CONFIG->serverclient_smtp_password;
+				$sql = "SELECT * FROM em_acounts WHERE user_id=1 AND username=?";
+				$email->query($sql, 's', 'admin@'.$domain);
 
-				$account['id'] = $email->add_account($account);
-
-				if($account['id']>0)
+				if(!$email->num_rows())
 				{
-					//get the account because we need special folder info
-					$account = $email->get_account($account['id']);
-					$email->synchronize_folders($account);
+					$account['user_id']=1;
+					$account['mbroot'] = $GO_CONFIG->serverclient_mbroot;
+					$account['use_ssl'] = $GO_CONFIG->serverclient_use_ssl;
+					$account['novalidate_cert'] = $GO_CONFIG->serverclient_novalidate_cert;
+					$account['type']=$GO_CONFIG->serverclient_type;
+					$account['host']=$GO_CONFIG->serverclient_host;
+					$account['port']=$GO_CONFIG->serverclient_port;
+					$account['username']='admin@'.$domain;
+					$account['password']='admin';
+					$account['name']=String::format_name($user);
+					$account['email']='admin@'.$domain;
+					$account['smtp_host']=$GO_CONFIG->serverclient_smtp_host;
+					$account['smtp_port']=$GO_CONFIG->serverclient_smtp_port;
+					$account['smtp_encryption']=$GO_CONFIG->serverclient_smtp_encryption;
+					$account['smtp_username']=$GO_CONFIG->serverclient_smtp_username;
+					$account['smtp_password']=$GO_CONFIG->serverclient_smtp_password;
+
+					$account['id'] = $email->add_account($account);
+
+					if($account['id']>0)
+					{
+						//get the account because we need special folder info
+						$account = $email->get_account($account['id']);
+						$email->synchronize_folders($account);
+					}
 				}
 			}
 		}
