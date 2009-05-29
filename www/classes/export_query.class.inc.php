@@ -396,7 +396,7 @@ class export_query extends TCPDF
 				$columns[]=$indexAndHeader[0];
 			}
 
-			fwrite($fp, $_SESSION['GO_SESSION']['text_separator'].implode($_SESSION['GO_SESSION']['text_separator'].$_SESSION['GO_SESSION']['list_separator'].$_SESSION['GO_SESSION']['text_separator'], $headers).$_SESSION['GO_SESSION']['text_separator']."\r\n");
+			fputcsv($fp, $headers, $_SESSION['GO_SESSION']['list_separator'], $_SESSION['GO_SESSION']['text_separator']);
 		}
 
 
@@ -413,8 +413,7 @@ class export_query extends TCPDF
 					$headers[]=$key;
 				}
 
-				fwrite($fp,  $_SESSION['GO_SESSION']['text_separator'].implode($_SESSION['GO_SESSION']['text_separator'].$_SESSION['GO_SESSION']['list_separator'].$_SESSION['GO_SESSION']['text_separator'], $headers).$_SESSION['GO_SESSION']['text_separator']."\r\n");
-
+				fputcsv($fp, $headers, $_SESSION['GO_SESSION']['list_separator'], $_SESSION['GO_SESSION']['text_separator']);
 			}
 
 			if(is_array($this->q) && isset($this->q['method']))
@@ -432,7 +431,7 @@ class export_query extends TCPDF
 			{
 				$values[] = $record[$index];
 			}
-			fwrite($fp, $_SESSION['GO_SESSION']['text_separator'].implode($_SESSION['GO_SESSION']['text_separator'].$_SESSION['GO_SESSION']['list_separator'].$_SESSION['GO_SESSION']['text_separator'], $values).$_SESSION['GO_SESSION']['text_separator']."\r\n");
+			fputcsv($fp, $values, $_SESSION['GO_SESSION']['list_separator'], $_SESSION['GO_SESSION']['text_separator']);
 		}
 	}
 }

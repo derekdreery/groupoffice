@@ -9,6 +9,7 @@
 - Projects treeview for easier navigation
 - A lot of Windows enhancements. libwbxml, zip and unzip work now and the
   installation is improved for Windows too.
+- GOTA didn't always report failure. Error handling is improved.
 
 2009/04/28 Version 3.01-stable-34
 - Added Greek translation
