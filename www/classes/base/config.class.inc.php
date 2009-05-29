@@ -793,26 +793,28 @@ class GO_CONFIG
       		{
       			$this->host .= '/';
       		}
-
-      		$this->full_url = 'http://'.$_SERVER['SERVER_NAME'].$this->host;
-
-      		$this->local_path = $this->root_path.'local/';
-      		$this->local_url = $this->host.'local/';
+      	
+		if(empty($config['local_path']))
+		{
+      			$this->local_path = $this->root_path.'local/';
+	      		$this->local_url = $this->host.'local/';
+		}
 
       		$this->db_host='localhost';
+
 
       		if(is_windows())
       		{
       			$this->file_storage_path = substr($this->root_path,0,3).'groupoffice/';
       			$this->tmpdir=substr($this->root_path,0,3).'temp';
 
-						$this->cmd_zip=$this->root_path.'controls/win32/zip.exe';
-						$this->cmd_unzip=$this->root_path.'controls/win32/unzip.exe';
-						$this->cmd_xml2wbxml=$this->root_path.'controls/win32/libwbxml/xml2wbxml.exe';
-						$this->cmd_wbxml2xml=$this->root_path.'controls/win32/libwbxml/wbxml2xml.exe';
-					}
+			$this->cmd_zip=$this->root_path.'controls/win32/zip.exe';
+			$this->cmd_unzip=$this->root_path.'controls/win32/unzip.exe';
+			$this->cmd_xml2wbxml=$this->root_path.'controls/win32/libwbxml/xml2wbxml.exe';
+			$this->cmd_wbxml2xml=$this->root_path.'controls/win32/libwbxml/wbxml2xml.exe';
+		}
 
-      		if(function_exists('sys_get_temp_dir'))
+      		if(empty($config['tmpdir']) && function_exists('sys_get_temp_dir'))
       		{
       			$this->tmpdir = str_replace('\\','/', sys_get_temp_dir());
       		}
