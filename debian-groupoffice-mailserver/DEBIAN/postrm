@@ -16,6 +16,7 @@ if [ "$1" = "purge" -a -e /usr/share/debconf/confmodule ]; then
 		rm /etc/dovecot/dovecot-sql.conf
 		rm /etc/groupoffice/vacation.pl
 		rm /etc/groupoffice/globalconfig.inc.php
+		rm /etc/groupoffice/config-mailserver.inc.php
 fi
 
 
