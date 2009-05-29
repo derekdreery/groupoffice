@@ -10,7 +10,9 @@
 
 if(!isset($GO_CONFIG))
 {
-	require_once(str_replace('controls/phpthumb/phpThumb.config.php','', __FILE__).'classes/base/config.class.inc.php');
+	$root = str_replace('controls/phpthumb/phpThumb.config.php','', __FILE__);
+	require_once($root.'functions.inc.php');
+	require_once($root.'classes/base/config.class.inc.php');
 	$GO_CONFIG = new GO_CONFIG();
 	if(!file_exists($GO_CONFIG->file_storage_path.'phpThumbCache/'))
 	{
