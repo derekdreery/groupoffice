@@ -20,7 +20,7 @@ if(!empty($GO_CONFIG->serverclient_domains))
 
 				$user = $GO_USERS->get_user(1);
 
-				$sql = "SELECT * FROM em_acounts WHERE user_id=1 AND username=?";
+				$sql = "SELECT * FROM em_accounts WHERE user_id=1 AND username=?";
 				$email->query($sql, 's', 'admin@'.$domain);
 
 				if(!$email->num_rows())
