@@ -25,10 +25,10 @@ svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-offi
 
 svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/trunk/debian-groupoffice
 
-#svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/trunk/www
-
-#mv www debian-groupoffice/usr/share/groupoffice
-
+if [[ $1 == "true" ]]
+	svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/trunk/www
+	mv www debian-groupoffice/usr/share/groupoffice
+fi
 
 
 chmod 775 debian-groupoffice/DEBIAN/postinst
