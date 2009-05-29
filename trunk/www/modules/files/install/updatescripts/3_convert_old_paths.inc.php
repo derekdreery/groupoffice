@@ -362,7 +362,7 @@ if(isset($GO_MODULES->modules['billing']))
 
             if($folder && !empty($new_folder_name))
             {
-                $new_path = 'billing/'.File::strip_invalid_chars($order['book_name']).'/'.date('Y', $order['btime']);
+                $new_path = 'billing/'.File::strip_invalid_chars($order['book_name']).'/'.date('Y', $order['btime']).'/'.File::strip_invalid_chars($order['id'].' '.$order['customer_name']);
 
                 $destination = $fsdb->resolve_path($new_path, true, 1);
 
@@ -514,5 +514,8 @@ while($user = $GO_USERS->next_record())
         echo $e->getMessage().$line_break;
     }
 }
+
+global $GO_EVENTS;
+$GO_EVENTS->fire_event('check_database');
 
 ?>

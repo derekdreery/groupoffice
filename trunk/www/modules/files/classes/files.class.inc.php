@@ -149,6 +149,7 @@ class files extends db {
 		//is found.
 		$check_current_path=preg_replace('/ \([0-9]+\)$/', '', $current_path);
 
+		//echo $current_path.' -> '.$path.'<br />';
 
 		if(!$current_path) {
 			$new_folder = $this->resolve_path($path,true,1,'1');
