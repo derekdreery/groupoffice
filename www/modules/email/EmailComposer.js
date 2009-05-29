@@ -898,7 +898,10 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 					dataIndex : 'name'
 				}, {
 					header : GO.lang.strSize,
-					dataIndex : 'size'
+					dataIndex : 'size',
+					renderer: function(v){
+						return  Ext.util.Format.fileSize(v);
+					}
 				}, {
 					header : GO.lang.strType,
 					dataIndex : 'type'

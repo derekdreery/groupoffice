@@ -68,4 +68,6 @@ $updates[] = "ALTER TABLE `fs_folders` ADD INDEX ( `parent_id` ) ";
 
 $updates[] = "script:3_convert_old_paths.inc.php";
 
+$updates[] = "ALTER TABLE `fs_folders` ADD INDEX (`visible`)";
+
 

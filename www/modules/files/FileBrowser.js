@@ -203,7 +203,10 @@ GO.files.FileBrowser = function(config){
 				},{
 					header:GO.lang.strSize,
 					dataIndex: 'size',
-					sortable:true
+					sortable:true,
+					renderer: function(v){
+						return  v=='-' ? v : Ext.util.Format.fileSize(v);
+					}
 					
 				},{
 					header:GO.lang.strMtime,
