@@ -199,7 +199,7 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 		loadMask : {
 			msg : GO.lang.waitMsgLoad
 		},
-		sm : new Ext.grid.RowSelectionModel({}),
+		sm : new Ext.grid.RowSelectionModel()
 	});
 		
 	
