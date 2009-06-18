@@ -50,7 +50,12 @@ class formprocessor{
 		{
 			$GO_LANGUAGE->set_language($_POST['language']);
 			require($GO_LANGUAGE->get_base_language_file('common'));
-		}		
+		}
+
+
+		if(!isset($_POST['salutation']))
+			$_POST['salutation']=isset($_POST['sex']) ? $lang['common']['default_salutation'][$_POST['sex']] : $lang['common']['default_salutation']['unknown'];
+
 		
 
 		if(isset($_POST['required']))
@@ -148,6 +153,8 @@ class formprocessor{
 			{
 				$contact_id = $existing_contact['id'];
 
+				$files_folder_id=$existing_contact['files_folder_id'];
+
 
 				/*
 				 * Only update empty fields
@@ -172,6 +179,7 @@ class formprocessor{
 			}else
 			{
 				$contact_id = $ab->add_contact($contact_credentials);
+				$files_folder_id=$contact_credentials['files_folder_id'];
 			}
 			if(!$contact_id)
 			{
@@ -182,10 +190,11 @@ class formprocessor{
 			{
 				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 				$fs = new files();
+				$path = $fs->build_path($files_folder_id);
 
-				$response['files_path']='contacts/'.$contact_id;
-				$full_path = $GO_CONFIG->file_storage_path.$response['files_path'];
-				$fs->check_share($full_path, $GO_SECURITY->user_id, $addressbook['acl_read'], $addressbook['acl_write'],true);
+				$response['files_folder_id']=$files_folder_id;
+
+				$full_path = $GO_CONFIG->file_storage_path.$path;				
 
 				while($file = array_shift($_FILES))
 				{
@@ -193,6 +202,8 @@ class formprocessor{
 					{
 						move_uploaded_file($file['tmp_name'], $full_path.'/'.$file['name']);
 						chmod($full_path.'/'.$file['name'], $GO_CONFIG->file_create_mode);
+
+						$fs->import_file($full_path, $files_folder_id);
 					}
 				}
 			}
