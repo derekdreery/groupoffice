@@ -485,7 +485,7 @@ class addressbook extends db {
 
     }
 
-    function add_contact($contact, $addressbook=false) {
+    function add_contact(&$contact, $addressbook=false) {
 
         global $GO_MODULES;
 
