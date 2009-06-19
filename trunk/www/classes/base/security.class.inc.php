@@ -46,6 +46,9 @@ class GO_SECURITY extends db {
 	*/
 	var $is_admin;
 
+
+        var $http_authenticated_session=false;
+
 	
 	/**
 	 * Constructor. Initialises base class of the security class family
@@ -61,6 +64,8 @@ class GO_SECURITY extends db {
 		$_SESSION['GO_SESSION']['user_id'] > 0)
 		{
 			$this->user_id=$_SESSION['GO_SESSION']['user_id'];
+                        $this->http_authenticated_session=!empty($_SESSION['GO_SESSION']['http_authenticated_user']);
+                        
 		}
 	}
 
@@ -86,22 +91,25 @@ class GO_SECURITY extends db {
 			{
 				global $GO_AUTH;
 				
-				if(isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW']))
+				if(!empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW']))
                                 {
                                         $username = $_SERVER['PHP_AUTH_USER'];
                                         $password = $_SERVER['PHP_AUTH_PW'];
-                                }elseif(isset($_COOKIE['GO_UN']) && isset($_COOKIE['GO_PW']) &&
-						$_COOKIE['GO_UN'] !='' && $_COOKIE['GO_PW'] != '')
+
+                                        if($GO_AUTH->login($username, $password))
+                                        {
+                                            $this->http_authenticated_session=$_SESSION['GO_SESSION']['http_authenticated_user']=true;
+                                            return true;
+                                        }
+                                }elseif(!empty($_COOKIE['GO_UN']) && !empty($_COOKIE['GO_PW']))
 				{
 					$username = $_COOKIE['GO_UN'];
 					$password = $_COOKIE['GO_PW'];
+
+                                        return $GO_AUTH->login($username, $password);
 				}
 					
-				if (!isset($username) || !isset($password) ||
-						!$GO_AUTH->login($username, $password))
-				{							
-					return false;
-				}
+				return false;				
 			}
 			
 			return ($this->user_id > 0);

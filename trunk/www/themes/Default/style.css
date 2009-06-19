@@ -162,7 +162,7 @@ display:block;margin-bottom:15px;
 
 .go-top-panel a:visited, .go-top-panel a:link, .go-top-panel a:active, .go-top-panel a:hover {
 	color: #666 !important;
-	margin-right:6px;
+	margin:0 5px;
 	text-decoration:none;
 }
 .go-top-panel .x-form-text {
