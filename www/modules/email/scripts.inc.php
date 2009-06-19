@@ -14,8 +14,11 @@ else
 
 if(isset($_GET['mail_to']))
 {
-	$qs=strtolower(str_replace('mailto:','mail_to=', $_GET['mail_to']));
-	$qs=str_replace('?subject','&subject', $qs);
+	//$qs=strtolower(str_replace('mailto:','mail_to=', $_GET['mail_to']));
+	//$qs=str_replace('?subject','&subject', $qs);
+
+        $qs=strtolower(str_replace('mailto:','', urldecode($_SERVER['QUERY_STRING'])));
+        $qs=str_replace('?subject','&subject', $qs);
 	
 	parse_str($qs, $vars);
 	//var_dump($vars);

@@ -1,7 +1,10 @@
-<?php 
+<?php
+header('Content-Type: text/html; charset=UTF-8');
+
 require('../../Group-Office.php');
 
-$qs=strtolower(str_replace('mailto:','mail_to=', $_GET['mail_to']));
+
+$qs=strtolower(str_replace('mailto:','', $_SERVER['QUERY_STRING']));
 $qs=str_replace('?subject','&subject', $qs);
 
 parse_str($qs, $vars);
@@ -33,7 +36,7 @@ function launchGO(){
 		
 	}else
 	{		
-		win.location.href="<?php echo $GO_CONFIG->host; ?>?mail_to=<?php echo $_GET['mail_to']; ?>";
+		win.location.href="<?php echo $GO_CONFIG->host; ?>?<?php echo $_SERVER['QUERY_STRING']; ?>";
 	}	
 	win.focus();	
 }
