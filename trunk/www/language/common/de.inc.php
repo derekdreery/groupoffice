@@ -45,6 +45,7 @@ $lang['common']['deleteError']='Fehler beim Löschen der Daten';
 $lang['common']['selectError']='Fehler beim Lesen der Daten';
 $lang['common']['missingField'] = 'Sie haben nicht alle benötigten Felder ausgefüllt.';
 $lang['common']['invalidEmailError']='Die E-Mail-Adresse war ungültig';
+$lang['common']['invalidDateError']='Die Datum war ungültig';
 $lang['common']['noFileUploaded']='Es wurde keine Datei empfangen';
 $lang['common']['error']='Fehler';
 

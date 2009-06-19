@@ -137,6 +137,9 @@ class formprocessor{
 			if(isset($_POST['birthday']))
 			{
 				$contact_credentials['birthday'] = Date::to_db_date($_POST['birthday'], false);
+
+                                if(!empty($_POST['birthday']) && $contact_credentials['birthday']=='0000-00-00')
+                                    throw new Exception($lang['common']['invalidDateError']);
 			}
 
 			unset($contact_credentials['company']);
