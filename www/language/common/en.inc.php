@@ -49,6 +49,7 @@ $lang['common']['deleteError']='Error while deleting the data';
 $lang['common']['selectError']='Error trying to read the data';
 $lang['common']['missingField'] = 'You didn\'t fill in all the required fields.';
 $lang['common']['invalidEmailError']='The e-mail address was invalid';
+$lang['common']['invalidDateError']='You entered an invalid date';
 $lang['common']['noFileUploaded']='No file was recieved';
 $lang['common']['error']='Error';
 
