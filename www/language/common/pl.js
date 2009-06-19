@@ -145,7 +145,7 @@ GO.lang.cmdOk = 'Ok';
 GO.lang.cmdCancel = 'Rezygnuj';
 
 GO.lang.cmdApply = 'Zastosuj';
-GO.lang.cmdRefresh = 'Odświerz';
+GO.lang.cmdRefresh = 'Odświez';
 
 GO.lang.cmdYes = 'Tak';
 GO.lang.cmdYesToAll = 'Tak na wszystko';
