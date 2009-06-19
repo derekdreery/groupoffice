@@ -86,7 +86,11 @@ class GO_SECURITY extends db {
 			{
 				global $GO_AUTH;
 				
-				if(isset($_COOKIE['GO_UN']) && isset($_COOKIE['GO_PW']) &&
+				if(isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW']))
+                                {
+                                        $username = $_SERVER['PHP_AUTH_USER'];
+                                        $password = $_SERVER['PHP_AUTH_PW'];
+                                }elseif(isset($_COOKIE['GO_UN']) && isset($_COOKIE['GO_PW']) &&
 						$_COOKIE['GO_UN'] !='' && $_COOKIE['GO_PW'] != '')
 				{
 					$username = $_COOKIE['GO_UN'];
@@ -142,10 +146,6 @@ class GO_SECURITY extends db {
 	{
 		//return 'NOTLOGGEDIN';
 		global $GO_CONFIG, $GO_AUTH, $auth_sources, $GO_MODULES;
-
-		$GO_AUTH_SOURCE_KEY = 
-			isset($_COOKIE['GO_AUTH_SOURCE_KEY']) ? 
-			$_COOKIE['GO_AUTH_SOURCE_KEY'] : 0;
 
 		if (!$this->logged_in())
 		{
