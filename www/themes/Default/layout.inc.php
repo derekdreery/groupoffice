@@ -50,14 +50,22 @@ if($GO_SECURITY->logged_in() && trim($_SESSION['GO_SESSION']['name']) != '' && !
 			<span id="search_query"></span>
 			
 			
-			&nbsp;&nbsp;<a id="admin-menu-link" href="#"><?php echo $lang['common']['adminMenu']; ?>&nbsp;&nbsp;|</a>		
+			<a id="admin-menu-link" href="#"><?php echo $lang['common']['adminMenu']; ?></a>
+
+                        |
 			
 			<a href="#" id="configuration-link">
-				<?php echo $lang['common']['settings']; ?>&nbsp;&nbsp;|</a>
+				<?php echo $lang['common']['settings']; ?></a>
+                        |
+                        
 			<a href="#" id="help-link">
-				<?php echo $lang['common']['help']; ?>&nbsp;&nbsp;|</a>
+				<?php echo $lang['common']['help']; ?></a>
+
+                        <?php if(!$GO_SECURITY->http_authenticated_session){?>
+                        |
 			<a href="javascript:GO.mainLayout.logout();">
 				<?php echo $lang['common']['logout']; ?></a>
+                        <?php } ?>
 		</div>
 	</div>
 	
