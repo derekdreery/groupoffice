@@ -308,9 +308,7 @@ class go_ical extends calendar
 							$line .= ' '.date($this->datetime_format, $event['repeat_end_time']).'Z';
 						}else
 						{
-							//$line .= ' #0';
-							//test for symbian							
-							$line .= ' '.date($this->datetime_format, mktime(0,0,0,1,1,2036)).'Z';
+							$line .= ' #0';
 						}
 						$lines[]=$line;
 						break;
