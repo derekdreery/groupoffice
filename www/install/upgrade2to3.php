@@ -215,6 +215,10 @@ $db->query("ALTER TABLE `go_reminders` ADD `link_type` INT NOT NULL AFTER `link_
 
 $GO_MODULES->load_modules();
 
+
+//prevent folder creations at this stage
+unset($GO_MODULES->modules['files']);
+
 //end framework updates
 
 
