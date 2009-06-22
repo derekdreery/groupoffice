@@ -10,23 +10,35 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
+
+
+
+
   
 GO.form.SelectCountry = function(config){
-	
-	var countries = [];
-	
-	for(var c in GO.lang.countries)
+
+	if(!GO.countriesStore)
 	{
-		countries.push([c, GO.lang.countries[c]]);
+		var countries = [];
+
+		for(var c in GO.lang.countries)
+		{
+			countries.push([c, GO.lang.countries[c]]);
+		}
+
+		GO.countriesStore = new Ext.data.SimpleStore({
+					fields: ['iso', 'name'],
+					data : countries
+			});
+		GO.countriesStore.sort('name');
 	}
 		
 	Ext.apply(this, config);
 
+	
+
 	GO.form.SelectCountry.superclass.constructor.call(this,{
-   store: new Ext.data.SimpleStore({
-        fields: ['iso', 'name'],
-        data : countries        
-    }),
+   store: GO.countriesStore,
 		valueField: 'iso',
 		displayField: 'name',
 		triggerAction: 'all',
