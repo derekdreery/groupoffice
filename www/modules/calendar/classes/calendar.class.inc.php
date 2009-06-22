@@ -470,7 +470,7 @@ class calendar extends db
 		global $GO_SECURITY;
 
 		$src_event = $dst_event = $this->get_event($event_id);
-		unset($dst_event['id']);
+		unset($dst_event['id'], $dst_event['participants_event_id']);
 
 		foreach($new_values as $key=>$value)
 		{
@@ -1155,14 +1155,16 @@ class calendar extends db
 			}
 			unset($event['exceptions']);
 		}
+
+		if(!$old_event)
+		{
+			$old_event = $this->get_event($event['id']);
+		}
 		
 		global $GO_MODULES;
 		if(isset($GO_MODULES->modules['files']))
 		{
-			if(!$old_event)
-			{
-				$old_event = $this->get_event($event['id']);
-			}			
+			
 			if(!$calendar)
 			{
 				$calendar = $this->get_calendar($event['calendar_id']);				
@@ -1197,8 +1199,7 @@ class calendar extends db
 
 			if(!isset($event['reminder']))
 			{
-				$oldevent = $this->get_event($event['id']);
-				$event['reminder']=$oldevent['reminder'];
+				$event['reminder']=$old_event['reminder'];
 			}
 
 			global $GO_CONFIG;
@@ -1220,10 +1221,7 @@ class calendar extends db
 				{
 					if(empty($event['calendar_id']))
 					{
-						if(!isset($oldevent))
-						$oldevent = $this->get_event($event['id']);
-
-						$event['calendar_id']=$oldevent['calendar_id'];
+						$event['calendar_id']=$old_event['calendar_id'];
 					}
 					$calendar = $this->get_calendar($event['calendar_id']);
 				}
@@ -1245,6 +1243,11 @@ class calendar extends db
 					$rm->add_reminder($reminder);
 				}
 			}
+		}
+
+		if(!empty($old_event['rrule']) && $old_event['start_time']!=$event['start_time'])
+		{
+			$this->move_exceptions($event['id'], $event['start_time']-$old_event['start_time']);
 		}
 
 		if($update_related  && !empty($event['id']))
