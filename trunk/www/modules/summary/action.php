@@ -43,7 +43,7 @@ try{
 			
 			$announcement['due_time']=Date::to_unixtime(trim($_POST['due_time']));
 			$announcement['title']=$_POST['title'];
-			$announcement['content']=$_POST['content'];
+			$announcement['content']=String::convert_html($_POST['content']);
 			if($announcement['id']>0)
 			{
 				$summary->update_announcement($announcement);
