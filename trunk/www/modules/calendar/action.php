@@ -230,6 +230,13 @@ try{
 
 
 					$response['new_event_id'] = $cal->copy_event($exception['event_id'], $update_event);
+
+					//for sync update the timestamp
+					$update_recurring_event=array();
+					$update_recurring_event['id']=$exception['event_id'];
+					$update_recurring_event['mtime']=time();
+					$cal->update_row('cal_events', 'id', $update_recurring_event);
+
 				}else
 				{
 					if(isset($_POST['offset']))
@@ -266,12 +273,12 @@ try{
 					
 					$update_event['id']=$update_event_id;
 					$cal->update_event($update_event, $calendar, $old_event);
-
+/*
 					//move the exceptions if a recurrent event is moved
 					if(!empty($old_event['rrule']) && isset($offset))
 					{
 						$cal->move_exceptions(($_POST['update_event_id']), $offset);
-					}
+					}*/
 				}
 				$response['success']=true;
 			}
@@ -431,10 +438,10 @@ try{
 						$cal->add_exception($exception);
 
 						//for sync update the timestamp
-						$update_event['id']=$_REQUEST['exception_event_id'];
-						$cal->update_event($update_event);
-
-						
+						$update_recurring_event=array();
+						$update_recurring_event['id']=$_REQUEST['exception_event_id'];
+						$update_recurring_event['mtime']=time();
+						$cal->update_row('cal_events', 'id', $update_recurring_event);
 					}
 					
 					$response['event_id']=$event_id;
@@ -488,7 +495,7 @@ try{
 								}
 	
 								$event['calendar_id'] = $calendar['id'];
-								$event['event_id'] = $event_id;
+								//$event['event_id'] = $event_id;
 								
 								if(!isset($event['participants_event_id']))
 								{
