@@ -226,7 +226,11 @@ class go_ical extends calendar
 						$event['repeat_end_time'] = mktime(0,0,0, date('n', $event['repeat_end_time']), date('j', $event['repeat_end_time'])+1, date('Y', $event['repeat_end_time']));
 					}else
 					{
-						$event['repeat_forever'] = 1;
+						//$event['repeat_forever'] = 1;
+
+						//test for symbian
+						$event['repeat_forever']='0';
+						$event['repeat_end_time'] = mktime(1,1,1,1,1,2100);
 					}
 				}elseif(isset($rrule['COUNT']))
 				{
