@@ -370,7 +370,10 @@ class go_ical extends calendar
 								$line .= ' '.date($this->datetime_format, $event['repeat_end_time']).'Z';
 							}else
 							{
-								$line .= ' #0';
+								//$line .= ' #0';
+
+								//test for symbian
+								$line .= ' '.date($this->datetime_format, mktime(0,0,0,1,1,2100)).'Z';
 							}
 						}
 
