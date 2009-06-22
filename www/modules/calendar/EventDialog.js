@@ -780,6 +780,13 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 		// Start of recurrence tab
 
+		var data = new Array();
+
+		for(var i=1;i<31;i++)
+		{
+			data.push([i]);
+		}
+
 		this.repeatEvery = new Ext.form.ComboBox({
 
 					fieldLabel : GO.calendar.lang.repeatEvery,
@@ -792,15 +799,10 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					mode : 'local',
 					value : '1',
 					valueField : 'value',
-					displayField : 'text',
-
+					displayField : 'value',
 					store : new Ext.data.SimpleStore({
-								fields : ['value', 'text'],
-								data : [['1', '1'], ['2', '2'], ['3', '3'],
-										['4', '4'], ['5', '5'], ['6', '6'],
-										['7', '7'], ['8', '8'], ['9', '9'],
-										['10', '10'], ['11', '11'],
-										['12', '12']]
+								fields : ['value'],
+								data : data
 							})
 				});
 
