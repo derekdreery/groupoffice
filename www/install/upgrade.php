@@ -12,12 +12,16 @@ chdir(dirname(__FILE__));
 require_once('../Group-Office.php');
 ini_set('max_execution_time', '3600');
 
-if(!defined('NOTINSTALLED'))
+if(!defined('NOTINSTALLED') && !isset($RERUN_UPDATE))
 {
 	//login event can cause problems
 	SetCookie("GO_UN","",time()-3600,"/","",!empty($_SERVER['HTTPS']),false);
 	SetCookie("GO_PW","",time()-3600,"/","",!empty($_SERVER['HTTPS']),false);
 }
+
+//update scripts can request to rerun the update process by setting $RERUN_UPDATE=true;
+//this is useful when an update installs a module that might need updates too.
+unset($RERUN_UPDATE);
 
 if(!$quiet)
 echo 'Updating Group-Office database: '.$GO_CONFIG->db_name.$line_break;
@@ -117,16 +121,24 @@ foreach($GO_MODULES->modules as $update_module)
 		}
 	}
 }
-echo 'Database is up to date now!'.$line_break.$line_break;
 
-if(is_dir($GO_CONFIG->local_path.'cache'))
+if(isset($RERUN_UPDATE))
 {
-	echo 'Removing cached javascripts from '.$GO_CONFIG->local_path.'cache ...'.$line_break;
-	
-	require_once($GO_CONFIG->class_path.'filesystem.class.inc');
-	$fs = new filesystem();
-	
-	$fs->delete($GO_CONFIG->local_path.'cache');
-	echo 'Done!'.$line_break.$line_break;
+	require(__FILE__);
+}else
+{
+	echo 'Database is up to date now!'.$line_break.$line_break;
+
+	if(is_dir($GO_CONFIG->local_path.'cache'))
+	{
+		echo 'Removing cached javascripts from '.$GO_CONFIG->local_path.'cache ...'.$line_break;
+
+		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+		$fs = new filesystem();
+
+		$fs->delete($GO_CONFIG->local_path.'cache');
+		echo 'Done!'.$line_break.$line_break;
+	}
 }
+
 

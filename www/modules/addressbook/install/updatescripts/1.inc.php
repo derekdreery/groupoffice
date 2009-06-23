@@ -13,5 +13,8 @@ if(is_dir($GO_CONFIG->module_path.'mailings'))
 	$db->insert_row('go_modules', $module);
 
 	$GO_MODULES->load_modules();
+
+	$RERUN_UPDATE=true;
+
 }
 ?>
