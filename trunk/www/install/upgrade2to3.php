@@ -1199,15 +1199,17 @@ $db->query("UPDATE go_users SET timezone='$timezone'");
 
 echo 'Done'.$line_break.$line_break;
 
+require('../modules/tools/dbcheck.php');
+
 if(isset($_SERVER['SERVER_NAME']))
 {
 	echo '<a target="_blank" href="index.php">Click here to run the installer and complete the whole proces</a>';
 
-	echo '<br /><br /><a target="_blank" href="../modules/tools/dbcheck.php">After that run a database check to rebuild the search index</a>';
+	echo '<br /><br /><a target="_blank" href="../modules/tools/checkmodules.php">After that run a database check to rebuild the search index</a>';
 }else
 {
 	echo 'Now run the installer in a browser at: '.$GO_CONFIG->host.'install/'."\n\n";
-	echo 'After that run the database check to rebuild the search index at: '.$GO_CONFIG->host.'modules/tools/dbcheck.php'."\n\n";
+	echo 'After that run the database check to rebuild the search index at: '.$GO_CONFIG->host.'modules/tools/checkmodules.php'."\n\n";
 }
 
 ?>

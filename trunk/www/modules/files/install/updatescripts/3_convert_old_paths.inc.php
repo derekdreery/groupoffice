@@ -518,8 +518,4 @@ while($user = $GO_USERS->next_record())
         echo $e->getMessage().$line_break;
     }
 }
-
-global $GO_EVENTS;
-$GO_EVENTS->fire_event('check_database');
-
 ?>
