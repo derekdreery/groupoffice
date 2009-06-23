@@ -137,7 +137,7 @@ class files extends db {
 		return $this->is_sub_dir($next, $parent);
 	}
 
-	function check_folder_location($folder_id, $path) {
+	function check_folder_location($folder_id, $path, $use_existing=false) {
 
 		global $GO_CONFIG;
 
@@ -167,6 +167,10 @@ class files extends db {
 			$count=1;
 			while($existing_folder = $this->folder_exists($destfolder['id'], $folder_name))
 			{
+				if($use_existing)
+				{
+					return $existing_folder['id'];
+				}
 				$folder_name = $base.' ('.$count.')';
 				$count++;
 			}
