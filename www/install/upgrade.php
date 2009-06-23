@@ -52,9 +52,8 @@ for($i=$old_version;$i<count($updates);$i++)
 
 	}else
 	{
-		@$db->query($updates[$i]);
-
 		//echo 'Excuting: '.$updates[$i].$line_break;
+		$db->query($updates[$i]);		
 	}
 
 	$GO_CONFIG->save_setting('version', $i+1);
@@ -70,11 +69,10 @@ if(!$quiet)
 
 
 //Upgrade modules
-$GO_MODULES->get_modules();
-while($GO_MODULES->next_record())
+foreach($GO_MODULES->modules as $update_module)
 {
 	unset($updates);
-	$update_file = $GO_CONFIG->module_path.$GO_MODULES->f('id').'/install/updates.inc.php';
+	$update_file = $GO_CONFIG->module_path.$update_module['id'].'/install/updates.inc.php';
 	if(file_exists($update_file))
 	{
 		require($update_file);
@@ -84,12 +82,11 @@ while($GO_MODULES->next_record())
 			//if(!$quiet)
 			//echo 'Updating '.$GO_MODULES->f('id').$line_break;
 
-			for($i=$GO_MODULES->f('version');$i<count($updates);$i++)
+			for($i=$update_module['version'];$i<count($updates);$i++)
 			{
-
 				if(substr($updates[$i], 0, 7)=='script:')
 				{
-					$update_script=$GO_CONFIG->module_path.$GO_MODULES->f('id').'/install/updatescripts/'.substr($updates[$i], 7);
+					$update_script=$GO_CONFIG->module_path.$update_module['id'].'/install/updatescripts/'.substr($updates[$i], 7);
 					if (!file_exists($update_script))
 					{
 						die($update_script.' not found!');
@@ -98,25 +95,25 @@ while($GO_MODULES->next_record())
 					echo 'Running '.$update_script.$line_break;
 
 					require_once($update_script);
-
 				}else
 				{
-					@$db->query($updates[$i]);
-					//echo 'Excuting: '.$updates[$i].$line_break;
+					//if(!$quiet)
+						//echo 'Excuting: '.$updates[$i].$line_break;
+
+					$db->query($updates[$i]);
 				}
 
-				$module['id']=$GO_MODULES->f('id');
-				$module['version']=count($updates);
-				$db->update_row('go_modules', 'id', $module);
+				$up_module['id']=$update_module['id'];
+				$up_module['version']=count($updates);
+				$db->update_row('go_modules', 'id', $up_module);
 			}
 			if(!$quiet)
 			{
-				if($GO_MODULES->f('version')!=$i)
+				if($update_module['version']!=$i)
 				{
-					echo 'Updated '.$GO_MODULES->f('id').' from '.$GO_MODULES->f('version').' to version '.$i.$line_break;
+					echo 'Updated '.$update_module['id'].' from '.$update_module['version'].' to version '.$i.$line_break;
 				}
-			}
-				
+			}				
 		}
 	}
 }
