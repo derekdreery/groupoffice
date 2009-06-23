@@ -132,7 +132,10 @@ if(isset($GO_MODULES->modules['addressbook']))
                 if(!empty($last_part))
                 {
                     $new_path .= '/'.$last_part;
-                }
+                }else
+								{
+									$new_path .= '/0 no last name';
+								}
 
                 //echo $new_path."\n";
                 $destination = $fsdb->resolve_path($new_path, true, 1);
