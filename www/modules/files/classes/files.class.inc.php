@@ -153,6 +153,9 @@ class files extends db {
 
 		if(!$current_path) {
 			$new_folder = $this->resolve_path($path,true,1,'1');
+
+			
+
 			return $new_folder['id'];
 		}elseif($check_current_path != $path) {
 
@@ -193,6 +196,7 @@ class files extends db {
 			$up_folder['parent_id']=$destfolder['id'];
 			$up_folder['name']=$folder_name;
 			$up_folder['readonly']='1';
+
 			$this->update_folder($up_folder);
 		}else
 		{
