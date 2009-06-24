@@ -7,6 +7,7 @@
 - Store a default e-mail template so it always shows on top.
 - PDF export / mail function for the addressbook and billing module
 - Projects treeview for easier navigation
+- Add event to multiple calendars without sending an invitation
 - A lot of Windows enhancements. libwbxml, zip and unzip work now and the
   installation is improved for Windows too.
 - GOTA didn't always report failure. Error handling is improved.

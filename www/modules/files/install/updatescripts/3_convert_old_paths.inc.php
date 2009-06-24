@@ -413,7 +413,7 @@ if(isset($GO_MODULES->modules['projects']))
 
             if($folder && !empty($new_folder_name))
             {
-                $new_path = $projects->build_project_files_path($project, array('name'=>$project['type_name']));
+                $new_path = dirname($projects->build_project_files_path($project, array('name'=>$project['type_name'])));
 
                 $destination = $fsdb->resolve_path($new_path, true, 1);
 
