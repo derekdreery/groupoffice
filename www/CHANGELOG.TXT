@@ -1,4 +1,4 @@
-2009/05/?
+2009/06/24 3.02-stable-1
 - Changed files module. It uses the database instead of the filesystem now to
   store files. All the modules store the files in logical paths now.
   eg. The files of a contact are in contacts/Addressbook name/S/Merijn Schering
