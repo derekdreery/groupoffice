@@ -7,6 +7,8 @@
 php /usr/share/groupoffice-servermanager/configure.php
 php /usr/share/groupoffice-servermanager/installservermanager.php
 
+a2enmod vhost_alias
+
 /etc/init.d/apache2 restart 3> /dev/null || true
 
 exit 0

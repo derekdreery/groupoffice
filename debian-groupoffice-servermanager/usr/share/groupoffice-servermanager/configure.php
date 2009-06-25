@@ -38,7 +38,7 @@ if(file_exists('/etc/apache2/sites-enabled/000-default'))
 	unlink('/etc/apache2/sites-enabled/000-default');
 
 echo "Configuring sudo\n";
-set_value('/etc/sudoers','www-data ALL=NOPASSWD: /usr/share/groupoffice/modules/servermanager/sudo.php');
+set_value('/etc/sudoers','www-data ALL=NOPASSWD:/usr/share/groupoffice/modules/servermanager/sudo.php');
 
 echo "Configuring cron";
 //create_file('/etc/cron.d/groupoffice','groupoffice/groupoffice.cron', $replacements);
