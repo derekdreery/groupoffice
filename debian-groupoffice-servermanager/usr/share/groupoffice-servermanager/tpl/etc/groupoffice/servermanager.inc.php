@@ -6,7 +6,7 @@ $sm_config['apache_user']='www-data';
 $sm_config['mysql_host']='localhost';
 $sm_config['mysql_user']='{db_user}';
 $sm_config['mysql_pass']='{db_pass}';
-$sm_config['source']='/usr/share/groupoffice-servermanager/groupoffice';
+$sm_config['source']='/usr/share/groupoffice';
 $sm_config['protocol']='http://';
 
 $sm_config['sender_email']='noreply@{domain}';

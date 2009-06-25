@@ -85,12 +85,12 @@ switch($task)
 			
 		//mkdir($go_root.'local',0755, true);
 		
-		mkdir($sm_config['install_path'].'local/'.$name.'/',0755,true);
+		mkdir($sm_config['install_path'].'sm-local/'.$name.'/',0755,true);
 		mkdir($go_root.'data',0755, true);		
 		mkdir('/tmp/'.$name,0777, true);
 		mkdir('/etc/groupoffice/'.$name,0755, true);
 		
-		chown($sm_config['install_path'].'local/'.$name.'/', $sm_config['apache_user']);
+		chown($sm_config['install_path'].'sm-local/'.$name.'/', $sm_config['apache_user']);
 		
 		/*
 				
