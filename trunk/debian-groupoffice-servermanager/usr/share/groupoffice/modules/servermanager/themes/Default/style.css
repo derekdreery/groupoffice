@@ -1,0 +1,10 @@
+.go-module-icon-servermanager , .go-menu-icon-servermanager{
+	background:url('images/servermanager.gif');
+}
+
+.go-tab-icon-servermanager {
+	background-image: none !important;
+}
+.go-link-icon-13 {
+	background-image: url('images/servermanager.gif') !important;
+}
