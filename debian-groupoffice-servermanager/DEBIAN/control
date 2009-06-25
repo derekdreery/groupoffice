@@ -1,0 +1,9 @@
+Package: groupoffice-servermanager
+Version: 3.02
+Architecture: all
+Maintainer: Merijn Schering <mschering@intermesh.nl>
+Installed-Size: 0
+Depends: groupoffice, groupoffice-mailserver
+Section: mail
+Priority: extra
+Description: Create multiple Group-Office installations

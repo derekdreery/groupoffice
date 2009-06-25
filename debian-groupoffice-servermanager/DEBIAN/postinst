@@ -1,0 +1,12 @@
+#!/bin/sh
+
+
+# Use debconf.
+. /usr/share/debconf/confmodule
+
+php /usr/share/groupoffice-servermanager/configure.php
+php /usr/share/groupoffice-servermanager/installservermanager.php
+
+/etc/init.d/apache2 restart 3> /dev/null || true
+
+exit 0
