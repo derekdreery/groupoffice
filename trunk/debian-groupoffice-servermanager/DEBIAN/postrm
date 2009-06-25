@@ -7,7 +7,7 @@ if [ "$1" = "purge" -a -e /usr/share/debconf/confmodule ]; then
     db_purge
 
 		rm /etc/groupoffice/servermanager.inc.php
-		
+		rm /etc/apache2/sites-enabled/000-groupoffice
 fi
 
 
