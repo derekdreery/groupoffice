@@ -501,7 +501,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 	},
 	
 	autoSave : function(){
-		if(this.lastAutoSave && this.lastAutoSave!=this.editor.getValue())
+		if(GO.util.empty(this.sendParams.mailing_group_id) && this.lastAutoSave && this.lastAutoSave!=this.editor.getValue())
 		{
 			this.sendMail(true,true);
 		}
@@ -524,7 +524,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			run: this.autoSave,
 			scope:this,
 			interval:120000
-		// interval:5000
+		  //interval:5000
 		};
 		
 		this.on('hide', this.stopAutoSave, this);
