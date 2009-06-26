@@ -128,11 +128,11 @@ try{
 
 			}else
 			{
-				$available_users = $servermanager->server_users_available();
+				/*$available_users = $servermanager->server_users_available();
 				if($available_users<$config['max_users'])
 				{
 					throw new Exception('You don\'t have enough user licenses. You have '.$available_users.' left');
-				}
+				}*/
 				
 				$installation['name']=strtolower((trim($_POST['name'])));
 				$config['db_name']=str_replace('.','_',$installation['name']);
