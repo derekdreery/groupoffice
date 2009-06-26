@@ -266,9 +266,6 @@ GO.lang.latestLinks='Última links'
 GO.lang.cmdBrowseLinks = 'Navegar links';
 
 
-
-
-GO.lang.countries={};
 GO.lang.countries["AF"] = "Afghanistan";
 GO.lang.countries["AL"] = "Albania";
 GO.lang.countries["DZ"] = "Algeria";

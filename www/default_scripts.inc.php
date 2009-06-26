@@ -50,6 +50,9 @@ GO.settings = Ext.decode('<?php echo addslashes(json_encode($settings)); ?>');
 //the index is the link type and the function gets the id as a parameter
 GO.linkHandlers={};
 
+
+GO.lang.countries={};
+
 GO.newMenuItems=[];
 
 <?php

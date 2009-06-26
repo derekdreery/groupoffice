@@ -275,7 +275,6 @@ GO.lang.cmdBrowseLinks = '鏈接';
 
 
 
-GO.lang.countries={};
 GO.lang.countries["AF"] = "Afghanistan";
 GO.lang.countries["AL"] = "Albania";
 GO.lang.countries["DZ"] = "Algeria";

@@ -15,7 +15,7 @@ GO.lang.strCommunityForum='Forum';
 GO.lang.moduleRequired='Questa caratteristica richiede il modulo \'{module}\' . Questo modulo non è disponibile.';
 GO.lang.completeProfile= 'Completa il tuo profilo';
 GO.lang.cmdImport='Importa';
-GO.lang.countries["CN"]= "Cina";
+
 GO.lang.fullscreen='Modalità schermo intero';
 GO.lang.popupBlocker = 'Il tuo browser blocca un popup di Group-Office. Disabilita il blocco-popup per questo sito';
 
@@ -274,9 +274,6 @@ GO.lang.latestLinks='Ultimi collegamenti'
 GO.lang.cmdBrowseLinks = 'Sfoglia collegamenti';
 
 
-
-
-GO.lang.countries={};
 GO.lang.countries["AF"] = "Afghanistan";
 GO.lang.countries["AL"] = "Albania";
 GO.lang.countries["DZ"] = "Algeria";
@@ -320,6 +317,7 @@ GO.lang.countries["KY"] = "Isole Cayman";
 GO.lang.countries["CF"] = "Repubblica Centrafricana";
 GO.lang.countries["TD"] = "Chad";
 GO.lang.countries["CL"] = "Cile";
+GO.lang.countries["CN"]= "Cina";
 GO.lang.countries["CX"] = "Isole Christmas";
 GO.lang.countries["CC"] = "Isole Cocos";
 GO.lang.countries["CO"] = "Colombia";

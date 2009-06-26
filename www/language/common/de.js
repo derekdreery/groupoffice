@@ -291,7 +291,6 @@ GO.lang.insertImage='Bild in Text einfügen';
 GO.lang.item='Element';
 GO.lang.items='Elemente';
 
-GO.lang.countries={};
 GO.lang.countries["AF"] = "Afghanistan";
 GO.lang.countries["AL"] = "Albanien";
 GO.lang.countries["DZ"] = "Algerien";

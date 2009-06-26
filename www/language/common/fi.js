@@ -281,7 +281,7 @@ GO.lang.insertImage='Lisää luva tekstiin';
 GO.lang.item='merkintä';
 GO.lang.items='merkintää';
 
-GO.lang.countries={};
+
 GO.lang.countries["AF"] = "Afghanistan";
 GO.lang.countries["AL"] = "Albania";
 GO.lang.countries["DZ"] = "Algeria";
