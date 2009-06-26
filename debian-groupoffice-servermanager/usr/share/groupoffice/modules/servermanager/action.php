@@ -96,11 +96,11 @@ try{
 			if($installation['id']>0)
 			{
 				
-				$available_users = $servermanager->server_users_available($installation['id']);
+				/*$available_users = $servermanager->server_users_available($installation['id']);
 				if($available_users<$config['max_users'])
 				{
 					throw new Exception('You don\'t have enough user licenses. You have '.$available_users.' left');
-				}
+				}*/
 				
 				
 				$servermanager->update_installation($installation);
