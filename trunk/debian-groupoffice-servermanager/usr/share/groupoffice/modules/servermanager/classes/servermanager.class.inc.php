@@ -54,13 +54,13 @@ class servermanager extends db {
 			}
 		}
 		
-		require('/etc/groupoffice/servermanager/license.inc.php');
+		/*require('/etc/groupoffice/servermanager/license.inc.php');
 		
 		if($secret!='ditishetgeheimewachtwoordvoornetgebruik')
 		{
 			return -1;
 		}		
-		return $max_server_users-$current_server_users;
+		return $max_server_users-$current_server_users;*/
 	}
 	
 /**
