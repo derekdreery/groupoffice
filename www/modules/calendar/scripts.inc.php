@@ -2,8 +2,9 @@
 require_once($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc.php');
 $cal = new calendar();
 
-$calendar = $cal->get_calendar();
+
 $settings = $cal->get_settings($GO_SECURITY->user_id);
+$calendar = $cal->get_calendar($settings['calendar_id']);
 $reminder = $cal->reminder_seconds_to_form_input($settings['reminder']);
 ?>
 <script type="text/javascript">

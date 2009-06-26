@@ -37,13 +37,13 @@ GO.PersonalSettingsDialog = function(config){
 			text: GO.lang['cmdOk'],
 			handler: function(){
 				this.submitForm();
-				this.hide();
+				
 			},
 			scope: this
 		},{
 			text: GO.lang['cmdApply'],
 			handler: function(){
-				this.submitForm();
+				this.submitForm(true);
 			},
 			scope:this
 		},{
@@ -126,7 +126,7 @@ Ext.extend(GO.PersonalSettingsDialog, Ext.Window,{
 	},
 	
 
-	submitForm : function(){
+	submitForm : function(hide){
 		this.formPanel.form.submit(
 		{
 			url : BaseHref+'action.php',
@@ -150,7 +150,9 @@ Ext.extend(GO.PersonalSettingsDialog, Ext.Window,{
 				if(this.reload)
 				{
 					document.location=GO.settings.config.host;
-				}				
+				}else if(hide){
+					this.hide();
+				}
 			},		
 			failure: function(form, action) {
 				if(action.failureType == 'client')

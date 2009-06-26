@@ -51,7 +51,7 @@ GO.settings = Ext.decode('<?php echo addslashes(json_encode($settings)); ?>');
 GO.linkHandlers={};
 
 
-GO.lang.countries={};
+
 
 GO.newMenuItems=[];
 
