@@ -87,16 +87,16 @@ class serverclient
 
 		if(!empty($user['password']) && !empty($GO_CONFIG->serverclient_domains))
 		{
-			if(isset($GO_MODULES->modules['servermanager']) && $user['id']==1){
-				$this->server_password=$user['password'];
-			}
-
-			$sc->login();
-				
 			$new_password = $user['password'];
 			$domains = explode(',', $GO_CONFIG->serverclient_domains);
 				
 			$user = $GO_USERS->get_user($user['id']);
+
+			if(isset($GO_MODULES->modules['servermanager']) && $user['username']==$this->server_username){
+				$sc->server_password=$new_password;
+			}
+
+			$sc->login();
 				
 			foreach($domains as $domain)
 			{
