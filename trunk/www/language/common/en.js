@@ -539,6 +539,8 @@ GO.lang.countries["ZR"] = "Zaire";
 GO.lang.countries["ZM"] = "Zambia";
 GO.lang.countries["ZW"] = "Zimbabwe";
 GO.lang.countries["SA"] = "Saudi Arabia";
+GO.lang.countries["RS"] = "Serbia";
+GO.lang.countries["AE"] = "United Arab Emirates";
 
 GO.lang.on ='On';
 GO.lang.off ='Off';
