@@ -29,11 +29,11 @@ try{
 				throw new Exception('Not found');
 			}
 			
-			$available = $servermanager->server_users_available();			
+			/*$available = $servermanager->server_users_available();
 			if($available<0)
 			{
 				throw new Exception('There is a license problem!');
-			}
+			}*/
 			
 			
 			$response['secret']=md5($_POST['installation_name'].date('Ymd').'nogwatgeheims');
@@ -45,8 +45,9 @@ try{
 		
 		case 'check_server_users':
 			
-			$available = $servermanager->server_users_available();			
-			$response['ok']=$available>-1;
+			/*$available = $servermanager->server_users_available();
+			$response['ok']=$available>-1;*/
+			$response['ok']=1;
 			break;
 		
 		case 'raw_report':
