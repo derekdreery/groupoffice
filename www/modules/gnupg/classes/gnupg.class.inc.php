@@ -306,16 +306,17 @@ class gnupg{
 
 		$this->run_cmd($cmd, $ouput, $errorcode, $data);
 
-		return empty($ret);
+		return empty($errorcode);
 	}
 
-	private function run_cmd($cmd, &$output=null, &$errorcode=null, $data=null, $passphrase=null)
+	private function run_cmd($cmd, &$output=null, &$errorcode=null, $data=null, $passphrase=null, $background=false)
 	{
 		global $GO_CONFIG;
 
 		$this->error = '';
 
 		$complete_cmd = $this->gpg.' --display-charset utf-8 --utf8-strings --no-tty';
+		//$complete_cmd = $this->gpg.' --display-charset utf-8 --utf8-strings';
 
 		if(isset($passphrase))
 		{
@@ -392,14 +393,17 @@ class gnupg{
 	function write_data($data, $pipe=GPGSTDIN)
 	{
 		debug('Writing '.$data.' to '.$pipe);
-		$write_pipes = array($this->pipes[$pipe]);
-		$numWrite=stream_select($read=NULL,$write_pipes,$except=NULL,5);
 
-		if ($numWrite !==false) {
+		//this hangs sometimes
+		//$write_pipes = array($this->pipes[$pipe]);
+		//$numWrite=stream_select($read=NULL,$write_pipes,$except=NULL,5);
+		//debug($numWrite);
+		//if ($numWrite !==false) {
+			
 			fwrite($this->pipes[$pipe], $data);
 			fflush($this->pipes[$pipe]);
 			$this->read_status();
-		}
+		//}
 	}
 
 	function read_status(){
