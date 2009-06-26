@@ -2,7 +2,7 @@
 set -e
 
 chown -R www-data:www-data /home/groupoffice
-chmod 666 /etc/groupoffice/config.php
+#chmod 666 /etc/groupoffice/config.php
 
 . /usr/share/debconf/confmodule
 
