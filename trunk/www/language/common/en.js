@@ -12,9 +12,10 @@
  */
 
 /**
- * Don't copy the next line into a translation
+ * Don't copy the next lines into a translation
  */
 GO.lang = {};
+GO.lang.countries={};
 /**
  * Copy everything below for translations
  */

@@ -97,6 +97,18 @@ class calendar extends db
 			$cal = new calendar();
 			$settings = $cal->get_settings($_POST['user_id']);
 			$settings = array_merge($settings, $cal->reminder_seconds_to_form_input($settings['reminder']));
+			if(empty($settings['calendar_id']))
+			{
+				$calendar = $cal->get_default_calendar($_POST['user_id']);				
+			}else
+			{
+				$calendar = $cal->get_calendar($settings['calendar_id']);
+			}
+			if($calendar)
+			{
+				$settings['calendar_id']=$calendar['id'];
+				$settings['calendar_name']=$calendar['name'];
+			}
 			$response['data']=array_merge($response['data'], $settings);
 		}
 	}
@@ -169,7 +181,6 @@ class calendar extends db
 			if(empty($record['background']))
 				$record['background']='EBF1E2';
 
-			$record['calendar_name'] = $this->get_calendar_name($record['calendar_id']);
 			return $record;
 		}else
 		{
@@ -890,15 +901,7 @@ class calendar extends db
 		}
 	}
 
-	function get_calendar_name($calendar_id)
-	{
-		$this->query("SELECT name FROM cal_calendars WHERE id=?", 'i', array($calendar_id));
-		if ($this->next_record(DB_ASSOC))
-		{
-			return $this->f('name');
-		}else		
-			return '';
-	}
+	
 	
 	function get_user_calendars($user_id,$start=0,$offset=0)
 	{
