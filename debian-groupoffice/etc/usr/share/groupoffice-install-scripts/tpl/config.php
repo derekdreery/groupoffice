@@ -3,9 +3,9 @@ $config['enabled']=true;
 $config['id']="groupoffice";
 $config['debug']=false;
 $config['log']=true;
-$config['language']="nl";
-$config['default_country']="NL";
-$config['default_timezone']="Europe/Amsterdam";
+$config['language']="{lang}";
+$config['default_country']="{country}";
+$config['default_timezone']="{timezone}";
 $config['default_currency']="€";
 $config['default_date_format']="dmY";
 $config['default_date_seperator']="-";
@@ -52,5 +52,3 @@ $config['default_date_separator']="-";
 $config['quota']="0";
 $config['cmd_php']="php";
 $config['default_password_length']="6";
-
-
