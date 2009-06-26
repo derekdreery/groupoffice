@@ -67,6 +67,8 @@ GO.gnupg.GenKeyDialog = function(config){
 				allowBlank:false				
 			}]	
 	});
+
+	this.formPanel.form.timeout=180;
 	
 
 	config.maximizable=true;
@@ -105,6 +107,8 @@ Ext.extend(GO.gnupg.GenKeyDialog, Ext.Window,{
 		GO.gnupg.GenKeyDialog.superclass.show.call(this);	
 	},
 	submitForm : function(){
+		var origTimeout = Ext.Ajax.timeout;
+
 		this.formPanel.form.submit(
 		{
 			url:GO.settings.modules.gnupg.url+'action.php',
@@ -112,7 +116,7 @@ Ext.extend(GO.gnupg.GenKeyDialog, Ext.Window,{
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){								
 				this.fireEvent('save', this);
-				this.hide();							
+				this.hide();
 			},		
 			failure: function(form, action) {
 				if(action.failureType == 'client')
@@ -124,6 +128,7 @@ Ext.extend(GO.gnupg.GenKeyDialog, Ext.Window,{
 			},
 			scope: this
 		});
+		
 		
 	}
 });
