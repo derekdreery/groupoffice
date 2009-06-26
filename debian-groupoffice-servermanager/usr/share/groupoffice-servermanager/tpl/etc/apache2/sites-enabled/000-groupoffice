@@ -10,7 +10,7 @@ Order allow,deny
 allow from all
 </Directory>
 
-Alias /sm-local /var/www/sm-local
+Alias /sm-local /var/www/groupoffice/sm-local
 ServerName *.{domain}
 ErrorLog /var/log/apache2/groupoffice_error_log
 VirtualDocumentRoot /var/www/groupoffice/%0/groupoffice

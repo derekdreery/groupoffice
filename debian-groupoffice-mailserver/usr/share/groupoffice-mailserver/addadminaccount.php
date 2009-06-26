@@ -2,6 +2,8 @@
 <?php
 require('/usr/share/groupoffice/Group-Office.php');
 
+echo 'Adding admin e-mail accounts for '.$GO_CONFIG->serverclient_domains;
+
 if(!empty($GO_CONFIG->serverclient_domains))
 {
 	global $GO_CONFIG, $GO_MODULES, $GO_USERS;
