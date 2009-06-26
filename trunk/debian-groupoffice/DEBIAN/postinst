@@ -22,6 +22,9 @@ fi
 
 php /usr/share/groupoffice-install-scripts/configure.php
 
+cd /usr/share/groupoffice/install
+php ./autoinstall.php /etc/groupoffice/config.php
+
 
 db_input high groupoffice/completed || true
 db_go
