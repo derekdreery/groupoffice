@@ -31,7 +31,7 @@ function set_value($file, $str) {
 
 echo 'Configuring apache'."\n";
 
-create_file('/etc/groupoffice/servermanager.inc.php', 'tpl/etc/groupoffice/servermanager.inc.php');
+create_file('/etc/groupoffice/servermanager.inc.php', 'tpl/etc/groupoffice/servermanager.inc.php', $replacements);
 
 create_file('/etc/apache2/sites-enabled/000-groupoffice', 'tpl/etc/apache2/sites-enabled/000-groupoffice', $replacements);
 
