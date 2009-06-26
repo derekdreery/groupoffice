@@ -452,7 +452,7 @@ try{
 			if(!empty($_POST['tmp_files']) && $GO_MODULES->has_module('files'))
 			{
 				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
-				$fs = new files();
+				$files = new files();
 				$fs = new filesystem();
 				
 				//event = $cal->get_event($event_id);
