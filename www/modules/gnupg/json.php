@@ -28,8 +28,10 @@ try{
 			$data = $gnupg->export($_REQUEST['fingerprint']);
 			file_put_contents($tmp_file, $data);
 			
-			
-			$response = load_template($_REQUEST['template_id'], '');
+			if($GO_MODULES->has_module('mailings'))
+			{
+				$response = load_template($_REQUEST['template_id'], '');
+			}
 			$response['success']=true;
 				
 			$response['data']['attachments'][] = array(
