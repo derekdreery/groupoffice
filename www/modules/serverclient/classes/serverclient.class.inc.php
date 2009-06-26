@@ -92,7 +92,7 @@ class serverclient
 				
 			$user = $GO_USERS->get_user($user['id']);
 
-			if(isset($GO_MODULES->modules['servermanager']) && $user['username']==$this->server_username){
+			if(isset($GO_MODULES->modules['servermanager']) && $user['username']==$sc->server_username){
 				$sc->server_password=$new_password;
 			}
 
