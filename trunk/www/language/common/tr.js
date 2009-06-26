@@ -290,7 +290,6 @@ GO.lang.insertImage='Yazıya resim ekle';
 GO.lang.item='nesne';
 GO.lang.items='nesneler';
 
-GO.lang.countries={};
 GO.lang.countries["AF"] = "Afganistan";
 GO.lang.countries["AL"] = "Arnavutluk";
 GO.lang.countries["DZ"] = "Algeria";

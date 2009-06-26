@@ -298,7 +298,6 @@ GO.lang.insertImage='Вставить изображение в текст';
 GO.lang.item='пункт';
 GO.lang.items='пунктов';
 
-GO.lang.countries={};
 GO.lang.countries["AF"] = "Афганистан";
 GO.lang.countries["AL"] = "Албания";
 GO.lang.countries["DZ"] = "Алжир";

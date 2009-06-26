@@ -277,7 +277,6 @@ GO.lang.insertImage='Εισάγετε εικόνα στο κείμενο';
 GO.lang.item='στοιχείο';
 GO.lang.items='στοιχεία';
 
-GO.lang.countries={};
 GO.lang.countries["AF"] = "Αφγανιστάν";
 GO.lang.countries["AL"] = "Αλβανία";
 GO.lang.countries["DZ"] = "Αλγερία";

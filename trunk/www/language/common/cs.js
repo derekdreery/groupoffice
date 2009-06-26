@@ -291,7 +291,7 @@ GO.lang.insertImage='Vložit obrázek do textu';
 GO.lang.item='položka';
 GO.lang.items='položky';
 
-GO.lang.countries={};
+
 GO.lang.countries["AF"] = "Afghanistan";
 GO.lang.countries["AL"] = "Albania";
 GO.lang.countries["DZ"] = "Algeria";

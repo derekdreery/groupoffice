@@ -273,7 +273,6 @@ GO.lang.today='I dag';
 
 GO.lang.displayingItemsShort='Total: {2}';
 
-GO.lang.countries={};
 GO.lang.countries["AF"] = "Afghanistan";
 GO.lang.countries["AL"] = "Albania";
 GO.lang.countries["DZ"] = "Algeria";

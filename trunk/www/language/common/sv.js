@@ -284,7 +284,6 @@ GO.lang.insertImage= 'Infoga bild i texten';
 GO.lang.item= 'objekt';
 GO.lang.items= 'objekten';
 
-GO.lang.countries={};
 GO.lang.countries["AF"] = 'Afghanistan';
 GO.lang.countries["AL"] = 'Albanien';
 GO.lang.countries["DZ"] = 'Algeriet';

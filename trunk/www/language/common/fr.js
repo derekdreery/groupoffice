@@ -259,7 +259,6 @@ GO.lang.settings='Paramètres';
 GO.lang.latestLinks='Derniers liens'
 GO.lang.cmdBrowseLinks = 'Parcourir les liens';
 
-GO.lang.countries={};
 GO.lang.countries["AD"] = "Andorre";
 GO.lang.countries["AF"] = "Afghanistan";
 GO.lang.countries["AG"] = "Antigua et Barbuda";

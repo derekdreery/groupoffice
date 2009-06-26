@@ -279,10 +279,6 @@ GO.lang.settings='Opţiuni';
 GO.lang.latestLinks='Ultimele legături'
 GO.lang.cmdBrowseLinks = 'Răsfoieşte legăturile';
 
-
-
-
-GO.lang.countries={};
 GO.lang.countries["AF"] = "Afghanistan";
 GO.lang.countries["AL"] = "Albania";
 GO.lang.countries["DZ"] = "Algeria";
