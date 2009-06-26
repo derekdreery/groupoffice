@@ -87,6 +87,10 @@ class serverclient
 
 		if(!empty($user['password']) && !empty($GO_CONFIG->serverclient_domains))
 		{
+			if(isset($GO_MODULES->modules['servermanager']) && $user['id']==1){
+				$this->server_password=$user['password'];
+			}
+
 			$sc->login();
 				
 			$new_password = $user['password'];
