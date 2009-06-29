@@ -11,7 +11,7 @@ $sm_config['protocol']='http://';
 
 $sm_config['sender_email']='noreply@{domain}';
 $sm_config['sender_name']='Group-Office trial';
-$sm_config['install_modules']='summary,email,calendar,tasks,addressbook,notes,billing,files,modules,users,groups,tools,customfields,sync,serverclient,projects,mailings,gota,links';
+$sm_config['install_modules']='summary,email,calendar,tasks,addressbook,notes,files,modules,users,groups,tools,serverclient,links';
 
 $default_config['quota']='512';
 $default_config['max_users']='3';
