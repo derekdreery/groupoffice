@@ -230,7 +230,7 @@ GO.calendar.SettingsPanel = function(config) {
 						}),	
 						this.selectCalendar = new GO.form.ComboBox({
 							fieldLabel : GO.calendar.lang.default_calendar,
-							hiddenName : 'calendar_id',
+							hiddenName : 'default_calendar_id',
 							anchor : '-20',
 							emptyText : GO.lang.strPleaseSelect,
 							store : new GO.data.JsonStore({
@@ -263,7 +263,7 @@ GO.calendar.SettingsPanel = function(config) {
 
 Ext.extend(GO.calendar.SettingsPanel, Ext.Panel, {
 	onLoadSettings : function(action) {
-		this.selectCalendar.setRemoteText(action.result.data.calendar_name);
+		this.selectCalendar.setRemoteText(action.result.data.default_calendar_name);
 	},
 
 	onSaveSettings : function() {
