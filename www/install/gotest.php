@@ -201,6 +201,31 @@ function test_system(){
 	$test['fatal']=false;
 
 	$tests[]=$test;
+
+	if(is_dir('../modules/professional'))
+	{
+		$test['name']='Professional license';
+		$check_url = $GO_CONFIG->full_url.'modules/professional/checklicense.php';
+		$content = file_get_contents($check_url);
+		if(empty($content)){
+			$test['feedback']='Warning: Could not determine if your license file works properly. <a target="_blank" href="'.$check_url.'">Click here to check it</a>.';
+			$test['fatal']=false;
+			$test['pass']=false;
+		}elseif($content!='<h1>Your license works!</h1>')
+		{
+			$test['feedback']='Fatal: Your professional license is invalid. Please contact Intermesh about this problem and supply the output of this page.';
+			$test['fatal']=true;
+			$test['pass']=false;
+		}else
+		{
+			$test['feedback']='';
+			$test['fatal']=false;
+			$test['pass']=true;
+		}	
+
+		$tests[]=$test;
+	}
+
 	
 	$test['name']='JSON functions';
 	$test['pass']=function_exists('json_encode');
