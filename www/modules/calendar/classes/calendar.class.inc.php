@@ -106,8 +106,11 @@ class calendar extends db
 			}
 			if($calendar)
 			{
-				$settings['calendar_id']=$calendar['id'];
-				$settings['calendar_name']=$calendar['name'];
+				//calendar_id conflicts with sync
+				
+				unset($settings['calendar_id']);
+				$settings['default_calendar_id']=$calendar['id'];
+				$settings['default_calendar_name']=$calendar['name'];
 			}
 			$response['data']=array_merge($response['data'], $settings);
 		}
@@ -122,7 +125,7 @@ class calendar extends db
 			$settings['user_id']=$_POST['user_id'];
 			$settings['background']=$_POST['background'];
 			$settings['reminder']=$_POST['reminder_multiplier'] * $_POST['reminder_value'];
-			$settings['calendar_id']=$_POST['calendar_id'];
+			$settings['calendar_id']=$_POST['default_calendar_id'];
 
 			$cal = new calendar();
 			$cal->update_settings($settings);

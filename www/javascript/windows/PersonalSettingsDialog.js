@@ -36,14 +36,14 @@ GO.PersonalSettingsDialog = function(config){
 	config.buttons=[{
 			text: GO.lang['cmdOk'],
 			handler: function(){
-				this.submitForm();
+				this.submitForm(true);
 				
 			},
 			scope: this
 		},{
 			text: GO.lang['cmdApply'],
 			handler: function(){
-				this.submitForm(true);
+				this.submitForm();
 			},
 			scope:this
 		},{
