@@ -149,47 +149,6 @@ class serverclient
 			}
 	}*/
 
-	function check_servermanager($index){
-
-		global $GO_CONFIG, $GO_USERS;
-
-		if(!isset($_SESSION['GO_SESSION']['servermanager_check']) || $_SESSION['GO_SESSION']['servermanager_check']!=$index)
-		{
-			$this->login();
-			
-			$count = $GO_USERS->get_users();
-			
-			if($count>$GO_CONFIG->max_users)
-			{
-				throw new Exception('There is a license problem!');
-			}
-
-			$params=array(
-							'task'=>'check_installation',
-							'installation_name'=>$GO_CONFIG->id);
-				
-			$response = $this->send_request($this->server_url.'modules/servermanager/json.php', $params);
-			$response = json_decode($response, true);
-
-			if(!is_array($response))
-			{
-				throw new Exception('Invalid response from servermanager');
-			}
-
-			if(!$response['success'])
-			{
-				throw new Exception($response['feedback']);
-			}
-
-			if($response['secret']!=$index)
-			{
-				throw new Exception('Invalid response from servermanager');
-			}
-
-			$_SESSION['GO_SESSION']['servermanager_check']=$index;
-		}
-	}
-
 	public static function add_user($user)
 	{
 		global $GO_MODULES, $GO_CONFIG;
