@@ -68,7 +68,7 @@ GO.users.lang.sunday = 'Zondag';
 GO.users.lang.monday = 'Maandag';
 GO.users.lang.regionalSettings = 'Regionale instellingen';
 GO.users.lang.userSettings = 'Gebruikers instellingen';
-GO.users.lang.maxUsersReached='Het maximaal aantal gebruikers is bereikt. Ga naar de service tab om het maximaal aantal gebruikers uit te breiden.';
+GO.users.lang.maxUsersReached='Het maximaal aantal gebruikers is bereikt. Neem contact op met uw provider om het maximaal aantal gebruikers uit te breiden.';
 GO.users.lang.group='Groep';
 
 GO.users.lang.muteSound='Demp geluiden';

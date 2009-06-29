@@ -213,7 +213,7 @@ function test_system(){
 			$test['pass']=false;
 		}elseif($content!='<h1>Your license works!</h1>')
 		{
-			$test['feedback']='Fatal: Your professional license is invalid. Please contact Intermesh about this problem and supply the output of this page.';
+			$test['feedback']='Fatal: Your professional license is invalid. Please contact Intermesh about this problem and supply the output of this page. <a target="_blank" href="'.$check_url.'">Click here to check the output of an encoded file.</a>';
 			$test['fatal']=true;
 			$test['pass']=false;
 		}else

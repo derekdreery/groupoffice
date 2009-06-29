@@ -103,6 +103,15 @@ class GO_MODULES extends db {
 	var $modules = array();
 
 	/**
+	 * Array of all allowed modules
+	 *
+	 *
+	 * @var     Array
+	 * @access  private
+	 */
+	var $allowed_modules = false;
+
+	/**
 	 * Constructor. Loads all installed modules into the modules array
 	 *
 	 * @access public
@@ -129,6 +138,17 @@ class GO_MODULES extends db {
 	public function has_module($module)
 	{
 		return isset($this->modules[$module]) && ($this->modules[$module]['read_permission'] || $this->modules[$module]['write_permission']);
+	}
+
+
+	public function module_is_allowed($module){
+
+		if(!$this->allowed_modules)
+		{
+			global $GO_CONFIG;
+			$this->allowed_modules=empty($GO_CONFIG->allowed_modules) ? array() : explode(',', $GO_CONFIG->allowed_modules);
+		}
+		return !count($this->allowed_modules) || in_array($module, $this->allowed_modules);
 	}
 	
 	/**
@@ -182,31 +202,35 @@ class GO_MODULES extends db {
 		$modules_props = $this->get_modules_with_locations();
 
 		for ( $i = 0; $i < count($modules_props); $i ++ ) {
-			$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']] = $modules_props[$i];
-			if (isset($GO_SECURITY) &&  $GO_SECURITY->logged_in() ) {
-				$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['write_permission'] =
-				$GO_SECURITY->has_permission(
-				$_SESSION['GO_SESSION']['user_id'], $modules_props[$i]['acl_write']);
-				$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['read_permission'] =
-				$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['write_permission'] ? true :
-				$GO_SECURITY->has_permission(
-				$_SESSION['GO_SESSION']['user_id'], $modules_props[$i]['acl_read']);
-					
-					
-					
-			}else
-			{
-				$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['write_permission'] = $_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['read_permission'] = false;
-			}
 
-			$language_file = $GO_LANGUAGE->get_language_file($modules_props[$i]['id']);
-			if(file_exists($language_file))
+			if($this->module_is_allowed($modules_props[$i]['id']))
 			{
-				require($language_file);
+				$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']] = $modules_props[$i];
+				if (isset($GO_SECURITY) &&  $GO_SECURITY->logged_in() ) {
+					$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['write_permission'] =
+					$GO_SECURITY->has_permission(
+					$_SESSION['GO_SESSION']['user_id'], $modules_props[$i]['acl_write']);
+					$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['read_permission'] =
+					$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['write_permission'] ? true :
+					$GO_SECURITY->has_permission(
+					$_SESSION['GO_SESSION']['user_id'], $modules_props[$i]['acl_read']);
+
+
+
+				}else
+				{
+					$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['write_permission'] = $_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['read_permission'] = false;
+				}
+
+				$language_file = $GO_LANGUAGE->get_language_file($modules_props[$i]['id']);
+				if(file_exists($language_file))
+				{
+					require($language_file);
+				}
+
+				$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['humanName'] = isset($lang[$modules_props[$i]['id']]['name']) ? $lang[$modules_props[$i]['id']]['name'] : $modules_props[$i]['id'];
+				$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['description'] = isset($lang[$modules_props[$i]['id']]['description']) ? $lang[$modules_props[$i]['id']]['description'] : '';
 			}
-				
-			$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['humanName'] = isset($lang[$modules_props[$i]['id']]['name']) ? $lang[$modules_props[$i]['id']]['name'] : $modules_props[$i]['id'];
-			$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['description'] = isset($lang[$modules_props[$i]['id']]['description']) ? $lang[$modules_props[$i]['id']]['description'] : '';
 				
 		}
 		$this->modules=$_SESSION['GO_SESSION']['modules'];
