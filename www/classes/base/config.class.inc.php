@@ -237,6 +237,14 @@ class GO_CONFIG
 	 */
 	var $register_modules_write = '';
 
+	/**
+	 * Comma separated list of allowed modules. Leave empty to allow all modules.
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $allowed_modules = '';
+
 
 	/**
 	 * Add self-registered users to these user groups

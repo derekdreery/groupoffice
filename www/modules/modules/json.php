@@ -35,27 +35,30 @@ try{
 
 			while($module = array_shift($folders))
 			{
-				$installed_module = $GO_MODULES->get_module($module['name']);
-
-				if(!$installed_module)
+				if($GO_MODULES->module_is_allowed($module['name']))
 				{
-					//require language file to obtain module name in the right language
-					$language_file = $GO_LANGUAGE->get_language_file($module['name']);
+					$installed_module = $GO_MODULES->get_module($module['name']);
 
-
-					if(file_exists($language_file))
+					if(!$installed_module)
 					{
-						require_once($language_file);
+						//require language file to obtain module name in the right language
+						$language_file = $GO_LANGUAGE->get_language_file($module['name']);
+
+
+						if(file_exists($language_file))
+						{
+							require_once($language_file);
+						}
+
+
+						$record = array(
+							'id' => $module['name'],
+							'name' => isset($lang[$module['name']]['name']) ? $lang[$module['name']]['name'] : $module['name'],
+							'description' => isset($lang[$module['name']]['description']) ? $lang[$module['name']]['description'] : '');
+
+						$records[] = $record;
+
 					}
-
-
-					$record = array(
-		 				'id' => $module['name'],
-		 				'name' => isset($lang[$module['name']]['name']) ? $lang[$module['name']]['name'] : $module['name'],
-		 				'description' => isset($lang[$module['name']]['description']) ? $lang[$module['name']]['description'] : '');
-
-					$records[] = $record;
-
 				}
 			}
 			break;

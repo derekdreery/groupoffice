@@ -79,7 +79,7 @@ GO.users.lang.monday = 'Monday';
 GO.users.lang.regionalSettings = 'Regional settings';
 GO.users.lang.userSettings = 'User settings';
 
-GO.users.lang.maxUsersReached='The maximum number of users has been reached. Go to the service tab to extend your maximum number of users.';
+GO.users.lang.maxUsersReached='The maximum number of users has been reached. Contact your hosting provider to extend your maximum number of users.';
 
 GO.users.lang.group='Group';
 

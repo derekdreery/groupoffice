@@ -242,7 +242,7 @@ if(!$GO_CONFIG->debug)
 {
 	?>
 	<script	src="<?php echo $GO_CONFIG->host; ?>language/common/en.js<?php echo $suffix; ?>" type="text/javascript"></script>
-	<script	src="<?php echo $GO_MODULES->modules['users']['url'].'language/en.js'.$suffix; ?>" type="text/javascript"></script>
+	<script	src="<?php echo $GO_MODULES->host.'modules/users/language/en.js'.$suffix; ?>" type="text/javascript"></script>
 	<?php
 
 	if($GO_LANGUAGE->language!='en')
@@ -259,9 +259,9 @@ if(!$GO_CONFIG->debug)
 			echo "\n";
 		}
 
-		if(file_exists($GO_MODULES->modules['users']['path'].'language/'.$GO_LANGUAGE->language.'.js'))
+		if(file_exists($GO_CONFIG->root_path.'modules/users/language/'.$GO_LANGUAGE->language.'.js'))
 		{
-			echo '<script type="text/javascript" src="'.$GO_MODULES->modules['users']['url'].'language/'.$GO_LANGUAGE->language.'.js'.$suffix.'"></script>';
+			echo '<script type="text/javascript" src="'.$GO_CONFIG->root_path.'modules/users/language/'.$GO_LANGUAGE->language.'.js'.$suffix.'"></script>';
 			echo "\n";
 		}
 	}
