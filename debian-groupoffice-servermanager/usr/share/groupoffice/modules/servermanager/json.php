@@ -99,6 +99,7 @@ try{
 			
 			$config_file = '/etc/groupoffice/'.$installation['name'].'/config.php';
 			require($config_file);
+			if(!isset($config)) $config = array();
 			unset($config['db_pass']);
 			$installation = array_merge($installation, $config);
 			$installation['quota']=isset($installation['quota']) ? $installation['quota']/1024 : 0;
@@ -154,10 +155,12 @@ try{
 				if(file_exists($config_file))
 				{
 					require($config_file);
-				
-					$installation['title']=$config['title'];
-					$installation['webmaster_email']=$config['webmaster_email'];
-					$installation['max_users']=isset($config['max_users']) ? $config['max_users'] : 0;
+					if(isset($config))
+					{
+						$installation['title']=$config['title'];
+						$installation['webmaster_email']=$config['webmaster_email'];
+						$installation['max_users']=isset($config['max_users']) ? $config['max_users'] : 0;
+					}
 				}
 				
 				$installation['mtime']=Date::get_timestamp($installation['mtime']);				
