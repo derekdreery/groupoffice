@@ -124,6 +124,10 @@ Ext.extend(GO.servermanager.InstallationDialog, Ext.Window,{
 	{
 		this.formPanel.form.baseParams['installation_id']=installation_id;
 		this.installation_id=installation_id;
+
+		this.modulesGrid.store.baseParams.installation_id=installation_id;
+		this.modulesGrid.store.removeAll();
+		this.modulesGrid.store.loaded=false;
 		
 		this.formPanel.form.findField('admin_password1').allowBlank=installation_id>0;
 		this.formPanel.form.findField('admin_password2').allowBlank=installation_id>0;
@@ -133,14 +137,26 @@ Ext.extend(GO.servermanager.InstallationDialog, Ext.Window,{
 	},
 	
 	submitForm : function(hide){
+
+		var params =  {'task' : 'save_installation'};
+		if(this.modulesGrid.store.loaded)
+		{
+			params.modules=Ext.encode(this.modulesGrid.getGridData());
+		}
+
 		this.formPanel.form.submit(
 		{
 			url:GO.settings.modules.servermanager.url+'action.php',
-			params: {'task' : 'save_installation'},
+			params:params,
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){
 				
 				this.fireEvent('save', this);
+
+				if(this.modulesGrid.loaded)
+				{
+					this.modulesGrid.store.commitChanges();
+				}
 				
 				if(hide)
 				{
@@ -457,7 +473,11 @@ Ext.extend(GO.servermanager.InstallationDialog, Ext.Window,{
 			}]
 				
 		});
-		var items  = [this.propertiesPanel];
+
+
+		this.modulesGrid = new GO.servermanager.ModulesGrid();
+
+		var items  = [this.propertiesPanel, this.modulesGrid];
 		
     
     

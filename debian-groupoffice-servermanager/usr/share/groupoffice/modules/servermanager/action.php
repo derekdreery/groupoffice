@@ -42,6 +42,23 @@ try{
 		case 'save_installation':
 				
 			$installation_id=$installation['id']=isset($_POST['installation_id']) ? ($_POST['installation_id']) : 0;
+
+			if(isset($_POST['modules']))
+			{
+				$modules = json_decode($_POST['modules'],true);
+
+				$allowed = array();
+
+				foreach($modules as $module)
+				{
+					if($module['allowed'])
+						$allowed[]=$module['id'];
+				}
+
+				$config['allowed_modules']=implode(',', $allowed);
+			}elseif(empty($_POST['installation_id'])){
+				$config['allowed_modules']=isset($default_config['allowed_modules']) ? $config['allowed_modules'] : '';
+			}
 			
 			$config['max_users']=$_POST['max_users'];			
 			

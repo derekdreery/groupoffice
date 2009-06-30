@@ -1,5 +1,6 @@
 modules/servermanager/InstallationsGrid.js
 modules/servermanager/InstallationDialog.js
+modules/servermanager/ModulesGrid.js
 modules/servermanager/InstallationPanel.js
 modules/servermanager/ReportGrid.js
 modules/servermanager/MainPanel.js
