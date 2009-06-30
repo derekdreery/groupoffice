@@ -48,3 +48,7 @@ GO.servermanager.lang.quota='Quota (MB)';
 GO.servermanager.lang.domain='Domain';
 GO.servermanager.lang.adminPassword='Admin password';
 GO.servermanager.lang.confirmAdminPassword='Confirm';
+
+GO.servermanager.lang.allowed='Allowed';
+GO.servermanager.lang.installed='Installed';
+GO.servermanager.lang.modules='Modules';

@@ -19,6 +19,39 @@ $task=isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
 try{
 	switch($task)
 	{
+
+		case 'modules':
+
+			if(!empty($_POST['installation_id'])){
+				$installation = $servermanager->get_installation($_POST['installation_id']);
+
+				$config_file = '/etc/groupoffice/'.$installation['name'].'/config.php';
+				require($config_file);
+				if(!isset($config)) $config = array();
+
+				$allowed_modules=empty($config['allowed_modules']) ? array() : explode(',', $config['allowed_modules']);
+			}else
+			{
+				$allowed_modules=empty($default_config['allowed_modules']) ? array() : explode(',', $default_config['allowed_modules']);
+			}
+
+			$response['results']=array();
+			foreach($GO_MODULES->modules as $module)
+			{
+				if($module['id']!='servermanager')
+				{
+					$record = array(
+						'id' => $module['id'],
+						'name' => $module['humanName'],
+						'installed' => false,
+						'allowed' => !count($allowed_modules) || in_array($module['id'], $allowed_modules)
+					);
+					$response['results'][] = $record;
+				}
+			}
+
+			$response['total']=count($response['results']);
+		break;
 		
 		case 'check_installation':
 			
