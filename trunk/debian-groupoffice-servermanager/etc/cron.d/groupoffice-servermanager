@@ -1,1 +1,1 @@
-1 4 * * * root php /usr/share/groupoffice/modules/servermanager/cache_report.php
+1 4 * * * root php /usr/share/groupoffice-servermanager/report.php
