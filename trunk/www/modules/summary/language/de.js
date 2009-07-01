@@ -1,4 +1,4 @@
-GO.summary.lang.summary = 'Zusammenfassung';
+GO.summary.lang.summary = 'Übersicht';
 GO.summary.lang.noItems = 'Sie haben keine Einträge auf Ihrer Startübersicht';
 GO.summary.lang.selectPortlet = 'Neues Fenster hinzufügen';
 GO.summary.lang.hotTopics = 'Nachrichten';

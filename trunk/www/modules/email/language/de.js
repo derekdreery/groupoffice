@@ -117,7 +117,7 @@ GO.email.lang.confirmEmptySubject='Sie haben keinen Betreff eingetragen. Sind Si
 GO.email.lang.usage='Belegter Speicherplatz';
 GO.email.lang.searchGO='GroupOffice durchsuchen';
 GO.email.lang.toggleWindowPosition = 'Ansicht umschalten';
-GO.email.lang.closeUploadDialog='Schliessen Sie zuerst den Upload-Dialog oder warten Sie, bis der Upload beendet ist';
+GO.email.lang.closeUploadDialog='Schließen Sie zuerst den Upload-Dialog oder warten Sie, bis der Upload beendet ist';
 
 GO.email.lang.signature='Signatur';
 
@@ -127,3 +127,16 @@ GO.email.defaultProgramInstructions ='<p>To set Group-Office as your default e-m
 
 GO.email.lang.htmlMarkup = 'HTML-Formatierung verwenden';
 GO.email.lang.confirmLostChanges = 'Änderungen werden verloren gehen. Sind Sie sicher?';
+
+/* table: em_aliases */
+GO.email.lang.alias="Alias";
+GO.email.lang.aliases="Aliase";
+GO.email.lang.accountId="Account ID";
+GO.email.lang.email="E-Mail";
+GO.email.lang.signature="Signatur";
+
+GO.email.lang.manageAliases='Absender-Aliase verwalten';
+
+GO.email.lang.addSendersTo='Absender hinzufügen zu...';
+
+GO.email.lang.defaultTemplate='Gewählte Vorlage als Standard verwenden';

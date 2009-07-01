@@ -2,7 +2,7 @@
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_language_file('email'));
 $lang['email']['name'] = 'E-Mail';
-$lang['email']['description'] = 'Modul zum Verwalten von E-Mail-Nachrichten';
+$lang['email']['description'] = 'Modul zum Verwalten von E-Mail-Konten und -Nachrichten';
 
 $lang['link_type'][9]='E-Mail';
 
@@ -40,12 +40,16 @@ $lang['email']['usage'] = '%s genutzt';
 $lang['email']['event']='Termin';
 $lang['email']['calendar']='Kalender';
 
-$lang['email']['quotaError']="Ihre Mailbox ist voll. Leeren Sie zuerst ihren Papierkorb. Wurde dieser schon geleert aber ihre Mailbox bleibt voll, so deaktivieren Sie den Papierkorb, um Nachrichten aus anderen Ordnern zu löschen. You can disable it at:\n\nSettings -> Accounts -> Double click account -> Folders.";
+$lang['email']['quotaError']="Ihre Mailbox ist voll. Leeren Sie zuerst ihren Papierkorb. Wurde dieser schon geleert, so deaktivieren Sie den Papierkorb, um Nachrichten aus anderen Ordnern zu löschen. Sie deaktivieren den Papierkorb über:\n\nEinstellungen -> Konten -> Doppelklick auf das gewünschte E-Mail-Konto -> Ordner.";
 
-$lang['email']['draftsDisabled']="Die Nachricht konnte nicht gespeichert werden, da der Ordner 'Entwürfe' nicht aktiviert wurde.<br /><br />Go to Settings -> Accounts -> Double click account -> Folders to configure it.";
+$lang['email']['draftsDisabled']="Die Nachricht konnte nicht gespeichert werden, da der Ordner 'Entwürfe' nicht aktiviert wurde.<br /><br />Gehen Sie in die Einstellungen -> Konten -> Doppelklick auf das gewünschte E-Mail-Konto -> Ordner, um den Ordner zu aktivieren.";
 $lang['email']['noSaveWithPop3']='Die Nachricht konnte nicht gespeichert werden, da ein POP3-Konto diese Funktion nicht unterstützt.';
 
 $lang['email']['goAlreadyStarted']='GroupOffice wurde bereits gestartet. Die E-Mail-Oberfläche wird nun in GroupOffice geladen. Schließen Sie dieses Fenster und schreiben Sie Ihre Nachricht in GroupOffice.';
 
 //At Tuesday, 07-04-2009 on 8:58 Group-Office Administrator <test@intermeshdev.nl> wrote:
 $lang['email']['replyHeader']='Am %s, den %s um %s schrieb %s:';
+$lang['email']['alias']='Alias';
+$lang['email']['aliases']='Aliase';
+
+$lang['email']['noUidNext']='Ihr Mailserver unterstützt kein UIDNEXT. Der Ordner \'Vorlagen\' wird daher für dieses Konto deaktiviert.';

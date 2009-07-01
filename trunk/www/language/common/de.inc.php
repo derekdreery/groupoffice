@@ -17,22 +17,26 @@ http://www.group-office.com
 Group-Office is created by Intermesh. For more information about Intermesh visit:
 http://www.intermesh.nl/en/';
 
+$lang['common']['totals']='Gesamt';
+$lang['common']['printPage']='Seite %s von %s';
+
 $lang['common']['htmldirection']= 'ltr';
 
-$lang['common']['quotaExceeded']='Ihr Speicherplatz ist verbraucht. Please delete some files or contact your provider to raise the quota';
+$lang['common']['quotaExceeded']='Ihr Speicherplatz ist verbraucht. Bitte löschen Sie einige Dateien oder bitten Sie Ihren Provider um mehr Speicherplatz.';
 $lang['common']['errorsInForm'] = 'Es sind Fehler im Formular, bitte korrigieren Sie diese und versuchen Sie es erneut.';
 
-$lang['common']['moduleRequired']='Diese Funktion erfordert folgendes Modul: %s';
+$lang['common']['moduleRequired']='Diese Funktion erfordert das Modul %s';
 
 $lang['common']['loadingCore']= 'Basissystem wird geladen';
-$lang['common']['loadingLogin'] = 'Logindialog wird geladen';
+$lang['common']['loadingLogin'] = 'Login-Dialog wird geladen';
 $lang['common']['renderInterface'] = 'Oberfläche wird aufgebaut';
-$lang['common']['loadingModule'] = 'Module werden geladen';
+$lang['common']['loadingModules'] = 'Module werden geladen';
+$lang['common']['loadingModule'] = 'Modul wird geladen';
 
 $lang['common']['loggedInAs'] = "Eingeloggt als ";
 $lang['common']['search']='Suche';
 $lang['common']['settings']='Einstellungen';
-$lang['common']['adminMenu']='Admin Menü';
+$lang['common']['adminMenu']='Administration';
 $lang['common']['help']='Hilfe';
 $lang['common']['logout']='Ausloggen';
 $lang['common']['badLogin'] = 'Falscher Benutzername oder Passwort';
@@ -45,7 +49,7 @@ $lang['common']['deleteError']='Fehler beim Löschen der Daten';
 $lang['common']['selectError']='Fehler beim Lesen der Daten';
 $lang['common']['missingField'] = 'Sie haben nicht alle benötigten Felder ausgefüllt.';
 $lang['common']['invalidEmailError']='Die E-Mail-Adresse war ungültig';
-$lang['common']['invalidDateError']='Die Datum war ungültig';
+$lang['common']['invalidDateError']='Das Datum war ungültig';
 $lang['common']['noFileUploaded']='Es wurde keine Datei empfangen';
 $lang['common']['error']='Fehler';
 
@@ -61,10 +65,10 @@ $lang['common']['birthday'] = 'Geburtstag';
 $lang['common']['sexes']['M'] = 'Männlich';
 $lang['common']['sexes']['F'] = 'Weiblich';
 $lang['common']['title'] = 'Titel';
-$lang['common']['addressNo'] = 'Hausnr.';
-$lang['common']['workAddressNo'] = 'Hausnr. (dienstl.)';
-$lang['common']['postAddress'] = 'Strasse';
-$lang['common']['postAddressNo'] = 'Hausnr.';
+$lang['common']['addressNo'] = 'Hausnummer';
+$lang['common']['workAddressNo'] = 'Hausnummer';
+$lang['common']['postAddress'] = 'Straße';
+$lang['common']['postAddressNo'] = 'Hausnummer';
 $lang['common']['postCity'] = 'Stadt';
 $lang['common']['postState'] = 'Bundesland';
 $lang['common']['postCountry'] = 'Land';
@@ -80,10 +84,10 @@ $lang['common']['country'] = 'Land';
 $lang['common']['state'] = 'Bundesland';
 $lang['common']['city'] = 'Stadt';
 $lang['common']['zip'] = 'PLZ';
-$lang['common']['address'] = 'Strasse';
+$lang['common']['address'] = 'Straße';
 $lang['common']['email'] = 'E-Mail';
 $lang['common']['phone'] = 'Telefon';
-$lang['common']['workphone'] = 'Telefon (dienstl.)';
+$lang['common']['workphone'] = 'Telefon';
 $lang['common']['cellular'] = 'Mobiltelefon';
 $lang['common']['company'] = 'Firma';
 $lang['common']['department'] = 'Abteilung';
@@ -91,13 +95,13 @@ $lang['common']['function'] = 'Funktion';
 $lang['common']['question'] = 'Geheime Frage';
 $lang['common']['answer'] = 'Antwort';
 $lang['common']['fax'] = 'Telefax';
-$lang['common']['workFax'] = 'Telefax (dienstl.)';
+$lang['common']['workFax'] = 'Telefax';
 $lang['common']['homepage'] = 'Webseite';
-$lang['common']['workAddress'] = 'Strasse (dienstl.)';
-$lang['common']['workZip'] = 'PLZ (dienstl.)';
-$lang['common']['workCountry'] = 'Land (dienstl.)';
-$lang['common']['workState'] = 'Bundesland (dienstl.)';
-$lang['common']['workCity'] = 'Stadt (dienstl.)';
+$lang['common']['workAddress'] = 'Straße';
+$lang['common']['workZip'] = 'PLZ';
+$lang['common']['workCountry'] = 'Land';
+$lang['common']['workState'] = 'Bundesland';
+$lang['common']['workCity'] = 'Stadt';
 $lang['common']['today'] = 'Heute';
 $lang['common']['tomorrow'] = 'Morgen';
 
@@ -160,13 +164,14 @@ $lang['common']['admin']='Administrator';
 
 $lang['common']['beginning']='Anrede';
 
-$lang['common']['max_emails_reached']= "Die maximale E-Mail-Anzahl pro Tag für SMTP-Host %s von %s ist erreicht.";
+$lang['common']['max_emails_reached']= "Für SMTP-Host %s wurde die max. Anzahl von %s E-Mail-Nachrichten pro Tag erreicht.";
 $lang['common']['usage_stats']='Festplattenspeicher Nutzung pro %s';
 $lang['common']['usage_text']='Diese GroupOffice-Installation verwendet';
 
 $lang['common']['database']='Datenbank';
 $lang['common']['files']='Dateien';
 $lang['common']['email']='E-Mail';
+// $lang['common']['total']='Gesamt';
 
 $lang['common']['lost_password_subject']='Neues Passwort';
 $lang['common']['lost_password_body']='%s,<br />
@@ -181,7 +186,7 @@ Passwort: %s';
 $lang['common']['lost_password_error']='Die angegebende E-Mail-Adresse konnte nicht gefunden werden.';
 $lang['common']['lost_password_success']='An Ihre E-Mail-Adresse wurde ein neues Passwort gesendet.';
 
-$lang['common']['confirm_leave']='If you leave GroupOffice you will loose unsaved changes';
+$lang['common']['confirm_leave']='Wenn Sie GroupOffice jetzt verlassen, werden alle ungespeicherten Änderungen wieder verworfen';
 $lang['common']['dataSaved']='Daten wurden erfolgreich gespeichert';
 
-$lang['common']['uploadMultipleFiles'] = 'Click at \'Browse\' to select files and/or folders from your computer. Click at \'Upload\' to transfer the files to Group-Office. This window will automatically close when the transfer is completed.';
+$lang['common']['uploadMultipleFiles'] = 'Klicken Sie auf \'Durchsuchen\', um Dateien und/oder Ordner auf Ihrem Computer auszuwählen. Klicken Sie auf \'Hochladen\', um diese dann nach GroupOffice zu transferieren. Dieses Fenster wird sich nach erfolgreichem Transfer automatisch schließen.';
