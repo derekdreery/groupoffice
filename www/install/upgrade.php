@@ -21,7 +21,7 @@ if(!defined('NOTINSTALLED') && !isset($RERUN_UPDATE))
 
 //update scripts can request to rerun the update process by setting $RERUN_UPDATE=true;
 //this is useful when an update installs a module that might need updates too.
-unset($RERUN_UPDATE);
+unset($RERUN_UPDATE, $CHECK_MODULES);
 
 if(!$quiet)
 echo 'Updating Group-Office database: '.$GO_CONFIG->db_name.$line_break;
@@ -137,6 +137,13 @@ if(isset($RERUN_UPDATE))
 		$fs = new filesystem();
 
 		$fs->delete($GO_CONFIG->local_path.'cache');
+
+
+		if(isset($CHECK_MODULES))
+		{
+			$GO_EVENTS->fire_event('check_database');
+		}
+
 		echo 'Done!'.$line_break.$line_break;
 	}
 }
