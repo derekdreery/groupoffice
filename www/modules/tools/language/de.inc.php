@@ -10,4 +10,8 @@ $lang['tools']['rm_duplicates']='Doppelte Kontakte und Termine löschen';
 
 $lang['tools']['backupdb']='Datenbank sichern';
 $lang['tools']['index_files']='Alle Daten neu indizieren';
+
+$lang['tools']['buildsearchcache']='Suchindex neu aufbauen';
+$lang['tools']['checkmodules']='Module überprüfen';
+
 ?>

@@ -10,11 +10,11 @@ $lang['tasks']['status']='Status';
 
 $lang['tasks']['scheduled_call']='Geplanter Anruf um %s';
 
-$lang['tasks']['statuses']['NEEDS-ACTION']= 'Benötigt Aktion';
-$lang['tasks']['statuses']['ACCEPTED']= 'Akzeptiert';
+$lang['tasks']['statuses']['NEEDS-ACTION']= 'Handlungsbedarf';
+$lang['tasks']['statuses']['ACCEPTED']= 'Angenommen';
 $lang['tasks']['statuses']['DECLINED']= 'Abgelehnt';
 $lang['tasks']['statuses']['TENTATIVE']= 'Vorläufig';
-$lang['tasks']['statuses']['DELEGATED']= 'Delegiert';
+$lang['tasks']['statuses']['DELEGATED']= 'Aufgeteilt';
 $lang['tasks']['statuses']['COMPLETED']= 'Erledigt';
 $lang['tasks']['statuses']['IN-PROCESS']= 'In Bearbeitung';
 
