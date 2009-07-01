@@ -11,4 +11,6 @@ require('../../../../Group-Office.php');
 $db = new db();
 $db->halt_on_error='report';
 
+ini_set('max_execution_time', '3600');
+
 require('3_convert_old_paths.inc.php');

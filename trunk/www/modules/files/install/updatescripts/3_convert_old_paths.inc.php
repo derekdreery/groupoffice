@@ -103,14 +103,17 @@ function crawl($path, $parent_id)
     }
 }
 
-$folders = $fs->get_folders($GO_CONFIG->file_storage_path);
-
-foreach($folders as $folder)
+if(!isset($_REQUEST['skip_crawl']))
 {
-    crawl($folder['path'], 0);
-}
+	$folders = $fs->get_folders($GO_CONFIG->file_storage_path);
 
-$fsdb->query("DELETE FROM fs_folders WHERE name=''");
+	foreach($folders as $folder)
+	{
+			crawl($folder['path'], 0);
+	}
+
+	$fsdb->query("DELETE FROM fs_folders WHERE name=''");
+}
 
 
 if(isset($GO_MODULES->modules['addressbook']))
@@ -518,4 +521,8 @@ while($user = $GO_USERS->next_record())
         echo $e->getMessage().$line_break;
     }
 }
+
+
+//the installer will check the database
+$CHECK_MODULES=true;
 ?>
