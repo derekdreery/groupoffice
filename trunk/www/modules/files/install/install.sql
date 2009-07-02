@@ -19,7 +19,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- Tabel structuur voor tabel `fs_files`
 --
 DROP TABLE IF EXISTS `fs_files`;
-CREATE TABLE `fs_files` (
+CREATE TABLE IF NOT EXISTS `fs_files` (
   `id` int(11) NOT NULL,
   `folder_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -31,9 +31,12 @@ CREATE TABLE `fs_files` (
   `size` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `comments` text,
+  `extension` varchar(4) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `folder_id` (`folder_id`),
-  KEY `name` (`name`)
+  KEY `name` (`name`),
+  KEY `extension` (`extension`),
+  KEY `path` (`path`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
         -------------
 

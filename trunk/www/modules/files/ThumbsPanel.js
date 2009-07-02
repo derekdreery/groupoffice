@@ -14,6 +14,15 @@
 GO.files.ThumbsPanel = Ext.extend(Ext.Panel, {
 	store : false,
 	initComponent : function(){
+
+		this.bbar = new Ext.PagingToolbar({
+  					cls: 'go-paging-tb',
+	          store: this.store,
+	          pageSize: parseInt(GO.settings['max_rows_list']),
+	          displayInfo: true,
+	          displayMsg: GO.lang['displayingItems'],
+	          emptyMsg: GO.lang['strNoItems']
+	      });
 		
     var tpl = new Ext.XTemplate('<tpl for=".">',
             '<div class="fs-thumb-wrap" id="{name}">',

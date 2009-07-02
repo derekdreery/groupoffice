@@ -561,37 +561,3 @@ GO.linkHandlers[3]=function(id){
 }
 
 
-Ext.override(Ext.menu.Menu, {
-    showAt : function(xy, parentMenu, /* private: */_e){
-        this.parentMenu = parentMenu;
-        if(!this.el){
-            this.render();
-        }
-        if(_e !== false){
-            this.fireEvent("beforeshow", this);
-            xy = this.el.adjustForConstraints(xy);
-        }
-        this.el.setXY(xy);
-        
-        // get max height from body height minus y cordinate from this.el
-        var maxHeight = Ext.getBody().getHeight() - xy[1];
-        // store orig element height
-        if (!this.el.origHeight) {
-            this.el.origHeight = this.el.getHeight();
-        }
-        // if orig height bigger than max height
-        if (this.el.origHeight > maxHeight) {
-            // set element with max height and apply scrollbar
-            this.el.setHeight(maxHeight);
-            this.el.applyStyles('overflow-y: auto;');
-        } else {
-            // set the orig height
-            this.el.setHeight(this.el.origHeight);
-        }
-
-        this.el.show();
-        this.hidden = false;
-        this.focus();
-        this.fireEvent("show", this);
-    }
-}); 

@@ -70,4 +70,8 @@ $updates[] = "script:3_convert_old_paths.inc.php";
 
 $updates[] = "ALTER TABLE `fs_folders` ADD INDEX (`visible`)";
 
+$updates[] = "ALTER TABLE `fs_files` ADD `extension` VARCHAR( 4 ) NOT NULL ,
+ADD INDEX ( extension )";
+
+$updates[] = "script:4_set_extension.inc.php";
 
