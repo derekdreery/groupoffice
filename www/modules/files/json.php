@@ -44,7 +44,7 @@ try{
 				global $files,$fs2;
 
 				$children = array();
-				$files->get_folders($folder_id,'name','ASC', 0,0, $authenticate);
+				$files->get_folders($folder_id,'name','ASC', 0,200, $authenticate);
 				while($folder=$files->next_record())
 				{
 					$node= array(
@@ -53,10 +53,10 @@ try{
 						'notreloadable'=>true
 					);
 
-                    if($folder['readonly']=='1')
-                    {
-                        $node['draggable']=false;
-                    }
+					if($folder['readonly']=='1')
+					{
+							$node['draggable']=false;
+					}
 
 					if($folder['acl_read']>0)
 					{
@@ -66,8 +66,7 @@ try{
 						$node['iconCls']='folder-default';
 					}
 
-					$fs2->get_folders($folder['id']);
-					if(!$fs2->found_rows())
+					if(!$fs2->has_children($folder['id']))
 					{
 						$node['children']=array();
 						$node['expanded']=true;
@@ -104,7 +103,7 @@ try{
 						$home_id = 'users/'.$_SESSION['GO_SESSION']['username'];
 						$home_folder=$files->resolve_path($home_id);
 
-						$folders = $files->get_folders($home_folder['id']);
+						$folders = $files->get_folders($home_folder['id'],'name', 'ASC',0,200);
 
 
 						$node= array(
@@ -132,48 +131,48 @@ try{
 						);
 						$response[]=$node;
 
-                        if($GO_MODULES->has_module('projects'))
-                        {
-                            require($GO_LANGUAGE->get_language_file('projects'));
+						if($GO_MODULES->has_module('projects'))
+						{
+								require($GO_LANGUAGE->get_language_file('projects'));
 
-                            $projects_folder = $files->resolve_path('projects');
-                            $node= array(
-                            'text'=>$lang['projects']['projects'],
-                            'id'=>$projects_folder['id'],
-                            'iconCls'=>'folder-default',
-                            'draggable'=>false,
-                            'allowDrop'=>false,
-                            'notreloadable'=>true
-                            );
-                            $response[]=$node;
-                        }
+								$projects_folder = $files->resolve_path('projects');
+								$node= array(
+								'text'=>$lang['projects']['projects'],
+								'id'=>$projects_folder['id'],
+								'iconCls'=>'folder-default',
+								'draggable'=>false,
+								'allowDrop'=>false,
+								'notreloadable'=>true
+								);
+								$response[]=$node;
+						}
 
 
-                        if($GO_MODULES->has_module('addressbook'))
-                        {
-                            require($GO_LANGUAGE->get_language_file('addressbook'));
-                            $contacts_folder = $files->resolve_path('contacts');
-                            $node= array(
-                            'text'=>$lang['addressbook']['contacts'],
-                            'id'=>$contacts_folder['id'],
-                            'iconCls'=>'folder-default',
-                            'draggable'=>false,
-                            'allowDrop'=>false,
-                            'notreloadable'=>true
-                            );
-                            $response[]=$node;
+						if($GO_MODULES->has_module('addressbook'))
+						{
+								require($GO_LANGUAGE->get_language_file('addressbook'));
+								$contacts_folder = $files->resolve_path('contacts');
+								$node= array(
+								'text'=>$lang['addressbook']['contacts'],
+								'id'=>$contacts_folder['id'],
+								'iconCls'=>'folder-default',
+								'draggable'=>false,
+								'allowDrop'=>false,
+								'notreloadable'=>true
+								);
+								$response[]=$node;
 
-                            $companies_folder = $files->resolve_path('companies');
-                            $node= array(
-                            'text'=>$lang['addressbook']['companies'],
-                            'id'=>$companies_folder['id'],
-                            'iconCls'=>'folder-default',
-                            'draggable'=>false,
-                            'allowDrop'=>false,
-                            'notreloadable'=>true
-                            );
-                            $response[]=$node;
-                        }
+								$companies_folder = $files->resolve_path('companies');
+								$node= array(
+								'text'=>$lang['addressbook']['companies'],
+								'id'=>$companies_folder['id'],
+								'iconCls'=>'folder-default',
+								'draggable'=>false,
+								'allowDrop'=>false,
+								'notreloadable'=>true
+								);
+								$response[]=$node;
+						}
 
 						$num_new_files = $files->get_num_new_files($GO_SECURITY->user_id);
 
@@ -196,7 +195,7 @@ try{
 
 					$share_count = $files->get_authorized_shares($GO_SECURITY->user_id);
 
-                    $nodes=array();
+          $nodes=array();
 
 					$count = 0;
 					while ($folder = $files->next_record())
@@ -334,6 +333,7 @@ try{
 
 						$sort = isset($_POST['sort']) ? $_POST['sort'] : 'mtime';
 						$dir = isset($_POST['dir']) ? $_POST['dir'] : 'DESC';
+						
 
 						//if($sort == 'grid_display') $sort = 'name';
 
@@ -523,11 +523,15 @@ try{
 						}
 						$dir = isset($_POST['dir']) ? $_POST['dir'] : 'ASC';
 
+						$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : '0';
+						$limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : '0';
+
 						require_once($GO_CONFIG->control_path.'phpthumb/phpThumb.config.php');
 
 						//$response['path']=$path;
 
-						$files->get_folders($curfolder['id'],$dsort,$dir,0,0,$authenticate);
+						$files->get_folders($curfolder['id'],$dsort,$dir,$start,$limit,$authenticate);
+						
 						while($folder = $files->next_record())
 						{
 							if($folder['acl_read']>0)
@@ -550,34 +554,49 @@ try{
 							$folder['extension']='folder';
 							$response['results'][]=$folder;
 						}
+						$count = count($response['results']);
+						$response['total']=$files->found_rows();
 
+						$folder_pages = floor($response['total']/$limit);
+						$folders_on_last_page = $response['total']-($folder_pages*$limit);
 
+						if($count)
+						{
+							$file_start = $start - ($folder_pages*$limit);
+							$file_limit = $limit-$folders_on_last_page;
+						}else
+						{
+							$file_start = $start - $response['total'];
+							$file_limit = $limit;
+						}
 						if(!empty($_POST['files_filter']))
 						{
 							$extensions = explode(',',$_POST['files_filter']);
 						}
 
+						$files->get_files($curfolder['id'], $fsort, $dir, $file_start, $file_limit);						
 
-						$files->get_files($curfolder['id'], $fsort, $dir);
+									
 						while($file = $files->next_record())
 						{
-							$extension = File::get_extension($file['name']);
+							//$extension = File::get_extension($file['name']);
 
-							if(!isset($extensions) || in_array($extension, $extensions))
-							{
-                                $file['path']=$path.'/'.$file['name'];
+							//if(!isset($extensions) || in_array($extension, $extensions))
+							//{
+								$file['path']=$path.'/'.$file['name'];
 								$file['type_id']='f:'.$file['id'];
 								$file['thumb_url']=$files->get_thumb_url($file['path']);
-								$file['extension']=$extension;
-								$file['grid_display']='<div class="go-grid-icon filetype filetype-'.$extension.'">'.$file['name'].'</div>';
-								$file['type']=File::get_filetype_description($extension);
+								//$file['extension']=$extension;
+								$file['grid_display']='<div class="go-grid-icon filetype filetype-'.$file['extension'].'">'.$file['name'].'</div>';
+								$file['type']=File::get_filetype_description($file['extension']);
 								$file['timestamp']=$file['mtime'];
 								$file['mtime']=Date::get_timestamp($file['mtime']);
 								//$file['size']=Number::format_size($file['size']);
 								$response['results'][]=$file;
-							}
+							//}
 						}
-
+						
+						$response['total']+=$files->found_rows();
 					}
 
 					break;

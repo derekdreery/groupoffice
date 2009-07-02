@@ -653,6 +653,7 @@ class files extends db {
 
 		$file['id']=$this->nextid('fs_files');
 		$file['user_id']=$GLOBALS['GO_SECURITY']->user_id;
+		$file['extension']=File::get_extension($file['name']);
 		$this->insert_row('fs_files', $file);
 
 		$this->cache_file($file);
@@ -666,6 +667,7 @@ class files extends db {
 		$file['ctime']=filectime($full_path);
 		$file['mtime']=filemtime($full_path);
 		$file['size']=filesize($full_path);
+		$file['extension']=File::get_extension($full_path);
 
 		return $this->update_file($file);
 	}
@@ -685,6 +687,7 @@ class files extends db {
 		$file['mtime']=filemtime($full_path);
 		$file['folder_id']=$parent_id;
 		$file['size']=filesize($full_path);
+		$file['extension']=File::get_extension($full_path);
 
 		if($existing_file) {
 			$file['id']=$existing_file['id'];
@@ -1031,7 +1034,7 @@ class files extends db {
 		return substr($path, strlen($GO_CONFIG->file_storage_path));
 	}
 
-	function get_files($folder_id, $sortfield='name', $sortorder='ASC', $start=0, $offset=0) {
+	function get_files($folder_id, $sortfield='name', $sortorder='ASC', $start=0, $offset=0, $extensions=array()) {
 		$sql = "SELECT ";
 		if($offset>0) {
 			$sql .= "SQL_CALC_FOUND_ROWS ";
@@ -1044,11 +1047,22 @@ class files extends db {
 		$types .= 'i';
 		$params[]=$folder_id;
 
+		if(count($extensions))
+		{
+			$sql .= " AND extension IN (".implode(',', $extensions).")";
+		}
+
 		$sql .= " ORDER BY ".$this->escape($sortfield.' '.$sortorder);
 		if($offset>0) {
 			$sql .= " LIMIT ".intval($start).",".intval($offset);
 		}
 		return $this->query($sql, $types, $params);
+	}
+
+	function has_children($folder_id){
+		$sql = "SELECT * FROM fs_folders WHERE id=".$this->escape($folder_id).' LIMIT 0,1';
+		$this->query($sql);
+		return $this->next_record();
 	}
 
 	function get_folders($folder_id, $sortfield='name', $sortorder='ASC', $start=0, $offset=0, $authenticate=false) {
@@ -1085,6 +1099,8 @@ class files extends db {
 			$sql .= " LIMIT ".intval($start).",".intval($offset);
 		}
 		return $this->query($sql, $types, $params);
+
+
 	}
 
 	function move_by_paths($sourcepath, $destpath) {

@@ -204,7 +204,8 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 			this.decompressButton.hide();
 			this.downloadButton.hide();
 		 	this.gotaButton.hide();
-		} 	
+		}
+
 		GO.files.FilesContextMenu.superclass.showAt.call(this, xy);
 	}	
 });

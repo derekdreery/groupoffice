@@ -105,6 +105,10 @@ function crawl($path, $parent_id)
 
 if(!isset($_REQUEST['skip_crawl']))
 {
+
+	$db->query("ALTER TABLE `fs_files` ADD INDEX ( `path` ) ");
+	$db->query("ALTER TABLE `fs_folders` ADD INDEX ( `path` ) ");
+
 	$folders = $fs->get_folders($GO_CONFIG->file_storage_path);
 
 	foreach($folders as $folder)

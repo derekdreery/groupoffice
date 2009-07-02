@@ -178,6 +178,7 @@ GO.files.FileBrowser = function(config){
 			layout:'fit',
 			split:true,
 			store: this.gridStore,
+			paging:true,
 			deleteConfig: {
 				scope:this,
 				success:function(){
@@ -481,7 +482,7 @@ GO.files.FileBrowser = function(config){
 			cls:'go-head-tb',
 			items: tbar});
 
-	this.thumbsPanel = new GO.files.ThumbsPanel();
+	this.thumbsPanel = new GO.files.ThumbsPanel({store:this.gridStore});
 	
 	this.thumbsPanel.view.on('click', function(view, index,node,e){
 		var record = view.store.getAt(index);
