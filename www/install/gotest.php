@@ -534,17 +534,20 @@ function save_config($config_obj)
 
 function whereis($cmd)
 {
-	exec('whereis '.$cmd, $return);
-
-	if(isset($return[0]))
+	if(strtoupper(substr(PHP_OS, 0, 3)) != 'WIN')
 	{
-		$locations = explode(' ', $return[0]);
-		if(isset($locations[1]))
+		exec('whereis '.$cmd, $return);
+
+		if(isset($return[0]))
 		{
-			return $locations[1];
+			$locations = explode(' ', $return[0]);
+			if(isset($locations[1]))
+			{
+				return $locations[1];
+			}
 		}
-		return false;
 	}
+	return false;
 }
 
 function return_bytes($val) {
