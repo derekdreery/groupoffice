@@ -144,6 +144,13 @@ class base_db{
 	var $locked = false;
 
 	/**
+	 * Error codes that won't be reported
+	 *
+	 * @var bool
+	 */
+	 var $suppress_errors=array();
+
+	/**
 	 * Constructor a config object with db_host, db_pass, db_user and db_name
 	 * may be passed so it can connect to a different database then the default.
 	 *
@@ -642,10 +649,13 @@ class base_db{
 			$this->error));
 		}elseif($this->halt_on_error=='report')
 		{
-			echo sprintf("<b>Database error:</b> %s<br>\n<b>MySQL Error</b>: %s (%s)<br>\n",
-			$msg,
-			$this->errno,
-			$this->error);
+			if(!in_array($this->errno, $this->suppress_errors))
+			{
+				echo sprintf("<b>Database error:</b> %s<br>\n<b>MySQL Error</b>: %s (%s)<br>\n",
+				$msg,
+				$this->errno,
+				$this->error);
+			}
 		}
 	}
 

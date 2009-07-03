@@ -95,11 +95,17 @@ function add_time($time)
 
 $db = new db();
 $db2 = new db();
+
+//suppress duplicate and drop errors
 $db->halt_on_error = 'report';
+$db->suppress_errors=array(1060, 1091);
+
 $db2->halt_on_error = 'report';
+$db2->suppress_errors=array(1060, 1091);
 
 $db3 = new db();
 $db3->halt_on_error = 'report';
+$db3->suppress_errors=array(1060, 1091);
 
 echo 'Upgrading '.$GO_CONFIG->db_name.$line_break;
 
