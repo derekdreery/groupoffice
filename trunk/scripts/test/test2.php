@@ -6,7 +6,7 @@ if(isset($argv[1]))
 
 
 require('../../www/Group-Office.php');
-
+/*
 require_once ($GO_MODULES->modules['projects']['class_path']."projects.class.inc.php");
 //require_once ($GO_LANGUAGE->get_language_file('projects'));
 $projects = new projects();
@@ -25,5 +25,8 @@ for($i=0;$i<1000;$i++)
 	$project['type_id']=$type['id'];
 
 	$projects->add_project($project, $type);
-}
+}*/
+
+
+files::build_search_index();
 ?>
