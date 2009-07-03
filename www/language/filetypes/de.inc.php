@@ -1,5 +1,4 @@
 <?php
-//Translated with Group-Office translate module
 require($GO_LANGUAGE->get_fallback_base_language_file('filetypes'));
 $lang['filetypes']['unknown']='Unbekannter Dateityp';
 $lang['filetypes']['txt']='Textdatei';
@@ -43,7 +42,7 @@ $lang['filetypes']['tif']='TIF Bild';
 $lang['filetypes']['png']='PNG Bild';
 $lang['filetypes']['php']='PHP Script';
 $lang['filetypes']['ics']='iCal Kalender';
-$lang['filetypes']['vcf']='Kontakt Information';
+$lang['filetypes']['vcf']='Kontaktinformation';
 $lang['filetypes']['wav']='Windows Audioformat';
 $lang['filetypes']['ogg']='OGG Vorbis Audiodatei';
 $lang['filetypes']['mp3']='MPEG3 Audiodatei';
@@ -60,5 +59,5 @@ $lang['filetypes']['swf']='Macromedia Flash Film';
 $lang['filetypes']['fla']='Macromedia Flash Dokument';
 $lang['filetypes']['xlt']='MS-Office Tabellenvorlage';
 $lang['filetypes']['ai']='Adobe Illustrator Datei';
-$lang['filetypes']['eml']='E-Mail-Nachricht';
+$lang['filetypes']['eml']='E-Mail Nachricht';
 ?>
