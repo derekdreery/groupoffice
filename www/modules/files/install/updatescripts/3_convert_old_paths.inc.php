@@ -103,9 +103,10 @@ function crawl($path, $parent_id)
     }
 }
 
+$db->query("ALTER TABLE `fs_files` ADD `extension` VARCHAR( 4 ) NOT NULL ,ADD INDEX ( extension )");
+
 if(!isset($_REQUEST['skip_crawl']))
 {
-
 	$db->query("ALTER TABLE `fs_files` ADD INDEX ( `path` ) ");
 	$db->query("ALTER TABLE `fs_folders` ADD INDEX ( `path` ) ");
 

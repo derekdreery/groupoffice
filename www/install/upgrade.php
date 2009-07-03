@@ -31,6 +31,9 @@ $GO_MODULES->load_modules();
 $db = new db();
 $db->halt_on_error = 'report';
 
+//suppress duplicate and drop errors
+$db->suppress_errors=array(1060, 1091);
+
 $old_version = $GO_CONFIG->get_setting('version');
 if(!$old_version)
 $old_version=0;
@@ -129,6 +132,12 @@ if(isset($RERUN_UPDATE))
 {
 	echo 'Database is up to date now!'.$line_break.$line_break;
 
+	if(isset($CHECK_MODULES))
+	{
+		echo 'Checking modules'.$line_break.$line_break;
+		$GO_EVENTS->fire_event('check_database');
+	}
+
 	if(is_dir($GO_CONFIG->local_path.'cache'))
 	{
 		echo 'Removing cached javascripts from '.$GO_CONFIG->local_path.'cache ...'.$line_break;
@@ -137,15 +146,8 @@ if(isset($RERUN_UPDATE))
 		$fs = new filesystem();
 
 		$fs->delete($GO_CONFIG->local_path.'cache');
-
-
-		if(isset($CHECK_MODULES))
-		{
-			$GO_EVENTS->fire_event('check_database');
-		}
-
-		echo 'Done!'.$line_break.$line_break;
 	}
+	echo 'Done!'.$line_break.$line_break;
 }
 
 
