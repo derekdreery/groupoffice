@@ -808,10 +808,11 @@ class files extends db {
 
 	function update_file($file) {
 
-		$this->cache_file($file['id']);
-
+		
 		//$file['mtime']=time();
 		$this->update_row('fs_files', 'id', $file);
+
+		$this->cache_file($file['id']);
 	}
 
 	function get_folder($id) {
@@ -1553,6 +1554,9 @@ class files extends db {
 		if(is_numeric($file)) {
 			$file = $this->get_file($file);
 		}
+
+		
+
 		if($file) {
 			$share = $fs->find_share($file['folder_id']);
 
@@ -1572,6 +1576,8 @@ class files extends db {
 				$cache['acl_read']=$share['acl_read'];
 				$cache['acl_write']=$share['acl_read'];
 
+				//var_dump($cache);
+
 				$search->cache_search_result($cache);
 			}
 		}
@@ -1585,11 +1591,11 @@ class files extends db {
 
 		$fs = new files();
 
-		$sql = "SELECT path FROM fs_files";
+		$sql = "SELECT * FROM fs_files";
 		$fs->query($sql);
 		$fs1 = new files();
 		while($record = $fs->next_record()) {
-			$fs1->cache_file($GO_CONFIG->file_storage_path.$record['path']);
+			$fs1->cache_file($record);
 		}
 	}
 }
