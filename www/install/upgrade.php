@@ -109,9 +109,9 @@ foreach($GO_MODULES->modules as $update_module)
 
 					$db->query($updates[$i]);
 				}
-
+				
 				$up_module['id']=$update_module['id'];
-				$up_module['version']=count($updates);
+				$up_module['version']=$i+1;//count($updates);
 				$db->update_row('go_modules', 'id', $up_module);
 			}
 			if(!$quiet)
