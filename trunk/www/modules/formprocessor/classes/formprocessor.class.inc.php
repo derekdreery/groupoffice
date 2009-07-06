@@ -206,7 +206,7 @@ class formprocessor{
 						move_uploaded_file($file['tmp_name'], $full_path.'/'.$file['name']);
 						chmod($full_path.'/'.$file['name'], $GO_CONFIG->file_create_mode);
 
-						$fs->import_file($full_path, $files_folder_id);
+						$fs->import_file($full_path.'/'.$file['name'], $files_folder_id);
 					}
 				}
 			}
