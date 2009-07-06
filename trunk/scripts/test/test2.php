@@ -28,5 +28,16 @@ for($i=0;$i<1000;$i++)
 }*/
 
 
-files::build_search_index();
+//files::build_search_index();
+
+for($i=1;$i<=50;$i++)
+{
+	$discount = pow(0.95,$i-1);
+	if($discount<0.3)
+	{
+		exit();
+		$discount = 0.3;
+	}
+	echo $i.' = '.ceil($i*10*$discount)."\n";
+}
 ?>
