@@ -61,7 +61,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
    * The amount of space to reserve for the scrollbar (defaults to 19 pixels)
    * @type Number
    */
-  scrollOffset: 19,
+  scrollOffset: 22,
   
   gridEvents : {},
   
