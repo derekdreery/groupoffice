@@ -1,3 +1,9 @@
+2009/06/24 Version 3.02
+A lot of enhancements were made like all the files at contacts, projects and
+companies are now accessible through logical paths in the file manager.
+Multiple sender aliases can be defined in the e-mail module and a lot of new
+features were added to the projects module.
+
 2009/02/16 Version 3.01
 
 Since the initial 3.0 release we have actively been developing new features. The most 

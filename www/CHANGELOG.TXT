@@ -1,3 +1,7 @@
+2009/07/06 3.02-stable-4
+- Various bugfixes
+- Updated German translation
+
 2009/06/24 3.02-stable-1
 - Changed files module. It uses the database instead of the filesystem now to
   store files. All the modules store the files in logical paths now.
