@@ -9,6 +9,12 @@ if(isset($argv[1]))
 
 require('../../Group-Office.php');
 
+
+if(php_sapi_name()!='cli')
+{
+	$GO_SECURITY->html_authenticate('tools');
+}
+
 $db1 = new db();
 $db2 = new db();
 $deleted=0;
