@@ -122,7 +122,12 @@ class files extends db {
 		if(!$homefolder)
 			return false;
 
-		return $this->is_sub_dir($folder, $homefolder);
+		if($folder['id']==$homefolder['id']){
+			return true;
+		}else
+		{
+			return $this->is_sub_dir($folder, $homefolder);
+		}
 	}
 
 
@@ -1061,7 +1066,7 @@ class files extends db {
 	}
 
 	function has_children($folder_id){
-		$sql = "SELECT * FROM fs_folders WHERE id=".$this->escape($folder_id).' LIMIT 0,1';
+		$sql = "SELECT * FROM fs_folders WHERE parent_id=".$this->escape($folder_id).' LIMIT 0,1';
 		$this->query($sql);
 		return $this->next_record();
 	}
@@ -1080,9 +1085,9 @@ class files extends db {
 		$sql .= "f.* FROM fs_folders f ";
 
 		if($authenticate) {
-			$sql .= "INNER JOIN go_acl a ON (a.acl_id=f.acl_read OR a.acl_id=f.acl_write) ".
+			$sql .= "LEFT JOIN go_acl a ON (a.acl_id=f.acl_read OR a.acl_id=f.acl_write) ".
 					"LEFT JOIN go_users_groups ug ON a.group_id=ug.group_id ".
-					"WHERE (a.user_id=".$this->escape($GO_SECURITY->user_id)." OR ug.user_id=".$this->escape($GO_SECURITY->user_id).") AND ";
+					"WHERE (a.user_id=".$this->escape($GO_SECURITY->user_id)." OR ug.user_id=".$this->escape($GO_SECURITY->user_id)." OR ISNULL(a.acl_id)) AND ";
 		}else {
 			$sql .= " WHERE ";
 		}
@@ -1097,7 +1102,7 @@ class files extends db {
 
 		$sql .= " ORDER BY ".$this->escape($sortfield.' '.$sortorder);
 		if($offset>0) {
-			$sql .= " LIMIT ".intval($start).",".intval($offset);
+		 	$sql .= " LIMIT ".intval($start).",".intval($offset);
 		}
 		return $this->query($sql, $types, $params);
 

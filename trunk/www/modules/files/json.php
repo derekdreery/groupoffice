@@ -92,7 +92,7 @@ try{
 							'expanded'=>true,
                'draggable'=>false,
 							'iconCls'=>'folder-default',
-							'children'=>get_node_children($folder['id']),
+							'children'=>get_node_children($folder['id'], true),
 							'notreloadable'=>true
 						);
 						$response[]=$node;
@@ -103,7 +103,7 @@ try{
 						$home_id = 'users/'.$_SESSION['GO_SESSION']['username'];
 						$home_folder=$files->resolve_path($home_id);
 
-						$folders = $files->get_folders($home_folder['id'],'name', 'ASC',0,200);
+						$folders = $files->get_folders($home_folder['id'],'name', 'ASC',0,200,false);
 
 
 						$node= array(
@@ -112,7 +112,7 @@ try{
 						'iconCls'=>'folder-home',
 						'expanded'=>true,
                         'draggable'=>false,
-						'children'=>get_node_children($home_folder['id']),
+						'children'=>get_node_children($home_folder['id'], false),
 						'notreloadable'=>true
 						);
 						$response[]=$node;
@@ -222,7 +222,7 @@ try{
                         $is_sub_dir = isset($last_path) ? $fs->is_sub_dir($path, $last_path) : false;
                         if(!$is_sub_dir)
                         {
-                            if(!$fs2->get_folders($files->f('id')))
+                            if(!$fs2->get_folders($files->f('id'),'name','ASC',0,1, true))
                             {
                                 $node['children']=array();
                                 $node['expanded']=true;
@@ -242,7 +242,7 @@ try{
 				default:
 
 					$folder = $files->get_folder($_POST['node']);
-					$authenticate = !$files->has_read_permission($GO_SECURITY->user_id, $folder);
+					$authenticate=!$files->is_owner($folder);
 
 					$response = get_node_children($_POST['node'], $authenticate);
 
@@ -377,9 +377,15 @@ try{
 
 
 						$response['write_permission']=$files->has_write_permission($GO_SECURITY->user_id, $curfolder);
-						$authenticate=(!$response['write_permission'] && !$files->has_read_permission($GO_SECURITY->user_id, $curfolder));
 
-                        $path = $files->build_path($curfolder);
+						if(!$response['write_permission'] && !$files->has_read_permission($GO_SECURITY->user_id, $curfolder))
+						{
+							throw new AccessDeniedException();
+						}
+
+						$authenticate=!$files->is_owner($curfolder);
+
+            $path = $files->build_path($curfolder);
 
 						if(isset($_POST['delete_keys']))
 						{
@@ -530,7 +536,7 @@ try{
 
 						//$response['path']=$path;
 
-						$files->get_folders($curfolder['id'],$dsort,$dir,$start,$limit,$authenticate);
+						$files->get_folders($curfolder['id'],$dsort,$dir,$start,$limit,true);
 						
 						while($folder = $files->next_record())
 						{
