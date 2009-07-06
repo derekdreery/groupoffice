@@ -7,12 +7,12 @@ if(isset($argv[1]))
 	define('CONFIG_FILE', $argv[1]);
 }
 
-require('../../Group-Office.php');
+require('../../../Group-Office.php');
 
 
-if(php_sapi_name()!='cli')
+if(php_sapi_name()!='cli' && $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
 {
-	$GO_SECURITY->html_authenticate('tools');
+	die('You must be admin or on the command line');
 }
 
 $db1 = new db();
@@ -26,7 +26,7 @@ function delete_duplicate_folders(){
 	$sql ="SELECT id, parent_id,name FROM fs_folders ORDER BY parent_id ASC, name ASC, ctime ASC";
 	$db1->query($sql);
 
-
+	$deleted_this_time=false;
 
 	$lastrecord['name']='';
 	$lastrecord['parent_id']=-1;
@@ -44,11 +44,16 @@ function delete_duplicate_folders(){
 			$sql = "DELETE FROM fs_folders WHERE id=".$record['id'];
 			$db2->query($sql);
 
+			$deleted_this_time=true;
 			$deleted++;
 		}else
 		{
 			$lastrecord=$record;
 		}
+	}
+	if($deleted_this_time)
+	{
+		delete_duplicate_folders();
 	}
 }
 
