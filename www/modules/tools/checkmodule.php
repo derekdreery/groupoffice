@@ -11,6 +11,11 @@ chdir(dirname(__FILE__));
 
 require_once("../../Group-Office.php");
 
+if(php_sapi_name()!='cli')
+{
+	$GO_SECURITY->html_authenticate('tools');
+}
+
 require_once($GO_MODULES->modules[$argv[1]]['class_path'].$argv[1].'.class.inc.php');
 
 $cls = new $argv[1];
