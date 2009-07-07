@@ -149,7 +149,7 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 		{
 			GO.mailings.writableMailingsStore.load({
 				callback:function(){
-					var values = contact_id>0 ? this.formPanel.form.getValues() : {};
+					var values = GO.util.empty(contact_id) ? this.formPanel.form.getValues() : {};
 					this.show(contact_id);
 					this.formPanel.form.setValues(values);
 				},
