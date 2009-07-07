@@ -2,8 +2,9 @@
 require_once($GO_MODULES->modules['tasks']['class_path'].'tasks.class.inc.php');
 $tasks = new tasks();
 
-$tasklist = $tasks->get_tasklist();
+
 $settings = $tasks->get_settings($GO_SECURITY->user_id);
+$tasklist = $tasks->get_tasklist($settings['default_tasklist_id']);
 ?>
 <script type="text/javascript">
 GO.tasks.defaultTasklist = {id: <?php echo $tasklist['id']; ?>, name: "<?php echo $tasklist['name']; ?>"};

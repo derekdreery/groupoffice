@@ -22,4 +22,6 @@ $updates[]="CREATE TABLE IF NOT EXISTS `ta_settings` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
 $updates[]="ALTER TABLE `ta_tasks` ADD `files_folder_id` INT NOT NULL;";
+
+$updates[]="ALTER TABLE `ta_settings` ADD `default_tasklist_id` INT NOT NULL ";
 ?>

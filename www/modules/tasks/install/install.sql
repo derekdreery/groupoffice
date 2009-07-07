@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS `ta_settings` (
   `reminder_days` int(11) NOT NULL,
   `reminder_time`  VARCHAR( 10 ) NOT NULL,
   `remind` enum('0','1') NOT NULL,
+	`default_tasklist_id` INT NOT NULL,
   PRIMARY KEY  (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

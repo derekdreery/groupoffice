@@ -13,12 +13,17 @@
 
 GO.tasks.SelectTasklist = function(config){
 	
-	Ext.apply(this, config);
-	
-	if(!this.company_name)
+	config = config || {};
+
+	if(!config.hiddenName)
+		config.hiddenName='tasklist_id';
+
+	if(!config.fieldLabel)
 	{
-		this.company_name = '';
+		config.fieldLabel=GO.tasks.lang.tasklist;
 	}
+
+	Ext.apply(this, config);
 	
 	
 	this.store = new GO.data.JsonStore({
@@ -32,8 +37,7 @@ GO.tasks.SelectTasklist = function(config){
 	});	
 
 	GO.tasks.SelectTasklist.superclass.constructor.call(this,{
-		displayField: 'name',
-		hiddenName:'tasklist_id',		
+		displayField: 'name',	
 		valueField: 'id',
 		triggerAction:'all',		
 		mode:'remote',
@@ -42,7 +46,6 @@ GO.tasks.SelectTasklist = function(config){
 		forceSelection: true,
 		typeAhead: true,
 		emptyText:GO.lang.strPleaseSelect,
-		fieldLabel: GO.tasks.lang.tasklist,
 		pageSize: parseInt(GO.settings.max_rows_list)
 	});
 	

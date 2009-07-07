@@ -24,6 +24,11 @@ GO.util.empty = function(v)
 	{
 		return true;
 	}
+
+	if(v=='0')
+	{
+		return true;
+	}
 	
 	if(v=='undefined')
 	{
