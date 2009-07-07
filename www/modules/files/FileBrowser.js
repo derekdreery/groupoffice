@@ -562,6 +562,12 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	pasteMode : 'cut',
 	
 	onStoreLoad : function(store){
+
+		if(!GO.util.empty(store.reader.jsonData.feedback))
+		{
+			alert(store.reader.jsonData.feedback);
+		}
+
 		this.setWritePermission(store.reader.jsonData.write_permission);
 		
 		this.thumbsToggle.toggle(store.reader.jsonData.thumbs=='1');
