@@ -441,9 +441,7 @@ try{
 								 fputs($fp, $template['content']);
 								 fclose($fp);*/
 
-								$file = $files->import_file($new_path,$curfolder['id']);
-
-								$response['new_id']=$file['id'];
+								$response['new_id'] = $files->import_file($new_path,$curfolder['id']);
 							}
 
 							try{

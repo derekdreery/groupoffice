@@ -745,7 +745,8 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 				callback: function(){
 					if(store.reader.jsonData.new_id)
 					{
-						GO.files.openFile(store.getById(store.reader.jsonData.new_id));
+						var record = store.getById('f:'+store.reader.jsonData.new_id);
+						GO.files.openFile(record);
 					}
 				},
 				scope: this
