@@ -25,6 +25,7 @@ GO.tasks.SettingsPanel = function(config) {
 	config.title = GO.tasks.lang.tasks;
 	config.hideMode='offsets';
 	config.layout = 'form';
+	config.labelWidth=125;
 	config.bodyStyle='padding:5px;';
 	config.items = {
 		xtype:'fieldset',
@@ -54,7 +55,12 @@ GO.tasks.SettingsPanel = function(config) {
 				value : eight.format(GO.settings['time_format']),
 				fieldLabel : GO.lang.strTime,
 				disabled : true
-			})]
+			}),
+			new GO.form.HtmlComponent({html:'<br />'}),
+			this.selectTaskList = new GO.tasks.SelectTasklist({
+					fieldLabel : GO.tasks.lang.defaultTasklist,
+					hiddenName : 'default_tasklist_id'
+				})]
 		};
 	
 	GO.tasks.SettingsPanel.superclass.constructor.call(this, config);
@@ -62,7 +68,7 @@ GO.tasks.SettingsPanel = function(config) {
 
 Ext.extend(GO.tasks.SettingsPanel, Ext.Panel, {
 			onLoadSettings : function(action) {
-
+				this.selectTaskList.setRemoteText(action.result.data.default_tasklist_name);
 			},
 			
 			onSaveSettings : function(){

@@ -29,3 +29,4 @@ GO.tasks.lang.scheduleCall='Telefoongesprek plannen';
 GO.tasks.lang.call='Bellen';
 GO.tasks.lang.taskDefaults='Standaard instellingen voor taken';
 GO.tasks.lang.daysBeforeStart='Dagen voor aanvang';
+GO.tasks.lang.defaultTasklist='Standaard takenlijst';

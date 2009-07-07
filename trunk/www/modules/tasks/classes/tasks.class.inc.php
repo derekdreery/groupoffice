@@ -82,6 +82,14 @@ class tasks extends db
 			$tasks = new tasks();
 			
 			$settings = $tasks->get_settings($_POST['user_id']);
+
+			$tasklist = $tasks->get_tasklist($settings['default_tasklist_id']);
+
+			if($tasklist)
+			{
+				$settings['default_tasklist_id']=$tasklist['id'];
+				$settings['default_tasklist_name']=$tasklist['name'];
+			}
 			$response['data']=array_merge($response['data'], $settings);
 		}
 	}
@@ -101,6 +109,8 @@ class tasks extends db
 				
 			if(isset($_POST['reminder_time']))
 				$settings['reminder_time']=$_POST['reminder_time'];
+
+			$settings['default_tasklist_id']=$_POST['default_tasklist_id'];
 			
 			$tasks->update_settings($settings);
 		}
