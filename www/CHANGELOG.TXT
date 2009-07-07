@@ -1,5 +1,5 @@
 2009/07/07 3.02-stable-5
-- Project templates extended with subprojects, tasks and events
+- Project templates extended with subprojects and tasks
 - A responsible user can be selected at a project and you can filter on that.
 - Script to sync files with the filesystem was added.
 - Changed lost password procedure. Now an e-mail is sent with a link to click on
