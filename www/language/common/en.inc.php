@@ -173,21 +173,14 @@ $lang['common']['files']='Files';
 $lang['common']['email']='E-mail';
 $lang['common']['total']='Total';
 
-$lang['common']['lost_password_subject']='New password';
-$lang['common']['lost_password_body']='%s,<br />
-<br />
-You requested a new password for %s.<br />
-<br />
-Your new login details are:<br />
-<br />
-Username: %s<br />
-Password: %s';
-
-$lang['common']['lost_password_error']='Could not find the supplied e-mail address.';
-$lang['common']['lost_password_success']='A new password has been sent to your e-mail address.';
 
 $lang['common']['confirm_leave']='If you leave Group-Office you will loose unsaved changes';
 $lang['common']['dataSaved']='The data was saved succesfully';
 
 $lang['common']['uploadMultipleFiles'] = 'Click at \'Browse\' to select files and/or folders from your computer. Click at \'Upload\' to transfer the files to Group-Office. This window will automatically close when the transfer is completed.';
 
+
+$lang['common']['loginToGO']='Click here to login to Group-Office';
+$lang['common']['links']='Links';
+$lang['common']['GOwebsite']='Group-Office website';
+$lang['common']['GOisAProductOf']='<i>Group-Office</i> is a product of <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';

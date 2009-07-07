@@ -159,21 +159,13 @@ $lang['common']['files']='Bestanden';
 $lang['common']['email']='E-mail';
 $lang['common']['total']='Totaal';
 
-
-$lang['common']['lost_password_subject']='Nieuw wachtwoord';
-$lang['common']['lost_password_body']='%s,<br />
-<br />
-U heeft een nieuw wachtwoord aangevraagd voor %s.<br />
-<br />
-Uw nieuwe inloggegevens zijn:<br />
-<br />
-Gebruikersnaam: %s<br />
-Wachtwoord: %s';
-
-$lang['common']['lost_password_error']='Het e-mail adres is onbekend.';
-$lang['common']['lost_password_success']='Een nieuw wachtwoord is naar uw e-mail adres verzonden.';
-
 $lang['common']['confirm_leave']='Wanneer u Group-Office verlaat gaat onopgeslagen werk verloren.';
 
 $lang['common']['dataSaved']='De gegevens zijn succesvol opgeslagen';
 $lang['common']['uploadMultipleFiles'] = 'Klik op \'Bladeren\' om bestanden en/of mappen van uw PC te selecteren. Klik daarna op \'Upload\' om de bestanden naar Group-Office te verzenden. Dit venster zal automatisch sluiten als de upload voltooid is.';
+
+
+$lang['common']['loginToGO']='Klik hier om in te loggen bij Group-Office';
+$lang['common']['links']='Links';
+$lang['common']['GOwebsite']='Group-Office website';
+$lang['common']['GOisAProductOf']='<i>Group-Office</i> is een product van <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';

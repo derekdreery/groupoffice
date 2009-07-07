@@ -38,39 +38,38 @@ try{
 			break;
 		
 		case 'lost_password':
+
+			require($GO_LANGUAGE->get_base_language_file('lostpassword'));
 			
 			if($user = $GO_USERS->get_user_by_email(($_POST['email'])))
 			{
-				$new_password = $GO_USERS->random_password();
 				
-				$up_user['id']=$user['id'];
-				$up_user['password']=$new_password;
-				
-				$GO_USERS->update_profile($up_user);
+
+				$url = $GO_CONFIG->full_url.'change_lost_password.php?username='.$user['username'].'&code1='.md5($user['password']).'&code2='.md5($user['lastlogin'].$user['registration_time']);
 		
 				$salutation = $lang['common']['default_salutation'][$user['sex']];
 				if(!empty($user['middle_name']))
 					$salutation .= ' '.$user['middle_name'];
 				$salutation .= ' '.$user['last_name'];
 
-				$mail_body = sprintf($lang['common']['lost_password_body'],
+				$mail_body = sprintf($lang['lostpassword']['lost_password_body'],
 					$salutation,
 					$GO_CONFIG->title,
 					$user['username'],
-					$new_password);
+					$url);
 				
 				require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
-				$swift = new GoSwift($user['email'], $lang['common']['lost_password_subject']);
-				$swift->set_body($mail_body);
+				$swift = new GoSwift($user['email'], $lang['lostpassword']['lost_password_subject']);
+				$swift->set_body($mail_body,'plain');
 				$swift->set_from($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
 				$swift->sendmail();				
 				
 				$response['success']=true;
-				$response['feedback']=$lang['common']['lost_password_success'];
+				$response['feedback']=$lang['lostpassword']['lost_password_success'];
 			}else
 			{
 				$response['success']=false;
-				$response['feedback']=$lang['common']['lost_password_error'];
+				$response['feedback']=$lang['lostpassword']['lost_password_error'];
 			}
 			
 			break;
