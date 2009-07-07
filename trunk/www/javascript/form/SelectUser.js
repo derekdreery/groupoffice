@@ -16,7 +16,13 @@
   * param user_id: the initial user_id 
   */
  
- GO.form.SelectUser = function(config){	
+ GO.form.SelectUser = function(config){
+
+	config = config || {};
+
+	if(typeof(config.allowBlank)=='undefined')
+		config.allowBlank=false;
+
 	Ext.apply(this, config);
 	
 	this.store = new GO.data.JsonStore({
@@ -29,13 +35,14 @@
 		remoteSort: true
 	});
 	this.store.setDefaultSort('name', 'asc');
-	
+
+	if(!this.hiddenName)
+		this.hiddenName='user_id';
 	
 	this.setRemoteValue(GO.settings.user_id, GO.settings.name);
 	
 	GO.form.SelectUser.superclass.constructor.call(this,{
-		displayField: 'name',
-		hiddenName:'user_id',
+		displayField: 'name',		
 		value: GO.settings.user_id,
 		valueField: 'id',
 		triggerAction: 'all',
@@ -45,7 +52,7 @@
 	});
 }
 
-Ext.extend(GO.form.SelectUser, GO.form.ComboBox,{
+Ext.extend(GO.form.SelectUser, GO.form.ComboBoxReset,{
 	setRemoteValue : function(user_id, name)
 	{
 		var UserRecord = Ext.data.Record.create([

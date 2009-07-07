@@ -1,11 +1,22 @@
+2009/07/07 3.02-stable-5
+- Project templates extended with subprojects, tasks and events
+- A responsible user can be selected at a project and you can filter on that.
+- Script to sync files with the filesystem was added.
+- Changed lost password procedure. Now an e-mail is sent with a link to click on
+	where the user can change the password. This method is more secure because
+	with the old method is was possible to change someone's password if you knew
+	the e-mail address.
+
 2009/07/06 3.02-stable-4
 - Various bugfixes
 - Updated German translation
 
 2009/06/24 3.02-stable-1
-- Changed files module. It uses the database instead of the filesystem now to
-  store files. All the modules store the files in logical paths now.
+- Changed files module. All the modules store the files in logical paths now.
   eg. The files of a contact are in contacts/Addressbook name/S/Merijn Schering
+	All the filesystem entries are stored in the database now for better performance.
+	The downside is that the database needs to be synced when changes on the
+	filesystem are made by another program like Samba, FTP, WebDAV etc.
 
 - Multiple e-mail sender aliases per mailbox can be defined now.
 - Store a default e-mail template so it always shows on top.
