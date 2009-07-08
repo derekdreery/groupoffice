@@ -7,6 +7,8 @@ if(isset($argv[1]))
 	define('CONFIG_FILE', $argv[1]);
 }
 
+chdir(dirname(__FILE__));
+
 require('../../../Group-Office.php');
 
 $line_break = php_sapi_name()=='cli' ? "\n" : '<br />';
