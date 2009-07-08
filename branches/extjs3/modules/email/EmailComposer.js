@@ -599,11 +599,12 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 					}
 
 					this.render(Ext.getBody());
-							
-					this.showCC(false);
-					this.showBCC(false);
+this.show(config);
+                                        this.showCC(false);
+                                        this.showBCC(false);
 
-					this.show(config);
+
+					
 					return;
 
 				} else {
@@ -635,11 +636,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 		} else {
 			this.updateAttachmentsButton();
 
-			this.toComboVisible = true;
-			this.showMenuButton.setDisabled(false);
-			this.toCombo.getEl().up('.x-form-item').setDisplayed(true);
-			this.sendURL = GO.settings.modules.email.url + 'action.php';
-			this.saveButton.setDisabled(false);
+			
 
 			if (config.template_id == undefined && this.templatesStore
 				&& this.templatesStore.getTotalCount() == 1) {
@@ -664,6 +661,8 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			if (config.values) {
 				this.formPanel.form.setValues(config.values);
 			}
+
+                        GO.email.EmailComposer.superclass.show.call(this);
 			
 			if(!config.keepEditingMode)
 			{
@@ -673,7 +672,13 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 					this.encryptCheck.setChecked(false, true);
 			}
 			
-			GO.email.EmailComposer.superclass.show.call(this);
+			
+
+                        this.toComboVisible = true;
+			this.showMenuButton.setDisabled(false);
+			this.toCombo.getEl().up('.x-form-item').setDisplayed(true);
+			this.sendURL = GO.settings.modules.email.url + 'action.php';
+			this.saveButton.setDisabled(false);
 			
 			if(config.move)
 			{

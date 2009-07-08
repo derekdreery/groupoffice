@@ -108,7 +108,7 @@ GO.form.ColorField =  Ext.extend(function(config){
             return true;
         }
         if(value.length<1) {
-            this.el.setStyle({
+            this.getEl().setStyle({
                 'background-color':'#' + this.defaultColor
             });
             if(!this.allowBlank) {
@@ -134,7 +134,7 @@ GO.form.ColorField =  Ext.extend(function(config){
     // was previously cleared so the color would show through.
     markInvalid : function( msg ) {
         GO.form.ColorField.superclass.markInvalid.call(this, msg);
-        this.el.setStyle({
+        this.getEl().setStyle({
             'background-image': 'url(../lib/resources/images/default/grid/invalid_line.gif)'
         });
     },
@@ -165,16 +165,16 @@ GO.form.ColorField =  Ext.extend(function(config){
     setColor : function(hex) {
         this.curColor = hex;
 	
-        this.el.setStyle( {
+        this.getEl().setStyle( {
             'background-color': '#' + hex,
             'background-image': 'none'
         });
         if(!this.showHexValue) {
-            this.el.setStyle({
+            this.getEl().setStyle({
                 'text-indent': '-100px'
             });
             if(Ext.isIE) {
-                this.el.setStyle({
+                this.getEl().setStyle({
                     'margin-left': '100px'
                 });
             }
@@ -210,7 +210,7 @@ GO.form.ColorField =  Ext.extend(function(config){
             return;
         }
       
-        this.menu.show(this.el, "tl-bl?");
+        this.menu.show(this.getEl(), "tl-bl?");
     }
 });
 
