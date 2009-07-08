@@ -956,7 +956,7 @@ class GO_CONFIG
 	 * @access public
 	 */
       function set_full_url() {
-      	if(isset($_SERVER["SERVER_NAME"]))
+      	if(isset($_SERVER["HTTP_HOST"]))
       	{
       		$https = isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on" || $_SERVER["HTTPS"] == "1");
       		$url = 'http';
@@ -966,12 +966,11 @@ class GO_CONFIG
       		}
       		$url .= "://";
       		if ((!$https && $_SERVER["SERVER_PORT"] != "80") || ($https && $_SERVER["SERVER_PORT"] != "443")) {
-      			$url .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$this->host;
+      			$url .= $_SERVER["HTTP_HOST"].":".$_SERVER["SERVER_PORT"].$this->host;
       		} else {
-      			$url .= $_SERVER["SERVER_NAME"].$this->host;
+      			$url .= $_SERVER["HTTP_HOST"].$this->host;
       		}
       		$this->full_url=$url;
-
       	}
       }
 
