@@ -55,6 +55,7 @@ function test_system(){
 	
 	$tests=array();
 
+	
 	$test['name']='PHP version';
 	$test['pass']=function_exists('version_compare') && version_compare( phpversion(), "5.2", ">=");
 	$test['feedback']='Fatal error: Your PHP version is too old to run Group-Office. PHP 5.2 or higher is required';
@@ -202,7 +203,7 @@ function test_system(){
 
 	$tests[]=$test;
 
-	if(is_dir('../modules/professional'))
+	if(is_dir('../modules/professional') && isset($GO_CONFIG))
 	{
 		$test['name']='Professional license';
 		$check_url = $GO_CONFIG->full_url.'modules/professional/checklicense.php';
@@ -233,6 +234,17 @@ function test_system(){
 	$test['fatal']=true;
 
 	$tests[]=$test;
+
+
+	$ze1compat=ini_get('zend.ze1_compatibility_mode');
+
+	$test['name']='zend.ze1_compatibility_mode';
+	$test['pass']=empty($ze1compat);
+	$test['feedback']='Fatal error: zend.ze1_compatibility_mode is enabled. Group-Office can\'t run with this setting enabled';
+	$test['fatal']=true;
+
+	$tests[]=$test;
+
 	
 	
 	if(!empty($GO_CONFIG->title))
