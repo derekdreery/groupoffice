@@ -52,20 +52,21 @@ if(empty($path))
 
 	foreach($folders as $folder)
 	{
+		$dbfolder = $files->resolve_path($files->strip_server_path($folder['path']));
 		echo 'Syncing '.$folder['path']."\n";
-		$files->import_folder($folder['path'], 0);
+		$files->sync_folder($dbfolder['id'], true);
 	}
 }else
 {
-	$parent = $files->resolve_path(dirname($path));
+	$dbfolder = $files->resolve_path($path);
 	
 	if(!$parent)
 	{
-		die('Fatal error! could not find parent folder of '.$path.' in database. Try to sync without path parameter first.');
+		die('Fatal error! could not find database folder of '.$path.' in database. Try to sync without path parameter first.');
 	}
 
 	echo 'Syncing '.$path."\n";
-	$files->import_folder($GO_CONFIG->file_storage_path.$path, $parent['id']);
+	$files->sync_folder($dbfolder['id'], true);
 }
 
 echo "Done!\n";

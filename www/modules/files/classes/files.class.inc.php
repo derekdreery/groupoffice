@@ -739,7 +739,7 @@ class files extends db {
 		return $folder['id'];
 	}
 
-	function sync_folder($folder_id){
+	function sync_folder($folder_id, $recursive=false){
 		global $GO_CONFIG;
 		$fs = new filesystem();
 		$folder = $this->get_folder($folder_id);
@@ -765,15 +765,16 @@ class files extends db {
 		}
 		$fsfolders = $fs->get_folders($full_path);
 
-		debug($fsfolders);
-		debug($dbfolders);
-
 		foreach($fsfolders as $fsfolder)
 		{
-			if(!in_array($fsfolder['name'], $dbfolders_names))
+			$key = array_search($fsfolder['name'], $dbfolders_names);
+			if($key===false)
 			{
 				$this->import_folder($fsfolder['path'], $folder_id);
+			}elseif($recursive){
+				$this->sync_folder($dbfolders[$key]['id'], true);
 			}
+
 		}
 
 		foreach($dbfolders as $dbfolder)
@@ -1364,7 +1365,7 @@ class files extends db {
 
 
 		$path = $GO_CONFIG->file_storage_path.$this->build_path($file['folder_id']).'/'.$file['name'];
-		return unlink($path);
+		return @unlink($path);
 	}
 
 	function get_content_json($folder_id, $sort='name', $dir='ASC', $filter=null) {

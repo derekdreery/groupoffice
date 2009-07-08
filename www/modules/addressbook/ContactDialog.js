@@ -144,6 +144,8 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 		{
 			this.render(Ext.getBody());
 		}
+
+		
 		
 		if(GO.mailings && !GO.mailings.writableMailingsStore.loaded)
 		{
@@ -156,7 +158,11 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 				scope:this
 			});
 		}else
-		{				
+		{
+			var tempAddressbookID = this.personalPanel.formAddressBooks.getValue();
+			this.formPanel.form.reset();
+			this.personalPanel.formAddressBooks.setValue(tempAddressbookID);
+
 			if(contact_id)
 			{
 				this.contact_id = contact_id;
@@ -189,12 +195,7 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 			if(this.contact_id > 0)
 			{
 				this.loadContact(contact_id);
-			} else {				
-				var tempAddressbookID = this.personalPanel.formAddressBooks.getValue();
-
-				this.formPanel.form.reset();
-							
-				this.personalPanel.formAddressBooks.setValue(tempAddressbookID);	
+			} else {	
 				GO.addressbook.ContactDialog.superclass.show.call(this);
 			}	
 			this.tabPanel.setActiveTab(0);
