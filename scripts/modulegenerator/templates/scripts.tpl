@@ -1,1 +1,0 @@
-modules/{module}/MainPanel.js
