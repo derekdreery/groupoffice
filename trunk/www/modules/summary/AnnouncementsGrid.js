@@ -21,35 +21,35 @@ GO.summary.AnnouncementsGrid = function(config){
 	config.autoScroll=true;
 	config.split=true;
 	config.store = new GO.data.JsonStore({
-	    url: GO.settings.modules.summary.url+ 'json.php',
-	    baseParams: {
-	    	task: 'announcements'
-	    	},
-	    root: 'results',
-	    id: 'id',
-	    totalProperty:'total',
-	    fields: ['id','user_name','due_time','ctime','mtime','title'],
-	    remoteSort: true
+		url: GO.settings.modules.summary.url+ 'json.php',
+		baseParams: {
+			task: 'announcements'
+		},
+		root: 'results',
+		id: 'id',
+		totalProperty:'total',
+		fields: ['id','user_name','due_time','ctime','mtime','title'],
+		remoteSort: true
 	});
 	config.paging=true;
 	var columnModel =  new Ext.grid.ColumnModel([
-	  {
-			header: GO.summary.lang.title, 
-			dataIndex: 'title'
-		},{
-			header: GO.lang.strOwner, 
-			dataIndex: 'user_name',
-		  sortable: false
-		},{
-			header: GO.summary.lang.dueTime, 
-			dataIndex: 'due_time'
-		},{
-			header: GO.lang.strCtime, 
-			dataIndex: 'ctime'
-		},{
-			header: GO.lang.strMtime, 
-			dataIndex: 'mtime'
-		}
+	{
+		header: GO.summary.lang.title,
+		dataIndex: 'title'
+	},{
+		header: GO.lang.strOwner,
+		dataIndex: 'user_name',
+		sortable: false
+	},{
+		header: GO.summary.lang.dueTime,
+		dataIndex: 'due_time'
+	},{
+		header: GO.lang.strCtime,
+		dataIndex: 'ctime'
+	},{
+		header: GO.lang.strMtime,
+		dataIndex: 'mtime'
+	}
 
 	]);
 	columnModel.defaultSortable = true;
@@ -57,38 +57,40 @@ GO.summary.AnnouncementsGrid = function(config){
 	config.view=new Ext.grid.GridView({
 		autoFill: true,
 		forceFit: true,
-		emptyText: GO.lang['strNoItems']		
+		emptyText: GO.lang['strNoItems']
 	});
 	config.sm=new Ext.grid.RowSelectionModel();
 	config.loadMask=true;
+
 	this.announcementDialog = new GO.summary.AnnouncementDialog();
-		this.announcementDialog.on('save', function(){   
-			this.store.reload();	    			    			
-		}, this);
+	this.announcementDialog.on('save', function(){
+		this.store.reload();
+	}, this);
+	
 	config.tbar=[{
-			iconCls: 'btn-add',							
-			text: GO.lang['cmdAdd'],
-			cls: 'x-btn-text-icon',
-			handler: function(){
-	    	this.announcementDialog.show();
-			},
-			scope: this
-		},{
-			iconCls: 'btn-delete',
-			text: GO.lang['cmdDelete'],
-			cls: 'x-btn-text-icon',
-			handler: function(){
-				this.deleteSelected();
-			},
-			scope: this
-		}];
+		iconCls: 'btn-add',
+		text: GO.lang['cmdAdd'],
+		cls: 'x-btn-text-icon',
+		handler: function(){
+			this.announcementDialog.show();
+		},
+		scope: this
+	},{
+		iconCls: 'btn-delete',
+		text: GO.lang['cmdDelete'],
+		cls: 'x-btn-text-icon',
+		handler: function(){
+			this.deleteSelected();
+		},
+		scope: this
+	}];
 	GO.summary.AnnouncementsGrid.superclass.constructor.call(this, config);
 	this.on('rowdblclick', function(grid, rowIndex){
 		var record = grid.getStore().getAt(rowIndex);	
 		this.announcementDialog.show(record.data.id);
-		}, this);
+	}, this);
 };
 Ext.extend(GO.summary.AnnouncementsGrid, GO.grid.GridPanel,{
 
 	
-});
+	});

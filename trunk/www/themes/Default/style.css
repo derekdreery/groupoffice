@@ -1,3 +1,7 @@
+.go-colored-table .even{
+	background-color:#f1f1f1 !important;
+}
+
 .x-date-weeknumber{
 	width:10px;
 }
