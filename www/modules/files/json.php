@@ -103,7 +103,7 @@ try{
 						$home_id = 'users/'.$_SESSION['GO_SESSION']['username'];
 						$home_folder=$files->resolve_path($home_id);
 
-						$folders = $files->get_folders($home_folder['id'],'name', 'ASC',0,200,false);
+						$files->get_folders($home_folder['id'],'name', 'ASC',0,200,false);
 
 
 						$node= array(
@@ -111,7 +111,7 @@ try{
 						'id'=>$home_folder['id'],
 						'iconCls'=>'folder-home',
 						'expanded'=>true,
-                        'draggable'=>false,
+            'draggable'=>false,
 						'children'=>get_node_children($home_folder['id'], false),
 						'notreloadable'=>true
 						);
@@ -122,8 +122,8 @@ try{
 						'text'=>$lang['files']['shared'],
 						'id'=>'shared',
 						'readonly'=>true,
-                        'draggable'=>false,
-                        'allowDrop'=>false,
+						'draggable'=>false,
+						'allowDrop'=>false,
 						'iconCls'=>'folder-shares'/*,
 						'expanded'=>true,
 						'children'=>$children,
@@ -200,37 +200,38 @@ try{
 					$count = 0;
 					while ($folder = $files->next_record())
 					{
-                        //$is_sub_dir = isset($last_folder) ? $files->is_sub_dir($share_id, $last_folder) : false;
+							//$is_sub_dir = isset($last_folder) ? $files->is_sub_dir($share_id, $last_folder) : false;
 
-                        $node = array(
-                                'text'=>$folder['name'],
-                                'id'=>$folder['id'],
-                                'iconCls'=>'folder-default',
-                                'notreloadable'=>true
-                        );
+							$node = array(
+											'text'=>$folder['name'],
+											'id'=>$folder['id'],
+											'iconCls'=>'folder-default',
+											'notreloadable'=>true
+							);
 
-                        $path = $fs2->build_path($folder);
-                        $nodes[$path]=$node;
-                    }
-                    ksort($nodes);
+							$path = $fs2->build_path($folder);
+							$nodes[$path]=$node;
+					}
+					ksort($nodes);
 
-                    $fs = new filesystem();
+					$fs = new filesystem();
 
 
-                    foreach($nodes as $path=>$node)
-                    {
-                        $is_sub_dir = isset($last_path) ? $fs->is_sub_dir($path, $last_path) : false;
-                        if(!$is_sub_dir)
-                        {
-                            if(!$fs2->get_folders($files->f('id'),'name','ASC',0,1, true))
-                            {
-                                $node['children']=array();
-                                $node['expanded']=true;
-                            }
-                            $response[]=$node;
-                            $last_path=$path;
-                        }
-                    }
+					foreach($nodes as $path=>$node)
+					{
+							$is_sub_dir = isset($last_path) ? $fs->is_sub_dir($path, $last_path) : false;
+							if(!$is_sub_dir)
+							{
+								//var_dump($node);
+									if(!$fs2->has_children($node['id']))
+									{										
+											$node['children']=array();
+											$node['expanded']=true;
+									}
+									$response[]=$node;
+									$last_path=$path;
+							}
+					}
 
 					break;
 
@@ -282,48 +283,48 @@ try{
 						}
 						$response['write_permission']=false;
 
-                        $fs2 = new files();
+						$fs2 = new files();
 
 
-                        $share_count = $files->get_authorized_shares($GO_SECURITY->user_id);
+						$share_count = $files->get_authorized_shares($GO_SECURITY->user_id);
 
-                        $folders=array();
+						$folders=array();
 
-                        $count = 0;
-                        while ($folder = $files->next_record())
-                        {
-                            $path = $fs2->build_path($folder);
-                            $folders[$path]=$folder;
-                        }
-                        ksort($folders);
+						$count = 0;
+						while ($folder = $files->next_record())
+						{
+								$path = $fs2->build_path($folder);
+								$folders[$path]=$folder;
+						}
+						ksort($folders);
 
-                        $fs = new filesystem();
+						$fs = new filesystem();
 
 
-                        foreach($folders as $path=>$folder)
-                        {
-                            $is_sub_dir = isset($last_path) ? $fs->is_sub_dir($path, $last_path) : false;
-                            if(!$is_sub_dir)
-                            {
-                                 $folder['thumb_url']=$GO_THEME->image_url.'128x128/filetypes/folder.png';
-                                $class='filetype-folder';
+						foreach($folders as $path=>$folder)
+						{
+								$is_sub_dir = isset($last_path) ? $fs->is_sub_dir($path, $last_path) : false;
+								if(!$is_sub_dir)
+								{
+										 $folder['thumb_url']=$GO_THEME->image_url.'128x128/filetypes/folder.png';
+										$class='filetype-folder';
 
-                                $folder['type_id']='d:'.$folder['id'];
-                                $folder['grid_display']='<div class="go-grid-icon '.$class.'">'.$folder['name'].'</div>';
-                                $folder['type']=$lang['files']['folder'];
-                                $folder['timestamp']=$folder['ctime'];
-                                $folder['mtime']=Date::get_timestamp($folder['ctime']);
-                                $folder['size']='-';
-                                $folder['extension']='folder';
-                                if($folder['readonly']=='1')
-                                {
-                                    $folder['draggable']=false;
-                                }
-                                $response['results'][]=$folder;
+										$folder['type_id']='d:'.$folder['id'];
+										$folder['grid_display']='<div class="go-grid-icon '.$class.'">'.$folder['name'].'</div>';
+										$folder['type']=$lang['files']['folder'];
+										$folder['timestamp']=$folder['ctime'];
+										$folder['mtime']=Date::get_timestamp($folder['ctime']);
+										$folder['size']='-';
+										$folder['extension']='folder';
+										if($folder['readonly']=='1')
+										{
+												$folder['draggable']=false;
+										}
+										$response['results'][]=$folder;
 
-                                $last_path=$path;
-                            }
-                        }
+										$last_path=$path;
+								}
+						}
 
 					}elseif($_POST['id'] == 'new')
 					{
@@ -457,21 +458,21 @@ try{
 										throw new Exception($lang['files']['filenameExists']);
 									}
 
-                                    $compress_sources = array_map('utf8_basename', $compress_sources);
+                  $compress_sources = array_map('utf8_basename', $compress_sources);
 
 									chdir($full_path);
 
-                                    $cmd = $GO_CONFIG->cmd_zip.' -r "'.$archive_name.'" "'.implode('" "',$compress_sources).'"';
+                  $cmd = $GO_CONFIG->cmd_zip.' -r "'.$archive_name.'" "'.implode('" "',$compress_sources).'"';
 
 									exec($cmd, $output);
 
-                                    if(!file_exists($full_path.'/'.$archive_name))
-                                    {
-                                        throw new Exception('Command failed: '.$cmd."<br /><br />".implode("<br />", $output));
-                                    }
+									if(!file_exists($full_path.'/'.$archive_name))
+									{
+											throw new Exception('Command failed: '.$cmd."<br /><br />".implode("<br />", $output));
+									}
 
 									$response['compress_success']=true;;
-                                    $files->import_file($full_path.'/'.$archive_name,$curfolder['id']);
+                  $files->import_file($full_path.'/'.$archive_name,$curfolder['id']);
 
 								}
 							}catch(Exception $e)
@@ -483,7 +484,7 @@ try{
 							try{
 								if(isset($_POST['decompress_sources']))
 								{
-                                    $full_path=$GO_CONFIG->file_storage_path.$path;
+                  $full_path=$GO_CONFIG->file_storage_path.$path;
 
 									chdir($full_path);
 									$decompress_sources = json_decode($_POST['decompress_sources']);
@@ -506,8 +507,8 @@ try{
 
 									}
 
-                                    //TODO sync only missing files
-                                    $files->import_folder($full_path, $curfolder['parent_id']);
+									//TODO sync only missing files
+									$files->import_folder($full_path, $curfolder['parent_id']);
 
 									//TODO error handling
 									$response['decompress_success']=true;
@@ -578,28 +579,33 @@ try{
 							$extensions = explode(',',$_POST['files_filter']);
 						}
 
-						$files->get_files($curfolder['id'], $fsort, $dir, $file_start, $file_limit);						
-
-									
-						while($file = $files->next_record())
+						if($file_start>=0)
 						{
-							//$extension = File::get_extension($file['name']);
+							$files->get_files($curfolder['id'], $fsort, $dir, $file_start, $file_limit);
 
-							//if(!isset($extensions) || in_array($extension, $extensions))
-							//{
-								$file['path']=$path.'/'.$file['name'];
-								$file['type_id']='f:'.$file['id'];
-								$file['thumb_url']=$files->get_thumb_url($file['path']);
-								//$file['extension']=$extension;
-								$file['grid_display']='<div class="go-grid-icon filetype filetype-'.$file['extension'].'">'.$file['name'].'</div>';
-								$file['type']=File::get_filetype_description($file['extension']);
-								$file['timestamp']=$file['mtime'];
-								$file['mtime']=Date::get_timestamp($file['mtime']);
-								//$file['size']=Number::format_size($file['size']);
-								$response['results'][]=$file;
-							//}
+
+							while($file = $files->next_record())
+							{
+								//$extension = File::get_extension($file['name']);
+
+								//if(!isset($extensions) || in_array($extension, $extensions))
+								//{
+									$file['path']=$path.'/'.$file['name'];
+									$file['type_id']='f:'.$file['id'];
+									$file['thumb_url']=$files->get_thumb_url($file['path']);
+									//$file['extension']=$extension;
+									$file['grid_display']='<div class="go-grid-icon filetype filetype-'.$file['extension'].'">'.$file['name'].'</div>';
+									$file['type']=File::get_filetype_description($file['extension']);
+									$file['timestamp']=$file['mtime'];
+									$file['mtime']=Date::get_timestamp($file['mtime']);
+									//$file['size']=Number::format_size($file['size']);
+									$response['results'][]=$file;
+								//}
+							}
+						}else
+						{
+							$files->get_files($curfolder['id'], $fsort, $dir, 0, 1);
 						}
-						
 						$response['total']+=$files->found_rows();
 					}
 

@@ -48,17 +48,19 @@ class users extends db
 
 				$folder = $files->resolve_path($home_dir,true,1,'1');
 
+				$up_folder['id']=$folder['id'];
 				if(empty($folder['acl_read']))
 				{
 					echo "Sharing users/".$GO_USERS->f('username').$line_break;
-
-					$up_folder['id']=$folder['id'];
+					
 					$up_folder['acl_read']=$GO_SECURITY->get_new_acl('files', $GO_USERS->f('id'));
 					$up_folder['acl_write']=$GO_SECURITY->get_new_acl('files', $GO_USERS->f('id'));
-
-					$files->update_folder($up_folder);
 				}
-				$files->set_readonly($folder['id']);
+				$up_folder['user_id']=$GO_USERS->f('id');
+				$up_folder['readonly']='1';
+				$up_folder['visible']='1';
+				$files->update_folder($up_folder);
+				//$files->set_readonly($folder['id']);
 
 				$home_dir = 'adminusers/'.$GO_USERS->f('username');
 
@@ -80,6 +82,10 @@ class users extends db
 					$files->update_folder($up_folder);
 				}
 				$files->set_readonly($folder['id']);
+
+				$up_user['id']=$GO_USERS->f('id');
+				$up_user['files_folder_id']=$folder['id'];
+				$files->update_row('go_users', 'id', $up_user);
 			}
 		}
 
