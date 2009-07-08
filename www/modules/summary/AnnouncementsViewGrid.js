@@ -43,6 +43,8 @@ GO.summary.AnnouncementsViewGrid = function(config){
     	}
 		}
 	]);
+
+	config.cls='go-colored-table';
 	columnModel.defaultSortable = true;
 	config.cm=columnModel;
 	config.view=new Ext.grid.GridView({
@@ -51,9 +53,12 @@ GO.summary.AnnouncementsViewGrid = function(config){
     forceFit:true,
     autoFill: true,
     getRowClass : function(record, rowIndex, p, ds) {
+
+				var cls = rowIndex%2 == 0 ? 'odd' : 'even';
+
         if (this.showPreview) {
             p.body = '<div class="description">' +record.data.content + '</div>';
-            return 'x-grid3-row-expanded';
+            return 'x-grid3-row-expanded '+cls;
         }
         return 'x-grid3-row-collapsed';
     },
