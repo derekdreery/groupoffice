@@ -12,13 +12,6 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 class comments extends db {
-	public function __construct()
-	{
-		parent::__construct();
-	
-		require_once($GLOBALS['GO_CONFIG']->root_path.'modules/professional/check.php');
-		if(check_license()!='nsdjkcksakcbsajkdas219msas')die('License invalid!');
-	}
 		/**
 	 * Add a Comment
 	 *
