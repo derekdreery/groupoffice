@@ -1,3 +1,6 @@
+2009/07/09 3.02-stable-9
+- License check for pro version was still in the comments module.
+
 2009/07/08 3.02-stable-8
 - Moved comments to Community version
 - Bug fixes
