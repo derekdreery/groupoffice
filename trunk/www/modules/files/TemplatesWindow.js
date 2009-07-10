@@ -179,17 +179,6 @@ Ext.extend(GO.files.TemplateWindow,Ext.Window, {
 					]
 				})],
 				buttons: buttons,
-				keys: [
-					{
-						key: Ext.EventObject.ESC, fn: function() {
-						 	this.savetemplate(true)
-						}, scope: this,
-						key: Ext.EventObject.ENTER, fn: function() {
-						 	this.templateDialog.hide()
-						 	this.formPanel.remove(this.importfileInput);
-						}, scope: this
-					}
-				],
 				focus: function(){
 		 			Ext.get('template-name').focus();
 				}									
@@ -247,6 +236,8 @@ Ext.extend(GO.files.TemplateWindow,Ext.Window, {
 			success:function(form, action){
 				this.template_id = action.result.template_id;
 				this.gridStore.reload();
+
+				this.uploadFile.clearQueue();
 				
 				if(this.template_id && !hide)
 				{
