@@ -27,6 +27,9 @@
 //otherwise log module will log all items as added.
 define('NOLOG', true);
 
+//event firing will cause problems with Ioncube
+define('NO_EVENTS',true);
+
 if(isset($argv[1]))
 {
 	define('CONFIG_FILE', $argv[1]);
@@ -38,7 +41,7 @@ require_once("../../../Group-Office.php");
 
 $path = isset($argv[2]) ? $argv[2] : '';
 
-if(php_sapi_name()!='cli' && $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
+if(php_sapi_name()!='cli' && !$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
 {
 	die('You must be admin or on the command line');
 }
