@@ -94,7 +94,7 @@ Ext.extend(GO.tasks.SimpleTasksPanel, GO.grid.GridPanel, {
 				}, this);
     
     this.on("rowdblclick", function(grid, rowClicked, e){	    
-				GO.tasks.taskDialog.show({ task_id: grid.selModel.selections.keys[0]});
+				GO.linkHandlers[12].call(this, grid.selModel.selections.keys[0]);
 			}, this);
 			
 		Ext.TaskMgr.start({
