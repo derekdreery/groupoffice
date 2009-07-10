@@ -389,8 +389,12 @@ class email extends db
 			$alias['default']='1';
 			$alias['account_id']=$account['id'];
 			$alias['name']=$account['name'];
-			$alias['email']=$account['email'];
-			$alias['signature']=$account['signature'];
+			
+			if(isset($alias['email']))
+				$alias['email']=$account['email'];
+
+			if(isset($account['signature']))
+				$alias['signature']=$account['signature'];
 			
 			$this->update_row('em_aliases',array('account_id', 'default'), $alias);
 			
