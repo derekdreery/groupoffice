@@ -2,6 +2,9 @@
 //otherwise log module will log all items as added.
 define('NOLOG', true);
 
+//event firing will cause problems with Ioncube
+define('NO_EVENTS',true);
+
 if(isset($argv[2]))
 {
 	define('CONFIG_FILE', $argv[2]);
