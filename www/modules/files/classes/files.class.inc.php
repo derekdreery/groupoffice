@@ -362,7 +362,7 @@ class files extends db {
 
 		$template['id']=$this->nextid('fs_templates');
 
-		if($this->insert_row('fs_templates', $template)) {
+		if($this->insert_row('fs_templates', $template, '', false)) {
 			return $template['id'];
 		}
 		return false;
@@ -378,7 +378,7 @@ class files extends db {
 	 */
 
 	function update_template($template, $types='') {
-		return $this->update_row('fs_templates', 'id', $template);
+		return $this->update_row('fs_templates', 'id', $template,'',false);
 	}
 
 
