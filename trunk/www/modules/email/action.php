@@ -212,12 +212,33 @@ try{
 
 					require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 
+
+					$aliases = array();
+					$email->get_aliases($_POST['account_id'], true);
+					while($alias=$email->next_record())
+					{
+						$aliases[$alias['email']]=$alias['id'];
+					}
+
+					$RFC822 = new RFC822();
+					$alias_id=0;
+					$to_addresses = $RFC822->parse_address_list($_POST['message_to']);
+					foreach($to_addresses as $address)
+					{
+						if(isset($aliases[$address['email']]))
+						{
+							$alias_id=$aliases[$address['email']];
+							break;
+						}
+					}
+
 					$body = sprintf($lang['email']['notification_body'], $_POST['subject'], Date::get_timestamp(time()));
 
 					$swift =& new GoSwift(
 					$_POST['notification_to'],
 					sprintf($lang['email']['notification_subject'],$_POST['subject']),
 					$_POST['account_id'],
+					$alias_id,
 					3,
 					$body
 					);
@@ -254,8 +275,8 @@ try{
 							if(!empty($_POST['reply_uid']))
 							$swift->set_reply_to($_POST['reply_uid'],$_POST['reply_mailbox']);
 
+							
 							$RFC822 = new RFC822();
-
 							$to_addresses = $RFC822->parse_address_list($_POST['to']);
 
 							//used for gpg encryption

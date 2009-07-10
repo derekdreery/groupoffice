@@ -653,8 +653,8 @@ try{
 
 			case 'message':
 
-				$account_id = ($_REQUEST['account_id']);
-				$mailbox = ($_REQUEST['mailbox']);
+				$account_id = $_REQUEST['account_id'];
+				$mailbox = $_REQUEST['mailbox'];
 				$uid = $_REQUEST['uid'];
 
 				$account = connect($account_id, $mailbox);
