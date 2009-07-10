@@ -232,6 +232,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				var params = {
 					task:'notification',
 					account_id: this.data.account_id,
+					message_to:this.data.to,
 					notification_to: this.data.notification,
 					subject: this.data.subject
 				}
