@@ -13,22 +13,51 @@
  
 GO.form.ComboBox = Ext.extend(Ext.form.ComboBox, {
 	
-	setRemoteText : function(text){
-		this.setRawValue(text);
-		this.lastSelectionText=text;
-	},
+    /*setRemoteText : function(text){
+        if(this.rendered)
+        {
+            this.setRawValue(text);
+        }
+        this.lastSelectionText=text;
+    },*/
+    setRemoteText : function(text)
+    {
+        var r = this.findRecord(this.valueField, this.value);
+        if(!r)
+        {
+            var comboRecord = Ext.data.Record.create([{
+                name: this.valueField
+            },{
+                name: this.displayField
+            }]);
+
+            var recordData = {};
+            recordData[this.valueField]=this.value;
+            recordData[this.displayField]=text;
+
+            var currentRecord = new comboRecord(recordData);
+            this.store.add(currentRecord);
+            
+            this.setValue(this.value);
+        }
+    },
+
+    initValue : function(){
+        GO.form.ComboBox.superclass.initValue.call(this);
+        this.setRawValue(this.lastSelectionText);
+    },
 	
-	selectFirst : function(){		
-		if(this.store.loaded && this.store.reader.jsonData.results.length>0)
-		{
-			this.setValue(this.store.reader.jsonData.results[0].id);
-		}
-	},
+    selectFirst : function(){
+        if(this.store.loaded && this.store.reader.jsonData.results.length>0)
+        {
+            this.setValue(this.store.reader.jsonData.results[0].id);
+        }
+    },
 	
-	clearLastSearch : function(){
-		this.lastQuery=false;
-		this.hasSearch=false;
-	}
+    clearLastSearch : function(){
+        this.lastQuery=false;
+        this.hasSearch=false;
+    }
 });
 
 Ext.reg('combo', GO.form.ComboBox);

@@ -48,7 +48,7 @@ GO.calendar.ListGrid = function(config)
 	  });
 	
 	config.paging=false,			
-	config.autoExpandColumn='summary-calendar-name-heading';
+	config.autoExpandColumn='listview-calendar-name-heading';
 	config.autoExpandMax=2500;
 	config.enableColumnHide=false;
   config.enableColumnMove=false;
@@ -69,7 +69,7 @@ GO.calendar.ListGrid = function(config)
 			}
 		},		
 		{
-			id:'summary-calendar-name-heading',
+			id:'listview-calendar-name-heading',
 			header:GO.lang.strName,
 			dataIndex: 'name',
 			renderer: this.renderName
