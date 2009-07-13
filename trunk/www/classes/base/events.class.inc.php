@@ -11,7 +11,7 @@ class GO_EVENTS
 			$this->load_listeners();
 		}else
 		{
-			$this->listeners=$_SESSION['GO_SESSION']['event_listeners'];
+			$this->listeners=isset($_SESSION['GO_SESSION']['event_listeners']) ? $_SESSION['GO_SESSION']['event_listeners'] : array();
 		}
 	}	
 	
