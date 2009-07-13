@@ -37,7 +37,7 @@ $sql = "SELECT *
 	
 $db->query($sql);
 
-require('../../modules/addressbook/classes/addressbook.class.inc.php');
+require_once('../../modules/addressbook/classes/addressbook.class.inc.php');
 $ab = new addressbook();
 
 $counter = 0;
@@ -60,7 +60,7 @@ echo 'Deleted '.$counter.' duplicate contacts<br /><hr /><br />';
 
 
 
-require('../../modules/calendar/classes/calendar.class.inc.php');
+require_once('../../modules/calendar/classes/calendar.class.inc.php');
 $cal = new calendar();
 
 function is_duplicate_event($record)
