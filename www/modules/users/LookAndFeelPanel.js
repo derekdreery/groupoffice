@@ -41,9 +41,9 @@ GO.users.LookAndFeelPanel = function(config)
 		
 	});
 
-	var modulesStore = new GO.data.JsonStore({
+	this.modulesStore = new GO.data.JsonStore({
 		url: GO.settings.modules.users.url+'non_admin_json.php',
-		baseParams: {'task':'start_module'},
+		baseParams: {'task':'start_module', user_id:0},
 		root: 'results',
 		totalProperty: 'total',
 		id: 'id',
@@ -75,7 +75,7 @@ GO.users.LookAndFeelPanel = function(config)
 			fieldLabel: GO.users.lang['cmdFormLabelStartModule'],
 			name: 'start_module_name',
 			hiddenName: 'start_module',
-			store: modulesStore,
+			store: this.modulesStore,
 			displayField:'name',
 			valueField: 'id',
 			mode:'remote',

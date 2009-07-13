@@ -121,6 +121,9 @@ Ext.extend(GO.users.UserDialog, Ext.Window,{
 			this.fileBrowseButton.setDisabled(user_id<1);
 		}
 
+		this.lookAndFeelTab.startModuleField.clearLastSearch();
+		this.lookAndFeelTab.modulesStore.baseParams.user_id=user_id;
+
 		this.fireEvent('set_id', this);
 	},
 	
