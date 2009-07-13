@@ -628,6 +628,9 @@ Ext.extend(GO.email.AccountDialog, Ext.Window, {
 filter = function() {
     return {
         showDialog : function(filter_id, account_id, ds) {
+
+						this.account_id=account_id;
+						
             if (!this.win) {
 
                 this.formPanel = new Ext.form.FormPanel({
@@ -713,7 +716,7 @@ filter = function() {
                                 params : {
                                     'task' : 'save_filter',
                                     'filter_id' : this.filter_id,
-                                    'account_id' : account_id
+                                    'account_id' : this.account_id
                                 },
                                 waitMsg : GO.lang.waitMsgSave,
                                 success : function(form, action) {
@@ -753,6 +756,7 @@ filter = function() {
 
             if (this.filter_id != filter_id) {
                 this.filter_id = filter_id;
+								
 
                 if (this.filter_id > 0) {
                     this.formPanel.load({

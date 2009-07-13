@@ -1,3 +1,8 @@
+2009/07/? 3.02-stable-13
+- Fixed some issues in preparation to move to ExtJS 3
+- E-mail filter bug. Adding a filter to a second account failed.
+- Updated German
+
 2009/07/10 3.02-stable-12
 - IMAP auth module was broken
 - Read notification didn't send correct alias
