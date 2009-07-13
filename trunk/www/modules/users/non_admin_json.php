@@ -63,9 +63,16 @@ switch($task)
 		echo json_encode($response);
 		break;
 	case 'start_module':
+		$records=array();
 		foreach($GO_MODULES->modules as $module)
 		{
-			if($module['read_permission'] && $module['admin_menu']=='0')
+			if($module['admin_menu']=='0' &&
+					(($module['read_permission'] && (empty($_POST['user_id']) || $_POST['user_id']==$GO_SECURITY->user_id)) ||
+						(!empty($_POST['user_id']) &&
+							($GO_SECURITY->has_permission($_POST['user_id'], $module['acl_read']) || $GO_SECURITY->has_permission($_POST['user_id'], $module['acl_write']))
+						)
+					)
+				)
 			{
 				$record = array(
 					'id' => $module['id'],
