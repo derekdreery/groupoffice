@@ -28,7 +28,7 @@ $db = new db();
 
 $db->query("SHOW TABLES");
 if($db->num_rows()>0)
-exit("Aborted because database is not empty!");
+exit("Automatic installation of Group-Office aborted because database is not empty");
 
 $queries = String::get_sql_queries($GO_CONFIG->root_path."install/sql/groupoffice.sql");
 //$queries = get_sql_queries($GO_CONFIG->root_path."lib/sql/groupoffice.sql");

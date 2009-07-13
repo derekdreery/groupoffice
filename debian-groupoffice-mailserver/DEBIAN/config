@@ -9,5 +9,8 @@ db_go
 db_get groupoffice-mailserver/domain
 domain="$RET"
 
-cat /etc/groupoffice/config-db.php > /etc/groupoffice/config-mailserver.inc.php
-echo "\$domain='$domain';\n" >> /etc/groupoffice/config-mailserver.inc.php
+if [ ! -e "/etc/groupoffice/config-mailserver.inc.php" ]
+then
+	cat /etc/groupoffice/config-db.php > /etc/groupoffice/config-mailserver.inc.php
+	echo "\$domain='$domain';\n" >> /etc/groupoffice/config-mailserver.inc.php
+fi
