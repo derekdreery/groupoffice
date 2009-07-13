@@ -147,17 +147,10 @@ $lang['common']['usage_text']='Diese GroupOffice-Installation verwendet';
 $lang['common']['database']='Datenbank';
 $lang['common']['files']='Dateien';
 $lang['common']['email']='E-Mail';
-$lang['common']['lost_password_subject']='Neues Passwort';
-$lang['common']['lost_password_body']='%s,<br />
-<br />
-Sie haben für %s. ein neues Passwort angefordert<br />
-<br />
-Ihre neuen Login Daten sind:<br />
-<br />
-Benutzername: %s<br />
-Passwort: %s';
-$lang['common']['lost_password_error']='Die angegebende E-Mail-Adresse konnte nicht gefunden werden.';
-$lang['common']['lost_password_success']='An Ihre E-Mail-Adresse wurde ein neues Passwort gesendet.';
 $lang['common']['confirm_leave']='Wenn Sie GroupOffice jetzt verlassen, werden alle ungespeicherten Änderungen wieder verworfen';
 $lang['common']['dataSaved']='Daten wurden erfolgreich gespeichert';
 $lang['common']['uploadMultipleFiles']='Klicken Sie auf \'Durchsuchen\', um Dateien und/oder Ordner auf Ihrem Computer auszuwählen. Klicken Sie auf \'Hochladen\', um diese dann nach GroupOffice zu transferieren. Dieses Fenster wird sich nach erfolgreichem Transfer automatisch schließen.';
+$lang['common']['loginToGO']='Klicken Sie hier, um sich einzuloggen';
+$lang['common']['links']='Links';
+$lang['common']['GOwebsite']='GroupOffice Webseite';
+$lang['common']['GOisAProductOf']='<i>GroupOffice</i> ist ein Produkt von <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';

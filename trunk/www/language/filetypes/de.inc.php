@@ -60,4 +60,3 @@ $lang['filetypes']['fla']='Macromedia Flash Dokument';
 $lang['filetypes']['xlt']='MS-Office Tabellenvorlage';
 $lang['filetypes']['ai']='Adobe Illustrator Datei';
 $lang['filetypes']['eml']='E-Mail Nachricht';
-?>

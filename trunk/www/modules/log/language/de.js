@@ -1,6 +1,2 @@
-
-
 GO.log.lang.log='Verlauf';
-
-GO.log.lang.time="Datum";
-
+GO.log.lang.time='Datum';
