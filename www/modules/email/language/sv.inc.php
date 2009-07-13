@@ -29,7 +29,7 @@ $lang['email']['no_recipients']= 'Hemlig mottagare';
 $lang['email']['original_message']= '--- Originalmeddelande följer ---';
 $lang['email']['attachments']= 'Bilagor';
 
-$lang['email']['notification_subject']= 'Läs: %s';
+$lang['email']['notification_subject']= 'Läst: %s';
 $lang['email']['notification_body']= 'Ditt meddelande med ämne "%s" visades vid %s';
 
 $lang['email']['errorGettingMessage']= 'Det gick inte att hämta meddelande från servern';
