@@ -748,10 +748,10 @@ class calendar extends db
 
 		$calendar = $this->get_calendar($calendar_id);
 
-		if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_write']))
+		/*if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_write']))
 		{
 			throw new AccessDeniedException();
-		}
+		}*/
 
 		global $GO_MODULES;
 		if(isset($GO_MODULES->modules['files']))
