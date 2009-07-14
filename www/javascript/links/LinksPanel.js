@@ -13,10 +13,6 @@
  
 GO.grid.LinksPanel = function(config){
 	
-	var linksDialog;
-	
-	//Ext.apply(this, config);
-	
 	if(!config)
 	{
 		config={};

@@ -130,6 +130,8 @@ class GO_SECURITY extends db {
 		SetCookie("GO_UN","",time()-3600,"/","",!empty($_SERVER['HTTPS']),false);
 		SetCookie("GO_PW","",time()-3600,"/","",!empty($_SERVER['HTTPS']),false);
 
+		$old_session = $_SESSION;
+
 		unset($_SESSION, $_COOKIE['GO_UN'], $_COOKIE['GO_PW']);
 		
 		session_destroy();
@@ -140,6 +142,9 @@ class GO_SECURITY extends db {
 		{
 			$GO_MODULES->load_modules();
 		}
+
+		global $GO_EVENTS;
+		$GO_EVENTS->fire_event('logout', $old_session);
 	}
 
 	/**

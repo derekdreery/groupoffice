@@ -22,19 +22,19 @@ GO.grid.LinksGrid = function(config){
 		config={};
 	}
 	
-	if(!this.link_id)
+	if(!config.link_id)
 	{
-		this.link_id=0;
+		config.link_id=0;
 	}
 	
-	if(!this.link_type)
+	if(!config.link_type)
 	{
-		this.link_type=0;
+		config.link_type=0;
 	}
 	
-	if(!this.folder_id)
+	if(!config.folder_id)
 	{
-		this.folder_id=0;
+		config.folder_id=0;
 	}
 	
 	//was required to show the search field in the tbar
@@ -51,8 +51,10 @@ GO.grid.LinksGrid = function(config){
 			remoteSort: true
 		});
 	config['store'].setDefaultSort('mtime', 'desc');
-	
-	this.searchField = new GO.form.SearchField({
+
+	if(!config.noSearchField)
+	{
+		this.searchField = new GO.form.SearchField({
 								store: config.store,
 								width:320
 						  });
@@ -60,6 +62,7 @@ GO.grid.LinksGrid = function(config){
 	config['tbar']=[
 	            GO.lang['strSearch']+': ', ' ',this.searchField
 	            ];
+	}
 	
 	config.clicksToEdit = 1;
 
@@ -113,6 +116,7 @@ GO.grid.LinksGrid = function(config){
 		enableRowBody:true,
 		showPreview:true,
 		autoFill:true,
+		forceFit:true,
 		emptyText:GO.lang.strNoItems,
 		getRowClass : function(record, rowIndex, p, store){
 	    if(this.showPreview && record.data.description.length){

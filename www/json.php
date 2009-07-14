@@ -515,7 +515,8 @@ try{
 				if(isset($_POST['types']))
 				{
 					$types= json_decode($_POST['types'], true);
-					$GO_CONFIG->save_setting('link_type_filter', implode(',',$types), $GO_SECURITY->user_id);
+					if(!isset($_POST['no_filter_save']))
+						$GO_CONFIG->save_setting('link_type_filter', implode(',',$types), $GO_SECURITY->user_id);
 				}else
 				{
 					$types = $GO_CONFIG->get_setting('link_type_filter', $GO_SECURITY->user_id);
