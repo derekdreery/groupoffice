@@ -31,19 +31,17 @@ function set_value($file, $str) {
 
 echo 'Configuring apache'."\n";
 
-create_file('/etc/groupoffice/servermanager.inc.php', 'tpl/etc/groupoffice/servermanager.inc.php', $replacements);
+if(!file_exists('/etc/groupoffice/servermanager.inc.php'))
+	create_file('/etc/groupoffice/servermanager.inc.php', 'tpl/etc/groupoffice/servermanager.inc.php', $replacements);
 
-create_file('/etc/apache2/sites-enabled/000-groupoffice', 'tpl/etc/apache2/sites-enabled/000-groupoffice', $replacements);
+if(!file_exists('/etc/apache2/sites-enabled/000-groupoffice'))
+	create_file('/etc/apache2/sites-enabled/000-groupoffice', 'tpl/etc/apache2/sites-enabled/000-groupoffice', $replacements);
 
 if(file_exists('/etc/apache2/sites-enabled/000-default'))
 	unlink('/etc/apache2/sites-enabled/000-default');
 
 echo "Configuring sudo\n";
 set_value('/etc/sudoers','www-data ALL=NOPASSWD:/usr/share/groupoffice/modules/servermanager/sudo.php');
-
-echo "Configuring cron\n";
-//create_file('/etc/cron.d/groupoffice','groupoffice/groupoffice.cron', $replacements);
-//chmod('/etc/cron.d/groupoffice', 0755);
 
 echo "Done!\n\n";
 ?>

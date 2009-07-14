@@ -8,7 +8,7 @@
 echo Configuring Postfix
 
 touch /etc/postfix/main.cf
-cp /etc/postfix/main.cf /etc/postfix/main.cf.gobak
+cp /etc/postfix/main.cf /etc/postfix/main.cf.gobak.$2
 
 #postconf -e 'recipient_delimiter = +'
 #postconf -e 'inet_interfaces = all'
@@ -32,20 +32,30 @@ postconf -e 'transport_maps = proxy:mysql:/etc/postfix/mysql_virtual_transports.
 postconf -e 'smtpd_recipient_restrictions = permit_mynetworks, permit_sasl_authenticated, reject_non_fqdn_hostname, reject_non_fqdn_sender, reject_non_fqdn_recipient, reject_unauth_destination, reject_unauth_pipelining, reject_invalid_hostname, reject_unknown_sender_domain, reject_rbl_client zen.spamhaus.org, reject_rbl_client list.dsbl.org, reject_rhsbl_sender dsn.fc-ignorant.org, permit'
 postconf -e 'smtpd_data_restrictions = reject_unauth_pipelining, reject_multi_recipient_bounce, permit'
 
-echo Adding vmail user
-useradd -r -u 150 -g mail -d /vmail -s /sbin/nologin -c "Virtual Mailbox" vmail
-chmod 770 /vmail
-chown -R vmail:mail /vmail
+
+#check if user vmail exists. Exit code 0 means it exists
+id vmail >/dev/null 2>&1
+if [ ! $? -eq 0 ]
+then
+	echo Adding vmail user
+	useradd -r -u 150 -g mail -d /vmail -s /sbin/nologin -c "Virtual Mailbox" vmail
+	chmod 770 /vmail
+	chown -R vmail:mail /vmail
+fi
 
 
 echo setting up dovecot
 chmod 600 /etc/dovecot/*.conf
 chown vmail /etc/dovecot/*.conf
 
-
-echo setting up vacation
-mkdir /var/spool/vacation
-useradd -r -d /var/spool/vmail -s /sbin/nologin -c "Virtual vacation" vacation
+#check if user vacation exists. Exit code 0 means it exists
+id vacation >/dev/null 2>&1
+if [ ! $? -eq 0 ]
+then
+	echo setting up vacation
+	mkdir /var/spool/vacation
+	useradd -r -d /var/spool/vmail -s /sbin/nologin -c "Virtual vacation" vacation
+fi
 
 chown -R vacation:vacation /var/spool/vacation/
 chmod 700 /var/spool/vacation/
@@ -60,10 +70,16 @@ postconf -e 'vacation_destination_recipient_limit = 1';
 
 
 echo Spamassassin
-groupadd -g 5001 spamd
-useradd -u 5001 -g spamd -s /sbin/nologin -d /var/lib/spamassassin spamd
-mkdir /var/lib/spamassassin
-chown spamd:spamd /var/lib/spamassassin
+
+#check if user spamd exists. Exit code 0 means it exists
+id spamd >/dev/null 2>&1
+if [ ! $? -eq 0 ]
+then
+	groupadd -g 5001 spamd
+	useradd -u 5001 -g spamd -s /sbin/nologin -d /var/lib/spamassassin spamd
+	mkdir /var/lib/spamassassin
+	chown spamd:spamd /var/lib/spamassassin
+fi
 
 
 postconf -e virtual_transport=dovecot
@@ -71,16 +87,16 @@ postconf -e dovecot_destination_recipient_limit=1
 
 
 
-cp /etc/default/spamassassin /etc/spamassassin/spamassassin.gobak
+cp /etc/default/spamassassin /etc/spamassassin/spamassassin.gobak.$2
 cp /usr/share/groupoffice-mailserver/tpl/etc/default/spamassassin /etc/default/spamassassin
 
-cp /etc/spamassassin/local.cf /etc/spamassassin/local.cf.gobak
+cp /etc/spamassassin/local.cf /etc/spamassassin/local.cf.gobak.$2
 cp /usr/share/groupoffice-mailserver/tpl/etc/spamassassin/local.cf /etc/spamassassin
 
-cp /etc/dovecot/dovecot.conf /etc/dovecot/dovecot.conf.gobak
+cp /etc/dovecot/dovecot.conf /etc/dovecot/dovecot.conf.gobak.$2
 cp /usr/share/groupoffice-mailserver/tpl/etc/dovecot/dovecot.conf /etc/dovecot
 
-cp /etc/postfix/master.cf /etc/postfix/master.cf.gobak
+cp /etc/postfix/master.cf /etc/postfix/master.cf.gobak.$2
 cp /usr/share/groupoffice-mailserver/tpl/etc/postfix/master.cf /etc/postfix
 
 
