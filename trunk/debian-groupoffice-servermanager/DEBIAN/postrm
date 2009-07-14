@@ -10,4 +10,4 @@ if [ "$1" = "purge" -a -e /usr/share/debconf/confmodule ]; then
 		rm /etc/apache2/sites-enabled/000-groupoffice
 fi
 
-
+exit 0

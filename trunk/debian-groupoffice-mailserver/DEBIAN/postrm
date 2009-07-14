@@ -20,3 +20,4 @@ if [ "$1" = "purge" -a -e /usr/share/debconf/confmodule ]; then
 fi
 
 
+exit 0
