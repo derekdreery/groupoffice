@@ -91,14 +91,16 @@ system('postmap /etc/postfix/transport');
 
 
 echo "Configuring Dovecot\n";
-create_file('/etc/dovecot/dovecot-sql.conf','tpl/etc/dovecot/dovecot-sql.conf', $replacements);
+if(!file_exists('/etc/dovecot/dovecot-sql.conf'))
+	create_file('/etc/dovecot/dovecot-sql.conf','tpl/etc/dovecot/dovecot-sql.conf', $replacements);
 
 echo "Configuring vacation\n";
-create_file('/etc/groupoffice/vacation.pl','tpl/etc/groupoffice/vacation.pl', $replacements);
+if(!file_exists('/etc/groupoffice/vacation.pl'))
+	create_file('/etc/groupoffice/vacation.pl','tpl/etc/groupoffice/vacation.pl', $replacements);
 
 echo "Configuring groupoffice\n";
-create_file('/etc/groupoffice/globalconfig.inc.php','tpl/etc/groupoffice/globalconfig.inc.php', $replacements);
+if(!file_exists('/etc/groupoffice/globalconfig.inc.php'))
+	create_file('/etc/groupoffice/globalconfig.inc.php','tpl/etc/groupoffice/globalconfig.inc.php', $replacements);
 
 set_value('/etc/groupoffice/config.php', '$config[\'serverclient_domains\']="'.$domain.'";');
-
 ?>
