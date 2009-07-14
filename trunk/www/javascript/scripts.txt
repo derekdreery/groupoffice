@@ -65,6 +65,7 @@ javascript/links/LinkBrowser.js
 javascript/links/LinkViewWindow.js
 javascript/links/LinkTypeFilterPanel.js
 javascript/links/LinkDescriptionField.js
+javascript/links/LinksAccordion.js
 
 javascript/panels/SearchPanel.js
 

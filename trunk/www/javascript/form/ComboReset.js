@@ -24,8 +24,13 @@ GO.form.ComboBoxReset = Ext.extend(GO.form.ComboBox, {
 				this.onTriggerClick();
 			},
 			onTrigger1Click : function() {
+
+				var oldValue = this.getValue();
+
 				this.clearValue();
 				//this.triggers[0].setDisplayed(false);
+
+				this.fireEvent('change', this, this.getValue(), oldValue);
 				this.fireEvent('clear', this);
 			},
 			setValue : function(v){
