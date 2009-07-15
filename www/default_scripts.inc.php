@@ -144,10 +144,10 @@ if(!$GO_CONFIG->debug)
 	}
 
 	
-	$scripts[]=$GO_CONFIG->root_path.'javascript/go-all-min.js';
+	$scripts[]=$GO_CONFIG->root_path.'javascript/go-all-min';
 	
 	
-	$file = 'base-'.md5($GO_LANGUAGE->language.$GO_CONFIG->mtime.filemtime($GO_CONFIG->root_path.'javascript/go-all-min.js')).'.js';
+	$file = 'base-'.md5($GO_LANGUAGE->language.$GO_CONFIG->mtime.filemtime($GO_CONFIG->root_path.'javascript/go-all-min')).'.js';
 	$path = $GO_CONFIG->local_path.'cache/'.$file;
 	$url = $GO_CONFIG->local_url.'cache/'.$file;
 	
@@ -191,9 +191,9 @@ if(!$GO_CONFIG->debug)
 					$scripts[]=$module['path'].'language/'.$GO_LANGUAGE->language.'.js';
 				}
 	
-				if(file_exists($module['path'].'all-module-scripts-min.js'))
+				if(file_exists($module['path'].'all-module-scripts-min'))
 				{
-					$scripts[]=$module['path'].'all-module-scripts-min.js';
+					$scripts[]=$module['path'].'all-module-scripts-min';
 				}
 	
 				$modules[]=$module['id'];
@@ -201,7 +201,7 @@ if(!$GO_CONFIG->debug)
 		}
 	
 		
-		$file = $GO_SECURITY->user_id.'-'.md5($GO_CONFIG->mtime.filemtime($GO_CONFIG->root_path.'javascript/go-all-min.js').':'.$GO_LANGUAGE->language.':'.implode(':', $modules)).'.js';
+		$file = $GO_SECURITY->user_id.'-'.md5($GO_CONFIG->mtime.filemtime($GO_CONFIG->root_path.'javascript/go-all-min').':'.$GO_LANGUAGE->language.':'.implode(':', $modules)).'.js';
 		$path = $GO_CONFIG->local_path.'cache/'.$file;
 		$url = $GO_CONFIG->local_url.'cache/'.$file;
 		
@@ -308,9 +308,9 @@ if(!$GO_CONFIG->debug)
 						echo "\n";
 					}
 				}
-			}else if(file_exists($module['path'].'all-module-scripts-min.js'))
+			}else if(file_exists($module['path'].'all-module-scripts-min'))
 			{
-				echo '<script type="text/javascript" src="'.$module['url'].'all-module-scripts-min.js"></script>';
+				echo '<script type="text/javascript" src="'.$module['url'].'all-module-scripts-min"></script>';
 				echo "\n";
 			}
 				

@@ -46,7 +46,7 @@ while($script = fgets($scripts_fp))
 }
 fclose($scripts_fp);
 
-exec($compressor.' javascript/go-all.js -o javascript/go-all-min.js');
+exec($compressor.' javascript/go-all.js -o javascript/go-all-min');
 unlink('javascript/go-all.js');
 if($delete)
 {
@@ -99,7 +99,7 @@ if($dir = @opendir('modules'))
 			}
 
 
-			exec($compressor.' '.$all_scripts_file.' -o modules/'.$module.'/all-module-scripts-min.js');
+			exec($compressor.' '.$all_scripts_file.' -o modules/'.$module.'/all-module-scripts-min');
 			unlink($all_scripts_file);
 		}
 	}
