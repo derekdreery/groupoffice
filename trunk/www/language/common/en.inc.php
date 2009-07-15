@@ -184,3 +184,6 @@ $lang['common']['loginToGO']='Click here to login to Group-Office';
 $lang['common']['links']='Links';
 $lang['common']['GOwebsite']='Group-Office website';
 $lang['common']['GOisAProductOf']='<i>Group-Office</i> is a product of <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
+
+$lang['common']['yes']='Yes';
+$lang['common']['no']='No';
