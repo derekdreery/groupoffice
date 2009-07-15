@@ -532,7 +532,7 @@ class addressbook extends db {
     function build_contact_files_path($contact, $addressbook)
     {
         $new_folder_name = File::strip_invalid_chars(String::format_name($contact));
-        $last_part = !empty($contact['last_name']) ? strtoupper(substr(File::strip_invalid_chars($contact['last_name']),0,1)) : '';
+        $last_part = $this->get_index_char($contact['last_name']);
         $new_path = 'contacts/'.File::strip_invalid_chars($addressbook['name']);
         if(!empty($last_part))
         {
@@ -548,7 +548,7 @@ class addressbook extends db {
     function build_company_files_path($company, $addressbook)
     {
         $new_folder_name = File::strip_invalid_chars($company['name']);
-        $last_part = strtoupper(File::strip_invalid_chars($company['name'][0]));
+        $last_part = $this->get_index_char($company['name']);
         $new_path = 'companies/'.File::strip_invalid_chars($addressbook['name']);
         if(!empty($last_part))
         {
@@ -1244,6 +1244,20 @@ class addressbook extends db {
     function get_contact_by_email($email, $user_id, $addressbook_id=0){
         $this->get_contacts_by_email($email, $user_id, $addressbook_id,0,1);
         return $this->next_record();
+    }
+
+    function get_index_char($string)
+    {
+        $char = '';
+        if (!empty($string)) {
+            if (function_exists('mb_substr')) {
+                $char = strtoupper(mb_substr(File::strip_invalid_chars($string),0,1,'UTF-8'));
+            } else {
+                $char = strtoupper(substr(File::strip_invalid_chars($string),0,1));
+            }
+        }
+
+        return $char;
     }
 
     function get_contacts_by_email($email, $user_id, $addressbook_id=0, $start=0, $offset=0, $count=false) {
