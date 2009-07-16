@@ -19,3 +19,4 @@ modules/addressbook/CompanyProfilePanel.js
 modules/addressbook/EmployeesPanel.js
 modules/addressbook/AdvancedSearchWindow.js
 modules/addressbook/MainPanel.js
+modules/addressbook/SelectAddressbook.js
