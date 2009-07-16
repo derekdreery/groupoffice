@@ -20,4 +20,4 @@ $updates[]="ALTER TABLE `cal_events` ADD `files_folder_id` INT NOT NULL;";
 $updates[]="ALTER TABLE `cal_settings` ADD `calendar_id` INT NOT NULL;";
 $updates[]="ALTER TABLE `cal_settings` ADD INDEX ( `calendar_id` )";
 
-?>
+$updates[]="ALTER TABLE `cal_calendars` ADD `shared_acl` BOOL NOT NULL ";

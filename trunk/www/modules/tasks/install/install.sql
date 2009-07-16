@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS `ta_lists` (
   `user_id` int(11) NOT NULL,
   `acl_read` int(11) NOT NULL,
   `acl_write` int(11) NOT NULL,
+	`shared_acl` BOOL NOT NULL ,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

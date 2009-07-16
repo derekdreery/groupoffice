@@ -1015,7 +1015,7 @@ class addressbook extends db {
         }
     }
 
-    function delete_addressbook($addressbook_id, $delete_acls=true) {
+    function delete_addressbook($addressbook_id) {
 
         $addressbook = $this->get_addressbook($addressbook_id);
 
@@ -1038,7 +1038,7 @@ class addressbook extends db {
             }
         }
 
-				if($delete_acls){
+				if(empty($addressbook['shared_acl'])){
 					$GO_SECURITY->delete_acl($addressbook['acl_read']);
 					$GO_SECURITY->delete_acl($addressbook['acl_write']);
 				}

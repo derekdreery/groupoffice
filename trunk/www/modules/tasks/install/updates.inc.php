@@ -24,4 +24,7 @@ $updates[]="CREATE TABLE IF NOT EXISTS `ta_settings` (
 $updates[]="ALTER TABLE `ta_tasks` ADD `files_folder_id` INT NOT NULL;";
 
 $updates[]="ALTER TABLE `ta_settings` ADD `default_tasklist_id` INT NOT NULL ";
+
+
+$updates[]="ALTER TABLE `ta_lists` ADD `shared_acl` BOOL NOT NULL ";
 ?>

@@ -46,3 +46,5 @@ $updates[] = "ALTER TABLE `ab_contacts` CHANGE `cellular` `cellular` VARCHAR( 30
 
 $updates[]="ALTER TABLE `ab_contacts` ADD `files_folder_id` INT NOT NULL;";
 $updates[]="ALTER TABLE `ab_companies` ADD `files_folder_id` INT NOT NULL;";
+
+$updates[]="ALTER TABLE `ab_addressbooks` ADD `shared_acl` BOOL NOT NULL ";

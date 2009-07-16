@@ -191,17 +191,17 @@ class tasks extends db
 		return $list['id'];
 	}
 
-	function delete_tasklist($list_id, $delete_acls=true)
+	function delete_tasklist($list_id)
 	{
 		global $GO_SECURITY;
 		$delete = new tasks();
 
 		$tasklist = $this->get_tasklist($list_id);
 
-		if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_write']))
+		/*if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_write']))
 		{
 			throw new AccessDeniedException();
-		}
+		}*/
 
 		$sql = "SELECT * FROM ta_tasks WHERE tasklist_id='".$this->escape($list_id)."'";
 		$this->query($sql);
@@ -214,7 +214,7 @@ class tasks extends db
 		$sql= "DELETE FROM ta_lists WHERE id='".$this->escape($list_id)."'";
 		$this->query($sql);
 
-		if($delete_acls){
+		if(empty($tasklist['shared_acl'])){
 			$GO_SECURITY->delete_acl($tasklist['acl_read']);
 			$GO_SECURITY->delete_acl($tasklist['acl_write']);
 		}
