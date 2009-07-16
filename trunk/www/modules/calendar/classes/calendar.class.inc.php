@@ -741,7 +741,7 @@ class calendar extends db
 		return $calendar['id'];
 	}
 
-	function delete_calendar($calendar_id)
+	function delete_calendar($calendar_id, $delete_acls=true)
 	{
 		global $GO_SECURITY;
 		$delete = new calendar;
@@ -778,8 +778,11 @@ class calendar extends db
 		$sql= "DELETE FROM cal_calendars WHERE id='".$this->escape($calendar_id)."'";
 		$this->query($sql);
 
-		$GO_SECURITY->delete_acl($calendar['acl_read']);
-		$GO_SECURITY->delete_acl($calendar['acl_write']);
+		if($delete_acls)
+		{
+			$GO_SECURITY->delete_acl($calendar['acl_read']);
+			$GO_SECURITY->delete_acl($calendar['acl_write']);
+		}
 	}
 
 	function update_calendar($calendar, $old_calendar=false)

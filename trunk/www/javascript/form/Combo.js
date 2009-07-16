@@ -12,14 +12,15 @@
  */
  
 GO.form.ComboBox = Ext.extend(Ext.form.ComboBox, {
-	
-	/*setRemoteText : function(text){
-        if(this.rendered)
-        {
-            this.setRawValue(text);
-        }
-        this.lastSelectionText=text;
-    },*/
+
+	/**
+	 * A combobox is often loaded remotely on demand. But you want to display the
+	 * correct text even before the store is loaded. When a form loads I also
+	 * supply the text and call this function to display it when the record is not
+	 * available.
+	 *
+	 * @param {String} remote text
+	 */
 	setRemoteText : function(text)
 	{
 		var r = this.findRecord(this.valueField, this.value);
@@ -42,10 +43,19 @@ GO.form.ComboBox = Ext.extend(Ext.form.ComboBox, {
 		}
 	},
 
+	/**
+	 * Small override to help the setRemoteText value when it is called before
+	 * rendering.
+	 */
+
 	initValue : function(){
 		GO.form.ComboBox.superclass.initValue.call(this);
 		this.setRawValue(this.lastSelectionText);
 	},
+
+	/**
+	 * Selects the first record of the associated store
+	 */
 	
 	selectFirst : function(){
 		if(this.store.getCount())
@@ -54,7 +64,11 @@ GO.form.ComboBox = Ext.extend(Ext.form.ComboBox, {
 			this.setValue(records[0].get(this.valueField));
 		}
 	},
-	
+
+	/**
+	 * Clears the last search action. Usefull when you change a baseParam of the
+	 * combo store and the cache prevents you searching the server.
+	 */
 	clearLastSearch : function(){
 		this.lastQuery=false;
 		this.hasSearch=false;
