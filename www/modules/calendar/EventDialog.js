@@ -747,22 +747,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
                 }, {
                     items : this.busy
                 }]
-            }, this.selectCalendar = new GO.form.ComboBox({
-                fieldLabel : GO.calendar.lang.calendar,
-                hiddenName : 'calendar_id',
+            }, this.selectCalendar = new GO.calendar.SelectCalendar({
                 anchor : '-20',
-                emptyText : GO.lang.strPleaseSelect,
-                store : new GO.data.JsonStore({
-                    url : GO.settings.modules.calendar.url + 'json.php',
-                    baseParams : {
-                        task : 'writable_calendars'
-                    },
-                    root : 'results',
-                    id : 'id',
-                    totalProperty : 'total',
-                    fields : ['id', 'name'],
-                    remoteSort : true
-                }),
                 pageSize : parseInt(GO.settings.max_rows_list),
                 valueField : 'id',
                 displayField : 'name',

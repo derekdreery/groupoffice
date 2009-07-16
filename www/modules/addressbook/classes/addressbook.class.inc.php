@@ -1015,7 +1015,7 @@ class addressbook extends db {
         }
     }
 
-    function delete_addressbook($addressbook_id) {
+    function delete_addressbook($addressbook_id, $delete_acls=true) {
 
         $addressbook = $this->get_addressbook($addressbook_id);
 
@@ -1038,8 +1038,10 @@ class addressbook extends db {
             }
         }
 
-        $GO_SECURITY->delete_acl($addressbook['acl_read']);
-        $GO_SECURITY->delete_acl($addressbook['acl_write']);
+				if($delete_acls){
+					$GO_SECURITY->delete_acl($addressbook['acl_read']);
+					$GO_SECURITY->delete_acl($addressbook['acl_write']);
+				}
 
         $ab = new addressbook();
 

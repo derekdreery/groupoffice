@@ -191,7 +191,7 @@ class tasks extends db
 		return $list['id'];
 	}
 
-	function delete_tasklist($list_id)
+	function delete_tasklist($list_id, $delete_acls=true)
 	{
 		global $GO_SECURITY;
 		$delete = new tasks();
@@ -213,9 +213,11 @@ class tasks extends db
 		
 		$sql= "DELETE FROM ta_lists WHERE id='".$this->escape($list_id)."'";
 		$this->query($sql);
-		
-		$GO_SECURITY->delete_acl($tasklist['acl_read']);
-		$GO_SECURITY->delete_acl($tasklist['acl_write']);
+
+		if($delete_acls){
+			$GO_SECURITY->delete_acl($tasklist['acl_read']);
+			$GO_SECURITY->delete_acl($tasklist['acl_write']);
+		}
 		
 		global $GO_MODULES;
 		if(isset($GO_MODULES->modules['files']))
