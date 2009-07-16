@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS `ab_addressbooks` (
   `name` varchar(50) default NULL,
   `acl_read` int(11) NOT NULL default '0',
   `acl_write` int(11) NOT NULL default '0',
+	`shared_acl` BOOL NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

@@ -741,7 +741,7 @@ class calendar extends db
 		return $calendar['id'];
 	}
 
-	function delete_calendar($calendar_id, $delete_acls=true)
+	function delete_calendar($calendar_id)
 	{
 		global $GO_SECURITY;
 		$delete = new calendar;
@@ -778,7 +778,7 @@ class calendar extends db
 		$sql= "DELETE FROM cal_calendars WHERE id='".$this->escape($calendar_id)."'";
 		$this->query($sql);
 
-		if($delete_acls)
+		if(empty($calendar['shared_acl']))
 		{
 			$GO_SECURITY->delete_acl($calendar['acl_read']);
 			$GO_SECURITY->delete_acl($calendar['acl_write']);
