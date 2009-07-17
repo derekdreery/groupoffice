@@ -111,6 +111,8 @@ try{
 			
 		case 'import':
 
+			ini_set('max_execution_time', 180);
+
 			if (!file_exists($_FILES['ical_file']['tmp_name'][0]))
 			{
 				throw new Exception($lang['common']['noFileUploaded']);

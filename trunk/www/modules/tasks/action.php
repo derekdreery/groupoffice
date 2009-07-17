@@ -29,6 +29,9 @@ try{
 	switch($_REQUEST['task'])
 	{	
 		case 'import':
+
+			ini_set('max_execution_time', 180);
+
 			require_once ($GO_LANGUAGE->get_language_file('tasks'));
 			
 			if (!file_exists($_FILES['ical_file']['tmp_name'][0]))
