@@ -33,6 +33,16 @@ GO.LinksAccordion = Ext.extend(Ext.Panel, {
 			this.items.push(tasksLinksPanel);
 		}
 
+		if(GO.notes)
+		{
+			var noteLinksPanel = new GO.grid.LinksGrid({
+				title:GO.notes.lang.notes,
+				noSearchField:true
+			});
+			noteLinksPanel.store.baseParams.types=Ext.encode([4]);
+			this.items.push(noteLinksPanel);
+		}
+
 		var p;
 		for(var i=0;i<this.items.length;i++)
 		{

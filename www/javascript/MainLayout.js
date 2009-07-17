@@ -15,7 +15,8 @@
 GO.MainLayout = function(){
 	
 	this.addEvents({
-		'ready' : true
+		'ready' : true,
+		'render' : true
 	});
 	
 	this.resumeEvents();
@@ -332,6 +333,10 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 				dismissDelay:0,
 				maxWidth:500
 		});
+
+
+		this.fireEvent('render');
+		
    	
    	this.removeLoadMask();
 	},
