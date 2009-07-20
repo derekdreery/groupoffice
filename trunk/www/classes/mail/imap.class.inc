@@ -851,7 +851,7 @@ class imap{
 	{
 		return (eregi("ATTACHMENT", $part["disposition"]) || ($part["name"] != '' && empty($part["id"]))
 		&& 
-		!($part['type']=='APPLEDOUBLE' && $part['mime']== 'application/APPLEFILE'));
+		!($part['type']=='APPLEDOUBLE' && $part['mime']== 'application/APPLEFILE') && strtolower($part['type'])!='alternative');
 	}
 	
 	/*function is_attachment($part)

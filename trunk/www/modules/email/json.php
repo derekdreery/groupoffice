@@ -373,6 +373,8 @@ try{
 	
 
 			$response['data']['body']='';
+
+			
 			
 			//remove alternative body part
 			$new_parts=array();
@@ -385,6 +387,8 @@ try{
 			}
 
 			$parts=$new_parts;
+
+			//debug($parts);
 			
 			if($GO_MODULES->has_module('gnupg'))
 			{
