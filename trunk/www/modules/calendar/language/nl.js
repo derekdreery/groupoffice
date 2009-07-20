@@ -61,3 +61,4 @@ GO.calendar.lang.eventDefaults='Standaard instellingen voor afspraken';
 
 GO.calendar.lang.importToCalendar='Voeg afspraak direct toe aan de agenda\'s';
 GO.calendar.lang.default_calendar='Standaard agenda';
+GO.email.lang.status='Status';

@@ -56,8 +56,10 @@ if(empty($path))
 	foreach($folders as $folder)
 	{
 		$dbfolder = $files->resolve_path($files->strip_server_path($folder['path']));
-		echo 'Syncing '.$folder['path']."\n";
-		$files->sync_folder($dbfolder['id'], true);
+		if($dbfolder){
+			echo 'Syncing '.$folder['path']."\n";
+			$files->sync_folder($dbfolder['id'], true);
+		}
 	}
 }else
 {
