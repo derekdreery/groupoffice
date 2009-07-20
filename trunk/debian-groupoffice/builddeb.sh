@@ -22,9 +22,6 @@ mkdir godebs
 
 cd godebs
 
-
-#svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/trunk/debian-groupoffice-mailserver
-
 svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/trunk/debian-groupoffice
 
 if [ $1 == "real" ]; then
@@ -37,4 +34,4 @@ cd groupoffice-$VERSION
 
 dpkg-buildpackage -rfakeroot
 
-mv ../groupoffice-com_$VERSION-1_all.deb $FULLPATH/groupoffice.deb
+mv ../groupoffice-com_$VERSION-1_all.deb $FULLPATH/groupoffice-com_$VERSION-1_all.deb

@@ -7,7 +7,7 @@ Standards-Version: 3.8.0
 Homepage: http://www.group-office.com
 
 Package: groupoffice-com
-Architecture: all
+Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Suggests: zip, tnef, libwbxml2-utils
 Description: Groupware application
