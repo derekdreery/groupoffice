@@ -39,6 +39,7 @@ if [ ! $? -eq 0 ]
 then
 	echo Adding vmail user
 	useradd -r -u 150 -g mail -d /home/vmail -s /sbin/nologin -c "Virtual Mailbox" vmail
+
 	chmod 770 /home/vmail
 	chown -R vmail:mail /home/vmail
 fi
@@ -77,9 +78,10 @@ if [ ! $? -eq 0 ]
 then
 	groupadd -g 5001 spamd
 	useradd -u 5001 -g spamd -s /sbin/nologin -d /var/lib/spamassassin spamd
-	mkdir /var/lib/spamassassin
-	chown spamd:spamd /var/lib/spamassassin
+	mkdir /var/lib/spamassassin	
 fi
+
+chown spamd:spamd /var/lib/spamassassin
 
 
 postconf -e virtual_transport=dovecot
