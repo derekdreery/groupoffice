@@ -1,0 +1,19 @@
+Source: groupoffice-servermanager
+Section: web
+Priority: extra
+Maintainer: Merijn Schering <mschering@intermesh.nl>
+Build-Depends: debhelper (>= 7)
+Standards-Version: 3.8.0
+Homepage: http://www.group-office.com
+
+Package: groupoffice-servermanager
+Architecture: all
+Depends: groupoffice-com,
+		php5-mysqli,
+		groupoffice-mailserver,
+		php5-cli,
+    ${misc:Depends},
+    dbconfig-common,
+    ucf (>= 0.28)
+Description: Create multiple Group-Office installations
+

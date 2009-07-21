@@ -1,5 +1,5 @@
 #!/bin/sh
-
+set -e
 
 # Use debconf.
 . /usr/share/debconf/confmodule
@@ -11,6 +11,8 @@ a2enmod vhost_alias
 
 chown -R www-data:www-data /var/www/groupoffice
 
-/etc/init.d/apache2 restart 3> /dev/null || true
+invoke-rc.d apache2 restart 3> /dev/null || true
+
+php /usr/share/groupoffice-servermanager/upgradeinstallation.php
 
 exit 0
