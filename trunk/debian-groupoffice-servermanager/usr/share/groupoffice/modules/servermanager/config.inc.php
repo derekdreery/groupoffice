@@ -1,5 +1,5 @@
 <?php
-$sm_config['install_path']='/var/www/groupoffice/';
+$sm_config['install_path']='/home/vhosts/groupoffice/';
 $sm_config['domain']='intermeshdev.nl';
 $sm_config['apache_conf']='/etc/apache2/sites-enabled/';
 $sm_config['apache_user']='www-data';

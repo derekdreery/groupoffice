@@ -3,15 +3,15 @@
 Options FollowSymLinks
 AllowOverride None
 </Directory>
-<Directory /var/www/groupoffice/>
+<Directory /home/govhosts/>
 Options Indexes FollowSymLinks MultiViews
 AllowOverride All
 Order allow,deny
 allow from all
 </Directory>
 
-Alias /sm-local /var/www/groupoffice/sm-local
+Alias /sm-local /home/govhosts/sm-local
 ServerName *.{domain}
 ErrorLog /var/log/apache2/groupoffice_error.log
-VirtualDocumentRoot /var/www/groupoffice/%0/groupoffice
+VirtualDocumentRoot /home/govhosts/%0/groupoffice
 </VirtualHost>
