@@ -23,7 +23,7 @@ function set_value($file, $str) {
 	$data = file_get_contents($file);
 
 	if(!strpos($data, $str)) {
-		$data .= "\n".$str;
+		$data .= $str."\n";
 	}
 	file_put_contents($file, $data);
 }
