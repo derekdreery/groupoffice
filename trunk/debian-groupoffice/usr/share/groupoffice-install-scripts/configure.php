@@ -33,8 +33,15 @@ if(!file_exists('/etc/groupoffice/config.php'))
 
 	$arr = explode('_', $locale);
 
-	$replacements['lang']=$arr[0];
-	$replacements['country']=$arr[1];
+	if(isset($arr[1]))
+	{
+		$replacements['lang']=$arr[0];
+		$replacements['country']=$arr[1];
+	}else
+	{
+		$replacements['lang']='en';
+		$replacements['country']='NL';
+	}
 
 
 	function create_file($file, $tpl, $replacements) {
