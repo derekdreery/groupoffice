@@ -9,12 +9,10 @@ Homepage: http://www.group-office.com
 Package: groupoffice-servermanager
 Architecture: all
 Depends: groupoffice-com,
-		php5-mysqli,
 		groupoffice-mailserver,
 		php5-cli,
-    ${misc:Depends},
-    dbconfig-common,
-    ucf (>= 0.28)
+		dbconfig-common,
+		ucf (>= 0.28)
 Description: Create multiple Group-Office installations
  It uses a virtual document root for Apache 2 to create multiple
  Group-Office domains easily.
