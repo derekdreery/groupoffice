@@ -1,24 +1,19 @@
-This package was debianized by Merijn Schering <mschering@Intermesh-1> on
+This package was debianized by Merijn Schering <mschering@intermesh.nl> on
 Mon, 20 Jul 2009 16:08:29 +0200.
 
-It was downloaded from <url://example.com>
+It was downloaded from http://www.group-office.com
 
 Upstream Author(s):
 
-    <put author's name and email here>
-    <likewise for another author>
+    Merijn Schering <mschering@intermesh.nl>
 
 Copyright:
 
-    <Copyright (C) YYYY Name OfAuthor>
-    <likewise for another author>
+    Copyright (C) 2009 Intermesh
 
 License:
 
-    <Put the license of the package here indented by 4 spaces>
+    AGPL 3.0
 
-The Debian packaging is copyright 2009, Merijn Schering <mschering@Intermesh-1> and
-is licensed under the GPL, see `/usr/share/common-licenses/GPL'.
-
-# Please also look if there are files or directories which have a
-# different copyright/license attached and list them here.
+The Debian packaging is copyright 2009, Merijn Schering <mschering@intermesh.nl> and
+is licensed under the AGPL, see http://www.fsf.org/licensing/licenses/agpl-3.0.html

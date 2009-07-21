@@ -2,4 +2,4 @@ groupoffice-com (3.2.14-1) unstable; urgency=low
 
   * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
 
- -- Merijn Schering <mschering@Intermesh-1>  Mon, 20 Jul 2009 16:08:29 +0200
+ -- Merijn Schering <mschering@intermesh.nl>  Mon, 20 Jul 2009 16:08:29 +0200
