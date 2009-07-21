@@ -18,7 +18,7 @@ postconf -e 'virtual_alias_domains ='
 postconf -e 'virtual_alias_maps = proxy:mysql:$config_directory/mysql_virtual_alias_maps.cf'
 postconf -e 'virtual_mailbox_domains = proxy:mysql:$config_directory/mysql_virtual_domains_maps.cf'
 postconf -e 'virtual_mailbox_maps = proxy:mysql:$config_directory/mysql_virtual_mailbox_maps.cf'
-postconf -e 'virtual_mailbox_base = /var/vmail'
+postconf -e 'virtual_mailbox_base = /home/vmail'
 postconf -e 'virtual_minimum_uid = 150'
 postconf -e 'virtual_uid_maps = static:150'
 postconf -e 'virtual_gid_maps = static:8'
@@ -38,9 +38,9 @@ id vmail >/dev/null 2>&1
 if [ ! $? -eq 0 ]
 then
 	echo Adding vmail user
-	useradd -r -u 150 -g mail -d /var/vmail -s /sbin/nologin -c "Virtual Mailbox" vmail
-	chmod 770 /var/vmail
-	chown -R vmail:mail /var/vmail
+	useradd -r -u 150 -g mail -d /home/vmail -s /sbin/nologin -c "Virtual Mailbox" vmail
+	chmod 770 /home/vmail
+	chown -R vmail:mail /home/vmail
 fi
 
 
