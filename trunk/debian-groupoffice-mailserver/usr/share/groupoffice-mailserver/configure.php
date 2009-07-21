@@ -95,8 +95,8 @@ if(!file_exists('/etc/dovecot/dovecot-sql.conf'))
 	create_file('/etc/dovecot/dovecot-sql.conf','tpl/etc/dovecot/dovecot-sql.conf', $replacements);
 
 echo "Configuring vacation\n";
-if(!file_exists('/etc/groupoffice/vacation.pl'))
-	create_file('/etc/groupoffice/vacation.pl','tpl/etc/groupoffice/vacation.pl', $replacements);
+if(!file_exists('/etc/groupoffice/vacation'))
+	create_file('/etc/groupoffice/vacation','tpl/etc/groupoffice/vacation', $replacements);
 
 echo "Configuring groupoffice\n";
 if(!file_exists('/etc/groupoffice/globalconfig.inc.php'))

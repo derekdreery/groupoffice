@@ -133,5 +133,5 @@ tlsmgr    unix  -       -       -       1000?   1       tlsmgr
 #scache    unix  -       -       -       -       1       scache
 #discard   unix  -       -       -       -       -       discard
 vacation    unix  -       n       n       -       -       pipe
-  flags=Rq user=vacation argv=/usr/bin/vacation.pl -f ${sender} -- ${recipient}
+  flags=Rq user=vacation argv=/usr/bin/vacation -f ${sender} -- ${recipient}
 

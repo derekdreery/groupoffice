@@ -90,7 +90,7 @@ our $debugfile='';
 
 my $syslog = 1;
 
-do "/etc/groupoffice/vacation.pl";
+do "/etc/groupoffice/vacation";
 
 
 
