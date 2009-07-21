@@ -1,5 +1,5 @@
 #!/bin/sh
-set -x
+set -e
 
 . /usr/share/debconf/confmodule
 . /usr/share/dbconfig-common/dpkg/prerm.mysql
