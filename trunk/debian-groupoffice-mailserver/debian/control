@@ -8,7 +8,7 @@ Homepage: http://www.group-office.com
 
 Package: groupoffice-mailserver
 Architecture: all
-Depends: groupoffice,
+Depends: groupoffice-com,
 		php5-cli,
 		postfix,
 		postfix-mysql,
