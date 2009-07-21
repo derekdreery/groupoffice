@@ -1,4 +1,4 @@
-Source: groupoffice
+Source: groupoffice-com
 Section: web
 Priority: extra
 Maintainer: Merijn Schering <mschering@intermesh.nl>
@@ -6,7 +6,7 @@ Build-Depends: debhelper (>= 7)
 Standards-Version: 3.8.0
 Homepage: http://www.group-office.com
 
-Package: groupoffice
+Package: groupoffice-com
 Architecture: all
 Depends: libapache2-mod-php5,
 		php5-mysqli,
