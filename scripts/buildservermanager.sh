@@ -28,4 +28,4 @@ chmod 775 debian-groupoffice-servermanager/DEBIAN/postrm
 
 dpkg --build debian-groupoffice-servermanager
 
-mv debian-groupoffice-servermanager.deb $FULLPATH/groupoffice-servermanager.deb
+mv debian-groupoffice-servermanager.deb $FULLPATH/groupoffice-servermanager_3.2.2_all.deb
