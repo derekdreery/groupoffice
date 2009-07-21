@@ -29,8 +29,8 @@ if [ $1 == "real" ]; then
 	mv groupoffice-com-$VERSION debian-groupoffice/usr/share/groupoffice
 fi
 
-mv debian-groupoffice groupoffice-$VERSION
-cd groupoffice-$VERSION
+mv debian-groupoffice groupoffice-com-$VERSION
+cd groupoffice-com-$VERSION
 
 dpkg-buildpackage -rfakeroot
 
