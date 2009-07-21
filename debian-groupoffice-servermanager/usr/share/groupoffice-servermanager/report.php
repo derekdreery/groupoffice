@@ -1,3 +1,4 @@
+#!/usr/bin/php
 <?php
 if(isset($argv[1]))
 define('CONFIG_FILE', $argv[1]);
@@ -19,7 +20,7 @@ if(!isset($GO_MODULES->modules['servermanager']))
 require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 $fs = new filesystem();
 
-$roots=array('/var/www/groupoffice');
+$roots=array($sm_config['install_path']);
 //$roots=array('/var/www/groupoffice');
 
 $configs=array();

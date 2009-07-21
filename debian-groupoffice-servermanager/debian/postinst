@@ -9,7 +9,7 @@ php /usr/share/groupoffice-servermanager/installservermanager.php
 
 a2enmod vhost_alias
 
-chown -R www-data:www-data /var/www/groupoffice
+chown -R www-data:www-data /home/govhosts/groupoffice
 
 invoke-rc.d apache2 restart 3> /dev/null || true
 
