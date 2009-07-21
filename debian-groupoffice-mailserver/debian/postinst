@@ -1,5 +1,5 @@
 #!/bin/sh
-
+set -e
 
 # Use debconf.
 . /usr/share/debconf/confmodule
@@ -18,7 +18,7 @@ postconf -e 'virtual_alias_domains ='
 postconf -e 'virtual_alias_maps = proxy:mysql:$config_directory/mysql_virtual_alias_maps.cf'
 postconf -e 'virtual_mailbox_domains = proxy:mysql:$config_directory/mysql_virtual_domains_maps.cf'
 postconf -e 'virtual_mailbox_maps = proxy:mysql:$config_directory/mysql_virtual_mailbox_maps.cf'
-postconf -e 'virtual_mailbox_base = /vmail'
+postconf -e 'virtual_mailbox_base = /var/vmail'
 postconf -e 'virtual_minimum_uid = 150'
 postconf -e 'virtual_uid_maps = static:150'
 postconf -e 'virtual_gid_maps = static:8'
@@ -38,9 +38,9 @@ id vmail >/dev/null 2>&1
 if [ ! $? -eq 0 ]
 then
 	echo Adding vmail user
-	useradd -r -u 150 -g mail -d /vmail -s /sbin/nologin -c "Virtual Mailbox" vmail
-	chmod 770 /vmail
-	chown -R vmail:mail /vmail
+	useradd -r -u 150 -g mail -d /var/vmail -s /sbin/nologin -c "Virtual Mailbox" vmail
+	chmod 770 /var/vmail
+	chown -R vmail:mail /var/vmail
 fi
 
 
@@ -62,8 +62,8 @@ chmod 700 /var/spool/vacation/
 touch /var/log/vacation.log /var/log/vacation-debug.log
 chown vacation:vacation /var/log/vacation*
 
-chown vacation:vacation /usr/bin/vacation.pl
-chmod 700 /usr/bin/vacation.pl
+chown vacation:vacation /usr/bin/vacation
+chmod 700 /usr/bin/vacation
 
 postconf -e 'transport_maps = hash:/etc/postfix/transport';
 postconf -e 'vacation_destination_recipient_limit = 1';
