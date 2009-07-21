@@ -7,7 +7,7 @@ if [ -f /usr/share/debconf/confmodule ]; then
 fi
 if [ -f /usr/share/dbconfig-common/dpkg/postrm.mysql ]; then
     . /usr/share/dbconfig-common/dpkg/postrm.mysql
-    dbc_go groupoffice $@
+    dbc_go groupoffice-com $@
 fi
 
 if [ "$1" = "purge" ]; then
