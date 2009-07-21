@@ -9,14 +9,14 @@ Homepage: http://www.group-office.com
 Package: groupoffice-com
 Architecture: all
 Depends: libapache2-mod-php5,
-		php5-mysql | php5-mysqli,
-		php5-gd,
-    php5-imap,
-		php5-cli,
-		php5-curl,
-    ${misc:Depends},
-    dbconfig-common,
-    ucf (>= 0.28)
+	mysql-server,
+	php5-mysql | php5-mysqli,
+	php5-gd,
+	php5-imap,
+	php5-cli,
+	php5-curl,
+	dbconfig-common,
+	ucf (>= 0.28)
 Suggests: zip, tnef, libwbxml2-utils
 Description: Groupware application
  Take your office online. Share projects, calendars, files and e-mail online 
