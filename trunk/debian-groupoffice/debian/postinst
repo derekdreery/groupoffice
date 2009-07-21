@@ -14,7 +14,7 @@ if [ ! -e /usr/share/groupoffice ]; then
 	ln -s /var/www/community/trunk/www /usr/share/groupoffice
 fi
 
-/etc/init.d/apache2 reload > /dev/null || true
+invoke-rc.d apache2 reload > /dev/null || true
 
 
 php /usr/share/groupoffice-install-scripts/configure.php
