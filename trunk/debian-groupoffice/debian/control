@@ -1,4 +1,4 @@
-Source: groupoffice-com
+Source: groupoffice
 Section: web
 Priority: extra
 Maintainer: Merijn Schering <mschering@intermesh.nl>
@@ -6,9 +6,17 @@ Build-Depends: debhelper (>= 7)
 Standards-Version: 3.8.0
 Homepage: http://www.group-office.com
 
-Package: groupoffice-com
-Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Package: groupoffice
+Architecture: all
+Depends: libapache2-mod-php5,
+		php5-mysqli,
+		php5-gd,
+    php5-imap,
+		php5-cli,
+		php5-curl,
+    ${misc:Depends},
+    dbconfig-common,
+    ucf (>= 0.28)
 Suggests: zip, tnef, libwbxml2-utils
 Description: Groupware application
  Take your office online. Share projects, calendars, files and e-mail online 
