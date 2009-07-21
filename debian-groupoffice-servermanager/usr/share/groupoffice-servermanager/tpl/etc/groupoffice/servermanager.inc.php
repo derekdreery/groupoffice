@@ -11,7 +11,7 @@ $sm_config['protocol']='http://';
 
 $sm_config['sender_email']='noreply@{domain}';
 $sm_config['sender_name']='Group-Office trial';
-$sm_config['install_modules']='summary,email,calendar,tasks,addressbook,notes,files,modules,users,groups,tools,serverclient,links';
+$sm_config['install_modules']='summary,email,calendar,tasks,addressbook,notes,files,modules,users,groups,tools,serverclient,links,comments';
 
 $default_config['quota']='512';
 $default_config['max_users']='3';
@@ -21,7 +21,7 @@ $default_config['allow_password_change']=true;
 $default_config['serverclient_domains']='';
 #restrict outgoing e-mails
 $default_config['restrict_smtp_hosts']='127.0.0.1:10';
-$default_config['allowed_modules']='summary,email,calendar,tasks,addressbook,notes,files,modules,users,groups,tools,serverclient,links';
+$default_config['allowed_modules']='summary,email,calendar,tasks,addressbook,notes,files,modules,users,groups,tools,serverclient,links,comments,log';
 
 
 $static_config['debug']=false;
