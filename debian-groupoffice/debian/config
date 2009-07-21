@@ -6,7 +6,7 @@ set -x
 
 if [ -f /usr/share/dbconfig-common/dpkg/config.mysql ]; then
         . /usr/share/dbconfig-common/dpkg/config.mysql
-        dbc_go groupoffice $@
+        dbc_go groupoffice-com $@
 fi
 
 exit 0
