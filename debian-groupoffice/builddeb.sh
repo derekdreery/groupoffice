@@ -33,10 +33,10 @@ fi
 
 mv debian-groupoffice groupoffice-com-$VERSION
 
-tar czf groupoffice-com_$VERSION.orig.tar.gz groupoffice-com-$VERSION
+#tar czf groupoffice-com_$VERSION.orig.tar.gz groupoffice-com-$VERSION
 
 cd groupoffice-com-$VERSION
 
-debuild -S -rfakeroot
+debuild -S -rfakeroot --no-tgz-check
 
 #mv ../groupoffice-com_$VERSION-1_all.deb $FULLPATH/
