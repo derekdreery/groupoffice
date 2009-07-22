@@ -44,7 +44,7 @@ GO.LinksTree = function(config){
 	
 	// set the root node
 	this.rootNode = new Ext.tree.AsyncTreeNode({
-		text: 'Root',
+		text: GO.lang['root'],
 		draggable:false,
 		iconCls : 'folder-default',
 		expanded:false
