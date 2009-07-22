@@ -390,7 +390,7 @@ class email extends db
 			$alias['account_id']=$account['id'];
 			$alias['name']=$account['name'];
 			
-			if(isset($alias['email']))
+			if(isset($account['email']))
 				$alias['email']=$account['email'];
 
 			if(isset($account['signature']))
