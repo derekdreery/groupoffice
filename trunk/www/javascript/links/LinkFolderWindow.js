@@ -24,7 +24,7 @@ GO.LinkFolderWindow = function(config){
 	this.newFolderNameField = new Ext.form.TextField({	             	
         fieldLabel: GO.lang['strName'],
         name: 'name',
-        value: 'New folder',
+        value: GO.lang['newFolder'],
         allowBlank:false,
         anchor:'100%'   
     });
@@ -44,7 +44,7 @@ GO.LinkFolderWindow = function(config){
 	config.width=400;
 	config.autHeight=true;
 	config.closeAction='hide';
-	config.title= 'New folder';					
+	config.title= GO.lang['newFolder'];
 	config.items= this.formPanel;
 	config.focus= focusName.createDelegate(this);
 	config.buttons=[{
