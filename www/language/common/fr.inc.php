@@ -3,25 +3,50 @@
 //Author : Lionel JULLIEN
 //Date : September, 04 2008
 
+//Update for 3.02-stable-10
+//Author : Cyril DUCHENOY
+//Date : July, 20 2009
+
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_base_language_file('common'));
 
+$lang['common']['about']='Version: %s
+
+Copyright (c) 2003-2009, Intermesh
+All rights reserved.
+This program is protected by copyright law and the Group-Office license.
+
+Pour le support technique contacter votre administrateur:
+%s
+
+Pour plus d\'informations sur Group-Office visitez:
+http://www.group-office.com
+
+Group-Office is created by Intermesh. For more information about Intermesh visit:
+http://www.intermesh.nl/en/';
+
+$lang['common']['totals']='Total';
+$lang['common']['printPage']='Page %s sur %s';
+
 $lang['common']['htmldirection']= 'ltr';
 
+$lang['common']['quotaExceeded']='Vous n\'avez plus d\'espace disque disponible. Veuillez supprimer certains fichiers ou contacter votre administrateur pour obtenir plus d\'espace';
 $lang['common']['errorsInForm'] = 'Il y a des erreurs dans le formulaire... Corrigez les et essayez de nouveau.';
 
+$lang['common']['moduleRequired']='Pour cette fonction, le module %s est requit';
 $lang['common']['loadingCore']= 'Chargement du système de base...';
 $lang['common']['loadingLogin'] = 'Chargement de la fenêtre de connexion...';
 $lang['common']['renderInterface']='Génération de l\'interface...';
-$lang['common']['loadingModule'] = 'Chargement des modules...';
+$lang['common']['loadingModules']='Chargement des modules';
+$lang['common']['loadingModule'] = 'Chargement du module';
 
 $lang['common']['loggedInAs'] = "Connecté en tant que ";
 $lang['common']['search']='Rechercher';
 $lang['common']['settings']='Paramètres';
-$lang['common']['adminMenu']='Menu Admin';
+$lang['common']['adminMenu']='Menu d\'Administration';
 $lang['common']['help']='Aide';
 $lang['common']['logout']='Se déconnecter';
-$lang['common']['badLogin'] = 'Mauvais nom ou mot de passe';
+$lang['common']['badLogin'] = 'Mauvais nom d\'utilisateur ou mot de passe';
 $lang['common']['badPassword'] = 'Vous avez saisi un mauvais mot de passe';
 
 $lang['common']['passwordMatchError']='Les mots de passe ne correspondent pas';
@@ -30,13 +55,17 @@ $lang['common']['saveError']='Erreur pendant la sauvegarde des données';
 $lang['common']['deleteError']='Erreur pendant l\'effacement des données';
 $lang['common']['selectError']='Erreur pendant la lecture des données';
 $lang['common']['missingField'] = 'Vous n\'avez pas renseigné tous les champs obligatoires.';
+$lang['common']['invalidEmailError']='L\'adresse e-mail est invalide';
+$lang['common']['invalidDateError']='La date est incorrecte';
+$lang['common']['noFileUploaded']='Aucun fichier reçu';
+$lang['common']['error']='Erreur';
 
 $lang['common']['salutation']='Salutation';
 $lang['common']['firstName'] = 'Prénom';
 $lang['common']['lastName'] = 'Nom';
 $lang['common']['middleName'] = 'Deuxième prénom';
-$lang['common']['sirMadam']['M'] = 'monsieur';
-$lang['common']['sirMadam']['F'] = 'madame';
+$lang['common']['sirMadam']['M'] = 'Monsieur';
+$lang['common']['sirMadam']['F'] = 'Madame';
 $lang['common']['initials'] = 'Initiales';
 $lang['common']['sex'] = 'Sexe';
 $lang['common']['birthday'] = 'Date de naissance';
@@ -52,7 +81,7 @@ $lang['common']['postState'] = 'Etat';
 $lang['common']['postCountry'] = 'Pays';
 $lang['common']['postZip'] = 'Code postal';
 $lang['common']['visitAddress'] = 'Adresse';
-$lang['common']['postAddress'] = 'Adresse postale';
+$lang['common']['postAddressHead'] = 'Adresse postale';
 $lang['common']['name'] = 'Nom';
 $lang['common']['user'] = 'Utilisateur';
 $lang['common']['username'] = 'Identifiant';
@@ -74,7 +103,7 @@ $lang['common']['question'] = 'Question secrète';
 $lang['common']['answer'] = 'Réponse';
 $lang['common']['fax'] = 'Fax';
 $lang['common']['workFax'] = 'Fax professionnel';
-$lang['common']['homepage'] = 'Site web';
+$lang['common']['homepage'] = 'Site Internet';
 $lang['common']['workAddress'] = 'Adresse professionnelle';
 $lang['common']['workZip'] = 'Code postal';
 $lang['common']['workCountry'] = 'Pays';
@@ -86,6 +115,7 @@ $lang['common']['tomorrow'] = 'Demain';
 $lang['common']['SearchAll'] = 'Tous les champs';
 $lang['common']['total'] = 'total';
 $lang['common']['results'] = 'résultats';
+
 
 $lang['common']['months'][1]='Janvier';
 $lang['common']['months'][2]='Février';
@@ -108,6 +138,7 @@ $lang['common']['short_days'][4]="Je";
 $lang['common']['short_days'][5]="Ve";
 $lang['common']['short_days'][6]="Sa";
 
+
 $lang['common']['full_days'][0] = "Dimanche";
 $lang['common']['full_days'][1] = "Lundi";
 $lang['common']['full_days'][2] = "Mardi";
@@ -122,6 +153,7 @@ $lang['common']['date']='Date';
 
 $lang['common']['default_salutation']['M']='Cher monsieur';
 $lang['common']['default_salutation']['F']='Chère madame';
+$lang['common']['default_salutation']['unknown']='Chère madame, Cher monsieur';
 
 $lang['common']['mins'] = 'Minutes';
 $lang['common']['hour'] = 'Heure';
@@ -148,19 +180,13 @@ $lang['common']['files']='Fichiers';
 $lang['common']['email']='E-mail';
 $lang['common']['total']='Total';
 
-$lang['common']['lost_password_subject']='Nouveau mot de passe';
-$lang['common']['lost_password_body']='%s,<br />
-<br />
-Vous avez demandé un nouveau mot de passe pour %s.<br />
-<br />
-Vos nouveau identifiants sont les suivants :<br />
-<br />
-Identifiant : %s<br />
-Mot de passe : %s';
 
-$lang['common']['lost_password_error']='Impossible de trouver l\'adresse email demandée.';
-$lang['common']['lost_password_success']='Un nouveau mot de passe vient de vous être envoyé.';
+$lang['common']['confirm_leave']='Si vous quittez Group-Office, vous allez perdre les données non enregistrées';
+$lang['common']['dataSaved']='Les données ont été sauvegardées avec succès';
 
-// 3.0-14
-$lang['common']['postAddressHead']= 'Adresse postale';
+$lang['common']['uploadMultipleFiles'] = 'Cliquez sur \'Parcourir\' pour sélectionner le(s) fichier(s) ou répertoire(s) de votre ordinateur. Cliquez sur \'Télécharger\' pour transférer le(s) fichier(s) ou répertoire(s) vers Group-Office. Cette fênetre sera fermée automatiquement à la fin du transfert.';
 
+$lang['common']['loginToGO']='Cliquez ici pour vous connecter à l\'application Group-Office';
+$lang['common']['links']='Liens';
+$lang['common']['GOwebsite']='Group-Office website';
+$lang['common']['GOisAProductOf']='<i>Group-Office</i> est un produit de <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';

@@ -13,6 +13,10 @@
  * French Translation v1.0
  * Author : Lionel JULLIEN
  * Date : September, 05 2008
+ *
+ * Update for 3.02-stable-10
+ * Author : Cyril DUCHENOY
+ * Date : July, 21 200
  */
 
 
@@ -28,7 +32,7 @@ GO.tasks.lang.tasklists = 'Listes de tâches';
 GO.tasks.lang.showCompletedTasks = 'Afficher les tâches terminées';
 GO.tasks.lang.filter = 'Filtrer';
 GO.tasks.lang.dueDate = 'Date de fin';
-GO.tasks.lang.dueAt = 'Terminée à';
+GO.tasks.lang.dueAt = 'Termine le';
 GO.tasks.lang.needsAction = 'Action nécessaire';
 GO.tasks.lang.accepted = 'Accepté';
 GO.tasks.lang.declined = 'Décliné';
@@ -43,10 +47,11 @@ GO.tasks.lang.repeatForever = 'Répéter pour toujours';
 GO.tasks.lang.recurrence = 'Récurrence';
 GO.tasks.lang.options = 'Options';
 GO.tasks.lang.createLink = 'Créer un lien';
-GO.tasks.lang.startsAt='Débute à';
+GO.tasks.lang.startsAt='Débute le';
 GO.tasks.lang.showInactiveTasks='Afficher les tâches inactives';
-
-// 3.0-14
-GO.tasks.lang.remindMe= 'Me le rappeler';
-GO.tasks.lang.scheduleCall='Planifier un appelSchedule call';
+GO.tasks.lang.remindMe= 'Ajouter un rappel';
+GO.tasks.lang.scheduleCall='Planifier un appel téléphonique';
 GO.tasks.lang.call='Appel';
+GO.tasks.lang.taskDefaults='Paramètres par défaut pour les tâches';
+GO.tasks.lang.daysBeforeStart='Rappel en jours avant l\'échéance';
+GO.tasks.lang.defaultTasklist='Afficher par défaut les tâches de';

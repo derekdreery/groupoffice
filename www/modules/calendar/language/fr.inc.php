@@ -55,7 +55,7 @@ $lang['calendar']['repeats_at'] = 'Répéter chaque %s le %s';//eg. Repeats ever
 $lang['calendar']['repeats_at_not_every'] = 'Répéter chaque %s %s le %s';//eg. Repeats every 2 weeks at monday
 $lang['calendar']['until']='jusqu\'à'; 
 
-$lang['calendar']['not_invited']='Vous n\'étes pas invité à cet évènement. Vous devriez vous connecter sous un autre nom.';
+$lang['calendar']['not_invited']='Vous n\'êtes pas invité à cet évènement. Vous devriez vous connecter sous un autre nom.';
 
 
 $lang['calendar']['accept_title']='Accepté';
@@ -64,4 +64,19 @@ $lang['calendar']['accept_confirm']='Le propriétaire de cet évènement sera no
 $lang['calendar']['decline_title']='Décliné';
 $lang['calendar']['decline_confirm']='Le propriétaire de cet évènement sera notifié que vous avez décliné l\'invitation';
 
-$lang['calendar']['cumulative']='Règle de récurrence invalide ! La prochaine occurence ne peut pas débuté avant que la précedente soit terminée.';
+$lang['calendar']['cumulative']='Règle de récurrence invalide ! La prochaine occurrence ne peut pas débuter avant que la précedente soit terminée.';
+
+// 3.02-stable-10
+$lang['calendar']['already_accepted']='Vous avez déjà accepté ce rendez-vous.';
+
+$lang['calendar']['private']='Privé';
+
+$lang['calendar']['import_success']='%s rendez-vous on été importé(s)';
+
+$lang['calendar']['printTimeFormat']='De %s à %s';
+$lang['calendar']['printLocationFormat']='. Lieu: %s';
+$lang['calendar']['printPage']='Page %s sur %s';
+$lang['calendar']['printList']='Liste des rendez-vous';
+
+$lang['calendar']['printAllDaySingle']='Toute la journée';
+$lang['calendar']['printAllDayMultiple']='Tous les jours du %s au %s';

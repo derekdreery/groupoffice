@@ -13,11 +13,33 @@
  * French Translation v1.0
  * Author : Lionel JULLIEN
  * Date : September, 04 2008
+ * 
+ * Update for 3.02-stable-10 and order between en.js and fr.js for easy update later
+ * Author : Cyril DUCHENOY
+ * Date : July, 21 2009
  */
 
+GO.lang.exportHiddenColumns='Exporter les colonnes cachées';
+GO.lang.searchQuery='requête de recherche';
+GO.lang.pleaseApplyFirst='Veuillez tout d\'abord sauvegarder en cliquant sur \'Appliquer\'';
+GO.lang.passwordMatchError='Les mots de passe ne correspondent pas';
+GO.lang.serverError='Le serveur Web a rencontré une erreur, contactez votre administrateur système.';
+GO.lang.errorDetails='Détail de l\'erreur'
+GO.lang.contactSupportDesk='Contacter votre support technique';
+
+GO.lang.disabled='Désactivé';
+GO.lang.changesWillBeLost='Vous avez effectué des modifications. Appuyez sur \'Annuler\' et enregistrer les modifications ou sur \'Ok\' pour continuer et supprimer vos modifications.';
+GO.lang.strCommunityForum='Forum communautaire';
+GO.lang.moduleRequired='Pour cette fonction, le module \'{module}\' est requit. Ce module est non disponible.';
+GO.lang.completeProfile = 'Veuillez compléter votre profil';
+GO.lang.fullscreen='Plein écran';
+GO.lang.popupBlocker = 'Votre navigateur est en train de bloquer une fenêtre popup de Group-Office. Veuillez désactiver le blocage des popups pour ce site';
+
+GO.lang.color='Couleur';
 GO.lang.browse='Parcourir...';
 GO.lang.largeUpload='Gros fichiers/dossiers (Java nécessaire)';
 GO.lang.smallUpload='Petits fichiers';
+
 
 GO.lang.lostPassword='Vous avez perdu votre mot de passe ?';
 GO.lang.lostPasswordText='Afin de retrouver votre mot de passe vous devez être capable de consulter votre boite de messagerie sans passer par Group-Office. Si vous renseignez votre adresse e-mail, un nouveau mot de passe va vous être envoyé.<br /><br />Saisissez votre adresse e-mail :';
@@ -47,7 +69,7 @@ GO.lang.strPassword = 'Mot de passe';
 
 GO.lang.strFirstName = 'Prénom';
 GO.lang.strMiddleName = 'Deuxième prénom';
-GO.lang.strNo = 'No.';
+GO.lang.strNo = 'N°';
 GO.lang.strLastName = 'Nom';
 GO.lang.strTitle = 'Civilité';
 GO.lang.strInitials = 'Initiales';
@@ -61,7 +83,7 @@ GO.lang.strCellular = 'Téléphone mobile';
 GO.lang.strAddress = 'Adresse';
 GO.lang.strAddressNo = 'Numéro de rue';
 GO.lang.strZip = 'Code postal';
-GO.lang.strCity = 'ville';
+GO.lang.strCity = 'Ville';
 GO.lang.strState = 'Etat';
 GO.lang.strCountry = 'Pays';
 GO.lang.strHomepage = 'Site web';
@@ -88,10 +110,11 @@ GO.lang.strPostZip = 'Code postal';
 GO.lang.locations = 'Lieux';
 GO.lang.folder = 'Dossier';
 GO.lang.folders = 'Dossiers';
+GO.lang.newFolder='Nouveau dossier';
 
 GO.lang.up = 'haut';
 GO.lang.fileExists = 'Fichier existant';
-GO.lang.overwriteFile = 'Voulez vous écraser le fichier \'{file}\'?';
+GO.lang.overwriteFile = 'Voulez vous écraser le fichier \'{file}\' ?';
 
 GO.lang.url = 'URL';
 
@@ -169,10 +192,10 @@ GO.lang.strError= 'Erreur';
 GO.lang.waitMsgSave= 'Sauvegarde...';
 GO.lang.waitMsgLoad= 'Chargement...';
 GO.lang.waitMsgUpload= 'Envoie...';
-
+GO.lang.strRequestError= 'Impossible de contacter le serveur. Veuillez vérifier votre connexion à Internet.';
 
 GO.lang.strSelected = 'Sélectionné';
-GO.lang.noItemSelected= 'Vous n\'avez pas sélectionné un élément.';
+GO.lang.noItemSelected= 'Vous n\'avez pas sélectionné d\'élément.';
 GO.lang.strDeleteSelectedItems= 'Etes-vous sûr de vouloir supprimer les {count} éléments ?';
 GO.lang.strDeleteSelectedItem= 'Etes-vous sûr de vouloir supprimer l\'élément sélectionné ?';
 
@@ -181,7 +204,7 @@ GO.lang.strNoWritePermissions = 'Vous n\'êtes pas autorisé à éditer cet él�
 GO.lang.strUnauthorized= 'Interdit';
 GO.lang.strUnauthorizedText= 'Vous n\'avez pas les permissions pour faire cette action';
 GO.lang.strReadPermissions = 'Permissions de lecture';
-GO.lang.strWritePermissions = 'Permission d\'écriture';
+GO.lang.strWritePermissions = 'Permissions d\'écriture';
 GO.lang.strPermissions = 'Permissions';
 GO.lang.strAccessDenied = 'Accès refusé';
 GO.lang.strAuthorizedGroups = 'Groupes autorisés';
@@ -195,6 +218,10 @@ GO.lang.strLogin= 'Identification nécessaire';
 GO.lang.strLoggedInAs= 'Connecté en tant que';
 
 GO.lang.strErrorsInForm= 'vous avez des erreurs dans votre formulaire. Les champs invalides sont mis en valeur.';
+
+
+
+
 
 GO.lang.strMinute="Minute";
 GO.lang.strMinutes="Minutes";
@@ -234,6 +261,7 @@ GO.lang.strAvailability='Disponibilité';
 GO.lang.strView='Voir';
 
 GO.lang.field = 'Champs';
+GO.lang.value = 'Valeur';
 
 GO.lang.customer = 'Client';
 
@@ -259,21 +287,34 @@ GO.lang.settings='Paramètres';
 GO.lang.latestLinks='Derniers liens'
 GO.lang.cmdBrowseLinks = 'Parcourir les liens';
 
-GO.lang.countries["AD"] = "Andorre";
+GO.lang.today='Ajourd\'hui';
+
+GO.lang.displayingItemsShort='Total: {2}';
+
+GO.lang.image='Image';
+GO.lang.insertImage='Insérer une image';
+
+GO.lang.item='élément';
+GO.lang.items='éléments';
+
+GO.lang.more='Plus';
+
 GO.lang.countries["AF"] = "Afghanistan";
-GO.lang.countries["AG"] = "Antigua et Barbuda";
-GO.lang.countries["AI"] = "Anguilla";
 GO.lang.countries["AL"] = "Albanie";
-GO.lang.countries["AM"] = "Arménie";
-GO.lang.countries["AN"] = "Antilles Néerlandaises";
-GO.lang.countries["AO"] = "Angola";
-GO.lang.countries["AQ"] = "Antarctique";
-GO.lang.countries["AR"] = "Argentine";
+GO.lang.countries["DZ"] = "Algérie";
 GO.lang.countries["AS"] = "Samoa";
-GO.lang.countries["AT"] = "Autriche";
-GO.lang.countries["AU"] = "Australie";
+GO.lang.countries["AD"] = "Andorre";
+GO.lang.countries["AO"] = "Angola";
+GO.lang.countries["AI"] = "Anguilla";
+GO.lang.countries["AQ"] = "Antarctique";
+GO.lang.countries["AG"] = "Antigua et Barbuda";
+GO.lang.countries["AR"] = "Argentine";
+GO.lang.countries["AM"] = "Arménie";
 GO.lang.countries["AW"] = "Aruba";
+GO.lang.countries["AU"] = "Australie";
+GO.lang.countries["AT"] = "Autriche";
 GO.lang.countries["AZ"] = "Azerbaïdjan";
+GO.lang.countries["AN"] = "Antilles Néerlandaises";
 GO.lang.countries["BA"] = "Bosnie Herzégovine";
 GO.lang.countries["BB"] = "Barbade";
 GO.lang.countries["BD"] = "Bangladesh";
@@ -314,7 +355,6 @@ GO.lang.countries["DJ"] = "Djibouti";
 GO.lang.countries["DK"] = "Danemark";
 GO.lang.countries["DM"] = "Dominica";
 GO.lang.countries["DO"] = "République Dominicaine";
-GO.lang.countries["DZ"] = "Algérie";
 GO.lang.countries["EC"] = "Equateur";
 GO.lang.countries["EE"] = "Estonie";
 GO.lang.countries["EG"] = "Egypte";
@@ -329,6 +369,7 @@ GO.lang.countries["FM"] = "Micronésie";
 GO.lang.countries["FO"] = "Féroé (Iles)";
 GO.lang.countries["FR"] = "France";
 GO.lang.countries["FX"] = "France Métropolitaine";
+GO.lang.countries["TF"]= "Terres Australes et Antarctiques Françaises";
 GO.lang.countries["GA"] = "Gabon";
 GO.lang.countries["GB"] = "Royaume-Uni";
 GO.lang.countries["GD"] = "Grenade";
@@ -487,8 +528,7 @@ GO.lang.countries["ZM"] = "Zambie";
 GO.lang.countries["ZR"] = "Zaïre";
 GO.lang.countries["ZW"] = "Zimbabwe";
 
-// 3.0-14
-GO.lang.fullscreen='Plein écran';
-GO.lang.popupBlocker= 'Votre navigateur est en train de bloquer une fenêtre popup de Group-Office. Veuillez désactiver le blocage des popups pour ce site';
-GO.lang.color='Couleur';
-GO.lang.countries["TF"]= "Terres Australes et Antarctiques Françaises";
+GO.lang.on ='On';
+GO.lang.off ='Off';
+
+GO.lang.keyword='Mot-clé';

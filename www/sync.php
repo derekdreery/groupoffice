@@ -11,5 +11,10 @@
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
+
+if(!file_exists('modules/sync/sync.php'))
+{
+	die('Sorry, the sync module is not available in the community version.');
+}
 require('modules/sync/sync.php');
 ?>
