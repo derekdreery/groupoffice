@@ -96,3 +96,5 @@ GO.users.lang.numberFormat ='Number format';
 GO.users.lang.importExport ='Import / Export';
 GO.users.lang.listSeparator='List separator';
 GO.users.lang.textSeparator='Text separator';
+
+GO.users.lang.deleteWarning='WARNING!!! All of the user data including addressbooks, projects, calendars etc. will be deleted!';
