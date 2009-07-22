@@ -68,6 +68,12 @@ class GO_THEME
 	*/
 	function GO_THEME()
 	{
+		$this->set_theme();
+	}
+
+
+	function set_theme(){
+
 		global $GO_CONFIG;
 
 		$_SESSION['GO_SESSION']['theme'] =
@@ -86,7 +92,6 @@ class GO_THEME
 		$this->theme_path = $GO_CONFIG->theme_path.$this->theme.'/';
 		$this->theme_url = $GO_CONFIG->theme_url.$this->theme.'/';
 		$this->image_url = $this->theme_url.'images/';
-
 	}
 	
 	/**
