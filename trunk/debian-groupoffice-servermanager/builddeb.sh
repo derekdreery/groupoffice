@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION=3.2.14
+VERSION=3.2.15
 
 PRG="$0"
 OLDPWD=`pwd`
@@ -12,7 +12,6 @@ FULLPATH=`pwd`
 else
 FULLPATH=''
 fi
-
 
 cd /tmp
 
