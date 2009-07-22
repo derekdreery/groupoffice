@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# useful: DEBCONF_DEBUG="developer"
+
 VERSION=3.2.15
 
 PRG="$0"
