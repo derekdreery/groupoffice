@@ -1,8 +1,18 @@
 #!/bin/sh
-set -e
+set -x
 
 # Use debconf.
 . /usr/share/debconf/confmodule
+
+
+db_get groupoffice-mailserver/domain
+domain="$RET"
+
+if [ ! -e "/etc/groupoffice/config-mailserver.inc.php" ]
+then
+	cat /etc/groupoffice/config-db.php > /etc/groupoffice/config-mailserver.inc.php
+	echo -e "\$domain='$domain';\n" >> /etc/groupoffice/config-mailserver.inc.php
+fi
 
 
 echo Configuring Postfix
