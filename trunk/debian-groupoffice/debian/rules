@@ -41,7 +41,6 @@ clean:
 	#$(MAKE) clean
 
 	dh_clean
-	debconf-updatepo
 
 
 install: build
