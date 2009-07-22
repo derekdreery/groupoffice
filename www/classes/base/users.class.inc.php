@@ -93,7 +93,7 @@ class GO_USERS extends db
 	 * @return bool
 	 */
 	function update_session( $user_id , $update_language=false) {
-		global $GO_LANGUAGE, $GO_CONFIG;
+		global $GO_LANGUAGE, $GO_CONFIG, $GO_THEME;
 		if ($userdata = $this->get_user($user_id)) {
 			$middle_name = $userdata['middle_name'] == '' ? '' : $userdata['middle_name'].' ';
 				
@@ -141,6 +141,8 @@ class GO_USERS extends db
 			
 			$_SESSION['GO_SESSION']['list_separator'] = $userdata['list_separator'];
 			$_SESSION['GO_SESSION']['text_separator'] = $userdata['text_separator'];
+
+			$GO_THEME->set_theme();
 			return true;
 		}
 		return false;
