@@ -23,11 +23,12 @@ $lang['addressbook']['name'] = 'Carnet d\'adresses';
 $lang['addressbook']['description'] = 'Module de gestion des contacts.';
 
 $lang['addressbook']['allAddressbooks'] = 'Tous les carnets d\'adresses';
-$lang['common']['addressbookAlreadyExists'] = 'Le carnet d\adresses que vous essayez de créer existe déjà';
+$lang['common']['addressbookAlreadyExists'] = 'Le carnet d\'adresses que vous essayez de créer existe déjà';
 $lang['addressbook']['notIncluded'] = 'Ne pas importer';
 
 $lang['addressbook']['comment'] = 'Commentaire';
-$lang['addressbook']['bankNo'] = 'Numéro de banque'; 
+//$lang['addressbook']['bankNo'] = 'Numéro de banque'; 
+$lang['addressbook']['bankNo'] = 'Numéro SIRET'; 
 $lang['addressbook']['vatNo'] = 'Numéro de TVA';
 $lang['addressbook']['contactsGroup'] = 'Groupe';
 
@@ -41,4 +42,8 @@ $lang['addressbook']['prospects'] = 'Prospects';
 $lang['addressbook']['contacts'] = 'Contacts';
 $lang['addressbook']['companies'] = 'Sociétés';
 
+// 3.02-stable-10
+$lang['addressbook']['newContactAdded']='Nouveau contact ajouté';
+$lang['addressbook']['newContactFromSite']='Un nouveau contact a été ajouté via le formulaire du site web.';
+$lang['addressbook']['clickHereToView']='Cliquez ici pour voir le contact';
 ?>
