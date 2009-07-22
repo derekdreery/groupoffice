@@ -7,8 +7,8 @@ if [ "$1" = "purge" -a -e /usr/share/debconf/confmodule ]; then
     # Remove my changes to the db.
     db_purge
 
-		rm /etc/groupoffice/servermanager.inc.php
-		rm /etc/apache2/sites-enabled/000-groupoffice
+		rm -f /etc/groupoffice/servermanager.inc.php
+		rm -f /etc/apache2/sites-enabled/000-groupoffice
 fi
 
 #DEBHELPER#
