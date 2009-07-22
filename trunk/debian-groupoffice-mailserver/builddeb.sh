@@ -25,6 +25,9 @@ cd groupoffice-mailserver
 svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/trunk/debian-groupoffice-mailserver
 
 mv debian-groupoffice-mailserver groupoffice-mailserver-$VERSION
+
+tar czf groupoffice-mailserver-$VERSION.orig.tar.gz groupoffice-mailserver-$VERSION
+
 cd groupoffice-mailserver-$VERSION
 
 debuild -rfakeroot

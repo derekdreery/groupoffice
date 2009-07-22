@@ -24,6 +24,9 @@ cd groupoffice-servermanager
 svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/trunk/debian-groupoffice-servermanager
 
 mv debian-groupoffice-servermanager groupoffice-servermanager-$VERSION
+
+tar czf groupoffice-mailserver-$VERSION.orig.tar.gz groupoffice-mailserver-$VERSION
+
 cd groupoffice-servermanager-$VERSION
 
 debuild -rfakeroot

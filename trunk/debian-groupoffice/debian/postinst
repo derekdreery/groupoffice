@@ -25,8 +25,7 @@ php ./upgrade.php /etc/groupoffice/config.php
 
 chown -R www-data:www-data /home/groupoffice
 
-db_input high groupoffice/completed || true
-db_go
+
 
 #DEBHELPER#
 
