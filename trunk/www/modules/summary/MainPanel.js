@@ -132,18 +132,16 @@
   
 
 
-  this.tbar=new Ext.Toolbar({
-      cls:'go-head-tb',
-      items:[{
+  var tbarItems = [{
   	text: GO.lang['cmdAdd'],
   	iconCls:'btn-add',
   	handler: this.showAvailablePortlets,
-  	scope: this}]
-    });
-  
+  	scope: this
+    }];
+
   if(GO.settings.modules.summary.write_permission)
   {
-	  this.tbar.add({
+	  tbarItems.push({
 	  	text: GO.summary.lang.manageAnnouncements,
 	  	iconCls:'btn-settings',
 	  	handler: function(){
@@ -187,6 +185,10 @@
 	  });
 	} 
 
+this.tbar=new Ext.Toolbar({
+      cls:'go-head-tb',
+      items:tbarItems
+  });
 
   
 	GO.summary.MainPanel.superclass.constructor.call(this,config);
