@@ -1,4 +1,4 @@
-2009/07/? 3.02-stable-15
+2009/07/? 3.2.15
 - Fixed some issues in preparation to move to ExtJS 3
 - E-mail filter bug. Adding a filter to a second account failed.
 - Updated German and French
