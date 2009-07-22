@@ -15,4 +15,6 @@ then
 	echo -e "\$domain='$domain';\n" >> /etc/groupoffice/config-mailserver.inc.php
 fi
 
+#DEBHELPER#
+
 exit 0

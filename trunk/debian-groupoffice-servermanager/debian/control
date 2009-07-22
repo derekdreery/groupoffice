@@ -11,8 +11,7 @@ Architecture: all
 Depends: groupoffice-com,
 		groupoffice-mailserver,
 		php5-cli,
-		dbconfig-common,
-		ucf (>= 0.28)
+                ${misc:Depends}
 Description: Create multiple Group-Office installations
  It uses a virtual document root for Apache 2 to create multiple
  Group-Office domains easily.
