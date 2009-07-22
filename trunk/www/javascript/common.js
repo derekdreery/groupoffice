@@ -140,26 +140,27 @@ GO.jsonAuthHandler = function(json, callback, scope)
 //it will reload with a callback that will check for deleteSuccess in the json reponse. If it
 //failed it will display deleteFeedback
 GO.deleteItems = function(config)
-{	
+{
+	config.extraWarning=config.extraWarning || "";
 	switch(config.count)
 	{
 		case 0:
-			alert( GO.lang['noItemSelected']);
+			alert(GO.lang['noItemSelected']);
 			return false;
 		
 		case 1:
-			var strConfirm = GO.lang['strDeleteSelectedItem'];
+			var strConfirm = config.extraWarning+GO.lang['strDeleteSelectedItem'];
 		break;
 		
 		default:
 			var t = new Ext.Template(
-		    	GO.lang['strDeleteSelectedItems']
+		    	config.extraWarning+GO.lang['strDeleteSelectedItems']
 			);
 			var strConfirm = t.applyTemplate({'count': config.count});						
 		break;						
 	}
 
-	if(confirm(strConfirm)){
+	if(config.noConfirmation || confirm(strConfirm)){
 		if(config.store)
 		{
 			//add the parameters

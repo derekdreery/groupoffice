@@ -44,6 +44,8 @@ GO.users.MainPanel = function(config)
 		forceFit: true,
 		autoFill: true
 	});
+
+	config.deleteConfig={extraWarning:GO.users.lang.deleteWarning+"\n\n"};
 			
 	config.cm = new Ext.grid.ColumnModel([
         {header: GO.lang['strUsername'], dataIndex: 'username'},
@@ -91,7 +93,7 @@ GO.users.MainPanel = function(config)
 		  		iconCls: 'btn-delete', 
 		  		text: GO.lang['cmdDelete'], 
 		  		cls: 'x-btn-text-icon', 
-		  		handler: this.deleteSelected,  
+		  		handler: function(){this.deleteSelected();},
 		  		scope: this
 		  	},{
 		  		iconCls: 'btn-upload',

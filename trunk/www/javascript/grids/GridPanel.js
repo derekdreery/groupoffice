@@ -186,7 +186,8 @@ Ext.extend(GO.grid.GridPanel, Ext.grid.GridPanel, {
 		var deleteItemsConfig = {
 			store:this.store,
 			params: params,
-			count: this.selModel.selections.keys.length	
+			count: this.selModel.selections.keys.length,
+			extraWarning: config.extraWarning || ""
 		};
 		
 		if(config.callback)

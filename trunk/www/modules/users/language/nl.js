@@ -85,3 +85,5 @@ GO.users.lang.numberFormat ='Nummerformaat';
 GO.users.lang.importExport ='Import / Export';
 GO.users.lang.listSeparator='Lijstscheidingsteken';
 GO.users.lang.textSeparator='Tekstschedingsteken';
+
+GO.users.lang.deleteWarning='WAARSCHUWING!!! Alle gegevens van de gebruiker inclusief adresboeken, agenda\'s en projecten worden verwijderd!';
