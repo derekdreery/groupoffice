@@ -132,12 +132,14 @@
   
 
 
-  this.tbar=[{
+  this.tbar=new Ext.Toolbar({
+      cls:'go-head-tb',
+      items:[{
   	text: GO.lang['cmdAdd'],
   	iconCls:'btn-add',
   	handler: this.showAvailablePortlets,
-  	scope: this
-  }];
+  	scope: this}]
+    });
   
   if(GO.settings.modules.summary.write_permission)
   {

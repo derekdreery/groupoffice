@@ -16,17 +16,17 @@ fi
 
 cd /tmp
 
-rm -Rf godebs
+rm -Rf groupoffice-servermanager
 
-mkdir godebs
+mkdir groupoffice-servermanager
 
-cd godebs
+cd groupoffice-servermanager
 
 svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/trunk/debian-groupoffice-servermanager
 
 mv debian-groupoffice-servermanager groupoffice-servermanager-$VERSION
 cd groupoffice-servermanager-$VERSION
 
-dpkg-buildpackage -rfakeroot
+debuild -rfakeroot
 
-mv ../groupoffice-servermanager_$VERSION-1_all.deb $FULLPATH/
+#mv ../groupoffice-servermanager_$VERSION-1_all.deb $FULLPATH/

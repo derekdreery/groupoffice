@@ -16,11 +16,11 @@ fi
 
 cd /tmp
 
-rm -Rf godebs
+rm -Rf groupoffice-com
 
-mkdir godebs
+mkdir groupoffice-com
 
-cd godebs
+cd groupoffice-com
 
 svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/trunk/debian-groupoffice
 
@@ -32,6 +32,6 @@ fi
 mv debian-groupoffice groupoffice-com-$VERSION
 cd groupoffice-com-$VERSION
 
-dpkg-buildpackage -rfakeroot
+debuild -rfakeroot
 
-mv ../groupoffice-com_$VERSION-1_all.deb $FULLPATH/
+#mv ../groupoffice-com_$VERSION-1_all.deb $FULLPATH/

@@ -23,6 +23,7 @@ Depends: groupoffice-com,
 		razor,
 		mailutils,
 		libmime-charset-perl,
-		libmime-encwords-perl
+		libmime-encwords-perl,
+                ${misc:Depends}
 Description: Mailserver solution for Group-Office
  Use Group-Office in combination with postfix, dovecot and spamassasin

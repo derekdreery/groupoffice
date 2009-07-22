@@ -112,4 +112,6 @@ invoke-rc.d postfix restart 3> /dev/null || true
 
 php /usr/share/groupoffice-mailserver/addadminaccount.php
 
+#DEBHELPER#
+
 exit 0

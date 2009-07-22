@@ -6,5 +6,6 @@ set -e
 dbc_go groupoffice-com $@
 
 
+#DEBHELPER#
 
 exit 0

@@ -16,17 +16,17 @@ fi
 
 cd /tmp
 
-rm -Rf godebs
+rm -Rf groupoffice-mailserver
 
-mkdir godebs
+mkdir groupoffice-mailserver
 
-cd godebs
+cd groupoffice-mailserver
 
 svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/trunk/debian-groupoffice-mailserver
 
 mv debian-groupoffice-mailserver groupoffice-mailserver-$VERSION
 cd groupoffice-mailserver-$VERSION
 
-dpkg-buildpackage -rfakeroot
+debuild -rfakeroot
 
-mv ../groupoffice-mailserver_$VERSION-1_all.deb $FULLPATH/
+#mv ../groupoffice-mailserver_$VERSION-1_all.deb $FULLPATH/
