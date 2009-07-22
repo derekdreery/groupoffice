@@ -29,7 +29,12 @@ if [ $1 == "real" ]; then
 	mv groupoffice-com-$VERSION debian-groupoffice/usr/share/groupoffice
 fi
 
+
+
 mv debian-groupoffice groupoffice-com-$VERSION
+
+tar czf groupoffice-com-$VERSION.orig.tar.gz groupoffice-com-$VERSION
+
 cd groupoffice-com-$VERSION
 
 debuild -S -rfakeroot
