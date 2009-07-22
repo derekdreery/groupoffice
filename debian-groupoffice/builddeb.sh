@@ -37,6 +37,6 @@ mv debian-groupoffice groupoffice-com-$VERSION
 
 cd groupoffice-com-$VERSION
 
-debuild -S -rfakeroot --no-tgz-check
+debuild -S -rfakeroot
 
 #mv ../groupoffice-com_$VERSION-1_all.deb $FULLPATH/

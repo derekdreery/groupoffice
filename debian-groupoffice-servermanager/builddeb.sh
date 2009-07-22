@@ -29,6 +29,6 @@ mv debian-groupoffice-servermanager groupoffice-servermanager-$VERSION
 
 cd groupoffice-servermanager-$VERSION
 
-debuild -S -rfakeroot --no-tgz-check
+debuild -S -rfakeroot
 
 #mv ../groupoffice-servermanager_$VERSION-1_all.deb $FULLPATH/
