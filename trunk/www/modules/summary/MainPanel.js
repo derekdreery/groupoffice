@@ -143,7 +143,7 @@
   
   if(GO.settings.modules.summary.write_permission)
   {
-	  this.tbar.push({
+	  this.tbar.add({
 	  	text: GO.summary.lang.manageAnnouncements,
 	  	iconCls:'btn-settings',
 	  	handler: function(){

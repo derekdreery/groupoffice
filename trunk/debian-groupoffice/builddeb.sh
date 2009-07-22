@@ -32,6 +32,6 @@ fi
 mv debian-groupoffice groupoffice-com-$VERSION
 cd groupoffice-com-$VERSION
 
-debuild -rfakeroot
+debuild -S -rfakeroot
 
 #mv ../groupoffice-com_$VERSION-1_all.deb $FULLPATH/
