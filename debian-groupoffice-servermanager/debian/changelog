@@ -1,5 +1,5 @@
-groupoffice-servermanager (3.2.14-1) unstable; urgency=low
+groupoffice-servermanager (3.2.15-1) unstable; urgency=low
 
-  * Initial release (LP: #394166)
+  * Initial release (LP: #394166: This report is public)
 
  -- Merijn Schering <mschering@intermesh.nl>  Mon, 20 Jul 2009 16:08:29 +0200
