@@ -31,5 +31,6 @@ mv debian-groupoffice-mailserver groupoffice-mailserver-$VERSION
 cd groupoffice-mailserver-$VERSION
 
 debuild -S -rfakeroot
+debuild -rfakeroot
 
 #mv ../groupoffice-mailserver_$VERSION-1_all.deb $FULLPATH/
