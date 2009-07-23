@@ -37,7 +37,7 @@ http://www.group-office.com/data/License+agreement for the terms.
 
 
 
-Components used
+Used components / libraries
 ------------------------------------------------------------------------------------------
 Swift: LGPL 3.0 license /usr/share/common-licenses/LGPL
 TCPDF: LGPL 2.0 license /usr/share/common-licenses/LGPL
