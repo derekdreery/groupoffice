@@ -1384,6 +1384,9 @@ Ext.extend(GO.calendar.ViewList,Ext.DataView, {
 
 });
 
+
+GO.calendar.extraToolbarItems = [];
+
 GO.moduleManager.addModule('calendar', GO.calendar.MainPanel, {
 	title : GO.calendar.lang.calendar,
 	iconCls : 'go-tab-icon-calendar'
@@ -1407,6 +1410,3 @@ GO.newMenuItems.push({
 		});
 	}
 });
-
-
-GO.calendar.extraToolbarItems = [];
