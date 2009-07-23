@@ -30,8 +30,9 @@ if [ "$1" == "real" ]; then
 	#mv groupoffice-com-$VERSION debian-groupoffice/usr/share/groupoffice
 
 	svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/trunk/www
-	tar czf groupoffice-com_$VERSION.orig.tar.gz www
-	mv www debian-groupoffice/usr/share/groupoffice
+	mv www groupoffice
+	tar czf groupoffice-com_$VERSION.orig.tar.gz groupoffice
+	mv www debian-groupoffice/groupoffice
 
 rm debian-groupoffice/usr/share/groupoffice/LICENSE.TXT
 fi
