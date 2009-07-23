@@ -285,7 +285,14 @@ class GO_SECURITY extends db {
 	function chown_acl($acl_id, $user_id)
 	{
 		$sql = "UPDATE go_acl_items SET user_id='".$this->escape($user_id)."' WHERE id='".$this->escape($acl_id)."'";
-		return $this->query($sql);
+		$this->query($sql);
+		
+		if(!$this->user_in_acl($user_id, $acl_id))
+		{
+			$this->add_user_to_acl($user_id, $acl_id);
+		}
+
+		return true;
 	}
 
 	/**
