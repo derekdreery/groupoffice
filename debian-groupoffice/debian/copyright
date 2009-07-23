@@ -17,12 +17,3 @@ License:
 
 The Debian packaging is copyright 2009, Merijn Schering <mschering@intermesh.nl> and
 is licensed under the AGPL, see http://www.fsf.org/licensing/licenses/agpl-3.0.html
-
-This package uses the following components:
-
-Swift: LGPL 3.0 license /usr/share/common-licenses/LGPL-3
-TCPDF: LGPL 2.0 license /usr/share/common-licenses/LGPL-2
-TinyMCE: LGPL 2.1 license /usr/share/common-licenses/LGPL-2.1
-PhpThumb: LGPL 2.0 license /usr/share/common-licenses/LGPL-2
-libwbxml: GPL 2.0 license /usr/share/common-licenses/GPL-2
-ExtJS: GPL 3.0 license /usr/share/common-licenses/GPL-3
