@@ -20,9 +20,9 @@ is licensed under the AGPL, see http://www.fsf.org/licensing/licenses/agpl-3.0.h
 
 This package uses the following components:
 
-Swift: LGPL 3.0 license
-TCPDF: LGPL 2.0 license
-TinyMCE: LGPL 2.1 license
-PhpThumb: LGPL 2.0 license
-libwbxml: GPL 2.0 license
-ExtJS: GPL 3.0 license
+Swift: LGPL 3.0 license /usr/share/common-licenses/LGPL
+TCPDF: LGPL 2.0 license /usr/share/common-licenses/LGPL
+TinyMCE: LGPL 2.1 license /usr/share/common-licenses/LGPL
+PhpThumb: LGPL 2.0 license /usr/share/common-licenses/LGPL
+libwbxml: GPL 2.0 license /usr/share/common-licenses/GPL
+ExtJS: GPL 3.0 license /usr/share/common-licenses/GPL

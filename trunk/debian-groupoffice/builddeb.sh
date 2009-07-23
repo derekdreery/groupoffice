@@ -25,7 +25,8 @@ cd groupoffice-com
 svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/trunk/debian-groupoffice
 
 if [ "$1" == "real" ]; then
-	svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/tags/groupoffice-com-$VERSION
+	#svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/tags/groupoffice-com-$VERSION
+	svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/trunk/www
 	mv groupoffice-com-$VERSION debian-groupoffice/usr/share/groupoffice
 	rm debian-groupoffice/usr/share/groupoffice/LICENSE.TXT
 fi

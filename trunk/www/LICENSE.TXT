@@ -34,3 +34,14 @@ If you are using Group-Office for business purposes, we encourage you to purchas
 a professional license. By buying a professional license you'll support the project and 
 you'll get extra interesting features. Please see
 http://www.group-office.com/data/License+agreement for the terms.
+
+
+
+Components used
+------------------------------------------------------------------------------------------
+Swift: LGPL 3.0 license /usr/share/common-licenses/LGPL
+TCPDF: LGPL 2.0 license /usr/share/common-licenses/LGPL
+TinyMCE: LGPL 2.1 license /usr/share/common-licenses/LGPL
+PhpThumb: LGPL 2.0 license /usr/share/common-licenses/LGPL
+libwbxml: GPL 2.0 license /usr/share/common-licenses/GPL
+ExtJS: GPL 3.0 license /usr/share/common-licenses/GPL
