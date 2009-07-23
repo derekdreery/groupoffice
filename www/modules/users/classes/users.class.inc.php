@@ -55,6 +55,10 @@ class users extends db
 					
 					$up_folder['acl_read']=$GO_SECURITY->get_new_acl('files', $GO_USERS->f('id'));
 					$up_folder['acl_write']=$GO_SECURITY->get_new_acl('files', $GO_USERS->f('id'));
+				}else
+				{
+					$GO_SECURITY->chown_acl($folder['acl_read'], $GO_USERS->f('id'));
+					$GO_SECURITY->chown_acl($folder['acl_write'], $GO_USERS->f('id'));
 				}
 				$up_folder['user_id']=$GO_USERS->f('id');
 				$up_folder['readonly']='1';
