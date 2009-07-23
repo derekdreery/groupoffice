@@ -26,23 +26,19 @@ svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-offi
 
 if [ "$1" == "real" ]; then
 	#svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/tags/groupoffice-com-$VERSION
+	#tar czf groupoffice-com_$VERSION.orig.tar.gz groupoffice-com-$VERSION
 	#mv groupoffice-com-$VERSION debian-groupoffice/usr/share/groupoffice
 
 	svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/trunk/www
+	tar czf groupoffice-com_$VERSION.orig.tar.gz www
 	mv www debian-groupoffice/usr/share/groupoffice
 
 rm debian-groupoffice/usr/share/groupoffice/LICENSE.TXT
 fi
 
-
-
 mv debian-groupoffice groupoffice-com-$VERSION
-
-#tar czf groupoffice-com_$VERSION.orig.tar.gz groupoffice-com-$VERSION
 
 cd groupoffice-com-$VERSION
 
-debuild -S -rfakeroot
-debuild -rfakeroot
-
-#mv ../groupoffice-com_$VERSION-1_all.deb $FULLPATH/
+#debuild -S -rfakeroot
+#debuild -rfakeroot

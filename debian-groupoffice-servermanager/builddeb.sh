@@ -33,5 +33,3 @@ cd groupoffice-servermanager-$VERSION
 
 debuild -S -rfakeroot
 debuild -rfakeroot
-
-#mv ../groupoffice-servermanager_$VERSION-1_all.deb $FULLPATH/
