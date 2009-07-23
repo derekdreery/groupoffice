@@ -36,7 +36,7 @@ fi
 
 mv debian-groupoffice groupoffice-com-$VERSION
 
-tar --exclude=debian czf groupoffice-com_$VERSION.orig.tar.gz groupoffice-com-$VERSION
+tar --exclude=debian -czf groupoffice-com_$VERSION.orig.tar.gz groupoffice-com-$VERSION
 
 cd groupoffice-com-$VERSION
 
