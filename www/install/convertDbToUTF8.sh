@@ -1,3 +1,4 @@
+#!/bin/bash
 echo Script to convert MySQL latin1 charsets to utf8.
 echo Usage: $0 dbname mysqloptions
 
