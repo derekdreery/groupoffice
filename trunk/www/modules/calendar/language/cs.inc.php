@@ -31,7 +31,7 @@ $lang['calendar']['status']='Stav';
 
 
 $lang['calendar']['statuses']['NEEDS-ACTION'] = 'Vyžaduje akci';
-$lang['calendar']['statuses']['ACCEPTED'] = 'Přijat';
+$lang['calendar']['statuses']['ACCEPTED'] = 'Přijatý';
 $lang['calendar']['statuses']['DECLINED'] = 'Odmítnutý';
 $lang['calendar']['statuses']['TENTATIVE'] = 'Nezávazný';
 $lang['calendar']['statuses']['DELEGATED'] = 'Delegovaný';

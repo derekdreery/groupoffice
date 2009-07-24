@@ -130,3 +130,15 @@ GO.email.defaultProgramInstructions ='<p>Pro nastavení Group-Office jako zákla
 
 GO.email.lang.htmlMarkup = 'Používat HTML znaky';
 GO.email.lang.confirmLostChanges = 'Provedné změny nebudou uloženy. Jste si jisti?';
+
+/* table: em_aliases */
+GO.email.lang.alias="Přezdívka";
+GO.email.lang.aliases="Přezdívky";
+GO.email.lang.accountId="Uživatel";
+GO.email.lang.email="E-mail";
+
+GO.email.lang.manageAliases='Upravit přezdívky odesílatele';
+
+GO.email.lang.addSendersTo='Přidat odesílatele do...';
+
+GO.email.lang.defaultTemplate='Nastavit vybranou šablonu jako výchozí';

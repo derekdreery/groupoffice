@@ -10,6 +10,9 @@
  * @version $Id: en.js 1591 2008-12-15 09:34:29Z mschering $
  * @author Merijn Schering <mschering@intermesh.nl>
  */
+
+GO.lang.exportHiddenColumns='Exportovat i skryté sloupce';
+GO.lang.searchQuery='hledat dotaz';
 GO.lang.pleaseApplyFirst='Prosím nejdříve uložte pomocí kliknutí na \'Použít\'';
 GO.lang.passwordMatchError='Hesla se neshodují';
 GO.lang.serverError='Došlo k chybě na webserveru. Kontaktujte Vašeho správce systému a poskytněte mu podrobnosti o chybě.';
@@ -291,6 +294,7 @@ GO.lang.insertImage='Vložit obrázek do textu';
 GO.lang.item='položka';
 GO.lang.items='položky';
 
+GO.lang.more='Více';
 
 GO.lang.countries["AF"] = "Afghanistan";
 GO.lang.countries["AL"] = "Albania";
@@ -393,6 +397,8 @@ GO.lang.countries["IS"] = "Iceland";
 GO.lang.countries["IN"] = "India";
 GO.lang.countries["ID"] = "Indonesia";
 GO.lang.countries["IE"] = "Ireland";
+GO.lang.countries['IR'] = 'Iran';
+GO.lang.countries['IQ'] = 'Iraq';
 GO.lang.countries["IL"] = "Israel";
 GO.lang.countries["IT"] = "Italy";
 GO.lang.countries["JM"] = "Jamaica";
@@ -412,9 +418,11 @@ GO.lang.countries["LY"] = "Libyan Arab Jamahiriya";
 GO.lang.countries["LI"] = "Liechtenstein";
 GO.lang.countries["LT"] = "Lithuania";
 GO.lang.countries["LU"] = "Luxembourg";
+
 GO.lang.countries["MO"] = "Macau";
 GO.lang.countries["MK"] = "Macedonia, The Former Yugoslav Republic of";
 GO.lang.countries["MG"] = "Madagascar";
+GO.lang.countries["MY"] = "Malaysia";
 GO.lang.countries["MW"] = "Malawi";
 GO.lang.countries["MV"] = "Maldives";
 GO.lang.countries["ML"] = "Mali";
@@ -519,10 +527,15 @@ GO.lang.countries["WF"] = "Wallis and Futuna Islands";
 GO.lang.countries["EH"] = "Western Sahara";
 GO.lang.countries["YE"] = "Yemen";
 GO.lang.countries["YU"] = "Yugoslavia";
-GO.lang.countries["ZR"] = "Zaire";
+GO.lang.countries["CD"] = "Congo";
 GO.lang.countries["ZM"] = "Zambia";
 GO.lang.countries["ZW"] = "Zimbabwe";
 GO.lang.countries["SA"] = "Saudi Arabia";
+GO.lang.countries["RS"] = "Serbia";
+GO.lang.countries["AE"] = "United Arab Emirates";
+
 
 GO.lang.on ='Zapnuto';
 GO.lang.off ='Vypnuto';
+
+GO.lang.keyword='Klíčové slovo';

@@ -4,6 +4,9 @@ require($GO_LANGUAGE->get_fallback_base_language_file('common'));
 
 $lang['common']['about']='Verze: %s';
 
+$lang['common']['totals']='Součty';
+$lang['common']['printPage']='Strana %s z %s';
+
 $lang['common']['htmldirection']= 'ltr';
 
 $lang['common']['quotaExceeded']='Bohužel už nemáte žádné volné místo. Prosím smažte některé soubory nebo se obraťte na Vašeho poskytovatele.';
@@ -15,6 +18,7 @@ $lang['common']['moduleRequired']='Modul %s je potřebný pro tuto funkci.';
 $lang['common']['loadingCore']= 'Nahravání systému';
 $lang['common']['loadingLogin'] = 'Nahrávání přihlašovacího dialogu';
 $lang['common']['renderInterface']='Zobrazování rozhraní';
+$lang['common']['loadingModules']='Nahrávání modulů';
 $lang['common']['loadingModule'] = 'Nahrávání modulů';
 
 $lang['common']['loggedInAs'] = "Přihlášen jako ";
@@ -33,6 +37,7 @@ $lang['common']['deleteError']='Chyba při vymazávání dat';
 $lang['common']['selectError']='Chyba při pokusu o čtení dat';
 $lang['common']['missingField'] = 'Nevyplnili jste všechna povinná pole.';
 $lang['common']['invalidEmailError']='E-mailová adresa není správná';
+$lang['common']['invalidDateError']='Zadali jste nesprávný formát datumu';
 $lang['common']['noFileUploaded']='Žádný soubor nebyl odeslán ';
 $lang['common']['error']='Chyba';
 
@@ -156,20 +161,12 @@ $lang['common']['files']='Soubory';
 $lang['common']['email']='E-mail';
 $lang['common']['total']='Celkem';
 
-$lang['common']['lost_password_subject']='Nové heslo';
-$lang['common']['lost_password_body']='%s,<br />
-<br />
-Požádal jste o nové heslo pro %s.<br />
-<br />
-Vaše nové přihlašovací informace:<br />
-<br />
-Uživatelské jméno: %s<br />
-Heslo: %s';
-
-$lang['common']['lost_password_error']='Nelze nalézt email příjemce.';
-$lang['common']['lost_password_success']='Nové heslo bylo zasláno na Vaši e-mailovou adresu.';
-
 $lang['common']['confirm_leave']='Pokud opustíte Group-Office, neuložené změny budou ztraceny';
 $lang['common']['dataSaved']='Data byla v pořádku uložena';
 
 $lang['common']['uploadMultipleFiles'] = 'Klikněte na \'Přidat z počítače\' pro výběr souboru a/nebo složky z Vašeho počítače. Klikněte na \'Přidat z pošty\' pro přenos souborů z Group-Office. Okno bude automaticky zavřeno po kompletním přenosu.';
+
+$lang['common']['loginToGO']='Klikněte zde pro přihlášení do Group-Office';
+$lang['common']['links']='Odkazy';
+$lang['common']['GOwebsite']='Group-Office stránky';
+$lang['common']['GOisAProductOf']='<i>Group-Office</i> je produkt od <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';

@@ -35,7 +35,7 @@ GO.users.lang.numberOfLogins = 'Aantal logins';
 GO.users.lang.cmdFormLabelTheme = 'Thema';
 GO.users.lang.cmdFormLabelStartModule = 'Start in module';
 GO.users.lang.cmdFormLabelMaximunRows = 'Maximaal aantal rijen in een lijst';
-GO.users.lang.cmdFormLabelSortNamesBy = 'Achternaam';
+GO.users.lang.cmdFormLabelSortNamesBy = 'Sorteer namen op';
 GO.users.lang.cmdFormLabelLanguage = 'Taal';
 GO.users.lang.cmdFormLabelTimezone = 'Tijdzone';
 GO.users.lang.cmdFormLabelAdjustDaylight = 'Pas tijd automatisch aan zomertijd aan';
@@ -87,3 +87,6 @@ GO.users.lang.listSeparator='Lijstscheidingsteken';
 GO.users.lang.textSeparator='Tekstschedingsteken';
 
 GO.users.lang.deleteWarning='WAARSCHUWING!!! Alle gegevens van de gebruiker inclusief adresboeken, agenda\'s en projecten worden verwijderd!';
+
+GO.users.lang.lastName = 'Achternaam';
+GO.users.lang.firstName = 'Voornaam';

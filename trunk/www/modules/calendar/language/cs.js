@@ -28,7 +28,7 @@ GO.calendar.lang.calendars = 'Kalendáře';
 GO.calendar.lang.views = 'Zobrazení';
 GO.calendar.lang.administration = 'Administrace';
 GO.calendar.lang.needsAction = 'Vyžaduje akci';
-GO.calendar.lang.accepted = 'Přijat';
+GO.calendar.lang.accepted = 'Přijatý';
 GO.calendar.lang.declined = 'Odmítnutý';
 GO.calendar.lang.tentative = 'Nezávazný';
 GO.calendar.lang.delegated = 'Delegovaný';
@@ -62,5 +62,7 @@ GO.calendar.lang.selectIcalendarFile='Vyberte icalendar (*.ics) soubor';
 GO.calendar.lang.location='Umístění';
 GO.calendar.lang.startsAt='Začátek v';
 GO.calendar.lang.endsAt='Konec v';
-
 GO.calendar.lang.eventDefaults='Základní nastavení událostí';
+
+GO.calendar.lang.importToCalendar='Přidat činnost přímo do kalendářů';
+GO.calendar.lang.default_calendar='Výchozí kalendář';

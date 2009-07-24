@@ -117,8 +117,8 @@ GO.users.LookAndFeelPanel = function(config)
 			store: new Ext.data.SimpleStore({
 				fields: ['value', 'text'],
 				data : [
-				['first_name','First name'],
-				['last_name','Last name']
+				['first_name',GO.users.lang.firstName],
+				['last_name',GO.users.lang.lastName]
 				]
 			}),
 			displayField:'text',

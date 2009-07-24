@@ -49,3 +49,7 @@ $lang['email']['goAlreadyStarted']='Group-Office byl spuštěn a zpráva byla vy
 
 //At Tuesday, 07-04-2009 on 8:58 Group-Office Administrator <test@intermeshdev.nl> wrote:
 $lang['email']['replyHeader']='Dne %s, %s v %s %s napsal:';
+$lang['email']['alias']='Přezdívka';
+$lang['email']['aliases']='Přezdívky';
+
+$lang['email']['noUidNext']='Váš emailový server nepodporuje UIDNEXT. Složka \'Koncepty\' bude automaticky zablokována pro tento účet.';
