@@ -247,8 +247,8 @@ GO.lang.strThird='ระดับ3';
 GO.lang.strFourth='ระดับ4';
 
 GO.lang.strStatus='สถานะ';
-GO.lang.strAvailable='สามารถใช้งานได้';//Available
-GO.lang.strAvailability='รายการที่สามารถใช้งานได้';//Availability
+GO.lang.strAvailable='เวลาว่าง';//Available
+GO.lang.strAvailability='ช่วงเวลาที่ว่าง';//Availability
 GO.lang.strView='มุมมอง';
 
 GO.lang.field = 'ฟิล์ด';

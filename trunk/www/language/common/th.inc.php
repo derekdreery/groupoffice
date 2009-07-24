@@ -1,6 +1,8 @@
 <?php
 //Uncomment this line in new translations!
+
 require($GO_LANGUAGE->get_fallback_base_language_file('common'));
+$lang['common']['extjs_lang']='th-utf8'; 
 
 $lang['common']['about']='เวอร์ชั่น: %s
 
