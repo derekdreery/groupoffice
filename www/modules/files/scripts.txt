@@ -10,5 +10,5 @@ modules/files/SaveAsDialog.js
 modules/files/VersionsGrid.js
 modules/files/NewFolderDialog.js
 modules/files/UploadDialog.js
-
+modules/files/SelectFile.js
 modules/files/FileBrowser.js
