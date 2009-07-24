@@ -45,7 +45,8 @@ GO.users.lang.numberOfLogins = 'Number of logins';
 GO.users.lang.cmdFormLabelTheme = 'Theme';
 GO.users.lang.cmdFormLabelStartModule = 'Start in module';
 GO.users.lang.cmdFormLabelMaximunRows = 'Maximum number of rows in lists';
-GO.users.lang.cmdFormLabelSortNamesBy = 'Last name';
+GO.users.lang.cmdFormLabelSortNamesBy = 'Sort names by';
+
 GO.users.lang.cmdFormLabelLanguage = 'Language';
 GO.users.lang.cmdFormLabelTimezone = 'Timezone';
 GO.users.lang.cmdFormLabelAdjustDaylight = 'Automatically adjust time to Daylight Savings Time';
@@ -98,3 +99,6 @@ GO.users.lang.listSeparator='List separator';
 GO.users.lang.textSeparator='Text separator';
 
 GO.users.lang.deleteWarning='WARNING!!! All of the user data including addressbooks, projects, calendars etc. will be deleted!';
+
+GO.users.lang.lastName = 'Last name';
+GO.users.lang.firstName = 'First name';

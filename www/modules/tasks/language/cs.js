@@ -29,3 +29,4 @@ GO.tasks.lang.scheduleCall='Plánované volání';
 GO.tasks.lang.call='Volání';
 GO.tasks.lang.taskDefaults='Základní nastavení úkolů';
 GO.tasks.lang.daysBeforeStart='Dnů před zahájením';
+GO.tasks.lang.defaultTasklist='Výchozí přehled úkolů';
