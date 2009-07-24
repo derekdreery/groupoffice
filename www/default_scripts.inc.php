@@ -12,24 +12,22 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-$suffix = '?'.$GO_CONFIG->mtime;
-
 ?>
-<script	src="<?php echo $GO_CONFIG->host; ?>ext/adapter/ext/ext-base.js<?php echo $suffix; ?>" type="text/javascript"></script>
+<script	src="<?php echo $GO_CONFIG->host; ?>ext/adapter/ext/ext-base.js" type="text/javascript"></script>
 <?php
 if($GO_CONFIG->debug)
 {
 ?>
-<script	src="<?php echo $GO_CONFIG->host; ?>ext/ext-all-debug.js<?php echo $suffix; ?>"	type="text/javascript"></script>
+<script	src="<?php echo $GO_CONFIG->host; ?>ext/ext-all-debug.js"	type="text/javascript"></script>
 <?php
 }else
 {
 ?>
-<script	src="<?php echo $GO_CONFIG->host; ?>ext/ext-all.js<?php echo $suffix; ?>"	type="text/javascript"></script>
+<script	src="<?php echo $GO_CONFIG->host; ?>ext/ext-all.js"	type="text/javascript"></script>
 <?php
 }
 ?>
-<script	src="<?php echo $GO_CONFIG->host; ?>javascript/namespaces.js<?php echo $suffix; ?>"	type="text/javascript"></script>
+<script	src="<?php echo $GO_CONFIG->host; ?>javascript/namespaces.js"	type="text/javascript"></script>
 <script type="text/javascript">
 
 if(typeof(Ext)=='undefined')
@@ -241,27 +239,27 @@ if(!$GO_CONFIG->debug)
 }else
 {
 	?>
-	<script	src="<?php echo $GO_CONFIG->host; ?>language/common/en.js<?php echo $suffix; ?>" type="text/javascript"></script>
-	<script	src="<?php echo $GO_CONFIG->host.'modules/users/language/en.js'.$suffix; ?>" type="text/javascript"></script>
+	<script	src="<?php echo $GO_CONFIG->host; ?>language/common/en.js" type="text/javascript"></script>
+	<script	src="<?php echo $GO_CONFIG->host.'modules/users/language/en.js'; ?>" type="text/javascript"></script>
 	<?php
 
 	if($GO_LANGUAGE->language!='en')
 	{
 		if(file_exists($GO_CONFIG->root_path.'language/common/'.$GO_LANGUAGE->language.'.js'))
 		{
-			echo '<script type="text/javascript" src="'.$GO_CONFIG->host.'language/common/'.$GO_LANGUAGE->language.'.js'.$suffix.'"></script>';
+			echo '<script type="text/javascript" src="'.$GO_CONFIG->host.'language/common/'.$GO_LANGUAGE->language.'.js"></script>';
 			echo "\n";
 		}
 	
 		if(file_exists($GO_CONFIG->root_path.'ext/build/locale/ext-lang-'.$lang['common']['extjs_lang'].'.js'))
 		{
-			echo '<script type="text/javascript" src="'.$GO_CONFIG->host.'ext/build/locale/ext-lang-'.$lang['common']['extjs_lang'].'.js'.$suffix.'"></script>';
+			echo '<script type="text/javascript" src="'.$GO_CONFIG->host.'ext/build/locale/ext-lang-'.$lang['common']['extjs_lang'].'.js"></script>';
 			echo "\n";
 		}
 
 		if(file_exists($GO_CONFIG->root_path.'modules/users/language/'.$GO_LANGUAGE->language.'.js'))
 		{
-			echo '<script type="text/javascript" src="'.$GO_CONFIG->host.'modules/users/language/'.$GO_LANGUAGE->language.'.js'.$suffix.'"></script>';
+			echo '<script type="text/javascript" src="'.$GO_CONFIG->host.'modules/users/language/'.$GO_LANGUAGE->language.'.js"></script>';
 			echo "\n";
 		}
 	}
@@ -273,7 +271,7 @@ if(!$GO_CONFIG->debug)
 	{
 		if(!empty($line))
 		{
-			echo '<script type="text/javascript" src="'.$GO_CONFIG->host.$line.$suffix.'"></script>';
+			echo '<script type="text/javascript" src="'.$GO_CONFIG->host.$line.'"></script>';
 			echo "\n";
 		}
 	}
@@ -336,7 +334,7 @@ Ext.state.Manager.setProvider(new GO.state.HttpProvider({url: BaseHref+'state.ph
 
 if(file_exists($GO_THEME->theme_path.'MainLayout.js'))
 {
-	echo '<script src="'.$GO_THEME->theme_url.'MainLayout.js'.$suffix.'" type="text/javascript"></script>';
+	echo '<script src="'.$GO_THEME->theme_url.'MainLayout.js" type="text/javascript"></script>';
 	echo "\n";
 	
 }
