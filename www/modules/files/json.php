@@ -414,7 +414,11 @@ try{
 										$files->delete_file($file);
 									}else
 									{
+
 										$folder = $files->get_folder($ti[1]);
+										if(!$files->has_delete_permission($GO_SECURITY->user_id, $folder)){
+											throw new AccessDeniedException();
+										}
 										$files->delete_folder($folder);
 										$deleted[]=$folder['name'];
 									}

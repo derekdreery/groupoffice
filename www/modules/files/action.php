@@ -38,19 +38,21 @@ try{
 			$response['success']=true;
 
 			break;
-			/*case 'delete':
+			case 'delete':
 
-			$delete_path = $GO_CONFIG->file_storage_path.$_POST['path'];
+				//delete called from tree
 
-			if(!$files->has_write_permission($GO_SECURITY->user_id, $delete_path))
+			$folder =$files->get_folder($_POST['id']);
+
+			if(!$files->has_delete_permission($GO_SECURITY->user_id, $folder))
 			{
-			throw new AccessDeniedException();
+				throw new AccessDeniedException();
 			}
 
-			$files->notify_users($_POST['path'], $GO_SECURITY->user_id, array(), array(), array(utf8_basename($delete_path)));
+			$files->notify_users($folder, $GO_SECURITY->user_id, array(), array(), array($folder['name']));
 
-			$response['success']=$files->delete($delete_path);
-			break;*/
+			$response['success']=$files->delete_folder($folder);
+			break;
 		case 'file_properties':
 			$file = $files->get_file($_POST['file_id']);
 			$folder = $files->get_folder($file['folder_id']);
