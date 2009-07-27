@@ -688,7 +688,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
         });
 
         this.propertiesPanel = new Ext.Panel({
-            //hideMode : 'offsets',
+            hideMode : 'offsets',
             title : GO.lang.strProperties,
             defaults : {
                 anchor : '-20'
@@ -898,7 +898,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
             title : GO.calendar.lang.recurrence,
             bodyStyle : 'padding: 5px',
             layout : 'form',
-            //hideMode : 'offsets',
+            hideMode : 'offsets',
             autoScroll : true,
             items : [{
                 border : false,
@@ -1030,7 +1030,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
             title : GO.calendar.lang.options,
             bodyStyle : 'padding:5px',
             layout : 'form',
-            //hideMode : 'offsets',
+            hideMode : 'offsets',
             autoScroll : true,
             items : [{
                 border : false,
