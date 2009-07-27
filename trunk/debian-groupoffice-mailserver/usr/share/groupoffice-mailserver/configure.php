@@ -91,8 +91,7 @@ system('postmap /etc/postfix/transport');
 
 
 echo "Configuring Dovecot\n";
-if(!file_exists('/etc/dovecot/dovecot-sql.conf'))
-	create_file('/etc/dovecot/dovecot-sql.conf','tpl/etc/dovecot/dovecot-sql.conf', $replacements);
+create_file('/etc/dovecot/dovecot-sql.conf','tpl/etc/dovecot/dovecot-sql.conf', $replacements);
 
 echo "Configuring vacation\n";
 if(!file_exists('/etc/groupoffice/vacation'))
