@@ -906,6 +906,19 @@ class files extends db {
 		}
 	}
 
+	function has_delete_permission($user_id, $folder){
+
+		if($folder['parent_id']==0){
+			return false;
+		}
+		$path = $this->build_path($folder);
+		if(strpos(dirname($path),'/')===false){
+			return false;
+		}
+
+		return $this->has_write_permission($user_id, $folder);
+	}
+
 	function has_read_permission($user_id, $folder) {
 		global $GO_SECURITY;
 
