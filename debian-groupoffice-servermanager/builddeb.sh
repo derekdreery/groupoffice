@@ -32,4 +32,10 @@ mv debian-groupoffice-servermanager groupoffice-servermanager-$VERSION
 cd groupoffice-servermanager-$VERSION
 
 debuild -S -rfakeroot
-debuild -rfakeroot
+if [ "$1" == "send" ]; then
+	debuild -rfakeroot
+	cd ..
+	scp *.deb mschering@imfoss.nl:/var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary/
+
+	ssh mschering@imfoss.nl "dpkg-scanpackages /var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary /dev/null | gzip -9c > /var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary/Packages.gz"
+fi
