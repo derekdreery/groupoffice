@@ -41,4 +41,11 @@ tar --exclude=debian -czf groupoffice-com_$VERSION.orig.tar.gz groupoffice-com-$
 cd groupoffice-com-$VERSION
 
 debuild -S -rfakeroot
-#debuild -rfakeroot
+
+if [ "$2" == "send" ]; then
+	debuild -rfakeroot
+	cd ..
+	scp *.deb mschering@imfoss.nl:/var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary/
+
+	ssh mschering@imfoss.nl "/dpkg-scanpackages /var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary /dev/null | gzip -9c > /var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary/Packages.gz"
+fi
