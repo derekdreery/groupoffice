@@ -3,6 +3,7 @@
 - E-mail filter bug. Adding a filter to a second account failed.
 - Updated German, Czech and French translation
 - Added Norwegian Bokmål translation
+- Other bug fixes
 - Debianized the package.
 
 2009/07/10 3.02-stable-12
