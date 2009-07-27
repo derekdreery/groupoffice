@@ -66,6 +66,8 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 		});
 	}*/
 
+	config.hideMode = 'offsets';
+
 	config.store = new GO.data.JsonStore({
 		url : GO.settings.modules.calendar.url + 'json.php',
 		baseParams : {
