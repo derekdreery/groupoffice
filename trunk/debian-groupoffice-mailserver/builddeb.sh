@@ -31,6 +31,12 @@ mv debian-groupoffice-mailserver groupoffice-mailserver-$VERSION
 cd groupoffice-mailserver-$VERSION
 
 debuild -S -rfakeroot
-debuild -rfakeroot
 
-#mv ../groupoffice-mailserver_$VERSION-1_all.deb $FULLPATH/
+if [ "$1" == "send" ]; then
+	debuild -rfakeroot
+	cd ..
+	scp *.deb mschering@imfoss.nl:/var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary/
+
+	ssh mschering@imfoss.nl "dpkg-scanpackages /var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary /dev/null | gzip -9c > /var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary/Packages.gz"
+fi
+

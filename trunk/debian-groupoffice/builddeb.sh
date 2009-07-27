@@ -31,7 +31,7 @@ if [ "$1" == "real" ]; then
 	svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/trunk/www
 	mv www debian-groupoffice/usr/share/groupoffice
 
-	rm debian-groupoffice/usr/share/groupoffice/LICENSE.TXT
+	mv debian-groupoffice/usr/share/groupoffice/LICENSE.TXT debian-groupoffice
 fi
 
 mv debian-groupoffice groupoffice-com-$VERSION
@@ -47,5 +47,5 @@ if [ "$2" == "send" ]; then
 	cd ..
 	scp *.deb mschering@imfoss.nl:/var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary/
 
-	ssh mschering@imfoss.nl "/dpkg-scanpackages /var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary /dev/null | gzip -9c > /var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary/Packages.gz"
+	ssh mschering@imfoss.nl "dpkg-scanpackages /var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary /dev/null | gzip -9c > /var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary/Packages.gz"
 fi
