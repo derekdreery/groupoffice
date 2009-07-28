@@ -57,7 +57,7 @@ try{
 
 				$config['allowed_modules']=implode(',', $allowed);
 			}elseif(empty($_POST['installation_id'])){
-				$config['allowed_modules']=isset($default_config['allowed_modules']) ? $config['allowed_modules'] : '';
+				$config['allowed_modules']=isset($default_config['allowed_modules']) ? $default_config['allowed_modules'] : '';
 			}
 			
 			$config['max_users']=$_POST['max_users'];			
@@ -169,10 +169,7 @@ try{
 					throw new Exception($lang['servermanager']['duplicateHost']);
 				}
 
-				$installation_id= $servermanager->add_installation($installation);
-
-				$response['installation_id']=$installation_id;
-				$response['success']=true;
+				
 
 		
 				$config['host']='/';
@@ -198,7 +195,18 @@ try{
 				{
 					$cmd .= ' "'.$admin_password.'"';
 				}
-				system($cmd);
+				exec($cmd, $output, $return_var);
+
+				var_dump($return_var);
+
+				if(!$return_var){
+					throw new Exception($output);
+				}
+
+				$installation_id= $servermanager->add_installation($installation);
+
+				$response['installation_id']=$installation_id;
+				$response['success']=true;
 
 			}
 			$response['success']=true;
