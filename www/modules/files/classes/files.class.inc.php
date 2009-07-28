@@ -677,7 +677,7 @@ class files extends db {
 		return $this->update_file($file);
 	}
 
-	function import_file($full_path, $parent_id=false) {
+	function import_file($full_path, &$parent_id=false) {
 		if(!$parent_id) {
 			$parent = $this->resolve_path(dirname($this->strip_server_path($full_path)),true);
 			$parent_id=$parent['id'];
@@ -713,6 +713,7 @@ class files extends db {
 		$folder['user_id']=$GO_SECURITY->user_id;
 		$folder['parent_id']=$parent_id;
 		$folder['ctime']=filectime($full_path);
+		$folder['mtime']=filemtime($full_path);
 
 		$existing_folder = $this->folder_exists($parent_id, $folder['name']);
 		if($existing_folder) {
@@ -739,10 +740,42 @@ class files extends db {
 		return $folder['id'];
 	}
 
-	function sync_folder($folder_id, $recursive=false){
+	/**
+	 * Compares the folder mtime in the database with the filesystem.
+	 * If it's different it will sync the filesystem with the database
+	 * 
+	 * @global config class $GO_CONFIG
+	 * @param array $folder
+	 * @param string $path
+	 * @return true if folder was updated
+	 */
+
+	function check_folder_sync($folder, &$path=false){
+		global $GO_CONFIG;
+
+		$path = $path ? $path : $this->build_path($folder);
+
+		$filemtime=filemtime($GO_CONFIG->file_storage_path.$path);
+		if($folder['mtime']<$filemtime)
+		{
+			//debug('Synced '.$path);
+			
+			$this->sync_folder($folder);
+
+			$this->touch_folder($folder['id'], $filemtime);
+
+			return true;
+		}else
+		{
+			return false;
+		}
+	}
+
+
+	function sync_folder($folder, $recursive=false){
 		global $GO_CONFIG;
 		$fs = new filesystem();
-		$folder = $this->get_folder($folder_id);
+		
 
 		if(!$folder)
 		{
@@ -770,9 +803,9 @@ class files extends db {
 			$key = array_search($fsfolder['name'], $dbfolders_names);
 			if($key===false)
 			{
-				$this->import_folder($fsfolder['path'], $folder_id);
+				$this->import_folder($fsfolder['path'], $folder['id']);
 			}elseif($recursive){
-				$this->sync_folder($dbfolders[$key]['id'], true);
+				$this->sync_folder($dbfolders[$key], true);
 			}
 
 		}
@@ -799,7 +832,7 @@ class files extends db {
 		{
 			if(!in_array($fsfile['name'], $dbfiles_names))
 			{
-				$this->import_file($fsfile['path'], $folder_id);
+				$this->import_file($fsfile['path'], $folder['id']);
 			}
 		}
 		foreach($dbfiles as $dbfile)
@@ -1247,7 +1280,8 @@ class files extends db {
 			$folder['user_id']=$user_id;
 			$folder['parent_id']=$parent['id'];
 			$folder['name']=$name;
-			$folder['ctime']=time();
+			$folder['ctime']=filectime($full_path.'/'.$name);
+			$folder['mtime']=filemtime($full_path.'/'.$name);
 			if($share_user_id) {
 				$folder['acl_read']=$GO_SECURITY->get_new_acl('files', $share_user_id);
 				$folder['acl_write']=$GO_SECURITY->get_new_acl('files', $share_user_id);
@@ -1256,8 +1290,22 @@ class files extends db {
 				$folder['acl_write']=0;
 			}
 			$folder['id']=$this->add_folder($folder);
+
+
+			$this->touch_folder($parent['id'], $folder['mtime']);
+
 			return $folder;
 		}
+	}
+
+	function touch_folder($folder_id, $time=false){
+		if(!$time)
+		{
+			$time=time();
+		}
+		$up_folder['id']=$folder_id;
+		$up_folder['mtime']=$time;
+		return $this->update_folder($up_folder);
 	}
 
 

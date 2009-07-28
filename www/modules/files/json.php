@@ -29,13 +29,11 @@ try{
 	switch($task)
 	{
 		case 'tree':
-
-
-			if(!empty($_POST['refresh_folder_id']) && is_numeric($_POST['refresh_folder_id']))
+			/*if(!empty($_POST['refresh_folder_id']) && is_numeric($_POST['refresh_folder_id']))
 			{
-				$files->sync_folder($_POST['refresh_folder_id']);
-			}
-
+				$folder = $this->get_folder($_POST['refresh_folder_id']);
+				$files->sync_folder($folder);
+			}*/
 
 			$fs2= new files();
 
@@ -86,6 +84,8 @@ try{
 					{
 						$folder = $files->get_folder($_POST['root_folder_id']);
 
+						$files->check_folder_sync($folder);
+
 						$node= array(
 							'text'=>$folder['name'],
 							'id'=>$folder['id'],
@@ -102,6 +102,8 @@ try{
 						/*Home folder with children */
 						$home_id = 'users/'.$_SESSION['GO_SESSION']['username'];
 						$home_folder=$files->resolve_path($home_id);
+
+						$files->check_folder_sync($home_folder, $home_id);
 
 						$files->get_folders($home_folder['id'],'name', 'ASC',0,200,false);
 
@@ -245,6 +247,8 @@ try{
 					$folder = $files->get_folder($_POST['node']);
 					$authenticate=!$files->is_owner($folder);
 
+					//$files->check_folder_sync($folder);
+
 					$response = get_node_children($_POST['node'], $authenticate);
 
 					break;
@@ -387,6 +391,11 @@ try{
 						$authenticate=!$files->is_owner($curfolder);
 
             $path = $files->build_path($curfolder);
+
+
+						$response['refreshed']=$files->check_folder_sync($curfolder, $path);
+
+
 
 						if(isset($_POST['delete_keys']))
 						{
