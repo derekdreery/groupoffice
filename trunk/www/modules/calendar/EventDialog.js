@@ -659,7 +659,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
             selectOnFocus : true,
             width : 148,
             forceSelection : true,
-            fieldLabel : GO.email.lang.status,
+            fieldLabel : GO.calendar.lang.status,
             mode : 'local',
             value : 'ACCEPTED',
             valueField : 'value',
