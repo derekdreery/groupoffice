@@ -51,9 +51,11 @@ CREATE TABLE IF NOT EXISTS `sm_new_trials` (
 --
 
 DROP TABLE IF EXISTS `sm_reports`;
+
 CREATE TABLE IF NOT EXISTS `sm_reports` (
   `name` varchar(100) NOT NULL default '',
   `count_users` int(11) NOT NULL,
+  `max_users` int(11) NOT NULL,
   `install_time` int(11) NOT NULL,
   `lastlogin` int(11) NOT NULL,
   `total_logins` int(11) NOT NULL,
@@ -71,6 +73,11 @@ CREATE TABLE IF NOT EXISTS `sm_reports` (
   `date_format` varchar(20) default NULL,
   `thousands_separator` char(1) NOT NULL,
   `decimal_separator` char(1) NOT NULL,
-  PRIMARY KEY  (`name`)
+  `billing` tinyint(1) NOT NULL,
+  `professional` tinyint(1) NOT NULL,
+  PRIMARY KEY  (`name`),
+  KEY `ctime` (`ctime`),
+  KEY `professional` (`professional`),
+  KEY `billing` (`billing`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
         
