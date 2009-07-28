@@ -23,7 +23,7 @@ GO.tools.MainPanel = function(config){
 		layout:'fit'
 	});
 
-	this.cls='tools-panel'
+	this.cls='tools-panel';
 	
 		
 	this.store = new GO.data.JsonStore({

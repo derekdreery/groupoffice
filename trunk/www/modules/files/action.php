@@ -151,7 +151,7 @@ try{
 				}
 			}
 				
-			$files->update_folder($up_folder);
+			//$files->update_folder($up_folder);
 
 			if(isset($_POST['name']))
 			{
@@ -164,6 +164,7 @@ try{
 					$fs->move($GO_CONFIG->file_storage_path.$path, $GO_CONFIG->file_storage_path.$newpath);
 
 					$up_folder['name']=$_POST['name'];
+					$up_folder['mtime']=filemtime($GO_CONFIG->file_storage_path.$newpath);
 						
 					$response['path']=$newpath;
 				}
@@ -297,6 +298,8 @@ try{
 					$command='ask';
 				}
 			}
+
+			$files->touch_folder($folder['id']);
 
 			$files->notify_users($folder, $GO_SECURITY->user_id, $modified, $new);
 

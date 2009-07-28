@@ -581,6 +581,16 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		}
 		
 		this.emptyListButton.setVisible(this.folder_id=='new' && num_files > 0);
+
+		if(store.reader.jsonData.refreshed)
+		{
+			var activeNode = this.treePanel.getNodeById(this.folder_id);
+			if(activeNode)
+			{
+				delete activeNode.attributes.children;
+				activeNode.reload();
+			}
+		}
 		
 		this.parentID = store.reader.jsonData.parent_id;
 		if(this.parentID==0 || !this.treePanel.getNodeById(this.parentID))

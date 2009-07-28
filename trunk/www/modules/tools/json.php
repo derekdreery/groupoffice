@@ -14,17 +14,19 @@ try{
 			
 				$response['results']=array();				
 				$response['results'][]=array('name'=>$lang['tools']['dbcheck'], 'script'=>$GO_MODULES->modules['tools']['url'].'dbcheck.php');
-                $response['results'][]=array('name'=>$lang['tools']['checkmodules'], 'script'=>$GO_MODULES->modules['tools']['url'].'checkmodules.php');
-                $response['results'][]=array('name'=>$lang['tools']['buildsearchcache'], 'script'=>$GO_MODULES->modules['tools']['url'].'buildsearchcache.php');
+				$response['results'][]=array('name'=>$lang['tools']['checkmodules'], 'script'=>$GO_MODULES->modules['tools']['url'].'checkmodules.php');
+				$response['results'][]=array('name'=>$lang['tools']['buildsearchcache'], 'script'=>$GO_MODULES->modules['tools']['url'].'buildsearchcache.php');
 				$response['results'][]=array('name'=>$lang['tools']['rm_duplicates'], 'script'=>$GO_MODULES->modules['tools']['url'].'rm_duplicates.php');
 				
-				/*if(isset($GO_MODULES->modules['files']))
+				if(isset($GO_MODULES->modules['files']))
 				{
-					$response['results'][]=array('name'=>$lang['tools']['index_files'], 'script'=>$GO_MODULES->modules['files']['url'].'crawl.php');
-				}*/
-				//$response['results'][]=array('name'=>$lang['tools']['backupdb'], 'script'=>$GO_MODULES->modules['tools']['url'].'backupdb.php');
+					$response['results'][]=array('name'=>'Remove duplicate folders and files', 'script'=>$GO_MODULES->modules['files']['url'].'scripts/removeduplicatefolders.php');
+					//$response['results'][]=array('name'=>'Sync filesystem with files database', 'script'=>$GO_MODULES->modules['files']['url'].'scripts/sync_filesystem.php');
+				}
+
 				if(!empty($GO_CONFIG->phpMyAdminUrl))
 					$response['results'][]=array('name'=>'PhpMyAdmin', 'script'=>$GO_MODULES->modules['tools']['url'].'phpmyadmin.php');
+
 			break;
 	}
 }catch(Exception $e)

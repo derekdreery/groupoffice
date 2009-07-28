@@ -1,4 +1,6 @@
-2009/07/? 3.2.15
+2009/07/28 3.2.15
+- Automatically sync filesystem with files database for easier external access
+	of files.
 - Fixed some issues in preparation to move to ExtJS 3
 - E-mail filter bug. Adding a filter to a second account failed.
 - Updated German, Czech and French translation
