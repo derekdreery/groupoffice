@@ -117,7 +117,7 @@ class GoSwift extends Swift_Mailer{
 	 * @param Int $account_id The account id from the em_accounts table. Used for smtp server and sent items
 	 * @param String $priority The priority can be 3 for normal, 1 for high or 5 for low.
 	 */
-	function __construct($email_to, $subject, $account_id=0, $alias_id=0, $priority = '3', $plain_text_body=null)
+	function __construct($email_to, $subject, $account_id=0, $alias_id=0, $priority = '3', $plain_text_body=null, $transport=null)
 	{
 		global $GO_CONFIG, $GO_MODULES;
 
@@ -129,29 +129,34 @@ class GoSwift extends Swift_Mailer{
 
 			$this->account = $email->get_account($account_id, $alias_id);
 			
-			$this->smtp_host=$this->account['smtp_host'];			
-
-			$encryption = empty($this->account['smtp_encryption']) ? null : $this->account['smtp_encryption'];
-			$transport = new Swift_SmtpTransport($this->account['smtp_host'], $this->account['smtp_port'], $encryption);
-			if(!empty($this->account['smtp_username']))
+			if(!isset($transport))
 			{
-				$transport->setUsername($this->account['smtp_username'])
-					->setPassword($this->account['smtp_password'])
-					;
+				$encryption = empty($this->account['smtp_encryption']) ? null : $this->account['smtp_encryption'];
+				$transport = new Swift_SmtpTransport($this->account['smtp_host'], $this->account['smtp_port'], $encryption);
+				if(!empty($this->account['smtp_username']))
+				{
+					$transport->setUsername($this->account['smtp_username'])
+						->setPassword($this->account['smtp_password'])
+						;
+				}
 			}
 		}else
 		{
-			$this->account=false;
-			$encryption = empty($GO_CONFIG->smtp_encryption) ? null : $GO_CONFIG->smtp_encryption;
-			
-			$this->smtp_host=$GO_CONFIG->smtp_server;
-			$transport=new Swift_SmtpTransport($GO_CONFIG->smtp_server, $GO_CONFIG->smtp_port, $encryption);
-			if(!empty($GO_CONFIG->smtp_username))
+			$this->account=false;		
+
+			if(isset($transport))
 			{
-				$transport->setUsername($GO_CONFIG->smtp_username)
-					->setPassword($GO_CONFIG->smtp_password);
+				$encryption = empty($GO_CONFIG->smtp_encryption) ? null : $GO_CONFIG->smtp_encryption;
+				$transport=new Swift_SmtpTransport($GO_CONFIG->smtp_server, $GO_CONFIG->smtp_port, $encryption);
+				if(!empty($GO_CONFIG->smtp_username))
+				{
+					$transport->setUsername($GO_CONFIG->smtp_username)
+						->setPassword($GO_CONFIG->smtp_password);
+				}
 			}
 		}
+
+		$this->smtp_host=$transport->getHost();
 		parent::__construct($transport);
 
 
@@ -402,7 +407,7 @@ class GoSwiftImport extends GoSwift{
 	
 	var $body='';
 
-	public function __construct($mime, $add_body=true, $alias_id=0)
+	public function __construct($mime, $add_body=true, $alias_id=0, $transport=null)
 	{
 		
 		$RFC822 = new RFC822();
@@ -429,7 +434,7 @@ class GoSwiftImport extends GoSwift{
 		$bcc = isset($structure->headers['bcc']) && strpos($structure->headers['bcc'],'undisclosed')===false ? $structure->headers['bcc'] : '';
 
 		
-		parent::__construct($to, $subject,0,$alias_id);
+		parent::__construct($to, $subject,0,$alias_id,'3',null, $transport);
 		
 		
 		if(isset($structure->headers['from']) )
