@@ -18,5 +18,5 @@ $languages['ru']='Русский';
 $languages['ro']='Romanian';
 $languages['fi']='Suomi - Finland';
 $languages['sv']='Svenska';
-$languages['th']='Thai';
 $languages['tr']='Türkçe';
+?>

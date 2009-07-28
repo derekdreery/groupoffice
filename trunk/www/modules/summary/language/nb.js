@@ -5,8 +5,8 @@
  * Copy everything below for translations
  */
 
-GO.summary.lang.summary = 'Sammendrag';
-GO.summary.lang.noItems = 'Du har ingen elementer på startsiden din.';
+GO.summary.lang.summary = 'Oversikt';
+GO.summary.lang.noItems = 'Du har ingen elementer på oversikten din.';
 GO.summary.lang.selectPortlet = 'Velg portlet';
 GO.summary.lang.hotTopics = 'Aktuelle emner';
 GO.summary.lang.enterRssFeed = 'Angi URL til RSS nyhetsstrøm:';

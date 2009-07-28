@@ -114,7 +114,7 @@ GO.email.lang.sendNotification='Avsender har bedt om lesebekreftelse: %s. Ønske
 
 GO.email.lang.searchOnSender='Vis meldinger i gjeldende mappe';
 
-GO.email.lang.blocked = '{blocked_images} av sikkerhetshensyn er bilder fra andre tjenere blokkert.';
+GO.email.lang.blocked = '{blocked_images} bilder fra andre tjenere er blokkert av sikkerhetshensyn.';
 GO.email.lang.unblock = 'Last inn bilder';
 
 GO.email.lang.loadEmailFirst = 'For å bruke denne funksjonen må du laste inn en e-post først ved å trykke e-postfanen';
