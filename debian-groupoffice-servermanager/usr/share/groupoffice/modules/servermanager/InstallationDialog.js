@@ -430,7 +430,7 @@ Ext.extend(GO.servermanager.InstallationDialog, Ext.Window,{
 						anchor: '-20',
 					  allowBlank:false,
 					  fieldLabel: GO.servermanager.lang.defaultDecimalSeperator,
-					  value: GO.settings.date_separator
+					  value: GO.settings.decimal_separator
 					},{
 						xtype: 'textfield',
 					  name: 'default_thousands_separator',
