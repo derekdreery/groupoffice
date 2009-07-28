@@ -108,23 +108,20 @@ try{
 			if(!String::validate_email($config['webmaster_email']))
 			{
 				throw new Exception($lang['servermanager']['invalidEmail']);
-			}			
+			}
+
 				
 			if($installation['id']>0)
 			{
-				
-				/*$available_users = $servermanager->server_users_available($installation['id']);
-				if($available_users<$config['max_users'])
-				{
-					throw new Exception('You don\'t have enough user licenses. You have '.$available_users.' left');
-				}*/
+				$old_installation = $servermanager->get_installation($installation['id']);
+
+				$servermanager->check_license($config, $old_installation['name']);
 				
 				
 				$servermanager->update_installation($installation);
 
 				
-				$old_installation = $servermanager->get_installation($installation['id']);
-
+				
 				//$config_str = ($_POST['config']);
 				
 				$tmp_config = $GO_CONFIG->tmpdir.uniqid();
@@ -140,16 +137,20 @@ try{
 				{
 					$cmd .= ' "'.$admin_password.'"';
 				}
-				debug($cmd);
-				system($cmd);
+
+				exec($cmd, $output, $return_var);
+
+				if($return_var!=0){
+					throw new Exception(implode('<br />', $output));
+				}
+
+				$servermanager->delete_report($old_installation['name']);
+
+				$installation['name']=$old_installation['name'];
 
 			}else
 			{
-				/*$available_users = $servermanager->server_users_available();
-				if($available_users<$config['max_users'])
-				{
-					throw new Exception('You don\'t have enough user licenses. You have '.$available_users.' left');
-				}*/
+				$servermanager->check_license($config);
 				
 				$installation['name']=strtolower((trim($_POST['name'])));
 				$config['db_name']=str_replace('.','_',$installation['name']);
@@ -188,6 +189,25 @@ try{
 				touch($tmp_config);
 				$servermanager->write_config($tmp_config, $config);
 
+				//$servermanager->create_report($installation['name'], $tmp_config);
+
+				//create temporary report otherwise the license check will fail.
+				$report['professional']=0;
+				
+				$allowed_modules = explode(',', $config['allowed_modules']);
+				foreach($servermanager->pro_modules as $pro_module) {
+					if(in_array($pro_module, $allowed_modules)) {
+						$report['professional']=1;
+						break;
+					}
+				}
+				$report['billing']=in_array('billing', $allowed_modules) ? 1 : 0;
+				$report['name']=$installation['name'];
+				$report['ctime']=time();
+				$report['max_users']=$config['max_users'];
+				$report['comment']='Temporary report';
+				$servermanager->add_report($report);
+
 
 				//debug ('sudo '.$GO_MODULES->modules['servermanager']['path'].'sudo.php '.$GO_CONFIG->get_config_file().' install '.$installation['name'].' '.$tmp_config);
 				$cmd = 'sudo '.$GO_MODULES->modules['servermanager']['path'].'sudo.php '.$GO_CONFIG->get_config_file().' install '.$installation['name'].' '.$tmp_config;
@@ -197,18 +217,21 @@ try{
 				}
 				exec($cmd, $output, $return_var);
 
-				var_dump($return_var);
+				debug($output);
 
-				if(!$return_var){
-					throw new Exception($output);
+				if($return_var!=0){
+					throw new Exception(implode('<br />', $output));
 				}
 
+				
 				$installation_id= $servermanager->add_installation($installation);
 
 				$response['installation_id']=$installation_id;
 				$response['success']=true;
 
 			}
+
+		
 			$response['success']=true;
 			break;
 				

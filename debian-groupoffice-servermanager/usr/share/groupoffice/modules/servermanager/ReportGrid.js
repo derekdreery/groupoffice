@@ -30,7 +30,7 @@ GO.servermanager.ReportGrid = function(config){
 	    totalProperty:'total',
 	    root: 'results',
 	    id: 'name',
-	    fields: ['name','count_users','install_time','lastlogin','total_logins','database_usage','file_storage_usage','mailbox_usage','total_usage', 'comment', 'ctime', 'mailbox_domains', 'features'],
+	    fields: ['name','count_users','max_users', 'install_time','lastlogin','total_logins','database_usage','file_storage_usage','mailbox_usage','total_usage', 'comment', 'ctime', 'mailbox_domains', 'features', 'billing', 'professional'],
 	    remoteSort: true
 	});
 	
@@ -42,6 +42,10 @@ GO.servermanager.ReportGrid = function(config){
 		},	{
 			header: GO.lang.strCtime, 
 			dataIndex: 'ctime'
+		},		{
+			header: GO.servermanager.lang.maxUsers,
+			dataIndex: 'max_users',
+			align:'right'
 		},		{
 			header: GO.servermanager.lang.countUsers, 
 			dataIndex: 'count_users',
@@ -82,9 +86,21 @@ GO.servermanager.ReportGrid = function(config){
 			header: GO.servermanager.lang.mailDomains, 
 			dataIndex: 'mailbox_domains'
 		},{
+			header: GO.servermanager.lang.billing, 
+			dataIndex: 'billing',
+			renderer:function(v){
+				return v=="1" ? GO.lang.cmdYes : GO.lang.cmdNo;
+			}
+		},{
+			header: 'Professional',
+			dataIndex: 'professional',
+			renderer:function(v){
+				return v=="1" ? GO.lang.cmdYes : GO.lang.cmdNo;
+			}
+		}/*,{
 			header: GO.servermanager.lang.features, 
 			dataIndex: 'features'
-		}
+		}*/
 	]);
 	columnModel.defaultSortable = true;
 	config.cm=columnModel;
