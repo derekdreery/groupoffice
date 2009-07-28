@@ -177,7 +177,7 @@ switch($task)
 		}
 		
 		system('rm -Rf '.$go_root);
-		system('rm -Rf '.$sm_config['install_path'].'local/'.$name);
+		system('rm -Rf '.$sm_config['install_path'].'sm-local/'.$name);
 		system('rm -Rf /etc/groupoffice/'.$name);
 		system('rm -Rf /tmp/'.$name);
 		

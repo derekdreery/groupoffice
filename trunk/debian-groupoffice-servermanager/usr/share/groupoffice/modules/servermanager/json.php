@@ -36,15 +36,21 @@ try{
 			}
 
 			$response['results']=array();
-			foreach($GO_MODULES->modules as $module)
+
+			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+			$fs = new filesystem();
+
+			$folders = $fs->get_folders($GO_CONFIG->module_path);
+
+			foreach($folders as $modulefolder)
 			{
-				if($module['id']!='servermanager')
+				if($modulefolder['name']!='servermanager')
 				{
 					$record = array(
-						'id' => $module['id'],
-						'name' => $module['humanName'],
+						'id' => $modulefolder['name'],
+						'name' => $modulefolder['name'],
 						'installed' => false,
-						'allowed' => !count($allowed_modules) || in_array($module['id'], $allowed_modules)
+						'allowed' => !count($allowed_modules) || in_array($modulefolder['name'], $allowed_modules)
 					);
 					$response['results'][] = $record;
 				}
@@ -97,9 +103,8 @@ try{
 			$response['results'] = array();
 			$response['total']=$servermanager->get_reports($query, $sort, $dir, $start, $limit);
 			
-			while($servermanager->next_record())
-			{
-				$report = $servermanager->record;
+			while($report =$servermanager->next_record())
+			{				
 				
 				//$report['total_usage']=$report['file_storage_usage']+$report['mailbox_usage']+$report['database_usage'];
 				
@@ -163,8 +168,10 @@ try{
 						
 						//exec('sudo '.$GO_MODULES->modules['servermanager']['path'].'remove.sh '.$installation['name']);
 						exec('sudo '.$GO_MODULES->modules['servermanager']['path'].'sudo.php '.$GO_CONFIG->get_config_file().' remove '.$installation['name']);
+
 						
 						$servermanager->delete_installation($installation_id);
+						$servermanager->delete_report($installation['name']);
 					}
 				}catch(Exception $e)
 				{
