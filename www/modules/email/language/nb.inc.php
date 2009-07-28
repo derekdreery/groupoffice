@@ -13,7 +13,7 @@ $lang['email']['feedbackCreateFolderFailed'] = 'Kunne ikke lage mappen';
 $lang['email']['feedbackDeleteFolderFailed'] = 'Kunne ikke slette mappen';
 $lang['email']['feedbackSubscribeFolderFailed'] = 'Kunne ikke abonnere på mappen';
 $lang['email']['feedbackUnsubscribeFolderFailed'] = 'Kunne ikke deaktivere abonnement på mappen';
-$lang['email']['feedbackCannotConnect'] = 'Kan ikke koble til %1$s via posrt %3$s<br /><br />Mailserveren returnerer: %2$s';
+$lang['email']['feedbackCannotConnect'] = 'Kan ikke koble til %1$s via port %3$s<br /><br />Mailserveren returnerer: %2$s';
 $lang['email']['inbox'] = 'Inbox';
 
 $lang['email']['spam']='Søppelpost';
@@ -30,9 +30,9 @@ $lang['email']['original_message']='--- Originalmelding følger her ---';
 $lang['email']['attachments']='Vedlegg';
 
 $lang['email']['notification_subject']='Lest: %s';
-$lang['email']['notification_body']='Din e-post med emne "%s" ble vist op mottagers skjerm den %s';
+$lang['email']['notification_body']='Din e-post med emne "%s" ble vist på mottagers skjerm den %s';
 
-$lang['email']['errorGettingMessage']='Kan ikke hende meldinger fra serveren';
+$lang['email']['errorGettingMessage']='Kan ikke hente meldinger fra serveren';
 $lang['email']['no_recipients_drafts']='Ingen mottagere';
 $lang['email']['usage_limit'] = '%s av %s brukt';
 $lang['email']['usage'] = '%s brukt';

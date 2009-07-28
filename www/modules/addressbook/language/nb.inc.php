@@ -25,7 +25,7 @@ $lang['addressbook']['notIncluded'] = 'Ikke importer';
 
 $lang['addressbook']['comment'] = 'Kommentar';
 $lang['addressbook']['bankNo'] = 'Bankkonto'; 
-$lang['addressbook']['vatNo'] = 'Organisasjonsnummer';
+$lang['addressbook']['vatNo'] = 'Org.nr.';
 $lang['addressbook']['contactsGroup'] = 'Gruppe';
 
 $lang['link_type'][2]=$lang['addressbook']['contact'] = 'Kontaktperson';
