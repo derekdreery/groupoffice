@@ -3,8 +3,8 @@
 if(isset($argv[1]))
 define('CONFIG_FILE', $argv[1]);
 
-$root_path = dirname(dirname(dirname(__FILE__)));
-require($root_path.'/Group-Office.php');
+#$root_path = dirname(dirname(dirname(__FILE__)));
+require('/usr/share/groupoffice/Group-Office.php');
 
 require('/etc/groupoffice/servermanager.inc.php');
 
@@ -29,12 +29,15 @@ foreach($roots as $root)
 
 	foreach($folders as $folder)
 	{
-		$installation['name']=$folder['name'];
-		if(!$servermanager->get_installation_by_name($installation['name']))
+		if(file_exists($folder['path'].'/config.php'))
 		{
-			echo 'Adding '.$installation['name']."\n";
-			$servermanager->add_installation($installation);
+			$installation['name']=$folder['name'];
+			if(!$servermanager->get_installation_by_name($installation['name']))
+			{
+				echo 'Adding '.$installation['name']."\n";
+				$servermanager->add_installation($installation);
 
+			}
 		}
 	}
 }
