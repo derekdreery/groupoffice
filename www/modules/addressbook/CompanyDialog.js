@@ -24,12 +24,13 @@ GO.addressbook.CompanyDialog = function(config)
 		items: [
 			new Ext.form.TextArea({
 				name: 'comment',
-				id: 'comment-company',
 				fieldLabel: '',
 				hideLabel: true
 			})
 		]
 	});
+
+	this.commentPanel.on('show', function(){ this.companyForm.form.findField('comment').focus(); }, this);
 
 	/* employees Grid */
   this.employeePanel = new GO.addressbook.EmployeesPanel();

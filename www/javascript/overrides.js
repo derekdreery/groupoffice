@@ -12,6 +12,10 @@
  */
 
 
+/**
+ * Scroll menu when higher then the screen is
+ *
+ **/
 Ext.override(Ext.menu.Menu, {
     showAt : function(xy, parentMenu, /* private: */_e){
         this.parentMenu = parentMenu;
@@ -58,24 +62,28 @@ Ext.override(Ext.grid.GridView, {scrollOffset:20});
 
 
 
-/* for IE8 menu's*/
-
-Ext.override(Ext.menu.Menu, {
-    autoWidth : function(){
-        var el = this.el, ul = this.ul;
-        if(!el){
-            return;
-        }
-        var w = this.width;
-        if(w){
-            el.setWidth(w);
-        }else if(Ext.isIE && !Ext.isIE8){
-            el.setWidth(this.minWidth);
-            var t = el.dom.offsetWidth; // force recalc
-            el.setWidth(ul.getWidth()+el.getFrameWidth("lr"));
-        }
-    }
-});
+/* for IE8 menu's
+ *
+ * Probably not needed in Extjs 3.x
+*/
+if(Ext.version!='3.0'){
+	Ext.override(Ext.menu.Menu, {
+			autoWidth : function(){
+					var el = this.el, ul = this.ul;
+					if(!el){
+							return;
+					}
+					var w = this.width;
+					if(w){
+							el.setWidth(w);
+					}else if(Ext.isIE && !Ext.isIE8){
+							el.setWidth(this.minWidth);
+							var t = el.dom.offsetWidth; // force recalc
+							el.setWidth(ul.getWidth()+el.getFrameWidth("lr"));
+					}
+			}
+	});
+}
 
 
 /* password vtype */ 
@@ -114,29 +122,33 @@ Ext.Window.override({
 });
 
 /**
- * For editor grid in scrolling view
- */
+ * For editor grid in scrolling view (Billing module items tab in order dialog)
 
-Ext.override(Ext.Editor, {
-	doAutoSize : function(){
-		if(this.autoSize){
-			var sz = this.boundEl.getSize(), fs = this.field.getSize();
-			switch(this.autoSize){
-				case "width":
-					this.setSize(sz.width, fs.height);
-					break;
-				case "height":
-					this.setSize(fs.width, sz.height);
-					break;
-				case "none":
-					this.setSize(fs.width, fs.height);
-					break;
-				default:
-					this.setSize(sz.width,  sz.height);
+Not needed in Extjs 3
+*/
+
+if(Ext.version!='3.0'){
+	Ext.override(Ext.Editor, {
+		doAutoSize : function(){
+			if(this.autoSize){
+				var sz = this.boundEl.getSize(), fs = this.field.getSize();
+				switch(this.autoSize){
+					case "width":
+						this.setSize(sz.width, fs.height);
+						break;
+					case "height":
+						this.setSize(fs.width, sz.height);
+						break;
+					case "none":
+						this.setSize(fs.width, fs.height);
+						break;
+					default:
+						this.setSize(sz.width,  sz.height);
+				}
 			}
 		}
-	}
-});
+	});
+}
 
 /**
  * Localization
@@ -165,42 +177,46 @@ Ext.override(Ext.DatePicker, {
  * Fix for hover in panels that stays on when you mouseout on scrollbar
  * 
  * https://extjs.com/forum/showthread.php?p=283708#post283708
- */
+ *
+ * not necessary in Extjs 3
+ * */
 
-Ext.override(Ext.Element, {
-	findParent : function(simpleSelector, maxDepth, returnEl){
-		var p = this.dom, b = document.body, depth = 0, dq = Ext.DomQuery, stopEl;
-		maxDepth = maxDepth || 50;
-		if(typeof maxDepth != "number"){
-			stopEl = Ext.getDom(maxDepth);
-			maxDepth = 10;
-		}
-		try {
-			while(p && p.nodeType == 1 && depth < maxDepth && p != b && p != stopEl){
-				if(dq.is(p, simpleSelector)){
-					return returnEl ? Ext.get(p) : p;
-				}
-				depth++;
-				p = p.parentNode;
+if(Ext.version!='3.0'){
+	Ext.override(Ext.Element, {
+		findParent : function(simpleSelector, maxDepth, returnEl){
+			var p = this.dom, b = document.body, depth = 0, dq = Ext.DomQuery, stopEl;
+			maxDepth = maxDepth || 50;
+			if(typeof maxDepth != "number"){
+				stopEl = Ext.getDom(maxDepth);
+				maxDepth = 10;
 			}
-		} catch(e) {};
-		return null;
-	}
-});
-
-Ext.override(Ext.tree.TreeEventModel, {
-	initEvents : function(){
-		var el = this.tree.getTreeEl();
-		el.on('click', this.delegateClick, this);
-		if(this.tree.trackMouseOver !== false){
-			var innerCt = Ext.fly(el.dom.firstChild);
-			innerCt.on('mouseover', this.delegateOver, this);
-			innerCt.on('mouseout', this.delegateOut, this);
+			try {
+				while(p && p.nodeType == 1 && depth < maxDepth && p != b && p != stopEl){
+					if(dq.is(p, simpleSelector)){
+						return returnEl ? Ext.get(p) : p;
+					}
+					depth++;
+					p = p.parentNode;
+				}
+			} catch(e) {};
+			return null;
 		}
-		el.on('dblclick', this.delegateDblClick, this);
-		el.on('contextmenu', this.delegateContextMenu, this);
-	}
-});
+	});
+
+	Ext.override(Ext.tree.TreeEventModel, {
+		initEvents : function(){
+			var el = this.tree.getTreeEl();
+			el.on('click', this.delegateClick, this);
+			if(this.tree.trackMouseOver !== false){
+				var innerCt = Ext.fly(el.dom.firstChild);
+				innerCt.on('mouseover', this.delegateOver, this);
+				innerCt.on('mouseout', this.delegateOut, this);
+			}
+			el.on('dblclick', this.delegateDblClick, this);
+			el.on('contextmenu', this.delegateContextMenu, this);
+		}
+	});
+}
 
 /*
  * End of fix for hover in panels that stays on when you mouseout on scrollbar
@@ -294,53 +310,44 @@ Ext.override(Ext.Component, {
  * Width and height not restored in grid
  * 
  * http://extjs.com/forum/showthread.php?t=55086
- */
-Ext.override(Ext.grid.GridPanel,{
- applyState : function(state){
-        var cm = this.colModel;
-        var cs = state.columns;
-        if(cs){
-            for(var i = 0, len = cs.length; i < len; i++){
-                var s = cs[i];
-                var c = cm.getColumnById(s.id);
-                if(c){
-                    c.hidden = s.hidden;
-                    c.width = s.width;
-                    var oldIndex = cm.getIndexById(s.id);
-                    if(oldIndex != i){
-                        cm.moveColumn(oldIndex, i);
-                    }
-                }
-            }
-        }
-        if(state.sort){
-            this.store[this.store.remoteSort ? 'setDefaultSort' : 'sort'](state.sort.field, state.sort.direction);
-        }
-        Ext.apply(this, state);
-    }
-});
+
+Not needed in 3.0
+	*/
+
+if(Ext.version!='3.0'){
+
+	Ext.override(Ext.grid.GridPanel,{
+	 applyState : function(state){
+					var cm = this.colModel;
+					var cs = state.columns;
+					if(cs){
+							for(var i = 0, len = cs.length; i < len; i++){
+									var s = cs[i];
+									var c = cm.getColumnById(s.id);
+									if(c){
+											c.hidden = s.hidden;
+											c.width = s.width;
+											var oldIndex = cm.getIndexById(s.id);
+											if(oldIndex != i){
+													cm.moveColumn(oldIndex, i);
+											}
+									}
+							}
+					}
+					if(state.sort){
+							this.store[this.store.remoteSort ? 'setDefaultSort' : 'sort'](state.sort.field, state.sort.direction);
+					}
+					Ext.apply(this, state);
+			}
+	});
+}
 /**
  * End Width and height not restored in grid
  */
 
 
 
-/**
- * Allows adding of components after rendering table layout
 
-Ext.override(Ext.layout.TableLayout, {
-    onLayout : function(ct, target){
-        var cs = ct.items.items, len = cs.length, c, i;
-
-        if(!this.table){
-            target.addClass('x-table-layout-ct');
-
-            this.table = target.createChild(
-                {tag:'table', cls:'x-table-layout', cellspacing: 0, cn: {tag: 'tbody'}}, null, true);
-        }
-        this.renderAll(ct, target);
-    }
-}); */
 
 /**
  * Catch JSON parsing errors and show error dialog
@@ -387,3 +394,9 @@ Ext.override(Ext.ToolTip,{
     return {x : x, y: y};
   }    
 }); */
+
+if(Ext.version=='3.0'){
+	Ext.override(Ext.Panel,{
+		forceLayout:true
+	});
+}

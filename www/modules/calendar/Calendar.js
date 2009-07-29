@@ -91,8 +91,16 @@ GO.calendar.MainPanel = function(config){
 		}, this);
 	
 		this.calendarList.on('selectionchange', function(dv, selections){
-			if(selections.length)
-				this.calendarTitle.td.innerHTML=selections[0].innerHTML;			
+			if(selections.length){
+				if(this.calendarTitle.td){
+					//Ext 2
+					this.calendarTitle.td.innerHTML=selections[0].innerHTML;
+				}else
+				{
+					//Ext 3
+					this.calendarTitle.setText(selections[0].innerHTML);
+				}
+			}
 		}, this);
 	
 	this.viewsList.on('click', function(dataview, index){	
