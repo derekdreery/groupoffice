@@ -12,6 +12,11 @@
 	<input type="hidden" name="return_to" value="<?php echo $_SERVER['PHP_SELF']; ?>" />
 	<input type="hidden" name="addressbook" value="Globaal" />
 	<!-- <input type="hidden" name="mailings[]" value="blabla" /> -->
+	<!--
+	Enable this input to send an e-mail confirmation. The first line of this template will be used as subject followed by an empty line.
+
+	<input type="hidden" name="confirmation_template" value="confirm_registation" />
+	-->
 	<input type="hidden" name="notify_users" value="1,2" />
 	
 	<input type="hidden" name="notify_addressbook_owner" value="0" />
