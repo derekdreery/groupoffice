@@ -268,8 +268,15 @@ class formprocessor{
 			{
 				throw new Exception('Fatal error: No email given for confirmation e-mail!');
 			}
-			global $smarty;
-			$email = $smarty->fetch($_POST['confirmation_template']);
+
+			if(isset($_GLOBALS['confirmation_template']))
+			{
+				global $smarty;
+				$email = $smarty->fetch($_POST['confirmation_template']);
+			}else
+			{
+				$email = file_get_contents($_GLOBALS['confirmation_template']);
+			}
 				
 			$pos = strpos($email,"\n");
 				
