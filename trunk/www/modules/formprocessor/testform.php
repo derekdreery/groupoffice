@@ -10,15 +10,17 @@
 	<form method="POST" action="submit.php">
 	
 	<input type="hidden" name="return_to" value="<?php echo $_SERVER['PHP_SELF']; ?>" />
-	<input type="hidden" name="addressbook" value="Globaal" />
+	<input type="hidden" name="addressbook" value="Klanten" />
 	<!-- <input type="hidden" name="mailings[]" value="blabla" /> -->
 	<!--
-	Enable this input to send an e-mail confirmation. The first line of this template will be used as subject followed by an empty line.
+	Enable this input to send an e-mail confirmation. 
 
 	The path is relative to the directory where your config.php file is.
 
-	<input type="hidden" name="confirmation_template" value="confirm.tpl" />
+
+	<input type="hidden" name="confirmation_email" value="confirm.eml" />
 	-->
+
 	<input type="hidden" name="notify_users" value="1,2" />
 	
 	<input type="hidden" name="notify_addressbook_owner" value="0" />

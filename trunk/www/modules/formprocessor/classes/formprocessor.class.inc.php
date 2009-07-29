@@ -269,25 +269,30 @@ class formprocessor{
 				throw new Exception('Fatal error: No email given for confirmation e-mail!');
 			}
 
-			if(isset($_GLOBALS['confirmation_template']))
-			{
-				global $smarty;
-				$email = $smarty->fetch($_POST['confirmation_template']);
-			}else
-			{
-				$email = file_get_contents(dirname($GO_CONFIG->get_config_file()).'/'.$_GLOBALS['confirmation_template']);
-			}
-				
+			global $smarty;
+			$email = $smarty->fetch($_POST['confirmation_template']);
+
 			$pos = strpos($email,"\n");
-				
+
 			$subject = trim(substr($email, 0, $pos));
 			$body = trim(substr($email,$pos));
-				
+
 			require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 			$swift = new GoSwift($_POST['email'], $subject);
 			$swift->set_body($body);
 			$swift->set_from($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
 			$swift->sendmail();
 		}
+
+		if(isset($_POST['confirmation_email']))
+		{
+			$email = file_get_contents(dirname($GO_CONFIG->get_config_file()).'/'.$_POST['confirmation_email']);
+			require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
+			$swift = new GoSwiftImport($email);
+			$swift->set_to($_POST['email']);
+			$swift->sendmail();
+		}
+
+
 	}
 }

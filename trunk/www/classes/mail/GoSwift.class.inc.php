@@ -129,7 +129,7 @@ class GoSwift extends Swift_Mailer{
 
 			$this->account = $email->get_account($account_id, $alias_id);
 			
-			if(!isset($transport))
+			if(empty($transport))
 			{
 				$encryption = empty($this->account['smtp_encryption']) ? null : $this->account['smtp_encryption'];
 				$transport = new Swift_SmtpTransport($this->account['smtp_host'], $this->account['smtp_port'], $encryption);
@@ -144,7 +144,7 @@ class GoSwift extends Swift_Mailer{
 		{
 			$this->account=false;		
 
-			if(isset($transport))
+			if(empty($transport))
 			{
 				$encryption = empty($GO_CONFIG->smtp_encryption) ? null : $GO_CONFIG->smtp_encryption;
 				$transport=new Swift_SmtpTransport($GO_CONFIG->smtp_server, $GO_CONFIG->smtp_port, $encryption);
