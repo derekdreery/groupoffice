@@ -31,6 +31,7 @@ switch($task)
 	case 'users':
 		if(isset($_POST['delete_keys']))
 		{
+			require($GO_LANGUAGE->get_language_file('users'));
 			try{				
 				if(!$GO_MODULES->modules['users']['read_permission'])
 				{
