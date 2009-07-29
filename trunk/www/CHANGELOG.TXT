@@ -1,4 +1,5 @@
 2009/07/29 3.2.16
+- Upgrade to ExtJS 2.3
 - Confirmation e-mail added to web form processing
 - Better SMTP error reporting in e-mail
 - Override newsletter mailing smtp server to always use a specific e-mail server
