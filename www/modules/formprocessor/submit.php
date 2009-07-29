@@ -42,8 +42,9 @@ if($ajax)
 {
 	?>
 	<html>
-	<body onload="document.return.submit();">
-	<form method="POST" name="return" action="<?php echo $return_to; ?>">
+	<head><title>Insert title here</title></head>
+	<body onload="document.returnForm.submit();">
+	<form method="POST" name="returnForm" action="<?php echo $return_to; ?>">
 	<input type="hidden" name="submitted" value="true" />
 	<?php 
 	foreach($_POST as $key=>$value)
