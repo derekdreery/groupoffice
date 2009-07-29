@@ -275,7 +275,7 @@ class formprocessor{
 				$email = $smarty->fetch($_POST['confirmation_template']);
 			}else
 			{
-				$email = file_get_contents($_GLOBALS['confirmation_template']);
+				$email = file_get_contents(dirname($GO_CONFIG->get_config_file()).'/'.$_GLOBALS['confirmation_template']);
 			}
 				
 			$pos = strpos($email,"\n");
