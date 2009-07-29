@@ -25,7 +25,6 @@ GO.addressbook.ContactDialog = function(config)
 		border:false,
 		items: [ new Ext.form.TextArea({
 			name: 'comment',
-			id: 'comment',
 			fieldLabel: '',
 			hideLabel: true,
 			anchor:'100% 100%'
@@ -43,7 +42,7 @@ GO.addressbook.ContactDialog = function(config)
 			}
 		}, this);
 		
-	this.commentPanel.on('show', function(){ Ext.get('comment').focus(); }, this);
+	this.commentPanel.on('show', function(){ this.formPanel.form.findField('comment').focus(); }, this);
 	
 	//var selectMailingsPanel = new GO.addressbook.SelectMailingsPanel();
 	
@@ -84,7 +83,7 @@ GO.addressbook.ContactDialog = function(config)
 	});
 	
 	
-	this.downloadDocumentButton = new Ext.Button();					
+	//this.downloadDocumentButton = new Ext.Button();
 
 	this.collapsible=true;
 	this.layout= 'fit';

@@ -71,7 +71,7 @@ GO.calendar.SettingsPanel = function(config) {
 	config.layout = 'form';
 	config.labelWidth=140;
 	config.bodyStyle = 'padding:5px';
-	config.items = {
+	config.items = [{
 		xtype : 'fieldset',
 		autoHeight : true,
 		layout : 'form',
@@ -256,7 +256,7 @@ GO.calendar.SettingsPanel = function(config) {
 							allowBlank : false
 						})					
 					]
-	};
+	}];
 
 	GO.calendar.SettingsPanel.superclass.constructor.call(this, config);
 };

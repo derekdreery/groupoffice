@@ -150,10 +150,11 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
                 // renderer: this.iconRenderer
                 }, {
                     header : GO.lang['strDescription'],
-                    dataIndex : 'description'
+                    dataIndex : 'description',
+										id:'description'
                 }],
                 paging : false,
-                autoExpandColumn : 1
+                autoExpandColumn : 'description'
             });
 
             this.availableModulesWin = new Ext.Window({

@@ -509,6 +509,10 @@ class tasks extends db
 			{
 				$task['due_time']=$old_task['due_time'];
 			}
+			if(!isset($task['name']))
+			{
+				$task['name']=$old_task['name'];
+			}
 			if(!isset($task['tasklist_id']))
 			{
 				$task['tasklist_id']=$old_task['tasklist_id'];
