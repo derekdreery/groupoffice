@@ -724,66 +724,60 @@ class addressbook extends db {
             }
         }
 
-        if(!empty($query))
-        {
-            $sql .= " AND ";
+        if(!empty($query)) {
+					$sql .= " AND ";
 
-            if(!is_array($field))
-            {
-                if($field == '')
-                {
-                    $fields=array('name');
-                    $fields_sql = "SHOW FIELDS FROM ab_contacts";
-                    $this->query($fields_sql);
-                    while($this->next_record())
-                    {
-                        if(eregi('varchar', $this->f('Type')))
-                        {
-                            $fields[]='ab_contacts.'.$this->f('Field');
-                        }
-                    }
-                    if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
-                    {
-                        $fields_sql = "SHOW FIELDS FROM cf_2";
-                        $this->query($fields_sql);
-                        while ($this->next_record()) {
-                            $fields[]='cf_2.'.$this->f('Field');
-                        }
-                    }
-                }else {
-                    $fields[]=$field;
-                }
-            }else {
-                $fields=$field;
-            }
+					if(!is_array($field)) {
+						if($field == '') {
+							if(!isset($_SESSION['GO_SESSION']['addressbook_search_contact_fields']))
+							{
+								$fields=array('name');
+								$fields_sql = "SHOW FIELDS FROM ab_contacts";
+								$this->query($fields_sql);
+								while($this->next_record()) {
+									if(eregi('varchar', $this->f('Type'))) {
+										$fields[]='ab_contacts.'.$this->f('Field');
+									}
+								}
+								if($GO_MODULES->has_module('customfields')) {
+									$fields_sql = "SHOW FIELDS FROM cf_2";
+									$this->query($fields_sql);
+									while ($this->next_record()) {
+										$fields[]='cf_2.'.$this->f('Field');
+									}
+								}
+								$_SESSION['GO_SESSION']['addressbook_search_contact_fields']=$fields;
+							}else
+							{
+								$fields=$_SESSION['GO_SESSION']['addressbook_search_fields'];
+							}
+						}else {
+							$fields[]=$field;
+						}
+					}else {
+						$fields=$field;
+					}
 
-            foreach($fields as $field)
-            {
-                if(count($fields)>1)
-                {
-                    if(isset($first))
-                    {
-                        $sql .= ' OR ';
-                    }else
-                    {
-                        $first = true;
-                        $sql .= '(';
-                    }
-                }
+					foreach($fields as $field) {
+						if(count($fields)>1) {
+							if(isset($first)) {
+								$sql .= ' OR ';
+							}else {
+								$first = true;
+								$sql .= '(';
+							}
+						}
 
-                if($field=='name')
-                {
-                    $sql .= "CONCAT(first_name,middle_name,last_name) $query_type '".$this->escape(str_replace(' ','%', $query))."' ";
-                }else
-                {
-                    $sql .= "$field $query_type '".$this->escape($query)."' ";
-                }
-            }
-            if(count($fields)>1)
-            {
-                $sql .= ')';
-            }
-        }
+						if($field=='name') {
+							$sql .= "CONCAT(first_name,middle_name,last_name) $query_type '".$this->escape(str_replace(' ','%', $query))."' ";
+						}else {
+							$sql .= "$field $query_type '".$this->escape($query)."' ";
+						}
+					}
+					if(count($fields)>1) {
+						$sql .= ')';
+					}
+				}
 
 
         if($require_email)
@@ -879,46 +873,57 @@ class addressbook extends db {
             }
         }
 
-        if(!empty($query))
-        {
-            $query = $this->escape($query);
-            $sql .= ' AND ';
-            if ($field == '') {
-                $fields_sql = "SHOW FIELDS FROM ab_companies";
-                $this->query($fields_sql);
-                while ($this->next_record()) {
-                    if (eregi('varchar', $this->f('Type'))) {
-                        if (isset ($first)) {
-                            $sql .= ' OR ';
-                        } else {
-                            $first = true;
-                            $sql .= '(';
-                        }
-                        $sql .= "ab_companies.".$this->f('Field')." LIKE '".$this->escape($query)."'";
-                    }
-                }
-                if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
-                {
-                    $fields_sql = "SHOW FIELDS FROM cf_3";
-                    $this->query($fields_sql);
-                    while ($this->next_record()) {
-                        //if (eregi('varchar', $this->f('Type')) || $this->f('Field')=='id') {
-                        if (isset ($first)) {
-                            $sql .= ' OR ';
-                        } else {
-                            $first = true;
-                            $sql .= '(';
-                        }
-                        $sql .= "cf_3.".$this->f('Field')." $query_type '$query'";
-                        //}
-                    }
 
-                }
-                $sql .= ')';
-            } else {
-                $sql .= "$field $query_type '$query'";
-            }
-        }
+				if(!empty($query)) {
+					$sql .= " AND ";
+
+					if(!is_array($field)) {
+						if($field == '') {
+							if(!isset($_SESSION['GO_SESSION']['addressbook_search_company_fields']))
+							{
+								$fields=array();
+								$fields_sql = "SHOW FIELDS FROM ab_companies";
+								$this->query($fields_sql);
+								while($this->next_record()) {
+									if(eregi('varchar', $this->f('Type'))) {
+										$fields[]='ab_companies.'.$this->f('Field');
+									}
+								}
+								if($GO_MODULES->has_module('customfields')) {
+									$fields_sql = "SHOW FIELDS FROM cf_3";
+									$this->query($fields_sql);
+									while ($this->next_record()) {
+										$fields[]='cf_3.'.$this->f('Field');
+									}
+								}
+								$_SESSION['GO_SESSION']['addressbook_search_company_fields']=$fields;
+							}else
+							{
+								$fields=$_SESSION['GO_SESSION']['addressbook_search_company_fields'];
+							}
+						}else {
+							$fields[]=$field;
+						}
+					}else {
+						$fields=$field;
+					}
+
+					foreach($fields as $field) {
+						if(count($fields)>1) {
+							if(isset($first)) {
+								$sql .= ' OR ';
+							}else {
+								$first = true;
+								$sql .= '(';
+							}
+						}
+
+						$sql .= "$field $query_type '".$this->escape($query)."' ";
+					}
+					if(count($fields)>1) {
+						$sql .= ')';
+					}
+				}
 
         if($require_email)
         {
