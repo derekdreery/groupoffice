@@ -131,7 +131,7 @@ try{
 				
 			$usersfolder = $files->resolve_path('users');
 
-			if($folder['parent_id']!=$usersfolder['id'] && ($files->is_owner($folder) || $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id)))
+			if(empty($folder['readonly']) && $folder['parent_id']!=$usersfolder['id'] && ($files->is_owner($folder) || $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id)))
 			{
 				if (isset($_POST['share']) && $folder['acl_read']==0) {
 
