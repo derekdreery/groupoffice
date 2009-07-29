@@ -28,11 +28,11 @@
 	<table>
 		<tr>
 			<td>{$lang.lostpassword.new_password}: </td>
-			<td><input type="text" name="pass1" value="{$smarty.request.pass1}" /></td>
+			<td><input type="password" name="pass1" value="{$smarty.request.pass1}" /></td>
 		</tr>
 		<tr>
 			<td>{$lang.lostpassword.confirm_password}: </td>
-			<td><input type="text" name="pass2" value="{$smarty.request.pass2}" /></td>
+			<td><input type="password" name="pass2" value="{$smarty.request.pass2}" /></td>
 		</tr>
 	</table>
 
