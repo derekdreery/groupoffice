@@ -433,8 +433,8 @@ a.normal-link:hover{
 }
 
 .go-icon {
-	width:16px;
-	height:16px;
+	width:16px !important;
+	height:16px !important;
 	background-repeat: no-repeat;
 }
 
