@@ -58,3 +58,5 @@ GO.files.SelectFile = Ext.extend(Ext.form.TriggerField,{
 	}
 
 });
+
+Ext.ComponentMgr.registerType('selectfile', GO.files.SelectFile);
