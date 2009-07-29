@@ -270,7 +270,7 @@ class servermanager extends db {
 		$sql = "SELECT SUM(billing) AS total_billing FROM sm_reports";
 
 		if(!empty($installation_name)) {
-			$sql .= " AND name='".$this->escape($installation_name)."'";
+			$sql .= " WHERE name='".$this->escape($installation_name)."'";
 		}
 
 		$this->query($sql);

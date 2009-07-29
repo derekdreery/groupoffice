@@ -59,6 +59,8 @@ try{
 			}elseif(empty($_POST['installation_id'])){
 				$config['allowed_modules']=isset($default_config['allowed_modules']) ? $default_config['allowed_modules'] : '';
 			}
+
+			//var_dump($config['allowed_modules']);
 			
 			$config['max_users']=$_POST['max_users'];			
 			
