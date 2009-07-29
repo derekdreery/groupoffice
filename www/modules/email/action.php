@@ -472,6 +472,9 @@ try{
 									$swift->set_draft($_POST['draft_uid']);
 								}
 
+								$log = new Swift_Plugins_LoggerPlugin(new Swift_Plugins_Loggers_ArrayLogger());
+								$swift->registerPlugin($log);
+
 								$response['success']=$swift->sendmail();
 
 								if(!empty($_POST['link']))
@@ -482,8 +485,15 @@ try{
 
 								if(!$response['success'])
 								{
-									$response['feedback']='An error ocurred. ';//The server returned: <br /><br />';
-									//$response['feedback'].=nl2br($log->dump(true));
+
+									$log_str = $log->dump();
+
+									$error = preg_match('/<< 550.*>>/s', $log_str,$matches);
+
+									if(isset($matches[0])){
+										$log_str=trim(substr($matches[0],2,-2));
+									}
+									$response['feedback']=nl2br($log_str);
 								}
 							}
 

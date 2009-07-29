@@ -167,7 +167,7 @@ function find_alias_and_recipients()
 	$email->get_aliases($account_id, true);
 	while($alias=$email->next_record())
 	{
-		$aliases[$alias['email']]=$alias['id'];
+		$aliases[strtolower($alias['email'])]=$alias['id'];
 	}
 	
 	$fill_to = $task=='reply_all' || $task=='opendraft';
@@ -178,7 +178,7 @@ function find_alias_and_recipients()
 		$first = !empty($response['data']['to']);
 		for ($i=0;$i<sizeof($content["to"]);$i++)
 		{
-			$address = String::get_email_from_string($content["to"][$i]);							
+			$address = strtolower(String::get_email_from_string($content["to"][$i]));
 			if (!empty($email))
 			{
 				if(isset($aliases[$address]))
