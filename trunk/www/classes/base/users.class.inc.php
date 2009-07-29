@@ -868,7 +868,7 @@ class GO_USERS extends db
 			$usersdir = $files->resolve_path('users',true, 1);
 			$admindir = $files->resolve_path('adminusers',true, 1);
 		
-			$files->mkdir($usersdir, $user['username'], $user['id'], 1,true,'1');
+			$files->mkdir($usersdir, $user['username'], $user['id'], 1,true,'1','1');
 			$folder = $files->mkdir($admindir, $user['username'], 1, 1,true,'1');
 			if($folder)
 				$user['files_folder_id']=$folder['id'];			
