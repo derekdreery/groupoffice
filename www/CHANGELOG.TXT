@@ -1,4 +1,4 @@
-2009/07/? 3.2.16
+2009/07/29 3.2.16
 - Confirmation e-mail added to web form processing
 - Better SMTP error reporting in e-mail
 - Override newsletter mailing smtp server to always use a specific e-mail server
