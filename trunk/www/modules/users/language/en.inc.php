@@ -4,7 +4,7 @@
 $lang['users']['name'] = 'Users';
 $lang['users']['description'] = 'Admin module. Managing system users.';
 
-$lang['users']['deletePrimaryAdmin'] = 'You can\t delete the primary administrator';
+$lang['users']['deletePrimaryAdmin'] = 'You can\'t delete the primary administrator';
 $lang['users']['deleteYourself'] = 'You can\'t delete yourself';
 
 $lang['link_type'][8]=$us_user = 'User';
