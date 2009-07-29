@@ -1235,7 +1235,7 @@ class files extends db {
 
 
 
-	function mkdir($parent, $name, $share_user_id=0, $user_id=0, $ignore_existing_filesystem_folder=false, $readonly='0') {
+	function mkdir($parent, $name, $share_user_id=0, $user_id=0, $ignore_existing_filesystem_folder=false, $readonly='0', $visible='0') {
 
 		global $GO_SECURITY, $GO_CONFIG, $lang;
 
@@ -1276,8 +1276,8 @@ class files extends db {
 			throw new Exception($lang['common']['saveError'].$full_path.'/'.$name);
 		} else {
 			$folder['readonly']=$readonly;
-			$folder['visible']='0';
-			$folder['user_id']=$user_id;
+			$folder['visible']=$visible;
+			$folder['user_id']=$share_user_id;
 			$folder['parent_id']=$parent['id'];
 			$folder['name']=$name;
 			$folder['ctime']=filectime($full_path.'/'.$name);
