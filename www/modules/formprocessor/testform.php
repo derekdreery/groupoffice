@@ -15,7 +15,9 @@
 	<!--
 	Enable this input to send an e-mail confirmation. The first line of this template will be used as subject followed by an empty line.
 
-	<input type="hidden" name="confirmation_template" value="confirm_registation" />
+	The path is relative to the directory where your config.php file is.
+
+	<input type="hidden" name="confirmation_template" value="confirm.tpl" />
 	-->
 	<input type="hidden" name="notify_users" value="1,2" />
 	
