@@ -12,19 +12,19 @@ GO.files.SelectFile = Ext.extend(Ext.form.TriggerField,{
 	onTriggerClick : function(){
 
 
-		if(!this.fb)
+		if(!GO.selectFileBrowser)
 		{
-			this.fb = new GO.files.FileBrowser({
+			GO.selectFileBrowser= new GO.files.FileBrowser({
 				border:false,
 				treeCollapsed:false
 			});
 
-			this.fb.setFileClickHandler(function(r){
+			GO.selectFileBrowser.setFileClickHandler(function(r){
 					this.setValue(r.data.path);
-					this.fileBrowserWindow.hide();
+					GO.selectFileBrowserWindow.hide();
 				}, this);
 
-			this.fileBrowserWindow = new Ext.Window({
+			GO.selectFileBrowserWindow = new Ext.Window({
 				title: GO.lang.strSelectFiles,
 				height:500,
 				width:750,
@@ -34,16 +34,19 @@ GO.files.SelectFile = Ext.extend(Ext.form.TriggerField,{
 				collapsible:true,
 				maximizable:true,
 				closeAction:'hide',
-				items: this.fb,
+				items: GO.selectFileBrowser,
 				buttons:[
 					{
 						text: GO.lang.cmdOk,
-						handler: function(){this.fb.fileClickHandler();},
+						handler: function(){
+							var records = GO.selectFileBrowser.getSelectedGridRecords();
+							GO.selectFileBrowser.fileClickHandler.call(this, records[0]);
+						},
 						scope: this
 					},{
 						text: GO.lang.cmdClose,
 						handler: function(){
-							this.fileBrowserWindow.hide();
+							GO.selectFileBrowserWindow.hide();
 						},
 						scope:this
 					}
@@ -52,9 +55,9 @@ GO.files.SelectFile = Ext.extend(Ext.form.TriggerField,{
 			});
 		}
 
-		this.fb.setFilesFilter(this.filesFilter);
-		this.fb.setRootID(this.root_folder_id, this.files_folder_id);
-		this.fileBrowserWindow.show();
+		GO.selectFileBrowser.setFilesFilter(this.filesFilter);
+		GO.selectFileBrowser.setRootID(this.root_folder_id, this.files_folder_id);
+		GO.selectFileBrowserWindow.show();
 	}
 
 });

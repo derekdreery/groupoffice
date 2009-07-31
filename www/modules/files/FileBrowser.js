@@ -41,7 +41,7 @@ GO.files.FileBrowser = function(config){
 	this.treeLoader = new Ext.tree.TreeLoader(
 		{
 			dataUrl:GO.settings.modules.files.url+'json.php',
-			baseParams:{task: 'tree',root_folder_id:0},
+			baseParams:{task: 'tree',root_folder_id:0, folder_id:0},
 			preloadChildren:true
 		});
 
@@ -657,7 +657,13 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	{	
 		this.folder_id=folder_id;
 		this.treeLoader.baseParams.root_folder_id=rootID;
-		this.rootNode.reload();		
+		this.treeLoader.baseParams.expand_folder_id=folder_id;
+		this.rootNode.reload({
+			callback:function(){
+				delete this.treeLoader.baseParams.expand_folder_id;
+			},
+			scope:this
+		});
 	},
 	
 	buildNewMenu : function(){		
@@ -1032,7 +1038,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	
 		var activeNode = this.treePanel.getNodeById(this.folder_id);
 
-		this.treeLoader.baseParams.refresh_folder_id=this.folder_id;
+		this.treeLoader.baseParams.expand_folder_id=this.folder_id;
 
 		this.expandPath=false;
 		if(activeNode)
@@ -1041,7 +1047,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		}		
 		this.rootNode.reload((function(){
 
-				delete this.treeLoader.baseParams.refresh_folder_id;
+				this.treeLoader.baseParams.expand_folder_id=0;
 
 				if(this.expandPath)
 					this.treePanel.expandPath(this.expandPath);

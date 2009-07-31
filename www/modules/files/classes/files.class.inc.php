@@ -1316,22 +1316,24 @@ class files extends db {
 	 * @return unknown_type
 	 */
 
-	function build_path($folder_id, $path='') {
+	function build_path($folder_id, &$pathinfo=array(), $path='') {
 		if($folder_id==0) {
 			return $path;
 		}
+
 		if(is_array($folder_id)) {
 			$folder=$folder_id;
 		}else {
 			$folder=$this->get_folder($folder_id);
 		}
+
 		if(!$folder)
 			return $path;
-
-		//array_unshift($pathinfo, $folder);
+		
+		array_unshift($pathinfo, $folder);
 
 		$path = empty($path) ? $folder['name'] : $folder['name'].'/'.$path;
-		return $this->build_path($folder['parent_id'], $path);
+		return $this->build_path($folder['parent_id'], $pathinfo, $path);
 	}
 
 	function folder_exists($parent_id, $name) {
