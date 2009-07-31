@@ -84,7 +84,7 @@ GO.users.lang.muteSound='Demp lyd';
 
 GO.users.lang.downloadSampleCSV='Last ned prøve CSV';
 
-GO.users.lang.importText='Du kan importere brukere fra en CSV fil. Du kan laste ned en prøve CSV fil for å se hvordan en slik fil skal bygges oppe.<br />Den første linjen må inneholde kolonnenavnene. Følgende felt kreves for hver bruker :<br /><br />username, password, first_name, last_name, email';
+GO.users.lang.importText='Du kan importere brukere fra en CSV fil. Du kan laste ned en CSV prøvefil for å se hvordan en slik fil skal bygges oppe.<br />Den første linjen må inneholde kolonnenavnene. Følgende felt kreves for hver bruker :<br /><br />username, password, first_name, last_name, email';
 
 
 GO.users.lang.useModule= 'Bruk';
@@ -94,3 +94,6 @@ GO.users.lang.numberFormat ='Nummerformat';
 GO.users.lang.importExport ='Import / Eksport';
 GO.users.lang.listSeparator='Liste separator';
 GO.users.lang.textSeparator='Tekst separator';
+GO.users.lang.deleteWarning='ADVARSEL!!! Alle brukerens data vil bli slettet, OGSÅ adressebøker, prosjekter, kalendere osv. !!!';
+GO.users.lang.lastName= 'Etternavn';
+GO.users.lang.firstName= 'Fornavn';
