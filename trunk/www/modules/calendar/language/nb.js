@@ -60,10 +60,11 @@ GO.calendar.lang.list='Liste';
 GO.calendar.lang.editRecurringEvent='Vil du endre denne hendelseneller hele serien?';
 GO.calendar.lang.selectIcalendarFile='Velg en icalendar (*.ics) fil';
 
-GO.calendar.lang.location='Locasjon';
+GO.calendar.lang.location='Lokasjon';
 GO.calendar.lang.startsAt='Starter';
 GO.calendar.lang.endsAt='Slutter';
 GO.calendar.lang.eventDefaults='Standardinstillinger for avtaler';
 
-GO.calendar.lang.importToCalendar='Legg avtalen direkte i kalenderene';
-GO.calendar.lang.default_calendar='Standard kalender';
+GO.calendar.lang.importToCalendar='Legg avtalen direkte i kalenderne';
+GO.calendar.lang.default_calendar='Standardkalender';
+GO.calendar.lang.status='Status';

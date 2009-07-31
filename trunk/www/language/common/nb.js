@@ -89,7 +89,7 @@ GO.lang.strCountry = 'Land';
 GO.lang.strHomepage = 'Nettsted';
 GO.lang.strCompany = 'Firma';
 GO.lang.strDepartment = 'Avdeling';
-GO.lang.strFunction = 'Stilling';
+GO.lang.strFunction = 'Funksjon';
 GO.lang.strSalutation = 'Hilsning';
 GO.lang.strComment = 'Kommentarer';
 GO.lang.strWorkAddress = 'Adresse (arbeid)';
@@ -276,7 +276,7 @@ GO.lang.right = 'Høyre';
 GO.lang.noFilesModule = 'Denne funksjonen krever at filmodulen er installert';
 
 
-GO.lang.remindPassword='Husk min innlogging på denne datamaskinen inntil jeg aktivt logger ut';
+GO.lang.remindPassword='Husk meg på denne datamaskinen inntil jeg aktivt logger ut';
 
 GO.lang.reminders = 'Påminnelser';
 GO.lang.dismiss='Avslutt';
