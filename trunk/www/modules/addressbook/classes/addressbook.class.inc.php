@@ -749,7 +749,7 @@ class addressbook extends db {
 								$_SESSION['GO_SESSION']['addressbook_search_contact_fields']=$fields;
 							}else
 							{
-								$fields=$_SESSION['GO_SESSION']['addressbook_search_fields'];
+								$fields=$_SESSION['GO_SESSION']['addressbook_search_contact_fields'];
 							}
 						}else {
 							$fields[]=$field;

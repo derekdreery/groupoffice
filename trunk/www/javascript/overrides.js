@@ -179,29 +179,9 @@ Ext.override(Ext.DatePicker, {
  * https://extjs.com/forum/showthread.php?p=283708#post283708
  *
  * not necessary in Extjs 3
- * */
-
+ * 
+*/
 if(Ext.version!='3.0'){
-	Ext.override(Ext.Element, {
-		findParent : function(simpleSelector, maxDepth, returnEl){
-			var p = this.dom, b = document.body, depth = 0, dq = Ext.DomQuery, stopEl;
-			maxDepth = maxDepth || 50;
-			if(typeof maxDepth != "number"){
-				stopEl = Ext.getDom(maxDepth);
-				maxDepth = 10;
-			}
-			try {
-				while(p && p.nodeType == 1 && depth < maxDepth && p != b && p != stopEl){
-					if(dq.is(p, simpleSelector)){
-						return returnEl ? Ext.get(p) : p;
-					}
-					depth++;
-					p = p.parentNode;
-				}
-			} catch(e) {};
-			return null;
-		}
-	});
 
 	Ext.override(Ext.tree.TreeEventModel, {
 		initEvents : function(){
@@ -312,7 +292,7 @@ Ext.override(Ext.Component, {
  * http://extjs.com/forum/showthread.php?t=55086
 
 Not needed in 3.0
-	*/
+
 
 if(Ext.version!='3.0'){
 
@@ -340,7 +320,7 @@ if(Ext.version!='3.0'){
 					Ext.apply(this, state);
 			}
 	});
-}
+}	*/
 /**
  * End Width and height not restored in grid
  */
