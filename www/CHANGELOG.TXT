@@ -1,3 +1,6 @@
+2009/07/29 3.2.17
+- Problem with search query for contacts
+
 2009/07/29 3.2.16
 - Upgrade to ExtJS 2.3
 - Confirmation e-mail added to web form processing
