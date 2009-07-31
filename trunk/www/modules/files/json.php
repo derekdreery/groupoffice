@@ -37,9 +37,11 @@ try{
 
 			$fs2= new files();
 
-			function get_node_children($folder_id, $authenticate=false)
+			function get_node_children($folder_id, $authenticate=false, $expand_folder_ids=array())
 			{
-				global $files,$fs2;
+				global $fs2;
+
+				$files = new files();
 
 				$children = array();
 				$files->get_folders($folder_id,'name','ASC', 0,200, $authenticate);
@@ -63,8 +65,11 @@ try{
 					{
 						$node['iconCls']='folder-default';
 					}
-
-					if(!$fs2->has_children($folder['id']))
+					if(in_array($folder['id'], $expand_folder_ids))
+					{
+						$node['children']=get_node_children($folder['id'], $authenticate, $expand_folder_ids);
+						$node['expanded']=true;
+					}else	if(!$fs2->has_children($folder['id']))
 					{
 						$node['children']=array();
 						$node['expanded']=true;
@@ -80,11 +85,39 @@ try{
 			{
 				case 'root':
 
+
+					
+						
 					if(!empty($_POST['root_folder_id']))
 					{
 						$folder = $files->get_folder($_POST['root_folder_id']);
-
 						$files->check_folder_sync($folder);
+					}else{
+						/*Home folder with children */
+						$home_path = 'users/'.$_SESSION['GO_SESSION']['username'];
+						$folder=$files->resolve_path($home_path);
+
+						$files->check_folder_sync($folder, $home_path);
+					}
+
+					$expand_folder_ids=array();
+					if(!empty($_POST['expand_folder_id'])){
+						//This is the active folder. We need to make sure this folder is
+						//provided
+						$pathinfo=array();
+						$path = $files->build_path($_POST['expand_folder_id'], $pathinfo);
+
+						$files->check_folder_sync($folder, $path);
+
+						$expand_folder_ids=array();
+						foreach($pathinfo as $expandfolder){
+							$expand_folder_ids[] = $expandfolder['id'];
+						}
+					}
+
+					if(!empty($_POST['root_folder_id']))
+					{
+						//$folder = $files->get_folder($_POST['root_folder_id']);
 
 						$node= array(
 							'text'=>$folder['name'],
@@ -92,29 +125,25 @@ try{
 							'expanded'=>true,
                'draggable'=>false,
 							'iconCls'=>'folder-default',
-							'children'=>get_node_children($folder['id'], true),
+							'children'=>get_node_children($folder['id'], true, $expand_folder_ids),
 							'notreloadable'=>true
 						);
 						$response[]=$node;
 
 					}else
 					{
-						/*Home folder with children */
-						$home_id = 'users/'.$_SESSION['GO_SESSION']['username'];
-						$home_folder=$files->resolve_path($home_id);
+						
 
-						$files->check_folder_sync($home_folder, $home_id);
-
-						$files->get_folders($home_folder['id'],'name', 'ASC',0,200,false);
+						$files->get_folders($folder['id'],'name', 'ASC',0,200,false);
 
 
 						$node= array(
 						'text'=>$lang['files']['personal'],
-						'id'=>$home_folder['id'],
+						'id'=>$folder['id'],
 						'iconCls'=>'folder-home',
 						'expanded'=>true,
             'draggable'=>false,
-						'children'=>get_node_children($home_folder['id'], false),
+						'children'=>get_node_children($folder['id'], false, $expand_folder_ids),
 						'notreloadable'=>true
 						);
 						$response[]=$node;
