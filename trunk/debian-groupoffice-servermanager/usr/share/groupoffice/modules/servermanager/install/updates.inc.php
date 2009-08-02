@@ -12,3 +12,4 @@ $updates[]="ALTER TABLE `sm_reports` ADD `professional` BOOL NOT NULL ";
 $updates[]="ALTER TABLE `sm_reports` ADD INDEX ( `ctime` )";
 $updates[]="ALTER TABLE `sm_reports` ADD INDEX ( `professional` )";
 $updates[]="ALTER TABLE `sm_reports` ADD INDEX ( `billing` ) ";
+$updates[]="ALTER TABLE `sm_reports` ADD `max_users` INT NOT NULL ";
