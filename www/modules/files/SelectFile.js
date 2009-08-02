@@ -19,11 +19,6 @@ GO.files.SelectFile = Ext.extend(Ext.form.TriggerField,{
 				treeCollapsed:false
 			});
 
-			GO.selectFileBrowser.setFileClickHandler(function(r){
-					this.setValue(r.data.path);
-					GO.selectFileBrowserWindow.hide();
-				}, this);
-
 			GO.selectFileBrowserWindow = new Ext.Window({
 				title: GO.lang.strSelectFiles,
 				height:500,
@@ -54,6 +49,11 @@ GO.files.SelectFile = Ext.extend(Ext.form.TriggerField,{
 
 			});
 		}
+
+		GO.selectFileBrowser.setFileClickHandler(function(r){
+			this.setValue(r.data.path);
+			GO.selectFileBrowserWindow.hide();
+		}, this);
 
 		GO.selectFileBrowser.setFilesFilter(this.filesFilter);
 		GO.selectFileBrowser.setRootID(this.root_folder_id, this.files_folder_id);
