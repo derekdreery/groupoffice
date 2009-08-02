@@ -41,7 +41,7 @@ GO.files.FileBrowser = function(config){
 	this.treeLoader = new Ext.tree.TreeLoader(
 		{
 			dataUrl:GO.settings.modules.files.url+'json.php',
-			baseParams:{task: 'tree',root_folder_id:0, folder_id:0},
+			baseParams:{task: 'tree',root_folder_id:0, expand_folder_id:0},
 			preloadChildren:true
 		});
 
@@ -49,7 +49,7 @@ GO.files.FileBrowser = function(config){
 		region:'west',
 		title:GO.lang.locations,
 		layout:'fit',
-        split:true,
+    split:true,
 		autoScroll:true,
 		width: 200,
 		animate:true,
@@ -59,7 +59,6 @@ GO.files.FileBrowser = function(config){
 		containerScroll: true,
 		collapsible:true,
 		ddAppendOnly: true,
-		containerScroll: true,
 		ddGroup : 'FilesDD',
 		enableDD:true,
 		selModel:new Ext.tree.MultiSelectionModel()		

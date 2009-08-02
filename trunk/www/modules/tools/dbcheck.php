@@ -119,6 +119,9 @@ if(count($acls))
 
 echo 'Checking ACL...'.$line_break;
 
+$sql = "DELETE FROM go_acl WHERE acl_id=0;";
+$db->query($sql);
+
 $sql = "SELECT * FROM go_acl_items";
 $db->query($sql);
 while($db->next_record())

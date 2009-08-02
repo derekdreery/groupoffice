@@ -84,10 +84,6 @@ try{
 			switch($node)
 			{
 				case 'root':
-
-
-					
-						
 					if(!empty($_POST['root_folder_id']))
 					{
 						$folder = $files->get_folder($_POST['root_folder_id']);
@@ -117,8 +113,6 @@ try{
 
 					if(!empty($_POST['root_folder_id']))
 					{
-						//$folder = $files->get_folder($_POST['root_folder_id']);
-
 						$node= array(
 							'text'=>$folder['name'],
 							'id'=>$folder['id'],
@@ -132,11 +126,8 @@ try{
 
 					}else
 					{
-						
-
 						$files->get_folders($folder['id'],'name', 'ASC',0,200,false);
-
-
+						
 						$node= array(
 						'text'=>$lang['files']['personal'],
 						'id'=>$folder['id'],
