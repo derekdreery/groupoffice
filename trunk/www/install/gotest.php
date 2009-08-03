@@ -331,7 +331,7 @@ function ic_system_info()
 	ob_end_clean();
 
 	foreach (split("\n",$php_info) as $line) {
-		if (eregi('command',$line)) {
+		if (stripos($line, 'command')!==false) {
 			continue;
 		}
 
