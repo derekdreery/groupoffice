@@ -1095,7 +1095,7 @@ class imap{
 			}
 		}
 
-		if ($part_charset != '' && $part_charset != $charset) {
+		if ($part_charset != ''){// && $part_charset != $charset) {
 			if($converted = @iconv($part_charset, $charset.'//IGNORE', $str))
 			{
 				return str_replace($part_charset, $charset, $converted);

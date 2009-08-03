@@ -24,6 +24,11 @@
 
 class String {
 
+	function clean_utf8($s){
+		//Does not always work
+		return iconv('UTF-8', 'UTF-8//IGNORE', $s);
+	}
+
 	function replace_once($search, $replace, $subject) {
 		$firstChar = strpos($subject, $search);
 		if($firstChar !== false) {
@@ -47,10 +52,10 @@ class String {
 	{
 		$size = strlen ($haystack);
 		$pos = strpos (strrev($haystack), strrev($needle), $size - $offset);
-		 
+
 		if ($pos === false)
 		return false;
-		 
+
 		return $size - $pos - strlen($needle);
 	}
 
@@ -308,7 +313,7 @@ class String {
 		if ($object['country'] != '') {
 			global $lang;
 			require_once($GLOBALS['GO_LANGUAGE']->get_base_language_file('countries'));
-			
+
 			$address .= $countries[$object['country']].$linebreak;
 		}
 		return $address;
@@ -383,7 +388,7 @@ class String {
 
 	/**
 	 * Trim plain text to a maximum number of lines
-	 * 
+	 *
 	 * @param $string
 	 * @param $maxlines
 	 * @return String
@@ -393,7 +398,7 @@ class String {
 		$string = str_replace("\r", '', $string);
 		$lines = explode("\n", $string, $maxlines);
 		$new_string =  implode("\n", $lines);
-		
+
 		if(strlen($new_string)<strlen($string))
 		{
 			$new_string .= "\n...";
@@ -504,23 +509,23 @@ class String {
 		$text = nl2br(trim($text));
 		//$text = str_replace("\r", "", $text);
 		//$text = str_replace("\n", "", $text);
-		
+
 		//we dont use < and > directly with the preg functions because htmlspecialchars will screw it up. We don't want to use
 		//htmlspecialchars before the pcre functions because email address like <mschering@intermesh.nl> will fail.
-		
+
 		$text = str_replace("{quot}", '"', $text);
 		$text = str_replace("{lt}", "<", $text);
 		$text = str_replace("{gt}", ">", $text);
 
 		return ($text);
 	}
-	
+
 	function html_to_text($text, $link_list=true){
 		global $GO_CONFIG;
 		require_once($GO_CONFIG->class_path.'html2text.class.inc');
-		
+
 		$htmlToText = new Html2Text ($text);
-		return $htmlToText->get_text($link_list);	
+		return $htmlToText->get_text($link_list);
 	}
 
 	/**
@@ -535,7 +540,7 @@ class String {
 	function convert_html($html, $block_external_images=false, &$replace_count=0) {
 
 		$html = str_replace("\r", '', $html);
-		$html = str_replace("\n",' ', $html);		
+		$html = str_replace("\n",' ', $html);
 
 		//remove strange white spaces in tags first
 		//sometimes things like this happen <style> </ style >
@@ -560,17 +565,17 @@ class String {
 		"'<textarea[^>]*>.*?</textarea>'si",
 		"'</form>'si"
 		);
-	
+
 		$html = preg_replace($to_removed_array, '', $html);
 		$html = preg_replace("/([\"']?)javascript:/i", "$1removed_script:", $html);
-	
+
 		if($block_external_images)
 		{
 			//$html = preg_replace("/<img(.*)src=([\"']?)http([^>])/", "<img$1src=$2blocked:http$3", $html);
 			//$html = preg_replace("/<([^=]*)=[\"']?http[^\"'\s>]*/", "<$1=\"blocked\"", $html);
 			$html = preg_replace("/<([^aA]{1})([^>]*)https?:([^>]*)/", "<$1$2blocked:$3", $html, -1, $replace_count);
 		}
-	
+
 		return $html;
 	}
 
@@ -603,8 +608,8 @@ class String {
 			$html = preg_replace("/(href=([\"']?)mailto:)([\w\.\-]+)(@)([\w\.\-\"]+)\b/i",
 			"href=\"javascript:this.showComposer({values: {to : '$3$4$5'}});", $html);
 		}
-	
-		
+
+
 
 		return $html;
 	}
@@ -633,11 +638,11 @@ class String {
 
 	function quoted_printable_encode($sText,$bEmulate_imap_8bit=true) {
 		// split text into lines
-		
+
 		$sText = str_replace("\r", '', $sText);
-		
+
 		$aLines=explode("\n",$sText);
-		
+
 		//var_dump($aLines);
 
 		for ($i=0;$i<count($aLines);$i++) {
@@ -688,7 +693,7 @@ class String {
 			// at the very first character of the line
 			// and after soft linebreaks, as well,
 			// but this wouldn't be caught by such an easy RegExp
-			
+
 			//preg_match_all( '/.{1,73}([^=]{0,2})?/', $sLine, $aMatch );
 			//$sLine = implode( '=' . chr(13).chr(10), $aMatch[0] ); // add soft crlf's
 		}

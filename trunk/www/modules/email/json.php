@@ -169,9 +169,9 @@ function find_alias_and_recipients()
 	{
 		$aliases[strtolower($alias['email'])]=$alias['id'];
 	}
-	
+
 	$fill_to = $task=='reply_all' || $task=='opendraft';
-	
+
 	//add all recievers from this email
 	if (isset($content["to"]))
 	{
@@ -185,17 +185,17 @@ function find_alias_and_recipients()
 				{
 					$response['data']['alias_id']=$aliases[$address];
 				}
-				
-				if($fill_to && (!isset($aliases[$address]) || $task=='opendraft')){		
+
+				if($fill_to && (!isset($aliases[$address]) || $task=='opendraft')){
 					if (!$first)
 					{
 						$first = true;
 					}else
 					{
 						$response['data']['to'] .= ',';
-					}							
-					$response['data']['to'] .= $content["to"][$i];									
-				}							
+					}
+					$response['data']['to'] .= $content["to"][$i];
+				}
 			}
 		}
 	}
@@ -205,22 +205,22 @@ function find_alias_and_recipients()
 		$first=false;
 		for ($i=0;$i<sizeof($content["cc"]);$i++)
 		{
-			$address = String::get_email_from_string($content["cc"][$i]);												
+			$address = String::get_email_from_string($content["cc"][$i]);
 			if (!empty($address))
 			{
 				if(isset($aliases[$address]))
 				{
 					$response['data']['alias_id']=$aliases[$address];
-				}elseif($fill_to){									
+				}elseif($fill_to){
 					if (!$first)
 					{
 						$first = true;
 					}else
 					{
 						$response['data']['cc'] .= ',';
-					}		
-					$response['data']['cc'] .= $content["cc"][$i];									
-				}							
+					}
+					$response['data']['cc'] .= $content["cc"][$i];
+				}
 			}
 		}
 	}
@@ -240,9 +240,9 @@ try{
 		$url_replacements=array();
 
 		$account = connect($account_id, $mailbox);
-		
-		
-	
+
+
+
 		if(!$account)
 		{
 			$response['success']=false;
@@ -268,7 +268,7 @@ try{
 					}else
 					{
 						$response['data']['subject'] = $subject;
-					}					
+					}
 					break;
 
 				case "reply_all":
@@ -300,7 +300,7 @@ try{
 						{
 							$response['data']['subject'] = $subject;
 						}
-					}				
+					}
 
 					//reattach non-inline attachments
 					for ($i=0;$i<count($parts);$i++)
@@ -334,7 +334,7 @@ try{
 
 					break;
 			}
-			
+
 			find_alias_and_recipients();
 
 
@@ -370,26 +370,26 @@ try{
 				}
 			}
 
-	
+
 
 			$response['data']['body']='';
 
-			
-			
+
+
 			//remove alternative body part
 			$new_parts=array();
 			for($i=0;$i<count($parts);$i++)
 			{
 				$mime = strtolower($parts[$i]["mime"]);
-							
-				if(strpos($mime, $_POST['content_type']) || (strtolower($parts[$i]['type'])!='alternative' &&  strtolower($parts[$i]['type'])!='related'))				
-					$new_parts[]=$parts[$i];				
+
+				if(strpos($mime, $_POST['content_type']) || (strtolower($parts[$i]['type'])!='alternative' &&  strtolower($parts[$i]['type'])!='related'))
+					$new_parts[]=$parts[$i];
 			}
 
 			$parts=$new_parts;
 
 			//debug($parts);
-			
+
 			if($GO_MODULES->has_module('gnupg'))
 			{
 				require_once($GO_MODULES->modules['gnupg']['class_path'].'gnupg.class.inc.php');
@@ -397,7 +397,7 @@ try{
 				$sender = String::get_email_from_string($content['from']);
 				$passphrase = !empty($_SESSION['GO_SESSION']['gnupg']['passwords'][$sender]) ? $_SESSION['GO_SESSION']['gnupg']['passwords'][$sender] : '';
 			}
-			
+
 
 			//$html_message_count = 0;
 			for ($i=0;$i<count($parts);$i++)
@@ -410,10 +410,10 @@ try{
 					{
 						case 'text/plain':
 							$text_part = trim($imap->view_part($uid, $parts[$i]["number"], $parts[$i]["transfer"], $parts[$i]['charset']));
-							
+
 							if($GO_MODULES->has_module('gnupg'))
-								$text_part = $gnupg->replace_encoded($text_part,$passphrase,false);							
-							
+								$text_part = $gnupg->replace_encoded($text_part,$passphrase,false);
+
 							$response['data']['body'] .= $_POST['content_type']=='html' ? String::text_to_html($text_part, false) : $text_part;
 							break;
 
@@ -422,16 +422,16 @@ try{
 
 							if($GO_MODULES->has_module('gnupg'))
 								$html_part = $gnupg->replace_encoded($html_part,$passphrase);
-								
+
 							$response['data']['body'] .= $_POST['content_type']=='html' ? String::convert_html($html_part) : String::html_to_text($html_part);
 							break;
 
 						case 'text/enriched':
 							$html_part = String::enriched_to_html(trim($imap->view_part($uid,$parts[$i]["number"], $parts[$i]["transfer"], $parts[$i]['charset'])), false);
-							
+
 							if($GO_MODULES->has_module('gnupg'))
 								$html_part = $gnupg->replace_encoded($html_part,$passphrase);
-							
+
 							$response['data']['body'] .= $html_part;
 							break;
 					}
@@ -439,21 +439,21 @@ try{
 			}
 
 			if($response['data']['body'] != '')
-			{				
+			{
 				//replace inline images with the url to display the part by Group-Office
 				for ($i=0;$i<count($url_replacements);$i++)
 				{
 					$response['data']['body'] = str_replace('cid:'.$url_replacements[$i]['id'], $url_replacements[$i]['url'], $response['data']['body']);
 				}
 			}
-			
+
 
 
 			if($task=='forward')
 			{
 				$om_to = isset($content['to']) ? implode(',',$content["to"]) : $lang['email']['no_recipients'];
 				$om_cc = isset($content['cc']) ? implode(',',$content["cc"]) : '';
-								
+
 				if($_POST['content_type']== 'html')
 				{
 					$header_om  = '<br /><br /><font face="verdana" size="2">'.$lang['email']['original_message']."<br />";
@@ -466,7 +466,7 @@ try{
 					}
 
 					$header_om .= "<b>".$lang['common']['date'].":&nbsp;</b>".date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'],$content["udate"])."<br />";
-				
+
 					$header_om .= "</font><br /><br />";
 
 					$response['data']['body']=$header_om.$response['data']['body'];
@@ -487,26 +487,26 @@ try{
 
 					$response['data']['body'] = str_replace("\r",'',$response['data']['body']);
 					//$response['data']['body'] = '> '.str_replace("\n","\n> ",$response['data']['body']);
-					
+
 					$response['data']['body'] = $header_om.$response['data']['body'];
 				}
 			}elseif($task=='reply' || $task=='reply_all')
 			{
 				$header_om = sprintf($lang['email']['replyHeader'],
-					$lang['common']['full_days'][date('w', $content["udate"])], 
+					$lang['common']['full_days'][date('w', $content["udate"])],
 					date($_SESSION['GO_SESSION']['date_format'],$content["udate"]),
 					date($_SESSION['GO_SESSION']['time_format'],$content["udate"]),
 					$content['from']);
-					
+
 				if($_POST['content_type']== 'html')
 				{
-					
+
 					$response['data']['body'] = '<br /><br />'.htmlspecialchars($header_om, ENT_QUOTES, 'UTF-8').'<br /><blockquote style="border:0;border-left: 2px solid #22437f; padding:0px; margin:0px; padding-left:5px; margin-left: 5px; ">'.$response['data']['body'].'</blockquote>';
 				}else
 				{
 					$response['data']['body'] = str_replace("\r",'',$response['data']['body']);
 					$response['data']['body'] = '> '.str_replace("\n","\n> ",$response['data']['body']);
-					
+
 					$response['data']['body'] = "\n\n".$header_om."\n".$response['data']['body'];
 				}
 			}
@@ -524,13 +524,13 @@ try{
 				$response['data']['body'] = $template['data']['body'].$response['data']['body'];
 				$response['data']['inline_attachments']=array_merge($response['data']['inline_attachments'], $template['data']['inline_attachments']);
 			}
-			
+
 			if($_POST['content_type']=='plain')
 			{
 				$response['data']['textbody']=$response['data']['body'];
 				unset($response['data']['body']);
 			}
-			
+
 			$response['success']=true;
 		}
 	}else
@@ -542,12 +542,12 @@ try{
 				{
 					throw new Exception(sprintf($lang['common']['moduleRequired'], $lang['email']['calendar']));
 				}
-				
-				
+
+
 				$account = connect($_REQUEST['account_id'], $_REQUEST['mailbox']);
 				$data = $imap->view_part($_REQUEST['uid'], $_REQUEST['part'], $_REQUEST['transfer']);
 
-				
+
 				require_once($GO_CONFIG->class_path.'Date.class.inc.php');
 				require_once($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc.php');
 				$cal = new calendar();
@@ -597,7 +597,7 @@ try{
 				$to=$_REQUEST['to'];
 
 				$response = load_template($template_id, $to, isset($_POST['mailing_group_id']) && $_POST['mailing_group_id']>0);
-				
+
 				if($_POST['content_type']=='plain')
 				{
 					$response['data']['textbody']=$response['data']['body'];
@@ -694,13 +694,13 @@ try{
 				$address = $RFC822->parse_address_list($response['from']);
 				$response['sender']=isset($address[0]['email']) ? htmlspecialchars($address[0]['email'], ENT_QUOTES, 'UTF-8') : '';
 				$response['from']=isset($address[0]['personal']) ? htmlspecialchars($address[0]['personal'], ENT_QUOTES, 'UTF-8') : '';
-				
+
 				$response['sender_contact_id']=0;
 				if(!empty($_POST['get_contact_id']) && $GO_MODULES->has_module('addressbook'))
 				{
 					require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
 					$ab = new addressbook();
-					
+
 					$contact = $ab->get_contact_by_email($response['sender'], $GO_SECURITY->user_id);
 					$response['sender_contact_id']=intval($contact['id']);
 				}
@@ -750,7 +750,7 @@ try{
 				//$response['size']=Number::format_size($response['size']);
 
 				$parts = array_reverse($imap->f("parts"));
-				
+
 				/*
 				 * Sometimes clients send multipart/alternative but there's only a text part. FIrst check if there's
 				 * a html alternative to display
@@ -802,7 +802,7 @@ try{
 				}else
 				{
 					$block=false;
-				}				
+				}
 
 				while($part = array_shift($parts))
 				{
@@ -817,14 +817,19 @@ try{
 					if (empty($response['body']) &&
 					(!eregi('attachment', $part["disposition"])) &&
 					((eregi('html', $mime) && empty($_POST['plaintext'])) ||(eregi('plain', $mime) && (!$html_alternative || strtolower($part['type'])!='alternative')) || $mime == "text/enriched" || $mime == "unknown/unknown"))
-					{						
+					{
 						$part_body = $imap->view_part($uid, $part["number"], $part["transfer"], $part["charset"]);
+
+						//echo $part_body= iconv("UTF-8","UTF-8//IGNORE",$part_body);
+						//$part_body = String::clean_utf8($part_body);
 
 						switch($mime)
 						{
 							case 'unknown/unknown':
 							case 'text/plain':
 								$uuencoded_attachments = $imap->extract_uuencoded_attachments($part_body);
+
+
 								$part_body = empty($_POST['plaintext']) ? String::text_to_html($part_body) : $part_body;
 
 								for($i=0;$i<count($uuencoded_attachments);$i++)
@@ -840,7 +845,6 @@ try{
 								break;
 
 							case 'text/html':
-								//$part_body= iconv("UTF-8","UTF-8//IGNORE",$part_body); 
 								$part_body = String::convert_html($part_body, $block, $response['blocked_images']);
 								break;
 
@@ -868,7 +872,7 @@ try{
 						$attachments[]=$part;
 					}
 				}
-				
+
 				//When a mail is saved as a task/appointment/etc. the attachments will be saved temporarily
 				if(!empty($_POST['create_temporary_attachments']))
 				{
@@ -876,10 +880,10 @@ try{
 					if(!is_dir($tmp_dir))
 					{
 						mkdir($tmp_dir);
-					}	
-				}			
-				
-				
+					}
+				}
+
+
 				if($GO_MODULES->has_module('gnupg'))
 				{
 					require_once($GO_MODULES->modules['gnupg']['class_path'].'gnupg.class.inc.php');
@@ -895,21 +899,21 @@ try{
 					catch(Exception $e)
 					{
 						$m = $e->getMessage();
-						
+
 						if(strpos($m, 'bad passphrase'))
 						{
-							$response['askPassphrase']=true;							
+							$response['askPassphrase']=true;
 							if(isset($_POST['passphrase']))
 							{
 								throw new Exception('Wrong passphrase!');
 							}
 						}else
-						{						
+						{
 							throw new Exception($m);
 						}
 					}
 				}
-				
+
 
 				//debug(var_export($attachments, true));
 
@@ -922,7 +926,7 @@ try{
 					{
 						$attachments[$i]['name']=$lang['email']['event'].'.ics';
 					}
-					
+
 					if (!empty($attachments[$i]["id"]))
 					{
 						//when an image has an id it belongs somewhere in the text we gathered above so replace the
@@ -936,7 +940,7 @@ try{
 						$id = "cid:".$tmp_id;
 
 						$url = $GO_MODULES->modules['email']['url']."attachment.php?account_id=".$account['id']."&mailbox=".urlencode($mailbox)."&amp;uid=".$uid."&amp;part=".$attachments[$i]["number"]."&amp;transfer=".$attachments[$i]["transfer"]."&amp;mime=".$attachments[$i]["mime"]."&amp;filename=".urlencode($attachments[$i]["name"]);
-						
+
 						if(strpos($response['body'], $id))
 						{
 							$response['body'] = str_replace($id, $url, $response['body']);
@@ -944,7 +948,7 @@ try{
 						{
 							//id was not found in body so add it as attachment later
 							unset($attachments[$i]['id']);
-						}						
+						}
 					}
 
 					if ($imap->part_is_attachment($attachments[$i])){
@@ -953,22 +957,24 @@ try{
 
 						$attachment['index']=$index;
 						$attachment['extension']=File::get_extension($attachments[$i]["name"]);
-						
+
 						if(!empty($_POST['create_temporary_attachments']))
 						{
 							$tmp_file = $tmp_dir.uniqid(time());
-							$data = $imap->view_part($uid, $attachment['number'], $attachment['transfer']);	
+							$data = $imap->view_part($uid, $attachment['number'], $attachment['transfer']);
 							if($data && file_put_contents($tmp_file, $data))
 							{
 								$attachment['tmp_file']=$tmp_file;
 							}
-						}					
-						
+						}
+
 						$response['attachments'][]=$attachment;
-						$index++;						
-					}				
-				}			
-				
+						$index++;
+					}
+				}
+
+
+
 				break;
 
 							case 'messages':
@@ -1006,7 +1012,7 @@ try{
 										{
 											$response['deleteFeedback']=$lang['email']['quotaError'];
 										}else
-										{										
+										{
 											$response['deleteFeedback']=$lang['common']['deleteError'].':<br /><br />'.$lasterror;
 										}
 									}
@@ -1029,7 +1035,7 @@ try{
 								$sort_field=isset($_POST['sort']) && $_POST['sort']=='from' ? SORTFROM : SORTDATE;
 								//if($sort_field == SORTDATE && $imap->is_imap())
 									//$sort_field = SORTARRIVAL;
-									
+
 								if(($response['sent'] || $response['drafts']) && $sort_field==SORTFROM)
 								{
 									$sort_field=SORTTO;
@@ -1101,7 +1107,7 @@ try{
 									{
 										$message['from']=$address[0]['email'];
 									}
-									
+
 									$message['sender'] = empty($address[0]) ? '' : $address[0]['email'];
 
 									$message['from']=htmlspecialchars($message['from'], ENT_QUOTES, 'UTF-8');
@@ -1242,13 +1248,13 @@ try{
 														'children'=>$children,
 														'canHaveChildren'=>$email2->f('type')=='imap',
 														'inbox_new'=>$inbox_new,
-														'usage'=>$usage														
+														'usage'=>$usage
 													);
 													if(!$account)
 													{
 														$node['qtipCfg'] = array('title'=>$lang['common']['error'], 'text' =>htmlspecialchars($imap->last_error(), ENT_QUOTES, 'UTF-8'));
 													}
-													
+
 													$response[]=$node;
 												}
 											}elseif($node_type=='account')
@@ -1277,13 +1283,13 @@ try{
 												$folder_id=$node[1];
 											}else
 											{
-												$folder_id=0;												
+												$folder_id=0;
 											}
 
 											$account = $email->get_account($account_id);
 											if($folder_id==0)
 												$email->synchronize_folders($account);
-											
+
 
 											$response = get_all_mailbox_nodes($account_id, $folder_id);
 											break;
@@ -1415,8 +1421,8 @@ try{
 											$response['success']=true;
 
 											break;
-										
-											
+
+
 		case 'alias':
 			$alias = $email->get_alias($_REQUEST['alias_id']);
 			$response['data']=$alias;
@@ -1438,7 +1444,7 @@ try{
 					$response['deleteFeedback']=$e->getMessage();
 				}
 			}
-	
+
 			$response['total'] = $email->get_aliases($_POST['account_id']);
 			$response['results']=array();
 			while($alias = $email->next_record())
@@ -1459,7 +1465,7 @@ try{
 				$response['results'][] = $alias;
 			}
 			break;
-		
+
 /* {TASKSWITCH} */
 		}
 	}
@@ -1474,5 +1480,5 @@ if(defined('IMAP_CONNECTED'))
 	$imap->close();
 }
 
-
+//var_dump($response);
 echo json_encode($response);
