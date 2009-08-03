@@ -1075,6 +1075,8 @@ class imap{
 
 		$str = imap_fetchbody($this->conn, $uid, $part_no, FT_UID);
 
+		
+
 		if ($transfer == 'BASE64')
 		{
 			$str = imap_base64($str);
@@ -1082,6 +1084,8 @@ class imap{
 		{
 			$str = quoted_printable_decode($str);
 		}
+
+		
 
 		//PHP sets us-ascii when the charset is unknown. Try to detect it.
 		if(strtolower($part_charset)=='us-ascii')
@@ -1095,13 +1099,15 @@ class imap{
 			}
 		}
 
+		//echo $part_charset;
+		
 		if ($part_charset != ''){// && $part_charset != $charset) {
-			if($converted = @iconv($part_charset, $charset.'//IGNORE', $str))
+			if($converted = iconv($part_charset, 'UTF-8//IGNORE', $str))
 			{
 				return str_replace($part_charset, $charset, $converted);
 			}
 		}
-		return ($str);
+		return $str;
 	}
 
 	function f($name) {
