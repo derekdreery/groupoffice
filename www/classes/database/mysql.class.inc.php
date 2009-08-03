@@ -53,27 +53,27 @@ class db extends base_db{
 	{
 
 		if(!$this->link)
-		{			
+		{
 			@$this->link = new MySQLi($this->host, $this->user, $this->password, $this->database, $this->port, $this->socket);
-		
+
 			if(isset($_SESSION['connect_count']))
 			{
 				$_SESSION['connect_count']++;
 			}
-			
+
 			//workaround for PHP bug: http://bugs.php.net/bug.php?id=45940&edit=2
-			//$this->link->connect_error does not work			
+			//$this->link->connect_error does not work
 			$this->errno = mysqli_connect_errno();
-			$this->error = mysqli_connect_error();		
-				
+			$this->error = mysqli_connect_error();
+
 			if(!empty($this->error))
-			{	
-				$this->link=false;					
-				$this->halt('Could not connect to MySQL database');							
+			{
+				$this->link=false;
+				$this->halt('Could not connect to MySQL database');
 			}else
 			{
 				$this->link->set_charset("utf8");
-			}				
+			}
 		}
 		return $this->link;
 	}
@@ -109,7 +109,7 @@ class db extends base_db{
 	{
 		if(empty($sql))
 		return false;
-			
+
 		$this->connect();
 
 		# New query, discard previous result.
@@ -124,7 +124,7 @@ class db extends base_db{
 
 		$param_count = count($params);
 		$this->prepared_statement=$param_count>0;
-			
+
 		if($this->prepared_statement)
 		{
 			$this->result = $this->link->prepare($sql);
@@ -134,7 +134,7 @@ class db extends base_db{
 				$this->halt('Could not prepare statement SQL: '.$sql.' types:'.$types.' params: '.var_export($params, true));
 				return false;
 			}
-			
+
 			if(is_array($types))
 			{
 				$types = $this->get_types_string($params,$types);
@@ -149,16 +149,16 @@ class db extends base_db{
 			$param_args=array($types);
 			for($i=0;$i<$param_count;$i++)
 			{
-				$param_args[]=$params[$i];
+				$param_args[]=&$params[$i];
 			}
 			call_user_func_array(array(&$this->result, 'bind_param'), $param_args);
-			
+
 			$pos = 0;
 			$keys = array_keys($params);
 			while($pos = strpos($types,'b', $pos+1))
-			{			
+			{
 				//debug('Send long data:'.$keys[$pos]);
-				$this->result->send_long_data($pos, $params[$keys[$pos]]);				
+				$this->result->send_long_data($pos, $params[$keys[$pos]]);
 			}
 
 			$ret = $this->result->execute();
@@ -216,7 +216,7 @@ class db extends base_db{
 	 * @return unknown
 	 */
 	public function next_record($result_type=DB_ASSOC) {
-			
+
 		if($this->result)
 		{
 			if ($this->prepared_statement) {
@@ -257,7 +257,7 @@ class db extends base_db{
 			{
 				$this->record[$i]=$value;
 				$i++;
-			}				
+			}
 		}
 	}
 
@@ -314,7 +314,7 @@ class db extends base_db{
 	public function escape($value, $trim=true)
 	{
 		$this->connect();
-		
+
 		if($this->debug && is_array($value))
 		{
 			var_dump($value);
@@ -322,7 +322,7 @@ class db extends base_db{
 
 		if($trim)
 		$value = trim($value);
-			
+
 		return $this->link->real_escape_string($value);
 	}
 
@@ -335,9 +335,9 @@ class db extends base_db{
 	{
 		return $this->link->insert_id();
 	}
-	
+
 	/**
-	 * When this object is stored in a session it must reconnect when 
+	 * When this object is stored in a session it must reconnect when
 	 * created by the session again.
 	 *
 	 */
@@ -346,7 +346,7 @@ class db extends base_db{
 		$this->link=false;
 		$this->result=false;
 	}
-	
+
 /**
 	 * Close the database connection
 	 *
