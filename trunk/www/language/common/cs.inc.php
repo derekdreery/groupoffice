@@ -170,3 +170,6 @@ $lang['common']['loginToGO']='Klikněte zde pro přihlášení do Group-Office';
 $lang['common']['links']='Odkazy';
 $lang['common']['GOwebsite']='Group-Office stránky';
 $lang['common']['GOisAProductOf']='<i>Group-Office</i> je produkt od <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
+
+$lang['common']['yes']='Ano';
+$lang['common']['no']='Ne';

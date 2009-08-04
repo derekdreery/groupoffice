@@ -238,6 +238,7 @@ GO.lang.noRecurrence= 'Geen herhaling';
 GO.lang.monthsByDate= 'Maanden op datum';
 GO.lang.monthsByDay= 'Maanden op dag';
 GO.lang.strSelectFiles='Selecteer bestanden';
+GO.lang.strSelectFile='Selecteer bestand';
 GO.lang.strFiles='Bestanden';
 GO.lang.strSubject='Onderwerp';
 GO.lang.strStart='Start';
