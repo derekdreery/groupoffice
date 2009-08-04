@@ -104,6 +104,7 @@ Ext.extend(GO.dialog.LinksDialog, Ext.Window, {
 				}else
 				{
 					this.fireEvent('link');
+					this.grid.searchGrid.getSelectionModel().clearSelections();
 					this.hide();
 				}
 			},

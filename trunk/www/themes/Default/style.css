@@ -785,3 +785,9 @@ table.display-panel a:active
 	height:16px;
 	vertical-align:middle;
 }
+
+
+.x-form-field-wrap .x-form-edit-trigger{
+    background-image: url(images/triggers/edit-trigger-gray.gif);
+    cursor:pointer;
+}
