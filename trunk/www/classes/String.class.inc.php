@@ -24,26 +24,27 @@
 
 class String {
 
+
+
+
 	function clean_utf8($s){
 		//Does not always work
-		$c = iconv('UTF-8', 'UTF-8//IGNORE', $s);
+
+		$s = preg_replace('/\p{Cc}/u', '', $s);
+
+		if(!$s)
+		{
+			die('Clean failed');
+		}
+
+		return preg_replace( '/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F-\x9F]/', '', $s );
+
+
+		$c = iconv('UTF-8', 'UNICODE//IGNORE', $s);
 		if(!empty($c))
 			return $c;
 		else
 			return $s;
-
-		/*global $GO_CONFIG;
-		$tmpfile = $GO_CONFIG->tmpdir.uniqid(time());
-		file_put_contents($tmpfile, $s);
-		exec('iconv -c -f UTF-8 -t UTF-8//IGNORE '.$tmpfile, $output);
-		unlink($tmpfile);
-		if(!empty($output))
-		{
-			return implode("\n",$output);
-		}else
-		{
-			return $s;
-		}*/
 	}
 
 	function replace_once($search, $replace, $subject) {

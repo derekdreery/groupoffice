@@ -1101,11 +1101,18 @@ class imap{
 		}
 
 		if ($part_charset != '') {
-			if($converted = iconv($part_charset, 'UTF-8//IGNORE', $str))
+			if($part_charset != $charset){
+				if($converted = iconv($part_charset, 'UTF-8//IGNORE', $str))
+				{
+					$str = str_replace($part_charset, $charset, $converted);
+				}
+			}else
 			{
-				$str = str_replace($part_charset, $charset, $converted);
+				$str = String::clean_utf8($str);
 			}
-		}		
+		}
+
+
 		return $str;
 	}
 
