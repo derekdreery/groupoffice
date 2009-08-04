@@ -27,7 +27,7 @@ class String {
 	function clean_utf8($s){
 		//Does not always work
 		$c = iconv('UTF-8', 'UTF-8//IGNORE', $s);
-		if($c)
+		if(!empty($c))
 			return $c;
 		else
 			return $s;
@@ -548,36 +548,36 @@ class String {
 
 		//remove strange white spaces in tags first
 		//sometimes things like this happen <style> </ style >
-		$html = preg_replace("'</[\s]*([\w]*)[\s]*>'","</$1>", $html);
+		$html = preg_replace("'</[\s]*([\w]*)[\s]*>'u","</$1>", $html);
 
 		$to_removed_array = array (
-		"'<html[^>]*>'si",
+		"'<html[^>]*>'usi",
 		"'</html>'si",
-		"'<body[^>]*>'si",
-		"'</body>'si",
-		"'<meta[^>]*>'si",
-		"'<head[^>]*>.*?</head>'si",
-		"'<style[^>]*>.*?</style>'si",
-		"'<script[^>]*>.*?</script>'si",
-		"'<iframe[^>]*>.*?</iframe>'si",
-		"'<object[^>]*>.*?</object>'si",
-		"'<embed[^>]*>.*?</embed>'si",
-		"'<applet[^>]*>.*?</applet>'si",
-		"'<form[^>]*>'si",
-		"'<input[^>]*>'si",
-		"'<select[^>]*>.*?</select>'si",
-		"'<textarea[^>]*>.*?</textarea>'si",
-		"'</form>'si"
+		"'<body[^>]*>'usi",
+		"'</body>'usi",
+		"'<meta[^>]*>'usi",
+		"'<head[^>]*>.*?</head>'usi",
+		"'<style[^>]*>.*?</style>'usi",
+		"'<script[^>]*>.*?</script>'usi",
+		"'<iframe[^>]*>.*?</iframe>'usi",
+		"'<object[^>]*>.*?</object>'usi",
+		"'<embed[^>]*>.*?</embed>'usi",
+		"'<applet[^>]*>.*?</applet>'usi",
+		"'<form[^>]*>'usi",
+		"'<input[^>]*>'usi",
+		"'<select[^>]*>.*?</select>'usi",
+		"'<textarea[^>]*>.*?</textarea>'usi",
+		"'</form>'usi"
 		);
 
 		$html = preg_replace($to_removed_array, '', $html);
-		$html = preg_replace("/([\"']?)javascript:/i", "$1removed_script:", $html);
+		$html = preg_replace("/([\"']?)javascript:/ui", "$1removed_script:", $html);
 
 		if($block_external_images)
 		{
 			//$html = preg_replace("/<img(.*)src=([\"']?)http([^>])/", "<img$1src=$2blocked:http$3", $html);
 			//$html = preg_replace("/<([^=]*)=[\"']?http[^\"'\s>]*/", "<$1=\"blocked\"", $html);
-			$html = preg_replace("/<([^aA]{1})([^>]*)https?:([^>]*)/", "<$1$2blocked:$3", $html, -1, $replace_count);
+			$html = preg_replace("/<([^aA]{1})([^>]*)https?:([^>]*)/u", "<$1$2blocked:$3", $html, -1, $replace_count);
 		}
 
 		return $html;
