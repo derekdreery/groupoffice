@@ -42,7 +42,7 @@ try
 					$contact_credentials[$key] = isset($_REQUEST[$key]) ? $_REQUEST[$key] : '';
 				}
 
-				$contact_credentials['company_id'] = !empty($_REQUEST['company_id']) ? $_REQUEST['company_id'] : 0;
+				$contact_credentials['company_id'] = !empty($_REQUEST['company_id']) && is_numeric($_REQUEST['company_id']) ? $_REQUEST['company_id'] : 0;
 
 
 				$addressbook = $ab->get_addressbook($contact_credentials['addressbook_id']);
