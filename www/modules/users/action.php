@@ -242,9 +242,11 @@ try
 				$user['currency'] = $_POST["currency"];
 			}
 
+			$insert=true;
 
 			if($user_id > 0)
 			{
+				$insert=false;
 				if (!empty($_POST["password1"]) || !empty($_POST["password2"]))
 				{
 					if($_POST["password1"] != $_POST["password2"])
@@ -392,6 +394,39 @@ try
 							$GO_SECURITY->delete_group_from_acl($group['id'], $old_user['acl_id']);
 						}
 					}					
+				}
+			}
+
+
+			if($GO_MODULES->has_module('customfields'))
+			{
+				require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+				$cf = new customfields();
+
+				$cf->update_fields($GO_SECURITY->user_id, $user_id, 8, $_POST, $insert);
+			}
+
+
+			if($GO_MODULES->has_module('mailings'))
+			{
+				require_once($GO_MODULES->modules['mailings']['class_path'].'mailings.class.inc.php');
+				$ml = new mailings();
+				$ml2 = new mailings();
+
+				$ml->get_authorized_mailing_groups('write', $GO_SECURITY->user_id, 0,0);
+				while($ml->next_record())
+				{
+					$is_in_group = $ml2->user_is_in_group($user_id, $ml->f('id'));
+					$should_be_in_group = isset($_POST['mailing_'.$ml->f('id')]);
+
+					if($is_in_group && !$should_be_in_group)
+					{
+						$ml2->remove_user_from_group($user_id, $ml->f('id'));
+					}
+					if(!$is_in_group && $should_be_in_group)
+					{
+						$ml2->add_user_to_mailing_group($user_id, $ml->f('id'));
+					}
 				}
 			}
 

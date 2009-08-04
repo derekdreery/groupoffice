@@ -19,13 +19,13 @@ GO.users.PersonalPanel = function(config)
 	}
 	
 	config.autoScroll=true;
-	config.border=false;
+	config.border=true;
 	config.hideLabel=true;
 	config.title = GO.users.lang.profile;
 	config.layout='column';
-	config.cls='go-form-panel';
+	//config.cls='go-form-panel';
 	config.labelWidth=120;
-	config.height=600;
+	config.autoHeight=true;
 	
 	var rightColItems = [
 					{fieldLabel: GO.lang['strAddress'], name: 'address'},
@@ -40,10 +40,7 @@ GO.users.PersonalPanel = function(config)
 						value: GO.settings.country
 					}),
 					new GO.form.HtmlComponent({html: '<br />'})];
-	
-	rightColItems.push({fieldLabel: GO.lang['strEmail'], name: 'email', allowBlank: false});
-	
-	rightColItems.push({fieldLabel: GO.lang['strPhone'], name: 'home_phone'});
+
 	rightColItems.push({fieldLabel: GO.lang['strFax'], name: 'fax'});
 	rightColItems.push({fieldLabel: GO.lang['strCellular'], name: 'cellular'});			
 	
@@ -52,7 +49,8 @@ GO.users.PersonalPanel = function(config)
 				columnWidth: .5,
 				layout: 'form',
 				border: false,
-				cls:'go-form-panel',waitMsgTarget:true,
+				bodyStyle:'padding-right:5px',
+				waitMsgTarget:true,
 				defaults: {anchor: '100%'},
 				defaultType: 'textfield',
 				items: [
@@ -85,13 +83,17 @@ GO.users.PersonalPanel = function(config)
 						fieldLabel: GO.lang['strBirthday'],
 						name: 'birthday',
 						format: GO.settings['date_format']
-					})
+					}),
+					new GO.form.HtmlComponent({html: '<br />'}),
+					{fieldLabel: GO.lang['strEmail'], name: 'email', allowBlank: false},
+					{fieldLabel: GO.lang['strPhone'], name: 'home_phone'}
 				]
 			},{
 				columnWidth: .5,
+				bodyStyle:'padding-left:5px',
 				layout: 'form',
 				border: false,
-				cls:'go-form-panel',waitMsgTarget:true,
+				waitMsgTarget:true,
 				defaults: {anchor:'100%', allowBlank: true},
 				defaultType: 'textfield',
 				items: rightColItems
@@ -103,7 +105,7 @@ GO.users.PersonalPanel = function(config)
 }
 
 
-Ext.extend(GO.users.PersonalPanel, Ext.Panel,{
+Ext.extend(GO.users.PersonalPanel, Ext.form.FieldSet,{
 	
 
 });			
