@@ -31,6 +31,19 @@ class String {
 			return $c;
 		else
 			return $s;
+
+		/*global $GO_CONFIG;
+		$tmpfile = $GO_CONFIG->tmpdir.uniqid(time());
+		file_put_contents($tmpfile, $s);
+		exec('iconv -c -f UTF-8 -t UTF-8//IGNORE '.$tmpfile, $output);
+		unlink($tmpfile);
+		if(!empty($output))
+		{
+			return implode("\n",$output);
+		}else
+		{
+			return $s;
+		}*/
 	}
 
 	function replace_once($search, $replace, $subject) {
@@ -552,7 +565,7 @@ class String {
 
 		$to_removed_array = array (
 		"'<html[^>]*>'usi",
-		"'</html>'si",
+		"'</html>'usi",
 		"'<body[^>]*>'usi",
 		"'</body>'usi",
 		"'<meta[^>]*>'usi",
