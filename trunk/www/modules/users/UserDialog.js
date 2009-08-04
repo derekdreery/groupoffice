@@ -57,7 +57,7 @@ GO.users.UserDialog = function(config){
 	config.maximizable=true;
 	config.width=750;
 	config.collapsible=true;
-	config.height=430;
+	config.height=580;
 	config.closeAction='hide';
 	config.title= GO.users.lang.userSettings;					
 	config.items= this.formPanel;
@@ -113,7 +113,9 @@ Ext.extend(GO.users.UserDialog, Ext.Window,{
 		{
 			var visible = user_id>0;
 			this.serverclientFieldSet.setVisible(!visible);
-		}		
+		}
+
+		this.loginTab.setVisible(user_id>0);
 		
 		this.linkBrowseButton.setDisabled(user_id<1);
 		if(GO.files)
@@ -179,7 +181,7 @@ Ext.extend(GO.users.UserDialog, Ext.Window,{
 					this.serverclientFieldSet.add(this.serverclientDomainCheckboxes[i]);
 				}
 				
-				this.accountTab.add(this.serverclientFieldSet);
+				this.rightCol.add(this.serverclientFieldSet);
 			}		
 			
 			this.render(Ext.getBody());
@@ -190,7 +192,7 @@ Ext.extend(GO.users.UserDialog, Ext.Window,{
 			this.formPanel.form.findField('username').on('change', this.setDefaultEmail, this);
 		}
 		
-		this.accountTab.show();
+		this.profileTab.show();
 
 		//reset form
 		this.formPanel.form.reset();
@@ -301,28 +303,67 @@ Ext.extend(GO.users.UserDialog, Ext.Window,{
 	
 	
 	buildForm : function () {
-		this.accountTab = new GO.users.AccountPanel();			
-		this.personalTab = new GO.users.PersonalPanel();		
+
+		
+
+		this.accountTab = new GO.users.AccountPanel();
+		this.personalTab = new GO.users.PersonalPanel();
 		this.companyTab = new GO.users.CompanyPanel();
-		this.loginTab = new GO.users.LoginPanel();		
+		this.loginTab = new GO.users.LoginPanel();
 		this.permissionsTab = new GO.users.PermissionsPanel();
 		this.regionalSettingsTab = new GO.users.RegionalSettingsPanel();
 		this.lookAndFeelTab = new GO.users.LookAndFeelPanel();
+
+		this.profileTab = new Ext.Panel({
+			title:GO.users.lang.account,
+			autoScroll:true,
+			layout:'column',
+			//cls:'go-form-panel',
+			bodyStyle:'padding:5px',
+			items:[{
+				columnWidth:.5,
+				items:[this.accountTab],
+				bodyStyle:'padding-right:5px',
+				border:false
+			},this.rightCol = new Ext.Panel({
+				columnWidth:.5,
+				bodyStyle:'padding-left:5px',
+				items:[this.loginTab],
+				border:false
+			}),{
+				columnWidth:1,
+				items:[this.personalTab],
+				border:false
+			}]
+		});
+		
+		var items = [
+      	this.profileTab,
+				this.companyTab,
+      	this.permissionsTab,
+      	this.regionalSettingsTab,
+      	this.lookAndFeelTab
+      ];
+
+		if(GO.mailings)
+		{
+			items.push(new GO.mailings.SelectMailingsPanel({hideAllowCheck:true}));
+		}
+
+		if(GO.customfields && GO.customfields.types["8"])
+		{
+			for(var i=0;i<GO.customfields.types["8"].panels.length;i++)
+			{
+				items.push(GO.customfields.types["8"].panels[i]);
+			}
+		}
  
     this.tabPanel = new Ext.TabPanel({     
       deferredRender: false,
 			anchor:'100% 100%',
       layoutOnTabChange:true,
     	border: false,
-      items: [
-      	this.accountTab,
-      	this.personalTab,
-      	this.companyTab,
-      	this.loginTab,
-      	this.permissionsTab,
-      	this.regionalSettingsTab,
-      	this.lookAndFeelTab
-      ]
+      items: items
     }) ;    
     
     this.formPanel = new Ext.form.FormPanel({

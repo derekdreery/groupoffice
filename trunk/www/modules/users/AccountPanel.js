@@ -18,14 +18,14 @@ GO.users.AccountPanel = function(config)
 		config={};
 	}
 	
-	config.autoScroll=true;
-	config.border=false;
+	config.autoHeight=true;
+	config.border=true;
 	config.hideLabel=true;
 	config.title = GO.users.lang.account;
 	config.layout='form';
 	config.defaults={anchor:'100%'};
 	config.defaultType = 'textfield';
-	config.cls='go-form-panel';
+	//config.cls='go-form-panel';
 	config.labelWidth=140;
 	
 	this.passwordField1 = new Ext.form.TextField({
@@ -62,7 +62,7 @@ GO.users.AccountPanel = function(config)
 }
 
 
-Ext.extend(GO.users.AccountPanel, Ext.Panel,{
+Ext.extend(GO.users.AccountPanel, Ext.form.FieldSet,{
 	
 	setUserId : function(user_id)
 	{

@@ -123,6 +123,29 @@ switch($task)
 		{
 			$result['success']=true;
 		}
+
+		if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
+		{
+			require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+			$cf = new customfields();
+			$values = $cf->get_values($GO_SECURITY->user_id, 8, $user_id);
+			$result['data']=array_merge($result['data'], $values);
+		}
+
+		if($GO_MODULES->has_module('mailings'))
+		{
+			require_once($GO_MODULES->modules['mailings']['class_path'].'mailings.class.inc.php');
+
+			$ml = new mailings();
+			$ml2 = new mailings();
+
+			$count = $ml->get_authorized_mailing_groups('write', $GO_SECURITY->user_id, 0,0);
+
+			while($ml->next_record())
+			{
+				$result['data']['mailing_'.$ml->f('id')]=$ml2->user_is_in_group($user_id, $ml->f('id')) ? true : false;
+			}
+		}
 		
 		$params['response']=&$result;
 		

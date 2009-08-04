@@ -18,14 +18,14 @@ GO.users.LoginPanel = function(config)
 		config={};
 	}
 	
-	config.autoScroll=true;
-	config.border=false;
+	config.autoHeight=true;
+	config.border=true;
 	config.hideLabel=true;
 	config.title = GO.users.lang.loginInfo;
 	config.layout='form';
 	config.defaults={anchor:'100%'};
 	config.defaultType = 'textfield';
-	config.cls='go-form-panel';
+	//config.cls='go-form-panel';
 	config.labelWidth=140;
 	
 	config.items=[
@@ -50,7 +50,7 @@ GO.users.LoginPanel = function(config)
 }
 
 
-Ext.extend(GO.users.LoginPanel, Ext.Panel,{
+Ext.extend(GO.users.LoginPanel, Ext.form.FieldSet,{
 	
 
 });			
