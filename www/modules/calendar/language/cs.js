@@ -66,3 +66,5 @@ GO.calendar.lang.eventDefaults='Základní nastavení událostí';
 
 GO.calendar.lang.importToCalendar='Přidat činnost přímo do kalendářů';
 GO.calendar.lang.default_calendar='Výchozí kalendář';
+
+GO.calendar.lang.status='Stav';

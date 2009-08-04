@@ -248,6 +248,7 @@ GO.lang.monthsByDate = 'Months by date';
 GO.lang.monthsByDay = 'Months by day';
 
 GO.lang.strSelectFiles='Select files';
+GO.lang.strSelectFile='Select file';
 GO.lang.strFiles='Files';
 GO.lang.strSubject='Subject';
 GO.lang.strLocation='Location';

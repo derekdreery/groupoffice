@@ -86,3 +86,8 @@ GO.users.lang.numberFormat ='Číselný formát';
 GO.users.lang.importExport ='Import / Export';
 GO.users.lang.listSeparator='Seznamový oddělovač';
 GO.users.lang.textSeparator='Textový oddělovač';
+
+GO.users.lang.deleteWarning='VAROVÁNÍ!!! Všechna uživatelská data včetně adresářů, projektů, kalendářů apod. budou smazána!';
+
+GO.users.lang.lastName = 'Příjmení';
+GO.users.lang.firstName = 'Křestního jména';

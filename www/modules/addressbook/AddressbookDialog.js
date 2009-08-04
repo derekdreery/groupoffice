@@ -149,7 +149,7 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 		
 		this.importfileInput = new Ext.form.TextField({
 			autoCreate: {tag: "input", type: "file", size: "25", autocomplete: "off"},
-			fieldLabel : 'Select file',
+			fieldLabel : GO.lang.strSelectFile,
 			name: 'import_file',
 			inputType: 'file',
 			cls: 'x-form-file x-form-field'
