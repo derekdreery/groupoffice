@@ -42,6 +42,7 @@ try
 					$contact_credentials[$key] = isset($_REQUEST[$key]) ? $_REQUEST[$key] : '';
 				}
 
+				//added is_nummeric becuase extjs sends the text as hiddenName now when no record is found
 				$contact_credentials['company_id'] = !empty($_REQUEST['company_id']) && is_numeric($_REQUEST['company_id']) ? $_REQUEST['company_id'] : 0;
 
 
