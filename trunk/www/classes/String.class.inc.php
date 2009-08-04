@@ -26,8 +26,11 @@ class String {
 
 	function clean_utf8($s){
 		//Does not always work
-		return iconv('UTF-8', 'UTF-8//IGNORE', $s);
-		//return mb_convert_encoding($s, 'UTF-8', 'UTF-8');
+		$c = iconv('UTF-8', 'UTF-8//IGNORE', $s);
+		if($c)
+			return $c;
+		else
+			return $s;
 	}
 
 	function replace_once($search, $replace, $subject) {
