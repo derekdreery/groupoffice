@@ -1,3 +1,7 @@
+2009/08/04 3.2.19
+- Invalid iconv call bug on attachments
+- Updated Czech
+
 2009/08/04 3.2.18
 - Time registration column header bug
 - Windows compatibility with Open-Office templates
