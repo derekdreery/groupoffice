@@ -1087,7 +1087,6 @@ class imap{
 
 		$part_charset=strtolower($part_charset);
 
-		//file_put_contents('/tmp/utf8test.txt', $str);
 
 		//PHP sets us-ascii when the charset is unknown. Try to detect it.
 		if($part_charset=='us-ascii')
@@ -1101,16 +1100,12 @@ class imap{
 			}
 		}
 
-		//echo $part_charset;
-		
-		if ($part_charset != '' && $part_charset != $charset) {
+		if ($part_charset != '') {
 			if($converted = iconv($part_charset, 'UTF-8//IGNORE', $str))
 			{
 				$str = str_replace($part_charset, $charset, $converted);
 			}
-		}
-
-		$str = String::clean_utf8($str);
+		}		
 		return $str;
 	}
 
