@@ -48,7 +48,7 @@ $lang['email']['noSaveWithPop3']='Meldingen kan ikke lagres fordi POP3 kontoer i
 $lang['email']['goAlreadyStarted']='Group-Office kjører allerede. E-postprogrammet er nå lastet i Group-Office. Lukk dette vinduet og skriv meldingen din i Group-Office.';
 
 //At Tuesday, 07-04-2009 on 8:58 Group-Office Administrator <test@intermeshdev.nl> wrote:
-$lang['email']['replyHeader']='Den %s, %s kl %s %s skrev:';
+$lang['email']['replyHeader']='%s, %s kl %s skrev %s :';
 $lang['email']['alias']='Alias';
 $lang['email']['aliases']='Aliaser';
 $lang['email']['alias']='Alias';

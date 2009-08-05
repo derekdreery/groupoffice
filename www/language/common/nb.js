@@ -521,7 +521,7 @@ GO.lang.countries["UG"] = "Uganda";
 GO.lang.countries["UA"] = "Ukraina";
 GO.lang.countries["GB"] = "Storbritannia";
 GO.lang.countries["US"] = "Amerikas Forente Stater";
-GO.lang.countries["UM"] = "U.S.A. minder u. øyer";
+GO.lang.countries["UM"] = "U.S.A. minder u. À蹥r";
 GO.lang.countries["UY"] = "Uruguay";
 GO.lang.countries["UZ"] = "Usbekistan";
 GO.lang.countries["VU"] = "Vanuatu";
@@ -544,3 +544,4 @@ GO.lang.on ='På';
 GO.lang.off ='Av';
 
 GO.lang.keyword='Nøkkelord';
+GO.lang.strSelectFile='Velg fil';
