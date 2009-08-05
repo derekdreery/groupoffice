@@ -22,6 +22,8 @@ javascript/RecordsContextMenu.js
 
 javascript/grids/SimpleSelectList.js
 javascript/grids/CheckColumn.js
+javascript/grids/RowAction.js
+
 javascript/common.js
 javascript/state/HttpProvider.js
 

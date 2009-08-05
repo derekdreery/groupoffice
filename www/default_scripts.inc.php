@@ -169,6 +169,19 @@ if(!$GO_CONFIG->debug)
 		}
 	}
 	echo '<script src="'.$url.'" type="text/javascript"></script>';
+
+
+	foreach($GO_MODULES->modules as $module)
+	{
+		if($module['read_permission'])
+		{
+			if(file_exists($module['path'].'prescripts.inc.php'))
+			{
+				require($module['path'].'prescripts.inc.php');
+			}
+		}
+	}
+
 	
 	$scripts=array();	
 	
@@ -225,16 +238,7 @@ if(!$GO_CONFIG->debug)
 	
 		echo '<script src="'.$url.'" type="text/javascript"></script>';
 
-		foreach($GO_MODULES->modules as $module)
-		{
-			if($module['read_permission'])
-			{
-				if(file_exists($module['path'].'scripts.inc.php'))
-				{
-					require($module['path'].'scripts.inc.php');
-				}
-			}
-		}
+		
 	}
 }else
 {
@@ -281,6 +285,18 @@ if(!$GO_CONFIG->debug)
 	{
 		if($module['read_permission'])
 		{
+			if(file_exists($module['path'].'prescripts.inc.php'))
+			{
+				require($module['path'].'prescripts.inc.php');
+			}
+		}
+	}
+
+
+	foreach($GO_MODULES->modules as $module)
+	{
+		if($module['read_permission'])
+		{
 			if(file_exists($module['path'].'language/en.js'))
 			{
 				echo '<script type="text/javascript" src="'.$module['url'].'language/en.js"></script>';
@@ -312,10 +328,18 @@ if(!$GO_CONFIG->debug)
 				echo "\n";
 			}
 				
-			if(file_exists($module['path'].'scripts.inc.php'))
-			{
-				require($module['path'].'scripts.inc.php');
-			}
+			
+		}
+	}
+}
+
+foreach($GO_MODULES->modules as $module)
+{
+	if($module['read_permission'])
+	{
+		if(file_exists($module['path'].'scripts.inc.php'))
+		{
+			require($module['path'].'scripts.inc.php');
 		}
 	}
 }
