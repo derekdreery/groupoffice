@@ -241,6 +241,8 @@ GO.lang.strYear="Year";
 GO.lang.strYears="Years";
 GO.lang.strTime='Time';
 
+GO.lang.selectWeek='Select week';
+
 GO.lang.shortDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri','Sat'];
 
 GO.lang.noRecurrence = 'No recurrence';
