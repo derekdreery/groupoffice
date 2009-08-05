@@ -5,6 +5,8 @@ javascript/MainLayout.js
 javascript/ColumnFitLayout.js
 javascript/Export.js
 
+javascript/WeekPicker.js
+
 modules/users/TimeZones.js
 javascript/windows/PersonalSettingsDialog.js
 modules/users/RegionalSettingsPanel.js

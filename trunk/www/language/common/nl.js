@@ -234,6 +234,8 @@ GO.lang.strYears="Jaren";
 GO.lang.strTime='Tijd';
 GO.lang.shortDays= ['Zon', 'Maa', 'Din', 'Woe', 'Don', 'Vri','Zat'];
 
+GO.lang.selectWeek='Selecteer week';
+
 GO.lang.noRecurrence= 'Geen herhaling';
 GO.lang.monthsByDate= 'Maanden op datum';
 GO.lang.monthsByDay= 'Maanden op dag';

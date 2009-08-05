@@ -25,6 +25,38 @@ $limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 try{
 	switch($_REQUEST['task'])
 	{
+		case 'get_weeks':
+
+			$start_time = mktime(0,0,0,1,1,$_POST['year']);
+			$end_time = Date::date_add($start_time,0,0,1);
+
+			$first_day = date('N', $start_time);
+			$first_monday = ($first_day != 1) ? Date::date_add($start_time, 8-$first_day) : $start_time;
+			if(date('W', $first_monday) == 2)
+			{
+				$first_monday = Date::date_add($first_monday, -7);
+			}
+
+			$weeks = array();
+			for($i=$first_monday; $i<$end_time; $i=(Date::date_add($i, 7)))
+			{
+				if(date("o",$i) == $_POST['year'])
+				{
+					$week_nr = date("W",$i);
+					$week['value'] = Date::get_last_sunday($i);
+					$first_weekday = Date::date_add($first_monday, ($week_nr-1)*7);
+					$last_weekday = Date::date_add($first_weekday, 6);
+					$first_weekday = date($_SESSION['GO_SESSION']['date_format'],$first_weekday);
+					$last_weekday = date($_SESSION['GO_SESSION']['date_format'],$last_weekday);
+					$week['text'] = $week_nr.' ('.$first_weekday.' / '.$last_weekday.')';
+
+					$weeks[] = $week;
+				}
+			}
+
+			$response['results'] = $weeks;
+			$response['success'] = true;
+			break;
 		
 		case 'email_export_query': 
 			
