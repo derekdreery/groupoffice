@@ -1103,7 +1103,7 @@ class imap{
 		if ($part_charset != '') {			
 			$str = String::clean_utf8($str, $part_charset);
 			if($part_charset != $charset){
-				$str = str_replace($part_charset, $charset, $converted);
+				$str = str_replace($part_charset, $charset, $str);
 			}
 		}
 		
