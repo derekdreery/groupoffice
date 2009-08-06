@@ -298,6 +298,11 @@ GO.email.EmailComposer = function(config) {
 	}, this, {
 		single:true
 	});
+
+	/*this.on('show', function(){
+		console.log('show');
+		this.htmlEditor.syncValue();
+	}, this);*/
 		
 
 	// store for attachments needs to be created here because a forward action

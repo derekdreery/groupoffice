@@ -1,7 +1,8 @@
-2009/08/? 3.2.20
+2009/08/06 3.2.20
 - Function to clean invalid UTF-8 strings that caused unreadable e-mails
 - Updated Norsk translation
 - Added custom fields functions to users
+- Compatible with 5.3. There are still a lot of deprecation warnings though.
 
 2009/08/04 3.2.19
 - Invalid iconv call bug on attachments

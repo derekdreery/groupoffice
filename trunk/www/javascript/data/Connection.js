@@ -161,7 +161,7 @@ GO.data.Connection = Ext.extend(Ext.data.Connection, {
 			{
 				var data = {};
 			}
-			if(data.authError)
+			if(!GO.util.empty(data.authError))
 			{
 				switch(data.authError)
 				{
