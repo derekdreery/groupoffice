@@ -95,6 +95,24 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
         items: items,
         layoutOnTabChange:true
     	});
+
+		this.tabPanel.on('beforeremove',function(tp, panel){
+			tp.hideTabStripItem(panel);
+			panel.hide();
+
+			if(panel == tp.activeTab){
+					var next = tp.stack.next();
+					if(next){
+							tp.setActiveTab(next);
+					}else if(tp.items.getCount() > 0){
+							tp.setActiveTab(0);
+					}else{
+							tp.activeTab = null;
+					}
+			}
+
+			return false;
+		}, this);
 	},
 	
 	getModulePanel : function(moduleName){
@@ -107,6 +125,11 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		{
 			return false;
 		}
+	},
+
+	//overridable
+	beforeRender : function(){
+
 	},
 
 	init : function(){  
@@ -128,6 +151,8 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
     }
     
     this.createTabPanel(items);
+
+		this.beforeRender();
     
    var topPanel = new Ext.Panel({
         region:'north',
@@ -172,6 +197,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 								this.tabPanel.add(panel);
 							}else{
 								var panel = this.tabPanel.items.map[panelId];
+								this.tabPanel.unhideTabStripItem(panel);
 							}	
 							panel.show();
 						},
