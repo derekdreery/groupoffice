@@ -866,6 +866,8 @@ try{
 						}
 						}*/
 
+						//Without this trim here Internet explorer mysteriously failed on some
+						//particular mails.
 						$response['body'] .= trim($part_body);
 					}else
 					{

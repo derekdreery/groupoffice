@@ -299,10 +299,7 @@ GO.email.EmailComposer = function(config) {
 		single:true
 	});
 
-	/*this.on('show', function(){
-		console.log('show');
-		this.htmlEditor.syncValue();
-	}, this);*/
+	
 		
 
 	// store for attachments needs to be created here because a forward action
@@ -469,6 +466,7 @@ GO.email.EmailComposer = function(config) {
 		layout : 'fit',
 		maximizable : true,
 		collapsible : true,
+		animCollapse : false,
 		plain : true,
 		closeAction : 'hide',
 		buttonAlign : 'center',
@@ -533,7 +531,13 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 		};
 		
 		this.on('hide', this.stopAutoSave, this);
-		
+
+		/*this[this.collapseEl].hideMode='offsets';
+
+		this.on('beforecollapse', function(){
+			console.log(this[this.collapseEl]);
+			this[this.collapseEl].hideMode='offsets';
+		}, this);		*/
 	},
 
 	toComboVisible : true,

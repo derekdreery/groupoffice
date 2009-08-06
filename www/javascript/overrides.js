@@ -118,7 +118,8 @@ Ext.form.TriggerField.override({
 
 Ext.Window.override({
 	 //shadow : false,
-	 constrainHeader : true
+	 constrainHeader : true,
+	 animCollapse : false
 });
 
 /**
