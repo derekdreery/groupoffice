@@ -3,6 +3,7 @@
 - Updated Norsk translation
 - Added custom fields functions to users
 - Compatible with 5.3. There are still a lot of deprecation warnings though.
+- Fixed destroyed htmleditor in e-mail composer when it was collapsed
 
 2009/08/04 3.2.19
 - Invalid iconv call bug on attachments
