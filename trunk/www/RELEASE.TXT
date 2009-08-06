@@ -1,3 +1,9 @@
+2009/08/06 3.2.20
+Fixed some compatibility issues with the latest versions of PHP and libraries
+used by Group-Office. We added custom fields to users, updated a lot of
+translations and fixed some bugs. Upgrading to this version is recommended.
+
+
 2009/06/24 Version 3.02
 A lot of enhancements were made like all the files at contacts, projects and
 companies are now accessible through logical paths in the file manager.
