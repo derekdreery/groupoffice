@@ -122,30 +122,26 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 	})
 	
 	this.checkPanel = new Ext.Panel({
-		border : false,
+		border : true,
 		region:'north',
-		autoHeight:true,
-		bodyStyle:'padding:10px',
-		labelWidth:110,		
-		defaults:{border:false},
+		height:40,
+		layout:'column',
+		defaults:{border:false,bodyStyle:'padding:5px'},
 		items:[{
-	    	layout:'column',
-	    	defaults:{border:false},
-        	items:[{
-          		columnWidth:.5,
-                items:[this.inviteCheckbox]
-            },{
-                columnWidth:.5,
-                bodyStyle:'padding-left:10px',                
-                items:[this.importCheckbox]
-        	}]
-        }]			
+				columnWidth:.5,
+				items:[this.inviteCheckbox]
+			},{
+				columnWidth:.5,
+				items:[this.importCheckbox]
+		}]
 	});
 	
 	this.gridPanel = new GO.grid.GridPanel(
 	{
+		layout:'fit',
+		split:true,
 		store: config.store,
-		border : false,
+		border : true,
 		region:'center',
 		columns : [{
 			header : GO.lang.strName,
