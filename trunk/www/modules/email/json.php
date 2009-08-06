@@ -866,7 +866,7 @@ try{
 						}
 						}*/
 
-						$response['body'] .= $part_body;
+						$response['body'] .= trim($part_body);
 					}else
 					{
 						$attachments[]=$part;
