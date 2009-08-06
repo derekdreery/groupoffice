@@ -12,17 +12,8 @@
  */
 
 GO.MainLayout.override({
-  createTabPanel : function(items){
-		this.tabPanel = new Ext.TabPanel({
-      region:'center',
-      titlebar: false,
-      border:false,
-      activeTab:'go-module-panel-'+GO.settings.start_module,
-      tabPosition:'top',
-      baseCls: 'go-moduletabs',
-      items: items,
-      layoutOnTabChange:true
-  	});
+	beforeRender : function(){
+		this.tabPanel.baseCls='go-moduletabs';
 	}
 });
  
