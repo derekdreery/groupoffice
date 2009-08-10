@@ -59,4 +59,8 @@ $updates[]="ALTER TABLE `go_users` ADD `list_separator` CHAR( 3 ) NOT NULL DEFAU
 ADD `text_separator` CHAR( 3 ) NOT NULL DEFAULT '\"'";
 
 $updates[]="ALTER TABLE `go_users` ADD `files_folder_id` INT NOT NULL;";
+
+
+$updates[]="delete FROM `go_state` WHERE `index`!='go';";
+$updates[]="ALTER TABLE `go_state` DROP `index`";
 ?>
