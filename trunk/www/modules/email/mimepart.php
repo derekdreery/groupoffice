@@ -57,8 +57,17 @@ for($i=0;$i<count($parts_arr);$i++)
 }
 
 
-
-$filename = isset($part->d_parameters['filename']) ? $part->d_parameters['filename'] : 'attachment';
+$filename = 'attachment';
+if(!empty($part->ctype_parameters['name']))
+{
+	$filename = $part->ctype_parameters['name'];
+}elseif(!empty($part->d_parameters['filename']) )
+{
+	$filename = $part->d_parameters['filename'];
+}elseif(!empty($part->d_parameters['filename*']))
+{
+	$filename=$part->d_parameters['filename*'];
+}
 
 $content_transfer_encoding = isset($part->headers['content-transfer-encoding']) ? $part->headers['content-transfer-encoding'] : '';
 $browser = detect_browser();
