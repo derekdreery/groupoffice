@@ -1402,11 +1402,7 @@ class imap{
 		* @return bool True on success
 		*/
 	function append_message($mailbox, $body, $flags = "") {
-		if (@ imap_append($this->conn, "{".$this->connectstring."}".$mailbox, $body, $flags)) {
-			return true;
-		} else {
-			return false;
-		}
+		return @ imap_append($this->conn, "{".$this->connectstring."}".$mailbox, $body, $flags);
 	}
 
 	/**

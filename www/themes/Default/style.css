@@ -8,9 +8,6 @@
     font-weight:bold;
     padding-bottom:4px;
 }
-.x-grid3-cell-first .x-grid3-cell-inner {
-    padding-left:16px;
-}
 .x-grid-hide-summary .x-grid3-summary-row {
     display:none;
 }

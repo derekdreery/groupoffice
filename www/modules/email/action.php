@@ -60,6 +60,41 @@ $response =array('success'=>false);
 try{
 	switch($_REQUEST['task'])
 	{
+		case 'move':
+
+			$start_time = time();
+
+			if(isset($_POST['messages'])){
+				$_SESSION['GO_SESSION']['email_move_messages'] = json_decode($_POST['messages']);
+				$_SESSION['GO_SESSION']['email_move_messages_count']=count($_SESSION['GO_SESSION']['email_move_messages']);
+			}
+
+			//move to another imap account
+			$imap2 = new cached_imap();
+			$from_account = connect($_POST['from_account_id'], $_POST['from_mailbox']);
+
+			$to_account = $email->get_account($_POST['to_account_id']);
+			$imap2->open($to_account, $_POST['to_mailbox']);
+
+			while($uid=array_shift($_SESSION['GO_SESSION']['email_move_messages'])){
+				$source = $imap->get_source($uid);
+				$imap2->append_message($_POST['to_mailbox'], $source, '\\Seen');
+				$left = count($_SESSION['GO_SESSION']['email_move_messages']);
+
+				if($left && $start_time+10<time()){
+
+					$done = $_SESSION['GO_SESSION']['email_move_messages_count']-$left;
+
+					$response['progress']=number_format($done/$_SESSION['GO_SESSION']['email_move_messages_count'],2);
+					$response['continue']=true;
+					break;
+				}
+			}
+			$imap2->close();
+			$response['success']=true;
+			
+			break;
+
 		case 'save_attachment':
 			
 			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
