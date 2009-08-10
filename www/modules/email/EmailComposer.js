@@ -286,10 +286,12 @@ GO.email.EmailComposer = function(config) {
 			content_type:'html'
 		},
 		cls : 'go-form-panel',
-		url : 'save-form.php',
 		defaultType : 'textfield',
 		items : items
 	});
+
+	//Set a long timeout for large attachments
+	this.formPanel.form.timeout=300;
 
 	//the html markup from a signature changes when the editor is initialized. The initialize event fires too soon.
 	//The first push event does the trick of changing the html.

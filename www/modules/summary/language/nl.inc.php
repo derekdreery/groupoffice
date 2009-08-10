@@ -2,6 +2,6 @@
 $lang['summary']['name']='Startpagina';
 $lang['summary']['description']='Een startpagina met een overzicht van verschillende actuele zaken';
 
-$lang['summary']['default_rss_url']='http://www.nu.nl/deeplink_rss2/index.jsp?r=Algemeen';
+$lang['summary']['default_rss_url']='http://headlines.nos.nl/rss.php/list_activetopics?ReactID=83b0934b7116fe1226283e93c3e9c82a';
 $lang['summary']['announcement']='Aankondiging';
 $lang['summary']['announcements']='Aankondigingen';
