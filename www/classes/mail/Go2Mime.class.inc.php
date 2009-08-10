@@ -236,13 +236,34 @@ class Go2Mime
 					$this->response['body'] .= $content_part;
 				}
 				//store attachements in the attachments array
-				if (!empty($part->d_parameters['filename']) && empty($part->headers['content-id']))
+
+				//var_dump($part);
+
+				/*if(empty($part->d_parameters['filename']) && isset($part->d_parameters['filename*']))
+				{
+					$part->d_parameters['filename']=imap::enc_utf8($part->d_parameters['filename*']);
+				}*/
+
+				$filename = '';
+				if(!empty($part->ctype_parameters['name']))
+				{
+					$filename = $part->ctype_parameters['name'];
+				}elseif(!empty($part->d_parameters['filename']) )
+				{
+					$filename = $part->d_parameters['filename'];
+				}elseif(!empty($part->d_parameters['filename*']))
+				{
+					$filename=$part->d_parameters['filename*'];
+				}
+
+
+				if (!empty($filename) && empty($part->headers['content-id']))
 				{
 					$mime_attachment['index']=count($this->response['attachments']);
 					$mime_attachment['size'] = isset($part->body) ? strlen($part->body) : 0;
 					$mime_attachment['human_size'] = Number::format_size($mime_attachment['size']);
-					$mime_attachment['name'] = $part->d_parameters['filename'];
-					$mime_attachment['extension'] = File::get_extension($part->d_parameters['filename']);
+					$mime_attachment['name'] = $filename;
+					$mime_attachment['extension'] = File::get_extension($filename);
 					$mime_attachment['mime'] = $part->ctype_primary.'/'.$part->ctype_secondary;
 					$mime_attachment['transfer'] = $part->headers['content-transfer-encoding'];
 					$mime_attachment['number'] = $part_number_prefix.$part_number;
@@ -251,7 +272,7 @@ class Go2Mime
 						
 					if($create_tmp_attachments)
 					{
-						$mime_attachment['tmp_file']=$GO_CONFIG->tmpdir.'attachments/'.$part->d_parameters['filename'];
+						$mime_attachment['tmp_file']=$GO_CONFIG->tmpdir.'attachments/'.$filename;
 						filesystem::mkdir_recursive(dirname($mime_attachment['tmp_file']));
 
 						file_put_contents($mime_attachment['tmp_file'], $part->body);
