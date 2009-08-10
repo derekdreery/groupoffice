@@ -185,9 +185,7 @@ class GO_SECURITY extends db {
 
 		if($authenticated!='AUTHORIZED')
 		{
-			$response['success']=false;
-			$response['authError']=$authenticated;
-			echo json_encode($response);
+			echo $authenticated;
 			exit();
 		}else
 		{

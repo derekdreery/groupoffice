@@ -140,7 +140,6 @@ GO.data.Connection = Ext.extend(Ext.data.Connection, {
 		
 	authHandler : function(options, success, response)
 	{
-
 		if(GO.checkerIcon)
 		{
 			GO.checkerIcon.setDisplayed(false);			
@@ -154,34 +153,23 @@ GO.data.Connection = Ext.extend(Ext.data.Connection, {
 			Ext.callback(options.originalCallback, options.scope, [options, success, response]);
 		}else
 		{
-			if(response.responseText.substr(0,1)=='{')
+			switch(response.responseText.trim())
 			{
-				var data = Ext.decode(response.responseText);
-			}else
-			{
-				var data = {};
-			}
-			if(!GO.util.empty(data.authError))
-			{
-				switch(data.authError)
-				{
-					case 'UNAUTHORIZED':
-						Ext.Msg.alert(GO.lang['strUnauthorized'], GO.lang['strUnauthorizedText']);
-					break;
-					
-					case 'NOTLOGGEDIN':						
-						GO.loginDialog.addCallback(options.loginCallback, options.loginCallbackScope);
-						GO.loginDialog.show();						
-					break;
-				}
-				return false;
+				case 'NOTLOGGEDIN':
+				GO.loginDialog.addCallback(options.loginCallback, options.loginCallbackScope);
+				GO.loginDialog.show();
+				break;
 				
-			}else
-			{
-				Ext.callback(options.originalCallback, options.scope, [options, success, response]);
+				case 'UNAUTHORIZED':
+				Ext.Msg.alert(GO.lang['strUnauthorized'], GO.lang['strUnauthorizedText']);
+				break;
+
+				default:
+					Ext.callback(options.originalCallback, options.scope, [options, success, response]);
+				break;
 			}
 		}
-	}	
+	}
 });
 
 
