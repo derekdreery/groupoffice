@@ -381,33 +381,90 @@ GO.email.EmailClient = function(config){
 	this.treePanel.on('beforenodedrop', function(e){
 		var s = e.data.selections, messages = [];
 
-		for(var i = 0, len = s.length; i < len; i++){
-
-			if(this.account_id != e.target.attributes['account_id'])
-			{
-				Ext.MessageBox.alert(GO.lang['strError'], GO.email.lang.crossAccountMove);
-				return false
-			}else if(this.mailbox == e.target.mailbox)
-			{
-				return false;
-			}else{
-				messages.push(s[i].id);
-			}
+		
+		for(var i = 0, len = s.length; i < len; i++){			
+			messages.push(s[i].id);			
 		}
 
 		if(messages.length>0)
-		{			
-			this.messagesGrid.store.baseParams['action']='move';
-			this.messagesGrid.store.baseParams['from_mailbox']=this.mailbox;
-			this.messagesGrid.store.baseParams['to_mailbox']=e.target.attributes['mailbox'];
-			this.messagesGrid.store.baseParams['messages']=Ext.encode(messages);
+		{
+
+			if(this.account_id != e.target.attributes['account_id'])
+			{
+				var params = {
+						task:'move',
+						from_account_id:this.account_id,
+						to_account_id:e.target.attributes['account_id'],
+						from_mailbox:this.mailbox,
+						to_mailbox:e.target.attributes['mailbox'],
+						messages:Ext.encode(messages)
+					}
+				Ext.MessageBox.progress(GO.email.lang.moving, '', '');
+				Ext.MessageBox.updateProgress(0, '0%', '');
+
+				var conn = new GO.data.Connection({
+						timeout:300000
+					});
+
+				var moveRequest = function(continued){
+
+					if(continued)
+					{
+						delete params.messages;
+					}
+
+					
+
+					conn.request({
+						url:GO.settings.modules.email.url+'action.php',
+						params:params,
+						callback:function(options, success, response){
+							var responseParams = Ext.decode(response.responseText);
+							if(!responseParams.success)
+							{
+								alert(responseParams.feedback);
+							}else if(responseParams['continue'])
+							{
+								Ext.MessageBox.updateProgress(responseParams.progress, (responseParams.progress*100)+'%', '');
+								moveRequest.call(this, [true]);
+							}else
+							{
+								this.messagesGrid.store.reload({
+									callback:function(){
+										Ext.MessageBox.hide();
+									},
+									scope:this
+								});
+							}
+
+						},
+						scope:this
+					});
+				}
+				moveRequest.call(this);
+
+			}else	if(this.mailbox == e.target.mailbox)
+			{
+				return false;
+			}else
+			{
+				this.messagesGrid.store.baseParams['action']='move';
+				this.messagesGrid.store.baseParams['from_account_id']=this.account_id;
+				this.messagesGrid.store.baseParams['to_account_id']=e.target.attributes['account_id'];
+				this.messagesGrid.store.baseParams['from_mailbox']=this.mailbox;
+				this.messagesGrid.store.baseParams['to_mailbox']=e.target.attributes['mailbox'];
+				this.messagesGrid.store.baseParams['messages']=Ext.encode(messages);
+				
+				this.messagesGrid.store.reload();
+
+				delete this.messagesGrid.store.baseParams['action'];
+				delete this.messagesGrid.store.baseParams['from_mailbox'];
+				delete this.messagesGrid.store.baseParams['to_mailbox'];
+				delete this.messagesGrid.store.baseParams['messages'];
+				delete this.messagesGrid.store.baseParams['to_account_id'];
+				delete this.messagesGrid.store.baseParams['from_account_id'];
+			}
 			
-			this.messagesGrid.store.reload();
-	
-			delete this.messagesGrid.store.baseParams['action'];
-			delete this.messagesGrid.store.baseParams['from_mailbox'];
-			delete this.messagesGrid.store.baseParams['to_mailbox'];
-			delete this.messagesGrid.store.baseParams['messages'];	
 		}
 	},
 	this);

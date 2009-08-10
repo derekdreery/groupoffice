@@ -131,3 +131,4 @@ GO.email.lang.manageAliases='Beheer afzendaliassen';
 GO.email.lang.addSendersTo='Voeg afzenders toe aan...';
 
 GO.email.lang.defaultTemplate='Stel geselecteerd sjabloon in als standaard';
+GO.email.lang.moving='Bezig met verplaatsen...';

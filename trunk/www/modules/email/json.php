@@ -1022,13 +1022,18 @@ try{
 
 								if(isset($_POST['action']))
 								{
+									
+
+								
 									$messages = json_decode($_POST['messages']);
 									switch($_POST['action'])
 									{
 										case 'move':
-											$from_mailbox = ($_REQUEST['from_mailbox']);
-											$to_mailbox = ($_REQUEST['to_mailbox']);
-											$response['success']=$imap->move($to_mailbox, $messages);
+											$from_mailbox = $_REQUEST['from_mailbox'];
+											$to_mailbox = $_REQUEST['to_mailbox'];
+											
+											$response['success']=$imap->move($to_mailbox, $_SESSION['GO_SESSION']['email_move_messages']);
+											
 											$nocache=true;
 											break;
 									}

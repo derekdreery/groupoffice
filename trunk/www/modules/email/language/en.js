@@ -157,3 +157,4 @@ GO.email.lang.manageAliases='Manage sender aliases';
 GO.email.lang.addSendersTo='Add senders to...';
 
 GO.email.lang.defaultTemplate='Set selected template as default';
+GO.email.lang.moving='Moving...';
