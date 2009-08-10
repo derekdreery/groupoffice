@@ -1,3 +1,7 @@
+2009/08/06 3.2.21
+- Too large padding on first grid cells
+- Move e-mail to another IMAP account.
+
 2009/08/06 3.2.20
 - Function to clean invalid UTF-8 strings that caused unreadable e-mails
 - Updated Norsk translation
