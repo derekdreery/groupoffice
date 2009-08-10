@@ -76,9 +76,18 @@ try{
 			$to_account = $email->get_account($_POST['to_account_id']);
 			$imap2->open($to_account, $_POST['to_mailbox']);
 
+			$delete_messages =array();
 			while($uid=array_shift($_SESSION['GO_SESSION']['email_move_messages'])){
 				$source = $imap->get_source($uid);
-				$imap2->append_message($_POST['to_mailbox'], $source, '\\Seen');
+				if(!$imap2->append_message($_POST['to_mailbox'], $source, '\\Seen'))
+				{
+					$imap2->close();
+					throw new Exception('Could not move message');
+				}
+
+				$delete_messages[]=$uid;
+
+				
 				$left = count($_SESSION['GO_SESSION']['email_move_messages']);
 
 				if($left && $start_time+10<time()){
@@ -90,6 +99,7 @@ try{
 					break;
 				}
 			}
+			$imap->delete($delete_messages);
 			$imap2->close();
 			$response['success']=true;
 			
