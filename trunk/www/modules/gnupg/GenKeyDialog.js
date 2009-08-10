@@ -68,7 +68,7 @@ GO.gnupg.GenKeyDialog = function(config){
 			}]	
 	});
 
-	this.formPanel.form.timeout=180;
+	this.formPanel.form.timeout=300;
 	
 
 	config.maximizable=true;
