@@ -252,10 +252,9 @@ CREATE TABLE IF NOT EXISTS `go_settings` (
 DROP TABLE IF EXISTS `go_state`;
 CREATE TABLE IF NOT EXISTS `go_state` (
   `user_id` int(11) NOT NULL,
-  `index` varchar(50) NOT NULL default '',
   `name` varchar(50) NOT NULL default '',
   `value` text,
-  PRIMARY KEY  (`user_id`,`index`,`name`)
+  PRIMARY KEY  (`user_id`,`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

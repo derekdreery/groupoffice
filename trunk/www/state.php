@@ -17,10 +17,9 @@ $GO_SECURITY->json_authenticate();
 
 
 
-$response['success']= $GO_CONFIG->save_state($GO_SECURITY->user_id, 
-	($_POST['index']),
-	($_POST['name']),
-	($_POST['value'])
+$response['success']= $GO_CONFIG->save_state($GO_SECURITY->user_id,
+	$_POST['name'],
+	$_POST['value']
 	);
 	
 echo json_encode($response);

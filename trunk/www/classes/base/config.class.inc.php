@@ -1038,10 +1038,9 @@ class GO_CONFIG
       	return $this->db->query("DELETE FROM go_settings WHERE name='".$this->db->escape($name)."'");
       }
 
-      function save_state($user_id, $index, $name, $value)
+      function save_state($user_id, $name, $value)
       {
       	$state['user_id']=$user_id;
-      	$state['index']=$index;
       	$state['name']=$name;
       	$state['value']=$value;
 
@@ -1051,7 +1050,7 @@ class GO_CONFIG
       function get_state($user_id, $index)
       {
       	$state = array();
-      	$sql = "SELECT * FROM go_state WHERE user_id=".$this->db->escape($user_id)." AND `index`='".$this->db->escape($index)."'";
+      	$sql = "SELECT * FROM go_state WHERE user_id=".$this->db->escape($user_id);
       	$this->db->query($sql);
 
       	while($this->db->next_record(DB_ASSOC))
