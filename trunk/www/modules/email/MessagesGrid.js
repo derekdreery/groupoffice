@@ -122,7 +122,6 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
     },
 	
     renderMessage : function(value, p, record){
-		
         if(record.data['new']=='1')
         {
             return String.format('<div id="sbj_'+record.data['uid']+'" class="NewSubject">{0}</div>{1}', value, record.data['subject']);

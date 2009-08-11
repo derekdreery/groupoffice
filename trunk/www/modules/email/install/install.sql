@@ -146,7 +146,7 @@ CREATE TABLE IF NOT EXISTS `em_messages_cache` (
   `flagged` enum('0','1') NOT NULL,
   `answered` enum('0','1') NOT NULL,
   `priority` tinyint(4) NOT NULL,
-  `to` varchar(100) default NULL,
+  `to` varchar(255) default NULL,
   `notification` varchar(100) NOT NULL,
   `content_type` varchar(100) NOT NULL,
   `content_transfer_encoding` varchar(50) NOT NULL,
