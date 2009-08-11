@@ -670,7 +670,10 @@ switch($task)
 		echo 'Do you wish to create a new database and user (Requires MySQL administration privileges) or do you want to use an existing database and user?<br /><br />';
 		echo '<input type="hidden" name="task" value="new_database" />';
 		echo '<div style="text-align:right"><input type="button" onclick="document.location=\''.$_SERVER['PHP_SELF'].'?task='.$lasttask.'\';" value="Back" />&nbsp;&nbsp;<input type="button" onclick="javascript:_go(\'create_database\');" value="Create new database" />&nbsp;&nbsp;';
-		echo '<input type="button" onclick="javascript:_go(\'database_connection\');" value="Use existing database" /></div>';
+
+		$buttonText = !isset($dbconn) ? 'Use existing database' : 'Upgrade database \''.$GO_CONFIG->db_name.'\'';
+
+		echo '<input type="button" onclick="javascript:_go(\'database_connection\');" value="'.$buttonText.'" /></div>';
 		echo '<script type="text/javascript">';
 		echo 'function _go(task){document.forms[0].task.value=task;document.forms[0].submit();}</script>';
 
@@ -1217,6 +1220,23 @@ switch($task)
 
 		<table>
 		<tr>
+			<td>Language:</td>
+			<td><select name="language">
+			<?php
+			require($GO_CONFIG->root_path.'language/languages.inc.php');
+
+			foreach($languages as $key => $language)
+			{
+				echo '<option value="'.$key.'"';
+				if($key==$GO_CONFIG->language)
+				{
+					echo ' selected';
+				}
+				echo '>'.$language.'</option>';
+			}
+			?></select></td>
+		</tr>
+		<tr>
 			<td>Country:</td>
 			<td>
 			<select name="default_country">
@@ -1235,23 +1255,7 @@ switch($task)
 			?></select>
 			</td>
 		</tr>
-		<tr>
-			<td>Language:</td>
-			<td><select name="language">
-			<?php
-			require($GO_CONFIG->root_path.'language/languages.inc.php');
-
-			foreach($languages as $key => $language)
-			{
-				echo '<option value="'.$key.'"';
-				if($key==$GO_CONFIG->language)
-				{
-					echo ' selected';
-				}
-				echo '>'.$language.'</option>';
-			}
-			?></select></td>
-		</tr>
+		
 		<tr>
 			<td>Timezone:</td>
 			<td>
@@ -1271,6 +1275,7 @@ switch($task)
 			?></select>
 			</td>
 		</tr>
+		<tr><td><br /></td></tr>
 
 		<tr>
 			<td>Date format:</td>
