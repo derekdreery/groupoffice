@@ -18,15 +18,20 @@ GO.form.NumberField = Ext.extend(Ext.form.TextField, {
 		
 		this.style="text-align:right";
 		
-		this.on('blur', function(input){			
-			var number = GO.util.unlocalizeNumber(input.getValue());	
- 			input.setValue(GO.util.numberFormat(number, this.decimals));
-  	});
-  	  	
-  	this.on('focus',function(input){
-  		input.focus(true);
-  	});		
-	}/*,
+		this.on('focus',function(input){
+			this.fixPrecision();
+			input.focus(true);
+		});
+	}
+	,
+	beforeBlur : function(){
+		this.fixPrecision();
+	},
+	fixPrecision : function(){
+		var number = GO.util.unlocalizeNumber(this.getValue());
+		this.setValue(GO.util.numberFormat(number, this.decimals));
+	}
+/*,
 	
 	setValue : function(v)
 	{
