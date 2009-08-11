@@ -991,7 +991,9 @@ try{
 
 								$account = connect($account_id, $mailbox);
 
+								$response['trash_folder']=$account['trash'];
 
+								$response['trash']=!empty($account['trash']) && strpos($mailbox, $imap->utf7_imap_encode($account['trash']))!==false;
 								$response['drafts']=!empty($account['drafts']) && strpos($mailbox, $imap->utf7_imap_encode($account['drafts']))!==false;
 								$response['sent']=!empty($account['sent']) && strpos($mailbox, $imap->utf7_imap_encode($account['sent']))!==false;
 

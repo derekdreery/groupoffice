@@ -99,7 +99,15 @@ GO.email.EmailClient = function(config){
 			{
 				selModel.select(node);
 			}
-		}					
+		}
+
+		if(this.messagePanel.uid && !this.messagesGrid.store.getById(this.messagePanel.uid))
+		{
+			this.messagePanel.reset();
+		}
+
+		//don't confirm delete to trashfolder
+		this.noDeleteConfirmation=!this.messagesGrid.store.reader.jsonData.trash && !GO.util.empty(this.messagesGrid.store.reader.jsonData.trash_folder);
 	}, this);	
 
 	GO.email.saveAsItems = GO.email.saveAsItems || [];
@@ -864,22 +872,14 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	checkMailInterval : 300000,
 	//checkMailInterval : 5000,
 	
-	justMarkedUnread : 0, 
+	justMarkedUnread : 0,
+
+	noDeleteConfirmation:false,
 	
 	deleteMessages : function(){ 
 		this.messagesGrid.deleteSelected({
-			callback : function(config){
-				var keys = Ext.decode(config.params.delete_keys);				
-				for(var i=0;i<keys.length;i++)
-				{
-					if(this.messagePanel.uid==keys[i])
-					{
-						this.messagePanel.reset();
-					}
-				}
-			},
-			scope: this
-		}); 
+			noConfirmation:this.noDeleteConfirmation
+		});
 	},
 	
 	afterRender : function(){
@@ -1205,7 +1205,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	{
 		if(folder_id!=this.folder_id)
 		{
-			this.messagePanel.reset();
+			//this.messagePanel.reset();
 			this.messagesGrid.getSelectionModel().clearSelections();
 		}
 		
