@@ -178,7 +178,7 @@ Ext.extend(GO.grid.GridPanel, Ext.grid.GridPanel, {
 			config['deleteParam']='delete_keys';
 		}
 		
-		var selectedRows = this.selModel.selections.keys;
+		//var selectedRows = this.selModel.selections.keys;
 		
 		var params={}
 		params[config.deleteParam]=Ext.encode(this.selModel.selections.keys);
@@ -187,7 +187,8 @@ Ext.extend(GO.grid.GridPanel, Ext.grid.GridPanel, {
 			store:this.store,
 			params: params,
 			count: this.selModel.selections.keys.length,
-			extraWarning: config.extraWarning || ""
+			extraWarning: config.extraWarning || "",
+			noConfirmation: config.noConfirmation
 		};
 		
 		if(config.callback)

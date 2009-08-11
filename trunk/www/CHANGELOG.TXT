@@ -8,6 +8,7 @@
 - Updated TinyMCE to 3.2.5
 - Added new address formats option for contacts so you can localize the display
 	of addresses in Group-Office.
+- No confirm of deleting mails when they will be moved to the trash folder.
 - Small bug fixes
 
 2009/08/06 3.2.20
