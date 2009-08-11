@@ -56,3 +56,4 @@ $updates[]="CREATE TABLE IF NOT EXISTS `em_aliases` (
 $updates[]="script:1_sender_aliases.inc.php";
 
 $updates[]="ALTER TABLE `em_accounts` DROP `name` , DROP `email` ;";
+$updates[]="ALTER TABLE `em_messages_cache` CHANGE `to` `to` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ";

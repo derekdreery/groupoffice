@@ -1104,13 +1104,17 @@ try{
 									$RFC822 = new RFC822();
 									$address = $RFC822->parse_address_list($message['from']);
 
-									if(!empty($address[0]['personal']))
-									{
-										$message['from']=$address[0]['personal'];
-									}else if(!empty($address[0]))
-									{
-										$message['from']=$address[0]['email'];
+									$readable_addresses=array();
+									for($i=0;$i<count($address);$i++){
+										if(!empty($address[$i]['personal']))
+										{
+											$readable_addresses[]=$address[$i]['personal'];
+										}else if(!empty($address[$i]))
+										{
+											$readable_addresses[]=$address[$i]['email'];
+										}
 									}
+									$message['from']=implode(',', $readable_addresses);
 
 									$message['sender'] = empty($address[0]) ? '' : $address[0]['email'];
 

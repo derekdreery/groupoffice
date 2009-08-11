@@ -349,7 +349,8 @@ class cached_imap extends imap{
 				foreach($new_messages as $message)
 				{
 					//trim values for mysql insertion
-					$message['to']=substr($message['to'],0, 100);
+					debug($message['to']);
+					$message['to']=substr($message['to'],0, 255);
 					$message['subject']=substr($message['subject'],0,100);
 					$message['from']=substr($message['from'],0,100);
 					$message['reply_to']=substr($message['reply_to'],0,100);
