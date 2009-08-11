@@ -427,7 +427,9 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		{
   		if(this.loaded)
   		{
+				//todo use store to maipulate grid
   			this.store.reload();
+				//this.load();
   		}
 		}	
  },
@@ -614,9 +616,9 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			var endMin = eventData.endDate.getMinutes();
 			endRow += Math.ceil(endMin/gridPrecision);
 						
-			if(endRow<startRow)
+			if(endRow<startRow+1)
 			{
-				endRow=startRow;
+				endRow=startRow+1;
 			}	
 
 			if(startRow && endRow && (originalDay==originalEndDay))
@@ -771,7 +773,8 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		//var allDayColumn = Ext.get("all_day_"+startDay);
 		//var size = allDayColumn.getSize();
 		
-		var snap = this.getSnap();		
+		//var snap = this.getSnap();
+		var text = '';
 		
 		if(startDay!=endDay)
 		{
@@ -784,7 +787,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		
 		var daySpan = endDay-startDay;
 			
-		var count=0;
+		//var count=0;
 		for (var i=startDay;i<=endDay;i++)
 		{
 			
