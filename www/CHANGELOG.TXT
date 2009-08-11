@@ -2,6 +2,10 @@
 - Too large padding on first grid cells
 - Move e-mail to another IMAP account.
 - Larger timeout when sending e-mail
+- Added missing licenses from components
+- Updated TCPDF to version 4.6.024
+- Updated PhpThumb to 1.7.9
+- Updated TinyMCE to 3.2.5
 
 2009/08/06 3.2.20
 - Function to clean invalid UTF-8 strings that caused unreadable e-mails
