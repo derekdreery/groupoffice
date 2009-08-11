@@ -147,7 +147,7 @@ class phpthumb_functions {
 				'Supported filetypes'    => ''
 			);
 			$phpinfo_array = phpthumb_functions::phpinfo_array();
-			foreach ($phpinfo_array as $dummy => $line) {
+			foreach ($phpinfo_array as $line) {
 				$line = trim(strip_tags($line));
 				foreach ($exif_info as $key => $value) {
 					if (strpos($line, $key) === 0) {
@@ -195,6 +195,15 @@ class phpthumb_functions {
 		return (isset($image_type_to_mime_type[$imagetype]) ? $image_type_to_mime_type[$imagetype] : false);
 	}
 
+
+	function TranslateWHbyAngle($width, $height, $angle) {
+		if (($angle % 180) == 0) {
+			return array($width, $height);
+		}
+		$newwidth  = (abs(sin(deg2rad($angle))) * $height) + (abs(cos(deg2rad($angle))) * $width);
+		$newheight = (abs(sin(deg2rad($angle))) * $width)  + (abs(cos(deg2rad($angle))) * $height);
+		return array($newwidth, $newheight);
+	}
 
 	function HexCharDisplay($string) {
 		$len = strlen($string);
@@ -249,6 +258,14 @@ class phpthumb_functions {
 	}
 
 
+	function PixelColorDifferencePercent($currentPixel, $targetPixel) {
+		$diff = 0;
+		foreach ($targetPixel as $channel => $currentvalue) {
+			$diff = max($diff, (max($currentPixel[$channel], $targetPixel[$channel]) - min($currentPixel[$channel], $targetPixel[$channel])) / 255);
+		}
+		return $diff * 100;
+	}
+
 	function GrayscaleValue($r, $g, $b) {
 		return round(($r * 0.30) + ($g * 0.59) + ($b * 0.11));
 	}
@@ -267,6 +284,27 @@ class phpthumb_functions {
 		return ($r * 0.299) + ($g * 0.587) + ($b * 0.114);
 	}
 
+
+	function ScaleToFitInBox($width, $height, $maxwidth=null, $maxheight=null, $allow_enlarge=true, $allow_reduce=true) {
+		$maxwidth  = (is_null($maxwidth)  ? $width  : $maxwidth);
+		$maxheight = (is_null($maxheight) ? $height : $maxheight);
+		$scale_x = 1;
+		$scale_y = 1;
+		if (($width > $maxwidth) || ($width < $maxwidth)) {
+			$scale_x = ($maxwidth / $width);
+		}
+		if (($height > $maxheight) || ($height < $maxheight)) {
+			$scale_y = ($maxheight / $height);
+		}
+		$scale = min($scale_x, $scale_y);
+		if (!$allow_enlarge) {
+			$scale = min($scale, 1);
+		}
+		if (!$allow_reduce) {
+			$scale = max($scale, 1);
+		}
+		return $scale;
+	}
 
 	function ImageCopyResampleBicubic($dst_img, $src_img, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h) {
 		// ron at korving dot demon dot nl
@@ -331,17 +369,17 @@ class phpthumb_functions {
 		if (($x_size <= 0) || ($y_size <= 0)) {
 			return phpthumb::ErrorImage('Invalid image dimensions: '.$ImageCreateFunction.'('.$x_size.', '.$y_size.')');
 		}
-		return $ImageCreateFunction($x_size, $y_size);
+		return $ImageCreateFunction(round($x_size), round($y_size));
 	}
 
 
-	function ImageCopyRespectAlpha(&$dst_im, &$src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct=100) {
+	function ImageCopyRespectAlpha(&$dst_im, &$src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $opacity_pct=100) {
+		$opacipct = $opacity_pct / 100;
 		for ($x = $src_x; $x < $src_w; $x++) {
 			for ($y = $src_y; $y < $src_h; $y++) {
 				$RealPixel    = phpthumb_functions::GetPixelColor($dst_im, $dst_x + $x, $dst_y + $y);
 				$OverlayPixel = phpthumb_functions::GetPixelColor($src_im, $x, $y);
 				$alphapct = $OverlayPixel['alpha'] / 127;
-				$opacipct = $pct / 100;
 				$overlaypct = (1 - $alphapct) * $opacipct;
 
 				$newcolor = phpthumb_functions::ImageColorAllocateAlphaSafe(
@@ -378,26 +416,27 @@ class phpthumb_functions {
 			// limited by height
 			$new_width = $new_height * $old_aspect_ratio;
 		}
-		return array(round($new_width), round($new_height));
+		return array(intval(round($new_width)), intval(round($new_height)));
 	}
 
 
 	function FunctionIsDisabled($function) {
 		static $DisabledFunctions = null;
 		if (is_null($DisabledFunctions)) {
-			$disable_functions_local  = explode(',',     @ini_get('disable_functions'));
-			$disable_functions_global = explode(',', @get_cfg_var('disable_functions'));
+			$disable_functions_local  = explode(',',     strtolower(@ini_get('disable_functions')));
+			$disable_functions_global = explode(',', strtolower(@get_cfg_var('disable_functions')));
 			foreach ($disable_functions_local as $key => $value) {
-				$DisabledFunctions[$value] = 'local';
+				$DisabledFunctions[trim($value)] = 'local';
 			}
 			foreach ($disable_functions_global as $key => $value) {
-				$DisabledFunctions[$value] = 'global';
+				$DisabledFunctions[trim($value)] = 'global';
 			}
 			if (@ini_get('safe_mode')) {
-				$DisabledFunctions['shell_exec'] = 'local';
+				$DisabledFunctions['shell_exec']     = 'local';
+				$DisabledFunctions['set_time_limit'] = 'local';
 			}
 		}
-		return isset($DisabledFunctions[$function]);
+		return isset($DisabledFunctions[strtolower($function)]);
 	}
 
 
@@ -409,22 +448,28 @@ class phpthumb_functions {
 				$AllowedExecFunctions[$key] = !phpthumb_functions::FunctionIsDisabled($key);
 			}
 		}
+		$command .= ' 2>&1'; // force redirect stderr to stdout
 		foreach ($AllowedExecFunctions as $execfunction => $is_allowed) {
 			if (!$is_allowed) {
 				continue;
 			}
+			$returnvalue = false;
 			switch ($execfunction) {
 				case 'passthru':
+				case 'system':
 					ob_start();
 					$execfunction($command);
 					$returnvalue = ob_get_contents();
 					ob_end_clean();
 					break;
 
-				case 'shell_exec':
-				case 'system':
 				case 'exec':
-				default:
+					$output = array();
+					$lastline = $execfunction($command, $output);
+					$returnvalue = implode("\n", $output);
+					break;
+
+				case 'shell_exec':
 					ob_start();
 					$returnvalue = $execfunction($command);
 					ob_end_clean();
@@ -442,7 +487,7 @@ class phpthumb_functions {
 			$keys = array('status', 'the_request', 'status_line', 'method', 'content_type', 'handler', 'uri', 'filename', 'path_info', 'args', 'boundary', 'no_cache', 'no_local_copy', 'allowed', 'send_bodyct', 'bytes_sent', 'byterange', 'clength', 'unparsed_uri', 'mtime', 'request_time');
 			if ($apacheLookupURIobject = @apache_lookup_uri($filename)) {
 				$apacheLookupURIarray = array();
-				foreach ($keys as $dummy => $key) {
+				foreach ($keys as $key) {
 					$apacheLookupURIarray[$key] = @$apacheLookupURIobject->$key;
 				}
 				return $apacheLookupURIarray;
@@ -480,7 +525,7 @@ class phpthumb_functions {
 
 	function filesize_remote($remotefile, $timeout=10) {
 		$size = false;
-		$url = parse_url($remotefile);
+		$url = phpthumb_functions::ParseURLbetter($remotefile);
 		if ($fp = @fsockopen($url['host'], ($url['port'] ? $url['port'] : 80), $errno, $errstr, $timeout)) {
 			fwrite($fp, 'HEAD '.@$url['path'].@$url['query'].' HTTP/1.0'."\r\n".'Host: '.@$url['host']."\r\n\r\n");
 			if (phpthumb_functions::version_compare_replacement(phpversion(), '4.3.0', '>=')) {
@@ -501,7 +546,7 @@ class phpthumb_functions {
 
 	function filedate_remote($remotefile, $timeout=10) {
 		$date = false;
-		$url = parse_url($remotefile);
+		$url = phpthumb_functions::ParseURLbetter($remotefile);
 		if ($fp = @fsockopen($url['host'], ($url['port'] ? $url['port'] : 80), $errno, $errstr, $timeout)) {
 			fwrite($fp, 'HEAD '.@$url['path'].@$url['query'].' HTTP/1.0'."\r\n".'Host: '.@$url['host']."\r\n\r\n");
 			if (phpthumb_functions::version_compare_replacement(phpversion(), '4.3.0', '>=')) {
@@ -541,7 +586,7 @@ class phpthumb_functions {
 	function nonempty_min() {
 		$arg_list = func_get_args();
 		$acceptable = array();
-		foreach ($arg_list as $dummy => $arg) {
+		foreach ($arg_list as $arg) {
 			if ($arg) {
 				$acceptable[] = $arg;
 			}
@@ -613,12 +658,16 @@ class phpthumb_functions {
 				if ($isHeader && ($line == "\r\n")) {
 					$isHeader = false;
 					if ($successonly) {
-						if ($errno == 200) {
-							// great, continue
-						} else {
-							$errstr = $errno.' '.$errstr.($header_newlocation ? '; Location: '.$header_newlocation : '');
-							fclose($fp);
-							return false;
+						switch ($errno) {
+							case 200:
+								// great, continue
+								break;
+
+							default:
+								$errstr = $errno.' '.$errstr.($header_newlocation ? '; Location: '.$header_newlocation : '');
+								fclose($fp);
+								return false;
+								break;
 						}
 					}
 				}
@@ -629,16 +678,92 @@ class phpthumb_functions {
 		return null;
 	}
 
-	function SafeURLread($url, &$error, $timeout=10) {
+	function CleanUpURLencoding($url, $queryseperator='&') {
+		if (!eregi('^http', $url)) {
+			return $url;
+		}
+		$parse_url = phpthumb_functions::ParseURLbetter($url);
+		$pathelements = explode('/', $parse_url['path']);
+		$CleanPathElements = array();
+		$TranslationMatrix = array(' '=>'%20');
+		foreach ($pathelements as $key => $pathelement) {
+			$CleanPathElements[] = strtr($pathelement, $TranslationMatrix);
+		}
+		foreach ($CleanPathElements as $key => $value) {
+			if ($value === '') {
+				unset($CleanPathElements[$key]);
+			}
+		}
+
+		$queries = explode($queryseperator, @$parse_url['query']);
+		$CleanQueries = array();
+		foreach ($queries as $key => $query) {
+			@list($param, $value) = explode('=', $query);
+			$CleanQueries[] = strtr($param, $TranslationMatrix).($value ? '='.strtr($value, $TranslationMatrix) : '');
+		}
+		foreach ($CleanQueries as $key => $value) {
+			if ($value === '') {
+				unset($CleanQueries[$key]);
+			}
+		}
+
+		$cleaned_url  = $parse_url['scheme'].'://';
+		$cleaned_url .= (@$parse_url['username'] ? $parse_url['host'].(@$parse_url['password'] ? ':'.$parse_url['password'] : '').'@' : '');
+		$cleaned_url .= $parse_url['host'];
+		$cleaned_url .= '/'.implode('/', $CleanPathElements);
+		$cleaned_url .= (@$CleanQueries ? '?'.implode($queryseperator, $CleanQueries) : '');
+		return $cleaned_url;
+	}
+
+	function ParseURLbetter($url) {
+		$parsedURL = @parse_url($url);
+		if (!@$parsedURL['port']) {
+			switch (strtolower(@$parsedURL['scheme'])) {
+				case 'ftp':
+					$parsedURL['port'] = 21;
+					break;
+				case 'https':
+					$parsedURL['port'] = 443;
+					break;
+				case 'http':
+					$parsedURL['port'] = 80;
+					break;
+			}
+		}
+		return $parsedURL;
+	}
+
+	function SafeURLread($url, &$error, $timeout=10, $followredirects=true) {
 		$error = '';
 
-		$parsed_url = @parse_url($url);
-		$rawData = phpthumb_functions::URLreadFsock(@$parsed_url['host'], @$parsed_url['path'].'?'.@$parsed_url['query'], $errstr, true, (@$parsed_url['port'] ? @$parsed_url['port'] : 80), $timeout);
-		$error .= 'Error: '.$errstr."\n".$url;
+		$parsed_url = phpthumb_functions::ParseURLbetter($url);
+		$alreadyLookedAtURLs[trim($url)] = true;
+
+		while (true) {
+			$tryagain = false;
+			$rawData = phpthumb_functions::URLreadFsock(@$parsed_url['host'], @$parsed_url['path'].'?'.@$parsed_url['query'], $errstr, true, (@$parsed_url['port'] ? @$parsed_url['port'] : 80), $timeout);
+			if (eregi('302 [a-z ]+; Location\\: (http.*)', $errstr, $matches)) {
+				$matches[1] = trim(@$matches[1]);
+				if (!@$alreadyLookedAtURLs[$matches[1]]) {
+					// loop through and examine new URL
+					$error .= 'URL "'.$url.'" redirected to "'.$matches[1].'"';
+
+					$tryagain = true;
+					$alreadyLookedAtURLs[$matches[1]] = true;
+					$parsed_url = phpthumb_functions::ParseURLbetter($matches[1]);
+				}
+			}
+			if (!$tryagain) {
+				break;
+			}
+		}
+
 		if ($rawData === false) {
+			$error .= 'Error opening "'.$url.'":'."\n\n".$errstr;
 			return false;
 		} elseif ($rawData === null) {
 			// fall through
+			$error .= 'Error opening "'.$url.'":'."\n\n".$errstr;
 		} else {
 			return $rawData;
 		}
@@ -653,6 +778,7 @@ class phpthumb_functions {
 			$rawData = curl_exec($ch);
 			curl_close($ch);
 			if (strlen($rawData) > 0) {
+				$error .= 'CURL succeeded ('.strlen($rawData).' bytes); ';
 				return $rawData;
 			}
 			$error .= 'CURL available but returned no data; ';
@@ -665,6 +791,7 @@ class phpthumb_functions {
 			$error .= 'fopen(URL) broken in PHP v'.phpversion().'; ';
 		} elseif (@ini_get('allow_url_fopen')) {
 			$rawData = '';
+			$error_fopen = '';
 			ob_start();
 			if ($fp = fopen($url, 'rb')) {
 				do {
@@ -673,13 +800,15 @@ class phpthumb_functions {
 				} while (strlen($buffer) > 0);
 				fclose($fp);
 			} else {
-				$error .= trim(strip_tags(ob_get_contents()));
+				$error_fopen .= trim(strip_tags(ob_get_contents()));
 			}
 			ob_end_clean();
-			if (!$error) {
+			$error .= $error_fopen;
+			if (!$error_fopen) {
+				$error .= '; "allow_url_fopen" succeeded ('.strlen($rawData).' bytes); ';
 				return $rawData;
 			}
-			$error .= '; "allow_url_fopen" enabled but returned no data; ';
+			$error .= '; "allow_url_fopen" enabled but returned no data ('.$error_fopen.'); ';
 		} else {
 			$error .= '"allow_url_fopen" disabled; ';
 		}
@@ -687,7 +816,84 @@ class phpthumb_functions {
 		return false;
 	}
 
+	function EnsureDirectoryExists($dirname) {
+		$directory_elements = explode(DIRECTORY_SEPARATOR, $dirname);
+		$startoffset = (!$directory_elements[0] ? 2 : 1);  // unix with leading "/" then start with 2nd element; Windows with leading "c:\" then start with 1st element
+		$open_basedirs = split('[;:]', ini_get('open_basedir'));
+		foreach ($open_basedirs as $key => $open_basedir) {
+			if (ereg('^'.preg_quote($open_basedir), $dirname) && (strlen($dirname) > strlen($open_basedir))) {
+				$startoffset = count(explode(DIRECTORY_SEPARATOR, $open_basedir));
+				break;
+			}
+		}
+		$i = $startoffset;
+		$endoffset = count($directory_elements);
+		for ($i = $startoffset; $i <= $endoffset; $i++) {
+			$test_directory = implode(DIRECTORY_SEPARATOR, array_slice($directory_elements, 0, $i));
+			if (!$test_directory) {
+				continue;
+			}
+			if (!@is_dir($test_directory)) {
+				if (@file_exists($test_directory)) {
+					// directory name already exists as a file
+					return false;
+				}
+				@mkdir($test_directory, 0755);
+				@chmod($test_directory, 0755);
+				if (!@is_dir($test_directory) || !@is_writeable($test_directory)) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+
+	function GetAllFilesInSubfolders($dirname) {
+		$AllFiles = array();
+		$dirname = rtrim(realpath($dirname), '/\\');
+		if ($dirhandle = @opendir($dirname)) {
+			while (($file = readdir($dirhandle)) !== false) {
+				$fullfilename = $dirname.DIRECTORY_SEPARATOR.$file;
+				if (is_file($fullfilename)) {
+					$AllFiles[] = $fullfilename;
+				} elseif (is_dir($fullfilename)) {
+					switch ($file) {
+						case '.':
+						case '..':
+							break;
+
+						default:
+							$AllFiles[] = $fullfilename;
+							$subfiles = phpthumb_functions::GetAllFilesInSubfolders($fullfilename);
+							foreach ($subfiles as $filename) {
+								$AllFiles[] = $filename;
+							}
+							break;
+					}
+				} else {
+					// ignore?
+				}
+			}
+			closedir($dirhandle);
+		}
+		sort($AllFiles);
+		return array_unique($AllFiles);
+	}
+
+
+	function SanitizeFilename($filename) {
+		$filename = ereg_replace('[^'.preg_quote(' !#$%^()+,-.;<>=@[]_{}').'a-zA-Z0-9]', '_', $filename);
+		if (phpthumb_functions::version_compare_replacement(phpversion(), '4.1.0', '>=')) {
+			$filename = trim($filename, '.');
+		}
+		return $filename;
+	}
+
 }
+
+
+////////////// END: class phpthumb_functions //////////////
 
 
 if (!function_exists('gd_info')) {
@@ -710,7 +916,7 @@ if (!function_exists('gd_info')) {
 				'XBM Support'        => false
 			);
 			$phpinfo_array = phpthumb_functions::phpinfo_array();
-			foreach ($phpinfo_array as $dummy => $line) {
+			foreach ($phpinfo_array as $line) {
 				$line = trim(strip_tags($line));
 				foreach ($gd_info as $key => $value) {
 					//if (strpos($line, $key) !== false) {
@@ -789,7 +995,7 @@ if (!function_exists('file_get_contents')) {
 	// included in PHP v4.3.0+
 	function file_get_contents($filename) {
 		if (eregi('^(f|ht)tp\://', $filename)) {
-			return SafeURLread($filename);
+			return SafeURLread($filename, $error);
 		}
 		if ($fp = @fopen($filename, 'rb')) {
 			$rawData = '';
@@ -834,3 +1040,5 @@ if (!function_exists('imagesavealpha')) {
 		return true;
 	}
 }
+
+?>

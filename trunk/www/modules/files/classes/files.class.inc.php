@@ -59,7 +59,7 @@ class files extends db {
 			case 'jpeg';
 			case 'png';
 			case 'gif';
-				return phpThumbURL('src='.$GO_CONFIG->file_storage_path.$path.'&w=100&h=100&zc=1');
+				return phpThumbURL('src='.urlencode($GO_CONFIG->file_storage_path.$path).'&w=100&h=100&zc=1');
 				break;
 
 			case 'pdf':
