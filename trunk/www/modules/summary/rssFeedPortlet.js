@@ -143,7 +143,7 @@ Ext.extend(GO.portlets.rssFeedPortlet, Ext.grid.GridPanel, {
     // within this function "this" is actually the GridView
     applyRowClass: function(record, rowIndex, p, ds) {
         if (this.showPreview) {
-            p.body = '<p class="description">' +Ext.util.Format.htmlDecode(record.data.description) + '</p>';
+            p.body = '<p class="description">' +Ext.util.Format.htmlDecode(record.data.description.trim()) + '</p>';
             return 'x-grid3-row-expanded';
         }
         return 'x-grid3-row-collapsed';
