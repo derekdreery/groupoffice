@@ -68,9 +68,10 @@ if($CONFIG_FILE=='/etc/groupoffice/config.php' && @file_exists('/etc/groupoffice
 
 $tasks[] = 'theme';
 
+$tasks[] = 'new_database';
+
 if(!isset($dbconn))
-{
-	$tasks[] = 'new_database';
+{	
 	$tasks[] = 'create_database';
 	$tasks[] = 'database_connection';
 }
@@ -956,7 +957,7 @@ switch($task)
 				?>
 					<tr>
 					<td colspan="2" align="right">
-					<?php echo '<input type="button" onclick="document.location=\''.$_SERVER['PHP_SELF'].'?task=existing_database\';" value="Back" />&nbsp;&nbsp;'; ?>
+					<?php echo '<input type="button" onclick="document.location=\''.$_SERVER['PHP_SELF'].'?task=database_connection\';" value="Back" />&nbsp;&nbsp;'; ?>
 					<input type="submit" value="Continue" />
 					&nbsp;&nbsp;
 					</td>
@@ -1166,7 +1167,6 @@ switch($task)
 			?>
 			<td><input type="text" size="50" name="local_path" value="<?php echo $local_path; ?>" /></td>
 		</tr>
-		<tr>
 		<tr>
 			<td>Public files URL:</td>
 			<?php
