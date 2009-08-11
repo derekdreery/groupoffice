@@ -18,6 +18,7 @@ function is_duplicate_contact($record)
 		"first_name='".$db->escape($record['first_name'])."' AND ".
 		"middle_name='".$db->escape($record['middle_name'])."' AND ".
 		"last_name='".$db->escape($record['last_name'])."' AND ".
+		"company_id='".$db->escape($record['company_id'])."' AND ".
 		"email='".$db->escape($record['email'])."'";
 		
 	$db->query($sql);
