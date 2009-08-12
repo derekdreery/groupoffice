@@ -166,8 +166,9 @@ GO.linkHandlers[8]=function(id){
 	GO.users.userDialog.show(id);
 };
 
-GO.moduleManager.addAdminModule('users', GO.users.MainPanel, {
+GO.moduleManager.addModule('users', GO.users.MainPanel, {
 	title : GO.lang.users,
-	iconCls : 'go-tab-icon-users'
+	iconCls : 'go-tab-icon-users',
+	admin :true
 });
 

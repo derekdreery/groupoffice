@@ -106,7 +106,7 @@ GO.ModuleManager = Ext.extend(function(){
 		}
 	},
 	
-	addAdminModule : function(moduleName, panelClass, panelConfig)
+	/*addAdminModule : function(moduleName, panelClass, panelConfig)
 	{
 		panelConfig.moduleName = moduleName;
 		
@@ -146,7 +146,7 @@ GO.ModuleManager = Ext.extend(function(){
 			configs.push(this.adminPanelConfigs[this.adminSortOrder[i]]);	
 		}
 		return configs;		
-	},
+	},*/
 	
 	getPanel : function(moduleName)
 	{

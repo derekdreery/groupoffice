@@ -50,7 +50,7 @@ if($GO_SECURITY->logged_in() && trim($_SESSION['GO_SESSION']['name']) != '' && !
 			<span id="search_query"></span>
 			
 			
-			<a id="admin-menu-link" href="#"><?php echo $lang['common']['adminMenu']; ?></a>
+			<a id="start-menu-link" href="#"><?php echo $lang['common']['startMenu']; ?></a>
 
                         |
 			

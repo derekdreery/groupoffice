@@ -68,7 +68,8 @@ Ext.extend(GO.tools.MainPanel, Ext.Panel,{
  * This will add the module to the main tabpanel filled with all the modules
  */
  
-GO.moduleManager.addAdminModule('tools', GO.tools.MainPanel, {
+GO.moduleManager.addModule('tools', GO.tools.MainPanel, {
 	title : GO.tools.lang.tools,
-	iconCls : 'go-tab-icon-tools'
+	iconCls : 'go-tab-icon-tools',
+	admin :true
 });
