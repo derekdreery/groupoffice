@@ -79,6 +79,7 @@ GO.lang.strZip = 'Postcode';
 GO.lang.strCity = 'Woonplaats';
 GO.lang.strState = 'Provincie';
 GO.lang.strCountry = 'Land';
+GO.lang.strAddressFormat = 'Adres formaat';
 GO.lang.strHomepage = 'Homepage';
 GO.lang.strCompany = 'Bedrijf';
 GO.lang.strDepartment = 'Afdeling';

@@ -24,7 +24,7 @@
  * @since Group-Office 1.0
  */
 
-class GO_LANGUAGE {
+class GO_LANGUAGE extends db {
 	/**
 	 * The current language setting
 	 *
@@ -80,6 +80,8 @@ class GO_LANGUAGE {
 				return $this->language;
 			}
 		}
+
+		parent::__construct();
 	}
 
 	/**
@@ -215,5 +217,19 @@ class GO_LANGUAGE {
 			if($lang_file)
 				require($lang_file);
 		}	
+	}
+
+	function get_address_formats()
+	{
+		$sql = "SELECT * FROM go_iso_address_format";
+		$this->query($sql);
+		return $this->num_rows();
+	}
+
+	function get_address_format_by_iso($iso)
+	{
+		$sql = "SELECT * FROM go_iso_address_format WHERE iso=\"$iso\"";
+		$this->query($sql);
+		return $this->num_rows();
 	}
 }

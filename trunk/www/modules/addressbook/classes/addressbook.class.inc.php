@@ -396,9 +396,17 @@ class addressbook extends db {
 
     function get_company($company_id) {
         $sql = "SELECT ab_companies.*, ab_addressbooks.acl_read, ".
-        "ab_addressbooks.acl_write FROM ab_companies ".
-        "INNER JOIN ab_addressbooks ON ".
-        "(ab_addressbooks.id=ab_companies.addressbook_id) ".
+        "ab_addressbooks.acl_write, ".
+		"af.format AS address_format, ".
+		"iaf.iso AS iso_address_format, ".
+		"post_af.format AS post_address_format, ".
+		"post_iaf.iso AS post_iso_address_format ".
+		"FROM ab_companies ".
+        "INNER JOIN ab_addressbooks ON (ab_addressbooks.id=ab_companies.addressbook_id) ".
+		"LEFT JOIN go_iso_address_format AS iaf ON (ab_companies.iso_address_format=iaf.iso) ".
+		"LEFT JOIN go_address_format AS af ON (af.id=iaf.address_format_id) ".
+		"LEFT JOIN go_iso_address_format AS post_iaf ON (ab_companies.post_iso_address_format=post_iaf.iso) ".
+		"LEFT JOIN go_address_format AS post_af ON (post_af.id=post_iaf.address_format_id) ".
         "WHERE ab_companies.id='".$this->escape($company_id)."'";
         $this->query($sql);
         if ($this->next_record(DB_ASSOC)) {
@@ -600,6 +608,8 @@ class addressbook extends db {
 
     function get_contact($contact_id) {
         $this->query("SELECT ab_addressbooks.acl_read, ab_addressbooks.acl_write, ab_contacts.*, ".
+		"ab_addressbooks.default_iso_address_format AS default_iso_address_format, ".
+		"ab_addressbooks.default_salutation AS default_salutation, ".
         "ab_companies.address AS work_address, ab_companies.address_no AS ".
         "work_address_no, ab_companies.zip AS work_zip, ".
         "ab_companies.city AS work_city, ab_companies.state AS work_state, ".
@@ -609,11 +619,14 @@ class addressbook extends db {
         "ab_companies.name AS company_name, ".
         "ab_companies.post_address AS work_post_address, ab_companies.post_address_no AS work_post_address_no, ".
         "ab_companies.post_zip AS work_post_zip, ab_companies.post_city AS work_post_city, ab_companies.post_state AS work_post_state, ".
-        "ab_companies.post_country AS work_post_country ".
+        "ab_companies.post_country AS work_post_country, ".
+		"go_address_format.format AS address_format, ".
+		"go_iso_address_format.iso AS iso_address_format ".
         "FROM ab_contacts LEFT JOIN ab_companies ON (ab_contacts.company_id=ab_companies.id) ".
         "INNER JOIN ab_addressbooks ON (ab_contacts.addressbook_id=ab_addressbooks.id) ".
+		"LEFT JOIN go_iso_address_format ON (ab_contacts.iso_address_format=go_iso_address_format.iso) ".
+		"LEFT JOIN go_address_format ON (go_address_format.id=go_iso_address_format.address_format_id) ".
         "WHERE ab_contacts.id='".$this->escape($contact_id)."'");
-
 
         if ($this->next_record(DB_ASSOC)) {
             return $this->record;
@@ -955,15 +968,17 @@ class addressbook extends db {
         $this->query($sql);
     }
 
-    function add_addressbook($user_id, $name) {
+    function add_addressbook($user_id, $name, $default_language = 'NL', $default_salutation = '') {
         global $GO_SECURITY, $GO_MODULES;
         
         $result['acl_read'] = $GO_SECURITY->get_new_acl('addressbook', $user_id);
         $result['acl_write'] = $GO_SECURITY->get_new_acl('addressbook', $user_id);
         $result['user_id']=$user_id;
-        $result['name']=$name;
+        $result['default_iso_address_format']=$default_language;
+		$result['default_salutation']=$default_salutation;
+		$result['name']=$name;
 
-				$this->_add_addressbook($result);       
+		$this->_add_addressbook($result);       
         $result['addressbook_id']=$result['id'];
         return $result;
     }
@@ -1304,4 +1319,10 @@ class addressbook extends db {
 
         return $this->query($sql);
     }
+
+	function update_all_addressbooks($lang, $sal)
+	{
+		$sql = "UPDATE ab_addressbooks SET default_iso_address_format = \"$lang\", default_salutation = \"$sal\"";
+		$this->query($sql);
+	}
 }

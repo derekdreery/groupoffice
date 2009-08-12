@@ -28,7 +28,7 @@ try{
 			{
 				if(!$GO_MODULES->update_module($module->id,$module->sort_order, $module->admin_menu))
 				{
-					throw new Exception($lang['comon']['saveError']);
+					throw new Exception($lang['common']['saveError']);
 				}
 				$response['success']=true;
 			}
@@ -41,7 +41,7 @@ try{
 			foreach($modules as $module)
 			{
 				if (!$GO_MODULES->add_module($module)) {
-					throw new Exception($lang['comon']['saveError']);
+					throw new Exception($lang['common']['saveError']);
 				}
 				$response['success']=true;
 			}

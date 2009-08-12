@@ -646,6 +646,24 @@ try{
 					$response[] = $node;
 			}
 			break;
+		case 'select_address_format':
+
+			require($GO_LANGUAGE->get_base_language_file('countries'));
+			require_once ($GO_MODULES->modules['addressbook']['class_path']."addressbook.class.inc.php");
+			$ab = new addressbook();
+		
+			$response['total'] = $GO_LANGUAGE->get_address_formats();
+			while($GO_LANGUAGE->next_record())
+			{
+				if(!empty($countries[$GO_LANGUAGE->f('iso')]))
+				{
+					$response['results'][] = array( 'iso'=>$GO_LANGUAGE->f('iso'),
+													'address_format_id'=>$GO_LANGUAGE->f('address_format_id'),
+													'country_name'=>$countries[$GO_LANGUAGE->f('iso')]);
+				}
+			}
+			sort($response['results']);
+			break;
 	}
 
 }catch(Exception $e)

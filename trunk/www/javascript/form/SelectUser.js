@@ -11,12 +11,12 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
  
- /**
+/**
   * param user_name: the text, the initial text to show
   * param user_id: the initial user_id 
   */
  
- GO.form.SelectUser = function(config){
+GO.form.SelectUser = function(config){
 
 	config = config || {};
 
@@ -27,7 +27,9 @@
 	
 	this.store = new GO.data.JsonStore({
 		url: GO.settings.modules.users.url+'non_admin_json.php',
-		baseParams: {'task':'users'},
+		baseParams: {
+			'task':'users'
+		},
 		root: 'results',
 		totalProperty: 'total',
 		id: 'id',
@@ -55,15 +57,22 @@
 Ext.extend(GO.form.SelectUser, GO.form.ComboBoxReset,{
 	setRemoteValue : function(user_id, name)
 	{
-		var UserRecord = Ext.data.Record.create([
-	    {name: 'id'},
-	    {name: 'name'}
-    ]);
-	  var loggedInUserRecord = new UserRecord({
-	  		id: user_id,
-	  		name: name
-	  });
-		this.store.add(loggedInUserRecord);
+		var r = this.findRecord('id', user_id);
+		if(!r)
+		{
+			var UserRecord = Ext.data.Record.create([
+			{
+				name: 'id'
+			},{
+				name: 'name'
+			}
+			]);
+			var loggedInUserRecord = new UserRecord({
+				id: user_id,
+				name: name
+			});
+			this.store.add(loggedInUserRecord);
+		}
 		
 		this.setValue(user_id);
 	}	

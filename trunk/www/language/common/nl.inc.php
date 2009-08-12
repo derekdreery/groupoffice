@@ -53,6 +53,7 @@ $lang['common']['username']='Gebruikersnaam';
 $lang['common']['password']='Wachtwoord';
 $lang['common']['authcode']='Authorisatie code';
 $lang['common']['country']='Land';
+$lang['common']['address_format']='Adres formaat';
 $lang['common']['state']='Provincie';
 $lang['common']['city']='Woonplaats';
 $lang['common']['zip']='Postcode';
@@ -143,6 +144,8 @@ $lang['common']['date']='Datum';
 $lang['common']['default_salutation']['M']='Geachte heer';
 $lang['common']['default_salutation']['F']='Geachte mevrouw';
 $lang['common']['default_salutation']['unknown']='Geachte heer/mevrouw';
+$lang['common']['dear']='Geachte';
+
 $lang['common']['mins']= 'Minuten';
 $lang['common']['hour']= 'uur';
 $lang['common']['hours']= 'uren';

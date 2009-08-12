@@ -56,6 +56,7 @@ try
 					array('field'=>'ab_contacts.birthday', 'label'=>$lang['common']['birthday'], 'type'=>'date'),
 					array('field'=>'ab_contacts.email', 'label'=>$lang['common']['email'], 'type'=>'text'),
 					array('field'=>'ab_contacts.country', 'label'=>$lang['common']['country'], 'type'=>'country'),
+					array('field'=>'ab_contacts.iso_address_format', 'label'=>$lang['common']['address_format'], 'type'=>'address_format'),
 					array('field'=>'ab_contacts.state', 'label'=>$lang['common']['state'], 'type'=>'text'),
 					array('field'=>'ab_contacts.city', 'label'=>$lang['common']['city'], 'type'=>'text'),
 					array('field'=>'ab_contacts.zip', 'label'=>$lang['common']['zip'], 'type'=>'text'),
@@ -81,6 +82,7 @@ try
 					array('field'=>'ab_companies.title', 'label'=>$lang['common']['title'], 'type'=>'text'),
 					array('field'=>'ab_companies.email', 'label'=>$lang['common']['email'], 'type'=>'text'),
 					array('field'=>'ab_companies.country', 'label'=>$lang['common']['country'], 'type'=>'country'),
+					array('field'=>'ab_companies.iso_address_format', 'label'=>$lang['common']['address_format'], 'type'=>'address_format'),
 					array('field'=>'ab_companies.state', 'label'=>$lang['common']['state'], 'type'=>'text'),
 					array('field'=>'ab_companies.city', 'label'=>$lang['common']['city'], 'type'=>'text'),
 					array('field'=>'ab_companies.zip', 'label'=>$lang['common']['zip'], 'type'=>'text'),
@@ -432,12 +434,11 @@ try
 			{
 				$response['data']['full_name'] = String::format_name($response['data']['last_name'], $response['data']['first_name'], $response['data']['middle_name']);
 
+				require($GO_LANGUAGE->get_base_language_file('countries'));
 				if($task == 'load_contact_with_items')
 				{
 					$response['data']['comment']=String::text_to_html($response['data']['comment']);
-					require($GO_LANGUAGE->get_base_language_file('countries'));
 					$response['data']['country']=isset($countries[$response['data']['country']]) ? $countries[$response['data']['country']] : $response['data']['country'];
-					
 				}
 
 				if($response['data']['birthday'] == '0000-00-00')
@@ -446,7 +447,9 @@ try
 				} else {
 					$response['data']['birthday'] = Date::format($response['data']['birthday'], false);
 				}
-				
+
+				if($response['data']['salutation'] == '')
+					$response['data']['salutation'] = $response['data']['default_salutation'];
 				
 				
 				if($response['data']['company_id'] > 0 && $company = $ab->get_company($response['data']['company_id']))
@@ -455,7 +458,28 @@ try
 				} else {
 					$response['data']['company_name'] = '';
 				}
-					
+
+				$values = array('address_no', 'address', 'zip', 'city', 'state', 'country');
+
+				$response['data']['formatted_address'] = $response['data']['address_format'];
+
+				foreach($values as $val)
+					$response['data']['formatted_address'] = str_replace('{'.$val.'}', $response['data'][$val], $response['data']['formatted_address']);
+
+				$response['data']['formatted_address'] = preg_replace("/(\r\n)+|(\n|\r)+/", "<br />", $response['data']['formatted_address']);
+				$response['data']['google_maps_link']='http://maps.google.com/maps?q=';
+
+				if($response['data']['address'] != '' && $response['data']['city'] != '' )
+				{
+					if($response['data']['address_no'] != '')
+						$response['data']['google_maps_link'] .= $response['data']['address'].'+'.$response['data']['address_no'].'+'.$response['data']['city'];
+					else
+						$response['data']['google_maps_link'] .= $response['data']['address'].'+'.$response['data']['city'];
+				}
+				else
+				{
+					$response['data']['google_maps_link'] = '';
+				}
 				$response['success']=true;	
 			}
 				
@@ -523,7 +547,10 @@ try
 			}else
 			{
 				$response['data']['files']=array();				
-			}			
+			}
+			
+			if(!isset($response['data']['iso_address_format']) || $response['data']['iso_address_format'] == '')
+				$response['data']['iso_address_format'] = $response['data']['default_iso_address_format'];
 				
 			echo json_encode($response);
 			break;
@@ -557,6 +584,50 @@ try
 					$response['data']['post_country']=isset($countries[$response['data']['post_country']]) ? $countries[$response['data']['post_country']] : $response['data']['post_country'];				
 				}
 
+				$values = array('address_no', 'address', 'zip', 'city', 'state', 'country');
+
+				$response['data']['formatted_address'] = $response['data']['address_format'];
+
+				foreach($values as $val)
+					$response['data']['formatted_address'] = str_replace('{'.$val.'}', $response['data'][$val], $response['data']['formatted_address']);
+
+				$response['data']['formatted_address'] = preg_replace("/(\r\n)+|(\n|\r)+/", "<br />", $response['data']['formatted_address']);
+				$response['data']['google_maps_link']='http://maps.google.com/maps?q=';
+
+				if($response['data']['address'] != '' && $response['data']['city'] != '' )
+				{
+					if($response['data']['address_no'] != '')
+						$response['data']['google_maps_link'] .= $response['data']['address'].'+'.$response['data']['address_no'].'+'.$response['data']['city'];
+					else
+						$response['data']['google_maps_link'] .= $response['data']['address'].'+'.$response['data']['city'];
+				}
+				else
+				{
+					$response['data']['google_maps_link'] = '';
+				}
+
+
+				$values = array('post_address_no', 'post_address', 'post_zip', 'post_city', 'post_state', 'post_country');
+
+				$response['data']['post_formatted_address'] = $response['data']['post_address_format'];
+
+				foreach($values as $val)
+					$response['data']['post_formatted_address'] = str_replace('{'.substr($val, 5).'}', $response['data'][$val], $response['data']['post_formatted_address']);
+
+				$response['data']['post_formatted_address'] = preg_replace("/(\r\n)+|(\n|\r)+/", "<br />", $response['data']['post_formatted_address']);
+				$response['data']['post_google_maps_link']='http://maps.google.com/maps?q=';
+
+				if($response['data']['post_address'] != '' && $response['data']['post_city'] != '' )
+				{
+					if($response['data']['post_address_no'] != '')
+						$response['data']['post_google_maps_link'] .= $response['data']['post_address'].'+'.$response['data']['post_address_no'].'+'.$response['data']['post_city'];
+					else
+						$response['data']['post_google_maps_link'] .= $response['data']['post_address'].'+'.$response['data']['post_city'];
+				}
+				else
+				{
+					$response['data']['post_google_maps_link'] = '';
+				}
 				
 				$response['data']['links'] = array();
 				$response['success']=true;		
@@ -710,7 +781,9 @@ try
 					'name' => $ab->f('name'),
 					'owner' => $user_name,
 					'acl_read' => $ab->f('acl_read'),
-					'acl_write' => $ab->f('acl_write')
+					'acl_write' => $ab->f('acl_write'),
+					'default_iso_address_format' => $ab->f('default_iso_address_format'),
+					'default_salutation' => $ab->f('default_salutation')
 				);
 					
 				$response['results'][] = $record;

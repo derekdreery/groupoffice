@@ -147,23 +147,12 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 										'<tr>'+
 											'<td>'+
 										//ADDRESS															
-										'<tpl if="this.notEmpty(address) || this.notEmpty(address_no)">'+
-											'{[this.GoogleMapsCityStreet(values)]}'+				
+										'<tpl if="this.notEmpty(google_maps_link)">'+
+											'<a href="{google_maps_link}" target="_blank">'+
 										'</tpl>'+
-										
-										//ZIP							
-										'<tpl if="this.notEmpty(zip) || this.notEmpty(city)">'+
-											'<br />{zip} {city}'+						
-										'</tpl>'+
-										
-										//STATE							
-										'<tpl if="this.notEmpty(state)">'+
-											'<br />{state}'+						
-										'</tpl>'+
-										
-										//COUNTRY							
-										'<tpl if="this.notEmpty(country)">'+
-											'<br />{country}'+						
+										'{formatted_address}'+
+										'<tpl if="this.notEmpty(google_maps_link)">'+
+											'</a>'+
 										'</tpl>'+
 
 									'</table>'+
@@ -191,25 +180,13 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 											'<td>'+							
 										
 										//ADDRESS															
-										'<tpl if="this.notEmpty(post_address) || this.notEmpty(post_address_no)">'+
-											'{post_address} {post_address_no}'+
+										'<tpl if="this.notEmpty(post_google_maps_link)">'+
+											'<a href="{post_google_maps_link}" target="_blank">'+
 										'</tpl>'+
-										
-										//ZIP							
-										'<tpl if="this.notEmpty(post_zip) || this.notEmpty(post_city)">'+
-											'<br />{post_zip} {post_city}'+
+										'{post_formatted_address}'+
+										'<tpl if="this.notEmpty(post_google_maps_link)">'+
+											'</a>'+
 										'</tpl>'+
-										
-										//STATE							
-										'<tpl if="this.notEmpty(post_state)">'+
-											'<br />{post_state}'+
-										'</tpl>'+
-										
-										//COUNTRY							
-										'<tpl if="this.notEmpty(post_country)">'+
-											'<br />{post_country}'+				
-										'</tpl>'+
-
 									'</table>'+
 								'</td>'+														
 							'</tpl>'+							
