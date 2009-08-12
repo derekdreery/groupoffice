@@ -101,6 +101,9 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 			tp.hideTabStripItem(panel);
 			panel.hide();
 
+			var menuItem = this.startMenu.items.item('go-start-menu-'+panel.moduleName);			
+			menuItem.show();
+
 			if(panel == tp.activeTab){
 					var next = tp.stack.next();
 					if(next){
@@ -143,9 +146,13 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 				maxWidth:500
 		});
 
-		var items = GO.moduleManager.getAllPanels();
+		var allPanels = GO.moduleManager.getAllPanels();
+
+		var items=[];
+
+		this.startMenu = new Ext.menu.Menu({id: 'startMenu'});
     
-    if(items.length==0)
+    if(allPanels.length==0)
     {
     	items = new Ext.Panel({
     		id: 'go-module-panel-'+GO.settings.start_module,
@@ -156,6 +163,39 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
     		html: '<h1>No modules available</h1>You have a valid Group-Office account but you don\'t have access to any of the modules. Please contact the administrator if you feel this is an error.'
     	});
     }
+
+		var adminMenuItems=[];
+		var menuItemConfig;
+
+		for(var i=0;i<allPanels.length;i++){
+			if(i<4){
+				items.push(allPanels[i]);
+			}
+
+			menuItemConfig = {
+					id:'go-start-menu-'+allPanels[i].moduleName,
+					moduleName:allPanels[i].moduleName,
+					text:allPanels[i].title,
+					iconCls: 'go-menu-icon-'+allPanels[i].moduleName,
+					handler: this.openModule,
+					scope: this
+				};
+
+			if(!allPanels[i].admin){
+				this.startMenu.add(menuItemConfig);
+			}else
+			{
+				adminMenuItems.push(menuItemConfig);
+			}
+		}
+		if(adminMenuItems.length){
+			this.startMenu.add('<div class="menu-title">'+GO.lang.adminMenu+'</div>');
+			for(var i=0;i<adminMenuItems.length;i++){
+				this.startMenu.add(adminMenuItems[i]);
+			}
+		}
+
+
     
     this.createTabPanel(items);
 
@@ -176,56 +216,18 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
         items:[topPanel,this.tabPanel]
       });    
     
-    var adminMenuLink = Ext.get("admin-menu-link");
-    var adminModulePanels = GO.moduleManager.getAllAdminPanelConfigs();
-		
-		if(adminMenuLink && adminModulePanels.length>0)
-		{
-			adminMenuLink.setDisplayed(true);
+    var startMenuLink = Ext.get("start-menu-link");
 			
-			var adminMenu = new Ext.menu.Menu({
-    	id: 'adminMenu'});
+		startMenuLink.on("click", function(){
 
-			for(var i=0;i<items.length;i++)
-      {
-					adminMenu.add({
-						moduleName:items[i].moduleName,
-						text:items[i].title,
-						tooltip:{text:'Right click to close'},
-						iconCls: 'go-menu-icon-'+items[i].moduleName,
-						handler: this.openModule,
-						scope: this
-					});
-      }
+			var x = startMenuLink.getX();
+			var y = topPanel.el.getY()+topPanel.el.getHeight();
 
-			adminMenu.add('<div class="menu-title">Admin menu</div>');
-      
-      for(var i=0;i<adminModulePanels.length;i++)
-      {
-					adminMenu.add({
-						moduleName:adminModulePanels[i].moduleName,
-						text:adminModulePanels[i].title,
+			this.startMenu.showAt([x,y]);
+		},
+		this);
 
-						iconCls: 'go-menu-icon-'+adminModulePanels[i].moduleName,
-						handler: this.openModule,
-						scope: this
-					});
-      }			
-			
-			adminMenuLink.on("click", function(){
 
-				var x = adminMenuLink.getX();
-				var y = topPanel.el.getY()+topPanel.el.getHeight();
-
-				adminMenu.showAt([x,y]);													
-			},
-			this);
-			
-		}else
-		{
-			adminMenuLink.setDisplayed(false);
-		}
-		
 		var configurationLink = Ext.get("configuration-link");
 		
 		if(configurationLink)
@@ -361,7 +363,11 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
   		renderTo:"search_query"  		
    	});
 
-		
+
+		for(var i=0;i<items.length;i++){
+			var menuItem = this.startMenu.items.item('go-start-menu-'+items[i].moduleName);
+			menuItem.hide();
+		}
 
 
 		this.fireEvent('render');
@@ -376,7 +382,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		var panel;
 		if(!this.tabPanel.items.map[panelId])
 		{
-			panel = GO.moduleManager.getAdminPanel(item.moduleName);
+			panel = GO.moduleManager.getPanel(item.moduleName);
 			panel.id = panelId;
 			this.tabPanel.add(panel);
 
@@ -390,20 +396,23 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 			panel = this.tabPanel.items.map[panelId];
 			this.tabPanel.unhideTabStripItem(panel);
 		}
+		
+		var menuItem = this.startMenu.items.item('go-start-menu-'+item.moduleName);
+		menuItem.hide();
 		panel.show();
 	},
 	
-	setAdminMenu : function()
+	setstartMenu : function()
 	{
-		var adminMenuLink = Ext.get("adminMenuLink");
-		if(adminMenuLink)
+		var startMenuLink = Ext.get("startMenuLink");
+		if(startMenuLink)
 		{			
-			adminMenuLink.on("click", function(){
+			startMenuLink.on("click", function(){
 
-				var x = adminMenuLink.getX();
+				var x = startMenuLink.getX();
 				var y = top.el.getY()+top.el.getHeight();
 
-				adminMenu.showAt([x,y]);													
+				startMenu.showAt([x,y]);
 			},
 			this);
 		}

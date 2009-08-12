@@ -37,6 +37,7 @@ $lang['common']['loggedInAs'] = "Logged in as ";
 $lang['common']['search']='Search';
 $lang['common']['settings']='Settings';
 $lang['common']['adminMenu']='Admin menu';
+$lang['common']['startMenu']='Start menu';
 $lang['common']['help']='Help';
 $lang['common']['logout']='Logout';
 $lang['common']['badLogin'] = 'Wrong username or password';
