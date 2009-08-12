@@ -279,7 +279,7 @@ GO.util.unlocalizeNumber = function (number, decimal_separator, thousands_separa
 		
 	var re = new RegExp('['+thousands_separator+']', 'g');	
 	number = number.replace(re, "");
-	return parseFloat(number.replace(decimal_separator, "."));
+	return number.replace(decimal_separator, ".");	
 }
 
 String.prototype.regexpEscape = function() {

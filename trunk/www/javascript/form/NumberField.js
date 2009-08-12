@@ -19,20 +19,24 @@ GO.form.NumberField = Ext.extend(Ext.form.TextField, {
 		this.style="text-align:right";
 		
 		this.on('focus',function(input){
-			this.setValue(this.getValue());
+			this.fixPrecision();
 			input.focus(true);
 		});
-	},
-	getValue : function(){
-		return GO.util.unlocalizeNumber(Ext.form.NumberField.superclass.getValue.call(this));
-	},
-
-	setValue : function(v){
-		Ext.form.NumberField.superclass.setValue.call(this, GO.util.numberFormat(v,this.decimals));
-	},
-	beforeBlur : function(){
-		this.setValue(this.getValue());
 	}
+	,
+	beforeBlur : function(){
+		this.fixPrecision();
+	},
+	fixPrecision : function(){
+		var number = GO.util.unlocalizeNumber(this.getValue());
+		this.setValue(GO.util.numberFormat(number, this.decimals));
+	}
+/*,
+	
+	setValue : function(v)
+	{
+		GO.form.NumberField.superclass.setValue.call(GO.util.numberFormat(v, this.decimals));
+	}*/	
 });
 
 Ext.reg('numberfield', GO.form.NumberField);
