@@ -1486,7 +1486,7 @@ switch($task)
 		<p>Restricted functions</p>
 		<input type="checkbox" name="allow_themes" value="1" <?php if(isset($_POST['allow_themes']) ? true : $GO_CONFIG->allow_themes) echo 'checked'; ?> />Allow users to change the theme
 		<br />
-		<input type="checkbox" name="allow_password_change" value="1" <?php if(isset($_POST['allow_password_change']) ? true : $GO_CONFIG->allow_password_change) echo 'checked'; ?> />Allow users to change thier password
+		<input type="checkbox" name="allow_password_change" value="1" <?php if(isset($_POST['allow_password_change']) ? true : $GO_CONFIG->allow_password_change) echo 'checked'; ?> />Allow users to change their password
 
 		<?php
 		echo '<p>New users will automatically have access to the following modules</p>';
