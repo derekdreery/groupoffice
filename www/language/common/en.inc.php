@@ -81,6 +81,7 @@ $lang['common']['username'] = 'Username';
 $lang['common']['password'] = 'Password';
 $lang['common']['authcode'] = 'Authorization code';
 $lang['common']['country'] = 'Country';
+$lang['common']['address_format']='Address format';
 $lang['common']['state'] = 'State';
 $lang['common']['city'] = 'City';
 $lang['common']['zip'] = 'ZIP/Postal';
@@ -147,6 +148,7 @@ $lang['common']['date']='Date';
 $lang['common']['default_salutation']['M']='Dear Mr';
 $lang['common']['default_salutation']['F']='Dear Ms';
 $lang['common']['default_salutation']['unknown']='Dear Mr / Ms';
+$lang['common']['dear']='Dear';
 
 $lang['common']['mins'] = 'Mins';
 $lang['common']['hour'] = 'hour';

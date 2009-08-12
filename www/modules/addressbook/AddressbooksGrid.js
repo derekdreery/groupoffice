@@ -33,7 +33,7 @@ GO.addressbook.AddresbooksGrid = function(config){
 		forceFit: true,
 		emptyText: GO.addressbook.lang.noAddressbooks		
 	}),
-	config.sm=new Ext.grid.RowSelectionModel();
+	config.sm=new Ext.grid.RowSelectionModel({singleSelect:true});
 	config.loadMask=true;
 
 	

@@ -90,7 +90,7 @@ GO.addressbook.ContactDialog = function(config)
 	this.modal=false;
 	this.shadow= false;
 	this.border= false;
-	this.height= 545;
+	this.height= 570;
 	//autoHeight= true;
 	this.width= 820;
 	this.plain= true;
@@ -143,8 +143,6 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 		{
 			this.render(Ext.getBody());
 		}
-
-		
 		
 		if(GO.mailings && !GO.mailings.writableMailingsStore.loaded)
 		{
@@ -152,6 +150,23 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 				callback:function(){
 					var values = GO.util.empty(contact_id) ? this.formPanel.form.getValues() : {};
 					this.show(contact_id);
+					delete values.addressbook_id;
+					delete values.iso_address_format;
+					delete values.salutation;
+					this.formPanel.form.setValues(values);
+				},
+				scope:this
+			});
+		}else if(!GO.addressbook.writableAddressbooksStore.loaded)
+		{
+			GO.addressbook.writableAddressbooksStore.load(
+			{
+				callback:function(){
+					var values = GO.util.empty(contact_id) ? this.formPanel.form.getValues() : {};
+					this.show(contact_id);
+					delete values.addressbook_id;
+					delete values.iso_address_format;
+					delete values.salutation;
 					this.formPanel.form.setValues(values);
 				},
 				scope:this
@@ -161,6 +176,7 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 			var tempAddressbookID = this.personalPanel.formAddressBooks.getValue();
 			this.formPanel.form.reset();
 			this.personalPanel.formAddressBooks.setValue(tempAddressbookID);
+			//this.personalPanel.formAddressFormat.selectDefault();
 
 			if(contact_id)
 			{
@@ -169,35 +185,27 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 				this.contact_id = 0;
 			}
 			
-			if(!GO.addressbook.writableAddressbooksStore.loaded)
-			{
-				GO.addressbook.writableAddressbooksStore.load(
-				{
-					callback: function(){		
-						GO.addressbook.writableAddressbooksStore.loaded=true;
-						if(this.personalPanel.formAddressBooks.getValue()<1)
-						{
-							this.personalPanel.formAddressBooks.selectFirst();
-							this.personalPanel.setAddressbookID(this.personalPanel.formAddressBooks.getValue());
-						}						
-					},
-					scope:this
-				});
+		
+
+			if(!GO.util.empty(GO.addressbook.defaultAddressbook)){
+				this.personalPanel.formAddressBooks.setValue(GO.addressbook.defaultAddressbook);
 			}else
 			{
-				if(this.personalPanel.formAddressBooks.getValue()<1)
-				{
-					this.personalPanel.formAddressBooks.selectFirst();
-				}	
-			}	
+				this.personalPanel.formAddressBooks.selectFirst();
+			}
 						
 			if(this.contact_id > 0)
 			{
 				this.loadContact(contact_id);
 			} else {	
 				GO.addressbook.ContactDialog.superclass.show.call(this);
-			}	
+			}
+			var abRecord = this.personalPanel.formAddressBooks.store.getById(this.personalPanel.formAddressBooks.getValue());
+			this.personalPanel.formAddressFormat.setValue(abRecord.get('default_iso_address_format'));
+			//var sal = this.personalPanel.setSalutation();
+			//this.personalPanel.formSalutation.setValue(sal);
 			this.tabPanel.setActiveTab(0);
+			
 		}	
 	},
 

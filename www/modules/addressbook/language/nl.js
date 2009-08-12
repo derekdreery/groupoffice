@@ -94,3 +94,12 @@ GO.addressbook.lang.strSelectCompany= 'Selecteer bedrijf';
 GO.addressbook.lang.matchFields='Koppel de velden';
 
 GO.addressbook.lang.advancedSearch='Geavanceerd zoeken';
+GO.addressbook.lang.defaultAddressFormat='Standaard adres formaat';
+GO.addressbook.lang.defaultSalutation='Standaard aanhef';
+GO.addressbook.lang.explanationVariables='Uitleg standaard aanhef variabelen';
+GO.addressbook.lang.explanationSex='Mannelijke en vrouwelijke vormen van de aanhef';
+GO.addressbook.lang.explanationTitle='Titel';
+GO.addressbook.lang.explanationInitials='Initialen';
+GO.addressbook.lang.explanationFirstName='Voornaam';
+GO.addressbook.lang.explanationMiddleName='Tussenvoegsel';
+GO.addressbook.lang.explanationLastName='Achternaam';

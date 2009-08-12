@@ -76,10 +76,10 @@ GO.addressbook.ContactProfilePanel = function(config)
     selectOnFocus:true,
     forceSelection: true
 	});
-				
+
 	this.formSalutation = new Ext.form.TextField(
 	{
-		fieldLabel: GO.addressbook.lang['cmdFormLabelSalutation'], 
+		fieldLabel: GO.addressbook.lang['cmdFormLabelSalutation'],
 		name: 'salutation'
 	});
 	
@@ -156,16 +156,36 @@ GO.addressbook.ContactProfilePanel = function(config)
 	{
 		fieldLabel: GO.lang['strState'], 
 		name: 'state'
-	})
+	});
 	
 	this.formCountry = new GO.form.SelectCountry({
 		fieldLabel: GO.lang['strCountry'],
 		name: 'country_text',
-		hiddenName: 'country'//,
-		//value:GO.settings.country
-
+		hiddenName: 'country',
+		listeners:{
+			select:function(combo, record) {
+				var r = this.formAddressFormat.store.getById(record.get('iso'));
+				if(!r){
+					var abRecord = this.formAddressBooks.store.getById(this.formAddressBooks.getValue());
+					r = abRecord.get('default_iso_address_format');
+				}
+				else
+				{
+					r = r.id;
+				}
+				this.formAddressFormat.setValue(r);
+			},
+			scope:this
+		}
 	});
-	
+
+	this.formAddressFormat = new GO.form.SelectAddressFormat({
+		fieldLabel: GO.lang['strAddressFormat'],
+		name: 'iso_address_format',
+		displayField: 'country_name',
+		hiddenName: 'iso_address_format'
+	});
+
 
 	this.formCompany = new GO.addressbook.SelectCompany({
 		fieldLabel: GO.lang['strCompany'], 
@@ -173,7 +193,7 @@ GO.addressbook.ContactProfilePanel = function(config)
 		hiddenName: 'company_id',
 		emptyText: GO.addressbook.lang['cmdFormCompanyEmptyText'],
 		addressbook_id: this.addressbook_id			
-	});			
+	});
 	
 
 	
@@ -212,7 +232,7 @@ GO.addressbook.ContactProfilePanel = function(config)
     mode:'local',
     triggerAction:'all',
     editable: false,
-		selectOnFocus:true,
+	selectOnFocus:true,
     forceSelection: true,
     allowBlank: false,
     anchor:'100%'
@@ -222,7 +242,10 @@ GO.addressbook.ContactProfilePanel = function(config)
 	{
 		if(this.formCompany.getValue()==0 || confirm(GO.addressbook.lang.moveAll))
 		{
+			var r = this.formAddressFormat.store.getById(record.get('default_iso_address_format'));
+			this.formAddressFormat.setValue(r.id);
 			this.setAddressbookID(record.data.id);
+			this.setSalutation();
 			return true;
 		}else
 		{
@@ -230,8 +253,11 @@ GO.addressbook.ContactProfilePanel = function(config)
 		}	
 	}, this);
 
+	this.formFirstName.on('blur', this.setSalutation, this);
 	this.formMiddleName.on('blur', this.setSalutation, this);
 	this.formLastName.on('blur', this.setSalutation, this);
+	this.formInitials.on('blur', this.setSalutation, this);
+	this.formTitle.on('blur', this.setSalutation, this);
 	this.sexCombo.on('change', this.setSalutation, this);
 	 
 	this.addressbookFieldset = 
@@ -264,7 +290,7 @@ GO.addressbook.ContactProfilePanel = function(config)
 		autoHeight: true,
 		collapsed: false,
 		defaults: { border: false, anchor:'100%'},
-  	items: [this.formAddress,this.formAddressNo,this.formPostal,this.formCity,this.formState,this.formCountry]
+  	items: [this.formAddress,this.formAddressNo,this.formPostal,this.formCity,this.formState,this.formCountry,this.formAddressFormat]
 	}
 	
 	this.contactFieldset = 
@@ -318,39 +344,33 @@ GO.addressbook.ContactProfilePanel = function(config)
 
 Ext.extend(GO.addressbook.ContactProfilePanel, Ext.Panel,{
 	setSalutation : function()
-	{			
-		var middleName = this.formMiddleName.getValue();	
-		var lastName = this.formLastName.getValue();	
-		
-		var empty = ' ';			
-		var salutation = GO.addressbook.lang['cmdSalutation'];
-		
-		if (this.sexCombo.getValue() == 'M')
-		{
-			salutation += empty + GO.addressbook.lang['cmdSir'];
-		} else
-		{			
-			salutation += empty + GO.addressbook.lang['cmdMadam'];			
-		}
+	{
+		var firstName = this.formFirstName.getValue();
+		var middleName = this.formMiddleName.getValue();
+		var lastName = this.formLastName.getValue();
+		var initials = this.formInitials.getValue();
+		var title = this.formTitle.getValue();
+		var record = this.formAddressBooks.store.getById(this.formAddressBooks.getValue());
+		var sal = record.get('default_salutation');
 
+		var sex = sal.slice(sal.indexOf('[')+1, sal.indexOf(']'));
+		var sex_split = sex.split('/');
+		var gender = (this.sexCombo.getValue() == 'M')? sex_split[0] : sex_split[1];
 
-		if (middleName != '')
-		{
-			salutation += empty + middleName;
-		}
+		sal = sal.replace('['+sex+']', gender);
+		sal = sal.replace('{first_name}', firstName);
+		sal = sal.replace('{middle_name}', middleName);
+		sal = sal.replace('{last_name}', lastName);
+		sal = sal.replace('{initials}', initials);
+		sal = sal.replace('{title}', title);
+		sal = sal.replace('  ', ' ');
 		
-		if (lastName != '')
-		{
-			salutation += empty + lastName;
-		}		
-		
-		this.formSalutation.setRawValue(salutation);
+		this.formSalutation.setRawValue(sal);
 	},
 	setAddressbookID : function(addressbook_id)
 	{
 		this.formAddressBooks.setValue(addressbook_id);		
 		this.formCompany.store.baseParams['addressbook_id'] = addressbook_id;
 		this.formCompany.clearLastSearch();
-		
 	}
 });

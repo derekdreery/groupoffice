@@ -60,7 +60,28 @@ ADD `text_separator` CHAR( 3 ) NOT NULL DEFAULT '\"'";
 
 $updates[]="ALTER TABLE `go_users` ADD `files_folder_id` INT NOT NULL;";
 
-
 $updates[]="delete FROM `go_state` WHERE `index`!='go';";
 $updates[]="ALTER TABLE `go_state` DROP `index`";
-?>
+
+$updates[]="DROP TABLE IF EXISTS `go_iso_address_format`;
+CREATE TABLE IF NOT EXISTS `go_iso_address_format` (
+  `iso` varchar(2) NOT NULL,
+  `address_format_id` int(11) NOT NULL,
+  PRIMARY KEY  (`address_format_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+$updates[]="INSERT INTO `go_iso_address_format` (`iso`, `address_format_id`) VALUES
+('NL', 1),
+('US', 2),
+('ES', 3),
+('SG', 4);";
+$updates[]="DROP TABLE IF EXISTS `go_address_format`;
+CREATE TABLE IF NOT EXISTS `go_address_format` (
+  `id` int(11) NOT NULL,
+  `format` varchar(255) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+$updates[]="INSERT INTO `go_address_format` (`id`, `format`) VALUES
+(1, '{address} {address_no}\r\n{zip} {city}\r\n{state}\r\n{country}'),
+(2, '{address_no} {address}\r\n{city}, {state} {zip}\r\n{country}'),
+(3, '{address}, {address_no}\r\n{zip} {city}\r\n{state} {country}'),
+(4, '{address_no} {address}\r\n{city} {zip}\r\n{state} {country}');";

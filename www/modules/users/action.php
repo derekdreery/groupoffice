@@ -141,7 +141,7 @@ try
 
 				if(!$user_id)
 				{
-					$failed[]=$user['username'].': '.$lang['comon']['saveError'];
+					$failed[]=$user['username'].': '.$lang['common']['saveError'];
 					continue;
 				}else
 				{

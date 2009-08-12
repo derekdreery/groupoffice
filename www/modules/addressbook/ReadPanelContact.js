@@ -30,30 +30,18 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 								//NAME
 								'<tr>'+
 									'<td>' +
-									'<tpl if="this.notEmpty(title)">'+
-									'{title} '+
-									'</tpl>'+
-									'{full_name}'+
-								
-									//ADDRESS															
-									'<tpl if="this.notEmpty(address) || this.notEmpty(address_no)">'+
-										'<br />{[this.GoogleMapsCityStreet(values)]}'+															
-									'</tpl>'+
-									
-									//ZIP							
-									'<tpl if="this.notEmpty(zip) || this.notEmpty(city)">'+
-										'<br />{zip} {city}'+			
-									'</tpl>'+
-									
-									//STATE							
-									'<tpl if="this.notEmpty(state)">'+
-										'<br />{state}'+						
-									'</tpl>'+
-									
-									//COUNTRY							
-									'<tpl if="this.notEmpty(country)">'+
-										'<br />{country}'+						
-									'</tpl>'+
+										'<tpl if="this.notEmpty(title)">'+
+											'{title} '+
+										'</tpl>'+
+										'{full_name}'+
+										'<br />'+
+										'<tpl if="this.notEmpty(google_maps_link)">'+
+											'<a href="{google_maps_link}" target="_blank">'+
+										'</tpl>'+
+										'{formatted_address}'+
+										'<tpl if="this.notEmpty(google_maps_link)">'+
+											'</a>'+
+										'</tpl>'+
 									'</td>'+
 								'</tr>'+					
 							'</table>'+

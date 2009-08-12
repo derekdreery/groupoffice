@@ -102,3 +102,12 @@ GO.addressbook.lang.confirmCreate='Contact doesn\'t exist. Do you wish to create
 GO.addressbook.lang.matchFields='Match the fields';
 
 GO.addressbook.lang.advancedSearch='Advanced search';
+GO.addressbook.lang.defaultAddressFormat='Default address format';
+GO.addressbook.lang.defaultSalutation='Default salutation';
+GO.addressbook.lang.explanationVariables='Explanation default salutation variables';
+GO.addressbook.lang.explanationSex='Male and female form of salutation';
+GO.addressbook.lang.explanationTitle='Title';
+GO.addressbook.lang.explanationInitials='Initials';
+GO.addressbook.lang.explanationFirstName='First name';
+GO.addressbook.lang.explanationMiddleName='Insertion';
+GO.addressbook.lang.explanationLastName='Last name';

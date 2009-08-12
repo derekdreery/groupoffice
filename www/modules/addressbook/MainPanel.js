@@ -114,8 +114,13 @@ GO.addressbook.MainPanel = function(config)
 	});
 	
 	this.addressbooksGrid.on('rowclick', function(grid, rowIndex){
-			var record = grid.getStore().getAt(rowIndex);
-			this.setSearchParams({addressbook_id : record.get("id")});			
+		var record = grid.getStore().getAt(rowIndex);
+		this.setSearchParams({addressbook_id : record.get("id")});
+
+	}, this);
+
+	this.addressbooksGrid.getSelectionModel().on('rowselect', function(sm, rowIndex, r){
+		GO.addressbook.defaultAddressbook = sm.getSelected().get('id');
 	}, this);
 	
 	
@@ -136,7 +141,7 @@ GO.addressbook.MainPanel = function(config)
   	border: true,
     items: [
 	    this.contactsPanel,
-	    this.companyPanel				
+	    this.companyPanel
     ]
 	});
 

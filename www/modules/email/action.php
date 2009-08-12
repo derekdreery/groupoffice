@@ -564,7 +564,7 @@ try{
 							$response['success']=true;
 						}else
 						{
-							$response['feedback']=$lang['comon']['saveError'];
+							$response['feedback']=$lang['common']['saveError'];
 						}
 					}else
 					{
@@ -574,7 +574,7 @@ try{
 							$response['success']=true;
 						}else
 						{
-							$response['feedback']=$lang['comon']['saveError'];
+							$response['feedback']=$lang['common']['saveError'];
 						}
 					}
 					break;
@@ -590,7 +590,7 @@ try{
 
 					if(!$response['feedback']=$email->_update_account($up_account))
 					{
-						$response['errors']=$lang['comon']['saveError'];
+						$response['errors']=$lang['common']['saveError'];
 					}
 
 					break;
@@ -742,7 +742,7 @@ try{
 						{
 							$response['success']=$email->rename_folder($folder['account_id'], $folder['name'], $new_folder);
 						}else {
-							$response['feedback']=$lang['comon']['saveError'];
+							$response['feedback']=$lang['common']['saveError'];
 						}
 						//$imap->close();
 					}else {

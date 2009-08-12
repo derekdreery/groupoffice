@@ -48,3 +48,11 @@ $updates[]="ALTER TABLE `ab_contacts` ADD `files_folder_id` INT NOT NULL;";
 $updates[]="ALTER TABLE `ab_companies` ADD `files_folder_id` INT NOT NULL;";
 
 $updates[]="ALTER TABLE `ab_addressbooks` ADD `shared_acl` BOOL NOT NULL ";
+
+$updates[] = "ALTER TABLE `ab_addressbooks` ADD `default_iso_address_format` VARCHAR( 2 ) NOT NULL ";
+$updates[] = "ALTER TABLE `ab_addressbooks` ADD `default_salutation` VARCHAR( 255 ) NOT NULL ";
+$updates[] = "ALTER TABLE `ab_contacts` ADD `iso_address_format` VARCHAR( 2 ) NOT NULL ";
+$updates[] = "ALTER TABLE `ab_contacts` ADD `default_salutation` VARCHAR( 255 ) NOT NULL ";
+$updates[] = "ALTER TABLE `ab_companies` ADD `iso_address_format` VARCHAR( 2 ) NOT NULL ";
+$updates[] = "ALTER TABLE `ab_companies` ADD `post_iso_address_format` VARCHAR( 2 ) NOT NULL ";
+$updates[] = "script:2_set_default_salutation.inc.php";

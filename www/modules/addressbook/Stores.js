@@ -34,7 +34,7 @@ GO.addressbook.writableAddressbooksStore = new GO.data.JsonStore({
 			root: 'results', 
 			totalProperty: 'total', 
 			id: 'id',
-			fields: ['id','name','owner', 'acl_read', 'acl_write'],
+			fields: ['id','name','owner', 'acl_read', 'acl_write','user_id','default_iso_address_format','default_salutation'],
 			remoteSort: true
 		});
 

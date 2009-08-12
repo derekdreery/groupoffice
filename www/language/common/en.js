@@ -88,6 +88,7 @@ GO.lang.strZip = 'ZIP/Postal';
 GO.lang.strCity = 'City';
 GO.lang.strState = 'State';
 GO.lang.strCountry = 'Country';
+GO.lang.strAddressFormat = 'Address format';
 GO.lang.strHomepage = 'Homepage';
 GO.lang.strCompany = 'Company';
 GO.lang.strDepartment = 'Department';

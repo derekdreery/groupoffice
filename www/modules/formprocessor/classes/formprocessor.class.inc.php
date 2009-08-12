@@ -186,7 +186,7 @@ class formprocessor{
 			}
 			if(!$contact_id)
 			{
-				throw new Exception($lang['comon']['saveError']);
+				throw new Exception($lang['common']['saveError']);
 			}
 
 			if($GO_MODULES->modules['files'])

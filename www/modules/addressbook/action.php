@@ -32,8 +32,8 @@ try
 			$credentials = array (
 				'first_name','middle_name','last_name','title','initials','sex','email',
 				'email2','email3','home_phone','fax','cellular','comment','address','address_no',
-				'zip','city','state','country','company','department','function','work_phone',
-				'work_fax','addressbook_id','salutation'
+				'zip','city','state','country', 'company','department','function','work_phone',
+				'work_fax','addressbook_id','salutation', 'iso_address_format'
 				);
 
 				$contact_credentials['email_allowed']=isset($_POST['email_allowed']) ? '1' : '0';
@@ -88,7 +88,7 @@ try
 
 					if(!$contact_id)
 					{
-						$result['feedback'] = $lang['comon']['saveError'];
+						$result['feedback'] = $lang['common']['saveError'];
 						$result['success'] = false;
 					} else {
 						$result['contact_id'] =  $contact_id;
@@ -102,7 +102,7 @@ try
 										
 					if(!$ab->update_contact($contact_credentials, $addressbook, $old_contact))
 					{
-						$result['feedback'] = $lang['comon']['saveError'];
+						$result['feedback'] = $lang['common']['saveError'];
 						$result['success'] = false;
 					}
 					
@@ -150,8 +150,8 @@ try
 			$company_id = isset($_REQUEST['company_id']) ? ($_REQUEST['company_id']) : 0;
 
 			$credentials = array (
-				'addressbook_id','name','address','address_no','zip','city','state','country',
-				'post_address','post_address_no','post_city','post_state','post_country','post_zip','phone',
+				'addressbook_id','name','address','address_no','zip','city','state','country','iso_address_format',
+				'post_address','post_address_no','post_city','post_state','post_country','post_zip','post_iso_address_format','phone',
 				'fax','email','homepage','bank_no','vat_no','comment'
 				);
 					
@@ -291,7 +291,10 @@ try
 					$addressbook['id']=$addressbook_id;
 					
 					if(isset($_REQUEST['user_id']))
-						$addressbook['user_id']=$user_id;
+						$addressbook['user_id']=$_REQUEST['user_id'];
+
+					$addressbook['default_salutation']=$_REQUEST['default_salutation'];
+					$addressbook['default_iso_address_format']=$_REQUEST['default_iso_address_format'];
 						
 					$addressbook['name']=$name;
 					$ab->update_addressbook($addressbook);					
