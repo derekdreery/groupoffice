@@ -356,7 +356,12 @@ Ext.extend(GO.addressbook.MainPanel, Ext.Panel,{
 		{
 			GO.addressbook.MainPanel.superclass.afterRender.call(this);
 
-			GO.addressbook.readableAddressbooksStore.load();
+			GO.addressbook.readableAddressbooksStore.load({
+				callback:function(){
+					this.addressbooksGrid.getSelectionModel().selectFirstRow();
+				},
+				scope:this
+			});
 			
 			if(GO.mailings)
 			{

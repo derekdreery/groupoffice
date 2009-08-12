@@ -167,11 +167,9 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		var adminMenuItems=[];
 		var menuItemConfig;
 
+		items.push(allPanels[0]);
 		for(var i=0;i<allPanels.length;i++){
-			if(i<4){
-				items.push(allPanels[i]);
-			}
-
+			
 			menuItemConfig = {
 					id:'go-start-menu-'+allPanels[i].moduleName,
 					moduleName:allPanels[i].moduleName,
@@ -182,6 +180,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 				};
 
 			if(!allPanels[i].admin){
+				
 				this.startMenu.add(menuItemConfig);
 			}else
 			{
@@ -399,6 +398,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		
 		var menuItem = this.startMenu.items.item('go-start-menu-'+item.moduleName);
 		menuItem.hide();
+		
 		panel.show();
 	},
 	

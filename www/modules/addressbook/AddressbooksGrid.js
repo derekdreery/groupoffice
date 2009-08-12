@@ -12,11 +12,7 @@ GO.addressbook.AddresbooksGrid = function(config){
 	config.store = GO.addressbook.readableAddressbooksStore;
 	config.ddGroup='AddressBooksDD';
 	config.enableDD=true;
-	
-	GO.addressbook.readableAddressbooksStore.on('load', function(){
-		this.selModel.selectFirstRow();
-	}, this);
-	
+		
 	config.paging=false;
 
 	var companiesColumnModel =  new Ext.grid.ColumnModel([
