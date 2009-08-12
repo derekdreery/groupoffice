@@ -63,8 +63,7 @@ $updates[]="ALTER TABLE `go_users` ADD `files_folder_id` INT NOT NULL;";
 $updates[]="delete FROM `go_state` WHERE `index`!='go';";
 $updates[]="ALTER TABLE `go_state` DROP `index`";
 
-$updates[]="DROP TABLE IF EXISTS `go_iso_address_format`;
-CREATE TABLE IF NOT EXISTS `go_iso_address_format` (
+$updates[]="CREATE TABLE IF NOT EXISTS `go_iso_address_format` (
   `iso` varchar(2) NOT NULL,
   `address_format_id` int(11) NOT NULL,
   PRIMARY KEY  (`address_format_id`)
@@ -74,8 +73,7 @@ $updates[]="INSERT INTO `go_iso_address_format` (`iso`, `address_format_id`) VAL
 ('US', 2),
 ('ES', 3),
 ('SG', 4);";
-$updates[]="DROP TABLE IF EXISTS `go_address_format`;
-CREATE TABLE IF NOT EXISTS `go_address_format` (
+$updates[]="CREATE TABLE IF NOT EXISTS `go_address_format` (
   `id` int(11) NOT NULL,
   `format` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`)
