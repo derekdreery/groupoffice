@@ -13,8 +13,7 @@
  
 
 
-GO.ModuleManager = Ext.extend(function(){
-	
+GO.ModuleManager = Ext.extend(function(){	
 	this.addEvents({
 		'moduleReady' : true
 	});	

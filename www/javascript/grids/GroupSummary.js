@@ -253,7 +253,7 @@ Ext.extend(Ext.grid.GridSummary, Ext.util.Observable, {
 			}else{
 				p.value = '';
 			}
-			if(p.value == undefined || p.value === "") p.value = "*";
+			if(p.value == undefined || p.value === "") p.value = "-";
 			buf[buf.length] = this.cellTpl.apply(p);
 		}
 

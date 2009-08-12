@@ -1320,9 +1320,5 @@ class addressbook extends db {
         return $this->query($sql);
     }
 
-	function update_all_addressbooks($lang, $sal)
-	{
-		$sql = "UPDATE ab_addressbooks SET default_iso_address_format = \"$lang\", default_salutation = \"$sal\"";
-		$this->query($sql);
-	}
+	
 }

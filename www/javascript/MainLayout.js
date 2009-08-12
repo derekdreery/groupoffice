@@ -91,12 +91,13 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
         titlebar: false,
         border:false,
         activeTab:'go-module-panel-'+GO.settings.start_module,
-        tabPosition:'top',
+        tabPosition:'top',				
         items: items,
         layoutOnTabChange:true
     	});
 
-		this.tabPanel.on('beforeremove',function(tp, panel){
+		this.tabPanel.on('contextmenu',function(tp, panel, e){
+
 			tp.hideTabStripItem(panel);
 			panel.hide();
 
@@ -110,9 +111,9 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 							tp.activeTab = null;
 					}
 			}
+		},this);
 
-			return false;
-		}, this);
+		
 	},
 	
 	getModulePanel : function(moduleName){
@@ -135,6 +136,12 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	init : function(){  
           
    	this.fireReady();
+
+		Ext.QuickTips.init();
+		Ext.apply(Ext.QuickTips.getQuickTip(), {
+				dismissDelay:0,
+				maxWidth:500
+		});
 
 		var items = GO.moduleManager.getAllPanels();
     
@@ -177,32 +184,32 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 			adminMenuLink.setDisplayed(true);
 			
 			var adminMenu = new Ext.menu.Menu({
-    	id: 'adminMenu'});    	
+    	id: 'adminMenu'});
+
+			for(var i=0;i<items.length;i++)
+      {
+					adminMenu.add({
+						moduleName:items[i].moduleName,
+						text:items[i].title,
+						tooltip:{text:'Right click to close'},
+						iconCls: 'go-menu-icon-'+items[i].moduleName,
+						handler: this.openModule,
+						scope: this
+					});
+      }
+
+			adminMenu.add('-');
       
       for(var i=0;i<adminModulePanels.length;i++)
       {
 					adminMenu.add({
 						moduleName:adminModulePanels[i].moduleName,
 						text:adminModulePanels[i].title,
-						//tooltip: {text:GO.settings.modules[i].description, title:GO.settings.modules[i].humanName},
+						tooltip:{text:'Right click to close'},
 						iconCls: 'go-menu-icon-'+adminModulePanels[i].moduleName,
-						handler: function(item, e){
-							
-							var panelId = 'go-module-panel-'+item.moduleName;
-							
-							if(!this.tabPanel.items.map[panelId])
-							{								
-								var panel = GO.moduleManager.getAdminPanel(item.moduleName);
-								panel.id = panelId;
-								this.tabPanel.add(panel);
-							}else{
-								var panel = this.tabPanel.items.map[panelId];
-								this.tabPanel.unhideTabStripItem(panel);
-							}	
-							panel.show();
-						},
+						handler: this.openModule,
 						scope: this
-					});				
+					});
       }			
 			
 			adminMenuLink.on("click", function(){
@@ -354,17 +361,31 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
   		renderTo:"search_query"  		
    	});
 
-		Ext.QuickTips.init();
-		Ext.apply(Ext.QuickTips.getQuickTip(), {
-				dismissDelay:0,
-				maxWidth:500
-		});
+		
 
 
 		this.fireEvent('render');
 		
    	
    	this.removeLoadMask();
+	},
+
+	openModule : function(item, e){
+
+		var panelId = 'go-module-panel-'+item.moduleName;
+		var panel;
+		if(!this.tabPanel.items.map[panelId])
+		{
+			panel = GO.moduleManager.getAdminPanel(item.moduleName);
+			panel.id = panelId;
+			this.tabPanel.add(panel);
+
+			
+		}else{
+			panel = this.tabPanel.items.map[panelId];
+			this.tabPanel.unhideTabStripItem(panel);
+		}
+		panel.show();
 	},
 	
 	setAdminMenu : function()
