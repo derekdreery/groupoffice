@@ -198,14 +198,14 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 					});
       }
 
-			adminMenu.add('-');
+			adminMenu.add('<div class="menu-title">Admin menu</div>');
       
       for(var i=0;i<adminModulePanels.length;i++)
       {
 					adminMenu.add({
 						moduleName:adminModulePanels[i].moduleName,
 						text:adminModulePanels[i].title,
-						tooltip:{text:'Right click to close'},
+
 						iconCls: 'go-menu-icon-'+adminModulePanels[i].moduleName,
 						handler: this.openModule,
 						scope: this
@@ -380,6 +380,11 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 			panel.id = panelId;
 			this.tabPanel.add(panel);
 
+			if(!this.hintShown)
+			{
+				this.msg(GO.lang.closeApps, GO.lang.rightClickToClose);
+				this.hintShown=true;
+			}
 			
 		}else{
 			panel = this.tabPanel.items.map[panelId];
@@ -430,7 +435,24 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		);
 		this.tabPanel.add(searchPanel);
 		searchPanel.show();
-	}/*,		
+	},
+	createBox : function (t, s){
+			return ['<div class="msg">',
+							'<div class="x-box-tl"><div class="x-box-tr"><div class="x-box-tc"></div></div></div>',
+							'<div class="x-box-ml"><div class="x-box-mr"><div class="x-box-mc"><h3>', t, '</h3>', s, '</div></div></div>',
+							'<div class="x-box-bl"><div class="x-box-br"><div class="x-box-bc"></div></div></div>',
+							'</div>'].join('');
+	},
+
+  msg : function(title, format){
+			if(!this.msgCt){
+					this.msgCt = Ext.DomHelper.insertFirst(document.body, {id:'msg-div'}, true);
+			}
+			this.msgCt.alignTo(this.tabPanel.el, 'tr-tr');
+			var s = String.format.apply(String, Array.prototype.slice.call(arguments, 1));
+			var m = Ext.DomHelper.append(this.msgCt, {html:this.createBox(title, s)}, true);
+			m.slideIn('t').pause(3).ghost("t", {remove:true});
+	}/*,
 	
 	showSearchRecord : function(recordData)
 	{

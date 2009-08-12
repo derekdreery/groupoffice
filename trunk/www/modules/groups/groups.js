@@ -266,6 +266,5 @@ Ext.extend(GO.groups.MainPanel, GO.grid.GridPanel,{
 
 GO.moduleManager.addAdminModule('groups', GO.groups.MainPanel, {
 		title : GO.groups.lang.groups,
-		iconCls : 'go-tab-icon-groups',
-		closable:true
+		iconCls : 'go-tab-icon-groups'
 });

@@ -553,3 +553,8 @@ GO.lang.keyword='Keyword';
 
 
 GO.lang.total='Total';
+
+GO.lang.closeApps='Close applications';
+GO.lang.rightClickToClose='Right click a tab panel header to close it.';
+
+GO.lang.adminMenu = 'Admin menu';
