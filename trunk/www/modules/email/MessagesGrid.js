@@ -172,6 +172,8 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
 		
     },
 
+		
+
     renderFlagged : function(value, p, record){
 
         var str = '';

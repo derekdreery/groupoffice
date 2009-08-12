@@ -107,7 +107,7 @@ GO.email.EmailClient = function(config){
 		}
 
 		//don't confirm delete to trashfolder
-		this.noDeleteConfirmation=!this.messagesGrid.store.reader.jsonData.trash && !GO.util.empty(this.messagesGrid.store.reader.jsonData.trash_folder);
+		this.messagesGrid.deleteConfig.noConfirmation=!this.messagesGrid.store.reader.jsonData.trash && !GO.util.empty(this.messagesGrid.store.reader.jsonData.trash_folder);
 	}, this);	
 
 	GO.email.saveAsItems = GO.email.saveAsItems || [];
@@ -169,7 +169,7 @@ GO.email.EmailClient = function(config){
 			iconCls: 'btn-delete',
 			text: GO.lang.cmdDelete,
 			cls: 'x-btn-text-icon',
-			handler: this.deleteMessages,
+			handler: function(){this.messagesGrid.deleteSelected();},
 			scope: this,
 			multiple:true
 		},'-',{
@@ -590,7 +590,7 @@ GO.email.EmailClient = function(config){
 					iconCls: 'btn-delete',
 					text: GO.lang.cmdDelete,
 					cls: 'x-btn-text-icon',
-					handler: this.deleteMessages,
+					handler: function(){this.messagesGrid.deleteSelected();},
 					scope: this
 				},new Ext.Toolbar.Separator(),
 				{
@@ -874,13 +874,6 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	
 	justMarkedUnread : 0,
 
-	noDeleteConfirmation:false,
-	
-	deleteMessages : function(){ 
-		this.messagesGrid.deleteSelected({
-			noConfirmation:this.noDeleteConfirmation
-		});
-	},
 	
 	afterRender : function(){
 		GO.email.EmailClient.superclass.afterRender.call(this);		
