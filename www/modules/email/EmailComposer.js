@@ -28,8 +28,7 @@ GO.email.EmailComposer = function(config) {
 		scope : this
 	}),
 	'-',
-	'<div class="menu-title"><img class="x-menu-item-icon" src="'
-	+ Ext.BLANK_IMAGE_URL + '" />'
+	'<div class="menu-title">'
 	+ GO.email.lang.priority + '</div>', {
 		text : GO.email.lang.high,
 		checked : false,

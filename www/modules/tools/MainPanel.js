@@ -70,6 +70,5 @@ Ext.extend(GO.tools.MainPanel, Ext.Panel,{
  
 GO.moduleManager.addAdminModule('tools', GO.tools.MainPanel, {
 	title : GO.tools.lang.tools,
-	iconCls : 'go-tab-icon-tools',
-	closable:true
+	iconCls : 'go-tab-icon-tools'
 });

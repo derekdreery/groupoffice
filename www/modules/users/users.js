@@ -168,7 +168,6 @@ GO.linkHandlers[8]=function(id){
 
 GO.moduleManager.addAdminModule('users', GO.users.MainPanel, {
 	title : GO.lang.users,
-	iconCls : 'go-tab-icon-users',
-	closable:true
+	iconCls : 'go-tab-icon-users'
 });
 

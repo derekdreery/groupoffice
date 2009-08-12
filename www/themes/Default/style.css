@@ -1,3 +1,12 @@
+#msg-div {
+    position:absolute;
+    left:35%;
+    top:10px;
+    width:250px;
+    z-index:20000;
+}
+
+
 .x-grid3-summary-row {
     border-left:1px solid #fff;
     border-right:1px solid #fff;
@@ -117,12 +126,13 @@
 
 
 
-
-
-
 .menu-title{
-padding:3px 21px 0px 3px;
+padding:10px 0px 3px 3px !important;
 font-weight:bold;
+background: #F0F0F0 !important;
+border-bottom: 1px solid #9c9f9d;
+display:block;
+color:#15428B;
 }
 
 .go_logo{

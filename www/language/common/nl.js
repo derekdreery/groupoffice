@@ -522,3 +522,6 @@ if(Ext.form.BasicForm)
 {
 	Ext.form.BasicForm.prototype.waitTitle = "Even wachten a.u.b...";
 }
+
+GO.lang.closeApps='Applicaties afsluiten';
+GO.lang.rightClickToClose='Klik met de rechtermuisknop op een tabblad kop om deze af te sluiten.';

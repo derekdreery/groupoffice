@@ -351,6 +351,5 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
 
 GO.moduleManager.addAdminModule('modules', GO.modules.MainPanel, {
     title : GO.modules.lang.modules,
-    iconCls : 'go-tab-icon-modules',
-    closable : true
+    iconCls : 'go-tab-icon-modules'
 });

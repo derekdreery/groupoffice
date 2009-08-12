@@ -147,7 +147,6 @@ GO.addressbook.MainPanel = function(config)
 
 	config.layout='border';
 	config.border=false;
-	config.id='ab-tbar';
 	
 	if(GO.mailings)
 	{
