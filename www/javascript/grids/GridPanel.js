@@ -99,13 +99,7 @@ GO.grid.GridPanel = function(config)
     config.store.baseParams['limit']=parseInt(GO.settings['max_rows_list']);
   }
     
-	GO.grid.GridPanel.superclass.constructor.call(this, config);
-	
-	if(!this.deleteConfig)
-	{
-		this.deleteConfig={};
-	}
-	
+	GO.grid.GridPanel.superclass.constructor.call(this, config);	
 	
 	//create a delayed rowselect event so that when a user repeatedly presses the
 	//up and down button it will only load if it stays on the same record for 400ms
@@ -148,6 +142,8 @@ GO.grid.GridPanel = function(config)
  
  
 Ext.extend(GO.grid.GridPanel, Ext.grid.GridPanel, {
+
+	deleteConfig : {},
 	
 	/**
 	 * @cfg {Boolean} paging True to set the store's limit parameter and render a bottom
@@ -172,6 +168,8 @@ Ext.extend(GO.grid.GridPanel, Ext.grid.GridPanel, {
 		{
 			config=this.deleteConfig;
 		}
+
+		console.log(config);
 		
 		if(!config['deleteParam'])
 		{
