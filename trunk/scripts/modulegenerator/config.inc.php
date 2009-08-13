@@ -14,12 +14,13 @@ $tables=array();
 $westpanel = array(
 	'mainpanel_tag'=> 'GRID',
 	'template'=>'GridPanel.tpl',
-	'name'=>'pm_report_templates',
-	'friendly_single'=>'report_template',
-	'friendly_multiple'=>'report_templates',
+	'name'=>'pm_custom_reports',
+	'friendly_single'=>'custom_report',
+	'friendly_multiple'=>'custom_reports',
+	'link_type'=>'14',
 	'authenticate'=>false,
 	'paging'=>true,
-	'autoload'=>false,
+	'autoload'=>true,
 	'files'=>false);
 
 $tables[] = $westpanel;
