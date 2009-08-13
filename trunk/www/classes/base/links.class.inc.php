@@ -35,6 +35,7 @@
  * 11=license
  * 12=tasks
  * 13=installation
+ * 14=Project reports
  * 
  * @author Merijn Schering <mschering@intermesh.nl>
  * @version $Id$
