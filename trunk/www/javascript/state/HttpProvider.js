@@ -66,7 +66,7 @@ GO.state.HttpProvider = function(config){
 Ext.extend(GO.state.HttpProvider, Ext.state.Provider, {
     // private
     //only works when a component as an assigned ID passed to the constructor
-    set : function(name, value){
+    set : function(name, value, callback, scope){
     	
     	if(name.substr(0,4)!='ext-')
     	{
@@ -74,7 +74,7 @@ Ext.extend(GO.state.HttpProvider, Ext.state.Provider, {
 	          this.clear(name);
 	          return;
 	      }
-	      this.setValue(name, value);
+	      this.setValue(name, value, callback, scope);
 	      GO.state.HttpProvider.superclass.set.call(this, name, value);
     	}
     },
@@ -100,9 +100,8 @@ Ext.extend(GO.state.HttpProvider, Ext.state.Provider, {
   	},
 
     // private
-    setValue : function(name, value){    	
-    	
-    	var conn = new Ext.data.Connection();
+    setValue : function(name, value, callback, scope){
+			
 			Ext.Ajax.request({
 				url: this.url,
 				params: {
@@ -110,15 +109,16 @@ Ext.extend(GO.state.HttpProvider, Ext.state.Provider, {
 					'name': name, 
 					'value': this.encodeValue(value),
 					index: GO.settings.state_index
-				}
+				},
+				callback : callback,
+				scope:scope
 			});
 	    	
     },
 
     // private
     clearValue : function(name){
-      var conn = new Ext.data.Connection();
-			conn.request({
+			Ext.Ajax.request({
 				url: this.url,
 				params: {task: 'set', 'name': name, 'value': 'null' }
 			});
