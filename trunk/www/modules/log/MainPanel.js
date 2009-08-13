@@ -1,4 +1,5 @@
-GO.moduleManager.addAdminModule('log', GO.log.EntriesGrid, {
+GO.moduleManager.addModule('log', GO.log.EntriesGrid, {
 	title : GO.log.lang.log,
-	iconCls : 'go-tab-icon-log'
+	iconCls : 'go-tab-icon-log',
+	admin:true
 });
