@@ -1,4 +1,4 @@
-2009/08/11 3.2.21
+2009/08/13 3.2.21
 - Too large padding on first grid cells
 - Move e-mail to another IMAP account.
 - Larger timeout when sending e-mail
