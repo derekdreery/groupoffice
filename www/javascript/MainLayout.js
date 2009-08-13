@@ -29,6 +29,8 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	fullscreenPopup : false,
 
 	state : false,
+
+	stateSaveScheduled : false,
 	
 	onReady : function(fn, scope){		
 		if(!this.ready){
@@ -56,9 +58,16 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	},
 
 	saveState : function(){
-		var state = this.getOpenModules();
 
-		Ext.state.Manager.set('open-modules', Ext.encode(state));
+		if(!this.stateSaveScheduled)
+		{			
+			this.stateSaveScheduled=true;
+			var state = this.getOpenModules();
+			var callback =function(){
+				this.stateSaveScheduled=false;
+			};
+			Ext.state.Manager.getProvider().set.defer(2000, Ext.state.Manager.getProvider(), ['open-modules', Ext.encode(state), callback, this]);
+		}
 	},
 	logout : function(first){
 		
@@ -441,6 +450,12 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		}
 		this.refreshMenu();
 
+		Ext.QuickTips.register({
+			text:GO.lang.rightClickToClose,
+			title:GO.lang.closeApps,
+			target:this.startMenuLink
+		});
+
 
 		this.fireEvent('render');
 		
@@ -459,11 +474,11 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 			panel.id = panelId;
 			this.tabPanel.add(panel);
 			
-			if(!this.hintShown)
+			/*if(!this.hintShown)
 			{
 				this.msg(GO.lang.closeApps, GO.lang.rightClickToClose);
 				this.hintShown=true;
-			}
+			}*/
 
 			
 		}else{
