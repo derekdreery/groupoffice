@@ -168,8 +168,6 @@ Ext.extend(GO.grid.GridPanel, Ext.grid.GridPanel, {
 		{
 			config=this.deleteConfig;
 		}
-
-		console.log(config);
 		
 		if(!config['deleteParam'])
 		{
