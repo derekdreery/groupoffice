@@ -695,7 +695,7 @@ hr{
 	margin-bottom:2px;
 	text-decoration:none;
 	line-height:18px;
-	cursor-default;
+	cursor: default;
 }
 
 .go-select-list .go-item-wrap{
@@ -767,9 +767,9 @@ table.display-panel a:active
 
 /* End Ext grid addons */
 
-.x-tab-strip-top{
+/*.x-tab-strip-top{
 	background:url(imag):
-}
+}*/
 
 
 
