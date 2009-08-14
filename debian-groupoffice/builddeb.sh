@@ -1,6 +1,7 @@
 #!/bin/bash
 
-VERSION=3.2.15
+
+
 
 PRG="$0"
 OLDPWD=`pwd`
@@ -13,6 +14,9 @@ else
 FULLPATH=''
 fi
 
+VERSION=`cat ../www/classes/base/config.class.inc.php | grep '$version' | sed -e 's/[^0-9\.]*//g'`
+
+echo "Group-Office version: $VERSION"
 
 cd /tmp
 
@@ -48,4 +52,6 @@ if [ "$2" == "send" ]; then
 	scp *.deb mschering@imfoss.nl:/var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary/
 
 	#ssh mschering@imfoss.nl "dpkg-scanpackages /var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary /dev/null | gzip -9c > /var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary/Packages.gz"
+else
+	debuild -S -rfakeroot
 fi

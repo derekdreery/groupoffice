@@ -1,7 +1,5 @@
 #!/bin/bash
 
-VERSION=3.2.15
-
 PRG="$0"
 OLDPWD=`pwd`
 P=`dirname $PRG`
@@ -12,6 +10,10 @@ FULLPATH=`pwd`
 else
 FULLPATH=''
 fi
+
+VERSION=`cat ../www/classes/base/config.class.inc.php | grep '$version' | sed -e 's/[^0-9\.]*//g'`
+
+echo "Group-Office version: $VERSION"
 
 
 cd /tmp
@@ -30,13 +32,15 @@ mv debian-groupoffice-mailserver groupoffice-mailserver-$VERSION
 
 cd groupoffice-mailserver-$VERSION
 
-debuild -S -rfakeroot
+
 
 if [ "$1" == "send" ]; then
 	debuild -rfakeroot
 	cd ..
 	scp *.deb mschering@imfoss.nl:/var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary/
 
-	ssh mschering@imfoss.nl "dpkg-scanpackages /var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary /dev/null | gzip -9c > /var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary/Packages.gz"
+	#ssh mschering@imfoss.nl "dpkg-scanpackages /var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary /dev/null | gzip -9c > /var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary/Packages.gz"
+else
+	debuild -S -rfakeroot
 fi
 
