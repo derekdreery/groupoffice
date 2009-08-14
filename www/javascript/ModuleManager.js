@@ -165,6 +165,16 @@ GO.ModuleManager = Ext.extend(function(){
 			panels.push(this.getPanel(this.sortOrder[i]));	
 		}
 		return panels;
+	},
+
+	getAllPanelConfigs : function(){
+		var configs = [];
+
+		for(var i=0;i<this.sortOrder.length;i++)
+		{
+			configs.push(this.panelConfigs[this.sortOrder[i]]);
+		}
+		return configs;
 	}
 				
 });
