@@ -57,14 +57,14 @@ border:1px solid black;
 }
 
 .go-menu-icon-calendar, .go-module-icon-calendar{
-		background-image: url('images/16x16/calendar.png') !important;
+	background-image: url('images/16x16/mod-calendar.png') !important;
 }
 .go-tab-icon-calendar {
 	background-image: none !important;
 }
 
 .go-link-icon-1 {
-	background-image: url('images/16x16/calendar.png') !important;
+	background-image: url('images/16x16/mod-calendar.png') !important;
 	width:16px;
 	height:16px;
 }

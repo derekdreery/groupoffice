@@ -4,8 +4,8 @@
 .ext-el-mask-msg div{border:1px solid #c1d1d6 !important;}
 
 .x-btn button{border:0 none;background:transparent;font:normal 11px tahoma,arial,helvetica,sans-serif;color:#fff;padding-left:3px;padding-right:3px;cursor:pointer;margin:0;overflow:visible;width:auto;-moz-outline:0 none;outline:0 none;}
- .x-btn-over .x-btn-text{color:#fff;}
-..x-btn-pressed .x-btn-text{color:#fff;}
+.x-btn-over .x-btn-text{color:#fff;}
+.x-btn-pressed .x-btn-text{color:#fff;}
 
 .x-btn-left{width:3px;height:21px;background:url(images/extjs/button/btn-sprite.gif) no-repeat 0 0;}
 .x-btn-right{width:3px;height:21px;background:url(images/extjs/button/btn-sprite.gif) no-repeat 0 -21px;}
@@ -40,7 +40,7 @@ ul.x-tab-strip-top{padding-top:1px;background:#f7f6f1 repeat-x bottom;border-bot
 .x-tab-strip-top .x-tab-strip-inner{background:transparent url(images/extjs/tabs/tabs-sprite-white.gif) repeat-x 0 -201px;}
 .x-tab-strip .x-tab-with-icon span.x-tab-strip-text{padding-left:4px;background-position:0 3px;background-repeat:no-repeat;}
 .x-tab-panel-header,.x-tab-panel-footer{background:transparant!important;overflow:hidden;zoom:1;}
-.x-tab-strip span.x-tab-strip-text{font:normal 11px tahoma,arial,helvetica,sans-serif;color:#000;white-space:nowrap;cursor:pointer;padding:4px;padding-top:5px; 0;}
+.x-tab-strip span.x-tab-strip-text{font:normal 11px tahoma,arial,helvetica,sans-serif;color:#000;white-space:nowrap;cursor:pointer;padding:4px;padding-top:5px;}
 .x-tab-strip .x-item-disabled{
 	color:#b1b1b1 !important;
 }
@@ -63,7 +63,7 @@ ul.x-tab-strip-top{padding-top:1px;background:#f7f6f1 repeat-x bottom;border-bot
 .go-moduletabs-header,.go-moduletabs-footer{background:#2e80a9;overflow:hidden;zoom:1;}
 .go-moduletabs-header ul.x-tab-strip-top{padding-top:1px;background:url(images/extjs/tabs/tab-strip-bg.gif) #cedff5 repeat-x bottom;margin-bottom:1px;}
 .go-moduletabs-header ul.x-tab-strip-bottom{padding-bottom:1px;background:url(images/extjs/tabs/tab-strip-btm-bg.gif) #cedff5 repeat-x top;border-top:1px solid #2e80a9;border-bottom:0 none;}
-.go-moduletabs-header .x-tab-strip span.x-tab-strip-text{font:normal 12px tahoma,arial,helvetica,sans-serif;color:#d1d1d1;white-space:nowrap;cursor:pointer;padding:4px;padding-top:5px; 0;}
+.go-moduletabs-header .x-tab-strip span.x-tab-strip-text{font:normal 12px tahoma,arial,helvetica,sans-serif;color:#d1d1d1;white-space:nowrap;cursor:pointer;padding:4px;padding-top:5px;}
 .go-moduletabs-header .x-tab-strip .x-tab-with-icon .x-tab-right{padding-left:4px;}
 .go-moduletabs-header .x-tab-strip .x-tab-with-icon span.x-tab-strip-text{padding-left:4px;background-position:0 3px;background-repeat:no-repeat;}
 .go-moduletabs-header .x-tab-strip-over span.x-tab-strip-text{color:white;}
@@ -136,7 +136,7 @@ ul.x-tab-strip-top{padding-top:1px;background:#f7f6f1 repeat-x bottom;border-bot
 .x-grid-panel .x-panel-mc .x-panel-body{border:1px solid #c0c0c0;}
 .x-grid3-hd-row td,.x-grid3-row td,.x-grid3-summary-row td{font:normal 11px tahoma,arial,helvetica,sans-serif;-moz-outline:none;-moz-user-focus:normal;}
 
-.x-grid3-row-over{background-color:#ebf1e2;border:1px solid #ebf1e2; url(images/extjs/grid/row-over.gif) repeat-x left top;}
+.x-grid3-row-over{background:#ebf1e2 url(images/extjs/grid/row-over.gif) repeat-x left top;border:1px solid #ebf1e2;}
 td.x-grid3-hd-over,td.sort-desc,td.sort-asc,td.x-grid3-hd-menu-open{border-left:1px solid #C6D2B4;border-right:1px solid #C6D2B4;}
 .x-grid3-row-selected{background:#ebf1e2!important;border:1px solid #669900;}
 .x-grid3-topbar,.x-grid3-bottombar{font:normal 12px tahoma,arial,helvetica,sans-serif;overflow:hidden;display:none;zoom:1;position:relative;}
@@ -252,7 +252,7 @@ background:#f3f5f6;
 .x-html-editor-tb .x-btn-pressed .x-btn-left{background:url(images/extjs/button/btn-sprite.gif) no-repeat 0 -63px;}
 .x-html-editor-tb .x-btn-pressed .x-btn-right{background:url(images/extjs/button/btn-sprite.gif) no-repeat 0 -84px;}
 .x-html-editor-tb .x-btn-pressed .x-btn-center{background:url(images/extjs/button/btn-sprite.gif) repeat-x 0 -126px;}
-.x-html-editor-tb .x-font-select {color:black};
+.x-html-editor-tb .x-font-select {color:black;}
 
 
 body.x-body-masked .x-window-plain .x-window-mc{background:#d1d8db;}

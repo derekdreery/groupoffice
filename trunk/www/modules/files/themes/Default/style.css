@@ -7,7 +7,7 @@ margin:auto;
 }
 
 .go-module-icon-files , .go-menu-icon-files {
-	background-image: url('images/files.png') !important;
+	background-image: url('images/folder.png') !important;
 }
 
 .go-tab-icon-files {
