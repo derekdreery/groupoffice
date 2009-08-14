@@ -122,6 +122,7 @@ try{
 				
 				$servermanager->update_installation($installation);
 
+				$config['enabled']=isset($_POST['enabled']) ? true : false;
 				
 				
 				//$config_str = ($_POST['config']);
@@ -222,6 +223,7 @@ try{
 				debug($output);
 
 				if($return_var!=0){
+					$servermanager->delete_report($report['name']);
 					throw new Exception(implode('<br />', $output));
 				}
 
