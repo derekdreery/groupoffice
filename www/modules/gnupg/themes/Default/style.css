@@ -6,3 +6,7 @@
 	background-image: none !important;
 }
 
+.gpg-btn-settings{
+	background-image: url('images/settings.png') !important;
+}
+
