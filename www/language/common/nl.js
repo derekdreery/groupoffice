@@ -525,3 +525,5 @@ if(Ext.form.BasicForm)
 
 GO.lang.closeApps='Applicaties afsluiten';
 GO.lang.rightClickToClose='Klik met de rechtermuisknop op een tabblad kop om deze af te sluiten.';
+
+GO.lang.administration='Beheer';

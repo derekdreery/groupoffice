@@ -252,7 +252,7 @@ GO.addressbook.MainPanel = function(config)
 		'-',
 		{
 			iconCls: 'btn-addressbook-manage', 
-			text: GO.addressbook.lang['btnManage'], 
+			text: GO.lang.administration,
 			cls: 'x-btn-text-icon', 
 			handler:function(){
 				if(!this.manageDialog)

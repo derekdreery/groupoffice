@@ -381,3 +381,25 @@ if(Ext.version=='3.0'){
 		forceLayout:true
 	});
 }
+
+/*
+ * Fix for "Permission denied to access property 'dom' from a non-chrome context"
+ *
+ * http://extjs.com/forum/showthread.php?p=366510#post366510
+ */
+
+Ext.lib.Event.resolveTextNode = Ext.isGecko ? function(node){
+	if(!node){
+		return;
+	}
+	var s = HTMLElement.prototype.toString.call(node);
+	if(s == '[xpconnect wrapped native prototype]' || s == '[object XULElement]'){
+		return;
+	}
+	return node.nodeType == 3 ? node.parentNode : node;
+} : function(node){
+	return node && node.nodeType == 3 ? node.parentNode : node;
+};
+/*
+* end fix
+ */

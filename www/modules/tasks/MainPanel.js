@@ -147,7 +147,7 @@ GO.tasks.MainPanel = function(config){
 								scope: this
 							}),{
 								iconCls: 'btn-settings',
-								text: GO.lang['cmdSettings'],
+								text: GO.lang.administration,
 								cls: 'x-btn-text-icon',
 								handler: function(){
 									this.showAdminDialog();	
