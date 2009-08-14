@@ -131,6 +131,8 @@ Ext.extend(GO.servermanager.InstallationDialog, Ext.Window,{
 		
 		this.formPanel.form.findField('admin_password1').allowBlank=installation_id>0;
 		this.formPanel.form.findField('admin_password2').allowBlank=installation_id>0;
+
+		this.formPanel.form.findField('enabled').setDisabled(installation_id==0);
 	//	this.configPanel.setDisabled(installation_id==0);
 		//this.linksPanel.loadLinks(installation_id, 13);
 
@@ -234,8 +236,15 @@ Ext.extend(GO.servermanager.InstallationDialog, Ext.Window,{
 					labelWidth:140,
 					border:false,
 					columnWidth:.5,
-					items:[
-				{
+					items:[{
+					xtype: 'checkbox',
+				  name: 'enabled',
+					anchor: '-20',
+				 	hideLabel:true,
+				  boxLabel: GO.servermanager.lang.enabled,
+				  checked:true,
+					disabled:true
+				},{
 					xtype: 'textfield',
 				  name: 'name',
 					anchor: '-20',
@@ -266,28 +275,44 @@ Ext.extend(GO.servermanager.InstallationDialog, Ext.Window,{
 					anchor: '-20',
 				  allowBlank:false,
 				  fieldLabel: GO.servermanager.lang.title,
-				  value: 'Group-Office'
+				  value: GO.settings.config.title
 				},{
-					xtype: 'textfield',
+					xtype: 'combo',
 				  name: 'theme',
+					store:  new GO.data.JsonStore({
+						url: GO.settings.modules.users.url+'non_admin_json.php',
+						baseParams: {'task':'themes'},
+						root: 'results',
+						totalProperty: 'total',
+						fields:['theme'],
+						remoteSort: true
+
+					}),
+					displayField:'theme',
+					valueField: 'theme',
+					mode:'remote',
+					triggerAction:'all',
+					editable: false,
+					selectOnFocus:true,
+					forceSelection: true,
 					anchor: '-20',
 				  allowBlank:false,
 				  fieldLabel: GO.servermanager.lang.theme,
-				  value:'Default'
+				  value:GO.settings.config.theme
 				},{
 					xtype: 'checkbox',
 				  name: 'allow_themes',
 					anchor: '-20',
 				 	hideLabel:true,
 				  boxLabel: GO.servermanager.lang.allowThemes,
-				  checked:true
+				  checked:!GO.util.empty(GO.servermanager.config.allow_themes)
 				},{
 					xtype: 'checkbox',
 				  name: 'allow_password_change',
 					anchor: '-20',
 				  hideLabel:true,
 				  boxLabel: GO.servermanager.lang.allowPasswordChange,
-				  checked:true
+				  checked:!GO.util.empty(GO.servermanager.config.allow_password_change)
 				}/*,{
 					xtype: 'checkbox',
 				  name: 'allow_registration',

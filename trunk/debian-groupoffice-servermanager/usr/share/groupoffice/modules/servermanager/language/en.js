@@ -54,3 +54,5 @@ GO.servermanager.lang.installed='Installed';
 GO.servermanager.lang.modules='Modules';
 
 GO.servermanager.lang.billing='Billing module';
+
+GO.servermanager.lang.enabled='Enabled';
