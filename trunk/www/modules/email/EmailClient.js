@@ -595,7 +595,7 @@ GO.email.EmailClient = function(config){
 				},new Ext.Toolbar.Separator(),
 				{
 					iconCls: 'btn-settings',
-					text:GO.lang.cmdSettings,
+					text:GO.lang.administration,
 					menu: {
           	items: settingsMenu
 					}				

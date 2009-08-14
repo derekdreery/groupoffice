@@ -558,3 +558,5 @@ GO.lang.closeApps='Close applications';
 GO.lang.rightClickToClose='Right click a tab panel header to close it.';
 
 GO.lang.adminMenu = 'Admin menu';
+
+GO.lang.administration='Administration';
