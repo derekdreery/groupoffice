@@ -115,6 +115,8 @@ try{
 
 		case 'save_domain':
 
+			$domain = array();
+
 			$domain_id=$domain['id']=isset($_POST['domain_id']) ? ($_POST['domain_id']) : 0;
 
 			if(isset($_POST['user_id']))
