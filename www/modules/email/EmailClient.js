@@ -561,7 +561,7 @@ GO.email.EmailClient = function(config){
 	{
 		settingsMenu.push('-');
 		settingsMenu.push({
-			iconCls:'go-menu-icon-gnupg',
+			iconCls:'gpg-btn-settings',
 			cls: 'x-btn-text-icon',
 			text:GO.gnupg.lang.encryptionSettings,
 			handler:function(){
