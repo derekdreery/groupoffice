@@ -15,7 +15,8 @@
 
 GO.ModuleManager = Ext.extend(function(){	
 	this.addEvents({
-		'moduleReady' : true
+		'moduleReady' : true,
+		'moduleconstructed' : true
 	});	
 	this.resumeEvents();
 }, Ext.util.Observable,
@@ -106,54 +107,16 @@ GO.ModuleManager = Ext.extend(function(){
 		}
 	},
 	
-	/*addAdminModule : function(moduleName, panelClass, panelConfig)
-	{
-		panelConfig.moduleName = moduleName;
-		
-		this.modules[moduleName]=true;
-		
-		this.adminModulePanels[moduleName] = panelClass;
-		this.adminPanelConfigs[moduleName] = panelConfig;
-		this.adminSortOrder.push(moduleName);
-		
-		this.onAddModule(moduleName);
-	},
-	
-	getAdminPanel : function(moduleName)
-	{
-		if(this.adminModulePanels[moduleName])
-			return new this.adminModulePanels[moduleName](this.adminPanelConfigs[moduleName]);
-		else
-			return false;				
-	},
-	
-	getAllAdminPanels : function(){
-		
-		var panels = [];
-		
-		for(var i=0;i<this.adminSortOrder.length;i++)
-		{
-			panels.push(this.getAdminPanel(this.adminSortOrder[i]));	
-		}
-		return panels;
-	},
-	
-	getAllAdminPanelConfigs : function(){
-		var configs = [];
-		
-		for(var i=0;i<this.adminSortOrder.length;i++)
-		{
-			configs.push(this.adminPanelConfigs[this.adminSortOrder[i]]);	
-		}
-		return configs;		
-	},*/
-	
 	getPanel : function(moduleName)
 	{
-		if(this.modulePanels[moduleName])
-			return new this.modulePanels[moduleName](this.panelConfigs[moduleName]);
-		else
-			return false;				
+		if(this.modulePanels[moduleName]){
+			var p = new this.modulePanels[moduleName](this.panelConfigs[moduleName]);
+			this.fireEvent('moduleconstructed', this, moduleName, p);
+			return p;
+		}else
+		{
+			return false;
+		}
 	},
 	
 	getAllPanels : function(){
