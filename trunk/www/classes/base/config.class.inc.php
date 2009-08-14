@@ -1086,6 +1086,7 @@ class GO_CONFIG
       	$response['config']['theme_url']=$GO_THEME->theme_url;
       	$response['config']['theme']=$GO_THEME->theme;
       	$response['config']['host']=$this->host;
+				$response['config']['title']=$this->title;
       	$response['config']['local_url']=$this->local_url;
       	$response['config']['webmaster_email']=$this->webmaster_email;
 

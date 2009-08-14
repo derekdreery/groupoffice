@@ -59,15 +59,19 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 
 	saveState : function(){
 
+		this.stateToSave = this.getOpenModules();
 		if(!this.stateSaveScheduled)
-		{			
-			this.stateSaveScheduled=true;
-			var state = this.getOpenModules();
-			var callback =function(){
-				this.stateSaveScheduled=false;
-			};
-			Ext.state.Manager.getProvider().set.defer(2000, Ext.state.Manager.getProvider(), ['open-modules', Ext.encode(state), callback, this]);
+		{
+			this.stateSaveScheduled=true;			
+			
+			this.sendSaveRequest.defer(2000, this);
 		}
+	},
+	sendSaveRequest : function(){
+		var callback =function(){
+			this.stateSaveScheduled=false;
+		};
+		Ext.state.Manager.getProvider().set('open-modules', Ext.encode(this.stateToSave), callback, this);
 	},
 	logout : function(first){
 		
@@ -220,7 +224,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 				maxWidth:500
 		});
 
-		var allPanels = GO.moduleManager.getAllPanels();
+		var allPanels = GO.moduleManager.getAllPanelConfigs();
 
 		var items=[];
 
@@ -247,7 +251,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		for(var i=0;i<allPanels.length;i++){
 
 			if(this.state && this.state.indexOf(allPanels[i].moduleName)>-1)
-				items.push(allPanels[i]);
+				items.push(GO.moduleManager.getPanel(allPanels[i].moduleName));
 			
 			menuItemConfig = {
 					id:'go-start-menu-'+allPanels[i].moduleName,
@@ -260,7 +264,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 
 			if(!allPanels[i].admin){
 				if(!this.state)
-					items.push(allPanels[i]);
+					items.push(GO.moduleManager.getPanel(allPanels[i].moduleName));
 				
 				this.startMenu.add(menuItemConfig);
 			}else
