@@ -19,6 +19,9 @@ margin:auto;
 }
 
 
+.btn-files {
+	background-image:url('images/files.png') !important;
+}
 
 .btn-up {
 	background-image:url('images/up.png') !important;
