@@ -272,8 +272,11 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 				adminMenuItems.push(menuItemConfig);
 			}
 		}
-		this.startMenu.add(new Ext.menu.TextItem({id:'go-start-menu-admin-menu', text:'<div class="menu-title">'+GO.lang.adminMenu+'</div>'}));
-		if(adminMenuItems.length){			
+		
+		if(adminMenuItems.length){
+
+			this.startMenu.add(new Ext.menu.TextItem({id:'go-start-menu-admin-menu', text:'<div class="menu-title">'+GO.lang.adminMenu+'</div>'}));
+
 			for(var i=0;i<adminMenuItems.length;i++){
 				this.startMenu.add(adminMenuItems[i]);
 			}
