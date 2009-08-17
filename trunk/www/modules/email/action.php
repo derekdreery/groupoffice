@@ -393,9 +393,15 @@ try{
 								foreach($inline_attachments as $inlineAttachment)
 								{
 									$tmp_name = $inlineAttachment['tmp_file'];
-									if(!File::is_full_path($tmp_name))
+									if(is_numeric($tmp_name))
 									{
-										$tmp_name = $GO_CONFIG->file_storage_path.$tmp_name;
+										$file = $files->get_file($tmp_name);
+										$folder = $files->get_folder($file['folder_id']);
+										if(!$file || !$folder)
+										{
+											throw new FileNotFoundException();
+										}
+										$tmp_name = $GO_CONFIG->file_storage_path.$files->build_path($folder).'/'.$file['name'];
 									}
 
 									$img = Swift_EmbeddedFile::fromPath($tmp_name);
