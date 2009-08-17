@@ -359,7 +359,7 @@ class ical2array
 
 		$rrule = str_replace('RRULE:', '', $rrule);
 		
-		if(strpos($rrule,';') === false)
+		if(strpos($rrule,'FREQ') === false)
 		{
 			//this must be a vcalendar 1.0 rrule
 			//we are attempting to convert it to icalendar format
@@ -535,7 +535,7 @@ class ical2array
 	}
 
 	function parse_date($date, $timezone_id='')
-	{	
+	{		
 		$date=trim($date);
 		$year = substr($date,0,4);
 		$month = substr($date,4,2);
@@ -581,7 +581,7 @@ class ical2array
 				}
 			}
 		}*/
-		
+
 		if(strpos($date, 'Z'))
 			return gmmktime($hour, $min, $sec, $month, $day , $year);
 		else		

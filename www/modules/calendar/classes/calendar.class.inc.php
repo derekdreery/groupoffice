@@ -1745,6 +1745,10 @@ class calendar extends db
 			$event['start_time'] = $this->ical2array->parse_date($object['DTSTART']['value']);
 		}
 
+		if(!$event['start_time']){
+			return false;
+		}
+
 		if(isset($object['DTEND']['value']))
 		{
 			$timezone_id = isset($object['DTEND']['params']['TZID']) ? $object['DTEND']['params']['TZID'] : '';
@@ -1799,41 +1803,21 @@ class calendar extends db
 			//for Nokia. It doesn't send all day event in any way. If the local times are equal and the
 			//time is 0:00 hour then this is probably an all day event.
 
+			$end_hour = date('G', $event['end_time']);
 
-
-			if($event['end_time'] == $event['start_time'] || (date('G', $event['end_time'])==23 && date('G', $event['end_time'])==0))
+			if($event['end_time'] == $event['start_time'] || (($end_hour==23 || $end_hour==0) && date('G', $event['start_time'])==0))
 			{
 				$event['all_day_event'] = '1';
 
 				//make sure times are 0 - 23
 
 				$start_date = getdate($event['start_time']);
-				$end_date = getdate($event['end_time']);
+				$end_date = getdate($event['end_time']-60);
 
 				$event['start_time']=mktime(0,0,0,$start_date['mon'], $start_date['mday'], $start_date['year']);
 				$event['end_time']=mktime(23,59,0,$end_date['mon'], $end_date['mday'], $end_date['year']);
-
-				//$event['start_time'] = $event['start_time']);
 			}
 
-			/*if($event['all_day_event'])
-			 {
-			 //TODO DST!
-			 //$event['end_time'] = $event['end_time']+86340;
-			 //dont do this for symbian
-
-			 //calc duration in days:
-			 $duration = $event['end_time']-$event['start_time'];
-			 $duration_days = ceil($duration/86400);
-
-			 $local_start_time = $event['start_time'];
-
-			 $year = date('Y', $local_start_time);
-			 $month = date('n', $local_start_time);
-			 $day = date('j', $local_start_time);
-			 $event['end_time'] = mktime(0,-1,0,$month, $day+$duration_days+1, $year);
-
-			 }*/
 			if(isset($object['CLASS']['value']) && $object['CLASS']['value'] == 'PRIVATE')
 			{
 				$event['private'] = '1';
