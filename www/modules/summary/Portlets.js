@@ -13,7 +13,7 @@
 GO.summary.portlets=[];
 
 GO.mainLayout.onReady(function(){
-	var feedGrid = new GO.portlets.rssFeedPortlet();
+	var rssTabPanel = new Ext.TabPanel({});
 	
 	GO.summary.portlets['portlet-rss-reader']=new GO.summary.Portlet({
 		id: 'portlet-rss-reader',
@@ -21,27 +21,82 @@ GO.mainLayout.onReady(function(){
 	 	title: GO.summary.lang.hotTopics,
 		layout:'fit',
 		tools: [{
-					id: 'gear',
+			id: 'gear',
 	        handler: function(){
-	          
-						Ext.Msg.prompt(GO.lang.url, GO.summary.lang.enterRssFeed, function(btn, text){
-							if (btn == 'ok'){
-								
-								feedGrid.loadFeed(text);
-								
+				if(!this.manageWebFeedsWindow)
+				{
+					this.manageWebFeedsWindow = new Ext.Window({
+						layout:'fit',
+						items:this.WebFeedsGrid =  new GO.summary.WebFeedsGrid(),
+						width:700,
+						height:400,
+						title:GO.summary.lang.rssFeeds,
+						closeAction:'hide',
+						buttons:[{
+							text: GO.lang.cmdSave,
+							handler: function(){
+								var params={'task' : 'save_feeds'};
+								if(this.WebFeedsGrid.store.loaded){
+									params['feeds']=Ext.encode(this.WebFeedsGrid.getGridData());
+								}
 								Ext.Ajax.request({
 									url: GO.settings.modules.summary.url+'action.php',
-									params: {
-										'task':'save_rss_url',
-										'url' : text
+									params: params,
+									callback: function(options, success, response){
+										if(!success)
+										{
+											Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
+										}else
+										{
+											var responseParams = Ext.decode(response.responseText);
+											this.WebFeedsGrid.store.reload();
+											this.manageWebFeedsWindow.hide();
+											rssTabPanel.items.each(function(p){ // Walk through tabs
+												if(responseParams.data[p.feedId]==undefined) // Deleted feed
+													rssTabPanel.remove(p);
+												else // Feed already exists
+												{
+													var r = responseParams.data[p.feedId];
+													if(p.feed != r.url || p.getView().showPreview != parseInt(r.summary))
+														p.loadFeed(r.url, parseInt(r.summary));
+													if(p.title != r.title)
+														p.setTitle(r.title);
+													delete responseParams.data[p.feedId]; //Remove id (don't create it again)
+												}
+											}, this);
+											for(var i in responseParams.data) //For each new id
+											{
+												if(i != 'remove')
+												{
+													rssTabPanel.add(new GO.portlets.rssFeedPortlet({
+														feedId: responseParams.data[i].id,
+														feed: responseParams.data[i].url,
+														title: responseParams.data[i].title,
+														showPreview:parseInt(responseParams.data[i].summary),
+														closable:false
+													}));
+												}
+											}
+
+										}
 									},
-									waitMsg: GO.lang['waitMsgSave'],
-									waitMsgTarget: 'portlet-rss-reader'		
+									scope:this
 								});
-							}
-						});
-	            
-	            
+							},
+							scope: this
+						}],
+						listeners:{
+							show: function(){
+								if(!this.WebFeedsGrid.store.loaded)
+								{
+									this.WebFeedsGrid.store.load();
+								}
+							},
+							scope:this
+						}
+					});
+				}
+				this.manageWebFeedsWindow.show();     
 	        }
 	    },{
 	        id:'close',
@@ -49,42 +104,41 @@ GO.mainLayout.onReady(function(){
 	            panel.removePortlet();
 	        }
 	    }],
-		items: feedGrid,
+		items: rssTabPanel,
 		height:300
 	});
-	
-	feedGrid.on('render',function(){
+
+	GO.summary.portlets['portlet-rss-reader'].on('render',function(){
 		Ext.Ajax.request({
 			url: GO.settings.modules.summary.url+'json.php',
 			params: {
-				'task':'feed'
+				'task':'rss_tabs'
 			},
 			waitMsg: GO.lang['waitMsgLoad'],
 			waitMsgTarget: 'portlet-rss-reader',
+			scope:this,
 			callback: function(options, success, response){
-					if(!success)
-					{
-						Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
-					}else
-					{
-						var responseParams = Ext.decode(response.responseText);
-						
-						if(responseParams.data.url && responseParams.data.url!='')
-						{
-							feedGrid.loadFeed(responseParams.data.url);
-						}else
-						{
-							feedGrid.loadFeed('http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml');
-						}
-					}
-			}		
+				if(!success)
+				{
+					Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
+				}else
+				{
+					var rssTabPanels = Ext.decode(response.responseText);
+					for(var i=0;i<rssTabPanels.data.length;i++){
+						rssTabPanel.add(new GO.portlets.rssFeedPortlet({
+						feedId: rssTabPanels.data[i].id,
+						feed: rssTabPanels.data[i].url,
+						title: rssTabPanels.data[i].title,
+						showPreview:parseInt(rssTabPanels.data[i].summary),
+						closable:false
+						}));
+						rssTabPanel.setActiveTab(0);
+					};
+				}
+				this.doLayout();
+			}
 		});
 	});
-	
-	
-	
-	
-	
 	
 	/* start note portlet */
 	
@@ -116,11 +170,6 @@ GO.mainLayout.onReady(function(){
 			waitMsg: GO.lang['waitMsgLoad']
 		});				
 	});
-	
-	
-	
-	
-	
 	
 	GO.summary.portlets['portlet-note']=new GO.summary.Portlet({
 		id: 'portlet-note',

@@ -13,6 +13,8 @@ while($GO_USERS->next_record())
 {
 	$feed['user_id']=$GO_USERS->f('id');
 	$feed['url']=$lang['summary']['default_rss_url'];
-	$sum->add_feed($feed);			
+	$feed['title']=$lang['summary']['default_rss_title'];
+	$feed['summary']=1;
+	$sum->add_feed($feed);
 }
 ?>

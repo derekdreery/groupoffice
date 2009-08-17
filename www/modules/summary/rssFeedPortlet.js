@@ -61,7 +61,7 @@ GO.portlets.rssFeedPortlet = function(config) {
         viewConfig: {
             forceFit:true,
             enableRowBody:true,
-            showPreview:true,
+            showPreview:this.showPreview,
             getRowClass : this.applyRowClass
         }
     });
@@ -75,7 +75,7 @@ Ext.extend(GO.portlets.rssFeedPortlet, Ext.grid.GridPanel, {
 			GO.portlets.rssFeedPortlet.superclass.afterRender.call(this);
 			
 			this.on('rowDblClick', this.rowDoubleClick, this);
-			//this.store.load();
+			this.store.load();
 			
 			
 		},
@@ -128,8 +128,14 @@ Ext.extend(GO.portlets.rssFeedPortlet, Ext.grid.GridPanel, {
         }
     },
 
-    loadFeed : function(url) {
-        this.store.baseParams = {
+    loadFeed : function(url, preview) {
+        if(typeof(preview) == 'undefined')
+			preview = 1;
+			var view = this.getView();
+			view.showPreview = preview;
+			//view.refresh();
+
+		this.store.baseParams = {
             feed: url
         };
         

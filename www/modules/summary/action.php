@@ -31,10 +31,28 @@ try{
 			
 			break;
 			
-		case 'save_rss_url':			
-			$feed['user_id']=$GO_SECURITY->user_id;
-			$feed['url']=$_POST['url'];
-			$summary->update_feed($feed);			
+		case 'save_feeds':
+			$feeds = json_decode($_POST['feeds'], true);
+			$ids = array();
+			$response['data'] = array();
+			foreach($feeds as $feed)
+			{
+				$feed['user_id'] = $GO_SECURITY->user_id;
+				$feed['id'] = $feed['feedId'];
+				unset($feed['feedId']);
+				if($feed['id']>0)
+				{
+					$summary->update_feed($feed);
+				}
+				else
+				{
+					$feed['id']=$summary->add_feed($feed);
+				}
+				$ids[] = $feed['id'];
+				$response['data'][$feed['id']]=$feed;
+			}
+			$summary->delete_other_feeds($GO_SECURITY->user_id, $ids);
+			$response['ids'] = $ids;
 			$response['success']=true;
 			
 			break;

@@ -13,3 +13,7 @@ GO.summary.lang.announcements="Aankondigingen";
 GO.summary.lang.dueTime="Toon tot";
 GO.summary.lang.title="Titel";
 GO.summary.lang.manageAnnouncements='Beheer aankondigingen';
+GO.summary.lang.webFeeds='Beheer webfeeds';
+GO.summary.lang.type='Type';
+GO.summary.lang.summaryType='Samenvatting';
+GO.summary.lang.rssFeeds='Rss Feeds';
