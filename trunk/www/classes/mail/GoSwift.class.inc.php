@@ -1,12 +1,12 @@
 <?php
-/** 
+/**
  * Copyright Intermesh
- * 
+ *
  * This file is part of Group-Office. You should have received a copy of the
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
- * 
+ *
  * If you have questions write an e-mail to info@intermesh.nl
- * 
+ *
  * @copyright Copyright Intermesh
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
@@ -57,8 +57,8 @@ class GoSwift extends Swift_Mailer{
 	 * @var Swift_Message
 	 */
 	public $message;
-	
-	
+
+
 	/**
 	 * Array with failed e-mail addresses after send.
 	 * @var Array
@@ -88,7 +88,7 @@ class GoSwift extends Swift_Mailer{
 	 * @access private
 	 */
 	private $reply_uid;
-	
+
 	/**
 	 * When repied to a message it flags the orignal message with ANSWERED
 	 *
@@ -96,7 +96,7 @@ class GoSwift extends Swift_Mailer{
 	 * @access private
 	 */
 	private $draft_uid;
-	
+
 
 	/**
 	 * The account record as an array. see table em_accounts
@@ -104,7 +104,7 @@ class GoSwift extends Swift_Mailer{
 	 * @var array
 	 */
 	public $account;
-	
+
 	private $smtp_host;
 
 
@@ -128,7 +128,7 @@ class GoSwift extends Swift_Mailer{
 			$email = new email();
 
 			$this->account = $email->get_account($account_id, $alias_id);
-			
+
 			if(empty($transport))
 			{
 				$encryption = empty($this->account['smtp_encryption']) ? null : $this->account['smtp_encryption'];
@@ -142,7 +142,7 @@ class GoSwift extends Swift_Mailer{
 			}
 		}else
 		{
-			$this->account=false;		
+			$this->account=false;
 
 			if(empty($transport))
 			{
@@ -163,35 +163,35 @@ class GoSwift extends Swift_Mailer{
 		//$this->message =  $pgp ? Swift_Pgp_Message::newInstance($subject, $plain_text_body) :  Swift_Message::newInstance($subject, $plain_text_body);
 		$this->message = Swift_Message::newInstance($subject, $plain_text_body);
 		$this->message->setPriority($priority);
-		
+
 		if($this->account)
 		{
 			$this->message->setFrom(array($this->account['email']=>$this->account['name']));
 		}
-		
-		
-		$headers = $this->message->getHeaders();		
-		
+
+
+		$headers = $this->message->getHeaders();
+
 		$headers->addTextHeader("X-Mailer", "Group-Office ".$GO_CONFIG->version);
 		$headers->addTextHeader("X-MimeOLE", "Produced by Group-Office ".$GO_CONFIG->version);
 
 		$this->set_to($email_to);
 	}
-	
+
 	function set_to($email_to)
 	{
 		$RFC822 = new RFC822();
 		$to_addresses = $RFC822->parse_address_list($email_to);
-		
+
 		$recipients=array();
 		foreach($to_addresses as $address)
 		{
-			$recipients[$address['email']]=$address['personal'];			
+			$recipients[$address['email']]=$address['personal'];
 		}
-		
-		$this->message->setTo($recipients);	
+
+		$this->message->setTo($recipients);
 	}
-	
+
 	function &get_message(){
 		return $this->message;
 	}
@@ -206,15 +206,15 @@ class GoSwift extends Swift_Mailer{
 	function set_body($body,$type='html')
 	{
 		global $GO_CONFIG;
-		
+
 		if($type=='html')
 		{
 			//replace URL's with anchor tags
 			//$body = preg_replace('/[\s\n;]{1}http(s?):\/\/([^\b<\n]*)/', "<a href=\"http$1://$2\">http$1://$2</a>", $body);
-		}		
+		}
 		//add body
 		$this->message->setBody($body, 'text/'.$type);
-	
+
 		if($type=='html')
 		{
 			//add text version of the HTML body
@@ -236,12 +236,12 @@ class GoSwift extends Swift_Mailer{
 		$this->reply_uid=$reply_uid;
 		$this->reply_mailbox=$reply_mailbox;
 	}
-	
+
 	function set_draft($draft_uid)
 	{
 		$this->draft_uid=$draft_uid;
 	}
-	
+
 	function set_from($email_from,$name_from)
 	{
 		$this->message->setFrom(array($email_from=>$name_from));
@@ -256,50 +256,50 @@ class GoSwift extends Swift_Mailer{
 	 * @throws Swift_ConnectionException If sending fails for any reason.
 	 * @return int The number of successful recipients
 	 */
-	
+
 
 	function sendmail($batch=false)
 	{
 		$smtp_restrict = new smtp_restrict();
-		
+
 		if(!$smtp_restrict->is_allowed($this->smtp_host))
 		{
 			global $lang;
 			$msg = sprintf($lang['common']['max_emails_reached'], $this->smtp_host, $smtp_restrict->hosts[gethostbyname($this->smtp_host)]);
 			throw new Exception($msg);
-		}		
-		
-		
+		}
+
+
 		$this->failed_recipients=array();
 		if($batch)
 		{
 			//$send_success = parent::batchSend($this->message,$this->recipients, new Swift_Address($email_from, $name_from));
-			
-			/*$this->batch =& new Swift_BatchMailer($this);	
+
+			/*$this->batch =& new Swift_BatchMailer($this);
 			$this->batch->setSleepTime(10);
 			$this->batch->setMaxTries(2);
-			$this->batch->setMaxSuccessiveFailures(10);		
+			$this->batch->setMaxSuccessiveFailures(10);
 			$send_success=$this->batch->send($this->message, $this->recipients, new Swift_Address($email_from, $name_from));*/
-			
+
 			$send_success = parent::batchSend($this->message,$this->failed_recipients);
-			
+
 		}else
 		{
 			$send_success = parent::send($this->message,$this->failed_recipients);
-		}		
-		
+		}
+
 		if(!$batch && $send_success && $this->account && $this->account['type']=='imap' && !empty($this->account['sent']))
 		{
-			global $GO_CONFIG, $GO_MODULES;				
-			
+			global $GO_CONFIG, $GO_MODULES;
+
 			require_once ($GO_CONFIG->class_path."mail/imap.class.inc");
 			require_once ($GO_MODULES->modules['email']['class_path']."cached_imap.class.inc.php");
-			$imap = new cached_imap();		
+			$imap = new cached_imap();
 
 			$mailbox = empty($this->draft_uid) ? 'INBOX' : $this->account['drafts'];
-				
-			if ($imap->open($this->account,$mailbox)) {									
-				
+
+			if ($imap->open($this->account,$mailbox)) {
+
 				$this->data=$this->message->toString();
 
 				if ($imap->append_message($imap->utf7_imap_encode($this->account['sent']), $this->data,"\\Seen"))
@@ -308,25 +308,25 @@ class GoSwift extends Swift_Mailer{
 					{
 						$uid_arr = array($this->reply_uid);
 						$imap->set_message_flag($this->reply_mailbox, $uid_arr, "\\Answered");
-						
+
 						$cached_message['folder_id']=$imap->folder['id'];
 						$cached_message['uid']=$this->reply_uid;
 						$cached_message['answered']='1';
-						$imap->update_cached_message($cached_message);						
+						$imap->update_cached_message($cached_message);
 					}
-					
+
 					if(!empty($this->draft_uid))
 					{
 						$imap->delete(array($this->draft_uid));
-					}					
-					
+					}
+
 					$imap->close();
 				}
 			}
 		}
 		return $send_success;
 	}
-	
+
 	function implodeSwiftAddressArray($swiftArr)
 	{
 		$fromArr=array();
@@ -340,10 +340,10 @@ class GoSwift extends Swift_Mailer{
 				$fromArr[]=RFC822::write_address($address, $personal);
 			}
 		}
-		
+
 		return implode(',',$fromArr);
 	}
-	
+
 	/**
 	 * Links the message to items in Group-Office. Must be called after send()
 	 *
@@ -356,14 +356,14 @@ class GoSwift extends Swift_Mailer{
 
 
 		$link_message['path']='email/'.date('mY').'/sent_'.time().'.eml';
-			
+
 		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 		$fs = new filesystem();
 		$fs->mkdir_recursive($GO_CONFIG->file_storage_path.dirname($link_message['path']));
 
 		if(empty($this->data))
 		{
-			$this->data = $this->message->toString();		
+			$this->data = $this->message->toString();
 		}
 
 		$fp = fopen($GO_CONFIG->file_storage_path.$link_message['path'],"w+");
@@ -371,27 +371,27 @@ class GoSwift extends Swift_Mailer{
 		fclose($fp);
 
 		$email = new email();
-		
+
 		require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
 		$search = new search();
-		
+
 
 		$link_message['from']=$this->implodeSwiftAddressArray($this->message->getFrom());
 		$link_message['to']=$this->implodeSwiftAddressArray($this->message->getTo());
 		$link_message['subject']=$this->message->getSubject();
 		$link_message['ctime']=$link_message['time']=time();
-		
-		
+
+
 
 		foreach($links as $link)
 		{
-			$sr = $search->get_search_result($link['link_id'], $link['link_type']);					
+			$sr = $search->get_search_result($link['link_id'], $link['link_type']);
 			if($sr)
 			{
 				$link_message['acl_read']=$sr['acl_read'];
-				$link_message['acl_write']=$sr['acl_write'];		
+				$link_message['acl_write']=$sr['acl_write'];
 				$link_message['link_id'] = $email->link_message($link_message);
-			
+
 				$GO_LINKS->add_link(
 				$link['link_id'],
 				$link['link_type'],
@@ -404,54 +404,54 @@ class GoSwift extends Swift_Mailer{
 
 
 class GoSwiftImport extends GoSwift{
-	
+
 	var $body='';
 
 	public function __construct($mime, $add_body=true, $alias_id=0, $transport=null)
 	{
-		
+
 		$RFC822 = new RFC822();
-		
-		
+
+
 		$params['include_bodies'] = true;
 		$params['decode_bodies'] = true;
 		$params['decode_headers'] = true;
 		$params['input'] = $mime;
-	
-	
+
+
 		$structure = Mail_mimeDecode::decode($params);
-		
+
 
 		$subject = isset($structure->headers['subject']) ? $structure->headers['subject'] : '';
-		
+
 		if(isset($structure->headers['disposition-notification-to']))
 		{
 			//$mail->ConfirmReadingTo = $structure->headers['disposition-notification-to'];
 		}
-		
+
 		$to = isset($structure->headers['to']) && strpos($structure->headers['to'],'undisclosed')===false ? $structure->headers['to'] : '';
 		$cc = isset($structure->headers['cc']) && strpos($structure->headers['cc'],'undisclosed')===false ? $structure->headers['cc'] : '';
 		$bcc = isset($structure->headers['bcc']) && strpos($structure->headers['bcc'],'undisclosed')===false ? $structure->headers['bcc'] : '';
 
-		
+
 		parent::__construct($to, $subject,0,$alias_id,'3',null, $transport);
-		
-		
+
+
 		if(isset($structure->headers['from']) )
 		{
 			$addresses=$RFC822->parse_address_list($structure->headers['from']);
 			if(isset($addresses[0]))
 			{
-				$this->set_from($addresses[0]['email'], $addresses[0]['personal']);								
+				$this->set_from($addresses[0]['email'], $addresses[0]['personal']);
 			}
 		}
-		
-		
+
+
 		$this->get_parts($structure);
-		
+
 		if($add_body)
 			$this->set_body($this->body);
-		
+
 	}
 
 	private function get_parts($structure, $part_number_prefix='')
@@ -483,25 +483,25 @@ class GoSwiftImport extends GoSwift{
 					$this->body .= $content_part;
 				}elseif($part->ctype_primary=='multipart')
 				{
-					
+
 				}else
 				{
-					//attachment 
-					
+					//attachment
+
 					$dir=$GO_CONFIG->tmpdir.'attachments/';
-					
+
 					if(!is_dir($dir))
 						mkdir($dir, 0755, true);
-						
-					//unset($part->body);						
+
+					//unset($part->body);
 					//var_dump($part);
 					//exit();
-						
-					$tmp_file = $dir.$part->d_parameters['filename'];					
+
+					$tmp_file = $dir.$part->d_parameters['filename'];
 					file_put_contents($tmp_file, $part->body);
 
 					$mime_type = $part->ctype_primary.'/'.$part->ctype_secondary;
-					
+
 					if(isset($part->headers['content-id']))
 					{
 						$content_id=trim($part->headers['content-id']);
@@ -511,11 +511,12 @@ class GoSwiftImport extends GoSwift{
 						}
 						$img = Swift_EmbeddedFile::fromPath($tmp_file);
 						$img->setContentType(File::get_mime($mime_type));
-						$img->setId($content_id);					
-						$this->message->embed($img);						
+						$img->setId($content_id);
+						$this->message->embed($img);
 					}else
-					{						
-						$attachment = Swift_Attachment::fromPath($tmp_file,File::get_mime($tmp_file)); 
+					{
+					echo $tmp_file."\n";
+						$attachment = Swift_Attachment::fromPath($tmp_file,File::get_mime($tmp_file));
 						$this->message->attach($attachment);
 					}
 				}
