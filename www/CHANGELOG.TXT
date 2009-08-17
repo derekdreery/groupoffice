@@ -1,3 +1,10 @@
+2009/08/?? 3.2.22
+- Adding attachments to mailings works on windows now too.
+- Fixed icalendar import bug
+- Added support for multiple RSS feeds on the start page.
+- Modules can be closed with right mouseclick.
+
+
 2009/08/13 3.2.21
 - Too large padding on first grid cells
 - Move e-mail to another IMAP account.
