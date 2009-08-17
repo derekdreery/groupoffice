@@ -66,8 +66,37 @@ $updates[]="ALTER TABLE `go_state` DROP `index`";
 $updates[]="CREATE TABLE IF NOT EXISTS `go_iso_address_format` (
   `iso` varchar(2) NOT NULL,
   `address_format_id` int(11) NOT NULL,
-  PRIMARY KEY  (`iso`,`address_format_id`)
+  PRIMARY KEY  (`address_format_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates[]="INSERT INTO `go_iso_address_format` (`iso`, `address_format_id`) VALUES
+('NL', 1),
+('US', 2),
+('ES', 3),
+('SG', 4);";
+
+$updates[]="CREATE TABLE IF NOT EXISTS `go_address_format` (
+  `id` int(11) NOT NULL,
+  `format` varchar(255) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+$updates[]="INSERT INTO `go_address_format` (`id`, `format`) VALUES
+(1, '{address} {address_no}\r\n{zip} {city}\r\n{state}\r\n{country}'),
+(2, '{address_no} {address}\r\n{city}, {state} {zip}\r\n{country}'),
+(3, '{address}, {address_no}\r\n{zip} {city}\r\n{state} {country}'),
+(4, '{address_no} {address}\r\n{city} {zip}\r\n{state} {country}');";
+
+
+$updates[]="INSERT INTO `go_address_format` (`id`, `format`) VALUES
+(5, '{address_no} {address}\r\n{zip} {city}\r\n{state} {country}'),
+(6, '{address_no} {address}\r\n{city}\r\n{zip}\r\n{country}'),
+(7, '{address_no} {address}\r\n{zip} {city} {state}\r\n{country}'),
+(8, '{address_no} {address}, {city}\r\n{zip} {state}\r\n{country}');";
+
+
+$updates[]="ALTER TABLE `go_iso_address_format` DROP PRIMARY KEY ,
+ADD PRIMARY KEY ( `iso` , `address_format_id` ) ;";
+
 $updates[]="INSERT INTO `go_iso_address_format` (`iso`, `address_format_id`) VALUES
 ('AD', 1),
 ('AF', 1),
@@ -133,7 +162,6 @@ $updates[]="INSERT INTO `go_iso_address_format` (`iso`, `address_format_id`) VAL
 ('EG', 1),
 ('EH', 1),
 ('ER', 1),
-('ES', 3),
 ('ET', 1),
 ('FI', 1),
 ('FJ', 1),
@@ -226,7 +254,6 @@ $updates[]="INSERT INTO `go_iso_address_format` (`iso`, `address_format_id`) VAL
 ('NF', 1),
 ('NG', 1),
 ('NI', 1),
-('NL', 1),
 ('NO', 1),
 ('NP', 1),
 ('NR', 1),
@@ -255,7 +282,6 @@ $updates[]="INSERT INTO `go_iso_address_format` (`iso`, `address_format_id`) VAL
 ('SC', 1),
 ('SD', 1),
 ('SE', 1),
-('SG', 4),
 ('SH', 1),
 ('SI', 1),
 ('SJ', 1),
@@ -288,7 +314,6 @@ $updates[]="INSERT INTO `go_iso_address_format` (`iso`, `address_format_id`) VAL
 ('UA', 1),
 ('UG', 1),
 ('UM', 1),
-('US', 2),
 ('UY', 1),
 ('UZ', 1),
 ('VA', 1),
@@ -305,17 +330,3 @@ $updates[]="INSERT INTO `go_iso_address_format` (`iso`, `address_format_id`) VAL
 ('ZA', 1),
 ('ZM', 1),
 ('ZW', 1);";
-$updates[]="CREATE TABLE IF NOT EXISTS `go_address_format` (
-  `id` int(11) NOT NULL,
-  `format` varchar(255) NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
-$updates[]="INSERT INTO `go_address_format` (`id`, `format`) VALUES
-(1, '{address} {address_no}\r\n{zip} {city}\r\n{state}\r\n{country}'),
-(2, '{address_no} {address}\r\n{city}, {state} {zip}\r\n{country}'),
-(3, '{address}, {address_no}\r\n{zip} {city}\r\n{state} {country}'),
-(4, '{address_no} {address}\r\n{city} {zip}\r\n{state} {country}'),
-(5, '{address_no} {address}\r\n{zip} {city}\r\n{state} {country}'),
-(6, '{address_no} {address}\r\n{city}\r\n{zip}\r\n{country}'),
-(7, '{address_no} {address}\r\n{zip} {city} {state}\r\n{country}'),
-(8, '{address_no} {address}, {city}\r\n{zip} {state}\r\n{country}');";
