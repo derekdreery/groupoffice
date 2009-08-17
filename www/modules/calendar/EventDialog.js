@@ -82,7 +82,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
         if (GO.files) {
             tbar.push(this.fileBrowseButton = new Ext.Button({
-                iconCls : 'go-menu-icon-files',
+                iconCls : 'btn-files',
                 cls : 'x-btn-text-icon',
                 text : GO.files.lang.files,
                 handler : function() {
