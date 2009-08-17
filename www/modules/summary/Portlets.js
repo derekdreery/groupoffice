@@ -77,7 +77,17 @@ GO.mainLayout.onReady(function(){
 													}));
 												}
 											}
-
+											if(rssTabPanel.items.length == 0)
+											{
+												rssTabPanel.add(new Ext.Panel({
+												title: '<br />',
+												html: '<br />'+GO.summary.lang.noRssFeeds,
+												cls: 'go-form-panel'
+												}));
+												rssTabPanel.setActiveTab(0);
+											}
+											if(rssTabPanel.getActiveTab() == null)
+												rssTabPanel.setActiveTab(0)
 										}
 									},
 									scope:this
@@ -124,16 +134,28 @@ GO.mainLayout.onReady(function(){
 				}else
 				{
 					var rssTabPanels = Ext.decode(response.responseText);
-					for(var i=0;i<rssTabPanels.data.length;i++){
-						rssTabPanel.add(new GO.portlets.rssFeedPortlet({
-						feedId: rssTabPanels.data[i].id,
-						feed: rssTabPanels.data[i].url,
-						title: rssTabPanels.data[i].title,
-						showPreview:parseInt(rssTabPanels.data[i].summary),
-						closable:false
+					if(rssTabPanels.data.length == 0)
+					{
+						rssTabPanel.add(new Ext.Panel({
+						title: '<br />',
+						html: '<br />'+GO.summary.lang.noRssFeeds,
+						cls: 'go-form-panel'
 						}));
 						rssTabPanel.setActiveTab(0);
-					};
+					}
+					else
+					{
+						for(var i=0;i<rssTabPanels.data.length;i++){
+							rssTabPanel.add(new GO.portlets.rssFeedPortlet({
+							feedId: rssTabPanels.data[i].id,
+							feed: rssTabPanels.data[i].url,
+							title: rssTabPanels.data[i].title,
+							showPreview:parseInt(rssTabPanels.data[i].summary),
+							closable:false
+							}));
+							rssTabPanel.setActiveTab(0);
+						};
+					}
 				}
 				this.doLayout();
 			}
