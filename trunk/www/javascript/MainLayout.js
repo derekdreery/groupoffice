@@ -140,8 +140,8 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 				tp.hideTabStripItem(panel);
 				panel.hide();
 
-				var menuItem = this.startMenu.items.item('go-start-menu-'+panel.moduleName);
-				menuItem.show();
+				//var menuItem = this.startMenu.items.item('go-start-menu-'+panel.moduleName);
+				//menuItem.show();
 
 				if(panel == tp.activeTab){
 						var next = tp.stack.next();
@@ -153,7 +153,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 								tp.activeTab = null;
 						}
 				}
-				this.refreshMenu();
+				//this.refreshMenu();
 				this.saveState();
 			}
 		},this);
@@ -161,7 +161,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		
 	},
 
-	refreshMenu : function(){
+	/*refreshMenu : function(){
 		var visible=0;
 		var above=0;
 		var beneath=0;
@@ -193,7 +193,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		}
 
 		this.startMenuLink.setDisplayed(visible>0);
-	},
+	},*/
 	
 	getModulePanel : function(moduleName){
 		var panelId = 'go-module-panel-'+moduleName;
@@ -278,8 +278,6 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 				this.startMenu.add(adminMenuItems[i]);
 			}
 		}
-
-
     
     this.createTabPanel(items);
 
@@ -312,25 +310,20 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		this);
 
 
-		var configurationLink = Ext.get("configuration-link");
-		
+		var configurationLink = Ext.get("configuration-link");		
 		if(configurationLink)
 		{
 			configurationLink.on("click", function(){
-				
 				if(!this.personalSettingsDialog)
 				{
 					this.personalSettingsDialog = new GO.PersonalSettingsDialog();						
 				}
-				
-				this.personalSettingsDialog.show();
-																
+				this.personalSettingsDialog.show();																
 			},
 			this);
 		}
 		
-		var helpLink = Ext.get("help-link");
-		
+		var helpLink = Ext.get("help-link");		
 		if(helpLink)
 		{
 			var helpMenu = new Ext.menu.Menu({
@@ -413,11 +406,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		var activeTab = this.tabPanel.getLayout().activeItem;
    
   	if(!activeTab)
-   		this.tabPanel.setActiveTab(0);
-   		
-   	
-   		
-				
+   		this.tabPanel.setActiveTab(0);				
 		
 		GO.checker = new GO.Checker();
 		GO.checker.init.defer(2000,GO.checker);
@@ -426,8 +415,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
    		{
    			Ext.get('notification-area').update(data.notification_area);
    		}
-   	}, this);
-   	
+   	}, this);   	
    	
    	var searchField = new Ext.form.TextField({
   		name:'search_query',
@@ -447,12 +435,11 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
   		renderTo:"search_query"  		
    	});
 
-
-		for(var i=0;i<items.length;i++){
+		/*for(var i=0;i<items.length;i++){
 			var menuItem = this.startMenu.items.item('go-start-menu-'+items[i].moduleName);
 			menuItem.hide();
 		}
-		this.refreshMenu();
+		this.refreshMenu();*/
 
 		Ext.QuickTips.register({
 			text:GO.lang.rightClickToClose,
@@ -460,9 +447,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 			target:this.startMenuLink
 		});
 
-
-		this.fireEvent('render');
-		
+		this.fireEvent('render');		
    	
    	this.removeLoadMask();
 	},
@@ -492,10 +477,10 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		
 		panel.show();
 
-		var menuItem = this.startMenu.items.item('go-start-menu-'+item.moduleName);
+		/*var menuItem = this.startMenu.items.item('go-start-menu-'+item.moduleName);
 		menuItem.hide();
 
-		this.refreshMenu();
+		this.refreshMenu();*/
 
 		this.saveState();
 	},
