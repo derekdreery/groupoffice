@@ -37,7 +37,10 @@ CREATE TABLE IF NOT EXISTS `su_notes` (
 
 DROP TABLE IF EXISTS `su_rss_feeds`;
 CREATE TABLE IF NOT EXISTS `su_rss_feeds` (
+  `id` int(11) NOT NULL auto_increment,
   `user_id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
   `url` varchar(255) default NULL,
-  PRIMARY KEY  (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  `summary` tinyint(1) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;

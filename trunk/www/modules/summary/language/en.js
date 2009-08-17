@@ -27,3 +27,7 @@ GO.summary.lang.title="Title";
 
 
 GO.summary.lang.manageAnnouncements='Manage announcements';
+GO.summary.lang.webFeeds='Manage webfeeds';
+GO.summary.lang.type='Type';
+GO.summary.lang.summaryType='Summary';
+GO.summary.lang.rssFeeds='Rss Feeds';

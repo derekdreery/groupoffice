@@ -27,11 +27,14 @@ try{
 			$response['data']['text'] = $summary->get_note($GO_SECURITY->user_id);
 			$response['success']=true;
 			break;
+		case 'rss_tabs':
+			$response['data'] = $summary->get_feeds($GO_SECURITY->user_id);
+			$response['success']=true;
+			break;
 		case 'feed':
 			$response['data']['url'] = $summary->get_feed($GO_SECURITY->user_id);
 			$response['success']=true;
 			break;
-
 		case 'announcement':
 			$announcement = $summary->get_announcement(($_REQUEST['announcement_id']));
 			$user = $GO_USERS->get_user($announcement['user_id']);
@@ -79,6 +82,43 @@ try{
 				$announcement['mtime']=Date::get_timestamp($announcement['mtime']);
 				$announcement['ctime']=Date::get_timestamp($announcement['ctime']);
 				$response['results'][] = $announcement;
+			}
+			break;
+		case 'webfeeds':
+			if(isset($_POST['delete_keys']))
+			{
+				try{
+					$response['deleteSuccess']=true;
+					$delete_webfeeds = json_decode(($_POST['delete_keys']));
+					foreach($delete_webfeeds as $webfeed_id)
+					{
+						$summary->delete_webfeed($webfeed_id);
+					}
+				}catch(Exception $e)
+				{
+					$response['deleteSuccess']=false;
+					$response['deleteFeedback']=$e->getMessage();
+				}
+			}
+			$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'id';
+			$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'ASC';
+			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
+			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
+			$query = isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
+
+			if(isset($_POST['active']) && $_POST['active']=='true')
+			{
+				$response['total'] = $summary->get_active_webfeeds($sort, $dir, $start, $limit, $GO_SECURITY->user_id);
+			}else
+			{
+				$response['total'] = $summary->get_webfeeds($query, $sort, $dir, $start, $limit, $GO_SECURITY->user_id);
+			}
+			$response['results']=array();
+			while($summary->next_record())
+			{
+				$webfeed = $summary->record;
+				$webfeed['feedId'] = $webfeed['id'];
+				$response['results'][] = $webfeed;
 			}
 			break;
 		case 'active_announcements':

@@ -333,7 +333,7 @@ class db extends base_db{
 	 */
 	function insert_id()
 	{
-		return $this->link->insert_id();
+		return $this->link->insert_id;
 	}
 
 	/**

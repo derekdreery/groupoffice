@@ -15,3 +15,11 @@ $updates[]="CREATE TABLE IF NOT EXISTS `su_announcements` (
 
 $updates[]="DELETE FROM go_state WHERE name='summary-active-portlets';";
 $updates[]="script:1_add_announcement.inc.php";
+
+$updates[]="ALTER TABLE `su_rss_feeds` DROP PRIMARY KEY ";
+$updates[]="ALTER TABLE `su_rss_feeds` ADD `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ";
+$updates[]="ALTER TABLE `su_rss_feeds` ADD `title` VARCHAR( 255 ) NOT NULL AFTER `user_id` ";
+$updates[]="ALTER TABLE `su_rss_feeds` ADD `summary` BOOL NOT NULL ";
+$updates[]="UPDATE `su_rss_feeds` SET `title` = 'News'";
+$updates[]="UPDATE `su_rss_feeds` SET `summary` = 1";
+$updates[]="script:2_add_rssfeed_title.inc.php";

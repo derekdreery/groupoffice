@@ -22,10 +22,12 @@ class summary extends db{
 	{
 		global $GO_SECURITY, $GO_LANGUAGE, $GO_CONFIG;
 
-		require($GO_LANGUAGE->get_language_file('summary'));
+		require($GO_LANGUAGE->get_language_file('summary',$user['language']));
 		
-		$feed['user_id']=$user['id'];
-		$feed['url']=$lang['summary']['default_rss_url'];
+		$feed['url'] = $lang['summary']['default_rss_url'];
+		$feed['title'] = $lang['summary']['default_rss_title'];
+		$feed['user_id'] = $user['id'];
+		$feed['summary'] = 1;
 		
 		$su = new summary();
 		
@@ -70,26 +72,46 @@ class summary extends db{
 		$sql = "SELECT * FROM su_rss_feeds WHERE user_id='".$this->escape($user_id)."'";
 		$this->query($sql);
 		
-		if(!$this->next_record())
-		{
-			$feed['user_id']=$user_id;
-			$this->insert_row('su_rss_feeds', $feed);
-			return $this->get_feed($user_id);
-		}else
-		{
-			return $this->f('url');
-		}						
+		$this->next_record();
+		return $this->f('url');
+	}
+
+	function get_feeds($user_id)
+	{
+
+		$sql = "SELECT * FROM su_rss_feeds WHERE user_id='".$this->escape($user_id)."' ORDER BY id";
+		$this->query($sql);
+		$urls = array();
+
+		while($this->next_record())
+			$urls[] = $this->record;
+		return $urls;
 	}
 	
 	function add_feed($feed)
 	{
-		return $this->insert_row('su_rss_feeds', $feed);
+		if($this->insert_row('su_rss_feeds', $feed))
+		{
+			return $this->insert_id();
+		}
+		return false;
 	}
 	
 	function update_feed($feed)
 	{
-		return $this->update_row('su_rss_feeds','user_id', $feed);
+		return $this->update_row('su_rss_feeds', 'id', $feed);
 	}
+
+	function delete_other_feeds($user_id, $ids)
+	{
+		$sql = "DELETE FROM su_rss_feeds WHERE user_id=".$this->escape($user_id);
+		if(count($ids))
+		{
+			$sql .= " AND id NOT IN (".implode(',', $ids).")";
+		}
+		$this->query($sql);
+	}
+
 	/**
 	 * Add a Announcement
 	 *
@@ -213,6 +235,54 @@ class summary extends db{
 	{
 		$sql = "SELECT * FROM su_announcements WHERE due_time=0 OR due_time > UNIX_TIMESTAMP()";
 		$sql .= " ORDER BY ".$this->escape($sortfield)." ".$this->escape($sortorder)."";
+		$this->query($sql);
+		$count = $this->num_rows();
+		if($offset>0)
+		{
+			$sql .= " LIMIT (".$this->escape($start).",".$this->escape($offset).")";
+			$this->query($sql);
+		}
+		return $count;
+	}
+
+	/**
+	 * Gets all webfeeds
+	 *
+	 * @param Int $start First record of the total record set to return
+	 * @param Int $offset Number of records to return
+	 * @param String $sortfield The field to sort on
+	 * @param String $sortorder The sort order
+	 *
+	 * @access public
+	 * @return Int Number of records found
+	 */
+	function get_webfeeds($query, $sortfield='id', $sortorder='ASC', $start=0, $offset=0, $user_id)
+	{
+		$sql = "SELECT * FROM su_rss_feeds WHERE user_id = $user_id ORDER BY ".$this->escape($sortfield)." ".$this->escape($sortorder)."";
+		$this->query($sql);
+		$count = $this->num_rows();
+		if($offset>0)
+		{
+			$sql .= " LIMIT ".$this->escape($start).",".$this->escape($offset);
+			$this->query($sql);
+		}
+		return $count;
+	}
+
+/**
+	 * Gets all active webfeeds
+	 *
+	 * @param Int $start First record of the total record set to return
+	 * @param Int $offset Number of records to return
+	 * @param String $sortfield The field to sort on
+	 * @param String $sortorder The sort order
+	 *
+	 * @access public
+	 * @return Int Number of records found
+	 */
+	function get_active_webfeeds($sortfield='url', $sortorder='ASC', $start=0, $offset=0, $user_id)
+	{
+		$sql = "SELECT * FROM su_rss_feeds WHERE due_time=0 OR due_time > UNIX_TIMESTAMP() AND user_id = $user_id ORDER BY ".$this->escape($sortfield)." ".$this->escape($sortorder)."";
 		$this->query($sql);
 		$count = $this->num_rows();
 		if($offset>0)

@@ -111,40 +111,13 @@ foreach($languages as $code=>$language)
 
 if(!isset($lang['common']['extjs_lang'])) $lang['common']['extjs_lang'] = $GO_LANGUAGE->language;
 
+if(!is_dir($GO_CONFIG->local_path.'cache'))
+{
+	mkdir($GO_CONFIG->local_path.'cache', 0755, true);
+}
+
 if(!$GO_CONFIG->debug)
 {
-	if(!is_dir($GO_CONFIG->local_path.'cache'))
-	{
-		mkdir($GO_CONFIG->local_path.'cache', 0755, true);
-	}
-
-	$scripts=array(
-	$GO_CONFIG->root_path.'language/common/en.js',
-	$GO_MODULES->modules['users']['path'].'language/en.js',
-	);
-
-	if($GO_LANGUAGE->language!='en')
-	{
-		if(file_exists($GO_CONFIG->root_path.'language/common/'.$GO_LANGUAGE->language.'.js'))
-		{
-			$scripts[] =$GO_CONFIG->root_path.'language/common/'.$GO_LANGUAGE->language.'.js';
-		}
-
-		if(file_exists($GO_CONFIG->root_path.'ext/build/locale/ext-lang-'.$lang['common']['extjs_lang'].'.js'))
-		{
-			$scripts[]=$GO_CONFIG->root_path.'ext/build/locale/ext-lang-'.$lang['common']['extjs_lang'].'.js';
-		}
-
-		if(file_exists($GO_CONFIG->root_path.'modules/users/language/'.$GO_LANGUAGE->language.'.js'))
-		{
-			$scripts[]=$GO_CONFIG->root_path.'modules/users/language/'.$GO_LANGUAGE->language.'.js';
-		}
-	}
-
-	
-	$scripts[]=$GO_CONFIG->root_path.'javascript/go-all-min';
-	
-	
 	$file = 'base-'.md5($GO_LANGUAGE->language.$GO_CONFIG->mtime.filemtime($GO_CONFIG->root_path.'javascript/go-all-min')).'.js';
 	$path = $GO_CONFIG->local_path.'cache/'.$file;
 	$url = $GO_CONFIG->local_url.'cache/'.$file;
@@ -162,7 +135,44 @@ if(!$GO_CONFIG->debug)
 			}
 		}
 		
-		echo "\n<!-- regenerated script -->\n";		
+		echo "\n<!-- regenerated script -->\n";
+
+		$scripts=array(
+		$GO_CONFIG->root_path.'language/common/en.js',
+		$GO_MODULES->modules['users']['path'].'language/en.js',
+		);
+
+		if($GO_LANGUAGE->language!='en')
+		{
+			if(file_exists($GO_CONFIG->root_path.'language/common/'.$GO_LANGUAGE->language.'.js'))
+			{
+				$scripts[] =$GO_CONFIG->root_path.'language/common/'.$GO_LANGUAGE->language.'.js';
+			}
+
+			if(file_exists($GO_CONFIG->root_path.'ext/build/locale/ext-lang-'.$lang['common']['extjs_lang'].'.js'))
+			{
+				$scripts[]=$GO_CONFIG->root_path.'ext/build/locale/ext-lang-'.$lang['common']['extjs_lang'].'.js';
+			}
+
+			if(file_exists($GO_CONFIG->root_path.'modules/users/language/'.$GO_LANGUAGE->language.'.js'))
+			{
+				$scripts[]=$GO_CONFIG->root_path.'modules/users/language/'.$GO_LANGUAGE->language.'.js';
+			}
+		}
+
+		include($GO_LANGUAGE->get_base_language_file('countries'));
+		$fp=fopen($GO_CONFIG->local_path.'cache/countries.js','w');
+
+		foreach($countries as $key=>$country)
+		{
+			fwrite($fp,'GO.lang.countries["'.$key.'"] = "'.$country.'";');
+			fwrite($fp,"\n");
+		}
+		fclose($fp);
+		$scripts[]=$GO_CONFIG->local_path.'cache/countries.js';
+		$scripts[]=$GO_CONFIG->root_path.'javascript/go-all-min';
+
+
 		foreach($scripts as $script)
 		{
 			file_put_contents($path,"\n\n/*".$script."*/\n\n".file_get_contents($script),FILE_APPEND);
@@ -267,6 +277,17 @@ if(!$GO_CONFIG->debug)
 			echo "\n";
 		}
 	}
+
+	include($GO_LANGUAGE->get_base_language_file('countries'));
+	$fp=fopen($GO_CONFIG->local_path.'cache/countries.js','w');
+	
+	foreach($countries as $key=>$country)
+	{
+		fwrite($fp,'GO.lang.countries["'.$key.'"] = "'.$country.'";');
+		fwrite($fp,"\n");
+	}
+	fclose($fp);
+	echo '<script type="text/javascript" src="'.$GO_CONFIG->local_url.'cache/countries.js"></script>';
 	
 
 	$data = file_get_contents($GO_CONFIG->root_path.'/javascript/scripts.txt');
