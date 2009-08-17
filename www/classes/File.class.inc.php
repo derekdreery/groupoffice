@@ -25,18 +25,18 @@
 class File
 {
 	var $path;
-	
+
 
 	function __construct($path){
 		$this->path = $path;
 	}
-	
-	
+
+
 	function is_full_path($path)
 	{
-		return ($path[0]=='/' || substr($path, 1, 2) == ':/');
+		return ($path[0]=='/' || substr($path, 1, 2) == ':/' || substr($path, 1, 2) == ':\\');
 	}
-	
+
 	function get_directory_size($dir)
 	{
 		$cmd = 'du -sk "'.$dir.'" 2>/dev/null';
@@ -52,14 +52,14 @@ class File
 
 		return $size;
 	}
-	
+
 	function strip_invalid_chars($filename){
 		$filename = trim(preg_replace('/[\/:\*\?"<>|\\\]/','', $filename));
-		
+
 		//IE likes to change a double white space to a single space
 		//We must do this ourselves so the filenames will match.
 		return preg_replace('/\s+/', ' ', $filename);
-		
+
 	}
 
 	function get_filetype_image($extension=null) {
@@ -87,7 +87,7 @@ class File
 
 	function get_filetype_description($extension=null) {
 		global $lang, $GO_LANGUAGE;
-		
+
 		require_once($GO_LANGUAGE->get_base_language_file('filetypes'));
 
 		if(!isset($extension))
@@ -101,35 +101,35 @@ class File
 			return $lang['filetypes']['unknown'];
 		}
 	}
-	
 
-	
+
+
 	function get_mime($path)
 	{
 		global $GO_CONFIG;
-		
+
 		$types = file_get_contents($GO_CONFIG->root_path.'mime.types');
-		
+
 		$extension = File::get_extension($path);
-		
+
 		if(empty($extension))
 		{
 			return 'application/octet-stream';
 		}
-		
+
 		$pos = strpos($types, ' '.$extension);
-		
+
 		if($pos)
 		{
 			$pos++;
-			
-			$start_of_line = String::rstrpos($types, "\n", $pos);			
+
+			$start_of_line = String::rstrpos($types, "\n", $pos);
 			$end_of_mime = strpos($types, ' ', $start_of_line);
 			$mime = substr($types, $start_of_line+1, $end_of_mime-$start_of_line-1);
-			
-			return $mime;		
-		}	
-		
+
+			return $mime;
+		}
+
 		if(function_exists('finfo_open')){
         $finfo    = finfo_open(FILEINFO_MIME);
         $mimetype = finfo_file($finfo, $filename);
@@ -137,11 +137,11 @@ class File
         return $mimetype;
     }elseif(function_exists('mime_content_type'))
     {
-    	return mime_content_type($path);		
+    	return mime_content_type($path);
     }else
     {
     	return 'application/octet-stream';
-    }		
+    }
 	}
 
 
