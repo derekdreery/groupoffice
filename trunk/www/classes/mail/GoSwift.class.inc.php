@@ -288,7 +288,7 @@ class GoSwift extends Swift_Mailer{
 			$send_success = parent::send($this->message,$this->failed_recipients);
 		}		
 		
-		if($send_success && $this->account && $this->account['type']=='imap' && !empty($this->account['sent']))
+		if(!$batch && $send_success && $this->account && $this->account['type']=='imap' && !empty($this->account['sent']))
 		{
 			global $GO_CONFIG, $GO_MODULES;				
 			
@@ -516,7 +516,7 @@ class GoSwiftImport extends GoSwift{
 					}else
 					{						
 						$attachment = Swift_Attachment::fromPath($tmp_file,File::get_mime($tmp_file)); 
-						$swift->message->attach($attachment);
+						$this->message->attach($attachment);
 					}
 				}
 
