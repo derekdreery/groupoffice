@@ -17,3 +17,4 @@ GO.summary.lang.webFeeds='Beheer webfeeds';
 GO.summary.lang.type='Type';
 GO.summary.lang.summaryType='Samenvatting';
 GO.summary.lang.rssFeeds='Rss Feeds';
+GO.summary.lang.noRssFeeds='Er zijn nog geen RSS feeds toegevoegd.<br />Klik op het instellingen knopje rechtsboven in dit venster om feeds toe te voegen.';

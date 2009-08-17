@@ -31,3 +31,4 @@ GO.summary.lang.webFeeds='Manage webfeeds';
 GO.summary.lang.type='Type';
 GO.summary.lang.summaryType='Summary';
 GO.summary.lang.rssFeeds='Rss Feeds';
+GO.summary.lang.noRssFeeds='No RSS feeds have been added.<br />Click the settings button in the top right corner of this window to add feeds.';

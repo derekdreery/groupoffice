@@ -14,10 +14,6 @@
 GO.portlets.rssFeedPortlet = function(config) {
     Ext.apply(this, config);
 
-		if(!this.feed)
-		{
-			this.feed = 'http://www.nu.nl/deeplink_rss2/index.jsp?r=Algemeen';
-		}
     this.store = new Ext.data.Store({
         proxy: new Ext.data.HttpProxy({        		
             url: GO.settings.modules.summary.url+'feed_proxy.php'
@@ -131,9 +127,8 @@ Ext.extend(GO.portlets.rssFeedPortlet, Ext.grid.GridPanel, {
     loadFeed : function(url, preview) {
         if(typeof(preview) == 'undefined')
 			preview = 1;
-			var view = this.getView();
-			view.showPreview = preview;
-			//view.refresh();
+		var view = this.getView();
+		view.showPreview = preview;
 
 		this.store.baseParams = {
             feed: url
