@@ -45,12 +45,23 @@ GO.email.EmailClient = function(config){
 		messagesAtTop =screen.width<1024;
 	}
 
+	var deleteConfig = {
+				callback:function(){
+					if(this.messagePanel.uid && !this.messagesGrid.store.getById(this.messagePanel.uid))
+					{
+						this.messagePanel.reset();
+					}
+				},
+				scope: this
+			};
+
 	this.leftMessagesGrid = new GO.email.MessagesGrid({
 		id:'em-pnl-west',
 		store:this.messagesStore,
 		width: 420,
 		region:'west',
-		hidden:messagesAtTop
+		hidden:messagesAtTop,
+		deleteConfig : deleteConfig
 	});	
 	this.addGridHandlers(this.leftMessagesGrid);
 	
@@ -59,7 +70,8 @@ GO.email.EmailClient = function(config){
 		store:this.messagesStore,
 		height: 250,
 		region:'north',
-		hidden:!messagesAtTop
+		hidden:!messagesAtTop,
+		deleteConfig : deleteConfig
 	});
 	this.addGridHandlers(this.topMessagesGrid);
 	
@@ -101,10 +113,12 @@ GO.email.EmailClient = function(config){
 			}
 		}
 
+		/*
+		 *This method is annoying when searching for unread mails
 		if(this.messagePanel.uid && !this.messagesGrid.store.getById(this.messagePanel.uid))
 		{
 			this.messagePanel.reset();
-		}
+		}*/
 
 		//don't confirm delete to trashfolder
 		this.messagesGrid.deleteConfig.noConfirmation=!this.messagesGrid.store.reader.jsonData.trash && !GO.util.empty(this.messagesGrid.store.reader.jsonData.trash_folder);
@@ -169,7 +183,9 @@ GO.email.EmailClient = function(config){
 			iconCls: 'btn-delete',
 			text: GO.lang.cmdDelete,
 			cls: 'x-btn-text-icon',
-			handler: function(){this.messagesGrid.deleteSelected();},
+			handler: function(){
+				this.messagesGrid.deleteSelected();
+			},
 			scope: this,
 			multiple:true
 		},'-',{
@@ -439,6 +455,12 @@ GO.email.EmailClient = function(config){
 							{
 								this.messagesGrid.store.reload({
 									callback:function(){
+
+										if(this.messagePanel.uid && !this.messagesGrid.store.getById(this.messagePanel.uid))
+										{
+											this.messagePanel.reset();
+										}
+
 										Ext.MessageBox.hide();
 									},
 									scope:this
@@ -463,7 +485,15 @@ GO.email.EmailClient = function(config){
 				this.messagesGrid.store.baseParams['to_mailbox']=e.target.attributes['mailbox'];
 				this.messagesGrid.store.baseParams['messages']=Ext.encode(messages);
 				
-				this.messagesGrid.store.reload();
+				this.messagesGrid.store.reload({
+					callback:function(){
+						if(this.messagePanel.uid && !this.messagesGrid.store.getById(this.messagePanel.uid))
+						{
+							this.messagePanel.reset();
+						}
+					},
+					scope:this
+				});
 
 				delete this.messagesGrid.store.baseParams['action'];
 				delete this.messagesGrid.store.baseParams['from_mailbox'];
@@ -1198,7 +1228,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	{
 		if(folder_id!=this.folder_id)
 		{
-			//this.messagePanel.reset();
+			this.messagePanel.reset();
 			this.messagesGrid.getSelectionModel().clearSelections();
 		}
 		

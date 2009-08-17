@@ -163,11 +163,10 @@ Ext.extend(GO.grid.GridPanel, Ext.grid.GridPanel, {
 	 * 
 	 */
 	deleteSelected : function(config){
-		
-		if(!config)
-		{
-			config=this.deleteConfig;
-		}
+
+		config = config || {};
+
+		Ext.apply(config, this.deleteConfig);
 		
 		if(!config['deleteParam'])
 		{
