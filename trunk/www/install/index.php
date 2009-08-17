@@ -43,7 +43,7 @@ if (!@is__writable($GO_CONFIG->file_storage_path) || !@is__writable($GO_CONFIG->
 	$tasks[] = 'userdir';
 }
 
-if($CONFIG_FILE=='/etc/groupoffice/config.php' && @file_exists('/etc/groupoffice/config-db.php'))
+/*if($CONFIG_FILE=='/etc/groupoffice/config.php' && @file_exists('/etc/groupoffice/config-db.php'))
 {
 	require('/etc/groupoffice/config-db.php');
 
@@ -64,7 +64,7 @@ if($CONFIG_FILE=='/etc/groupoffice/config.php' && @file_exists('/etc/groupoffice
 			$dbconn=true;
 		}
 	}
-}
+}*/
 
 $tasks[] = 'theme';
 
