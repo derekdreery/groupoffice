@@ -392,7 +392,7 @@ GO.calendar.MainPanel = function(config){
 			var sD = this.getActivePanel().startDate;
 			var eD = this.getActivePanel().endDate;
 									
-			var l = GO.settings.modules.calendar.url+'print.php?start_time='+sD.format('U')+'&end_time='+eD.format('U');
+			var l = GO.settings.modules.calendar.url+'print.php?start_time='+sD.format('Y-m-d')+'&end_time='+eD.format('Y-m-d');
 									
 			if(this.displayType=='view')
 			{

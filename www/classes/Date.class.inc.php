@@ -495,8 +495,10 @@ class Date
 			return 0;
 		}
 		try{
-			$d = new DateTime(Date::to_input_format($date_string));
-			return $d->format('U');
+			//$d = new DateTime(Date::to_input_format($date_string));
+			//return $d->format('U');
+
+			return strtotime(Date::to_input_format($date_string));
 		}catch(Exception $e)
 		{
 			return false;
@@ -580,21 +582,21 @@ class Date
 		return ((float) $usec + (float) $sec);
 	}
 
-	public static function get_timestamp($utime, $with_time=true, $timezone='GMT')
+	public static function get_timestamp($utime, $with_time=true)
 	{
 		if(empty($utime))
 			return '';
 			
-		return Date::format('@'.$utime, $with_time, $timezone);
+		return Date::format('@'.$utime, $with_time);
 	}
 
-	public static function format($time, $with_time=true, $timezone='GMT')
+	public static function format($time, $with_time=true)//, $timezone='GMT')
 	{
 		if(empty($time) || $time=='0000-00-00')
 		{
 			return '';
 		}
-		$d = new DateTime($time, new DateTimeZone($timezone));
+		/*$d = new DateTime($time, new DateTimeZone($timezone));
 
 
 		if($timezone!=$_SESSION['GO_SESSION']['timezone'])
@@ -604,11 +606,11 @@ class Date
 			{
 				$d->setTimezone($tz);
 			}
-		}
+		}*/
 
 		$date_format = $with_time ?  $_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'] : $_SESSION['GO_SESSION']['date_format'];
 
-		return $d->format($date_format);
+		return date($date_format, strtotime($time));
 	}
 
 	/*public static function local_to_gmt_time($utime)
