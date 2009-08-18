@@ -1,3 +1,7 @@
+2009/08/18 3.2.24
+Fixed some bugs and we enhanced the RSS feeds panel and address formatting
+functions.
+
 2009/08/13 3.2.21
 Moving e-mails between IMAP accounts is now possible and you can select different
 address formats for contacts and companies now.
