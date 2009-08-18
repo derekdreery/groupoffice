@@ -1,4 +1,4 @@
-2009/08/18 3.2.24
+2009/08/18 3.2.25
 Fixed some bugs and we enhanced the RSS feeds panel and address formatting
 functions.
 
