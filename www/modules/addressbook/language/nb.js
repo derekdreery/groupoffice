@@ -97,3 +97,12 @@ GO.addressbook.lang.confirmCreate='Kontaktperson finnes ikke. Vil du opprette en
 GO.addressbook.lang.matchFields='Finn like felter';
 
 GO.addressbook.lang.advancedSearch='Avansert søk';
+GO.addressbook.lang.defaultAddressFormat='Forvalgt adresseformat';
+GO.addressbook.lang.defaultSalutation='Forvalgt hilsning';
+GO.addressbook.lang.explanationVariables='Forklaring til hilsningsvariabler';
+GO.addressbook.lang.explanationSex='Mannlig og kvinnelig hilsningsform';
+GO.addressbook.lang.explanationTitle='Tittel';
+GO.addressbook.lang.explanationInitials='Initialer';
+GO.addressbook.lang.explanationFirstName='Fornavn';
+GO.addressbook.lang.explanationMiddleName='Mellomnavn';
+GO.addressbook.lang.explanationLastName='Etternavn';
