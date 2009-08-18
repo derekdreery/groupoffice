@@ -1,8 +1,10 @@
-2009/08/?? 3.2.22
+2009/08/18 3.2.24
 - Adding attachments to mailings works on windows now too.
 - Fixed icalendar import bug
 - Added support for multiple RSS feeds on the start page.
 - Modules can be closed with right mouseclick.
+- Calendar printing was off one day in some timezones
+- Address formats for all countries now.
 
 
 2009/08/13 3.2.21

@@ -142,3 +142,4 @@ GO.email.lang.manageAliases='Upravit přezdívky odesílatele';
 GO.email.lang.addSendersTo='Přidat odesílatele do...';
 
 GO.email.lang.defaultTemplate='Nastavit vybranou šablonu jako výchozí';
+GO.email.lang.moving='Přenášení...';
