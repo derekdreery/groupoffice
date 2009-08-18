@@ -76,3 +76,6 @@ GO.users.lang.numberFormat ='Währungsformat';
 GO.users.lang.importExport ='Import / Export';
 GO.users.lang.listSeparator='Listentrennzeichen';
 GO.users.lang.textSeparator='Texttrennzeichen';
+GO.users.lang.deleteWarning='WARNUNG!!! Alle Benutzerdaten inkl. Adressbüchern, Projekten, Kalendern, etc. werden unwiderruflich gelöscht!';
+GO.users.lang.lastName='Nachname';
+GO.users.lang.firstName='Vorname';

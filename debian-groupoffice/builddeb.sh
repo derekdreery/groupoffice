@@ -44,8 +44,6 @@ tar --exclude=debian -czf groupoffice-com_$VERSION.orig.tar.gz groupoffice-com-$
 
 cd groupoffice-com-$VERSION
 
-debuild -S -rfakeroot
-
 if [ "$2" == "send" ]; then
 	debuild -rfakeroot
 	cd ..
