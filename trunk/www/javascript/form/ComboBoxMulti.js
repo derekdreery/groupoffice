@@ -20,18 +20,7 @@
  * @param {Object} config Configuration options
  */
 GO.form.ComboBoxMulti = function(config){
-    /**
-     * @cfg {String} sep is used to separate text entries
-     */
-    /**
-     * @cfg {Boolean} preventDuplicates indicates whether repeated selections of the same option will generate extra entries
-     */
-
-		if(!config.sep)
-		{
-			config.sep=',';
-		}
-    
+   
     // this option will interfere will expected operation
     config.typeAhead = false;
     // these options customize behavior
@@ -48,7 +37,13 @@ GO.form.ComboBoxMulti = function(config){
     this.on('blur', function(){this.focused=false;}, this);
 };
 
-Ext.extend(GO.form.ComboBoxMulti, Ext.form.ComboBox, {
+Ext.extend(GO.form.ComboBoxMulti, GO.form.ComboBox, {
+		/**
+     * @cfg {String} sep is used to separate text entries
+     */
+		sep : ',',
+
+		//private
 		focused : false,
 		
     getCursorPosition: function(){

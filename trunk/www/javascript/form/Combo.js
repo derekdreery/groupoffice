@@ -10,7 +10,16 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
- 
+
+
+/**
+ * @class GO.form.ComboBoxMulti
+ * @extends GO.form.ComboBox
+ * A combobox control with support for autocomplete, remote-loading, paging and many other features.
+ * @constructor
+ * Create a new ComboBoxMulti.
+ * @param {Object} config Configuration options
+ */
 GO.form.ComboBox = Ext.extend(Ext.form.ComboBox, {
 
 	/**
@@ -43,7 +52,7 @@ GO.form.ComboBox = Ext.extend(Ext.form.ComboBox, {
 		}
 	},
 
-	/**
+	/*
 	 * Small override to help the setRemoteText value when it is called before
 	 * rendering.
 	 */
@@ -68,6 +77,7 @@ GO.form.ComboBox = Ext.extend(Ext.form.ComboBox, {
 	/**
 	 * Clears the last search action. Usefull when you change a baseParam of the
 	 * combo store and the cache prevents you searching the server.
+	 *
 	 */
 	clearLastSearch : function(){
 		this.lastQuery=false;
