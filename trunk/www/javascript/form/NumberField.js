@@ -10,8 +10,20 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
- 
+
+ /**
+ * @class GO.form.NumberField
+ * @extends Ext.form.TextField
+ * Numeric text field that provides automatic number formatting by using the
+ * Group-Office personal settings
+ * @constructor
+ * Creates a new NumberField
+ * @param {Object} config Configuration options
+ */
 GO.form.NumberField = Ext.extend(Ext.form.TextField, {
+	/**
+	 * @cfg {Number} decimals The maximum precision to display after the decimal separator (defaults to 2)
+	 */
 	decimals : 2,
 	initComponent : function(){
 		GO.form.NumberField.superclass.initComponent.call(this);
@@ -31,12 +43,6 @@ GO.form.NumberField = Ext.extend(Ext.form.TextField, {
 		var number = GO.util.unlocalizeNumber(this.getValue());
 		this.setValue(GO.util.numberFormat(number, this.decimals));
 	}
-/*,
-	
-	setValue : function(v)
-	{
-		GO.form.NumberField.superclass.setValue.call(GO.util.numberFormat(v, this.decimals));
-	}*/	
 });
 
 Ext.reg('numberfield', GO.form.NumberField);

@@ -12,10 +12,15 @@
  */
  
 /**
-  * param user_name: the text, the initial text to show
-  * param user_id: the initial user_id 
-  */
- 
+ * @class GO.form.SelectUser
+ * @extends GO.form.ComboBox
+ *
+ * Selects a Group-Office user.
+ *
+ * @constructor
+ * Creates a new SelectUser
+ * @param {Object} config Configuration options
+ */
 GO.form.SelectUser = function(config){
 
 	config = config || {};

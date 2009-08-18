@@ -10,8 +10,20 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
- 
+
+ /**
+ * @class GO.form.SearchField
+ * @extends Ext.form.TriggerField
+ * Search text field that will add a query parameter to a Datastore automatically
+ * @constructor
+ * Creates a new SearchField
+ * @param {Object} config Configuration options
+ */
 GO.form.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
+	/**
+	 * @cfg {Number} store The data store to add the query too
+	 */
+		store : false,
     initComponent : function(){
         GO.form.SearchField.superclass.initComponent.call(this);
         this.on('specialkey', function(f, e){
