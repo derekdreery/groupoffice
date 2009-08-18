@@ -131,14 +131,6 @@ GO.linkHandlers[13]=function(id){
 }
 /* {LINKHANDLERS} */
 
-GO.newMenuItems.push({
-	text: GO.servermanager.lang.installation,
-	iconCls: 'go-link-icon-13',
-	handler:function(item, e){		
-		GO.servermanager.installationDialog.show(0, {
-			link_config: item.parentMenu.link_config			
-		});
-	}
-});
+
 /* {NEWMENUITEMS} */
 
