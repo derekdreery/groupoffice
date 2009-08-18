@@ -253,7 +253,8 @@ try
 				throw new Exception($lang['common']['missingField']);
 			} else {
 				$existing_ab = $ab->get_addressbook_by_name($name);
-					
+
+
 				if ($addressbook_id < 1)
 				{
 					#insert
@@ -277,7 +278,7 @@ try
 					
 					$user_id = isset($_REQUEST['user_id']) ? ($_REQUEST['user_id']) : $GO_SECURITY->user_id;
 
-					$addressbook = $ab->add_addressbook($user_id, $name);
+					$addressbook = $ab->add_addressbook($user_id, $name, $_REQUEST['default_iso_address_format'], $_REQUEST['default_salutation']);
 					$result['addressbook_id'] = $addressbook['addressbook_id'];
 					$result['acl_read'] = $addressbook['acl_read'];
 					$result['acl_write'] = $addressbook['acl_write'];

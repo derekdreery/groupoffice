@@ -126,7 +126,8 @@ GO.addressbook.CompanyProfilePanel = function(config)
 		fieldLabel: GO.lang['strAddressFormat'],
 		name: 'iso_address_format',
 		displayField: 'country_name',
-		hiddenName: 'iso_address_format'
+		hiddenName: 'iso_address_format',
+		allowBlank: false
 	});
 	
 	
