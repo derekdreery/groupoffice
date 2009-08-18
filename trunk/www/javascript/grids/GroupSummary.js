@@ -27,7 +27,7 @@ Ext.extend(Ext.grid.GroupSummary, Ext.util.Observable, {
 
         if(!this.rowTpl){
             this.rowTpl = new Ext.Template(
-                '<div class="x-grid3-summary-row" style="{tstyle}">',
+                '<div id="x-grid3-summary-row-'+this.grid.id+'" class="x-grid3-summary-row" style="{tstyle}">',
                 '<table class="x-grid3-summary-table" border="0" cellspacing="0" cellpadding="0" style="{tstyle}">',
                     '<tbody><tr>{cells}</tr></tbody>',
                 '</table></div>'
