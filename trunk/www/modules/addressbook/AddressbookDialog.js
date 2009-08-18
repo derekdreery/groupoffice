@@ -164,11 +164,11 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 					columnWidth:.8,
 					border:false,
 					html:	GO.addressbook.lang.explanationSex+
-							'<br />'+GO.addressbook.lang.explanationTitle+
-							'<br />'+GO.addressbook.lang.explanationInitials+
-							'<br />'+GO.addressbook.lang.explanationFirstName+
-							'<br />'+GO.addressbook.lang.explanationMiddleName+
-							'<br />'+GO.addressbook.lang.explanationLastName
+							'<br />'+GO.lang.strTitle+
+							'<br />'+GO.lang.strInitials+
+							'<br />'+GO.lang.strFirstName+
+							'<br />'+GO.lang.strMiddleName+
+							'<br />'+GO.lang.strLastName
 				}]
 			}
 			]

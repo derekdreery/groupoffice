@@ -153,3 +153,5 @@ GO.email.lang.manageAliases='Behandle aliaser';
 GO.email.lang.addSendersTo='Legg til avsendere i ...';
 
 GO.email.lang.defaultTemplate='Sett valgte mal som standard';
+
+GO.email.lang.moving='Flytter...';

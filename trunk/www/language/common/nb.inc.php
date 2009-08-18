@@ -187,3 +187,6 @@ $lang['common']['GOwebsite']='Group-Office nettsted';
 $lang['common']['GOisAProductOf']='<i>Group-Office</i> er et produkt fra <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
 $lang['common']['yes']='Ja';
 $lang['common']['no']='Nei';
+$lang['common']['startMenu']='Admin meny';
+$lang['common']['address_format']='Adresseformat';
+$lang['common']['dear']='Kjære';
