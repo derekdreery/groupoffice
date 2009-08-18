@@ -118,3 +118,4 @@ GO.email.lang.email='E-Mail';
 GO.email.lang.manageAliases='Aliase...';
 GO.email.lang.addSendersTo='Absender als Empfänger';
 GO.email.lang.defaultTemplate='Gewählte Vorlage als Standard verwenden';
+GO.email.lang.moving='Verschiebe...';

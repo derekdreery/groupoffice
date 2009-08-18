@@ -58,3 +58,4 @@ GO.calendar.lang.endsAt='Endet um';
 GO.calendar.lang.eventDefaults='Standardeinstellungen für Termine';
 GO.calendar.lang.importToCalendar='Ohne Einladung direkt in zugehörige Kalender eintragen';
 GO.calendar.lang.default_calendar='Standardkalender';
+GO.calendar.lang.status='Status';
