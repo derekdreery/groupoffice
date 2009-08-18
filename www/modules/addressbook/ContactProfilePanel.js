@@ -183,7 +183,8 @@ GO.addressbook.ContactProfilePanel = function(config)
 		fieldLabel: GO.lang['strAddressFormat'],
 		name: 'iso_address_format',
 		displayField: 'country_name',
-		hiddenName: 'iso_address_format'
+		hiddenName: 'iso_address_format',
+		allowBlank: false
 	});
 
 
@@ -232,7 +233,7 @@ GO.addressbook.ContactProfilePanel = function(config)
     mode:'local',
     triggerAction:'all',
     editable: false,
-	selectOnFocus:true,
+		selectOnFocus:true,
     forceSelection: true,
     allowBlank: false,
     anchor:'100%'
@@ -253,12 +254,18 @@ GO.addressbook.ContactProfilePanel = function(config)
 		}	
 	}, this);
 
-	this.formFirstName.on('blur', this.setSalutation, this);
-	this.formMiddleName.on('blur', this.setSalutation, this);
-	this.formLastName.on('blur', this.setSalutation, this);
-	this.formInitials.on('blur', this.setSalutation, this);
-	this.formTitle.on('blur', this.setSalutation, this);
-	this.sexCombo.on('change', this.setSalutation, this);
+	this.formFirstName.on('blur', function(){this.setSalutation(false)}, this);
+	this.formMiddleName.on('blur', function(){this.setSalutation(false)}, this);
+	this.formLastName.on('blur', function(){this.setSalutation(false)}, this);
+	this.formInitials.on('blur', function(){this.setSalutation(false)}, this);
+	this.formTitle.on('blur', function(){this.setSalutation(false)}, this);
+	this.sexCombo.on('change', function(){this.setSalutation(true)}, this);
+
+	this.formFirstName.on('change', function(){this.setSalutation(true)}, this);
+	this.formMiddleName.on('change', function(){this.setSalutation(true)}, this);
+	this.formLastName.on('change', function(){this.setSalutation(true)}, this);
+	this.formInitials.on('change', function(){this.setSalutation(true)}, this);
+	this.formTitle.on('change', function(){this.setSalutation(true)}, this);
 	 
 	this.addressbookFieldset = 
 	{
@@ -343,29 +350,31 @@ GO.addressbook.ContactProfilePanel = function(config)
 }
 
 Ext.extend(GO.addressbook.ContactProfilePanel, Ext.Panel,{
-	setSalutation : function()
+	setSalutation : function(overwrite)
 	{
-		var firstName = this.formFirstName.getValue();
-		var middleName = this.formMiddleName.getValue();
-		var lastName = this.formLastName.getValue();
-		var initials = this.formInitials.getValue();
-		var title = this.formTitle.getValue();
-		var record = this.formAddressBooks.store.getById(this.formAddressBooks.getValue());
-		var sal = record.get('default_salutation');
+		if(overwrite || this.formSalutation.getValue()==''){
+			var firstName = this.formFirstName.getValue();
+			var middleName = this.formMiddleName.getValue();
+			var lastName = this.formLastName.getValue();
+			var initials = this.formInitials.getValue();
+			var title = this.formTitle.getValue();
+			var record = this.formAddressBooks.store.getById(this.formAddressBooks.getValue());
+			var sal = record.get('default_salutation');
 
-		var sex = sal.slice(sal.indexOf('[')+1, sal.indexOf(']'));
-		var sex_split = sex.split('/');
-		var gender = (this.sexCombo.getValue() == 'M')? sex_split[0] : sex_split[1];
+			var sex = sal.slice(sal.indexOf('[')+1, sal.indexOf(']'));
+			var sex_split = sex.split('/');
+			var gender = (this.sexCombo.getValue() == 'M')? sex_split[0] : sex_split[1];
 
-		sal = sal.replace('['+sex+']', gender);
-		sal = sal.replace('{first_name}', firstName);
-		sal = sal.replace('{middle_name}', middleName);
-		sal = sal.replace('{last_name}', lastName);
-		sal = sal.replace('{initials}', initials);
-		sal = sal.replace('{title}', title);
-		sal = sal.replace('  ', ' ');
-		
-		this.formSalutation.setRawValue(sal);
+			sal = sal.replace('['+sex+']', gender);
+			sal = sal.replace('{first_name}', firstName);
+			sal = sal.replace('{middle_name}', middleName);
+			sal = sal.replace('{last_name}', lastName);
+			sal = sal.replace('{initials}', initials);
+			sal = sal.replace('{title}', title);
+			sal = sal.replace('  ', ' ');
+
+			this.formSalutation.setValue(sal);
+		}
 	},
 	setAddressbookID : function(addressbook_id)
 	{

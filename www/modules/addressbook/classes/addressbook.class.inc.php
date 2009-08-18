@@ -968,20 +968,20 @@ class addressbook extends db {
         $this->query($sql);
     }
 
-    function add_addressbook($user_id, $name, $default_language = 'NL', $default_salutation = '') {
-        global $GO_SECURITY, $GO_MODULES;
-        
-        $result['acl_read'] = $GO_SECURITY->get_new_acl('addressbook', $user_id);
-        $result['acl_write'] = $GO_SECURITY->get_new_acl('addressbook', $user_id);
-        $result['user_id']=$user_id;
-        $result['default_iso_address_format']=$default_language;
-		$result['default_salutation']=$default_salutation;
-		$result['name']=$name;
+		function add_addressbook($user_id, $name, $default_iso_address_format = 'NL', $default_salutation = '') {
+			global $GO_SECURITY, $GO_MODULES;
 
-		$this->_add_addressbook($result);       
-        $result['addressbook_id']=$result['id'];
-        return $result;
-    }
+			$result['acl_read'] = $GO_SECURITY->get_new_acl('addressbook', $user_id);
+			$result['acl_write'] = $GO_SECURITY->get_new_acl('addressbook', $user_id);
+			$result['user_id']=$user_id;
+			$result['default_iso_address_format']=$default_iso_address_format;
+			$result['default_salutation']=$default_salutation;
+			$result['name']=$name;
+
+			$this->_add_addressbook($result);
+			$result['addressbook_id']=$result['id'];
+			return $result;
+		}
 
 		function _add_addressbook(&$addressbook)
 		{

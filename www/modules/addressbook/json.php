@@ -448,8 +448,8 @@ try
 					$response['data']['birthday'] = Date::format($response['data']['birthday'], false);
 				}
 
-				if($response['data']['salutation'] == '')
-					$response['data']['salutation'] = $response['data']['default_salutation'];
+				//if($response['data']['salutation'] == '')
+					//$response['data']['salutation'] = $response['data']['default_salutation'];
 				
 				
 				if($response['data']['company_id'] > 0 && $company = $ab->get_company($response['data']['company_id']))

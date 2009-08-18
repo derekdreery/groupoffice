@@ -14,7 +14,7 @@ GO.addressbook.ManageAddressbooksGrid = function(config){
 	
 	
 	
-	config.paging=true;
+	config.paging=false;
 
 	var companiesColumnModel =  new Ext.grid.ColumnModel([
 	  {
