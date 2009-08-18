@@ -222,17 +222,18 @@ class Go2Mime
 
 				if ($part->ctype_primary == 'text' && (!isset($part->disposition) || $part->disposition != 'attachment') && empty($part->d_parameters['filename']))
 				{
-					if (eregi('plain', $part->ctype_secondary))
-					{
-						$content_part = nl2br($part->body);
-					}else
-					{
-						$content_part = String::convert_html($part->body);
-					}
 					if(isset($part->ctype_parameters['charset']) && strtoupper($part->ctype_parameters['charset'])!='UTF-8')
 					{
-						$content_part = iconv($part->ctype_parameters['charset'], 'UTF-8', $content_part);
+						$content_part = iconv($part->ctype_parameters['charset'], 'UTF-8', $part->body);
 					}
+					if (eregi('plain', $part->ctype_secondary))
+					{
+						$content_part = nl2br($content_part);
+					}else
+					{
+						$content_part = String::convert_html($content_part);
+					}
+					
 					$this->response['body'] .= $content_part;
 				}
 				//store attachements in the attachments array
