@@ -12,9 +12,15 @@
  */
 
  /**
-  * param group_name: the text, the initial text to show
-  * param group_id: the initial group_id
-  */
+ * @class GO.form.SelectGroup
+ * @extends GO.form.ComboBox
+ *
+ * Selects a Group-Office user group.
+ * 
+ * @constructor
+ * Creates a new SelectGroup
+ * @param {Object} config Configuration options
+ */
 
  GO.form.SelectGroup = function(config){
 	Ext.apply(this, config);

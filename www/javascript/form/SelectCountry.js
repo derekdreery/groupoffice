@@ -14,6 +14,15 @@
 
 
 
+ /**
+ * @class GO.form.SelectCountry
+ * @extends GO.form.ComboBox
+ *
+ * Selects a country. It will use the country's ISO code as value field
+ * @constructor
+ * Creates a new SelectCountry
+ * @param {Object} config Configuration options
+ */
   
 GO.form.SelectCountry = function(config){
 

@@ -15,12 +15,17 @@
  
 
 
+/**
+ * @class GO.form.UploadFile
+ *
+ * Allows multiple files to be uploaded. They have to be selected one by one
+ * though.
+ *
+ * @constructor
+ * Creates a new SelectUser
+ * @param {Object} config Configuration options
+ */
 GO.form.UploadFile = function(config) {
-	
-	if(!config.cls)
-	{
-		config.cls = '';
-	}
 	
 	if(!config.addText)
 	{
@@ -36,12 +41,20 @@ GO.form.UploadFile = function(config) {
 
 
 Ext.extend(GO.form.UploadFile, Ext.BoxComponent, {
-	
+	/**
+	 * @cfg {String} The text on the button to add a file
+	 */
+	addText : '',
+	/**
+	 * @cfg {String} The class name of the base element
+	 */
+	cls : '',
 	defaultAutoCreate : {tag: "div"},
-	//addText : this.addText,
-	//addIcon : GOimages['add'],
-	//deleteIcon : GOimages['delete'],
 	fileCls: 'filetype',
+
+	/**
+	 * @cfg {Number} The maximum number of files that can be selected
+	 */
 	max:0,
 	
 	onRender : function(ct, position){

@@ -12,10 +12,10 @@
  */
 
 
-/**
+/*
  * Scroll menu when higher then the screen is
  *
- **/
+ */
 Ext.override(Ext.menu.Menu, {
     showAt : function(xy, parentMenu, /* private: */_e){
         this.parentMenu = parentMenu;
@@ -54,7 +54,7 @@ Ext.override(Ext.menu.Menu, {
 });
 
 
-/**
+/*
 * for Ubuntu new wave theme
 */
 
@@ -122,7 +122,7 @@ Ext.Window.override({
 	 animCollapse : false
 });
 
-/**
+/*
  * For editor grid in scrolling view (Billing module items tab in order dialog)
 
 Not needed in Extjs 3
@@ -151,7 +151,7 @@ if(Ext.version!='3.0'){
 	});
 }
 
-/**
+/*
  * Localization
  */
 Ext.MessageBox.buttonText.yes = GO.lang['cmdYes'];
@@ -160,7 +160,7 @@ Ext.MessageBox.buttonText.ok = GO.lang['cmdOk'];
 Ext.MessageBox.buttonText.cancel = GO.lang['cmdCancel'];
 
 
-/**
+/*
  * Fix for loosing pasted value in HTML editor
 
 Ext.override(Ext.form.HtmlEditor, {
@@ -204,7 +204,7 @@ if(Ext.version!='3.0'){
  */
 
 
-/**
+/*
 * Print elements
 */
 Ext.override(Ext.Element, {
@@ -220,8 +220,8 @@ Ext.override(Ext.Element, {
      * @property {string} printTitle Page Title for printout. 
      */
     , printTitle: document.title
-    /**
-    
+
+    /**    
      * Prints this element.
      * 
      * @param config {object} (optional)
@@ -283,11 +283,11 @@ Ext.override(Ext.Component, {
     }
 }); 
 
-/**
+/*
 *End of print elements
 */
 
-/**
+/*
  * Width and height not restored in grid
  * 
  * http://extjs.com/forum/showthread.php?t=55086
@@ -330,7 +330,7 @@ if(Ext.version!='3.0'){
 
 
 
-/**
+/*
  * Catch JSON parsing errors and show error dialog
  * @type 
  */
@@ -345,7 +345,7 @@ Ext.decode = Ext.util.JSON.decode = function(json){
 };
 
 
-/**
+/*
  * Don't position tooltip outside the screen
 
 

@@ -13,11 +13,11 @@
 
 
 /**
- * @class GO.form.ComboBoxMulti
- * @extends GO.form.ComboBox
+ * @class GO.form.ComboBox
+ * @extends Ext.form.ComboBox
  * A combobox control with support for autocomplete, remote-loading, paging and many other features.
  * @constructor
- * Create a new ComboBoxMulti.
+ * Create a new ComboBox.
  * @param {Object} config Configuration options
  */
 GO.form.ComboBox = Ext.extend(Ext.form.ComboBox, {
