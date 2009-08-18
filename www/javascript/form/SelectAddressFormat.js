@@ -40,7 +40,7 @@ GO.addressFormatStore.setDefaultSort('country_name', 'ASC');
 		triggerAction: 'all',
 		selectOnFocus:true,
 		forceSelection:true,
-		editable:false,
+		editable:true,
 		mode:'local',
 		lazyInit:false
 	});
