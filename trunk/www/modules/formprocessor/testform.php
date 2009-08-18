@@ -10,7 +10,7 @@
 	<form method="POST" action="submit.php">
 	
 	<input type="hidden" name="return_to" value="<?php echo $_SERVER['PHP_SELF']; ?>" />
-	<input type="hidden" name="addressbook" value="Klanten" />
+	<input type="hidden" name="addressbook" value="test2" />
 	<!-- <input type="hidden" name="mailings[]" value="blabla" /> -->
 	<!--
 	Enable this input to send an e-mail confirmation. 

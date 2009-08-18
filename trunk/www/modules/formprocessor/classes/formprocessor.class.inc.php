@@ -91,7 +91,7 @@ class formprocessor{
 			'zip','city','state','country','company','department','function','work_phone',
 			'work_fax','salutation');
 
-			$contact_credentials['email_allowed']='1';
+			
 
 			foreach($credentials as $key)
 			{
@@ -119,8 +119,9 @@ class formprocessor{
 			}
 
 			$contact_credentials['addressbook_id']=$addressbook['id'];
-				
+			$contact_credentials['iso_address_format']=$addressbook['default_iso_address_format'];
 			$contact_credentials['email_allowed']='1';
+
 				
 				
 
@@ -131,6 +132,7 @@ class formprocessor{
 					$company['addressbook_id'] = $contact_credentials['addressbook_id'];
 					$company['name'] = $contact_credentials['company']; // bedrijfsnaam
 					$company['user_id'] = $GO_SECURITY->user_id;
+					$company['iso_address_format']=$company['post_iso_address_format']=$addressbook['default_iso_address_format'];
 					$contact_credentials['company_id'] = $ab->add_company($company);
 				}
 			}
@@ -138,8 +140,8 @@ class formprocessor{
 			{
 				$contact_credentials['birthday'] = Date::to_db_date($_POST['birthday'], false);
 
-                                if(!empty($_POST['birthday']) && $contact_credentials['birthday']=='0000-00-00')
-                                    throw new Exception($lang['common']['invalidDateError']);
+				if(!empty($_POST['birthday']) && $contact_credentials['birthday']=='0000-00-00')
+						throw new Exception($lang['common']['invalidDateError']);
 			}
 
 			unset($contact_credentials['company']);
