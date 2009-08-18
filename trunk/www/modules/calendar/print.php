@@ -9,7 +9,7 @@ require_once ($GO_MODULES->modules['calendar']['class_path'].'pdf.class.inc.php'
 require_once ($GO_LANGUAGE->get_language_file('calendar'));
 $cal = new calendar();
 
-$date = getdate();
+//$date = getdate();
 
 /*
 $calendar_id=1;
@@ -17,6 +17,8 @@ $start_time = mktime(0,0,0,$date['mon'], $date['mday']-$date['wday']+1,$date['ye
 $end_time = Date::date_add($start_time,7);
 */
 
+$start_time = strtotime($_REQUEST['start_time']);
+$end_time = strtotime($_REQUEST['end_time']);
 
 $pdf = new PDF();
 
@@ -25,7 +27,7 @@ if(!empty($_REQUEST['view_id']))
 	
 	$view = $cal->get_view($_REQUEST['view_id']);
 	$title=$view['name'];
-	$pdf->setParams($view['name'], $_REQUEST['start_time'], $_REQUEST['end_time']);
+	$pdf->setParams($view['name'], $start_time, $end_time);
 	$pdf->AddPage();
 	$cal->get_view_calendars($view['id']);
 	$cal2 = new calendar();
@@ -33,7 +35,7 @@ if(!empty($_REQUEST['view_id']))
 	$even=false;
 	while($cal->next_record())
 	{		
-		$events = $cal2->get_events_in_array(array($cal->f('id')), 0, $_REQUEST['start_time'], $_REQUEST['end_time']);
+		$events = $cal2->get_events_in_array(array($cal->f('id')), 0, $start_time, $end_time);
 		//$pdf->H3($cal->f('name'));
 		$pdf->addCalendar($events, false,$first, $cal->f('name'));
 		$first=false;
@@ -42,8 +44,8 @@ if(!empty($_REQUEST['view_id']))
 {
 	$calendar = $cal->get_calendar($_REQUEST['calendar_id']);
 	$title=$calendar['name'];
-	$pdf->setParams($calendar['name'], $_REQUEST['start_time'], $_REQUEST['end_time']);
-	$events = $cal->get_events_in_array(array($_REQUEST['calendar_id']), 0, $_REQUEST['start_time'], $_REQUEST['end_time']);
+	$pdf->setParams($calendar['name'], $start_time, $end_time);
+	$events = $cal->get_events_in_array(array($_REQUEST['calendar_id']), 0, $start_time, $end_time);
 	//var_dump($events);
 	$pdf->AddPage();
 	$pdf->addCalendar($events);
