@@ -264,7 +264,9 @@ GO.util.getFlashMovieObject = function(movieName)
 
 GO.util.unlocalizeNumber = function (number, decimal_separator, thousands_separator)
 {
-	
+	if(GO.util.empty(number)){
+		return 0;
+	}
 	if(!decimal_separator)
 	{
 		decimal_separator=GO.settings.decimal_separator;
