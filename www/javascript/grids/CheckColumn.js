@@ -59,20 +59,21 @@ Ext.extend(GO.grid.CheckColumn, Ext.util.Observable, {
         
         var disabled = record.get(this.disabled_field);
 
-        if (v == '1')
+        var on;
+        if (!GO.util.empty(v))
         {
         	if (disabled)
         	{
-        		var on = '-on x-item-disabled';
+        		on = '-on x-item-disabled';
         	} else {
-        		var on = '-on';
+        		on = '-on';
         	}
         } else {
         	if (disabled)
         	{
-        		var on = ' x-item-disabled';
+        		on = ' x-item-disabled';
         	} else {
-        		var on = '';
+        		on = '';
         	}
         }
         
