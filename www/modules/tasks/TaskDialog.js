@@ -122,14 +122,17 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 			this.win.show();
 			this.setValues(config.values);
 
-			if (!config.tasklist_id) {
+			if (GO.util.empty(config.tasklist_id)) {
 				config.tasklist_id = GO.tasks.defaultTasklist.id;
 				config.tasklist_name = GO.tasks.defaultTasklist.name;
 			}
 			this.selectTaskList.setValue(config.tasklist_id);
 			if (config.tasklist_name) {
 				this.selectTaskList.setRemoteText(config.tasklist_name);
-				// this.selectTaskList.container.up('div.x-form-item').setDisplayed(true);
+				this.selectTaskList.container.up('div.x-form-item').setDisplayed(true);
+			}else
+			{
+				this.selectTaskList.container.up('div.x-form-item').setDisplayed(false);
 			}
 		}
 

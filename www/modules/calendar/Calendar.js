@@ -1447,9 +1447,11 @@ GO.linkHandlers[1]=function(id){
 GO.newMenuItems.push({
 	text: GO.calendar.lang.appointment,
 	iconCls: 'go-link-icon-1',
-	handler:function(item, e){				
-		GO.calendar.eventDialog.show({
-			link_config: item.parentMenu.link_config		
-		});
+	handler:function(item, e){
+
+		var eventShowConfig = item.parentMenu.eventShowConfig || {};
+		eventShowConfig.link_config=item.parentMenu.link_config
+
+		GO.calendar.eventDialog.show(eventShowConfig);
 	}
 });
