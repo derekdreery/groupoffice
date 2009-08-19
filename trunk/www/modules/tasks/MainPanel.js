@@ -359,8 +359,10 @@ GO.newMenuItems.push({
 		{
 			GO.tasks.taskDialog = new GO.tasks.TaskDialog();		
 		}
-		GO.tasks.taskDialog.show({
-			link_config: item.parentMenu.link_config			
-		});
+
+		var taskShowConfig = item.parentMenu.taskShowConfig || {};
+		taskShowConfig.link_config=item.parentMenu.link_config
+
+		GO.tasks.taskDialog.show(taskShowConfig);
 	}
 });

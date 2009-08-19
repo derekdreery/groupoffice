@@ -232,7 +232,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
             this.win.show();
 
-            this.selectCalendar.container.up('div.x-form-item').setDisplayed(false);
+           
 
             config.values = config.values || {};
 
@@ -265,16 +265,20 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
             this.setValues(config.values);
 
-            if (!config.calendar_id) {
+            if (GO.util.empty(config.calendar_id)) {
                 config.calendar_id = GO.calendar.defaultCalendar.id;
                 config.calendar_name = GO.calendar.defaultCalendar.name;
             }
+						
             this.selectCalendar.setValue(config.calendar_id);
             if (config.calendar_name) {
                 this.selectCalendar.container.up('div.x-form-item')
                 .setDisplayed(true);
                 this.selectCalendar.setRemoteText(config.calendar_name);
-            }
+            }else
+						{
+							this.selectCalendar.container.up('div.x-form-item').setDisplayed(false);
+						}
         }
         // if the newMenuButton from another passed a linkTypeId then set this
         // value in the select link field

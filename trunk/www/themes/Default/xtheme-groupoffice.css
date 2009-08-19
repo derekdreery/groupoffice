@@ -198,7 +198,7 @@ td.x-grid3-hd-over,td.sort-desc,td.sort-asc,td.x-grid3-hd-menu-open{border-left:
 
 .x-panel-header{overflow:hidden;zoom:1;color:#666;font:bold 12px tahoma,arial,helvetica,sans-serif;padding:5px 3px 4px 5px;border:1px solid #c1d1d6;line-height:15px;background:transparent url(images/extjs/panel/white-top-bottom.gif) repeat-x 0 -1px;}
 .x-panel-body{border:1px solid #d0d0d0;overflow:hidden;background:#fff;position:relative;}
-.x-panel-tbar .x-toolbar{border:1px solid #D0DEF0;border-top:0 none;overflow:hidden;padding:2px;}
+.x-panel-tbar .x-toolbar{border:1px solid #C1D1D6;border-top:0 none;overflow:hidden;padding:2px;}
 .x-panel-tbar{background:none;}
 .x-panel-tbar-noheader .x-toolbar,.x-panel-mc .x-panel-tbar .x-toolbar{border-top:1px solid #c0c0c0;border-bottom:0 none;}
 
