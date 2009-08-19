@@ -71,7 +71,7 @@ Ext.extend(GO.PersonalSettingsDialog, Ext.Window,{
 		
 		if(!this.rendered)
 		{
-			this.render(Ext.getBody());			
+			this.render(Ext.getBody());
 			
 			this.tabPanel.items.items[0].languageCombo.on('change', function(){this.reload=true;}, this);
 			
@@ -127,6 +127,22 @@ Ext.extend(GO.PersonalSettingsDialog, Ext.Window,{
 	
 
 	submitForm : function(hide){
+
+		for(var i=0;i<this.tabPanel.items.getCount();i++)
+		{
+			var panel = this.tabPanel.items.itemAt(i);
+			if(panel.onBeforeSaveSettings)
+			{
+				var func = panel.onBeforeSaveSettings.createDelegate(panel, [this]);
+				var result = func.call();
+				if(!result)
+				{
+					this.tabPanel.setActiveTab(panel);
+					return false;
+				}
+			}
+		}
+
 		this.formPanel.form.submit(
 		{
 			url : BaseHref+'action.php',

@@ -1079,6 +1079,12 @@ class addressbook extends db {
 
         $sql = "DELETE FROM ab_addressbooks WHERE id='".$this->escape($addressbook_id)."'";
         $this->query($sql);
+
+		if(isset($GO_MODULES->modules['sync']))
+		{
+			$sql = "DELETE FROM sync_addressbook_user WHERE addressbook_id='".$this->escape($addressbook_id)."'";
+			$this->query($sql);
+		}
     }
 
     function search_email($user_id, $query)
