@@ -20,6 +20,8 @@ define('DB_NUM', MYSQLI_NUM);
 define('DB_BOTH', MYSQLI_BOTH);
 define('DB_ASSOC', MYSQLI_ASSOC);
 
+$GLOBALS['query_count']=0;
+
 /**
  * Class that connects to MySQL using the MySQLi extension
  *
@@ -51,28 +53,30 @@ class db extends base_db{
 
 	public function connect()
 	{
+		global $GO_DB_LINK;
 
+		
 		if(!$this->link)
 		{
-			@$this->link = new MySQLi($this->host, $this->user, $this->password, $this->database, $this->port, $this->socket);
-
-			if(isset($_SESSION['connect_count']))
-			{
-				$_SESSION['connect_count']++;
-			}
-
-			//workaround for PHP bug: http://bugs.php.net/bug.php?id=45940&edit=2
-			//$this->link->connect_error does not work
-			$this->errno = mysqli_connect_errno();
-			$this->error = mysqli_connect_error();
-
-			if(!empty($this->error))
-			{
-				$this->link=false;
-				$this->halt('Could not connect to MySQL database');
+			if(isset($GLOBALS['GO_DB_LINK'])){
+				$this->link = $GLOBALS['GO_DB_LINK'];
 			}else
 			{
-				$this->link->set_charset("utf8");
+				@$this->link = $GLOBALS['GO_DB_LINK'] = new MySQLi($this->host, $this->user, $this->password, $this->database, $this->port, $this->socket);
+
+				//workaround for PHP bug: http://bugs.php.net/bug.php?id=45940&edit=2
+				//$this->link->connect_error does not work
+				$this->errno = mysqli_connect_errno();
+				$this->error = mysqli_connect_error();
+
+				if(!empty($this->error))
+				{
+					$this->link=false;
+					$this->halt('Could not connect to MySQL database');
+				}else
+				{
+					$this->link->set_charset("utf8");
+				}
 			}
 		}
 		return $this->link;
@@ -115,8 +119,14 @@ class db extends base_db{
 		# New query, discard previous result.
 		$this->free();
 
+		
+
+		$GLOBALS['query_count']++;
+
 		if ($this->debug)
-		debug($sql);
+		{
+			debug($sql);
+		}
 
 		//a single parameter does not need to be an array.
 		if(!is_array($params))
