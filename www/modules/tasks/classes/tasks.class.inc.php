@@ -287,7 +287,7 @@ class tasks extends db
 				return $this->record;
 			}else
 			{
-				return $this->get_tasklist();
+				return false;
 			}
 		}else
 		{

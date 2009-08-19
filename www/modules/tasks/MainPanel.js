@@ -191,16 +191,19 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 					
 		this.taskListsStore.load({
 			callback: function(){
+
+				var defaultRecord = this.taskListsStore.getById(GO.tasks.defaultTasklist.id);
+				if(!defaultRecord){
+					defaultRecord =  this.taskListsStore.getAt(0);
+				}
 				
-				this.tasklist_id = GO.tasks.defaultTasklist.id;		
-				this.tasklist_name = GO.tasks.defaultTasklist.name;
+				this.tasklist_id = defaultRecord.id;
+				this.tasklist_name = defaultRecord.get('name');
 												
-				this.gridPanel.store.baseParams['tasklist_id']=GO.tasks.defaultTasklist.id;
+				this.gridPanel.store.baseParams['tasklist_id']=this.tasklist_id;
 				this.gridPanel.store.load({
 					callback:function(){
-						var sm = this.taskListsPanel.getSelectionModel();				
-						//sm.selectFirstRow();				
-						var defaultRecord = this.taskListsStore.getById(GO.tasks.defaultTasklist.id);
+						var sm = this.taskListsPanel.getSelectionModel();
 						sm.selectRecords([defaultRecord]);		
 					},
 					scope: this

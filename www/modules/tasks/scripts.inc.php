@@ -5,6 +5,9 @@ $tasks = new tasks();
 
 $settings = $tasks->get_settings($GO_SECURITY->user_id);
 $tasklist = $tasks->get_tasklist($settings['default_tasklist_id']);
+if(!$tasklist){
+	$tasklist=array('id'=>0, 'name'=>'');
+}
 ?>
 <script type="text/javascript">
 GO.tasks.defaultTasklist = {id: <?php echo $tasklist['id']; ?>, name: "<?php echo $tasklist['name']; ?>"};

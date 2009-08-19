@@ -552,7 +552,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			callback:function(){				
 				if(this.state.displayType!='view')
 				{
-					if(this.state.calendar_id==0)
+					if(!this.calendarsStore.getById(this.state.calendar_id))
 					{
 						this.state.calendar_id = this.calendarsStore.data.items[0].id;
 					}

@@ -5,6 +5,9 @@ $cal = new calendar();
 
 $settings = $cal->get_settings($GO_SECURITY->user_id);
 $calendar = $cal->get_calendar($settings['calendar_id']);
+if(!$calendar){
+	$calendar=array('id'=>0,'name'=>'');
+}
 $reminder = $cal->reminder_seconds_to_form_input($settings['reminder']);
 ?>
 <script type="text/javascript">
