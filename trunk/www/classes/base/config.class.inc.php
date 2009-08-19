@@ -29,16 +29,15 @@
  * @uses db
  */
 
-class GO_CONFIG
-{
-	#FRAMEWORK VARIABLES
+class GO_CONFIG {
+#FRAMEWORK VARIABLES
 
-	/**
-	 * Enable this Group-Office installation?
-	 *
-	 * @var     string
-	 * @access  public
-	 */
+/**
+ * Enable this Group-Office installation?
+ *
+ * @var     string
+ * @access  public
+ */
 	var $enabled = true;
 
 	/**
@@ -333,11 +332,11 @@ class GO_CONFIG
 
 	#database configuration
 	/**
-	* The database type to use. Currently only MySQL is supported
-	*
-	* @var     string
-	* @access  public
-	*/
+	 * The database type to use. Currently only MySQL is supported
+	 *
+	 * @var     string
+	 * @access  public
+	 */
 	var $db_type = 'mysql';
 	/**
 	 * The host of the database
@@ -426,18 +425,18 @@ class GO_CONFIG
 
 	#email variables
 	/**
-	* The E-mail mailer type to use. Valid options are: smtp, qmail, sendmail, mail
-	*
-	* @var     int
-	* @access  public
-	*/
+	 * The E-mail mailer type to use. Valid options are: smtp, qmail, sendmail, mail
+	 *
+	 * @var     int
+	 * @access  public
+	 */
 	//var $mailer = 'smtp';
 	/**
-	* The SMTP host to use when using the SMTP mailer
-	*
-	* @var     string
-	* @access  public
-	*/
+	 * The SMTP host to use when using the SMTP mailer
+	 *
+	 * @var     string
+	 * @access  public
+	 */
 	var $smtp_server = 'localhost';
 	/**
 	 * The SMTP port to use when using the SMTP mailer
@@ -638,11 +637,11 @@ class GO_CONFIG
 
 	#group configuration
 	/**
-	* The administrator user group ID
-	*
-	* @var     string
-	* @access  public
-	*/
+	 * The administrator user group ID
+	 *
+	 * @var     string
+	 * @access  public
+	 */
 	var $group_root = '1';
 	/**
 	 * The everyone user group ID
@@ -667,284 +666,263 @@ class GO_CONFIG
 	 * @access  public
 	 */
 	var $date_formats = array(
-      'dmY',
-      'mdY',
-      'Ymd'
-      );
+	'dmY',
+	'mdY',
+	'Ymd'
+	);
 
-      /**
-       * Date separators to be used.
-       *
-       * @var     string
-       * @access  public
-       */
+	/**
+	 * Date separators to be used.
+	 *
+	 * @var     string
+	 * @access  public
+	 */
 
-      var $date_separators = array(
-  	'-',
-  	'.',
-  	'/'
-  	);
-  	/**
-  	 * Time formats to be used.
-  	 *
-  	 * @var     string
-  	 * @access  public
-  	 */
-  	var $time_formats = array(
-      'G:i',
-      'g:i a'
-      );
+	var $date_separators = array(
+	'-',
+	'.',
+	'/'
+	);
+	/**
+	 * Time formats to be used.
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $time_formats = array(
+	'G:i',
+	'g:i a'
+	);
 
-      /**
-       * Relative path to the modules directory with no slash at start and end
-       *
-       * @var     string
-       * @access  private
-       */
-      var $module_path = 'modules';
-      /**
-       * Relative URL to the administrator directory with no slash at start and end
-       *
-       * @var     string
-       * @access  private
-       */
+	/**
+	 * Relative path to the modules directory with no slash at start and end
+	 *
+	 * @var     string
+	 * @access  private
+	 */
+	var $module_path = 'modules';
+	/**
+	 * Relative URL to the administrator directory with no slash at start and end
+	 *
+	 * @var     string
+	 * @access  private
+	 */
 
-      var $configuration_url = 'configuration';
-      /**
-       * Relative path to the classes directory with no slash at start and end
-       *
-       * @var     string
-       * @access  private
-       */
-      var $class_path = 'classes';
-      /**
-       * Relative path to the controls directory with no slash at start and end
-       *
-       * @var     string
-       * @access  private
-       */
-      var $control_path = 'controls';
-      /**
-       * Relative URL to the controls directory with no slash at start and end
-       *
-       * @var     string
-       * @access  private
-       */
-      var $control_url = 'controls';
-      /**
-       * Relative path to the themes directory with no slash at start and end
-       *
-       * @var     string
-       * @access  private
-       */
-      var $theme_path = 'themes';
+	var $configuration_url = 'configuration';
+	/**
+	 * Relative path to the classes directory with no slash at start and end
+	 *
+	 * @var     string
+	 * @access  private
+	 */
+	var $class_path = 'classes';
+	/**
+	 * Relative path to the controls directory with no slash at start and end
+	 *
+	 * @var     string
+	 * @access  private
+	 */
+	var $control_path = 'controls';
+	/**
+	 * Relative URL to the controls directory with no slash at start and end
+	 *
+	 * @var     string
+	 * @access  private
+	 */
+	var $control_url = 'controls';
+	/**
+	 * Relative path to the themes directory with no slash at start and end
+	 *
+	 * @var     string
+	 * @access  private
+	 */
+	var $theme_path = 'themes';
 
-      /**
-       * Relative URL to the themes directory with no slash at start and end
-       *
-       * @var     string
-       * @access  private
-       */
-      var $theme_url = 'themes';
+	/**
+	 * Relative URL to the themes directory with no slash at start and end
+	 *
+	 * @var     string
+	 * @access  private
+	 */
+	var $theme_url = 'themes';
 
-      /**
-       * Relative path to the language directory with no slash at start and end
-       *
-       * @var     string
-       * @access  private
-       */
-      var $language_path = 'language';
+	/**
+	 * Relative path to the language directory with no slash at start and end
+	 *
+	 * @var     string
+	 * @access  private
+	 */
+	var $language_path = 'language';
 
-      /**
-       * Database object
-       *
-       * @var     object
-       * @access  private
-       */
-      var $db;
-
-
-      /**
-       * Constructor. Initialises all public variables.
-       *
-       * @access public
-       * @return void
-       */
-      function __construct()
-      {
-				$config = array();
-
-				$this->root_path = str_replace('\\','/',dirname(dirname(dirname(__FILE__)))).'/';
-
-      	//suppress error for open_basedir warnings etc
-      	if(@file_exists('/etc/groupoffice/globalconfig.inc.php'))
-      	{
-      		require('/etc/groupoffice/globalconfig.inc.php');
-      	}
-
-      	$config_file = $this->get_config_file();
-
-      	@include($config_file);
-
-      	foreach($config as $key=>$value)
-      	{
-      		$this->$key=$value;
-      	}
+	/**
+	 * Database object
+	 *
+	 * @var     object
+	 * @access  private
+	 */
+	var $db;
 
 
-				if(empty($this->title))
-      	{
-      		//Detect some default values for installation if root_path is not set yet
-      		$this->host = dirname(dirname($_SERVER['PHP_SELF']));
+	/**
+	 * Constructor. Initialises all public variables.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	function __construct() {
+		$config = array();
 
-      		if(substr($this->host,-1) != '/')
-      		{
-      			$this->host .= '/';
-      		}
-      	
-		if(empty($config['local_path']))
-		{
-      			$this->local_path = $this->root_path.'local/';
-	      		$this->local_url = $this->host.'local/';
+		$this->root_path = str_replace('\\','/',dirname(dirname(dirname(__FILE__)))).'/';
+
+		//suppress error for open_basedir warnings etc
+		if(@file_exists('/etc/groupoffice/globalconfig.inc.php')) {
+			require('/etc/groupoffice/globalconfig.inc.php');
 		}
 
-      		$this->db_host='localhost';
+		$config_file = $this->get_config_file();
 
+		@include($config_file);
 
-      		if(is_windows())
-      		{
-      			$this->file_storage_path = substr($this->root_path,0,3).'groupoffice/';
-      			$this->tmpdir=substr($this->root_path,0,3).'temp';
-
-			$this->cmd_zip=$this->root_path.'controls/win32/zip.exe';
-			$this->cmd_unzip=$this->root_path.'controls/win32/unzip.exe';
-			$this->cmd_xml2wbxml=$this->root_path.'controls/win32/libwbxml/xml2wbxml.exe';
-			$this->cmd_wbxml2xml=$this->root_path.'controls/win32/libwbxml/wbxml2xml.exe';
+		foreach($config as $key=>$value) {
+			$this->$key=$value;
 		}
 
-      		if(empty($config['tmpdir']) && function_exists('sys_get_temp_dir'))
-      		{
-      			$this->tmpdir = str_replace('\\','/', sys_get_temp_dir());
-      		}
-      	}
+
+		if(empty($this->title)) {
+		//Detect some default values for installation if root_path is not set yet
+			$this->host = dirname(dirname($_SERVER['PHP_SELF']));
+			
+			if(substr($this->host,-1) != '/') {
+				$this->host .= '/';
+			}
+
+			if(empty($config['local_path'])) {
+				$this->local_path = $this->root_path.'local/';
+				$this->local_url = $this->host.'local/';
+			}
+
+			$this->db_host='localhost';
+
+
+			if(is_windows()) {
+				$this->file_storage_path = substr($this->root_path,0,3).'groupoffice/';
+				$this->tmpdir=substr($this->root_path,0,3).'temp';
+
+				$this->cmd_zip=$this->root_path.'controls/win32/zip.exe';
+				$this->cmd_unzip=$this->root_path.'controls/win32/unzip.exe';
+				$this->cmd_xml2wbxml=$this->root_path.'controls/win32/libwbxml/xml2wbxml.exe';
+				$this->cmd_wbxml2xml=$this->root_path.'controls/win32/libwbxml/wbxml2xml.exe';
+			}
+
+			if(empty($config['tmpdir']) && function_exists('sys_get_temp_dir')) {
+				$this->tmpdir = str_replace('\\','/', sys_get_temp_dir());
+			}
+		}
 
 
 
-      	// path to classes
-      	$this->class_path = $this->root_path.$this->class_path.'/';
+		// path to classes
+		$this->class_path = $this->root_path.$this->class_path.'/';
 
-      	// path to themes
-      	$this->theme_path = $this->root_path.$this->theme_path.'/';
+		// path to themes
+		$this->theme_path = $this->root_path.$this->theme_path.'/';
 
-      	// URL to themes
-      	$this->theme_url = $this->host.$this->theme_url.'/';
+		// URL to themes
+		$this->theme_url = $this->host.$this->theme_url.'/';
 
-      	// path to controls
-      	$this->control_path = $this->root_path.$this->control_path.'/';
+		// path to controls
+		$this->control_path = $this->root_path.$this->control_path.'/';
 
-      	// url to controls
-      	$this->control_url = $this->host.$this->control_url.'/';
+		// url to controls
+		$this->control_url = $this->host.$this->control_url.'/';
 
-      	// path to modules
-      	$this->module_path = $this->root_path.$this->module_path.'/';
+		// path to modules
+		$this->module_path = $this->root_path.$this->module_path.'/';
 
-      	// url to user configuration apps
-      	$this->configuration_url = $this->host.$this->configuration_url.'/';
+		// url to user configuration apps
+		$this->configuration_url = $this->host.$this->configuration_url.'/';
 
 
-	      if($this->debug)
-				{
-					list ($usec, $sec) = explode(" ", microtime());
-					$this->loadstart = ((float) $usec + (float) $sec);
+		if($this->debug) {
+			list ($usec, $sec) = explode(" ", microtime());
+			$this->loadstart = ((float) $usec + (float) $sec);
+		}
+
+		// database class library
+		require_once($this->class_path.'database/base_db.class.inc.php');
+		require_once($this->class_path.'database/'.$this->db_type.'.class.inc.php');
+
+		$this->db = new db($this);
+
+		if(is_string($this->file_create_mode)) {
+			$this->file_create_mode=octdec($this->file_create_mode);
+		}
+
+		if(is_string($this->folder_create_mode)) {
+			$this->folder_create_mode=octdec($this->folder_create_mode);
+		}
+
+		if($this->debug) {
+			$this->log=true;
+		}
+
+
+
+		$this->set_full_url();
+	}
+
+	function __destruct() {
+		if($this->debug) {
+			debug('Performed '.$GLOBALS['query_count'].' database queries', $this);
+
+			debug('Page load took: '.(getmicrotime()-$this->loadstart).'ms', $this);
+		}
+	}
+
+	/**
+	 * Get's the location of a configuration file.
+	 * Group-Office searches two locations:
+	 *	1. /etc/Group-Office/APACHE SERVER NAME/subdir/to/groupoffice/config.php
+	 *	2. /path/to/groupoffice/config.php
+	 *
+	 * The first location is more secure because the sensitive information is kept
+	 * outside the document root.
+	 *
+	 * @access public
+	 * @return string Path to configuration file
+	 */
+
+	function get_config_file() {
+		if(defined('CONFIG_FILE'))
+			return CONFIG_FILE;
+
+		if(isset($_SESSION['GO_SESSION']['config_file'])) {
+			return $_SESSION['GO_SESSION']['config_file'];
+		}else {
+			$config_file = $this->root_path.'config.php';
+			if(@file_exists($config_file)) {
+				$_SESSION['GO_SESSION']['config_file']=$config_file;
+				return $config_file;
+			}
+			if(isset($_SERVER['SCRIPT_FILENAME']) && isset($_SERVER['PHP_SELF'])) {
+				$config_file = dirname(substr($_SERVER['SCRIPT_FILENAME'], 0 ,-strlen($_SERVER['PHP_SELF']))).'/config.php';
+				if(@file_exists($config_file)) {
+					$_SESSION['GO_SESSION']['config_file']=$config_file;
+					return $config_file;
 				}
-
-      	// database class library
-				require_once($this->class_path.'database/base_db.class.inc.php');
-      	require_once($this->class_path.'database/'.$this->db_type.'.class.inc.php');
-
-      	$this->db = new db($this);
-
-      	if(is_string($this->file_create_mode))
-      	{
-      		$this->file_create_mode=octdec($this->file_create_mode);
-      	}
-
-     		if(is_string($this->folder_create_mode))
-      	{
-      		$this->folder_create_mode=octdec($this->folder_create_mode);
-      	}
-
-      	if($this->debug)
-      	{
-      		$this->log=true;
-      	}
-
-				
-
-      	$this->set_full_url();
-      }
-
- 			function __destruct(){
-      	if($this->debug)
-				{					
-					debug('Performed '.$GLOBALS['query_count'].' database queries', $this);
-
-					debug('Page load took: '.(getmicrotime()-$this->loadstart).'ms', $this);
-				}
-      }
-
-      /**
-       * Get's the location of a configuration file.
-       * Group-Office searches two locations:
-       *	1. /etc/Group-Office/APACHE SERVER NAME/subdir/to/groupoffice/config.php
-       *	2. /path/to/groupoffice/config.php
-       *
-       * The first location is more secure because the sensitive information is kept
-       * outside the document root.
-       *
-       * @access public
-       * @return string Path to configuration file
-       */
-
-      function get_config_file()
-      {
-      	if(defined('CONFIG_FILE'))
-      	return CONFIG_FILE;
-
-      	if(isset($_SESSION['GO_SESSION']['config_file']))
-      	{
-      		return $_SESSION['GO_SESSION']['config_file'];
-      	}else
-      	{
-      		$config_file = $this->root_path.'config.php';
-      		if(@file_exists($config_file))
-      		{
-      			$_SESSION['GO_SESSION']['config_file']=$config_file;
-      			return $config_file;
-      		}
-      		if(isset($_SERVER['SCRIPT_FILENAME']) && isset($_SERVER['PHP_SELF']))
-      		{
-	      		$config_file = dirname(substr($_SERVER['SCRIPT_FILENAME'], 0 ,-strlen($_SERVER['PHP_SELF']))).'/config.php';
-	      		if(@file_exists($config_file))
-	      		{
-	      			$_SESSION['GO_SESSION']['config_file']=$config_file;
-	      			return $config_file;
-	      		}
-      		}
-      		$config_file = '/etc/groupoffice/'.$_SERVER['SERVER_NAME'].'/config.php';
-      		if(@file_exists($config_file))
-      		{
-      			$_SESSION['GO_SESSION']['config_file']=$config_file;
-      			return $config_file;
-      		}
-					$config_file = '/etc/groupoffice/config.php';
-      		if(@file_exists($config_file))
-      		{
-      			$_SESSION['GO_SESSION']['config_file']=$config_file;
-      			return $config_file;
-      		}
-      	}
-      }
+			}
+			$config_file = '/etc/groupoffice/'.$_SERVER['SERVER_NAME'].'/config.php';
+			if(@file_exists($config_file)) {
+				$_SESSION['GO_SESSION']['config_file']=$config_file;
+				return $config_file;
+			}
+			$config_file = '/etc/groupoffice/config.php';
+			if(@file_exists($config_file)) {
+				$_SESSION['GO_SESSION']['config_file']=$config_file;
+				return $config_file;
+			}
+		}
+	}
 
 	/**
 	 * Sets Full URL to reach Group-Office with slash on end
@@ -954,146 +932,132 @@ class GO_CONFIG
 	 *
 	 * @access public
 	 */
-      function set_full_url() {
-      	if(isset($_SERVER["HTTP_HOST"]))
-      	{
-      		$https = isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on" || $_SERVER["HTTPS"] == "1");
-      		$url = 'http';
-      		if ($https)
-      		{
-      			$url .= "s";
-      		}
-      		$url .= "://";
-      		if ((!$https && $_SERVER["SERVER_PORT"] != "80") || ($https && $_SERVER["SERVER_PORT"] != "443")) {
-      			$url .= $_SERVER["HTTP_HOST"].":".$_SERVER["SERVER_PORT"].$this->host;
-      		} else {
-      			$url .= $_SERVER["HTTP_HOST"].$this->host;
-      		}
-      		$this->full_url=$url;
-      	}
-      }
+	function set_full_url() {
+		if(isset($_SERVER["HTTP_HOST"])) {
+			$https = isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on" || $_SERVER["HTTPS"] == "1");
+			$url = 'http';
+			if ($https) {
+				$url .= "s";
+			}
+			$url .= "://";
+			if ((!$https && $_SERVER["SERVER_PORT"] != "80") || ($https && $_SERVER["SERVER_PORT"] != "443")) {
+				$url .= $_SERVER["HTTP_HOST"].":".$_SERVER["SERVER_PORT"].$this->host;
+			} else {
+				$url .= $_SERVER["HTTP_HOST"].$this->host;
+			}
+			$this->full_url=$url;
+		}
+	}
 
 
-      /**
-       * Gets a custom saved setting from the database
-       *
-       * @param  string $name Configuration key name
-       * @access public
-       * @return string Configuration key value
-       */
-      function get_setting($name, $user_id=0)
-      {
-      	$this->db->query("SELECT * FROM go_settings WHERE name='".$this->db->escape($name)."' AND user_id=".$this->db->escape($user_id));
-      	if ( $this->db->next_record() ) {
-      		return $this->db->f('value');
-      	}
-      	return false;
-      }
+	/**
+	 * Gets a custom saved setting from the database
+	 *
+	 * @param  string $name Configuration key name
+	 * @access public
+	 * @return string Configuration key value
+	 */
+	function get_setting($name, $user_id=0) {
+		$this->db->query("SELECT * FROM go_settings WHERE name='".$this->db->escape($name)."' AND user_id=".$this->db->escape($user_id));
+		if ( $this->db->next_record() ) {
+			return $this->db->f('value');
+		}
+		return false;
+	}
 
-      /**
-       * Gets all custom saved user settings from the database
-       *
-       * @param  user_id The user ID to get the settings for.
-       * @access public
-       * @return array Configurations with key and value
-       */
-      function get_settings($user_id)
-      {
-      	$settings=array();
-      	$this->db->query("SELECT * FROM go_settings WHERE user_id=".$this->db->escape($user_id));
-      	while($this->db->next_record())
-      	{
-      		$settings[$this->db->f('name')]=$this->db->f('value');
-      	}
-      	return $settings;
-      }
+	/**
+	 * Gets all custom saved user settings from the database
+	 *
+	 * @param  user_id The user ID to get the settings for.
+	 * @access public
+	 * @return array Configurations with key and value
+	 */
+	function get_settings($user_id) {
+		$settings=array();
+		$this->db->query("SELECT * FROM go_settings WHERE user_id=".$this->db->escape($user_id));
+		while($this->db->next_record()) {
+			$settings[$this->db->f('name')]=$this->db->f('value');
+		}
+		return $settings;
+	}
 
-      /**
-       * Saves a custom setting to the database
-       *
-       * @param 	string $name Configuration key name
-       * @param 	string $value Configuration key value
-       * @access public
-       * @return bool Returns true on succes
-       */
-      function save_setting( $name, $value, $user_id=0)
-      {
-      	if ( $this->get_setting($name, $user_id) === false ) {
-      		return $this->db->query("INSERT INTO go_settings (name, value, user_id) VALUES ('$name', '$value', '$user_id')");
-      	} else {
-      		return $this->db->query("UPDATE go_settings SET value='".$this->db->escape($value)."' WHERE name='".$this->db->escape($name)."' AND user_id='".$this->db->escape($user_id)."'");
-      	}
-      }
+	/**
+	 * Saves a custom setting to the database
+	 *
+	 * @param 	string $name Configuration key name
+	 * @param 	string $value Configuration key value
+	 * @access public
+	 * @return bool Returns true on succes
+	 */
+	function save_setting( $name, $value, $user_id=0) {
+		if ( $this->get_setting($name, $user_id) === false ) {
+			return $this->db->query("INSERT INTO go_settings (name, value, user_id) VALUES ('$name', '$value', '$user_id')");
+		} else {
+			return $this->db->query("UPDATE go_settings SET value='".$this->db->escape($value)."' WHERE name='".$this->db->escape($name)."' AND user_id='".$this->db->escape($user_id)."'");
+		}
+	}
 
-      /**
-       * Deletes a custom setting from the database
-       *
-       * @param 	string $name Configuration key name
-       * @access public
-       * @return bool Returns true on succes
-       */
-      function delete_setting( $name )
-      {
-      	return $this->db->query("DELETE FROM go_settings WHERE name='".$this->db->escape($name)."'");
-      }
+	/**
+	 * Deletes a custom setting from the database
+	 *
+	 * @param 	string $name Configuration key name
+	 * @access public
+	 * @return bool Returns true on succes
+	 */
+	function delete_setting( $name ) {
+		return $this->db->query("DELETE FROM go_settings WHERE name='".$this->db->escape($name)."'");
+	}
 
-      function save_state($user_id, $name, $value)
-      {
-      	$state['user_id']=$user_id;
-      	$state['name']=$name;
-      	$state['value']=$value;
+	function save_state($user_id, $name, $value) {
+		$state['user_id']=$user_id;
+		$state['name']=$name;
+		$state['value']=$value;
 
-      	return $this->db->replace_row('go_state',$state);
-      }
+		return $this->db->replace_row('go_state',$state);
+	}
 
-      function get_state($user_id, $index)
-      {
-      	$state = array();
-      	$sql = "SELECT * FROM go_state WHERE user_id=".$this->db->escape($user_id);
-      	$this->db->query($sql);
+	function get_state($user_id, $index) {
+		$state = array();
+		$sql = "SELECT * FROM go_state WHERE user_id=".$this->db->escape($user_id);
+		$this->db->query($sql);
 
-      	while($this->db->next_record(DB_ASSOC))
-      	{
-      		$state[$this->db->f('name')]=$this->db->f('value');
-      	}
-      	return $state;
-      }
+		while($this->db->next_record(DB_ASSOC)) {
+			$state[$this->db->f('name')]=$this->db->f('value');
+		}
+		return $state;
+	}
 
 
 
-      function get_client_settings()
-      {
-      	global $GO_SECURITY, $GO_MODULES, $GO_THEME, $GO_LANGUAGE;
+	function get_client_settings() {
+		global $GO_SECURITY, $GO_MODULES, $GO_THEME, $GO_LANGUAGE;
 
-      	$response['state_index'] = 'go';
+		$response['state_index'] = 'go';
 
-				$response['language']=$GO_LANGUAGE->language;
-      	$response['state']=array();
-      	if($GO_SECURITY->logged_in())
-      	{
-      		//state for Ext components
-      		$response['state'] = $this->get_state($GO_SECURITY->user_id, $response['state_index']);
-      	}
- 				foreach($_SESSION['GO_SESSION'] as $key=>$value)
- 				{
- 					if(!is_array($value))
- 					{
- 						$response[$key]=$value;
- 					}
- 				}
-      	$response['modules']=$GO_MODULES->modules;
-      	$response['config']['theme_url']=$GO_THEME->theme_url;
-      	$response['config']['theme']=$GO_THEME->theme;
-      	$response['config']['host']=$this->host;
-				$response['config']['title']=$this->title;
-      	$response['config']['local_url']=$this->local_url;
-      	$response['config']['webmaster_email']=$this->webmaster_email;
+		$response['language']=$GO_LANGUAGE->language;
+		$response['state']=array();
+		if($GO_SECURITY->logged_in()) {
+		//state for Ext components
+			$response['state'] = $this->get_state($GO_SECURITY->user_id, $response['state_index']);
+		}
+		foreach($_SESSION['GO_SESSION'] as $key=>$value) {
+			if(!is_array($value)) {
+				$response[$key]=$value;
+			}
+		}
+		$response['modules']=$GO_MODULES->modules;
+		$response['config']['theme_url']=$GO_THEME->theme_url;
+		$response['config']['theme']=$GO_THEME->theme;
+		$response['config']['host']=$this->host;
+		$response['config']['title']=$this->title;
+		$response['config']['local_url']=$this->local_url;
+		$response['config']['webmaster_email']=$this->webmaster_email;
 
-      	$response['config']['allow_password_change']=$this->allow_password_change;
-      	$response['config']['allow_themes']=$this->allow_themes;
+		$response['config']['allow_password_change']=$this->allow_password_change;
+		$response['config']['allow_themes']=$this->allow_themes;
 
-      	$response['config']['max_users']=$this->max_users;
+		$response['config']['max_users']=$this->max_users;
 
-      	return $response;
-      }
+		return $response;
+	}
 }

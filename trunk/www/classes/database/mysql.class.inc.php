@@ -120,7 +120,7 @@ class db extends base_db{
 		$this->free();
 
 		
-
+		# Count queries for debugging purposes
 		$GLOBALS['query_count']++;
 
 		if ($this->debug)
