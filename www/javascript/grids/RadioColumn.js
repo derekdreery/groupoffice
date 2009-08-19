@@ -1,3 +1,24 @@
+/**
+ * Copyright Intermesh
+ *
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ *
+ * @version $Id: RadioColumn.js 1384 2009-08-17 13:13:13Z dwijffelaars $
+ * @copyright Copyright Intermesh
+ * @author Danny Wijffelaars <dwijffelaars@intermesh.nl>
+ */
+
+/**
+ * @class GO.grid.RadioColumn
+ * @extends Ext.util.Observable
+ *
+ * Creates new RadioColumn plugin
+ * @constructor
+ * @param {Object} config The config object
+ */
 GO.grid.RadioColumn = function(config){
     Ext.apply(this, config);
     if(!this.id){
@@ -7,6 +28,9 @@ GO.grid.RadioColumn = function(config){
 };
 
 GO.grid.RadioColumn.prototype = {
+	/**
+	 * @param {} grid passes Ext.grid.GridPanel.
+	 */
     init : function(grid){
         this.grid = grid;
         this.grid.on('render', function(){
@@ -15,6 +39,10 @@ GO.grid.RadioColumn.prototype = {
         }, this);
     },
 
+	/**
+	 * @param {} e passes the current event.
+	 * @param {} t passes the table
+	 */
     onMouseDown : function(e, t){
         if(t.className && t.className.indexOf('x-grid3-cc-'+this.id) != -1){
             e.stopEvent();
@@ -41,10 +69,20 @@ GO.grid.RadioColumn.prototype = {
         }
     },
 
+	/**
+	 * This function can be overwritten
+	 * @param {} record
+	 */
 	isDisabled : function(record){
 		return false;
 	},
 
+	/**
+	 * This function makes the radiobutton (not) selected or (not) disabled
+	 * @param {} v passes the value of the checkbox it is currently linked to
+	 * @param {} p passes the panel
+	 * @param {} record passes the current record from the store of the checkbox
+	 */
     renderer : function(v, p, record){
 		p.css += ' x-grid3-radio-col-td';
         var disabled = this.isDisabled(record);
