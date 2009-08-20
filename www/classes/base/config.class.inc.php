@@ -1045,7 +1045,7 @@ class GO_CONFIG {
 				$response[$key]=$value;
 			}
 		}
-		$response['modules']=$GO_MODULES->modules;
+		//$response['modules']=$GO_MODULES->modules;
 		$response['config']['theme_url']=$GO_THEME->theme_url;
 		$response['config']['theme']=$GO_THEME->theme;
 		$response['config']['host']=$this->host;

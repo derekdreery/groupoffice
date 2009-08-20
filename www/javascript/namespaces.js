@@ -23,3 +23,10 @@ Ext.namespace("GO.users");
 Ext.namespace('GO.layout');
 Ext.namespace('GO.mailFunctions');
 Ext.namespace('GO.menu');
+
+//An object of functions that open a particular link.
+//the index is the link type and the function gets the id as a parameter
+GO.linkHandlers={};
+GO.newMenuItems=[];
+
+//GO.settings = Ext.decode(GO.settings);
