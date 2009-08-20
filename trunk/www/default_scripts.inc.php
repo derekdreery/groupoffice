@@ -84,7 +84,7 @@ if($GO_SECURITY->logged_in() && $fullscreen=='true' && !isset($_REQUEST['fullscr
 
 if(!isset($lang['common']['extjs_lang'])) $lang['common']['extjs_lang'] = $GO_LANGUAGE->language;
 
-$file = 'base-'.md5($GO_LANGUAGE->language.$GO_CONFIG->mtime.filemtime($GO_CONFIG->root_path.'javascript/go-all-min')).'.js';
+$file = 'base-'.md5($GO_LANGUAGE->language.$GO_CONFIG->mtime).'.js';
 $path = $GO_CONFIG->local_path.'cache/'.$file;
 $url = $GO_CONFIG->local_url.'cache/'.$file;
 

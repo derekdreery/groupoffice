@@ -5,36 +5,24 @@
 }*/
 
 
-require('../../www/Group-Office.php');
+//require('../../www/Group-Office.php');
 
+$record['test']='bla';
 
-$s = file_get_contents($argv[1]);
+$template= '{test|number}
 
-//$s = substr($s, $i, 2000);
-//echo $s;
-echo String::clean_utf8($s);
+{test2}
 
-exit();
-while($i<strlen($s)) {
-	$valid = String::valid_utf8_chr($s,$i,$bytes);
+{name},<br>{status_name}';
 
-	$chr = substr($s,$i,$bytes);
-	if($valid){		
-		$news .= $chr;
-	}else
-	{
-		$news .= '?';
-	}
+function replace($tag, $record){
+	var_dump($tag);
 
-	echo $valid.':'.$bytes.':'.$chr."\n";
+	var_dump($record);
 
-	//$valid = String::utf8_is_valid($chr) ? '1' : '0';
-	//echo $ord.':'.$valid.':'.$chr."\n";
-	#if($ord){
-	#$news.=substr($s,$i,$bytes);
-	#}
-	$i+=$bytes;
+	echo "-----\n\n";
 }
 
-//echo $news;
+echo preg_replace('/{[^}]*}/eU', "replace('$0', \$record)", $template)
+
 ?>
