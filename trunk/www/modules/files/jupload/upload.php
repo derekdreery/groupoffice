@@ -135,4 +135,4 @@ while($file = array_shift($_FILES))
 	}
 	$count++;
 }
-echo 'SUCCESS';
+echo "SUCCESS\n";
