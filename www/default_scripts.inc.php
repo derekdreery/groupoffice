@@ -152,11 +152,6 @@ if($GO_CONFIG->debug || !file_exists($path)) {
 
 if(!$GO_CONFIG->debug) {
 	$scripts=array();
-	if(!$GO_SECURITY->logged_in()) {
-		file_put_contents($GO_CONFIG->local_path.'cache/modules.js', 'GO.settings.modules = Ext.decode("'.addslashes(json_encode($GO_MODULES->modules)).'");');
-
-		$scripts[]=$local_uri.'cache/modules.js';
-	}
 	$scripts[]=$url;
 }
 
