@@ -290,7 +290,7 @@ GO.email.EmailComposer = function(config) {
 	});
 
 	//Set a long timeout for large attachments
-	this.formPanel.form.timeout=300;
+	this.formPanel.form.timeout=3000;
 
 	//the html markup from a signature changes when the editor is initialized. The initialize event fires too soon.
 	//The first push event does the trick of changing the html.
