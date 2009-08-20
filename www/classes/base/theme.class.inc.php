@@ -121,7 +121,7 @@ class GO_THEME
 			}
 		}else
 		{
-			return '<link href="'.$url.'" type="text/css" rel="stylesheet" />';
+			return '<link href="'.$url.'" type="text/css" rel="stylesheet" />'."\n";
 		}
 	}
 
