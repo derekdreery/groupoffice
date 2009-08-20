@@ -29,10 +29,7 @@ if($GO_CONFIG->debug)
 $scripts[]=$root_uri.'javascript/namespaces.js';
 ?>
 <script type="text/javascript">
-/*if(typeof(Ext)=='undefined')
-{
-	alert('The ExtJS javascripts were not loaded. Your host configuration properties are probably configured incorrectly');
-}*/
+
 var BaseHref = '<?php echo $GO_CONFIG->host; ?>';
 
 GO = {};
@@ -187,6 +184,14 @@ if(!$GO_CONFIG->debug)
 foreach($scripts as $script){
 	echo '<script type="text/javascript" src="'.$script.'"></script>'."\n";
 }
+?>
+<script type="text/javascript">
+if(typeof(Ext)=='undefined')
+{
+	alert('The ExtJS javascripts were not loaded. Your host configuration properties are probably configured incorrectly');
+}
+</script>
+<?php
 
 foreach($GO_MODULES->modules as $module)
 {
