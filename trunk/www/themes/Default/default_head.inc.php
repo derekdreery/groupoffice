@@ -12,7 +12,7 @@
 <?php
 foreach($GO_MODULES->modules as $module)
 {
-	echo $GO_THEME->get_stylesheet($module['id']);	
+	echo $GO_THEME->get_stylesheet($module['id']);
 }
 ?>
 
