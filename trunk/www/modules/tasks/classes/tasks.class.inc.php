@@ -145,6 +145,10 @@ class tasks extends db
 		unset($task['exceptions']);
 		$record = $task;
 
+		if(!isset($record['due_time'])){
+			$record['due_time']=0;
+		}
+
 		$sql = "SELECT id FROM ta_tasks WHERE ".
 		"name='".$this->escape($record['name'])."' AND ".
 		"due_time='".$this->escape($record['due_time'])."' AND ".
@@ -762,6 +766,14 @@ class tasks extends db
 		{
 			$timezone_id = isset($object['DUE']['params']['TZID']) ? $object['DUE']['params']['TZID'] : '';
 			$task['due_time'] = $this->ical2array->parse_date($object['DUE']['value'],  $timezone_id);
+		}
+		
+		if(empty($task['start_time'])){
+			$task['start_time']=!empty($task['due_time']) ? $task['due_time'] : time();
+		}
+
+		if(empty($task['due_time'])){
+			$task['due_time']=$task['start_time'];
 		}
 
 
