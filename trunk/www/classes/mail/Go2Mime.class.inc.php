@@ -222,9 +222,10 @@ class Go2Mime
 
 				if ($part->ctype_primary == 'text' && (!isset($part->disposition) || $part->disposition != 'attachment') && empty($part->d_parameters['filename']))
 				{
+					$content_part=$part->body;
 					if(isset($part->ctype_parameters['charset']) && strtoupper($part->ctype_parameters['charset'])!='UTF-8')
 					{
-						$content_part = iconv($part->ctype_parameters['charset'], 'UTF-8', $part->body);
+						$content_part = iconv($part->ctype_parameters['charset'], 'UTF-8', $content_part);
 					}
 					if (eregi('plain', $part->ctype_secondary))
 					{
