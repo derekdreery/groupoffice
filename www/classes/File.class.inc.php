@@ -135,7 +135,7 @@ class File
         $mimetype = finfo_file($finfo, $filename);
         finfo_close($finfo);
         return $mimetype;
-    }elseif(function_exists('mime_content_type'))
+    }elseif(function_exists('mime_content_type') && file_exists($path))
     {
     	return mime_content_type($path);
     }else
