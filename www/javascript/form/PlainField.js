@@ -48,21 +48,25 @@ GO.form.PlainField = Ext.extend(Ext.form.Field, {
 			 * @param {Object} file
 			 */
 			'load'
-		);
+			);
 	},
 	
 	getName: function(){
-    return this.name;
-  },
+		return this.name;
+	},
 
 	// private
-  initValue : function(){
-      if(this.value !== undefined){
-          this.setValue(this.value);
-      }else if(this.el.dom.innerHTML.length > 0){
-          this.setValue(this.el.dom.value);
-      }
-  },
+	initValue : function(){
+		if(this.value !== undefined){
+			this.setValue(this.value);
+		}else if(this.el.dom.innerHTML.length > 0){
+			this.setValue(this.el.dom.value);
+		}
+	},
+
+	getValue : function(){
+		return this.value;
+	},
 	
 	setValue : function(v){
 		
@@ -78,10 +82,10 @@ GO.form.PlainField = Ext.extend(Ext.form.Field, {
 		}
 		
 		this.value = v;
-    if(this.rendered){
-        this.el.update(v);
-    }
-  }
+		if(this.rendered){
+			this.el.update(v);
+		}
+	}
 
 });
 Ext.reg('plainfield', GO.form.PlainField);
