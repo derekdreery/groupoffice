@@ -16,3 +16,8 @@ GO.summary.lang.title="Titulek";
 
 
 GO.summary.lang.manageAnnouncements='Upravit zprávy';
+GO.summary.lang.webFeeds='Upravit webové zprávy';
+GO.summary.lang.type='Typ';
+GO.summary.lang.summaryType='Přehled';
+GO.summary.lang.rssFeeds='RSS zprávy';
+GO.summary.lang.noRssFeeds='Žádné RSS zprávy nebyly přidány.<br />Pro přidání zpráv klikněte na tlačítko \'nastavení\' v pravém rohu okna.';
