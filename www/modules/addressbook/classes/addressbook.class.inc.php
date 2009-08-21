@@ -290,6 +290,19 @@ class addressbook extends db {
 			$company['mtime'] = $company['ctime'];
 		}
 
+		if(!isset($company['iso_address_format'])){
+			if(!$addressbook) {
+				$addressbook = $this->get_addressbook($company['addressbook_id']);
+			}
+			$company['iso_address_format']=$addressbook['default_iso_address_format'];
+		}
+		if(!isset($company['post_iso_address_format'])){
+			if(!$addressbook) {
+				$addressbook = $this->get_addressbook($company['addressbook_id']);
+			}
+			$company['post_iso_address_format']=$addressbook['default_iso_address_format'];
+		}
+
 		global $GO_MODULES;
 		if(!isset($company['files_folder_id']) && isset($GO_MODULES->modules['files'])) {
 			global $GO_CONFIG;
