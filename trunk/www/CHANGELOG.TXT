@@ -1,3 +1,10 @@
+2009/08/21 3.2.26
+- New report for billing that shows the total turnover per customer
+- Synchronization supports multiple addressbooks now.
+- Saved e-mails and templates were not displayed again.
+- More efficient database connection
+- More efficient script loading
+
 2009/08/18 3.2.25
 - Fixed bug which prevented saved e-mails from displaying.
 
