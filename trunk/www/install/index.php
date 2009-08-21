@@ -899,7 +899,7 @@ switch($task)
 
 			$settings_exist = false;
 			$is_old_go=false;
-			$db->query("SHOW TABLES");
+			$db->query("SHOW TABLES;");
 			if ($db->num_rows() > 0)
 			{
 				//structure exists see if the settings table exists

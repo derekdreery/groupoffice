@@ -62,7 +62,7 @@ class db extends base_db{
 				$this->link = $GLOBALS['GO_DB_LINK'];
 			}else
 			{
-				@$this->link = $GLOBALS['GO_DB_LINK'] = new MySQLi($this->host, $this->user, $this->password, $this->database, $this->port, $this->socket);
+				@$this->link = new MySQLi($this->host, $this->user, $this->password, $this->database, $this->port, $this->socket);
 
 				//workaround for PHP bug: http://bugs.php.net/bug.php?id=45940&edit=2
 				//$this->link->connect_error does not work
@@ -76,6 +76,7 @@ class db extends base_db{
 				}else
 				{
 					$this->link->set_charset("utf8");
+					$GLOBALS['GO_DB_LINK'] = $this->link;
 				}
 			}
 		}
@@ -278,7 +279,7 @@ class db extends base_db{
 	 */
 
 	public function num_rows() {
-		return $this->result->num_rows;
+		return $this->result ? $this->result->num_rows : false;
 	}
 
 	/**
@@ -287,7 +288,7 @@ class db extends base_db{
 	 * @return int
 	 */
 	function affected_rows() {
-		return $this->link->affected_rows;
+		return $this->link ? $this->link->affected_rows : false;
 	}
 
 
