@@ -207,7 +207,11 @@ class ical2array
 					*/
 					if ($this->buffer_type == 'value')
 					{
-						if(isset($line[0]) && $line[0] != chr(32) && $line[0] != chr(9) && !$this->continue_value)
+						//Nexthaus does not indent the description with spaces. So if the next line does not match this pattern:
+						// PROP:value then continue with the value
+						/// ^\S{1}[^:]*:.*/
+
+						if(isset($line[0]) && $line[0] != chr(32) && $line[0] != chr(9) && !$this->continue_value && preg_match('/^\S{1}[^:]*:.*/', $line))
 						{
 							$this->add_buffer();
 							$this->buffer_type = 'object_name';
@@ -215,7 +219,7 @@ class ical2array
 						{		
 							if(!$this->continue_value)
 							{
-								$line = substr($line, 1);
+								$line = ltrim($line);
 							}
 						}
 					}

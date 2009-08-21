@@ -1745,7 +1745,8 @@ class calendar extends db
 			$event['start_time'] = $this->ical2array->parse_date($object['DTSTART']['value']);
 		}
 
-		if(!$event['start_time']){
+		if(empty($event['start_time'])){
+			debug($object);
 			return false;
 		}
 

@@ -6,7 +6,7 @@
 
 
 //require('../../www/Group-Office.php');
-
+/*
 $record['test']='bla';
 
 $template= '{test|number}
@@ -24,5 +24,19 @@ function replace($tag, $record){
 }
 
 echo preg_replace('/{[^}]*}/eU', "replace('$0', \$record)", $template)
+ *
+ */
+
+$pattern = '/^\S{1}[^:]*:.*/';
+
+$line[] = 'DTSTART:1234545456';
+$line[] = ' DTSTART:1234545456';
+$line[] = 'sdvds : ds  ds';
+
+foreach($line as $l){
+	$ret = preg_match($pattern, $l);
+	var_dump($ret);
+}
+
 
 ?>
