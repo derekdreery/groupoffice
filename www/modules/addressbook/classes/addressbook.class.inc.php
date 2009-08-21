@@ -486,6 +486,13 @@ class addressbook extends db {
 			$contact['sex'] = 'M';
 		}
 
+		if(!isset($contact['iso_address_format'])){
+			if(!$addressbook) {
+				$addressbook = $this->get_addressbook($contact['addressbook_id']);
+			}
+			$contact['iso_address_format']=$addressbook['default_iso_address_format'];
+		}
+
 		if(!isset($contact['files_folder_id']) && isset($GO_MODULES->modules['files'])) {
 			global $GO_CONFIG;
 
