@@ -232,4 +232,12 @@ class GO_LANGUAGE extends db {
 		$this->query($sql);
 		return $this->num_rows();
 	}
+
+	function get_address_format($id)
+	{
+		$sql = "SELECT format FROM go_address_format WHERE id=$id";
+		$this->query($sql);
+		$this->next_record();
+		return $this->f('format');
+	}
 }
