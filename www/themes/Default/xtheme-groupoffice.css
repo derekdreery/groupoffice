@@ -276,3 +276,31 @@ body.x-body-masked .x-window-plain .x-window-mc{background:#d1d8db;}
 
 /* made textboxes too small
 .ext-strict .x-form-text{height:22px;} */
+
+.x-tab-scroller-right {
+	background: url(images/extjs/tabs/scroll-right.gif);
+	height:25px !important;
+	border-bottom:1px solid #acbbc0;
+}
+
+.x-tab-scroller-right-over {
+	background: url(images/extjs/tabs/scroll-right.gif);
+	background-position: -18px 0;
+	}
+
+.x-tab-scroller-left {
+	background: url(images/extjs/tabs/scroll-left.gif) -18px 0;
+	height:25px !important;
+	border-bottom:1px solid #acbbc0;
+}
+
+.x-tab-scroller-left-over {
+	background: url(images/extjs/tabs/scroll-left.gif) ;
+	background-position: 0 0;
+	}
+
+
+
+.x-tab-strip span.x-tab-strip-text{
+	line-height: 15px;
+}
