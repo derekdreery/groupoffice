@@ -8,3 +8,4 @@ $lang['summary']['description']='Viser en oversikt over aktuelle elementer';
 $lang['summary']['default_rss_url']='http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml';
 $lang['summary']['announcement']='Kunngjøring';
 $lang['summary']['announcements']='Kunngjøringer';
+$lang['summary']['default_rss_title']='Nyheter';

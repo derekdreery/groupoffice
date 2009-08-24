@@ -23,3 +23,9 @@ GO.summary.lang.title="Tittel";
 
 
 GO.summary.lang.manageAnnouncements='Behandle kunngjøringer';
+
+GO.summary.lang.webFeeds='Behandle nyhetsstrømmer';
+GO.summary.lang.type='Type';
+GO.summary.lang.summaryType='Sammendrag';
+GO.summary.lang.rssFeeds='RSS strømmer';
+GO.summary.lang.noRssFeeds='Ingen RSS strømmer er lagt inn!<br />Trykk på knappen for innstillinger, i øverste høyre hjørne av dette dialogvinduet, for å legge til nyhetsstrømmer.';
