@@ -68,7 +68,7 @@ GO.calendar.SummaryGroupPanel = function(config)
 	
 	config.paging=false,			
 	config.autoExpandColumn='summary-calendar-name-heading';
-	config.autoExpandMax=2500;
+	//config.autoExpandMax=2500;
 	config.enableColumnHide=false;
   config.enableColumnMove=false;
 
@@ -100,6 +100,11 @@ GO.calendar.SummaryGroupPanel = function(config)
 	config.autoHeight=true;
 	
 	GO.calendar.SummaryGroupPanel.superclass.constructor.call(this, config);
+
+	//with auto expand column this works better otherwise you'll get a big scrollbar
+	this.store.on('load', function(){
+		this.addClass('go-grid3-hide-headers');
+	}, this, {single:true})
 	
 };
 
