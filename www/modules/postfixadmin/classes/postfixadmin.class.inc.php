@@ -138,7 +138,7 @@ class postfixadmin extends db {
 	 * @access public
 	 * @return Int Number of records found
 	 */
-	function get_aliases($domain_id, $query, $sortfield='id', $sortorder='ASC', $start=0, $offset=0)
+	function get_aliases($domain_id, $query='', $sortfield='id', $sortorder='ASC', $start=0, $offset=0)
 	{
 		$sql = "SELECT * FROM pa_aliases WHERE domain_id=".$this->escape($domain_id);
 		
