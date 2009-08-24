@@ -178,7 +178,7 @@ $lang['common']['total']='Totalt';
 $lang['common']['confirm_leave']='Hvis du går ut av Group-Office vil du miste ikke lagrede endringer';
 $lang['common']['dataSaved']='Data er lagret!';
 
-$lang['common']['uploadMultipleFiles'] = 'Trykk på \'Browse\' for å velge filer og/eller mapper fra din egen datamaskin. Trykk \'Upload\' for å overføre filene til Group-Office. Dette vinduet vil lukkes automatisk når overføringen er ferdig.';
+$lang['common']['uploadMultipleFiles'] = 'Trykk på \'Bla gjennom\' ( eller \'Browse\' ) for å velge filer og/eller mapper fra din egen datamaskin. Trykk \'Last opp\' ( eller \'Upload\' ) for å overføre filene til Group-Office. Dette vinduet vil lukkes automatisk når overføringen er ferdig.';
 
 
 $lang['common']['loginToGO']='Trykk her for å logge inn i Group-Office';
@@ -187,6 +187,6 @@ $lang['common']['GOwebsite']='Group-Office nettsted';
 $lang['common']['GOisAProductOf']='<i>Group-Office</i> er et produkt fra <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
 $lang['common']['yes']='Ja';
 $lang['common']['no']='Nei';
-$lang['common']['startMenu']='Admin meny';
+$lang['common']['startMenu']='Startmeny';
 $lang['common']['address_format']='Adresseformat';
 $lang['common']['dear']='Kjære';
