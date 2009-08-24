@@ -167,6 +167,8 @@ foreach($scripts as $script) {
 </script>
 <?php
 
+$scripts=array();
+
 if($GO_SECURITY->logged_in()) {
 
 
@@ -203,7 +205,7 @@ if($GO_SECURITY->logged_in()) {
 				}
 			}else {
 				if(file_exists($module['path'].'all-module-scripts-min')) {
-					$scripts[]=$module['path'].'all-module-scripts-min';
+					$scripts[]=$module_uri.'all-module-scripts-min';
 				}
 			}
 
