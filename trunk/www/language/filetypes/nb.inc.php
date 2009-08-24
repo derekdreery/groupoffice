@@ -17,7 +17,7 @@ $lang['filetypes']['otp']= 'OpenOffice.Org presentasjonsmal';
 $lang['filetypes']['ods']= 'OpenOffice.Org regneark';
 $lang['filetypes']['ots']= 'OpenOffice.Org regnearkmal';
 $lang['filetypes']['odt']= 'OpenOffice.Org tekstdokument';
-$lang['filetypes']['odm']= 'OpenOffice.Org mastedokument';
+$lang['filetypes']['odm']= 'OpenOffice.Org masterdokument';
 $lang['filetypes']['oth']= 'OpenOffice.Org nettside';
 
 
