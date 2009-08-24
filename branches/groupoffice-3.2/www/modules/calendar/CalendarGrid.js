@@ -71,6 +71,8 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 	hourHeight : 40,
 	
 	loaded : false,
+
+	minRows : 2,
 	
 	writePermission : false,
 	
@@ -615,10 +617,12 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			
 			var endMin = eventData.endDate.getMinutes();
 			endRow += Math.ceil(endMin/gridPrecision);
+
+			var minEndRow = startRow+this.minRows-1;
 						
-			if(endRow<startRow+1)
+			if(endRow<minEndRow)
 			{
-				endRow=startRow+1;
+				endRow=minEndRow;
 			}	
 
 			if(startRow && endRow && (originalDay==originalEndDay))
