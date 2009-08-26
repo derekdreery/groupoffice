@@ -27,8 +27,21 @@ GO.email.AddressContextMenu = function(config)
 					text: GO.email.lang.compose,
 					cls: 'x-btn-text-icon',
 					handler: function(){
+
+						var values = {to: this.address};
+						this.queryString = decodeURI(this.queryString);
+						var pairs = this.queryString.split('&');
+						var pair;
+						for(var i=0;i<pairs.length;i++){
+							pair = pairs[i].split('=');
+							
+							if(pair.length==2){
+								values[pair[0]]=pair[1];
+							}
+						}
+
 						GO.email.showComposer({
-							values : {to: this.address}							
+							values : values
 						});
 					},
 					scope: this
@@ -83,11 +96,11 @@ GO.email.AddressContextMenu = function(config)
 Ext.extend(GO.email.AddressContextMenu, Ext.menu.Menu,{
 	personal : '',
 	address : '',
-	showAt : function(xy, address, personal)
-	{ 	
-		this.address = address;
-		if(personal)
-			this.personal=personal;
+	showAt : function(xy, address, personal, queryString)
+	{
+		this.queryString=queryString || '';
+		this.address = address || '';
+		this.personal= personal || '';
 		
 		GO.email.AddressContextMenu.superclass.showAt.call(this, xy);
 	}	
