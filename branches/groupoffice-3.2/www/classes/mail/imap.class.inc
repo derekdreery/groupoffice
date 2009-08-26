@@ -573,6 +573,10 @@ class imap{
 	}
 
 
+	function headerinfo($uid){
+		return imap_headerinfo($this->conn, imap_msgno($this->conn,$uid));
+	}
+
 
 	function get_source($uid)
 	{
