@@ -1286,23 +1286,18 @@ class imap{
 		* @access public
 		* @return bool True on success
 		*/
-	function delete_folder($name, $mailbox_root) {
-		
+	function delete_folder($name, $mailbox_root) {		
 		$children = $this->get_mailboxes($name);
-		//debug($children);
-		foreach($children as $child)
+		rsort($children);
+
+		foreach($children as $child)		
 		{
-			if($child['name']!=$name)
+			if(!imap_deletemailbox($this->conn, "{".$this->connectstring."}".$child['name']))
 			{
-				if(!$this->delete_folder($child['name'], $mailbox_root))
-				{
-					return false;
-				}
+				return false;
 			}
 		}
-		
-		//$this->unsubscribe($name);
-		return imap_deletemailbox($this->conn, "{".$this->connectstring."}".$name);		
+		return true;
 	}
 
 	/**
