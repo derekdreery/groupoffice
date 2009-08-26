@@ -1,3 +1,6 @@
+2009/08/26 3.2.29
+- Several small bug fixes
+
 2009/08/24 3.2.28
 - Fixed bug in billing module where country was incorrectly saved
 

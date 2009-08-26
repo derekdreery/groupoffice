@@ -184,8 +184,6 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 			} else {
 				this.contact_id = 0;
 			}
-			
-		
 
 			if(!GO.util.empty(GO.addressbook.defaultAddressbook)){
 				this.personalPanel.formAddressBooks.setValue(GO.addressbook.defaultAddressbook);
@@ -204,11 +202,9 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 			this.personalPanel.formAddressFormat.setValue(abRecord.get('default_iso_address_format'));
 			//var sal = this.personalPanel.setSalutation();
 			//this.personalPanel.formSalutation.setValue(sal);
-			this.tabPanel.setActiveTab(0);
-			
+			this.tabPanel.setActiveTab(0);			
 		}	
 	},
-
 	
 	/*setAddressbookId : function(addressbook_id)
 	{
