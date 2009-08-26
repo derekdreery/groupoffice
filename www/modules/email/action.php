@@ -79,7 +79,17 @@ try{
 			$delete_messages =array();
 			while($uid=array_shift($_SESSION['GO_SESSION']['email_move_messages'])){
 				$source = $imap->get_source($uid);
-				if(!$imap2->append_message($_POST['to_mailbox'], $source, '\\Seen'))
+
+				$flags = '\\Seen';
+				$headerinfo = $imap->headerinfo($uid);
+				if($headerinfo->Flagged=='F'){
+					$flags .= ' \\Flagged';
+				}
+				if($headerinfo->Answered=='A'){
+					$flags .= ' \\Answered';
+				}
+
+				if(!$imap2->append_message($_POST['to_mailbox'], $source, $flags))
 				{
 					$imap2->close();
 					throw new Exception('Could not move message');
