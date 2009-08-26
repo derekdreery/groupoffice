@@ -311,9 +311,11 @@ class export_query extends TCPDF
 
 		while($record = $this->db->next_record())
 		{
-			foreach($this->totals as $field=>$value)
-			{
-				$this->totals[$field]+=$record[$field];
+			if(is_array($this->totals)){
+				foreach($this->totals as $field=>$value)
+				{
+					$this->totals[$field]+=$record[$field];
+				}
 			}
 
 			if(!count($columns))
