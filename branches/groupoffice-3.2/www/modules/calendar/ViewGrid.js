@@ -341,7 +341,7 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 	    		var dragTime = data.dragDate.format('U');
 	    		var dropTime = data.dropDate.format('U');
 	    		
-	    		offsetDays = Math.round((dropTime-dragTime)/86400);
+	    		var offsetDays = Math.round((dropTime-dragTime)/86400);
 	    		
 	    		var actionData = {offsetDays:offsetDays, dragDate: data.dragDate, calendar_id: data.calendar_id};
 	
@@ -839,7 +839,7 @@ Ext.extend(GO.calendar.dd.ViewDragZone, Ext.dd.DragZone, {
 	    
 	    this.eventDomElements = this.viewGrid.getRelatedDomElements(this.dragData.item.id);
 	    
-	    var td = Ext.get(this.dragData.item).findParent('td', 10, true);
+	    //var td = Ext.get(this.dragData.item).findParent('td', 10, true);
 	    
 	   	//this.proxyCount = eventDomElements.length;
 	    
@@ -1001,7 +1001,7 @@ Ext.extend(GO.calendar.dd.ViewDropTarget, Ext.dd.DropTarget, {
 		        		} 		
 		        	}
 		        	
-		        	tdOver.insertFirst(dd.eventProxies[i].id);
+		        	tdOver.insertFirst(dd.eventProxies[i]);
 		        	//dd.eventProxies[i].insertAfter(tdOver.first());	
 		        	var currentTd=tdOver;
 		        	for(var i=dd.proxyDragPos+1;i<dd.eventProxies.length;i++)
