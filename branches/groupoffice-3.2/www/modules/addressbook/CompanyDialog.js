@@ -128,7 +128,16 @@ Ext.extend(GO.addressbook.CompanyDialog, Ext.Window, {
 		
 	show : function(company_id)
 	{
-		if(GO.mailings && !GO.mailings.writableMailingsStore.loaded)
+		if(!GO.addressbook.writableAddressbooksStore.loaded)
+		{
+			GO.addressbook.writableAddressbooksStore.load(
+			{
+				callback: function(){
+					this.show(company_id);
+				},
+				scope:this
+			});
+		}else	if(GO.mailings && !GO.mailings.writableMailingsStore.loaded)
 		{
 			GO.mailings.writableMailingsStore.load({
 				callback:function(){
@@ -148,28 +157,15 @@ Ext.extend(GO.addressbook.CompanyDialog, Ext.Window, {
 				this.company_id = company_id;
 			} else {
 				this.company_id = 0;
-			}			
-			
-			if(!GO.addressbook.writableAddressbooksStore.loaded)
-			{
-				GO.addressbook.writableAddressbooksStore.load(
-				{
-					callback: function(){
-						GO.addressbook.writableAddressbooksStore.loaded=true;				
-						if(this.personalPanel.formAddressBooks.getValue()<1)
-						{
-							this.personalPanel.formAddressBooks.selectFirst();
-						}		
-					},
-					scope:this
-				});
+			}	
+
+			if(!GO.util.empty(GO.addressbook.defaultAddressbook)){
+				this.personalPanel.formAddressBooks.setValue(GO.addressbook.defaultAddressbook);
 			}else
 			{
-				if(this.personalPanel.formAddressBooks.getValue()<1)
-				{
-					this.personalPanel.formAddressBooks.selectFirst();
-				}	
+				this.personalPanel.formAddressBooks.selectFirst();
 			}
+
 		
 			this.tabPanel.setActiveTab(0);
 			
@@ -184,6 +180,10 @@ Ext.extend(GO.addressbook.CompanyDialog, Ext.Window, {
 				this.personalPanel.formAddressBooks.setValue(tempAddressbookID);	
 				
 				this.personalPanel.setCompanyId(0);
+
+				var abRecord = this.personalPanel.formAddressBooks.store.getById(tempAddressbookID);
+				this.personalPanel.formAddressFormat.setValue(abRecord.get('default_iso_address_format'));
+				this.personalPanel.formPostAddressFormat.setValue(abRecord.get('default_iso_address_format'));
 				
 				GO.addressbook.CompanyDialog.superclass.show.call(this);
 			}		

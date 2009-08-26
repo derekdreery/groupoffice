@@ -196,9 +196,6 @@ GO.addressbook.ContactProfilePanel = function(config)
 		addressbook_id: this.addressbook_id			
 	});
 	
-
-	
-	
 	this.formDepartment = new Ext.form.TextField(
 	{
 		fieldLabel: GO.lang['strDepartment'], 
@@ -243,10 +240,13 @@ GO.addressbook.ContactProfilePanel = function(config)
 	{
 		if(this.formCompany.getValue()==0 || confirm(GO.addressbook.lang.moveAll))
 		{
-			var r = this.formAddressFormat.store.getById(record.get('default_iso_address_format'));
-			this.formAddressFormat.setValue(r.id);
 			this.setAddressbookID(record.data.id);
-			this.setSalutation();
+
+			var r = this.formAddressFormat.store.getById(record.get('default_iso_address_format'));
+			if(r){
+				this.formAddressFormat.setValue(r.id);
+				this.setSalutation();
+			}
 			return true;
 		}else
 		{
@@ -254,6 +254,7 @@ GO.addressbook.ContactProfilePanel = function(config)
 		}	
 	}, this);
 
+	this.formAddressBooks.on('select', function(){this.setSalutation(true)}, this);
 	this.formFirstName.on('blur', function(){this.setSalutation(false)}, this);
 	this.formMiddleName.on('blur', function(){this.setSalutation(false)}, this);
 	this.formLastName.on('blur', function(){this.setSalutation(false)}, this);
