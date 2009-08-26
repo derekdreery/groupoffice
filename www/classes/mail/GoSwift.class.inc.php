@@ -258,7 +258,7 @@ class GoSwift extends Swift_Mailer{
 	 */
 
 
-	function sendmail($batch=false)
+	function sendmail($batch=false, $dont_save_in_sent_items=false)
 	{
 		$smtp_restrict = new smtp_restrict();
 
@@ -288,7 +288,7 @@ class GoSwift extends Swift_Mailer{
 			$send_success = parent::send($this->message,$this->failed_recipients);
 		}
 
-		if(!$batch && $send_success && $this->account && $this->account['type']=='imap' && !empty($this->account['sent']))
+		if(!$dont_save_in_sent_items && $send_success && $this->account && $this->account['type']=='imap' && !empty($this->account['sent']))
 		{
 			global $GO_CONFIG, $GO_MODULES;
 
@@ -409,18 +409,14 @@ class GoSwiftImport extends GoSwift{
 
 	public function __construct($mime, $add_body=true, $alias_id=0, $transport=null)
 	{
-
 		$RFC822 = new RFC822();
-
 
 		$params['include_bodies'] = true;
 		$params['decode_bodies'] = true;
 		$params['decode_headers'] = true;
 		$params['input'] = $mime;
 
-
 		$structure = Mail_mimeDecode::decode($params);
-
 
 		$subject = isset($structure->headers['subject']) ? $structure->headers['subject'] : '';
 
