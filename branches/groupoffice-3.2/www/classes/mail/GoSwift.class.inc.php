@@ -203,7 +203,7 @@ class GoSwift extends Swift_Mailer{
 	 * @param String $type Can be html or text
 	 */
 
-	function set_body($body,$type='html')
+	function set_body($body,$type='html', $add_text_version=true)
 	{
 		global $GO_CONFIG;
 
@@ -215,7 +215,7 @@ class GoSwift extends Swift_Mailer{
 		//add body
 		$this->message->setBody($body, 'text/'.$type);
 
-		if($type=='html')
+		if($type=='html' && $add_text_version)
 		{
 			//add text version of the HTML body
 			$htmlToText = new Html2Text ($body);
