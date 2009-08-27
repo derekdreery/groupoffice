@@ -15,6 +15,12 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
 -- --------------------------------------------------------
 
+DROP TABLE IF EXISTS `cf_6`;
+CREATE TABLE IF NOT EXISTS `cf_6` (
+  `link_id` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`link_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 --
 -- Tabel structuur voor tabel `fs_files`
 --
