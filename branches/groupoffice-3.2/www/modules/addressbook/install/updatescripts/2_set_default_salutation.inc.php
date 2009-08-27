@@ -11,7 +11,7 @@
 	if($GO_LANGUAGE->get_address_format_by_iso($default_language) == 0)
 		$default_language = 'US';
 
-	$db = new db();
+
 	$sql = "UPDATE ab_addressbooks SET default_iso_address_format = \"$default_language\", default_salutation = \"$default_salutation\"";
 	$db->query($sql);
 
