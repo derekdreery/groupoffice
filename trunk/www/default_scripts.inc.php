@@ -242,11 +242,10 @@ if($GO_SECURITY->logged_in()) {
 		array_unshift($scripts, $local_uri.'cache/modules.js');
 	}
 
+	$GO_SCRIPTS_JS='';
 	foreach($scripts as $script) {
 		echo '<script type="text/javascript" src="'.$script.'"></script>'."\n";
 	}
-
-
 	foreach($GO_MODULES->modules as $module) {
 		if($module['read_permission']) {
 			if(file_exists($module['path'].'scripts.inc.php')) {
@@ -254,8 +253,17 @@ if($GO_SECURITY->logged_in()) {
 			}
 		}
 	}
-}
 
+
+	$filename = $GO_SECURITY->user_id.'-scripts.js';
+	$path = $GO_CONFIG->local_path.'cache/'.$filename;
+
+	if($GO_SCRIPTS_JS!=@file_get_contents($path)){
+		file_put_contents($path, $GO_SCRIPTS_JS);
+	}
+
+	echo '<script type="text/javascript" src="'.$GO_CONFIG->local_url.'cache/'.$filename.'?mtime='.filemtime($path).'"></script>'."\n";
+}
 ?>
 
 

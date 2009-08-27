@@ -9,10 +9,8 @@ if(!$calendar){
 	$calendar=array('id'=>0,'name'=>'');
 }
 $reminder = $cal->reminder_seconds_to_form_input($settings['reminder']);
-?>
-<script type="text/javascript">
-GO.calendar.defaultCalendar = {id: <?php echo $calendar['id']; ?>, name: "<?php echo $calendar['name']; ?>"};
-GO.calendar.defaultBackground='<?php echo $settings['background']; ?>';
-GO.calendar.defaultReminderValue='<?php echo $reminder['reminder_value']; ?>';
-GO.calendar.defaultReminderMultiplier='<?php echo $reminder['reminder_multiplier']; ?>';
-</script>
+
+$GO_SCRIPTS_JS .= 'GO.calendar.defaultCalendar = {id: '.$calendar['id'].', name: "'.$calendar['name'].'"};
+GO.calendar.defaultBackground="'.$settings['background'].'";
+GO.calendar.defaultReminderValue="'.$reminder['reminder_value'].'";
+GO.calendar.defaultReminderMultiplier="'.$reminder['reminder_multiplier'].'";';

@@ -8,12 +8,16 @@ $tasklist = $tasks->get_tasklist($settings['default_tasklist_id']);
 if(!$tasklist){
 	$tasklist=array('id'=>0, 'name'=>'');
 }
-?>
-<script type="text/javascript">
-GO.tasks.defaultTasklist = {id: <?php echo $tasklist['id']; ?>, name: "<?php echo $tasklist['name']; ?>"};
-GO.tasks.showInactive=<?php if($GO_CONFIG->get_setting('tasks_show_inactive', $GO_SECURITY->user_id)=='1') echo 'true'; else echo 'false'; ?>;
-GO.tasks.showCompleted=<?php if($GO_CONFIG->get_setting('tasks_show_completed', $GO_SECURITY->user_id)=='1') echo 'true'; else echo 'false'; ?>;
-GO.tasks.remind='<?php echo $settings['remind']; ?>';
-GO.tasks.reminderDaysBefore=parseInt(<?php echo $settings['reminder_days']; ?>);
-GO.tasks.reminderTime='<?php echo $settings['reminder_time']; ?>';
-</script>
+
+$GO_SCRIPTS_JS .='GO.tasks.defaultTasklist = {id: '.$tasklist['id'].', name: "'.$tasklist['name'].'"};
+GO.tasks.showInactive=';
+
+if($GO_CONFIG->get_setting("tasks_show_inactive", $GO_SECURITY->user_id)=='1') $GO_SCRIPTS_JS .= 'true'; else $GO_SCRIPTS_JS .= 'false';
+
+$GO_SCRIPTS_JS .= ';GO.tasks.showCompleted=';
+
+if($GO_CONFIG->get_setting('tasks_show_completed', $GO_SECURITY->user_id)=='1') $GO_SCRIPTS_JS .= 'true'; else $GO_SCRIPTS_JS .= 'false';
+
+$GO_SCRIPTS_JS .= ';GO.tasks.remind="'.$settings['remind'].'";
+GO.tasks.reminderDaysBefore=parseInt('.$settings['reminder_days'].');
+GO.tasks.reminderTime="'.$settings['reminder_time'].'"';
