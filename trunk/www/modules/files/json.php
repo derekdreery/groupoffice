@@ -735,6 +735,15 @@ try{
 												$response['data']['size']=Number::format_size($file['size']);
 												$response['data']['write_permission']=$files->has_write_permission($GO_SECURITY->user_id, $folder);
 
+
+												if(isset($GO_MODULES->modules['customfields']))
+												{
+													require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+													$cf = new customfields();
+													$values = $cf->get_values($GO_SECURITY->user_id, 6, $response['data']['id']);
+													$response['data']=array_merge($response['data'], $values);
+												}
+
 												$params['response']=&$response;
 												$GO_EVENTS->fire_event('load_file_properties', $params);
 

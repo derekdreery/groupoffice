@@ -94,11 +94,22 @@ GO.files.FilePropertiesDialog = function(config){
 		this.workflowPanel = new GO.workflow.FilePropertiesPanel();
 		items.push(this.workflowPanel);
 	}
+
+
+	if(GO.customfields && GO.customfields.types["6"])
+	{
+  	for(var i=0;i<GO.customfields.types["6"].panels.length;i++)
+  	{
+  		items.push(GO.customfields.types["6"].panels[i]);
+  	}
+	}
+
 	
 	this.tabPanel =new Ext.TabPanel({
 			activeTab: 0,
 			deferredRender:false,
 			doLayoutOnTabChange:true,
+			enableTabScroll:true,
 		  border:false,
 		  anchor:'100% 100%',
 		  hideLabel:true,

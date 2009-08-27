@@ -75,3 +75,8 @@ ADD INDEX ( extension )";
 
 $updates[] = "script:4_set_extension.inc.php";
 
+$updates[] = "CREATE TABLE IF NOT EXISTS `cf_6` (
+  `link_id` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`link_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+

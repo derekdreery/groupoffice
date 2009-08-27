@@ -92,6 +92,15 @@ try{
 				$up_file['name']=$_POST['name'];
 			}			
 			$files->update_file($up_file);
+
+
+			if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
+			{
+				require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+				$cf = new customfields();
+				$cf->insert_cf_row(6,$up_file['id']);
+				$cf->update_fields($GO_SECURITY->user_id, $up_file['id'], 6, $_POST, false);
+			}
 				
 			$GO_EVENTS->fire_event('save_file_properties', array(&$response,$up_file));
 
