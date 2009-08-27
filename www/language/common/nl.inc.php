@@ -172,3 +172,5 @@ $lang['common']['loginToGO']='Klik hier om in te loggen bij Group-Office';
 $lang['common']['links']='Links';
 $lang['common']['GOwebsite']='Group-Office website';
 $lang['common']['GOisAProductOf']='<i>Group-Office</i> is een product van <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
+
+$lang['common']['system']='Systeem';

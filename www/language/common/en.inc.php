@@ -190,3 +190,5 @@ $lang['common']['GOisAProductOf']='<i>Group-Office</i> is a product of <a href="
 
 $lang['common']['yes']='Yes';
 $lang['common']['no']='No';
+
+$lang['common']['system']='System';
