@@ -219,7 +219,18 @@ class GoSwift extends Swift_Mailer{
 		{
 			//add text version of the HTML body
 			$htmlToText = new Html2Text ($body);
-			$this->message->addPart($htmlToText->get_text(), 'text/plain','UTF-8');
+
+			if(isset($this->text_body)){
+				//the body was already set so find the text version and replace it.
+				$children = (array) $this->message->getChildren();
+				foreach($children as $child){
+					$child->setBody($htmlToText->get_text());
+					break;
+				}
+			}else
+			{
+				$this->text_body = $this->message->addPart($htmlToText->get_text(), 'text/plain','UTF-8');
+			}
 		}
 	}
 
