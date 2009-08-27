@@ -139,7 +139,7 @@ function test_system(){
 		$wbxml2xml = whereis('wbxml2xml') ? whereis('wbxml2xml') : '/usr/bin/wbxml2xml';
 		$xml2wbxml = whereis('xml2wbxml') ? whereis('xml2wbxml') : '/usr/bin/xml2wbxml';
 	}
-	$test['pass']=is_executable($wbxml2xml) && is_executable($xml2wbxml);
+	$test['pass']=@is_executable($wbxml2xml) && @is_executable($xml2wbxml);
 	$test['feedback']='Warning: libwbxml2 is not installed. Synchronization will not work!';
 	$test['fatal']=false;
 
@@ -165,7 +165,7 @@ function test_system(){
 		$tar = whereis('tar') ? whereis('tar') : '/bin/tar';
 	}
 
-	$test['pass']=is_executable($tar);
+	$test['pass']=@is_executable($tar);
 	$test['feedback']='Warning: tar is not installed or not executable.';
 	$test['fatal']=false;
 
@@ -178,7 +178,7 @@ function test_system(){
 	{
 		$zip = whereis('zip') ? whereis('zip') : '/usr/bin/zip';
 	}
-	$test['pass']=is_executable($zip);
+	$test['pass']=@is_executable($zip);
 	$test['feedback']='Warning: zip is not installed or not executable.';
 	$test['fatal']=false;
 
@@ -191,7 +191,7 @@ function test_system(){
 	{
 		$tnef = whereis('tnef') ? whereis('tnef') : '/usr/bin/tnef';
 	}
-	$test['pass']=is_executable($tnef);
+	$test['pass']=@is_executable($tnef);
 	$test['feedback']='Warning: tnef is not installed or not executable. you can\'t view winmail.dat attachments in the email module.';
 	$test['fatal']=false;
 
@@ -546,7 +546,7 @@ function save_config($config_obj)
 
 function whereis($cmd)
 {
-	if(strtoupper(substr(PHP_OS, 0, 3)) != 'WIN' && is_executable('whereis'))
+	if(strtoupper(substr(PHP_OS, 0, 3)) != 'WIN' && @is_executable('whereis'))
 	{
 		exec('whereis '.$cmd, $return);
 
