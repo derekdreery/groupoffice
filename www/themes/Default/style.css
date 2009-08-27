@@ -839,3 +839,25 @@ table.display-panel a:active
 	height: 16px;
 	background: transparent url(images/buttons/radioon.gif) no-repeat center center;
 }
+
+
+
+.go-icon-ok .x-grid3-cell-inner{
+	background: url('images/16x16/ok.png') no-repeat !important;
+	padding-left:22px !important;
+}
+
+.go-icon-cross .x-grid3-cell-inner{
+	background: url('images/16x16/cross.png') no-repeat !important;
+	padding-left:22px !important;
+}
+
+.go-icon-unknown .x-grid3-cell-inner{
+	background: url('images/16x16/unknown.png') no-repeat !important;
+	padding-left:22px !important;
+}
+
+.go-icon-empty .x-grid3-cell-inner{
+	background: none !important;
+	padding-left:22px !important;
+}

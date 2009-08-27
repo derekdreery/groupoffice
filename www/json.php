@@ -46,9 +46,12 @@ try{
 					$week['value'] = Date::get_last_sunday($i);
 					$first_weekday = Date::date_add($first_monday, ($week_nr-1)*7);
 					$last_weekday = Date::date_add($first_weekday, 6);
-					$first_weekday = date($_SESSION['GO_SESSION']['date_format'],$first_weekday);
-					$last_weekday = date($_SESSION['GO_SESSION']['date_format'],$last_weekday);
-					$week['text'] = $week_nr.' ('.$first_weekday.' / '.$last_weekday.')';
+
+					$date_format = str_replace($_SESSION['GO_SESSION']['date_separator'].'Y', '', $_SESSION['GO_SESSION']['date_format']);
+
+					$first_weekday = date($date_format,$first_weekday);
+					$last_weekday = date($date_format,$last_weekday);
+					$week['text'] = $week_nr.' ('.$first_weekday.')';// / '.$last_weekday.')';
 
 					$weeks[] = $week;
 				}
