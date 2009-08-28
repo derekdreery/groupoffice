@@ -268,12 +268,24 @@ try{
 			break;
 
 
-
-
-
-			$response['success']=true;
-
-			break;
+			case 'save_portlet':
+				$tasklists = json_decode($_POST['tasklists'], true);
+				$response['data'] = array();
+				foreach($tasklists as $tasklist)
+				{
+					$tasklist['user_id'] = $GO_SECURITY->user_id;
+					if($tasklist['visible'] == 0)
+					{
+						$tasks->delete_visible_tasklist($tasklist['tasklist_id'], $tasklist['user_id']);
+					}
+					else
+					{
+						$tasklist['tasklist_id']=$tasks->add_visible_tasklist(array('tasklist_id'=>$tasklist['tasklist_id'], 'user_id'=>$tasklist['user_id']));
+					}
+					$response['data'][$tasklist['tasklist_id']]=$tasklist;
+				}
+				$response['success']=true;
+				break;
 	}
 }catch(Exception $e)
 {

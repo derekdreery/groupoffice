@@ -30,3 +30,5 @@ GO.tasks.lang.call='Bellen';
 GO.tasks.lang.taskDefaults='Standaard instellingen voor taken';
 GO.tasks.lang.daysBeforeStart='Dagen voor aanvang';
 GO.tasks.lang.defaultTasklist='Standaard takenlijst';
+GO.tasks.lang.visibleTasklists='Zichtbare taaklijsten';
+GO.tasks.lang.visible='Zichtbaar';

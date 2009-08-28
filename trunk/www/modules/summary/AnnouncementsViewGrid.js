@@ -41,7 +41,7 @@ GO.summary.AnnouncementsViewGrid = function(config){
 		  renderer: function(value, p, record) {
         return '<b>'+value+'</b>';               
     	}
-		}
+	  }
 	]);
 
 	config.cls='go-colored-table';

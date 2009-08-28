@@ -2036,7 +2036,7 @@ class calendar extends db
 
 	public static function add_user($user)
 	{
-		global $GO_SECURITY, $GO_LANGUAGE, $GO_CONFIG;
+		global $GO_SECURITY, $GO_LANGUAGE, $GO_CONFIG, $GO_MODULES;
 
 		$cal2 = new calendar();
 
@@ -2064,6 +2064,11 @@ class calendar extends db
 			if($count<=20)
 			$cal2->add_calendar_to_view($calendar_id, '', $view_id);
 		}
+
+		if(isset($GO_MODULES->modules['summary'])){
+			$cal2->add_visible_calendar(array('user_id'=>$user['id'], 'calendar_id'=>$calendar_id));
+		}
+
 	}
 
 
@@ -2367,6 +2372,26 @@ class calendar extends db
 			$event = array_merge($event, $this->reminder_seconds_to_form_input($event['reminder']));
 		}
 		return $event;
+	}
+
+	public function get_visible_calendars($user_id)
+	{
+		$this->query("SELECT * FROM su_visible_calendars WHERE user_id = $user_id");
+		return $this->num_rows();
+	}
+
+	public function add_visible_calendar($calendar)
+	{
+		if($this->replace_row('su_visible_calendars', $calendar))
+		{
+			return $this->insert_id();
+		}
+		return false;
+	}
+
+	public function delete_visible_calendar($calendar_id, $user_id)
+	{
+		$this->query("DELETE FROM su_visible_calendars WHERE calendar_id = $calendar_id AND user_id = $user_id");
 	}
 
 }

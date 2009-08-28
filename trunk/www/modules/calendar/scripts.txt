@@ -11,3 +11,4 @@ modules/calendar/ParticipantsPanel.js
 modules/calendar/AvailabilityCheckWindow.js
 modules/calendar/Settings.js
 modules/calendar/SelectCalendar.js
+modules/calendar/PortletSettings.js

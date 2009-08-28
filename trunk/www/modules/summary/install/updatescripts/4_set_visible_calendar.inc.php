@@ -1,0 +1,14 @@
+<?php
+
+require_once($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc.php');
+$cal = new calendar();
+$cal1 = new db();
+$cal2 = new db();
+
+$cal1->query("SELECT calendar_id, user_id FROM cal_settings");
+
+while($settings = $cal1->next_record())
+{
+	$calendar = $cal->get_calendar($settings['calendar_id']);
+	$cal2->query('INSERT INTO su_visible_calendars(calendar_id, user_id) VALUES("'.$calendar['id'].'", "'.$cal1->f('user_id').'")');
+}

@@ -44,3 +44,27 @@ CREATE TABLE IF NOT EXISTS `su_rss_feeds` (
   `summary` tinyint(1) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `su_visible_lists`
+--
+
+CREATE TABLE IF NOT EXISTS `su_visible_lists` (
+  `user_id` int(11) NOT NULL,
+  `tasklist_id` int(11) NOT NULL,
+  PRIMARY KEY  (`user_id`,`tasklist_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `su_visible_calendars`
+--
+
+CREATE TABLE IF NOT EXISTS `su_visible_calendars` (
+  `user_id` int(11) NOT NULL,
+  `calendar_id` int(11) NOT NULL,
+  PRIMARY KEY  (`user_id`,`calendar_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;

@@ -166,4 +166,3 @@ CREATE TABLE IF NOT EXISTS `go_links_1` (
   KEY `id` (`id`,`folder_id`),
   KEY `ctime` (`ctime`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-        

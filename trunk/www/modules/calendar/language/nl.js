@@ -62,3 +62,6 @@ GO.calendar.lang.eventDefaults='Standaard instellingen voor afspraken';
 GO.calendar.lang.importToCalendar='Voeg afspraak direct toe aan de agenda\'s';
 GO.calendar.lang.default_calendar='Standaard agenda';
 GO.calendar.lang.status='Status';
+
+GO.calendar.lang.visibleCalendars='Zichtbare agenda\'s';
+GO.calendar.lang.visible='Zichtbaar';
