@@ -13,11 +13,6 @@ padding:0 20px 0 20px;
 font-weight:bold;
 }
 
-#summary-calendar-grid .x-grid3-header {
-    display:none;
-}
-
-
 #availability_date{
 font: bold 12px verdana;	
 }

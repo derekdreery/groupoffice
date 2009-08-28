@@ -75,3 +75,6 @@ GO.calendar.lang.importToCalendar='Add appointment directly to the calendars';
 GO.calendar.lang.default_calendar='Default calendar';
 
 GO.calendar.lang.status='Status';
+
+GO.calendar.lang.visibleCalendars='Visible calendars';
+GO.calendar.lang.visible='Visible';

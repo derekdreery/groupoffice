@@ -21,6 +21,7 @@ require($GO_LANGUAGE->get_language_file('calendar'));
 
 require_once ($GO_MODULES->modules['calendar']['class_path']."calendar.class.inc.php");
 $cal = new calendar();
+$cal2 = new calendar();
 
 $max_description_length=800;
 
@@ -43,7 +44,26 @@ try{
 			$timezone_offset = Date::get_timezone_offset(mktime(0, 0, 0, $month, $day, $year))*3600;
 			$interval_start_time = mktime(0, 0, 0, $month, $day, $year)-$timezone_offset;
 			$interval_end_time = mktime(0, 0, 0, $month, $day+2, $year)-$timezone_offset;
-			$events = $cal->get_events_in_array(array(),$GO_SECURITY->user_id, $interval_start_time, $interval_end_time);
+
+
+			$user_id = $_REQUEST['user_id'];
+			$calendars = array();
+			$calendars_name = array();
+			if($_REQUEST['portlet'])
+			{
+				if($cal->get_visible_calendars($user_id) == 0)
+					$calendars[] = '0';
+				while($cal->next_record())
+				{
+					$cur_calendar = $cal2->get_calendar($cal->f('calendar_id'));
+					$calendars[] = $cal->f('calendar_id');
+					$calendars_name[] = $cur_calendar['name'];
+				}
+				$user_id = 0;
+			}
+
+
+			$events = $cal->get_events_in_array($calendars,$user_id, $interval_start_time, $interval_end_time);
 
 			$today_end = mktime(0, 0, 0, $month, $day+1, $year)-$timezone_offset;
 
@@ -62,6 +82,7 @@ try{
 						$date_format = $_SESSION['GO_SESSION']['time_format'];
 					}
 				}
+				$cal_id = array_search($event['calendar_id'], $calendars);
 				
 				$response['results'][] = array(
 					'id'=>$response['count'],
@@ -74,7 +95,8 @@ try{
 					'description'=>nl2br(htmlspecialchars(String::cut_string($event['description'],$max_description_length), ENT_COMPAT, 'UTF-8')),
 					'private'=>($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']),
 					'repeats'=>!empty($event['rrule']),
-					'day'=>$event['start_time']<$today_end ? $lang['common']['today'] : $lang['common']['tomorrow']
+					'day'=>$event['start_time']<$today_end ? $lang['common']['today'] : $lang['common']['tomorrow'],
+					'calendar_name'=>(isset($calendars_name) && $cal_id !== false)? $calendars_name[$cal_id]: ''
 				);
 				$response['count']++;
 			}
@@ -720,6 +742,33 @@ try{
 			$response['participants'][]=$participant;
 
 
+			break;
+
+		case 'settings':
+			$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'id';
+			$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'DESC';
+			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
+			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
+			$query = isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
+
+			$cal->get_visible_calendars($GO_SECURITY->user_id);
+			$visible_cals = array();
+			while($cal->next_record())
+			{
+				$visible_cals[] = $cal->f('calendar_id');
+			}
+
+			$response['total'] = $cal->get_authorized_calendars($GO_SECURITY->user_id, $start, $limit);
+
+			$response['results']=array();
+
+			while($cal->next_record())
+			{
+				$calendars['calendar_id'] = $cal->f('id');
+				$calendars['name'] = $cal->f('name');
+				$calendars['visible'] = (in_array($cal->f('id'), $visible_cals));
+				$response['results'][] = $calendars;
+			}
 			break;
 	}
 }catch(Exception $e)

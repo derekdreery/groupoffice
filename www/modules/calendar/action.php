@@ -740,6 +740,25 @@ try{
 			$response['success']=true;
 
 			break;
+
+		case 'save_portlet':
+			$calendars = json_decode($_POST['calendars'], true);
+			$response['data'] = array();
+			foreach($calendars as $calendar)
+			{
+				$calendar['user_id'] = $GO_SECURITY->user_id;
+				if($calendar['visible'] == 0)
+				{
+					$cal->delete_visible_calendar($calendar['calendar_id'], $calendar['user_id']);
+				}
+				else
+				{
+					$calendar['calendar_id']=$cal->add_visible_calendar(array('calendar_id'=>$calendar['calendar_id'], 'user_id'=>$calendar['user_id']));
+				}
+				$response['data'][$calendar['calendar_id']]=$calendar;
+			}
+			$response['success']=true;
+			break;
 	}
 }catch(Exception $e)
 {

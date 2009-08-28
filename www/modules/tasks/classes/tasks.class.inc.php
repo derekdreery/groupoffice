@@ -946,7 +946,7 @@ class tasks extends db
 	
 	public static function add_user($user)
 	{
-		global $GO_SECURITY;
+		global $GO_SECURITY, $GO_MODULES;
 		
 		$tasks = new tasks();
 
@@ -956,6 +956,10 @@ class tasks extends db
 		$tasklist['acl_write']=$GO_SECURITY->get_new_acl('tasks', $user['id']);
 
 		$tasklist_id = $tasks->add_tasklist($tasklist);
+		
+		if(isset($GO_MODULES->modules['summary'])){
+			$tasks->add_visible_tasklist(array('user_id'=>$user['id'], 'tasklist_id'=>$tasklist_id));
+		}
 	}
 
 
@@ -1041,5 +1045,25 @@ class tasks extends db
 				
 			$search->cache_search_result($cache);
 		}
+	}
+
+	public function get_visible_tasklists($user_id)
+	{
+		$this->query("SELECT * FROM su_visible_lists WHERE user_id = $user_id");
+		return $this->num_rows();
+	}
+
+	public function add_visible_tasklist($tasklist)
+	{
+		if($this->replace_row('su_visible_lists', $tasklist))
+		{
+			return $this->insert_id();
+		}
+		return false;
+	}
+
+	public function delete_visible_tasklist($tasklist_id, $user_id)
+	{
+		$this->query("DELETE FROM su_visible_lists WHERE tasklist_id = $tasklist_id AND user_id = $user_id");
 	}
 }

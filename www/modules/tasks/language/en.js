@@ -41,3 +41,5 @@ GO.tasks.lang.call='Call';
 GO.tasks.lang.taskDefaults='Defaults settings for tasks';
 GO.tasks.lang.daysBeforeStart='Days before start';
 GO.tasks.lang.defaultTasklist='Default tasklist';
+GO.tasks.lang.visibleTasklists='Visible tasklists';
+GO.tasks.lang.visible='Visible';

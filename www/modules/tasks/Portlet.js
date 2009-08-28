@@ -4,20 +4,25 @@ GO.tasks.SimpleTasksPanel = function(config)
 		{
 			config = {};
 		}
+		var reader = new Ext.data.JsonReader({
+		    root: 'results',
+			totalProperty: 'total',
+			fields:['id', 'name','completed','due_time','description','tasklist_name'],
+			id: 'id'
+	    });
 	
-		config.store = new GO.data.JsonStore({
+		config.store = new Ext.data.GroupingStore({
 			url: GO.settings.modules.tasks.url+'json.php',
 			baseParams: {
 				'task': 'tasks',
 				'user_id' : GO.settings.user_id,
-				'active_only' : true
+				'active_only' : true,
+				'portlet' : true
 			},
-			root: 'results',
-			totalProperty: 'total',
-			id: 'id',
-			fields:['id', 'name','completed','due_time','description']
+			reader: reader,
+			sortInfo: {field: 'due_time', direction: 'ASC'},
+			groupField: 'tasklist_name'
 		});
-	
 	
 		var checkColumn = new GO.grid.CheckColumn({
 			header: '',
@@ -42,8 +47,6 @@ GO.tasks.SimpleTasksPanel = function(config)
 			delete this.store.baseParams['checked'];
 		}, this);
 	
-	
-	
 		config.paging=false,
 		config.plugins=checkColumn;
 		config.autoExpandColumn='task-portlet-name-col';
@@ -67,20 +70,22 @@ GO.tasks.SimpleTasksPanel = function(config)
 			header:GO.tasks.lang.dueDate,
 			dataIndex: 'due_time',
 			width:100
+		},{
+			header:GO.tasks.lang.tasklist,
+			dataIndex: 'tasklist_name'
 		}];
-		config.view=new Ext.grid.GridView({
-		
+		config.view=new Ext.grid.GroupingView({
+			forceFit:true,
+			hideGroupedColumn:true,
 			emptyText: GO.tasks.lang.noTask
 		}),
 		config.sm=new Ext.grid.RowSelectionModel();
 		config.loadMask=true;
 		config.autoHeight=true;
 	
-	
 		GO.tasks.SimpleTasksPanel.superclass.constructor.call(this, config);
 	
 	};
-
 
 Ext.extend(GO.tasks.SimpleTasksPanel, GO.grid.GridPanel, {
 	
@@ -104,11 +109,14 @@ Ext.extend(GO.tasks.SimpleTasksPanel, GO.grid.GridPanel, {
 			scope:this.store,
 			interval:960000
 		});
+		this.store.on('load', function() {
+			if(this.store.collect('tasklist_name').length <= 1)
+				this.store.clearGrouping();
+			else
+				this.store.groupBy('tasklist_name');
+		},this);
 	}
-	
 });
-
-
 
 
 GO.mainLayout.onReady(function(){
@@ -122,6 +130,59 @@ GO.mainLayout.onReady(function(){
 			title: GO.tasks.lang.tasks,
 			layout:'fit',
 			tools: [{
+				id: 'gear',
+				handler: function(){
+					if(!this.manageTasksWindow)
+					{
+						this.manageTasksWindow = new Ext.Window({
+							layout:'fit',
+							items:this.PortletSettings =  new GO.tasks.PortletSettings(),
+							width:700,
+							height:400,
+							title:GO.tasks.lang.visibleTasklists,
+							closeAction:'hide',
+							buttons:[{
+								text: GO.lang.cmdSave,
+								handler: function(){
+									var params={'task' : 'save_portlet'};
+									if(this.PortletSettings.store.loaded){
+										params['tasklists']=Ext.encode(this.PortletSettings.getGridData());
+									}
+									Ext.Ajax.request({
+										url: GO.settings.modules.tasks.url+'action.php',
+										params: params,
+										callback: function(options, success, response){
+											if(!success)
+											{
+												Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
+											}else
+											{
+												var responseParams = Ext.decode(response.responseText);
+												this.PortletSettings.store.reload();
+												this.manageTasksWindow.hide();
+												
+												tasksGrid.store.reload();
+											}
+										},
+										scope:this
+									});
+								},
+								scope: this
+							}],
+							listeners:{
+								show: function(){
+									if(!this.PortletSettings.store.loaded)
+									{
+										this.PortletSettings.store.load();
+									}
+								},
+								scope:this
+							}
+						});
+					}
+					this.manageTasksWindow.show();
+				}
+			},{
 				id:'close',
 				handler: function(e, target, panel){
 					panel.removePortlet();

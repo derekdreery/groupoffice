@@ -34,10 +34,15 @@ GO.calendar.SummaryGroupPanel = function(config)
 						'location',
 						'private',
 						'repeats',
-						'day'			
+						'day',
+						'calendar_name'
 					]
 	    	}),
-			baseParams: {task:'summary'},
+			baseParams: {
+				task:'summary',
+				'user_id' : GO.settings.user_id,
+				'portlet' : true
+			},
 			proxy: new Ext.data.HttpProxy({
 		      url: GO.settings.modules.calendar.url+'json.php'
 		  }),        
@@ -68,9 +73,8 @@ GO.calendar.SummaryGroupPanel = function(config)
 	
 	config.paging=false,			
 	config.autoExpandColumn='summary-calendar-name-heading';
-	//config.autoExpandMax=2500;
 	config.enableColumnHide=false;
-  config.enableColumnMove=false;
+	config.enableColumnMove=false;
 
 	config.columns=[
 		{
@@ -81,12 +85,15 @@ GO.calendar.SummaryGroupPanel = function(config)
 			header:GO.lang.strTime,
 			dataIndex: 'time',
 			width:70
-		},		
+		},
 		{
 			id:'summary-calendar-name-heading',
 			header:GO.lang.strName,
 			dataIndex: 'name',
 			renderer: this.renderName
+		},{
+			header:GO.calendar.lang.calendar,
+			dataIndex: 'calendar_name'
 		}];
 		
 	config.view=  new Ext.grid.GroupingView({
@@ -136,13 +143,6 @@ Ext.extend(GO.calendar.SummaryGroupPanel, Ext.grid.GridPanel, {
 	
 });
 
-	
-	
-
-
-
-
-
 GO.mainLayout.onReady(function(){
 	
 	if(GO.summary)
@@ -157,6 +157,59 @@ GO.mainLayout.onReady(function(){
 		 	title: GO.calendar.lang.appointments,
 			layout:'fit',
 			tools: [{
+				id: 'gear',
+				handler: function(){
+					if(!this.manageCalsWindow)
+					{
+						this.manageCalsWindow = new Ext.Window({
+							layout:'fit',
+							items:this.PortletSettings =  new GO.calendar.PortletSettings(),
+							width:700,
+							height:400,
+							title:GO.calendar.lang.visibleCalendars,
+							closeAction:'hide',
+							buttons:[{
+								text: GO.lang.cmdSave,
+								handler: function(){
+									var params={'task' : 'save_portlet'};
+									if(this.PortletSettings.store.loaded){
+										params['calendars']=Ext.encode(this.PortletSettings.getGridData());
+									}
+									Ext.Ajax.request({
+										url: GO.settings.modules.calendar.url+'action.php',
+										params: params,
+										callback: function(options, success, response){
+											if(!success)
+											{
+												Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
+											}else
+											{
+												var responseParams = Ext.decode(response.responseText);
+												this.PortletSettings.store.reload();
+												this.manageCalsWindow.hide();
+
+												calGrid.store.reload();
+											}
+										},
+										scope:this
+									});
+								},
+								scope: this
+							}],
+							listeners:{
+								show: function(){
+									if(!this.PortletSettings.store.loaded)
+									{
+										this.PortletSettings.store.load();
+									}
+								},
+								scope:this
+							}
+						});
+					}
+					this.manageCalsWindow.show();
+				}
+			},{
 	        id:'close',
 	        handler: function(e, target, panel){
 	            panel.removePortlet();
