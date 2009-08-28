@@ -939,12 +939,14 @@ class GO_CONFIG {
 			if ($https) {
 				$url .= "s";
 			}
-			$url .= "://";
+			/*$url .= "://";
 			if ((!$https && $_SERVER["SERVER_PORT"] != "80") || ($https && $_SERVER["SERVER_PORT"] != "443")) {
 				$url .= $_SERVER["HTTP_HOST"].":".$_SERVER["SERVER_PORT"].$this->host;
 			} else {
 				$url .= $_SERVER["HTTP_HOST"].$this->host;
-			}
+			}*/
+
+			$url .= '://'.$_SERVER["HTTP_HOST"].$this->host;
 			$this->full_url=$url;
 		}
 	}
