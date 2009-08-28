@@ -321,14 +321,7 @@ try
 
 			move_uploaded_file($import_file, $_SESSION['GO_SESSION']['addressbook']['import_file']);
 
-
-			$enc='UTF-8';
-			$str = file_get_contents($_SESSION['GO_SESSION']['addressbook']['import_file']);
-			if(function_exists('mb_detect_encoding'))
-			{
-				$enc = mb_detect_encoding($str, "ASCII,JIS,UTF-8,ISO-8859-1,ISO-8859-15,EUC-JP,SJIS");
-			}
-			file_put_contents($_SESSION['GO_SESSION']['addressbook']['import_file'], String::clean_utf8($str, $enc));
+			File::convert_to_utf8($_SESSION['GO_SESSION']['addressbook']['import_file']);
 
 			switch($import_filetype)
 			{

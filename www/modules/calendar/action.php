@@ -118,7 +118,11 @@ try{
 				throw new Exception($lang['common']['noFileUploaded']);
 			}else
 			{
-				if($count = $cal->import_ical_file($_FILES['ical_file']['tmp_name'][0], $_POST['calendar_id']))
+				$tmpfile = $GO_CONFIG->tmpdir.uniqid(time());
+				move_uploaded_file($_FILES['ical_file']['tmp_name'][0], $tmpfile);				
+				File::convert_to_utf8($tmpfile);
+
+				if($count = $cal->import_ical_file($tmpfile, $_POST['calendar_id']))
 				{
 					$response['feedback'] = sprintf($lang['calendar']['import_success'], $count);
 					$response['success']=true;					
@@ -126,7 +130,7 @@ try{
 				{
 					throw new Exception($lang['common']['saveError']);
 				}
-				unlink($_FILES['ical_file']['tmp_name'][0]);
+				unlink($tmpfile);
 			}
 			break;
 		case 'delete_event':
