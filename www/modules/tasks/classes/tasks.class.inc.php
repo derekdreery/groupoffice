@@ -309,6 +309,9 @@ class tasks extends db
 
 				$list['user_id']=$user_id;
 				$user = $GO_USERS->get_user($user_id);
+				if(!$user){
+					return false;
+				}
 				$task_name = String::format_name($user['last_name'], $user['first_name'], $user['middle_name'], 'last_name');
 				$list['name'] = $task_name;
 				$list['acl_read']=$GO_SECURITY->get_new_acl('',$user_id);
@@ -971,6 +974,10 @@ class tasks extends db
 	{
 		$tasks = new tasks();
 		$delete = new tasks();
+
+		$sql = "DELETE FROM ta_settings WHERE user_id=".$cal->escape($user['id']);
+		$tasks->query($sql);
+
 		$sql = "SELECT * FROM ta_lists WHERE user_id='".$tasks->escape($user['id'])."'";
 		$tasks->query($sql);
 		while($tasks->next_record())
