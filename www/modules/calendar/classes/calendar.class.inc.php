@@ -868,7 +868,7 @@ class calendar extends db
 
 
 
-	function get_calendar($calendar_id=0)
+	function get_calendar($calendar_id=0, $user_id=0)
 	{
 		if($calendar_id > 0)
 		{
@@ -884,8 +884,8 @@ class calendar extends db
 		}else
 		{
 			global $GO_SECURITY;
-
-			return $this->get_default_calendar($GO_SECURITY->user_id);
+			$user_id = !empty($user_id) ? $user_id : $GO_SECURITY->user_id;
+			return $this->get_default_calendar($user_id);
 		}
 	}
 

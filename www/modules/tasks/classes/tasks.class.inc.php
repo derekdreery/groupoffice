@@ -280,7 +280,7 @@ class tasks extends db
 		
 	}
 
-	function get_tasklist($list_id=0)
+	function get_tasklist($list_id=0, $user_id=0)
 	{
 		if($list_id > 0)
 		{
@@ -297,7 +297,9 @@ class tasks extends db
 		{
 			global $GO_SECURITY;
 
-			$tasklist = $this->get_default_tasklist($GO_SECURITY->user_id);
+			$user_id = !empty($user_id) ? $user_id : $GO_SECURITY->user_id;
+
+			$tasklist = $this->get_default_tasklist($user_id);
 			if ($tasklist)
 			{
 				return $tasklist;
@@ -305,12 +307,12 @@ class tasks extends db
 			{
 				global $GO_USERS;
 
-				$list['user_id']=$GO_SECURITY->user_id;
-				$user = $GO_USERS->get_user($GO_SECURITY->user_id);
+				$list['user_id']=$user_id;
+				$user = $GO_USERS->get_user($user_id);
 				$task_name = String::format_name($user['last_name'], $user['first_name'], $user['middle_name'], 'last_name');
 				$list['name'] = $task_name;
-				$list['acl_read']=$GO_SECURITY->get_new_acl();
-				$list['acl_write']=$GO_SECURITY->get_new_acl();
+				$list['acl_read']=$GO_SECURITY->get_new_acl('',$user_id);
+				$list['acl_write']=$GO_SECURITY->get_new_acl('',$user_id);
 				$x = 1;
 				while($this->get_tasklist_by_name($list['name']))
 				{

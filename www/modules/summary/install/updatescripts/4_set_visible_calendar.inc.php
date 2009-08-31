@@ -9,7 +9,7 @@ if(isset($GO_MODULES->modules['calendar'])){
 
 	while($settings = $cal1->next_record())
 	{
-		$calendar = $cal->get_calendar($settings['calendar_id']);
+		$calendar = $cal->get_calendar($settings['calendar_id'], $settings['user_id']);
 		$cal2->query('INSERT INTO su_visible_calendars(calendar_id, user_id) VALUES("'.$calendar['id'].'", "'.$cal1->f('user_id').'")');
 	}
 }
