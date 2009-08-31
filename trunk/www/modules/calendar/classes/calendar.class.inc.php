@@ -844,6 +844,9 @@ class calendar extends db
 
 			$calendar['user_id']=$user_id;
 			$user = $GO_USERS->get_user($user_id);
+			if(!$user){
+				return false;
+			}
 			$calendar_name = String::format_name($user['last_name'], $user['first_name'], $user['middle_name'], 'last_name');
 			$calendar['name'] = $calendar_name;
 			$calendar['acl_read']=$GO_SECURITY->get_new_acl();
@@ -2023,6 +2026,9 @@ class calendar extends db
 		{
 			$delete->delete_calendar($cal->f('id'));
 		}
+
+		$sql = "DELETE FROM cal_settings WHERE user_id=".$cal->escape($user['id']);
+		$cal->query($sql);
 
 
 		$cal->get_user_views($user['id']);
