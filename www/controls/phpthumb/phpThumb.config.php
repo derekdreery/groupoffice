@@ -73,7 +73,7 @@ $PHPTHUMB_CONFIG['cache_maxfiles'] = 200;             // delete least-recently-a
 
 
 // * Source image cache configuration
-$PHPTHUMB_CONFIG['cache_source_enabled']   = true;                               // if true, source images obtained via HTTP are cached to $PHPTHUMB_CONFIG['cache_source_directory']
+$PHPTHUMB_CONFIG['cache_source_enabled']   = false;                               // if true, source images obtained via HTTP are cached to $PHPTHUMB_CONFIG['cache_source_directory']
 $PHPTHUMB_CONFIG['cache_source_directory'] = dirname(__FILE__).'/cache/source/';  // set the cache directory for unprocessed source images
 
 // * cache source modification date configuration
