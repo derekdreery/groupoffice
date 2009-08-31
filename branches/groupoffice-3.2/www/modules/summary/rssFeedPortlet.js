@@ -82,11 +82,12 @@ Ext.extend(GO.portlets.rssFeedPortlet, Ext.grid.GridPanel, {
 		GO.portlets.rssFeedPortlet.superclass.afterRender.call(this);
 			
 		this.on('rowDblClick', this.rowDoubleClick, this);
-		this.store.load();
+		//this.store.load();
 
 		this.refreshTask ={
 			run: function(){this.store.load()},
 			scope:this,
+			//interval:5000
 			interval:1800000
 		};
 
