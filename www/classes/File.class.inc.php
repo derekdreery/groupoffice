@@ -31,6 +31,16 @@ class File
 		$this->path = $path;
 	}
 
+	function convert_to_utf8($path){
+		$enc='UTF-8';
+		$str = file_get_contents($path);
+		if(function_exists('mb_detect_encoding'))
+		{
+			$enc = mb_detect_encoding($str, "ASCII,JIS,UTF-8,ISO-8859-1,ISO-8859-15,EUC-JP,SJIS");
+		}
+		return file_put_contents($path, String::clean_utf8($str, $enc));
+	}
+
 
 	function is_full_path($path)
 	{

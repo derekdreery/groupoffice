@@ -321,6 +321,8 @@ try
 
 			move_uploaded_file($import_file, $_SESSION['GO_SESSION']['addressbook']['import_file']);
 
+			File::convert_to_utf8($_SESSION['GO_SESSION']['addressbook']['import_file']);
+
 			switch($import_filetype)
 			{
 				case 'vcf':
@@ -328,7 +330,7 @@ try
 					$vcard = new vcard();
 					$result['success'] = $vcard->import($_SESSION['GO_SESSION']['addressbook']['import_file'], $GO_SECURITY->user_id, ($_POST['addressbook_id']));
 					break;
-				case 'csv':
+				case 'csv':					
 
 					$fp = fopen($_SESSION['GO_SESSION']['addressbook']['import_file'], 'r');
 
