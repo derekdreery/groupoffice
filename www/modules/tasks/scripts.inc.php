@@ -20,4 +20,4 @@ if($GO_CONFIG->get_setting('tasks_show_completed', $GO_SECURITY->user_id)=='1') 
 
 $GO_SCRIPTS_JS .= ';GO.tasks.remind="'.$settings['remind'].'";
 GO.tasks.reminderDaysBefore=parseInt('.$settings['reminder_days'].');
-GO.tasks.reminderTime="'.$settings['reminder_time'].'"';
+GO.tasks.reminderTime="'.$settings['reminder_time'].'";';
