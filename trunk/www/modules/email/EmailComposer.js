@@ -528,12 +528,12 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			run: this.autoSave,
 			scope:this,
 			interval:120000
-		  //interval:5000
+		//interval:5000
 		};
 		
 		this.on('hide', this.stopAutoSave, this);
 
-		/*this[this.collapseEl].hideMode='offsets';
+	/*this[this.collapseEl].hideMode='offsets';
 
 		this.on('beforecollapse', function(){
 			console.log(this[this.collapseEl]);
@@ -609,12 +609,9 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 					}
 
 					this.render(Ext.getBody());
-this.show(config);
-                                        this.showCC(false);
-                                        this.showBCC(false);
-
-
-					
+					this.show(config);
+					this.showCC(false);
+					this.showBCC(false);
 					return;
 
 				} else {
@@ -657,10 +654,12 @@ this.show(config);
 			this.attachmentsStore.removeAll();
 			this.inline_attachments = [];
 			this.reset();
-			
+
 			var index=-1;
 			if (config.account_id) {
-				index = this.fromCombo.store.find('account_id', config.account_id);
+				index = this.fromCombo.store.findBy(function(record, id){
+					return record.get('account_id')==config.account_id;
+				});
 			}
 			if(index==-1)
 			{
@@ -672,7 +671,7 @@ this.show(config);
 				this.formPanel.form.setValues(config.values);
 			}
 
-                        GO.email.EmailComposer.superclass.show.call(this);
+			GO.email.EmailComposer.superclass.show.call(this);
 			
 			if(!config.keepEditingMode)
 			{
@@ -684,7 +683,7 @@ this.show(config);
 			
 			
 
-                        this.toComboVisible = true;
+			this.toComboVisible = true;
 			this.showMenuButton.setDisabled(false);
 			this.toCombo.getEl().up('.x-form-item').setDisplayed(true);
 			this.sendURL = GO.settings.modules.email.url + 'action.php';

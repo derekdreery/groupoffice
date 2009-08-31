@@ -283,7 +283,7 @@ try{
 				$user_id = $_REQUEST['user_id'];
 				$tasklists = array();
 				$tasklists_name = array();
-				if($_REQUEST['portlet'])
+				if(isset($_REQUEST['portlet']))
 				{
 					if($tasks->get_visible_tasklists($user_id) == 0)
 						$tasklists[] = '0';

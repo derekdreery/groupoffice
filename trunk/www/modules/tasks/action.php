@@ -39,7 +39,11 @@ try{
 				throw new Exception($lang['common']['noFileUploaded']);
 			}else
 			{
-				if($count = $tasks->import_ical_file($_FILES['ical_file']['tmp_name'][0], $_POST['tasklist_id']))
+				$tmpfile = $GO_CONFIG->tmpdir.uniqid(time());
+				move_uploaded_file($_FILES['ical_file']['tmp_name'][0], $tmpfile);
+				File::convert_to_utf8($tmpfile);
+
+				if($count = $tasks->import_ical_file($tmpfile, $_POST['tasklist_id']))
 				{
 					$response['feedback'] = sprintf($lang['tasks']['import_success'], $count);
 					$response['success']=true;					
@@ -47,7 +51,7 @@ try{
 				{
 					throw new Exception($lang['common']['saveError']);
 				}
-				unlink($_FILES['ical_file']['tmp_name'][0]);
+				unlink($tmpfile);
 			}
 			break;
 			

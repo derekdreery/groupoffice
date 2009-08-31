@@ -18,11 +18,11 @@ GO.mainLayout.onReady(function(){
 	GO.summary.portlets['portlet-rss-reader']=new GO.summary.Portlet({
 		id: 'portlet-rss-reader',
 		//iconCls: 'rss-icon',
-	 	title: GO.summary.lang.hotTopics,
+		title: GO.summary.lang.hotTopics,
 		layout:'fit',
 		tools: [{
 			id: 'gear',
-	        handler: function(){
+			handler: function(){
 				if(!this.manageWebFeedsWindow)
 				{
 					this.manageWebFeedsWindow = new Ext.Window({
@@ -35,7 +35,9 @@ GO.mainLayout.onReady(function(){
 						buttons:[{
 							text: GO.lang.cmdSave,
 							handler: function(){
-								var params={'task' : 'save_feeds'};
+								var params={
+									'task' : 'save_feeds'
+								};
 								if(this.WebFeedsGrid.store.loaded){
 									params['feeds']=Ext.encode(this.WebFeedsGrid.getGridData());
 								}
@@ -80,9 +82,9 @@ GO.mainLayout.onReady(function(){
 											if(rssTabPanel.items.length == 0)
 											{
 												rssTabPanel.add(new Ext.Panel({
-												title: '<br />',
-												html: '<br />'+GO.summary.lang.noRssFeeds,
-												cls: 'go-form-panel'
+													title: '<br />',
+													html: '<br />'+GO.summary.lang.noRssFeeds,
+													cls: 'go-form-panel'
 												}));
 												rssTabPanel.setActiveTab(0);
 											}
@@ -107,13 +109,13 @@ GO.mainLayout.onReady(function(){
 					});
 				}
 				this.manageWebFeedsWindow.show();     
-	        }
-	    },{
-	        id:'close',
-	        handler: function(e, target, panel){
-	            panel.removePortlet();
-	        }
-	    }],
+			}
+		},{
+			id:'close',
+			handler: function(e, target, panel){
+				panel.removePortlet();
+			}
+		}],
 		items: rssTabPanel,
 		height:300
 	});
@@ -137,9 +139,9 @@ GO.mainLayout.onReady(function(){
 					if(rssTabPanels.data.length == 0)
 					{
 						rssTabPanel.add(new Ext.Panel({
-						title: '<br />',
-						html: '<br />'+GO.summary.lang.noRssFeeds,
-						cls: 'go-form-panel'
+							title: '<br />',
+							html: '<br />'+GO.summary.lang.noRssFeeds,
+							cls: 'go-form-panel'
 						}));
 						rssTabPanel.setActiveTab(0);
 					}
@@ -147,11 +149,11 @@ GO.mainLayout.onReady(function(){
 					{
 						for(var i=0;i<rssTabPanels.data.length;i++){
 							rssTabPanel.add(new GO.portlets.rssFeedPortlet({
-							feedId: rssTabPanels.data[i].id,
-							feed: rssTabPanels.data[i].url,
-							title: rssTabPanels.data[i].title,
-							showPreview:parseInt(rssTabPanels.data[i].summary),
-							closable:false
+								feedId: rssTabPanels.data[i].id,
+								feed: rssTabPanels.data[i].url,
+								title: rssTabPanels.data[i].title,
+								showPreview:parseInt(rssTabPanels.data[i].summary),
+								closable:false
 							}));
 							rssTabPanel.setActiveTab(0);
 						};
@@ -175,7 +177,9 @@ GO.mainLayout.onReady(function(){
 	noteInput.on('change', function(){
 		notePanel.form.submit({
 			url: GO.settings.modules.summary.url+'action.php',
-			params: {'task':'save_note'},
+			params: {
+				'task':'save_note'
+			},
 			waitMsg: GO.lang['waitMsgSave']			
 		});
 	});
@@ -188,7 +192,9 @@ GO.mainLayout.onReady(function(){
 	notePanel.on('render', function(){
 		notePanel.load({
 			url: GO.settings.modules.summary.url+'json.php',
-			params:{task:'note'},
+			params:{
+				task:'note'
+			},
 			waitMsg: GO.lang['waitMsgLoad']
 		});				
 	});
@@ -196,14 +202,14 @@ GO.mainLayout.onReady(function(){
 	GO.summary.portlets['portlet-note']=new GO.summary.Portlet({
 		id: 'portlet-note',
 		//iconCls: 'note-icon',
-	 	title: GO.summary.lang.notes,
+		title: GO.summary.lang.notes,
 		layout:'fit',
 		tools: [{
-	        id:'close',
-	        handler: function(e, target, panel){
-	            panel.removePortlet();
-	        }
-	    }],
+			id:'close',
+			handler: function(e, target, panel){
+				panel.removePortlet();
+			}
+		}],
 		items: notePanel,
 		height:300
 	});
@@ -228,7 +234,7 @@ GO.mainLayout.onReady(function(){
 	
 	GO.summary.portlets['portlet-announcements']=new GO.summary.Portlet({
 		id: 'portlet-announcements',
-	 	title: GO.summary.lang.announcements,
+		title: GO.summary.lang.announcements,
 		layout:'fit',
 		items: GO.summary.announcementsPanel,
 		autoHeight:true
