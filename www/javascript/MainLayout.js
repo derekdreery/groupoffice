@@ -51,7 +51,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	login : function(){
 	
 		this.fireReady();
-		GO.loginDialog = new GO.dialog.LoginDialog({modal:false});
+		//GO.loginDialog = new GO.dialog.LoginDialog({modal:false});
 		this.createLoginCallback();
 		GO.loginDialog.show();
 		this.removeLoadMask();		
