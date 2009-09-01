@@ -12,7 +12,6 @@ GO.comments.displayPanelTemplate =
 					'<tr>'+
 						'<td colspan="2" style="padding-left:5px">{comments}<hr /></td>'+
 					'</tr>'+
-					'</tpl>'+
 				'</tpl>'+
 			'</table>'+
 	'</tpl>';
