@@ -975,7 +975,7 @@ class tasks extends db
 		$tasks = new tasks();
 		$delete = new tasks();
 
-		$sql = "DELETE FROM ta_settings WHERE user_id=".$cal->escape($user['id']);
+		$sql = "DELETE FROM ta_settings WHERE user_id=".$tasks->escape($user['id']);
 		$tasks->query($sql);
 
 		$sql = "SELECT * FROM ta_lists WHERE user_id='".$tasks->escape($user['id'])."'";
