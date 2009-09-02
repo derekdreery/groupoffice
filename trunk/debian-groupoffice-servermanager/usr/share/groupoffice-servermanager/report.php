@@ -23,7 +23,10 @@ $fs = new filesystem();
 $roots=array($sm_config['install_path']);
 //$roots=array('/var/www/groupoffice');
 
-$configs=array(array('name'=>'servermanager','conf'=>'/etc/groupoffice/config.php'));
+$configs=array();
+if(file_exists('/etc/groupoffice/config.php')){
+	$configs[]=array('name'=>'servermanager','conf'=>'/etc/groupoffice/config.php');
+}
 foreach($roots as $root) {
 	$folders = $fs->get_folders($root);
 
