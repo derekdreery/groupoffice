@@ -32,3 +32,8 @@ $updates[]="CREATE TABLE IF NOT EXISTS `cal_groups` (
   `fields` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates[]="CREATE TABLE IF NOT EXISTS `cf_1` (
+  `link_id` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`link_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";

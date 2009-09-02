@@ -14,7 +14,14 @@
 
 -- 
 -- Tabel structuur voor tabel `cal_calendars`
--- 
+--
+
+DROP TABLE IF EXISTS `cf_1`;
+CREATE TABLE IF NOT EXISTS `cf_1` (
+  `link_id` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`link_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 
 DROP TABLE IF EXISTS `cal_settings`;
 CREATE TABLE `cal_settings` (
