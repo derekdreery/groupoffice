@@ -82,7 +82,7 @@ class users extends db
 					$up_folder['id']=$folder['id'];
 					$up_folder['acl_read']=$GO_SECURITY->get_new_acl('files', 1);
 					$up_folder['acl_write']=$GO_SECURITY->get_new_acl('files', 1);
-
+					$up_folder['visible']='0';
 					$files->update_folder($up_folder);
 				}
 				$files->set_readonly($folder['id']);
