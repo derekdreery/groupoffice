@@ -143,6 +143,8 @@ if($GO_CONFIG->debug || !file_exists($path)) {
 		$scripts[]=$root_uri.'javascript/go-all-min';
 	}
 
+	
+
 	if(!$GO_CONFIG->debug) {
 		foreach($scripts as $script) {
 			file_put_contents($path,"\n\n/*".$script."*/\n\n".file_get_contents($script),FILE_APPEND);
@@ -213,6 +215,9 @@ if($GO_SECURITY->logged_in()) {
 		}
 	}
 
+	//two modules may include the same script
+	$scripts=array_unique($scripts);
+
 	$file = $GO_SECURITY->user_id.'-'.md5($GO_CONFIG->mtime.filemtime($GO_CONFIG->root_path.'javascript/go-all-min').':'.$GO_LANGUAGE->language.':'.implode(':', $modules)).'.js';
 	$path = $GO_CONFIG->local_path.'cache/'.$file;
 	$url = $GO_CONFIG->local_url.'cache/'.$file;
@@ -241,11 +246,12 @@ if($GO_SECURITY->logged_in()) {
 		file_put_contents($GO_CONFIG->local_path.'cache/modules.js', 'GO.settings.modules = Ext.decode("'.addslashes(json_encode($GO_MODULES->modules)).'");');
 		array_unshift($scripts, $local_uri.'cache/modules.js');
 	}
-
-	$GO_SCRIPTS_JS='';
+	
 	foreach($scripts as $script) {
 		echo '<script type="text/javascript" src="'.$script.'"></script>'."\n";
 	}
+
+	$GO_SCRIPTS_JS='';
 	foreach($GO_MODULES->modules as $module) {
 		if($module['read_permission']) {
 			if(file_exists($module['path'].'scripts.inc.php')) {
@@ -261,8 +267,9 @@ if($GO_SECURITY->logged_in()) {
 	if($GO_SCRIPTS_JS!=@file_get_contents($path)){
 		file_put_contents($path, $GO_SCRIPTS_JS);
 	}
-
-	echo '<script type="text/javascript" src="'.$GO_CONFIG->local_url.'cache/'.$filename.'?mtime='.filemtime($path).'"></script>'."\n";
+	if(file_exists($path)){
+		echo '<script type="text/javascript" src="'.$GO_CONFIG->local_url.'cache/'.$filename.'?mtime='.filemtime($path).'"></script>'."\n";
+	}
 }
 ?>
 
