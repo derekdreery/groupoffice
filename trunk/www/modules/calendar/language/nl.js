@@ -61,7 +61,18 @@ GO.calendar.lang.eventDefaults='Standaard instellingen voor afspraken';
 
 GO.calendar.lang.importToCalendar='Voeg afspraak direct toe aan de agenda\'s';
 GO.calendar.lang.default_calendar='Standaard agenda';
+
 GO.calendar.lang.status='Status';
+
+GO.calendar.lang.resource_groups='Hulpmiddel groepen';
+GO.calendar.lang.resource_group='Hulpmiddel groep';
+GO.calendar.lang.resources='Hulpmiddelen';
+GO.calendar.lang.resource='Hulpmiddel';
+GO.calendar.lang.calendar_group='Agenda groep';
+GO.calendar.lang.admins='Beheerders';
+GO.calendar.lang.no_group_selected='U heeft het formulier onvolledig of foutief ingevuld. U dient een groep te selecteren voor dit hulpmiddel.';
 
 GO.calendar.lang.visibleCalendars='Zichtbare agenda\'s';
 GO.calendar.lang.visible='Zichtbaar';
+
+GO.calendar.lang.group='Groep';

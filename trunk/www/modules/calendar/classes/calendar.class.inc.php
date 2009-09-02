@@ -204,7 +204,7 @@ class calendar extends db
 
 
 
-	function event_to_html($event)
+	function event_to_html($event, $custom=false)
 	{
 		global $GO_LANGUAGE, $GO_CONFIG, $lang;
 
@@ -468,6 +468,12 @@ class calendar extends db
 		{
 			$html .= '<tr><td style="vertical-align:top">'.$lang['common']['description'].':</td>'.
 					'<td>'.String::text_to_html($event['description']).'</td></tr>';
+		}
+
+        if($custom)
+		{
+			$html .= '<tr><td style="vertical-align:top">{CUSTOM_FIELDS}</td>'.
+					'<td>{CUSTOM_VALUES}</td></tr>';
 		}
 
 		$html .= '</table>';
@@ -949,7 +955,7 @@ class calendar extends db
 		return $this->num_rows();
 	}
 
-	function get_authorized_calendars($user_id, $start=0, $offset=0)
+	function get_authorized_calendars($user_id, $start=0, $offset=0, $resources=0, $group_id=-1)
 	{
 		$sql = "SELECT DISTINCT cal_calendars.* ".
 		"FROM cal_calendars ".
@@ -957,9 +963,22 @@ class calendar extends db
 		"OR cal_calendars.acl_write = go_acl.acl_id ) ".
 		"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ".
 		"WHERE (go_acl.user_id=".$this->escape($user_id)." ".
-		"OR go_users_groups.user_id=".$this->escape($user_id).") ORDER BY cal_calendars.name ASC";
+		"OR go_users_groups.user_id=".$this->escape($user_id).")";
+    
+        if($resources)
+        {
+            $sql .= " AND cal_calendars.group_id > 1";
+        }else
+        $group_id = 1;
+        
+        if($group_id>-1)
+        {
+            $sql .= " AND cal_calendars.group_id = ".$this->escape($group_id);
+        }
+        $sql .= " ORDER BY cal_calendars.name ASC";
 
 		$this->query($sql);
+
 		$count= $this->num_rows();
 		if($offset>0)
 		{
@@ -969,14 +988,38 @@ class calendar extends db
 		return $count;
 	}
 
-	function get_writable_calendars($user_id, $start=0, $offset=0)
+	function get_writable_calendars($user_id, $start=0, $offset=0, $resources=0, $groups=0, $group_id=-1, $show_all=0)
 	{
-		$sql = "SELECT DISTINCT cal_calendars . * ".
-		"FROM cal_calendars ".
+		$sql = "SELECT DISTINCT cal_calendars.* ";
+        if($groups)
+            $sql .= ", cal_groups.fields ";
+		$sql .= "FROM cal_calendars ".
 		"INNER JOIN go_acl ON cal_calendars.acl_write = go_acl.acl_id ".
-		"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ".
-		"WHERE (go_acl.user_id=".$this->escape($user_id)." ".
-		"OR go_users_groups.user_id=".$this->escape($user_id).") ORDER BY cal_calendars.name ASC";
+		"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ";
+
+        if($groups)
+            $sql .= "LEFT JOIN cal_groups ON cal_calendars.group_id = cal_groups.id ";
+        $sql .= "WHERE (go_acl.user_id=".$this->escape($user_id)." ".
+		"OR go_users_groups.user_id=".$this->escape($user_id).")";
+
+        if(!$show_all)
+        {
+            if($resources)
+            {
+                $sql .= " AND cal_calendars.group_id > 1";
+            }else
+                $group_id = 1;
+
+            if($group_id>-1)
+            {
+                $sql .= " AND cal_calendars.group_id = ".$this->escape($group_id);
+            }
+            $sql .= " ORDER BY cal_calendars.name ASC";
+        }else
+        {
+            $sql .= " ORDER BY cal_calendars.group_id ASC, cal_calendars.name ASC";
+        }
+        
 
 		$this->query($sql);
 		$count= $this->num_rows();
@@ -984,9 +1027,15 @@ class calendar extends db
 		{
 			$sql .= " LIMIT ".$this->escape($start.",".$offset);
 			$this->query($sql);
-		}
+		}        
 		return $count;
 	}
+
+    function get_calendars_by_group_id($group_id)
+    {
+        $sql = "SELECT * FROM cal_calendars WHERE group_id = ? ORDER BY name ASC";
+        $this->query($sql, 'i', array($group_id));
+    }
 	/*
 	 Times in GMT!
 	 */
@@ -1652,6 +1701,11 @@ class calendar extends db
 					$this->delete_event($cal->f('id'),false);
 				}
 			}
+
+            if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
+            {
+                $this->query("DELETE FROM cf_1 WHERE link_id = ?", 'i', array($event_id));
+            }
 		}
 	}
 
@@ -1969,46 +2023,14 @@ class calendar extends db
 		return $this->import_ical_string($data, $calendar_id);
 	}
 
-	function get_conflicts($start_time, $end_time, $calendars, $participants)
+    function get_conflicts($start_time, $end_time, $calendars)
 	{
-		global $GO_USERS, $RFC822;
-
-		$conflicts=array();
-
-		$participants_array = $RFC822->explode_address_list($participants);
-
-		for($i=0;$i<sizeof($participants_array);$i++)
+        $conflicts = array();
+        
+		$cal_events = $this->get_events_in_array($calendars, 0, $start_time, $end_time, false);
+		foreach($cal_events as $event)
 		{
-			if(!empty($participants_array[$i]))
-			{
-				$id = 0;
-
-				if($member_profile = $GO_USERS->get_user_by_email(($participants_array[$i])))
-				{
-					$id = $member_profile["id"];
-
-					$member_events = false;
-					if($id)
-					{
-						$member_events = $this->get_events_in_array(0, 0, $id,
-						$start_time, $end_time,false,false,true,false,false,true);
-						foreach($member_events as $event)
-						{
-							$conflicts[$event['id']]=$event;
-						}
-					}
-				}
-			}
-		}
-
-		foreach($calendars as $calendar_id)
-		{
-			$cal_events = $this->get_events_in_array($calendar_id, 0, 0,
-			$start_time, $end_time,false,false,true,false,false,true);
-			foreach($cal_events as $event)
-			{
-				$conflicts[$event['id']]=$event;
-			}
+			$conflicts[$event['id']]=$event;
 		}
 
 		return $conflicts;
@@ -2226,6 +2248,152 @@ class calendar extends db
 			if($this->next_record())
 			{
 				return $this->f('status');
+			}
+		}
+		return false;
+	}
+
+
+	/**
+	 * Add a Group
+	 *
+	 * @param Array $group Associative array of record fields
+	 *
+	 * @access public
+	 * @return int New record ID created
+	 */
+	function add_group($group)
+	{
+        if(!$group['id'])
+            $group['id']=$this->nextid('cal_groups');
+		
+		if($this->insert_row('cal_groups', $group))
+		{
+			return $group['id'];
+		}
+		return false;
+	}
+	/**
+	 * Update a Group
+	 *
+	 * @param Array $group Associative array of record fields
+	 *
+	 * @access public
+	 * @return bool True on success
+	 */
+	function update_group($group)
+	{
+		$r = $this->update_row('cal_groups', 'id', $group);
+		return $r;
+	}
+	/**
+	 * Delete a Group
+	 *
+	 * @param Int $group_id ID of the group
+	 *
+	 * @access public
+	 * @return bool True on success
+	 */
+	function delete_group($group_id)
+	{
+		return $this->query("DELETE FROM cal_groups WHERE id=?", 'i', $group_id);
+	}
+	/**
+	 * Gets a Groups record
+	 *
+	 * @param Int $group_id ID of the group
+	 *
+	 * @access public
+	 * @return Array Record properties
+	 */
+	function get_group($group_id)
+	{
+		$this->query("SELECT * FROM cal_groups WHERE id=?", 'i', $group_id);
+		return $this->next_record();
+	}
+	/**
+	 * Gets a Group record by the name field
+	 *
+	 * @param String $name Name of the group
+	 *
+	 * @access public
+	 * @return Array Record properties
+	 */
+	function get_group_by_name($name)
+	{
+		$this->query("SELECT * FROM cal_groups WHERE name=?", 's', $name);
+		return $this->next_record();
+	}
+	/**
+	 * Gets all Groups
+	 *
+	 * @param Int $start First record of the total record set to return
+	 * @param Int $offset Number of records to return
+	 * @param String $sortfield The field to sort on
+	 * @param String $sortorder The sort order
+	 *
+	 * @access public
+	 * @return Int Number of records found
+	 */
+	function get_groups($sortfield='name', $sortorder='ASC', $start=0, $offset=0, $hide_cal=1)
+	{
+		$sql = "SELECT ";
+		if($offset>0)
+		{
+			$sql .= "SQL_CALC_FOUND_ROWS ";
+		}
+		$sql .= "* FROM cal_groups ";
+        if($hide_cal)
+        {
+            $sql .= "WHERE id > 1";
+        }
+
+		$sql .= " ORDER BY ".$this->escape($sortfield.' '.$sortorder);
+		if($offset>0)
+		{
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
+		}
+		$this->query($sql);
+
+        return $this->num_rows();
+	}
+	/**
+	 * Gets all Event Resources
+	 *
+	 * @param Int $event_id ID of the event
+	 *
+	 * @access public
+	 * @return Int Number of records found
+	 */
+    function get_event_resources($event_id)
+	{
+		if($event_id>0)
+		{
+			$sql = "SELECT cal_events.* FROM cal_events WHERE participants_event_id ='$event_id' OR id='$event_id'";
+			$this->query($sql);
+			return $this->num_rows();
+		}
+		return false;
+	}
+	/**
+	 * Gets Event Resource
+	 *
+	 * @param Int $event_id ID of the event
+     * @param Int $calendar_id ID of the calendar
+	 *
+	 * @access public
+	 * @return Int Number of records found
+	 */
+	function get_event_resource($event_id, $calendar_id)
+	{
+		if($event_id>0 && $calendar_id>0)
+		{
+			$sql = "SELECT cal_events.* FROM cal_events WHERE participants_event_id='$event_id' AND calendar_id='$calendar_id'";
+
+			$this->query($sql);
+			if($this->next_record())
+			{
+				return $this->record;
 			}
 		}
 		return false;

@@ -1,11 +1,11 @@
 /**
  * Copyright Intermesh
- * 
+ *
  * This file is part of Group-Office. You should have received a copy of the
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
- * 
+ *
  * If you have questions write an e-mail to info@intermesh.nl
- * 
+ *
  * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
@@ -15,28 +15,57 @@ GO.calendar.EventDialog = function(calendar) {
     this.calendar = calendar;
 
     this.buildForm();
-	
+
     this.beforeInit();
-	
-	
+
+    this.resourceGroupsStore = new GO.data.JsonStore({
+        url: GO.settings.modules.calendar.url+ 'json.php',
+        baseParams: {
+            task: 'resources'
+        },
+        root: 'results',
+        id: 'id',
+        totalProperty:'total',
+        fields: ['id','resources','name','acl_write','fields'],
+        remoteSort: true
+    });
+
+    this.resourceGroupsStore.on('load', function()
+    {
+        this.resourcesPanel.removeAll(true);
+        this.buildAccordion();
+    }, this);
+
+    var items  = [
+        this.propertiesPanel,
+        this.descriptionPanel,
+        this.recurrencePanel,
+        this.optionsPanel,
+        this.participantsPanel,
+        this.resourcesPanel
+        ];
+
+    if(GO.customfields && GO.customfields.types["1"])
+    {
+        for(var i=0;i<GO.customfields.types["1"].panels.length;i++)
+        {
+            items.push(GO.customfields.types["1"].panels[i]);
+        }
+    }
+
     this.tabPanel = new Ext.TabPanel({
         activeTab : 0,
         deferredRender : false,
         border : false,
         anchor : '100% 100%',
         hideLabel : true,
-        items : [
-        this.propertiesPanel,
-        this.descriptionPanel,
-        this.recurrencePanel,
-        this.optionsPanel,
-        this.participantsPanel
-        ]
+        enableTabScroll : true,
+        items : items
     });
-	
+
     this.formPanel = new Ext.form.FormPanel({
         waitMsgTarget : true,
-        url : GO.settings.modules.calendar.url + 'action.php',
+        url : GO.settings.modules.calendar.url + 'json.php',
         border : false,
         baseParams : {
             task : 'event'
@@ -50,16 +79,16 @@ GO.calendar.EventDialog = function(calendar) {
         'save' : true
     });
 
-		this.win.render(Ext.getBody());
+    this.win.render(Ext.getBody());
 
 }
 
 Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
+    resources_options : '',
+    beforeInit : function(){
 
-   beforeInit : function(){
+    },
 
-   },
-	
     initWindow : function() {
         var focusSubject = function() {
             this.subjectField.focus();
@@ -97,7 +126,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
             layout : 'fit',
             modal : false,
             tbar : tbar,
-            resizable : false,
+            resizable : true,
+            maximizable:true,
             width : 560,
             height : 420,
             closeAction : 'hide',
@@ -124,14 +154,87 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
                 scope : this
             }]
         });
-
-        
-
     },
 
     files_folder_id : 0,
 
+    initCustomFields : function(group_id){
+
+        var record, fields;
+        if(group_id > 1)
+        {
+            record = GO.calendar.groupsStore.getById(group_id);
+            fields = record.get('fields');
+        }else
+        {
+            record = true;
+            fields = GO.calendar.defaultGroupFields;
+        }
+
+        if(record)
+        {
+            if(fields == null)
+                fields = '';
+            fields = fields.split(',');
+
+            if(GO.customfields && GO.customfields.types["1"])
+            {
+                this.tabPanel.items.each(function(p){
+                    if(p.category_id && p.category_id != 1)
+                    {
+                        var visible = fields.indexOf('cf_category_'+p.category_id)>-1;
+
+                        if(visible)
+                        {
+                            this.tabPanel.unhideTabStripItem(p.id);
+                        }else
+                        {
+                            this.tabPanel.hideTabStripItem(p.id);
+                        }
+                    }
+                }, this);
+            }
+        }
+
+        if(this.resourceGroupsStore.data.items.length == 0 || group_id != '1')
+            this.tabPanel.hideTabStripItem('resources-panel');
+        else
+            this.tabPanel.unhideTabStripItem('resources-panel');
+    },
+
     show : function(config) {
+
+        config = config || {};
+
+        if(!GO.calendar.groupsStore.loaded){
+            GO.calendar.groupsStore.load({
+               callback:function(){
+                   this.show(config);
+               },
+               scope:this
+            });
+            return false;
+        }
+
+        if(!this.selectCalendar.store.loaded){
+            this.selectCalendar.store.load({
+               callback:function(){
+                   this.show(config);
+               },
+               scope:this
+            });
+            return false;
+        }
+        
+        if(!this.resourceGroupsStore.loaded){
+            this.resourceGroupsStore.load({
+               callback:function(){
+                   this.show(config);
+               },
+               scope:this
+            });
+            return false;
+        }
         
         if (config.oldDomId) {
             this.oldDomId = config.oldDomId;
@@ -141,10 +244,10 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
         // propertiesPanel.show();
 
         delete this.link_config;
-		
+
         //tmpfiles on the server ({name:'Name',tmp_file:/tmp/name.ext} will be attached)
         this.formPanel.baseParams.tmp_files = config.tmp_files ? Ext.encode(config.tmp_files) : '';
-		
+
         this.formPanel.form.reset();
 
         this.tabPanel.setActiveTab(0);
@@ -152,9 +255,9 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
         if (!config.event_id) {
             config.event_id = 0;
         }
-       
 
-        this.setEventId(config.event_id);
+
+        this.setEventId(config.event_id);        
 
         if (config.event_id > 0) {
             this.formPanel.load({
@@ -162,22 +265,51 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
                 // waitMsg:GO.lang.waitMsgLoad,
                 success : function(form, action) {
                     this.win.show();
-                    this.participantsPanel
-                    .setEventId(action.result.data.participants_event_id);
-                    this.formPanel.form.baseParams['calendar_id'] = action.result.data.calendar_id;
+                    this.participantsPanel.setEventId(action.result.data.participants_event_id);
+                    //this.formPanel.form.baseParams['calendar_id'] = action.result.data.calendar_id;
+                    //this.formPanel.form.baseParams['categories'] = Ext.encode(action.result.data.categories);
+                    this.formPanel.form.baseParams['group_id'] = action.result.data.group_id;
+                    this.initCustomFields(action.result.data.group_id);
+
                     this.changeRepeat(action.result.data.repeat_type);
                     this.setValues(config.values);
                     // this.participantsPanel.setDisabled(false);
 
                     this.setWritePermission(action.result.data.write_permission);
 
-                    this.selectCalendar
-                    .setRemoteText(action.result.data.calendar_name);
-                    this.selectCalendar.container.up('div.x-form-item')
-                    .setDisplayed(true);
+                    this.selectCalendar.setValue(action.result.data.calendar_id);
+                    this.selectCalendar.setRemoteText(action.result.data.calendar_name);
+                    this.selectCalendar.container.up('div.x-form-item').setDisplayed(true);
 
                     this.files_folder_id = action.result.data.files_folder_id;
+                    var resources_checked = action.result.data.resources_checked;
 
+                    if(action.result.data.group_id == 1)
+                    {
+                        for(var i=0; i<this.resourceGroupsStore.data.items.length; i++)
+                        {
+                            var record = this.resourceGroupsStore.data.items[i].data;
+                            var resources = record.resources;
+
+                            for(var j=0; j<resources.length; j++)
+                            {
+                                var p = this.resourcesPanel.getComponent('group_'+record.id);
+                                var r = resources[j].id;
+                                var c = p.getComponent(r);
+                                var l = c.getComponent('status_'+r)
+
+                                if(resources_checked.indexOf(r) != -1)
+                                {
+                                    l.container.up('div.x-form-item').setDisplayed(true);
+                                    c.expand();
+                                }else
+                                {
+                                    l.container.up('div.x-form-item').setDisplayed(false);
+                                    c.collapse();
+                                }
+                            }
+                        }
+                    }
                 },
                 failure : function(form, action) {
                     Ext.Msg.alert(GO.lang.strError, action.result.feedback)
@@ -198,8 +330,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 
 
-                    this.participantsPanel
-                    .setEventId(action.result.data.participants_event_id);
+                    this.participantsPanel.setEventId(action.result.data.participants_event_id);
                     this.formPanel.form.baseParams['exception_event_id'] = config.exception_event_id;
                     this.formPanel.form.baseParams['exceptionDate'] = config.exceptionDate;
 
@@ -210,13 +341,10 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
                     this.setValues(config.values);
                     // this.participantsPanel.setDisabled(false);
 
-                    this.selectCalendar
-                    .setRemoteText(action.result.data.calendar_name);
-                    this.selectCalendar.container.up('div.x-form-item')
-                    .setDisplayed(true);
+                    this.selectCalendar.setRemoteText(action.result.data.calendar_name);
+                    this.selectCalendar.container.up('div.x-form-item').setDisplayed(true);
 
-                    this
-                    .setWritePermission(action.result.data.write_permission);
+                    this.setWritePermission(action.result.data.write_permission);
                 },
                 failure : function(form, action) {
                     Ext.Msg.alert(GO.lang.strError, action.result.feedback)
@@ -226,13 +354,13 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
         } else {
             delete this.formPanel.form.baseParams['exception_event_id'];
             delete this.formPanel.form.baseParams['exceptionDate'];
-
+            delete this.formPanel.form.baseParams['group_id'];
             // this.participantsPanel.setDisabled(true);
             this.setWritePermission(true);
 
             this.win.show();
+            
 
-           
 
             config.values = config.values || {};
 
@@ -269,17 +397,43 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
                 config.calendar_id = GO.calendar.defaultCalendar.id;
                 config.calendar_name = GO.calendar.defaultCalendar.name;
             }
-						
+
+            var calendarRecord = GO.calendar.calendarsStore.getById(config.calendar_id);
+            if(!calendarRecord)
+                calendarRecord = GO.calendar.resourcesStore.getById(config.calendar_id);
+
+            var group_id = calendarRecord.get('group_id');
+            this.formPanel.form.baseParams['group_id'] = group_id;
+            this.initCustomFields(group_id);
+
+            for(var i=0; i<this.resourceGroupsStore.data.items.length; i++)
+            {
+                var record = this.resourceGroupsStore.data.items[i].data;
+                var resources = record.resources;
+
+                for(var j=0; j<resources.length; j++)
+                {
+                    var p = this.resourcesPanel.getComponent('group_'+record.id);
+                    var r = resources[j].id;
+                    var c = p.getComponent(r);
+                    var l = c.getComponent('status_'+r)
+                    
+                    c.collapse();
+                    l.container.up('div.x-form-item').setDisplayed(false);
+                }
+            }
+
             this.selectCalendar.setValue(config.calendar_id);
             if (config.calendar_name) {
-                this.selectCalendar.container.up('div.x-form-item')
-                .setDisplayed(true);
+                this.selectCalendar.container.up('div.x-form-item').setDisplayed(true);
                 this.selectCalendar.setRemoteText(config.calendar_name);
             }else
-						{
-							this.selectCalendar.container.up('div.x-form-item').setDisplayed(false);
-						}
+            {
+                this.selectCalendar.container.up('div.x-form-item').setDisplayed(false);
+            }
         }
+
+                                  
         // if the newMenuButton from another passed a linkTypeId then set this
         // value in the select link field
         if (config && config.link_config) {
@@ -317,8 +471,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
         this.participantsPanel.setEventId(event_id);
 
-        this.selectLinkField.container.up('div.x-form-item')
-        .setDisplayed(event_id == 0);
+        this.selectLinkField.container.up('div.x-form-item').setDisplayed(event_id == 0);
 
         this.linkBrowseButton.setDisabled(event_id < 1);
         if (GO.files) {
@@ -343,17 +496,17 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
     },
 
     submitForm : function(hide, config) {
-		
+
         var params = {
             'task' : 'save_event'
         };
-		
+
         if(this.participantsPanel.store.loaded)
         {
             params.participants=Ext.encode(this.participantsPanel.getGridData());
         }
-		
-		
+
+
         this.formPanel.form.submit({
             url : GO.settings.modules.calendar.url + 'action.php',
             params : params,
@@ -402,7 +555,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
                     .getValue() > 0,
                     'private' : false
                 };
-				
+
 
                 this.fireEvent('save', newEvent, this.oldDomId);
 
@@ -486,7 +639,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
                 }
             }
         }
-		
+
         this.participantsPanel.reloadAvailability();
     },
 
@@ -524,7 +677,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
             fieldLabel : GO.lang.strLocation
         });
 
-		
+
 
         this.startDate = new Ext.form.DateField({
             name : 'start_date',
@@ -752,12 +905,11 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
                     items : this.busy
                 }]
             }, this.selectCalendar = new GO.calendar.SelectCalendar({
-                anchor : '-20',
-                pageSize : parseInt(GO.settings.max_rows_list),
+                anchor : '-20',                
                 valueField : 'id',
                 displayField : 'name',
                 typeAhead : true,
-                mode : 'remote',
+                mode : 'local',
                 triggerAction : 'all',
                 editable : false,
                 selectOnFocus : true,
@@ -766,7 +918,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
             })]
 
         });
-		
+
         this.descriptionPanel = new Ext.Panel({
             title: GO.lang.strDescription,
             layout: 'fit',
@@ -1012,7 +1164,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
         /*
 		 * this.participantsPanel.on('show', function(){
-		 * 
+		 *
 		 * if(!this.loadedParticipantsEventId ||
 		 * this.loadedParticipantsEventId!=this.participants_event_id) {
 		 * this.participantsStore.baseParams['event_id']=this.participants_event_id;
@@ -1191,9 +1343,94 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
             this.privateCB]
         });
 
-		
+        this.resourcesPanel = new Ext.Panel({
+            id:'resources-panel',
+            title:GO.calendar.lang.resources,
+            border:false,
+            layout:'accordion',
+            layoutConfig:{
+                titleCollapse:true,
+                animate:false,
+                activeOnTop:false
+            }
+        });
+        this.resourcesPanel.on('show', function(){
+            this.tabPanel.doLayout();
+        },this);
+
+        
     },
-	
+
+    buildAccordion : function()
+    {
+        var newFormField;
+        for(var i=0; i<this.resourceGroupsStore.data.items.length; i++)
+        {
+            var record = this.resourceGroupsStore.data.items[i].data;
+            var resourceFieldSets = [];
+            var resources = record.resources;
+
+            for(var j=0; j<resources.length; j++)
+            {
+                var resourceOptions = [];
+                for(var k=0; k<record.fields.length; k++)
+                {
+                    var field = record.fields[k];
+
+                    if(GO.customfields && GO.customfields.types["1"])
+                    {
+                        for(var l=0; l<GO.customfields.types["1"].panels.length; l++)
+                        {
+                            var cfield = 'cf_category_'+GO.customfields.types["1"].panels[l].category_id;
+                            if(cfield == field)
+                            {
+                                var pfieldStatus = new GO.form.PlainField({
+                                    id:'status_'+resources[j].id,
+                                    name:'status_'+resources[j].id,
+                                    fieldLabel: GO.calendar.lang.status,
+                            		value: ''
+                                });
+                                resourceOptions.push(pfieldStatus);
+                                this.formPanel.form.add(pfieldStatus);
+
+                                var cf = GO.customfields.types["1"].panels[l].customfields;                                                                
+                                for(var m=0; m<cf.length; m++)
+                                {
+                                    newFormField = GO.customfields.getFormField(cf[m],{
+                                        name:'resource_options['+resources[j].id+']['+cf[m].name+']'
+                                    });
+
+                                    resourceOptions.push(newFormField);
+                                    this.formPanel.form.add(newFormField);
+                                }
+                                
+                                l = GO.customfields.types["1"].panels.length;
+                            }
+                        }
+                    }
+                }
+                
+                resourceFieldSets.push({
+                    xtype:'fieldset',
+                    checkboxToggle:true,
+                    checkboxName:'resources['+resources[j].id+']',
+                    title:resources[j].name,
+                    id:resources[j].id,
+                    autoHeight:true,
+                    items:resourceOptions
+                });
+            }           
+            
+            this.resourcesPanel.add(new Ext.Panel({
+                cls:'go-form-panel',
+                id:'group_'+record.id,
+                layout:'form',
+                autoScroll:true,
+                title:record.name,
+                items:resourceFieldSets
+            }));
+        }
+    },
 
     changeRepeat : function(value) {
 

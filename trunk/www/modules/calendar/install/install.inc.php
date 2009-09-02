@@ -26,6 +26,7 @@ while($GO_USERS->next_record())
 		
 	$calendar['name']=String::format_name($user);
 	$calendar['user_id']=$user['id'];
+    $calendar['group_id']=1;
 	$calendar['acl_read']=$GO_SECURITY->get_new_acl('category', $user['id']);
 	$calendar['acl_write']=$GO_SECURITY->get_new_acl('category', $user['id']);
 	
@@ -34,3 +35,9 @@ while($GO_USERS->next_record())
 	if($count<=20)
 		$cal->add_calendar_to_view($calendar_id, '', $view_id);
 }
+
+$group['id'] = 1;
+$group['user_id']=1;
+$group['name']=$lang['calendar']['calendars'];
+$group['acl_admin'] = $GO_SECURITY->get_new_acl('group');
+$cal->add_group($group);

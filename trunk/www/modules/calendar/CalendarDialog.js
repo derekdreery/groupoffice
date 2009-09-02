@@ -24,11 +24,9 @@ GO.calendar.CalendarDialog = function(config)
 		waitMsgTarget:true,
 		title:GO.lang['strProperties'],
 		layout:'form',
-		anchor: '100% 100%',
-		defaultType: 'textfield',
+		anchor: '100% 100%',		
 		autoHeight:true,
 		cls:'go-form-panel',
-		waitMsgTarget:true,
 		labelWidth: 75,
    
 		items: [
@@ -38,12 +36,28 @@ GO.calendar.CalendarDialog = function(config)
 				value: GO.settings.user_id,
 				anchor: '100%'
 			}),
-			{
+			this.name = new Ext.form.TextField({
 				fieldLabel: GO.lang.strName,
 				name: 'name',
 				allowBlank:false,
 				anchor: '100%'	
-			},this.exportButton = new Ext.Button({			
+			}),
+            this.selectGroup = new GO.form.ComboBox({
+                hiddenName:'group_id',
+                fieldLabel:GO.groups.lang.group,
+                valueField:'id',
+                displayField:'name',
+                id:'resource_groups',
+                emptyText: GO.lang.strPleaseSelect,
+                store: GO.calendar.groupsStore,
+                mode:'local',                
+                triggerAction:'all',
+                editable:true,
+                selectOnFocus:true,
+                allowBlank:true,
+                forceSelection:true
+            }),
+            this.exportButton = new Ext.Button({
 				text:GO.lang.cmdExport,
 				disabled:true,
 				handler:function(){
@@ -132,53 +146,62 @@ GO.calendar.CalendarDialog = function(config)
 
 	
 	GO.calendar.CalendarDialog.superclass.constructor.call(this,{
-					title: GO.calendar.lang.calendar,
-					layout:'fit',
-					modal:false,
-					height:500,
-					width:450,
-					closeAction:'hide',
-					items: this.tabPanel,
-					buttons:[
-					{
-						text:GO.lang.cmdOk,
-						handler: function(){this.save(true)},
-						scope: this
-					},
-					{
-						text:GO.lang.cmdApply,
-						handler: function(){this.save(false)},
-						scope: this
-					},
+        title: GO.calendar.lang.calendar,
+        layout:'fit',
+        modal:false,
+        height:500,
+        width:450,        
+        closeAction:'hide',
+        items: this.tabPanel,
+        buttons:[
+        {
+            text:GO.lang.cmdOk,
+            handler: function(){this.save(true)},
+            scope: this
+        },
+        {
+            text:GO.lang.cmdApply,
+            handler: function(){this.save(false)},
+            scope: this
+        },
 
-					{
-						text:GO.lang.cmdClose,
-						handler: function(){this.hide()},
-						scope: this
-					}
-					]
-				});
+        {
+            text:GO.lang.cmdClose,
+            handler: function(){this.hide()},
+            scope: this
+        }
+        ]
+    });
 
 }
 
 Ext.extend(GO.calendar.CalendarDialog, Ext.Window, {
-	
+
+    resource: 0,
+    
 	initComponent : function(){
 		
 		this.addEvents({'save' : true});
 		
-		GO.calendar.CalendarDialog.superclass.initComponent.call(this);
+		GO.calendar.CalendarDialog.superclass.initComponent.call(this);	
 		
-		
-	},
-				
-	show : function (calendar_id){		
-		
+	},				
+	show : function (calendar_id, resource){		
 		if(!this.rendered)
 			this.render(Ext.getBody());
 			
-		this.propertiesTab.show();
-		
+		this.propertiesTab.show();       
+
+        if(resource && !this.selectGroup.store.loaded)
+        {
+            this.selectGroup.store.load();
+        }
+
+        this.resource = (resource > 0) ? resource : 0;
+
+        var title = (this.resource) ? GO.calendar.lang.resource : GO.calendar.lang.calendar;
+        this.setTitle(title);        
+
 		if(calendar_id > 0)
 		{
 			if(calendar_id!=this.calendar_id)
@@ -187,17 +210,19 @@ Ext.extend(GO.calendar.CalendarDialog, Ext.Window, {
 			}else
 			{
 				GO.calendar.CalendarDialog.superclass.show.call(this);
-			}
+			}                                   
 		}else
 		{
 			this.calendar_id=0;
-			this.propertiesTab.form.reset();
-			
+			this.propertiesTab.form.reset();          
+            
 			this.exportButton.setDisabled(true);
 			this.importTab.setDisabled(true);	
 
 			this.readPermissionsTab.setDisabled(true);
 			this.writePermissionsTab.setDisabled(true);
+
+            this.showGroups(resource);
 
 			GO.calendar.CalendarDialog.superclass.show.call(this);
 		}
@@ -218,6 +243,9 @@ Ext.extend(GO.calendar.CalendarDialog, Ext.Window, {
 				this.writePermissionsTab.setAcl(action.result.data.acl_write);
 				this.exportButton.setDisabled(false);
 				this.importTab.setDisabled(false);
+
+                this.showGroups(action.result.data.group_id > 1);
+
 				GO.calendar.CalendarDialog.superclass.show.call(this);
 			},
 			failure:function(form, action)
@@ -228,50 +256,61 @@ Ext.extend(GO.calendar.CalendarDialog, Ext.Window, {
 		});
 	},
 	save : function(hide)
-	{
-		this.propertiesTab.form.submit({
-				
-			url:GO.settings.modules.calendar.url+'action.php',
-			params: {
-					'task' : 'save_calendar', 
-					'calendar_id': this.calendar_id
-			},
-			waitMsg:GO.lang.waitMsgSave,
-			success:function(form, action){
-										
-				if(action.result.calendar_id)
-				{
-					this.calendar_id=action.result.calendar_id;
-					this.readPermissionsTab.setAcl(action.result.acl_read);
-					this.writePermissionsTab.setAcl(action.result.acl_write);
-					this.exportButton.setDisabled(false);
-					this.importTab.setDisabled(false);
-					//this.loadAccount(this.calendar_id);
-				}
-				
-				this.fireEvent('save');
-				
-				if(hide)
-				{
-					this.hide();
-				}
-			},
+	{        
+        if(this.resource && this.name.getValue() && !this.selectGroup.getValue())
+        {
+            Ext.MessageBox.alert(GO.lang.strError, GO.calendar.lang.no_group_selected);
+        }else
+        {
+            this.propertiesTab.form.submit({
 
-			failure: function(form, action) {
-				var error = '';
-				if(action.failureType=='client')
-				{
-					error = GO.lang.strErrorsInForm;
-				}else
-				{
-					error = action.result.feedback;
-				}
-					
-				Ext.MessageBox.alert(GO.lang.strError, error);
-			},
-			scope:this
+                url:GO.settings.modules.calendar.url+'action.php',
+                params: {
+                        'task' : 'save_calendar',
+                        'calendar_id': this.calendar_id
+                },
+                waitMsg:GO.lang.waitMsgSave,
+                success:function(form, action){
 
-		});
+                    if(action.result.calendar_id)
+                    {
+                        this.calendar_id=action.result.calendar_id;
+                        this.readPermissionsTab.setAcl(action.result.acl_read);
+                        this.writePermissionsTab.setAcl(action.result.acl_write);
+                        this.exportButton.setDisabled(false);
+                        this.importTab.setDisabled(false);
+                        //this.loadAccount(this.calendar_id);
+                    }
+
+                    this.fireEvent('save', this, this.selectGroup.getValue());
+
+                    if(hide)
+                    {
+                        this.hide();
+                    }
+                },
+
+                failure: function(form, action) {
+                    var error = '';
+                    if(action.failureType=='client')
+                    {
+                        error = GO.lang.strErrorsInForm;
+                    }else
+                    {
+                        error = action.result.feedback;
+                    }
+
+                    Ext.MessageBox.alert(GO.lang.strError, error);
+                },
+                scope:this
+
+            });
+        }
 			
-	}
+	},
+    showGroups : function(resource)
+    {
+        var f = this.propertiesTab.form.findField('resource_groups');
+        f.container.up('div.x-form-item').setDisplayed(resource);
+    }
 });

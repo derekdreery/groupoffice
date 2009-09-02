@@ -224,6 +224,46 @@ a:link, a:visited, a:active{
 	
 }
 
+#resourceList {
+	font:normal 11px arial, tahoma, helvetica, sans-serif;
+	padding:6px;
+	background-color:white;
+	position:relative;
+}
+
+#resourceList div{
+	border:1px solid white;
+	display:block;
+	-moz-outline:none;
+	margin-bottom:2px;
+	text-decoration:none;
+	line-height:18px;
+	cursor: default;
+}
+
+#resourceList .resource-wrap{
+	border:1px solid white;
+	display:block;
+	-moz-outline:none;
+	margin-top:4px;
+	padding:2px 2px 2px 6px;
+	cursor: default;
+}
+
+#resourceList .x-view-over{
+  background-color:#ebf1e2;
+  border:1px solid #ebf1e2;
+ 	margin-top:4px;
+	padding:2px 2px 2px 6px;
+}
+
+#resourceList .x-view-selected{
+	border:1px solid #669900;
+	background-color:#ebf1e2;
+	margin-top:4px;
+	padding:2px 2px 2px 6px;
+
+}
 
 .x-calGrid-panel .x-panel-body{
 background-color: #F1F1F1 !important;

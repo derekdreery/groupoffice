@@ -7,3 +7,4 @@ DROP TABLE IF EXISTS `cal_exceptions`;
 DROP TABLE IF EXISTS `cal_views_calendars`;
 DROP TABLE IF EXISTS `go_links_1`;
 DROP TABLE IF EXISTS `cal_settings`;
+DROP TABLE IF EXISTS `cal_groups`;

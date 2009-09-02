@@ -221,7 +221,43 @@ a:link, a:visited, a:active{
 
 
 
+#resourceList {
+	font:normal 11px arial, tahoma, helvetica, sans-serif;
+	padding:2px;
+	background-color:white;
+	position:relative;
+	/*border-bottom:1px solid #c3daf9;*/
+}
 
+#resourceList div{
+	border:1px solid white;
+	display:block;
+	-moz-outline:none;
+	margin-bottom:2px;
+	text-decoration:none;
+	line-height:18px;
+	cursor: default;
+}
+
+#resourceList .resource-wrap{
+	border:1px solid white;
+	display:block;
+	-moz-outline:none;
+	padding: 2px;
+	cursor: default;
+}
+
+#resourceList .x-view-over{
+    border:1px solid #dddddd;
+    background: #efefef url(../../../../ext/resources/images/default/grid/row-over.gif) repeat-x left top;
+	padding: 2px;
+}
+
+#resourceList .x-view-selected{
+	border:1px solid #c3daf9;
+	background-color:#ddecfe;
+	padding: 2px;
+}
 
 
 

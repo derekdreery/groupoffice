@@ -59,3 +59,17 @@ $lang['calendar']['printList']='Afsprakenlijst';
 
 $lang['calendar']['printAllDaySingle']='Hele dag';
 $lang['calendar']['printAllDayMultiple']='Hele dag van %s tot %s';
+
+$lang['calendar']['calendars']='Agenda\'s';
+$lang['calendar']['resource_mail_subject']='Hulpmiddel \'%s\' gereserveerd';
+$lang['calendar']['resource_mail_body']='%s heeft hulpmiddel \'%s\' gereserveerd. U beheert dit hulpmiddel. Open de reservering om deze te accepteren of weigeren.';
+$lang['calendar']['open_resource']='Reservering openen';
+$lang['calendar']['resource_modified_mail_subject']='Reservering voor hulpmiddel \'%s\' gewijzigd';
+$lang['calendar']['resource_modified_mail_body']='%s heeft de reservering voor hulpmiddel \'%s\' gewijzigd. U beheert dit hulpmiddel. Open de reservering om deze te accepteren of weigeren.';
+
+$lang['calendar']['your_resource_modified_mail_subject']='Uw boeking voor \'%s\' in status %s is gewijzigd';
+$lang['calendar']['your_resource_modified_mail_body']='%s heeft uw reservering voor \'%s\' gewijzigd.';
+$lang['calendar']['your_resource_accepted_mail_subject'] = 'Reservering voor \'%s\' is geaccepteerd';
+$lang['calendar']['your_resource_accepted_mail_body'] = '%s heeft uw boeking voor hulpmiddel \'%s\' geaccepteerd.';
+$lang['calendar']['your_resource_declined_mail_subject'] = 'Reservering voor \'%s\' is geweigerd';
+$lang['calendar']['your_resource_declined_mail_body'] = '%s heeft uw boeking voor hulpmiddel \'%s\' geweigerd.';

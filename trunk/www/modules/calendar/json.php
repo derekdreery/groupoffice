@@ -158,39 +158,72 @@ try{
 					'tmp_name'=>$tmp_file,
 					'name'=>$name,
 					'size'=>strlen($ics_string),
-					'type'=>File::get_filetype_description('ics')					
+					'type'=>File::get_filetype_description('ics')
 			));
 
 
 
 			break;*/
-		
+
 
 		case 'event':
 
 			require_once($GO_CONFIG->class_path.'ical2array.class.inc');
 			require_once($GO_CONFIG->class_path.'Date.class.inc.php');
-				
+
 			$event = $cal->get_event($_REQUEST['event_id']);
-				
+
 			if(!$event)
 			{
 				throw new DatabaseSelectException();
 			}
 			$calendar = $cal->get_calendar($event['calendar_id']);
-				
+
 			$response['data']['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_write']);
 			if((!$response['data']['write_permission'] && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_read'])) ||
 			($event['private']=='1' && $event['user_id']!=$GO_SECURITY->user_id))
 			{
 				throw new AccessDeniedException();
 			}
-				
-			$response['data']=array_merge($response['data'], $cal->event_to_json_response($event));
-			$response['data']['calendar_name']=$calendar['name'];
-			$response['success']=true;
 
+			$response['data']=array_merge($response['data'], $cal->event_to_json_response($event));
+
+            if(isset($GO_MODULES->modules['customfields']))
+            {
+                require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+                $cf = new customfields();
+
+                $response['data']['resources_checked'] = array();
+                
+                $values = $cf->get_values($GO_SECURITY->user_id, 1, $event['id']);
+                $response['data']=array_merge($response['data'], $values);
+                
+                if($calendar['group_id'] == 1)
+                {
+                    $cal->get_event_resources($response['data']['id']);
+                    while($cal->next_record())
+                    {
+                        $values = $cf->get_values($GO_SECURITY->user_id, 1, $cal->f('id'));
+                        $response['data']['resources'][$cal->f('calendar_id')] = $values;
+                        $response['data']['status_'.$cal->f('calendar_id')] = $lang['calendar']['statuses'][$cal->f('status')];
+                        $i = 0;
+                        foreach($values as $key=>$value)
+                        {
+                            $resource_options = 'resource_options['.$cal->f('calendar_id').']['.$key.']';
+                            $response['data'][$resource_options] = $value;
+                            $i++;
+                        }
+                        if($i > 0)
+                            $response['data']['resources_checked'][] = $cal->f('calendar_id');
+                    }
+                }
+            }           
+
+			$response['data']['calendar_name']=$calendar['name'];
+            $response['data']['group_id'] = $calendar['group_id'];
+			$response['success']=true;
 			break;
+        
 		case 'events':
 
 			//setlocale(LC_ALL, 'nl_NL@euro');
@@ -233,13 +266,13 @@ try{
 					}
 				}
 
-			
+
 				$private = ($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']);
 				if($private)
 				{
 					$event['name']=$lang['calendar']['private'];
 					$event['description']='';
-					$event['location']='';					
+					$event['location']='';
 				}
 
 				$response['results'][] = array(
@@ -402,13 +435,13 @@ try{
 						}
 					}
 
-		
-					$private = ($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']);				
+
+					$private = ($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']);
 					if($private)
 					{
 						$event['name']=$lang['calendar']['private'];
 						$event['description']='';
-						$event['location']='';					
+						$event['location']='';
 					}
 
 
@@ -434,19 +467,24 @@ try{
 
 		case 'calendars':
 
-			$response['total'] = $cal->get_authorized_calendars($GO_SECURITY->user_id);
+            $resources = isset($_REQUEST['resources']) ? $_REQUEST['resources'] : 0;
+
+			$response['total'] = $cal->get_authorized_calendars($GO_SECURITY->user_id, 0, 0, $resources);
+            /*
 			if(!$response['total'])
 			{
 				$cal->get_calendar();
 				$response['total'] = $cal->get_authorized_calendars($GO_SECURITY->user_id);
 			}
+             */
+            
 			$response['results']=array();
 			while($cal->next_record(DB_ASSOC))
-			{
-				//$user = $GO_USERS->get_user($cal->f('user_id'));
-
-				//$cal->record['user_name'] = String::format_name($user);
-				$response['results'][] = $cal->record;
+			{				
+                $record = $cal->record;
+                $group = $cal2->get_group($record['group_id']);
+                $record['group_name'] = $group['name'];
+				$response['results'][] = $record;
 			}
 			break;
 
@@ -473,24 +511,30 @@ try{
 					$response['deleteFeedback']=$e->getMessage();
 				}
 			}
-				
-			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
-			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 
+			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : 0;
+			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : 0;
+            $resources = isset($_REQUEST['resources']) ? $_REQUEST['resources'] : 0;
+            $show_all = isset($_REQUEST['show_all']) ? $_REQUEST['show_all'] : 0;
 
-			$response['total'] = $cal->get_writable_calendars($GO_SECURITY->user_id, $start, $limit);
+			$response['total'] = $cal->get_writable_calendars($GO_SECURITY->user_id, $start, $limit, $resources, 1, -1, $show_all);
 			if(!$response['total'])
 			{
 				$cal->get_calendar();
-				$response['total'] = $cal->get_writable_calendars($GO_SECURITY->user_id, $start, $limit);
+				$response['total'] = $cal->get_writable_calendars($GO_SECURITY->user_id, $start, $limit, $resources, 1, -1, $show_all);
 			}
+
 			$response['results']=array();
 			while($cal->next_record(DB_ASSOC))
 			{
-				$user = $GO_USERS->get_user($cal->f('user_id'));
+                $record = $cal->record;
+                $group = $cal2->get_group($record['group_id']);
+                $record['group_name'] = $group['name'];				
 
-				$cal->record['user_name'] = String::format_name($user);
-				$response['results'][] = $cal->record;
+				$user = $GO_USERS->get_user($record['user_id']);
+				$record['user_name'] = String::format_name($user);
+
+                $response['results'][] = $record;
 			}
 			break;
 
@@ -498,8 +542,6 @@ try{
 		case 'view_calendars':
 
 			$view_id = ($_REQUEST['view_id']);
-
-			$cal2 = new calendar();
 
 			$response['total'] = $cal->get_authorized_calendars($GO_SECURITY->user_id);
 			if(!$response['total'])
@@ -629,34 +671,32 @@ try{
 
 			if($event_id>0)
 			{
-				$cal2 = new calendar();		
-	
 				$event = $cal->get_event($event_id);
-	
+
 				$response['total'] = $cal->get_participants($event_id);
 				$response['results']=array();
 				while($cal->next_record(DB_ASSOC))
 				{
 					$participant = $cal->record;
-	
+
 					$participant['available']='?';
 					$user=$GO_USERS->get_user_by_email($participant['email']);
 					if($user)
 					{
 						$participant['available']=$cal2->is_available($user['id'], $event['start_time'], $event['end_time'], $event['id']) ? '1' : '0';
 					}
-	
+
 					$response['results'][]=$participant;
 				}
 			}else
 			{
-				
+
 			}
 			break;
 		case 'get_default_participant':
 				$calendar = $cal->get_calendar($_REQUEST['calendar_id']);
 				$calendar_user = $GO_USERS->get_user($calendar['user_id']);
-				
+
 				if($calendar_user)
 				{
 					$response['user_id']=$calendar_user['id'];
@@ -666,18 +706,18 @@ try{
 					$response['available']=$cal->is_available($response['user_id'], $_REQUEST['start_time'], $_REQUEST['end_time'], 0) ? '1' : '0';
 				}
 			break;
-		
-			
+
+
 		case 'check_availability':
 				$event_id = empty($_REQUEST['event_id']) ? 0 : $_REQUEST['event_id'];
-				
+
 				$emails=explode(',', $_REQUEST['emails']);
-				
+
 				$response=array();
 				foreach($emails as $email)
 				{
 				 	$user=$GO_USERS->get_user_by_email($email);
-	
+
 					if($user)
 					{
 						$response[$email]=$cal->is_available($user['id'], $_REQUEST['start_time'], $_REQUEST['end_time'], $event_id) ? '1' : '0';
@@ -688,7 +728,7 @@ try{
 
 				}
 		break;
-		
+
 		case 'availability':
 			$event_id = empty($_REQUEST['event_id']) ? 0 : $_REQUEST['event_id'];
 			$date = Date::to_unixtime($_REQUEST['date']);
@@ -708,8 +748,8 @@ try{
 				$participant['name']=array_shift($names);
 				$participant['email']=$email;
 				$participant['freebusy']=array();
-				
-				$user = $GO_USERS->get_user_by_email($email);				
+
+				$user = $GO_USERS->get_user_by_email($email);
 				if($user)
 				{
 					$freebusy=$cal->get_free_busy($user['id'], $date, $event_id);
@@ -726,7 +766,7 @@ try{
 				}
 				$response['participants'][]=$participant;
 			}
-			
+
 
 			$participant['name']=$lang['calendar']['allTogether'];
 			$participant['email']='';
@@ -743,6 +783,82 @@ try{
 
 
 			break;
+
+
+        case 'group':
+
+			$group = $cal->get_group($_REQUEST['group_id']);
+			$user = $GO_USERS->get_user($group['user_id']);
+
+			$fields = explode(',', $group['fields']);
+			foreach($fields as $field)
+			{
+				$group['fields['.$field.']'] = true;
+			}
+
+			$group['user_name'] = String::format_name($user);
+			$response['data'] = $group;
+
+			$response['success'] = true;
+			break;
+
+		case 'groups':
+
+			if(isset($_POST['delete_keys']))
+			{
+				try{
+					$response['deleteSuccess']=true;
+					$delete_groups = json_decode($_POST['delete_keys']);
+					foreach($delete_groups as $group_id)
+					{
+						$cal->delete_group(addslashes($group_id));
+					}
+				}catch(Exception $e)
+				{
+					$response['deleteSuccess']=false;
+					$response['deleteFeedback']=$e->getMessage();
+				}
+			}
+			$sort = isset($_REQUEST['sort']) ? $_REQUEST['sort'] : 'id';
+			$dir = isset($_REQUEST['dir']) ? $_REQUEST['dir'] : 'DESC';
+			$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : '0';
+			$limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : '0';
+
+            $response['results']=array();
+            $response['total'] = $cal->get_groups($sort, $dir, $start, $limit);
+            while($group = $cal->next_record())
+			{
+				$user = $GO_USERS->get_user($group['user_id']);
+				$group['user_name']=String::format_name($user);
+				$response['results'][] = $group;
+			}
+
+			break;
+
+        case 'resources':
+
+            $cal->get_groups();
+			$response['results']=array();          
+			while($group = $cal->next_record())
+			{
+                $group['fields'] = explode(",", $group['fields']);
+                $group['resources'] = array();                
+                $cal2->get_authorized_calendars($GO_SECURITY->user_id, 0, 0, 1, $group['id']);
+                while($resource = $cal2->next_record())
+                {
+                    $user = $GO_USERS->get_user($resource['user_id']);
+                    $resource['user_name']=String::format_name($user);
+                    $group['resources'][] = $resource;                    
+                }
+
+                if(count($group['resources']) > 0)
+                {
+                    $response['results'][] = $group;
+                }
+			}
+            $response['total'] = count($response['results']);
+			break;
+
 
 		case 'settings':
 			$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'id';
@@ -770,6 +886,7 @@ try{
 				$response['results'][] = $calendars;
 			}
 			break;
+
 	}
 }catch(Exception $e)
 {

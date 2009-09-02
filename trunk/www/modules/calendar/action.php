@@ -346,28 +346,33 @@ try{
 		case 'save_event':
 			$event = get_posted_event();
 			$event_id=$event['id'];
+            $group_id = isset($_POST['group_id']) ? $_POST['group_id'] : 0;
 			$calendar_id = $event['calendar_id'];
-			//throw new Exception(nl2br(var_export($event, true)));
 
-			/*
-			 todo conflict checking
-			 if($event['busy']=='0' || isset($_POST['ignore_conflicts']))
-			 {
-			 $conflicts = array();
-			 }else
-			 {
-			 $calendars = $_POST['calendars'];
-			 if(isset($_POST['resources']))
-			 {
-			 $calendars = array_merge($calendars, $_POST['resources']);
-			 }
+            if($event['busy']=='0' || isset($_POST['ignore_conflicts']))
+			{
+                $conflicts = array();
+			}else
+			{
+                $calendars = array();
+                                
+                if(isset($_POST['resources']))
+                {
+                    foreach($_POST['resources'] as $key => $value)
+                    {
+                        if($value == 'on')
+                        {
+                            $resources[] = $key;
+                        }
+                    }
+                    $calendars = $resources;
+                }
+                $calendars[] = $calendar_id;
 
-			 $conflicts = $cal->get_conflicts($event['start_time'], $event['end_time'], $calendars, $_POST['to']);
-			 //var_dump($conflicts);
-			 unset($conflicts[$event_id]);
-			 }*/
-			$conflicts=array();
-
+                $conflicts = $cal->get_conflicts($event['start_time'], $event['end_time'], $calendars);
+                unset($conflicts[$event_id]);
+			}
+            
 
 			if(empty($event['calendar_id']))
 			{
@@ -395,20 +400,47 @@ try{
 			
 			if(count($conflicts))
 			{
-				throw new Exception($cal_conflict);
+				//throw new Exception("Conflict!");
 			}
 			
 
+            $insert = false;
+            $modified = false;
+            $accepted = false;
+            $declined = false;
 			if($event['id']>0)
 			{
-				$cal->update_event($event, $calendar);
+                $old_event = $cal->get_event($event_id);
+                $update_related = (isset($_POST['resources'])) ? false : true;
+
+                if($old_event['start_time'] != $event['start_time'] || $old_event['end_time'] != $event['end_time'])
+                    $modified = true;
+
+                if($calendar['group_id'] > 1 && ($old_event['status'] != $event['status']))
+                {
+                    if($event['status'] == 'ACCEPTED')
+                    {
+                        $accepted = true;
+                        $event['background'] = 'CCFFCC';
+                    }else
+                    if($event['status'] == 'DECLINED')
+                    {
+                        $declined = true;
+                        $event['background'] = 'FF6666';                        
+                    }
+                }
+                
+				$cal->update_event($event, $calendar, $old_event, $update_related);
+
 				$response['files_folder_id']=$event['files_folder_id'];
 				$response['success']=true;
-
+                
 			}else
 			{
 				
 				$event_id= $cal->add_event($event, $calendar);
+                $old_event = $cal->get_event($event_id);
+                $insert = true;
 				if($event_id)
 				{
 					
@@ -454,6 +486,34 @@ try{
 					$response['success']=true;
 				}					
 			}
+
+            if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
+            {
+                require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+                $cf = new customfields();
+
+                if(!$insert && $calendar['group_id'] > 1)
+                {
+                    $values_old = array_values($cf->get_values($GO_SECURITY->user_id, 1, $event_id));
+                }
+
+                $cf->update_fields($GO_SECURITY->user_id, $event_id, 1, $_POST, $insert);
+                $response['deb'] = $cf->affected_rows();
+
+                if(!$insert && $calendar['group_id'] > 1)
+                {
+                    $values = array_values($cf->get_values($GO_SECURITY->user_id, 1, $event_id));
+                    for($i=0; $i<count($values_old); $i++)
+                    {
+                        if($values_old[$i] != $values[$i])
+                        {
+                            $modified = true;
+                            $response['mod'] = true;
+                            $i = count($values_old);
+                        }                        
+                    }
+                }
+            }
 			
 			if(!empty($_POST['tmp_files']) && $GO_MODULES->has_module('files'))
 			{
@@ -613,13 +673,290 @@ try{
 					}
 				}
 			}
-			
+            
+            if($calendar['group_id'] > 1)
+            {
+                $group = $cal->get_group($calendar['group_id']);
+                $admins = array();
+                if($group['acl_admin'])
+                {
+                    $admins = $GO_SECURITY->get_authorized_users_in_acl($group['acl_admin']);
+                }
+
+                $admin_count = count($admins);
+                if($admin_count && ($modified || $accepted || $declined))
+                {
+                    $js = json_encode(array('event_id' => $event_id));
+                    $url = $GO_CONFIG->full_url.'dialog.php?module=calendar&function=showEvent&params='.$js;
+                    if(!$insert)
+                    {
+                        $body = sprintf($lang['calendar']['resource_modified_mail_body'],$_SESSION['GO_SESSION']['name'],$calendar['name']).'<br /><br />';
+                        $body .= $cal->event_to_html($event, true);                        
+                        $body .= '<br /><a href='.$url.'>'.$lang['calendar']['open_resource'].'</a>';
+
+                        $subject = sprintf($lang['calendar']['resource_modified_mail_subject'],$calendar['name']);
+                    }
+                    else
+                    {
+                        $body = sprintf($lang['calendar']['resource_mail_body'],$_SESSION['GO_SESSION']['name'],$calendar['name']).'<br /><br />';
+                        $body .= $cal->event_to_html($event, true);
+                        $body .= '<br /><a href='.$url.'>'.$lang['calendar']['open_resource'].'</a>';
+
+                        $subject = sprintf($lang['calendar']['resource_mail_subject'],$calendar['name']);
+                    }
+                    for($i=0; $i<$admin_count; $i++)
+                    {
+                        if($admins[$i] != $GO_SECURITY->user_id)
+                        {
+                            $user = $GO_USERS->get_user($admins[$i]);
+
+                            $send_mail['to'] = $user['email'];
+                            $send_mail['subject'] = $subject;
+                            $send_mail['body'] = $body;
+                            $send_mail['event'] = $old_event;
+                            $send_mail['group'] = $group;
+
+                            $send_mails[] = $send_mail;
+                        }
+                    }
+                }                
+                if($old_event['user_id'] != $GO_SECURITY->user_id)
+                {
+                    $send_mail = false;
+					
+                    if($accepted)
+                    {
+                        $body = sprintf($lang['calendar']['your_resource_accepted_mail_body'],$_SESSION['GO_SESSION']['name'],$calendar['name']).'<br /><br />';
+                        $body .= $cal->event_to_html($event, true);
+
+                        $send_mail['subject'] = sprintf($lang['calendar']['your_resource_accepted_mail_subject'],$calendar['name']);
+                        $send_mail['body'] = $body;                        
+                    }else
+                    if($declined)
+                    {
+                        $body = sprintf($lang['calendar']['your_resource_declined_mail_body'],$_SESSION['GO_SESSION']['name'],$calendar['name']).'<br /><br />';
+                        $body .= $cal->event_to_html($event, true);
+
+                        $send_mail['subject'] = sprintf($lang['calendar']['your_resource_declined_mail_subject'],$calendar['name']);
+                        $send_mail['body'] = $body;
+                    }else
+                    if($modified)
+                    {
+                        $body = sprintf($lang['calendar']['your_resource_modified_mail_body'],$_SESSION['GO_SESSION']['name'],$calendar['name']).'<br /><br />';
+                        $body .= $cal->event_to_html($event, true);
+
+                        $send_mail['subject'] = sprintf($lang['calendar']['your_resource_modified_mail_subject'],$calendar['name'],$lang['calendar']['statuses'][$event['status']]);
+                        $send_mail['body'] = $body;
+                    }
+
+                    if($send_mail)
+                    {
+                        $user = $GO_USERS->get_user($old_event['user_id']);
+                        //$js = json_encode(array('event_id' => $event['id']));
+                        //$url = $GO_CONFIG->full_url.'dialog.php?module=calendar&function=showEvent&params='.$js;
+                        //$send_mail['body'] .= '<br /><a href='.$url.'>'.$lang['calendar']['open_resource'].'</a>';
+                        $send_mail['to'] = $user['email'];
+                        $send_mail['event'] = $old_event;
+                        $send_mail['group'] = $group;
+
+                        $send_mails[] = $send_mail;
+                    }
+                }                
+            }           
+            else 
+            {
+                //copy event properties
+                $event_copy = array_map('addslashes',$event);
+                unset($event_copy['id'], $event_copy['reminder'], $event_copy['files_folder_id'], $event_copy['calendar_id']);
+                
+                $event_copy['busy'] = '0';
+                $event_copy['user_id'] = (isset($event_copy['user_id']) && $event_copy['user_id'] > 0) ? $event_copy['user_id'] : $GO_SECURITY->user_id;
+
+                $cal2 = new calendar();
+                $cal3 = new calendar();
+
+                $num_resources = $cal->get_authorized_calendars($GO_SECURITY->user_id, 0, 0, 1);
+                if($num_resources > 0)
+                {
+                    while($resource_calendar = $cal->next_record(DB_ASSOC))
+                    {
+                        $resource_id = $resource_calendar['id'];
+                        $existing_resource = $cal2->get_event_resource($event_id, $resource_id);
+                        if(isset($resources) && in_array($resource_id, $resources))
+                        {
+                            $resource = $event_copy;
+                            $resource['participants_event_id'] = $event_id;
+                            $resource['calendar_id'] = $resource_id;
+                            $insert = false;
+
+                            if($existing_resource)
+                            {
+                                $resource['id'] = $resource_id = $existing_resource['id'];
+
+                                if($modified)
+                                {
+                                    $group = $cal2->get_group($resource_calendar['group_id']);
+                                    $admins = array();
+                                    if($group['acl_admin'])
+                                    {
+                                        $admins = $GO_SECURITY->get_authorized_users_in_acl($group['acl_admin']);
+                                    }
+
+                                    $admin_count = count($admins);
+                                    if($admin_count>0 && in_array($resource['user_id'], $admins))
+                                    {
+                                        $resource['status']='ACCEPTED';
+                                    }else
+                                    {
+                                        $resource['status']='NEEDS-ACTION';
+                                    }
+                                    $resource['background']=$resource['status']=='ACCEPTED' ? 'CCFFCC' : 'FF6666';
+
+                                    if($admin_count)
+                                    {
+                                        $body = sprintf($lang['calendar']['resource_modified_mail_body'],$_SESSION['GO_SESSION']['name'],$resource_calendar['name']).'<br /><br />';
+                                        $body .= $cal3->event_to_html($resource, true);
+                                        
+                                        $js = json_encode(array('event_id' => $resource['id']));                                    
+                                        $url = $GO_CONFIG->full_url.'dialog.php?module=calendar&function=showEvent&params='.$js;
+                                        $body .= '<br /><a href='.$url.'>'.$lang['calendar']['open_resource'].'</a>';
+
+                                        $subject = sprintf($lang['calendar']['resource_modified_mail_subject'],$resource_calendar['name']);
+
+                                        for($i=0; $i<$admin_count; $i++)
+                                        {
+                                            if($admins[$i] != $GO_SECURITY->user_id)
+                                            {
+                                                $user = $GO_USERS->get_user($admins[$i]);
+
+                                                $send_mail['to'] = $user['email'];
+                                                $send_mail['subject'] = $subject;
+                                                $send_mail['body'] = $body;
+                                                $send_mail['event'] = $resource;
+                                                $send_mail['group'] = $group;
+
+                                                $send_mails[] = $send_mail;
+                                            }
+                                        }
+                                    }
+                                    $cal3->update_event($resource);                                    
+                                }                                
+                            }else
+                            {
+                                $group = $cal2->get_group($resource_calendar['group_id']);
+                                $admins = array();
+                                if($group['acl_admin'])
+                                {
+                                    $admins = $GO_SECURITY->get_authorized_users_in_acl($group['acl_admin']);
+                                }
+
+                                $admin_count = count($admins);
+                                if($admin_count>0 && in_array($resource['user_id'], $admins))
+                                {
+                                    $resource['status']='ACCEPTED';
+                                }else
+                                {
+                                    $resource['status']='NEEDS-ACTION';
+                                }
+                                $resource['background']=$resource['status']=='ACCEPTED' ? 'CCFFCC' : 'FF6666';
+
+                                $resource_id = $resource['id'] = $cal3->add_event($resource);
+                                $insert = true;
+
+                                if($admin_count)
+                                {                                    
+                                    $body = sprintf($lang['calendar']['resource_mail_body'],$_SESSION['GO_SESSION']['name'],$resource_calendar['name']).'<br /><br />';
+                                    $body .= $cal3->event_to_html($resource, true);
+                                    
+                                    $js = json_encode(array('event_id' => $resource_id));                                    
+                                    $url = $GO_CONFIG->full_url.'dialog.php?module=calendar&function=showEvent&params='.$js;                                    
+                                    $body .= '<br /><a href='.$url.'>'.$lang['calendar']['open_resource'].'</a>';
+
+                                    $subject = sprintf($lang['calendar']['resource_mail_subject'],$resource_calendar['name']);
+
+                                    for($i=0; $i<$admin_count; $i++)
+                                    {
+                                        if($admins[$i] != $GO_SECURITY->user_id)
+                                        {
+                                            $user = $GO_USERS->get_user($admins[$i]);
+
+                                            $send_mail['to'] = $user['email'];
+                                            $send_mail['subject'] = $subject;
+                                            $send_mail['body'] = $body;
+                                            $send_mail['event'] = $resource;
+                                            $send_mail['group'] = $group;
+
+                                            $send_mails[] = $send_mail;
+                                        }
+                                    }
+                                }
+                            }
+
+                            if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
+                            {
+                                require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+                                $cf = new customfields();
+
+                                $custom_fields=isset($_POST['resource_options'][$resource_calendar['id']]) ? $_POST['resource_options'][$resource_calendar['id']] : array();
+
+                                $cf->update_fields($GO_SECURITY->user_id, $resource_id, 1, $custom_fields, $insert);
+                            }
+                        }elseif($existing_resource)
+                        {
+                            $cal3->delete_event($existing_resource['id']);
+                        }
+                    }
+                }
+            }
+
+            if(isset($send_mails) && count($send_mails) > 0)
+            {
+                for($i=0; $i<count($send_mails); $i++)
+                {
+                    require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
+                    $swift = new GoSwift($send_mails[$i]['to'], $send_mails[$i]['subject']);
+
+                    $swift->set_from($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
+                    $body = $send_mails[$i]['body'];
+                    $values = '';
+                    $labels = '';
+
+                    if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
+                    {
+                        require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+                        $cf = new customfields();
+
+                        $categories = explode(',',$send_mails[$i]['group']['fields']);
+                        $fields = $cf->get_fields_with_values($send_mails[$i]['event']['user_id'], 1, $send_mails[$i]['event']['id']);
+
+                        $cf = array();
+                        for($j=0; $j<count($fields); $j++)
+                        {
+                            if(in_array('cf_category_'.$fields[$j]['category_id'], $categories) && $fields[$j]['datatype'] == 'checkbox')
+                            {
+                                $labels .= $fields[$j]['label'].': <br />';
+
+                                $value = (empty($fields[$j]['value'])) ? $lang['common']['no'] : $lang['common']['yes'];
+                                $values .= $value.'<br />';
+                            }
+                        }
+                    }
+
+                    $body = str_replace(array('{CUSTOM_FIELDS}', '{CUSTOM_VALUES}'), array($labels, $values), $body);
+                    $swift->set_body($body);
+
+                    $swift->sendmail();
+                }
+            }
+                                
 			break;
 
 		case 'save_calendar':
 
 			$calendar['id']=$_POST['calendar_id'];
 			$calendar['user_id'] = isset($_POST['user_id']) ? ($_POST['user_id']) : $GO_SECURITY->user_id;
+            $calendar['group_id'] = isset($_POST['group_id']) ? ($_POST['group_id']) : 0;
+            if($calendar['group_id'] == 0) $calendar['group_id'] = 1;
 			$calendar['name']=$_POST['name'];
 
 
@@ -745,6 +1082,46 @@ try{
 
 			break;
 
+        
+        case 'save_group':
+
+			$group_id = $group['id'] = isset($_POST['group_id']) ? $_POST['group_id'] : 0;
+
+            if(!$GO_MODULES->modules['calendar']['write_permission'])
+			{
+                throw new AccessDeniedException();
+			}
+
+			if(isset($_POST['user_id']))
+				$group['user_id'] = $_POST['user_id'];
+
+			$fields = array();
+			if(isset($_POST['fields']))
+			{
+				foreach($_POST['fields'] as $field=>$value)
+				{
+					$fields[] = $field;
+				}
+			}
+
+			$group['fields'] = implode(',', $fields);
+
+			$group['name'] = $_POST['name'];
+			if($group['id'] > 0)
+			{
+				$cal->update_group($group);
+				$response['success'] = true;
+			}else
+			{
+				$group['user_id'] = $GO_SECURITY->user_id;
+                $response['acl_admin'] = $group['acl_admin'] = $GO_SECURITY->get_new_acl('group');
+				$response['group_id'] = $cal->add_group($group);
+                
+				$response['success'] = true;
+			}
+			break;
+
+
 		case 'save_portlet':
 			$calendars = json_decode($_POST['calendars'], true);
 			$response['data'] = array();
@@ -763,6 +1140,7 @@ try{
 			}
 			$response['success']=true;
 			break;
+
 	}
 }catch(Exception $e)
 {

@@ -76,5 +76,15 @@ GO.calendar.lang.default_calendar='Default calendar';
 
 GO.calendar.lang.status='Status';
 
+GO.calendar.lang.resource_groups='Resource groups';
+GO.calendar.lang.resource_group='Resource group';
+GO.calendar.lang.resources='Resources';
+GO.calendar.lang.resource='Resource';
+GO.calendar.lang.calendar_group='Calendar group';
+GO.calendar.lang.admins='Administrators';
+GO.calendar.lang.no_group_selected='You have errors in your form. You need to select a group for this resource.';
+
 GO.calendar.lang.visibleCalendars='Visible calendars';
 GO.calendar.lang.visible='Visible';
+
+GO.calendar.lang.group='Group';
