@@ -64,6 +64,10 @@ class users extends db
 				$up_folder['readonly']='1';
 				$up_folder['visible']='1';
 				$files->update_folder($up_folder);
+
+				//correct user_id on child folders
+				echo "Applying user_id recursively".$line_break;
+				$files->update_child_folders_recursively($up_folder['id'], array('user_id'=>$GO_USERS->f('user_id')));
 				//$files->set_readonly($folder['id']);
 
 				$home_dir = 'adminusers/'.$GO_USERS->f('username');

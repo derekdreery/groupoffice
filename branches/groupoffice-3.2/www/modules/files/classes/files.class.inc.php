@@ -1474,6 +1474,19 @@ class files extends db {
 		return $results;
 	}
 
+	public function update_child_folders_recursively($folder_id, $update){
+
+		$files = new files();
+		$files->get_folders($folder_id);
+		while($record = $files->next_record()){
+
+			$this->update_child_folders_recursively($record['id'], $update);
+
+			$update['id']=$record['id'];
+			$this->update_row('fs_folders', 'id', $update);
+		}
+	}
+
 
 	public static function check_database() {
 		global $GO_USERS, $GO_CONFIG, $GO_SECURITY;
@@ -1508,7 +1521,7 @@ class files extends db {
 			}
 			}*/
 
-		echo "Checking user home directories$line_break";
+		/*echo "Checking user home directories$line_break";
 
 
 
@@ -1528,7 +1541,7 @@ class files extends db {
 
 				$fs->update_folder($up_folder);
 			}
-		}
+		}*/
 
 		/*echo 'Correcting id=0'.$line_break;
 
