@@ -55,11 +55,12 @@ class db extends base_db{
 	{
 		global $GO_DB_LINK;
 
+		$link_hash = md5($this->host.$this->user.$this->password.$this->database.$this->port.$this->socket);
 		
 		if(!$this->link)
 		{
-			if(isset($GLOBALS['GO_DB_LINK'])){
-				$this->link = $GLOBALS['GO_DB_LINK'];
+			if(isset($GLOBALS['GO_DB_LINK'][$link_hash])){
+				$this->link = $GLOBALS['GO_DB_LINK'][$link_hash];
 			}else
 			{
 				@$this->link = new MySQLi($this->host, $this->user, $this->password, $this->database, $this->port, $this->socket);
@@ -76,7 +77,7 @@ class db extends base_db{
 				}else
 				{
 					$this->link->set_charset("utf8");
-					$GLOBALS['GO_DB_LINK'] = $this->link;
+					$GLOBALS['GO_DB_LINK'][$link_hash] = $this->link;
 				}
 			}
 		}
