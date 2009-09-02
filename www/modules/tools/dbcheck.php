@@ -38,10 +38,7 @@ $line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
 
 ini_set('max_execution_time', 360);
 
-
-
-
-
+header('Content-Type: text/html; charset=UTF-8');
 
 $db2 = new db();
 $db3 = new db();
@@ -238,6 +235,93 @@ for($i=1;$i<=13;$i++)
 */
 
 
+echo 'Checking for duplicate folders and files'.$line_break;
 
+
+function delete_duplicate_folders(){
+	global $db,$db2,$deleted;
+
+
+	$sql ="SELECT id, parent_id,name FROM fs_folders ORDER BY parent_id ASC, name ASC, ctime ASC";
+	$db->query($sql);
+
+	$deleted_this_time=false;
+
+	$lastrecord['name']='';
+	$lastrecord['parent_id']=-1;
+	$lastrecord['id']=-1;
+	while($record = $db->next_record())
+	{
+		if($record['name']==$lastrecord['name'] && $record['parent_id']==$lastrecord['parent_id'])
+		{
+			$sql = "UPDATE fs_folders SET parent_id=".$lastrecord['id']." WHERE parent_id=".$record['id'];
+			$db2->query($sql);
+
+			$sql = "UPDATE fs_files SET folder_id=".$lastrecord['id']." WHERE folder_id=".$record['id'];
+			$db2->query($sql);
+
+			$sql = "DELETE FROM fs_folders WHERE id=".$record['id'];
+			$db2->query($sql);
+
+			$deleted_this_time=true;
+			$deleted++;
+		}else
+		{
+			$lastrecord=$record;
+		}
+	}
+	if($deleted_this_time)
+	{
+		delete_duplicate_folders();
+	}
+}
+
+delete_duplicate_folders();
+
+echo 'Deleted '.$deleted.' duplicate folders'.$line_break;
+
+
+$deleted=0;
+
+function delete_duplicate_files(){
+	global $db,$db2,$deleted;
+
+
+	$sql ="SELECT id, folder_id,name FROM fs_files ORDER BY folder_id ASC, name ASC, ctime ASC";
+	$db->query($sql);
+
+	$deleted_this_time=false;
+
+	$lastrecord['name']='';
+	$lastrecord['folder_id']=-1;
+	$lastrecord['id']=-1;
+	while($record = $db->next_record())
+	{
+		if($record['name']==$lastrecord['name'] && $record['folder_id']==$lastrecord['folder_id'])
+		{
+			$sql = "DELETE FROM fs_files WHERE id=".$record['id'];
+			$db2->query($sql);
+
+			$deleted_this_time=true;
+			$deleted++;
+		}else
+		{
+			$lastrecord=$record;
+		}
+	}
+	if($deleted_this_time)
+	{
+		delete_duplicate_files();
+	}
+}
+
+delete_duplicate_files();
+echo 'Deleted '.$deleted.' duplicate files'.$line_break;
+
+echo $line_break;
+
+echo 'Starting with module checks '.$line_break;
+
+$GO_EVENTS->fire_event('check_database');
 
 echo 'All Done!'.$line_break;

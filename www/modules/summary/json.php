@@ -39,6 +39,7 @@ try{
 			$announcement = $summary->get_announcement(($_REQUEST['announcement_id']));
 			$user = $GO_USERS->get_user($announcement['user_id']);
 			$announcement['user_name']=String::format_name($user);
+			$announcement['due_time']=Date::get_timestamp($announcement['due_time'], false);
 			$announcement['mtime']=Date::get_timestamp($announcement['mtime']);
 			$announcement['ctime']=Date::get_timestamp($announcement['ctime']);
 			$response['data']=$announcement;

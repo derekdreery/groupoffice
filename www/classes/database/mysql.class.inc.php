@@ -56,7 +56,7 @@ class db extends base_db{
 		global $GO_DB_LINK;
 
 		$link_hash = md5($this->host.$this->user.$this->password.$this->database.$this->port.$this->socket);
-		
+
 		if(!$this->link)
 		{
 			if(isset($GLOBALS['GO_DB_LINK'][$link_hash])){

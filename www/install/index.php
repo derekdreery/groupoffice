@@ -38,10 +38,10 @@ $tasks[] = 'release_notes';
 $tasks[] = 'title';
 //$tasks[] = 'url';
 
-if (!@is__writable($GO_CONFIG->file_storage_path) || !@is__writable($GO_CONFIG->local_path) || !@is__writable($GO_CONFIG->tmpdir))
-{
+//if (!@is__writable($GO_CONFIG->file_storage_path) || !@is__writable($GO_CONFIG->local_path) || !@is__writable($GO_CONFIG->tmpdir))
+//{
 	$tasks[] = 'userdir';
-}
+//}
 
 /*if($CONFIG_FILE=='/etc/groupoffice/config.php' && @file_exists('/etc/groupoffice/config-db.php'))
 {
@@ -70,11 +70,11 @@ $tasks[] = 'theme';
 
 $tasks[] = 'new_database';
 
-if(!isset($dbconn))
-{	
+//if(!isset($dbconn))
+//{
 	$tasks[] = 'create_database';
 	$tasks[] = 'database_connection';
-}
+//}
 
 $tasks[] = 'database_structure';
 //$tasks[] = 'allow_password_change';
