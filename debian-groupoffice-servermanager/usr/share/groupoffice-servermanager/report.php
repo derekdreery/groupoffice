@@ -3,9 +3,11 @@
 if(isset($argv[1]))
 	define('CONFIG_FILE', $argv[1]);
 
-require('/usr/share/groupoffice/Group-Office.php');
-
 require('/etc/groupoffice/servermanager.inc.php');
+
+$go_src_path = isset($sm_config['go_src_path']) ? $sm_config['go_src_path'] : '/usr/share/groupoffice/';
+require($go_src_path.'Group-Office.php');
+
 
 if(!isset($GO_MODULES->modules['serverclient'])) {
 	die('Fatal error: serverclient module must be installed');
