@@ -349,7 +349,6 @@ class cached_imap extends imap{
 				foreach($new_messages as $message)
 				{
 					//trim values for mysql insertion
-					debug($message['to']);
 					$message['to']=substr($message['to'],0, 255);
 					$message['subject']=substr($message['subject'],0,100);
 					$message['from']=substr($message['from'],0,100);
@@ -391,7 +390,7 @@ class cached_imap extends imap{
 
 	function get_filtered_message_headers($uids)
 	{
-		$messages=array();
+		
 		$this->filtered=array();
 		for ($i=0;$i<sizeof($this->filters);$i++)
 		{
@@ -404,7 +403,7 @@ class cached_imap extends imap{
 			return $new_messages;
 		}
 
-		while($message = array_shift($new_messages))
+		foreach($new_messages as $message)
 		{
 			if($message['new']=='1')
 			{
@@ -426,8 +425,7 @@ class cached_imap extends imap{
 					//message was filtered so dont't add it
 					continue;
 				}
-			}
-			$messages[]=$message;
+			}			
 		}
 
 		for ($i=0;$i<sizeof($this->filters);$i++)
@@ -438,7 +436,7 @@ class cached_imap extends imap{
 				{
 					$ret = $this->set_message_flag($this->mailbox, $this->filters[$i]['uids'], "\\Seen");
 				}
-				if(parent::move($this->filters[$i]["folder"], $this->filters[$i]['uids'],false))
+				if(parent::move($this->utf7_imap_encode($this->filters[$i]["folder"]), $this->filters[$i]['uids'],false))
 				{
 					foreach($this->filters[$i]['uids'] as $uid)
 					{
@@ -457,7 +455,20 @@ class cached_imap extends imap{
 
 			$this->delete_cached_messages($this->filtered);
 		}
-		return $messages;
+
+
+		if(count($this->filtered)){
+			$messages=array();
+			while($message = array_shift($new_messages)){
+				if(!in_array($message['uid'], $this->filtered)){
+					$messages[]=$message;
+				}				
+			}
+			return $messages;
+		}else
+		{
+			return $new_messages;
+		}
 	}
 
 
