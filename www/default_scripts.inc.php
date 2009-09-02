@@ -294,4 +294,30 @@ if(file_exists($GO_THEME->theme_path.'MainLayout.js')) {
 	echo '<script src="'.$GO_THEME->theme_url.'MainLayout.js" type="text/javascript"></script>';
 	echo "\n";
 }
+
 ?>
+
+<script type="text/javascript">
+<?php
+if(isset($_GET['module']))
+{
+    $module = isset($_GET['module']) ? $_GET['module'] : false;
+    $function = isset($_GET['function']) ? $_GET['function'] : false;
+    $params = isset($_GET['params']) ? ($_GET['params']) : false;
+
+    if($module && $function && $params)
+    {
+    ?>
+    if(GO.<?php echo $module; ?>)
+    {
+        GO.mainLayout.onReady(function(){
+            GO.<?php echo $module; ?>.<?php echo $function; ?>({
+                values: <?php echo $params; ?>
+            });
+        });
+    }
+    <?php
+    }
+}
+?>
+</script>
