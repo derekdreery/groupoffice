@@ -1,4 +1,4 @@
-2009/09/02 3.2.31
+2009/09/02 3.2.32
 - Put all the relevant scripts together in the database check to make it simpler
 - Small bug fixes
 
