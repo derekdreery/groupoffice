@@ -10,7 +10,8 @@
  *
  */
 
-$line_break=isset($_SERVER['SERVER_NAME']) ? $line_break : "\n";
+$line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
+
 
 if(isset($argv[1]))
 {
