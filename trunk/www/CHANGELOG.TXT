@@ -1,3 +1,7 @@
+2009/09/02 3.2.32
+- Put all the relevant scripts together in the database check to make it simpler
+- Small bug fixes
+
 2009/08/28 3.2.31
 - Detect import encoding in addressbook, calendar and tasks
 - Fixed small bugs
