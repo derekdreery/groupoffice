@@ -700,8 +700,9 @@ class String {
 	 */
 	function convert_html($html, $block_external_images=false, &$replace_count=0) {
 
-		$html = str_replace("\r", '', $html);
-		$html = str_replace("\n",' ', $html);
+		//don't do this because it will mess up <pre></pre> tags
+		//$html = str_replace("\r", '', $html);
+		//$html = str_replace("\n",' ', $html);
 
 		//remove strange white spaces in tags first
 		//sometimes things like this happen <style> </ style >

@@ -404,7 +404,11 @@ try{
 			{
 				$mime = strtolower($parts[$i]["mime"]);
 
-				if (!$imap->part_is_attachment($parts[$i]))
+				//var_dump($parts[$i]);
+
+				if (empty($response['data']['body']) &&
+					(!eregi('attachment', $parts[$i]["disposition"])) &&
+					(eregi('html', $mime) || eregi('plain', $mime) || $mime == "text/enriched" || $mime == "unknown/unknown"))
 				{
 					switch ($mime)
 					{
@@ -820,8 +824,7 @@ try{
 					{
 						$part_body = $imap->view_part($uid, $part["number"], $part["transfer"], $part["charset"]);
 
-						//echo $part_body= iconv("UTF-8","UTF-8//IGNORE",$part_body);
-						//$part_body = String::clean_utf8($part_body);
+						//debug($part_body);
 
 						switch($mime)
 						{
@@ -1030,9 +1033,9 @@ try{
 										case 'move':
 											$from_mailbox = $_REQUEST['from_mailbox'];
 											$to_mailbox = $_REQUEST['to_mailbox'];
-											
+
 											$response['success']=$imap->move($to_mailbox,$messages);
-											
+
 											$nocache=true;
 											break;
 									}
@@ -1493,6 +1496,6 @@ if(defined('IMAP_CONNECTED'))
 
 
 
-	
+
 //var_dump($response);
 echo json_encode($response);
