@@ -39,5 +39,5 @@ while($GO_USERS->next_record())
 $group['id'] = 1;
 $group['user_id']=1;
 $group['name']=$lang['calendar']['calendars'];
-$group['acl_admin'] = $GO_SECURITY->get_new_acl('group');
+$group['acl_admin'] = $GO_SECURITY->get_new_acl('resource_group');
 $cal->add_group($group);

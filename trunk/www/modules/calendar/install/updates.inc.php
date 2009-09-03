@@ -35,3 +35,8 @@ $updates[]="CREATE TABLE IF NOT EXISTS `cf_1` (
   `link_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`link_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$acl = $GO_SECURITY->get_new_acl('resource_group', 1);
+$updates[]="INSERT INTO `cal_groups` (`id`, `user_id`, `name`, `acl_admin`, `fields`) VALUES (1, 1, 'Calendars', ".$acl.", '');";
+
+?>
