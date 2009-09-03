@@ -893,8 +893,8 @@ class vcard_property {
 					break;
 				case "work_phone" :
 					$this->name = "TEL";
-					$this->parm_types[] = "WORK";
-					$this->values[] = $value;
+					$this->parm_types[0] = "WORK";
+					$this->values[0] = $value;
 					break;
 				case "fax" :
 					$this->name = "TEL";
