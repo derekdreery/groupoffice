@@ -8,3 +8,4 @@ DROP TABLE IF EXISTS `cal_views_calendars`;
 DROP TABLE IF EXISTS `go_links_1`;
 DROP TABLE IF EXISTS `cal_settings`;
 DROP TABLE IF EXISTS `cal_groups`;
+DROP TABLE IF EXISTS `cf_1`;

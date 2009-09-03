@@ -811,7 +811,12 @@ try{
 					$delete_groups = json_decode($_POST['delete_keys']);
 					foreach($delete_groups as $group_id)
 					{
-						$cal->delete_group(addslashes($group_id));
+                        $cal->get_calendars_by_group_id($group_id);
+						while($cal->next_record())
+						{
+                            $cal2->delete_calendar($cal->f('id'));
+						}
+						$cal->delete_group($group_id);                        
 					}
 				}catch(Exception $e)
 				{

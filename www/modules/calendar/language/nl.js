@@ -76,3 +76,5 @@ GO.calendar.lang.visibleCalendars='Zichtbare agenda\'s';
 GO.calendar.lang.visible='Zichtbaar';
 
 GO.calendar.lang.group='Groep';
+GO.calendar.lang.no_status='Nieuw';
+GO.calendar.lang.no_custom_fields='Er zijn geen extra opties beschikaar.';

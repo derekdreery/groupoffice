@@ -27,8 +27,7 @@ GO.calendar.CalendarDialog = function(config)
 		anchor: '100% 100%',		
 		autoHeight:true,
 		cls:'go-form-panel',
-		labelWidth: 75,
-   
+		labelWidth: 75, 
 		items: [
 			this.selectUser = new GO.form.SelectUser({
 				fieldLabel: GO.lang.strUser,
@@ -44,7 +43,7 @@ GO.calendar.CalendarDialog = function(config)
 			}),
             this.selectGroup = new GO.form.ComboBox({
                 hiddenName:'group_id',
-                fieldLabel:GO.groups.lang.group,
+                fieldLabel:GO.calendar.lang.group,
                 valueField:'id',
                 displayField:'name',
                 id:'resource_groups',

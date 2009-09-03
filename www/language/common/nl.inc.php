@@ -173,4 +173,9 @@ $lang['common']['links']='Links';
 $lang['common']['GOwebsite']='Group-Office website';
 $lang['common']['GOisAProductOf']='<i>Group-Office</i> is een product van <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
 
+$lang['common']['yes']='Ja';
+$lang['common']['no']='Nee';
+
 $lang['common']['system']='Systeem';
+
+$lang['common']['goAlreadyStarted']='Group-Office was already started. The dialog created by {FUNCTION} is loaded in Group-Office. You can now close this window and continue working in your Group-Office.';

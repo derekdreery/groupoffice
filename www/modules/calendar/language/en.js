@@ -88,3 +88,5 @@ GO.calendar.lang.visibleCalendars='Visible calendars';
 GO.calendar.lang.visible='Visible';
 
 GO.calendar.lang.group='Group';
+GO.calendar.lang.no_status='New';
+GO.calendar.lang.no_custom_fields='There are no extra options available.';

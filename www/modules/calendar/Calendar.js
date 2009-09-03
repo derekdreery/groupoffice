@@ -102,8 +102,12 @@ GO.calendar.MainPanel = function(config){
 
     this.calendarList = new GO.grid.GridPanel({
         border: false,
-        store: this.calendarsStore,
+        id:'acc_calendars',        
+        title:GO.calendar.lang.calendars,
+        layout:'fit',
+        store: this.calendarsStore,       
         cls: 'go-grid3-hide-headers',
+        autoScroll:true,
         columns:[{
             header:GO.lang.strName,
             dataIndex: 'name',
@@ -111,16 +115,19 @@ GO.calendar.MainPanel = function(config){
             width:188
         }],
         view:new Ext.grid.GridView({
-            forceFit:true,
-            autoFill:true
+            forceFit:true
         }),
         sm: new Ext.grid.RowSelectionModel()
     });
 
     this.viewsList = new GO.grid.GridPanel({
         border: false,
+        id:'acc_views',
+        title:GO.calendar.lang.views,
+        layout:'fit',
         store: this.viewsStore,
         cls: 'go-grid3-hide-headers',
+        autoScroll:true,
         columns:[{
             header:GO.lang.strName,
             dataIndex: 'name',
@@ -136,8 +143,12 @@ GO.calendar.MainPanel = function(config){
 
     this.resourcesList = new GO.grid.GridPanel({
         border: false,
+        id:'acc_resources',
+        title:GO.calendar.lang.resources,
+        layout:'fit',
         store: this.resourcesStore,
         cls: 'go-grid3-hide-headers',
+        autoScroll:true,
         columns:[{
             header:GO.lang.strName,
             dataIndex: 'name',
@@ -230,7 +241,23 @@ GO.calendar.MainPanel = function(config){
 	}, this);
 
 
-    
+    this.calendarListPanel = new Ext.Panel({
+        id:'navigation-panel',
+        border:false,
+        region:'center',
+        layout:'accordion',
+        layoutConfig:{
+            titleCollapse:true,
+            animate:false,
+            activeOnTop:false
+        }
+    });
+
+    this.calendarListPanel.add(this.calendarList);
+    this.calendarListPanel.add(this.viewsList);
+    this.calendarListPanel.add(this.resourcesList);
+
+
 
 	this.daysGridStore = new GO.data.JsonStore({
 
@@ -291,37 +318,7 @@ GO.calendar.MainPanel = function(config){
 	});
 
 	this.listStore = this.listGrid.store;
-
-
-    this.calendarListPanel = new Ext.Panel({
-        id:'navigation-panel',                
-        border:false,
-        region:'center',
-        layout:'accordion',       
-        layoutConfig:{
-            titleCollapse:true,
-            animate:false,
-            activeOnTop:false
-        }
-    });
-    this.calendarListPanel.add(new Ext.Panel({
-        id:'acc_calendars',
-        autoScroll:true,
-        title:GO.calendar.lang.calendars,
-        items:this.calendarList
-    }));
-    this.calendarListPanel.add(new Ext.Panel({
-        id:'acc_views',
-        autoScroll:true,
-        title:GO.calendar.lang.views,
-        items:this.viewsList
-    }));
-    this.calendarListPanel.add(new Ext.Panel({
-        id:'acc_resources',
-        autoScroll:true,
-        title:GO.calendar.lang.resources,
-        items:this.resourcesList
-    }));
+ 
 
 
 	this.displayPanel = new Ext.Panel({
@@ -603,7 +600,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		GO.calendar.MainPanel.superclass.afterRender.call(this);
 
 
-  	
+
 		//couldn't add key events to panels so I add this event to the whole doc
 			
 		
@@ -697,6 +694,11 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
                         }
                     }
                 }
+                if(!this.calendarsStore.data.length)
+                {
+                    this.calendarsList.setVisible(false);
+                    this.calendarListPanel.doLayout();
+                }
 			},
 			scope:this			
 		});
@@ -721,6 +723,11 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
                         }
                     }
                 }
+                if(!this.viewsStore.data.length)
+                {
+                    this.viewsList.setVisible(false);
+                    this.calendarListPanel.doLayout();
+                }
             },
             scope:this
         });
@@ -744,6 +751,11 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
                             this.calendarTitle.setText(title);
                         }
                     }
+                }
+                if(!this.resourcesStore.data.length)
+                {
+                    this.resourcesList.setVisible(false);
+                    this.calendarListPanel.doLayout();
                 }
             },
             scope:this
@@ -1550,15 +1562,36 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			this.groupsGrid = new GO.calendar.GroupsGrid({
                 title:GO.calendar.lang.resource_groups,
                 layout:'fit',
-                store:GO.calendar.groupsStore
+                store:GO.calendar.groupsStore,
+                deleteConfig: {
+					callback:function(){
+                        this.writableResourcesStore.reload();
+						this.resourcesStore.reload();
+					},
+					scope:this
+				}
             });
 			            
             this.resourcesGrid = new GO.calendar.ResourcesGrid({
                 title:GO.calendar.lang.resources,
                 layout:'fit',
-                store:this.writableResourcesStore
+                id:'resources-grid',
+                store:this.writableResourcesStore,
+                deleteConfig: {
+					callback:function(){
+						this.resourcesStore.reload();
+					},
+					scope:this
+				}
             })          			
 
+            var items = [this.calendarsGrid, this.viewsGrid];
+            if(GO.settings.modules['calendar']['write_permission'])
+            {
+                items.push(this.groupsGrid);
+                items.push(this.resourcesGrid);
+            }
+            
 			this.adminDialog = new Ext.Window({
 				title: GO.calendar.lang.administration,
 				layout:'fit',
@@ -1567,26 +1600,25 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				minHeight:300,
 				height:400,
 				width:600,
-				closeAction:'hide',
-				
+				closeAction:'hide',				
 				items: new Ext.TabPanel({
-					border:false,
-					activeTab:0,
-					items:[this.calendarsGrid, this.viewsGrid, this.groupsGrid, this.resourcesGrid]
-				}),
+                    border:false,
+                    activeTab:0,
+                    items:items
+                }),
 				buttons:[{
 					text:GO.lang.cmdClose,
 					handler: function(){
 						this.adminDialog.hide()
-						},
+                    },
 					scope: this
 				}]
 			});
 			
 		}
-		
+
 		this.adminDialog.show();			
-	}	
+    }
 });
 
 
