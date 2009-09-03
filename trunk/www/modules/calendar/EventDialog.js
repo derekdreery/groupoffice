@@ -272,7 +272,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
                     this.initCustomFields(action.result.data.group_id);
 
                     this.changeRepeat(action.result.data.repeat_type);
-                    this.setValues(config.values);
+                    this.setValues(config.values);                    
                     // this.participantsPanel.setDisabled(false);
 
                     this.setWritePermission(action.result.data.write_permission);
@@ -296,15 +296,15 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
                                 var p = this.resourcesPanel.getComponent('group_'+record.id);
                                 var r = resources[j].id;
                                 var c = p.getComponent(r);
-                                var l = c.getComponent('status_'+r)
 
                                 if(resources_checked.indexOf(r) != -1)
                                 {
-                                    l.container.up('div.x-form-item').setDisplayed(true);
                                     c.expand();
                                 }else
                                 {
-                                    l.container.up('div.x-form-item').setDisplayed(false);
+                                    var l = c.getComponent('status_'+r);
+                                    l.setValue(GO.calendar.lang.no_status);
+                                    
                                     c.collapse();
                                 }
                             }
@@ -416,10 +416,11 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
                     var p = this.resourcesPanel.getComponent('group_'+record.id);
                     var r = resources[j].id;
                     var c = p.getComponent(r);
-                    var l = c.getComponent('status_'+r)
+
+                    var l = c.getComponent('status_'+r);
+                    l.setValue(GO.calendar.lang.no_status);
                     
-                    c.collapse();
-                    l.container.up('div.x-form-item').setDisplayed(false);
+                    c.collapse();                    
                 }
             }
 
@@ -1373,27 +1374,27 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
             for(var j=0; j<resources.length; j++)
             {
                 var resourceOptions = [];
+
+                var pfieldStatus = new GO.form.PlainField({
+                    id:'status_'+resources[j].id,
+                    name:'status_'+resources[j].id,
+                    fieldLabel: GO.calendar.lang.status
+                });
+                resourceOptions.push(pfieldStatus);
+                this.formPanel.form.add(pfieldStatus);
+
                 for(var k=0; k<record.fields.length; k++)
                 {
                     var field = record.fields[k];
 
-                    if(GO.customfields && GO.customfields.types["1"])
+                    if(field && GO.customfields && GO.customfields.types["1"])
                     {
                         for(var l=0; l<GO.customfields.types["1"].panels.length; l++)
                         {
                             var cfield = 'cf_category_'+GO.customfields.types["1"].panels[l].category_id;
                             if(cfield == field)
                             {
-                                var pfieldStatus = new GO.form.PlainField({
-                                    id:'status_'+resources[j].id,
-                                    name:'status_'+resources[j].id,
-                                    fieldLabel: GO.calendar.lang.status,
-                            		value: ''
-                                });
-                                resourceOptions.push(pfieldStatus);
-                                this.formPanel.form.add(pfieldStatus);
-
-                                var cf = GO.customfields.types["1"].panels[l].customfields;                                                                
+                                var cf = GO.customfields.types["1"].panels[l].customfields;
                                 for(var m=0; m<cf.length; m++)
                                 {
                                     newFormField = GO.customfields.getFormField(cf[m],{
@@ -1403,10 +1404,18 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
                                     resourceOptions.push(newFormField);
                                     this.formPanel.form.add(newFormField);
                                 }
-                                
+
                                 l = GO.customfields.types["1"].panels.length;
                             }
                         }
+                    }
+                    else
+                    {
+                        resourceOptions.push(new GO.form.PlainField({
+                            name:'no_fields_'+resources[j].id,
+                            hideLabel:true,
+                            value: GO.calendar.lang.no_custom_fields
+                        }));
                     }
                 }
                 

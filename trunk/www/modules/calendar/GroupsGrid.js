@@ -48,6 +48,7 @@ GO.calendar.GroupsGrid = function(config){
 		},
 		scope: this
 	},{
+        id: 'delete',
 		iconCls: 'btn-delete',
 		text: GO.lang['cmdDelete'],
 		cls: 'x-btn-text-icon',
@@ -65,6 +66,7 @@ GO.calendar.GroupsGrid = function(config){
 		var record = grid.getStore().getAt(rowIndex);	
 		this.groupDialog.show(record.data.id);
 	}, this);
+
 
     this.on('show', function(){
         if(!this.store.loaded)
