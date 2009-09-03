@@ -820,8 +820,7 @@ try{
 					{
 						$part_body = $imap->view_part($uid, $part["number"], $part["transfer"], $part["charset"]);
 
-						//echo $part_body= iconv("UTF-8","UTF-8//IGNORE",$part_body);
-						//$part_body = String::clean_utf8($part_body);
+						//debug($part_body);
 
 						switch($mime)
 						{
