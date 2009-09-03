@@ -22,8 +22,6 @@ $updates[]="ALTER TABLE `cal_settings` ADD INDEX ( `calendar_id` )";
 
 $updates[]="ALTER TABLE `cal_calendars` ADD `shared_acl` BOOL NOT NULL ";
 
-
-$updates[]="DROP TABLE IF EXISTS `cal_groups`;";
 $updates[]="CREATE TABLE IF NOT EXISTS `cal_groups` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
