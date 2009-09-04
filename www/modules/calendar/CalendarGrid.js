@@ -302,17 +302,21 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			{tag: 'td', style: 'width:40px'}, true);
 	
 		var timeFormat;
-
+		
+		var timeColHeight = (((this.rowHeight+1)*this.rowsPerHour)-1);
+		
 		for (var i = 0;i<this.scale;i+=this.rowsPerHour)
 		{	
 			timeformat = GO.settings.time_format.substr(0,1)=='G' ? 'G:i' : 'g a';
 				Ext.DomHelper.append(timeCol,
-					{tag: 'div', id: 'head'+i, cls: "x-calGrid-timeHead", html: Date.parseDate(i/this.rowsPerHour, "G").format(timeformat), style: 'width:40px;height:'+(((this.rowHeight+1)*this.rowsPerHour)-1)+'px'}, true);
+					{tag: 'div', id: 'head'+i, cls: "x-calGrid-timeHead", html: Date.parseDate(i/this.rowsPerHour, "G").format(timeformat), style: 'width:40px;height:'+timeColHeight+'px'}, true);
 		}
 		
 		this.gridCells=[];
 		
 		var dayColumn, className, cell;
+		
+		var cellHtml = Ext.isIE6 ? '<p style="line-height:0px;"></p>' : '';
 		
 		for(var day=0;day<this.days;day++)
 		{	
@@ -339,8 +343,10 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 					className = "x-calGrid-blankRow";
 				}
 				
+				
+				
 				cell = Ext.DomHelper.append(dayColumn,
-					{tag: 'div', id: 'day'+day+'_row'+i, cls: className, style: 'height:'+this.rowHeight+'px'}, true);
+					{tag: 'div', id: 'day'+day+'_row'+i, cls: className, style: 'height:'+(this.rowHeight)+'px;', html:cellHtml}, true);
 				
 				this.gridCells[day].push(cell);		
 				

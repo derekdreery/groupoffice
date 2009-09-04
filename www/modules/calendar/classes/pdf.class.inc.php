@@ -10,6 +10,7 @@ class PDF extends TCPDF
 
 	var $font_size=9;
 	var $cell_height=12;
+	var $calendar;
 
 	function __construct()
 	{
@@ -136,9 +137,13 @@ class PDF extends TCPDF
 		$this->date_range_text = $this->days > 1 ? date($_SESSION['GO_SESSION']['date_format'], $start_time).' - '.date($_SESSION['GO_SESSION']['date_format'], $end_time) : date($_SESSION['GO_SESSION']['date_format'], $start_time);		
 	}
 
+	function setCurrentCalendar($calendar){
+		$this->calendar=$calendar;
+	}
+
 	function addCalendar($events, $list=true, $headers=true, $calendar_name='')
 	{
-		global $lang;
+		global $lang, $GO_SECURITY;
 		
 		for($i=0;$i<$this->days;$i++)
 		{
@@ -151,6 +156,12 @@ class PDF extends TCPDF
 			$index_time = mktime(0,0,0,$date['mon'], $date['mday'], $date['year']);			
 			while($index_time<=$event['end_time'] && $index_time<$this->end_time)
 			{
+				if($this->calendar['user_id']!=$GO_SECURITY->user_id && !empty($event['private'])){
+					$event['name']=$lang['calendar']['private'];
+					$event['description']='';
+					$event['location']='';
+				}
+
 				$cellIndex = floor(($index_time-$this->start_time)/86400);
 				$index_time = Date::date_add($index_time,1);
 				$cellEvents[$cellIndex][]=$event;
@@ -337,6 +348,7 @@ class PDF extends TCPDF
 					$this->SetFont($this->font,'',$this->font_size);
 					while($event = array_shift($cellEvents[$i]))
 					{
+						
 
 						$this->H4($event['name']);
 						

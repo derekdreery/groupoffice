@@ -33,8 +33,10 @@ if(!empty($_REQUEST['view_id']))
 	$cal2 = new calendar();
 	$first = true;
 	$even=false;
-	while($cal->next_record())
-	{		
+	while($calendar=$cal->next_record())
+	{
+		$pdf->setCurrentCalendar($calendar);
+		
 		$events = $cal2->get_events_in_array(array($cal->f('id')), 0, $start_time, $end_time);
 		//$pdf->H3($cal->f('name'));
 		$pdf->addCalendar($events, false,$first, $cal->f('name'));
@@ -43,6 +45,7 @@ if(!empty($_REQUEST['view_id']))
 }else
 {
 	$calendar = $cal->get_calendar($_REQUEST['calendar_id']);
+	$pdf->setCurrentCalendar($calendar);
 	$title=$calendar['name'];
 	$pdf->setParams($calendar['name'], $start_time, $end_time);
 	$events = $cal->get_events_in_array(array($_REQUEST['calendar_id']), 0, $start_time, $end_time);
