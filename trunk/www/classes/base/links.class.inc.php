@@ -75,7 +75,7 @@ class GO_LINKS extends db
 		$sql = "SELECT * FROM go_link_folders";
 		if($parent_id)
 		{
-			$sql .= " WHERE parent_id=$parent_id";
+			$sql .= " WHERE parent_id=".intval($parent_id);
 		}else
 		{
 			$sql .= " WHERE link_id=".$this->escape($link_id)." AND link_type=".$this->escape($link_type)." AND parent_id=0";
@@ -97,7 +97,7 @@ class GO_LINKS extends db
 			$links->delete_folder($this->f('id'));	
 		}
 		
-		$sql = "DELETE FROM go_links_".$folder['link_type']." WHERE folder_id=".$this->escape($folder_id);
+		$sql = "DELETE FROM go_links_".intval($folder['link_type'])." WHERE folder_id=".$this->escape($folder_id);
 		$this->query($sql);
 		
 		$sql = "DELETE FROM go_link_folders WHERE id=".$this->escape($folder_id);
@@ -160,8 +160,8 @@ class GO_LINKS extends db
 	
 	function link_exists($link_id1, $type1, $link_id2, $type2)
 	{
-		$sql = "SELECT * FROM go_links_$type1 WHERE ".
-			"`id`=$link_id1 AND link_type=$type2 AND `link_id`=$link_id2";
+		$sql = "SELECT * FROM go_links_".intval($type1)." WHERE ".
+			"`id`=".intval($link_id1)." AND link_type=".intval($type2)." AND `link_id`=".intval($link_id2);
 		$this->query($sql);
 		return $this->next_record();
 	}
@@ -172,23 +172,23 @@ class GO_LINKS extends db
 		//{
 			if($link_id2>0)
 			{
-				$sql = "DELETE FROM go_links_$type1 WHERE id=".$this->escape($link_id1)." AND link_type=".$this->escape($type2)." AND link_id=".$this->escape($link_id2);
+				$sql = "DELETE FROM go_links_".intval($type1)." WHERE id=".$this->escape($link_id1)." AND link_type=".$this->escape($type2)." AND link_id=".$this->escape($link_id2);
 				$this->query($sql);
 				
-				$sql = "DELETE FROM go_links_$type2 WHERE id=".$this->escape($link_id2)." AND link_type=".$this->escape($type1)." AND link_id=".$this->escape($link_id1);
+				$sql = "DELETE FROM go_links_".intval($type2)." WHERE id=".$this->escape($link_id2)." AND link_type=".$this->escape($type1)." AND link_id=".$this->escape($link_id1);
 				$this->query($sql);
 			}else
 			{
-				$sql = "SELECT * FROM go_links_$type1 WHERE id=".$this->escape($link_id1);
+				$sql = "SELECT * FROM go_links_".intval($type1)." WHERE id=".$this->escape($link_id1);
 				$this->query($sql);
 				
 				$db = new db();
 				
 				while($this->next_record())
 				{
-					$db->query("DELETE FROM go_links_".$this->f('link_type')." WHERE link_id=".$this->escape($link_id1)." AND link_type=".$this->escape($type1));					
+					$db->query("DELETE FROM go_links_".intval($this->f('link_type'))." WHERE link_id=".$this->escape($link_id1)." AND link_type=".$this->escape($type1));
 				}
-				$this->query("DELETE FROM go_links_$type1 WHERE id=".$this->escape($link_id1));
+				$this->query("DELETE FROM go_links_".intval($type1)." WHERE id=".$this->escape($link_id1));
 			}
 		//}
 		return true;
@@ -198,7 +198,7 @@ class GO_LINKS extends db
 	{
 		if($link_id > 0)
 		{
-			$sql = "SELECT * FROM go_links_$type WHERE id=".$this->escape($link_id);
+			$sql = "SELECT * FROM go_links_".intval($type)." WHERE id=".$this->escape($link_id);
 			$this->query($sql);
 			return $this->next_record();
 		}

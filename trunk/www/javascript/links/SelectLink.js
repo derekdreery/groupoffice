@@ -27,13 +27,14 @@ GO.form.SelectLink = function(config){
 				remoteSort: true
 				
 			});
-			
+
+	config.forceSelection=true;
 	config.displayField='type_name';
 	config.valueField='link_and_type',
 	config.hiddenName='link';
   config.triggerAction='all';
 	config.width=400;
-	config. selectOnFocus=false;
+	config.selectOnFocus=false;
   config.fieldLabel=GO.lang.cmdLink;
 	config.pageSize=parseInt(GO.settings['max_rows_list']);
 	GO.form.SelectLink.superclass.constructor.call(this, config);

@@ -279,28 +279,24 @@ background-color: #F1F1F1 !important;
 .x-calGrid-blankRow{
 	border-top:1px dotted #f1f1f1;
 	border-right:3px double #DDDDDD;
-	height:20px;
 	background-color:#fff;
 }
 
 .x-calGrid-hourRow{
 	border-top:1px solid #DDDDDD;
 	border-right:3px double #DDDDDD;
-	height:20px;
 	background-color:#fff;
 }
 
 .x-calGrid-halfhourRow{
 	border-top:1px dotted #DDDDDD;
 	border-right:3px double #DDDDDD;
-	height:20px;
 	background-color:#fff;
 }
 
 .x-calGrid-timeHead{
 	background-color:#f1f1f1;
 	width:40px !important;
-	height:20px;
 	border-top:1px solid #DDDDDD;
 	border-right:1px solid #DDDDDD;
 	text-align:right;

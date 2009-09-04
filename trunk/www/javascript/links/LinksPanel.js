@@ -132,16 +132,19 @@ GO.grid.LinksPanel = function(config){
 
 	
 	this.linksGrid.on('rowcontextmenu', function(grid, rowIndex,e){
+
+		e.stopEvent();
 		
-		var type = '';
-		var selections = selModel.getSelections();
-		if(selections.length=='1')
-		{				
-  		type = selections[0].data.link_type;				
-		}
-		
+		var sm =grid.getSelectionModel();
+    if(sm.isSelected(rowIndex) !== true) {
+      sm.clearSelections();
+      sm.selectRow(rowIndex);
+    }
+
+
 		var coords = e.getXY();
-		this.linksContextMenu.showAt([coords[0], coords[1]], selModel.selections.keys, type);
+		this.linksContextMenu.showAt([coords[0], coords[1]], sm.selections.keys);
+
 	}, this)
 	
 	
@@ -185,13 +188,11 @@ GO.grid.LinksPanel = function(config){
 	}, this);
 	
 	this.linksContextMenu.on('delete', function(menu,selections){
-		
+		this.linksGrid.deleteSelected();
 	}, this);
 	
 	this.linksContextMenu.on('unlink', function(menu,selections){
-		this.linksGrid.store.baseParams['unlinks']=Ext.encode(selections);
-		this.linksGrid.store.reload();
-		delete this.linksGrid.store.baseParams['unlinks'];
+		this.unlinkSelected();
 	}, this);
 	
 	config['layout']='border';
@@ -216,17 +217,7 @@ GO.grid.LinksPanel = function(config){
 				cls: 'x-btn-text-icon',
 				handler: function() {
 					
-					var unlinks = [];
-	
-					var selectionModel = this.linksGrid.getSelectionModel();
-					var records = selectionModel.getSelections();
-					
-					if(records.length>0)
-					{
-						this.linksGrid.store.baseParams['unlinks']=Ext.encode(selectionModel.selections.keys);
-						this.linksGrid.store.reload();
-						delete this.linksGrid.store.baseParams['unlinks'];
-					}
+					this.unlinkSelected();
 				},
 				scope: this
 			}),this.newFolderButton = new Ext.Button({
@@ -306,6 +297,19 @@ Ext.extend(GO.grid.LinksPanel, Ext.Panel, {
 		if(this.isVisible())
 		{
 			this.onShow();
+		}
+	},
+
+	unlinkSelected : function(){
+
+		var selectionModel = this.linksGrid.getSelectionModel();
+		var records = selectionModel.getSelections();
+
+		if(records.length>0)
+		{
+			this.linksGrid.store.baseParams['unlinks']=Ext.encode(selectionModel.selections.keys);
+			this.linksGrid.store.reload();
+			delete this.linksGrid.store.baseParams['unlinks'];
 		}
 	},
 	

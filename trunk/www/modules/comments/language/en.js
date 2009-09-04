@@ -9,5 +9,5 @@
 
 GO.comments.lang.comment="Comment";
 GO.comments.lang.comments="Comments";
-GO.comments.lang.fiveLatestComments='5 latest comments';
+GO.comments.lang.recentComments='Recent comments';
 GO.comments.lang.browseComments = 'Browse comments';
