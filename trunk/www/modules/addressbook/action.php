@@ -252,13 +252,13 @@ try
 			{
 				throw new Exception($lang['common']['missingField']);
 			} else {
-				$existing_ab = $ab->get_addressbook_by_name($name);
+				//$existing_ab = $ab->get_addressbook_by_name($name);
 
 
 				if ($addressbook_id < 1)
 				{
 					#insert
-					if ($existing_ab)
+					/*if ($existing_ab)
 					{
 						throw new Exception($lang['common']['addressbookAlreadyExists']);
 					}
@@ -269,7 +269,7 @@ try
 						{
 							throw new AccessDeniedException();
 						}
-					}
+					}*/
 
 					if(!$GO_MODULES->modules['addressbook']['write_permission'])
 					{
@@ -284,10 +284,10 @@ try
 					$result['acl_write'] = $addressbook['acl_write'];
 				} else {
 					#update
-					if ($existing_ab && $existing_ab['id'] != $addressbook_id)
+					/*if ($existing_ab && $existing_ab['id'] != $addressbook_id)
 					{
 						throw new Exception($lang['common']['addressbookAlreadyExists']);
-					}
+					}*/
 					
 					$addressbook['id']=$addressbook_id;
 					
