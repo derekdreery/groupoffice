@@ -123,6 +123,7 @@ if($GO_CONFIG->debug || !file_exists($path)) {
 
 
 	include($GO_LANGUAGE->get_base_language_file('countries'));
+	//array_multisort($countries);
 	$fp=fopen($GO_CONFIG->local_path.'cache/countries.js','w');
 
 	foreach($countries as $key=>$country) {
