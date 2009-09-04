@@ -37,9 +37,13 @@ GO.form.SelectCountry = function(config){
 
 		GO.countriesStore = new Ext.data.SimpleStore({
 					fields: ['iso', 'name'],
-					data : countries
+					data : countries,
+					sortInfo: {
+							field: 'name',
+							direction: 'ASC' // or 'DESC' (case sensitive for local sorting)
+					}
 			});
-		GO.countriesStore.sort('name');
+		//GO.countriesStore.sort('name');
 	}
 		
 	Ext.apply(this, config);
