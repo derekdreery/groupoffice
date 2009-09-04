@@ -1,5 +1,5 @@
-groupoffice-mailserver (3.2.30-1) karmic; urgency=low
+groupoffice-mailserver (3.2.33-1) karmic; urgency=low
 
   * Initial release (LP: #394166: This report is public)
 
- -- Merijn Schering <mschering@intermesh.nl>  Mon, 27 Aug 2009 16:08:29 +0200
+ -- Merijn Schering <mschering@intermesh.nl>  Fri, 4 Sep 2009 16:08:29 +0200
