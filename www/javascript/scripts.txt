@@ -75,9 +75,4 @@ javascript/links/LinkDescriptionField.js
 javascript/links/LinksAccordion.js
 
 javascript/panels/SearchPanel.js
-
-javascript/panels/miframe.js
-
-
-
 javascript/checker.js

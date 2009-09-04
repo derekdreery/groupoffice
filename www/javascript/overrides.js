@@ -11,6 +11,7 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
+Ext.Container.prototype.bufferResize = false;
 
 /*
  * Scroll menu when higher then the screen is
@@ -61,31 +62,6 @@ Ext.override(Ext.menu.Menu, {
 Ext.override(Ext.grid.GridView, {scrollOffset:20});
 
 
-
-/* for IE8 menu's
- *
- * Probably not needed in Extjs 3.x
-*/
-if(Ext.version!='3.0'){
-	Ext.override(Ext.menu.Menu, {
-			autoWidth : function(){
-					var el = this.el, ul = this.ul;
-					if(!el){
-							return;
-					}
-					var w = this.width;
-					if(w){
-							el.setWidth(w);
-					}else if(Ext.isIE && !Ext.isIE8){
-							el.setWidth(this.minWidth);
-							var t = el.dom.offsetWidth; // force recalc
-							el.setWidth(ul.getWidth()+el.getFrameWidth("lr"));
-					}
-			}
-	});
-}
-
-
 /* password vtype */ 
  Ext.apply(Ext.form.VTypes, {    
     password : function(val, field) {
@@ -99,19 +75,6 @@ if(Ext.version!='3.0'){
 });
 
  
-//override Ext functions here
-/* bug in 2.2 
-Ext.form.TriggerField.override({
-    afterRender : function(){
-        Ext.form.TriggerField.superclass.afterRender.call(this);
-        var y;
-        if(Ext.isIE && !this.hideTrigger && this.el.getY() != (y = this.trigger.getY())){
-            this.el.position();
-            this.el.setY(y);
-        }
-    }
-});*/
-
 /**
  * Keep window in viewport and no shadows by default for IE performance
  */
@@ -121,35 +84,6 @@ Ext.Window.override({
 	 constrainHeader : true,
 	 animCollapse : false
 });
-
-/*
- * For editor grid in scrolling view (Billing module items tab in order dialog)
-
-Not needed in Extjs 3
-*/
-
-if(Ext.version!='3.0'){
-	Ext.override(Ext.Editor, {
-		doAutoSize : function(){
-			if(this.autoSize){
-				var sz = this.boundEl.getSize(), fs = this.field.getSize();
-				switch(this.autoSize){
-					case "width":
-						this.setSize(sz.width, fs.height);
-						break;
-					case "height":
-						this.setSize(fs.width, sz.height);
-						break;
-					case "none":
-						this.setSize(fs.width, fs.height);
-						break;
-					default:
-						this.setSize(sz.width,  sz.height);
-				}
-			}
-		}
-	});
-}
 
 /*
  * Localization
@@ -173,35 +107,6 @@ Ext.override(Ext.form.HtmlEditor, {
 Ext.override(Ext.DatePicker, {
 	startDay: parseInt(GO.settings.first_weekday)
 });
-
-/*
- * Fix for hover in panels that stays on when you mouseout on scrollbar
- * 
- * https://extjs.com/forum/showthread.php?p=283708#post283708
- *
- * not necessary in Extjs 3
- * 
-*/
-if(Ext.version!='3.0'){
-
-	Ext.override(Ext.tree.TreeEventModel, {
-		initEvents : function(){
-			var el = this.tree.getTreeEl();
-			el.on('click', this.delegateClick, this);
-			if(this.tree.trackMouseOver !== false){
-				var innerCt = Ext.fly(el.dom.firstChild);
-				innerCt.on('mouseover', this.delegateOver, this);
-				innerCt.on('mouseout', this.delegateOut, this);
-			}
-			el.on('dblclick', this.delegateDblClick, this);
-			el.on('contextmenu', this.delegateContextMenu, this);
-		}
-	});
-}
-
-/*
- * End of fix for hover in panels that stays on when you mouseout on scrollbar
- */
 
 
 /*
@@ -283,52 +188,6 @@ Ext.override(Ext.Component, {
     }
 }); 
 
-/*
-*End of print elements
-*/
-
-/*
- * Width and height not restored in grid
- * 
- * http://extjs.com/forum/showthread.php?t=55086
-
-Not needed in 3.0
-
-
-if(Ext.version!='3.0'){
-
-	Ext.override(Ext.grid.GridPanel,{
-	 applyState : function(state){
-					var cm = this.colModel;
-					var cs = state.columns;
-					if(cs){
-							for(var i = 0, len = cs.length; i < len; i++){
-									var s = cs[i];
-									var c = cm.getColumnById(s.id);
-									if(c){
-											c.hidden = s.hidden;
-											c.width = s.width;
-											var oldIndex = cm.getIndexById(s.id);
-											if(oldIndex != i){
-													cm.moveColumn(oldIndex, i);
-											}
-									}
-							}
-					}
-					if(state.sort){
-							this.store[this.store.remoteSort ? 'setDefaultSort' : 'sort'](state.sort.field, state.sort.direction);
-					}
-					Ext.apply(this, state);
-			}
-	});
-}	*/
-/**
- * End Width and height not restored in grid
- */
-
-
-
-
 
 /*
  * Catch JSON parsing errors and show error dialog
@@ -376,17 +235,12 @@ Ext.override(Ext.ToolTip,{
   }    
 }); */
 
-if(Ext.version=='3.0'){
-	Ext.override(Ext.Panel,{
-		forceLayout:true
-	});
-}
 
 /*
  * Fix for "Permission denied to access property 'dom' from a non-chrome context"
  *
  * http://extjs.com/forum/showthread.php?p=366510#post366510
- */
+ 
 
 Ext.lib.Event.resolveTextNode = Ext.isGecko ? function(node){
 	if(!node){
@@ -400,6 +254,6 @@ Ext.lib.Event.resolveTextNode = Ext.isGecko ? function(node){
 } : function(node){
 	return node && node.nodeType == 3 ? node.parentNode : node;
 };
-/*
+
 * end fix
  */

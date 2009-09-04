@@ -278,6 +278,7 @@ if($GO_SECURITY->logged_in()) {
 
 <script type="text/javascript">
 	Ext.BLANK_IMAGE_URL = '<?php echo $GO_CONFIG->host; ?>ext/resources/images/default/s.gif';
+	
 
 	if(!GO.state.HttpProvider)
 	{

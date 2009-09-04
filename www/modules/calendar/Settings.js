@@ -72,6 +72,7 @@ GO.calendar.SettingsPanel = function(config) {
 	config.labelWidth=140;
 	config.bodyStyle = 'padding:5px';
 	config.items = [{
+		forceLayout:true,
 		xtype : 'fieldset',
 		autoHeight : true,
 		layout : 'form',

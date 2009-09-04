@@ -1057,13 +1057,15 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
             layout : 'form',
             hideMode : 'offsets',
             autoScroll : true,
+						defaults:{forceLayout:true},
             items : [{
                 border : false,
                 layout : 'table',
                 defaults : {
                     border : false,
                     layout : 'form',
-                    bodyStyle : 'padding-right:3px'
+                    bodyStyle : 'padding-right:3px',
+										forceLayout:true
                 },
                 items : [{
                     items : this.repeatEvery
@@ -1076,7 +1078,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
                 defaults : {
                     border : false,
                     layout : 'form',
-                    bodyStyle : 'padding-right:3px;white-space:nowrap'
+                    bodyStyle : 'padding-right:3px;white-space:nowrap',
+										forceLayout:true
                 },
 
                 items : [{
@@ -1102,7 +1105,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
                 defaults : {
                     border : false,
                     layout : 'form',
-                    bodyStyle : 'padding-right:3px'
+                    bodyStyle : 'padding-right:3px',
+										forceLayout:true
                 },
                 items : [{
                     items : this.repeatEndDate
@@ -1189,10 +1193,12 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
             layout : 'form',
             hideMode : 'offsets',
             autoScroll : true,
+						defaults:{forceLayout:true},
             items : [{
                 border : false,
                 layout : 'table',
                 defaults : {
+										forceLayout:true,
                     border : false,
                     layout : 'form',
                     bodyStyle : 'padding-right:3px'
