@@ -366,6 +366,14 @@ INSERT INTO `go_address_format` (`id`, `format`) VALUES
 (7, '{address_no} {address}\r\n{zip} {city} {state}\r\n{country}'),
 (8, '{address_no} {address}, {city}\r\n{zip} {state}\r\n{country}');
 
+INSERT INTO `go_address_format` (
+`id` ,
+`format`
+)
+VALUES (
+'9', '{address} {address_no} {zip} {city} {state} {country}'
+);
+
 -- --------------------------------------------------------
 
 --
