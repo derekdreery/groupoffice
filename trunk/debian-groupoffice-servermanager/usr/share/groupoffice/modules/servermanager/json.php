@@ -44,7 +44,7 @@ try{
 
 			foreach($folders as $modulefolder)
 			{
-				if($modulefolder['name']!='servermanager')
+				if($modulefolder['name']!='servermanager' && $modulefolder['name']!='postfixadmin')
 				{
 					$record = array(
 						'id' => $modulefolder['name'],

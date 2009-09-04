@@ -5,8 +5,7 @@ define('CONFIG_FILE', $argv[1]);
 
 require('/etc/groupoffice/servermanager.inc.php');
 
-$go_src_path = isset($sm_config['go_src_path']) ? $sm_config['go_src_path'] : '/usr/share/groupoffice/';
-require($go_src_path.'Group-Office.php');
+require($sm_config['source'].'Group-Office.php');
 
 require_once ($GO_MODULES->modules['servermanager']['class_path']."servermanager.class.inc.php");
 $servermanager = new servermanager();
