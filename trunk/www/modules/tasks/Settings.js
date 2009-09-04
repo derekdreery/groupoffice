@@ -31,6 +31,7 @@ GO.tasks.SettingsPanel = function(config) {
 		xtype:'fieldset',
 		autoHeight:true,
 		layout:'form',
+		forceLayout:true,
 		title:GO.tasks.lang.taskDefaults,
 		items:[this.remindCheck=new Ext.form.Checkbox({
 				boxLabel : GO.tasks.lang.remindMe,

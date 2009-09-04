@@ -470,10 +470,12 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 					layout : 'form',
 					hideMode : 'offsets',
 					autoScroll : true,
+					defaults:{forceLayout:true},
 					items : [{
 								border : false,
 								layout : 'table',
 								defaults : {
+									forceLayout:true,
 									border : false,
 									layout : 'form',
 									bodyStyle : 'padding-right:3px'
@@ -487,6 +489,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 								border : false,
 								layout : 'table',
 								defaults : {
+									forceLayout:true,
 									border : false,
 									layout : 'form',
 									bodyStyle : 'padding-right:3px;white-space:nowrap'
@@ -513,6 +516,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 								border : false,
 								layout : 'table',
 								defaults : {
+									forceLayout:true,
 									border : false,
 									layout : 'form',
 									bodyStyle : 'padding-right:3px'
