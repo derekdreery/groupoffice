@@ -1,6 +1,6 @@
 GO.summary.lang.summary='Übersicht';
 GO.summary.lang.noItems='Sie haben keine Einträge auf Ihrer Startübersicht';
-GO.summary.lang.selectPortlet='Neues Fenster hinzufügen';
+GO.summary.lang.selectPortlet='Anwendung hinzufügen';
 GO.summary.lang.hotTopics='Nachrichten';
 GO.summary.lang.enterRssFeed='Geben Sie eine RSS-Feed-Adresse an:';
 GO.summary.lang.notes='Notizen';
@@ -12,3 +12,8 @@ GO.summary.lang.announcements='Ankündigungen';
 GO.summary.lang.dueTime='Anzeigedauer';
 GO.summary.lang.title='Titel';
 GO.summary.lang.manageAnnouncements='Ankündigungen verwalten';
+GO.summary.lang.webFeeds='RSS-Feeds verwalten';
+GO.summary.lang.type='Typ';
+GO.summary.lang.summaryType='Übersicht';
+GO.summary.lang.rssFeeds='RSS-Feeds';
+GO.summary.lang.noRssFeeds='Es sind keine RSS-Feeds vorhanden.<br />Klicken Sie in diesem Fenster oben rechts auf das Options-Symbol, um RSS-Feeds hinzuzufügen.';
