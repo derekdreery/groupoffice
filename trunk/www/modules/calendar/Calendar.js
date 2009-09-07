@@ -694,11 +694,6 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
                         }
                     }
                 }
-                if(!this.calendarsStore.data.length)
-                {
-                    this.calendarsList.setVisible(false);
-                    this.calendarListPanel.doLayout();
-                }
 			},
 			scope:this			
 		});
@@ -723,11 +718,6 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
                         }
                     }
                 }
-                if(!this.viewsStore.data.length)
-                {
-                    this.viewsList.setVisible(false);
-                    this.calendarListPanel.doLayout();
-                }
             },
             scope:this
         });
@@ -751,16 +741,22 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
                             this.calendarTitle.setText(title);
                         }
                     }
-                }
-                if(!this.resourcesStore.data.length)
-                {
-                    this.resourcesList.setVisible(false);
-                    this.calendarListPanel.doLayout();
-                }
+                }               
             },
             scope:this
         });
-        
+      
+        this.viewsStore.on('load', function()
+        {
+            this.viewsList.setVisible(this.viewsStore.data.length);
+            this.calendarListPanel.doLayout();
+        }, this);
+
+        this.resourcesStore.on('load', function()
+        {
+            this.resourcesList.setVisible(this.resourcesStore.data.length);
+            this.calendarListPanel.doLayout();
+        }, this);
 	},
 	
 	deleteHandler : function(){
@@ -1583,7 +1579,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					},
 					scope:this
 				}
-            })          			
+            });
 
             var items = [this.calendarsGrid, this.viewsGrid];
             if(GO.settings.modules['calendar']['write_permission'])
