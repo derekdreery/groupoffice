@@ -517,3 +517,7 @@ a.x-monthGrid-cell-day-text:hover{
 
 /* end view grid */
 
+
+.x-grid3-col-summary-calendar-name-heading{
+	white-space:normal !important;
+}
