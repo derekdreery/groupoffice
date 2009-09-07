@@ -49,6 +49,11 @@ GO.calendar.SummaryGroupPanel = function(config)
 	    groupField:'day',
 	    sortInfo: {field: 'start_time', direction: 'ASC'}
 	  });
+
+	config.store.on('load', function(){
+		//do layout on Startpage
+		this.ownerCt.ownerCt.ownerCt.doLayout();
+	}, this);
 	  
 	/*config.store = new Ext.data.JsonStore({
       totalProperty: "count",
@@ -73,8 +78,8 @@ GO.calendar.SummaryGroupPanel = function(config)
 	
 	config.paging=false,			
 	config.autoExpandColumn='summary-calendar-name-heading';
-	config.enableColumnHide=false;
-	config.enableColumnMove=false;
+	//config.enableColumnHide=false;
+	//config.enableColumnMove=false;
 
 	config.columns=[
 		{
@@ -109,9 +114,9 @@ GO.calendar.SummaryGroupPanel = function(config)
 	GO.calendar.SummaryGroupPanel.superclass.constructor.call(this, config);
 
 	//with auto expand column this works better otherwise you'll get a big scrollbar
-	this.store.on('load', function(){
+	/*this.store.on('load', function(){
 		this.addClass('go-grid3-hide-headers');
-	}, this, {single:true})
+	}, this, {single:true})*/
 	
 };
 
@@ -184,7 +189,7 @@ GO.mainLayout.onReady(function(){
 												Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
 											}else
 											{
-												var responseParams = Ext.decode(response.responseText);
+												//var responseParams = Ext.decode(response.responseText);
 												this.PortletSettings.store.reload();
 												this.manageCalsWindow.hide();
 
