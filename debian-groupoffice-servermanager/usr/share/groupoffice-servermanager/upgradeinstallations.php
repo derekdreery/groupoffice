@@ -17,6 +17,10 @@ if(!isset($GO_MODULES->modules['servermanager']))
 require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 $fs = new filesystem();
 
+if(file_exists('/etc/groupoffice/config.php')){
+	exec('php '.$sm_config['source'].'install/upgrade.php /etc/groupoffice/config.php');
+}
+
 //$roots=array('/var/www/groupoffice', '/var/www');
 $roots=array($sm_config['install_path']);
 
