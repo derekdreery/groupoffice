@@ -1082,16 +1082,19 @@ class addressbook extends db {
 
 		require($GO_LANGUAGE->get_language_file('addressbook'));
 
-		$sql = "SELECT c.*,a.acl_read,a.acl_write, a.name AS addressbook_name FROM ab_contacts c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id WHERE c.id=?";
+		$sql = "SELECT c.*,a.acl_read,a.acl_write, a.name AS addressbook_name, co.name AS company FROM ab_contacts c ".
+			"INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id ".
+			"INNER JOIN ab_companies co ON co.id=c.company_id ".
+			"WHERE c.id=?";
 		$this->query($sql, 'i', $contact_id);
 		$record = $this->next_record();
 		if($record) {
 			$cache['id']=$this->f('id');
 			$cache['user_id']=$this->f('user_id');
 			$cache['module']='addressbook';
-			$cache['name'] = htmlspecialchars(String::format_name($this->f('last_name'),$this->f('first_name'),$this->f('middle_name')).' ('.$this->f('addressbook_name').')', ENT_QUOTES,'UTF-8');
+			$cache['name'] = htmlspecialchars(String::format_name($this->f('last_name'),$this->f('first_name'),$this->f('middle_name')), ENT_QUOTES,'UTF-8');
 			$cache['link_type']=2;
-			$cache['description']='';
+			$cache['description']=$this->f('addressbook_name').', '.$this->f('company');
 			$cache['type']=$lang['addressbook']['contact'];
 			$cache['keywords']=$search->record_to_keywords($this->record).','.$lang['addressbook']['contact'];
 			$cache['mtime']=$this->f('mtime');

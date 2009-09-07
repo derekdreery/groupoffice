@@ -13,14 +13,12 @@
  
 GO.grid.SearchPanel = function(config){
 
-	config = config || {};
-	
+	config = config || {};	
 	
 	if(!this.query)
 	{
 		this.query='';
-	}
-	
+	}	
 	
 	config.border=false;
 	if(!config.noTitle)
@@ -76,15 +74,14 @@ GO.grid.SearchPanel = function(config){
 			}],
 		store:this.store,
 		columns:[{
-	      header: "",
-	      width:28,
-				dataIndex: 'icon',
-				renderer: this.iconRenderer
-	    },{
-	       header: GO.lang['strName'],
+				id:'name',
+	      header: GO.lang['strName'],
 				dataIndex: 'name',
 				css: 'white-space:normal;',
-				sortable: true
+				sortable: true,
+				renderer:function(v, meta, record){
+					return '<div class="go-grid-icon '+record.data.iconCls+'">'+v+'</div>';
+				}
 	    },{
 		    header: GO.lang['strType'],
 				dataIndex: 'type',
@@ -97,7 +94,7 @@ GO.grid.SearchPanel = function(config){
 	      width:100
 	    }],
 	 	autoExpandMax:2500,
-		autoExpandColumn:1,
+		autoExpandColumn:'name',
 		paging:true,
 		layout:'fit',
 		view:new Ext.grid.GridView({
