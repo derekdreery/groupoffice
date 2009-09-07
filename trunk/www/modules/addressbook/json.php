@@ -67,7 +67,7 @@ try
 					array('field'=>'ab_contacts.fax', 'label'=>$lang['common']['name'], 'fax'=>'text'),
 					array('field'=>'ab_contacts.work_fax', 'label'=>$lang['common']['workFax'], 'type'=>'text'),
 					array('field'=>'ab_contacts.cellular', 'label'=>$lang['common']['cellular'], 'type'=>'text'),
-					array('field'=>'ab_contacts.company', 'label'=>$lang['common']['company'], 'type'=>'text'),
+					array('field'=>'ab_companies.name', 'label'=>$lang['common']['company'], 'type'=>'text'),
 					array('field'=>'ab_contacts.department', 'label'=>$lang['common']['department'], 'type'=>'text'),
 					array('field'=>'ab_contacts.function', 'label'=>$lang['common']['function'], 'type'=>'text'),
 					array('field'=>'ab_contacts.comment', 'label'=>$lang['addressbook']['comment'], 'type'=>'textarea'),

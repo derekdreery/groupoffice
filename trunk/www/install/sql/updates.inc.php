@@ -337,7 +337,11 @@ $updates[]="INSERT INTO `go_address_format` (
 `format`
 )
 VALUES (
-'9', '{address} {address_no} {zip} {city} {state} {country}'
+'9', '{address}
+{address_no}
+{zip} {city}
+{state}
+{country}'
 );";
 
 $updates[]="UPDATE `go_iso_address_format` SET `address_format_id` = '9' WHERE `go_iso_address_format`.`iso` = 'NO' AND `go_iso_address_format`.`address_format_id` =1 LIMIT 1 ;";
