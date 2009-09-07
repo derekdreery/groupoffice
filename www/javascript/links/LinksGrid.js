@@ -69,17 +69,20 @@ GO.grid.LinksGrid = function(config){
 	config.enableDragDrop=true;
 	config.ddGroup='LinksDD';
 	
-	config['columns'] = [{
+	config['columns'] = [/*{
 		      header: "",
 		      hideable:false,
 		      width:28,
 					dataIndex: 'icon',
 					renderer: this.iconRenderer
-		    },{
+		    },*/{
 		      header: GO.lang['strName'],
 					dataIndex: 'name',
 					css: 'white-space:normal;',
-					sortable: true
+					sortable: true,
+					renderer:function(v, meta, record){
+						return '<div class="go-grid-icon '+record.data.iconCls+'">'+v+'</div>';
+					}
 		    },{
 			    header: GO.lang['strDescription'],
 					dataIndex: 'link_description',

@@ -48,7 +48,7 @@ $company['user_id']=1;
 $company['comment']='';
 
 $contact['user_id']=1;
-$contact['company_id']=$ab->add_company($company);
+//$contact['company_id']=$ab->add_company($company);
 $contact['addressbook_id']=$addressbook['addressbook_id'];
 $contact['first_name']='Merijn';
 $contact['middle_name']='';
@@ -61,7 +61,7 @@ $contact['salutation']=$lang['common']['dear'].' Merijn';
 $contact['comment']='';
 $contact['iso_address_format']=$default_language;
 
-$ab->add_contact($contact);
+//$ab->add_contact($contact);
 
 
 $addressbook = $ab->add_addressbook(1, $lang['addressbook']['customers'], $default_language, $default_salutation);
