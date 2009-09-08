@@ -1,13 +1,3 @@
-.em-blocked{
-margin:5px 2px;
-}
-
-.em-statusbar-body{
-line-height:21px !important;
-padding-left:2px;
-}
-
-
 #ml-notify, #ml-notify:hover{
 	float:left;
 	padding-left:20px;
@@ -101,21 +91,6 @@ padding-left:2px;
 }
 
 
-
-
-.NewSubject{
-	margin:0px;
-	margin-bottom:4px;
-	font-weight:bold;
-}
-
-.Subject{
-	margin:0px;
-	margin-bottom:4px;
-	font-weight:normal;
-}
-
-
 .message-header{
 	font-family:tahoma,arial,helvetica,sans-serif;
 	font-size:12px;
@@ -124,32 +99,6 @@ padding-left:2px;
 	padding-left: 5px;
 }
 
-.message-header a{
-	color: black;
-	text-decoration: none;	
-}
-
-.message-header a:hover{
-	color: black;
-	text-decoration: underline;	
-}
-
-.message-body{
-	padding: 5px;	
-}
-
-.message-header-table td{
-	vertical-align:top;	
-}
-
-
-.message-body a:link,.message-body a:active,.message-body a:visited{
-	color: blue;
-	text-decoration: underline;
-}
-.message-body a:hover{
-	text-decoration:none;
-}
 
 
 .x-tree-node img.folder-account, .x-tree-node-collapsed img.folder-account{
@@ -167,12 +116,4 @@ padding-left:2px;
 
 .x-tree-node-expanded img.folder-default{
     background-image:  url("images/16x16/folder_open.png");
-}
-
-.email-grid-icon{
-	float:left;
-	width:16px;
-	height:16px;
-	margin:1px;
-	background-repeat: no-repeat;
-}
+}}
