@@ -633,7 +633,7 @@ class GO_CONFIG {
 	 * @access  public
 	 */
 
-	var $mtime = '20090904';
+	var $mtime = '20090908';
 
 	#group configuration
 	/**
@@ -762,6 +762,14 @@ class GO_CONFIG {
 	 */
 	var $db;
 
+	/**
+	 * Enable zlib compression for faster downloading of scripts and css
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+		var $zlib_compress = true;
+
 
 	/**
 	 * Constructor. Initialises all public variables.
@@ -877,6 +885,15 @@ class GO_CONFIG {
 
 			debug('Page load took: '.(getmicrotime()-$this->loadstart).'ms', $this);
 		}
+	}
+
+	function use_zlib_compression(){
+
+		if(!isset($this->zlib_support_tested)){
+			$this->zlib_support_tested=true;
+			$this->zlib_compress=$this->zlib_compress && extension_loaded('zlib') && !ini_get('zlib.output_compression');
+		}
+		return $this->zlib_compress;
 	}
 
 	/**
