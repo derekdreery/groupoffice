@@ -311,7 +311,7 @@ a.normal-link:hover{
 	background-image:url('images/16x16/filetypes/txt.png') !important;
 }
 
-.filetype-odp, .filetype-pps, .filetype-ppsx  {
+.filetype-odp, .filetype-pps, .filetype-ppsx,.filetype-ppt, .filetype-pptx  {
 	background-image:url('images/16x16/filetypes/pps.png') !important;
 }
 
