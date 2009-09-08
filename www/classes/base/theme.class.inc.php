@@ -59,6 +59,8 @@ class GO_THEME
 	var $theme_url;
 
 
+	var $stylesheets;
+
 
 	/**
 	* Constructor. Initialises user's theme
@@ -92,6 +94,63 @@ class GO_THEME
 		$this->theme_path = $GO_CONFIG->theme_path.$this->theme.'/';
 		$this->theme_url = $GO_CONFIG->theme_url.$this->theme.'/';
 		$this->image_url = $this->theme_url.'images/';
+	}
+
+
+
+	function replace_url($css, $baseurl){
+		return preg_replace('/url[\s]*\(([^\)]*)\)/ieU', "GO_THEME::replace_url_callback('$1', \$baseurl)", $css);
+	}
+
+	function replace_url_callback($url, $baseurl){
+		return 'url('.$baseurl.trim(stripslashes($url),'\'" ').')';
+	}
+
+	function add_stylesheet($path){
+
+		echo '<!-- '.$path.' -->'."\n";
+
+		$this->stylesheets[]=$path;
+	}
+
+	function load_module_stylesheets(){
+		global $GO_MODULES;
+
+		foreach($GO_MODULES->modules as $module)
+		{
+			if(file_exists($module['path'].'themes/Default/style.css')){
+				$this->add_stylesheet($module['path'].'themes/Default/style.css');
+			}
+
+			if($this->theme!='Default'){
+				if(file_exists($module['path'].'themes/'.$this->theme.'/style.css')){
+					$this->add_stylesheet($module['path'].'themes/'.$this->theme.'/style.css');
+				}
+			}
+		}
+	}
+
+	function get_cached_css(){
+		global $GO_CONFIG, $GO_SECURITY;
+
+		$hash = md5($GO_CONFIG->root_path.$GO_CONFIG->host.$GO_CONFIG->mtime);
+
+		$relpath= 'cache/'.$hash.'-style.css';
+		$cssfile = $GO_CONFIG->local_path.$relpath;
+
+		if(!file_exists($cssfile) || $GO_CONFIG->debug){
+			$fp = fopen($cssfile, 'w+');
+			foreach($this->stylesheets as $s){
+
+				$baseurl = str_replace($GO_CONFIG->root_path, $GO_CONFIG->host, dirname($s)).'/';
+
+				fputs($fp, $this->replace_url(file_get_contents($s),$baseurl));
+			}
+			fclose($fp);
+		}
+
+		$cssurl = $GO_CONFIG->local_url.$relpath;
+		echo '<link href="'.$cssurl.'" type="text/css" rel="stylesheet" />';
 	}
 	
 	/**

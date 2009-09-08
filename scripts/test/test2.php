@@ -5,7 +5,7 @@
 }*/
 
 
-//require('../../www/Group-Office.php');
+require('../../www/Group-Office.php');
 /*
 $record['test']='bla';
 
@@ -27,16 +27,6 @@ echo preg_replace('/{[^}]*}/eU', "replace('$0', \$record)", $template)
  *
  */
 
-$pattern = '/^\S{1}[^:]*:.*/';
-
-$line[] = 'DTSTART:1234545456';
-$line[] = ' DTSTART:1234545456';
-$line[] = 'sdvds : ds  ds';
-
-foreach($line as $l){
-	$ret = preg_match($pattern, $l);
-	var_dump($ret);
-}
-
+echo $GO_THEME->replace_url(file_get_contents($GO_CONFIG->root_path.'themes/Default/style.css'), $GO_CONFIG->host.'themes/');
 
 ?>
