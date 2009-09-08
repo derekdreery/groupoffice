@@ -108,7 +108,7 @@ class GO_THEME
 
 	function add_stylesheet($path){
 
-		echo '<!-- '.$path.' -->'."\n";
+		//echo '<!-- '.$path.' -->'."\n";
 
 		$this->stylesheets[]=$path;
 	}

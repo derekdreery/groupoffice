@@ -1,5 +1,3 @@
-@CHARSET "UTF-8";
-
 .go-module-icon-files , .go-menu-icon-files , .go-tab-icon-files {
 	background-image: url('images/folder.png') !important;
 }
@@ -86,51 +84,4 @@
 }
 .x-tree-node img.folder-shares, .x-tree-node-collapsed img.img.folder-shares, .x-tree-node-expanded img.folder-shares{
     background-image:  url("images/network.png");
-}
-
-
-
-
-
-.fs-thumb{
-	/*background: #dddddd;*/
-	padding: 3px;
-}
-.fs-thumb img{
-	height: 100px;
-	width: 100px;
-}
-.fs-thumb-wrap{
-	float: left;
-	margin: 4px;
-	margin-right: 0;
-	padding: 5px;
-}
-.fs-thumb-wrap span{
-	display: block;
-	overflow: hidden;
-	text-align: center;
-}
-
-.fs-view-over{
-  border:1px solid #dddddd;
-  background: #efefef url(../../../../themes/Default/images/extjs/grid/row-over.gif) repeat-x left top;
-	padding: 4px;
-}
-.fs-view-selected{
-	background: #eff5fb url(images/selected.gif) no-repeat right bottom;
-	border:1px solid #99bbe8;
-	padding: 4px;
-}
-.fs-view-selected .fs-thumb{
-	background:transparent;
-}
-
-.fs-loading-indicator {
-	font-size:11px;
-	background-image:url('../../../../themes/Default/images/extjs/grid/loading.gif');
-	background-repeat: no-repeat;
-	background-position: left;
-	padding-left:20px;
-	margin:10px;
 }

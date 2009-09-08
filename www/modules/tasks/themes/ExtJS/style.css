@@ -22,12 +22,3 @@
 	height:16px;
 	
 }
-
-.tasks-completed{
-	text-decoration:line-through;
-	color: black !important;
-}
-
-.tasks-late td{
-	color: red;
-}
