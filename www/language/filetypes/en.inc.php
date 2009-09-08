@@ -22,10 +22,14 @@ $lang['filetypes']['oth']= 'OpenOffice.Org web page';
 
 
 $lang['filetypes']['doc'] = 'Microsoft Word document';
+$lang['filetypes']['docx'] = 'Microsoft Word document';
 $lang['filetypes']['xls'] = 'Microsoft Excel spreadsheet';
+$lang['filetypes']['xlsx'] = 'Microsoft Excel spreadsheet';
 $lang['filetypes']['mdb'] = 'Microsoft Access database';
 $lang['filetypes']['ppt'] = 'Microsoft Powerpoint presentation';
+$lang['filetypes']['pptx'] = 'Microsoft Powerpoint presentation';
 $lang['filetypes']['pps'] = 'Microsoft Powerpoint presentation';
+$lang['filetypes']['ppsx'] = 'Microsoft Powerpoint presentation';
 $lang['filetypes']['sxc'] = 'OpenOffice.Org Calc spreadsheet';
 $lang['filetypes']['tar'] = 'Tar archive';
 $lang['filetypes']['zip'] = 'ZIP compressed archive';
@@ -63,7 +67,5 @@ $lang['filetypes']['psd'] = 'Adobe Photoshop file';
 $lang['filetypes']['rtf'] = 'Rich Text Format';
 $lang['filetypes']['swf'] = 'Macromedia Flash Movie';
 $lang['filetypes']['fla'] = 'Macromedia Flash Document (Source)';
-$lang['filetypes']['xls'] = 'Microsoft Excel spreadsheet';
-$lang['filetypes']['xlt'] = 'Microsoft Excel spreadsheet';
 $lang['filetypes']['ai'] = 'Adobe Illustrator file';
 $lang['filetypes']['eml'] = 'E-mail message';
