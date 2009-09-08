@@ -73,11 +73,13 @@ if($GO_SECURITY->logged_in() && $fullscreen=='true' && !isset($_REQUEST['fullscr
 </script>
 <?php
 
+
+
 if(!isset($lang['common']['extjs_lang'])) $lang['common']['extjs_lang'] = $GO_LANGUAGE->language;
 
 $file = 'base-'.md5($GO_LANGUAGE->language.$GO_CONFIG->mtime).'.js';
 $path = $GO_CONFIG->local_path.'cache/'.$file;
-$url = $GO_CONFIG->local_url.'cache/'.$file;
+$url = $GO_CONFIG->use_zlib_compression() ? $GO_CONFIG->host.'compress.php?file='.$file : $GO_CONFIG->local_url.'cache/'.$file;
 
 if($GO_CONFIG->debug || !file_exists($path)) {
 	if(!is_dir($GO_CONFIG->local_path.'cache')) {
@@ -221,8 +223,8 @@ if($GO_SECURITY->logged_in()) {
 
 	$file = $GO_SECURITY->user_id.'-'.md5($GO_CONFIG->mtime.filemtime($GO_CONFIG->root_path.'javascript/go-all-min').':'.$GO_LANGUAGE->language.':'.implode(':', $modules)).'.js';
 	$path = $GO_CONFIG->local_path.'cache/'.$file;
-	$url = $GO_CONFIG->local_url.'cache/'.$file;
-
+	$url = $GO_CONFIG->use_zlib_compression() ? $GO_CONFIG->host.'compress.php?file='.$file : $GO_CONFIG->local_url.'cache/'.$file;
+	
 	if(!$GO_CONFIG->debug) {
 		if(!file_exists($path)) {
 
@@ -241,7 +243,11 @@ if($GO_SECURITY->logged_in()) {
 				file_put_contents($path,"\n\n/*".$script."*/\n\n".file_get_contents($script),FILE_APPEND);
 			}
 		}
+
+
+
 		$scripts=array($url);
+
 	}else
 	{
 		file_put_contents($GO_CONFIG->local_path.'cache/modules.js', 'GO.settings.modules = Ext.decode("'.addslashes(json_encode($GO_MODULES->modules)).'");');
@@ -269,6 +275,9 @@ if($GO_SECURITY->logged_in()) {
 		file_put_contents($path, $GO_SCRIPTS_JS);
 	}
 	if(file_exists($path)){
+
+		//$url = $GO_CONFIG->use_zlib_compression() ? $GO_CONFIG->host.'compress.php?file='.$filename : $GO_CONFIG->local_url.'cache/'.$filename;
+
 		echo '<script type="text/javascript" src="'.$GO_CONFIG->local_url.'cache/'.$filename.'?mtime='.filemtime($path).'"></script>'."\n";
 	}
 }

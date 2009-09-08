@@ -149,7 +149,7 @@ class GO_THEME
 			fclose($fp);
 		}
 
-		$cssurl = $GO_CONFIG->local_url.$relpath;
+		$cssurl = $GO_CONFIG->use_zlib_compression() ? $GO_CONFIG->host.'compress.php?file='.basename($relpath) : $GO_CONFIG->local_url.$relpath;
 		echo '<link href="'.$cssurl.'" type="text/css" rel="stylesheet" />';
 	}
 	
