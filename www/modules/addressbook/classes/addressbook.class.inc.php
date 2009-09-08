@@ -1084,7 +1084,7 @@ class addressbook extends db {
 
 		$sql = "SELECT c.*,a.acl_read,a.acl_write, a.name AS addressbook_name, co.name AS company FROM ab_contacts c ".
 			"INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id ".
-			"INNER JOIN ab_companies co ON co.id=c.company_id ".
+			"LEFT JOIN ab_companies co ON co.id=c.company_id ".
 			"WHERE c.id=?";
 		$this->query($sql, 'i', $contact_id);
 		$record = $this->next_record();
