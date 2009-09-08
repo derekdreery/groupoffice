@@ -94,16 +94,25 @@ function test_system(){
 
 	$test['name']='Safe mode';
 	$test['pass']=ini_get('safe_mode') != '1';
-	$test['feedback']='Warning: Safe mode is enabled. This may cause trouble with the filesystem module and Synchronization. If you can please set safe_mode=Off in php.ini';
+	$test['feedback']='Warning: safe_mode is enabled in php.ini. This may cause trouble with the filesystem module and Synchronization. If you can please set safe_mode=Off in php.ini';
 	$test['fatal']=false;
 
 	$tests[]=$test;
+
 	$test['name']='Open base_dir';
 	$test['pass']=ini_get('open_basedir')=='';
 	$test['feedback']='Warning: open_basedir is enabled. This may cause trouble with the filesystem module and Synchronization.';
 	$test['fatal']=false;
 
 	$tests[]=$test;
+
+	$test['name']='URL fopen';
+	$test['pass']=ini_get('allow_url_fopen') == '1';
+	$test['feedback']='Warning: allow_url_fopen is disabled in php.ini. RSS feeds on the start page will not work.';
+	$test['fatal']=false;
+
+	$tests[]=$test;
+	
 	$test['name']='Calendar functions';
 	$test['pass']=function_exists('easter_date');
 	$test['feedback']='Warning: Calendar functions not available. The Group-Office calendar won\'t be able to generate all holidays for you. Please compile PHP with --enable-calendar.';
