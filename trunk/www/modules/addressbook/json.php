@@ -469,17 +469,8 @@ try
 				$response['data']['formatted_address'] = preg_replace("/(\r\n)+|(\n|\r)+/", "<br />", $response['data']['formatted_address']);
 				$response['data']['google_maps_link']='http://maps.google.com/maps?q=';
 
-				if($response['data']['address'] != '' && $response['data']['city'] != '' )
-				{
-					if($response['data']['address_no'] != '')
-						$response['data']['google_maps_link'] .= $response['data']['address'].'+'.$response['data']['address_no'].'+'.$response['data']['city'];
-					else
-						$response['data']['google_maps_link'] .= $response['data']['address'].'+'.$response['data']['city'];
-				}
-				else
-				{
-					$response['data']['google_maps_link'] = '';
-				}
+				$response['data']['google_maps_link']=google_maps_link($response['data']['address'], $response['data']['address_no'], $response['data']['city'], $response['data']['country']);
+
 				$response['success']=true;	
 			}
 				
@@ -592,19 +583,8 @@ try
 					$response['data']['formatted_address'] = str_replace('{'.$val.'}', $response['data'][$val], $response['data']['formatted_address']);
 
 				$response['data']['formatted_address'] = preg_replace("/(\r\n)+|(\n|\r)+/", "<br />", $response['data']['formatted_address']);
-				$response['data']['google_maps_link']='http://maps.google.com/maps?q=';
 
-				if($response['data']['address'] != '' && $response['data']['city'] != '' )
-				{
-					if($response['data']['address_no'] != '')
-						$response['data']['google_maps_link'] .= $response['data']['address'].'+'.$response['data']['address_no'].'+'.$response['data']['city'];
-					else
-						$response['data']['google_maps_link'] .= $response['data']['address'].'+'.$response['data']['city'];
-				}
-				else
-				{
-					$response['data']['google_maps_link'] = '';
-				}
+				$response['data']['google_maps_link']=google_maps_link($response['data']['address'], $response['data']['address_no'], $response['data']['city'], $response['data']['country']);
 
 
 				$values = array('post_address_no', 'post_address', 'post_zip', 'post_city', 'post_state', 'post_country');
@@ -615,19 +595,8 @@ try
 					$response['data']['post_formatted_address'] = str_replace('{'.substr($val, 5).'}', $response['data'][$val], $response['data']['post_formatted_address']);
 
 				$response['data']['post_formatted_address'] = preg_replace("/(\r\n)+|(\n|\r)+/", "<br />", $response['data']['post_formatted_address']);
-				$response['data']['post_google_maps_link']='http://maps.google.com/maps?q=';
 
-				if($response['data']['post_address'] != '' && $response['data']['post_city'] != '' )
-				{
-					if($response['data']['post_address_no'] != '')
-						$response['data']['post_google_maps_link'] .= $response['data']['post_address'].'+'.$response['data']['post_address_no'].'+'.$response['data']['post_city'];
-					else
-						$response['data']['post_google_maps_link'] .= $response['data']['post_address'].'+'.$response['data']['post_city'];
-				}
-				else
-				{
-					$response['data']['post_google_maps_link'] = '';
-				}
+				$response['data']['post_google_maps_link']=google_maps_link($response['data']['post_address'], $response['data']['post_address_no'], $response['data']['post_city'], $response['data']['post_country']);
 				
 				$response['data']['links'] = array();
 				$response['success']=true;		

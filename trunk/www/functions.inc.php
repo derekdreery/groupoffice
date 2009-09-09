@@ -1,5 +1,19 @@
 <?php
 /**
+ * Copyright Intermesh
+ *
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ *
+ * @copyright Copyright Intermesh
+ * @version $Id$
+ * @author Merijn Schering <mschering@intermesh.nl>
+ */
+
+
+/**
  * This file holds global functions for use inside Group-Office
  *
  * @package go.global
@@ -8,6 +22,31 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  * @since    Group-Office 1.0
  */
+
+
+ function google_maps_link($address, $address_no, $city, $country){
+	 $l='';
+
+	if(!empty($address) && !empty($city))
+	{
+		$l .= $address;
+		if(!empty($address_no)){
+			$l .= ' '.$address_no.', '.$city;
+		}else
+		{
+			$l .= ', '.$city;
+		}
+
+		if(!empty($country)){
+			$l .= ', '.$country;
+		}
+
+		return 'http://maps.google.com/maps?q='.urlencode($l);
+	}else
+	{
+		return false;
+	}
+ }
 
 
 /**
