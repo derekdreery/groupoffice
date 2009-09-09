@@ -241,11 +241,11 @@ try{
 				throw new Exception($lang['common']['missingField']);
 			}
 
-			$existing_tasklist = $tasks->get_tasklist_by_name($tasklist['name']);
+			/*$existing_tasklist = $tasks->get_tasklist_by_name($tasklist['name']);
 			if($existing_tasklist && ($tasklist['id']==0 || $existing_tasklist['id']!=$tasklist['id']))
 			{
 				throw new Exception($sc_tasklist_exists);
-			}
+			}*/
 
 			if($tasklist['id']>0)
 			{
