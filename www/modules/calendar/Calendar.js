@@ -1414,7 +1414,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
                 {
                     this.writableResourcesStore.reload();                    
                     this.resourcesList.store.reload();
-                    GO.calendar.eventDialog.afterResourceUpdate();
+                    GO.calendar.eventDialog.updateResourcePanel();
                 } else
                 {
                     this.writableCalendarsStore.reload();
@@ -1563,7 +1563,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					callback:function(){
                         this.writableResourcesStore.reload();
 						this.resourcesStore.reload();
-                        GO.calendar.eventDialog.resourceGroupsStore.reload();
+                        GO.calendar.eventDialog.updateResourcePanel();
 					},
 					scope:this
 				}
@@ -1576,7 +1576,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
                 deleteConfig: {
 					callback:function(){
 						this.resourcesStore.reload();                        
-                        GO.calendar.eventDialog.resourceGroupsStore.reload();
+                        GO.calendar.eventDialog.updateResourcePanel();
 					},
 					scope:this
 				}
