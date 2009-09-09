@@ -1414,7 +1414,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
                 {
                     this.writableResourcesStore.reload();                    
                     this.resourcesList.store.reload();
-                    GO.calendar.eventDialog.resourceGroupsStore.load();             
+                    GO.calendar.eventDialog.afterResourceUpdate();
                 } else
                 {
                     this.writableCalendarsStore.reload();
