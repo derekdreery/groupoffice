@@ -402,6 +402,10 @@ a.normal-link:hover{
 	background-image:url('images/16x16/actions.png') !important;
 }
 
+.btn-extra {
+	background-image:url('images/16x16/actions.png') !important;
+}
+
 .btn-print{
 	background-image:url('images/16x16/print.png') !important;
 }

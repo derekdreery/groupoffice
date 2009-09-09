@@ -1,16 +1,12 @@
-<script type="text/javascript">
-GO.email.defaultSmtpHost="<?php echo $GO_CONFIG->smtp_server; ?>";
-GO.email.useHtmlMarkup=<?php
+<?php
+$GO_SCRIPTS_JS .='GO.email.defaultSmtpHost="'.$GO_CONFIG->smtp_server.'";
+GO.email.useHtmlMarkup=';
 
 $use_plain_text_markup = $GO_CONFIG->get_setting('email_use_plain_text_markup', $GO_SECURITY->user_id);
-
 if(!empty($use_plain_text_markup))
-	echo 'false;';
+	$GO_SCRIPTS_JS .= 'false;';
 else
-	echo 'true;';
-?>
-
-<?php 
+	$GO_SCRIPTS_JS .= 'true;';
 
 if(isset($_GET['mail_to']))
 {
@@ -34,14 +30,13 @@ if(isset($_GET['mail_to']))
 	
 	$js = json_encode($vars);
 	?>
-
+	<script type="text/javascript">
 	GO.mainLayout.onReady(function(){
 		GO.email.showComposer({
 			values: <?php echo $js; ?>
 		});
 	});
+	</script>
 	<?php
 }
 ?>
-
-</script>

@@ -113,6 +113,15 @@ function test_system(){
 
 	$tests[]=$test;
 	
+	
+
+	$test['name']='zlib compression';
+	$test['pass']=extension_loaded('zlib');
+	$test['feedback']='Warning: No zlib output compression support. You can increase the initial load time by installing this php extension.';
+	$test['fatal']=false;
+
+	$tests[]=$test;
+	
 	$test['name']='Calendar functions';
 	$test['pass']=function_exists('easter_date');
 	$test['feedback']='Warning: Calendar functions not available. The Group-Office calendar won\'t be able to generate all holidays for you. Please compile PHP with --enable-calendar.';
