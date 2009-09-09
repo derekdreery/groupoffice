@@ -34,6 +34,7 @@ GO.calendar.EventDialog = function(calendar) {
     {
         this.resourcesPanel.removeAll(true);
         this.buildAccordion();
+        this.toggleFieldSets();
     }, this);
 
     var items  = [
@@ -283,33 +284,10 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
                     this.selectCalendar.container.up('div.x-form-item').setDisplayed(true);
 
                     this.files_folder_id = action.result.data.files_folder_id;
-                    var resources_checked = action.result.data.resources_checked;
 
                     if(action.result.data.group_id == 1)
                     {
-                        for(var i=0; i<this.resourceGroupsStore.data.items.length; i++)
-                        {
-                            var record = this.resourceGroupsStore.data.items[i].data;
-                            var resources = record.resources;
-
-                            for(var j=0; j<resources.length; j++)
-                            {
-                                var p = this.resourcesPanel.getComponent('group_'+record.id);
-                                var r = resources[j].id;
-                                var c = p.getComponent(r);
-
-                                if(resources_checked.indexOf(r) != -1)
-                                {
-                                    c.expand();
-                                }else
-                                {
-                                    var l = c.getComponent('status_'+r);
-                                    l.setValue(GO.calendar.lang.no_status);
-                                    
-                                    c.collapse();
-                                }
-                            }
-                        }
+                        this.toggleFieldSets(action.result.data.resources_checked);
                     }
                 },
                 failure : function(form, action) {
@@ -407,23 +385,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
             this.formPanel.form.baseParams['group_id'] = group_id;
             this.initCustomFields(group_id);
 
-            for(var i=0; i<this.resourceGroupsStore.data.items.length; i++)
-            {
-                var record = this.resourceGroupsStore.data.items[i].data;
-                var resources = record.resources;
-
-                for(var j=0; j<resources.length; j++)
-                {
-                    var p = this.resourcesPanel.getComponent('group_'+record.id);
-                    var r = resources[j].id;
-                    var c = p.getComponent(r);
-
-                    var l = c.getComponent('status_'+r);
-                    l.setValue(GO.calendar.lang.no_status);
-                    
-                    c.collapse();                    
-                }
-            }
+            if(group_id == 1)
+                this.toggleFieldSets();
 
             this.selectCalendar.setValue(config.calendar_id);
             if (config.calendar_name) {
@@ -448,8 +411,33 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
                     this.subjectField.setValue(config.link_config.text);
             }
         }
-    },
+    },   
+    toggleFieldSets : function(resources_checked)
+    {
+        for(var i=0; i<this.resourceGroupsStore.data.items.length; i++)
+        {
+            var record = this.resourceGroupsStore.data.items[i].data;
+            var resources = record.resources;
 
+            for(var j=0; j<resources.length; j++)
+            {                
+                var p = this.resourcesPanel.getComponent('group_'+record.id);
+                var r = resources[j].id;
+                var c = p.getComponent(r);
+
+                if(resources_checked && (resources_checked.indexOf(r) != -1))
+                {
+                    c.expand();
+                }else
+                {
+                    var l = c.getComponent('status_'+r);
+                    l.setValue(GO.calendar.lang.no_status);
+
+                    c.collapse();
+                }
+            }
+        }
+    },
     setWritePermission : function(writePermission) {
         this.win.buttons[0].setDisabled(!writePermission);
         this.win.buttons[1].setDisabled(!writePermission);
@@ -1370,10 +1358,10 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
     },
 
     buildAccordion : function()
-    {
+    {   
         var newFormField;
         for(var i=0; i<this.resourceGroupsStore.data.items.length; i++)
-        {
+        {    
             var record = this.resourceGroupsStore.data.items[i].data;
             var resourceFieldSets = [];
             var resources = record.resources;
@@ -1446,6 +1434,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
                 items:resourceFieldSets
             }));
         }
+        
+        this.tabPanel.doLayout();
     },
 
     changeRepeat : function(value) {

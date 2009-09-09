@@ -843,7 +843,8 @@ try{
         case 'resources':
 
             $cal->get_groups();
-			$response['results']=array();          
+			$response['results']=array();
+            $total = 0;
 			while($group = $cal->next_record())
 			{
                 $group['fields'] = explode(",", $group['fields']);
@@ -856,12 +857,15 @@ try{
                     $group['resources'][] = $resource;                    
                 }
 
-                if(count($group['resources']) > 0)
+                $num_resources = count($group['resources']);
+                if($num_resources > 0)
                 {
                     $response['results'][] = $group;
+                    $total+=$num_resources;
                 }
 			}
-            $response['total'] = count($response['results']);
+
+            $response['total'] = $total;
 			break;
 
 

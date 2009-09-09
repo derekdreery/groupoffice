@@ -96,7 +96,7 @@ GO.calendar.MainPanel = function(config){
             url: GO.settings.modules.calendar.url+'json.php'
         }),
         groupField:'group_name',
-        sortInfo: {field: 'id', direction: 'ASC'}
+        remoteSort:true
     });
 
 
@@ -1402,7 +1402,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
                     url: GO.settings.modules.calendar.url+'json.php'
                 }),
                 groupField:'group_name',
-                sortInfo: {field: 'id', direction: 'ASC'}
+                sortInfo: {field: 'name', direction: 'ASC'}
             }),
 
             
@@ -1414,7 +1414,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
                 {
                     this.writableResourcesStore.reload();                    
                     this.resourcesList.store.reload();
-                    GO.calendar.eventDialog.resourceGroupsStore.load();
+                    GO.calendar.eventDialog.resourceGroupsStore.load();             
                 } else
                 {
                     this.writableCalendarsStore.reload();
@@ -1563,6 +1563,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					callback:function(){
                         this.writableResourcesStore.reload();
 						this.resourcesStore.reload();
+                        GO.calendar.eventDialog.resourceGroupsStore.reload();
 					},
 					scope:this
 				}
@@ -1571,11 +1572,11 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
             this.resourcesGrid = new GO.calendar.ResourcesGrid({
                 title:GO.calendar.lang.resources,
                 layout:'fit',
-                id:'resources-grid',
                 store:this.writableResourcesStore,
                 deleteConfig: {
 					callback:function(){
-						this.resourcesStore.reload();
+						this.resourcesStore.reload();                        
+                        GO.calendar.eventDialog.resourceGroupsStore.reload();
 					},
 					scope:this
 				}
