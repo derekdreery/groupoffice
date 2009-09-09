@@ -32,8 +32,8 @@ GO.calendar.EventDialog = function(calendar) {
 
     this.resourceGroupsStore.on('load', function()
     {
-        this.resourcesPanel.removeAll(true);        
-        this.buildAccordion();                       
+        this.resourcesPanel.removeAll(true);
+        this.buildAccordion();         
     }, this);
 
     var items  = [
@@ -85,7 +85,6 @@ GO.calendar.EventDialog = function(calendar) {
 
 Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
     resources_options : '',
-    resources_checked : false,
     beforeInit : function(){
 
     },
@@ -251,8 +250,6 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
         this.formPanel.baseParams.tmp_files = config.tmp_files ? Ext.encode(config.tmp_files) : '';
 
         this.formPanel.form.reset();
-
-        this.resources_checked = false;
         
         this.tabPanel.setActiveTab(0);
 
@@ -287,10 +284,9 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
                     this.files_folder_id = action.result.data.files_folder_id;
 
-                    this.resources_checked = action.result.data.resources_checked;
                     if(action.result.data.group_id == 1)
                     {
-                        this.toggleFieldSets(this.resources_checked);
+                        this.toggleFieldSets(action.result.data.resources_checked);
                     }                   
                 },
                 failure : function(form, action) {
@@ -415,40 +411,51 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
             }
         }
     },
-    afterResourceUpdate : function()
-    {
-        var options = {};
+    updateResourcePanel : function()
+    {       
+        var values = {};
+        var checked = [];
 
         // save values before all items are removed (checkboxes + statuses)
-        if(GO.customfields && GO.customfields.types["1"])
+        if(this.win.isVisible())
         {
-            for(var i=0; i<this.resourceGroupsStore.data.items.length; i++)
+            if(GO.customfields && GO.customfields.types["1"])
             {
-                var record = this.resourceGroupsStore.data.items[i].data;
-                var resources = record.resources;
-
-                for(var j=0; j<resources.length; j++)
+                for(var i=0; i<this.resourceGroupsStore.data.items.length; i++)
                 {
-                    var calendar_id = resources[j].id;
-                    options['status_'+calendar_id] = this.formPanel.form.findField('status_'+calendar_id).getValue();
-                    
-                    for(var k=0; k<record.fields.length; k++)
-                    {
-                        var field = record.fields[k];
-                        if(field)
-                        {
-                            for(var l=0; l<GO.customfields.types["1"].panels.length; l++)
-                            {
-                                var cfield = 'cf_category_'+GO.customfields.types["1"].panels[l].category_id;
-                                if(cfield == field)
-                                {
-                                    var cf = GO.customfields.types["1"].panels[l].customfields;
-                                    for(var m=0; m<cf.length; m++)
-                                    {
-                                        var name = 'resource_options['+calendar_id+']['+cf[m].name+']';
-                                        var value = this.formPanel.form.findField(name).getValue();
+                    var record = this.resourceGroupsStore.data.items[i].data;
+                    var resources = record.resources;
 
-                                        options[name] = value;
+                    for(var j=0; j<resources.length; j++)
+                    {
+                        var calendar_id = resources[j].id;
+                        values['status_'+calendar_id] = this.formPanel.form.findField('status_'+calendar_id).getValue();
+
+                        var p = this.resourcesPanel.getComponent('group_'+record.id);
+                        var c = p.getComponent('resource_'+calendar_id);                        
+                        if(!c.collapsed)
+                        {
+                            checked.push(calendar_id);
+                        }
+
+                        for(var k=0; k<record.fields.length; k++)
+                        {
+                            var field = record.fields[k];
+                            if(field)
+                            {
+                                for(var l=0; l<GO.customfields.types["1"].panels.length; l++)
+                                {
+                                    var cfield = 'cf_category_'+GO.customfields.types["1"].panels[l].category_id;
+                                    if(cfield == field)
+                                    {
+                                        var cf = GO.customfields.types["1"].panels[l].customfields;
+                                        for(var m=0; m<cf.length; m++)
+                                        {
+                                            var name = 'resource_options['+calendar_id+']['+cf[m].name+']';
+                                            var value = this.formPanel.form.findField(name).getValue();
+
+                                            values[name] = value;
+                                        }
                                     }
                                 }
                             }
@@ -457,19 +464,19 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
                 }
             }
         }
-
+        
         this.resourceGroupsStore.load({
             callback:function()
             {
-                if(this.win.isVisible() && this.event_id > 0)
+                if(this.win.isVisible())
                 {
-                    if(this.resources_checked)
+                    if(checked)
                     {
-                        this.toggleFieldSets(this.resources_checked);
+                        this.toggleFieldSets(checked);
                     }
 
                     // after reload store set the values we saved earlier
-                    this.setValues(options);
+                    this.setValues(values);
                 }
             },
             scope:this
@@ -485,15 +492,15 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
             for(var j=0; j<resources.length; j++)
             {                
                 var p = this.resourcesPanel.getComponent('group_'+record.id);
-                var r = resources[j].id;
-                var c = p.getComponent(r);                
+                var r = 'resource_'+resources[j].id;
+                var c = p.getComponent(r);
 
-                if(resources_checked && (resources_checked.indexOf(r) != -1))
+                if(resources_checked && (resources_checked.indexOf(resources[j].id) != -1))
                 {
                     c.expand();
                 }else
                 {
-                    var l = c.getComponent('status_'+r);
+                    var l = c.getComponent('status_'+resources[j].id);
                     l.setValue(GO.calendar.lang.no_status);
 
                     c.collapse();
@@ -1477,17 +1484,18 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
                         }));
                     }
                 }
-                
+
                 resourceFieldSets.push({
                     xtype:'fieldset',
                     checkboxToggle:true,
                     checkboxName:'resources['+resources[j].id+']',
                     title:resources[j].name,
-                    id:resources[j].id,
+                    id:'resource_'+resources[j].id,
                     autoHeight:true,
+                    collapsed:true,
                     items:resourceOptions
                 });
-            }           
+            }  
             
             this.resourcesPanel.add(new Ext.Panel({
                 cls:'go-form-panel',
