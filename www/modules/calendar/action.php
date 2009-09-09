@@ -968,7 +968,7 @@ try{
 			$existing_calendar = $cal->get_calendar_by_name($calendar['name']);
 			if($existing_calendar && ($calendar['id']==0 || $existing_calendar['id']!=$calendar['id']))
 			{
-				throw new Exception($sc_calendar_exists);
+				//throw new Exception($sc_calendar_exists);
 			}
 
 			if($calendar['id']>0)
