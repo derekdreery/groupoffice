@@ -167,7 +167,7 @@ foreach($scripts as $script) {
 <script type="text/javascript">
 	if(typeof(Ext)=='undefined')
 	{
-		alert('The ExtJS javascripts were not loaded. Your host configuration properties are probably configured incorrectly');
+		alert('The ExtJS javascripts were not loaded. Check local_url, local_path and the host property in config.ph');
 	}
 </script>
 <?php
@@ -276,38 +276,22 @@ if($GO_SECURITY->logged_in()) {
 	}
 	if(file_exists($path)){
 
-		//$url = $GO_CONFIG->use_zlib_compression() ? $GO_CONFIG->host.'compress.php?file='.$filename : $GO_CONFIG->local_url.'cache/'.$filename;
-
-		echo '<script type="text/javascript" src="'.$GO_CONFIG->local_url.'cache/'.$filename.'?mtime='.filemtime($path).'"></script>'."\n";
+		$url = $GO_CONFIG->use_zlib_compression() ? $GO_CONFIG->host.'compress.php?file='.$filename.'&mtime='.filemtime($path) : $GO_CONFIG->local_url.'cache/'.$filename & $GO_CONFIG->local_url.'cache/'.$filename.'?mtime='.filemtime($path);
+		echo '<script type="text/javascript" src="'.$url.'"></script>'."\n";
 	}
 }
 ?>
-
-
-
-
 <script type="text/javascript">
 	Ext.BLANK_IMAGE_URL = '<?php echo $GO_CONFIG->host; ?>ext/resources/images/default/s.gif';
-	
-
-	if(!GO.state.HttpProvider)
-	{
-		alert('The Group-Office javascripts were not loaded. Your local_url or local_path configuration properties are probably configured incorrectly');
-	}
 
 	Ext.state.Manager.setProvider(new GO.state.HttpProvider({url: BaseHref+'state.php'}));
-
-
 </script>
 <?php
-
 if(file_exists($GO_THEME->theme_path.'MainLayout.js')) {
 	echo '<script src="'.$GO_THEME->theme_url.'MainLayout.js" type="text/javascript"></script>';
 	echo "\n";
 }
-
 ?>
-
 <script type="text/javascript">
 <?php
 if(isset($_GET['module']))

@@ -116,6 +116,9 @@ line-height:20px;
 .btn-actions {
 	background-image:url('images/16x16/actions.png') !important;
 }
+.btn-extra {
+	background-image:url('images/16x16/actions.png') !important;
+}
 
 .btn-print{
 	background-image:url('images/16x16/print.png') !important;

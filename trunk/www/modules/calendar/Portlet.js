@@ -89,16 +89,21 @@ GO.calendar.SummaryGroupPanel = function(config)
 		{
 			header:GO.lang.strTime,
 			dataIndex: 'time',
-			width:70
+			width:100,
+			align:'right'
 		},
 		{
 			id:'summary-calendar-name-heading',
 			header:GO.lang.strName,
 			dataIndex: 'name',
-			renderer: this.renderName
+			renderer:function(value, p, record){
+				p.attr = 'ext:qtip="'+Ext.util.Format.htmlEncode(GO.calendar.formatQtip(record.data))+'"';
+				return value;
+			}
 		},{
 			header:GO.calendar.lang.calendar,
-			dataIndex: 'calendar_name'
+			dataIndex: 'calendar_name',
+			width:140
 		}];
 		
 	config.view=  new Ext.grid.GroupingView({
@@ -123,10 +128,6 @@ GO.calendar.SummaryGroupPanel = function(config)
 
 Ext.extend(GO.calendar.SummaryGroupPanel, Ext.grid.GridPanel, {
 	
-	renderName : function(grid, value, record)
-	{		
-		return '<div style="font-weight:bold">'+record.data.name+'</div>'+GO.calendar.formatQtip(record.data);		
-	},
 		
 	afterRender : function()
 	{

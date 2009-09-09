@@ -162,7 +162,7 @@ GO.mainLayout.onReady(function(){
 												Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
 											}else
 											{
-												var responseParams = Ext.decode(response.responseText);
+												//var responseParams = Ext.decode(response.responseText);
 												this.PortletSettings.store.reload();
 												this.manageTasksWindow.hide();
 												
