@@ -892,7 +892,20 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
                 GO.calendar.lang.tentative],
                 ['DELEGATED',
                 GO.calendar.lang.delegated]]
-            })
+            }),
+						listeners: {
+							scope:this,
+							change:function(cb, newValue){
+								if(this.formPanel.form.baseParams['group_id']>0){
+									if(newValue=='ACCEPTED'){
+										this.colorField.setValue('CCFFCC');
+									}else
+									{
+										this.colorField.setValue('FF6666');
+									}
+								}
+							}
+						}
         });
 
         this.busy = new Ext.form.Checkbox({
