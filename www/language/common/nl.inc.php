@@ -173,4 +173,4 @@ $lang['common']['links']='Links';
 $lang['common']['GOwebsite']='Group-Office website';
 $lang['common']['GOisAProductOf']='<i>Group-Office</i> is een product van <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
 
-$lang['commmon']['logFiles']='Log bestanden';
+$lang['commmon']['logFiles']='Logbestanden';
