@@ -196,6 +196,24 @@ try{
 								$response[]=$node;
 						}
 
+
+						if($GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
+						{
+
+								$log_folder = $files->resolve_path('log');
+								$node= array(
+								'text'=>$lang['commmon']['logFiles'],
+								'id'=>$log_folder['id'],
+								'iconCls'=>'folder-default',
+								'draggable'=>false,
+								'allowDrop'=>false,
+								'notreloadable'=>true
+								);
+								$response[]=$node;
+						}
+
+
+
 						$num_new_files = $files->get_num_new_files($GO_SECURITY->user_id);
 
 						$node= array(
