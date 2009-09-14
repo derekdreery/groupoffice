@@ -56,3 +56,5 @@ $updates[] = "ALTER TABLE `ab_contacts` ADD `default_salutation` VARCHAR( 255 ) 
 $updates[] = "ALTER TABLE `ab_companies` ADD `iso_address_format` VARCHAR( 2 ) NOT NULL ";
 $updates[] = "ALTER TABLE `ab_companies` ADD `post_iso_address_format` VARCHAR( 2 ) NOT NULL ";
 $updates[] = "script:2_set_default_salutation.inc.php";
+
+$updates[] = "ALTER TABLE `ab_companies` CHANGE `name` `name` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL";
