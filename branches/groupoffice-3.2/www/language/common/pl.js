@@ -13,9 +13,22 @@
  * Polish Translation v1.0
  * Author : Robert GOLIAT info@robertgoliat.com  info@it-administrator.org
  * Date : January, 20 2009
+ * Polish Translation v1.1
+ * Author : Michał Kość michael12n@o2.pl
+ * Date : September, 11 2009
 */
 
-GO.lang.more='Więcej';
+
+GO.lang.exportHiddenColumns='Eksportować także ukryte kolumny';
+GO.lang.searchQuery='szukaj';
+GO.lang.pleaseApplyFirst='Proszę zapisz poprzez naciśnięcie przycisku \'Zastosuj\'';
+GO.lang.passwordMatchError='Hasła nie pasują do siebie';
+GO.lang.serverError='Na stronie wystąpił błąd. Skontaktuj się ze swoim administratorem systemu i przekaż mu szczegóły błędu.';
+GO.lang.errorDetails='Szczegóły błędu';
+GO.lang.contactSupportDesk='Kontakt z pomocą techniczną';
+
+GO.lang.disabled='Wyłącz';
+GO.lang.changesWillBeLost='Wprowadziłeś zmiany na tym ekranie. Naciśnij Anuluj i zapisz zmiany lub Ok żeby kontynuować i usunąć zmiany.';
 GO.lang.strCommunityForum='Forum';
 GO.lang.moduleRequired='Ta funkcja wymaga modułu \'{module}\'. Moduł nie jest dostępny.';
 
@@ -47,7 +60,7 @@ GO.lang.users = 'Użytkownicy';
 GO.lang.strOwner = 'Właściciel';
 GO.lang.strContacts = 'Kontakty';
 
-GO.lang.strLanguage='Język';
+GO.lang.strLanguage = 'Język';
 
 GO.lang.strOpenOffice = 'Dokument OpenOffice.org';
 
@@ -74,6 +87,7 @@ GO.lang.strZip = 'Kod pocztowy';
 GO.lang.strCity = 'Miasto';
 GO.lang.strState = 'Województwo';
 GO.lang.strCountry = 'Kraj';
+GO.lang.strAddressFormat = 'Format adresu';
 GO.lang.strHomepage = 'Strona domowa';
 GO.lang.strCompany = 'Firma';
 GO.lang.strDepartment = 'Dział';
@@ -98,6 +112,7 @@ GO.lang.strPostZip = 'Kod pocztowy (poczta)';
 GO.lang.locations = 'Lokalizacje';
 GO.lang.folder = 'Folder';
 GO.lang.folders = 'Foldery';
+GO.lang.newFolder='Nowy folder';
 
 GO.lang.up = 'Wyżej';
 GO.lang.fileExists = 'Plik istnieje';
@@ -125,13 +140,14 @@ GO.lang.cmdAdd = 'Dodaj';
 GO.lang.cmdAddPlusNew = 'Dodaj + nowy';
 GO.lang.cmdSavePlusNew='Zapisz + nowy';
 GO.lang.cmdSave = 'Zapisz';
+GO.lang.cmdSaveAs = 'Zapisz jako'; 
 GO.lang.cmdEdit = 'Popraw';
 GO.lang.cmdLink = 'Połacz';
 GO.lang.cmdUnlink = 'Rozłącz';
 GO.lang.cmdClose = 'Zamknij';
 GO.lang.cmdSettings = 'Ustawienia';
 GO.lang.cmdReset = 'Reset';
-GO.lang.cmdExport='Export';
+GO.lang.cmdExport='Eksport';
 GO.lang.cmdPrint='Drukuj';
 GO.lang.cmdImport='Import';
 
@@ -180,7 +196,7 @@ GO.lang.strError= 'Błąd';
 GO.lang.waitMsgSave= 'Zapisywanie ...';
 GO.lang.waitMsgLoad= 'Ładowanie ...';
 GO.lang.waitMsgUpload= 'Wysyłanie ...';
-
+GO.lang.strRequestError= 'Nie można połączyć z serwerem. Proszę sprawdzić swoje połączenie internetowe.';
 
 GO.lang.strSelected = 'Wybrane';
 GO.lang.noItemSelected= 'Nie wybrano żadnych pozycji.';
@@ -225,6 +241,8 @@ GO.lang.strYear="Rok";
 GO.lang.strYears="Lat";
 GO.lang.strTime='Czas';
 
+GO.lang.selectWeek='Wybierz tydzień';
+
 GO.lang.shortDays = ['Nie', 'Pon', 'Wto', 'Śro', 'Czw', 'Pią','Sob'];
 
 GO.lang.noRecurrence = 'Brak powtarzania';
@@ -232,6 +250,7 @@ GO.lang.monthsByDate = 'Miesięcznie wg daty';
 GO.lang.monthsByDay = 'Miesięcznie wg dnia';
 
 GO.lang.strSelectFiles='Wybrane pliki';
+GO.lang.strSelectFile='Wybrany plik';
 GO.lang.strFiles='Pliki';
 GO.lang.strSubject='Temat';
 GO.lang.strLocation='Lokalizacja';
@@ -249,10 +268,11 @@ GO.lang.strAvailability='Dostępność';
 GO.lang.strView='Widok';
 
 GO.lang.field = 'Pole';
+GO.lang.value = 'Wartość';
 
 GO.lang.customer = 'Klient';
 
-GO.lang.strNoCountrySelected='Nie wybrano kraju';
+GO.lang.strNoCountrySelected = 'Nie wybrano kraju';
 GO.lang.menu = 'Menu';
 GO.lang.root = 'Root';
 GO.lang.left = 'Lewo';
@@ -265,6 +285,7 @@ GO.lang.remindPassword='Zapamietaj mój login na tym komputerze';
 
 GO.lang.reminders = 'Przypomnienia';
 GO.lang.dismiss='Odrzuć';
+GO.lang.selectAll='Zaznacz wszystko';
 GO.lang.snooze='Drzemka';
 
 GO.lang.strMax = 'Maksimum';
@@ -274,4 +295,30 @@ GO.lang.settings='Ustawienia';
 GO.lang.latestLinks='Ostatnie linki'
 GO.lang.cmdBrowseLinks = 'Linki';
 
-GO.lang.displayingItemsShort='Total: {2}';
+GO.lang.today='Dzisiaj';
+
+GO.lang.displayingItemsShort='Ogólnie: {2}';
+
+GO.lang.image='Obrazek';
+GO.lang.insertImage='Wstaw obrazek do tekstu';
+
+GO.lang.item='pozycja';
+GO.lang.items='pozycje';
+
+GO.lang.more='Więcej';
+
+GO.lang.on ='Wł';
+GO.lang.off ='Wył';
+
+GO.lang.keyword='Keyword';
+
+
+GO.lang.total='Ogólnie';
+
+GO.lang.closeApps='Zamknij aplikację';
+GO.lang.rightClickToClose='Kliknij prawym przyciskiem na zakładkę żeby ją zamknąć.';
+
+GO.lang.adminMenu = 'Menu administratora';
+
+GO.lang.administration = 'Zarządzanie';
+ 	  	 
