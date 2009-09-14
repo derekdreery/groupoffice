@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `ab_companies` (
   `link_id` int(11) default NULL,
   `user_id` int(11) NOT NULL default '0',
   `addressbook_id` int(11) NOT NULL default '0',
-  `name` varchar(50) default NULL,
+  `name` varchar(100) default NULL,
   `address` varchar(100) default NULL,
   `address_no` varchar(10) default NULL,
   `zip` varchar(10) default NULL,
