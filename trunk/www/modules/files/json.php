@@ -166,6 +166,11 @@ try{
 								'allowDrop'=>false,
 								'notreloadable'=>true
 								);
+
+								if(in_array($projects_folder['id'], $expand_folder_ids)){
+									$node['children']=get_node_children($projects_folder['id'], false, $expand_folder_ids);
+									$node['expanded']=true;
+								}
 								$response[]=$node;
 						}
 
@@ -182,6 +187,10 @@ try{
 								'allowDrop'=>false,
 								'notreloadable'=>true
 								);
+								if(in_array($contacts_folder['id'], $expand_folder_ids)){
+									$node['children']=get_node_children($projects_folder['id'], false, $expand_folder_ids);
+									$node['expanded']=true;
+								}
 								$response[]=$node;
 
 								$companies_folder = $files->resolve_path('companies');
@@ -193,6 +202,10 @@ try{
 								'allowDrop'=>false,
 								'notreloadable'=>true
 								);
+								if(in_array($companies_folder['id'], $expand_folder_ids)){
+									$node['children']=get_node_children($projects_folder['id'], false, $expand_folder_ids);
+									$node['expanded']=true;
+								}
 								$response[]=$node;
 						}
 
