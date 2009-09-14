@@ -785,6 +785,7 @@ class files extends db {
 		$full_path = $GO_CONFIG->file_storage_path.$this->build_path($folder);
 		if(!is_dir($full_path))
 		{
+			echo 'Not found: '.$full_path;
 			throw new FileNotFoundException();
 		}
 
@@ -1495,7 +1496,8 @@ class files extends db {
 
 		$fs = new files();
 
-		$fs2 = new files();
+		//$fs->query("DELETE FROM fs_folders WHERE id=0");
+		
 		/*echo 'Deleting invalid folders in database'.$line_break;
 		 $sql = "SELECT * FROM fs_folders";
 		 $fs->query($sql);
@@ -1543,15 +1545,15 @@ class files extends db {
 			}
 		}*/
 
-		/*echo 'Correcting id=0'.$line_break;
+		echo 'Correcting id=0'.$line_break;
 
 		$sql = "SELECT path FROM fs_folders WHERE id=0";
 		$fs->query($sql);
 		while($r = $fs->next_record())
 		{
-		$r['id']=$fs2->nextid('fs_folders');
-		$fs2->update_row('fs_folders', 'path', $r);
-		}*/
+			$r['id']=$fs2->nextid('fs_folders');
+			$fs2->update_row('fs_folders', 'path', $r);
+		}
 	}
 
 	function crawl($path) {
