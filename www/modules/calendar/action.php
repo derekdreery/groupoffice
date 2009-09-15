@@ -378,20 +378,6 @@ try {
 				if($old_event['start_time'] != $event['start_time'] || $old_event['end_time'] != $event['end_time'])
 					$modified = true;
 
-                /*if($calendar['group_id'] > 1 && ($old_event['status'] != $event['status']))
-                {
-                    if($event['status'] == 'ACCEPTED')
-                    {
-                        $accepted = true;
-                        $event['background'] = 'CCFFCC';
-                    }else
-                    if($event['status'] == 'DECLINED')
-                    {
-                        $declined = true;
-                        $event['background'] = 'FF6666';                        
-                    }
-                }*/
-
 				$cal->update_event($event, $calendar, $old_event, $update_related);
 
 				$response['files_folder_id']=$event['files_folder_id'];
