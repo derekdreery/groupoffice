@@ -1188,7 +1188,13 @@ class calendar extends db
 	}
 
 	function update_event(&$event, $calendar=false, $old_event=false, $update_related=true)
-	{			
+	{
+		if(!$old_event)
+		{
+			$old_event = $this->get_event($event['id']);
+		}
+
+		
 		unset($event['read_permission'], $event['write_permission']);
 		if(empty($event['mtime']))
 		{
@@ -1217,10 +1223,7 @@ class calendar extends db
 			unset($event['exceptions']);
 		}
 
-		if(!$old_event)
-		{
-			$old_event = $this->get_event($event['id']);
-		}
+		
 		
 		global $GO_MODULES;
 		if(isset($GO_MODULES->modules['files']))
@@ -1316,7 +1319,13 @@ class calendar extends db
 			unset($event['user_id'], $event['calendar_id'], $event['participants_event_id']);
 			
 			$cal = new calendar();
-			$sql = "SELECT * FROM cal_events WHERE participants_event_id=".$this->escape($event['id']);
+			if(!empty($old_event['participants_event_id'])){
+				$sql = "SELECT * FROM cal_events WHERE id!=".$this->escape($event['id'])." AND (participants_event_id=".$this->escape($old_event['participants_event_id'])." OR id=".$this->escape($old_event['participants_event_id']).")";
+			}else
+			{
+				$sql = "SELECT * FROM cal_events WHERE participants_event_id=".$this->escape($event['id']);
+			}
+
 			$cal->query($sql);
 			while($old_event = $cal->next_record())
 			{
