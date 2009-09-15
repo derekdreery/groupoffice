@@ -279,8 +279,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
                     this.setWritePermission(action.result.data.write_permission);
 
                     this.selectCalendar.setValue(action.result.data.calendar_id);
-                    this.selectCalendar.setRemoteText(action.result.data.calendar_name);
-                    this.selectCalendar.container.up('div.x-form-item').setDisplayed(true);
+                    //this.selectCalendar.setRemoteText(action.result.data.calendar_name);
+                    //this.selectCalendar.container.up('div.x-form-item').setDisplayed(true);
 
                     this.files_folder_id = action.result.data.files_folder_id;
 
@@ -319,8 +319,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
                     this.setValues(config.values);
                     // this.participantsPanel.setDisabled(false);
 
-                    this.selectCalendar.setRemoteText(action.result.data.calendar_name);
-                    this.selectCalendar.container.up('div.x-form-item').setDisplayed(true);
+                    //this.selectCalendar.setRemoteText(action.result.data.calendar_name);
+                    //this.selectCalendar.container.up('div.x-form-item').setDisplayed(true);
 
                     this.setWritePermission(action.result.data.write_permission);
                 },
@@ -376,10 +376,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
                 config.calendar_name = GO.calendar.defaultCalendar.name;
             }
 
-            var calendarRecord = GO.calendar.calendarsStore.getById(config.calendar_id);
-            if(!calendarRecord)
-                calendarRecord = GO.calendar.resourcesStore.getById(config.calendar_id);
-
+						var calendarRecord = this.selectCalendar.store.getById(config.calendar_id);
+            
             var group_id = calendarRecord.get('group_id');
             this.formPanel.form.baseParams['group_id'] = group_id;
             this.initCustomFields(group_id);
@@ -388,13 +386,13 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
                 this.toggleFieldSets();
 
             this.selectCalendar.setValue(config.calendar_id);
-            if (config.calendar_name) {
-                this.selectCalendar.container.up('div.x-form-item').setDisplayed(true);
+            /*if (config.calendar_name) {
+                //this.selectCalendar.container.up('div.x-form-item').setDisplayed(true);
                 this.selectCalendar.setRemoteText(config.calendar_name);
             }else
             {
-                this.selectCalendar.container.up('div.x-form-item').setDisplayed(false);
-            }
+                //this.selectCalendar.container.up('div.x-form-item').setDisplayed(false);
+            }*/
         }
 
                                   
