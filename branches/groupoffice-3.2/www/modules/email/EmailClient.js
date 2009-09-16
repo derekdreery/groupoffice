@@ -451,6 +451,7 @@ GO.email.EmailClient = function(config){
 							if(!responseParams.success)
 							{
 								alert(responseParams.feedback);
+								Ext.MessageBox.hide();
 							}else if(responseParams['continue'])
 							{
 								Ext.MessageBox.updateProgress(responseParams.progress, (responseParams.progress*100)+'%', '');
