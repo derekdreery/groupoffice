@@ -42,7 +42,7 @@ GO.form.ComboBoxReset = Ext.extend(GO.form.ComboBox, {
 			},
 			afterRender:function(){
 				GO.form.ComboBoxReset.superclass.afterRender.call(this);
-				if(Ext.isIE8)this.el.setTop(1);
+				if(Ext.isIE8)this.el.setTop(0);
 				
 				//this.on('resize', function(combo, adjWidth, adjHeight, rawWidth, rawHeight ){console.log(adjWidth);}, this);
 			}			

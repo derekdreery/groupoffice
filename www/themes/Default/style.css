@@ -837,3 +837,9 @@ table.display-panel a:active
 	height: 16px;
 	background: transparent url(images/buttons/radioon.gif) no-repeat center center;
 }
+
+
+/*IE somtimes clipped first form field somehow*/
+.x-fieldset-body{
+	padding-top:1px;
+}
