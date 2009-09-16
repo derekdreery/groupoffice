@@ -368,6 +368,10 @@ GO.email.EmailClient = function(config){
 							if(responseParams.success)
 							{
 								node.remove();
+
+								if(node.attributes.mailbox==this.messagesGrid.store.baseParams.mailbox){
+									this.messagesGrid.store.removeAll();
+								}
 							}else
 							{
 								Ext.MessageBox.alert(GO.lang.strError,responseParams.feedback);
