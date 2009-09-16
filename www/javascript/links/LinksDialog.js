@@ -39,7 +39,6 @@ GO.dialog.LinksDialog = function(config){
 		closeAction:'hide',
 		title:GO.lang['strLinkItems'],
 		items: this.grid,
-		
 		buttons: [
 			{
 				text: GO.lang['cmdOk'],

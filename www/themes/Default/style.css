@@ -706,15 +706,13 @@ hr{
 	border:1px solid white;
 	display:block;
 	-moz-outline:none;
-	padding: 4px;
+	padding: 3px;
 	cursor: default;
 }
 
 .go-select-list .go-view-over{
     background-color:#ebf1e2;
     border:1px solid #ebf1e2;
-    /*background: #efefef url(../../ext/resources/images/default/grid/row-over.gif) repeat-x left top;*/
-	padding: 4px;
 }
 
 .go-select-list .go-view-selected{
@@ -844,8 +842,6 @@ table.display-panel a:active
 	background: transparent url(images/buttons/radioon.gif) no-repeat center center;
 }
 
-
-
 .go-icon-ok .x-grid3-cell-inner{
 	background: url('images/16x16/ok.png') no-repeat !important;
 	padding-left:22px !important;
@@ -864,4 +860,10 @@ table.display-panel a:active
 .go-icon-empty .x-grid3-cell-inner{
 	background: none !important;
 	padding-left:22px !important;
+}
+
+
+/*IE somtimes clipped first form field somehow*/
+.x-fieldset-body{
+	padding-top:1px;
 }
