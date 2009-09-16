@@ -23,10 +23,8 @@ GO.addressbook.SelectAddressbook = function(config){
 		config.fieldLabel=GO.addressbook.lang.addressbook;
 	}
 
-	Ext.apply(this, config);
 
-
-	this.store = GO.addressbook.writableAddressbooksStore;
+	config.store = GO.addressbook.writableAddressbooksStore;
 
 	GO.addressbook.SelectAddressbook.superclass.constructor.call(this,{
 		displayField: 'name',
