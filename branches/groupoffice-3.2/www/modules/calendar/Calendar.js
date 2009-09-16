@@ -268,11 +268,6 @@ GO.calendar.MainPanel = function(config){
 		key: Ext.EventObject.DELETE,
 		fn: this.deleteHandler,
 		scope: this
-	},{
-		key:Ext.EventObject.ENTER,
-		fn: function(){
-			alert('hoi');
-		}
 	}];
 						
 	var tbar = [{
