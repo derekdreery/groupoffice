@@ -58,3 +58,12 @@ $updates[] = "ALTER TABLE `ab_companies` ADD `post_iso_address_format` VARCHAR( 
 $updates[] = "script:2_set_default_salutation.inc.php";
 
 $updates[] = "ALTER TABLE `ab_companies` CHANGE `name` `name` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL";
+
+$updates[] = "ALTER TABLE `ab_contacts` CHANGE `first_name` `first_name` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT ''";
+$updates[] = "ALTER TABLE `ab_contacts` CHANGE `middle_name` `middle_name` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT ''";
+$updates[] = "ALTER TABLE `ab_contacts` CHANGE `last_name` `last_name` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT ''";
+$updates[] = "ALTER TABLE `ab_contacts` CHANGE `email` `email` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT ''";
+$updates[] = "ALTER TABLE `ab_contacts` CHANGE `email2` `email2` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT ''";
+$updates[] = "ALTER TABLE `ab_contacts` CHANGE `email3` `email3` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT ''";
+
+$updates[] = "ALTER TABLE `ab_contacts` DROP INDEX `link_id_2` ";
