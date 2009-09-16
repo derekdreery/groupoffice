@@ -702,15 +702,13 @@ hr{
 	border:1px solid white;
 	display:block;
 	-moz-outline:none;
-	padding: 4px;
+	padding: 3px;
 	cursor: default;
 }
 
 .go-select-list .go-view-over{
     background-color:#ebf1e2;
     border:1px solid #ebf1e2;
-    /*background: #efefef url(../../ext/resources/images/default/grid/row-over.gif) repeat-x left top;*/
-	padding: 4px;
 }
 
 .go-select-list .go-view-selected{
