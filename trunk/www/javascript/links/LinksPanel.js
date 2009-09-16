@@ -48,6 +48,15 @@ GO.grid.LinksPanel = function(config){
 	
 	this.linksTree.on('contextmenu', function(node, e){
 		e.stopEvent();
+
+		var selModel = this.linksTree.getSelectionModel();
+
+		if(!selModel.isSelected(node))
+		{
+			selModel.clearSelections();
+			selModel.select(node);
+		}
+
 		var folder_id = node.id.substr(10);
 		
 		if(folder_id!='')
@@ -88,7 +97,7 @@ GO.grid.LinksPanel = function(config){
 		}else
 		{
 			//dropped from tree		  
-		  var selections = ['folder:'+e.data.node.id.substr(10)];
+		  selections = ['folder:'+e.data.node.id.substr(10)];
 		}
 		
 		this.moveSelections(selections, target);
@@ -113,6 +122,14 @@ GO.grid.LinksPanel = function(config){
 				}
 			}
 	});
+
+	this.linksGrid.store.on('load', function(){
+		var sm = this.linksTree.getSelectionModel();
+
+		var activeNode = this.linksTree.getNodeById('lt-folder-'+this.folder_id);
+		if(activeNode)
+			sm.select(activeNode);
+	}, this);
 	
 	this.linksGrid.on('folderDrop', function(grid, selections, dropRecord){
 		var target = {
@@ -188,7 +205,32 @@ GO.grid.LinksPanel = function(config){
 	}, this);
 	
 	this.linksContextMenu.on('delete', function(menu,selections){
-		this.linksGrid.deleteSelected();
+
+		if(selections.indexOf('folder:'+this.folder_id)>-1){
+			this.setFolder(0,true);
+		}
+		
+		var deleteConfig = {
+			store:this.linksGrid.store,
+			params:{
+				delete_keys:Ext.encode(selections)
+			},
+			count:selections.length,
+			callback:function(){
+				var colonPos, folder_id, deletedNode;
+				for(var i=0;i<selections.length;i++){
+					colonPos = selections[i].indexOf(':');
+					folder_id = selections[i].substr(colonPos+1);
+
+					deletedNode = this.linksTree.getNodeById('lt-folder-'+folder_id);
+					if(deletedNode)
+						deletedNode.remove();					
+				}
+			},
+			scope:this
+		};
+		GO.deleteItems(deleteConfig);
+		
 	}, this);
 	
 	this.linksContextMenu.on('unlink', function(menu,selections){
@@ -400,7 +442,7 @@ Ext.extend(GO.grid.LinksPanel, Ext.Panel, {
 		this.linksGrid.write_permission=writePermission;
 	},
 	
-	setFolder : function(folder_id)
+	setFolder : function(folder_id, noload)
 	{
 		var activeNode = this.linksTree.getNodeById('lt-folder-'+folder_id);
 		if(activeNode)
@@ -412,7 +454,8 @@ Ext.extend(GO.grid.LinksPanel, Ext.Panel, {
 		
 		this.folder_id=folder_id;
 		this.linksGrid.store.baseParams["folder_id"]=folder_id;
-		this.linksGrid.store.load();
+		if(!noload)
+			this.linksGrid.store.load();
 	},
 	
 	loadLinks : function (link_id, link_type, folder_id)

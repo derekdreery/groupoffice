@@ -113,15 +113,7 @@ GO.grid.SearchPanel = function(config){
 		sm:new Ext.grid.RowSelectionModel({})
 	};
 	
-	if(config.noOpenLinks)
-	{
-		gridConfig.bbar = [GO.lang.strDescription+': ',' ',this.linkDescriptionField = new GO.form.LinkDescriptionField({
-				name:'description',
-				width:320
-			})];
-	}
-	
-	this.searchGrid = new GO.grid.GridPanel(gridConfig);
+		this.searchGrid = new GO.grid.GridPanel(gridConfig);
 	
 	this.searchGrid.store.setDefaultSort('mtime', 'desc');
 	if(!config.noTitle)
@@ -148,6 +140,24 @@ GO.grid.SearchPanel = function(config){
 		}, this);
 	}
   config.items=[this.filterPanel, this.searchGrid];
+
+	if(config.noOpenLinks)
+	{
+		config.items.push({
+			region:'south',
+			height:34,
+			layout:'form',
+			cls:'go-form-panel',
+			split:true,
+			items:this.linkDescriptionField = new GO.form.LinkDescriptionField({
+				name:'description',
+				fieldLabel:GO.lang.strDescription,
+				anchor:'100%'
+			})
+		});
+	}
+
+
 		
   GO.grid.SearchPanel.superclass.constructor.call(this, config);
 }
