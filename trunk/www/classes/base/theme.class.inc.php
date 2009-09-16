@@ -139,6 +139,11 @@ class GO_THEME
 		$cssfile = $GO_CONFIG->local_path.$relpath;
 
 		if(!file_exists($cssfile) || $GO_CONFIG->debug){
+
+			if(!is_dir($GO_CONFIG->local_path.'cache')){
+				mkdir($GO_CONFIG->local_path.'cache', $GO_CONFIG->folder_create_mode, true);
+			}
+
 			$fp = fopen($cssfile, 'w+');
 			foreach($this->stylesheets as $s){
 
