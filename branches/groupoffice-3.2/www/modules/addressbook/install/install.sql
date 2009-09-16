@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `ab_contacts` (
   `user_id` int(11) NOT NULL default '0',
   `addressbook_id` int(11) NOT NULL default '0',
   `source_id` int(11) NOT NULL default '0',
-  `first_name` varchar(50) default NULL,
+  `first_name` varchar(50) default '',
   `middle_name` varchar(50) default NULL,
   `last_name` varchar(50) default NULL,
   `initials` varchar(10) default NULL,
@@ -128,10 +128,11 @@ CREATE TABLE IF NOT EXISTS `ab_contacts` (
   `email_allowed` enum('0','1') NOT NULL,
   `files_folder_id` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
-  KEY `user_id` (`addressbook_id`),
   KEY `link_id` (`link_id`),
-  KEY `link_id_2` (`link_id`)
+  KEY `addressbook_id` (`addressbook_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
 
 -- --------------------------------------------------------
 
