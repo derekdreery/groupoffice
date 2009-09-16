@@ -131,11 +131,16 @@ class GO_THEME
 	}
 
 	function get_cached_css(){
-		global $GO_CONFIG, $GO_SECURITY;
+		global $GO_CONFIG, $GO_SECURITY, $GO_MODULES;
 
-		$hash = md5($GO_CONFIG->root_path.$GO_CONFIG->host.$GO_CONFIG->mtime);
+		$mods='';
+		foreach($GO_MODULES->modules as $module) {
+			$mods.=$module['id'];
+		}
 
-		$relpath= 'cache/'.$hash.'-style.css';
+		$hash = md5($GO_CONFIG->root_path.$GO_CONFIG->host.$GO_CONFIG->mtime.$mods);
+
+		$relpath= 'cache/'.$hash.'-'.$this->theme.'-style.css';
 		$cssfile = $GO_CONFIG->local_path.$relpath;
 
 		if(!file_exists($cssfile) || $GO_CONFIG->debug){

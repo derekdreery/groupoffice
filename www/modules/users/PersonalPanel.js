@@ -57,7 +57,6 @@ GO.users.PersonalPanel = function(config)
 					{fieldLabel: GO.lang['strFirstName'], name: 'first_name', allowBlank: false},
 					{fieldLabel: GO.lang['strMiddleName'], name: 'middle_name'},
 					{fieldLabel: GO.lang['strLastName'], name: 'last_name', allowBlank: false},
-					new GO.form.HtmlComponent({html: '<br />'}),				
 					{fieldLabel: GO.lang['strTitle'], name: 'title'},
 					{fieldLabel: GO.lang['strInitials'], name: 'initials'},
 					new Ext.form.ComboBox({
