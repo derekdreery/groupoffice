@@ -1,8 +1,12 @@
 <?php
 
 global $GO_MODULES;
-require_once ($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
 
-$cf = new customfields();
+if(isset($GO_MODULES->modules['customfields']))
+{
+    require_once ($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
 
-$cf->delete_link_type(8);
+    $cf = new customfields();
+
+    $cf->delete_link_type(8);
+}
