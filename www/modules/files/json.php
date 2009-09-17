@@ -213,16 +213,18 @@ try{
 						if($GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
 						{
 
-								$log_folder = $files->resolve_path('log');
-								$node= array(
-								'text'=>$lang['commmon']['logFiles'],
-								'id'=>$log_folder['id'],
-								'iconCls'=>'folder-default',
-								'draggable'=>false,
-								'allowDrop'=>false,
-								'notreloadable'=>true
-								);
-								$response[]=$node;
+								$log_folder = $files->resolve_path('log',true);
+								if($log_folder){
+									$node= array(
+									'text'=>$lang['commmon']['logFiles'],
+									'id'=>$log_folder['id'],
+									'iconCls'=>'folder-default',
+									'draggable'=>false,
+									'allowDrop'=>false,
+									'notreloadable'=>true
+									);
+									$response[]=$node;
+								}
 						}
 
 
