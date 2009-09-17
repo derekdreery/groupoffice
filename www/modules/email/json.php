@@ -707,6 +707,9 @@ try{
 
 					$contact = $ab->get_contact_by_email($response['sender'], $GO_SECURITY->user_id);
 					$response['sender_contact_id']=intval($contact['id']);
+
+                    $contact['contact_name'] = String::format_name($contact);
+                    $response['contact']=$contact;
 				}
 
 
