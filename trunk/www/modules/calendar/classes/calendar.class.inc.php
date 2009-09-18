@@ -2362,9 +2362,9 @@ class calendar extends db
 		{
 			$sql .= " LIMIT ".intval($start).",".intval($offset);
 		}
-		$this->query($sql);
-
-        return $this->num_rows();
+		
+    $this->query($sql);
+		return $offset>0 ? $this->found_rows() : $this->num_rows();
 	}
 	/**
 	 * Gets all Event Resources
