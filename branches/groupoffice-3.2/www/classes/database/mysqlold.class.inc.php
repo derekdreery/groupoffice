@@ -47,20 +47,6 @@ class db extends base_db {
 	 */
 	var $pconnect     = false;
 
-
-	/**
-	 * Returns the number of rows found when you have used 
-	 * SELECT SQL_CALC_FOUND_ROWS
-	 *
-	 * @return unknown
-	 */
-	
-	public function found_rows(){
-		$this->query("SELECT FOUND_ROWS() as found;");
-		$this->next_record();
-		return $this->f('found');
-	}
-
 	/**
 	 * Connnects to the database
 	 *

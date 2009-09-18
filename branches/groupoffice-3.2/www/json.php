@@ -107,13 +107,13 @@ try{
 			$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : '0';
 			$limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : '0';
 			$query = isset($_REQUEST['query']) ? '%'.$_REQUEST['query'].'%' : '';
-			$GO_LINKS->get_link_descriptions( $query, $sort, $dir, $start, $limit);
+			$response['total'] = $GO_LINKS->get_link_descriptions( $query, $sort, $dir, $start, $limit);
 			$response['results']=array();
 			while($link_description = $GO_LINKS->next_record())
 			{
 				$response['results'][] = $link_description;
 			}
-			$response['total'] = $GO_LINKS->found_rows();
+			
 			break;
 			
 		case 'settings':
