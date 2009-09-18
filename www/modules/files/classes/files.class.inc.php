@@ -1110,7 +1110,8 @@ class files extends db {
 		if($offset>0) {
 			$sql .= " LIMIT ".intval($start).",".intval($offset);
 		}
-		return $this->query($sql, $types, $params);
+		$this->query($sql, $types, $params);
+		return $offset>0 ? $this->found_rows() : $this->num_rows();
 	}
 
 	function has_children($folder_id){
@@ -1152,9 +1153,8 @@ class files extends db {
 		if($offset>0) {
 		 	$sql .= " LIMIT ".intval($start).",".intval($offset);
 		}
-		return $this->query($sql, $types, $params);
-
-
+		$this->query($sql, $types, $params);
+		return $offset>0 ? $this->found_rows() : $this->num_rows();
 	}
 
 	function move_by_paths($sourcepath, $destpath) {

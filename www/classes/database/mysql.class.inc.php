@@ -207,19 +207,6 @@ class db extends base_db{
 		}
 	}
 
-	/**
-	 * Returns the number of rows found when you have used
-	 * SELECT SQL_CALC_FOUND_ROWS
-	 *
-	 * @return unknown
-	 */
-
-	public function found_rows(){
-		$this->query("SELECT FOUND_ROWS() as found;");
-		$this->next_record();
-		return $this->f('found');
-	}
-
 
 	/**
 	 * Walk the result set from a select query

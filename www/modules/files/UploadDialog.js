@@ -20,38 +20,56 @@ GO.files.UploadDialog = function(config) {
 				addText : GO.lang.smallUpload
 			});
 
+	var items = [this.uploadFile, new Ext.Button({
+			text : GO.lang.largeUpload,
+			handler : function() {
+				if (!deployJava.isWebStartInstalled('1.5.0')) {
+					Ext.MessageBox.alert(GO.lang.strError,
+							GO.lang.noJava);
+				} else {
+					/*
+					 * var p = GO.util.popup({ url:
+					 * GO.settings.modules.files.url+'jupload/index.php?id='+encodeURIComponent(this.folder_id),
+					 * width : 640, height: 500, target:
+					 * 'jupload' });
+					 */
+
+					window
+							.open(GO.settings.modules.files.url
+									+ 'jupload/index.php?id='
+									+ this.folder_id);
+
+					this.hide();
+				}
+			},
+			scope : this
+		}),{
+			xtype:'textarea',
+			name:'comments',
+			fieldLabel:GO.lang.comments,
+			anchor:'100%',
+			height:100
+	}];
+	
+
+	if(GO.customfields && GO.customfields.types["6"])
+	{
+  	for(var i=0;i<GO.customfields.types["6"].panels.length;i++)
+  	{
+  		items.push(GO.customfields.types["6"].panels[i]);
+  	}
+	}
+
+
 	this.upForm = new Ext.form.FormPanel({
-				fileUpload : true,
-				waitMsgTarget : true,
-				baseParams: {
-				  task: 'upload'
-				},
-				items : [this.uploadFile, new Ext.Button({
-							text : GO.lang.largeUpload,
-							handler : function() {
-								if (!deployJava.isWebStartInstalled('1.5.0')) {
-									Ext.MessageBox.alert(GO.lang.strError,
-											GO.lang.noJava);
-								} else {
-									/*
-									 * var p = GO.util.popup({ url:
-									 * GO.settings.modules.files.url+'jupload/index.php?id='+encodeURIComponent(this.folder_id),
-									 * width : 640, height: 500, target:
-									 * 'jupload' });
-									 */
-
-									window
-											.open(GO.settings.modules.files.url
-													+ 'jupload/index.php?id='
-													+ this.folder_id);
-
-									this.hide();									
-								}
-							},
-							scope : this
-						})],
-				cls : 'go-form-panel'
-			});
+		fileUpload : true,
+		waitMsgTarget : true,
+		baseParams: {
+			task: 'upload'
+		},
+		items : items,
+		cls : 'go-form-panel'
+	});
 
 	config.collapsible = false;
 	config.maximizable = false;

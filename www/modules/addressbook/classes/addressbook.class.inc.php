@@ -782,8 +782,8 @@ class addressbook extends db {
 			$sql .= " LIMIT ".$this->escape($start.",".$offset);
 		}
 
-		//debug($sql);
-		return $this->query($sql);
+		$this->query($sql);
+		return $offset>0 ? $this->found_rows() : $this->num_rows();
 	}
 
 	function format_contact_record(&$record) {
@@ -912,6 +912,7 @@ class addressbook extends db {
 			$sql .= " LIMIT ".$this->escape($start.",".$offset);
 		}
 		$this->query($sql);
+		return $offset>0 ? $this->found_rows() : $this->num_rows();
 	}
 
 	function add_addressbook($user_id, $name, $default_iso_address_format = 'NL', $default_salutation = '') {
@@ -1238,7 +1239,8 @@ class addressbook extends db {
 			$sql .= " LIMIT ".$this->escape($start.",".$offset);
 		}
 
-		return $this->query($sql);
+		$this->query($sql);
+		return $offset>0 ? $this->found_rows() : $this->num_rows();
 	}
 
 

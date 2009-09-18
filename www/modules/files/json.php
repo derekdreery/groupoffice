@@ -601,7 +601,7 @@ try{
 
 						//$response['path']=$path;
 
-						$files->get_folders($curfolder['id'],$dsort,$dir,$start,$limit,true);
+						$response['total']=$files->get_folders($curfolder['id'],$dsort,$dir,$start,$limit,true);
 						
 						while($folder = $files->next_record())
 						{
@@ -626,7 +626,7 @@ try{
 							$response['results'][]=$folder;
 						}
 						$count = count($response['results']);
-						$response['total']=$files->found_rows();
+						
 
 						$folder_pages = floor($response['total']/$limit);
 						$folders_on_last_page = $response['total']-($folder_pages*$limit);
@@ -647,7 +647,7 @@ try{
 
 						if($file_start>=0)
 						{
-							$files->get_files($curfolder['id'], $fsort, $dir, $file_start, $file_limit);
+							$response['total']+=$files->get_files($curfolder['id'], $fsort, $dir, $file_start, $file_limit);
 
 
 							while($file = $files->next_record())
@@ -672,7 +672,7 @@ try{
 						{
 							$files->get_files($curfolder['id'], $fsort, $dir, 0, 1);
 						}
-						$response['total']+=$files->found_rows();
+						
 					}
 
 					break;
