@@ -170,7 +170,7 @@ class search extends db {
 			$this->query($sql);
 			$count = $this->num_rows();
 		}
-		return $count;
+		return $offset>0 ? $this->found_rows() : $this->num_rows();
 	}
 
 	
@@ -316,7 +316,7 @@ class search extends db {
 		
 		
 		
-		$this->global_search($user_id, $query, $start, $limit, $sort,$dir, $link_types, $link_id, $link_type,$folder_id, $conditions);
+		$response['total']=$this->global_search($user_id, $query, $start, $limit, $sort,$dir, $link_types, $link_id, $link_type,$folder_id, $conditions);
 
 		while($this->next_record())
 		{
@@ -338,13 +338,7 @@ class search extends db {
 			);
 		}
 		
-		if($limit>0)
-		{
-			$response['total']=$this->found_rows();	
-		}else
-		{
-			$response['total']=$this->num_rows();
-		}
+
 		
 		return $response;
 	}

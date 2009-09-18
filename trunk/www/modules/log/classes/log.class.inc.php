@@ -60,7 +60,8 @@ class log extends db {
 		{
 			$sql .= " LIMIT ".intval($start).",".intval($offset);
 		}
-		return $this->query($sql);
+		$this->query($sql);
+		return $offset>0 ? $this->found_rows() : $this->num_rows();
 	}
 	
 	function format_log_entry(&$entry)

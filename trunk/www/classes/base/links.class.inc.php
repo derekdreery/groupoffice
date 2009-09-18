@@ -310,6 +310,7 @@ class GO_LINKS extends db
 		{
 			$sql .= " LIMIT ".intval($start).",".intval($offset);
 		}
-		return $this->query($sql, $types, $params);
+		$this->query($sql, $types, $params);
+		return $offset>0 ? $this->found_rows() : $this->num_rows();
 	}
 }

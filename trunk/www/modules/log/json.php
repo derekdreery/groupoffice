@@ -27,7 +27,7 @@ try{
 			$limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : '0';
 			$query = isset($_REQUEST['query']) ? '%'.trim($_REQUEST['query']).'%' : '';
 			
-			$log->get_entries($query, $sort, $dir, $start, $limit);
+			$response['total']=$log->get_entries($query, $sort, $dir, $start, $limit);
 			
 			$response['results']=array();
 			while($entry = $log->next_record())
@@ -35,7 +35,7 @@ try{
 				log::format_log_entry($entry);
 				$response['results'][] = $entry;
 			}
-			$response['total'] = $log->found_rows();
+			
 			break;
 			
 /* {TASKSWITCH} */
