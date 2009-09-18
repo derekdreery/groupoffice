@@ -227,7 +227,7 @@ try
 				
 				
 			$response['results']=array();
-			$ab->search_contacts(
+			$response['total']=$ab->search_contacts(
 			$GO_SECURITY->user_id,
 			$query,
 			$field,
@@ -248,8 +248,6 @@ try
 				addressbook::format_contact_record($record);
 				$response['results'][] = $record;
 			}
-			
-			$response['total'] = $ab->found_rows();
 
 			echo json_encode($response);
 			break;
@@ -325,7 +323,7 @@ try
 			}
 
 			$response['results'] = array();
-			$ab->search_companies(
+			$response['total']=$ab->search_companies(
 			$GO_SECURITY->user_id,
 			$query,
 			$field,
@@ -346,7 +344,7 @@ try
 				$response['results'][] = $record;
 			}
 			
-			$response['total'] = $ab->found_rows();
+			
 
 			echo json_encode($response);
 			break;

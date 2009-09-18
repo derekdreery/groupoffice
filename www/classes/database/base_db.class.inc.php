@@ -150,6 +150,13 @@ class base_db{
 	 */
 	 var $suppress_errors=array();
 
+	 /**
+	  * Another db object that is used to calculate the number of found rows so
+	  * that it can be called immediately after a select and doesn't clear the
+	  * result set.
+	  */
+		var $helper_db;
+
 	/**
 	 * Constructor a config object with db_host, db_pass, db_user and db_name
 	 * may be passed so it can connect to a different database then the default.
@@ -248,16 +255,6 @@ class base_db{
 	 */
 	public function query($sql, $types='', $params=array())
 	{
-	}
-
-	/**
-	 * Returns the number of rows found when you have used
-	 * SELECT SQL_CALC_FOUND_ROWS
-	 *
-	 * @return unknown
-	 */
-
-	public function found_rows(){
 	}
 
 
@@ -684,6 +681,21 @@ class base_db{
 			$types .= isset($types_array[$key]) ? $types_array[$key] : 's';
 		}
 		return $types;
+	}
+
+	/**
+	 * Returns the number of rows found when you have used
+	 * SELECT SQL_CALC_FOUND_ROWS
+	 *
+	 * @return unknown
+	 */
+	public function found_rows(){
+		if(!isset($this->helper_db)){
+			$this->helper_db = new db();
+		}
+		$this->helper_db->query("SELECT FOUND_ROWS() as found;");
+		$this->helper_db->next_record();
+		return $this->helper_db->f('found');
 	}
 
 }
