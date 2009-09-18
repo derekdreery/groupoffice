@@ -203,6 +203,7 @@ try{
 			$fs->mkdir_recursive($GO_CONFIG->tmpdir.'files_upload');
 
 			$_SESSION['GO_SESSION']['files']['uploaded_files']=array();
+			$_SESSION['GO_SESSION']['files']['uploaded_files_props']=array();
 
 			for ($n = 0; $n < count($_FILES['attachments']['tmp_name']); $n ++)
 			{
@@ -213,6 +214,7 @@ try{
 					chmod($tmp_file, $GO_CONFIG->file_create_mode);
 
 					$_SESSION['GO_SESSION']['files']['uploaded_files'][]=$tmp_file;
+					$_SESSION['GO_SESSION']['files']['uploaded_files_props'][]=$_POST;
 				}
 			}
 			$response['success']=true;
@@ -245,6 +247,7 @@ try{
 
 			while($tmp_file = array_shift($_SESSION['GO_SESSION']['files']['uploaded_files']))
 			{
+
 				$filename = utf8_basename($tmp_file);
 				$new_path = $full_path.'/'.$filename;
 
@@ -284,7 +287,19 @@ try{
 						throw new Exception($lang['common']['saveError']);
 					}
 
-					$file_id = $files->import_file($new_path, $folder['id']);
+					$props = isset($_SESSION['GO_SESSION']['files']['uploaded_files_props']) ? array_shift($_SESSION['GO_SESSION']['files']['uploaded_files_props']) : false;
+					$comments = isset($props['comments']) ? $props['comments'] : '';
+
+					$file_id = $files->import_file($new_path, $folder['id'], $comments);
+
+					if($props && $GO_MODULES->has_module('customfields'))
+					{
+						require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+						$cf = new customfields();
+
+						$cf->update_fields($GO_SECURITY->user_id, $file_id, 6, $props, true);
+					}
+
 
 					if(!$existing_file && $GO_MODULES->has_module('workflow'))
 					{

@@ -677,7 +677,7 @@ class files extends db {
 		return $this->update_file($file);
 	}
 
-	function import_file($full_path, &$parent_id=false) {
+	function import_file($full_path, &$parent_id=false, $comments='') {
 		if(!$parent_id) {
 			$parent = $this->resolve_path(dirname($this->strip_server_path($full_path)),true);
 			$parent_id=$parent['id'];
@@ -693,6 +693,7 @@ class files extends db {
 		$file['folder_id']=$parent_id;
 		$file['size']=filesize($full_path);
 		$file['extension']=File::get_extension($full_path);
+		$file['comments']=$comments;
 
 		if($existing_file) {
 			$file['id']=$existing_file['id'];
@@ -1089,11 +1090,23 @@ class files extends db {
 	}
 
 	function get_files($folder_id, $sortfield='name', $sortorder='ASC', $start=0, $offset=0, $extensions=array()) {
+		global $GO_MODULES;
+
 		$sql = "SELECT ";
 		if($offset>0) {
 			$sql .= "SQL_CALC_FOUND_ROWS ";
 		}
-		$sql .= "* FROM fs_files ";
+		$sql .= "f.*";
+
+		if($GO_MODULES->has_module('customfields')) {
+			$sql .= ",cf_6.*";
+		}
+		$sql .= " FROM fs_files f ";
+
+		if($GO_MODULES->has_module('customfields')) {
+			$sql .= "LEFT JOIN cf_6 ON cf_6.link_id=f.id ";
+		}
+
 		$types='';
 		$params=array();
 

@@ -44,19 +44,39 @@ GO.files.UploadDialog = function(config) {
 			},
 			scope : this
 		}),{
+			border:false,
+			html:GO.files.lang.uploadProperties,
+			bodyStyle:'padding:20px 0px 10px'
+		},{
 			xtype:'textarea',
 			name:'comments',
-			fieldLabel:GO.lang.comments,
+			fieldLabel:GO.files.lang.comments,
 			anchor:'100%',
 			height:100
 	}];
-	
 
+
+	
 	if(GO.customfields && GO.customfields.types["6"])
 	{
+		var cfFS, formField;
   	for(var i=0;i<GO.customfields.types["6"].panels.length;i++)
   	{
-  		items.push(GO.customfields.types["6"].panels[i]);
+			var cfPanel = GO.customfields.types["6"].panels[i];
+
+			cfFS = {
+				xtype:'fieldset',
+				title:cfPanel.title,
+				items:[],
+				autoHeight:true
+			};
+			for(var i=0;i<cfPanel.customfields.length;i++)
+			{
+				formField = GO.customfields.getFormField(cfPanel.customfields[i]);
+				cfFS.items.push(formField);
+			}
+
+			items.push(cfFS);
   	}
 	}
 
@@ -77,7 +97,8 @@ GO.files.UploadDialog = function(config) {
 	config.resizable = false;
 	config.width = 500;
 	config.items = this.upForm;
-	config.autoHeight = true;
+	config.layout='fit';
+	config.height=400;
 	config.closeAction = 'hide';
 	config.title = GO.lang.uploadFiles;
 	config.buttons = [{
@@ -103,6 +124,9 @@ Ext.extend(GO.files.UploadDialog, Ext.Window, {
 		if (!this.rendered) {
 			this.render(Ext.getBody());
 		}
+
+		this.upForm.form.reset();
+		
 		this.folder_id=folder_id;
 		GO.files.UploadDialog.superclass.show.call(this);
 	},
