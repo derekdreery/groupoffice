@@ -80,23 +80,17 @@ GO.util.nl2br = function (v)
 	return v.replace(/\n/g, '<br />');
 }
 
-GO.util.clone = function(o) {
-    if('object' !== typeof o) {
-        return o;
-    }
-    var c = 'function' === typeof o.pop ? [] : {};
-    var p, v;
-    for(p in o) {
-        v = o[p];
-        if('object' === typeof v) {
-            c[p] = GO.util.clone(v);
-        }
-        else {
-            c[p] = v;
-        }
-    }
-    return c;
-}  
+GO.util.clone = function clone(obj){
+    if(obj == null || typeof(obj) != 'object')
+        return obj;
+    var temp = new obj.constructor(); // changed (twice)
+
+    for(var key in obj)
+        temp[key] = clone(obj[key]);
+
+    return temp;
+
+}
 /**
  * Handles default error messages from the Group-Office server. It checks for the 
  * precense of UNAUTHORIZED or NOTLOGGEDIN as error message. It will present a 

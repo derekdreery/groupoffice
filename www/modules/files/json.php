@@ -588,7 +588,7 @@ try{
 
 						$fsort = isset($_POST['sort']) ? $_POST['sort'] : 'name';
 						$dsort = isset($_POST['sort']) ? $_POST['sort'] : 'name';
-						if($dsort=='size')
+						if($dsort!='name' || $dsort !='mtime')
 						{
 							$dsort='name';
 						}

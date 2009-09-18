@@ -37,6 +37,8 @@ GO.files.FileBrowser = function(config){
 	{
 		config = {};
 	}
+	if(!config.id)
+		config.id=Ext.id();
 	
 	this.treeLoader = new Ext.tree.TreeLoader(
 		{
@@ -154,6 +156,38 @@ GO.files.FileBrowser = function(config){
 			}			
 		}
 	}, this);
+
+
+	var fields ={
+		fields:['type_id', 'id','name','type', 'size', 'mtime', 'extension', 'timestamp', 'thumb_url','path','acl_read'],
+		columns:[{
+					header:GO.lang['strName'],
+					dataIndex: 'name',
+					renderer:function(v, meta, r){
+						var cls = r.get('acl_read')>0 ? 'folder-shared' : 'filetype filetype-'+r.get('extension');
+						return '<div class="go-grid-icon '+cls+'">'+v+'</div>';
+					}
+				},{
+					header:GO.lang.strType,
+					dataIndex: 'type',
+					sortable:false
+				},{
+					header:GO.lang.strSize,
+					dataIndex: 'size',
+					renderer: function(v){
+						return  v=='-' ? v : Ext.util.Format.fileSize(v);
+					}
+
+				},{
+					header:GO.lang.strMtime,
+					dataIndex: 'mtime'
+				}]
+	};
+
+	if(GO.customfields)
+	{
+		GO.customfields.addColumns(6, fields);
+	}
 	
 	this.gridStore = new GO.data.JsonStore({
 		url: GO.settings.modules.files.url+'json.php',
@@ -161,7 +195,7 @@ GO.files.FileBrowser = function(config){
 		root: 'results',
 		totalProperty: 'total',
 		id: 'type_id',
-		fields:['type_id', 'id','name','type', 'size', 'mtime', 'extension', 'timestamp', 'thumb_url','path','acl_read'],
+		fields:fields.fields,
 		remoteSort:true
 	});
 	
@@ -172,9 +206,13 @@ GO.files.FileBrowser = function(config){
 		this.setFilesFilter(config.filesFilter);
 	}
 
+	var cm =  new Ext.grid.ColumnModel(fields.columns);
+	cm.defaultSortable = true;
+
 	
 	this.gridPanel = new GO.grid.GridPanel( {
 			layout:'fit',
+			id:this.id+'-fs-grid',
 			split:true,
 			store: this.gridStore,
 			paging:true,
@@ -188,31 +226,7 @@ GO.files.FileBrowser = function(config){
 				  }
 				}
 			},
-			columns:[{
-					header:GO.lang['strName'],
-					dataIndex: 'name',
-					renderer:function(v, meta, r){
-						var cls = r.get('acl_read')>0 ? 'folder-shared' : 'filetype filetype-'+r.get('extension');
-						return '<div class="go-grid-icon '+cls+'">'+v+'</div>';
-					},
-					sortable:true
-				},{
-					header:GO.lang.strType,
-					dataIndex: 'type',
-					sortable:false
-				},{
-					header:GO.lang.strSize,
-					dataIndex: 'size',
-					sortable:true,
-					renderer: function(v){
-						return  v=='-' ? v : Ext.util.Format.fileSize(v);
-					}
-					
-				},{
-					header:GO.lang.strMtime,
-					dataIndex: 'mtime',
-					sortable:true
-				}],						
+			cm:cm,
 			view:new Ext.grid.GridView({
 				autoFill:true,
 				forceFit:true		
