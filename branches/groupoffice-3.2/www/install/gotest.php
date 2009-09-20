@@ -218,7 +218,7 @@ function test_system(){
 		$check_url = $GO_CONFIG->full_url.'modules/professional/checklicense.php';
 		$content = @file_get_contents($check_url);
 		if(empty($content)){
-			$test['feedback']='Warning: Could not determine if your license file works properly. Probably becuase URL file-access is disabled in your server configuration. This is not really a problem but you should check it manually now. <a target="_blank" href="'.$check_url.'">Click here to check it</a>.';
+			$test['feedback']='Warning: Could not determine if your license file works properly. Probably becuase URL file-access is disabled in your server configuration. This is not really a problem but you should check it manually now. <a target="_blank" href="'.$check_url.'">Click here to check it</a>. The output from the server was: '.$content;
 			$test['fatal']=false;
 			$test['pass']=false;
 		}elseif($content!='<h1>Your license works!</h1>')
