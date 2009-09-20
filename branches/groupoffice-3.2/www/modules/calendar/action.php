@@ -628,11 +628,11 @@ try{
 				throw new Exception($lang['common']['missingField']);
 			}
 
-			$existing_calendar = $cal->get_calendar_by_name($calendar['name']);
+			/*$existing_calendar = $cal->get_calendar_by_name($calendar['name']);
 			if($existing_calendar && ($calendar['id']==0 || $existing_calendar['id']!=$calendar['id']))
 			{
 				throw new Exception($sc_calendar_exists);
-			}
+			}*/
 
 			if($calendar['id']>0)
 			{
@@ -641,7 +641,7 @@ try{
 				{
 					throw new AccessDeniedException();
 				}
-				$cal->update_calendar($calendar, $existing_calendar);
+				$cal->update_calendar($calendar, $old_calendar);
 			}else
 			{
 				if(!$GO_MODULES->modules['calendar']['write_permission'])
