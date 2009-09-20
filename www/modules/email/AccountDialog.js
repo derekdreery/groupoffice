@@ -625,7 +625,7 @@ Ext.extend(GO.email.AccountDialog, Ext.Window, {
     }
 });
 
-filter = function() {
+var filter = function() {
     return {
         showDialog : function(filter_id, account_id, ds) {
 
