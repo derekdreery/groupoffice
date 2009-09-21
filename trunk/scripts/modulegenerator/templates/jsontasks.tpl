@@ -144,7 +144,7 @@
 
 			$query = isset($_REQUEST['query']) ? '%'.$_REQUEST['query'].'%' : '';
 			
-			${module}->get_<gotpl if="$authenticate">authorized_</gotpl>{friendly_multiple}(<gotpl if="$authenticate">$auth_type, $GO_SECURITY->user_id, </gotpl><gotpl if="$relation">${related_field_id}, </gotpl> $query, $sort, $dir, $start, $limit);
+			$response['total'] = ${module}->get_<gotpl if="$authenticate">authorized_</gotpl>{friendly_multiple}(<gotpl if="$authenticate">$auth_type, $GO_SECURITY->user_id, </gotpl><gotpl if="$relation">${related_field_id}, </gotpl> $query, $sort, $dir, $start, $limit);
 			$response['results']=array();
 			while(${friendly_single} = ${module}->next_record())
 			{
@@ -161,8 +161,6 @@
 								
 				$response['results'][] = ${friendly_single};
 			}
-			
-			$response['total'] = ${module}->found_rows();
 
 			break;
 			

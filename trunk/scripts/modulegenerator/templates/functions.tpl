@@ -165,7 +165,7 @@
 	 * @access public
 	 * @return Int Number of records found
 	 */
-	function get_{friendly_multiple}(<gotpl if="$relation">${related_field_id}, </gotpl>$query, $sortfield='id', $sortorder='ASC', $start=0, $offset=0)
+	function get_{friendly_multiple}(<gotpl if="$relation">${related_field_id}, </gotpl>$query='', $sortfield='id', $sortorder='ASC', $start=0, $offset=0)
 	{
 		$sql = "SELECT ";		
 		if($offset>0)
@@ -194,7 +194,8 @@
 			$sql .= " LIMIT ".intval($start).",".intval($offset);
 		}
 		
-		return $this->query($sql, $types, $params);
+		$this->query($sql, $types, $params);
+		return $offset>0 ? $this->found_rows() : $this->num_rows();
 	}
 	
 	<gotpl if="$authenticate">
