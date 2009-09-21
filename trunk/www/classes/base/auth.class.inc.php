@@ -262,16 +262,15 @@ class GO_AUTH extends db
 			}
 			// The user was found and is enabled, so we can get the user_id
 			// from the user's profile.
-			
-			go_log(LOG_DEBUG, 'LOGIN Username: '.$username.'; IP: '.$_SERVER['REMOTE_ADDR']);
-			
-			$GO_EVENTS->fire_event('login', array($username, $password, $user));
 
 			$user_id = $user['id'];
 		}
 
 		// Actualise session and other necessary things.
 		$this->updateAfterLogin( $user_id );
+
+		go_log(LOG_DEBUG, 'LOGIN Username: '.$username.'; IP: '.$_SERVER['REMOTE_ADDR']);
+		$GO_EVENTS->fire_event('login', array($username, $password, $user));	
 
 		return true;
 	}

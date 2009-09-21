@@ -21,7 +21,9 @@ class log extends db {
 	{
 		$log = new log();
 		$sql = "DELETE FROM go_log WHERE time<".Date::date_add(time(),0,-1);
-		$log->query($sql);	
+		$log->query($sql);
+
+		$log->add('Logged in');
 	}
 	
 	/**
@@ -77,6 +79,20 @@ class log extends db {
 		$user = $GO_USERS->get_user($entry['user_id']);
 		$entry['user_name']=String::format_name($user);
 		$entry['time']=Date::get_timestamp($entry['time']);
-		$entry['link_type']=$lang['link_type'][$entry['link_type']];
+		$entry['link_type']=isset($lang['link_type'][$entry['link_type']]) ? $lang['link_type'][$entry['link_type']] : '-';
+	}
+
+	function add($text, $link_id=0, $link_type=0){
+		if(!defined('NOLOG'))
+		{
+			$log['link_id']=$link_id;
+			$log['link_type']=$link_type;
+			$log['time']=time();
+			$log['text']=$text;
+			$log['user_id']=$GLOBALS['GO_SECURITY']->user_id;
+			$log['id']=$this->nextid('go_log');
+
+			return $this->insert_row('go_log', $log);
+		}
 	}
 }
