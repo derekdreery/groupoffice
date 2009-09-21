@@ -68,7 +68,18 @@ GO.calendar.MainPanel = function(config){
 		fields:['id','name','user_name'],
 		remoteSort:true
 	});
-	
+
+	this.calendarsStore.on('load', function(){
+				if(this.state.displayType!='view')
+				{
+					if(!this.calendarsStore.getById(this.state.calendar_id))
+					{
+						this.state.calendar_id = this.calendarsStore.data.items[0].id;
+					}
+					this.calendarList.select('calendar-'+this.state.calendar_id);
+					this.setDisplay(this.state);
+				}
+			}, this);
 	
 	this.viewsStore = new GO.data.JsonStore({
 		url: GO.settings.modules.calendar.url+'json.php',
@@ -80,7 +91,15 @@ GO.calendar.MainPanel = function(config){
 		id: 'id',
 		fields:['id','name','user_name'],
 		remoteSort:true
-	});	
+	});
+
+	this.viewsStore.on('load', function(){
+				if(this.state.displayType=='view')
+				{
+					this.viewsList.select('view-'+this.state.view_id);
+					this.setDisplay(this.state);
+				}
+		}, this);
 	
 	
 	this.calendarList= new GO.calendar.CalendarList({
@@ -543,32 +562,11 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	
 	init : function(){
 
-		this.calendarsStore.load({
-			callback:function(){				
-				if(this.state.displayType!='view')
-				{
-					if(!this.calendarsStore.getById(this.state.calendar_id))
-					{
-						this.state.calendar_id = this.calendarsStore.data.items[0].id;
-					}
-					this.calendarList.select('calendar-'+this.state.calendar_id);
-					this.setDisplay(this.state);
-				}
-			},
-			scope:this			
-		});		
 		
-		this.viewsStore.load({
-			callback:function(){				
-				if(this.state.displayType=='view')
-				{
-					this.viewsList.select('view-'+this.state.view_id);
-					this.setDisplay(this.state);
-				}		
-				
-			},
-			scope:this			
-		});	
+
+		this.calendarsStore.load();		
+		
+		this.viewsStore.load();	
 	},
 	
 	deleteHandler : function(){
