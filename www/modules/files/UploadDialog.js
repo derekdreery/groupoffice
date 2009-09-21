@@ -99,6 +99,7 @@ GO.files.UploadDialog = function(config) {
 	config.items = this.upForm;
 	config.layout='fit';
 	config.height=400;
+	config.autoScroll=true;
 	config.closeAction = 'hide';
 	config.title = GO.lang.uploadFiles;
 	config.buttons = [{
