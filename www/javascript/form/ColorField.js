@@ -33,6 +33,7 @@ GO.form.ColorField =  Ext.extend(function(config){
 	this.menu.palette.on('select', this.handleSelect, this );
 	this.menu.on('show', function(){
 		this.menu.palette.select(this.curColor);
+
 	}, this );
 
 	this.menu.on(Ext.apply({}, this.menuListeners, {
@@ -213,7 +214,7 @@ GO.form.ColorField =  Ext.extend(function(config){
 			return;
 		}
 
-		this.menu.show(this.el, "tl-bl?");
+		this.menu.show(this.el, "tl-bl");
 	}
 });
 
