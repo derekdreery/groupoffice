@@ -73,15 +73,14 @@ GO.addressbook.SearchPanel = function(config)
  	
  	this.queryField = new Ext.form.TextField({
     name: 'query',
-    width: 150		          
+    width: 200,
+		emptyText:GO.lang.strSearch+ ' '+GO.addressbook.lang['cmdFormSearchFourth']
   });
  	
  	config.defaults={border: false, cls:'ab-search-form-panel'};
  	config.items=[{
- 						items: this.alphabetView
+ 						items: this.alphabetView,
  					},{
-		        html: GO.lang.strSearch+":"
-			    },{
 		        items: this.queryField
 			    }, 	
  					{
@@ -126,8 +125,6 @@ GO.addressbook.SearchPanel = function(config)
 								text: GO.lang.cmdReset,
 								scope: this				          
 			        })
-			    },{
-		        html: GO.addressbook.lang['cmdFormSearchFourth']
 			    }];
 	
 	GO.addressbook.SearchPanel.superclass.constructor.call(this, config);

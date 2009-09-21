@@ -217,11 +217,18 @@ try
 				$aq = json_decode($_POST['advancedQuery'], true);				
 				foreach($aq as $field=>$value)
 				{
-					if(empty($advancedQuery))
+					if(!empty($advancedQuery))
 					{
 						$advancedQuery .= ' AND ';
 					}
-					$advancedQuery .= $ab->escape($field).' LIKE \''.$ab->escape($value).'\'';
+					if($field=='ab_contacts.name')
+					{
+						$field = 'CONCAT(first_name,middle_name,last_name)';
+					}else
+					{
+						$field = $ab->escape($field);
+					}
+					$advancedQuery .= $field.' LIKE \'%'.$ab->escape($value).'%\'';
 				}			
 			}
 				
@@ -234,7 +241,7 @@ try
 			$addressbook_id,
 			$start,
 			$limit,
-			false,
+			!empty($_POST['require_email']),
 			$sort,
 			$dir,
 			false,
