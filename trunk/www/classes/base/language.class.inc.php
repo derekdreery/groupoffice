@@ -182,6 +182,14 @@ class GO_LANGUAGE extends db {
 		}
 	}
 
+	function require_language_file($module_id, $language=null){
+		global $lang, $GO_EVENTS;
+		require_once($this->get_language_file($module_id, $language));
+	
+		$args=array($module_id, $language);
+		$GO_EVENTS->fire_event('require_language_file', $args);
+	}
+
 	/**
 	 *	Get's the prefered language file.
 	 *
