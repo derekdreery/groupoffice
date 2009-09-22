@@ -345,3 +345,7 @@ VALUES (
 );";
 
 $updates[]="UPDATE `go_iso_address_format` SET `address_format_id` = '9' WHERE `go_iso_address_format`.`iso` = 'NO' AND `go_iso_address_format`.`address_format_id` =1 LIMIT 1 ;";
+$updates[]="INSERT INTO `go_iso_address_format` ( `iso` , `address_format_id` )
+VALUES (
+'AE', '1'
+);";
