@@ -101,43 +101,7 @@ GO.grid.GridPanel = function(config)
     
 	GO.grid.GridPanel.superclass.constructor.call(this, config);	
 	
-	//create a delayed rowselect event so that when a user repeatedly presses the
-	//up and down button it will only load if it stays on the same record for 400ms
-	this.addEvents({'delayedrowselect':true});
 	
-	this.on("rowcontextmenu", function(grid, rowIndex, e) {
-		e.stopEvent();
-		
-		this.rowClicked=true;
-		
-		var sm =this.getSelectionModel();
-    if(sm.isSelected(rowIndex) !== true) {
-      sm.clearSelections();
-      sm.selectRow(rowIndex);
-    }
-	}, this);
-	
-	this.on('rowclick', function(grid, rowIndex, e){
-		
-		if(!e.ctrlKey && !e.shiftKey)
-		{
-			var record = this.getSelectionModel().getSelected();
-			this.fireEvent('delayedrowselect', this, rowIndex, record);
-		}		
-		this.rowClicked=true;
-	}, this);
-	  	
-  this.getSelectionModel().on("rowselect",function(sm, rowIndex, r){
-		if(!this.rowClicked)
-		{
-			var record = this.getSelectionModel().getSelected();	
-			if(record==r)
-			{
-				this.fireEvent('delayedrowselect', this, rowIndex, r);
-			}
-		}
-		this.rowClicked=false;
-	}, this, {delay:400});
 }
  
  
@@ -151,6 +115,50 @@ Ext.extend(GO.grid.GridPanel, Ext.grid.GridPanel, {
 	 */
 	 
 	paging : false,
+
+
+	initComponent : function(){
+		//create a delayed rowselect event so that when a user repeatedly presses the
+		//up and down button it will only load if it stays on the same record for 400ms
+		this.addEvents({'delayedrowselect':true});
+
+		this.on("rowcontextmenu", function(grid, rowIndex, e) {
+			e.stopEvent();
+
+			this.rowClicked=true;
+
+			var sm =this.getSelectionModel();
+			if(sm.isSelected(rowIndex) !== true) {
+				sm.clearSelections();
+				sm.selectRow(rowIndex);
+			}
+		}, this);
+
+		this.on('rowclick', function(grid, rowIndex, e){
+
+			if(!e.ctrlKey && !e.shiftKey)
+			{
+				var record = this.getSelectionModel().getSelected();
+				this.fireEvent('delayedrowselect', this, rowIndex, record);
+			}
+			this.rowClicked=true;
+		}, this);
+
+		this.getSelectionModel().on("rowselect",function(sm, rowIndex, r){
+			if(!this.rowClicked)
+			{
+				var record = this.getSelectionModel().getSelected();
+				if(record==r)
+				{
+					this.fireEvent('delayedrowselect', this, rowIndex, r);
+				}
+			}
+			this.rowClicked=false;
+		}, this, {delay:400});
+
+		GO.grid.GridPanel.superclass.initComponent.call(this);
+	},
+
 	/**
 	 * Sends a delete request to the remote store. It will send the selected keys in json 
 	 * format as a parameter. (delete_keys by default.)
