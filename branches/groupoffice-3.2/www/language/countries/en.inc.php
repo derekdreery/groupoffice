@@ -2,6 +2,8 @@
 //Uncomment this line in new translations!
 //require($GO_LANGUAGE->get_fallback_base_language_file('countries'));
 
+
+$countries['AE'] = 'United Arab Emirates';
 $countries['AF'] = 'Afghanistan';
 $countries['AX'] = 'Åland Islands';
 $countries['AL'] = 'Albania';
