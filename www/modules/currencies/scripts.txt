@@ -1,6 +1,4 @@
 modules/currencies/Stores.js
 modules/currencies/SelectCurrency.js
-modules/currencies/CurrencyPanel.js
-modules/currencies/CurrencyDialog.js
 modules/currencies/CurrenciesGrid.js
 modules/currencies/MainPanel.js
