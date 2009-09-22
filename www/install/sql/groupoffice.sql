@@ -627,4 +627,5 @@ INSERT INTO `go_iso_address_format` (`iso`, `address_format_id`) VALUES
 ('YU', 1),
 ('ZA', 1),
 ('ZM', 1),
+('AE', 1),
 ('ZW', 1);
