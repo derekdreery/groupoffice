@@ -1242,7 +1242,8 @@ switch($task)
 			<select name="default_country">
 			<?php
 			require($GO_LANGUAGE->get_base_language_file('countries'));
-
+			asort($countries);
+			
 			foreach($countries as $key => $country)
 			{
 				echo '<option value="'.$key.'"';
