@@ -81,8 +81,9 @@ Ext.extend(GO.portlets.rssFeedPortlet, Ext.grid.GridPanel, {
 	afterRender : function(){
 		GO.portlets.rssFeedPortlet.superclass.afterRender.call(this);
 			
-		this.on('rowDblClick', this.rowDoubleClick, this);
-		//this.store.load();
+		this.on('rowdblclick', this.rowDoubleClick, this);
+		this.on('rowclick', this.rowClick, this);
+
 
 		this.refreshTask ={
 			run: function(){this.store.load()},
@@ -103,6 +104,21 @@ Ext.extend(GO.portlets.rssFeedPortlet, Ext.grid.GridPanel, {
 			
 		window.open(record.data.link);
 			
+	},
+
+
+	rowClick : function(grid, index, e){
+		var target = e.target;
+		if(target.tagName!='A')
+		{
+			target = Ext.get(target).findParent('A', 10);
+			if(!target)
+				return false;
+		}else
+		{
+			e.preventDefault();
+			window.open(target.attributes['href'].value);			
+		}
 	},
 	onContextClick : function(grid, index, e){
 		if(!this.menu){ // create context menu on first right click
