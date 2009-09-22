@@ -155,7 +155,7 @@ try{
 
 						if($GO_MODULES->has_module('projects'))
 						{
-								require($GO_LANGUAGE->get_language_file('projects'));
+								$GO_LANGUAGE->require_language_file('projects');
 
 								$projects_folder = $files->resolve_path('projects');
 								$node= array(
