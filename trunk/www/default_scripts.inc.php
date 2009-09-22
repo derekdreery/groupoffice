@@ -172,10 +172,15 @@ foreach($scripts as $script) {
 </script>
 <?php
 
+foreach($GO_MODULES->modules as $module) {
+	if(file_exists($module['path'].'logged_off_scripts.inc.php')) {
+		require($module['path'].'logged_off_scripts.inc.php');
+	}
+}
+
 $scripts=array();
 
 if($GO_SECURITY->logged_in()) {
-
 
 	foreach($GO_MODULES->modules as $module) {
 		if($module['read_permission']) {
