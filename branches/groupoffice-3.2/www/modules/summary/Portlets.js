@@ -59,7 +59,8 @@ GO.mainLayout.onReady(function(){
 												else // Feed already exists
 												{
 													var r = responseParams.data[p.feedId];
-													if(p.feed != r.url || p.getView().showPreview != parseInt(r.summary))
+
+													if(p.feed != r.url || parseInt(p.getView().showPreview) != parseInt(r.summary))
 														p.loadFeed(r.url, parseInt(r.summary));
 													if(p.title != r.title)
 														p.setTitle(r.title);
