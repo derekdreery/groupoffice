@@ -83,6 +83,7 @@ GO.files.UploadDialog = function(config) {
 
 	this.upForm = new Ext.form.FormPanel({
 		fileUpload : true,
+		autoHeight:true,
 		waitMsgTarget : true,
 		baseParams: {
 			task: 'upload'
@@ -97,7 +98,6 @@ GO.files.UploadDialog = function(config) {
 	config.resizable = false;
 	config.width = 500;
 	config.items = this.upForm;
-	config.layout='fit';
 	config.height=400;
 	config.autoScroll=true;
 	config.closeAction = 'hide';
