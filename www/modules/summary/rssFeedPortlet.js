@@ -12,14 +12,15 @@
  */
 
 GO.portlets.rssFeedPortlet = function(config) {
-	Ext.apply(this, config);
+	
+	config = config || {};
 
-	this.store = new Ext.data.Store({
+	config.store = new Ext.data.Store({
 		proxy: new Ext.data.HttpProxy({
 			url: GO.settings.modules.summary.url+'feed_proxy.php'
 		}),
 		baseParams: {
-			feed: this.feed
+			feed: config.feed
 			},
 
 		reader: new Ext.data.XmlReader(
@@ -32,9 +33,9 @@ GO.portlets.rssFeedPortlet = function(config) {
 		}, 'link', 'description', 'content']
 		)
 	});
-	this.store.setDefaultSort('pubDate', "DESC");
+	config.store.setDefaultSort('pubDate', "DESC");
 
-	this.columns = [{
+	config.columns = [{
 		id: 'title',
 		header: GO.lang.strTitle,
 		dataIndex: 'title',
@@ -56,34 +57,33 @@ GO.portlets.rssFeedPortlet = function(config) {
 		sortable:true
 	}];
 
-	GO.portlets.rssFeedPortlet.superclass.constructor.call(this, {
-		loadMask: {
+	config.loadMask = {
 			msg:GO.summary.lang.loadingFeed
-			},
-		sm: new Ext.grid.RowSelectionModel({
+			};
+	config.sm = new Ext.grid.RowSelectionModel({
 			singleSelect:true
-		}),
-		viewConfig: {
+		});
+
+	config.viewConfig={
 			forceFit:true,
 			enableRowBody:true,
-			showPreview:this.showPreview,
+			showPreview:config.showPreview,
 			getRowClass : this.applyRowClass
-		}
-	});
+		};
 
-	this.on('rowcontextmenu', this.onContextClick, this);
+	GO.portlets.rssFeedPortlet.superclass.constructor.call(this, config);	
 };
 
-Ext.extend(GO.portlets.rssFeedPortlet, Ext.grid.GridPanel, {
+Ext.extend(GO.portlets.rssFeedPortlet, GO.grid.GridPanel, {
 
 	refreshTask : false,
 
 	afterRender : function(){
 		GO.portlets.rssFeedPortlet.superclass.afterRender.call(this);
-			
+
+		this.on('rowcontextmenu', this.onContextClick, this);
 		this.on('rowdblclick', this.rowDoubleClick, this);
 		this.on('rowclick', this.rowClick, this);
-
 
 		this.refreshTask ={
 			run: function(){this.store.load()},
@@ -171,8 +171,8 @@ Ext.extend(GO.portlets.rssFeedPortlet, Ext.grid.GridPanel, {
 		this.store.baseParams = {
 			feed: url
 		};
-        
 		
+    this.store.load();
 	},
 
 	// within this function "this" is actually the GridView
