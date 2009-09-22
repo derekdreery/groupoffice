@@ -20,6 +20,7 @@ GO.customcss.MainPanel = function(config){
 			handler:function(){
 				this.form.submit({
 					url: GO.settings.modules.customcss.url+'action.php',
+					waitMsg:GO.lang['waitMsgSave'],
 					callback:function(){
 						
 					}
@@ -28,7 +29,7 @@ GO.customcss.MainPanel = function(config){
 			scope:this
 	},{
 		iconCls: 'btn-files',
-		text:'Select file',
+		text:GO.customcss.lang.selectFile,
 		handler:function(){
 			if(!this.selectFileBrowser)
 			{
@@ -86,7 +87,8 @@ Ext.extend(GO.customcss.MainPanel, Ext.form.FormPanel, {
 	afterRender : function(){
 		GO.customcss.MainPanel.superclass.afterRender.call(this);
 		this.form.load({
-			url: GO.settings.modules.customcss.url+'json.php'
+			url: GO.settings.modules.customcss.url+'json.php',
+			waitMsg:GO.lang['waitMsgLoad']
 		});
 	}
 	
