@@ -63,7 +63,7 @@ class currencies extends db {
 	 * @access public
 	 * @return Int Number of records found
 	 */
-	function get_currencies($query='', $sortfield='id', $sortorder='ASC', $start=0, $offset=0)
+	function get_currencies($query='', $sortfield='code', $sortorder='ASC', $start=0, $offset=0)
 	{
 		$sql = "SELECT ";		
 		if($offset>0)

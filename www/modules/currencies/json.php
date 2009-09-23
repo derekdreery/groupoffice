@@ -35,7 +35,7 @@ try{
 					$response['deleteFeedback']=$e->getMessage();
 				}
 			}
-			$sort = isset($_REQUEST['sort']) ? $_REQUEST['sort'] : 'id';
+			$sort = isset($_REQUEST['sort']) ? $_REQUEST['sort'] : 'code';
 			$dir = isset($_REQUEST['dir']) ? $_REQUEST['dir'] : 'DESC';
 			$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : '0';
 			$limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : '0';
