@@ -88,6 +88,11 @@ GO.tasks.MainPanel = function(config){
 	this.gridPanel.on("delayedrowselect",function(grid, rowIndex, r){
 		this.taskPanel.load(r.data.id);
 	}, this);
+
+	this.gridPanel.on('rowdblclick', function(grid, rowIndex){
+		var record = grid.getStore().getAt(rowIndex);
+		GO.tasks.taskDialog.show({task_id: record.data.id});
+	}, this);
 			
 	this.gridPanel.store.on('load', function(store){
 		this.deleteButton.setDisabled(!store.reader.jsonData.write_permission);		
