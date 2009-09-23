@@ -21,10 +21,6 @@ GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
 	loadUrl : GO.settings.modules.tasks.url+'json.php',
 	
 	editHandler : function(){
-		if(!GO.tasks.taskDialog)
-		{
-			GO.tasks.taskDialog = new GO.tasks.TaskDialog();
-		}
 		this.addSaveHandler(GO.tasks.taskDialog);
 		GO.tasks.taskDialog.show({task_id: this.data.id});
 	},	
