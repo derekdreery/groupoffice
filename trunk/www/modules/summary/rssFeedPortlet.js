@@ -109,15 +109,17 @@ Ext.extend(GO.portlets.rssFeedPortlet, GO.grid.GridPanel, {
 
 	rowClick : function(grid, index, e){
 		var target = e.target;
+	
 		if(target.tagName!='A')
 		{
 			target = Ext.get(target).findParent('A', 10);
+			
 			if(!target)
 				return false;
 		}
 
 		e.preventDefault();
-		window.open(target.attributes['href'].value);			
+		window.open(target.attributes['href'].value);
 		
 	},
 	onContextClick : function(grid, index, e){
