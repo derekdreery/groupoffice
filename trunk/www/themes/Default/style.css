@@ -483,8 +483,15 @@ a.normal-link:hover{
 .go-grid-icon{
 	background-repeat:no-repeat;
 	padding-left:20px;
-	height:16px;
+	line-height:16px;
 	display:block;
+	height:auto !important;
+}
+
+.go-inline-icon{
+	float:left;
+	background-repeat:no-repeat;
+	margin:0px 2px;
 }
 
 /*
