@@ -155,7 +155,7 @@ Ext.extend(GO.users.UserDialog, Ext.Window,{
 	
 	show : function (user_id) {
 
-		if(!GO.mailings.writableMailingsStore.loaded){
+		if(GO.mailings && !GO.mailings.writableMailingsStore.loaded){
 			GO.mailings.writableMailingsStore.load({
 				callback:function(){
 					this.show(user_id);
