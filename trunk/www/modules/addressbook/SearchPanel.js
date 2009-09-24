@@ -79,7 +79,7 @@ GO.addressbook.SearchPanel = function(config)
  	
  	config.defaults={border: false, cls:'ab-search-form-panel'};
  	config.items=[{
- 						items: this.alphabetView,
+ 						items: this.alphabetView
  					},{
 		        items: this.queryField
 			    }, 	
