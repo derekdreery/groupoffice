@@ -525,17 +525,13 @@ try{
 								}
 							}else
 							{
-								//$log =& Swift_LogContainer::getLog();
-								//	$log->setLogLevel(2);
-
+							
 								if(!empty($_POST['draft_uid']))
 								{
 									$swift->set_draft($_POST['draft_uid']);
 								}
 
-								$log = new Swift_Plugins_LoggerPlugin(new Swift_Plugins_Loggers_ArrayLogger());
-								$swift->registerPlugin($log);
-
+							
 								$response['success']=$swift->sendmail();
 
 								if(!empty($_POST['link']))
@@ -543,23 +539,10 @@ try{
 									$link_props = explode(':', $_POST['link']);
 									$swift->link_to(array(array('link_id'=>$link_props[1],'link_type'=>$link_props[0])));
 								}
-
-								if(!$response['success'])
-								{
-
-									$log_str = $log->dump();
-
-									$error = preg_match('/<< 550.*>>/s', $log_str,$matches);
-
-									if(isset($matches[0])){
-										$log_str=trim(substr($matches[0],2,-2));
-									}
-									$response['feedback']=nl2br($log_str);
-								}
 							}
 
 						} catch (Exception $e) {
-							$response['feedback'] = $lang['email']['feedbackSMTPProblem'] . $e->getMessage();
+							$response['feedback'] = $lang['email']['feedbackSMTPProblem'] . '<br />'.nl2br($e->getMessage());
 						}
 					}
 					break;
