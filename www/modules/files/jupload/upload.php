@@ -59,7 +59,7 @@ while($file = array_shift($_FILES))
 				$complete_dir = $path.'/';				
 				if(!empty($_POST['relpathinfo'][$count]))
 				{
-					$complete_dir .= $_POST['relpathinfo'][$count].'/';
+					$complete_dir .= str_replace('\\','/',$_POST['relpathinfo'][$count]).'/';
 				}
 				$filepath = File::checkfilename($complete_dir.$file['name']);
 
@@ -95,7 +95,7 @@ while($file = array_shift($_FILES))
 			$dir = $path.'/';				
 			if(!empty($_POST['relpathinfo'][$count]))
 			{
-				$dir .= $_POST['relpathinfo'][$count].'/';
+				$dir .= str_replace('\\','/',$_POST['relpathinfo'][$count]).'/';
 			}
 				
 			$filepath = $dir.$file['name'];
