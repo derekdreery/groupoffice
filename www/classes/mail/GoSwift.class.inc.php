@@ -107,6 +107,8 @@ class GoSwift extends Swift_Mailer{
 
 	private $smtp_host;
 
+	public $log;
+
 
 
 	/**
@@ -158,6 +160,10 @@ class GoSwift extends Swift_Mailer{
 
 		$this->smtp_host=$transport->getHost();
 		parent::__construct($transport);
+
+
+		$this->log = new Swift_Plugins_LoggerPlugin(new Swift_Plugins_Loggers_ArrayLogger());
+		$this->registerPlugin($this->log);
 
 
 		//$this->message =  $pgp ? Swift_Pgp_Message::newInstance($subject, $plain_text_body) :  Swift_Message::newInstance($subject, $plain_text_body);
@@ -297,6 +303,17 @@ class GoSwift extends Swift_Mailer{
 		}else
 		{
 			$send_success = parent::send($this->message,$this->failed_recipients);
+		}
+
+		if(!$send_success){
+			$log_str = $this->log->dump();
+
+			$error = preg_match('/<< 550.*>>/s', $log_str,$matches);
+
+			if(isset($matches[0])){
+				$log_str=trim(substr($matches[0],2,-2));
+			}
+			throw new Exception($log_str);
 		}
 
 		if(!$dont_save_in_sent_items && $send_success && $this->account && $this->account['type']=='imap' && !empty($this->account['sent']))
