@@ -514,6 +514,10 @@ try{
 							try{
 								if(isset($_POST['compress_sources']) && isset($_POST['archive_name']))
 								{
+
+									if(!is_windows())
+										putenv('LANG=en_US.UTF-8');
+
 									$compress_sources = json_decode($_POST['compress_sources'],true);
 									$archive_name = $_POST['archive_name'].'.zip';
 
@@ -550,6 +554,9 @@ try{
 							try{
 								if(isset($_POST['decompress_sources']))
 								{
+									if(!is_windows())
+										putenv('LANG=en_US.UTF-8');
+													
                   $full_path=$GO_CONFIG->file_storage_path.$path;
 
 									chdir($full_path);
@@ -558,6 +565,8 @@ try{
 										switch(File::get_extension($file))
 										{
 											case 'zip':
+
+
 												exec($GO_CONFIG->cmd_unzip.' "'.$GO_CONFIG->file_storage_path.$file.'"');
 												break;
 

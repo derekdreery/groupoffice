@@ -117,10 +117,8 @@ Ext.extend(GO.portlets.rssFeedPortlet, GO.grid.GridPanel, {
 			if(!target)
 				return false;
 		}
-
 		e.preventDefault();
 		window.open(target.attributes['href'].value);
-		
 	},
 	onContextClick : function(grid, index, e){
 		if(!this.menu){ // create context menu on first right click
