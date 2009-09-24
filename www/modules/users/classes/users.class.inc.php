@@ -21,6 +21,24 @@ class users extends db
 		$events->add_listener('check_database', __FILE__, 'users', 'check_database');
 	}
 
+	public function get_register_email(){
+		global $GO_CONFIG, $GO_LANGUAGE, $lang;
+		$r=array(
+			'register_email_subject' => $GO_CONFIG->get_setting('register_email_subject'),
+			'register_email_body' => $GO_CONFIG->get_setting('register_email_body')
+		);
+
+		$GO_LANGUAGE->require_language_file('users');
+
+		if(!$r['register_email_subject']){
+			$r['register_email_subject']=$lang['users']['register_email_subject'];
+		}
+		if(!$r['register_email_body']){
+			$r['register_email_body']=$lang['users']['register_email_body'];
+		}
+		return $r;
+	}
+
 	public static function check_database(){
 		global $GO_CONFIG, $GO_MODULES, $GO_USERS, $GO_SECURITY;
 

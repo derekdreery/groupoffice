@@ -269,17 +269,12 @@ switch($task)
 		break;
 	case 'settings':
 
+		require_once($GO_MODULES->modules['users']['class_path'].'users.class.inc.php');
+		$users = new users();
+
 		$result['success'] = true;
-		$result['data']=array(
-			'confirmed_subject' => $GO_CONFIG->get_setting('registration_confirmation_subject'),
-			'unconfirmed_subject' => $GO_CONFIG->get_setting('registration_unconfirmed_subject'),
-			'confirmed' => $registration_confirmation = $GO_CONFIG->get_setting('registration_confirmation'),
-			'unconfirmed' => $registration_unconfirmed = $GO_CONFIG->get_setting('registration_unconfirmed')
-		);
-
+		$result['data']=$users->get_register_email();
 		echo json_encode($result);
-
-		//echo '({total":'.count($record).',"data":'.json_encode($result).'})';
 		break;
 }
 

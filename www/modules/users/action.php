@@ -299,6 +299,27 @@ try
 					$password='';
 				}
 
+				if(!empty($_POST['send_invitation'])){
+
+					require_once($GO_MODULES->modules['users']['class_path'].'users.class.inc.php');
+					$users = new users();
+
+					$email = $users->get_register_email();
+					
+					
+					require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
+					$swift = new GoSwift($user['email'], $email['register_email_subject']);
+					foreach($user as $key=>$value){
+						$email['register_email_body'] = str_replace('{'.$key.'}', $value, $email['register_email_body']);
+					}
+
+					$email['register_email_body']= str_replace('{url}', $GO_CONFIG->full_url, $email['register_email_body']);
+					$email['register_email_body']= str_replace('{title}', $GO_CONFIG->title, $email['register_email_body']);
+					$swift->set_body($email['register_email_body'],'plain');
+					$swift->set_from($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
+					$swift->sendmail();
+				}
+
 
 				//deprecated modules get updated below
 				$modules_read = array_map('trim', explode(',',$GO_CONFIG->register_modules_read));
@@ -435,17 +456,12 @@ try
 			echo json_encode($response);
 			break;
 
-		/*case 'save_setting':
-			$email['confirmed'] = $_POST["confirmed"];
-			$email['unconfirmed'] = $_POST["unconfirmed"];
-			$email['confirmed_subject'] = $_POST["confirmed_subject"];
-			$email['unconfirmed_subject'] = $_POST["unconfirmed_subject"];
-
-			$GO_CONFIG->save_setting('registration_confirmation', $email['confirmed']);
-			$GO_CONFIG->save_setting('registration_confirmation_subject', $email['confirmed_subject']);
-			$GO_CONFIG->save_setting('registration_unconfirmed', $email['unconfirmed']);
-			$GO_CONFIG->save_setting('registration_unconfirmed_subject', $email['unconfirmed_subject']);
-			break;*/
+		case 'save_settings':
+			
+			$GO_CONFIG->save_setting('register_email_subject', $_POST['register_email_subject']);
+			$GO_CONFIG->save_setting('register_email_body', $_POST['register_email_body']);
+			
+			break;
 	}
 }
 catch(Exception $e)
