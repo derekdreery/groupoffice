@@ -20,3 +20,10 @@ $lang['users']['imported']='%s gebruikers geïmporteerd';
 $lang['users']['failed']='Mislukt';
 
 $lang['users']['incorrectFormat']='Bestand was niet in het jusite CSV formaat';
+
+$lang['users']['register_email_subject']='Uw Group-Office account gegevens';
+$lang['users']['register_email_body']='Er is een Group-Office account voor u aangemaakt op {url}
+Uw inloggegevens zijn:
+
+Gebruikersnaam: {username}
+Wachtwoord: {password}';

@@ -102,3 +102,5 @@ GO.users.lang.deleteWarning='WARNING!!! All of the user data including addressbo
 
 GO.users.lang.lastName = 'Last name';
 GO.users.lang.firstName = 'First name';
+
+GO.users.lang.sendInvitation='Send invitation';

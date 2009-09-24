@@ -107,7 +107,18 @@ GO.users.MainPanel = function(config)
 		  			this.importDialog.show();
 		  		},
 		  		scope:this		  		
-		  	},
+		  	},{
+				iconCls:'btn-settings',
+				text:GO.lang.administration,
+				handler:function(){
+					if(!this.settingsDialog)
+					{
+						this.settingsDialog = new GO.users.SettingsDialog();
+					}
+					this.settingsDialog.show();
+				},
+				scope:this
+			},
 				'-',
 		         GO.lang['strSearch']+':',
 		        this.searchField

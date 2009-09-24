@@ -51,11 +51,30 @@ GO.users.AccountPanel = function(config)
 		hideLabel:true
 	});
 
+	this.invitationField = new Ext.form.Checkbox({
+		boxLabel: GO.users.lang.sendInvitation,
+		name: 'send_invitation',
+		checked: true,
+		hideLabel:true
+	});
+
 	config.items=[
 		this.usernameField,
 		this.passwordField1,
-		this.passwordField2,
-		this.enabledField
+		this.passwordField2,{
+			xtype:'panel',
+			hideLabel:true,
+			border:false,
+			bodyStyle:'padding:0',
+			layout:'column',
+			defaults:{bodyStyle:'padding:0',border:false, layout:'form', columnWidth:.5},
+			items:[{
+				items:this.enabledField
+			},{
+				items:this.invitationField
+			}]
+		},
+		
 	];
 
 	GO.users.AccountPanel.superclass.constructor.call(this, config);		
@@ -66,6 +85,7 @@ Ext.extend(GO.users.AccountPanel, Ext.form.FieldSet,{
 	
 	setUserId : function(user_id)
 	{
+		this.invitationField.getEl().up('.x-form-item').setDisplayed(!user_id);
 		this.usernameField.setDisabled(user_id>0);
 		this.passwordField2.allowBlank=(user_id>0);
 		this.passwordField1.allowBlank=(user_id>0);

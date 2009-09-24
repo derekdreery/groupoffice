@@ -5,4 +5,5 @@ modules/users/PersonalPanel.js
 modules/users/CompanyPanel.js
 modules/users/AccountPanel.js
 modules/users/ImportDialog.js
-modules/users/users.js
+modules/users/SettingsDialog.js
+modules/users/MainPanel.js
