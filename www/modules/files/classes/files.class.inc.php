@@ -80,6 +80,7 @@ class files extends db {
 				break;
 
 			case 'odc':
+			case 'ods':
 			case 'xls':
 			case 'xlsx':
 				return $GO_THEME->image_url.'128x128/filetypes/spreadsheet.png';
