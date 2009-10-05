@@ -698,4 +698,16 @@ class base_db{
 		return $this->helper_db->f('found');
 	}
 
+
+	public function table_exists($table_name){
+		if(!isset($this->tables)){
+			$this->tables=array();
+			$this->query('SHOW TABLES');
+			while($r=$this->next_record(DB_NUM)){
+				$this->tables[]=$r[0];
+			}
+		}
+		return in_array($table_name, $this->tables);
+	}
+
 }
