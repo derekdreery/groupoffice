@@ -12,8 +12,8 @@ $lang['email']['description'] = 'Module de gestion des E-mails. chaque utilisate
 $lang['link_type'][9]='E-mail';
 
 $lang['email']['feedbackNoReciepent'] = 'Vous n\'avez pas renseigné de destinataire';
-$lang['email']['feedbackSMTPProblem'] = 'Il y a eut un problème de communication avec le serveur SMTP : ';
-$lang['email']['feedbackUnexpectedError'] = 'Il y a eut un problème lors de la construction de l\'e-mail : ';
+$lang['email']['feedbackSMTPProblem'] = 'Il y a eu un problème de communication avec le serveur SMTP : ';
+$lang['email']['feedbackUnexpectedError'] = 'Il y a eu un problème lors de la construction de l\'e-mail : ';
 $lang['email']['feedbackCreateFolderFailed'] = 'Echec lors de la création du dossier';
 $lang['email']['feedbackSubscribeFolderFailed'] = 'Echec lors de l\'abonnement au dossier';
 $lang['email']['feedbackUnsubscribeFolderFailed'] = 'Echec lors du désabonnement au dossier';
@@ -38,7 +38,7 @@ $lang['email']['notification_subject']='Lire : %s';
 $lang['email']['notification_body']='Votre message ayant pour sujet "%s" a été lu à %s';
 
 // 3.02-stable-10
-$lang['email']['errorGettingMessage']='Could not get message from server';
+$lang['email']['errorGettingMessage']='Impossible d\'obtenir le message sur le serveur';
 $lang['email']['no_recipients_drafts']='Pas de destinataire';
 $lang['email']['usage_limit'] = '%s de %s utilisé';
 $lang['email']['usage'] = '%s utilisé';
