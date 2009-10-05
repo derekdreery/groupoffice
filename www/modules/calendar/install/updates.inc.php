@@ -22,6 +22,8 @@ $updates[]="ALTER TABLE `cal_settings` ADD INDEX ( `calendar_id` )";
 
 $updates[]="ALTER TABLE `cal_calendars` ADD `shared_acl` BOOL NOT NULL ";
 
+$updates[]="RENAME TABLE `cal_groups`  TO `cal_groups_old` ;";
+
 $updates[]="CREATE TABLE IF NOT EXISTS `cal_groups` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -36,7 +38,6 @@ $updates[]="CREATE TABLE IF NOT EXISTS `cf_1` (
   PRIMARY KEY  (`link_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
-$acl = $GO_SECURITY->get_new_acl('resource_group', 1);
-$updates[]="INSERT INTO `cal_groups` (`id`, `user_id`, `name`, `acl_admin`, `fields`) VALUES (1, 1, 'Calendars', ".$acl.", '');";
+$updates[]="script:2_install_groups.inc.php";
 
 ?>
