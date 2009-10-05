@@ -188,3 +188,9 @@ $lang['common']['loginToGO']='คลิ๊กที่นี่เพื่อ�
 $lang['common']['links']='เชื่อมโยง';
 $lang['common']['GOwebsite']='Group-Office เว็บไซต์';
 $lang['common']['GOisAProductOf']='<i>Group-Office</i> is a product of <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
+$lang['common']['startMenu']='เมนูเริ่มต้น';
+$lang['common']['address_format']='รูปแบบที่อยู่';
+$lang['common']['dear']='ถึง';
+$lang['common']['yes']='ตกลง';
+$lang['common']['no']='ปฏิเสธ';
+$lang['commmon']['logFiles']='ล็อคไฟล์';

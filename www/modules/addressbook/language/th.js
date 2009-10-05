@@ -93,7 +93,7 @@ GO.addressbook.lang.noAddressbooks = 'ไม่มีสมุดที่อย
 GO.addressbook.lang.moveAll = 'ข้อมูลบริษัทและพนักงานจะถูกย้ายไปยังสมุดที่อยู่ใหม่ ต้องการทำรายการข้างต้นหรือไม่?';
 GO.addressbook.lang.addressbook = 'สมุดที่อยู่';
 GO.addressbook.lang.addressbooks = 'สมุดที่อยู่';
-GO.addressbook.lang.sendMailing='ส่งอีเมล';
+GO.addressbook.lang.sendMailing='ส่งจดหมายข่าว';
 GO.addressbook.lang.importSuccess='การนำเข้าข้อมูลสำเร็จ';
 GO.addressbook.lang.searchOnSender='ค้นหาในสมุดที่อยู่';
 GO.addressbook.lang.confirmCreate='ไม่มีรายการผู้ติดต่อใหม่. คุณต้องการเพิ่มผู้ติดต่อใหม่?';
@@ -101,4 +101,7 @@ GO.addressbook.lang.confirmCreate='ไม่มีรายการผู้ต
 GO.addressbook.lang.matchFields='Match the fields';
 
 GO.addressbook.lang.advancedSearch='ค้นหาแบบละเอียด';
-
+GO.addressbook.lang.defaultAddressFormat='ค่าเริ่มต้นรูปแบบที่อยู่';
+GO.addressbook.lang.defaultSalutation='ค่าเริ่มต้นข้อความแสดงความเคารพ';
+GO.addressbook.lang.explanationVariables='ข้อความอธิบายค่าตัวแปล ค่าเริ่มต้นข้อความแสดงความเคารพ';
+GO.addressbook.lang.explanationSex='Male and female form of salutation';
