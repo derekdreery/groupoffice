@@ -14,7 +14,7 @@ $lang['users']['deleteYourself'] = 'Vous ne pouvez pas vous supprimer !';
 
 $lang['link_type'][8]=$us_user = 'Utilisateur';
 
-$lang['users']['error_username']='Il y a des caractères invalides dans votre nom d\'utilisateur';
+$lang['users']['error_username']='Il y a des caractères non supportés dans votre nom d\'utilisateur';
 $lang['users']['error_username_exists']='Désolé, ce nom d\'utilisateur existe déjà';
 $lang['users']['error_email_exists']='Désolé, cette adresse e-mail est déjà utilisée.';
 $lang['users']['error_match_pass']='Les mots de passe ne correspondent pas !';
