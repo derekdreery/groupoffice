@@ -1244,6 +1244,10 @@ class files extends db {
 			$user_id=$GO_SECURITY->user_id;
 		}
 
+		if($share_user_id==0) {
+			$share_user_id=$GO_SECURITY->user_id;
+		}
+
 
 		if($parent==0) {
 			/*if(!$GO_SECURITY->has_admin_permission($user_id)) {
