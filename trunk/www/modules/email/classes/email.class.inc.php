@@ -514,6 +514,8 @@ class email extends db
 
 	function delete_account($id)
 	{
+		global $GO_EVENTS;
+		
 		$id = $this->escape($id);
 		$sql = "DELETE FROM em_accounts WHERE id='$id'";
 		if ($this->query($sql))
@@ -524,6 +526,8 @@ class email extends db
 			$this->query($sql);
 			$sql = "DELETE FROM em_filters WHERE account_id='$id'";
 			$this->query($sql);
+
+			$GO_EVENTS->fire_event('delete_email_account', $id);
 		}
 	}
 

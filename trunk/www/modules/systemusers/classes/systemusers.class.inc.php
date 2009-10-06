@@ -7,6 +7,7 @@ class systemusers extends db
 		$events->add_listener('before_add_user', __FILE__, 'systemusers', 'before_add_user');
 		$events->add_listener('update_user', __FILE__, 'systemusers', 'update_user');
         $events->add_listener('user_delete', __FILE__, 'systemusers', 'user_delete');
+		$events->add_listener('delete_email_account', __FILE__, 'systemusers', 'delete_vacation');
 	}
 
 
@@ -71,6 +72,11 @@ class systemusers extends db
 	{
 		$r = $this->update_row('syu_vacation', 'account_id', $vacation);
 		return $r;
+	}
+	function delete_vacation($account_id)
+	{
+		$su = new systemusers();
+		return $su->query("DELETE FROM syu_vacation WHERE account_id=?", 'i', $account_id);
 	}
 
 	function get_vacation_account_ids()
