@@ -1212,7 +1212,7 @@ class files extends db {
 			if(!$file) {
 				$folder = $this->folder_exists($folder_id, $first_part);
 				if(!$folder && $create_folders) {
-					$folder = $this->mkdir($folder_id, $first_part,false, $user_id, true,'1');
+					$folder = $this->mkdir($folder_id, $first_part,false, $user_id, true,'0');
 				}
 				return $folder;
 			}else {
@@ -1244,9 +1244,9 @@ class files extends db {
 			$user_id=$GO_SECURITY->user_id;
 		}
 
-		if($share_user_id==0) {
+		/*if($share_user_id==0) {
 			$share_user_id=$GO_SECURITY->user_id;
-		}
+		}*/
 
 
 		if($parent==0) {
@@ -1282,7 +1282,8 @@ class files extends db {
 		} else {
 			$folder['readonly']=$readonly;
 			$folder['visible']=$visible;
-			$folder['user_id']=$share_user_id;
+			//used to be share_user_id
+			$folder['user_id']=$user_id;
 			$folder['parent_id']=$parent['id'];
 			$folder['name']=$name;
 			$folder['ctime']=filectime($full_path.'/'.$name);
