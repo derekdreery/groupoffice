@@ -1662,7 +1662,7 @@ class files extends db {
 				$cache['keywords']=$file['comments'].','.$cache['name'].','.$cache['type'];
 				$cache['mtime']=$file['mtime'];
 				$cache['acl_read']=$share['acl_read'];
-				$cache['acl_write']=$share['acl_read'];
+				$cache['acl_write']=$share['acl_write'];
 
 				//var_dump($cache);
 
