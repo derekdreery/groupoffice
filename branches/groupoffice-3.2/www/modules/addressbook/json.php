@@ -219,7 +219,7 @@ try
 				{
 					if(!empty($advancedQuery))
 					{
-						$advancedQuery .= ' AND ';
+						$advancedQuery .= ' OR ';
 					}
 					if($field=='ab_contacts.name')
 					{
@@ -228,7 +228,7 @@ try
 					{
 						$field = $ab->escape($field);
 					}
-					$advancedQuery .= $field.' LIKE \'%'.$ab->escape($value).'%\'';
+					$advancedQuery .= $field.' LIKE \'%'.$ab->escape(str_replace(' ','%',$value)).'%\'';
 				}			
 			}
 				
