@@ -145,6 +145,7 @@ GO.calendar.MainPanel = function(config){
 		proxy: new Ext.data.HttpProxy({
 			url: GO.settings.modules.calendar.url+'json.php'
 		}),
+		sortInfo:{field: 'name', direction: "ASC"},
 		groupField:'group_name',
 		remoteSort:true
 	});
