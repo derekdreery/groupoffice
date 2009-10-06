@@ -203,6 +203,7 @@ GO.CheckerPanel = Ext.extend(function(config){
 	}
 	
 	config.layout='fit';
+	config.id='go-checker-panel';
 		
 		
 	config.store = new Ext.data.GroupingStore({
@@ -227,12 +228,14 @@ GO.CheckerPanel = Ext.extend(function(config){
  
 	config.cm = new Ext.grid.ColumnModel([
 			{
-				dataIndex: 'link_type_name'
+				dataIndex: 'link_type_name',
+				hideable: false
 			},{
 	      header: "",
 	      width:28,
 				dataIndex: 'icon',
-				renderer: this.iconRenderer
+				renderer: this.iconRenderer,
+				hideable: false
 	    },
 			{
 				header:GO.lang.strTime,

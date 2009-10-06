@@ -102,6 +102,10 @@ GO.addressbook.SearchPanel = function(config)
 								{
 									this.advancedSearchWindow = new GO.addressbook.AdvancedSearchWindow();
 									this.advancedSearchWindow.on('ok', function(win){
+
+										//See bug report:
+										//https://sourceforge.net/tracker/?func=detail&aid=2871777&group_id=76359&atid=547651
+										win.grid.stopEditing();
 										
 										this.fireEvent('queryChange', {advancedQuery:Ext.encode(win.getGridData())});										
 									}, this)
