@@ -39,5 +39,6 @@ $updates[]="CREATE TABLE IF NOT EXISTS `cf_1` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
 $updates[]="script:2_install_groups.inc.php";
+$updates[]="UPDATE cal_calendars SET group_id=1 WHERE group_id<1";
 
 ?>
