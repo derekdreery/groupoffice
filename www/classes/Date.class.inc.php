@@ -223,6 +223,9 @@ class Date
 					
 				}else
 				{
+					if(empty($rrule['BYDAY'])){
+						return false;
+					}
 					
 					//Maybe more efficient to jump to right week first....
 

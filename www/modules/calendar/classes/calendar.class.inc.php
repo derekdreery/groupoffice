@@ -1596,7 +1596,7 @@ class calendar extends db
 
 			//echo date('Ymd G:i', $first_occurrence_time).'<br />';
 
-			//go_log(LOG_DEBUG, $calculated_event['name'].': '.date('Ymd G:i', $first_occurrence_time));
+			//debug($calculated_event['name'].': '.date('Ymd G:i', $first_occurrence_time));
 
 			$loops = 0;
 			while($calculated_event['start_time'] = Date::get_next_recurrence_time($first_occurrence_time, $calculated_event['start_time'], $event['rrule']))
@@ -1605,7 +1605,7 @@ class calendar extends db
 
 				//echo date('Ymd G:i', $calculated_event['start_time']).'<br />';
 
-				//	go_log(LOG_DEBUG, $calculated_event['name'].': '.date('Ymd G:i', $calculated_event['start_time']));
+				//debug($calculated_event['name'].': '.date('Ymd G:i', $calculated_event['start_time']));
 
 				$calculated_event['end_time'] = $calculated_event['start_time']+$duration;
 
