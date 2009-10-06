@@ -38,7 +38,7 @@ switch($task)
 
 				// remove vacation reference in forward file if module is being uninstalled
 				if(isset($argv[3]) && $argv[3] == 'uninstall')
-					$vacation['vacation_active']  = 0;
+					$vacation['vacation_active'] = 0;
 		
 				if($vacation['vacation_active'])
 				{
