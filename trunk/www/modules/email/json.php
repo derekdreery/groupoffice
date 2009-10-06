@@ -708,10 +708,12 @@ try{
 					$contact = $ab->get_contact_by_email($response['sender'], $GO_SECURITY->user_id);
 					$response['sender_contact_id']=intval($contact['id']);
 
-                    $contact['contact_name'] = String::format_name($contact);
-                    $response['contact']=$contact;
+                    if($response['sender_contact_id'])
+                    {                        
+                        $contact['contact_name'] = String::format_name($contact);
+						$response['contact']=$contact;
+                    }                    
 				}
-
 
 				if(!empty($response['to']))
 				{
@@ -1359,7 +1361,7 @@ try{
 											break;
 
 										case 'account':
-											$email = new email();
+											$email = new email();											
 											$response['success']=false;
 											$response['data']=$email->get_account($_POST['account_id']);
 
@@ -1369,11 +1371,31 @@ try{
 												$response['data']['user_name']=String::format_name($user['last_name'],$user['first_name'], $user['middle_name']);
 
 												$server_response = $email->get_servermanager_mailbox_info($response['data']);
-												if(isset($server_response['success']))
-												{
+												if(isset($server_response['success']))												
+												{												
 													$response['data']['vacation_active']=$server_response['data']['vacation_active'];
 													$response['data']['vacation_subject']=$server_response['data']['vacation_subject'];
-													$response['data']['vacation_body']=$server_response['data']['vacation_body'];
+													$response['data']['vacation_body']=$server_response['data']['vacation_body'];		
+												}else
+												if(isset($GO_MODULES->modules['systemusers']))
+												{
+													require_once($GO_MODULES->modules['systemusers']['class_path'].'systemusers.class.inc.php');
+													$su = new systemusers();
+
+													$account_id	= $_POST['account_id'];
+													$vacation = $su->get_vacation($account_id);
+
+													$user_home_dirs = isset($GO_CONFIG->user_home_dirs) ? $GO_CONFIG->user_home_dirs : '/home/';
+													$homedir = $user_home_dirs.$response['data']['username'];
+													if(!eregi('localhost', $response['data']['host']) || !file_exists($homedir))
+													{
+														$response['data']['hidetab'] = true;
+													}else
+													{
+														$response['data']['vacation_active'] = ($vacation['vacation_active']) ? $vacation['vacation_active'] : 0;
+														$response['data']['vacation_subject'] = ($vacation['vacation_subject']) ? $vacation['vacation_subject'] : '';
+														$response['data']['vacation_body'] = ($vacation['vacation_body']) ? $vacation['vacation_body'] : '';
+													}
 												}
 												$response['success']=true;
 											}

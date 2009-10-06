@@ -520,7 +520,7 @@ GO.email.AccountDialog = function(config) {
 }
 
 Ext.extend(GO.email.AccountDialog, Ext.Window, {
-
+	
     save : function(hide) {
         this.propertiesPanel.form.submit({
 
@@ -617,8 +617,9 @@ Ext.extend(GO.email.AccountDialog, Ext.Window, {
 
                 this.foldersTab.setDisabled(action.result.data.type == 'pop3');
                 this.filtersTab.setDisabled(action.result.data.type == 'pop3');
-                this.vacationPanel
-                .setDisabled(typeof(action.result.data.vacation_subject) == 'undefined');
+
+				var serverclient = (typeof(action.result.data.vacation_subject) != 'undefined');
+                this.vacationPanel.setDisabled((!serverclient && !GO.systemusers) || action.result.data.hidetab);
             },
             scope : this
         });
