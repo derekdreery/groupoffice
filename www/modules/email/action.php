@@ -835,51 +835,90 @@ try{
 
 							$response['success']=true;
 
-
+							$use_systemusers = true;
 							if(isset($GO_MODULES->modules['serverclient']))
-							{
+							{								
 								require_once($GO_MODULES->modules['serverclient']['class_path'].'serverclient.class.inc.php');
 								$sc = new serverclient();
-
-								foreach($sc->domains as $domain)
+								
+								if(count($sc->domains))
 								{
-
-									if(!$GO_MODULES->modules['email']['write_permission'])
+									$use_systemusers = false;
+								
+									foreach($sc->domains as $domain)
 									{
-										$account = $email->get_account($account['id']);
-									}
-
-									//go_log(LOG_DEBUG, $account['username'].' -> '.$domain);
-									if(strpos($account['username'], '@'.$domain))
-									{
-										$sc->login();
-
-										$params=array(
-										//'sid'=>$sc->sid,
-									'task'=>'serverclient_set_vacation',
-									'username'=>$account['username'],
-									'password'=>$account['password'],
-									'vacation_active'=>isset($_POST['vacation_active']) ? '1' : '0',
-									'vacation_subject'=>($_POST['vacation_subject']),
-									'vacation_body'=>($_POST['vacation_body'])
-										);
-
-										//go_log(LOG_DEBUG, var_export($params, true));
-
-										$server_response = $sc->send_request($GO_CONFIG->serverclient_server_url.'modules/postfixadmin/action.php', $params);
-
-										$server_response = json_decode($server_response, true);
-
-										if(!$server_response['success'])
+										
+										if(!$GO_MODULES->modules['email']['write_permission'])
 										{
-											throw new Exception($server_response['feedback']);
+											$account = $email->get_account($account['id']);
 										}
-										break;
-									}
 
+										//go_log(LOG_DEBUG, $account['username'].' -> '.$domain);
+										if(strpos($account['username'], '@'.$domain))
+										{
+											$sc->login();
+
+											$params=array(
+											//'sid'=>$sc->sid,
+										'task'=>'serverclient_set_vacation',
+										'username'=>$account['username'],
+										'password'=>$account['password'],
+										'vacation_active'=>isset($_POST['vacation_active']) ? '1' : '0',
+										'vacation_subject'=>($_POST['vacation_subject']),
+										'vacation_body'=>($_POST['vacation_body'])
+											);
+
+											//go_log(LOG_DEBUG, var_export($params, true));
+
+											$server_response = $sc->send_request($GO_CONFIG->serverclient_server_url.'modules/postfixadmin/action.php', $params);
+
+											$server_response = json_decode($server_response, true);
+
+											if(!$server_response['success'])
+											{
+												throw new Exception($server_response['feedback']);
+											}
+											break;
+										}
+
+									}
 								}
 							}
 
+							if(isset($GO_MODULES->modules['systemusers']) && $use_systemusers)
+							{								
+								exec('whereis vacation', $return);
+								if(isset($return[0]))
+								{
+									$params = explode(' ', $return[0]);
+								}
+
+								$vacation_exec = (isset($params[1])) ? $params[1] : false;
+								if(!is_executable($vacation_exec))
+								{
+									require_once ($GO_LANGUAGE->get_language_file('systemusers'));
+									throw new Exception($lang['systemusers']['vacation_not_executable_error']);
+								}
+
+
+								require_once($GO_MODULES->modules['systemusers']['class_path'].'systemusers.class.inc.php');
+								$su = new systemusers();
+
+								$vacation['vacation_active'] = isset($_POST['vacation_active']) ? '1' : '0';
+								$vacation['vacation_subject'] = isset($_POST['vacation_subject']) ? ($_POST['vacation_subject']) : '';
+								$vacation['vacation_body'] = isset($_POST['vacation_body']) ? ($_POST['vacation_body']) : '';
+								$vacation['account_id'] = $account['id'];
+								
+								if($su->get_vacation($vacation['account_id']))
+								{
+									$su->update_vacation($vacation);
+								}else
+								{
+									$su->add_vacation($vacation);
+								}
+								
+								exec($GO_CONFIG->cmd_sudo.' '.$GO_MODULES->modules['systemusers']['path'].'sudo.php set_vacation '.$vacation['account_id']);
+							}							
 						}else
 						{
 							$account['user_id']=isset($_REQUEST['user_id']) ? ($_REQUEST['user_id']) : $GO_SECURITY->user_id;
