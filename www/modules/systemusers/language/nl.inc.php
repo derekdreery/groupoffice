@@ -1,8 +1,0 @@
-<?php
-//Uncomment this line in new translations!
-require($GO_LANGUAGE->get_fallback_language_file('systemusers'));
-
-$lang['systemusers']['name']='Systeem gebruikers';
-$lang['systemusers']['description']='Maakt systeem gebruikers aan voor iedere Group-Office gebruiker';
-$lang['systemusers']['return_error']='Systeem gebruiker {USERNAME} kon niet worden aangemaakt.';
-$lang['systemusers']['vacation_not_executable_error']='Het programma vacation is niet geinstalleerd of niet uitvoerbaar.';
