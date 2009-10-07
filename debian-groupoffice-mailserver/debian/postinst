@@ -47,12 +47,9 @@ postconf -e 'smtpd_data_restrictions = reject_unauth_pipelining, reject_multi_re
 if  ! id vmail 1>/dev/null 2>&1 ; then
 	echo Adding vmail user
 	useradd -r -u 150 -g mail -d /home/vmail -s /sbin/nologin -c "Virtual Mailbox" vmail
-
-	#chmod 770 /home/vmail
-	#chown -R vmail:mail /home/vmail
 fi
 
-if [ ! -x $source ]; then
+if [ ! -x /home/vmail ]; then
 	mkdir /home/vmail
 	chmod 770 /home/vmail
 	chown -R vmail:mail /home/vmail
