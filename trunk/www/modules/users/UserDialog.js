@@ -117,10 +117,10 @@ Ext.extend(GO.users.UserDialog, Ext.Window,{
 
 		this.loginTab.setVisible(user_id>0);
 		
-		this.linkBrowseButton.setDisabled(user_id<1);
+		this.linkBrowseButton.setDisabled(!user_id);
 		if(GO.files)
 		{
-			this.fileBrowseButton.setDisabled(user_id<1);
+			this.fileBrowseButton.setDisabled(!user_id);
 		}
 
 		this.lookAndFeelTab.startModuleField.clearLastSearch();
