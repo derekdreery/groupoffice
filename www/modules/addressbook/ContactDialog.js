@@ -91,6 +91,7 @@ GO.addressbook.ContactDialog = function(config)
 	this.shadow= false;
 	this.border= false;
 	this.height= 570;
+	
 	//autoHeight= true;
 	this.width= 820;
 	this.plain= true;
