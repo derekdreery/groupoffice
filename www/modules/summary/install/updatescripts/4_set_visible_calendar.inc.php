@@ -5,7 +5,7 @@ if(isset($GO_MODULES->modules['calendar'])){
 	$cal1 = new db();
 	$cal2 = new db();
 
-	$cal1->query("ALTER TABLE `cal_settings` ADD `calendar_id` INT NOT NULL;");
+	$db->query("ALTER TABLE `cal_settings` ADD `calendar_id` INT NOT NULL;");
 
 	$cal1->query("SELECT calendar_id, user_id FROM cal_settings");
 

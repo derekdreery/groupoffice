@@ -2,7 +2,21 @@
 require_once($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc.php');
 $cal = new calendar();
 
-if(!$db->table_exists('cal_groups_old')){
+$old_exists = $db->table_exists('cal_groups');
+if($old_exists){
+	$db->query("RENAME TABLE `cal_groups`  TO `cal_groups_old` ;");
+}
+
+$db->query("CREATE TABLE IF NOT EXISTS `cal_groups` (
+  `id` int(11) NOT NULL default '0',
+  `user_id` int(11) NOT NULL default '0',
+  `name` varchar(50) default NULL,
+  `acl_admin` int(11) NOT NULL,
+  `fields` varchar(255) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+
+if(!$old_exists){
 	$group['user_id']=1;
 	$group['name']='Calendars';
 	$group['acl_admin']=$GO_SECURITY->get_new_acl('resource_group', 1);
