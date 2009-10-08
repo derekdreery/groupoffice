@@ -6,6 +6,26 @@ require_once('../../Group-Office.php');
 $task = $argv[1];
 $user_home_dirs = isset($GO_CONFIG->user_home_dirs) ? $GO_CONFIG->user_home_dirs : '/home/';
 
+
+function get_string($output, $status)
+{
+	$lines = count($output);
+	if($lines)
+	{
+		$str = '';
+		for($i=0; $i<$lines; $i++)
+		{
+			$str .= $output[$i]."<br />";
+		}
+	}else
+	{
+		$str = 'Error code: '. $status;
+	}
+
+	return $str;
+}
+
+
 switch($task)
 {
 	case 'add_user':
@@ -13,20 +33,10 @@ switch($task)
 		$username = $argv[2];
 		$password = $argv[3];	
 
-		exec($GO_CONFIG->cmd_sudo.' useradd -m '.$username. ' 2>&1', $output, $status);		
+		exec($GO_CONFIG->cmd_sudo.' useradd -m '.$username. ' 2>&1', $output, $status);	
 		if($status)
-		{
-			$output_lines = count($output);
-			if($output_lines)
-			{
-				$return_string = '';
-				for($i=0; $i<$output_lines; $i++)
-				{
-					$return_string .= $output[$i]."<br />";
-				}
-				
-				exit($return_string);
-			}
+		{		
+			exit(get_string($output, $status));
 		}
 			
 		exec('echo '.$username.':'.$password.' | '.$GO_CONFIG->cmd_sudo.' '.$GO_CONFIG->cmd_chpasswd);
@@ -45,20 +55,10 @@ switch($task)
 		$GO_USERS->get_user($user_id);
 		$username = $GO_USERS->f('username');
 
-		exec('echo '.$username.':'.$password.' | '.$GO_CONFIG->cmd_sudo.' '.$GO_CONFIG->cmd_chpasswd.' 2>&1', $output, $status);		
+		exec('echo '.$username.':'.$password.' | '.$GO_CONFIG->cmd_sudo.' '.$GO_CONFIG->cmd_chpasswd.' 2>&1', $output, $status);
 		if($status)
 		{
-			$output_lines = count($output);
-			if($output_lines)
-			{
-				$return_string = '';
-				for($i=0; $i<$output_lines; $i++)
-				{
-					$return_string .= $output[$i]."<br />";
-				}
-
-				exit($return_string);
-			}
+			exit(get_string($output, $status));
 		}
 		
 		break;
@@ -70,17 +70,7 @@ switch($task)
 		exec($GO_CONFIG->cmd_sudo.' userdel '.$username.' 2>&1', $output, $status);
 		if($status)
 		{
-			$output_lines = count($output);
-			if($output_lines)
-			{
-				$return_string = '';
-				for($i=0; $i<$output_lines; $i++)
-				{
-					$return_string .= $output[$i]."<br />";
-				}
-
-				exit($return_string);
-			}
+			exit(get_string($output, $status));
 		}
 
 		break;

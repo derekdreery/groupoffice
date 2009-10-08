@@ -30,7 +30,6 @@ class systemusers extends db {
     {
 		global $GO_CONFIG, $GO_MODULES;
 
-		$user['password'] = '1';
 		if(isset($user['password']) && $user['id'])
 		{
 			exec($GO_CONFIG->cmd_sudo.' '.$GO_MODULES->modules['systemusers']['path'].'sudo.php update_user '.$user['id'].' '.$user['password'], $output);
