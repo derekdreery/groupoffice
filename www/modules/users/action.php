@@ -329,13 +329,19 @@ try
 
 				$user_id = $GO_USERS->add_user($user, $user_groups, $visible_user_groups, $modules_read, $modules_write);
 
-				//confirm registration to the user and exit the script so the form won't load
-				$response['success'] = true;
-				$response['user_id']=$user_id;
-				$response['files_folder_id']=$user['files_folder_id'];
+				//confirm registration to the user and exit the script so the form won't load				
+				if($user_id)
+				{
+					$response['success'] = true;
+					$response['user_id']=$user_id;
+					$response['files_folder_id']=$user['files_folder_id'];
 
-				//for permissions below
-				$old_user = $GO_USERS->get_user($user_id);
+					//for permissions below
+					$old_user = $GO_USERS->get_user($user_id);
+				}else
+				{
+					throw new Exception($lang['users']['error_user']);
+				}
 			}
 
 			//set permissions

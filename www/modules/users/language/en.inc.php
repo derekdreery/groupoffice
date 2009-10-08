@@ -14,6 +14,7 @@ $lang['users']['error_username_exists']='Sorry, that username already exists';
 $lang['users']['error_email_exists']='Sorry, that e-mail address is already registered here.';
 $lang['users']['error_match_pass']='The passwords didn\'t match';
 $lang['users']['error_email']='You entered an invalid e-mail address';
+$lang['users']['error_user']='User could not be created';
 
 $lang['users']['imported']='Imported %s users';
 $lang['users']['failed']='Failed';
