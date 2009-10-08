@@ -8,6 +8,83 @@ $user_home_dirs = isset($GO_CONFIG->user_home_dirs) ? $GO_CONFIG->user_home_dirs
 
 switch($task)
 {
+	case 'add_user':
+
+		$username = $argv[2];
+		$password = $argv[3];	
+
+		exec($GO_CONFIG->cmd_sudo.' useradd -m '.$username. ' 2>&1', $output, $status);		
+		if($status)
+		{
+			$output_lines = count($output);
+			if($output_lines)
+			{
+				$return_string = '';
+				for($i=0; $i<$output_lines; $i++)
+				{
+					$return_string .= $output[$i]."<br />";
+				}
+				
+				exit($return_string);
+			}
+		}
+			
+		exec('echo '.$username.':'.$password.' | '.$GO_CONFIG->cmd_sudo.' '.$GO_CONFIG->cmd_chpasswd);
+
+		if(!empty($GO_CONFIG->cmd_edquota) && !empty($GO_CONFIG->quota_protouser))
+		{
+			exec($GO_CONFIG->cmd_sudo.' '.$GO_CONFIG->cmd_edquota.' -p '.$GO_CONFIG->quota_protouser.' '.$GO_CONFIG->id.'_'.$username);
+		}
+
+		break;
+
+	case 'update_user':
+
+		$user_id = $argv[2];
+		$password = $argv[3];
+		$GO_USERS->get_user($user_id);
+		$username = $GO_USERS->f('username');
+
+		exec('echo '.$username.':'.$password.' | '.$GO_CONFIG->cmd_sudo.' '.$GO_CONFIG->cmd_chpasswd.' 2>&1', $output, $status);		
+		if($status)
+		{
+			$output_lines = count($output);
+			if($output_lines)
+			{
+				$return_string = '';
+				for($i=0; $i<$output_lines; $i++)
+				{
+					$return_string .= $output[$i]."<br />";
+				}
+
+				exit($return_string);
+			}
+		}
+		
+		break;
+
+	case 'delete_user':
+
+		$username = $argv[2];
+		
+		exec($GO_CONFIG->cmd_sudo.' userdel '.$username.' 2>&1', $output, $status);
+		if($status)
+		{
+			$output_lines = count($output);
+			if($output_lines)
+			{
+				$return_string = '';
+				for($i=0; $i<$output_lines; $i++)
+				{
+					$return_string .= $output[$i]."<br />";
+				}
+
+				exit($return_string);
+			}
+		}
+
+		break;
+
 	case 'set_vacation':
 
 		$account_id=$argv[2];
