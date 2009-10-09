@@ -739,7 +739,7 @@ class GO_USERS extends db
 	 */
 	function check_username($username)
 	{
-		return preg_match('/^[A-Za-z0-9_\-\.]*$/', $username);
+		return preg_match('/^[A-Za-z0-9_\-\.\@]*$/', $username);
 	}
 
 	/**
