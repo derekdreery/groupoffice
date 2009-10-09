@@ -71,6 +71,8 @@ try
 			$modules_read_col = $count++;
 			$modules_write_col = $count++;
 
+			$send_invitation_col = $count++;
+
 
 
 			$import_file = $GO_CONFIG->tmpdir.'userimport.csv';
@@ -99,14 +101,20 @@ try
 				}
 			}
 
-			$modules_read = array_map('trim', explode(',',$GO_CONFIG->register_modules_read));
+			/*$modules_read = array_map('trim', explode(',',$GO_CONFIG->register_modules_read));
 			$modules_write = array_map('trim', explode(',',$GO_CONFIG->register_modules_write));
 
 			//user groups the user will be added to.
 			$user_groups = $GO_GROUPS->groupnames_to_ids(array_map('trim',explode(',',$GO_CONFIG->register_user_groups)));
 
 			//user groups that this user will be visible to
-			$visible_user_groups = $GO_GROUPS->groupnames_to_ids(array_map('trim',explode(',',$GO_CONFIG->register_visible_user_groups)));
+			$visible_user_groups = $GO_GROUPS->groupnames_to_ids(array_map('trim',explode(',',$GO_CONFIG->register_visible_user_groups)));*/
+
+			require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
+			require_once($GO_MODULES->modules['users']['class_path'].'users.class.inc.php');
+			$users = new users();
+
+			$email = $users->get_register_email();
 
 
 			$failed = array();
@@ -115,6 +123,16 @@ try
 
 			while($record = fgetcsv($fp, 4096, $_SESSION['GO_SESSION']['list_separator'], $_SESSION['GO_SESSION']['text_separator']))
 			{
+				$modules_read = array_map('trim', explode(',',$record[$modules_read_col]));
+				$modules_write = array_map('trim', explode(',',$record[$modules_write_col]));
+
+				//user groups the user will be added to.
+				$user_groups = $GO_GROUPS->groupnames_to_ids(array_map('trim',explode(',',$record[$groups_col])));
+
+				//user groups that this user will be visible to
+				$visible_user_groups = $GO_GROUPS->groupnames_to_ids(array_map('trim',explode(',',$record[$visible_groups_col])));
+
+
 				$user = array();
 
 				for($i=0;$i<count($cols);$i++)
@@ -154,6 +172,18 @@ try
 					continue;
 				}else
 				{
+					if(!empty($record[$send_invitation_col])){
+						$swift = new GoSwift($user['email'], $email['register_email_subject']);
+						foreach($user as $key=>$value){
+							$email['register_email_body'] = str_replace('{'.$key.'}', $value, $email['register_email_body']);
+						}
+
+						$email['register_email_body']= str_replace('{url}', $GO_CONFIG->full_url, $email['register_email_body']);
+						$email['register_email_body']= str_replace('{title}', $GO_CONFIG->title, $email['register_email_body']);
+						$swift->set_body($email['register_email_body'],'plain');
+						$swift->set_from($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
+						$swift->sendmail();
+					}
 					$success_count++;
 				}
 			}
