@@ -63,6 +63,15 @@ try
 			$cols[]='work_fax';
 
 
+			$count = count($cols);
+
+			$groups_col = $count++;
+			$visible_groups_col = $count++;
+
+			$modules_read_col = $count++;
+			$modules_write_col = $count++;
+
+
 
 			$import_file = $GO_CONFIG->tmpdir.'userimport.csv';
 			if (is_uploaded_file($_FILES['importfile']['tmp_name'][0]))
