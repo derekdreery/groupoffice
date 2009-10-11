@@ -38,10 +38,8 @@ $tasks[] = 'release_notes';
 $tasks[] = 'title';
 //$tasks[] = 'url';
 
-//if (!@is__writable($GO_CONFIG->file_storage_path) || !@is__writable($GO_CONFIG->local_path) || !@is__writable($GO_CONFIG->tmpdir))
-//{
-	$tasks[] = 'userdir';
-//}
+$tasks[] = 'userdir';
+
 
 /*if($CONFIG_FILE=='/etc/groupoffice/config.php' && @file_exists('/etc/groupoffice/config-db.php'))
 {
@@ -327,9 +325,6 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 			}elseif($_POST['max_file_size'] > return_bytes(ini_get('upload_max_filesize')))
 			{
 				$feedback = '<font color="red">You entered a greater upload size then the PHP configuration allows.<br />Please correct this and try again.</font>';
-			}elseif (!is__writable($_POST['local_path']))
-			{
-				$feedback = '<font color="red">The public files path you entered is not writable.<br />Please correct this and try again.</font>';
 			}elseif (!is__writable($tmpdir))
 			{
 				$feedback = '<font color="red">The temporary files path you entered is not writable.<br />Please correct this and try again.</font>';
@@ -340,12 +335,7 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 			//$GO_CONFIG->create_mode=$_POST['create_mode'];
 			$GO_CONFIG->max_file_size=$_POST['max_file_size'];
 
-			if (substr($_POST['local_path'], -1) != '/') $_POST['local_path'] = $_POST['local_path'].'/';
-			if (substr($_POST['local_url'], -1) != '/') $_POST['local_url'] = $_POST['local_url'].'/';
-
-			$GO_CONFIG->local_path=$_POST['local_path'];
-			$GO_CONFIG->local_url=$_POST['local_url'];
-
+	
 			if (substr($tmpdir, -1) != '/') $tmpdir = $tmpdir.'/';
 			$GO_CONFIG->tmpdir=$tmpdir;
 
@@ -1140,43 +1130,7 @@ switch($task)
 		(Current PHP configuration allows <?php echo $max_ini; ?> bytes)
 		</td>
 		</tr>
-		<?php
-		if($GO_CONFIG->local_path == '')
-		{
-			$GO_CONFIG->local_path = $GO_CONFIG->root_path.'local/';
-			$GO_CONFIG->local_url = $GO_CONFIG->host.'local/';
-		}
-		?>
-		<tr>
-			<td colspan="2">
-			<br /><br />
-			Group-Office needs a place to store that is available through a webbrowser so please provide the URL to access this path too. The default path is inside the
-			Group-Office directory. It is probably better to place it somewhere outside this directory if you have the means to do so. This way configuration data
-			is separated from the Group-Office source.
-			<br /><br />
-			<font color="#003399"><i>
-			$ su<br />
-			$ mkdir <?php echo $GO_CONFIG->local_path; ?><br />
-			$ chown apache:apache <?php echo $GO_CONFIG->local_path; ?><br />
-			</i></font>
-
-			<br /><br />
-		</td>
-		</tr>
-		<tr>
-			<td>Public files path:</td>
-			<?php
-			$local_path = isset($_POST['local_path']) ? $_POST['local_path'] : $GO_CONFIG->local_path;
-			?>
-			<td><input type="text" size="50" name="local_path" value="<?php echo $local_path; ?>" /></td>
-		</tr>
-		<tr>
-			<td>Public files URL:</td>
-			<?php
-			$local_url = isset($_POST['local_url']) ? $_POST['local_url'] : $GO_CONFIG->local_url;
-			?>
-			<td><input type="text" size="50" name="local_url" value="<?php echo $local_url; ?>" /></td>
-		</tr>
+		
 		<tr>
 			<td colspan="2">
 			<br /><br />

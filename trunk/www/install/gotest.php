@@ -266,13 +266,7 @@ function test_system(){
 	
 	
 	if(!empty($GO_CONFIG->title))
-	{
-		$test['name']='Public files path';
-		$test['pass']=is_writable($GO_CONFIG->local_path);
-		$test['feedback']='Fatal error: the local_path setting in config.php is not writable. You must correct this or Group-Office will not run.';
-		$test['fatal']=false;
-		$tests[]=$test;
-		
+	{		
 		$test['name']='Protected files path';
 		$test['pass']=is_writable($GO_CONFIG->file_storage_path);
 		$test['feedback']='Fatal error: the file_storage_path setting in config.php is not writable. You must correct this or Group-Office will not run.';

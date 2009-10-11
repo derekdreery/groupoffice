@@ -138,14 +138,14 @@ if(isset($RERUN_UPDATE))
 		$GO_EVENTS->fire_event('check_database');
 	}
 
-	if(is_dir($GO_CONFIG->local_path.'cache'))
+	if(is_dir($GO_CONFIG->file_storage_path.'cache'))
 	{
-		echo 'Removing cached javascripts from '.$GO_CONFIG->local_path.'cache ...'.$line_break;
+		echo 'Removing cached javascripts...'.$line_break;
 
 		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 		$fs = new filesystem();
 
-		$fs->delete($GO_CONFIG->local_path.'cache');
+		$fs->delete($GO_CONFIG->file_storage_path.'cache');
 	}
 	echo 'Done!'.$line_break.$line_break;
 }
