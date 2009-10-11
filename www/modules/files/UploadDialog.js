@@ -55,7 +55,7 @@ GO.files.UploadDialog = function(config) {
 
 	config.collapsible = false;
 	config.maximizable = false;
-	config.modal = false;
+	config.modal = true;
 	config.resizable = false;
 	config.width = 300;
 	config.items = this.upForm;
