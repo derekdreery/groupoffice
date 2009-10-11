@@ -138,15 +138,15 @@ class GO_THEME
 			$mods.=$module['id'];
 		}
 
-		$hash = md5($GO_CONFIG->root_path.$GO_CONFIG->host.$GO_CONFIG->mtime.$mods);
+		$hash = md5($GO_CONFIG->file_storage_path.$GO_CONFIG->host.$GO_CONFIG->mtime.$mods);
 
 		$relpath= 'cache/'.$hash.'-'.$this->theme.'-style.css';
-		$cssfile = $GO_CONFIG->local_path.$relpath;
+		$cssfile = $GO_CONFIG->file_storage_path.$relpath;
 
 		if(!file_exists($cssfile) || $GO_CONFIG->debug){
 
-			if(!is_dir($GO_CONFIG->local_path.'cache')){
-				mkdir($GO_CONFIG->local_path.'cache', $GO_CONFIG->folder_create_mode, true);
+			if(!is_dir($GO_CONFIG->file_storage_path.'cache')){
+				mkdir($GO_CONFIG->file_storage_path.'cache', $GO_CONFIG->folder_create_mode, true);
 			}
 
 			$fp = fopen($cssfile, 'w+');
@@ -159,7 +159,7 @@ class GO_THEME
 			fclose($fp);
 		}
 
-		$cssurl = $GO_CONFIG->use_zlib_compression() ? $GO_CONFIG->host.'compress.php?file='.basename($relpath) : $GO_CONFIG->local_url.$relpath;
+		$cssurl = $GO_CONFIG->host.'compress.php?file='.basename($relpath);
 		echo '<link href="'.$cssurl.'" type="text/css" rel="stylesheet" />';
 	}
 	

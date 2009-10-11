@@ -383,20 +383,6 @@ class GO_CONFIG {
 	 */
 	var $db_socket = '';
 
-	/** Path to local installation specific files
-	 *
-	 * @var     string
-	 * @access  public
-	 */
-	var $local_path = '';
-
-	/** URL to local installation specific files
-	 *
-	 * @var     string
-	 * @access  public
-	 */
-	var $local_url = '';
-
 
 
 	#FILE BROWSER VARIABLES
@@ -804,13 +790,7 @@ class GO_CONFIG {
 				$this->host .= '/';
 			}
 
-			if(empty($config['local_path'])) {
-				$this->local_path = $this->root_path.'local/';
-				$this->local_url = $this->host.'local/';
-			}
-
 			$this->db_host='localhost';
-
 
 			if(is_windows()) {
 				$this->file_storage_path = substr($this->root_path,0,3).'groupoffice/';
@@ -1069,7 +1049,6 @@ class GO_CONFIG {
 		$response['config']['theme']=$GO_THEME->theme;
 		$response['config']['host']=$this->host;
 		$response['config']['title']=$this->title;
-		$response['config']['local_url']=$this->local_url;
 		$response['config']['webmaster_email']=$this->webmaster_email;
 
 		$response['config']['allow_password_change']=$this->allow_password_change;

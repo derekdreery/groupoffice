@@ -13,7 +13,6 @@
  */
 
 $root_uri = $GO_CONFIG->debug ? $GO_CONFIG->host : $GO_CONFIG->root_path;
-$local_uri = $GO_CONFIG->debug ? $GO_CONFIG->local_url : $GO_CONFIG->local_path;
 
 $scripts=array();
 $scripts[]=$root_uri.'ext/adapter/ext/ext-base.js';
@@ -78,17 +77,17 @@ if($GO_SECURITY->logged_in() && $fullscreen=='true' && !isset($_REQUEST['fullscr
 if(!isset($lang['common']['extjs_lang'])) $lang['common']['extjs_lang'] = $GO_LANGUAGE->language;
 
 $file = 'base-'.md5($GO_LANGUAGE->language.$GO_CONFIG->mtime).'.js';
-$path = $GO_CONFIG->local_path.'cache/'.$file;
-$url = $GO_CONFIG->use_zlib_compression() ? $GO_CONFIG->host.'compress.php?file='.$file : $GO_CONFIG->local_url.'cache/'.$file;
+$path = $GO_CONFIG->file_storage_path.'cache/'.$file;
+$url = $GO_CONFIG->host.'compress.php?file='.$file;
 
 if($GO_CONFIG->debug || !file_exists($path)) {
-	if(!is_dir($GO_CONFIG->local_path.'cache')) {
-		mkdir($GO_CONFIG->local_path.'cache', 0755, true);
+	if(!is_dir($GO_CONFIG->file_storage_path.'cache')) {
+		mkdir($GO_CONFIG->file_storage_path.'cache', 0755, true);
 	}
 
 	//cleanup old cache
 	$fs = new filesystem();
-	$files = $fs->get_files_sorted($GO_CONFIG->local_path.'cache');
+	$files = $fs->get_files_sorted($GO_CONFIG->file_storage_path.'cache');
 	while($file=array_shift($files)) {
 		if(substr($file['name'],0, 7)=='base-'.$GO_LANGUAGE->language) {
 			unlink($file['path']);
@@ -114,25 +113,42 @@ if($GO_CONFIG->debug || !file_exists($path)) {
 		}
 	}
 
+	$dynamic_debug_scripts=array();
+
 	require($GO_CONFIG->root_path.'language/languages.inc.php');
-	$fp=fopen($GO_CONFIG->local_path.'cache/languages.js','w');
+	$fp=fopen($GO_CONFIG->file_storage_path.'cache/languages.js','w');
 	fwrite($fp, "GO.Languages=[];\n");
 	foreach($languages as $code=>$language) {
 		fwrite($fp,'GO.Languages.push(["'.$code.'","'.$language.'"]);');
 	}
 	fclose($fp);
-	$scripts[]=$local_uri.'cache/languages.js';
+	if(!$GO_CONFIG->debug){
+		$scripts[]=$GO_CONFIG->file_storage_path.'cache/languages.js';
+	}else
+	{
+		$dynamic_debug_script=$GO_CONFIG->file_storage_path.'cache/languages.js';
+		$scripts[]=$GO_CONFIG->host.'compress.php?file=languages.js&mtime='.filemtime($dynamic_debug_script);
+	}
 
 
 	include($GO_LANGUAGE->get_base_language_file('countries'));
 	//array_multisort($countries);
-	$fp=fopen($GO_CONFIG->local_path.'cache/countries.js','w');
+	$fp=fopen($GO_CONFIG->file_storage_path.'cache/countries.js','w');
 
 	foreach($countries as $key=>$country) {
 		fwrite($fp,'GO.lang.countries["'.$key.'"] = "'.$country.'";');
 	}
 	fclose($fp);
-	$scripts[]=$local_uri.'cache/countries.js';
+	if(!$GO_CONFIG->debug){
+		$scripts[]=$GO_CONFIG->file_storage_path.'cache/countries.js';
+	}else
+	{
+		$dynamic_debug_script=$GO_CONFIG->file_storage_path.'cache/countries.js';
+		$scripts[]=$GO_CONFIG->host.'compress.php?file=countries.js&mtime='.filemtime($dynamic_debug_script);
+	}
+
+
+
 
 	if($GO_CONFIG->debug) {
 		$data = file_get_contents($GO_CONFIG->root_path.'/javascript/scripts.txt');
@@ -167,7 +183,7 @@ foreach($scripts as $script) {
 <script type="text/javascript">
 	if(typeof(Ext)=='undefined')
 	{
-		alert('The ExtJS javascripts were not loaded. Check local_url, local_path and the host property in config.ph');
+		alert('The Group-Office javascripts were not loaded. Check the host property in config.php');
 	}
 </script>
 <?php
@@ -227,36 +243,36 @@ if($GO_SECURITY->logged_in()) {
 	$scripts=array_unique($scripts);
 
 	$file = $GO_SECURITY->user_id.'-'.md5($GO_CONFIG->mtime.filemtime($GO_CONFIG->root_path.'javascript/go-all-min').':'.$GO_LANGUAGE->language.':'.implode(':', $modules)).'.js';
-	$path = $GO_CONFIG->local_path.'cache/'.$file;
-	$url = $GO_CONFIG->use_zlib_compression() ? $GO_CONFIG->host.'compress.php?file='.$file : $GO_CONFIG->local_url.'cache/'.$file;
+	$path = $GO_CONFIG->file_storage_path.'cache/'.$file;
+	$url = $GO_CONFIG->host.'compress.php?file='.$file;
 	
 	if(!$GO_CONFIG->debug) {
 		if(!file_exists($path)) {
-
-			file_put_contents($GO_CONFIG->local_path.'cache/modules.js', 'GO.settings.modules = Ext.decode("'.addslashes(json_encode($GO_MODULES->modules)).'");');
-			array_unshift($scripts, $local_uri.'cache/modules.js');
-
+		
 			//cleanup old cache
 			$fs = new filesystem();
-			$files = $fs->get_files_sorted($GO_CONFIG->local_path.'cache');
+			$files = $fs->get_files_sorted($GO_CONFIG->file_storage_path.'cache');
 			while($file=array_shift($files)) {
 				if(substr($file['name'],0, 1)==$GO_SECURITY->user_id) {
 					unlink($file['path']);
 				}
 			}
+
+			file_put_contents($GO_CONFIG->file_storage_path.'cache/'.$GO_SECURITY->user_id.'-modules.js', 'GO.settings.modules = Ext.decode("'.addslashes(json_encode($GO_MODULES->modules)).'");');
+			array_unshift($scripts, $GO_CONFIG->file_storage_path.'cache/'.$GO_SECURITY->user_id.'-modules.js');
+
+
 			foreach($scripts as $script) {
 				file_put_contents($path,"\n\n/*".$script."*/\n\n".file_get_contents($script),FILE_APPEND);
 			}
 		}
 
-
-
 		$scripts=array($url);
 
 	}else
 	{
-		file_put_contents($GO_CONFIG->local_path.'cache/modules.js', 'GO.settings.modules = Ext.decode("'.addslashes(json_encode($GO_MODULES->modules)).'");');
-		array_unshift($scripts, $local_uri.'cache/modules.js');
+		file_put_contents($GO_CONFIG->file_storage_path.'cache/'.$GO_SECURITY->user_id.'-modules.js', 'GO.settings.modules = Ext.decode("'.addslashes(json_encode($GO_MODULES->modules)).'");');
+		array_unshift($scripts, $GO_CONFIG->host.'compress.php?file='.$GO_SECURITY->user_id.'-modules.js&mtime='.filemtime($GO_CONFIG->file_storage_path.'cache/'.$GO_SECURITY->user_id.'-modules.js'));
 	}
 	
 	foreach($scripts as $script) {
@@ -274,14 +290,14 @@ if($GO_SECURITY->logged_in()) {
 
 
 	$filename = $GO_SECURITY->user_id.'-scripts.js';
-	$path = $GO_CONFIG->local_path.'cache/'.$filename;
+	$path = $GO_CONFIG->file_storage_path.'cache/'.$filename;
 
 	if($GO_SCRIPTS_JS!=@file_get_contents($path)){
 		file_put_contents($path, $GO_SCRIPTS_JS);
 	}
 	if(file_exists($path)){
 
-		$url = $GO_CONFIG->use_zlib_compression() ? $GO_CONFIG->host.'compress.php?file='.$filename.'&mtime='.filemtime($path) : $GO_CONFIG->local_url.'cache/'.$filename & $GO_CONFIG->local_url.'cache/'.$filename.'?mtime='.filemtime($path);
+		$url = $GO_CONFIG->host.'compress.php?file='.$filename.'&mtime='.filemtime($path);
 		echo '<script type="text/javascript" src="'.$url.'"></script>'."\n";
 	}
 }
