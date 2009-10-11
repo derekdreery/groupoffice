@@ -91,6 +91,7 @@ Ext.extend(GO.files.UploadDialog, Ext.Window, {
 	uploadHandler : function(){
 		this.upForm.form.submit({
 			url:GO.settings.modules.files.url+'action.php',
+			waitMsg : GO.lang.waitMsgUpload,
 			success:function(form, action){
 				this.uploadFile.clearQueue();						
 				this.hide();
