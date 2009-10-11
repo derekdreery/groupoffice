@@ -108,7 +108,6 @@ class servermanager extends db {
 
 				$installation['mail_domains']=isset($config['serverclient_domains']) ? $config['serverclient_domains'] : '';
 				$installation['file_storage_usage']=File::get_directory_size($config['file_storage_path']);
-				$installation['file_storage_usage']+=File::get_directory_size($config['local_path']);
 				$installation['max_users']=$config['max_users'];
 
 				if(empty($users_table)) {

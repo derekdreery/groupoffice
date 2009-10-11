@@ -82,8 +82,6 @@ if(!$new_trial)
 			$config['host']='/';
 			$config['root_path']=$sm_config['install_path'].$installation['name'].'/groupoffice/';
 			$config['tmpdir']='/tmp/'.$installation['name'].'/';
-			$config['local_path']=$sm_config['install_path'].'sm-local/'.$installation['name'].'/';
-			$config['local_url']='/sm-local/'.$installation['name'].'/';
 			$config['file_storage_path']=$sm_config['install_path'].$installation['name'].'/data/';
 			$config['db_name']=str_replace('.','_',$installation['name']);
 
