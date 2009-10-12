@@ -143,7 +143,8 @@ GO.email.AddressbookDialog = function(config) {
 		this.companiesStore = new GO.data.JsonStore({
 					url : GO.settings.modules.addressbook.url + 'json.php',
 					baseParams : {
-						task : 'companies'
+						task : 'companies',
+						require_email:true
 					},
 					root : 'results',
 					id : 'id',
