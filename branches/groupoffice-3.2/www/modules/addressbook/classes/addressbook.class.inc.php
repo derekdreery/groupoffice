@@ -925,8 +925,17 @@ class addressbook extends db {
 		return $offset>0 ? $this->found_rows() : $this->num_rows();
 	}
 
-	function add_addressbook($user_id, $name, $default_iso_address_format = 'NL', $default_salutation = '') {
-		global $GO_SECURITY, $GO_MODULES;
+	function add_addressbook($user_id, $name, $default_iso_address_format = '', $default_salutation = '') {
+		global $GO_SECURITY, $GO_MODULES,$lang;
+
+		if(empty($default_iso_address_format)){
+			$default_iso_address_format=$_SESSION['GO_SESSION']['country'];
+		}
+
+		if(empty($default_salutation)){
+			$default_salutation= $lang['common']['dear'].' ['.$lang['common']['sirMadam']['M'].'/'.$lang['common']['sirMadam']['F'].'] {middle_name} {last_name}';
+		}
+
 
 		$result['acl_read'] = $GO_SECURITY->get_new_acl('addressbook', $user_id);
 		$result['acl_write'] = $GO_SECURITY->get_new_acl('addressbook', $user_id);
