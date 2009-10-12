@@ -828,7 +828,7 @@ class tasks extends db
 				{
 					if($task['repeat_end_time'] = $this->ical2array->parse_date($rrule['UNTIL']))
 					{
-						$task['repeat_end_time'] = date(0,0,0, date('n', $task['repeat_end_time']), date('j', $task['repeat_end_time'])+1, date('Y', $task['repeat_end_time']));
+						$task['repeat_end_time'] = mktime(0,0,0, date('n', $task['repeat_end_time']), date('j', $task['repeat_end_time'])+1, date('Y', $task['repeat_end_time']));
 					}
 				}			
 				
