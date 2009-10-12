@@ -94,7 +94,7 @@ GO.files.UploadDialog = function(config) {
 
 	config.collapsible = false;
 	config.maximizable = false;
-	config.modal = false;
+	config.modal = true;
 	config.resizable = false;
 	config.width = 500;
 	config.items = this.upForm;
@@ -134,6 +134,7 @@ Ext.extend(GO.files.UploadDialog, Ext.Window, {
 	uploadHandler : function(){
 		this.upForm.form.submit({
 			url:GO.settings.modules.files.url+'action.php',
+			waitMsg : GO.lang.waitMsgUpload,
 			success:function(form, action){
 				this.uploadFile.clearQueue();						
 				this.hide();

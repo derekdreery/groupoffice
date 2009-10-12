@@ -30,7 +30,8 @@ while($file = array_shift($_FILES))
 		{				
 			$dir = $GO_CONFIG->tmpdir.'chunked_upload/';
 			$filepath = $dir.$file['name'].'.part'.$_POST['jupart'];
-				
+
+			debug('Part '.$_POST['jupart'].': '.$filepath);
 				
 			if($_POST['jupart']==1)
 			{
@@ -61,16 +62,26 @@ while($file = array_shift($_FILES))
 				{
 					$complete_dir .= str_replace('\\','/',$_POST['relpathinfo'][$count]).'/';
 				}
+
+				if(!is_dir($complete_dir))
+				{
+					mkdir($complete_dir,$GO_CONFIG->folder_create_mode,true);
+				}
+
 				$filepath = File::checkfilename($complete_dir.$file['name']);
 
-				$fp = fopen($filepath, 'a+');
+				debug('Final part '.$_POST['jupart'].': '.$filepath);
+
+				$fp = fopen($filepath, 'w+');
 
 				for($i=1;$i<=$_POST['jupart'];$i++)
 				{
 					$part = $dir.$file['name'].'.part'.$i;
 					fwrite($fp, file_get_contents($part));
 					unlink($part);
-				}				
+				}
+
+				fclose($fp);
 				
 				$file_id = $files->import_file($filepath);
 
@@ -86,8 +97,8 @@ while($file = array_shift($_FILES))
 					}
 				}
 				
-				$_SESSION['GO_SESSION']['files']['jupload_new_files'][]=$relpath;
-				fclose($fp);
+				$_SESSION['GO_SESSION']['files']['jupload_new_files'][]=$files->strip_server_path($filepath);
+				
 				continue;
 			}
 		}else

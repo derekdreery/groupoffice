@@ -24,3 +24,8 @@ GO.summary.lang.title="หัวข้อ";
 
 
 GO.summary.lang.manageAnnouncements='การจัดการประกาศ';
+GO.summary.lang.webFeeds='จัดการเว็บฟีด';
+GO.summary.lang.type='ชนิด';
+GO.summary.lang.summaryType='หน้าหลัก';
+GO.summary.lang.rssFeeds='Rss Feeds';
+GO.summary.lang.noRssFeeds='ไม่มีรายการ RSS feeds ที่เพิ่มไว้.<br />คลิ๊กปุ่มกำหนดค่าในมุมบนขวาเพื่อเพิ่มรายการ';

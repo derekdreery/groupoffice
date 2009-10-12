@@ -195,7 +195,7 @@ GO.email.AddressbookDialog = function(config) {
 	if (GO.mailings) {
 		this.mailingsGrid = new GO.grid.GridPanel({
 					title : GO.mailings.lang.cmdPanelMailings,
-					paging : true,
+					paging : false,
 					border : false,
 					store : GO.mailings.readableMailingsStore,
 					view : new Ext.grid.GridView({
@@ -211,6 +211,7 @@ GO.email.AddressbookDialog = function(config) {
 					sm : new Ext.grid.RowSelectionModel()
 				});
 		this.mailingsGrid.on('show', function() {
+				if(!GO.mailings.readableMailingsStore.loaded)
 					GO.mailings.readableMailingsStore.load();
 				}, this);
 

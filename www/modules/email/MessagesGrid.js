@@ -34,7 +34,8 @@ GO.email.MessagesGrid = function(config){
             sortable:false
         },{
             header: GO.email.lang.from,
-            dataIndex: 'from'
+            dataIndex: 'from',
+						id:'from'
         },{
             header: GO.email.lang.subject,
             dataIndex: 'subject'

@@ -11,7 +11,7 @@ $lang['calendar']['event']='เรื่อง';
 $lang['calendar']['startsAt']='เริ่มต้น';
 $lang['calendar']['endsAt']='สิ้นสุด';
 
-$lang['calendar']['exceptionNoCalendarID'] = 'ผิดพลาด:ไม่มีหมายเลขในปฏิทิน!';
+$lang['calendar']['exceptionNoCalendarID'] = 'ผิดพลาด:ไม่มีหมายเลขไอดีในปฏิทิน!';
 $lang['calendar']['appointment'] = 'ตารางการนัดหมาย: ';
 $lang['calendar']['allTogether'] = 'ทั้งหมด';
 
@@ -53,7 +53,7 @@ $lang['calendar']['repeats_at'] = 'แสดงซ้ำ  %s ถึง  %s';//eg
 $lang['calendar']['repeats_at_not_every'] = 'แสดงซ้ำ %s %s ถึง %s';//eg. Repeats every 2 weeks at monday
 $lang['calendar']['until']='จนถึง'; 
 
-$lang['calendar']['not_invited']='ไม่ได้รับสิทธิ์ในรายการนี้. ต้องการทำรายการนี้กรุณาเข้าใช้งานชื่อผู้ใช้งานอื่น.';//You were not invited to this event. You might need to login as a different user
+$lang['calendar']['not_invited']='ไม่ได้รับสิทธิ์ในการเชิญชวนรายการนี้. ต้องการเชิญชวนในรายการนี้กรุณาเข้าใช้งานชื่อผู้ใช้งานอื่น.';//You were not invited to this event. You might need to login as a different user
 
 
 $lang['calendar']['accept_title']='ตกลง';
@@ -63,17 +63,17 @@ $lang['calendar']['decline_confirm']='ผู้ส่งจะได้รับ
 
 $lang['calendar']['cumulative']='การแก้ไขปัญหาการตอบกลับที่ไม่ถูกต้อง. อาจยังไม่แสดงผล . ทำการบันทึกและเข้าสู่ระบบใหม่ ';//Invalid recurrence rule. The next occurence may not start before the previous has ended
 
-$lang['calendar']['already_accepted']='เสร็จสิ้นรายการ.';//You already accepted this event
+$lang['calendar']['already_accepted']='เหตุการณ์นี้ตอบรับเรียบร้อย.';//You already accepted this event
 
 $lang['calendar']['private']='ส่วนบุคคล';
 
-$lang['calendar']['import_success']='%s กำลังทำรายการนำเข้า';
+$lang['calendar']['import_success']='%s การนำเข้าข้อมูลเรียบร้อย';
 
-$lang['calendar']['printTimeFormat']='From %s till %s';
+$lang['calendar']['printTimeFormat']='จาก %s ถึง %s';
 $lang['calendar']['printLocationFormat']=' at location "%s"';
-$lang['calendar']['printPage']='Page %s of %s';
-$lang['calendar']['printList']='List of appointments';
+$lang['calendar']['printPage']='หน้า %s จาก %s';
+$lang['calendar']['printList']='รายการตารางนัดหมาย';
 
-$lang['calendar']['printAllDaySingle']='All day';
-$lang['calendar']['printAllDayMultiple']='All day from %s till %s';
+$lang['calendar']['printAllDaySingle']='ทุกวัน';
+$lang['calendar']['printAllDayMultiple']='ทุกวันจาก %s จนถึง %s';
 

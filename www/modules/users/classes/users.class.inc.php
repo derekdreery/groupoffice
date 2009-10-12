@@ -55,6 +55,8 @@ class users extends db
 			$files = new files();
 			$GO_USERS->get_users();
 
+			$last_acl_read=0;
+
 			while($GO_USERS->next_record())
 			{
 				$home_dir = 'users/'.$GO_USERS->f('username');
@@ -66,8 +68,9 @@ class users extends db
 
 				$folder = $files->resolve_path($home_dir,true,1,'1');
 
+				$up_folder=array();
 				$up_folder['id']=$folder['id'];
-				if(empty($folder['acl_read']))
+				if(empty($folder['acl_read']) || $folder['acl_read']==$last_acl_read)
 				{
 					echo "Sharing users/".$GO_USERS->f('username').$line_break;
 					
@@ -83,6 +86,10 @@ class users extends db
 				$up_folder['visible']='1';
 				$files->update_folder($up_folder);
 
+
+				$last_acl_read=$folder['acl_read'];
+				
+
 				//correct user_id on child folders
 				echo "Applying user_id recursively".$line_break;
 				$files->update_child_folders_recursively($up_folder['id'], array('user_id'=>$GO_USERS->f('id')));
@@ -97,8 +104,9 @@ class users extends db
 
 				$folder = $files->resolve_path($home_dir,true,1,'1');
 
+				$up_folder=array();
 				$up_folder['id']=$folder['id'];
-				if(empty($folder['acl_read']))
+				if(empty($folder['acl_read']) || $folder['acl_read']==$last_acl_read)
 				{
 					echo "Sharing adminusers/".$GO_USERS->f('username').$line_break;
 					

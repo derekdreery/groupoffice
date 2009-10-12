@@ -24,7 +24,7 @@ GO.email.lang.message='Message';
 GO.email.lang.inbox='Boite de réception';
 GO.email.lang.accounts='Comptes de messagerie';
 GO.email.lang.account='Compte de messagerie';
-GO.email.lang.crossAccountMove='Désolé, impossible de déplacer les messages vers un autre compte';
+GO.email.lang.crossAccountMove='Désolé, il est impossible de déplacer les messages vers un autre compte';
 GO.email.lang.compose='Composer';
 GO.email.lang.reply='Répondre';
 GO.email.lang.replyAll='Répondre à tous';
@@ -67,7 +67,7 @@ GO.email.lang.bccField='Champs - BCC (Copie cachée)';
 GO.email.lang.keyword='Mot clé';
 GO.email.lang.notification='Demande de notification de lecture';
 GO.email.lang.high='Haute';
-GO.email.lang.normal='Normal';
+GO.email.lang.normal='Normale';
 GO.email.lang.low='Basse';
 GO.email.lang.from='De';
 GO.email.lang.sendTo='Envoyé à';
@@ -109,7 +109,7 @@ GO.email.lang.emptyFolder='Vider ce dossier';
 GO.email.lang.emptyFolderConfirm='Etes-vous sûr de vouloir VIDER \'{name}\'?';
 GO.email.lang.addUnknownRecipients='Ajouter les destinataires inconnus';
 GO.email.lang.addUnknownRecipientsText='Vous venez juste d\'envoyer un message à un destinataire qui ne figure pas dans votre carnet d`adresses. Cliquez sur le nom si vous voulez l\'ajouter ou fermez cette fenêtre.';
-GO.email.lang.attachFilesPC='Ajouter depuis le PC';
+GO.email.lang.attachFilesPC='Ajouter depuis votre ordinateur';
 GO.email.lang.attachFilesGO='Ajouter depuis Group-Office';
 
 
@@ -125,14 +125,14 @@ GO.email.lang.addToBCC = 'Ajouter en copie cachée';
 GO.email.lang.viewSource='Voir la source du message';
 
 // 3.0-14
-GO.email.lang.sendNotification='L\'expéditeur de ce message a demandé une notification de lecture : %s. Voulez-vous envoyé la notification maintenant ?';
+GO.email.lang.sendNotification='L\'expéditeur de ce message a demandé une notification de lecture : %s. Voulez-vous envoyer la notification maintenant ?';
 GO.email.lang.searchOnSender='Afficher les messages';
 
 // 3.02-stable-10
 GO.email.lang.blocked = '{blocked_images} Afin de protéger votre vie privée, l\'affichage des images distantes a été bloqué.';
-GO.email.lang.unblock = 'Cliquez ici pour télécharger les images bloquées';
+GO.email.lang.unblock = 'Cliquez ici pour afficher les images bloquées';
 
-GO.email.lang.loadEmailFirst = 'To use this function you must load your e-mail first by pressing the e-mail tab';
+GO.email.lang.loadEmailFirst = 'Pour utiliser cette fonctionnalité vous devez tout d\'abord cliquer sur l\'onglet e-mail';
 
 GO.email.lang.confirmEmptySubject='Vous n\'avez pas spécifié de sujet à votre message.\nVoulez-vous envoyer votre message sans sujet ?';
 
@@ -150,8 +150,8 @@ GO.email.lang.htmlMarkup = 'Rédiger en HTML';
 GO.email.lang.confirmLostChanges = 'Changer d\'éditeur entraîne la perte du texte de votre message !\nVoulez-vous continuer ?';
 
 /* table: em_aliases */
-GO.email.lang.alias="Paramètres de l'indentité";
-GO.email.lang.aliases="Indentités multiples";
+GO.email.lang.alias="Paramètres de l'identité";
+GO.email.lang.aliases="Identités multiples";
 GO.email.lang.accountId="Account id";
 GO.email.lang.email="E-mail";
 GO.email.lang.signature="Signature";

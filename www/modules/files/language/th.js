@@ -25,8 +25,8 @@ GO.files.lang.fileBrowser = 'ไฟล์ เบราเซอร์';
 GO.files.lang.thumbnails = 'รูปย่อ';
 GO.files.lang.saveFile='บันทึกไฟล์';
 GO.files.lang.confirmOverwrite='มี{filename}แล้ว.ต้องการบันทึกซ้ำหรือไม่  ?';//already exists, do you want to overwrite the file
-GO.files.lang.file='File';
-GO.files.lang.emptyList='Empty list';
+GO.files.lang.file='ไฟล์';
+GO.files.lang.emptyList='รายการว่าง';
 GO.files.lang.newFiles='New';
 
-GO.files.lang.olderVersions='Older versions';
+GO.files.lang.olderVersions='เวอร์ชั่นที่เก่ากว่า';

@@ -16,7 +16,7 @@ $lang['calendar']['event']='Evènement';
 $lang['calendar']['startsAt']='Débute à';
 $lang['calendar']['endsAt']='Termine à';
 
-$lang['calendar']['exceptionNoCalendarID'] = 'ERREUR FATALe : calendrier sans ID !';
+$lang['calendar']['exceptionNoCalendarID'] = 'ERREUR FATALE : calendrier sans ID !';
 $lang['calendar']['appointment'] = 'Rendez-vous : ';
 $lang['calendar']['allTogether'] = 'Tous ensemble';
 
