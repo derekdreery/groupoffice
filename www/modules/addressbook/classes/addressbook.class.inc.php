@@ -499,6 +499,10 @@ class addressbook extends db {
 			$contact['sex'] = 'M';
 		}
 
+		if(empty($contact['first_name']) && empty($contact['last_name'])){
+			$contact['first_name']='Unnamed';
+		}
+
 		if(!isset($contact['iso_address_format'])){
 			if(!$addressbook) {
 				$addressbook = $this->get_addressbook($contact['addressbook_id']);
@@ -558,6 +562,10 @@ class addressbook extends db {
 
 		if (isset($contact['sex']) && $contact['sex'] == '') {
 			$contact['sex'] = 'M';
+		}
+
+		if(empty($contact['first_name']) && empty($contact['last_name'])){
+			$contact['first_name']='Unnamed';
 		}
 
 		if(!$old_contact) {
