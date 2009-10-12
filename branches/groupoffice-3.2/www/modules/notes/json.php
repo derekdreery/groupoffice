@@ -63,6 +63,11 @@ try{
 			$query = isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
 			
 			$response['total'] = $notes->get_authorized_categories($auth_type, $GO_SECURITY->user_id, $query, $sort, $dir, $start, $limit);
+			if(!$response['total'])
+			{
+				$notes->get_category();
+				$response['total'] = $notes->get_authorized_categories($auth_type, $GO_SECURITY->user_id, $query, $sort, $dir, $start, $limit);
+			}
 			$response['results']=array();
 			while($notes->next_record())
 			{
