@@ -102,7 +102,7 @@ GO.ExportQueryDialog = Ext.extend(Ext.Window, {
 		if (this.colModel) {
 			for (var i = 0; i < this.colModel.getColumnCount(); i++) {
 				var c = this.colModel.config[i];
-				if (exportHidden || !c.hidden)
+				if ((exportHidden || !c.hidden) && !c.hideInExport)
 					columns.push(c.dataIndex + ':' + c.header);
 			}
 		}
