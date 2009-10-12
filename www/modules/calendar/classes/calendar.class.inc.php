@@ -1189,11 +1189,11 @@ class calendar extends db
 			{
 				$event['calendar_id']=$old_event['calendar_id'];
 			}
-			if(!isset($event['name']))
+			if(empty($event['name']))
 			{
 				$event['name']=$old_event['name'];
 				if(empty($event['name'])){
-					$event['name']='No name';
+					$event['name']='Unnamed';
 				}
 			}
 			
