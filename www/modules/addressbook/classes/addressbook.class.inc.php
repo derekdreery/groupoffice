@@ -564,13 +564,15 @@ class addressbook extends db {
 			$contact['sex'] = 'M';
 		}
 
-		if(empty($contact['first_name']) && empty($contact['last_name'])){
-			$contact['first_name']='Unnamed';
-		}
-
+		
 		if(!$old_contact) {
 			$old_contact = $this->get_contact($contact['id']);
 		}
+
+		if(empty($contact['first_name']) && empty($contact['last_name']) && empty($old_contact['first_name']) && empty($old_contact['last_name'])){
+			$contact['first_name']='Unnamed';
+		}
+
 
 		global $GO_MODULES;
 		if(isset($GO_MODULES->modules['files']) && isset($contact['addressbook_id'])) {
