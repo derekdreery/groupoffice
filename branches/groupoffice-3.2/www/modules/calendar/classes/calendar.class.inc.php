@@ -1192,6 +1192,9 @@ class calendar extends db
 			if(!isset($event['name']))
 			{
 				$event['name']=$old_event['name'];
+				if(empty($event['name'])){
+					$event['name']='No name';
+				}
 			}
 			
 			$new_path = $this->build_event_files_path($event, $calendar);			
