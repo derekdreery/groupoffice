@@ -1010,7 +1010,7 @@ class files extends db {
 	function get_new_files($user_id, $sort='name', $dir='DESC') {
 	//global $GO_CONFIG;
 
-		$this->query("SELECT ff.* FROM fs_new_files AS fn, fs_files AS ff WHERE fn.file_id = ff.id AND fn.user_id = ?", 'i', $user_id);
+		$this->query("SELECT ff.* FROM fs_new_files AS fn, fs_files AS ff WHERE fn.file_id = ff.id AND fn.user_id = ? ORDER BY ".$this->escape($sort.' '.$dir), 'i', $user_id);
 
 		/*$files = array();
 		while($item = $this->next_record())
