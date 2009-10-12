@@ -891,10 +891,10 @@ try {
 				throw new Exception($lang['common']['missingField']);
 			}
 
-			$existing_view = $cal->get_view_by_name($view['user_id'], $view['name']);
+			/*$existing_view = $cal->get_view_by_name($view['user_id'], $view['name']);
 			if($existing_view && ($view['id']==0 || $existing_view['id']!=$view['id'])) {
 				throw new Exception($sc_view_exists);
-			}
+			}*/
 
 			if($view['id']>0) {
 				$old_view = $cal->get_view($view['id']);

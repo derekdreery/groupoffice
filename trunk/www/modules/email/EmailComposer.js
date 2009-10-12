@@ -990,7 +990,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			this.uploadDialog = new Ext.Window({
 				title : GO.email.lang.uploadAttachments,
 				layout : 'fit',
-				modal : false,
+				modal : true,
 				height : 300,
 				width : 300,
 				items : this.upForm,

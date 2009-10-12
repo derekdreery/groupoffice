@@ -66,7 +66,7 @@ GO.email.lang.send='ส่ง';
 GO.email.lang.extraOptions='ตัวเลือกพิเศษ';
 GO.email.lang.attachments='แนบไฟล์';
 GO.email.lang.show='แสดง';
-GO.email.lang.noAccount='ไม่ได้ทำการตั้งค่าอีเมล ทำการตั่งค่าอีเมลโดยไปยังแถบอีเมล  --> เลือกการตั่งค่า --> บัญชีผู้ใช้งาน';//You didn\'t configure an e-mail account yet. Go to e-mail -> Accounts to setup your first e-mail account
+GO.email.lang.noAccount='ไม่ได้ทำการตั้งค่าอีเมล ทำการตั้งค่าอีเมลโดยไปยังแถบอีเมล  --> เลือกการตั้งค่า --> บัญชีผู้ใช้งาน';//You didn\'t configure an e-mail account yet. Go to e-mail -> Accounts to setup your first e-mail account
 GO.email.lang.attachFiles='เลือกไฟล์แนบจากเครื่องคอมพิวเตอร์';
 GO.email.lang.uploadAttachments='อัพโหลดไฟล์แนบ';
 GO.email.lang.startTransfer='เริ่มต้นการอัพโหลด';
@@ -154,3 +154,4 @@ GO.email.lang.manageAliases='กำหนดชื่อผู้ส่งเพ
 GO.email.lang.addSendersTo='เพิ่มชื่อผู้ส่ง...';
 
 GO.email.lang.defaultTemplate='เลือกรูปแบบที่ใช้ประจำ';
+GO.email.lang.moving='ย้าย...';

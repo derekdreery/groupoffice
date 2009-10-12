@@ -95,3 +95,6 @@ GO.users.lang.numberFormat ='รูปแบบตัวเลข';
 GO.users.lang.importExport ='นำเข้า / ส่งออก';
 GO.users.lang.listSeparator='แยกรายการตามสัญลักษณ์';
 GO.users.lang.textSeparator='แยกตัวอักษรตามสัญลักษณ์';
+GO.users.lang.deleteWarning='ข้อความเตือน!!! ข้อมูลของผู้ใช้งานเช่น addressbooks, projects, calendars และอื่นๆ จะถูกลบทันที!';
+GO.users.lang.lastName= 'นามสกุล';
+GO.users.lang.firstName= 'ชื่อ';

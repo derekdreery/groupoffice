@@ -90,7 +90,7 @@ GO.email.EmailClient = function(config){
 		
 		var cm = this.topMessagesGrid.getColumnModel();
 		var header = this.messagesGrid.store.reader.jsonData.sent ? GO.email.lang.to : GO.email.lang.from;
-		cm.setColumnHeader(1, header);
+		cm.setColumnHeader(cm.getIndexById('from'), header);
 		
 		var unseen = this.messagesGrid.store.reader.jsonData.unseen;
 		for(var folder_id in unseen)
