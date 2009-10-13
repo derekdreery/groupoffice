@@ -160,13 +160,7 @@ try{
 				
 			//$response['settings'] = $GO_CONFIG->get_client_settings();
 			
-			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
-			$fs = new filesystem();
-			if(file_exists($GO_CONFIG->tmpdir.$GO_SECURITY->user_id.'/'))
-			{
-				$fs->delete($GO_CONFIG->tmpdir.$GO_SECURITY->user_id.'/');
-			}
-			$fs->mkdir_recursive($GO_CONFIG->tmpdir.$GO_SECURITY->user_id.'/');
+			
 			
 			require_once($GO_CONFIG->class_path.'cache.class.inc.php');
 			$cache = new cache();
