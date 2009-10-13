@@ -1415,13 +1415,13 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 									field='new';
 									value=false;
 									
-									this.justMarkedUnread=-records.length;									
+									this.justMarkedUnread-=records.length;
 									break;
 								case 'mark_as_unread':
 									field='new';
 									value=true;
 									
-									this.justMarkedUnread=records.length;									
+									this.justMarkedUnread+=records.length;
 									break;
 									
 								case 'flag':					
