@@ -484,7 +484,7 @@ class imap{
 		$values = array();
 		foreach($lines as $line)
 		{
-			$line = stripslashes($line);
+			//$line = stripslashes($line);
 			$colpos = strpos($line, ':');
 
 			if($colpos)
