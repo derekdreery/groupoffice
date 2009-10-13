@@ -37,10 +37,4 @@ if(empty($GO_CONFIG->title))
 	exit();
 }
 
-if(!is_dir($GO_CONFIG->tmpdir))
-{
-	mkdir($GO_CONFIG->tmpdir,0755, true);
-}
-
-
 require_once($GO_THEME->theme_path."layout.inc.php");
