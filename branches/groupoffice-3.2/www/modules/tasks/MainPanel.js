@@ -158,7 +158,15 @@ GO.tasks.MainPanel = function(config){
 									this.showAdminDialog();	
 								},
 								scope: this												
-							}
+							},{
+									iconCls: 'btn-refresh',
+									text: GO.lang['cmdRefresh'],
+									cls: 'x-btn-text-icon',
+									handler: function(){
+										this.taskListsStore.load();
+									},
+									scope: this
+								}
 							]})
 				
 			}),
@@ -194,29 +202,33 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 			this.gridPanel.store.reload();
 		}, this);
 					
-		this.taskListsStore.load({
-			callback: function(){
+		this.taskListsStore.on('load', function(){
 
-				var defaultRecord = this.taskListsStore.getById(GO.tasks.defaultTasklist.id);
-				if(!defaultRecord){
-					defaultRecord =  this.taskListsStore.getAt(0);
-				}
-				
-				this.tasklist_id = defaultRecord.id;
-				this.tasklist_name = defaultRecord.get('name');
-												
-				this.gridPanel.store.baseParams['tasklist_id']=this.tasklist_id;
-				this.gridPanel.store.load({
-					callback:function(){
-						var sm = this.taskListsPanel.getSelectionModel();
-						sm.selectRecords([defaultRecord]);		
-					},
-					scope: this
-				});
-			},
-			scope: this
+			var defaultRecord;
+
+			if(this.gridPanel.store.baseParams.tasklist_id)
+				defaultRecord=this.taskListsStore.getById(this.gridPanel.store.baseParams.tasklist_id);
 			
-		});
+			if(!defaultRecord)
+				defaultRecord = this.taskListsStore.getById(GO.tasks.defaultTasklist.id);
+			
+			if(!defaultRecord)
+				defaultRecord =  this.taskListsStore.getAt(0);
+
+			this.tasklist_id = defaultRecord.id;
+			this.tasklist_name = defaultRecord.get('name');
+
+			this.gridPanel.store.baseParams['tasklist_id']=this.tasklist_id;
+			this.gridPanel.store.load({
+				callback:function(){
+					var sm = this.taskListsPanel.getSelectionModel();
+					sm.selectRecords([defaultRecord]);
+				},
+				scope: this
+			});
+		},this);
+
+		this.taskListsStore.load();
     
 	},
   
@@ -225,6 +237,13 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 		if(!this.adminDialog)
 		{
 			this.tasklistDialog = new GO.tasks.TasklistDialog();
+
+			GO.tasks.writableTasklistsStore.on('load', function(){
+				if(GO.tasks.writableTasklistsStore.reader.jsonData.new_default_tasklist){
+					GO.tasks.defaultTasklist=GO.tasks.writableTasklistsStore.reader.jsonData.new_default_tasklist;
+				}
+			
+			}, this);
 			
 			this.tasklistDialog.on('save', function(){
 				GO.tasks.writableTasklistsStore.load();

@@ -245,7 +245,7 @@ try{
 										$response['total'] = $tasks->get_authorized_tasklists($auth_type, $query, $GO_SECURITY->user_id, $start, $limit, $sort, $dir);
 										if(!$response['total'])
 										{
-											$tasks->get_tasklist();
+											$response['new_default_tasklist']= $tasks->get_tasklist();
 											$response['total'] = $tasks->get_authorized_tasklists($auth_type, $query, $GO_SECURITY->user_id, $start, $limit, $sort, $dir);
 										}
 										$response['results']=array();
