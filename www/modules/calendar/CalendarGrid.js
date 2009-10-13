@@ -947,6 +947,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		event.on('mouseup', function(){
 			this.eventMouseUp=true;
 		}, this);
+		
 			
 		//add the event to the appointments array		
 		if(typeof(this.appointments[day])=='undefined')

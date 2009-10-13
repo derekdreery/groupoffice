@@ -174,7 +174,14 @@ GO.calendar.MainPanel = function(config){
 		id: 'days-grid',
 		store: this.daysGridStore, 
 		border: false,
-		firstWeekday: parseInt(GO.settings.first_weekday)
+		firstWeekday: parseInt(GO.settings.first_weekday),
+		keys:[ {
+				key:  Ext.EventObject.DELETE,
+				fn: function(){
+					//console.log('delete');
+				},
+				scope: this
+		}]
 	});
 	
 	this.monthGrid = new GO.grid.MonthGrid({
@@ -275,19 +282,11 @@ GO.calendar.MainPanel = function(config){
 			},
 			scope: this
 		}],
-		keys:[{
-			key: Ext.EventObject.DELETE,
-			fn: this.deleteHandler,
-			scope: this
-		}],
+		
 		items: [this.daysGrid, this.monthGrid, this.viewGrid, this.listGrid]
 	});
 	
-	config.keys=[{
-		key: Ext.EventObject.DELETE,
-		fn: this.deleteHandler,
-		scope: this
-	}];
+
 						
 	var tbar = [{
 		iconCls: 'btn-add',
@@ -493,7 +492,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	afterRender : function(){
 		GO.calendar.MainPanel.superclass.afterRender.call(this);
 
-  	
+
+
   	
 		//couldn't add key events to panels so I add this event to the whole doc
 			

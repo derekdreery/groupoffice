@@ -639,3 +639,12 @@ GO.util.dirname = function(path)
 	}
 	return path;
 }
+
+
+GO.util.logExtEvents = function() {
+    var o = Ext.util.Observable.prototype;
+    o.fireEvent = o.fireEvent.createInterceptor(function(evt) {
+        var a = arguments;
+        console.log(this, ' fired event ',evt,' with args ',Array.prototype.slice.call(a, 1, a.length));
+    });
+}
