@@ -63,9 +63,15 @@ GO.email.EmailComposer = function(config) {
 				{
 					this.setContentTypeHtml(checked);
 					/**
-										 * reload dialog for text or html
-										 */
+					 * reload dialog for text or html
+					 */
 					this.showConfig.keepEditingMode=true;
+					var v = this.formPanel.form.getValues();
+					
+					if(!this.showConfig.values) this.showConfig.values={};
+						Ext.apply(this.showConfig.values, v);
+
+					
 					delete this.showConfig.move;
 					this.show(this.showConfig);
 				}else
