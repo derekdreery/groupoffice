@@ -323,6 +323,7 @@ class tasks extends db
 					throw new DatabaseInsertException();
 				}else
 				{
+					$this->update_settings(array('user_id'=>$GO_SECURITY->user_id, 'default_tasklist_id'=>$list_id));
 					return $this->get_tasklist($list_id);
 				}
 			}
