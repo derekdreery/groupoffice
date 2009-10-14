@@ -161,7 +161,6 @@ class GoSwift extends Swift_Mailer{
 		$this->smtp_host=$transport->getHost();
 		parent::__construct($transport);
 
-
 		$this->log = new Swift_Plugins_LoggerPlugin(new Swift_Plugins_Loggers_ArrayLogger());
 		$this->registerPlugin($this->log);
 

@@ -43,7 +43,7 @@ GO.users.ImportDialog = Ext.extend(Ext.Window, {
 		},{
 			text:GO.users.lang.downloadSampleCSV,
 			handler: function(){
-				window.open(GO.settings.modules.users.url+'importsample.csv');
+				window.open(GO.settings.modules.users.url+'download_importsample.php');
 			},
 			scope:this			
 		}];

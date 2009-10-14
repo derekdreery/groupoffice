@@ -499,6 +499,10 @@ class addressbook extends db {
 			$contact['sex'] = 'M';
 		}
 
+		if(empty($contact['first_name']) && empty($contact['last_name'])){
+			$contact['first_name']='Unnamed';
+		}
+
 		if(!isset($contact['iso_address_format'])){
 			if(!$addressbook) {
 				$addressbook = $this->get_addressbook($contact['addressbook_id']);
@@ -560,9 +564,15 @@ class addressbook extends db {
 			$contact['sex'] = 'M';
 		}
 
+		
 		if(!$old_contact) {
 			$old_contact = $this->get_contact($contact['id']);
 		}
+
+		if(empty($contact['first_name']) && empty($contact['last_name']) && empty($old_contact['first_name']) && empty($old_contact['last_name'])){
+			$contact['first_name']='Unnamed';
+		}
+
 
 		global $GO_MODULES;
 		if(isset($GO_MODULES->modules['files']) && isset($contact['addressbook_id'])) {
@@ -915,8 +925,17 @@ class addressbook extends db {
 		return $offset>0 ? $this->found_rows() : $this->num_rows();
 	}
 
-	function add_addressbook($user_id, $name, $default_iso_address_format = 'NL', $default_salutation = '') {
-		global $GO_SECURITY, $GO_MODULES;
+	function add_addressbook($user_id, $name, $default_iso_address_format = '', $default_salutation = '') {
+		global $GO_SECURITY, $GO_MODULES,$lang;
+
+		if(empty($default_iso_address_format)){
+			$default_iso_address_format=$_SESSION['GO_SESSION']['country'];
+		}
+
+		if(empty($default_salutation)){
+			$default_salutation= $lang['common']['dear'].' ['.$lang['common']['sirMadam']['M'].'/'.$lang['common']['sirMadam']['F'].'] {middle_name} {last_name}';
+		}
+
 
 		$result['acl_read'] = $GO_SECURITY->get_new_acl('addressbook', $user_id);
 		$result['acl_write'] = $GO_SECURITY->get_new_acl('addressbook', $user_id);

@@ -337,7 +337,7 @@ try
 			$addressbook_id,
 			$start,
 			$limit,
-			false,
+			!empty($_POST['require_email']),
 			$sort,
 			$dir,
 			$query_type,

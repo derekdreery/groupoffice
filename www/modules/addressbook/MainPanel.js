@@ -113,14 +113,16 @@ GO.addressbook.MainPanel = function(config)
 		width:180
 	});
 	
-	this.addressbooksGrid.on('rowclick', function(grid, rowIndex){
-		var record = grid.getStore().getAt(rowIndex);
-		this.setSearchParams({addressbook_id : record.get("id")});
+	/*this.addressbooksGrid.on('rowclick', function(grid, rowIndex){
+		
 
-	}, this);
+	}, this);*/
 
 	this.addressbooksGrid.getSelectionModel().on('rowselect', function(sm, rowIndex, r){
 		GO.addressbook.defaultAddressbook = sm.getSelected().get('id');
+
+		var record = this.addressbooksGrid.getStore().getAt(rowIndex);
+		this.setSearchParams({addressbook_id : record.get("id")});
 	}, this);
 	
 	
@@ -356,12 +358,12 @@ Ext.extend(GO.addressbook.MainPanel, Ext.Panel,{
 		{
 			GO.addressbook.MainPanel.superclass.afterRender.call(this);
 
-			GO.addressbook.readableAddressbooksStore.load({
-				callback:function(){
-					this.addressbooksGrid.getSelectionModel().selectFirstRow();
-				},
-				scope:this
-			});
+			
+			GO.addressbook.readableAddressbooksStore.on('load', function(){
+					if(!this.addressbooksGrid.getSelectionModel().getSelected())
+						this.addressbooksGrid.getSelectionModel().selectFirstRow();
+				}, this);
+			GO.addressbook.readableAddressbooksStore.load();
 			
 			if(GO.mailings)
 			{
