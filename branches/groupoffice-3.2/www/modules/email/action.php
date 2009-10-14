@@ -412,6 +412,9 @@ try{
 											throw new FileNotFoundException();
 										}
 										$tmp_name = $GO_CONFIG->file_storage_path.$files->build_path($folder).'/'.$file['name'];
+									}else
+									{
+										$tmp_name=$GO_CONFIG->file_storage_path.$tmp_name;
 									}
 
 									$img = Swift_EmbeddedFile::fromPath($tmp_name);
