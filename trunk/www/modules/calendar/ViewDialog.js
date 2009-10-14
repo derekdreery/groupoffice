@@ -174,6 +174,9 @@ Ext.extend(GO.calendar.ViewDialog, Ext.Window, {
 			if(view_id!=this.view_id)
 			{
 				this.loadView(view_id);
+			}else
+			{
+				GO.calendar.ViewDialog.superclass.show.call(this);
 			}
 		}else
 		{

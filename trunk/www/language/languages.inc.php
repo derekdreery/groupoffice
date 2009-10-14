@@ -10,6 +10,7 @@ $languages['es']='Español';
 $languages['el']='Ελληνικά';
 $languages['fr']='Francais';
 $languages['it']='Italiano';
+$languages['hu']='Magyar';
 $languages['nl']='Nederlands';
 $languages['nb']='Norsk bokmål';
 $languages['pl']='Polski';

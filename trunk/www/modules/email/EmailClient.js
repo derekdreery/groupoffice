@@ -61,7 +61,11 @@ GO.email.EmailClient = function(config){
 		width: 420,
 		region:'west',
 		hidden:messagesAtTop,
-		deleteConfig : deleteConfig
+		deleteConfig : deleteConfig,
+		floatable:false,
+		collapsible:true,
+		collapseMode:'mini',
+		split:true
 	});	
 	this.addGridHandlers(this.leftMessagesGrid);
 	
@@ -71,7 +75,11 @@ GO.email.EmailClient = function(config){
 		height: 250,
 		region:'north',
 		hidden:!messagesAtTop,
-		deleteConfig : deleteConfig
+		deleteConfig : deleteConfig,
+		floatable:false,
+		collapsible:true,
+		collapseMode:'mini',
+		split:true
 	});
 	this.addGridHandlers(this.topMessagesGrid);
 	
@@ -1407,13 +1415,13 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 									field='new';
 									value=false;
 									
-									this.justMarkedUnread=-records.length;									
+									this.justMarkedUnread-=records.length;
 									break;
 								case 'mark_as_unread':
 									field='new';
 									value=true;
 									
-									this.justMarkedUnread=records.length;									
+									this.justMarkedUnread+=records.length;
 									break;
 									
 								case 'flag':					

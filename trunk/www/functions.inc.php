@@ -55,15 +55,18 @@
  * @param string $class_name
  */
 
-function __autoload($class_name) {
+function go_autoload($class_name) {
 	global $GO_CONFIG;
 
 	/*if(!file_exists($GO_CONFIG->class_path. $class_name.'.class.inc.php'))
 		{
 		debug_print_backtrace();
 		}*/
-	require_once $GO_CONFIG->class_path. $class_name.'.class.inc.php';
+	$cls = $GO_CONFIG->class_path. $class_name.'.class.inc.php';
+	if(file_exists($cls))
+		require_once $cls;
 }
+spl_autoload_register("go_autoload");
 
 
 function is_windows(){

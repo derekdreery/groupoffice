@@ -1025,7 +1025,7 @@ try{
 											$response['deleteFeedback']=$lang['email']['quotaError'];
 										}else
 										{
-											$response['deleteFeedback']=$lang['common']['deleteError'].':<br /><br />'.$lasterror;
+											$response['deleteFeedback']=$lang['common']['deleteError'].':<br /><br />'.$lasterror.'<br /><br />'.$lang['email']['disable_trash_folder'];
 										}
 									}
 								}

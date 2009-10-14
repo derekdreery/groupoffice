@@ -405,6 +405,9 @@ try{
 									$tmp_name = $inlineAttachment['tmp_file'];
 									if(is_numeric($tmp_name))
 									{
+										require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+										$files = new files();
+
 										$file = $files->get_file($tmp_name);
 										$folder = $files->get_folder($file['folder_id']);
 										if(!$file || !$folder)

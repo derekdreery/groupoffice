@@ -120,7 +120,7 @@ Ext.extend(GO.plugins.HtmlEditorImageInsert, Ext.util.Observable, {
 			
 			this.fileBrowserWindow = new Ext.Window({
 				
-				title: 'Select files',
+				title: GO.files.lang.selectFiles,
 				height:480,
 				width:680,
 				layout:'fit',
@@ -153,8 +153,9 @@ Ext.extend(GO.plugins.HtmlEditorImageInsert, Ext.util.Observable, {
 		
 		if(records.length)
 		{
+			this.selectedRecord = records[0];
 			this.selectedPath = records[0].data.path;
-			this.selectedUrl = GO.settings.modules.files.url+'download.php?path='+encodeURIComponent(this.selectedPath);
+			this.selectedUrl = GO.settings.modules.files.url+'download.php?id='+this.selectedRecord.get('id');
 				
 			var html = '<img src="'+this.selectedUrl+'" border="0" />';
 								

@@ -161,7 +161,8 @@ Ext.extend(GO.PersonalSettingsDialog, Ext.Window,{
 							func.call();							 
 						}
 					}
-				
+
+				GO.settings.mute_sound=this.formPanel.form.findField('mute_sound').getValue();
 				
 				if(this.reload)
 				{
