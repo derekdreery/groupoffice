@@ -151,7 +151,7 @@ GO.email.EmailComposer = function(config) {
 
 	imageInsertPlugin.on('insert', function(plugin) {
 		this.inline_attachments.push({
-			tmp_file : plugin.selectedPath,
+			tmp_file : plugin.selectedRecord.get('id'),
 			url : plugin.selectedUrl
 		});
 	}, this);

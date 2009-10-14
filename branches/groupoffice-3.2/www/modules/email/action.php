@@ -405,6 +405,9 @@ try{
 									$tmp_name = $inlineAttachment['tmp_file'];
 									if(is_numeric($tmp_name))
 									{
+										require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+										$files = new files();
+
 										$file = $files->get_file($tmp_name);
 										$folder = $files->get_folder($file['folder_id']);
 										if(!$file || !$folder)
@@ -412,9 +415,6 @@ try{
 											throw new FileNotFoundException();
 										}
 										$tmp_name = $GO_CONFIG->file_storage_path.$files->build_path($folder).'/'.$file['name'];
-									}else
-									{
-										$tmp_name=$GO_CONFIG->file_storage_path.$tmp_name;
 									}
 
 									$img = Swift_EmbeddedFile::fromPath($tmp_name);
