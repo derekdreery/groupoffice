@@ -6,7 +6,7 @@ if(!isset($argv[1]) || !isset($argv[2]))
 }
 
 $full_path = dirname(__FILE__);
-$compressor="/usr/lib/jvm/java-6-sun/bin/java -jar $full_path/yuicompressor-2.3.5/build/yuicompressor-2.3.5.jar";
+$compressor="java -jar $full_path/yuicompressor-2.4.2.jar";
 
 //chdir($full_path);
 
