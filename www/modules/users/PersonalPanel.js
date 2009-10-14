@@ -18,10 +18,10 @@ GO.users.PersonalPanel = function(config)
 		config={};
 	}
 	
-	config.autoScroll=true;
-	config.border=true;
+	//config.autoScroll=true;
+	config.border=false;
 	config.hideLabel=true;
-	config.title = GO.users.lang.profile;
+
 	config.layout='column';
 	//config.cls='go-form-panel';
 	config.labelWidth=120;
@@ -104,7 +104,7 @@ GO.users.PersonalPanel = function(config)
 }
 
 
-Ext.extend(GO.users.PersonalPanel, Ext.form.FieldSet,{
+Ext.extend(GO.users.PersonalPanel, Ext.Panel,{
 	
 
 });			
