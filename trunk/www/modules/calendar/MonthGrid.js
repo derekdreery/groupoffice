@@ -357,7 +357,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
             onNotifyDrop : function(dd, e, data) {
             		
             		//number of seconds moved
-            		
+
             		var dragTime = data.dragDate.format('U');
             		var dropTime = data.dropDate.format('U');
             		
@@ -366,24 +366,28 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
             		var actionData = {offsetDays:offsetDays, dragDate: data.dragDate};
             		
             		var remoteEvent = this.elementToEvent(data.item.id);
-            		
-				
-								if(remoteEvent['repeats'])
-								{
-									this.handleRecurringEvent("move", remoteEvent, actionData);
-								}else
-								{
-									this.fireEvent("move", this, remoteEvent, actionData);
-									
-									this.removeEvent(remoteEvent.domId);
-									delete remoteEvent.domId;
-									remoteEvent.repeats=false;
-									remoteEvent.startDate = remoteEvent.startDate.add(Date.DAY, offsetDays);
-									remoteEvent.endDate = remoteEvent.endDate.add(Date.DAY, offsetDays);
-									remoteEvent.start_time = remoteEvent.startDate.format('U');
-									remoteEvent.end_time = remoteEvent.endDate.format('U');									
-									this.addMonthGridEvent(remoteEvent);
-								}           		
+
+					if(!remoteEvent.read_only)
+					{
+						if(remoteEvent['repeats'])
+						{
+							this.handleRecurringEvent("move", remoteEvent, actionData);
+						}else
+						{
+							this.fireEvent("move", this, remoteEvent, actionData);
+
+							this.removeEvent(remoteEvent.domId);
+							delete remoteEvent.domId;
+							remoteEvent.repeats=false;
+							remoteEvent.startDate = remoteEvent.startDate.add(Date.DAY, offsetDays);
+							remoteEvent.endDate = remoteEvent.endDate.add(Date.DAY, offsetDays);
+							remoteEvent.start_time = remoteEvent.startDate.format('U');
+							remoteEvent.end_time = remoteEvent.endDate.format('U');
+							this.addMonthGridEvent(remoteEvent);
+
+							this.clearSelection();
+						}
+					}
             	},
             scope : this
         });
@@ -434,7 +438,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 	},
 	getSelectedEvent : function()
 	{
-		if(this.selected)
+		if(this.selected && this.selected.length > 0)
 		{
 			return this.elementToEvent(this.selected[0].id);
 		}
@@ -539,31 +543,34 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 				
 				this.gridEvents[dateStr].push(event);
 				
-				this.registerEvent(eventData.domId, eventData);				
+				this.registerEvent(eventData.domId, eventData);						
+
+				if(!eventData.read_only)
+				{
+					event.on('mousedown', function(e, eventEl){
+						eventEl = Ext.get(eventEl).findParent('div.x-calGrid-month-event-container', 2, true);
+
+						this.selectEventElement(eventEl);
+						this.clickedEventId=eventEl.id;
+					}, this);
 				
-				event.on('mousedown', function(e, eventEl){				
-					eventEl = Ext.get(eventEl).findParent('div.x-calGrid-month-event-container', 2, true);
-					
-					this.selectEventElement(eventEl);					
-					this.clickedEventId=eventEl.id;		
-				}, this);
-				
-				event.on('dblclick', function(e, eventEl){
-					
-					eventEl = Ext.get(eventEl).findParent('div.x-calGrid-month-event-container', 2, true);
-					
-					//this.eventDoubleClicked=true;
-					var event = this.elementToEvent(this.clickedEventId);
-					
-					if(event['repeats'] && this.writePermission)
-					{
-						this.handleRecurringEvent("eventDblClick", event, {});
-					}else
-					{						
-						this.fireEvent("eventDblClick", this, event, {singleInstance : this.writePermission});
-					}
-					
-				}, this);	
+					event.on('dblclick', function(e, eventEl){
+
+						eventEl = Ext.get(eventEl).findParent('div.x-calGrid-month-event-container', 2, true);
+
+						//this.eventDoubleClicked=true;
+						var event = this.elementToEvent(this.clickedEventId);
+
+						if(event['repeats'] && this.writePermission)
+						{
+							this.handleRecurringEvent("eventDblClick", event, {});
+						}else
+						{
+							this.fireEvent("eventDblClick", this, event, {singleInstance : this.writePermission});
+						}
+
+					}, this);
+				}
 			}
 		}
 		
@@ -833,7 +840,7 @@ GO.calendar.dd.MonthDragZone = function(el, config) {
 Ext.extend(GO.calendar.dd.MonthDragZone, Ext.dd.DragZone, {
 	onInitDrag: function(e) {
 		
-		if(!this.monthGrid.writePermission || this.monthGrid.remoteEvents[this.dragData.item.id]['private'])
+		if(!this.monthGrid.writePermission || this.monthGrid.remoteEvents[this.dragData.item.id]['private'] || this.monthGrid.remoteEvents[this.dragData.item.id]['read_only'])
 		{
 			return false;
 		}else
@@ -906,14 +913,19 @@ Ext.extend(GO.calendar.dd.MonthDragZone, Ext.dd.DragZone, {
 	    data.item.highlight('#e8edff');
 	    return data.item.getXY();
 	},
-  getDragData: function(e) {
+  getDragData: function(e) {	 
   	if(!this.monthGrid.writePermission)
 		{
 			return false;
 		}else
 		{
       var target = Ext.get(e.getTarget());
-           
+
+	  if(target.hasClass('x-calGrid-month-event-container') && this.monthGrid.remoteEvents[target.id]['read_only'])
+	  {
+		  return false;
+	  }
+	  
       var td = target.parent();
       var dragDate = Date.parseDate(td.id.substr(1),'Ymd');
       
@@ -937,33 +949,33 @@ GO.calendar.dd.MonthDropTarget = function(el, config) {
 };
 Ext.extend(GO.calendar.dd.MonthDropTarget, Ext.dd.DropTarget, {
     notifyDrop: function(dd, e, data) {
- 		
- 				if(!this.scope.writePermission)
- 				{
- 					return false;
- 				}else
- 				{
-			 		var target = Ext.get(e.getTarget()).findParent('div.cal-monthGrid-cell', 3, true);
-			 		
-			 		data.dropDate = Date.parseDate(target.id.substr(1),'Ymd');
-			 		
-			 		dd.removeEventProxies();
-	 		   	
-	        this.el.removeClass(this.overClass);
-	        target.appendChild(data.item);
-	        
-	        if(this.onNotifyDrop)
-					{
-						if(!this.scope)
-						{
-							this.scope=this;
-						}
-						
-						var onNotifyDrop = this.onNotifyDrop.createDelegate(this.scope);
-						onNotifyDrop.call(this, dd, e, data);
-					}
-	        return true;
- 				}
+		var remoteEvent = this.scope.elementToEvent(data.item.id);
+		if(!this.scope.writePermission || remoteEvent.read_only)
+		{
+			return false;
+		}else
+		{
+			var target = Ext.get(e.getTarget()).findParent('div.cal-monthGrid-cell', 3, true);
+
+			data.dropDate = Date.parseDate(target.id.substr(1),'Ymd');
+
+			dd.removeEventProxies();
+
+			this.el.removeClass(this.overClass);
+			target.appendChild(data.item);
+
+			if(this.onNotifyDrop)
+			{
+				if(!this.scope)
+				{
+					this.scope=this;
+				}
+
+				var onNotifyDrop = this.onNotifyDrop.createDelegate(this.scope);
+				onNotifyDrop.call(this, dd, e, data);
+			}
+			return true;
+		}
     },
     
     notifyOver : function(dd, e, data){

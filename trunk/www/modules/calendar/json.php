@@ -244,12 +244,8 @@ try{
 			{
 				throw new AccessDeniedException();
 			}
-			//echo $calendar['acl_write'];
 
-			$events = $cal->get_events_in_array($calendars, 0,
-			$start_time,
-			$end_time
-			);
+			$events = $cal->get_events_in_array($calendars,0,$start_time,$end_time);		
 			$response['results']=array();
 			$response['count']=0;
 			foreach($events as $event)
@@ -291,6 +287,36 @@ try{
 				);
 				$response['count']++;
 			}
+			
+			if($calendar['show_bdays'])
+			{
+				require_once ($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
+				$ab = new addressbook();
+				$abooks = $ab->get_user_addressbook_ids($calendar['user_id']);
+
+				if($start_time < $end_time)
+				$cal->get_bdays($start_time, $end_time ,$abooks);
+				while($bday = $cal->next_record())
+				{			
+					$name = String::format_name($bday['last_name'], $bday['first_name'], $bday['middle_name']);
+
+					$start_time = $bday['upcoming'].' 00:00';
+					$end_time = $bday['upcoming'].' 23:59';
+			
+					$response['results'][] = array(
+						'id'=>$response['count']++,
+						'name'=>str_replace('{NAME}',$name,$lang['calendar']['birthday_name']),
+						'description'=>str_replace(array('{NAME}','{AGE}'), array($name,$bday['upcoming']-$bday['birthday']), $lang['calendar']['birthday_desc']),
+						'time'=>'00:00',
+						'start_time'=>$start_time,
+						'end_time'=>$end_time,
+						'background'=>'EBF1E2',
+						'day'=>$lang['common']['full_days'][date('w', strtotime($start_time))].' '.date($_SESSION['GO_SESSION']['date_format'], strtotime($start_time)),
+						'read_only'=>true
+					);
+				}
+			}
+
 			break;
 
 		case 'view_events':

@@ -69,6 +69,37 @@ GO.calendar.MainPanel = function(config){
 		remoteSort:true
 	});
 
+	this.viewsStore = new GO.data.JsonStore({
+		url: GO.settings.modules.calendar.url+'json.php',
+		baseParams: {
+			'task': 'views'
+		},
+		root: 'results',
+		totalProperty: 'total',
+		id: 'id',
+		fields:['id','name','user_name'],
+		remoteSort:true
+	});
+
+	GO.calendar.resourcesStore = this.resourcesStore = new Ext.data.GroupingStore({
+		baseParams: {
+			'task': 'calendars',
+			'resources' : 'true'
+		},
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			id: 'id',
+			totalProperty: 'total',
+			fields:['id','name','user_name','group_id', 'group_name']
+		}),
+		proxy: new Ext.data.HttpProxy({
+			url: GO.settings.modules.calendar.url+'json.php'
+		}),
+		sortInfo:{field: 'name', direction: "ASC"},
+		groupField:'group_name',
+		remoteSort:true
+	});
+
 	this.calendarsStore.on('load', function(){
 		if(this.state.displayType!='view' && this.group_id==1)
 		{
@@ -94,26 +125,16 @@ GO.calendar.MainPanel = function(config){
 			}
 		}
 	}, this);
-	
-	this.viewsStore = new GO.data.JsonStore({
-		url: GO.settings.modules.calendar.url+'json.php',
-		baseParams: {
-			'task': 'views'
-		},
-		root: 'results',
-		totalProperty: 'total',
-		id: 'id',
-		fields:['id','name','user_name'],
-		remoteSort:true
-	});
 
 	this.viewsStore.on('load', function(){
 		if(this.state.displayType=='view')
-		{
-			this.viewsList.select('view-'+this.state.view_id);
-			this.setDisplay(this.state);
-
+		{			
 			var record = this.viewsStore.getById(this.state.view_id);
+			if(!record)
+			{
+				record = this.viewsStore.getAt(0);
+				this.state.view_id = record.data.id;
+			}
 			this.viewsList.getSelectionModel().selectRecords(new Array(record));
 			this.setDisplay(this.state);
 
@@ -131,36 +152,16 @@ GO.calendar.MainPanel = function(config){
 		}
 	}, this);
 
-	GO.calendar.resourcesStore = this.resourcesStore = new Ext.data.GroupingStore({
-		baseParams: {
-			'task': 'calendars',
-			'resources' : 'true'
-		},
-		reader: new Ext.data.JsonReader({
-			root: 'results',
-			id: 'id',
-			totalProperty: 'total',
-			fields:['id','name','user_name','group_id', 'group_name']
-		}),
-		proxy: new Ext.data.HttpProxy({
-			url: GO.settings.modules.calendar.url+'json.php'
-		}),
-		sortInfo:{field: 'name', direction: "ASC"},
-		groupField:'group_name',
-		remoteSort:true
-	});
-
 	this.resourcesStore.on('load', function(){
-		if(this.state.displayType!='view' && this.group_id==1)
+		if(this.state.displayType!='view' && this.group_id>1)
 		{
-			var record = this.calendarsStore.getById(this.state.calendar_id);
+			var record = this.resourcesStore.getById(this.state.calendar_id);
 			if(!record)
 			{
-				record = this.calendarsStore.getAt(0);
+				record = this.resourcesStore.getAt(0);
 				this.state.calendar_id = record.data.id;
 			}
-
-			this.calendarList.getSelectionModel().selectRecords(new Array(record));
+			this.resourcesList.getSelectionModel().selectRecords(new Array(record));
 			this.setDisplay(this.state);
 
 			var title = record.data.name;
@@ -176,8 +177,7 @@ GO.calendar.MainPanel = function(config){
 			}
 		}
 	}, this);
-
-
+	
 	this.calendarList = new GO.grid.GridPanel({
 		border: false,
 		id:'acc_calendars',
@@ -245,32 +245,6 @@ GO.calendar.MainPanel = function(config){
 		}),
 		sm: new Ext.grid.RowSelectionModel()
 	});
-
-	this.resourcesStore.on('load', function(){
-		if(this.state.displayType!='view' && this.group_id>1)
-		{
-			var record = this.calendarsStore.getById(this.state.calendar_id);
-			if(!record)
-			{
-				record = this.calendarsStore.getAt(0);
-				this.state.calendar_id = record.data.id;
-			}
-			this.calendarList.select('calendar-'+this.state.calendar_id);
-			this.setDisplay(this.state);
-
-			var title = record.data.name;
-			if(title.length){
-				if(this.calendarTitle.td){
-					//Ext 2
-					this.calendarTitle.td.innerHTML = title;
-				}else
-				{
-					//Ext 3
-					this.calendarTitle.setText(title);
-				}
-			}
-		}
-	}, this);
    
 	this.calendarList.on('rowclick', function(grid, rowIndex)
 	{
@@ -375,7 +349,7 @@ GO.calendar.MainPanel = function(config){
 		},
 		root: 'results',
 		id: 'id',
-		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background']
+		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only']
 	});
 	
 	this.monthGridStore = new GO.data.JsonStore({
@@ -386,7 +360,7 @@ GO.calendar.MainPanel = function(config){
 		},
 		root: 'results',
 		id: 'id',
-		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background']
+		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only']
 	});
 
 	this.daysGrid = new GO.grid.CalendarGrid(
@@ -604,6 +578,7 @@ GO.calendar.MainPanel = function(config){
 			        			
 			this.setDisplay({
 				displayType:'list',
+				days: 7,
 				saveState:true
 			});
 			        		
@@ -774,47 +749,24 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	},
 	
 	init : function(){
-
+		
 		this.calendarsStore.load();
 
-		this.viewsStore.load();
-
-		this.resourcesStore.load({
-			callback:function(){
-				if(this.state.displayType=='view')
-				{
-					var record = this.resourceStore.getById(this.state.calendar_id);
-					this.resourcesList.getSelectionModel().selectRecords(new Array(record));
-					this.setDisplay(this.state);
-
-					var title = record.data.name;
-					if(title.length){
-						if(this.calendarTitle.td){
-							//Ext 2
-							this.calendarTitle.td.innerHTML = title;
-						}else
-						{
-							//Ext 3
-							this.calendarTitle.setText(title);
-						}
-					}
-				}
+		this.viewsStore.load({
+			callback : function(){
+				this.viewsList.setVisible(this.viewsStore.data.length);
+				this.calendarListPanel.doLayout();
 			},
 			scope:this
-		});
-      
-		this.viewsStore.on('load', function()
-		{
-			this.viewsList.setVisible(this.viewsStore.data.length);
-			this.calendarListPanel.doLayout();
-		}, this);
-
-		this.resourcesStore.on('load', function()
-		{
-			this.resourcesList.setVisible(this.resourcesStore.data.length);
-			this.calendarListPanel.doLayout();
-		}, this);
-
+		})
+		this.resourcesStore.load({
+			callback : function()
+			{
+				this.resourcesList.setVisible(this.resourcesStore.data.length);
+				this.calendarListPanel.doLayout();
+			},
+			scope:this
+		})
 	},
 	
 	deleteHandler : function(){
@@ -822,7 +774,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		{
 			case 'days':
 				var event = this.daysGrid.getSelectedEvent();
-				var callback = function(event, refresh){
+				var callback = function(event, refresh){					
 					if(refresh)
 					{
 						this.daysGrid.store.reload();
@@ -873,10 +825,10 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				break;
 		}
 									
-		if(event)
+		if(event && !event.read_only)
 		{
 			this.deleteEvent(event, callback);
-		}		
+		}
 	},
 	
 	getActivePanel : function(){
@@ -1038,11 +990,11 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		{
 			config = {};
 		}
-
+		
 		//when refresh is clicked remember state
 		Ext.apply(this.state, config);
 		delete this.state.saveState;
-		
+
 		if(config.displayType)
 		{							
 			this.displayType=config.displayType;
@@ -1162,7 +1114,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		
 		
 		this.dayButton.toggle(this.displayType=='days' && this.days==1);
-		this.workWeekButton.toggle(this.displayType=='days' && this.days==5);
+		this.workWeekButton.toggle(this.displayType=='days' && this.days==6);
 		this.weekButton.toggle(this.displayType=='days' && this.days==7);
 		
 		this.monthButton.toggle(this.displayType=='month');
@@ -1196,8 +1148,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	createDaysGrid : function()
 	{
 		
-		this.daysGrid.on("eventResize", function(grid, event, actionData){		
-			
+		this.daysGrid.on("eventResize", function(grid, event, actionData){
+
 			var params = {
 				task : 'update_grid_event',
 				update_event_id : event['event_id'],
@@ -1341,19 +1293,19 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	},
 	  
 	onDblClick : function(grid, event, actionData){
-			
+		
 		if(event.repeats && actionData.singleInstance)
 		{
 			var formValues={};
-			
-			formValues['start_date'] = event['startDate'].format(GO.settings['date_format']);					
+
+			formValues['start_date'] = event['startDate'].format(GO.settings['date_format']);
 			formValues['start_hour'] = event['startDate'].format("H");
 			formValues['start_min'] = event['startDate'].format("i");
-			
+
 			formValues['end_date'] = event['endDate'].format(GO.settings['date_format']);
 			formValues['end_hour'] = event['endDate'].format("H");
 			formValues['end_min'] = event['endDate'].format("i");
-			
+
 			GO.calendar.eventDialog.show({
 				values: formValues,
 				exceptionDate: event['startDate'].format(this.daysGrid.dateTimeFormat),
@@ -1361,7 +1313,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				oldDomId : event.domId
 			});
 		}else
-		{						
+		{
 			GO.calendar.eventDialog.show({
 				event_id: event['event_id'],
 				oldDomId : event.domId
@@ -1370,30 +1322,30 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	},
     
 	onEventMove : function(grid, event, actionData){
-    		
+		
 		var params = {
 			task : 'update_grid_event',
 			update_event_id : event['event_id']
 		};
-		
+
 		if(actionData.offset)
 			params['offset']=actionData.offset;
-		
+
 		if(actionData.offsetDays)
 			params['offsetDays']=actionData.offsetDays;
-		
+
 		if(event.repeats && actionData.singleInstance)
 		{
 			params['createException']='true';
 			params['exceptionDate']=actionData.dragDate.format(grid.dateTimeFormat);
 			params['repeats']='true';
 		}
-		
+
 		if(actionData.calendar_id)
 		{
 			params['update_calendar_id']=actionData.calendar_id;
-		}  		
- 		
+		}
+
 		Ext.Ajax.request({
 			url: GO.settings.modules.calendar.url+'action.php',
 			params: params,
@@ -1414,7 +1366,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					}
 				}
 			}
-		});		
+		});
 	},
 
 	showAdminDialog : function() {
