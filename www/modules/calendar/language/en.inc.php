@@ -91,3 +91,6 @@ $lang['calendar']['your_resource_accepted_mail_subject'] = 'Booking for \'%s\' i
 $lang['calendar']['your_resource_accepted_mail_body'] = '%s has accepted your booking for the resource \'%s\'.'; //First %s is the name of the person who created the event. Second is the calendar name
 $lang['calendar']['your_resource_declined_mail_subject'] = 'Booking for \'%s\' is declined';//%s is resource name
 $lang['calendar']['your_resource_declined_mail_body'] = '%s has declined your booking for the resource \'%s\'.'; //First %s is the name of the person who created the event. Second is the calendar name
+
+$lang['calendar']['birthday_name']='Birthday: {NAME}';
+$lang['calendar']['birthday_desc']='{NAME} has turned {AGE} today';

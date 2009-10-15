@@ -55,7 +55,13 @@ GO.calendar.CalendarDialog = function(config)
                 selectOnFocus:true,
                 allowBlank:true,
                 forceSelection:true
-            }),
+            }),{
+				xtype:'checkbox',
+				name:'show_bdays',
+				id:'show_bdays',
+				boxLabel:GO.calendar.lang.show_bdays,
+				hideLabel:true
+			},
             this.exportButton = new Ext.Button({
 				text:GO.lang.cmdExport,
 				disabled:true,
@@ -311,5 +317,8 @@ Ext.extend(GO.calendar.CalendarDialog, Ext.Window, {
     {
         var f = this.propertiesTab.form.findField('resource_groups');
         f.container.up('div.x-form-item').setDisplayed(resource);
+
+		f = this.propertiesTab.form.findField('show_bdays');
+        f.container.up('div.x-form-item').setDisplayed(!resource);
     }
 });

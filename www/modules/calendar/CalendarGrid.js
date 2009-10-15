@@ -642,8 +642,8 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 	},	
 	
 	getSelectedEvent : function()
-	{
-		if(this.selected)
+	{	
+		if(this.selected && this.selected.length > 0)
 		{
 			return this.elementToEvent(this.selected[0].id);
 		}
@@ -835,37 +835,40 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		
 			
 			//add events
-			
-			event.on('mousedown', function(e, eventEl){				
-				eventEl = Ext.get(eventEl).findParent('div.x-calGrid-all-day-event-container', 2, true);					
-			
-				this.selectEventElement(eventEl);	
-				
-				this.clickedEventId=eventEl.id;
-				this.eventMouseUp=false;
-				this.startAllDayEventDrag(e, eventEl.id);
-	
-			}, this);
-			
-			event.on('dblclick', function(e, eventEl){
 
-				var actionData = {}; 
-				
-				//do last because orginal times will be lost after this.
-				var event = this.elementToEvent(this.clickedEventId);
-				
-				if(this.remoteEvents[this.clickedEventId]['repeats'] && this.writePermission)
-				{
-					this.handleRecurringEvent("eventDblClick", event, actionData);
-				}else
-				{
-					this.fireEvent("eventDblClick", this, event, actionData);
-				}				
-			}, this);	
-			
-			event.on('mouseup', function(){
-				this.eventMouseUp=true;
-			}, this);	
+			if(!eventData.read_only)
+			{			
+				event.on('mousedown', function(e, eventEl){
+					eventEl = Ext.get(eventEl).findParent('div.x-calGrid-all-day-event-container', 2, true);
+
+					this.selectEventElement(eventEl);
+
+					this.clickedEventId=eventEl.id;
+					this.eventMouseUp=false;
+					this.startAllDayEventDrag(e, eventEl.id);
+
+				}, this);
+
+				event.on('dblclick', function(e, eventEl){
+
+					var actionData = {};
+
+					//do last because orginal times will be lost after this.
+					var event = this.elementToEvent(this.clickedEventId);
+
+					if(this.remoteEvents[this.clickedEventId]['repeats'] && this.writePermission)
+					{
+						this.handleRecurringEvent("eventDblClick", event, actionData);
+					}else
+					{
+						this.fireEvent("eventDblClick", this, event, actionData);
+					}
+				}, this);
+
+				event.on('mouseup', function(){
+					this.eventMouseUp=true;
+				}, this);
+			}
 		}
 		
 		return domId;
@@ -916,34 +919,34 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 	
 		event.setXY(startRowPos);
 		event.setSize(snap["x"]-2, height);
-		
+
 		event.on('mousedown', function(e, eventEl){
-		
+
 			eventEl = Ext.get(eventEl).findParent('div.x-calGrid-event-container', 4, true);
-				
-			this.selectEventElement(eventEl);			
-			
+
+			this.selectEventElement(eventEl);
+
 			this.clickedEventId=eventEl.id;
 			this.eventMouseUp=false;
 			this.startEventDrag(e, eventEl.id);
 		}, this);
-		
 
-		event.on('dblclick', function(e, eventEl){			
-			var actionData = {}; 
-				
+
+		event.on('dblclick', function(e, eventEl){
+			var actionData = {};
+
 			//do last because orginal times will be lost after this.
 			var event = this.elementToEvent(this.clickedEventId);
-			
+
 			if(this.remoteEvents[this.clickedEventId]['repeats'] && this.writePermission)
 			{
 				this.handleRecurringEvent("eventDblClick", event, actionData);
 			}else
 			{
 				this.fireEvent("eventDblClick", this, event, actionData);
-			}			
+			}
 		}, this);
-		
+
 		event.on('mouseup', function(){
 			this.eventMouseUp=true;
 		}, this);
@@ -1360,7 +1363,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		this.writePermission = this.store.reader.jsonData.write_permission;
 
 		this.clearGrid();
-		
+
 		this.renderDaysGrid();
   	
 

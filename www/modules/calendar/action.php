@@ -251,10 +251,14 @@ try {
 
 					if(isset($_POST['update_calendar_id'])) {
 						$update_event['calendar_id']=$_POST['update_calendar_id'];
+
 					}
 
-					$update_event['id']=$update_event_id;
-					$cal->update_event($update_event, $calendar, $old_event);
+					if(isset($update_event))
+					{
+						$update_event['id']=$update_event_id;
+						$cal->update_event($update_event, $calendar, $old_event);
+					}
 /*
 					//move the exceptions if a recurrent event is moved
 					if(!empty($old_event['rrule']) && isset($offset))
@@ -840,6 +844,7 @@ try {
 			$calendar['id']=$_POST['calendar_id'];
 			$calendar['user_id'] = isset($_POST['user_id']) ? ($_POST['user_id']) : $GO_SECURITY->user_id;
 			$calendar['group_id'] = isset($_POST['group_id']) ? ($_POST['group_id']) : 0;
+			$calendar['show_bdays'] = isset($_POST['show_bdays']) ? 1 : 0;
 			if($calendar['group_id'] == 0) $calendar['group_id'] = 1;
 			$calendar['name']=$_POST['name'];
 

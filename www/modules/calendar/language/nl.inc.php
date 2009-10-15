@@ -73,3 +73,6 @@ $lang['calendar']['your_resource_accepted_mail_subject'] = 'Reservering voor \'%
 $lang['calendar']['your_resource_accepted_mail_body'] = '%s heeft uw boeking voor hulpmiddel \'%s\' geaccepteerd.';
 $lang['calendar']['your_resource_declined_mail_subject'] = 'Reservering voor \'%s\' is geweigerd';
 $lang['calendar']['your_resource_declined_mail_body'] = '%s heeft uw boeking voor hulpmiddel \'%s\' geweigerd.';
+
+$lang['calendar']['birthday_name']='Verjaardag: {NAME}';
+$lang['calendar']['birthday_desc']='{NAME} is vandaag {AGE} geworden';

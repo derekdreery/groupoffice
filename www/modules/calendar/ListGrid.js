@@ -35,7 +35,8 @@ GO.calendar.ListGrid = function(config)
 						'private',
 						'repeats',
 						'background',
-						'day'			
+						'day',
+						'read_only'
 					]
 	    	}),
 			baseParams: {task:'events'},
@@ -146,10 +147,11 @@ Ext.extend(GO.calendar.ListGrid, Ext.grid.GridPanel, {
     	}    	
     }, this);*/
     
-    this.on("rowdblclick", function(grid, rowIndex, e){
-    	var record = grid.getStore().getAt(rowIndex);	
-					 
-			GO.calendar.eventDialog.show({event_id: record.data.event_id});
+		this.on("rowdblclick", function(grid, rowIndex, e){
+			var record = grid.getStore().getAt(rowIndex);
+			
+			if(!record.data.read_only)
+				GO.calendar.eventDialog.show({event_id: record.data.event_id});
 		}, this);		  
 	},
 	
@@ -166,7 +168,7 @@ Ext.extend(GO.calendar.ListGrid, Ext.grid.GridPanel, {
 	},
 	setDays : function(days, load)
 	{
-		this.setDate(this.configuredDate, 7, load);		
+		this.setDate(this.configuredDate, 7, load);
 	},
 	
 	getSelectedEvent : function(){
@@ -189,15 +191,15 @@ Ext.extend(GO.calendar.ListGrid, Ext.grid.GridPanel, {
 	},
 	
   setDate : function(date, days, load)
-  {    	
-    	
+  {
+	  
   	var oldStartDate = this.startDate;
   	var oldEndDate = this.endDate;
   	
-/*  	if(days)
+  	if(days)
   	{
-  		this.days=days;	
-  	}   	*/
+  		//this.days=+days;
+  	}   
   	
   	this.configuredDate = date;	    	
 
@@ -214,9 +216,9 @@ Ext.extend(GO.calendar.ListGrid, Ext.grid.GridPanel, {
   	if(load)
   	{
     	//if(!oldEndDate || !oldStartDate || oldEndDate.getElapsed(this.endDate)!=0 || oldStartDate.getElapsed(this.startDate)!=0)
-    	//{    			     		
+    	{    			     		
 	    	this.store.reload();    			    	
-    	//}
+    	}
   	}
   },
   
