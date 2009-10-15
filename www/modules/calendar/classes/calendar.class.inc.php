@@ -2112,12 +2112,12 @@ class calendar extends db
 
 	function cache_event($event_id)
 	{
-		global $GO_CONFIG, $GO_LANGUAGE;
+		global $GO_CONFIG, $GO_LANGUAGE, $lang;
 
 		require_once($GO_CONFIG->class_path.'/base/search.class.inc.php');
 		$search = new search();
 
-		require($GO_LANGUAGE->get_language_file('calendar'));
+		$GO_LANGUAGE->require_language_file('calendar');
 
 		$sql  = "SELECT DISTINCT cal_events.*, cal_calendars.acl_read, cal_calendars.acl_write FROM cal_events ".
 		"INNER JOIN cal_calendars ON cal_events.calendar_id=cal_calendars.id ".
@@ -2133,7 +2133,7 @@ class calendar extends db
 			$cache['link_type']=1;
 			$cache['module']='calendar';
 			$cache['description']='';
-			$cache['type']=$lang['calendar']['event'];
+			$cache['type']=$lang['link_type'][1];
 			$cache['keywords']=$search->record_to_keywords($this->record).','.$cache['type'];
 			$cache['mtime']=$this->f('mtime');
 			$cache['acl_read']=$this->f('acl_read');
