@@ -297,4 +297,22 @@ class formprocessor{
 
 
 	}
+
+	function process_simple_contact_form(){
+		global $GO_CONFIG, $lang;
+		
+		if (empty($_POST['name']) || empty($_POST['email']) || empty($_POST['subject']) || empty($_POST['body']))
+		{
+			throw new Exception($lang['common']['missingField']);
+		}elseif(!String::validate_email($_POST['email']))
+		{
+			throw new Exception($lang['common']['invalidEmailError']);
+		}
+
+		require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
+		$swift = new GoSwift('test@intermeshdev.nl', $_POST['subject']);
+		$swift->set_body($_POST['body']);
+		$swift->set_from($_POST['email'], $_POST['name'].' (Via website)');
+		return $swift->sendmail();
+	}
 }
