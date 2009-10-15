@@ -1,5 +1,3 @@
-Ext.namespace('GO.links');
-GO.links.lang={};
 GO.links.lang.links='Beschrijvingen van koppelingen';
 
 /* table: go_link_descriptions */

@@ -181,3 +181,8 @@ $lang['common']['system']='Systeem';
 $lang['common']['goAlreadyStarted']='Group-Office was already started. The dialog created by {FUNCTION} is loaded in Group-Office. You can now close this window and continue working in your Group-Office.';
 
 $lang['commmon']['logFiles']='Logbestanden';
+
+$lang['common']['startMenu']='Startmenu';
+$lang['common']['invalidDateError']='U heeft een ongeldige datum ingevoerd';
+$lang['common']['error']='Fout';
+

@@ -28,6 +28,7 @@ echo '<html><head><title>Language Checker</title></head><body><font face="arial"
 
 function get_contents($filename)
 {
+	$contents=array();
 	if(!file_exists($filename))
 		return false;
 	else

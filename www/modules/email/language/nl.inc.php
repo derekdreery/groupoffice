@@ -51,3 +51,6 @@ $lang['email']['noUidNext']='Uw mailserver ondersteund geen UIDNEXT. De \'Concep
 
 
 $lang['email']['disable_trash_folder']='Kon het bericht niet naar de prullenbak verplaatsen.Mogelijk door gebrek aan schijfruimte. U kunt uw mailbox opschonen door de prullenbak uit te schakelen bij Beheer -> Accounts -> Dubbelklik account -> Mappen.';
+
+$lang['email']['alias']='Alias';
+$lang['email']['aliases']='Aliasen';

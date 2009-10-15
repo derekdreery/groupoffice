@@ -298,3 +298,7 @@ GO.lang.closeApps='Applicaties afsluiten';
 GO.lang.rightClickToClose='Klik met de rechtermuisknop op een tabblad kop om deze af te sluiten.';
 
 GO.lang.administration='Beheer';
+
+GO.lang.total='Totaal';
+GO.lang.adminMenu= 'Beheermenu';
+GO.lang.extra='Extra';

@@ -3,6 +3,8 @@
 require($GO_LANGUAGE->get_fallback_language_file('files'));
 $lang['files']['name'] = 'Bestanden';
 $lang['link_type'][6]='Bestand';
+
+$lang['files']['files']='Bestanden';
 $lang['files']['description'] = 'Bestanden module; Module voor het delen van bestanden.';
 
 $lang['files']['fileNotFound'] = 'Bestand niet gevonden';
