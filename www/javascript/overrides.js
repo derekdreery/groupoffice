@@ -11,8 +11,6 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-Ext.Container.prototype.bufferResize = false;
-
 /*
  * Scroll menu when higher then the screen is
  *
