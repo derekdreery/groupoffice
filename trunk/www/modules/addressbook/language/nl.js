@@ -20,8 +20,7 @@ GO.addressbook.lang.btnAddContact = 'Contact toevoegen'	;
 GO.addressbook.lang.btnAddCompany = 'Bedrijf toevoegen';
 GO.addressbook.lang.btnManage = 'Beheren';
 GO.addressbook.lang.btnDownload = 'Download bestand';
-GO.addressbook.lang.btnSearch = 'Zoeken';
-GO.addressbook.lang.btnReset = 'Reset';
+
 GO.addressbook.lang.cmdFormSearchFirst = 'Zoeken in= ';
 GO.addressbook.lang.cmdFormSearchSecond = ' op= ';
 GO.addressbook.lang.cmdFormSearchThird = ' voor= ';

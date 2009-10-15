@@ -1,7 +1,3 @@
-Ext.namespace('GO.tools');
-
-GO.tools.lang = {};
-
 GO.tools.lang.tools='Systeembeheer';
 GO.tools.lang.description='Klik op een van de scripts hieronder om deze uit te voeren.';
 

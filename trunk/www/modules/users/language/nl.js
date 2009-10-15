@@ -90,3 +90,5 @@ GO.users.lang.deleteWarning='WAARSCHUWING!!! Alle gegevens van de gebruiker incl
 
 GO.users.lang.lastName = 'Achternaam';
 GO.users.lang.firstName = 'Voornaam';
+
+GO.users.lang.sendInvitation='Verstuur uitnodiging';
