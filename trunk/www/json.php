@@ -440,8 +440,7 @@ try{
 			{				
 				if($lang_file = $GO_LANGUAGE->get_language_file($module['id']))
 				{
-
-					require($lang_file);
+					$GO_LANGUAGE->require_language_file($module['id']);
 				}
 			}
 		
