@@ -1658,6 +1658,18 @@ GO.mainLayout.onReady(function(){
 	}),
 
 	GO.calendar.eventDialog = new GO.calendar.EventDialog();
+
+	GO.newMenuItems.push({
+		text: GO.calendar.lang.appointment,
+		iconCls: 'go-link-icon-1',
+		handler:function(item, e){
+
+			var eventShowConfig = item.parentMenu.eventShowConfig || {};
+			eventShowConfig.link_config=item.parentMenu.link_config
+
+			GO.calendar.eventDialog.show(eventShowConfig);
+		}
+	});
 }); 
 
 GO.linkHandlers[1]=function(id){
@@ -1667,17 +1679,7 @@ GO.linkHandlers[1]=function(id){
 	});
 };
 
-GO.newMenuItems.push({
-	text: GO.calendar.lang.appointment,
-	iconCls: 'go-link-icon-1',
-	handler:function(item, e){
 
-		var eventShowConfig = item.parentMenu.eventShowConfig || {};
-		eventShowConfig.link_config=item.parentMenu.link_config
-
-		GO.calendar.eventDialog.show(eventShowConfig);
-	}
-});
 
 GO.calendar.showEvent = function(config){
 
