@@ -7,7 +7,7 @@ GO.tasks.SimpleTasksPanel = function(config)
 		var reader = new Ext.data.JsonReader({
 		    root: 'results',
 			totalProperty: 'total',
-			fields:['id', 'name','completed','due_time','description','tasklist_name'],
+			fields:['id', 'name','completed','due_time','description','tasklist_name','late'],
 			id: 'id'
 	    });
 	
@@ -82,7 +82,12 @@ GO.tasks.SimpleTasksPanel = function(config)
 		config.view=new Ext.grid.GroupingView({
 			forceFit:true,
 			hideGroupedColumn:true,
-			emptyText: GO.tasks.lang.noTask
+			emptyText: GO.tasks.lang.noTask,
+			getRowClass : function(record, rowIndex, p, store){
+					if(record.data.late){
+							return 'tasks-late';
+					}
+			}
 		}),
 		config.sm=new Ext.grid.RowSelectionModel();
 		config.loadMask=true;
