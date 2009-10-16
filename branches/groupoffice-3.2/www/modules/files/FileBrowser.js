@@ -144,15 +144,24 @@ GO.files.FileBrowser = function(config){
 					if(moveid==targetid || parentid==targetid)
 					{
 						return false;
-					}					
+					}
+				
 					var dragNode = this.treePanel.getNodeById(moveid);
-					if(dragEvent.target.isAncestor(dragNode))
+					if(dragNode.parentNode.id == targetid || dragEvent.target.isAncestor(dragNode))
 					{
 						return false;
 					}
 					return true;
 				}
 			}			
+		}else
+		{
+			var parentId = this.treePanel.getNodeById(dragEvent.dropNode.id).parentNode.id;
+			if(parentId == dragEvent.target.id)
+			{
+				return false
+			}
+			return true;
 		}
 	}, this);
 	
@@ -1015,14 +1024,14 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	paste : function(pasteMode, destination, records)
 	{
 		var paste_sources = Array();
-		var folderSelected = false;
+		//var folderSelected = false;
 		for(var i=0;i<records.length;i++)
 		{
 			paste_sources.push(records[i].data['type_id']);
-			if(records[i].data['extension']=='folder')
+			/*if(records[i].data['extension']=='folder')
 			{
 				folderSelected = true;
-			}
+			}*/
 		}
 		
 		var params = {			
