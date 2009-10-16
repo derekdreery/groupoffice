@@ -92,6 +92,7 @@ GO.email.lang.vacation='Automatisch beantwoorden';
 GO.email.lang.vacationActive='Activeer automatisch beantwoorden';
 GO.email.lang.vacationSubject='Onderwerp';
 GO.email.lang.vacationBody='Inhoud';
+GO.email.lang.renameFolder='Map hernoemen';
 
 GO.email.lang.addToRecipients = 'Voeg toe aan ontvangers';
 GO.email.lang.addToCC = 'Voeg toe aan CC';

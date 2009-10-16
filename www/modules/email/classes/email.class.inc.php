@@ -601,6 +601,12 @@ class email extends db
 		$this->query($sql);
 		return $this->num_rows();
 	}
+
+	function get_folders_by_path($account_id, $path_name)
+	{
+		$sql = "SELECT * FROM em_folders WHERE account_id = ? AND name LIKE ?";
+		$this->query($sql, 'is', array($account_id, $path_name.'%'));
+	}
 	/*
 	 function get_all_folders($account_id, $subscribed_only=false)
 	 {
@@ -634,11 +640,16 @@ class email extends db
 
 		return $folder['id'];
 	}
-	function rename_folder($account_id, $old_name, $new_name)
+	function rename_folder($account_id, $old_name, $new_name, $new_parent_id=0)
 	{
-		$sql = "UPDATE em_folders SET name='".$this->escape($new_name)."' WHERE".
-		" name='".$this->escape($old_name)."' AND ".
-		"account_id='".$this->escape($account_id)."'";
+		$sql = "UPDATE em_folders SET name='".$this->escape($new_name)."'";
+
+		if($new_parent_id)
+		{
+			$sql .= ",parent_id='".$this->escape($new_parent_id)."' ";
+		}
+
+		$sql .= "WHERE name='".$this->escape($old_name)."' AND account_id='".$this->escape($account_id)."'";
 
 		$this->query($sql);
 		$sql = "UPDATE em_filters SET folder='".$this->escape($new_name)."' ".

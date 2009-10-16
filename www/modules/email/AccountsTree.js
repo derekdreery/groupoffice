@@ -34,7 +34,7 @@ GO.email.AccountsTree = function(config){
 	config.collapsible=true;
 	config.ddAppendOnly=true;
 	config.containerScroll=true;	
-	config.enableDrop=true;
+	config.enableDD=true;
 	config.ddGroup='EmailDD';
 	
 	config.bbar=new Ext.Toolbar({cls:'go-paging-tb',items:[this.statusBar = new Ext.Panel({height:20, baseCls:'em-statusbar',border:false, plain:true})]});
@@ -51,11 +51,45 @@ GO.email.AccountsTree = function(config){
 		expanded:false
 	});
 	this.setRootNode(rootNode);
+
+	this.on('nodedragover', function(e)
+	{		
+		if(e.dropNode)
+		{
+			return ((this.getNodeById(e.dropNode.id).parentNode.id != e.target.id) &&
+					(e.source.dragData.node.attributes.account_id == e.target.attributes.account_id));
+		}
+		return true;
+		
+	}, this);
 	
 }
 
 Ext.extend(GO.email.AccountsTree, Ext.tree.TreePanel, {	
 	setUsage : function(usage){		
 			this.statusBar.body.update(usage);
+	},
+	moveFolder : function(dest, src)
+	{
+		Ext.Ajax.request({
+			url:GO.settings.modules.email.url+'action.php',
+			params:{
+				task:'move_folder',
+				source_id:src,
+				target_id:dest
+			},
+			callback:function(options, success, response)
+			{
+				var responseParams = Ext.decode(response.responseText);
+				if(!responseParams.success)
+				{
+					alert(responseParams.feedback);
+					Ext.MessageBox.hide();
+				}else
+				{
+				}
+			},
+			scope:this
+		});
 	}
 });

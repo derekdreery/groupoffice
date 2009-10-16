@@ -101,6 +101,7 @@ GO.email.lang.addUnknownRecipients='Add unknown recipients';
 GO.email.lang.addUnknownRecipientsText='You just sent an e-mail to one or more recipients that are not in your addressbook. Click on a name if you want to add that person or close this window.';
 GO.email.lang.attachFilesPC='Add from PC';
 GO.email.lang.attachFilesGO='Add from Group-Office';
+GO.email.lang.renameFolder='Rename folder';
 
 
 GO.email.lang.vacation='Automatic reply';
