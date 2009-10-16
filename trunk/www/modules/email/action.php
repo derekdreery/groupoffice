@@ -735,7 +735,7 @@ try{
 							$location = '';
 						}
 
-						$new_folder = $location.$imap->utf7_imap_encode(($_POST['new_name']));
+						$new_folder = $location.$imap->utf7_imap_encode(($_POST['new_name']));						
 
 						connect($folder['account_id']);
 
@@ -743,6 +743,18 @@ try{
 						if ($imap->rename_folder($folder['name'], $new_folder))
 						{
 							$response['success']=$email->rename_folder($folder['account_id'], $folder['name'], $new_folder);
+
+							/*
+							$email->get_folders_by_path($folder['account_id'], $folder['name']);
+							while($record = $email->next_record())
+							{
+								$email2 = new email();
+
+								$folder_name = $new_folder.substr($record['name'], strlen($folder['name']));
+								$reponse['deb']['a'] = $folder_name;
+								$email2->rename_folder($folder['account_id'], $record['name'], $folder_name);
+							}
+							*/
 						}else {
 							$response['feedback']=$lang['common']['saveError'];
 						}
@@ -750,6 +762,50 @@ try{
 					}else {
 						$response['feedback']=$lang['comon']['selectError'];
 					}
+					break;
+				case 'move_folder':
+
+					$response['success'] = false;
+
+					if(isset($_REQUEST['source_id']) && isset($_REQUEST['target_id']))
+					{					
+						$folder_src = $email->get_folder_by_id(substr($_REQUEST['source_id'], 7));
+						$folder_dest = $email->get_folder_by_id(substr($_REQUEST['target_id'], 7));
+						
+						if($folder_src && $folder_dest)
+						{						
+							$pos = strrpos($folder_src['name'], $folder_src['delimiter']);
+							if($pos && $folder_src['delimiter'] != '')
+							{
+								$folder_name = substr($folder_src['name'],$pos+1);
+							}else
+							{
+								$folder_name = $folder_src['name'];
+							}
+
+							$path_name = $folder_dest['name'].$folder_dest['delimiter'].$imap->utf7_imap_encode($folder_name);
+
+							connect($folder_dest['account_id']);
+							
+							if($imap->rename_folder($folder_src['name'],$path_name))
+							{
+								$response['success'] = $email->rename_folder($folder_dest['account_id'], $folder_src['name'], $path_name, $folder_dest['id']);
+
+								$email->get_folders_by_path($folder_dest['account_id'], $folder_src['name']);
+								while($record = $email->next_record())
+								{
+									$email2 = new email();
+
+									$folder_name = $path_name.substr($record['name'], strlen($folder_src['name']));
+									$email2->rename_folder($folder_dest['account_id'], $record['name'], $folder_name);
+								}
+							}
+						}					
+					}
+					else
+					{
+						$response['feedback']=$lang['comon']['selectError'];
+					}					
 					break;
 
 				case 'syncfolders':
