@@ -46,10 +46,12 @@ CREATE TABLE IF NOT EXISTS `cal_calendars` (
   `background` varchar(6) default NULL,
   `time_interval` int(11) NOT NULL default '1800',
   `public` enum('0','1') NOT NULL,
-	`shared_acl` BOOL NOT NULL ,
+  `shared_acl` BOOL NOT NULL ,
+  `show_bdays` tinyint(1) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `group_id` (`group_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 
 -- --------------------------------------------------------
 
