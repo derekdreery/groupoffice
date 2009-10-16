@@ -138,9 +138,10 @@ GO.files.FileBrowser = function(config){
 				if(dragEvent.data.selections[i].data.extension=='folder')
 				{
 					var moveid = dragEvent.data.selections[i].data.id;
+					var parentid = dragEvent.data.selections[i].data.parent_id;
 					var targetid = dragEvent.target.id;
 					
-					if(moveid==targetid)
+					if(moveid==targetid || parentid==targetid)
 					{
 						return false;
 					}					
@@ -907,11 +908,15 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 						var treeNode = this.treePanel.getNodeById(records[0].data.id);
 						if(treeNode)
 						{
-							if(this.folder_id.indexOf(records[0].data.id)>-1 || (treeNode.parentNode && treeNode.parentNode.id==this.folder_id))
-							{
-								this.setFolderID(treeNode.parentNode.id);
-							}
+							//parentNode is destroyed after remove so keep it for later use
+							var parentNodeId = treeNode.parentNode.id;
 							treeNode.remove();
+							
+							var activeTreenode = this.treePanel.getNodeById(this.folder_id);
+							if(!activeTreenode){
+								//current folder must have been removed. Let's go up.
+								this.setFolderID(parentNodeId);
+							}
 						}
 					}
 				},
