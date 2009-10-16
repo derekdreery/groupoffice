@@ -47,7 +47,7 @@ GO.files.FileBrowser = function(config){
 
 	this.treePanel = new Ext.tree.TreePanel({
 		region:'west',
-		title:GO.lang.locations,
+		//title:GO.lang.locations,
 		layout:'fit',
     split:true,
 		autoScroll:true,
@@ -58,6 +58,7 @@ GO.files.FileBrowser = function(config){
 		rootVisible:false,
 		containerScroll: true,
 		collapsible:true,
+		collapseMode:'mini',
 		ddAppendOnly: true,
 		ddGroup : 'FilesDD',
 		enableDD:true,
