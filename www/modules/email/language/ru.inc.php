@@ -55,3 +55,9 @@ $lang['email']['goAlreadyStarted']='Group-Office was al gestart. Het e-mailscher
 
 //At Tuesday, 07-04-2009 on 8:58 Group-Office Administrator <test@intermeshdev.nl> wrote:
 $lang['email']['replyHeader']='В %s, %s на %s %s писал:';
+$lang['email']['alias']='Псевдоним';
+$lang['email']['aliases']='Псевдонимы';
+$lang['email']['alias']='Псевдоним';
+$lang['email']['aliases']='Псевдонимы';
+
+$lang['email']['noUidNext']='Ваш почтовый сервер не поддерживает  UIDNEXT. Папка \'Черновики\' для данной учетной записи автоматически отключена.';

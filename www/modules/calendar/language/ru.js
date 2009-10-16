@@ -76,3 +76,8 @@ GO.calendar.lang.location='Место';
 GO.calendar.lang.startsAt='Начинается в';
 GO.calendar.lang.endsAt='Заканчивается в';
 GO.calendar.lang.eventDefaults='Настройки по умолчанию';
+
+GO.calendar.lang.importToCalendar='Добавить событие напрямую в календари';
+GO.calendar.lang.default_calendar='Календарь по умолчанию';
+
+GO.calendar.lang.status='Состояние';
