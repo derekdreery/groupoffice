@@ -108,6 +108,6 @@ GO.email.lang.toggleWindowPosition = 'Mesaj içeriği penceresinin Pozisyonunu d
 GO.email.lang.closeUploadDialog='Yükleme pencereciğini kapatın veya yüklemenin bitmesini bekleyin';
 GO.email.lang.signature='İmza';
 GO.email.defaultProgram='Varsayılan e-posta programı';
-GO.email.defaultProgramInstructions ='<p> Group-Office\'i varsayılan E-Posta istemcisi yapmak için lütfen <a class="normal-link" href="http://www.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client" target="_blank">read the instructions</a>.</p><p>Then if you are using Windows you must download and run <a class="normal-link" href="'+GO.settings.modules.email.url+'register_email.php"> bu kayıt dosyasını yükleyiniz</a></p>';
+GO.email.defaultProgramInstructions ='<p> Group-Office\'i varsayılan E-Posta istemcisi yapmak için lütfen <a class="normal-link" href="http://www.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client" target="_blank">read the instructions</a>.</p><p>Then if you are using Windows you must download and run <a class="normal-link" href="{url}"> bu kayıt dosyasını yükleyiniz</a></p>';
 GO.email.lang.htmlMarkup = 'HTML kullan';
 GO.email.lang.confirmLostChanges = 'Değişiklikler kaybolacak. Eminmisiniz?';

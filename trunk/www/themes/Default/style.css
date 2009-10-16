@@ -486,6 +486,7 @@ a.normal-link:hover{
 	line-height:16px;
 	display:block;
 	height:auto !important;
+	text-decoration:none !important;
 }
 
 .go-inline-icon{

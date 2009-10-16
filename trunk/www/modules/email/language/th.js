@@ -130,7 +130,7 @@ GO.email.lang.closeUploadDialog='ปิดหน้าต่างการอ�
 GO.email.lang.signature='ลายเซ็น';
 /*ท็อป เพิ่ม 22-07-2009*/
 GO.email.defaultProgram='ใช้ Software Email ประจำที่ใช้อยู่';
-GO.email.defaultProgramInstructions ='<p>การกำหนดค่าใน Email Client เพื่อใช้ร่วมกับ Group Office <a class="normal-link" href="http://www.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client" target="_blank">วิธีการกำหนดค่า</a>.</p><p> หากถ้าท่านใช้ Windows อยู่ท่านสามารถดาวน์โหลดและติดตั้งดังนี้ได้ <a class="normal-link" href="'+GO.settings.modules.email.url+'register_email.php">ดาวน์โหลดไฟล์ลงทะเบียนอัตโนมัติ</a></p>';
+GO.email.defaultProgramInstructions ='<p>การกำหนดค่าใน Email Client เพื่อใช้ร่วมกับ Group Office <a class="normal-link" href="http://www.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client" target="_blank">วิธีการกำหนดค่า</a>.</p><p> หากถ้าท่านใช้ Windows อยู่ท่านสามารถดาวน์โหลดและติดตั้งดังนี้ได้ <a class="normal-link" href="{url}">ดาวน์โหลดไฟล์ลงทะเบียนอัตโนมัติ</a></p>';
 
 
 GO.email.lang.htmlMarkup = 'ใช้รูปแบบการแสดงผล HTML';

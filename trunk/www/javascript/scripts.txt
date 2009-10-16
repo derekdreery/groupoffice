@@ -1,3 +1,4 @@
+
 javascript/overrides.js
 javascript/Date.js
 javascript/DeployJava.js
@@ -58,7 +59,7 @@ javascript/form/FileUploadField.js
 javascript/form/HtmlComponent.js
 javascript/form/NumberField.js
 javascript/panels/PermissionsPanel.js
-javascript/ModuleManager.js
+
 javascript/NewMenuButton.js
 
 javascript/links/LinkFolderWindow.js

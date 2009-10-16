@@ -144,7 +144,7 @@ GO.email.lang.closeUploadDialog='Veuillez fermer cette fenêtre ou attendre la f
 GO.email.lang.signature='Signature';
 
 GO.email.defaultProgram='Programme de messagerie par défaut';
-GO.email.defaultProgramInstructions ='<p>Pour définir Group-Office comme programme de messagerie par défaut, veuillez <a class="normal-link" href="http://www.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client" target="_blank">lire ces instructions</a>.</p><p>Si vous utilisez Microsoft Windows, vous devez télécharger et exécuter <a class="normal-link" href="'+GO.settings.modules.email.url+'register_email.php">ce fichier</a></p>';
+GO.email.defaultProgramInstructions ='<p>Pour définir Group-Office comme programme de messagerie par défaut, veuillez <a class="normal-link" href="http://www.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client" target="_blank">lire ces instructions</a>.</p><p>Si vous utilisez Microsoft Windows, vous devez télécharger et exécuter <a class="normal-link" href="{url}">ce fichier</a></p>';
 
 GO.email.lang.htmlMarkup = 'Rédiger en HTML';
 GO.email.lang.confirmLostChanges = 'Changer d\'éditeur entraîne la perte du texte de votre message !\nVoulez-vous continuer ?';
