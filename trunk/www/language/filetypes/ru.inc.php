@@ -27,10 +27,14 @@ $lang['filetypes']['oth']= 'OpenOffice.Org web страница';
 
 
 $lang['filetypes']['doc'] = 'Microsoft Word документ';
-$lang['filetypes']['xls'] = 'Microsoft Excel таблица';
+$lang['filetypes']['docx'] = 'Microsoft Word документ';
+$lang['filetypes']['xls'] = 'Microsoft Excel документ';
+$lang['filetypes']['xlsx'] = 'Microsoft Excel документ';
 $lang['filetypes']['mdb'] = 'Microsoft Access база данных';
 $lang['filetypes']['ppt'] = 'Microsoft Powerpoint презентация';
+$lang['filetypes']['pptx'] = 'Microsoft Powerpoint презентация';
 $lang['filetypes']['pps'] = 'Microsoft Powerpoint презентация';
+$lang['filetypes']['ppsx'] = 'Microsoft Powerpoint презентация';
 $lang['filetypes']['sxc'] = 'OpenOffice.Org Calc таблица';
 $lang['filetypes']['tar'] = 'Tar архив';
 $lang['filetypes']['zip'] = 'ZIP архив';

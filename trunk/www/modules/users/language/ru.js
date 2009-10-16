@@ -51,7 +51,8 @@ GO.users.lang.numberOfLogins = 'Количество входов';
 GO.users.lang.cmdFormLabelTheme = 'Тема';
 GO.users.lang.cmdFormLabelStartModule = 'Начальный модуль';
 GO.users.lang.cmdFormLabelMaximunRows = 'Максимальное количество сторок в списке';
-GO.users.lang.cmdFormLabelSortNamesBy = 'Фамилия';
+GO.users.lang.cmdFormLabelSortNamesBy = 'Сортировать имена по';
+
 GO.users.lang.cmdFormLabelLanguage = 'Язык';
 GO.users.lang.cmdFormLabelTimezone = 'Временная зона';
 GO.users.lang.cmdFormLabelAdjustDaylight = 'Автоматически изменять время при перходе на летнне/зимнее время';
@@ -102,3 +103,8 @@ GO.users.lang.numberFormat ='Формат чимел';
 GO.users.lang.importExport ='Импорт / Экспорт';
 GO.users.lang.listSeparator='Раздельтель в списках';
 GO.users.lang.textSeparator='Разделитель в тексте';
+
+GO.users.lang.deleteWarning='ВНИМАНИЕ!!! Все пользовательские данные включая адресные книги, проекты, календари и т.д. будут удалены!';
+
+GO.users.lang.lastName = 'Фамилия';
+GO.users.lang.firstName = 'Имя';

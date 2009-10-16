@@ -144,3 +144,23 @@ GO.email.defaultProgramInstructions ='<p>Чтобы установить Group-O
 
 GO.email.lang.htmlMarkup = 'Использовать HTML маркировку';
 GO.email.lang.confirmLostChanges = 'Изменения будут потеряны. Вы уверены?';
+/* table: em_aliases */
+GO.email.lang.alias="Псевдоним";
+GO.email.lang.aliases="Псевдонимы";
+GO.email.lang.accountId="Учетная запись";
+GO.email.lang.email="Email";
+GO.email.lang.signature="Подпись";
+
+/* table: em_aliases */
+GO.email.lang.alias="Псевдоним";
+GO.email.lang.aliases="Псевдонимы";
+GO.email.lang.accountId="Учетная запись";
+GO.email.lang.email="Email";
+GO.email.lang.signature="Подпись";
+
+GO.email.lang.manageAliases='Управление псевдонимами отправителей';
+
+GO.email.lang.addSendersTo='Добавить отправителей в...';
+
+GO.email.lang.defaultTemplate='Использовать как шаблон по умолчанию';
+GO.email.lang.moving='Перемещение...';
