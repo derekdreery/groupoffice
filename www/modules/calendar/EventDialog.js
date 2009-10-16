@@ -420,9 +420,9 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
             },
             failure : function(form, action) {
                 if (action.failureType == 'client') {
-                    error = GO.lang.strErrorsInForm;
+                    var error = GO.lang.strErrorsInForm;
                 } else {
-                    error = action.result.feedback;
+                    var error = action.result.feedback;
                 }
 
                 if (config && config.callback) {
@@ -461,11 +461,11 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
         }
 
         if (sD.getElapsed(eD) == 0) {
-            var sH = this.startHour.getValue();
-            var eH = this.endHour.getValue();
-            var sM = this.startMin.getValue();
-            var eM = this.endMin.getValue();
-
+            var sH = parseInt(this.startHour.getValue());
+            var eH = parseInt(this.endHour.getValue());
+            var sM = parseInt(this.startMin.getValue());
+            var eM = parseInt(this.endMin.getValue());
+						
             if (sH > eH) {
                 eH = sH;
                 this.endHour.setValue(sH);
@@ -827,15 +827,12 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
                 ['4', GO.calendar.lang.monthsByDay],
                 ['5', GO.calendar.lang.years]]
             }),
-            hideLabel : true,
-            listeners : {
-                'change' : this.checkDateInput,
-                scope: this
-            }
+            hideLabel : true
 
         });
 
         this.repeatType.on('select', function(combo, record) {
+						this.checkDateInput();
             this.changeRepeat(record.data.value);
         }, this);
 
