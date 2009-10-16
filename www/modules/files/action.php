@@ -296,8 +296,9 @@ try{
 					{
 						require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
 						$cf = new customfields();
-
-						$cf->update_fields($GO_SECURITY->user_id, $file_id, 6, $props, true);
+						
+						$cf->insert_cf_row(6, $file_id);
+						$cf->update_fields($GO_SECURITY->user_id, $file_id, 6, $props, false);
 					}
 
 

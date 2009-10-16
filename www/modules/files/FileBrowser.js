@@ -49,7 +49,7 @@ GO.files.FileBrowser = function(config){
 
 	this.treePanel = new Ext.tree.TreePanel({
 		region:'west',
-		title:GO.lang.locations,
+		//title:GO.lang.locations,
 		layout:'fit',
     split:true,
 		autoScroll:true,
@@ -60,6 +60,7 @@ GO.files.FileBrowser = function(config){
 		rootVisible:false,
 		containerScroll: true,
 		collapsible:true,
+		collapseMode:'mini',
 		ddAppendOnly: true,
 		ddGroup : 'FilesDD',
 		enableDD:true,
@@ -140,20 +141,30 @@ GO.files.FileBrowser = function(config){
 				if(dragEvent.data.selections[i].data.extension=='folder')
 				{
 					var moveid = dragEvent.data.selections[i].data.id;
+					var parentid = dragEvent.data.selections[i].data.parent_id;
 					var targetid = dragEvent.target.id;
 					
-					if(moveid==targetid)
+					if(moveid==targetid || parentid==targetid)
 					{
 						return false;
-					}					
+					}
+				
 					var dragNode = this.treePanel.getNodeById(moveid);
-					if(dragEvent.target.isAncestor(dragNode))
+					if(dragNode.parentNode.id == targetid || dragEvent.target.isAncestor(dragNode))
 					{
 						return false;
 					}
 					return true;
 				}
 			}			
+		}else
+		{
+			var parentId = this.treePanel.getNodeById(dragEvent.dropNode.id).parentNode.id;
+			if(parentId == dragEvent.target.id)
+			{
+				return false
+			}
+			return true;
 		}
 	}, this);
 
@@ -212,7 +223,7 @@ GO.files.FileBrowser = function(config){
 	
 	this.gridPanel = new GO.grid.GridPanel( {
 			layout:'fit',
-			id:this.id+'-fs-grid',
+			id:config.id+'-fs-grid',
 			split:true,
 			store: this.gridStore,
 			paging:true,
@@ -921,11 +932,15 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 						var treeNode = this.treePanel.getNodeById(records[0].data.id);
 						if(treeNode)
 						{
-							if(this.folder_id.indexOf(records[0].data.id)>-1 || (treeNode.parentNode && treeNode.parentNode.id==this.folder_id))
-							{
-								this.setFolderID(treeNode.parentNode.id);
-							}
+							//parentNode is destroyed after remove so keep it for later use
+							var parentNodeId = treeNode.parentNode.id;
 							treeNode.remove();
+							
+							var activeTreenode = this.treePanel.getNodeById(this.folder_id);
+							if(!activeTreenode){
+								//current folder must have been removed. Let's go up.
+								this.setFolderID(parentNodeId);
+							}
 						}
 					}
 				},
@@ -1024,14 +1039,14 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	paste : function(pasteMode, destination, records)
 	{
 		var paste_sources = Array();
-		var folderSelected = false;
+		//var folderSelected = false;
 		for(var i=0;i<records.length;i++)
 		{
 			paste_sources.push(records[i].data['type_id']);
-			if(records[i].data['extension']=='folder')
+			/*if(records[i].data['extension']=='folder')
 			{
 				folderSelected = true;
-			}
+			}*/
 		}
 		
 		var params = {			
