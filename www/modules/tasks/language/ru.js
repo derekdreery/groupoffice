@@ -46,3 +46,4 @@ GO.tasks.lang.scheduleCall='Запланировать звонок';
 GO.tasks.lang.call='Звонок';
 GO.tasks.lang.taskDefaults='Установки по умолчанию для задач';
 GO.tasks.lang.daysBeforeStart='Дней до начала';
+GO.tasks.lang.defaultTasklist='Список задачь по умолчанию'; 

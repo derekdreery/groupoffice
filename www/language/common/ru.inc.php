@@ -8,6 +8,24 @@
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_base_language_file('common'));
 
+$lang['common']['about']='Версия: %s
+
+Copyright (c) 2003-2009, Intermesh
+All rights reserved.
+This program is protected by copyright law and the Group-Office license.
+
+For support questions contact your webmaster:
+%s
+
+For more information about Group-Office visit:
+http://www.group-office.com
+
+Group-Office is created by Intermesh. For more information about Intermesh visit:
+http://www.intermesh.nl/en/';
+
+$lang['common']['totals']='Всего';
+$lang['common']['printPage']='Стр. %s из %s';
+
 $lang['common']['htmldirection']= 'ltr';
 
 $lang['common']['quotaExceeded']='Закончилось место на диске. Пожалуйста удалите какие-нибуть файлы или попростите Вашего провайдера увеличить объем дискового пространства.';
@@ -18,12 +36,14 @@ $lang['common']['moduleRequired']='Для этой функции требует
 $lang['common']['loadingCore']= 'Загрузка основной системы';
 $lang['common']['loadingLogin'] = 'Загрузка диалога входа в систему';
 $lang['common']['renderInterface']='Отображение интерфейса';
-$lang['common']['loadingModule'] = 'Загрузка модулей';
+$lang['common']['loadingModules']='Загрузка модулей';
+$lang['common']['loadingModule'] = 'Загрузка модуля';
 
 $lang['common']['loggedInAs'] = "Вошли как ";
 $lang['common']['search']='Поиск';
 $lang['common']['settings']='Настройки';
 $lang['common']['adminMenu']='Меню администратора';
+$lang['common']['startMenu']='Стартовое меню';
 $lang['common']['help']='Помощь';
 $lang['common']['logout']='Выход';
 $lang['common']['badLogin'] = 'Неверное имя пользователя или пароль';
@@ -36,9 +56,9 @@ $lang['common']['deleteError']='Ошибка во время удаления д
 $lang['common']['selectError']='Ошибка во время чтения данных';
 $lang['common']['missingField'] = 'Вы не заполнили все необходимые поля.';
 $lang['common']['invalidEmailError']='Не верный e-mail адрес';
+$lang['common']['invalidDateError']='Вы ввели неверную дату.';
 $lang['common']['noFileUploaded']='Файл не принят';
 $lang['common']['error']='Ошибка';
-
 
 $lang['common']['salutation']='приветствие';
 $lang['common']['firstName'] = 'Имя';
@@ -68,6 +88,7 @@ $lang['common']['username'] = 'Имя пользователя';
 $lang['common']['password'] = 'Пароль';
 $lang['common']['authcode'] = 'Код авторизации';
 $lang['common']['country'] = 'Страна';
+$lang['common']['address_format']='Формат адреса';
 $lang['common']['state'] = 'Область';
 $lang['common']['city'] = 'Город';
 $lang['common']['zip'] = 'Почтовый индекс';
@@ -160,16 +181,18 @@ $lang['common']['files']='Файлы';
 $lang['common']['email']='E-mail';
 $lang['common']['total']='Итого';
 
-$lang['common']['lost_password_subject']='Новый пароль';
-$lang['common']['lost_password_body']='%s,<br />
-<br />
-Вы просите создать новый пароль для %s.<br />
-<br />
-Ваши данные для входа:<br />
-<br />
-Имя пользователя: %s<br />
-Пароль: %s';
+$lang['common']['confirm_leave']='Вы потеряете несозраненные данные если выйдете из Group-Office';
+$lang['common']['dataSaved']='Сохранено...';
 
-$lang['common']['lost_password_error']='В базе данных нет указанного e-mail адреса.';
-$lang['common']['lost_password_success']='Новый пароль выслан на ваш e-mail адрес.';
+$lang['common']['uploadMultipleFiles'] = 'Нажмите на  \'Обзор\' для выбора файлов и/или папок на Вашем компьютере. Нажмите \'Выгрузить\' для отправки этих файлов в Group-Office. Это окно закроется автоматически когда закончится передача фалов.';
 
+
+$lang['common']['loginToGO']='Нажмите здесь чтобы войти в Group-Office';
+$lang['common']['links']='Ссылки';
+$lang['common']['GOwebsite']='Официальный сайт Group-Office';
+$lang['common']['GOisAProductOf']='<i>Group-Office</i> - это продукт коипании <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
+
+$lang['common']['yes']='Да';
+$lang['common']['no']='Нет';
+
+$lang['commmon']['logFiles']='Журналы';

@@ -9,7 +9,7 @@
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_language_file('summary'));
 
-$lang['summary']['name']='Резюме';
+$lang['summary']['name']='Начальная страница';
 $lang['summary']['description']='Модуль для отображения обобщенной информации.';
 
 $lang['summary']['default_rss_url']='http://static.feed.rbc.ru/rbc/internal/rss.rbc.ru/rbc.ru/news.rss';
