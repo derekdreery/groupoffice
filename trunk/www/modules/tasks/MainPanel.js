@@ -82,6 +82,7 @@ GO.tasks.MainPanel = function(config){
 	});
 
 	this.gridPanel = new GO.tasks.TasksPanel( {
+		title:GO.tasks.lang.tasks,
 				region:'center'								
 			});
 			
@@ -97,6 +98,9 @@ GO.tasks.MainPanel = function(config){
 	this.gridPanel.store.on('load', function(store){
 		this.deleteButton.setDisabled(!store.reader.jsonData.write_permission);		
 		this.addButton.setDisabled(!store.reader.jsonData.write_permission);
+
+		this.gridPanel.setTitle(this.tasklist_name);
+		
 	}, this);
 	
 	this.taskPanel = new GO.tasks.TaskPanel({
