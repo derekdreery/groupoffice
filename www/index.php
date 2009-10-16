@@ -17,6 +17,7 @@ require_once("Group-Office.php");
 //will do autologin here before theme is loaded.
 $GO_SECURITY->logged_in();
 
+
 if(isset($_REQUEST['task']) && $_REQUEST['task']=='logout')
 {
 	$GO_SECURITY->logout();	

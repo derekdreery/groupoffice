@@ -108,7 +108,7 @@ GO.email.lang.toggleWindowPosition='Nachrichtenansicht umschalten';
 GO.email.lang.closeUploadDialog='Schließen Sie zuerst den Upload-Dialog oder warten Sie, bis der Upload beendet ist';
 GO.email.lang.signature='Signatur';
 GO.email.defaultProgram='Standard E-Mail-Programm';
-GO.email.defaultProgramInstructions ='<p>Um GroupOffice als Ihr Standard E-Mail-Programm einzurichten, lesen Sie bitte <a class="normal-link" href="http://www.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client" target="_blank">diese Anweisungen</a>.</p><p>Unter Windows müssen Sie dann noch <a class="normal-link" href="'+GO.settings.modules.email.url+'register_email.php">diese Regdatei</a> herunterladen und ausführen/importieren</p>';
+GO.email.defaultProgramInstructions ='<p>Um GroupOffice als Ihr Standard E-Mail-Programm einzurichten, lesen Sie bitte <a class="normal-link" href="http://www.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client" target="_blank">diese Anweisungen</a>.</p><p>Unter Windows müssen Sie dann noch <a class="normal-link" href="{url}">diese Regdatei</a> herunterladen und ausführen/importieren</p>';
 GO.email.lang.htmlMarkup='HTML-Formatierung verwenden';
 GO.email.lang.confirmLostChanges='Änderungen werden verloren gehen. Sind Sie sicher?';
 GO.email.lang.alias='Alias';

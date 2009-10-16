@@ -123,4 +123,4 @@ GO.email.lang.closeUploadDialog='Κλείσιμο του παραθύρου δι
 GO.email.lang.signature='Υπογραφή';
 
 GO.email.defaultProgram='Προεπιλογή προγράμματος ηλεκτρονικού ταχυδρομείου';
-GO.email.defaultProgramInstructions ='<p>Για να ορίσετε το Group-Office σαν το προεπιλεγμένο πρόγραμμα ηλεκτρονικού ταχυδρομείου παρακαλούμε <a class="normal-link" href="http://www.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client" target="_blank">διαβάστε τις οδηγίες</a>.</p><p>Έπειτα, εάν χρησιμοποιείτε Windows θα πρέπει να κατεβάσετε και να τρέξτε <a class="normal-link" href="'+GO.settings.modules.email.url+'register_email.php">αυτό το αρχείο καταχώρησης</a></p>';
+GO.email.defaultProgramInstructions ='<p>Για να ορίσετε το Group-Office σαν το προεπιλεγμένο πρόγραμμα ηλεκτρονικού ταχυδρομείου παρακαλούμε <a class="normal-link" href="http://www.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client" target="_blank">διαβάστε τις οδηγίες</a>.</p><p>Έπειτα, εάν χρησιμοποιείτε Windows θα πρέπει να κατεβάσετε και να τρέξτε <a class="normal-link" href="{url}">αυτό το αρχείο καταχώρησης</a></p>';

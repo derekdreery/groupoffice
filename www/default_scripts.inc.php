@@ -95,6 +95,7 @@ if($GO_CONFIG->debug || !file_exists($path)) {
 	}
 	echo "\n<!-- regenerated script -->\n";
 
+	$scripts[]=$root_uri.'javascript/ModuleManager.js';
 
 	$scripts[]=$root_uri.'language/common/en.js';
 	$scripts[]=$root_uri.'modules/users/language/en.js';
@@ -112,6 +113,29 @@ if($GO_CONFIG->debug || !file_exists($path)) {
 			$scripts[]=$root_uri.'modules/users/language/'.$GO_LANGUAGE->language.'.js';
 		}
 	}
+
+
+	if($GO_SECURITY->logged_in()) {
+		//load language first so it can be overridden
+		foreach($GO_MODULES->modules as $module) {
+			if($module['read_permission']) {
+
+				$module_uri = $GO_CONFIG->debug ? $module['url'] : $module['path'];
+
+				if(file_exists($module['path'].'language/en.js')) {
+					$scripts[]=$module_uri.'language/en.js';
+				}
+
+				if($GO_LANGUAGE->language!='en' && file_exists($module['path'].'language/'.$GO_LANGUAGE->language.'.js')) {
+					$scripts[]=$module_uri.'language/'.$GO_LANGUAGE->language.'.js';
+				}
+			}
+		}
+	}
+
+
+	
+
 
 	$dynamic_debug_scripts=array();
 
@@ -131,6 +155,8 @@ if($GO_CONFIG->debug || !file_exists($path)) {
 	}
 
 
+
+
 	include($GO_LANGUAGE->get_base_language_file('countries'));
 	//array_multisort($countries);
 	$fp=fopen($GO_CONFIG->file_storage_path.'cache/countries.js','w');
@@ -146,6 +172,8 @@ if($GO_CONFIG->debug || !file_exists($path)) {
 		$dynamic_debug_script=$GO_CONFIG->file_storage_path.'cache/countries.js';
 		$scripts[]=$GO_CONFIG->host.'compress.php?file=countries.js&mtime='.filemtime($dynamic_debug_script);
 	}
+
+	$scripts[]=$root_uri.'javascript/LanguageLoaded.js';
 
 
 
@@ -196,6 +224,7 @@ foreach($GO_MODULES->modules as $module) {
 
 $scripts=array();
 
+
 if($GO_SECURITY->logged_in()) {
 
 	foreach($GO_MODULES->modules as $module) {
@@ -212,14 +241,6 @@ if($GO_SECURITY->logged_in()) {
 		if($module['read_permission']) {
 
 			$module_uri = $GO_CONFIG->debug ? $module['url'] : $module['path'];
-
-			if(file_exists($module['path'].'language/en.js')) {
-				$scripts[]=$module_uri.'language/en.js';
-			}
-
-			if($GO_LANGUAGE->language!='en' && file_exists($module['path'].'language/'.$GO_LANGUAGE->language.'.js')) {
-				$scripts[]=$module_uri.'language/'.$GO_LANGUAGE->language.'.js';
-			}
 
 			if(file_exists($module['path'].'scripts.txt') && $GO_CONFIG->debug) {
 				$data = file_get_contents($module['path'].'scripts.txt');

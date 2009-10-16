@@ -73,8 +73,7 @@ GO.users.AccountPanel = function(config)
 			},{
 				items:this.invitationField
 			}]
-		},
-		
+		}		
 	];
 
 	GO.users.AccountPanel.superclass.constructor.call(this, config);		

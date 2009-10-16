@@ -139,7 +139,7 @@ GO.email.lang.closeUploadDialog='Сначала закройте диалог с
 GO.email.lang.signature='Подпись';
 
 GO.email.defaultProgram='Почтовая программа по умолчанию';
-GO.email.defaultProgramInstructions ='<p>Чтобы установить Group-Office как почтовую программу по умолчанию перейдите на <a class="normal-link" href="http://www.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client" target="_blank">read the instructions</a>.</p><p>Затем если Вы используете Windows загрузите и откройте <a class="normal-link" href="'+GO.settings.modules.email.url+'register_email.php"> файл</a></p>';
+GO.email.defaultProgramInstructions ='<p>Чтобы установить Group-Office как почтовую программу по умолчанию перейдите на <a class="normal-link" href="http://www.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client" target="_blank">read the instructions</a>.</p><p>Затем если Вы используете Windows загрузите и откройте <a class="normal-link" href="{url}"> файл</a></p>';
 
 
 GO.email.lang.htmlMarkup = 'Использовать HTML маркировку';
