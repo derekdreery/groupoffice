@@ -18,6 +18,8 @@
 */
 
 
+GO.lang.exportHiddenColumns='Экспортировать со скрытыми колонками';
+GO.lang.searchQuery='запрос для поиска';
 GO.lang.pleaseApplyFirst='Пожалуйста сохраните изменения нажав \'Применить\'';
 GO.lang.passwordMatchError='Пароли не совпадают';
 GO.lang.serverError='На WEB-сервере возникла ошибка. Сообщите об этом системному администратору и предоставьте ему подробное описание ошибки.';
@@ -84,6 +86,7 @@ GO.lang.strZip = 'Почтовый индекс';
 GO.lang.strCity = 'Город';
 GO.lang.strState = 'Область';
 GO.lang.strCountry = 'Страна';
+GO.lang.strAddressFormat = 'Формат адреса';
 GO.lang.strHomepage = 'WEB-страница';
 GO.lang.strCompany = 'Компания';
 GO.lang.strDepartment = 'Отдел';
@@ -237,6 +240,8 @@ GO.lang.strYear="Год";
 GO.lang.strYears="Лет";
 GO.lang.strTime='Время';
 
+GO.lang.selectWeek='Выберите неделю';
+
 GO.lang.shortDays = ['Вск', 'Пон', 'Вт', 'Ср', 'Чтв', 'Птн','Суб'];
 
 GO.lang.noRecurrence = 'Нет повторений';
@@ -244,6 +249,7 @@ GO.lang.monthsByDate = 'Ежемесячно по дате';
 GO.lang.monthsByDay = 'Ежемесячно по дню';
 
 GO.lang.strSelectFiles='Выберите файлы';
+GO.lang.strSelectFile='Выберите файл';
 GO.lang.strFiles='Файлы';
 GO.lang.strSubject='Тема';
 GO.lang.strLocation='Место';
@@ -298,5 +304,19 @@ GO.lang.insertImage='Вставить изображение в текст';
 GO.lang.item='пункт';
 GO.lang.items='пунктов';
 
+GO.lang.more='Еще';
+
 GO.lang.on ='Вкл';
 GO.lang.off ='Выкл';
+
+GO.lang.keyword='Ключевое слово';
+
+
+GO.lang.total='Всего';
+
+GO.lang.closeApps='Закрыть приложения';
+GO.lang.rightClickToClose='Нажмите правой кнопкой мыши на заголовке панели закладок чтобы закрыть ее.';
+
+GO.lang.adminMenu = 'Меню Администратора';
+
+GO.lang.administration='Администрация';

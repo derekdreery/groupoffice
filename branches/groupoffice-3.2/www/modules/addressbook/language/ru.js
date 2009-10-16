@@ -1,4 +1,4 @@
-/** 
+/**
  * Copyright Intermesh
  * 
  * This file is part of Group-Office. You should have received a copy of the
@@ -85,10 +85,10 @@ GO.addressbook.lang.cmdPanelAddressbook= 'Адресные книги';
 GO.addressbook.lang.cmdPanelProperties= 'Свойства';
 GO.addressbook.lang.cmdContactDialog= 'Редактировать контакт';
 GO.addressbook.lang.cmdFormLabelFileType= 'Тип файла';
-GO.addressbook.lang.cmdFormLabelFile= 'Файл';	
+GO.addressbook.lang.cmdFormLabelFile= 'Файл';
 GO.addressbook.lang.cmdFormLabelValueSeperated= 'Значения разделяются';
 GO.addressbook.lang.cmdFormLabelValueIncluded= 'Значения объединяются';
-GO.addressbook.lang.cmdFormLabelLinesEnded= 'Сроки оканчиваются';
+GO.addressbook.lang.cmdFormLabelLinesEnded= 'Строки оканчиваются';
 GO.addressbook.lang.cmdUpload= 'Разместить на сервере';
 GO.addressbook.lang.cmdImport= 'Импортировать';
 GO.addressbook.lang.cmdExport= 'Экспортировать';
@@ -110,3 +110,7 @@ GO.addressbook.lang.confirmCreate='Не найден контакт. Хотит�
 GO.addressbook.lang.matchFields='Совпадения в полях';
 
 GO.addressbook.lang.advancedSearch='Расширенный поиск';
+GO.addressbook.lang.defaultAddressFormat='Формат адреса';
+GO.addressbook.lang.defaultSalutation='Приветствие по умолчанию';
+GO.addressbook.lang.explanationVariables='Пояснения к параметрам приветствия';
+GO.addressbook.lang.explanationSex='Форма приветствия для мужчины и женщины';
