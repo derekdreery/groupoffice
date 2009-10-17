@@ -1,4 +1,4 @@
-
+javascript/ModuleManager.js
 javascript/overrides.js
 javascript/Date.js
 javascript/DeployJava.js
