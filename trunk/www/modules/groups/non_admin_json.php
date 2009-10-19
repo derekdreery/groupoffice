@@ -24,6 +24,35 @@ $limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 switch ($_POST['task'])
 {
 	case 'groups':
+		if(isset($_POST['delete_keys']))
+		{
+			try{
+				if(!$GO_MODULES->modules['groups']['read_permission'])
+				{
+					throw new AccessDeniedException();
+				}
+
+				$response['deleteSuccess']=true;
+				$groups = json_decode(($_POST['delete_keys']));
+
+				foreach($groups as $group_id)
+				{
+					if ($group_id == 1)
+					{
+						throw new Exception($lang['groups']['noDeleteAdmins']);
+					} elseif($group_id == 2) {
+						throw new Exception($lang['groups']['noDeleteEveryone']);
+					} else {
+						$GO_GROUPS->delete_group($group_id);
+					}
+				}
+			}catch(Exception $e)
+			{
+				$response['deleteSuccess']=false;
+				$response['deleteFeedback']=$e->getMessage();
+			}
+		}
+		
 		$response['total'] = $GO_GROUPS->get_groups(null, $start, $limit, $sort, $dir);
 		$response['results']=array();
 		while($GO_GROUPS->next_record())
