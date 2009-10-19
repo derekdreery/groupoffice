@@ -162,3 +162,5 @@ GO.email.lang.moving='Moving...';
 
 GO.email.lang.orderFilters='You can change the order of filters by dragging.';
 GO.email.lang.orderAccounts='You can change the order of accounts by dragging.';
+
+GO.email.lang.groups='Groups';
