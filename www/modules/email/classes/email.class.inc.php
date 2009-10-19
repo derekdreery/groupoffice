@@ -1052,7 +1052,7 @@ class email extends db
 	function get_filters($account_id)
 	{
 		$sql = "SELECT * FROM em_filters WHERE account_id='".$this->escape($account_id)."' ".
-		" ORDER BY priority DESC";
+		" ORDER BY priority ASC";
 		$this->query($sql);
 		return $this->num_rows();
 	}

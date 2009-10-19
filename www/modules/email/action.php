@@ -1030,6 +1030,19 @@ try{
 						$insert=true;
 					}
 					break;
+
+				case 'save_filters_sort_order':
+
+					$sort_order = json_decode(($_POST['sort_order']), true);
+
+					foreach($sort_order as $filter_id=>$sort_index)
+					{
+						$filter['id'] = $filter_id;
+						$filter['priority']=$sort_index;
+						$email->update_filter($filter);						
+					}
+					$success=true;
+					break;
 					/* {TASKSWITCH} */
 	}
 }catch(Exception $e)
