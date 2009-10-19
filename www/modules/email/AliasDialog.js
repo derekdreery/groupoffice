@@ -129,11 +129,13 @@ Ext.extend(GO.email.AliasDialog, Ext.Window, {
 										xtype : 'textfield',
 										name : 'name',
 										anchor : '100%',
+										allowBlank:false,
 										fieldLabel : GO.lang.strName
 									}, {
 										xtype : 'textfield',
 										name : 'email',
 										anchor : '100%',
+										allowBlank:false,
 										fieldLabel : GO.email.lang.email
 									}, {
 										xtype : 'textarea',
