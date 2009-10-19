@@ -91,6 +91,47 @@ GO.email.AddressbookDialog = function(config) {
 
 	items.push(this.usersGrid);
 
+	this.userGroupsStore = new GO.data.JsonStore({
+		url : GO.settings.modules.groups.url + 'non_admin_json.php',
+		baseParams : {
+			task : 'groups'
+		},
+		id : 'id',
+		root : 'results',
+		fields: ['id', 'name', 'user_id', 'user_name'],
+		totalProperty : 'total',
+		remoteSort : true
+	});
+
+	this.userGroupsGrid = new GO.grid.GridPanel({
+		title : GO.email.lang.groups,
+		paging : true,
+		border : false,
+		store : this.userGroupsStore,
+		view : new Ext.grid.GridView({
+			autoFill : true,
+			forceFit : true
+		}),
+		columns : [{
+			header : GO.lang['strName'],
+			dataIndex : 'name',
+			css : 'white-space:normal;',
+			sortable : true
+		}, {
+			header : GO.lang['strOwner'],
+			dataIndex : 'user_name',
+			css : 'white-space:normal;',
+			sortable : true
+		}],
+		sm : new Ext.grid.RowSelectionModel()
+	});
+
+	this.userGroupsGrid.on('show', function() {
+		this.userGroupsStore.load();
+	}, this);
+	
+	items.push(this.userGroupsGrid);
+
 	if (GO.addressbook) {
 		this.contactsStore = new GO.data.JsonStore({
 					url : GO.settings.modules.addressbook.url + 'json.php',
@@ -296,8 +337,34 @@ Ext.extend(GO.email.AddressbookDialog, Ext.Window, {
 						scope:this
 					});
 
-				} else {
+				}else
+				if(activeGrid == this.userGroupsGrid)
+				{
+					var user_groups = [];
 
+					for(var i=0;i<selections.length;i++)
+					{
+						user_groups.push(selections[i].data.id);
+					}
+
+					this.el.mask(GO.lang.waitMsgLoad);
+					Ext.Ajax.request({
+						url: GO.settings.modules.groups.url+'non_admin_json.php',
+						params: {
+								task:'user_groups_string',
+								user_groups: user_groups.join(',')
+							},
+						callback: function(options, success, response)
+						{
+							str = response.responseText;
+							this.fireEvent('addrecipients', field, str);
+							this.el.unmask();
+						},
+						scope:this
+					});
+				}
+				else
+				{
 					var emails = [];
 
 					for (var i = 0; i < selections.length; i++) {
