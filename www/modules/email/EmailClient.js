@@ -1413,7 +1413,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		if(!this.accountsDialog)
 		{
 			this.accountsDialog = new GO.email.AccountsDialog();
-			this.accountsDialog.accountsGrid.accountDialog.on('save', function(dialog, result){
+			this.accountsDialog.accountDialog.on('save', function(dialog, result){
 					if(result.refreshNeeded){
 						this.refresh();
 					}

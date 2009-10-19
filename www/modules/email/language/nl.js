@@ -138,3 +138,6 @@ GO.email.lang.alias="Alias";
 GO.email.lang.aliases="Aliasen";
 GO.email.lang.accountId="Account";
 GO.email.lang.email="E-mail";
+
+GO.email.lang.orderFilters='U kunt door slepen de volgorde van filters veranderen.';
+GO.email.lang.orderAccounts='U kunt door slepen de volgorde van accounts veranderen.';

@@ -19,8 +19,10 @@ GO.email.AccountsGrid = function(config){
 	}
 	
 	config.layout='fit';
+	config.border=false;
+	config.enableDragDrop= true;
+	config.ddGroup = 'EmailAccountsDD';
 	config.autoScroll=true;
-	
 	config.store = new GO.data.JsonStore({
 		url: GO.settings.modules.email.url+'json.php',
 		baseParams: {		
@@ -31,24 +33,23 @@ GO.email.AccountsGrid = function(config){
 		id: 'id',
 		fields:['id','email','host', 'user_name'],
 		remoteSort: true
-	});
-	
+	});	
 	config.store.setDefaultSort('utime', 'asc');
-	
-	
-	
 	config.paging=true;
-	var columnModel =  new Ext.grid.ColumnModel([{
-						header:GO.lang.strEmail,
-						dataIndex: 'email'
-					},{
-						header:GO.lang.strOwner,
-						dataIndex: 'user_name',
-						sortable: false
-					},{
-						header:GO.email.lang.host,
-						dataIndex: 'host'
-					}]);
+	
+	var columnModel = new Ext.grid.ColumnModel([
+		{
+			header:GO.lang.strEmail,
+			dataIndex: 'email'
+		},{
+			header:GO.lang.strOwner,
+			dataIndex: 'user_name',
+			sortable: false
+		},{
+			header:GO.email.lang.host,
+			dataIndex: 'host'
+		}]
+	);
 	columnModel.defaultSortable = false;
 	config.cm=columnModel;
 	
@@ -59,63 +60,12 @@ GO.email.AccountsGrid = function(config){
 	});
 	
 	config.sm=new Ext.grid.RowSelectionModel();
-	config.loadMask=true;
+	config.loadMask=true;			
 	
-			
-	config.border=false;		
-	config.enableDragDrop= true;
-	config.ddGroup = 'EmailAccountsDD';
-	
-	if(GO.settings.modules.email.write_permission)
-	{
-		config.tbar= [{
-						iconCls: 'btn-add',
-						text: GO.lang.cmdAdd,
-						cls: 'x-btn-text-icon',
-						handler: function(){
-							this.accountDialog.show();
-						},
-						scope: this
-					},{
-						iconCls: 'btn-delete',
-						text: GO.lang.cmdDelete,
-						cls: 'x-btn-text-icon',
-						handler: function(){
-							this.deleteSelected({
-								callback: function(){										 
-									if(GO.email.aliasesStore.loaded)
-									{
-										GO.email.aliasesStore.reload();
-									}
-									this.fireEvent('delete', this);
-								},
-								scope: this
-							});					
-						},
-						scope:this						
-					}];
-	}	
-	
-	GO.email.AccountsGrid.superclass.constructor.call(this, config);
-	
+	GO.email.AccountsGrid.superclass.constructor.call(this, config);	
+
 	this.addEvents({'delete':true});
 
-	this.accountDialog = new GO.email.AccountDialog();
-	this.accountDialog.on('save', function(){   
-			this.store.reload();	 
-			if(GO.email.aliasesStore.loaded)
-			{
-				GO.email.aliasesStore.reload();
-			}
-	}, this);
-	
-	this.on('rowdblclick', function(grid, rowIndex){
-		var record = grid.getStore().getAt(rowIndex);	
-		
-		this.accountDialog.show(record.data.id);
-		
-		}, this);
-	
 };
 
 Ext.extend(GO.email.AccountsGrid, GO.grid.GridPanel,{
@@ -131,7 +81,7 @@ Ext.extend(GO.email.AccountsGrid, GO.grid.GridPanel,{
 	},
 	onNotifyDrop : function(dd, e, data)
 	{
-		
+	
 		var rows=this.selModel.getSelections();
 		var dragData = dd.getDragData(e);
 		var cindex=dragData.rowIndex;

@@ -19,27 +19,86 @@ GO.email.AccountsDialog = function(config){
 		config={};
 	}
 	
-	this.accountsGrid = new GO.email.AccountsGrid();
-	
+	this.accountsGrid = new GO.email.AccountsGrid({
+		region:'center'
+	});
+	this.accountDialog = new GO.email.AccountDialog();
+
 	config.maximizable=true;
-	config.layout='fit';
+	config.layout='border';
 	config.modal=false;
 	config.resizable=false;
+	config.border=false;
 	config.width=500;
 	config.height=400;
 	config.closeAction='hide';
-	config.title= GO.email.lang.accounts;					
-	config.items=this.accountsGrid;
+	config.title=GO.email.lang.accounts;	
+
+	var tbar;
+	if(GO.settings.modules.email.write_permission)
+	{
+		tbar = [{
+			iconCls: 'btn-add',
+			text: GO.lang.cmdAdd,
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				this.accountDialog.show();
+			},
+			scope: this
+		},{
+			iconCls: 'btn-delete',
+			text: GO.lang.cmdDelete,
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				this.accountsGrid.deleteSelected({
+					callback: function(){
+						if(GO.email.aliasesStore.loaded)
+						{
+							GO.email.aliasesStore.reload();
+						}
+						this.accountsGrid.fireEvent('delete', this);
+					},
+					scope: this
+				});
+			},
+			scope:this
+		}];
+	}
+	config.tbar=tbar;
+
 	config.ddGroup="EmailAccountsDD";
-	config.buttons=[			
-			{				
-				text: GO.lang.cmdClose,
-				handler: function(){this.hide();},
-				scope: this
-			}
-		]
-		
-	GO.email.AccountsDialog.superclass.constructor.call(this, config);
+	config.buttons=[{
+		text: GO.lang.cmdClose,
+		handler: function(){this.hide();},
+		scope: this
+	}];
+
+	config.items=[{
+		xtype:'panel',
+		region:'north',
+		height:25,
+		border:true,
+		html:GO.email.lang.orderAccounts,
+		bodyStyle:'padding:5px'
+	}, this.accountsGrid];
+
+	this.accountDialog.on('save', function(){
+		this.accountsGrid.store.reload();
+		if(GO.email.aliasesStore.loaded)
+		{
+			GO.email.aliasesStore.reload();
+		}
+	}, this);
+
+	this.accountsGrid.on('rowdblclick', function(grid, rowIndex){
+		var record = grid.getStore().getAt(rowIndex);
+
+		this.accountDialog.show(record.data.id);
+
+	}, this);
+
+	GO.email.AccountsDialog.superclass.constructor.call(this, config);	
+
 }
 Ext.extend(GO.email.AccountsDialog, Ext.Window,{
 	
