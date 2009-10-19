@@ -244,17 +244,8 @@ GO.email.AccountDialog = function(config) {
 
     // end incomming tab
 
-    var propertiesTab = {
-        title : GO.lang.strProperties,
-        layout : 'form',
-        anchor : '100% 100%',
-        defaultType : 'textfield',
-        autoHeight : true,
-        cls : 'go-form-panel',
-        labelWidth : 100,
-        items : [
-		
-        this.selectUser = new GO.form.SelectUser({
+	var properties_items = [
+		this.selectUser = new GO.form.SelectUser({
             fieldLabel : GO.lang.strUser,
             disabled : !GO.settings.modules['email']['write_permission'],
             anchor : '100%'
@@ -281,16 +272,32 @@ GO.email.AccountDialog = function(config) {
             fieldLabel : GO.email.lang.signature,
             height : 100,
             anchor : '100%'
-        }, this.aliasesButton = new Ext.Button({
-            text : GO.email.lang.manageAliases,
-            handler : function() {
-                if (!this.aliasesDialog) {
-                    this.aliasesDialog = new GO.email.AliasesDialog();
-                }
-                this.aliasesDialog.show(this.account_id);
-            },
-            scope : this
-        })]
+        }
+	];
+
+	this.aliasesButton = new Ext.Button({
+		text : GO.email.lang.manageAliases,
+		handler : function() {
+			if (!this.aliasesDialog) {
+				this.aliasesDialog = new GO.email.AliasesDialog();
+			}
+			this.aliasesDialog.show(this.account_id);
+		},
+		scope : this
+	})
+
+	if(GO.settings.modules.email.write_permission)
+		properties_items.push(this.aliasesButton);
+
+    var propertiesTab = {
+        title : GO.lang.strProperties,
+        layout : 'form',
+        anchor : '100% 100%',
+        defaultType : 'textfield',
+        autoHeight : true,
+        cls : 'go-form-panel',
+        labelWidth : 100,
+        items :properties_items
     };
 
     var outgoingTab = {
