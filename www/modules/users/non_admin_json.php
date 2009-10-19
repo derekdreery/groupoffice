@@ -21,17 +21,59 @@ switch($task)
 {
 	case 'users':
 
+		if(isset($_POST['delete_keys']))
+		{
+			require($GO_LANGUAGE->get_language_file('users'));
+			try{
+				if(!$GO_MODULES->modules['users']['read_permission'])
+				{
+					throw new AccessDeniedException();
+				}
+
+				$response['deleteSuccess']=true;
+				$users = json_decode(($_POST['delete_keys']));
+
+				foreach($users as $delete_user_id)
+				{
+					if ($delete_user_id == 1)
+					{
+						throw new Exception($lang['users']['deletePrimaryAdmin']);
+					} elseif($delete_user_id == $GO_SECURITY->user_id) {
+						throw new Exception($lang['users']['deleteYourself']);
+					} else {
+						$GO_USERS->delete_user($delete_user_id);
+					}
+				}
+			}catch(Exception $e)
+			{
+				$response['deleteSuccess']=false;
+				$response['deleteFeedback']=$e->getMessage();
+			}
+		}
+
 		$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'name';
 		$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'ASC';
 		$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
 		$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 		$query = isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : null;
 		$search_field = isset($_REQUEST['search_field']) ? ($_REQUEST['search_field']) : null;
-
-		$response['total'] = $GO_USERS->search($query, $search_field, $GO_SECURITY->user_id, $start, $limit, $sort,$dir);
+		$user_id = isset($_REQUEST['user_id']) ? ($_REQUEST['user_id']) : null;
+		
+		if(isset($user_id))
+		{
+			$user = $GO_USERS->get_user($user_id);
+		}else
+		{
+			$user=false;
+			$user_id = (!$GO_MODULES->modules['users']['read_permission']) ? $GO_SECURITY->user_id : 0;
+			$response['total'] = $GO_USERS->search($query, $search_field, $user_id, $start, $limit, $sort,$dir);
+		}
+		
 		$response['results']=array();
-		while($GO_USERS->next_record())
-		{				
+		while($user || $GO_USERS->next_record())
+		{
+			$user=false;
+			
 			$name = String::format_name($GO_USERS->f('last_name'),$GO_USERS->f('first_name'),$GO_USERS->f('middle_name'));
 			$address = $GO_USERS->f('address').' '.$GO_USERS->f('address_no');
 			$waddress = $GO_USERS->f('work_address').' '.$GO_USERS->f('work_address_no');
