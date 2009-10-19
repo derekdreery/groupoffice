@@ -69,12 +69,13 @@ Ext.extend(GO.email.AccountsTree, Ext.tree.TreePanel, {
 	setUsage : function(usage){		
 			this.statusBar.body.update(usage);
 	},
-	moveFolder : function(dest, src)
+	moveFolder : function(account_id, dest, src)
 	{
 		Ext.Ajax.request({
 			url:GO.settings.modules.email.url+'action.php',
 			params:{
 				task:'move_folder',
+				account_id:account_id,
 				source_id:src,
 				target_id:dest
 			},

@@ -346,8 +346,8 @@ GO.email.EmailClient = function(config){
 									if(responseParams.success)
 									{
 										//remove preloaded children otherwise it won't request the server
-										delete node.attributes.children;
-										node.reload();
+										delete node.parentNode.attributes.children;
+										node.parentNode.reload();
 									}else
 									{
 										Ext.MessageBox.alert(GO.lang.strError,responseParams.feedback);
@@ -566,7 +566,7 @@ GO.email.EmailClient = function(config){
 			}
 		}else
 		{
-			this.treePanel.moveFolder(e.target.id,e.data.node.id);
+			this.treePanel.moveFolder(e.target.attributes['account_id'], e.target.id,e.data.node.id);
 		}		
 	},
 	this);
