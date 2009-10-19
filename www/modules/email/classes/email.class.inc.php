@@ -640,11 +640,11 @@ class email extends db
 
 		return $folder['id'];
 	}
-	function rename_folder($account_id, $old_name, $new_name, $new_parent_id=0)
+	function rename_folder($account_id, $old_name, $new_name, $new_parent_id=-1)
 	{
 		$sql = "UPDATE em_folders SET name='".$this->escape($new_name)."'";
 
-		if($new_parent_id)
+		if($new_parent_id > -1)
 		{
 			$sql .= ",parent_id='".$this->escape($new_parent_id)."' ";
 		}
