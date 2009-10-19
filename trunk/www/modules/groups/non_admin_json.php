@@ -52,8 +52,10 @@ switch ($_POST['task'])
 				$response['deleteFeedback']=$e->getMessage();
 			}
 		}
+
+		$user_id = (!$GO_MODULES->modules['groups']['read_permission']) ? $GO_SECURITY->user_id : 0;
 		
-		$response['total'] = $GO_GROUPS->get_groups(null, $start, $limit, $sort, $dir);
+		$response['total'] = $GO_GROUPS->get_groups($user_id, $start, $limit, $sort, $dir);
 		$response['results']=array();
 		while($GO_GROUPS->next_record())
 		{
@@ -74,6 +76,7 @@ switch ($_POST['task'])
 	case 'users_in_group':
 		$response=array();
 
+		$group_id = $_REQUEST['group_id'];
 		$response['total'] = $GO_GROUPS->get_users_in_group($group_id, $start, $limit, $sort, $dir);
 		$response['results']=array();
 		while($GO_GROUPS->next_record())
@@ -87,6 +90,25 @@ switch ($_POST['task'])
 			$response['results'][] = $record;
 		}
 		echo json_encode($response);
+		break;
+
+	case 'user_groups_string':
+
+		require_once($GO_CONFIG->class_path.'mail/RFC822.class.inc');
+		$RFC822 = new RFC822();
+		$groups = explode(',', $_REQUEST['user_groups']);
+
+		$response = '';
+		foreach($groups as $group_id)
+		{
+			$GO_GROUPS->get_users_in_group($group_id);
+			while($user = $GO_GROUPS->next_record())
+			{
+				if(!empty($user['email']))
+					$response .= $RFC822->write_address(String::format_name($user), $user['email']).', ';
+			}
+		}
+		echo $response;
 		break;
 }
 
