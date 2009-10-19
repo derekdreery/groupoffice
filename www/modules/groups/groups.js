@@ -23,8 +23,8 @@
  	}
 	
 	this.storeAllGroups = new GO.data.JsonStore({
-	    url: GO.settings.modules.groups.url+'json.php',
-	    baseParams: {action: 'groups'},
+	    url: GO.settings.modules.groups.url+'non_admin_json.php',
+	    baseParams: {task: 'groups'},
 	    root: 'results',
 	    id: 'id',
 	    totalProperty:'total',

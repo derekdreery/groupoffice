@@ -30,49 +30,6 @@ $search_field = isset($_REQUEST['search_field']) ? ($_REQUEST['search_field']) :
 
 switch ($action)
 {
-	case 'groups':
-		if(isset($_POST['delete_keys']))
-		{
-			try{
-				$response['deleteSuccess']=true;
-				$groups = json_decode(($_POST['delete_keys']));
-
-				foreach($groups as $group_id)
-				{
-					if ($group_id == 1)
-					{
-						throw new Exception($lang['groups']['noDeleteAdmins']);
-					} elseif($group_id == 2) {
-						throw new Exception($lang['groups']['noDeleteEveryone']);
-					} else {
-						$GO_GROUPS->delete_group($group_id);
-					}
-				}
-			}catch(Exception $e)
-			{
-				$response['deleteSuccess']=false;
-				$response['deleteFeedback']=$e->getMessage();
-			}
-		}
-
-		$response['total'] = $GO_GROUPS->get_groups(null, $start, $limit, $sort, $dir);
-		$response['results']=array();
-		while($GO_GROUPS->next_record())
-		{
-			if ($GO_GROUPS->f('id') != 2)
-			{
-				$record = array(
-					'id' => $GO_GROUPS->f('id'),
-					'name' => $GO_GROUPS->f('name'),
-					'user_id' => $GO_GROUPS->f('user_id'),
-					'user_name' => String::format_name($GO_GROUPS->f('last_name'), $GO_GROUPS->f('first_name'), $GO_GROUPS->f('middle_name'))
-				);
-				$response['results'][] = $record;
-			}
-		}
-
-		echo json_encode($response);
-		break;
 	case 'users_in_group':
 		
 		$response=array();
