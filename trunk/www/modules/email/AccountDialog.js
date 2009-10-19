@@ -56,11 +56,30 @@ GO.email.AccountDialog = function(config) {
         remoteSort : false
     });
 
+	var tbar = [{
+		iconCls : 'btn-add',
+		text : GO.lang.cmdAdd,
+		cls : 'x-btn-text-icon',
+		handler : function() {
+			filter.showDialog(0, this.account_id,
+				this.filtersDS);
+		},
+		scope : this
+	}, {
+		iconCls : 'btn-delete',
+		text : GO.lang.cmdDelete,
+		cls : 'x-btn-text-icon',
+		handler : function() {
+			this.filtersTab.deleteSelected();
+		},
+		scope : this
+	}];
+	
     // create the editor grid
-    this.filtersTab = new GO.grid.GridPanel({
-        title : GO.email.lang.filters,
+    this.filtersGrid = new GO.grid.GridPanel({        
         layout : 'fit',
-        border : true,
+		region:'center',
+        border : false,
         loadMask : true,
 		enableDragDrop:true,
 		ddGroup:'EmailFiltersDD',
@@ -71,30 +90,13 @@ GO.email.AccountDialog = function(config) {
             forceFit : true,
             emptyText : GO.lang.strNoItems
         }),
-        sm : new Ext.grid.RowSelectionModel(),
-        tbar : [{
-            iconCls : 'btn-add',
-            text : GO.lang.cmdAdd,
-            cls : 'x-btn-text-icon',
-            handler : function() {
-                filter.showDialog(0, this.account_id,
-                    this.filtersDS);
-            },
-            scope : this
-        }, {
-            iconCls : 'btn-delete',
-            text : GO.lang.cmdDelete,
-            cls : 'x-btn-text-icon',
-            handler : function() {
-                this.filtersTab.deleteSelected();
-            },
-            scope : this
-        }]
+        sm : new Ext.grid.RowSelectionModel()
+        
     });
 
-	this.filtersTab.on('render', function(){
+	this.filtersGrid.on('render', function(){
 		//enable row sorting
-		var DDtarget = new Ext.dd.DropTarget(this.filtersTab.getView().mainBody,
+		var DDtarget = new Ext.dd.DropTarget(this.filtersGrid.getView().mainBody,
 		{
 			ddGroup : 'EmailFiltersDD',
 			copy:false,
@@ -102,12 +104,28 @@ GO.email.AccountDialog = function(config) {
 		});
 	}, this);
 
-    this.filtersTab.on('rowdblclick', function() {
-        var selectionModel = this.filtersTab.getSelectionModel();
+    this.filtersGrid.on('rowdblclick', function() {
+        var selectionModel = this.filtersGrid.getSelectionModel();
         var record = selectionModel.getSelected();
         filter.showDialog(record.data.id, this.account_id,
             this.filtersDS, GO.email.subscribedFoldersStore);
     }, this);
+
+
+	this.filtersTab = new Ext.Panel({
+		title : GO.email.lang.filters,
+		layout:'border',
+		border:false,
+		tbar:tbar,
+		items:[{
+			xtype:'panel',
+			region:'north',
+			height:25,
+			border:true,
+			html:GO.email.lang.orderFilters,
+			bodyStyle:'padding:5px'
+		}, this.filtersGrid]
+	})
 
     this.filtersTab.on('show', function() {
         // trigger the data store load
@@ -119,7 +137,7 @@ GO.email.AccountDialog = function(config) {
             };
             this.filtersDS.load();
         }
-    }, this);
+    }, this);	
 
     var incomingTab = {
         title : GO.email.lang.incomingMail,
@@ -638,31 +656,31 @@ Ext.extend(GO.email.AccountDialog, Ext.Window, {
 
 	onNotifyDrop : function(dd, e, data)
 	{
-		var rows=this.filtersTab.selModel.getSelections();
+		var rows=this.filtersGrid.selModel.getSelections();
 		var dragData = dd.getDragData(e);
 		var cindex=dragData.rowIndex;
 		if(cindex=='undefined')
 		{
-			cindex=this.filtersTab.store.data.length-1;
+			cindex=this.filtersGrid.store.data.length-1;
 		}
 
 		for(i = 0; i < rows.length; i++)
 		{
-			var rowData=this.filtersTab.store.getById(rows[i].id);
+			var rowData=this.filtersGrid.store.getById(rows[i].id);
 
 			if(!this.copy){
-				this.filtersTab.store.remove(this.filtersTab.store.getById(rows[i].id));
+				this.filtersGrid.store.remove(this.filtersGrid.store.getById(rows[i].id));
 			}
 
-			this.filtersTab.store.insert(cindex,rowData);
+			this.filtersGrid.store.insert(cindex,rowData);
 		}
 
 		//save sort order
 		var filters = {};
 
-		for (var i = 0; i < this.filtersTab.store.data.items.length;  i++)
+		for (var i = 0; i < this.filtersGrid.store.data.items.length;  i++)
 		{
-				filters[this.filtersTab.store.data.items[i].get('id')] = i;
+				filters[this.filtersGrid.store.data.items[i].get('id')] = i;
 		}
 
 		Ext.Ajax.request({
