@@ -62,6 +62,8 @@ GO.email.AccountDialog = function(config) {
         layout : 'fit',
         border : true,
         loadMask : true,
+		enableDragDrop:true,
+		ddGroup:'EmailFiltersDD',
         ds : this.filtersDS,
         cm : cm,
         view : new Ext.grid.GridView({
@@ -88,8 +90,17 @@ GO.email.AccountDialog = function(config) {
             },
             scope : this
         }]
-
     });
+
+	this.filtersTab.on('render', function(){
+		//enable row sorting
+		var DDtarget = new Ext.dd.DropTarget(this.filtersTab.getView().mainBody,
+		{
+			ddGroup : 'EmailFiltersDD',
+			copy:false,
+			notifyDrop : this.onNotifyDrop.createDelegate(this)
+		});
+	}, this);
 
     this.filtersTab.on('rowdblclick', function() {
         var selectionModel = this.filtersTab.getSelectionModel();
@@ -623,7 +634,47 @@ Ext.extend(GO.email.AccountDialog, Ext.Window, {
             },
             scope : this
         });
-    }
+    },
+
+	onNotifyDrop : function(dd, e, data)
+	{
+		var rows=this.filtersTab.selModel.getSelections();
+		var dragData = dd.getDragData(e);
+		var cindex=dragData.rowIndex;
+		if(cindex=='undefined')
+		{
+			cindex=this.filtersTab.store.data.length-1;
+		}
+
+		for(i = 0; i < rows.length; i++)
+		{
+			var rowData=this.filtersTab.store.getById(rows[i].id);
+
+			if(!this.copy){
+				this.filtersTab.store.remove(this.filtersTab.store.getById(rows[i].id));
+			}
+
+			this.filtersTab.store.insert(cindex,rowData);
+		}
+
+		//save sort order
+		var filters = {};
+
+		for (var i = 0; i < this.filtersTab.store.data.items.length;  i++)
+		{
+				filters[this.filtersTab.store.data.items[i].get('id')] = i;
+		}
+
+		Ext.Ajax.request({
+			url: GO.settings.modules.email.url+'action.php',
+			params: {
+				task: 'save_filters_sort_order',
+				sort_order: Ext.encode(filters)
+			}
+		});
+
+	}
+	
 });
 
 var filter = function() {
