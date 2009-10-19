@@ -69,26 +69,28 @@ Ext.extend(GO.email.AccountsTree, Ext.tree.TreePanel, {
 	setUsage : function(usage){		
 			this.statusBar.body.update(usage);
 	},
-	moveFolder : function(account_id, dest, src)
+	moveFolder : function(account_id, target_id, node)
 	{
 		Ext.Ajax.request({
 			url:GO.settings.modules.email.url+'action.php',
 			params:{
 				task:'move_folder',
 				account_id:account_id,
-				source_id:src,
-				target_id:dest
+				source_id:node.id,
+				target_id:target_id
 			},
 			callback:function(options, success, response)
 			{
 				var responseParams = Ext.decode(response.responseText);
-				if(!responseParams.success)
+				if(responseParams.success)
 				{
-					alert(responseParams.feedback);
-					Ext.MessageBox.hide();
+					//remove preloaded children otherwise it won't request the server
+					delete node.parentNode.attributes.children;
+					node.parentNode.reload();
 				}else
 				{
-				}
+					Ext.MessageBox.alert(GO.lang.strError,responseParams.feedback);
+				}								
 			},
 			scope:this
 		});

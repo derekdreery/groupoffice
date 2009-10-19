@@ -566,7 +566,7 @@ GO.email.EmailClient = function(config){
 			}
 		}else
 		{
-			this.treePanel.moveFolder(e.target.attributes['account_id'], e.target.id,e.data.node.id);
+			this.treePanel.moveFolder(e.target.attributes['account_id'], e.target.id , e.data.node);
 		}		
 	},
 	this);
