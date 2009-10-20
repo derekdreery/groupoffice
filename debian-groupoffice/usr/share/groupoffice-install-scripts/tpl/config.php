@@ -59,3 +59,5 @@ $config['db_user']="{db_user}";
 $config['db_pass']="{db_pass}";
 $config['db_port']="3306";
 $config['db_socket']="";
+$config['local_path']="/home/groupoffice/local/";
+$config['local_url']="/local/";
