@@ -210,7 +210,7 @@ if($GO_SECURITY->logged_in()) {
 				}
 			}
 
-			$modules[]=$module['id'];
+			$modules[]=$module['id'].$module['write_permission'];
 		}
 	}
 
