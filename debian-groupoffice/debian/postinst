@@ -19,13 +19,7 @@ invoke-rc.d apache2 reload > /dev/null || true
 
 php /usr/share/groupoffice-install-scripts/configure.php
 
-cd /usr/share/groupoffice/install
-php ./autoinstall.php /etc/groupoffice/config.php
-php ./upgrade.php /etc/groupoffice/config.php
-
-chown -R www-data:www-data /home/groupoffice
-
-
+find /home/groupoffice -maxdepth 1 -exec chown www-data:www-data {} \;
 
 #DEBHELPER#
 

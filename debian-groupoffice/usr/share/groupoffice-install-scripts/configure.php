@@ -66,5 +66,10 @@ if(!file_exists('/etc/groupoffice/config.php'))
 	create_file('/etc/groupoffice/config.php', 'tpl/config.php', $replacements);
 }
 
+require_once('/etc/groupoffice/config.php');
+
+exec('php '.$config['root_path'].'install/autoinstall.php /etc/groupoffice/config.php');
+exec('php '.$config['root_path'].'install/upgrade.php /etc/groupoffice/config.php');
+
 echo "Done!\n\n";
 ?>
