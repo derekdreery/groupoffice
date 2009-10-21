@@ -262,10 +262,10 @@ try{
 				}else
 				{
 					$size = filesize($tmp_file)/1024;
-					/*if(!$quota->check($size))
-					 {
+					if(!$quota->check($size))
+					{
 						throw new Exception($lang['common']['quotaExceeded']);
-						}*/
+					}
 						
 					$existing_file = $files->file_exists($folder['id'], $filename);
 					if($existing_file)
@@ -314,7 +314,7 @@ try{
 						}
 					}
                     
-					//$quota->add($size);
+					$quota->add($size);
 
 						
 				}
