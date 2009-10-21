@@ -117,6 +117,15 @@ try{
 			{
 				$old_installation = $servermanager->get_installation($installation['id']);
 
+				function get_allowed_modules($name){
+					require('/etc/groupoffice/'.$name.'/config.php');
+					return $config['allowed_modules'];
+				}
+
+				if(!isset($config['allowed_modules'])){
+					$config['allowed_modules']=get_allowed_modules($old_installation['name']);
+				}
+
 				$servermanager->check_license($config, $old_installation['name']);
 				
 				
