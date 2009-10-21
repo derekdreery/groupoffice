@@ -1,8 +1,9 @@
 #!/usr/bin/php
 <?php
-require('/etc/groupoffice/servermanager.inc.php');
+require_once('/etc/groupoffice/config.php');
+require($config['root_path'].'Group-Office.php');
 
-require($sm_config['source'].'Group-Office.php');
+
 
 
 if(!isset($GO_MODULES->modules['servermanager']))
