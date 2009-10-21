@@ -908,10 +908,12 @@ class GO_CONFIG {
 					return $config_file;
 				}
 			}
-			$config_file = '/etc/groupoffice/'.$_SERVER['SERVER_NAME'].'/config.php';
-			if(@file_exists($config_file)) {
-				$_SESSION['GO_SESSION']['config_file']=$config_file;
-				return $config_file;
+			if(!empty($_SERVER['SERVER_NAME'])){
+				$config_file = '/etc/groupoffice/'.$_SERVER['SERVER_NAME'].'/config.php';
+				if(@file_exists($config_file)) {
+					$_SESSION['GO_SESSION']['config_file']=$config_file;
+					return $config_file;
+				}
 			}
 			$config_file = '/etc/groupoffice/config.php';
 			if(@file_exists($config_file)) {
