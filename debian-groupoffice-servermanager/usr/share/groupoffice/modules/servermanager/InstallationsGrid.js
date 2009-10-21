@@ -78,27 +78,7 @@ GO.servermanager.InstallationsGrid = function(config){
 	}, this);
 	
 	
-	config.tbar=[{
-			iconCls: 'btn-add',							
-			text: GO.lang['cmdAdd'],
-			cls: 'x-btn-text-icon',
-			handler: function(){
-				
-	    	
-	    	GO.servermanager.installationDialog.show();
-	    	
-	    	
-			},
-			scope: this
-		},{
-			iconCls: 'btn-delete',
-			text: GO.lang['cmdDelete'],
-			cls: 'x-btn-text-icon',
-			handler: function(){
-				this.deleteSelected();
-			},
-			scope: this
-		},'-',GO.lang['strSearch']+': ', ' ',this.searchField];
+	
 	
 	
 	

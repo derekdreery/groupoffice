@@ -250,17 +250,25 @@ class servermanager extends db {
 		return true;
 	}
 
+	function get_used_licenses(){
+		$sql = "SELECT SUM(max_users) AS total_users, SUM(billing) AS total_billing FROM sm_reports WHERE professional=1";
+		$this->query($sql);
+		return $this->next_record();
+	}
+
 	function server_users_available($installation_name='') {
 		$sql = "SELECT SUM(max_users) AS total_users FROM sm_reports WHERE professional=1";
 
 		if(!empty($installation_name)) {
-			$sql .= " AND name='".$this->escape($installation_name)."'";
+			$sql .= " AND name!='".$this->escape($installation_name)."'";
 		}
 
 		$this->query($sql);
 		$report = $this->next_record();
 
+
 		require('/etc/groupoffice/license.inc.php');
+
 
 		return $max['users']-$report['total_users'];
 	}
