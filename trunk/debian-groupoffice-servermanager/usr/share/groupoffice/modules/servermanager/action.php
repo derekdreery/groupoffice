@@ -62,7 +62,7 @@ try{
 
 			//var_dump($config['allowed_modules']);
 			
-			$config['max_users']=$_POST['max_users'];			
+			$config['max_users']=Number::to_phpnumber($_POST['max_users']);
 			
 			$config['webmaster_email']=$_POST['webmaster_email'];
 			$config['title']=$_POST['title'];
@@ -150,6 +150,24 @@ try{
 				$servermanager->delete_report($old_installation['name']);
 
 				$installation['name']=$old_installation['name'];
+
+
+				//create temporary report otherwise the license check will fail.
+				$report['professional']=0;
+
+				$allowed_modules = explode(',', $config['allowed_modules']);
+				foreach($servermanager->pro_modules as $pro_module) {
+					if(in_array($pro_module, $allowed_modules)) {
+						$report['professional']=1;
+						break;
+					}
+				}
+				$report['billing']=in_array('billing', $allowed_modules) ? 1 : 0;
+				$report['name']=$installation['name'];
+				$report['ctime']=time();
+				$report['max_users']=$config['max_users'];
+				$report['comment']='Temporary report';
+				$servermanager->add_report($report);
 
 			}else
 			{
