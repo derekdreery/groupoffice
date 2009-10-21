@@ -235,10 +235,13 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
                     modules : keys.join(',')
                 },
                 callback : function(options, success, response) {
-                    grid.container.unmask();
-                    grid.store.reload();
-                    this.store.reload();
-                    this.availableModulesWin.hide();
+
+									var responseParams = Ext.decode(response.responseText);
+									
+									grid.container.unmask();
+									grid.store.reload();
+									this.store.reload();
+									this.availableModulesWin.hide();
                 },
                 scope : this
             });

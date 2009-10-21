@@ -347,9 +347,6 @@ class GO_MODULES extends db {
 			$module['version']=isset($updates) ? count($updates) : 0;
 		}
 
-		$this->insert_row('go_modules', $module);
-
-
 		$install_sql_file = $GO_CONFIG->root_path.'modules/'.$module_id.'/install/install.sql';
 
 		if ( file_exists( $install_sql_file ) ) {
@@ -360,14 +357,17 @@ class GO_MODULES extends db {
 			}
 		}
 
+		$this->insert_row('go_modules', $module);
+		$this->load_modules();
+
 		$install_script = $GO_CONFIG->root_path.'modules/'.$module_id.'/install/install.inc.php';
 		if(file_exists($install_script))
 		{
 			require($install_script);
 		}
 		$params = array('module'=>$module);
+
 		
-		$this->load_modules();
 
 		return true;
 	}
