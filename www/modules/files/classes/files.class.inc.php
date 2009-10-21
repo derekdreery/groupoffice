@@ -1430,6 +1430,10 @@ class files extends db {
 			//no db functions apply to this move
 				$fs = new filesystem();
 				$fs->delete($versions_dir);
+
+				require_once($GO_CONFIG->class_path.'base/quota.class.inc.php');
+				$quota = new quota();
+				$quota->add(-File::get_directory_size($versions_dir));
 			}
 		}
 
@@ -1448,6 +1452,11 @@ class files extends db {
 
 
 		$path = $GO_CONFIG->file_storage_path.$this->build_path($file['folder_id']).'/'.$file['name'];
+
+		require_once($GO_CONFIG->class_path.'base/quota.class.inc.php');
+		$quota = new quota();
+		$quota->add(-filesize($path)/1024);
+
 		return @unlink($path);
 	}
 

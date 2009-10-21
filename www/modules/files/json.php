@@ -454,9 +454,6 @@ try{
 						{
 							try{
 
-								require_once($GO_CONFIG->class_path.'base/quota.class.inc.php');
-								$quota = new quota();
-
 								$response['deleteSuccess']=true;
 								$delete_ids = json_decode($_POST['delete_keys']);
 
