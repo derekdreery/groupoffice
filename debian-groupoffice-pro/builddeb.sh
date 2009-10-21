@@ -1,5 +1,7 @@
 #!/bin/bash
 
+PROMODULES="sync customfields gota mailings projects professional timeregistration";
+
 # useful: DEBCONF_DEBUG="developer"
 
 PRG="$0"
@@ -17,6 +19,11 @@ VERSION=`cat ../www/classes/base/config.class.inc.php | grep '$version' | sed -e
 
 echo "Group-Office version: $VERSION"
 
+if [ ! -e /var/www/release/groupoffice-pro-$VERSION ]; then
+	echo /var/www/release/groupoffice-pro-$VERSION bestaat niet. eerst createtag.sh draaien.
+	exit
+fi
+
 cd /tmp
 
 rm -Rf groupoffice-pro
@@ -28,6 +35,10 @@ cd groupoffice-pro
 svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/trunk/debian-groupoffice-pro
 
 mv debian-groupoffice-pro groupoffice-pro-$VERSION
+
+for m in $PROMODULES; do
+	cp -R /var/www/release/groupoffice-pro-$VERSION/modules/$m groupoffice-pro-$VERSION/usr/share/groupoffice/modules/
+done
 
 cd groupoffice-pro-$VERSION
 
