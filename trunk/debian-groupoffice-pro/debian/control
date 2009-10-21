@@ -11,4 +11,5 @@ Package: groupoffice-pro
 Architecture: all
 Depends: groupoffice-com,
 	${misc:Depends}
-Description: Adds the professional licensed modules.
+Description: Adds the professional modules.
+	You need a license to make them work. Have a look at http://www.group-office.com
