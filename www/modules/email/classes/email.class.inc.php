@@ -510,6 +510,13 @@ class email extends db
 		}
 	}
 
+	function get_account_folders($account_id)
+	{
+		$sql = "SELECT sent, drafts, trash, spam FROM em_accounts WHERE id = ?";
+		$this->query($sql, 'i', array($account_id));
+
+		return ($this->next_record(DB_ASSOC)) ? $this->record : false;
+	}
 
 
 	function delete_account($id)
@@ -652,9 +659,26 @@ class email extends db
 		$sql .= "WHERE name='".$this->escape($old_name)."' AND account_id='".$this->escape($account_id)."'";
 
 		$this->query($sql);
+
+		$saved_folders = $this->get_account_folders($account_id);
+		$folders = array();
+		foreach($saved_folders as $key => $value) {
+			if($value == $old_name)
+			{
+				$folders[$key] = $new_name;
+			}
+		}
+
+		if(count($folders))
+		{
+			$folders['id'] = $account_id;
+			$this->update_row('em_accounts', 'id', $folders);
+		}
+
 		$sql = "UPDATE em_filters SET folder='".$this->escape($new_name)."' ".
 		"WHERE folder='".$this->escape($old_name)."' AND ".
 		"account_id='".$this->escape($account_id)."'";
+
 		return $this->query($sql);
 	}
 
