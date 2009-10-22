@@ -313,7 +313,7 @@ GO.email.EmailClient = function(config){
 				}, this);
 			},
 			scope:this
-		}),'-',
+		}),
 		this.renameFolderButton = new Ext.menu.Item({
 			iconCls: 'btn-edit',
 			text: GO.email.lang.renameFolder,
@@ -321,47 +321,55 @@ GO.email.EmailClient = function(config){
 			{
 				var sm = this.treePanel.getSelectionModel();
 		 		var node = sm.getSelectedNode();
-				
-				Ext.MessageBox.prompt(GO.lang.strName, GO.email.lang.enterFolderName, function(button, text){
-					if(button=='ok')
-					{
-						var sm = this.treePanel.getSelectionModel();
-		 				var node = sm.getSelectedNode();
 
-						Ext.Ajax.request({
-							url: GO.settings.modules.email.url+'action.php',
-							params: {
-								task: 'rename_folder',
-								folder_id: node.attributes.folder_id,
-								new_name: text
-							},
-							callback: function(options, success, response)
-							{
-								if(!success)
+				if(!node|| node.attributes.folder_id<1)
+				{
+					Ext.MessageBox.alert(GO.lang.strError, GO.email.lang.selectFolderRename);
+				}else if(node.attributes.mailbox=='INBOX')
+				{
+					Ext.MessageBox.alert(GO.lang.strError, GO.email.lang.cantRenameInboxFolder);
+				}else
+				{				
+					Ext.MessageBox.prompt(GO.lang.strName, GO.email.lang.enterFolderName, function(button, text){
+						if(button=='ok')
+						{
+							var sm = this.treePanel.getSelectionModel();
+							var node = sm.getSelectedNode();
+
+							Ext.Ajax.request({
+								url: GO.settings.modules.email.url+'action.php',
+								params: {
+									task: 'rename_folder',
+									folder_id: node.attributes.folder_id,
+									new_name: text
+								},
+								callback: function(options, success, response)
 								{
-									Ext.MessageBox.alert(GO.lang.strError, response.result.errors);
-								}else
-								{
-									var responseParams = Ext.decode(response.responseText);
-									if(responseParams.success)
+									if(!success)
 									{
-										//remove preloaded children otherwise it won't request the server
-										delete node.parentNode.attributes.children;
-										node.parentNode.reload();
+										Ext.MessageBox.alert(GO.lang.strError, response.result.errors);
 									}else
 									{
-										Ext.MessageBox.alert(GO.lang.strError,responseParams.feedback);
+										var responseParams = Ext.decode(response.responseText);
+										if(responseParams.success)
+										{
+											//remove preloaded children otherwise it won't request the server
+											delete node.parentNode.attributes.children;
+											node.parentNode.reload();
+										}else
+										{
+											Ext.MessageBox.alert(GO.lang.strError,responseParams.feedback);
+										}
 									}
-								}
-							},
-							scope: this
-						});
-					}
-
-				}, this, false, node.attributes.name);
+								},
+								scope: this
+							});
+						}					
+					}, this, false, node.attributes.name);
+				}
 			},
 			scope:this
-		}),{		
+		}),'-',{
 			iconCls: 'btn-delete', 
 			text: GO.email.lang.emptyFolder, 
 			handler: function(){
