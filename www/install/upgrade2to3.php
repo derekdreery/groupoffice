@@ -271,8 +271,8 @@ if(in_array('calendar', $module_ids))
 		$db2->query($sql);
 		if($event = $db2->next_record())
 		{		
-			echo 'Duplicating event '.$event['name'].$line_break;
-			flush();
+			echo 'Duplicating event '.htmlspecialchars($event['name']).$line_break;
+			//flush();
 			
 			$sql = "SELECT * FROM cal_events_calendars WHERE event_id=".$event['id'];
 			$db2->query($sql);

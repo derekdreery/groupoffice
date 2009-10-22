@@ -146,7 +146,7 @@ if($GO_CONFIG->debug || !file_exists($path)) {
 
 	if(!$GO_CONFIG->debug) {
 		foreach($scripts as $script) {
-			file_put_contents($path,"\n\n/*".$script."*/\n\n".file_get_contents($script),FILE_APPEND);
+			file_put_contents($path,"\n\n".file_get_contents($script),FILE_APPEND);
 		}
 	}
 }
@@ -233,7 +233,7 @@ if($GO_SECURITY->logged_in()) {
 				}
 			}
 			foreach($scripts as $script) {
-				file_put_contents($path,"\n\n/*".$script."*/\n\n".file_get_contents($script),FILE_APPEND);
+				file_put_contents($path,"\n\n".file_get_contents($script),FILE_APPEND);
 			}
 		}
 		$scripts=array($url);
