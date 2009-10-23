@@ -568,6 +568,7 @@ GO.files.FileBrowser = function(config){
 	config['items']=[this.locationPanel, this.treePanel,this.cardPanel];
 	
 	GO.files.FileBrowser.superclass.constructor.call(this, config);
+
 	
 	this.addEvents({
 		fileselected : true,
@@ -584,6 +585,8 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	 * cut or copy
 	 */
 	pasteMode : 'cut',
+
+
 	
 	onStoreLoad : function(store){
 

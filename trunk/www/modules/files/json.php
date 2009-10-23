@@ -140,18 +140,64 @@ try{
 						$response[]=$node;
 
 
+						
+
+
+
+						$share_count = $files->get_authorized_shares($GO_SECURITY->user_id);
+
+						$nodes=array();
+
+						$count = 0;
+						while ($folder = $files->next_record())
+						{
+								//$is_sub_dir = isset($last_folder) ? $files->is_sub_dir($share_id, $last_folder) : false;
+
+								$node = array(
+												'text'=>$folder['name'],
+												'id'=>$folder['id'],
+												'iconCls'=>'folder-default',
+												'notreloadable'=>true
+								);
+
+								$path = $fs2->build_path($folder);
+								$nodes[$path]=$node;
+						}
+						ksort($nodes);
+
+						$fs = new filesystem();
+
+						$children=array();
+
+						foreach($nodes as $path=>$node)
+						{
+								$is_sub_dir = isset($last_path) ? $fs->is_sub_dir($path, $last_path) : false;
+								if(!$is_sub_dir)
+								{
+									//var_dump($node);
+										if(!$fs2->has_children($node['id']))
+										{
+												$node['children']=array();
+												$node['expanded']=true;
+										}
+										$children[]=$node;
+										$last_path=$path;
+								}
+						}
+
+
 						$node= array(
 						'text'=>$lang['files']['shared'],
 						'id'=>'shared',
 						'readonly'=>true,
 						'draggable'=>false,
 						'allowDrop'=>false,
-						'iconCls'=>'folder-shares'/*,
+						'iconCls'=>'folder-shares',
 						'expanded'=>true,
-						'children'=>$children,
-						'notreloadable'=>true				*/
+						'children'=>$children
 						);
 						$response[]=$node;
+
 
 						if($GO_MODULES->has_module('projects'))
 						{
@@ -246,7 +292,7 @@ try{
 					break;
 
 
-				case 'shared':
+				/*case 'shared':
 
 					$share_count = $files->get_authorized_shares($GO_SECURITY->user_id);
 
@@ -288,7 +334,7 @@ try{
 							}
 					}
 
-					break;
+					break;*/
 
 				case 'new' :
 
