@@ -389,7 +389,16 @@ class export_query extends TCPDF
 
 	function export_to_csv($fp){
 
-		global $GO_USERS, $lang;
+		global $GO_USERS, $lang, $GO_MODULES;
+
+
+		if($GO_MODULES->has_module('customfields')) {
+			require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+			$cf = new customfields();
+		}else
+		{
+			$cf=false;
+		}
 
 		$this->query();
 
@@ -429,7 +438,7 @@ class export_query extends TCPDF
 
 			if(is_array($this->q) && isset($this->q['method']))
 			{
-				call_user_func_array(array($this->q['class'], $this->q['method']),array(&$record));
+				call_user_func_array(array($this->q['class'], $this->q['method']),array(&$record, $cf));
 			}
 
 			if(isset($record['user_id']) && isset($columns['user_id']))
