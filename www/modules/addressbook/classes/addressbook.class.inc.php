@@ -796,16 +796,20 @@ class addressbook extends db {
 		return $offset>0 ? $this->found_rows() : $this->num_rows();
 	}
 
-	function format_contact_record(&$record) {
+	function format_contact_record(&$record, $cf=false) {
 		$record['name'] = String::format_name($record['last_name'], $record['first_name'], $record['middle_name']);
 		$record['ctime']=Date::get_timestamp($record['ctime']);
 		$record['mtime']=Date::get_timestamp($record['mtime']);
+		if($cf)
+			$cf->format_record($record, 2, true);
 	}
 
 
-	function format_company_record(&$record) {
+	function format_company_record(&$record, $cf=false) {
 		$record['ctime']=Date::get_timestamp($record['ctime']);
 		$record['mtime']=Date::get_timestamp($record['mtime']);
+		if($cf)
+			$cf->format_record($record, 3, true);
 	}
 
 	function search_companies($user_id, $query, $field = 'name', $addressbook_id = 0, $start=0, $offset=0, $require_email=false, $sort_index='name', $sort_order='ASC', $query_type='LIKE', $mailings_filter=array(), $advanced_query='') {
