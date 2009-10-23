@@ -1,5 +1,5 @@
-groupoffice-servermanager (3.2.39-1) karmic; urgency=low
+groupoffice-servermanager (3.2.40-1) three; urgency=low
 
   * Initial release (LP: #394166: This report is public)
 
- -- Merijn Schering <mschering@intermesh.nl>  Wed, 07 Oct 2009 16:08:29 +0200
+ -- Merijn Schering <mschering@intermesh.nl>  Wed, 23 Oct 2009 16:08:29 +0200
