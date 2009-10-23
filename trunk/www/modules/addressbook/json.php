@@ -250,9 +250,18 @@ try
 			$advancedQuery
 			);
 
+			if($GO_MODULES->has_module('customfields')) {
+				require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+				$cf = new customfields();
+			}else
+			{
+				$cf=false;
+			}
+
 			while($record = $ab->next_record())
 			{
-				addressbook::format_contact_record($record);
+				addressbook::format_contact_record($record, $cf);
+
 				$response['results'][] = $record;
 			}
 

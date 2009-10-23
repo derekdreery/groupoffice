@@ -699,6 +699,15 @@ try{
 
 						if($file_start>=0)
 						{
+
+							if($GO_MODULES->has_module('customfields')) {
+								require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+								$cf = new customfields();
+							}else
+							{
+								$cf=false;
+							}
+
 							$response['total']+=$files->get_files($curfolder['id'], $fsort, $dir, $file_start, $file_limit);
 
 
@@ -717,6 +726,10 @@ try{
 									$file['timestamp']=$file['mtime'];
 									$file['mtime']=Date::get_timestamp($file['mtime']);
 									//$file['size']=Number::format_size($file['size']);
+
+									if($cf)
+										$cf->format_record($file, 6);
+
 									$response['results'][]=$file;
 								//}
 							}
