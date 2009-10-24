@@ -261,20 +261,9 @@ try{
 			switch($task)
 			{
 				case "reply":
-					$response['data']['to'] = $content["reply-to"];
-					if(!eregi('Re:', $subject))
-					{
-						$response['data']['subject'] = 'Re: '.$subject;
-					}else
-					{
-						$response['data']['subject'] = $subject;
-					}
-					break;
-
 				case "reply_all":
-
 					$response['data']['to'] = $content["reply-to"];
-					if(!eregi('Re:', $subject))
+					if(stripos($subject,'Re:')===false)
 					{
 						$response['data']['subject'] = 'Re: '.$subject;
 					}else
@@ -293,7 +282,7 @@ try{
 
 					}else
 					{
-						if(!eregi('Fwd:', $subject))
+						if(stripos($subject,'Fwd:')===false)
 						{
 							$response['data']['subject'] = 'Fwd: '.$subject;
 						}else
@@ -407,8 +396,8 @@ try{
 				//var_dump($parts[$i]);
 
 				if (empty($response['data']['body']) &&
-					(!eregi('attachment', $parts[$i]["disposition"])) &&
-					(eregi('html', $mime) || eregi('plain', $mime) || $mime == "text/enriched" || $mime == "unknown/unknown"))
+					(stripos($parts[$i]["disposition"],'attachment')===false) &&
+					(stripos($mime,'html')!==false || eregi('plain', $mime) || $mime == "text/enriched" || $mime == "unknown/unknown"))
 				{
 					switch ($mime)
 					{
@@ -671,7 +660,7 @@ try{
 
 				if($imap->set_unseen_cache(array($uid), false))
 				{
-					if(eregi('gmail',$account['host']))
+					if(stripos($account['host'],'gmail')!==false)
 					{
 						$imap->set_message_flag($mailbox, array($uid), "\\Seen");
 					}
@@ -769,7 +758,7 @@ try{
 				{
 					for($i=0;$i<count($parts);$i++)
 					{
-						if(eregi('html', $parts[$i]['mime']) && (strtolower($parts[$i]['type'])=='alternative' || strtolower($parts[$i]['type'])=='related'))
+						if(stripos($parts[$i]['mime'],'html')!==false && (strtolower($parts[$i]['type'])=='alternative' || strtolower($parts[$i]['type'])=='related'))
 						{
 							$html_alternative=true;
 						}
@@ -780,7 +769,7 @@ try{
 
 				$attachments=array();
 
-				if(eregi('html', $response['content_type']))
+				if(stripos($response['content_type'],'html')!==false)
 				{
 					$default_mime = 'text/html';
 				}else
@@ -792,7 +781,7 @@ try{
 				if($part_count==1)
 				{
 					//if there's only one part use the message parameters.
-					if(eregi('plain', $parts[0]['mime']))
+					if(stripos($parts[0]['mime'],'plain')!==false)
 						$parts[0]['mime']=$default_mime;
 
 					if(empty($parts[0]['transfer']))
@@ -824,8 +813,8 @@ try{
 					}
 
 					if (empty($response['body']) &&
-					(!eregi('attachment', $part["disposition"])) &&
-					((eregi('html', $mime) && empty($_POST['plaintext'])) ||(eregi('plain', $mime) && (!$html_alternative || strtolower($part['type'])!='alternative')) || $mime == "text/enriched" || $mime == "unknown/unknown"))
+					(stripos($part["disposition"],'attachment')===false) &&
+					((stripos($mime,'html')!==false && empty($_POST['plaintext'])) ||(stripos($mime,'plain')!==false && (!$html_alternative || strtolower($part['type'])!='alternative')) || $mime == "text/enriched" || $mime == "unknown/unknown"))
 					{
 						$part_body = $imap->view_part($uid, $part["number"], $part["transfer"], $part["charset"]);
 
@@ -932,7 +921,7 @@ try{
 				$index=0;
 				for ($i = 0; $i < count($attachments); $i ++) {
 
-					if(eregi('calendar',$attachments[$i]['mime']) && empty($attachments[$i]['name']))
+					if(stripos($attachments[$i]['mime'],'calendar')!==false && empty($attachments[$i]['name']))
 					{
 						$attachments[$i]['name']=$lang['email']['event'].'.ics';
 					}
@@ -1020,7 +1009,7 @@ try{
 									if(!$response['deleteSuccess'])
 									{
 										$lasterror = $imap->last_error();
-										if(eregi('quota', $lasterror))
+										if(stripos($lasterror,'quota')!==false)
 										{
 											$response['deleteFeedback']=$lang['email']['quotaError'];
 										}else
@@ -1389,7 +1378,7 @@ try{
 
 													$user_home_dirs = isset($GO_CONFIG->user_home_dirs) ? $GO_CONFIG->user_home_dirs : '/home/';
 													$homedir = $user_home_dirs.$response['data']['username'];
-													if(!eregi('localhost', $response['data']['host']) || !file_exists($homedir))
+													if(stripos($response['data']['host'],'localhost')===false || !file_exists($homedir))
 													{
 														$response['data']['hidetab'] = true;
 													}else
