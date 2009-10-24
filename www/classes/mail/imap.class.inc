@@ -853,7 +853,7 @@ class imap{
 	 */
 	function part_is_attachment($part)
 	{
-		return (eregi("ATTACHMENT", $part["disposition"]) || ($part["name"] != '' && empty($part["id"]))
+		return (stripos($part["disposition"],"ATTACHMENT")!==false || ($part["name"] != '' && empty($part["id"]))
 		&& 
 		!($part['type']=='APPLEDOUBLE' && $part['mime']== 'application/APPLEFILE') && strtolower($part['type'])!='alternative');
 	}

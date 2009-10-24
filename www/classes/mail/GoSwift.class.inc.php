@@ -496,7 +496,7 @@ class GoSwiftImport extends GoSwift{
 
 				if ($part->ctype_primary == 'text' && (!isset($part->disposition) || $part->disposition != 'attachment') && empty($part->d_parameters['filename']))
 				{
-					if (eregi('plain', $part->ctype_secondary))
+					if (stripos($part->ctype_secondary,'plain')!==false)
 					{
 						$content_part = nl2br($part->body);
 					}else
@@ -554,7 +554,7 @@ class GoSwiftImport extends GoSwift{
 		}elseif(isset($structure->body))
 		{
 			//convert text to html
-			if (eregi('plain', $structure->ctype_secondary))
+			if (stripos( $structure->ctype_secondary,'plain')!==false)
 			{
 				$text_part = nl2br($structure->body);
 			}else

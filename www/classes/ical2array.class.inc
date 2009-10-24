@@ -134,7 +134,7 @@ class ical2array
 	  	//check for all object types
 	  	for($i=0;$i<count($this->object_types);$i++)
 	  	{	  		
-  			if(eregi('BEGIN:'.$this->object_types[$i], $line))
+  			if(stripos($line,'BEGIN:'.$this->object_types[$i])!==false)
   			{  				
   				//found beginning of object now find the end
   				$eoo = strpos($data, 'END:'.$this->object_types[$i]);
@@ -190,10 +190,10 @@ class ical2array
 				}
 		  }else
 		  {
-		  	if(eregi('BEGIN:', $line))
+		  	if(stripos($line,'BEGIN:')!==false)
 		  	{
 		  		$in_nested_object = true;
-		  	}elseif(eregi('END:', $line))
+		  	}elseif(stripos($line,'END:')!==false)
 		  	{
 		  		$in_nested_object = false;
 		  	}

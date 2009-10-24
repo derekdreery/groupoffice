@@ -28,7 +28,7 @@ foreach($tables as $table)
 	$db1->query($sql);
 	while($record = $db1->next_record())
 	{
-		if($record['Null']='NO' && (eregi('varchar', $record['Type']) || eregi('text', $record['Type'])))
+		if($record['Null']='NO' && (stripos($record['Type'],'varchar')!==false || stripos($record['Type'],'text'))!==false)
 		{
 			$sql = "ALTER TABLE `$table` CHANGE `".$record['Field']."` `".$record['Field']."` ".$record['Type']." CHARACTER SET utf8 COLLATE utf8_general_ci NULL";
 			$db2->query($sql); 
