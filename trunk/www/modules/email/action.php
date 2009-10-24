@@ -289,7 +289,7 @@ try{
 
 					$body = sprintf($lang['email']['notification_body'], $_POST['subject'], Date::get_timestamp(time()));
 
-					$swift =& new GoSwift(
+					$swift = new GoSwift(
 					$_POST['notification_to'],
 					sprintf($lang['email']['notification_subject'],$_POST['subject']),
 					$_POST['account_id'],
@@ -319,7 +319,7 @@ try{
 
 							require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 
-							$swift =& new GoSwift(
+							$swift = new GoSwift(
 							$_POST['to'],
 							$_POST['subject'],
 							0,
