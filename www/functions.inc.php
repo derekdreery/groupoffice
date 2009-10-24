@@ -185,24 +185,24 @@ function debug($text, $config=false)
  * @return array Array contains keys name, version and subversion
  */
 function detect_browser() {
-	if (eregi('msie ([0-9].[0-9]{1,2})', $_SERVER['HTTP_USER_AGENT'], $log_version)) {
+	if (preg_match("'msie ([0-9].[0-9]{1,2})'i", $_SERVER['HTTP_USER_AGENT'], $log_version)) {
 		$browser['version'] = $log_version[1];
 		$browser['name'] = 'MSIE';
 	}
-	elseif (eregi('opera/([0-9].[0-9]{1,2})', $_SERVER['HTTP_USER_AGENT'], $log_version)) {
+	elseif (preg_match("'opera/([0-9].[0-9]{1,2})'i", $_SERVER['HTTP_USER_AGENT'], $log_version)) {
 		$browser['version'] = $log_version[1];
 		$browser['name'] = 'OPERA';
 	}
-	elseif (eregi('mozilla/([0-9].[0-9]{1,2}).*gecko/([0-9]+)', $_SERVER['HTTP_USER_AGENT'], $log_version)) {
+	elseif (preg_match("'mozilla/([0-9].[0-9]{1,2}).*gecko/([0-9]+)'i", $_SERVER['HTTP_USER_AGENT'], $log_version)) {
 		$browser['version'] = $log_version[1];
 		$browser['name'] = 'MOZILLA';
 		$browser['subversion'] = $log_version[2];
 	}
-	elseif (eregi('netscape/([0-9].[0-9]{1,2})', $_SERVER['HTTP_USER_AGENT'], $log_version)) {
+	elseif (preg_match("'netscape/([0-9].[0-9]{1,2})'i", $_SERVER['HTTP_USER_AGENT'], $log_version)) {
 		$browser['version'] = $log_version[1];
 		$browser['name'] = 'NETSCAPE';
 	}
-	elseif (eregi('safari/([0-9]+.[0-9]+)', $_SERVER['HTTP_USER_AGENT'], $log_version)) {
+	elseif (preg_match("'safari/([0-9]+.[0-9]+)'i", $_SERVER['HTTP_USER_AGENT'], $log_version)) {
 		$browser['version'] = $log_version[1];
 		$browser['name'] = 'SAFARI';
 	} else {

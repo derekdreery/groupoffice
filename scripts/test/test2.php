@@ -27,6 +27,9 @@ echo preg_replace('/{[^}]*}/eU', "replace('$0', \$record)", $template)
  *
  */
 
-echo $GO_THEME->replace_url(file_get_contents($GO_CONFIG->root_path.'themes/Default/style.css'), $GO_CONFIG->host.'themes/');
+//echo $GO_THEME->replace_url(file_get_contents($GO_CONFIG->root_path.'themes/Default/style.css'), $GO_CONFIG->host.'themes/');
+
+$b = detect_browser();
+var_dump($b);
 
 ?>

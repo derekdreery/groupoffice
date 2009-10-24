@@ -397,7 +397,7 @@ try{
 
 				if (empty($response['data']['body']) &&
 					(stripos($parts[$i]["disposition"],'attachment')===false) &&
-					(stripos($mime,'html')!==false || eregi('plain', $mime) || $mime == "text/enriched" || $mime == "unknown/unknown"))
+					(stripos($mime,'html')!==false || stripos($mime,'plain')!==false || $mime == "text/enriched" || $mime == "unknown/unknown"))
 				{
 					switch ($mime)
 					{
