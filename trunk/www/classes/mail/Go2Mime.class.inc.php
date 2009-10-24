@@ -227,7 +227,7 @@ class Go2Mime
 					{
 						$content_part = iconv($part->ctype_parameters['charset'], 'UTF-8', $content_part);
 					}
-					if (eregi('plain', $part->ctype_secondary))
+					if (stripos($part->ctype_secondary,'plain')!==false)
 					{
 						$content_part = nl2br($content_part);
 					}else
@@ -322,7 +322,7 @@ class Go2Mime
 		}elseif(isset($structure->body))
 		{
 			//convert text to html
-			if (eregi('plain', $structure->ctype_secondary))
+			if (stripos($structure->ctype_secondary,'plain')!==false)
 			{
 				$text_part = nl2br($structure->body);
 			}else

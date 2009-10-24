@@ -253,7 +253,7 @@ class GO_USERS extends db
 					$this->query($fields_sql);
 					while($this->next_record())
 					{
-						if(eregi('varchar', $this->f('Type')))
+						if(stripos($this->f('Type'),'varchar')!==false)
 						{
 							$fields[]='go_users.'.$this->f('Field');
 						}

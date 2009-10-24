@@ -723,7 +723,7 @@ class addressbook extends db {
 						$fields_sql = "SHOW FIELDS FROM ab_contacts";
 						$this->query($fields_sql);
 						while($this->next_record()) {
-							if(eregi('varchar', $this->f('Type'))) {
+							if(stripos($this->f('Type'),'varchar')!==false) {
 								$fields[]='ab_contacts.'.$this->f('Field');
 							}
 						}
@@ -863,7 +863,7 @@ class addressbook extends db {
 						$fields_sql = "SHOW FIELDS FROM ab_companies";
 						$this->query($fields_sql);
 						while($this->next_record()) {
-							if(eregi('varchar', $this->f('Type'))) {
+							if(stripos($this->f('Type'),'varchar')!==false) {
 								$fields[]='ab_companies.'.$this->f('Field');
 							}
 						}

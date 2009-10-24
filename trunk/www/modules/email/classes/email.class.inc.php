@@ -1190,7 +1190,7 @@ class email extends db
 
 			if (
 			(
-			eregi("ATTACHMENT", $message['parts'][$i]["disposition"])  ||
+			stripos($message['parts'][$i]["disposition"],"ATTACHMENT")!==false  ||
 			($message['parts'][$i]["name"] != '' && empty($message['parts'][$i]["id"])
 			)
 			&& !($message['parts'][$i]['type']=='APPLEDOUBLE' && $message['parts'][$i]['mime']== 'application/APPLEFILE')
