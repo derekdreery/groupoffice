@@ -499,7 +499,7 @@ class imap{
 		$message["priority"] = isset($values['x-priority']) ? $values['x-priority'] : '';
 		$message['attachments']=false;
 
-		if (!empty($values['content-type']) && eregi("([^/]*)/([^ ;\n\t]*)", $values['content-type'], $regs)) {
+		if (!empty($values['content-type']) && preg_match("'([^/]*)/([^ ;\n\t]*)'i", $values['content-type'], $regs)) {
 			$mtype = strtolower($regs[1]);
 			$stype = strtolower($regs[2]);
 		}else
