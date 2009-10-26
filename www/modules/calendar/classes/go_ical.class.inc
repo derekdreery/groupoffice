@@ -26,11 +26,14 @@ class go_ical extends calendar
 
 	var $line_break="\n";
 
-	function go_ical($version='2.0')
+	var $utc=false;
+
+	function go_ical($version='2.0', $utc=false)
 	{
 		parent::__construct();
 
 		$this->version = $version;
+		$this->utc=$utc;
 
 		$this->calendar_properties =
 			"VERSION:".$version.$this->line_break.
@@ -150,21 +153,30 @@ class go_ical extends calendar
 			$lines[] ="CLASS:PUBLIC";
 		}
 
+		
+
 		if($this->version == '1.0' && $event['all_day_event'] == '1')
 		{
-			$line = "DTSTART:".date($this->datetime_format, $event['start_time']);
+			$start_date = $this->utc ? gmdate($this->datetime_format, $event['start_time']).'Z' : date($this->datetime_format, $event['start_time']);
+			$end_date = $this->utc ? gmdate($this->datetime_format, $event['end_time']).'Z' : date($this->datetime_format, $event['end_time']);
+
+			$line = "DTSTART:".$start_date;
 			$lines[] = $line;
 
 			//if($event['all_day_event']=='0')
 			//{
 			$line = "DTEND:";
-			$line .= date($this->datetime_format, $event['end_time']);
+			$line .= $end_date;
 			$lines[] = $line;
 			//}
 
 		}else
 		{
 			$DT_format = $event['all_day_event'] == '1' ? go_ical::date_format : $this->datetime_format;
+
+			$start_date = $this->utc ? gmdate($DT_format , $event['start_time']).'Z' : date($DT_format , $event['start_time']);
+			$end_date = $this->utc ? gmdate($DT_format , $event['end_time']).'Z' : date($DT_format, $event['end_time']);
+
 
 			$line = "DTSTART";
 
@@ -174,10 +186,10 @@ class go_ical extends calendar
 			}
 			if($this->timezone_id != '')
 			{
-				$line .= ";TZID=".$this->timezone_id.":".date($DT_format, $event['start_time']);
+				$line .= ";TZID=".$this->timezone_id.":".$start_date;
 			}else
 			{
-				$line .= ":".date($DT_format, $event['start_time']);
+				$line .= ":".$start_date;
 
 			}
 			$lines[]=$line;
@@ -190,10 +202,10 @@ class go_ical extends calendar
 			}
 			if($this->timezone_id != '')
 			{
-				$line .= ";TZID=".$this->timezone_id.":".date($DT_format, $event['end_time']);
+				$line .= ";TZID=".$this->timezone_id.":".$end_date;
 			}else
 			{
-				$line .= ":".date($DT_format, $event['end_time']+$timezone_offset);
+				$line .= ":".$end_date;
 
 
 			}

@@ -26,10 +26,14 @@ class export_tasks
 
 	var $line_break="\n";
 
-	function __construct($version='2.0')
+	var $utc=false;
+
+	function __construct($version='2.0',$utc=false)
 	{
 
 		$this->version = $version;
+		$this->utc=$utc;
+
 
 		$this->tasklist_properties =
 			"VERSION:".$version.$this->line_break.
@@ -130,14 +134,20 @@ class export_tasks
 		{
 			//$line = "DTSTART:".date($this->datetime_format, $task['due_time']);
 			//	$lines[] = $line;
+
+			$due_date = $this->utc ? gmdate($this->datetime_format, $task['due_time']+60).'Z' : date($this->datetime_format, $task['due_time']+60);
+
 			$line = "DUE:";
 			//was 59 before nexthaus
-			$line .= date($this->datetime_format, $task['due_time']+60);
+			$line .= $due_date;
 			$lines[] = $line;
 				
 			if($task['completion_time']>0)
 			{
-				$line = "COMPLETED:".date($this->datetime_format, $task['completion_time']);
+				$compl_date = $this->utc ? gmdate($this->datetime_format, $task['completion_time']).'Z' : date($this->datetime_format, $task['completion_time']);
+
+
+				$line = "COMPLETED:".$compl_date;
 				$lines[] = $line;
 			}
 
@@ -145,38 +155,48 @@ class export_tasks
 		{
 			$DT_format = export_tasks::date_format;
 
+
+
 			$line = "DTSTART;VALUE=DATE";
+
+			$start_date = $this->utc ? gmdate($DT_format , $task['start_time']).'Z' : date($DT_format , $task['start_time']);
 
 			if($this->timezone_id != '')
 			{
-				$line .= ";TZID=".$this->timezone_id.":".date($DT_format, $task['due_time']);
+				$line .= ";TZID=".$start_date;
 			}else
 			{
-				$line .= ":".date($DT_format, $task['due_time']);
+				$line .= ":".$start_date;
 
 			}
 			$lines[]=$line;
 
 			$line = "DUE;VALUE=DATE";
 
+			$due_date = $this->utc ? gmdate($DT_format , $task['due_time']).'Z' : date($DT_format , $task['due_time']);
+
+
 			if($this->timezone_id != '')
 			{
-				$line .= ";TZID=".$this->timezone_id.":".date($DT_format, $task['end_time']);
+				$line .= ";TZID=".$this->timezone_id.":".$due_date;
 			}else
 			{
-				$line .= ":".date($DT_format, $task['due_time']+$timezone_offset);
+				$line .= ":".$due_date;
 			}
 			$lines[]=$line;
 				
 			if($task['completion_time']>0)
 			{
+				$compl_date = $this->utc ? gmdate($DT_format , $task['completion_time']).'Z' : date($DT_format , $task['completion_time']);
+
+
 				$line = "COMPLETED;VALUE=DATE";
 				if($this->timezone_id != '')
 				{
-					$line .= ";TZID=".$this->timezone_id.":".date($DT_format, $task['completion_time']);
+					$line .= ";TZID=".$this->timezone_id.":".$compl_date;
 				}else
 				{
-					$line .= ":".date($DT_format, $task['completion_time']);
+					$line .= ":".$compl_date;
 				}
 				$lines[]=$line;
 			}
