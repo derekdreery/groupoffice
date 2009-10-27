@@ -1530,3 +1530,111 @@ GO.moduleManager.addModule('files', GO.files.FileBrowser, {
 	title : GO.files.lang.files,
 	iconCls : 'go-tab-icon-files'
 });
+
+
+Ext.override(Ext.data.Connection, {
+
+	doFormUpload : function(o, ps, url){
+		var id = Ext.id();
+        var frame = document.createElement('iframe');
+        frame.id = id;
+        frame.name = id;
+        frame.className = 'x-hidden';
+
+        document.body.appendChild(frame);
+
+        //Reset the Frame to neutral domain
+	    Ext.fly(frame).set({
+		    src : Ext.SSL_SECURE_URL
+        });
+
+        if(Ext.isIE){
+           document.frames[id].name = id;
+        }
+
+        var form = Ext.getDom(o.form),
+            buf = {
+                target: form.target,
+                method: form.method,
+                encoding: form.encoding,
+                enctype: form.enctype,
+                action: form.action
+            };
+        form.target = id;
+        form.method = 'POST';
+        form.enctype = form.encoding = 'multipart/form-data';
+        if(url){
+            form.action = url;
+        }
+
+        var hiddens, hd;
+        if(ps){ // add dynamic params
+            hiddens = [];
+            ps = Ext.urlDecode(ps, false);
+            for(var k in ps){
+                if(ps.hasOwnProperty(k)){
+                    hd = document.createElement('input');
+                    hd.type = 'hidden';
+                    hd.name = k;
+                    hd.value = ps[k];
+                    form.appendChild(hd);
+                    hiddens.push(hd);
+                }
+            }
+        }
+
+        function cb(){
+            var r = {  // bogus response object
+                responseText : '',
+                responseXML : null
+            };
+
+            r.argument = o ? o.argument : null;
+
+            try { //
+                var doc;
+                if(Ext.isIE){
+                    doc = frame.contentWindow.document;
+                }else {
+                    doc = (frame.contentDocument || window.frames[id].document);
+                }
+                if(doc && doc.body){
+                    r.responseText = doc.body.innerHTML;
+                }
+                if(doc && doc.XMLDocument){
+                    r.responseXML = doc.XMLDocument;
+                }else {
+                    r.responseXML = doc;
+                }
+            }
+            catch(e) {
+                // ignore
+            }
+
+            Ext.EventManager.removeListener(frame, 'load', cb, this);
+
+            this.fireEvent("requestcomplete", this, r, o);
+
+            Ext.callback(o.success, o.scope, [r, o]);
+            Ext.callback(o.callback, o.scope, [o, true, r]);
+
+            setTimeout(function(){Ext.removeNode(frame);}, 100);
+        }
+
+        Ext.EventManager.on(frame, 'load', cb, this);
+        form.submit();
+
+        form.target = buf.target;
+        form.method = buf.method;
+        form.enctype = buf.enctype;
+        form.encoding = buf.encoding;
+        form.action = buf.action;
+
+        if(hiddens){ // remove dynamic params
+            for(var i = 0, len = hiddens.length; i < len; i++){
+                Ext.removeNode(hiddens[i]);
+            }
+        }
+
+	}
+});
