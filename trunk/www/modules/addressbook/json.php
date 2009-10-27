@@ -321,7 +321,7 @@ try
 				}
 			} else {
 				$field = '';
-				$query = '%'.$query.'%';
+				$query = !empty($query) ? '%'.$query.'%' : '';
 			}
 			
 			$advancedQuery = '';
