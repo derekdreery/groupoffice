@@ -52,7 +52,7 @@ class Number {
 	function to_phpnumber($number)
 	{
 		$number = str_replace($_SESSION['GO_SESSION']['thousands_separator'],'', $number);
-		return str_replace($_SESSION['GO_SESSION']['decimal_separator'],'.',$number);
+		return floatval(str_replace($_SESSION['GO_SESSION']['decimal_separator'],'.',$number));
 	}
 
 	/**
