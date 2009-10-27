@@ -5,7 +5,7 @@ require('Group-Office.php');
 
 $module = isset($_REQUEST['module']) ? $_REQUEST['module'] : 'email';
 $function = isset($_REQUEST['function']) ? $_REQUEST['function'] : 'showComposer';
-$params = isset($_REQUEST['params']) ? ($_REQUEST['params']) : '';
+$params = isset($_REQUEST['params']) ? ($_REQUEST['params']) : '0';
 
 //var_dump($params);
 
