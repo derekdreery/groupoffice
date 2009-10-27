@@ -2129,7 +2129,7 @@ class calendar extends db
 		{
 			$cache['id']=$this->f('id');
 			$cache['user_id']=$this->f('user_id');
-			$cache['name'] = htmlspecialchars($this->f('name').' ('.Date::get_timestamp($this->f('start_time'), false).')', ENT_QUOTES, 'utf-8');
+			$cache['name'] = htmlspecialchars($this->f('name').' ('.Date::get_timestamp($this->f('start_time'), true).')', ENT_QUOTES, 'utf-8');
 			$cache['link_type']=1;
 			$cache['module']='calendar';
 			$cache['description']='';
