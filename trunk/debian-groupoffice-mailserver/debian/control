@@ -26,5 +26,6 @@ Depends: groupoffice-com,
 	libmime-charset-perl,
 	libmime-encwords-perl,
 	${misc:Depends}
-Description: Mailserver solution for Group-Office
- Use Group-Office in combination with postfix, dovecot and spamassasin
+Description: 
+ The ultimate mailserver solution for Group-Office.
+ It configures Group-Office with postfix, dovecot and spamassasin

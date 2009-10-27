@@ -13,6 +13,6 @@ Depends: groupoffice-com,
 		groupoffice-mailserver,
 		php5-cli,
                 ${misc:Depends}
-Description: Create multiple Group-Office installations
- It uses a virtual document root for Apache 2 to create multiple
- Group-Office domains easily.
+Description:
+ Create multiple Group-Office installations. It uses a virtual document root for
+ Apache 2 to create multiple Group-Office domains easily.

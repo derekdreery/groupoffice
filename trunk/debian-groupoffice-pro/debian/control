@@ -19,5 +19,5 @@ Depends: groupoffice-com,
 	php5-curl,
 	libwbxml2-utils,
 	${misc:Depends}
-Description: Adds the professional modules
- You need a license to make them work.
+Description: 
+ Adds the professional modules. You need a license to make them work.
