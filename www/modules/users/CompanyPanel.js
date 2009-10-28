@@ -17,21 +17,21 @@ GO.users.CompanyPanel = function(config)
 	{
 		config={};
 	}
-	
+
 	config.autoScroll=true;
 	config.border=false;
 	config.hideLabel=true;
-	config.title = GO.users.lang.companyProfile;
-	config.layout='column';
-	config.cls='go-form-panel';
+	config.layout='column';	
 	config.labelWidth=120;
-	
 
-	config.items=[{
+	this.comboBoxId = config.cb_id;
+	
+	config.items=[{			
 			columnWidth: .5,
 			layout: 'form',
 			border: false,
-			cls:'go-form-panel',waitMsgTarget:true,
+			bodyStyle:'padding-right:5px',
+			waitMsgTarget:true,
 			defaults: {anchor:'100%'},
 			defaultType: 'textfield',
 			items: [
@@ -46,7 +46,8 @@ GO.users.CompanyPanel = function(config)
 			columnWidth: .5,
 			layout: 'form',
 			border: false,
-			cls:'go-form-panel',waitMsgTarget:true,
+			bodyStyle:'padding-left:5px',
+			waitMsgTarget:true,
 			defaults: {anchor:'100%'},
 			defaultType: 'textfield',
 			items: [
@@ -54,7 +55,7 @@ GO.users.CompanyPanel = function(config)
 			{fieldLabel: GO.lang['strWorkState'], name: 'work_state'},
 			new GO.form.SelectCountry({
 				fieldLabel: GO.lang['strWorkCountry'],
-				id: 'work_countryCombo',
+				id:this.comboBoxId,
 				hiddenName: 'work_country',
 				value: GO.settings.country
 			}),

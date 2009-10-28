@@ -143,8 +143,8 @@ class users extends db
 	}
 
 	function save_settings()
-	{
-		global $GO_USERS, $lang, $GO_CONFIG;
+	{		
+		global $GO_USERS, $lang, $GO_CONFIG, $GO_LANGUAGE;
 
 		$user['id'] = isset($_POST['user_id']) ? (trim($_POST['user_id'])) : 0;
 
@@ -152,36 +152,35 @@ class users extends db
 		{
 			$user['first_name'] = $_POST['first_name'];
 			$user['middle_name'] = $_POST['middle_name'];
-			$user['last_name'] = $_POST['last_name'];
-			$user['email'] = $_POST["email"];
-			//$user['enabled'] = isset($_POST['enabled']) ? '1' : '0' ;
+			$user['last_name'] = $_POST['last_name'];			
 			$user['title'] = $_POST["title"];
-
-
 			$user['initials'] = $_POST["initials"];
+			$user['sex'] = $_POST["sex"];
 			$user['birthday'] = Date::to_db_date($_POST['birthday']);
-			//$user['work_phone'] = $_POST["work_phone"];
-			$user['home_phone'] = $_POST["home_phone"];
-			$user['fax'] = $_POST["fax"];
-			$user['cellular'] = $_POST["cellular"];
-			$user['country'] = $_POST["country"];
-			$user['state'] = $_POST["state"];
-			$user['city'] = $_POST["city"];
-			$user['zip'] = $_POST["zip"];
 			$user['address'] = $_POST["address"];
 			$user['address_no'] = $_POST["address_no"];
-			//$user['department'] = $_POST["department"];
-			//$user['function'] = $_POST["function"];
+			$user['zip'] = $_POST["zip"];
+			$user['city'] = $_POST["city"];
+			$user['state'] = $_POST["state"];
+			$user['country'] = $_POST["country"];
+
+			$user['email'] = $_POST["email"];
+			$user['home_phone'] = $_POST["home_phone"];
+			$user['fax'] = $_POST["fax"];
+			$user['cellular'] = $_POST["cellular"];						
+			
 			$user['company'] = $_POST["company"];
-			/*$user['work_country'] = $_POST["work_country"];
-			$user['work_state'] = $_POST["work_state"];
-			$user['work_city'] = $_POST["work_city"];
-			$user['work_zip'] = $_POST["work_zip"];
+			$user['department'] = $_POST["department"];
+			$user['function'] = $_POST["function"];
 			$user['work_address'] = $_POST["work_address"];
 			$user['work_address_no'] = $_POST["work_address_no"];
+			$user['work_zip'] = $_POST["work_zip"];
+			$user['work_city'] = $_POST["work_city"];
+			$user['work_state'] = $_POST["work_state"];
+			$user['work_country'] = $_POST["work_country"];
+			$user['work_phone'] = $_POST["work_phone"];
 			$user['work_fax'] = $_POST["work_fax"];
-			$user['homepage'] = $_POST["homepage"];*/
-			$user['sex'] = $_POST["sex"];
+			$user['homepage'] = $_POST["homepage"];		
 
 			if(empty($user['email']) || empty($user['first_name']) || empty($user['last_name']))
 			{

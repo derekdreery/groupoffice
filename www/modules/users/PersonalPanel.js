@@ -26,6 +26,8 @@ GO.users.PersonalPanel = function(config)
 	//config.cls='go-form-panel';
 	config.labelWidth=120;
 	config.autoHeight=true;
+
+	this.comboBoxId = config.cb_id;
 	
 	var rightColItems = [
 					{fieldLabel: GO.lang['strAddress'], name: 'address'},
@@ -35,7 +37,7 @@ GO.users.PersonalPanel = function(config)
 					{fieldLabel: GO.lang['strState'], name: 'state'},
 					new GO.form.SelectCountry({
 						fieldLabel: GO.lang['strCountry'],
-						id: 'countryCombo',
+						id:this.comboBoxId,
 						hiddenName: 'country',
 						value: GO.settings.country
 					}),
