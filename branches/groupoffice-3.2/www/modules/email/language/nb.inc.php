@@ -55,3 +55,5 @@ $lang['email']['alias']='Alias';
 $lang['email']['aliases']='Aliaser';
 
 $lang['email']['noUidNext']='Din mailserver støtter ikke UIDNEXT. Mappen \'Utkast\' er derfor automatisk slått av for denne kontoen.';
+
+$lang['email']['disable_trash_folder']='Feil ved flytting av e-post til papirkurv. Årsaken kan være at du ikke har mer diskplass. Du kan bare frigjøre plass ved å deaktivere mappen for papirkurv på: Administrasjon -> Kontoer -> Dobbeltklikk på din konto -> Mapper';
