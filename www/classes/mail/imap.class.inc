@@ -549,19 +549,27 @@ class imap{
 		$message["reply-to"] = isset($values['reply-to']) ? $RFC822->reformat_address_list($this->enc_utf8($values['reply-to'])) : $message["from"];
 
 		if(isset($values['date'])){
-			
+		
 			//a popular mail client sends the time incorrect. Here's a hack to make it work
 			if(substr($values['date'],-2)=='UT')
 			{
 				$values['date'].='C';
 			}			
 			//some clients put a (+0100) behind the date.
-			$values['date']=trim(preg_replace('/\(.+\)/', '', $values['date']));			
+			$values['date']=trim(preg_replace('/\(.+\)/', '', $values['date']));					
+			
+			//cut away the 2-character abbreviation and the comma
+			if(stripos($values['date'],' ') == 2)
+			{
+				$values['date'] = substr($values['date'], 3);
+				$values['date'] = str_replace(',','',$values['date']);
+			}		
+
 			$message['udate']=strtotime($values['date']);
 		}else
 		{
 			$message['udate']=0;
-		}		
+		}	
 		
 		$message['subject'] = isset($values['subject']) ? $this->enc_utf8($values['subject']) : '';
 
