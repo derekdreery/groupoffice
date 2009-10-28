@@ -39,8 +39,8 @@ switch($task)
 		
 		$result['data']['start_module_name'] = isset($GO_MODULES->modules[$result['data']['start_module']]['humanName']) ? $GO_MODULES->modules[$result['data']['start_module']]['humanName'] : ''; 
 		
-		$result['data']['registration_time'] = date("d-m-Y  H:i", $result['data']['registration_time']);
-		$result['data']['lastlogin'] = date("d-m-Y  H:i", $result['data']['lastlogin']);
+		$result['data']['registration_time'] = Date::get_timestamp($result['data']['registration_time']);
+		$result['data']['lastlogin'] = ($result['data']['lastlogin']) ? Date::get_timestamp($result['data']['lastlogin']) : '-';
 		if($result['data'])
 		{
 			$result['success']=true;
