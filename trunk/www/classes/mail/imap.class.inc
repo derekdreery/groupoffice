@@ -559,11 +559,11 @@ class imap{
 			$values['date']=trim(preg_replace('/\(.+\)/', '', $values['date']));					
 			
 			//cut away the 2-character abbreviation and the comma
-			if(preg_match('/^[a-zA-Z][a-zA-Z][ ]/', $values['date']))
+			if(preg_match('/^[a-zA-Z]{2} /', $values['date']))			
 			{
 				$values['date'] = substr($values['date'], 3);
 				$values['date'] = str_replace(',','',$values['date']);
-			}
+			}			
 
 			$message['udate']=strtotime($values['date']);
 		}else
