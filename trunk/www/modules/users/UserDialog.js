@@ -318,12 +318,18 @@ Ext.extend(GO.users.UserDialog, Ext.Window,{
 
 		this.accountTab = new GO.users.AccountPanel();
 		this.personalTab = new Ext.form.FieldSet({
-			title:GO.users.lang.profile,
-			items:new GO.users.PersonalPanel(),
+			title:GO.users.lang.personalProfile,
+			items:new GO.users.PersonalPanel({
+				cb_id:'users_countryCombo'
+			}),
 			autoHeight:true,
-			layout:'fit'
+			layout:'fit'			
 		});
-		this.companyTab = new GO.users.CompanyPanel();
+		this.companyTab = new GO.users.CompanyPanel({
+			title:GO.users.lang.companyProfile,
+			cls:'go-form-panel',
+			cb_id:'users_work_countryCombo'
+		});
 		this.loginTab = new GO.users.LoginPanel();
 		this.permissionsTab = new GO.users.PermissionsPanel();
 		this.regionalSettingsTab = new GO.users.RegionalSettingsPanel();

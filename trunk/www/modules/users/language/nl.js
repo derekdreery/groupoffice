@@ -57,7 +57,7 @@ GO.users.lang.newPassword = 'Nieuw wachtwoord';
 GO.users.lang.confirmPassword = 'Wachtwoord bevestigen';
 GO.users.lang.moduleAccess = 'Module toegang';
 GO.users.lang.groupMembership = 'Groepslidmaatschap';
-GO.users.lang.profile = 'Persoonlijk profiel';
+GO.users.lang.personalProfile = 'Persoonlijk profiel';
 GO.users.lang.settings = 'Persoonlijke instellingen';
 GO.users.lang.dmy = 'Dag-Maand-Jaar';
 GO.users.lang.mdy = 'Maand-Dag-Jaar';
@@ -70,6 +70,7 @@ GO.users.lang.regionalSettings = 'Regionale instellingen';
 GO.users.lang.userSettings = 'Gebruikers instellingen';
 GO.users.lang.maxUsersReached='Het maximaal aantal gebruikers is bereikt. Neem contact op met uw provider om het maximaal aantal gebruikers uit te breiden.';
 GO.users.lang.group='Groep';
+GO.users.lang.profile='Profiel';
 
 GO.users.lang.muteSound='Demp geluiden';
 

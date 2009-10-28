@@ -68,7 +68,7 @@ GO.users.lang.newPassword = 'New password';
 GO.users.lang.confirmPassword = 'Confirm password';
 GO.users.lang.moduleAccess = 'Module access';
 GO.users.lang.groupMembership = 'Group membership';
-GO.users.lang.profile = 'Personal profile';
+GO.users.lang.personalProfile = 'Personal profile';
 GO.users.lang.settings = 'Personal settings';
 GO.users.lang.dmy = 'Day-Month-Year';
 GO.users.lang.mdy = 'Month-Day-Year';
@@ -79,6 +79,7 @@ GO.users.lang.sunday = 'Sunday';
 GO.users.lang.monday = 'Monday';
 GO.users.lang.regionalSettings = 'Regional settings';
 GO.users.lang.userSettings = 'User settings';
+GO.users.lang.profile='Profile';
 
 GO.users.lang.maxUsersReached='The maximum number of users has been reached. Contact your hosting provider to extend your maximum number of users.';
 
