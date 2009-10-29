@@ -1160,6 +1160,7 @@ class calendar extends db
 				$reminder['link_type']=1;
 				$reminder['link_id']=$event['id'];
 				$reminder['time']=$event['start_time']-$event['reminder'];
+				$reminder['vtime']=$event['start_time'];
 
 				$rm->add_reminder($reminder);
 			}
@@ -1298,6 +1299,7 @@ class calendar extends db
 				$reminder['link_type']=1;
 				$reminder['link_id']=$event['id'];
 				$reminder['time']=$event['start_time']-$event['reminder'];
+				$reminder['vtime']=$event['start_time'];
 
 				if($existing_reminder)
 				{

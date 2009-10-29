@@ -266,6 +266,8 @@ try
 				$user['max_rows_list'] = $_POST["max_rows_list"];
 				$user['sort_name'] = $_POST["sort_name"];
 				$user['start_module'] = $_POST["start_module"];
+				$user['mute_sound'] = isset($_POST["mute_sound"]) ? '1' : '0';
+				$user['mail_reminders'] = isset($_POST["mail_reminders"]) ? '1' : '0';
 			}
 
 			if($_POST['language'])

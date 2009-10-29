@@ -353,3 +353,5 @@ VALUES (
 
 $updates[]="ALTER TABLE `go_state` CHANGE `name` `name` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL";
 
+$updates[]="ALTER TABLE `go_reminders` ADD `vtime` INT NOT NULL DEFAULT 0;";
+$updates[]="ALTER TABLE `go_reminders` ADD `mail_send` TINYINT NOT NULL DEFAULT 0;";
