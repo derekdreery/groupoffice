@@ -56,8 +56,11 @@ class reminder extends db
 	* @return bool True on success
 	*/
 	
-	function update_reminder($reminder)
-	{			
+	function update_reminder($reminder, $reset_mail_send=true)
+	{
+		if($reset_mail_send)
+			$reminder['mail_send'] = 0;
+			
 		return $this->update_row('go_reminders', 'id', $reminder);
 	}
 	
@@ -191,10 +194,14 @@ class reminder extends db
 	* @access public
 	* @return Int Number of records found
 	*/
-	function get_reminders($user_id)
+	function get_reminders($user_id, $not_mailed=false)
 	{
 		//echo date('Ymd G:i', time());
 	 	$sql = "SELECT * FROM go_reminders WHERE user_id=".$this->escape($user_id)." AND time<".time();
+		if($not_mailed)
+		{
+			$sql .= ' AND mail_send = 0';
+		}
 		$this->query($sql);
 
 		return $this->num_rows();

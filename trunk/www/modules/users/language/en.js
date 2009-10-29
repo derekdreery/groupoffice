@@ -86,6 +86,7 @@ GO.users.lang.maxUsersReached='The maximum number of users has been reached. Con
 GO.users.lang.group='Group';
 
 GO.users.lang.muteSound='Mute sound';
+GO.users.lang.mailReminders='Mail reminders';
 
 GO.users.lang.downloadSampleCSV='Download sample CSV';
 

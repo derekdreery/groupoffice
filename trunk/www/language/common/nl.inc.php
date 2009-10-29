@@ -186,3 +186,6 @@ $lang['common']['startMenu']='Startmenu';
 $lang['common']['invalidDateError']='U heeft een ongeldige datum ingevoerd';
 $lang['common']['error']='Fout';
 
+$lang['common']['reminder']='Herinnering';
+$lang['common']['unknown']='Onbekend';
+$lang['common']['time']='Tijd';

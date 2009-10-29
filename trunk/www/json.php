@@ -151,8 +151,20 @@ try{
 			{
 				$reminder=$rm->record;
 				$reminder['iconCls']='go-link-icon-'.$reminder['link_type'];
-				$reminder['link_type_name']=isset($lang['link_type'][$reminder['link_type']]) ? $lang['link_type'][$reminder['link_type']] : 'Unknown';
-				$reminder['local_time']=date($_SESSION['GO_SESSION']['time_format'], $reminder['time']);
+				$reminder['link_type_name']=isset($lang['link_type'][$reminder['link_type']]) ? $lang['link_type'][$reminder['link_type']] : 'Unknown';				
+
+				$now = getdate(time());
+				$today = mktime(0,0,0,$now['mon'],$now['mday'], $now['year']);
+
+				$time = ($reminder['vtime']) ? $reminder['vtime'] : $reminder['time'];
+				if($time >= $today)
+				{
+					$reminder['local_time']=date($_SESSION['GO_SESSION']['time_format'], $time);
+				}else
+				{
+					$reminder['local_time']=date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], $time);
+				}
+					
 				$response['reminders'][]=$reminder;
 			}
 			

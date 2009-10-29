@@ -197,3 +197,7 @@ $lang['common']['goAlreadyStarted']='Group-Office was already started. The dialo
 $lang['common']['no']='No';
 
 $lang['commmon']['logFiles']='Log files';
+
+$lang['common']['reminder']='Reminder';
+$lang['common']['unknown']='Unknown';
+$lang['common']['time']='Time';
