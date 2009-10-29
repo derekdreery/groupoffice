@@ -46,28 +46,18 @@ class formprocessor{
 	{
 		global $GO_SECURITY, $GO_LANGUAGE, $GO_MODULES, $GO_USERS, $GO_CONFIG, $lang;
 
+		$this->check_required();
+
 		if(isset($_POST['language']) && $_POST['language']!=$GO_LANGUAGE->language)
 		{
 			$GO_LANGUAGE->set_language($_POST['language']);
 			require($GO_LANGUAGE->get_base_language_file('common'));
 		}
 
-
 		if(!isset($_POST['salutation']))
 			$_POST['salutation']=isset($_POST['sex']) ? $lang['common']['default_salutation'][$_POST['sex']] : $lang['common']['default_salutation']['unknown'];
 
 		
-
-		if(isset($_POST['required']))
-		{
-			foreach($_POST['required'] as $key)
-			{
-				if(empty($_POST[$key]))
-				{
-					throw new Exception($lang['common']['missingField']);
-				}
-			}
-		}
 
 		if(isset($_POST['email']) && !String::validate_email($_POST['email']))
 		{
@@ -298,10 +288,65 @@ class formprocessor{
 
 	}
 
+	function check_required(){
+		global $lang;
+		//remove empty texts
+		
+		if(isset($_POST['empty_texts'])){
+			foreach($_POST['empty_texts'] as $value){
+				
+				$value = explode(':',$value);
+				
+				$key = $value[0];
+				$value=$value[1];
+				
+				if($pos = strpos($key, '['))
+				{
+					$key1 = substr($key,0,$pos);
+					$key2 = substr($key,$pos+1, -1);
+
+					if(isset($_POST[$key1][$key2]) && $_POST[$key1][$key2]==$value){
+						$_POST[$key1][$key2]='';
+					}
+				}else
+				{
+					if(isset($_POST[$key]) && $_POST[$key]==$value){
+						$_POST[$key]='';
+					}
+				}
+			}
+		}
+		
+		if(isset($_POST['required']))
+		{
+			foreach($_POST['required'] as $key)
+			{
+				if($pos = strpos($key, '['))
+				{
+					$key1 = substr($key,0,$pos);
+					$key2 = substr($key,$pos+1, -1);
+
+					if(empty($_POST[$key1][$key2]))
+					{
+						throw new Exception($lang['common']['missingField']);
+					}
+				}else
+				{
+					if(empty($_POST[$key]))
+					{
+						throw new Exception($lang['common']['missingField']);
+					}
+				}
+			}
+		}
+	}
+
 	function process_simple_contact_form($email){
 		global $GO_CONFIG, $lang;
+
+		$this->check_required();
 		
-		if (empty($_POST['name']) || empty($_POST['email']) || empty($_POST['subject']) || empty($_POST['body']))
+		if (empty($_POST['name']) || empty($_POST['email']) || empty($_POST['subject']))
 		{
 			throw new Exception($lang['common']['missingField']);
 		}elseif(!String::validate_email($_POST['email']))
@@ -309,9 +354,21 @@ class formprocessor{
 			throw new Exception($lang['common']['invalidEmailError']);
 		}
 
+		$body = isset($_POST['body']) ? $_POST['body'] : '';
+
+		if(isset($_POST['extra'])){
+			foreach($_POST['extra'] as $name=>$value){
+				if(!empty($value))
+					$body .= "\n\n".$name.":\n".$value;
+			}
+		}
+
+		if(empty($body))
+			throw new Exception($lang['common']['missingField']);
+
 		require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 		$swift = new GoSwift($email, $_POST['subject']);
-		$swift->set_body($_POST['body']);
+		$swift->set_body($body, 'plain');
 		$swift->set_from($_POST['email'], $_POST['name'].' (Via website)');
 		return $swift->sendmail();
 	}

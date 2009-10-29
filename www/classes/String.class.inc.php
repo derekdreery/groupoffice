@@ -24,6 +24,9 @@
 
 class String {
 
+	function escape_javascript($str){
+		return strtr($str, array('\\'=>'\\\\',"'"=>"\\'",'"'=>'\\"',"\r"=>'\\r',"\n"=>'\\n','</'=>'<\/'));
+	}
 
 	function clean_utf8($str, $source_charset='UTF-8') {
 
