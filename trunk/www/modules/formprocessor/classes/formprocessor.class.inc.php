@@ -298,7 +298,7 @@ class formprocessor{
 
 	}
 
-	function process_simple_contact_form(){
+	function process_simple_contact_form($email){
 		global $GO_CONFIG, $lang;
 		
 		if (empty($_POST['name']) || empty($_POST['email']) || empty($_POST['subject']) || empty($_POST['body']))
@@ -310,7 +310,7 @@ class formprocessor{
 		}
 
 		require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
-		$swift = new GoSwift('test@intermeshdev.nl', $_POST['subject']);
+		$swift = new GoSwift($email, $_POST['subject']);
 		$swift->set_body($_POST['body']);
 		$swift->set_from($_POST['email'], $_POST['name'].' (Via website)');
 		return $swift->sendmail();
