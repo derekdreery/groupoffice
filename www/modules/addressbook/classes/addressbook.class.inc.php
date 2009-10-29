@@ -626,11 +626,11 @@ class addressbook extends db {
 		return false;
 	}
 
-	function delete_contact($contact_id) {
+	function delete_contact($contact_id, $contact=false) {
 
 		global $GO_CONFIG,$GO_LINKS, $GO_MODULES;
 
-		$contact=$this->get_contact($contact_id);
+		if(!$contact) $contact = $this->get_contact($contact_id);
 
 		#$GO_LINKS->delete_link($contact['link_id']);
 
@@ -1005,7 +1005,7 @@ class addressbook extends db {
 
 		$addressbook = $this->get_addressbook($addressbook_id);
 
-		global $GO_SECURITY, $GO_MODULES;
+		global $GO_SECURITY, $GO_MODULES, $GO_EVENTS;
 
 		if(isset($GO_MODULES->modules['files'])) {
 			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
@@ -1031,8 +1031,11 @@ class addressbook extends db {
 		$ab = new addressbook();
 
 		$this->get_contacts($addressbook_id);
+		$contact_ids = array();
 		while($this->next_record()) {
-			$ab->delete_contact($this->f('id'));
+			$contact_id = $this->f('id');
+			$ab->delete_contact($contact_id);
+			$contact_ids[] = $contact_id;
 		}
 
 		$this->get_companies($addressbook_id);
@@ -1042,6 +1045,9 @@ class addressbook extends db {
 
 		$sql = "DELETE FROM ab_addressbooks WHERE id='".$this->escape($addressbook_id)."'";
 		$this->query($sql);
+
+		if(count($contact_ids))
+			$GO_EVENTS->fire_event('addressbook_delete', array($contact_ids));
 
 		if(isset($GO_MODULES->modules['sync'])) {
 			$sql = "DELETE FROM sync_addressbook_user WHERE addressbook_id='".$this->escape($addressbook_id)."'";

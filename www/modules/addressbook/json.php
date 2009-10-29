@@ -184,7 +184,9 @@ try
 							throw new AccessDeniedException();
 						}
 
-						$ab->delete_contact($id);
+						$ab->delete_contact($id, $contact);
+						
+						$GO_EVENTS->fire_event('contact_delete', array($contact));
 					}
 				}
 				catch (Exception $e)
