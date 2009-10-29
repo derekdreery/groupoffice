@@ -40,24 +40,27 @@ try{
 			$month = date("m", $local_time);
 			$day = date("j", $local_time);
 
-
-			$timezone_offset = Date::get_timezone_offset(mktime(0, 0, 0, $month, $day, $year))*3600;
-			$interval_start_time = mktime(0, 0, 0, $month, $day, $year)-$timezone_offset;
-			$interval_end_time = mktime(0, 0, 0, $month, $day+2, $year)-$timezone_offset;
-
+			$interval_start_time = mktime(0, 0, 0, $month, $day, $year);
+			$interval_end_time = mktime(0, 0, 0, $month, $day+2, $year);
 
 			$user_id = $_REQUEST['user_id'];
 			$calendars = array();
 			$calendars_name = array();
+			$calendars_with_bdays = array();
 			if($_REQUEST['portlet'])
 			{
 				if($cal->get_visible_calendars($user_id) == 0)
 					$calendars[] = '0';
 				while($cal->next_record())
 				{
-					$cur_calendar = $cal2->get_calendar($cal->f('calendar_id'));
+ 					$cur_calendar = $cal2->get_calendar($cal->f('calendar_id'));
 					$calendars[] = $cal->f('calendar_id');
 					$calendars_name[] = $cur_calendar['name'];
+
+					if($cur_calendar['show_bdays'])
+					{
+						$calendars_with_bdays[] = $cur_calendar;
+					}
 				}
 				$user_id = 0;
 			}
@@ -65,7 +68,7 @@ try{
 
 			$events = $cal->get_events_in_array($calendars,$user_id, $interval_start_time, $interval_end_time);
 
-			$today_end = mktime(0, 0, 0, $month, $day+1, $year)-$timezone_offset;
+			$today_end = mktime(0, 0, 0, $month, $day+1, $year);
 
 			$response['count']=0;
 			$response['results']=array();
@@ -99,6 +102,43 @@ try{
 					'calendar_name'=>(isset($calendars_name) && $cal_id !== false)? $calendars_name[$cal_id]: ''
 				);
 				$response['count']++;
+			}
+
+			$num_books = count($calendars_with_bdays);
+			if($num_books)
+			{
+				require_once ($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
+				$ab = new addressbook();
+
+				$abooks = array();
+				for($i=0; $i<$num_books; $i++)
+				{
+					$user_id = $calendars_with_bdays[$i]['user_id'];
+					$abooks = array_merge($abooks, $ab->get_user_addressbook_ids($user_id));
+				}
+				$abooks = array_unique($abooks);
+
+				$response['books'] = $abooks;
+				$cal->get_bdays($interval_start_time, $interval_end_time, $abooks);
+				while($bday = $cal->next_record())
+				{
+					$name = String::format_name($bday['last_name'], $bday['first_name'], $bday['middle_name']);
+
+					$start_time = $bday['upcoming'].' 00:00';
+					$end_time = $bday['upcoming'].' 23:59';
+					$start_timestamp = Date::to_unixtime($start_time);
+
+					$response['results'][] = array(
+						'id'=>$response['count']++,
+						'name'=>str_replace('{NAME}',$name,$lang['calendar']['birthday_name']),
+						'description'=>str_replace(array('{NAME}','{AGE}'), array($name,$bday['upcoming']-$bday['birthday']), $lang['calendar']['birthday_desc']),
+						'time'=>date($_SESSION['GO_SESSION']['date_format'], $start_timestamp),
+						'start_time'=>$start_time,
+						'end_time'=>$end_time,
+						'day'=>$today_end<=$start_timestamp ? $lang['common']['tomorrow'] : $lang['common']['today'],
+						'read_only'=>true
+					);
+				}				
 			}
 
 			break;
@@ -272,18 +312,18 @@ try{
 				}
 
 				$response['results'][] = array(
-'id'=>$response['count'],
-'event_id'=> $event['id'],
-'name'=> htmlspecialchars($event['name'], ENT_COMPAT, 'UTF-8'),
-'time'=>date($date_format, $event['start_time']),
-'start_time'=> date('Y-m-d H:i', $event['start_time']),
-'end_time'=> date('Y-m-d H:i', $event['end_time']),
-'location'=>htmlspecialchars($event['location'], ENT_COMPAT, 'UTF-8'),
-'description'=>nl2br(htmlspecialchars(String::cut_string($event['description'],$max_description_length), ENT_COMPAT, 'UTF-8')),
-'background'=>$event['background'],
-'private'=>($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']),
-'repeats'=>!empty($event['rrule']),
-'day'=>$lang['common']['full_days'][date('w', $event['start_time'])].' '.date($_SESSION['GO_SESSION']['date_format'], $event['start_time'])
+					'id'=>$response['count'],
+					'event_id'=> $event['id'],
+					'name'=> htmlspecialchars($event['name'], ENT_COMPAT, 'UTF-8'),
+					'time'=>date($date_format, $event['start_time']),
+					'start_time'=> date('Y-m-d H:i', $event['start_time']),
+					'end_time'=> date('Y-m-d H:i', $event['end_time']),
+					'location'=>htmlspecialchars($event['location'], ENT_COMPAT, 'UTF-8'),
+					'description'=>nl2br(htmlspecialchars(String::cut_string($event['description'],$max_description_length), ENT_COMPAT, 'UTF-8')),
+					'background'=>$event['background'],
+					'private'=>($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']),
+					'repeats'=>!empty($event['rrule']),
+					'day'=>$lang['common']['full_days'][date('w', $event['start_time'])].' '.date($_SESSION['GO_SESSION']['date_format'], $event['start_time'])
 				);
 				$response['count']++;
 			}
@@ -294,7 +334,7 @@ try{
 				$ab = new addressbook();
 				$abooks = $ab->get_user_addressbook_ids($calendar['user_id']);
 
-				if($start_time < $end_time)
+				//if($start_time < $end_time)
 				$cal->get_bdays($start_time, $end_time ,$abooks);
 				while($bday = $cal->next_record())
 				{			

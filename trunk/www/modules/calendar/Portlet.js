@@ -133,12 +133,15 @@ Ext.extend(GO.calendar.SummaryGroupPanel, Ext.grid.GridPanel, {
 	{
 		GO.calendar.SummaryGroupPanel.superclass.afterRender.call(this);
     
-    GO.calendar.eventDialog.on('save', function(){this.store.reload()}, this);
-    
-    this.on("rowdblclick", function(grid, rowClicked, e){
-    	var event_id = grid.selModel.selections.keys[0];			 
-			GO.calendar.eventDialog.show({event_id: event_id});
-		}, this);		  
+		GO.calendar.eventDialog.on('save', function(){this.store.reload()}, this);
+
+		this.on("rowdblclick", function(grid, rowClicked, e){
+			if(!grid.selModel.selections.items[0].json.read_only)
+			{
+				var event_id = grid.selModel.selections.keys[0];
+				GO.calendar.eventDialog.show({event_id: event_id});
+			}
+		}, this);
 		
 		Ext.TaskMgr.start({
 		    run: this.store.load,
