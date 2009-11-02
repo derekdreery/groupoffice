@@ -88,10 +88,6 @@
 		title: GO.lang['strReadPermissions']					
 	});
 	
-	this.writePermissionsTab = new GO.grid.PermissionsPanel({
-		title: GO.lang['strWritePermissions']
-	});
-	
 	this.commentsPanel = new Ext.Panel({
 		layout:'form',
 		labelWidth: 70,
@@ -112,7 +108,7 @@
 		  border:false,
 		  anchor:'100% 100%',
 		  hideLabel:true,
-			items:[this.propertiesPanel, this.commentsPanel, this.readPermissionsTab, this.writePermissionsTab]		
+			items:[this.propertiesPanel, this.commentsPanel, this.readPermissionsTab]		
 		});
 
 	if(GO.workflow)
@@ -178,12 +174,11 @@ Ext.extend(GO.files.FolderPropertiesDialog, Ext.Window, {
 			success: function(form, action) {
 
 				var shareField = this.formPanel.form.findField('share');
-				shareField.setValue(action.result.data.acl_read>0);
+				shareField.setValue(action.result.data.acl_id>0);
 				
 				this.parent_id=action.result.data.parent_id;
 								
-				this.readPermissionsTab.setAcl(action.result.data.acl_read);
-				this.writePermissionsTab.setAcl(action.result.data.acl_write);				
+				this.readPermissionsTab.setAcl(action.result.data.acl_id);
 				
 				this.setWritePermission(action.result.data.is_home_dir, action.result.data.write_permission, action.result.data.is_owner);
 
@@ -206,7 +201,6 @@ Ext.extend(GO.files.FolderPropertiesDialog, Ext.Window, {
 		form.findField('name').setDisabled(is_home_dir || !writePermission);
 		form.findField('share').setDisabled(is_home_dir || !is_owner || !writePermission);
 		this.readPermissionsTab.setDisabled(!is_owner || this.readPermissionsTab.acl_id==0);
-		this.writePermissionsTab.setDisabled(!is_owner || this.writePermissionsTab.acl_id==0);
 	},
 	
 	save : function(hide)
@@ -221,10 +215,9 @@ Ext.extend(GO.files.FolderPropertiesDialog, Ext.Window, {
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){
 
-				if(action.result.acl_read)
+				if(action.result.acl_id)
 				{
-					this.readPermissionsTab.setAcl(action.result.acl_read);
-					this.writePermissionsTab.setAcl(action.result.acl_write);			
+					this.readPermissionsTab.setAcl(action.result.acl_id);
 				}
 				
 				if(action.result.path)

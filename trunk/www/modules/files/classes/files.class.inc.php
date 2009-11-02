@@ -242,7 +242,7 @@ class files extends db {
 		$this->update_folder($up_folder);
 	}
 
-	function check_share($path, $user_id, $acl_read, $acl_write, $quiet=true) {
+	function check_share($path, $user_id, $acl_id, $quiet=true) {
 		global $GO_LANGUAGE, $lang, $GO_CONFIG;
 
 		$line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
@@ -255,11 +255,10 @@ class files extends db {
 
 		$folder = $this->resolve_path($path,true,1,'1');
 
-		if($folder['acl_read']!=$acl_read || $folder['acl_write']!=$acl_write || $folder['readonly']!='1') {
+		if($folder['acl_id']!=$acl_id || $folder['readonly']!='1') {
 			$up_folder['id']=$folder['id'];
 			$up_folder['user_id']=$user_id;
-			$up_folder['acl_read']=$acl_read;
-			$up_folder['acl_write']=$acl_write;
+			$up_folder['acl_id']=$acl_id;
 			$up_folder['readonly']='1';
 
 			$this->update_folder($up_folder);
@@ -410,7 +409,7 @@ class files extends db {
 		if($with_content) {
 			$fields = '*';
 		}else {
-			$fields = 'id, name, user_id, extension, acl_read, acl_write';
+			$fields = 'id, name, user_id, extension, acl_id';
 		}
 		$this->query("SELECT $fields FROM fs_templates WHERE id=".$this->escape($template_id));
 		if($this->next_record()) {
@@ -451,7 +450,7 @@ class files extends db {
 	function get_authorized_templates($user_id, $start=0, $offset=0, $sortfield='id', $sortorder='ASC') {
 		$user_id = $this->escape($user_id);
 		$sql = "SELECT DISTINCT t.id, t.user_id, t.name, t.extension FROM fs_templates t ".
-				"INNER JOIN go_acl a ON (a.acl_id=t.acl_read OR a.acl_id=t.acl_write) ".
+				"INNER JOIN go_acl a ON a.acl_id=t.acl_id ".
 				"LEFT JOIN go_users_groups ug ON a.group_id=ug.group_id ".
 				"WHERE (a.user_id=".$this->escape($user_id)." OR ug.user_id=".$this->escape($user_id).") ORDER BY ".$this->escape($sortfield." ".$sortorder);
 
@@ -481,7 +480,7 @@ class files extends db {
 		$user_id = $this->escape($user_id);
 
 		$sql = "SELECT DISTINCT t.id, t.user_id, t.name, t.extension FROM fs_templates t ".
-				"INNER JOIN go_acl a ON a.acl_id=t.acl_write ".
+				"INNER JOIN go_acl a ON a.acl_id=t.acl_id AND a.level<4 ".
 				"LEFT JOIN go_users_groups ug ON a.group_id=ug.group_id ".
 				"WHERE (a.user_id=".$this->escape($user_id)." OR ug.user_id=".$this->escape($user_id).") ORDER BY ".$this->escape($sortfield." ".$sortorder);
 
@@ -545,13 +544,7 @@ class files extends db {
 		$share= $this->find_share($folder_id);
 
 		if($share) {
-			$users = $GO_SECURITY->get_authorized_users_in_acl($share['acl_read']);
-			$write_users = $GO_SECURITY->get_authorized_users_in_acl($share['acl_write']);
-			while($user_id = array_shift($write_users)) {
-				if(!in_array($user_id, $users)) {
-					$users[]=$user_id;
-				}
-			}
+			$users = $GO_SECURITY->get_authorized_users_in_acl($share['acl_id']);
 		}
 
 		return $users;
@@ -892,7 +885,7 @@ class files extends db {
 		$user_id=$this->escape($user_id);
 		//ORDER BY PATH important so higher order shares come first
 		$sql = "SELECT DISTINCT f.* FROM fs_folders f ".
-				"INNER JOIN go_acl a ON (f.acl_read=a.acl_id OR f.acl_write=a.acl_id) ".
+				"INNER JOIN go_acl a ON f.acl_id=a.acl_id ".
 				"LEFT JOIN go_users_groups ug ON (a.group_id=ug.group_id) ".
 				"WHERE (ug.user_id=".$this->escape($user_id)." OR a.user_id=".$this->escape($user_id).") AND f.user_id!=$user_id ";
 		if($visible_only) {
@@ -931,14 +924,14 @@ class files extends db {
 			return $GO_SECURITY->has_admin_permission($user_id);
 		}
 
-		if(empty($folder['acl_write'])) {
+		if(empty($folder['acl_id'])) {
 			if(empty($folder['parent_id'])) {
 				return $GO_SECURITY->has_admin_permission($user_id);
 			}
 			$parent = $this->get_folder($folder['parent_id']);
 			return $this->has_write_permission($user_id, $parent);
 		}else {
-			return $GO_SECURITY->has_permission($user_id, $folder['acl_write']);
+			return $GO_SECURITY->has_permission($user_id, $folder['acl_id'])>1;
 		}
 	}
 
@@ -964,7 +957,7 @@ class files extends db {
 		if(!$folder) {
 			return $GO_SECURITY->has_admin_permission($user_id);
 		}
-		if(empty($folder['acl_write'])) {
+		if(empty($folder['acl_id'])) {
 			if(empty($folder['parent_id'])) {
 				return $GO_SECURITY->has_admin_permission($user_id);
 			}
@@ -972,7 +965,7 @@ class files extends db {
 			return $this->has_read_permission($user_id, $parent);
 		}else {
 
-			return $GO_SECURITY->has_permission($user_id, $folder['acl_read']) || $GO_SECURITY->has_permission($user_id, $folder['acl_write']);
+			return $GO_SECURITY->has_permission($user_id, $folder['acl_id']);
 		}
 	}
 
@@ -1148,7 +1141,7 @@ class files extends db {
 		$sql .= "f.* FROM fs_folders f ";
 
 		if($authenticate) {
-			$sql .= "LEFT JOIN go_acl a ON (a.acl_id=f.acl_read OR a.acl_id=f.acl_write) ".
+			$sql .= "LEFT JOIN go_acl a ON a.acl_id=f.acl_id ".
 					"LEFT JOIN go_users_groups ug ON a.group_id=ug.group_id ".
 					"WHERE (a.user_id=".$this->escape($GO_SECURITY->user_id)." OR ug.user_id=".$this->escape($GO_SECURITY->user_id)." OR ISNULL(a.acl_id)) AND ";
 		}else {
@@ -1167,6 +1160,8 @@ class files extends db {
 		if($offset>0) {
 		 	$sql .= " LIMIT ".intval($start).",".intval($offset);
 		}
+		debug($sql);
+		debug($params);
 		$this->query($sql, $types, $params);
 		return $offset>0 ? $this->found_rows() : $this->num_rows();
 	}
@@ -1238,7 +1233,7 @@ class files extends db {
 	function find_share($folder_id) {
 		$folder = $this->get_folder($folder_id);
 
-		if ($folder && $folder['acl_read']>0) {
+		if ($folder && $folder['acl_id']>0) {
 			return $folder;
 		}elseif($folder['parent_id']>0) {
 			return $this->find_share($folder['parent_id']);
@@ -1303,11 +1298,9 @@ class files extends db {
 			$folder['ctime']=filectime($full_path.'/'.$name);
 			$folder['mtime']=filemtime($full_path.'/'.$name);
 			if($share_user_id) {
-				$folder['acl_read']=$GO_SECURITY->get_new_acl('files', $share_user_id);
-				$folder['acl_write']=$GO_SECURITY->get_new_acl('files', $share_user_id);
+				$folder['acl_id']=$GO_SECURITY->get_new_acl('files', $share_user_id);
 			}else {
-				$folder['acl_read']=0;
-				$folder['acl_write']=0;
+				$folder['acl_id']=0;
 			}
 			$folder['id']=$this->add_folder($folder);
 
@@ -1466,7 +1459,7 @@ class files extends db {
 
 			$folders = $this->get_folders($folder_id, 'name', $dir);
 			while($folder=$this->next_record()) {
-				if($folder['acl_read']>0) {
+				if($folder['acl_id']>0) {
 					$class='folder-shared';
 				}else {
 					$class='filetype-folder';
@@ -1523,55 +1516,6 @@ class files extends db {
 		$line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
 
 		$fs = new files();
-
-		//$fs->query("DELETE FROM fs_folders WHERE id=0");
-		
-		/*echo 'Deleting invalid folders in database'.$line_break;
-		 $sql = "SELECT * FROM fs_folders";
-		 $fs->query($sql);
-		 while($folder = $fs->next_record())
-		 {
-			$full_path = $GO_CONFIG->file_storage_path.$folder['path'];
-			if(!is_dir($full_path))
-			{
-			$fs2->delete_folder($full_path);
-			}
-			}
-
-			echo 'Deleting invalid files in database'.$line_break;
-
-			$sql = "SELECT * FROM fs_files";
-			$fs->query($sql);
-			while($file = $fs->next_record())
-			{
-			$full_path = $GO_CONFIG->file_storage_path.$file['path'];
-			if(!file_exists($full_path))
-			{
-			$fs2->delete_file($full_path);
-			}
-			}*/
-
-		/*echo "Checking user home directories$line_break";
-
-
-
-		$GO_USERS->get_users();
-
-		while($GO_USERS->next_record()) {
-			$home_dir = 'users/'.$GO_USERS->f('username');
-
-			$folder = $fs->resolve_path($home_dir);
-
-			if(empty($folder['acl_read'])) {
-				echo "Sharing users/".$GO_USERS->f('username').$line_break;
-
-				$up_folder['id']=$folder['id'];
-				$up_folder['acl_read']=$GO_SECURITY->get_new_acl('files', $GO_USERS->f('id'));
-				$up_folder['acl_write']=$GO_SECURITY->get_new_acl('files', $GO_USERS->f('id'));
-
-				$fs->update_folder($up_folder);
-			}
-		}*/
 
 		echo 'Correcting id=0'.$line_break;
 
@@ -1685,10 +1629,7 @@ class files extends db {
 				$cache['module']='files';
 				$cache['keywords']=$file['comments'].','.$cache['name'].','.$cache['type'];
 				$cache['mtime']=$file['mtime'];
-				$cache['acl_read']=$share['acl_read'];
-				$cache['acl_write']=$share['acl_write'];
-
-				//var_dump($cache);
+				$cache['acl_id']=$share['acl_id'];
 
 				$search->cache_search_result($cache);
 			}

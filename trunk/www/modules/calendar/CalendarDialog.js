@@ -29,47 +29,47 @@ GO.calendar.CalendarDialog = function(config)
 		cls:'go-form-panel',
 		labelWidth: 75, 
 		items: [
-			this.selectUser = new GO.form.SelectUser({
-				fieldLabel: GO.lang.strUser,
-				disabled: !GO.settings.modules['calendar']['write_permission'],
-				value: GO.settings.user_id,
-				anchor: '100%'
-			}),
-			this.name = new Ext.form.TextField({
-				fieldLabel: GO.lang.strName,
-				name: 'name',
-				allowBlank:false,
-				anchor: '100%'	
-			}),
-            this.selectGroup = new GO.form.ComboBox({
-                hiddenName:'group_id',
-                fieldLabel:GO.calendar.lang.group,
-                valueField:'id',
-                displayField:'name',
-                id:'resource_groups',
-                emptyText: GO.lang.strPleaseSelect,
-                store: GO.calendar.groupsStore,
-                mode:'local',                
-                triggerAction:'all',
-                editable:true,
-                selectOnFocus:true,
-                allowBlank:true,
-                forceSelection:true
-            }),{
-				xtype:'checkbox',
-				name:'show_bdays',
-				id:'show_bdays',
-				boxLabel:GO.calendar.lang.show_bdays,
-				hideLabel:true
+		this.selectUser = new GO.form.SelectUser({
+			fieldLabel: GO.lang.strUser,
+			disabled: !GO.settings.modules['calendar']['write_permission'],
+			value: GO.settings.user_id,
+			anchor: '100%'
+		}),
+		this.name = new Ext.form.TextField({
+			fieldLabel: GO.lang.strName,
+			name: 'name',
+			allowBlank:false,
+			anchor: '100%'
+		}),
+		this.selectGroup = new GO.form.ComboBox({
+			hiddenName:'group_id',
+			fieldLabel:GO.calendar.lang.group,
+			valueField:'id',
+			displayField:'name',
+			id:'resource_groups',
+			emptyText: GO.lang.strPleaseSelect,
+			store: GO.calendar.groupsStore,
+			mode:'local',
+			triggerAction:'all',
+			editable:true,
+			selectOnFocus:true,
+			allowBlank:true,
+			forceSelection:true
+		}),{
+			xtype:'checkbox',
+			name:'show_bdays',
+			id:'show_bdays',
+			boxLabel:GO.calendar.lang.show_bdays,
+			hideLabel:true
+		},
+		this.exportButton = new Ext.Button({
+			text:GO.lang.cmdExport,
+			disabled:true,
+			handler:function(){
+				document.location=GO.settings.modules.calendar.url+'export.php?calendar_id='+this.calendar_id;
 			},
-            this.exportButton = new Ext.Button({
-				text:GO.lang.cmdExport,
-				disabled:true,
-				handler:function(){
-					document.location=GO.settings.modules.calendar.url+'export.php?calendar_id='+this.calendar_id;
-				},
-				scope:this
-			})
+			scope:this
+		})
 		]
 	});
 
@@ -78,9 +78,6 @@ GO.calendar.CalendarDialog = function(config)
 		title: GO.lang.strReadPermissions
 	});
 
-	this.writePermissionsTab = new GO.grid.PermissionsPanel({
-		title: GO.lang.strWritePermissions
-	});
 	
 	var uploadFile = new GO.form.UploadFile({
 		inputName : 'ical_file',	   
@@ -102,91 +99,101 @@ GO.calendar.CalendarDialog = function(config)
 			html: GO.calendar.lang.selectIcalendarFile,
 			border:false	
 		},uploadFile,this.importButton = new Ext.Button({
-				xtype:'button',
-				disabled:true,
-				text:GO.lang.cmdImport,
-				handler: function(){						
-					this.importTab.form.submit({
-						waitMsg:GO.lang.waitMsgUpload,
-						url:GO.settings.modules.calendar.url+'action.php',
-						params: {task: 'import', calendar_id:this.calendar_id},
-						success: function(form,action)
-						{				
-							uploadFile.clearQueue();		
+			xtype:'button',
+			disabled:true,
+			text:GO.lang.cmdImport,
+			handler: function(){
+				this.importTab.form.submit({
+					waitMsg:GO.lang.waitMsgUpload,
+					url:GO.settings.modules.calendar.url+'action.php',
+					params: {
+						task: 'import',
+						calendar_id:this.calendar_id
+						},
+					success: function(form,action)
+					{
+						uploadFile.clearQueue();
 
-							if(action.result.success)
-							{
-								Ext.MessageBox.alert(GO.lang.strSuccess,action.result.feedback);
-							}else
-							{
-								Ext.MessageBox.alert(GO.lang.strError,action.result.feedback);
-							}						
-						},
-						failure: function(form, action) {
-							Ext.MessageBox.alert(GO.lang.strError, action.result.feedback);
-						},
-						scope: this
-					});
-				}, 
-				scope: this
-			})],
+						if(action.result.success)
+						{
+							Ext.MessageBox.alert(GO.lang.strSuccess,action.result.feedback);
+						}else
+						{
+							Ext.MessageBox.alert(GO.lang.strError,action.result.feedback);
+						}
+					},
+					failure: function(form, action) {
+						Ext.MessageBox.alert(GO.lang.strError, action.result.feedback);
+					},
+					scope: this
+				});
+			},
+			scope: this
+		})],
 		cls: 'go-form-panel'
 	});
 
 	
 	this.tabPanel = new Ext.TabPanel({
-			hideLabel:true,
-			deferredRender:false,
-			xtype:'tabpanel',
-			activeTab: 0,
-			border:false,
-			anchor: '100% 100%',
-			items:[
-			this.propertiesTab,
-			this.readPermissionsTab,
-			this.writePermissionsTab,
-			this.importTab 
-			]
-		});
+		hideLabel:true,
+		deferredRender:false,
+		xtype:'tabpanel',
+		activeTab: 0,
+		border:false,
+		anchor: '100% 100%',
+		items:[
+		this.propertiesTab,
+		this.readPermissionsTab,
+		this.importTab
+		]
+	});
 
 	
 	GO.calendar.CalendarDialog.superclass.constructor.call(this,{
-        title: GO.calendar.lang.calendar,
-        layout:'fit',
-        modal:false,
-        height:500,
-        width:450,        
-        closeAction:'hide',
-        items: this.tabPanel,
-        buttons:[
-        {
-            text:GO.lang.cmdOk,
-            handler: function(){this.save(true)},
-            scope: this
-        },
-        {
-            text:GO.lang.cmdApply,
-            handler: function(){this.save(false)},
-            scope: this
-        },
+		title: GO.calendar.lang.calendar,
+		layout:'fit',
+		modal:false,
+		height:500,
+		width:450,
+		closeAction:'hide',
+		items: this.tabPanel,
+		buttons:[
+		{
+			text:GO.lang.cmdOk,
+			handler: function(){
+				this.save(true)
+				},
+			scope: this
+		},
+		{
+			text:GO.lang.cmdApply,
+			handler: function(){
+				this.save(false)
+				},
+			scope: this
+		},
 
-        {
-            text:GO.lang.cmdClose,
-            handler: function(){this.hide()},
-            scope: this
-        }
-        ]
-    });
+		{
+			text:GO.lang.cmdClose,
+			handler: function(){
+				this.hide()
+				},
+			scope: this
+		}
+		]
+	});
 
 }
 
 Ext.extend(GO.calendar.CalendarDialog, Ext.Window, {
 
-    resource: 0,
+	resource: 0,
     
 	initComponent : function(){
 		
-		this.addEvents({'save' : true});
+		this.addEvents({
+			'save' : true
+		});
 		
 		GO.calendar.CalendarDialog.superclass.initComponent.call(this);	
 		
@@ -197,15 +204,15 @@ Ext.extend(GO.calendar.CalendarDialog, Ext.Window, {
 			
 		this.propertiesTab.show();       
 
-        if(resource && !this.selectGroup.store.loaded)
-        {
-            this.selectGroup.store.load();
-        }
+		if(resource && !this.selectGroup.store.loaded)
+		{
+			this.selectGroup.store.load();
+		}
 
-        this.resource = (resource > 0) ? resource : 0;
+		this.resource = (resource > 0) ? resource : 0;
 
-        var title = (this.resource) ? GO.calendar.lang.resource : GO.calendar.lang.calendar;
-        this.setTitle(title);        
+		var title = (this.resource) ? GO.calendar.lang.resource : GO.calendar.lang.calendar;
+		this.setTitle(title);
 
 		if(calendar_id > 0)
 		{
@@ -225,9 +232,8 @@ Ext.extend(GO.calendar.CalendarDialog, Ext.Window, {
 			this.importTab.setDisabled(true);	
 
 			this.readPermissionsTab.setDisabled(true);
-			this.writePermissionsTab.setDisabled(true);
 
-            this.showGroups(resource);
+			this.showGroups(resource);
 
 			GO.calendar.CalendarDialog.superclass.show.call(this);
 		}
@@ -244,12 +250,11 @@ Ext.extend(GO.calendar.CalendarDialog, Ext.Window, {
 			success: function(form, action) {
 				this.calendar_id=calendar_id;
 				this.selectUser.setRawValue(action.result.data.user_name);
-				this.readPermissionsTab.setAcl(action.result.data.acl_read);
-				this.writePermissionsTab.setAcl(action.result.data.acl_write);
+				this.readPermissionsTab.setAcl(action.result.data.acl_id);
 				this.exportButton.setDisabled(false);
 				this.importTab.setDisabled(false);
 
-                this.showGroups(action.result.data.group_id > 1);
+				this.showGroups(action.result.data.group_id > 1);
 
 				GO.calendar.CalendarDialog.superclass.show.call(this);
 			},
@@ -262,63 +267,62 @@ Ext.extend(GO.calendar.CalendarDialog, Ext.Window, {
 	},
 	save : function(hide)
 	{        
-        if(this.resource && this.name.getValue() && !this.selectGroup.getValue())
-        {
-            Ext.MessageBox.alert(GO.lang.strError, GO.calendar.lang.no_group_selected);
-        }else
-        {
-            this.propertiesTab.form.submit({
+		if(this.resource && this.name.getValue() && !this.selectGroup.getValue())
+		{
+			Ext.MessageBox.alert(GO.lang.strError, GO.calendar.lang.no_group_selected);
+		}else
+		{
+			this.propertiesTab.form.submit({
 
-                url:GO.settings.modules.calendar.url+'action.php',
-                params: {
-                        'task' : 'save_calendar',
-                        'calendar_id': this.calendar_id
-                },
-                waitMsg:GO.lang.waitMsgSave,
-                success:function(form, action){
+				url:GO.settings.modules.calendar.url+'action.php',
+				params: {
+					'task' : 'save_calendar',
+					'calendar_id': this.calendar_id
+				},
+				waitMsg:GO.lang.waitMsgSave,
+				success:function(form, action){
 
-                    if(action.result.calendar_id)
-                    {
-                        this.calendar_id=action.result.calendar_id;
-                        this.readPermissionsTab.setAcl(action.result.acl_read);
-                        this.writePermissionsTab.setAcl(action.result.acl_write);
-                        this.exportButton.setDisabled(false);
-                        this.importTab.setDisabled(false);
-                        //this.loadAccount(this.calendar_id);
-                    }
+					if(action.result.calendar_id)
+					{
+						this.calendar_id=action.result.calendar_id;
+						this.readPermissionsTab.setAcl(action.result.acl_id);
+						this.exportButton.setDisabled(false);
+						this.importTab.setDisabled(false);
+					//this.loadAccount(this.calendar_id);
+					}
 
-                    this.fireEvent('save', this, this.selectGroup.getValue());
+					this.fireEvent('save', this, this.selectGroup.getValue());
 
-                    if(hide)
-                    {
-                        this.hide();
-                    }
-                },
+					if(hide)
+					{
+						this.hide();
+					}
+				},
 
-                failure: function(form, action) {
-                    var error = '';
-                    if(action.failureType=='client')
-                    {
-                        error = GO.lang.strErrorsInForm;
-                    }else
-                    {
-                        error = action.result.feedback;
-                    }
+				failure: function(form, action) {
+					var error = '';
+					if(action.failureType=='client')
+					{
+						error = GO.lang.strErrorsInForm;
+					}else
+					{
+						error = action.result.feedback;
+					}
 
-                    Ext.MessageBox.alert(GO.lang.strError, error);
-                },
-                scope:this
+					Ext.MessageBox.alert(GO.lang.strError, error);
+				},
+				scope:this
 
-            });
-        }
+			});
+		}
 			
 	},
-    showGroups : function(resource)
-    {
-        var f = this.propertiesTab.form.findField('resource_groups');
-        f.container.up('div.x-form-item').setDisplayed(resource);
+	showGroups : function(resource)
+	{
+		var f = this.propertiesTab.form.findField('resource_groups');
+		f.container.up('div.x-form-item').setDisplayed(resource);
 
 		f = this.propertiesTab.form.findField('show_bdays');
-        f.container.up('div.x-form-item').setDisplayed(!resource);
-    }
+		f.container.up('div.x-form-item').setDisplayed(!resource);
+	}
 });

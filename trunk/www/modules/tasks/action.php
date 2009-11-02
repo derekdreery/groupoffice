@@ -119,7 +119,7 @@ try{
 			$task['tasklist_id']=$_POST['tasklist_id'];
 			
 			$tasklist = $tasks->get_tasklist($task['tasklist_id']);
-			if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_write']))
+			if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_id'])>1)
 			{
 				throw new AccessDeniedException();
 			}
@@ -250,7 +250,7 @@ try{
 			if($tasklist['id']>0)
 			{
 				$old_tasklist = $tasks->get_tasklist($tasklist['id']);
-				if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_tasklist['acl_write']))
+				if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_tasklist['acl_id'])>1)
 				{
 					throw new AccessDeniedException();
 				}
@@ -261,10 +261,8 @@ try{
 				{
 					throw new AccessDeniedException();
 				}
-				$response['acl_read'] = $tasklist['acl_read'] = $GO_SECURITY->get_new_acl('tasklist read: '.$tasklist['name'], $tasklist['user_id']);
-				$response['acl_write'] = $tasklist['acl_write'] = $GO_SECURITY->get_new_acl('tasklist write: '.$tasklist['name'], $tasklist['user_id']);
+				$response['acl_id'] = $tasklist['acl_id'] = $GO_SECURITY->get_new_acl('tasks', $tasklist['user_id']);
 					
-				$response['acl_read'] =
 				$response['tasklist_id']=$tasks->add_tasklist($tasklist);
 			}
 			$response['success']=true;

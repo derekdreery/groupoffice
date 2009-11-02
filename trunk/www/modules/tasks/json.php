@@ -42,8 +42,9 @@ try{
 
 			$response['data']['status_text']=isset($lang['tasks']['statuses'][$task['status']]) ? $lang['tasks']['statuses'][$task['status']] : $lang['tasks']['statuses']['NEEDS-ACTION'];
 
-			$response['data']['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_write']);
-			if(!$response['data']['write_permission'] && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_read']))
+			$response['data']['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_id']);
+			$response['data']['write_permission']=$response['data']['permission_level']>1;
+			if(!$response['data']['permission_level'])
 			{
 				throw new AccessDeniedException();
 			}
@@ -217,7 +218,7 @@ try{
 					foreach($tasklists as $tasklist_id)
 					{
 						$tasklist = $tasks->get_tasklist($tasklist_id);
-						if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_write']))
+						if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_id'])>2)
 						{
 							throw new AccessDeniedException();
 						}
@@ -270,9 +271,9 @@ try{
 
 				$tasklist = $tasks->get_tasklist($tasklist_id);
 
-				$response['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_write']);
-
-				if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_read']) && !$response['write_permission'])
+				$response['data']['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_id']);
+				$response['data']['write_permission']=$response['data']['permission_level']>1;
+				if(!$response['data']['permission_level'])
 				{
 					throw new AccessDeniedException();
 				}
@@ -305,7 +306,7 @@ try{
 					foreach($delete_tasks as $task_id)
 					{
 						$old_task = $tasks->get_task($task_id);
-						if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_task['acl_write']))
+						if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_task['acl_id'])>2)
 						{
 							throw new AccessDeniedException();
 						}
@@ -325,7 +326,7 @@ try{
 				$task['id']=$_POST['completed_task_id'];
 
 				$old_task = $tasks->get_task($task['id']);
-				if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_task['acl_write']))
+				if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_task['acl_id'])>1)
 				{
 					throw new AccessDeniedException();
 				}
@@ -343,10 +344,7 @@ try{
 				}
 
 				$tasks->update_task($task);
-
 			}
-
-
 
 			$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'due_time ASC, ctime';
 			$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'ASC';

@@ -44,10 +44,7 @@ GO.tasks.TasklistDialog = function(config)
 		title: GO.lang['strReadPermissions']
 	});
 
-	this.writePermissionsTab = new GO.grid.PermissionsPanel({
-		title: GO.lang['strWritePermissions']
-	});
-	
+
 	var uploadFile = new GO.form.UploadFile({
 		inputName : 'ical_file',	   
 		max:1 			
@@ -109,7 +106,6 @@ GO.tasks.TasklistDialog = function(config)
 			items:[
 			this.propertiesTab,
 			this.readPermissionsTab,
-			this.writePermissionsTab,
 			this.importTab 
 			]
 		});
@@ -174,10 +170,8 @@ Ext.extend(GO.tasks.TasklistDialog, Ext.Window, {
 		{
 			this.tasklist_id=0;
 			this.propertiesTab.form.reset();
-			
 
 			this.readPermissionsTab.setDisabled(true);
-			this.writePermissionsTab.setDisabled(true);
 
 			this.exportButton.setDisabled(true);
 			this.importTab.setDisabled(true);
@@ -198,8 +192,7 @@ Ext.extend(GO.tasks.TasklistDialog, Ext.Window, {
 			success: function(form, action) {
 				this.tasklist_id=tasklist_id;
 				this.selectUser.setRemoteText(action.result.data.user_name);
-				this.readPermissionsTab.setAcl(action.result.data.acl_read);
-				this.writePermissionsTab.setAcl(action.result.data.acl_write);
+				this.readPermissionsTab.setAcl(action.result.data.acl_id);
 				
 				this.exportButton.setDisabled(false);
 				this.importTab.setDisabled(false);
@@ -227,8 +220,7 @@ Ext.extend(GO.tasks.TasklistDialog, Ext.Window, {
 				if(action.result.tasklist_id)
 				{
 					this.tasklist_id=action.result.tasklist_id;
-					this.readPermissionsTab.setAcl(action.result.acl_read);
-					this.writePermissionsTab.setAcl(action.result.acl_write);
+					this.readPermissionsTab.setAcl(action.result.acl_id);
 					
 					this.exportButton.setDisabled(false);
 					this.importTab.setDisabled(false);

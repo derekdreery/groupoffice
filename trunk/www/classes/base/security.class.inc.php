@@ -219,8 +219,8 @@ class GO_SECURITY extends db {
 
 		$this->insert_row('go_acl_items', $ai);
 
-		$this->add_group_to_acl($GO_CONFIG->group_root, $ai['id']);
-		$this->add_user_to_acl($user_id, $ai['id']);
+		$this->add_group_to_acl($GO_CONFIG->group_root, $ai['id'],1);
+		$this->add_user_to_acl($user_id, $ai['id'],1);
 		return $ai['id'];
 	}
 
@@ -297,9 +297,9 @@ class GO_SECURITY extends db {
 	 * @access public
 	 * @return bool		True on success
 	 */
-	function add_user_to_acl($user_id,$acl_id) {
-		return $this->query("INSERT INTO go_acl (acl_id,user_id) ".
-				"VALUES ('".$this->escape($acl_id)."','".$this->escape($user_id)."')");
+	function add_user_to_acl($user_id,$acl_id, $level=1) {
+		return $this->query("INSERT INTO go_acl (acl_id,user_id,level) ".
+				"VALUES ('".$this->escape($acl_id)."','".$this->escape($user_id)."','".$this->escape($level)."')");
 	}
 
 	/**
@@ -323,9 +323,9 @@ class GO_SECURITY extends db {
 	 * @access public
 	 * @return bool		True on success
 	 */
-	function add_group_to_acl($group_id,$acl_id) {
-		return $this->query("INSERT INTO go_acl (acl_id,group_id) ".
-				"VALUES ('".$this->escape($acl_id)."','".$this->escape($group_id)."')");
+	function add_group_to_acl($group_id,$acl_id, $level=1) {
+		return $this->query("INSERT INTO go_acl (acl_id,group_id,level) ".
+				"VALUES ('".$this->escape($acl_id)."','".$this->escape($group_id)."','".$this->escape($level)."')");
 	}
 
 	/**
@@ -637,20 +637,20 @@ class GO_SECURITY extends db {
 		if ($user_id > 0 && $acl_id > 0) {
 
 			if(!$groups_only) {
-				$sql = "SELECT acl_id FROM go_acl WHERE ".
+				$sql = "SELECT acl_id,level FROM go_acl WHERE ".
 						"acl_id='".$this->escape($acl_id)."' AND user_id='".$this->escape($user_id)."'";
 				$this->query($sql);
 				if($this->next_record()) {
-					return true;
+					return $this->f('level');
 				}
 			}
 
-			$sql = "SELECT go_acl.acl_id FROM go_acl, go_users_groups	WHERE ".
+			$sql = "SELECT go_acl.acl_id, go_acl.level FROM go_acl, go_users_groups	WHERE ".
 					"go_acl.acl_id='".$this->escape($acl_id)."' AND go_acl.group_id=go_users_groups.group_id AND ".
 					"go_users_groups.user_id='".$this->escape($user_id)."'";
 			$this->query($sql);
 			if($this->next_record()) {
-				return true;
+				return $this->f('level');
 			}
 		}
 		return false;

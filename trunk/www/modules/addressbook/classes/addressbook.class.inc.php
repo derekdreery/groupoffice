@@ -38,8 +38,8 @@ class addressbook extends db {
 			$db->query($sql);
 			while($addressbook = $db->next_record()) {
 				try {
-					$files->check_share('contacts/'.File::strip_invalid_chars($addressbook['name']), $addressbook['user_id'], $addressbook['acl_read'], $addressbook['acl_write'], false);
-					$files->check_share('companies/'.File::strip_invalid_chars($addressbook['name']), $addressbook['user_id'], $addressbook['acl_read'], $addressbook['acl_write'], false);
+					$files->check_share('contacts/'.File::strip_invalid_chars($addressbook['name']), $addressbook['user_id'], $addressbook['acl_id'], false);
+					$files->check_share('companies/'.File::strip_invalid_chars($addressbook['name']), $addressbook['user_id'], $addressbook['acl_id'], false);
 				}
 				catch(Exception $e ){
 					echo $e->getMessage().$line_break;
@@ -47,7 +47,7 @@ class addressbook extends db {
 			}
 			flush();
 
-			$db->query("SELECT c.*,a.name AS addressbook_name,a.acl_read,a.acl_write FROM ab_contacts c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id");
+			$db->query("SELECT c.*,a.name AS addressbook_name,a.acl_idFROM ab_contacts c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id");
 			while($contact = $db->next_record()) {
 				try {
 					$path = $ab->build_contact_files_path($contact, array('name'=>$contact['addressbook_name']));
@@ -67,7 +67,7 @@ class addressbook extends db {
 				flush();
 			}
 
-			$db->query("SELECT c.*,a.name AS addressbook_name,a.acl_read,a.acl_write FROM ab_companies c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id");
+			$db->query("SELECT c.*,a.name AS addressbook_name,a.acl_id FROM ab_companies c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id");
 			while($company = $db->next_record()) {
 				try {
 					$path = $ab->build_company_files_path($company, array('name'=>$company['addressbook_name']));
@@ -179,8 +179,7 @@ class addressbook extends db {
 	function get_user_addressbooks($user_id, $start=0, $offset=0, $sort='name', $dir='ASC') {
 		$sql = "SELECT DISTINCT ab_addressbooks.* ".
 				"FROM ab_addressbooks ".
-				"	INNER JOIN go_acl ON (ab_addressbooks.acl_read = go_acl.acl_id ".
-				"OR ab_addressbooks.acl_write = go_acl.acl_id) ".
+				"	INNER JOIN go_acl ON ab_addressbooks.acl_id = go_acl.acl_id ".
 				"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ".
 				"WHERE go_acl.user_id=".$this->escape($user_id)." ".
 				"OR go_users_groups.user_id=".$this->escape($user_id)." ".
@@ -262,7 +261,7 @@ class addressbook extends db {
 	function get_writable_addressbooks($user_id, $start=0, $offset=0, $sort='name', $dir='ASC') {
 		$sql = "SELECT DISTINCT ab_addressbooks.* ".
 				"FROM ab_addressbooks ".
-				"	INNER JOIN go_acl ON ab_addressbooks.acl_write = go_acl.acl_id ".
+				"	INNER JOIN go_acl ON (ab_addressbooks.acl_id = go_acl.acl_id AND go_acl.level>1) ".
 				"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ".
 				"WHERE go_acl.user_id=".$this->escape($user_id)." ".
 				"OR go_users_groups.user_id=".$this->escape($user_id)." ".
@@ -382,8 +381,7 @@ class addressbook extends db {
 	}
 
 	function get_company($company_id) {
-		$sql = "SELECT ab_companies.*, ab_addressbooks.acl_read, ".
-				"ab_addressbooks.acl_write, ".
+		$sql = "SELECT ab_companies.*, ab_addressbooks.acl_id, ".
 				"af.format AS address_format, ".
 				"iaf.iso AS iso_address_format, ".
 				"post_af.format AS post_address_format, ".
@@ -597,7 +595,7 @@ class addressbook extends db {
 	}
 
 	function get_contact($contact_id) {
-		$this->query("SELECT ab_addressbooks.acl_read, ab_addressbooks.acl_write, ab_contacts.*, ".
+		$this->query("SELECT ab_addressbooks.acl_id, ab_contacts.*, ".
 				"ab_addressbooks.default_iso_address_format AS default_iso_address_format, ".
 				"ab_addressbooks.default_salutation AS default_salutation, ".
 				"ab_companies.address AS work_address, ab_companies.address_no AS ".
@@ -941,8 +939,7 @@ class addressbook extends db {
 		}
 
 
-		$result['acl_read'] = $GO_SECURITY->get_new_acl('addressbook', $user_id);
-		$result['acl_write'] = $GO_SECURITY->get_new_acl('addressbook', $user_id);
+		$result['acl_id'] = $GO_SECURITY->get_new_acl('addressbook', $user_id);
 		$result['user_id']=$user_id;
 		$result['default_iso_address_format']=$default_iso_address_format;
 		$result['default_salutation']=$default_salutation;
@@ -959,8 +956,8 @@ class addressbook extends db {
 			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 
-			$files->check_share('contacts/'.File::strip_invalid_chars($addressbook['name']),$addressbook['user_id'], $addressbook['acl_read'], $addressbook['acl_write']);
-			$files->check_share('companies/'.File::strip_invalid_chars($addressbook['name']),$addressbook['user_id'], $addressbook['acl_read'], $addressbook['acl_write']);
+			$files->check_share('contacts/'.File::strip_invalid_chars($addressbook['name']),$addressbook['user_id'], $addressbook['acl_id']);
+			$files->check_share('companies/'.File::strip_invalid_chars($addressbook['name']),$addressbook['user_id'], $addressbook['acl_id']);
 		}
 
 		$this->insert_row('ab_addressbooks', $addressbook);
@@ -983,8 +980,7 @@ class addressbook extends db {
 		global $GO_SECURITY;
 		//user id of the addressbook changed. Change the owner of the ACL as well
 		if(isset($addressbook['user_id']) && $old_addressbook['user_id'] != $addressbook['user_id']) {
-			$GO_SECURITY->chown_acl($old_addressbook['acl_read'], $addressbook['user_id']);
-			$GO_SECURITY->chown_acl($old_addressbook['acl_write'], $addressbook['user_id']);
+			$GO_SECURITY->chown_acl($old_addressbook['acl_id'], $addressbook['user_id']);
 		}
 
 		return $this->update_row('ab_addressbooks', 'id', $addressbook);
@@ -1024,8 +1020,7 @@ class addressbook extends db {
 		}
 
 		if(empty($addressbook['shared_acl'])) {
-			$GO_SECURITY->delete_acl($addressbook['acl_read']);
-			$GO_SECURITY->delete_acl($addressbook['acl_write']);
+			$GO_SECURITY->delete_acl($addressbook['acl_id']);
 		}
 
 		$ab = new addressbook();
@@ -1112,7 +1107,7 @@ class addressbook extends db {
 
 		require($GO_LANGUAGE->get_language_file('addressbook'));
 
-		$sql = "SELECT c.*,a.acl_read,a.acl_write, a.name AS addressbook_name, co.name AS company FROM ab_contacts c ".
+		$sql = "SELECT c.*,a.acl_id, a.name AS addressbook_name, co.name AS company FROM ab_contacts c ".
 			"INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id ".
 			"LEFT JOIN ab_companies co ON co.id=c.company_id ".
 			"WHERE c.id=?";
@@ -1128,8 +1123,7 @@ class addressbook extends db {
 			$cache['type']=$lang['addressbook']['contact'];
 			$cache['keywords']=$search->record_to_keywords($this->record).','.$lang['addressbook']['contact'];
 			$cache['mtime']=$this->f('mtime');
-			$cache['acl_read']=$this->f('acl_read');
-			$cache['acl_write']=$this->f('acl_write');
+			$cache['acl_id']=$this->f('acl_id');
 
 			$search->cache_search_result($cache);
 		}
@@ -1145,7 +1139,7 @@ class addressbook extends db {
 		require_once($GO_CONFIG->class_path.'/base/search.class.inc.php');
 		$search = new search();
 		require($GO_LANGUAGE->get_language_file('addressbook'));
-		$sql = "SELECT c.*, a.acl_read, a.acl_write, a.name AS addressbook_name FROM ab_companies c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id WHERE c.id=?";
+		$sql = "SELECT c.*, a.acl_id,  a.name AS addressbook_name FROM ab_companies c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id WHERE c.id=?";
 		$this->query($sql, 'i', $company_id);
 		$record = $this->next_record();
 		if($record) {
@@ -1158,8 +1152,7 @@ class addressbook extends db {
 			$cache['type']=$lang['addressbook']['company'];
 			$cache['keywords']=$search->record_to_keywords($this->record).','.$cache['type'];
 			$cache['mtime']=$this->f('mtime');
-			$cache['acl_read']=$this->f('acl_read');
-			$cache['acl_write']=$this->f('acl_write');
+			$cache['acl_id']=$this->f('acl_id');
 
 			$search->cache_search_result($cache);
 		}

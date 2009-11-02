@@ -172,10 +172,7 @@ Ext.extend(GO.files.TemplateWindow,Ext.Window, {
 						this.formPanel,
 						this.readPermissionsTab = new GO.grid.PermissionsPanel({
 							title: GO.lang['strReadPermissions']		
-						}),							
-						this.writePermissionsTab = new GO.grid.PermissionsPanel({
-							title: GO.lang['strWritePermissions']			
-						})								
+						})						
 					]
 				})],
 				buttons: buttons,
@@ -193,7 +190,6 @@ Ext.extend(GO.files.TemplateWindow,Ext.Window, {
 		{
 			//update
 			this.readPermissionsTab.setDisabled(false);
-			this.writePermissionsTab.setDisabled(false);
 			
 			this.loadTemplate();				 			
 		} else {
@@ -201,7 +197,6 @@ Ext.extend(GO.files.TemplateWindow,Ext.Window, {
 			
 			this.formPanel.form.reset();
 			this.readPermissionsTab.setAcl(0);
-			this.writePermissionsTab.setAcl(0);
 			this.downloadButton.setDisabled(true);						
 		}
 		
@@ -215,8 +210,7 @@ Ext.extend(GO.files.TemplateWindow,Ext.Window, {
 			
 			success: function(form, action) {
 				this.selectUser.setRemoteText(action.result.data.user_name);
-				this.readPermissionsTab.setAcl(action.result.data.acl_read);
-				this.writePermissionsTab.setAcl(action.result.data.acl_write);
+				this.readPermissionsTab.setAcl(action.result.data.acl_id);
 				this.downloadButton.setDisabled(false);										
 		    },
 		    scope: this
@@ -241,8 +235,7 @@ Ext.extend(GO.files.TemplateWindow,Ext.Window, {
 				
 				if(this.template_id && !hide)
 				{
-					this.readPermissionsTab.setAcl(action.result.acl_read);
-					this.writePermissionsTab.setAcl(action.result.acl_write);											
+					this.readPermissionsTab.setAcl(action.result.acl_id);			
 				}					
 				
 				if(hide)

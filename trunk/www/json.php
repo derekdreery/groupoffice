@@ -505,7 +505,7 @@ try{
 
 							$record = $search->get_search_result($link[1], $link[0]);
 
-							if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $record['acl_write']))
+							if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $record['acl_id'])>2)
 							{
 								throw new AccessDeniedException();
 							}
@@ -597,9 +597,10 @@ try{
 				$record = $search->get_search_result($link_id, $link_type);
 				
 				//debug($record);
-				
-				$response['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $record['acl_write']);				
-				if(!$response['write_permission'] && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $record['acl_read']))
+
+				$response['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $record['acl_id']);
+				$response['write_permission']=$response['permission_level']>1;
+				if(!$response['permission_level'])
 				{
 					throw new AccessDeniedException();
 				}

@@ -30,7 +30,7 @@ try{
 			$category = $notes->get_category(($_REQUEST['category_id']));
 			$user = $GO_USERS->get_user($category['user_id']);
 			$category['user_name']=String::format_name($user);
-			$category['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_write']);
+			$category['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_id'])>1;
 			$response['data']=$category;
 			$response['success']=true;		
 			break;
@@ -42,7 +42,7 @@ try{
 			{
 				try{
 					$response['deleteSuccess']=true;
-					$delete_categories = json_decode(($_POST['delete_keys']));
+					$delete_categories = json_decode($_POST['delete_keys']);
 
 					foreach($delete_categories as $category_id)
 					{
@@ -97,9 +97,9 @@ try{
 			$note['ctime']=Date::get_timestamp($note['ctime']);			
 			
 			$response['data']=$note;
-			
-			$response['data']['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_write']);
-			if(!$response['data']['write_permission'] && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_read']))
+			$response['data']['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_id']);
+			$response['data']['write_permission']=$response['data']['permission_level']>1;
+			if(!$response['data']['permission_level'])
 			{
 				throw new AccessDeniedException();
 			}
@@ -162,8 +162,9 @@ try{
 		case 'notes':
 			$category_id=$_POST['category_id'];
 			$category = $notes->get_category($category_id);
-			$response['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_write']);
-			if(!$response['write_permission'] && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_read']))
+			$response['data']['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_id']);
+			$response['data']['write_permission']=$response['data']['permission_level']>1;
+			if(!$response['data']['permission_level'])
 			{
 				throw new AccessDeniedException();
 			}			

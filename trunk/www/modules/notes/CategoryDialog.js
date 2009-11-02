@@ -89,17 +89,11 @@ Ext.extend(GO.notes.CategoryDialog, Ext.Window,{
 				url : GO.settings.modules.notes.url+'json.php',
 				
 				success:function(form, action)
-				{
-					
-					
-					
+				{					
 					this.setWritePermission(action.result.data.write_permission);					
-					this.readPermissionsTab.setAcl(action.result.data.acl_read);
-					this.writePermissionsTab.setAcl(action.result.data.acl_write);
-						
+					this.readPermissionsTab.setAcl(action.result.data.acl_id);
 					
 					this.selectUser.setRemoteText(action.result.data.user_name);
-									
 					
 					GO.notes.CategoryDialog.superclass.show.call(this);
 				},
@@ -111,15 +105,9 @@ Ext.extend(GO.notes.CategoryDialog, Ext.Window,{
 				
 			});
 		}else 
-		{
-			
+		{			
 			this.formPanel.form.reset();
-			
-			
 			this.setWritePermission(true);
-			
-				
-			
 			
 			GO.notes.CategoryDialog.superclass.show.call(this);
 		}
@@ -130,13 +118,7 @@ Ext.extend(GO.notes.CategoryDialog, Ext.Window,{
 	{
 		this.buttons[0].setDisabled(!writePermission);
 		this.buttons[1].setDisabled(!writePermission);
-		
-		
-		
 	},
-	
-	
-	
 
 	setCategoryId : function(category_id)
 	{
@@ -151,10 +133,8 @@ Ext.extend(GO.notes.CategoryDialog, Ext.Window,{
 			url:GO.settings.modules.notes.url+'action.php',
 			params: {'task' : 'save_category'},
 			waitMsg:GO.lang['waitMsgSave'],
-			success:function(form, action){
-				
-				this.fireEvent('save', this);
-				
+			success:function(form, action){				
+				this.fireEvent('save', this);				
 				if(hide)
 				{
 					this.hide();	
@@ -164,16 +144,9 @@ Ext.extend(GO.notes.CategoryDialog, Ext.Window,{
 					if(action.result.category_id)
 					{
 						this.setCategoryId(action.result.category_id);
-						
-						
-						
-						this.readPermissionsTab.setAcl(action.result.acl_read);
-						this.writePermissionsTab.setAcl(action.result.acl_write);
-											
+						this.readPermissionsTab.setAcl(action.result.acl_id);
 					}
-				}
-				
-									
+				}	
 			},		
 			failure: function(form, action) {
 				if(action.failureType == 'client')
@@ -216,23 +189,11 @@ Ext.extend(GO.notes.CategoryDialog, Ext.Window,{
 
 		var items  = [this.propertiesPanel];
 		
-    
-    
-    
-		
-		
-		
     this.readPermissionsTab = new GO.grid.PermissionsPanel({
 			title: GO.lang['strReadPermissions']
 		});
-	
-		this.writePermissionsTab = new GO.grid.PermissionsPanel({
-			title: GO.lang['strWritePermissions']
-		});
-    
+
     items.push(this.readPermissionsTab);
-    items.push(this.writePermissionsTab);
-		
  
     this.tabPanel = new Ext.TabPanel({
       activeTab: 0,      

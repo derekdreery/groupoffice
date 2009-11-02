@@ -130,7 +130,7 @@ try {
 
 			$event = $cal->get_event($event_id);
 
-			if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $event['acl_write'])) {
+			if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $event['acl_id'])>2) {
 				throw new AccessDeniedException();
 			}
 
@@ -162,7 +162,7 @@ try {
 				$calendar = $cal->get_calendar($old_event['calendar_id']);
 
 				//an event is moved or resized
-				if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id,$old_event['acl_write'])) {
+				if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_event['acl_id'])>1) {
 					throw new AccessDeniedException();
 				}
 
@@ -352,7 +352,7 @@ try {
 
 			$calendar = $cal->get_calendar($event['calendar_id']);
 
-			if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_write'])) {
+			if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id'])>1) {
 				throw new AccessDeniedException();
 			}
 
@@ -491,7 +491,7 @@ try {
 
 							if($calendar_id != $calendar['id']) {
 								$response['cal'] = $calendar;
-								if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_write'])) {
+								if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id'])>1) {
 									throw new AccessDeniedException();
 								}
 
@@ -860,7 +860,7 @@ try {
 
 			if($calendar['id']>0) {
 				$old_calendar = $cal->get_calendar($calendar['id']);
-				if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_calendar['acl_write'])) {
+				if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_calendar['acl_id'])>1) {
 					throw new AccessDeniedException();
 				}
 				$cal->update_calendar($calendar, $old_calendar);
@@ -868,11 +868,8 @@ try {
 				if(!$GO_MODULES->modules['calendar']['write_permission']) {
 				//throw new AccessDeniedException();
 				}
-				$response['acl_read'] = $calendar['acl_read'] = $GO_SECURITY->get_new_acl('calendar read: '.$calendar['name'], $calendar['user_id']);
-				$response['acl_write'] = $calendar['acl_write'] = $GO_SECURITY->get_new_acl('calendar write: '.$calendar['name'], $calendar['user_id']);
-
-				$response['acl_read'] =
-						$response['calendar_id']=$cal->add_calendar($calendar);
+				$response['acl_id'] = $calendar['acl_id'] = $GO_SECURITY->get_new_acl('calendar read: '.$calendar['name'], $calendar['user_id']);			
+				$response['calendar_id']=$cal->add_calendar($calendar);
 			}
 			$response['success']=true;
 
@@ -903,15 +900,15 @@ try {
 
 			if($view['id']>0) {
 				$old_view = $cal->get_view($view['id']);
-				if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_view['acl_write'])) {
+
+				if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_view['acl_id'])>1) {
 					throw new AccessDeniedException();
 				}
 				$cal->update_view($view);
 
 				//user id of the view changed. Change the owner of the ACL as well
 				if($old_view['user_id'] != $view['user_id']) {
-					$GO_SECURITY->chown_acl($old_view['acl_read'], $view['user_id']);
-					$GO_SECURITY->chown_acl($old_view['acl_write'], $view['user_id']);
+					$GO_SECURITY->chown_acl($old_view['acl_id'], $view['user_id']);
 				}
 
 
@@ -932,24 +929,13 @@ try {
 				}
 
 			}else {
-			//if(!$GO_MODULES->modules['calendar']['write_permission'])
-			//{
-			//	throw new AccessDeniedException();
-			//}
-				$response['acl_read'] = $view['acl_read'] = $GO_SECURITY->get_new_acl('view read: '.$view['name'], $view['user_id']);
-				$response['acl_write'] = $view['acl_write'] = $GO_SECURITY->get_new_acl('view write: '.$view['name'], $view['user_id']);
-
-				$response['acl_read'] =
-						$response['view_id']=$cal->add_view($view);
+				$response['acl_id'] = $view['acl_id'] = $GO_SECURITY->get_new_acl('view read: '.$view['name'], $view['user_id']);
+				$response['view_id']=$cal->add_view($view);
 
 				foreach($view_calendars as $calendar_id) {
 					$cal->add_calendar_to_view($calendar_id, '', $response['view_id']);
 				}
-
 			}
-
-
-
 			$response['success']=true;
 
 			break;

@@ -142,21 +142,17 @@ try{
 
 			if(empty($folder['readonly']) && $folder['parent_id']!=$usersfolder['id'] && ($files->is_owner($folder) || $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id)))
 			{
-				if (isset($_POST['share']) && $folder['acl_read']==0) {
+				if (isset($_POST['share']) && $folder['acl_id']==0) {
 
-					$up_folder['acl_read']=$GO_SECURITY->get_new_acl();
-					$up_folder['acl_write']=$GO_SECURITY->get_new_acl();
+					$up_folder['acl_id']=$GO_SECURITY->get_new_acl();
 					$up_folder['visible']='1';
 
-					$response['acl_read']=$up_folder['acl_read'];
-					$response['acl_write']=$up_folder['acl_write'];
+					$response['acl_id']=$up_folder['acl_id'];
 				}
-				if (!isset ($_POST['share']) && $folder['acl_read']) {
-					$up_folder['acl_read']=0;
-					$up_folder['acl_write']=0;
+				if (!isset ($_POST['share']) && $folder['acl_id']) {
+					$up_folder['acl_id']=0;
 
-					$GO_SECURITY->delete_acl($folder['acl_read']);
-					$GO_SECURITY->delete_acl($folder['acl_write']);
+					$GO_SECURITY->delete_acl($folder['acl_id']);
 				}
 			}
 				
@@ -491,8 +487,8 @@ try{
 				{
 					$template['user_id']=$GO_SECURITY->user_id;
 				}
-				$response['acl_read']=$template['acl_read']=$GO_SECURITY->get_new_acl();
-				$response['acl_write']=$template['acl_write']=$GO_SECURITY->get_new_acl();
+				$response['acl_id']=$template['acl_id']=$GO_SECURITY->get_new_acl();
+			
 				$types .= 'ii';
 				$response['template_id']=$files->add_template($template, $types);
 			}

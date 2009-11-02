@@ -57,3 +57,5 @@ $updates[]="script:1_sender_aliases.inc.php";
 
 $updates[]="ALTER TABLE `em_accounts` DROP `name` , DROP `email` ;";
 $updates[]="ALTER TABLE `em_messages_cache` CHANGE `to` `to` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ";
+
+$updates[]="ALTER TABLE `em_links` CHANGE `acl_read` `acl_id` INT( 11 ) NOT NULL DEFAULT '0'";

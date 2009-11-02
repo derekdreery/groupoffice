@@ -80,3 +80,5 @@ $updates[] = "CREATE TABLE IF NOT EXISTS `cf_6` (
   PRIMARY KEY  (`link_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
+
+$updates[] = "script:5_convert_acl.inc.php";

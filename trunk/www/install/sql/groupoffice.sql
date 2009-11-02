@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS `go_acl` (
   `acl_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   `group_id` int(11) NOT NULL default '0',
+	`level` TINYINT NOT NULL DEFAULT '1',
   PRIMARY KEY  (`acl_id`,`user_id`,`group_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

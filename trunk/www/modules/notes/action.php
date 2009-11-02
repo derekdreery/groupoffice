@@ -40,7 +40,7 @@ try{
 			{
 				$old_category = $notes->get_category($category['id']);
 				
-				if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_category['acl_write']))
+				if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_category['acl_id'])<2)
 				{
 					throw new AccessDeniedException();
 				}
@@ -52,8 +52,7 @@ try{
 			{
 				$category['user_id']=$GO_SECURITY->user_id;
 				
-				$response['acl_read']=$category['acl_read']=$GO_SECURITY->get_new_acl('category');
-				$response['acl_write']=$category['acl_write']=$GO_SECURITY->get_new_acl('category');
+				$response['acl_id']=$category['acl_id']=$GO_SECURITY->get_new_acl('notes');
 				
 				$category_id= $notes->add_category($category);							
 
@@ -67,10 +66,10 @@ try{
 			
 			$category = $notes->get_category((trim($_POST['category_id'])));
 			
-			if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_write']))
+			if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_category['acl_id'])<2)
 			{
 				throw new AccessDeniedException();
-			}			
+			}
 			
 			$note['category_id']=$_POST['category_id'];
 			$note['name']=$_POST['name'];

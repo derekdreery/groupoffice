@@ -41,14 +41,14 @@ class notes extends db {
 			while($category = $db->next_record())
 			{
 				try{
-					$files->check_share('notes/'.$category['name'], $category['user_id'], $category['acl_read'], $category['acl_write'], false);
+					$files->check_share('notes/'.$category['name'], $category['user_id'], $category['acl_id'], false);
 				}
 				catch(Exception $e){
 					echo $e->getMessage().$line_break;
 				}
 			}
 
-			$db->query("SELECT c.*,a.name AS category_name,a.acl_read,a.acl_write FROM no_notes c INNER JOIN no_categories a ON a.id=c.category_id");
+			$db->query("SELECT c.*,a.name AS category_name,a.acl_id FROM no_notes c INNER JOIN no_categories a ON a.id=c.category_id");
 			while($note = $db->next_record())
 			{
 				try{
@@ -88,7 +88,7 @@ class notes extends db {
 		{
 			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();			
-			$files->check_share('notes/'.File::strip_invalid_chars($category['name']),$category['user_id'], $category['acl_read'], $category['acl_write']);
+			$files->check_share('notes/'.File::strip_invalid_chars($category['name']),$category['user_id'], $category['acl_id']);
 		}		
 			
 		if($this->insert_row('no_categories', $category))
@@ -121,8 +121,7 @@ class notes extends db {
 		//user id of the category changed. Change the owner of the ACL as well
 		if(isset($category['user_id']) && $old_category['user_id'] != $category['user_id'])
 		{
-			$GO_SECURITY->chown_acl($old_category['acl_read'], $category['user_id']);
-			$GO_SECURITY->chown_acl($old_category['acl_write'], $category['user_id']);
+			$GO_SECURITY->chown_acl($old_category['acl_id'], $category['user_id']);
 		}
 		
 		return $this->update_row('no_categories', 'id', $category);
@@ -163,8 +162,7 @@ class notes extends db {
 		}
 
 		global $GO_SECURITY;
-		$GO_SECURITY->delete_acl($category['acl_read']);
-		$GO_SECURITY->delete_acl($category['acl_write']);
+		$GO_SECURITY->delete_acl($category['acl_id']);
 
 		return $this->query("DELETE FROM no_categories WHERE id=".$this->escape($category_id));
 	}
@@ -316,8 +314,8 @@ class notes extends db {
 				$user = $GO_USERS->get_user($GO_SECURITY->user_id);
 				$task_name = String::format_name($user['last_name'], $user['first_name'], $user['middle_name'], 'last_name');
 				$category['name'] = $task_name;
-				$category['acl_read']=$GO_SECURITY->get_new_acl();
-				$category['acl_write']=$GO_SECURITY->get_new_acl();
+				$category['acl_id']=$GO_SECURITY->get_new_acl();
+
 				$x = 1;
 				while($this->get_category_by_name($category['name']))
 				{
@@ -422,11 +420,11 @@ class notes extends db {
 		switch($auth_type)
 		{
 			case 'read':
-				$sql .= "(no_categories.acl_read = a.acl_id OR no_categories.acl_write = a.acl_id) ";	
+				$sql .= "no_categories.acl_id = a.acl_id ";
 				break;
 				
 			case 'write':
-				$sql .= "no_categories.acl_write = a.acl_id ";
+				$sql .= "(no_categories.acl_id = a.acl_id AND a.level>1) ";
 				break;
 		}
 		
@@ -533,7 +531,7 @@ class notes extends db {
 			global $GO_SECURITY;
 			
 			$sql .= " INNER JOIN no_categories c ON n.category_id=c.id ".
- 				"INNER JOIN go_acl a ON (c.acl_read = a.acl_id OR c.acl_write = a.acl_id) ".	
+ 				"INNER JOIN go_acl a ON c.acl_id = a.acl_id  ".
 				"LEFT JOIN go_users_groups ug ON (a.group_id = ug.group_id) WHERE ((".
  				"ug.user_id = ".$GO_SECURITY->user_id.") OR (a.user_id = ".$GO_SECURITY->user_id."))";
 		}
@@ -606,8 +604,7 @@ class notes extends db {
 		{			
 			$category['name']=String::format_name($user);
 			$category['user_id']=$user['id'];
-			$category['acl_read']=$GO_SECURITY->get_new_acl('category',$user['id']);
-			$category['acl_write']=$GO_SECURITY->get_new_acl('category',$user['id']);
+			$category['acl_id']=$GO_SECURITY->get_new_acl('category',$user['id']);
 			
 			$notes->add_category($category);
 		}
@@ -628,7 +625,7 @@ class notes extends db {
 		
 		require($GO_LANGUAGE->get_language_file('notes'));
 		
-		$sql = "SELECT i.*,r.acl_read,r.acl_write FROM no_notes i ".
+		$sql = "SELECT i.*,r.acl_id FROM no_notes i ".
 			"INNER JOIN no_categories r ON r.id=i.category_id WHERE i.id=?";
 		
 		$this->query($sql, 'i', $note_id);
@@ -644,8 +641,7 @@ class notes extends db {
 			$cache['type']=$lang['notes']['note'];
 			$cache['keywords']=$search->record_to_keywords($this->record).','.$cache['type'];
 			$cache['mtime']=$this->f('mtime');
-			$cache['acl_read']=$this->f('acl_read');
- 			$cache['acl_write']=$this->f('acl_write');	
+			$cache['acl_id']=$this->f('acl_id');
  			
 			$search->cache_search_result($cache);
 		}
