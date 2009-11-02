@@ -355,3 +355,11 @@ $updates[]="ALTER TABLE `go_state` CHANGE `name` `name` VARCHAR( 100 ) CHARACTER
 
 $updates[]="ALTER TABLE `go_reminders` ADD `vtime` INT NOT NULL DEFAULT 0;";
 $updates[]="ALTER TABLE `go_reminders` ADD `mail_send` TINYINT NOT NULL DEFAULT 0;";
+
+$updates[]="ALTER TABLE `go_acl` ADD `level` TINYINT NOT NULL DEFAULT '1'";
+$updates[]="UPDATE go_acl SET level=-1";
+$updates[]="ALTER TABLE `go_acl` ADD INDEX ( `acl_id` , `user_id` , `group_id` , `level` ) ;";
+$updates[]="ALTER TABLE `go_search_cache` CHANGE `acl_read` `acl_id` INT( 11 ) NOT NULL ";
+$updates[]="ALTER TABLE `go_search_cache` DROP `acl_write`";
+
+$updates[]='script:6_convert_acl.inc.php';

@@ -25,7 +25,7 @@ GO.modules.MainPanel = function(config) {
         root : 'results',
         id : 'id',
         fields : ['name', 'description', 'id', 'sort_order',
-        'admin_menu', 'acl_read', 'acl_write'],
+        'admin_menu', 'acl_id'],
         remoteSort : true
     });
 
@@ -37,7 +37,7 @@ GO.modules.MainPanel = function(config) {
         root : 'results',
         id : 'id',
         fields : ['name', 'description', 'id', 'sort_order',
-        'admin_menu', 'acl_read', 'acl_write'],
+        'admin_menu', 'acl_id'],
         remoteSort : true
     });
 
@@ -306,15 +306,7 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
                     title : GO.users.lang.useModule
                 });
 
-                this.writePermissionsTab = new GO.grid.PermissionsPanel({
-                    title : GO.users.lang.manageModule
-                });
-
-                this.tabPanel = new Ext.TabPanel({
-                    activeTab : 0,
-                    items : [this.readPermissionsTab,
-                    this.writePermissionsTab]
-                });
+                
 
                 this.permissionsWin = new Ext.Window({
                     title : GO.lang['strPermissions'],
@@ -323,7 +315,7 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
                     height : 500,
                     width : 400,
                     closeAction:'hide',
-                    items : [this.tabPanel],
+                    items : [this.readPermissionsTab],
                     buttons : [{
                         text : GO.lang['cmdClose'],
                         handler : function() {
@@ -338,8 +330,7 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
             this.permissionsWin.setTitle(GO.lang['strPermissions'] + ' '
                 + record[0].data.name);
 
-            this.readPermissionsTab.setAcl(record[0].data.acl_read);
-            this.writePermissionsTab.setAcl(record[0].data.acl_write);
+            this.readPermissionsTab.setAcl(record[0].data.acl_id);
 
         }
     },

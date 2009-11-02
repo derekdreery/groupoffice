@@ -33,5 +33,4 @@ $updates[]="script:2_install_groups.inc.php";
 $updates[]="UPDATE cal_calendars SET group_id=1 WHERE group_id<1";
 
 $updates[]="ALTER TABLE `cal_calendars` ADD `show_bdays` TINYINT( 1 ) NOT NULL ";
-
-?>
+$updates[]="script:3_convert_acl.inc.php";

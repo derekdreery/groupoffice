@@ -170,12 +170,12 @@ GO.files.FileBrowser = function(config){
 
 
 	var fields ={
-		fields:['type_id', 'id','name','type', 'size', 'mtime', 'extension', 'timestamp', 'thumb_url','path','acl_read'],
+		fields:['type_id', 'id','name','type', 'size', 'mtime', 'extension', 'timestamp', 'thumb_url','path','acl_id'],
 		columns:[{
 					header:GO.lang['strName'],
 					dataIndex: 'name',
 					renderer:function(v, meta, r){
-						var cls = r.get('acl_read')>0 ? 'folder-shared' : 'filetype filetype-'+r.get('extension');
+						var cls = r.get('acl_id')>0 ? 'folder-shared' : 'filetype filetype-'+r.get('extension');
 						return '<div class="go-grid-icon '+cls+'">'+v+'</div>';
 					}
 				},{

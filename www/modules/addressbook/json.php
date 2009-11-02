@@ -179,7 +179,7 @@ try
 					foreach($delete_contacts as $id)
 					{
 						$contact = $ab->get_contact($id);
-						if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $contact['acl_write']))
+						if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $contact['acl_id'])<3)
 						{
 							throw new AccessDeniedException();
 						}
@@ -294,7 +294,7 @@ try
 					foreach($delete_companies as $id)
 					{
 						$company = $ab->get_company($id);
-						if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $company['acl_write']))
+						if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $contact['acl_id'])<3)
 						{
 							throw new AccessDeniedException();
 						}
@@ -373,7 +373,7 @@ try
 				
 			$company = $ab->get_company($company_id);
 
-			if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $company['acl_write']))
+			if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $contact['acl_id'])<3)
 			{
 				throw new AccessDeniedException();
 			}
@@ -439,9 +439,10 @@ try
 			$response['success']=false;
 
 			$response['data'] = $ab->get_contact($contact_id);
-				
-			$response['data']['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $response['data']['acl_write']);
-			if(!$response['data']['write_permission'] && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $response['data']['acl_read']) && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $response['data']['acl_write']))
+
+			$perm_lvl = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $response['data']['acl_id']);
+			$response['data']['write_permission']=$perm_lvl>1;
+			if(!$perm_lvl)
 			{
 				throw new AccessDeniedException();
 			}
@@ -574,8 +575,9 @@ try
 
 			$response['data'] = $ab->get_company($company_id);
 			
-			$response['data']['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $response['data']['acl_write']);
-			if(!$response['data']['write_permission'] && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $response['data']['acl_read']) && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $response['data']['acl_write']))
+			$perm_lvl = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $response['data']['acl_id']);
+			$response['data']['write_permission']=$perm_lvl>1;
+			if(!$perm_lvl)
 			{
 				throw new AccessDeniedException();
 			}
@@ -765,8 +767,7 @@ try
 					'user_id' => $ab->f('user_id'),
 					'name' => $ab->f('name'),
 					'owner' => $user_name,
-					'acl_read' => $ab->f('acl_read'),
-					'acl_write' => $ab->f('acl_write'),
+					'acl_id' => $ab->f('acl_id'),
 					'default_iso_address_format' => $ab->f('default_iso_address_format'),
 					'default_salutation' => $ab->f('default_salutation')
 				);

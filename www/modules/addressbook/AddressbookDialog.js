@@ -406,9 +406,6 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 			this.addressbookExportPanel,
 			this.readPermissionsTab = new GO.grid.PermissionsPanel({
 				title: GO.lang['strReadPermissions']
-			}),
-			this.writePermissionsTab = new GO.grid.PermissionsPanel({
-				title: GO.lang['strWritePermissions']
 			})
 			]
 		});
@@ -418,7 +415,6 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 		this.addressbookImportPanel.on('show', this.syncButtons, this);			
 		this.addressbookExportPanel.on('show', this.syncButtons, this);				
 		this.readPermissionsTab.on('show', this.syncButtons, this);			
-		this.writePermissionsTab.on('show', this.syncButtons, this);
 	
 	},
 	
@@ -455,7 +451,6 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 			this.addressbookImportPanel.setDisabled(true);
 			this.addressbookExportPanel.setDisabled(true);
 			this.readPermissionsTab.setAcl(0);
-			this.writePermissionsTab.setAcl(0);	
 	
 		} else {			
 			//this.propertiesPanel.form.findField('name').setValue(this.record.data.name);
@@ -466,8 +461,7 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 			this.addressbookImportPanel.setDisabled(false);
 			this.addressbookExportPanel.setDisabled(false);
 			
-			this.readPermissionsTab.setAcl(this.record.data.acl_read);
-			this.writePermissionsTab.setAcl(this.record.data.acl_write);	
+			this.readPermissionsTab.setAcl(this.record.data.acl_id);
 		}
 		
 		
@@ -675,8 +669,7 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 					
 					this.addressbookImportPanel.setDisabled(false);
 					this.addressbookExportPanel.setDisabled(false);
-					this.readPermissionsTab.setAcl(action.result.acl_read);
-					this.writePermissionsTab.setAcl(action.result.acl_write);					
+					this.readPermissionsTab.setAcl(action.result.acl_id);
 				}
 				
 				if (hide)

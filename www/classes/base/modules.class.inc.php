@@ -91,7 +91,6 @@ class GO_MODULES extends db {
 	 * humanName 					The localized name
 	 * id									The module name
 	 * description
-	 * acl_write
 	 * acl_read
 	 * read_permission 		bool
 	 * write_permission 	bool
@@ -207,15 +206,11 @@ class GO_MODULES extends db {
 			{
 				$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']] = $modules_props[$i];
 				if (isset($GO_SECURITY) &&  $GO_SECURITY->logged_in() ) {
-					$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['write_permission'] =
-					$GO_SECURITY->has_permission(
-					$_SESSION['GO_SESSION']['user_id'], $modules_props[$i]['acl_write']);
-					$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['read_permission'] =
-					$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['write_permission'] ? true :
-					$GO_SECURITY->has_permission(
-					$_SESSION['GO_SESSION']['user_id'], $modules_props[$i]['acl_read']);
 
+					$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['permission_level'] =$GO_SECURITY->has_permission($_SESSION['GO_SESSION']['user_id'], $modules_props[$i]['acl_id']);
 
+					$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['write_permission'] = $_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['permission_level']==1;
+					$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['read_permission'] =$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['write_permission'] = $_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['permission_level']>0;
 
 				}else
 				{
@@ -336,8 +331,7 @@ class GO_MODULES extends db {
 
 		$module['id']=$module_id;
 		$module['sort_order'] = count($this->modules)+1;
-		$module['acl_read']=$GO_SECURITY->get_new_acl();
-		$module['acl_write']=$GO_SECURITY->get_new_acl();
+		$module['acl_id']=$GO_SECURITY->get_new_acl();
 		
 		$module['version']=0;
 		$updates_file = $GO_CONFIG->root_path.'modules/'.$module_id.'/install/updates.inc.php';		
@@ -411,8 +405,7 @@ class GO_MODULES extends db {
 				require($uninstall_script);
 			}			
 						
-			$GO_SECURITY->delete_acl($module['acl_read']);
-			$GO_SECURITY->delete_acl($module['acl_write']);
+			$GO_SECURITY->delete_acl($module['acl_id']);
 			$sql = "DELETE FROM go_modules WHERE id='".$module_id."'";
 			if ( $this->query( $sql ) ) {
 				$uninstall_sql_file = $GO_CONFIG->root_path.'modules/'.$module_id.'/install/uninstall.sql';

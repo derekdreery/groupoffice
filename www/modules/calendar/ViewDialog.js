@@ -95,12 +95,7 @@ GO.calendar.ViewDialog = function(config)
 		title: GO.lang.strReadPermissions
 	});
 
-	this.writePermissionsTab = new GO.grid.PermissionsPanel({
-		title: GO.lang.strWritePermissions
-	});
 
-	//this.readPermissionsTab.render(document.body);
-	//this.writePermissionsTab.render(document.body);
 
 	this.formPanel = new Ext.form.FormPanel({
 		url: GO.settings.modules.calendar.url+'action.php',
@@ -117,8 +112,7 @@ GO.calendar.ViewDialog = function(config)
 			anchor: '100% 100%',
 			items:[
 			this.propertiesTab,
-			this.readPermissionsTab,
-			this.writePermissionsTab
+			this.readPermissionsTab
 			]
 		}]
 	});
@@ -185,7 +179,6 @@ Ext.extend(GO.calendar.ViewDialog, Ext.Window, {
 			this.propertiesTab.show();
 
 			this.readPermissionsTab.setDisabled(true);
-			this.writePermissionsTab.setDisabled(true);
 			
 			
 			this.calendarsStore.baseParams['view_id']=0;
@@ -209,8 +202,8 @@ Ext.extend(GO.calendar.ViewDialog, Ext.Window, {
 			success: function(form, action) {
 				this.view_id=view_id;
 				this.selectUser.setRawValue(action.result.data.user_name);
-				this.readPermissionsTab.setAcl(action.result.data.acl_read);
-				this.writePermissionsTab.setAcl(action.result.data.acl_write);
+				this.readPermissionsTab.setAcl(action.result.data.acl_id);
+
 				
 				this.calendarsStore.baseParams['view_id']=view_id;
 				this.calendarsStore.reload();
@@ -253,8 +246,8 @@ Ext.extend(GO.calendar.ViewDialog, Ext.Window, {
 				if(action.result.view_id)
 				{
 					this.view_id=action.result.view_id;
-					this.readPermissionsTab.setAcl(action.result.acl_read);
-					this.writePermissionsTab.setAcl(action.result.acl_write);
+					this.readPermissionsTab.setAcl(action.result.acl_id);
+
 					//this.loadAccount(this.view_id);
 				}
 				

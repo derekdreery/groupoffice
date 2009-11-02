@@ -75,3 +75,4 @@ $updates[] = "ALTER TABLE `ab_contacts` CHANGE `last_name` `last_name` VARCHAR( 
 $updates[] = "ALTER TABLE `ab_contacts` CHANGE `email` `email` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
 $updates[] = "ALTER TABLE `ab_contacts` CHANGE `email2` `email2` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
 $updates[] = "ALTER TABLE `ab_contacts` CHANGE `email3` `email3` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+$updates[] = "script:3_convert_acl.inc.php";

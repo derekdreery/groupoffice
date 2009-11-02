@@ -119,8 +119,7 @@ CREATE TABLE IF NOT EXISTS `em_links` (
   `time` int(11) NOT NULL default '0',
   `path` varchar(255) default NULL,
   `ctime` int(11) NOT NULL,
-  `acl_read` int(11) NOT NULL,
-  `acl_write` int(11) NOT NULL,
+  `acl_id` int(11) NOT NULL,
   PRIMARY KEY  (`link_id`),
   KEY `account_id` (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

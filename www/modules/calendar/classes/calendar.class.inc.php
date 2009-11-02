@@ -57,7 +57,7 @@ class calendar extends db
 			while($calendar = $db->next_record())
 			{
 				try{
-					$files->check_share('events/'.$calendar['name'], $calendar['user_id'], $calendar['acl_read'], $calendar['acl_write'], false);
+					$files->check_share('events/'.$calendar['name'], $calendar['user_id'], $calendar['acl_id'], false);
 				}
 				catch(Exception $e){
 					echo $e->getMessage().$line_break;
@@ -65,7 +65,7 @@ class calendar extends db
 			}
 		
 
-			$db->query("SELECT c.*,a.name AS calendar_name,a.acl_read,a.acl_write FROM cal_events c INNER JOIN cal_calendars a ON a.id=c.calendar_id");
+			$db->query("SELECT c.*,a.name AS calendar_name,a.acl_id FROM cal_events c INNER JOIN cal_calendars a ON a.id=c.calendar_id");
 			while($event = $db->next_record())
 			{
 				try{
@@ -568,8 +568,7 @@ class calendar extends db
 	{
 		$sql = "SELECT DISTINCT cal_views . * ".
 		"FROM cal_views ".
-		"INNER JOIN go_acl ON ( cal_views.acl_read = go_acl.acl_id ".
-		"OR cal_views.acl_write = go_acl.acl_id ) ".
+		"INNER JOIN go_acl ON cal_views.acl_id = go_acl.acl_id ".
 		"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ".
 		"WHERE go_acl.user_id=".$this->escape($user_id)." ".
 		"OR go_users_groups.user_id=".$this->escape($user_id)." ".
@@ -590,7 +589,7 @@ class calendar extends db
 
 		$sql = "SELECT DISTINCT cal_views . * ".
 		"FROM cal_views ".
-		"INNER JOIN go_acl ON cal_views.acl_write = go_acl.acl_id ".
+		"INNER JOIN go_acl ON (cal_views.acl_id = go_acl.acl_id AND level>1) ".
 		"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ".
 		"WHERE go_acl.user_id=".$this->escape($user_id)." ".
 		"OR go_users_groups.user_id=".$this->escape($user_id)." ".
@@ -740,7 +739,7 @@ class calendar extends db
 			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 				
-			$files->check_share('events/'.File::strip_invalid_chars($calendar['name']),$calendar['user_id'], $calendar['acl_read'], $calendar['acl_write']);
+			$files->check_share('events/'.File::strip_invalid_chars($calendar['name']),$calendar['user_id'], $calendar['acl_id']);
 		}
 
 		$this->insert_row('cal_calendars',$calendar);
@@ -753,11 +752,6 @@ class calendar extends db
 		$delete = new calendar;
 
 		$calendar = $this->get_calendar($calendar_id);
-
-		/*if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_write']))
-		{
-			throw new AccessDeniedException();
-		}*/
 
 		global $GO_MODULES;
 		if(isset($GO_MODULES->modules['files']))
@@ -786,8 +780,7 @@ class calendar extends db
 
 		if(empty($calendar['shared_acl']))
 		{
-			$GO_SECURITY->delete_acl($calendar['acl_read']);
-			$GO_SECURITY->delete_acl($calendar['acl_write']);
+			$GO_SECURITY->delete_acl($calendar['acl_id']);
 		}
 	}
 
@@ -807,8 +800,7 @@ class calendar extends db
 		//user id of the calendar changed. Change the owner of the ACL as well
 		if(isset($calendar['user_id']) && $old_calendar['user_id'] != $calendar['user_id'])
 		{
-			$GO_SECURITY->chown_acl($old_calendar['acl_read'], $calendar['user_id']);
-			$GO_SECURITY->chown_acl($old_calendar['acl_write'], $calendar['user_id']);
+			$GO_SECURITY->chown_acl($old_calendar['acl_id'], $calendar['user_id']);
 		}
 		
 		return $this->update_row('cal_calendars','id', $calendar);
@@ -855,8 +847,7 @@ class calendar extends db
 			}
 			$calendar_name = String::format_name($user['last_name'], $user['first_name'], $user['middle_name'], 'last_name');
 			$calendar['name'] = $calendar_name;
-			$calendar['acl_read']=$GO_SECURITY->get_new_acl();
-			$calendar['acl_write']=$GO_SECURITY->get_new_acl();
+			$calendar['acl_id']=$GO_SECURITY->get_new_acl();
 			$x = 1;
 			while($this->get_calendar_by_name($calendar['name']))
 			{
@@ -959,8 +950,7 @@ class calendar extends db
 	{
 		$sql = "SELECT DISTINCT cal_calendars.* ".
 		"FROM cal_calendars ".
-		"INNER JOIN go_acl ON ( cal_calendars.acl_read = go_acl.acl_id ".
-		"OR cal_calendars.acl_write = go_acl.acl_id ) ".
+		"INNER JOIN go_acl ON cal_calendars.acl_id = go_acl.acl_id ".
 		"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ".
 		"WHERE (go_acl.user_id=".$this->escape($user_id)." ".
 		"OR go_users_groups.user_id=".$this->escape($user_id).")";
@@ -994,7 +984,7 @@ class calendar extends db
         if($groups)
             $sql .= ", cal_groups.fields ";
 		$sql .= "FROM cal_calendars ".
-		"INNER JOIN go_acl ON cal_calendars.acl_write = go_acl.acl_id ".
+		"INNER JOIN go_acl ON (cal_calendars.acl_id = go_acl.acl_id AND level>1) ".
 		"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ";
 
         if($groups)
@@ -1078,7 +1068,7 @@ class calendar extends db
 			$event['status'] = 'ACCEPTED';
 		}
 
-		unset($event['acl_read'], $event['acl_write']);
+		unset($event['acl_id']);
 
 
 
@@ -1639,7 +1629,7 @@ class calendar extends db
 
 	function get_event($event_id)
 	{
-		$sql = "SELECT e.*, c.acl_read, c.acl_write FROM cal_events e INNER JOIN cal_calendars c ON c.id=e.calendar_id WHERE e.id='".$this->escape($event_id)."'";
+		$sql = "SELECT e.*, c.acl_id FROM cal_events e INNER JOIN cal_calendars c ON c.id=e.calendar_id WHERE e.id='".$this->escape($event_id)."'";
 		$this->query($sql);
 		if($this->next_record(DB_ASSOC))
 		{
@@ -2083,10 +2073,10 @@ class calendar extends db
 
 		$calendar['name']=String::format_name($user);
 		$calendar['user_id']=$user['id'];
-		$calendar['acl_read']=$GO_SECURITY->get_new_acl('category', $user['id']);
-		$calendar['acl_write']=$GO_SECURITY->get_new_acl('category', $user['id']);
+		$calendar['acl_id']=$GO_SECURITY->get_new_acl('calendar', $user['id']);
 
-		$GO_SECURITY->add_group_to_acl($GO_CONFIG->group_internal, $calendar['acl_write']);
+
+		$GO_SECURITY->add_group_to_acl($GO_CONFIG->group_internal, $calendar['acl_id'],2);
 
 		$calendar_id = $cal->add_calendar($calendar);
 
@@ -2121,7 +2111,7 @@ class calendar extends db
 
 		$GO_LANGUAGE->require_language_file('calendar');
 
-		$sql  = "SELECT DISTINCT cal_events.*, cal_calendars.acl_read, cal_calendars.acl_write FROM cal_events ".
+		$sql  = "SELECT DISTINCT cal_events.*, cal_calendars.acl_id FROM cal_events ".
 		"INNER JOIN cal_calendars ON cal_events.calendar_id=cal_calendars.id ".
 		"WHERE cal_events.id=?";
 
@@ -2138,8 +2128,7 @@ class calendar extends db
 			$cache['type']=$lang['link_type'][1];
 			$cache['keywords']=$search->record_to_keywords($this->record).','.$cache['type'];
 			$cache['mtime']=$this->f('mtime');
-			$cache['acl_read']=$this->f('acl_read');
-			$cache['acl_write']=$this->f('acl_write');
+			$cache['acl_id']=$this->f('acl_id');
 
 			$search->cache_search_result($cache);
 		}
@@ -2433,28 +2422,7 @@ class calendar extends db
 		return $this->num_rows();		
 	}
 
-	/*function __on_check_database(){
-	 global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE;
 
-	 echo 'Checking calendar folder permissions<br />';
-
-	 if(isset($GO_MODULES->modules['files']))
-	 {
-	 require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
-	 $fs = new files();
-
-	 $sql = "SELECT e.name,e.id, c.acl_read, c.acl_write, c.user_id FROM cal_events e INNER JOIN cal_calendars c ON c.id=e.calendar_id";
-	 $this->query($sql);
-	 while($this->next_record())
-	 {
-	 echo 'Checking '.$this->f('name').'<br />';
-	 $full_path = $GO_CONFIG->file_storage_path.'events/'.$this->f('id');
-	 $fs->check_share($full_path, $this->f('user_id'), $this->f('acl_read'), $this->f('acl_write'));
-	 }
-	 }
-	 echo 'Done<br /><br />';
-	 }
-	 */
 	/**
 	 * When a an item gets deleted in a panel with links. Group-Office attempts
 	 * to delete the item by finding the associated module class and this function

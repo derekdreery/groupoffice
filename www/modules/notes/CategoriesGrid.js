@@ -31,12 +31,9 @@ GO.notes.CategoriesGrid = function(config){
 	    root: 'results',
 	    id: 'id',
 	    totalProperty:'total',
-	    fields: ['id','user_name','acl_read','acl_write','name'],
+	    fields: ['id','user_name','acl_id','name'],
 	    remoteSort: true
 	});
-
-	
-	
 
 	var columnModel =  new Ext.grid.ColumnModel([
 	  {

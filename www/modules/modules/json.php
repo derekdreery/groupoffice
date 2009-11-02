@@ -104,8 +104,7 @@ try{
 	 			'description' => $module['description'],
 	 			'sort_order' => $module['sort_order'],
 	 			'admin_menu' => $module['admin_menu'],
- 				'acl_read' => $module['acl_read'],
- 				'acl_write' => $module['acl_write']
+ 				'acl_id' => $module['acl_id']
 				);
 				$records[] = $record;
 

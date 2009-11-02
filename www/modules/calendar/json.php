@@ -219,8 +219,11 @@ try{
 			}
 			$calendar = $cal->get_calendar($event['calendar_id']);
 
-			$response['data']['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_write']);
-			if((!$response['data']['write_permission'] && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_read'])) ||
+
+
+			$response['data']['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id']);
+			$response['data']['write_permission']=$response['data']['permission_level']>1;
+			if(!$response['data']['permission_level'] ||
 			($event['private']=='1' && $event['user_id']!=$GO_SECURITY->user_id))
 			{
 				throw new AccessDeniedException();
@@ -279,8 +282,9 @@ try{
 
 			$calendar = $cal->get_calendar($calendar_id);
 
-			$response['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_write']);
-			if(!$response['write_permission'] && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_read']))
+			$response['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id']);
+			$response['write_permission']=$response['permission_level']>1;
+			if(!$response['permission_level'])
 			{
 				throw new AccessDeniedException();
 			}
@@ -478,7 +482,7 @@ try{
 			while($cal->next_record())
 			{
 				$response[$cal->f('id')] = $cal2->get_calendar($cal->f('id'));
-				$response[$cal->f('id')]['write_permission'] = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $cal2->f('acl_write'));
+				$response[$cal->f('id')]['write_permission'] = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $cal2->f('acl_id'))>1;
 
 				$events = $cal2->get_events_in_array(array($cal->f('id')), 0,
 				$start_time,
@@ -565,7 +569,7 @@ try{
 					foreach($calendars as $calendar_id)
 					{
 						$calendar = $cal->get_calendar($calendar_id);
-						if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_write']))
+						if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id'])>2)
 						{
 							throw new AccessDeniedException();
 						}
@@ -654,7 +658,7 @@ try{
 					foreach($views as $view_id)
 					{
 						$view = $cal->get_view($view_id);
-						if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $view['acl_write']))
+						if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $view['acl_id'])>2)
 						{
 							throw new AccessDeniedException();
 						}

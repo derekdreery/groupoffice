@@ -43,14 +43,14 @@ class tasks extends db
 			while($tasklist = $db->next_record())
 			{
 				try{
-					$files->check_share('tasks/'.$tasklist['name'], $tasklist['user_id'], $tasklist['acl_read'], $tasklist['acl_write'], false);
+					$files->check_share('tasks/'.$tasklist['name'], $tasklist['user_id'], $tasklist['acl_id'], false);
 				}
 				catch(Exception $e){
 					echo $e->getMessage().$line_break;
 				}
 			}
 
-			$db->query("SELECT c.*,a.name AS tasklist_name,a.acl_read,a.acl_write FROM ta_tasks c INNER JOIN ta_lists a ON a.id=c.tasklist_id");
+			$db->query("SELECT c.*,a.name AS tasklist_name,a.acl_id FROM ta_tasks c INNER JOIN ta_lists a ON a.id=c.tasklist_id");
 			while($task = $db->next_record())
 			{
 				try{
@@ -168,7 +168,7 @@ class tasks extends db
 		global $GO_SECURITY;
 
 		$src_task = $dst_task = $this->get_task($task_id);
-		unset($dst_task['id'], $dst_task['acl_write'], $dst_task['acl_read']);
+		unset($dst_task['id'], $dst_task['acl_id']);
 
 		foreach($new_values as $key=>$value)
 		{
@@ -187,7 +187,7 @@ class tasks extends db
 			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 			
-			$files->check_share('tasks/'.File::strip_invalid_chars($list['name']),$list['user_id'], $list['acl_read'], $list['acl_write']);
+			$files->check_share('tasks/'.File::strip_invalid_chars($list['name']),$list['user_id'], $list['acl_id']);
 		}	
 		
 		$list['id'] = $this->nextid("ta_lists");	
@@ -202,11 +202,6 @@ class tasks extends db
 
 		$tasklist = $this->get_tasklist($list_id);
 
-		/*if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_write']))
-		{
-			throw new AccessDeniedException();
-		}*/
-
 		$sql = "SELECT * FROM ta_tasks WHERE tasklist_id='".$this->escape($list_id)."'";
 		$this->query($sql);
 
@@ -219,8 +214,7 @@ class tasks extends db
 		$this->query($sql);
 
 		if(empty($tasklist['shared_acl'])){
-			$GO_SECURITY->delete_acl($tasklist['acl_read']);
-			$GO_SECURITY->delete_acl($tasklist['acl_write']);
+			$GO_SECURITY->delete_acl($tasklist['acl_id']);
 		}
 		
 		global $GO_MODULES;
@@ -253,8 +247,7 @@ class tasks extends db
 		//user id of the tasklist changed. Change the owner of the ACL as well
 		if(isset($tasklist['user_id']) && $old_tasklist['user_id'] != $tasklist['user_id'])
 		{
-			$GO_SECURITY->chown_acl($old_tasklist['acl_read'], $tasklist['user_id']);
-			$GO_SECURITY->chown_acl($old_tasklist['acl_write'], $tasklist['user_id']);
+			$GO_SECURITY->chown_acl($old_tasklist['acl_id'], $tasklist['user_id']);
 		}
 		
 		return $this->update_row('ta_lists','id', $tasklist);
@@ -314,8 +307,7 @@ class tasks extends db
 				}
 				$task_name = String::format_name($user['last_name'], $user['first_name'], $user['middle_name'], 'last_name');
 				$list['name'] = $task_name;
-				$list['acl_read']=$GO_SECURITY->get_new_acl('',$user_id);
-				$list['acl_write']=$GO_SECURITY->get_new_acl('',$user_id);
+				$list['acl_id']=$GO_SECURITY->get_new_acl('',$user_id);
 				$x = 1;
 				while($this->get_tasklist_by_name($list['name']))
 				{
@@ -361,10 +353,10 @@ class tasks extends db
 		"FROM ta_lists l ";
 		if($auth_type=='read')
 		{
-			$sql .= "INNER JOIN go_acl a ON (l.acl_read = a.acl_id OR l.acl_write = a.acl_id ) ";
+			$sql .= "INNER JOIN go_acl a ON l.acl_id = a.acl_id ";
 		}else
 		{
-			$sql .= "INNER JOIN go_acl a ON (l.acl_write = a.acl_id ) ";
+			$sql .= "INNER JOIN go_acl a ON (l.acl_id=a.acl_id AND l.level>1) ";
 		}
 		$sql .= "LEFT JOIN go_users_groups ug ON a.group_id = ug.group_id ".
 		"WHERE (a.user_id=".$this->escape($user_id)." OR ug.user_id=".$this->escape($user_id).")";
@@ -557,7 +549,7 @@ class tasks extends db
 		 if(!empty($task['rrule']) && $next_recurrence_time = Date::get_next_recurrence_time($task['start_time'], $task['start_time'], $task['rrule']))
 		 {
 		 	$old_id = $task['id'];
-		 	unset($task['completion_time'], $task['id'], $task['acl_read'], $task['acl_write']);
+		 	unset($task['completion_time'], $task['id'], $task['acl_id']);
 		 	$task['start_time'] = $next_recurrence_time;
 		 	
 		 	$diff = $next_recurrence_time-$old_start_time;
@@ -670,7 +662,7 @@ class tasks extends db
 
 	function get_task($task_id)
 	{
-		$sql = "SELECT t.*, tl.acl_read, tl.acl_write FROM ta_tasks t INNER JOIN ta_lists tl ON tl.id=t.tasklist_id WHERE t.id='".$this->escape($task_id)."'";
+		$sql = "SELECT t.*, tl.acl_id FROM ta_tasks t INNER JOIN ta_lists tl ON tl.id=t.tasklist_id WHERE t.id='".$this->escape($task_id)."'";
 		$this->query($sql);
 		if($this->next_record(DB_ASSOC))
 		{
@@ -958,8 +950,7 @@ class tasks extends db
 
 		$tasklist['name']=String::format_name($user);
 		$tasklist['user_id']=$user['id'];
-		$tasklist['acl_read']=$GO_SECURITY->get_new_acl('tasks', $user['id']);
-		$tasklist['acl_write']=$GO_SECURITY->get_new_acl('tasks', $user['id']);
+		$tasklist['acl_id']=$GO_SECURITY->get_new_acl('tasks', $user['id']);
 
 		$tasklist_id = $tasks->add_tasklist($tasklist);
 		
@@ -1025,7 +1016,7 @@ class tasks extends db
 		$search = new search();
 		require($GO_LANGUAGE->get_language_file('tasks'));
 
-		$sql  = "SELECT DISTINCT t.*, tl.acl_read, tl.acl_write FROM ta_tasks t ".
+		$sql  = "SELECT DISTINCT t.*, tl.acl_id FROM ta_tasks t ".
 		"INNER JOIN ta_lists tl ON t.tasklist_id=tl.id ".
 		"WHERE t.id=?";
 
@@ -1060,8 +1051,7 @@ class tasks extends db
 			$cache['type']=$lang['link_type'][12];
 			$cache['keywords']=$search->record_to_keywords($this->record).','.$cache['type'];
 			$cache['mtime']=$this->f('mtime');
-			$cache['acl_read']=$this->f('acl_read');
-			$cache['acl_write']=$this->f('acl_write');
+			$cache['acl_id']=$this->f('acl_id');
 				
 			$search->cache_search_result($cache);
 		}

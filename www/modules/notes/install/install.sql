@@ -54,8 +54,7 @@ DROP TABLE IF EXISTS `no_categories`;
 CREATE TABLE IF NOT EXISTS `no_categories` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `acl_read` int(11) NOT NULL,
-  `acl_write` int(11) NOT NULL,
+  `acl_id` int(11) NOT NULL,
   `name` varchar(50) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

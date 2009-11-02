@@ -58,7 +58,7 @@ try{
 							$node['draggable']=false;
 					}
 
-					if($folder['acl_read']>0)
+					if($folder['acl_id']>0)
 					{
 						$node['iconCls']='folder-shared';
 					}else
@@ -657,7 +657,7 @@ try{
 						
 						while($folder = $files->next_record())
 						{
-							if($folder['acl_read']>0)
+							if($folder['acl_id']>0)
 							{
 								$folder['thumb_url']=$GO_THEME->image_url.'128x128/filetypes/folder_public.png';
 								//$class='folder-shared';

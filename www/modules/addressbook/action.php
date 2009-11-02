@@ -280,8 +280,7 @@ try
 
 					$addressbook = $ab->add_addressbook($user_id, $name, $_REQUEST['default_iso_address_format'], $_REQUEST['default_salutation']);
 					$result['addressbook_id'] = $addressbook['addressbook_id'];
-					$result['acl_read'] = $addressbook['acl_read'];
-					$result['acl_write'] = $addressbook['acl_write'];
+					$result['acl_id'] = $addressbook['acl_id'];
 				} else {
 					#update
 					/*if ($existing_ab && $existing_ab['id'] != $addressbook_id)
@@ -505,7 +504,7 @@ try
 					$abook_id = isset($_REQUEST['book_id']) ? ($_REQUEST['book_id']) : 0;
 					
 					$addressbook = $ab->get_addressbook($abook_id);
-					if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $addressbook['acl_write']))
+					if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $addressbook['acl_id'])<3)
 					{
 						throw new AccessDeniedException();
 					}
@@ -519,7 +518,7 @@ try
 						if($contact['id'] > 0)
 						{
 							$old_contact = $ab->get_contact($contact['id']);
-							if(($old_contact['addressbook_id'] != $abook_id) && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_contact['acl_write']))
+							if(($old_contact['addressbook_id'] != $abook_id) && $GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_contact['acl_id'])<2)
 							{
 								throw new AccessDeniedException();
 							}
@@ -543,7 +542,7 @@ try
 					$abook_id = isset($_REQUEST['book_id']) ? ($_REQUEST['book_id']) : 0;
 				
 					$addressbook = $ab->get_addressbook($abook_id);
-					if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $addressbook['acl_write']))
+					if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $addressbook['acl_id'])<3)
 					{
 						throw new AccessDeniedException();
 					}
@@ -557,7 +556,7 @@ try
 						if($company['id'] > 0)
 						{
 							$old_company = $ab->get_company($company['id']);							
-							if(($old_company['addressbook_id'] != $abook_id) && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_company['acl_write']))
+							if(($old_company['addressbook_id'] != $abook_id) && $GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_company['acl_id'])<3)
 							{
 								throw new AccessDeniedException();
 							}
