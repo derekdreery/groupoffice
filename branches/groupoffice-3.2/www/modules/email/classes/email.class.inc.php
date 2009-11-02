@@ -1020,9 +1020,8 @@ class email extends db
 		}
 			
 
-		$subscribed =  $mail->get_subscribed($account['mbroot']);
+		$subscribed =  $mail->get_subscribed($account['mbroot']);		
 		$mailboxes =  $mail->get_mailboxes($account['mbroot']);
-
 
 		$this->_synchronize_folders($account, $mailboxes, $subscribed);
 

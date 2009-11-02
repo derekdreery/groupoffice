@@ -1177,26 +1177,32 @@ class imap{
 	function get_mailboxes($mailbox_root = '', $name_only = false) {
 
 		$this->mailboxes = array ();
-		$list = imap_getmailboxes($this->conn, "{".$this->connectstring."}", $mailbox_root.'%');
+		$list = imap_getmailboxes($this->conn, "{".$this->connectstring."}", $mailbox_root.'*');
 		if (is_array($list)) {
 			foreach ($list as $value) {
 				if (substr($value->name, -1) != $value->delimiter && strlen($value->delimiter) > 0) {
-					if ($name_only) {
-						$this->mailboxes[] = str_replace("{".$this->connectstring."}", "", $value->name);
-					} else {
+					
 
-						$mailbox['name'] = str_replace("{".$this->connectstring."}", "", $value->name);
-						$mailbox['delimiter'] = $value->delimiter;
-						$mailbox['attributes'] = $value->attributes;
-						//sometimes the IMAP server returns the parent folder as well so avoid a loop					
-						if($mailbox['name']!=substr($mailbox_root,0, -strlen($mailbox['delimiter'])))
-						{	
-							$this->mailboxes[] = $mailbox;
-							if (!($mailbox['attributes'] & LATT_NOINFERIORS)) {
-								$this->mailboxes = array_merge($this->mailboxes, $this->get_mailboxes($mailbox['name'].$mailbox['delimiter'],$name_only));
-							}
-						}
+					$mailbox['name'] = str_replace("{".$this->connectstring."}", "", $value->name);
+
+					$mailbox['delimiter'] = $value->delimiter;
+					$mailbox['attributes'] = $value->attributes;
+
+					if ($name_only) {
+						$this->mailboxes[] = $mailbox['name'];
+					} else {
+						$this->mailboxes[] = $mailbox;
 					}
+
+					//sometimes the IMAP server returns the parent folder as well so avoid a loop
+					/*if($mailbox['name']!=substr($mailbox_root,0, -strlen($mailbox['delimiter'])))
+					{
+						$this->mailboxes[] = $mailbox;
+						if (!($mailbox['attributes'] & LATT_NOINFERIORS)) {
+							$this->mailboxes = array_merge($this->mailboxes, $this->get_mailboxes($mailbox['name'].$mailbox['delimiter'],$name_only));
+						}
+					}*/
+
 				}
 			}
 		}
@@ -1214,12 +1220,13 @@ class imap{
 		*/
 	function get_subscribed($mailbox_root = '', $name_only = false) {
 		$this->mailboxes = array ();
-		$list = imap_getsubscribed($this->conn, "{".$this->connectstring."}", $mailbox_root.'%');
-
+		$list = imap_getsubscribed($this->conn, "{".$this->connectstring."}", $mailbox_root.'*');
+//debug($list);
 		if (is_array($list)) {
 			foreach ($list as $value) {
 				if (substr($value->name, -1) != $value->delimiter && strlen($value->delimiter) > 0) {														
 					$mailbox['name'] = str_replace("{".$this->connectstring."}", "",$value->name);
+					
 					$mailbox['delimiter'] = $value->delimiter;
 					$mailbox['attributes'] = $value->attributes;
 					//sometimes the IMAP server returns the parent folder as well so avoid a loop					
@@ -1231,9 +1238,9 @@ class imap{
 							$this->mailboxes[] = $mailbox;
 						}
 						
-						if (!($mailbox['attributes'] & LATT_NOINFERIORS)) {
+						/*if (!($mailbox['attributes'] & LATT_NOINFERIORS)) {
 							$this->mailboxes = array_merge($this->mailboxes, $this->get_subscribed($mailbox['name'].$mailbox['delimiter'], $name_only));
-						}
+						}*/
 					}
 				}
 			}
