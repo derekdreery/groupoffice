@@ -38,8 +38,7 @@ CREATE TABLE IF NOT EXISTS `cal_calendars` (
   `id` int(11) NOT NULL default '0',
   `group_id` int(11) NOT NULL default '1',
   `user_id` int(11) NOT NULL default '0',
-  `acl_read` int(11) NOT NULL default '0',
-  `acl_write` int(11) NOT NULL default '0',
+  `acl_id` int(11) NOT NULL default '0',
   `name` varchar(100) default NULL,
   `start_hour` tinyint(4) NOT NULL default '0',
   `end_hour` tinyint(4) NOT NULL default '0',
@@ -138,8 +137,7 @@ CREATE TABLE IF NOT EXISTS `cal_views` (
   `end_hour` tinyint(4) NOT NULL default '0',
   `event_colors_override` enum('0','1') NOT NULL default '0',
   `time_interval` int(11) NOT NULL default '1800',
-  `acl_read` int(11) NOT NULL default '0',
-  `acl_write` int(11) NOT NULL default '0',
+  `acl_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

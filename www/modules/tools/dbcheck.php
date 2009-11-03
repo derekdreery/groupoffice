@@ -86,10 +86,10 @@ flush();
 
 $acls=array();
 
-$db->query("SELECT acl_read FROM `go_modules` GROUP BY acl_read HAVING count( * )>1");
+$db->query("SELECT acl_id FROM `go_modules` GROUP BY acl_id HAVING count( * )>1");
 while($record = $db->next_record())
 {
-	$acls[]=$record['acl_read'];
+	$acls[]=$record['acl_id'];
 }
 
 if(count($acls))
@@ -97,14 +97,13 @@ if(count($acls))
 	echo "Correcting module permissions...$line_break";
 	foreach($acls as $acl_read)
 	{
-		$sql = "SELECT * FROM go_modules WHERE acl_read='$acl_read'";
+		$sql = "SELECT * FROM go_modules WHERE acl_id='$acl_id'";
 		$db->query($sql);
 		$first = $db->next_record();
 		while($record = $db->next_record())
 		{
 			$mod['id']=$record['id'];
-			$mod['acl_read']=$GO_SECURITY->copy_acl($first['acl_read']);
-			$mod['acl_write']=$GO_SECURITY->copy_acl($first['acl_write']);
+			$mod['acl_id']=$GO_SECURITY->copy_acl($first['acl_id']);
 			
 			$db2->update_row('go_modules', 'id', $mod);
 		}

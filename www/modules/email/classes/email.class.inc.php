@@ -1285,8 +1285,7 @@ class email extends db
 			$cache['type']=$lang['link_type'][9];
 			$cache['keywords']=$search->record_to_keywords($this->record).','.$cache['type'];
 			$cache['mtime']=$this->f('time');
-			$cache['acl_read']=$this->f('acl_read');
-			$cache['acl_write']=$this->f('acl_write');
+			$cache['acl_id']=$this->f('acl_id');
 
 			$search->cache_search_result($cache);
 		}
@@ -1327,8 +1326,7 @@ class email extends db
 			$sr = $search->next_record();
 			if($sr)
 			{
-				$record['acl_read']=$sr['acl_read'];
-				$record['acl_write']=$sr['acl_write'];
+				$record['acl_id']=$sr['acl_id'];
 				$email2->update_row('em_links', 'link_id', $record);
 			}
 		}
