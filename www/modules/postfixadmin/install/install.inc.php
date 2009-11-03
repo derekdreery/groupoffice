@@ -17,8 +17,7 @@ if(!empty($GO_CONFIG->serverclient_domains))
 			$d['user_id']=1;
 			$d['transport']='virtual';
 			$d['active']='1';
-			$d['acl_read']=$GO_SECURITY->get_new_acl('domain');
-			$d['acl_write']=$GO_SECURITY->get_new_acl('domain');
+			$d['acl_id']=$GO_SECURITY->get_new_acl('domain');
 
 			$mailbox['domain_id']=$postfixadmin->add_domain($d);
 			$mailbox['maildir']=$domain.'/admin/';

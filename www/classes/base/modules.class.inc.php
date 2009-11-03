@@ -208,9 +208,8 @@ class GO_MODULES extends db {
 				if (isset($GO_SECURITY) &&  $GO_SECURITY->logged_in() ) {
 
 					$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['permission_level'] =$GO_SECURITY->has_permission($_SESSION['GO_SESSION']['user_id'], $modules_props[$i]['acl_id']);
-
-					$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['write_permission'] = $_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['permission_level']==1;
-					$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['read_permission'] =$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['write_permission'] = $_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['permission_level']>0;
+					$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['write_permission'] = $_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['permission_level']>GO_SECURITY::READ_PERMISSION;
+					$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['read_permission'] = $_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['permission_level']>0;
 
 				}else
 				{

@@ -404,9 +404,7 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 			this.propertiesPanel,
 			this.addressbookImportPanel,
 			this.addressbookExportPanel,
-			this.readPermissionsTab = new GO.grid.PermissionsPanel({
-				title: GO.lang['strReadPermissions']
-			})
+			this.readPermissionsTab = new GO.grid.PermissionsPanel()
 			]
 		});
 		

@@ -31,9 +31,13 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 	// private
 	initComponent : function() {
 
-		var selectPermissionLevel = new GO.form.ComboBox({
+		if(!this.title){
+			this.title=GO.lang.strPermissions;
+		}
+
+		var permissionLevelConfig ={
 					store : new Ext.data.SimpleStore({
-						id:'value',
+						id:0,
 						fields : ['value', 'text'],
 						data : [
 							[1, 'Read'],
@@ -49,7 +53,10 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 					editable : false,
 					selectOnFocus : true,
 					forceSelection : true
-				});
+				};
+
+		var selectUsersPermissionLevel = new GO.form.ComboBox(permissionLevelConfig);
+		var selectGroupsPermissionLevel = new GO.form.ComboBox(permissionLevelConfig);
 
 		this.header = false;
 		this.layout = 'anchor';
@@ -73,8 +80,8 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 		this.aclGroupsStore.setDefaultSort('name', 'ASC');
 
 		var renderLevel = function(v){
-			var r = selectPermissionLevel.store.getById(v);
-			return r.get('name');
+			var r = permissionLevelConfig.store.getById(v);
+			return r.get('text');
 		}
 
 		this.aclGroupsGrid = new GO.grid.EditorGridPanel({
@@ -90,7 +97,7 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 				header : GO.lang.permissionsLevel,
 				dataIndex : 'level',
 				menuDisabled:true,
-				editor : selectPermissionLevel,
+				editor : selectUsersPermissionLevel,
 				renderer:renderLevel
 			}],
 			view : new Ext.grid.GridView({
@@ -177,7 +184,7 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 				header : GO.lang.permissionsLevel,
 				dataIndex : 'level',
 				menuDisabled:true,
-				editor : selectPermissionLevel,
+				editor : selectGroupsPermissionLevel,
 				renderer:renderLevel
 			}],
 			view : new Ext.grid.GridView({

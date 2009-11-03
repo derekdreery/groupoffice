@@ -105,14 +105,7 @@ GO.grid.LinksGrid = function(config){
 	//config.autoExpandMax=2500;
 	//config.autoExpandColumn=1;	
 	
-	config.bbar = new Ext.PagingToolbar({
-  					cls: 'go-paging-tb',
-	          store: config.store,
-	          pageSize: parseInt(GO.settings['max_rows_list']),
-	          displayInfo: true,
-	          displayMsg: GO.lang['displayingItems'],
-	          emptyMsg: GO.lang['strNoItems']
-	      });
+	config.paging=true;
 	      
 	config['layout']='fit';
 	config['view']=new Ext.grid.GridView({
@@ -143,7 +136,7 @@ GO.grid.LinksGrid = function(config){
   	
 }
 
-Ext.extend(GO.grid.LinksGrid, Ext.grid.EditorGridPanel, {
+Ext.extend(GO.grid.LinksGrid, GO.grid.EditorGridPanel, {
 	
 	write_permission : false,
 	
@@ -189,49 +182,6 @@ Ext.extend(GO.grid.LinksGrid, Ext.grid.EditorGridPanel, {
 		
 	},
 	
-	deleteSelected : function(config){
-		
-		if(!config)
-		{
-			config=this.deleteConfig;
-		}
-		
-		if(!config['deleteParam'])
-		{
-			config['deleteParam']='delete_keys';
-		}
-		
-		var selectedRows = this.selModel.selections.keys;
-		
-		var params={}
-		params[config.deleteParam]=Ext.encode(this.selModel.selections.keys);
-		
-		var deleteItemsConfig = {
-			store:this.store,
-			params: params,
-			count: this.selModel.selections.keys.length	
-		};
-		
-		if(config.callback)
-		{
-		  deleteItemsConfig['callback']=config.callback;		
-		}
-		if(config.success)
-		{
-		  deleteItemsConfig['success']=config.success;		
-		}
-		if(config.failure)
-		{
-		  deleteItemsConfig['failure']=config.failure;		
-		}
-		if(config.scope)
-		{
-		  deleteItemsConfig['scope']=config.scope;
-		}
-		
-	
-		GO.deleteItems(deleteItemsConfig);		
-	},
 	
 	onGridNotifyOver : function(dd, e, data){
 			var dragData = dd.getDragData(e);

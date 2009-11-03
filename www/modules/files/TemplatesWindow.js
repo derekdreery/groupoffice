@@ -171,7 +171,7 @@ Ext.extend(GO.files.TemplateWindow,Ext.Window, {
 					items:[
 						this.formPanel,
 						this.readPermissionsTab = new GO.grid.PermissionsPanel({
-							title: GO.lang['strReadPermissions']		
+									
 						})						
 					]
 				})],

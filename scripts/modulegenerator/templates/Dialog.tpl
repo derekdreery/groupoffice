@@ -215,7 +215,7 @@ Ext.extend(GO.{module}.{friendly_single_ucfirst}Dialog, Ext.Window,{
 		</gotpl>		
 		<gotpl if="$authenticate">
     this.readPermissionsTab = new GO.grid.PermissionsPanel({
-			title: GO.lang['strReadPermissions']
+			
 		});
 	
 		this.writePermissionsTab = new GO.grid.PermissionsPanel({

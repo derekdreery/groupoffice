@@ -47,7 +47,7 @@ class addressbook extends db {
 			}
 			flush();
 
-			$db->query("SELECT c.*,a.name AS addressbook_name,a.acl_idFROM ab_contacts c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id");
+			$db->query("SELECT c.*,a.name AS addressbook_name,a.acl_id FROM ab_contacts c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id");
 			while($contact = $db->next_record()) {
 				try {
 					$path = $ab->build_contact_files_path($contact, array('name'=>$contact['addressbook_name']));
