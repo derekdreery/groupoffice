@@ -588,41 +588,4 @@ class servermanager extends db {
 		/* {ON_DELETE_LINK_FUNCTION} */	
 	}
 
-
-/**
- * When a global search action is performed this function will be called for each module
- *
- * @param int $last_sync_time The time this function was called last
-	 
-	
- public function __on_search($last_sync_time=0)
- {
- global $GO_MODULES, $GO_LANGUAGE;
-		
- require($GO_LANGUAGE->get_language_file('servermanager'));
-		
- $sql = "SELECT * FROM sm_installations WHERE mtime>".$this->escape($last_sync_time);
-		
-		
- $this->query($sql);
- $search = new search();
- while($this->next_record())
- {
- $cache['id']=$this->f('id');
- $cache['user_id']=$this->f('user_id');
- $cache['module']='servermanager';
- $cache['name'] = htmlspecialchars($this->f('name'), ENT_QUOTES, 'utf-8');
- $cache['link_type']=13;
- $cache['description']='';
- $cache['type']=$lang['servermanager']['installation'];
- $cache['keywords']=$search->record_to_keywords($this->record).','.$cache['type'];
- $cache['mtime']=$this->f('mtime');
- $cache['acl_read']=$this->f('acl_read');
- $cache['acl_write']=$this->f('acl_write');
- $search->cache_search_result($cache);
- }
-		
-		
- }*/
-
 }
