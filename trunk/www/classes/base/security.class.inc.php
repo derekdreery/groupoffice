@@ -639,20 +639,17 @@ class GO_SECURITY extends db {
 		global $GO_CONFIG;
 
 		if ($user_id > 0 && $acl_id > 0) {
+			$sql = "SELECT a.acl_id, a.level FROM go_acl a ".
+				"LEFT JOIN go_users_groups ug ON a.group_id=ug.group_id ".
+				"WHERE a.acl_id=".$this->escape($acl_id)." AND ".
+				"(ug.user_id=".$this->escape($user_id);
+			
+			if(!$groups_only)
+				$sql .= " OR a.user_id=".$this->escape($user_id).") ORDER BY a.level DESC";
+			else
+				$sql .= ")";
 
-			if(!$groups_only) {
-				$sql = "SELECT acl_id,level FROM go_acl WHERE ".
-						"acl_id='".$this->escape($acl_id)."' AND user_id='".$this->escape($user_id)."'";
-				$this->query($sql);
-				if($this->next_record()) {
-					return $this->f('level');
-				}
-			}
-
-			$sql = "SELECT go_acl.acl_id, go_acl.level FROM go_acl, go_users_groups	WHERE ".
-					"go_acl.acl_id='".$this->escape($acl_id)."' AND go_acl.group_id=go_users_groups.group_id AND ".
-					"go_users_groups.user_id='".$this->escape($user_id)."'";
-			$this->query($sql);
+		$this->query($sql);
 			if($this->next_record()) {
 				return $this->f('level');
 			}

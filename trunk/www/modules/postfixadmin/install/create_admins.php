@@ -28,8 +28,7 @@ while($pa->next_record())
 				if($up_domain['user_id']>0)
 				{
 				
-					$GO_SECURITY->add_user_to_acl($pa->f('acl_write'), $up_domain['user_id']);
-					$GO_SECURITY->add_user_to_acl($pa->f('acl_read'), $up_domain['user_id']);
+					$GO_SECURITY->add_user_to_acl($pa->f('acl_id'), $up_domain['user_id'], GO_SECURITY::WRITE_PERMISSION);
 				
 					$up_domain['id']=$pa->f('id');
 

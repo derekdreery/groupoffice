@@ -29,7 +29,7 @@ GO.postfixadmin.DomainsGrid = function(config){
 	    root: 'results',
 	    id: 'id',
 	    totalProperty:'total',
-	    fields: ['id','user_name','domain','description','aliases','mailboxes','maxquota','quota','transport','backupmx','ctime','mtime','active','acl_read','acl_write'],
+	    fields: ['id','user_name','domain','description','aliases','mailboxes','maxquota','quota','transport','backupmx','ctime','mtime','active','acl_id'],
 	    remoteSort: true
 	});
 	

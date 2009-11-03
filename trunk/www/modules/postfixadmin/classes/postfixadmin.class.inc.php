@@ -326,11 +326,11 @@ class postfixadmin extends db {
 		switch($auth_type)
 		{
 			case 'read':
-				$sql .= "(pa_domains.acl_read = a.acl_id OR pa_domains.acl_write = a.acl_id) ";	
+				$sql .= "pa_domains.acl_id = a.acl_id ";
 				break;
 				
 			case 'write':
-				$sql .= "pa_domains.acl_write = a.acl_id ";
+				$sql .= "(pa_domains.acl_id = a.acl_id AND a.level > ".GO_SECURITY::READ_PERMISSION.") ";
 				break;
 		}
 		

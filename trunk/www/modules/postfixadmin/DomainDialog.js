@@ -89,8 +89,7 @@ Ext.extend(GO.postfixadmin.DomainDialog, Ext.Window,{
 				{
 					if(GO.settings.modules.postfixadmin.write_permission)
 					{
-						this.readPermissionsTab.setAcl(action.result.data.acl_read);
-						this.writePermissionsTab.setAcl(action.result.data.acl_write);
+						this.readPermissionsTab.setAcl(action.result.data.acl_id);
 					}					
 					
 					this.setBackupMX(action.result.data.backupmx=='1');
@@ -112,7 +111,6 @@ Ext.extend(GO.postfixadmin.DomainDialog, Ext.Window,{
 			this.formPanel.form.reset();
 
 			this.readPermissionsTab.setAcl(0);
-			this.writePermissionsTab.setAcl(0);
 			
 			GO.postfixadmin.DomainDialog.superclass.show.call(this);
 		}
@@ -148,8 +146,7 @@ Ext.extend(GO.postfixadmin.DomainDialog, Ext.Window,{
 						this.mailboxesGrid.setDisabled(this.formPanel.form.findField("backupmx").getValue());
 						this.aliasesGrid.setDisabled(this.formPanel.form.findField("backupmx").getValue());
 						
-						this.readPermissionsTab.setAcl(action.result.acl_read);
-						this.writePermissionsTab.setAcl(action.result.acl_write);											
+						this.readPermissionsTab.setAcl(action.result.acl_id);
 					}
 				}
 				
@@ -271,16 +268,10 @@ Ext.extend(GO.postfixadmin.DomainDialog, Ext.Window,{
 		items.push(this.aliasesGrid);
 		
 		
-    this.readPermissionsTab = new GO.grid.PermissionsPanel({
-			title: GO.lang['strReadPermissions']
-		});
-	
-		this.writePermissionsTab = new GO.grid.PermissionsPanel({
-			title: GO.lang['strWritePermissions']
-		});
+    this.readPermissionsTab = new GO.grid.PermissionsPanel();
+
     
     items.push(this.readPermissionsTab);
-    items.push(this.writePermissionsTab);
 		
  
     this.tabPanel = new Ext.TabPanel({

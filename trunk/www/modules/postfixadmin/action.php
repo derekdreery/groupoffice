@@ -48,7 +48,7 @@ try{
 				
 				$domain = $postfixadmin->get_domain_by_domain($domain);
 			
-				if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $domain['acl_write']))
+				if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $domain['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
 				{
 					throw new AccessDeniedException();
 				}
@@ -68,7 +68,7 @@ try{
 			
 			$domain = $postfixadmin->get_domain_by_domain($domain);
 			
-			if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $domain['acl_write']))
+			if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $domain['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
 			{
 				throw new AccessDeniedException();
 			}
@@ -148,9 +148,7 @@ try{
 			{
 				$domain['user_id']=$GO_SECURITY->user_id;
 
-				$response['acl_read']=$domain['acl_read']=$GO_SECURITY->get_new_acl('domain');
-				$response['acl_write']=$domain['acl_write']=$GO_SECURITY->get_new_acl('domain');
-
+				$response['acl_id']=$domain['acl_id']=$GO_SECURITY->get_new_acl('domain');
 
 				$domain_id= $postfixadmin->add_domain($domain);
 
@@ -201,7 +199,7 @@ try{
 			$str_domain = ($_POST['domain']);			
 			$domain= $postfixadmin->get_domain_by_domain($str_domain);
 			
-			if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $domain['acl_write']))
+			if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $domain['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
 				throw new AccessDeniedException();
 				
 			$mailbox = $postfixadmin->get_mailbox_by_username(($_POST['username']));
@@ -287,8 +285,7 @@ try{
 				$domain['user_id']=$GO_SECURITY->user_id;
 				$domain['transport']='virtual';
 				$domain['active']='1';
-				$domain['acl_read']=$GO_SECURITY->get_new_acl('domain');
-				$domain['acl_write']=$GO_SECURITY->get_new_acl('domain');
+				$domain['acl_id']=$GO_SECURITY->get_new_acl('domain');
 				$domain['quota']=524288;
 				$domain['id']=$postfixadmin->add_domain($domain);
 			}
@@ -304,13 +301,10 @@ try{
 
 			$mailbox['domain_id']=$_POST['domain_id'];
 
-			$domain = $postfixadmin->get_domain($mailbox['domain_id']);
+			$domain = $postfixadmin->get_domain($mailbox['domain_id']);		
 			
-			
-			if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $domain['acl_write']))
-				throw new AccessDeniedException();
-				
-			
+			if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $domain['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
+				throw new AccessDeniedException();			
 
 			if(!empty($_POST['password1']))
 				$mailbox['password']=md5(trim($_POST['password1']));

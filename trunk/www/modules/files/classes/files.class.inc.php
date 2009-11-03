@@ -1521,6 +1521,7 @@ class files extends db {
 
 		$sql = "SELECT path FROM fs_folders WHERE id=0";
 		$fs->query($sql);
+		$fs2 = new files();
 		while($r = $fs->next_record())
 		{
 			$r['id']=$fs2->nextid('fs_folders');

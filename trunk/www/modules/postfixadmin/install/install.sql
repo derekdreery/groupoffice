@@ -51,8 +51,7 @@ CREATE TABLE IF NOT EXISTS `pa_domains` (
   `ctime` int(11) NOT NULL default '0',
   `mtime` int(11) NOT NULL default '0',
   `active` enum('0','1') NOT NULL default '1',
-  `acl_read` int(11) NOT NULL,
-  `acl_write` int(11) NOT NULL,
+  `acl_id` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `domain` (`domain`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Postfix Admin - Virtual Domains';

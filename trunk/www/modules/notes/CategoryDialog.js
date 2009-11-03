@@ -190,7 +190,7 @@ Ext.extend(GO.notes.CategoryDialog, Ext.Window,{
 		var items  = [this.propertiesPanel];
 		
     this.readPermissionsTab = new GO.grid.PermissionsPanel({
-			title: GO.lang['strReadPermissions']
+			
 		});
 
     items.push(this.readPermissionsTab);

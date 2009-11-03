@@ -143,17 +143,12 @@ foreach($lines as $line)
 			$db_domain['transport']='virtual';
 			if($doreal)
 			{
-				$db_domain['acl_read']=$GO_SECURITY->get_new_acl('domain');
-				$db_domain['acl_write']=$GO_SECURITY->get_new_acl('domain');
-				$GO_SECURITY->add_user_to_acl($db_domain['acl_write'], $user_id);
+				$db_domain['acl_id']=$GO_SECURITY->get_new_acl('domain');
+				$GO_SECURITY->add_user_to_acl($db_domain['acl_id'], $user_id, GO_SECURITY::WRITE_PERMISSION);
 			}
 
-
-			
 			if($doreal)
-				$db_domain['id'] = $pa->add_domain($db_domain);
-			
-			
+				$db_domain['id'] = $pa->add_domain($db_domain);		
 		}
 		
 		//don't use the current system name but use the first alias as mailbox name
