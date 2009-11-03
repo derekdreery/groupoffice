@@ -110,9 +110,7 @@ switch($task)
 		{
 			if($module['admin_menu']=='0' &&
 					(($module['read_permission'] && (empty($_POST['user_id']) || $_POST['user_id']==$GO_SECURITY->user_id)) ||
-						(!empty($_POST['user_id']) &&
-							($GO_SECURITY->has_permission($_POST['user_id'], $module['acl_read']) || $GO_SECURITY->has_permission($_POST['user_id'], $module['acl_write']))
-						)
+						(!empty($_POST['user_id']) && $GO_SECURITY->has_permission($_POST['user_id'], $module['acl_id']))
 					)
 				)
 			{
