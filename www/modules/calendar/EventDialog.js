@@ -26,7 +26,7 @@ GO.calendar.EventDialog = function(calendar) {
         root: 'results',
         id: 'id',
         totalProperty:'total',
-        fields: ['id','resources','name','acl_write','fields'],
+        fields: ['id','resources','name','acl_admin','fields'],
         remoteSort: true
     });
 

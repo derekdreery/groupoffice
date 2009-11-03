@@ -363,3 +363,6 @@ $updates[]="ALTER TABLE `go_search_cache` CHANGE `acl_read` `acl_id` INT( 11 ) N
 $updates[]="ALTER TABLE `go_search_cache` DROP `acl_write`";
 
 $updates[]='script:6_convert_acl.inc.php';
+
+$updates[]="ALTER TABLE `go_reminders` ADD `mail_send` TINYINT NOT NULL DEFAULT 0;";
+$updates[]="ALTER TABLE `go_users` ADD `mail_reminders` BOOL NOT NULL ";

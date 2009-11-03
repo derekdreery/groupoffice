@@ -316,7 +316,6 @@ class GO_MODULES extends db {
 	 * @param string $module_id The name of the module
 	 * @param float $version The version of the module
 	 * @param int $acl_read The ACL id used to control read permissions
-	 * @param int $acl_write The ACL id used to control write permissions. This means a user has admin permission for a module
 	 * @param int $sort_order The sort index used to control the position in the module
 	 *
 	 * @return mixed array with module information or false on failure

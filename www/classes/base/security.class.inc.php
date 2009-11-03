@@ -302,7 +302,7 @@ class GO_SECURITY extends db {
 	 * @return bool		True on success
 	 */
 	function add_user_to_acl($user_id,$acl_id, $level=1) {
-		return $this->query("INSERT INTO go_acl (acl_id,user_id,level) ".
+		return $this->query("REPLACE INTO go_acl (acl_id,user_id,level) ".
 				"VALUES ('".$this->escape($acl_id)."','".$this->escape($user_id)."','".$this->escape($level)."')");
 	}
 

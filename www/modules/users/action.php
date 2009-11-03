@@ -398,32 +398,23 @@ try
 				{
 					$mod = $GO_MODULES->get_module($module['id']);
 
-					$read = $module['read_permission'];
-					$write = $module['write_permission'];
-
-					if (!empty($module['read_permission']))
-					{
-						if(!$GO_SECURITY->has_permission($user_id, $mod['acl_read']))
-						{
-							$GO_SECURITY->add_user_to_acl($user_id, $mod['acl_read']);
-						}
-					} else {
-						if($GO_SECURITY->user_in_acl($user_id, $mod['acl_read']))
-						{
-							$GO_SECURITY->delete_user_from_acl($user_id, $mod['acl_read']);
-						}
+					$level = 0;
+					if($module['write_permission']){
+						$level = GO_SECURITY::WRITE_PERMISSION;
+					}elseif($module['read_permission']){
+						$level = GO_SECURITY::READ_PERMISSION;
 					}
 
-					if (!empty($module['write_permission']))
+					if ($level)
 					{
-						if(!$GO_SECURITY->has_permission($user_id, $mod['acl_write']))
+						if(!$GO_SECURITY->has_permission($user_id, $mod['acl_id']))
 						{
-							$GO_SECURITY->add_user_to_acl($user_id, $mod['acl_write']);
+							$GO_SECURITY->add_user_to_acl($user_id, $mod['acl_id'], $level);
 						}
 					} else {
-						if($GO_SECURITY->user_in_acl($user_id, $mod['acl_write']))
+						if($GO_SECURITY->user_in_acl($user_id, $mod['acl_id']))
 						{
-							$GO_SECURITY->delete_user_from_acl($user_id, $mod['acl_write']);
+							$GO_SECURITY->delete_user_from_acl($user_id, $mod['acl_id']);
 						}
 					}
 				}

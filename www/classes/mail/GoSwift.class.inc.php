@@ -415,8 +415,7 @@ class GoSwift extends Swift_Mailer{
 			$sr = $search->get_search_result($link['link_id'], $link['link_type']);
 			if($sr)
 			{
-				$link_message['acl_read']=$sr['acl_read'];
-				$link_message['acl_write']=$sr['acl_write'];
+				$link_message['acl_id']=$sr['acl_id'];
 				$link_message['link_id'] = $email->link_message($link_message);
 
 				$GO_LINKS->add_link(

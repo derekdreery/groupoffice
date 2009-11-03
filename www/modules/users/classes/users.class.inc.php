@@ -55,7 +55,7 @@ class users extends db
 			$files = new files();
 			$GO_USERS->get_users();
 
-			$last_acl_read=0;
+			$last_acl_id=0;
 
 			while($GO_USERS->next_record())
 			{
@@ -70,16 +70,14 @@ class users extends db
 
 				$up_folder=array();
 				$up_folder['id']=$folder['id'];
-				if(empty($folder['acl_read']) || $folder['acl_read']==$last_acl_read)
+				if(empty($folder['acl_id']) || $folder['acl_id']==$last_acl_id)
 				{
 					echo "Sharing users/".$GO_USERS->f('username').$line_break;
 					
-					$up_folder['acl_read']=$GO_SECURITY->get_new_acl('files', $GO_USERS->f('id'));
-					$up_folder['acl_write']=$GO_SECURITY->get_new_acl('files', $GO_USERS->f('id'));
+					$up_folder['acl_id']=$GO_SECURITY->get_new_acl('files', $GO_USERS->f('id'));
 				}else
 				{
-					$GO_SECURITY->chown_acl($folder['acl_read'], $GO_USERS->f('id'));
-					$GO_SECURITY->chown_acl($folder['acl_write'], $GO_USERS->f('id'));
+					$GO_SECURITY->chown_acl($folder['acl_id'], $GO_USERS->f('id'));
 				}
 				$up_folder['user_id']=$GO_USERS->f('id');
 				$up_folder['readonly']='1';
@@ -87,7 +85,7 @@ class users extends db
 				$files->update_folder($up_folder);
 
 
-				$last_acl_read=$folder['acl_read'];
+				$last_acl_id=$folder['acl_id'];
 				
 
 				//correct user_id on child folders
@@ -106,12 +104,11 @@ class users extends db
 
 				$up_folder=array();
 				$up_folder['id']=$folder['id'];
-				if(empty($folder['acl_read']) || $folder['acl_read']==$last_acl_read)
+				if(empty($folder['acl_id']) || $folder['acl_id']==$last_acl_id)
 				{
 					echo "Sharing adminusers/".$GO_USERS->f('username').$line_break;
 					
-					$up_folder['acl_read']=$GO_SECURITY->get_new_acl('files', 1);
-					$up_folder['acl_write']=$GO_SECURITY->get_new_acl('files', 1);					
+					$up_folder['acl_id']=$GO_SECURITY->get_new_acl('files', 1);	
 				}
 				$up_folder['visible']='0';
 				$up_folder['readonly']='1';
