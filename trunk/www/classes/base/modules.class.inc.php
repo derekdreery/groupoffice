@@ -91,7 +91,6 @@ class GO_MODULES extends db {
 	 * humanName 					The localized name
 	 * id									The module name
 	 * description
-	 * acl_read
 	 * read_permission 		bool
 	 * write_permission 	bool
 	 *
@@ -314,7 +313,7 @@ class GO_MODULES extends db {
 	 *
 	 * @param string $module_id The name of the module
 	 * @param float $version The version of the module
-	 * @param int $acl_read The ACL id used to control read permissions
+	 * @param int $acl_id The ACL id used to control read permissions
 	 * @param int $sort_order The sort index used to control the position in the module
 	 *
 	 * @return mixed array with module information or false on failure

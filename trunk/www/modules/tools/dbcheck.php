@@ -95,7 +95,7 @@ while($record = $db->next_record())
 if(count($acls))
 {
 	echo "Correcting module permissions...$line_break";
-	foreach($acls as $acl_read)
+	foreach($acls as $acl_id)
 	{
 		$sql = "SELECT * FROM go_modules WHERE acl_id='$acl_id'";
 		$db->query($sql);
