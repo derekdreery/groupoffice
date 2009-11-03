@@ -223,8 +223,8 @@ class GO_SECURITY extends db {
 
 		$this->insert_row('go_acl_items', $ai);
 
-		$this->add_group_to_acl($GO_CONFIG->group_root, $ai['id'],1);
-		$this->add_user_to_acl($user_id, $ai['id'],1);
+		$this->add_group_to_acl($GO_CONFIG->group_root, $ai['id'],GO_SECURITY::MANAGE_PERMISSION);
+		$this->add_user_to_acl($user_id, $ai['id'],GO_SECURITY::MANAGE_PERMISSION);
 		return $ai['id'];
 	}
 
@@ -328,7 +328,7 @@ class GO_SECURITY extends db {
 	 * @return bool		True on success
 	 */
 	function add_group_to_acl($group_id,$acl_id, $level=1) {
-		return $this->query("INSERT INTO go_acl (acl_id,group_id,level) ".
+		return $this->query("REPLACE INTO go_acl (acl_id,group_id,level) ".
 				"VALUES ('".$this->escape($acl_id)."','".$this->escape($group_id)."','".$this->escape($level)."')");
 	}
 
@@ -400,9 +400,9 @@ class GO_SECURITY extends db {
 	function get_groups_in_acl($acl_id) {
 		global $GO_CONFIG, $auth_sources;
 
-		$sql = "SELECT go_groups.* FROM go_groups INNER JOIN go_acl ON".
-				" go_acl.group_id=go_groups.id WHERE go_acl.acl_id='".$this->escape($acl_id)."'".
-				" ORDER BY go_groups.name";
+		$sql = "SELECT g.*,a.level FROM go_groups g INNER JOIN go_acl a ON".
+				" a.group_id=g.id WHERE a.acl_id='".$this->escape($acl_id)."'".
+				" ORDER BY g.name";
 		$this->query($sql);
 		return $this->num_rows();
 	}
@@ -434,7 +434,7 @@ class GO_SECURITY extends db {
 	 * @return int			Number of users in the acl
 	 */
 	function get_users_in_acl($acl_id) {
-		$sql = "SELECT u.id, u.first_name, u.middle_name, u.last_name ".
+		$sql = "SELECT u.id, u.first_name, u.middle_name, u.last_name, a.level ".
 				"FROM go_acl a INNER JOIN go_users u ON u.id=a.user_id WHERE ".
 				"a.acl_id='".$this->escape($acl_id)."'";
 		$this->query($sql);

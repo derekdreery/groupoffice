@@ -31,6 +31,26 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 	// private
 	initComponent : function() {
 
+		var selectPermissionLevel = new GO.form.ComboBox({
+					store : new Ext.data.SimpleStore({
+						id:'value',
+						fields : ['value', 'text'],
+						data : [
+							[1, 'Read'],
+							[2, 'Write'],
+							[3, 'Delete'],
+							[4, 'Manage']
+						]
+					}),
+					valueField : 'value',
+					displayField : 'text',
+					mode : 'local',
+					triggerAction : 'all',
+					editable : false,
+					selectOnFocus : true,
+					forceSelection : true
+				});
+
 		this.header = false;
 		this.layout = 'anchor';
 		this.border = false;
@@ -39,113 +59,183 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 		// this.hideMode='offsets';
 
 		this.aclGroupsStore = new GO.data.JsonStore({
-					url : BaseHref + 'json.php',
-					baseParams : {
-						task : "groups_in_acl",
-						acl_id : 0
-					},
-					root : 'results',
-					totalProperty : 'total',
-					id : 'id',
-					fields : ['id', 'name'],
-					remoteSort : true
-				});
+			url : BaseHref + 'json.php',
+			baseParams : {
+				task : "groups_in_acl",
+				acl_id : 0
+			},
+			root : 'results',
+			totalProperty : 'total',
+			id : 'id',
+			fields : ['id', 'name', 'level'],
+			remoteSort : true
+		});
 		this.aclGroupsStore.setDefaultSort('name', 'ASC');
 
-		this.aclGroupsGrid = new GO.grid.GridPanel({
-					anchor : '100% 50%',
-					title : GO.lang['strAuthorizedGroups'],
-					store : this.aclGroupsStore,
-					border : false,
-					columns : [{
-								header : GO.lang['strName'],
-								dataIndex : 'name',
-								menuDisabled:true
-							}],
-					view : new Ext.grid.GridView({
-								autoFill : true,
-								forceFit : true
-							}),
-					loadMask : {
-						msg : GO.lang['waitMsgLoad']
-					},
-					sm : new Ext.grid.RowSelectionModel({}),
-					// paging:true,
-					layout : 'fit',
-					tbar : [{
-								iconCls : 'btn-add',
-								text : GO.lang['cmdAdd'],
-								cls : 'x-btn-text-icon',
-								handler : function() {
-									this.showAddGroupsDialog();
-								},
-								scope : this
-							}, {
-								iconCls : 'btn-delete',
-								text : GO.lang['cmdDelete'],
-								cls : 'x-btn-text-icon',
-								handler : function() {
-									this.aclGroupsGrid.deleteSelected();
-								},
-								scope : this
-							}]
+		var renderLevel = function(v){
+			var r = selectPermissionLevel.store.getById(v);
+			return r.get('name');
+		}
 
-				});
+		this.aclGroupsGrid = new GO.grid.EditorGridPanel({
+			anchor : '100% 50%',
+			title : GO.lang['strAuthorizedGroups'],
+			store : this.aclGroupsStore,
+			border : false,
+			columns : [{
+				header : GO.lang['strName'],
+				dataIndex : 'name',
+				menuDisabled:true
+			},{
+				header : GO.lang.permissionsLevel,
+				dataIndex : 'level',
+				menuDisabled:true,
+				editor : selectPermissionLevel,
+				renderer:renderLevel
+			}],
+			view : new Ext.grid.GridView({
+				autoFill : true,
+				forceFit : true
+			}),
+			loadMask : {
+				msg : GO.lang['waitMsgLoad']
+			},
+			sm : new Ext.grid.RowSelectionModel({}),
+			// paging:true,
+			layout : 'fit',
+			tbar : [{
+				iconCls : 'btn-add',
+				text : GO.lang['cmdAdd'],
+				cls : 'x-btn-text-icon',
+				handler : function() {
+					this.showAddGroupsDialog();
+				},
+				scope : this
+			}, {
+				iconCls : 'btn-delete',
+				text : GO.lang['cmdDelete'],
+				cls : 'x-btn-text-icon',
+				handler : function() {
+					this.aclGroupsGrid.deleteSelected();
+				},
+				scope : this
+			}]
+
+		});
+
+		this.aclGroupsGrid.on('afteredit', function(e) {
+
+			Ext.Ajax.request({
+				url:GO.settings.config.host+'action.php',
+				params:{
+					task:'update_level',
+					acl_id: this.store.baseParams.acl_id,
+					group_id: e.record.get("id"),
+					level:e.record.get("level")
+				},
+				success: function(response, options)
+				{
+					var responseParams = Ext.decode(response.responseText);
+					if(!responseParams.success)
+					{
+						alert(responseParams.feedback);
+					}else
+					{
+						this.store.commitChanges();
+					}
+				},
+				scope:this
+			})
+
+		}, this.aclGroupsGrid);
 
 		this.aclUsersStore = new GO.data.JsonStore({
 
-					url : BaseHref + 'json.php',
-					baseParams : {
-						task : "users_in_acl",
-						acl_id : 0
-					},
-					root : 'results',
-					totalProperty : 'total',
-					id : 'id',
-					fields : ['id', 'name'],
-					remoteSort : true
-				});
+			url : BaseHref + 'json.php',
+			baseParams : {
+				task : "users_in_acl",
+				acl_id : 0
+			},
+			root : 'results',
+			totalProperty : 'total',
+			id : 'id',
+			fields : ['id', 'name', 'level'],
+			remoteSort : true
+		});
 		this.aclUsersStore.setDefaultSort('name', 'ASC');
 
-		this.aclUsersGrid = new GO.grid.GridPanel({
-					anchor : '100% 50%',
-					title : GO.lang['strAuthorizedUsers'],
-					store : this.aclUsersStore,
-					border : false,
-					columns : [{
-								header : GO.lang['strName'],
-								dataIndex : 'name',
-								menuDisabled:true
-							}],
-					view : new Ext.grid.GridView({
-								autoFill : true,
-								forceFit : true
-							}),
-					loadMask : {
-						msg : GO.lang['waitMsgLoad']
-					},
-					sm : new Ext.grid.RowSelectionModel({}),
-					// paging:true,
-					layout : 'fit',
-					tbar : [{
-								iconCls : 'btn-add',
-								text : GO.lang['cmdAdd'],
-								cls : 'x-btn-text-icon',
-								handler : function() {
-									this.showAddUsersDialog();
-								},
-								scope : this
-							}, {
-								iconCls : 'btn-delete',
-								text : GO.lang['cmdDelete'],
-								cls : 'x-btn-text-icon',
-								handler : function() {
-									this.aclUsersGrid.deleteSelected();
-								},
-								scope : this
-							}]
+		this.aclUsersGrid = new GO.grid.EditorGridPanel({
+			anchor : '100% 50%',
+			title : GO.lang['strAuthorizedUsers'],
+			store : this.aclUsersStore,
+			border : false,
+			columns : [{
+				header : GO.lang['strName'],
+				dataIndex : 'name',
+				menuDisabled:true
+			},{
+				header : GO.lang.permissionsLevel,
+				dataIndex : 'level',
+				menuDisabled:true,
+				editor : selectPermissionLevel,
+				renderer:renderLevel
+			}],
+			view : new Ext.grid.GridView({
+				autoFill : true,
+				forceFit : true
+			}),
+			loadMask : {
+				msg : GO.lang['waitMsgLoad']
+			},
+			sm : new Ext.grid.RowSelectionModel({}),
+			// paging:true,
+			layout : 'fit',
+			tbar : [{
+				iconCls : 'btn-add',
+				text : GO.lang['cmdAdd'],
+				cls : 'x-btn-text-icon',
+				handler : function() {
+					this.showAddUsersDialog();
+				},
+				scope : this
+			}, {
+				iconCls : 'btn-delete',
+				text : GO.lang['cmdDelete'],
+				cls : 'x-btn-text-icon',
+				handler : function() {
+					this.aclUsersGrid.deleteSelected();
+				},
+				scope : this
+			}]
 
-				});
+		});
+
+		this.aclUsersGrid.on('afteredit', function(e) {
+
+			Ext.Ajax.request({
+				url:GO.settings.config.host+'action.php',
+				params:{
+					task:'update_level',
+					acl_id: this.store.baseParams.acl_id,
+					user_id: e.record.get("id"),
+					level:e.record.get("level")
+				},
+				success: function(response, options)
+				{
+					var responseParams = Ext.decode(response.responseText);
+					if(!responseParams.success)
+					{
+						alert(responseParams.feedback);
+					}else
+					{
+						this.store.commitChanges();
+					}
+				},
+				scope:this
+			})
+
+		}, this.aclUsersGrid);
+
 
 		this.items = [this.aclGroupsGrid, this.aclUsersGrid];
 
@@ -203,17 +293,17 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 				handler : function(groupsGrid) {
 					if (groupsGrid.selModel.selections.keys.length > 0) {
 						this.aclGroupsStore.baseParams['add_groups'] = Ext
-								.encode(groupsGrid.selModel.selections.keys);
+						.encode(groupsGrid.selModel.selections.keys);
 						this.aclGroupsStore.load({
-									callback : function() {
-										if (!this.reader.jsonData.addSuccess) {
-											alert(this.reader.jsonData.addFeedback);
-										}
-									}
-								});
+							callback : function() {
+								if (!this.reader.jsonData.addSuccess) {
+									alert(this.reader.jsonData.addFeedback);
+								}
+							}
+						});
 						delete this.aclGroupsStore.baseParams['add_groups'];
-						// this.aclGroupsStore.add(groupsGrid.selModel.getSelections());
-						// this.changed=true;
+					// this.aclGroupsStore.add(groupsGrid.selModel.getSelections());
+					// this.changed=true;
 					}
 				},
 				scope : this
@@ -229,14 +319,14 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 				handler : function(usersGrid) {
 					if (usersGrid.selModel.selections.keys.length > 0) {
 						this.aclUsersStore.baseParams['add_users'] = Ext
-								.encode(usersGrid.selModel.selections.keys);
+						.encode(usersGrid.selModel.selections.keys);
 						this.aclUsersStore.load({
-									callback : function() {
-										if (!this.reader.jsonData.addSuccess) {
-											alert(this.reader.jsonData.addFeedback);
-										}
-									}
-								});
+							callback : function() {
+								if (!this.reader.jsonData.addSuccess) {
+									alert(this.reader.jsonData.addFeedback);
+								}
+							}
+						});
 						delete this.aclUsersStore.baseParams['add_users'];
 					}
 				},

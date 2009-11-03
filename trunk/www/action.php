@@ -23,6 +23,17 @@ try{
 	switch($_REQUEST['task'])
 	{
 
+		case 'update_level':
+
+			if(!empty($_POST['user_id'])){
+				$response['success']=$GO_SECURITY->add_user_to_acl($_POST['user_id'], $_POST['acl_id'], $_POST['level']);
+			}else
+			{
+				$response['success']=$GO_SECURITY->add_group_to_acl($_POST['group_id'], $_POST['acl_id'], $_POST['level']);
+			}
+
+			break;
+
 		
 		case 'complete_profile':
 			
