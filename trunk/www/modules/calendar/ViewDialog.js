@@ -92,7 +92,7 @@ GO.calendar.ViewDialog = function(config)
 
 
 	this.readPermissionsTab = new GO.grid.PermissionsPanel({
-		title: GO.lang.strReadPermissions
+		
 	});
 
 

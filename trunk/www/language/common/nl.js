@@ -302,3 +302,10 @@ GO.lang.administration='Beheer';
 GO.lang.total='Totaal';
 GO.lang.adminMenu= 'Beheermenu';
 GO.lang.extra='Extra';
+
+GO.lang.permissionsLevel='Niveau';
+
+GO.lang.permissionRead='Alleen lezen';
+GO.lang.permissionWrite='Schrijven';
+GO.lang.permissionDelete='Schrijven en verwijderen';
+GO.lang.permissionManage='Beheren';

@@ -13,3 +13,8 @@ while($folder=$db->next_record()){
 }
 $db->query("ALTER TABLE `cal_views` CHANGE `acl_read` `acl_id` INT( 11 ) NOT NULL DEFAULT '0'");
 
+$db->query("SELECT * FROM cal_groups WHERE acl_admin>0");
+while($folder=$db->next_record()){
+	apply_write_acl($folder['acl_admin']);
+}
+

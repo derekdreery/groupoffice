@@ -189,3 +189,6 @@ $lang['common']['error']='Fout';
 $lang['common']['reminder']='Herinnering';
 $lang['common']['unknown']='Onbekend';
 $lang['common']['time']='Tijd';
+
+$lang['common']['dontChangeAdminsPermissions']='U kunt de toegangsrechten van de beheerdersgroep niet wijzigen';
+$lang['common']['dontChangeOwnersPermissions']='U kunt de toegangsrechten van de eigenaar niet wijzigen';

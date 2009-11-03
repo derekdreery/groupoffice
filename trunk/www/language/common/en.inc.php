@@ -201,3 +201,6 @@ $lang['commmon']['logFiles']='Log files';
 $lang['common']['reminder']='Reminder';
 $lang['common']['unknown']='Unknown';
 $lang['common']['time']='Time';
+
+$lang['common']['dontChangeAdminsPermissions']='You can\'t change the permissions of the admin group';
+$lang['common']['dontChangeOwnersPermissions']='You can\'t change the permissions of the owner';
