@@ -65,7 +65,7 @@
 		require($GO_LANGUAGE->get_language_file('{module}'));
 		
 		<gotpl if="$authenticate_relation">
-		$sql = "SELECT i.*,r.acl_read,r.acl_write FROM {prefix}_{friendly_multiple} i INNER JOIN {prefix}_{related_friendly_multiple} r ON r.id=i.{related_field_id} WHERE i.id=?";
+		$sql = "SELECT i.*,r.acl_id FROM {prefix}_{friendly_multiple} i INNER JOIN {prefix}_{related_friendly_multiple} r ON r.id=i.{related_field_id} WHERE i.id=?";
 		</gotpl>
 		<gotpl if="$authenticate">
 		$sql = "SELECT * FROM {prefix}_{friendly_multiple} i WHERE i.id=?";
@@ -84,8 +84,7 @@
 			$cache['type']=$lang['{module}']['{friendly_single}'];
 			$cache['keywords']=$search->record_to_keywords($record).','.$cache['type'];
 			$cache['mtime']=$record['mtime'];
-			$cache['acl_read']=$record['acl_read'];
-	 		$cache['acl_write']=$record['acl_write'];	
+			$cache['acl_id']=$record['acl_id'];
 
 	 		$search->cache_search_result($cache);
 		}
@@ -227,11 +226,11 @@
 		switch($auth_type)
 		{
 			case 'read':
-				$sql .= "({prefix}_{friendly_multiple}.acl_read = a.acl_id OR {prefix}_{friendly_multiple}.acl_write = a.acl_id) ";	
+				$sql .= "{prefix}_{friendly_multiple}.acl_id = a.acl_id ";
 				break;
 				
 			case 'write':
-				$sql .= "{prefix}_{friendly_multiple}.acl_write = a.acl_id ";
+				$sql .= "({prefix}_{friendly_multiple}.acl_id = a.acl_id AND a.level>".GO_SECURITY::READ_PERMISSION.") ";
 				break;
 		}		
 		

@@ -93,8 +93,7 @@ Ext.extend(GO.{module}.{friendly_single_ucfirst}Dialog, Ext.Window,{
 				{					
 					<gotpl if="$authenticate">
 					this.setWritePermission(action.result.data.write_permission);					
-					this.readPermissionsTab.setAcl(action.result.data.acl_read);
-					this.writePermissionsTab.setAcl(action.result.data.acl_write);
+					this.readPermissionsTab.setAcl(action.result.data.acl_id);
 					</gotpl>	
 					<gotpl if="$user_id">
 					this.selectUser.setRemoteText(action.result.data.user_name);
@@ -113,7 +112,7 @@ Ext.extend(GO.{module}.{friendly_single_ucfirst}Dialog, Ext.Window,{
 			<gotpl if="$authenticate">
 			this.setWritePermission(true);
 			this.readPermissionsTab.setAcl(0);
-			this.writePermissionsTab.setAcl(0);
+
 			</gotpl>
 			GO.{module}.{friendly_single_ucfirst}Dialog.superclass.show.call(this);
 		}
@@ -162,8 +161,7 @@ Ext.extend(GO.{module}.{friendly_single_ucfirst}Dialog, Ext.Window,{
 				{
 					this.set{friendly_single_ucfirst}Id(action.result.{friendly_single}_id);
 					<gotpl if="$authenticate">
-					this.readPermissionsTab.setAcl(action.result.acl_read);
-					this.writePermissionsTab.setAcl(action.result.acl_write);
+					this.readPermissionsTab.setAcl(action.result.acl_id);
 					</gotpl>					
 				}				
 								
@@ -218,12 +216,8 @@ Ext.extend(GO.{module}.{friendly_single_ucfirst}Dialog, Ext.Window,{
 			
 		});
 	
-		this.writePermissionsTab = new GO.grid.PermissionsPanel({
-			title: GO.lang['strWritePermissions']
-		});
-    
+
     items.push(this.readPermissionsTab);
-    items.push(this.writePermissionsTab);
 		</gotpl>
  
     this.tabPanel = new Ext.TabPanel({

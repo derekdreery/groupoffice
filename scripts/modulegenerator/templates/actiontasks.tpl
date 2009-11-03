@@ -11,7 +11,7 @@
 			<gotpl if="$authenticate_relation && $relation">
 			${related_friendly_single} = ${module}->get_{related_friendly_single}($_POST['{related_field_id}']);
 			
-			if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, ${related_friendly_single}['acl_write']))
+			if($GO_SECURITY->has_permission($GO_SECURITY->user_id, ${related_friendly_single}['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
 			{
 				throw new AccessDeniedException();
 			}
@@ -28,8 +28,7 @@
 			{
 				${friendly_single}['user_id']=$GO_SECURITY->user_id;
 				<gotpl if="$authenticate">
-				$response['acl_read']=${friendly_single}['acl_read']=$GO_SECURITY->get_new_acl('{friendly_single}');
-				$response['acl_write']=${friendly_single}['acl_write']=$GO_SECURITY->get_new_acl('{friendly_single}');
+				$response['acl_id']=${friendly_single}['acl_id']=$GO_SECURITY->get_new_acl('{friendly_single}');
 				</gotpl>
 				
 				${friendly_single}_id= ${module}->add_{friendly_single}(${friendly_single});
@@ -42,7 +41,7 @@
 
 					$response['files_path']='{module}/'.${friendly_single}_id;						
 					$full_path = $GO_CONFIG->file_storage_path.$response['files_path'];
-					$fs->check_share($full_path, $GO_SECURITY->user_id, <gotpl if="$authenticate">${friendly_single}['acl_read'],${friendly_single}['acl_write']</gotpl><gotpl if="$authenticate_relation">${related_friendly_single}['acl_read'],${related_friendly_single}['acl_write']</gotpl>);
+					$fs->check_share($full_path, $GO_SECURITY->user_id, <gotpl if="$authenticate">${friendly_single}['acl_id']</gotpl><gotpl if="$authenticate_relation">${related_friendly_single}['acl_id']</gotpl>);
 				}
 				</gotpl>				
 

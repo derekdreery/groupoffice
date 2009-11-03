@@ -27,8 +27,9 @@
 			
 			$response['data']=${friendly_single};
 			<gotpl if="$authenticate_relation && $relation">
-			$response['data']['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, ${related_friendly_single}['acl_write']);
-			if(!$response['data']['write_permission'] && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, ${related_friendly_single}['acl_read']))
+			$response['data']['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, ${related_friendly_single}['acl_id']);
+			$response['data']['write_permission']=$response['permission_level']>GO_SECURITY::READ_PERMISSION;
+			if(!$response['data']['permission_level'])
 			{
 				throw new AccessDeniedException();
 			}
@@ -43,7 +44,7 @@
 				$response['data']['files_path']='{module}/'.$response['data']['id'];
 
 				$full_path = $GO_CONFIG->file_storage_path.$response['data']['files_path'];
-				$fs->check_share($full_path, $response['data']['user_id'], <gotpl if="$authenticate">${friendly_single}['acl_read'],${friendly_single}['acl_write']</gotpl><gotpl if="$authenticate_relation">${related_friendly_single}['acl_read'],${related_friendly_single}['acl_write']</gotpl>);				
+				$fs->check_share($full_path, $response['data']['user_id'], <gotpl if="$authenticate">${friendly_single}['acl_id']</gotpl><gotpl if="$authenticate_relation">${related_friendly_single}['acl_id']</gotpl>);
 			}
 			</gotpl>			
 			$response['success']=true;
@@ -113,8 +114,9 @@
 			<gotpl if="$relation">
 			${related_field_id}=$_POST['{related_field_id}'];
 			${related_friendly_single} = ${module}->get_{related_friendly_single}(${related_field_id});
-			$response['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, ${related_friendly_single}['acl_write']);
-			if(!$response['write_permission'] && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, ${related_friendly_single}['acl_read']))
+			$response['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, ${related_friendly_single}['acl_id']);
+			$response['data']['write_permission']=$response['permission_level']>GO_SECURITY::READ_PERMISSION;
+			if(!$response['data']['permission_level'])
 			{
 				throw new AccessDeniedException();
 			}
