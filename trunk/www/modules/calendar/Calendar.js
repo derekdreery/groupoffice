@@ -1653,7 +1653,7 @@ GO.mainLayout.onReady(function(){
 		root: 'results',
 		id: 'id',
 		totalProperty:'total',
-		fields:['id','name','user_name','fields','acl_write'],
+		fields:['id','name','user_name','fields','acl_id'],
 		remoteSort: true
 	}),
 

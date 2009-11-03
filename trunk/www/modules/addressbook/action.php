@@ -47,7 +47,7 @@ try
 
 
 				$addressbook = $ab->get_addressbook($contact_credentials['addressbook_id']);
-				if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $addressbook['acl_write']))
+				if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $addressbook['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
 				{
 					throw new AccessDeniedException();
 				}
@@ -56,7 +56,7 @@ try
 				{
 					$old_contact = $ab->get_contact($contact_id);
 
-					if(($old_contact['addressbook_id'] != $contact_credentials['addressbook_id']) && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_contact['acl_write']))
+					if(($old_contact['addressbook_id'] != $contact_credentials['addressbook_id']) && $GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_contact['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
 					{
 						throw new AccessDeniedException();
 					}
@@ -168,7 +168,7 @@ try
 					
 				$addressbook = $ab->get_addressbook($company_credentials['addressbook_id']);
 					
-				if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $addressbook['acl_write']))
+				if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $addressbook['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
 				{
 					throw new AccessDeniedException();
 				}
@@ -177,7 +177,7 @@ try
 				{
 					$old_company = $ab->get_company($company_id);
 
-					if(($old_company['addressbook_id'] != $company_credentials['addressbook_id']) && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_company['acl_write']))
+					if(($old_company['addressbook_id'] != $company_credentials['addressbook_id']) && $GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_company['acl_write'])<GO_SECURITY::WRITE_PERMISSION)
 					{
 						throw new AccessDeniedException();
 					}
@@ -257,19 +257,6 @@ try
 
 				if ($addressbook_id < 1)
 				{
-					#insert
-					/*if ($existing_ab)
-					{
-						throw new Exception($lang['common']['addressbookAlreadyExists']);
-					}
-
-					if($existing_ab)
-					{
-						if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $existing_ab['acl_write']))
-						{
-							throw new AccessDeniedException();
-						}
-					}*/
 
 					if(!$GO_MODULES->modules['addressbook']['write_permission'])
 					{

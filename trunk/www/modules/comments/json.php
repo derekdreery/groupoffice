@@ -61,7 +61,7 @@ try{
 			
 			$record = $search->get_search_result($link_id, $link_type);
 			$response['permisson_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $record['acl_write']);
-			$response['write_permission']=$response['permisson_level']>$GO_SECURITY->WRITE_PERMISSION;
+			$response['write_permission']=$response['permisson_level']>GO_SECURITY::WRITE_PERMISSION;
 			if(!$response['permisson_level'])
 			{
 				throw new AccessDeniedException();

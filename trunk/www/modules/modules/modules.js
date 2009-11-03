@@ -330,6 +330,8 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
             this.permissionsWin.setTitle(GO.lang['strPermissions'] + ' '
                 + record[0].data.name);
 
+						console.log(record[0]);
+
             this.readPermissionsTab.setAcl(record[0].data.acl_id);
 
         }

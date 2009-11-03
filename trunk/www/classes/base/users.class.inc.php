@@ -531,45 +531,37 @@ class GO_USERS extends db
 		global $GO_MODULES, $GO_SECURITY, $GO_GROUPS;
 
 		if($this->update_profile($user))
-		{			
-			$GO_MODULES->get_modules();
-			while ($GO_MODULES->next_record())
-			{
-				if(isset($modules_read))
+		{
+			//make sure we have user['acl_id']
+			$user = $this->get_user($user['id']);
+			
+			if(isset($modules_read) && isset($modules_write)){
+				$GO_MODULES->get_modules();
+				while ($mod = $GO_MODULES->next_record())
 				{
-					$could_read = $GO_SECURITY->has_permission($user['id'], $GO_MODULES->f('acl_read'));
-					$can_read =  in_array($GO_MODULES->f('id'), $modules_read);
-
-					if ($could_read && !$can_read)
-					{
-						$GO_SECURITY->delete_user_from_acl($user['id'], $GO_MODULES->f('acl_read'));
+					$level = 0;
+					if(in_array($mod['id'], $modules_write)){
+						$level = GO_SECURITY::WRITE_PERMISSION;
+					}elseif(in_array($mod['id'], $modules_read)){
+						$level = GO_SECURITY::READ_PERMISSION;
 					}
 
-					if ($can_read && !$could_read)
+					if ($level)
 					{
-						$GO_SECURITY->add_user_to_acl($user['id'], $GO_MODULES->f('acl_read'));
-					}
-				}
-
-				if(isset($modules_write))
-				{
-					$could_write = $GO_SECURITY->has_permission($user['id'], $GO_MODULES->f('acl_write'));
-					$can_write =  in_array($GO_MODULES->f('id'), $modules_write);
-
-					if ($could_write && !$can_write)
-					{
-						$GO_SECURITY->delete_user_from_acl($user['id'], $GO_MODULES->f('acl_write'));
-					}
-
-					if ($can_write && !$could_write)
-					{
-						$GO_SECURITY->add_user_to_acl($user['id'], $GO_MODULES->f('acl_write'));
+						if(!$GO_SECURITY->has_permission($user['id'], $mod['acl_id']))
+						{
+							$GO_SECURITY->add_user_to_acl($user['id'], $mod['acl_id'], $level);
+						}
+					} else {
+						if($GO_SECURITY->user_in_acl($user['id'], $mod['acl_id']))
+						{
+							$GO_SECURITY->delete_user_from_acl($user['id'], $mod['acl_id']);
+						}
 					}
 				}
 			}
 
-			//make sure we have user['acl_id']
-			$user = $this->get_user($user['id']);
+			
 
 
 			$GO_GROUPS->get_groups();
@@ -901,18 +893,18 @@ class GO_USERS extends db
 			foreach($modules_read as $module_name)
 			{
 				$module = $GO_MODULES->get_module($module_name);
-				if($module && !$GO_SECURITY->user_in_acl($user['id'], $module['acl_read']))
+				if($module && !$GO_SECURITY->user_in_acl($user['id'], $module['acl_id']))
 				{
-					$GO_SECURITY->add_user_to_acl($user['id'], $module['acl_read']);
+					$GO_SECURITY->add_user_to_acl($user['id'], $module['acl_id']);
 				}
 			}
 
 			foreach($modules_write as $module_name)
 			{
 				$module = $GO_MODULES->get_module($module_name);
-				if($module && !$GO_SECURITY->user_in_acl($user['id'], $module['acl_write']))
+				if($module && !$GO_SECURITY->user_in_acl($user['id'], $module['acl_id']))
 				{
-					$GO_SECURITY->add_user_to_acl($user['id'], $module['acl_write']);
+					$GO_SECURITY->add_user_to_acl($user['id'], $module['acl_id'], GO_SECURITY::WRITE_PERMISSION);
 				}
 			}
 
@@ -931,9 +923,6 @@ class GO_USERS extends db
 			{			
 				$GO_EVENTS->fire_event('add_user', array($user));
 			}
-			
-		
-			
 
 			return $user['id'];
 		} else {
@@ -1125,9 +1114,8 @@ class GO_USERS extends db
 			$cache['keywords']=$search->record_to_keywords($this->record).','.$cache['type'];
 			$cache['mtime']=$this->f('mtime');
 			$cache['module']='users';
-			$cache['acl_read']=$GO_MODULES->modules['users']['acl_read'];
-			$cache['acl_write']=$GO_MODULES->modules['users']['acl_write'];
-				
+			$cache['acl_id']=$GO_MODULES->modules['users']['acl_id'];
+			
 			$search->cache_search_result($cache);
 		}
 	}

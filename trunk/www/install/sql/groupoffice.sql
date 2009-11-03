@@ -211,8 +211,7 @@ CREATE TABLE IF NOT EXISTS `go_search_cache` (
   `type` varchar(20) default NULL,
   `keywords` text,
   `mtime` int(11) NOT NULL default '0',
-  `acl_read` int(11) NOT NULL,
-  `acl_write` int(11) NOT NULL,
+  `acl_id` int(11) NOT NULL,
   PRIMARY KEY  (`id`,`link_type`),
   KEY `name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -325,6 +324,7 @@ CREATE TABLE IF NOT EXISTS `go_users` (
   `list_separator` char(3) NOT NULL default ';',
   `text_separator` char(3) NOT NULL default '"',
   `files_folder_id` INT NOT NULL,
+	`mail_reminders` BOOL NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
