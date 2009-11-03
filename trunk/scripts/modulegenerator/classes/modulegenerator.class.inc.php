@@ -376,8 +376,7 @@ class modulegenerator extends db
 		
 		$hidden_fields = array(
 			'id',
-			'acl_read',
-			'acl_write'
+			'acl_id'
 		);
 		
 		
