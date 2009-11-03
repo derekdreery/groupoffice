@@ -25,10 +25,24 @@ try{
 
 		case 'update_level':
 
+			if(!$GO_SECURITY->has_permission_to_manage_acl($GO_SECURITY->user_id, $_POST['acl_id'])){
+				throw new AccessDeniedException();
+			}
+
 			if(!empty($_POST['user_id'])){
+
+				$acl = $GO_SECURITY->get_acl($_POST['acl_id']);
+
+				if($_POST['user_id']==$acl['user_id'] || $_POST['user_id']==$GO_SECURITY->user_id){
+					throw new Exception($lang['common']['dontChangeOwnersPermissions']);
+				}
+
 				$response['success']=$GO_SECURITY->add_user_to_acl($_POST['user_id'], $_POST['acl_id'], $_POST['level']);
 			}else
 			{
+				if($_POST['group_id']==$GO_CONFIG->group_root){
+					throw new Exception($lang['common']['dontChangeAdminsPermissions']);
+				}
 				$response['success']=$GO_SECURITY->add_group_to_acl($_POST['group_id'], $_POST['acl_id'], $_POST['level']);
 			}
 

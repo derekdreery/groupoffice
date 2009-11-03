@@ -40,10 +40,10 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 						id:0,
 						fields : ['value', 'text'],
 						data : [
-							[1, 'Read'],
-							[2, 'Write'],
-							[3, 'Delete'],
-							[4, 'Manage']
+							[1, GO.lang.permissionRead],
+							[2, GO.lang.permissionWrite],
+							[3, GO.lang.permissionDelete],
+							[4, GO.lang.permissionManage]
 						]
 					}),
 					valueField : 'value',
@@ -146,6 +146,7 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 					if(!responseParams.success)
 					{
 						alert(responseParams.feedback);
+						this.store.rejectChanges();
 					}else
 					{
 						this.store.commitChanges();
@@ -233,6 +234,7 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 					if(!responseParams.success)
 					{
 						alert(responseParams.feedback);
+						this.store.rejectChanges();
 					}else
 					{
 						this.store.commitChanges();

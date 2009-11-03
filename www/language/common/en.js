@@ -325,3 +325,8 @@ GO.lang.administration='Administration';
 GO.lang.extra='Extra';
 
 GO.lang.permissionsLevel='Level';
+
+GO.lang.permissionRead='Read only';
+GO.lang.permissionWrite='Write';
+GO.lang.permissionDelete='Write and delete';
+GO.lang.permissionManage='Manage';

@@ -144,7 +144,7 @@ try{
 
 
 
-						$share_count = $files->get_authorized_shares($GO_SECURITY->user_id);
+						/*$share_count = $files->get_authorized_shares($GO_SECURITY->user_id);
 
 						$nodes=array();
 
@@ -183,7 +183,7 @@ try{
 										$children[]=$node;
 										$last_path=$path;
 								}
-						}
+						}*/
 
 
 						$node= array(
@@ -193,8 +193,8 @@ try{
 						'draggable'=>false,
 						'allowDrop'=>false,
 						'iconCls'=>'folder-shares',
-						'expanded'=>true,
-						'children'=>$children
+						//'expanded'=>true,
+						//'children'=>$children
 						);
 						$response[]=$node;
 

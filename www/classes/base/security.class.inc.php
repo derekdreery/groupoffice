@@ -237,7 +237,8 @@ class GO_SECURITY extends db {
 	 * @return bool
 	 */
 	function has_permission_to_manage_acl($user_id, $acl_id) {
-		return ($this->user_owns_acl($user_id, $acl_id) || $this->has_admin_permission($user_id));
+		//return ($this->user_owns_acl($user_id, $acl_id) || $this->has_admin_permission($user_id));
+		return $this->has_permission($user_id, $acl_id)==GO_SECURITY::MANAGE_PERMISSION;
 	}
 
 	/**
@@ -291,6 +292,11 @@ class GO_SECURITY extends db {
 			return $this->query("DELETE FROM go_acl_items WHERE id='".$this->escape($acl_id)."'");
 		}
 		return false;
+	}
+
+	function get_acl($acl_id){
+		$this->query("SELECT * FROM go_acl WHERE acl_id='".$this->escape($acl_id)."'");
+		return $this->next_record();
 	}
 
 	/**
