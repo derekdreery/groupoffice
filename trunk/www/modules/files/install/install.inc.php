@@ -65,7 +65,7 @@ if(!is_dir($share_dir))
 
 $folder = $files->get_folder('users/admin/'.$lang['files']['general']);
 
-if(empty($folder['acl_read']))
+if(empty($folder['acl_id']))
 {
 	$up_folder['id']=$folder['id'];
 	$up_folder['user_id']=1;

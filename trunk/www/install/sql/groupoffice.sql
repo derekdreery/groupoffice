@@ -168,8 +168,7 @@ CREATE TABLE IF NOT EXISTS `go_modules` (
   `version` int(11) NOT NULL,
   `sort_order` int(11) NOT NULL default '0',
   `admin_menu` enum('0','1') NOT NULL default '0',
-  `acl_read` int(11) NOT NULL default '0',
-  `acl_write` int(11) NOT NULL default '0',
+  `acl_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

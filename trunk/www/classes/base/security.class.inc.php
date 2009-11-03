@@ -28,6 +28,10 @@
 
 class GO_SECURITY extends db {
 
+	const READ_PERMISSION=1;
+	const WRITE_PERMISSION=2;
+	const DELETE_PERMISSION=3;
+	const MANAGE_PERMISSION=4;
 
 
 /**
