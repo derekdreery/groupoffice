@@ -466,6 +466,10 @@ try{
 					}else
 					{
 						$curfolder = $files->get_folder($_POST['id']);
+
+						if(!$curfolder)
+							throw new FileNotFoundException();
+					
 						$response['thumbs']=$curfolder['thumbs'];
 						$response['parent_id']=$curfolder['parent_id'];
 
