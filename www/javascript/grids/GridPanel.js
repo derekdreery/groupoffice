@@ -51,7 +51,7 @@
  * @param {Object} config The config object
  */
  
-GO.grid.GridPanel = function(config)
+GO.grid.EditorGridPanel =GO.grid.GridPanel = function(config)
 {	
 	if(!config)
 	{
@@ -103,17 +103,16 @@ GO.grid.GridPanel = function(config)
 	
 	
 }
- 
- 
-Ext.extend(GO.grid.GridPanel, Ext.grid.GridPanel, {
+
+GO.grid.ExtraFunctions={
 
 	deleteConfig : {},
-	
+
 	/**
 	 * @cfg {Boolean} paging True to set the store's limit parameter and render a bottom
 	 * paging toolbar.
 	 */
-	 
+
 	paging : false,
 
 
@@ -160,32 +159,32 @@ Ext.extend(GO.grid.GridPanel, Ext.grid.GridPanel, {
 	},
 
 	/**
-	 * Sends a delete request to the remote store. It will send the selected keys in json 
+	 * Sends a delete request to the remote store. It will send the selected keys in json
 	 * format as a parameter. (delete_keys by default.)
-	 * 
+	 *
 	 * @param {Object} options An object which may contain the following properties:<ul>
      * <li><b>deleteParam</b> : String (Optional)<p style="margin-left:1em">The name of the
      * parameter that will send to the store that holds the selected keys in JSON format.
      * Defaults to "delete_keys"</p>
      * </li>
-	 * 
+	 *
 	 */
 	deleteSelected : function(config){
 
 		config = config || {};
 
 		Ext.apply(config, this.deleteConfig);
-		
+
 		if(!config['deleteParam'])
 		{
 			config['deleteParam']='delete_keys';
 		}
-		
+
 		//var selectedRows = this.selModel.selections.keys;
-		
+
 		var params={}
 		params[config.deleteParam]=Ext.encode(this.selModel.selections.keys);
-		
+
 		var deleteItemsConfig = {
 			store:this.store,
 			params: params,
@@ -193,49 +192,53 @@ Ext.extend(GO.grid.GridPanel, Ext.grid.GridPanel, {
 			extraWarning: config.extraWarning || "",
 			noConfirmation: config.noConfirmation
 		};
-		
+
 		if(config.callback)
 		{
-		  deleteItemsConfig['callback']=config.callback;		
+		  deleteItemsConfig['callback']=config.callback;
 		}
 		if(config.success)
 		{
-		  deleteItemsConfig['success']=config.success;		
+		  deleteItemsConfig['success']=config.success;
 		}
 		if(config.failure)
 		{
-		  deleteItemsConfig['failure']=config.failure;		
+		  deleteItemsConfig['failure']=config.failure;
 		}
 		if(config.scope)
 		{
 		  deleteItemsConfig['scope']=config.scope;
 		}
-		
-	
-		GO.deleteItems(deleteItemsConfig);		
+
+
+		GO.deleteItems(deleteItemsConfig);
 	},
-	
+
 	getGridData : function(){
-		
+
 		var data = {};
-		
+
 		for (var i = 0; i < this.store.data.items.length;  i++)
 		{
 			var r = this.store.data.items[i].data;
-			
+
 			data[i]={};
-			
+
 			for(var key in r)
 			{
 				data[i][key]=r[key];
-			}	
+			}
 		}
-		
-		return data;		
+
+		return data;
 	},
-	
+
 	numberRenderer : function(v)
 	{
 		return GO.util.numberFormat(v);
 	}
-});
+};
+ 
+ 
+Ext.extend(GO.grid.GridPanel, Ext.grid.GridPanel, GO.grid.ExtraFunctions);
+Ext.extend(GO.grid.EditorGridPanel, Ext.grid.EditorGridPanel, GO.grid.ExtraFunctions);

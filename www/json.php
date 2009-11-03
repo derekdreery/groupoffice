@@ -269,9 +269,9 @@ try{
 
 			$response['total'] = $GO_SECURITY->get_groups_in_acl($acl_id);
 			$response['results']=array();
-			while($GO_SECURITY->next_record(DB_ASSOC))
+			while($r=$GO_SECURITY->next_record(DB_ASSOC))
 			{
-				$response['results'][]=$GO_SECURITY->record;
+				$response['results'][]=$r;
 			}
 			break;
 
@@ -289,7 +289,7 @@ try{
 					}
 
 					$response['deleteSuccess']=true;
-					$users = json_decode(($_REQUEST['delete_keys']));
+					$users = json_decode($_REQUEST['delete_keys']);
 
 					foreach($users as $user_id)
 					{
@@ -334,6 +334,7 @@ try{
 			{
 				$result['id']=$GO_SECURITY->f('id');
 				$result['name']=String::format_name($GO_SECURITY->record);
+				$result['level']=$GO_SECURITY->f('level');
 				$response['results'][]=$result;
 			}
 

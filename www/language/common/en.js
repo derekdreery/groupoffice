@@ -323,3 +323,5 @@ GO.lang.adminMenu = 'Admin menu';
 
 GO.lang.administration='Administration';
 GO.lang.extra='Extra';
+
+GO.lang.permissionsLevel='Level';
