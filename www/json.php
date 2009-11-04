@@ -157,7 +157,7 @@ try{
 				$today = mktime(0,0,0,$now['mon'],$now['mday'], $now['year']);
 
 				$time = ($reminder['vtime']) ? $reminder['vtime'] : $reminder['time'];
-				if($time >= $today)
+				if($time == $today)
 				{
 					$reminder['local_time']=date($_SESSION['GO_SESSION']['time_format'], $time);
 				}else
