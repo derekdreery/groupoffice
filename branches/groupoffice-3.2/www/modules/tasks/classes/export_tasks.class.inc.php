@@ -205,18 +205,37 @@ class export_tasks
 
 		if(!empty($task['rrule']) && !$no_rrule)
 		{
-
+			require_once($GO_CONFIG->class_path.'ical2array.class.inc');
+			$ical2array = new ical2array();
 
 			if($this->version != '1.0')
 			{
 					
-				$lines[]= $task['rrule'];
+				$rrule = $ical2array->parse_rrule($task['rrule']);
+debug($rrule);
+				if(!$this->utc && isset($rrule['BYDAY'])){
+					if($rrule['FREQ']=='MONTHLY'){
+						$month_time = $rrule['BYDAY'][0];
+						$day = substr($rrule['BYDAY'], 1);
+						$days =Date::byday_to_days($day);
+					}else
+					{
+						$month_time = 1;
+						$days = Date::byday_to_days($rrule['BYDAY']);
+					}
+					$days = Date::shift_days_to_local($days, date('G', $task['start_time']), Date::get_timezone_offset($task['start_time']));
+
+
+					$lines[]=Date::build_rrule(Date::ical_freq_to_repeat_type($rrule), $rrule['INTERVAL'], $task['repeat_end_time'], $days, $month_time);
+				}else
+				{
+					$lines[]=$task['rrule'];
+				}
 			}else
 			{
 					
 					
-				require_once($GO_CONFIG->class_path.'ical2array.class.inc');
-				$ical2array = new ical2array();
+				
 
 
 				$rrule = $ical2array->parse_rrule($task['rrule']);
