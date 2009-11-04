@@ -470,6 +470,17 @@ class GO_CONFIG {
 	 */
 	var $smtp_encryption = '';
 
+
+	/**
+	 * The Swift mailer component auto detects the domain you are connecting from.
+	 * In some cases it fails and uses an invalid IPv6 IP like ::1. You can
+	 * override it here.
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $smtp_local_domain = '';
+
 	/**
 	 * A comma separated list of smtp server IP addresses that you
 	 * want to restrict.
