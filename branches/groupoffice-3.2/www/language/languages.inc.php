@@ -20,4 +20,5 @@ $languages['ro']='Romanian';
 $languages['fi']='Suomi - Finland';
 $languages['sv']='Svenska';
 $languages['tr']='Türkçe';
+$languages['th']='ไทย';
 ?>
