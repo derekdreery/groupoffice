@@ -632,7 +632,7 @@ class imap{
 				$structure = imap_fetchstructure($this->conn, $this->message['uid'], FT_UID);
 				if(!$structure){
 					require($GLOBALS['GO_LANGUAGE']->get_language_file('email'));
-					throw new Exception($lang['email']['errorGettingMessage']);
+					throw new Exception($lang['email']['errorGettingMessage']."\n\n".$this->last_error());
 				}
 				
 				$this->get_parts($structure);
@@ -641,7 +641,7 @@ class imap{
 			$header = imap_fetchheader($this->conn, $this->message['uid'], FT_UID);
 			if(!$header){
 				require($GLOBALS['GO_LANGUAGE']->get_language_file('email'));
-				throw new Exception($lang['email']['errorGettingMessage']);
+				throw new Exception($lang['email']['errorGettingMessage']."\n\n".$this->last_error());
 			}
 
 			$values = $this->get_header_values($header);
