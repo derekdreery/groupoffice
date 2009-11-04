@@ -639,9 +639,9 @@ class Date
 		return $d->getOffset()/3600;
 	}
 
-	function ical_freq_to_repeat_type($freq)
+	function ical_freq_to_repeat_type($rrule)
 	{
-		switch($freq)
+		switch($rrule['FREQ'])
 		{
 			case 'WEEKLY':
 				return REPEAT_WEEKLY;
