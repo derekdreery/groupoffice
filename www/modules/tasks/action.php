@@ -119,7 +119,7 @@ try{
 			$task['tasklist_id']=$_POST['tasklist_id'];
 			
 			$tasklist = $tasks->get_tasklist($task['tasklist_id']);
-			if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_id'])>1)
+			if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
 			{
 				throw new AccessDeniedException();
 			}
