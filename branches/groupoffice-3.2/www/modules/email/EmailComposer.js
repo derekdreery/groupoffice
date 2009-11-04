@@ -559,7 +559,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 		this.attachmentsButton.setText(text);
 	},
 
-	reset : function() {
+	reset : function(keepAttachments) {
 
 		this.sendParams = {
 			'task' : 'sendmail',
@@ -568,7 +568,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			draft_uid : 0,
 			inline_attachments : {}
 		};
-		this.inline_attachments = Array();
+		this.inline_attachments = [];
 		this.formPanel.form.reset();
 
 		if (this.defaultAcccountId) {
@@ -578,7 +578,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 		this.notifyCheck.setChecked(false);
 		this.normalPriorityCheck.setChecked(true);
 
-		if (this.attachmentsGrid) {
+		if (this.attachmentsGrid && !keepAttachments) {
 			this.attachmentsGrid.store.loadData({
 				results : []
 			});
@@ -657,9 +657,11 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 				.get('id');
 			}
 
-			this.attachmentsStore.removeAll();
-			this.inline_attachments = [];
-			this.reset();
+			
+			//this.inline_attachments = [];
+
+			//keep attachments when switchting from text <> html
+			this.reset(config.keepEditingMode);
 
 			var index=-1;
 			if (config.account_id) {
@@ -678,16 +680,18 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			}
 
 			
-			
+
+			//this will be true when swithing from html to text or vice versa
 			if(!config.keepEditingMode)
 			{
+				//remove attachments if not switching edit mode
+				//this.attachmentsStore.removeAll();
+				
 				this.setContentTypeHtml(GO.email.useHtmlMarkup);
 				this.htmlCheck.setChecked(GO.email.useHtmlMarkup, true);
 				if(this.encryptCheck)
 					this.encryptCheck.setChecked(false, true);
-			}
-			
-			
+			}			
 
 			this.toComboVisible = true;
 			this.showMenuButton.setDisabled(false);
