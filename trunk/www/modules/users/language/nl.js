@@ -73,7 +73,7 @@ GO.users.lang.group='Groep';
 GO.users.lang.profile='Profiel';
 
 GO.users.lang.muteSound='Demp geluiden';
-GO.users.lang.mailReminders='Email reminders';
+GO.users.lang.mailReminders='Email herinneringen';
 
 
 GO.users.lang.downloadSampleCSV='Download voorbeeld CSV';
