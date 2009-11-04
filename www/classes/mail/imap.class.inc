@@ -580,7 +580,14 @@ class imap{
 
 	function get_source($uid)
 	{
-		return imap_fetchheader($this->conn,$uid, FT_UID).imap_body($this->conn, $uid, FT_UID);
+		$header = imap_fetchheader($this->conn,$uid, FT_UID);
+		if(!$header)
+				return false;
+	
+		$body = imap_body($this->conn, $uid, FT_UID);
+		if(!$body)
+				return false;
+		return $header.$body;
 	}
 
 	/**
@@ -623,11 +630,19 @@ class imap{
 			if($fetchstructure)
 			{
 				$structure = imap_fetchstructure($this->conn, $this->message['uid'], FT_UID);
+				if(!$structure){
+					require($GLOBALS['GO_LANGUAGE']->get_language_file('email'));
+					throw new Exception($lang['email']['errorGettingMessage']);
+				}
 				
 				$this->get_parts($structure);
 			}
 
 			$header = imap_fetchheader($this->conn, $this->message['uid'], FT_UID);
+			if(!$header){
+				require($GLOBALS['GO_LANGUAGE']->get_language_file('email'));
+				throw new Exception($lang['email']['errorGettingMessage']);
+			}
 
 			$values = $this->get_header_values($header);
 			

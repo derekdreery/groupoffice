@@ -53,6 +53,7 @@ $lang['common']['invalidEmailError']='The e-mail address was invalid';
 $lang['common']['invalidDateError']='You entered an invalid date';
 $lang['common']['noFileUploaded']='No file was recieved';
 $lang['common']['error']='Error';
+$lang['common']['fileCreateError']='Could not create the file';
 
 $lang['common']['salutation']='Salutation';
 $lang['common']['firstName'] = 'First name';
