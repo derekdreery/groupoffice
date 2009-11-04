@@ -66,7 +66,7 @@ try{
 			
 			$category = $notes->get_category((trim($_POST['category_id'])));
 			
-			if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_category['acl_id'])<2)
+			if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
 			{
 				throw new AccessDeniedException();
 			}
