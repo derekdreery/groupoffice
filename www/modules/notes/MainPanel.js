@@ -42,7 +42,14 @@ GO.notes.MainPanel = function(config){
 		var sm = this.westPanel.selModel;		
 		
 		var defaultRecord = this.westPanel.store.getById(GO.notes.defaultCategory.id);
+		if(!defaultRecord)
+		{
+			defaultRecord = this.westPanel.store.getAt(0);
+			GO.notes.defaultCategory = defaultRecord.data;
+		}
 		sm.selectRecords([defaultRecord]);
+
+		
 		
 		GO.notes.writableCategoriesStore.load();
 
