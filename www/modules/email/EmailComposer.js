@@ -677,7 +677,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 				this.formPanel.form.setValues(config.values);
 			}
 
-			GO.email.EmailComposer.superclass.show.call(this);
+			
 			
 			if(!config.keepEditingMode)
 			{
@@ -786,6 +786,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			{
 				this.afterShowAndLoad(true);
 			}
+			GO.email.EmailComposer.superclass.show.call(this);
 		}
 	},
 	
