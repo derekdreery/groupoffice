@@ -633,8 +633,7 @@ class imap{
 				if(!$structure){
 					require($GLOBALS['GO_LANGUAGE']->get_language_file('email'));
 					throw new Exception($lang['email']['errorGettingMessage']."\n\n".$this->last_error());
-				}
-				
+				}				
 				$this->get_parts($structure);
 			}
 
