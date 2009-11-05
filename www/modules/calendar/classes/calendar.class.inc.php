@@ -2404,7 +2404,7 @@ class calendar extends db
 		$start = date('Y-m-d',$start_time);
 		$end = date('Y-m-d',$end_time);
 		
-		$sql = "SELECT birthday, first_name, middle_name, last_name, "
+		$sql = "SELECT DISTINCT birthday, first_name, middle_name, last_name, "
 			."IF (STR_TO_DATE(CONCAT(YEAR(?),'/',MONTH(birthday),'/',DAY(birthday)),'%Y/%c/%e') >= ?, "
 			."STR_TO_DATE(CONCAT(YEAR(?),'/',MONTH(birthday),'/',DAY(birthday)),'%Y/%c/%e') , "
 			."STR_TO_DATE(CONCAT(YEAR(?)+1,'/',MONTH(birthday),'/',DAY(birthday)),'%Y/%c/%e')) "
