@@ -32,10 +32,25 @@ try{
 			
 			require_once($GO_CONFIG->class_path.'/base/search.class.inc.php');
 			$search = new search();
+
+			$link_id = isset($_REQUEST['link_id']) ? ($_REQUEST['link_id']) : '';
+			$link_type = isset($_REQUEST['link_type']) ? ($_REQUEST['link_type']) : '';
+
+
+			$record = $search->get_search_result($link_id, $link_type);
+			$response['permisson_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $record['acl_id']);
+			$response['write_permission']=$response['permisson_level']>GO_SECURITY::WRITE_PERMISSION;
+			if(!$response['permisson_level'])
+			{
+				throw new AccessDeniedException();
+			}
 			
 			if(isset($_POST['delete_keys']))
 			{
 				try{
+					if($response['permisson_level']<GO_SECURITY::DELETE_PERMISSION){
+						throw new AccessDeniedException();
+					}
 					$response['deleteSuccess']=true;
 					$delete_comments = json_decode(($_POST['delete_keys']));
 					foreach($delete_comments as $comment_id)
@@ -55,17 +70,7 @@ try{
 			$query = isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
 			
 			
-			$link_id = isset($_REQUEST['link_id']) ? ($_REQUEST['link_id']) : '';
-			$link_type = isset($_REQUEST['link_type']) ? ($_REQUEST['link_type']) : '';
 			
-			
-			$record = $search->get_search_result($link_id, $link_type);
-			$response['permisson_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $record['acl_id']);
-			$response['write_permission']=$response['permisson_level']>GO_SECURITY::WRITE_PERMISSION;
-			if(!$response['permisson_level'])
-			{
-				throw new AccessDeniedException();
-			}
 			
 			
 			$response['total'] = $comments->get_comments($link_id, $link_type, $query, $sort, $dir, $start, $limit);

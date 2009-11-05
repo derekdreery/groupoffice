@@ -218,7 +218,7 @@ try{
 					foreach($tasklists as $tasklist_id)
 					{
 						$tasklist = $tasks->get_tasklist($tasklist_id);
-						if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_id'])>2)
+						if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_id'])<GO_SECURITY::DELETE_PERMISSION)
 						{
 							throw new AccessDeniedException();
 						}
@@ -306,7 +306,7 @@ try{
 					foreach($delete_tasks as $task_id)
 					{
 						$old_task = $tasks->get_task($task_id);
-						if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_task['acl_id'])>2)
+						if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_task['acl_id'])<GO_SECURITY::DELETE_PERMISSION)
 						{
 							throw new AccessDeniedException();
 						}
