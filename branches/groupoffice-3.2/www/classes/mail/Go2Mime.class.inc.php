@@ -222,12 +222,9 @@ class Go2Mime
 
 				if ($part->ctype_primary == 'text' && (!isset($part->disposition) || $part->disposition != 'attachment') && empty($part->d_parameters['filename']))
 				{
-					$content_part=$part->body;
-					if(isset($part->ctype_parameters['charset']) && strtoupper($part->ctype_parameters['charset'])!='UTF-8')
-					{
-						$content_part = iconv($part->ctype_parameters['charset'], 'UTF-8', $content_part);
-					}
-					if (eregi('plain', $part->ctype_secondary))
+					$part->ctype_parameters['charset']=isset($part->ctype_parameters['charset']) ? $part->ctype_parameters['charset'] : 'UTF-8';
+					$content_part = String::clean_utf8($part->body, $part->ctype_parameters['charset']);
+					if (stripos($part->ctype_secondary,'plain')!==false)
 					{
 						$content_part = nl2br($content_part);
 					}else
@@ -237,7 +234,7 @@ class Go2Mime
 					
 					$this->response['body'] .= $content_part;
 				}
-				//store attachements in the attachments array
+				//store attachments in the attachments array
 
 				//var_dump($part);
 
@@ -321,17 +318,15 @@ class Go2Mime
 			}
 		}elseif(isset($structure->body))
 		{
+			$structure->ctype_parameters['charset']=isset($structure->ctype_parameters['charset']) ? $structure->ctype_parameters['charset'] : 'UTF-8';
+			$text_part = String::clean_utf8($structure->body, $structure->ctype_parameters['charset']);
 			//convert text to html
-			if (eregi('plain', $structure->ctype_secondary))
+			if (stripos($structure->ctype_secondary,'plain')!==false)
 			{
-				$text_part = nl2br($structure->body);
+				$text_part = nl2br($text_part);
 			}else
 			{
-				$text_part = $structure->body;
-			}
-			if(isset($structure->ctype_parameters['charset']) && strtoupper($structure->ctype_parameters['charset'])!='UTF-8')
-			{
-				$text_part = iconv($structure->ctype_parameters['charset'], 'UTF-8', $text_part);
+				$text_part = String::convert_html($text_part);
 			}
 			$this->response['body'] .= $text_part;
 		}
