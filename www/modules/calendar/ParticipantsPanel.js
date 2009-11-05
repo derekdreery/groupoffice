@@ -474,8 +474,8 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 		this.availabilityWindow.show({
 					date : this.eventDialog.startDate.getRawValue(),
 					event_id : this.event_id,
-					emails : emails.join(','),
-					names : names.join(',')
+					emails : Ext.encode(emails),
+					names : Ext.encode(names)
 				});
 	}
 

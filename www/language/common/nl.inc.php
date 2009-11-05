@@ -47,6 +47,8 @@ $lang['common']['selectError']='Fout tijdens het lezen van de gegevens';
 $lang['common']['missingField'] = 'U heeft niet alle vereiste velden ingevuld';
 $lang['common']['noFileUploaded']='Bestand was niet ontvangen';
 $lang['common']['invalidEmailError']='Het opgegeven e-mail adres was ongeldig';
+$lang['common']['fileCreateError']='Kon het bestand niet aanmaken';
+
 $lang['common']['name']='Naam';
 $lang['common']['user']='Gebruiker';
 $lang['common']['username']='Gebruikersnaam';

@@ -39,7 +39,7 @@ if (!isset($filename))
 {
 	$browser = detect_browser();
 
-	header('Content-Type: text/calendar');
+	header('Content-Type: text/calendar;charset=UTF-8');
 	//header('Content-Length: '.filesize($path));
 	header('Expires: '.gmdate('D, d M Y H:i:s') . ' GMT');
 	if ($browser['name'] == 'MSIE')
