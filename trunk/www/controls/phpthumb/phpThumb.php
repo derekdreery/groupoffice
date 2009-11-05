@@ -149,7 +149,7 @@ if (!empty($PHPTHUMB_CONFIG)) {
 	foreach ($PHPTHUMB_CONFIG as $key => $value) {
 		$keyname = 'config_'.$key;
 		$phpThumb->setParameter($keyname, $value);
-		if (!eregi('password|mysql', $key)) {
+		if (!preg_match('/password|mysql/i', $key)) {
 			$phpThumb->DebugMessage('setParameter('.$keyname.', '.$phpThumb->phpThumbDebugVarDump($value).')', __FILE__, __LINE__);
 		}
 	}
