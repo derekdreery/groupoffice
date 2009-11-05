@@ -50,3 +50,7 @@ $lang['calendar']['printPage']='Seite %s von %s';
 $lang['calendar']['printList']='Terminliste';
 $lang['calendar']['printAllDaySingle']='Ganzer Tag';
 $lang['calendar']['printAllDayMultiple']='Ganze Tage vom %s bis zum %s';
+
+
+$lang['calendar']['birthday_name']='Geburtstag: {NAME}';
+$lang['calendar']['birthday_desc']='{NAME} wird heute {AGE}';
