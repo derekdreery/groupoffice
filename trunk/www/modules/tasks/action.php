@@ -250,7 +250,7 @@ try{
 			if($tasklist['id']>0)
 			{
 				$old_tasklist = $tasks->get_tasklist($tasklist['id']);
-				if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_tasklist['acl_id'])>1)
+				if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_tasklist['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
 				{
 					throw new AccessDeniedException();
 				}

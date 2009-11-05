@@ -162,7 +162,7 @@ try {
 				$calendar = $cal->get_calendar($old_event['calendar_id']);
 
 				//an event is moved or resized
-				if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_event['acl_id'])>1) {
+				if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_event['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
 					throw new AccessDeniedException();
 				}
 
@@ -352,7 +352,7 @@ try {
 
 			$calendar = $cal->get_calendar($event['calendar_id']);
 
-			if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id'])>1) {
+			if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
 				throw new AccessDeniedException();
 			}
 
@@ -491,7 +491,7 @@ try {
 
 							if($calendar_id != $calendar['id']) {
 								$response['cal'] = $calendar;
-								if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id'])>1) {
+								if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
 									throw new AccessDeniedException();
 								}
 
@@ -860,7 +860,7 @@ try {
 
 			if($calendar['id']>0) {
 				$old_calendar = $cal->get_calendar($calendar['id']);
-				if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_calendar['acl_id'])>1) {
+				if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_calendar['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
 					throw new AccessDeniedException();
 				}
 				$cal->update_calendar($calendar, $old_calendar);
@@ -901,7 +901,7 @@ try {
 			if($view['id']>0) {
 				$old_view = $cal->get_view($view['id']);
 
-				if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_view['acl_id'])>1) {
+				if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_view['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
 					throw new AccessDeniedException();
 				}
 				$cal->update_view($view);

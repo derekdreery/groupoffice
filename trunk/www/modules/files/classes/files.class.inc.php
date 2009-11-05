@@ -931,7 +931,7 @@ class files extends db {
 			$parent = $this->get_folder($folder['parent_id']);
 			return $this->has_write_permission($user_id, $parent);
 		}else {
-			return $GO_SECURITY->has_permission($user_id, $folder['acl_id'])>1;
+			return $GO_SECURITY->has_permission($user_id, $folder['acl_id'])>GO_SECURITY::READ_PERMISSION;
 		}
 	}
 
