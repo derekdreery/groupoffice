@@ -179,7 +179,7 @@ try
 					foreach($delete_contacts as $id)
 					{
 						$contact = $ab->get_contact($id);
-						if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $contact['acl_id'])<3)
+						if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $contact['acl_id'])<GO_SECURITY::DELETE_PERMISSION)
 						{
 							throw new AccessDeniedException();
 						}
@@ -294,7 +294,8 @@ try
 					foreach($delete_companies as $id)
 					{
 						$company = $ab->get_company($id);
-						if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $contact['acl_id'])<3)
+
+						if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $contact['acl_id'])<GO_SECURITY::DELETE_PERMISSION)
 						{
 							throw new AccessDeniedException();
 						}
