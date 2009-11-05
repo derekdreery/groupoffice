@@ -326,7 +326,7 @@ try{
 				$task['id']=$_POST['completed_task_id'];
 
 				$old_task = $tasks->get_task($task['id']);
-				if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_task['acl_id'])>1)
+				if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_task['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
 				{
 					throw new AccessDeniedException();
 				}
