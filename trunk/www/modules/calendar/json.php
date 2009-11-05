@@ -802,8 +802,8 @@ try{
 		case 'availability':
 			$event_id = empty($_REQUEST['event_id']) ? 0 : $_REQUEST['event_id'];
 			$date = Date::to_unixtime($_REQUEST['date']);
-			$emails = explode(',',$_REQUEST['emails']);
-			$names = isset($_REQUEST['names']) ? explode(',',$_REQUEST['names']) : $emails;
+			$emails = json_decode($_REQUEST['emails'], true);
+			$names = isset($_REQUEST['names']) ? json_decode($_REQUEST['names'], true) : $emails;
 
 
 			$merged_free_busy=array();

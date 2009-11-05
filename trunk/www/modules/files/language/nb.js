@@ -29,3 +29,5 @@ GO.files.lang.emptyList='Tøm liste';
 GO.files.lang.newFiles='Ny';
 
 GO.files.lang.olderVersions='Eldre versjoner';
+
+GO.files.lang.selectFiles= 'Velg filer';

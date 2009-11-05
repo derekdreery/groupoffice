@@ -9,7 +9,7 @@ Copyright (c) 2003-2009, Intermesh
 Alle rettigheter forbeholdt.
 Dette programmet er beskyttet av copyrightlovgivning og en egen Group-Office lisens.
 
-For brukerstøtte kontakt webansvarlig:
+For brukerstøtte kontakt installasjonsansvarlig:
 %s
 
 Besøk Group-office for mer informasjon på:
@@ -190,3 +190,5 @@ $lang['common']['no']='Nei';
 $lang['common']['startMenu']='Startmeny';
 $lang['common']['address_format']='Adresseformat';
 $lang['common']['dear']='Kjære';
+
+$lang['commmon']['logFiles']='Loggfiler';

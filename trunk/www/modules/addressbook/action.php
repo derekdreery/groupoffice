@@ -383,6 +383,7 @@ try
 								{
 									if ((isset ($record[$_POST['first_name']]) && $record[$_POST['first_name']] != "") || (isset ($record[$_POST['last_name']]) && $record[$_POST['last_name']] != ''))
 									{
+										$contact['email_allowed']='1';
 										$contact['title'] = isset ($record[$_POST['title']]) ? trim($record[$_POST['title']]) : '';
 										$contact['first_name'] = isset ($record[$_POST['first_name']]) ? trim($record[$_POST['first_name']]) : '';
 										$contact['middle_name'] = isset ($record[$_POST['middle_name']]) ? trim($record[$_POST['middle_name']]) : '';
@@ -435,6 +436,7 @@ try
 
 										if (!$ab->get_company_by_name($_POST['addressbook_id'], $company['name']))
 										{
+											$company['email_allowed']='1';
 											$company['email'] = isset ($record[$_POST['email']]) ? String::get_email_from_string($record[$_POST['email']]) : '';
 											$company['phone'] = isset ($record[$_POST['phone']]) ? trim($record[$_POST['phone']]) : '';
 											$company['fax'] = isset ($record[$_POST['fax']]) ? trim($record[$_POST['fax']]) : '';
@@ -472,7 +474,7 @@ try
 										$cf_record=array('link_id'=>$new_id);
 										foreach($customfields as $field)
 										{
-											if(isset($_POST[$field['name']]))
+											if(isset($_POST[$field['name']]) && isset($record[$_POST[$field['name']]]))
 												$cf_record[$field['name']]=$record[$_POST[$field['name']]];
 										}
 										$cf->insert_row('cf_'.$new_type,$cf_record);
