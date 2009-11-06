@@ -86,7 +86,7 @@ class export_tasks
 
 		$qp_value_part = String::quoted_printable_encode($value_part);
 
-		if($value_part != $qp_value_part)
+		if($value_part != $qp_value_part || strlen($name_part.$value_part)>=73)
 		{
 			$name_part .= ";ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:";
 			return explode("\n", $name_part.$qp_value_part);
@@ -209,10 +209,9 @@ class export_tasks
 			$ical2array = new ical2array();
 
 			if($this->version != '1.0')
-			{
-					
+			{					
 				$rrule = $ical2array->parse_rrule($task['rrule']);
-debug($rrule);
+
 				if(!$this->utc && isset($rrule['BYDAY'])){
 					if($rrule['FREQ']=='MONTHLY'){
 						$month_time = $rrule['BYDAY'][0];
@@ -233,11 +232,6 @@ debug($rrule);
 				}
 			}else
 			{
-					
-					
-				
-
-
 				$rrule = $ical2array->parse_rrule($task['rrule']);
 
 				if (isset($rrule['UNTIL']))
@@ -429,7 +423,7 @@ debug($rrule);
 		$vtodo = '';
 		foreach ($lines as $line) {
 		 preg_match_all( '/.{1,73}([^=]{0,2})?/', $line, $matches);
-		 $vtodo .= implode( '=' . chr(13).chr(10), $matches[0] )."\r\n"; // add soft crlf's
+		 $vtodo .= implode( '=' . chr(13).chr(10).' ', $matches[0] )."\r\n"; // add soft crlf's
 		}
 		return $vtodo;
 	}

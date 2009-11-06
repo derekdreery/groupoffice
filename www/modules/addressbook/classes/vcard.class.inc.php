@@ -542,7 +542,7 @@ class vcard extends addressbook {
 
 		$qp_value_part = String::quoted_printable_encode($value_part);
 
-		if($value_part != $qp_value_part)
+		if($value_part != $qp_value_part || strlen($name_part.$value_part)>=73)
 		{
 			$name_part .= ";ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:";
 			return explode("\n", $name_part.$qp_value_part);
@@ -691,7 +691,7 @@ class vcard extends addressbook {
 		$this->vcf = '';
 		foreach ($lines as $line) {
 		 preg_match_all( '/.{1,73}([^=]{0,2})?/', $line, $matches);
-		 $this->vcf .= implode( '=' . chr(13).chr(10), $matches[0] )."\r\n"; // add soft crlf's
+		 $this->vcf .= implode( '=' . chr(13).chr(10).' ', $matches[0] )."\r\n"; // add soft crlf's
 		}
 		
 		if (empty ($this->vcf)) {

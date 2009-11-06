@@ -87,7 +87,7 @@ class go_ical extends calendar
 
 		$qp_value_part = String::quoted_printable_encode($value_part);
 
-		if($value_part != $qp_value_part)
+		if($value_part != $qp_value_part || strlen($name_part.$value_part)>=73)
 		{
 			$name_part .= ";ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:";
 			return explode("\n", $name_part.$qp_value_part);
@@ -482,7 +482,7 @@ class go_ical extends calendar
 		$vevent = '';
 		foreach ($lines as $line) {
 		 preg_match_all( '/.{1,73}([^=]{0,2})?/', $line, $matches);
-		 $vevent .= implode( '=' . chr(13).chr(10), $matches[0] )."\r\n"; // add soft crlf's
+		 $vevent .= implode( '=' . chr(13).chr(10).' ', $matches[0] )."\r\n"; // add soft crlf's
 		}
 		return $vevent;
 	}
