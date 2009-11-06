@@ -28,6 +28,8 @@ class go_ical extends calendar
 
 	var $utc=false;
 
+	var $add_leading_space_to_qp_encoded_line_wraps=false;
+
 	function go_ical($version='2.0', $utc=false)
 	{
 		parent::__construct();
@@ -81,7 +83,7 @@ class go_ical extends calendar
 	}
 
 
-	function format_line($name_part, $value_part)
+	/*function format_line($name_part, $value_part)
 	{
 		$value_part = str_replace("\r\n","\n", $value_part);
 
@@ -96,7 +98,7 @@ class go_ical extends calendar
 			$name_part .= ';CHARSET=UTF-8:';
 		}
 		return array($name_part.$value_part);
-	}
+	}*/
 
 	/*function format_line($name_part, $value_part)
 	 {
@@ -133,14 +135,14 @@ class go_ical extends calendar
 		$lines[] = "BEGIN:VEVENT";
 		$lines[] = "UID:".$event['id'];
 
-		$lines = array_merge($lines, $this->format_line('SUMMARY', $event['name']));
+		$lines = array_merge($lines, String::format_vcard_line('SUMMARY', $event['name'], $this->add_leading_space_to_qp_encoded_line_wraps));
 		if ($event['description'] != '')
 		{
-			$lines = array_merge($lines, $this->format_line('DESCRIPTION', $event['description']));
+			$lines = array_merge($lines, String::format_vcard_line('DESCRIPTION', $event['description'], $this->add_leading_space_to_qp_encoded_line_wraps));
 		}
 		if ($event['location'] != '')
 		{
-			$lines = array_merge($lines, $this->format_line('LOCATION', $event['location']));
+			$lines = array_merge($lines, String::format_vcard_line('LOCATION', $event['location'], $this->add_leading_space_to_qp_encoded_line_wraps));
 		}
 
 		$lines[] =	"STATUS:".$event['status'];
@@ -479,11 +481,11 @@ class go_ical extends calendar
 		$lines[]= "DTSTAMP:".date($this->datetime_format, $event['ctime']);
 		$lines[] = "END:VEVENT";
 
-		$vevent = '';
+		/*$vevent = '';
 		foreach ($lines as $line) {
 		 preg_match_all( '/.{1,73}([^=]{0,2})?/', $line, $matches);
 		 $vevent .= implode( '=' . chr(13).chr(10).' ', $matches[0] )."\r\n"; // add soft crlf's
-		}
-		return $vevent;
+		}*/
+		return implode("\r\n", $lines);
 	}
 }
