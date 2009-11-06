@@ -99,6 +99,11 @@ class GOXML
 	{		
 		
 		$xml_array=array();
+
+		if(!is_object($n)){
+			debug($n);
+			return '';
+		}
 		
 		if($n->hasChildNodes())
 		{			
