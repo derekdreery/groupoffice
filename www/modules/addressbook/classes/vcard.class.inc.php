@@ -77,6 +77,8 @@ class vcard extends addressbook {
 	var $revision;
 	var $vcf;
 
+	var $add_leading_space_to_qp_encoded_line_wraps=false;
+
 	function vcard() {
 		$this->index = null;
 		$this->instance = array ();
@@ -536,7 +538,7 @@ class vcard extends addressbook {
 		}
 	}
 	
-	function format_line($name_part, $value_part)
+	/*function format_line($name_part, $value_part)
 	{
 		$value_part = str_replace("\r\n","\n", $value_part);
 
@@ -551,7 +553,7 @@ class vcard extends addressbook {
 			$name_part .= ';CHARSET=UTF-8:';
 		}
 		return array($name_part.$value_part);
-	}
+	}*/
 
 	/**
 	* Creates the vCard file.
@@ -586,12 +588,12 @@ class vcard extends addressbook {
 										$property->values[N_PREFIX];
 										
 							
-									$lines = array_merge($lines, $this->format_line($name_part, $value_part));
+									$lines = array_merge($lines, String::format_vcard_line($name_part, $value_part, $this->add_leading_space_to_qp_encoded_line_wraps));
 								
 									
 									$name_part = "FN";
 									$value_part = $property->values[N_GIVEN].CHAR_WSP.$property->values[N_FAMILY];
-									$lines = array_merge($lines, $this->format_line($name_part, $value_part));
+									$lines = array_merge($lines, String::format_vcard_line($name_part, $value_part, $this->add_leading_space_to_qp_encoded_line_wraps));
 
 									break;
 								case "ADR" :
@@ -609,7 +611,7 @@ class vcard extends addressbook {
 											$property->values[ADR_POSTALCODE].DELIM_SEMICOLON.
 											$property->values[ADR_COUNTRY];
 											
-										$lines = array_merge($lines, $this->format_line($name_part, $value_part));
+										$lines = array_merge($lines, String::format_vcard_line($name_part, $value_part, $this->add_leading_space_to_qp_encoded_line_wraps));
 									}
 									break;
 								case "EMAIL" :
@@ -643,7 +645,7 @@ class vcard extends addressbook {
 										$name_part = $property->name;
 										$value_part = $property->values[ORG_NAME].DELIM_SEMICOLON.$property->values[ORG_UNIT];
 										
-										$lines = array_merge($lines, $this->format_line($name_part, $value_part));						
+										$lines = array_merge($lines, String::format_vcard_line($name_part, $value_part, $this->add_leading_space_to_qp_encoded_line_wraps));
 									}
 									break;
 								case "URL" :
@@ -661,17 +663,17 @@ class vcard extends addressbook {
 				
 									if (intval($property->values[0]) > 0) {
 										//$lines[] = $property->name.DELIM_COLON.$property->values[0];
-										$lines = array_merge($lines, $this->format_line($property->name, $property->values[0]));
+										$lines = array_merge($lines, String::format_vcard_line($property->name, $property->values[0], $this->add_leading_space_to_qp_encoded_line_wraps));
 									}
 									break;
 								default :
 									if (!empty ($property->values[0])) {
-										$lines = array_merge($lines, $this->format_line($property->name, $property->values[0]));
+										$lines = array_merge($lines, String::format_vcard_line($property->name, $property->values[0], $this->add_leading_space_to_qp_encoded_line_wraps));
 									}
 									break;
 							/*	case 'X-GO-SALUTATION':
 									if (!empty ($property->values[0])) {
-										$lines = array_merge($lines, $this->format_line($property->name, $property->values[0]));
+										$lines = array_merge($lines, String::format_vcard_line($property->name, $property->values[0], $this->add_leading_space_to_qp_encoded_line_wraps));
 									}									
 								break;*/
 							}
@@ -688,11 +690,12 @@ class vcard extends addressbook {
 						}*/
 		}
 		
-		$this->vcf = '';
+		/*$this->vcf = '';
 		foreach ($lines as $line) {
 		 preg_match_all( '/.{1,73}([^=]{0,2})?/', $line, $matches);
-		 $this->vcf .= implode( '=' . chr(13).chr(10).' ', $matches[0] )."\r\n"; // add soft crlf's
-		}
+		 $this->vcf .= implode( '=' . chr(13).chr(10), $matches[0] )."\r\n"; // add soft crlf's
+		}*/
+		$this->vcf = implode("\r\n", $lines);
 		
 		if (empty ($this->vcf)) {
 			return false;

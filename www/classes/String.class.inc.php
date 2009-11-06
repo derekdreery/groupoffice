@@ -770,9 +770,7 @@ class String {
 			$html = preg_replace("/(href=([\"']?)mailto:)([\w\.\-]+)(@)([\w\.\-\"]+)\b/i",
 			"href=\"javascript:this.showComposer({values: {to : '$3$4$5'}});", $html);
 		}
-
-
-
+		
 		return $html;
 	}
 
@@ -798,63 +796,91 @@ class String {
 	 * @return unknown
 	 */
 
-	function quoted_printable_encode($sText,$bEmulate_imap_8bit=false) {
-  // split text into lines
-  $aLines=explode(chr(13).chr(10),$sText);
+	function quoted_printable_encode($sLine,$bEmulate_imap_8bit=false) {
+	
+		$sLine = str_replace("\r", '', $sLine);
+		$sLine = str_replace("\n", "\r\n", $sLine);
+		
+		// split text into lines
 
-  for ($i=0;$i<count($aLines);$i++) {
-    $sLine =& $aLines[$i];
-    if (strlen($sLine)===0) continue; // do nothing, if empty
+			$sRegExp = '/[^\x09\x20\x21-\x3C\x3E-\x7E]/e';
 
-    $sRegExp = '/[^\x09\x20\x21-\x3C\x3E-\x7E]/e';
+			// imap_8bit encodes x09 everywhere, not only at lineends,
+			// for EBCDIC safeness encode !"#$@[\]^`{|}~,
+			// for complete safeness encode every character :)
+			if ($bEmulate_imap_8bit)
+				$sRegExp = '/[^\x20\x21-\x3C\x3E-\x7E]/e';
 
-    // imap_8bit encodes x09 everywhere, not only at lineends,
-    // for EBCDIC safeness encode !"#$@[\]^`{|}~,
-    // for complete safeness encode every character :)
-    if ($bEmulate_imap_8bit)
-      $sRegExp = '/[^\x20\x21-\x3C\x3E-\x7E]/e';
+			$sReplmt = 'sprintf( "=%02X", ord ( "$0" ) ) ;';
+			$sLine = preg_replace( $sRegExp, $sReplmt, $sLine );
 
-    $sReplmt = 'sprintf( "=%02X", ord ( "$0" ) ) ;';
-    $sLine = preg_replace( $sRegExp, $sReplmt, $sLine );
+			// encode x09,x20 at lineends
+			{
+				$iLength = strlen($sLine);
+				$iLastChar = ord($sLine{$iLength-1});
 
-    // encode x09,x20 at lineends
-    {
-      $iLength = strlen($sLine);
-      $iLastChar = ord($sLine{$iLength-1});
+				//              !!!!!!!!
+				// imap_8_bit does not encode x20 at the very end of a text,
+				// here is, where I don't agree with imap_8_bit,
+				// please correct me, if I'm wrong,
+				// or comment next line for RFC2045 conformance, if you like
+				if (!($bEmulate_imap_8bit && ($i==count($aLines)-1)))
 
-      //              !!!!!!!!
-      // imap_8_bit does not encode x20 at the very end of a text,
-      // here is, where I don't agree with imap_8_bit,
-      // please correct me, if I'm wrong,
-      // or comment next line for RFC2045 conformance, if you like
-      if (!($bEmulate_imap_8bit && ($i==count($aLines)-1)))
+				if (($iLastChar==0x09)||($iLastChar==0x20)) {
+					$sLine{$iLength-1}='=';
+					$sLine .= ($iLastChar==0x09)?'09':'20';
+				}
+			}    // imap_8bit encodes x20 before chr(13), too
+			// although IMHO not requested by RFC2045, why not do it safer :)
+			// and why not encode any x20 around chr(10) or chr(13)
+			if ($bEmulate_imap_8bit) {
+				$sLine=str_replace(' =0D','=20=0D',$sLine);
+				//$sLine=str_replace(' =0A','=20=0A',$sLine);
+				//$sLine=str_replace('=0D ','=0D=20',$sLine);
+				//$sLine=str_replace('=0A ','=0A=20',$sLine);
+			}
 
-      if (($iLastChar==0x09)||($iLastChar==0x20)) {
-        $sLine{$iLength-1}='=';
-        $sLine .= ($iLastChar==0x09)?'09':'20';
-      }
-    }    // imap_8bit encodes x20 before chr(13), too
-    // although IMHO not requested by RFC2045, why not do it safer :)
-    // and why not encode any x20 around chr(10) or chr(13)
-    if ($bEmulate_imap_8bit) {
-      $sLine=str_replace(' =0D','=20=0D',$sLine);
-      //$sLine=str_replace(' =0A','=20=0A',$sLine);
-      //$sLine=str_replace('=0D ','=0D=20',$sLine);
-      //$sLine=str_replace('=0A ','=0A=20',$sLine);
-    }
+			// finally split into softlines no longer than 76 chars,
+			// for even more safeness one could encode x09,x20
+			// at the very first character of the line
+			// and after soft linebreaks, as well,
+			// but this wouldn't be caught by such an easy RegExp
+			//preg_match_all( '/.{1,73}([^=]{0,2})?/', $sLine, $aMatch );
+			//$sLine = implode( '=' . chr(13).chr(10), $aMatch[0] ); // add soft crlf's
+		//}
+		return $sLine;
+		// join lines into text
+		//return implode(chr(13).chr(10),$aLines);
+	}
 
-    // finally split into softlines no longer than 76 chars,
-    // for even more safeness one could encode x09,x20
-    // at the very first character of the line
-    // and after soft linebreaks, as well,
-    // but this wouldn't be caught by such an easy RegExp
-    //preg_match_all( '/.{1,73}([^=]{0,2})?/', $sLine, $aMatch );
-    //$sLine = implode( '=' . chr(13).chr(10), $aMatch[0] ); // add soft crlf's
-  }
+	function wrap_quoted_printable_encoded_string($sText, $add_leading_space=false){
+		$lb = '='.chr(13).chr(10);
 
-  // join lines into text
-  return implode(chr(13).chr(10),$aLines);
-}
+		//funambol clients need this to parse the vcard correctly.
+		if($add_leading_space)
+			$lb .= ' ';
+
+		preg_match_all( '/.{1,73}([^=]{0,2})?/', $sText, $aMatch );
+		return implode($lb, $aMatch[0]); // add soft crlf's
+		
+	}
+
+	function format_vcard_line($name_part, $value_part, $add_leading_space=false)
+	{
+		//$value_part = str_replace("\r\n","\n", $value_part);
+
+		$qp_value_part = String::quoted_printable_encode($value_part);
+
+		if($value_part != $qp_value_part || strlen($name_part.$value_part)>=73)
+		{
+			$name_part .= ";ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:";
+			return array(String::wrap_quoted_printable_encoded_string($name_part.$qp_value_part, $add_leading_space));
+		}else
+		{
+			$name_part .= ';CHARSET=UTF-8:';
+		}
+		return array($name_part.$value_part);
+	}
 
 /*
 
@@ -921,8 +947,8 @@ class String {
 		}
 
 		// join lines into text
-		//return implode('=0D=0A',$aLines);
-		return implode(chr(13).chr(10),$aLines);
+		return implode('=0D=0A',$aLines);
+		//return implode(chr(13).chr(10),$aLines);
 	}
 */
 
