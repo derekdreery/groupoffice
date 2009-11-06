@@ -775,7 +775,7 @@ class tasks extends db
 		}
 
 
-		if(isset($object['COMPLETED']['value']))
+		if(!empty($object['COMPLETED']['value']))
 		{
 			$timezone_id = isset($object['COMPLETED']['params']['TZID']) ? $object['COMPLETED']['params']['TZID'] : '';
 			$task['completion_time'] = $this->ical2array->parse_date($object['COMPLETED']['value'], $timezone_id);
@@ -790,7 +790,7 @@ class tasks extends db
 		
 
 		//reminder
-		if(isset($object['DALARM']['value']))
+		if(!empty($object['DALARM']['value']))
 		{
 			$dalarm = explode(';', $object['DALARM']['value']);
 			if(isset($dalarm[0]))
