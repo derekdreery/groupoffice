@@ -28,6 +28,8 @@ class export_tasks
 
 	var $utc=false;
 
+	var $add_leading_space_to_qp_encoded_line_wraps=false;
+
 	function __construct($version='2.0',$utc=false)
 	{
 
@@ -80,7 +82,7 @@ class export_tasks
 		return $ics;
 	}
 
-	function format_line($name_part, $value_part)
+	/*function format_line($name_part, $value_part)
 	{
 		$value_part = str_replace("\r\n","\n", $value_part);
 
@@ -95,7 +97,7 @@ class export_tasks
 			$name_part .= ';CHARSET=UTF-8:';
 		}
 		return array($name_part.$value_part);
-	}
+	}*/
 
 	function convert_task($task, $no_rrule=false)
 	{
@@ -114,10 +116,10 @@ class export_tasks
 		$lines[] = "BEGIN:VTODO";
 		$lines[] = "UID:".$task['id'];
 
-		$lines = array_merge($lines, $this->format_line('SUMMARY', $task['name']));
+		$lines = array_merge($lines, String::format_vcard_line('SUMMARY', $task['name'], $this->add_leading_space_to_qp_encoded_line_wraps));
 		if ($task['description'] != '')
 		{
-			$lines = array_merge($lines, $this->format_line('DESCRIPTION', $task['description']));
+			$lines = array_merge($lines, String::format_vcard_line('DESCRIPTION', $task['description'], $this->add_leading_space_to_qp_encoded_line_wraps));
 		}
 
 		$lines[] =	"STATUS:".$task['status'];
@@ -420,12 +422,12 @@ class export_tasks
 
 		//return implode("\n", $lines)."\n";
 		
-		$vtodo = '';
+		/*$vtodo = '';
 		foreach ($lines as $line) {
 		 preg_match_all( '/.{1,73}([^=]{0,2})?/', $line, $matches);
 		 $vtodo .= implode( '=' . chr(13).chr(10).' ', $matches[0] )."\r\n"; // add soft crlf's
-		}
-		return $vtodo;
+		}*/
+		return implode("\r\n", $lines);
 	}
 
 
