@@ -1,13 +1,7 @@
 <VirtualHost *:80>
 <Directory />
-Options FollowSymLinks
+Options -Indexes FollowSymLinks
 AllowOverride None
-</Directory>
-<Directory /home/govhosts/>
-Options Indexes FollowSymLinks MultiViews
-AllowOverride All
-Order allow,deny
-allow from all
 </Directory>
 
 Alias /sm-local /home/govhosts/sm-local
