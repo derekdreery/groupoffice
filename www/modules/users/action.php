@@ -340,9 +340,6 @@ try
 					$password='';
 				}
 
-				
-
-
 				//deprecated modules get updated below
 				$modules_read = array_map('trim', explode(',',$GO_CONFIG->register_modules_read));
 				$modules_write = array_map('trim', explode(',',$GO_CONFIG->register_modules_write));
