@@ -185,6 +185,7 @@ try{
 			if($task['id']>0)
 			{
 				$tasks->update_task($task, $tasklist, $old_task);
+                                $insert = false;
 				$response['success']=true;
 
 			}else
@@ -192,10 +193,18 @@ try{
 				$task['user_id']=$GO_SECURITY->user_id;
 				$task_id= $tasks->add_task($task, $tasklist);
 				if($task_id)
-				{					
+				{
+                                        $insert = true;
 					$response['task_id']=$task_id;
 					$response['success']=true;
 				}					
+			}
+
+                        if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
+			{
+				require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+				$cf = new customfields();
+				$cf->update_fields($GO_SECURITY->user_id, $task_id, 12, $_POST, $insert);
 			}
 			
 			if(!empty($_POST['tmp_files']) && $GO_MODULES->has_module('files'))

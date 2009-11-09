@@ -29,4 +29,9 @@ $updates[]="ALTER TABLE `ta_settings` ADD `default_tasklist_id` INT NOT NULL ";
 $updates[]="ALTER TABLE `ta_lists` ADD `shared_acl` BOOL NOT NULL ";
 
 $updates[]="script:1_convert_acl.inc.php";
+
+$updates[] = "CREATE TABLE IF NOT EXISTS `cf_12` (
+	`link_id` int(11) NOT NULL default '0',
+	PRIMARY KEY  (`link_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 ?>

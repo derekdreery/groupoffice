@@ -579,12 +579,24 @@ class tasks extends db
 	$show_inactive=false)
 	{
 
-		$sql  = "SELECT DISTINCT t.* FROM ta_tasks t";
+                global $GO_MODULES, $response;
+                
+		$sql  = "SELECT DISTINCT t.*";
 
-		if($user_id > 0)
+		if($GO_MODULES->has_module('customfields')) {
+                        $sql .= " ,cf_12.*";
+                }
+
+                $sql .= " FROM ta_tasks t";
+                
+                if($user_id > 0)
 		{
 			$sql .= " INNER JOIN ta_lists l ON (t.tasklist_id=l.id)";
 		}
+
+                if($GO_MODULES->has_module('customfields')) {
+                        $sql .= " LEFT JOIN cf_12 ON cf_12.link_id=t.id";
+                }
 
 		$where=false;
 
@@ -641,6 +653,8 @@ class tasks extends db
 			$sql .=	" ORDER BY ".$this->escape($sort_field)." ".$this->escape($sort_order)."";
 		}
 
+                $response['sql'] = $sql;
+                
 		if($offset == 0)
 		{
 			$this->query($sql);

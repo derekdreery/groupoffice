@@ -576,6 +576,14 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 
 		var items = [propertiesPanel, this.descriptionPanel, recurrencePanel, optionsPanel];
 
+
+                if(GO.customfields && GO.customfields.types["12"])
+		{
+			for(var i=0;i<GO.customfields.types["12"].panels.length;i++)
+			{
+				items.push(GO.customfields.types["12"].panels[i]);
+			}
+		}
 		this.tabPanel = new Ext.TabPanel({
 					activeTab : 0,
 					deferredRender : false,
