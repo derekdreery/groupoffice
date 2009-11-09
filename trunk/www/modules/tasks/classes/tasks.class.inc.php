@@ -347,8 +347,13 @@ class tasks extends db
 
 
 	
-	function get_authorized_tasklists($auth_type='read', $query='', $user_id, $start=0, $offset=0, $sort='name', $direction='ASC')
+	function get_authorized_tasklists($auth_type='read', $query='', $user_id=0, $start=0, $offset=0, $sort='name', $direction='ASC')
 	{
+                global $GO_SECURITY;
+
+                if(!$user_id)
+                        $user_id = $GO_SECURITY->user_id;
+        
 		$sql = "SELECT DISTINCT l.* ".
 		"FROM ta_lists l ";
 		if($auth_type=='read')

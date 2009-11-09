@@ -61,6 +61,12 @@ GO.calendar.CalendarDialog = function(config)
 			id:'show_bdays',
 			boxLabel:GO.calendar.lang.show_bdays,
 			hideLabel:true
+		},{
+			xtype:'checkbox',
+			name:'show_tasks',
+			id:'show_tasks',
+			boxLabel:GO.calendar.lang.show_tasks,
+			hideLabel:true
 		},
 		this.exportButton = new Ext.Button({
 			text:GO.lang.cmdExport,

@@ -845,6 +845,7 @@ try {
 			$calendar['user_id'] = isset($_POST['user_id']) ? ($_POST['user_id']) : $GO_SECURITY->user_id;
 			$calendar['group_id'] = isset($_POST['group_id']) ? ($_POST['group_id']) : 0;
 			$calendar['show_bdays'] = isset($_POST['show_bdays']) ? 1 : 0;
+                        $calendar['show_tasks'] = isset($_POST['show_tasks']) ? 1 : 0;
 			if($calendar['group_id'] == 0) $calendar['group_id'] = 1;
 			$calendar['name']=$_POST['name'];
 

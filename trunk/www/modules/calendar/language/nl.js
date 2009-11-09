@@ -79,3 +79,4 @@ GO.calendar.lang.group='Groep';
 GO.calendar.lang.no_status='Nieuw';
 GO.calendar.lang.no_custom_fields='Er zijn geen extra opties beschikaar.';
 GO.calendar.lang.show_bdays='Toon verjaardagen uit adresboek';
+GO.calendar.lang.show_tasks='Toon taken uit takenlijsten';

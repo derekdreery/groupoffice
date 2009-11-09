@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS `cal_calendars` (
   `public` enum('0','1') NOT NULL,
   `shared_acl` BOOL NOT NULL ,
   `show_bdays` tinyint(1) NOT NULL,
+  `show_tasks` tinyint(1) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `group_id` (`group_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
