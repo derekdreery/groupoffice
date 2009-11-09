@@ -358,6 +358,7 @@ try{
 			$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'ASC';
 			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
 			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
+                        $query = isset($_REQUEST['query']) ? '%'.$_REQUEST['query'].'%' : '';
 
 			//$show_completed=isset($_POST['show_completed']) && $_POST['show_completed']=='true';
 			//$show_inactive=isset($_POST['show_inactive']) && $_POST['show_inactive']=='true';
@@ -373,7 +374,7 @@ try{
 			$show_completed=$GO_CONFIG->get_setting('tasks_show_completed', $GO_SECURITY->user_id);
 			$show_inactive=$GO_CONFIG->get_setting('tasks_show_inactive', $GO_SECURITY->user_id);
 
-			$response['total'] = $tasks->get_tasks($tasklists,$user_id, $show_completed, $sort, $dir, $start, $limit,$show_inactive);
+			$response['total'] = $tasks->get_tasks($tasklists,$user_id, $show_completed, $sort, $dir, $start, $limit,$show_inactive, $query);
 			$response['results']=array();
 
 			$now=time();
