@@ -90,6 +90,7 @@ GO.tasks.MainPanel = function(config){
 
         this.gridPanel = new GO.tasks.TasksPanel( {
                 title:GO.tasks.lang.tasks,
+                id:'ta-tasks-grid',
                 region:'center'
         });
 			
@@ -172,6 +173,33 @@ GO.tasks.MainPanel = function(config){
                                 },
                                 scope: this
                         },{
+				iconCls: 'btn-export',
+				text: GO.lang.cmdExport,
+				cls: 'x-btn-text-icon',
+				handler:function(){
+					var config = {};
+					config.query='get_tasks';
+					config.colModel = this.gridPanel.getColumnModel();
+					config.title = GO.tasks.lang.tasks;
+
+					var query = this.gridPanel.searchField.getValue();
+					if(!GO.util.empty(query))
+					{
+						config.subtitle= GO.lang.searchQuery+': '+query;
+					}else
+					{
+						config.subtitle='';
+					}
+
+					if(!this.exportDialog)
+					{
+						this.exportDialog = new GO.ExportQueryDialog();
+					}
+					this.exportDialog.show(config);
+
+				},
+				scope: this
+			},{
                                 iconCls: 'btn-refresh',
                                 text: GO.lang['cmdRefresh'],
                                 cls: 'x-btn-text-icon',
