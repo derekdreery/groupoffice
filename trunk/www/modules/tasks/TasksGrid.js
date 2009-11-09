@@ -5,21 +5,8 @@ GO.tasks.TasksPanel = function(config)
             config = {};
         }
 	
-        config.store = new GO.data.JsonStore({
-            url: GO.settings.modules.tasks.url+'json.php',
-            baseParams: {
-                'task': 'tasks'
-            },
-            root: 'results',
-            totalProperty: 'total',
-            id: 'id',
-            fields:['id', 'name','completed','due_time', 'late', 'description', 'status', 'ctime', 'mtime', 'start_time', 'completion_time'],
-            remoteSort:true
-        });
-        
-	
+       
         this.checkColumn = new GO.grid.CheckColumn({
-            header: '',
             dataIndex: 'completed',
             width: 30,
             hideInExport:true,
@@ -41,8 +28,88 @@ GO.tasks.TasksPanel = function(config)
             delete this.store.baseParams['completed_task_id'];
             delete this.store.baseParams['checked'];
         }, this);
-	
-	
+    
+        var fields ={
+                fields:['id', 'name','completed','due_time', 'late', 'description', 'status', 'ctime', 'mtime', 'start_time', 'completion_time'],
+		columns:[this.checkColumn,
+                {
+                        id:'name',
+                        header:GO.lang['strName'],
+                        dataIndex: 'name',
+                        renderer:function(value, p, record){
+                                if(!GO.util.empty(record.data.description))
+                                {
+                                        p.attr = 'ext:qtip="'+Ext.util.Format.htmlEncode(record.data.description)+'"';
+                                }
+                                return value;
+                        },
+                        sortable:true
+                },{
+                        header:GO.tasks.lang.dueDate,
+                        dataIndex: 'due_time',
+                        width:100,
+                        sortable:true
+                },{
+                        header: GO.tasks.lang.startsAt,
+                        dataIndex: 'start_time',
+                        hidden:true,
+                        width:110
+                },{
+                        header: GO.tasks.lang.completedAt,
+                        dataIndex: 'completion_time',
+                        hidden:true,
+                        width:110
+                },{
+                        header: GO.lang.strDescription,
+                        dataIndex: 'description',
+                        hidden:true,
+                        width:110
+                },{
+                        header: GO.lang.strStatus,
+                        dataIndex: 'status',
+                        hidden:true,
+                        width:110
+                },{
+                        header: GO.lang.strCtime,
+                        dataIndex: 'ctime',
+                        hidden:true,
+                        width:110
+                },{
+                        header: GO.lang.strMtime,
+                        dataIndex: 'mtime',
+                        hidden:true,
+                        width:110
+                }]
+        };
+
+        if(GO.customfields)
+	{
+		GO.customfields.addColumns(12, fields);
+	}
+
+        config.store = new GO.data.JsonStore({
+            url: GO.settings.modules.tasks.url+'json.php',
+            baseParams: {
+                'task': 'tasks'
+            },
+            root: 'results',
+            totalProperty: 'total',
+            id: 'id',
+            fields: fields.fields,
+            remoteSort:true
+        });
+
+        var columnModel =  new Ext.grid.ColumnModel(fields.columns);
+	columnModel.defaultSortable = true;
+	config.cm=columnModel;
+
+        config.paging=true,
+        config.plugins=this.checkColumn;
+        config.autoExpandColumn='name';
+        config.autoExpandMax=2500;
+        config.enableColumnHide=true;
+        config.enableColumnMove=true;
+
         // custom template for the grid header
         var headerTpl = new Ext.Template(
             '<table border="0" cellspacing="0" cellpadding="0" style="{tstyle}">',
@@ -55,65 +122,7 @@ GO.tasks.TasksPanel = function(config)
             '</tr></tbody>',
             "</table>"
             );
-	
-	
-        config.paging=true,
-        config.plugins=this.checkColumn;
-        config.autoExpandColumn='name';
-        config.autoExpandMax=2500;
-        config.enableColumnHide=true;
-        config.enableColumnMove=true;
-        config.columns=[
-        this.checkColumn,
-        {
-                id:'name',
-                header:GO.lang['strName'],
-                dataIndex: 'name',
-                renderer:function(value, p, record){
-                        if(!GO.util.empty(record.data.description))
-                        {
-                                p.attr = 'ext:qtip="'+Ext.util.Format.htmlEncode(record.data.description)+'"';
-                        }
-                        return value;
-                },
-                sortable:true
-        },{
-                header:GO.tasks.lang.dueDate,
-                dataIndex: 'due_time',
-                width:100,
-                sortable:true
-        },{
-                header: GO.tasks.lang.startsAt,
-                dataIndex: 'start_time',
-                hidden:true,
-                width:110
-        },{
-                header: GO.tasks.lang.completedAt,
-                dataIndex: 'completion_time',
-                hidden:true,
-                width:110
-        },{
-                header: GO.lang.strDescription,
-                dataIndex: 'description',
-                hidden:true,
-                width:110
-        },{
-                header: GO.lang.strStatus,
-                dataIndex: 'status',
-                hidden:true,
-                width:110
-        },{                
-                header: GO.lang.strCtime,
-                dataIndex: 'ctime',
-                hidden:true,
-                width:110
-        },{
-                header: GO.lang.strMtime,
-                dataIndex: 'mtime',
-                hidden:true,
-                width:110
-        }];
-        
+
         config.view=new Ext.grid.GridView({
             //autoFill: true,
             //forceFit: true,
