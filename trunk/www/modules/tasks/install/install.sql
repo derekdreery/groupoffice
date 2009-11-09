@@ -79,3 +79,14 @@ CREATE TABLE IF NOT EXISTS `go_links_12` (
   KEY `id` (`id`,`folder_id`),
   KEY `ctime` (`ctime`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `cf_12`
+--
+
+CREATE TABLE IF NOT EXISTS `cf_12` (
+  `link_id` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`link_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
