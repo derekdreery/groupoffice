@@ -340,26 +340,7 @@ try
 					$password='';
 				}
 
-				if(!empty($_POST['send_invitation'])){
-
-					require_once($GO_MODULES->modules['users']['class_path'].'users.class.inc.php');
-					$users = new users();
-
-					$email = $users->get_register_email();
-					
-					
-					require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
-					$swift = new GoSwift($user['email'], $email['register_email_subject']);
-					foreach($user as $key=>$value){
-						$email['register_email_body'] = str_replace('{'.$key.'}', $value, $email['register_email_body']);
-					}
-
-					$email['register_email_body']= str_replace('{url}', $GO_CONFIG->full_url, $email['register_email_body']);
-					$email['register_email_body']= str_replace('{title}', $GO_CONFIG->title, $email['register_email_body']);
-					$swift->set_body($email['register_email_body'],'plain');
-					$swift->set_from($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
-					$swift->sendmail();
-				}
+				
 
 
 				//deprecated modules get updated below
@@ -382,6 +363,30 @@ try
 				}else
 				{
 					throw new Exception($lang['users']['error_user']);
+				}
+
+
+				if(!empty($_POST['send_invitation'])){
+
+					require_once($GO_MODULES->modules['users']['class_path'].'users.class.inc.php');
+					$users = new users();
+
+					$email = $users->get_register_email();
+
+
+					require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
+					$swift = new GoSwift($user['email'], $email['register_email_subject']);
+					foreach($user as $key=>$value){
+						$email['register_email_body'] = str_replace('{'.$key.'}', $value, $email['register_email_body']);
+					}
+
+					$email['register_email_body']= str_replace('{url}', $GO_CONFIG->full_url, $email['register_email_body']);
+					$email['register_email_body']= str_replace('{title}', $GO_CONFIG->title, $email['register_email_body']);
+					$email['register_email_body']= str_replace('{password}', $_POST["password1"], $email['register_email_body']);
+
+					$swift->set_body($email['register_email_body'],'plain');
+					$swift->set_from($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
+					$swift->sendmail();
 				}
 			}
 
