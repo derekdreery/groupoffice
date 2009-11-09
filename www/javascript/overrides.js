@@ -11,11 +11,15 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
+/*Ext.override(Ext.form.TextField, {
+	stripCharsRe: /(^\s+|\s+$)/g
+});*/
 
 /*
  * Scroll menu when higher then the screen is
  *
  */
+
 Ext.override(Ext.menu.Menu, {
     showAt : function(xy, parentMenu, /* private: */_e){
         this.parentMenu = parentMenu;
