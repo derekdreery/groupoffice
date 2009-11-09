@@ -98,7 +98,12 @@ GO.tasks.TasksPanel = function(config)
         config.sm=new Ext.grid.RowSelectionModel();
         config.loadMask=true;
 
-	
+	this.searchField = new GO.form.SearchField({
+                store: config.store,
+                width:320
+        });
+
+        config.tbar = [GO.lang['strSearch'] + ':', this.searchField];
 	
         GO.tasks.TasksPanel.superclass.constructor.call(this, config);
 	

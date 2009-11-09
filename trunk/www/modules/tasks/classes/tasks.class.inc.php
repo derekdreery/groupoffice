@@ -576,10 +576,11 @@ class tasks extends db
 	$sort_order='ASC',
 	$start=0,
 	$offset=0,
-	$show_inactive=false)
+	$show_inactive=false,
+        $search_query='')
 	{
 
-                global $GO_MODULES, $response;
+                global $GO_MODULES;
                 
 		$sql  = "SELECT DISTINCT t.*";
 
@@ -648,12 +649,25 @@ class tasks extends db
 			$sql .= "t.start_time<=".$now." AND (t.due_time>=".$now." OR t.completion_time=0)";
 		}
 
+                if(!empty($search_query))
+                {
+                        if($where)
+                        {
+                                $sql .= " AND ";
+                        }
+                        else
+                        {
+                                $where=true;
+                                $sql .= " WHERE ";
+                        }
+                        $query = $this->escape($search_query);
+                        $sql .= "(t.name LIKE '".$query."' OR t.description LIKE '".$query."')";
+                }
+                
 		if($sort_field != '' && $sort_order != '')
 		{
 			$sql .=	" ORDER BY ".$this->escape($sort_field)." ".$this->escape($sort_order)."";
 		}
-
-                $response['sql'] = $sql;
                 
 		if($offset == 0)
 		{
