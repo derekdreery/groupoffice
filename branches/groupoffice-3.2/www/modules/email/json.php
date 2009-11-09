@@ -994,6 +994,10 @@ try{
 
 								$account = connect($account_id, $mailbox);
 
+								if(!empty($_POST['refresh'])){
+									$imap->clear_cache($_POST['folder_id']);
+								}
+
 								$response['trash_folder']=$account['trash'];
 
 								$response['trash']=!empty($account['trash']) && strpos($mailbox, $imap->utf7_imap_encode($account['trash']))!==false;
