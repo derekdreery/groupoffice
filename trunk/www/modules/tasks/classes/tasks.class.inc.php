@@ -668,6 +668,12 @@ class tasks extends db
 		{
 			$sql .=	" ORDER BY ".$this->escape($sort_field)." ".$this->escape($sort_order)."";
 		}
+
+                $_SESSION['GO_SESSION']['export_queries']['get_tasks']=array(
+                    'query'=>$sql,
+                    'method'=>'format_task_record',
+                    'class'=>'tasks',
+                    'require'=>__FILE__);
                 
 		if($offset == 0)
 		{
@@ -686,7 +692,13 @@ class tasks extends db
 		}
 	}
 
-
+         function format_task_record(&$record) {               
+                $record['start_time']=Date::get_timestamp($record['start_time']);
+                $record['due_time']=Date::get_timestamp($record['due_time']);
+                $record['completion_time']=Date::get_timestamp($record['completion_time']);
+                $record['ctime']=Date::get_timestamp($record['ctime']);
+                $record['mtime']=Date::get_timestamp($record['mtime']);               
+        }
 
 	function get_task($task_id)
 	{
