@@ -142,6 +142,7 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 	reset : function(){
 		this.body.removeAllListeners();
 		this.body.update("");
+		this.data={};
 		
 		this.getTopToolbar().setDisabled(true);
 	},
