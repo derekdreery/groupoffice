@@ -179,13 +179,9 @@ try{
 			break;
 
 		case 'new_folder':
-				
-			
-			
 			$folder=$files->mkdir($_POST['folder_id'], $_POST['name']);
 			$response['folder_id']=$folder['id'];
 			$response['success']=true;
-
 			break;
 
 		case 'upload':

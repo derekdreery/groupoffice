@@ -622,6 +622,9 @@ try{
 					if(empty($new_folder_name)){
 						throw new MissingFieldException();
 					}
+					if(File::has_invalid_chars($new_folder_name)){
+						throw new Exception(sprintf($lang['common']['illegalCharsError'],'\\/?*"<>|'));
+					}
 
 					$delimiter = $imap->get_mailbox_delimiter();
 					$parent_id=$_REQUEST['folder_id'];
