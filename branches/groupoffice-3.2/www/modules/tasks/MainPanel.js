@@ -100,6 +100,11 @@ GO.tasks.MainPanel = function(config){
 		this.addButton.setDisabled(!store.reader.jsonData.write_permission);
 
 		this.gridPanel.setTitle(this.tasklist_name);
+
+		if(this.taskPanel.data.tasklist_id!=this.tasklist_id)
+		{
+			this.taskPanel.reset();
+		}
 		
 	}, this);
 	
