@@ -24,4 +24,6 @@ $lang['tasks']['import_success']='%s tasks were imported';
 $lang['tasks']['call']='Call';
 
 $lang['tasks']['dueAtdate']='Due at %s';
+
+$lang['tasks']['list']='Tasklist';
 ?>
