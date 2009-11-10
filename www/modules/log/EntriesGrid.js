@@ -70,7 +70,6 @@ GO.log.EntriesGrid = function(config) {
 			cls: 'x-btn-text-icon', 
 			handler:function(){				
 				var config = {};			
-				config.query='log';
 				config.colModel = this.getColumnModel();				
 				config.title = this.ownerCt.title;
 				
@@ -85,7 +84,9 @@ GO.log.EntriesGrid = function(config) {
 				
 				if(!this.exportDialog)
 				{
-					this.exportDialog = new GO.ExportQueryDialog();
+					this.exportDialog = new GO.ExportQueryDialog({
+						query:'log'
+					});
 				}			
 				this.exportDialog.show(config);
 			},  

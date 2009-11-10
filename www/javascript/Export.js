@@ -3,7 +3,7 @@ GO.ExportQueryDialog = Ext.extend(Ext.Window, {
 	initComponent : function() {
 
 
-		if(GO.customexports[this.query]){
+		if(this.query && GO.customexports[this.query]){
 			for(var i=0;i<GO.customexports[this.query].length;i++){
 				this.formPanelItems[0].items.push({
 					boxLabel : GO.customexports[this.query][i].name,
