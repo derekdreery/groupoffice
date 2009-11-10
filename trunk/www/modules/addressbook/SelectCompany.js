@@ -17,6 +17,16 @@ GO.addressbook.SelectCompany = function(config){
 	Ext.apply(this, config);
 		
 	this.displayField='name';
+
+	var fields = {
+		columns:[],
+		fields:['id', 'name', 'post_address', 'post_address_no', 'post_zip', 'post_city', 'post_state', 'post_country', 'vat_no', 'email']
+	};
+
+	if(GO.customfields)
+	{
+		GO.customfields.addColumns(3, fields);
+	}
 	
 	this.store = new GO.data.JsonStore({
 	    url: GO.settings.modules.addressbook.url+ 'json.php',
@@ -27,7 +37,7 @@ GO.addressbook.SelectCompany = function(config){
 	    root: 'results',
 	    id: 'id',
 	    totalProperty:'total',
-	    fields: ['id', 'name', 'post_address', 'post_address_no', 'post_zip', 'post_city', 'post_state', 'post_country', 'vat_no', 'email'],
+	    fields: fields.fields,
 	    remoteSort: true
 	});
 	
