@@ -107,6 +107,16 @@ GO.email.MessagesGrid = function(config){
     config.animCollapse=false;
 	
     GO.email.MessagesGrid.superclass.constructor.call(this, config);
+
+		this.getBottomToolbar().onClick=function(which){
+			if(which== "refresh"){
+				this.store.baseParams.refresh=true;
+			}
+			Ext.PagingToolbar.prototype.onClick.call(this, which);
+			if(which== "refresh"){
+				delete this.store.baseParams.refresh;
+			}
+		};
 };
 
 Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{

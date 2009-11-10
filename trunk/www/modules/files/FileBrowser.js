@@ -834,19 +834,28 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	
 	onCompress : function(records, filename)
 	{		
-		var compress_sources = [];		
-		for(var i=0;i<records.length;i++)
+		var compress_sources = [];
+		var compress_id=0;
+		if(records.length==1 && !records[0].data.path && records[0].data.id>0){
+			compress_id=records[0].data.id;
+		}else
 		{
-			compress_sources.push(records[i].data.path);
-		}		
+			for(var i=0;i<records.length;i++)
+			{
+				compress_sources.push(records[i].data.path);
+			}
+		}
+			
 		
-		if(compress_sources.length)
+		if(compress_sources.length || compress_id>0)
 		{		
 			if(!filename || filename == '')
 			{
 				Ext.Msg.prompt(GO.files.lang.enterName, GO.files.lang.pleaseEnterNameArchive, 
-					function(id, filename){ 
-						this.onCompress(records, filename);
+					function(id, filename){
+						if(id=='ok'){
+							this.onCompress(records, filename);
+						}
 					},this);
 			}else
 			{
@@ -854,6 +863,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 				
 				store.baseParams['compress_sources']=Ext.encode(compress_sources);
 				store.baseParams['archive_name']=filename;
+				store.baseParams['compress_id']=compress_id;
 				
 				store.load({
 					callback: function(){
@@ -867,7 +877,11 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 				});
 				delete store.baseParams['compress_sources'];
 				delete store.baseParams['archive_name'];
+				delete store.baseParams['compress_id'];
 			}		
+		}else
+		{
+			alert('You can\'t compress that folder');
 		}
 	},
 	
@@ -881,7 +895,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		 {
 		 	records.push({data: {
 		 		type_id:'d:'+nodes[i].id, 
-		 		id: nodes[i].id, 
+		 		id: nodes[i].id,
 		 		extension:'folder'}});
 		 }
 		 return records;		
