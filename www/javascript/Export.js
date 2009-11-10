@@ -1,6 +1,19 @@
 GO.ExportQueryDialog = Ext.extend(Ext.Window, {
 
 	initComponent : function() {
+
+
+		if(GO.customexports[this.query]){
+			for(var i=0;i<GO.customexports[this.query].length;i++){
+				this.formPanelItems[0].items.push({
+					boxLabel : GO.customexports[this.query][i].name,
+					name : 'type',
+					inputValue : GO.customexports[this.query][i].cls
+				});
+			}
+		}
+
+
 		Ext.apply(this, {
 			title : GO.lang.cmdExport,
 			items : this.formPanel = new Ext.FormPanel({
@@ -67,6 +80,7 @@ GO.ExportQueryDialog = Ext.extend(Ext.Window, {
 				autoHeight : true,
 				xtype : 'radiogroup',
 				fieldLabel : GO.lang.strType,
+				columns:2,
 				items : [{
 							boxLabel : 'CSV',
 							name : 'type',

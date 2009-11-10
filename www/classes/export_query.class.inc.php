@@ -1,4 +1,17 @@
 <?php
+/**
+ * Copyright Intermesh
+ *
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ *
+ * @version $Id: Date.class.inc.php 3589 2009-11-05 13:02:37Z mschering $
+ * @copyright Copyright Intermesh
+ * @author Merijn Schering <mschering@intermesh.nl>
+ */
+
 require_once($GO_CONFIG->class_path.'tcpdf/tcpdf.php');
 
 //ini_set('display_errors', 'off');
@@ -18,6 +31,11 @@ class export_query extends TCPDF
 
 	var $font_size=9;
 	var $cell_height=12;
+
+	var $type = 'CSV';
+
+	var $list_separator=';';
+	var $text_separator='"';
 
 	function __construct()
 	{
@@ -42,6 +60,38 @@ class export_query extends TCPDF
 		$this->SetAutoPageBreak(true, 30);
 
 		$this->db = new db();
+
+		if($_REQUEST['type']=='PDF')
+			$this->type='PDF';
+
+		$this->list_separator=$_SESSION['GO_SESSION']['list_separator'];
+		$this->text_separator=$_SESSION['GO_SESSION']['text_separator'];
+	}
+
+	function find_custom_exports(){
+		global $GO_CONFIG;
+
+		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+		$fs = new filesystem();
+
+		$ce=array();
+
+		$files = $fs->get_files($GO_CONFIG->file_storage_path.'customexports');
+		while($file = array_shift($files)){
+			require_once($file['path']);
+
+			$names = explode('.', $file['name']);
+			
+			$cls = new $names[0];
+
+			if(!isset($ce[$cls->query]))
+				$ce[$cls->query]=array();
+
+			$ce[$cls->query][]=array('name'=>$cls->name, 'cls'=>$names[0]);
+		}
+
+		return 'GO.customexports='.json_encode($ce);
+
 	}
 
 	function Footer(){
@@ -229,7 +279,7 @@ class export_query extends TCPDF
 	function download_headers()
 	{
 		$browser = detect_browser();
-		if($_REQUEST['type']=='CSV')
+		if($this->type=='CSV')
 		{
 			header("Content-type: text/x-csv;charset=UTF-8");
 			if ($browser['name'] == 'MSIE')
@@ -262,46 +312,46 @@ class export_query extends TCPDF
 
 	function export($fp)
 	{
-		if($_REQUEST['type']=='CSV')
+		global $GO_MODULES;
+		
+		if($GO_MODULES->has_module('customfields')) {
+			require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+			$this->cf = new customfields();
+		}else
+		{
+			$this->cf=false;
+		}
+
+		$this->query();
+		$this->init_columns();
+		
+		if($this->type=='CSV')
 		return $this->export_to_csv($fp);
 		else
 		return $this->export_to_pdf($fp);
 	}
 
-	function print_column_headers($headers){
-
-		$this->cellWidth = $this->pageWidth/count($headers);
-
-		for($i=0;$i<count($headers);$i++)
-		{
-			$this->Cell($this->cellWidth, 20, $headers[$i], 1,0,'L', 1);
+	function print_column_headers(){
+		$this->cellWidth = $this->pageWidth/count($this->columns);
+		if(count($this->headers)){
+			for($i=0;$i<count($this->headers);$i++)
+			{
+				$this->Cell($this->cellWidth, 20, $this->headers[$i], 1,0,'L', 1);
+			}
+			$this->Ln();
 		}
-		$this->Ln();
 	}
 
-	function export_to_pdf($fp){
-		global $GO_USERS, $lang, $GO_MODULES;
-
-
-		if($GO_MODULES->has_module('customfields')) {
-			require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
-			$cf = new customfields();
-		}else
+	function format_record(&$record){
+		if(is_array($this->q) && isset($this->q['method']))
 		{
-			$cf=false;
+			call_user_func_array(array($this->q['class'], $this->q['method']),array(&$record, $this->cf));
 		}
+	}
 
-		$this->query();
-
-		$this->AddPage();
-
-		//green border
-		$this->SetDrawColor(125,165, 65);
-		$this->SetFillColor(248, 248, 248);
-
-
-		$columns=array();
-		$headers=array();
+	function init_columns(){
+		$this->columns=array();
+		$this->headers=array();
 		if(isset($_REQUEST['columns']))
 		{
 			$indexesAndHeaders = explode(',', $_REQUEST['columns']);
@@ -310,12 +360,22 @@ class export_query extends TCPDF
 			{
 				$indexAndHeader = explode(':', $i);
 
-				$headers[]=$indexAndHeader[1];
-				$columns[]=$indexAndHeader[0];
+				$this->headers[]=$indexAndHeader[1];
+				$this->columns[]=$indexAndHeader[0];
 			}
-
-			$this->print_column_headers($headers);
 		}
+	}
+
+	function export_to_pdf($fp){
+		global $GO_USERS, $lang, $GO_MODULES;
+
+		$this->AddPage();
+
+		//green border
+		$this->SetDrawColor(125,165, 65);
+		$this->SetFillColor(248, 248, 248);
+
+		$this->print_column_headers();
 
 
 		while($record = $this->db->next_record())
@@ -327,29 +387,31 @@ class export_query extends TCPDF
 				}
 			}
 
-			if(!count($columns))
+			if(!count($this->columns))
 			{
 				foreach($record as $key=>$value)
 				{
-					$columns[]=$key;
-					$headers[]=$key;
+					$this->columns[]=$key;
+					$this->headers[]=$key;
 				}
-				$this->print_column_headers($headers);
+				$this->print_column_headers();
 			}
 
-			if(is_array($this->q) && isset($this->q['method']))
+			/*if(is_array($this->q) && isset($this->q['method']))
 			{
 				call_user_func_array(array($this->q['class'], $this->q['method']),array(&$record, $cf));
-			}
+			}*/
 
-			if(isset($record['user_id']) && isset($columns['user_id']))
+			$this->format_record($record);
+
+			if(isset($record['user_id']) && isset($this->columns['user_id']))
 			{
 				$user = $GO_USERS->get_user($record['user_id']);
 				$record['user_id']=$user['username'];
 			}
 
 			$lines=1;
-			foreach($columns as $index)
+			foreach($this->columns as $index)
 			{
 				$new_lines = $this->getNumLines($record[$index],$this->cellWidth);
 				if($new_lines>$lines)
@@ -361,10 +423,10 @@ class export_query extends TCPDF
 			if($lines*($this->font_size+2)+8+$this->getY()>$this->h-$this->bMargin)
 			{
 				$this->AddPage();
-				$this->print_column_headers($headers);
+				$this->print_column_headers();
 			}
 			
-			foreach($columns as $index)
+			foreach($this->columns as $index)
 			{
 				$this->MultiCell($this->cellWidth,$lines*($this->font_size+2)+8, $record[$index],1,'L',0,0);				
 			}
@@ -377,7 +439,7 @@ class export_query extends TCPDF
 			$this->Ln();
 			$this->Cell($this->getPageWidth(),20,$lang['common']['totals'].':');
 			$this->Ln();
-			foreach($columns as $index)
+			foreach($this->columns as $index)
 			{
 				$value = isset($this->totals[$index]) ? Number::format($this->totals[$index]) : '';
 				$this->Cell($this->cellWidth, 20, $value, 'T',0,'L');
@@ -387,71 +449,56 @@ class export_query extends TCPDF
 		fwrite($fp, $this->Output('export.pdf', 'S'));
 	}
 
+	function fputcsv($fp, $record, $ls, $ts){
+
+		if(empty($ts)){
+			$data = implode($ls, $record)."\r\n";
+			return fputs($fp, $data);
+		}else
+		{
+			return fputcsv($fp, $record, $ls, $ts);
+		}
+	}
+
 	function export_to_csv($fp){
 
 		global $GO_USERS, $lang, $GO_MODULES;
 
+		
 
-		if($GO_MODULES->has_module('customfields')) {
-			require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
-			$cf = new customfields();
-		}else
-		{
-			$cf=false;
-		}
-
-		$this->query();
-
-		$columns=array();
-		$headers=array();
-		if(isset($_REQUEST['columns']))
-		{
-			$indexesAndHeaders = explode(',', $_REQUEST['columns']);
-
-			foreach($indexesAndHeaders as $i)
-			{
-				$indexAndHeader = explode(':', $i);
-
-				$headers[]=$indexAndHeader[1];
-				$columns[]=$indexAndHeader[0];
-			}
-
-			fputcsv($fp, $headers, $_SESSION['GO_SESSION']['list_separator'], $_SESSION['GO_SESSION']['text_separator']);
-		}
-
-
+		if(count($this->headers))
+			$this->fputcsv($fp, $this->headers, $this->list_separator, $this->text_separator);
 
 
 		while($record = $this->db->next_record())
 		{
-			if(!count($columns))
+			if(!count($this->columns))
 			{
-
 				foreach($record as $key=>$value)
 				{
-					$columns[]=$key;
-					$headers[]=$key;
+					$this->columns[]=$key;
+					$this->headers[]=$key;
 				}
-
-				fputcsv($fp, $headers, $_SESSION['GO_SESSION']['list_separator'], $_SESSION['GO_SESSION']['text_separator']);
+				$this->fputcsv($fp, $this->headers, $this->list_separator, $this->text_separator);
 			}
 
-			if(is_array($this->q) && isset($this->q['method']))
+			/*if(is_array($this->q) && isset($this->q['method']))
 			{
 				call_user_func_array(array($this->q['class'], $this->q['method']),array(&$record, $cf));
-			}
+			}*/
+			$this->format_record($record);
 
-			if(isset($record['user_id']) && isset($columns['user_id']))
+			if(isset($record['user_id']) && isset($this->columns['user_id']))
 			{
 				$user = $GO_USERS->get_user($record['user_id']);
 				$record['user_id']=$user['username'];
 			}
 			$values=array();
-			foreach($columns as $index)
+			foreach($this->columns as $index)
 			{
 				$values[] = $record[$index];
 			}
-			fputcsv($fp, $values, $_SESSION['GO_SESSION']['list_separator'], $_SESSION['GO_SESSION']['text_separator']);
+			$this->fputcsv($fp, $values,$this->list_separator, $this->text_separator);
 		}
 	}
 }
