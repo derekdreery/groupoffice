@@ -599,7 +599,15 @@ try{
 
 				case 'add_folder':
 
-					$account = connect(($_REQUEST['account_id']));
+					$account = connect($_REQUEST['account_id']);
+
+					$new_folder_name = trim($_POST['new_folder_name']);
+					if(empty($new_folder_name)){
+						throw new MissingFieldException();
+					}
+					if(File::has_invalid_chars($new_folder_name)){
+						throw new Exception(sprintf($lang['common']['illegalCharsError'],'\\/?*"<>|'));
+					}
 
 					$delimiter = $imap->get_mailbox_delimiter();
 					$parent_id=$_REQUEST['folder_id'];
@@ -611,7 +619,7 @@ try{
 							{
 								$parent_id=0;
 							}
-							$new_folder_name=$folder['name'].$delimiter.$imap->utf7_imap_encode($_POST['new_folder_name']);
+							$new_folder_name=$folder['name'].$delimiter.$imap->utf7_imap_encode($new_folder_name);
 						}else {
 							$response['success']=false;
 							$response['feedback']=$lang['comon']['selectError'];
@@ -707,11 +715,11 @@ try{
 
 				case 'delete_folder':
 
-					if($folder = $email->get_folder_by_id(($_REQUEST['folder_id'])))
+					if($folder = $email->get_folder_by_id($_REQUEST['folder_id']))
 					{
 						$account = connect($folder['account_id']);
 
-						if ($imap->delete_folder($folder['name'], $account['mbroot']))
+						if (empty($folder['name']) || $imap->delete_folder($folder['name'], $account['mbroot']))
 						{
 							$response['success']=$email->delete_folder($account['id'], $folder['name']);
 						}else {

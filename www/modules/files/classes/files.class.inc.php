@@ -1249,6 +1249,8 @@ class files extends db {
 
 		global $GO_SECURITY, $GO_CONFIG, $lang;
 
+		$name = trim($name);
+
 		if($user_id==0) {
 			$user_id=$GO_SECURITY->user_id;
 		}
@@ -1277,6 +1279,10 @@ class files extends db {
 
 		if (empty($name)) {
 			throw new Exception($lang['common']['missingField']);
+		}
+
+		if(strlen($name)>240){
+			throw new Exception('Filename too long');
 		}
 
 		$rel_path=$this->build_path($parent);

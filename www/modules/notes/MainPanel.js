@@ -72,6 +72,13 @@ GO.notes.MainPanel = function(config){
 	this.centerPanel.on("delayedrowselect",function(grid, rowIndex, r){
 		this.eastPanel.load(r.data.id);		
 	}, this);
+
+	this.centerPanel.store.on('load', function(){
+		if(this.eastPanel.data.category_id!=this.category_id)
+		{
+			this.eastPanel.reset();
+		}
+	}, this);
 	
 	this.eastPanel = new GO.notes.NotePanel({
 		region:'east',

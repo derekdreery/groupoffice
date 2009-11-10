@@ -568,28 +568,43 @@ try{
 									$compress_sources = json_decode($_POST['compress_sources'],true);
 									$archive_name = $_POST['archive_name'].'.zip';
 
-                                    $full_path = $GO_CONFIG->file_storage_path.$path;
-
-									if(file_exists($full_path.'/'.$archive_name))
+									if(!empty($_POST['compress_id'])){
+										$compress_rel_path = $files->build_path($_POST['compress_id']);
+										$full_path = $GO_CONFIG->file_storage_path.dirname($compress_rel_path);
+										$compress_sources=array($compress_rel_path);
+									}else
 									{
-										throw new Exception($lang['files']['filenameExists']);
+										$full_path = $GO_CONFIG->file_storage_path.$path;
+
+										if(file_exists($full_path.'/'.$archive_name))
+										{
+											throw new Exception($lang['files']['filenameExists']);
+										}
 									}
 
                   $compress_sources = array_map('utf8_basename', $compress_sources);
 
-									chdir($full_path);
+									chdir($full_path);									
 
                   $cmd = $GO_CONFIG->cmd_zip.' -r "'.$archive_name.'" "'.implode('" "',$compress_sources).'"';
 
 									exec($cmd, $output);
 
-									if(!file_exists($full_path.'/'.$archive_name))
+									$full_file_path = $full_path.'/'.$archive_name;
+									if(!file_exists($full_file_path))
 									{
 											throw new Exception('Command failed: '.$cmd."<br /><br />".implode("<br />", $output));
 									}
 
+									if($full_path!=$GO_CONFIG->file_storage_path.$path)
+									{
+										$new_full_file_path =$GO_CONFIG->file_storage_path.$path.'/'.utf8_basename($full_file_path);
+										rename($full_file_path, $new_full_file_path);
+										$full_file_path=$new_full_file_path;
+									}
+
 									$response['compress_success']=true;;
-                  $files->import_file($full_path.'/'.$archive_name,$curfolder['id']);
+                  $files->import_file($full_file_path,$curfolder['id']);
 
 								}
 							}catch(Exception $e)

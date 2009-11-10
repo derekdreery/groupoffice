@@ -26,6 +26,7 @@ class File
 {
 	var $path;
 
+	const INVALID_CHARS = '/[\/:\*\?"<>|\\\]/';
 
 	function __construct($path){
 		$this->path = $path;
@@ -63,8 +64,12 @@ class File
 		return $size;
 	}
 
+	function has_invalid_chars($filename){
+		return preg_match(File::INVALID_CHARS, $filename);
+	}
+
 	function strip_invalid_chars($filename){
-		$filename = trim(preg_replace('/[\/:\*\?"<>|\\\]/','', $filename));
+		$filename = trim(preg_replace(File::INVALID_CHARS,'', $filename));
 
 		//IE likes to change a double white space to a single space
 		//We must do this ourselves so the filenames will match.
