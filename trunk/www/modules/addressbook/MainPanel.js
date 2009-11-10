@@ -297,7 +297,9 @@ GO.addressbook.MainPanel = function(config)
 				
 				if(!this.exportDialog)
 				{
-					this.exportDialog = new GO.ExportQueryDialog();
+					this.exportDialog = new GO.ExportQueryDialog({
+							query:config.query
+						});
 				}			
 				this.exportDialog.show(config);
 
