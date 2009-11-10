@@ -1160,8 +1160,7 @@ class files extends db {
 		if($offset>0) {
 		 	$sql .= " LIMIT ".intval($start).",".intval($offset);
 		}
-		debug($sql);
-		debug($params);
+
 		$this->query($sql, $types, $params);
 		return $offset>0 ? $this->found_rows() : $this->num_rows();
 	}

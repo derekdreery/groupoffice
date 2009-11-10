@@ -293,6 +293,13 @@ if($GO_SECURITY->logged_in()) {
 	}
 
 	$GO_SCRIPTS_JS='';
+
+	require_once($GO_CONFIG->class_path.'export_query.class.inc.php');
+	$eq = new export_query();
+
+	$GO_SCRIPTS_JS.=$eq->find_custom_exports();
+
+	
 	foreach($GO_MODULES->modules as $module) {
 		if($module['read_permission']) {
 			if(file_exists($module['path'].'scripts.inc.php')) {
@@ -301,11 +308,7 @@ if($GO_SECURITY->logged_in()) {
 		}
 	}
 	
-	require_once($GO_CONFIG->class_path.'export_query.class.inc.php');
-	$eq = new export_query();
-
-	$GO_SCRIPTS_JS.=$eq->find_custom_exports();
-
+	
 
 	$filename = $GO_SECURITY->user_id.'-scripts.js';
 	$path = $GO_CONFIG->file_storage_path.'cache/'.$filename;
