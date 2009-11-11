@@ -578,10 +578,9 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 		this.notifyCheck.setChecked(false);
 		this.normalPriorityCheck.setChecked(true);
 
-		if (this.attachmentsGrid && !keepAttachments) {
-			this.attachmentsGrid.store.loadData({
-				results : []
-			});
+		if (!keepAttachments) {
+			this.attachmentsStore.removeAll();
+			this.updateAttachmentsButton();
 		}
 	},
 
@@ -602,20 +601,22 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 	},
 
 	show : function(config) {
+
+		Ext.getBody().mask(GO.lang.waitMsgLoad);
 		
 		this.showConfig=config;
 
 		if (!this.rendered) {
 
-			this.fromCombo.store.on('load', function() {
+			var loadCb = function() {
 				var records = this.fromCombo.store.getRange();
 				if (records.length) {
 					if (!config.account_id) {
-						config.account_id = records[0].data.account_id;
+						this.showConfig.account_id = records[0].data.account_id;
 					}
 
 					this.render(Ext.getBody());
-					this.show(config);
+					this.show(this.showConfig);
 					this.showCC(false);
 					this.showBCC(false);
 					return;
@@ -625,18 +626,22 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 					Ext.Msg.alert(GO.email.lang.noAccountTitle,
 						GO.email.lang.noAccount);
 				}
-			}, this, {
-				single : true
-			});
+			};
 
 			if (!GO.mailings) {
 				config.template_id = 0;
-				this.fromCombo.store.load();
+				this.fromCombo.store.load({
+					callback:loadCb,
+					scope:this
+				});
 			} else {
 
 				this.templatesStore.load({
 					callback : function() {
-						this.fromCombo.store.load();
+						this.fromCombo.store.load({
+							callback:loadCb,
+							scope:this
+						});
 					},
 					scope : this
 				});
@@ -644,12 +649,9 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 
 		} else if (config.template_id == undefined && this.templatesStore
 			&& this.templatesStore.getTotalCount() > 1) {
-			this.showConfig = config;
+			//this.showConfig = config;
 			this.templatesWindow.show();
 		} else {
-			this.updateAttachmentsButton();
-
-			
 
 			if (config.template_id == undefined && this.templatesStore
 				&& this.templatesStore.getTotalCount() == 1) {
@@ -678,8 +680,6 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			if (config.values) {
 				this.formPanel.form.setValues(config.values);
 			}
-
-			
 
 			//this will be true when swithing from html to text or vice versa
 			if(!config.keepEditingMode)
@@ -790,7 +790,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 			{
 				this.afterShowAndLoad(true);
 			}
-			GO.email.EmailComposer.superclass.show.call(this);
+			
 		}
 	},
 	
@@ -819,6 +819,9 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 		this.setEditorHeight();
 		this.startAutoSave();
 		this.bodyContentAtWindowOpen=this.editor.getValue();
+
+		Ext.getBody().unmask();
+		GO.email.EmailComposer.superclass.show.call(this);
 	},
 	
 	addSignature : function(accountRecord){
