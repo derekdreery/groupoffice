@@ -61,7 +61,7 @@ class export_query extends TCPDF
 
 		$this->db = new db();
 
-		if($_REQUEST['type']=='PDF')
+		if(isset($_REQUEST['type']) && $_REQUEST['type']=='PDF')
 			$this->type='PDF';
 
 		$this->list_separator=$_SESSION['GO_SESSION']['list_separator'];

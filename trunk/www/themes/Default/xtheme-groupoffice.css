@@ -304,3 +304,8 @@ body.x-body-masked .x-window-plain .x-window-mc{background:#d1d8db;}
 .x-tab-strip span.x-tab-strip-text{
 	line-height: 15px;
 }
+
+
+.x-grid-group-hd {
+border-bottom:2px solid #C1D1D6;
+}
