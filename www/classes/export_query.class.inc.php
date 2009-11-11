@@ -90,7 +90,7 @@ class export_query extends TCPDF
 			$ce[$cls->query][]=array('name'=>$cls->name, 'cls'=>$names[0]);
 		}
 
-		return 'GO.customexports='.json_encode($ce);
+		return 'GO.customexports='.json_encode($ce).';';
 
 	}
 
