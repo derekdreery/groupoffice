@@ -1,5 +1,5 @@
-groupoffice-mailserver (3.2.40-1) three; urgency=low
+groupoffice-mailserver (3.2.46-1) three; urgency=low
 
   * Initial release (LP: #394166: This report is public)
 
- -- Merijn Schering <mschering@intermesh.nl>  Wed, 23 Oct 2009 16:08:29 +0200
+ -- Merijn Schering <mschering@intermesh.nl>  Wed, 11 Nov 2009 12:30:00 +0200

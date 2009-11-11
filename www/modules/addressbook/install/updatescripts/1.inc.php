@@ -1,6 +1,7 @@
 <?php
 if(is_dir($GO_CONFIG->module_path.'mailings'))
 {
+	$module=array();
 	$module['version']='0';
 	$module['id']='mailings';
 	$module['sort_order'] = count($GO_MODULES->modules)+1;
