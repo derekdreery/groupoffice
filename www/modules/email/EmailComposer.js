@@ -561,6 +561,11 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 
 	reset : function(keepAttachments) {
 
+		this.showCC(false);
+		this.showBCC(false);
+		this.bccFieldCheck.setChecked(false);
+		this.ccFieldCheck.setChecked(false);
+		
 		this.sendParams = {
 			'task' : 'sendmail',
 			notification : 'false',
@@ -592,7 +597,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 		}
 	},
 	
-	showBCC : function(show){
+	showBCC : function(show){	
 		this.bccCombo.getEl().up('.x-form-item').setDisplayed(show);
 		if(show)
 		{
@@ -617,8 +622,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 
 					this.render(Ext.getBody());
 					this.show(this.showConfig);
-					this.showCC(false);
-					this.showBCC(false);
+					
 					return;
 
 				} else {
@@ -795,10 +799,6 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 	},
 	
 	afterShowAndLoad : function(addSignature){
-		
-		this.bccFieldCheck.setChecked(this.bccCombo.getValue()!='');
-		this.ccFieldCheck.setChecked(this.ccCombo.getValue()!='');
-		
 		if(addSignature)
 		{
 			this.addSignature();
@@ -818,7 +818,10 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 
 		this.setEditorHeight();
 		this.startAutoSave();
-		this.bodyContentAtWindowOpen=this.editor.getValue();
+		this.bodyContentAtWindowOpen=this.editor.getValue();		
+
+		this.bccFieldCheck.setChecked(this.bccCombo.getValue()!='');
+		this.ccFieldCheck.setChecked(this.ccCombo.getValue()!='');
 
 		Ext.getBody().unmask();
 		GO.email.EmailComposer.superclass.show.call(this);
@@ -1184,6 +1187,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 	},
 
 	onShowFieldCheck : function(check, checked) {
+		
 		switch (check.id) {
 			case this.formFieldCheck.id :
 				this.fromCombo.getEl().up('.x-form-item').setDisplayed(checked);
