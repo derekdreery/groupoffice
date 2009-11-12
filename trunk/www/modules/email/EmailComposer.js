@@ -654,6 +654,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 		} else if (config.template_id == undefined && this.templatesStore
 			&& this.templatesStore.getTotalCount() > 1) {
 			//this.showConfig = config;
+			Ext.getBody().unmask();
 			this.templatesWindow.show();
 		} else {
 
