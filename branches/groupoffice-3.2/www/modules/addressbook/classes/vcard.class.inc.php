@@ -83,9 +83,9 @@ class vcard extends addressbook {
 		$this->index = null;
 		$this->instance = array ();
 		$this->version = 'VERSION:2.1';
-		$this->_set_revision();		
+		$this->_set_revision();
 		$this->vcf = '';
-		
+
 		parent::__construct();
 	}
 
@@ -103,11 +103,11 @@ class vcard extends addressbook {
 			if ($this->_set_vcard($content, "file")) {
 				foreach ($this->instance as $vcard) {
 					$record = $this->_get_vcard_contact($vcard);
-					
+
 				//	go_log(LOG_DEBUG, var_export($record, true));
 
 					$contact = $record['contact'];
-					
+
 
 					global $GO_SECURITY;
 					if ($ab = $this->get_addressbook($addressbook_id)) {
@@ -117,11 +117,11 @@ class vcard extends addressbook {
 							$company = $record['company'];
 							$company['addressbook_id']=$contact['addressbook_id'];
 							if(!$contact['company_id'] = $this->get_company_id_by_name($company['name'], $addressbook_id))
-							{							
+							{
 								$contact['company_id'] = $this->add_company($company);
 							}
 						}
-					//	unset($contact['company_name']);						
+					//	unset($contact['company_name']);
 						$this->add_contact($contact);
 
 					} else {
@@ -136,7 +136,7 @@ class vcard extends addressbook {
 		}
 		return true;
 	}
-	
+
 	function vcf_to_go($vcf_string)
 	{
 		$vcf_string = str_replace(WORD_WRAP_DOS, WORD_WRAP_UNIX, $vcf_string);
@@ -149,10 +149,10 @@ class vcard extends addressbook {
 		$vcf_string = preg_replace($regex, "", $vcf_string);
 
 		$content = preg_split('/'.WORD_WRAP_UNIX.'/', $vcf_string);
-		
+
 		if($this->_set_vcard($content, "file"))
 		{
-			return $this->_get_vcard_contact($this->instance[0]);					
+			return $this->_get_vcard_contact($this->instance[0]);
 		}
 		return false;
 	}
@@ -250,7 +250,7 @@ class vcard extends addressbook {
 
 			switch ($property->name) {
 				case "N" :
-					
+
 					$record['contact']['title'] = isset ($property->values[N_PREFIX]) ? $property->values[N_PREFIX] : "";
 					$record['contact']['last_name'] = isset ($property->values[N_FAMILY]) ? $property->values[N_FAMILY] : "";
 					$record['contact']['first_name'] = isset ($property->values[N_GIVEN]) ? $property->values[N_GIVEN] : "";
@@ -290,9 +290,9 @@ class vcard extends addressbook {
 					}
 					break;
 				case "TEL" :
-					
+
 					if (in_array('HOME', $property->parm_types)) {
-						
+
 						if (in_array('FAX', $property->parm_types)) {
 							$record['contact']['fax'] = $property->values[0];
 						}
@@ -403,7 +403,7 @@ class vcard extends addressbook {
 					break;
 				case GO_SALUTATION :
 					$record['contact']['salutation'] = $property->values[0];
-					break;				
+					break;
 			}
 		}
 		return $record;
@@ -443,7 +443,7 @@ class vcard extends addressbook {
 		$content = preg_split('/'.WORD_WRAP_UNIX.'/', $content);
 		return $content;
 	}
-	
+
 
 
 	/**
@@ -537,7 +537,7 @@ class vcard extends addressbook {
 			return false;
 		}
 	}
-	
+
 	/*function format_line($name_part, $value_part)
 	{
 		$value_part = str_replace("\r\n","\n", $value_part);
@@ -574,30 +574,30 @@ class vcard extends addressbook {
 						//BEGIN:VCARD
 						$lines[] = "BEGIN:VCARD";
 						$lines[] = $this->version;
-						
+
 						foreach ($vcard as $property) {
 							switch ($property->name) {
 								case "N" :
 									$name_part = $property->name;
-									
-																		
-									$value_part =										
+
+
+									$value_part =
 										$property->values[N_FAMILY].DELIM_SEMICOLON.
 										$property->values[N_GIVEN].DELIM_SEMICOLON.
 										$property->values[N_ADDITIONAL].DELIM_SEMICOLON.
 										$property->values[N_PREFIX];
-										
-							
+
+
 									$lines = array_merge($lines, String::format_vcard_line($name_part, $value_part, $this->add_leading_space_to_qp_encoded_line_wraps));
-								
-									
+
+
 									$name_part = "FN";
 									$value_part = $property->values[N_GIVEN].CHAR_WSP.$property->values[N_FAMILY];
 									$lines = array_merge($lines, String::format_vcard_line($name_part, $value_part, $this->add_leading_space_to_qp_encoded_line_wraps));
 
 									break;
 								case "ADR" :
-									if (!empty ($property->values[ADR_STREET])) {
+									//if (!empty ($property->values[ADR_STREET])) {
 										$parm_types = "";
 										foreach ($property->parm_types as $parm_type) {
 											//$parm_types .= DELIM_SEMICOLON . PARM_TYPE . DELIM_EQUAL . $parm_type;
@@ -610,71 +610,71 @@ class vcard extends addressbook {
 											$property->values[ADR_REGION].DELIM_SEMICOLON.
 											$property->values[ADR_POSTALCODE].DELIM_SEMICOLON.
 											$property->values[ADR_COUNTRY];
-											
+
 										$lines = array_merge($lines, String::format_vcard_line($name_part, $value_part, $this->add_leading_space_to_qp_encoded_line_wraps));
-									}
+									//}
 									break;
 								case "EMAIL" :
-									if (!empty ($property->values[0])) {
+									//if (!empty ($property->values[0])) {
 										$line = $property->name;
-				
+
 										foreach ($property->parm_types as $parm_type) {
 											if(!empty($parm_type))
 											{
 												$line .= DELIM_SEMICOLON.$parm_type;
 											}
 										}
-										
+
 										$line .= DELIM_COLON.$property->values[0];
 										$lines[] = $line;
-									}
+									//}
 									break;
 								case "TEL" :
-									if (!empty ($property->values[0])) {
+									//if (!empty ($property->values[0])) {
 										$parm_types = "";
 										foreach ($property->parm_types as $parm_type) {
 											//											$parm_types .= DELIM_SEMICOLON . PARM_TYPE . DELIM_EQUAL . $parm_type;
 											$parm_types .= DELIM_SEMICOLON.$parm_type;
 										}
 										$lines[] = $property->name.$parm_types.DELIM_COLON.$property->values[0];
-									}
+									//}
 									break;
 								case "ORG" :
-									if (!empty ($property->values[ORG_NAME])) {
-										
+									//if (!empty ($property->values[ORG_NAME])) {
+
 										$name_part = $property->name;
 										$value_part = $property->values[ORG_NAME].DELIM_SEMICOLON.$property->values[ORG_UNIT];
-										
+
 										$lines = array_merge($lines, String::format_vcard_line($name_part, $value_part, $this->add_leading_space_to_qp_encoded_line_wraps));
-									}
+									//}
 									break;
 								case "URL" :
-									if (!empty ($property->values[0])) {
+									//if (!empty ($property->values[0])) {
 										$parm_types = "";
 										foreach ($property->parm_types as $parm_type) {
 											//											$parm_types .= DELIM_SEMICOLON . PARM_TYPE . DELIM_EQUAL . $parm_type;
 											$parm_types .= DELIM_SEMICOLON.$parm_type;
 										}
-										
+
 										$lines[] = $property->name.$parm_types.DELIM_COLON.$property->values[0];
-									}
+									//}
 									break;
 								case "BDAY" :
-				
-									if (intval($property->values[0]) > 0) {
+
+									//if (intval($property->values[0]) > 0) {
 										//$lines[] = $property->name.DELIM_COLON.$property->values[0];
 										$lines = array_merge($lines, String::format_vcard_line($property->name, $property->values[0], $this->add_leading_space_to_qp_encoded_line_wraps));
-									}
+									//}
 									break;
 								default :
-									if (!empty ($property->values[0])) {
+									if (!empty ($property->name)) {
 										$lines = array_merge($lines, String::format_vcard_line($property->name, $property->values[0], $this->add_leading_space_to_qp_encoded_line_wraps));
 									}
 									break;
 							/*	case 'X-GO-SALUTATION':
 									if (!empty ($property->values[0])) {
 										$lines = array_merge($lines, String::format_vcard_line($property->name, $property->values[0], $this->add_leading_space_to_qp_encoded_line_wraps));
-									}									
+									}
 								break;*/
 							}
 						}
@@ -689,14 +689,14 @@ class vcard extends addressbook {
 							$lines[] = "END:VCARD";
 						}*/
 		}
-		
+
 		/*$this->vcf = '';
 		foreach ($lines as $line) {
 		 preg_match_all( '/.{1,73}([^=]{0,2})?/', $line, $matches);
 		 $this->vcf .= implode( '=' . chr(13).chr(10), $matches[0] )."\r\n"; // add soft crlf's
 		}*/
 		$this->vcf = implode("\r\n", $lines);
-		
+
 		if (empty ($this->vcf)) {
 			return false;
 		}
@@ -869,7 +869,7 @@ class vcard_property {
 				case "email" :
 					$this->name = "EMAIL";
 					$this->parm_types[0] = "INTERNET";
-					$this->parm_types[1] = "PREF";					
+					$this->parm_types[1] = "PREF";
 					$this->values[0] = $value;
 					break;
 				case "email2":
@@ -1029,7 +1029,7 @@ class vcard_property {
 					break;
 				case 'salutation':
 					$this->name = GO_SALUTATION;
-					$this->values[0] = $value;					
+					$this->values[0] = $value;
 				break;
 			}
 		}
