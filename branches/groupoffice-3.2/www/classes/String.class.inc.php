@@ -797,6 +797,10 @@ class String {
 	 */
 
 	function quoted_printable_encode($sLine,$bEmulate_imap_8bit=false) {
+
+		if(empty($sLine)){
+			return $sLine;
+		}
 	
 		$sLine = str_replace("\r", '', $sLine);
 		$sLine = str_replace("\n", "\r\n", $sLine);

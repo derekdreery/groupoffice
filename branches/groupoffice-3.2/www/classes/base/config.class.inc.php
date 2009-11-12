@@ -854,7 +854,7 @@ class GO_CONFIG {
 		$this->configuration_url = $this->host.$this->configuration_url.'/';
 
 
-		if($this->debug) {
+		if($this->debug) {			
 			list ($usec, $sec) = explode(" ", microtime());
 			$this->loadstart = ((float) $usec + (float) $sec);
 		}
@@ -887,6 +887,9 @@ class GO_CONFIG {
 			debug('Performed '.$GLOBALS['query_count'].' database queries', $this);
 
 			debug('Page load took: '.(getmicrotime()-$this->loadstart).'ms', $this);
+
+			debug('Peak memory usage:'.memory_get_peak_usage(), $this);
+			debug("--------------------\n", $this);
 		}
 	}
 
