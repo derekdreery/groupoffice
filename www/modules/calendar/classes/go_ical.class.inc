@@ -136,14 +136,14 @@ class go_ical extends calendar
 		$lines[] = "UID:".$event['id'];
 
 		$lines = array_merge($lines, String::format_vcard_line('SUMMARY', $event['name'], $this->add_leading_space_to_qp_encoded_line_wraps));
-		if ($event['description'] != '')
-		{
+		//if ($event['description'] != '')
+		//{
 			$lines = array_merge($lines, String::format_vcard_line('DESCRIPTION', $event['description'], $this->add_leading_space_to_qp_encoded_line_wraps));
-		}
-		if ($event['location'] != '')
-		{
+		//}
+		//if ($event['location'] != '')
+		//{
 			$lines = array_merge($lines, String::format_vcard_line('LOCATION', $event['location'], $this->add_leading_space_to_qp_encoded_line_wraps));
-		}
+		//}
 
 		$lines[] =	"STATUS:".$event['status'];
 			

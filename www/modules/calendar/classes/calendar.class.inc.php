@@ -1804,7 +1804,6 @@ class calendar extends db
 		}
 
 		if(empty($event['start_time'])){
-			debug($object);
 			return false;
 		}
 

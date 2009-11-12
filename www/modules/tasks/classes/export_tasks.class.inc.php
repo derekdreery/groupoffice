@@ -117,10 +117,10 @@ class export_tasks
 		$lines[] = "UID:".$task['id'];
 
 		$lines = array_merge($lines, String::format_vcard_line('SUMMARY', $task['name'], $this->add_leading_space_to_qp_encoded_line_wraps));
-		if ($task['description'] != '')
-		{
+		//if ($task['description'] != '')
+		//{
 			$lines = array_merge($lines, String::format_vcard_line('DESCRIPTION', $task['description'], $this->add_leading_space_to_qp_encoded_line_wraps));
-		}
+		//}
 
 		$lines[] =	"STATUS:".$task['status'];
 			

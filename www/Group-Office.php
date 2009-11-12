@@ -35,6 +35,8 @@ require($root.'classes/base/config.class.inc.php');
 //load configuration
 $GO_CONFIG = new GO_CONFIG();
 
+
+
 if(!$GO_CONFIG->enabled)
 {
 	die('<h1>Disabled</h1>This Group-Office installation has been disabled');
@@ -50,6 +52,7 @@ if ( isset( $GO_INCLUDES ) ) {
 //start session
 session_name('groupoffice');
 session_start();
+debug('['.date('Y-m-d G:i').'] Start of new request');
 
 if($GO_CONFIG->debug)
 {
