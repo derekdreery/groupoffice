@@ -981,13 +981,13 @@ try{
 								$account_id = isset ($_REQUEST['account_id']) ? $_REQUEST['account_id'] : 0;
 								$mailbox = isset ($_REQUEST['mailbox']) ? ($_REQUEST['mailbox']) : 'INBOX';
 								$query = isset($_POST['query']) ? ($_POST['query']) : '';
-                                                                $unread = isset($_POST['unread']) && ($_POST['unread'] == 'true') ? true : false;
-                                                                
-                                                                if($unread)
-                                                                {
-                                                                        $query = str_replace(array('UNSEEN', 'SEEN'), array('', ''), $query);
-                                                                        $query .= ' UNSEEN';
-                                                                }                                                               
+								$unread = isset($_POST['unread']) && ($_POST['unread'] == 'true') ? true : false;
+
+								if($unread)
+								{
+												$query = str_replace(array('UNSEEN', 'SEEN'), array('', ''), $query);
+												$query .= ' UNSEEN';
+								}
 
 								$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : 0;
 								$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : 30;
