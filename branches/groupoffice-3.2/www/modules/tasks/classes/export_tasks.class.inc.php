@@ -427,7 +427,7 @@ class export_tasks
 		 preg_match_all( '/.{1,73}([^=]{0,2})?/', $line, $matches);
 		 $vtodo .= implode( '=' . chr(13).chr(10).' ', $matches[0] )."\r\n"; // add soft crlf's
 		}*/
-		return implode("\r\n", $lines);
+		return implode("\r\n", $lines)."\r\n";
 	}
 
 
