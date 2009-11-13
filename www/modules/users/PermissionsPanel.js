@@ -219,6 +219,12 @@ Ext.extend(GO.users.PermissionsPanel, Ext.Panel,{
             this.groupVisibleStore.load();
         }
     },
+
+		commit : function(){
+			this.modulePermissionsStore.commitChanges();
+			this.groupMemberStore.commitChanges();
+			this.groupVisibleStore.commitChanges();
+		},
 	
     getPermissionParameters : function(){
 

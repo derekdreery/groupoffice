@@ -90,9 +90,9 @@ switch($task)
 		 			'id' => $module['id'],
 		 			'name' => $module['humanName'],
 	 				'read_disabled' => ($user_id && $GO_SECURITY->has_permission($user_id, $module['acl_id'], true)),
-					'write_disabled' => ($user_id && $GO_SECURITY->has_permission($user_id, $module['acl_id'], true)>GO_SECURITY::WRITE_PERMISSION),
+					'write_disabled' => ($user_id && $GO_SECURITY->has_permission($user_id, $module['acl_id'], true)>GO_SECURITY::READ_PERMISSION),
 	 				'read_permission'=> $user_id > 0 ? $GO_SECURITY->has_permission($user_id, $module['acl_id']) : in_array($module['id'], $modules_read),
-	 				'write_permission'=> $user_id > 0 ? $GO_SECURITY->has_permission($user_id, $module['acl_id'])>GO_SECURITY::WRITE_PERMISSION : in_array($module['id'], $modules_write)
+	 				'write_permission'=> $user_id > 0 ? $GO_SECURITY->has_permission($user_id, $module['acl_id'])>GO_SECURITY::READ_PERMISSION : in_array($module['id'], $modules_write)
 				);
 				$records[] = $record;
 			}

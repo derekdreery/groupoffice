@@ -13,8 +13,6 @@
  */
  
 GO.users.UserDialog = function(config){
-	
-	
 	if(!config)
 	{
 		config={};
@@ -22,8 +20,6 @@ GO.users.UserDialog = function(config){
 	
 	this.buildForm();
 
-
-	
 	config.tbar = [
 		this.linkBrowseButton = new Ext.Button({
 			iconCls: 'btn-link', 
@@ -48,8 +44,7 @@ GO.users.UserDialog = function(config){
 				scope: this,
 				disabled: true
 			}));
-		}
-	
+		}	
 
 	config.layout='fit';
 	config.modal=false;
@@ -88,10 +83,8 @@ GO.users.UserDialog = function(config){
 			scope:this
 		}					
 	];
-
 	
 	GO.users.UserDialog.superclass.constructor.call(this, config);
-	
 	
 	this.addEvents({'save' : true, 'set_id' : true});	
 }
@@ -249,15 +242,15 @@ Ext.extend(GO.users.UserDialog, Ext.Window,{
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){
 				
-				
 				this.fireEvent('save', this);
+
+				this.permissionsTab.commit();
 				
 				if(hide)
 				{
 					this.hide();
 				}else if(reset)
 				{
-					
 					this.setUserId(0);
 					
 					var resetFields = [
@@ -289,7 +282,6 @@ Ext.extend(GO.users.UserDialog, Ext.Window,{
 					}
 					
 					this.permissionsTab.onShow();
-					
 					
 				}else if(action.result.user_id)
 				{
