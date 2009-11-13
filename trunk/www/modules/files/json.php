@@ -292,7 +292,7 @@ try{
 					break;
 
 
-				/*case 'shared':
+				case 'shared':
 
 					$share_count = $files->get_authorized_shares($GO_SECURITY->user_id);
 
@@ -334,7 +334,7 @@ try{
 							}
 					}
 
-					break;*/
+					break;
 
 				case 'new' :
 
@@ -344,6 +344,11 @@ try{
 				default:
 
 					$folder = $files->get_folder($_POST['node']);
+
+					if(!$folder){
+						throw new FileNotFoundException();
+					}
+
 					$authenticate=!$files->is_owner($folder);
 
 					//$files->check_folder_sync($folder);
