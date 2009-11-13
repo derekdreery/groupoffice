@@ -283,6 +283,11 @@ try{
 				default:
 
 					$folder = $files->get_folder($_POST['node']);
+
+					if(!$folder){
+						throw new FileNotFoundException();
+					}
+					
 					$authenticate=!$files->is_owner($folder);
 
 					//$files->check_folder_sync($folder);
