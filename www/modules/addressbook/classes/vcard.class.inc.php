@@ -695,7 +695,7 @@ class vcard extends addressbook {
 		 preg_match_all( '/.{1,73}([^=]{0,2})?/', $line, $matches);
 		 $this->vcf .= implode( '=' . chr(13).chr(10), $matches[0] )."\r\n"; // add soft crlf's
 		}*/
-		$this->vcf = implode("\r\n", $lines);
+		$this->vcf = implode("\r\n", $lines)."\r\n";
 
 		if (empty ($this->vcf)) {
 			return false;
