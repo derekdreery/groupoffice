@@ -3,7 +3,7 @@ GO.email.SearchDialog = function(config){
 	//Ext.apply(config);
 
 	return {
-		
+		hasSearch : false,
 		show :  function(){
 		
 			if(!this.dialog)
@@ -21,15 +21,15 @@ GO.email.SearchDialog = function(config){
 			                name: 'subject'
 				            },
 				            {
-				                fieldLabel: GO.email.lang.from,
+				                fieldLabel: GO.email.lang.searchFrom,
 				                name: 'from'
 				            },
 				            {
-				                fieldLabel: GO.email.lang.to,
+				                fieldLabel: GO.email.lang.searchTo,
 				                name: 'to'
 				            },
 				            {
-				                fieldLabel: GO.email.lang.cc,
+				                fieldLabel: GO.email.lang.searchCC,
 				                name: 'cc'
 				            },
 				            {
@@ -154,12 +154,32 @@ GO.email.SearchDialog = function(config){
 				
 		
 			}
+
 			this.dialog.show();
+
+                        if(GO.email.search_query)
+                        {
+                                var search_query = GO.email.search_query;
+                                var search_type = (GO.email.search_type) ? GO.email.search_type : GO.email.search_type_default;
+
+                                this.formPanel.form.findField('from').setValue(
+                                        (search_type == 'from') ? search_query : '');
+                                this.formPanel.form.findField('subject').setValue(
+                                        (search_type == 'subject') ? search_query : '');
+                                this.formPanel.form.findField('to').setValue(
+                                        (search_type == 'to') ? search_query : '');
+                                this.formPanel.form.findField('cc').setValue(
+                                        (search_type == 'cc') ? search_query : '');
+                                
+                        }
 		},
 		
 		doSearch : function(){
+
+                        this.hasSearch = true;                        
 			config.store.baseParams['query']=this.buildQuery();
 			config.store.load();
+
 			this.dialog.hide();					
 		},
 		

@@ -166,3 +166,8 @@ GO.email.lang.orderFilters='You can change the order of filters by dragging.';
 GO.email.lang.orderAccounts='You can change the order of accounts by dragging.';
 
 GO.email.lang.groups='Groups';
+
+GO.email.lang.showUnread='Show unread';
+GO.email.lang.searchFrom='Sender';
+GO.email.lang.searchTo='Recipient';
+GO.email.lang.searchCC='Recipient (CC)';

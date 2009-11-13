@@ -93,7 +93,43 @@ GO.email.EmailClient = function(config){
   
   //for global access by composers
   GO.email.messagesGrid=this.messagesGrid;
-  
+
+
+        this.messagesGrid.store.on("beforeload", function()
+        {
+                               
+                if(this.messagesGrid.store.baseParams['search'] != undefined)
+                {
+                        GO.email.search_query = this.messagesGrid.store.baseParams['search'];
+                        this.searchDialog.hasSearch = false;
+                        delete(this.messagesGrid.store.baseParams['search']);
+                }else
+                if(this.searchDialog.hasSearch)
+                {
+                        this.messagesGrid.resetSearch();
+                        delete(GO.email.search_query);
+                }
+
+
+                if(GO.email.search_query)
+                {
+                        this.searchDialog.hasSearch = false;
+
+                        var search_type = (GO.email.search_type)
+                                        ? GO.email.search_type : GO.email.search_type_default;
+
+                        search_type = search_type.toUpperCase();
+                        var query_string = search_type + ' "' + GO.email.search_query + '"';
+                        this.messagesGrid.store.baseParams['query'] = query_string;
+                }else
+                if(!this.searchDialog.hasSearch && this.messagesGrid.store.baseParams['query'])
+                {
+                        this.messagesGrid.resetSearch();
+                        delete(this.messagesGrid.store.baseParams['query']);
+                }              
+                
+        }, this);
+              
 	this.messagesGrid.store.on('load',function(){
 		
 		var cm = this.topMessagesGrid.getColumnModel();
@@ -104,7 +140,7 @@ GO.email.EmailClient = function(config){
 		for(var folder_id in unseen)
 			this.updateFolderStatus(folder_id,unseen[folder_id]);
 		
-		if(this.messagesGrid.store.baseParams['query'] && this.messagesGrid.store.baseParams['query']!=''){
+		if(this.messagesGrid.store.baseParams['query'] && this.messagesGrid.store.baseParams['query']!='' && this.searchDialog.hasSearch){
 			this.resetSearchButton.setVisible(true);			
 		}else
 		{
@@ -119,7 +155,7 @@ GO.email.EmailClient = function(config){
 			{
 				selModel.select(node);
 			}
-		}
+		}                
 
 		/*
 		 *This method is annoying when searching for unread mails
@@ -725,8 +761,9 @@ GO.email.EmailClient = function(config){
 					cls: 'x-btn-text-icon',
 					hidden:true,
 					handler: function(){
+                                                this.searchDialog.hasSearch = false;
 						this.messagesGrid.store.baseParams['query']='';	
-						this.messagesGrid.store.load({params:{start:0}});							
+						this.messagesGrid.store.load({params:{start:0}});                                                
 					},
 					scope: this
 				})
@@ -1559,6 +1596,8 @@ GO.mainLayout.onReady(function(){
 	
 	//contextmenu when an e-mail address is clicked
 	GO.email.addressContextMenu=new GO.email.AddressContextMenu();
+
+        GO.email.search_type_default = 'from';
 	
 	
 });
