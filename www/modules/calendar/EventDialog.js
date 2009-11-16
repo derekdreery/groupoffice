@@ -705,23 +705,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
         this.selectLinkField = new GO.form.SelectLink({});
 
-        var hours = Array();
-        if (GO.settings.time_format.substr(0, 1) == 'G') {
-            var hourWidth = 40;
-            var timeformat = 'G';
-        } else {
-            var hourWidth = 60;
-            var timeformat = 'g a';
-        }
-
-        for (var i = 0; i < 24; i++) {
-            var h = Date.parseDate(i, "G");
-            hours.push([h.format('G'), h.format(timeformat)]);
-        }
-
-        var minutes = [['00', '00'], ['05', '05'], ['10', '10'], ['15', '15'],
-        ['20', '20'], ['25', '25'], ['30', '30'], ['35', '35'],
-        ['40', '40'], ['45', '45'], ['50', '50'], ['55', '55']];
+        
 
         this.subjectField = new Ext.form.TextField({
             name : 'subject',
@@ -751,11 +735,13 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
             }
         });
 
+				var hourWidth = GO.settings.time_format.substr(0, 1) == 'G' ? 40 : 60;
+
         this.startHour = new Ext.form.ComboBox({
             hiddenName : 'start_hour',
             store : new Ext.data.SimpleStore({
                 fields : ['value', 'text'],
-                data : hours
+                data : GO.date.hours
             }),
             valueField : 'value',
             displayField : 'text',
@@ -777,7 +763,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
             name : 'start_min',
             store : new Ext.data.SimpleStore({
                 fields : ['value', 'text'],
-                data : minutes
+                data : GO.date.minutes
             }),
             displayField : 'text',
             mode : 'local',
@@ -812,7 +798,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
             hiddenName : 'end_hour',
             store : new Ext.data.SimpleStore({
                 fields : ['value', 'text'],
-                data : hours
+                data : GO.date.hours
             }),
             displayField : 'text',
             valueField : 'value',
@@ -834,7 +820,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
             name : 'end_min',
             store : new Ext.data.SimpleStore({
                 fields : ['value', 'text'],
-                data : minutes
+                data : GO.date.minutes
             }),
             displayField : 'text',
             mode : 'local',
