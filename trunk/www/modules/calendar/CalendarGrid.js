@@ -401,7 +401,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				}else
 				{
 					//should never come here
-					alert('error');
+					//alert('error');
 				}
 			}
 		}

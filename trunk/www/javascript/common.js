@@ -642,3 +642,25 @@ GO.util.logExtEvents = function() {
         console.log(this, ' fired event ',evt,' with args ',Array.prototype.slice.call(a, 1, a.length));
     });
 }
+
+if(GO.settings){
+	GO.date = {
+		hours:[],
+		minutes:[]
+	};
+
+	if (GO.settings.time_format.substr(0, 1) == 'G') {
+			var timeformat = 'G';
+	} else {			
+			var timeformat = 'g a';
+	}
+
+	for (var i = 0; i < 24; i++) {
+			var h = Date.parseDate(i, "G");
+			GO.date.hours.push([h.format('G'), h.format(timeformat)]);
+	}
+
+	GO.date.minutes = [['00', '00'], ['05', '05'], ['10', '10'], ['15', '15'],
+					['20', '20'], ['25', '25'], ['30', '30'], ['35', '35'],
+					['40', '40'], ['45', '45'], ['50', '50'], ['55', '55']];
+}
