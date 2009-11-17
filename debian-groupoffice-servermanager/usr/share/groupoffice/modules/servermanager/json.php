@@ -218,6 +218,9 @@ try{
 				$usage = $servermanager->get_used_licenses();
 				$response['total_users']=$usage['total_users'];
 				$response['total_billing']=$usage['total_billing'];
+			}else
+			{
+				$response['max_users']=0;
 			}
 
 			break;

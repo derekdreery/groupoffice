@@ -111,9 +111,9 @@ switch($task)
 		symlink($sm_config['source'], $go_root.'groupoffice');
 		
 		rename($tmp_config, $config_file);
-		chmod($config_file, 0644);
+		chmod($config_file, 0640);
 		chown($config_file, 'root');
-		chgrp($config_file, 'root');
+		chgrp($config_file, 'www-data');
 
 		//system('apache2ctl graceful');
 	

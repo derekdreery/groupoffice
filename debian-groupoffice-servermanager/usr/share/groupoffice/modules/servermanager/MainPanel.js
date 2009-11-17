@@ -57,10 +57,13 @@ GO.servermanager.MainPanel = function(config){
 	this.reportGrid = new GO.servermanager.ReportGrid();
 
 	this.xtemplate = new Ext.XTemplate(
+		'<tpl if="max_users==0"><p>No license restrictions apply to this server</p></tpl>'+
+		'<tpl if="max_users!=0">'+
 		'<tpl if="max_users &gt; total_users"><p>Used {total_users} of {max_users} available users</p></tpl>'+
 		'<tpl if="max_users &lt;= total_users"><p>You have no professional licenses available.</p></tpl>'+
 		'<tpl if="max_billing &gt; total_billing"><p>Used {total_billing} of {max_billing} available billing installations</p></tpl>'+
-		'<tpl if="max_billing &lt;= total_billing"><p>No billing installations available</p></tpl>'
+		'<tpl if="max_billing &lt;= total_billing"><p>No billing installations available</p></tpl>'+
+		'</tpl>'
 		);
 
 	
