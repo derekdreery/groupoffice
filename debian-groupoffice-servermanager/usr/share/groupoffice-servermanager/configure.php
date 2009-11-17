@@ -34,6 +34,9 @@ echo 'Configuring apache'."\n";
 if(!file_exists('/etc/groupoffice/servermanager.inc.php'))
 	create_file('/etc/groupoffice/servermanager.inc.php', 'tpl/etc/groupoffice/servermanager.inc.php', $replacements);
 
+chgrp('/etc/groupoffice/servermanager.inc.php', 'www-data');
+chmod('/etc/groupoffice/servermanager.inc.php', 640);
+
 if(!file_exists('/etc/apache2/sites-enabled/000-groupoffice'))
 	create_file('/etc/apache2/sites-enabled/000-groupoffice', 'tpl/etc/apache2/sites-enabled/000-groupoffice', $replacements);
 

@@ -66,6 +66,9 @@ if(!file_exists('/etc/groupoffice/config.php'))
 	create_file('/etc/groupoffice/config.php', 'tpl/config.php', $replacements);
 }
 
+chgrp('/etc/groupoffice/config.php', 'www-data');
+chmod('/etc/groupoffice/config.php', 640);
+
 require_once('/etc/groupoffice/config.php');
 
 exec('/usr/bin/php '.$config['root_path'].'install/autoinstall.php /etc/groupoffice/config.php');
