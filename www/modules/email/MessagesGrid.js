@@ -183,23 +183,16 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
         
         show : function()
         {
-                if(!GO.email.search_type)
-                {
-                        GO.email.search_type = GO.email.search_type_default;
-                }
-                
-                this.searchType.setValue(GO.email.search_type);
-                this.searchField.setValue(GO.email.search_query);
-                
-                if(!GO.email.search_query && this.searchField.hasSearch)
-                {
-                        this.searchField.hasSearch = false;
-                }
-
                 if(GO.email.messagesGrid.store.baseParams['unread'] != undefined)
                 {
                         this.showUnreadButton.toggle(GO.email.messagesGrid.store.baseParams['unread']);
                 }
+
+		if(!GO.email.search_type)
+                {
+                        GO.email.search_type = GO.email.search_type_default;
+                }
+		this.setSearchFields(GO.email.search_type, GO.email.search_query);
 
                 GO.email.MessagesGrid.superclass.show.call(this);
         },
@@ -208,11 +201,15 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
                 GO.email.search_type = GO.email.search_type_default;
                 GO.email.search_query = '';
                 
-                this.searchField.hasSearch = false;
-                
-                this.searchType.setValue(GO.email.search_type);
-                this.searchField.setValue(GO.email.search_query);
+		this.setSearchFields(GO.email.search_type, GO.email.search_query);
         },
+	setSearchFields : function(type, query)
+	{
+		this.searchType.setValue(type);
+                this.searchField.setValue(query);
+
+		this.searchField.hasSearch = (query) ? true : false;
+	},
         toggleUnread : function(item, pressed)
         {
                 GO.email.messagesGrid.store.baseParams['unread']=pressed;
