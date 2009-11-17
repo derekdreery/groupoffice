@@ -643,7 +643,7 @@ GO.util.logExtEvents = function() {
     });
 }
 
-if(GO.settings){
+if(GO.settings && GO.settings.time_format){
 	GO.date = {
 		hours:[],
 		minutes:[]

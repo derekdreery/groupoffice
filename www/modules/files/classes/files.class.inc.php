@@ -14,6 +14,7 @@
 
 require_once($GLOBALS['GO_CONFIG']->class_path.'filesystem.class.inc');
 
+
 class files extends db {
 	var $enable_versioning=true;
 
@@ -47,6 +48,13 @@ class files extends db {
 		//$events->add_listener('add_user', __FILE__, 'files', 'add_user');
 		$events->add_listener('build_search_index', __FILE__, 'files', 'build_search_index');
 		$events->add_listener('login', __FILE__, 'files', 'login');
+		$events->add_listener('init_customfields_types', __FILE__, 'files', 'init_customfields_types');
+	}
+
+	function init_customfields_types(&$customfield_types){
+		global $GO_MODULES;
+		require_once($GO_MODULES->modules['files']['class_path'].'file_customfield_type.class.inc.php');
+		$customfield_types['file']=new file_customfield_type();
 	}
 
 	function get_thumb_url($path) {
