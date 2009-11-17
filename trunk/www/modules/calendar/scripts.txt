@@ -5,7 +5,6 @@ modules/calendar/ListGrid.js
 modules/calendar/ViewGrid.js
 modules/calendar/CalendarDialog.js
 modules/calendar/ViewDialog.js
-modules/calendar/Calendar.js
 modules/calendar/Portlet.js
 modules/calendar/ParticipantsPanel.js
 modules/calendar/AvailabilityCheckWindow.js
@@ -16,3 +15,4 @@ modules/calendar/GroupDialog.js
 modules/calendar/ManagePermissionsPanel.js
 modules/calendar/ResourcesGrid.js
 modules/calendar/PortletSettings.js
+modules/calendar/Calendar.js
