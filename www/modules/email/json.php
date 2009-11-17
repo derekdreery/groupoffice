@@ -1370,11 +1370,14 @@ try{
 												$response['data']['user_name']=String::format_name($user['last_name'],$user['first_name'], $user['middle_name']);
 
 												$server_response = $email->get_servermanager_mailbox_info($response['data']);
-												if(isset($server_response['success']))
+												if(is_array($server_response))
 												{
 													$response['data']['vacation_active']=$server_response['data']['vacation_active'];
 													$response['data']['vacation_subject']=$server_response['data']['vacation_subject'];
 													$response['data']['vacation_body']=$server_response['data']['vacation_body'];
+												}else
+												{
+													throw new Exception('Mailserver responded: '.$server_response);
 												}
 												$response['success']=true;
 											}
