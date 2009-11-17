@@ -407,6 +407,8 @@ class search extends db {
 	
 	function delete_search_result($id, $link_type)
 	{
+		global $GO_LINKS, $GO_MODULES;
+
 		$sr = $this->get_search_result($id, $link_type);
 		if($sr)
 		{
@@ -414,10 +416,12 @@ class search extends db {
 			$this->query($sql);
 			
 			$this->log($id, $link_type, 'Deleted '.strip_tags($sr['name']));
-			
-			global $GO_LINKS;
-			
-			$GO_LINKS->delete_link($id, $link_type);
+			$GO_LINKS->delete_link($id, $link_type);			
+		}
+		if(isset($GO_MODULES->modules['customfields'])){
+			require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+			$cf = new customfields();
+			$cf->delete_cf_row($link_type, $id);
 		}
 	}
 	

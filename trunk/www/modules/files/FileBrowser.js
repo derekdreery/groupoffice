@@ -1440,14 +1440,14 @@ GO.files.openFile = function(record, store)
 				{
 					images.push({name: r.name, src: GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+r[index]})
 				}
-				if(r[index]==record.get(index))
+				if(r[index]==record.data[index])
 				{
 					imgindex=images.length-1;
 				}
 			}
 		}else
 		{
-			images.push({name: record.get('name'), src: GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.get(index)})
+			images.push({name: record.data['name'], src: GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.data[index]})
 		}
 		
 		this.imageViewer.show(images, imgindex);
@@ -1468,14 +1468,14 @@ GO.files.openFile = function(record, store)
 				{
 					GO.files.noJavaNotified=true;
 					Ext.MessageBox.alert(GO.lang.strError, GO.lang.noJava);					
-					window.location.href=GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.get(index);
+					window.location.href=GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.data[index];
 				}else
 				{
-					window.location.href=GO.settings.modules.gota.url+'jnlp.php?'+index+'='+record.get('id');
+					window.location.href=GO.settings.modules.gota.url+'jnlp.php?'+index+'='+record.data['id'];
 				}
 			}else
 			{
-				window.location.href=GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.get(index);
+				window.location.href=GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.data[index];
 			}
 		break;
 		
@@ -1489,7 +1489,7 @@ GO.files.openFile = function(record, store)
 			}
 		
 		default:
-			window.location.href=GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.get(index);
+			window.location.href=GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.data[index];
 		break;	
 	}	
 }

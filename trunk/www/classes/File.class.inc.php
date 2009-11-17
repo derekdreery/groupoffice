@@ -196,7 +196,7 @@ class File
 	 */
 	function get_extension($filename=null) {
 
-		if(!isset($filename))
+		if(!isset($filename) && isset($this->path))
 		{
 			$filename = utf8_basename($this->path);
 		}
