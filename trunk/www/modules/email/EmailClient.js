@@ -97,7 +97,7 @@ GO.email.EmailClient = function(config){
 
         this.messagesGrid.store.on("beforeload", function()
         {
-                               
+
                 if(this.messagesGrid.store.baseParams['search'] != undefined)
                 {
                         GO.email.search_query = this.messagesGrid.store.baseParams['search'];
@@ -107,26 +107,21 @@ GO.email.EmailClient = function(config){
                 if(this.searchDialog.hasSearch)
                 {
                         this.messagesGrid.resetSearch();
-                        delete(GO.email.search_query);
                 }
-
 
                 if(GO.email.search_query)
                 {
                         this.searchDialog.hasSearch = false;
-
                         var search_type = (GO.email.search_type)
                                         ? GO.email.search_type : GO.email.search_type_default;
 
-                        search_type = search_type.toUpperCase();
-                        var query_string = search_type + ' "' + GO.email.search_query + '"';
-                        this.messagesGrid.store.baseParams['query'] = query_string;
+                        this.messagesGrid.store.baseParams['query'] = search_type.toUpperCase() + ' "' + GO.email.search_query + '"';
                 }else
                 if(!this.searchDialog.hasSearch && this.messagesGrid.store.baseParams['query'])
                 {
                         this.messagesGrid.resetSearch();
                         delete(this.messagesGrid.store.baseParams['query']);
-                }              
+                }   
                 
         }, this);
               
@@ -762,7 +757,7 @@ GO.email.EmailClient = function(config){
 					hidden:true,
 					handler: function(){
                                                 this.searchDialog.hasSearch = false;
-						this.messagesGrid.store.baseParams['query']='';	
+						this.messagesGrid.store.baseParams['query']='';
 						this.messagesGrid.store.load({params:{start:0}});                                                
 					},
 					scope: this
@@ -932,7 +927,10 @@ GO.email.EmailClient = function(config){
 	{
 		if(this.rendered)
 		{
-			this.messagesGrid.store.baseParams.query='FROM "'+sender+'"';
+			GO.email.search_type = 'from';
+			this.messagesGrid.store.baseParams['search'] = sender;
+			this.messagesGrid.setSearchFields('from', sender);
+			
 			this.messagesGrid.store.load({params:{start:0}});
 			
 			if(GO.mainLayout.tabPanel)
