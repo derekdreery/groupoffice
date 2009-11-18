@@ -295,7 +295,7 @@ try
 					{
 						$company = $ab->get_company($id);
 
-						if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $contact['acl_id'])<GO_SECURITY::DELETE_PERMISSION)
+						if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $company['acl_id'])<GO_SECURITY::DELETE_PERMISSION)
 						{
 							throw new AccessDeniedException();
 						}
