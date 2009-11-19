@@ -49,21 +49,21 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 							'<table cellpadding="0" cellspacing="0" border="0">'+						
 								
 								//PHONE							
-								'<tpl if="this.notEmpty(phone)">'+
+								'<tpl if="!GO.util.empty(phone)">'+
 									'<tr>'+
 										'<td class="contactCompanyLabelWidth">' + GO.lang['strPhone'] + ':</td><td><a href="callto:{phone}+type=phone">{phone}</a></td>'+
 									'</tr>'+						
 								'</tpl>'+
 
 								//FAX							
-								'<tpl if="this.notEmpty(fax)">'+
+								'<tpl if="!GO.util.empty(fax)">'+
 									'<tr>'+
 										'<td class="contactCompanyLabelWidth">' + GO.lang['strFax'] + ':</td><td>{fax}</td>'+
 									'</tr>'+						
 								'</tpl>'+								
 								
 								//EMAIL							
-								'<tpl if="this.notEmpty(email)">'+
+								'<tpl if="!GO.util.empty(email)">'+
 									'<tr>'+
 										'<td class="contactCompanyLabelWidth">' + GO.lang['strEmail'] + ':</td><td>{[this.mailTo(values.email, values.full_name)]}</td>'+
 									'</tr>'+						
@@ -73,7 +73,7 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 								'<tr><td colspan="2">&nbsp;</td></tr>'+																
 											
 								//HOMEPAGE							
-								'<tpl if="this.notEmpty(homepage)">'+
+								'<tpl if="!GO.util.empty(homepage)">'+
 									'<tr>'+
 										'<td class="contactCompanyLabelWidth">' + GO.lang['strHomepage'] + ':</td><td>&nbsp;<a href="{homepage}" target="_blank">{homepage}</a></td>'+
 									'</tr>'+						
@@ -87,14 +87,14 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 								'<table cellpadding="0" cellspacing="0" border="0">'+												
 									
 									//BANK_NO
-									'<tpl if="this.notEmpty(bank_no)">'+
+									'<tpl if="!GO.util.empty(bank_no)">'+
 										'<tr>'+
 											'<td>' + GO.addressbook.lang['cmdFormLabelBankNo'] + ':</td><td>&nbsp;{bank_no}</td>'+
 										'</tr>'+						
 									'</tpl>'+
 		
 									//VAT_NO							
-									'<tpl if="this.notEmpty(vat_no)">'+
+									'<tpl if="!GO.util.empty(vat_no)">'+
 										'<tr>'+
 											'<td>' + GO.addressbook.lang['cmdFormLabelVatNo'] + ':</td><td> {vat_no}</td>'+
 										'</tr>'+						
@@ -147,11 +147,11 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 										'<tr>'+
 											'<td>'+
 										//ADDRESS															
-										'<tpl if="this.notEmpty(google_maps_link)">'+
+										'<tpl if="!GO.util.empty(google_maps_link)">'+
 											'<a href="{google_maps_link}" target="_blank">'+
 										'</tpl>'+
 										'{formatted_address}'+
-										'<tpl if="this.notEmpty(google_maps_link)">'+
+										'<tpl if="!GO.util.empty(google_maps_link)">'+
 											'</a>'+
 										'</tpl>'+
 
@@ -180,11 +180,11 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 											'<td>'+							
 										
 										//ADDRESS															
-										'<tpl if="this.notEmpty(post_google_maps_link)">'+
+										'<tpl if="!GO.util.empty(post_google_maps_link)">'+
 											'<a href="{post_google_maps_link}" target="_blank">'+
 										'</tpl>'+
 										'{post_formatted_address}'+
-										'<tpl if="this.notEmpty(post_google_maps_link)">'+
+										'<tpl if="!GO.util.empty(post_google_maps_link)">'+
 											'</a>'+
 										'</tpl>'+
 									'</table>'+
@@ -195,7 +195,7 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 					
 					'</table>'+		
 
-					'<tpl if="this.notEmpty(comment)">'+						
+					'<tpl if="!GO.util.empty(comment)">'+						
 						'<table cellpadding="0" cellspacing="0" border="0" class="display-panel">'+
 						'<tr>'+
 							'<td class="display-panel-heading">' + GO.addressbook.lang['cmdFormLabelComment'] + '</td>'+
@@ -269,8 +269,8 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 			isBankVat : function(values)
 			{
 				if(
-					this.notEmpty(values['bank_no']) ||
-					this.notEmpty(values['vat_no']) 				
+					!GO.util.empty(values['bank_no']) ||
+					!GO.util.empty(values['vat_no']) 				
 				)
 				{
 					return true;
@@ -281,18 +281,18 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 			isAddress : function(values)
 			{
 				if(
-					this.notEmpty(values['address']) ||
-					this.notEmpty(values['address_no']) ||
-					this.notEmpty(values['zip']) ||
-					this.notEmpty(values['city']) ||
-					this.notEmpty(values['state']) ||
-					this.notEmpty(values['country']) ||
-					this.notEmpty(values['post_address']) ||
-					this.notEmpty(values['post_address_no']) ||
-					this.notEmpty(values['post_zip']) ||
-					this.notEmpty(values['post_city']) ||
-					this.notEmpty(values['post_state']) ||
-					this.notEmpty(values['post_country'])
+					!GO.util.empty(values['address']) ||
+					!GO.util.empty(values['address_no']) ||
+					!GO.util.empty(values['zip']) ||
+					!GO.util.empty(values['city']) ||
+					!GO.util.empty(values['state']) ||
+					!GO.util.empty(values['country']) ||
+					!GO.util.empty(values['post_address']) ||
+					!GO.util.empty(values['post_address_no']) ||
+					!GO.util.empty(values['post_zip']) ||
+					!GO.util.empty(values['post_city']) ||
+					!GO.util.empty(values['post_state']) ||
+					!GO.util.empty(values['post_country'])
 				)
 				{
 					return true;
@@ -303,12 +303,12 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 			isAddressVisit : function(values)
 			{
 				if(
-					this.notEmpty(values['address']) ||
-					this.notEmpty(values['address_no']) ||
-					this.notEmpty(values['zip']) ||
-					this.notEmpty(values['city']) ||
-					this.notEmpty(values['state']) ||
-					this.notEmpty(values['country'])
+					!GO.util.empty(values['address']) ||
+					!GO.util.empty(values['address_no']) ||
+					!GO.util.empty(values['zip']) ||
+					!GO.util.empty(values['city']) ||
+					!GO.util.empty(values['state']) ||
+					!GO.util.empty(values['country'])
 				)
 				{
 					return true;
@@ -319,12 +319,12 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 			isAddressPost : function(values)
 			{
 				if(
-					this.notEmpty(values['post_address']) ||
-					this.notEmpty(values['post_address_no']) ||
-					this.notEmpty(values['post_zip']) ||
-					this.notEmpty(values['post_city']) ||
-					this.notEmpty(values['post_state']) ||
-					this.notEmpty(values['post_country'])					
+					!GO.util.empty(values['post_address']) ||
+					!GO.util.empty(values['post_address_no']) ||
+					!GO.util.empty(values['post_zip']) ||
+					!GO.util.empty(values['post_city']) ||
+					!GO.util.empty(values['post_state']) ||
+					!GO.util.empty(values['post_country'])					
 				)
 				{
 					return true;
@@ -336,9 +336,9 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 			{
 				var google_url = 'http://maps.google.com/maps?q=';
 				
-				if(this.notEmpty(values['address']) && this.notEmpty(values['city']))
+				if(!GO.util.empty(values['address']) && !GO.util.empty(values['city']))
 				{
-					if(this.notEmpty(values['address_no']))
+					if(!GO.util.empty(values['address_no']))
 					{
 						return '<a href="' + google_url + values['address'] + '+' + values['address_no'] + '+' + values['city'] + '" target="_blank" >' + values['address'] + ' ' + values['address_no'] + '</a>';	
 					} else {
