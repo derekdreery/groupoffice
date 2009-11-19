@@ -361,7 +361,7 @@ class tasks extends db
 			$sql .= "INNER JOIN go_acl a ON l.acl_id = a.acl_id ";
 		}else
 		{
-			$sql .= "INNER JOIN go_acl a ON (l.acl_id=a.acl_id AND l.level>1) ";
+			$sql .= "INNER JOIN go_acl a ON (l.acl_id=a.acl_id AND a.level>".GO_SECURITY::READ_PERMISSION.") ";
 		}
 		$sql .= "LEFT JOIN go_users_groups ug ON a.group_id = ug.group_id ".
 		"WHERE (a.user_id=".$this->escape($user_id)." OR ug.user_id=".$this->escape($user_id).")";
