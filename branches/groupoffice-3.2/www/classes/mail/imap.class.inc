@@ -1111,7 +1111,7 @@ class imap{
 		{
 			if(function_exists('mb_detect_encoding'))
 			{
-				$part_charset = mb_detect_encoding($str, "ASCII,JIS,UTF-8,ISO-8859-1,ISO-8859-15,EUC-JP,SJIS");
+				$part_charset = mb_detect_encoding($str, "auto");
 			}else
 			{
 				$part_charset = 'ISO-8859-1';
