@@ -1369,13 +1369,15 @@ try{
 											{
 												$user = $GO_USERS->get_user($response['data']['user_id']);
 												$response['data']['user_name']=String::format_name($user['last_name'],$user['first_name'], $user['middle_name']);
+
 												try{
 													$server_response = $email->get_servermanager_mailbox_info($response['data']);
 												}catch(Exception $e){
 													go_log(LOG_DEBUG, 'Connection to postfixadmin failed: '.$e->getMessage());
 												}
-												if(isset($server_response['success']))												
-												{												
+
+												if(is_array($server_response))
+												{
 													$response['data']['vacation_active']=$server_response['data']['vacation_active'];
 													$response['data']['vacation_subject']=$server_response['data']['vacation_subject'];
 													$response['data']['vacation_body']=$server_response['data']['vacation_body'];		
@@ -1398,6 +1400,9 @@ try{
 														$response['data']['vacation_subject'] = ($vacation['vacation_subject']) ? $vacation['vacation_subject'] : '';
 														$response['data']['vacation_body'] = ($vacation['vacation_body']) ? $vacation['vacation_body'] : '';
 													}
+												}else
+												{
+													throw new Exception('Mailserver responded: '.$server_response);
 												}
 												$response['success']=true;
 											}
