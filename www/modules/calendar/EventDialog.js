@@ -893,7 +893,14 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
             disabled : true,
             width : 'auto',
             hideLabel : true,
-            laelSeperator : ''
+						listeners : {
+                 check : {
+                    fn : function(cb, checked){
+											this.repeatEndDate.setDisabled(checked);
+										},
+                    scope : this
+                }
+            }
         });
         this.recurrencePanel = new Ext.Panel({
             title : GO.calendar.lang.recurrence,
@@ -1194,6 +1201,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
     changeRepeat : function(value) {
 
+			var repeatForever = this.repeatForever.getValue();
+
         var form = this.formPanel.form;
         switch (value) {
             case '0' :
@@ -1208,7 +1217,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
                 this.disableDays(true);
                 form.findField('month_time').setDisabled(true);
                 form.findField('repeat_forever').setDisabled(false);
-                form.findField('repeat_end_date').setDisabled(false);
+                form.findField('repeat_end_date').setDisabled(repeatForever);
                 form.findField('repeat_every').setDisabled(false);
 
                 break;
@@ -1217,7 +1226,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
                 this.disableDays(false);
                 form.findField('month_time').setDisabled(true);
                 form.findField('repeat_forever').setDisabled(false);
-                form.findField('repeat_end_date').setDisabled(false);
+                form.findField('repeat_end_date').setDisabled(repeatForever);
                 form.findField('repeat_every').setDisabled(false);
 
                 break;
@@ -1226,7 +1235,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
                 this.disableDays(true);
                 form.findField('month_time').setDisabled(true);
                 form.findField('repeat_forever').setDisabled(false);
-                form.findField('repeat_end_date').setDisabled(false);
+                form.findField('repeat_end_date').setDisabled(repeatForever);
                 form.findField('repeat_every').setDisabled(false);
 
                 break;
@@ -1235,7 +1244,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
                 this.disableDays(false);
                 form.findField('month_time').setDisabled(false);
                 form.findField('repeat_forever').setDisabled(false);
-                form.findField('repeat_end_date').setDisabled(false);
+                form.findField('repeat_end_date').setDisabled(repeatForever);
                 form.findField('repeat_every').setDisabled(false);
                 break;
 
@@ -1243,7 +1252,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
                 this.disableDays(true);
                 form.findField('month_time').setDisabled(true);
                 form.findField('repeat_forever').setDisabled(false);
-                form.findField('repeat_end_date').setDisabled(false);
+                form.findField('repeat_end_date').setDisabled(repeatForever);
                 form.findField('repeat_every').setDisabled(false);
                 break;
         }
