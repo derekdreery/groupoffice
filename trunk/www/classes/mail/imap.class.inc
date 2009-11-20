@@ -1119,7 +1119,7 @@ class imap{
 		{
 			if(function_exists('mb_detect_encoding'))
 			{
-				$part_charset = mb_detect_encoding($str, "ASCII,JIS,UTF-8,ISO-8859-1,ISO-8859-15,EUC-JP,SJIS");
+				$part_charset = mb_detect_encoding($str, "auto");
 			}else
 			{
 				$part_charset = 'ISO-8859-1';
@@ -1510,10 +1510,52 @@ class imap{
 		//containing space values inside, but they mustn't. The space values have to be removed before
 		//they are going to be converted to utf8.
 
+		//debug($str);
+
 		if (strpos($str, '=?') !== false) {
+
+			$obj = imap_mime_header_decode($str);
+			$decoded='';
+			for ($i=0; $i<count($obj); $i++) {
+				if($obj[$i]->charset!='UTF-8' && $obj[$i]->charset!='default'){
+					$decoded.=iconv($obj[$i]->charset, 'UTF-8', $obj[$i]->text);
+				}else
+				{
+					$decoded.=$obj[$i]->text;
+				}
+			}
+			return $decoded;
+
+			/*$decoded = preg_replace_callback(
+        '/=\?.*\?=/U',
+        create_function(
+            // single quotes are essential here,
+            // or alternative escape all $ as \$
+            '$matches',
+            'debug($matches[0]);
+	$decoded= iconv_mime_decode($matches[0],ICONV_MIME_DECODE_CONTINUE_ON_ERROR,\'UTF-8\');
+
+			if($decoded){
+				return $decoded;
+			}else
+			{
+				return imap_utf8($matches[0]);
+			}
+	'
+        ),
+        $str
+			);
+
 			//$str = str_replace(" ", "", $str);
 			//return imap_utf8($str);
-			return @iconv_mime_decode($str,null,'UTF-8');
+			//$decoded = iconv_mime_decode($str,ICONV_MIME_DECODE_CONTINUE_ON_ERROR,'UTF-8');
+			//debug($decoded);
+			if($decoded){
+				return $decoded;
+			}else
+			{
+				return imap_utf8($str);
+			}*/
 		}else {
 			if (function_exists('iconv'))
 			{
