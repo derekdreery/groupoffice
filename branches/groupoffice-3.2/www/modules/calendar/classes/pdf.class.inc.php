@@ -243,9 +243,14 @@ class PDF extends TCPDF
 				foreach($cellEvents[$i] as $event)
 				{
 					$time = $event['all_day_event']=='1' ? '-' : date($time_format,$event['start_time']);
-					$this->Cell($timeColWidth, $this->cell_height, $time, 0, 0, 'L');
-					$this->MultiCell($cellWidth-$timeColWidth,$this->cell_height, $event['name'], 0, 1, 0, 1, '', '', true, 0, false, false, 0);
-					$this->setX($tableLeftMargin+($pos*$cellWidth));					
+					//$this->Cell($timeColWidth, $this->cell_height, $time, 0, 0, 'L');
+					//$this->MultiCell($cellWidth-$timeColWidth,$this->cell_height, $event['name'], 0, 1, 0, 1, '', '', true, 0, false, false, 0);
+					$this->SetFillColor( hexdec(substr($event['background'], 0, 2)),hexdec(substr($event['background'], 2, 2)), hexdec(substr($event['background'], 4, 2)));
+          $this->Cell($timeColWidth, $this->cell_height, $time, 0, 0, 'L', 1);
+          $this->MultiCell($cellWidth-$timeColWidth,$this->cell_height, $event['name'], 0, 1, 1, 1, '', '', true, 0, false, false, 0);
+					$this->setX($tableLeftMargin+($pos*$cellWidth));
+
+
 				}
 				
 				
