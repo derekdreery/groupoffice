@@ -1,5 +1,6 @@
 2009/11/19 3.2.49
 - Fixed corrupted CHANGELOG.TXT
+- Small bug fixes
 
 2009/11/13 3.2.48
 - Small notice fix
