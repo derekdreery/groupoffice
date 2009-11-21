@@ -64,11 +64,12 @@ if(!$event = $cal->get_event($event_id))
 		$body = sprintf($lang['calendar']['decline_mail_body'],$email);		
 		$body .= '<br /><br />'.$cal->event_to_html($event);
 		
-		$swift->set_body($body);
-		$swift->sendmail();		
-	}
 		
-	$user = $GO_USERS->get_user($event['user_id']);
+	}
+
+	$swift->set_body($body);
+	$swift->sendmail();
+	//$user = $GO_USERS->get_user($event['user_id']);
 
 }else
 {
