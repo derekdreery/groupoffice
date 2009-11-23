@@ -1507,6 +1507,7 @@ class imap{
 		if (strpos($str, '=?') !== false) {
 
 			$obj = imap_mime_header_decode($str);
+			//debug($obj);
 			$decoded='';
 			for ($i=0; $i<count($obj); $i++) {
 				if($obj[$i]->charset!='UTF-8' && $obj[$i]->charset!='default'){
@@ -1516,6 +1517,7 @@ class imap{
 					$decoded.=$obj[$i]->text;
 				}
 			}
+			//debug($decoded);
 			return $decoded;
 
 			/*$decoded = preg_replace_callback(
