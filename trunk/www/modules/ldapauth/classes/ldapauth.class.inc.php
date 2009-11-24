@@ -1,5 +1,6 @@
 <?php
-require_once($GO_MODULES->modules['ldapauth']['class_path'].'ldap.class.inc.php');
+
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/ldap.class.inc.php');
 require_once($GLOBALS['GO_CONFIG']->root_path.'modules/imapauth/classes/imapauth.class.inc.php');
 
 class ldapauth extends imapauth
@@ -86,7 +87,7 @@ class ldapauth extends imapauth
 		}
 		$la = new ldapauth();
 		$user = $la->convert_ldap_entry_to_groupoffice_record($entry[0]);
-		
+
 		$authenticated = $ldap->bind($entry[0]['dn'], $password);
 
 		if(!$authenticated)

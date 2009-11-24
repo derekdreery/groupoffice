@@ -3,7 +3,7 @@ GO.mainLayout.onReady(function(){
 	GO.moduleManager.addSettingsPanel('look_and_feel', GO.users.LookAndFeelPanel);
 	GO.moduleManager.addSettingsPanel('profile', GO.users.ProfilePanel);
 	
-	if(GO.settings.config.allow_password_change)
+	if(GO.settings.config.allow_password_change && (!GO.ldapemail || (GO.ldapemail && !GO.ldapemail.ldapUser)))
 	{
 		GO.moduleManager.addSettingsPanel('password', GO.users.PasswordPanel);
 	}
