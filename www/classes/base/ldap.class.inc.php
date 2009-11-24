@@ -75,13 +75,27 @@ class ldap {
 	var $Auto_Free = 0;
 
 	/* public: constructor */
-	function ldap($host, $user, $password, $basedn, $peopledn, $groupsdn) {
-		$this->Host = $host;
-		$this->User = $user;
-		$this->Password = $password;
-		$this->BaseDN = $basedn;
-		$this->PeopleDN = $peopledn;
-		$this->GroupsDN = $groupsdn;
+	function ldap($host='', $user='', $password='', $basedn='', $peopledn='', $groupsdn='') {
+
+		global $GO_CONFIG;
+		
+		if($host)
+		{
+			$this->Host = $host;
+			$this->User = $user;
+			$this->Password = $password;
+			$this->BaseDN = $basedn;
+			$this->PeopleDN = $peopledn;
+			$this->GroupsDN = $groupsdn;
+		}else
+		{
+			$this->Host = $GO_CONFIG->ldap_host;
+			$this->User = $GO_CONFIG->ldap_user;
+			$this->Password = $GO_CONFIG->ldap_pass;
+			$this->BaseDN = $GO_CONFIG->ldap_basedn;
+			$this->PeopleDN = $GO_CONFIG->ldap_peopledn;
+			$this->GroupsDN = $GO_CONFIG->ldap_groupsdn;
+		}
 	}
 
 	/* public: some trivial reporting */
@@ -371,10 +385,10 @@ class ldap {
 	 * @return a reference to the found LDAP entry object.
 	 */
 	function fetch_entry( $dn, $attributes = null ) {
-		if ( $attributes != null ) {
+		if ( $attributes == null ) {
 			$this->Search_ID = @ldap_read(
-			$this->Link_ID, $dn, 'objectclass=*' );
-		} else {
+			$this->Link_ID, $dn, 'objectclass=*' );			
+		} else {			
 			$this->Search_ID = @ldap_read(
 			$this->Link_ID, $dn, 'objectclass=*', $attributes );
 		}
@@ -465,4 +479,86 @@ class ldap {
 		$this->Errno,
 		$this->Error);
 	}
+
+	
+	/**
+	 * This function extends the ldap_mod_add function with an extra check if
+	 * the value to be added doesn't already exists on in the Directory
+	 *
+	 * @param Object $link_id Link Object of the connection
+	 * @param string $dn is the DN of the entry that should be fetched from
+	 * the directory.
+	 * @param array $data is an 3D array of attribute names (string) and values
+	 *
+	 * @access public
+	 * @return Boolean true if there are any modifications done
+	 */
+	function ldap_mod_save_add($link_id, $dn, $data)
+	{
+		if($link_id)
+		{
+			while(list($attr, $values) = each($data))
+			{				
+				$values_to_add = array();
+
+				$this->fetch_entry($dn, array($attr));
+				$saved_values = $this->get_values($attr);
+				for($i=0; $i<count($values); $i++)
+				{
+					if(!$saved_values || !in_array($values[$i], $saved_values))
+					{
+						$values_to_add[$attr][] = $values[$i];
+					}
+				}
+			}
+
+			if(count($values_to_add))
+			{
+				ldap_mod_add($link_id, $dn, $values_to_add);
+			}
+		}
+
+		return (count($values_to_add)) ? true : false;
+	}
+
+	/**
+	 * This function extends the ldap_mod_del function with an extra check if
+	 * the value to be deleted does exists on in the Directory
+	 *
+	 * @param Object $link_id Link Object of the connection
+	 * @param string $dn is the DN of the entry that should be fetched from
+	 * the directory.
+	 * @param array $data is an 3D array of attribute names (string) and values
+	 *
+	 * @access public
+	 * @return Boolean true if there are any modifications done
+	 */
+	function ldap_mod_save_del($link_id, $dn, $data)
+	{
+		if($link_id)
+		{
+			while(list($attr, $values) = each($data))
+			{
+				$values_to_del = array();
+
+				$this->fetch_entry($dn, array($attr));				
+				$saved_values = $this->get_values($attr);
+				for($i=0; $i<count($values); $i++)
+				{
+					if($saved_values && in_array($values[$i], $saved_values))
+					{
+						$values_to_del[$attr][] = $values[$i];
+					}
+				}
+			}
+
+			if(count($values_to_del))
+			{
+				ldap_mod_del($link_id, $dn, $values_to_del);
+			}
+		}
+
+		return (count($values_to_del)) ? true : false;
+	}
+	
 }

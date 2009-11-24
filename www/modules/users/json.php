@@ -51,7 +51,9 @@ switch($task)
 			require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
 			$cf = new customfields();
 			$values = $cf->get_values($GO_SECURITY->user_id, 8, $user_id);
-			$result['data']=array_merge($result['data'], $values);
+
+			if(count($values))
+				$result['data']=array_merge($result['data'], $values);
 		}
 
 		if($GO_MODULES->has_module('mailings'))

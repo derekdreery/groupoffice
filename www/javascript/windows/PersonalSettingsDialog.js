@@ -187,22 +187,25 @@ Ext.extend(GO.PersonalSettingsDialog, Ext.Window,{
 	
 	buildForm : function () {
  
-    this.tabPanel = new Ext.TabPanel({
-      activeTab: 0,      
-      deferredRender: false,
+		this.tabPanel = new Ext.TabPanel({
+			activeTab: 0,
+			deferredRender: false,
 			anchor:'100% 100%',
-      //layoutOnTabChange:true,
-    	border: false,
-      items: GO.moduleManager.getAllSettingsPanels()
-    }) ;    
-    
-    this.formPanel = new Ext.form.FormPanel({
+			enableTabScroll : true,
+			//layoutOnTabChange:true,
+			border: false,
+			items: GO.moduleManager.getAllSettingsPanels()
+		}) ;
+
+		this.formPanel = new Ext.form.FormPanel({
 			items:this.tabPanel,
-			baseParams:{task:'settings'},
-	    waitMsgTarget:true,
-	    border:false
+			baseParams:{
+				task:'settings'
+			},
+			waitMsgTarget:true,
+			border:false
 		});
-		
+
 		
 		
 	}
