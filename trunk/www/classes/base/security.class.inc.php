@@ -483,11 +483,11 @@ class GO_SECURITY extends db {
 	 * @return int			True if the user is in the ACL
 	 */
 	function user_in_acl($user_id, $acl_id) {
-		$sql = "SELECT user_id FROM go_acl WHERE acl_id='".$this->escape($acl_id)."' AND".
+		$sql = "SELECT level FROM go_acl WHERE acl_id='".$this->escape($acl_id)."' AND".
 				" user_id='$user_id'";
 		$this->query($sql);
-		if ($this->num_rows() > 0) {
-			return true;
+		if ($this->next_record()) {
+			return $this->f('level');
 		}
 		return false;
 	}
@@ -501,13 +501,12 @@ class GO_SECURITY extends db {
 	 * @return int			True if the group is in the ACL
 	 */
 	function group_in_acl($group_id, $acl_id) {
-		$sql = "SELECT group_id FROM go_acl WHERE acl_id='".$this->escape($acl_id)."' AND group_id='".$this->escape($group_id)."'";
+		$sql = "SELECT level FROM go_acl WHERE acl_id='".$this->escape($acl_id)."' AND group_id='".$this->escape($group_id)."'";
 		$this->query($sql);
-		if ($this->num_rows() > 0) {
-			return true;
-		}else {
-			return false;
+		if ($this->next_record()) {
+			return $this->f('level');
 		}
+		return false;
 	}
 
 	/**
