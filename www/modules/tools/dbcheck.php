@@ -122,15 +122,15 @@ $sql = "SELECT * FROM go_acl_items";
 $db->query($sql);
 while($db->next_record())
 {
-	if(!$GO_SECURITY->group_in_acl($GO_CONFIG->group_root, $db->f('id')))
+	if($GO_SECURITY->group_in_acl($GO_CONFIG->group_root, $db->f('id'))<GO_SECURITY::MANAGE_PERMISSION)
 	{
 		echo 'Adding admin group to '.$db->f('id').$line_break;
-		$GO_SECURITY->add_group_to_acl($GO_CONFIG->group_root, $db->f('id'));
+		$GO_SECURITY->add_group_to_acl($GO_CONFIG->group_root, $db->f('id'), GO_SECURITY::MANAGE_PERMISSION);
 	}
-	if(!$GO_SECURITY->user_in_acl($db->f('user_id'), $db->f('id')))
+	if($GO_SECURITY->user_in_acl($db->f('user_id'), $db->f('id'))<GO_SECURITY::MANAGE_PERMISSION)
 	{
 		echo 'Adding owner to '.$db->f('id').$line_break;
-		$GO_SECURITY->add_user_to_acl($db->f('user_id'), $db->f('id'));
+		$GO_SECURITY->add_user_to_acl($db->f('user_id'), $db->f('id'), GO_SECURITY::MANAGE_PERMISSION);
 	}
 }
 echo 'Done'.$line_break.$line_break;
