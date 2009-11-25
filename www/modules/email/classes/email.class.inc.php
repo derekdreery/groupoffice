@@ -1251,12 +1251,13 @@ class email extends db
 
 	function user_delete($user)
 	{
+		debug($user);
 		$email = new email();
 		$del = new email();
 		$email->get_accounts($user['id']);
 		while ($email->next_record())
 		{
-			$del->delete_account($user['id'],$email->f("id"));
+			$del->delete_account($email->f("id"));
 		}
 	}
 

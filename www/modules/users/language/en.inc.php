@@ -27,3 +27,6 @@ Your login details are:
 
 Username: {username}
 Password: {password}';
+
+
+$lang['users']['max_users_reached']='The maximum number of users has been reached for this system.';

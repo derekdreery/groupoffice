@@ -52,13 +52,18 @@ class serverclient
 				
 			foreach($_POST['serverclient_domains'] as $domain)
 			{
+				$aliases='';
+				if(strpos($user['email'],'@'.$domain) && $user['email']!=$user['username'].'@'.$domain){
+					$aliases=$user['email'];
+				}
 				$params=array(
 					'task'=>'serverclient_create_mailbox',
 					'domain'=>($domain),
 					'go_installation_id'=>$GO_CONFIG->id,
 					'username'=>$user['username'],
 					'password1'=>$user['password'],
-					'password2'=>$user['password'],			
+					'password2'=>$user['password'],
+					'aliases'=>$aliases,
 					'name'=>String::format_name($user),
 					'quota'=>0,
 					'active'=>'1',					
