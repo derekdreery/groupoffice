@@ -428,9 +428,18 @@ try{
 				
 				$alias['active']=$mailbox['active'];
 				
-				debug(var_export($alias, true));
+				
 
 				$postfixadmin->add_alias($alias);
+
+				if(isset($_POST['aliases'])){
+					$aliases = array_map('trim', explode(',',$_POST['aliases']));
+					foreach($aliases as $alias_address){
+						$alias['address']=$alias_address;
+						$postfixadmin->add_alias($alias);
+					}
+				}
+				debug(var_export($alias, true));
 			}
 			
 			

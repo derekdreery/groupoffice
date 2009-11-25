@@ -756,25 +756,46 @@ class GO_USERS extends db
 	$visible_user_groups=array(),
 	$modules_read=array(),
 	$modules_write=array(),
-	$acl=array())
+	$acl=array(),
+	$send_invitation=false
+	)
 	{
-		global $GO_CONFIG, $GO_LANGUAGE, $GO_SECURITY, $GO_GROUPS, $GO_MODULES, $GO_EVENTS;
+		global $GO_CONFIG, $GO_LANGUAGE, $GO_SECURITY, $GO_GROUPS, $GO_MODULES, $GO_EVENTS, $lang;
+
+		require_once($GO_LANGUAGE->get_language_file('users'));
+
+		if(empty($user['username']) || empty($user['email']))
+		{
+			throw new Exception($lang['common']['missingField']);
+		}
 
 		// We check if we are able to add a new user. If we already have too much
 		// of them we do not want new ones ;)
 		if ( $this->max_users_reached() ) {
-			return false;
+			throw new Exception($lang['users']['max_users_reached']);
 		}
+
+		if (!String::validate_email($user['email'])) {
+			throw new Exception($lang['users']['error_email']);
+		}
+
+
+		if (!$this->check_username($user['username'])) {
+			throw new Exception($lang['users']['error_username']);
+		}
+
 		// We check if a user with this email address already exists. Since the
 		// email address is used as key for the acl_id, no two users may have the
 		// same address. It also should not be possible to have multiple users
 		// with the same name...
 		if(!$GO_CONFIG->allow_duplicate_email)
 		{
-			$this->query( "SELECT id FROM go_users WHERE email='".$this->escape($user['email'])."' OR username='".$this->escape($user['username'])."'");
-			if ( $this->num_rows() > 0 ) {
-
-				return false;
+			$this->query( "SELECT email,username,id FROM go_users WHERE email='".$this->escape($user['email'])."' OR username='".$this->escape($user['username'])."'");
+			if ($existing = $this->next_record()) {
+				if($existing['email']==$user['email'])
+					throw new Exception($lang['users']['error_email_exists']);
+				else
+					throw new Exception($lang['users']['error_username_exists']);
 			}
 		}		
 		
@@ -840,6 +861,11 @@ class GO_USERS extends db
 		$user['auth_md5_pass']='';
 
 		$user['registration_time'] = $user['mtime']=time();
+
+
+		if(empty($user['password'])){
+			$user['password']=$this->random_password();
+		}
 		
 	
 		
@@ -917,11 +943,30 @@ class GO_USERS extends db
 			}
 			
 			$user['password']=$unencrypted_password;
-			
+
 			//delay add user event because name must be supplied first.
-			if(!empty($user['first_name']) && !empty($user['first_name']))
-			{			
+			if(!empty($user['first_name']))
+			{
 				$GO_EVENTS->fire_event('add_user', array($user));
+			}
+
+			if($send_invitation){
+				require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
+				require_once($GO_MODULES->modules['users']['class_path'].'users.class.inc.php');
+				$users = new users();
+
+				$email = $users->get_register_email();
+
+				$swift = new GoSwift($user['email'], $email['register_email_subject']);
+				foreach($user as $key=>$value){
+					$email['register_email_body'] = str_replace('{'.$key.'}', $value, $email['register_email_body']);
+				}
+
+				$email['register_email_body']= str_replace('{url}', $GO_CONFIG->full_url, $email['register_email_body']);
+				$email['register_email_body']= str_replace('{title}', $GO_CONFIG->title, $email['register_email_body']);
+				$swift->set_body($email['register_email_body'],'plain');
+				$swift->set_from($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
+				$swift->sendmail();
 			}
 
 			return $user['id'];

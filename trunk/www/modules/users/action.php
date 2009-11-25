@@ -29,6 +29,8 @@ try
 	switch($task)
 	{
 		case 'import':
+			ini_set('max_execution_time', 3600);
+
 			$cols[]='username';
 			$cols[]='password';
 			$cols[]='enabled';
@@ -63,18 +65,6 @@ try
 			$cols[]='work_fax';
 
 
-			$count = count($cols);
-
-			$groups_col = $count++;
-			$visible_groups_col = $count++;
-
-			$modules_read_col = $count++;
-			$modules_write_col = $count++;
-
-			$send_invitation_col = $count++;
-
-
-
 			$import_file = $GO_CONFIG->tmpdir.'userimport.csv';
 			if (is_uploaded_file($_FILES['importfile']['tmp_name'][0]))
 			{
@@ -92,14 +82,19 @@ try
 				throw new Exception('Could not open uploaded file');
 			}
 
+			$map = array();
 			$record = fgetcsv($fp, 4096, $_SESSION['GO_SESSION']['list_separator'], $_SESSION['GO_SESSION']['text_separator']);
-			for($i=0;$i<count($cols);$i++)
+			for($i=0;$i<count($record);$i++)
 			{
-				if(empty($record[$i]) || $record[$i]!=$cols[$i])
-				{
-					throw new Exception($lang['users']['incorrectFormat']);
-				}
+				if(!empty($record[$i]))
+					$map[$record[$i]]=$i;
 			}
+
+			if(!isset($map['username']) || !isset($map['first_name']) || !isset($map['last_name']) || !isset($map['email']))
+			{
+				throw new Exception($lang['users']['incorrectFormat']);
+			}
+
 
 			/*$modules_read = array_map('trim', explode(',',$GO_CONFIG->register_modules_read));
 			$modules_write = array_map('trim', explode(',',$GO_CONFIG->register_modules_write));
@@ -110,12 +105,7 @@ try
 			//user groups that this user will be visible to
 			$visible_user_groups = $GO_GROUPS->groupnames_to_ids(array_map('trim',explode(',',$GO_CONFIG->register_visible_user_groups)));*/
 
-			require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
-			require_once($GO_MODULES->modules['users']['class_path'].'users.class.inc.php');
-			$users = new users();
-
-			$email = $users->get_register_email();
-
+			
 
 			$failed = array();
 
@@ -123,48 +113,38 @@ try
 
 			while($record = fgetcsv($fp, 4096, $_SESSION['GO_SESSION']['list_separator'], $_SESSION['GO_SESSION']['text_separator']))
 			{
-				$modules_read = array_map('trim', explode(',',$record[$modules_read_col]));
-				$modules_write = array_map('trim', explode(',',$record[$modules_write_col]));
+				$modules_read =  isset($map['modules_read']) ? array_map('trim', explode(',',$record[$map['modules_read']])) : array();
+				$modules_write = isset($map['modules_write']) ? array_map('trim', explode(',',$record[$map['modules_write']])) : array();
 
 				//user groups the user will be added to.
-				$user_groups = $GO_GROUPS->groupnames_to_ids(array_map('trim',explode(',',$record[$groups_col])));
+				$user_groups = isset($map['groups']) ? $GO_GROUPS->groupnames_to_ids(array_map('trim', explode(',',$record[$map['groups']]))) : array();
 
 				//user groups that this user will be visible to
-				$visible_user_groups = $GO_GROUPS->groupnames_to_ids(array_map('trim',explode(',',$record[$visible_groups_col])));
+				$visible_user_groups = isset($map['visible_groups']) ? $GO_GROUPS->groupnames_to_ids(array_map('trim', explode(',',$record[$map['visible_groups']]))) : array();
 
-
+				if(isset($map['serverclient_domains']))
+				{
+					$_POST['serverclient_domains']=array_map('trim', explode(',',$record[$map['serverclient_domains']]));
+					debug($_POST['serverclient_domains']);
+				}
 				$user = array();
 
 				for($i=0;$i<count($cols);$i++)
 				{
-					$user[$cols[$i]]=$record[$i];
-				}
+					if(isset($map[$cols[$i]])){
+						$user[$cols[$i]]=$record[$map[$cols[$i]]];
+					}
+				}				
 
-				if(empty($user['username']) || empty($user['password']) || empty($user['email']) || empty($user['first_name']) || empty($user['last_name']))
-				{
-					$failed[]=$user['username'].': '.$lang['common']['missingField'];
+				try{
+					//User is ok to add
+					$send_invitation = !empty($map['send_invitation']) && !empty($record[$map['send_invitation']]);
+					$user_id = $GO_USERS->add_user($user, $user_groups, $visible_user_groups, $modules_read, $modules_write,array(),$send_invitation);
+				}
+				catch (Exception $e){
+					$failed[]=$user['username'].': '. $e->getMessage();
 					continue;
 				}
-
-				if (!$GO_USERS->check_username($user['username'])) {
-					$failed[]=$user['username'].': '.$lang['users']['error_username'];
-					continue;
-				}
-
-				if (!String::validate_email($user['email'])) {
-					$failed[]=$user['username'].': '.$lang['users']['error_email'];
-					continue;
-				}
-
-				$existing_email_user = $GO_CONFIG->allow_duplicate_email ? false : $GO_USERS->get_user_by_email($user['email']);
-
-				if ($existing_email_user && ($user_id == 0 || $existing_email_user['id'] != $user_id)) {
-					$failed[]=$user['username'].': '.$lang['users']['error_email_exists'];
-					continue;
-				}
-
-				//User is ok to add
-				$user_id = $GO_USERS->add_user($user, $user_groups, $visible_user_groups, $modules_read, $modules_write);
 
 				if(!$user_id)
 				{
@@ -172,20 +152,8 @@ try
 					continue;
 				}else
 				{
-					if(!empty($record[$send_invitation_col])){
-						$swift = new GoSwift($user['email'], $email['register_email_subject']);
-						foreach($user as $key=>$value){
-							$email['register_email_body'] = str_replace('{'.$key.'}', $value, $email['register_email_body']);
-						}
-
-						$email['register_email_body']= str_replace('{url}', $GO_CONFIG->full_url, $email['register_email_body']);
-						$email['register_email_body']= str_replace('{title}', $GO_CONFIG->title, $email['register_email_body']);
-						$swift->set_body($email['register_email_body'],'plain');
-						$swift->set_from($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
-						$swift->sendmail();
-					}
 					$success_count++;
-				}
+				}				
 			}
 
 			$response['feedback'] = sprintf($lang['users']['imported'],$success_count);
