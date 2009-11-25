@@ -1400,9 +1400,6 @@ try{
 														$response['data']['vacation_subject'] = ($vacation['vacation_subject']) ? $vacation['vacation_subject'] : '';
 														$response['data']['vacation_body'] = ($vacation['vacation_body']) ? $vacation['vacation_body'] : '';
 													}
-												}else
-												{
-													throw new Exception('Mailserver responded: '.$server_response);
 												}
 												$response['success']=true;
 											}
