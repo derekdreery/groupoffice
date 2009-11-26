@@ -74,12 +74,11 @@ foreach($load_modules as $module_id)
 Ext.onReady(function(){
 
 	GO.mainLayout.fireReady();
-	
+
+	delete GO.moduleManager.panelConfigs['email'].title;
 	var panel = GO.moduleManager.getPanel("<?php echo $_REQUEST['module']; ?>");
 	
-	if(!panel)
-		panel = GO.moduleManager.getAdminPanel("<?php echo $_REQUEST['module']; ?>");
-
+	
 	var viewport = new Ext.Viewport({
 		layout:'fit',				
 		items: panel
