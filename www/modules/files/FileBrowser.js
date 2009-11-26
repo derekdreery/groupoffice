@@ -681,16 +681,18 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 	
 	setRootID : function(rootID, folder_id)
-	{	
-		this.folder_id=folder_id;
-		this.treeLoader.baseParams.root_folder_id=rootID;
-		this.treeLoader.baseParams.expand_folder_id=folder_id;
-		this.rootNode.reload({
-			callback:function(){
-				delete this.treeLoader.baseParams.expand_folder_id;
-			},
-			scope:this
-		});
+	{
+		if(this.treeLoader.baseParams.root_folder_id!=rootID || (folder_id>0 && this.folder_id!=folder_id)){
+			this.folder_id=folder_id;
+			this.treeLoader.baseParams.root_folder_id=rootID;
+			this.treeLoader.baseParams.expand_folder_id=folder_id;
+			this.rootNode.reload({
+				callback:function(){
+					delete this.treeLoader.baseParams.expand_folder_id;
+				},
+				scope:this
+			});
+		}
 	},
 	
 	buildNewMenu : function(){		
