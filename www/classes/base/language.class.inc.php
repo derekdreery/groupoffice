@@ -92,7 +92,7 @@ class GO_LANGUAGE extends db {
 	 * @return string	language code
 	 */
 	function set_language($language) {
-
+		global $lang, $GO_LANGUAGE;
 		if(file_exists($this->language_path.'common/'.$language.'.inc.php'))
 		{
 			$this->language=$_SESSION['GO_SESSION']['language']=$language;
@@ -102,6 +102,8 @@ class GO_LANGUAGE extends db {
 				$_COOKIE['GO_LANGUAGE']=$this->language;
 				SetCookie("GO_LANGUAGE",$language,time()+3600*24*30,"/",'',!empty($_SERVER['HTTPS']),false);
 			}
+
+			require($GO_LANGUAGE->get_base_language_file('common'));
 				
 			return true;
 		}else
