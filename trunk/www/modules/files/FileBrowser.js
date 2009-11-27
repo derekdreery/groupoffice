@@ -1534,6 +1534,46 @@ GO.files.openFolder = function(id, folder_id)
 	return GO.files.fileBrowser;
 }
 
+GO.files.createSelectFileBrowser = function(){
+	if(!GO.selectFileBrowser)
+	{
+		GO.selectFileBrowser= new GO.files.FileBrowser({
+			border:false,
+			treeCollapsed:false
+		});
+
+		GO.selectFileBrowserWindow = new Ext.Window({
+			title: GO.lang.strSelectFiles,
+			height:500,
+			width:750,
+			modal:true,
+			layout:'fit',
+			border:false,
+			collapsible:true,
+			maximizable:true,
+			closeAction:'hide',
+			items: GO.selectFileBrowser,
+			buttons:[
+				{
+					text: GO.lang.cmdOk,
+					handler: function(){
+						var records = GO.selectFileBrowser.getSelectedGridRecords();
+						GO.selectFileBrowser.fileClickHandler.call(this, records[0]);
+					},
+					scope: this
+				},{
+					text: GO.lang.cmdClose,
+					handler: function(){
+						GO.selectFileBrowserWindow.hide();
+					},
+					scope:this
+				}
+			]
+
+		});
+	}
+}
+
 
 GO.linkHandlers[6]=function(id, record){
 	GO.files.filePropertiesDialog.show(id+"");
