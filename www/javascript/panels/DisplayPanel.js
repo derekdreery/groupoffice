@@ -172,7 +172,7 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 			this.newMenuButton.setDisabled(true);
 		}		
 		
-		if(GO.files)
+		if(this.fileBrowseButton)
 		{
 			this.fileBrowseButton.setDisabled(data.files_folder_id<1);
 		}
