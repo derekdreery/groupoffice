@@ -1,29 +1,29 @@
 <?php
 //Uncomment this line in new translations!
-//require($GO_LANGUAGE->get_fallback_base_language_file('lostpassword'));
+require($GO_LANGUAGE->get_fallback_base_language_file('lostpassword'));
 
-$lang['lostpassword']['success']='<h1>Пароль изменен</h1><p>Ваш пароль успешно изменен. Теперь Вы можете перейти на страницу входа.</p>';
-$lang['lostpassword']['send']='Отправить';
-$lang['lostpassword']['login']='Имя пользователя';
+$lang['lostpassword']['success']='<h1>ГЏГ Г°Г®Г«Гј ГЁГ§Г¬ГҐГ­ГҐГ­</h1><p>Г‚Г Гё ГЇГ Г°Г®Г«Гј ГіГ±ГЇГҐГёГ­Г® ГЁГ§Г¬ГҐГ­ГҐГ­. Г’ГҐГЇГҐГ°Гј Г‚Г» Г¬Г®Г¦ГҐГІГҐ ГЇГҐГ°ГҐГ©ГІГЁ Г­Г  Г±ГІГ°Г Г­ГЁГ¶Гі ГўГµГ®Г¤Г .</p>';
+$lang['lostpassword']['send']='ГЋГІГЇГ°Г ГўГЁГІГј';
+$lang['lostpassword']['login']='Г€Г¬Гї ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гї';
 
-$lang['lostpassword']['lost_password_subject']='Запрос нового пароля';
+$lang['lostpassword']['lost_password_subject']='Г‡Г ГЇГ°Г®Г± Г­Г®ГўГ®ГЈГ® ГЇГ Г°Г®Г«Гї';
 $lang['lostpassword']['lost_password_body']='%s,
 
-Вы запросили создать новый пароль для %s. Имя пользователя "%s".
+Г‚Г» Г§Г ГЇГ°Г®Г±ГЁГ«ГЁ Г±Г®Г§Г¤Г ГІГј Г­Г®ГўГ»Г© ГЇГ Г°Г®Г«Гј Г¤Г«Гї %s. Г€Г¬Гї ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гї "%s".
 
-Нажмите на ссылку ниже(или скопируйте ее в адресную строку интернет браузера) чтобы изменить Ваш пароль:
+ГЌГ Г¦Г¬ГЁГІГҐ Г­Г  Г±Г±Г»Г«ГЄГі Г­ГЁГ¦ГҐ(ГЁГ«ГЁ Г±ГЄГ®ГЇГЁГ°ГіГ©ГІГҐ ГҐГҐ Гў Г Г¤Г°ГҐГ±Г­ГіГѕ Г±ГІГ°Г®ГЄГі ГЁГ­ГІГҐГ°Г­ГҐГІ ГЎГ°Г ГіГ§ГҐГ°Г ) Г·ГІГ®ГЎГ» ГЁГ§Г¬ГҐГ­ГЁГІГј Г‚Г Гё ГЇГ Г°Г®Г«Гј:
 
 %s
 
-Если Вы не запрашивали замену пароля удалите это письмо.';
+Г…Г±Г«ГЁ Г‚Г» Г­ГҐ Г§Г ГЇГ°Г ГёГЁГўГ Г«ГЁ Г§Г Г¬ГҐГ­Гі ГЇГ Г°Г®Г«Гї ГіГ¤Г Г«ГЁГІГҐ ГЅГІГ® ГЇГЁГ±ГјГ¬Г®.';
 
-$lang['lostpassword']['lost_password_error']='В базе данных нет указанного e-mail адреса.';
-$lang['lostpassword']['lost_password_success']='Письмо с инструкцией выслано на Ваш e-mail адрес.';
+$lang['lostpassword']['lost_password_error']='Г‚ ГЎГ Г§ГҐ Г¤Г Г­Г­Г»Гµ Г­ГҐГІ ГіГЄГ Г§Г Г­Г­Г®ГЈГ® e-mail Г Г¤Г°ГҐГ±Г .';
+$lang['lostpassword']['lost_password_success']='ГЏГЁГ±ГјГ¬Г® Г± ГЁГ­Г±ГІГ°ГіГЄГ¶ГЁГҐГ© ГўГ»Г±Г«Г Г­Г® Г­Г  Г‚Г Гё e-mail Г Г¤Г°ГҐГ±.';
 
-$lang['lostpassword']['enter_password']='Введите новый пароль';
+$lang['lostpassword']['enter_password']='Г‚ГўГҐГ¤ГЁГІГҐ Г­Г®ГўГ»Г© ГЇГ Г°Г®Г«Гј';
 
-$lang['lostpassword']['new_password']='Новый пароль';
-$lang['lostpassword']['lost_password']='Забыли пароль';
+$lang['lostpassword']['new_password']='ГЌГ®ГўГ»Г© ГЇГ Г°Г®Г«Гј';
+$lang['lostpassword']['lost_password']='Г‡Г ГЎГ»Г«ГЁ ГЇГ Г°Г®Г«Гј';
 
-$lang['lostpassword']['confirm_password']='Подтвердите пароль';
+$lang['lostpassword']['confirm_password']='ГЏГ®Г¤ГІГўГҐГ°Г¤ГЁГІГҐ ГЇГ Г°Г®Г«Гј';
 ?>

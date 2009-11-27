@@ -68,24 +68,36 @@ function compare_arrays($array1, $array2, $file)
 function check_encoding($file)
 {
 	global $GO_CONFIG;
-	
+
+	$save=false;
+	$str = file_get_contents($file);
 	if(function_exists('mb_detect_encoding'))
-	{
-		$str = file_get_contents($file);
+	{		
 		$enc = mb_detect_encoding($str, "ASCII,JIS,UTF-8,ISO-8859-1,ISO-8859-15,EUC-JP,SJIS");
 		if($enc!='UTF-8' && $enc!='ASCII')
 		{
 			if(is_writable($file))
 			{
+				$save=true;
 				echo '<p style="color:red">Warning, corrected encoding of '.str_replace($GO_CONFIG->root_path, '', $file).' from '.$enc.' to UTF-8</p>';
 				
 				$str = iconv($enc, 'UTF-8', $str);//mb_convert_encoding($str,'UTF-8', $enc);
-				file_put_contents($file, $str);
+				
 			}else
 			{
 				echo '<p style="color:red">Warning, encoding of '.str_replace($GO_CONFIG->root_path, '', $file).' is '.$enc.' and should be UTF-8. Make the file writable to let this script correct it.</p>';
 			}
 		}
+	}
+
+	if(strpos($str, "\xEF\xBB\xBF")!==false){
+		$save=true;
+		echo '<p style="color:red">Replacing BOM character</p>';
+		$str = str_replace("\xEF\xBB\xBF", '', $str);
+	}
+	if($save && is_writable($file)){
+		echo 'Saving: '.$file.'<br />';
+		file_put_contents($file, $str);
 	}
 }
 
@@ -172,12 +184,16 @@ function compare_files($file1, $file2, $type)
 
 
 
-echo '<h3>COMMON FILES</h3>';
-$common = $GO_CONFIG->root_path.'language/common/';
+require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+$fs = new filesystem();
+$commons = $fs->get_folders($GO_CONFIG->root_path.'language');
 
-compare_files($common.$lang1.'.inc.php', $common.$lang2.'.inc.php', 'php');
-compare_files($common.$lang1.'.js', $common.$lang2.'.js', 'js');
-echo '<hr>';
+foreach($commons as $common){
+	echo '<h3>'.$common['path'].'</h3>';
+	compare_files($common['path'].'/'.$lang1.'.inc.php', $common['path'].'/'.$lang2.'.inc.php', 'php');
+	compare_files($common['path'].'/'.$lang1.'.js', $common['path'].'/'.$lang2.'.js', 'js');
+	echo '<hr>';
+}
 
 foreach($modules as $module)
 {

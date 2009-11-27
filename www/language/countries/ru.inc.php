@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /** 
  * Russian translation 
  * By Valery Yanchenko (utf-8 encoding) 
