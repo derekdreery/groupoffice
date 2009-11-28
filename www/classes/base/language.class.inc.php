@@ -102,8 +102,8 @@ class GO_LANGUAGE extends db {
 				$_COOKIE['GO_LANGUAGE']=$this->language;
 				SetCookie("GO_LANGUAGE",$language,time()+3600*24*30,"/",'',!empty($_SERVER['HTTPS']),false);
 			}
-
-			require($GO_LANGUAGE->get_base_language_file('common'));
+			if(is_object($GO_LANGUAGE))
+				require($GO_LANGUAGE->get_base_language_file('common'));
 				
 			return true;
 		}else
