@@ -328,8 +328,8 @@ try {
 
                                         $response['results'][] = array(
                                             'id'=>$response['count']++,
-                                            'name'=>str_replace('{NAME}',$name,$lang['calendar']['birthday_name']),
-                                            'description'=>str_replace(array('{NAME}','{AGE}'), array($name,$bday['upcoming']-$bday['birthday']), $lang['calendar']['birthday_desc']),
+                                            'name'=>htmlspecialchars(str_replace('{NAME}',$name,$lang['calendar']['birthday_name']), ENT_COMPAT, 'UTF-8'),
+                                            'description'=>htmlspecialchars(str_replace(array('{NAME}','{AGE}'), array($name,$bday['upcoming']-$bday['birthday']), $lang['calendar']['birthday_desc']), ENT_COMPAT, 'UTF-8'),
                                             'time'=>'00:00',
                                             'start_time'=>$start_time,
                                             'end_time'=>$end_time,
@@ -356,9 +356,9 @@ try {
                                 $tasks->get_tasks($tasklists_ids, 0, false, 'due_time', 'ASC', 0, 0, true);                                
                                 while($task = $tasks->next_record())
                                 {                                        
-                                        $name = $lang['tasks']['task'].': '.$task['name'];                                      
-                                        $description = $lang['tasks']['list'].': '.$tasklists_names[$task['tasklist_id']];
-                                        $description .= ($task['description']) ? '<br /><br />'.$task['description'] : '';
+                                        $name = htmlspecialchars($lang['tasks']['task'].': '.$task['name'], ENT_QUOTES, 'UTF-8');
+                                        $description = $lang['tasks']['list'].': '.htmlspecialchars($tasklists_names[$task['tasklist_id']], ENT_QUOTES, 'UTF-8');
+                                        $description .= ($task['description']) ? '<br /><br />'.htmlscpecialchars($task['description'], ENT_QUOTES, 'UTF-8') : '';
 
                                         $start_time = date('Y-m-d',$task['start_time']).' 00:00';
                                         $end_time = date('Y-m-d',$task['due_time']).' 23:59';
