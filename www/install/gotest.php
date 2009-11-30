@@ -221,7 +221,7 @@ function test_system(){
 			$test['feedback']='Warning: Could not determine if your license file works properly. Probably becuase URL file-access is disabled in your server configuration. This is not really a problem but you should check it manually now. <a target="_blank" href="'.$check_url.'">Click here to check it</a>. The output from the server was: '.$content;
 			$test['fatal']=false;
 			$test['pass']=false;
-		}elseif($content!='<h1>Your license works!</h1>')
+		}elseif(strpos($content,'Your license works!')===false)
 		{
 			$test['feedback']='Fatal: Your professional license is invalid. Please contact Intermesh about this problem and supply the output of this page. <a target="_blank" href="'.$check_url.'">Click here to check the output of an encoded file.</a>';
 			$test['fatal']=true;
