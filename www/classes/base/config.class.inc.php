@@ -270,6 +270,15 @@ class GO_CONFIG {
 	 * @access  public
 	 */
 	var $host = '/groupoffice/';
+	
+	/**
+	 * Useful to force https://your.host:433 or something like that
+	 * 
+	 * @var bool
+	 * @access  public
+	 */
+
+	var $force_login_url = false;
 
 	/**
 	 * Full URL to reach Group-Office with slash on end

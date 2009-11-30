@@ -11,9 +11,8 @@ Take following steps:
 1. Backup your database
 2. Move away your old source files.
 3. Put the new files at the right location.
-4. If exists copy your old config.php and local path to the new files.
-5. Launch your browser and go to install/ or install/upgrade.php to do it really 
-		quick.
+4. If exists copy your old config.php to the new files.
+5. Launch Group-Office in your browser and it will perform a system upgrade.
 
 !!! READ THE RELEASE NOTES !!!
 

@@ -37,10 +37,13 @@ $GO_CONFIG = new GO_CONFIG();
 
 
 
+
 if(!$GO_CONFIG->enabled)
 {
 	die('<h1>Disabled</h1>This Group-Office installation has been disabled');
 }
+
+
 
 //preload classes before session so they can be stored in the session
 if ( isset( $GO_INCLUDES ) ) {

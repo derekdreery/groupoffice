@@ -206,3 +206,8 @@ $lang['common']['time']='Time';
 
 $lang['common']['dontChangeAdminsPermissions']='You can\'t change the permissions of the admin group';
 $lang['common']['dontChangeOwnersPermissions']='You can\'t change the permissions of the owner';
+
+
+$lang['common']['running_sys_upgrade']='Running required system update';
+$lang['common']['sys_upgrade_text']='One moment please. All output will be logged.';
+$lang['common']['click_here_to_contine']='Click here to continue';
