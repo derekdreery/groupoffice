@@ -1,4 +1,4 @@
-Development version:
+2009/12/? 3.3.0
 - Added zlib compression to increase startup speed. It loads way faster now.
 - Resource management in the calendar to manage meeting rooms for example.
 - Enhancements to the projects module
@@ -9,6 +9,12 @@ Development version:
 - Systemusers module to automatically create Linux system users with
   Group-Office accounts and generate .forward files for vacation replies in the 
   e-mail module
+- Automatically perform system update when new sources are replaced.
+- E-mail reminders
+
+
+2009/11/30 3.2.50
+- Small bug fixes
 
 2009/11/19 3.2.49
 - Fixed corrupted CHANGELOG.TXT

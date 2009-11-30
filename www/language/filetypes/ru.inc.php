@@ -5,7 +5,7 @@
 * vajanchenko@hotmail.com 
 * 10 December 2008*/
 //Uncomment this line in new translations!
-//require($GO_LANGUAGE->get_fallback_base_language_file('filetypes'));
+require($GO_LANGUAGE->get_fallback_base_language_file('filetypes'));
 
 $lang['filetypes']['unknown'] = 'Неизвестный тип файла';
 $lang['filetypes']['txt'] = 'Текстовый файл';
