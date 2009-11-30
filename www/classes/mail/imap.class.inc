@@ -663,7 +663,7 @@ class imap{
 	 */
 	function get_parts($mimeobj, $section = 0, $parttype='') {
 		
-		//debug($mimeobj);
+		
 		
 		if (isset ($mimeobj->type)) {
 			$type = $this->get_mime_type($mimeobj->type);
@@ -677,11 +677,7 @@ class imap{
 
 		$name = '';
 
-		if(!empty($mimeobj->description))
-		{
-			$name = $this->enc_utf8($mimeobj->description);
-		}else
-		{
+	
 			if (isset ($mimeobj->parameters)) {
 				$params = $mimeobj->parameters;
 				for ($x = 0; $x < count($params); $x ++) {
@@ -729,7 +725,10 @@ class imap{
 				}
 			}
 
-			
+			if(empty($name) && !empty($mimeobj->description))
+			{
+				$name = $this->enc_utf8($mimeobj->description);
+			}			
 
 			if(substr($name,0,2)=='=?')
 			{
@@ -743,7 +742,7 @@ class imap{
 				}
 				$name = rawurldecode($name);
 			}
-		}
+		
 		$x = 0;
 		if (isset ($mimeobj->parts)) {
 			for ($x = 0; $x < count($mimeobj->parts); $x ++) {
