@@ -75,10 +75,8 @@ try
 						$contact_credentials['company_id'] = $ab->add_company($company);
 					}
 				}
-
-				if(!empty($_POST['birthday']))
-				$contact_credentials['birthday'] = Date::to_db_date($_POST['birthday'], false);
-				
+			
+				$contact_credentials['birthday'] = Date::to_db_date($_POST['birthday'], false);			
 
 
 				unset($contact_credentials['company']);
