@@ -100,18 +100,9 @@ class RFC822
 					//do nothing		
 				break;							
 				
-				case ',':			
-					if($this->quote)
-					{
-						$this->buffer .= $char;				
-					}else
-					{
-						$this->add_address();
-					}
-				break;
-				
+				case ',':
 				case ';':			
-					if($this->quote)
+					if($this->quote)// || !String::validate_email($this->buffer))
 					{
 						$this->buffer .= $char;				
 					}else

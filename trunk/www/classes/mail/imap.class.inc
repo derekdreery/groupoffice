@@ -544,9 +544,19 @@ class imap{
 				$message['bcc'][]=$RFC822->write_address($this->enc_utf8($address['personal']), $address['email']);
 			}
 		}
-			
-		$message["from"] = isset($values['from']) ? $RFC822->reformat_address_list($this->enc_utf8($values['from'])) : '';
-		$message["reply-to"] = isset($values['reply-to']) ? $RFC822->reformat_address_list($this->enc_utf8($values['reply-to'])) : $message["from"];
+
+		$message['from']='';
+		if(isset($values['from'])){
+			$address = $RFC822->parse_address_list($values['from']);
+			$message['from']=$RFC822->write_address($this->enc_utf8($address[0]['personal']), $address[0]['email']);
+		}
+
+		$message['reply-to']='';
+		if(isset($values['reply-to'])){
+			$address = $RFC822->parse_address_list($values['reply-to']);
+			$message['reply-to']=$RFC822->write_address($this->enc_utf8($address[0]['personal']), $address[0]['email']);
+		}
+
 
 		if(isset($values['date'])){
 		
@@ -671,7 +681,7 @@ class imap{
 	 */
 	function get_parts($mimeobj, $section = 0, $parttype='') {
 		
-		//debug($mimeobj);
+		
 		
 		if (isset ($mimeobj->type)) {
 			$type = $this->get_mime_type($mimeobj->type);
@@ -685,11 +695,7 @@ class imap{
 
 		$name = '';
 
-		if(!empty($mimeobj->description))
-		{
-			$name = $this->enc_utf8($mimeobj->description);
-		}else
-		{
+	
 			if (isset ($mimeobj->parameters)) {
 				$params = $mimeobj->parameters;
 				for ($x = 0; $x < count($params); $x ++) {
@@ -737,7 +743,10 @@ class imap{
 				}
 			}
 
-			
+			if(empty($name) && !empty($mimeobj->description))
+			{
+				$name = $this->enc_utf8($mimeobj->description);
+			}			
 
 			if(substr($name,0,2)=='=?')
 			{
@@ -751,7 +760,7 @@ class imap{
 				}
 				$name = rawurldecode($name);
 			}
-		}
+		
 		$x = 0;
 		if (isset ($mimeobj->parts)) {
 			for ($x = 0; $x < count($mimeobj->parts); $x ++) {
@@ -1515,6 +1524,7 @@ class imap{
 		if (strpos($str, '=?') !== false) {
 
 			$obj = imap_mime_header_decode($str);
+			//debug($obj);
 			$decoded='';
 			for ($i=0; $i<count($obj); $i++) {
 				if($obj[$i]->charset!='UTF-8' && $obj[$i]->charset!='default'){
@@ -1524,6 +1534,7 @@ class imap{
 					$decoded.=$obj[$i]->text;
 				}
 			}
+			//debug($decoded);
 			return $decoded;
 
 			/*$decoded = preg_replace_callback(
