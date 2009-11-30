@@ -14,6 +14,27 @@
 
 require_once("Group-Office.php");
 
+//Redirect to correct login url if a force_login_url is set. Useful to foce ssl
+if($GO_CONFIG->force_login_url && strpos($GO_CONFIG->full_url,$GO_CONFIG->force_login_url)===false) {
+	header('Location: '.$GO_CONFIG->force_login_url);
+	exit();
+}
+
+$mtime = $GO_CONFIG->get_setting('upgrade_mtime');
+
+if($mtime!=$GO_CONFIG->mtime)
+{
+	$GO_SECURITY->logout();
+	
+	echo '<html><head><style>body{font-family:arial;}</style></head><body>';
+	echo '<h1>'.$lang['common']['running_sys_upgrade'].'</h1><p>'.$lang['common']['sys_upgrade_text'].'</p>';
+	require($GO_CONFIG->root_path.'install/upgrade.php');
+	echo '<a href="#" onclick="document.location.reload();">'.$lang['common']['click_here_to_contine'].'</a>';
+	echo '</body></html>';
+	exit();
+}
+
+
 //will do autologin here before theme is loaded.
 $GO_SECURITY->logged_in();
 

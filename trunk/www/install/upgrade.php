@@ -1,6 +1,10 @@
 <?php
+
+
+
+
 $quiet=false;
-$line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
+$line_break="\n";
 
 if(isset($argv[1]))
 {
@@ -12,16 +16,45 @@ chdir(dirname(__FILE__));
 require_once('../Group-Office.php');
 ini_set('max_execution_time', '3600');
 
-if(!defined('NOTINSTALLED') && !isset($RERUN_UPDATE))
+$log_dir = $GO_CONFIG->file_storage_path.'log/upgrade/';
+if(!is_dir($log_dir)){
+	mkdir($log_dir,0750,true);
+}
+$log_file = $log_dir.date('Ymd_Gi').'.log';
+
+touch ($log_file);
+
+if(!is_writable($log_file)){
+	die('Fatal error: Could not write to log file');
+}
+
+function ob_upgrade_log($buffer)
+{
+	global $log_file;
+	
+  file_put_contents($log_file, $buffer, FILE_APPEND);
+  return $buffer;
+}
+
+
+if(!defined('NOTINSTALLED') && !isset($RERUN_UPDATE) && !headers_sent())
 {
 	//login event can cause problems
 	SetCookie("GO_UN","",time()-3600,"/","",!empty($_SERVER['HTTPS']),false);
 	SetCookie("GO_PW","",time()-3600,"/","",!empty($_SERVER['HTTPS']),false);
 }
 
+
+if(php_sapi_name() != 'cli'){
+	echo '<pre>';
+}
+ob_start("ob_upgrade_log");
+
 //update scripts can request to rerun the update process by setting $RERUN_UPDATE=true;
 //this is useful when an update installs a module that might need updates too.
 unset($RERUN_UPDATE, $CHECK_MODULES);
+
+
 
 if(!$quiet)
 echo 'Updating Group-Office database: '.$GO_CONFIG->db_name.$line_break;
@@ -45,6 +78,7 @@ require_once($GO_CONFIG->root_path.'install/sql/updates.inc.php');
 
 for($i=$old_version;$i<count($updates);$i++)
 {
+	ob_flush();
 	if(substr($updates[$i], 0, 7)=='script:')
 	{
 		$update_script=$GO_CONFIG->root_path.'install/updatescripts/'.substr($updates[$i], 7);
@@ -91,6 +125,7 @@ foreach($GO_MODULES->modules as $update_module)
 
 			for($i=$update_module['version'];$i<count($updates);$i++)
 			{
+				ob_flush();
 				if(substr($updates[$i], 0, 7)=='script:')
 				{
 					$update_script=$GO_CONFIG->module_path.$update_module['id'].'/install/updatescripts/'.substr($updates[$i], 7);
@@ -148,6 +183,14 @@ if(isset($RERUN_UPDATE))
 		$fs->delete($GO_CONFIG->file_storage_path.'cache');
 	}
 	echo 'Done!'.$line_break.$line_break;
+
+	$GO_CONFIG->save_setting('upgrade_mtime', $GO_CONFIG->mtime);
+	
 }
 
+ob_end_flush();
+
+if(php_sapi_name() != 'cli'){
+	echo '</pre>';
+}
 
