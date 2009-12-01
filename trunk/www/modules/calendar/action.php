@@ -539,7 +539,7 @@ try {
 				$participants=array();
 				$cal->get_participants($event_id);
 				while($cal->next_record()) {
-					if($cal->f('status') !=1 && $cal->f('email')!=$_SESSION['GO_SESSION']['email']) {
+					if(/*$cal->f('status') !=1 && */$cal->f('email')!=$_SESSION['GO_SESSION']['email']) {
 						$participants[] = $RFC822->write_address($cal->f('name'), $cal->f('email'));
 					}
 				}
@@ -588,12 +588,8 @@ try {
 
 					$swift->message->attach(Swift_Attachment::newInstance($ics_string, $name,File::get_mime($name)));
 
-
-
 					$swift->set_from($_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name']);
-
-
-
+					
 					if(!$swift->sendmail(true)) {
 						throw new Exception('Could not send invitation');
 					}
