@@ -1,4 +1,4 @@
-2009/12/? 3.3.0
+2009/12/01 3.3.0
 - Added zlib compression to increase startup speed. It loads much faster now.
 - Resource management in the calendar to manage meeting rooms for example.
 - Enhancements to the projects module

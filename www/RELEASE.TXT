@@ -1,3 +1,17 @@
+2009/12/01 3.3.0
+We've been working a lot on performance for this release. We're now using
+compression on the files so the startup time of Group-Office is much faster.
+Enhancements on the permissions system deliver a much better overall performance
+on large installations.
+
+We've also added a lot of new features like:
+- Resource management to book meeting rooms for example
+- Enhanced project manager
+- Tickets or Helpdesk module
+- A lot of small enhancements everywhere in the system
+
+Upgrading to this version is recommended for everyone!
+
 2009/08/18 3.2.25
 Fixed some bugs and we enhanced the RSS feeds panel and address formatting
 functions.
