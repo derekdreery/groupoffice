@@ -1,9 +1,14 @@
 2009/12/? 3.3.0
-- Added zlib compression to increase startup speed. It loads way faster now.
+- Added zlib compression to increase startup speed. It loads much faster now.
 - Resource management in the calendar to manage meeting rooms for example.
 - Enhancements to the projects module
 - Multiple calendars and tasklists on the summary page.
 - Create invoices from projects and timeregistration
+- Separated timeregistration into it's own module.
+- Hours approval module so that managers can approve the timeregistrations
+- 2 different styles of entering timeregistration. Besides the week grid there's
+  also a form for multiple entries per project per day.
+- Added custom fields to billing templates, tasks and calendar events.
 - Changed ACL system to impove overall performance on large installations
 - Birthday calendar
 - Systemusers module to automatically create Linux system users with
@@ -11,6 +16,7 @@
   e-mail module
 - Automatically perform system update when new sources are replaced.
 - E-mail reminders
+- Tickets module
 
 
 2009/11/30 3.2.50
