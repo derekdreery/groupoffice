@@ -1,9 +1,4 @@
 <?php
-
-$updates[] = "ALTER TABLE `ab_contacts` CHANGE `address_no` `address_no` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL";
-$updates[] = "ALTER TABLE `ab_companies` CHANGE `address_no` `address_no` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ";
-$updates[] = "ALTER TABLE `ab_companies` CHANGE `post_address_no` `post_address_no` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ";
-
 $updates[] = "ALTER TABLE `ab_mailing_contacts` ADD `mail_sent` ENUM( '0', '1' ) NOT NULL ;";
 $updates[] = "ALTER TABLE `ab_mailing_contacts` ADD `status` VARCHAR( 100 ) NOT NULL ";
 
@@ -81,3 +76,7 @@ $updates[] = "ALTER TABLE `ab_contacts` CHANGE `email` `email` VARCHAR( 50 ) CHA
 $updates[] = "ALTER TABLE `ab_contacts` CHANGE `email2` `email2` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
 $updates[] = "ALTER TABLE `ab_contacts` CHANGE `email3` `email3` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
 $updates[] = "script:3_convert_acl.inc.php";
+
+$updates[] = "ALTER TABLE `ab_contacts` CHANGE `address_no` `address_no` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL";
+$updates[] = "ALTER TABLE `ab_companies` CHANGE `address_no` `address_no` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ";
+$updates[] = "ALTER TABLE `ab_companies` CHANGE `post_address_no` `post_address_no` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ";
