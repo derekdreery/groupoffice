@@ -58,4 +58,10 @@ GO.users.PasswordPanel = function(config)
 };
 
 
-Ext.extend(GO.users.PasswordPanel, Ext.Panel);			
+Ext.extend(GO.users.PasswordPanel, Ext.Panel,{
+	onSaveSettings : function(){
+		this.currentPasswordField.reset();
+		this.passwordField1.reset();
+		this.passwordField2.reset();
+	}
+});
