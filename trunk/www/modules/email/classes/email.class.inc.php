@@ -353,7 +353,7 @@ class email extends db
 		if($this->_add_folder($account['mbroot'].$lang['email']['trash'], $mailbox_names, $subscribed_names))
 		{
 			$account['trash'] = $account['mbroot'].$lang['email']['trash'];
-		}elseif($account['mbroot'] = $this->mail->check_mbroot('INBOX'))
+		}elseif($account['mbroot'] = $this->mail->check_mbroot($mailbox_names[0]))
 		{
 			if($this->_add_folder($account['mbroot'].$lang['email']['trash'], $mailbox_names, $subscribed_names))
 			{
