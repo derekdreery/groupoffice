@@ -548,13 +548,15 @@ class imap{
 		$message['from']='';
 		if(isset($values['from'])){
 			$address = $RFC822->parse_address_list($values['from']);
-			$message['from']=$RFC822->write_address($this->enc_utf8($address[0]['personal']), $address[0]['email']);
+			if(isset($address[0]))
+				$message['from']=$RFC822->write_address($this->enc_utf8($address[0]['personal']), $address[0]['email']);
 		}
 
 		$message['reply-to']=$message['from'];
 		if(isset($values['reply-to'])){
 			$address = $RFC822->parse_address_list($values['reply-to']);
-			$message['reply-to']=$RFC822->write_address($this->enc_utf8($address[0]['personal']), $address[0]['email']);
+			if(isset($address[0]))
+				$message['reply-to']=$RFC822->write_address($this->enc_utf8($address[0]['personal']), $address[0]['email']);
 		}
 
 
@@ -1237,7 +1239,7 @@ class imap{
 				}
 			}
 		}
-
+		sort($this->mailboxes);
 		return $this->mailboxes;
 	}
 
@@ -1276,7 +1278,7 @@ class imap{
 				}
 			}
 		}
-
+		sort($this->mailboxes);
 		return $this->mailboxes;
 	}
 
