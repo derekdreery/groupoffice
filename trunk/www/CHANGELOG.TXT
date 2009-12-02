@@ -1,3 +1,7 @@
+2009/12/02 3.3.1
+- Sort IMAP folders for mbroot detection
+- Small bug in calendar
+
 2009/12/01 3.3.0
 - Added zlib compression to increase startup speed. It loads much faster now.
 - Resource management in the calendar to manage meeting rooms for example.

@@ -258,8 +258,8 @@ if(in_array('calendar', $module_ids))
         //prevent folder creations at this stage
         unset($GO_MODULES->modules['files']);
 	
-	$GO_SECURITY->copy_acl($GO_MODULES->modules['calendar']['acl_read'], $GO_MODULES->modules['tasks']['acl_read']);
-	$GO_SECURITY->copy_acl($GO_MODULES->modules['calendar']['acl_write'], $GO_MODULES->modules['tasks']['acl_write']);	
+	//$GO_SECURITY->copy_acl($GO_MODULES->modules['calendar']['acl_read'], $GO_MODULES->modules['tasks']['acl_read']);
+	//$GO_SECURITY->copy_acl($GO_MODULES->modules['calendar']['acl_write'], $GO_MODULES->modules['tasks']['acl_write']);
 
 
 	//separate events that are in multiple calendars
