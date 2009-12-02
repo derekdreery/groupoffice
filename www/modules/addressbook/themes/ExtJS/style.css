@@ -13,7 +13,7 @@
 }
 
 .go-module-icon-addressbook , .go-menu-icon-addressbook , .go-tab-icon-addressbook {
-	background:url('images/16x16/icon-addressbook.png');
+	background-image:url('images/16x16/icon-addressbook.png') !important;
 }
 
 .btn-addressbook-add-contact {
