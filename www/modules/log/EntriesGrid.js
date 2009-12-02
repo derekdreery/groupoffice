@@ -19,7 +19,6 @@ GO.log.EntriesGrid = function(config) {
 	config.layout = 'fit';
 	config.autoScroll = true;
 	config.split = true;
-	config.closable=true;
 	config.store = new GO.data.JsonStore({
 				url : GO.settings.modules.log.url + 'json.php',
 				baseParams : {
