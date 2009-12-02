@@ -1,5 +1,5 @@
 .go-module-icon-cms , .go-menu-icon-cms , .go-tab-icon-cms {
-	background:url('images/cms.png');
+	background-image:url('images/cms.png') !important;
 }
 
 .cms-btn-view{
