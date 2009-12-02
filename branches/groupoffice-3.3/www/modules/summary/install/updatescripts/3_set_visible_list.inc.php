@@ -12,7 +12,7 @@ if(isset($GO_MODULES->modules['tasks'])){
 	{
 		$tasklist = $tasks->get_tasklist($settings['default_tasklist_id'], $db1->f('user_id'));
 		if($tasklist){
-			$db2->query('INSERT INTO su_visible_lists(tasklist_id, user_id) VALUES("'.$tasklist['id'].'", "'.$db1->f('user_id').'")');
+			$db2->query('REPLACE INTO su_visible_lists(tasklist_id, user_id) VALUES("'.$tasklist['id'].'", "'.$db1->f('user_id').'")');
 		}
 	}
 }

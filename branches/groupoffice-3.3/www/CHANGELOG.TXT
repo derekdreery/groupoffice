@@ -1,6 +1,8 @@
 2009/12/02 3.3.1
 - Sort IMAP folders for mbroot detection
 - Small bug in calendar
+- Removed upgrade2to3.php because it doesn't work anymore. Upgrades from 2.18
+	must first be done with version 3.2 and then from 3.2 to 3.3.
 
 2009/12/01 3.3.0
 - Added zlib compression to increase startup speed. It loads much faster now.
