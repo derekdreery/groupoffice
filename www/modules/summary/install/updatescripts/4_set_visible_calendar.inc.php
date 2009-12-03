@@ -13,7 +13,7 @@ if(isset($GO_MODULES->modules['calendar'])){
 	{
 		$calendar = $cal->get_calendar($settings['calendar_id'], $settings['user_id']);
 		if($calendar){
-			$cal2->query('INSERT INTO su_visible_calendars(calendar_id, user_id) VALUES("'.$calendar['id'].'", "'.$cal1->f('user_id').'")');
+			$cal2->query('REPLACE INTO su_visible_calendars(calendar_id, user_id) VALUES("'.$calendar['id'].'", "'.$cal1->f('user_id').'")');
 		}
 	}
 }

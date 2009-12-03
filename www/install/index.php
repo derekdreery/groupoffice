@@ -312,6 +312,9 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 				$GO_USERS->debug=true;
 				$GO_USERS->add_user($user,$user_groups,array($GO_CONFIG->group_everyone));
 				//filesystem::mkdir_recursive($GO_CONFIG->file_storage_path.'users/admin/');
+
+				$GO_CONFIG->save_setting('upgrade_mtime', $GO_CONFIG->mtime);
+				
 				$task = $nexttask;
 			}
 			break;
@@ -1719,6 +1722,8 @@ switch($task)
 
 
 	case 'completed':
+
+		
 
 		print_head();
 	?>
