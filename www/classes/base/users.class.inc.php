@@ -1018,6 +1018,7 @@ class GO_USERS extends db
 			$sql = "DELETE FROM go_users WHERE id='".$this->escape($user_id)."'";
 			if ($this->query($sql))
 			{
+				$GO_GROUPS->delete_user($user_id);
 				$GO_SECURITY->delete_acl($acl_id);
 				$GO_SECURITY->delete_user($user_id);
 				
