@@ -165,7 +165,7 @@ Ext.override(Ext.Element, {
         	this.printCSS+='<link rel="stylesheet" type="text/css" href="'+document.styleSheets[i].href+'"/>';
         }
 
-				this.printCSS+='<style>body{overflow:auto !important;}</style>';
+				this.printCSS+='<style>body{overflow:visible !important;}</style>';
         
         //Build our HTML document for the iframe
         strHTML = String.format(
