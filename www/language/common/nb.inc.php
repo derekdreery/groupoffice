@@ -192,3 +192,15 @@ $lang['common']['address_format']='Adresseformat';
 $lang['common']['dear']='Kjære';
 
 $lang['commmon']['logFiles']='Loggfiler';
+$lang['common']['fileCreateError']='Feil ved oppretting av fil';
+$lang['common']['illegalCharsError']='Navnet inneholdt ett av følgende ugyldige tegn %s';
+$lang['common']['system']='System';
+$lang['common']['goAlreadyStarted']='Group-Office kjører allerede. Dialogvinduet laget av {FUNCTION} er åpnet i Group-Office. Du kan nå lukke dette vinduet, og forsette å arbeide i Group-Office.';
+$lang['common']['reminder']='Påminnelse';
+$lang['common']['unknown']='Ukjent';
+$lang['common']['time']='Tid';
+$lang['common']['dontChangeAdminsPermissions']='Du kan ikke endre tillatelser i admingruppen';
+$lang['common']['dontChangeOwnersPermissions']='Du kan ikke endre eierens tilatelser';
+$lang['common']['running_sys_upgrade']='Kjører nødvendig systemoppdatering';
+$lang['common']['sys_upgrade_text']='Vennligst vent. Alle meldinger blir loggført.';
+$lang['common']['click_here_to_contine']='Trykk her for å fortsette';

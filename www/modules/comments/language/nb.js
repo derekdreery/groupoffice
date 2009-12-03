@@ -7,5 +7,5 @@
 
 GO.comments.lang.comment="Kommentar";
 GO.comments.lang.comments="Kommentarer";
-GO.comments.lang.fiveLatestComments='5 nyeste kommentarer';
 GO.comments.lang.browseComments = 'Bla i kommentarer';
+GO.comments.lang.recentComments='Siste kommentarer';

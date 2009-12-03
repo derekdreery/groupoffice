@@ -24,4 +24,5 @@ $lang['tasks']['import_success']='%s oppgaver er importert';
 $lang['tasks']['call']='Telefon';
 
 $lang['tasks']['dueAtdate']='Frist %s';
+$lang['tasks']['list']='Oppgaveliste';
 ?>

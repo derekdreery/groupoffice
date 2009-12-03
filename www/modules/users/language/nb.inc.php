@@ -19,3 +19,12 @@ $lang['users']['imported']='Importerte %s brukere';
 $lang['users']['failed']='Feilet!';
 
 $lang['users']['incorrectFormat']='Filen er ikke i riktig CSV format';
+$lang['users']['error_user']='Kunne ikke opprette brukeren';
+$lang['users']['register_email_subject']='Opplysninger om din Group-Office brukerkonto';
+$lang['users']['register_email_body']='En Group-Office brukerkonto er opprettet for deg på {url}
+
+Din innloggingsinformasjon er:
+
+Brukernavn: {username}
+Passord: {password}';
+$lang['users']['max_users_reached']='Grensen for maksimalt antall brukere på dette systemet er nådd.';

@@ -155,3 +155,13 @@ GO.email.lang.addSendersTo='Legg til avsendere i ...';
 GO.email.lang.defaultTemplate='Sett valgte mal som standard';
 
 GO.email.lang.moving='Flytter...';
+GO.email.lang.selectFolderRename='Velg mappen du vil gi nytt navn til';
+GO.email.lang.cantRenameInboxFolder='Du kan ikke endre navnet på mappen INBOX ';
+GO.email.lang.renameFolder='Gi nytt navn til mappe';
+GO.email.lang.orderFilters='Du kan endre filterenes rekkefølge med dra og slipp.';
+GO.email.lang.orderAccounts='Du kan endre kontoenes rekkefølge med dra og slipp.';
+GO.email.lang.groups='Grupper';
+GO.email.lang.showUnread='Vis uleste';
+GO.email.lang.searchFrom='Avsender';
+GO.email.lang.searchTo='Mottaker';
+GO.email.lang.searchCC='Mottaker (CC)';
