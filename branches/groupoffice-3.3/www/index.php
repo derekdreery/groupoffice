@@ -14,6 +14,13 @@
 
 require_once("Group-Office.php");
 
+//$config_file = $GO_CONFIG->get_config_file();
+if(empty($GO_CONFIG->title))
+{
+	header('Location: install/');
+	exit();
+}
+
 //Redirect to correct login url if a force_login_url is set. Useful to foce ssl
 if($GO_CONFIG->force_login_url && strpos($GO_CONFIG->full_url,$GO_CONFIG->force_login_url)===false) {
 	header('Location: '.$GO_CONFIG->force_login_url);
@@ -52,11 +59,6 @@ if(isset($_REQUEST['task']) && $_REQUEST['task']=='logout')
 		exit();
 	}
 }
-//$config_file = $GO_CONFIG->get_config_file();
-if(empty($GO_CONFIG->title))
-{
-	header('Location: install/');
-	exit();
-}
+
 
 require_once($GO_THEME->theme_path."layout.inc.php");
