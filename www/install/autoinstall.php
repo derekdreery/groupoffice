@@ -116,3 +116,6 @@ $user['work_country']=$GO_CONFIG->default_country;
 $user['enabled']='1';
 
 $GO_USERS->add_user($user,$user_groups,array($GO_CONFIG->group_everyone));
+
+
+$GO_CONFIG->save_setting('upgrade_mtime', $GO_CONFIG->mtime);
