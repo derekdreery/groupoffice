@@ -116,7 +116,7 @@ try
 				{
 					if($field['datatype']!='heading' && $field['datatype']!='function')
 					{
-						$f = array('field'=>'cf_'.$link_type.'.'.$field['name'], 'label'=>$field['label'], 'type'=>$field['datatype']);
+						$f = array('field'=>'cf_'.$link_type.'.'.$field['dataname'], 'label'=>$field['name'], 'type'=>$field['datatype']);
 						
 						if($f['type']=='select')
 						{
