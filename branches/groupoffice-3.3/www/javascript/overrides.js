@@ -160,12 +160,12 @@ Ext.override(Ext.Element, {
             }
         }
         
-        /*for(var i=0;i<document.styleSheets.length;i++)
+        for(var i=0;i<document.styleSheets.length;i++)
         {
         	this.printCSS+='<link rel="stylesheet" type="text/css" href="'+document.styleSheets[i].href+'"/>';
-        }*/
+        }
 
-				this.printCSS='<style>body{font-family: Helvetica, Arial, sans-serif;overflow:hidden;}</style>';
+				this.printCSS+='<style>body{overflow:auto !important;}</style>';
         
         //Build our HTML document for the iframe
         strHTML = String.format(
