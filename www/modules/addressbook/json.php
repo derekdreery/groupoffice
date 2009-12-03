@@ -133,6 +133,7 @@ try
 					}
 				}
 			}
+			debug($response);
 			
 			echo json_encode($response);
 			break;
