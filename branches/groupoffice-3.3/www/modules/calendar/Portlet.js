@@ -47,7 +47,9 @@ GO.calendar.SummaryGroupPanel = function(config)
 		      url: GO.settings.modules.calendar.url+'json.php'
 		  }),        
 	    groupField:'day',
-	    sortInfo: {field: 'start_time', direction: 'ASC'}
+	    sortInfo: {field: 'start_time', direction: 'ASC'},
+			remoteGroup:true,
+			remoteSort:true
 	  });
 
 	config.store.on('load', function(){
