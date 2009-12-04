@@ -7,6 +7,10 @@ if(!$GO_SECURITY->logged_in())
 	die('Unauthorized');
 }
 
+require_once($GO_CONFIG->class_path.'base/quota.class.inc.php');
+$quota = new quota();
+
+
 require_once ($GO_MODULES->modules['files']['class_path']."files.class.inc.php");
 $files = new files();
 
@@ -21,6 +25,10 @@ if(!isset($_SESSION['GO_SESSION']['files']['jupload_new_files']))
 }
 
 $count=0;
+
+try{
+
+
 while($file = array_shift($_FILES))
 {
 
@@ -73,15 +81,21 @@ while($file = array_shift($_FILES))
 				debug('Final part '.$_POST['jupart'].': '.$filepath);
 
 				$fp = fopen($filepath, 'w+');
-
 				for($i=1;$i<=$_POST['jupart'];$i++)
 				{
 					$part = $dir.$file['name'].'.part'.$i;
 					fwrite($fp, file_get_contents($part));
 					unlink($part);
 				}
-
 				fclose($fp);
+
+
+				
+				if(!$quota->add_file($filepath))
+				{
+					unlink($filepath);
+					throw new Exception($lang['common']['quotaExceeded']);
+				}
 				
 				$file_id = $files->import_file($filepath);
 
@@ -121,6 +135,12 @@ while($file = array_shift($_FILES))
 		{
 			$filepath = File::checkfilename($filepath);
 		}
+
+	
+		if(!$quota->add_file($file['tmp_name']))
+		{
+			throw new Exception($lang['common']['quotaExceeded']);
+		}
         
 		move_uploaded_file($file['tmp_name'], $filepath);
 		
@@ -146,4 +166,9 @@ while($file = array_shift($_FILES))
 	}
 	$count++;
 }
+
+}catch(Exception $e){
+	echo 'WARNING: ' .$e->getMessage()."\n";
+}
+
 echo "SUCCESS\n";

@@ -53,6 +53,7 @@ if($GO_CONFIG->quota>0)
 			
 	echo 'Recalculating quota'.$line_break;
 	$quota->reset();
+	$GO_CONFIG->save_setting('usage_date',time());
 	echo 'Done'.$line_break.$line_break;
 }
 flush();
