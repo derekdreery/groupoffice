@@ -1375,7 +1375,7 @@ class files extends db {
 	}
 
 	function delete_folder($folder) {
-		global $GO_SECURITY;
+		global $GO_SECURITY, $GO_CONFIG;
 
 		if(is_numeric($folder)) {
 			$folder = $this->get_folder($folder);
@@ -1406,6 +1406,11 @@ class files extends db {
 
 		$path = $GLOBALS['GO_CONFIG']->file_storage_path.$subpath;
 		$fs = new filesystem();
+
+		require_once($GO_CONFIG->class_path.'base/quota.class.inc.php');
+		$quota = new quota();
+		$quota->add(-File::get_directory_size($path));
+
 		return $fs->delete($path);
 	}
 

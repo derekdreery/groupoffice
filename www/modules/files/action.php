@@ -252,9 +252,8 @@ try{
 						throw new Exception('File exists');
 					}
 				}else
-				{
-					$size = filesize($tmp_file)/1024;
-					if(!$quota->check($size))
+				{					
+					if(!$quota->add_file($tmp_file))
 					{
 						throw new Exception($lang['common']['quotaExceeded']);
 					}
@@ -304,11 +303,7 @@ try{
 						{
 							$wf->enable_workflow_process($file_id, $wf_folder['default_process_id']);
 						}
-					}
-                    
-					$quota->add($size);
-
-						
+					}	
 				}
 				if($command != 'yestoall' && $command != 'notoall')
 				{
