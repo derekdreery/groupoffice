@@ -255,7 +255,9 @@ if($GO_SECURITY->logged_in()) {
 	//two modules may include the same script
 	$scripts=array_unique($scripts);
 
-	$file = $GO_SECURITY->user_id.'-'.md5($GO_CONFIG->mtime.filemtime($GO_CONFIG->root_path.'javascript/go-all-min').':'.$GO_LANGUAGE->language.':'.implode(':', $modules)).'.js';
+	//include config file location because in some cases different URL's point to
+	//the same database and this can break things if the settings are cached.
+	$file = $GO_SECURITY->user_id.'-'.md5($GO_CONFIG->mtime.$GO_CONFIG->get_config_file().filemtime($GO_CONFIG->root_path.'javascript/go-all-min').':'.$GO_LANGUAGE->language.':'.implode(':', $modules)).'.js';
 	$path = $GO_CONFIG->file_storage_path.'cache/'.$file;
 	$url = $GO_CONFIG->host.'compress.php?file='.$file;
 	
