@@ -124,7 +124,7 @@ if(!isset($_REQUEST['skip_crawl']))
 if(isset($GO_MODULES->modules['addressbook']))
 {
     $db->query("ALTER TABLE `ab_contacts` ADD `files_folder_id` INT NOT NULL;");
-    $db->query("SELECT c.*,a.name AS addressbook_name,a.acl_read,a.acl_write FROM ab_contacts c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id");
+    $db->query("SELECT c.*,a.name AS addressbook_name FROM ab_contacts c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id");
     while($contact = $db->next_record())
     {
         try{
@@ -156,8 +156,7 @@ if(isset($GO_MODULES->modules['addressbook']))
 
                 $up_folder['id']=$new_folder_id;
                 $up_folder['name']=File::strip_invalid_chars(String::format_name($contact));
-                $up_folder['acl_read']=0;
-                $up_folder['acl_write']=0;
+                $up_folder['acl_id']=0;
                 $up_folder['readonly']='1';
 
                 $fsdb->update_folder($up_folder);
@@ -175,7 +174,7 @@ if(isset($GO_MODULES->modules['addressbook']))
     }
 
     $db->query("ALTER TABLE `ab_companies` ADD `files_folder_id` INT NOT NULL;");
-    $db->query("SELECT c.*,a.name AS addressbook_name,a.acl_read,a.acl_write FROM ab_companies c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id");
+    $db->query("SELECT c.*,a.name AS addressbook_name FROM ab_companies c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id");
     while($company = $db->next_record())
     {
         try{
@@ -200,8 +199,7 @@ if(isset($GO_MODULES->modules['addressbook']))
 
                 $up_folder['id']=$new_folder_id;
                 $up_folder['name']=File::strip_invalid_chars($company['name']);
-                $up_folder['acl_read']=0;
-                $up_folder['acl_write']=0;
+                $up_folder['acl_id']=0;
                 $up_folder['readonly']='1';
 
                 $fsdb->update_folder($up_folder);
@@ -223,7 +221,7 @@ if(isset($GO_MODULES->modules['addressbook']))
 if(isset($GO_MODULES->modules['notes']))
 {
     $db->query("ALTER TABLE `no_notes` ADD `files_folder_id` INT NOT NULL;");
-    $db->query("SELECT n.*,c.name AS category_name,c.acl_read,c.acl_write FROM no_notes n INNER JOIN no_categories c ON c.id=n.category_id");
+    $db->query("SELECT n.*,c.name AS category_name FROM no_notes n INNER JOIN no_categories c ON c.id=n.category_id");
     while($note = $db->next_record())
     {
         try{
@@ -247,8 +245,7 @@ if(isset($GO_MODULES->modules['notes']))
 
                 $up_folder['id']=$new_folder_id;
                 $up_folder['name']=File::strip_invalid_chars($note['name']);
-                $up_folder['acl_read']=0;
-                $up_folder['acl_write']=0;
+                $up_folder['acl_id']=0;
                 $up_folder['readonly']='1';
 
                 $fsdb->update_folder($up_folder);
@@ -270,7 +267,7 @@ if(isset($GO_MODULES->modules['notes']))
 if(isset($GO_MODULES->modules['tasks']))
 {
     $db->query("ALTER TABLE `ta_tasks` ADD `files_folder_id` INT NOT NULL;");
-    $db->query("SELECT t.*,l.name AS tasklist_name,l.acl_read,l.acl_write FROM ta_tasks t INNER JOIN ta_lists l ON l.id=t.tasklist_id");
+    $db->query("SELECT t.*,l.name AS tasklist_name FROM ta_tasks t INNER JOIN ta_lists l ON l.id=t.tasklist_id");
     while($task = $db->next_record())
     {
         try{
@@ -293,8 +290,8 @@ if(isset($GO_MODULES->modules['tasks']))
 
                 $up_folder['id']=$new_folder_id;
                 $up_folder['name']=File::strip_invalid_chars($task['name']);
-                $up_folder['acl_read']=0;
-                $up_folder['acl_write']=0;
+                $up_folder['acl_id']=0;
+  
                 $up_folder['readonly']='1';
 
                 $fsdb->update_folder($up_folder);
@@ -317,7 +314,7 @@ if(isset($GO_MODULES->modules['tasks']))
 if(isset($GO_MODULES->modules['calendar']))
 {
     $db->query("ALTER TABLE `cal_events` ADD `files_folder_id` INT NOT NULL;");
-    $db->query("SELECT e.*,c.name AS calendar_name,c.acl_read,c.acl_write FROM cal_events e INNER JOIN cal_calendars c ON c.id=e.calendar_id");
+    $db->query("SELECT e.*,c.name AS calendar_name FROM cal_events e INNER JOIN cal_calendars c ON c.id=e.calendar_id");
     while($event = $db->next_record())
     {
         try{
@@ -340,8 +337,7 @@ if(isset($GO_MODULES->modules['calendar']))
 
                 $up_folder['id']=$new_folder_id;
                 $up_folder['name']=File::strip_invalid_chars($event['name']);
-                $up_folder['acl_read']=0;
-                $up_folder['acl_write']=0;
+                $up_folder['acl_id']=0;
                 $up_folder['readonly']='1';
 
                 $fsdb->update_folder($up_folder);
@@ -363,7 +359,7 @@ if(isset($GO_MODULES->modules['calendar']))
 if(isset($GO_MODULES->modules['billing']))
 {
     $db->query("ALTER TABLE `bs_orders` ADD `files_folder_id` INT NOT NULL;");
-    $db->query("SELECT e.*,c.name AS book_name,c.acl_read,c.acl_write FROM bs_orders e INNER JOIN bs_books c ON c.id=e.book_id");
+    $db->query("SELECT e.*,c.name AS book_name FROM bs_orders e INNER JOIN bs_books c ON c.id=e.book_id");
     while($order = $db->next_record())
     {
         try{
@@ -385,8 +381,7 @@ if(isset($GO_MODULES->modules['billing']))
 
                 $up_folder['id']=$new_folder_id;
                 $up_folder['name']=File::strip_invalid_chars($order['id'].' '.$order['customer_name']);
-                $up_folder['acl_read']=0;
-                $up_folder['acl_write']=0;
+                $up_folder['acl_id']=0;
                 $up_folder['readonly']='1';
 
                 $fsdb->update_folder($up_folder);
@@ -410,7 +405,7 @@ if(isset($GO_MODULES->modules['projects']))
     $projects = new projects();
 
     $db->query("ALTER TABLE `pm_projects` ADD `files_folder_id` INT NOT NULL;");
-    $db->query("SELECT e.*,c.name AS type_name,c.acl_read,c.acl_write FROM pm_projects e INNER JOIN pm_types c ON c.id=e.type_id");
+    $db->query("SELECT e.*,c.name AS type_name FROM pm_projects e INNER JOIN pm_types c ON c.id=e.type_id");
     while($project = $db->next_record())
     {
         try{
@@ -432,8 +427,7 @@ if(isset($GO_MODULES->modules['projects']))
 
                 $up_folder['id']=$new_folder_id;
                 $up_folder['name']=$new_folder_name;
-                $up_folder['acl_read']=0;
-                $up_folder['acl_write']=0;
+                $up_folder['acl_id']=0;
                 $up_folder['readonly']='1';
 
                 $fsdb->update_folder($up_folder);
@@ -509,8 +503,7 @@ while($user = $GO_USERS->next_record())
 
             $up_folder['id']=$new_folder_id;
             $up_folder['name']=$new_folder_name;
-            $up_folder['acl_read']=0;
-            $up_folder['acl_write']=0;
+            $up_folder['acl_id']=0;
             $up_folder['readonly']='1';
 
             $fsdb->update_folder($up_folder);
