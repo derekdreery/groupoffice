@@ -292,15 +292,22 @@ try{
 				$tasklists_name = array();
 				if(isset($_REQUEST['portlet']))
 				{
-					if($tasks->get_visible_tasklists($user_id) == 0)
-						$tasklists[] = '0';
+					if($tasks->get_visible_tasklists($user_id) == 0){
 
+						$tasklist = $tasks->get_default_tasklist($user_id);
+						$vt['tasklist_id']=$tasklist['id'];
+						$vt['user_id']=$user_id;
+						$tasks->add_visible_tasklist($vt);
+
+						$tasks->get_visible_tasklists($user_id);
+					}
 					while($tasks->next_record())
 					{
 						$cur_tasklist = $tasks2->get_tasklist($tasks->f('tasklist_id'));
 						$tasklists[] = $tasks->f('tasklist_id');
 						$tasklists_name[] = $cur_tasklist['name'];
 					}
+
 					$user_id = 0;
 				}
 			}

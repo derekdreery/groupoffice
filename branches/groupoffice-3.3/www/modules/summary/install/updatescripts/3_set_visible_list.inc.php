@@ -1,5 +1,7 @@
 <?php
-
+/*
+ *
+ * disable because doesn't work well
 if(isset($GO_MODULES->modules['tasks'])){
 	require_once($GO_MODULES->modules['tasks']['class_path'].'tasks.class.inc.php');
 	$tasks = new tasks();
@@ -18,4 +20,4 @@ if(isset($GO_MODULES->modules['tasks'])){
 			}
 		}
 	}
-}
+}*/
