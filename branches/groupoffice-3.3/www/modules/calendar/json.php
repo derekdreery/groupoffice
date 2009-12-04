@@ -572,7 +572,7 @@ try {
 
 					foreach($calendars as $calendar_id) {
 						$calendar = $cal->get_calendar($calendar_id);
-						if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id'])<GO_SECURITY::DELETE_PERMISSION) {
+						if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id'])<GO_SECURITY::DELETE_PERMISSION) {
 							throw new AccessDeniedException();
 						}
 						$cal->delete_calendar($calendar_id);
@@ -653,7 +653,7 @@ try {
 
 					foreach($views as $view_id) {
 						$view = $cal->get_view($view_id);
-						if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $view['acl_id'])<GO_SECURITY::DELETE_PERMISSION) {
+						if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $view['acl_id'])<GO_SECURITY::DELETE_PERMISSION) {
 							throw new AccessDeniedException();
 						}
 						$cal->delete_view($view_id);
