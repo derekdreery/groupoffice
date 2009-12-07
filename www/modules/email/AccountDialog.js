@@ -506,12 +506,14 @@ GO.email.AccountDialog = function(config) {
     }, this)
 
     this.selectUser.on('select', function(combo, record, index) {
-        this.propertiesPanel.form.findField('email')
-        .setValue(record.data.email);
-        this.propertiesPanel.form.findField('username')
-        .setValue(record.data.username);
-        this.propertiesPanel.form.findField('name')
-        .setValue(record.data.name);
+				if(GO.util.empty(this.account_id)){
+					this.propertiesPanel.form.findField('email')
+					.setValue(record.data.email);
+					this.propertiesPanel.form.findField('username')
+					.setValue(record.data.username);
+					this.propertiesPanel.form.findField('name')
+					.setValue(record.data.name);
+				}
     }, this);
 
     GO.email.AccountDialog.superclass.constructor.call(this, {
