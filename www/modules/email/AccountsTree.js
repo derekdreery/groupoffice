@@ -32,7 +32,7 @@ GO.email.AccountsTree = function(config){
 	config.rootVisible=false;
 	config.collapseFirst=false;
 	config.collapsible=true;
-	config.ddAppendOnly=true;
+	//config.ddAppendOnly=true;
 	config.containerScroll=true;	
 	config.enableDD=true;
 	config.ddGroup='EmailDD';
@@ -53,7 +53,16 @@ GO.email.AccountsTree = function(config){
 	this.setRootNode(rootNode);
 
 	this.on('nodedragover', function(e)
-	{		
+	{
+		if(e.source.dragData.node.id.indexOf('account')>-1 && e.target.id.indexOf('account')>-1){
+			if(e.point!='append')
+				return true;
+			else
+				e.target.collapse();
+		}
+		if(e.point!='append'){
+			return false;
+		}
 		if(e.dropNode)
 		{
 			return ((this.getNodeById(e.dropNode.id).parentNode.id != e.target.id) &&
