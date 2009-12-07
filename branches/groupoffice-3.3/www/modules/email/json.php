@@ -1341,15 +1341,19 @@ try{
 
 											$user_id = !isset($_POST['personal_only']) && $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id) ? 0 : $GO_SECURITY->user_id;
 
+											$sort = isset ( $_POST['sort'] ) ? $_POST['sort'] : 'email';
+											$dir = isset ( $_POST['dir'] ) ? $_POST['dir'] : 'ASC';
+
 											$start = isset ( $_POST['start'] ) ? $_POST['start'] : 0;
 											$limit = isset ( $_POST['limit'] ) ? $_POST['limit'] : 0;
-											$response['total'] = $email->get_accounts($user_id,$start, $limit);
+											$response['total'] = $email->get_accounts($user_id,$start, $limit, $sort, $dir);
 
 											while($record = $email->next_record())
 											{
 												$response['results'][] = array(
 															'id'=>$email->f('id'),
 															'email'=>$email->f('email'),
+															'username'=>$email->f('username'),
 															'user_name'=>String::format_name($record),
 															'user_id'=>$email->f('user_id'),
 															'host'=>$email->f('host'),

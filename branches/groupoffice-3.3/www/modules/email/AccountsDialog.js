@@ -25,11 +25,11 @@ GO.email.AccountsDialog = function(config){
 	this.accountDialog = new GO.email.AccountDialog();
 
 	config.maximizable=true;
-	config.layout='border';
+	config.layout='fit';
 	config.modal=false;
-	config.resizable=false;
+	config.resizable=true;
 	config.border=false;
-	config.width=500;
+	config.width=600;
 	config.height=400;
 	config.closeAction='hide';
 	config.title=GO.email.lang.accounts;	
@@ -66,21 +66,13 @@ GO.email.AccountsDialog = function(config){
 	}
 	config.tbar=tbar;
 
-	config.ddGroup="EmailAccountsDD";
 	config.buttons=[{
 		text: GO.lang.cmdClose,
 		handler: function(){this.hide();},
 		scope: this
 	}];
 
-	config.items=[{
-		xtype:'panel',
-		region:'north',
-		height:25,
-		border:true,
-		html:GO.email.lang.orderAccounts,
-		bodyStyle:'padding:5px'
-	}, this.accountsGrid];
+	config.items=this.accountsGrid;
 
 	this.accountDialog.on('save', function(){
 		this.accountsGrid.store.reload();
