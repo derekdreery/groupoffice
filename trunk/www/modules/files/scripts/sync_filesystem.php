@@ -35,6 +35,8 @@ if(isset($argv[1]))
 	define('CONFIG_FILE', $argv[1]);
 }
 
+ini_set('max_execution_time', 3600);
+
 chdir(dirname(__FILE__));
 
 require_once("../../../Group-Office.php");

@@ -18,8 +18,11 @@
 class custom_export_query extends export_query
 {
 	var $query='orders';
-	var $name='osFinancials';
+	var $name='OSF gastouders';
 
+	/**
+	 * Optionally hardcode the list and text separator in the constructor
+	 */
 	function __construct()
 	{
 		parent::__construct();
@@ -28,16 +31,26 @@ class custom_export_query extends export_query
 		$this->text_separator='';
 	}
 
+	/**
+	 * Format the raw database record.
+	 */
+
 	function format_record(&$record){
-		$record['customer_no']='???';
-		$record['tegenrekening']='<T>';
-		$record['veld6']='<T>';
+		$record['veld6']='T';
 		$record['veld8']='False';
 		$record['btime']=date('d/m/Y', $record['btime']);
 	}
 
+	/**
+	 * Initialize the columns.
+	 * Some example custom fields are used here
+	 */
+
 	function init_columns(){
-		$this->columns=array('order_id','btime','customer_name', 'customer_no','tegenrekening','veld6', 'total', 'veld8');
+		$crediteurnummer = $this->cf->find_first_field_by_name(7, 'Crediteurnummer');
+		$tegenrekening = $this->cf->find_first_field_by_name(7, 'Tegenrekening');
+
+		$this->columns=array('order_id','btime','customer_name', 'col_'.$crediteurnummer['id'],'col_'.$tegenrekening['id'],'veld6', 'total', 'veld8');
 		$this->headers=array();
 	}
 }

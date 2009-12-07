@@ -77,3 +77,18 @@ $lang['calendar']['printList']='Avtaleoversikt';
 
 $lang['calendar']['printAllDaySingle']='Hele dagen';
 $lang['calendar']['printAllDayMultiple']='Hele dagen fra %s til %s';
+
+$lang['calendar']['calendars']='Kalendere';
+$lang['calendar']['resource_mail_subject']='Ressursen \'%s\' er reservert'; //%s is resource name
+$lang['calendar']['resource_mail_body']='%s ønsker å reservere ressursen \'%s\'. Du er ansvarlig for denne ressursen. Du må åpne bestillingen for å bekrefte eller avvise reservasjonen.'; //First %s is the name of the person who created the event. Second is the calendar name
+$lang['calendar']['open_resource']='Åpne bestilling';
+$lang['calendar']['resource_modified_mail_subject']='Endring i bestilling av ressursen \'%s\' ';//%s is resource name
+$lang['calendar']['resource_modified_mail_body']='%s har endret en bestilling av ressursen \'%s\'. Du er ansvarlig for denne ressursen. Du må åpne bestillingen for å bekrefte eller avvise endringen.'; //First %s is the name of the person who created the event. Second is the calendar name
+$lang['calendar']['your_resource_modified_mail_subject']='Din bestilling av \'%s\' med status %s er endret';
+$lang['calendar']['your_resource_modified_mail_body']='%s her endret sin bestilling av ressursen \'%s\'.';
+$lang['calendar']['your_resource_accepted_mail_subject']= 'Bestilling av \'%s\' er akseptert';//%s is resource name, status
+$lang['calendar']['your_resource_accepted_mail_body']= '%s har akseptert din bestilling av ressursen \'%s\'.'; //First %s is the name of the person who created the event. Second is the calendar name
+$lang['calendar']['your_resource_declined_mail_subject']= 'Bestilling av \'%s\' er avvist';//%s is resource name
+$lang['calendar']['your_resource_declined_mail_body']= '%s har avvist din bestilling av ressursen \'%s\'.'; //First %s is the name of the person who created the event. Second is the calendar name
+$lang['calendar']['birthday_name']='Fødselsdag: {NAME}';
+$lang['calendar']['birthday_desc']='{NAME} fyller {AGE} i dag';

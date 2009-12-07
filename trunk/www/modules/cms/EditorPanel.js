@@ -222,7 +222,7 @@ GO.cms.EditorPanel = Ext.extend(
 				params: {
 					'task' : 'save_file'
 				},
-				waitMsg:GO.lang['waitMsgSave'],
+				//waitMsg:GO.lang['waitMsgSave'],
 				success:function(form, action){
 					if(action.result.file_id)
 					{

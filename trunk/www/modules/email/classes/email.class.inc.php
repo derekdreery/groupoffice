@@ -157,7 +157,7 @@ class email extends db
 		return false;
 	}
 
-	function get_accounts($user_id=0, $start=0, $offset=0)
+	function get_accounts($user_id=0, $start=0, $offset=0, $sort='standard', $dir='ASC')
 	{
 		$sql = "SELECT al.name, al.email, al.signature, al.id AS default_alias_id, a.*,u.first_name, u.middle_name, u.last_name FROM em_accounts a ".
 			"INNER JOIN go_users u on u.id=a.user_id ".
@@ -166,10 +166,10 @@ class email extends db
 		if($user_id > 0)
 		{
 			$sql .= " WHERE user_id='".$this->escape($user_id)."'";
-			$sql .= " ORDER BY standard ASC";
+			$sql .= " ORDER BY ".$this->escape($sort.' '.$dir);
 		}else {
 			$sql = 
-			$sql .= " ORDER BY u.first_name ASC, u.last_name ASC, standard ASC";
+			$sql .= " ORDER BY ".$this->escape($sort.' '.$dir);
 		}
 
 		$this->query($sql);

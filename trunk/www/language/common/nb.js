@@ -317,3 +317,10 @@ GO.lang.rightClickToClose='Høyreklikk en arkfane for å lukke et program.';
 GO.lang.adminMenu= 'Admin-meny';
 
 GO.lang.administration='Administrasjon';
+GO.lang.extra='Ekstra';
+GO.lang.permissionsLevel='Nivå';
+GO.lang.permissionRead='Kun lese';
+GO.lang.permissionWrite='Skrive';
+GO.lang.permissionDelete='Skrive og slette';
+GO.lang.permissionManage='Behandle';
+

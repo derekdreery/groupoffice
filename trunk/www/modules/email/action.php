@@ -837,15 +837,15 @@ try{
 
 				case 'save_accounts_sort_order':
 
-					$sort_order = json_decode(($_POST['sort_order']), true);
+					$sort_order = json_decode($_POST['sort_order'], true);
 
-					foreach($sort_order as $account_id=>$sort_index)
+					for($i=0;$i<count($sort_order);$i++)
 					{
-						$account['id']=$account_id;
-						$account['standard']=$sort_index;
+						$account['id']=$sort_order[$i];
+						$account['standard']=$i;
 						$email->_update_account($account);
 					}
-					$success=true;
+					$response['success']=true;
 					break;
 
 				case 'save_account_properties':

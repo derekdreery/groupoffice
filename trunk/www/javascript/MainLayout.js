@@ -49,9 +49,9 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	},	
 	
 	login : function(){
-	
-		this.fireReady();
-		//GO.loginDialog = new GO.dialog.LoginDialog({modal:false});
+
+		GO.loginDialog = new GO.dialog.LoginDialog({modal:false});
+		this.fireReady();		
 		this.createLoginCallback();
 		GO.loginDialog.show();
 		this.removeLoadMask();		
@@ -215,7 +215,9 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 
 
 	init : function(){  
-          
+    
+		GO.loginDialog = new GO.dialog.LoginDialog({modal:true});
+
    	this.fireReady();
 
 		Ext.QuickTips.init();

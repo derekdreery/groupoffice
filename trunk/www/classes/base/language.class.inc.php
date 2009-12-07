@@ -57,6 +57,10 @@ class GO_LANGUAGE extends db {
 	 * @return string 	language code (See developer guidelines for codes)
 	 */
 	function __construct() {
+
+		parent::__construct();
+
+		
 		global $GO_CONFIG;
 
 		$this->language_path = $GO_CONFIG->root_path.$GO_CONFIG->language_path.'/';
@@ -81,7 +85,7 @@ class GO_LANGUAGE extends db {
 			}
 		}
 
-		parent::__construct();
+		
 	}
 
 	/**
@@ -238,7 +242,7 @@ class GO_LANGUAGE extends db {
 
 	function get_address_format_by_iso($iso)
 	{
-		$sql = "SELECT * FROM go_iso_address_format WHERE iso=\"$iso\"";
+		$sql = "SELECT * FROM go_iso_address_format WHERE `iso`='$iso'";
 		$this->query($sql);
 		return $this->num_rows();
 	}

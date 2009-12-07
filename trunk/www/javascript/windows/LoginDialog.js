@@ -308,9 +308,5 @@ Ext.extend(GO.dialog.LoginDialog, Ext.Window, {
 	
 });
 
-//GO.mainLayout.onReady(function(){
-	GO.loginDialog = new GO.dialog.LoginDialog({modal:false});
-	
-//});
 
 

@@ -218,6 +218,7 @@ try{
 			$mailbox['mtime']=Date::get_timestamp($mailbox['mtime']);		
 			$mailbox['ctime']=Date::get_timestamp($mailbox['ctime']);
 			$mailbox['quota']=Number::format($mailbox['quota']/1024);
+			
 					
 			$response['data']=$mailbox;						
 			$response['success']=true;			
@@ -255,7 +256,8 @@ try{
 				$mailbox = $postfixadmin->record;
 				$mailbox['mtime']=Date::get_timestamp($mailbox['mtime']);
 				$mailbox['ctime']=Date::get_timestamp($mailbox['ctime']);							
-				$mailbox['quota']=Number::format($mailbox['quota']/1024);	
+				//$mailbox['quota']=Number::format($mailbox['quota']/1024);
+				$mailbox['quota']=Number::format_size($mailbox['usage']*1024).' / '.Number::format_size($mailbox['quota']/1024);
 				$response['results'][] = $mailbox;
 			}
 			break;

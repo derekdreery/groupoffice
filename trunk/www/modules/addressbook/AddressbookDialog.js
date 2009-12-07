@@ -542,7 +542,7 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 				{
 					if(fields[f].datatype!='heading' && fields[f].datatype!='function')
 					{
-						this.defaultCSVField[fields[f].name]=fields[f].label;
+						this.defaultCSVField[fields[f].dataname]=fields[f].name;
 					}
 				}
 			}
