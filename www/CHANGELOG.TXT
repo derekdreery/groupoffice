@@ -1,7 +1,7 @@
-2009/12/04 3.3.2
+2009/12/07 3.3.2
 - Brought back upgrade2to3.php with it's own function libs
 - Updated Norwegian translation
-- Upgrade bugs fixed
+- Small bugs fixed
 
 2009/12/03 3.3.1
 - Sort IMAP folders for mbroot detection
