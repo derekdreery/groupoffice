@@ -1558,7 +1558,7 @@ GO.files.createSelectFileBrowser = function(){
 					text: GO.lang.cmdOk,
 					handler: function(){
 						var records = GO.selectFileBrowser.getSelectedGridRecords();
-						GO.selectFileBrowser.fileClickHandler.call(this, records[0]);
+						GO.selectFileBrowser.fileClickHandler.call(this.selectFileBrowser.scope, records[0]);
 					},
 					scope: this
 				},{

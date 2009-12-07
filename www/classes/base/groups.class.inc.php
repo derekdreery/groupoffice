@@ -368,11 +368,11 @@ class GO_GROUPS extends db
 	 * @return bool		True on success
 	 */
 
-	function __on_user_delete($user)
+	function delete_user($user_id)
 	{					
-		$sql = "DELETE FROM go_users_groups WHERE user_id='".$this->escape($user['id'])."'";
+		$sql = "DELETE FROM go_users_groups WHERE user_id='".$this->escape($user_id)."'";
 		$this->query($sql);
-		$sql = "SELECT id FROM go_groups WHERE user_id='".$this->escape($user['id'])."'";
+		$sql = "SELECT id FROM go_groups WHERE user_id='".$this->escape($user_id)."'";
 		$this->query($sql);
 		$del = new GO_GROUPS();
 		while ($this->next_record())

@@ -367,6 +367,8 @@ GO.email.EmailClient = function(config){
 							var sm = this.treePanel.getSelectionModel();
 							var node = sm.getSelectedNode();
 
+							this.el.mask(GO.lang.waitMsgLoad);
+
 							Ext.Ajax.request({
 								url: GO.settings.modules.email.url+'action.php',
 								params: {
@@ -379,17 +381,30 @@ GO.email.EmailClient = function(config){
 									if(!success)
 									{
 										Ext.MessageBox.alert(GO.lang.strError, response.result.errors);
+										this.el.unmask();
 									}else
-									{
+									{										
 										var responseParams = Ext.decode(response.responseText);
 										if(responseParams.success)
 										{
 											//remove preloaded children otherwise it won't request the server
 											delete node.parentNode.attributes.children;
-											node.parentNode.reload();
+
+											var updateFolderName = function(){
+												var node = this.treePanel.getNodeById('folder_'+this.folder_id);												
+												if(node){
+													if(this.folder_id==node.attributes.folder_id){
+														this.mailbox = node.attributes.mailbox;
+														this.treePanel.getSelectionModel().select(node);
+													}
+												}
+												this.el.unmask();
+											}
+											node.parentNode.reload(updateFolderName.createDelegate(this));
 										}else
 										{
 											Ext.MessageBox.alert(GO.lang.strError,responseParams.feedback);
+											this.el.unmask();
 										}
 									}
 								},
@@ -502,6 +517,7 @@ GO.email.EmailClient = function(config){
 
 	this.treePanel.on('beforenodedrop', function(e){
 		
+		
 		if(!e.dropNode)
 		{
 			var s = e.data.selections, messages = [];
@@ -604,8 +620,24 @@ GO.email.EmailClient = function(config){
 
 			}
 		}else
-		{
-			this.treePanel.moveFolder(e.target.attributes['account_id'], e.target.id , e.data.node);
+		{			
+			if(e.source.dragData.node.id.indexOf('account')>-1 && e.target.id.indexOf('account')>-1 && e.point!='append'){				
+				var sortorder=[];
+				var c = this.treePanel.getRootNode().childNodes;
+				for(var i=c.length;i>0;i--){
+					sortorder.push(c[i-1].attributes.account_id);
+				}
+				Ext.Ajax.request({
+					url: GO.settings.modules.email.url+'action.php',
+					params: {
+						task: 'save_accounts_sort_order',
+						sort_order: Ext.encode(sortorder)
+					}
+				});
+			}else
+			{
+				this.treePanel.moveFolder(e.target.attributes['account_id'], e.target.id , e.data.node);
+			}
 		}		
 	},
 	this);

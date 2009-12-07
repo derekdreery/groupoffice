@@ -1,54 +1,59 @@
 <?php
 
-ini_set('display_errors', 'on');
+
+if(empty($SECOND_RUN)){
+	ini_set('display_errors', 'on');
 
 
-$quiet=false;
-$line_break="\n";
+	$quiet=false;
+	$line_break="\n";
 
-if(isset($argv[1]))
-{
-	define('CONFIG_FILE', $argv[1]);
+	if(isset($argv[1]))
+	{
+		define('CONFIG_FILE', $argv[1]);
+	}
+
+	chdir(dirname(__FILE__));
+
+
+
+	require_once('../Group-Office.php');
+	ini_set('max_execution_time', '3600');
+
+	$log_dir = $GO_CONFIG->file_storage_path.'log/upgrade/';
+	if(!is_dir($log_dir)){
+		mkdir($log_dir,0750,true);
+	}
+	$log_file = $log_dir.date('Ymd_Gi').'.log';
+
+	touch ($log_file);
+
+	if(!is_writable($log_file)){
+		die('Fatal error: Could not write to log file');
+	}
+
+	function ob_upgrade_log($buffer)
+	{
+		global $log_file;
+
+		file_put_contents($log_file, $buffer, FILE_APPEND);
+		return $buffer;
+	}
+
+
+	if(!defined('NOTINSTALLED') && !isset($RERUN_UPDATE) && !headers_sent())
+	{
+		//login event can cause problems
+		SetCookie("GO_UN","",time()-3600,"/","",!empty($_SERVER['HTTPS']),false);
+		SetCookie("GO_PW","",time()-3600,"/","",!empty($_SERVER['HTTPS']),false);
+	}
+
+
+	if(php_sapi_name() != 'cli'){
+		echo '<pre>';
+	}
+	ob_start("ob_upgrade_log");
 }
-
-chdir(dirname(__FILE__));
-
-require_once('../Group-Office.php');
-ini_set('max_execution_time', '3600');
-
-$log_dir = $GO_CONFIG->file_storage_path.'log/upgrade/';
-if(!is_dir($log_dir)){
-	mkdir($log_dir,0750,true);
-}
-$log_file = $log_dir.date('Ymd_Gi').'.log';
-
-touch ($log_file);
-
-if(!is_writable($log_file)){
-	die('Fatal error: Could not write to log file');
-}
-
-function ob_upgrade_log($buffer)
-{
-	global $log_file;
-	
-  file_put_contents($log_file, $buffer, FILE_APPEND);
-  return $buffer;
-}
-
-
-if(!defined('NOTINSTALLED') && !isset($RERUN_UPDATE) && !headers_sent())
-{
-	//login event can cause problems
-	SetCookie("GO_UN","",time()-3600,"/","",!empty($_SERVER['HTTPS']),false);
-	SetCookie("GO_PW","",time()-3600,"/","",!empty($_SERVER['HTTPS']),false);
-}
-
-
-if(php_sapi_name() != 'cli'){
-	echo '<pre>';
-}
-ob_start("ob_upgrade_log");
 
 //update scripts can request to rerun the update process by setting $RERUN_UPDATE=true;
 //this is useful when an update installs a module that might need updates too.
@@ -162,7 +167,9 @@ foreach($GO_MODULES->modules as $update_module)
 
 if(isset($RERUN_UPDATE))
 {
+	$SECOND_RUN=true;
 	require(__FILE__);
+	$SECOND_RUN=false;
 }else
 {
 	echo 'Database is up to date now!'.$line_break.$line_break;
@@ -188,7 +195,9 @@ if(isset($RERUN_UPDATE))
 	
 }
 
-ob_end_flush();
+if(empty($SECOND_RUN)){
+	ob_end_flush();
+}
 
 if(php_sapi_name() != 'cli'){
 	echo '</pre>';

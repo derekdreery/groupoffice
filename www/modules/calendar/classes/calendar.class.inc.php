@@ -584,7 +584,7 @@ class calendar extends db
 		return $count;
 	}
 
-	function get_writable_views($user_id)
+	function get_writable_views($user_id, $sort='name', $dir='ASC')
 	{
 
 		$sql = "SELECT DISTINCT cal_views . * ".
@@ -593,7 +593,7 @@ class calendar extends db
 		"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ".
 		"WHERE go_acl.user_id=".$this->escape($user_id)." ".
 		"OR go_users_groups.user_id=".$this->escape($user_id)." ".
-		" ORDER BY cal_views.name ASC";
+		" ORDER BY cal_views.".$this->escape($sort.' '.$dir);
 
 		$this->query($sql);
 		return $this->num_rows();
@@ -978,7 +978,7 @@ class calendar extends db
 		return $count;
 	}
 
-	function get_writable_calendars($user_id, $start=0, $offset=0, $resources=0, $groups=0, $group_id=-1, $show_all=0)
+	function get_writable_calendars($user_id, $start=0, $offset=0, $resources=0, $groups=0, $group_id=-1, $show_all=0, $sort='name', $dir='ASC')
 	{
 		$sql = "SELECT DISTINCT cal_calendars.* ";
         if($groups)
@@ -1004,10 +1004,10 @@ class calendar extends db
             {
                 $sql .= " AND cal_calendars.group_id = ".$this->escape($group_id);
             }
-            $sql .= " ORDER BY cal_calendars.name ASC";
+            $sql .= " ORDER BY cal_calendars.".$this->escape($sort.' '.$dir);
         }else
         {
-            $sql .= " ORDER BY cal_calendars.group_id ASC, cal_calendars.name ASC";
+            $sql .= " ORDER BY cal_calendars.group_id ASC, cal_calendars.".$this->escape($sort.' '.$dir);
         }
         
 

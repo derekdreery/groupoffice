@@ -293,8 +293,10 @@ GO.cms.MainPanel = function(config){
 	},'-',this.saveButton = new Ext.Button({
 		iconCls: 'btn-save',
 		text: GO.lang.cmdSave,
-		handler:function(){			
+		handler:function(){
+			this.el.mask(GO.lang['waitMsgSave']);
 			this.editorPanel.saveFile();
+			
 		},
 		scope:this,
 		disabled:true
@@ -343,6 +345,7 @@ GO.cms.MainPanel = function(config){
 
         this.editorPanel.on('save', function(){
           this.filesButton.setDisabled(this.editorPanel.files_folder_id==0);
+					this.el.unmask();
         },this);
 	}
 	

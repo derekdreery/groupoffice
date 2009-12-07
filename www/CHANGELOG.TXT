@@ -1,3 +1,10 @@
+2009/12/07 3.3.2
+- Brought back upgrade2to3.php with it's own function libs
+- Updated Norwegian translation
+- Reorder e-mail accounts by dragging them around in the e-mail treeview so
+	we can sort on e-mail address in the administration dialog.
+- Small bugs fixed
+
 2009/12/03 3.3.1
 - Sort IMAP folders for mbroot detection
 - Small bug in calendar

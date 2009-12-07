@@ -35,3 +35,4 @@ $lang['files']['deleted']='Slettet';
 
 $lang['files']['file']='Fil';
 $lang['files']['folder']='Mappe';
+$lang['files']['files']='Filer';

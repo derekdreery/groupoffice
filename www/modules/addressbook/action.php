@@ -472,8 +472,8 @@ try
 										$cf_record=array('link_id'=>$new_id);
 										foreach($customfields as $field)
 										{
-											if(isset($_POST[$field['name']]) && isset($record[$_POST[$field['name']]]))
-												$cf_record[$field['name']]=$record[$_POST[$field['name']]];
+											if(isset($_POST[$field['dataname']]) && isset($record[$_POST[$field['dataname']]]))
+												$cf_record[$field['dataname']]=$record[$_POST[$field['dataname']]];
 										}
 										$cf->insert_row('cf_'.$new_type,$cf_record);
 									}

@@ -1,12 +1,10 @@
-#!/usr/bin/php
 <?php
 if(isset($argv[1]))
 	define('CONFIG_FILE', $argv[1]);
 
-require('/etc/groupoffice/servermanager.inc.php');
-require_once('/etc/groupoffice/config.php');
+$root_path = dirname(dirname(dirname(__FILE__)));
 
-require($config['root_path'].'Group-Office.php');
+require($root_path.'/Group-Office.php');
 
 //require('/etc/groupoffice/servermanager/config.inc.php');
 
@@ -28,12 +26,15 @@ $pa2 = new postfixadmin();
 
 $pa->get_mailboxes();
 while($pa->next_record()) {
-	$path = $GO_CONFIG->postfixadmin_vmail_root.$pa->f('maildir');
-
+	$arr = explode('@', $pa->f('username'));
+	$path = $GO_CONFIG->postfixadmin_vmail_root.$arr[1].'/'.$arr[0];
 	echo 'Calculating size of '.$path."\n";
+
 	$mailbox['id']=$pa->f('id');
 	$mailbox['usage']=File::get_directory_size($path);
+
 	echo $mailbox['usage']."\n";
+
 	$pa2->update_mailbox($mailbox);
 }
 ?>
