@@ -367,6 +367,8 @@ GO.email.EmailClient = function(config){
 							var sm = this.treePanel.getSelectionModel();
 							var node = sm.getSelectedNode();
 
+							this.el.mask(GO.lang.waitMsgLoad);
+
 							Ext.Ajax.request({
 								url: GO.settings.modules.email.url+'action.php',
 								params: {
@@ -379,17 +381,30 @@ GO.email.EmailClient = function(config){
 									if(!success)
 									{
 										Ext.MessageBox.alert(GO.lang.strError, response.result.errors);
+										this.el.unmask();
 									}else
-									{
+									{										
 										var responseParams = Ext.decode(response.responseText);
 										if(responseParams.success)
 										{
 											//remove preloaded children otherwise it won't request the server
 											delete node.parentNode.attributes.children;
-											node.parentNode.reload();
+
+											var updateFolderName = function(){
+												var node = this.treePanel.getNodeById('folder_'+this.folder_id);												
+												if(node){
+													if(this.folder_id==node.attributes.folder_id){
+														this.mailbox = node.attributes.mailbox;
+														this.treePanel.getSelectionModel().select(node);
+													}
+												}
+												this.el.unmask();
+											}
+											node.parentNode.reload(updateFolderName.createDelegate(this));
 										}else
 										{
 											Ext.MessageBox.alert(GO.lang.strError,responseParams.feedback);
+											this.el.unmask();
 										}
 									}
 								},

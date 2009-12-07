@@ -651,7 +651,8 @@ class imap{
 			{
 				$structure = imap_fetchstructure($this->conn, $this->message['uid'], FT_UID);
 				if(!$structure){
-					require($GLOBALS['GO_LANGUAGE']->get_language_file('email'));
+					global $GO_LANGUAGE;
+					require($GO_LANGUAGE->get_language_file('email'));
 					throw new Exception($lang['email']['errorGettingMessage']."\n\n".$this->last_error());
 				}				
 				$this->get_parts($structure);
