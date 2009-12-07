@@ -1383,7 +1383,11 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				totalProperty: 'total',
 				id: 'id',
 				fields:['id','name','user_name'],
-				remoteSort:true
+				remoteSort:true,
+				sortInfo: {
+					field: 'name',
+					direction: 'ASC'
+				}
 			});
 			
 			this.writableCalendarsStore.load();
@@ -1399,7 +1403,11 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				totalProperty: 'total',
 				id: 'id',
 				fields:['id','name','user_name'],
-				remoteSort:true
+				remoteSort:true,
+				sortInfo: {
+					field: 'name',
+					direction: 'ASC'
+				}
 			});
 
 			this.writableResourcesStore = new Ext.data.GroupingStore({
@@ -1491,7 +1499,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				},
 				columns:[{
 					header:GO.lang.strName,
-					dataIndex: 'name'
+					dataIndex: 'name',
+					sortable:true
 				},{
 					header:GO.lang.strOwner,
 					dataIndex: 'user_name'
@@ -1532,7 +1541,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				},
 				columns:[{
 					header:GO.lang.strName,
-					dataIndex: 'name'
+					dataIndex: 'name',
+					sortable:true
 				},{
 					header:GO.lang.strOwner,
 					dataIndex: 'user_name'

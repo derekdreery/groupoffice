@@ -310,7 +310,8 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 				},
 				columns:[{
 					header:GO.lang['strName'],
-					dataIndex: 'name'
+					dataIndex: 'name',
+					sortable:true
 				},{
 					header:GO.lang['strOwner'],
 					dataIndex: 'user_name'
@@ -391,7 +392,11 @@ GO.tasks.writableTasklistsStore = new GO.data.JsonStore({
 	totalProperty: 'total',
 	id: 'id',
 	fields:['id','name','user_name'],
-	remoteSort:true
+	remoteSort:true,
+	sortInfo: {
+		field: 'name',
+		direction: 'ASC'
+	}
 });
 
 

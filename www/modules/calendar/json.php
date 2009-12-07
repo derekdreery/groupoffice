@@ -589,10 +589,13 @@ try {
 			$resources = isset($_REQUEST['resources']) ? $_REQUEST['resources'] : 0;
 			$show_all = isset($_REQUEST['show_all']) ? $_REQUEST['show_all'] : 0;
 
-			$response['total'] = $cal->get_writable_calendars($GO_SECURITY->user_id, $start, $limit, $resources, 1, -1, $show_all);
+			$sort = isset($_REQUEST['sort']) ? $_REQUEST['sort'] : 'name';
+			$dir = isset($_REQUEST['dir']) ? $_REQUEST['dir'] : 'ASC';
+
+			$response['total'] = $cal->get_writable_calendars($GO_SECURITY->user_id, $start, $limit, $resources, 1, -1, $show_all, $sort, $dir);
 			if(!$response['total']) {
 				$cal->get_calendar();
-				$response['total'] = $cal->get_writable_calendars($GO_SECURITY->user_id, $start, $limit, $resources, 1, -1, $show_all);
+				$response['total'] = $cal->get_writable_calendars($GO_SECURITY->user_id, $start, $limit, $resources, 1, -1, $show_all, $sort, $dir);
 			}
 
 			$response['results']=array();
@@ -665,8 +668,10 @@ try {
 				}
 			}
 
-
-			$response['total'] = $cal->get_writable_views($GO_SECURITY->user_id);
+			$sort = isset($_REQUEST['sort']) ? $_REQUEST['sort'] : 'name';
+			$dir = isset($_REQUEST['dir']) ? $_REQUEST['dir'] : 'ASC';
+			
+			$response['total'] = $cal->get_writable_views($GO_SECURITY->user_id, $sort, $dir);
 			$response['results']=array();
 			while($cal->next_record(DB_ASSOC)) {
 				$user = $GO_USERS->get_user($cal->f('user_id'));
