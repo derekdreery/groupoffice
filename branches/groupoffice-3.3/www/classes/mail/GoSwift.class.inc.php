@@ -211,6 +211,8 @@ class GoSwift extends Swift_Mailer{
 	 * @param String $type Can be html or text
 	 */
 
+
+
 	function set_body($body,$type='html', $add_text_version=true)
 	{
 		global $GO_CONFIG;
@@ -225,19 +227,27 @@ class GoSwift extends Swift_Mailer{
 
 		if($type=='html' && $add_text_version)
 		{
+			
 			//add text version of the HTML body
 			$htmlToText = new Html2Text ($body);
 
-			if(isset($this->text_body)){
+			if(isset($this->text_part_body)){
 				//the body was already set so find the text version and replace it.
 				$children = (array) $this->message->getChildren();
 				foreach($children as $child){
-					$child->setBody($htmlToText->get_text());
-					break;
+					
+					if($child->getBody()==$this->text_part_body){
+						debug('Replaced');
+						$this->text_part_body = $htmlToText->get_text();
+						$child->setBody($this->text_part_body);
+						break;
+					}					
 				}
+				//$this->text_body->setBody($htmlToText->get_text());
 			}else
 			{
-				$this->text_body = $this->message->addPart($htmlToText->get_text(), 'text/plain','UTF-8');
+				$this->text_part_body =$htmlToText->get_text();
+				$this->message->addPart($this->text_part_body, 'text/plain','UTF-8');
 			}
 		}
 	}
@@ -540,7 +550,7 @@ class GoSwiftImport extends GoSwift{
 						$this->message->embed($img);
 					}else
 					{
-					echo $tmp_file."\n";
+					//echo $tmp_file."\n";
 						$attachment = Swift_Attachment::fromPath($tmp_file,File::get_mime($tmp_file));
 						$this->message->attach($attachment);
 					}
