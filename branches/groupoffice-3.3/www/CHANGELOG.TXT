@@ -1,3 +1,6 @@
+2009/12/08 3.3.4
+- Mailings didn't start automatically
+
 2009/12/08 3.3.3
 - Drag and drop e-mail messages was broken
 
