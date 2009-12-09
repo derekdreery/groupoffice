@@ -2,6 +2,10 @@
 
 
 if(empty($SECOND_RUN)){
+
+	if(!headers_sent()){
+		header('Content-Type: text/html; charset=UTF-8');
+	}
 	ini_set('display_errors', 'on');
 
 

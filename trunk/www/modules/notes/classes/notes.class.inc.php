@@ -66,6 +66,12 @@ class notes extends db {
 				}
 			}
 		}
+
+		if($GO_MODULES->modules['customfields']){
+			$db = new db();
+			echo "Deleting non existing custom field records".$line_break.$line_break;
+			$db->query("delete from cf_4 where link_id not in (select id from no_notes);");
+		}
 		echo 'Done'.$line_break.$line_break;
 
 	}

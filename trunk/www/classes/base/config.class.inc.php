@@ -170,6 +170,14 @@ class GO_CONFIG {
 	var $allow_password_change = true;
 
 	/**
+	 * Enable profile editing by every user through the settings dialog
+	 *
+	 * @var     bool
+	 * @access  public
+	 */
+	var $allow_profile_edit = true;
+
+	/**
 	 * Enable user registration by everyone
 	 *
 	 * @var     bool
@@ -613,7 +621,7 @@ class GO_CONFIG {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '3.3.2';
+	var $version = '3.3.4';
 
 
 	/* The permissions mode to use when creating files
@@ -638,7 +646,7 @@ class GO_CONFIG {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20091207';
+	var $mtime = '20091209';
 
 	#group configuration
 	/**
@@ -1077,6 +1085,7 @@ class GO_CONFIG {
 
 		$response['config']['allow_password_change']=$this->allow_password_change;
 		$response['config']['allow_themes']=$this->allow_themes;
+		$response['config']['allow_profile_edit']=$this->allow_profile_edit;
 
 		$response['config']['max_users']=$this->max_users;
 
