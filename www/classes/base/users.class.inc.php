@@ -919,16 +919,16 @@ class GO_USERS extends db
 			foreach($modules_read as $module_name)
 			{
 				$module = $GO_MODULES->get_module($module_name);
-				if($module && !$GO_SECURITY->user_in_acl($user['id'], $module['acl_id']))
+				if($module)
 				{
-					$GO_SECURITY->add_user_to_acl($user['id'], $module['acl_id']);
+					$GO_SECURITY->add_user_to_acl($user['id'], $module['acl_id'], GO_SECURITY::READ_PERMISSION);
 				}
 			}
 
 			foreach($modules_write as $module_name)
 			{
 				$module = $GO_MODULES->get_module($module_name);
-				if($module && !$GO_SECURITY->user_in_acl($user['id'], $module['acl_id']))
+				if($module)
 				{
 					$GO_SECURITY->add_user_to_acl($user['id'], $module['acl_id'], GO_SECURITY::WRITE_PERMISSION);
 				}
