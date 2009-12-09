@@ -79,10 +79,8 @@ Ext.extend(GO.PersonalSettingsDialog, Ext.Window,{
 			if(this.tabPanel.items.items[1].themeCombo)
 			{
 				this.tabPanel.items.items[1].themeCombo.on('change', function(){this.reload=true;}, this);
-			}
-		
-		}
-		
+			}		
+		}		
 		
 		this.formPanel.form.baseParams['user_id']=GO.settings.user_id;
 		this.user_id=GO.settings.user_id;
@@ -204,9 +202,6 @@ Ext.extend(GO.PersonalSettingsDialog, Ext.Window,{
 			},
 			waitMsgTarget:true,
 			border:false
-		});
-
-		
-		
+		});		
 	}
 });
