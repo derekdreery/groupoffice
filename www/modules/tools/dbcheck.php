@@ -66,6 +66,8 @@ $db->query("update go_users set timezone='".$db->escape($GO_CONFIG->default_time
 flush();
 echo 'Adding everyone to the everyone group'.$line_break;
 
+$db->query("DELETE FROM go_users_groups where user_id NOT IN (SELECT id FROM go_users)");
+
 $GO_USERS->get_users();
 
 while($GO_USERS->next_record())
@@ -74,6 +76,8 @@ while($GO_USERS->next_record())
 		$GO_GROUPS->add_user_to_group($GO_USERS->f('id'), $GO_CONFIG->group_everyone);
 }
 echo 'Done'.$line_break.$line_break;
+
+
 
 if(!$GO_GROUPS->is_in_group(1, $GO_CONFIG->group_root))
 {

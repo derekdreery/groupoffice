@@ -1529,7 +1529,7 @@ class files extends db {
 
 
 	public static function check_database() {
-		global $GO_USERS, $GO_CONFIG, $GO_SECURITY;
+		global $GO_USERS, $GO_CONFIG, $GO_SECURITY, $GO_MODULES;
 
 		$line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
 
@@ -1544,6 +1544,12 @@ class files extends db {
 		{
 			$r['id']=$fs2->nextid('fs_folders');
 			$fs2->update_row('fs_folders', 'path', $r);
+		}
+
+		if($GO_MODULES->modules['customfields']){
+			$db = new db();
+			echo "Deleting non existing custom field records".$line_break.$line_break;
+			$db->query("delete from cf_6 where link_id not in (select id from fs_files);");
 		}
 	}
 
