@@ -38,6 +38,11 @@ if(!defined('REPEAT_NONE'))
 
 class Date
 {
+
+	public function format_long_date($time){
+		global $lang;
+		return $lang['common']['full_days'][date('w', $time)].' '.date('d', $time).' '.$lang['common']['months'][date('n', $time)].' '.date('Y - G:i', $time);
+	}
 	/**
 	 * Converts a Group-Office date to unix time.
 	 *
