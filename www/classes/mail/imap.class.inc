@@ -1183,7 +1183,6 @@ class imap{
 		$mbroot = trim($mbroot);
 
 		$list = imap_getmailboxes($this->conn, "{".$this->connectstring."}", '%');
-
 		if (is_array($list)) {
 			while ($folder = array_shift($list)) {
 				if (!isset ($delimiter) && strlen($folder->delimiter) > 0) {
@@ -1213,7 +1212,6 @@ class imap{
 
 		$this->mailboxes = array ();
 		$list = imap_getmailboxes($this->conn, "{".$this->connectstring."}", $mailbox_root.'*');
-
 		if (is_array($list)) {
 			foreach ($list as $value) {
 				if (substr($value->name, -1) != $value->delimiter && strlen($value->delimiter) > 0) {
@@ -1257,7 +1255,7 @@ class imap{
 	function get_subscribed($mailbox_root = '', $name_only = false) {
 		$this->mailboxes = array ();
 		$list = imap_getsubscribed($this->conn, "{".$this->connectstring."}", $mailbox_root.'*');
-
+//debug($list);
 		if (is_array($list)) {
 			foreach ($list as $value) {
 				if (substr($value->name, -1) != $value->delimiter && strlen($value->delimiter) > 0) {														
