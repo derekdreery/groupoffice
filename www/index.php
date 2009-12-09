@@ -32,7 +32,7 @@ $mtime = $GO_CONFIG->get_setting('upgrade_mtime');
 if($mtime!=$GO_CONFIG->mtime)
 {
 	$GO_SECURITY->logout();
-	
+	header('Content-Type: text/html; charset=UTF-8');
 	echo '<html><head><style>body{font-family:arial;}</style></head><body>';
 	echo '<h1>'.$lang['common']['running_sys_upgrade'].'</h1><p>'.$lang['common']['sys_upgrade_text'].'</p>';
 	require($GO_CONFIG->root_path.'install/upgrade.php');

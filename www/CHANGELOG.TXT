@@ -1,3 +1,11 @@
+2009/12/09 3.3.4
+- Mailings didn't start automatically
+- Added config option to disable profile editing in the settings dialog.
+- Fixed small bugs
+
+2009/12/08 3.3.3
+- Drag and drop e-mail messages was broken
+
 2009/12/07 3.3.2
 - Brought back upgrade2to3.php with it's own function libs
 - Updated Norwegian translation

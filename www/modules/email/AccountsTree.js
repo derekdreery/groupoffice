@@ -53,25 +53,30 @@ GO.email.AccountsTree = function(config){
 	this.setRootNode(rootNode);
 
 	this.on('nodedragover', function(e)
-	{
-		if(e.source.dragData.node.id.indexOf('account')>-1 && e.target.id.indexOf('account')>-1){
-			if(e.point!='append')
-				return true;
-			else
-				e.target.collapse();
-		}
-		if(e.point!='append'){
-			return false;
-		}
+	{		
 		if(e.dropNode)
 		{
+			if(e.source.dragData.node.id.indexOf('account')>-1 && e.target.id.indexOf('account')>-1){
+				if(e.point!='append')
+					return true;
+				else
+					e.target.collapse();
+			}
+			if(e.point!='append'){
+				return false;
+			}
 			return ((this.getNodeById(e.dropNode.id).parentNode.id != e.target.id) &&
 					(e.source.dragData.node.attributes.account_id == e.target.attributes.account_id));
-		}
-		return true;
-		
-	}, this);
-	
+		}else
+		{
+			if(e.point!='append'){
+				return false;
+			}else
+			{
+				return true;
+			}
+		}		
+	}, this);	
 }
 
 Ext.extend(GO.email.AccountsTree, Ext.tree.TreePanel, {	
