@@ -377,10 +377,7 @@ try
 
 					if ($level)
 					{
-						if(!$GO_SECURITY->has_permission($user_id, $mod['acl_id']))
-						{
-							$GO_SECURITY->add_user_to_acl($user_id, $mod['acl_id'], $level);
-						}
+						$GO_SECURITY->add_user_to_acl($user_id, $mod['acl_id'], $level);
 					} else {
 						if($GO_SECURITY->user_in_acl($user_id, $mod['acl_id']))
 						{
