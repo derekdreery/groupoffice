@@ -16,7 +16,9 @@ GO.users.PasswordPanel = function(config)
 	if(!config)
 	{
 		config={};
-	}
+	}	
+
+	var prefix = (config.ldap_password) ? 'ldap_' : '';
 	
 	config.autoScroll=true;
 	config.border=false;
@@ -31,18 +33,18 @@ GO.users.PasswordPanel = function(config)
 	this.currentPasswordField = new Ext.form.TextField({
 		inputType: 'password', 
 		fieldLabel: GO.users.lang.currentPassword, 
-		name: 'current_password'
+		name: 'current_'+prefix+'password'
 		});
 	
 	this.passwordField1 = new Ext.form.TextField({
 		inputType: 'password', 
 		fieldLabel: GO.users.lang.newPassword, 
-		name: 'password1'
+		name: prefix+'password1'
 		});
 	this.passwordField2 = new Ext.form.TextField({
 		inputType: 'password', 
 		fieldLabel: GO.users.lang.confirmPassword, 
-		name: 'password2'
+		name: prefix+'password2'
 		});
 
 		
