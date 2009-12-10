@@ -1,5 +1,7 @@
-2009/12/09 3.3.5
+2009/12/10 3.3.5
 - Save module permissions at user properties was broken
+- Fixed bug in outlook sync. Phone numbers were not correctly sent from Outlook
+  to Group-Office
 
 2009/12/09 3.3.4
 - Mailings didn't start automatically
