@@ -1,3 +1,6 @@
+2009/12/09 3.3.5
+- Save module permissions at user properties was broken
+
 2009/12/09 3.3.4
 - Mailings didn't start automatically
 - Added config option to disable profile editing in the settings dialog.
