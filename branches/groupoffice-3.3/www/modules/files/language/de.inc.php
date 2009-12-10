@@ -26,3 +26,4 @@ $lang['files']['new']='Neu';
 $lang['files']['deleted']='Gelöscht';
 $lang['files']['file']='Datei';
 $lang['files']['folder']='Ordner';
+$lang['files']['files']='Dateien';

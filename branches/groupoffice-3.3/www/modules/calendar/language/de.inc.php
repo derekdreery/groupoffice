@@ -50,7 +50,17 @@ $lang['calendar']['printPage']='Seite %s von %s';
 $lang['calendar']['printList']='Terminliste';
 $lang['calendar']['printAllDaySingle']='Ganzer Tag';
 $lang['calendar']['printAllDayMultiple']='Ganze Tage vom %s bis zum %s';
-
-
+$lang['calendar']['calendars']='Kalender';
+$lang['calendar']['resource_mail_subject']='Resource \'%s\' booked'; //%s is resource name
+$lang['calendar']['resource_mail_body']='%s has made a booking for the resource \'%s\'. You are the maintainer of this resource. Please open the booking to decline or approve it.'; //First %s is the name of the person who created the event. Second is the calendar name
+$lang['calendar']['open_resource']='Open booking';
+$lang['calendar']['resource_modified_mail_subject']='Resource \'%s\' booking modified';//%s is resource name
+$lang['calendar']['resource_modified_mail_body']='%s has modified a booking for the resource \'%s\'. You are the maintainer of this resource. Please open the booking to decline or approve it.'; //First %s is the name of the person who created the event. Second is the calendar name
+$lang['calendar']['your_resource_modified_mail_subject']='Your booking for \'%s\' in status %s is modified';
+$lang['calendar']['your_resource_modified_mail_body']='%s has modified your booking for the resource \'%s\'.';
+$lang['calendar']['your_resource_accepted_mail_subject'] = 'Booking for \'%s\' is accepted';//%s is resource name, status
+$lang['calendar']['your_resource_accepted_mail_body'] = '%s has accepted your booking for the resource \'%s\'.'; //First %s is the name of the person who created the event. Second is the calendar name
+$lang['calendar']['your_resource_declined_mail_subject'] = 'Booking for \'%s\' is declined';//%s is resource name
+$lang['calendar']['your_resource_declined_mail_body'] = '%s has declined your booking for the resource \'%s\'.'; //First %s is the name of the person who created the event. Second is the calendar name
 $lang['calendar']['birthday_name']='Geburtstag: {NAME}';
-$lang['calendar']['birthday_desc']='{NAME} wird heute {AGE}';
+$lang['calendar']['birthday_desc']='{NAME} wurde heute {AGE}';
