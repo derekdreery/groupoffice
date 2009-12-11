@@ -38,5 +38,5 @@ GO.tasks.lang.taskDefaults='Forhåndsvalg for oppgaver';
 GO.tasks.lang.daysBeforeStart='Dager før start';
 GO.tasks.lang.defaultTasklist='Standard oppgaveliste';
 GO.tasks.lang.completedAt='Fullført den';
-GO.tasks.lang.visibleTasklists='Synlige opgavelister';
+GO.tasks.lang.visibleTasklists='Synlige oppgavelister';
 GO.tasks.lang.visible='Synlig';

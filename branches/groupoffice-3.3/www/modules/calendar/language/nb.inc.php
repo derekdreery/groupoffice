@@ -57,12 +57,12 @@ $lang['calendar']['not_invited']='Du er ikke blitt invitert til denne hendelsen.
 
 
 $lang['calendar']['accept_title']='Akseptert';
-$lang['calendar']['accept_confirm']='Eieren vil få beskjed om at du har akseptert hendelsen';
+$lang['calendar']['accept_confirm']='Avsender vil få beskjed om at du har akseptert hendelsen';
 
 $lang['calendar']['decline_title']='Avvist';
-$lang['calendar']['decline_confirm']='Eieren vil få beskjed om at du har avvist hendelsen';
+$lang['calendar']['decline_confirm']='Avsender vil få beskjed om at du har avvist hendelsen';
 
-$lang['calendar']['cumulative']='Uguldig gjentagelsesregel. Neste forskomst kan ikke starte før den forrige er ferdig.';
+$lang['calendar']['cumulative']='Ugyldig gjentagelsesregel. Neste forskomst kan ikke starte før den forrige er ferdig.';
 
 $lang['calendar']['already_accepted']='Du har allerede akseptert denne hendelsen.';
 
