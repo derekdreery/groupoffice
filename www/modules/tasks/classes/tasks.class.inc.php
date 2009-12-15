@@ -447,251 +447,214 @@ class tasks extends db
 		return $task['id'];
 	}
 	
-	function set_reminder($task)
-	{
+	function set_reminder($task) {
 		global $GO_CONFIG;
-		
+
 		$tasklist = $this->get_tasklist($task['tasklist_id']);
-		
+
 		require_once($GO_CONFIG->class_path.'base/reminder.class.inc.php');
 		$rm = new reminder();
 		$existing_reminder = $rm->get_reminder_by_link_id($tasklist['user_id'], $task['id'], 12);
 
-		if(empty($task['reminder']) && $existing_reminder)
-		{
+		if(empty($task['reminder']) && $existing_reminder) {
 			$rm->delete_reminder($existing_reminder['id']);
 		}
-		
-		if(!empty($task['reminder']))
-		{			
+
+		if(!empty($task['reminder'])) {
 			$reminder['user_id']=$tasklist['user_id'];
 			$reminder['name']=$task['name'];
 			$reminder['link_type']=12;
 			$reminder['link_id']=$task['id'];
 			$reminder['time']=$task['reminder'];
-			
-			if($existing_reminder)
-			{
+
+			if($existing_reminder) {
 				$reminder['id']=$existing_reminder['id'];
 				$rm->update_reminder($reminder);
-			}else
-			{
+			}else {
 				$rm->add_reminder($reminder);
 			}
 		}
 	}
-	
-	function build_task_files_path($task, $tasklist)
-	{
+
+	function build_task_files_path($task, $tasklist) {
 		return 'tasks/'.File::strip_invalid_chars($tasklist['name']).'/'.date('Y', $task['due_time']).'/'.File::strip_invalid_chars($task['name']);
 	}
 
 
-	function update_task($task, $tasklist=false, $old_task=false)
-	{
-		if(!isset($task['mtime']) || $task['mtime'] == 0)
-		{
+	function update_task($task, $tasklist=false, $old_task=false) {
+		if(!isset($task['mtime']) || $task['mtime'] == 0) {
 			$task['mtime']  = time();
 		}
 
-		if(isset($task['completion_time']) && $task['completion_time'] > 0 && $this->copy_recurring_completed($task['id']))
-		{
+		if(isset($task['completion_time']) && $task['completion_time'] > 0 && $this->copy_recurring_completed($task['id'])) {
 			$task['rrule'] = '';
 			$task['repeat_end_time'] = 0;
 		}
 
-		if(isset($task['reminder']))
-		{
+		if(isset($task['reminder'])) {
 			$this->set_reminder($task);
 		}
-		
-		
-		
+
+
+
 		global $GO_MODULES;
-		if(isset($GO_MODULES->modules['files']))
-		{
-			if(!$old_task)
-			{
+		if(isset($GO_MODULES->modules['files'])) {
+			if(!$old_task) {
 				$old_task = $this->get_task($task['id']);
-			}			
-			
+			}
+
 			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
-			
-			if(!isset($task['due_time']))
-			{
+
+			if(!isset($task['due_time'])) {
 				$task['due_time']=$old_task['due_time'];
 			}
-			if(!isset($task['name']))
-			{
+			if(!isset($task['name'])) {
 				$task['name']=$old_task['name'];
 			}
-			if(!isset($task['tasklist_id']))
-			{
+			if(!isset($task['tasklist_id'])) {
 				$task['tasklist_id']=$old_task['tasklist_id'];
 			}
-			if(!$tasklist)
-			{
-				$tasklist = $this->get_tasklist($task['tasklist_id']);				
+			if(!$tasklist) {
+				$tasklist = $this->get_tasklist($task['tasklist_id']);
 			}
-			
-			$new_path = $this->build_task_files_path($task, $tasklist);			
-			$task['files_folder_id']=$files->check_folder_location($old_task['files_folder_id'], $new_path);			
-		}	
-		
+
+			$new_path = $this->build_task_files_path($task, $tasklist);
+			$task['files_folder_id']=$files->check_folder_location($old_task['files_folder_id'], $new_path);
+		}
+
 		$r = $this->update_row('ta_tasks', 'id', $task);
-		
-		
+
+
 		$this->cache_task($task['id']);
 		return $r;
 	}
-	
-	
-	function copy_recurring_completed($task_id)
-	{
+
+
+	function copy_recurring_completed($task_id) {
 		global $GO_LINKS;
 		/*
 		 If a recurring task is completed we copy it to a new task and recur that again
 		 */
 
-		 $task = $this->get_task($task_id);
-		 $old_start_time = $task['start_time'];
+		$task = $this->get_task($task_id);
+		$old_start_time = $task['start_time'];
 
-		 if(!empty($task['rrule']) && $next_recurrence_time = Date::get_next_recurrence_time($task['start_time'], $task['start_time'], $task['rrule']))
-		 {
-		 	$old_id = $task['id'];
-		 	unset($task['completion_time'], $task['id'], $task['acl_id']);
-		 	$task['start_time'] = $next_recurrence_time;
-		 	
-		 	$diff = $next_recurrence_time-$old_start_time;
-		 	
-		 	$task['due_time']+=$diff;
-		 	$task['reminder']+=$diff;
-		 		 	
-		 	$task['status']='IN-PROCESS';
-		 	
-		 	$task=array_map('addslashes',$task);
-		 	if($new_task_id = $this->add_task($task))
-		 	{
-		 		//$GO_LINKS->copy_links($old_id, $new_task_id, 11, 11);	
-		 	}
-		 }
-		 return true;
+		if(!empty($task['rrule']) && $next_recurrence_time = Date::get_next_recurrence_time($task['start_time'], $task['start_time'], $task['rrule'])) {
+			$old_id = $task['id'];
+			unset($task['completion_time'], $task['id'], $task['acl_id']);
+			$task['start_time'] = $next_recurrence_time;
+
+			$diff = $next_recurrence_time-$old_start_time;
+
+			$task['due_time']+=$diff;
+			$task['reminder']+=$diff;
+
+			$task['status']='IN-PROCESS';
+
+			$task=array_map('addslashes',$task);
+			if($new_task_id = $this->add_task($task)) {
+			//$GO_LINKS->copy_links($old_id, $new_task_id, 11, 11);
+			}
+		}
+		return true;
 	}
 
 	function get_tasks(
-	$lists,
-	$user_id=0,
-	$show_completed=false,
-	$sort_field='due_time',
-	$sort_order='ASC',
-	$start=0,
-	$offset=0,
-	$show_inactive=false,
-        $search_query='')
-	{
+			$lists,
+			$user_id=0,
+			$show_completed=false,
+			$sort_field='due_time',
+			$sort_order='ASC',
+			$start=0,
+			$offset=0,
+			$show_inactive=false,
+			$search_query='') {
 
-                global $GO_MODULES;
-                
+		global $GO_MODULES;
+
 		$sql  = "SELECT DISTINCT t.*";
 
 		if($GO_MODULES->has_module('customfields')) {
-                        $sql .= " ,cf_12.*";
-                }
+			$sql .= " ,cf_12.*";
+		}
 
-                $sql .= " FROM ta_tasks t";
-                
-                if($user_id > 0)
-		{
+		$sql .= " FROM ta_tasks t";
+
+		if($user_id > 0) {
 			$sql .= " INNER JOIN ta_lists l ON (t.tasklist_id=l.id)";
 		}
 
-                if($GO_MODULES->has_module('customfields')) {
-                        $sql .= " LEFT JOIN cf_12 ON cf_12.link_id=t.id";
-                }
+		if($GO_MODULES->has_module('customfields')) {
+			$sql .= " LEFT JOIN cf_12 ON cf_12.link_id=t.id";
+		}
 
 		$where=false;
 
-		if(empty($show_completed))
-		{
-			$where=true;			
+		if(empty($show_completed)) {
+			$where=true;
 			$sql .= ' WHERE completion_time=0';
 
 		}
-		
 
-		if($user_id > 0)
-		{
-			if($where)
-			{
+
+		if($user_id > 0) {
+			if($where) {
 				$sql .= " AND ";
-			}else
-			{
+			}else {
 				$sql .= " WHERE ";
 				$where=true;
 			}
 			$sql .= "l.user_id='".$this->escape($user_id)."' ";
-		}else
-		{
-			if($where)
-			{
+		}else {
+			if($where) {
 				$sql .= " AND ";
-			}else
-			{
+			}else {
 				$sql .= " WHERE ";
 				$where=true;
 			}
 
 			$sql .= "t.tasklist_id IN (".$this->escape(implode(',',$lists)).")";
-			
+
 		}
-		
-		if(empty($show_inactive))
-		{
+
+		if(empty($show_inactive)) {
 			$now = mktime(0,0,0);
-			if($where)
-			{
+			if($where) {
 				$sql .= " AND ";
-			}else
-			{
+			}else {
 				$sql .= " WHERE ";
 				$where=true;
 			}
 			$sql .= "t.start_time<=".$now." AND (t.due_time>=".$now." OR t.completion_time=0)";
 		}
 
-                if(!empty($search_query))
-                {
-                        if($where)
-                        {
-                                $sql .= " AND ";
-                        }
-                        else
-                        {
-                                $where=true;
-                                $sql .= " WHERE ";
-                        }
-                        $query = $this->escape($search_query);
-                        $sql .= "(t.name LIKE '".$query."' OR t.description LIKE '".$query."')";
-                }
-                
-		if($sort_field != '' && $sort_order != '')
-		{
+		if(!empty($search_query)) {
+			if($where) {
+				$sql .= " AND ";
+			}
+			else {
+				$where=true;
+				$sql .= " WHERE ";
+			}
+			$query = $this->escape($search_query);
+			$sql .= "(t.name LIKE '".$query."' OR t.description LIKE '".$query."')";
+		}
+
+		if($sort_field != '' && $sort_order != '') {
 			$sql .=	" ORDER BY ".$this->escape($sort_field)." ".$this->escape($sort_order)."";
 		}
 
-                $_SESSION['GO_SESSION']['export_queries']['get_tasks']=array(
-                    'query'=>$sql,
-                    'method'=>'format_task_record',
-                    'class'=>'tasks',
-                    'require'=>__FILE__);
-                
-		if($offset == 0)
-		{
+		$_SESSION['GO_SESSION']['export_queries']['get_tasks']=array(
+				'query'=>$sql,
+				'method'=>'format_task_record',
+				'class'=>'tasks',
+				'require'=>__FILE__);
+
+		if($offset == 0) {
 			$this->query($sql);
 			return $this->num_rows();
-		}else
-		{
+		}else {
 			$this->query($sql);
 			$count = $this->num_rows();
 
@@ -703,25 +666,18 @@ class tasks extends db
 		}
 	}
 
-         function format_task_record(&$record) {               
-                $record['start_time']=Date::get_timestamp($record['start_time']);
-                $record['due_time']=Date::get_timestamp($record['due_time']);
-                $record['completion_time']=Date::get_timestamp($record['completion_time']);
-                $record['ctime']=Date::get_timestamp($record['ctime']);
-                $record['mtime']=Date::get_timestamp($record['mtime']);               
-        }
+	function format_task_record(&$record) {
+		$record['start_time']=Date::get_timestamp($record['start_time']);
+		$record['due_time']=Date::get_timestamp($record['due_time']);
+		$record['completion_time']=Date::get_timestamp($record['completion_time']);
+		$record['ctime']=Date::get_timestamp($record['ctime']);
+		$record['mtime']=Date::get_timestamp($record['mtime']);
+	}
 
-	function get_task($task_id)
-	{
+	function get_task($task_id) {
 		$sql = "SELECT t.*, tl.acl_id FROM ta_tasks t INNER JOIN ta_lists tl ON tl.id=t.tasklist_id WHERE t.id='".$this->escape($task_id)."'";
 		$this->query($sql);
-		if($this->next_record(DB_ASSOC))
-		{
-			return $this->record;
-		}else
-		{
-			throw new DatabaseSelectException();
-		}
+		return $this->next_record(DB_ASSOC);
 	}
 
 	function delete_task($task_id)

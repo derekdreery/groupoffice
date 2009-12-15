@@ -402,10 +402,7 @@ class addressbook extends db {
 				"LEFT JOIN go_address_format AS post_af ON (post_af.id=post_iaf.address_format_id) ".
 				"WHERE ab_companies.id='".$this->escape($company_id)."'";
 		$this->query($sql);
-		if ($this->next_record(DB_ASSOC)) {
-			return $this->record;
-		}
-		return false;
+		return $this->next_record(DB_ASSOC);
 	}
 
 	function get_company_by_name($addressbook_id, $name) {
@@ -624,12 +621,8 @@ class addressbook extends db {
 				"LEFT JOIN go_address_format ON (go_address_format.id=go_iso_address_format.address_format_id) ".
 				"WHERE ab_contacts.id='".$this->escape($contact_id)."'");
 
-		if ($this->next_record(DB_ASSOC)) {
-			return $this->record;
-		}else {
-			throw new DatabaseSelectException();
-		}
-		return false;
+		return $this->next_record(DB_ASSOC);
+		
 	}
 
 	function delete_contact($contact_id, $contact=false) {

@@ -1637,13 +1637,7 @@ class calendar extends db
 	{
 		$sql = "SELECT e.*, c.acl_id FROM cal_events e INNER JOIN cal_calendars c ON c.id=e.calendar_id WHERE e.id='".$this->escape($event_id)."'";
 		$this->query($sql);
-		if($this->next_record(DB_ASSOC))
-		{
-			return $this->record;
-		}else
-		{
-			return false;
-		}
+		return $this->next_record(DB_ASSOC);
 	}
 
 	function get_events_for_period($user_id, $start_offset, $days, $index_hour=false)
