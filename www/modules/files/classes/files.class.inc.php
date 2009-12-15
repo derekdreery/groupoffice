@@ -1206,7 +1206,7 @@ class files extends db {
 
 	function resolve_path($path,$create_folders=false, $user_id=0, $readonly='0', $folder_id=0) {
 		if(substr($path,-1)=='/') {
-			$url=substr($path,0,-1);
+			$path=substr($path,0,-1);
 		}
 		$parts = explode('/', $path);
 		$first_part = array_shift($parts);
