@@ -1,3 +1,8 @@
+2009/12/16 3.3.7
+- Updated Czech, Norwegian and German translations.
+- Fixed Synchronization problems
+- Fixed small bugs
+
 2009/12/10 3.3.6
 - The package in 3.3.5 seemed to be 3.3.4.
 
