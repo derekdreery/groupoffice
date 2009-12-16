@@ -1,4 +1,4 @@
-﻿GO.calendar.lang.addressbook='Adressbuch';
+GO.calendar.lang.addressbook='Adressbuch';
 GO.calendar.lang.appointment='Termin';
 GO.calendar.lang.appointments='Termine';
 GO.calendar.lang.recurrence='Wiederholung';
