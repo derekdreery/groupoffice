@@ -181,7 +181,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
             if(GO.customfields && GO.customfields.types["1"])
             {
                 this.tabPanel.items.each(function(p){
-                    if(p.category_id && p.category_id != 1)
+                    if(p.category_id)
                     {
                         var visible = fields.indexOf('cf_category_'+p.category_id)>-1;
 
