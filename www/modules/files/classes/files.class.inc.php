@@ -97,6 +97,7 @@ class files extends db {
 			case 'odp':
 			case 'pps':
 			case 'pptx':
+			case 'ppt':
 				return $GO_THEME->image_url.'128x128/filetypes/pps.png';
 				break;
 
