@@ -35,6 +35,11 @@ GO.mainLayout.onReady(function(){
 						buttons:[{
 							text: GO.lang.cmdSave,
 							handler: function(){
+
+								if(!this.WebFeedsGrid.isValid(true)){
+									alert(GO.lang['strErrorsInForm']);
+									return false;
+								}
 								var params={
 									'task' : 'save_feeds'
 								};
