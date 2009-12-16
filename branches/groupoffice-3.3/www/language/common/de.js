@@ -1,4 +1,4 @@
-﻿GO.lang.exportHiddenColumns='Auch versteckte Spalten exportieren';
+GO.lang.exportHiddenColumns='Auch versteckte Spalten exportieren';
 GO.lang.searchQuery='Suchbegriff';
 GO.lang.pleaseApplyFirst='Bitte erst mit einem Klick auf \'Anwenden\' speichern';
 GO.lang.passwordMatchError='Die Passwörter stimmen nicht überein';

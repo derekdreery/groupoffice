@@ -4,7 +4,7 @@ GO.cms.lang.cms='Webseiten';
 GO.cms.lang.site="Seite";
 GO.cms.lang.sites="Seiten";
 GO.cms.lang.allowProperties="Allow properties";
-GO.cms.lang.domain="Domäne";
+GO.cms.lang.domain="DomÃ¤ne";
 GO.cms.lang.webmaster="Webmaster";
 GO.cms.lang.language="Sprache";
 
@@ -20,7 +20,7 @@ GO.cms.lang.files="Dateien";
 
 GO.cms.lang.autoMeta="Generate meta data automatically";
 GO.cms.lang.title="Titel";
-GO.cms.lang.keywords="Schlüsselworte";
+GO.cms.lang.keywords="SchlÃ¼sselworte";
 
 /* table: cms_templates */
 GO.cms.lang.template="Vorlage";

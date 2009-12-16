@@ -1,4 +1,4 @@
-﻿GO.modules.lang.modules='Module';
+GO.modules.lang.modules='Module';
 GO.modules.lang.cmdSaveChanges='Änderungen speichern';
 GO.modules.lang.cmdInstall='Hinzufügen';
 GO.modules.lang.cmdUninstall='Entfernen';

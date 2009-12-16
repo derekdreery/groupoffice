@@ -1,4 +1,4 @@
-﻿GO.users.lang.cmdCheckColumnRead='Lesen';
+GO.users.lang.cmdCheckColumnRead='Lesen';
 GO.users.lang.cmdCheckColumnWrite='Schreiben';
 GO.users.lang.cmdCheckColumnGroups='Gruppen';
 GO.users.lang.cmdHeaderColumnName='Modulname';
