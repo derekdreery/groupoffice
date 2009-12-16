@@ -56,7 +56,7 @@ try{
 			}
 
 			$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'name';
-			$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'DESC';
+			$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'ASC';
 			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
 			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 			

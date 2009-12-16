@@ -51,7 +51,7 @@ GO.notes.MainPanel = function(config){
 
 		
 		
-		GO.notes.writableCategoriesStore.load();
+		//GO.notes.writableCategoriesStore.load();
 
 		if(defaultRecord)
 		{
@@ -122,7 +122,7 @@ GO.notes.MainPanel = function(config){
 					if(!this.categoriesDialog)
 					{
 						this.categoriesDialog = new GO.notes.ManageCategoriesDialog();
-						this.categoriesDialog.on('change', function(){this.westPanel.store.reload();}, this);						
+						this.categoriesDialog.on('change', function(){this.westPanel.store.reload();GO.notes.writableCategoriesStore.reload();}, this);
 					}
 					this.categoriesDialog.show();
 				},
@@ -148,7 +148,7 @@ Ext.extend(GO.notes.MainPanel, Ext.Panel, {
 });
 
 
-GO.notes.writableCategoriesStore = new GO.data.JsonStore({
+/*GO.notes.writableCategoriesStore = new GO.data.JsonStore({
 	    url: GO.settings.modules.notes.url+ 'json.php',
 	    baseParams: {
 	    	auth_type:'write',
@@ -159,7 +159,7 @@ GO.notes.writableCategoriesStore = new GO.data.JsonStore({
 	    totalProperty:'total',
 	    fields: ['id', 'name', 'user_name'],
 	    remoteSort: true
-	});
+	});*/
 
 
 GO.mainLayout.onReady(function(){

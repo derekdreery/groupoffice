@@ -35,29 +35,31 @@ GO.notes.NoteDialog = function(config){
 	config.items= this.formPanel;
 	config.focus= focusFirstField.createDelegate(this);
 	config.buttons=[{
-			text: GO.lang['cmdOk'],
-			handler: function(){
-				this.submitForm(true);
-			},
-			scope: this
-		},{
-			text: GO.lang['cmdApply'],
-			handler: function(){
-				this.submitForm();
-			},
-			scope:this
-		},{
-			text: GO.lang['cmdClose'],
-			handler: function(){
-				this.hide();
-			},
-			scope:this
-		}					
+		text: GO.lang['cmdOk'],
+		handler: function(){
+			this.submitForm(true);
+		},
+		scope: this
+	},{
+		text: GO.lang['cmdApply'],
+		handler: function(){
+			this.submitForm();
+		},
+		scope:this
+	},{
+		text: GO.lang['cmdClose'],
+		handler: function(){
+			this.hide();
+		},
+		scope:this
+	}
 	];
 	
 	GO.notes.NoteDialog.superclass.constructor.call(this, config);	
 	
-	this.addEvents({'save' : true});	
+	this.addEvents({
+		'save' : true
+	});
 }
 
 Ext.extend(GO.notes.NoteDialog, Ext.Window,{
@@ -141,7 +143,9 @@ Ext.extend(GO.notes.NoteDialog, Ext.Window,{
 		this.formPanel.form.submit(
 		{
 			url:GO.settings.modules.notes.url+'action.php',
-			params: {'task' : 'save_note'},
+			params: {
+				'task' : 'save_note'
+			},
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){
 				
@@ -183,53 +187,45 @@ Ext.extend(GO.notes.NoteDialog, Ext.Window,{
 		this.propertiesPanel = new Ext.Panel({
 			url: GO.settings.modules.notes.url+'action.php',
 			border: false,
-			baseParams: {task: 'note'},			
+			baseParams: {
+				task: 'note'
+			},
 			title:GO.lang['strProperties'],			
-			cls:'go-form-panel',waitMsgTarget:true,			
+			cls:'go-form-panel',
+			waitMsgTarget:true,
 			layout:'form',
 			autoHeight:true,
 			items:[{
-					xtype: 'textfield',
-				  name: 'name',
-				  width:300,
-					anchor: '100%',
-					maxLength: 100,
-				  allowBlank:false,
-				  fieldLabel: GO.lang.strName
-				},this.selectCategory = new GO.form.ComboBox({
-	       	fieldLabel: GO.notes.lang.category_id,
-	        hiddenName:'category_id',
-	        anchor:'100%',
-	        emptyText:GO.lang.strPleaseSelect,
-	        store: new GO.data.JsonStore({
-					    url: GO.settings.modules.notes.url+ 'json.php',
-					    baseParams: {
-					    	auth_type:'write',
-					    	task: 'categories'
-				    	},
-			    root: 'results',
-			    id: 'id',
-			    totalProperty:'total',
-			    fields: ['id', 'name', 'user_name'],
-			    remoteSort: true
-				}),
+				xtype: 'textfield',
+				name: 'name',
+				width:300,
+				anchor: '100%',
+				maxLength: 100,
+				allowBlank:false,
+				fieldLabel: GO.lang.strName
+			},this.selectCategory = new GO.form.ComboBox({
+				fieldLabel: GO.notes.lang.category_id,
+				hiddenName:'category_id',
+				anchor:'100%',
+				emptyText:GO.lang.strPleaseSelect,
+				store: GO.notes.writableCategoriesStore,
 				pageSize: parseInt(GO.settings.max_rows_list),
-        valueField:'id',
-        displayField:'name',
-        mode: 'remote',
-        triggerAction: 'all',
-        editable: true,
-        selectOnFocus:true,
-        forceSelection: true,
-        allowBlank: false
-    }),
+				valueField:'id',
+				displayField:'name',
+				mode: 'remote',
+				triggerAction: 'all',
+				editable: true,
+				selectOnFocus:true,
+				forceSelection: true,
+				allowBlank: false
+			}),
 			this.selectLinkField,
 			{
 				xtype: 'textarea',
-			  name: 'content',
+				name: 'content',
 				anchor: '100%',
 				height:300,
-			  hideLabel:true
+				hideLabel:true
 			}]				
 		});
 
@@ -243,20 +239,22 @@ Ext.extend(GO.notes.NoteDialog, Ext.Window,{
 			}
 		}
  
-    this.tabPanel = new Ext.TabPanel({
-      activeTab: 0,      
-      deferredRender: false,
-    	border: false,
-      items: items,
-      anchor: '100% 100%'
-    });    
+		this.tabPanel = new Ext.TabPanel({
+			activeTab: 0,
+			deferredRender: false,
+			border: false,
+			items: items,
+			anchor: '100% 100%'
+		});
     
-    this.formPanel = new Ext.form.FormPanel({
-    	waitMsgTarget:true,
+		this.formPanel = new Ext.form.FormPanel({
+			waitMsgTarget:true,
 			url: GO.settings.modules.notes.url+'action.php',
 			border: false,
 			autoHeight:true,
-			baseParams: {task: 'note'},				
+			baseParams: {
+				task: 'note'
+			},
 			items:this.tabPanel				
 		});    
 	}
