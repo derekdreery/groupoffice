@@ -718,7 +718,7 @@ class email extends db
 		$this->query($sql);
 
 		$sql = "DELETE FROM em_filters WHERE account_id='".$this->escape($account_id)."' ".
-		"AND folder='$name'";
+		"AND folder='".$this->escape($name)."'";
 		return $this->query($sql);
 	}
 	function folder_exists($account_id, $name)
