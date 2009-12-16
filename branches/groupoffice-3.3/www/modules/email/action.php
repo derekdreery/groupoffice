@@ -797,13 +797,13 @@ try{
 						if('account_'.$account_id == $target_id)
 						{
 							$parent_id = 0;
-							$path_name=$account['mbroot'].$imap->utf7_imap_encode($folder_name);
+							$path_name=$account['mbroot'].$folder_name;
 						}else
 						{
 							$folder_dest = $email->get_folder_by_id(substr($target_id, 7));
 
 							$parent_id = $folder_dest['id'];
-							$path_name = $folder_dest['name'].$folder_dest['delimiter'].$imap->utf7_imap_encode($folder_name);
+							$path_name = $folder_dest['name'].$folder_dest['delimiter'].$folder_name;
 						}
 
 						if($imap->rename_folder($folder_src['name'],$path_name))
