@@ -22,18 +22,7 @@ GO.notes.CategoriesGrid = function(config){
 	config.layout='fit';
 	config.autoScroll=true;
 	config.split=true;
-	config.store = new GO.data.JsonStore({
-	    url: GO.settings.modules.notes.url+ 'json.php',
-	    baseParams: {
-	    	task: 'categories',
-	    	auth_type: 'read'
-	    	},
-	    root: 'results',
-	    id: 'id',
-	    totalProperty:'total',
-	    fields: ['id','user_name','acl_id','name'],
-	    remoteSort: true
-	});
+	config.store = GO.notes.readableCategoriesStore;
 
 	var columnModel =  new Ext.grid.ColumnModel([
 	  {
