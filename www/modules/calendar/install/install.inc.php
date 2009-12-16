@@ -35,6 +35,8 @@ while($GO_USERS->next_record())
 		$cal->add_calendar_to_view($calendar_id, '', $view_id);
 }
 
+$cal->query("REPLACE INTO go_db_sequence (nextid,seq_name) VALUES (1, 'cal_groups')");
+
 $group['id'] = 1;
 $group['user_id']=1;
 $group['name']=$lang['calendar']['calendars'];
