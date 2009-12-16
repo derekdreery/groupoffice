@@ -138,7 +138,7 @@ GO.lang.cmdLink = 'Odkaz';
 GO.lang.cmdUnlink = 'Zrušit odkaz';
 GO.lang.cmdClose = 'Zavřít';
 GO.lang.cmdSettings = 'Nastavení';
-GO.lang.cmdReset = 'Základní';
+GO.lang.cmdReset = 'Výchozí';
 GO.lang.cmdExport='Exportovat';
 GO.lang.cmdPrint='Tisk';
 GO.lang.cmdImport='Importovat';
@@ -313,3 +313,12 @@ GO.lang.rightClickToClose='Pravé kliknutní na hlavičce panelu slouží k zav�
 GO.lang.adminMenu = 'Administrace';
 
 GO.lang.administration='Administrace';
+
+GO.lang.extra='Extra';
+
+GO.lang.permissionsLevel='Úroveň';
+
+GO.lang.permissionRead='Pouze čtení';
+GO.lang.permissionWrite='Zápis';
+GO.lang.permissionDelete='Zápis a smazání';
+GO.lang.permissionManage='Upravit';

@@ -77,3 +77,20 @@ $lang['calendar']['printList']='Seznam událostí';
 
 $lang['calendar']['printAllDaySingle']='Celý den';
 $lang['calendar']['printAllDayMultiple']='Celý den od %s do %s';
+
+$lang['calendar']['calendars']='Kalendáře';
+$lang['calendar']['resource_mail_subject']='Prostředek \'%s\' byl zamluven'; //%s is resource name
+$lang['calendar']['resource_mail_body']='%s vytvořil rezervaci pro prostředek \'%s\'. Vy jste správcem tohoto prostředku. Prosím, otevřete, zakažte nebo schvalte rezervace.'; //First %s is the name of the person who created the event. Second is the calendar name
+$lang['calendar']['open_resource']='Otevřená rezervace';
+$lang['calendar']['resource_modified_mail_subject']='Rezervace prostředku \'%s\' byla změněna';//%s is resource name
+$lang['calendar']['resource_modified_mail_body']='%s změnil rezervace pro prostředek \'%s\'. Vy jste správcem tohoto prostředku. Prosím, otevřete, zakažte nebo schvalte rezervace.'; //First %s is the name of the person who created the event. Second is the calendar name
+
+$lang['calendar']['your_resource_modified_mail_subject']='Vaše rezervace pro \'%s\' ve stavu %s byla změněna';
+$lang['calendar']['your_resource_modified_mail_body']='%s byla změněna Vaše rezervace pro prostředek \'%s\'.';
+$lang['calendar']['your_resource_accepted_mail_subject'] = 'Rezervace pro \'%s\' byla přijata';//%s is resource name, status
+$lang['calendar']['your_resource_accepted_mail_body'] = '%s přijal Vaši rezervaci pro prostředek \'%s\'.'; //First %s is the name of the person who created the event. Second is the calendar name
+$lang['calendar']['your_resource_declined_mail_subject'] = 'Rezervace pro \'%s\' byla odmítnuta';//%s is resource name
+$lang['calendar']['your_resource_declined_mail_body'] = '%s odmítnul Vaši rezervaci pro prostředek \'%s\'.'; //First %s is the name of the person who created the event. Second is the calendar name
+
+$lang['calendar']['birthday_name']='Narozeniny: {NAME}';
+$lang['calendar']['birthday_desc']='{NAME} oslavil dnes {AGE}';

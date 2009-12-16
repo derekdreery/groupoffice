@@ -41,6 +41,8 @@ $lang['common']['invalidEmailError']='E-mailová adresa není správná';
 $lang['common']['invalidDateError']='Zadali jste nesprávný formát datumu';
 $lang['common']['noFileUploaded']='Žádný soubor nebyl odeslán ';
 $lang['common']['error']='Chyba';
+$lang['common']['fileCreateError']='Nepodařilo se vytvořit soubor';
+$lang['common']['illegalCharsError']='Název obsahuje jeden z následujících nedovolených znaků %s';
 
 $lang['common']['salutation']='Oslovení';
 $lang['common']['firstName'] = 'Křestní jméno';
@@ -176,3 +178,21 @@ $lang['common']['GOisAProductOf']='<i>Group-Office</i> je produkt od <a href="ht
 
 $lang['common']['yes']='Ano';
 $lang['common']['no']='Ne';
+
+$lang['common']['system']='Systém';
+
+$lang['common']['goAlreadyStarted']='Group-Office byl již spuštěn. Tento dialog vytvořil {FUNCTION} a byl nahrán v Group-Office. Nyní můžete toho okno zavřít a pokračovat ve Vaší práci v Group-Office.';
+
+$lang['commmon']['logFiles']='Logovací soubory';
+
+$lang['common']['reminder']='Připomínka';
+$lang['common']['unknown']='Neznámé';
+$lang['common']['time']='Čas';
+
+$lang['common']['dontChangeAdminsPermissions']='Nemůžete měnit práva v administrátorské skupině';
+$lang['common']['dontChangeOwnersPermissions']='Nemůžete měnit práva vlastníka';
+
+
+$lang['common']['running_sys_upgrade']='Running required system update';
+$lang['common']['sys_upgrade_text']='Vyčkejte prosím. Všechny výstupy budou přihlášeny.';
+$lang['common']['click_here_to_contine']='Klikněte zde pro pokračování';

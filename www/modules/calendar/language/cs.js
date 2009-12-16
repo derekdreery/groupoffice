@@ -62,9 +62,26 @@ GO.calendar.lang.selectIcalendarFile='Vyberte icalendar (*.ics) soubor';
 GO.calendar.lang.location='Umístění';
 GO.calendar.lang.startsAt='Začátek v';
 GO.calendar.lang.endsAt='Konec v';
-GO.calendar.lang.eventDefaults='Základní nastavení událostí';
+GO.calendar.lang.eventDefaults='Výchozí nastavení událostí';
 
 GO.calendar.lang.importToCalendar='Přidat činnost přímo do kalendářů';
 GO.calendar.lang.default_calendar='Výchozí kalendář';
 
 GO.calendar.lang.status='Stav';
+
+GO.calendar.lang.resource_groups='Skupiny prostředků';
+GO.calendar.lang.resource_group='Skupina prostředku';
+GO.calendar.lang.resources='Prostředky';
+GO.calendar.lang.resource='Prostředek';
+GO.calendar.lang.calendar_group='Skupina kalendářů';
+GO.calendar.lang.admins='Administrátoři';
+GO.calendar.lang.no_group_selected='Vyskytly se chyby ve formuláři. Musíte vybrat skupinu pro tento prostředek.';
+
+GO.calendar.lang.visibleCalendars='Viditelné kalendáře';
+GO.calendar.lang.visible='Viditelný';
+
+GO.calendar.lang.group='Skupina';
+GO.calendar.lang.no_status='Nový';
+GO.calendar.lang.no_custom_fields='Nejsou k dispozici žádné další možnosti.';
+GO.calendar.lang.show_bdays='Zobrazit narozeniny z adresáře';
+GO.calendar.lang.show_tasks='Zobrazit úkoly z přehledu úkolů';
