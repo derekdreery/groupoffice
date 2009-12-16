@@ -59,12 +59,6 @@ GO.tasks.TasksPanel = function(config)
 				hidden:true,
 				width:110
 			},{
-				header: GO.lang.strDescription,
-				dataIndex: 'description',
-				hidden:true,
-				width:110,
-				sortable:false
-			},{
 				header: GO.lang.strStatus,
 				dataIndex: 'status',
 				hidden:true,
