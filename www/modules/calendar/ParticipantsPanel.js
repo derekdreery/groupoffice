@@ -245,6 +245,10 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 		this.newId=0;		
 		this.inviteCheckbox.setValue(false);
 		this.importCheckbox.setValue(false);
+
+		if(this.isVisible()){
+			this.store.reload();
+		}
 	},
 	
 	onShow : function() {
