@@ -478,34 +478,37 @@ try {
 				$participants = json_decode($_POST['participants'], true);
 				foreach($participants as $p) {
 					if(substr($p['id'], 0,4)=='new_') {
+						$event_added=false;
 						$participant['event_id']=$event_id;
 						$participant['name']=$p['name'];
 						$participant['email']=$p['email'];
 						$participant['user_id']=(isset($p['user_id'])) ? $p['user_id'] : 0;
-						$participant['status']=(isset($_POST['invitation'])) ? $p['status'] : 1;
-						$ids[]=$cal->add_participant($participant);
+						$participant['status']=$p['status'] ;
+						
 
 						if(isset($_POST['import']) && $participant['user_id'] > 0) {
 							$calendar = $cal->get_default_import_calendar($participant['user_id']);
 
 							if($calendar_id != $calendar['id']) {
-								$response['cal'] = $calendar;
-								if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
-									throw new AccessDeniedException();
+								
+								if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id'])>=GO_SECURITY::WRITE_PERMISSION) {
+									$response['cal'] = $calendar;
+
+									$event['calendar_id'] = $calendar['id'];
+									//$event['event_id'] = $event_id;
+
+									if(!isset($event['participants_event_id'])) {
+										$event['participants_event_id'] = $event_id;
+									}
+
+									unset($event['files_folder_id']);
+
+									$cal->add_event($event, $calendar);
+									$participant['status']=1;
 								}
-
-								$event['calendar_id'] = $calendar['id'];
-								//$event['event_id'] = $event_id;
-
-								if(!isset($event['participants_event_id'])) {
-									$event['participants_event_id'] = $event_id;
-								}
-
-								unset($event['files_folder_id']);
-
-								$cal->add_event($event, $calendar);
 							}
 						}
+						$ids[]=$cal->add_participant($participant);
 					}else {
 						$ids[]=$p['id'];
 					}
