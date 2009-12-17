@@ -127,7 +127,11 @@ GO.calendar.MainPanel = function(config){
 	}, this);
 
 	this.viewsStore.on('load', function(){
-		if(this.state.displayType=='view')
+
+		this.viewsList.setVisible(this.viewsStore.data.length);
+		this.calendarListPanel.doLayout();
+		
+		if(this.state.displayType=='view' && this.viewsStore.data.length)
 		{			
 			var record = this.viewsStore.getById(this.state.view_id);
 			if(!record)
@@ -153,7 +157,11 @@ GO.calendar.MainPanel = function(config){
 	}, this);
 
 	this.resourcesStore.on('load', function(){
-		if(this.state.displayType!='view' && this.group_id>1)
+
+		this.resourcesList.setVisible(this.resourcesStore.data.length);
+		this.calendarListPanel.doLayout();
+
+		if(this.state.displayType!='view' && this.group_id>1 && this.resourcesStore.data.length)
 		{
 			var record = this.resourcesStore.getById(this.state.calendar_id);
 			if(!record)
@@ -751,22 +759,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	init : function(){
 		
 		this.calendarsStore.load();
-
-		this.viewsStore.load({
-			callback : function(){
-				this.viewsList.setVisible(this.viewsStore.data.length);
-				this.calendarListPanel.doLayout();
-			},
-			scope:this
-		})
-		this.resourcesStore.load({
-			callback : function()
-			{
-				this.resourcesList.setVisible(this.resourcesStore.data.length);
-				this.calendarListPanel.doLayout();
-			},
-			scope:this
-		})
+		this.viewsStore.load();	
+		this.resourcesStore.load();
 	},
 	
 	deleteHandler : function(){
