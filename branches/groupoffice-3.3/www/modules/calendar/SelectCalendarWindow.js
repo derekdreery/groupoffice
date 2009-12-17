@@ -19,8 +19,7 @@ SelectCalendarWindow = function(){
 				url: 'action.php',
 				params:{
 					task: 'accept', 
-					event_id: event_id,
-					event_exists: 1
+					event_id: event_id
 				},
 				callback: function(options, success, response){
 					
@@ -45,7 +44,7 @@ SelectCalendarWindow = function(){
 				scope: this		
 			});
 		},
-		show : function(event_id, event_exists){
+		show : function(event_id){
 
 			this.selectCalendar = new GO.calendar.SelectCalendar({
 				value:GO.calendar.defaultCalendar.id,
@@ -100,16 +99,9 @@ SelectCalendarWindow = function(){
 					},
 					scope: this
 				}]
-			});
+			});			
 			
-			if(!event_exists)
-			{
-				this.window.show();
-			}else
-			{
-				this.accept(event_id);
-			}
-			
+			this.window.show();
 		}
 	}
 }
