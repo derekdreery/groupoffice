@@ -325,11 +325,13 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 					handler: function(){
 						this.tasklistDialog.show();
 					},
+					disabled: !GO.settings.modules.tasks.write_permission,
 					scope: this
 				},{
 					iconCls: 'btn-delete',
 					text: GO.lang['cmdDelete'],
 					cls: 'x-btn-text-icon',
+					disabled: !GO.settings.modules.tasks.write_permission,
 					handler: function(){
 						this.tasklistsGrid.deleteSelected();
 					},

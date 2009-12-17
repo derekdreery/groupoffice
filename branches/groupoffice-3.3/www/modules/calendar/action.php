@@ -863,7 +863,7 @@ try {
 				$cal->update_calendar($calendar, $old_calendar);
 			}else {
 				if(!$GO_MODULES->modules['calendar']['write_permission']) {
-				//throw new AccessDeniedException();
+					throw new AccessDeniedException();
 				}
 				$response['acl_id'] = $calendar['acl_id'] = $GO_SECURITY->get_new_acl('calendar read: '.$calendar['name'], $calendar['user_id']);			
 				$response['calendar_id']=$cal->add_calendar($calendar);

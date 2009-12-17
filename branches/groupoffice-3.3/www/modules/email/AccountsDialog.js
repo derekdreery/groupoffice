@@ -34,37 +34,35 @@ GO.email.AccountsDialog = function(config){
 	config.closeAction='hide';
 	config.title=GO.email.lang.accounts;	
 
-	var tbar;
-	if(GO.settings.modules.email.write_permission)
-	{
-		tbar = [{
-			iconCls: 'btn-add',
-			text: GO.lang.cmdAdd,
-			cls: 'x-btn-text-icon',
-			handler: function(){
-				this.accountDialog.show();
-			},
-			scope: this
-		},{
-			iconCls: 'btn-delete',
-			text: GO.lang.cmdDelete,
-			cls: 'x-btn-text-icon',
-			handler: function(){
-				this.accountsGrid.deleteSelected({
-					callback: function(){
-						if(GO.email.aliasesStore.loaded)
-						{
-							GO.email.aliasesStore.reload();
-						}
-						this.accountsGrid.fireEvent('delete', this);
-					},
-					scope: this
-				});
-			},
-			scope:this
-		}];
-	}
-	config.tbar=tbar;
+
+	config.tbar = [{
+		iconCls: 'btn-add',
+		text: GO.lang.cmdAdd,
+		cls: 'x-btn-text-icon',
+		handler: function(){
+			this.accountDialog.show();
+		},
+		scope: this,
+		disabled: !GO.settings.modules.email.write_permission
+	},{
+		iconCls: 'btn-delete',
+		text: GO.lang.cmdDelete,
+		cls: 'x-btn-text-icon',
+		handler: function(){
+			this.accountsGrid.deleteSelected({
+				callback: function(){
+					if(GO.email.aliasesStore.loaded)
+					{
+						GO.email.aliasesStore.reload();
+					}
+					this.accountsGrid.fireEvent('delete', this);
+				},
+				scope: this
+			});
+		},
+		scope:this,
+		disabled: !GO.settings.modules.email.write_permission
+	}];
 
 	config.buttons=[{
 		text: GO.lang.cmdClose,
