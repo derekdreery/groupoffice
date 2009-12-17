@@ -534,12 +534,14 @@ try {
 				require_once $GO_CONFIG->class_path.'mail/swift/lib/classes/Swift/Plugins/Decorator/Replacements.php';
 
 				$RFC822 = new RFC822();
-
-				$cal->clear_event_status($event_id, $_SESSION['GO_SESSION']['email']);
-
+				$participants_event_id=empty($old_event['participants_event_id']) ? $event_id : $old_event['participants_event_id'];
+				//debug($participants_event_id);
+				$cal->clear_event_status($participants_event_id, $_SESSION['GO_SESSION']['email']);
+			
 				$participants=array();
-				$cal->get_participants($event_id);
+				$cal->get_participants($participants_event_id);
 				while($cal->next_record()) {
+	
 					if(/*$cal->f('status') !=1 && */$cal->f('email')!=$_SESSION['GO_SESSION']['email']) {
 						$participants[] = $RFC822->write_address($cal->f('name'), $cal->f('email'));
 					}
@@ -573,7 +575,7 @@ try {
 					//create ics attachment
 					require_once ($GO_MODULES->modules['calendar']['class_path'].'go_ical.class.inc');
 					$ical = new go_ical();
-					$ics_string = $ical->export_event($event_id);
+					$ics_string = $ical->export_event($participants_event_id);
 
 					$name = File::strip_invalid_chars($event['name']).'.ics';
 

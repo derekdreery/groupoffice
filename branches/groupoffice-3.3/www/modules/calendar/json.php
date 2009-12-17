@@ -740,6 +740,10 @@ try {
 			if($event_id>0) {
 				$event = $cal->get_event($event_id);
 
+				if(!empty($event['participants_event_id'])){
+					$event_id=$event['participants_event_id'];
+				}
+
 				$response['total'] = $cal->get_participants($event_id);
 				$response['results']=array();
 				while($cal->next_record(DB_ASSOC)) {
@@ -748,7 +752,7 @@ try {
 					$participant['available']='?';
 					$user=$GO_USERS->get_user_by_email($participant['email']);
 					if($user) {
-						$participant['available']=$cal2->is_available($user['id'], $event['start_time'], $event['end_time'], $event['id']) ? '1' : '0';
+						$participant['available']=$cal2->is_available($user['id'], $event['start_time'], $event['end_time'], $event_id) ? '1' : '0';
 					}
 
 					$response['results'][]=$participant;
