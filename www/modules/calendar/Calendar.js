@@ -1452,6 +1452,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				id: 'addCalendar',
 				iconCls: 'btn-add',
 				text: GO.lang.cmdAdd,
+				disabled: !GO.settings.modules.calendar.write_permission,
 				cls: 'x-btn-text-icon',
 				handler: function(){
 					this.calendarDialog.show(0, false);
@@ -1461,6 +1462,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				id: 'delete',
 				iconCls: 'btn-delete',
 				text: GO.lang.cmdDelete,
+				disabled: !GO.settings.modules.calendar.write_permission,
 				cls: 'x-btn-text-icon',
 				handler: function(){
 					this.calendarsGrid.deleteSelected();
@@ -1473,6 +1475,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				this.tbar.push(new Ext.Button({
 					id: 'manage_cf',
 					iconCls: 'btn-settings',
+					disabled: !GO.settings.modules.calendar.write_permission,
 					text: GO.customfields.lang.customfields,
 					cls: 'x-btn-text-icon',
 					handler: function(){
