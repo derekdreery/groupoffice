@@ -16,7 +16,8 @@ GO.MainLayout = function(){
 	
 	this.addEvents({
 		'ready' : true,
-		'render' : true
+		'render' : true,
+		'linksDeleted' : true
 	});
 	
 	this.resumeEvents();
@@ -533,7 +534,20 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 			var s = String.format.apply(String, Array.prototype.slice.call(arguments, 1));
 			var m = Ext.DomHelper.append(this.msgCt, {html:this.createBox(title, s)}, true);
 			m.slideIn('t').pause(3).ghost("t", {remove:true});
-	}/*,
+	},
+	onLinksDeletedHandler : function(link_types, modulePanel, store){
+		if(link_types){
+			for(var i=0;i<link_types.length;i++){
+				if(store.getById(link_types[i])){
+					modulePanel.on('show',function(){
+						store.reload();
+					}, this, {single:true});
+				}
+			}
+		}
+	}
+
+	/*,
 	
 	showSearchRecord : function(recordData)
 	{
