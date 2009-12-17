@@ -48,10 +48,16 @@ GO.files.FileBrowser = function(config){
 		});
 
 	this.treeLoader.on('beforeload', function(){
-		this.treePanel.getEl().mask(GO.lang.waitMsgLoad);
+		var el =this.treePanel.getEl();
+		if(el){
+			el.mask(GO.lang.waitMsgLoad);
+		}
 	}, this);
 	this.treeLoader.on('load', function(){
-		this.treePanel.getEl().unmask();
+		var el =this.treePanel.getEl();
+		if(el){
+			el.unmask();
+		}
 	}, this);
 
 	this.treePanel = new Ext.tree.TreePanel({
