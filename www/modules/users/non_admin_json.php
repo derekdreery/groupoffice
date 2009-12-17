@@ -98,7 +98,8 @@ switch($task)
 					'wcity' => $GO_USERS->f('work_city'),
 					'wstate' => $GO_USERS->f('work_state'),
 					'wcountry' => $GO_USERS->f('work_country'),
-					'wphone' => $GO_USERS->f('work_phone')
+					'wphone' => $GO_USERS->f('work_phone'),
+					'enabled'=> $GO_USERS->f('enabled')
 			);				
 		}
 
