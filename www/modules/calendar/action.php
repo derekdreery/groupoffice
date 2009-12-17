@@ -281,40 +281,39 @@ try {
 			$event_id = ($_REQUEST['event_id']);
 			$calendar_id = isset($_REQUEST['calendar_id']) ? $_REQUEST['calendar_id'] : 0;
 
-			$event_exists = isset($_REQUEST['event_exists']) ? 1 : 0;
+			$event_exists= $cal->has_participants_event($event_id, $calendar_id);
+
 
 			if(!$cal->is_participant($event_id, $_SESSION['GO_SESSION']['email'])) {
 				throw new Exception($lang['calendar']['not_invited']);
 			}
 
+
 			$event = $cal->get_event($event_id);
 
-			if(!$event_exists && ($event['calendar_id']!=$calendar_id)) {
+			if(!$event_exists && !empty($calendar_id) && $event['calendar_id']!=$calendar_id) {
 				$new_event['user_id']=$GO_SECURITY->user_id;
 				$new_event['calendar_id']=$calendar_id;
 				$new_event['participants_event_id']=$event_id;
 
 				$cal->copy_event($event_id, $new_event);
-
-				$event_exists = true;
 			}
 
-			if($event_exists) {
-				$cal->set_event_status($event_id, '1', $_SESSION['GO_SESSION']['email']);
+			$cal->set_event_status($event_id, '1', $_SESSION['GO_SESSION']['email']);
 
-				$owner = $GO_USERS->get_user($event['user_id']);
+			$owner = $GO_USERS->get_user($event['user_id']);
 
-				require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
-				$swift = new GoSwift($owner['email'], sprintf($lang['calendar']['accept_mail_subject'],$event['name']));
+			require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
+			$swift = new GoSwift($owner['email'], sprintf($lang['calendar']['accept_mail_subject'],$event['name']));
 
-				$swift->set_from($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
+			$swift->set_from($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
 
-				$body = sprintf($lang['calendar']['accept_mail_body'],$_SESSION['GO_SESSION']['email']);
-				$body .= '<br /><br />'.$cal->event_to_html($event);
+			$body = sprintf($lang['calendar']['accept_mail_body'],$_SESSION['GO_SESSION']['email']);
+			$body .= '<br /><br />'.$cal->event_to_html($event);
 
-				$swift->set_body($body);
-				$swift->sendmail();
-			}
+			$swift->set_body($body);
+			$swift->sendmail();
+			
 
 			$response['success']=true;
 
@@ -473,19 +472,24 @@ try {
 				}
 			}
 
+			/*
+			 * When the user adds events to participants calendar's directly it might be
+			 * that the user is unauthorized. We report those at the end of this switch case.
+			 */
+			$unauthorized_participants=array();
+			
 			if(!empty($_POST['participants'])) {
+
 				$ids=array();
 				$participants = json_decode($_POST['participants'], true);
 				foreach($participants as $p) {
-					if(substr($p['id'], 0,4)=='new_') {
-						$event_added=false;
-						$participant['event_id']=$event_id;
-						$participant['name']=$p['name'];
-						$participant['email']=$p['email'];
-						$participant['user_id']=(isset($p['user_id'])) ? $p['user_id'] : 0;
-						$participant['status']=$p['status'] ;
-						
+					$participant['event_id']=$event_id;
+					$participant['name']=$p['name'];
+					$participant['email']=$p['email'];
+					$participant['user_id']=(isset($p['user_id'])) ? $p['user_id'] : 0;
+					$participant['status']=$p['status'] ;
 
+					if(substr($p['id'], 0,4)=='new_') {
 						if(isset($_POST['import']) && $participant['user_id'] > 0) {
 							$calendar = $cal->get_default_import_calendar($participant['user_id']);
 
@@ -494,23 +498,45 @@ try {
 								if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id'])>=GO_SECURITY::WRITE_PERMISSION) {
 									$response['cal'] = $calendar;
 
-									$event['calendar_id'] = $calendar['id'];
-									//$event['event_id'] = $event_id;
-
+									$event['calendar_id'] = $calendar['id'];	
 									if(!isset($event['participants_event_id'])) {
 										$event['participants_event_id'] = $event_id;
 									}
-
 									unset($event['files_folder_id']);
-
 									$cal->add_event($event, $calendar);
 									$participant['status']=1;
+								}else
+								{
+									$unauthorized_participants[] = $participant['name'];
 								}
 							}
 						}
 						$ids[]=$cal->add_participant($participant);
 					}else {
 						$ids[]=$p['id'];
+
+						debug($participant);
+
+						if(isset($_POST['import']) && $participant['user_id'] > 0) {
+							$calendar = $cal->get_default_import_calendar($participant['user_id']);
+
+							if($calendar_id != $calendar['id']) {
+								if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id'])>=GO_SECURITY::WRITE_PERMISSION) {
+									if(!$cal->has_participants_event($event_id, $calendar['id'])){
+										$event['calendar_id'] = $calendar['id'];
+										if(!isset($event['participants_event_id'])) {
+											$event['participants_event_id'] = $event_id;
+										}
+										unset($event['files_folder_id']);
+										$cal->add_event($event, $calendar);										
+									}
+									$cal->set_event_status($event_id, 1, $participant['email']);
+								}else
+								{
+									$unauthorized_participants[] = $participant['name'];
+								}
+							}
+						}
 					}
 				}
 				$response['event_id'] = $event_id;
@@ -551,10 +577,7 @@ try {
 				}
 
 				//debug($participants);
-				if(count($participants)) {
-
-					$import = (isset($_POST['import'])) ? '1' : '0';
-
+				if(count($participants)) {				
 					$swift = new GoSwift(
 							implode(',', $participants),
 							$lang['calendar']['appointment'].$event['name']);
@@ -571,9 +594,9 @@ try {
 					$swift->set_body('<p>'.$lang['calendar']['invited'].'</p>'.
 							$cal->event_to_html($event).
 							'<p>'.$lang['calendar']['acccept_question'].'</p>'.
-							'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$event_id.'&task=accept&email=%email%&import='.$import.'">'.$lang['calendar']['accept'].'</a>'.
+							'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$event_id.'&task=accept&email=%email%">'.$lang['calendar']['accept'].'</a>'.
 							'&nbsp;|&nbsp;'.
-							'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$event_id.'&task=decline&email=%email%&import='.$import.'">'.$lang['calendar']['decline'].'</a>');
+							'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$event_id.'&task=decline&email=%email%">'.$lang['calendar']['decline'].'</a>');
 
 					//create ics attachment
 					require_once ($GO_MODULES->modules['calendar']['class_path'].'go_ical.class.inc');
@@ -839,6 +862,10 @@ try {
 
 					$swift->sendmail();
 				}
+			}
+
+			if(count($unauthorized_participants)){
+				$response['feedback']=str_replace('{NAMES}', implode(', ',$unauthorized_participants), $lang['calendar']['unauthorized_participants_write']);
 			}
 
 			break;

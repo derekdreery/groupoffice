@@ -1631,7 +1631,11 @@ class calendar extends db
 	}
 
 
-
+	function has_participants_event($participants_event_id, $calendar_id){
+		$sql = "SELECT * FROM cal_events WHERE participants_event_id=? AND calendar_id=?";
+		$this->query($sql, 'ii', array($participants_event_id, $calendar_id));
+		return $this->next_record();
+	}
 
 	function get_event($event_id)
 	{

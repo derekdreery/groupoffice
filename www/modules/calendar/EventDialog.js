@@ -630,7 +630,9 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					this.link_config.callback.call(this);
 				}
 
-				if (hide) {
+				if(action.result.feedback){
+					Ext.MessageBox.alert(GO.lang.strError, action.result.feedback);
+				}else	if (hide) {
 					this.win.hide();
 				}
 

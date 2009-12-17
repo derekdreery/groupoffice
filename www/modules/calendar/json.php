@@ -746,9 +746,7 @@ try {
 
 				$response['total'] = $cal->get_participants($event_id);
 				$response['results']=array();
-				while($cal->next_record(DB_ASSOC)) {
-					$participant = $cal->record;
-
+				while($participant =$cal->next_record(DB_ASSOC)) {
 					$participant['available']='?';
 					$user=$GO_USERS->get_user_by_email($participant['email']);
 					if($user) {

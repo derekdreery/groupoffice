@@ -21,7 +21,8 @@ GO.tasks.SimpleTasksPanel = function(config)
 			},
 			reader: reader,
 			sortInfo: {field: 'due_time', direction: 'ASC'},
-			groupField: 'tasklist_name'
+			groupField: 'tasklist_name',
+			remoteSort:true
 		});
 
 		config.store.on('load', function(){
