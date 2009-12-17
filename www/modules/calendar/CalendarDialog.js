@@ -51,7 +51,7 @@ GO.calendar.CalendarDialog = function(config)
 			store: GO.calendar.groupsStore,
 			mode:'local',
 			triggerAction:'all',
-			editable:true,
+			editable:false,
 			selectOnFocus:true,
 			allowBlank:true,
 			forceSelection:true

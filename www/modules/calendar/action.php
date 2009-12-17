@@ -443,8 +443,7 @@ try {
 					$values_old = array_values($cf->get_values($GO_SECURITY->user_id, 1, $event_id));
 				}
 
-				$cf->update_fields($GO_SECURITY->user_id, $event_id, 1, $_POST, $insert);
-				$response['deb'] = $cf->affected_rows();
+				$cf->update_fields($GO_SECURITY->user_id, $event_id, 1, $_POST, $insert);								
 
 				if(!$insert && $calendar['group_id'] > 1) {
 					$values = array_values($cf->get_values($GO_SECURITY->user_id, 1, $event_id));
