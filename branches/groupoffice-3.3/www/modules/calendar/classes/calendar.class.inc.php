@@ -2232,6 +2232,11 @@ class calendar extends db
 
 	}
 
+	function clear_event_status($event_id, $accepted_email){
+		$sql = "UPDATE cal_participants SET status='0' WHERE email!='".$this->escape($accepted_email)."' AND event_id='".$this->escape($event_id)."'";
+		return $this->query($sql);
+	}
+
 
 	function set_event_status($event_id, $status, $email)
 	{

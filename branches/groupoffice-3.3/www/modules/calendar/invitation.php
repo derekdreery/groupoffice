@@ -13,6 +13,14 @@ $event_id = isset($_REQUEST['event_id']) ? ($_REQUEST['event_id']) : 0;
 $event_exists = isset($_REQUEST['import']) ? $_REQUEST['import'] : 0;
 
 $user = $GO_USERS->get_user_by_email($email);
+
+if($user && $GO_SECURITY->user_id!=$user['id']){
+	$GO_SECURITY->logout();
+}
+
+if($user)
+	$GO_SECURITY->html_authenticate();
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -27,13 +35,14 @@ require($GO_THEME->theme_path.'default_head.inc.php');
 
 <?php
 $event = $cal->get_event($event_id);
-$owner = $GO_USERS->get_user($event['user_id']);
-if(!$event = $cal->get_event($event_id))
+
+if(!$event)
 {
 	echo '<h1 class="cal-go-title">'.$GO_CONFIG->title.'</h1>';
 	echo '<p>'.$lang['calendar']['bad_event'].'</p>';
 }elseif(!$user || $task == 'decline')
 {
+	$owner = $GO_USERS->get_user($event['user_id']);
 	if($task=='accept')
 	{
 		$cal->set_event_status($event_id, '1', $email);
