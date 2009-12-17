@@ -535,6 +535,8 @@ try {
 
 				$RFC822 = new RFC822();
 
+				$cal->clear_event_status($event_id, $_SESSION['GO_SESSION']['email']);
+
 				$participants=array();
 				$cal->get_participants($event_id);
 				while($cal->next_record()) {
@@ -542,6 +544,8 @@ try {
 						$participants[] = $RFC822->write_address($cal->f('name'), $cal->f('email'));
 					}
 				}
+
+				//debug($participants);
 				if(count($participants)) {
 
 					$import = (isset($_POST['import'])) ? '1' : '0';
