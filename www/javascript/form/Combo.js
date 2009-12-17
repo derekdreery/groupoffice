@@ -22,6 +22,17 @@
  */
 GO.form.ComboBox = Ext.extend(Ext.form.ComboBox, {
 
+	initComponent : function(){
+
+
+
+		GO.form.ComboBox.superclass.initComponent.call(this);
+
+		if(this.remoteText){
+			this.setRemoteText(this.remoteText);
+		}
+	},
+
 	/**
 	 * A combobox is often loaded remotely on demand. But you want to display the
 	 * correct text even before the store is loaded. When a form loads I also

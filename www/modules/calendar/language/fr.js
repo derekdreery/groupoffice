@@ -68,7 +68,7 @@ GO.calendar.lang.previousDay = 'Jour précedent';
 GO.calendar.lang.nextDay = 'Jour suivant';
 GO.calendar.lang.noAppointmentsToDisplay = 'Aucun rendez-vous à afficher';
 GO.calendar.lang.selectCalendar = 'Sélectionnez un calendrier';
-GO.calendar.lang.selectCalendarForAppointment = 'Sélectionnez le calendrier dans lequel ajouter le rendez-vous :';
+GO.calendar.lang.selectCalendarForAppointment = 'Sélectionnez le calendrier dans lequel ajouter le rendez-vous';
 GO.calendar.lang.closeWindow = 'Le rendez-vous a été accepté et programmé. Vous pouvez fermer cette fenêtre.';
 GO.calendar.lang.list='Liste';
 

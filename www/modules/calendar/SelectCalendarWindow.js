@@ -11,44 +11,8 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-CalendarList = function(config){
-	
-	Ext.apply(config);
-	var tpl = new Ext.XTemplate( 
-		'<b>'+GO.calendar.lang.selectCalendarForAppointment+'</b>',
-		'<tpl for=".">',
-		'<div id="calendar-{id}" class="calendar-wrap">{name}</div>',
-		'</tpl>'
-	);
-	
-	CalendarList.superclass.constructor.call(this, {
-		store: config.store,
-        tpl: tpl,
-        singleSelect:true,
-        autoHeight:true,
-        overClass:'x-view-over',
-        itemSelector:'div.calendar-wrap'
-	});	
-}
-
-Ext.extend(CalendarList,Ext.DataView, {
-     onRender : function(ct, position){
-          this.el = ct.createChild({
-          	tag: 'div', 
-          	id:"calendarList", 
-          	cls:'calendar-list'
-          });
-          
-          CalendarList.superclass.onRender.apply(this, arguments);
-     }
-
-});
-
 SelectCalendarWindow = function(){
-	
-
 	return {
-
 		accept : function(event_id)
 		{
 			Ext.Ajax.request({
@@ -82,71 +46,61 @@ SelectCalendarWindow = function(){
 			});
 		},
 		show : function(event_id, event_exists){
-			
-			this.calendarsStore = new GO.data.JsonStore({
-				url: 'json.php',
-				baseParams: {'task': 'calendars'},
-				root: 'results',
-				totalProperty: 'total',
-				id: 'id',
-				fields:['id','name','user_name'],
-				remoteSort:true
-			});
-			this.calendarsStore.load();
-			
-			
-			
-			var calendarList= new CalendarList(
-				{store: this.calendarsStore});				
-				
-			calendarList.on('click', function(dataview, index){
-				
-				Ext.Ajax.request({
-					url: 'action.php',
-					params:{
-						task: 'accept', 
-						calendar_id: dataview.store.data.items[index].id,
-						event_id: event_id
-					},
-					callback: function(options, success, response){
-						
-						if(!success)
-						{
-							Ext.MessageBox.alert(GO.lang.strError, GO.lang.strRequestError);
-						}else
-						{						
-							var responseParams = Ext.decode(response.responseText);
-							if(responseParams.success)
-							{
-								Ext.MessageBox.alert(GO.lang.strSuccess, GO.calendar.lang.closeWindow);
-								this.window.close();
-							}else
-							{
-								Ext.MessageBox.alert(GO.lang.strError, responseParams.feedback);
-								
-							}
-						}
-												
-					},
-					scope: this		
-				});
-				
-     		}, this);
+
+			this.selectCalendar = new GO.calendar.SelectCalendar({
+				value:GO.calendar.defaultCalendar.id,
+				remoteText:GO.calendar.defaultCalendar.name,
+				fieldLabel:GO.calendar.lang.selectCalendarForAppointment
+			});		
+	
 
 			this.window = new Ext.Window({
-					renderTo:document.body,
-					title: GO.calendar.lang.selectCalendar,
-					layout:'fit',
-					modal:false,
-					height:400,
-					width:600,
-					closable:false,					
-					items: new Ext.Panel({
-						items:calendarList,
-						cls:'go-form-panel',waitMsgTarget:true,
-						autoScroll:true
-					})
-				});
+				renderTo:document.body,
+				title: GO.calendar.lang.selectCalendar,
+				modal:false,
+				autoHeight:true,
+				width:500,
+				closable:false,
+				items: new Ext.FormPanel({
+					autoHeight:true,
+					items:this.selectCalendar,
+					labelAlign:'top',
+					cls:'go-form-panel',
+					waitMsgTarget:true
+				}),
+				buttons:[{
+					text:GO.lang.cmdOk,
+					handler: function(){
+						Ext.Ajax.request({
+							url: 'action.php',
+							params:{
+								task: 'accept',
+								calendar_id: this.selectCalendar.getValue(),
+								event_id: event_id
+							},
+							callback: function(options, success, response){
+								if(!success)
+								{
+									Ext.MessageBox.alert(GO.lang.strError, GO.lang.strRequestError);
+								}else
+								{
+									var responseParams = Ext.decode(response.responseText);
+									if(responseParams.success)
+									{
+										Ext.MessageBox.alert(GO.lang.strSuccess, GO.calendar.lang.closeWindow);
+										this.window.close();
+									}else
+									{
+										Ext.MessageBox.alert(GO.lang.strError, responseParams.feedback);
+
+									}
+								}							},
+							scope: this
+						});
+					},
+					scope: this
+				}]
+			});
 			
 			if(!event_exists)
 			{
