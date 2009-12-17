@@ -1001,6 +1001,13 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 						this.resizeAppointment(eventEl.el.id, this.clickedDay);					
 						this.fireEvent("eventResize", this, event, actionData);
 					}
+
+					var timeEl = eventEl.el.select('span.x-calGrid-event-time');
+					if(timeEl)
+					{
+						timeEl.update(event.startDate.format(GO.settings.time_format));
+						eventEl.el.set({'ext:qtip': GO.calendar.formatQtip(event)});
+					}
 				}				
 			}, this);
 		}
