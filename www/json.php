@@ -506,7 +506,7 @@ try{
 
 							$record = $search->get_search_result($link[1], $link[0]);
 
-							if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $record['acl_id'])>2)
+							if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $record['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
 							{
 								throw new AccessDeniedException();
 							}
