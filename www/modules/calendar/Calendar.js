@@ -753,7 +753,11 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		this.state.view_id=0;
 				
 		this.init();	
-		this.createDaysGrid();          
+		this.createDaysGrid();
+
+		this.on('show', function(){
+			this.refresh();
+		}, this);
 	},
 	
 	init : function(){

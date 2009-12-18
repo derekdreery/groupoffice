@@ -123,6 +123,8 @@ GO.grid.ExtraFunctions={
 		//up and down button it will only load if it stays on the same record for 400ms
 		this.addEvents({'delayedrowselect':true});
 
+		
+
 		this.on("rowcontextmenu", function(grid, rowIndex, e) {
 			e.stopEvent();
 
@@ -143,6 +145,8 @@ GO.grid.ExtraFunctions={
 			}
 			this.rowClicked=true;
 		}, this);
+
+		
 
 		this.getSelectionModel().on("rowselect",function(sm, rowIndex, r){
 			if(!this.rowClicked)
