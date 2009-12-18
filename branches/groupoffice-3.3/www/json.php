@@ -232,6 +232,9 @@ try{
 
 					foreach($groups as $group_id)
 					{
+						if($group_id == $GO_CONFIG->group_root) {
+							throw new Exception($lang['common']['dontChangeAdminsPermissions']);
+						}
 						$GO_SECURITY->delete_group_from_acl($group_id, $acl_id);
 					}
 				}catch(Exception $e)
@@ -282,7 +285,6 @@ try{
 			if(isset($_REQUEST['delete_keys']))
 			{
 				try{
-
 					if(!$GO_SECURITY->has_permission_to_manage_acl($GO_SECURITY->user_id, $acl_id))
 					{
 						throw new AccessDeniedException();
@@ -293,7 +295,12 @@ try{
 
 					foreach($users as $user_id)
 					{
+						if($GO_SECURITY->user_owns_acl($user_id, $acl_id))
+						{
+							throw new Exception($lang['common']['dontChangeOwnersPermissions']);
+						}
 						$GO_SECURITY->delete_user_from_acl($user_id, $acl_id);
+						
 					}
 				}catch(Exception $e)
 				{
