@@ -733,6 +733,7 @@ class String {
 
 		$html = preg_replace($to_removed_array, '', $html);
 		$html = preg_replace("/([\"']?)javascript:/ui", "$1removed_script:", $html);
+		$html = preg_replace("/(<.* )on.*=[^>]*/iU", "$1removedevent=", $html);
 
 		if($block_external_images)
 		{
