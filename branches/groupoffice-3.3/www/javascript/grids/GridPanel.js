@@ -117,6 +117,8 @@ GO.grid.ExtraFunctions={
 
 
 	initComponent : function(){
+		GO.grid.GridPanel.superclass.initComponent.call(this);
+		
 		//create a delayed rowselect event so that when a user repeatedly presses the
 		//up and down button it will only load if it stays on the same record for 400ms
 		this.addEvents({'delayedrowselect':true});
@@ -134,7 +136,6 @@ GO.grid.ExtraFunctions={
 		}, this);
 
 		this.on('rowclick', function(grid, rowIndex, e){
-
 			if(!e.ctrlKey && !e.shiftKey)
 			{
 				var record = this.getSelectionModel().getSelected();
@@ -155,7 +156,7 @@ GO.grid.ExtraFunctions={
 			this.rowClicked=false;
 		}, this, {delay:400});
 
-		GO.grid.GridPanel.superclass.initComponent.call(this);
+		
 	},
 
 	/**
