@@ -175,7 +175,7 @@ try
 				{
 					$old_company = $ab->get_company($company_id);
 
-					if(($old_company['addressbook_id'] != $company_credentials['addressbook_id']) && $GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_company['acl_write'])<GO_SECURITY::WRITE_PERMISSION)
+					if(($old_company['addressbook_id'] != $company_credentials['addressbook_id']) && $GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_company['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
 					{
 						throw new AccessDeniedException();
 					}
