@@ -278,8 +278,7 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 		
 		GO.mainLayout.on('linksDeleted', function(deleteConfig, link_types){
 			GO.mainLayout.onLinksDeletedHandler(link_types[12], this, this.gridPanel.store);
-		}, this);
-    
+		}, this);    
 	},
   
 	showAdminDialog : function() {
