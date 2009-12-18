@@ -17,7 +17,9 @@ GO.users.PasswordPanel = function(config)
 	{
 		config={};
 	}
-	
+
+	var prefix = (config.ldap_password) ? 'ldap_' : '';
+
 	config.autoScroll=true;
 	config.border=false;
 	config.hideLabel=true;
@@ -27,25 +29,25 @@ GO.users.PasswordPanel = function(config)
 	config.defaultType = 'textfield';
 	config.cls='go-form-panel';
 	config.labelWidth=140;
-	
+
 	this.currentPasswordField = new Ext.form.TextField({
-		inputType: 'password', 
-		fieldLabel: GO.users.lang.currentPassword, 
-		name: 'current_password'
-		});
-	
-	this.passwordField1 = new Ext.form.TextField({
-		inputType: 'password', 
-		fieldLabel: GO.users.lang.newPassword, 
-		name: 'password1'
-		});
-	this.passwordField2 = new Ext.form.TextField({
-		inputType: 'password', 
-		fieldLabel: GO.users.lang.confirmPassword, 
-		name: 'password2'
+		inputType: 'password',
+		fieldLabel: GO.users.lang.currentPassword,
+		name: 'current_'+prefix+'password'
 		});
 
-		
+	this.passwordField1 = new Ext.form.TextField({
+		inputType: 'password',
+		fieldLabel: GO.users.lang.newPassword,
+		name: prefix+'password1'
+		});
+	this.passwordField2 = new Ext.form.TextField({
+		inputType: 'password',
+		fieldLabel: GO.users.lang.confirmPassword,
+		name: prefix+'password2'
+		});
+
+
 
 
 	config.items=[
@@ -54,7 +56,7 @@ GO.users.PasswordPanel = function(config)
 		this.passwordField2
 	];
 
-	GO.users.PasswordPanel.superclass.constructor.call(this, config);		
+	GO.users.PasswordPanel.superclass.constructor.call(this, config);
 };
 
 
