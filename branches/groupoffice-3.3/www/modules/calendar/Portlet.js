@@ -92,7 +92,8 @@ GO.calendar.SummaryGroupPanel = function(config)
 			header:GO.lang.strTime,
 			dataIndex: 'time',
 			width:100,
-			align:'right'
+			align:'right',
+			groupable:false
 		},
 		{
 			id:'summary-calendar-name-heading',
@@ -101,7 +102,8 @@ GO.calendar.SummaryGroupPanel = function(config)
 			renderer:function(value, p, record){
 				p.attr = 'ext:qtip="'+Ext.util.Format.htmlEncode(GO.calendar.formatQtip(record.data))+'"';
 				return value;
-			}
+			},
+			groupable:false
 		},{
 			header:GO.calendar.lang.calendar,
 			dataIndex: 'calendar_name',
