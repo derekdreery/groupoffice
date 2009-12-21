@@ -1,3 +1,6 @@
+2009/12/21 3.3.8
+- Fixed bug in function to strip dangerous elements in HTML
+
 2009/12/18 3.3.7
 - Updated Czech, Norwegian and German translations.
 - Fixed Synchronization problems
