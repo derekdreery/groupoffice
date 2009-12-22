@@ -302,9 +302,11 @@ try
 			//go_log(LOG_DEBUG, var_export($_POST,true));
 
 			$_SESSION['GO_SESSION']['addressbook']['import_file'] = $GO_CONFIG->tmpdir.uniqid(time());
+			debug($import_file);
 
-			move_uploaded_file($import_file, $_SESSION['GO_SESSION']['addressbook']['import_file']);
-
+			if(!move_uploaded_file($import_file, $_SESSION['GO_SESSION']['addressbook']['import_file'])){
+				throw new Exception('Could not move '.$import_file);
+			}
 			File::convert_to_utf8($_SESSION['GO_SESSION']['addressbook']['import_file']);
 
 			switch($import_filetype)
@@ -326,7 +328,7 @@ try
 
 						if (!$record = fgetcsv($fp, 4096, $separator, $quote))
 						{
-							throw new Exception($contacts_import_incompatible);
+							throw new Exception('Could not read import file');
 						}
 
 						fclose($fp);
@@ -347,11 +349,16 @@ try
 			echo json_encode($result);
 			break;
 				case'import':
+
+					ini_set('max_execution_time', 360);
+
 					$addressbook_id = isset($_REQUEST['addressbook_id']) ? ($_REQUEST['addressbook_id']) : 0;
 					$separator	= isset($_REQUEST['separator']) ? ($_REQUEST['separator']) : ',';
 					$quote	= isset($_REQUEST['quote']) ? ($_REQUEST['quote']) : '"';
 					$import_type = isset($_REQUEST['import_type']) ? ($_REQUEST['import_type']) : '';
 					$import_filetype = isset($_REQUEST['import_filetype']) ? ($_REQUEST['import_filetype']) : '';
+
+					$addressbook = $ab->get_addressbook($addressbook_id);
 
 					$result['success'] = true;
 					$result['feedback'] = $feedback;
@@ -362,6 +369,15 @@ try
 
 							break;
 						case 'csv':
+
+							if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
+							{
+								require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+								$cf = new customfields();
+								$company_customfields = $cf->get_authorized_fields($GO_SECURITY->user_id, 3);
+								$contact_customfields = $cf->get_authorized_fields($GO_SECURITY->user_id, 2);
+							}
+
 							$fp = fopen($_SESSION['GO_SESSION']['addressbook']['import_file'], "r");
 
 							if (!$fp || !$addressbook = $ab->get_addressbook($addressbook_id))
@@ -424,7 +440,7 @@ try
 										}
 
 										$contact['addressbook_id'] = $addressbook_id;
-										$new_id=$ab->add_contact($contact);
+										$new_id=$ab->add_contact($contact, $addressbook);
 										$new_type=2;
 									}
 								} else {
@@ -432,7 +448,7 @@ try
 									{
 										$company['name'] = trim($record[$_POST['name']]);
 
-										if (!$ab->get_company_by_name($_POST['addressbook_id'], $company['name']))
+										//if (!$ab->get_company_by_name($_POST['addressbook_id'], $company['name']))
 										{
 											$company['email_allowed']='1';
 											$company['email'] = isset ($record[$_POST['email']]) ? String::get_email_from_string($record[$_POST['email']]) : '';
@@ -455,7 +471,7 @@ try
 											$company['vat_no'] = isset ($record[$_POST['vat_no']]) ? trim($record[$_POST['vat_no']]) : '';
 											$company['addressbook_id']  = $_POST['addressbook_id'];
 
-											$new_id=$ab->add_company($company);
+											$new_id=$ab->add_company($company, $addressbook);
 											$new_type=3;
 										}
 									}
@@ -463,12 +479,8 @@ try
 
 								if($new_id>0)
 								{
-									if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
-									{
-										require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
-										$cf = new customfields();
-										$customfields = $cf->get_authorized_fields($GO_SECURITY->user_id, $new_type);
-											
+									if(isset($cf)){
+										$customfields = $new_type==2 ? $contact_customfields : $company_customfields;
 										$cf_record=array('link_id'=>$new_id);
 										foreach($customfields as $field)
 										{

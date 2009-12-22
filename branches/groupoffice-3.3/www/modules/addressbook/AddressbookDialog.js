@@ -40,10 +40,7 @@ GO.addressbook.AddressbookDialog = function(config)
 		text: GO.addressbook.lang['cmdUpload'],
 		handler: function(){
 			this.uploadFile();
-			if('csv' == this.addressbookImportPanel.form.items.items[0].getValue())
-			{
-				this.importDataSelectionWindow();
-			}
+			
 		},
 		hidden: true,
 		scope: this
@@ -557,15 +554,18 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 		
 		this.addressbookImportData = new Ext.form.FormPanel({
 			waitMsgTarget:true,
-			id: 'addressbook-default-import-data-window',
+			
+			//id: 'addressbook-default-import-data-window',
 			labelWidth: 125,
 			border: false,
 			defaults: { 
 				anchor:'-20'
 			},
 			cls: 'go-form-panel',
-			autoScroll:true
+			autoHeight:true
 		});
+
+		this.addressbookImportData.form.timeout=300;
 		
 		this.csvFieldStore = new Ext.data.JsonStore({
 			fields: ['id', 'name'],
@@ -634,9 +634,10 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 		];
 		
 		this.csvFieldDialog = new Ext.Window({
-			layout: 'fit',
+			autoScroll:true,
 			height: 400,
 			width: 400,
+			modal:true,
 			title: GO.addressbook.lang.matchFields,
 			items: [
 			this.addressbookImportData
@@ -690,6 +691,7 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 	uploadFile : function()
 	{
 		this.addressbookImportPanel.form.submit({
+			waitMsg: GO.lang.waitMsgUpload,
 			url:GO.settings.modules.addressbook.url+ 'action.php',
 			params:
 			{
@@ -699,6 +701,7 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 			success:function(form, action){
 				if(this.addressbookImportPanel.form.items.items[0].getValue() == 'csv')
 				{
+					this.importDataSelectionWindow();
 					this.csvFieldStore.loadData(action.result);
 				}else
 				{
@@ -707,11 +710,11 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 					Ext.MessageBox.alert(GO.lang.strSuccess, GO.addressbook.lang.importSuccess);
 				}
 			},
-			failure: function(form, task) {
+			failure: function(form, action) {
 				
-				if(task.failureType != 'client')
+				if(action.failureType != 'client')
 				{					
-					Ext.MessageBox.alert(GO.lang['strError'], task.result.feedback);			
+					Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback);
 				}
 			},
 			scope: this
@@ -739,7 +742,7 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 				Ext.MessageBox.alert(GO.lang.strSuccess, GO.addressbook.lang.importSuccess);				
 			},
 			failure: function(form, action) {					
-				if(task.failureType != 'client')
+				if(action.failureType != 'client')
 				{					
 					Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback);			
 				}

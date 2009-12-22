@@ -32,8 +32,9 @@ class String {
 
 		//Does not always work. We suppress the:
 		//Notice:  iconv() [function.iconv]: Detected an illegal character in input string in /var/www/community/trunk/www/classes/String.class.inc.php on line 31
-		
-		$c = @iconv($source_charset, 'UTF-8//IGNORE', $str);
+		$old_lvl = error_reporting (E_ALL ^ E_NOTICE);
+		$c = iconv($source_charset, 'UTF-8//IGNORE', $str);
+		error_reporting ($old_lvl);
 		if(!empty($c))
 		{
 			$str=$c;

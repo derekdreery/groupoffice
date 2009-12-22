@@ -455,11 +455,11 @@ class addressbook extends db {
 		}
 	}
 
-	function delete_company($company_id) {
+	function delete_company($company_id, $company=false) {
 		global $GO_CONFIG, $GO_LINKS,$GO_MODULES;
 
 		if(isset($GO_MODULES->modules['files'])) {
-			$company=$this->get_company($company_id);
+			$company=$company ? $company : $this->get_company($company_id);
 			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 			try {
@@ -478,8 +478,6 @@ class addressbook extends db {
 		if ($this->query($sql)) {
 			return true;
 		}
-
-
 	}
 
 	function add_contact(&$contact, $addressbook=false) {
@@ -1028,9 +1026,9 @@ class addressbook extends db {
 
 		$this->get_contacts($addressbook_id);
 		$contact_ids = array();
-		while($this->next_record()) {
+		while($contact=$this->next_record()) {
 			$contact_id = $this->f('id');
-			$ab->delete_contact($contact_id);
+			$ab->delete_contact($contact_id, $contact);
 			$contact_ids[] = $contact_id;
 		}
 
