@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*if(isset($argv[1]))
 {
     define('CONFIG_FILE', $argv[1]);
@@ -29,7 +29,7 @@ function get_file($path, $parent_id)
         $file['name']=utf8_basename($path);
         $file['folder_id']=$parent_id;
 				$file['size']=@filesize($GO_CONFIG->file_storage_path.$path);
-        $fsdb->update_file($file);
+        $fsdb->update_row('fs_files', 'id', $file);
 
         return $file['id'];
     }else
@@ -40,8 +40,13 @@ function get_file($path, $parent_id)
         $file['mtime']=@filemtime($GO_CONFIG->file_storage_path.$path);
         $file['size']=@filesize($GO_CONFIG->file_storage_path.$path);
         $file['folder_id']=$parent_id;
+				$file['id']=$fsdb->nextid('fs_files');
+				$file['user_id']=$GLOBALS['GO_SECURITY']->user_id;
+				$file['extension']=File::get_extension($file['name']);
+				$fsdb->insert_row('fs_files', $file);
 
-        return $fsdb->add_file($file);
+
+        return $file['id'];
 
     }
 }
@@ -60,7 +65,8 @@ function get_folder($path, $parent_id)
         $folder['name']=utf8_basename($path);
         $folder['parent_id']=$parent_id;
         $folder['ctime']=@filectime($GO_CONFIG->file_storage_path.$path);
-        $fsdb->update_folder($folder);
+        $folder['mtime']=time();
+				$fsdb->update_row('fs_folders', 'id', $folder);
 
         return $folder['id'];
     }else
@@ -69,7 +75,10 @@ function get_folder($path, $parent_id)
         $folder['name']=utf8_basename($path);
         $folder['ctime']=@filectime($GO_CONFIG->file_storage_path.$path);
         $folder['parent_id']=$parent_id;
-        return $fsdb->add_folder($folder);
+				$folder['id']=$fsdb->nextid('fs_folders');
+
+				$fsdb->insert_row('fs_folders', $folder);
+        return $folder['id'];
     }
 }
 
@@ -102,6 +111,8 @@ function crawl($path, $parent_id)
         get_file($fsdb->strip_server_path($file['path']),$folder_id);
     }
 }
+
+$db->query("replace into go_db_sequence select 'fs_files', max(id) from fs_files");
 
 $db->query("ALTER TABLE `fs_files` ADD `extension` VARCHAR( 4 ) NOT NULL ,ADD INDEX ( extension )");
 
@@ -156,10 +167,10 @@ if(isset($GO_MODULES->modules['addressbook']))
 
                 $up_folder['id']=$new_folder_id;
                 $up_folder['name']=File::strip_invalid_chars(String::format_name($contact));
-                $up_folder['acl_id']=0;
+                //$up_folder['acl_id']=0;
                 $up_folder['readonly']='1';
 
-                $fsdb->update_folder($up_folder);
+                $fsdb->update_row('fs_folders', 'id', $up_folder);
 
                 $up_contact['id']=$contact['id'];
                 $up_contact['files_folder_id']=$new_folder_id;
@@ -199,10 +210,10 @@ if(isset($GO_MODULES->modules['addressbook']))
 
                 $up_folder['id']=$new_folder_id;
                 $up_folder['name']=File::strip_invalid_chars($company['name']);
-                $up_folder['acl_id']=0;
+                //$up_folder['acl_id']=0;
                 $up_folder['readonly']='1';
 
-                $fsdb->update_folder($up_folder);
+                $fsdb->update_row('fs_folders', 'id', $up_folder);
 
                 $up_company['id']=$company['id'];
                 $up_company['files_folder_id']=$new_folder_id;
@@ -245,10 +256,10 @@ if(isset($GO_MODULES->modules['notes']))
 
                 $up_folder['id']=$new_folder_id;
                 $up_folder['name']=File::strip_invalid_chars($note['name']);
-                $up_folder['acl_id']=0;
+                //$up_folder['acl_id']=0;
                 $up_folder['readonly']='1';
 
-                $fsdb->update_folder($up_folder);
+                $fsdb->update_row('fs_folders', 'id', $up_folder);
 
                 $up_note['id']=$note['id'];
                 $up_note['files_folder_id']=$new_folder_id;
@@ -290,11 +301,11 @@ if(isset($GO_MODULES->modules['tasks']))
 
                 $up_folder['id']=$new_folder_id;
                 $up_folder['name']=File::strip_invalid_chars($task['name']);
-                $up_folder['acl_id']=0;
-  
+                //$up_folder['acl_id']=0;
+
                 $up_folder['readonly']='1';
 
-                $fsdb->update_folder($up_folder);
+                $fsdb->update_row('fs_folders', 'id', $up_folder);
 
                 $up_task['id']=$task['id'];
                 $up_task['files_folder_id']=$new_folder_id;
@@ -337,10 +348,10 @@ if(isset($GO_MODULES->modules['calendar']))
 
                 $up_folder['id']=$new_folder_id;
                 $up_folder['name']=File::strip_invalid_chars($event['name']);
-                $up_folder['acl_id']=0;
+                //$up_folder['acl_id']=0;
                 $up_folder['readonly']='1';
 
-                $fsdb->update_folder($up_folder);
+                $fsdb->update_row('fs_folders', 'id', $up_folder);
 
                 $up_event['id']=$event['id'];
                 $up_event['files_folder_id']=$new_folder_id;
@@ -381,10 +392,10 @@ if(isset($GO_MODULES->modules['billing']))
 
                 $up_folder['id']=$new_folder_id;
                 $up_folder['name']=File::strip_invalid_chars($order['id'].' '.$order['customer_name']);
-                $up_folder['acl_id']=0;
+                //$up_folder['acl_id']=0;
                 $up_folder['readonly']='1';
 
-                $fsdb->update_folder($up_folder);
+								$fsdb->update_row('fs_folders', 'id', $up_folder);
 
                 $up_order['id']=$order['id'];
                 $up_order['files_folder_id']=$new_folder_id;
@@ -427,10 +438,10 @@ if(isset($GO_MODULES->modules['projects']))
 
                 $up_folder['id']=$new_folder_id;
                 $up_folder['name']=$new_folder_name;
-                $up_folder['acl_id']=0;
+                //$up_folder['acl_id']=0;
                 $up_folder['readonly']='1';
 
-                $fsdb->update_folder($up_folder);
+                $fsdb->update_row('fs_folders', 'id', $up_folder);
 
                 $up_project['id']=$project['id'];
                 $up_project['files_folder_id']=$new_folder_id;
@@ -503,10 +514,10 @@ while($user = $GO_USERS->next_record())
 
             $up_folder['id']=$new_folder_id;
             $up_folder['name']=$new_folder_name;
-            $up_folder['acl_id']=0;
+            //$up_folder['acl_id']=0;
             $up_folder['readonly']='1';
 
-            $fsdb->update_folder($up_folder);
+						$fsdb->update_row('fs_folders', 'id', $up_folder);
 
             $up_user['id']=$user['id'];
             $up_user['files_folder_id']=$new_folder_id;
