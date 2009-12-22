@@ -67,7 +67,9 @@ GO.data.JsonStore = function(config) {
 				if(this.reader.jsonData && this.reader.jsonData.feedback)
 				{
 					msg += '<br /><br />'+this.reader.jsonData.feedback;
-				}				
+				}
+
+				msg += '<br /><br />JsonStore load exception occurred';
 				GO.errorDialog.show(msg, response.responseText);			
 			}
 		}
