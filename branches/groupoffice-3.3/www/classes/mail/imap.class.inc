@@ -654,7 +654,9 @@ class imap{
 					global $GO_LANGUAGE;
 					require($GO_LANGUAGE->get_language_file('email'));
 					throw new Exception($lang['email']['errorGettingMessage']."\n\n".$this->last_error());
-				}				
+				}
+
+				//debug($structure);
 				$this->get_parts($structure);
 			}
 
@@ -683,9 +685,7 @@ class imap{
 	 * @return void
 	 */
 	function get_parts($mimeobj, $section = 0, $parttype='') {
-		
-		
-		
+
 		if (isset ($mimeobj->type)) {
 			$type = $this->get_mime_type($mimeobj->type);
 		} else {
@@ -693,84 +693,69 @@ class imap{
 		}
 
 		$full_mime_type = $type."/".$mimeobj->subtype;
-		//echo $full_mime_type.' '.$section.'<br />';
 		$encoding = $this->get_encoding($mimeobj->encoding);
+
+		//debug($full_mime_type.' '.$section);
 
 		$name = '';
 
-	
-			if (isset ($mimeobj->parameters)) {
-				$params = $mimeobj->parameters;
-				for ($x = 0; $x < count($params); $x ++) {
-					if(is_object($params) && isset($params->$x))
-					{
-						$param = $params->$x;
-					}elseif(is_array($params) && isset($params[$x]))
-					{
-						$param = $params[$x];
-					}else
-					{
-						$param = null;
-					}
+		if (isset ($mimeobj->parameters)) {
+			$params = $mimeobj->parameters;
+			for ($x = 0; $x < count($params); $x ++) {
+				if(is_object($params) && isset($params->$x)) {
+					$param = $params->$x;
+				}elseif(is_array($params) && isset($params[$x])) {
+					$param = $params[$x];
+				}else {
+					$param = null;
+				}
 
-					if(isset($param))
-					{
-						if ((substr(strtolower($param->attribute),0,4) == 'name') && $param->value != '') {
-							$name .= $param->value;//$this->enc_utf8($param->value);
-						}
+				if(isset($param)) {
+					if ((substr(strtolower($param->attribute),0,4) == 'name') && $param->value != '') {
+						$name .= $param->value;//$this->enc_utf8($param->value);
 					}
 				}
 			}
-			
-			if (empty($name) && isset ($mimeobj->dparameters)) {
-				$params = $mimeobj->dparameters;
-				for ($x = 0; $x < count($params); $x ++) {
-					if(is_object($params) && isset($params->$x))
-					{
-						$param = $params->$x;
-					}elseif(is_array($params) && isset($params[$x]))
-					{
-						$param = $params[$x];
-					}else
-					{
-						$param = null;
-					}
+		}
 
-					if(isset($param))
-					{
-						if (substr(strtolower($param->attribute),0,8) == 'filename' && $param->value != '') {
-							//$name = $this->enc_utf8(quoted_printable_decode($param->value));
-							$name .= $param->value;
-						}
+		if (empty($name) && isset ($mimeobj->dparameters)) {
+			$params = $mimeobj->dparameters;
+			for ($x = 0; $x < count($params); $x ++) {
+				if(is_object($params) && isset($params->$x)) {
+					$param = $params->$x;
+				}elseif(is_array($params) && isset($params[$x])) {
+					$param = $params[$x];
+				}else {
+					$param = null;
+				}
+
+				if(isset($param)) {
+					if (substr(strtolower($param->attribute),0,8) == 'filename' && $param->value != '') {
+					//$name = $this->enc_utf8(quoted_printable_decode($param->value));
+						$name .= $param->value;
 					}
 				}
 			}
+		}
 
-			if(empty($name) && !empty($mimeobj->description))
-			{
-				$name = $this->enc_utf8($mimeobj->description);
-			}			
+		if(empty($name) && !empty($mimeobj->description)) {
+			$name = $this->enc_utf8($mimeobj->description);
+		}
 
-			if(substr($name,0,2)=='=?')
-			{
-				$name = $this->enc_utf8($name);
-			}else
-			{
-				$start = strpos($name,"''");
-				if($start)
-				{
-					$name = substr($name, $start);
-				}
-				$name = rawurldecode($name);
+		if(substr($name,0,2)=='=?') {
+			$name = $this->enc_utf8($name);
+		}else {
+			$start = strpos($name,"''");
+			if($start) {
+				$name = substr($name, $start);
 			}
-		
+			$name = rawurldecode($name);
+		}
+
 		$x = 0;
 		if (isset ($mimeobj->parts)) {
 			for ($x = 0; $x < count($mimeobj->parts); $x ++) {
-					
-
-				// If we are in the root of the object increment by whole integers
-
+			// If we are in the root of the object increment by whole integers
 				if ($section == 0) {
 					/*if(strtolower($mimeobj->subtype)!='related' && strtolower($mimeobj->subtype)!='mixed' && strtolower($mimeobj->subtype)!='alternative')
 					 {
@@ -780,14 +765,18 @@ class imap{
 						}*/
 					$nsection = $x +1;
 				} elseif (
-				($pos = strrpos($section, ".")) &&
-				($mimeobj->parts[0]->type != TYPEMULTIPART || $mimeobj->parts[0]->subtype != 'RELATED')
+				($pos = strrpos($section, "."))
+				//Uncommented this for mails from zimbra
+				//&& ($mimeobj->parts[0]->type != TYPEMULTIPART || $mimeobj->parts[0]->subtype != 'RELATED')
 				) {
+
 					$subsection = (int) substr($section, $pos +1) + $x;
+					//debug('sub '.$subsection);
 					if ($subsection == '') {
 						$subsection = '0';
 					}
 					$nsection = substr($section, 0, $pos).".". ($subsection +1);
+				//debug('new '.$nsection);
 				} else {
 					$nsection = $section;
 				}
@@ -797,30 +786,29 @@ class imap{
 
 				if (isset ($mimeobj->parts[$x]->parts) && count($mimeobj->parts[$x]->parts))// && strtolower($mimeobj->parts[$x]->subtype) != 'rfc822')
 				{
-					// Funny really, if a mime section is a inline message that has a multipart body you reference the message
-					// mime section with "2" the inline message header with "2.0" and the subsections with	"2.x"
-					// However if the mime section is a inline message with only 1 part then you reference the
-					// mime section in the message with 2.0 and the	inline message body with 2.1
+				// Funny really, if a mime section is a inline message that has a multipart body you reference the message
+				// mime section with "2" the inline message header with "2.0" and the subsections with	"2.x"
+				// However if the mime section is a inline message with only 1 part then you reference the
+				// mime section in the message with 2.0 and the	inline message body with 2.1
 
-					//echo $mimeobj->parts[$x]->type.' '.TYPEMESSAGE.' ';
-					//echo $mimeobj->parts[$x]->parts[0]->type.' '.TYPEMULTIPART.' '.$section.' '.$full_mime_type.'<br />';
-					//if (!($mimeobj->parts[$x]->type == TYPEMESSAGE && $mimeobj->parts[$x]->parts[0]->type == TYPEMULTIPART)) {
+				//echo $mimeobj->parts[$x]->type.' '.TYPEMESSAGE.' ';
+				//echo $mimeobj->parts[$x]->parts[0]->type.' '.TYPEMULTIPART.' '.$section.' '.$full_mime_type.'<br />';
+				//if (!($mimeobj->parts[$x]->type == TYPEMESSAGE && $mimeobj->parts[$x]->parts[0]->type == TYPEMULTIPART)) {
 					if ($mimeobj->parts[$x]->type != TYPEMESSAGE) {
-						//echo 'ja';
+					//echo 'ja';
 						$nsection .= ".0";
 					} else {
 						$nsection .= "";
 					}
 
-					//$nsection .= ".0";
+				//$nsection .= ".0";
 				}
 
 				//added section is 0 check because novell uses message/rfc822 in the main headers
-				if($section==0 || strtolower($full_mime_type) != 'message/rfc822')
-				{
+				if($section==0 || strtolower($full_mime_type) != 'message/rfc822') {
 					$this->get_parts($mimeobj->parts[$x], $nsection, $mimeobj->subtype);
 				}
-			
+
 				/*
 				 * else {
 					
@@ -828,8 +816,6 @@ class imap{
 				$section .= ".2";
 				}
 				}*/
-
-
 			}
 		}
 
@@ -857,24 +843,23 @@ class imap{
 			}
 
 			//don't make an attachment for section=0 and type message/rfc822
-			if(empty($name) && !empty($section) && strtolower($full_mime_type) == 'message/rfc822')
-			{
+			if(empty($name) && !empty($section) && strtolower($full_mime_type) == 'message/rfc822') {
 				$name='Message.eml';
 			}
 
 			//echo $section.': '.$full_mime_type.' '.$name.'<br>';
 			$bytes = isset ($mimeobj->bytes) ? $mimeobj->bytes : 0;
 			$tmp = Array (
-				'number' => $section, 
-				'id' => $mimeobj->ifid ? $mimeobj->id : 0, 
-				'name' => $name, 
-				'mime' => $full_mime_type, 
-				'transfer' => $encoding, 
-				'charset' => $part_charset, 
-				'disposition' => $mimeobj->ifdisposition ? $mimeobj->disposition : '', 
-				'size' => $bytes,
-				'human_size'=>Number::format_size($bytes),
-				'type' => $parttype);
+					'number' => $section,
+					'id' => $mimeobj->ifid ? $mimeobj->id : 0,
+					'name' => $name,
+					'mime' => $full_mime_type,
+					'transfer' => $encoding,
+					'charset' => $part_charset,
+					'disposition' => $mimeobj->ifdisposition ? $mimeobj->disposition : '',
+					'size' => $bytes,
+					'human_size'=>Number::format_size($bytes),
+					'type' => $parttype);
 
 			array_unshift($this->message["parts"], $tmp);
 		}
