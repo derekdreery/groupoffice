@@ -32,8 +32,9 @@ class String {
 
 		//Does not always work. We suppress the:
 		//Notice:  iconv() [function.iconv]: Detected an illegal character in input string in /var/www/community/trunk/www/classes/String.class.inc.php on line 31
-		
-		$c = @iconv($source_charset, 'UTF-8//IGNORE', $str);
+		$old_lvl = error_reporting (E_ALL ^ E_NOTICE);
+		$c = iconv($source_charset, 'UTF-8//IGNORE', $str);
+		error_reporting ($old_lvl);
 		if(!empty($c))
 		{
 			$str=$c;
@@ -733,6 +734,7 @@ class String {
 
 		$html = preg_replace($to_removed_array, '', $html);
 		$html = preg_replace("/([\"']?)javascript:/ui", "$1removed_script:", $html);
+		$html = preg_replace("/(<.* )on[a-z]+\s*('|\")?=[^>]*/iU", "$1removedevent=", $html);
 
 		if($block_external_images)
 		{

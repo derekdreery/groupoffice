@@ -9,5 +9,5 @@
 
 GO.comments.lang.comment="Komentář";
 GO.comments.lang.comments="Komentáře";
-GO.comments.lang.fiveLatestComments='5 posledních komentářů';
+GO.comments.lang.recentComments='Poslední komentáře';
 GO.comments.lang.browseComments = 'Procházet komentáře';

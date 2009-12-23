@@ -516,8 +516,6 @@ GO.email.EmailClient = function(config){
 
 
 	this.treePanel.on('beforenodedrop', function(e){
-		
-		
 		if(!e.dropNode)
 		{
 			var s = e.data.selections, messages = [];
@@ -619,13 +617,19 @@ GO.email.EmailClient = function(config){
 				}
 
 			}
-		}else
-		{			
-			if(e.source.dragData.node.id.indexOf('account')>-1 && e.target.id.indexOf('account')>-1 && e.point!='append'){				
+		}	
+	},
+	this);
+
+	this.treePanel.on('nodedrop', function(e){
+		if(e.dropNode)
+		{
+			if(e.source.dragData.node.id.indexOf('account')>-1 && e.target.id.indexOf('account')>-1 && e.point!='append'){
 				var sortorder=[];
 				var c = this.treePanel.getRootNode().childNodes;
-				for(var i=c.length;i>0;i--){
-					sortorder.push(c[i-1].attributes.account_id);
+
+				for(var i=0;i<c.length;i++){
+					sortorder.push(c[i].attributes.account_id);
 				}
 				Ext.Ajax.request({
 					url: GO.settings.modules.email.url+'action.php',
@@ -638,9 +642,10 @@ GO.email.EmailClient = function(config){
 			{
 				this.treePanel.moveFolder(e.target.attributes['account_id'], e.target.id , e.data.node);
 			}
-		}		
+		}
 	},
 	this);
+
 	
 	//select the first inbox to be displayed in the messages grid
 	root.on('load', function(node)

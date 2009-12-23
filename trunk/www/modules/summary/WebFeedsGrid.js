@@ -132,7 +132,7 @@ GO.summary.WebFeedsGrid = function(config){
 
 	GO.summary.WebFeedsGrid.superclass.constructor.call(this, config);
 };
-Ext.extend(GO.summary.WebFeedsGrid, Ext.grid.EditorGridPanel,{
+Ext.extend(GO.summary.WebFeedsGrid, GO.grid.EditorGridPanel,{
 
 	getGridData : function(){
 		var data = {};

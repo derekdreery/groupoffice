@@ -68,12 +68,14 @@ GO.users.lang.sunday = 'Neděle';
 GO.users.lang.monday = 'Pondělí';
 GO.users.lang.regionalSettings = 'Regionální nastavení';
 GO.users.lang.userSettings = 'Uživatelské nastavení';
+GO.users.lang.profile='Profil';
 
 GO.users.lang.maxUsersReached='Byl překročen maximální počet uživatelů. Jděte na záložku služby a rozšiřte maximální počet uživatelů.';
 
 GO.users.lang.group='Skupina';
 
 GO.users.lang.muteSound='Vypnout zvuk';
+GO.users.lang.mailReminders='E-mailové připomínky';
 
 GO.users.lang.downloadSampleCSV='Stáhnout ukázkový CSV soubor';
 
@@ -91,3 +93,5 @@ GO.users.lang.deleteWarning='VAROVÁNÍ!!! Všechna uživatelská data včetně 
 
 GO.users.lang.lastName = 'Příjmení';
 GO.users.lang.firstName = 'Křestního jména';
+
+GO.users.lang.sendInvitation='Poslat pozvánku';

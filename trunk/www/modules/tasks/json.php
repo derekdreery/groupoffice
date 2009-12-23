@@ -269,6 +269,8 @@ try{
 
 		case 'tasks':
 
+			$GO_LANGUAGE->require_language_file('tasks');
+
 			$response['write_permission']=true;
 			if(isset($_REQUEST['tasklist_id']))
 			{
@@ -386,12 +388,18 @@ try{
 
 			$now=time();
 
-			while($tasks->next_record(DB_ASSOC))
+			while($task = $tasks->next_record(DB_ASSOC))
 			{
 				$task = $tasks->record;
 				$task['completed']=$tasks->f('completion_time')>0;
 				$task['late']=!$task['completed'] && $task['due_time']<$now;
-				$task['due_time']=date($_SESSION['GO_SESSION']['date_format'], $tasks->f('due_time'));
+				$task['due_time']=Date::get_timestamp($task['due_time'], false);
+				$task['mtime']=Date::get_timestamp($task['mtime']);
+				$task['ctime']=Date::get_timestamp($task['ctime']);
+				$task['completion_time']=Date::get_timestamp($task['completion_time']);
+				$task['start_time']=Date::get_timestamp($task['start_time'], false);
+
+				$task['status']=$lang['tasks']['statuses'][$task['status']];
 				$task['description']=String::text_to_html(String::cut_string($task['description'],500));
 				$tl_id = array_search($tasks->f('tasklist_id'), $tasklists);
 				$task['tasklist_name'] = (isset($tasklists_name) && $tl_id !== false)? $tasklists_name[$tl_id]: '';

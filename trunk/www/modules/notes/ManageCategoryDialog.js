@@ -33,11 +33,7 @@ GO.notes.ManageCategoriesDialog = function(config){
 	config.buttons=[{
 			text: GO.lang['cmdClose'],
 			handler: function(){
-				if(this.categoriesGrid.changed)
-				{
-					this.fireEvent('change');
-					this.categoriesGrid.changed=false;
-				}
+				
 				this.hide();
 				
 			},
@@ -48,6 +44,14 @@ GO.notes.ManageCategoriesDialog = function(config){
 
 	
 	GO.notes.ManageCategoriesDialog.superclass.constructor.call(this, config);
+
+	this.on('hide', function(){
+		if(this.categoriesGrid.changed)
+		{
+			this.fireEvent('change');
+			this.categoriesGrid.changed=false;
+		}
+	}, this);
 	
 	this.addEvents({'change':true});
 }

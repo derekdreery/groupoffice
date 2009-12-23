@@ -1631,19 +1631,17 @@ class calendar extends db
 	}
 
 
-
+	function has_participants_event($participants_event_id, $calendar_id){
+		$sql = "SELECT * FROM cal_events WHERE participants_event_id=? AND calendar_id=?";
+		$this->query($sql, 'ii', array($participants_event_id, $calendar_id));
+		return $this->next_record();
+	}
 
 	function get_event($event_id)
 	{
 		$sql = "SELECT e.*, c.acl_id FROM cal_events e INNER JOIN cal_calendars c ON c.id=e.calendar_id WHERE e.id='".$this->escape($event_id)."'";
 		$this->query($sql);
-		if($this->next_record(DB_ASSOC))
-		{
-			return $this->record;
-		}else
-		{
-			return false;
-		}
+		return $this->next_record(DB_ASSOC);
 	}
 
 	function get_events_for_period($user_id, $start_offset, $days, $index_hour=false)
@@ -2236,6 +2234,11 @@ class calendar extends db
 		}
 		return $freebusy;
 
+	}
+
+	function clear_event_status($event_id, $accepted_email){
+		$sql = "UPDATE cal_participants SET status='0' WHERE email!='".$this->escape($accepted_email)."' AND event_id='".$this->escape($event_id)."'";
+		return $this->query($sql);
 	}
 
 

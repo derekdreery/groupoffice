@@ -230,8 +230,6 @@ Ext.extend(GO.calendar.ViewDialog, Ext.Window, {
 		}
 		
 		this.formPanel.form.submit({
-			
-			
 				
 			url:GO.settings.modules.calendar.url+'action.php',
 			params: {

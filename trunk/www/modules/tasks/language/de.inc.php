@@ -15,4 +15,5 @@ $lang['tasks']['statuses']['IN-PROCESS']='In Bearbeitung';
 $lang['tasks']['import_success']='%s Aufgaben wurden importiert';
 $lang['tasks']['call']='Anruf';
 $lang['tasks']['dueAtdate']='Fällig am %s';
+$lang['tasks']['list']='Aufgabenliste';
 ?>

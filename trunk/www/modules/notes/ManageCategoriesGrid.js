@@ -21,13 +21,9 @@ GO.notes.ManageCategoriesGrid = function(config){
 	config.layout='fit';
 	config.autoScroll=true;
 	config.split=true;
-	config.store = GO.notes.writableCategoriesStore;
-	
-	config.border=false;
-	
+	config.store = GO.notes.writableAdminCategoriesStore;	
+	config.border=false;	
 	config.paging=true;
-
-	
 
 	var columnModel =  new Ext.grid.ColumnModel([
 	  {
@@ -92,6 +88,8 @@ GO.notes.ManageCategoriesGrid = function(config){
 		this.categoryDialog.show(record.data.id);
 		
 		}, this);
+
+	GO.notes.writableAdminCategoriesStore.load();
 	
 };
 

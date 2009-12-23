@@ -1,4 +1,4 @@
-﻿GO.lang.exportHiddenColumns='Auch versteckte Spalten exportieren';
+GO.lang.exportHiddenColumns='Auch versteckte Spalten exportieren';
 GO.lang.searchQuery='Suchbegriff';
 GO.lang.pleaseApplyFirst='Bitte erst mit einem Klick auf \'Anwenden\' speichern';
 GO.lang.passwordMatchError='Die Passwörter stimmen nicht überein';
@@ -229,3 +229,9 @@ GO.lang.closeApps='Anwendungen schließen';
 GO.lang.rightClickToClose='Klicken Sie mit der rechten Maustaste oben auf eine Tab-Bezeichnung, um den zugehörigen Tab zu schließen.';
 GO.lang.adminMenu='Verwaltung';
 GO.lang.administration='Administration';
+GO.lang.extra='Extra';
+GO.lang.permissionsLevel='Level';
+GO.lang.permissionRead='Nur Lesen';
+GO.lang.permissionWrite='Schreiben';
+GO.lang.permissionDelete='Schreiben und löschen';
+GO.lang.permissionManage='Verwalten';

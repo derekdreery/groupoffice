@@ -117,9 +117,13 @@ GO.grid.ExtraFunctions={
 
 
 	initComponent : function(){
+		GO.grid.GridPanel.superclass.initComponent.call(this);
+		
 		//create a delayed rowselect event so that when a user repeatedly presses the
 		//up and down button it will only load if it stays on the same record for 400ms
 		this.addEvents({'delayedrowselect':true});
+
+		
 
 		this.on("rowcontextmenu", function(grid, rowIndex, e) {
 			e.stopEvent();
@@ -134,7 +138,6 @@ GO.grid.ExtraFunctions={
 		}, this);
 
 		this.on('rowclick', function(grid, rowIndex, e){
-
 			if(!e.ctrlKey && !e.shiftKey)
 			{
 				var record = this.getSelectionModel().getSelected();
@@ -142,6 +145,8 @@ GO.grid.ExtraFunctions={
 			}
 			this.rowClicked=true;
 		}, this);
+
+		
 
 		this.getSelectionModel().on("rowselect",function(sm, rowIndex, r){
 			if(!this.rowClicked)
@@ -155,7 +160,7 @@ GO.grid.ExtraFunctions={
 			this.rowClicked=false;
 		}, this, {delay:400});
 
-		GO.grid.GridPanel.superclass.initComponent.call(this);
+		
 	},
 
 	/**
@@ -241,4 +246,55 @@ GO.grid.ExtraFunctions={
  
  
 Ext.extend(GO.grid.GridPanel, Ext.grid.GridPanel, GO.grid.ExtraFunctions);
-Ext.extend(GO.grid.EditorGridPanel, Ext.grid.EditorGridPanel, GO.grid.ExtraFunctions);
+Ext.extend(GO.grid.EditorGridPanel, Ext.grid.EditorGridPanel, Ext.apply(GO.grid.ExtraFunctions,{
+	
+	/**
+	 * Checks if a grid cell is valid
+	 * @param {Integer} col Cell column index
+	 * @param {Integer} row Cell row index
+	 * @return {Boolean} true = valid, false = invalid
+	 */
+	isCellValid:function(col, row) {
+			if(!this.colModel.isCellEditable(col, row)) {
+					return true;
+			}
+			var ed = this.colModel.getCellEditor(col, row);
+			if(!ed) {
+					return true;
+			}
+			var record = this.store.getAt(row);
+			if(!record) {
+					return true;
+			}
+			var field = this.colModel.getDataIndex(col);
+			ed.field.setValue(record.data[field]);
+			return ed.field.isValid(true);
+	} // end of function isCellValid
+
+	/**
+	 * Checks if grid has valid data
+	 * @param {Boolean} editInvalid true to automatically start editing of the first invalid cell
+	 * @return {Boolean} true = valid, false = invalid
+	 */
+	,isValid:function(editInvalid) {
+			var cols = this.colModel.getColumnCount();
+			var rows = this.store.getCount();
+			var r, c;
+			var valid = true;
+			for(r = 0; r < rows; r++) {
+					for(c = 0; c < cols; c++) {
+							valid = this.isCellValid(c, r);
+							if(!valid) {
+									break;
+							}
+					}
+					if(!valid) {
+							break;
+					}
+			}
+			if(editInvalid && !valid) {
+					this.startEditing(r, c);
+			}
+			return valid;
+	} // end of function isValid
+}));

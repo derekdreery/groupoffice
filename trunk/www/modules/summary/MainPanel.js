@@ -115,22 +115,14 @@
 	  		this.availablePortlets.push(GO.summary.portlets[p]);
 	  	}
   	}
-  }  
-  
-	this.availablePortletsStore.loadData({portlets: this.availablePortlets});
-	
-	
+  }	
    
   config.items=this.columns;
-  
-  
   
   if(!config.items)
   {
   	config.html = GO.summary.lang.noItems;
   }
-  
-
 
   var tbarItems = [{
   	text: GO.lang['cmdAdd'],
@@ -237,16 +229,12 @@ Ext.extend(GO.summary.MainPanel, GO.summary.Portal, {
 	showAvailablePortlets : function(){
 
 		if(!this.portletsWindow)
-		{
-			
-			
-
-			
+		{			
 			var tpl ='<tpl for=".">'+
 				'<div class="go-item-wrap">{title}</div>'+
 				'</tpl>';
 			
-			var list = new GO.grid.SimpleSelectList({store: this.availablePortletsStore, tpl: tpl});
+			var list = new GO.grid.SimpleSelectList({store: this.availablePortletsStore, tpl: tpl,  emptyText: GO.lang.strNoItems});
 			
 			list.on('click', function(dataview, index){
 	
@@ -279,6 +267,7 @@ Ext.extend(GO.summary.MainPanel, GO.summary.Portal, {
 			});
 		}
 		this.portletsWindow.show();
+		this.availablePortletsStore.loadData({portlets: this.availablePortlets});
 		
 	}
 });

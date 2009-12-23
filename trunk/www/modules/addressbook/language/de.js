@@ -1,4 +1,4 @@
-﻿GO.addressbook.lang.selectMailingGroup='Mailing-Gruppe auswählen';
+GO.addressbook.lang.selectMailingGroup='Mailing-Gruppe auswählen';
 GO.addressbook.lang.cmdFormLabelAddressBooks='Adressbuch';
 GO.addressbook.lang.alphabet='A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z';
 GO.addressbook.lang.cmdAllFields='Alle Felder';

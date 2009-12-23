@@ -22,8 +22,9 @@ GO.email.lang.root='Kořenový adresář';
 GO.email.lang.folders='Složky';
 GO.email.lang.filter='Filtr';
 GO.email.lang.filters='Filtry';
-GO.email.lang.selectFolderDelete='Prosím, označte složku ke smazání.';
+GO.email.lang.selectFolderDelete='Prosím, vyberte složku ke smazání.';
 GO.email.lang.selectFolderAdd='Nejprve vyberte kde se nová složka má vytvořit a poté klikněte na \'Přidat složku\'';
+GO.email.lang.selectFolderRename='Prosím, vyberte složku pro přejmenování';
 GO.email.lang.forward='Přeposlat';
 GO.email.lang.resetSearch='Zrušit vyhledání';
 GO.email.lang.emailMessage='Emailová zpráva';
@@ -67,7 +68,8 @@ GO.email.lang.attachFiles='Přiložte soubory';
 GO.email.lang.uploadAttachments='Nahrát přílohy';
 GO.email.lang.startTransfer='Začít přenos';
 GO.email.lang.cantEditFolder='Tuto složku nemůžete upravit';
-GO.email.lang.cantDeleteInboxFolder='Nemůžete smazat kořenový adresář';
+GO.email.lang.cantDeleteInboxFolder='Nemůžete smazat výchozí složku';
+GO.email.lang.cantRenameInboxFolder='Nemůžete přejmenovat výchozí složku';
 GO.email.lang.enterFolderName='Vložte název složky:';
 GO.email.lang.addFolder='Přidat složku';
 GO.email.lang.to='Příjemce';
@@ -94,6 +96,7 @@ GO.email.lang.addUnknownRecipients='Přidat neznámého příjemce';
 GO.email.lang.addUnknownRecipientsText='Právě jste poslali email na jednoho nebo více příjemců, kteří nejsou ve Vašem adresáři. Kliknutím na jméno můžete dotyčného přidat do adresáře nebo zavřít toto okno';
 GO.email.lang.attachFilesPC='Přidat z počítače';
 GO.email.lang.attachFilesGO='Přidat z pošty';
+GO.email.lang.renameFolder='Přejmenovat složku';
 
 
 GO.email.lang.vacation='Automatická odpověď';
@@ -125,8 +128,8 @@ GO.email.lang.closeUploadDialog='Zavřít okno s nahráváním ihned nebo čekat
 
 GO.email.lang.signature='Podpis';
 
-GO.email.defaultProgram='Základní e-mailový program';
-GO.email.defaultProgramInstructions ='<p>Pro nastavení Group-Office jako základní e-mailový program si prosím <a class="normal-link" href="http://www.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client" target="_blank">přečtěte pokyny</a>.</p><p>Pokud používáte Windows, musíte stáhnout a spustit <a class="normal-link" href="{url}">tento registrační soubor</a>.</p>';
+GO.email.defaultProgram='Výchozí e-mailový program';
+GO.email.defaultProgramInstructions ='<p>Pro nastavení Group-Office jako výchozí e-mailový program si prosím <a class="normal-link" href="http://www.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client" target="_blank">přečtěte pokyny</a>.</p><p>Pokud používáte Windows, musíte stáhnout a spustit <a class="normal-link" href="{url}">tento registrační soubor</a>.</p>';
 
 GO.email.lang.htmlMarkup = 'Používat HTML znaky';
 GO.email.lang.confirmLostChanges = 'Provedné změny nebudou uloženy. Jste si jisti?';
@@ -143,3 +146,13 @@ GO.email.lang.addSendersTo='Přidat odesílatele do...';
 
 GO.email.lang.defaultTemplate='Nastavit vybranou šablonu jako výchozí';
 GO.email.lang.moving='Přenášení...';
+
+GO.email.lang.orderFilters='Pořadí filtrů můžete změnit přetažením.';
+GO.email.lang.orderAccounts='Pořadí účtů můžete změnit přetažením.';
+
+GO.email.lang.groups='Skupiny';
+
+GO.email.lang.showUnread='Zobrazit nepřečtené';
+GO.email.lang.searchFrom='Odesílatel';
+GO.email.lang.searchTo='Příjemce';
+GO.email.lang.searchCC='Příjemce (CC)';

@@ -95,7 +95,7 @@ GO.addressbook.lang.confirmCreate='Kontakt neexistuje. Chcete založit nový?';
 GO.addressbook.lang.matchFields='Shodné údaje';
 
 GO.addressbook.lang.advancedSearch='Rozšířené vyhledávání';
-GO.addressbook.lang.defaultAddressFormat='Základní formát adresy';
-GO.addressbook.lang.defaultSalutation='Základní pozdrav';
+GO.addressbook.lang.defaultAddressFormat='Výchozí formát adresy';
+GO.addressbook.lang.defaultSalutation='Výchozí pozdrav';
 GO.addressbook.lang.explanationVariables='Nápověda k zakládním proměnným pozdravů';
 GO.addressbook.lang.explanationSex='Mužská a ženská podoba pozdravu';

@@ -1,4 +1,4 @@
-﻿GO.calendar.lang.addressbook='Adressbuch';
+GO.calendar.lang.addressbook='Adressbuch';
 GO.calendar.lang.appointment='Termin';
 GO.calendar.lang.appointments='Termine';
 GO.calendar.lang.recurrence='Wiederholung';
@@ -47,7 +47,7 @@ GO.calendar.lang.previousDay='Vorheriger Tag';
 GO.calendar.lang.nextDay='Nächster Tag';
 GO.calendar.lang.noAppointmentsToDisplay='Keine Termine zum Anzeigen';
 GO.calendar.lang.selectCalendar='Kalender auswählen';
-GO.calendar.lang.selectCalendarForAppointment='Wählen Sie einen Kalender, in den Sie den Termin eintragen möchten:';
+GO.calendar.lang.selectCalendarForAppointment='Wählen Sie einen Kalender, in den Sie den Termin eintragen möchten';
 GO.calendar.lang.closeWindow='Der Termin wurde akzeptiert und eingetragen. Sie können das Fenster schließen.';
 GO.calendar.lang.list='Liste';
 GO.calendar.lang.editRecurringEvent='Möchten Sie die Wiederholung oder den gesamten Termin bearbeiten?';
@@ -59,20 +59,19 @@ GO.calendar.lang.eventDefaults='Standardeinstellungen für Termine';
 GO.calendar.lang.importToCalendar='Ohne Einladung direkt in zugehörige Kalender eintragen';
 GO.calendar.lang.default_calendar='Standardkalender';
 GO.calendar.lang.status='Status';
-
-
-GO.calendar.lang.resource_groups='Resource Gruppen';
-GO.calendar.lang.resource_group='Resource Grup';
-GO.calendar.lang.resources='Resourcen';
+GO.calendar.lang.resource_groups='Resource groups';
+GO.calendar.lang.resource_group='Resource group';
+GO.calendar.lang.resources='Resources';
 GO.calendar.lang.resource='Resource';
-GO.calendar.lang.calendar_group='Calendar group';
-GO.calendar.lang.admins='Administrators';
+GO.calendar.lang.calendar_group='Kalendergruppe';
+GO.calendar.lang.admins='Administratoren';
 GO.calendar.lang.no_group_selected='You have errors in your form. You need to select a group for this resource.';
 
-GO.calendar.lang.visibleCalendars='Visible calendars';
-GO.calendar.lang.visible='Visible';
+GO.calendar.lang.visibleCalendars='Sichtbare Kalender';
+GO.calendar.lang.visible='Sichtbar';
 
-GO.calendar.lang.group='Group';
-GO.calendar.lang.no_status='New';
+GO.calendar.lang.group='Gruppe';
+GO.calendar.lang.no_status='Neu';
 GO.calendar.lang.no_custom_fields='There are no extra options available.';
-GO.calendar.lang.show_bdays='Zeige Geburtstage aus Adressbuch';
+GO.calendar.lang.show_bdays='Geburtstage aus Adressbuch anzeigen';
+GO.calendar.lang.show_tasks='Aufgaben aus Aufgabenliste anzeigen';
