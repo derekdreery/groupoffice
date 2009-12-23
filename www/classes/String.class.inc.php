@@ -703,6 +703,7 @@ class String {
 	 * @return string HTML formatted string
 	 */
 	function convert_html($html, $block_external_images=false, &$replace_count=0) {
+		global $GO_CONFIG;
 
 		//don't do this because it will mess up <pre></pre> tags
 		//$html = str_replace("\r", '', $html);
@@ -733,8 +734,22 @@ class String {
 		);
 
 		$html = preg_replace($to_removed_array, '', $html);
-		$html = preg_replace("/([\"']?)javascript:/ui", "$1removed_script:", $html);
-		$html = preg_replace("/(<.* )on[a-z]+\s*('|\")?=[^>]*/iU", "$1removedevent=", $html);
+		//$html = preg_replace("/([\"']?)javascript:/ui", "$1removed_script:", $html);
+
+		require_once($GO_CONFIG->class_path.'XSSclean.class.inc.php');
+		$XSSclean = new XSSclean();
+		$html = $XSSclean->xss_clean($html);		
+
+		/*$html = html_entity_decode($html, ENT_QUOTES, 'UTF-8');
+		$html = preg_replace('/&#38;#(\d+);/me','chr(\\1)', $html);
+		$html = preg_replace('/&#38;#x([a-f0-9]+);/mei','chr(0x\\1)', $html);*/
+
+		//$html = preg_replace("/(<.* )on[a-z]+\s*('|\")?=[^>]*/iU", "$1removedevent=", $html);
+
+		/*$html = str_replace('javascript:', 'removed_script:', $html);
+		$html = str_replace('vbscript:', 'removed_script:', $html);*/
+
+		//debug($html);
 
 		if($block_external_images)
 		{
@@ -746,6 +761,7 @@ class String {
 		return $html;
 	}
 
+	
 	/**
 	 * Change HTML links to Group-Office links. For example mailto: links will call
 	 * the Group-Office e-mail module if installed.
