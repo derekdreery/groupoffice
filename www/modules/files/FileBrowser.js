@@ -47,6 +47,19 @@ GO.files.FileBrowser = function(config){
 			preloadChildren:true
 		});
 
+	this.treeLoader.on('beforeload', function(){
+		var el =this.treePanel.getEl();
+		if(el){
+			el.mask(GO.lang.waitMsgLoad);
+		}
+	}, this);
+	this.treeLoader.on('load', function(){
+		var el =this.treePanel.getEl();
+		if(el){
+			el.unmask();
+		}
+	}, this);
+
 	this.treePanel = new Ext.tree.TreePanel({
 		region:'west',
 		//title:GO.lang.locations,
@@ -1224,7 +1237,9 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 								var destinationNode = this.treePanel.getNodeById(pasteDestination);
 								if(destinationNode)
 								{
-									delete destinationNode.attributes.children;								
+									//delete destinationNode.attributes.children;
+									destinationNode.attributes.children=[];
+									destinationNode.attributes.childrenRendered=false;
 									destinationNode.reload();
 								}
 								

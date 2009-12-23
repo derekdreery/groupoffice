@@ -245,23 +245,26 @@ Ext.extend(GO.dialog.SelectEmail, Ext.Window, {
 				this.scope = this;
 			}
 
-			var activeGrid;
+			var activeGrid, type;
 
 			switch (this.tabPanel.getLayout().activeItem.id) {
 				case 'select-users-grid' :
+					type='users';
 					activeGrid = this.usersGrid;
 					break;
 
 				case 'select-contacts-grid' :
+					type='contacts';
 					activeGrid = this.contactsGrid;
 					break;
 
 				case 'select-companies-grid' :
+					type='companies';
 					activeGrid = this.companiesGrid;
 					break;
 			}
 
-			var handler = this.handler.createDelegate(this.scope, [activeGrid]);
+			var handler = this.handler.createDelegate(this.scope, [activeGrid, type]);
 			handler.call();
 		}
 		if (hide) {

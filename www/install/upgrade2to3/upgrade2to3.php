@@ -407,8 +407,8 @@ if(in_array('calendar', $module_ids))
 			$todo['repeat_end_time']=$db->f('repeat_end_time');
 
 
-			$task_id=$tasks->add_task($todo);
-
+			$todo['id'] = $db2->nextid("ta_tasks");
+			$db2->insert_row('ta_tasks', $task);
 
 			$sql = "UPDATE go_links SET link_id1=".$task_id.",type1=12 WHERE link_id1=".$db->f('id')." AND type1=1";
 			$db2->query($sql);

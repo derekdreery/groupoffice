@@ -14,3 +14,7 @@
 .input-form-setting {
 	padding: 5px 5px 1px 5px;
 }
+
+.user-disabled td{
+	color: red;
+}

@@ -53,3 +53,5 @@ $lang['email']['alias']='Přezdívka';
 $lang['email']['aliases']='Přezdívky';
 
 $lang['email']['noUidNext']='Váš emailový server nepodporuje UIDNEXT. Složka \'Koncepty\' bude automaticky zablokována pro tento účet.';
+
+$lang['email']['disable_trash_folder']='Přesunutí e-mailu do koše se nezdařilo. To by mohlo být tím, že nemáte dostatek volného místa na Vašem disku. Můžete uvolnit volné místo, tím že zakážete složku koše v Administrace -> Účty -> dvojtý klik na Váš účet -> Složky';

@@ -35,3 +35,4 @@ $lang['files']['deleted']='Smazáno';
 
 $lang['files']['file']='Soubor';
 $lang['files']['folder']='Složka';
+$lang['files']['files']='Soubory';

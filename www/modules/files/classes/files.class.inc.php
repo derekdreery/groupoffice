@@ -97,6 +97,7 @@ class files extends db {
 			case 'odp':
 			case 'pps':
 			case 'pptx':
+			case 'ppt':
 				return $GO_THEME->image_url.'128x128/filetypes/pps.png';
 				break;
 
@@ -488,7 +489,7 @@ class files extends db {
 		$user_id = $this->escape($user_id);
 
 		$sql = "SELECT DISTINCT t.id, t.user_id, t.name, t.extension FROM fs_templates t ".
-				"INNER JOIN go_acl a ON a.acl_id=t.acl_id AND a.level<4 ".
+				"INNER JOIN go_acl a ON a.acl_id=t.acl_id AND a.level>".GO_SECURITY::READ_PERMISSION.' '.
 				"LEFT JOIN go_users_groups ug ON a.group_id=ug.group_id ".
 				"WHERE (a.user_id=".$this->escape($user_id)." OR ug.user_id=".$this->escape($user_id).") ORDER BY ".$this->escape($sortfield." ".$sortorder);
 
@@ -1206,7 +1207,7 @@ class files extends db {
 
 	function resolve_path($path,$create_folders=false, $user_id=0, $readonly='0', $folder_id=0) {
 		if(substr($path,-1)=='/') {
-			$url=substr($path,0,-1);
+			$path=substr($path,0,-1);
 		}
 		$parts = explode('/', $path);
 		$first_part = array_shift($parts);

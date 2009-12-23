@@ -375,7 +375,7 @@ try
 				
 			$company = $ab->get_company($company_id);
 
-			if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $contact['acl_id'])<3)
+			if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $company['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
 			{
 				throw new AccessDeniedException();
 			}

@@ -20,3 +20,5 @@ GO.files.lang.file='Datei';
 GO.files.lang.emptyList='Liste leeren';
 GO.files.lang.newFiles='Neu';
 GO.files.lang.olderVersions='Ältere Versionen';
+GO.files.lang.uploadProperties='Die nachfolgenden Optionen werden für alle Dateien übernommen, die als "Kleine Dateien" hochgeladen wurden';
+GO.files.lang.selectFiles = 'Dateien auswählen';

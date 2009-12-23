@@ -108,9 +108,9 @@ GO.grid.LinksPanel = function(config){
 	
 	this.linksGrid = new GO.grid.LinksGrid({
 		region:'center',
-		deleteConfig: {
+		deleteConfig:{
 				scope:this,
-				success:function(){
+				success:this.onDelete/*function(deleteConfig){
 				  var activeNode = this.linksTree.getNodeById('lt-folder-'+this.folder_id);
 				  if(activeNode)
 				  {
@@ -119,7 +119,21 @@ GO.grid.LinksPanel = function(config){
 				  {
 				  	this.linksTree.getRootNode().reload();
 				  }
-				}
+
+					var link_types = [];
+					var keys = deleteConfig.params.delete_keys;
+					for(var i=0;i<keys.length;i++){
+						var key = keys[i];
+						var arr = key.split(':');
+						if(!link_types[arr[0]])
+						{
+							link_types[arr[0]]=[];
+						}
+						link_types[arr[0]].push(arr[1]);
+					}
+
+					GO.mainLayout.fireEvent('linksDeleted', deleteConfig, link_types);
+				}*/
 			}
 	});
 
@@ -216,17 +230,7 @@ GO.grid.LinksPanel = function(config){
 				delete_keys:Ext.encode(selections)
 			},
 			count:selections.length,
-			callback:function(){
-				var colonPos, folder_id, deletedNode;
-				for(var i=0;i<selections.length;i++){
-					colonPos = selections[i].indexOf(':');
-					folder_id = selections[i].substr(colonPos+1);
-
-					deletedNode = this.linksTree.getNodeById('lt-folder-'+folder_id);
-					if(deletedNode)
-						deletedNode.remove();					
-				}
-			},
+			callback:this.onDelete,
 			scope:this
 		};
 		GO.deleteItems(deleteConfig);
@@ -329,6 +333,31 @@ GO.grid.LinksPanel = function(config){
 }
 
 Ext.extend(GO.grid.LinksPanel, Ext.Panel, {
+
+	onDelete : function(deleteConfig){
+		var selections = Ext.decode(deleteConfig.params.delete_keys);
+		var colonPos, folder_id, deletedNode;
+		for(var i=0;i<selections.length;i++){
+			colonPos = selections[i].indexOf(':');
+			folder_id = selections[i].substr(colonPos+1);
+
+			deletedNode = this.linksTree.getNodeById('lt-folder-'+folder_id);
+			if(deletedNode)
+				deletedNode.remove();
+		}
+
+		var link_types = {};
+		for(var i=0;i<selections.length;i++){
+			var arr = selections[i].split(':');
+			if(!link_types[arr[0]])
+			{
+				link_types[arr[0]]=[];
+			}
+			link_types[arr[0]].push(arr[1]);
+		}
+
+		GO.mainLayout.fireEvent('linksDeleted', deleteConfig, link_types);
+	},
 	
 	afterRender : function(){
 		

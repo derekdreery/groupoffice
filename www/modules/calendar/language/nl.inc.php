@@ -61,18 +61,25 @@ $lang['calendar']['printAllDaySingle']='Hele dag';
 $lang['calendar']['printAllDayMultiple']='Hele dag van %s tot %s';
 
 $lang['calendar']['calendars']='Agenda\'s';
-$lang['calendar']['resource_mail_subject']='Hulpmiddel \'%s\' gereserveerd';
-$lang['calendar']['resource_mail_body']='%s heeft hulpmiddel \'%s\' gereserveerd. U beheert dit hulpmiddel. Open de reservering om deze te accepteren of weigeren.';
+
 $lang['calendar']['open_resource']='Reservering openen';
-$lang['calendar']['resource_modified_mail_subject']='Reservering voor hulpmiddel \'%s\' gewijzigd';
+
+$lang['calendar']['resource_mail_subject']='Hulpmiddel \'%s\' gereserveerd voor \'%s\' op \'%s\'';//%s is resource name, %s is event name, %s is start date
+$lang['calendar']['resource_mail_body']='%s heeft hulpmiddel \'%s\' gereserveerd. U beheert dit hulpmiddel. Open de reservering om deze te accepteren of weigeren.';
+
+$lang['calendar']['resource_modified_mail_subject']='Hulpmiddel \'%s\' reservering voor \'%s\' op \'%s\' gewijzigd';//%s is resource name, %s is event name, %s is start date
 $lang['calendar']['resource_modified_mail_body']='%s heeft de reservering voor hulpmiddel \'%s\' gewijzigd. U beheert dit hulpmiddel. Open de reservering om deze te accepteren of weigeren.';
 
-$lang['calendar']['your_resource_modified_mail_subject']='Uw boeking voor \'%s\' in status %s is gewijzigd';
+$lang['calendar']['your_resource_modified_mail_subject']='Reservering voor \'%s\' op \'%s\' in status \'%s\' is gewijzigd';//is resource name, %s is start date, %s is status
 $lang['calendar']['your_resource_modified_mail_body']='%s heeft uw reservering voor \'%s\' gewijzigd.';
-$lang['calendar']['your_resource_accepted_mail_subject'] = 'Reservering voor \'%s\' is geaccepteerd';
+
+$lang['calendar']['your_resource_accepted_mail_subject']='Reservering voor \'%s\' op \'%s\' is geaccepteerd';//%s is resource name, %s is start date
 $lang['calendar']['your_resource_accepted_mail_body'] = '%s heeft uw boeking voor hulpmiddel \'%s\' geaccepteerd.';
-$lang['calendar']['your_resource_declined_mail_subject'] = 'Reservering voor \'%s\' is geweigerd';
+
+$lang['calendar']['your_resource_declined_mail_subject']='Reservering voor \'%s\' op \'%s\' is geweigerd';//%s is resource name, %s is start date
 $lang['calendar']['your_resource_declined_mail_body'] = '%s heeft uw boeking voor hulpmiddel \'%s\' geweigerd.';
 
 $lang['calendar']['birthday_name']='Verjaardag: {NAME}';
 $lang['calendar']['birthday_desc']='{NAME} is vandaag {AGE} geworden';
+
+$lang['calendar']['unauthorized_participants_write']='U heeft onvoldoende toegangsrechten om afspraken te plannen voor de volgende gebruikers:<br /><br />{NAMES}<br /><br />Wellicht wilt u nog een uitnodiging versturen zodat zij de afspraak kunnen accepteren en inplannen.';

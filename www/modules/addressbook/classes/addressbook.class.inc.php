@@ -402,10 +402,7 @@ class addressbook extends db {
 				"LEFT JOIN go_address_format AS post_af ON (post_af.id=post_iaf.address_format_id) ".
 				"WHERE ab_companies.id='".$this->escape($company_id)."'";
 		$this->query($sql);
-		if ($this->next_record(DB_ASSOC)) {
-			return $this->record;
-		}
-		return false;
+		return $this->next_record(DB_ASSOC);
 	}
 
 	function get_company_by_name($addressbook_id, $name) {
@@ -458,11 +455,11 @@ class addressbook extends db {
 		}
 	}
 
-	function delete_company($company_id) {
+	function delete_company($company_id, $company=false) {
 		global $GO_CONFIG, $GO_LINKS,$GO_MODULES;
 
 		if(isset($GO_MODULES->modules['files'])) {
-			$company=$this->get_company($company_id);
+			$company=$company ? $company : $this->get_company($company_id);
 			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 			try {
@@ -481,8 +478,6 @@ class addressbook extends db {
 		if ($this->query($sql)) {
 			return true;
 		}
-
-
 	}
 
 	function add_contact(&$contact, $addressbook=false) {
@@ -624,12 +619,8 @@ class addressbook extends db {
 				"LEFT JOIN go_address_format ON (go_address_format.id=go_iso_address_format.address_format_id) ".
 				"WHERE ab_contacts.id='".$this->escape($contact_id)."'");
 
-		if ($this->next_record(DB_ASSOC)) {
-			return $this->record;
-		}else {
-			throw new DatabaseSelectException();
-		}
-		return false;
+		return $this->next_record(DB_ASSOC);
+		
 	}
 
 	function delete_contact($contact_id, $contact=false) {
@@ -1035,9 +1026,9 @@ class addressbook extends db {
 
 		$this->get_contacts($addressbook_id);
 		$contact_ids = array();
-		while($this->next_record()) {
+		while($contact=$this->next_record()) {
 			$contact_id = $this->f('id');
-			$ab->delete_contact($contact_id);
+			$ab->delete_contact($contact_id, $contact);
 			$contact_ids[] = $contact_id;
 		}
 

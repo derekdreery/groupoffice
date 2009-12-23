@@ -75,8 +75,7 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 		},
 		root : 'results',
 		id : 'id',
-		fields : ['id', 'name', 'email', 'available',
-				'status']
+		fields : ['id', 'name', 'email', 'available','status', 'user_id']
 	});
 		
 	var tbar = [{
@@ -245,6 +244,10 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 		this.newId=0;		
 		this.inviteCheckbox.setValue(false);
 		this.importCheckbox.setValue(false);
+
+		if(this.isVisible()){
+			this.store.reload();
+		}
 	},
 	
 	onShow : function() {
@@ -270,7 +273,7 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 		}
 		if (!this.addParticipantsDialog) {
 			this.addParticipantsDialog = new GO.dialog.SelectEmail({
-				handler : function(grid) {
+				handler : function(grid, type) {
 					if (grid.selModel.selections.keys.length > 0) {
 						var selections = grid.selModel.getSelections();							
 
@@ -313,7 +316,7 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 												name : selections[i].get('name'),
 												email : selections[i].get('email'),
 												status : "0",
-												user_id : selections[i].get('id'),
+												user_id : type=='users' ? selections[i].get('id') : 0,
 												available : responseParams[selections[i].get('email')]
 											});
 										}

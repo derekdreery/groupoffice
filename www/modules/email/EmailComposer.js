@@ -626,7 +626,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 					return;
 
 				} else {
-
+					Ext.getBody().unmask();
 					Ext.Msg.alert(GO.email.lang.noAccountTitle,
 						GO.email.lang.noAccount);
 				}

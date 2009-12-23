@@ -301,11 +301,9 @@ class vcard extends addressbook {
 							}
 							if (in_array('VOICE', $property->parm_types)) {
 								$record['contact']['home_phone'] = $property->values[0];
-								echo '1';
 							}
 							if (!in_array('FAX', $property->parm_types) && !in_array('VOICE', $property->parm_types)) {
 								$record['contact']['home_phone'] = $property->values[0];
-								echo '2';
 							}
 						}
 

@@ -17,6 +17,9 @@ GO.grid.CheckColumn = function(config){
     if(!this.id){
         this.id = Ext.id();
     }
+
+		this.groupable=false;
+		this.menuDisabled=true;
     this.renderer = this.renderer.createDelegate(this);
     
     this.addEvents({'change' : true});

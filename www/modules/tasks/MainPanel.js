@@ -104,6 +104,12 @@ GO.tasks.MainPanel = function(config){
 			task_id: record.data.id
 		});
 	}, this);
+
+	this.gridPanel.on('checked', function(grid, task_id){
+		if(this.taskPanel.data && this.taskPanel.data.id==task_id)
+				this.taskPanel.reload();
+			
+	}, this);
 			
 	this.gridPanel.store.on('load', function(store){
 		this.deleteButton.setDisabled(!store.reader.jsonData.write_permission);
@@ -141,16 +147,7 @@ GO.tasks.MainPanel = function(config){
 				text: GO.lang['cmdAdd'],
 				cls: 'x-btn-text-icon',
 				handler: function(){
-					if(!GO.tasks.taskDialog)
-					{
-						GO.tasks.taskDialog = new GO.tasks.TaskDialog();
-					}
-					if(!GO.tasks.taskDialog.hasListener('save'))
-					{
-						GO.tasks.taskDialog.on('save', function(){
-							this.gridPanel.store.reload();
-						}, this);
-					}
+
 					GO.tasks.taskDialog.show({
 						tasklist_id: this.tasklist_id,
 						tasklist_name: this.tasklist_name
@@ -277,7 +274,11 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 		},this);
 
 		this.taskListsStore.load();
-    
+
+		
+		GO.mainLayout.on('linksDeleted', function(deleteConfig, link_types){
+			GO.mainLayout.onLinksDeletedHandler(link_types[12], this, this.gridPanel.store);
+		}, this);    
 	},
   
 	showAdminDialog : function() {
@@ -328,11 +329,13 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 					handler: function(){
 						this.tasklistDialog.show();
 					},
+					disabled: !GO.settings.modules.tasks.write_permission,
 					scope: this
 				},{
 					iconCls: 'btn-delete',
 					text: GO.lang['cmdDelete'],
 					cls: 'x-btn-text-icon',
+					disabled: !GO.settings.modules.tasks.write_permission,
 					handler: function(){
 						this.tasklistsGrid.deleteSelected();
 					},

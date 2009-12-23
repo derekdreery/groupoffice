@@ -1,2 +1,2 @@
 GO.serverclient.lang.mailboxes='Mailboxen';
-GO.serverclient.lang.createMailbox='Mailbox für Domain anlegen';
+GO.serverclient.lang.createMailbox='Mailbox fÃ¼r Domain anlegen';

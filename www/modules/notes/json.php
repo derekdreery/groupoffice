@@ -41,6 +41,9 @@ try{
 			if(isset($_POST['delete_keys']))
 			{
 				try{
+					if(!$GO_MODULES->modules['notes']['write_permission']){
+						throw new AccessDeniedException();
+					}
 					$response['deleteSuccess']=true;
 					$delete_categories = json_decode($_POST['delete_keys']);
 
@@ -56,7 +59,7 @@ try{
 			}
 
 			$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'name';
-			$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'DESC';
+			$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'ASC';
 			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
 			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 			
@@ -98,7 +101,7 @@ try{
 			
 			$response['data']=$note;
 			$response['data']['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_id']);
-			$response['data']['write_permission']=$response['data']['permission_level']>1;
+			$response['data']['write_permission']=$response['data']['permission_level']>GO_SECURITY::WRITE_PERMISSION;
 			if(!$response['data']['permission_level'])
 			{
 				throw new AccessDeniedException();
@@ -163,7 +166,8 @@ try{
 			$category_id=$_POST['category_id'];
 			$category = $notes->get_category($category_id);
 			$response['data']['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_id']);
-			$response['data']['write_permission']=$response['data']['permission_level']>1;
+			$response['data']['write_permission']=$response['data']['permission_level']>GO_SECURITY::READ_PERMISSION;
+			;
 			if(!$response['data']['permission_level'])
 			{
 				throw new AccessDeniedException();
@@ -172,6 +176,9 @@ try{
 			if(isset($_POST['delete_keys']))
 			{
 				try{
+					if($response['data']['permission_level']<GO_SECURITY::DELETE_PERMISSION){
+						throw new AccessDeniedException();
+					}
 					$response['deleteSuccess']=true;
 					$delete_notes = json_decode(($_POST['delete_keys']));
 

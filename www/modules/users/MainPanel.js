@@ -28,7 +28,7 @@ GO.users.MainPanel = function(config)
 	    totalProperty: 'total',
 	    root: 'results',
 	    fields: ['id', 'username', 'name','company','logins','lastlogin','registration_time','address','zip','city','state','country','phone','email',
-	    	'waddress','wzip','wcity','wstate','wcountry','wphone'],
+	    	'waddress','wzip','wcity','wstate','wcountry','wphone','enabled'],
 	    remoteSort: true
 	});
 						
@@ -42,7 +42,12 @@ GO.users.MainPanel = function(config)
  
 	config.view = new Ext.grid.GridView({
 		forceFit: true,
-		autoFill: true
+		autoFill: true,
+		getRowClass : function(record, rowIndex, p, store){
+			if(GO.util.empty(record.data.enabled)){
+				return 'user-disabled';
+			}
+		}
 	});
 
 	config.deleteConfig={extraWarning:GO.users.lang.deleteWarning+"\n\n"};

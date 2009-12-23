@@ -56,6 +56,6 @@ GO.postfixadmin.lang.body="Text zprávy";
 GO.postfixadmin.lang.cache="Paměť";
 GO.postfixadmin.lang.domain="Doména";
 
-GO.postfixadmin.lang.defaultQuota='Základní kvóta (MB)';
+GO.postfixadmin.lang.defaultQuota='Výchozí kvóta (MB)';
 
 
