@@ -51,7 +51,7 @@
  * @param {Object} config The config object
  */
  
-GO.grid.EditorGridPanel =GO.grid.GridPanel = function(config)
+GO.grid.GridPanel = function(config)
 {	
 	if(!config)
 	{
@@ -99,12 +99,49 @@ GO.grid.EditorGridPanel =GO.grid.GridPanel = function(config)
     config.store.baseParams['limit']=parseInt(GO.settings['max_rows_list']);
   }
     
-	GO.grid.GridPanel.superclass.constructor.call(this, config);	
-	
-	
+	GO.grid.GridPanel.superclass.constructor.call(this, config);
+
+	//create a delayed rowselect event so that when a user repeatedly presses the
+	//up and down button it will only load if it stays on the same record for 400ms
+	this.addEvents({'delayedrowselect':true});
+
+
+
+	this.on("rowcontextmenu", function(grid, rowIndex, e) {
+		e.stopEvent();
+
+		this.rowClicked=true;
+
+		var sm =this.getSelectionModel();
+		if(sm.isSelected(rowIndex) !== true) {
+			sm.clearSelections();
+			sm.selectRow(rowIndex);
+		}
+	}, this);
+
+	this.on('rowclick', function(grid, rowIndex, e){
+		if(!e.ctrlKey && !e.shiftKey)
+		{
+			var record = this.getSelectionModel().getSelected();
+			this.fireEvent('delayedrowselect', this, rowIndex, record);
+		}
+		this.rowClicked=true;
+	}, this);
+
+	this.getSelectionModel().on("rowselect",function(sm, rowIndex, r){
+		if(!this.rowClicked)
+		{
+			var record = this.getSelectionModel().getSelected();
+			if(record==r)
+			{
+				this.fireEvent('delayedrowselect', this, rowIndex, r);
+			}
+		}
+		this.rowClicked=false;
+	}, this, {delay:400});	
 }
 
-GO.grid.ExtraFunctions={
+Ext.extend(GO.grid.GridPanel, Ext.grid.GridPanel, {
 
 	deleteConfig : {},
 
@@ -114,54 +151,6 @@ GO.grid.ExtraFunctions={
 	 */
 
 	paging : false,
-
-
-	initComponent : function(){
-		GO.grid.GridPanel.superclass.initComponent.call(this);
-		
-		//create a delayed rowselect event so that when a user repeatedly presses the
-		//up and down button it will only load if it stays on the same record for 400ms
-		this.addEvents({'delayedrowselect':true});
-
-		
-
-		this.on("rowcontextmenu", function(grid, rowIndex, e) {
-			e.stopEvent();
-
-			this.rowClicked=true;
-
-			var sm =this.getSelectionModel();
-			if(sm.isSelected(rowIndex) !== true) {
-				sm.clearSelections();
-				sm.selectRow(rowIndex);
-			}
-		}, this);
-
-		this.on('rowclick', function(grid, rowIndex, e){
-			if(!e.ctrlKey && !e.shiftKey)
-			{
-				var record = this.getSelectionModel().getSelected();
-				this.fireEvent('delayedrowselect', this, rowIndex, record);
-			}
-			this.rowClicked=true;
-		}, this);
-
-		
-
-		this.getSelectionModel().on("rowselect",function(sm, rowIndex, r){
-			if(!this.rowClicked)
-			{
-				var record = this.getSelectionModel().getSelected();
-				if(record==r)
-				{
-					this.fireEvent('delayedrowselect', this, rowIndex, r);
-				}
-			}
-			this.rowClicked=false;
-		}, this, {delay:400});
-
-		
-	},
 
 	/**
 	 * Sends a delete request to the remote store. It will send the selected keys in json
@@ -242,12 +231,88 @@ GO.grid.ExtraFunctions={
 	{
 		return GO.util.numberFormat(v);
 	}
-};
- 
- 
-Ext.extend(GO.grid.GridPanel, Ext.grid.GridPanel, GO.grid.ExtraFunctions);
-Ext.extend(GO.grid.EditorGridPanel, Ext.grid.EditorGridPanel, Ext.apply(GO.grid.ExtraFunctions,{
-	
+});
+
+
+GO.grid.EditorGridPanel = function(config)
+{
+	if(!config)
+	{
+		config={};
+	}
+
+	if(!config.keys)
+	{
+		config.keys=[];
+	}
+
+	if(!config.store)
+	{
+		config.store=config.ds;
+	}
+
+	config.keys.push({
+        key: Ext.EventObject.DELETE,
+        fn: function(key, e){
+        	//sometimes there's a search input in the grid, so dont delete when focus is on an input
+        	if(e.target.tagName!='INPUT')
+        		this.deleteSelected(this.deleteConfig);
+        },
+        scope:this
+    });
+
+	if(config.paging)
+  {
+  	if(!config.bbar)
+  	{
+  		config.bbar = new Ext.PagingToolbar({
+  					cls: 'go-paging-tb',
+	          store: config.store,
+	          pageSize: parseInt(GO.settings['max_rows_list']),
+	          displayInfo: true,
+	          displayMsg: GO.lang['displayingItems'],
+	          emptyMsg: GO.lang['strNoItems']
+	      });
+  	}
+
+    if(!config.store.baseParams)
+    {
+    	config.store.baseParams={};
+    }
+    config.store.baseParams['limit']=parseInt(GO.settings['max_rows_list']);
+  }
+
+	GO.grid.EditorGridPanel.superclass.constructor.call(this, config);
+}
+
+Ext.extend(GO.grid.EditorGridPanel, Ext.grid.EditorGridPanel, {
+
+	deleteConfig : {},
+
+	/**
+	 * @cfg {Boolean} paging True to set the store's limit parameter and render a bottom
+	 * paging toolbar.
+	 */
+
+	paging : false,
+
+	/**
+	 * Sends a delete request to the remote store. It will send the selected keys in json
+	 * format as a parameter. (delete_keys by default.)
+	 *
+	 * @param {Object} options An object which may contain the following properties:<ul>
+     * <li><b>deleteParam</b> : String (Optional)<p style="margin-left:1em">The name of the
+     * parameter that will send to the store that holds the selected keys in JSON format.
+     * Defaults to "delete_keys"</p>
+     * </li>
+	 *
+	 */
+	deleteSelected : GO.grid.GridPanel.prototype.deleteSelected,
+
+	getGridData : GO.grid.GridPanel.prototype.getGridData,
+
+	numberRenderer : GO.grid.GridPanel.prototype.numberRenderer,
+
 	/**
 	 * Checks if a grid cell is valid
 	 * @param {Integer} col Cell column index
@@ -297,4 +362,4 @@ Ext.extend(GO.grid.EditorGridPanel, Ext.grid.EditorGridPanel, Ext.apply(GO.grid.
 			}
 			return valid;
 	} // end of function isValid
-}));
+});
