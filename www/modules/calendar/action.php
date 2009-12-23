@@ -534,8 +534,6 @@ try {
 					}else {
 						$ids[]=$p['id'];
 
-						debug($participant);
-
 						if(isset($_POST['import']) && $participant['user_id'] > 0) {
 							$calendar = $cal->get_default_import_calendar($participant['user_id']);
 
@@ -650,7 +648,7 @@ try {
 				$group = $cal->get_group($calendar['group_id']);
 				$admins = array();
 				if($group['acl_admin']) {
-					$admins = $GO_SECURITY->get_authorized_users_in_acl($group['acl_admin']);
+					$admins = $GO_SECURITY->get_users_in_acl($group['acl_admin']);
 				}
 
 				$admin_count = count($admins);
