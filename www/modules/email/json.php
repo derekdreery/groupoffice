@@ -697,11 +697,11 @@ try{
 					$contact = $ab->get_contact_by_email($response['sender'], $GO_SECURITY->user_id);
 					$response['sender_contact_id']=intval($contact['id']);
 
-                    if($response['sender_contact_id'])
-                    {                        
-                        $contact['contact_name'] = String::format_name($contact);
-						$response['contact']=$contact;
-                    }                    
+					if($response['sender_contact_id'])
+					{
+							$contact['contact_name'] = String::format_name($contact);
+							$response['contact']=$contact;
+					}             
 				}
 
 				if(!empty($response['to']))
@@ -748,6 +748,8 @@ try{
 				//$response['size']=Number::format_size($response['size']);
 
 				$parts = array_reverse($imap->f("parts"));
+
+				//debug($parts);
 				/*
 				*
 				 * Sometimes clients send multipart/alternative but there's only a text part. FIrst check if there's
@@ -764,6 +766,8 @@ try{
 						}
 					}
 				}
+
+				//debug($html_alternative);
 
 				$response['body']='';
 
@@ -812,10 +816,19 @@ try{
 						$mime = 'text/html';
 					}
 
+					/*debug($mime);
+					debug($html_alternative);
+					debug($part['type']);
+					debug($part["disposition"]);
+					debug('-----');*/
+
 					if (empty($response['body']) &&
 					(stripos($part["disposition"],'attachment')===false) &&
-					((stripos($mime,'html')!==false && empty($_POST['plaintext'])) ||(stripos($mime,'plain')!==false && (!$html_alternative || strtolower($part['type'])!='alternative')) || $mime == "text/enriched" || $mime == "unknown/unknown"))
+					(
+						(stripos($mime,'html')!==false && empty($_POST['plaintext'])) ||
+						(stripos($mime,'plain')!==false && (!$html_alternative || strtolower($part['type'])!='alternative')) || $mime == "text/enriched" || $mime == "unknown/unknown"))
 					{
+						//debug('ja');
 						$part_body = $imap->view_part($uid, $part["number"], $part["transfer"], $part["charset"]);
 
 						//debug($part_body);
