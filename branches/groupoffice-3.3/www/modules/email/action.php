@@ -304,7 +304,7 @@ try{
 
 				case 'sendmail':
 
-					if(empty($_POST['to']) && empty($_POST['cc']) && empty($_POST['draft']))
+					if(empty($_POST['to']) && empty($_POST['cc']) && empty($_POST['bcc']) && empty($_POST['draft']))
 					{
 						$response['feedback'] = $lang['email']['feedbackNoReciepent'];
 					}else
@@ -362,12 +362,11 @@ try{
 
 							if(!empty($_POST['bcc']))
 							{
-								$all_recipients[]=$address['email'];
-
 								$bcc_addresses = $RFC822->parse_address_list($_POST['bcc']);
 								$swift_addresses=array();
 								foreach($bcc_addresses as $address)
 								{
+									$all_recipients[]=$address['email'];
 									add_unknown_recipient($address['email'], $address['personal']);
 									$swift_addresses[$address['email']]=$address['personal'];
 								}
