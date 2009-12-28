@@ -668,8 +668,9 @@ GO.email.EmailClient = function(config){
 						firstInboxNode.attributes.folder_id,
 						firstInboxNode.attributes.mailbox,
 						firstInboxNode.parentNode.attributes.usage
-						);					
-					this.checkMail.defer(this.checkMailInterval, this);
+						);
+					if(!this.checkMailStarted)
+						this.checkMail.defer(this.checkMailInterval, this);
 				}
 			},this, {single: true});
 			
@@ -1446,7 +1447,8 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	},	
 	
 	
-	checkMail : function(){		
+	checkMail : function(){
+		this.checkMailStarted=true;
 		Ext.Ajax.request({
 			url: GO.settings.modules.email.url+'action.php',
 			params: {
