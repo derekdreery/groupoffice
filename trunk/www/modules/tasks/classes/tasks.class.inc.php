@@ -233,7 +233,12 @@ class tasks extends db
 			if($folder){
 				$files->delete_folder($folder);
 			}
-		}	
+		}
+
+		if(isset($GO_MODULES->modules['sync'])) {
+			$sql = "DELETE FROM sync_tasklist_user WHERE tasklist_id='".$this->escape($list_id)."'";
+			$this->query($sql);
+		}
 
 	}
 
@@ -1082,5 +1087,22 @@ class tasks extends db
 	public function delete_visible_tasklist($tasklist_id, $user_id)
 	{
 		$this->query("DELETE FROM su_visible_lists WHERE tasklist_id = $tasklist_id AND user_id = $user_id");
+	}
+
+	function get_writable_tasklists($user_id, $start=0, $offset=0, $sort='name', $dir='ASC') {
+		$sql = "SELECT DISTINCT ta_lists.* ".
+				"FROM ta_lists ".
+				"	INNER JOIN go_acl ON (ta_lists.acl_id = go_acl.acl_id AND go_acl.level>1) ".
+				"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ".
+				"WHERE go_acl.user_id=".$this->escape($user_id)." ".
+				"OR go_users_groups.user_id=".$this->escape($user_id)." ".
+				" ORDER BY ta_lists.".$sort." ".$dir;
+		$this->query($sql);
+		$count= $this->num_rows();
+		if($offset>0) {
+			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+			$this->query($sql);
+		}
+		return $count;
 	}
 }
