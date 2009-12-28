@@ -357,7 +357,7 @@ GO.calendar.MainPanel = function(config){
 		},
 		root: 'results',
 		id: 'id',
-		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only']
+		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id']
 	});
 	
 	this.monthGridStore = new GO.data.JsonStore({
@@ -368,8 +368,7 @@ GO.calendar.MainPanel = function(config){
 		},
 		root: 'results',
 		id: 'id',
-		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only']
-	});
+		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id']	});
 
 	this.daysGrid = new GO.grid.CalendarGrid(
 	{
@@ -823,7 +822,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				break;
 		}
 									
-		if(event && !event.read_only)
+		if(event && !event.read_only && !event.task_id)
 		{
 			this.deleteEvent(event, callback);
 		}
@@ -1312,10 +1311,23 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			});
 		}else
 		{
-			GO.calendar.eventDialog.show({
-				event_id: event['event_id'],
-				oldDomId : event.domId
-			});
+			if(event.task_id)
+			{
+				if(!GO.tasks.taskDialog)
+				{
+					GO.tasks.taskDialog = new GO.tasks.TaskDialog();										
+				}
+				
+				GO.tasks.taskDialog.show({
+					task_id : event.task_id
+				})				
+			}else
+			{
+				GO.calendar.eventDialog.show({
+					event_id: event['event_id'],
+					oldDomId : event.domId
+				});
+			}
 		}
 	},
     

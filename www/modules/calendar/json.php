@@ -376,7 +376,8 @@ try {
 							'end_time'=>$end_time,
 							'background'=>'EBF1E2',
 							'day'=>$lang['common']['full_days'][date('w', ($task['start_time']))].' '.date($_SESSION['GO_SESSION']['date_format'], ($task['start_time'])),
-							'read_only'=>true
+							'task_id'=>$task['id'],
+							'read_only'=>false
 					);
 				}
 			}
