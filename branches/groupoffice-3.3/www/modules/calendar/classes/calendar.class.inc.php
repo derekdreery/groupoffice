@@ -1184,7 +1184,7 @@ class calendar extends db
 		return false;
 	}
 
-	function update_event(&$event, $calendar=false, $old_event=false, $update_related=true)
+	function update_event(&$event, $calendar=false, $old_event=false, $update_related=true, $update_related_status=true)
 	{
 		if(!$old_event)
 		{
@@ -1312,9 +1312,9 @@ class calendar extends db
 			$this->move_exceptions($event['id'], $event['start_time']-$old_event['start_time']);
 		}
 
-		if($update_related  && !empty($event['id']))
+		if($update_related && !empty($event['id']))
 		{			
-			unset($event['user_id'], $event['calendar_id'], $event['participants_event_id']);
+			unset($event['user_id'], $event['calendar_id'], $event['participants_event_id']);						
 			
 			$cal = new calendar();
 			if(!empty($old_event['participants_event_id'])){
@@ -1329,7 +1329,14 @@ class calendar extends db
 			{
 				$event['id']=$cal->f('id');
 				$event['calendar_id'] = $cal->f('calendar_id');
-				$this->update_event($event,false,$old_event, false);
+
+				if(!$update_related_status)
+				{
+					$event['status'] = $cal->f('status');
+					$event['background'] = $cal->f('background');
+				}
+
+				$this->update_event($event, false, $old_event, false);
 			}
 		}		
 	
@@ -2576,6 +2583,28 @@ class calendar extends db
 	public function delete_visible_calendar($calendar_id, $user_id)
 	{
 		$this->query("DELETE FROM su_visible_calendars WHERE calendar_id = $calendar_id AND user_id = $user_id");
+	}
+
+	public function get_group_admins($group_id)
+	{		
+		$this->query("SELECT user_id FROM cal_group_admins WHERE group_id=?", 'i', $group_id);
+		return $this->num_rows();		
+	}
+
+	public function group_admin_exists($group_id, $user_id)
+	{
+		$this->query("SELECT user_id FROM cal_group_admins WHERE group_id=? AND user_id=?", 'ii', array($group_id, $user_id));
+		return ($this->num_rows() > 0) ? true : false;
+	}
+
+	public function add_group_admin($group_admin)
+	{		
+		return $this->insert_row('cal_group_admins', $group_admin);
+	}
+
+	public function delete_group_admin($group_id, $user_id)
+	{
+		return $this->query("DELETE FROM cal_group_admins WHERE group_id=? AND user_id=?" , 'ii', array($group_id, $user_id));
 	}
 
 }

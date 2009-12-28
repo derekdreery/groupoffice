@@ -944,6 +944,70 @@ try {
 			}
 			break;
 
+		case 'group_admins':
+
+			$group_id = isset($_REQUEST['group_id']) ? $_REQUEST['group_id'] : 0;
+
+			$response['total'] = 0;
+			$response['results'] = array();
+			$response['success'] = false;
+			
+			if($group_id > 0)
+			{
+				if(isset($_POST['add_users']))
+				{
+					try
+					{
+						$response['addSuccess']=true;
+						$add_group_admins = json_decode($_POST['add_users']);
+						foreach($add_group_admins as $user_id)
+						{
+							if(!$cal->group_admin_exists($group_id, $user_id))
+							{
+								$cal->add_group_admin(array('group_id' => $group_id, 'user_id' => $user_id));
+							}					
+						}
+					}
+					catch(Exception $e) {
+						$response['addSuccess']=false;
+						$response['addFeedback']=$e->getMessage();
+					}
+				}
+
+				if(isset($_POST['delete_keys']))
+				{
+					try
+					{
+						$response['deleteSuccess']=true;
+						
+						$delete_group_admins = json_decode($_POST['delete_keys']);
+						foreach($delete_group_admins as $user_id)
+						{
+							$cal->delete_group_admin($group_id, $user_id);													
+						}						
+					}
+					catch(Exception $e) {
+						$response['deleteSuccess']=false;
+						$response['deleteFeedback']=$e->getMessage();
+					}
+				}
+				
+				$response['total'] = $cal->get_group_admins($group_id);
+				while($cal->next_record())
+				{
+					$admin['id'] = $cal->f('user_id');
+					
+					$user = $GO_USERS->get_user($admin['id']);
+					$admin['email'] = $GO_USERS->f('email');
+					$admin['name'] = String::format_name($GO_USERS->f('last_name'),$GO_USERS->f('first_name'),$GO_USERS->f('middle_name'));
+
+					$response['results'][] = $admin;
+				}
+			}
+			
+			$response['success'] = true;
+			break;
+
 	}
 }
 catch(Exception $e) {

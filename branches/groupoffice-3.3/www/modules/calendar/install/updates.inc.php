@@ -36,3 +36,11 @@ $updates[]="ALTER TABLE `cal_calendars` ADD `show_bdays` TINYINT( 1 ) NOT NULL "
 $updates[]="script:3_convert_acl.inc.php";
 
 $updates[]="ALTER TABLE `cal_calendars` ADD `show_tasks` TINYINT( 1 ) NOT NULL ";
+
+$updates[]="CREATE TABLE IF NOT EXISTS `cal_group_admins` (
+  `group_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`,`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8";
+
+$updates[]="ALTER TABLE `cal_groups` DROP `acl_admin` ";
