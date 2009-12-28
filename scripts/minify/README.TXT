@@ -1,3 +1,4 @@
+
 The minify.php script will compress all the javascript sources of Group-Office.
 These compressed sources will be used when Group-Office is in production.
 ($config['debug']=false;).
