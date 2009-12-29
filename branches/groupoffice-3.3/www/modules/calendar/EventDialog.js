@@ -1483,6 +1483,15 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 										id:'resource_options['+resources[j].id+']['+cf[m].dataname+']'
 									});
 
+
+									/*
+									 * Customfields might return a simple object instead of an Ext.component.
+									 * So check if it has events otherwise create the Ext component.
+									 */
+									if(!newFormField.events){
+										newFormField=Ext.ComponentMgr.create(newFormField, 'textfield');
+									}
+
 									resourceOptions.push(newFormField);
 									this.formPanel.form.add(newFormField);
 								}
