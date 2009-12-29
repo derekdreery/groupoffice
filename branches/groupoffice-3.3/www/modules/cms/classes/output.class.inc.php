@@ -378,7 +378,7 @@ class cms_output extends cms{
 		$item_template = isset($params['item_template']) ? $params['item_template'] : '';
 		$active_item_template = isset($params['active_item_template']) ? $params['active_item_template'] : $item_template;
 		$max_items=isset($params['max_items']) ? $params['max_items'] : 0;
-		$wrap_div=isset($params['wrap_div']) && empty($params['wrap_div']) ? false : true;
+		$wrap_div=isset($params['wrap_div']) && (empty($params['wrap_div']) || $params['wrap_div']=='false') ? false : true;
 		$paging_id = isset($params['paging_id']) ? $params['paging_id'] : false;
 		$reverse = !empty($params['reverse']);
 		$level_template  = isset($params['level_template'])?  $params['level_template'] : '';
