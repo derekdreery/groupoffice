@@ -46,64 +46,30 @@ try {
 			$calendars = array();
 			$calendars_name = array();
 			$calendars_with_bdays = array();
-			if($_REQUEST['portlet']) {
-				if($cal->get_visible_calendars($user_id) == 0) {
-					$default_calendar = $cal->get_default_calendar($user_id);
-					$vc['calendar_id']=$default_calendar['id'];
-					$vc['user_id']=$user_id;
-					$cal->add_visible_calendar($vc);
-					$cal->get_visible_calendars($user_id);
-				}
-
-				while($cal->next_record()) {
-					$cur_calendar = $cal2->get_calendar($cal->f('calendar_id'));
-					$calendars[] = $cal->f('calendar_id');
-					$calendars_name[] = $cur_calendar['name'];
-
-					if($cur_calendar['show_bdays']) {
-						$calendars_with_bdays[] = $cur_calendar;
-					}
-				}
-				$user_id = 0;
+			
+			if($cal->get_visible_calendars($user_id) == 0) {
+				$default_calendar = $cal->get_default_calendar($user_id);
+				$vc['calendar_id']=$default_calendar['id'];
+				$vc['user_id']=$user_id;
+				$cal->add_visible_calendar($vc);
+				$cal->get_visible_calendars($user_id);
 			}
 
+			while($cal->next_record()) {
+				$cur_calendar = $cal2->get_calendar($cal->f('calendar_id'));
+				$calendars[] = $cal->f('calendar_id');
+				$calendars_name[] = $cur_calendar['name'];
 
-			$events = $cal->get_events_in_array($calendars,$user_id, $interval_start_time, $interval_end_time);
-
+				if($cur_calendar['show_bdays']) {
+					$calendars_with_bdays[] = $cur_calendar;
+				}
+			}
+						
 			$today_end = mktime(0, 0, 0, $month, $day+1, $year);
 
+			$unsorted=array();
 			$response['count']=0;
 			$response['results']=array();
-			foreach($events as $event) {
-				if($event['all_day_event'] == '1') {
-					$date_format = $_SESSION['GO_SESSION']['date_format'];
-				}
-				else {
-					if (date($_SESSION['GO_SESSION']['date_format'], $event['start_time']) != date($_SESSION['GO_SESSION']['date_format'], $event['end_time'])) {
-						$date_format = $_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'];
-					}
-					else {
-						$date_format = $_SESSION['GO_SESSION']['time_format'];
-					}
-				}
-				$cal_id = array_search($event['calendar_id'], $calendars);
-
-				$response['results'][] = array(
-						'id'=>$response['count'],
-						'event_id'=> $event['id'],
-						'name'=> htmlspecialchars($event['name'],ENT_COMPAT,'UTF-8'),
-						'time'=>date($date_format, $event['start_time']),
-						'start_time'=> date('Y-m-d H:i', $event['start_time']),
-						'end_time'=> date('Y-m-d H:i', $event['end_time']),
-						'location'=>htmlspecialchars($event['location'], ENT_COMPAT, 'UTF-8'),
-						'description'=>nl2br(htmlspecialchars(String::cut_string($event['description'],$max_description_length), ENT_COMPAT, 'UTF-8')),
-						'private'=>($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']),
-						'repeats'=>!empty($event['rrule']),
-						'day'=>$event['start_time']<$today_end ? $lang['common']['today'] : $lang['common']['tomorrow'],
-						'calendar_name'=>(isset($calendars_name) && $cal_id !== false)? $calendars_name[$cal_id]: ''
-				);
-				$response['count']++;
-			}
 
 			$num_books = count($calendars_with_bdays);
 			if($num_books) {
@@ -119,25 +85,74 @@ try {
 
 				$response['books'] = $abooks;
 				$cal->get_bdays($interval_start_time, $interval_end_time, $abooks);
-				while($bday = $cal->next_record()) {
-					$name = String::format_name($bday['last_name'], $bday['first_name'], $bday['middle_name']);
+				while($contact = $cal->next_record()) {
+					$name = String::format_name($contact['last_name'], $contact['first_name'], $contact['middle_name']);
 
-					$start_time = $bday['upcoming'].' 00:00';
-					$end_time = $bday['upcoming'].' 23:59';
+					$start_time = $contact['upcoming'].' 00:00';
+					$end_time = $contact['upcoming'].' 23:59';
 					$start_timestamp = Date::to_unixtime($start_time);
 
-					$response['results'][] = array(
+					$index = strtotime($start_time);
+					while(isset($unsorted[$index])){
+						$index++;
+					}
+					
+					$unsorted[$index] = array(
 							'id'=>$response['count']++,
 							'name'=>str_replace('{NAME}',$name,$lang['calendar']['birthday_name']),
-							'description'=>str_replace(array('{NAME}','{AGE}'), array($name,$bday['upcoming']-$bday['birthday']), $lang['calendar']['birthday_desc']),
+							'description'=>str_replace(array('{NAME}','{AGE}'), array($name,$contact['upcoming']-$contact['birthday']), $lang['calendar']['birthday_desc']),
 							'time'=>date($_SESSION['GO_SESSION']['date_format'], $start_timestamp),
 							'start_time'=>$start_time,
 							'end_time'=>$end_time,
 							'day'=>$today_end<=$start_timestamp ? $lang['common']['tomorrow'] : $lang['common']['today'],
-							'read_only'=>true
+							'read_only'=>true,
+							'contact_id'=>$contact['id']
 					);
 				}
 			}
+
+			$events = $cal->get_events_in_array($calendars, 0, $interval_start_time, $interval_end_time);
+			
+			foreach($events as $event) {
+				if($event['all_day_event'] == '1') {
+					$date_format = $_SESSION['GO_SESSION']['date_format'];
+				}
+				else {
+					if (date($_SESSION['GO_SESSION']['date_format'], $event['start_time']) != date($_SESSION['GO_SESSION']['date_format'], $event['end_time'])) {
+						$date_format = $_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'];
+					}
+					else {
+						$date_format = $_SESSION['GO_SESSION']['time_format'];
+					}
+				}
+				$cal_id = array_search($event['calendar_id'], $calendars);
+
+				$index = $event['start_time'];
+				while(isset($unsorted[$index])){
+					$index++;
+				}
+
+				$unsorted[$index] = array(
+						'id'=>$response['count'],
+						'event_id'=> $event['id'],
+						'name'=> htmlspecialchars($event['name'],ENT_COMPAT,'UTF-8'),
+						'time'=>date($date_format, $event['start_time']),
+						'start_time'=> date('Y-m-d H:i', $event['start_time']),
+						'end_time'=> date('Y-m-d H:i', $event['end_time']),
+						'location'=>htmlspecialchars($event['location'], ENT_COMPAT, 'UTF-8'),
+						'description'=>nl2br(htmlspecialchars(String::cut_string($event['description'],$max_description_length), ENT_COMPAT, 'UTF-8')),
+						'private'=>($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']),
+						'repeats'=>!empty($event['rrule']),
+						'day'=>$event['start_time']<$today_end ? $lang['common']['today'] : $lang['common']['tomorrow'],
+						'calendar_name'=>(isset($calendars_name) && $cal_id !== false)? $calendars_name[$cal_id]: ''
+				);
+				$response['count']++;
+			}
+			
+
+			ksort($unsorted);
+			while($event = array_shift($unsorted))
+				$response['results'][]=$event;
 
 			break;
 
@@ -326,22 +341,23 @@ try {
 				$abooks = $ab->get_user_addressbook_ids($calendar['user_id']);
 
 				$cal->get_bdays($start_time, $end_time ,$abooks);
-				while($bday = $cal->next_record()) {
-					$name = String::format_name($bday['last_name'], $bday['first_name'], $bday['middle_name']);
+				while($contact = $cal->next_record()) {
+					$name = String::format_name($contact['last_name'], $contact['first_name'], $contact['middle_name']);
 
-					$start_time = $bday['upcoming'].' 00:00';
-					$end_time = $bday['upcoming'].' 23:59';
+					$start_time = $contact['upcoming'].' 00:00';
+					$end_time = $contact['upcoming'].' 23:59';
 
 					$response['results'][] = array(
 							'id'=>$response['count']++,
 							'name'=>htmlspecialchars(str_replace('{NAME}',$name,$lang['calendar']['birthday_name']), ENT_COMPAT, 'UTF-8'),
-							'description'=>htmlspecialchars(str_replace(array('{NAME}','{AGE}'), array($name,$bday['upcoming']-$bday['birthday']), $lang['calendar']['birthday_desc']), ENT_COMPAT, 'UTF-8'),
+							'description'=>htmlspecialchars(str_replace(array('{NAME}','{AGE}'), array($name,$contact['upcoming']-$contact['birthday']), $lang['calendar']['birthday_desc']), ENT_COMPAT, 'UTF-8'),
 							'time'=>'00:00',
 							'start_time'=>$start_time,
 							'end_time'=>$end_time,
 							'background'=>'EBF1E2',
 							'day'=>$lang['common']['full_days'][date('w', strtotime($start_time))].' '.date($_SESSION['GO_SESSION']['date_format'], strtotime($start_time)),
-							'read_only'=>true
+							'read_only'=>true,
+							'contact_id'=>$contact['id']							
 					);
 				}
 			}
@@ -376,8 +392,8 @@ try {
 							'end_time'=>$end_time,
 							'background'=>'EBF1E2',
 							'day'=>$lang['common']['full_days'][date('w', ($task['start_time']))].' '.date($_SESSION['GO_SESSION']['date_format'], ($task['start_time'])),
-							'task_id'=>$task['id'],
-							'read_only'=>false
+							'read_only'=>true,
+							'task_id'=>$task['id']							
 					);
 				}
 			}

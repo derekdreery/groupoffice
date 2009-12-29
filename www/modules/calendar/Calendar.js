@@ -357,7 +357,7 @@ GO.calendar.MainPanel = function(config){
 		},
 		root: 'results',
 		id: 'id',
-		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id']
+		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id']
 	});
 	
 	this.monthGridStore = new GO.data.JsonStore({
@@ -368,7 +368,8 @@ GO.calendar.MainPanel = function(config){
 		},
 		root: 'results',
 		id: 'id',
-		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id']	});
+		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id']
+	});
 
 	this.daysGrid = new GO.grid.CalendarGrid(
 	{
@@ -735,7 +736,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		{
 			this.init();
 		}, this);
-
+	
 		
 		this.state = Ext.state.Manager.get('calendar-state');
 		if(!this.state)
@@ -828,7 +829,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				break;
 		}
 									
-		if(event && !event.read_only && !event.task_id)
+		if(event && !event.read_only && !event.task_id & !event.contact_id)
 		{
 			this.deleteEvent(event, callback);
 		}
@@ -1296,7 +1297,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	},
 	  
 	onDblClick : function(grid, event, actionData){
-		
+
 		if(event.repeats && actionData.singleInstance)
 		{
 			var formValues={};
@@ -1316,13 +1317,18 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				oldDomId : event.domId
 			});
 		}else
-		{
-			if(event.task_id)
+		{		
+			if(event['task_id'])
 			{
 				GO.tasks.taskDialog.show({
-					task_id : event.task_id
+					task_id : event['task_id']
 				})				
 			}else
+			if(event['contact_id'])
+			{			
+				GO.linkHandlers[2].call(this, event['contact_id']);
+			}else
+			if(event['event_id'])
 			{
 				GO.calendar.eventDialog.show({
 					event_id: event['event_id'],

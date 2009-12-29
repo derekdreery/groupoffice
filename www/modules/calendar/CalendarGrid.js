@@ -847,28 +847,36 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 					this.eventMouseUp=false;
 					this.startAllDayEventDrag(e, eventEl.id);
 
-				}, this);
+				}, this);				
+			}
 
-				event.on('dblclick', function(e, eventEl){
+			event.on('dblclick', function(e, eventEl){
+				
+				eventEl = Ext.get(eventEl).findParent('div.x-calGrid-all-day-event-container', 2, true);
+				
+				this.clickedEventId=eventEl.id;
 
-					var actionData = {};
+				var actionData = {};
+				
+				//do last because orginal times will be lost after this.
+				var event = this.elementToEvent(this.clickedEventId);
 
-					//do last because orginal times will be lost after this.
-					var event = this.elementToEvent(this.clickedEventId);
+				if(this.remoteEvents[this.clickedEventId]['repeats'] && this.writePermission)
+				{
+					this.handleRecurringEvent("eventDblClick", event, actionData);
+				}else
+				{
+					this.fireEvent("eventDblClick", this, event, actionData);
+				}
+			}, this);
 
-					if(this.remoteEvents[this.clickedEventId]['repeats'] && this.writePermission)
-					{
-						this.handleRecurringEvent("eventDblClick", event, actionData);
-					}else
-					{
-						this.fireEvent("eventDblClick", this, event, actionData);
-					}
-				}, this);
-
+			if(!eventData.read_only)
+			{
 				event.on('mouseup', function(){
 					this.eventMouseUp=true;
 				}, this);
 			}
+			
 		}
 		
 		return domId;
