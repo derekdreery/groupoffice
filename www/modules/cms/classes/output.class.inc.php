@@ -372,18 +372,27 @@ class cms_output extends cms{
 		$root_path = isset($params['root_path']) ? $params['root_path'] : '';
 		$root_folder_id = isset($params['root_folder_id']) ? $params['root_folder_id'] : $this->site['root_folder_id'];
 		$expand_levels = isset($params['expand_levels']) ? $params['expand_levels'] : 0;
-		$expand_all =  isset($params['expand_all']) && $params['expand_all']=='true';
+		$expand_all =  !empty($params['expand_all']);
 		$class = isset($params['class']) ? $params['class'] : 'items';
 		$level = isset($params['level']) ? $params['level'] : 0;
 		$item_template = isset($params['item_template']) ? $params['item_template'] : '';
 		$active_item_template = isset($params['active_item_template']) ? $params['active_item_template'] : $item_template;
 		$max_items=isset($params['max_items']) ? $params['max_items'] : 0;
-		$wrap_div=isset($params['wrap_div']) && $params['wrap_div']=='false' ? false : true;
+		$wrap_div=isset($params['wrap_div']) && empty($params['wrap_div']) ? false : true;
 		$paging_id = isset($params['paging_id']) ? $params['paging_id'] : false;
-		$reverse = isset($params['reverse']) && $params['reverse']=='true';
+		$reverse = !empty($params['reverse']);
 		$level_template  = isset($params['level_template'])?  $params['level_template'] : '';
 		$start  = isset($params['start'])?  $params['start'] : 0;
 		$random = !empty($params['random']);
+		$no_folder_links = !empty($params['no_folder_links']);
+
+		/*
+		 * lastfile is used to record the previous and next file of the currently viewed file
+		 */
+		if($current_level==0){
+			$this->lastfile=false;
+			$this->record_next_file=false;
+		}
 
 
 		if(!empty($root_path))
@@ -524,14 +533,14 @@ class cms_output extends cms{
 
 		$count = count($items);
 
-		$smarty = new cms_smarty();
+		$smarty2 = new cms_smarty();
 
 		$uneven=true;	
 
 		if($count)
 		{
-			$smarty->assign('item_count', $count);
-			$smarty->assign('item_percentage', round(100/$count,1));
+			$smarty2->assign('item_count', $count);
+			$smarty2->assign('item_percentage', round(100/$count,1));
 			
 			if($wrap_div)
 			$html .= '<div id="'.$class.'_'.$folder_id.'" class="'.$class.' '.$class.'_'.$current_level.'">';
@@ -560,6 +569,9 @@ class cms_output extends cms{
 						$is_in_path=true;
 						$item_html .= ' selected';
 						$current_item_template = $active_item_template;
+
+						$smarty->assign('previous_file', $this->lastfile);
+						$this->record_next_file=true;
 					}else
 					{
 						$is_in_path=false;
@@ -579,7 +591,10 @@ class cms_output extends cms{
 
 					$is_in_path = $this->is_in_path($item['id'],$this->folder['id']);
 
-					$item_html .= '<a title="'.$item['name'].'" class="'.$class.' '.$class.'_'.$current_level;
+
+					$item_html .= $no_folder_links ? '<div' : '<a title="'.$item['name'].'"';
+
+					$item_html .= ' class="'.$class.' '.$class.'_'.$current_level;
 
 					//if($this->folder['id']==$item['id'])
 					if($is_in_path)
@@ -594,7 +609,10 @@ class cms_output extends cms{
 					else
 					$item['href']=$GO_MODULES->modules['cms']['url'].'run.php?folder_id='.$item['id'];
 
-					$item_html .= '" href="'.$item['href'].'">'.$item['name'].'</a>';
+					if($no_folder_links)
+						$item_html .= '">'.$item['name'].'</div>';
+					else
+						$item_html .= '" href="'.$item['href'].'">'.$item['name'].'</a>';
 
 				}
 				if($is_in_path)
@@ -605,19 +623,19 @@ class cms_output extends cms{
 					if(!empty($item['option_values']))
 					$item['option_values']=$this->get_template_values($item['option_values']);
 
-					$smarty->assign('parentitem', $parentitem);
-					$smarty->assign('item', $item);
-					$smarty->assign('content', $item_html);
-					$smarty->assign('level', $current_level);
-					$smarty->assign('is_in_path', $is_in_path);
-					$smarty->assign('last_was_in_path', $last_was_in_path);
+					$smarty2->assign('parentitem', $parentitem);
+					$smarty2->assign('item', $item);
+					$smarty2->assign('content', $item_html);
+					$smarty2->assign('level', $current_level);
+					$smarty2->assign('is_in_path', $is_in_path);
+					$smarty2->assign('last_was_in_path', $last_was_in_path);
 
-					$smarty->assign('even', $uneven ? 'uneven' : 'even');
+					$smarty2->assign('even', $uneven ? 'uneven' : 'even');
 
 					$folder = $this->get_folder($folder_id);
-					$smarty->assign('folder', $folder);
+					$smarty2->assign('folder', $folder);
 
-					$html .= $smarty->fetch($current_item_template);
+					$html .= $smarty2->fetch($current_item_template);
 				}else
 				{
 					$html .= $item_html;
@@ -629,12 +647,26 @@ class cms_output extends cms{
 				}
 
 
+				/**
+				 * Record the previous and next file if there is an active file
+				 */
+				if($item['fstype']=='file'){
+					$this->lastfile=$item;
+					if(!$is_in_path && $this->record_next_file){
+						$smarty->assign('next_file', $item);
+						$this->record_next_file=false;
+					}
+				}
+
+
 				$counter++;
 
 				if($max_items>0 && $max_items==$counter)
 				{
 					break;
 				}
+
+				
 					
 					
 				$uneven=!$uneven;
@@ -644,13 +676,13 @@ class cms_output extends cms{
 			
 			if(!empty($level_template))
 			{
-				$smarty->assign('parentitem', $parentitem);
-				$smarty->assign('level', $current_level);
-				$smarty->assign('count', $counter);
-				$smarty->assign('active_index', $active_index);
-				$smarty->assign('content', $html);
+				$smarty2->assign('parentitem', $parentitem);
+				$smarty2->assign('level', $current_level);
+				$smarty2->assign('count', $counter);
+				$smarty2->assign('active_index', $active_index);
+				$smarty2->assign('content', $html);
 				
-				$html = $smarty->fetch($level_template);
+				$html = $smarty2->fetch($level_template);
 			}
 
 		}
