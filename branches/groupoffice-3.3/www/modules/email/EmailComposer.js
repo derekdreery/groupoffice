@@ -273,7 +273,9 @@ GO.email.EmailComposer = function(config) {
 		hideLabel : true,
 		name : 'body',
 		anchor : '100% '+anchor,
-		plugins : imageInsertPlugin
+		plugins : imageInsertPlugin,
+		style:'font:12px arial";',
+		defaultFont:'arial'
 	}));
 				
 	items.push(this.textEditor = new Ext.form.TextArea({
