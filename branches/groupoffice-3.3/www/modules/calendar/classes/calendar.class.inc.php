@@ -784,6 +784,8 @@ class calendar extends db
 		$sql= "DELETE FROM cal_calendars WHERE id='".$this->escape($calendar_id)."'";
 		$this->query($sql);
 
+		$this->query("DELETE FROM su_visible_calendars WHERE calendar_id=?", 'i', $calendar_id);
+
 		if(empty($calendar['shared_acl']))
 		{
 			$GO_SECURITY->delete_acl($calendar['acl_id']);
@@ -1540,7 +1542,7 @@ class calendar extends db
 	{
 		$this->events = array();
 		$this->events_sort=array();
-
+		
 
 		if($count = $this->get_events(
 		$calendars,
@@ -2419,7 +2421,7 @@ class calendar extends db
 		$start = date('Y-m-d',$start_time);
 		$end = date('Y-m-d',$end_time);
 		
-		$sql = "SELECT DISTINCT birthday, first_name, middle_name, last_name, "
+		$sql = "SELECT DISTINCT id, birthday, first_name, middle_name, last_name, "
 			."IF (STR_TO_DATE(CONCAT(YEAR(?),'/',MONTH(birthday),'/',DAY(birthday)),'%Y/%c/%e') >= ?, "
 			."STR_TO_DATE(CONCAT(YEAR(?),'/',MONTH(birthday),'/',DAY(birthday)),'%Y/%c/%e') , "
 			."STR_TO_DATE(CONCAT(YEAR(?)+1,'/',MONTH(birthday),'/',DAY(birthday)),'%Y/%c/%e')) "

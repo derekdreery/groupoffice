@@ -553,24 +553,26 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 						this.selectEventElement(eventEl);
 						this.clickedEventId=eventEl.id;
 					}, this);
-				
-					event.on('dblclick', function(e, eventEl){
-
-						eventEl = Ext.get(eventEl).findParent('div.x-calGrid-month-event-container', 2, true);
-
-						//this.eventDoubleClicked=true;
-						var event = this.elementToEvent(this.clickedEventId);
-
-						if(event['repeats'] && this.writePermission)
-						{
-							this.handleRecurringEvent("eventDblClick", event, {});
-						}else
-						{
-							this.fireEvent("eventDblClick", this, event, {singleInstance : this.writePermission});
-						}
-
-					}, this);
 				}
+				
+				event.on('dblclick', function(e, eventEl){
+
+					eventEl = Ext.get(eventEl).findParent('div.x-calGrid-month-event-container', 2, true);
+				
+					this.clickedEventId=eventEl.id;					
+
+					//this.eventDoubleClicked=true;
+					var event = this.elementToEvent(this.clickedEventId);
+
+					if(event['repeats'] && this.writePermission)
+					{
+						this.handleRecurringEvent("eventDblClick", event, {});
+					}else
+					{
+						this.fireEvent("eventDblClick", this, event, {singleInstance : this.writePermission});
+					}
+
+				}, this);
 			}
 		}
 		
