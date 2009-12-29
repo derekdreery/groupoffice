@@ -554,9 +554,15 @@ class imap{
 
 		$message['reply-to']=$message['from'];
 		if(isset($values['reply-to'])){
-			$address = $RFC822->parse_address_list($values['reply-to']);
-			if(isset($address[0]))
-				$message['reply-to']=$RFC822->write_address($this->enc_utf8($address[0]['personal']), $address[0]['email']);
+			$addresses = $RFC822->parse_address_list($values['reply-to']);
+			if(isset($addresses[0])){
+				$reply_to_addresses=array();
+				while($address = array_shift($addresses)){
+					$reply_to_addresses[]=$RFC822->write_address($this->enc_utf8($address['personal']), $address['email']);
+				}
+				
+				$message['reply-to']=implode(',', $reply_to_addresses);
+			}
 		}
 
 
