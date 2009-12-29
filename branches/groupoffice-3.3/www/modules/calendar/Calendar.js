@@ -728,8 +728,14 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			}
 						
 		}, this);
-		
-		
+
+
+		GO.tasks.taskDialog = new GO.tasks.TaskDialog();		
+		GO.tasks.taskDialog.on('save', function()
+		{
+			this.init();
+		}, this);
+
 		
 		this.state = Ext.state.Manager.get('calendar-state');
 		if(!this.state)
@@ -1313,11 +1319,6 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		{
 			if(event.task_id)
 			{
-				if(!GO.tasks.taskDialog)
-				{
-					GO.tasks.taskDialog = new GO.tasks.TaskDialog();										
-				}
-				
 				GO.tasks.taskDialog.show({
 					task_id : event.task_id
 				})				
