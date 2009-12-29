@@ -186,10 +186,14 @@ GO.grid.LinksPanel = function(config){
 	}, this);
 	
 	this.folderWindow = new GO.LinkFolderWindow();
-	this.folderWindow.on('save', function(){
+	this.folderWindow.on('save', function(folderWin){
 		this.linksGrid.store.reload();
 		
 		var activeNode = this.linksTree.getNodeById('lt-folder-'+this.folder_id);
+
+		if(folderWin.folder_id==this.folder_id){
+			activeNode = activeNode.parentNode;
+		}
 		
 		if(activeNode)
 		{
