@@ -187,7 +187,8 @@ GO.cms.EditorPanel = Ext.extend(
 				this.baseParams.folder_id=0;
 					
 			this.dirty=false;
-				
+
+			
 				
 			this.load({
 				success:function(form, action)
