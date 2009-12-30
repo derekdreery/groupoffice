@@ -896,8 +896,7 @@ try {
 			$calendar['id']=$_POST['calendar_id'];
 			$calendar['user_id'] = isset($_POST['user_id']) ? ($_POST['user_id']) : $GO_SECURITY->user_id;
 			$calendar['group_id'] = isset($_POST['group_id']) ? ($_POST['group_id']) : 0;
-			$calendar['show_bdays'] = isset($_POST['show_bdays']) ? 1 : 0;
-                        $calendar['show_tasks'] = isset($_POST['show_tasks']) ? 1 : 0;
+			$calendar['show_bdays'] = isset($_POST['show_bdays']) ? 1 : 0;                        
 			if($calendar['group_id'] == 0) $calendar['group_id'] = 1;
 			$calendar['name']=$_POST['name'];
 
@@ -922,13 +921,28 @@ try {
 					throw new AccessDeniedException();
 				}
 				$response['acl_id'] = $calendar['acl_id'] = $GO_SECURITY->get_new_acl('calendar read: '.$calendar['name'], $calendar['user_id']);			
-				$response['calendar_id']=$cal->add_calendar($calendar);
+				$response['calendar_id']=$calendar['id']=$cal->add_calendar($calendar);
 			}
+			
+			$tasklists = (isset($_REQUEST['tasklists'])) ? json_decode($_REQUEST['tasklists'], true) : array();
+			if(!is_array($tasklists))
+			{
+				$tasklists = array();
+			}
+			
+			foreach($tasklists as $tasklist)
+			{
+				if($tasklist['visible'] == 0)
+				{
+					$cal->delete_visible_tasklist($calendar['id'], $tasklist['id']);
+				}else
+				{
+					$cal->add_visible_tasklist(array('calendar_id'=>$calendar['id'], 'tasklist_id'=>$tasklist['id']));
+				}
+			}
+
 			$response['success']=true;
-
 			break;
-
-
 
 
 		case 'save_view':

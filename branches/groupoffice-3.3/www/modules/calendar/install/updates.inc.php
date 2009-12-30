@@ -44,3 +44,10 @@ $updates[]="CREATE TABLE IF NOT EXISTS `cal_group_admins` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8";
 
 $updates[]="ALTER TABLE `cal_groups` DROP `acl_admin` ";
+
+$updates[]="ALTER TABLE `cal_calendars` DROP `show_tasks`";
+$updates[]="CREATE TABLE IF NOT EXISTS `cal_visible_tasklists` (
+  `calendar_id` int(11) NOT NULL,
+  `tasklist_id` int(11) NOT NULL,
+  PRIMARY KEY (`calendar_id`,`tasklist_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8";
