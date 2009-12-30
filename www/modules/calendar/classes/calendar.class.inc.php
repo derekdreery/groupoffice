@@ -2468,6 +2468,13 @@ class calendar extends db
 
 	function event_to_json_response($event)
 	{
+		global $GO_USERS;
+
+		if(!empty($event['user_id'])){
+			$user = $GO_USERS->get_user($event['user_id']);
+			$event['user_name']=String::format_name($user);
+		}
+
 		//for IE
 		if(empty($event['background']))
 		$event['background']='EBF1E2';
