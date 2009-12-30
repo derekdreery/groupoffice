@@ -171,7 +171,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			record = true;
 			fields = GO.calendar.defaultGroupFields;
 		}
-
+		
 		if(record)
 		{
 			if(fields == null)
@@ -412,8 +412,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 	updateResourcePanel : function()
 	{
 		var values = {};
-		var checked = [];
-
+		var checked = [];		
+		
 		// save values before all items are removed (checkboxes + statuses)
 		if(this.win.isVisible())
 		{

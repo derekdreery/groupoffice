@@ -1037,14 +1037,19 @@ try {
 			if($group['id'] > 0)
 			{
 				$cal->update_group($group);
-				$response['success'] = true;
 			}else
 			{
 				$group['user_id'] = $GO_SECURITY->user_id;				
-				$response['group_id'] = $cal->add_group($group);
-
-				$response['success'] = true;
+				$response['group_id'] = $cal->add_group($group);				
 			}
+			
+			if($group['id'] == 1)
+			{
+				$group = $cal->get_group(1);
+				$response['fields'] = $group['fields'];			
+			}
+
+			$response['success'] = true;
 			break;
 
 
