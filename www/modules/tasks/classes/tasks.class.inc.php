@@ -222,6 +222,9 @@ class tasks extends db
 		if(empty($tasklist['shared_acl'])){
 			$GO_SECURITY->delete_acl($tasklist['acl_id']);
 		}
+
+		$this->query("DELETE FROM cal_visible_tasklists WHERE tasklist_id=?", 'i', $list_id);
+		$this->query("DELETE FROM su_visible_lists WHERE tasklist_id=?", 'i', $list_id);
 		
 		global $GO_MODULES;
 		if(isset($GO_MODULES->modules['files']))
