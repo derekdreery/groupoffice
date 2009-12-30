@@ -983,6 +983,9 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				selectOnFocus : true,
 				forceSelection : true,
 				allowBlank : false
+			}),new GO.form.PlainField({
+				fieldLabel: GO.lang.strOwner,
+				name:'user_name'
 			})]
 
 		});

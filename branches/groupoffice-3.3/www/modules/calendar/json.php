@@ -231,8 +231,6 @@ try {
 			}
 			$calendar = $cal->get_calendar($event['calendar_id']);
 
-
-
 			$response['data']['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id']);
 			$response['data']['write_permission']=$response['data']['permission_level']>1;
 			if(!$response['data']['permission_level'] ||
