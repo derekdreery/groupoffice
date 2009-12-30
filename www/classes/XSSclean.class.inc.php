@@ -157,6 +157,10 @@ class XSSclean {
 		*
 		*/
 
+		//merijn remove HTML comments
+		$str = preg_replace('/<!--.*>/', '', $str);
+
+
 		$str = preg_replace_callback("/[a-z]+=([\'\"]).*?\\1/si", array($this, '_convert_attribute'), $str);
 
 		$str = preg_replace_callback("/<\w+.*?(?=>|<|$)/si", array($this, '_html_entity_decode_callback'), $str);
@@ -208,8 +212,8 @@ class XSSclean {
 		*	<?xml
 		*
 		* But it doesn't seem to pose a problem.
-		*
 		*/
+		
 		if ($is_image === TRUE)
 		{
 			// Images have a tendency to have the PHP short opening and closing tags every so often
