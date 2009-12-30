@@ -32,19 +32,13 @@ GO.calendar.GroupsGrid = function(config){
 	config.sm=new Ext.grid.RowSelectionModel();
 	config.loadMask=true;
     
-	this.groupDialog = new GO.calendar.GroupDialog();
-	this.groupDialog.on('save', function()
-    {
-		this.store.reload();
-	}, this);
-
 	config.tbar=[{
 		iconCls: 'btn-add',
 		text: GO.lang['cmdAdd'],
 		cls: 'x-btn-text-icon',
 		handler: function()
-        {
-			this.groupDialog.show();
+		{
+			GO.calendar.groupDialog.show();
 		},
 		scope: this
 	},{
@@ -64,7 +58,7 @@ GO.calendar.GroupsGrid = function(config){
 	this.on('rowdblclick', function(grid, rowIndex)
     {
 		var record = grid.getStore().getAt(rowIndex);	
-		this.groupDialog.show(record.data.id);
+		GO.calendar.groupDialog.show(record.data.id);
 	}, this);
 
 

@@ -118,7 +118,11 @@ Ext.extend(GO.calendar.GroupDialog, Ext.Window, {
 					this.groupAdminsPanel.setGroupId(action.result.group_id);
 					this.setGroupId(action.result.group_id);
 				}
-				this.fireEvent('save', this, this.group_id);
+		
+				var fields = (this.group_id == 1) ? action.result.fields : false;
+				
+				this.fireEvent('save', this, this.group_id, fields);
+				
 				if (hide)
 				{
 					this.hide();

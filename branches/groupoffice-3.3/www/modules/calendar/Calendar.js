@@ -738,7 +738,28 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			{
 				this.init();
 			}, this);
-		}
+		}	
+
+		GO.calendar.groupDialog = new GO.calendar.GroupDialog();
+		GO.calendar.groupDialog.on('save', function(e, group_id, fields)
+		{			
+			if(group_id == 1)
+			{
+				GO.calendar.defaultGroupFields = fields;
+				GO.calendar.eventDialog.initCustomFields(1);
+				GO.calendar.eventDialog.tabPanel.setActiveTab(0);
+			}
+			else{
+				GO.calendar.groupsGrid.store.reload({
+					callback:function(){
+						GO.calendar.eventDialog.initCustomFields(group_id);
+						GO.calendar.eventDialog.tabPanel.setActiveTab(0);
+					},
+					scope:this
+				});				
+			}
+								
+		},this);
 		
 		
 		this.state = Ext.state.Manager.get('calendar-state');
@@ -1455,7 +1476,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			
 			this.calendarDialog = GO.calendar.calendarDialog = new GO.calendar.CalendarDialog();
 			this.calendarDialog.on('save', function(e, group_id)
-			{
+			{				
 				if(group_id > 1)
 				{
 					this.writableResourcesStore.reload();
@@ -1498,12 +1519,9 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					disabled: !GO.settings.modules.calendar.write_permission,
 					text: GO.customfields.lang.customfields,
 					cls: 'x-btn-text-icon',
-					handler: function(){
-						if(!this.groupDialog)
-						{
-							this.groupDialog = new GO.calendar.GroupDialog();
-						}
-						this.groupDialog.show(1);
+					handler: function()
+					{
+						GO.calendar.groupDialog.show(1);
 					},
 					scope: this
 				}));
@@ -1606,12 +1624,13 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				single:true
 			});
 			
-			this.groupsGrid = new GO.calendar.GroupsGrid({
+			GO.calendar.groupsGrid = this.groupsGrid = new GO.calendar.GroupsGrid({
 				title:GO.calendar.lang.resource_groups,
 				layout:'fit',
 				store:GO.calendar.groupsStore,
 				deleteConfig: {
 					callback:function(){
+
 						this.writableResourcesStore.reload();
 						this.resourcesStore.reload();
 						GO.calendar.eventDialog.updateResourcePanel();
