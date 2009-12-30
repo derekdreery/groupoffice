@@ -5,7 +5,7 @@
 <meta name="robots" content="all,index,follow" />
 <meta name="keywords" content="{$file.keywords}" />
 <meta name="description" content="{$file.description}" />
-<title>{$file.title}</title>
+<title>{$file.title} - {$site.name}</title>
 <link href="{$template_url}css/editor.css" rel="stylesheet" type="text/css" />
 <link href="{$template_url}css/stylesheet.css" rel="stylesheet" type="text/css" />
 <link href="{$template_url}css/buttons.css" rel="stylesheet" type="text/css" />
