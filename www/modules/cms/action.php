@@ -285,11 +285,11 @@ try{
 			if($file['auto_meta']=='1')
 			{
 				$file['title']=$cms->get_title_from_html($file['content']);
-				if(strpos($file['title'],$file['name'])===false){
+				if(stripos($file['title'],$file['name'])===false){
 					$file['title'] = empty($file['title']) ? $file['name'] : $file['name'].' - '.$file['title'];
 				}
 				$file['keywords']=$cms->get_keywords_from_html($file['content']);
-				if(strpos($file['keywords'],$file['name'])===false)
+				if(stripos($file['keywords'],$file['name'])===false)
 					$file['keywords'] = empty($file['keywords']) ? $file['name'] : $file['name'].', '.$file['keywords'];
 
 				$file['description']=$cms->get_description_from_html($file['content']);
