@@ -620,19 +620,19 @@ try {
 				$num_admins = $cal->get_group_admins($calendar['group_id']);
 				if($num_admins && ($insert || $modified || $accepted || $declined))
 				{					
-					$url = $GO_CONFIG->full_url.'dialog.php?module=calendar&function=showEvent&params='.json_encode(array('event_id' => $event_id));
+					$url = $GO_CONFIG->full_url.'dialog.php?module=calendar&function=showEvent&params='.base64_encode(json_encode(array('values'=>array('event_id' => $event_id))));
 
 					if(!$insert)
 					{
 						$body = sprintf($lang['calendar']['resource_modified_mail_body'],$_SESSION['GO_SESSION']['name'],$calendar['name']).'<br /><br />'
 							. $cal->event_to_html($event, true)
-							. '<br /><a href='.$url.'>'.$lang['calendar']['open_resource'].'</a>';
+							. '<br /><a href="'.$url.'">'.$lang['calendar']['open_resource'].'</a>';
 						$subject = sprintf($lang['calendar']['resource_modified_mail_subject'],$calendar['name'], $event['name'], date($date_format, $event['start_time']));
 					}else
 					{
 						$body = sprintf($lang['calendar']['resource_mail_body'],$_SESSION['GO_SESSION']['name'],$calendar['name']).'<br /><br />'
 							. $cal->event_to_html($event, true)
-							. '<br /><a href='.$url.'>'.$lang['calendar']['open_resource'].'</a>';
+							. '<br /><a href="'.$url.'">'.$lang['calendar']['open_resource'].'</a>';
 						$subject = sprintf($lang['calendar']['resource_mail_subject'],$calendar['name'], $event['name'], date($date_format, $event['start_time']));						
 					}
 
@@ -753,11 +753,11 @@ try {
 									$num_admins = $cal2->get_group_admins($resource_calendar['group_id']);
 									if($num_admins)
 									{																				
-										$url = $GO_CONFIG->full_url.'dialog.php?module=calendar&function=showEvent&params='.json_encode(array('event_id' => $resource['id']));
+										$url = $GO_CONFIG->full_url.'dialog.php?module=calendar&function=showEvent&params='.base64_encode(json_encode(array('values'=>array('event_id' => $resource['id']))));
 
 										$body = sprintf($lang['calendar']['resource_modified_mail_body'],$_SESSION['GO_SESSION']['name'],$resource_calendar['name']).'<br /><br />'
 											. $cal3->event_to_html($resource, true)
-											. '<br /><a href='.$url.'>'.$lang['calendar']['open_resource'].'</a>';
+											. '<br /><a href="'.$url.'">'.$lang['calendar']['open_resource'].'</a>';
 										$subject = sprintf($lang['calendar']['resource_modified_mail_subject'],$resource_calendar['name'], $event_copy['name'], date($date_format, $event['start_time']));
 										
 										while($cal2->next_record())
@@ -814,11 +814,11 @@ try {
 								$num_admins = $cal2->get_group_admins($resource_calendar['group_id']);
 								if($num_admins)
 								{
-									$url = $GO_CONFIG->full_url.'dialog.php?module=calendar&function=showEvent&params='.json_encode(array('event_id' => $resource_id));
+									$url = $GO_CONFIG->full_url.'dialog.php?module=calendar&function=showEvent&params='.base64_encode(json_encode(array('values'=>array('event_id' => $resource_id))));
 									
 									$body = sprintf($lang['calendar']['resource_mail_body'],$_SESSION['GO_SESSION']['name'],$resource_calendar['name']).'<br /><br />'
 										. $cal3->event_to_html($resource, true)
-										. '<br /><a href='.$url.'>'.$lang['calendar']['open_resource'].'</a>';
+										. '<br /><a href="'.$url.'">'.$lang['calendar']['open_resource'].'</a>';
 									$subject = sprintf($lang['calendar']['resource_mail_subject'],$resource_calendar['name'], $event_copy['name'], date($date_format, $event_copy['start_time']));
 
 									while($cal2->next_record())
