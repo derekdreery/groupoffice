@@ -731,12 +731,15 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		}, this);
 
 
-		GO.tasks.taskDialog = new GO.tasks.TaskDialog();		
-		GO.tasks.taskDialog.on('save', function()
+		if(GO.tasks)
 		{
-			this.init();
-		}, this);
-	
+			GO.tasks.taskDialog = new GO.tasks.TaskDialog();
+			GO.tasks.taskDialog.on('save', function()
+			{
+				this.init();
+			}, this);
+		}
+		
 		
 		this.state = Ext.state.Manager.get('calendar-state');
 		if(!this.state)

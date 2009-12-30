@@ -754,12 +754,11 @@ class calendar extends db
 
 	function delete_calendar($calendar_id)
 	{
-		global $GO_SECURITY;
+		global $GO_SECURITY, $GO_MODULES;
 		$delete = new calendar;
 
 		$calendar = $this->get_calendar($calendar_id);
 
-		global $GO_MODULES;
 		if(isset($GO_MODULES->modules['files']))
 		{
 			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
@@ -784,7 +783,12 @@ class calendar extends db
 		$sql= "DELETE FROM cal_calendars WHERE id='".$this->escape($calendar_id)."'";
 		$this->query($sql);
 
-		$this->query("DELETE FROM su_visible_calendars WHERE calendar_id=?", 'i', $calendar_id);
+		$this->query("DELETE FROM cal_visible_tasklists WHERE calendar_id=?", 'i', $calendar_id);
+		
+		if(isset($GO_MODULES->modules['summary']))
+		{
+			$this->query("DELETE FROM su_visible_calendars WHERE calendar_id=?", 'i', $calendar_id);
+		}
 
 		if(empty($calendar['shared_acl']))
 		{
@@ -2611,6 +2615,23 @@ class calendar extends db
 	public function delete_group_admin($group_id, $user_id)
 	{
 		return $this->query("DELETE FROM cal_group_admins WHERE group_id=? AND user_id=?" , 'ii', array($group_id, $user_id));
+	}
+
+	
+	public function get_visible_tasklists($calendar_id)
+	{
+		$this->query("SELECT * FROM cal_visible_tasklists WHERE calendar_id = ?", 'i', $calendar_id);
+		return $this->num_rows();
+	}
+
+	public function add_visible_tasklist($tasklist)
+	{
+		return $this->replace_row('cal_visible_tasklists', $tasklist);
+	}
+
+	public function delete_visible_tasklist($calendar_id, $tasklist_id)
+	{
+		return $this->query("DELETE FROM cal_visible_tasklists WHERE calendar_id = ? AND tasklist_id = ?", 'ii', array($calendar_id, $tasklist_id));
 	}
 
 }

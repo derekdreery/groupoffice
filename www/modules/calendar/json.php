@@ -335,7 +335,8 @@ try {
 				);
 			}
 
-			if($calendar['show_bdays']) {
+			if(isset($GO_MODULES->modules['addressbook']) && $calendar['show_bdays'])
+			{
 				require_once ($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
 				$ab = new addressbook();
 				$abooks = $ab->get_user_addressbook_ids($calendar['user_id']);
@@ -362,39 +363,55 @@ try {
 				}
 			}
 
-			if($calendar['show_tasks']) {
-				require_once ($GO_MODULES->modules['tasks']['class_path'].'tasks.class.inc.php');
-				$tasks = new tasks();
-
-				require($GO_LANGUAGE->get_language_file('tasks'));
-
-				$tasks->get_authorized_tasklists();
-				while($list = $tasks->next_record()) {
-					$tasklists_ids[] = $list['id'];
-					$tasklists_names[$list['id']] = $list['name'];
+			if(isset($GO_MODULES->modules['tasks'])) 
+			{
+				$visible_lists = array();
+				$cal->get_visible_tasklists($calendar['id']);
+				while($cal->next_record())
+				{
+					$visible_lists[] = $cal->f('tasklist_id');
 				}
 
-				$tasks->get_tasks($tasklists_ids, 0, false, 'due_time', 'ASC', 0, 0, true);
-				while($task = $tasks->next_record()) {
-					$name = htmlspecialchars($lang['tasks']['task'].': '.$task['name'], ENT_QUOTES, 'UTF-8');
-					$description = $lang['tasks']['list'].': '.htmlspecialchars($tasklists_names[$task['tasklist_id']], ENT_QUOTES, 'UTF-8');
-					$description .= ($task['description']) ? '<br /><br />'.htmlspecialchars($task['description'], ENT_QUOTES, 'UTF-8') : '';
+				if(count($visible_lists) > 0) {
 
-					$start_time = date('Y-m-d',$task['start_time']).' 00:00';
-					$end_time = date('Y-m-d',$task['due_time']).' 23:59';
+					require_once ($GO_MODULES->modules['tasks']['class_path'].'tasks.class.inc.php');
+					$tasks = new tasks();
 
-					$response['results'][] = array(
-							'id'=>$response['count']++,
-							'name'=>$name,
-							'description'=>$description,
-							'time'=>'00:00',
-							'start_time'=>$start_time,
-							'end_time'=>$end_time,
-							'background'=>'EBF1E2',
-							'day'=>$lang['common']['full_days'][date('w', ($task['start_time']))].' '.date($_SESSION['GO_SESSION']['date_format'], ($task['start_time'])),
-							'read_only'=>true,
-							'task_id'=>$task['id']							
-					);
+					require($GO_LANGUAGE->get_language_file('tasks'));
+
+					$tasklists_ids = array();
+					$tasks->get_authorized_tasklists();
+					while($list = $tasks->next_record())
+					{
+						if(in_array($list['id'], $visible_lists))
+						{
+							$tasklists_ids[] = $list['id'];
+							$tasklists_names[$list['id']] = $list['name'];
+						}
+					}
+
+					$tasks->get_tasks($tasklists_ids, 0, false, 'due_time', 'ASC', 0, 0, true);
+					while($task = $tasks->next_record()) {
+						$name = htmlspecialchars($lang['tasks']['task'].': '.$task['name'], ENT_QUOTES, 'UTF-8');
+						$description = $lang['tasks']['list'].': '.htmlspecialchars($tasklists_names[$task['tasklist_id']], ENT_QUOTES, 'UTF-8');
+						$description .= ($task['description']) ? '<br /><br />'.htmlspecialchars($task['description'], ENT_QUOTES, 'UTF-8') : '';
+
+						$start_time = date('Y-m-d',$task['start_time']).' 00:00';
+						$end_time = date('Y-m-d',$task['due_time']).' 23:59';
+
+						$response['results'][] = array(
+								'id'=>$response['count']++,
+								'name'=>$name,
+								'description'=>$description,
+								'time'=>'00:00',
+								'start_time'=>$start_time,
+								'end_time'=>$end_time,
+								'background'=>'EBF1E2',
+								'day'=>$lang['common']['full_days'][date('w', ($task['start_time']))].' '.date($_SESSION['GO_SESSION']['date_format'], ($task['start_time'])),
+								'read_only'=>true,
+								'task_id'=>$task['id']
+						);
+					}
 				}
 			}
 
@@ -1022,6 +1039,41 @@ try {
 				}
 			}
 			
+			$response['success'] = true;
+			break;
+
+
+		case 'tasklists':
+
+			$calendar_id = isset($_REQUEST['calendar_id']) ? $_REQUEST['calendar_id'] : 0;
+			$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'id';
+			$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'DESC';
+
+			$visible_lists = array();
+			if($calendar_id)
+			{
+				$cal->get_visible_tasklists($calendar_id);
+				while($cal->next_record())
+				{
+					$visible_lists[] = $cal->f('tasklist_id');
+				}
+			}
+
+
+			require_once ($GO_MODULES->modules['tasks']['class_path'].'tasks.class.inc.php');
+			$tasks = new tasks();
+							
+			$response['results']=array();
+			$response['total'] = $tasks->get_authorized_tasklists('read', '', $GO_SECURITY->user_id, 0, 0, $sort, $dir);
+			while($tasks->next_record())
+			{
+				$tasklist['id'] = $tasks->f('id');
+				$tasklist['name'] = $tasks->f('name');
+				$tasklist['visible'] = (in_array($tasklist['id'], $visible_lists));
+				
+				$response['results'][] = $tasklist;
+			}
+
 			$response['success'] = true;
 			break;
 
