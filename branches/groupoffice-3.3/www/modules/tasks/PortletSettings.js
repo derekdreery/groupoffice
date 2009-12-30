@@ -23,7 +23,8 @@ GO.tasks.PortletSettings = function(config){
         header: GO.tasks.lang.visible,
         dataIndex: 'visible',
         width: 55,
-        disabled_field:''
+        disabled_field:'',
+	sortable:false
     });
 
 	var fields ={
