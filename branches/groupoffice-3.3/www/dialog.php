@@ -20,9 +20,7 @@ function launchGO(){
 
 	if(win.GO && win.GO.<?php echo $module; ?>)
 	{
-		win.GO.<?php echo $module; ?>.<?php echo $function; ?>({
-            values: <?php echo $params; ?>
-		});
+		win.GO.<?php echo $module; ?>.<?php echo $function; ?>(<?php echo base64_decode($params); ?>);
 	}else
 	{
 		win.location.href="<?php echo $GO_CONFIG->host; ?>?<?php echo $_SERVER['QUERY_STRING']; ?>";
