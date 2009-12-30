@@ -193,4 +193,4 @@ CREATE TABLE IF NOT EXISTS `cal_group_admins` (
   `group_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`group_id`,`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8";
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
