@@ -2418,6 +2418,8 @@ class calendar extends db
 
 	function get_bdays($start_time,$end_time,$abooks=array())
 	{
+		global $response;
+		
 		$start = date('Y-m-d',$start_time);
 		$end = date('Y-m-d',$end_time);
 		
@@ -2425,11 +2427,13 @@ class calendar extends db
 			."IF (STR_TO_DATE(CONCAT(YEAR(?),'/',MONTH(birthday),'/',DAY(birthday)),'%Y/%c/%e') >= ?, "
 			."STR_TO_DATE(CONCAT(YEAR(?),'/',MONTH(birthday),'/',DAY(birthday)),'%Y/%c/%e') , "
 			."STR_TO_DATE(CONCAT(YEAR(?)+1,'/',MONTH(birthday),'/',DAY(birthday)),'%Y/%c/%e')) "
-			."as upcoming FROM ab_contacts ";
+			."as upcoming FROM ab_contacts "
+			."WHERE birthday != '0000-00-00' ";
+
 
 		if(count($abooks))
 		{
-			$sql .= "WHERE addressbook_id IN (".implode(',', $abooks).") ";
+			$sql .= "AND addressbook_id IN (".implode(',', $abooks).") ";
 		}
 
 		$sql .= "HAVING upcoming BETWEEN ? AND ? ORDER BY upcoming";
