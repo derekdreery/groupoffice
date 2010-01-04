@@ -922,6 +922,16 @@ try {
 				}
 				$response['acl_id'] = $calendar['acl_id'] = $GO_SECURITY->get_new_acl('calendar read: '.$calendar['name'], $calendar['user_id']);			
 				$response['calendar_id']=$calendar['id']=$cal->add_calendar($calendar);
+
+				/*
+				 * Automatically add resource admins to manage permission. Resources have a group id higher then 1
+				 */
+
+				if(!empty($calendar['group_id'])){
+					$cal->get_group_admins($calendar['group_id']);
+					while($group_admin = $cal->next_record())
+						$GO_SECURITY->add_user_to_acl($group_admin['user_id'], $calendar['acl_id'], GO_SECURITY::MANAGE_PERMISSION);
+				}
 			}
 			
 			$tasklists = (isset($_REQUEST['tasklists'])) ? json_decode($_REQUEST['tasklists'], true) : array();
