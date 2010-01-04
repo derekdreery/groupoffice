@@ -1,4 +1,4 @@
-2009/12/29 3.3.9
+2010/01/04 3.3.9
 - Debian package groupoffice-mailserver conflicted with vacation package
 - Updated quota query for Dovecot 1.1
 - Bug fixes
