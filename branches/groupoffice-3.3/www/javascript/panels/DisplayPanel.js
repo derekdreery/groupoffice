@@ -1,5 +1,5 @@
 GO.DisplayPanel = Ext.extend(Ext.Panel,{
-	
+	id: 0,
 	link_type : 0,
 	
 	newMenuButton : false,
@@ -250,6 +250,7 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 	{
 		if(this.data.id!=id || reload)
 		{
+			this.id=id;
 			this.loadParams[this.idParam]=id;
 			
 			this.body.mask(GO.lang.waitMsgLoad);
