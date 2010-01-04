@@ -26,13 +26,12 @@ GO.calendar.EventDialog = function(calendar) {
 		root: 'results',
 		id: 'id',
 		totalProperty:'total',
-		fields: ['id','resources','name','acl_admin','fields'],
+		fields: ['id','resources','name','fields'],
 		remoteSort: true
 	});
 
 	this.resourceGroupsStore.on('load', function()
-	{
-		this.resourcesPanel.removeAll(true);
+	{		
 		this.buildAccordion();
 	}, this);
 
@@ -1448,8 +1447,10 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 	buildAccordion : function()
 	{
+		this.resourcesPanel.removeAll(true);
+
 		var newFormField;
-		for(var i=0; i<this.resourceGroupsStore.data.items.length; i++)
+		for(var i=0; i<this.resourceGroupsStore.getCount(); i++)
 		{
 			var record = this.resourceGroupsStore.data.items[i].data;
 			var resourceFieldSets = [];

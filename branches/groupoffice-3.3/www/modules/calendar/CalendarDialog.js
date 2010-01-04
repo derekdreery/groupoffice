@@ -54,7 +54,8 @@ GO.calendar.CalendarDialog = function(config)
 			editable:false,
 			selectOnFocus:true,
 			allowBlank:true,
-			forceSelection:true
+			forceSelection:true,
+			anchor:'100%'
 		}),{
 			xtype:'checkbox',
 			name:'show_bdays',
@@ -237,7 +238,9 @@ Ext.extend(GO.calendar.CalendarDialog, Ext.Window, {
 		}else
 		{
 			this.calendar_id=0;
-			this.propertiesTab.form.reset(); 
+			this.propertiesTab.form.reset();
+
+			this.selectGroup.selectFirst();
             
 			this.exportButton.setDisabled(true);
 			this.importTab.setDisabled(true);	

@@ -42,12 +42,11 @@ GO.calendar.GroupsGrid = function(config){
 		},
 		scope: this
 	},{
-        id: 'delete',
 		iconCls: 'btn-delete',
 		text: GO.lang['cmdDelete'],
 		cls: 'x-btn-text-icon',
 		handler: function()
-        {
+		{
 			this.deleteSelected();
 		},
 		scope: this
@@ -56,20 +55,20 @@ GO.calendar.GroupsGrid = function(config){
 	GO.calendar.GroupsGrid.superclass.constructor.call(this, config);
 
 	this.on('rowdblclick', function(grid, rowIndex)
-    {
+	{
 		var record = grid.getStore().getAt(rowIndex);	
 		GO.calendar.groupDialog.show(record.data.id);
 	}, this);
 
 
-    this.on('show', function(){
-        if(!this.store.loaded)
-        {
-            this.store.load();
-        }
-    },this, {
-        single:true
-    });
+	this.on('show', function(){
+		if(!this.store.loaded)
+		{
+			this.store.load();
+		}
+	},this, {
+		single:true
+	});
 
 };
 

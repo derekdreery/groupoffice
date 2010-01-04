@@ -744,18 +744,14 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			if(group_id == 1)
 			{
 				GO.calendar.defaultGroupFields = fields;
-				GO.calendar.eventDialog.initCustomFields(1);
-				GO.calendar.eventDialog.tabPanel.setActiveTab(0);
-			}
-			else{
-				GO.calendar.groupsGrid.store.reload({
-					callback:function(){
-						GO.calendar.eventDialog.initCustomFields(group_id);
-						GO.calendar.eventDialog.tabPanel.setActiveTab(0);
-					},
-					scope:this
-				});				
-			}
+			}			
+			GO.calendar.groupsGrid.store.load({
+				callback:function(){
+					GO.calendar.eventDialog.resourceGroupsStore.reload();
+				},
+				scope:this
+			});
+			
 								
 		},this);
 		
