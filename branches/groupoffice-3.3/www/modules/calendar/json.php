@@ -984,6 +984,7 @@ try {
 			$response['results'] = array();
 			$response['success'] = false;
 			
+			
 			if($group_id > 0)
 			{
 				if(isset($_POST['add_users']))

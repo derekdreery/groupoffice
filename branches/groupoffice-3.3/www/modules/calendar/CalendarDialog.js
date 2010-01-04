@@ -240,7 +240,12 @@ Ext.extend(GO.calendar.CalendarDialog, Ext.Window, {
 			this.calendar_id=0;
 			this.propertiesTab.form.reset();
 
-			this.selectGroup.selectFirst();
+			if(resource){
+				this.selectGroup.selectFirst();
+			}else
+			{
+				this.selectGroup.setValue(0);
+			}
             
 			this.exportButton.setDisabled(true);
 			this.importTab.setDisabled(true);	

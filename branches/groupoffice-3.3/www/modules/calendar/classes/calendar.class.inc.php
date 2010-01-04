@@ -2615,7 +2615,14 @@ class calendar extends db
 	}
 
 	public function add_group_admin($group_admin)
-	{		
+	{
+		global $GO_SECURITY;
+
+		$this->get_calendars_by_group_id($group_admin['group_id']);
+		while($calendar = $this->next_record()){
+			$GO_SECURITY->add_user_to_acl($group_admin['user_id'], $calendar['acl_id'], GO_SECURITY::MANAGE_PERMISSION);
+		}
+
 		return $this->insert_row('cal_group_admins', $group_admin);
 	}
 
