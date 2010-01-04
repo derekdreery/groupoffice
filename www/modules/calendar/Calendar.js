@@ -188,9 +188,8 @@ GO.calendar.MainPanel = function(config){
 	
 	this.calendarList = new GO.grid.GridPanel({
 		border: false,
-		id:'acc_calendars',
-		title:GO.calendar.lang.calendars,
 		layout:'fit',
+		title:GO.calendar.lang.calendars,
 		store: this.calendarsStore,
 		cls: 'go-grid3-hide-headers',
 		autoScroll:true,
@@ -208,9 +207,8 @@ GO.calendar.MainPanel = function(config){
 
 	this.viewsList = new GO.grid.GridPanel({
 		border: false,
-		id:'acc_views',
-		title:GO.calendar.lang.views,
 		layout:'fit',
+		title:GO.calendar.lang.views,
 		store: this.viewsStore,
 		cls: 'go-grid3-hide-headers',
 		autoScroll:true,
@@ -229,7 +227,6 @@ GO.calendar.MainPanel = function(config){
 
 	this.resourcesList = new GO.grid.GridPanel({
 		border: false,
-		id:'acc_resources',
 		title:GO.calendar.lang.resources,
 		layout:'fit',
 		store: this.resourcesStore,
@@ -332,20 +329,21 @@ GO.calendar.MainPanel = function(config){
 
 
 	this.calendarListPanel = new Ext.Panel({
-		id:'navigation-panel',
-		border:false,
+		border:true,
 		region:'center',
 		layout:'accordion',
-		layoutConfig:{
+		/*layoutConfig:{
+			autoWidth : false,
 			titleCollapse:true,
 			animate:false,
 			activeOnTop:false
-		}
+		},*/
+		items: [
+			this.calendarList,
+			this.viewsList,
+			this.resourcesList
+		]
 	});
-
-	this.calendarListPanel.add(this.calendarList);
-	this.calendarListPanel.add(this.viewsList);
-	this.calendarListPanel.add(this.resourcesList);
 
 
 
@@ -644,12 +642,12 @@ GO.calendar.MainPanel = function(config){
 		region:'west',
 		titlebar: false,
 		autoScroll:false,
-		closeOnTab: true,
+		//closeOnTab: true,
 		width: 210,
 		split:true,
 		layout:'border',
 		border:false,
-		plain:true,
+		//plain:true,
 		items:[
 		new Ext.Panel({
 			region:'north',
