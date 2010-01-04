@@ -164,15 +164,16 @@ try{
 
 				if(isset($_POST['name']))
 				{
-					if($_POST['name'] != $folder['name'])
+					$name = trim($_POST['name']);
+					if($name != $folder['name'])
 					{
 						$path=$files->build_path($folder);
-						$newpath = dirname($path).'/'.$_POST['name'];
+						$newpath = dirname($path).'/'.$name;
 
 						$fs = new filesystem();
 						$fs->move($GO_CONFIG->file_storage_path.$path, $GO_CONFIG->file_storage_path.$newpath);
 
-						$up_folder['name']=$_POST['name'];
+						$up_folder['name']=$name;
 						$up_folder['mtime']=filemtime($GO_CONFIG->file_storage_path.$newpath);
 
 						$response['path']=$newpath;
