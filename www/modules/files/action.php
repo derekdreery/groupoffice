@@ -66,30 +66,32 @@ try{
 
 			$up_file['id']=$file['id'];
 			$up_file['comments']=$_POST['comments'];
+
+			$name = trim($_POST['name']);
 			
 
 
-			if(empty($_POST['name']))
+			if(empty($name))
 			{
 				throw new MissingFieldException();
 			}
 			$extension = File::get_extension($file['name']);
 			if(!empty($extension))
 			{
-				$_POST['name'] .= '.'.$extension;
+				$name .= '.'.$extension;
 			}
 
-			if($_POST['name'] != $file['name'])
+			if($name != $file['name'])
 			{
 				$path=$files->build_path($folder);
 				$oldpath = $path.'/'.$file['name'];
-				$newpath = $path.'/'.$_POST['name'];
+				$newpath = $path.'/'.$name;
 						
 				$fs = new filesystem();
 				$fs->move($GO_CONFIG->file_storage_path.$oldpath, $GO_CONFIG->file_storage_path.$newpath);		
 				$response['path']=$newpath;
 				
-				$up_file['name']=$_POST['name'];
+				$up_file['name']=$name;
 			}			
 			$files->update_file($up_file);
 
