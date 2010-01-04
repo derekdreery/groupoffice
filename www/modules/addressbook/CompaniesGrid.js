@@ -154,14 +154,7 @@ GO.addressbook.CompaniesGrid = function(config){
 	config.enableDragDrop=true;
 	config.ddGroup='AddressBooksDD';
 	
-	GO.addressbook.CompaniesGrid.superclass.constructor.call(this, config);
-	
-	this.on('rowdblclick', function(grid, rowIndex){
-		var record = grid.getStore().getAt(rowIndex);			
-		
-		GO.addressbook.companyDialog.show(record.data.id);
-		}, this);
-	
+	GO.addressbook.CompaniesGrid.superclass.constructor.call(this, config);	
 };
 
 

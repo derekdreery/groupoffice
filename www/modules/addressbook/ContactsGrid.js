@@ -191,13 +191,6 @@ GO.addressbook.ContactsGrid = function(config){
 	config.ddGroup='AddressBooksDD';
 	
 	GO.addressbook.ContactsGrid.superclass.constructor.call(this, config);
-	
-	this.on('rowdblclick', function(grid, rowIndex){
-		var record = grid.getStore().getAt(rowIndex);			
-		
-		GO.addressbook.contactDialog.show(record.data.id);
-		}, this);
-	
 };
 
 
