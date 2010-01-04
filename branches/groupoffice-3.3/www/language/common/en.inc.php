@@ -4,7 +4,7 @@
 
 $lang['common']['about']='Version: %s
 
-Copyright (c) 2003-2010, Intermesh
+Copyright (c) 2003-%s, Intermesh
 All rights reserved.
 This program is protected by copyright law and the Group-Office license.
 

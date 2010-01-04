@@ -138,7 +138,7 @@ GO.grid.GridPanel = function(config)
 			}
 		}
 		this.rowClicked=false;
-	}, this, {delay:400});	
+	}, this, {delay:250});
 }
 
 Ext.extend(GO.grid.GridPanel, Ext.grid.GridPanel, {
