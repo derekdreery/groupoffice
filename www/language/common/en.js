@@ -315,6 +315,7 @@ GO.lang.keyword='Keyword';
 
 
 GO.lang.total='Total';
+GO.lang.totals='Totals';
 
 GO.lang.closeApps='Close applications';
 GO.lang.rightClickToClose='Right click a tab panel header to close it.';
