@@ -76,8 +76,8 @@ chmod 700 /var/spool/vacation/
 touch /var/log/vacation.log /var/log/vacation-debug.log
 chown vacation:vacation /var/log/vacation*
 
-chown vacation:vacation /usr/bin/vacation
-chmod 700 /usr/bin/vacation
+chown vacation:vacation /usr/bin/groupoffice-vacation
+chmod 700 /usr/bin/groupoffice-vacation
 
 postconf -e 'transport_maps = hash:/etc/postfix/transport';
 postconf -e 'vacation_destination_recipient_limit = 1';
