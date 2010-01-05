@@ -34,3 +34,4 @@ GO.tasks.lang.daysBeforeStart= 'Tag(e) vorher';
 GO.tasks.lang.defaultTasklist='Standardliste';
 GO.tasks.lang.visibleTasklists='Sichtbare Aufgabenlisten';
 GO.tasks.lang.visible='Sichtbar';
+GO.tasks.lang.selectIcalendarFile='Wählen Sie eine iCalendar (*.ics) Datei';

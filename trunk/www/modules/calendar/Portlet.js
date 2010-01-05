@@ -19,42 +19,45 @@ GO.calendar.SummaryGroupPanel = function(config)
 	}
 	
 	config.store = new Ext.data.GroupingStore({
-	    reader: new Ext.data.JsonReader({
-			    totalProperty: "count",
-			    root: "results",
-			    id: "event_id",
-			    fields: [
-						'id',
-						'event_id',
-						'name',
-						'time',
-						'start_time',
-						'end_time',
-						'description',
-						'location',
-						'private',
-						'repeats',
-						'day',
-						'calendar_name'
-					]
-	    	}),
-			baseParams: {
-				task:'summary',
-				'user_id' : GO.settings.user_id,
-				'portlet' : true
-			},
-			proxy: new Ext.data.HttpProxy({
-		      url: GO.settings.modules.calendar.url+'json.php'
-		  }),        
-	    groupField:'day',
-	    sortInfo: {field: 'start_time', direction: 'ASC'},
-			remoteGroup:true,
-			remoteSort:true
-	  });
+		reader: new Ext.data.JsonReader({
+			totalProperty: "count",
+			root: "results",
+			id: "event_id",
+			fields: [
+			'id',
+			'event_id',
+			'name',
+			'time',
+			'start_time',
+			'end_time',
+			'description',
+			'location',
+			'private',
+			'repeats',
+			'day',
+			'calendar_name'
+			]
+		}),
+		baseParams: {
+			task:'summary',
+			'user_id' : GO.settings.user_id,
+			'portlet' : true
+		},
+		proxy: new Ext.data.HttpProxy({
+			url: GO.settings.modules.calendar.url+'json.php'
+		}),
+		groupField:'day',
+		sortInfo: {
+			field: 'start_time',
+			direction: 'ASC'
+		},
+		remoteGroup:true,
+		remoteSort:true
+	});
 
 	config.store.on('load', function(){
 		//do layout on Startpage
-		this.ownerCt.ownerCt.ownerCt.doLayout();
+		this.ownerCt.ownerCt.ownerCt.doLayout();		
 	}, this);
 	  
 	/*config.store = new Ext.data.JsonStore({
@@ -84,37 +87,37 @@ GO.calendar.SummaryGroupPanel = function(config)
 	//config.enableColumnMove=false;
 
 	config.columns=[
-		{
-			header:GO.lang.strDay,
-			dataIndex: 'day'
-		},		
-		{
-			header:GO.lang.strTime,
-			dataIndex: 'time',
-			width:100,
-			align:'right',
-			groupable:false
+	{
+		header:GO.lang.strDay,
+		dataIndex: 'day'
+	},
+	{
+		header:GO.lang.strTime,
+		dataIndex: 'time',
+		width:100,
+		align:'right',
+		groupable:false
+	},
+	{
+		id:'summary-calendar-name-heading',
+		header:GO.lang.strName,
+		dataIndex: 'name',
+		renderer:function(value, p, record){
+			p.attr = 'ext:qtip="'+Ext.util.Format.htmlEncode(GO.calendar.formatQtip(record.data))+'"';
+			return value;
 		},
-		{
-			id:'summary-calendar-name-heading',
-			header:GO.lang.strName,
-			dataIndex: 'name',
-			renderer:function(value, p, record){
-				p.attr = 'ext:qtip="'+Ext.util.Format.htmlEncode(GO.calendar.formatQtip(record.data))+'"';
-				return value;
-			},
-			groupable:false
-		},{
-			header:GO.calendar.lang.calendar,
-			dataIndex: 'calendar_name',
-			width:140
-		}];
+		groupable:false
+	},{
+		header:GO.calendar.lang.calendar,
+		dataIndex: 'calendar_name',
+		width:140
+	}];
 		
 	config.view=  new Ext.grid.GroupingView({
-    hideGroupedColumn:true,
-    groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "'+GO.lang.items+'" : "'+GO.lang.item+'"]})',
-   	emptyText: GO.calendar.lang.noAppointmentsToDisplay,
-   	showGroupName:false
+		hideGroupedColumn:true,
+		groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "'+GO.lang.items+'" : "'+GO.lang.item+'"]})',
+		emptyText: GO.calendar.lang.noAppointmentsToDisplay,
+		showGroupName:false
 	});
 	config.sm=new Ext.grid.RowSelectionModel();
 	config.loadMask=true;
@@ -122,8 +125,8 @@ GO.calendar.SummaryGroupPanel = function(config)
 	
 	GO.calendar.SummaryGroupPanel.superclass.constructor.call(this, config);
 
-	//with auto expand column this works better otherwise you'll get a big scrollbar
-	/*this.store.on('load', function(){
+//with auto expand column this works better otherwise you'll get a big scrollbar
+/*this.store.on('load', function(){
 		this.addClass('go-grid3-hide-headers');
 	}, this, {single:true})*/
 	
@@ -137,20 +140,27 @@ Ext.extend(GO.calendar.SummaryGroupPanel, Ext.grid.GridPanel, {
 	{
 		GO.calendar.SummaryGroupPanel.superclass.afterRender.call(this);
     
-		GO.calendar.eventDialog.on('save', function(){this.store.reload()}, this);
+		GO.calendar.eventDialog.on('save', function(){
+			this.store.reload()
+			}, this);
 
 		this.on("rowdblclick", function(grid, rowClicked, e){
-			if(!grid.selModel.selections.items[0].json.read_only)
+			if(grid.selModel.selections.items[0].json.contact_id)
+			{
+				GO.linkHandlers[2].call(this, grid.selModel.selections.items[0].json.contact_id);
+			}else
 			{
 				var event_id = grid.selModel.selections.keys[0];
-				GO.calendar.eventDialog.show({event_id: event_id});
+				GO.calendar.eventDialog.show({
+					event_id: event_id
+				});
 			}
 		}, this);
 		
 		Ext.TaskMgr.start({
-		    run: this.store.load,
-		    scope:this.store,
-		    interval:900000
+			run: this.store.load,
+			scope:this.store,
+			interval:900000
 		});  
 	}
 	
@@ -167,7 +177,7 @@ GO.mainLayout.onReady(function(){
 		GO.summary.portlets['portlet-calendar']=new GO.summary.Portlet({
 			id: 'portlet-calendar',
 			//iconCls: 'go-module-icon-calendar',
-		 	title: GO.calendar.lang.appointments,
+			title: GO.calendar.lang.appointments,
 			layout:'fit',
 			tools: [{
 				id: 'gear',
@@ -184,7 +194,9 @@ GO.mainLayout.onReady(function(){
 							buttons:[{
 								text: GO.lang.cmdSave,
 								handler: function(){
-									var params={'task' : 'save_portlet'};
+									var params={
+										'task' : 'save_portlet'
+									};
 									if(this.PortletSettings.store.loaded){
 										params['calendars']=Ext.encode(this.PortletSettings.getGridData());
 									}
@@ -223,11 +235,11 @@ GO.mainLayout.onReady(function(){
 					this.manageCalsWindow.show();
 				}
 			},{
-	        id:'close',
-	        handler: function(e, target, panel){
-	            panel.removePortlet();
-	        }
-		   }],
+				id:'close',
+				handler: function(e, target, panel){
+					panel.removePortlet();
+				}
+			}],
 			items: calGrid,
 			autoHeight:true
 			

@@ -300,6 +300,7 @@ GO.lang.rightClickToClose='Klik met de rechtermuisknop op een tabblad kop om dez
 GO.lang.administration='Beheer';
 
 GO.lang.total='Totaal';
+GO.lang.totals='Totalen';
 GO.lang.adminMenu= 'Beheermenu';
 GO.lang.extra='Extra';
 

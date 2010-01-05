@@ -754,12 +754,11 @@ class calendar extends db
 
 	function delete_calendar($calendar_id)
 	{
-		global $GO_SECURITY;
+		global $GO_SECURITY, $GO_MODULES;
 		$delete = new calendar;
 
 		$calendar = $this->get_calendar($calendar_id);
 
-		global $GO_MODULES;
 		if(isset($GO_MODULES->modules['files']))
 		{
 			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
@@ -783,6 +782,13 @@ class calendar extends db
 
 		$sql= "DELETE FROM cal_calendars WHERE id='".$this->escape($calendar_id)."'";
 		$this->query($sql);
+
+		$this->query("DELETE FROM cal_visible_tasklists WHERE calendar_id=?", 'i', $calendar_id);
+		
+		if(isset($GO_MODULES->modules['summary']))
+		{
+			$this->query("DELETE FROM su_visible_calendars WHERE calendar_id=?", 'i', $calendar_id);
+		}
 
 		if(empty($calendar['shared_acl']))
 		{
@@ -1184,7 +1190,7 @@ class calendar extends db
 		return false;
 	}
 
-	function update_event(&$event, $calendar=false, $old_event=false, $update_related=true)
+	function update_event(&$event, $calendar=false, $old_event=false, $update_related=true, $update_related_status=true)
 	{
 		if(!$old_event)
 		{
@@ -1312,9 +1318,9 @@ class calendar extends db
 			$this->move_exceptions($event['id'], $event['start_time']-$old_event['start_time']);
 		}
 
-		if($update_related  && !empty($event['id']))
+		if($update_related && !empty($event['id']))
 		{			
-			unset($event['user_id'], $event['calendar_id'], $event['participants_event_id']);
+			unset($event['user_id'], $event['calendar_id'], $event['participants_event_id']);						
 			
 			$cal = new calendar();
 			if(!empty($old_event['participants_event_id'])){
@@ -1329,7 +1335,14 @@ class calendar extends db
 			{
 				$event['id']=$cal->f('id');
 				$event['calendar_id'] = $cal->f('calendar_id');
-				$this->update_event($event,false,$old_event, false);
+
+				if(!$update_related_status)
+				{
+					$event['status'] = $cal->f('status');
+					$event['background'] = $cal->f('background');
+				}
+
+				$this->update_event($event, false, $old_event, false);
 			}
 		}		
 	
@@ -1533,7 +1546,7 @@ class calendar extends db
 	{
 		$this->events = array();
 		$this->events_sort=array();
-
+		
 
 		if($count = $this->get_events(
 		$calendars,
@@ -2409,18 +2422,22 @@ class calendar extends db
 
 	function get_bdays($start_time,$end_time,$abooks=array())
 	{
+		global $response;
+		
 		$start = date('Y-m-d',$start_time);
 		$end = date('Y-m-d',$end_time);
 		
-		$sql = "SELECT DISTINCT birthday, first_name, middle_name, last_name, "
+		$sql = "SELECT DISTINCT id, birthday, first_name, middle_name, last_name, "
 			."IF (STR_TO_DATE(CONCAT(YEAR(?),'/',MONTH(birthday),'/',DAY(birthday)),'%Y/%c/%e') >= ?, "
 			."STR_TO_DATE(CONCAT(YEAR(?),'/',MONTH(birthday),'/',DAY(birthday)),'%Y/%c/%e') , "
 			."STR_TO_DATE(CONCAT(YEAR(?)+1,'/',MONTH(birthday),'/',DAY(birthday)),'%Y/%c/%e')) "
-			."as upcoming FROM ab_contacts ";
+			."as upcoming FROM ab_contacts "
+			."WHERE birthday != '0000-00-00' ";
+
 
 		if(count($abooks))
 		{
-			$sql .= "WHERE addressbook_id IN (".implode(',', $abooks).") ";
+			$sql .= "AND addressbook_id IN (".implode(',', $abooks).") ";
 		}
 
 		$sql .= "HAVING upcoming BETWEEN ? AND ? ORDER BY upcoming";
@@ -2451,6 +2468,13 @@ class calendar extends db
 
 	function event_to_json_response($event)
 	{
+		global $GO_USERS;
+
+		if(!empty($event['user_id'])){
+			$user = $GO_USERS->get_user($event['user_id']);
+			$event['user_name']=String::format_name($user);
+		}
+
 		//for IE
 		if(empty($event['background']))
 		$event['background']='EBF1E2';
@@ -2576,6 +2600,52 @@ class calendar extends db
 	public function delete_visible_calendar($calendar_id, $user_id)
 	{
 		$this->query("DELETE FROM su_visible_calendars WHERE calendar_id = $calendar_id AND user_id = $user_id");
+	}
+
+	public function get_group_admins($group_id)
+	{		
+		$this->query("SELECT user_id FROM cal_group_admins WHERE group_id=?", 'i', $group_id);
+		return $this->num_rows();		
+	}
+
+	public function group_admin_exists($group_id, $user_id)
+	{
+		$this->query("SELECT user_id FROM cal_group_admins WHERE group_id=? AND user_id=?", 'ii', array($group_id, $user_id));
+		return ($this->num_rows() > 0) ? true : false;
+	}
+
+	public function add_group_admin($group_admin)
+	{
+		global $GO_SECURITY;
+
+		$this->get_calendars_by_group_id($group_admin['group_id']);
+		while($calendar = $this->next_record()){
+			$GO_SECURITY->add_user_to_acl($group_admin['user_id'], $calendar['acl_id'], GO_SECURITY::MANAGE_PERMISSION);
+		}
+
+		return $this->insert_row('cal_group_admins', $group_admin);
+	}
+
+	public function delete_group_admin($group_id, $user_id)
+	{
+		return $this->query("DELETE FROM cal_group_admins WHERE group_id=? AND user_id=?" , 'ii', array($group_id, $user_id));
+	}
+
+	
+	public function get_visible_tasklists($calendar_id)
+	{
+		$this->query("SELECT * FROM cal_visible_tasklists WHERE calendar_id = ?", 'i', $calendar_id);
+		return $this->num_rows();
+	}
+
+	public function add_visible_tasklist($tasklist)
+	{
+		return $this->replace_row('cal_visible_tasklists', $tasklist);
+	}
+
+	public function delete_visible_tasklist($calendar_id, $tasklist_id)
+	{
+		return $this->query("DELETE FROM cal_visible_tasklists WHERE calendar_id = ? AND tasklist_id = ?", 'ii', array($calendar_id, $tasklist_id));
 	}
 
 }

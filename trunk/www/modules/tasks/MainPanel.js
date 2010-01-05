@@ -99,10 +99,12 @@ GO.tasks.MainPanel = function(config){
 	}, this);
 
 	this.gridPanel.on('rowdblclick', function(grid, rowIndex){
-		var record = grid.getStore().getAt(rowIndex);
+		/*var record = grid.getStore().getAt(rowIndex);
 		GO.tasks.taskDialog.show({
 			task_id: record.data.id
-		});
+		});*/
+
+		this.taskPanel.editHandler();
 	}, this);
 
 	this.gridPanel.on('checked', function(grid, task_id){

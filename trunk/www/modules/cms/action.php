@@ -284,9 +284,19 @@ try{
 			
 			if($file['auto_meta']=='1')
 			{
-				$file['title']=$response['title']=$file['name'].' - '.$cms->get_title_from_html(stripslashes($file['content']));
-				$file['keywords']=$response['keywords']=$file['name'].', '.$cms->get_keywords_from_html(stripslashes($file['content']));
-				$file['description']=$response['description']=$cms->get_description_from_html(stripslashes($file['content']));
+				$file['title']=$cms->get_title_from_html($file['content']);
+				if(stripos($file['title'],$file['name'])===false){
+					$file['title'] = empty($file['title']) ? $file['name'] : $file['name'].' - '.$file['title'];
+				}
+				$file['keywords']=$cms->get_keywords_from_html($file['content']);
+				if(stripos($file['keywords'],$file['name'])===false)
+					$file['keywords'] = empty($file['keywords']) ? $file['name'] : $file['name'].', '.$file['keywords'];
+
+				$file['description']=$cms->get_description_from_html($file['content']);
+
+				$response['title']=$file['title'];
+				$response['keywords']=$file['keywords'];
+				$response['description']=$file['description'];
 			}else
 			{
 				$file['title']=$_POST['title'];

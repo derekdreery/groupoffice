@@ -66,30 +66,32 @@ try{
 
 			$up_file['id']=$file['id'];
 			$up_file['comments']=$_POST['comments'];
+
+			$name = trim($_POST['name']);
 			
 
 
-			if(empty($_POST['name']))
+			if(empty($name))
 			{
 				throw new MissingFieldException();
 			}
 			$extension = File::get_extension($file['name']);
 			if(!empty($extension))
 			{
-				$_POST['name'] .= '.'.$extension;
+				$name .= '.'.$extension;
 			}
 
-			if($_POST['name'] != $file['name'])
+			if($name != $file['name'])
 			{
 				$path=$files->build_path($folder);
 				$oldpath = $path.'/'.$file['name'];
-				$newpath = $path.'/'.$_POST['name'];
+				$newpath = $path.'/'.$name;
 						
 				$fs = new filesystem();
 				$fs->move($GO_CONFIG->file_storage_path.$oldpath, $GO_CONFIG->file_storage_path.$newpath);		
 				$response['path']=$newpath;
 				
-				$up_file['name']=$_POST['name'];
+				$up_file['name']=$name;
 			}			
 			$files->update_file($up_file);
 
@@ -113,14 +115,11 @@ try{
 			if(!$folder)
 			{
 				throw new FileNotFoundException();
-			}elseif(!$files->has_write_permission($GO_SECURITY->user_id, $folder))
+			}
+
+			if(!$files->has_read_permission($GO_SECURITY->user_id, $folder))
 			{
 				throw new AccessDeniedException();
-			}
-				
-			if(isset($_POST['name']) && empty($_POST['name']))
-			{
-				throw new MissingFieldException();
 			}
 
 			$new_notify = isset($_POST['notify']);
@@ -135,49 +134,58 @@ try{
 				$files->remove_notification($_POST['folder_id'], $GO_SECURITY->user_id);
 			}
 
-			$up_folder['id']=$_POST['folder_id'];
-			$up_folder['comments']=$_POST['comments'];
-				
-			$usersfolder = $files->resolve_path('users');
-
-			if(empty($folder['readonly']) && $folder['parent_id']!=$usersfolder['id'] && ($files->is_owner($folder) || $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id)))
+			if($files->has_write_permission($GO_SECURITY->user_id, $folder))
 			{
-				if (isset($_POST['share']) && $folder['acl_id']==0) {
-
-					$up_folder['acl_id']=$GO_SECURITY->get_new_acl();
-					$up_folder['visible']='1';
-
-					$response['acl_id']=$up_folder['acl_id'];
-				}
-				if (!isset ($_POST['share']) && $folder['acl_id']) {
-					$up_folder['acl_id']=0;
-
-					$GO_SECURITY->delete_acl($folder['acl_id']);
-				}
-			}
-				
-			//$files->update_folder($up_folder);
-
-			if(isset($_POST['name']))
-			{
-				if($_POST['name'] != $folder['name'])
+				if(isset($_POST['name']) && empty($_POST['name']))
 				{
-					$path=$files->build_path($folder);
-					$newpath = dirname($path).'/'.$_POST['name'];
-						
-					$fs = new filesystem();
-					$fs->move($GO_CONFIG->file_storage_path.$path, $GO_CONFIG->file_storage_path.$newpath);
-
-					$up_folder['name']=$_POST['name'];
-					$up_folder['mtime']=filemtime($GO_CONFIG->file_storage_path.$newpath);
-						
-					$response['path']=$newpath;
+					throw new MissingFieldException();
 				}
-			}
 				
-			$files->update_folder($up_folder);
+				$up_folder['id']=$_POST['folder_id'];
+				$up_folder['comments']=$_POST['comments'];
 
-			$GO_EVENTS->fire_event('save_folder_properties', array(&$response,$up_folder));
+				$usersfolder = $files->resolve_path('users');
+
+				if(empty($folder['readonly']) && $folder['parent_id']!=$usersfolder['id'] && ($files->is_owner($folder) || $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id)))
+				{
+					if (isset($_POST['share']) && $folder['acl_id']==0) {
+
+						$up_folder['acl_id']=$GO_SECURITY->get_new_acl();
+						$up_folder['visible']='1';
+
+						$response['acl_id']=$up_folder['acl_id'];
+					}
+					if (!isset ($_POST['share']) && $folder['acl_id']) {
+						$up_folder['acl_id']=0;
+
+						$GO_SECURITY->delete_acl($folder['acl_id']);
+					}
+				}
+
+				//$files->update_folder($up_folder);
+
+				if(isset($_POST['name']))
+				{
+					$name = trim($_POST['name']);
+					if($name != $folder['name'])
+					{
+						$path=$files->build_path($folder);
+						$newpath = dirname($path).'/'.$name;
+
+						$fs = new filesystem();
+						$fs->move($GO_CONFIG->file_storage_path.$path, $GO_CONFIG->file_storage_path.$newpath);
+
+						$up_folder['name']=$name;
+						$up_folder['mtime']=filemtime($GO_CONFIG->file_storage_path.$newpath);
+
+						$response['path']=$newpath;
+					}
+				}
+
+				$files->update_folder($up_folder);
+
+				$GO_EVENTS->fire_event('save_folder_properties', array(&$response,$up_folder));
+			}
 
 			$response['success']=true;
 

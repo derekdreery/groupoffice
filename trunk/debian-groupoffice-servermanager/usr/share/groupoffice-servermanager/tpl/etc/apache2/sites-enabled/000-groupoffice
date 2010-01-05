@@ -1,3 +1,7 @@
+#Default DocumentRoot. Otherwise we'll get a lot of
+#[client ::1] File does not exist: /htdocs errors
+DocumentRoot /var/www
+
 <VirtualHost *:80>
 <Directory />
 Options -Indexes FollowSymLinks

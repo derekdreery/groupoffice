@@ -69,7 +69,7 @@ Ext.extend(GO.calendar.GroupDialog, Ext.Window, {
 				waitMsg : GO.lang['waitMsgLoad'],
 				success : function(form, action)
 				{
-					this.adminPermissionsTab.setAcl(action.result.data.acl_admin);
+					this.groupAdminsPanel.setGroupId(action.result.data.id);
 					this.selectUser.setRemoteText(action.result.data.user_name);
 
 					if(this.group_id == 1)
@@ -93,9 +93,8 @@ Ext.extend(GO.calendar.GroupDialog, Ext.Window, {
 				scope : this
 			});            
 		} else
-{
-			//this.writePermissionsTab.setAcl(0);
-			this.adminPermissionsTab.setAcl(0);
+{			
+			this.groupAdminsPanel.setGroupId(0);
 			GO.calendar.GroupDialog.superclass.show.call(this);
 		}
 	},
@@ -116,11 +115,14 @@ Ext.extend(GO.calendar.GroupDialog, Ext.Window, {
 			{
 				if (action.result.group_id)
 				{
+					this.groupAdminsPanel.setGroupId(action.result.group_id);
 					this.setGroupId(action.result.group_id);
-
-					this.adminPermissionsTab.setAcl(action.result.acl_admin);
 				}
-				this.fireEvent('save', this, this.group_id);
+		
+				var fields = (this.group_id == 1) ? action.result.fields : false;
+				
+				this.fireEvent('save', this, this.group_id, fields);
+				
 				if (hide)
 				{
 					this.hide();
@@ -184,17 +186,11 @@ Ext.extend(GO.calendar.GroupDialog, Ext.Window, {
 	
 		var items = [this.propertiesPanel];
 
-		/*
-		this.writePermissionsTab = new GO.grid.PermissionsPanel({
-			title : GO.lang['strWritePermissions']
-		});
-        */
-		this.adminPermissionsTab = new GO.calendar.ManagePermissionsPanel({
+		this.groupAdminsPanel = new GO.calendar.GroupAdminsPanel({
 			id:'permissions-panel'
 		});
 
-		//items.push(this.writePermissionsTab);
-		items.push(this.adminPermissionsTab);
+		items.push(this.groupAdminsPanel);
         
 		this.tabPanel = new Ext.TabPanel({
 			activeTab : 0,

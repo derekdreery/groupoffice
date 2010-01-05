@@ -73,6 +73,10 @@ GO.notes.MainPanel = function(config){
 		this.eastPanel.load(r.data.id);		
 	}, this);
 
+	this.centerPanel.on('rowdblclick', function(grid, rowIndex){
+		this.eastPanel.editHandler();
+		}, this);
+
 	this.centerPanel.store.on('load', function(){
 		if(this.eastPanel.data.category_id!=this.category_id)
 		{

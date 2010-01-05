@@ -10,7 +10,7 @@ require($GO_LANGUAGE->get_fallback_base_language_file('common'));
 
 $lang['common']['about']='Версия: %s
 
-Copyright (c) 2003-2009, Intermesh
+Copyright (c) 2003-%s, Intermesh
 All rights reserved.
 This program is protected by copyright law and the Group-Office license.
 

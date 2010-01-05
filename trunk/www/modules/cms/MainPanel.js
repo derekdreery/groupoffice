@@ -74,6 +74,7 @@ GO.cms.MainPanel = function(config){
 			if(node.attributes.file_id>0)
 			{
 				this.checkChanges.defer(100, this, [function(){
+					this.getEl().mask(GO.lang.waitMsgLoad);
 					this.editorPanel.loadFile(node.attributes.file_id, node.attributes.template);	
 				}, this]);				
 				
@@ -341,6 +342,8 @@ GO.cms.MainPanel = function(config){
 
         this.editorPanel.on('load', function(){
           this.filesButton.setDisabled(this.editorPanel.files_folder_id==0);
+
+					this.getEl().unmask();
         },this);
 
         this.editorPanel.on('save', function(){

@@ -77,13 +77,6 @@
   config.tbar = [GO.lang['strSearch'] + ':', this.searchField];
 	
 	GO.notes.NotesGrid.superclass.constructor.call(this, config);
-	
-	this.on('rowdblclick', function(grid, rowIndex){
-		var record = grid.getStore().getAt(rowIndex);	
-		
-		GO.notes.noteDialog.show(record.data.id);
-		}, this);
-	
 };
 
 

@@ -62,7 +62,7 @@ GO.tasks.TasklistDialog = function(config)
 		title:GO.lang.cmdImport,
 		items: [{
 			xtype: 'panel',
-			html: GO.calendar.lang.selectIcalendarFile,
+			html: GO.tasks.lang.selectIcalendarFile,
 			border:false	
 		},uploadFile,this.importButton = new Ext.Button({
 				xtype:'button',

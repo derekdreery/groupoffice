@@ -26,13 +26,12 @@ GO.calendar.EventDialog = function(calendar) {
 		root: 'results',
 		id: 'id',
 		totalProperty:'total',
-		fields: ['id','resources','name','acl_admin','fields'],
+		fields: ['id','resources','name','fields'],
 		remoteSort: true
 	});
 
 	this.resourceGroupsStore.on('load', function()
-	{
-		this.resourcesPanel.removeAll(true);
+	{		
 		this.buildAccordion();
 	}, this);
 
@@ -171,7 +170,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			record = true;
 			fields = GO.calendar.defaultGroupFields;
 		}
-
+		
 		if(record)
 		{
 			if(fields == null)
@@ -412,8 +411,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 	updateResourcePanel : function()
 	{
 		var values = {};
-		var checked = [];
-
+		var checked = [];		
+		
 		// save values before all items are removed (checkboxes + statuses)
 		if(this.win.isVisible())
 		{
@@ -983,6 +982,9 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				selectOnFocus : true,
 				forceSelection : true,
 				allowBlank : false
+			}),new GO.form.PlainField({
+				fieldLabel: GO.lang.strOwner,
+				name:'user_name'
 			})]
 
 		});
@@ -1445,8 +1447,10 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 	buildAccordion : function()
 	{
+		this.resourcesPanel.removeAll(true);
+
 		var newFormField;
-		for(var i=0; i<this.resourceGroupsStore.data.items.length; i++)
+		for(var i=0; i<this.resourceGroupsStore.getCount(); i++)
 		{
 			var record = this.resourceGroupsStore.data.items[i].data;
 			var resourceFieldSets = [];
@@ -1482,6 +1486,15 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 										name:'resource_options['+resources[j].id+']['+cf[m].dataname+']',
 										id:'resource_options['+resources[j].id+']['+cf[m].dataname+']'
 									});
+
+
+									/*
+									 * Customfields might return a simple object instead of an Ext.component.
+									 * So check if it has events otherwise create the Ext component.
+									 */
+									if(!newFormField.events){
+										newFormField=Ext.ComponentMgr.create(newFormField, 'textfield');
+									}
 
 									resourceOptions.push(newFormField);
 									this.formPanel.form.add(newFormField);

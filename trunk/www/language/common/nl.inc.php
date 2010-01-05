@@ -4,7 +4,7 @@ require($GO_LANGUAGE->get_fallback_base_language_file('common'));
 
 $lang['common']['about']='Versie: %s
 
-Copyright (c) 2003-2009, Intermesh
+Copyright (c) 2003-%s, Intermesh
 Alle rechten voorbehouden
 Dit programma is beschermd door de auteurswet en de Group-Office licentie.
 

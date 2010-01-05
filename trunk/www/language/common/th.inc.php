@@ -6,7 +6,7 @@ $lang['common']['extjs_lang']='th-utf8';
 
 $lang['common']['about']='เวอร์ชั่น: %s
 
-Copyright (c) 2003-2009, Intermesh
+Copyright (c) 2003-%s, Intermesh
 All rights reserved.
 This program is protected by copyright law and the Group-Office license.
 

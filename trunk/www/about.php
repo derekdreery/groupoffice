@@ -16,7 +16,7 @@ require('Group-Office.php');
 <div style="padding:10px;line-height:16px">
 	<div class="go-about-logo"></div>
 	<?php	
-	echo String::text_to_html(sprintf($lang['common']['about'], $GO_CONFIG->version, $GO_CONFIG->webmaster_email));
+	echo String::text_to_html(sprintf($lang['common']['about'], $GO_CONFIG->version, date('Y'), $GO_CONFIG->webmaster_email));
 	
 	$usage_date = $GO_CONFIG->get_setting('usage_date');
 	if($usage_date){
