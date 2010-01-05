@@ -147,7 +147,7 @@ try{
 				
 				$domain_info = $pa2->get_domain_info($postfixadmin->f('id'));
 				
-				$domain['quota']=Number::format_size($domain_info['usage']*1024).' / '.Number::format_size($domain['quota']*1024);
+				$domain['quota']=Number::format_size($domain_info['usage']*1024).' / '.Number::format_size($domain['maxquota']*1024);
 				$domain['aliases']=$domain_info['alias_count'].' / '.$domain['aliases'];
 				$domain['mailboxes']=$domain_info['mailbox_count'].' / '.$domain['mailboxes'];
 				
@@ -257,7 +257,7 @@ try{
 				$mailbox['mtime']=Date::get_timestamp($mailbox['mtime']);
 				$mailbox['ctime']=Date::get_timestamp($mailbox['ctime']);							
 				//$mailbox['quota']=Number::format($mailbox['quota']/1024);
-				$mailbox['quota']=Number::format_size($mailbox['usage']*1024).' / '.Number::format_size($mailbox['quota']/1024);
+				$mailbox['quota']=Number::format_size($mailbox['usage']*1024).' / '.Number::format_size($mailbox['quota']*1024);
 				$response['results'][] = $mailbox;
 			}
 			break;
