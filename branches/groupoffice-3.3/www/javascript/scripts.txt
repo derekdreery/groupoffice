@@ -25,6 +25,7 @@ javascript/data/Connection.js
 javascript/data/JsonStore.js
 javascript/grids/GridPanel.js
 javascript/grids/GroupSummary.js
+javascript/grids/RemoteGridTotals.js
 javascript/RecordsContextMenu.js
 
 javascript/grids/SimpleSelectList.js
