@@ -54,18 +54,13 @@ GO.calendar.CalendarDialog = function(config)
 			editable:false,
 			selectOnFocus:true,
 			allowBlank:true,
-			forceSelection:true
+			forceSelection:true,
+			anchor:'100%'
 		}),{
 			xtype:'checkbox',
 			name:'show_bdays',
 			id:'show_bdays',
 			boxLabel:GO.calendar.lang.show_bdays,
-			hideLabel:true
-		},{
-			xtype:'checkbox',
-			name:'show_tasks',
-			id:'show_tasks',
-			boxLabel:GO.calendar.lang.show_tasks,
 			hideLabel:true
 		},
 		this.exportButton = new Ext.Button({
@@ -79,11 +74,16 @@ GO.calendar.CalendarDialog = function(config)
 		]
 	});
 
+	if(GO.tasks)
+	{
+		this.tasklistsTab = new GO.calendar.TasklistsGrid({
+			title:GO.tasks.lang.visibleTasklists,
+			id:'calendar_visible_tasklists'
+		});
+	}
 
-	this.readPermissionsTab = new GO.grid.PermissionsPanel({
-		
+	this.readPermissionsTab = new GO.grid.PermissionsPanel({	
 	});
-
 	
 	var uploadFile = new GO.form.UploadFile({
 		inputName : 'ical_file',	   
@@ -115,7 +115,7 @@ GO.calendar.CalendarDialog = function(config)
 					params: {
 						task: 'import',
 						calendar_id:this.calendar_id
-						},
+					},
 					success: function(form,action)
 					{
 						uploadFile.clearQueue();
@@ -139,19 +139,25 @@ GO.calendar.CalendarDialog = function(config)
 		cls: 'go-form-panel'
 	});
 
+
+	var items = [this.propertiesTab];
 	
+	if(GO.tasks)
+	{
+		items.push(this.tasklistsTab);
+	}
+
+	items.push(this.readPermissionsTab);
+	items.push(this.importTab);
+
 	this.tabPanel = new Ext.TabPanel({
-		hideLabel:true,
+		hideLabel:true,	
 		deferredRender:false,
 		xtype:'tabpanel',
 		activeTab: 0,
 		border:false,
 		anchor: '100% 100%',
-		items:[
-		this.propertiesTab,
-		this.readPermissionsTab,
-		this.importTab
-		]
+		items:items
 	});
 
 	
@@ -160,7 +166,7 @@ GO.calendar.CalendarDialog = function(config)
 		layout:'fit',
 		modal:false,
 		height:500,
-		width:450,
+		width:500,
 		closeAction:'hide',
 		items: this.tabPanel,
 		buttons:[
@@ -168,14 +174,14 @@ GO.calendar.CalendarDialog = function(config)
 			text:GO.lang.cmdOk,
 			handler: function(){
 				this.save(true)
-				},
+			},
 			scope: this
 		},
 		{
 			text:GO.lang.cmdApply,
 			handler: function(){
 				this.save(false)
-				},
+			},
 			scope: this
 		},
 
@@ -183,7 +189,7 @@ GO.calendar.CalendarDialog = function(config)
 			text:GO.lang.cmdClose,
 			handler: function(){
 				this.hide()
-				},
+			},
 			scope: this
 		}
 		]
@@ -232,7 +238,14 @@ Ext.extend(GO.calendar.CalendarDialog, Ext.Window, {
 		}else
 		{
 			this.calendar_id=0;
-			this.propertiesTab.form.reset();          
+			this.propertiesTab.form.reset();
+
+			if(resource){
+				this.selectGroup.selectFirst();
+			}else
+			{
+				this.selectGroup.setValue(0);
+			}
             
 			this.exportButton.setDisabled(true);
 			this.importTab.setDisabled(true);	
@@ -246,6 +259,12 @@ Ext.extend(GO.calendar.CalendarDialog, Ext.Window, {
 	},
 	loadCalendar : function(calendar_id)
 	{
+		if(GO.tasks)
+		{
+			this.tasklistsTab.store.loaded = false;
+			this.tasklistsTab.store.baseParams.calendar_id = calendar_id;
+		}
+
 		this.propertiesTab.form.load({
 			url: GO.settings.modules.calendar.url+'json.php',
 			params: {
@@ -278,12 +297,14 @@ Ext.extend(GO.calendar.CalendarDialog, Ext.Window, {
 			Ext.MessageBox.alert(GO.lang.strError, GO.calendar.lang.no_group_selected);
 		}else
 		{
+			var tasklists = (GO.tasks && !this.resource) ? Ext.encode(this.tasklistsTab.getGridData()) : '';
+		
 			this.propertiesTab.form.submit({
-
 				url:GO.settings.modules.calendar.url+'action.php',
 				params: {
 					'task' : 'save_calendar',
-					'calendar_id': this.calendar_id
+					'calendar_id': this.calendar_id,
+					'tasklists':tasklists
 				},
 				waitMsg:GO.lang.waitMsgSave,
 				success:function(form, action){
@@ -295,6 +316,11 @@ Ext.extend(GO.calendar.CalendarDialog, Ext.Window, {
 						this.exportButton.setDisabled(false);
 						this.importTab.setDisabled(false);
 					//this.loadAccount(this.calendar_id);
+					}
+
+					if(GO.tasks)
+					{
+						this.tasklistsTab.store.commitChanges();
 					}
 
 					this.fireEvent('save', this, this.selectGroup.getValue());
@@ -330,5 +356,16 @@ Ext.extend(GO.calendar.CalendarDialog, Ext.Window, {
 
 		f = this.propertiesTab.form.findField('show_bdays');
 		f.container.up('div.x-form-item').setDisplayed(!resource);
+
+		if(GO.tasks)
+		{
+			if(resource)
+			{
+				this.tabPanel.hideTabStripItem('calendar_visible_tasklists');
+			}else
+			{
+				this.tabPanel.unhideTabStripItem('calendar_visible_tasklists');
+			}
+		}
 	}
 });

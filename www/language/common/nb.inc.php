@@ -5,7 +5,7 @@ $lang['common']['extjs_lang']='no_NB';
 
 $lang['common']['about']='Versjon: %s
 
-Copyright (c) 2003-2009, Intermesh
+Copyright (c) 2003-%s, Intermesh
 Alle rettigheter forbeholdt.
 Dette programmet er beskyttet av copyrightlovgivning og en egen Group-Office lisens.
 

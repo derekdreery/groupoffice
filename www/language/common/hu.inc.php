@@ -4,7 +4,7 @@ require($GO_LANGUAGE->get_fallback_base_language_file('common'));
 
 $lang['common']['about']='Verzió: %s
 
-Copyright (c) 2003-2009, Intermesh
+Copyright (c) 2003-%s, Intermesh
 Minden jog fenntartva.
 
 Ha támogatásra van szüksége, kérdezze az Administratort:

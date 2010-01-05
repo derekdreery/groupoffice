@@ -203,7 +203,7 @@ class tasks extends db
 
 	function delete_tasklist($list_id)
 	{
-		global $GO_SECURITY;
+		global $GO_SECURITY, $GO_MODULES;
 		$delete = new tasks();
 
 		$tasklist = $this->get_tasklist($list_id);
@@ -222,8 +222,16 @@ class tasks extends db
 		if(empty($tasklist['shared_acl'])){
 			$GO_SECURITY->delete_acl($tasklist['acl_id']);
 		}
-		
-		global $GO_MODULES;
+
+		if(isset($GO_MODULES->modules['calendar']))
+		{
+			$this->query("DELETE FROM cal_visible_tasklists WHERE tasklist_id=?", 'i', $list_id);
+		}
+		if(isset($GO_MODULES->modules['summary']))
+		{
+			$this->query("DELETE FROM su_visible_lists WHERE tasklist_id=?", 'i', $list_id);
+		}		
+			
 		if(isset($GO_MODULES->modules['files']))
 		{
 			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');

@@ -371,3 +371,26 @@ Ext.lib.Event.resolveTextNode = Ext.isGecko ? function(node){
 
 * end fix
  */
+
+/*
+ * accordion layout fix
+ * http://www.extjs.com/forum/showthread.php?t=76911
+ */
+if(Ext.isIE7 || Ext.isIE6) {
+    Ext.override(Ext.Element, {
+      getHeight : function(contentHeight){
+            var h = Math.max(this.dom.offsetHeight, this.dom.clientHeight) || 0;
+            h = this.dom.offsetHeight || 0;
+            h = contentHeight !== true ? h : h-this.getBorderWidth("tb")-this.getPadding("tb");
+            return h < 0 ? 0 : h;
+        },
+
+
+        getWidth : function(contentWidth){
+            var w = Math.max(this.dom.offsetWidth, this.dom.clientWidth) || 0;
+            w = this.dom.offsetWidth || 0;
+            w = contentWidth !== true ? w : w-this.getBorderWidth("lr")-this.getPadding("lr");
+            return w < 0 ? 0 : w;
+        }
+    });
+}

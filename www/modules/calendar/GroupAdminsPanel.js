@@ -1,4 +1,4 @@
-GO.calendar.ManagePermissionsPanel = function(config) {
+GO.calendar.GroupAdminsPanel = function(config) {
 
 	if(!config)
 	{
@@ -10,15 +10,15 @@ GO.calendar.ManagePermissionsPanel = function(config) {
 	config.autoScroll=true;
 	config.split=true;
 	config.store = new GO.data.JsonStore({
-		url : BaseHref + 'json.php',
+		url : GO.settings.modules.calendar.url + 'json.php',
 		baseParams : {
-			task : "users_in_acl",
-			acl_id : 0
+			task : "group_admins",
+			group_id : 0
 		},
 		root : 'results',
 		totalProperty : 'total',
 		id : 'id',
-		fields : ['id', 'name'],
+		fields : ['id', 'name', 'email'],
 		remoteSort : true
 	});
 
@@ -26,6 +26,9 @@ GO.calendar.ManagePermissionsPanel = function(config) {
 	{
 		header : GO.lang['strName'],
 		dataIndex : 'name'
+	},{
+		header : GO.lang['strEmail'],
+		dataIndex : 'email'
 	}]);
 
 	columnModel.defaultSortable = true;
@@ -43,7 +46,7 @@ GO.calendar.ManagePermissionsPanel = function(config) {
 		text : GO.lang['cmdAdd'],
 		cls : 'x-btn-text-icon',
 		handler : function() {
-			this.showAddUsersDialog();
+			this.showAddAdminsDialog();
 		},
 		scope : this
 	},{
@@ -56,35 +59,35 @@ GO.calendar.ManagePermissionsPanel = function(config) {
 		scope : this
 	}];
 
-	GO.calendar.ManagePermissionsPanel.superclass.constructor.call(this, config);
+	GO.calendar.GroupAdminsPanel.superclass.constructor.call(this, config);
 
 }
 
-Ext.extend(GO.calendar.ManagePermissionsPanel, GO.grid.GridPanel, {
+Ext.extend(GO.calendar.GroupAdminsPanel, GO.grid.GridPanel, {
 
 	changed : false,
 	loaded : false,
 
 	initComponent : function() {
 
-		GO.calendar.ManagePermissionsPanel.superclass.initComponent.call(this);
+		GO.calendar.GroupAdminsPanel.superclass.initComponent.call(this);
 	},
-	setAcl : function(acl_id)
+	setGroupId : function(group_id)
 	{
-		this.acl_id = acl_id ? acl_id : 0;
+		this.group_id = group_id ? group_id : 0;
 		this.loaded = false;
-		this.store.baseParams['acl_id'] = acl_id;
-		this.setDisabled(acl_id == 0);
+		this.store.baseParams['group_id'] = group_id;
+		this.setDisabled(group_id == 0);
 
 		if (this.isVisible())
 		{
 			this.store.load();
 			this.loaded = true;
-		}
-	},
+		}		
+	},	
 	onShow : function()
 	{
-		GO.calendar.ManagePermissionsPanel.superclass.onShow.call(this);
+		GO.calendar.GroupAdminsPanel.superclass.onShow.call(this);
 
 		if (!this.loaded)
 		{
@@ -94,7 +97,7 @@ Ext.extend(GO.calendar.ManagePermissionsPanel, GO.grid.GridPanel, {
 	},
 	afterRender : function()
 	{
-		GO.calendar.ManagePermissionsPanel.superclass.afterRender.call(this);
+		GO.calendar.GroupAdminsPanel.superclass.afterRender.call(this);
 
 		if (this.isVisible() && !this.loaded)
 		{
@@ -102,11 +105,11 @@ Ext.extend(GO.calendar.ManagePermissionsPanel, GO.grid.GridPanel, {
 			this.loaded = true;
 		}
 	},
-	showAddUsersDialog : function()
+	showAddAdminsDialog : function()
 	{
-		if (!this.addUsersDialog)
+		if (!this.AddAdminsDialog)
 		{
-			this.addUsersDialog = new GO.dialog.SelectUsers({
+			this.AddAdminsDialog = new GO.dialog.SelectUsers({
 				handler : function(usersGrid)
 				{
 					if (usersGrid.selModel.selections.keys.length > 0)
@@ -127,6 +130,6 @@ Ext.extend(GO.calendar.ManagePermissionsPanel, GO.grid.GridPanel, {
 				scope : this
 			});
 		}
-		this.addUsersDialog.show();
+		this.AddAdminsDialog.show();
 	}
 });

@@ -64,3 +64,4 @@ $lang['filetypes']['fla']='Macromedia Flash Dokument';
 $lang['filetypes']['xlt']='Microsoft Excel Tabellenvorlage';
 $lang['filetypes']['ai']='Adobe Illustrator Datei';
 $lang['filetypes']['eml']='E-Mail Nachricht';
+$lang['filetypes']['csv'] ='CSV (Trennzeichen-getrennt)';

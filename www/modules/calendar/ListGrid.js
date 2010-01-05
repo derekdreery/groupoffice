@@ -36,7 +36,8 @@ GO.calendar.ListGrid = function(config)
 						'repeats',
 						'background',
 						'day',
-						'read_only'
+						'task_id',
+						'contact_id'
 					]
 	    	}),
 			baseParams: {task:'events'},
@@ -149,9 +150,23 @@ Ext.extend(GO.calendar.ListGrid, Ext.grid.GridPanel, {
     
 		this.on("rowdblclick", function(grid, rowIndex, e){
 			var record = grid.getStore().getAt(rowIndex);
-			
-			if(!record.data.read_only)
+
+			if(record.data.event_id)
+			{
 				GO.calendar.eventDialog.show({event_id: record.data.event_id});
+				
+			}else			
+			if(record.data.task_id)
+			{
+				GO.tasks.taskDialog.show({
+					task_id : record.data.task_id
+				})
+			}else
+			if(record.data.contact_id)
+			{
+				GO.linkHandlers[2].call(this, record.data.contact_id);
+			}
+			
 		}, this);		  
 	},
 	

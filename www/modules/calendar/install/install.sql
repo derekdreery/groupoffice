@@ -1,18 +1,18 @@
 -- phpMyAdmin SQL Dump
 -- version 2.6.0-pl2
 -- http://www.phpmyadmin.net
--- 
+--
 -- Host: localhost
 -- Generatie Tijd: 26 Jun 2008 om 14:46
 -- Server versie: 5.0.32
 -- PHP Versie: 5.2.0-8+etch11
--- 
+--
 -- Database: `fossit`
--- 
+--
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Tabel structuur voor tabel `cal_calendars`
 --
 
@@ -47,7 +47,6 @@ CREATE TABLE IF NOT EXISTS `cal_calendars` (
   `public` enum('0','1') NOT NULL,
   `shared_acl` BOOL NOT NULL ,
   `show_bdays` tinyint(1) NOT NULL,
-  `show_tasks` tinyint(1) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `group_id` (`group_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -158,9 +157,9 @@ CREATE TABLE IF NOT EXISTS `cal_views_calendars` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
--- 
+--
 -- Tabel structuur voor tabel `go_links_1`
--- 
+--
 
 DROP TABLE IF EXISTS `go_links_1`;
 CREATE TABLE IF NOT EXISTS `go_links_1` (
@@ -184,7 +183,24 @@ CREATE TABLE IF NOT EXISTS `cal_groups` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   `name` varchar(50) default NULL,
-  `acl_admin` int(11) NOT NULL,
   `fields` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `cal_group_admins`;
+CREATE TABLE IF NOT EXISTS `cal_group_admins` (
+  `group_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`group_id`,`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Tabelstructuur voor tabel `cal_visible_tasklists`
+--
+
+DROP TABLE IF EXISTS `cal_visible_tasklists`;
+CREATE TABLE IF NOT EXISTS `cal_visible_tasklists` (
+  `calendar_id` int(11) NOT NULL,
+  `tasklist_id` int(11) NOT NULL,
+  PRIMARY KEY (`calendar_id`,`tasklist_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

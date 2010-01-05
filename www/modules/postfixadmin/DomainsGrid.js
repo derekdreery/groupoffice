@@ -51,10 +51,7 @@ GO.postfixadmin.DomainsGrid = function(config){
 		},		{
 			header: GO.postfixadmin.lang.mailboxes, 
 			dataIndex: 'mailboxes'
-		},		{
-			header: GO.postfixadmin.lang.maxquota, 
-			dataIndex: 'maxquota'
-		},		{
+		},			{
 			header: GO.postfixadmin.lang.quota, 
 			dataIndex: 'quota'
 		},	{

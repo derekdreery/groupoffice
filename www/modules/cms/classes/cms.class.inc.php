@@ -349,12 +349,14 @@ class cms extends db {
 		 }*/
 
 		$html = strip_tags($html);
-
+		$html = $this->strip_unwanted_chars($html);
 		return String::cut_string($html, 240);
 	}
 
 	function get_keywords_from_html($html, $keywords='')
 	{
+		$html = $this->strip_unwanted_chars($html);
+		
 		$keywordsArr = $this->get_keywords_from_html_in_array($html);
 		foreach($keywordsArr as $keyword)
 		{
@@ -376,11 +378,13 @@ class cms extends db {
 		//global $charset;
 		$word = html_entity_decode($word, ENT_QUOTES, 'UTF-8');
 
+		
+
 		//Workaround:
 		$word = str_replace('&nbsp;',' ', $word);
 		$word = str_replace('&amp;','&', $word);
 
-		$word = trim($word);
+		
 		$word = str_replace('(','', $word);
 		$word = str_replace(')','', $word);
 		$word = str_replace('.','', $word);
@@ -388,6 +392,10 @@ class cms extends db {
 		$word = str_replace('?','', $word);
 		$word = str_replace(':','', $word);
 		$word = str_replace(',','', $word);
+
+		$word = str_replace(chr(194), '', $word);
+	
+		$word = trim($word);
 
 		return $word;
 	}

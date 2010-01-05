@@ -304,7 +304,7 @@ try{
 
 				case 'sendmail':
 
-					if(empty($_POST['to']) && empty($_POST['cc']) && empty($_POST['draft']))
+					if(empty($_POST['to']) && empty($_POST['cc']) && empty($_POST['bcc']) && empty($_POST['draft']))
 					{
 						$response['feedback'] = $lang['email']['feedbackNoReciepent'];
 					}else
@@ -362,12 +362,11 @@ try{
 
 							if(!empty($_POST['bcc']))
 							{
-								$all_recipients[]=$address['email'];
-
 								$bcc_addresses = $RFC822->parse_address_list($_POST['bcc']);
 								$swift_addresses=array();
 								foreach($bcc_addresses as $address)
 								{
+									$all_recipients[]=$address['email'];
 									add_unknown_recipient($address['email'], $address['personal']);
 									$swift_addresses[$address['email']]=$address['personal'];
 								}
@@ -605,11 +604,13 @@ try{
 					if(empty($new_folder_name)){
 						throw new MissingFieldException();
 					}
-					if(File::has_invalid_chars($new_folder_name)){
-						throw new Exception(sprintf($lang['common']['illegalCharsError'],'\\/?*"<>|'));
-					}
 
 					$delimiter = $imap->get_mailbox_delimiter();
+					if(File::has_invalid_chars($new_folder_name) || strpos($new_folder_name, $delimiter)){
+						throw new Exception(sprintf($lang['common']['illegalCharsError'],$delimiter.'\\/?*"<>|'));
+					}				
+
+
 					$parent_id=$_REQUEST['folder_id'];
 					if($parent_id>0)
 					{
