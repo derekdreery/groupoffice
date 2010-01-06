@@ -780,6 +780,141 @@ try
 			echo json_encode($response);
 			break;
 
+		case 'addressbooks_string':
+
+			require_once($GO_CONFIG->class_path.'mail/RFC822.class.inc');
+			$RFC822 = new RFC822();
+			$abs = explode(',', $_REQUEST['addressbooks']);
+
+			$response = '';
+			foreach($abs as $ab_id)
+			{
+				$ab->get_contacts($ab_id);
+				while($contact = $ab->next_record())
+				{
+					if(!empty($contact['email'])) {
+						$name = !empty($contact['middle_name']) ?
+							$contact['first_name'].' '.$contact['middle_name'].' '.$contact['last_name'] :
+							$contact['first_name'].' '.$contact['last_name'];
+						$response .= $RFC822->write_address(String::format_name($name), $contact['email']).', ';
+					}
+				}
+			}
+			echo $response;
+			break;
+
+		case 'ab_fields':
+
+			require($GO_LANGUAGE->get_language_file('addressbook'));
+
+			$ab->query("SHOW COLUMNS FROM ab_contacts");
+			$contact_types = array();
+			while ($ab->next_record()) {
+				$contact_types[$ab->record['Field']] = getSimpleType($ab->record['Type']);
+			}
+
+			$ab->query("SHOW COLUMNS FROM ab_companies");
+			$company_types = array();
+			while ($ab->next_record()) {
+				$company_types[$ab->record['Field']] = getSimpleType($ab->record['Type']);
+			}
+
+
+			if($_POST['type']=='contacts')
+			{
+
+				$response['results']=array(
+					//array('field'=>'ab_contacts.name', 'label'=>$lang['common']['name'], 'type'=>$contact_types['name']),
+					array('field'=>'ab_contacts.title', 'label'=>$lang['common']['title'], 'type'=>$contact_types['title']),
+					array('field'=>'ab_contacts.first_name', 'label'=>$lang['common']['firstName'], 'type'=>$contact_types['first_name']),
+					array('field'=>'ab_contacts.middle_name', 'label'=>$lang['common']['middleName'], 'type'=>$contact_types['middle_name']),
+					array('field'=>'ab_contacts.last_name', 'label'=>$lang['common']['lastName'], 'type'=>$contact_types['last_name']),
+					array('field'=>'ab_contacts.initials', 'label'=>$lang['common']['initials'], 'type'=>$contact_types['initials']),
+					array('field'=>'ab_contacts.sex', 'label'=>$lang['common']['sex'], 'type'=>$contact_types['sex']),
+					array('field'=>'ab_contacts.birthday', 'label'=>$lang['common']['birthday'], 'type'=>$contact_types['birthday']),
+					array('field'=>'ab_contacts.email', 'label'=>$lang['common']['email'], 'type'=>$contact_types['email']),
+					array('field'=>'ab_contacts.country', 'label'=>$lang['common']['country'], 'type'=>$contact_types['country']),
+					array('field'=>'ab_contacts.iso_address_format', 'label'=>$lang['common']['address_format'], 'type'=>$contact_types['iso_address_format']),
+					array('field'=>'ab_contacts.state', 'label'=>$lang['common']['state'], 'type'=>$contact_types['state']),
+					array('field'=>'ab_contacts.city', 'label'=>$lang['common']['city'], 'type'=>$contact_types['city']),
+					array('field'=>'ab_contacts.zip', 'label'=>$lang['common']['zip'], 'type'=>$contact_types['zip']),
+					array('field'=>'ab_contacts.address', 'label'=>$lang['common']['address'], 'type'=>$contact_types['address']),
+					array('field'=>'ab_contacts.address_no', 'label'=>$lang['common']['addressNo'], 'type'=>$contact_types['address_no']),
+					array('field'=>'ab_contacts.home_phone', 'label'=>$lang['common']['phone'], 'type'=>$contact_types['home_phone']),
+					array('field'=>'ab_contacts.work_phone', 'label'=>$lang['common']['workphone'], 'type'=>$contact_types['work_phone']),
+					array('field'=>'ab_contacts.fax', 'label'=>$lang['common']['name'], 'fax'=>$contact_types['fax']),
+					array('field'=>'ab_contacts.work_fax', 'label'=>$lang['common']['workFax'], 'type'=>$contact_types['work_fax']),
+					array('field'=>'ab_contacts.cellular', 'label'=>$lang['common']['cellular'], 'type'=>$contact_types['cellular']),
+					array('field'=>'ab_companies.name', 'label'=>$lang['common']['company'], 'type'=>$company_types['name']),
+					array('field'=>'ab_contacts.department', 'label'=>$lang['common']['department'], 'type'=>$contact_types['department']),
+					array('field'=>'ab_contacts.function', 'label'=>$lang['common']['function'], 'type'=>$contact_types['function']),
+					array('field'=>'ab_contacts.comment', 'label'=>$lang['addressbook']['comment'], 'type'=>$contact_types['comment']),
+					array('field'=>'ab_contacts.salutation', 'label'=>$lang['common']['salutation'], 'type'=>$contact_types['salutation'])
+				);
+
+				$link_type=2;
+			}else
+			{
+				$response['results']=array(
+					array('field'=>'ab_companies.name', 'label'=>$lang['common']['name'], 'type'=>$company_types['name']),
+					array('field'=>'ab_companies.title', 'label'=>$lang['common']['title'], 'type'=>$company_types['title']),
+					array('field'=>'ab_companies.email', 'label'=>$lang['common']['email'], 'type'=>$company_types['email']),
+					array('field'=>'ab_companies.country', 'label'=>$lang['common']['country'], 'type'=>$company_types['country']),
+					array('field'=>'ab_companies.iso_address_format', 'label'=>$lang['common']['address_format'], 'type'=>$company_types['iso_address_format']),
+					array('field'=>'ab_companies.state', 'label'=>$lang['common']['state'], 'type'=>$company_types['state']),
+					array('field'=>'ab_companies.city', 'label'=>$lang['common']['city'], 'type'=>$company_types['city']),
+					array('field'=>'ab_companies.zip', 'label'=>$lang['common']['zip'], 'type'=>$company_types['zip']),
+					array('field'=>'ab_companies.address', 'label'=>$lang['common']['address'], 'type'=>$company_types['address']),
+					array('field'=>'ab_companies.address_no', 'label'=>$lang['common']['addressNo'], 'type'=>$company_types['address_no']),
+
+					array('field'=>'ab_companies.post_country', 'label'=>$lang['common']['postCountry'], 'type'=>$company_types['post_country']),
+					array('field'=>'ab_companies.post_state', 'label'=>$lang['common']['postState'], 'type'=>$company_types['post_state']),
+					array('field'=>'ab_companies.post_city', 'label'=>$lang['common']['postCity'], 'type'=>$company_types['post_city']),
+					array('field'=>'ab_companies.post_zip', 'label'=>$lang['common']['postZip'], 'type'=>$company_types['post_zip']),
+					array('field'=>'ab_companies.post_address', 'label'=>$lang['common']['postAddress'], 'type'=>$company_types['post_address']),
+					array('field'=>'ab_companies.post_address_no', 'label'=>$lang['common']['postAddressNo'], 'type'=>$company_types['post_address_no']),
+
+					array('field'=>'ab_companies.phone', 'label'=>$lang['common']['phone'], 'type'=>$company_types['phone']),
+					array('field'=>'ab_companies.fax', 'label'=>$lang['common']['name'], 'type'=>$company_types['fax']),
+
+					array('field'=>'ab_companies.comment', 'label'=>$lang['addressbook']['comment'], 'type'=>$company_types['comment'])
+
+				);
+				$link_type=3;
+			}
+
+			if($GO_MODULES->has_module('customfields'))
+			{
+
+				require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+				$cf = new customfields();
+
+				$fields = $cf->get_authorized_fields($GO_SECURITY->user_id, $link_type);
+				while($field = array_shift($fields))
+				{
+					if($field['datatype']!='heading' && $field['datatype']!='function')
+					{
+						$f = array('field'=>'cf_'.$link_type.'.'.$field['dataname'], 'label'=>$field['name'], 'type'=>$field['datatype']);
+
+						if($f['type']=='select')
+						{
+							$f['type']=$field['name'];
+							$f['options']=array();
+							$cf->get_select_options($field['id']);
+							while($cf->next_record())
+							{
+								$f['options'][]=array($cf->f('text'));
+							}
+						}
+
+						$response['results'][]=$f;
+					}
+				}
+			}
+			debug($response);
+
+			echo json_encode($response);
+			break;
 		
 	}
 }
@@ -790,4 +925,10 @@ catch(Exception $e)
 	echo json_encode($response);
 
 }
+
+function getSimpleType($type) {
+	$pos = strpos($type,"(");
+	return substr($type,0,$pos);
+}
+
 ?>
