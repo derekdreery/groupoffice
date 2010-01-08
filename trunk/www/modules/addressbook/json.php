@@ -217,22 +217,26 @@ try
 			$advancedQuery = '';
 			if(!empty($_POST['advancedQuery']))
 			{
-				$aq = json_decode($_POST['advancedQuery'], true);				
-				foreach($aq as $field=>$value)
-				{
-					if(!empty($advancedQuery))
+				if (is_string($_POST['advancedQuery'])) {
+					$advancedQuery = ' AND '.$_POST['advancedQuery'];
+				} else {
+					$aq = json_decode($_POST['advancedQuery'], true);
+					foreach($aq as $field=>$value)
 					{
-						$advancedQuery .= ' OR ';
+						if(!empty($advancedQuery))
+						{
+							$advancedQuery .= ' OR ';
+						}
+						if($field=='ab_contacts.name')
+						{
+							$field = 'CONCAT(first_name,middle_name,last_name)';
+						}else
+						{
+							$field = $ab->escape($field);
+						}
+						$advancedQuery .= $field.' LIKE \'%'.$ab->escape(str_replace(' ','%',$value)).'%\'';
 					}
-					if($field=='ab_contacts.name')
-					{
-						$field = 'CONCAT(first_name,middle_name,last_name)';
-					}else
-					{
-						$field = $ab->escape($field);
-					}
-					$advancedQuery .= $field.' LIKE \'%'.$ab->escape(str_replace(' ','%',$value)).'%\'';
-				}			
+				}
 			}
 				
 				
@@ -331,15 +335,19 @@ try
 			$advancedQuery = '';
 			if(!empty($_POST['advancedQuery']))
 			{
-				$aq = json_decode($_POST['advancedQuery'], true);				
-				foreach($aq as $field=>$value)
-				{
-					if(empty($advancedQuery))
+				if (is_string($_POST['advancedQuery'])) {
+					$advancedQuery = ' AND '.$_POST['advancedQuery'];
+				} else {
+					$aq = json_decode($_POST['advancedQuery'], true);
+					foreach($aq as $field=>$value)
 					{
-						$advancedQuery .= ' AND ';
+						if(empty($advancedQuery))
+						{
+							$advancedQuery .= ' AND ';
+						}
+						$advancedQuery .= $ab->escape($field).' LIKE \''.$ab->escape($value).'\'';
 					}
-					$advancedQuery .= $ab->escape($field).' LIKE \''.$ab->escape($value).'\'';
-				}			
+				}
 			}
 
 			$response['results'] = array();
@@ -857,7 +865,7 @@ try
 			{
 				$response['results']=array(
 					array('field'=>'ab_companies.name', 'label'=>$lang['common']['name'], 'type'=>$company_types['name']),
-					array('field'=>'ab_companies.title', 'label'=>$lang['common']['title'], 'type'=>$company_types['title']),
+					//array('field'=>'ab_companies.title', 'label'=>$lang['common']['title'], 'type'=>$company_types['title']),
 					array('field'=>'ab_companies.email', 'label'=>$lang['common']['email'], 'type'=>$company_types['email']),
 					array('field'=>'ab_companies.country', 'label'=>$lang['common']['country'], 'type'=>$company_types['country']),
 					array('field'=>'ab_companies.iso_address_format', 'label'=>$lang['common']['address_format'], 'type'=>$company_types['iso_address_format']),
@@ -915,7 +923,15 @@ try
 
 			echo json_encode($response);
 			break;
-		
+
+		case 'sqls':
+			$response['total'] = $ab->get_sqls();
+			$response['results'] = array();
+			while($ab->next_record())
+				$response['results'][] = $ab->record;
+			$response['success'] = true;
+			echo json_encode($response);
+			break;
 	}
 }
 catch(Exception $e)

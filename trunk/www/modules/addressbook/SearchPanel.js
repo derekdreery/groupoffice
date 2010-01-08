@@ -106,8 +106,9 @@ GO.addressbook.SearchPanel = function(config)
 										//See bug report:
 										//https://sourceforge.net/tracker/?func=detail&aid=2871777&group_id=76359&atid=547651
 										win.grid.stopEditing();
-										
-										this.fireEvent('queryChange', {advancedQuery:Ext.encode(win.getGridData())});										
+
+										this.fireEvent('queryChange', {advancedQuery:GO.addressbook.searchQueryPanel.queryField.getValue()});
+										//this.fireEvent('queryChange', {advancedQuery:Ext.encode(win.getGridData())});
 									}, this)
 								}
 								var type = this.ab.tabPanel.getActiveTab().id=='ab-contacts-grid' ? 'contacts' : 'companies';

@@ -571,7 +571,14 @@ try
 					}					
 					echo json_encode($result);
 					break;
-				
+
+				case 'save_sql':
+
+					$ab->save_sql(array('sql'=>$_POST['sql']));
+					$response['success']=true;
+					echo json_encode($response);
+
+					break;
 	}
 }
 catch(Exception $e)

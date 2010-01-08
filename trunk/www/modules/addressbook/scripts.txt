@@ -18,5 +18,7 @@ modules/addressbook/ContactProfilePanel.js
 modules/addressbook/CompanyProfilePanel.js
 modules/addressbook/EmployeesPanel.js
 modules/addressbook/AdvancedSearchWindow.js
+modules/addressbook/SearchQueryPanel.js
+modules/addressbook/SavedQueryGrid.js
 modules/addressbook/MainPanel.js
 modules/addressbook/SelectAddressbook.js

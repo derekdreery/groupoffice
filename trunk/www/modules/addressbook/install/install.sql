@@ -132,6 +132,13 @@ CREATE TABLE IF NOT EXISTS `ab_contacts` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
+DROP TABLE IF EXISTS `ab_sql`;
+CREATE TABLE IF NOT EXISTS `ab_sql` (
+  `id` int(11) NOT NULL default '0',
+  `sql` varchar(255) default '',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 
 -- --------------------------------------------------------
 
