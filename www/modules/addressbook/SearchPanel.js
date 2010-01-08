@@ -100,7 +100,7 @@ GO.addressbook.SearchPanel = function(config)
 							{					
 								if(!this.advancedSearchWindow)
 								{
-									this.advancedSearchWindow = new GO.addressbook.AdvancedSearchWindow();
+									this.advancedSearchWindow = GO.addressbook.advancedSearchWindow = new GO.addressbook.AdvancedSearchWindow();
 									this.advancedSearchWindow.on('ok', function(win){
 
 										//See bug report:
