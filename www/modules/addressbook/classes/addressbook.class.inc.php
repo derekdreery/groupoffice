@@ -1264,5 +1264,13 @@ class addressbook extends db {
 		return $offset>0 ? $this->found_rows() : $this->num_rows();
 	}
 
+	function save_sql($sql) {
+		$sql['id'] = $this->nextid('ab_sql');
+		return $this->insert_row('ab_sql',$sql);
+	}
 
+	function get_sqls() {
+		$this->query("SELECT * FROM ab_sql");
+		return $this->num_rows();
+	}
 }
