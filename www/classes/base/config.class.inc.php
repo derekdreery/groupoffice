@@ -610,6 +610,13 @@ class GO_CONFIG {
 	 * @var int
 	 */
 	var $default_password_length=6;
+	
+	/**
+	 *
+	 * @var Automatically log a user out after n seconds of inactivity
+	 */
+
+	var $session_inactivity_timeout = 0;
 
 	/*//////////////////////////////////////////////////////////////////////////////
 	 //////////      Variables that are not touched by the installer   /////////////

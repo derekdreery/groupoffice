@@ -57,6 +57,21 @@ session_name('groupoffice');
 session_start();
 debug('['.date('Y-m-d G:i').'] Start of new request');
 
+if($GO_CONFIG->session_inactivity_timeout>0){
+	$now = time();
+	if(isset($_SESSION['last_activity']) && $_SESSION['last_activity']+$GO_CONFIG->session_inactivity_timeout<$now){
+		session_destroy();
+		unset($_SESSION);
+
+		SetCookie("GO_UN","",time()-3600,"/","",0);
+    SetCookie("GO_PW","",time()-3600,"/","",0);
+
+	}else
+	{
+		$_SESSION['last_activity']=$now;
+	}
+}
+
 if($GO_CONFIG->debug)
 {
 	$_SESSION['connect_count']=0;
@@ -157,3 +172,5 @@ if (get_magic_quotes_gpc())
 
 
 umask(0);
+
+
