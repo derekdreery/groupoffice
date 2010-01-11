@@ -1,3 +1,7 @@
+2010/?
+- Added session_inactiviy_timeout config option to automatically logout inactive
+  users.
+
 2010/01/04 3.3.9
 - Debian package groupoffice-mailserver conflicted with vacation package
 - Updated quota query for Dovecot 1.1
