@@ -675,13 +675,15 @@ class addressbook extends db {
 			$sql .= "SQL_CALC_FOUND_ROWS ";
 		}
 
-		$sql .= "ab_contacts.*, ab_companies.name AS company_name";
+		$sql .= "ab_contacts.*, ab_addressbooks.name AS ab_name, ab_companies.name AS company_name";
 
 		if($GO_MODULES->has_module('customfields')) {
 			$sql .= ",cf_2.*";
 		}
 
 		$sql .= " FROM ab_contacts LEFT JOIN ab_companies ON ab_contacts.company_id=ab_companies.id ";
+		
+		$sql .= " LEFT JOIN ab_addressbooks ON ab_contacts.addressbook_id = ab_addressbooks.id ";
 
 		if($GO_MODULES->has_module('customfields')) {
 			$sql .= "LEFT JOIN cf_2 ON cf_2.link_id=ab_contacts.id ";
