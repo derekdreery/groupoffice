@@ -25,7 +25,7 @@ GO.addressbook.SearchQueryPanel = function(config)
 
 		var comparators = this.getComparators();
 
-		this.queryField = new Ext.form.TextArea({
+		GO.addressbook.queryField = this.queryField = new Ext.form.TextArea({
 			fieldLabel : 'Zoekopdracht',
 			width : 585,
 			height : 150
@@ -118,25 +118,28 @@ GO.addressbook.SearchQueryPanel = function(config)
 			buttons: [new Ext.Button({
 				handler: function()
 				{
-					Ext.Ajax.request({
-						url:GO.settings.modules.addressbook.url +'action.php',
-						params:{
-							task:'save_sql',
-							sql: this.queryField.getValue()
-						},
-						success: function(response, options)
-						{
-							var responseParams = Ext.decode(response.responseText);
-							if(!responseParams.success)
+					Ext.Msg.prompt(GO.addressbook.lang.searchQueryName, GO.addressbook.lang.enterSearchQueryName, function(btn, text){
+						Ext.Ajax.request({
+							url:GO.settings.modules.addressbook.url +'action.php',
+							params:{
+								task:'save_sql',
+								sql: GO.addressbook.queryField.getValue(),
+								name: text
+							},
+							success: function(response, options)
 							{
-								alert(responseParams.feedback);
-							}else
-							{
-						}
-						},
-						scope:this
+								var responseParams = Ext.decode(response.responseText);
+								if(!responseParams.success)
+								{
+									alert(responseParams.feedback);
+								}else
+								{
+							}
+							},
+							scope:this
+						})
 					})
-				},
+					},
 				text: 'opslaan',
 				scope: this
 			}),new Ext.Button({

@@ -106,3 +106,6 @@ GO.addressbook.lang.defaultAddressFormat='Default address format';
 GO.addressbook.lang.defaultSalutation='Default salutation';
 GO.addressbook.lang.explanationVariables='Explanation default salutation variables';
 GO.addressbook.lang.explanationSex='Male and female form of salutation';
+
+GO.addressbook.lang.searchQueryName='Search query name';
+GO.addressbook.lang.enterSearchQueryName='Enter the name of the search query:';

@@ -80,3 +80,10 @@ $updates[] = "script:3_convert_acl.inc.php";
 $updates[] = "ALTER TABLE `ab_contacts` CHANGE `address_no` `address_no` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL";
 $updates[] = "ALTER TABLE `ab_companies` CHANGE `address_no` `address_no` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ";
 $updates[] = "ALTER TABLE `ab_companies` CHANGE `post_address_no` `post_address_no` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ";
+
+$updates[] = "CREATE TABLE IF NOT EXISTS `ab_sql` (
+  `id` int(11) NOT NULL default '0',
+	`name` varchar(32) default NULL,
+  `sql` varchar(255) default '',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
