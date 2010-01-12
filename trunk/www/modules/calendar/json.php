@@ -1128,11 +1128,11 @@ try {
 			foreach($ids as $ug_id) {
 				$users->get_users($ug_id);
 				while ($users->next_record()) {
-					$participant['id'] = $ab->record['id'];
-					$participant['email'] = $ab->record['email'];
-					$participant['name'] = !empty($ab->record['middle_name']) ?
-						$ab->record['first_name'].' '.$ab->record['middle_name'].' '.$ab->record['last_name'] :
-						$ab->record['first_name'].' '.$ab->record['last_name'];
+					$participant['id'] = $users->record['id'];
+					$participant['email'] = $users->record['email'];
+					$participant['name'] = !empty($users->record['middle_name']) ?
+						$users->record['first_name'].' '.$users->record['middle_name'].' '.$users->record['last_name'] :
+						$users->record['first_name'].' '.$users->record['last_name'];
 					$response['results'][] = $participant;
 				}
 			}
