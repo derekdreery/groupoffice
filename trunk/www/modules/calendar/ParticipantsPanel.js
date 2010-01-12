@@ -13,8 +13,8 @@
 
 GO.calendar.Participant = Ext.data.Record.create([
 // the "name" below matches the tag name to read, except "availDate"
-		// which is mapped to the tag "availability"
-		{
+// which is mapped to the tag "availability"
+{
 	name : 'id',
 	type : 'string'
 }, {
@@ -125,13 +125,16 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 		region:'north',
 		height:40,
 		layout:'column',
-		defaults:{border:false,bodyStyle:'padding:5px'},
+		defaults:{
+			border:false,
+			bodyStyle:'padding:5px'
+		},
 		items:[{
-				columnWidth:.5,
-				items:[this.inviteCheckbox]
-			},{
-				columnWidth:.5,
-				items:[this.importCheckbox]
+			columnWidth:.5,
+			items:[this.inviteCheckbox]
+		},{
+			columnWidth:.5,
+			items:[this.importCheckbox]
 		}]
 	});
 	
@@ -267,65 +270,133 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 		if (!GO.addressbook) {
 			var tpl = new Ext.XTemplate(GO.lang.moduleRequired);
 			Ext.Msg.alert(GO.lang.strError, tpl.apply({
-								module : GO.calendar.lang.addressbook
-							}));
+				module : GO.calendar.lang.addressbook
+			}));
 			return false;
 		}
 		if (!this.addParticipantsDialog) {
 			this.addParticipantsDialog = new GO.dialog.SelectEmail({
 				handler : function(grid, type) {
 					if (grid.selModel.selections.keys.length > 0) {
+
 						var selections = grid.selModel.getSelections();							
 
-						var participants = [];
+						if (type=='addressbooks' || type=='usergroups') {
+							var ids = new Array();
+							for (var i=0; i<selections.length; i++) {
+								ids.push(selections[i].data.id);
+							}
 
-						for (var i = 0; i < selections.length; i++) {							
-								participants.push(selections[i].get('email'));							
-						}
-
-						Ext.Ajax.request({
-							url : GO.settings.modules.calendar.url + 'json.php',
-							params : {
-								task : 'check_availability',
-								emails : participants.join(','),
-								start_time : this.eventDialog.getStartDate()
-										.format('U'),
-								end_time : this.eventDialog.getEndDate()
-										.format('U')
-							},
-							callback : function(options, success, response) {
-								if (!success) {
-									Ext.MessageBox.alert(GO.lang['strError'],
+							Ext.Ajax.request({
+								url : GO.settings.modules.calendar.url + 'json.php',
+								params : {
+									task : type+'_participants',
+									ids : Ext.encode(ids)
+								},
+								callback : function(options, success, response) {
+									if (!success) {
+										Ext.MessageBox.alert(GO.lang['strError'],
 											GO.lang['strRequestError']);
-								} else {
-									var responseParams = Ext.decode(response.responseText);
+									} else {
+										var emails = [];
+										var responseParams = Ext.decode(response.responseText);
+										for (var i=0; i<responseParams.results.length; i++) {
+											emails.push(responseParams.results[i].email);
+										}
+										Ext.Ajax.request({
+											url : GO.settings.modules.calendar.url + 'json.php',
+											params : {
+												task : 'check_availability',
+												emails : emails.join(','),
+												start_time : this.eventDialog.getStartDate()
+												.format('U'),
+												end_time : this.eventDialog.getEndDate()
+												.format('U')
+											},
+											callback : function(options, success, response2) {
+												if (!success) {
+													Ext.MessageBox.alert(GO.lang['strError'],
+														GO.lang['strRequestError']);
+												} else {
+													var responseParams2 = Ext.decode(response2.responseText);
 
-									for (var i = 0; i < selections.length; i++) {
-										var record = this.store.findBy(function(record, id){
-											if(record.get('email')==selections[i].get('email'))
-											{
-												return true;
-											}else
-											{
-												return false;
-											}
+													for (var i = 0; i < responseParams.results.length; i++) {
+														var record = this.store.findBy(function(record, id){
+															if(record.get('email')==responseParams.results[i].email)
+															{
+																return true;
+															}else
+															{
+																return false;
+															}
+														});
+
+														if(record==-1){
+															this.addParticipant({
+																name : responseParams.results[i].name,
+																email : responseParams.results[i].email,
+																status : "0",
+																user_id : type=='usergroups' ? responseParams.results[i].id : 0,
+																available : responseParams2[responseParams.results[i].email]
+															});
+														}
+													}
+												}
+											},
+											scope : this
 										});
-										
-										if(record==-1){
-											this.addParticipant({
-												name : selections[i].get('name'),
-												email : selections[i].get('email'),
-												status : "0",
-												user_id : type=='users' ? selections[i].get('id') : 0,
-												available : responseParams[selections[i].get('email')]
+									}
+								},
+								scope : this
+							});
+						} else {
+							var participants = [];
+							for (var i = 0; i < selections.length; i++) {
+								participants.push(selections[i].get('email'));
+							}
+							Ext.Ajax.request({
+								url : GO.settings.modules.calendar.url + 'json.php',
+								params : {
+									task : 'check_availability',
+									emails : participants.join(','),
+									start_time : this.eventDialog.getStartDate()
+									.format('U'),
+									end_time : this.eventDialog.getEndDate()
+									.format('U')
+								},
+								callback : function(options, success, response) {
+									if (!success) {
+										Ext.MessageBox.alert(GO.lang['strError'],
+											GO.lang['strRequestError']);
+									} else {
+										var responseParams = Ext.decode(response.responseText);
+
+										for (var i = 0; i < selections.length; i++) {
+											var record = this.store.findBy(function(record, id){
+												if(record.get('email')==selections[i].get('email'))
+												{
+													return true;
+												}else
+												{
+													return false;
+												}
 											});
+
+											if(record==-1){
+												this.addParticipant({
+													name : selections[i].get('name'),
+													email : selections[i].get('email'),
+													status : "0",
+													user_id : type=='users' ? selections[i].get('id') : 0,
+													available : responseParams[selections[i].get('email')]
+												});
+											}
 										}
 									}
-								}
-							},
-							scope : this
-						});
-
+								},
+								scope : this
+							});
+						}
 					}
 				},
 				scope : this
@@ -348,7 +419,7 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 				this.body.unmask();
 				if (!success) {
 					Ext.MessageBox.alert(GO.lang['strError'],
-							GO.lang['strRequestError']);
+						GO.lang['strRequestError']);
 				} else {
 					var responseParams = Ext.decode(response.responseText);							
 					this.addParticipant({
@@ -385,28 +456,28 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 			
 			Ext.Ajax.request({
 				url : GO.settings.modules.calendar.url + 'json.php',
-					params : {
-						task : 'check_availability',
-						emails : participants.join(','),
-						start_time : this.eventDialog.getStartDate().format('U'),
-						end_time : this.eventDialog.getEndDate().format('U')
-					},
-					callback : function(options, success, response) {
-						if (!success) {
-							Ext.MessageBox.alert(GO.lang['strError'],
-									GO.lang['strRequestError']);
-						} else {
-							var responseParams = Ext.decode(response.responseText);
+				params : {
+					task : 'check_availability',
+					emails : participants.join(','),
+					start_time : this.eventDialog.getStartDate().format('U'),
+					end_time : this.eventDialog.getEndDate().format('U')
+				},
+				callback : function(options, success, response) {
+					if (!success) {
+						Ext.MessageBox.alert(GO.lang['strError'],
+							GO.lang['strRequestError']);
+					} else {
+						var responseParams = Ext.decode(response.responseText);
 	
-							for (var i = 0; i < selections.length; i++) {									
-								selections[i].set('available', responseParams[selections[i].get('email')]);				
+						for (var i = 0; i < selections.length; i++) {
+							selections[i].set('available', responseParams[selections[i].get('email')]);
 								
-							}
-							this.store.commitChanges();
 						}
-					},
-					scope : this
-				});
+						this.store.commitChanges();
+					}
+				},
+				scope : this
+			});
 		}
 	},
 	
@@ -423,9 +494,9 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 				var hours = time.substr(0, colonIndex);
 
 				var hourDiff = parseInt(d.endHour.getValue())
-						- parseInt(d.startHour.getValue());
+				- parseInt(d.startHour.getValue());
 				var minDiff = parseInt(d.endMin.getValue())
-						- parseInt(d.startMin.getValue());
+				- parseInt(d.startMin.getValue());
 
 				if (minDiff < 0) {
 					minDiff += 60;
@@ -440,8 +511,8 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 				d.startHour.setValue(hours);
 				d.startMin.setValue(minutes);
 				d.startDate.setValue(Date.parseDate(
-						dataview.store.baseParams.date,
-						GO.settings.date_format));
+					dataview.store.baseParams.date,
+					GO.settings.date_format));
 
 				var endHour = parseInt(hours) + hourDiff;
 				var endMin = parseInt(minutes) + minDiff;
@@ -459,8 +530,8 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 				d.endHour.setValue(endHour);
 				d.endMin.setValue(endMin);
 				d.endDate.setValue(Date.parseDate(
-						dataview.store.baseParams.date,
-						GO.settings.date_format));
+					dataview.store.baseParams.date,
+					GO.settings.date_format));
 
 				d.tabPanel.setActiveTab(0);
 				this.reloadAvailability();
@@ -475,11 +546,11 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 			names.push(records[i].get('name'));
 		}
 		this.availabilityWindow.show({
-					date : this.eventDialog.startDate.getRawValue(),
-					event_id : this.event_id,
-					emails : Ext.encode(emails),
-					names : Ext.encode(names)
-				});
+			date : this.eventDialog.startDate.getRawValue(),
+			event_id : this.event_id,
+			emails : Ext.encode(emails),
+			names : Ext.encode(names)
+		});
 	}
 
 });

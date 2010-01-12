@@ -1076,6 +1076,71 @@ try {
 			$response['success'] = true;
 			break;
 
+		case 'my_calendar':
+
+			$cal = $cal->get_calendar(0, $GO_SECURITY->user_id);
+
+			$my_cal = $response['data'] = array();
+			foreach($cal as $k=>$v) {
+				$my_cal[$k] = $v;
+			}
+			$response['data'][0] = $my_cal;
+			$response['success'] = true;
+			break;
+
+		case 'addressbooks_participants':
+			$ids = json_decode($_POST['ids']);
+
+			require_once ($GO_MODULES->modules['addressbook']['class_path']."addressbook.class.inc.php");
+			$ab = new addressbook();
+
+			$response['results'] = array();
+
+			foreach($ids as $ab_id) {
+				$ab->get_contacts($ab_id);
+				while ($ab->next_record()) {
+					$participant['email'] = $ab->record['email'];
+					$participant['name'] = !empty($ab->record['middle_name']) ?
+						$ab->record['first_name'].' '.$ab->record['middle_name'].' '.$ab->record['last_name'] :
+						$ab->record['first_name'].' '.$ab->record['last_name'];
+					$response['results'][] = $participant;
+				}
+				$ab->get_companies($ab_id);
+				while ($ab->next_record()) {
+					$company['email'] = $ab->record['email'];
+					$company['name'] = $ab->record['name'];
+					$response['results'][] = $company;
+				}
+			}
+
+			$response['success'] =true;
+
+			break;
+
+		case 'usergroups_participants':
+			$ids = json_decode($_POST['ids']);
+
+			require_once ($GO_MODULES->modules['users']['class_path']."users.class.inc.php");
+			$users = new users();
+
+			$response['results'] = array();
+
+			foreach($ids as $ug_id) {
+				$users->get_users($ug_id);
+				while ($users->next_record()) {
+					$participant['id'] = $ab->record['id'];
+					$participant['email'] = $ab->record['email'];
+					$participant['name'] = !empty($ab->record['middle_name']) ?
+						$ab->record['first_name'].' '.$ab->record['middle_name'].' '.$ab->record['last_name'] :
+						$ab->record['first_name'].' '.$ab->record['last_name'];
+					$response['results'][] = $participant;
+				}
+			}
+
+			$response['success'] =true;
+
+			break;
+
 	}
 }
 catch(Exception $e) {
