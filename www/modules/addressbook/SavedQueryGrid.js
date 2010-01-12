@@ -16,13 +16,15 @@ GO.addressbook.SavedQueryGrid = function(config)
 			},
 			root: 'results',
 			id: 'id',
-			fields: ['id','sql'],
+			fields: ['id','name','sql'],
 			remoteSort: true
 		});
 
 		var cm =  new Ext.grid.ColumnModel([
 		{
 			header: 'Zoekopdracht',
+			dataIndex: 'name'
+		},{
 			dataIndex: 'sql'
 		}]);
 		cm.defaultSortable = true;

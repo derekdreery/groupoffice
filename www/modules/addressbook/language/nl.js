@@ -97,3 +97,6 @@ GO.addressbook.lang.defaultAddressFormat='Standaard adres formaat';
 GO.addressbook.lang.defaultSalutation='Standaard aanhef';
 GO.addressbook.lang.explanationVariables='Uitleg standaard aanhef variabelen';
 GO.addressbook.lang.explanationSex='Mannelijke en vrouwelijke vormen van de aanhef';
+
+GO.addressbook.lang.searchQueryName='Naam zoekterm';
+GO.addressbook.lang.enterSearchQueryName='Geef een naam aan deze zoekterm:';

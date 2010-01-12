@@ -574,7 +574,7 @@ try
 
 				case 'save_sql':
 
-					$ab->save_sql(array('sql'=>$_POST['sql']));
+					$ab->save_sql(array('sql'=>$_POST['sql'],'name'=>$_POST['name']));
 					$response['success']=true;
 					echo json_encode($response);
 
