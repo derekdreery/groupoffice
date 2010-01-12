@@ -1267,7 +1267,6 @@ class addressbook extends db {
 	}
 
 	function save_sql($sql) {
-		var_dump($sql);
 		$sql['id'] = $this->nextid('ab_sql');
 		return $this->insert_row('ab_sql',$sql);
 	}
