@@ -908,7 +908,7 @@ class addressbook extends db {
 		}
 
 		if(!empty($advanced_query)) {
-			$sql .= $advanced_query;
+			$sql .= ' AND ('.$advanced_query.')';
 		}
 
 		$_SESSION['GO_SESSION']['export_queries']['search_companies']=array(

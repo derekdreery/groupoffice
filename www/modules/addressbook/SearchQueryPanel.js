@@ -33,71 +33,89 @@ GO.addressbook.SearchQueryPanel = function(config)
 
 		this.queryMakerPanel = new Ext.Panel({
 			layout: 'table',
-			items: [this.typesBox = new Ext.form.ComboBox({
-				store: this.typesStore,
-				valueField:'field',
-				displayField:'label',
-				mode: 'local',
-				triggerAction: 'all',
-				editable: true,
-				selectOnFocus:true,
-				forceSelection:true,
-				emptyText: 'kies type'
-			}),this.comparatorBox = new Ext.form.ComboBox({
-				store: new Ext.data.SimpleStore({
-					fields: ['value'],
-					data : comparators
-				}),
-				valueField:'value',
-				displayField:'value',
-				value: '=',
-				width: 50,
-				mode: 'local',
-				triggerAction: 'all',
-				editable: true,
-				selectOnFocus:true,
-				forceSelection:true
-			}),this.criteriumField = new Ext.form.TextField({
-				//fieldLabel: GO.lang['strFirstName'],
-				name: 'criterium',
-				emptyText: 'criterium',
-				width: 190,
-				panel: this
-			}),this.operatorBox = new Ext.form.ComboBox({
-				store: new Ext.data.SimpleStore({
-					fields: ['value','text'],
-					data : [
-					['','--'],
-					['AND','AND'],
-					['OR','OR']
-					]
-				}),
-				valueField:'value',
-				displayField:'text',
-				width: 60,
-				mode: 'local',
-				triggerAction: 'all',
-				editable: true,
-				selectOnFocus:true,
-				forceSelection:true
-			}),new Ext.Button({
-				handler: function()
-				{
-					var text = this.queryField.getValue();
-					if (this.typesBox.value) text = text + ' ' + this.typesBox.value;
-					if (this.comparatorBox.value) text = text + ' ' + this.comparatorBox.value;
-					if (this.criteriumField.getValue()) text = text + ' \'' + this.criteriumField.getValue() + '\'';
-					if (this.operatorBox.value) text = text + ' ' + this.operatorBox.value;
-					this.queryField.setValue(text);
-				},
-				text: 'voeg toe',
-				scope: this
-			})]
+			border:false,
+			defaults: {
+				// applied to each contained panel
+				bodyStyle:'padding-right:4px',
+				border:false
+			},
+
+			items: [{
+				items:this.operatorBox = new Ext.form.ComboBox({
+					store: new Ext.data.SimpleStore({
+						fields: ['value','text'],
+						data : [
+						['','--'],
+						['AND','AND'],
+						['OR','OR']
+						]
+					}),
+					valueField:'value',
+					displayField:'text',
+					width: 60,
+					mode: 'local',
+					triggerAction: 'all',
+					editable: true,
+					selectOnFocus:true,
+					forceSelection:true
+				})
+			},{
+				items:this.typesBox = new Ext.form.ComboBox({
+					store: this.typesStore,
+					valueField:'field',
+					displayField:'label',
+					mode: 'local',
+					triggerAction: 'all',
+					editable: true,
+					selectOnFocus:true,
+					forceSelection:true,
+					emptyText: 'kies type'
+				})
+			},{
+				items:this.comparatorBox = new Ext.form.ComboBox({
+					store: new Ext.data.SimpleStore({
+						fields: ['value'],
+						data : comparators
+					}),
+					valueField:'value',
+					displayField:'value',
+					value: '=',
+					width: 50,
+					mode: 'local',
+					triggerAction: 'all',
+					editable: true,
+					selectOnFocus:true,
+					forceSelection:true
+				})
+			},{
+				items:this.criteriumField = new Ext.form.TextField({
+					//fieldLabel: GO.lang['strFirstName'],
+					name: 'criterium',
+					emptyText: 'criterium',
+					width: 180,
+					panel: this
+				})
+			},{
+				items:new Ext.Button({
+					handler: function()
+					{
+						var text = this.queryField.getValue();
+						if (this.typesBox.value) text = text + ' ' + this.typesBox.value;
+						if (this.queryField.getValue() && this.operatorBox.value) text = text + ' ' + this.operatorBox.value;
+						if (this.comparatorBox.value) text = text + ' ' + this.comparatorBox.value;
+						if (this.criteriumField.getValue()) text = text + ' \'' + this.criteriumField.getValue() + '\'';
+						this.queryField.setValue(text);
+					},
+					text: 'voeg toe',
+					scope: this
+				})
+			}]
 		});
 
 		this.buttonsPanel = new Ext.Panel({
 			layout: 'table',
-			items: [new Ext.Button({
+			buttonAlign: 'left',
+			buttons: [new Ext.Button({
 				handler: function()
 				{
 					Ext.Ajax.request({
@@ -114,7 +132,7 @@ GO.addressbook.SearchQueryPanel = function(config)
 								alert(responseParams.feedback);
 							}else
 							{
-							}
+						}
 						},
 						scope:this
 					})
@@ -141,15 +159,15 @@ Ext.extend(GO.addressbook.SearchQueryPanel, Ext.Panel, {
 
 	getComparators : function() {
 		return [
-					['LIKE'],
-					['NOT LIKE'],
-					['='],
-					['!='],
-					['>'],
-					['>='],
-					['<'],
-					['<=']
-					];
+		['LIKE'],
+		['NOT LIKE'],
+		['='],
+		['!='],
+		['>'],
+		['>='],
+		['<'],
+		['<=']
+		];
 	}
 
-	});
+});
