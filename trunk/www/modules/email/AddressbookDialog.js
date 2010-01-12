@@ -131,7 +131,7 @@ GO.email.AddressbookDialog = function(config) {
 	}, this);
 	
 	items.push(this.userGroupsGrid);
-
+/*
 	this.addressbooksStore = new GO.data.JsonStore({
 		url : GO.settings.modules.addressbook.url + 'json.php',
 		baseParams : {
@@ -172,7 +172,7 @@ GO.email.AddressbookDialog = function(config) {
 	}, this);
 
 	items.push(this.addressbooksGrid);
-
+*/
 	if (GO.addressbook) {
 		this.contactsStore = new GO.data.JsonStore({
 			url : GO.settings.modules.addressbook.url + 'json.php',
@@ -184,7 +184,7 @@ GO.email.AddressbookDialog = function(config) {
 			id : 'id',
 			totalProperty : 'total',
 			fields : ['id', 'name', 'company_name', 'email',
-			'home_phone', 'work_phone', 'work_fax', 'cellular'],
+			'home_phone', 'work_phone', 'work_fax', 'cellular', 'ab_name'],
 			remoteSort : true
 		});
 
@@ -210,6 +210,11 @@ GO.email.AddressbookDialog = function(config) {
 			}, {
 				header : GO.lang['strEmail'],
 				dataIndex : 'email',
+				css : 'white-space:normal;',
+				sortable : true
+			}, {
+				header : GO.addressbook.lang.addressbook,
+				dataIndex : 'ab_name',
 				css : 'white-space:normal;',
 				sortable : true
 			}],
@@ -404,7 +409,7 @@ Ext.extend(GO.email.AddressbookDialog, Ext.Window, {
 				scope:this
 			});
 		}else
-		if(activeGrid == this.addressbooksGrid)
+		/*if(activeGrid == this.addressbooksGrid)
 		{
 			var addressbooks = [];
 
@@ -429,7 +434,7 @@ Ext.extend(GO.email.AddressbookDialog, Ext.Window, {
 				scope:this
 			});
 		}
-		else
+		else*/
 		{
 			var emails = [];
 
