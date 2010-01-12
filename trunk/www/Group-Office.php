@@ -157,5 +157,3 @@ if (get_magic_quotes_gpc())
 
 
 umask(0);
-
-$config['session_inactivity_timeout'] = 60;
