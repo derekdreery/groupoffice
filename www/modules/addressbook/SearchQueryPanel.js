@@ -43,15 +43,15 @@ GO.addressbook.SearchQueryPanel = function(config)
 			items: [{
 				items:this.operatorBox = new Ext.form.ComboBox({
 					store: new Ext.data.SimpleStore({
-						fields: ['value','text'],
+						fields: ['value'],
 						data : [
-						['','--'],
-						['AND','AND'],
-						['OR','OR']
+						['AND'],
+						['OR']
 						]
 					}),
+					value: 'AND',
 					valueField:'value',
-					displayField:'text',
+					displayField:'value',
 					width: 60,
 					mode: 'local',
 					triggerAction: 'all',
@@ -79,7 +79,7 @@ GO.addressbook.SearchQueryPanel = function(config)
 					}),
 					valueField:'value',
 					displayField:'value',
-					value: '=',
+					value: 'LIKE',
 					width: 50,
 					mode: 'local',
 					triggerAction: 'all',
@@ -100,8 +100,8 @@ GO.addressbook.SearchQueryPanel = function(config)
 					handler: function()
 					{
 						var text = this.queryField.getValue();
-						if (this.typesBox.value) text = text + ' ' + this.typesBox.value;
 						if (this.queryField.getValue() && this.operatorBox.value) text = text + ' ' + this.operatorBox.value;
+						if (this.typesBox.value) text = text + ' ' + this.typesBox.value;
 						if (this.comparatorBox.value) text = text + ' ' + this.comparatorBox.value;
 						if (this.criteriumField.getValue()) text = text + ' \'' + this.criteriumField.getValue() + '\'';
 						this.queryField.setValue(text);
