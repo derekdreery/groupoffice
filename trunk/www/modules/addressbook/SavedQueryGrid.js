@@ -16,7 +16,7 @@ GO.addressbook.SavedQueryGrid = function(config)
 			},
 			root: 'results',
 			id: 'id',
-			fields: ['id','name','sql'],
+			fields: ['id','name'],
 			remoteSort: true
 		});
 
@@ -24,8 +24,6 @@ GO.addressbook.SavedQueryGrid = function(config)
 		{
 			header: 'Zoekopdracht',
 			dataIndex: 'name'
-		},{
-			dataIndex: 'sql'
 		}]);
 		cm.defaultSortable = true;
 		config.cm=cm;
