@@ -218,7 +218,7 @@ try
 			if(!empty($_POST['advancedQuery']))
 			{
 				if (is_string($_POST['advancedQuery'])) {
-					$advancedQuery = ' AND '.$_POST['advancedQuery'];
+					$advancedQuery = $_POST['advancedQuery'];
 				} else {
 					$aq = json_decode($_POST['advancedQuery'], true);
 					foreach($aq as $field=>$value)
@@ -336,7 +336,7 @@ try
 			if(!empty($_POST['advancedQuery']))
 			{
 				if (is_string($_POST['advancedQuery'])) {
-					$advancedQuery = ' AND '.$_POST['advancedQuery'];
+					$advancedQuery = $_POST['advancedQuery'];
 				} else {
 					$aq = json_decode($_POST['advancedQuery'], true);
 					foreach($aq as $field=>$value)
@@ -925,6 +925,26 @@ try
 			break;
 
 		case 'sqls':
+
+			if(isset($_POST['delete_keys']))
+			{
+				try{
+					$delete_sqls = json_decode(($_POST['delete_keys']));
+
+					foreach($delete_sqls as $id)
+					{
+						$ab->delete_sql($id);
+						//$GO_EVENTS->fire_event('contact_delete', array($contact));
+					}
+					$response['deleteSuccess'] = true;
+				}
+				catch (Exception $e)
+				{
+					$response['deleteFeedback'] = $e->getMessage();
+					$response['deleteSuccess'] = false;
+				}
+			}
+
 			$response['total'] = $ab->get_sqls();
 			$response['results'] = array();
 			while($ab->next_record())
