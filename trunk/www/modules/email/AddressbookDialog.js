@@ -37,53 +37,53 @@ GO.email.AddressbookDialog = function(config) {
 
 	var items = Array();
 	this.usersStore = new GO.data.JsonStore({
-				url : GO.settings.modules.users.url + 'non_admin_json.php',
-				baseParams : {
-					task : 'users'
-				},
-				id : 'id',
-				root : 'results',
-				fields : ['id', 'username', 'name', 'company', 'logins',
-						'lastlogin', 'registration_time', 'address', 'zip',
-						'city', 'state', 'country', 'phone', 'email',
-						'waddress', 'wzip', 'wcity', 'wstate', 'wcountry',
-						'wphone'],
-				totalProperty : 'total',
-				remoteSort : true
-			});
+		url : GO.settings.modules.users.url + 'non_admin_json.php',
+		baseParams : {
+			task : 'users'
+		},
+		id : 'id',
+		root : 'results',
+		fields : ['id', 'username', 'name', 'company', 'logins',
+		'lastlogin', 'registration_time', 'address', 'zip',
+		'city', 'state', 'country', 'phone', 'email',
+		'waddress', 'wzip', 'wcity', 'wstate', 'wcountry',
+		'wphone'],
+		totalProperty : 'total',
+		remoteSort : true
+	});
 
 	this.usersSearchField = new GO.form.SearchField({
-				store : this.usersStore,
-				width : 320
-			});
+		store : this.usersStore,
+		width : 320
+	});
 
 	this.usersGrid = new GO.grid.GridPanel({
-				title : GO.addressbook.lang.users,
-				paging : true,
-				border : false,
-				store : this.usersStore,
-				view : new Ext.grid.GridView({
-							autoFill : true,
-							forceFit : true
-						}),
-				columns : [{
-							header : GO.lang['strName'],
-							dataIndex : 'name',
-							css : 'white-space:normal;',
-							sortable : true
-						}, {
-							header : GO.lang['strEmail'],
-							dataIndex : 'email',
-							css : 'white-space:normal;',
-							sortable : true
-						}],
-				sm : new Ext.grid.RowSelectionModel(),
-				tbar : [GO.lang['strSearch'] + ': ', ' ', this.usersSearchField]
-			});
+		title : GO.addressbook.lang.users,
+		paging : true,
+		border : false,
+		store : this.usersStore,
+		view : new Ext.grid.GridView({
+			autoFill : true,
+			forceFit : true
+		}),
+		columns : [{
+			header : GO.lang['strName'],
+			dataIndex : 'name',
+			css : 'white-space:normal;',
+			sortable : true
+		}, {
+			header : GO.lang['strEmail'],
+			dataIndex : 'email',
+			css : 'white-space:normal;',
+			sortable : true
+		}],
+		sm : new Ext.grid.RowSelectionModel(),
+		tbar : [GO.lang['strSearch'] + ': ', ' ', this.usersSearchField]
+	});
 
 	this.usersGrid.on('show', function() {
-				this.usersStore.load();
-			}, this);
+		this.usersStore.load();
+	}, this);
 	/*
 	 * this.usersGrid.on('afterRender', function(){
 	 * if(this.usersGrid.isVisible()) { this.onShow(); } }, this);
@@ -132,102 +132,143 @@ GO.email.AddressbookDialog = function(config) {
 	
 	items.push(this.userGroupsGrid);
 
+	this.addressbooksStore = new GO.data.JsonStore({
+		url : GO.settings.modules.addressbook.url + 'json.php',
+		baseParams : {
+			task : 'addressbooks'
+		},
+		id : 'id',
+		root : 'results',
+		fields: ['id', 'name', 'owner', 'user_id', 'acl_id','acl_write','shared_acl','default_iso_adress_format','default_salutation'],
+		totalProperty : 'total',
+		remoteSort : true
+	});
+
+	this.addressbooksGrid = new GO.grid.GridPanel({
+		title : GO.addressbook.lang.addressbooks,
+		paging : true,
+		border : false,
+		store : this.addressbooksStore,
+		view : new Ext.grid.GridView({
+			autoFill : true,
+			forceFit : true
+		}),
+		columns : [{
+			header : GO.lang['strName'],
+			dataIndex : 'name',
+			css : 'white-space:normal;',
+			sortable : true
+		}, {
+			header : GO.lang['strOwner'],
+			dataIndex : 'owner',
+			css : 'white-space:normal;',
+			sortable : true
+		}],
+		sm : new Ext.grid.RowSelectionModel()
+	});
+
+	this.addressbooksGrid.on('show', function() {
+		this.addressbooksStore.load();
+	}, this);
+
+	items.push(this.addressbooksGrid);
+
 	if (GO.addressbook) {
 		this.contactsStore = new GO.data.JsonStore({
-					url : GO.settings.modules.addressbook.url + 'json.php',
-					baseParams : {
-						task : 'contacts',
-						require_email:true
-					},
-					root : 'results',
-					id : 'id',
-					totalProperty : 'total',
-					fields : ['id', 'name', 'company_name', 'email',
-							'home_phone', 'work_phone', 'work_fax', 'cellular'],
-					remoteSort : true
-				});
+			url : GO.settings.modules.addressbook.url + 'json.php',
+			baseParams : {
+				task : 'contacts',
+				require_email:true
+			},
+			root : 'results',
+			id : 'id',
+			totalProperty : 'total',
+			fields : ['id', 'name', 'company_name', 'email',
+			'home_phone', 'work_phone', 'work_fax', 'cellular'],
+			remoteSort : true
+		});
 
 		this.contactsSearchField = new GO.form.SearchField({
-					store : this.contactsStore,
-					width : 320
-				});
+			store : this.contactsStore,
+			width : 320
+		});
 
 		this.contactsGrid = new GO.grid.GridPanel({
-					title : GO.addressbook.lang.contacts,
-					paging : true,
-					border : false,
-					store : this.contactsStore,
-					view : new Ext.grid.GridView({
-								autoFill : true,
-								forceFit : true
-							}),
-					columns : [{
-								header : GO.lang['strName'],
-								dataIndex : 'name',
-								css : 'white-space:normal;',
-								sortable : true
-							}, {
-								header : GO.lang['strEmail'],
-								dataIndex : 'email',
-								css : 'white-space:normal;',
-								sortable : true
-							}],
-					sm : new Ext.grid.RowSelectionModel(),
-					tbar : [GO.lang['strSearch'] + ': ', ' ',
-							this.contactsSearchField]
-				});
+			title : GO.addressbook.lang.contacts,
+			paging : true,
+			border : false,
+			store : this.contactsStore,
+			view : new Ext.grid.GridView({
+				autoFill : true,
+				forceFit : true
+			}),
+			columns : [{
+				header : GO.lang['strName'],
+				dataIndex : 'name',
+				css : 'white-space:normal;',
+				sortable : true
+			}, {
+				header : GO.lang['strEmail'],
+				dataIndex : 'email',
+				css : 'white-space:normal;',
+				sortable : true
+			}],
+			sm : new Ext.grid.RowSelectionModel(),
+			tbar : [GO.lang['strSearch'] + ': ', ' ',
+			this.contactsSearchField]
+		});
 
 		this.contactsGrid.on('show', function() {
-					this.contactsStore.load();
-				}, this);
+			this.contactsStore.load();
+		}, this);
 
 		this.companiesStore = new GO.data.JsonStore({
-					url : GO.settings.modules.addressbook.url + 'json.php',
-					baseParams : {
-						task : 'companies',
-						require_email:true
-					},
-					root : 'results',
-					id : 'id',
-					totalProperty : 'total',
-					fields : ['id', 'name', 'city', 'email', 'phone',
-							'homepage', 'address', 'zip'],
-					remoteSort : true
-				});
+			url : GO.settings.modules.addressbook.url + 'json.php',
+			baseParams : {
+				task : 'companies',
+				require_email:true
+			},
+			root : 'results',
+			id : 'id',
+			totalProperty : 'total',
+			fields : ['id', 'name', 'city', 'email', 'phone',
+			'homepage', 'address', 'zip'],
+			remoteSort : true
+		});
 
 		this.companySearchField = new GO.form.SearchField({
-					store : this.companiesStore,
-					width : 320
-				});
+			store : this.companiesStore,
+			width : 320
+		});
 
 		this.companyGrid = new GO.grid.GridPanel({
-					title : GO.addressbook.lang.companies,
-					paging : true,
-					border : false,
-					store : this.companiesStore,
-					view : new Ext.grid.GridView({
-								autoFill : true,
-								forceFit : true
-							}),
-					columns : [{
-								header : GO.lang['strName'],
-								dataIndex : 'name',
-								css : 'white-space:normal;',
-								sortable : true
-							}, {
-								header : GO.lang['strEmail'],
-								dataIndex : 'email',
-								css : 'white-space:normal;',
-								sortable : true
-							}],
-					sm : new Ext.grid.RowSelectionModel(),
-					tbar : [GO.lang['strSearch'] + ': ', ' ',
-							this.companySearchField]
-				});
+			title : GO.addressbook.lang.companies,
+			paging : true,
+			border : false,
+			store : this.companiesStore,
+			view : new Ext.grid.GridView({
+				autoFill : true,
+				forceFit : true
+			}),
+			columns : [{
+				header : GO.lang['strName'],
+				dataIndex : 'name',
+				css : 'white-space:normal;',
+				sortable : true
+			}, {
+				header : GO.lang['strEmail'],
+				dataIndex : 'email',
+				css : 'white-space:normal;',
+				sortable : true
+			}],
+			sm : new Ext.grid.RowSelectionModel(),
+			tbar : [GO.lang['strSearch'] + ': ', ' ',
+			this.companySearchField]
+		});
 
 		this.companyGrid.on('show', function() {
-					this.companiesStore.load();
-				}, this);
+			this.companiesStore.load();
+		}, this);
 
 		items.push(this.contactsGrid);
 		items.push(this.companyGrid);
@@ -236,145 +277,170 @@ GO.email.AddressbookDialog = function(config) {
 
 	if (GO.mailings) {
 		this.mailingsGrid = new GO.grid.GridPanel({
-					title : GO.mailings.lang.cmdPanelMailings,
-					paging : false,
-					border : false,
-					store : GO.mailings.readableMailingsStore,
-					view : new Ext.grid.GridView({
-								autoFill : true,
-								forceFit : true
-							}),
-					columns : [{
-								header : GO.lang['strName'],
-								dataIndex : 'name',
-								css : 'white-space:normal;',
-								sortable : true
-							}],
-					sm : new Ext.grid.RowSelectionModel()
-				});
+			title : GO.mailings.lang.cmdPanelMailings,
+			paging : false,
+			border : false,
+			store : GO.mailings.readableMailingsStore,
+			view : new Ext.grid.GridView({
+				autoFill : true,
+				forceFit : true
+			}),
+			columns : [{
+				header : GO.lang['strName'],
+				dataIndex : 'name',
+				css : 'white-space:normal;',
+				sortable : true
+			}],
+			sm : new Ext.grid.RowSelectionModel()
+		});
 		this.mailingsGrid.on('show', function() {
-				if(!GO.mailings.readableMailingsStore.loaded)
-					GO.mailings.readableMailingsStore.load();
-				}, this);
+			if(!GO.mailings.readableMailingsStore.loaded)
+				GO.mailings.readableMailingsStore.load();
+		}, this);
 
 		items.push(this.mailingsGrid);
 	}
 
 	this.tabPanel = new Ext.TabPanel({
-				activeTab : 0,
-				items : items,
-				border : false
-			});
+		activeTab : 0,
+		items : items,
+		border : false
+	});
 
 	GO.email.AddressbookDialog.superclass.constructor.call(this, {
-				layout : 'fit',
-				modal : false,
-				height : 400,
-				width : 600,
-				closeAction : 'hide',
-				title : GO.addressbook.lang.addressbook,
-				items : this.tabPanel,
-				buttons : [{
-							text : GO.email.lang.addToRecipients,
-							handler : function() {
-								this.addRecipients('to');
-							},
-							scope : this
-						}, {
-							text : GO.email.lang.addToCC,
-							handler : function() {
-								this.addRecipients('cc');
-							},
-							scope : this
-						}, {
-							text : GO.email.lang.addToBCC,
-							handler : function() {
-								this.addRecipients('bcc');
-							},
-							scope : this
-						}, {
-							text : GO.lang['cmdClose'],
-							handler : function() {
-								this.hide();
-							},
-							scope : this
-						}]
-			});
+		layout : 'fit',
+		modal : false,
+		height : 400,
+		width : 600,
+		closeAction : 'hide',
+		title : GO.addressbook.lang.addressbook,
+		items : this.tabPanel,
+		buttons : [{
+			text : GO.email.lang.addToRecipients,
+			handler : function() {
+				this.addRecipients('to');
+			},
+			scope : this
+		}, {
+			text : GO.email.lang.addToCC,
+			handler : function() {
+				this.addRecipients('cc');
+			},
+			scope : this
+		}, {
+			text : GO.email.lang.addToBCC,
+			handler : function() {
+				this.addRecipients('bcc');
+			},
+			scope : this
+		}, {
+			text : GO.lang['cmdClose'],
+			handler : function() {
+				this.hide();
+			},
+			scope : this
+		}]
+	});
 
 	this.addEvents({
-				addrecipients : true
-			});
+		addrecipients : true
+	});
 };
 
 Ext.extend(GO.email.AddressbookDialog, Ext.Window, {
-			addRecipients : function(field) {
-				var str="";
-				var activeGrid = this.tabPanel.getLayout().activeItem;
-				var selections = activeGrid.selModel.getSelections();
+	addRecipients : function(field) {
+		var str="";
+		var activeGrid = this.tabPanel.getLayout().activeItem;
+		var selections = activeGrid.selModel.getSelections();
 				
-				if (this.mailingsGrid && activeGrid == this.mailingsGrid) {
+		if (this.mailingsGrid && activeGrid == this.mailingsGrid) {
 					
-					var mailing_groups = [];
+			var mailing_groups = [];
 					
-					for(var i=0;i<selections.length;i++)
-					{
-						mailing_groups.push(selections[i].data.id);
-					}
-					
-					this.el.mask(GO.lang.waitMsgLoad);
-					Ext.Ajax.request({
-						url: GO.settings.modules.mailings.url+'json.php',
-						params: {
-								task:'mailing_group_string',
-								mailing_groups: mailing_groups.join(',')
-							},
-						callback: function(options, success, response)
-						{
-							str = response.responseText;
-							this.fireEvent('addrecipients', field, str);
-							this.el.unmask();
-						},
-						scope:this
-					});
-
-				}else
-				if(activeGrid == this.userGroupsGrid)
-				{
-					var user_groups = [];
-
-					for(var i=0;i<selections.length;i++)
-					{
-						user_groups.push(selections[i].data.id);
-					}
-
-					this.el.mask(GO.lang.waitMsgLoad);
-					Ext.Ajax.request({
-						url: GO.settings.modules.groups.url+'non_admin_json.php',
-						params: {
-								task:'user_groups_string',
-								user_groups: user_groups.join(',')
-							},
-						callback: function(options, success, response)
-						{
-							str = response.responseText;
-							this.fireEvent('addrecipients', field, str);
-							this.el.unmask();
-						},
-						scope:this
-					});
-				}
-				else
-				{
-					var emails = [];
-
-					for (var i = 0; i < selections.length; i++) {
-						emails.push('"' + selections[i].data.name + '" <'
-								+ selections[i].data.email + '>');
-					}
-					
-					str=emails.join(', ');
-					this.fireEvent('addrecipients', field, str);
-				}
-				
+			for(var i=0;i<selections.length;i++)
+			{
+				mailing_groups.push(selections[i].data.id);
 			}
-		});
+					
+			this.el.mask(GO.lang.waitMsgLoad);
+			Ext.Ajax.request({
+				url: GO.settings.modules.mailings.url+'json.php',
+				params: {
+					task:'mailing_group_string',
+					mailing_groups: mailing_groups.join(',')
+				},
+				callback: function(options, success, response)
+				{
+					str = response.responseText;
+					this.fireEvent('addrecipients', field, str);
+					this.el.unmask();
+				},
+				scope:this
+			});
+
+		}else
+		if(activeGrid == this.userGroupsGrid)
+		{
+			var user_groups = [];
+
+			for(var i=0;i<selections.length;i++)
+			{
+				user_groups.push(selections[i].data.id);
+			}
+
+			this.el.mask(GO.lang.waitMsgLoad);
+			Ext.Ajax.request({
+				url: GO.settings.modules.groups.url+'non_admin_json.php',
+				params: {
+					task:'user_groups_string',
+					user_groups: user_groups.join(',')
+				},
+				callback: function(options, success, response)
+				{
+					str = response.responseText;
+					this.fireEvent('addrecipients', field, str);
+					this.el.unmask();
+				},
+				scope:this
+			});
+		}else
+		if(activeGrid == this.addressbooksGrid)
+		{
+			var addressbooks = [];
+
+			for(var i=0;i<selections.length;i++)
+			{
+				addressbooks.push(selections[i].data.id);
+			}
+
+			this.el.mask(GO.lang.waitMsgLoad);
+			Ext.Ajax.request({
+				url: GO.settings.modules.addressbook.url+'json.php',
+				params: {
+					task:'addressbooks_string',
+					addressbooks: addressbooks.join(',')
+				},
+				callback: function(options, success, response)
+				{
+					str = response.responseText;
+					this.fireEvent('addrecipients', field, str);
+					this.el.unmask();
+				},
+				scope:this
+			});
+		}
+		else
+		{
+			var emails = [];
+
+			for (var i = 0; i < selections.length; i++) {
+				emails.push('"' + selections[i].data.name + '" <'
+					+ selections[i].data.email + '>');
+			}
+					
+			str=emails.join(', ');
+			this.fireEvent('addrecipients', field, str);
+		}
+				
+	}
+});
