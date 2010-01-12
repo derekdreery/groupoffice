@@ -1273,4 +1273,15 @@ class addressbook extends db {
 		$this->query("SELECT * FROM ab_sql");
 		return $this->num_rows();
 	}
+
+	function get_sql($id) {
+		$this->query("SELECT * FROM ab_sql WHERE id='$id'");
+		return $this->next_record();
+	}
+
+	function delete_sql($sql_id) {
+
+		return $this->query("DELETE FROM ab_sql WHERE id='".$this->escape($sql_id)."'");
+
+	}
 }
