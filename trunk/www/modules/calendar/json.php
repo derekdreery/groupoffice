@@ -1087,7 +1087,7 @@ try {
 			$response['data'][0] = $my_cal;
 			$response['success'] = true;
 			break;
-
+/*
 		case 'addressbooks_participants':
 			$ids = json_decode($_POST['ids']);
 
@@ -1110,6 +1110,44 @@ try {
 					$company['email'] = $ab->record['email'];
 					$company['name'] = $ab->record['name'];
 					$response['results'][] = $company;
+				}
+			}
+
+			$response['success'] =true;
+
+			break;
+*/
+
+		case 'mailings_participants':
+			$ids = json_decode($_POST['ids']);
+
+			require_once ($GO_MODULES->modules['mailings']['class_path']."mailings.class.inc.php");
+			$mailings = new mailings();
+
+			$response['results'] = array();
+
+			foreach($ids as $mailing_id) {
+				$mailings->get_contacts_from_mailing_group($mailing_id);
+				while ($mailings->next_record()) {
+					$participant['email'] = $mailings->record['email'];
+					$participant['name'] = !empty($mailings->record['middle_name']) ?
+						$mailings->record['first_name'].' '.$mailings->record['middle_name'].' '.$mailings->record['last_name'] :
+						$mailings->record['first_name'].' '.$mailings->record['last_name'];
+					$response['results'][] = $participant;
+				}
+				$mailings->get_companies_from_mailing_group($mailing_id);
+				while ($mailings->next_record()) {
+					$company['email'] = $mailings->record['email'];
+					$company['name'] = $mailings->record['name'];
+					$response['results'][] = $company;
+				}
+				$mailings->get_users_from_mailing_group($mailing_id);
+				while ($mailings->next_record()) {
+					$participant['email'] = $mailings->record['email'];
+					$participant['name'] = !empty($mailings->record['middle_name']) ?
+						$mailings->record['first_name'].' '.$mailings->record['middle_name'].' '.$mailings->record['last_name'] :
+						$mailings->record['first_name'].' '.$mailings->record['last_name'];
+					$response['results'][] = $participant;
 				}
 			}
 
