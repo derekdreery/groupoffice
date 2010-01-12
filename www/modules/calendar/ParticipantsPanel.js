@@ -281,7 +281,7 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 
 						var selections = grid.selModel.getSelections();							
 
-						if (type=='addressbooks' || type=='usergroups') {
+						if (type=='mailings' || type=='usergroups') {
 							var ids = new Array();
 							for (var i=0; i<selections.length; i++) {
 								ids.push(selections[i].data.id);
