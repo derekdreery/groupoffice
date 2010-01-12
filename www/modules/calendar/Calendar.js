@@ -95,7 +95,10 @@ GO.calendar.MainPanel = function(config){
 		proxy: new Ext.data.HttpProxy({
 			url: GO.settings.modules.calendar.url+'json.php'
 		}),
-		sortInfo:{field: 'name', direction: "ASC"},
+		sortInfo:{
+			field: 'name',
+			direction: "ASC"
+		},
 		groupField:'group_name',
 		remoteSort:true
 	});
@@ -185,7 +188,17 @@ GO.calendar.MainPanel = function(config){
 			}
 		}
 	}, this);
-	
+
+	this.myCalendar = new GO.data.JsonStore({
+		url: GO.settings.modules.calendar.url+"json.php",
+		baseParams: {'task': 'my_calendar'},
+		root: 'data',
+		id: 'id',
+		fields:['id','group_id','name']
+	});
+
+	this.myCalendar.load();
+
 	this.calendarList = new GO.grid.GridPanel({
 		border: false,
 		layout:'fit',
@@ -202,6 +215,31 @@ GO.calendar.MainPanel = function(config){
 		view:new Ext.grid.GridView({
 			forceFit:true
 		}),
+		tbar: [{
+			text : GO.calendar.lang.myCalendar,
+			handler : function() {
+				console.log(this.myCalendar);
+				this.setDisplay({
+					group_id: this.myCalendar.data.items[0].data.group_id,
+					calendar_id: this.myCalendar.data.items[0].data.id,
+					calendar_name: this.myCalendar.data.items[0].data.name,
+					saveState:true
+				});
+
+				var title = this.myCalendar.data.name;
+				if(title.length){
+					if(this.calendarTitle.td){
+						//Ext 2
+						this.calendarTitle.td.innerHTML = title;
+					}else
+					{
+						//Ext 3
+						this.calendarTitle.setText(title);
+					}
+				}
+			},
+			scope : this
+		}],
 		sm: new Ext.grid.RowSelectionModel()
 	});
 
@@ -339,9 +377,9 @@ GO.calendar.MainPanel = function(config){
 			activeOnTop:false
 		},*/
 		items: [
-			this.calendarList,
-			this.viewsList,
-			this.resourcesList
+		this.calendarList,
+		this.viewsList,
+		this.resourcesList
 		]
 	});
 
@@ -376,11 +414,11 @@ GO.calendar.MainPanel = function(config){
 		border: false,
 		firstWeekday: parseInt(GO.settings.first_weekday),
 		keys:[ {
-				key:  Ext.EventObject.DELETE,
-				fn: function(){
-					//console.log('delete');
-				},
-				scope: this
+			key:  Ext.EventObject.DELETE,
+			fn: function(){
+			//console.log('delete');
+			},
+			scope: this
 		}]
 	});
 	
