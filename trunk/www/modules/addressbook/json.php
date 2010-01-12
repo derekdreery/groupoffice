@@ -337,7 +337,7 @@ try
 			{
 				if (is_string($_POST['advancedQuery'])) {
 					$advancedQuery = $_POST['advancedQuery'];
-				} else {
+				} /* else {
 					$aq = json_decode($_POST['advancedQuery'], true);
 					foreach($aq as $field=>$value)
 					{
@@ -347,7 +347,7 @@ try
 						}
 						$advancedQuery .= $ab->escape($field).' LIKE \''.$ab->escape($value).'\'';
 					}
-				}
+				} */
 			}
 
 			$response['results'] = array();
