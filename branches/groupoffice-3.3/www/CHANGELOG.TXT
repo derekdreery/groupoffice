@@ -1,4 +1,4 @@
-2010/?
+2010/01/13 3.3.10
 - Added session_inactiviy_timeout config option to automatically logout inactive
   users.
 - Synchronize multiple tasklists
