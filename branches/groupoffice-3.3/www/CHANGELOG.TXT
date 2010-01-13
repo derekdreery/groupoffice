@@ -1,6 +1,9 @@
 2010/?
 - Added session_inactiviy_timeout config option to automatically logout inactive
   users.
+- Synchronize multiple tasklists
+- Delete sync devices
+- Bug fixes
 
 2010/01/04 3.3.9
 - Debian package groupoffice-mailserver conflicted with vacation package
