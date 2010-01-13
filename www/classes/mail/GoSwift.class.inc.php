@@ -157,7 +157,7 @@ class GoSwift extends Swift_Mailer{
 				}
 			}
 		}
-
+		$transport->setLocalDomain($_SERVER['HTTP_HOST']);
 		if(!empty($GO_CONFIG->smtp_local_domain))
 			$transport->setLocalDomain($GO_CONFIG->smtp_local_domain);
 
@@ -298,8 +298,8 @@ class GoSwift extends Swift_Mailer{
 			throw new Exception($msg);
 		}
 
-
 		$this->failed_recipients=array();
+		
 		if($batch)
 		{
 			//$send_success = parent::batchSend($this->message,$this->recipients, new Swift_Address($email_from, $name_from));
