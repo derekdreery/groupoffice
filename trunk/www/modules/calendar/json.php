@@ -1130,9 +1130,7 @@ try {
 				$mailings->get_contacts_from_mailing_group($mailing_id);
 				while ($mailings->next_record()) {
 					$participant['email'] = $mailings->record['email'];
-					$participant['name'] = !empty($mailings->record['middle_name']) ?
-						$mailings->record['first_name'].' '.$mailings->record['middle_name'].' '.$mailings->record['last_name'] :
-						$mailings->record['first_name'].' '.$mailings->record['last_name'];
+					$participant['name'] = String::format_name($mailings->record);
 					$response['results'][] = $participant;
 				}
 				$mailings->get_companies_from_mailing_group($mailing_id);
@@ -1144,9 +1142,7 @@ try {
 				$mailings->get_users_from_mailing_group($mailing_id);
 				while ($mailings->next_record()) {
 					$participant['email'] = $mailings->record['email'];
-					$participant['name'] = !empty($mailings->record['middle_name']) ?
-						$mailings->record['first_name'].' '.$mailings->record['middle_name'].' '.$mailings->record['last_name'] :
-						$mailings->record['first_name'].' '.$mailings->record['last_name'];
+					$participant['name'] = String::format_name($mailings->record);
 					$response['results'][] = $participant;
 				}
 			}
@@ -1158,19 +1154,17 @@ try {
 		case 'usergroups_participants':
 			$ids = json_decode($_POST['ids']);
 
-			require_once ($GO_MODULES->modules['users']['class_path']."users.class.inc.php");
-			$users = new users();
+			//require_once ($GO_MODULES->modules['users']['class_path']."groups.class.inc.php");
+			//$groups = new groups();
 
 			$response['results'] = array();
 
 			foreach($ids as $ug_id) {
-				$users->get_users($ug_id);
-				while ($users->next_record()) {
-					$participant['id'] = $users->record['id'];
-					$participant['email'] = $users->record['email'];
-					$participant['name'] = !empty($users->record['middle_name']) ?
-						$users->record['first_name'].' '.$users->record['middle_name'].' '.$users->record['last_name'] :
-						$users->record['first_name'].' '.$users->record['last_name'];
+				$GO_GROUPS->get_users_in_group($ug_id);
+				while ($record = $GO_GROUPS->next_record()) {
+					$participant['id'] = $record['id'];
+					$participant['email'] = $record['email'];
+					$participant['name'] = String::format_name($record);
 					$response['results'][] = $participant;
 				}
 			}
