@@ -190,8 +190,12 @@ GO.dialog.SelectEmail = function(config) {
 			this.userGroupsStore.load();
 		}, this);
 
-		items.push(this.userGroupsGrid);
+		this.userGroupsGrid.on('rowdblclick', function(){
+			this.callHandler(true);
+		}, this);
 
+		items.push(this.userGroupsGrid);
+/*
 		this.addressbooksStore = new GO.data.JsonStore({
 			url : GO.settings.modules.addressbook.url + 'json.php',
 			baseParams : {
@@ -233,6 +237,7 @@ GO.dialog.SelectEmail = function(config) {
 		}, this);
 
 		items.push(this.addressbooksGrid);
+*/
 
 		this.companiesStore = new GO.data.JsonStore({
 			url : GO.settings.modules.addressbook.url + 'json.php',
@@ -289,6 +294,36 @@ GO.dialog.SelectEmail = function(config) {
 		items.push(this.contactsGrid);
 		items.push(this.companyGrid);
 
+	if (GO.mailings) {
+		this.mailingsGrid = new GO.grid.GridPanel({
+			id : 'select-mailings-grid',
+			title : GO.mailings.lang.cmdPanelMailings,
+			paging : false,
+			border : false,
+			store : GO.mailings.readableMailingsStore,
+			view : new Ext.grid.GridView({
+				autoFill : true,
+				forceFit : true
+			}),
+			columns : [{
+				header : GO.lang['strName'],
+				dataIndex : 'name',
+				css : 'white-space:normal;',
+				sortable : true
+			}],
+			sm : new Ext.grid.RowSelectionModel()
+		});
+		this.mailingsGrid.on('show', function() {
+			if(!GO.mailings.readableMailingsStore.loaded)
+				GO.mailings.readableMailingsStore.load();
+		}, this);
+		this.mailingsGrid.on('rowdblclick', function(){
+			this.callHandler(true);
+		}, this);
+
+		items.push(this.mailingsGrid);
+	}
+
 	}
 
 	this.tabPanel = new Ext.TabPanel({
@@ -330,6 +365,7 @@ Ext.extend(GO.dialog.SelectEmail, Ext.Window, {
 
 	// private
 	callHandler : function(hide) {
+
 		if (this.handler) {
 			if (!this.scope) {
 				this.scope = this;
@@ -341,22 +377,18 @@ Ext.extend(GO.dialog.SelectEmail, Ext.Window, {
 				case 'select-users-grid' :
 					type='users';
 					activeGrid = this.usersGrid;
-					var handler = this.handler.createDelegate(this.scope, [activeGrid, type]);
-					handler.call();
 					break;
 
 				case 'select-contacts-grid' :
 					type='contacts';
 					activeGrid = this.contactsGrid;
-					var handler = this.handler.createDelegate(this.scope, [activeGrid, type]);
-					handler.call();
 					break;
-
+/*
 				case 'select-addressbooks-grid' :
 					type='addressbooks';
 					activeGrid = this.addressbooksGrid;
 					break;
-
+*/
 				case 'select-usergroups-grid' :
 					type='usergroups';
 					activeGrid = this.userGroupsGrid;
@@ -364,11 +396,17 @@ Ext.extend(GO.dialog.SelectEmail, Ext.Window, {
 
 				case 'select-companies-grid' :
 					type='companies';
-					activeGrid = this.companiesGrid;
-					var handler = this.handler.createDelegate(this.scope, [activeGrid, type]);
-					handler.call();
+					activeGrid = this.companyGrid;
+					break;
+
+				case 'select-mailings-grid' :
+					type='mailings';
+					activeGrid = this.mailingsGrid;
 					break;
 			}
+
+			var handler = this.handler.createDelegate(this.scope, [activeGrid, type]);
+			handler.call();
 
 		}
 		if (hide) {

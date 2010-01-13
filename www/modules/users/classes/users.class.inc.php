@@ -270,4 +270,13 @@ class users extends db
 		}
 	}
 
+/*	public function get_users($group_id) {
+		$sql = "SELECT * FROM go_users_groups ug ".
+			"INNER JOIN go_users u ".
+			"ON ug.user_id=u.id ".
+			"WHERE ug.group_id='$group_id' ";
+		$this->query($sql);
+		return $this->num_rows();
+	}*/
+
 }
