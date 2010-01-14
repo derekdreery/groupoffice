@@ -4,7 +4,7 @@ GO.addressbook.SearchQueryPanel = function(config)
 			config = {};
 		}
 
-		config.title = 'Nieuwe zoekopdracht';
+		config.title = GO.addressbook.lang.newSearch;
 
 		this.typesStore = new GO.data.JsonStore({
 			url: GO.settings.modules.addressbook.url+'json.php',
@@ -18,16 +18,17 @@ GO.addressbook.SearchQueryPanel = function(config)
 			remoteSort: true
 		});
 
-		//config.layout='table';
-		config.split=true;
+		config.border=false;
+		config.layout='form';
+		config.defaults={hideLabel:true};
+		config.bodyStyle='padding:5px;';
 
 		this.typesStore.load();
 
 		var comparators = this.getComparators();
 
 		GO.addressbook.queryField = this.queryField = new Ext.form.TextArea({
-			fieldLabel : 'Zoekopdracht',
-			width : 585,
+			anchor:'100%',
 			height : 150
 		});
 
@@ -69,7 +70,8 @@ GO.addressbook.SearchQueryPanel = function(config)
 					editable: true,
 					selectOnFocus:true,
 					forceSelection:true,
-					emptyText: 'kies type'
+					emptyText: GO.addressbook.lang.selectField,
+					width:200
 				})
 			},{
 				items:this.comparatorBox = new Ext.form.ComboBox({
@@ -80,7 +82,7 @@ GO.addressbook.SearchQueryPanel = function(config)
 					valueField:'value',
 					displayField:'value',
 					value: 'LIKE',
-					width: 50,
+					width: 60,
 					mode: 'local',
 					triggerAction: 'all',
 					editable: true,
@@ -106,15 +108,15 @@ GO.addressbook.SearchQueryPanel = function(config)
 						if (this.criteriumField.getValue()) text = text + ' \'' + this.criteriumField.getValue() + '\'';
 						this.queryField.setValue(text);
 					},
-					text: 'voeg toe',
+					text: GO.lang.cmdAdd,
 					scope: this
 				})
 			}]
 		});
 
-		this.buttonsPanel = new Ext.Panel({
-			layout: 'table',
+		this.buttonsPanel = new Ext.Panel({			
 			buttonAlign: 'left',
+			border:false,
 			buttons: [new Ext.Button({
 				handler: function()
 				{
@@ -140,14 +142,14 @@ GO.addressbook.SearchQueryPanel = function(config)
 						})
 					})
 					},
-				text: 'opslaan',
+				text: GO.lang.cmdSave,
 				scope: this
 			}),new Ext.Button({
 				handler: function()
 				{
 					this.queryField.setValue('');
 				},
-				text: 'reset',
+				text: GO.lang.cmdReset,
 				scope: this
 			})]
 		});
