@@ -1,3 +1,7 @@
+2010/01/14 3.3.11
+- Bug in sync fixed
+- Bug in OO templates creation fixed
+
 2010/01/13 3.3.10
 - Added session_inactiviy_timeout config option to automatically logout inactive
   users.
