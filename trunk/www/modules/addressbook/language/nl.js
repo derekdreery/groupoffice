@@ -12,6 +12,10 @@
  * See file /LICENSE.GPL
  */
 
+GO.addressbook.lang.savedQueries='Opgeslagen zoekopdrachten';
+GO.addressbook.lang.newSearch='Nieuwe zoekopdracht';
+GO.addressbook.lang.executeQuery='Zoekopdracht uitvoeren';
+GO.addressbook.lang.selectField = 'Selecteer veld';
 
 GO.addressbook.lang.cmdFormLabelAddressBooks = 'Adresboek';
 GO.addressbook.lang.alphabet = 'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z';

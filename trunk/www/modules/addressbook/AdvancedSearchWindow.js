@@ -11,7 +11,7 @@ GO.addressbook.AdvancedSearchWindow = function(config){
 
 	config.items = new Ext.TabPanel({
 		activeTab: 0,
-		border: true,
+		border: false,
 		items: [GO.addressbook.searchQueryPanel, GO.addressbook.savedQueryGrid]
 	});
 
@@ -25,7 +25,7 @@ GO.addressbook.AdvancedSearchWindow = function(config){
 	config.closeAction='hide';
 	config.title= GO.addressbook.lang.advancedSearch;		
 	config.buttons=[{
-		text: 'Zoekopdracht uitvoeren',
+		text: GO.addressbook.lang.executeQuery,
 		handler: function(){
 			this.fireEvent('ok', this);
 			this.hide();

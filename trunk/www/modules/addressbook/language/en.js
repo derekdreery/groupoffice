@@ -22,7 +22,10 @@ GO.addressbook.lang={};
  * Copy everything below for translations
  */
 
-
+GO.addressbook.lang.newSearch='New search';
+GO.addressbook.lang.executeQuery='Execute search query';
+GO.addressbook.lang.savedQueries='Saved search queries';
+GO.addressbook.lang.selectField = 'Select field';
 GO.addressbook.lang.selectMailingGroup='Select mailing group';
 
 GO.addressbook.lang.cmdFormLabelAddressBooks = 'Addressbook';

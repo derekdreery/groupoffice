@@ -5,7 +5,7 @@ GO.addressbook.SavedQueryGrid = function(config)
 			config = {};
 		}
 
-		config.title = 'Opgeslagen zoekopdrachten';
+		config.title = GO.addressbook.lang.savedQueries;
 		config.paging=true;
 		config.border=false;
 
@@ -22,7 +22,7 @@ GO.addressbook.SavedQueryGrid = function(config)
 
 		var cm =  new Ext.grid.ColumnModel([
 		{
-			header: 'Zoekopdracht',
+			header: GO.lang.strName,
 			dataIndex: 'name'
 		}]);
 		cm.defaultSortable = true;
