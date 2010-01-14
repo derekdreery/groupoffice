@@ -240,3 +240,5 @@ $countries['YE'] = 'Yemen';
 $countries['YU'] = 'Yugoslavia';
 $countries['ZM'] = 'Zambia';
 $countries['ZW'] = 'Zimbabwe';
+$countries['KP'] = 'Korea, Democratic people\'s republic of';
+$countries['KR'] = 'Korea, Republic of';
