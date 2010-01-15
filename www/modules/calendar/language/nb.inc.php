@@ -92,3 +92,4 @@ $lang['calendar']['your_resource_declined_mail_subject']= 'Bestilling av \'%s\' 
 $lang['calendar']['your_resource_declined_mail_body']= '%s har avvist din bestilling av ressursen \'%s\'.'; //First %s is the name of the person who created the event. Second is the calendar name
 $lang['calendar']['birthday_name']='Fødselsdag: {NAME}';
 $lang['calendar']['birthday_desc']='{NAME} fyller {AGE} i dag';
+$lang['calendar']['unauthorized_participants_write']='Du har ikke tilstrekkelige rettigheter til å registrere avtaler for disse brukerne:<br /><br />{NAMES}<br /><br />I stedet kan du sende dem en invitasjon, slik at de selv kan akseptere og registrere avtalen.';

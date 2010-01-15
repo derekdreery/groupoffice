@@ -40,3 +40,4 @@ GO.tasks.lang.defaultTasklist='Standard oppgaveliste';
 GO.tasks.lang.completedAt='Fullført den';
 GO.tasks.lang.visibleTasklists='Synlige oppgavelister';
 GO.tasks.lang.visible='Synlig';
+GO.tasks.lang.selectIcalendarFile='Velg en iCal kalenderfil (*.ics) ';
