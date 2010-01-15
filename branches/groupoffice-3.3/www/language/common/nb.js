@@ -323,4 +323,4 @@ GO.lang.permissionRead='Kun lese';
 GO.lang.permissionWrite='Skrive';
 GO.lang.permissionDelete='Skrive og slette';
 GO.lang.permissionManage='Behandle';
-
+GO.lang.totals='Totalt';
