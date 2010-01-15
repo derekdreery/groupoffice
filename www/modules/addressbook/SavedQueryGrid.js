@@ -16,7 +16,7 @@ GO.addressbook.SavedQueryGrid = function(config)
 			},
 			root: 'results',
 			id: 'id',
-			fields: ['id','name'],
+			fields: ['id','name','sql'],
 			remoteSort: true
 		});
 

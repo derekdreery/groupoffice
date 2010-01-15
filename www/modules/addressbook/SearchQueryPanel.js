@@ -71,7 +71,7 @@ GO.addressbook.SearchQueryPanel = function(config)
 					selectOnFocus:true,
 					forceSelection:true,
 					emptyText: GO.addressbook.lang.selectField,
-					width:200
+					width:180
 				})
 			},{
 				items:this.comparatorBox = new Ext.form.ComboBox({
@@ -93,7 +93,7 @@ GO.addressbook.SearchQueryPanel = function(config)
 				items:this.criteriumField = new Ext.form.TextField({
 					//fieldLabel: GO.lang['strFirstName'],
 					name: 'criterium',
-					emptyText: 'criterium',
+					emptyText: GO.lang.keyword,
 					width: 180,
 					panel: this
 				})
