@@ -986,7 +986,7 @@ try{
 								if(!is_executable($vacation_exec))
 								{
 									require_once ($GO_LANGUAGE->get_language_file('systemusers'));
-									throw new Exception($lang['systemusers']['vacation_not_executable_error']);
+									//throw new Exception($lang['systemusers']['vacation_not_executable_error']);
 								}
 
 
@@ -996,6 +996,7 @@ try{
 								$vacation['vacation_active'] = isset($_POST['vacation_active']) ? '1' : '0';
 								$vacation['vacation_subject'] = isset($_POST['vacation_subject']) ? ($_POST['vacation_subject']) : '';
 								$vacation['vacation_body'] = isset($_POST['vacation_body']) ? ($_POST['vacation_body']) : '';
+								$vacation['forward_to'] = isset($_POST['forward_to']) ? ($_POST['forward_to']) : '';
 								$vacation['account_id'] = $account['id'];
 								
 								if($su->get_vacation($vacation['account_id']))
@@ -1005,8 +1006,10 @@ try{
 								{
 									$su->add_vacation($vacation);
 								}
-								
-								exec($GO_CONFIG->cmd_sudo.' '.$GO_MODULES->modules['systemusers']['path'].'sudo.php set_vacation '.$vacation['account_id']);
+
+								$cmd = $GO_CONFIG->cmd_sudo.' '.$GO_MODULES->modules['systemusers']['path'].'sudo.php '.$GO_CONFIG->get_config_file().' set_vacation '.$vacation['account_id'];
+								//debug($cmd);
+								exec($cmd);
 							}							
 						}else
 						{

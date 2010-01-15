@@ -1,9 +1,10 @@
 #!/usr/bin/php
 <?php
+define('CONFIG_FILE', $argv[1]);
 
 require_once('../../Group-Office.php');
 
-$task = $argv[1];
+$task = $argv[2];
 $user_home_dirs = isset($GO_CONFIG->user_home_dirs) ? $GO_CONFIG->user_home_dirs : '/home/';
 
 
@@ -30,8 +31,8 @@ switch($task)
 {
 	case 'add_user':
 
-		$username = $argv[2];
-		$password = $argv[3];	
+		$username = $argv[3];
+		$password = $argv[4];
 
 		exec($GO_CONFIG->cmd_sudo.' useradd -m '.$username. ' 2>&1', $output, $status);	
 		if($status)
@@ -50,8 +51,8 @@ switch($task)
 
 	case 'update_user':
 
-		$user_id = $argv[2];
-		$password = $argv[3];
+		$user_id = $argv[3];
+		$password = $argv[4];
 		$GO_USERS->get_user($user_id);
 		$username = $GO_USERS->f('username');
 
@@ -65,7 +66,7 @@ switch($task)
 
 	case 'delete_user':
 
-		$username = $argv[2];
+		$username = $argv[3];
 		
 		exec($GO_CONFIG->cmd_sudo.' userdel '.$username.' 2>&1', $output, $status);
 		if($status)
@@ -77,7 +78,7 @@ switch($task)
 
 	case 'set_vacation':
 
-		$account_id=$argv[2];
+		$account_id=$argv[3];
 
 		require_once($GO_CONFIG->class_path.'mail/RFC822.class.inc');
 		$RFC822 = new RFC822();
@@ -91,7 +92,6 @@ switch($task)
 		require_once($GO_MODULES->modules['systemusers']['path'].'vacation_functions.php');
 
 		$account = $email->get_account($account_id);
-
 		if($account)
 		{
 			$homedir = $user_home_dirs.$account['username'];
@@ -104,7 +104,7 @@ switch($task)
 				$vacation = $su->get_vacation($account_id);
 
 				// remove vacation reference in forward file if module is being uninstalled
-				if(isset($argv[3]) && $argv[3] == 'uninstall')
+				if(isset($argv[4]) && $argv[4] == 'uninstall')
 					$vacation['vacation_active'] = 0;
 		
 				if($vacation['vacation_active'])
@@ -116,25 +116,33 @@ switch($task)
 					/* update .forward file */
 					excludeVacation ($forward_file, $account['username'], $account['email']);
 					includeVacation ($forward_file, $account['username'], $account['email']);
+
+					
+
 					writeFile ($vacation_file, $vacation_file_contents);
 					/* update vacation database */
 					//copy ($empty_db_file, $db_file);
 
 					chown($vacation_file, $account['username']);
-					//chown($db_file, $account['username']);
-					chown($forward_file, $account['username']);
+					//chown($db_file, $account['username']);				
 
 					chmod($vacation_file, 0640);
-					//chmod($db_file, 0640);
-					chmod($forward_file, 0640);
-
-				}
-				else {
+				}else {
 					/* update .forward file */
 					excludeVacation ($forward_file, $account['username'], $account['email']);
 					if(file_exists($vacation_file)) unlink($vacation_file);
 					if(file_exists($db_file)) unlink($db_file);
 				}
+
+				debug($forward_file);
+
+				removeForward($forward_file);
+				if(!empty($vacation['forward_to']))
+					includeForward($forward_file, $vacation['forward_to'], $account['username']);
+
+				chown($forward_file, $account['username']);
+				chmod($forward_file, 0640);
+				
 			}
 		}
 
