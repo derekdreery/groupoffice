@@ -29,7 +29,7 @@ class users extends db
 		);
 
 		$GO_LANGUAGE->require_language_file('users');
-
+		
 		if(!$r['register_email_subject']){
 			$r['register_email_subject']=$lang['users']['register_email_subject'];
 		}
