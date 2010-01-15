@@ -788,7 +788,10 @@ try{
 					if(stripos($parts[0]['mime'],'plain')!==false)
 						$parts[0]['mime']=$default_mime;
 
-					if(empty($parts[0]['transfer']))
+						//debug($response['content_transfer_encoding']);
+					  //debug($parts[0]['transfer']);
+
+					if(!empty($response['content_transfer_encoding']) && (empty($parts[0]['transfer']) || strtolower($parts[0]['transfer'])=='7bit' || strtolower($parts[0]['transfer'])=='8bit'))
 						$parts[0]['transfer']=$response['content_transfer_encoding'];
 				}
 

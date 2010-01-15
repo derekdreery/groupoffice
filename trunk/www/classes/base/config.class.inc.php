@@ -610,6 +610,14 @@ class GO_CONFIG {
 	 * @var int
 	 */
 	var $default_password_length=6;
+	
+	/**
+	 * Automatically log a user out after n seconds of inactivity
+	 *
+	 * @var int
+	 */
+
+	var $session_inactivity_timeout = 0;
 
 	/*//////////////////////////////////////////////////////////////////////////////
 	 //////////      Variables that are not touched by the installer   /////////////
@@ -621,7 +629,7 @@ class GO_CONFIG {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '3.3.9';
+	var $version = '3.3.11';
 
 
 	/* The permissions mode to use when creating files
@@ -646,7 +654,7 @@ class GO_CONFIG {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20100105';
+	var $mtime = '20100114';
 
 	#group configuration
 	/**
