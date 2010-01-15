@@ -79,6 +79,7 @@
 # ==========================================================================
 smtp      inet  n       -       -       -       -       smtpd
 	-o content_filter=spamassassin
+	-o receive_override_options=no_unknown_recipient_checks,no_header_body_checks,no_milters
 spamassassin unix -     n       n       -       -       pipe
 	user=spamd argv=/usr/bin/spamc -f -e
 	/usr/sbin/sendmail -oi -f ${sender} ${recipient}

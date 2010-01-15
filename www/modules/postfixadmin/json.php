@@ -208,6 +208,26 @@ try{
 				throw new AccessDeniedException();
 				
 			$response['data']=$mailbox;
+
+			//get forward_to value for forwarding
+			$alias = $postfixadmin->get_alias_by_address($username);
+
+			$forward_to=array();
+			$goto = explode(',', $alias['goto']);
+			foreach($goto as $to_address){
+				if(strpos($to_address,'#')!==false){
+					//autoreply alias
+					continue;
+				}
+				if(strpos($to_address, $username)!==false){
+					continue;
+				}
+				$forward_to[]=$to_address;
+			}
+
+			$response['data']['forward_to']=implode(',', $forward_to);
+
+
 			$response['success']=true;
 			
 			break;

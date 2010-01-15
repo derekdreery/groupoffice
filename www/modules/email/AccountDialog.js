@@ -450,6 +450,11 @@ GO.email.AccountDialog = function(config) {
 			anchor : '-20',
 			fieldLabel : GO.email.lang.vacationBody,
 			height : 160
+		},{
+			xtype: 'textfield',
+			name:'forward_to',
+			anchor:'-20',
+			fieldLabel:GO.email.lang.forwardTo
 		}]
 
 	});
