@@ -19,7 +19,7 @@ class systemusers extends db {
 			throw new Exception($lang['common']['missingField']);
 		}
 
-		exec($GO_CONFIG->cmd_sudo.' '.$GO_MODULES->modules['systemusers']['path'].'sudo.php add_user '.$user['username'].' '.$user['password'], $output);
+		exec($GO_CONFIG->cmd_sudo.' '.$GO_MODULES->modules['systemusers']['path'].'sudo.php '.$GO_CONFIG->get_config_file().' add_user '.$user['username'].' '.$user['password'], $output);
 		if($output)
 		{
 			throw new Exception($output[0]);
@@ -32,7 +32,7 @@ class systemusers extends db {
 
 		if(isset($user['password']) && $user['id'])
 		{
-			exec($GO_CONFIG->cmd_sudo.' '.$GO_MODULES->modules['systemusers']['path'].'sudo.php update_user '.$user['id'].' '.$user['password'], $output);
+			exec($GO_CONFIG->cmd_sudo.' '.$GO_MODULES->modules['systemusers']['path'].'sudo.php '.$GO_CONFIG->get_config_file().' update_user '.$user['id'].' '.$user['password'], $output);
 			if($output)
 			{
 				throw new Exception($output[0]);
@@ -44,7 +44,7 @@ class systemusers extends db {
 	{
 		global $GO_CONFIG, $GO_MODULES;
 		
-		exec($GO_CONFIG->cmd_sudo.' '.$GO_MODULES->modules['systemusers']['path'].'sudo.php delete_user '.$user['username'], $output);
+		exec($GO_CONFIG->cmd_sudo.' '.$GO_MODULES->modules['systemusers']['path'].'sudo.php '.$GO_CONFIG->get_config_file().' delete_user '.$user['username'], $output);
 		if($output)
 		{
 			throw new Exception(str_replace('<br />',"\n", $output[0]));
