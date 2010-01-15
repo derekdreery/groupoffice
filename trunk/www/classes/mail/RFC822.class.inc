@@ -177,12 +177,15 @@ class RFC822
 	* @access public
 	* @return string  RFC822 formatted address list
 	*/
-	function reformat_address_list($address_list)
+	function reformat_address_list($address_list, $validate=false)
 	{
 		$addresses = $this->parse_address_list($address_list);
 		$formatted = array();
 		foreach ($addresses as $address)
-		{     	
+		{
+			if($validate && !String::validate_email($address['email'])){
+				return false;
+			}
 			$formatted[] = $this->write_address($address['personal'], $address['email']);	
 		}
 		return implode(',', $formatted);

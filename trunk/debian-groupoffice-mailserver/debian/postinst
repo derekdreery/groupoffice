@@ -47,6 +47,9 @@ postconf -e 'smtpd_recipient_restrictions = permit_mynetworks, permit_sasl_authe
 postconf -e 'smtpd_data_restrictions = reject_unauth_pipelining, reject_multi_recipient_bounce, permit'
 
 
+#address mapping is done after spamassassin
+postconf -e 'receive_override_options = no_address_mappings'
+
 #check if user vmail exists
 if  ! id vmail 1>/dev/null 2>&1 ; then
 	echo Adding vmail user

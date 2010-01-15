@@ -1385,6 +1385,7 @@ try{
 
 												try{
 													$server_response = $email->get_servermanager_mailbox_info($response['data']);
+													
 												}catch(Exception $e){
 													go_log(LOG_DEBUG, 'Connection to postfixadmin failed: '.$e->getMessage());
 												}
@@ -1393,7 +1394,8 @@ try{
 												{
 													$response['data']['vacation_active']=$server_response['data']['vacation_active'];
 													$response['data']['vacation_subject']=$server_response['data']['vacation_subject'];
-													$response['data']['vacation_body']=$server_response['data']['vacation_body'];		
+													$response['data']['vacation_body']=$server_response['data']['vacation_body'];
+													$response['data']['forward_to'] = $server_response['data']['forward_to'];
 												}elseif(isset($GO_MODULES->modules['systemusers']))
 												{
 													require_once($GO_MODULES->modules['systemusers']['class_path'].'systemusers.class.inc.php');
@@ -1412,6 +1414,7 @@ try{
 														$response['data']['vacation_active'] = ($vacation['vacation_active']) ? $vacation['vacation_active'] : 0;
 														$response['data']['vacation_subject'] = ($vacation['vacation_subject']) ? $vacation['vacation_subject'] : '';
 														$response['data']['vacation_body'] = ($vacation['vacation_body']) ? $vacation['vacation_body'] : '';
+														
 													}
 												}
 												$response['success']=true;

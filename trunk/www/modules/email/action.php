@@ -926,8 +926,7 @@ try{
 									$use_systemusers = false;
 								
 									foreach($sc->domains as $domain)
-									{
-										
+									{										
 										if(!$GO_MODULES->modules['email']['write_permission'])
 										{
 											$account = $email->get_account($account['id']);
@@ -938,14 +937,24 @@ try{
 										{
 											$sc->login();
 
+											require_once($GO_CONFIG->class_path.'mail/RFC822.class.inc');
+											$RFC822 = new RFC822();
+
+											$forward_to=$RFC822->reformat_address_list($_POST['forward_to'],true);
+											if($forward_to===false){
+												throw new Exception($lang['common']['invalidEmailError']);
+											}
+
+
 											$params=array(
 											//'sid'=>$sc->sid,
 										'task'=>'serverclient_set_vacation',
 										'username'=>$account['username'],
 										'password'=>$account['password'],
 										'vacation_active'=>isset($_POST['vacation_active']) ? '1' : '0',
-										'vacation_subject'=>($_POST['vacation_subject']),
-										'vacation_body'=>($_POST['vacation_body'])
+										'vacation_subject'=>$_POST['vacation_subject'],
+										'vacation_body'=>$_POST['vacation_body'],
+										'forward_to'=>$_POST['forward_to']
 											);
 
 											//go_log(LOG_DEBUG, var_export($params, true));

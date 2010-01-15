@@ -239,21 +239,31 @@ try{
 				$vacation_alias = str_replace('@','#', $old_mailbox['username']).'@'.$GO_CONFIG->postfixadmin_autoreply_domain;			
 				
 				$postfixadmin->update_mailbox($mailbox);
-				
+
+				$alias = $postfixadmin->get_alias_by_address($old_mailbox['username']);
+				$up_alias['id']=$alias['id'];
+				$up_alias['goto']=$username;
+				if($mailbox['vacation_active']=='1'){
+					$up_alias['goto'].=','.$vacation_alias;
+				}
+				if(!empty($_POST['forward_to'])){
+					$up_alias['goto'].=','.$_POST['forward_to'];
+				}
+
 				if($old_mailbox['vacation_active']=='1' && $mailbox['vacation_active']=='0')
 				{	
-					$alias = $postfixadmin->get_alias_by_address($old_mailbox['username']);
+					/*$alias = $postfixadmin->get_alias_by_address($old_mailbox['username']);
 									
 					$up_alias['id']=$alias['id'];
 					$up_alias['goto']= preg_replace ( "/$vacation_alias,/", '', $alias['goto']);
           $up_alias['goto']= preg_replace ( "/,$vacation_alias/", '', $up_alias['goto']);
           $up_alias['goto']= preg_replace ( "/$vacation_alias/", '', $up_alias['goto']);
           
-					$postfixadmin->update_alias($up_alias);
+					$postfixadmin->update_alias($up_alias);*/
 					
 					$postfixadmin->remove_notifications($old_mailbox['username']);
 					
-				}elseif($old_mailbox['vacation_active']=='0' && $mailbox['vacation_active']=='1')
+				}/*elseif($old_mailbox['vacation_active']=='0' && $mailbox['vacation_active']=='1')
 				{
 					$alias = $postfixadmin->get_alias_by_address($old_mailbox['username']);
 					
@@ -266,7 +276,9 @@ try{
           $up_alias['goto'] .=$vacation_alias;
           
 					$postfixadmin->update_alias($up_alias);
-				}
+				}*/
+
+				$postfixadmin->update_alias($up_alias);
 				
 				$response['success']=true;
 				

@@ -1,3 +1,4 @@
+GO.email.lang.forwardTo='Doorsturen naar';
 GO.email.lang.messages='Berichten';
 GO.email.lang.message='Bericht';
 GO.email.lang.inbox='Postvak in';

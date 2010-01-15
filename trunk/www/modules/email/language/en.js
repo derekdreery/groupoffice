@@ -8,7 +8,7 @@ GO.email.lang={};
 /**
  * Copy everything below for translations
  */
-
+GO.email.lang.forwardTo='Forward mail to';
 GO.email.lang.messages='Messages';
 GO.email.lang.message='Message';
 GO.email.lang.inbox='Inbox';
