@@ -795,6 +795,8 @@ try{
 						$parts[0]['transfer']=$response['content_transfer_encoding'];
 				}
 
+				//debug($parts);
+
 				//block remote URL's if contacts is unknown
 				$response['blocked_images']=0;
 				if(!isset($_POST['unblock']))
@@ -834,7 +836,7 @@ try{
 						//debug('ja');
 						$part_body = $imap->view_part($uid, $part["number"], $part["transfer"], $part["charset"]);
 
-						//debug($part_body);
+						
 
 						switch($mime)
 						{
@@ -844,7 +846,7 @@ try{
 
 
 								$part_body = empty($_POST['plaintext']) ? String::text_to_html($part_body) : $part_body;
-
+//debug($part_body);
 								for($i=0;$i<count($uuencoded_attachments);$i++)
 								{
 									$attachment = $uuencoded_attachments[$i];

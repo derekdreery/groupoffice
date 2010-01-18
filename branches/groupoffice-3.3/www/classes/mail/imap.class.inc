@@ -1123,12 +1123,15 @@ class imap{
 			if(function_exists('mb_detect_encoding'))
 			{
 				$part_charset = mb_detect_encoding($str, "auto");
+				if(!$part_charset){
+					$part_charset='us-ascii';
+				}
 			}else
 			{
 				$part_charset = 'ISO-8859-1';
 			}
 		}
-
+//debug($part_charset);
 		if ($part_charset != '') {			
 			$str = String::clean_utf8($str, $part_charset);
 			if($part_charset != $charset){
