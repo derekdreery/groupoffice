@@ -15,7 +15,6 @@ GO.files.FilePropertiesDialog = function(config){
 	
 	if(!config)
 		config={};
-
 	
 	this.propertiesPanel = new Ext.Panel({
 		layout:'form',
@@ -123,8 +122,22 @@ GO.files.FilePropertiesDialog = function(config){
 		defaultType: 'textfield',
 		items:this.tabPanel
 	});
-	
-	var tbar = [{
+
+
+	var tbar = [this.linkBrowseButton = new Ext.Button({
+			iconCls : 'btn-link',
+			cls : 'x-btn-text-icon',
+			text : GO.lang.cmdBrowseLinks,
+			disabled : true,
+			handler : function() {
+				GO.linkBrowser.show({
+					link_id : this.file_id,
+					link_type : "6",
+					folder_id : "0"
+				});
+			},
+			scope : this
+		}),{
 					iconCls: 'btn-save',
 					text: GO.lang.download,
 					cls: 'x-btn-text-icon',
@@ -229,13 +242,14 @@ Ext.extend(GO.files.FilePropertiesDialog, Ext.Window, {
 				Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback);
 			},
 	    scope: this
-		});		
+		});
 	},
 	
 	setFileID : function(file_id)
 	{
 		this.file_id = file_id;
 		this.versionsGrid.setFileID(file_id);
+		this.linkBrowseButton.setDisabled(file_id < 1);
 	},
 	
 	setWritePermission : function(writePermission)
