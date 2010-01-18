@@ -1,3 +1,6 @@
+2010/01/18 3.3.12
+- Bugs fixed
+
 2010/01/14 3.3.11
 - Bug in sync fixed
 - Bug in OO templates creation fixed
