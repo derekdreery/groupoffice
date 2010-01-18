@@ -708,6 +708,7 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 					//this.csvFieldDialog.close();
 					
 					Ext.MessageBox.alert(GO.lang.strSuccess, GO.addressbook.lang.importSuccess);
+					this.refreshAb();
 				}
 			},
 			failure: function(form, action) {
@@ -719,6 +720,15 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 			},
 			scope: this
 		});
+	},
+
+	refreshAb : function(){
+		var ab = GO.mainLayout.getModulePanel('addressbook');
+		if(ab.tabPanel.getActiveTab().id=='ab-contacts-grid')
+			ab.contactsGrid.store.reload();
+		else
+			ab.companiesGrid.store.reload();
+
 	},
 
 	importData : function()
@@ -739,7 +749,8 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 				if(this.csvFieldDialog)
 					this.csvFieldDialog.close();
 					
-				Ext.MessageBox.alert(GO.lang.strSuccess, GO.addressbook.lang.importSuccess);				
+				Ext.MessageBox.alert(GO.lang.strSuccess, GO.addressbook.lang.importSuccess);
+				this.refreshAb();
 			},
 			failure: function(form, action) {					
 				if(action.failureType != 'client')
