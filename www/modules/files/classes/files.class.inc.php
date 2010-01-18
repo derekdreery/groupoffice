@@ -1637,9 +1637,8 @@ class files extends db {
 			$file = $this->get_file($file);
 		}
 
-		
-
 		if($file) {
+
 			$share = $fs->find_share($file['folder_id']);
 
 			if(!isset($file['comments']))
