@@ -320,13 +320,12 @@ class search extends db {
 
 		while($this->next_record())
 		{
-
 			$response['results'][]=array(
 				'iconCls'=>'go-link-icon-'.$this->f('link_type'),
 				'id'=>$this->f('id'),
 				'link_type'=>$this->f('link_type'),
 				'link_and_type'=>$this->f('link_type').':'.$this->f('id'),
-				'type_name'=>'('.$this->f('type').') '.$this->f('name'),
+				'type_name'=>'('.$this->f('type').') '.strip_tags($this->f('name')),
 				'name'=>$this->f('name'),
 				'type'=>$this->f('type'),
 				'description'=>$this->f('description'),
