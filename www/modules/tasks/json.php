@@ -386,22 +386,21 @@ try{
 			$response['total'] = $tasks->get_tasks($tasklists,$user_id, $show_completed, $sort, $dir, $start, $limit,$show_inactive, $query);
 			$response['results']=array();
 
-			$now=time();
+			
+
+			if($GO_MODULES->has_module('customfields')) {
+				require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+				$cf = new customfields();
+			}else
+			{
+				$cf=false;
+			}
 
 			while($task = $tasks->next_record(DB_ASSOC))
 			{
-				$task = $tasks->record;
-				$task['completed']=$tasks->f('completion_time')>0;
-				$task['late']=!$task['completed'] && $task['due_time']<$now;
-				$task['due_time']=Date::get_timestamp($task['due_time'], false);
-				$task['mtime']=Date::get_timestamp($task['mtime']);
-				$task['ctime']=Date::get_timestamp($task['ctime']);
-				$task['completion_time']=Date::get_timestamp($task['completion_time']);
-				$task['start_time']=Date::get_timestamp($task['start_time'], false);
+				$tasks->format_task_record(&$task, $cf);
 
-				$task['status']=$lang['tasks']['statuses'][$task['status']];
-				$task['description']=String::text_to_html(String::cut_string($task['description'],500));
-				$tl_id = array_search($tasks->f('tasklist_id'), $tasklists);
+				$tl_id = array_search($task['tasklist_id'], $tasklists);
 				$task['tasklist_name'] = (isset($tasklists_name) && $tl_id !== false)? $tasklists_name[$tl_id]: '';
 				$response['results'][] = $task;
 			}
