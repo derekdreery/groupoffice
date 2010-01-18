@@ -414,6 +414,24 @@ class addressbook extends db {
 		return false;
 	}
 
+	function get_company_by_email($email, $user_id) {
+		$sql = "SELECT * FROM ab_companies WHERE ";
+
+		$user_ab = $this->get_user_addressbook_ids($user_id);
+		if(count($user_ab) > 1) {
+			$sql .= "addressbook_id IN (".implode(",",$user_ab).") ";
+		}elseif(count($user_ab)==1) {
+			$sql .= "addressbook_id=".$user_ab[0]." ";
+		}
+		$sql .= "AND email='".$this->escape($email)."' LIMIT 0,1";
+		
+		$this->query($sql);
+		if ($this->next_record()) {
+			return $this->record;
+		}
+		return false;
+	}
+
 	function get_company_id_by_name($name, $addressbook_id) {
 		$sql = "SELECT id FROM ab_companies WHERE addressbook_id='$addressbook_id' AND name='".$this->escape($name)."'";
 		$this->query($sql);
