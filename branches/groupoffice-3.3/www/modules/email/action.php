@@ -40,7 +40,7 @@ function add_unknown_recipient($email, $name)
 			$name=$email;
 		}
 
-		if (!$ab->get_contact_by_email($email,$GO_SECURITY->user_id) && !$GO_USERS->get_authorized_user_by_email($GO_SECURITY->user_id, $email))
+		if (!$ab->get_contact_by_email($email,$GO_SECURITY->user_id) && !$ab->get_company_by_email($email,$GO_SECURITY->user_id) && !$GO_USERS->get_authorized_user_by_email($GO_SECURITY->user_id, $email))
 		{
 			$contact['name']=htmlspecialchars($RFC822->write_address($name, $email), ENT_COMPAT, 'UTF-8');
 			$contact['first_name'] = $name_arr['first'];
