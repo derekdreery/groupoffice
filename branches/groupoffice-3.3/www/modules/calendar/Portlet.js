@@ -114,6 +114,7 @@ GO.calendar.SummaryGroupPanel = function(config)
 	}];
 		
 	config.view=  new Ext.grid.GroupingView({
+		scrollOffset: 2,
 		hideGroupedColumn:true,
 		groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "'+GO.lang.items+'" : "'+GO.lang.item+'"]})',
 		emptyText: GO.calendar.lang.noAppointmentsToDisplay,

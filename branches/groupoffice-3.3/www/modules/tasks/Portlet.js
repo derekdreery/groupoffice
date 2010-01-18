@@ -81,6 +81,7 @@ GO.tasks.SimpleTasksPanel = function(config)
 			dataIndex: 'tasklist_name'
 		}];
 		config.view=new Ext.grid.GroupingView({
+			scrollOffset: 2,
 			forceFit:true,
 			hideGroupedColumn:true,
 			emptyText: GO.tasks.lang.noTask,
