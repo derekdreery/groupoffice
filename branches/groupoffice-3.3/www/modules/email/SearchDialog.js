@@ -10,107 +10,109 @@ GO.email.SearchDialog = function(config){
 			{
 				
 				this.formPanel = new Ext.FormPanel({
-					defaults: {anchor: '100%'},
-			        defaultType: 'textfield',
-			        autoHeight:true,
-			        bodyStyle:'padding:5px',
-			        labelWidth:125,
+					defaults: {
+						anchor: '100%'
+					},
+					defaultType: 'textfield',
+					autoHeight:true,
+					bodyStyle:'padding:5px',
+					labelWidth:125,
 			        
 					items: [{
-			                fieldLabel: GO.email.lang.subject,
-			                name: 'subject'
-				            },
-				            {
-				                fieldLabel: GO.email.lang.searchFrom,
-				                name: 'from'
-				            },
-				            {
-				                fieldLabel: GO.email.lang.searchTo,
-				                name: 'to'
-				            },
-				            {
-				                fieldLabel: GO.email.lang.searchCC,
-				                name: 'cc'
-				            },
-				            {
-				                fieldLabel: GO.email.lang.body,
-				                name: 'body'
-				            },
-				            new Ext.form.DateField({
-	       						fieldLabel: GO.email.lang.recievedBefore,
-	       						name: 'before',
-	       						format: GO.settings['date_format']
-							}),
-				            new Ext.form.DateField({
-	       						fieldLabel: GO.email.lang.recievedSince,
-	       						name: 'since',
-	       						format: GO.settings['date_format']
-							}),
-							new Ext.form.ComboBox({
-				               	fieldLabel: GO.email.lang.flagged,
-				                name:'flagged',
-				                store: new Ext.data.SimpleStore({
-				                    fields: ['value', 'text'],
-				                    data : [
-				                    	['', GO.email.lang.NA],
-				                    	['FLAGGED', GO.lang.cmdYes],
-				                    	['UNFLAGGED', GO.lang.cmdNo]
-				                    ]
+						fieldLabel: GO.email.lang.subject,
+						name: 'subject'
+					},
+					{
+						fieldLabel: GO.email.lang.searchFrom,
+						name: 'from'
+					},
+					{
+						fieldLabel: GO.email.lang.searchTo,
+						name: 'to'
+					},
+					{
+						fieldLabel: GO.email.lang.searchCC,
+						name: 'cc'
+					},
+					{
+						fieldLabel: GO.email.lang.body,
+						name: 'body'
+					},
+					new Ext.form.DateField({
+						fieldLabel: GO.email.lang.recievedBefore,
+						name: 'before',
+						format: GO.settings['date_format']
+					}),
+					new Ext.form.DateField({
+						fieldLabel: GO.email.lang.recievedSince,
+						name: 'since',
+						format: GO.settings['date_format']
+					}),
+					new Ext.form.ComboBox({
+						fieldLabel: GO.email.lang.flagged,
+						name:'flagged',
+						store: new Ext.data.SimpleStore({
+							fields: ['value', 'text'],
+							data : [
+							['', GO.email.lang.NA],
+							['FLAGGED', GO.lang.cmdYes],
+							['UNFLAGGED', GO.lang.cmdNo]
+							]
 				                    
-				                }),
-				                value:'',
-				                valueField:'value',
-				                displayField:'text',
-				                mode: 'local',
-				                triggerAction: 'all',
-				                editable: false,
-				                selectOnFocus:true,
-				                forceSelection: true
-				            }),
-							new Ext.form.ComboBox({
-				               	fieldLabel: GO.email.lang.answered,
-				                name:'answered',
-				                store: new Ext.data.SimpleStore({
-				                    fields: ['value', 'text'],
-				                    data : [
-				                    	['', GO.email.lang.NA],
-				                    	['ANSWERED', GO.lang.cmdYes],
-				                    	['UNANSWERED', GO.lang.cmdNo]
-				                    ]
+						}),
+						value:'',
+						valueField:'value',
+						displayField:'text',
+						mode: 'local',
+						triggerAction: 'all',
+						editable: false,
+						selectOnFocus:true,
+						forceSelection: true
+					}),
+					new Ext.form.ComboBox({
+						fieldLabel: GO.email.lang.answered,
+						name:'answered',
+						store: new Ext.data.SimpleStore({
+							fields: ['value', 'text'],
+							data : [
+							['', GO.email.lang.NA],
+							['ANSWERED', GO.lang.cmdYes],
+							['UNANSWERED', GO.lang.cmdNo]
+							]
 				                    
-				                }),
-				                value:'',
-				                valueField:'value',
-				                displayField:'text',
-				                mode: 'local',
-				                triggerAction: 'all',
-				                editable: false,
-				                selectOnFocus:true,
-				                forceSelection: true
-				            }),
-							new Ext.form.ComboBox({
-				               	fieldLabel: GO.email.lang.read,
-				                name:'seen',
-				                store: new Ext.data.SimpleStore({
-				                    fields: ['value', 'text'],
-				                    data : [
-				                    	['', GO.email.lang.NA],
-				                    	['SEEN', GO.lang.cmdYes],
-				                    	['UNSEEN', GO.lang.cmdNo]
-				                    ]
+						}),
+						value:'',
+						valueField:'value',
+						displayField:'text',
+						mode: 'local',
+						triggerAction: 'all',
+						editable: false,
+						selectOnFocus:true,
+						forceSelection: true
+					}),
+					new Ext.form.ComboBox({
+						fieldLabel: GO.email.lang.read,
+						name:'seen',
+						store: new Ext.data.SimpleStore({
+							fields: ['value', 'text'],
+							data : [
+							['', GO.email.lang.NA],
+							['SEEN', GO.lang.cmdYes],
+							['UNSEEN', GO.lang.cmdNo]
+							]
 				                    
-				                }),
-				                value:'',
-				                valueField:'value',
-				                displayField:'text',
-				                typeAhead: true,
-				                mode: 'local',
-				                triggerAction: 'all',
-				                editable: false,
-				                selectOnFocus:true,
-				                forceSelection: true
-				            })
-				            ]
+						}),
+						value:'',
+						valueField:'value',
+						displayField:'text',
+						typeAhead: true,
+						mode: 'local',
+						triggerAction: 'all',
+						editable: false,
+						selectOnFocus:true,
+						forceSelection: true
+					})
+					]
 				
 				
 				});
@@ -142,13 +144,13 @@ GO.email.SearchDialog = function(config){
 						scope:this					
 					}],
 					keys: [{
-			            key: Ext.EventObject.ENTER,
-			            fn: this.doSearch,
-			            scope:this
-			        }],
-	        focus: function(){
-	        	this.formPanel.form.findField('subject').focus(true);			        	
-	        }.createDelegate(this)
+						key: Ext.EventObject.ENTER,
+						fn: this.doSearch,
+						scope:this
+					}],
+					focus: function(){
+						this.formPanel.form.findField('subject').focus(true);
+					}.createDelegate(this)
 				}
 				);	
 				
@@ -157,26 +159,26 @@ GO.email.SearchDialog = function(config){
 
 			this.dialog.show();
 
-                        if(GO.email.search_query)
-                        {
-                                var search_query = GO.email.search_query;
-                                var search_type = (GO.email.search_type) ? GO.email.search_type : GO.email.search_type_default;
+			if(GO.email.search_query)
+			{
+				var search_query = GO.email.search_query;
+				var search_type = (GO.email.search_type) ? GO.email.search_type : GO.email.search_type_default;
 
-                                this.formPanel.form.findField('from').setValue(
-                                        (search_type == 'from') ? search_query : '');
-                                this.formPanel.form.findField('subject').setValue(
-                                        (search_type == 'subject') ? search_query : '');
-                                this.formPanel.form.findField('to').setValue(
-                                        (search_type == 'to') ? search_query : '');
-                                this.formPanel.form.findField('cc').setValue(
-                                        (search_type == 'cc') ? search_query : '');
+				this.formPanel.form.findField('from').setValue(
+					(search_type == 'from') ? search_query : '');
+				this.formPanel.form.findField('subject').setValue(
+					(search_type == 'subject') ? search_query : '');
+				this.formPanel.form.findField('to').setValue(
+					(search_type == 'to') ? search_query : '');
+				this.formPanel.form.findField('cc').setValue(
+					(search_type == 'cc') ? search_query : '');
                                 
-                        }
+			}
 		},
 		
 		doSearch : function(){
 
-                        this.hasSearch = true;                        
+			this.hasSearch = true;
 			config.store.baseParams['query']=this.buildQuery();
 			config.store.load();
 
@@ -186,6 +188,8 @@ GO.email.SearchDialog = function(config){
 		
 		buildQuery : function() {
 			var query = '';
+
+			var months=['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 			
 			var form = this.formPanel.form;
 			
@@ -223,12 +227,12 @@ GO.email.SearchDialog = function(config){
 			
 			if(before!='')
 			{
-				query += 'BEFORE "'+before.format('d-M-Y')+'" ';
+				query += 'BEFORE "'+before.format('d')+'-'+months[before.format('n')-1]+'-'+before.format('Y')+'" ';
 			}
 			
 			if(since!='')
 			{
-				query += 'SINCE "'+since.format('d-M-Y')+'" ';
+				query += 'SINCE "'+since.format('d')+'-'+months[since.format('n')-1]+'-'+since.format('Y')+'" ';
 			}
 			
 			if (flagged != '') {
