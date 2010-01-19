@@ -129,8 +129,8 @@ CREATE TABLE IF NOT EXISTS `ab_contacts` (
   KEY `link_id` (`link_id`),
   KEY `addressbook_id` (`addressbook_id`),
 	KEY `email` (`email`),
-	KEY `email` (`email2`),
-	KEY `email` (`email3`)
+	KEY `email2` (`email2`),
+	KEY `email3` (`email3`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
