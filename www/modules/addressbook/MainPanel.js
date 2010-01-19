@@ -265,7 +265,7 @@ GO.addressbook.MainPanel = function(config)
 			handler:function(){
 				if(!this.manageDialog)
 				{
-					this.manageDialog = new GO.addressbook.ManageDialog();
+					this.manageDialog = new GO.addressbook.ManageDialog();					
 				}
 				this.manageDialog.show();
 			},  

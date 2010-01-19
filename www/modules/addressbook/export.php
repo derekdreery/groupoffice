@@ -79,7 +79,7 @@ if($file_type == 'vcf') {
 			foreach($customfields as $field)
 			{
 				if($field['datatype']!='heading' && $field['datatype']!='function')
-					$headings[]=$field['label'];
+					$headings[]=$field['name'];
 			}			
 		}
 		
@@ -98,7 +98,7 @@ if($file_type == 'vcf') {
 				foreach($customfields as $field)
 				{
 					if($field['datatype']!='heading' && $field['datatype']!='function')
-						$record[]=$customvalues[$field['name']];
+						$record[]=$customvalues[$field['dataname']];
 				}
 			}
 			
@@ -118,7 +118,7 @@ if($file_type == 'vcf') {
 			foreach($customfields as $field)
 			{
 				if($field['datatype']!='heading' && $field['datatype']!='function')
-					$headings[]=$field['label'];
+					$headings[]=$field['name'];
 			}			
 		}
 		
@@ -142,7 +142,7 @@ if($file_type == 'vcf') {
 				foreach($customfields as $field)
 				{
 					if($field['datatype']!='heading' && $field['datatype']!='function')
-						$record[]=$customvalues[$field['name']];
+						$record[]=$customvalues[$field['dataname']];
 				}
 			}
 			

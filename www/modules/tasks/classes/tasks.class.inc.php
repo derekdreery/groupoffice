@@ -573,6 +573,31 @@ class tasks extends db
 		return true;
 	}
 
+	function format_task_record(&$task, $cf=false){
+		global $lang;
+		$now=time();
+
+		if(!isset($lang['tasks'])){
+			global $GO_LANGUAGE;
+			$GO_LANGUAGE->require_language_file('tasks');
+		}
+		
+		$task['completed']=$task['completion_time']>0;
+		$task['late']=!$task['completed'] && $task['due_time']<$now;
+		$task['due_time']=Date::get_timestamp($task['due_time'], false);
+		$task['mtime']=Date::get_timestamp($task['mtime']);
+		$task['ctime']=Date::get_timestamp($task['ctime']);
+		$task['completion_time']=Date::get_timestamp($task['completion_time']);
+		$task['start_time']=Date::get_timestamp($task['start_time'], false);
+
+		$task['status']=$lang['tasks']['statuses'][$task['status']];
+		$task['description']=String::text_to_html(String::cut_string($task['description'],500));
+
+		if($cf)
+			$cf->format_record($record, 12, true);
+		
+	}
+
 	function get_tasks(
 			$lists,
 			$user_id=0,
@@ -679,13 +704,13 @@ class tasks extends db
 		}
 	}
 
-	function format_task_record(&$record) {
+	/*function format_task_record(&$record) {
 		$record['start_time']=Date::get_timestamp($record['start_time']);
 		$record['due_time']=Date::get_timestamp($record['due_time']);
 		$record['completion_time']=Date::get_timestamp($record['completion_time']);
 		$record['ctime']=Date::get_timestamp($record['ctime']);
 		$record['mtime']=Date::get_timestamp($record['mtime']);
-	}
+	}*/
 
 	function get_task($task_id) {
 		$sql = "SELECT t.*, tl.acl_id FROM ta_tasks t INNER JOIN ta_lists tl ON tl.id=t.tasklist_id WHERE t.id='".$this->escape($task_id)."'";
