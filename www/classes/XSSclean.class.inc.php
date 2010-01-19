@@ -158,7 +158,7 @@ class XSSclean {
 		*/
 
 		//merijn remove HTML comments
-		$str = preg_replace('/<!--.*>/', '', $str);
+		$str = preg_replace('/<!.*>/', '', $str);
 
 
 		$str = preg_replace_callback("/[a-z]+=([\'\"]).*?\\1/si", array($this, '_convert_attribute'), $str);
