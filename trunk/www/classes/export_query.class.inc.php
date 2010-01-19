@@ -377,6 +377,8 @@ class export_query extends TCPDF
 
 		$this->print_column_headers();
 
+		$this->SetTitle($_REQUEST['title']);
+
 
 		while($record = $this->db->next_record())
 		{

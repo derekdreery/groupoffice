@@ -76,9 +76,12 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	},
 	logout : function(first){
 		
-		if(!first || Ext.Ajax.isLoading())
+		if(Ext.Ajax.isLoading())
 		{
-			this.logout.defer(200, this, [true]);
+			if(first){
+				Ext.getBody().mask(GO.lang.waitMsgLoad);
+			}
+			this.logout.defer(500, this, [true]);
 		}else
 		{
 			document.location=GO.settings.config.host+"index.php?task=logout";

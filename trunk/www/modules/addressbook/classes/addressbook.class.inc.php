@@ -414,6 +414,24 @@ class addressbook extends db {
 		return false;
 	}
 
+	function get_company_by_email($email, $user_id) {
+		$sql = "SELECT * FROM ab_companies WHERE ";
+
+		$user_ab = $this->get_user_addressbook_ids($user_id);
+		if(count($user_ab) > 1) {
+			$sql .= "addressbook_id IN (".implode(",",$user_ab).") ";
+		}elseif(count($user_ab)==1) {
+			$sql .= "addressbook_id=".$user_ab[0]." ";
+		}
+		$sql .= "AND email='".$this->escape($email)."' LIMIT 0,1";
+		
+		$this->query($sql);
+		if ($this->next_record()) {
+			return $this->record;
+		}
+		return false;
+	}
+
 	function get_company_id_by_name($name, $addressbook_id) {
 		$sql = "SELECT id FROM ab_companies WHERE addressbook_id='$addressbook_id' AND name='".$this->escape($name)."'";
 		$this->query($sql);
@@ -1065,7 +1083,7 @@ class addressbook extends db {
 		}else {
 			return false;
 		}
-		$sql .= "(CONCAT(first_name,middle_name,last_name) LIKE '".$query."' OR email LIKE '".$this->escape($query)."' OR email2 LIKE '".$this->escape($query)."' OR email3 LIKE '".$this->escape($query)."')";
+		$sql .= "(CONCAT(first_name,middle_name,last_name) LIKE '".$query."' OR email LIKE '".$query."' OR email2 LIKE '".$query."' OR email3 LIKE '".$query."')";
 
 		if ($_SESSION['GO_SESSION']['sort_name'] == 'first_name') {
 			$sort_index = 'ab_contacts.first_name ASC, ab_contacts.last_name';
@@ -1074,6 +1092,26 @@ class addressbook extends db {
 		}
 
 		$sql .= " ORDER BY $sort_index ASC LIMIT 0,10";
+
+		$this->query($sql);
+	}
+
+	function search_company_email($user_id, $query) {
+
+		$query = $this->escape(str_replace(' ','%', $query));
+
+		$sql = "SELECT DISTINCT c.name, c.email FROM ab_companies c WHERE ";
+
+		$user_ab = $this->get_user_addressbook_ids($user_id);
+		if(count($user_ab) > 1) {
+			$sql .= "c.addressbook_id IN (".implode(",",$user_ab).") AND ";
+		}elseif(count($user_ab)==1) {
+			$sql .= "c.addressbook_id=".$user_ab[0]." AND ";
+		}else {
+			return false;
+		}
+		$sql .= "(name LIKE '".$query."' OR email LIKE '".$query."') AND email!=''";
+		$sql .= " ORDER BY name ASC LIMIT 0,10";
 
 		$this->query($sql);
 	}

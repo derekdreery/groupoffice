@@ -75,9 +75,8 @@ CREATE TABLE IF NOT EXISTS `ab_companies` (
   `files_folder_id` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `addressbook_id` (`addressbook_id`),
-  KEY `addressbook_id_2` (`addressbook_id`),
   KEY `link_id` (`link_id`),
-  KEY `link_id_2` (`link_id`)
+	KEY `email` (`email`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -128,7 +127,10 @@ CREATE TABLE IF NOT EXISTS `ab_contacts` (
   `files_folder_id` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `link_id` (`link_id`),
-  KEY `addressbook_id` (`addressbook_id`)
+  KEY `addressbook_id` (`addressbook_id`),
+	KEY `email` (`email`),
+	KEY `email` (`email2`),
+	KEY `email` (`email3`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
