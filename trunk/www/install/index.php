@@ -1723,7 +1723,7 @@ switch($task)
 
 	case 'completed':
 
-		
+		@session_destroy();
 
 		print_head();
 	?>

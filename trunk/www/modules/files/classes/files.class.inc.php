@@ -51,10 +51,10 @@ class files extends db {
 		$events->add_listener('init_customfields_types', __FILE__, 'files', 'init_customfields_types');
 	}
 
-	function init_customfields_types(&$customfield_types){
-		global $GO_MODULES;
+	function init_customfields_types(){
+		global $GO_MODULES, $customfield_types;
 		require_once($GO_MODULES->modules['files']['class_path'].'file_customfield_type.class.inc.php');
-		$customfield_types['file']=new file_customfield_type();
+		$customfield_types['file']=new file_customfield_type(array());
 	}
 
 	function get_thumb_url($path) {

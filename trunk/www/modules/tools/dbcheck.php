@@ -36,7 +36,7 @@ if(php_sapi_name()!='cli')
 $line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
 //$GO_SECURITY->html_authenticate('tools');
 
-ini_set('max_execution_time', 360);
+ini_set('max_execution_time', 3600);
 
 header('Content-Type: text/html; charset=UTF-8');
 
