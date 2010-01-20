@@ -774,6 +774,7 @@ class Date
 					
 				$rrule = "RRULE:FREQ=MONTHLY;";
 				$rrule .= "BYDAY=".implode(',', $event_days).';';
+				$rrule .= 'INTERVAL='.$interval.';';
 				break;
 
 			case REPEAT_YEARLY:
