@@ -101,6 +101,11 @@ class Date
 			return false;
 		}
 
+		//test
+		if($start_time < $first_occurence_time){
+			//return $first_occurence_time;
+		}
+
 		//if the requested start
 		if($start_time < $first_occurence_time)
 		$start_time = $first_occurence_time-1;
@@ -210,16 +215,17 @@ class Date
 				break;
 
 			case 'MONTHLY':
-				$interval_years = date('Y', $start_time)-date('Y', $first_occurence_time);
-				$interval_months = date('n', $start_time)-date('n', $first_occurence_time);
-				$interval_months = 12*$interval_years+$interval_months;
-					
-				$devided = $interval_months/$event['repeat_every'];
-				$rounded = ceil($devided);
-				//echo '*'.$rounded."\n";
+				
 
 				if (!isset($rrule['BYDAY']))
 				{
+					$interval_years = date('Y', $start_time)-date('Y', $first_occurence_time);
+					$interval_months = date('n', $start_time)-date('n', $first_occurence_time);
+					$interval_months = 12*$interval_years+$interval_months;
+
+					$devided = $interval_months/$event['repeat_every'];
+					$rounded = ceil($devided);
+					//debug('*'.$devided);
 					while($occurence_time<=$start_time)
 					{
 						$occurence_time=mktime(date('H', $first_occurence_time), date('i', $first_occurence_time),0, date('n', $first_occurence_time)+($event['repeat_every']*$rounded), date('j', $first_occurence_time), date('Y', $first_occurence_time));
@@ -245,43 +251,45 @@ class Date
 
 					$days = Date::shift_days_to_local($days, date('G', $event['start_time']), Date::get_timezone_offset($event['start_time']));
 
-					//debug('New call');
-					///start searching at the current day.
-					$start_day=date('j', $start_time);
-					$last_occurence_time=0;
+					debug('New call');
+
+					$test_time=mktime(date('H', $first_occurence_time), date('i', $first_occurence_time),0, date('n', $start_time), date('j', $start_time), date('Y', $start_time));
 					while($occurence_time==0)
 					{				
-						//debug('while '.$start_day.' '.$occurence_time);
+						$test_time = Date::date_add($test_time, 1);
 
-						$last_occurence_time=mktime(date('H', $first_occurence_time), date('i', $first_occurence_time),0, date('n', $first_occurence_time)+($event['repeat_every']*$rounded), 1, date('Y', $first_occurence_time));
-						$rounded++;
-							
-						for($d=$start_day;$d<31;$d++)
+						debug('*'.date('r', $test_time));
+
+						$weekday = date("w", $test_time);
+
+						if (!empty($days[$day_db_field[$weekday]]))
 						{
-							$test_time = Date::date_add($last_occurence_time, $d);
+							$interval_years = date('Y', $test_time)-date('Y', $first_occurence_time);
+							$interval_months = date('n', $test_time)-date('n', $first_occurence_time);
+							$interval_months = 12*$interval_years+$interval_months;
+							$devided = $interval_months/$event['repeat_every'];
 
-							//debug('*'.date('r', $test_time));
-
-							$weekday = date("w", $test_time);
-
-							if (!empty($days[$day_db_field[$weekday]]) && $test_time>$start_time && $test_time>$first_occurence_time)
+							if(ceil($devided)!=$devided){
+								//$test_time = Date::date_add($test_time, 23);
+								$test_time = mktime(date('H', $test_time), date('i', $test_time),0, date('n', $test_time)+1, 1, date('Y', $test_time));
+							}else
 							{
-								//debug('**'.ceil(date('j',$test_time)/7).' = '.$event['month_time']);
+								debug('**'.ceil(date('j',$test_time)/7).' = '.$event['month_time']);
 								if (ceil(date('j',$test_time)/7) == $event['month_time'])
-								{									
+								{
 									$occurence_time=$test_time;
-									//debug('found '.date('Ymd', $occurence_time));
+									debug('found '.date('Ymd', $occurence_time));
 									break;
 								}
 							}
-
-							if($d==31 && $occurence_time<$start_time)
-							{
-								$rounded++;
-								$d=-1;
-							}
 						}
-						$start_day=0;
+
+						/*
+						 * jump to next month if
+						 */
+						if(date('j',$test_time)>($event['month_time']+1)*7){
+							$test_time = mktime(date('H', $test_time), date('i', $test_time),0, date('n', $test_time)+1, 1, date('Y', $test_time));
+						}
 					}
 					
 				}
