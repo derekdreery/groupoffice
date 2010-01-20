@@ -101,14 +101,9 @@ class Date
 			return false;
 		}
 
-		//test
-		if($start_time < $first_occurence_time){
-			//return $first_occurence_time;
-		}
-
 		//if the requested start
 		if($start_time < $first_occurence_time)
-		$start_time = $first_occurence_time-1;
+			$start_time = $first_occurence_time-1;
 			
 		//we cannot simply return the first_occurrence_time because a recurring event
 		//can start on a day that it doesn't occur on.
@@ -251,14 +246,14 @@ class Date
 
 					$days = Date::shift_days_to_local($days, date('G', $event['start_time']), Date::get_timezone_offset($event['start_time']));
 
-					debug('New call');
+					//debug('New call');
 
 					$test_time=mktime(date('H', $first_occurence_time), date('i', $first_occurence_time),0, date('n', $start_time), date('j', $start_time), date('Y', $start_time));
 					while($occurence_time==0)
 					{				
 						$test_time = Date::date_add($test_time, 1);
 
-						debug('*'.date('r', $test_time));
+						//debug('*'.date('r', $test_time));
 
 						$weekday = date("w", $test_time);
 
@@ -274,11 +269,11 @@ class Date
 								$test_time = mktime(date('H', $test_time), date('i', $test_time),0, date('n', $test_time)+1, 1, date('Y', $test_time));
 							}else
 							{
-								debug('**'.ceil(date('j',$test_time)/7).' = '.$event['month_time']);
+								//debug('**'.ceil(date('j',$test_time)/7).' = '.$event['month_time']);
 								if (ceil(date('j',$test_time)/7) == $event['month_time'])
 								{
 									$occurence_time=$test_time;
-									debug('found '.date('Ymd', $occurence_time));
+									//debug('found '.date('Ymd', $occurence_time));
 									break;
 								}
 							}
