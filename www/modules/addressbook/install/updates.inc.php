@@ -91,3 +91,5 @@ $updates[] = "CREATE TABLE IF NOT EXISTS `ab_sql` (
   `sql` varchar(255) default '',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates[] = "ALTER TABLE `ab_sql` CHANGE `sql` `sql` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci ";
