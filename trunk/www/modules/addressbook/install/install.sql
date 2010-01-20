@@ -135,10 +135,10 @@ CREATE TABLE IF NOT EXISTS `ab_contacts` (
 
 
 DROP TABLE IF EXISTS `ab_sql`;
-CREATE TABLE IF NOT EXISTS `ab_sql` (
+CREATE TABLE `ab_sql` (
   `id` int(11) NOT NULL default '0',
-	`name` varchar(32) default NULL,
-  `sql` varchar(255) default '',
+  `name` varchar(32) default NULL,
+  `sql` text,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
