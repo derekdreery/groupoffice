@@ -49,6 +49,9 @@ class cms extends db {
 			}elseif($option['type']=='file'){
 				$resizeLabelNode=$fieldNode->attributes->getNamedItem('resize');
 				$option['resize']=$resizeLabelNode ? $resizeLabelNode->nodeValue : '';
+				
+				$filterLabelNode=$fieldNode->attributes->getNamedItem('files_filter');
+				$option['files_filter']=$filterLabelNode ? $filterLabelNode->nodeValue : '';
 			}
 			return $option;
 		}
