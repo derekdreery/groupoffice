@@ -87,6 +87,11 @@
 		<td><textarea class="textbox" name="comment[Opmerking]" ></textarea></td>
 	</tr>
 	<tr>
+		<td colspan="2">
+			<label for="email_allowed"><input id="email_allowed" type="checkbox" name="email_allowed" style="vertical-align: middle;" />I'd like to recieve newsletters</label>
+		</td>
+	</tr>
+	<tr>
 		<td></td>
 		<td>			
 				<input type="submit" />	

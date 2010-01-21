@@ -110,7 +110,7 @@ class formprocessor{
 
 			$contact_credentials['addressbook_id']=$addressbook['id'];
 			$contact_credentials['iso_address_format']=$addressbook['default_iso_address_format'];
-			$contact_credentials['email_allowed']='1';
+			$contact_credentials['email_allowed']=isset($_POST['email_allowed']) ? '1' : '0';
 
 				
 				

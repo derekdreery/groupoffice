@@ -540,7 +540,9 @@ class cms_output extends cms{
 
 		$smarty2 = new cms_smarty();
 
-		$uneven=true;	
+		$uneven=true;
+
+		$smarty->assign('item_count', $count);
 
 		if($count)
 		{
