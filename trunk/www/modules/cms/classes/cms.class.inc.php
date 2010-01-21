@@ -49,6 +49,9 @@ class cms extends db {
 			}elseif($option['type']=='file'){
 				$resizeLabelNode=$fieldNode->attributes->getNamedItem('resize');
 				$option['resize']=$resizeLabelNode ? $resizeLabelNode->nodeValue : '';
+				
+				$filterLabelNode=$fieldNode->attributes->getNamedItem('files_filter');
+				$option['files_filter']=$filterLabelNode ? $filterLabelNode->nodeValue : '';
 			}
 			return $option;
 		}
@@ -184,7 +187,7 @@ class cms extends db {
 		 }
 		 */
 
-		$sql = "SELECT * FROM cms_files WHERE (extension='html' OR extension='htm') AND folder_id='".$this->escape($folder_id)."'";
+		$sql = "SELECT * FROM cms_files WHERE folder_id='".$this->escape($folder_id)."'";
 
 		$allkeywords=array();
 		$keywords= explode(' ', $search_word);
@@ -208,9 +211,10 @@ class cms extends db {
 
 		$this->query($sql);
 
-		while ($this->next_record())
+		while ($file = $this->next_record())
 		{
-			$files[] = $this->record;
+			$file['fstype']='file';
+			$files[] = $file;
 		}
 
 		$this->get_folders($folder_id);

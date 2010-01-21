@@ -737,10 +737,9 @@ try{
 
 							while($file = $files->next_record())
 							{
-								//$extension = File::get_extension($file['name']);
 
-								//if(!isset($extensions) || in_array($extension, $extensions))
-								//{
+								if(!isset($extensions) || in_array(File::get_extension($file['name']), $extensions))
+								{
 									$file['path']=$path.'/'.$file['name'];
 									$file['type_id']='f:'.$file['id'];
 									$file['thumb_url']=$files->get_thumb_url($file['path']);
@@ -755,7 +754,7 @@ try{
 										$cf->format_record($file, 6);
 
 									$response['results'][]=$file;
-								//}
+								}
 							}
 						}else
 						{

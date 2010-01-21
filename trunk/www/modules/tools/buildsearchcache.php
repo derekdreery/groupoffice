@@ -19,7 +19,7 @@ if(php_sapi_name()!='cli')
 $line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
 //$GO_SECURITY->html_authenticate('tools');
 
-ini_set('max_execution_time', 360);
+ini_set('max_execution_time', 3600);
 echo 'Clearing search cache'.$line_break;
 
 require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
