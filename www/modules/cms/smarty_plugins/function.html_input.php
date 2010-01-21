@@ -18,19 +18,21 @@ function smarty_function_html_input($params, &$smarty)
 		
 	if(!isset($params['class']))
 		$params['class']='textbox';
-		
-	if($pos = strpos($params['name'], '['))
-	{
-		$key1 = substr($params['name'],0,$pos);		
-		$key2 = substr($params['name'],$pos+1, -1);
-			
-		$isset = isset($_POST[$key1][$key2]);
-		$value = isset($_POST[$key1][$key2]) ? ($_POST[$key1][$key2]) : $params['value'];
-		
-	}else
-	{
-		$value = isset($_POST[$params['name']]) ? ($_POST[$params['name']]) : $params['value'];
-		$isset = isset($_POST[$params['name']]);
+
+	if(empty($params['forget_value'])){
+		if($pos = strpos($params['name'], '['))
+		{
+			$key1 = substr($params['name'],0,$pos);
+			$key2 = substr($params['name'],$pos+1, -1);
+
+			$isset = isset($_POST[$key1][$key2]);
+			$value = isset($_POST[$key1][$key2]) ? ($_POST[$key1][$key2]) : $params['value'];
+
+		}else
+		{
+			$value = isset($_POST[$params['name']]) ? ($_POST[$params['name']]) : $params['value'];
+			$isset = isset($_POST[$params['name']]);
+		}
 	}
 		
 	if($isset && empty($value) && $params['required'])

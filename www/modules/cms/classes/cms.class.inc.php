@@ -187,7 +187,7 @@ class cms extends db {
 		 }
 		 */
 
-		$sql = "SELECT * FROM cms_files WHERE (extension='html' OR extension='htm') AND folder_id='".$this->escape($folder_id)."'";
+		$sql = "SELECT * FROM cms_files WHERE folder_id='".$this->escape($folder_id)."'";
 
 		$allkeywords=array();
 		$keywords= explode(' ', $search_word);
