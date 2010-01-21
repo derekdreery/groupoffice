@@ -146,7 +146,8 @@ GO.email.MessagesGrid = function(config){
 		text:GO.email.lang.showUnread,
 		enableToggle:true,
 		toggleHandler:this.toggleUnread,
-		pressed:false
+		pressed:false,
+		style:'margin-left:10px'
 	});
 
 	config.tbar = [this.searchType, this.searchField, this.showUnreadButton];
