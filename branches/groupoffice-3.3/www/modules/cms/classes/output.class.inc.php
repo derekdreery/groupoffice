@@ -385,6 +385,7 @@ class cms_output extends cms{
 		$start  = isset($params['start'])?  $params['start'] : 0;
 		$random = !empty($params['random']);
 		$no_folder_links = !empty($params['no_folder_links']);
+		$search = !empty($params['search']);
 
 		/*
 		 * lastfile is used to record the previous and next file of the currently viewed file
@@ -447,14 +448,18 @@ class cms_output extends cms{
 		}
 
 		
-
-		$items = isset($params['items']) ? $params['items'] : $this->get_authorized_items($folder_id, $GO_SECURITY->user_id, true, $reverse);
+		if($search){
+			$items = $this->search_files($root_folder_id, $_REQUEST['query']);
+		}else
+		{
+			$items = isset($params['items']) ? $params['items'] : $this->get_authorized_items($folder_id, $GO_SECURITY->user_id, true, $reverse);
+		}
 
 		$total = count($items);
 		
 		if($random)
 		{
-			$items = array($items[rand($start, $total)]);
+			shuffle($items);
 		}elseif($paging_id && $total > $max_items)
 		{
 			$_SESSION['GO_SESSION']['cms']['paging_'.$paging_id]=isset($_SESSION['GO_SESSION']['cms']['paging_'.$paging_id]) ? $_SESSION['GO_SESSION']['cms']['paging_'.$paging_id] : $start;
