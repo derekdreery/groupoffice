@@ -166,12 +166,16 @@ GO.cms.TemplateOptionsPanel = Ext.extend(function(cfg) {
 							value = this.optionValues[o.name]
 									? this.optionValues[o.name]
 									: '';
+
+									console.log(o.files_filter);
+			
 							this.options.push(new GO.files.SelectFile({
 										fieldLabel : o.fieldLabel,
 										root_folder_id : this.ownerCt.ownerCt.ownerCt.root_folder_id,
 										name : o.name,
 										value : value,
-										anchor : '-20'
+										anchor : '-20',
+										filesFilter : o.files_filter
 									}));
 							
 						}else if(o.type=='checkbox'){
