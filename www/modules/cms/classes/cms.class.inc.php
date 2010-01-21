@@ -211,9 +211,10 @@ class cms extends db {
 
 		$this->query($sql);
 
-		while ($this->next_record())
+		while ($file = $this->next_record())
 		{
-			$files[] = $this->record;
+			$file['fstype']='file';
+			$files[] = $file;
 		}
 
 		$this->get_folders($folder_id);
