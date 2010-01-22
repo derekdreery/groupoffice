@@ -155,7 +155,10 @@ GO.email.EmailComposer = function(config) {
 			url : plugin.selectedUrl
 		});
 	}, this);
-			
+
+
+	var spellcheckInsertPlugin = new GO.plugins.HtmlEditorSpellCheck(this);
+
 			
 	var items = [
 	this.fromCombo = new Ext.form.ComboBox({
@@ -273,7 +276,7 @@ GO.email.EmailComposer = function(config) {
 		hideLabel : true,
 		name : 'body',
 		anchor : '100% '+anchor,
-		plugins : imageInsertPlugin,
+		plugins : [imageInsertPlugin,spellcheckInsertPlugin],
 		style:'font:12px arial";',
 		defaultFont:'arial'
 	}));
@@ -498,6 +501,14 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 	lastAutoSave : false,
 	
 	bodyContentAtWindowOpen : false,
+
+	isHTML : function(){
+		if (this.formPanel.baseParams.content_type == 'html'){
+			return true;
+		}else{
+			return false;
+		}
+	},
 	
 	setContentTypeHtml : function(checked){
 		this.formPanel.baseParams.content_type = checked
@@ -578,6 +589,8 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 		this.inline_attachments = [];
 		this.formPanel.form.reset();
 
+		this.htmlEditor.SpellCheck = false;
+
 		if (this.defaultAcccountId) {
 			this.fromCombo.setValue(this.defaultAcccountId);
 		}
@@ -652,7 +665,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 					scope : this
 				});
 			}
-
+			this.htmlEditor.SpellCheck = false;
 		} else if (config.template_id == undefined && this.templatesStore
 			&& this.templatesStore.getTotalCount() > 1) {
 			//this.showConfig = config;
@@ -842,7 +855,7 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 				sig = "\n"+sig+"\n";
 			}else
 			{
-				sig = '<br />'+sig+'<br />';
+				sig = '<br /><div id="EmailSignature">'+sig+'</div><br />';
 			}
 		}
 		
@@ -1084,7 +1097,24 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 
 	},
 
+	HandleResult : function (btn){
+		if (btn == 'yes'){
+			this.htmlEditor.SpellCheck = true;
+			this.sendMail();
+		}else{
+			this.editor.plugins[1].spellcheck();
+		}
+	},
+
 	sendMail : function(draft, autoSave) {
+
+		var self = this;
+
+		if (this.isHTML() && this.htmlEditor.SpellCheck == false && !draft){
+			//Ask if they want to run a spell check
+			Ext.MessageBox.confirm(GO.lang.strConfirm, GO.lang.spellcheckAsk, function (btn){self.HandleResult(btn,self);});
+			return false;
+		}
 
 		if (this.uploadDialog && this.uploadDialog.isVisible()) {
 			alert(GO.email.lang.closeUploadDialog);

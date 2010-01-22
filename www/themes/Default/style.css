@@ -875,3 +875,23 @@ table.display-panel a:active
 .x-fieldset-body{
 	padding-top:1px;
 }
+
+
+
+.x-spell-checker {
+	font-size:12px;
+}
+
+.x-spell-checker span.spelling {
+	background:url(images/spellerror.gif) repeat-x left bottom;
+	position:relative;
+	cursor:pointer;
+}
+
+.x-spell-checker span.spelling ul {
+	display:none;
+}
+
+.go-edit-spellcheck .x-btn-text{
+	background: url('images/16x16/spellcheck.png') no-repeat !important;
+}

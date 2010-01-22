@@ -29,12 +29,13 @@ cd groupoffice-com
 svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/trunk/debian-groupoffice
 
 if [ "$1" == "real" ]; then
-	svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/tags/groupoffice-com-$VERSION
-	mv groupoffice-com-$VERSION debian-groupoffice/usr/share/groupoffice
+	#svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/tags/groupoffice-com-$VERSION
+	#mv groupoffice-com-$VERSION debian-groupoffice/usr/share/groupoffice
 
 	#svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/trunk/www
 	#mv www debian-groupoffice/usr/share/groupoffice
 
+	cp -R /var/www/release/packages/groupoffice-com-$VERSION debian-groupoffice/usr/share/groupoffice
 	mv debian-groupoffice/usr/share/groupoffice/LICENSE.TXT debian-groupoffice
 fi
 

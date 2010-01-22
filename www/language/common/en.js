@@ -331,3 +331,11 @@ GO.lang.permissionRead='Read only';
 GO.lang.permissionWrite='Write';
 GO.lang.permissionDelete='Write and delete';
 GO.lang.permissionManage='Manage';
+
+
+GO.lang.spellcheck = 'Spell Check';
+GO.lang.spellcheckdetails = 'Check Spelling';
+GO.lang.spellcheckNoError = 'No Errors Found';
+GO.lang.spellcheckServerError = 'There was a problem running the spell check, if the problem continues, please contact support';
+GO.lang.spellcheckNoErrors = 'Email content with [{1}] mistake(s)';
+GO.lang.spellcheckAsk = 'Send without spell checking?';

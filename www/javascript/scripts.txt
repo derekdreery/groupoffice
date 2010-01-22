@@ -39,6 +39,7 @@ javascript/state/HttpProvider.js
 javascript/plugins/DataView.js
 javascript/plugins/InsertAtCursorTextarea.js
 javascript/plugins/HtmlEditorImageInsert.js
+javascript/plugins/HtmlEditorSpellCheck.js
 javascript/panels/DisplayPanel.js
 javascript/panels/IframeComponent.js
 javascript/windows/SelectGroups.js
