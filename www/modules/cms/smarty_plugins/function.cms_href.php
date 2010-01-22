@@ -29,7 +29,14 @@ function smarty_function_cms_href($params, &$smarty)
 	$url .= $params['path'];
 	if(!empty($params['params']))
 	{
-		$url .= '&amp;'.$params['params'];
+		if($co->basehref!=$GO_MODULES->modules['cms']['url'])
+		{
+			$url .= '?';
+		}else
+		{
+			$url .= '&amp;';
+		}
+		$url .= $params['params'];
 	}
 	return $url;
 }
