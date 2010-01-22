@@ -104,3 +104,6 @@ GO.addressbook.lang.explanationSex='Mannelijke en vrouwelijke vormen van de aanh
 
 GO.addressbook.lang.searchQueryName='Naam zoekterm';
 GO.addressbook.lang.enterSearchQueryName='Geef een naam aan deze zoekterm:';
+
+GO.addressbook.lang.photo = 'Foto';
+GO.addressbook.lang.deleteImage='Verwijder afbeelding';
