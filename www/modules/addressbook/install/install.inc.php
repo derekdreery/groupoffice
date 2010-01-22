@@ -61,6 +61,9 @@ $contact['salutation']=$lang['common']['dear'].' Merijn';
 $contact['comment']='';
 $contact['iso_address_format']=$default_language;
 
+if (!is_dir($GO_CONFIG->file_storage_path.'contacts/contact_photos'))
+	mkdir($GO_CONFIG->file_storage_path.'contacts/contact_photos','0644');
+
 //$ab->add_contact($contact);
 
 
