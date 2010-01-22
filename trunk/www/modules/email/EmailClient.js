@@ -63,6 +63,7 @@ GO.email.EmailClient = function(config){
 		hidden:messagesAtTop,
 		deleteConfig : deleteConfig,
 		floatable:false,
+		header:false,
 		collapsible:true,
 		collapseMode:'mini',
 		split:true
