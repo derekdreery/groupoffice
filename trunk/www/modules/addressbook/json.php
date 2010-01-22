@@ -571,8 +571,7 @@ try
 
 			if(file_exists($GO_CONFIG->file_storage_path.'contacts/contact_photos/'.$response['data']['id'].'.jpg'))
 			{
-				require_once($GO_CONFIG->control_path.'phpthumb/phpThumb.config.php');
-				$response['data']['photo_src'] = phpThumbURL('src='.urlencode($GO_CONFIG->file_storage_path.'contacts/contact_photos/'.$response['data']['id'].'.jpg').'&w=180');
+				$response['data']['photo_src'] = $GO_MODULES->modules['addressbook']['url'].'photo.php?contact_id='.$response['data']['id'].'&w=180';
 			} else {
 				$response['data']['photo_src'] = '';
 			}
@@ -960,21 +959,6 @@ try
 			echo json_encode($response);
 			break;
 
-		case 'photo':
-
-			$contact_id = isset($_REQUEST['contact_id']) ? ($_REQUEST['contact_id']) : 0;
-
-			if(file_exists($GO_CONFIG->file_storage_path.'contacts/contact_photos/'.$contact_id.'.jpg'))
-			{
-				require_once($GO_CONFIG->control_path.'phpthumb/phpThumb.config.php');
-				$response['data']['image'] = phpThumbURL('src='.urlencode($GO_CONFIG->file_storage_path.'contacts/contact_photos/'.$contact_id.'.jpg').'&w=180');
-			} else {
-				$response['data']['image'] = '';
-			}
-
-			$response['success'] = true;
-			echo json_encode($response);
-			break;
 	}
 }
 catch(Exception $e)
