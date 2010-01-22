@@ -26,30 +26,13 @@ GO.addressbook.ContactDialog = function(config)
 			});
 			this.setVisible(false);
 		},
-		setSrc : function(contact_id)
+		setPhotoSrc : function(contact_id)
 		{
-			Ext.Ajax.request({
-				url: GO.settings.modules.addressbook.url+'json.php',
-				params: {
-					task:'photo',
-					contact_id:contact_id
-				},
-				success: function(response, options)
-				{
-					var responseParams = Ext.decode(response.responseText);
-					if(!responseParams.success)
-					{
-						alert(responseParams.feedback);
-					}else
-					{
-						this.el.set({
-							src: responseParams.data.image
-						});
-						this.setVisible(true);
-					}
-				},
-				scope:this
+			this.el.set({
+				src: GO.settings.modules.addressbook.url+'photo.php?contact_id='+contact_id
 			});
+			this.setVisible(true);
+		
 		}
 	});
 
@@ -211,7 +194,7 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 		{
 			this.render(Ext.getBody());
 		}
-
+		this.setPhoto(contact_id);
 		if(GO.mailings && !GO.mailings.writableMailingsStore.loaded)
 		{
 			GO.mailings.writableMailingsStore.load({
@@ -273,8 +256,6 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 			this.tabPanel.setActiveTab(0);			
 		}
 
-		this.setPhoto(this.contact_id);
-
 	},
 
 	/*setAddressbookId : function(addressbook_id)
@@ -301,7 +282,7 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 				{					
 					this.personalPanel.setAddressbookID(action.result.data.addressbook_id);
 					this.formPanel.form.findField('company_id').setRemoteText(action.result.data.company_name);
-					
+					this.setPhoto(id);
 					GO.addressbook.ContactDialog.superclass.show.call(this);
 				}
 			},
@@ -335,6 +316,8 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 				if (hide)
 				{
 					this.hide();
+				} else {
+					this.setPhoto(this.contact_id);
 				}
 			},
 			failure: function(form, action) {				
@@ -354,7 +337,7 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 
 	setPhoto : function(contact_id)
 	{
-		this.contactPhoto.setSrc(contact_id);
+		this.contactPhoto.setPhotoSrc(contact_id);
 		this.deleteImageCB.setValue(false);
 		this.deleteImageCB.setDisabled(contact_id=='');
 	}
