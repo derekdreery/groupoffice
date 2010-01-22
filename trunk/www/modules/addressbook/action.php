@@ -29,6 +29,12 @@ try
 		case 'save_contact':
 			$contact_id = isset($_REQUEST['contact_id']) ? ($_REQUEST['contact_id']) : 0;
 
+			if(isset($_POST['delete_photo']) && strcmp($_POST['delete_photo'],'true')==0 && $contact_id>0)
+			{
+				@unlink($GO_CONFIG->file_storage_path.'contacts/contact_photos/'.$contact_id.'.jpg');
+				$response['image']='';
+			}
+
 			$credentials = array (
 				'first_name','middle_name','last_name','title','initials','sex','email',
 				'email2','email3','home_phone','fax','cellular','comment','address','address_no',
@@ -55,6 +61,30 @@ try
 				if($contact_id > 0)
 				{
 					$old_contact = $ab->get_contact($contact_id);
+
+					if(isset($_FILES['image']['tmp_name'][0]) && is_uploaded_file($_FILES['image']['tmp_name'][0]))
+					{
+						$extension = File::get_extension($_FILES['image']['name'][0]);
+
+						if($extension != 'jpg')
+						{
+							throw new Exception('Only jpg images are supported.');
+						}else
+						{
+
+							$destination = $GO_CONFIG->file_storage_path.'contacts/contact_photos/'.$contact_id.'.jpg';
+
+							require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+							filesystem::mkdir_recursive(dirname($destination));
+							move_uploaded_file($_FILES['image']['tmp_name'][0], $destination);
+
+							require_once($GO_CONFIG->control_path.'phpthumb/phpThumb.config.php');
+							$response['image']=phpThumbURL('src='.urlencode($destination).'&w=180');
+
+							//go_log(LOG_DEBUG, var_export($response, true));
+						}
+
+					}
 
 					if(($old_contact['addressbook_id'] != $contact_credentials['addressbook_id']) && $GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_contact['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
 					{

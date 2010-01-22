@@ -18,7 +18,68 @@ GO.addressbook.ContactDialog = function(config)
 	
 
 	this.personalPanel = new GO.addressbook.ContactProfilePanel();
-			
+
+	GO.addressbook.ContactPhoto = Ext.extend(Ext.BoxComponent, {
+		onRender : function(ct, position){
+			this.el = ct.createChild({
+				tag: 'img'
+			});
+			this.setVisible(false);
+		},
+		setSrc : function(contact_id)
+		{
+			Ext.Ajax.request({
+				url: GO.settings.modules.addressbook.url+'json.php',
+				params: {
+					task:'photo',
+					contact_id:contact_id
+				},
+				success: function(response, options)
+				{
+					var responseParams = Ext.decode(response.responseText);
+					if(!responseParams.success)
+					{
+						alert(responseParams.feedback);
+					}else
+					{
+						this.el.set({
+							src: responseParams.data.image
+						});
+						this.setVisible(true);
+					}
+				},
+				scope:this
+			});
+		}
+	});
+
+	this.contactPhoto = new GO.addressbook.ContactPhoto();
+
+	this.deleteImageCB = new Ext.form.Checkbox({
+		boxLabel: GO.addressbook.lang.deleteImage,
+		labelSeparator: '',
+		name: 'delete_image',
+		allowBlank: true,
+		hideLabel:true,
+		disabled:true
+	});
+
+	this.uploadFile = new GO.form.UploadFile({
+		inputName : 'image',
+		max: 1
+	})
+
+	this.photoPanel = new Ext.Panel({
+		title : GO.addressbook.lang.photo,
+		layout: 'form',
+		border:false,
+		autoScroll:true,
+		items:[	this.uploadFile,
+		this.contactPhoto
+		,this.deleteImageCB
+		]
+	});
+
 	this.commentPanel = new Ext.Panel({
 		title: GO.addressbook.lang['cmdPanelComments'], 
 		layout: 'fit',
@@ -42,13 +103,16 @@ GO.addressbook.ContactDialog = function(config)
 			}
 		}, this);
 		
-	this.commentPanel.on('show', function(){ this.formPanel.form.findField('comment').focus(); }, this);
+	this.commentPanel.on('show', function(){ 
+		this.formPanel.form.findField('comment').focus();
+	}, this);
 	
 	//var selectMailingsPanel = new GO.addressbook.SelectMailingsPanel();
 	
 	var items = [
-	      	this.personalPanel,
-	      	this.commentPanel];
+	this.personalPanel,
+	this.photoPanel,
+	this.commentPanel];
 	      
 	if(GO.mailings)
 	{	
@@ -56,30 +120,30 @@ GO.addressbook.ContactDialog = function(config)
 	}
 	
   
-  if(GO.customfields && GO.customfields.types["2"])
+	if(GO.customfields && GO.customfields.types["2"])
 	{
-  	for(var i=0;i<GO.customfields.types["2"].panels.length;i++)
-  	{			  	
-  		items.push(GO.customfields.types["2"].panels[i]);
-  	}
+		for(var i=0;i<GO.customfields.types["2"].panels.length;i++)
+		{
+			items.push(GO.customfields.types["2"].panels[i]);
+		}
 	}
-	
-			
+
 	this.formPanel = new Ext.FormPanel({
 		waitMsgTarget:true,
 		url: GO.settings.modules.addressbook.url+ 'json.php',
 		baseParams: {},
 		border: false,
-    items: [
-    	this.tabPanel = new Ext.TabPanel({
-    		border: false,
-    		activeTab: 0,
-    		hideLabel: true,
-    		deferredRender: false,
-    		anchor:'100% 100%',
-	      items: items   		
-    	})
-    ]
+		fileUpload : true,
+		items: [
+		this.tabPanel = new Ext.TabPanel({
+			border: false,
+			activeTab: 0,
+			hideLabel: true,
+			deferredRender: false,
+			anchor:'100% 100%',
+			items: items
+		})
+		]
 	});
 	
 	
@@ -100,28 +164,28 @@ GO.addressbook.ContactDialog = function(config)
 	this.title= GO.addressbook.lang['cmdContactDialog'];
 	this.items= this.formPanel;
 	this.buttons= [
-		{ 
-			text: GO.lang['cmdOk'], 
-			handler:function(){
-				this.saveContact(true);
-				}, 
-			scope: this 
+	{
+		text: GO.lang['cmdOk'],
+		handler:function(){
+			this.saveContact(true);
 		},
-		{ 
-			text: GO.lang['cmdApply'], 
-			handler: function(){
-				this.saveContact();
-				}, 
-			scope: this 
+		scope: this
+	},
+	{
+		text: GO.lang['cmdApply'],
+		handler: function(){
+			this.saveContact();
 		},
-		{		 
-			text: GO.lang['cmdClose'], 
-			handler: function()
-			{
-				this.hide();
-			}, 
-			scope: this 
-		}
+		scope: this
+	},
+	{
+		text: GO.lang['cmdClose'],
+		handler: function()
+		{
+			this.hide();
+		},
+		scope: this
+	}
 	];
 	
 	var focusFirstField = function(){
@@ -133,18 +197,21 @@ GO.addressbook.ContactDialog = function(config)
 	
 	GO.addressbook.ContactDialog.superclass.constructor.call(this);
 	
-	this.addEvents({'save':true});
+	this.addEvents({
+		'save':true
+	});
 }
 
 Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 
 	show : function(contact_id)
 	{
+
 		if(!this.rendered)
 		{
 			this.render(Ext.getBody());
 		}
-		
+
 		if(GO.mailings && !GO.mailings.writableMailingsStore.loaded)
 		{
 			GO.mailings.writableMailingsStore.load({
@@ -204,9 +271,12 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 			//var sal = this.personalPanel.setSalutation();
 			//this.personalPanel.formSalutation.setValue(sal);
 			this.tabPanel.setActiveTab(0);			
-		}	
+		}
+
+		this.setPhoto(this.contact_id);
+
 	},
-	
+
 	/*setAddressbookId : function(addressbook_id)
 	{
 		this.personalPanel.formAddressBooks.setValue(addressbook_id);
@@ -218,7 +288,10 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 	{
 		this.formPanel.form.load({
 			url: GO.settings.modules.addressbook.url+ 'json.php', 
-			params: {contact_id: id, task: 'load_contact'},
+			params: {
+				contact_id: id,
+				task: 'load_contact'
+			},
 			success: function(form, action) {
 				
 				if(!action.result.data.write_permission)
@@ -231,15 +304,17 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 					
 					GO.addressbook.ContactDialog.superclass.show.call(this);
 				}
-	    },
-	    scope: this
+			},
+			scope: this
 		});
+
+		this.setPhoto(id);
 	},
 	
 	saveContact : function(hide)
 	{		
 		var company = this.personalPanel.formCompany.getRawValue();
-		
+
 		this.formPanel.form.submit({
 			url:GO.settings.modules.addressbook.url+ 'action.php',
 			waitMsg:GO.lang['waitMsgSave'],
@@ -247,7 +322,8 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 			{
 				task : 'save_contact',
 				contact_id : this.contact_id,
-				company: company
+				company: company,
+				delete_photo : this.deleteImageCB.getValue()
 			},
 			success:function(form, action){
 				if(action.result.contact_id)
@@ -270,6 +346,16 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 				}
 			},
 			scope: this
-		});	
+		});
+
+		this.setPhoto(this.contact_id);
+
+	},
+
+	setPhoto : function(contact_id)
+	{
+		this.contactPhoto.setSrc(contact_id);
+		this.deleteImageCB.setValue(false);
+		this.deleteImageCB.setDisabled(contact_id=='');
 	}
 });

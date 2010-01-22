@@ -38,7 +38,6 @@ try
 {
 	switch($task)
 	{
-		
 		case 'fields':
 			
 			require($GO_LANGUAGE->get_language_file('addressbook'));
@@ -569,7 +568,15 @@ try
 			
 			if(!isset($response['data']['iso_address_format']) || $response['data']['iso_address_format'] == '')
 				$response['data']['iso_address_format'] = $response['data']['default_iso_address_format'];
-				
+
+			if(file_exists($GO_CONFIG->file_storage_path.'contacts/contact_photos/'.$response['data']['id'].'.jpg'))
+			{
+				require_once($GO_CONFIG->control_path.'phpthumb/phpThumb.config.php');
+				$response['data']['photo_src'] = phpThumbURL('src='.urlencode($GO_CONFIG->file_storage_path.'contacts/contact_photos/'.$response['data']['id'].'.jpg').'&w=180');
+			} else {
+				$response['data']['photo_src'] = '';
+			}
+
 			echo json_encode($response);
 			break;
 
@@ -949,6 +956,22 @@ try
 			$response['results'] = array();
 			while($ab->next_record())
 				$response['results'][] = $ab->record;
+			$response['success'] = true;
+			echo json_encode($response);
+			break;
+
+		case 'photo':
+
+			$contact_id = isset($_REQUEST['contact_id']) ? ($_REQUEST['contact_id']) : 0;
+
+			if(file_exists($GO_CONFIG->file_storage_path.'contacts/contact_photos/'.$contact_id.'.jpg'))
+			{
+				require_once($GO_CONFIG->control_path.'phpthumb/phpThumb.config.php');
+				$response['data']['image'] = phpThumbURL('src='.urlencode($GO_CONFIG->file_storage_path.'contacts/contact_photos/'.$contact_id.'.jpg').'&w=180');
+			} else {
+				$response['data']['image'] = '';
+			}
+
 			$response['success'] = true;
 			echo json_encode($response);
 			break;
