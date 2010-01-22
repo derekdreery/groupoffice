@@ -112,3 +112,6 @@ GO.addressbook.lang.explanationSex='Male and female form of salutation';
 
 GO.addressbook.lang.searchQueryName='Search query name';
 GO.addressbook.lang.enterSearchQueryName='Enter the name of the search query:';
+
+GO.addressbook.lang.photo = 'Photo';
+GO.addressbook.lang.deleteImage='Delete image';
