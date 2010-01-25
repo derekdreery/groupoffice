@@ -571,9 +571,9 @@ try
 
 			if(file_exists($GO_CONFIG->file_storage_path.'contacts/contact_photos/'.$response['data']['id'].'.jpg'))
 			{
-				$response['data']['photo_src'] = $GO_MODULES->modules['addressbook']['url'].'photo.php?contact_id='.$response['data']['id'].'&w=180';
+				$response['data']['photo_src'] = $GO_MODULES->modules['addressbook']['url'].'photo.php?contact_id='.$response['data']['id'].'&mtime='.time();
 			} else {
-				$response['data']['photo_src'] = '';
+				$response['data']['photo_src'] = $GO_MODULES->modules['addressbook']['url'].'photo.php?contact_id=noperson';
 			}
 
 			echo json_encode($response);
