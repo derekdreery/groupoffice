@@ -67,6 +67,8 @@ GO.email.EmailComposer = function(config) {
 					 */
 					this.showConfig.keepEditingMode=true;
 					var v = this.formPanel.form.getValues();
+					delete v.body
+					delete v.textbody;
 					
 					if(!this.showConfig.values) this.showConfig.values={};
 						Ext.apply(this.showConfig.values, v);
