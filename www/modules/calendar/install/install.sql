@@ -138,6 +138,7 @@ CREATE TABLE IF NOT EXISTS `cal_views` (
   `event_colors_override` enum('0','1') NOT NULL default '0',
   `time_interval` int(11) NOT NULL default '1800',
   `acl_id` int(11) NOT NULL default '0',
+	`integrate` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

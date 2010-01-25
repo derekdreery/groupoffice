@@ -572,7 +572,6 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			params.participants=Ext.encode(this.participantsPanel.getGridData());
 		}
 
-
 		this.formPanel.form.submit({
 			url : GO.settings.modules.calendar.url + 'action.php',
 			params : params,

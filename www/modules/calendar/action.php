@@ -1079,6 +1079,14 @@ try {
 			$response['success']=true;
 			break;
 
+		case 'change_integrate':
+			$view = array();
+			$view['id'] = $_POST['view_id'];
+			$view['integrate'] = $_POST['integrate'];
+			$cal->update_view($view);
+			$response['success']=true;
+			break;
+
 	}
 }catch(Exception $e)
 {

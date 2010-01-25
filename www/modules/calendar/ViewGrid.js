@@ -384,8 +384,6 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 	},
 	
 	onResize : function(adjWidth, adjHeight, rawWidth, rawHeight){
-		//Ext.grid.GridPanel.superclass.onResize.apply(this, arguments);
-		//console.log(this.gridTable);
 		if(this.gridContainer)
 		{
 			this.gridContainer.setSize(adjWidth, adjHeight);

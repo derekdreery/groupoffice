@@ -273,15 +273,30 @@ try {
 			break;
 
                 case 'events':
-
 		//setlocale(LC_ALL, 'nl_NL@euro');
 
 		//return all events for a given period
-			$calendar_id=isset($_REQUEST['calendar_id']) ? ($_REQUEST['calendar_id']) : 0;
-			$calendars=isset($_REQUEST['calendars']) ? json_decode(($_REQUEST['calendars'])) : array($calendar_id);
+			$view_id = isset($_REQUEST['view_id']) ? $_REQUEST['view_id'] : 0;
+			$calendar_id=isset($_REQUEST['calendar_id']) && !isNaN($_REQUEST['calendar_id']) ? ($_REQUEST['calendar_id']) : 0;
 			//$view_id=isset($_REQUEST['view_id']) ? ($_REQUEST['view_id']) : 0;
 			$start_time=isset($_REQUEST['start_time']) ? strtotime($_REQUEST['start_time']) : 0;
 			$end_time=isset($_REQUEST['end_time']) ? strtotime($_REQUEST['end_time']) : 0;
+
+			if ($view_id) {
+				$ncals = $cal->get_authorized_calendars($GO_SECURITY->user_id);
+				if(!$ncals) {
+					$cal->get_calendar();
+					$ncals = $cal->get_authorized_calendars($GO_SECURITY->user_id);
+				}
+				$calendars = array();
+				while($cal->next_record(DB_ASSOC)) {
+					$cal->record['selected']=$cal2->is_view_calendar($cal->f('id'), $view_id) ? '1' : '0';
+					if ($cal->record['selected'])
+						$calendars[] = $cal->record['id'];
+				}
+			} else {
+				$calendars=isset($_REQUEST['calendars']) ? json_decode(($_REQUEST['calendars'])) : array($calendar_id);
+			}
 
 			$calendar_id=$calendars[0];
 
@@ -647,7 +662,7 @@ try {
 		case 'view_calendars':
 
 			$view_id = ($_REQUEST['view_id']);
-
+			
 			$response['total'] = $cal->get_authorized_calendars($GO_SECURITY->user_id);
 			if(!$response['total']) {
 				$cal->get_calendar();
@@ -663,6 +678,9 @@ try {
 
 				$response['results'][] = $cal->record;
 			}
+
+			$response['success'] = true;
+
 			break;
 
 		case 'views':
