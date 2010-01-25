@@ -398,7 +398,7 @@ try{
 
 			while($task = $tasks->next_record(DB_ASSOC))
 			{
-				$tasks->format_task_record(&$task, $cf);
+				$tasks->format_task_record($task, $cf);
 
 				$tl_id = array_search($task['tasklist_id'], $tasklists);
 				$task['tasklist_name'] = (isset($tasklists_name) && $tl_id !== false)? $tasklists_name[$tl_id]: '';
