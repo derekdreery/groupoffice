@@ -28,11 +28,11 @@ GO.addressbook.ContactDialog = function(config)
 		},
 		setPhotoSrc : function(contact_id)
 		{
+			var now = new Date();
 			this.el.set({
-				src: GO.settings.modules.addressbook.url+'photo.php?contact_id='+contact_id
+				src: GO.settings.modules.addressbook.url+'photo.php?contact_id='+contact_id+'&mtime='+now.format('U')
 			});
 			this.setVisible(true);
-		
 		}
 	});
 
@@ -56,6 +56,7 @@ GO.addressbook.ContactDialog = function(config)
 		title : GO.addressbook.lang.photo,
 		layout: 'form',
 		border:false,
+		cls : 'go-form-panel',
 		autoScroll:true,
 		items:[	this.uploadFile,
 		this.contactPhoto
@@ -309,15 +310,14 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 			success:function(form, action){
 				if(action.result.contact_id)
 				{
-					this.contact_id = action.result.contact_id;				
+					this.contact_id = action.result.contact_id;
 				}
+				this.uploadFile.clearQueue();
 				this.fireEvent('save', this, this.contact_id);
-
+				this.setPhoto(this.contact_id);
 				if (hide)
 				{
 					this.hide();
-				} else {
-					this.setPhoto(this.contact_id);
 				}
 			},
 			failure: function(form, action) {				
@@ -330,9 +330,6 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 			},
 			scope: this
 		});
-
-		this.setPhoto(this.contact_id);
-
 	},
 
 	setPhoto : function(contact_id)

@@ -1,17 +1,3 @@
-z-- phpMyAdmin SQL Dump
--- version 2.11.3deb1ubuntu1
--- http://www.phpmyadmin.net
---
--- Host: localhost
--- Generatie Tijd: 05 Mei 2008 om 14:04
--- Server versie: 5.0.51
--- PHP Versie: 5.2.4-2ubuntu5
-
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-
---
--- Database: `imfoss_nl`
---
 
 -- --------------------------------------------------------
 

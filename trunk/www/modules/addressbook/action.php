@@ -78,8 +78,7 @@ try
 							filesystem::mkdir_recursive(dirname($destination));
 							move_uploaded_file($_FILES['image']['tmp_name'][0], $destination);
 
-							require_once($GO_CONFIG->control_path.'phpthumb/phpThumb.config.php');
-							$response['image']=phpThumbURL('src='.urlencode($destination).'&w=180');
+							$response['image']=$GO_MODULES->modules['addressbook']['url'].'photo.php?contact_id='.$contact_id;
 
 							//go_log(LOG_DEBUG, var_export($response, true));
 						}
