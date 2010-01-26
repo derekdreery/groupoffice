@@ -1,5 +1,5 @@
-javascript/ModuleManager.js
 javascript/overrides.js
+javascript/ModuleManager.js
 javascript/Date.js
 javascript/DeployJava.js
 javascript/MainLayout.js

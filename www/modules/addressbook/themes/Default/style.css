@@ -54,11 +54,12 @@
 
 .letter
 {
-	margin: 0px 0px 0px 0px;
+	margin: 1px;
 	padding: 4px 3px 4px 3px;
 	font-size: 16px;
 	font-weight: bold;
-	border: 1px solid white;
+	/*border: 1px solid white;*/
+
 	cursor: pointer;
 	cursor: hand;
 	line-height:40px;

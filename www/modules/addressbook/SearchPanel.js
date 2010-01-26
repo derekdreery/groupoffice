@@ -5,9 +5,11 @@ GO.addressbook.SearchPanel = function(config)
 	}
 	
 	config.layout='table';
-	config.split=true;
+	config.split=false;
  	config.height=40;
- 	
+ 	config.forceLayout=true;
+	config.baseCls='x-plain';
+
  	config.keys= [{
             key: Ext.EventObject.ENTER,
             fn: function(){
@@ -77,7 +79,7 @@ GO.addressbook.SearchPanel = function(config)
 		emptyText:GO.lang.strSearch+ ' '+GO.addressbook.lang['cmdFormSearchFourth']
   });
  	
- 	config.defaults={border: false, cls:'ab-search-form-panel'};
+ 	config.defaults={border: false, cls:'ab-search-form-panel', baseCls:'x-plain', forceLayout:true};
  	config.items=[{
  						items: this.alphabetView
  					},{
