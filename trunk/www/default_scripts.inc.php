@@ -27,6 +27,8 @@ $scripts[]=$root_uri.'javascript/namespaces.js';
 ?>
 <script type="text/javascript">
 
+
+
 	var BaseHref = '<?php echo $GO_CONFIG->host; ?>';
 
 	GO = {};
