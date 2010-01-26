@@ -59,7 +59,8 @@ GO.calendar.EventDialog = function(calendar) {
 		anchor : '100% 100%',
 		hideLabel : true,
 		enableTabScroll : true,
-		items : items
+		items : items,
+		defaults:{forceLayout:true}
 	});
 
 	this.formPanel = new Ext.form.FormPanel({
