@@ -762,7 +762,7 @@ class files extends db {
 		$filemtime=filemtime($GO_CONFIG->file_storage_path.$path);
 		if($folder['mtime']<$filemtime)
 		{
-			//debug('Synced '.$path);
+			//go_debug('Synced '.$path);
 			
 			$this->sync_folder($folder);
 

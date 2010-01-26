@@ -438,7 +438,7 @@ try{
 								//$body = $gnupg->encode($body, $all_recipients, $swift->account['email']);
 								$body = $gnupg->encode($body, $all_recipients, $swift->account['email']);
 
-								debug($body);
+								go_debug($body);
 
 								$swift->message->setMaxLineLength(1000);
 								$swift->message->setBody($body, 'text/plain');
@@ -1008,7 +1008,7 @@ try{
 								}
 
 								$cmd = $GO_CONFIG->cmd_sudo.' '.$GO_MODULES->modules['systemusers']['path'].'sudo.php '.$GO_CONFIG->get_config_file().' set_vacation '.$vacation['account_id'];
-								//debug($cmd);
+								//go_debug($cmd);
 								exec($cmd);
 							}							
 						}else

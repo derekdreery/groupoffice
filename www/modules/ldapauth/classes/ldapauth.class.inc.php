@@ -92,7 +92,7 @@ class ldapauth extends imapauth
 
 		if(!$authenticated)
 		{
-			debug('LDAP authentication failed for '.$username);
+			go_debug('LDAP authentication failed for '.$username);
 			throw new Exception($GLOBALS['lang']['common']['badLogin']);
 		}else
 		{

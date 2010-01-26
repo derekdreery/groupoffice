@@ -156,7 +156,7 @@ class search extends db {
 		$sql .= " ORDER BY $sort_index $sort_order";
 		
 
-		//debug($sql);
+		//go_debug($sql);
 		
 		if($offset>0)
 		{

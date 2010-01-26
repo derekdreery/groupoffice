@@ -34,7 +34,7 @@ try{
 					break;
 				}
 				
-				debug(var_export($mailboxes, true));
+				go_debug(var_export($mailboxes, true));
 				
 		case 'delete_mailboxes':
 			
@@ -453,7 +453,7 @@ try{
 						}
 					}
 				}
-				debug(var_export($alias, true));
+				go_debug(var_export($alias, true));
 			}
 			
 			

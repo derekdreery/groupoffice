@@ -39,7 +39,7 @@ while($file = array_shift($_FILES))
 			$dir = $GO_CONFIG->tmpdir.'chunked_upload/';
 			$filepath = $dir.$file['name'].'.part'.$_POST['jupart'];
 
-			debug('Part '.$_POST['jupart'].': '.$filepath);
+			go_debug('Part '.$_POST['jupart'].': '.$filepath);
 				
 			if($_POST['jupart']==1)
 			{
@@ -55,7 +55,7 @@ while($file = array_shift($_FILES))
 					$part = $dir.$file['name'].'.part'.$i;
 					unlink($part);
 				}
-			//	debug('Uploaded file too big: '.$_SESSION['GO_SESSION']['chunked_upload_size'].' -> '.$GO_CONFIG->max_file_size);
+			//	go_debug('Uploaded file too big: '.$_SESSION['GO_SESSION']['chunked_upload_size'].' -> '.$GO_CONFIG->max_file_size);
 				exit('ERROR: File is too big');
 			}
 
@@ -78,7 +78,7 @@ while($file = array_shift($_FILES))
 
 				$filepath = File::checkfilename($complete_dir.$file['name']);
 
-				debug('Final part '.$_POST['jupart'].': '.$filepath);
+				go_debug('Final part '.$_POST['jupart'].': '.$filepath);
 
 				$fp = fopen($filepath, 'w+');
 				for($i=1;$i<=$_POST['jupart'];$i++)

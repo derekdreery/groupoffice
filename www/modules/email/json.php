@@ -105,7 +105,7 @@ function get_mailbox_nodes($account_id, $folder_id){
 		{
 		if($email->f('unseen')+$status->recent!= $status->unseen || $email->f('msgcount')+$status->recent!= $status->messages)
 		{
-		debug('Clearing dirty cache of folder: '.$email->f('name'));
+		go_debug('Clearing dirty cache of folder: '.$email->f('name'));
 		$imap->clear_cache($email->f('id'));
 		}
 		}*/
@@ -377,7 +377,7 @@ try{
 
 			$parts=$new_parts;
 
-			//debug($parts);
+			//go_debug($parts);
 
 			if($GO_MODULES->has_module('gnupg'))
 			{
@@ -566,7 +566,7 @@ try{
 					throw new Exception($lang['common']['selectError']);
 				}
 				$response=$cal->event_to_json_response($event);
-				//debug($response);
+				//go_debug($response);
 				$response['success']=true;
 				break;
 
@@ -671,7 +671,7 @@ try{
 					throw new Exception($lang['email']['errorGettingMessage']);
 				}
 
-				//debug($response);
+				//go_debug($response);
 
 				if(empty($response["subject"]))
 				{
@@ -749,7 +749,7 @@ try{
 
 				$parts = array_reverse($imap->f("parts"));
 
-				//debug($parts);
+				//go_debug($parts);
 				/*
 				*
 				 * Sometimes clients send multipart/alternative but there's only a text part. FIrst check if there's
@@ -767,7 +767,7 @@ try{
 					}
 				}
 
-				//debug($html_alternative);
+				//go_debug($html_alternative);
 
 				$response['body']='';
 
@@ -788,14 +788,14 @@ try{
 					if(stripos($parts[0]['mime'],'plain')!==false)
 						$parts[0]['mime']=$default_mime;
 
-						//debug($response['content_transfer_encoding']);
-					  //debug($parts[0]['transfer']);
+						//go_debug($response['content_transfer_encoding']);
+					  //go_debug($parts[0]['transfer']);
 
 					if(!empty($response['content_transfer_encoding']) && (empty($parts[0]['transfer']) || strtolower($parts[0]['transfer'])=='7bit' || strtolower($parts[0]['transfer'])=='8bit'))
 						$parts[0]['transfer']=$response['content_transfer_encoding'];
 				}
 
-				//debug($parts);
+				//go_debug($parts);
 
 				//block remote URL's if contacts is unknown
 				$response['blocked_images']=0;
@@ -821,11 +821,11 @@ try{
 						$mime = 'text/html';
 					}
 
-					/*debug($mime);
-					debug($html_alternative);
-					debug($part['type']);
-					debug($part["disposition"]);
-					debug('-----');*/
+					/*go_debug($mime);
+					go_debug($html_alternative);
+					go_debug($part['type']);
+					go_debug($part["disposition"]);
+					go_debug('-----');*/
 
 					if (empty($response['body']) &&
 					(stripos($part["disposition"],'attachment')===false) &&
@@ -833,7 +833,7 @@ try{
 						(stripos($mime,'html')!==false && empty($_POST['plaintext'])) ||
 						(stripos($mime,'plain')!==false && (!$html_alternative || strtolower($part['type'])!='alternative')) || $mime == "text/enriched" || $mime == "unknown/unknown"))
 					{
-						//debug('ja');
+						//go_debug('ja');
 						$part_body = $imap->view_part($uid, $part["number"], $part["transfer"], $part["charset"]);
 
 						
@@ -846,7 +846,7 @@ try{
 
 
 								$part_body = empty($_POST['plaintext']) ? String::text_to_html($part_body) : $part_body;
-//debug($part_body);
+//go_debug($part_body);
 								for($i=0;$i<count($uuencoded_attachments);$i++)
 								{
 									$attachment = $uuencoded_attachments[$i];
@@ -932,7 +932,7 @@ try{
 				}
 
 
-				//debug(var_export($attachments, true));
+				//go_debug(var_export($attachments, true));
 
 				//$response['event']=false;
 				$response['attachments']=array();
@@ -1109,8 +1109,8 @@ try{
 				//filtering might have changed the uid list
 				$uids = $imap->get_uids_subset($start, $limit);
 
-				//debug($uids);
-				//debug($messages);
+				//go_debug($uids);
+				//go_debug($messages);
 
 				$response['results']=array();
 
@@ -1208,7 +1208,7 @@ try{
 													{
 														if(!empty($_POST['refresh']))
 														{
-															debug('refreshing');
+															go_debug('refreshing');
 															$email->synchronize_folders($account, $imap);
 															$imap->clear_cache();
 														}

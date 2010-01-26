@@ -149,7 +149,7 @@ class email extends db
 						'password'=>$account['password']														
 					);
 					$server_response = $sc->send_request($GO_CONFIG->serverclient_server_url.'modules/postfixadmin/json.php', $params);
-					debug($server_response);
+					go_debug($server_response);
 					//go_log(LOG_DEBUG, var_export($server_response, true));
 					return json_decode($server_response, true);
 				}
@@ -1252,7 +1252,7 @@ class email extends db
 
 	function user_delete($user)
 	{
-		debug($user);
+		go_debug($user);
 		$email = new email();
 		$del = new email();
 		$email->get_accounts($user['id']);
@@ -1425,7 +1425,7 @@ class email extends db
 		
 		$sql .= " ORDER BY name ASC, email ASC";
 		
-		debug($sql);
+		go_debug($sql);
 			
 		$this->query($sql);
 		return $this->num_rows();

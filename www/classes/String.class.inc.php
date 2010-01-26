@@ -751,7 +751,7 @@ class String {
 		/*$html = str_replace('javascript:', 'removed_script:', $html);
 		$html = str_replace('vbscript:', 'removed_script:', $html);*/
 
-		//debug($html);
+		//go_debug($html);
 
 		if($block_external_images)
 		{

@@ -59,8 +59,8 @@ class smtp_restrict extends db{
 	{
 		$host = gethostbyname($host);
 		
-		//debug(var_export($this->hosts, true));
-		//debug($host);
+		//go_debug(var_export($this->hosts, true));
+		//go_debug($host);
 		
 		
 		if(!isset($this->hosts[$host]))

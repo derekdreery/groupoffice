@@ -49,7 +49,7 @@ class imapauth
 	{
 		$ia = new imapauth();
 
-		debug('IMAP auth module active');
+		go_debug('IMAP auth module active');
 		$arr = explode('@', $username);
 
 		$email = trim($username);
@@ -73,7 +73,7 @@ class imapauth
 				$mail_username = $mailbox;
 			}
 
-			debug('Attempt IMAP login');
+			go_debug('Attempt IMAP login');
 
 			if ($imap->open(
 			$config['host'],
@@ -86,7 +86,7 @@ class imapauth
 			$config['ssl'],
 			$config['novalidate_cert']))
 			{
-				debug('IMAP auth module logged in');
+				go_debug('IMAP auth module logged in');
 				$imap->close();
 
 				if ($user = $GO_USERS->get_user_by_username( $go_username ) ) {
@@ -124,7 +124,7 @@ class imapauth
 				}
 			}else
 			{
-				debug('IMAP auth failed '.$imap->last_error());
+				go_debug('IMAP auth failed '.$imap->last_error());
 				$imap->clear_errors();
 				
 				throw new Exception($GLOBALS['lang']['common']['badLogin']);

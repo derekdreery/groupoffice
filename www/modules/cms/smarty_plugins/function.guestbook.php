@@ -39,11 +39,11 @@ function smarty_function_guestbook($params, &$smarty)
 		{
 			$feedback = $lang['common']['missingField'];	
 		}elseif(preg_match('/http(s)?:\/\//',$file['content'])){
-			debug($_POST);
+			go_debug($_POST);
 			$feedback = 'We think your message was spam. If this is not true please contact the site owner.';
 		}else
 		{			
-			debug($_POST);		
+			go_debug($_POST);		
 			
 			$co->add_file($file, $co->site);
 			

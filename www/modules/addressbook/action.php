@@ -331,7 +331,7 @@ try
 			//go_log(LOG_DEBUG, var_export($_POST,true));
 
 			$_SESSION['GO_SESSION']['addressbook']['import_file'] = $GO_CONFIG->tmpdir.uniqid(time());
-			debug($import_file);
+			go_debug($import_file);
 
 			if(!move_uploaded_file($import_file, $_SESSION['GO_SESSION']['addressbook']['import_file'])){
 				throw new Exception('Could not move '.$import_file);

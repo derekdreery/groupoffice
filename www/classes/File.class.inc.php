@@ -59,7 +59,7 @@ class File
 
 
 		$size = substr ( $size, 0, strpos ( $size, ' ' ) );
-		//debug($cmd.' Size: '.$size);
+		//go_debug($cmd.' Size: '.$size);
 
 		return $size;
 	}

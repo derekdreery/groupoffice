@@ -77,7 +77,7 @@ function get_posted_event() {
 
 	$days = Date::shift_days_to_gmt($days, date('G', $event['start_time']), Date::get_timezone_offset($event['start_time']));
 
-	//debug(var_export($days, true));
+	//go_debug(var_export($days, true));
 	if($_POST['repeat_type']>0) {
 		$event['rrule']=Date::build_rrule($_POST['repeat_type'], $repeat_every,$event['repeat_end_time'], $days, $month_time);
 	}else {
@@ -550,7 +550,7 @@ try {
 
 				$RFC822 = new RFC822();
 				$participants_event_id=empty($old_event['participants_event_id']) ? $event_id : $old_event['participants_event_id'];
-				//debug($participants_event_id);
+				//go_debug($participants_event_id);
 				$cal->clear_event_status($participants_event_id, $_SESSION['GO_SESSION']['email']);
 			
 				$participants=array();
@@ -562,7 +562,7 @@ try {
 					}
 				}
 
-				//debug($participants);
+				//go_debug($participants);
 				if(count($participants)) {				
 					$swift = new GoSwift(
 							implode(',', $participants),
