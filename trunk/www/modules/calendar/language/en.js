@@ -94,4 +94,5 @@ GO.calendar.lang.show_bdays='Show birthdays from addressbook';
 GO.calendar.lang.show_tasks='Show tasks from tasklists';
 
 GO.calendar.lang.myCalendar='My calendar';
-GO.calendar.lang.integrate='Integrate';
+GO.calendar.lang.merge='Merge';
+GO.calendar.lang.ownColor = 'Every calendar its own color';

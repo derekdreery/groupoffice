@@ -70,7 +70,7 @@ GO.calendar.ViewDialog = function(config)
 		items: [new Ext.Panel({
 			layout:'form',
 			region:'north',
-			height:90,
+			height:110,
 			defaultType: 'textfield',
 			defaults: {
 				anchor: '100%'
@@ -88,17 +88,22 @@ GO.calendar.ViewDialog = function(config)
 				fieldLabel: GO.lang.strName,
 				name: 'name',
 				allowBlank:false		
-			},this.integrate = new Ext.form.Checkbox({
-				name:'integrate',
-				boxLabel: GO.calendar.lang.integrate,
+			},this.merge = new Ext.form.Checkbox({
+				name:'merge',
+				boxLabel: GO.calendar.lang.merge,
 				hideLabel : true
+			}),GO.calendar.ownColor = new Ext.form.Checkbox({
+				name:'owncolor',
+				boxLabel: GO.calendar.lang.ownColor,
+				hideLabel : true,
+				disabled : true,
+				checked : true
 			})
 			]
 		}),
 		this.calendarsGrid]
 
 	});
-
 
 	this.readPermissionsTab = new GO.grid.PermissionsPanel({
 		
@@ -160,6 +165,14 @@ GO.calendar.ViewDialog = function(config)
 		}
 		]
 	});
+
+	this.merge.on('check',function(checkbox,value) {
+		if (value) {
+			GO.calendar.ownColor.setDisabled(false);
+		} else {
+			GO.calendar.ownColor.setDisabled(true);
+		}
+		});
 
 }
 
@@ -252,7 +265,7 @@ Ext.extend(GO.calendar.ViewDialog, Ext.Window, {
 			params: {
 				'task' : 'save_view',
 				'view_id': this.view_id,
-				'integrate' : this.integrate,
+				'merge' : this.merge,
 				'view_calendars' : Ext.encode(calendars)
 			},
 			waitMsg:GO.lang.waitMsgSave,
