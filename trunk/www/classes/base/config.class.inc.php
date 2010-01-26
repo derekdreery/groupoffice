@@ -934,18 +934,24 @@ class GO_CONFIG {
 		if(isset($_SESSION['GO_SESSION']['config_file'])) {
 			return $_SESSION['GO_SESSION']['config_file'];
 		}else {
-			$config_file = $this->root_path.'config.php';
-			if(@file_exists($config_file)) {
-				$_SESSION['GO_SESSION']['config_file']=$config_file;
-				return $config_file;
+			$config_dir = $this->root_path;
+
+			while(!isset($_SESSION['config_file']) && dirname($config_dir) != $config_dir){
+				$config_file = $config_dir.'config.php';				
+				if(@file_exists($config_file)) {
+					$_SESSION['GO_SESSION']['config_file']=$config_file;
+					return $config_file;
+				}
+				$config_dir=dirname($config_dir).'/';
 			}
-			if(isset($_SERVER['SCRIPT_FILENAME']) && isset($_SERVER['PHP_SELF'])) {
+			
+			/*if(isset($_SERVER['SCRIPT_FILENAME']) && isset($_SERVER['PHP_SELF'])) {
 				$config_file = dirname(substr($_SERVER['SCRIPT_FILENAME'], 0 ,-strlen($_SERVER['PHP_SELF']))).'/config.php';
 				if(@file_exists($config_file)) {
 					$_SESSION['GO_SESSION']['config_file']=$config_file;
 					return $config_file;
 				}
-			}
+			}*/
 			if(!empty($_SERVER['SERVER_NAME'])){
 				$config_file = '/etc/groupoffice/'.$_SERVER['SERVER_NAME'].'/config.php';
 				if(@file_exists($config_file)) {
