@@ -29,9 +29,10 @@ GO.addressbook.ContactDialog = function(config)
 		setPhotoSrc : function(contact_id)
 		{
 			var now = new Date();
-			this.el.set({
-				src: GO.settings.modules.addressbook.url+'photo.php?contact_id='+contact_id+'&mtime='+now.format('U')
-			});
+			if (this.el)
+				this.el.set({
+					src: GO.settings.modules.addressbook.url+'photo.php?contact_id='+contact_id+'&mtime='+now.format('U')
+				});
 			this.setVisible(true);
 		}
 	});
@@ -190,7 +191,6 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 
 	show : function(contact_id)
 	{
-
 		if(!this.rendered)
 		{
 			this.render(Ext.getBody());
