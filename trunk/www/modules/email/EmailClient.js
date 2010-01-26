@@ -1826,3 +1826,16 @@ GO.linkHandlers[9] = function(id, remoteMessage){
 		});
 		
 }
+
+GO.newMenuItems.push({
+	text: GO.email.lang.email,
+	iconCls: 'go-link-icon-9',
+	handler:function(item, e){
+		var taskShowConfig = item.parentMenu.taskShowConfig || {};
+		taskShowConfig.link_config=item.parentMenu.link_config
+
+		GO.email.emailComposer = new GO.email.EmailComposer({links: true});
+
+		GO.email.emailComposer.show(taskShowConfig);
+	}
+});

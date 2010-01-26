@@ -258,14 +258,26 @@ GO.email.EmailComposer = function(config) {
 						
 	if(GO.mailings)
 	{
-		this.selectLinkField = new GO.form.SelectLink({
-			anchor : '100%'
-		});
-					
-		anchor+=26;
-		items.push(this.selectLinkField);
+		if (!this.selectLinkField) {
+			this.selectLinkField = new GO.form.SelectLink({
+				anchor : '100%'
+			});					
+			anchor+=26;
+			items.push(this.selectLinkField);
+		}
 	}
-				
+
+	if(config.links)
+	{
+		if (!this.selectLinkField) {
+			this.selectLinkField = new GO.form.SelectLink({
+				anchor : '100%'
+			});
+			anchor+=26;
+			items.push(this.selectLinkField);
+		}
+	}
+
 	items.push(this.subjectField = new Ext.form.TextField({
 		fieldLabel : GO.email.lang.subject,
 		name : 'subject',
@@ -811,6 +823,14 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 				this.afterShowAndLoad(true);
 			}
 			
+		}
+
+		if (config.link_config) {
+			this.link_config = config.link_config;
+			if (config.link_config.type_id) {
+				this.selectLinkField.setValue(config.link_config.type_id);
+				this.selectLinkField.setRemoteText(config.link_config.text);
+			}
 		}
 	},
 	
