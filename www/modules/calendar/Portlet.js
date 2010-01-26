@@ -159,8 +159,8 @@ Ext.extend(GO.calendar.SummaryGroupPanel, Ext.grid.GridPanel, {
 		}, this);
 		
 		Ext.TaskMgr.start({
-			run: this.store.load,
-			scope:this.store,
+			run: function(){this.store.load();},
+			scope:this,
 			interval:900000
 		});  
 	}

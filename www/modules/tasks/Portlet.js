@@ -117,8 +117,8 @@ Ext.extend(GO.tasks.SimpleTasksPanel, GO.grid.GridPanel, {
 		}, this);
 			
 		Ext.TaskMgr.start({
-			run: this.store.load,
-			scope:this.store,
+			run: function(){this.store.load();},
+			scope:this,
 			interval:960000
 		});
 		this.store.on('load', function() {
