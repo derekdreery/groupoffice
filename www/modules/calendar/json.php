@@ -294,6 +294,10 @@ try {
 					if ($cal->record['selected'])
 						$calendars[] = $cal->record['id'];
 				}
+				/* Random bright color for default background */
+				$default_bg = array();
+				foreach ($calendars as $k=>$v)
+					$default_bg[$v] = randHex().randHex().randHex().randHex().randHex().randHex();
 			} else {
 				$calendars=isset($_REQUEST['calendars']) ? json_decode(($_REQUEST['calendars'])) : array($calendar_id);
 			}
@@ -331,6 +335,10 @@ try {
 					$event['description']='';
 					$event['location']='';
 				}
+
+				if ($view_id)
+					if (strtolower($event['background'])=='null' || empty($event['background']) || $event['background']=='EBF1E2')
+						$event['background'] = $default_bg[$event['calendar_id']];
 
 				$response['results'][] = array(
 						'id'=>$response['count']++,
@@ -1198,3 +1206,28 @@ catch(Exception $e) {
         $response['success']=false;
 }
 echo json_encode($response);
+
+function randHex() {
+	$x = rand(8,15);
+	switch ($x) {
+		case '10':
+			$x = 'A';
+			break;
+		case '11':
+			$x = 'B';
+			break;
+		case '12':
+			$x = 'C';
+			break;
+		case '13':
+			$x = 'D';
+			break;
+		case '14':
+			$x = 'E';
+			break;
+		case '15':
+			$x = 'F';
+			break;
+	}
+	return $x;
+}
