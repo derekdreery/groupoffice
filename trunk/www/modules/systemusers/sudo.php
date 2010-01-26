@@ -134,7 +134,7 @@ switch($task)
 					if(file_exists($db_file)) unlink($db_file);
 				}
 
-				debug($forward_file);
+				go_debug($forward_file);
 
 				removeForward($forward_file);
 				if(!empty($vacation['forward_to']))

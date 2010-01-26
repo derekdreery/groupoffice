@@ -132,7 +132,7 @@ try
 					}
 				}
 			}
-			debug($response);
+			go_debug($response);
 			
 			echo json_encode($response);
 			break;
@@ -925,7 +925,7 @@ try
 					}
 				}
 			}
-			debug($response);
+			go_debug($response);
 
 			echo json_encode($response);
 			break;

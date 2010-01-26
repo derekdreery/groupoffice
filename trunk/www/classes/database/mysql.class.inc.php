@@ -127,7 +127,7 @@ class db extends base_db{
 
 		if ($this->debug)
 		{
-			debug($sql);
+			go_debug($sql);
 		}
 
 		//a single parameter does not need to be an array.
@@ -153,8 +153,8 @@ class db extends base_db{
 			}
 			if ($this->debug)
 			{
-				debug($params);
-				debug($types);
+				go_debug($params);
+				go_debug($types);
 			}
 
 			//bind parameters
@@ -169,7 +169,7 @@ class db extends base_db{
 			$keys = array_keys($params);
 			while($pos = strpos($types,'b', $pos+1))
 			{
-				//debug('Send long data:'.$keys[$pos]);
+				//go_debug('Send long data:'.$keys[$pos]);
 				$this->result->send_long_data($pos, $params[$keys[$pos]]);
 			}
 

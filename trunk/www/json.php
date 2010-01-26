@@ -550,7 +550,7 @@ try {
 			if($link_id>0) {
 				$record = $search->get_search_result($link_id, $link_type);
 
-				//debug($record);
+				//go_debug($record);
 
 				$response['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $record['acl_id']);
 				$response['write_permission']=$response['permission_level']>1;

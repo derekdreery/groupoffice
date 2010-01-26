@@ -181,7 +181,7 @@ class imap{
 			$this->connectstring .= '/novalidate-cert';
 		}
 		
-		//debug($this->connectstring);
+		//go_debug($this->connectstring);
 
 		if ($flags != 0) {
 			$this->conn = @imap_open("{".$this->connectstring."}".$this->mailbox, $username, $password, $flags, 1);
@@ -189,7 +189,7 @@ class imap{
 			$this->conn = @imap_open("{".$this->connectstring."}".$this->mailbox, $username, $password);
 		}
 		
-		//debug('Connected to IMAP server');
+		//go_debug('Connected to IMAP server');
 		return $this->conn;
 	}
 	
@@ -662,7 +662,7 @@ class imap{
 					throw new Exception($lang['email']['errorGettingMessage']."\n\n".$this->last_error());
 				}
 
-				//debug($structure);
+				//go_debug($structure);
 				$this->get_parts($structure);
 			}
 
@@ -701,7 +701,7 @@ class imap{
 		$full_mime_type = $type."/".$mimeobj->subtype;
 		$encoding = $this->get_encoding($mimeobj->encoding);
 
-		//debug($full_mime_type.' '.$section);
+		//go_debug($full_mime_type.' '.$section);
 
 		$name = '';
 
@@ -777,12 +777,12 @@ class imap{
 				) {
 
 					$subsection = (int) substr($section, $pos +1) + $x;
-					//debug('sub '.$subsection);
+					//go_debug('sub '.$subsection);
 					if ($subsection == '') {
 						$subsection = '0';
 					}
 					$nsection = substr($section, 0, $pos).".". ($subsection +1);
-				//debug('new '.$nsection);
+				//go_debug('new '.$nsection);
 				} else {
 					$nsection = $section;
 				}
@@ -1131,7 +1131,7 @@ class imap{
 				$part_charset = 'ISO-8859-1';
 			}
 		}
-//debug($part_charset);
+//go_debug($part_charset);
 		if ($part_charset != '') {			
 			$str = String::clean_utf8($str, $part_charset);
 			if($part_charset != $charset){
@@ -1249,7 +1249,7 @@ class imap{
 	function get_subscribed($mailbox_root = '', $name_only = false) {
 		$this->mailboxes = array ();
 		$list = imap_getsubscribed($this->conn, "{".$this->connectstring."}", $mailbox_root.'*');
-//debug($list);
+//go_debug($list);
 		if (is_array($list)) {
 			foreach ($list as $value) {
 				if (substr($value->name, -1) != $value->delimiter && strlen($value->delimiter) > 0) {														
@@ -1423,7 +1423,7 @@ class imap{
 	function expunge()
 	{
 		imap_expunge($this->conn);
-		//debug('Expunged');
+		//go_debug('Expunged');
 	}
 
 	/**
@@ -1516,12 +1516,12 @@ class imap{
 		//containing space values inside, but they mustn't. The space values have to be removed before
 		//they are going to be converted to utf8.
 
-		//debug($str);
+		//go_debug($str);
 
 		if (strpos($str, '=?') !== false) {
 
 			$obj = imap_mime_header_decode($str);
-			//debug($obj);
+			//go_debug($obj);
 			$decoded='';
 			for ($i=0; $i<count($obj); $i++) {
 				if($obj[$i]->charset!='UTF-8' && $obj[$i]->charset!='default'){
@@ -1531,7 +1531,7 @@ class imap{
 					$decoded.=$obj[$i]->text;
 				}
 			}
-			//debug($decoded);
+			//go_debug($decoded);
 			return $decoded;
 
 			/*$decoded = preg_replace_callback(
@@ -1540,7 +1540,7 @@ class imap{
             // single quotes are essential here,
             // or alternative escape all $ as \$
             '$matches',
-            'debug($matches[0]);
+            'go_debug($matches[0]);
 	$decoded= iconv_mime_decode($matches[0],ICONV_MIME_DECODE_CONTINUE_ON_ERROR,\'UTF-8\');
 
 			if($decoded){
@@ -1557,7 +1557,7 @@ class imap{
 			//$str = str_replace(" ", "", $str);
 			//return imap_utf8($str);
 			//$decoded = iconv_mime_decode($str,ICONV_MIME_DECODE_CONTINUE_ON_ERROR,'UTF-8');
-			//debug($decoded);
+			//go_debug($decoded);
 			if($decoded){
 				return $decoded;
 			}else
@@ -1690,7 +1690,7 @@ class imap{
     
     //remove it from the body.
     $body = preg_replace($regex, "", $body);
-    //debug($body);
+    //go_debug($body);
     
     return $attachments;
 	}

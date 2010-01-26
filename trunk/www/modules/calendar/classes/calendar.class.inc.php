@@ -1565,14 +1565,14 @@ class calendar extends db
 
 		asort($this->events_sort);
 
-		//debug($this->events_sort);
+		//go_debug($this->events_sort);
 
 		$sorted_events=array();
 		foreach($this->events_sort as $key=>$value)
 		{
 			$sorted_events[] = &$this->events[$key];
 		}
-		//debug($sorted_events);
+		//go_debug($sorted_events);
 		return $sorted_events;
 	}
 
@@ -1607,7 +1607,7 @@ class calendar extends db
 
 			//echo date('Ymd G:i', $first_occurrence_time).'<br />';
 
-			//debug($calculated_event['name'].': '.date('Ymd G:i', $first_occurrence_time));
+			//go_debug($calculated_event['name'].': '.date('Ymd G:i', $first_occurrence_time));
 
 			$loops = 0;
 			while($calculated_event['start_time'] = Date::get_next_recurrence_time($first_occurrence_time, $calculated_event['start_time'], $event['rrule']))
@@ -1616,7 +1616,7 @@ class calendar extends db
 
 				//echo date('Ymd G:i', $calculated_event['start_time']).'<br />';
 
-				//debug($calculated_event['name'].': '.date('Ymd G:i', $calculated_event['start_time']));
+				//go_debug($calculated_event['name'].': '.date('Ymd G:i', $calculated_event['start_time']));
 
 				$calculated_event['end_time'] = $calculated_event['start_time']+$duration;
 

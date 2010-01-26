@@ -152,7 +152,7 @@ function set_debug_log($file)
  * @param string $text log entry
  */
 
-function debug($text, $config=false)
+function go_debug($text, $config=false)
 {
 
 	if(!$config)

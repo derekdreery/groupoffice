@@ -220,7 +220,7 @@ class Date
 
 					$devided = $interval_months/$event['repeat_every'];
 					$rounded = ceil($devided);
-					//debug('*'.$devided);
+					//go_debug('*'.$devided);
 					while($occurence_time<=$start_time)
 					{
 						$occurence_time=mktime(date('H', $first_occurence_time), date('i', $first_occurence_time),0, date('n', $first_occurence_time)+($event['repeat_every']*$rounded), date('j', $first_occurence_time), date('Y', $first_occurence_time));
@@ -246,14 +246,14 @@ class Date
 
 					$days = Date::shift_days_to_local($days, date('G', $event['start_time']), Date::get_timezone_offset($event['start_time']));
 
-					//debug('New call');
+					//go_debug('New call');
 
 					$test_time=mktime(date('H', $first_occurence_time), date('i', $first_occurence_time),0, date('n', $start_time), date('j', $start_time), date('Y', $start_time));
 					while($occurence_time==0)
 					{				
 						$test_time = Date::date_add($test_time, 1);
 
-						//debug('*'.date('r', $test_time));
+						//go_debug('*'.date('r', $test_time));
 
 						$weekday = date("w", $test_time);
 
@@ -269,11 +269,11 @@ class Date
 								$test_time = mktime(date('H', $test_time), date('i', $test_time),0, date('n', $test_time)+1, 1, date('Y', $test_time));
 							}else
 							{
-								//debug('**'.ceil(date('j',$test_time)/7).' = '.$event['month_time']);
+								//go_debug('**'.ceil(date('j',$test_time)/7).' = '.$event['month_time']);
 								if (ceil(date('j',$test_time)/7) == $event['month_time'])
 								{
 									$occurence_time=$test_time;
-									//debug('found '.date('Ymd', $occurence_time));
+									//go_debug('found '.date('Ymd', $occurence_time));
 									break;
 								}
 							}
@@ -399,7 +399,7 @@ class Date
 			$shift_day = 0;
 		}
 
-		//debug($gmt_start_hour.' > '.$timezone_offset.' > '.$shift_day);
+		//go_debug($gmt_start_hour.' > '.$timezone_offset.' > '.$shift_day);
 
 		if($shift_day!=0)
 		{

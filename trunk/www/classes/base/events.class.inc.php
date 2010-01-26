@@ -56,7 +56,7 @@ class GO_EVENTS
 			'method'=>$method
 		);
 		
-		//debug('Adding listener: '.$class.'::'.$method);
+		//go_debug('Adding listener: '.$class.'::'.$method);
 	}
 	
 	public function fire_event($event, $args=array())
@@ -70,7 +70,7 @@ class GO_EVENTS
 			foreach($this->listeners[$event] as $listener)
 			{
 				require_once($listener['file']);
-				debug('Firing listener: '.$listener['class'].'::'.$listener['method']);
+				go_debug('Firing listener: '.$listener['class'].'::'.$listener['method']);
 				call_user_func_array(array($listener['class'], $listener['method']),$args);
 			}		
 		}		

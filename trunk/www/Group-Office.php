@@ -55,7 +55,7 @@ if ( isset( $GO_INCLUDES ) ) {
 //start session
 session_name('groupoffice');
 session_start();
-debug('['.date('Y-m-d G:i').'] Start of new request');
+go_debug('['.date('Y-m-d G:i').'] Start of new request');
 
 if($GO_CONFIG->session_inactivity_timeout>0){
 	$now = time();

@@ -74,7 +74,7 @@ class serverclient
 				$response = $sc->send_request($sc->server_url.'modules/postfixadmin/action.php', $params);
 				$response = json_decode($response, true);
 					
-				//debug($response, true);
+				//go_debug($response, true);
 
 				if(!is_array($response) || !$response['success'])
 				{
@@ -150,7 +150,7 @@ class serverclient
 			$response = $this->send_request($this->server_url.'modules/postfixadmin/action.php', $params);
 			}
 
-			//debug(var_export($response, true));
+			//go_debug(var_export($response, true));
 			}
 	}*/
 
@@ -185,7 +185,7 @@ class serverclient
 				$account['smtp_username']=$GO_CONFIG->serverclient_smtp_username;
 				$account['smtp_password']=$GO_CONFIG->serverclient_smtp_password;
 
-				//debug(var_export($account, true));
+				//go_debug(var_export($account, true));
 
 				$account['id'] = $email->add_account($account);
 
@@ -218,7 +218,7 @@ class serverclient
 
 		if(!isset($response['success']) || !$response['success'])
 		{
-			debug($response);
+			go_debug($response);
 			require($GO_LANGUAGE->get_language_file('serverclient'));
 			$feedback = isset($response['feedback']) ? $response['feedback'] : sprintf($lang['serverclient']['connect_error'], $this->server_url);
 			throw new Exception($feedback);

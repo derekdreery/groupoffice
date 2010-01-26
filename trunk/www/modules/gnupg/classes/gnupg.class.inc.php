@@ -95,7 +95,7 @@ class gnupg{
 
 		global $GO_CONFIG;
 
-		//debug($data);
+		//go_debug($data);
 
 		$command = '-d';
 		$this->run_cmd($command, $unencrypted, $errorcode, $data, $passphrase);
@@ -107,7 +107,7 @@ class gnupg{
 
 		global $GO_CONFIG;
 
-		//debug($data);
+		//go_debug($data);
 		if(file_exists($outfile))
 		{
 			unlink($outfile);
@@ -127,7 +127,7 @@ class gnupg{
 	public function encode($data, $recipient, $user=null){
 		$command = '--always-trust -a  -e';
 		
-		debug($data);
+		go_debug($data);
 
 		if(!is_array($recipient))
 		{
@@ -198,7 +198,7 @@ class gnupg{
 	function import($data)
 	{
 		$this->run_cmd('--armor --import', $output, $errorval, $data);
-		//debug($this->error);
+		//go_debug($this->error);
 	}
 
 	public function list_keys(){
@@ -327,7 +327,7 @@ class gnupg{
 
 		$complete_cmd .= ' '.$cmd;
 
-		debug($complete_cmd);
+		go_debug($complete_cmd);
 		
 		
 		if(isset($passphrase))
@@ -366,10 +366,10 @@ class gnupg{
 		$this->output .= stream_get_contents($this->pipes[GPGSTDOUT]);
 		
 		$output = $this->output;
-		debug($this->output);
+		go_debug($this->output);
 
 		$this->error = stream_get_contents($this->pipes[GPGSTDERR]);
-		debug('Error :'.$this->error);
+		go_debug('Error :'.$this->error);
 		
 		
 
@@ -392,12 +392,12 @@ class gnupg{
 
 	function write_data($data, $pipe=GPGSTDIN)
 	{
-		debug('Writing '.$data.' to '.$pipe);
+		go_debug('Writing '.$data.' to '.$pipe);
 
 		//this hangs sometimes
 		//$write_pipes = array($this->pipes[$pipe]);
 		//$numWrite=stream_select($read=NULL,$write_pipes,$except=NULL,5);
-		//debug($numWrite);
+		//go_debug($numWrite);
 		//if ($numWrite !==false) {
 			
 			fwrite($this->pipes[$pipe], $data);
@@ -419,10 +419,10 @@ class gnupg{
 					if ($this->pipes[STATUS_FD] == $pipe) {
 						stream_set_blocking($this->pipes[STATUS_FD],0);
 						
-						//debug('Reading status FD');
+						//go_debug('Reading status FD');
 					
 						$status = fgets( $this->pipes[ STATUS_FD ]);							
-						debug('Status :'.$status);
+						go_debug('Status :'.$status);
 
 						if(strpos($status, 'okay')!==false)
 						{
@@ -434,7 +434,7 @@ class gnupg{
 					}
 
 					if ($this->pipes[GPGSTDOUT] == $pipe) {
-						debug('Read output');
+						go_debug('Read output');
 						stream_set_blocking($this->pipes[GPGSTDOUT],0);						
 						$this->output .= stream_get_contents($this->pipes[GPGSTDOUT]);
 

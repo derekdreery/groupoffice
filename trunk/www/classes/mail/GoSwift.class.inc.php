@@ -237,7 +237,7 @@ class GoSwift extends Swift_Mailer{
 				foreach($children as $child){
 					
 					if($child->getBody()==$this->text_part_body){
-						debug('Replaced');
+						go_debug('Replaced');
 						$this->text_part_body = $htmlToText->get_text();
 						$child->setBody($this->text_part_body);
 						break;

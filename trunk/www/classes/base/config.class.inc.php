@@ -896,12 +896,12 @@ class GO_CONFIG {
 
 	function __destruct() {
 		if($this->debug) {
-			debug('Performed '.$GLOBALS['query_count'].' database queries', $this);
+			go_debug('Performed '.$GLOBALS['query_count'].' database queries', $this);
 
-			debug('Page load took: '.(getmicrotime()-$this->loadstart).'ms', $this);
+			go_debug('Page load took: '.(getmicrotime()-$this->loadstart).'ms', $this);
 
-			debug('Peak memory usage:'.memory_get_peak_usage(), $this);
-			debug("--------------------\n", $this);
+			go_debug('Peak memory usage:'.memory_get_peak_usage(), $this);
+			go_debug("--------------------\n", $this);
 		}
 	}
 
