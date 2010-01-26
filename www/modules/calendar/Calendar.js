@@ -296,7 +296,6 @@ GO.calendar.MainPanel = function(config){
 	{
 		this.viewsList.getSelectionModel().clearSelections();
 		this.resourcesList.getSelectionModel().clearSelections();
-
 		var calendars = this.calendarList.getSelectionModel().selections.items;
 		
 		if (calendars.length<2) {
@@ -1216,6 +1215,10 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			this.daysGridStore.baseParams['view_id']=config.view_id;
 			this.monthGridStore.baseParams['view_id']=config.view_id;
 			this.listGrid.store.baseParams['view_id']=config.view_id;
+		} else {
+			this.daysGridStore.baseParams['view_id']=null;
+			this.monthGridStore.baseParams['view_id']=null;
+			this.listGrid.store.baseParams['view_id']=null;
 		}
 
 		if(config.calendar_name)
