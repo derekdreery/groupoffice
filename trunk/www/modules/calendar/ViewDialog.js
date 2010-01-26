@@ -26,7 +26,10 @@ GO.calendar.ViewDialog = function(config)
 	 
 	this.calendarsStore = new GO.data.JsonStore({
 		url: GO.settings.modules.calendar.url+'json.php',
-		baseParams: {'task': 'view_calendars', view_id: this.view_id},
+		baseParams: {
+			'task': 'view_calendars',
+			view_id: this.view_id
+		},
 		root: 'results',
 		totalProperty: 'total',
 		id: 'id',
@@ -67,10 +70,13 @@ GO.calendar.ViewDialog = function(config)
 		items: [new Ext.Panel({
 			layout:'form',
 			region:'north',
-			height:70,
+			height:90,
 			defaultType: 'textfield',
-			defaults: {anchor: '100%'},
-			cls:'go-form-panel',waitMsgTarget:true,
+			defaults: {
+				anchor: '100%'
+			},
+			cls:'go-form-panel',
+			waitMsgTarget:true,
 			labelWidth: 75,
 			border:false,
 			items: [
@@ -81,9 +87,12 @@ GO.calendar.ViewDialog = function(config)
 			{
 				fieldLabel: GO.lang.strName,
 				name: 'name',
-				allowBlank:false
-					
-			}
+				allowBlank:false		
+			},this.integrate = new Ext.form.Checkbox({
+				name:'integrate',
+				boxLabel: GO.calendar.lang.integrate,
+				hideLabel : true
+			})
 			]
 		}),
 		this.calendarsGrid]
@@ -93,7 +102,7 @@ GO.calendar.ViewDialog = function(config)
 
 	this.readPermissionsTab = new GO.grid.PermissionsPanel({
 		
-	});
+		});
 
 
 
@@ -119,32 +128,38 @@ GO.calendar.ViewDialog = function(config)
 	
 	
 	GO.calendar.ViewDialog.superclass.constructor.call(this,{
-					title: GO.lang.strView,
-					layout:'fit',
-					modal:false,
-					height:500,
-					width:400,
-					closeAction:'hide',
-					items: this.formPanel,
-					buttons:[
-					{
-						text:GO.lang.cmdOk,
-						handler: function(){this.save(true)},
-						scope: this
-					},
-					{
-						text:GO.lang.cmdApply,
-						handler: function(){this.save(false)},
-						scope: this
-					},
+		title: GO.lang.strView,
+		layout:'fit',
+		modal:false,
+		height:500,
+		width:400,
+		closeAction:'hide',
+		items: this.formPanel,
+		buttons:[
+		{
+			text:GO.lang.cmdOk,
+			handler: function(){
+				this.save(true)
+			},
+			scope: this
+		},
+		{
+			text:GO.lang.cmdApply,
+			handler: function(){
+				this.save(false)
+			},
+			scope: this
+		},
 
-					{
-						text:GO.lang.cmdClose,
-						handler: function(){this.hide()},
-						scope: this
-					}
-					]
-				});
+		{
+			text:GO.lang.cmdClose,
+			handler: function(){
+				this.hide()
+			},
+			scope: this
+		}
+		]
+	});
 
 }
 
@@ -152,7 +167,9 @@ Ext.extend(GO.calendar.ViewDialog, Ext.Window, {
 	
 	initComponent : function(){
 		
-		this.addEvents({'save' : true});
+		this.addEvents({
+			'save' : true
+		});
 		
 		GO.calendar.ViewDialog.superclass.initComponent.call(this);
 		
@@ -233,9 +250,10 @@ Ext.extend(GO.calendar.ViewDialog, Ext.Window, {
 				
 			url:GO.settings.modules.calendar.url+'action.php',
 			params: {
-					'task' : 'save_view', 
-					'view_id': this.view_id,
-					'view_calendars' : Ext.encode(calendars)
+				'task' : 'save_view',
+				'view_id': this.view_id,
+				'integrate' : this.integrate,
+				'view_calendars' : Ext.encode(calendars)
 			},
 			waitMsg:GO.lang.waitMsgSave,
 			success:function(form, action){
@@ -246,7 +264,7 @@ Ext.extend(GO.calendar.ViewDialog, Ext.Window, {
 					this.view_id=action.result.view_id;
 					this.readPermissionsTab.setAcl(action.result.acl_id);
 
-					//this.loadAccount(this.view_id);
+				//this.loadAccount(this.view_id);
 				}
 				
 				this.fireEvent('save');
