@@ -960,6 +960,7 @@ try {
 			$view['id']=$_POST['view_id'];
 			$view['user_id'] = isset($_POST['user_id']) ? ($_POST['user_id']) : $GO_SECURITY->user_id;
 			$view['name']=$_POST['name'];
+			$view['integrate'] = isset($_POST['integrate']) && $_POST['integrate']=='on' ? '1' : '0';
 
 			$view_calendars = json_decode(($_POST['view_calendars']));
 
