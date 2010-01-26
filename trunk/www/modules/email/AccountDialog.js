@@ -17,10 +17,7 @@ GO.email.AccountDialog = function(config) {
 	var typeField;
 	var sslCb;
 
-	function formatBoolean(value) {
-		return value == "1" ? GO.lang.cmdYes : GO.lang.cmdNo;
-	};
-
+	
 	// the column model has information about grid columns
 	// dataIndex maps the column to the specific data field in
 	// the data store (created below)
@@ -36,7 +33,9 @@ GO.email.AccountDialog = function(config) {
 	}, {
 		header : GO.email.lang.markAsRead,
 		dataIndex : 'mark_as_read',
-		renderer : formatBoolean
+		renderer : function (value) {
+			return value == "1" ? GO.lang.cmdYes : GO.lang.cmdNo;
+		}
 	}]);
 
 	// by default columns are sortable
@@ -207,6 +206,7 @@ GO.email.AccountDialog = function(config) {
 			xtype : 'fieldset',
 			title : GO.email.lang.advanced,
 			collapsible : true,
+			forceLayout:true,
 			collapsed : true,
 			autoHeight : true,
 			autoWidth : true,
@@ -471,6 +471,7 @@ GO.email.AccountDialog = function(config) {
 		url : GO.settings.modules.email.url + 'action.php',
 		// labelWidth: 75, // label settings here cascade unless
 		// overridden
+		defaults:{forceLayout:true},
 		defaultType : 'textfield',
 		waitMsgTarget : true,
 		labelWidth : 120,
