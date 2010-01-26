@@ -52,4 +52,5 @@ $updates[]="CREATE TABLE IF NOT EXISTS `cal_visible_tasklists` (
   PRIMARY KEY (`calendar_id`,`tasklist_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8";
 
-$updates[]= "ALTER TABLE `cal_views` ADD `integrate` tinyint(1) NOT NULL default '0'";
+$updates[]= "ALTER TABLE `cal_views` ADD `merge` tinyint(1) NOT NULL default '0'";
+$updates[]= "ALTER TABLE `cal_views` ADD `owncolor` tinyint(1) NOT NULL default '1'";

@@ -82,4 +82,5 @@ GO.calendar.lang.show_bdays='Toon verjaardagen uit adresboek';
 GO.calendar.lang.show_tasks='Toon taken uit takenlijsten';
 
 GO.calendar.lang.myCalendar='Mijn agenda';
-GO.calendar.lang.integrate='Samenvoegen';
+GO.calendar.lang.merge='Samenvoegen';
+GO.calendar.lang.ownColor = 'Elke agenda zijn eigen kleur';

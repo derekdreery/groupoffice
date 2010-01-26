@@ -960,7 +960,8 @@ try {
 			$view['id']=$_POST['view_id'];
 			$view['user_id'] = isset($_POST['user_id']) ? ($_POST['user_id']) : $GO_SECURITY->user_id;
 			$view['name']=$_POST['name'];
-			$view['integrate'] = isset($_POST['integrate']) && $_POST['integrate']=='on' ? '1' : '0';
+			$view['merge'] = isset($_POST['merge']) && $_POST['merge']=='on' ? '1' : '0';
+			$view['owncolor'] = isset($_POST['owncolor']) && $_POST['owncolor']=='on' ? '1' : '0';
 
 			$view_calendars = json_decode(($_POST['view_calendars']));
 
@@ -1080,10 +1081,10 @@ try {
 			$response['success']=true;
 			break;
 
-		case 'change_integrate':
+		case 'change_merge':
 			$view = array();
 			$view['id'] = $_POST['view_id'];
-			$view['integrate'] = $_POST['integrate'];
+			$view['merge'] = $_POST['merge'];
 			$cal->update_view($view);
 			$response['success']=true;
 			break;
