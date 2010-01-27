@@ -59,8 +59,12 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	},
 
 	saveState : function(){
+		Ext.state.Manager.getProvider().set('open-modules', this.getOpenModules());
+	},
+		/*
 
 		this.stateToSave = this.getOpenModules();
+
 		if(!this.stateSaveScheduled)
 		{
 			this.stateSaveScheduled=true;			
@@ -73,7 +77,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 			this.stateSaveScheduled=false;
 		};
 		Ext.state.Manager.getProvider().set('open-modules', Ext.encode(this.stateToSave), callback, this);
-	},
+	},*/
 	logout : function(first){
 		
 		if(Ext.Ajax.isLoading())
