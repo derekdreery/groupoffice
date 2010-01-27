@@ -682,7 +682,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					error = error+'<ul>';
 					for (var i in action.result.resources) {
 						if (!isNaN(i))
-							error = error+'<li> - '+action.result.resources[i]+' ('+GO.calendar.lang.calendar+': '+action.result.calendars[i]+')</li>';
+							error = error+'<li> - '+action.result.resources[i]+'</li>';
 					}
 					error = error+'</ul>';
 					Ext.MessageBox.alert(GO.calendar.lang.resourceConflictTitle, error);

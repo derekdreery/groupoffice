@@ -365,7 +365,7 @@ try {
 					if ($value['id'] != $event['id']) {
 						$cal2 = new calendar();
 						$resource = $cal2->get_calendar($value['calendar_id']);
-						$cal2->get_event_resources($value['participants_event_id']);
+						/* $cal2->get_event_resources($value['participants_event_id']);
 						while ($cal2->next_record()) {
 							if ($cal2->record['calendar_id'] != $value['calendar_id']) {
 								$current_cal_id = $cal2->record['calendar_id'];
@@ -373,7 +373,8 @@ try {
 								$current_calendar = $cal3->get_calendar($current_cal_id);
 								$response['calendars'][] = $current_calendar['name'];
 							}
-						}
+						} */
+
 						$response['success'] = false;
 						$response['resources'][] = $resource['name'];
 						$response['feedback'] = 'Resource conflict';
@@ -387,12 +388,10 @@ try {
 
 			/* Check for conflicts with other events in the calendar */
 			if ($check_conflicts) {
-				$cal->get_events_in_array($calendar['id'], $GO_SECURITY->user_id, $event['start_time'], $event['end_time']);
-				if($cal->num_rows()) {
-					$response['success'] = false;
-					//$response['hide'] = $_POST['hide'];
-					$response['feedback'] = 'Ask permission';
-					break;
+				$conflict_events = $cal->get_events_in_array($calendar['id'], $GO_SECURITY->user_id, $event['start_time'], $event['end_time']);
+				while($conflict_event = array_shift($conflict_events)) {
+					if($conflict_event['id']!=$event_id)
+						throw new Exception('Ask permission');					
 				}
 			}
 
