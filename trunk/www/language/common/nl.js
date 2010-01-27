@@ -310,3 +310,5 @@ GO.lang.permissionRead='Alleen lezen';
 GO.lang.permissionWrite='Schrijven';
 GO.lang.permissionDelete='Schrijven en verwijderen';
 GO.lang.permissionManage='Beheren';
+
+GO.lang.age='Leeftijd';
