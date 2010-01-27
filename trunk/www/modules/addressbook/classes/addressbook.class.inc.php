@@ -681,7 +681,11 @@ class addressbook extends db {
 			} else {
 				$sort_index = 'ab_contacts.last_name '.$sort_order.', ab_contacts.first_name';
 			}
+		}elseif($sort_index=='age'){
+			$sort_index='birthday';
 		}
+
+
 
 		if(count($mailings_filter)) {
 			$sql = "SELECT DISTINCT ";
