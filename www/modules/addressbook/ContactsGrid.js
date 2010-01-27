@@ -183,9 +183,12 @@ GO.addressbook.ContactsGrid = function(config){
 	    remoteSort: true
 	});
 	
-	var contactsColumnModel =  new Ext.grid.ColumnModel(fields.columns);
-	contactsColumnModel.defaultSortable = true;
-	config.cm=contactsColumnModel;
+	config.cm=new Ext.grid.ColumnModel({
+		defaults:{
+			sortable:true
+		},
+		columns:fields.columns
+	});
 	
 	config.view=new Ext.grid.GridView({
 		autoFill: true,
