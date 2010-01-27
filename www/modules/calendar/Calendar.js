@@ -1585,8 +1585,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				}
 			}, this);
 
-			this.tbar = [{
-				id: 'addCalendar',
+			 var tbar = [{
 				iconCls: 'btn-add',
 				text: GO.lang.cmdAdd,
 				disabled: !GO.settings.modules.calendar.write_permission,
@@ -1596,7 +1595,6 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				},
 				scope: this
 			},{
-				id: 'delete',
 				iconCls: 'btn-delete',
 				text: GO.lang.cmdDelete,
 				disabled: !GO.settings.modules.calendar.write_permission,
@@ -1609,8 +1607,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 
 			if(GO.customfields)
 			{
-				this.tbar.push(new Ext.Button({
-					id: 'manage_cf',
+				tbar.push(new Ext.Button({
 					iconCls: 'btn-settings',
 					disabled: !GO.settings.modules.calendar.write_permission,
 					text: GO.customfields.lang.customfields,
@@ -1647,7 +1644,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				}),
 				sm: new Ext.grid.RowSelectionModel(),
 				loadMask: true,
-				tbar:this.tbar
+				tbar:tbar
 				
 			});		
             
