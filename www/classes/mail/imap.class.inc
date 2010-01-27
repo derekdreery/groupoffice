@@ -878,9 +878,13 @@ class imap{
 	 */
 	function part_is_attachment($part)
 	{
-		return (stripos($part["disposition"],"ATTACHMENT")!==false || ($part["name"] != '' && empty($part["id"]))
-		&& 
-		!($part['type']=='APPLEDOUBLE' && $part['mime']== 'application/APPLEFILE') && strtolower($part['type'])!='alternative');
+		return ((
+						stripos($part["disposition"],"ATTACHMENT")!==false || ($part["name"] != '' && empty($part["id"]))
+						&&
+						!($part['type']=='APPLEDOUBLE' && $part['mime']== 'application/APPLEFILE') && strtolower($part['type'])!='alternative')
+					||
+				strtolower($part['mime'])=='text/calendar'
+		);
 	}
 	
 	/*function is_attachment($part)
