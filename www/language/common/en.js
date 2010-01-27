@@ -339,3 +339,5 @@ GO.lang.spellcheckNoError = 'No Errors Found';
 GO.lang.spellcheckServerError = 'There was a problem running the spell check, if the problem continues, please contact support';
 GO.lang.spellcheckNoErrors = 'Email content with [{1}] mistake(s)';
 GO.lang.spellcheckAsk = 'Send without spell checking?';
+
+GO.lang.age='Age';

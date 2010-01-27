@@ -817,6 +817,26 @@ class addressbook extends db {
 		$record['name'] = String::format_name($record['last_name'], $record['first_name'], $record['middle_name']);
 		$record['ctime']=Date::get_timestamp($record['ctime']);
 		$record['mtime']=Date::get_timestamp($record['mtime']);
+
+
+		if(!isset($GLOBALS['now']))
+			$GLOBALS['now']=time();
+
+		$record['age']='';
+
+		if($record['birthday']!='0000-00-00'){
+			$btime = strtotime($record['birthday']);
+			$age = date('Y')-date('Y', $btime);
+
+			$month = date('n');
+			$bmonth = date('n', $btime);
+
+			if($month<$bmonth || ($month==$bmonth && date('j')<date('j', $btime))) {
+				$age--;
+			}
+			$record['age']=$age;
+		}
+
 		if($cf)
 			$cf->format_record($record, 2, true);
 	}
