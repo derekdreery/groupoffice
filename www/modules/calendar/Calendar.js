@@ -606,9 +606,12 @@ GO.calendar.MainPanel = function(config){
 		text: GO.calendar.lang.oneDay,
 		cls: 'x-btn-text-icon',
 		handler: function(){
+			
 			this.setDisplay({
 				days:1,
 				displayType: this.displayType == 'view' ? 'view' : 'days',
+				calendar_name: this.calendar_name,
+				view_id : this.view_id,		
 				saveState:true
 			});
 		},
@@ -623,6 +626,8 @@ GO.calendar.MainPanel = function(config){
 			this.setDisplay({
 				days: 5,
 				displayType: this.displayType == 'view' ? 'view' : 'days',
+				calendar_name: this.calendar_name,
+				view_id : this.view_id,				
 				saveState:true
 			});
 		},
@@ -633,9 +638,12 @@ GO.calendar.MainPanel = function(config){
 		text: GO.calendar.lang.sevenDays,
 		cls: 'x-btn-text-icon',
 		handler: function(){
+		
 			this.setDisplay({
 				days: 7,
 				displayType: this.displayType == 'view' ? 'view' : 'days',
+				calendar_name: this.calendar_name,
+				view_id : this.view_id,
 				saveState:true
 			});
 		},
@@ -645,8 +653,11 @@ GO.calendar.MainPanel = function(config){
 		text: GO.calendar.lang.month,
 		cls: 'x-btn-text-icon',
 		handler: function(){
+			
 			this.setDisplay({
 				displayType:'month',
+				calendar_name: this.calendar_name,
+				view_id : this.view_id,
 				saveState:true
 			});
 		},
@@ -657,10 +668,12 @@ GO.calendar.MainPanel = function(config){
 		text: GO.calendar.lang.list,
 		cls: 'x-btn-text-icon',
 		handler: function(item, pressed){
-			        			
+			
 			this.setDisplay({
 				displayType:'list',
 				days: 7,
+				calendar_name: this.calendar_name,
+				view_id : this.view_id,
 				saveState:true
 			});
 			        		
@@ -1146,33 +1159,24 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		this.listButton.setDisabled(this.displayType=='view');
 
 		if (config.calendars) {
+			this.view_id=0;
 			this.calendar_id = null;
 			this.daysGridStore.baseParams['calendars']=Ext.encode(config.calendars);
 			this.monthGridStore.baseParams['calendars']=Ext.encode(config.calendars);
 			this.listGrid.store.baseParams['calendars']=Ext.encode(config.calendars);
 		} else if (config.calendar_id)
 		{
+			this.view_id=0;
 			this.calendar_id=config.calendar_id;
 			this.daysGridStore.baseParams['calendars']=Ext.encode([config.calendar_id]);
 			this.monthGridStore.baseParams['calendars']=Ext.encode([config.calendar_id]);
 			this.listGrid.store.baseParams['calendars']=Ext.encode([config.calendar_id]);
 		}
 
-		if (config.merge=='1') {
-			this.daysGridStore.baseParams['view_id']=config.view_id;
-			this.monthGridStore.baseParams['view_id']=config.view_id;
-			this.listGrid.store.baseParams['view_id']=config.view_id;
-			this.daysGridStore.baseParams['owncolor']=config.owncolor;
-			this.monthGridStore.baseParams['owncolor']=config.owncolor;
-			this.listGrid.store.baseParams['owncolor']=config.owncolor;
-		} else {
-			this.daysGridStore.baseParams['view_id']=null;
-			this.monthGridStore.baseParams['view_id']=null;
-			this.listGrid.store.baseParams['view_id']=null;
-			this.daysGridStore.baseParams['owncolor']=null;
-			this.monthGridStore.baseParams['owncolor']=null;
-			this.listGrid.store.baseParams['owncolor']=null;
-		}
+		if (typeof(config.merge)!='undefined'){
+			this.merge=config.merge;
+			this.owncolor = config.owncolor;
+		}		
 
 		if(config.calendar_name)
 		{
@@ -1188,6 +1192,22 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		if(config.group_id)
 		{
 			this.group_id=config.group_id;
+		}
+
+		if (this.merge=='1' && this.view_id) {
+			this.daysGridStore.baseParams['view_id']=this.view_id;
+			this.monthGridStore.baseParams['view_id']=this.view_id;
+			this.listGrid.store.baseParams['view_id']=this.view_id;
+			this.daysGridStore.baseParams['owncolor']=this.owncolor;
+			this.monthGridStore.baseParams['owncolor']=this.owncolor;
+			this.listGrid.store.baseParams['owncolor']=this.owncolor;
+		} else {
+			this.daysGridStore.baseParams['view_id']=null;
+			this.monthGridStore.baseParams['view_id']=null;
+			this.listGrid.store.baseParams['view_id']=null;
+			this.daysGridStore.baseParams['owncolor']=null;
+			this.monthGridStore.baseParams['owncolor']=null;
+			this.listGrid.store.baseParams['owncolor']=null;
 		}
 
 		if(config.date)
@@ -1259,7 +1279,10 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			displayType: this.displayType,
 			calendar_id: this.calendar_id,
 			view_id: this.view_id,
-			days: this.days
+			days: this.days,
+			merge : this.merge,
+			owncolor : this.owncolor,
+			group_id : this.group_id
 		}
 		
 		Ext.state.Manager.set('calendar-state', Ext.encode(state));
