@@ -566,6 +566,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 		var params = {
 			'task' : 'save_event'
+			//,'check_conflicts' : config.check_conflicts
 		};
 
 		if(this.participantsPanel.store.loaded)
