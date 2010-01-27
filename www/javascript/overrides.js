@@ -14,10 +14,6 @@
 
 Ext.Container.prototype.bufferResize = 150;
 
-/*Ext.override(Ext.form.TextField, {
-	stripCharsRe: /(^\s+|\s+$)/g
-});*/
-
 /*
  * Scroll menu when higher then the screen is
  *

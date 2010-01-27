@@ -140,7 +140,6 @@ $lang['common']['beginning']='Saudações';
 
 $lang['common']['max_emails_reached']= "O número máximo de e-mail para o servidor SMTP %s de %s por dia foi atingido.";
 $lang['common']['usage_stats']='Uso de dico por %s';
-$lang['common']['usage_text']='Esta instalação do Group-Office está sendo usada';
 
 $lang['common']['database']='Banco de dados';
 $lang['common']['files']='Arquivos';
@@ -159,4 +158,8 @@ Password: %s';
 
 $lang['common']['lost_password_error']='E-mail fornecido não foi encontrado.';
 $lang['common']['lost_password_success']='Uma nova senha foi enviada para seu e-mail.';
+
+/* by alan hoffmeister */
+
+$lang['common']['loadingModules']='Carregando módulos';
 

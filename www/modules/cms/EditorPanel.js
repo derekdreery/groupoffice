@@ -216,6 +216,8 @@ GO.cms.EditorPanel = Ext.extend(
 		},
 		saveFile : function(){
 			tinyMCE.triggerSave();
+
+			GO.mainLayout.getModulePanel('cms').getEl().mask(GO.lang.waitMsgSave);
 			
 			this.form.submit(
 			{
@@ -247,6 +249,7 @@ GO.cms.EditorPanel = Ext.extend(
 					this.editor.ed.isNotDirty = 1;
 						
 					this.fireEvent('save', this.baseParams.file_id, this.form.getValues(), this.baseParams.folder_id);
+					GO.mainLayout.getModulePanel('cms').getEl().unmask();
 				},
 				failure: function(form, action) {
 					if(action.failureType == 'client')
@@ -255,6 +258,7 @@ GO.cms.EditorPanel = Ext.extend(
 					} else {
 						Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback);
 					}
+					GO.mainLayout.getModulePanel('cms').getEl().unmask();
 				},
 				scope: this
 			});

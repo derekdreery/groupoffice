@@ -346,7 +346,7 @@ class formprocessor{
 
 		$this->check_required();
 		
-		if (empty($_POST['name']) || empty($_POST['email']) || empty($_POST['subject']))
+		if (empty($_POST['email']) || empty($_POST['subject']))
 		{
 			throw new Exception($lang['common']['missingField']);
 		}elseif(!String::validate_email($_POST['email']))
@@ -362,14 +362,16 @@ class formprocessor{
 					$body .= "\n\n".$name.":\n".$value;
 			}
 		}
+		
+		$name = isset($_POST['name']) ? $_POST['name'] : $_POST['email'];
 
-		if(empty($body))
-			throw new Exception($lang['common']['missingField']);
+		//if(empty($body))
+			//throw new Exception($lang['common']['missingField']);
 
 		require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 		$swift = new GoSwift($email, $_POST['subject']);
 		$swift->set_body($body, 'plain');
-		$swift->set_from($_POST['email'], $_POST['name'].' (Via website)');
+		$swift->set_from($_POST['email'], $name.' (Via website)');
 		return $swift->sendmail();
 	}
 }
