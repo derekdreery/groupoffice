@@ -320,17 +320,14 @@ GO.addressbook.MainPanel = function(config)
 		tbar.push('-');
 		tbar.push({
 				iconCls: 'ml-btn-mailings', 
-				text: GO.addressbook.lang.sendMailing, 
+				text: GO.mailings.lang.newsletters,
 				cls: 'x-btn-text-icon', 
 				handler: function(){
-					if(!this.selectMailingGroupWindow)
+					if(!this.mailingStatusWindow)
 					{
-						this.selectMailingGroupWindow=new GO.mailings.SelectMailingGroupWindow();
-						this.selectMailingGroupWindow.on("select", function(win, mailing_group_id){
-							GO.email.showComposer({mailing_group_id:mailing_group_id});
-						}, this);
+						this.mailingStatusWindow = new GO.mailings.MailingStatusWindow();
 					}	
-					this.selectMailingGroupWindow.show();
+					this.mailingStatusWindow.show();
 				}, 
 				scope: this
 			});
