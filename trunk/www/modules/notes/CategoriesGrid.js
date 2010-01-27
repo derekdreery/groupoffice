@@ -24,13 +24,18 @@ GO.notes.CategoriesGrid = function(config){
 	config.split=true;
 	config.store = GO.notes.readableCategoriesStore;
 
-	var columnModel =  new Ext.grid.ColumnModel([
+	var columnModel =  new Ext.grid.ColumnModel({
+		defaults:{
+			sortable:true
+		},
+		columns:[
 	  {
 			header: GO.lang.strName, 
 			dataIndex: 'name'
 		}
-	]);
-	columnModel.defaultSortable = true;
+	]
+	});
+
 	config.cm=columnModel;
 	
 	config.view=new Ext.grid.GridView({

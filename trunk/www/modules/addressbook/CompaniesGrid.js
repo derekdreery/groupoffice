@@ -139,8 +139,13 @@ GO.addressbook.CompaniesGrid = function(config){
 	    remoteSort: true
 	});
 
-	var companiesColumnModel =  new Ext.grid.ColumnModel(fields.columns);
-	companiesColumnModel.defaultSortable = true;
+	var companiesColumnModel =  new Ext.grid.ColumnModel({
+		defaults:{
+			sortable:true
+		},
+		columns:fields.columns
+	});
+	
 	config.cm=companiesColumnModel;
 	
 	config.view=new Ext.grid.GridView({

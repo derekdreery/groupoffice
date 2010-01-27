@@ -35,7 +35,11 @@ GO.cms.CommentsGrid = function(config){
 	});
 	
 	config.paging=true;
-	var columnModel =  new Ext.grid.ColumnModel([
+	var columnModel =  new Ext.grid.ColumnModel({
+		defaults:{
+			sortable:true
+		},
+		columns:[
 	   		{
 			header: GO.cms.lang.fileId, 
 			dataIndex: 'file_id'
@@ -53,8 +57,9 @@ GO.cms.CommentsGrid = function(config){
 			header: GO.lang.strCtime, 
 			dataIndex: 'ctime'
 		}
-	]);
-	columnModel.defaultSortable = true;
+	]
+	});
+	
 	config.cm=columnModel;
 	
 	config.view=new Ext.grid.GridView({

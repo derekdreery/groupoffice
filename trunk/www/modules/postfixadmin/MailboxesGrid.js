@@ -36,7 +36,11 @@ GO.postfixadmin.MailboxesGrid = function(config){
 	
 	config.disabled=true;
 	config.paging=true;
-	var columnModel =  new Ext.grid.ColumnModel([
+	var columnModel =  new Ext.grid.ColumnModel({
+		defaults:{
+			sortable:true
+		},
+		columns:[
 	   		{
 			header: GO.postfixadmin.lang.username, 
 			dataIndex: 'username'
@@ -56,8 +60,8 @@ GO.postfixadmin.MailboxesGrid = function(config){
 			header: GO.postfixadmin.lang.active, 
 			dataIndex: 'active'
 		}
-	]);
-	columnModel.defaultSortable = true;
+	]});
+	
 	config.cm=columnModel;
 	
 	config.view=new Ext.grid.GridView({

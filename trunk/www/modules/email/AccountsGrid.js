@@ -29,13 +29,17 @@ GO.email.AccountsGrid = function(config){
 		root: 'results',
 		totalProperty: 'total',
 		id: 'id',
-		fields:['id','email','host', 'user_name', 'username'],
+		fields:['id','email','host', 'user_name', 'username','smtp_host'],
 		remoteSort: true,
 		sortInfo:{field: 'email', direction: "ASC"}
 	});	
 	config.paging=true;
 	
-	var columnModel = new Ext.grid.ColumnModel([
+	var columnModel = new Ext.grid.ColumnModel({
+		defaults:{
+			sortable:true
+		},
+		columns:[
 		{
 			header:GO.lang.strEmail,
 			dataIndex: 'email'
@@ -49,9 +53,12 @@ GO.email.AccountsGrid = function(config){
 		},{
 			header:GO.email.lang.host,
 			dataIndex: 'host'
+		},{
+			header:'SMTP',
+			dataIndex: 'smtp_host'
 		}]
-	);
-	columnModel.defaultSortable = true;
+	});
+	
 	config.cm=columnModel;
 	
 	config.view=new Ext.grid.GridView({

@@ -23,7 +23,6 @@ GO.calendar.ResourcesGrid = function(config){
         hidden:true
 	}]);
 
-	//columnModel.defaultSortable = true;
 	config.cm=columnModel;
 	config.view=new Ext.grid.GroupingView({
         autoFill: true,

@@ -38,8 +38,6 @@ GO.email.AccountDialog = function(config) {
 		}
 	}]);
 
-	// by default columns are sortable
-	cm.defaultSortable = false;
 
 	// create the Data Store
 	this.filtersDS = new GO.data.JsonStore({

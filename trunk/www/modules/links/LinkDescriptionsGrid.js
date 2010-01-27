@@ -31,14 +31,17 @@ GO.links.LinkDescriptionsGrid = function(config){
 	    remoteSort: true
 	});
 	//config.paging=true;
-	var columnModel =  new Ext.grid.ColumnModel([
+	var columnModel =  new Ext.grid.ColumnModel({
+		defaults:{
+			sortable:true
+		},
+		columns:[
 	   		{
 			header: GO.lang.strDescription, 
 			dataIndex: 'description'
-		}
-
-	]);
-	columnModel.defaultSortable = true;
+		}]
+	});
+	
 	config.cm=columnModel;
 	config.view=new Ext.grid.GridView({
 		autoFill: true,

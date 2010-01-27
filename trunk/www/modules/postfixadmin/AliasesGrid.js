@@ -35,7 +35,11 @@ GO.postfixadmin.AliasesGrid = function(config){
 	});
 	config.disabled=true;
 	config.paging=true;
-	var columnModel =  new Ext.grid.ColumnModel([
+	var columnModel =  new Ext.grid.ColumnModel({
+		defaults:{
+			sortable:true
+		},
+		columns:[
 	   		{
 			header: GO.postfixadmin.lang.address, 
 			dataIndex: 'address'
@@ -52,7 +56,9 @@ GO.postfixadmin.AliasesGrid = function(config){
 			header: GO.postfixadmin.lang.active, 
 			dataIndex: 'active'
 		}
-	]);
+	]
+	});
+
 	columnModel.defaultSortable = true;
 	config.cm=columnModel;
 	

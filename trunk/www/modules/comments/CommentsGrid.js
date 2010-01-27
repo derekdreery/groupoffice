@@ -39,7 +39,11 @@ GO.comments.CommentsGrid = function(config){
 	
 	
 	config.paging=true;
-	var columnModel =  new Ext.grid.ColumnModel([{
+	var columnModel =  new Ext.grid.ColumnModel({
+		defaults:{
+			sortable:true
+		},
+		columns:[{
 			header: GO.lang.strOwner, 
 			dataIndex: 'user_name',
 		  sortable: false,
@@ -53,9 +57,10 @@ GO.comments.CommentsGrid = function(config){
 		  renderer: function(v){
 		  	return '<b>'+v+'</b>';
 		  }
-		}]);
+		}]
+	});
 		
-	columnModel.defaultSortable = true;
+	
 	config.cm=columnModel;
 	config.viewConfig={
       forceFit:true,

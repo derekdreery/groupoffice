@@ -32,7 +32,11 @@ GO.log.EntriesGrid = function(config) {
 				remoteSort : true
 			});
 	config.paging = true;
-	var columnModel = new Ext.grid.ColumnModel([{
+	var columnModel = new Ext.grid.ColumnModel({
+		defaults:{
+			sortable:true
+		},
+		columns:[{
 				header : GO.log.lang.time,
 				dataIndex : 'time'
 			}, {
@@ -47,8 +51,9 @@ GO.log.EntriesGrid = function(config) {
 				dataIndex : 'link_type'
 			}
 
-	]);
-	columnModel.defaultSortable = true;
+	]
+	});
+	
 	config.cm = columnModel;
 	config.view = new Ext.grid.GridView({
 				autoFill : true,

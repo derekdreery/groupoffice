@@ -33,11 +33,16 @@
 	});			
 
 
-	var columnModel =  new Ext.grid.ColumnModel([
+	var columnModel =  new Ext.grid.ColumnModel({
+		defaults:{
+			sortable:true
+		},
+		columns:[
         {header: GO.groups.lang.groups, dataIndex: 'name', width: 300},
         {header: GO.groups.lang.owner, dataIndex: 'user_name'}	        			        
-    ]);	
-  columnModel.defaultSortable = true;
+    ]
+	});
+  
     
 	var tbar = new Ext.Toolbar({		
 			cls:'go-head-tb',
@@ -103,11 +108,16 @@ Ext.extend(GO.groups.MainPanel, GO.grid.GridPanel,{
 				    remoteSort: true
 				});			
 	
-				var columnModel =  new Ext.grid.ColumnModel([
-			        {header: GO.lang.strUsername, dataIndex: 'name'},
+				var columnModel =  new Ext.grid.ColumnModel({
+					defaults:{
+						sortable:true
+					},
+					columns:[
+							{header: GO.lang.strUsername, dataIndex: 'name'},
 			        {header: GO.lang.strEmail, dataIndex: 'email'}	        			        
-			    ]);	
-			  columnModel.defaultSortable = true;		
+			    ]
+				});
+			  
 					
 			  this.userGrid = new GO.grid.GridPanel({
 			  	region:'center',

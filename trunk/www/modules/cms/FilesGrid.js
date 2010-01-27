@@ -37,7 +37,11 @@ GO.cms.FilesGrid = function(config){
 	});
 	
 	config.paging=true;
-	var columnModel =  new Ext.grid.ColumnModel([
+	var columnModel =  new Ext.grid.ColumnModel({
+		defaults:{
+			sortable:true
+		},
+		columns:[
 	   		{
 			header: GO.cms.lang.folderId, 
 			dataIndex: 'folder_id'
@@ -93,8 +97,9 @@ GO.cms.FilesGrid = function(config){
 			header: GO.cms.lang.unregisteredComments, 
 			dataIndex: 'unregistered_comments'
 		}
-	]);
-	columnModel.defaultSortable = true;
+	]
+	});
+	
 	config.cm=columnModel;
 	
 	config.view=new Ext.grid.GridView({

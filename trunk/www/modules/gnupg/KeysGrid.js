@@ -19,7 +19,11 @@ GO.gnupg.KeysGrid = function(config){
 	    fields: ['fingerprint', 'id', 'uid', 'type']
 	});
 	
-	var columnModel =  new Ext.grid.ColumnModel([
+	var columnModel =  new Ext.grid.ColumnModel({
+		defaults:{
+			sortable:true
+		},
+		columns:[
 		{
 			header: 'id', 
 			dataIndex: 'id'
@@ -30,8 +34,9 @@ GO.gnupg.KeysGrid = function(config){
 			header: 'type', 
 			dataIndex: 'type'
 		}
-	]);
-	columnModel.defaultSortable = true;
+	]
+	});
+	
 	config.cm=columnModel;
 	
 	config.view=new Ext.grid.GridView({
