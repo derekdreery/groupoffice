@@ -325,6 +325,7 @@ try {
 			$event_id=$event['id'];
 			$group_id = isset($_POST['group_id']) ? $_POST['group_id'] : 0;
 			$calendar_id = $event['calendar_id'];
+			$check_conflicts = isset($_POST['check_conflicts']) ? $_POST['check_conflicts'] : 0;
 
 			$date_format = $_SESSION['GO_SESSION']['date_format'];
 
@@ -354,6 +355,45 @@ try {
 			if(!empty($event['rrule']) && Date::get_next_recurrence_time($event['start_time'],$event['start_time'], $event['rrule']) < $event['end_time']) {
 			//Event will cumulate
 				throw new Exception($lang['calendar']['cumulative']);
+			}
+
+			/* Check for conflicts regarding resources */
+			if (isset($resources)) {
+				$cal = new calendar();
+				$concurrent_resources = $cal->get_events_in_array($resources,0, $event['start_time'], $event['end_time']);
+				foreach ($concurrent_resources as $key=>$value) {
+					if ($value['id'] != $event['id']) {
+						$cal2 = new calendar();
+						$resource = $cal2->get_calendar($value['calendar_id']);
+						$cal2->get_event_resources($value['participants_event_id']);
+						while ($cal2->next_record()) {
+							if ($cal2->record['calendar_id'] != $value['calendar_id']) {
+								$current_cal_id = $cal2->record['calendar_id'];
+								$cal3 = new calendar();
+								$current_calendar = $cal3->get_calendar($current_cal_id);
+								$response['calendars'][] = $current_calendar['name'];
+							}
+						}
+						$response['success'] = false;
+						$response['resources'][] = $resource['name'];
+						$response['feedback'] = 'Resource conflict';
+					}
+				}
+
+				if (isset($response['feedback']) && $response['feedback']=='Resource conflict') {
+					break;
+				}
+			}
+
+			/* Check for conflicts with other events in the calendar */
+			if ($check_conflicts) {
+				$cal->get_events_in_array($calendar['id'], $GO_SECURITY->user_id, $event['start_time'], $event['end_time']);
+				if($cal->num_rows()) {
+					$response['success'] = false;
+					//$response['hide'] = $_POST['hide'];
+					$response['feedback'] = 'Ask permission';
+					break;
+				}
 			}
 
 			$insert = false;
