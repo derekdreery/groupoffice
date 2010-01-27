@@ -84,38 +84,34 @@ GO.email.lang.type='Tipo';
 GO.email.lang.noEncryption='Não criptografado';
 GO.email.lang.noAccountTitle='Sem conta';
 GO.email.lang.priority='Prioridade';
-
 GO.email.lang.read='Lido';
 GO.email.lang.NA='N/A';
-
 GO.email.lang.emptyFolder='Pasta vazia';
 GO.email.lang.emptyFolderConfirm='Deseja LIMPAR a pasta \'{name}\'?';
 GO.email.lang.addUnknownRecipients='Adicionar destinatários desconhecido';
 GO.email.lang.addUnknownRecipientsText='Você mandou um e-mail para um ou mais destinatários que não fazem parte dos seus contatos. Clique no nome se deseja adicionar ou feche essa janela.';
 GO.email.lang.attachFilesPC='Adicionar do PC';
-GO.email.lang.attachFilesGO='Adicionar do Group-Office';
-
-
+GO.email.lang.attachFilesGO='Adicionar do sistema';
 GO.email.lang.vacation='Resposta automática';
 GO.email.lang.vacationActive='Activar resposta automática';
 GO.email.lang.vacationSubject='Assunto';
 GO.email.lang.vacationBody='Corpo';
-
 GO.email.lang.addToRecipients = 'Adicionar ao destinatário';
 GO.email.lang.addToCC = 'Adicionar a CC';
 GO.email.lang.addToBCC = 'Adicionar a BCC';
-
 GO.email.lang.viewSource='Ver fonte';
-
 GO.email.lang.sendNotification='O rementente solicitou uma confirmação de leitura em: %s. Você deseja enviar a confirmação de leitura agora?';
-
 GO.email.lang.searchOnSender='Mostrar menssagens';
-
 GO.email.lang.blocked = '{blocked_images} imagens externas foram bloqueadas por segurança.';
 GO.email.lang.unblock = 'Clique aqui para desbloquear';
-
 GO.email.lang.loadEmailFirst = 'Para usar esta função você deve carregar seu e-mail primeiro clicando na aba do e-mail';
-
 GO.email.lang.confirmEmptySubject='Você não preencheu o assunto. Deseja enviar essa menssagem sem um assunto?';
-
 GO.email.lang.usage='Uso de disco';
+/* By Alan Hoffmeister */
+GO.email.lang.renameFolder='Renomear pasta'; 
+GO.email.lang.showUnread='Somente não lidos'; 
+GO.email.lang.toggleWindowPosition = 'Mudar posição da caixa de e-mail';
+GO.email.lang.addSendersTo='Enviar para remetente'; 
+GO.email.lang.searchFrom='De:';
+GO.email.lang.searchTo='Para:';
+GO.email.lang.searchCC='Para (CC):';
