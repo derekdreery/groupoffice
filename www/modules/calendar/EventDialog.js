@@ -578,11 +578,12 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			config = {};
 		}
 
+		this.hide = hide;
+
 		var params = {
 			'task' : 'save_event'
 			,
 			'check_conflicts' : typeof(config.check_conflicts)!='undefined' ? config.check_conflicts : null
-			//,'hide' : hide
 		};
 
 		if(this.participantsPanel.store.loaded)
@@ -698,7 +699,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 	handlePrompt : function(btn) {
 		if (btn=='yes') {
-				GO.calendar.eventDialog.submitForm(true,{
+				GO.calendar.eventDialog.submitForm(GO.calendar.eventDialog.hide,{
 					'check_conflicts':'0'
 				});
 		}
