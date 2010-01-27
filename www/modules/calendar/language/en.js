@@ -96,3 +96,8 @@ GO.calendar.lang.show_tasks='Show tasks from tasklists';
 GO.calendar.lang.myCalendar='My calendar';
 GO.calendar.lang.merge='Merge';
 GO.calendar.lang.ownColor = 'Every calendar its own color';
+
+GO.calendar.lang.ignoreConflictsTitle = 'Ignore conflict?';
+GO.calendar.lang.ignoreConflictsMsg = 'This event conflicts with another event in your calender. Save this event anyway?';
+GO.calendar.lang.resourceConflictTitle = 'Resource conflict';
+GO.calendar.lang.resourceConflictMsg = 'One or more resources in this event are already in use at the same time:</br>';

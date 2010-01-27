@@ -60,7 +60,9 @@ GO.calendar.EventDialog = function(calendar) {
 		hideLabel : true,
 		enableTabScroll : true,
 		items : items,
-		defaults:{forceLayout:true}
+		defaults:{
+			forceLayout:true
+		}
 	});
 
 	this.formPanel = new Ext.form.FormPanel({
@@ -139,13 +141,17 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			buttons : [{
 				text : GO.lang.cmdOk,
 				handler : function() {
-					this.submitForm(true);
+					this.submitForm(true, { 
+						'check_conflicts' : 1
+					} );
 				},
 				scope : this
 			}, {
 				text : GO.lang.cmdApply,
 				handler : function() {
-					this.submitForm();
+					this.submitForm(false, { 
+						'check_conflicts' : 1
+					} );
 				},
 				scope : this
 			}, {
@@ -567,9 +573,16 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 	submitForm : function(hide, config) {
 
+		if(!config)
+		{
+			config = {};
+		}
+
 		var params = {
 			'task' : 'save_event'
-			//,'check_conflicts' : config.check_conflicts
+			,
+			'check_conflicts' : typeof(config.check_conflicts)!='undefined' ? config.check_conflicts : null
+			//,'hide' : hide
 		};
 
 		if(this.participantsPanel.store.loaded)
@@ -642,6 +655,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				if (config && config.callback) {
 					config.callback.call(this, this, true);
 				}
+
 			},
 			failure : function(form, action) {
 				if (action.failureType == 'client') {
@@ -650,14 +664,44 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					var error = action.result.feedback;
 				}
 
-				if (config && config.callback) {
-					config.callback.call(this, this, false);
+				if (error=='Ask permission') {
+					Ext.Msg.show({
+						title: GO.calendar.lang.ignoreConflictsTitle,
+						msg: GO.calendar.lang.ignoreConflictsMsg,
+						buttons: Ext.Msg.YESNO,
+						fn: this.handlePrompt,
+						animEl: 'elId',
+						icon: Ext.MessageBox.QUESTION
+					});
+				} else if (error=='Resource conflict') {
+					error = GO.calendar.lang.resourceConflictMsg;
+					if (config && config.callback) {
+						config.callback.call(this, this, false);
+					}
+					error = error+'<ul>';
+					for (var i in action.result.resources) {
+						if (!isNaN(i))
+							error = error+'<li> - '+action.result.resources[i]+' ('+GO.calendar.lang.calendar+': '+action.result.calendars[i]+')</li>';
+					}
+					error = error+'</ul>';
+					Ext.MessageBox.alert(GO.calendar.lang.resourceConflictTitle, error);
+				} else {
+					if (config && config.callback) {
+						config.callback.call(this, this, false);
+					}
+					Ext.MessageBox.alert(GO.lang.strError, error);
 				}
-
-				Ext.MessageBox.alert(GO.lang.strError, error);
 			},
 			scope : this
 		});
+	},
+
+	handlePrompt : function(btn) {
+		if (btn=='yes') {
+				GO.calendar.eventDialog.submitForm(true,{
+					'check_conflicts':'0'
+				});
+		}
 	},
 
 	getStartDate : function() {
