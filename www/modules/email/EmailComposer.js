@@ -267,16 +267,18 @@ GO.email.EmailComposer = function(config) {
 		}
 	}
 
-	if(config.links)
-	{
-		if (!this.selectLinkField) {
-			this.selectLinkField = new GO.form.SelectLink({
-				anchor : '100%'
-			});
-			anchor+=26;
-			items.push(this.selectLinkField);
+	try {
+		if(config.links)
+		{
+			if (!this.selectLinkField) {
+				this.selectLinkField = new GO.form.SelectLink({
+					anchor : '100%'
+				});
+				anchor+=26;
+				items.push(this.selectLinkField);
+			}
 		}
-	}
+	} catch(e) {}
 
 	items.push(this.subjectField = new Ext.form.TextField({
 		fieldLabel : GO.email.lang.subject,
