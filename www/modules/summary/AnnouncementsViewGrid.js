@@ -45,7 +45,7 @@ GO.summary.AnnouncementsViewGrid = function(config){
 	]);
 
 	config.cls='go-colored-table';
-	columnModel.defaultSortable = true;
+	
 	config.cm=columnModel;
 	config.view=new Ext.grid.GridView({
 		enableRowBody:true,
