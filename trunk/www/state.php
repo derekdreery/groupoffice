@@ -16,10 +16,14 @@ require_once("Group-Office.php");
 $GO_SECURITY->json_authenticate();
 
 
+$values = json_decode($_POST['values'], true);
 
-$response['success']= $GO_CONFIG->save_state($GO_SECURITY->user_id,
-	$_POST['name'],
-	$_POST['value']
+foreach($values as $name=>$value){
+
+	$GO_CONFIG->save_state($GO_SECURITY->user_id,
+		$name,
+		$value
 	);
-	
+}
+$response['success']=true;
 echo json_encode($response);
