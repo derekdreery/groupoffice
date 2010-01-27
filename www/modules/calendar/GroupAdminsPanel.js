@@ -22,16 +22,21 @@ GO.calendar.GroupAdminsPanel = function(config) {
 		remoteSort : true
 	});
 
-	var columnModel = new Ext.grid.ColumnModel([
+	var columnModel = new Ext.grid.ColumnModel({
+		defaults:{
+			sortable:true
+		},
+		columns:[
 	{
 		header : GO.lang['strName'],
 		dataIndex : 'name'
 	},{
 		header : GO.lang['strEmail'],
 		dataIndex : 'email'
-	}]);
+	}]
+	});
 
-	columnModel.defaultSortable = true;
+	
 	config.cm=columnModel;
 	config.view = new Ext.grid.GridView({
 		autoFill : true,

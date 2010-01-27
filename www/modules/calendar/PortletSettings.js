@@ -48,7 +48,7 @@ GO.calendar.PortletSettings = function(config){
 	});
 
 	var columnModel =  new Ext.grid.ColumnModel(fields.columns);
-	columnModel.defaultSortable = true;
+	
 	config.cm=columnModel;
 	config.view=new Ext.grid.GridView({
 		autoFill: true,

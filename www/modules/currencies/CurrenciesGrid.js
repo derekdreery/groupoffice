@@ -20,7 +20,11 @@ GO.currencies.CurrenciesGrid = function(config){
 	config.autoScroll=true;		
 	config.store = GO.currencies.currenciesStore;	
 
-	var columnModel =  new Ext.grid.ColumnModel([{
+	var columnModel =  new Ext.grid.ColumnModel({
+		defaults:{
+			sortable:true
+		},
+		columns:[{
 		header: GO.currencies.lang.code,
 		dataIndex: 'code',
 		editor:new Ext.form.TextField()
@@ -32,9 +36,10 @@ GO.currencies.CurrenciesGrid = function(config){
 		header: GO.currencies.lang.value,
 		dataIndex: 'value',
 		editor:new GO.form.NumberField()
-	}]);
+	}]
+	});
 
-	columnModel.defaultSortable = true;
+	
 	config.cm=columnModel;
 	config.view=new Ext.grid.GridView({
 		autoFill: true,

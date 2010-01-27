@@ -37,7 +37,11 @@ GO.cms.FoldersGrid = function(config){
 	});
 	
 	config.paging=true;
-	var columnModel =  new Ext.grid.ColumnModel([
+	var columnModel =  new Ext.grid.ColumnModel({
+		defaults:{
+			sortable:true
+		},
+		columns:[
 	   		{
 			header: GO.cms.lang.parentId, 
 			dataIndex: 'parent_id'
@@ -66,8 +70,9 @@ GO.cms.FoldersGrid = function(config){
 			header: GO.cms.lang.acl, 
 			dataIndex: 'acl'
 		}
-	]);
-	columnModel.defaultSortable = true;
+	]
+	});
+	
 	config.cm=columnModel;
 	
 	config.view=new Ext.grid.GridView({

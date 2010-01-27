@@ -34,7 +34,11 @@ GO.postfixadmin.DomainsGrid = function(config){
 	});
 	
 	config.paging=true;
-	var columnModel =  new Ext.grid.ColumnModel([
+	var columnModel =  new Ext.grid.ColumnModel({
+		defaults:{
+			sortable:true
+		},
+		columns:[
 	   			{
 			header: GO.postfixadmin.lang.domain, 
 			dataIndex: 'domain'
@@ -67,8 +71,8 @@ GO.postfixadmin.DomainsGrid = function(config){
 			header: GO.lang.strMtime, 
 			dataIndex: 'mtime'
 		}
-	]);
-	columnModel.defaultSortable = true;
+	]
+	});
 	config.cm=columnModel;
 	
 	config.view=new Ext.grid.GridView({

@@ -62,7 +62,11 @@ GO.email.MessagesGrid = function(config){
 	{
 		this.searchtypeWidth = 120;
 		this.searchfieldWidth = 150;
-		config.cm =  new Ext.grid.ColumnModel([
+		config.cm =  new Ext.grid.ColumnModel({
+		defaults:{
+			sortable:true
+		},
+		columns:[
 		{
 			header:"&nbsp;",
 			width:46,
@@ -82,7 +86,8 @@ GO.email.MessagesGrid = function(config){
 			dataIndex: 'date',
 			width:65,
 			align:'right'
-		}]);
+		}]
+		});
 		config.bbar = new Ext.PagingToolbar({
 			cls: 'go-paging-tb',
 			store: config.store,
@@ -98,7 +103,6 @@ GO.email.MessagesGrid = function(config){
 			emptyText: GO.lang['strNoItems']
 		});
 	}
-	config.cm.defaultSortable = true;
 	
 	config.sm=new Ext.grid.RowSelectionModel();
 	config.loadMask=true;

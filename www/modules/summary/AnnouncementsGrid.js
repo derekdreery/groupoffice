@@ -32,7 +32,11 @@ GO.summary.AnnouncementsGrid = function(config){
 		remoteSort: true
 	});
 	config.paging=true;
-	var columnModel =  new Ext.grid.ColumnModel([
+	var columnModel =  new Ext.grid.ColumnModel({
+		defaults:{
+			sortable:true
+		},
+		columns:[
 	{
 		header: GO.summary.lang.title,
 		dataIndex: 'title'
@@ -51,8 +55,9 @@ GO.summary.AnnouncementsGrid = function(config){
 		dataIndex: 'mtime'
 	}
 
-	]);
-	columnModel.defaultSortable = true;
+	]
+	});
+	
 	config.cm=columnModel;
 	config.view=new Ext.grid.GridView({
 		autoFill: true,

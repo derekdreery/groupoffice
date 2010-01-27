@@ -230,9 +230,13 @@ GO.files.FileBrowser = function(config){
 		this.setFilesFilter(config.filesFilter);
 	}
 
-	var cm =  new Ext.grid.ColumnModel(fields.columns);
-	cm.defaultSortable = true;
-
+	var cm =  new Ext.grid.ColumnModel({
+		defaults:{
+			sortable:true
+		},
+		columns:fields.columns
+	});
+	
 	
 	this.gridPanel = new GO.grid.GridPanel( {
 			layout:'fit',

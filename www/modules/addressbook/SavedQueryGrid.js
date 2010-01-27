@@ -20,12 +20,17 @@ GO.addressbook.SavedQueryGrid = function(config)
 			remoteSort: true
 		});
 
-		var cm =  new Ext.grid.ColumnModel([
+		var cm =  new Ext.grid.ColumnModel({
+		defaults:{
+			sortable:true
+		},
+		columns:[
 		{
 			header: GO.lang.strName,
 			dataIndex: 'name'
-		}]);
-		cm.defaultSortable = true;
+		}]
+		});
+		
 		config.cm=cm;
 
 		config.view=new Ext.grid.GridView({

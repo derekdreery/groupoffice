@@ -16,7 +16,11 @@ GO.addressbook.ManageAddressbooksGrid = function(config){
 	
 	config.paging=false;
 
-	var companiesColumnModel =  new Ext.grid.ColumnModel([
+	var companiesColumnModel =  new Ext.grid.ColumnModel({
+		defaults:{
+			sortable:true
+		},
+		columns:[
 	  {
 	  	header: GO.lang['strName'], 
 	  	dataIndex: 'name'
@@ -26,8 +30,9 @@ GO.addressbook.ManageAddressbooksGrid = function(config){
 	  	dataIndex: 'owner' ,
 	  	sortable: false
 	  }
-	]);
-	companiesColumnModel.defaultSortable = true;
+	]
+	});
+	
 	config.cm=companiesColumnModel;
 	
 	config.view=new Ext.grid.GridView({

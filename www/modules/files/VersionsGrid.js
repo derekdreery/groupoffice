@@ -37,7 +37,11 @@ GO.files.VersionsGrid = function(config) {
 	var nameId = Ext.id();
 
 	config.paging = true;
-	var columnModel = new Ext.grid.ColumnModel([{
+	var columnModel = new Ext.grid.ColumnModel({
+		defaults:{
+			sortable:true
+		},
+		columns:[{
 				header : GO.lang['strName'],
 				dataIndex : 'grid_display',
 				sortable : true,
@@ -52,8 +56,9 @@ GO.files.VersionsGrid = function(config) {
 				dataIndex : 'mtime',
 				sortable : true,
 				width:100
-			}]);
-	columnModel.defaultSortable = true;
+			}]
+});
+	
 	config.cm = columnModel;
 	
 	config.autoExpandColumn=nameId;

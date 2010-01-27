@@ -52,7 +52,11 @@ GO.users.MainPanel = function(config)
 
 	config.deleteConfig={extraWarning:GO.users.lang.deleteWarning+"\n\n"};
 			
-	config.cm = new Ext.grid.ColumnModel([
+	config.cm = new Ext.grid.ColumnModel({
+		defaults:{
+			sortable:true
+		},
+		columns:[
         {header: GO.lang['strUsername'], dataIndex: 'username'},
         {header: GO.lang['strName'], dataIndex: 'name', width: 250},
         {header: GO.lang['strCompany'], dataIndex: 'company', width: 200},
@@ -73,8 +77,9 @@ GO.users.MainPanel = function(config)
         {header: GO.lang['strWorkState'], dataIndex: 'wstate', width: 100, hidden: true},
         {header: GO.lang['strWorkCountry'], dataIndex: 'wcountry', width: 100, hidden: true},
         {header: GO.lang['strWorkPhone'], dataIndex: 'wphone', width: 100, hidden: true}      			        
-    ]);
-	config.cm.defaultSortable = true;
+    ]
+	});
+	
 		    	
 	config.tbar = new Ext.Toolbar({		
 			cls:'go-head-tb',

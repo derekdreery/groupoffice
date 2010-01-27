@@ -52,8 +52,13 @@ GO.{module}.{friendly_multiple_ucfirst}Grid = function(config){
 	
 	<gotpl if="$paging">config.paging=true;</gotpl>
 
-	var columnModel =  new Ext.grid.ColumnModel(fields.columns);
-	columnModel.defaultSortable = true;
+	var columnModel =  new Ext.grid.ColumnModel({
+		defaults:{
+			sortable:true
+		},
+		columns:fields.columns
+	});
+	
 	config.cm=columnModel;
 	
 	config.view=new Ext.grid.GridView({

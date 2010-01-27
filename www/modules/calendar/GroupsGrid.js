@@ -11,17 +11,22 @@ GO.calendar.GroupsGrid = function(config){
 	config.split=true;
 	config.paging=true;
     
-	var columnModel =  new Ext.grid.ColumnModel([
-	{
-		header: GO.lang.strName,
-		dataIndex: 'name'
-	},{
-		header: GO.lang.strOwner,
-		dataIndex: 'user_name',
-		sortable: false
-	}]);
+	var columnModel =  new Ext.grid.ColumnModel({
+		defaults:{
+			sortable:true
+		},
+		columns:[
+		{
+			header: GO.lang.strName,
+			dataIndex: 'name'
+		},{
+			header: GO.lang.strOwner,
+			dataIndex: 'user_name',
+			sortable: false
+		}]
+	});
 
-	columnModel.defaultSortable = true;
+	
 	config.cm=columnModel;
 	config.view=new Ext.grid.GridView({
 		autoFill: true,
