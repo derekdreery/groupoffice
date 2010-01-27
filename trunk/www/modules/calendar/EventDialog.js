@@ -76,7 +76,8 @@ GO.calendar.EventDialog = function(calendar) {
 	this.initWindow();
 
 	this.addEvents({
-		'save' : true
+		'save' : true,
+		'show' : true
 	});
 
 	this.win.render(Ext.getBody());
@@ -408,6 +409,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					this.subjectField.setValue(config.link_config.text);
 			}
 		}
+
+		this.fireEvent('show', this);
 	},
 	updateResourcePanel : function()
 	{
