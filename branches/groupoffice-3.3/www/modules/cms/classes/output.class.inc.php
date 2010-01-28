@@ -517,7 +517,7 @@ class cms_output extends cms {
 						
 					if($this->basehref!=$GO_MODULES->modules['cms']['url']) {
 						$href_path = $search ? $this->build_path($item['folder_id'], $this->site['root_folder_id']).'/' : $path;
-						$item['href']=$this->basehref.$path.urlencode($this->special_encode($item['name']));
+						$item['href']=$this->basehref.$href_path.urlencode($this->special_encode($item['name']));
 					}else {
 						$item['href']=$GO_MODULES->modules['cms']['url'].'run.php?file_id='.$item['id'];
 					}
