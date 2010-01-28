@@ -355,6 +355,10 @@ a.normal-link:hover{
 	background-image:url('images/16x16/search.png') !important;
 }
 
+.btn-view {
+	background-image:url('images/16x16/search.png') !important;
+}
+
 .btn-help {
 	background-image:url('images/16x16/icon-help.png') !important;
 }

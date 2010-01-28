@@ -32,21 +32,16 @@ $root = dirname(__FILE__).'/';
 require_once($root.'functions.inc.php');
 require($root.'classes/base/config.class.inc.php');
 
-//load configuration
-$GO_CONFIG = new GO_CONFIG();
-
-
-
-
-if(!$GO_CONFIG->enabled)
-{
-	die('<h1>Disabled</h1>This Group-Office installation has been disabled');
-}
-
 
 
 //preload classes before session so they can be stored in the session
 if ( isset( $GO_INCLUDES ) ) {
+	
+	//load configuration before session start because otherwise objects may be incomplete.
+	//We rather start the session before creating GO_CONFIG because we can save the location
+	//of config.php in the session. Otherwise we'll have to search for it every time.
+	$GO_CONFIG = new GO_CONFIG();
+
 	while ( $include = array_shift( $GO_INCLUDES ) ) {
 		require_once( $include );
 	}
@@ -55,6 +50,16 @@ if ( isset( $GO_INCLUDES ) ) {
 //start session
 session_name('groupoffice');
 session_start();
+
+if(!isset($GO_CONFIG))
+	$GO_CONFIG = new GO_CONFIG();
+
+if(!$GO_CONFIG->enabled)
+{
+	die('<h1>Disabled</h1>This Group-Office installation has been disabled');
+}
+
+
 go_debug('['.date('Y-m-d G:i').'] Start of new request');
 
 if($GO_CONFIG->session_inactivity_timeout>0){

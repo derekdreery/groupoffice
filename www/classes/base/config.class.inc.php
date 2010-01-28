@@ -934,12 +934,12 @@ class GO_CONFIG {
 		if(isset($_SESSION['GO_SESSION']['config_file'])) {
 			return $_SESSION['GO_SESSION']['config_file'];
 		}else {
-
-			//go_debug('Searching for config file', $this);
-
 			$config_dir = $this->root_path;
 
+			$count = 0;
+
 			while(!isset($_SESSION['config_file'])){
+				$count++;
 				$config_file = $config_dir.'config.php';
 
 				if(@file_exists($config_file)) {
@@ -948,7 +948,7 @@ class GO_CONFIG {
 				}
 				$config_dir=dirname($config_dir);
 
-				if(dirname($config_dir) == $config_dir){
+				if($count==3 || dirname($config_dir) == $config_dir){
 					break;
 				}
 				$config_dir .= '/';			

@@ -157,7 +157,7 @@ class GoSwift extends Swift_Mailer{
 				}
 			}
 		}
-		$transport->setLocalDomain($_SERVER['HTTP_HOST']);
+		
 		if(!empty($GO_CONFIG->smtp_local_domain))
 			$transport->setLocalDomain($GO_CONFIG->smtp_local_domain);
 
