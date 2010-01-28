@@ -433,7 +433,7 @@ class search extends db {
 	function cache_search_result($result)
 	{
 		global $lang;
-		
+
 		if(isset($result['keywords']) && strlen($result['keywords'])>255)
 		{
 			$result['keywords']=substr($result['keywords'],0,255);
