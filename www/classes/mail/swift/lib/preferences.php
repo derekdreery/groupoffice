@@ -5,5 +5,5 @@ require_once(dirname(__FILE__).'/../../../../Group-Office.php');
 Swift_Preferences::getInstance()->setCharset('utf-8');
 
 Swift_Preferences::getInstance()
-    -> setTempDir($GO_CONFIG->tmpdir)
+    -> setTempDir($GLOBALS['GO_CONFIG']->tmpdir)
     -> setCacheType('disk');
