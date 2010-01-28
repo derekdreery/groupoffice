@@ -516,8 +516,8 @@ class cms_output extends cms {
 					}
 						
 					if($this->basehref!=$GO_MODULES->modules['cms']['url']) {
-						$href_path = $search ? $this->build_path($item['folder_id'], $this->site['root_folder_id']).'/' : $path;
-						$item['href']=$this->basehref.$href_path.urlencode($this->special_encode($item['name']));
+						$href_path = $search ? $this->build_path($item['folder_id'], $this->site['root_folder_id']) : $path;
+						$item['href']=$this->basehref.$href_path.'/'.urlencode($this->special_encode($item['name']));
 					}else {
 						$item['href']=$GO_MODULES->modules['cms']['url'].'run.php?file_id='.$item['id'];
 					}
@@ -541,7 +541,7 @@ class cms_output extends cms {
 
 					//double urlencode for apache rewriting of & etc.
 					if($this->basehref!=$GO_MODULES->modules['cms']['url'])
-						$item['href']=$this->basehref.$path.urlencode($this->special_encode($item['name']));
+						$item['href']=$this->basehref.$path.'/'.urlencode($this->special_encode($item['name']));
 					else
 						$item['href']=$GO_MODULES->modules['cms']['url'].'run.php?folder_id='.$item['id'];
 
@@ -576,7 +576,7 @@ class cms_output extends cms {
 				}
 
 				if($item['fstype']=='folder' && $current_level < $expand_levels && ($is_in_path || $expand_all)) {
-					$html .= $this->print_items($params, &$smarty, $current_level+1,$item['id'],$path.urlencode($item['name']).'/', $item);
+					$html .= $this->print_items($params, &$smarty, $current_level+1,$item['id'],$path.'/'.urlencode($item['name']).'/', $item);
 				}
 
 
