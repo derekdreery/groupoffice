@@ -15,6 +15,8 @@ GO.files.ThumbsPanel = Ext.extend(Ext.Panel, {
 	store : false,
 	initComponent : function(){
 
+		this.forceLayout=true;
+
 		this.bbar = new Ext.PagingToolbar({
   					cls: 'go-paging-tb',
 	          store: this.store,
