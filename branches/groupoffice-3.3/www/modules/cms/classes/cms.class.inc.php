@@ -607,7 +607,7 @@ class cms extends db {
 			if(!$folder)
 			return $path;
 
-			$path = $folder['name'].'/'.$path;
+			$path = empty($path) ? $folder['name'] : $folder['name'].'/'.$path;
 			return $this->build_path($folder['parent_id'], $root_folder_id, $path);
 		}
 	}
