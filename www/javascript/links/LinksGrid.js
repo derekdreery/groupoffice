@@ -39,7 +39,7 @@ GO.grid.LinksGrid = function(config){
 	
 	//was required to show the search field in the tbar
 	config.hideMode='offsets';
-	
+
 	config['store'] = new GO.data.JsonStore({
 
 			url: BaseHref+'json.php',			

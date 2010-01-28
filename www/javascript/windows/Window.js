@@ -1,3 +1,21 @@
+GO.Window = function(config)
+{
+	if(!config)
+	{
+		config={};
+	}
+
+	config.maximizable=true;
+	config.minimizable=true;
+
+	GO.Window.superclass.constructor.call(this, config);
+/*
+	this.on("show",function(window){
+		console.log(window);
+	});
+*/
+}
+
 GO.Window = Ext.extend(Ext.Window,{
 
 	temporaryListeners : [],
@@ -6,7 +24,18 @@ GO.Window = Ext.extend(Ext.Window,{
 		this.on(eventName, fn, scope);		
 		this.temporaryListeners.push({eventName:eventName,fn:fn,scope:scope});
 	},
-	
+
+	beforeShow : function() {
+		GO.Window.superclass.beforeShow.call(this);
+		if (this.height > screen.height || this.width > screen.width) {
+			this.maximizable=true;
+			this.minimizable=true;
+			//this.maximized=false;
+			this.fitContainer();
+			//this.render();
+		}
+	},
+
 	hide : function(){
 		
 		for(var i=0;i<this.temporaryListeners.length;i++)
