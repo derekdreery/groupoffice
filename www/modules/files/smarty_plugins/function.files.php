@@ -11,7 +11,7 @@ function smarty_function_files($params, &$smarty)
 	{
 		$images_path = $smarty->_tpl_vars['images_path'];
 		
-		$path = $images_path.$co->build_path($co->folder['id'], $co->site['root_folder_id']).$co->file['name'];
+		$path = $images_path.$co->build_path($co->folder['id'], $co->site['root_folder_id']).'/'.$co->file['name'];
 		
 		if(!is_dir($path))
 		{
