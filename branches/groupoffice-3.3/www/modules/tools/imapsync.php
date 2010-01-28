@@ -26,42 +26,30 @@ if(isset($argv[1]))
 chdir(dirname(__FILE__));
 
 require_once("../../Group-Office.php");
+$local_host='localhost';
+$remote_host = 'mail.houtwerf.nl';
+//$imapsync = '/usr/share/groupoffice/modules/tools/imapsync-1.286/imapsync';
+$imapsync = '/usr/bin/imapsync';
 
 
-$fp = fopen('remotepasswords.csv', "r");
+$fp = fopen('/root/remotepasswords2.csv', "r");
 if(!$fp)
 {
 	die('COuld not read remotepasswords.csv');
 }
 
-$passwords = array();
-while($record = fgetcsv($fp, 4096, ';', '"')){
-	$passwords[$record[0]]=$record[1];
-}
+while($record = fgetcsv($fp, 4096, ',', '"'))
+{
+//	if($record[0]=='g.dekker@houtwerf.nl'){
+	echo "Syncing ".$record[0]."\n\n";
 
-$local_host = 'localhost';
-$remote_host = 'mail.example.com';
-$imapsync = '/usr/bin/imapsync';
+$cmd = $imapsync.' --skipsize --syncinternaldates --fast --useheader Message-Id --authmech1 LOGIN --authmech2 LOGIN '.
+			'--host1="'.$remote_host.'" --user1="'.$record[0].'" --password1="'.$record[1].'" '.
+			'--user2="'.$record[2].'" --host2="'.$local_host.'" --password2="'.$record[3].'"';
 
-$db = new db();
-
-$sql = "SELECT DISTINCT username, email, password FROM em_accounts e INNER JOIN em_aliases a ON (a.account_id=e.id AND a.default='1')  WHERE host='$local_host' AND username LIKE 'HWROME%'";
-$db->query($sql);
-
-while($account = $db->next_record()){
-	echo "Syncing ".$account['username']."\n\n";
-
-	if(isset($passwords[$account['email']])){
-		$cmd = $imapsync.' --subscribe  --authmech1 LOGIN --authmech2 LOGIN '.
-			'--host1="'.$remote_host.'" --user1="'.$account['email'].'" --password1="'.$account['password'].'" '.
-			'--user2="'.$account['username'].'" --host2="'.$local_host.'" --password2="'.$passwords[$account['email']].'"';
-	}else
-	{
-		echo "\n\n#########################\n\nNO PASSWORD FOR ".$account['email']."\n\n#########################\n\n";
-	}
-
-	//echo $cmd."\n\n";
+	echo $cmd."\n\n";
 
 	system($cmd);
+//	}
 }
 
