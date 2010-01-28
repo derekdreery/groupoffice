@@ -356,7 +356,7 @@ class cms_output extends cms {
 
 		if(!empty($root_path)) {
 			if(!isset($path)) {
-				$path = $root_path.'/';
+				$path = $root_path;
 			}
 			$folder =  $this->resolve_url($root_path, $this->site['root_folder_id']);
 			if(!$folder) {
@@ -394,7 +394,6 @@ class cms_output extends cms {
 		if(!isset($path) && $this->basehref!=$GO_MODULES->modules['cms']['url']) {
 			$path = $this->build_path($folder_id, $this->site['root_folder_id']);
 		}
-
 
 		if($search) {
 			$items = $this->search_files($root_folder_id, $_REQUEST['query']);
@@ -517,7 +516,10 @@ class cms_output extends cms {
 						
 					if($this->basehref!=$GO_MODULES->modules['cms']['url']) {
 						$href_path = $search ? $this->build_path($item['folder_id'], $this->site['root_folder_id']) : $path;
-						$item['href']=$this->basehref.$href_path.'/'.urlencode($this->special_encode($item['name']));
+						if(!empty($href_path)){
+							$href_path .= '/';
+						}
+						$item['href']=$this->basehref.$href_path.urlencode($this->special_encode($item['name']));
 					}else {
 						$item['href']=$GO_MODULES->modules['cms']['url'].'run.php?file_id='.$item['id'];
 					}
@@ -540,9 +542,13 @@ class cms_output extends cms {
 					}
 
 					//double urlencode for apache rewriting of & etc.
-					if($this->basehref!=$GO_MODULES->modules['cms']['url'])
-						$item['href']=$this->basehref.$path.'/'.urlencode($this->special_encode($item['name']));
-					else
+					if($this->basehref!=$GO_MODULES->modules['cms']['url']){
+						$item['href']=$this->basehref.$path;
+						if(!empty($path)){
+							$item['href'].='/';
+						}
+						$item['href'] .= urlencode($this->special_encode($item['name']));
+					}else
 						$item['href']=$GO_MODULES->modules['cms']['url'].'run.php?folder_id='.$item['id'];
 
 					if($no_folder_links)
