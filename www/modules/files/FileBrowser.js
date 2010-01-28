@@ -74,6 +74,7 @@ GO.files.FileBrowser = function(config){
 		containerScroll: true,
 		collapsible:true,
 		collapseMode:'mini',
+		header:false,
 		ddAppendOnly: true,
 		ddGroup : 'FilesDD',
 		enableDD:true,
