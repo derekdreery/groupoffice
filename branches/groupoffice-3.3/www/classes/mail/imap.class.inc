@@ -1220,7 +1220,12 @@ class imap{
 					/*
 					 * This will make sure only root.abc is returned and not rootabc
 					 */
-					if(empty($mailbox_root) || strpos($mailbox['name'], $mailbox_root.$value->delimiter)===0){
+
+					if(!empty($mailbox_root) && substr($mailbox_root,-1,1)!=$value->delimiter){
+						$mailbox_root .= $value->delimiter;
+					}
+
+					if(empty($mailbox_root) || strpos($mailbox['name'], $mailbox_root)===0){
 
 						$mailbox['delimiter'] = $value->delimiter;
 						$mailbox['attributes'] = $value->attributes;
@@ -1266,11 +1271,21 @@ class imap{
 				if (substr($value->name, -1) != $value->delimiter && strlen($value->delimiter) > 0) {														
 					$mailbox['name'] = str_replace("{".$this->connectstring."}", "",$value->name);
 					
-					$mailbox['delimiter'] = $value->delimiter;
-					$mailbox['attributes'] = $value->attributes;
+					
+					/*
+					 * This will make sure only root.abc is returned and not rootabc
+					 */
+
+					if(!empty($mailbox_root) && substr($mailbox_root,-1,1)!=$value->delimiter){
+						$mailbox_root .= $value->delimiter;
+					}
+
+
 					//sometimes the IMAP server returns the parent folder as well so avoid a loop					
-					if($mailbox['name']!=substr($mailbox_root,0, -strlen($mailbox['delimiter'])))
-					{	
+					if(empty($mailbox_root) || strpos($mailbox['name'], $mailbox_root)===0){
+						$mailbox['delimiter'] = $value->delimiter;
+						$mailbox['attributes'] = $value->attributes;
+
 						if ($name_only) {
 							$this->mailboxes[] = $mailbox['name'];
 						} else {
