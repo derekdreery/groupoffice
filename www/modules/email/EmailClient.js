@@ -438,7 +438,8 @@ GO.email.EmailClient = function(config){
 							callback:function(){
 								if(node.attributes.mailbox==this.mailbox)
 								{
-									this.messagesGrid.store.removeAll();										
+									this.messagesGrid.store.removeAll();
+									this.messagePanel.reset();
 								}
 								this.updateFolderStatus(node.attributes.folder_id);
 								this.updateNotificationEl();
