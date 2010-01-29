@@ -12,7 +12,7 @@
  */
 
 
-Ext.Container.prototype.bufferResize = 150;
+//Ext.Container.prototype.bufferResize = 150;
 
 /*
  * Scroll menu when higher then the screen is

@@ -45,6 +45,10 @@ if($GO_SECURITY->logged_in() && trim($_SESSION['GO_SESSION']['name']) != '' && !
 			<img src="<?php echo $GO_CONFIG->host; ?>themes/Default/images/16x16/icon-search.png" style="border:0px;margin-left:10px;margin-right:1px;vertical-align:middle" />
 			
 			<span id="search_query"></span>
+
+			<?php if($GO_CONFIG->debug){ ?>
+			<a href="javascript:(function(){var a,l,o=(Ext?Ext.util.Observable.prototype:false);if(!o){alert('Ext not in page');return;}if(!(l=console?console.log:false)){alert('Use Firefox with Firebug');return;}o.fireEvent=o.fireEvent.createInterceptor(function(evt){a=arguments;l(this,' fired event ',evt,' with args ',Array.prototype.slice.call(a,1,a.length));});})();">Log all Ext events</a> |
+			<?php } ?>
 			
 			
 			<a id="start-menu-link" href="#"><?php echo $lang['common']['startMenu']; ?></a>

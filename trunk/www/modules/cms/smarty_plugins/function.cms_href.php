@@ -11,11 +11,11 @@ function smarty_function_cms_href($params, &$smarty)
 	{
 		$params['path']='';
 	}
-	
+
 	$co->build_path($folder_id);
-	
+
 	$site_id = $smarty->_tpl_vars['site']['id'];
-	
+
 		if($co->basehref!=$GO_MODULES->modules['cms']['url'])
 		{
 			//we do rewriting
@@ -25,7 +25,7 @@ function smarty_function_cms_href($params, &$smarty)
 			//we use the ugly URL
 			$url = $GO_MODULES->modules['cms']['url'].'run.php?basehref='.urlencode($GO_MODULES->modules['cms']['url']).'&amp;site_id='.$site_id.'&amp;path=';
 		}
-	
+
 	$url .= $params['path'];
 	if(!empty($params['params']))
 	{

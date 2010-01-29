@@ -392,6 +392,16 @@ background-color: #F1F1F1 !important;
 }
 
 
+
+#cal-monthGrid-wrap div{
+	box-sizing: border-box;
+
+  /* and for older/other browsers: */
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
 .cal-monthGrid-cell{
 	border-right:1px solid #C0C0C0;
 	border-bottom:1px solid #C0C0C0;
