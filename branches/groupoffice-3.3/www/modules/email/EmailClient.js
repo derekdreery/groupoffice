@@ -1096,7 +1096,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 			}
 			
 			var current = this.notificationEl.dom.innerHTML;
-			
+
 			if(current!='' && inbox_new-this.justMarkedUnread>current)
 			{
 				GO.playAlarm();
@@ -1548,14 +1548,21 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 								case 'mark_as_read':							
 									field='new';
 									value=false;
+
+									for(var i=0;i<records.length;i++){
+										if(records[i].get('new')=='1')
+											this.justMarkedUnread--;
+									}
 									
-									this.justMarkedUnread-=records.length;
 									break;
 								case 'mark_as_unread':
 									field='new';
 									value=true;
 									
-									this.justMarkedUnread+=records.length;
+									for(var i=0;i<records.length;i++){
+										if(records[i].get('new')!='1')
+											this.justMarkedUnread++;
+									}
 									break;
 									
 								case 'flag':					
