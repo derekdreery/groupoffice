@@ -143,7 +143,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 		var cellClass = '';
 		var dateFormat;
 		
-		this.cellWrap = Ext.DomHelper.append(this.body,{tag:'div'}, true);
+		this.cellWrap = Ext.DomHelper.append(this.body,{tag:'div', id:'cal-monthGrid-wrap'}, true);
 			
 	
 		this.gridCells={};
