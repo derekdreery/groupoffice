@@ -296,6 +296,10 @@ try {
 						$calendars[] = $cal->record['id'];
 				}
 
+                                if (count($calendars)==0) {
+                                    throw new Exception($lang['calendar']['noCalSelected']);
+                                }
+
 				/* Default colors for merged calendars */
 				$default_colors = array('F0AE67','FFCC00','FFFF00','CCFF00','66FF00',
 									'00FFCC','00CCFF','0066FF','95C5D3','6704FB',
@@ -315,7 +319,7 @@ try {
 			$response['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id']);
 			$response['write_permission']=$response['permission_level']>1;
 			if(!$response['permission_level']) {
-				throw new AccessDeniedException();
+                            throw new AccessDeniedException();
 			}
 
 			$events = $cal->get_events_in_array($calendars,0,$start_time,$end_time);
