@@ -120,6 +120,8 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			var date = new Date();
 			this.startDate=Date.parseDate(date.format(this.dateFormat), this.dateFormat);
 		}
+
+		
 		
 		this.configuredDate=this.startDate;
 		
@@ -264,6 +266,8 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		this.gridContainer = Ext.DomHelper.append(this.body,
 				{tag: 'div', cls: "x-calGrid-grid-container"}, true);
 
+		
+		
 		//calculate gridContainer size
 		var headingsHeight = this.headingsTable.getHeight();
 
@@ -292,6 +296,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		this.body.on("mouseup", this.onEventDragMouseUp, this);
 		this.allDayTable.on("mousemove", this.onAllDayEventDragMouseMove, this);	
 		this.body.on("mouseup", this.onAllDayEventDragMouseUp, this);
+
 		
 		var gridRow =  Ext.DomHelper.append(this.tbody,
 		{
@@ -534,33 +539,35 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			this.clickedRow = this.getRowNumberByY(coords[1]);
 			
 			this.dragSnap = this.getSnap(); 
-			
-			//get position of the row the user clicked on
-			this.selectorStartRow = this.gridCells[this.clickedDay][this.clickedRow];
-			
-			if(this.selectorStartRow)
-			{
-				
-				var columnsContainerY = this.gridTable.getY();
-				var position = [this.selectorStartRow.xy[0],this.selectorStartRow.xy[1]+columnsContainerY];
 
-				
-				//create an overlay to track the mousemovement
-				if(!this.overlay){
-			    this.overlay = this.body.createProxy({tag: "div", cls: "x-resizable-overlay", html: "&#160;"});
-			    this.overlay.unselectable();
-			    this.overlay.enableDisplayMode("block");	
-			    this.overlay.on("mousemove", this.onSelectionMouseMove, this);
-					this.overlay.on("mouseup", this.onSelectionMouseUp, this);	    
-				}				
-				    
-				this.overlay.setSize(Ext.lib.Dom.getViewWidth(true), Ext.lib.Dom.getViewHeight(true));
-				this.overlay.show();
-				
-				this.selector.setXY(position);
-				//substract double border
-				this.selector.setSize(this.snapCol['x']-3, this.snapCol['y']);
-				this.selector.setVisible(true,false);
+			if(this.clickedDay>-1){
+				//get position of the row the user clicked on
+				this.selectorStartRow = this.gridCells[this.clickedDay][this.clickedRow];
+
+				if(this.selectorStartRow)
+				{
+
+					var columnsContainerY = this.gridTable.getY();
+					var position = [this.selectorStartRow.xy[0],this.selectorStartRow.xy[1]+columnsContainerY];
+
+
+					//create an overlay to track the mousemovement
+					if(!this.overlay){
+						this.overlay = this.body.createProxy({tag: "div", cls: "x-resizable-overlay", html: "&#160;"});
+						this.overlay.unselectable();
+						this.overlay.enableDisplayMode("block");
+						this.overlay.on("mousemove", this.onSelectionMouseMove, this);
+						this.overlay.on("mouseup", this.onSelectionMouseUp, this);
+					}
+
+					this.overlay.setSize(Ext.lib.Dom.getViewWidth(true), Ext.lib.Dom.getViewHeight(true));
+					this.overlay.show();
+
+					this.selector.setXY(position);
+					//substract double border
+					this.selector.setSize(this.snapCol['x']-3, this.snapCol['y']);
+					this.selector.setVisible(true,false);
+				}
 			}
 		}
 	},	
@@ -822,7 +829,8 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 					style:"background-color:#"+eventData.background,
 					html: text , 
 					qtip: GO.calendar.formatQtip(eventData),
-					qtitle:eventData.name
+					qtitle:eventData.name,
+					tabindex:0//tabindex is needed for focussing and events
 				}, true);
 			
 			//add the event to the appointments array		
@@ -909,7 +917,8 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				style:"background-color:#"+eventData.background,	 
 				qtip: GO.calendar.formatQtip(eventData),
 				qtitle:eventData.name,
-				html:text
+				html:text,
+				tabindex:0//tabindex is needed for focussing and events
 			});
 			
 
@@ -937,6 +946,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			this.clickedEventId=eventEl.id;
 			this.eventMouseUp=false;
 			this.startEventDrag(e, eventEl.id);
+			
 		}, this);
 
 
@@ -955,9 +965,17 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			}
 		}, this);
 
+		//event.on('mouseover', function(e){this.el.focus();}, this);
+		
+
 		event.on('mouseup', function(){
 			this.eventMouseUp=true;
 		}, this);
+
+
+		
+
+
 		
 			
 		//add the event to the appointments array		
