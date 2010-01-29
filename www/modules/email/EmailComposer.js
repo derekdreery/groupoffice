@@ -563,34 +563,42 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 		this.attachmentsButton.setText(text);
 	},
 
-	reset : function(keepAttachments) {
+	reset : function(keepAttachmentsAndOptions) {
 
-		this.showCC(false);
-		this.showBCC(false);
-		this.bccFieldCheck.setChecked(false);
-		this.ccFieldCheck.setChecked(false);
 		
-		this.sendParams = {
-			'task' : 'sendmail',
-			notification : 'false',
-			priority : '3',
-			draft_uid : 0,
-			inline_attachments : {}
-		};
-		this.inline_attachments = [];
-		this.formPanel.form.reset();
+		
+		if(!keepAttachmentsAndOptions){
+			this.sendParams = {
+				'task' : 'sendmail',
+				inline_attachments : {},
+				notification : 'false',
+				priority : '3',
+				draft_uid : 0
+			};
 
-		if (this.defaultAcccountId) {
-			this.fromCombo.setValue(this.defaultAcccountId);
-		}
+			this.showCC(false);
+			this.showBCC(false);
+			this.bccFieldCheck.setChecked(false);
+			this.ccFieldCheck.setChecked(false);
 
-		this.notifyCheck.setChecked(false);
-		this.normalPriorityCheck.setChecked(true);
+			
 
-		if (!keepAttachments) {
+			if (this.defaultAcccountId) {
+				this.fromCombo.setValue(this.defaultAcccountId);
+			}
+			this.notifyCheck.setChecked(false);
+			this.normalPriorityCheck.setChecked(true);
 			this.attachmentsStore.removeAll();
 			this.updateAttachmentsButton();
+		}else
+		{
+			Ext.apply(this.sendParams,{
+				inline_attachments : {}
+			});
+			
 		}
+		this.inline_attachments = [];
+		this.formPanel.form.reset();
 	},
 
 	showCC : function(show){
