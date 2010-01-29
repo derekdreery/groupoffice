@@ -990,6 +990,11 @@ try{
 					}
 				}
 
+				// don't send very large texts to the browser because it will hang.
+				if(strlen($response['body'])>512000){
+					$response['body']=String::cut_string($response['body'], 521000, false);
+				}
+
 
 
 				break;
