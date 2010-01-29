@@ -83,3 +83,5 @@ $lang['calendar']['birthday_name']='Verjaardag: {NAME}';
 $lang['calendar']['birthday_desc']='{NAME} is vandaag {AGE} geworden';
 
 $lang['calendar']['unauthorized_participants_write']='U heeft onvoldoende toegangsrechten om afspraken te plannen voor de volgende gebruikers:<br /><br />{NAMES}<br /><br />Wellicht wilt u nog een uitnodiging versturen zodat zij de afspraak kunnen accepteren en inplannen.';
+
+$lang['calendar']['noCalSelected'] = 'Er is geen agenda geselecteerd voor deze overzicht. Selecteer minstens een agenda bij Beheer.';

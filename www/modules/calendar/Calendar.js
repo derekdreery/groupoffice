@@ -874,7 +874,6 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	},
 	
 	init : function(){
-		
 		this.calendarsStore.load();
 		this.viewsStore.load();	
 		this.resourcesStore.load();
