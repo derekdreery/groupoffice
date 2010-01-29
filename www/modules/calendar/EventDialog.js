@@ -1084,10 +1084,14 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 		this.cb = [];
 		for (var day = 0; day < 7; day++) {
-			this.cb[day] = new Ext.form.Checkbox({
-				boxLabel : GO.lang.shortDays[day],
-				id : 'frm_repeat_days_' + day,
-				name : 'repeat_days_' + day,
+
+			var display_day = day+parseInt(GO.settings.first_weekday);
+			if(display_day==7)display_day=0;
+
+			this.cb[display_day] = new Ext.form.Checkbox({
+				boxLabel : GO.lang.shortDays[display_day],
+				id : 'frm_repeat_days_' + display_day,
+				name : 'repeat_days_' + display_day,
 				disabled : true,
 				checked : false,
 				width : 'auto',
