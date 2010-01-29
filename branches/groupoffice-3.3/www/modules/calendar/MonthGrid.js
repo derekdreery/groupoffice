@@ -476,6 +476,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 				if(element)
 				{
 					element.addClass('x-calGrid-selected');
+					element.focus();
 					this.selected.push(element);
 				}
 			}
@@ -523,7 +524,8 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 					text += eventData.startDate.format(GO.settings.time_format)+'&nbsp;';
 				}				
 				text += eventData['name'];
-			
+
+				
 				var event = Ext.DomHelper.append(col,
 					{
 						tag: 'div', 
@@ -532,7 +534,8 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 						style:"background-color:#"+eventData.background+';width:'+(this.eventWidth)+'px',
 						html: text, 						
 						qtip: GO.calendar.formatQtip(eventData),
-						qtitle:eventData.name
+						qtitle:eventData.name,
+						tabindex:0//tabindex is needed for focussing and events
 					}, true);				
 					
 				var dateStr = date.format('Ymd');

@@ -378,7 +378,7 @@ GO.calendar.MainPanel = function(config){
 		keys:[ {
 				key:  Ext.EventObject.DELETE,
 				fn: function(){
-					//console.log('delete');
+					this.deleteHandler();
 				},
 				scope: this
 		}]
@@ -389,14 +389,27 @@ GO.calendar.MainPanel = function(config){
 		store: this.monthGridStore,
 		border: false,
 		layout:'fit',
-		firstWeekday: parseInt(GO.settings.first_weekday)
-		
+		firstWeekday: parseInt(GO.settings.first_weekday),
+		keys:[ {
+				key:  Ext.EventObject.DELETE,
+				fn: function(){
+					this.deleteHandler();
+				},
+				scope: this
+		}]
 	});
 	
 	this.viewGrid = new GO.grid.ViewGrid({
 		id: 'view-grid',
 		border: false,
-		firstWeekday: parseInt(GO.settings.first_weekday)
+		firstWeekday: parseInt(GO.settings.first_weekday),
+		keys:[ {
+				key:  Ext.EventObject.DELETE,
+				fn: function(){
+					this.deleteHandler();
+				},
+				scope: this
+		}]
 	});
 	
 	this.viewGrid.on('zoom', function(conf){	
