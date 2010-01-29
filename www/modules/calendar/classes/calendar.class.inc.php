@@ -1203,6 +1203,11 @@ class calendar extends db
 		{
 			$event['mtime']  = time();
 		}
+		//for building files path we need this.
+		if(empty($event['start_time']))
+		{
+			$event['start_time']  = $old_event['start_time'];
+		}
 
 		if(isset($event['completion_time']) && $event['completion_time'] > 0 && $this->copy_completed($event['id']))
 		{

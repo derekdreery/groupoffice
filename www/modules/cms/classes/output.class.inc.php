@@ -1,5 +1,5 @@
 <?php
-class cms_output extends cms{
+class cms_output extends cms {
 
 	var $site;
 	var $file_id;
@@ -22,65 +22,59 @@ class cms_output extends cms{
 	 */
 	var $basehref;
 
-	function __construct(){
+	function __construct() {
 		parent::__construct();
 
 		global $GO_MODULES;
 		$this->basehref=$GO_MODULES->modules['cms']['url'];
 
 		if(isset($_REQUEST['site_id']))
-		$_SESSION['site_id']=$_REQUEST['site_id'];
+			$_SESSION['site_id']=$_REQUEST['site_id'];
 
 		if(isset($_REQUEST['basehref']))
-		$_SESSION['basehref']=$_REQUEST['basehref'];
+			$_SESSION['basehref']=$_REQUEST['basehref'];
 
 
 		if(!empty($_SESSION['basehref']))
-		$this->basehref=$_SESSION['basehref'];
+			$this->basehref=$_SESSION['basehref'];
 	}
-	
-	
+
+
 
 
 	/*
 	 * A page must call load_site, set_by_id or set_by_path to inititalize
-	 */
+	*/
 
-	function load_site()
-	{
+	function load_site() {
 		$this->site=$this->get_site($_SESSION['site_id']);
 		$this->load_config();
 	}
 
-	function load_config()
-	{
+	function load_config() {
 		global $GO_MODULES, $GO_LANGUAGE;
 
 		$conf = $GO_MODULES->modules['cms']['path'].'templates/'.$this->site['template'].'/config.php';
-		if(file_exists($conf))
-		{
+		if(file_exists($conf)) {
 			require($conf);
 
 			$this->config = $config;
 		}
-		
+
 		$GO_LANGUAGE->set_language($this->site['language']);
 	}
 
-	function set_by_id($file_id=0, $folder_id=0)
-	{
+	function set_by_id($file_id=0, $folder_id=0) {
 		global $GO_MODULES;
 		//$this->folder['id']=$folder_id;
 		//$this->file['id']=$file_id;
 
-		if(empty($file_id))
-		{
+		if(empty($file_id)) {
 			$this->find_file($folder_id);
-		}else
-		{
-			$this->file = $this->get_file($file_id);			
+		}else {
+			$this->file = $this->get_file($file_id);
 		}
-		
+
 		$folder_id=$this->file['folder_id'];
 
 		$this->folder=$this->get_folder($folder_id);
@@ -89,214 +83,180 @@ class cms_output extends cms{
 		$_SESSION['site_id']=$this->site['id'];
 
 		//still no file?
-		if(!$this->file)
-		{
+		if(!$this->file) {
 			$this->file['content']='No file found';
-		}else
-		{
+		}else {
 			$this->folder['path']=$this->build_path($this->file['folder_id'], $this->site['root_folder_id']);
 			$this->file['path']=$this->folder['path'].$this->file['name'];
 			$this->file['level']=count(explode('/', $this->file['path']))-1;
 		}
-		
-		
+
+
 
 		//$this->file['content']=str_replace('{site_url}', $GO_MODULES->modules['cms']['url'].'run.php', $this->file['content']);
 		//$this->file['content']=str_replace('/{site_url}?', $GO_MODULES->modules['cms']['url'].'run.php?basehref='.urlencode($GO_MODULES->modules['cms']['url']).'&', $this->file['content']);
 
 		$this->load_config();
 	}
-	
-	function authenticate(){
-		
+
+	function authenticate() {
+
 	}
 
-	function set_by_path($site_id, $path, $basehref)
-	{
+	function set_by_path($site_id, $path, $basehref) {
 		$this->basehref=$basehref;
 
-		if(empty($site_id)){
+		if(empty($site_id)) {
 			$this->site = $this->get_site_by_domain($_SERVER['HTTP_HOST'], true);
-		}else
-		{
+		}else {
 			$this->site = $this->get_site($site_id);
 		}
 
-		if(!$this->site){
+		if(!$this->site) {
 			die('Invalid site requested or the CMS is not configured correctly');
 		}
 
 		$_SESSION['site_id']=$this->site['id'];
-		
+
 		$item = $this->resolve_url($path,$this->site['root_folder_id']);
 
-		if(!$item)
-		{			
+		if(!$item) {
 			$this->find_file($this->site['root_folder_id']);
-			if($this->file)
-			{				
+			if($this->file) {
 				$this->file['path']=$this->file['name'];
 			}
-		}else
-		{
-			if(isset($item['parent_id']))
-			{
+		}else {
+			if(isset($item['parent_id'])) {
 				$this->folder=$item;
 				$this->find_file($this->folder['id']);
-				if($this->file)
-				{
+				if($this->file) {
 					$this->file['path']=empty($path) ? $this->file['name'] : $path.'/'.$this->file['name'];
 				}
-			}else
-			{
+			}else {
 				$this->file=$item;
 				$this->file['option_values']=$this->get_template_values($this->file['option_values']);
 				$this->file['path']=$path;
 				$this->folder=$this->get_folder($item['folder_id']);
-			}			
+			}
 		}
-		
-		if($this->file && (empty($this->folder) || $this->file['folder_id']!=$this->folder['id']))
-		{
+
+		if($this->file && (empty($this->folder) || $this->file['folder_id']!=$this->folder['id'])) {
 			$this->folder=$this->get_folder($this->file['folder_id']);
 			$this->folder['path']=$this->build_path($this->file['folder_id'], $this->site['root_folder_id']);
 			$this->file['path']=$this->folder['path'].$this->file['name'];
 		}
-		
-		if(isset($this->file['path']))
-		{
+
+		if(isset($this->file['path'])) {
 			$this->folder['path']=dirname($this->file['path']);
 			$this->file['level']=count(explode('/', $this->file['path']))-1;
 		}
 
 		/*
 		 * /{site_url}?site_id=5&amp;path=Referenties
-		 */
+		*/
 		//$this->file['content']=str_replace('/{site_url}?site_id='.$this->site['id'].'&amp;path=', $this->basehref, $this->file['content']);
 
 	}
 
-	function replace_urls($content)
-	{
+	function replace_urls($content) {
 		global $GO_MODULES;
 
-		if($this->basehref!=$GO_MODULES->modules['cms']['url'])
-		{
+		if($this->basehref!=$GO_MODULES->modules['cms']['url']) {
 			//we do rewriting
 			return str_replace('/{site_url}?site_id='.$this->site['id'].'&amp;path=', $this->basehref, $content);
-		}else
-		{
+		}else {
 			//we use the ugly URL
 			return str_replace('/{site_url}?', $GO_MODULES->modules['cms']['url'].'run.php?basehref='.urlencode($GO_MODULES->modules['cms']['url']).'&amp;', $content);
 		}
 	}
 
-	function get_authorized_items($folder_id, $user_id, $only_visible=false, $reverse=false)
-	{
+	function get_authorized_items($folder_id, $user_id, $only_visible=false, $reverse=false) {
 		$items = array();
 		$folders = $this->get_authorized_folders($folder_id, $user_id, $only_visible);
-		foreach($folders as $folder)
-		{
+		foreach($folders as $folder) {
 			$priority=$folder['priority'];
 			while(isset($items[$priority]))
-			$priority++;
+				$priority++;
 
 			$items[$priority] = $folder;
 			$items[$priority]['fstype']='folder';
 		}
 		$files = $this->get_authorized_files($folder_id, $user_id, $only_visible);
-		foreach($files as $file)
-		{
+		foreach($files as $file) {
 			$priority=$file['priority'];
 			while(isset($items[$priority]))
-			$priority++;
+				$priority++;
 
 			$items[$priority] = $file;
 			$items[$priority]['fstype']='file';
 		}
-		if($reverse)
-		{
+		if($reverse) {
 			krsort($items);
-		}else
-		{
+		}else {
 			ksort($items);
 		}
 		return $items;
 	}
 
-	function get_authorized_folders($folder_id, $user_id, $only_visible=false)
-	{
+	function get_authorized_folders($folder_id, $user_id, $only_visible=false) {
 		global $GO_SECURITY;
 		$folders=array();
-		if($only_visible)
-		{
+		if($only_visible) {
 			$this->get_visible_folders($folder_id);
-		}else
-		{
+		}else {
 			$this->get_folders($folder_id,'priority', 'ASC');
 		}
-		while($this->next_record())
-		{
-			if($this->f('acl')==0 || $GO_SECURITY->has_permission($user_id, $this->f('acl')))
-			{
+		while($this->next_record()) {
+			if($this->f('acl')==0 || $GO_SECURITY->has_permission($user_id, $this->f('acl'))) {
 				$folders[]=$this->record;
 			}
 		}
 		return $folders;
 	}
 
-	function get_authorized_files($folder_id, $user_id, $only_visible=false)
-	{
+	function get_authorized_files($folder_id, $user_id, $only_visible=false) {
 		global $GO_SECURITY;
 
 		$files=array();
 
 		$this->get_files($folder_id,'priority','ASC',0,0,$only_visible);
-		while($this->next_record())
-		{
-			if($this->f('acl')==0 || $GO_SECURITY->has_permission($user_id, $this->f('acl')))
-			{
+		while($this->next_record()) {
+			if($this->f('acl')==0 || $GO_SECURITY->has_permission($user_id, $this->f('acl'))) {
 				$files[]=$this->record;
 			}
 		}
 		return $files;
 	}
 
-	function find_file($folder_id)
-	{
+	function find_file($folder_id) {
 		global $GO_SECURITY;
 
-		if($folder_id==0)
-		{
+		if($folder_id==0) {
 			$folder_id=$this->site['root_folder_id'];
 		}
-		
+
 		$items = $this->get_authorized_items($folder_id, $GO_SECURITY->user_id,true);
-		
-		foreach($items as $item)
-		{
-			if($item['fstype']=='file')
-			{
+
+		foreach($items as $item) {
+			if($item['fstype']=='file') {
 				//$this->folder=$this->get_folder($item['folder_id']);
 				//var_dump($item);
 				$this->file=$item;
 				$this->file['option_values']=$this->get_template_values($this->file['option_values']);
 				return $this->file['id'];
-			}else
-			{
+			}else {
 				return $this->find_file($item['id']);
 			}
 		}
-		
+
 		$folder = $this->get_folder($folder_id);
-		if($folder && $folder['parent_id']>0)
-		{
+		if($folder && $folder['parent_id']>0) {
 			return $this->find_file($folder['parent_id']);
-		}	
+		}
 		return false;
 	}
 
-	function get_active_levels(){
+	function get_active_levels() {
 
 		$levels=array();
 
@@ -305,7 +265,7 @@ class cms_output extends cms{
 		if(empty($folder_id))
 			return array();
 
-		do{
+		do {
 			$levels[]=$folder_id;
 			$folder = $this->get_folder($folder_id);
 			$folder_id=$folder['parent_id'];
@@ -355,14 +315,12 @@ class cms_output extends cms{
 	 * @param int $folder_id
 	 * @return String HTML
 	 */
-	
-	function special_encode($str)
-	{
+
+	function special_encode($str) {
 		return str_replace('&', '_AMP_', $str);
 	}
-	
-	function special_decode($str)
-	{
+
+	function special_decode($str) {
 		return html_entity_decode(str_replace('_AMP_','&', $str),ENT_QUOTES,'UTF-8');
 	}
 
@@ -389,25 +347,21 @@ class cms_output extends cms{
 
 		/*
 		 * lastfile is used to record the previous and next file of the currently viewed file
-		 */
-		if($current_level==0){
+		*/
+		if($current_level==0) {
 			$this->lastfile=false;
 			$this->record_next_file=false;
 		}
 
 
-		if(!empty($root_path))
-		{
-			if(!isset($path))
-			{
-				$path = $root_path.'/';
+		if(!empty($root_path)) {
+			if(!isset($path)) {
+				$path = $root_path;
 			}
 			$folder =  $this->resolve_url($root_path, $this->site['root_folder_id']);
-			if(!$folder)
-			{
+			if(!$folder) {
 				return 'Couldn\'t resolve path: '.$root_path;
-			}else
-			{
+			}else {
 				$root_folder_id=$folder['id'];
 			}
 		}
@@ -415,63 +369,50 @@ class cms_output extends cms{
 		$html = '';
 
 
-		if($folder_id==0)
-		{
-			if(!empty($level))
-			{
+		if($folder_id==0) {
+			if(!empty($level)) {
 				$levels=$this->get_active_levels();
 
-				if(!isset($levels[$level]))
-				{
+				if(!isset($levels[$level])) {
 					return '';
 				}else {
 					$folder_id=$levels[$level];
 				}
 
-			}else
-			{
+			}else {
 				$folder_id = $root_folder_id;
 			}
 		}
 
-		if(empty($folder_id))
-		{
+		if(empty($folder_id)) {
 			return '';
 		}
 
 		//When we start with a level or root_folder_id we don't
 		//know the current path yet. If basehref is set we need to know
 		//the path for mod_rewrite to work.
-		if(!isset($path) && $this->basehref!=$GO_MODULES->modules['cms']['url'])
-		{
+		if(!isset($path) && $this->basehref!=$GO_MODULES->modules['cms']['url']) {
 			$path = $this->build_path($folder_id, $this->site['root_folder_id']);
 		}
 
-		
-		if($search){
+		if($search) {
 			$items = $this->search_files($root_folder_id, $_REQUEST['query']);
-		}else
-		{
+		}else {
 			$items = isset($params['items']) ? $params['items'] : $this->get_authorized_items($folder_id, $GO_SECURITY->user_id, true, $reverse);
 		}
 
 		$total = count($items);
-		
-		if($random)
-		{
+
+		if($random) {
 			shuffle($items);
-		}elseif($paging_id && $total > $max_items)
-		{
+		}elseif($paging_id && $total > $max_items) {
 			$_SESSION['GO_SESSION']['cms']['paging_'.$paging_id]=isset($_SESSION['GO_SESSION']['cms']['paging_'.$paging_id]) ? $_SESSION['GO_SESSION']['cms']['paging_'.$paging_id] : $start;
-			if(isset($_REQUEST[$paging_id]))
-			{
+			if(isset($_REQUEST[$paging_id])) {
 				$start = $_SESSION['GO_SESSION']['cms']['paging_'.$paging_id]= $_REQUEST[$paging_id];
-			}else
-			{
+			}else {
 				$start=$_SESSION['GO_SESSION']['cms']['paging_'.$paging_id];
 			}
-			for($i=0;$i<$start;$i++)
-			{
+			for($i=0;$i<$start;$i++) {
 				array_shift($items);
 			}
 
@@ -481,11 +422,10 @@ class cms_output extends cms{
 			$next_start = $start+$max_items;
 
 			$pagination_html = '<div class="'.$class.' pagination">';
-			
+
 			$request_uri = preg_replace('/&'.$paging_id.'=.+&?/', '', $_SERVER['REQUEST_URI']);
 
-			if($start>0)
-			{
+			if($start>0) {
 				$pagination['firstpage_href']=$request_uri.'&'.$paging_id.'=0';
 				$pagination['previous_href']=$request_uri.'&'.$paging_id.'='.$previous_start;
 			}
@@ -493,45 +433,38 @@ class cms_output extends cms{
 			$start_link = ($start-((10/2)*$max_items));
 			$end_link = ($start+((10/2)*$max_items));
 
-			if ($start_link < 0)
-			{
+			if ($start_link < 0) {
 				$end_link = $end_link - $start_link;
 				$start_link=0;
 			}
-			if ($end_link > $total)
-			{
+			if ($end_link > $total) {
 				$end_link = $total;
 			}
 
 
 			$pagination['start']=$start;
 			$pagination['page_hrefs']=array();
-			for ($i=$start_link;$i<$end_link;$i+=$max_items)
-			{
+			for ($i=$start_link;$i<$end_link;$i+=$max_items) {
 				$page = ($i/$max_items)+1;
 				$pagination['page_hrefs'][]=array(
-					'page'=>$page, 
-					'href'=>$request_uri.'&'.$paging_id.'='.$i,
-					'active'=>$start==$i? 'active' : 'inactive');
+								'page'=>$page,
+								'href'=>$request_uri.'&'.$paging_id.'='.$i,
+								'active'=>$start==$i? 'active' : 'inactive');
 			}
 
-			if ($end_link < $total)
-			{
+			if ($end_link < $total) {
 				$pagination_html .= '...&nbsp;';
 			}
 
 			$last_page = floor($total/$max_items)*$max_items;
-			if($total>$next_start)
-			{
+			if($total>$next_start) {
 				$pagination['lastpage_href']=$request_uri.'&'.$paging_id.'='.$last_page;
 				$pagination['next_href']=$request_uri.'&'.$paging_id.'='.$next_start;
 			}
 
 			$smarty->assign($paging_id, $pagination);
-		}else
-		{
-			for($i=0;$i<$start;$i++)
-			{
+		}else {
+			for($i=0;$i<$start;$i++) {
 				array_shift($items);
 			}
 		}
@@ -544,22 +477,21 @@ class cms_output extends cms{
 
 		$smarty->assign('item_count', $count);
 
-		if($count)
-		{
+		if($count) {
 			$smarty2->assign('item_count', $count);
 			$smarty2->assign('item_percentage', round(100/$count,1));
-			
+
 			if($wrap_div)
-			$html .= '<div id="'.$class.'_'.$folder_id.'" class="'.$class.' '.$class.'_'.$current_level.'">';
+				$html .= '<div id="'.$class.'_'.$folder_id.'" class="'.$class.' '.$class.'_'.$current_level.'">';
 
 			$counter=$active_index=0;
 			while ($item = array_shift($items)) {
-				
+
 				$item['index']=$counter;
 				$item['safename']=preg_replace($this->safe_regex, '', $item['name']);
 				$item['name']=htmlspecialchars($item['name']);
 				$item['level']=$current_level;
-				
+
 				$current_item_template = $item_template;
 
 				$last_was_in_path = !empty($is_in_path);
@@ -571,26 +503,26 @@ class cms_output extends cms{
 					$title = $item['title'] == '' ? $name : $item['title'];
 					$item_html .= '<a title="'.$title.'" class="'.$class.' '.$class.'_'.$current_level;
 
-					if($this->file['id']==$item['id'])
-					{
+					if($this->file['id']==$item['id']) {
 						$is_in_path=true;
 						$item_html .= ' selected';
 						$current_item_template = $active_item_template;
 
 						$smarty->assign('previous_file', $this->lastfile);
 						$this->record_next_file=true;
-					}else
-					{
+					}else {
 						$is_in_path=false;
 					}
-
-					
-
-					//$item['href']=$GO_MODULES->modules['cms']['url'].'run.php?file_id='.$item['id'];
-					if($this->basehref!=$GO_MODULES->modules['cms']['url'])
-					$item['href']=$this->basehref.$path.urlencode($this->special_encode($item['name']));
-					else
-					$item['href']=$GO_MODULES->modules['cms']['url'].'run.php?file_id='.$item['id'];
+						
+					if($this->basehref!=$GO_MODULES->modules['cms']['url']) {
+						$href_path = $search ? $this->build_path($item['folder_id'], $this->site['root_folder_id']) : $path;
+						if(!empty($href_path)){
+							$href_path .= '/';
+						}
+						$item['href']=$this->basehref.$href_path.urlencode($this->special_encode($item['name']));
+					}else {
+						$item['href']=$GO_MODULES->modules['cms']['url'].'run.php?file_id='.$item['id'];
+					}
 
 					$item_html .= '" href="'.$item['href'].'">'.$name.'</a>';
 
@@ -604,17 +536,20 @@ class cms_output extends cms{
 					$item_html .= ' class="'.$class.' '.$class.'_'.$current_level;
 
 					//if($this->folder['id']==$item['id'])
-					if($is_in_path)
-					{
+					if($is_in_path) {
 						$item_html .= ' selected';
 						$current_item_template = $active_item_template;
 					}
 
 					//double urlencode for apache rewriting of & etc.
-					if($this->basehref!=$GO_MODULES->modules['cms']['url'])
-						$item['href']=$this->basehref.$path.urlencode($this->special_encode($item['name']));
-					else
-					$item['href']=$GO_MODULES->modules['cms']['url'].'run.php?folder_id='.$item['id'];
+					if($this->basehref!=$GO_MODULES->modules['cms']['url']){
+						$item['href']=$this->basehref.$path;
+						if(!empty($path)){
+							$item['href'].='/';
+						}
+						$item['href'] .= urlencode($this->special_encode($item['name']));
+					}else
+						$item['href']=$GO_MODULES->modules['cms']['url'].'run.php?folder_id='.$item['id'];
 
 					if($no_folder_links)
 						$item_html .= '">'.$item['name'].'</div>';
@@ -625,10 +560,9 @@ class cms_output extends cms{
 				if($is_in_path)
 					$active_index=$counter;
 
-				if(!empty($current_item_template))
-				{
+				if(!empty($current_item_template)) {
 					if(!empty($item['option_values']))
-					$item['option_values']=$this->get_template_values($item['option_values']);
+						$item['option_values']=$this->get_template_values($item['option_values']);
 
 					$smarty2->assign('parentitem', $parentitem);
 					$smarty2->assign('item', $item);
@@ -643,23 +577,22 @@ class cms_output extends cms{
 					$smarty2->assign('folder', $folder);
 
 					$html .= $smarty2->fetch($current_item_template);
-				}else
-				{
+				}else {
 					$html .= $item_html;
 				}
-				
-				if($item['fstype']=='folder' && $current_level < $expand_levels && ($is_in_path || $expand_all))
-				{
-					$html .= $this->print_items($params, &$smarty, $current_level+1,$item['id'],$path.urlencode($item['name']).'/', $item);
+
+				if($item['fstype']=='folder' && $current_level < $expand_levels && ($is_in_path || $expand_all)) {
+					$href_path = empty($path) ? '' : $path.'/';
+					$html .= $this->print_items($params, &$smarty, $current_level+1,$item['id'],$href_path.urlencode($item['name']), $item);
 				}
 
 
 				/**
 				 * Record the previous and next file if there is an active file
 				 */
-				if($item['fstype']=='file'){
+				if($item['fstype']=='file') {
 					$this->lastfile=$item;
-					if(!$is_in_path && $this->record_next_file){
+					if(!$is_in_path && $this->record_next_file) {
 						$smarty->assign('next_file', $item);
 						$this->record_next_file=false;
 					}
@@ -668,32 +601,30 @@ class cms_output extends cms{
 
 				$counter++;
 
-				if($max_items>0 && $max_items==$counter)
-				{
+				if($max_items>0 && $max_items==$counter) {
 					break;
 				}
 
-				
-					
-					
+
+
+
 				$uneven=!$uneven;
 			}
 			if($wrap_div)
-			$html .= '</div>';
-			
-			if(!empty($level_template))
-			{
+				$html .= '</div>';
+
+			if(!empty($level_template)) {
 				$smarty2->assign('parentitem', $parentitem);
 				$smarty2->assign('level', $current_level);
 				$smarty2->assign('count', $counter);
 				$smarty2->assign('active_index', $active_index);
 				$smarty2->assign('content', $html);
-				
+
 				$html = $smarty2->fetch($level_template);
 			}
 
 		}
-		
+
 		return $html;
 	}
 

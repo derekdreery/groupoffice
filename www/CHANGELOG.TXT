@@ -1,3 +1,6 @@
+2010/01/29 3.3.16
+- Small bug fixes
+
 2010/01/21 3.3.14
 - Bug fixes and fixed a strange segmentation fault in apache when using Ioncube
 

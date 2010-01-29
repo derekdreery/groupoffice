@@ -607,7 +607,7 @@ class cms extends db {
 			if(!$folder)
 			return $path;
 
-			$path = $folder['name'].'/'.$path;
+			$path = empty($path) ? $folder['name'] : $folder['name'].'/'.$path;
 			return $this->build_path($folder['parent_id'], $root_folder_id, $path);
 		}
 	}
@@ -1360,7 +1360,7 @@ class cms extends db {
     public function build_file_files_path($file, $site){
         $path = 'public/cms/'.$site['name'];
 
-        $sub = $this->build_path($file['folder_id']);
+        $sub = $this->build_path($file['folder_id']).'/';
         $pos = strpos($sub, '/');
         $sub = substr($sub, $pos);
         $path .= $sub.$file['name'];

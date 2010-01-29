@@ -74,6 +74,10 @@ class File
 		//IE likes to change a double white space to a single space
 		//We must do this ourselves so the filenames will match.
 		$filename =  preg_replace('/\s+/', ' ', $filename);
+
+		//strip dots from start
+		$filename=ltrim($filename, '.');
+
 		if(empty($filename)){
 			$filename = 'unnamed';
 		}

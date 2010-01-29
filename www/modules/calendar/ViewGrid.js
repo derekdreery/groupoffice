@@ -467,6 +467,7 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 				if(element)
 				{
 					element.addClass('x-calGrid-selected');
+					element.focus();
 					this.selected.push(element);
 				}
 			}
@@ -526,7 +527,8 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 					style:"background-color:#"+eventData.background,
 					html: text,
 					qtitle:eventData.name,
-					qtip: GO.calendar.formatQtip(eventData)
+					qtip: GO.calendar.formatQtip(eventData),
+					tabindex:0//tabindex is needed for focussing and events
 				}, true);
 					
 				this.registerEvent(domId, eventData);
