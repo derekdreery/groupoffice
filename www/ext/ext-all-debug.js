@@ -11339,7 +11339,7 @@ Ext.Container = Ext.extend(Ext.BoxComponent, {
         }
 
         if(this.monitorResize === true){
-            Ext.EventManager.onWindowResize(this.doLayout, this, [false]);
+            Ext.EventManager.onWindowResize(this.layout.layout, this.layout);
         }
     },
 
@@ -11625,7 +11625,7 @@ Ext.Container = Ext.extend(Ext.BoxComponent, {
             }
         }
         if(this.monitorResize){
-            Ext.EventManager.removeResizeListener(this.doLayout, this);
+            Ext.EventManager.removeResizeListener(this.layout.layout, this.layout);
         }
         Ext.destroy(this.layout);
         Ext.Container.superclass.beforeDestroy.call(this);
@@ -13517,6 +13517,12 @@ Ext.layout.VBoxLayout = Ext.extend(Ext.layout.BoxLayout, {
             c = cs[i];
             cm = c.margins;
             totalFlex += c.flex || 0;
+
+            // autoHeight Containers must be fully laid out to acquire a height
+            if (c.doLayout && !c.height && !c.hasLayout) {
+                c.doLayout();
+            }
+
             ch = c.getHeight();
             margin = cm.top + cm.bottom;
             extraHeight += ch + margin;
@@ -13598,6 +13604,12 @@ Ext.layout.HBoxLayout = Ext.extend(Ext.layout.BoxLayout, {
         Ext.each(cs, function(c){
             cm = c.margins;
             totalFlex += c.flex || 0;
+
+            // autoWidth Containers must be fully laid out to acquire a width
+            if (c.doLayout && !c.width && !c.hasLayout) {
+                c.doLayout();
+            }
+
             cw = c.getWidth();
             margin = cm.left + cm.right;
             extraWidth += cw + margin;
