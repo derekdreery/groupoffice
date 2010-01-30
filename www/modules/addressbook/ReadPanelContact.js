@@ -46,9 +46,11 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 								'</tr>'+					
 							'</table>'+
 						'</td>'+
-						'<td class="photo" rowspan="2">' +
-							'<center><img src="{photo_src}" width="80" height="120" /></center>' +
-						'</td>' +
+						'<tpl if="photo_src">'+
+							'<td class="photo" rowspan="2">' +
+								'<center><img src="{photo_src}" width="80" height="120" /></center>' +
+							'</td>' +
+						'</tpl>'+
 					'</tr>' +
 
 					'<tr>' +

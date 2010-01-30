@@ -64,7 +64,7 @@ $contact['iso_address_format']=$default_language;
 if (!is_dir($GO_CONFIG->file_storage_path.'contacts/contact_photos'))
 	mkdir($GO_CONFIG->file_storage_path.'contacts/contact_photos',0755);
 
-copy($module['path'].'install/noperson.jpg',$GO_CONFIG->file_storage_path.'contacts/contact_photos/noperson.jpg');
+//copy($module['path'].'install/noperson.jpg',$GO_CONFIG->file_storage_path.'contacts/contact_photos/noperson.jpg');
 
 //$ab->add_contact($contact);
 
