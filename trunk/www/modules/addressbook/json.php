@@ -458,6 +458,7 @@ try
 				
 			if($response['data'])
 			{
+				
 				$response['data']['full_name'] = String::format_name($response['data']['last_name'], $response['data']['first_name'], $response['data']['middle_name']);
 
 				require($GO_LANGUAGE->get_base_language_file('countries'));
@@ -573,7 +574,7 @@ try
 			{
 				$response['data']['photo_src'] = $GO_MODULES->modules['addressbook']['url'].'photo.php?contact_id='.$response['data']['id'].'&mtime='.time();
 			} else {
-				$response['data']['photo_src'] = $GO_MODULES->modules['addressbook']['url'].'photo.php?contact_id=noperson';
+				$response['data']['photo_src'] = false;
 			}
 
 			echo json_encode($response);
