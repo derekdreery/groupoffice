@@ -73,6 +73,10 @@ border:1px solid black;
 	background-image: url('images/16x16/message.png') !important;
 }
 
+.cal-btn-home{
+	background-image: url('images/16x16/home.png') !important;
+}
+
 .btn-one-day {
 	background-image: url('images/16x16/calendar.png') !important;
 }

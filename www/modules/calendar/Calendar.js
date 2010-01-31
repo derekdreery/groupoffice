@@ -322,24 +322,25 @@ GO.calendar.MainPanel = function(config){
 		region:'center',
 		layout:'accordion',
 		tbar:[{
-		
+			iconCls:'cal-btn-home',
 			text : GO.calendar.lang.myCalendar,
-				handler : function() {
-					this.setDisplay({
-						group_id: 1,
-						calendar_id: GO.calendar.defaultCalendar['id'],
-						calendar_name: GO.calendar.defaultCalendar['name'],
-						saveState:true,
-						title:GO.calendar.defaultCalendar['name']
-					});
-				},
-				scope : this
-		},{			
-			text : this.datePicker.todayText,
+			handler : function() {
+				this.setDisplay({
+					group_id: 1,
+					calendar_id: GO.calendar.defaultCalendar['id'],
+					calendar_name: GO.calendar.defaultCalendar['name'],
+					saveState:true,
+					title:GO.calendar.defaultCalendar['name']
+				});
+			},
+			scope : this
+		},{
+			iconCls:'btn-one-day',
+			text : GO.lang.today,
 			handler : function(){
 				this.setDisplay({
-					date: new Date()
-				})
+					date: new Date().clearTime()
+				});
 			},
 			scope : this
 		}],
@@ -424,14 +425,8 @@ GO.calendar.MainPanel = function(config){
 	});
 	
 	this.viewGrid.on('zoom', function(conf){	
-		//this.viewsList.getSelectionModel().clearSelections();
-
-		//var r = this.calendarList.store.getById(conf.calendar_id);
-		//this.calendarList.getSelectionModel().selectRecords([r]);
-		//this.calendarList.expand();
 		this.setDisplay(conf);
-	}, this);
-	
+	}, this);	
 	
 	this.listGrid = new GO.calendar.ListGrid({
 		id: 'list-grid',
@@ -440,8 +435,6 @@ GO.calendar.MainPanel = function(config){
 	});
 
 	this.listStore = this.listGrid.store;
- 
-
 
 	this.displayPanel = new Ext.Panel({
 		region:'center',
@@ -689,7 +682,7 @@ GO.calendar.MainPanel = function(config){
 		new Ext.Panel({
 			region:'north',
 			border:true,
-			height:164,
+			height:160,
 			split:true,
 			baseCls:'x-plain',
 			items:this.datePicker
@@ -700,8 +693,6 @@ GO.calendar.MainPanel = function(config){
 	];		
 		
 	GO.calendar.MainPanel.superclass.constructor.call(this, config);	
-	
-	
 }
 
 Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
@@ -722,10 +713,6 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	},
 	afterRender : function(){
 		GO.calendar.MainPanel.superclass.afterRender.call(this);
-
-
-
-  	
 		//couldn't add key events to panels so I add this event to the whole doc
 			
 		
