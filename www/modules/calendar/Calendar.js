@@ -48,10 +48,31 @@ GO.calendar.MainPanel = function(config){
 	if(!config)
 	{
 		config = {};
-	}			
-	var datePicker = new Ext.DatePicker();
+	}
+
+	this.datePicker = new Ext.DatePicker({
+		cls:'cal-date-picker',
+		showToday:false
+	});
+
+	/*this.datePicker.on('render',function(){
+		this.myCalBtn = new Ext.Button({
+			renderTo: this.datePicker.el.child("td.x-date-bottom", true),
+			text : GO.calendar.lang.myCalendar,
+				handler : function() {
+					this.setDisplay({
+						group_id: 1,
+						calendar_id: GO.calendar.defaultCalendar['id'],
+						calendar_name: GO.calendar.defaultCalendar['name'],
+						saveState:true,
+						title:GO.calendar.defaultCalendar['name']
+					});
+				},
+				scope : this
+		}, this);
+	}, this);*/
 	
-	datePicker.on("select", function(DatePicker, DateObj){			
+	this.datePicker.on("select", function(datePicker, DateObj){
 		this.setDisplay({
 			date: DateObj
 		});
@@ -113,7 +134,7 @@ GO.calendar.MainPanel = function(config){
 				this.state.title=record.data.name;
 				this.state.calendar_id = record.data.id;
 			}
-			this.calendarList.getSelectionModel().selectRecords(new Array(record));
+			//this.calendarList.getSelectionModel().selectRecords(new Array(record));
 			this.setDisplay(this.state);
 
 			
@@ -134,7 +155,7 @@ GO.calendar.MainPanel = function(config){
 				this.state.view_id = record.data.id;
 				this.state.title = record.data.name;
 			}
-			this.viewsList.getSelectionModel().selectRecords(new Array(record));
+			//this.viewsList.getSelectionModel().selectRecords(new Array(record));
 			this.setDisplay(this.state);
 		}
 	}, this);
@@ -154,10 +175,12 @@ GO.calendar.MainPanel = function(config){
 				this.state.calendar_id = record.data.id;
 				this.state.title=record.data.name;
 			}
-			this.resourcesList.getSelectionModel().selectRecords(new Array(record));
+			//this.resourcesList.getSelectionModel().selectRecords(new Array(record));
 			this.setDisplay(this.state);
 		}
 	}, this);
+
+	
 
 	this.calendarList = new GO.grid.GridPanel({
 		border: false,
@@ -175,20 +198,6 @@ GO.calendar.MainPanel = function(config){
 		view:new Ext.grid.GridView({
 			forceFit:true
 		}),
-		tbar: [{
-			text : GO.calendar.lang.myCalendar,
-			handler : function() {
-				this.setDisplay({
-					group_id: 1,
-					calendar_id: GO.calendar.defaultCalendar['id'],
-					calendar_name: GO.calendar.defaultCalendar['name'],
-					saveState:true,
-					title:GO.calendar.defaultCalendar['name']
-				});
-
-			},
-			scope : this
-		}],
 		sm: new Ext.grid.RowSelectionModel()
 	});
 
@@ -240,8 +249,8 @@ GO.calendar.MainPanel = function(config){
    
 	this.calendarList.on('rowclick', function(grid, rowIndex)
 	{
-		this.viewsList.getSelectionModel().clearSelections();
-		this.resourcesList.getSelectionModel().clearSelections();
+		//this.viewsList.getSelectionModel().clearSelections();
+		//this.resourcesList.getSelectionModel().clearSelections();
 		var calendars = this.calendarList.getSelectionModel().selections.items;
 		
 		if (calendars.length<2) {
@@ -280,8 +289,8 @@ GO.calendar.MainPanel = function(config){
 	
 	this.viewsList.on('rowclick', function(grid, rowIndex)
 	{
-		this.calendarList.getSelectionModel().clearSelections();
-		this.resourcesList.getSelectionModel().clearSelections();
+		//this.calendarList.getSelectionModel().clearSelections();
+		//this.resourcesList.getSelectionModel().clearSelections();
 
 		this.setDisplay({
 				group_id:0,
@@ -296,8 +305,8 @@ GO.calendar.MainPanel = function(config){
 
 	this.resourcesList.on('rowclick', function(grid, rowIndex)
 	{
-		this.calendarList.getSelectionModel().clearSelections();
-		this.viewsList.getSelectionModel().clearSelections();
+		//this.calendarList.getSelectionModel().clearSelections();
+		//this.viewsList.getSelectionModel().clearSelections();
         
 		this.setDisplay({
 			group_id:grid.store.data.items[rowIndex].data.group_id,
@@ -312,6 +321,28 @@ GO.calendar.MainPanel = function(config){
 		border:true,
 		region:'center',
 		layout:'accordion',
+		tbar:[{
+		
+			text : GO.calendar.lang.myCalendar,
+				handler : function() {
+					this.setDisplay({
+						group_id: 1,
+						calendar_id: GO.calendar.defaultCalendar['id'],
+						calendar_name: GO.calendar.defaultCalendar['name'],
+						saveState:true,
+						title:GO.calendar.defaultCalendar['name']
+					});
+				},
+				scope : this
+		},{			
+			text : this.datePicker.todayText,
+			handler : function(){
+				this.setDisplay({
+					date: new Date()
+				})
+			},
+			scope : this
+		}],
 		/*layoutConfig:{
 			autoWidth : false,
 			titleCollapse:true,
@@ -393,11 +424,11 @@ GO.calendar.MainPanel = function(config){
 	});
 	
 	this.viewGrid.on('zoom', function(conf){	
-		this.viewsList.getSelectionModel().clearSelections();
+		//this.viewsList.getSelectionModel().clearSelections();
 
-		var r = this.calendarList.store.getById(conf.calendar_id);
-		this.calendarList.getSelectionModel().selectRecords([r]);
-		this.calendarList.expand();
+		//var r = this.calendarList.store.getById(conf.calendar_id);
+		//this.calendarList.getSelectionModel().selectRecords([r]);
+		//this.calendarList.expand();
 		this.setDisplay(conf);
 	}, this);
 	
@@ -658,10 +689,10 @@ GO.calendar.MainPanel = function(config){
 		new Ext.Panel({
 			region:'north',
 			border:true,
-			height:194,
+			height:164,
 			split:true,
 			baseCls:'x-plain',
-			items:datePicker
+			items:this.datePicker
 		}),
 		this.calendarListPanel]
 	}),
@@ -1141,6 +1172,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 
 		if(config.date)
 		{
+			this.datePicker.setValue(config.date);
+			
 			if(!config.days)
 			{				
 				config.days = this.type=='days' ?  this.daysGrid.days : this.viewGrid.days;
@@ -1199,6 +1232,29 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		{
 			this.saveState();
 		}
+
+		//update navigation selection
+		this.viewsList.getSelectionModel().clearSelections();
+		this.resourcesList.getSelectionModel().clearSelections();
+		this.calendarList.getSelectionModel().clearSelections();
+		
+		var selectGrid, id, record;
+		if(this.view_id>0){
+			selectGrid = this.viewsList;
+			id = this.view_id;
+		}else
+		{
+			if(this.group_id==1){
+				selectGrid = this.calendarList;				
+			}else
+			{
+				selectGrid = this.resourcesList;				
+			}
+			id = this.calendar_id;
+		}
+		selectGrid.expand();
+		record = selectGrid.store.getById(id)
+		selectGrid.getSelectionModel().selectRecords([record]);
 	},
 	
 	

@@ -1,3 +1,8 @@
+.cal-date-picker .x-date-bottom .x-btn{
+	float:left;
+	margin-left:25px;
+}
+
 .cal-go-title{
 	font-size:16px;
 	margin-bottom:10px;
