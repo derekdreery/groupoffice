@@ -1139,11 +1139,11 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 
 		var self = this;
 
-		if (this.isHTML() && this.htmlEditor.SpellCheck == false && !draft){
+		/*if (this.isHTML() && this.htmlEditor.SpellCheck == false && !draft){
 			//Ask if they want to run a spell check
 			Ext.MessageBox.confirm(GO.lang.strConfirm, GO.lang.spellcheckAsk, function (btn){self.HandleResult(btn,self);});
 			return false;
-		}
+		}*/
 
 		if (this.uploadDialog && this.uploadDialog.isVisible()) {
 			alert(GO.email.lang.closeUploadDialog);
