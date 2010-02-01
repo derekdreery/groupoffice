@@ -43,6 +43,10 @@ class servermanager extends db {
 		
 
 		$config=array();
+		if(!file_exists($config_file)){
+			echo "Warning: ".$config_file." does not exist\n";
+			return false;
+		}
 		require($config_file);
 
 		$installation=array();
