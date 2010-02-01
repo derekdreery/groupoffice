@@ -1865,6 +1865,11 @@ GO.linkHandlers[1]=function(id){
 		event_id: id
 	});
 };
+GO.linkPreviewPanels[1]=function(config){
+	var config = config || {};
+	return new GO.calendar.EventPanel(config);
+}
+
 
 
 

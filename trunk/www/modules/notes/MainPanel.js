@@ -198,6 +198,12 @@ GO.linkHandlers[4]=function(id){
 	linkWindow.show();
 }
 
+GO.linkPreviewPanels[4]=function(config){
+	config = config || {};
+	return new GO.notes.NotePanel(config);
+}
+
+
 /* {LINKHANDLERS} */
 
 

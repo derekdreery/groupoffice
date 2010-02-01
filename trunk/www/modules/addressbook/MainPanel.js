@@ -548,12 +548,12 @@ GO.linkHandlers[2]=GO.mailFunctions.showContact=function(id){
 }
 
 GO.linkPreviewPanels[2]=function(config){
-	var config = config || {};
+	config = config || {};
 	return new GO.addressbook.ContactReadPanel(config);
 }
 
 GO.linkPreviewPanels[3]=function(config){
-	var config = config || {};
+	config = config || {};
 	return new GO.addressbook.CompanyReadPanel(config);
 }
 

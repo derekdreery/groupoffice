@@ -1732,12 +1732,118 @@ GO.email.showAddressMenu = function(e, email, name)
 	var e = Ext.EventObject.setEvent(e);
 	e.preventDefault();
 	GO.email.addressContextMenu.showAt(e.getXY(), email, name);
-}	
+}
+
+
+GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
+	initComponent : function(){
+		this.tbar=[{
+					iconCls: 'btn-print',
+					text: GO.lang.cmdPrint,
+					cls: 'x-btn-text-icon',
+					handler: function(){
+						this.body.print();
+					}
+				}];
+
+		GO.email.LinkedMessagePanel.superclass.initComponent.call(this);
+	},
+	border:false,
+	autoScroll:true,
+	load : function(id){
+		
+		this.el.mask(GO.lang.strWaitMsgLoad);
+
+		if(!this.remoteMessage)
+			this.remoteMessage={};
+
+		if(id)
+			this.messageId=id;
+		
+		this.remoteMessage.id=this.messageId;
+
+		var url = '';
+		if(this.remoteMessage.account_id)
+		{
+			this.remoteMessage.task='message_attachment';
+			url = GO.settings.modules.email.url+'json.php';
+		}else
+		{
+			this.remoteMessage.task='linked_message';
+			url = GO.settings.modules.mailings.url+'json.php';
+		}
+
+
+		Ext.Ajax.request({
+			url: url,
+			params: this.remoteMessage,
+			scope: this,
+			callback: function(options, success, response)
+			{
+				var data = Ext.decode(response.responseText);
+				this.setMessage(data);
+				this.el.unmask();
+			}
+		});
+	},
+	listeners:{
+		scope:this,
+		linkedClicked: function(href){
+			var win = window.open(href);
+			win.focus();
+		},
+		attachmentClicked: function(attachment, panel){
+			if(attachment.mime.indexOf('message')>-1)
+			{
+				this.remoteMessage.part_number=attachment.number+".0";
+				GO.linkHandlers[9].call(this, this.messageId, this.remoteMessage);
+			}else
+			{
+				if(panel.data.path)
+				{
+					document.location.href=GO.settings.modules.email.url+
+					'mimepart.php?path='+
+					encodeURIComponent(panel.data.path)+'&part_number='+attachment.number;
+				}else
+				{
+					document.location.href=GO.settings.modules.email.url+
+					'mimepart.php?uid='+this.remoteMessage.uid+'' +
+					'&account_id='+this.remoteMessage.account_id+'' +
+					'&transfer='+this.remoteMessage.transfer+'' +
+					'&mailbox='+encodeURIComponent(this.remoteMessage.mailbox)+'' +
+					'&part='+this.remoteMessage.part+'' +
+					'&part_number='+attachment.number;
+				}
+			}
+		}
+	}
+
+});
+
 
 
 GO.linkHandlers[9] = function(id, remoteMessage){
+
+	if(!GO.email.linkedMessagePanel){
+		GO.email.linkedMessagePanel = new GO.email.LinkedMessagePanel();
+
+		GO.email.linkedMessageWin = new Ext.Window({
+			maximizable:true,
+			collapsible:true,
+			title: GO.email.lang.emailMessage,
+			height: 400,
+			width: 600,
+			closeAction:'hide',
+			layout:'fit',
+			items: GO.email.linkedMessagePanel			
+		});
+	}
 	
-	var messagePanel = new GO.email.MessagePanel({
+	GO.email.linkedMessagePanel.remoteMessage=remoteMessage;	
+	GO.email.linkedMessageWin.show();
+	GO.email.linkedMessagePanel.load(id);
+	
+	/*var messagePanel = new GO.email.MessagePanel({
 			border:false,
 			autoScroll:true
 		});		
@@ -1773,66 +1879,12 @@ GO.linkHandlers[9] = function(id, remoteMessage){
   	
   	
   }, this);
-  messagePanel.on('zipOfAttachmentsClicked', function(){}, this);
-  
-	
-	var win = new Ext.Window({
-			maximizable:true,
-			collapsible:true,
-			title: GO.email.lang.emailMessage,
-			height: 400,
-			width: 600,
-			layout:'fit',
-			items: messagePanel,		
-			tbar:[{		
-					iconCls: 'btn-print',
-					text: GO.lang.cmdPrint,
-					cls: 'x-btn-text-icon',
-					handler: function(){
-						messagePanel.body.print();												
-					}
-				}],
-			buttons:[{
-				text:GO.lang.cmdClose,
-				handler:function(){
-					win.close();
-				}
-			}]
-		});
-		
-	
-	win.show();
-	messagePanel.el.mask(GO.lang.strWaitMsgLoad);
+  messagePanel.on('zipOfAttachmentsClicked', function(){}, this);*/
+}
 
-	if(!remoteMessage)
-		remoteMessage={};
-	
-	remoteMessage.id=id;
-	
-	var url = '';
-	if(remoteMessage.account_id)
-	{
-		remoteMessage.task='message_attachment';
-		url = GO.settings.modules.email.url+'json.php';
-	}else
-	{
-		remoteMessage.task='linked_message';
-		url = GO.settings.modules.mailings.url+'json.php';
-	}
-	
-
-	Ext.Ajax.request({
-			url: url,
-			params: remoteMessage,
-			scope: this,
-			callback: function(options, success, response)
-			{
-				var data = Ext.decode(response.responseText);
-				messagePanel.setMessage(data);				
-				messagePanel.el.unmask();				
-			}
-		});
-		
+GO.linkPreviewPanels[9]=function(config){
+	config = config || {};	
+	return new GO.email.LinkedMessagePanel(config);
 }
 
 GO.newMenuItems.push({
@@ -1842,7 +1894,9 @@ GO.newMenuItems.push({
 		var taskShowConfig = item.parentMenu.taskShowConfig || {};
 		taskShowConfig.link_config=item.parentMenu.link_config
 
-		GO.email.emailComposer = new GO.email.EmailComposer({links: true});
+		GO.email.emailComposer = new GO.email.EmailComposer({
+			links: true
+		});
 
 		GO.email.emailComposer.show(taskShowConfig);
 	}
