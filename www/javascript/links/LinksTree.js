@@ -16,8 +16,7 @@ GO.LinksTree = function(config){
 	{
 		config = {};
 	}
-		
-	config.title=GO.lang.folders;
+	
 	config.layout='fit';
   config.split=true;
 	config.autoScroll=true;
@@ -54,15 +53,25 @@ GO.LinksTree = function(config){
 
 Ext.extend(GO.LinksTree, Ext.tree.TreePanel, {
 	
-	loadLinks : function(link_id, link_type)
+	loadLinks : function(link_id, link_type, cb, scope)
 	{
 		this.loader.baseParams.link_id=link_id;
 		this.loader.baseParams.link_type=link_type;
-		
+
+		if(cb){
+			if(scope){
+				cb = cb.createDelegate(scope);
+			}
+		}else
+		{
+			cb = function(){};
+		}
+
+
 		if(this.rootNode.isExpanded())
-			this.rootNode.reload();
+			this.rootNode.reload(cb);
 		else
-			this.rootNode.expand();
+			this.rootNode.expand(false,true, cb);
 	}
 	
 });

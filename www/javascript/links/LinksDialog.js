@@ -67,12 +67,19 @@ Ext.extend(GO.dialog.LinksDialog, Ext.Window, {
 		this.fromLinks = [];
 		for (var i = 0;i<gridRecords.length;i++)
 		{
-			this.fromLinks.push({ 'link_id' : gridRecords[i].data['link_id'], 'link_type' : gridRecords[i].data['link_type'] });
+			this.fromLinks.push({'link_id' : gridRecords[i].data['link_id'], 'link_type' : gridRecords[i].data['link_type']});
 		}
 	},
 	setSingleLink : function(link_id, link_type)
 	{
 		this.fromLinks=[{"link_id":link_id,"link_type":link_type}];
+	},
+
+	selectFolder : function(toLinks){
+
+
+
+		
 	},
 	
 	linkItems : function()	{
@@ -83,17 +90,73 @@ Ext.extend(GO.dialog.LinksDialog, Ext.Window, {
 
 		for (var i = 0;i<records.length;i++)
 		{
-			tolinks.push({ 'link_id' : records[i].data['id'], 'link_type' : records[i].data['link_type'] });
+			tolinks.push({'link_id' : records[i].data['id'], 'link_type' : records[i].data['link_type']});
 		}
 
+		if(tolinks.length==1){
+			if(!this.selectFolderWindow){
+
+				this.selectFolderTree = new GO.LinksTree();
+				this.selectFolderTree.on('dblclick', function(node){
+					var to_folder_id = parseInt(node.id.replace('lt-folder-',''));
+					this.sendLinkRequest(tolinks, to_folder_id);
+					this.selectFolderWindow.hide();
+				}, this);
+
+				this.selectFolderWindow = new GO.Window({
+					layout:'fit',
+					title:GO.lang.selectFolder,
+					items:this.selectFolderTree,
+					closeAction:'hide',
+					width:400,
+					height:400,
+					modal:true,
+					closable:true,
+					buttons:[{
+							text:GO.lang.cmdOk,
+							handler:function(){
+
+								var node = this.selectFolderTree.getSelectionModel().getSelectedNode();
+								if(!node){
+									alert(GO.lang.selectFolder);
+								}
+
+								var to_folder_id = parseInt(node.id.replace('lt-folder-',''));
+								this.sendLinkRequest(tolinks, to_folder_id);
+								this.selectFolderWindow.hide();
+							},
+							scope:this
+					}]
+				});
+			}
+			this.selectFolderWindow.show();
+
+			this.selectFolderTree.loadLinks(tolinks[0]['link_id'], tolinks[0]['link_type'], function(rootNode){
+				if(!rootNode.childNodes.length){
+					this.selectFolderWindow.hide();
+					this.sendLinkRequest(tolinks);
+				}
+			}, this);
+			
+		}else
+		{
+			this.sendLinkRequest(tolinks);
+		}
+
+		
+	},
+
+	sendLinkRequest : function(tolinks, to_folder_id){
+		var to_folder_id = to_folder_id || 0;
 		Ext.Ajax.request({
 			url: BaseHref+'action.php',
 			params: {
-				task: 'link', 
-				fromLinks: Ext.encode(this.fromLinks), 
+				task: 'link',
+				fromLinks: Ext.encode(this.fromLinks),
 				toLinks: Ext.encode(tolinks),
 				description:this.grid.linkDescriptionField.getValue(),
-				folder_id: this.folder_id
+				folder_id: this.folder_id,
+				to_folder_id : to_folder_id
 				},
 			callback: function(options, success, response)
 			{

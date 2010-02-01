@@ -191,7 +191,7 @@ GO.grid.LinksPanel = function(config){
 		
 		var activeNode = this.linksTree.getNodeById('lt-folder-'+this.folder_id);
 
-		if(folderWin.folder_id==this.folder_id){
+		if(folderWin.folder_id==this.folder_id && activeNode){
 			activeNode = activeNode.parentNode;
 		}
 		

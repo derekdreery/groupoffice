@@ -341,3 +341,5 @@ GO.lang.spellcheckNoErrors = 'Email content with [{1}] mistake(s)';
 GO.lang.spellcheckAsk = 'Send without spell checking?';
 
 GO.lang.age='Age';
+
+GO.lang.selectFolder = 'Select a folder please';
