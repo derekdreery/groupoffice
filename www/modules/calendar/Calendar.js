@@ -131,8 +131,11 @@ GO.calendar.MainPanel = function(config){
 			if(!record)
 			{
 				record = this.calendarsStore.getAt(0);
-				this.state.title=record.data.name;
+				this.state.calendar_name=this.state.title=record.data.name;
 				this.state.calendar_id = record.data.id;
+			}else
+			{
+				this.state.calendar_name=this.state.title=GO.calendar.defaultCalendar['name'];
 			}
 			//this.calendarList.getSelectionModel().selectRecords(new Array(record));
 			this.setDisplay(this.state);
