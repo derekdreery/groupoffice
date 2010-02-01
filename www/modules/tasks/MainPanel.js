@@ -437,6 +437,11 @@ GO.linkHandlers[12]=function(id, link_config){
 	linkWindow.show();
 }
 
+GO.linkPreviewPanels[12]=function(config){
+	config = config || {};
+	return new GO.tasks.TaskPanel(config);
+}
+
 
 GO.newMenuItems.push({
 	text: GO.tasks.lang.task,

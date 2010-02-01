@@ -213,7 +213,9 @@ GO.grid.LinksPanel = function(config){
 
 	}, this);
 
-	this.linkPreviewPanels[0]=new Ext.Panel();
+	this.linkPreviewPanels[0]=new Ext.Panel({
+		bodyStyle:'padding:5px'
+	});
 
 	this.previewPanel = new Ext.Panel({
 		id: config.id+'_preview',
@@ -472,14 +474,19 @@ Ext.extend(GO.grid.LinksPanel, Ext.Panel, {
 
 		var panelId = 'link_pp_'+record.data.link_type;
 
-		if(record.data.link_type!='folder' && GO.linkPreviewPanels[record.data.link_type]){
+		if(record.data.link_type!='folder'){
 
-			if(!this.linkPreviewPanels[record.data.link_type]){
-				this.linkPreviewPanels[record.data.link_type] = GO.linkPreviewPanels[record.data.link_type].call(this, {id:panelId});
-				this.previewPanel.add(this.linkPreviewPanels[record.data.link_type]);
+			if(!GO.linkPreviewPanels[record.data.link_type]){
+				this.linkPreviewPanels[0].body.update('Sorry, the preview of this type not implemented yet.');
+			}else
+			{
+				if(!this.linkPreviewPanels[record.data.link_type]){
+					this.linkPreviewPanels[record.data.link_type] = GO.linkPreviewPanels[record.data.link_type].call(this, {id:panelId});
+					this.previewPanel.add(this.linkPreviewPanels[record.data.link_type]);
+				}
+				this.previewPanel.getLayout().setActiveItem(panelId);
+				this.linkPreviewPanels[record.data.link_type].load(record.data.id);
 			}
-			this.previewPanel.getLayout().setActiveItem(panelId);
-			this.linkPreviewPanels[record.data.link_type].load(record.data.id);
 		}
 	},
 	

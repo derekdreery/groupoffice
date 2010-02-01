@@ -1602,6 +1602,7 @@ GO.linkHandlers[6]=function(id, record){
 
 
 
+
 GO.moduleManager.addModule('files', GO.files.FileBrowser, {
 	title : GO.files.lang.files,
 	iconCls : 'go-tab-icon-files'
