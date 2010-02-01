@@ -237,7 +237,7 @@ GO.lang.strMonth="Måned";
 GO.lang.strMonths="Måneder";
 GO.lang.strYear="År";
 GO.lang.strYears="År";
-GO.lang.strTime='Tid';
+GO.lang.strTime='Tidspunkt';
 
 GO.lang.shortDays = ['Søn', 'Man', 'Tir', 'Ons', 'Tor', 'Fre','Lør'];
 
