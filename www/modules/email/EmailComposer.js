@@ -160,8 +160,14 @@ GO.email.EmailComposer = function(config) {
 
 
 	var spellcheckInsertPlugin = new GO.plugins.HtmlEditorSpellCheck(this);
+        var wordPastePlugin = new Ext.ux.form.HtmlEditor.Word();
+        var dividePlugin = new Ext.ux.form.HtmlEditor.Divider();
+        var tablePlugin = new Ext.ux.form.HtmlEditor.Table();
+        var hrPlugin = new Ext.ux.form.HtmlEditor.HR();
+        var ioDentPlugin = new Ext.ux.form.HtmlEditor.IndentOutdent();
+	var ssScriptPlugin = new Ext.ux.form.HtmlEditor.SubSuperScript();
+        var rmFormatPlugin = new Ext.ux.form.HtmlEditor.RemoveFormat();
 
-			
 	var items = [
 	this.fromCombo = new Ext.form.ComboBox({
 		store : GO.email.aliasesStore,
@@ -287,12 +293,18 @@ GO.email.EmailComposer = function(config) {
 		name : 'subject',
 		anchor : '100%'
 	}));
-				
+
+        var plugins = [imageInsertPlugin,spellcheckInsertPlugin,
+                    wordPastePlugin, 
+                    hrPlugin,ioDentPlugin,ssScriptPlugin,rmFormatPlugin];
+        if (Ext.version!='2.3.0')
+            plugins.push(tablePlugin);
+
 	items.push(this.htmlEditor = new Ext.form.HtmlEditor({
 		hideLabel : true,
 		name : 'body',
 		anchor : '100% '+anchor,
-		plugins : [imageInsertPlugin,spellcheckInsertPlugin],
+		plugins : plugins,
 		style:'font:12px arial";',
 		defaultFont:'arial'
 	}));
@@ -487,7 +499,7 @@ GO.email.EmailComposer = function(config) {
 
 	GO.email.EmailComposer.superclass.constructor.call(this, {
 		title : GO.email.lang.composeEmail,
-		width : 700,
+		width : 800,
 		height : 500,
 		minWidth : 300,
 		minHeight : 200,

@@ -40,6 +40,7 @@ javascript/plugins/DataView.js
 javascript/plugins/InsertAtCursorTextarea.js
 javascript/plugins/HtmlEditorImageInsert.js
 javascript/plugins/HtmlEditorSpellCheck.js
+javascript/plugins/Ext.ux.HtmlEditor.Plugins-0.2-all.js
 javascript/panels/DisplayPanel.js
 javascript/panels/IframeComponent.js
 javascript/windows/SelectGroups.js
