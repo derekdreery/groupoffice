@@ -2,11 +2,7 @@
 if(isset($argv[1]))
 	define('CONFIG_FILE', $argv[1]);
 
-$root_path = dirname(dirname(dirname(__FILE__)));
-
-require($root_path.'/Group-Office.php');
-
-//require('/etc/groupoffice/servermanager/config.inc.php');
+require('/usr/share/groupoffice/Group-Office.php');
 
 if(!isset($GO_MODULES->modules['postfixadmin'])) {
 	die('Fatal error: postfixadmin module must be installed');
