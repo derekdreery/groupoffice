@@ -20,7 +20,6 @@ GO.LinksTree = function(config){
 	config.layout='fit';
   config.split=true;
 	config.autoScroll=true;
-	config.width=200;
 	
 	config.animate=true;
 	config.loader=new Ext.tree.TreeLoader(
@@ -33,6 +32,8 @@ GO.LinksTree = function(config){
 	config.containerScroll=true;
 	config.rootVisible=true;
 	config.collapsible=true;
+	config.header=false;
+	config.collapseMode='mini';
 	config.ddAppendOnly=true;
 	config.containerScroll=true;
 	config.ddGroup='LinksDD';

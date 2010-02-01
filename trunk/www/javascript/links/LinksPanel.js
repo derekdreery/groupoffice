@@ -33,13 +33,18 @@ GO.grid.LinksPanel = function(config){
 		this.folder_id=0;
 	}
 
+	if(!config.id){
+		config.id='go-links-panel';
+	}
+
 	this.linksDialog = new GO.dialog.LinksDialog({linksStore: config['store']});
 	this.linksDialog.on('link', function(){this.linksGrid.store.reload();}, this);
 	
 	this.linksTree = new GO.LinksTree({
+		id:config.id+'_tree',
 		region:'west',
 		split:true,
-		title:GO.lang.folders
+		width:160
 	});
 	
 	this.linksTree.on('click', function(node)	{
@@ -108,6 +113,7 @@ GO.grid.LinksPanel = function(config){
 	
 	this.linksGrid = new GO.grid.LinksGrid({
 		region:'center',
+		id: config.id+'_grid',
 		deleteConfig:{
 				scope:this,
 				success:this.onDelete/*function(deleteConfig){
@@ -205,9 +211,20 @@ GO.grid.LinksPanel = function(config){
 			this.linksTree.rootNode.reload();
 		}
 
-	}, this);	
+	}, this);
+
+	this.linkPreviewPanels[0]=new Ext.Panel();
+
+	this.previewPanel = new Ext.Panel({
+		id: config.id+'_preview',
+		region:'east',
+		width:420,
+		split:true,
+		layout:'card',
+		items:[this.linkPreviewPanels[0]]
+	});
 	
-	config.items=[this.linksTree, this.linksGrid];		
+	config.items=[this.linksTree, this.linksGrid, this.previewPanel];
 	
 	this.linksContextMenu = new GO.LinksContextMenu();
 	
@@ -330,6 +347,8 @@ GO.grid.LinksPanel = function(config){
 		
 		
 	this.linksGrid.on("rowdblclick", this.rowDoulbleClicked, this);
+	this.linksGrid.on("delayedrowselect", this.rowClicked, this);
+
 	
 	
   GO.grid.LinksPanel.superclass.constructor.call(this, config);
@@ -337,6 +356,8 @@ GO.grid.LinksPanel = function(config){
 }
 
 Ext.extend(GO.grid.LinksPanel, Ext.Panel, {
+
+	linkPreviewPanels : [],
 
 	onDelete : function(deleteConfig){
 		var selections = Ext.decode(deleteConfig.params.delete_keys);
@@ -366,8 +387,6 @@ Ext.extend(GO.grid.LinksPanel, Ext.Panel, {
 	afterRender : function(){
 		
 		GO.grid.LinksPanel.superclass.afterRender.call(this);
-		
-		this.on("rowdblclick", this.rowDoulbleClicked, this);
 		
 		if(this.isVisible())
 		{
@@ -430,8 +449,7 @@ Ext.extend(GO.grid.LinksPanel, Ext.Panel, {
 	
 	rowDoulbleClicked : function(grid, rowClicked, e) {
 			
-		var selectionModel = grid.getSelectionModel();
-		var record = selectionModel.getSelected();
+		var record = grid.store.getAt(rowClicked);
 		
 		if(record.data.link_type=='folder')
 		{
@@ -445,10 +463,31 @@ Ext.extend(GO.grid.LinksPanel, Ext.Panel, {
 			Ext.Msg.alert(GO.lang['strError'], 'No handler definded for link type: '+record.data.link_type);
 		}
 	},
+
+	rowClicked : function(grid, rowClicked, record){
+		
+		//this.linkPreviewPanels[0].show();
+
+		this.previewPanel.getLayout().setActiveItem(0);
+
+		var panelId = 'link_pp_'+record.data.link_type;
+
+		if(record.data.link_type!='folder' && GO.linkPreviewPanels[record.data.link_type]){
+
+			if(!this.linkPreviewPanels[record.data.link_type]){
+				this.linkPreviewPanels[record.data.link_type] = GO.linkPreviewPanels[record.data.link_type].call(this, {id:panelId});
+				this.previewPanel.add(this.linkPreviewPanels[record.data.link_type]);
+			}
+			this.previewPanel.getLayout().setActiveItem(panelId);
+			this.linkPreviewPanels[record.data.link_type].load(record.data.id);
+		}
+	},
 	
 	
 	onShow : function(){
 		GO.grid.LinksPanel.superclass.onShow.call(this);
+
+		this.previewPanel.getLayout().setActiveItem(0);
 		
 		if(!this.loaded && this.link_id>0)
 		{

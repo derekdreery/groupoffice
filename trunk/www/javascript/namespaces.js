@@ -27,6 +27,9 @@ Ext.namespace('GO.menu');
 //An object of functions that open a particular link.
 //the index is the link type and the function gets the id as a parameter
 GO.linkHandlers={};
+GO.linkPreviewPanels={};
+
+//Will be filled by modules with menu items for the new menu in various panels.
 GO.newMenuItems=[];
 
 //GO.settings = Ext.decode(GO.settings);
