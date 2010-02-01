@@ -547,6 +547,17 @@ GO.linkHandlers[2]=GO.mailFunctions.showContact=function(id){
 	linkWindow.show();
 }
 
+GO.linkPreviewPanels[2]=function(config){
+	var config = config || {};
+	return new GO.addressbook.ContactReadPanel(config);
+}
+
+GO.linkPreviewPanels[3]=function(config){
+	var config = config || {};
+	return new GO.addressbook.CompanyReadPanel(config);
+}
+
+
 GO.linkHandlers[3]=function(id){
 	//GO.addressbook.companyDialog.show(id);	
 	
@@ -558,5 +569,3 @@ GO.linkHandlers[3]=function(id){
 	companyPanel.load(id);
 	linkWindow.show();
 }
-
-

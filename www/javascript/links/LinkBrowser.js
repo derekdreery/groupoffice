@@ -18,6 +18,8 @@ GO.LinkBrowser = function(config){
 
 	this.linksPanel = new GO.grid.LinksPanel();
 
+	if(!this.id)
+		this.id='go-link-browser';
 	
 	GO.LinkBrowser.superclass.constructor.call(this, {
    	layout: 'fit',
@@ -25,28 +27,14 @@ GO.LinkBrowser = function(config){
 		minWidth:300,
 		minHeight:300,
 		height:500,
-		width:750,
+		width:950,
 		border:false,
 		plain:true,
 		maximizable:true,
 		collapsible:true,
 		closeAction:'hide',
 		title:GO.lang.cmdBrowseLinks,
-		items: this.linksPanel,
-		buttons: [
-			/*{
-				text: GO.lang['cmdOk'],
-				handler: function(){							
-					this.linkItems();
-				},
-				scope:this
-			},*/
-			{
-				text: GO.lang['cmdClose'],
-				handler: function(){this.hide();},
-				scope: this
-			}
-		]
+		items: this.linksPanel
     });
     
    this.addEvents({'link' : true});

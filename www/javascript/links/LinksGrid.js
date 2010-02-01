@@ -56,7 +56,7 @@ GO.grid.LinksGrid = function(config){
 	{
 		this.searchField = new GO.form.SearchField({
 								store: config.store,
-								width:320
+								width:240
 						  });
 	
 	config['tbar']=[
@@ -106,6 +106,15 @@ GO.grid.LinksGrid = function(config){
 	//config.autoExpandColumn=1;	
 	
 	config.paging=true;
+
+	config.bbar = new Ext.PagingToolbar({
+			cls: 'go-paging-tb',
+			store: config.store,
+			pageSize: parseInt(GO.settings['max_rows_list']),
+			displayInfo: true,
+			displayMsg: GO.lang.displayingItemsShort,
+			emptyMsg: GO.lang['strNoItems']
+		});
 	      
 	config['layout']='fit';
 	config['view']=new Ext.grid.GridView({

@@ -283,6 +283,29 @@ GO.grid.EditorGridPanel = function(config)
   }
 
 	GO.grid.EditorGridPanel.superclass.constructor.call(this, config);
+
+	this.addEvents({delayedrowselect:true});
+
+	this.on('rowclick', function(grid, rowIndex, e){
+		if(!e.ctrlKey && !e.shiftKey)
+		{
+			var record = this.getSelectionModel().getSelected();
+			this.fireEvent('delayedrowselect', this, rowIndex, record);
+		}
+		this.rowClicked=true;
+	}, this);
+
+	this.getSelectionModel().on("rowselect",function(sm, rowIndex, r){
+		if(!this.rowClicked)
+		{
+			var record = this.getSelectionModel().getSelected();
+			if(record==r)
+			{
+				this.fireEvent('delayedrowselect', this, rowIndex, r);
+			}
+		}
+		this.rowClicked=false;
+	}, this, {delay:250});
 }
 
 Ext.extend(GO.grid.EditorGridPanel, Ext.grid.EditorGridPanel, {
