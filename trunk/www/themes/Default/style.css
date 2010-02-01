@@ -1,3 +1,11 @@
+/*
+* This file contains all the Group-Office styles for elements
+* That are used by the framework and one or more modules. Don't put
+* module specific styles here. Put them in
+* modules/<modulename>/themes/Default/style.css instead.
+*/
+
+
 #msg-div {
     position:absolute;
     left:35%;
@@ -959,5 +967,7 @@ table.display-panel a:active
 	background:transparent none ! important;
 	float:left;
 }
+
+/* javascript/plugins/Ext.ux.HtmlEditor */
 
 /* eof */

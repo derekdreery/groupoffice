@@ -1,3 +1,8 @@
+/*
+* This file contains all the overrides for the ExtJS library.
+* Don't modify this file unless you are overriding styles from the ExtJS library
+*/
+
 .ext-el-mask{z-index:8000;} /*set it lower for windows to be on top */
 
 .ext-el-mask-msg{background:#d1d8db url(images/extjs/box/tb.gif) repeat-x 0 -16px !important;border: 1px solid #9c9f9d !important;}
