@@ -312,3 +312,5 @@ GO.lang.permissionDelete='Schrijven en verwijderen';
 GO.lang.permissionManage='Beheren';
 
 GO.lang.age='Leeftijd';
+
+GO.lang.selectFolder = 'Selecteer een map a.u.b.';

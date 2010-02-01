@@ -208,12 +208,13 @@ try{
 			$fromLinks = json_decode(($_POST['fromLinks']),true);
 			$toLinks = json_decode(($_POST['toLinks']),true);
 			$from_folder_id=isset($_POST['folder_id']) ? ($_POST['folder_id']) : 0;
+			$to_folder_id=isset($_POST['to_folder_id']) ? ($_POST['to_folder_id']) : 0;
 
 			foreach($fromLinks as $fromLink)
 			{
 				foreach($toLinks as $toLink)
 				{
-					$GO_LINKS->add_link($fromLink['link_id'], $fromLink['link_type'], $toLink['link_id'], $toLink['link_type'],$from_folder_id, $_POST['description'], $_POST['description']);
+					$GO_LINKS->add_link($fromLink['link_id'], $fromLink['link_type'], $toLink['link_id'], $toLink['link_type'],$from_folder_id, $to_folder_id, $_POST['description'], $_POST['description']);
 				}
 			}
 
