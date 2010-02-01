@@ -3,10 +3,10 @@
 if(isset($argv[1]))
 	define('CONFIG_FILE', $argv[1]);
 
-require('/etc/groupoffice/servermanager.inc.php');
-require_once('/etc/groupoffice/config.php');
+//require('/etc/groupoffice/servermanager.inc.php');
+//require_once('/etc/groupoffice/config.php');
 
-require($config['root_path'].'Group-Office.php');
+require('/usr/share/groupoffice/Group-Office.php');
 
 
 if(!isset($GO_MODULES->modules['serverclient'])) {
