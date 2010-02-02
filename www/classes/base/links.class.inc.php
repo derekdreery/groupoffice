@@ -36,6 +36,8 @@
  * 12=tasks
  * 13=installation
  * 14=Project reports
+ * 15=Custom database
+ * 20=Tickets
  * 
  * @author Merijn Schering <mschering@intermesh.nl>
  * @version $Id$

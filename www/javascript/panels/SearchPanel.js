@@ -152,7 +152,7 @@ GO.grid.SearchPanel = function(config){
 			}*/
 		}, this);
 
-		this.linkPreviewPanels[0]=new Ext.Panel({
+		this.linkPreviewPanels["search_pp_0"]=new Ext.Panel({
 			bodyStyle:'padding:5px'
 		});
 
@@ -162,7 +162,7 @@ GO.grid.SearchPanel = function(config){
 			width:420,
 			split:true,
 			layout:'card',
-			items:[this.linkPreviewPanels[0]]
+			items:[this.linkPreviewPanels["search_pp_0"]]
 		});
 
 		config.items.push(this.previewPanel);

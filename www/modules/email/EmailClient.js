@@ -1750,6 +1750,9 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 	},
 	border:false,
 	autoScroll:true,
+	editHandler : function(){
+		//needed because it needs to be compatible with javascript/DisplayPanel.js
+	},
 	load : function(id){
 		
 		this.el.mask(GO.lang.strWaitMsgLoad);

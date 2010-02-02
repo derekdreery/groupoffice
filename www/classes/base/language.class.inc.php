@@ -242,9 +242,9 @@ class GO_LANGUAGE extends db {
 
 	function get_address_format_by_iso($iso)
 	{
-		$sql = "SELECT * FROM go_iso_address_format WHERE `iso`='$iso'";
+		$sql = "SELECT i.*,f.format FROM go_iso_address_format i INNER JOIN go_address_format f ON f.id=i.address_format_id WHERE `iso`='$iso'";
 		$this->query($sql);
-		return $this->num_rows();
+		return $this->next_record();
 	}
 
 	function get_address_format($id)
