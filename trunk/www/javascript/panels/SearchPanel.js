@@ -18,13 +18,16 @@ GO.grid.SearchPanel = function(config){
 	if(!this.query)
 	{
 		this.query='';
-	}	
+	}
+
+	if(!config.id){
+		config.id=Ext.id();
+	}
 	
 	config.border=false;
 	if(!config.noTitle)
-  	config.title=GO.lang['strSearch']+': "'+Ext.util.Format.htmlEncode(this.query)+'"';
+		config.title=GO.lang['strSearch']+': "'+Ext.util.Format.htmlEncode(this.query)+'"';
   	
-	config.closable=true;
 	config.iconCls='go-search-icon-tab';
 	config.layout='border';
 
@@ -45,7 +48,13 @@ GO.grid.SearchPanel = function(config){
 	
 	this.store = new GO.data.JsonStore({
 		url: BaseHref+'json.php',			
-		baseParams: {task: "links", link_id: this.link_id, link_type: this.link_type, folder_id: this.folder_id, type_filter:'true'},
+		baseParams: {
+			task: "links",
+			link_id: this.link_id,
+			link_type: this.link_type,
+			folder_id: this.folder_id,
+			type_filter:'true'
+		},
 		root: 'results',
 		totalProperty: 'total',
 		id: 'link_and_type',
@@ -56,44 +65,44 @@ GO.grid.SearchPanel = function(config){
 	this.searchField = new GO.form.SearchField({
 		store: this.store,
 		width:320
-  });
+	});
 	
-  var gridConfig = {
+	var gridConfig = {
 		border:true,
 		region:'center',
 		tbar:[
-	    GO.lang['strSearch']+': ', ' ',this.searchField,
-	    '-',{
-				iconCls: 'btn-delete',
-				text: GO.lang['cmdDelete'],
-				cls: 'x-btn-text-icon',
-				handler: function(){
-					this.searchGrid.deleteSelected();
-				},
-				scope: this
-			}],
+		GO.lang['strSearch']+': ', ' ',this.searchField,
+		'-',{
+			iconCls: 'btn-delete',
+			text: GO.lang['cmdDelete'],
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				this.searchGrid.deleteSelected();
+			},
+			scope: this
+		}],
 		store:this.store,
 		columns:[{
-				id:'name',
-	      header: GO.lang['strName'],
-				dataIndex: 'name',
-				css: 'white-space:normal;',
-				sortable: true,
-				renderer:function(v, meta, record){
-					return '<div class="go-grid-icon '+record.data.iconCls+'">'+v+'</div>';
-				}
-	    },{
-		    header: GO.lang['strType'],
-				dataIndex: 'type',
-		    sortable:true,
-		    width:100
-	   	},{
-	      header: GO.lang['strMtime'],
-				dataIndex: 'mtime',
-	      sortable:true,
-	      width:100
-	    }],
-	 	autoExpandMax:2500,
+			id:'name',
+			header: GO.lang['strName'],
+			dataIndex: 'name',
+			css: 'white-space:normal;',
+			sortable: true,
+			renderer:function(v, meta, record){
+				return '<div class="go-grid-icon '+record.data.iconCls+'">'+v+'</div>';
+			}
+		},{
+			header: GO.lang['strType'],
+			dataIndex: 'type',
+			sortable:true,
+			width:100
+		},{
+			header: GO.lang['strMtime'],
+			dataIndex: 'mtime',
+			sortable:true,
+			width:100
+		}],
+		autoExpandMax:2500,
 		autoExpandColumn:'name',
 		paging:true,
 		layout:'fit',
@@ -102,30 +111,34 @@ GO.grid.SearchPanel = function(config){
 			showPreview:true,			
 			emptyText:GO.lang.strNoItems,	
 			getRowClass : function(record, rowIndex, p, store){
-		    if(this.showPreview && record.data.description.length){
-		        p.body = '<div class="go-links-panel-description">'+record.data.description+'</div>';
-		        return 'x-grid3-row-expanded';
-		    }
-		    return 'x-grid3-row-collapsed';
+				if(this.showPreview && record.data.description.length){
+					p.body = '<div class="go-links-panel-description">'+record.data.description+'</div>';
+					return 'x-grid3-row-expanded';
+				}
+				return 'x-grid3-row-collapsed';
 			}
 		}),
-		loadMask:{msg: GO.lang['waitMsgLoad']},
+		loadMask:{
+			msg: GO.lang['waitMsgLoad']
+			},
 		sm:new Ext.grid.RowSelectionModel({})
 	};
 	
-		this.searchGrid = new GO.grid.GridPanel(gridConfig);
+	this.searchGrid = new GO.grid.GridPanel(gridConfig);
 	
 	this.searchGrid.store.setDefaultSort('mtime', 'desc');
 	if(!config.noTitle)
 	{
 		this.searchGrid.store.on('load', function(){
-	  	this.setTitle(GO.lang['strSearch']+': "'+Ext.util.Format.htmlEncode(this.searchGrid.store.baseParams.query)+'"');
-	  	}, this);
+			this.setTitle(GO.lang['strSearch']+': "'+Ext.util.Format.htmlEncode(this.searchGrid.store.baseParams.query)+'"');
+		}, this);
 	}
+
+	config.items=[this.filterPanel, this.searchGrid];
  
 	if(!config.noOpenLinks)
 	{
-	  this.searchGrid.on('rowdblclick', function(grid, rowClicked, e) {
+		this.searchGrid.on('rowdblclick', function(grid, rowClicked, e) {
 	
 			var selectionModel = grid.getSelectionModel();
 			var record = selectionModel.getSelected();
@@ -138,8 +151,26 @@ GO.grid.SearchPanel = function(config){
 				Ext.Msg.alert(GO.lang['strError'], 'No handler definded for link type: '+record.data.link_type);
 			}
 		}, this);
+
+		this.linkPreviewPanels[0]=new Ext.Panel({
+			bodyStyle:'padding:5px'
+		});
+
+		this.previewPanel = new Ext.Panel({
+			id: config.id+'_preview',
+			region:'east',
+			width:420,
+			split:true,
+			layout:'card',
+			items:[this.linkPreviewPanels[0]]
+		});
+
+		config.items.push(this.previewPanel);
+
+		this.searchGrid.on("delayedrowselect", this.rowClicked, this);
+
 	}
-  config.items=[this.filterPanel, this.searchGrid];
+	
 
 	if(config.noOpenLinks)
 	{
@@ -159,11 +190,34 @@ GO.grid.SearchPanel = function(config){
 
 
 		
-  GO.grid.SearchPanel.superclass.constructor.call(this, config);
+	GO.grid.SearchPanel.superclass.constructor.call(this, config);
 }
 
 Ext.extend(GO.grid.SearchPanel, Ext.Panel, {
 
+	linkPreviewPanels : [],
+	
+	rowClicked : function(grid, rowClicked, record){
+
+		this.previewPanel.getLayout().setActiveItem(0);
+
+		var panelId = 'link_pp_'+record.data.link_type;
+
+		if(record.data.link_type!='folder'){
+
+			if(!GO.linkPreviewPanels[record.data.link_type]){
+				this.linkPreviewPanels[0].body.update('Sorry, the preview of this type not implemented yet.');
+			}else
+			{
+				if(!this.linkPreviewPanels[record.data.link_type]){
+					this.linkPreviewPanels[record.data.link_type] = GO.linkPreviewPanels[record.data.link_type].call(this, {id:panelId});
+					this.previewPanel.add(this.linkPreviewPanels[record.data.link_type]);
+				}
+				this.previewPanel.getLayout().setActiveItem(panelId);
+				this.linkPreviewPanels[record.data.link_type].load(record.data.id);
+			}
+		}
+	},
 	
 	afterRender : function()
 	{
@@ -183,7 +237,7 @@ Ext.extend(GO.grid.SearchPanel, Ext.Panel, {
 		}else
 		{		
 			this.searchField.setValue(this.query);
-	  	this.searchGrid.store.baseParams.query=this.query;
+			this.searchGrid.store.baseParams.query=this.query;
 			this.searchGrid.store.load();
 		}
 	},	

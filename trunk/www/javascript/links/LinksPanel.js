@@ -116,30 +116,7 @@ GO.grid.LinksPanel = function(config){
 		id: config.id+'_grid',
 		deleteConfig:{
 				scope:this,
-				success:this.onDelete/*function(deleteConfig){
-				  var activeNode = this.linksTree.getNodeById('lt-folder-'+this.folder_id);
-				  if(activeNode)
-				  {
-				  	activeNode.reload();
-				  }else
-				  {
-				  	this.linksTree.getRootNode().reload();
-				  }
-
-					var link_types = [];
-					var keys = deleteConfig.params.delete_keys;
-					for(var i=0;i<keys.length;i++){
-						var key = keys[i];
-						var arr = key.split(':');
-						if(!link_types[arr[0]])
-						{
-							link_types[arr[0]]=[];
-						}
-						link_types[arr[0]].push(arr[1]);
-					}
-
-					GO.mainLayout.fireEvent('linksDeleted', deleteConfig, link_types);
-				}*/
+				success:this.onDelete
 			}
 	});
 
@@ -467,9 +444,6 @@ Ext.extend(GO.grid.LinksPanel, Ext.Panel, {
 	},
 
 	rowClicked : function(grid, rowClicked, record){
-		
-		//this.linkPreviewPanels[0].show();
-
 		this.previewPanel.getLayout().setActiveItem(0);
 
 		var panelId = 'link_pp_'+record.data.link_type;
