@@ -935,8 +935,8 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 
 							this.fileBrowserWindow = new Ext.Window({
 								title : GO.lang.strSelectFiles,
-								height : 480,
-								width : 680,
+								height : 450,
+								width : 750,
 								layout : 'fit',
 								border : false,
 								closeAction : 'hide',

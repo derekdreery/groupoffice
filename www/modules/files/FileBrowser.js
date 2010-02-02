@@ -1530,7 +1530,7 @@ GO.files.openFolder = function(id, folder_id)
 		
 			title: GO.files.lang.fileBrowser,
 			height:500,
-			width:900,
+			width:750,
 			layout:'fit',
 			border:false,
 			maximizable:true,
