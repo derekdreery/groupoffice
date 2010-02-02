@@ -218,6 +218,55 @@ try {
 
 			break;*/
 
+		case 'event_with_items':
+			require_once($GO_CONFIG->class_path.'ical2array.class.inc');
+			require_once($GO_CONFIG->class_path.'Date.class.inc.php');
+
+			$event = $cal->get_event($_REQUEST['event_id']);
+			if(!$event) {
+				throw new DatabaseSelectException();
+			}
+			$calendar = $cal->get_calendar($event['calendar_id']);
+
+			$response['data']['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id']);
+			$response['data']['write_permission']=$response['data']['permission_level']>1;
+			if(!$response['data']['permission_level'] ||
+							($event['private']=='1' && $event['user_id']!=$GO_SECURITY->user_id)) {
+				throw new AccessDeniedException();
+			}
+
+			$response['data']=array_merge($response['data'], $event);
+			$response['data']['html_event']=$cal->event_to_html($event);
+
+			require_once($GO_CONFIG->class_path.'/base/search.class.inc.php');
+			$search = new search();
+
+			$links_json = $search->get_latest_links_json($GO_SECURITY->user_id, $response['data']['id'], 1);
+			$response['data']['links']=$links_json['results'];
+
+			if(isset($GO_MODULES->modules['files'])) {
+				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+				$files = new files();
+				$response['data']['files']=$files->get_content_json($response['data']['files_folder_id']);
+			}else {
+				$response['data']['files']=array();
+			}
+
+			if(isset($GO_MODULES->modules['comments'])) {
+				require_once ($GO_MODULES->modules['comments']['class_path'].'comments.class.inc.php');
+				$comments = new comments();
+
+				$response['data']['comments']=$comments->get_comments_json($response['data']['id'], 1);
+			}
+			if(isset($GO_MODULES->modules['customfields'])) {
+				require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+				$cf = new customfields();
+				$values = $cf->get_values($GO_SECURITY->user_id, 1, $response['data']['id']);
+				$response['data']=array_merge($response['data'], $values);
+			}
+
+			break;
+
 
 		case 'event':
 
@@ -1215,28 +1264,3 @@ catch(Exception $e) {
         $response['success']=false;
 }
 echo json_encode($response);
-
-function randHex() {
-	$x = rand(8,15);
-	switch ($x) {
-		case '10':
-			$x = 'A';
-			break;
-		case '11':
-			$x = 'B';
-			break;
-		case '12':
-			$x = 'C';
-			break;
-		case '13':
-			$x = 'D';
-			break;
-		case '14':
-			$x = 'E';
-			break;
-		case '15':
-			$x = 'F';
-			break;
-	}
-	return $x;
-}

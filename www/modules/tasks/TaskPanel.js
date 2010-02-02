@@ -27,8 +27,7 @@ GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
 	
 	initComponent : function(){
 	
-		this.template = 
-			'<div>'+
+		this.template = 			
 				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+
 					'<tr>'+
 						'<td colspan="2" class="display-panel-heading">{name}</td>'+
@@ -73,9 +72,9 @@ GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
 		}
 		
 		GO.tasks.TaskPanel.superclass.initComponent.call(this);
-	},
+	}
 	
-	loadTask : function(task_id)
+	/*loadTask : function(task_id)
 	{
 		this.body.mask(GO.lang.waitMsgLoad);
 		Ext.Ajax.request({
@@ -97,6 +96,7 @@ GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
 				}				
 			},
 			scope: this			
-		});		
-	}	
+		});
+	}	 */
+	
 });			
