@@ -56,6 +56,35 @@ try{
 			$user['middle_name']=$_POST['middle_name'];
 			$user['last_name']=$_POST['last_name'];
 			
+			$user['title'] = isset($_POST["title"]);
+			$user['initials'] = isset($_POST["initials"]);
+			$user['sex'] = isset($_POST["sex"]);
+			$user['birthday'] = isset($_POST['birthday']) ? Date::to_db_date($_POST['birthday']) : '';
+			$user['address'] = isset($_POST["address"]) ? $_POST["address"] : '';
+			$user['address_no'] = isset($_POST["address_no"]) ? $_POST["address_no"] : '';
+			$user['zip'] = isset($_POST["zip"]) ? $_POST["zip"] : '';
+			$user['city'] = isset($_POST["city"]) ? $_POST["city"] : '';
+			$user['state'] = isset($_POST["state"]) ? $_POST["state"] : '';
+			$user['country'] = isset($_POST["country"]) ? $_POST["country"] : '';
+
+			$user['email'] = isset($_POST["email"]) ? $_POST["email"] : '';
+			$user['home_phone'] = isset($_POST["home_phone"]) ? $_POST["home_phone"] : '';
+			$user['fax'] = isset($_POST["fax"]) ? $_POST["fax"] : '';
+			$user['cellular'] = isset($_POST["cellular"]) ? $_POST["cellular"] : '';
+			
+			$user['company'] = isset($_POST["company"]) ? $_POST["company"] : '';
+			$user['department'] = isset($_POST["department"]) ? $_POST["department"] : '';
+			$user['function'] = isset($_POST["function"]) ? $_POST["function"] : '';
+			$user['work_address'] = isset($_POST["work_address"]) ? $_POST["work_address"] : '';
+			$user['work_address_no'] = isset($_POST["work_address_no"]) ? $_POST["work_address_no"] : '';
+			$user['work_zip'] = isset($_POST["work_zip"]) ? $_POST["work_zip"] : '';
+			$user['work_city'] = isset($_POST["work_city"]) ? $_POST["work_city"] : '';
+			$user['work_state'] = isset($_POST["work_state"]) ? $_POST["work_state"] : '';
+			$user['work_country'] = isset($_POST["work_country"]) ? $_POST["work_country"] : '';
+			$user['work_phone'] = isset($_POST["work_phone"]) ? $_POST["work_phone"] : '';
+			$user['work_fax'] = isset($_POST["work_fax"]) ? $_POST["work_fax"] : '';
+			$user['homepage'] = isset($_POST["homepage"]) ? $_POST["homepage"] : '';
+
 			$GO_USERS->update_profile($user, true);
 			
 			$response['success']=true;
