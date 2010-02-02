@@ -1523,20 +1523,20 @@ GO.files.openFolder = function(id, folder_id)
 	{	
 		GO.files.fileBrowser=new GO.files.FileBrowser({
 				border:false,
-				treeRootVisible:true,
-				treeCollapsed:true
+				treeRootVisible:true/*,
+				treeCollapsed:true*/
 			});			        			
 		GO.files.fileBrowserWin = new Ext.Window({
 		
 			title: GO.files.lang.fileBrowser,
 			height:500,
-			width:740,
+			width:900,
 			layout:'fit',
 			border:false,
 			maximizable:true,
 			collapsible:true,
 			closeAction:'hide',
-			items: GO.files.fileBrowser,
+			items: GO.files.fileBrowser/*,
 			buttons:[
 				{
 					text: GO.lang['cmdClose'],				        						
@@ -1545,7 +1545,7 @@ GO.files.openFolder = function(id, folder_id)
 					},
 					scope:this
 				}				
-			]							        				
+			]*/
 		});		
 	}
 	GO.files.fileBrowser.setRootID(id, folder_id);
