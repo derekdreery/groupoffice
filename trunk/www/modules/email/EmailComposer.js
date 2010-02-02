@@ -71,7 +71,7 @@ GO.email.EmailComposer = function(config) {
 					delete v.textbody;
 					
 					if(!this.showConfig.values) this.showConfig.values={};
-						Ext.apply(this.showConfig.values, v);
+					Ext.apply(this.showConfig.values, v);
 
 					
 					delete this.showConfig.move;
@@ -160,13 +160,13 @@ GO.email.EmailComposer = function(config) {
 
 
 	var spellcheckInsertPlugin = new GO.plugins.HtmlEditorSpellCheck(this);
-        var wordPastePlugin = new Ext.ux.form.HtmlEditor.Word();
-        var dividePlugin = new Ext.ux.form.HtmlEditor.Divider();
-        var tablePlugin = new Ext.ux.form.HtmlEditor.Table();
-        var hrPlugin = new Ext.ux.form.HtmlEditor.HR();
-        var ioDentPlugin = new Ext.ux.form.HtmlEditor.IndentOutdent();
-	var ssScriptPlugin = new Ext.ux.form.HtmlEditor.SubSuperScript();
-        var rmFormatPlugin = new Ext.ux.form.HtmlEditor.RemoveFormat();
+	var wordPastePlugin = new Ext.ux.form.HtmlEditor.Word();
+	//var dividePlugin = new Ext.ux.form.HtmlEditor.Divider();
+	//var tablePlugin = new Ext.ux.form.HtmlEditor.Table();
+	var hrPlugin = new Ext.ux.form.HtmlEditor.HR();
+	var ioDentPlugin = new Ext.ux.form.HtmlEditor.IndentOutdent();
+	//var ssScriptPlugin = new Ext.ux.form.HtmlEditor.SubSuperScript();
+	var rmFormatPlugin = new Ext.ux.form.HtmlEditor.RemoveFormat();
 
 	var items = [
 	this.fromCombo = new Ext.form.ComboBox({
@@ -294,11 +294,16 @@ GO.email.EmailComposer = function(config) {
 		anchor : '100%'
 	}));
 
-        var plugins = [imageInsertPlugin,spellcheckInsertPlugin,
-                    wordPastePlugin, 
-                    hrPlugin,ioDentPlugin,ssScriptPlugin,rmFormatPlugin];
-        if (Ext.version!='2.3.0')
-            plugins.push(tablePlugin);
+	var plugins = [
+		imageInsertPlugin,spellcheckInsertPlugin,
+		wordPastePlugin,
+		hrPlugin,
+		ioDentPlugin,
+		rmFormatPlugin
+	];
+	
+	//if (Ext.version!='2.3.0')
+		//plugins.push(tablePlugin);
 
 	items.push(this.htmlEditor = new Ext.form.HtmlEditor({
 		hideLabel : true,
@@ -499,7 +504,7 @@ GO.email.EmailComposer = function(config) {
 
 	GO.email.EmailComposer.superclass.constructor.call(this, {
 		title : GO.email.lang.composeEmail,
-		width : 800,
+		width : 750,
 		height : 500,
 		minWidth : 300,
 		minHeight : 200,
