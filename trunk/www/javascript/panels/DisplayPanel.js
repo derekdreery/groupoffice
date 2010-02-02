@@ -25,6 +25,8 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 	data : {},
 	
 	saveHandlerAdded : false,
+
+	noFileBrowser : false,
 	
 	
 	addSaveHandler : function(win)
@@ -62,7 +64,7 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 			scope: this
 		}));
 		
-		if(GO.files)
+		if(GO.files && !this.noFileBrowser)
 		{
 			tbar.push(this.fileBrowseButton = new Ext.Button({
 				iconCls: 'btn-files',
