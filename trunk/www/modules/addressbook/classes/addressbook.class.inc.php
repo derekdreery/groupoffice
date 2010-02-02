@@ -47,6 +47,9 @@ class addressbook extends db {
 			}
 			flush();
 
+			$files->check_share('contacts', 1, $GO_MODULES->modules['addressbook']['acl_id'], false);
+			$files->check_share('companies', 1, $GO_MODULES->modules['addressbook']['acl_id'], false);
+
 			$db->query("SELECT c.*,a.name AS addressbook_name,a.acl_id FROM ab_contacts c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id");
 			while($contact = $db->next_record()) {
 				try {
