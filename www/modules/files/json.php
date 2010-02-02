@@ -766,109 +766,127 @@ try{
 					break;
 
 
-                case 'versions':
+				case 'versions':
 
-                    $path = $files->get_versions_dir($_POST['file_id']);
+					$path = $files->get_versions_dir($_POST['file_id']);
 
-                    $fs = new filesystem();
-                    $fs_files = $fs->get_files($path);
+					$fs = new filesystem();
+					$fs_files = $fs->get_files($path);
 
-                    $response['results']=array();
-                    $response['total']=count($fs_files);
-                    while($file=array_shift($fs_files))
-                    {
-                        $extension = File::get_extension($file['name']);
-                        $file['path']=$files->strip_server_path($file['path']);
-                        $file['extension']=$extension;
-                        $file['grid_display']='<div class="go-grid-icon filetype filetype-'.$extension.'">'.$file['name'].'</div>';
-                        $file['type']=File::get_filetype_description($extension);
-                        $file['timestamp']=$file['mtime'];
-                        $file['mtime']=Date::get_timestamp($file['mtime']);
-                        $file['size']=Number::format_size($file['size']);
-                        $response['results'][]=$file;
-                    }
-
-
-                    break;
-
-											case 'folder_properties':
+					$response['results']=array();
+					$response['total']=count($fs_files);
+					while($file=array_shift($fs_files)) {
+						$extension = File::get_extension($file['name']);
+						$file['path']=$files->strip_server_path($file['path']);
+						$file['extension']=$extension;
+						$file['grid_display']='<div class="go-grid-icon filetype filetype-'.$extension.'">'.$file['name'].'</div>';
+						$file['type']=File::get_filetype_description($extension);
+						$file['timestamp']=$file['mtime'];
+						$file['mtime']=Date::get_timestamp($file['mtime']);
+						$file['size']=Number::format_size($file['size']);
+						$response['results'][]=$file;
+					}
 
 
-												$folder = $files->get_folder($_POST['folder_id']);
-												if(!$folder)
-												{
-													throw new FileNotFoundException();
-												}elseif(!$files->has_read_permission($GO_SECURITY->user_id, $folder))
-												{
-													throw new AccessDeniedException();
-												}
+					break;
 
-												$response['success']=true;
-
-												$admin = $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id);
-
-												$response['data'] = $folder;
-												$path=$files->build_path($folder);
-												$response['data']['path']=$path;
-												$response['data']['ctime']=Date::get_timestamp(filectime($GO_CONFIG->file_storage_path.$path));
-												$response['data']['mtime']=Date::get_timestamp(fileatime($GO_CONFIG->file_storage_path.$path));
-												$response['data']['atime']=Date::get_timestamp(filemtime($GO_CONFIG->file_storage_path.$path));
-
-												$response['data']['type']='<div class="go-grid-icon filetype-folder">'.$lang['files']['folder'].'</div>';
-												$response['data']['size']='-';
-
-												$response['data']['write_permission']=empty($response['data']['readonly']) && $files->has_write_permission($GO_SECURITY->user_id, $folder);
-												$response['data']['is_owner']=$admin || $files->is_owner($folder);
-
-												$usersfolder = $files->resolve_path('users');
-												$response['data']['is_home_dir']=$folder['parent_id']==$usersfolder['id'];
-												$response['data']['notify']=$files->is_notified($folder['id'], $GO_SECURITY->user_id);
-
-												$params['response']=&$response;
-												$GO_EVENTS->fire_event('load_folder_properties', $params);
-												break;
+				case 'folder_properties':
 
 
-											case 'file_properties':
+					$folder = $files->get_folder($_POST['folder_id']);
+					if(!$folder) {
+						throw new FileNotFoundException();
+					}elseif(!$files->has_read_permission($GO_SECURITY->user_id, $folder)) {
+						throw new AccessDeniedException();
+					}
 
-												$file = $files->get_file($_POST['file_id']);
-												$folder = $files->get_folder($file['folder_id']);
-												if(!$folder)
-												{
-													throw new FileNotFoundException();
-												}elseif(!$files->has_read_permission($GO_SECURITY->user_id, $folder))
-												{
-													throw new AccessDeniedException();
-												}
+					$response['success']=true;
 
-												$extension=File::get_extension($file['name']);
+					$admin = $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id);
 
-												$response['success']=true;
+					$response['data'] = $folder;
+					$path=$files->build_path($folder);
+					$response['data']['path']=$path;
+					$response['data']['ctime']=Date::get_timestamp(filectime($GO_CONFIG->file_storage_path.$path));
+					$response['data']['mtime']=Date::get_timestamp(fileatime($GO_CONFIG->file_storage_path.$path));
+					$response['data']['atime']=Date::get_timestamp(filemtime($GO_CONFIG->file_storage_path.$path));
 
-												$response['data'] = $file;
-												$path=$files->build_path($folder).'/'.$file['name'];
-												$response['data']['path']=$path;
-												$response['data']['name']=File::strip_extension($file['name']);
-												$response['data']['ctime']=Date::get_timestamp(filectime($GO_CONFIG->file_storage_path.$path));
-												$response['data']['mtime']=Date::get_timestamp(fileatime($GO_CONFIG->file_storage_path.$path));
-												$response['data']['atime']=Date::get_timestamp(filemtime($GO_CONFIG->file_storage_path.$path));
-												$response['data']['type']='<div class="go-grid-icon filetype filetype-'.$extension.'">'.File::get_filetype_description($extension).'</div>';
-												$response['data']['size']=Number::format_size($file['size']);
-												$response['data']['write_permission']=$files->has_write_permission($GO_SECURITY->user_id, $folder);
+					$response['data']['type']='<div class="go-grid-icon filetype-folder">'.$lang['files']['folder'].'</div>';
+					$response['data']['size']='-';
+
+					$response['data']['write_permission']=empty($response['data']['readonly']) && $files->has_write_permission($GO_SECURITY->user_id, $folder);
+					$response['data']['is_owner']=$admin || $files->is_owner($folder);
+
+					$usersfolder = $files->resolve_path('users');
+					$response['data']['is_home_dir']=$folder['parent_id']==$usersfolder['id'];
+					$response['data']['notify']=$files->is_notified($folder['id'], $GO_SECURITY->user_id);
+
+					$params['response']=&$response;
+					$GO_EVENTS->fire_event('load_folder_properties', $params);
+					break;
 
 
-												if(isset($GO_MODULES->modules['customfields']))
-												{
-													require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
-													$cf = new customfields();
-													$values = $cf->get_values($GO_SECURITY->user_id, 6, $response['data']['id']);
-													$response['data']=array_merge($response['data'], $values);
-												}
+				case 'file_with_items':
+				case 'file_properties':
 
-												$params['response']=&$response;
-												$GO_EVENTS->fire_event('load_file_properties', $params);
+					$file = $files->get_file($_POST['file_id']);
+					$folder = $files->get_folder($file['folder_id']);
+					if(!$folder) {
+						throw new FileNotFoundException();
+					}elseif(!$files->has_read_permission($GO_SECURITY->user_id, $folder)) {
+						throw new AccessDeniedException();
+					}
 
-												break;
+					$extension=File::get_extension($file['name']);
+
+					$response['success']=true;
+
+					$response['data'] = $file;
+					$path=$files->build_path($folder).'/'.$file['name'];
+					$response['data']['path']=$path;
+					$response['data']['name']=File::strip_extension($file['name']);
+					$response['data']['ctime']=Date::get_timestamp(filectime($GO_CONFIG->file_storage_path.$path));
+					$response['data']['mtime']=Date::get_timestamp(fileatime($GO_CONFIG->file_storage_path.$path));
+					$response['data']['atime']=Date::get_timestamp(filemtime($GO_CONFIG->file_storage_path.$path));
+					$response['data']['type']='<div class="go-grid-icon filetype filetype-'.$extension.'">'.File::get_filetype_description($extension).'</div>';
+					$response['data']['size']=Number::format_size($file['size']);
+					$response['data']['write_permission']=$files->has_write_permission($GO_SECURITY->user_id, $folder);
+
+					if($task == 'file_properties') {
+						if(isset($GO_MODULES->modules['customfields'])) {
+							require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+							$cf = new customfields();
+							$values = $cf->get_values($GO_SECURITY->user_id, 6, $response['data']['id']);
+							$response['data']=array_merge($response['data'], $values);
+						}
+					}else {
+
+						$response['data']['comment']=$response['data']['comments'];
+
+						if($GO_MODULES->has_module('customfields')) {
+							require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+							$cf = new customfields();
+							$response['data']['customfields']=$cf->get_all_fields_with_values($GO_SECURITY->user_id, 6, $response['data']['id']);
+						}
+
+						if($GO_MODULES->has_module('comments')) {
+							require_once ($GO_MODULES->modules['comments']['class_path'].'comments.class.inc.php');
+							$comments = new comments();
+
+							$response['data']['comments']=$comments->get_comments_json($response['data']['id'], 6);
+						}
+						require_once($GO_CONFIG->class_path.'/base/search.class.inc.php');
+						$search = new search();
+
+						$links_json = $search->get_latest_links_json($GO_SECURITY->user_id, $response['data']['id'], 6);
+
+						$response['data']['links']=$links_json['results'];						
+					}
+
+					$params['response']=&$response;
+					$GO_EVENTS->fire_event('load_file_properties', $params);
+
+					break;
 
 											case 'templates':
 												if(isset($_POST['delete_keys']))

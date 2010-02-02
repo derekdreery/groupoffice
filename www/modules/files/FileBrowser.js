@@ -1598,6 +1598,10 @@ GO.files.createSelectFileBrowser = function(){
 GO.linkHandlers[6]=function(id, record){
 	GO.files.filePropertiesDialog.show(id+"");
 }
+GO.linkPreviewPanels[6]=function(config){
+	config = config || {};
+	return new GO.files.FilePanel(config);
+}
 
 
 
