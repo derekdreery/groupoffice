@@ -13,7 +13,7 @@
  */
  
 require_once("../../Group-Office.php");
-$GO_SECURITY->json_authenticate('users');
+$GO_SECURITY->json_authenticate();
 
 $sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'username';
 $dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'ASC';
@@ -34,6 +34,11 @@ switch($task)
 		
 		$response['success'] = false;
 		$response['data'] = $GO_USERS->get_user($user_id);
+
+		if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $response['data']['acl_id'])){
+			throw new AccessDeniedException();
+		}
+
 		$response['data']['write_permission']=$GO_MODULES->modules['users']['read_permission'];
 
 

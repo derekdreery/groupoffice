@@ -69,7 +69,7 @@ GO.users.UserPanel = Ext.extend(GO.DisplayPanel,{
 
 						//user DETAILS
 						'<tr>'+
-							'<td colspan="2" class="display-panel-heading">Contact info</td>'+
+							'<td colspan="2" class="display-panel-heading">'+GO.users.lang.contactInfo+'</td>'+
 						'</tr>'+
 
 						'<tr>'+
