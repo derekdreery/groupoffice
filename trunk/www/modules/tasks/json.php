@@ -164,43 +164,38 @@ try{
 				$response['data']['remind_date']=date($_SESSION['GO_SESSION']['date_format'], $response['data']['start_time']);
 				$response['data']['remind_time']=date($_SESSION['GO_SESSION']['time_format'], 28800);
 			}
-
-			if($_task!='task')
-			{
+			
+			if($_task!='task') {
 				$response['data']['description']=String::text_to_html($response['data']['description']);
 
 				require_once($GO_CONFIG->class_path.'/base/search.class.inc.php');
 				$search = new search();
-					
+
 				$links_json = $search->get_latest_links_json($GO_SECURITY->user_id, $response['data']['id'], 12);
 				$response['data']['links']=$links_json['results'];
 
-				if(isset($GO_MODULES->modules['files']))
-				{
+				if(isset($GO_MODULES->modules['files'])) {
 					require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 					$files = new files();
 					$response['data']['files']=$files->get_content_json($response['data']['files_folder_id']);
-				}else
-				{
+				}else {
 					$response['data']['files']=array();
 				}
 
-				if(isset($GO_MODULES->modules['comments']))
-				{
+				if(isset($GO_MODULES->modules['comments'])) {
 					require_once ($GO_MODULES->modules['comments']['class_path'].'comments.class.inc.php');
 					$comments = new comments();
 
 					$response['data']['comments']=$comments->get_comments_json($response['data']['id'], 12);
-				}                                
+				}
 			}
 
-                        if(isset($GO_MODULES->modules['customfields']))
-                        {
-                                require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
-                                $cf = new customfields();
-                                $values = $cf->get_values($GO_SECURITY->user_id, 12, $response['data']['id']);
-                                $response['data']=array_merge($response['data'], $values);
-                        }
+			if(isset($GO_MODULES->modules['customfields'])) {
+				require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+				$cf = new customfields();
+				$values = $cf->get_values($GO_SECURITY->user_id, 12, $response['data']['id']);
+				$response['data']=array_merge($response['data'], $values);
+			}
 
 			$response['success']=true;
 			break;
