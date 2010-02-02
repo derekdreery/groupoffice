@@ -13,11 +13,14 @@
  
 GO.LogoComponent = Ext.extend(Ext.BoxComponent, {
 	onRender : function(ct, position){
-		this.el = ct.createChild({tag: 'div', cls: "go-app-logo"});
+		this.el = ct.createChild({
+			tag: 'div',
+			cls: "go-app-logo"
+		});
 	}
 });
 
- /**
+/**
  * @class GO.dialog.LoginDialog
  * @extends Ext.Window
  * The Group-Office login dialog window.
@@ -43,67 +46,68 @@ GO.dialog.LoginDialog = function(config){
 	Ext.apply(this, config);
 	
 	var langCombo = new Ext.form.ComboBox({
-			fieldLabel: GO.lang.strLanguage,
-			name: 'language_text',
-			store:  new Ext.data.SimpleStore({
-					fields: ['id', 'language'],
-					data : GO.Languages
-				}),
-			anchor:'100%',
-			hiddenName: 'language',
-			displayField:'language',
-			valueField: 'id',			
-			mode:'local',
-			triggerAction:'all',			
-			forceSelection: true,
-			editable: false,
-			value: GO.settings.language
-		});
+		fieldLabel: GO.lang.strLanguage,
+		name: 'language_text',
+		store:  new Ext.data.SimpleStore({
+			fields: ['id', 'language'],
+			data : GO.Languages
+		}),
+		anchor:'100%',
+		hiddenName: 'language',
+		displayField:'language',
+		valueField: 'id',
+		mode:'local',
+		triggerAction:'all',
+		forceSelection: true,
+		editable: false,
+		value: GO.settings.language
+	});
 		
 	langCombo.on('select', function(){
 		document.location=BaseHref+'index.php?SET_LANGUAGE='+langCombo.getValue();
 	}, this);
 	
 	this.formPanel = new Ext.FormPanel({
-        labelWidth: 120, // label settings here cascade unless overridden
-        url:'action.php',        
-        defaultType: 'textfield',
-        autoHeight:true,
-        waitMsgTarget:true,
-        //cls:'go-form-panel',
+		labelWidth: 120, // label settings here cascade unless overridden
+		url:'action.php',
+		defaultType: 'textfield',
+		autoHeight:true,
+		waitMsgTarget:true,
+		//cls:'go-form-panel',
         
-        bodyStyle:'padding:5px 10px 5px 10px',
-        items: [new GO.LogoComponent(),
-        		langCombo,
-        		{
-                fieldLabel: GO.lang.strUsername,
-                name: 'username',
-                allowBlank:false,
-                anchor:'100%'
-            },{
-                fieldLabel: GO.lang.strPassword,
-                name: 'password',
-                inputType: 'password',
-                allowBlank:false,
-                anchor:'100%'
-            },{
-            	xtype: 'checkbox',
-            	hideLabel:true,
-            	boxLabel: GO.lang.remindPassword,
-            	name:'remind'
-            },this.fullscreenField = new Ext.form.Checkbox({            	
-            	hideLabel:true,
-            	boxLabel: GO.lang.fullscreen,
-            	checked:GO.fullscreen,
-            	name:'fullscreen'})
-            ]
-		});
+		bodyStyle:'padding:5px 10px 5px 10px',
+		items: [new GO.LogoComponent(),
+		langCombo,
+		{
+			fieldLabel: GO.lang.strUsername,
+			name: 'username',
+			allowBlank:false,
+			anchor:'100%'
+		},{
+			fieldLabel: GO.lang.strPassword,
+			name: 'password',
+			inputType: 'password',
+			allowBlank:false,
+			anchor:'100%'
+		},{
+			xtype: 'checkbox',
+			hideLabel:true,
+			boxLabel: GO.lang.remindPassword,
+			name:'remind'
+		},this.fullscreenField = new Ext.form.Checkbox({
+			hideLabel:true,
+			boxLabel: GO.lang.fullscreen,
+			checked:GO.fullscreen,
+			name:'fullscreen'
+		})
+		]
+	});
 
 	
 	//var logo = Ext.getBody().createChild({tag: 'div', cls: 'go-app-logo'});
 	
 	GO.dialog.LoginDialog.superclass.constructor.call(this, {
-    layout: 'fit',
+		layout: 'fit',
 		
 		autoHeight:true,
 		width:400,
@@ -112,67 +116,69 @@ GO.dialog.LoginDialog = function(config){
 		title:GO.lang['strLogin'],
 		closable: false,
 		focus: function(){
- 		    this.formPanel.form.findField('username').focus(true);
+			this.formPanel.form.findField('username').focus(true);
 		}.createDelegate(this),
 
 		items: [
 			
-			this.formPanel
+		this.formPanel
 		],
 		
 		buttons: [
-			{				
-				text: GO.lang.lostPassword,
-				handler: function(){
+		{
+			text: GO.lang.lostPassword,
+			handler: function(){
 					
-					// Prompt for user data and process the result using a callback:
-					Ext.Msg.prompt(GO.lang.lostPassword, GO.lang.lostPasswordText, function(btn, text){
-					    if (btn == 'ok'){
+				// Prompt for user data and process the result using a callback:
+				Ext.Msg.prompt(GO.lang.lostPassword, GO.lang.lostPasswordText, function(btn, text){
+					if (btn == 'ok'){
 					        
-					        Ext.Ajax.request({
-					        	url:'action.php',
-					        	params:{
-					        		task:'lost_password',
-					        		email:text
-					        	},
-					        	callback: function(options, success, response)
-										{						
-											if(!success)
-											{
-												Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
-											}else
-											{
-												var responseParams = Ext.decode(response.responseText);
-												if(!responseParams.success)
-												{
-													Ext.MessageBox.alert(GO.lang['strError'], responseParams.feedback);
-												}else
-												{
-													Ext.MessageBox.alert(GO.lang['strSuccess'], responseParams.feedback);
-												}
-											}
-										}				
-									});					        
-					    }
-					})
+						Ext.Ajax.request({
+							url:'action.php',
+							params:{
+								task:'lost_password',
+								email:text
+							},
+							callback: function(options, success, response)
+							{
+								if(!success)
+								{
+									Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
+								}else
+								{
+									var responseParams = Ext.decode(response.responseText);
+									if(!responseParams.success)
+									{
+										Ext.MessageBox.alert(GO.lang['strError'], responseParams.feedback);
+									}else
+									{
+										Ext.MessageBox.alert(GO.lang['strSuccess'], responseParams.feedback);
+									}
+								}
+							}
+						});
+					}
+				})
 					
-				},
-				scope:this
 			},
-			{				
-				text: GO.lang['cmdOk'],
-				handler: this.doLogin,
-				scope:this
-			}
+			scope:this
+		},
+		{
+			text: GO.lang['cmdOk'],
+			handler: this.doLogin,
+			scope:this
+		}
 		],
 		keys: [{
-            key: Ext.EventObject.ENTER,
-            fn: this.doLogin,
-            scope:this
-        }]
-    });
+			key: Ext.EventObject.ENTER,
+			fn: this.doLogin,
+			scope:this
+		}]
+	});
     
-    this.addEvents({callbackshandled: true});
+	this.addEvents({
+		callbackshandled: true
+	});
     
 };
 
@@ -184,13 +190,18 @@ Ext.extend(GO.dialog.LoginDialog, Ext.Window, {
 	
 	addCallback : function(callback, scope)
 	{		
-		this.callbacks.push({callback: callback, scope: scope});		
+		this.callbacks.push({
+			callback: callback,
+			scope: scope
+		});
 	},
 	
 	doLogin : function(){							
 		this.formPanel.form.submit({
 			url:BaseHref+'action.php',
-			params: {'task' : 'login'},	
+			params: {
+				'task' : 'login'
+			},
 			waitMsg:GO.lang.waitMsgLoad,
 			success:function(form, action){
 
@@ -245,13 +256,18 @@ Ext.extend(GO.dialog.LoginDialog, Ext.Window, {
 	completeProfileDialog : function(){
 		
 		var formPanel = new Ext.form.FormPanel({
-	    waitMsgTarget:true,
+			waitMsgTarget:true,
 			url: BaseHref+'action.php',
 			border: false,
 			autoHeight: true,
 			cls:'go-form-panel',
-			baseParams: {task: 'complete_profile'},				
-			defaults:{xtype:'textfield',anchor:'100%'},				
+			baseParams: {
+				task: 'complete_profile'
+			},
+			defaults:{
+				xtype:'textfield',
+				anchor:'100%'
+			},
 			items:[{
 				fieldLabel: GO.lang['strFirstName'], 
 				name: 'first_name', 
@@ -271,21 +287,44 @@ Ext.extend(GO.dialog.LoginDialog, Ext.Window, {
 		var focusFirstField = function(){
 			formPanel.items.items[0].focus();
 		};
-		
+
+		this.profileFormPanel = new Ext.form.FormPanel({
+			items: new GO.users.ProfilePanel({
+				title:GO.lang.completeProfile
+				}),
+			baseParams:{
+				task:'complete_profile'
+			},
+			url:BaseHref+'action.php',
+			waitMsgTarget:true,
+			border:false
+		});
+
 		this.completeProfileDialog = new Ext.Window({
-			width: 400,
+			width: 900,
 			autoHeight:true,
-			title:GO.lang.completeProfile,
-			items:formPanel	,
+			items: this.profileFormPanel,
 			closable:false,
 			focus:focusFirstField.createDelegate(this),
 			buttons:[{
 				text: GO.lang['cmdOk'],
 				handler: function(){
-					formPanel.form.submit(
-					{						
+					this.profileFormPanel.form.submit(
+					{
 						waitMsg:GO.lang['waitMsgSave'],
-						success:function(form, action){							
+						success:function(form, action){
+							this.fireEvent('save', this);
+							if(this.profileFormPanel.onSaveSettings)
+							{
+								var func = this.profileFormPanel.onSaveSettings.createDelegate(this.profileFormPanel, [action]);
+								func.call();
+							}
+
+							if(this.reload)
+							{
+								document.location=GO.settings.config.host;
+							}
+							this.hide();
 							this.handleCallbacks();
 						},		
 						failure: function(form, action) {
