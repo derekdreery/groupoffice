@@ -94,3 +94,5 @@ GO.users.lang.lastName = 'Achternaam';
 GO.users.lang.firstName = 'Voornaam';
 
 GO.users.lang.sendInvitation='Verstuur uitnodiging';
+
+GO.users.lang.contactInfo='Contact information';
