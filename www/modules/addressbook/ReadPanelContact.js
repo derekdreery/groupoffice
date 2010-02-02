@@ -9,7 +9,7 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 	loadUrl : GO.settings.modules.addressbook.url+'json.php',
 	
 	editHandler : function(){
-		GO.addressbook.contactDialog.show(this.id);
+		GO.addressbook.contactDialog.show(this.link_id);
 		this.addSaveHandler(GO.addressbook.contactDialog);
 	},	
 	

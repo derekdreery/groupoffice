@@ -22,7 +22,7 @@ GO.{module}.{friendly_single_ucfirst}Panel = Ext.extend(GO.DisplayPanel,{
 	loadUrl : GO.settings.modules.{module}.url+'json.php',
 	
 	editHandler : function(){
-		GO.{module}.{friendly_single}Dialog.show({ {friendly_single}_id: this.data.id});
+		GO.{module}.{friendly_single}Dialog.show({ {friendly_single}_id: this.link_id});
 		this.addSaveHandler(GO.{module}.{friendly_single}Dialog);
 	},
 	
