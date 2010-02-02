@@ -1408,9 +1408,11 @@ class files extends db {
 		$path = $GLOBALS['GO_CONFIG']->file_storage_path.$subpath;
 		$fs = new filesystem();
 
-		require_once($GO_CONFIG->class_path.'base/quota.class.inc.php');
-		$quota = new quota();
-		$quota->add(-File::get_directory_size($path));
+		if($GO_CONFIG->quota>0){
+			require_once($GO_CONFIG->class_path.'base/quota.class.inc.php');
+			$quota = new quota();
+			$quota->add(-File::get_directory_size($path));
+		}
 
 		return $fs->delete($path);
 	}
@@ -1443,9 +1445,11 @@ class files extends db {
 				$fs = new filesystem();
 				$fs->delete($versions_dir);
 
-				require_once($GO_CONFIG->class_path.'base/quota.class.inc.php');
-				$quota = new quota();
-				$quota->add(-File::get_directory_size($versions_dir));
+				if($GO_CONFIG->quota>0){
+					require_once($GO_CONFIG->class_path.'base/quota.class.inc.php');
+					$quota = new quota();
+					$quota->add(-File::get_directory_size($versions_dir));
+				}
 			}
 		}
 
