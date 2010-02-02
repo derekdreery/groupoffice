@@ -27,7 +27,7 @@ GO.notes.NotePanel = Ext.extend(GO.DisplayPanel,{
 		}
 		this.addSaveHandler(GO.notes.noteDialog);
 				
-		GO.notes.noteDialog.show(this.id);
+		GO.notes.noteDialog.show(this.link_id);
 	},	
 		
 	initComponent : function(){	

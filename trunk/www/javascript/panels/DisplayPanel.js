@@ -1,5 +1,5 @@
 GO.DisplayPanel = Ext.extend(Ext.Panel,{
-	id: 0,
+	link_id: 0,
 	link_type : 0,
 	
 	newMenuButton : false,
@@ -248,10 +248,9 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 	
 	load : function(id, reload)
 	{
-		if(this.data.id!=id || reload)
+		if(this.link_id!=id || reload)
 		{
-			this.id=id;
-			this.loadParams[this.idParam]=id;
+			this.loadParams[this.idParam]=this.link_id=id;
 			
 			this.body.mask(GO.lang.waitMsgLoad);
 			Ext.Ajax.request({

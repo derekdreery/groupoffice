@@ -139,8 +139,8 @@ GO.grid.SearchPanel = function(config){
 	if(!config.noOpenLinks)
 	{
 		this.searchGrid.on('rowdblclick', function(grid, rowClicked, e) {
-	
-			var selectionModel = grid.getSelectionModel();
+			this.previewPanel.getLayout().activeItem.editHandler();
+			/*var selectionModel = grid.getSelectionModel();
 			var record = selectionModel.getSelected();
 			
 			if(GO.linkHandlers[record.data.link_type])
@@ -149,7 +149,7 @@ GO.grid.SearchPanel = function(config){
 			}else
 			{
 				Ext.Msg.alert(GO.lang['strError'], 'No handler definded for link type: '+record.data.link_type);
-			}
+			}*/
 		}, this);
 
 		this.linkPreviewPanels[0]=new Ext.Panel({
@@ -201,20 +201,21 @@ Ext.extend(GO.grid.SearchPanel, Ext.Panel, {
 
 		this.previewPanel.getLayout().setActiveItem(0);
 
-		var panelId = 'link_pp_'+record.data.link_type;
+		var panelId = 'search_pp_'+record.data.link_type;
 
 		if(record.data.link_type!='folder'){
 
 			if(!GO.linkPreviewPanels[record.data.link_type]){
-				this.linkPreviewPanels[0].body.update('Sorry, the preview of this type not implemented yet.');
+				this.linkPreviewPanels["search_pp_0"].body.update('Sorry, the preview of this type not implemented yet.');
 			}else
 			{
-				if(!this.linkPreviewPanels[record.data.link_type]){
-					this.linkPreviewPanels[record.data.link_type] = GO.linkPreviewPanels[record.data.link_type].call(this, {id:panelId});
-					this.previewPanel.add(this.linkPreviewPanels[record.data.link_type]);
+				if(!this.linkPreviewPanels[panelId]){
+					this.linkPreviewPanels[panelId] = GO.linkPreviewPanels[record.data.link_type].call(this, {id:panelId});
+					this.previewPanel.add(this.linkPreviewPanels[panelId]);
 				}
-				this.previewPanel.getLayout().setActiveItem(panelId);
-				this.linkPreviewPanels[record.data.link_type].load(record.data.id);
+				
+				this.previewPanel.getLayout().setActiveItem(panelId);				
+				this.linkPreviewPanels[panelId].load(record.data.id);
 			}
 		}
 	},

@@ -22,7 +22,7 @@ GO.calendar.EventPanel = Ext.extend(GO.DisplayPanel,{
 
 	editHandler : function(){
 		this.addSaveHandler(GO.calendar.eventDialog);
-		GO.calendar.eventDialog.show({event_id: this.id});
+		GO.calendar.eventDialog.show({event_id: this.link_id});
 	},
 
 	initComponent : function(){

@@ -22,7 +22,7 @@ GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
 	
 	editHandler : function(){
 		this.addSaveHandler(GO.tasks.taskDialog);
-		GO.tasks.taskDialog.show({task_id: this.id});
+		GO.tasks.taskDialog.show({task_id: this.link_id});
 	},	
 	
 	initComponent : function(){

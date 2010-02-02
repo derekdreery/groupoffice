@@ -433,14 +433,19 @@ Ext.extend(GO.grid.LinksPanel, Ext.Panel, {
 		if(record.data.link_type=='folder')
 		{
 			this.setFolder(record.data.id);
-			
-		}else	if(GO.linkHandlers[record.data.link_type])
+		}else
+		{			
+			this.previewPanel.getLayout().activeItem.editHandler();
+		}
+
+		/*else	if(GO.linkHandlers[record.data.link_type])
 		{
 			GO.linkHandlers[record.data.link_type].call(this, record.data.id);
+
 		}else
 		{
 			Ext.Msg.alert(GO.lang['strError'], 'No handler definded for link type: '+record.data.link_type);
-		}
+		}*/
 	},
 
 	rowClicked : function(grid, rowClicked, record){
