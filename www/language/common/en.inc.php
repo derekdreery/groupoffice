@@ -160,6 +160,8 @@ $lang['common']['day'] = 'day';
 $lang['common']['days'] = 'days';
 $lang['common']['week'] = 'week';
 $lang['common']['weeks'] = 'weeks';
+$lang['common']['month'] = 'month';
+$lang['common']['strMonths'] = 'months';
 
 $lang['common']['group_everyone']='Everyone';
 $lang['common']['group_admins']='Admins';

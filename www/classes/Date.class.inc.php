@@ -56,17 +56,27 @@ class Date
 
 	public function byday_to_days($byday)
 	{
-		$days_arr = explode(',', $byday);
+		//$days_arr = explode(',', $byday);
+		
+		$event=array();
 
-		$days['sun'] = in_array('SU', $days_arr) ? '1' : '0';
+		$event['sun'] = strpos($byday,'SU')!==false ? '1' : '0';
+		$event['mon'] = strpos($byday,'MO')!==false ? '1' : '0';
+		$event['tue'] = strpos($byday,'TU')!==false ? '1' : '0';
+		$event['wed'] = strpos($byday,'WE')!==false ? '1' : '0';
+		$event['thu'] = strpos($byday,'TH')!==false ? '1' : '0';
+		$event['fri'] = strpos($byday,'FR')!==false ? '1' : '0';
+		$event['sat'] = strpos($byday,'SA')!==false ? '1' : '0';
+
+		/*$days['sun'] = in_array('SU', $days_arr) ? '1' : '0';
 		$days['mon'] = in_array('MO', $days_arr) ? '1' : '0';
 		$days['tue'] = in_array('TU', $days_arr) ? '1' : '0';
 		$days['wed'] = in_array('WE', $days_arr) ? '1' : '0';
 		$days['thu'] = in_array('TH', $days_arr) ? '1' : '0';
 		$days['fri'] = in_array('FR', $days_arr) ? '1' : '0';
-		$days['sat'] = in_array('SA', $days_arr) ? '1' : '0';
+		$days['sat'] = in_array('SA', $days_arr) ? '1' : '0';*/
 
-		return $days;
+		return $event;
 	}
 
 

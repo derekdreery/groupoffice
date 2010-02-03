@@ -292,17 +292,27 @@ class calendar extends db
 
 			$event['repeat_every']=$rrule['INTERVAL'];
 
+
+
 			if(isset($rrule['BYDAY']))
 			{
-				$days = explode(',', $rrule['BYDAY']);
+				//var_dump($rrule);
+				
+				//$days = explode(',', $rrule['BYDAY']);
 
-				$event['sun'] = in_array('SU', $days) ? '1' : '0';
-				$event['mon'] = in_array('MO', $days) ? '1' : '0';
-				$event['tue'] = in_array('TU', $days) ? '1' : '0';
-				$event['wed'] = in_array('WE', $days) ? '1' : '0';
-				$event['thu'] = in_array('TH', $days) ? '1' : '0';
-				$event['fri'] = in_array('FR', $days) ? '1' : '0';
-				$event['sat'] = in_array('SA', $days) ? '1' : '0';
+
+
+				/*$event['sun'] = strpos($rrule['BYDAY'],'SU')!==false ? '1' : '0';
+				$event['mon'] = strpos($rrule['BYDAY'],'MO')!==false ? '1' : '0';
+				$event['tue'] = strpos($rrule['BYDAY'],'TU')!==false ? '1' : '0';
+				$event['wed'] = strpos($rrule['BYDAY'],'WE')!==false ? '1' : '0';
+				$event['thu'] = strpos($rrule['BYDAY'],'TH')!==false ? '1' : '0';
+				$event['fri'] = strpos($rrule['BYDAY'],'FR')!==false ? '1' : '0';
+				$event['sat'] = strpos($rrule['BYDAY'],'SA')!==false ? '1' : '0';*/
+
+				$days = Date::byday_to_days($rrule['BYDAY']);
+				$event = array_merge($event, $days);
+
 			}
 
 
@@ -395,7 +405,7 @@ class calendar extends db
 					{
 
 
-						$event = Date::shift_days_to_local($event);
+						$event = Date::shift_days_to_local($event, date('G', $event['start_time']),Date::get_timezone_offset($event['start_time']));
 
 						$days=array();
 						if($event['sun']=='1')
@@ -429,17 +439,17 @@ class calendar extends db
 
 						if(count($days)==1)
 						{
-							$daysStr=$days[0];
+							$daysStr=$lang['calendar']['month_times'][$rrule['BYDAY'][0]].' '.$days[0];
 						}else
 						{
 							$daysStr = ' '.$lang['calendar']['and'].' '.array_pop($days);
-							$daysStr = implode(', ', $days).$daysStr;
+							$daysStr = $lang['calendar']['month_times'][$rrule['BYDAY'][0]].' '.implode(', ', $days).$daysStr;
 						}
 
 						if($event['repeat_every']>1)
 						{
 							$html .= sprintf($lang['calendar']['repeats_at_not_every'],
-							$event['repeat_every'], $lang['common']['months'], $daysStr);
+							$event['repeat_every'], $lang['common']['strMonths'], $daysStr);
 						}else
 						{
 							$html .= sprintf($lang['calendar']['repeats_at'],
