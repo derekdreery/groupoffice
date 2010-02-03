@@ -103,3 +103,9 @@ $lang['calendar']['birthday_desc']='{NAME} has turned {AGE} today';
 $lang['calendar']['unauthorized_participants_write']='You have insufficient permissions to schedule appointments for the following users:<br /><br />{NAMES}<br /><br />You might want to send them an invitation so they can accept and schedule it.';
 
 $lang['calendar']['noCalSelected'] = 'No calendars have been selected for this overview. Select at least one calendar in Administration.';
+
+$lang['calendar']['month_times'][1]='the first';
+$lang['calendar']['month_times'][2]='the second';
+$lang['calendar']['month_times'][3]='the third';
+$lang['calendar']['month_times'][4]='the fourth';
+$lang['calendar']['month_times'][5]='the fifth';

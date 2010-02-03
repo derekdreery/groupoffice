@@ -156,6 +156,10 @@ $lang['common']['day']= 'dag';
 $lang['common']['days']= 'dagen';
 $lang['common']['week']= 'week';
 $lang['common']['weeks']= 'weken';
+$lang['common']['month'] = 'maand';
+$lang['common']['strMonths'] = 'maanden';
+
+
 $lang['common']['max_emails_reached']= "Het maximale aantal e-mails voor SMTP host %s van %s per dag is bereikt.";
 $lang['common']['usage_stats']='Schijfruimtegebruik per %s';
 $lang['common']['usage_text']='Deze Group-Office installatie gebruikt';
