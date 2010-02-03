@@ -8,6 +8,12 @@ GO.Window = function(config)
 	config.maximizable=true;
 	config.minimizable=true;
 
+
+	if(!config.keys)
+	{
+		config.keys=[];
+	}
+	
 	GO.Window.superclass.constructor.call(this, config);
 /*
 	this.on("show",function(window){

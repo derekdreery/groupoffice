@@ -330,7 +330,15 @@ GO.email.EmailComposer = function(config) {
 		},
 		cls : 'go-form-panel',
 		defaultType : 'textfield',
-		items : items
+		items : items,
+		keys:[{
+        key: Ext.EventObject.ENTER,
+				ctrl:true,
+        fn: function(key, e){					
+        	this.sendMail(false,false);
+        },
+        scope:this
+    }]
 	});
 
 	//Set a long timeout for large attachments
@@ -525,7 +533,7 @@ GO.email.EmailComposer = function(config) {
 	});
 };
 
-Ext.extend(GO.email.EmailComposer, Ext.Window, {
+Ext.extend(GO.email.EmailComposer, GO.Window, {
 	
 	showConfig : {},
 
@@ -1150,6 +1158,11 @@ Ext.extend(GO.email.EmailComposer, Ext.Window, {
 		}else{
 			this.editor.plugins[1].spellcheck();
 		}
+	},
+
+	submitForm : function(hide){
+		console.log('ctrl+enter');
+		this.sendMail(false, false);
 	},
 
 	sendMail : function(draft, autoSave) {

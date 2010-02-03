@@ -513,13 +513,18 @@ Ext.ux.form.HtmlEditor.HR = Ext.extend(Ext.util.Observable, {
             iconCls: 'x-edit-hr',
             handler: function(){
                 if (!this.hrWindow){
+										
                     this.hrWindow = new Ext.Window({
                         title: 'Insert Rule',
                         closeAction: 'hide',
+												focus: function(){													
+													this.items.get(0).form.findField('hrwidth').focus(true);
+												},
                         items: [{
                             itemId: 'insert-hr',
                             xtype: 'form',
                             border: false,
+														
                             plain: true,
                             bodyStyle: 'padding: 10px;',
                             labelWidth: 60,
@@ -528,11 +533,13 @@ Ext.ux.form.HtmlEditor.HR = Ext.extend(Ext.util.Observable, {
                                 xtype: 'label',
                                 html: 'Enter the width of the Rule in percentage<br/> followed by the % sign at the end, or to<br/> set a fixed width ommit the % symbol.<br/>&nbsp;'
                             }, {
+																
                                 xtype: 'textfield',
                                 maskRe: /[0-9]|%/,
                                 regex: /^[1-9][0-9%]{1,3}/,
                                 fieldLabel: 'Width',
                                 name: 'hrwidth',
+																value:'100%',
                                 width: 60,
                                  listeners: {
                                     specialkey: function(f, e){
