@@ -938,7 +938,7 @@ class GO_CONFIG {
 
 			$count = 0;
 
-			while(!isset($_SESSION['config_file'])){
+			while(!isset($_SESSION['GO_SESSION']['config_file'])){
 				$count++;
 				$config_file = $config_dir.'config.php';
 
@@ -946,7 +946,7 @@ class GO_CONFIG {
 					$_SESSION['GO_SESSION']['config_file']=$config_file;
 					return $config_file;
 				}
-				$config_dir=dirname($config_dir);
+				$config_dir=realpath($config_dir.'../');
 
 				if($count==3 || dirname($config_dir) == $config_dir){
 					break;
