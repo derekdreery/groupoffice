@@ -32,7 +32,7 @@ class File
 		$this->path = $path;
 	}
 
-	function convert_to_utf8($path){
+	public static function convert_to_utf8($path){
 		$enc='UTF-8';
 		$str = file_get_contents($path);
 		if(function_exists('mb_detect_encoding'))
@@ -43,12 +43,12 @@ class File
 	}
 
 
-	function is_full_path($path)
+	public static function is_full_path($path)
 	{
 		return ($path[0]=='/' || substr($path, 1, 2) == ':/' || substr($path, 1, 2) == ':\\');
 	}
 
-	function get_directory_size($dir)
+	public static function get_directory_size($dir)
 	{
 		$cmd = 'du -sk "'.$dir.'" 2>/dev/null';
 
@@ -64,11 +64,11 @@ class File
 		return $size;
 	}
 
-	function has_invalid_chars($filename){
+	public static function has_invalid_chars($filename){
 		return preg_match(File::INVALID_CHARS, $filename);
 	}
 
-	function strip_invalid_chars($filename){
+	public static function strip_invalid_chars($filename){
 		$filename = trim(preg_replace(File::INVALID_CHARS,'', $filename));
 
 		//IE likes to change a double white space to a single space
@@ -102,7 +102,7 @@ class File
 	}
 
 
-	function get_filetype_description_by_path($path)
+	public static function get_filetype_description_by_path($path)
 	{
 		return File::get_filetype_description(File::get_extension($path));
 	}
