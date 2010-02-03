@@ -934,9 +934,17 @@ class GO_CONFIG {
 		if(isset($_SESSION['GO_SESSION']['config_file'])) {
 			return $_SESSION['GO_SESSION']['config_file'];
 		}else {
+
 			$config_dir = $this->root_path;
+			$config_file = $config_dir.'config.php';
+			if(@file_exists($config_file)) {
+				$_SESSION['GO_SESSION']['config_file']=$config_file;
+				return $config_file;
+			}
 
 			$count = 0;
+
+			$config_dir = dirname($_SERVER['SCRIPT_FILENAME']);
 
 			while(!isset($_SESSION['GO_SESSION']['config_file'])){
 				$count++;
@@ -946,9 +954,9 @@ class GO_CONFIG {
 					$_SESSION['GO_SESSION']['config_file']=$config_file;
 					return $config_file;
 				}
-				$config_dir=realpath($config_dir.'../');
+				$config_dir=dirname($config_dir);
 
-				if($count==3 || dirname($config_dir) == $config_dir){
+				if($count==5 || dirname($config_dir) == $config_dir){
 					break;
 				}
 				$config_dir .= '/';			
