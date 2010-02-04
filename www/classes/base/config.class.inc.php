@@ -948,7 +948,8 @@ class GO_CONFIG {
 
 			$config_dir = dirname($_SERVER['SCRIPT_FILENAME']).'/';
 
-			openlog("get_config_file", LOG_PID | LOG_PERROR, LOG_LOCAL0);
+
+			openlog('[Group-Office]['.date('Ymd G:i').']', LOG_PERROR, LOG_USER);
 
 			while(!isset($_SESSION['GO_SESSION']['config_file'])){
 				$count++;
