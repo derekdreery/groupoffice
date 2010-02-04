@@ -935,6 +935,8 @@ class GO_CONFIG {
 			return $_SESSION['GO_SESSION']['config_file'];
 		}else {
 
+			
+
 			$config_dir = $this->root_path;
 			$config_file = $config_dir.'config.php';
 			if(@file_exists($config_file)) {
@@ -946,9 +948,13 @@ class GO_CONFIG {
 
 			$config_dir = dirname($_SERVER['SCRIPT_FILENAME']).'/';
 
+			openlog("get_config_file", LOG_PID | LOG_PERROR, LOG_LOCAL0);
+
 			while(!isset($_SESSION['GO_SESSION']['config_file'])){
 				$count++;
 				$config_file = $config_dir.'config.php';
+				syslog(LOG_NOTICE,$config_file);
+
 				
 				if(@file_exists($config_file)) {
 					$_SESSION['GO_SESSION']['config_file']=$config_file;
