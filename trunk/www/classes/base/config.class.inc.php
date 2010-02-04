@@ -944,12 +944,12 @@ class GO_CONFIG {
 
 			$count = 0;
 
-			$config_dir = dirname($_SERVER['SCRIPT_FILENAME']);
+			$config_dir = dirname($_SERVER['SCRIPT_FILENAME']).'/';
 
 			while(!isset($_SESSION['GO_SESSION']['config_file'])){
 				$count++;
 				$config_file = $config_dir.'config.php';
-
+				
 				if(@file_exists($config_file)) {
 					$_SESSION['GO_SESSION']['config_file']=$config_file;
 					return $config_file;
