@@ -956,12 +956,12 @@ class GO_CONFIG {
 				$config_dir = substr($config_dir, 0, $pos);
 			}
 
-			openlog('[Group-Office]['.date('Ymd G:i').']', LOG_PERROR, LOG_USER);
+			//openlog('[Group-Office]['.date('Ymd G:i').']', LOG_PERROR, LOG_USER);
 
 			while(!isset($_SESSION['GO_SESSION']['config_file'])){
 				$count++;
 				$config_file = $config_dir.'config.php';
-				syslog(LOG_NOTICE,$config_file);
+				//syslog(LOG_NOTICE,$config_file);
 
 				
 				if(@file_exists($config_file)) {
