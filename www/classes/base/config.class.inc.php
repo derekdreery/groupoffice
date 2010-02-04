@@ -948,6 +948,13 @@ class GO_CONFIG {
 
 			$config_dir = dirname($_SERVER['SCRIPT_FILENAME']).'/';
 
+			/*
+			 * z-push also has a config.php. Don't detect that.
+			 */
+			$pos = strpos($config_dir, 'modules/z-push');
+			if($pos){
+				$config_dir = substr($config_dir, 0, $pos);
+			}
 
 			openlog('[Group-Office]['.date('Ymd G:i').']', LOG_PERROR, LOG_USER);
 
