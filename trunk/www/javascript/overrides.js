@@ -12,7 +12,6 @@
  */
 
 
-
 if(Ext.version=="2.3.0"){
 
 	//Hack to make 2.3 compatible with 3.x

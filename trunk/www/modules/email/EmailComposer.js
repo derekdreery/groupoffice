@@ -354,6 +354,20 @@ GO.email.EmailComposer = function(config) {
         //this.syncValue();
     }
 	}));
+
+	/*
+	 *Handles ctrl+enter = send
+	 */	
+	this.htmlEditor.composer = this;
+	this.htmlEditor.onEditorEvent=function(e){		
+		this.updateToolbar();
+
+   var keyCode = (document.layers) ? keyStroke.which : e.keyCode;
+   if (keyCode == 13 && e.ctrlKey) this.composer.sendMail(false, false);
+	}
+
+	
+
 				
 	items.push(this.textEditor = new Ext.form.TextArea({
 		name: 'textbody',
