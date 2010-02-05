@@ -160,7 +160,7 @@ GO.email.EmailComposer = function(config) {
 
 
 	var spellcheckInsertPlugin = new GO.plugins.HtmlEditorSpellCheck(this);
-	var wordPastePlugin = new Ext.ux.form.HtmlEditor.Word();
+	//var wordPastePlugin = new Ext.ux.form.HtmlEditor.Word();
 	//var dividePlugin = new Ext.ux.form.HtmlEditor.Divider();
 	//var tablePlugin = new Ext.ux.form.HtmlEditor.Table();
 	var hrPlugin = new Ext.ux.form.HtmlEditor.HR();
@@ -296,7 +296,7 @@ GO.email.EmailComposer = function(config) {
 
 	var plugins = [
 		imageInsertPlugin,spellcheckInsertPlugin,
-		wordPastePlugin,
+		//wordPastePlugin, evil! makes it very slow because of a lot of getvalue calls.
 		hrPlugin,
 		ioDentPlugin,
 		rmFormatPlugin
@@ -311,7 +311,48 @@ GO.email.EmailComposer = function(config) {
 		anchor : '100% '+anchor,
 		plugins : plugins,
 		style:'font:12px arial";',
-		defaultFont:'arial'
+		defaultFont:'arial',
+		updateToolbar: function(){
+
+				/*
+				 * I override the default function here to increase performance.
+				 * ExtJS syncs value every 100ms while typing. This is slow with large
+				 * html documents. I manually call syncvalue when the message is sent
+				 * so it's certain the right content is submitted.
+				 */
+
+        if(!this.activated){
+            this.onFirstFocus();
+            return;
+        }
+
+        var btns = this.tb.items.map, doc = this.doc;
+
+        if(this.enableFont && !Ext.isSafari2){
+            var name = (this.doc.queryCommandValue('FontName')||this.defaultFont).toLowerCase();
+            if(name != this.fontSelect.dom.value){
+                this.fontSelect.dom.value = name;
+            }
+        }
+        if(this.enableFormat){
+            btns.bold.toggle(doc.queryCommandState('bold'));
+            btns.italic.toggle(doc.queryCommandState('italic'));
+            btns.underline.toggle(doc.queryCommandState('underline'));
+        }
+        if(this.enableAlignments){
+            btns.justifyleft.toggle(doc.queryCommandState('justifyleft'));
+            btns.justifycenter.toggle(doc.queryCommandState('justifycenter'));
+            btns.justifyright.toggle(doc.queryCommandState('justifyright'));
+        }
+        if(!Ext.isSafari2 && this.enableLists){
+            btns.insertorderedlist.toggle(doc.queryCommandState('insertorderedlist'));
+            btns.insertunorderedlist.toggle(doc.queryCommandState('insertunorderedlist'));
+        }
+
+        Ext.menu.MenuMgr.hideAll();
+
+        //this.syncValue();
+    }
 	}));
 				
 	items.push(this.textEditor = new Ext.form.TextArea({
@@ -880,11 +921,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			this.editor.selectText(0,0);
 		}
 		
-		if (this.toCombo.getValue() == '') {
-			this.toCombo.focus();
-		} else {
-			this.editor.focus();
-		}
+		
 
 		this.setEditorHeight();
 		this.startAutoSave();
@@ -895,6 +932,13 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 
 		Ext.getBody().unmask();
 		GO.email.EmailComposer.superclass.show.call(this);
+
+
+		if (this.toCombo.getValue() == '') {
+			this.toCombo.focus();
+		} else {
+			this.editor.focus();
+		}
 	},
 	
 	addSignature : function(accountRecord){
