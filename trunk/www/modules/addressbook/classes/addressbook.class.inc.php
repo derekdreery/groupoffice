@@ -844,6 +844,8 @@ class addressbook extends db {
 			$record['age']=$age;
 		}
 
+		$record['birthday'] = Date::format($record['birthday'], false);
+
 		if($cf)
 			$cf->format_record($record, 2, true);
 	}
