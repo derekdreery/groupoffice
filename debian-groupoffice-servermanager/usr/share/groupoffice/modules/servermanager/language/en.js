@@ -22,6 +22,7 @@ GO.servermanager.lang.allowRegistration="Allow registration";
 GO.servermanager.lang.allowDuplicateEmail="Allow duplicate email";
 GO.servermanager.lang.autoActivateAccounts="Auto activate accounts";
 GO.servermanager.lang.notifyAdminOfRegistration="Notify admin of registration";
+GO.servermanager.lang.status='Status';
 
 GO.servermanager.lang.maxUsers="Max users";
 

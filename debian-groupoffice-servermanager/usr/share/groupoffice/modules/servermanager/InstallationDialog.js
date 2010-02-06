@@ -244,7 +244,30 @@ Ext.extend(GO.servermanager.InstallationDialog, Ext.Window,{
 				  boxLabel: GO.servermanager.lang.enabled,
 				  checked:true,
 					disabled:true
-				},{
+				},new Ext.form.ComboBox({
+						fieldLabel: GO.servermanager.lang.status,
+						hiddenName:'status',
+						store: new Ext.data.SimpleStore({
+								fields: ['value', 'text'],
+								data : [
+									['trial', '30 day trial'],
+									['warntrial1', 'First warning, 20 days until deletion'],
+									['warntrial2', 'Second warning, 10 days until deletion'],
+									['ignore', 'Never remove installation']
+								]
+
+						}),
+						value:'trial',
+						valueField:'value',
+						displayField:'text',
+						typeAhead: true,
+						mode: 'local',
+						triggerAction: 'all',
+						editable: false,
+						selectOnFocus:true,
+						forceSelection: true,
+						anchor: '-20'
+				}),{
 					xtype: 'textfield',
 				  name: 'name',
 					anchor: '-20',
