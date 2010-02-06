@@ -62,7 +62,7 @@ $contact['comment']='';
 $contact['iso_address_format']=$default_language;
 
 if (!is_dir($GO_CONFIG->file_storage_path.'contacts/contact_photos'))
-	mkdir($GO_CONFIG->file_storage_path.'contacts/contact_photos',0755);
+	mkdir($GO_CONFIG->file_storage_path.'contacts/contact_photos',0755, true);
 
 //copy($module['path'].'install/noperson.jpg',$GO_CONFIG->file_storage_path.'contacts/contact_photos/noperson.jpg');
 
@@ -72,7 +72,10 @@ if (!is_dir($GO_CONFIG->file_storage_path.'contacts/contact_photos'))
 $addressbook = $ab->add_addressbook(1, $lang['addressbook']['customers'], $default_language, $default_salutation);
 $GLOBALS['GO_SECURITY']->add_group_to_acl($GO_CONFIG->group_internal, $addressbook['acl_id'], GO_SECURITY::WRITE_PERMISSION);
 
-require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+/*
+ * Problem if files module is not intalled yet.
+ * 
+ * require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 $files = new files();
 $files->check_share('contacts', 1, $GO_MODULES->modules['addressbook']['acl_id'], false);
-$files->check_share('companies', 1, $GO_MODULES->modules['addressbook']['acl_id'], false);
+$files->check_share('companies', 1, $GO_MODULES->modules['addressbook']['acl_id'], false);*/

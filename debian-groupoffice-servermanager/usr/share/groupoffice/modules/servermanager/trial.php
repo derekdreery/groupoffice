@@ -52,7 +52,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 		$new_trial['key']=md5($new_trial['name']);
 		
 
-		$body = file_get_contents('trialmail.txt');
+		$body = file_get_contents('templates/trial.txt');
 		
 		$url = $sm_config['protocol'].$new_trial['name'].'.'.$sm_config['domain'];
 
@@ -80,7 +80,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 }
 ?>
 <form method="post">
-<?
+<?php
 if(isset($feedback))
 echo '<p class="error">'.$feedback.'</p>';
 ?>

@@ -43,6 +43,8 @@ try{
 				
 			$installation_id=$installation['id']=isset($_POST['installation_id']) ? ($_POST['installation_id']) : 0;
 
+
+
 			if(isset($_POST['modules']))
 			{
 				$modules = json_decode($_POST['modules'],true);
@@ -112,6 +114,9 @@ try{
 				throw new Exception($lang['servermanager']['invalidEmail']);
 			}
 
+
+			$installation['report_ctime']=time();
+			$installation['max_users']=$config['max_users'];
 				
 			if($installation['id']>0)
 			{
@@ -125,9 +130,18 @@ try{
 				if(!isset($config['allowed_modules'])){
 					$config['allowed_modules']=get_allowed_modules($old_installation['name']);
 				}
-
 				$servermanager->check_license($config, $old_installation['name']);
-				
+
+				$report['professional']=0;
+				$installation['billing']=strpos($config['allowed_modules'], 'billing')!==false ? 1 : 0;
+
+				$allowed_modules = explode(',', $config['allowed_modules']);
+				foreach($servermanager->pro_modules as $pro_module) {
+					if(in_array($pro_module, $allowed_modules)) {
+						$report['professional']=1;
+						break;
+					}
+				}
 				
 				$servermanager->update_installation($installation);
 
@@ -143,7 +157,7 @@ try{
 				//unset($config['id']);
 				$servermanager->write_config($tmp_config, $config);
 
-				//debug ('sudo '.$GO_MODULES->modules['servermanager']['path'].'sudo.php '.$GO_CONFIG->get_config_file().' move_config '.$old_installation['name'].' '.$tmp_config);
+				//go_debug ('sudo '.$GO_MODULES->modules['servermanager']['path'].'sudo.php '.$GO_CONFIG->get_config_file().' move_config '.$old_installation['name'].' '.$tmp_config);
 				$cmd = 'sudo '.$GO_MODULES->modules['servermanager']['path'].'sudo.php '.$GO_CONFIG->get_config_file().' move_config '.$old_installation['name'].' '.$tmp_config;
 				if(isset($admin_password))
 				{
@@ -156,27 +170,11 @@ try{
 					throw new Exception(implode('<br />', $output));
 				}
 
-				$servermanager->delete_report($old_installation['name']);
+				//$servermanager->delete_report($old_installation['name']);
 
-				$installation['name']=$old_installation['name'];
+				//
 
 
-				//create temporary report otherwise the license check will fail.
-				$report['professional']=0;
-
-				$allowed_modules = explode(',', $config['allowed_modules']);
-				foreach($servermanager->pro_modules as $pro_module) {
-					if(in_array($pro_module, $allowed_modules)) {
-						$report['professional']=1;
-						break;
-					}
-				}
-				$report['billing']=in_array('billing', $allowed_modules) ? 1 : 0;
-				$report['name']=$installation['name'];
-				$report['ctime']=time();
-				$report['max_users']=$config['max_users'];
-				$report['comment']='Temporary report';
-				$servermanager->add_report($report);
 
 			}else
 			{
@@ -223,24 +221,20 @@ try{
 				//$servermanager->create_report($installation['name'], $tmp_config);
 
 				//create temporary report otherwise the license check will fail.
-				$report['professional']=0;
+				$intallation['professional']=0;
 				
 				$allowed_modules = explode(',', $config['allowed_modules']);
 				foreach($servermanager->pro_modules as $pro_module) {
 					if(in_array($pro_module, $allowed_modules)) {
-						$report['professional']=1;
+						$intallation['professional']=1;
 						break;
 					}
 				}
-				$report['billing']=in_array('billing', $allowed_modules) ? 1 : 0;
-				$report['name']=$installation['name'];
-				$report['ctime']=time();
-				$report['max_users']=$config['max_users'];
-				$report['comment']='Temporary report';
-				$servermanager->add_report($report);
+				$installation['billing']=strpos($config['allowed_modules'], 'billing')!==false ? 1 : 0;
 
+			
 
-				//debug ('sudo '.$GO_MODULES->modules['servermanager']['path'].'sudo.php '.$GO_CONFIG->get_config_file().' install '.$installation['name'].' '.$tmp_config);
+				//go_debug ('sudo '.$GO_MODULES->modules['servermanager']['path'].'sudo.php '.$GO_CONFIG->get_config_file().' install '.$installation['name'].' '.$tmp_config);
 				$cmd = 'sudo '.$GO_MODULES->modules['servermanager']['path'].'sudo.php '.$GO_CONFIG->get_config_file().' install '.$installation['name'].' '.$tmp_config;
 				if(isset($admin_password))
 				{
@@ -248,13 +242,11 @@ try{
 				}
 				exec($cmd, $output, $return_var);
 
-				debug($output);
+				//go_debug($output);
 
 				if($return_var!=0){
-					$servermanager->delete_report($report['name']);
 					throw new Exception(implode('<br />', $output));
 				}
-
 				
 				$installation_id= $servermanager->add_installation($installation);
 
@@ -273,7 +265,7 @@ try{
 				
 			//throw new Exception(var_export($_POST, true));
 			
-			//debug(var_export($_POST, true));
+			//go_debug(var_export($_POST, true));
 				
 			$config_file = '/etc/groupoffice/'.$installation_name.'/config.php';
 				

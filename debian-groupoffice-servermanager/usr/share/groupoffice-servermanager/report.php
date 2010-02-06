@@ -3,7 +3,10 @@
 if(isset($argv[1]))
 	define('CONFIG_FILE', $argv[1]);
 
-//require('/etc/groupoffice/servermanager.inc.php');
+ini_set('display_errors', 'on');
+error_reporting(E_ALL);
+
+require('/etc/groupoffice/servermanager.inc.php');
 //require_once('/etc/groupoffice/config.php');
 
 require('/usr/share/groupoffice/Group-Office.php');
@@ -30,6 +33,10 @@ if(file_exists('/etc/groupoffice/config.php')){
 foreach($roots as $root) {
 	$folders = $fs->get_folders($root);
 
+	echo 'Finding config files in '.$root."\n";
+
+	var_dump($folders);
+
 	foreach($folders as $folder) {
 		$conf = '/etc/groupoffice/'.$folder['name'].'/config.php';
 		if(file_exists($conf)) {
@@ -53,7 +60,7 @@ $sc = new serverclient();
 $sm = new servermanager();
 
 
-$sm->query("DELETE FROM sm_reports");
+//$sm->query("DELETE FROM sm_reports");
 
 $logged_in=false;
 
@@ -62,5 +69,8 @@ $db2 = new db();
 $db2->halt_on_error='report';
 
 foreach($configs as $conf) {
-	$sm->create_report($conf['name'], $conf['conf'], $sc);
+	//if($conf['conf']!=$GO_CONFIG->get_config_file()){
+		echo 'Processing '.$conf['name']."\n";
+		$sm->create_report($conf['name'], $conf['conf'], $sc);
+	//}
 }
