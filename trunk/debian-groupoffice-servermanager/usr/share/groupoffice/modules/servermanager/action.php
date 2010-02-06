@@ -122,6 +122,12 @@ try{
 			{
 				$old_installation = $servermanager->get_installation($installation['id']);
 
+				if($_POST['status']!=$old_installation['status'])
+				{
+					$installation['status']=$_POST['status'];
+					$installation['status_change_time']=time();
+				}
+
 				function get_allowed_modules($name){
 					require('/etc/groupoffice/'.$name.'/config.php');
 					return $config['allowed_modules'];
@@ -179,7 +185,10 @@ try{
 			}else
 			{
 				$servermanager->check_license($config);
-				
+
+				$installation['status']=$_POST['status'];
+				$installation['status_change_time']=time();
+
 				$installation['name']=strtolower((trim($_POST['name'])));
 				$config['db_name']=str_replace('.','_',$installation['name']);
 
