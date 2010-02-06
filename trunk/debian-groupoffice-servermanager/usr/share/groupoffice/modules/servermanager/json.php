@@ -163,15 +163,8 @@ try{
 					$response['deleteSuccess']=true;
 					$delete_installations = json_decode(($_POST['delete_keys']));
 					foreach($delete_installations as $installation_id)
-					{
-						$installation = $servermanager->get_installation($installation_id);
-						
-						//exec('sudo '.$GO_MODULES->modules['servermanager']['path'].'remove.sh '.$installation['name']);
-						exec('sudo '.$GO_MODULES->modules['servermanager']['path'].'sudo.php '.$GO_CONFIG->get_config_file().' remove '.$installation['name']);
-
-						
-						$servermanager->delete_installation($installation_id);
-						$servermanager->delete_report($installation['name']);
+					{					
+						$servermanager->delete_installation($installation_id);					
 					}
 				}catch(Exception $e)
 				{
@@ -202,6 +195,14 @@ try{
 						$installation['max_users']=isset($config['max_users']) ? $config['max_users'] : 0;
 					}
 				}
+
+				$installation['total_usage']=Number::format_size($installation['total_usage']*1024);
+				$installation['file_storage_usage']=Number::format_size($installation['file_storage_usage']*1024);
+				$installation['mailbox_usage']=Number::format_size($installation['mailbox_usage']*1024);
+				$installation['database_usage']=Number::format_size($installation['database_usage']*1024);
+
+				$installation['install_time']=Date::get_timestamp($installation['install_time']);
+				$installation['lastlogin']=Date::get_timestamp($installation['lastlogin']);
 				
 				$installation['mtime']=Date::get_timestamp($installation['mtime']);				
 				$installation['ctime']=Date::get_timestamp($installation['ctime']);

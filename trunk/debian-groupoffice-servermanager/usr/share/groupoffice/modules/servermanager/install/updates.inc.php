@@ -13,3 +13,26 @@ $updates[]="ALTER TABLE `sm_reports` ADD INDEX ( `ctime` )";
 $updates[]="ALTER TABLE `sm_reports` ADD INDEX ( `professional` )";
 $updates[]="ALTER TABLE `sm_reports` ADD INDEX ( `billing` ) ";
 $updates[]="ALTER TABLE `sm_reports` ADD `max_users` INT NOT NULL ";
+
+$updates[]="ALTER TABLE sm_installations ADD  `count_users` int( 11 ) NOT NULL ,
+ADD `install_time` int( 11 ) NOT NULL ,
+ADD `lastlogin` int( 11 ) NOT NULL ,
+ADD `total_logins` int( 11 ) NOT NULL ,
+ADD `database_usage` int( 11 ) NOT NULL ,
+ADD `file_storage_usage` int( 11 ) NOT NULL ,
+ADD `mailbox_usage` int( 11 ) DEFAULT NULL ,
+ADD `report_ctime` int( 11 ) NOT NULL ,
+ADD `comment` text,
+ADD `features` varchar( 255 ) DEFAULT NULL ,
+ADD `mail_domains` varchar( 255 ) DEFAULT NULL ,
+ADD `admin_email` varchar( 100 ) DEFAULT NULL ,
+ADD `admin_name` varchar( 100 ) DEFAULT NULL ,
+ADD `admin_salutation` varchar( 100 ) DEFAULT NULL ,
+ADD `admin_country` char( 2 ) NOT NULL ,
+ADD `date_format` varchar( 20 ) DEFAULT NULL ,
+ADD `thousands_separator` char( 1 ) NOT NULL ,
+ADD `decimal_separator` char( 1 ) DEFAULT NULL ,
+ADD `billing` tinyint( 1 ) NOT NULL ,
+ADD `professional` tinyint( 1 ) NOT NULL ,
+ADD `status` varchar( 50 ) NOT NULL ,
+ADD `status_change_time` int( 11 ) NOT NULL ";

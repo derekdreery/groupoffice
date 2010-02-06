@@ -68,7 +68,7 @@ switch($task)
 		
 		$db = new db();
 		$db->user=$sm_config['mysql_user'];
-		$db->pass=$sm_config['mysql_pass'];
+		$db->password=$sm_config['mysql_pass'];
 		$db->host=$sm_config['mysql_host'];
 		
 		$db->query("SET NAMES UTF8");
@@ -150,13 +150,13 @@ switch($task)
 		$db = new db();
 		$db->halt_on_error='report';
 		$db->user=$sm_config['mysql_user'];
-		$db->pass=$sm_config['mysql_pass'];
+		$db->password=$sm_config['mysql_pass'];
 		$db->host=$sm_config['mysql_host'];
 		
 		$db->query("SET NAMES UTF8");
 		
 
-		require_once($GO_MODULES->modules['serverclient']['class_path'].'serverclient.class.inc.php');
+		/*require_once($GO_MODULES->modules['serverclient']['class_path'].'serverclient.class.inc.php');
 		$sc = new serverclient();
 		
 		try{
@@ -178,10 +178,14 @@ switch($task)
 		catch(Exception $e)
 		{
 			echo $e->getMessage();
+		}*/
+
+		if(!is_dir($go_root)){
+			die("Error: ".$go_root." doesn't exits\n");
 		}
 		
 		system('rm -Rf '.$go_root);
-		system('rm -Rf '.$sm_config['install_path'].'sm-local/'.$name);
+		//system('rm -Rf '.$sm_config['install_path'].'sm-local/'.$name);
 		system('rm -Rf /etc/groupoffice/'.$name);
 		system('rm -Rf /tmp/'.$name);
 		

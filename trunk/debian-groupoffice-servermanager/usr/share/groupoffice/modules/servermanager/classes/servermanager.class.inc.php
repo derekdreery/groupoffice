@@ -40,10 +40,10 @@ class servermanager extends db {
 
 		global $GO_CONFIG;
 
-		
+		echo "Creating report for ".$name."\n";
 
 		$config=array();
-		if(!file_exists($config_file)){
+		if(!file_exists($config_file)) {
 			echo "Warning: ".$config_file." does not exist\n";
 			return false;
 		}
@@ -53,6 +53,11 @@ class servermanager extends db {
 		$installation['name']=$name;
 		$installation['ctime']=time();
 		$installation['comment']='';
+
+		if($installation['name']=='servermanager'){
+			$installation['status']='ignore';
+		}
+		
 		$features=array();
 
 		$db2 = new db();
@@ -167,19 +172,17 @@ class servermanager extends db {
 					$installation['features']=implode(',', $features);
 
 
-				
+
 					$installation['mailbox_usage']=0;
 
 					if(!empty($GO_CONFIG->serverclient_server_url) && !empty($config['serverclient_domains'])) {
-						if(!$sc)
-						{
+						if(!$sc) {
 							global $GO_MODULES;
 							require_once($GO_MODULES->modules['serverclient']['class_path'].'serverclient.class.inc.php');
 							$sc = new serverclient();
 						}
 
-						if(!$logged_in)
-							$sc->login();
+						$sc->login();
 
 						$params=array(
 								'task'=>'serverclient_get_usage',
@@ -206,7 +209,54 @@ class servermanager extends db {
 				}
 			}
 			$this->query('USE `'.$this->database.'`');
-			$this->add_report($installation);
+
+			//var_dump($installation);
+
+			$old_installation = $this->get_installation_by_name($installation['name']);
+
+
+
+			if($old_installation) {
+				$installation['id']=$old_installation['id'];
+				$this->update_installation($installation);
+
+				switch($old_installation['status']) {
+					case 'ignore':
+					//do nothing
+
+						break;
+
+					case 'warntrial1':
+					//send mail after 30 days
+						$time = Date::date_add(time(), -10);
+						if($old_installation['status_change_time']<$time) {
+							$this->change_status($old_installation, 'warntrial2');
+						}
+						break;
+					case 'warntrial2':
+					//send mail after 40 days
+						$time = Date::date_add(time(), -10);
+						$time2 = Date::date_add(time(), -40);
+						if($old_installation['status_change_time']<$time || $old_installation['install_time']<$time2) {
+							$this->delete_installation($old_installation['id']);
+						}
+						break;
+
+					default:
+					//send mail after 20 days
+						$time = Date::date_add(time(), -20);
+						if($old_installation['status_change_time']<$time) {
+							$this->change_status($old_installation, 'warntrial1');
+						}
+						break;
+				}
+
+
+			}else {
+				$this->add_installation($installation);
+			}
+
+
 		}
 
 	}
@@ -225,8 +275,7 @@ class servermanager extends db {
 
 	function check_license($config, $existing_installation_name='') {
 		$pro = 0;
-		if(isset($config['allowed_modules']))
-		{
+		if(isset($config['allowed_modules'])) {
 			$allowed_modules = explode(',', $config['allowed_modules']);
 
 			foreach($this->pro_modules as $pro_module) {
@@ -249,12 +298,12 @@ class servermanager extends db {
 			}
 		}
 
-		
+
 
 		return true;
 	}
 
-	function get_used_licenses(){
+	function get_used_licenses() {
 		$sql = "SELECT SUM(max_users) AS total_users, SUM(billing) AS total_billing FROM sm_reports WHERE professional=1";
 		$this->query($sql);
 		return $this->next_record();
@@ -270,8 +319,10 @@ class servermanager extends db {
 		$this->query($sql);
 		$report = $this->next_record();
 
-
-		require('/etc/groupoffice/license.inc.php');
+		if(file_exists('/etc/groupoffice/license.inc.php'))
+			require('/etc/groupoffice/license.inc.php');
+		else
+			$max['users']=0;
 
 
 		return $max['users']-$report['total_users'];
@@ -287,7 +338,10 @@ class servermanager extends db {
 		$this->query($sql);
 		$report = $this->next_record();
 
-		require('/etc/groupoffice/license.inc.php');
+		if(file_exists('/etc/groupoffice/license.inc.php'))
+			require('/etc/groupoffice/license.inc.php');
+		else
+			$max['billing']=0;
 
 		return $max['billing']-$report['total_billing'];
 	}
@@ -476,6 +530,10 @@ class servermanager extends db {
 	function add_installation($installation) {
 		$installation['ctime']=$installation['mtime']=time();
 
+		$installation['status_change_time']=time();
+
+		
+
 		$installation['id']=$this->nextid('sm_installations');
 		if($this->insert_row('sm_installations', $installation)) {
 			return $installation['id'];
@@ -490,10 +548,10 @@ class servermanager extends db {
 	 * @access public
 	 * @return bool True on success
 	 */
-	function update_installation($installation) {
+	function update_installation($installation, $update_field='id') {
 		$installation['mtime']=time();
 
-		return $this->update_row('sm_installations', 'id', $installation);
+		return $this->update_row('sm_installations', $update_field, $installation);
 	}
 
 	/**
@@ -505,7 +563,17 @@ class servermanager extends db {
 	 * @return bool True on success
 	 */
 	function delete_installation($installation_id) {
-		global $GO_CONFIG;
+		global $GO_CONFIG, $GO_MODULES;
+
+
+		$installation = $this->get_installation($installation_id);
+		$cmd = 'sudo '.$GO_MODULES->modules['servermanager']['path'].'sudo.php '.$GO_CONFIG->get_config_file().' remove '.$installation['name'];
+
+		exec($cmd, $output, $return_var);
+
+		if($return_var!=0) {
+			throw new Exception(implode('<br />', $output));
+		}
 
 		return $this->query("DELETE FROM sm_installations WHERE id=".$this->escape($installation_id));
 	}
@@ -554,7 +622,7 @@ class servermanager extends db {
 	 * @return Int Number of records found
 	 */
 	function get_installations($query='', $sortfield='id', $sortorder='ASC', $start=0, $offset=0) {
-		$sql = "SELECT * FROM sm_installations ";
+		$sql = "SELECT sm_installations.*, (file_storage_usage+mailbox_usage+database_usage) AS total_usage FROM sm_installations ";
 
 		if(!empty($query)) {
 			$sql .= " WHERE name LIKE '".$this->escape($query)."'";
@@ -568,6 +636,46 @@ class servermanager extends db {
 			$this->query($sql);
 		}
 		return $count;
+	}
+
+	function get_status_message($status) {
+		global $GO_MODULES;
+
+		$file = $GO_MODULES->modules['servermanager']['path'].'templates/'.$status.'.txt';
+
+		$text = file_get_contents($file);
+
+		$lines = explode("\n", $text);
+
+		$message['subject'] = array_shift($lines);
+		$message['body']=trim(implode("\n", $lines));
+
+		return $message;
+	}
+
+
+	function change_status($installation, $status) {
+		global $GO_LANGUAGE, $GO_MODULES,$GO_CONFIG;
+
+		require('/etc/groupoffice/servermanager.inc.php');
+
+		require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
+
+		$message = $this->get_status_message($status);
+		if($message) {
+
+			$_body = str_replace('{admin_salutation}', $installation['admin_salutation'], $message['body']);
+			$_body = str_replace('{name}',$installation['name'], $_body);
+
+			$swift = new GoSwift($installation['admin_email'], $message['subject'],0,0,'3',$_body);
+			$swift->message->addBcc('mschering@intermesh.nl');
+			$swift->set_from($sm_config['sender_email'], $sm_config['sender_name']);
+			$swift->sendmail();
+		}
+
+		$sql = "UPDATE sm_installations SET status='".$this->escape($status)."', status_change_time='".time()."' WHERE id=".$this->escape($installation['id']);
+
+		$this->query($sql);
 	}
 
 

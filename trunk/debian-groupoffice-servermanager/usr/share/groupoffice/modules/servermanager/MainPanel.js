@@ -20,8 +20,8 @@ GO.servermanager.MainPanel = function(config){
 	}
 	
 	this.installationsGrid = new GO.servermanager.InstallationsGrid({
-			region:'center'
-		});
+		region:'center'
+	});
 
 	this.infoPanel = new Ext.Panel({
 		region:'north',
@@ -29,32 +29,30 @@ GO.servermanager.MainPanel = function(config){
 		height:40,
 		split:true
 	});
-	this.borderGrid = {
-		border:false,
-		tbar:[{
-			iconCls: 'btn-add',
-			text: GO.lang['cmdAdd'],
-			cls: 'x-btn-text-icon',
-			handler: function(){
-	    	GO.servermanager.installationDialog.show();
-			},
-			scope: this
-		},{
-			iconCls: 'btn-delete',
-			text: GO.lang['cmdDelete'],
-			cls: 'x-btn-text-icon',
-			handler: function(){
-				this.installationsGrid.deleteSelected();
-			},
-			scope: this
-		},'-',GO.lang['strSearch']+': ', ' ',this.installationsGrid.searchField],
-		items:[
-			this.infoPanel,
-			this.installationsGrid
-		],
-		layout:'border'
-	};
-	this.reportGrid = new GO.servermanager.ReportGrid();
+	config.tbar=[{
+		iconCls: 'btn-add',
+		text: GO.lang['cmdAdd'],
+		cls: 'x-btn-text-icon',
+		handler: function(){
+			GO.servermanager.installationDialog.show();
+		},
+		scope: this
+	},{
+		iconCls: 'btn-delete',
+		text: GO.lang['cmdDelete'],
+		cls: 'x-btn-text-icon',
+		handler: function(){
+			this.installationsGrid.deleteSelected();
+		},
+		scope: this
+	},'-',GO.lang['strSearch']+': ', ' ',this.installationsGrid.searchField],
+
+
+	config.items=[
+	this.infoPanel,
+	this.installationsGrid
+	]
+	
 
 	this.xtemplate = new Ext.XTemplate(
 		'<tpl if="max_users==0"><p>No license restrictions apply to this server</p></tpl>'+
@@ -69,64 +67,9 @@ GO.servermanager.MainPanel = function(config){
 	
 	//dirty but it works
 	this.installationsGrid.store.on('load', function(){		
-		this.navMenu.select(0);
 		this.xtemplate.overwrite(this.infoPanel.body, this.installationsGrid.store.reader.jsonData);
 	}, this);
-	
-	
-	var navData = [
-    		['sm_installations', GO.servermanager.lang.installations],
-    		['sm_report', GO.servermanager.lang.report]    		
-    	];
-    	
-  var cardPanelItems = [
-		this.borderGrid,
-		this.reportGrid		
-		]
- 	
- 	
-	var navStore = new Ext.data.SimpleStore({
-			fields: ['dom_id', 'name'],
-    	data : navData
-			});
-	
-	this.navMenu= new GO.grid.SimpleSelectList({
-		store: navStore		
-		});
-	
-	
-	this.navMenu.on('click', function(dataview, index){		
-			this.cardPanel.getLayout().setActiveItem(index);
-			
-		}, this);
-	
-	this.navPanel = new Ext.Panel({
-          region:'west',
-          title:GO.lang.menu,
-					autoScroll:true,					
-					width: 150,
-					split:true,
-					resizable:true,							
-					items:this.navMenu
-	});
 
-	this.cardPanel = new Ext.Panel({
-		region:'center',
-		layout:'card',
-		border:false,
-		activeItem: 0,
-		layoutConfig: {
-		  deferredRender: true
-		},
-		items:cardPanelItems
-	
-	});
-
-	config.items=[
-		this.navPanel,
-		this.cardPanel
-	];	
-	
 	config.title=GO.servermanager.lang.servermanager;
 	
 	config.layout='border';
@@ -144,8 +87,8 @@ Ext.extend(GO.servermanager.MainPanel, Ext.Panel, {
 
 
 GO.mainLayout.onReady(function(){
-		GO.servermanager.installationDialog = new GO.servermanager.InstallationDialog();
-	/* {LINKDIALOGS} */
+	GO.servermanager.installationDialog = new GO.servermanager.InstallationDialog();
+/* {LINKDIALOGS} */
 });
 /*
  * This will add the module to the main tabpanel filled with all the modules
@@ -171,7 +114,7 @@ GO.linkHandlers[13]=function(id){
 		title: GO.billing.lang.installation,
 		items: installationPanel
 	});
-	 installationPanel.loadInstallation(id);
+	installationPanel.loadInstallation(id);
 	linkWindow.show();
 }
 /* {LINKHANDLERS} */
