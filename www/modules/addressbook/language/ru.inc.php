@@ -39,7 +39,7 @@ $lang['link_type'][3]=$lang['addressbook']['company'] = 'Компания';
 
 $lang['addressbook']['customers'] = 'Клиенты';
 $lang['addressbook']['suppliers'] = 'Поставщики';
-$lang['addressbook']['prospects'] = 'Предварительно';
+$lang['addressbook']['prospects'] = 'Перспективные';
 
 
 $lang['addressbook']['contacts'] = 'Контакты';

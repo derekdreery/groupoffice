@@ -5,8 +5,8 @@
  * 10 December 2008
 */
 
-Ext.namespace('GO.postfixadmin');
-GO.postfixadmin.lang={};
+
+
 GO.postfixadmin.lang.postfixadmin='E-mail домены';
 
 /* table: pa_aliases */

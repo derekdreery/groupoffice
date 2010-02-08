@@ -28,7 +28,7 @@ $lang['common']['printPage']='Стр. %s из %s';
 
 $lang['common']['htmldirection']= 'ltr';
 
-$lang['common']['quotaExceeded']='Закончилось место на диске. Пожалуйста удалите какие-нибуть файлы или попростите Вашего провайдера увеличить объем дискового пространства.';
+$lang['common']['quotaExceeded']='Закончилось место на диске. Пожалуйста удалите какие-нибудь файлы или попростите Вашего провайдера увеличить объем дискового пространства.';
 $lang['common']['errorsInForm'] = 'Неверно заполнена форма. Исправьте ошибки и попробуйте еще раз.';
 
 $lang['common']['moduleRequired']='Для этой функции требуется модуль %s';
@@ -59,8 +59,10 @@ $lang['common']['invalidEmailError']='Не верный e-mail адрес';
 $lang['common']['invalidDateError']='Вы ввели неверную дату.';
 $lang['common']['noFileUploaded']='Файл не принят';
 $lang['common']['error']='Ошибка';
+$lang['common']['fileCreateError']='Ошибка создания файла';
+$lang['common']['illegalCharsError']='В имени содержаться один из следующих нелегальных символов:%s';
 
-$lang['common']['salutation']='приветствие';
+$lang['common']['salutation']='Приветствие';
 $lang['common']['firstName'] = 'Имя';
 $lang['common']['lastName'] = 'Фамилия';
 $lang['common']['middleName'] = 'Отчество';
@@ -155,6 +157,7 @@ $lang['common']['date']='Дата';
 $lang['common']['default_salutation']['M']='Уважаемый';
 $lang['common']['default_salutation']['F']='Уважаемая';
 $lang['common']['default_salutation']['unknown']='Уважаемый/Уважаемая';
+$lang['common']['dear']='Уважаемый(ая)';
 
 $lang['common']['mins'] = 'Мин.';
 $lang['common']['hour'] = 'час';
@@ -181,6 +184,7 @@ $lang['common']['files']='Файлы';
 $lang['common']['email']='E-mail';
 $lang['common']['total']='Итого';
 
+
 $lang['common']['confirm_leave']='Вы потеряете несозраненные данные если выйдете из Group-Office';
 $lang['common']['dataSaved']='Сохранено...';
 
@@ -196,3 +200,14 @@ $lang['common']['yes']='Да';
 $lang['common']['no']='Нет';
 
 $lang['commmon']['logFiles']='Журналы';
+$lang['common']['reminder']='Напоминание';
+$lang['common']['unknown']='Неизвестно';
+$lang['common']['time']='Время';
+
+$lang['common']['dontChangeAdminsPermissions']='Вы не можете изменить права у группы Администраторы';
+$lang['common']['dontChangeOwnersPermissions']='Вы не можете изменить права для владельца';
+
+
+$lang['common']['running_sys_upgrade']='Выполняется обновление системы';
+$lang['common']['sys_upgrade_text']='Подождите. Дополнительная информация будет выведена на экран.';
+$lang['common']['click_here_to_contine']='Нажмите здесь для продолжения';

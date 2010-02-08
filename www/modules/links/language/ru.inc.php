@@ -8,7 +8,7 @@
 */
 require($GO_LANGUAGE->get_fallback_language_file('links'));
 
-$lang['links']['name']='Описания ссылки';
-$lang['links']['description']='Задать текущее описание ссылки';
+$lang['links']['name']='Ссылки';
+$lang['links']['description']='Ссылки';
 $lang['links']['link_description']='Описание ссылки';
-$lang['links']['link_descriptions']='Описания ссылки';
+$lang['links']['link_descriptions']='Описания ссылок';

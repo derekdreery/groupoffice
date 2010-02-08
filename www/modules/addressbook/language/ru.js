@@ -38,8 +38,6 @@ GO.addressbook.lang.btnAddContact = 'Добавить контакт'	;
 GO.addressbook.lang.btnAddCompany = 'Добавить компанию';
 GO.addressbook.lang.btnManage = 'Настройки';
 GO.addressbook.lang.btnDownload = 'Загрузить файл';
-GO.addressbook.lang.btnSearch = 'Поиск';
-GO.addressbook.lang.btnReset = 'Сбросить';
 GO.addressbook.lang.cmdFormSearchFirst = 'Искать в= ';
 GO.addressbook.lang.cmdFormSearchSecond = ' в= ';
 GO.addressbook.lang.cmdFormSearchThird = ' для= ';
@@ -114,3 +112,6 @@ GO.addressbook.lang.defaultAddressFormat='Формат адреса';
 GO.addressbook.lang.defaultSalutation='Приветствие по умолчанию';
 GO.addressbook.lang.explanationVariables='Пояснения к параметрам приветствия';
 GO.addressbook.lang.explanationSex='Форма приветствия для мужчины и женщины';
+GO.addressbook.lang.btnSearch = 'Поиск';
+GO.addressbook.lang.btnReset = 'Сбросить';
+
