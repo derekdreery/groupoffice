@@ -108,3 +108,5 @@ GO.users.lang.deleteWarning='ВНИМАНИЕ!!! Все пользователь
 
 GO.users.lang.lastName = 'Фамилия';
 GO.users.lang.firstName = 'Имя';
+
+GO.users.lang.sendInvitation='Отправить приглашение';

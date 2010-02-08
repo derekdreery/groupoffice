@@ -2,28 +2,28 @@
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_base_language_file('lostpassword'));
 
-$lang['lostpassword']['success']='<h1>Ïàðîëü èçìåíåí</h1><p>Âàø ïàðîëü óñïåøíî èçìåíåí. Òåïåðü Âû ìîæåòå ïåðåéòè íà ñòðàíèöó âõîäà.</p>';
-$lang['lostpassword']['send']='Îòïðàâèòü';
-$lang['lostpassword']['login']='Èìÿ ïîëüçîâàòåëÿ';
+$lang['lostpassword']['success']='<h1>Пароль изменен</h1><p>Ваш пароль был изменен. Теперь вы можете войти в систему.</p>';
+$lang['lostpassword']['send']='Отправить';
+$lang['lostpassword']['login']='Имя пользователя';
 
-$lang['lostpassword']['lost_password_subject']='Çàïðîñ íîâîãî ïàðîëÿ';
+$lang['lostpassword']['lost_password_subject']='Запрос нового пароля';
 $lang['lostpassword']['lost_password_body']='%s,
 
-Âû çàïðîñèëè ñîçäàòü íîâûé ïàðîëü äëÿ %s. Èìÿ ïîëüçîâàòåëÿ "%s".
+Вы запросили новый пароль для %s. Имя пользователя "%s".
 
-Íàæìèòå íà ññûëêó íèæå(èëè ñêîïèðóéòå åå â àäðåñíóþ ñòðîêó èíòåðíåò áðàóçåðà) ÷òîáû èçìåíèòü Âàø ïàðîëü:
+Для смены пароля нажмите на ссылку или скопируйте ее и вставьте в строку адреса вашего Инеренет браузера:
 
 %s
 
-Åñëè Âû íå çàïðàøèâàëè çàìåíó ïàðîëÿ óäàëèòå ýòî ïèñüìî.';
+Если Вы не запришивали новый пароль, удалите это письмо.';
 
-$lang['lostpassword']['lost_password_error']='Â áàçå äàííûõ íåò óêàçàííîãî e-mail àäðåñà.';
-$lang['lostpassword']['lost_password_success']='Ïèñüìî ñ èíñòðóêöèåé âûñëàíî íà Âàø e-mail àäðåñ.';
+$lang['lostpassword']['lost_password_error']='Указанный e-mail адрес не найден.';
+$lang['lostpassword']['lost_password_success']='Письмо с инструкцией по замене пароля выслано на указанный e-mail.';
 
-$lang['lostpassword']['enter_password']='Ââåäèòå íîâûé ïàðîëü';
+$lang['lostpassword']['enter_password']='Введите новый пароль';
 
-$lang['lostpassword']['new_password']='Íîâûé ïàðîëü';
-$lang['lostpassword']['lost_password']='Çàáûëè ïàðîëü';
+$lang['lostpassword']['new_password']='Новый пароль';
+$lang['lostpassword']['lost_password']='Забыли пароль';
 
-$lang['lostpassword']['confirm_password']='Ïîäòâåðäèòå ïàðîëü';
+$lang['lostpassword']['confirm_password']='Подтверждение пароля';
 ?>

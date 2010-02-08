@@ -30,5 +30,5 @@ $lang['tasks']['import_success']='%s задач импортированно';
 $lang['tasks']['call']='Позвонить';
 
 $lang['tasks']['dueAtdate']='До %s';
-
+$lang['tasks']['list']='Список задач';
 ?>

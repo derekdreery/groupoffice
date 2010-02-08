@@ -38,5 +38,5 @@ GO.summary.lang.manageAnnouncements='Управление новостями';
 GO.summary.lang.webFeeds='Управление webfeeds';
 GO.summary.lang.type='Тип';
 GO.summary.lang.summaryType='Резюме';
-GO.summary.lang.rssFeeds='Rss Feeds';
+GO.summary.lang.rssFeeds='Rss каналы';
 GO.summary.lang.noRssFeeds='Не добавлено ни одного RSS-канала.<br />Нажмите на кнопку Настройки в верхнем правом углу чтобы добавить новостной канал.';

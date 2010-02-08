@@ -23,7 +23,7 @@ $lang['calendar']['allTogether'] = 'Все вместе';
 
 $lang['calendar']['location']='Место';
 
-$lang['calendar']['invited']='Вы приглашены для следующего события';
+$lang['calendar']['invited']='Вы приглашены на следующее событие';
 $lang['calendar']['acccept_question']='Принимаете приглашение?';
 
 $lang['calendar']['accept']='Принять';
@@ -83,3 +83,27 @@ $lang['calendar']['printList']='Список событий';
 
 $lang['calendar']['printAllDaySingle']='Весь день';
 $lang['calendar']['printAllDayMultiple']='Весь день с %s по %s';
+
+$lang['calendar']['calendars']='Календари';
+
+$lang['calendar']['open_resource']='Свободный ресурс';
+
+$lang['calendar']['resource_mail_subject']='Ресурс \'%s\' зарезервирован для \'%s\' на \'%s\'';//%s is resource name, %s is event name, %s is start date
+$lang['calendar']['resource_mail_body']='%s зарезервировал ресурс \'%s\'. Вы назначены отвественным за данный ресурс. Пожалуйста примите или отклоните заявку.'; //First %s is the name of the person who created the event. Second is the calendar name
+
+$lang['calendar']['resource_modified_mail_subject']='Ресурс \'%s\' зарезервированый для \'%s\' на \'%s\' изменен';//%s is resource name, %s is event name, %s is start date
+$lang['calendar']['resource_modified_mail_body']='%s изменил заявку для ресурса \'%s\'. Вы назначены отвественным за данный ресурс. Пожалуйста примите или отклоните заявку.'; //First %s is the name of the person who created the event. Second is the calendar name
+
+$lang['calendar']['your_resource_modified_mail_subject']='Ваша заявка \'%s\' на \'%s\' в состоянии \'%s\' изменена';//is resource name, %s is event name, %s is start date
+$lang['calendar']['your_resource_modified_mail_body']='%s изменил Вашу заявку на ресурс \'%s\'.';
+
+$lang['calendar']['your_resource_accepted_mail_subject']='Ваша заявка для \'%s\' на \'%s\' принята';//%s is resource name, %s is start date
+$lang['calendar']['your_resource_accepted_mail_body']='%s принял Вашу заявку на ресурс \'%s\'.'; //First %s is the name of the person who created the event. Second is the calendar name
+
+$lang['calendar']['your_resource_declined_mail_subject']='Ваша заявка для \'%s\' на \'%s\' отклонена';//%s is resource name, %s is start date
+$lang['calendar']['your_resource_declined_mail_body']='%s отклонил Вашу заявку на ресурс \'%s\'.'; //First %s is the name of the person who created the event. Second is the calendar name
+
+$lang['calendar']['birthday_name']='День рождения: {NAME}';
+$lang['calendar']['birthday_desc']='{NAME} сегодня {AGE} лет';
+
+$lang['calendar']['unauthorized_participants_write']='У Вас недостаточно привелегий для планирования событий следующих пользователей:<br /><br />{NAMES}<br /><br />Вы можете выслать им приглашения и они могут принять и добавитьв свой календарь.';
