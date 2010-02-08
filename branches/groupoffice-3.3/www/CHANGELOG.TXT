@@ -1,3 +1,7 @@
+2010/02/08 3.3.19
+- Updated Russian translation
+- Speed up the typing in the e-mail composer
+
 2010/02/05 3.3.18
 - Fixed popen warning that occured on some shared hosting setups.
 
