@@ -420,7 +420,7 @@ try {
 			}
 			break;
 
-		case 'link_types':
+		/*case 'link_types':
 
 			foreach($GO_MODULES->modules as $module) {
 				if($lang_file = $GO_LANGUAGE->get_language_file($module['id'])) {
@@ -443,7 +443,7 @@ try {
 			}
 			break;
 
-			break;
+			break;*/
 
 		case 'links':
 

@@ -1,12 +1,4 @@
-GO.linkTypeStore = new GO.data.JsonStore({
-	url: BaseHref+'json.php',			
-	baseParams: {task: "link_types"},
-	root: 'results',
-	totalProperty: 'total',
-	id: 'id',
-	fields: ['id','name', 'checked'],
-	remoteSort: true
-});
+
 
 GO.LinkTypeFilterPanel = function(config)
 {
@@ -30,7 +22,11 @@ GO.LinkTypeFilterPanel = function(config)
 		autoHeight:true,
 		border:false,
 		loadMask:true,
-		store: GO.linkTypeStore,		
+		store: new Ext.data.JsonStore({
+			root: 'results',
+			data: {"results":GO.linkTypes},
+			fields: ['id','name', 'checked']
+		}),
 		columns: [
 				checkColumn,
 				{

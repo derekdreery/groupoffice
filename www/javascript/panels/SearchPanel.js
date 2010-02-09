@@ -227,20 +227,9 @@ Ext.extend(GO.grid.SearchPanel, Ext.Panel, {
 	},
 	
 	load : function(){
-		if(!GO.linkTypeStore.loaded)
-		{
-			GO.linkTypeStore.load({
-				scope:this,
-				callback:function(){
-					this.load();
-				}
-			});
-		}else
-		{		
-			this.searchField.setValue(this.query);
-			this.searchGrid.store.baseParams.query=this.query;
-			this.searchGrid.store.load();
-		}
+		this.searchField.setValue(this.query);
+		this.searchGrid.store.baseParams.query=this.query;
+		this.searchGrid.store.load();
 	},	
 	
 	iconRenderer : function(src,cell,record){
