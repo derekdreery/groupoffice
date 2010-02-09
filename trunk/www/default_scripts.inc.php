@@ -296,7 +296,37 @@ if($GO_SECURITY->logged_in()) {
 		echo '<script type="text/javascript" src="'.$script.'"></script>'."\n";
 	}
 
+	/*
+	 * The GO_SCRIPTS_JS variable can be filled with javascript code and will be
+	 * executed when Group-Office loads for the first time.
+	 * Modules can add stuff in their scripts.inc.php files.
+	 */
+
 	$GO_SCRIPTS_JS='';
+
+	foreach($GO_MODULES->modules as $module) {
+		if($lang_file = $GO_LANGUAGE->get_language_file($module['id'])) {
+			$GO_LANGUAGE->require_language_file($module['id']);
+		}
+	}
+
+	$response['total'] = count($lang['link_type']);
+	$response['results']=array();
+
+	//The checked values is used in the SearchPanel.js for the filter
+	$types = $GO_CONFIG->get_setting('link_type_filter', $GO_SECURITY->user_id);
+	$types = empty($types) ? array() : explode(',', $types);
+
+	$link_types=array();
+	asort($lang['link_type']);
+	foreach($lang['link_type'] as $id=>$name) {
+		$type['id']=$id;
+		$type['name']=$name;
+		$type['checked']=in_array($id, $types);
+		$link_types[] = $type;
+	}
+
+	$GO_SCRIPTS_JS .= 'GO.linkTypes='.json_encode($link_types).';';
 
 	require_once($GO_CONFIG->class_path.'export_query.class.inc.php');
 	$eq = new export_query();
