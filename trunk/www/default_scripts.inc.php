@@ -310,9 +310,6 @@ if($GO_SECURITY->logged_in()) {
 		}
 	}
 
-	$response['total'] = count($lang['link_type']);
-	$response['results']=array();
-
 	//The checked values is used in the SearchPanel.js for the filter
 	$types = $GO_CONFIG->get_setting('link_type_filter', $GO_SECURITY->user_id);
 	$types = empty($types) ? array() : explode(',', $types);

@@ -17,6 +17,14 @@ $GO_SECURITY->json_authenticate('links');
 try{
 	switch($_REQUEST['task'])
 	{
+		case 'save_default_link_folders':
+
+			foreach($_POST['default_folders'] as $link_type=>$value){
+				$GO_CONFIG->save_setting('default_link_folder_'.$link_type, $value);
+			}
+			$response['success']=true;
+
+			break;
 		case 'save_link_description':		
 			$link_description_id=$link_description['id']=isset($_POST['link_description_id']) ? $_POST['link_description_id'] : 0;
 						$link_description['description']=$_POST['description'];

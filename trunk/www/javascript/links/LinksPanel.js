@@ -291,33 +291,18 @@ GO.grid.LinksPanel = function(config){
 			})
 		];
 		
-	if(GO.links && GO.links.LinkDescriptionsGrid)
+	if(GO.links && GO.links.SettingsDialog)
 	{
 		config.tbar.push('-');
 		
 		config.tbar.push({
-			text: GO.links.lang.linkDescriptions,
+			text: GO.lang.cmdSettings,
 			scope:this,
 			iconCls:'btn-settings',
 			handler:function(){
 				if(!this.settingsWindow)
 				{
-					this.settingsWindow = new GO.Window({
-						height:400,
-						width:300,
-						layout:'fit',
-						title:GO.links.lang.linkDescriptions,
-						closeAction:'hide',
-						items:new GO.links.LinkDescriptionsGrid(),
-						buttons:[
-							{
-								text: GO.lang['cmdClose'],				        						
-								handler: function(){
-									this.settingsWindow.hide();
-								},
-								scope:this
-							}]
-					});
+					this.settingsWindow = new GO.links.SettingsDialog();
 				}
 				this.settingsWindow.show();				
 			}
