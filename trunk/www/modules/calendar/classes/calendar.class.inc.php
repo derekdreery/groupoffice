@@ -1996,9 +1996,9 @@ class calendar extends db
 
 	function get_event_from_ical_file($ical_file)
 	{
-		global $GO_MODULES;
+		global $GO_CONFIG;
 
-		require_once($GO_MODULES->modules['calendar']['class_path'].'ical2array.class.inc');
+		require_once($GO_CONFIG->class_path.'ical2array.class.inc');
 		$this->ical2array = new ical2array();
 
 		$vcalendar = $this->ical2array->parse_file($ical_file);
