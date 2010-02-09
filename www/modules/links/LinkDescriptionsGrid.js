@@ -15,6 +15,7 @@ GO.links.LinkDescriptionsGrid = function(config){
 	{
 		config = {};
 	}
+	config.title=GO.links.lang.linkDescriptions;
 	config.layout='fit';
 	config.autoScroll=true;
 	config.split=true;
