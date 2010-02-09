@@ -492,7 +492,7 @@ class String {
 	 * @param string $sort_name string Vlaue can be last_name or first_name
 	 * @return string base64 encoded string
 	 */
-	function format_name($last, $first = '', $middle = '', $sort_name='') {
+	public static function format_name($last, $first = '', $middle = '', $sort_name='') {
 
 		if(is_array($last))
 		{
