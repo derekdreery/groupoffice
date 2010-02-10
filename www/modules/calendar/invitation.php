@@ -42,12 +42,19 @@ if(!$event)
 }elseif(!$user || $task == 'decline')
 {
 	$owner = $GO_USERS->get_user($event['user_id']);
+
+	
 	if($task=='accept')
 	{
 		$cal->set_event_status($event_id, '1', $email);
 		echo '<h1 class="cal-go-title">'.$GO_CONFIG->title.'</h1>';
 		echo '<h1>'.$lang['calendar']['accept_title'].'</h1>';
 		echo '<p>'.$lang['calendar']['accept_confirm'].'</p>';
+
+		if($user['language']!=$GO_LANGUAGE->language){
+			$GO_LANGUAGE->set_language($user['language']);
+			require($GO_LANGUAGE->get_language_file('calendar'));
+		}
 
 		require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 		$swift = new GoSwift($owner['email'],  sprintf($lang['calendar']['accept_mail_subject'],$event['name']));
@@ -64,6 +71,11 @@ if(!$event)
 		echo '<h1 class="cal-go-title">'.$GO_CONFIG->title.'</h1>';
 		echo '<h1>'.$lang['calendar']['decline_title'].'</h1>';
 		echo '<p>'.$lang['calendar']['decline_confirm'].'</p>';
+
+		if($user['language']!=$GO_LANGUAGE->language){
+			$GO_LANGUAGE->set_language($user['language']);
+			require($GO_LANGUAGE->get_language_file('calendar'));
+		}
 
 		require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 		$swift = new GoSwift($owner['email'], sprintf($lang['calendar']['decline_mail_subject'],$event['name']));
