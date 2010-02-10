@@ -55,4 +55,4 @@ $lang['email']['disable_trash_folder']='Kon het bericht niet naar de prullenbak 
 $lang['email']['alias']='Alias';
 $lang['email']['aliases']='Aliasen';
 
-$lang['email']['error_move_folder']='Kon de map niet verplaatsen';
+$lang['email']['error_move_folder']='Kon de map niet';

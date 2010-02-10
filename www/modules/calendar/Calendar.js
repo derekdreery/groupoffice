@@ -1149,7 +1149,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		
 		
 		this.dayButton.toggle(this.displayType=='days' && this.days==1);
-		this.workWeekButton.toggle(this.displayType=='days' && this.days==6);
+		this.workWeekButton.toggle(this.displayType=='days' && this.days==5);
 		this.weekButton.toggle(this.displayType=='days' && this.days==7);
 		
 		this.monthButton.toggle(this.displayType=='month');
