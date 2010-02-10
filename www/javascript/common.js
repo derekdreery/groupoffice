@@ -68,7 +68,7 @@ GO.playAlarm = function(){
 	if(GO.util.empty(GO.settings.mute_sound))
 	{
 		var flashMovie= GO.util.getFlashMovieObject("alarmSound");
-		if(flashMovie)
+		if(flashMovie && flashMovie.Play)
 		{
 			flashMovie.Play();
 		}
