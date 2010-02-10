@@ -36,3 +36,5 @@ ADD `billing` tinyint( 1 ) NOT NULL ,
 ADD `professional` tinyint( 1 ) NOT NULL ,
 ADD `status` varchar( 50 ) NOT NULL ,
 ADD `status_change_time` int( 11 ) NOT NULL ";
+
+$updates[]="UPDATE sm_installations SET status='ignore'";
