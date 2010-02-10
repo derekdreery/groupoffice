@@ -101,6 +101,10 @@ class XSSclean {
 			return $str;
 		}
 
+		//merijn remove HTML comments
+		$str = preg_replace('/<!.*>/U', '', $str);
+		$str = preg_replace("/on[a-z\w]+=[^\"'>\n]*/iU", "removed='' ", $str);
+
 		/*
 		* Remove Invisible Characters
 		*/
@@ -146,7 +150,7 @@ class XSSclean {
 		* Note: Use rawurldecode() so it does not remove plus signs
 		*
 		*/
-		$str = rawurldecode($str);
+		//$str = rawurldecode($str);
 
 		/*
 		* Convert character entities to ASCII
@@ -157,8 +161,7 @@ class XSSclean {
 		*
 		*/
 
-		//merijn remove HTML comments
-		$str = preg_replace('/<!.*>/U', '', $str);
+		
 
 
 		$str = preg_replace_callback("/[a-z]+=([\'\"]).*?\\1/si", array($this, '_convert_attribute'), $str);
@@ -481,7 +484,9 @@ class XSSclean {
 	function _js_link_removal($match)
 	{
 		$attributes = $this->_filter_attributes(str_replace(array('<', '>'), '', $match[1]));
-		return str_replace($match[1], preg_replace("#href=.*?(alert\(|alert&\#40;|javascript\:|charset\=|window\.|document\.|\.cookie|<script|<xss|base64\s*,)#si", "", $attributes), $match[0]);
+
+		$new = preg_replace("#href=.*?(alert\(|alert&\#40;|javascript\:|charset\=|window\.|document\.|\.cookie|<script|<xss|base64\s*,)#si", "", $attributes);
+		return str_replace($match[1], $new, $match[0]);
 	}
 
 	/**
