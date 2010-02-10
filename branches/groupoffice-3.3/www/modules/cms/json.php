@@ -39,7 +39,7 @@ function get_folder_nodes($folder_id, $site, $path=''){
 				'template'=>$site['template'],
 				'root_folder_id'=>$item['files_folder_id'],
 				'leaf'=>true,
-				'path'=> $path.urlencode($item['name'])
+				'path'=> $path.'/'.urlencode($item['name'])
 			);	
 		}else
 		{
@@ -52,7 +52,7 @@ function get_folder_nodes($folder_id, $site, $path=''){
 				'template'=>$site['template'],
 				'root_folder_id'=>$site['files_folder_id'],
 				'default_template'=>$item['default_template'],
-				'path'=> $path.urlencode($item['name'])
+				'path'=> $path.'/'.urlencode($item['name'])
 			);
 			
 			$subitems = $cms->get_items($item['id']);
