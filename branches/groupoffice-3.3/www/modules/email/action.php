@@ -821,6 +821,9 @@ try{
 								$folder_name = $path_name.substr($record['name'], $folder_src_length);
 								$email2->rename_folder($account_id, $record['name'], $folder_name);
 							}
+						}else
+						{
+							$response['feedback']=$lang['email']['error_move_folder'];
 						}
 					}
 					else

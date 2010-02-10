@@ -1391,37 +1391,35 @@ class imap{
 		* @access public
 		* @return bool True on success
 		*/
-	function rename_folder($old_name, $new_name) {
+	 function rename_folder($old_name, $new_name) {
 
-		$children = $this->get_mailboxes($old_name);
-		if(imap_renamemailbox($this->conn, "{".$this->connectstring."}".$old_name, "{".$this->connectstring."}".$new_name))
-		{
-			foreach($children as $old_child)
-			{
-				$old_child = $old_child['name'];
-				$pos = strpos($old_child, $old_name);
-				$new_child = substr_replace($old_child, $new_name, $pos, strlen($old_name));
-				//echo 'Renaming: '.$old_child.' to: '.$new_child.' <br />';
-				if(!$this->unsubscribe($old_child))
-				{
-					return false;
-				}elseif(!$this->subscribe($new_child))
-				{
-					if(imap_renamemailbox($this->conn, "{".$this->connectstring."}".$old_child, "{".$this->connectstring."}".$new_child))
-					{
-						if(!$this->subscribe($new_child))
-						{
-							return false;
-						}
-					}
-				}
-			}
-		}
-		return true;
-	}
+		 $children = $this->get_mailboxes($old_name);
 
+		 //debug('Renaming: '.$old_name.' to: '.$new_name);
 
+		 //debug($children);
 
+		 $ret = imap_renamemailbox($this->conn, "{".$this->connectstring."}".$old_name, "{".$this->connectstring."}".$new_name);
+		 if(!$ret) {
+			 return false;
+		 }
+		 $this->unsubscribe($old_name);
+		 $this->subscribe($new_name);
+
+		 foreach($children as $old_child) {
+			 $old_child = $old_child['name'];
+			 $pos = strpos($old_child, $old_name);
+			 $new_child = substr_replace($old_child, $new_name, $pos, strlen($old_name));
+			 //debug('Renaming: '.$old_child.' to: '.$new_child);
+			 $this->unsubscribe($old_child);			 
+			 //if(imap_renamemailbox($this->conn, "{".$this->connectstring."}".$old_child, "{".$this->connectstring."}".$new_child)) {
+				 //debug('Subscribing:'.$new_child);
+				 $this->subscribe($new_child);
+			 //}
+		 }
+
+		 return true;
+	 }
 
 	/**
 		* Move messages to another mailbox
