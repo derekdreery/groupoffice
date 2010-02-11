@@ -57,7 +57,10 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 			iconCls: 'btn-link', 
 			cls: 'x-btn-text-icon', 
 			text: GO.lang.cmdBrowseLinks,
-			handler: function(){				
+			handler: function(){
+				if(!GO.linkBrowser){
+					GO.linkBrowser = new GO.LinkBrowser();
+				}
 				GO.linkBrowser.show({link_id: this.data.id,link_type: this.link_type,folder_id: "0"});
 				GO.linkBrowser.on('hide', this.reload, this,{single:true});
 			},
