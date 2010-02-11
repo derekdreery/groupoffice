@@ -54,7 +54,3 @@ Ext.extend(GO.LinkBrowser, Ext.Window, {
 		GO.LinkBrowser.superclass.show.call(this);
 	}
 });
-
-GO.mainLayout.onReady(function(){
-	GO.linkBrowser = new GO.LinkBrowser();
-});
