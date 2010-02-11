@@ -19,8 +19,15 @@ try{
 	{
 		case 'save_default_link_folders':
 
-			foreach($_POST['default_folders'] as $link_type=>$value){
-				$GO_CONFIG->save_setting('default_link_folder_'.$link_type, $value);
+			foreach($GO_MODULES->modules as $module) {
+				if($lang_file = $GO_LANGUAGE->get_language_file($module['id'])) {
+					$GO_LANGUAGE->require_language_file($module['id']);
+				}
+			}
+
+			foreach($lang['link_type'] as $id=>$name) {
+				if(isset($_POST['default_folders_'.$id]))
+					$GO_CONFIG->save_setting('default_link_folder_'.$id, $_POST['default_folders_'.$id]);
 			}
 			$response['success']=true;
 

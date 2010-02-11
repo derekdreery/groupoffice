@@ -19,12 +19,29 @@ GO.links.SettingsDialog = function(config){
 		config={};
 	}
 
+	
+	var formItems = [{
+			xtype:'htmlcomponent',			
+			html: GO.links.lang.defaultLinkFolderText
+	}];
+	for(var i=0;i<GO.linkTypes.length;i++){
+		formItems.push({
+			xtype:'textarea',
+			fieldLabel:GO.linkTypes[i].name,
+			name: 'default_folders_'+GO.linkTypes[i].id,
+			anchor:'-20',
+			height:40
+		});
+	}
+
 	this.defaultFoldersPanel = new Ext.FormPanel({
-		title:'Default link folders',
+		title:GO.links.lang.linkFolders,
 		cls:'go-form-panel',
 		url:GO.settings.modules.links.url+'action.php',
 		baseParams:{task:'save_default_link_folders'},
 		autoScroll:true,
+		items:formItems,
+		buttonAlign:'right',
 		buttons:[{
 			text: GO.lang.cmdSave,
 			handler: function(){
@@ -33,16 +50,6 @@ GO.links.SettingsDialog = function(config){
 			scope:this
 		}]
 	});
-
-	for(var i=0;i<GO.linkTypes.length;i++){
-		this.defaultFoldersPanel.add({
-			xtype:'textarea',
-			fieldLabel:GO.linkTypes[i].name,
-			name: 'default_folders['+GO.linkTypes[i].id+']',
-			anchor:'100%',
-			height:40
-		});
-	}
 
 	config.layout='fit';
 	config.modal=false;
@@ -66,10 +73,13 @@ GO.links.SettingsDialog = function(config){
 	GO.links.SettingsDialog.superclass.constructor.call(this, config);
 }
 Ext.extend(GO.links.SettingsDialog, Ext.Window,{
-	show : function(){
 
-
-		GO.links.SettingsDialog.superclass.show.call(this);
+	afterRender : function(){
+		GO.links.SettingsDialog.superclass.afterRender.call(this);
+		this.defaultFoldersPanel.load({
+			url:GO.settings.modules.links.url+'json.php',
+			params:{task:'default_link_folders'}
+		});
 	}
 
 });

@@ -23,6 +23,20 @@ try{
 			$response['data']=$link_description;
 			$response['success']=true;
 			break;
+
+		case 'default_link_folders':
+			foreach($GO_MODULES->modules as $module) {
+				if($lang_file = $GO_LANGUAGE->get_language_file($module['id'])) {
+					$GO_LANGUAGE->require_language_file($module['id']);
+				}
+			}
+			$response['data']=array();
+			$response['success']=true;
+			foreach($lang['link_type'] as $id=>$name) {
+				$response['data']['default_folders_'.$id]=$GO_CONFIG->get_setting('default_link_folder_'.$id);
+			}
+
+			break;
 		
 /* {TASKSWITCH} */
 	}
