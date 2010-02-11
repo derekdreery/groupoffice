@@ -60,6 +60,21 @@ class GO_LINKS extends db
 	{		
 		$this->update_row('go_link_folders', 'id', $folder);		
 	}
+
+	function get_folder_by_name($name, $link_id, $link_type, $parent_id=0){
+		$sql = "SELECT * FROM go_link_folders";
+		if($parent_id)
+		{
+			$sql .= " WHERE parent_id=".intval($parent_id);
+		}else
+		{
+			$sql .= " WHERE link_id=".$this->escape($link_id)." AND link_type=".$this->escape($link_type)." AND parent_id=0";
+		}
+
+		$sql .= " AND name='".$this->escape($name)."'";
+		$this->query($sql);
+		return $this->next_record();
+	}
 	
 	function get_folder($folder_id)
 	{

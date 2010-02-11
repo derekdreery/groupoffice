@@ -447,6 +447,38 @@ class search extends db {
  			$cache['ctime']=time();
  			$this->insert_row('go_search_cache',$result);
  			$this->log($result['id'], $result['link_type'], 'Added '.strip_tags($result['name']));
+
+			//create default link folders
+			global $GO_CONFIG, $GO_LINKS;
+			
+			$default_folders = $GO_CONFIG->get_setting('default_link_folder_'.$result['link_type']);
+			if($default_folders){
+
+				$default_folder_array=array();
+
+				$lines = explode("\n", $default_folders);
+				foreach($lines as $line){
+					$folders = explode('/', $line);
+
+					$parent_id=0;
+					for($i=0;$i<count($folders);$i++)
+					{
+						$folder = $GO_LINKS->get_folder_by_name($folders[$i], $result['id'], $result['link_type'], $parent_id);
+						if(!$folder){
+							$parent_id = $GO_LINKS->add_folder(array(
+								'name'=>$folders[$i],
+								'link_id'=>$result['id'],
+								'link_type'=>$result['link_type'],
+								'parent_id'=>$parent_id
+							));
+						}else
+						{
+							$parent_id=$folder['id'];
+						}
+					}
+				}
+				//go_debug($default_folder_array);
+			}
  		}
 	}
 	
