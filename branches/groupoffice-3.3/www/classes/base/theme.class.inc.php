@@ -113,7 +113,7 @@ class GO_THEME
 		$this->stylesheets[]=$path;
 	}
 
-	function load_module_stylesheets(){
+	function load_module_stylesheets($derrived_theme=false){
 		global $GO_MODULES;
 
 		foreach($GO_MODULES->modules as $module)
@@ -123,6 +123,9 @@ class GO_THEME
 			}
 
 			if($this->theme!='Default'){
+				if($derrived_theme && file_exists($module['path'].'themes/'.$derrived_theme.'/style.css')){
+					$this->add_stylesheet($module['path'].'themes/'.$derrived_theme.'/style.css');
+				}
 				if(file_exists($module['path'].'themes/'.$this->theme.'/style.css')){
 					$this->add_stylesheet($module['path'].'themes/'.$this->theme.'/style.css');
 				}
