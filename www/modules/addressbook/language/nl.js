@@ -107,3 +107,6 @@ GO.addressbook.lang.enterSearchQueryName='Geef een naam aan deze zoekterm:';
 
 GO.addressbook.lang.photo = 'Foto';
 GO.addressbook.lang.deleteImage='Verwijder afbeelding';
+
+GO.addressbook.lang.addAllSearchResults='Alle zoekresultaten toevoegen';
+GO.addressbook.lang.confirmAddAllSearchResults='Weet u zeker dat u alle zoekresultaten aan de adreslijst wilt toevoegen?';

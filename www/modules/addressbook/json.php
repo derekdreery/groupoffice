@@ -213,31 +213,7 @@ try
 				$query = !empty($query) ? '%'.$query.'%' : '';
 			}
 			
-			$advancedQuery = '';
-			if(!empty($_POST['advancedQuery']))
-			{
-				if (is_string($_POST['advancedQuery'])) {
-					$advancedQuery = $_POST['advancedQuery'];
-				} else {
-					$aq = json_decode($_POST['advancedQuery'], true);
-					foreach($aq as $field=>$value)
-					{
-						if(!empty($advancedQuery))
-						{
-							$advancedQuery .= ' OR ';
-						}
-						if($field=='ab_contacts.name')
-						{
-							$field = 'CONCAT(first_name,middle_name,last_name)';
-						}else
-						{
-							$field = $ab->escape($field);
-						}
-						$advancedQuery .= $field.' LIKE \'%'.$ab->escape(str_replace(' ','%',$value)).'%\'';
-					}
-				}
-			}
-				
+			$advancedQuery = empty($_POST['advancedQuery']) ? '' : $_POST['advancedQuery'];
 				
 			$response['results']=array();
 			$response['total']=$ab->search_contacts(
@@ -331,24 +307,8 @@ try
 				$query = !empty($query) ? '%'.$query.'%' : '';
 			}
 			
-			$advancedQuery = '';
-			if(!empty($_POST['advancedQuery']))
-			{
-				if (is_string($_POST['advancedQuery'])) {
-					$advancedQuery = $_POST['advancedQuery'];
-				} /* else {
-					$aq = json_decode($_POST['advancedQuery'], true);
-					foreach($aq as $field=>$value)
-					{
-						if(empty($advancedQuery))
-						{
-							$advancedQuery .= ' AND ';
-						}
-						$advancedQuery .= $ab->escape($field).' LIKE \''.$ab->escape($value).'\'';
-					}
-				} */
-			}
-
+			$advancedQuery = empty($_POST['advancedQuery']) ? '' : $_POST['advancedQuery'];
+			
 			$response['results'] = array();
 			$response['total']=$ab->search_companies(
 			$GO_SECURITY->user_id,
@@ -369,9 +329,7 @@ try
 			{
 				addressbook::format_company_record($record);
 				$response['results'][] = $record;
-			}
-			
-			
+			}		
 
 			echo json_encode($response);
 			break;
