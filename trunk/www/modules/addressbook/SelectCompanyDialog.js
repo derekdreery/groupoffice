@@ -36,11 +36,54 @@ GO.addressbook.SelectCompanyDialog = function(config){
 	  
   this.searchField = new GO.form.SearchField({
 		width:320
-  });	
+  });
+
+	this.addressbooksGrid = new GO.addressbook.AddresbooksGrid({
+		region:'west',
+		width:180
+	});
+
+	this.addressbooksGrid.getSelectionModel().on('rowselect', function(sm, rowIndex, r){
+		var record = this.addressbooksGrid.getStore().getAt(rowIndex);
+		this.grid.store.baseParams.addressbook_id=record.get("id");
+		this.grid.store.load();
+	}, this);
+
 		
 	this.grid = new GO.addressbook.CompaniesGrid({
+		region:'center',
 		tbar: [
-    GO.lang['strSearch']+': ', ' ', this.searchField
+    GO.lang['strSearch']+': ', ' ', this.searchField,{
+				handler: function()
+				{
+					if(!this.advancedSearchWindow)
+					{
+						this.advancedSearchWindow = GO.addressbook.advancedSearchWindow = new GO.addressbook.AdvancedSearchWindow();
+						this.advancedSearchWindow.on('ok', function(win){
+
+						this.grid.store.baseParams.advancedQuery=GO.addressbook.searchQueryPanel.queryField.getValue();
+						this.searchField.setValue("[ "+GO.addressbook.lang.advancedSearch+" ]");
+						this.searchField.setDisabled(true);
+						this.grid.store.load();
+
+						}, this)
+					}
+					this.advancedSearchWindow.show('companies');
+				},
+				text: GO.addressbook.lang.advancedSearch,
+				scope: this,
+				style:'margin-left:5px;'
+			},{
+				handler: function()
+				{
+					this.searchField.setValue("");
+					delete this.grid.store.baseParams.advancedQuery;
+					this.searchField.setDisabled(false);
+					this.grid.store.load();
+				},
+				text: GO.lang.cmdReset,
+				scope: this
+			}
     ]});
     
   //dont filter on address lists when selecting
@@ -56,14 +99,14 @@ GO.addressbook.SelectCompanyDialog = function(config){
 	
 	
 	GO.addressbook.SelectCompanyDialog.superclass.constructor.call(this, {
-    layout: 'fit',
+    layout: 'border',
     focus: focusSearchField.createDelegate(this),
 		modal:false,
 		height:400,
-		width:600,
+		width:750,
 		closeAction:'hide',
 		title: GO.addressbook.lang['strSelectCompany'],
-		items: this.grid,
+		items: [this.addressbooksGrid ,this.grid],
 		buttons: [
 			{
 				text: GO.lang['cmdOk'],
@@ -76,6 +119,14 @@ GO.addressbook.SelectCompanyDialog = function(config){
 				text: GO.lang['cmdAdd'],
 				handler: function (){
 					this.callHandler(false);
+				},
+				scope:this
+			},{
+				text: GO.addressbook.lang.addAllSearchResults,
+				handler: function (){
+					if(confirm(GO.addressbook.lang.confirmAddAllSearchResults)){
+						this.callHandler(true, true);
+					}
 				},
 				scope:this
 			},
@@ -99,7 +150,7 @@ Ext.extend(GO.addressbook.SelectCompanyDialog, Ext.Window, {
 	},
 	
 	//private
-	callHandler : function(hide){
+	callHandler : function(hide, allResults){
 		if(this.handler)
 		{
 			if(!this.scope)
@@ -107,7 +158,7 @@ Ext.extend(GO.addressbook.SelectCompanyDialog, Ext.Window, {
 				this.scope=this;
 			}
 			
-			var handler = this.handler.createDelegate(this.scope, [this.grid]);
+			var handler = this.handler.createDelegate(this.scope, [this.grid, allResults]);
 			handler.call();
 		}
 		if(hide)
