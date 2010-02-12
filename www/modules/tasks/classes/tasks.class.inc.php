@@ -585,7 +585,7 @@ class tasks extends db
 		$task['completion_time']=Date::get_timestamp($task['completion_time']);
 		$task['start_time']=Date::get_timestamp($task['start_time'], false);
 
-		$task['status']=$lang['tasks']['statuses'][$task['status']];
+		$task['status']=isset($lang['tasks']['statuses'][$task['status']]) ? $lang['tasks']['statuses'][$task['status']] : '';
 		$task['description']=String::text_to_html(String::cut_string($task['description'],500));
 
 		if($cf)
