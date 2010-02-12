@@ -135,6 +135,10 @@ class imap{
 		$this->RFC822 = new RFC822();
 	}
 
+	function __destruct(){		
+			$this->close();
+	}
+
 	/**
 	 * Opens a connection to server
 	 *

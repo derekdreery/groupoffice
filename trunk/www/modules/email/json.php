@@ -239,9 +239,9 @@ try{
 
 		$url_replacements=array();
 
-		$account = connect($account_id, $mailbox);
-
-
+		//$account = connect($account_id, $mailbox);
+		$account = $email->get_account($account_id);
+		$imap->set_account($account, $mailbox);
 
 		if(!$account)
 		{
@@ -250,7 +250,7 @@ try{
 		}else
 		{
 
-			$content = $imap->get_message_with_body($uid, $_POST['content_type']!='html', true, true);
+			$content = $imap->get_message_with_body($uid, $_POST['content_type']!='html', true);
 
 			switch($task)
 			{
@@ -543,9 +543,11 @@ try{
 				$mailbox = $_REQUEST['mailbox'];
 				$uid = $_REQUEST['uid'];
 
-				$account = connect($account_id, $mailbox);
+				//$account = connect($account_id, $mailbox);
+				$account = $email->get_account($account_id);
+				$imap->set_account($account, $mailbox);
 				
-				$response = $imap->get_message_with_body($uid, !empty($_POST['plaintext']),isset($_POST['unblock']), !empty($_POST['create_temporary_attachments']));
+				$response = $imap->get_message_with_body($uid, !empty($_POST['plaintext']),!empty($_POST['create_temporary_attachments']));
 
 				if($imap->set_unseen_cache(array($uid), false))
 				{
@@ -646,11 +648,23 @@ try{
 						}
 					}
 				}
+				if(!empty($_POST['unblock'])){
+					$block_images=false;
+				}else
+				{
+					require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
+					$ab = new addressbook();
 
-				// don't send very large texts to the browser because it will hang.
-				if(strlen($response['body'])>512000){
-					$response['body']=String::cut_string($response['body'], 521000, false);
+					$contact = $ab->get_contact_by_email($response['sender'], $GO_SECURITY->user_id);
+					$block_images = !is_array($contact);
 				}
+				$response['blocked_images']=0;
+				if($block_images)
+				{
+					$response['body'] = preg_replace("/<([^a]{1})([^>]*)https?:([^>]*)/iu", "<$1$2blocked:$3", $response['body'], -1, $response['blocked_images']);
+				}
+
+				
 
 				break;
 
@@ -1195,10 +1209,6 @@ try{
 	$response['success']=false;
 }
 
-if(defined('IMAP_CONNECTED'))
-{
-	$imap->close();
-}
 
 
 
