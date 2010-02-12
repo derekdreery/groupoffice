@@ -35,7 +35,16 @@ class cached_imap extends imap{
 		parent::__construct();
 	}
 
+	function set_account($account, $mailbox='INBOX'){
+		$this->account = $account;
 
+		if(!$this->folder || $this->folder['name']!=$mailbox){
+			$this->folder = $this->email->get_folder($this->account['id'],$mailbox);
+
+			if($this->folder)
+				$this->folder_sort_cache=json_decode($this->folder['sort'], true);
+		}
+	}
 	/**
 	 * Opens a connection to server
 	 *
@@ -52,9 +61,9 @@ class cached_imap extends imap{
 	 * @return mixed	The recource ID on success or false on failure
 	 */
 	function open($account, $mailbox='INBOX') {
-		$start_time = getmicrotime();
+		//$start_time = getmicrotime();
 
-		$this->account = $account;
+		$this->set_account($account, $mailbox);
 
 		//cache DNS in session. Seems to be faster with gmail somehow.
 		/*if(empty($_SESSION['cached_imap'][$account['host']]))
@@ -65,13 +74,10 @@ class cached_imap extends imap{
 
 		$conn = parent::open($account['host'], $account['type'], $account['port'], $account['username'], $account['password'], $mailbox, null, $account['use_ssl'], $account['novalidate_cert']);
 
-		$this->folder = $this->email->get_folder($this->account['id'],$mailbox);
-
-		if($this->folder)
-		$this->folder_sort_cache=json_decode($this->folder['sort'], true);
+		
 			
 
-		$end_time = getmicrotime();
+		//$end_time = getmicrotime();
 		//go_debug('IMAP connect took '.($end_time-$start_time).'s');
 
 		return $conn;
@@ -273,6 +279,17 @@ class cached_imap extends imap{
 		return $this->get_uids_subset($first, $offset);
 	}
 
+	function view_part($uid, $part_no, $transfer, $part_charset = '') {
+		
+		if(!$this->conn){
+			if(!$this->open($this->account, $this->folder['name'])){
+				throw new Exception(sprintf($lang['email']['feedbackCannotConnect'], $this->account['host'],  $this->last_error(), $this->account['port']));
+			}
+		}
+
+		return parent::view_part($uid, $part_no, $transfer, $part_charset);
+	}
+
 	/**
 	 * Get one message with the structure
 	 *
@@ -311,10 +328,47 @@ class cached_imap extends imap{
 		return $this->message;
 	}
 
-	function get_message_with_body($uid, $return_plaintext_body=false, $never_block_images=false, $create_temporary_attachment_files=false) {
+	function get_message_with_body($uid, $return_plaintext_body=false, $create_temporary_attachment_files=false) {
 		global $GO_CONFIG, $GO_MODULES, $GO_SECURITY, $GO_LANGUAGE, $lang;
 
 		require_once($GO_LANGUAGE->get_language_file('email'));
+
+
+		/*
+		 * Check cache
+		 */
+		$this->get_cached_messages($this->folder['id'], array($uid), true);
+		$values=$this->email->next_record();
+		if(!empty($values['serialized_message_object'])){
+			$message =  unserialize($values['serialized_message_object']);
+
+			if($create_temporary_attachment_files) {
+				for ($i = 0; $i < count($message['attachments']); $i ++) {
+					$tmp_file = $GO_CONFIG->tmpdir.$message['attachments'][$i]['name'];
+					$data = $this->view_part($uid, $message['attachments'][$i]['number'], $message['attachments'][$i]['transfer']);
+					if($data && file_put_contents($tmp_file, $data)) {
+						$message['attachments'][$i]['tmp_file']=$tmp_file;
+					}
+				}
+
+				for ($i = 0; $i < count($message['url_replacements']); $i ++) {
+					$attachment = $message['url_replacements'][$i]['attachment'];
+					$tmp_file = $GO_CONFIG->tmpdir.$attachment['name'];
+					$data = $this->view_part($uid, $attachment['number'], $attachment['transfer']);
+					if($data && file_put_contents($tmp_file, $data)) {
+						$message['url_replacements'][$i]['tmp_file']=$tmp_file;
+					}
+				}
+			}
+			//go_debug($message);
+			return $message;
+		}
+
+		if(!$this->conn){
+			if(!$this->open($this->account, $this->folder['name'])){
+				throw new Exception(sprintf($lang['email']['feedbackCannotConnect'], $this->account['host'],  $this->last_error(), $this->account['port']));
+			}
+		}
 		
 		$message = $this->get_message($uid);
 
@@ -336,16 +390,7 @@ class cached_imap extends imap{
 		}
 		$message['subject']= htmlspecialchars($message['subject'], ENT_QUOTES, 'UTF-8');
 
-		if($never_block_images){
-			$block_images=false;
-		}else
-		{
-			require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
-			$ab = new addressbook();
-
-			$contact = $ab->get_contact_by_email($message['sender'], $GO_SECURITY->user_id);
-			$block_images = !is_array($contact);
-		}
+		
 
 		/*
 		 * Sometimes clients send multipart/alternative but there's only a text part. FIrst check if there's
@@ -362,7 +407,7 @@ class cached_imap extends imap{
 
 		//go_debug($html_alternative);
 
-		$message['blocked_images']=0;
+		//$message['blocked_images']=0;
 		$message['body']='';
 
 		$attachments=array();
@@ -428,7 +473,7 @@ class cached_imap extends imap{
 
 					case 'text/html':
 
-						$part_body = $return_plaintext_body ?  String::html_to_text($part_body) : String::convert_html($part_body, $block_images, $message['blocked_images']);
+						$part_body = $return_plaintext_body ?  String::html_to_text($part_body) : String::convert_html($part_body);
 						break;
 
 					case 'text/enriched':
@@ -456,13 +501,15 @@ class cached_imap extends imap{
 				}
 			}
 
-			//When a mail is saved as a task/appointment/etc. the attachments will be saved temporarily
-			$attachments[$i]['tmp_file']=false;
-			if($create_temporary_attachment_files) {
-				$tmp_file = $GO_CONFIG->tmpdir.$attachments[$i]['name'];
-				$data = $this->view_part($uid, $attachments[$i]['number'], $attachments[$i]['transfer']);
-				if($data && file_put_contents($tmp_file, $data)) {
-					$attachments[$i]['tmp_file']=$tmp_file;
+			if (!empty($attachments[$i]["id"]) || $this->part_is_attachment($attachments[$i])) {
+				//When a mail is saved as a task/appointment/etc. the attachments will be saved temporarily
+				$attachments[$i]['tmp_file']=false;
+				if($create_temporary_attachment_files) {
+					$tmp_file = $GO_CONFIG->tmpdir.$attachments[$i]['name'];
+					$data = $this->view_part($uid, $attachments[$i]['number'], $attachments[$i]['transfer']);
+					if($data && file_put_contents($tmp_file, $data)) {
+						$attachments[$i]['tmp_file']=$tmp_file;
+					}
 				}
 			}
 
@@ -481,6 +528,9 @@ class cached_imap extends imap{
 				$url_replacement['id'] = $attachments[$i]["id"];
 				$url_replacement['url'] = $url;
 				$url_replacement['tmp_file'] = $attachments[$i]['tmp_file'];
+				//we need the attachment object later when we're creating temporary
+				//attachment files from cache
+				$url_replacement['attachment']=$attachments[$i];
 
 				$message['url_replacements'][]=$url_replacement;
 
@@ -499,6 +549,16 @@ class cached_imap extends imap{
 				$index++;
 			}
 		}
+
+		// don't send very large texts to the browser because it will hang.
+		if(strlen($message['body'])>512000){
+			$message['body']=String::cut_string($message['body'], 521000, false);
+		}
+
+		$cached_message['uid']=$uid;
+		$cached_message['folder_id']=$this->folder['id'];
+		$cached_message['serialized_message_object']=serialize($message);
+		$this->update_cached_message($cached_message);
 
 		return $message;
 	}
@@ -721,10 +781,16 @@ class cached_imap extends imap{
 	 * @return Array Record properties
 	 */
 
-	function get_cached_messages($folder_id, $uids)
+	function get_cached_messages($folder_id, $uids, $with_full_cached_message=false)
 	{
-		//TODO dont select all fields
-		$this->email->query("SELECT * FROM em_messages_cache WHERE folder_id=".$this->email->escape($folder_id)." AND uid IN (".$this->email->escape(implode(',',$uids)).")");
+		$sql = "SELECT `folder_id`,`uid`,`account_id`,`new`,`subject`,`from`,".
+			"`reply_to`,`size`,`udate`,`attachments`,`flagged`,`answered`,`priority`,".
+			"`to`,`notification`,`content_type`,`content_transfer_encoding`";
+		if($with_full_cached_message){
+			$sql .= ",`serialized_message_object` ";
+		}
+		$sql .= "FROM em_messages_cache WHERE folder_id=".$this->email->escape($folder_id)." AND uid IN (".$this->email->escape(implode(',',$uids)).")";
+		$this->email->query($sql);
 	}
 
 }

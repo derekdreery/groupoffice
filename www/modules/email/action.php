@@ -416,6 +416,10 @@ try{
 										$tmp_name = $GO_CONFIG->file_storage_path.$files->build_path($folder).'/'.$file['name'];
 									}
 
+									if(!file_exists($tmp_name)){
+										throw new FileNotFoundException();
+									}
+
 									$img = Swift_EmbeddedFile::fromPath($tmp_name);
 									$img->setContentType(File::get_mime($tmp_name));
 									$src_id = $swift->message->embed($img);
@@ -474,6 +478,10 @@ try{
 											throw new FileNotFoundException();
 										}
 										$tmp_name = $GO_CONFIG->file_storage_path.$files->build_path($folder).'/'.$file['name'];
+									}
+
+									if(!file_exists($tmp_name)){
+										throw new FileNotFoundException();
 									}
 									
 									if(!empty($_POST['encrypt']) && empty($_POST['draft']))
@@ -1074,8 +1082,5 @@ try{
 	$response['feedback']=$e->getMessage();
 	$response['success']=false;
 }
-if(defined('IMAP_CONNECTED'))
-{
-	$imap->close();
-}
+
 echo json_encode($response);

@@ -702,7 +702,7 @@ class String {
 	 * @access public
 	 * @return string HTML formatted string
 	 */
-	function convert_html($html, $block_external_images=false, &$replace_count=0) {
+	function convert_html($html) {
 		global $GO_CONFIG;
 
 		//don't do this because it will mess up <pre></pre> tags
@@ -769,12 +769,7 @@ class String {
 		//$html = preg_replace('/&#38;#x([a-f0-9]+);/mei','chr(0x\\1)', $html);
 		
 		
-		if($block_external_images)
-		{
-			//$html = preg_replace("/<img(.*)src=([\"']?)http([^>])/", "<img$1src=$2blocked:http$3", $html);
-			//$html = preg_replace("/<([^=]*)=[\"']?http[^\"'\s>]*/", "<$1=\"blocked\"", $html);
-			$html = preg_replace("/<([^a]{1})([^>]*)https?:([^>]*)/iu", "<$1$2blocked:$3", $html, -1, $replace_count);
-		}
+		
 		//debug($html);
 
 		return $html;
