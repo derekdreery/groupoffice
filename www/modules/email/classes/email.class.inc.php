@@ -114,7 +114,17 @@ class email extends db
 		$events->add_listener('build_search_index', __FILE__, 'email', 'build_search_index');
 		$events->add_listener('save_settings', __FILE__, 'email', 'save_settings');
 		$events->add_listener('check_database', __FILE__, 'email', 'check_database');
+		$events->add_listener('login', __FILE__, 'email', 'login');
+	}
 
+	public static function login()
+	{
+		global $GO_SECURITY;
+
+		//clear old cache
+		$db = new db();
+		$sql = "DELETE FROM em_messages_cache WHERE udate<".Date::date_add(time(),-21)." AND account_id IN (SELECT id FROM em_accounts WHERE user_id=".$GO_SECURITY->user_id.")";
+		$db->query($sql);
 	}
 	
 	public static function save_settings(){
