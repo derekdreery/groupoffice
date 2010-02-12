@@ -65,7 +65,7 @@ if ($browser['name'] == 'MSIE')
 	header('Pragma: public');
 }else
 {
-	header('Content-Type: '.File::get_mime($path));
+	header('Content-Type: '.File::get_mime($tmpdir."tnef-attachments.zip"));
 	header('Pragma: no-cache');
 	header('Content-Disposition: attachment; filename="'.$lang['email']['attachments'].'.zip"');
 }

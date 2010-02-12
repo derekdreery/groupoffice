@@ -25,3 +25,12 @@ $lang['users']['imported']='Импортировано %s пользовател
 $lang['users']['failed']='Ошибка';
 
 $lang['users']['incorrectFormat']='Формат CSV Файла некоректен';
+$lang['users']['register_email_subject']='Ваша учетная запись в Group-Office';
+$lang['users']['register_email_body']='Для Вас была создана учетная запись в Group-Office на {url}
+Your login details are:
+
+Имя пользователя: {username}
+Пороль: {password}';
+
+
+$lang['users']['max_users_reached']='Превышено максимальное количество пользователей для данной системы.';

@@ -7,7 +7,7 @@ $lang['common']['about']='Versjon: %s
 
 Copyright (c) 2003-%s, Intermesh
 Alle rettigheter forbeholdt.
-Dette programmet er beskyttet av copyrightlovgivning og en egen Group-Office lisens.
+Dette programmet er beskyttet av opphavsretten og en egen Group-Office lisens.
 
 For brukerstøtte kontakt installasjonsansvarlig:
 %s
@@ -198,7 +198,7 @@ $lang['common']['system']='System';
 $lang['common']['goAlreadyStarted']='Group-Office kjører allerede. Dialogvinduet laget av {FUNCTION} er åpnet i Group-Office. Du kan nå lukke dette vinduet, og forsette å arbeide i Group-Office.';
 $lang['common']['reminder']='Påminnelse';
 $lang['common']['unknown']='Ukjent';
-$lang['common']['time']='Tid';
+$lang['common']['time']='Tidspunkt';
 $lang['common']['dontChangeAdminsPermissions']='Du kan ikke endre tillatelser i admingruppen';
 $lang['common']['dontChangeOwnersPermissions']='Du kan ikke endre eierens tilatelser';
 $lang['common']['running_sys_upgrade']='Kjører nødvendig systemoppdatering';

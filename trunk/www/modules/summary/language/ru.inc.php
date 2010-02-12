@@ -13,5 +13,6 @@ $lang['summary']['name']='Начальная страница';
 $lang['summary']['description']='Модуль для отображения обобщенной информации.';
 
 $lang['summary']['default_rss_url']='http://static.feed.rbc.ru/rbc/internal/rss.rbc.ru/rbc.ru/news.rss';
+$lang['summary']['default_rss_title']='Новости';
 $lang['summary']['announcement']='Анонс';
 $lang['summary']['announcements']='Анонсы';

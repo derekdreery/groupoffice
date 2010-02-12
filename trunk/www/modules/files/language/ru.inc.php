@@ -41,3 +41,4 @@ $lang['files']['deleted']='Удален';
 
 $lang['files']['file']='Файл';
 $lang['files']['folder']='Папка';
+$lang['files']['files']='Файлы';

@@ -319,4 +319,4 @@ GO.lang.rightClickToClose='Нажмите правой кнопкой мыши �
 
 GO.lang.adminMenu = 'Меню Администратора';
 
-GO.lang.administration='Администрация';
+GO.lang.administration='Настройки';

@@ -1,5 +1,5 @@
-GO.currencies.lang.currency="Währung";
-GO.currencies.lang.currencies="Währungen";
+GO.currencies.lang.currency="WÃ¤hrung";
+GO.currencies.lang.currencies="WÃ¤hrungen";
 GO.currencies.lang.code="Code";
 GO.currencies.lang.symbol="Symbol";
 GO.currencies.lang.value="Wert";

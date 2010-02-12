@@ -37,6 +37,7 @@ GO.email.lang.filter='Фильтр';
 GO.email.lang.filters='Фильтры';
 GO.email.lang.selectFolderDelete='Выберите папку для удаления';
 GO.email.lang.selectFolderAdd='Сначала выберите папку из дерева, в которую Вы хотите добавить новую папку, а затем нажмите \'Добавить\'';
+GO.email.lang.selectFolderRename='Выберите папку для переименования';
 GO.email.lang.forward='Перенаправить';
 GO.email.lang.resetSearch='Сбросить фильтр';
 GO.email.lang.emailMessage='E-mail сообщение';
@@ -81,6 +82,7 @@ GO.email.lang.uploadAttachments='Добавить вложения';
 GO.email.lang.startTransfer='Начать передачу';
 GO.email.lang.cantEditFolder='Вы не можете редактировать эту папку';
 GO.email.lang.cantDeleteInboxFolder='Вы не можете удалить папку Входящие';
+GO.email.lang.cantRenameInboxFolder='Вы не можете переименовать папку Входящие';
 GO.email.lang.enterFolderName='Введите имя папки:';
 GO.email.lang.addFolder='Добавить папку';
 GO.email.lang.to='Кому';
@@ -164,3 +166,13 @@ GO.email.lang.addSendersTo='Добавить отправителей в...';
 
 GO.email.lang.defaultTemplate='Использовать как шаблон по умолчанию';
 GO.email.lang.moving='Перемещение...';
+
+GO.email.lang.orderFilters='Вы можете изменить порядок фильтров перетащив их.';
+GO.email.lang.orderAccounts='Вы можете изменить порядок учетных записей перетащив их.';
+
+GO.email.lang.groups='Группы';
+
+GO.email.lang.showUnread='Показать непрочитанные';
+GO.email.lang.searchFrom='Отправитель';
+GO.email.lang.searchTo='Получатель';
+GO.email.lang.searchCC='Получатель (копия)';

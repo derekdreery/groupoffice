@@ -9,9 +9,9 @@
  * Don't copy the next lines into a translation
  */
 
-//Ext.namespace('GO.gnupg');
+//
 
-//GO.gnupg.lang={};
+//
 /**
  * Copy everything below for translations
  */

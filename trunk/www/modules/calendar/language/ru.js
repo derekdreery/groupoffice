@@ -39,7 +39,7 @@ GO.calendar.lang.entireSeries = 'Все повторы';
 GO.calendar.lang.calendar = 'Календарь';
 GO.calendar.lang.calendars = 'Календари';
 GO.calendar.lang.views = 'Представления';
-GO.calendar.lang.administration = 'Администрирование';
+GO.calendar.lang.administration = 'Настройки';
 GO.calendar.lang.needsAction = 'Необходимо действие';
 GO.calendar.lang.accepted = 'Принято';
 GO.calendar.lang.declined = 'Отклонено';
@@ -81,3 +81,20 @@ GO.calendar.lang.importToCalendar='Добавить событие напрям�
 GO.calendar.lang.default_calendar='Календарь по умолчанию';
 
 GO.calendar.lang.status='Состояние';
+
+GO.calendar.lang.resource_groups='Группы ресурсов';
+GO.calendar.lang.resource_group='Группа ресурсов';
+GO.calendar.lang.resources='Ресурсы';
+GO.calendar.lang.resource='Ресурс';
+GO.calendar.lang.calendar_group='Группа календарей';
+GO.calendar.lang.admins='Администраторы';
+GO.calendar.lang.no_group_selected='В форме содержатся ошибки. Вам необходимо выбрать группу для данного ресурса.';
+
+GO.calendar.lang.visibleCalendars='Видимые календари';
+GO.calendar.lang.visible='Видимый';
+
+GO.calendar.lang.group='Группа';
+GO.calendar.lang.no_status='Новый';
+GO.calendar.lang.no_custom_fields='Нет дополнительной информации.';
+GO.calendar.lang.show_bdays='Отображать дни рождения из адресной книги';
+GO.calendar.lang.show_tasks='Отображать задачи из списка задач';

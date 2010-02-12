@@ -9,6 +9,7 @@ require($GO_LANGUAGE->get_fallback_base_language_file('countries'));
 
 $countries['AE'] = 'Объединенные арабские эмираты';
 $countries['AF'] = 'Афганистан';
+$countries['AX'] = 'Аландские острова';
 $countries['AL'] = 'Албания';
 $countries['DZ'] = 'Алжир';
 $countries['AS'] = 'Американская Самоа';
@@ -244,3 +245,5 @@ $countries['YU'] = 'Югославия';
 $countries['ZR'] = 'Заир';
 $countries['ZM'] = 'Замбия';
 $countries['ZW'] = 'Зимбабве';
+$countries['KP'] = 'Демократическая республика Корея';
+$countries['KR'] = 'Республика Корея';

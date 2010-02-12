@@ -105,6 +105,10 @@ Ext.extend(GO.email.AccountsTree, Ext.tree.TreePanel, {
 					node.parentNode.reload();
 				}else
 				{
+					var accountNode = this.getNodeById('account_'+account_id)
+					if(accountNode)
+						accountNode.reload();
+					
 					Ext.MessageBox.alert(GO.lang.strError,responseParams.feedback);
 				}								
 			},
