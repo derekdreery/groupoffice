@@ -250,25 +250,19 @@ try{
 		}else
 		{
 
-			$content = $imap->get_message($uid);
-			$parts = array_reverse($imap->f("parts"));
-
-			//fill in the header fields
-			$subject = isset($content['subject']) ? $content['subject'] : $lang['email']['no_subject'];
-
-			$response['attachments']=array();
+			$content = $imap->get_message_with_body($uid, $_POST['content_type']!='html', true, true);
 
 			switch($task)
 			{
 				case "reply":
 				case "reply_all":
 					$response['data']['to'] = $content["reply-to"];
-					if(stripos($subject,'Re:')===false)
+					if(stripos($content['subject'],'Re:')===false)
 					{
-						$response['data']['subject'] = 'Re: '.$subject;
+						$response['data']['subject'] = 'Re: '.$content['subject'];
 					}else
 					{
-						$response['data']['subject'] = $subject;
+						$response['data']['subject'] = $content['subject'];
 					}
 					break;
 
@@ -278,46 +272,30 @@ try{
 					if($task == 'opendraft')
 					{
 						$response['data']['to']='';
-						$response['data']['subject'] = $subject;
+						$response['data']['subject'] = $content['subject'];
 
 					}else
 					{
-						if(stripos($subject,'Fwd:')===false)
+						if(stripos($content['subject'],'Fwd:')===false)
 						{
-							$response['data']['subject'] = 'Fwd: '.$subject;
+							$response['data']['subject'] = 'Fwd: '.$content['subject'];
 						}else
 						{
-							$response['data']['subject'] = $subject;
+							$response['data']['subject'] = $content['subject'];
 						}
 					}
 
-					//reattach non-inline attachments
-					for ($i=0;$i<count($parts);$i++)
-					{
+					//reattach non-inline attachments					
+					foreach($content['attachments'] as $attachment){
 						//var_dump($parts[$i]);
-						if($imap->part_is_attachment($parts[$i]))
+						if($imap->part_is_attachment($attachment))
 						{
-							$file = $imap->view_part($uid, $parts[$i]["number"], $parts[$i]["transfer"]);
-
-							$name = $parts[$i]['name'] != '' ? $parts[$i]['name'] : 'attach_'.$i;
-
-							$dir=$GO_CONFIG->tmpdir.'attachments/';
-
-							filesystem::mkdir_recursive($dir);
-
-							$tmp_file = $dir.File::strip_invalid_chars($name);
-
-							$fp = fopen($tmp_file,"wb");
-							fwrite ($fp,$file);
-							fclose($fp);
-
 							$response['data']['attachments'][]=array(
-							'tmp_name'=>$tmp_file,
-							'name'=>$name,
-							'size'=>$parts[$i]["size"],
-							'type'=>File::get_filetype_description(File::get_extension($name))
-							);
-
+								'tmp_name'=>$attachment['tmp_file'],
+								'name'=>$attachment['name'],
+								'size'=>$attachment["size"],
+								'type'=>File::get_filetype_description(File::get_extension($attachment['name']))
+								);
 						}
 					}
 
@@ -327,57 +305,8 @@ try{
 			find_alias_and_recipients();
 
 
-			//reatach inline attachements
-			for ($i=0;$i<count($parts);$i++)
-			{
-				if ($parts[$i]["id"] != '')// && eregi("inline", $parts[$i]["disposition"]))
-				{
-					$file = $imap->view_part($uid, $parts[$i]["number"], $parts[$i]["transfer"]);
+			$response['data']['body']=$content['body'];
 
-					$dir=$GO_CONFIG->tmpdir.'attachments/';
-					filesystem::mkdir_recursive($dir);
-
-					$tmp_file = !empty($parts[$i]["name"]) ? $dir.File::strip_invalid_chars($parts[$i]["name"]) : $dir.uniqid(time());
-
-					$fp = fopen($tmp_file,"wb");
-					fwrite ($fp,$file);
-					fclose($fp);
-
-					if (strpos($parts[$i]["id"],'>'))
-					{
-						$parts[$i]["id"] = substr($parts[$i]["id"], 1,strlen($parts[$i]["id"])-2);
-					}
-
-					//Content-ID's that need to be replaced with urls when message is send
-
-					//replace inline images identified by a content id with the url to display the part by Group-Office
-					$url_replacement['id'] = $parts[$i]["id"];
-					$url_replacement['url'] = $GO_MODULES->modules['email']['url']."attachment.php?account_id=".$account_id."&amp;mailbox=".$mailbox."&amp;uid=".$uid."&amp;part=".$parts[$i]["number"]."&amp;transfer=".$parts[$i]["transfer"]."&amp;mime=".$parts[$i]["mime"]."&amp;filename=".urlencode($parts[$i]["name"]);
-					$url_replacement['tmp_file'] = $tmp_file;
-
-					$url_replacements[] = $url_replacement;
-				}
-			}
-
-
-
-			$response['data']['body']='';
-
-
-
-			//remove alternative body part
-			$new_parts=array();
-			for($i=0;$i<count($parts);$i++)
-			{
-				$mime = strtolower($parts[$i]["mime"]);
-
-				if(strpos($mime, $_POST['content_type']) || (strtolower($parts[$i]['type'])!='alternative' &&  strtolower($parts[$i]['type'])!='related'))
-					$new_parts[]=$parts[$i];
-			}
-
-			$parts=$new_parts;
-
-			//go_debug($parts);
 
 			if($GO_MODULES->has_module('gnupg'))
 			{
@@ -387,49 +316,9 @@ try{
 				$passphrase = !empty($_SESSION['GO_SESSION']['gnupg']['passwords'][$sender]) ? $_SESSION['GO_SESSION']['gnupg']['passwords'][$sender] : '';
 			}
 
+			if($GO_MODULES->has_module('gnupg'))
+				$response['data']['body'] = $gnupg->replace_encoded($response['data']['body'],$passphrase,false);
 
-			//$html_message_count = 0;
-			for ($i=0;$i<count($parts);$i++)
-			{
-				$mime = strtolower($parts[$i]["mime"]);
-
-				//var_dump($parts[$i]);
-
-				if (empty($response['data']['body']) &&
-					(stripos($parts[$i]["disposition"],'attachment')===false) &&
-					(stripos($mime,'html')!==false || stripos($mime,'plain')!==false || $mime == "text/enriched" || $mime == "unknown/unknown"))
-				{
-					switch ($mime)
-					{
-						case 'text/plain':
-							$text_part = trim($imap->view_part($uid, $parts[$i]["number"], $parts[$i]["transfer"], $parts[$i]['charset']));
-
-							if($GO_MODULES->has_module('gnupg'))
-								$text_part = $gnupg->replace_encoded($text_part,$passphrase,false);
-
-							$response['data']['body'] .= $_POST['content_type']=='html' ? String::text_to_html($text_part, false) : $text_part;
-							break;
-
-						case 'text/html':
-							$html_part = trim($imap->view_part($uid, $parts[$i]["number"], $parts[$i]["transfer"], $parts[$i]['charset']));
-
-							if($GO_MODULES->has_module('gnupg'))
-								$html_part = $gnupg->replace_encoded($html_part,$passphrase);
-
-							$response['data']['body'] .= $_POST['content_type']=='html' ? String::convert_html($html_part) : String::html_to_text($html_part);
-							break;
-
-						case 'text/enriched':
-							$html_part = String::enriched_to_html(trim($imap->view_part($uid,$parts[$i]["number"], $parts[$i]["transfer"], $parts[$i]['charset'])), false);
-
-							if($GO_MODULES->has_module('gnupg'))
-								$html_part = $gnupg->replace_encoded($html_part,$passphrase);
-
-							$response['data']['body'] .= $html_part;
-							break;
-					}
-				}
-			}
 
 			if($response['data']['body'] != '')
 			{
@@ -440,8 +329,6 @@ try{
 				}
 			}
 
-
-
 			if($task=='forward')
 			{
 				$om_to = isset($content['to']) ? implode(',',$content["to"]) : $lang['email']['no_recipients'];
@@ -450,7 +337,7 @@ try{
 				if($_POST['content_type']== 'html')
 				{
 					$header_om  = '<br /><br /><font face="verdana" size="2">'.$lang['email']['original_message']."<br />";
-					$header_om .= "<b>".$lang['email']['subject'].":&nbsp;</b>".htmlspecialchars($subject, ENT_QUOTES, 'UTF-8')."<br />";
+					$header_om .= "<b>".$lang['email']['subject'].":&nbsp;</b>".htmlspecialchars($content['subject'], ENT_QUOTES, 'UTF-8')."<br />";
 					$header_om .= '<b>'.$lang['email']['from'].": &nbsp;</b>".htmlspecialchars($content['from'], ENT_QUOTES, 'UTF-8')."<br />";
 					$header_om .= "<b>".$lang['email']['to'].":&nbsp;</b>".htmlspecialchars($om_to, ENT_QUOTES, 'UTF-8')."<br />";
 					if(!empty($om_cc))
@@ -504,9 +391,9 @@ try{
 				}
 			}
 
+			$response['data']['inline_attachments']=$content['url_replacements'];
 
-			$response['data']['inline_attachments']=$url_replacements;
-
+			go_debug($url_replacements);
 
 			if(isset($_POST['template_id']) && $_POST['template_id']>0)
 			{
@@ -650,13 +537,15 @@ try{
 
 			case 'message':
 
+				$RFC822 = new RFC822();
+
 				$account_id = $_REQUEST['account_id'];
 				$mailbox = $_REQUEST['mailbox'];
 				$uid = $_REQUEST['uid'];
 
 				$account = connect($account_id, $mailbox);
-
-				$response = $imap->get_message($uid);
+				
+				$response = $imap->get_message_with_body($uid, !empty($_POST['plaintext']),isset($_POST['unblock']), !empty($_POST['create_temporary_attachments']));
 
 				if($imap->set_unseen_cache(array($uid), false))
 				{
@@ -665,29 +554,8 @@ try{
 						$imap->set_message_flag($mailbox, array($uid), "\\Seen");
 					}
 				}
-
-				if(!$response)
-				{
-					throw new Exception($lang['email']['errorGettingMessage']);
-				}
-
-				//go_debug($response);
-
-				if(empty($response["subject"]))
-				{
-					$response['subject']= $lang['email']['no_subject'];
-				}
-				$response['subject']= htmlspecialchars($response['subject'], ENT_QUOTES, 'UTF-8');;
-
-
-				$response['account_id']=$account_id;
-				$response['full_from']=htmlspecialchars($response['from'], ENT_QUOTES, 'UTF-8');
-
-				$RFC822 = new RFC822();
-				$address = $RFC822->parse_address_list($response['from']);
-				$response['sender']=isset($address[0]['email']) ? htmlspecialchars($address[0]['email'], ENT_QUOTES, 'UTF-8') : '';
-				$response['from']=isset($address[0]['personal']) ? htmlspecialchars($address[0]['personal'], ENT_QUOTES, 'UTF-8') : '';
-
+				$response['account_id']=$account_id;				
+				
 				$response['sender_contact_id']=0;
 				if(!empty($_POST['get_contact_id']) && $GO_MODULES->has_module('addressbook'))
 				{
@@ -747,160 +615,8 @@ try{
 				$response['date']=date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], $response['udate']);
 				//$response['size']=Number::format_size($response['size']);
 
-				$parts = array_reverse($imap->f("parts"));
-
-				//go_debug($parts);
-				/*
-				*
-				 * Sometimes clients send multipart/alternative but there's only a text part. FIrst check if there's
-				 * a html alternative to display
-				 */
-				$html_alternative=false;
-				if(empty($_POST['plaintext']))
-				{
-					for($i=0;$i<count($parts);$i++)
-					{
-						if(stripos($parts[$i]['mime'],'html')!==false && (strtolower($parts[$i]['type'])=='alternative' || strtolower($parts[$i]['type'])=='related'))
-						{
-							$html_alternative=true;
-						}
-					}
-				}
-
-				//go_debug($html_alternative);
-
-				$response['body']='';
-
-				$attachments=array();
-
-				if(stripos($response['content_type'],'html')!==false)
-				{
-					$default_mime = 'text/html';
-				}else
-				{
-					$default_mime = 'text/plain';
-				}
-
-				$part_count = count($parts);
-				if($part_count==1)
-				{
-					//if there's only one part use the message parameters.
-					if(stripos($parts[0]['mime'],'plain')!==false)
-						$parts[0]['mime']=$default_mime;
-
-						//go_debug($response['content_transfer_encoding']);
-					  //go_debug($parts[0]['transfer']);
-
-					if(!empty($response['content_transfer_encoding']) && (empty($parts[0]['transfer']) || strtolower($parts[0]['transfer'])=='7bit' || strtolower($parts[0]['transfer'])=='8bit'))
-						$parts[0]['transfer']=$response['content_transfer_encoding'];
-				}
-
-				//go_debug($parts);
-
-				//block remote URL's if contacts is unknown
-				$response['blocked_images']=0;
-				if(!isset($_POST['unblock']))
-				{
-					require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
-					$ab = new addressbook();
-
-					$contact = $ab->get_contact_by_email($response['sender'], $GO_SECURITY->user_id);
-					$block = !is_array($contact);
-				}else
-				{
-					$block=false;
-				}
-
-				while($part = array_shift($parts))
-				{
-					$mime = isset($part["mime"]) ? strtolower($part["mime"]) : $default_mime;
-
-					//some clients just send html
-					if($mime=='html')
-					{
-						$mime = 'text/html';
-					}
-
-					/*go_debug($mime);
-					go_debug($html_alternative);
-					go_debug($part['type']);
-					go_debug($part["disposition"]);
-					go_debug('-----');*/
-
-					if (empty($response['body']) &&
-					(stripos($part["disposition"],'attachment')===false) &&
-					(
-						(stripos($mime,'html')!==false && empty($_POST['plaintext'])) ||
-						(stripos($mime,'plain')!==false && (!$html_alternative || strtolower($part['type'])!='alternative')) || $mime == "text/enriched" || $mime == "unknown/unknown"))
-					{
-						//go_debug('ja');
-						$part_body = $imap->view_part($uid, $part["number"], $part["transfer"], $part["charset"]);
-
-						
-
-						switch($mime)
-						{
-							case 'unknown/unknown':
-							case 'text/plain':
-								$uuencoded_attachments = $imap->extract_uuencoded_attachments($part_body);
-
-
-								$part_body = empty($_POST['plaintext']) ? String::text_to_html($part_body) : $part_body;
-//go_debug($part_body);
-								for($i=0;$i<count($uuencoded_attachments);$i++)
-								{
-									$attachment = $uuencoded_attachments[$i];
-									$attachment['number']=$part['number'];
-									unset($attachment['data']);
-									$attachment['uuencoded_partnumber']=$i+1;
-
-									$attachments[]=$attachment;
-								}
-
-								break;
-
-							case 'text/html':
-								$part_body = String::convert_html($part_body, $block, $response['blocked_images']);
-								break;
-
-							case 'text/enriched':
-								$part_body = String::enriched_to_html($part_body);
-								break;
-						}
-
-						/*go_log(LOG_DEBUG, $part["name"]);
-
-						if(!empty($response['body']))
-						{
-						if (!empty($part["name"]))
-						{
-						$response['body'] .= "<p align=\"center\">--- ".$part["name"]." ---</p>";
-						}elseif($response['body'] != '')
-						{
-						$response['body'] .= '<br /><br /><br />';
-						}
-						}*/
-
-						//Without this trim here Internet explorer mysteriously failed on some
-						//particular mails.
-						$response['body'] .= trim($part_body);
-					}else
-					{
-						$attachments[]=$part;
-					}
-				}
-
-				//When a mail is saved as a task/appointment/etc. the attachments will be saved temporarily
-				if(!empty($_POST['create_temporary_attachments']))
-				{
-					$tmp_dir = $GO_CONFIG->tmpdir.'temporary_attachments/';
-					if(!is_dir($tmp_dir))
-					{
-						mkdir($tmp_dir);
-					}
-				}
-
-
+			
+				
 				if($GO_MODULES->has_module('gnupg'))
 				{
 					require_once($GO_MODULES->modules['gnupg']['class_path'].'gnupg.class.inc.php');
@@ -931,71 +647,10 @@ try{
 					}
 				}
 
-
-				//go_debug(var_export($attachments, true));
-
-				//$response['event']=false;
-				$response['attachments']=array();
-				$index=0;
-				for ($i = 0; $i < count($attachments); $i ++) {
-
-					if(stripos($attachments[$i]['mime'],'calendar')!==false && empty($attachments[$i]['name']))
-					{
-						$attachments[$i]['name']=$lang['email']['event'].'.ics';
-					}
-
-					if (!empty($attachments[$i]["id"]))
-					{
-						//when an image has an id it belongs somewhere in the text we gathered above so replace the
-						//source id with the correct link to display the image.
-
-						$tmp_id = $attachments[$i]["id"];
-						if (strpos($tmp_id,'>'))
-						{
-							$tmp_id = substr($attachments[$i]["id"], 1,strlen($attachments[$i]["id"])-2);
-						}
-						$id = "cid:".$tmp_id;
-
-						$url = $GO_MODULES->modules['email']['url']."attachment.php?account_id=".$account['id']."&mailbox=".urlencode($mailbox)."&amp;uid=".$uid."&amp;part=".$attachments[$i]["number"]."&amp;transfer=".$attachments[$i]["transfer"]."&amp;mime=".$attachments[$i]["mime"]."&amp;filename=".urlencode($attachments[$i]["name"]);
-
-						if(strpos($response['body'], $id))
-						{
-							$response['body'] = str_replace($id, $url, $response['body']);
-						}else
-						{
-							//id was not found in body so add it as attachment later
-							unset($attachments[$i]['id']);
-						}
-					}
-
-					if ($imap->part_is_attachment($attachments[$i])){
-
-						$attachment = $attachments[$i];
-
-						$attachment['index']=$index;
-						$attachment['extension']=File::get_extension($attachments[$i]["name"]);
-
-						if(!empty($_POST['create_temporary_attachments']))
-						{
-							$tmp_file = $tmp_dir.uniqid(time());
-							$data = $imap->view_part($uid, $attachment['number'], $attachment['transfer']);
-							if($data && file_put_contents($tmp_file, $data))
-							{
-								$attachment['tmp_file']=$tmp_file;
-							}
-						}
-
-						$response['attachments'][]=$attachment;
-						$index++;
-					}
-				}
-
 				// don't send very large texts to the browser because it will hang.
 				if(strlen($response['body'])>512000){
 					$response['body']=String::cut_string($response['body'], 521000, false);
 				}
-
-
 
 				break;
 
