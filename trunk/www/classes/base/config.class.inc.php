@@ -970,7 +970,7 @@ class GO_CONFIG {
 				}
 				$config_dir=dirname($config_dir);
 
-				if($count==5 || dirname($config_dir) == $config_dir){
+				if($count==10 || dirname($config_dir) == $config_dir){
 					break;
 				}
 				$config_dir .= '/';			
