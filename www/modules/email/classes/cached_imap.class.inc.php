@@ -311,6 +311,198 @@ class cached_imap extends imap{
 		return $this->message;
 	}
 
+	function get_message_with_body($uid, $return_plaintext_body=false, $never_block_images=false, $create_temporary_attachment_files=false) {
+		global $GO_CONFIG, $GO_MODULES, $GO_SECURITY, $GO_LANGUAGE, $lang;
+
+		require_once($GO_LANGUAGE->get_language_file('email'));
+		
+		$message = $this->get_message($uid);
+
+		if(!$message){
+			throw new Exception($lang['email']['errorGettingMessage']);
+		}
+
+		$RFC822 = new RFC822();
+		$address = $RFC822->parse_address_list($message['from']);
+
+		$message['full_from']=htmlspecialchars($message['from'], ENT_QUOTES, 'UTF-8');
+
+		$message['sender']=isset($address[0]['email']) ? htmlspecialchars($address[0]['email'], ENT_QUOTES, 'UTF-8') : '';
+		$message['from']=isset($address[0]['personal']) ? htmlspecialchars($address[0]['personal'], ENT_QUOTES, 'UTF-8') : '';
+
+		if(empty($message["subject"]))
+		{
+			$message['subject']= $lang['email']['no_subject'];
+		}
+		$message['subject']= htmlspecialchars($message['subject'], ENT_QUOTES, 'UTF-8');
+
+		if($never_block_images){
+			$block_images=false;
+		}else
+		{
+			require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
+			$ab = new addressbook();
+
+			$contact = $ab->get_contact_by_email($message['sender'], $GO_SECURITY->user_id);
+			$block_images = !is_array($contact);
+		}
+
+		/*
+		 * Sometimes clients send multipart/alternative but there's only a text part. FIrst check if there's
+		 * a html alternative to display
+		 */
+		$html_alternative=false;
+		if(!$return_plaintext_body) {
+			for($i=0;$i<count($message['parts']);$i++) {
+				if(stripos($message['parts'][$i]['mime'],'html')!==false && (strtolower($message['parts'][$i]['type'])=='alternative' || strtolower($message['parts'][$i]['type'])=='related')) {
+					$html_alternative=true;
+				}
+			}
+		}
+
+		//go_debug($html_alternative);
+
+		$message['blocked_images']=0;
+		$message['body']='';
+
+		$attachments=array();
+
+		if(stripos($message['content_type'],'html')!==false) {
+			$default_mime = 'text/html';
+		}else {
+			$default_mime = 'text/plain';
+		}
+
+		$part_count = count($message['parts']);
+		if($part_count==1) {
+			//if there's only one part use the message parameters.
+			if(stripos($message['parts'][0]['mime'],'plain')!==false)
+				$message['parts'][0]['mime']=$default_mime;
+
+			//go_debug($message['content_transfer_encoding']);
+			//go_debug($message['parts'][0]['transfer']);
+
+			if(!empty($message['content_transfer_encoding']) && (empty($message['parts'][0]['transfer']) || strtolower($message['parts'][0]['transfer'])=='7bit' || strtolower($message['parts'][0]['transfer'])=='8bit'))
+				$message['parts'][0]['transfer']=$message['content_transfer_encoding'];
+		}
+
+		while($part = array_shift($message['parts'])) {
+			$mime = isset($part["mime"]) ? strtolower($part["mime"]) : $default_mime;
+
+			//some clients just send html
+			if($mime=='html') {
+				$mime = 'text/html';
+			}
+
+			/*go_debug($mime);
+						go_debug($html_alternative);
+						go_debug($part['type']);
+						go_debug($part["disposition"]);
+						go_debug('-----');*/
+
+			if (empty($message['body']) &&
+							(stripos($part["disposition"],'attachment')===false) &&
+							(
+							(stripos($mime,'html')!==false && !$return_plaintext_body) ||
+											(stripos($mime,'plain')!==false && (!$html_alternative || strtolower($part['type'])!='alternative')) || $mime == "text/enriched" || $mime == "unknown/unknown")) {
+				//go_debug('ja');
+				$part_body = $this->view_part($uid, $part["number"], $part["transfer"], $part["charset"]);
+
+				switch($mime) {
+					case 'unknown/unknown':
+					case 'text/plain':
+						$uuencoded_attachments = $this->extract_uuencoded_attachments($part_body);
+
+						$part_body = $return_plaintext_body ? $part_body : String::text_to_html($part_body);
+
+						for($i=0;$i<count($uuencoded_attachments);$i++) {
+							$attachment = $uuencoded_attachments[$i];
+							$attachment['number']=$part['number'];
+							unset($attachment['data']);
+							$attachment['uuencoded_partnumber']=$i+1;
+
+							$attachments[]=$attachment;
+						}
+
+						break;
+
+					case 'text/html':
+
+						$part_body = $return_plaintext_body ?  String::html_to_text($part_body) : String::convert_html($part_body, $block_images, $message['blocked_images']);
+						break;
+
+					case 'text/enriched':
+						$part_body = String::enriched_to_html($part_body);
+						break;
+				}
+				
+				$message['body'] .= trim($part_body);
+			}else {
+				$attachments[]=$part;
+			}
+		}
+
+		$message['url_replacements']=array();
+		$message['attachments']=array();
+		$index=0;
+		for ($i = 0; $i < count($attachments); $i ++) {
+
+			if(empty($attachments[$i]['name'])){
+				if(stripos($attachments[$i]['mime'],'calendar')!==false) {
+					$attachments[$i]['name']=$lang['email']['event'].'.ics';
+				}else
+				{
+					$attachments[$i]['name']=uniqid(time());
+				}
+			}
+
+			//When a mail is saved as a task/appointment/etc. the attachments will be saved temporarily
+			$attachments[$i]['tmp_file']=false;
+			if($create_temporary_attachment_files) {
+				$tmp_file = $GO_CONFIG->tmpdir.$attachments[$i]['name'];
+				$data = $this->view_part($uid, $attachments[$i]['number'], $attachments[$i]['transfer']);
+				if($data && file_put_contents($tmp_file, $data)) {
+					$attachments[$i]['tmp_file']=$tmp_file;
+				}
+			}
+
+			if (!empty($attachments[$i]["id"])) {
+				//when an image has an id it belongs somewhere in the text we gathered above so replace the
+				//source id with the correct link to display the image.
+
+				$tmp_id = $attachments[$i]["id"];
+				if (strpos($tmp_id,'>')) {
+					$tmp_id = substr($attachments[$i]["id"], 1,strlen($attachments[$i]["id"])-2);
+				}
+				$id = "cid:".$tmp_id;
+
+				$url = $GO_MODULES->modules['email']['url']."attachment.php?account_id=".$this->account['id']."&mailbox=".urlencode($this->mailbox)."&amp;uid=".$uid."&amp;part=".$attachments[$i]["number"]."&amp;transfer=".$attachments[$i]["transfer"]."&amp;mime=".$attachments[$i]["mime"]."&amp;filename=".urlencode($attachments[$i]["name"]);
+
+				$url_replacement['id'] = $attachments[$i]["id"];
+				$url_replacement['url'] = $url;
+				$url_replacement['tmp_file'] = $attachments[$i]['tmp_file'];
+
+				$message['url_replacements'][]=$url_replacement;
+
+				if(strpos($message['body'], $id)) {
+					$message['body'] = str_replace($id, $url, $message['body']);
+				}else {
+					//id was not found in body so add it as attachment later
+					unset($attachments[$i]['id']);
+				}
+			}
+
+			if ($this->part_is_attachment($attachments[$i])) {
+				$attachments[$i]['index']=$index;
+				$attachments[$i]['extension']=File::get_extension($attachments[$i]["name"]);
+				$message['attachments'][]=$attachments[$i];
+				$index++;
+			}
+		}
+
+		return $message;
+	}
+
 	function get_message_headers($start, $limit, $sort_field , $sort_order, $query)
 	{
 		$uids = $this->get_message_uids($start, $limit, $sort_field , $sort_order, $query);
