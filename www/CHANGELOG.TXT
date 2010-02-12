@@ -1,3 +1,17 @@
+2010/02/11 3.3.20
+- Small bug fixes
+
+2010/02/08 3.3.19
+- Updated Russian translation
+- Speed up the typing in the e-mail composer
+
+2010/02/05 3.3.18
+- Fixed popen warning that occured on some shared hosting setups.
+
+2010/02/01 3.3.17
+- Small feature enhancements in the hours approval module
+- Updated Norwegian translation
+
 2010/01/29 3.3.16
 - Small bug fixes
 

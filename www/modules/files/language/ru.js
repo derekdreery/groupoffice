@@ -38,3 +38,5 @@ GO.files.lang.emptyList='Постой список';
 GO.files.lang.newFiles='Новый';
 
 GO.files.lang.olderVersions='Старые версии';
+GO.files.lang.uploadProperties='Эти настройки будут применены для всех фалов загруженных с опцией "Маленькие файлы"';
+GO.files.lang.selectFiles = 'Выберите файлы';

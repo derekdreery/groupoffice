@@ -712,6 +712,7 @@ class String {
 		//remove strange white spaces in tags first
 		//sometimes things like this happen <style> </ style >
 		$html = preg_replace("'</[\s]*([\w]*)[\s]*>'u","</$1>", $html);
+		
 
 		$to_removed_array = array (
 		"'<html[^>]*>'usi",
@@ -721,7 +722,9 @@ class String {
 		"'<meta[^>]*>'usi",
 		"'<link[^>]*>'usi",
 		"'<head[^>]*>.*?</head>'usi",
+		"'<head[^>]*>'usi",
 		"'<xml[^>]*>.*?</xml>'usi",
+		"'<\?xml[^>]*>'usi",
 		"'<style[^>]*>.*?</style>'usi",
 		"'<script[^>]*>.*?</script>'usi",
 		"'<iframe[^>]*>.*?</iframe>'usi",
@@ -736,29 +739,43 @@ class String {
 		);
 
 		$html = preg_replace($to_removed_array, '', $html);
-		//$html = preg_replace("/([\"']?)javascript:/ui", "$1removed_script:", $html);
-
+				
 		require_once($GO_CONFIG->class_path.'XSSclean.class.inc.php');
 		$XSSclean = new XSSclean();
-		$html = $XSSclean->xss_clean($html);		
+		$html = $XSSclean->xss_clean($html);
+		
+		//debug($html);
 
-		/*$html = html_entity_decode($html, ENT_QUOTES, 'UTF-8');
-		$html = preg_replace('/&#38;#(\d+);/me','chr(\\1)', $html);
-		$html = preg_replace('/&#38;#x([a-f0-9]+);/mei','chr(0x\\1)', $html);*/
+		//$html = String::clean_utf8($html);
 
-		//$html = preg_replace("/(<.* )on[a-z]+\s*('|\")?=[^>]*/iU", "$1removedevent=", $html);
 
-		/*$html = str_replace('javascript:', 'removed_script:', $html);
-		$html = str_replace('vbscript:', 'removed_script:', $html);*/
+		//$html = html_entity_decode($html, ENT_QUOTES, 'UTF-8');
+		
+		//$html = preg_replace('/<!.*>/U', '', $html);
+		//$html = preg_replace("/([\"']?.*)(script|xss|expression):/Uui", "$1removed", $html);
 
-		//go_debug($html);
 
+		//$html = preg_replace("/([\"']?.*)xss:/Uui", "$1removed", $html);
+		//$html = preg_replace("/([\"']?.*)expression:/Uui", "$1removed", $html);
+
+		//$html = preg_replace("/([\"']?)vbscript:/ui", "$1removed_script:", $html);
+		
+		//$html = preg_replace("/(<.* )on[a-z]+\s*('|\")?=[^>]*/iU", "$1removed_event=", $html);
+		//$html = preg_replace("/(<.* )([\"']?\w*) on[a-z]+\s*('|\")?=[^>]*/iU", "$1removed_event=", $html);
+
+
+		//not sure if this is needed
+		//$html = preg_replace('/&#38;#(\d+);/me','chr(\\1)', $html);
+		//$html = preg_replace('/&#38;#x([a-f0-9]+);/mei','chr(0x\\1)', $html);
+		
+		
 		if($block_external_images)
 		{
 			//$html = preg_replace("/<img(.*)src=([\"']?)http([^>])/", "<img$1src=$2blocked:http$3", $html);
 			//$html = preg_replace("/<([^=]*)=[\"']?http[^\"'\s>]*/", "<$1=\"blocked\"", $html);
-			$html = preg_replace("/<([^aA]{1})([^>]*)https?:([^>]*)/u", "<$1$2blocked:$3", $html, -1, $replace_count);
+			$html = preg_replace("/<([^a]{1})([^>]*)https?:([^>]*)/iu", "<$1$2blocked:$3", $html, -1, $replace_count);
 		}
+		//debug($html);
 
 		return $html;
 	}

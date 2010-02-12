@@ -57,3 +57,5 @@ $lang['email']['aliases']='Aliases';
 $lang['email']['noUidNext']='Your mail server does not support UIDNEXT. The \'Drafts\' folder is disabled automatically for this account now.';
 
 $lang['email']['disable_trash_folder']='Moving the e-mail to the trash folder failed. This might be because you are out of disk space. You can only free up space by disabling the trash folder at Administration -> Accounts -> Double click your account -> Folders';
+
+$lang['email']['error_move_folder']='Could not move the folder';

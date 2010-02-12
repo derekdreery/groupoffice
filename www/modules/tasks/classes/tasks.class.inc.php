@@ -590,7 +590,7 @@ class tasks extends db
 		$task['completion_time']=Date::get_timestamp($task['completion_time']);
 		$task['start_time']=Date::get_timestamp($task['start_time'], false);
 
-		$task['status']=$lang['tasks']['statuses'][$task['status']];
+		$task['status']=isset($lang['tasks']['statuses'][$task['status']]) ? $lang['tasks']['statuses'][$task['status']] : '';
 		$task['description']=String::text_to_html(String::cut_string($task['description'],500));
 
 		if($cf)
@@ -1121,6 +1121,7 @@ class tasks extends db
 	{
 		$this->query("DELETE FROM su_visible_lists WHERE tasklist_id = $tasklist_id AND user_id = $user_id");
 	}
+/*
 
 	function get_writable_tasklists($user_id, $start=0, $offset=0, $sort='name', $dir='ASC') {
 		$sql = "SELECT DISTINCT ta_lists.* ".
@@ -1138,4 +1139,5 @@ class tasks extends db
 		}
 		return $count;
 	}
+}*/
 }
