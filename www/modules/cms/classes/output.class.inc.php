@@ -583,7 +583,7 @@ class cms_output extends cms {
 
 				if($item['fstype']=='folder' && $current_level < $expand_levels && ($is_in_path || $expand_all)) {
 					$href_path = empty($path) ? '' : $path.'/';
-					$html .= $this->print_items($params, &$smarty, $current_level+1,$item['id'],$href_path.urlencode($item['name']), $item);
+					$html .= $this->print_items($params, $smarty, $current_level+1,$item['id'],$href_path.urlencode($item['name']), $item);
 				}
 
 

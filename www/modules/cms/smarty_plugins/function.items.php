@@ -5,7 +5,7 @@ function smarty_function_items($params, &$smarty)
 
 
 	
-	return $co->print_items($params, &$smarty);
+	return $co->print_items($params, $smarty);
 
 
 }
