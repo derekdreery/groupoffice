@@ -342,7 +342,7 @@ class postfixadmin extends db {
  		{
  			$sql .= " AND domain LIKE '".$this->escape($query)."'";
  		} 		
-		$sql .= " ORDER BY `".$this->escape($sortfield)."` ".$this->escape($sortorder);
+		$sql .= " ORDER BY `".$this->escape($sort)."` ".$this->escape($direction);
 		
 		$this->query($sql);
 		$count = $this->num_rows();
