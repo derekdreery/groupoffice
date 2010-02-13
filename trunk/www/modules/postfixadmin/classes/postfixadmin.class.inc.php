@@ -272,7 +272,7 @@ class postfixadmin extends db {
  			$sql .= " WHERE name LIKE '".$this->escape($query)."'";
  		} 		
 		
-		$sql .= " ORDER BY ".$this->escape($sortfield." ".$sortorder);
+		$sql .= " ORDER BY `".$this->escape($sortfield)."` ".$this->escape($sortorder);
 		$this->query($sql);
 		$count = $this->num_rows();
 		if($offset>0)
@@ -617,7 +617,7 @@ class postfixadmin extends db {
  			$sql .= "name LIKE '".$this->escape($query)."' ";
  		} 		
 		
-		$sql .= " ORDER BY ".$this->escape($sortfield." ".$sortorder);
+		$sql .= " ORDER BY `".$this->escape($sortfield)."` ".$this->escape($sortorder);
 		$this->query($sql);
 		$count = $this->num_rows();
 		if($offset>0)
