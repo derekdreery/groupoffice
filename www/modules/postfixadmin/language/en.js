@@ -55,6 +55,7 @@ GO.postfixadmin.lang.subject="Subject";
 GO.postfixadmin.lang.body="Body";
 GO.postfixadmin.lang.cache="Cache";
 GO.postfixadmin.lang.domain="Domain";
+GO.postfixadmin.lang.usage="Usage";
 
 GO.postfixadmin.lang.defaultQuota='Default quota (MB)';
 

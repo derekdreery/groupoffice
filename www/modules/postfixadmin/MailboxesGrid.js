@@ -30,7 +30,7 @@ GO.postfixadmin.MailboxesGrid = function(config){
 	    root: 'results',
 	    id: 'id',
 	    totalProperty:'total',
-	    fields: ['id','username','name','quota','ctime','mtime','active'],
+	    fields: ['id','username','name','quota','usage','ctime','mtime','active'],
 	    remoteSort: true
 	});
 	
@@ -50,7 +50,10 @@ GO.postfixadmin.MailboxesGrid = function(config){
 		},	{
 			header: GO.postfixadmin.lang.quota, 
 			dataIndex: 'quota'
-		}, 	{
+		}, {
+			header: GO.postfixadmin.lang.usage,
+			dataIndex: 'usage'
+		}, 		{
 			header: GO.lang.strCtime, 
 			dataIndex: 'ctime'
 		},		{
