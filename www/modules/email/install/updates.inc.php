@@ -59,4 +59,4 @@ $updates[]="ALTER TABLE `em_accounts` DROP `name` , DROP `email` ;";
 $updates[]="ALTER TABLE `em_messages_cache` CHANGE `to` `to` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ";
 
 $updates[]="ALTER TABLE `em_links` CHANGE `acl_read` `acl_id` INT( 11 ) NOT NULL DEFAULT '0'";
-$updates[]="ALTER TABLE `em_messages_cache` ADD `serialized_message_object` TEXT NOT NULL ";
+$updates[]="ALTER TABLE `em_messages_cache` ADD `serialized_message_object` MEDIUMTEXT NOT NULL ";
