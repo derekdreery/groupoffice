@@ -58,7 +58,7 @@ foreach($configs as $conf) {
 				$prefix='';
 			}
 
-			$sql = "SELECT DISTINCT email FROM ".$prefix."_users LIMIT 0,2";
+			$sql = "SELECT DISTINCT email FROM ".$prefix."users LIMIT 0,2";
 			$db->query($sql);
 			while($record=$db->next_record()){
 				$emails[]=$record['email'];
@@ -68,5 +68,5 @@ foreach($configs as $conf) {
 }
 
 $emails=array_unique($emails);
-
+echo count($emails)."\n\n";
 echo implode(', ', $emails)."\n";
