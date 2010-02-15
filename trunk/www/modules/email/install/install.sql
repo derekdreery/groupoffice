@@ -149,7 +149,7 @@ CREATE TABLE IF NOT EXISTS `em_messages_cache` (
   `notification` varchar(100) NOT NULL,
   `content_type` varchar(100) NOT NULL,
   `content_transfer_encoding` varchar(50) NOT NULL,
-  `serialized_message_object` text NOT NULL,
+  `serialized_message_object` mediumtext NOT NULL,
   PRIMARY KEY (`folder_id`,`uid`),
   KEY `account_id` (`account_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
