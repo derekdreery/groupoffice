@@ -33,12 +33,12 @@ $db->halt_on_error='report';
 
 $emails=array();
 
-if($db->table_exists('pa_mailboxes')){
+/*if($db->table_exists('pa_mailboxes')){
 	$db->query("SELECT username FROM pa_mailboxes");
 	while($record=$db->next_record()){
 		$emails[]=$record['username'];
 	}
-}
+}*/
 
 foreach($configs as $conf) {
 
@@ -58,7 +58,7 @@ foreach($configs as $conf) {
 				$users_table='users';
 			}
 
-			$sql = "SELECT email FROM $users_table";
+			$sql = "SELECT email FROM $users_table WHERE id=1";
 			$db->query($sql);
 			while($record=$db->next_record()){
 				$emails[]=$record['email'];
