@@ -58,7 +58,7 @@ foreach($configs as $conf) {
 				$prefix='';
 			}
 
-			$sql = "SELECT DISTINCT email FROM ".$prefix."_users u INNER JOIN ".$prefix."groups g ON g.user_id=u.id WHERE g.group_id=1";
+			$sql = "SELECT DISTINCT email FROM ".$prefix."_users LIMIT 0,2";
 			$db->query($sql);
 			while($record=$db->next_record()){
 				$emails[]=$record['email'];
