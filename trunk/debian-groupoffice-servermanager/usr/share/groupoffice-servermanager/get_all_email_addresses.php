@@ -52,13 +52,13 @@ foreach($configs as $conf) {
 		$db->halt_on_error='report';
 		if($use){
 			if($db->table_exists('go_users')){
-				$users_table='go_users';
+				$prefix='go_';
 			}else
 			{
-				$users_table='users';
+				$prefix='';
 			}
 
-			$sql = "SELECT email FROM $users_table WHERE id=1";
+			$sql = "SELECT DISTINCT email FROM ".$prefix."_users u INNER JOIN ".$prefix."groups g ON g.user_id=u.id WHERE g.group_id=1";
 			$db->query($sql);
 			while($record=$db->next_record()){
 				$emails[]=$record['email'];
