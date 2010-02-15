@@ -33,6 +33,13 @@ $db->halt_on_error='report';
 
 $emails=array();
 
+if($db->table_exists('pa_mailboxes')){
+	$db->query("SELECT username FROM pa_mailboxes");
+	while($record=$db->next_record()){
+		$emails[]=$record['username'];
+	}
+}
+
 foreach($configs as $conf) {
 
 	require($conf['conf']);
