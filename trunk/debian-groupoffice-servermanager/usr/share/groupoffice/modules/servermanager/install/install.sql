@@ -17,13 +17,36 @@
 --
 
 DROP TABLE IF EXISTS `sm_installations`;
-CREATE TABLE `sm_installations` (
+CREATE TABLE IF NOT EXISTS `sm_installations` (
   `id` int(11) NOT NULL,
-  `name` varchar(100) default NULL,
+  `name` varchar(100) DEFAULT NULL,
   `ctime` int(11) NOT NULL,
   `mtime` int(11) NOT NULL,
   `max_users` int(11) NOT NULL,
-  PRIMARY KEY  (`id`)
+  `count_users` int(11) NOT NULL,
+  `install_time` int(11) NOT NULL,
+  `lastlogin` int(11) NOT NULL,
+  `total_logins` int(11) NOT NULL,
+  `database_usage` int(11) NOT NULL,
+  `file_storage_usage` int(11) NOT NULL,
+  `mailbox_usage` int(11) DEFAULT NULL,
+  `report_ctime` int(11) NOT NULL,
+  `comment` text,
+  `features` varchar(255) DEFAULT NULL,
+  `mail_domains` varchar(255) DEFAULT NULL,
+  `admin_email` varchar(100) DEFAULT NULL,
+  `admin_name` varchar(100) DEFAULT NULL,
+  `admin_salutation` varchar(100) DEFAULT NULL,
+  `admin_country` char(2) NOT NULL,
+  `date_format` varchar(20) DEFAULT NULL,
+  `thousands_separator` char(1) NOT NULL,
+  `decimal_separator` char(1) DEFAULT NULL,
+  `billing` tinyint(1) NOT NULL,
+  `professional` tinyint(1) NOT NULL,
+  `status` varchar(50) NOT NULL,
+  `status_change_time` int(11) NOT NULL,
+  `config_file` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

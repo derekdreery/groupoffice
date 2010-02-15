@@ -38,3 +38,6 @@ ADD `status` varchar( 50 ) NOT NULL ,
 ADD `status_change_time` int( 11 ) NOT NULL ";
 
 $updates[]="UPDATE sm_installations SET status='ignore'";
+
+$updates[]="ALTER TABLE `sm_installations` ADD `config_file` VARCHAR( 255 ) NOT NULL";
+
