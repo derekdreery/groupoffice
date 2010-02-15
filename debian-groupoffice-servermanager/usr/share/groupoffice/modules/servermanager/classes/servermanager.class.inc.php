@@ -22,6 +22,44 @@ class servermanager extends db {
 		$events->add_listener('update_user', __FILE__, 'servermanager', 'update_user');
 	}
 
+	public function get_all_config_files($roots){
+		global $GO_CONFIG;
+		
+		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+		$fs = new filesystem();
+
+		$configs=array();
+		if(file_exists('/etc/groupoffice/config.php')){
+			$configs[]=array('name'=>'servermanager','conf'=>'/etc/groupoffice/config.php');
+		}
+		foreach($roots as $root) {
+			$folders = $fs->get_folders($root);
+
+			echo 'Finding config files in '.$root."\n";
+
+			//var_dump($folders);
+
+			foreach($folders as $folder) {
+				$conf = '/etc/groupoffice/'.$folder['name'].'/config.php';
+				if(file_exists($conf)) {
+					$configs[]=array('name'=>$folder['name'], 'conf'=>$conf);
+				}else {
+					$conf = $folder['path'].'/html/groupoffice/config.php';
+					if(file_exists($conf)) {
+						$configs[]=array('name'=>$folder['name'], 'conf'=>$conf);
+					}else
+					{
+						$conf = $folder['path'].'/config.php';
+						if(file_exists($conf)) {
+							$configs[]=array('name'=>$folder['name'], 'conf'=>$conf);
+						}
+					}
+				}
+			}
+		}
+		return $configs;
+	}
+
 	/**
 	 *
 	 * Creates a report about the usage. Don't mess with this because the professional
@@ -53,6 +91,7 @@ class servermanager extends db {
 		$installation['name']=$name;
 		$installation['ctime']=time();
 		$installation['comment']='';
+		$installation['config_file']=$config_file;
 
 		if($installation['name']=='servermanager'){
 			$installation['status']='ignore';
