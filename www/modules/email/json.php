@@ -178,7 +178,7 @@ function find_alias_and_recipients()
 		$first = !empty($response['data']['to']);
 		for ($i=0;$i<sizeof($content["to"]);$i++)
 		{
-			$address = strtolower(String::get_email_from_string($content["to"][$i]));
+			$address = strtolower($content["to"][$i]['email']);
 			if (!empty($email))
 			{
 				if(isset($aliases[$address]))
@@ -205,7 +205,7 @@ function find_alias_and_recipients()
 		$first=false;
 		for ($i=0;$i<sizeof($content["cc"]);$i++)
 		{
-			$address = String::get_email_from_string($content["cc"][$i]);
+			$address = strtolower($content["cc"][$i]['email']);
 			if (!empty($address))
 			{
 				if(isset($aliases[$address]))
