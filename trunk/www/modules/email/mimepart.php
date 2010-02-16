@@ -73,17 +73,17 @@ $content_transfer_encoding = isset($part->headers['content-transfer-encoding']) 
 $browser = detect_browser();
 
 header('Content-Length: '.strlen($part->body));
-header('Expires: '.gmdate('D, d M Y H:i:s') . ' GMT');
+header("Expires: " . date("D, j M Y G:i:s ", time()+(86400*14)) . 'GMT');//expires in 2 weeks
+header('Cache-Control: cache');
+header('Pragma: cache');
+
 if ($browser['name'] == 'MSIE')
 {
 	header('Content-Type: application/download');
 	header('Content-Disposition: attachment; filename="'.$filename.'"');
-	header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-	header('Pragma: public');
 }else
 {
-	header('Content-Type: '.$part->ctype_primary.'/'.$part->ctype_secondary);
-	header('Pragma: no-cache');
+	header('Content-Type: '.File::get_mime($filename));
 	header('Content-Disposition: attachment; filename="'.$filename.'"');
 }
 header('Content-Transfer-Encoding: binary');
