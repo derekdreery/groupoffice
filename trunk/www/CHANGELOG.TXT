@@ -1,3 +1,42 @@
+2010/02/?? 3.4.0
+General
+- Maximize window automatically when the window is larger then the current
+  screen resolution.
+- Create links from files
+- Created a copy function in the billing catalog
+- Improved browsing of links and global searcing. The linkbrowser shows a
+  preview on the right just like e-mail works. This way it's much easier to
+  browse links and search results.
+- Possible to predefine some default link folders. They will automatically be
+  created when you create a new project for example.
+
+Calendar
+- Add user groups and addresslist to appointments at once.
+- Compose e-mail from the New menu at contacts, companies and project which will
+  be linked automatically.
+- Conflict checking on the server when adding appointments
+- Button to jump to own calendar
+- Created a merged view in the calendar to view appointments from multiple persons
+  in one grid.
+
+E-mail
+- Cache mail body to improve speed and reduce load on the IMAP server
+- Show addressbook when selecting contacts in autocomplete and addressbook dialog
+- Added spellcheck
+- Added buttons for indenting and clear formatting.
+
+Addressbook & Addresslists
+- Advanced search improved. You can build any SQL query.
+- Added image to contacts
+- Easier adding of contacts to addresslists. You can add an entire result of an
+  advanced search query.
+- More control over sent mailings. There's one central status screen where you
+  can see all sent mailings. From there it's possible to pause and start them
+	again. You can also view the log and message from the status window.
+
+Projects
+- Automatic rounding of timeregistration entries to 15 or 30 minutes for example.
+
 2010/02/11 3.3.20
 - Small bug fixes
 
