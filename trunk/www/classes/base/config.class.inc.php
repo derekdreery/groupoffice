@@ -900,7 +900,7 @@ class GO_CONFIG {
 
 			go_debug('Page load took: '.(getmicrotime()-$this->loadstart).'ms', $this);
 
-			go_debug('Peak memory usage:'.memory_get_peak_usage(), $this);
+			go_debug('Peak memory usage:'.round(memory_get_peak_usage()/1048576,2).'MB', $this);
 			go_debug("--------------------\n", $this);
 		}
 	}
