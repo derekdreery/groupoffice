@@ -233,186 +233,204 @@ try{
 	$task = $_REQUEST['task'];
 	if($task == 'reply' || $task =='reply_all' || $task == 'forward' || $task=='opendraft')
 	{
-		$account_id = $_POST['account_id'];
-		$uid = $_POST['uid'];
-		$mailbox = $_POST['mailbox'];
+		if(!empty($_POST['uid'])){
+			/*
+			 * Regular reply in the e-mail client
+			 */
 
-		$url_replacements=array();
+			$account_id = $_POST['account_id'];
+			$uid = $_POST['uid'];
+			$mailbox = $_POST['mailbox'];
 
-		//$account = connect($account_id, $mailbox);
-		$account = $email->get_account($account_id);
-		$imap->set_account($account, $mailbox);
+			$url_replacements=array();
 
-		if(!$account)
-		{
-			$response['success']=false;
-			$response['feedback']=$strDataError;
-		}else
-		{
+			//$account = connect($account_id, $mailbox);
+			$account = $email->get_account($account_id);
+			$imap->set_account($account, $mailbox);
 
-			$content = $imap->get_message_with_body($uid, $_POST['content_type']!='html', true);
-
-			switch($task)
+			if(!$account)
 			{
-				case "reply":
-				case "reply_all":
-					$response['data']['to'] = $content["reply-to"];
-					if(stripos($content['subject'],'Re:')===false)
-					{
-						$response['data']['subject'] = 'Re: '.$content['subject'];
-					}else
-					{
-						$response['data']['subject'] = $content['subject'];
-					}
-					break;
-
-				case "opendraft":
-				case "forward":
-
-					if($task == 'opendraft')
-					{
-						$response['data']['to']='';
-						$response['data']['subject'] = $content['subject'];
-
-					}else
-					{
-						if(stripos($content['subject'],'Fwd:')===false)
-						{
-							$response['data']['subject'] = 'Fwd: '.$content['subject'];
-						}else
-						{
-							$response['data']['subject'] = $content['subject'];
-						}
-					}
-
-					//reattach non-inline attachments					
-					foreach($content['attachments'] as $attachment){
-						//var_dump($parts[$i]);
-						if($imap->part_is_attachment($attachment))
-						{
-							$response['data']['attachments'][]=array(
-								'tmp_name'=>$attachment['tmp_file'],
-								'name'=>$attachment['name'],
-								'size'=>$attachment["size"],
-								'type'=>File::get_filetype_description(File::get_extension($attachment['name']))
-								);
-						}
-					}
-
-					break;
+				throw new DatabaseSelectException();
 			}
 
+			$content = $imap->get_message_with_body($uid, $_POST['content_type']!='html', true);
+		}else
+		{
+			/*
+			 * Reply / forward for a linked message. We need the mailings module to fetch the message.
+			 */
+			$id = isset($_REQUEST['id']) ? ($_REQUEST['id']) : 0;
+			$path = isset($_REQUEST['path']) ? ($_REQUEST['path']) : "";
+			$part_number = isset($_REQUEST['part_number']) ? ($_REQUEST['part_number']) : "";
+
+			require_once($GO_MODULES->modules['mailings']['class_path'].'mailings.class.inc.php');
+			$ml = new mailings();
+
+			$content = $ml->get_message_for_client($id, $path, $part_number, true);
+		}
+
+		switch($task)
+		{
+			case "reply":
+			case "reply_all":
+				$response['data']['to'] = $content["reply-to"];
+				if(stripos($content['subject'],'Re:')===false)
+				{
+					$response['data']['subject'] = 'Re: '.$content['subject'];
+				}else
+				{
+					$response['data']['subject'] = $content['subject'];
+				}
+				break;
+
+			case "opendraft":
+			case "forward":
+
+				if($task == 'opendraft')
+				{
+					$response['data']['to']='';
+					$response['data']['subject'] = $content['subject'];
+
+				}else
+				{
+					if(stripos($content['subject'],'Fwd:')===false)
+					{
+						$response['data']['subject'] = 'Fwd: '.$content['subject'];
+					}else
+					{
+						$response['data']['subject'] = $content['subject'];
+					}
+				}
+
+				//reattach non-inline attachments
+				foreach($content['attachments'] as $attachment){
+					//var_dump($parts[$i]);
+					if($imap->part_is_attachment($attachment))
+					{
+						$response['data']['attachments'][]=array(
+							'tmp_name'=>$attachment['tmp_file'],
+							'name'=>$attachment['name'],
+							'size'=>$attachment["size"],
+							'type'=>File::get_filetype_description(File::get_extension($attachment['name']))
+							);
+					}
+				}
+
+				break;
+		}
+
+		if(!empty($uid))
 			find_alias_and_recipients();
 
 
-			$response['data']['body']=$content['body'];
+		$response['data']['body']=$content['body'];
 
 
-			if($GO_MODULES->has_module('gnupg'))
-			{
-				require_once($GO_MODULES->modules['gnupg']['class_path'].'gnupg.class.inc.php');
-				$gnupg = new gnupg();
-				$sender = String::get_email_from_string($content['from']);
-				$passphrase = !empty($_SESSION['GO_SESSION']['gnupg']['passwords'][$sender]) ? $_SESSION['GO_SESSION']['gnupg']['passwords'][$sender] : '';
-			}
-
-			if($GO_MODULES->has_module('gnupg'))
-				$response['data']['body'] = $gnupg->replace_encoded($response['data']['body'],$passphrase,false);
-
-
-			if($response['data']['body'] != '')
-			{
-				//replace inline images with the url to display the part by Group-Office
-				for ($i=0;$i<count($url_replacements);$i++)
-				{
-					$response['data']['body'] = str_replace('cid:'.$url_replacements[$i]['id'], $url_replacements[$i]['url'], $response['data']['body']);
-				}
-			}
-
-			if($task=='forward')
-			{
-				$om_to = isset($content['to']) ? implode(',',$content["to"]) : $lang['email']['no_recipients'];
-				$om_cc = isset($content['cc']) ? implode(',',$content["cc"]) : '';
-
-				if($_POST['content_type']== 'html')
-				{
-					$header_om  = '<br /><br /><font face="verdana" size="2">'.$lang['email']['original_message']."<br />";
-					$header_om .= "<b>".$lang['email']['subject'].":&nbsp;</b>".htmlspecialchars($content['subject'], ENT_QUOTES, 'UTF-8')."<br />";
-					$header_om .= '<b>'.$lang['email']['from'].": &nbsp;</b>".htmlspecialchars($content['from'], ENT_QUOTES, 'UTF-8')."<br />";
-					$header_om .= "<b>".$lang['email']['to'].":&nbsp;</b>".htmlspecialchars($om_to, ENT_QUOTES, 'UTF-8')."<br />";
-					if(!empty($om_cc))
-					{
-						$header_om .= "<b>CC:&nbsp;</b>".htmlspecialchars($om_cc, ENT_QUOTES, 'UTF-8')."<br />";
-					}
-
-					$header_om .= "<b>".$lang['common']['date'].":&nbsp;</b>".date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'],$content["udate"])."<br />";
-
-					$header_om .= "</font><br /><br />";
-
-					$response['data']['body']=$header_om.$response['data']['body'];
-					//$response['data']['body'] = '<br /><blockquote style="border:0;border-left: 2px solid #22437f; padding:0px; margin:0px; padding-left:5px; margin-left: 5px; ">'.$header_om.$response['data']['body'].'</blockquote>';
-				}else
-				{
-					$header_om  = "\n\n".$lang['email']['original_message']."\n";
-					$header_om .= $lang['email']['subject'].": ".$subject."\n";
-					$header_om .= $lang['email']['from'].": ".$content['from']."\n";
-					$header_om .= $lang['email']['to'].": ".$om_to."\n";
-					if(!empty($om_cc))
-					{
-						$header_om .= "CC: ".$om_cc."\n";
-					}
-
-					$header_om .= $lang['common']['date'].": ".date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'],$content["udate"])."\n";
-					$header_om .= "\n\n";
-
-					$response['data']['body'] = str_replace("\r",'',$response['data']['body']);
-					//$response['data']['body'] = '> '.str_replace("\n","\n> ",$response['data']['body']);
-
-					$response['data']['body'] = $header_om.$response['data']['body'];
-				}
-			}elseif($task=='reply' || $task=='reply_all')
-			{
-				$header_om = sprintf($lang['email']['replyHeader'],
-					$lang['common']['full_days'][date('w', $content["udate"])],
-					date($_SESSION['GO_SESSION']['date_format'],$content["udate"]),
-					date($_SESSION['GO_SESSION']['time_format'],$content["udate"]),
-					$content['from']);
-
-				if($_POST['content_type']== 'html')
-				{
-
-					$response['data']['body'] = '<br /><br />'.htmlspecialchars($header_om, ENT_QUOTES, 'UTF-8').'<br /><blockquote style="border:0;border-left: 2px solid #22437f; padding:0px; margin:0px; padding-left:5px; margin-left: 5px; ">'.$response['data']['body'].'</blockquote>';
-				}else
-				{
-					$response['data']['body'] = str_replace("\r",'',$response['data']['body']);
-					$response['data']['body'] = '> '.str_replace("\n","\n> ",$response['data']['body']);
-
-					$response['data']['body'] = "\n\n".$header_om."\n".$response['data']['body'];
-				}
-			}
-
-			$response['data']['inline_attachments']=$content['url_replacements'];
-
-			go_debug($url_replacements);
-
-			if(isset($_POST['template_id']) && $_POST['template_id']>0)
-			{
-				$template_id = ($_POST['template_id']);
-				$to = isset($response['data']['to']) ? $response['data']['to'] : '';
-				$template = load_template($template_id, $to);
-
-				$response['data']['body'] = $template['data']['body'].$response['data']['body'];
-				$response['data']['inline_attachments']=array_merge($response['data']['inline_attachments'], $template['data']['inline_attachments']);
-			}
-
-			if($_POST['content_type']=='plain')
-			{
-				$response['data']['textbody']=$response['data']['body'];
-				unset($response['data']['body']);
-			}
-
-			$response['success']=true;
+		if($GO_MODULES->has_module('gnupg'))
+		{
+			require_once($GO_MODULES->modules['gnupg']['class_path'].'gnupg.class.inc.php');
+			$gnupg = new gnupg();
+			$sender = String::get_email_from_string($content['from']);
+			$passphrase = !empty($_SESSION['GO_SESSION']['gnupg']['passwords'][$sender]) ? $_SESSION['GO_SESSION']['gnupg']['passwords'][$sender] : '';
 		}
+
+		if($GO_MODULES->has_module('gnupg'))
+			$response['data']['body'] = $gnupg->replace_encoded($response['data']['body'],$passphrase,false);
+
+
+		/*if($response['data']['body'] != '')
+		{
+			//replace inline images with the url to display the part by Group-Office
+			for ($i=0;$i<count($url_replacements);$i++)
+			{
+				$response['data']['body'] = str_replace('cid:'.$url_replacements[$i]['id'], $url_replacements[$i]['url'], $response['data']['body']);
+			}
+		}*/
+
+		if($task=='forward')
+		{
+			$om_to = $content["to_string"];
+			$om_cc = $content["cc_string"];
+
+			if($_POST['content_type']== 'html')
+			{
+				$header_om  = '<br /><br /><font face="verdana" size="2">'.$lang['email']['original_message']."<br />";
+				$header_om .= "<b>".$lang['email']['subject'].":&nbsp;</b>".htmlspecialchars($content['subject'], ENT_QUOTES, 'UTF-8')."<br />";
+				$header_om .= '<b>'.$lang['email']['from'].": &nbsp;</b>".htmlspecialchars($content['from'], ENT_QUOTES, 'UTF-8')."<br />";
+				$header_om .= "<b>".$lang['email']['to'].":&nbsp;</b>".htmlspecialchars($om_to, ENT_QUOTES, 'UTF-8')."<br />";
+				if(!empty($om_cc))
+				{
+					$header_om .= "<b>CC:&nbsp;</b>".htmlspecialchars($om_cc, ENT_QUOTES, 'UTF-8')."<br />";
+				}
+
+				$header_om .= "<b>".$lang['common']['date'].":&nbsp;</b>".date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'],$content["udate"])."<br />";
+
+				$header_om .= "</font><br /><br />";
+
+				$response['data']['body']=$header_om.$response['data']['body'];
+				//$response['data']['body'] = '<br /><blockquote style="border:0;border-left: 2px solid #22437f; padding:0px; margin:0px; padding-left:5px; margin-left: 5px; ">'.$header_om.$response['data']['body'].'</blockquote>';
+			}else
+			{
+				$header_om  = "\n\n".$lang['email']['original_message']."\n";
+				$header_om .= $lang['email']['subject'].": ".$subject."\n";
+				$header_om .= $lang['email']['from'].": ".$content['from']."\n";
+				$header_om .= $lang['email']['to'].": ".$om_to."\n";
+				if(!empty($om_cc))
+				{
+					$header_om .= "CC: ".$om_cc."\n";
+				}
+
+				$header_om .= $lang['common']['date'].": ".date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'],$content["udate"])."\n";
+				$header_om .= "\n\n";
+
+				$response['data']['body'] = str_replace("\r",'',$response['data']['body']);
+				//$response['data']['body'] = '> '.str_replace("\n","\n> ",$response['data']['body']);
+
+				$response['data']['body'] = $header_om.$response['data']['body'];
+			}
+		}elseif($task=='reply' || $task=='reply_all')
+		{
+			$header_om = sprintf($lang['email']['replyHeader'],
+				$lang['common']['full_days'][date('w', $content["udate"])],
+				date($_SESSION['GO_SESSION']['date_format'],$content["udate"]),
+				date($_SESSION['GO_SESSION']['time_format'],$content["udate"]),
+				$content['from']);
+
+			if($_POST['content_type']== 'html')
+			{
+
+				$response['data']['body'] = '<br /><br />'.htmlspecialchars($header_om, ENT_QUOTES, 'UTF-8').'<br /><blockquote style="border:0;border-left: 2px solid #22437f; padding:0px; margin:0px; padding-left:5px; margin-left: 5px; ">'.$response['data']['body'].'</blockquote>';
+			}else
+			{
+				$response['data']['body'] = str_replace("\r",'',$response['data']['body']);
+				$response['data']['body'] = '> '.str_replace("\n","\n> ",$response['data']['body']);
+
+				$response['data']['body'] = "\n\n".$header_om."\n".$response['data']['body'];
+			}
+		}
+
+		$response['data']['inline_attachments']=$content['url_replacements'];
+
+		//go_debug($url_replacements);
+
+		if(isset($_POST['template_id']) && $_POST['template_id']>0)
+		{
+			$template_id = ($_POST['template_id']);
+			$to = isset($response['data']['to']) ? $response['data']['to'] : '';
+			$template = load_template($template_id, $to);
+
+			$response['data']['body'] = $template['data']['body'].$response['data']['body'];
+			$response['data']['inline_attachments']=array_merge($response['data']['inline_attachments'], $template['data']['inline_attachments']);
+		}
+
+		if($_POST['content_type']=='plain')
+		{
+			$response['data']['textbody']=$response['data']['body'];
+			unset($response['data']['body']);
+		}
+
+		$response['success']=true;
+
 	}else
 	{
 		switch($_REQUEST['task'])
@@ -574,45 +592,7 @@ try{
 					}             
 				}
 
-				if(!empty($response['to']))
-				{
-					$to=array();
-					foreach($response['to'] as $address)
-					{
-						$address=$RFC822->parse_address_list($address);
-						$to[] = array('email'=>htmlspecialchars($address[0]['email'], ENT_QUOTES, 'UTF-8'),
-						'name'=>htmlspecialchars($address[0]['personal'], ENT_QUOTES, 'UTF-8'));
-					}
-					$response['to']=$to;
-				}else
-				{
-					$response['to']=array('email'=>'', 'name'=> $lang['email']['no_recipients']);
-				}
-
-
-				$cc=array();
-				if(!empty($response['cc']))
-				{
-					foreach($response['cc'] as $address)
-					{
-						$address=$RFC822->parse_address_list($address);
-						$cc[] = array('email'=>htmlspecialchars($address[0]['email'], ENT_QUOTES, 'UTF-8'),
-						'name'=>htmlspecialchars($address[0]['personal'], ENT_QUOTES, 'UTF-8'));
-					}
-				}
-				$response['cc']=$cc;
-
-				$bcc=array();
-				if(!empty($response['bcc']))
-				{
-					foreach($response['bcc'] as $address)
-					{
-						$address=$RFC822->parse_address_list($address);
-						$bcc[] = array('email'=>htmlspecialchars($address[0]['email'], ENT_QUOTES, 'UTF-8'),
-						'name'=>htmlspecialchars($address[0]['personal'], ENT_QUOTES, 'UTF-8'));
-					}
-				}
-				$response['bcc']=$bcc;
+				
 
 				$response['date']=date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], $response['udate']);
 				//$response['size']=Number::format_size($response['size']);

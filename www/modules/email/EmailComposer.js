@@ -883,6 +883,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 					waitMsg : GO.lang.waitMsgLoad,
 					failure:function(form, action)
 					{
+						Ext.getBody().unmask();
 						Ext.Msg.alert(GO.lang['strError'], action.result.feedback)
 					},
 					success : function(form, action) {

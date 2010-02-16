@@ -141,53 +141,65 @@ class Go2Mime
 		$this->response['cc'] = isset($structure->headers['cc']) ? $structure->headers['cc'] : '';
 		$this->response['bcc'] = isset($structure->headers['bcc']) ? $structure->headers['bcc'] : '';
 		
-		
+		$this->response['to_string']='';
 		if(!empty($this->response['to']))
 		{
 			$addresses=$RFC822->parse_address_list($this->response['to']);
 			$to=array();
 			foreach($addresses as $address)
 			{
+				$this->response['to_string'].= $RFC822->write_address($address['personal'], $address['email']).', ';
 				$to[] = array('email'=>htmlspecialchars($address['email'], ENT_QUOTES, 'UTF-8'),
 						'name'=>htmlspecialchars($address['personal'], ENT_QUOTES, 'UTF-8'));
 			}
 			$this->response['to']=$to;
+			$this->response['to_string']=substr($this->response['to_string'],0,-2);
 		}else
 		{
 			$this->response['to']=array('email'=>'', 'name'=> $lang['email']['no_recipients']);
 		}
 
 		$cc=array();
+		$this->response['cc_string']='';
 		if(!empty($this->response['cc']))
 		{
 			$addresses=$RFC822->parse_address_list($this->response['cc']);
 			foreach($addresses as $address)
 			{
+				$this->response['cc_string'].= $RFC822->write_address($address['personal'], $address['email']).', ';
 				$cc[] = array('email'=>htmlspecialchars($address['email'], ENT_QUOTES, 'UTF-8'),
 						'name'=>htmlspecialchars($address['personal'], ENT_QUOTES, 'UTF-8'));
 			}
+			$this->response['cc_string']=substr($this->response['cc_string'],0,-2);
 		}
 		$this->response['cc']=$cc;
 
 		$bcc=array();
+		$this->response['bcc_string']='';
 		if(!empty($this->response['bcc']))
 		{
 			$addresses=$RFC822->parse_address_list($this->response['bcc']);
 			foreach($addresses as $address)
 			{
+				$this->response['bcc_string'].= $RFC822->write_address($address['personal'], $address['email']).', ';
 				$bcc[] = array('email'=>htmlspecialchars($address['email'], ENT_QUOTES, 'UTF-8'),
 						'name'=>htmlspecialchars($address['personal'], ENT_QUOTES, 'UTF-8'));
 			}
+			$this->response['bcc_string']=substr($this->response['bcc_string'],0,-2);
 		}
 		$this->response['bcc']=$bcc;
 
 		$this->response['full_from']=$this->response['from'];
 		$this->response['priority']=3;
 
-		if(isset($structure->headers['date']))
-		$this->response['date']=date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], strtotime($structure->headers['date']));
-		else
-		$this->response['date']=time();
+
+		if(isset($structure->headers['date'])){
+			$this->response['udate']=strtotime($structure->headers['date']);
+		}else
+		{
+			$this->response['udate']=time();
+		}
+		$this->response['date']=date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], $this->response['udate']);
 			
 		$this->response['size']=strlen($params['input']);
 
@@ -201,6 +213,9 @@ class Go2Mime
 		{
 			$this->response['body'] = str_replace('cid:'.$this->replacements[$i]['id'], $this->replacements[$i]['url'], $this->response['body']);
 		}
+
+		//for compatibility with IMAP get_message_with_body
+		$this->response['url_replacements']=$this->response['inline_attachments'];
 
 		return $this->response;
 	}
@@ -258,6 +273,7 @@ class Go2Mime
 
 				if (!empty($filename) && empty($part->headers['content-id']))
 				{
+					$mime_attachment['tmp_file']=false; //for compatibility with IMAP attachments which use this property.
 					$mime_attachment['index']=count($this->response['attachments']);
 					$mime_attachment['size'] = isset($part->body) ? strlen($part->body) : 0;
 					$mime_attachment['human_size'] = Number::format_size($mime_attachment['size']);

@@ -387,6 +387,56 @@ class cached_imap extends imap{
 		$message['sender']=isset($address[0]['email']) ? htmlspecialchars($address[0]['email'], ENT_QUOTES, 'UTF-8') : '';
 		$message['from']=isset($address[0]['personal']) ? htmlspecialchars($address[0]['personal'], ENT_QUOTES, 'UTF-8') : '';
 
+		$message['to_string']='';
+		if(!empty($message['to']))
+		{			
+			$to=array();
+			foreach($message['to'] as $address)
+			{
+				$message['to_string'].= $address.', ';
+				$address=$RFC822->parse_address_list($address);
+				$to[] = array('email'=>htmlspecialchars($address[0]['email'], ENT_QUOTES, 'UTF-8'),
+				'name'=>htmlspecialchars($address[0]['personal'], ENT_QUOTES, 'UTF-8'));
+			}
+			$message['to_string']=substr($message['to_string'],0,-2);
+			$message['to']=$to;
+		}else
+		{
+			$message['to']=array('email'=>'', 'name'=> $lang['email']['no_recipients']);
+		}
+
+
+		$message['cc_string']='';
+		$cc=array();
+		if(!empty($message['cc']))
+		{
+			foreach($message['cc'] as $address)
+			{
+				$message['cc_string'].= $address.', ';
+				$address=$RFC822->parse_address_list($address);
+				$cc[] = array('email'=>htmlspecialchars($address[0]['email'], ENT_QUOTES, 'UTF-8'),
+				'name'=>htmlspecialchars($address[0]['personal'], ENT_QUOTES, 'UTF-8'));
+			}
+			$message['cc_string']=substr($message['cc_string'],0,-2);
+		}
+		$message['cc']=$cc;
+
+		$bcc=array();
+		$message['bcc_string']='';
+		if(!empty($message['bcc']))
+		{
+			foreach($message['bcc'] as $address)
+			{
+				$message['bcc_string'].= $address.', ';
+				$address=$RFC822->parse_address_list($address);
+				$bcc[] = array('email'=>htmlspecialchars($address[0]['email'], ENT_QUOTES, 'UTF-8'),
+				'name'=>htmlspecialchars($address[0]['personal'], ENT_QUOTES, 'UTF-8'));
+			}
+			$message['bcc_string']=substr($message['bcc_string'],0,-2);
+		}
+		$message['bcc']=$bcc;
+
+
 		if(empty($message["subject"]))
 		{
 			$message['subject']= $lang['email']['no_subject'];
