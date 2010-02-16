@@ -304,7 +304,9 @@ try{
 
 				case 'sendmail':
 
-					if(empty($_POST['to']) && empty($_POST['cc']) && empty($_POST['bcc']) && empty($_POST['draft']))
+					$draft = isset($_POST['draft']) && $_POST['draft']=='true';
+
+					if(empty($_POST['to']) && empty($_POST['cc']) && empty($_POST['bcc']) && $draft)
 					{
 						$response['feedback'] = $lang['email']['feedbackNoReciepent'];
 					}else
@@ -431,7 +433,7 @@ try{
 								}
 							}
 
-							if(!empty($_POST['encrypt']) && empty($_POST['draft']))
+							if(!empty($_POST['encrypt']) && $draft)
 							{
 								require_once ($GO_MODULES->modules['gnupg']['class_path'].'gnupg.class.inc.php');
 								$gnupg = new gnupg();
@@ -484,7 +486,7 @@ try{
 										throw new FileNotFoundException();
 									}
 									
-									if(!empty($_POST['encrypt']) && empty($_POST['draft']))
+									if(!empty($_POST['encrypt']) && $draft)
 									{
 										$encoded = $gnupg->encode_file($tmp_name, $all_recipients, $swift->account['email']);
 
@@ -497,7 +499,7 @@ try{
 								}
 							}
 
-							if(!empty($_POST['draft']))
+							if($draft)
 							{
 								if($swift->account['type']!='imap')
 								{
