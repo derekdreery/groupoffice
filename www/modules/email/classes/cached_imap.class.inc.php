@@ -29,6 +29,9 @@ class cached_imap extends imap{
 	var $filtered=0;
 
 
+	var $disable_message_cache=false;
+
+
 	function __construct()
 	{
 		$this->email = new email();
@@ -339,7 +342,7 @@ class cached_imap extends imap{
 		 */
 		$this->get_cached_messages($this->folder['id'], array($uid), true);
 		$values=$this->email->next_record();
-		if(!empty($values['serialized_message_object'])){
+		if(!$this->disable_message_cache && !empty($values['serialized_message_object'])){
 			$message =  unserialize($values['serialized_message_object']);
 
 			if($create_temporary_attachment_files) {
@@ -431,6 +434,8 @@ class cached_imap extends imap{
 				$message['parts'][0]['transfer']=$message['content_transfer_encoding'];
 		}
 
+		//go_debug($message['parts']);
+
 		while($part = array_shift($message['parts'])) {
 			$mime = isset($part["mime"]) ? strtolower($part["mime"]) : $default_mime;
 
@@ -440,22 +445,25 @@ class cached_imap extends imap{
 			}
 
 			/*go_debug($mime);
-						go_debug($html_alternative);
-						go_debug($part['type']);
-						go_debug($part["disposition"]);
-						go_debug('-----');*/
+			go_debug($html_alternative);
+			go_debug($part['type']);
+			go_debug($part["disposition"]);
+			go_debug('-----');*/
 
-			if (empty($message['body']) &&
+			if (/*empty($message['body']) &&*/
 							(stripos($part["disposition"],'attachment')===false) &&
 							(
 							(stripos($mime,'html')!==false && !$return_plaintext_body) ||
 											(stripos($mime,'plain')!==false && (!$html_alternative || strtolower($part['type'])!='alternative')) || $mime == "text/enriched" || $mime == "unknown/unknown")) {
 				//go_debug('ja');
-				$part_body = $this->view_part($uid, $part["number"], $part["transfer"], $part["charset"]);
-
+				
+//go_debug($part_body);
+//go_debug('######');
 				switch($mime) {
 					case 'unknown/unknown':
 					case 'text/plain':
+						$part_body = $this->view_part($uid, $part["number"], $part["transfer"], $part["charset"]);
+
 						$uuencoded_attachments = $this->extract_uuencoded_attachments($part_body);
 
 						$part_body = $return_plaintext_body ? $part_body : String::text_to_html($part_body);
@@ -472,15 +480,18 @@ class cached_imap extends imap{
 						break;
 
 					case 'text/html':
-
+						$part_body = $this->view_part($uid, $part["number"], $part["transfer"], $part["charset"]);
 						$part_body = $return_plaintext_body ?  String::html_to_text($part_body) : String::convert_html($part_body);
 						break;
 
 					case 'text/enriched':
+						$part_body = $this->view_part($uid, $part["number"], $part["transfer"], $part["charset"]);
 						$part_body = String::enriched_to_html($part_body);
-						break;
+						break;					
 				}
 				
+				if(!empty($message['body']))
+					$message['body'].='<hr style="margin:20px 0" />';
 				$message['body'] .= trim($part_body);
 			}else {
 				$attachments[]=$part;

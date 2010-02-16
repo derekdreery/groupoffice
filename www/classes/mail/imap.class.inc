@@ -668,6 +668,7 @@ class imap{
 
 				//go_debug($structure);
 				$this->get_parts($structure);
+				$this->message['parts']=array_reverse($this->message['parts']);
 			}
 
 			$header = imap_fetchheader($this->conn, $this->message['uid'], FT_UID);
