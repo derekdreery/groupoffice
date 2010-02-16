@@ -336,9 +336,9 @@ class GoSwift extends Swift_Mailer{
 			require_once ($GO_MODULES->modules['email']['class_path']."cached_imap.class.inc.php");
 			$imap = new cached_imap();
 
-			$mailbox = empty($this->draft_uid) ? 'INBOX' : $this->account['drafts'];
+			//$mailbox = empty($this->draft_uid) ? 'INBOX' : $this->account['drafts'];
 
-			if ($imap->open($this->account,$mailbox)) {
+			if ($imap->open($this->account,$this->account['sent'])) {
 
 				$this->data=$this->message->toString();
 
@@ -357,6 +357,7 @@ class GoSwift extends Swift_Mailer{
 
 					if(!empty($this->draft_uid))
 					{
+						$imap->reopen($this->account['drafts']);
 						$imap->delete(array($this->draft_uid));
 					}
 
