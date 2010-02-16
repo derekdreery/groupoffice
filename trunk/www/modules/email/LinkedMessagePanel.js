@@ -11,6 +11,32 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 				},
 				'-',
 				{
+					iconCls: 'btn-reply',
+					text: GO.email.lang.reply,
+					cls: 'x-btn-text-icon',
+					handler: function(){
+						this.remoteMessage.task='reply';
+						GO.email.showComposer({
+							loadUrl : GO.settings.modules.email.url + 'json.php',
+							loadParams : this.remoteMessage
+						});
+					},
+					scope: this
+				},
+				{
+					iconCls: 'btn-reply-all',
+					text: GO.email.lang.replyAll,
+					cls: 'x-btn-text-icon',
+					handler: function(){
+						this.remoteMessage.task='reply_all';
+						GO.email.showComposer({
+							loadUrl : GO.settings.modules.email.url + 'json.php',
+							loadParams : this.remoteMessage
+						});
+					},
+					scope: this
+				},
+				{
 					iconCls: 'btn-forward',
 					text: GO.email.lang.forward,
 					cls: 'x-btn-text-icon',

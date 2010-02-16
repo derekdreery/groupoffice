@@ -140,6 +140,7 @@ class Go2Mime
 		$this->response['to'] = isset($structure->headers['to']) ? $structure->headers['to'] : '';
 		$this->response['cc'] = isset($structure->headers['cc']) ? $structure->headers['cc'] : '';
 		$this->response['bcc'] = isset($structure->headers['bcc']) ? $structure->headers['bcc'] : '';
+		$this->response['reply-to']=isset($structure->headers['reply-to']) ? $structure->headers['reply-to'] : $this->response['sender'];
 		
 		$this->response['to_string']='';
 		if(!empty($this->response['to']))
