@@ -1102,22 +1102,22 @@ class addressbook extends db {
 
 		$query = $this->escape(str_replace(' ','%', $query));
 
-		$sql = "SELECT DISTINCT ab_contacts.first_name, ab_contacts.middle_name, ab_contacts.last_name, ab_contacts.email, ab_contacts.email2, ab_contacts.email3 FROM ab_contacts WHERE ";
+		$sql = "SELECT DISTINCT a.name AS addressbook_name, c.first_name, c.middle_name, c.last_name, c.email, c.email2, c.email3 FROM ab_contacts c INNER JOIN ab_addressbooks a ON c.addressbook_id=a.id WHERE ";
 
 		$user_ab = $this->get_user_addressbook_ids($user_id);
 		if(count($user_ab) > 1) {
-			$sql .= "ab_contacts.addressbook_id IN (".implode(",",$user_ab).") AND ";
+			$sql .= "c.addressbook_id IN (".implode(",",$user_ab).") AND ";
 		}elseif(count($user_ab)==1) {
-			$sql .= "ab_contacts.addressbook_id=".$user_ab[0]." AND ";
+			$sql .= "c.addressbook_id=".$user_ab[0]." AND ";
 		}else {
 			return false;
 		}
 		$sql .= "(CONCAT(first_name,middle_name,last_name) LIKE '".$query."' OR email LIKE '".$query."' OR email2 LIKE '".$query."' OR email3 LIKE '".$query."')";
 
 		if ($_SESSION['GO_SESSION']['sort_name'] == 'first_name') {
-			$sort_index = 'ab_contacts.first_name ASC, ab_contacts.last_name';
+			$sort_index = 'c.first_name ASC, c.last_name';
 		} else {
-			$sort_index = 'ab_contacts.last_name ASC, ab_contacts.first_name';
+			$sort_index = 'c.last_name ASC, c.first_name';
 		}
 
 		$sql .= " ORDER BY $sort_index ASC LIMIT 0,10";
@@ -1129,7 +1129,7 @@ class addressbook extends db {
 
 		$query = $this->escape(str_replace(' ','%', $query));
 
-		$sql = "SELECT DISTINCT c.name, c.email FROM ab_companies c WHERE ";
+		$sql = "SELECT DISTINCT a.name AS addressbook_name, c.name, c.email FROM ab_companies c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id WHERE ";
 
 		$user_ab = $this->get_user_addressbook_ids($user_id);
 		if(count($user_ab) > 1) {
@@ -1139,7 +1139,7 @@ class addressbook extends db {
 		}else {
 			return false;
 		}
-		$sql .= "(name LIKE '".$query."' OR email LIKE '".$query."') AND email!=''";
+		$sql .= "(c.name LIKE '".$query."' OR c.email LIKE '".$query."') AND c.email!=''";
 		$sql .= " ORDER BY name ASC LIMIT 0,10";
 
 		$this->query($sql);

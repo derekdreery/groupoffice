@@ -212,10 +212,11 @@ GO.email.EmailComposer = function(config) {
 			baseParams : {
 				task : "email"
 			},
-			fields : ['full_email'],
+			fields : ['full_email','info'],
 			root : 'persons'
 		}),
-		displayField : 'full_email'
+		valueField : 'full_email',
+		displayField : 'info'
 	}),
 
 	this.ccCombo = new GO.form.ComboBoxMulti({

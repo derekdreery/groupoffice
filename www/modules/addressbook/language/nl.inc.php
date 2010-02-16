@@ -38,4 +38,6 @@ $lang['addressbook']['companies']= 'Bedrijven';
 $lang['addressbook']['newContactAdded']='Nieuw contactpersoon toegevoegd';
 $lang['addressbook']['newContactFromSite']='Een nieuw contactpersoon was via een websiteformulier toegevoegd';
 $lang['addressbook']['clickHereToView']='Klik hier om de contactpersoon te bekijken';
-?>
+
+$lang['addressbook']['contactFromAddressbook']='Contactpersoon uit %s';
+$lang['addressbook']['companyFromAddressbook']='Bedrijf uit %s';
