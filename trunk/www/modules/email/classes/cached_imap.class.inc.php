@@ -331,7 +331,7 @@ class cached_imap extends imap{
 		return $this->message;
 	}
 
-	function get_message_with_body($uid, $return_plaintext_body=false, $create_temporary_attachment_files=false) {
+	function get_message_with_body($uid, $return_plaintext_body=false, $create_temporary_attachment_files=false, $create_temporary_inline_attachment_files=false) {
 		global $GO_CONFIG, $GO_MODULES, $GO_SECURITY, $GO_LANGUAGE, $lang;
 
 		require_once($GO_LANGUAGE->get_language_file('email'));
@@ -353,7 +353,8 @@ class cached_imap extends imap{
 						$message['attachments'][$i]['tmp_file']=$tmp_file;
 					}
 				}
-
+			}
+			if($create_temporary_inline_attachment_files) {
 				for ($i = 0; $i < count($message['url_replacements']); $i ++) {
 					$attachment = $message['url_replacements'][$i]['attachment'];
 					$tmp_file = $GO_CONFIG->tmpdir.$attachment['name'];

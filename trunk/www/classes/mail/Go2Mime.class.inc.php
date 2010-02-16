@@ -102,7 +102,7 @@ class Go2Mime
 	}
 
 
-	public function mime2GO($mime, $inline_attachments_url='', $create_tmp_attachments=false, $part_number=''){
+	public function mime2GO($mime, $inline_attachments_url='', $create_tmp_attachments=false, $create_tmp_inline_attachments=false, $part_number=''){
 
 		global $lang, $GO_LANGUAGE;
 		
@@ -207,7 +207,7 @@ class Go2Mime
 		$this->response['inline_attachments']=array();
 		$this->response['body']='';
 
-		$this->get_parts($structure, '', $create_tmp_attachments);
+		$this->get_parts($structure, '', $create_tmp_attachments, $create_tmp_inline_attachments);
 
 		for ($i=0;$i<count($this->replacements);$i++)
 		{
@@ -220,7 +220,7 @@ class Go2Mime
 		return $this->response;
 	}
 
-	private function get_parts($structure, $part_number_prefix='', $create_tmp_attachments=false)
+	private function get_parts($structure, $part_number_prefix='', $create_tmp_attachments=false, $create_tmp_inline_attachments=false)
 	{
 		global $GO_CONFIG;
 
@@ -313,7 +313,7 @@ class Go2Mime
 						$url_replacement['part_number'] = $part_number_prefix.$part_number;
 						$url_replacement['url'] = String::add_params_to_url($this->inline_attachments_url, 'part_number='.$url_replacement['part_number']);
 
-						if($create_tmp_attachments)
+						if($create_tmp_inline_attachments)
 						{
 							$url_replacement['tmp_file']=$GO_CONFIG->tmpdir.'attachments/'.$part->d_parameters['filename'];
 							filesystem::mkdir_recursive(dirname($url_replacement['tmp_file']));
@@ -328,7 +328,7 @@ class Go2Mime
 
 				if(isset($part->parts))
 				{
-					$this->get_parts($part, $part_number_prefix.$part_number.'.',$create_tmp_attachments);
+					$this->get_parts($part, $part_number_prefix.$part_number.'.',$create_tmp_attachments, $create_tmp_inline_attachments);
 				}
 				$part_number++;
 			}

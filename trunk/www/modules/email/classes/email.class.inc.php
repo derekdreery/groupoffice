@@ -66,7 +66,7 @@ function load_template($template_id, $to='', $keep_tags=false)
 
 	require_once($GO_CONFIG->class_path.'mail/Go2Mime.class.inc.php');
 	$go2mime = new Go2Mime();
-	$response['data'] = $go2mime->mime2GO($template['content'], $GO_MODULES->modules['mailings']['url'].'mimepart.php?template_id='.$template_id, true);
+	$response['data'] = $go2mime->mime2GO($template['content'], $GO_MODULES->modules['mailings']['url'].'mimepart.php?template_id='.$template_id, true, true);
 	unset($response['data']['to'],$response['data']['cc'], $response['data']['bcc'],$response['data']['subject']);
 
 	if(!$keep_tags)

@@ -253,7 +253,7 @@ try{
 				throw new DatabaseSelectException();
 			}
 
-			$content = $imap->get_message_with_body($uid, $_POST['content_type']!='html', true);
+			$content = $imap->get_message_with_body($uid, $_POST['content_type']!='html', $task=='forward', true);
 		}else
 		{
 			/*
@@ -266,7 +266,7 @@ try{
 			require_once($GO_MODULES->modules['mailings']['class_path'].'mailings.class.inc.php');
 			$ml = new mailings();
 
-			$content = $ml->get_message_for_client($id, $path, $part_number, true);
+			$content = $ml->get_message_for_client($id, $path, $part_number, $task=='forward', true);
 		}
 
 		switch($task)
@@ -549,7 +549,7 @@ try{
 
 				$response['blocked_images']=0;
 
-				$response = array_merge($response, $go2mime->mime2GO($data, $inline_url,false,''));
+				$response = array_merge($response, $go2mime->mime2GO($data, $inline_url,false,false,''));
 
 				break;
 
