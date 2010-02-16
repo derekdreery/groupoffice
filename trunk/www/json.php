@@ -324,6 +324,8 @@ try {
 			$query = isset($_REQUEST['query']) ? '%'.trim($_REQUEST['query']).'%' : '%';
 
 			if(isset($GO_MODULES->modules['addressbook']) && $GO_MODULES->modules['addressbook']['read_permission']) {
+				$GO_LANGUAGE->require_language_file('addressbook');
+
 				require_once ($GO_MODULES->modules['addressbook']['class_path']."addressbook.class.inc.php");
 				$ab = new addressbook();
 				$ab->search_email($GO_SECURITY->user_id, $query);
@@ -336,6 +338,7 @@ try {
 							$addresses[]=$rfc_email;
 
 							$results[]=array(
+											'info'=>htmlspecialchars($rfc_email.' ('.sprintf($lang['addressbook']['contactFromAddressbook'], $ab->f('addressbook_name')).')', ENT_COMPAT, 'UTF-8'),
 											'full_email'=>htmlspecialchars($rfc_email, ENT_COMPAT, 'UTF-8'),
 											'name'=>$name,
 											'email'=>$ab->f('email')
@@ -348,6 +351,7 @@ try {
 						if( !in_array($rfc_email, $addresses)) {
 							$addresses[]=$rfc_email;
 							$results[]=array(
+											'info'=>htmlspecialchars($rfc_email.' ('.sprintf($lang['addressbook']['contactFromAddressbook'], $ab->f('addressbook_name')).')', ENT_COMPAT, 'UTF-8'),
 											'full_email'=>htmlspecialchars($rfc_email, ENT_COMPAT, 'UTF-8'),
 											'name'=>$name,
 											'email'=>$ab->f('email2')
@@ -360,6 +364,7 @@ try {
 						if( !in_array($rfc_email, $addresses)) {
 							$addresses[]=htmlspecialchars($rfc_email, ENT_COMPAT, 'UTF-8');
 							$results[]=array(
+											'info'=>htmlspecialchars($rfc_email.' ('.sprintf($lang['addressbook']['contactFromAddressbook'], $ab->f('addressbook_name')).')', ENT_COMPAT, 'UTF-8'),
 											'full_email'=>$rfc_email,
 											'name'=>$name,
 											'email'=>$ab->f('email3')
@@ -377,6 +382,7 @@ try {
 						if( !in_array($rfc_email, $addresses)) {
 							$addresses[]=$rfc_email;
 							$results[]=array(
+											'info'=>htmlspecialchars($rfc_email.' ('.sprintf($lang['addressbook']['companyFromAddressbook'], $ab->f('addressbook_name')).')', ENT_COMPAT, 'UTF-8'),
 											'full_email'=>htmlspecialchars($rfc_email, ENT_COMPAT, 'UTF-8'),
 											'name'=>$ab->f('name'),
 											'email'=>$ab->f('email')
@@ -395,6 +401,7 @@ try {
 					if(!in_array($rfc_email,$addresses)) {
 						$addresses[]=$rfc_email;
 						$results[]=array(
+										'info'=>htmlspecialchars($rfc_email.' ('.$lang['common']['user'].')', ENT_COMPAT, 'UTF-8'),
 										'full_email'=>htmlspecialchars($rfc_email, ENT_COMPAT, 'UTF-8'),
 										'name'=>$name,
 										'email'=>$GO_USERS->f('email')
