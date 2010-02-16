@@ -67,24 +67,23 @@ if ($mail->open($account['host'], $account['type'],$account['port'],$account['us
 	}
 
 	$browser = detect_browser();
-	
-	//header('Content-Length: '.strlen($file));
-	header('Expires: '.gmdate('D, d M Y H:i:s') . ' GMT');
+
+	header("Expires: " . date("D, j M Y G:i:s ", time()+(86400*14)) . 'GMT');//expires in 2 weeks
+	header('Cache-Control: cache');
+	header('Pragma: cache');	
 	if ($browser['name'] == 'MSIE')
 	{
 		header('Content-Type: application/download');
 		header('Content-Disposition: attachment; filename="'.rawurlencode($_REQUEST['filename']).'";');
-		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-		header('Pragma: public');
 	}else
 	{		
 		$mime = File::get_mime($_REQUEST['filename']);
 		
-		header('Content-Type: '.$mime);
-		header('Pragma: no-cache');
+		header('Content-Type: '.$mime);		
 		header('Content-Disposition: attachment; filename="'.$_REQUEST['filename'].'"');
 	}
 	header('Content-Transfer-Encoding: binary');
+	
 	echo $file;
 }else
 {
