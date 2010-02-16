@@ -1743,7 +1743,8 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 					cls: 'x-btn-text-icon',
 					handler: function(){
 						this.body.print();
-					}
+					},
+					scope: this
 				}];
 
 		GO.email.LinkedMessagePanel.superclass.initComponent.call(this);
@@ -1799,7 +1800,7 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 			if(attachment.mime.indexOf('message')>-1)
 			{
 				this.remoteMessage.part_number=attachment.number+".0";
-				GO.linkHandlers[9].call(this, this.messageId, this.remoteMessage);
+				GO.linkHandlers[9].call(panel, panel.messageId, panel.remoteMessage);
 			}else
 			{
 				if(panel.data.path)
@@ -1810,11 +1811,11 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 				}else
 				{
 					document.location.href=GO.settings.modules.email.url+
-					'mimepart.php?uid='+this.remoteMessage.uid+'' +
-					'&account_id='+this.remoteMessage.account_id+'' +
-					'&transfer='+this.remoteMessage.transfer+'' +
-					'&mailbox='+encodeURIComponent(this.remoteMessage.mailbox)+'' +
-					'&part='+this.remoteMessage.part+'' +
+					'mimepart.php?uid='+panel.remoteMessage.uid+'' +
+					'&account_id='+panel.remoteMessage.account_id+'' +
+					'&transfer='+panel.remoteMessage.transfer+'' +
+					'&mailbox='+encodeURIComponent(panel.remoteMessage.mailbox)+'' +
+					'&part='+panel.remoteMessage.part+'' +
 					'&part_number='+attachment.number;
 				}
 			}
