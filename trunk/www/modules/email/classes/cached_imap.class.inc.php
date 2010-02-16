@@ -512,6 +512,10 @@ class cached_imap extends imap{
 				}
 			}
 
+			if(strpos($attachments[$i]['name'],'.')===false && !empty($attachments[$i]["mime"]) && strpos($attachments[$i]["mime"], 'text')!==false){
+				$attachments[$i]['name'].='.txt';
+			}
+
 			if (!empty($attachments[$i]["id"]) || $this->part_is_attachment($attachments[$i])) {
 				//When a mail is saved as a task/appointment/etc. the attachments will be saved temporarily
 				$attachments[$i]['tmp_file']=false;
