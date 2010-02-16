@@ -358,7 +358,12 @@ class GO_MODULES extends db {
 		}
 		$params = array('module'=>$module);
 
-		
+
+		/*
+		 * Remove listeners.txt. See classes/base/events.class.inc.php for more info
+		 */
+		if(file_exists($GO_CONFIG->file_storage_path.'cache/listeners.txt'))
+			unlink($GO_CONFIG->file_storage_path.'cache/listeners.txt');		
 
 		return true;
 	}
@@ -414,7 +419,13 @@ class GO_MODULES extends db {
 						}
 					}
 				}
-			}	
+			}
+
+			/*
+			 * Remove listeners.txt. See classes/base/events.class.inc.php for more info
+			 */
+			if(file_exists($GO_CONFIG->file_storage_path.'cache/listeners.txt'))
+				unlink($GO_CONFIG->file_storage_path.'cache/listeners.txt');
 			
 			return true;
 		}

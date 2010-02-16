@@ -179,4 +179,4 @@ if (get_magic_quotes_gpc())
 
 umask(0);
 
-
+//go_debug(round(memory_get_usage()/1048576,2)."MB\n");

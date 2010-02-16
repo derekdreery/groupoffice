@@ -5,16 +5,31 @@ class GO_EVENTS
 	
 	public function __construct(){
 		global $GO_CONFIG;
-		
-		if(!defined('NO_EVENTS') && (!isset($_SESSION['GO_SESSION']['event_listeners']) || $GO_CONFIG->debug))
-		{
-			$this->load_listeners();
-		}else
-		{
-			$this->listeners=isset($_SESSION['GO_SESSION']['event_listeners']) ? $_SESSION['GO_SESSION']['event_listeners'] : array();
+
+		if(!defined('NO_EVENTS')){
+
+			/*
+			 * Cache listerner in a file because scanning all the modules for
+			 * listeners is a heavy job.
+			 */
+			$cache_file = $GO_CONFIG->file_storage_path.'cache/listeners.txt';
+			if(file_exists($cache_file)){
+				$this->listeners = unserialize(file_get_contents($cache_file));
+			}
+
+			if(!$this->listeners)// || $GO_CONFIG->debug))
+			{
+				$this->load_listeners();
+				file_put_contents($cache_file, serialize($this->listeners));
+			}
 		}
 	}	
-	
+	/**
+	 * Scans all modules and looks for listerners. This method uses a lot of memory so should be avoided.
+	 * It's generally only called the first time Group-Office loads.
+	 *
+	 * @global <type> $GO_MODULES
+	 */
 	public function load_listeners(){
 		global $GO_MODULES;
 		
@@ -42,7 +57,7 @@ class GO_EVENTS
 				}
 			}
 		}
-		$_SESSION['GO_SESSION']['event_listeners']=$this->listeners;
+		//$_SESSION['GO_SESSION']['event_listeners']=$this->listeners;
 	}
 		
 	public function add_listener($event, $file, $class, $method){

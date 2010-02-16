@@ -193,6 +193,8 @@ if(isset($RERUN_UPDATE))
 
 		$fs->delete($GO_CONFIG->file_storage_path.'cache');
 	}
+	mkdir($GO_CONFIG->file_storage_path.'cache', 0755, true);
+
 	echo 'Done!'.$line_break.$line_break;
 
 	$GO_CONFIG->save_setting('upgrade_mtime', $GO_CONFIG->mtime);

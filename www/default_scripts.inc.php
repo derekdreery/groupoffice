@@ -83,10 +83,7 @@ $path = $GO_CONFIG->file_storage_path.'cache/'.$file;
 $url = $GO_CONFIG->host.'compress.php?file='.$file;
 
 if($GO_CONFIG->debug || !file_exists($path)) {
-	if(!is_dir($GO_CONFIG->file_storage_path.'cache')) {
-		mkdir($GO_CONFIG->file_storage_path.'cache', 0755, true);
-	}
-
+	
 	//cleanup old cache
 	$fs = new filesystem();
 	$files = $fs->get_files_sorted($GO_CONFIG->file_storage_path.'cache');
@@ -113,13 +110,6 @@ if($GO_CONFIG->debug || !file_exists($path)) {
 			$scripts[]=$root_uri.'modules/users/language/'.$GO_LANGUAGE->language.'.js';
 		}
 	}
-
-
-	
-
-
-	
-
 
 	$dynamic_debug_scripts=array();
 
