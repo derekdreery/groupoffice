@@ -163,6 +163,9 @@ function get_mailbox_nodes($account_id, $folder_id){
 function find_alias_and_recipients()
 {
 	global $email, $account_id, $response, $content, $task;
+
+	$RFC822 = new RFC822();
+	
 	$aliases = array();
 	$email->get_aliases($account_id, true);
 	while($alias=$email->next_record())
@@ -194,7 +197,7 @@ function find_alias_and_recipients()
 					{
 						$response['data']['to'] .= ',';
 					}
-					$response['data']['to'] .= $content["to"][$i];
+					$response['data']['to'] .= $RFC822->write_address($content["to"][$i]['name'],$content["to"][$i]['email']);
 				}
 			}
 		}
@@ -219,7 +222,7 @@ function find_alias_and_recipients()
 					{
 						$response['data']['cc'] .= ',';
 					}
-					$response['data']['cc'] .= $content["cc"][$i];
+					$response['data']['cc'] .= $RFC822->write_address($content["cc"][$i]['name'],$content["cc"][$i]['email']);
 				}
 			}
 		}
