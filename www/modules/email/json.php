@@ -256,7 +256,14 @@ try{
 				throw new DatabaseSelectException();
 			}
 
-			$content = $imap->get_message_with_body($uid, $_POST['content_type']!='html', $task=='forward', true);
+			$content = $imap->get_message_with_body($uid, $task=='forward', true);
+			if($_POST['content_type']!='html'){
+				$content['body']=$content['plain_body'];
+			}else
+			{
+				$content['body']=$content['html_body'];
+			}
+			unset($content['html_body'], $content['plain_body']);
 		}else
 		{
 			/*
@@ -568,7 +575,15 @@ try{
 				$account = $email->get_account($account_id);
 				$imap->set_account($account, $mailbox);
 				
-				$response = $imap->get_message_with_body($uid, !empty($_POST['plaintext']),!empty($_POST['create_temporary_attachments']));
+				$response = $imap->get_message_with_body($uid, !empty($_POST['create_temporary_attachments']));
+
+				if(!empty($_POST['plaintext'])){
+					$response['body']=$response['plain_body'];
+				}else
+				{
+					$response['body']=$response['html_body'];
+				}
+				unset($response['html_body'], $response['plain_body']);
 
 				if($imap->set_unseen_cache(array($uid), false))
 				{
