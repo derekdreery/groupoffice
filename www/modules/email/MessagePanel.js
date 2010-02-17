@@ -180,9 +180,6 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 	setMessage : function(data)
 	{
 		this.data = data;
-
-		//html entity encode. this is not done at the serverside because the same
-		//call is used for replies where
 		
 		//remove old listeners
 		if(this.messageBodyEl)
