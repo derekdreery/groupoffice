@@ -148,7 +148,7 @@ $fs = new filesystem();
 if($GO_SECURITY->user_id>0)
 {
 	$GO_CONFIG->tmpdir=$GO_CONFIG->tmpdir.$GO_SECURITY->user_id.'/';
-	$fs->mkdir_recursive($GO_CONFIG->tmpdir);
+	//$fs->mkdir_recursive($GO_CONFIG->tmpdir);
 }
 
 
@@ -178,5 +178,3 @@ if (get_magic_quotes_gpc())
 
 
 umask(0);
-
-//go_debug(round(memory_get_usage()/1048576,2)."MB\n");

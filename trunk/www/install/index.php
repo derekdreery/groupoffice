@@ -13,6 +13,8 @@
  */
 
 define('NOTINSTALLED', true);
+//don't fire events yet
+define('NO_EVENTS', true);
 
 header('Content-Type: text/html; charset=UTF-8');
 
