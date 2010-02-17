@@ -35,7 +35,8 @@ switch($task)
 		$response['success'] = false;
 		$response['data'] = $GO_USERS->get_user($user_id);
 
-		if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $response['data']['acl_id'])){
+		//if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $response['data']['acl_id'])){
+		if(!$GO_MODULES->modules['users']['read_permission']){
 			throw new AccessDeniedException();
 		}
 
