@@ -331,7 +331,7 @@ class cached_imap extends imap{
 		return $this->message;
 	}
 
-	function get_message_with_body($uid, $return_plaintext_body=false, $create_temporary_attachment_files=false, $create_temporary_inline_attachment_files=false) {
+	function get_message_with_body($uid, $create_temporary_attachment_files=false, $create_temporary_inline_attachment_files=false) {
 		global $GO_CONFIG, $GO_MODULES, $GO_SECURITY, $GO_LANGUAGE, $lang;
 
 		require_once($GO_LANGUAGE->get_language_file('email'));
@@ -451,18 +451,23 @@ class cached_imap extends imap{
 		 * a html alternative to display
 		 */
 		$html_alternative=false;
-		if(!$return_plaintext_body) {
-			for($i=0;$i<count($message['parts']);$i++) {
-				if(stripos($message['parts'][$i]['mime'],'html')!==false && (strtolower($message['parts'][$i]['type'])=='alternative' || strtolower($message['parts'][$i]['type'])=='related')) {
-					$html_alternative=true;
-				}
+		$plain_alternative=false;
+		
+		for($i=0;$i<count($message['parts']);$i++) {
+			if(stripos($message['parts'][$i]['mime'],'html')!==false && (strtolower($message['parts'][$i]['type'])=='alternative' || strtolower($message['parts'][$i]['type'])=='related')) {
+				$html_alternative=true;
+			}
+			if(stripos($message['parts'][$i]['mime'],'plain')!==false && (strtolower($message['parts'][$i]['type'])=='alternative' || strtolower($message['parts'][$i]['type'])=='related')) {
+				$plain_alternative=true;
 			}
 		}
+
 
 		//go_debug($html_alternative);
 
 		//$message['blocked_images']=0;
-		$message['body']='';
+		$message['html_body']='';
+		$message['plain_body']='';
 
 		$attachments=array();
 
@@ -504,20 +509,26 @@ class cached_imap extends imap{
 			if (/*empty($message['body']) &&*/
 							(stripos($part["disposition"],'attachment')===false) &&
 							(
-							(stripos($mime,'html')!==false && !$return_plaintext_body) ||
-											(stripos($mime,'plain')!==false && (!$html_alternative || strtolower($part['type'])!='alternative')) || $mime == "text/enriched" || $mime == "unknown/unknown")) {
-				//go_debug('ja');
+											(stripos($mime,'html')!==false) ||
+											(stripos($mime,'plain')!==false || $mime == "text/enriched" || $mime == "unknown/unknown"))
+							) {
+
 				
-//go_debug($part_body);
-//go_debug('######');
+				
+				$plain_part = '';
+				$html_part = '';
+
 				switch($mime) {
 					case 'unknown/unknown':
 					case 'text/plain':
-						$part_body = $this->view_part($uid, $part["number"], $part["transfer"], $part["charset"]);
+						$plain_part = $this->view_part($uid, $part["number"], $part["transfer"], $part["charset"]);
 
-						$uuencoded_attachments = $this->extract_uuencoded_attachments($part_body);
+						$uuencoded_attachments = $this->extract_uuencoded_attachments($plain_part);
 
-						$part_body = $return_plaintext_body ? $part_body : String::text_to_html($part_body);
+						if(!$html_alternative || (strtolower($part['type'])!='related' && strtolower($part['type'])!='alternative')){
+							$html_part = String::text_to_html($plain_part);							
+						}
+						
 
 						for($i=0;$i<count($uuencoded_attachments);$i++) {
 							$attachment = $uuencoded_attachments[$i];
@@ -531,19 +542,30 @@ class cached_imap extends imap{
 						break;
 
 					case 'text/html':
-						$part_body = $this->view_part($uid, $part["number"], $part["transfer"], $part["charset"]);
-						$part_body = $return_plaintext_body ?  String::html_to_text($part_body) : String::convert_html($part_body);
+						$html_part = String::convert_html($this->view_part($uid, $part["number"], $part["transfer"], $part["charset"]));
+
+						if(!$plain_alternative || (strtolower($part['type'])!='related' && strtolower($part['type'])!='alternative')) {
+							$plain_part = String::html_to_text($html_part);
+						}
 						break;
 
 					case 'text/enriched':
-						$part_body = $this->view_part($uid, $part["number"], $part["transfer"], $part["charset"]);
-						$part_body = String::enriched_to_html($part_body);
+						$html_part = String::enriched_to_html($this->view_part($uid, $part["number"], $part["transfer"], $part["charset"]));
+						if(!$plain_alternative || (strtolower($part['type'])!='related' && strtolower($part['type'])!='alternative')){
+							$plain_part = String::html_to_text($html_part);
+						}
 						break;					
 				}
-				
-				if(!empty($message['body']))
-					$message['body'].='<hr style="margin:20px 0" />';
-				$message['body'] .= trim($part_body);
+
+
+				if(!empty($message['html_body']) && !empty($html_part)){
+					$message['html_body'].='<hr style="margin:20px 0" />';
+				}
+				$message['html_body'] .= $html_part;
+				if(!empty($message['plain_body']) && !empty($plain_part)){
+					$message['plain_body'].="\n\n-----\n\n";
+				}
+				$message['plain_body'] .= $plain_part;
 			}else {
 				$attachments[]=$part;
 			}
@@ -600,8 +622,8 @@ class cached_imap extends imap{
 
 				$message['url_replacements'][]=$url_replacement;
 
-				if(strpos($message['body'], $id)) {
-					$message['body'] = str_replace($id, $url, $message['body']);
+				if(strpos($message['html_body'], $id)) {
+					$message['html_body'] = str_replace($id, $url, $message['html_body']);
 				}else {
 					//id was not found in body so add it as attachment later
 					unset($attachments[$i]['id']);
@@ -617,14 +639,19 @@ class cached_imap extends imap{
 		}
 
 		// don't send very large texts to the browser because it will hang.
-		if(strlen($message['body'])>512000){
-			$message['body']=String::cut_string($message['body'], 521000, false);
+		if(strlen($message['html_body'])>512000){
+			$message['html_body']=String::cut_string($message['html_body'], 521000, false);
+		}
+		if(strlen($message['plain_body'])>512000){
+			$message['plain_body']=String::cut_string($message['plain_body'], 521000, false);
 		}
 
 		$cached_message['uid']=$uid;
 		$cached_message['folder_id']=$this->folder['id'];
 		$cached_message['serialized_message_object']=serialize($message);
 		$this->update_cached_message($cached_message);
+
+		//go_debug($message);
 
 		return $message;
 	}

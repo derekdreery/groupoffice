@@ -1434,8 +1434,6 @@ class email extends db
 		}
 		
 		$sql .= " ORDER BY name ASC, email ASC";
-		
-		go_debug($sql);
 			
 		$this->query($sql);
 		return $this->num_rows();
