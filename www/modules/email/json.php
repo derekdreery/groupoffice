@@ -595,12 +595,8 @@ try{
 					}             
 				}
 
-				
-
 				$response['date']=date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], $response['udate']);
-				//$response['size']=Number::format_size($response['size']);
-
-			
+				//$response['size']=Number::format_size($response['size']);		
 				
 				if($GO_MODULES->has_module('gnupg'))
 				{
@@ -647,7 +643,29 @@ try{
 					$response['body'] = preg_replace("/<([^a]{1})([^>]*)https?:([^>]*)/iu", "<$1$2blocked:$3", $response['body'], -1, $response['blocked_images']);
 				}
 
-				
+				$response['full_from']=htmlspecialchars($response['full_from'], ENT_COMPAT, 'UTF-8');
+				$response['sender']=htmlspecialchars($response['sender'], ENT_COMPAT, 'UTF-8');
+				$response['from']=htmlspecialchars($response['from'], ENT_COMPAT, 'UTF-8');
+				$response['subject']=htmlspecialchars($response['subject'], ENT_COMPAT, 'UTF-8');
+				$response['reply-to']=htmlspecialchars($response['reply-to'], ENT_COMPAT, 'UTF-8');
+				for($i=0;$i<count($response['to']);$i++){
+					$response['to'][$i]=array(
+						'email'=>htmlspecialchars($response['to'][$i]['email'], ENT_COMPAT, 'UTF-8'),
+						'name'=>htmlspecialchars($response['to'][$i]['name'], ENT_COMPAT, 'UTF-8')
+					);
+				}
+				for($i=0;$i<count($response['cc']);$i++){
+					$response['cc'][$i]=array(
+						'email'=>htmlspecialchars($response['cc'][$i]['email'], ENT_COMPAT, 'UTF-8'),
+						'name'=>htmlspecialchars($response['cc'][$i]['name'], ENT_COMPAT, 'UTF-8')
+					);
+				}
+				for($i=0;$i<count($response['bcc']);$i++){
+					$response['bcc'][$i]=array(
+						'email'=>htmlspecialchars($response['bcc'][$i]['email'], ENT_COMPAT, 'UTF-8'),
+						'name'=>htmlspecialchars($response['bcc'][$i]['name'], ENT_COMPAT, 'UTF-8')
+					);
+				}
 
 				break;
 
