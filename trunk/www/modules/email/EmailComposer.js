@@ -696,9 +696,16 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			this.updateAttachmentsButton();
 		}else
 		{
-			Ext.apply(this.sendParams,{
-				inline_attachments : {}
-			});
+			//keep options when switching from text <> html
+			this.sendParams={
+				'task' : 'sendmail',
+				inline_attachments : {},
+				notification : this.sendParams.notification,
+				priority : this.sendParams.priority,
+				draft_uid : this.sendParams.draft_uid,
+				reply_uid : this.sendParams.reply_uid,
+				reply_mailbox : this.sendParams.reply_mailbox
+			};
 			
 		}
 		this.inline_attachments = [];
