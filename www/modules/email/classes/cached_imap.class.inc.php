@@ -86,6 +86,12 @@ class cached_imap extends imap{
 		return $conn;
 	}
 
+	function reopen($mailbox = "INBOX", $flags = "") {
+		parent::reopen($mailbox, $flags);
+		//update $this->folder with the db cache
+		$this->set_account($this->account, $mailbox);
+	}
+
 	/**
 	 * Sort message UID's into $this->sort (see imap_sort() PHP docs)
 	 *
