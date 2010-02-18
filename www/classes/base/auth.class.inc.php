@@ -179,13 +179,28 @@ class GO_AUTH extends db
 	 * @param int $user_id is the userid number of the user that has been
 	 * authenticated successfully.
 	 */
-	function updateAfterLogin($user_id) {
+	function updateAfterLogin($user_id, $count_login=true) {
 		global $GO_SECURITY, $GO_MODULES, $GO_USERS,$GO_CONFIG;
 		// Tell the security framework that a user has been logged in. The
 		// security framework takes care on setting the userid as active.
 		$GO_SECURITY->logged_in($user_id);
 		// Increment the number of logins of the given user.
-		$GO_USERS->increment_logins($user_id);
+		if($count_login){
+			$GO_USERS->increment_logins($user_id);
+
+			//clean temp dir only when counting the login
+			//logins are not counted for example when a synchronization is done.
+			//We also don't want to clear the temp dir in that case because that can
+			//screw up an active session in the browser.
+			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+			$fs = new filesystem();
+			if(is_dir($GO_CONFIG->tmpdir.$this->user_id.'/'))
+			{
+				$fs->delete($GO_CONFIG->tmpdir.$this->user_id.'/');
+			}
+			$fs->mkdir_recursive($GO_CONFIG->tmpdir.$this->user_id.'/');
+
+		}
 		//reinitialise available modules
 		$GO_MODULES->load_modules();
 	}
@@ -219,7 +234,7 @@ class GO_AUTH extends db
 	 * 
 	 * @return bool true if the login was possible, false otherwise.
 	 */
-	function login($username, $password, $params=array() ) {
+	function login($username, $password, $type='normal', $count_login=true) {
 		// This variable is used to fetch the user's profile from the current
 		// user management backend database.
 		global $GO_USERS, $GO_EVENTS, $GO_SECURITY;
@@ -235,7 +250,7 @@ class GO_AUTH extends db
 		
 
 		// Authenticate the user.
-		$user_id = $this->authenticate( $username, $password );
+		$user_id = $this->authenticate($username, $password, $type);
 		// Check if the authentication was successful, otherwise exit.
 		if ( $user_id == null ) {
 			go_log(LOG_DEBUG, 'Wrong password entered for '.$username);
@@ -267,7 +282,7 @@ class GO_AUTH extends db
 		}
 
 		// Actualise session and other necessary things.
-		$this->updateAfterLogin( $user_id );
+		$this->updateAfterLogin($user_id,$count_login);
 
 		go_log(LOG_DEBUG, 'LOGIN Username: '.$username.'; IP: '.$_SERVER['REMOTE_ADDR']);
 		$GO_EVENTS->fire_event('login', array($username, $password, $user));	
