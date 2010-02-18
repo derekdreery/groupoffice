@@ -444,7 +444,7 @@ try{
 								//$body = $gnupg->encode($body, $all_recipients, $swift->account['email']);
 								$body = $gnupg->encode($body, $all_recipients, $swift->account['email']);
 
-								go_debug($body);
+								//go_debug($body);
 
 								$swift->message->setMaxLineLength(1000);
 								$swift->message->setBody($body, 'text/plain');
