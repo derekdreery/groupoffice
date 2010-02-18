@@ -358,7 +358,8 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 
 			if (save_config($GO_CONFIG) && !isset($feedback))
 			{
-				mkdir($GO_CONFIG->file_storage_path.'cache', 0755, true);
+				if(!is_dir($GO_CONFIG->file_storage_path.'cache'))
+					mkdir($GO_CONFIG->file_storage_path.'cache', 0755, true);
 				
 				//check for userdirs
 				/*$GO_USERS->get_users();
