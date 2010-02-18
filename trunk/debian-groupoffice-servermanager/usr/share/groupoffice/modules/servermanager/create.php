@@ -71,6 +71,8 @@ if(!$new_trial)
 		}else
 		{
 			$installation['name'].='.'.$sm_config['domain'];
+			$installation['status']='trial';
+			$installation['status_change_time']=time();
 			
 			$installation_id= $sm->add_installation($installation);
 
