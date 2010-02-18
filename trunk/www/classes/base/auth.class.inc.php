@@ -194,11 +194,11 @@ class GO_AUTH extends db
 			//screw up an active session in the browser.
 			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 			$fs = new filesystem();
-			if(is_dir($GO_CONFIG->tmpdir.$this->user_id.'/'))
+			if(is_dir($GO_CONFIG->tmpdir.$user_id.'/'))
 			{
-				$fs->delete($GO_CONFIG->tmpdir.$this->user_id.'/');
+				$fs->delete($GO_CONFIG->tmpdir.$user_id.'/');
 			}
-			$fs->mkdir_recursive($GO_CONFIG->tmpdir.$this->user_id.'/');
+			$fs->mkdir_recursive($GO_CONFIG->tmpdir.$user_id.'/');
 
 		}
 		//reinitialise available modules
