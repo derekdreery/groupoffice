@@ -12,10 +12,11 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
+require_once($GO_CONFIG->class_path.'export/csv_export_query.class.inc.php');
 /**
  * Example override for a custom export
  */
-class custom_export_query extends export_query
+class custom_export_query extends csv_export_query
 {
 	var $query='orders';
 	var $name='OSF gastouders';

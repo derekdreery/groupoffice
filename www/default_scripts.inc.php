@@ -315,7 +315,7 @@ if($GO_SECURITY->logged_in()) {
 
 	$GO_SCRIPTS_JS .= 'GO.linkTypes='.json_encode($link_types).';';
 
-	require_once($GO_CONFIG->class_path.'export_query.class.inc.php');
+	require_once($GO_CONFIG->class_path.'export/export_query.class.inc.php');
 	$eq = new export_query();
 
 	$GO_SCRIPTS_JS.=$eq->find_custom_exports();

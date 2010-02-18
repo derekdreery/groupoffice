@@ -84,12 +84,12 @@ GO.ExportQueryDialog = Ext.extend(Ext.Window, {
 				items : [{
 							boxLabel : 'CSV',
 							name : 'type',
-							inputValue : 'CSV',
+							inputValue : 'csv_export_query',
 							checked : true
 						}, {
 							boxLabel : 'PDF',
 							name : 'type',
-							inputValue : 'PDF'
+							inputValue : 'pdf_export_query'
 						}]
 			},{
 				xtype:'checkbox',
