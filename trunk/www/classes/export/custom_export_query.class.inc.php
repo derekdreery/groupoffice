@@ -12,14 +12,17 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-require_once($GO_CONFIG->class_path.'export/csv_export_query.class.inc.php');
 /**
  * Example override for a custom export
+ *
+ * We'll base this export on the CSV export so include it.
  */
+require_once($GO_CONFIG->class_path.'export/csv_export_query.class.inc.php');
+
 class custom_export_query extends csv_export_query
 {
 	var $query='orders';
-	var $name='OSF gastouders';
+	var $name='My custom export';
 
 	/**
 	 * Optionally hardcode the list and text separator in the constructor
@@ -48,10 +51,9 @@ class custom_export_query extends csv_export_query
 	 */
 
 	function init_columns(){
-		$crediteurnummer = $this->cf->find_first_field_by_name(7, 'Crediteurnummer');
-		$tegenrekening = $this->cf->find_first_field_by_name(7, 'Tegenrekening');
-
-		$this->columns=array('order_id','btime','customer_name', 'col_'.$crediteurnummer['id'],'col_'.$tegenrekening['id'],'veld6', 'total', 'veld8');
+		$customfield = $this->cf->find_first_field_by_name(7, 'Some custom field');
+		
+		$this->columns=array('order_id','btime','customer_name', 'col_'.$customfield['id'],'veld6', 'total', 'veld8');
 		$this->headers=array();
 	}
 }
