@@ -349,7 +349,9 @@ class GoSwift extends Swift_Mailer{
 						$uid_arr = array($this->reply_uid);
 						$imap->set_message_flag($this->reply_mailbox, $uid_arr, "\\Answered");
 
-						$cached_message['folder_id']=$imap->folder['id'];
+						$folder = $imap->email->get_folder($this->account['id'],$this->reply_mailbox);
+
+						$cached_message['folder_id']=$folder['id'];
 						$cached_message['uid']=$this->reply_uid;
 						$cached_message['answered']='1';
 						$imap->update_cached_message($cached_message);

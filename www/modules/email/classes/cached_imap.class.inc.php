@@ -357,8 +357,10 @@ class cached_imap extends imap{
 			if($create_temporary_inline_attachment_files) {
 				for ($i = 0; $i < count($message['url_replacements']); $i ++) {
 					$attachment = $message['url_replacements'][$i]['attachment'];
+					
 					$tmp_file = $GO_CONFIG->tmpdir.$attachment['name'];
 					$data = $this->view_part($uid, $attachment['number'], $attachment['transfer']);
+					
 					if($data && file_put_contents($tmp_file, $data)) {
 						$message['url_replacements'][$i]['tmp_file']=$tmp_file;
 					}
