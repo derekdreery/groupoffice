@@ -33,7 +33,9 @@ try{
 			$response['data']=array();
 			$response['success']=true;
 			foreach($lang['link_type'] as $id=>$name) {
-				$response['data']['default_folders_'.$id]=$GO_CONFIG->get_setting('default_link_folder_'.$id);
+				$v = $GO_CONFIG->get_setting('default_link_folder_'.$id);
+				if($v)
+					$response['data']['default_folders_'.$id]=$v;
 			}
 
 			break;
