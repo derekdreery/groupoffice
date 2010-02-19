@@ -38,7 +38,7 @@ GO.form.SelectUser = function(config){
 		root: 'results',
 		totalProperty: 'total',
 		id: 'id',
-		fields:['id','name','email','username'],
+		fields:['id','name','email','username','company','first_name', 'middle_name', 'last_name', 'address', 'address_no', 'zip', 'city', 'state', 'country'],
 		remoteSort: true
 	});
 	this.store.setDefaultSort('name', 'asc');
