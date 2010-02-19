@@ -1,4 +1,6 @@
 <?php
+
+require_once($GLOBALS['GO_CONFIG']->class_path.'mail/imap.class.inc');
 class cached_imap extends imap{
 
 	/**
