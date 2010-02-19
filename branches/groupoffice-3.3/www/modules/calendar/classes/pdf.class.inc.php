@@ -153,7 +153,7 @@ class PDF extends TCPDF
 		while($event = array_shift($events))
 		{
 			$date = getdate($event['start_time']);			
-			$index_time = mktime(0,0,0,$date['mon'], $date['mday'], $date['year']);			
+			$index_time = mktime(0,0,0,$date['mon'], $date['mday'], $date['year']);
 			while($index_time<=$event['end_time'] && $index_time<$this->end_time)
 			{
 				if($this->calendar['user_id']!=$GO_SECURITY->user_id && !empty($event['private'])){
@@ -162,7 +162,8 @@ class PDF extends TCPDF
 					$event['location']='';
 				}
 
-				$cellIndex = floor(($index_time-$this->start_time)/86400);
+				//$cellIndex = floor(($index_time-$this->start_time)/86400);
+				$cellIndex = Date::date_diff_days($this->start_time, $index_time);
 				$index_time = Date::date_add($index_time,1);
 				$cellEvents[$cellIndex][]=$event;
 			}			
