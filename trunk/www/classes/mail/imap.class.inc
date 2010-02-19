@@ -1104,15 +1104,18 @@ class imap{
 		* @return string Message part data
 		*/
 
-	function view_part($uid, $part_no, $transfer, $part_charset = '') {
+	function view_part($uid, $part_no, $transfer, $part_charset = '', $peek=false) {
 		global $GO_CONFIG;
 
 		$charset='utf-8';
 		
 		$transfer=strtoupper($transfer);
 
-		$str = imap_fetchbody($this->conn, $uid, $part_no, FT_UID);
-
+		if($peek){
+			$str = imap_fetchbody($this->conn, $uid, $part_no, FT_UID | FT_PEEK);
+		}else
+			$str = imap_fetchbody($this->conn, $uid, $part_no, FT_UID);
+		}
 		
 
 		if ($transfer == 'BASE64')

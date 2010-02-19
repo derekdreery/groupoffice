@@ -288,7 +288,7 @@ class cached_imap extends imap{
 		return $this->get_uids_subset($first, $offset);
 	}
 
-	function view_part($uid, $part_no, $transfer, $part_charset = '') {
+	function view_part($uid, $part_no, $transfer, $part_charset = '', $peek=false) {
 		
 		if(!$this->conn){
 			if(!$this->open($this->account, $this->folder['name'])){
@@ -296,7 +296,7 @@ class cached_imap extends imap{
 			}
 		}
 
-		return parent::view_part($uid, $part_no, $transfer, $part_charset);
+		return parent::view_part($uid, $part_no, $transfer, $part_charset, $peek);
 	}
 
 	/**
@@ -337,7 +337,7 @@ class cached_imap extends imap{
 		return $this->message;
 	}
 
-	function get_message_with_body($uid, $create_temporary_attachment_files=false, $create_temporary_inline_attachment_files=false) {
+	function get_message_with_body($uid, $create_temporary_attachment_files=false, $create_temporary_inline_attachment_files=false, $peek=false) {
 		global $GO_CONFIG, $GO_MODULES, $GO_SECURITY, $GO_LANGUAGE, $lang;
 
 		require_once($GO_LANGUAGE->get_language_file('email'));
@@ -354,7 +354,7 @@ class cached_imap extends imap{
 			if($create_temporary_attachment_files) {
 				for ($i = 0; $i < count($message['attachments']); $i ++) {
 					$tmp_file = $GO_CONFIG->tmpdir.$message['attachments'][$i]['name'];
-					$data = $this->view_part($uid, $message['attachments'][$i]['number'], $message['attachments'][$i]['transfer']);
+					$data = $this->view_part($uid, $message['attachments'][$i]['number'], $message['attachments'][$i]['transfer'], '', $peek);
 					if($data && file_put_contents($tmp_file, $data)) {
 						$message['attachments'][$i]['tmp_file']=$tmp_file;
 					}
@@ -365,7 +365,7 @@ class cached_imap extends imap{
 					$attachment = $message['url_replacements'][$i]['attachment'];
 					
 					$tmp_file = $GO_CONFIG->tmpdir.$attachment['name'];
-					$data = $this->view_part($uid, $attachment['number'], $attachment['transfer']);
+					$data = $this->view_part($uid, $attachment['number'], $attachment['transfer'], '', $peek);
 					
 					if($data && file_put_contents($tmp_file, $data)) {
 						$message['url_replacements'][$i]['tmp_file']=$tmp_file;
@@ -529,7 +529,7 @@ class cached_imap extends imap{
 				switch($mime) {
 					case 'unknown/unknown':
 					case 'text/plain':
-						$plain_part = $this->view_part($uid, $part["number"], $part["transfer"], $part["charset"]);
+						$plain_part = $this->view_part($uid, $part["number"], $part["transfer"], $part["charset"], $peek);
 
 						$uuencoded_attachments = $this->extract_uuencoded_attachments($plain_part);
 
@@ -550,7 +550,7 @@ class cached_imap extends imap{
 						break;
 
 					case 'text/html':
-						$html_part = String::convert_html($this->view_part($uid, $part["number"], $part["transfer"], $part["charset"]));
+						$html_part = String::convert_html($this->view_part($uid, $part["number"], $part["transfer"], $part["charset"], $peek));
 
 						if(!$plain_alternative || (strtolower($part['type'])!='related' && strtolower($part['type'])!='alternative')) {
 							$plain_part = String::html_to_text($html_part);
@@ -558,7 +558,7 @@ class cached_imap extends imap{
 						break;
 
 					case 'text/enriched':
-						$html_part = String::enriched_to_html($this->view_part($uid, $part["number"], $part["transfer"], $part["charset"]));
+						$html_part = String::enriched_to_html($this->view_part($uid, $part["number"], $part["transfer"], $part["charset"], $peek));
 						if(!$plain_alternative || (strtolower($part['type'])!='related' && strtolower($part['type'])!='alternative')){
 							$plain_part = String::html_to_text($html_part);
 						}
@@ -602,7 +602,7 @@ class cached_imap extends imap{
 				$attachments[$i]['tmp_file']=false;
 				if($create_temporary_attachment_files) {
 					$tmp_file = $GO_CONFIG->tmpdir.$attachments[$i]['name'];
-					$data = $this->view_part($uid, $attachments[$i]['number'], $attachments[$i]['transfer']);
+					$data = $this->view_part($uid, $attachments[$i]['number'], $attachments[$i]['transfer'], '', $peek);
 					if($data && file_put_contents($tmp_file, $data)) {
 						$attachments[$i]['tmp_file']=$tmp_file;
 					}
