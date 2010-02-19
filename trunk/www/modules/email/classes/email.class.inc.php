@@ -521,9 +521,12 @@ class email extends db
 		}
 	}
 
-	function get_account_folders($account_id)
+	function get_account_folders($account_id, $mbroot=false)
 	{
-		$sql = "SELECT sent, drafts, trash, spam FROM em_accounts WHERE id = ?";
+		if ($mbroot)
+			$sql = "SELECT mbroot, sent, drafts, trash, spam FROM em_accounts WHERE id = ?";
+		else
+			$sql = "SELECT sent, drafts, trash, spam FROM em_accounts WHERE id = ?";
 		$this->query($sql, 'i', array($account_id));
 
 		return ($this->next_record(DB_ASSOC)) ? $this->record : false;
