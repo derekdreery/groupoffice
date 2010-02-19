@@ -9,7 +9,7 @@ We hope you are enjoying your trial period and you will continue using it. If yo
 
 You can click on the link below to order the service online:
 
-http://www.group-office.com/OrderHostedGroup-Office
+https://intermesh.group-office.com/groupoffice/modules/dealermanager/pay.php?report={name}
 
 Thank you for using Group-Office!
 

@@ -259,6 +259,8 @@ class servermanager extends db {
 				$installation['id']=$old_installation['id'];
 				$this->update_installation($installation);
 
+				$old_installation = $this->get_installation($installation['id']);
+
 				switch($old_installation['status']) {
 					case 'ignore':
 					//do nothing
@@ -701,7 +703,7 @@ class servermanager extends db {
 		require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 
 		$message = $this->get_status_message($status);
-		if($message) {
+		if($message && !empty($installation['admin_email'])) {
 
 			$_body = str_replace('{admin_salutation}', $installation['admin_salutation'], $message['body']);
 			$_body = str_replace('{name}',$installation['name'], $_body);
