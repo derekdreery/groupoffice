@@ -1511,7 +1511,8 @@ class imap{
 		* @return bool True on success
 		*/
 	function reopen($mailbox = "INBOX", $flags = "") {
-		if (imap_reopen($this->conn, "{".$this->connectstring."}".$mailbox, $flags)) {
+
+		if ($mailbox==$this->mailbox || imap_reopen($this->conn, "{".$this->connectstring."}".$mailbox, $flags)) {
 			$this->mailbox = $mailbox;
 			return true;
 		} else {
