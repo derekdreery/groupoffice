@@ -9,6 +9,7 @@ $sm_config['mysql_pass']='{db_pass}';
 $sm_config['source']='/usr/share/groupoffice/';
 $sm_config['protocol']='http://';
 
+$sm_config['bcc_email']='';//send all notifications to this e-mail too.
 $sm_config['sender_email']='noreply@{domain}';
 $sm_config['sender_name']='Group-Office trial';
 $sm_config['install_modules']='summary,email,calendar,tasks,addressbook,notes,files,modules,users,groups,tools,serverclient,links,comments';

@@ -63,7 +63,8 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 
 		$swift = new GoSwift($new_trial['email'], $lang['servermanager']['new_trial_subject'],0,0,'3',$_body);
 		$swift->set_from($sm_config['sender_email'], $sm_config['sender_name']);
-		$swift->message->addBcc('mschering@intermesh.nl');
+		if(!empty($sm_config['bcc_email']))
+				$swift->message->addBcc($sm_config['bcc_email']);
 
 		$swift->sendmail();
 		
