@@ -1114,6 +1114,7 @@ class imap{
 		if($peek){
 			$str = imap_fetchbody($this->conn, $uid, $part_no, FT_UID | FT_PEEK);
 		}else
+		{
 			$str = imap_fetchbody($this->conn, $uid, $part_no, FT_UID);
 		}
 		
