@@ -709,7 +709,8 @@ class servermanager extends db {
 			$_body = str_replace('{name}',$installation['name'], $_body);
 
 			$swift = new GoSwift($installation['admin_email'], $message['subject'],0,0,'3',$_body);
-			$swift->message->addBcc('mschering@intermesh.nl');
+			if(!empty($sm_config['bcc_email']))
+				$swift->message->addBcc($sm_config['bcc_email']);
 			$swift->set_from($sm_config['sender_email'], $sm_config['sender_name']);
 			$swift->sendmail();
 		}
