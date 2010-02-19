@@ -1599,7 +1599,7 @@ class imap{
 		}else {
 			if (function_exists('iconv'))
 			{
-				if($converted = @iconv('ISO-8859-15', $GLOBALS['charset'].'//IGNORE', $str))
+				if($converted = @iconv('ISO-8859-15', 'UTF-8//IGNORE', $str))
 				{
 					return $converted;
 				}
