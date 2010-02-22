@@ -127,6 +127,10 @@ try
 							filesystem::mkdir_recursive(dirname($destination));
 							move_uploaded_file($_FILES['image']['tmp_name'][0], $destination);
 
+							$img = new Image($destination);
+							$img->zoomcrop(90,120);
+							$img->save($destination);
+
 							$response['image']=$GO_MODULES->modules['addressbook']['url'].'photo.php?contact_id='.$contact_id;
 
 							//go_log(LOG_DEBUG, var_export($response, true));

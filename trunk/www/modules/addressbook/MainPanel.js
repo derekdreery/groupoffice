@@ -68,12 +68,14 @@ GO.addressbook.MainPanel = function(config)
 	}, this);	
 	
 	this.contactEastPanel = new GO.addressbook.ContactReadPanel({
+		id:'ab-contact-panel',
 		region : 'east',
 		title: GO.addressbook.lang['cmdPanelContact'],
 		width:420
 	});
 	
 	this.companyEastPanel = new GO.addressbook.CompanyReadPanel({
+		id:'ab-company-panel',
 		region : 'east',
 		title: GO.addressbook.lang['cmdPanelCompany'],
 		width:420
