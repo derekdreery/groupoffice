@@ -1570,20 +1570,19 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			
 			this.calendarDialog = GO.calendar.calendarDialog = new GO.calendar.CalendarDialog();
 			this.calendarDialog.on('save', function(e, group_id)
-			{				
+			{
+				this.adminDialog.madeChanges=true;
 				if(group_id > 1)
 				{
 					this.writableResourcesStore.reload();
-					this.resourcesList.store.reload();
-					GO.calendar.eventDialog.updateResourcePanel();
 				} else
 				{
 					this.writableCalendarsStore.reload();
-					this.calendarsStore.reload();
 				}
 			}, this);
 
-			 var tbar = [{
+
+			var tbar = [{
 				iconCls: 'btn-add',
 				text: GO.lang.cmdAdd,
 				disabled: !GO.settings.modules.calendar.write_permission,
@@ -1592,7 +1591,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					this.calendarDialog.show(0, false);
 				},
 				scope: this
-			},{
+			},{				
 				iconCls: 'btn-delete',
 				text: GO.lang.cmdDelete,
 				disabled: !GO.settings.modules.calendar.write_permission,
@@ -1625,7 +1624,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				store: this.writableCalendarsStore,
 				deleteConfig: {
 					callback:function(){
-						this.calendarsStore.reload();
+						this.adminDialog.madeChanges=true;
 					},
 					scope:this
 				},
@@ -1657,7 +1656,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			
 			this.viewDialog.on('save', function(){
 				this.writableViewsStore.reload();
-				this.viewsStore.reload();				
+				this.adminDialog.madeChanges=true;
 			}, this);
 
 			this.mergeColumn = new GO.grid.CheckColumn({
@@ -1709,7 +1708,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				store: this.writableViewsStore,
 				deleteConfig: {
 					callback:function(){
-						this.viewsStore.reload();
+						this.adminDialog.madeChanges=true;
 					},
 					scope:this
 				},
@@ -1764,11 +1763,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				layout:'fit',
 				store:GO.calendar.groupsStore,
 				deleteConfig: {
-					callback:function(){
-
-						this.writableResourcesStore.reload();
-						this.resourcesStore.reload();
-						GO.calendar.eventDialog.updateResourcePanel();
+					callback:function(){						
+						this.adminDialog.madeChanges=true;
 					},
 					scope:this
 				}
@@ -1779,9 +1775,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				layout:'fit',
 				store:this.writableResourcesStore,
 				deleteConfig: {
-					callback:function(){
-						this.resourcesStore.reload();                        
-						GO.calendar.eventDialog.updateResourcePanel();
+					callback:function(){						                   
+						this.adminDialog.madeChanges=true;
 					},
 					scope:this
 				}
@@ -1797,12 +1792,13 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			this.adminDialog = new Ext.Window({
 				title: GO.calendar.lang.administration,
 				layout:'fit',
-				modal:false,
+				modal:true,
 				minWidth:300,
 				minHeight:300,
 				height:400,
 				width:600,
-				closeAction:'hide',				
+				closeAction:'hide',
+				madeChanges:false,//used for reloading other stuff in the calendar
 				items: new Ext.TabPanel({
 					border:false,
 					activeTab:0,
@@ -1816,6 +1812,21 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					scope: this
 				}]
 			});
+
+			this.adminDialog.on('hide', function(){
+				if(this.adminDialog.madeChanges){
+					this.viewsStore.reload();
+					this.resourcesStore.reload();
+					this.calendarsStore.reload();
+
+					GO.calendar.eventDialog.updateResourcePanel();
+					GO.calendar.eventDialog.selectCalendar.store.reload();
+					
+					//this.resourcesList.store.reload();
+					
+					this.adminDialog.madeChanges=false;
+				}
+			}, this);
 			
 		}
 

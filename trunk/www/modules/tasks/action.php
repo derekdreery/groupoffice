@@ -108,8 +108,6 @@ try{
 		
 		case 'save_task':
 			$conflicts=array();
-
-			
 			
 			$task_id=$task['id']=isset($_POST['task_id']) ? ($_POST['task_id']) : 0;
 
@@ -131,8 +129,7 @@ try{
 				
 			$old_task = $task_id>0 ? $tasks->get_task($task_id) : false;
 			if(isset($task['status']))
-			{
-				
+			{				
 				if($task['status']=='COMPLETED' && (!$old_task || $old_task['completion_time']==0))
 				{
 					$task['completion_time']=time();
@@ -146,7 +143,19 @@ try{
 			
 			if(isset($_POST['remind']))
 			{
-				$task['reminder']=Date::to_unixtime(($_POST['remind_date'].' '.$_POST['remind_time']));	
+				$task['reminder']=Date::to_unixtime($_POST['remind_date'].' '.$_POST['remind_time']);	
+			}elseif(!isset($_POST['status']))
+			{
+				//this task is added with the quick add option
+				$settings=$tasks->get_settings($GO_SECURITY->user_id);
+				if(!empty($settings['remind']))
+				{
+					$reminder_day = $task['due_time'];
+					if(!empty($settings['reminder_days']))
+						$reminder_day = Date::date_add($reminder_day,-$settings['reminder_days']);				
+
+					$task['reminder']=Date::to_unixtime(Date::get_timestamp($reminder_day, false).' '.$settings['reminder_time']);
+				}
 			}else
 			{
 				$task['reminder']=0;

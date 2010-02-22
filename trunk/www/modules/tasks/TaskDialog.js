@@ -79,6 +79,10 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 		delete this.link_config;
 		this.formPanel.form.reset();
 
+		this.formPanel.form.findField('remind').setValue(!GO.util.empty(GO.tasks.remind));
+		this.formPanel.form.findField('remind_date').setDisabled(GO.util.empty(GO.tasks.remind));
+		this.formPanel.form.findField('remind_time').setDisabled(GO.util.empty(GO.tasks.remind));
+
 		this.tabPanel.setActiveTab(0);
 
 		if (!config.task_id) {
@@ -102,6 +106,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 							.setRemoteText(action.result.data.tasklist_name);
 					this
 							.setWritePermission(action.result.data.write_permission);
+					
 				},
 				failure : function(form, action) {
 					Ext.Msg.alert(GO.lang['strError'], action.result.feedback)
@@ -530,7 +535,6 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 				});
 
 		var remindDate = now.add(Date.DAY, -GO.tasks.reminderDaysBefore);
-		
 		// start other options tab
 		var optionsPanel = new Ext.Panel({
 
@@ -546,8 +550,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 						xtype : 'checkbox',
 						boxLabel : GO.tasks.lang.remindMe,
 						hideLabel : true,
-						name : 'remind',
-						value: GO.tasks.reminde=='1',
+						name : 'remind',						
 						listeners : {
 							'check' : function(field, checked) {
 								this.formPanel.form.findField('remind_date')

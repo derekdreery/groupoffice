@@ -36,10 +36,31 @@ if(!defined('REPEAT_NONE'))
  * @since Group-Office 3.0
  */
 
-class Date
-{
+class Date {
 
-	public function format_long_date($time){
+	/**
+	 * Finds the difference in days between two calendar dates.
+	 *
+	 * @param Date $startDate
+	 * @param Date $endDate
+	 * @return Int
+	 */
+	public static function date_diff_days($start_time, $end_time) {
+		// Parse dates for conversion
+		$start = getdate($start_time);
+		$end = getdate($end_time);
+
+		// Convert dates to Julian Days
+		$start_date = gregoriantojd($start["mon"], $start["mday"], $start["year"]);
+		$end_date = gregoriantojd($end["mon"], $end["mday"], $end["year"]);
+		
+		return $end_date-$start_date;
+		// Return difference
+		//return round(($end_date - $start_date), 0);
+	}
+
+
+	public static function format_long_date($time){
 		global $lang;
 		return $lang['common']['full_days'][date('w', $time)].' '.date('d', $time).' '.$lang['common']['months'][date('n', $time)].' '.date('Y - G:i', $time);
 	}
