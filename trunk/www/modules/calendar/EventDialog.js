@@ -737,8 +737,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			var eM = parseInt(this.endMin.getValue());
 						
 			if (sH > eH) {
-				eH = sH;
-				this.endHour.setValue(sH);
+				eH = sH+1;
+				this.endHour.setValue(eH);
 			}
 
 			if (sH == eH && sM > eM) {
