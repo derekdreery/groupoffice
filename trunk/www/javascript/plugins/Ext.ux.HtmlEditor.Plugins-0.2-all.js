@@ -38,6 +38,7 @@ Ext.ux.form.HtmlEditor.MidasCommand = Ext.extend(Ext.util.Observable, {
             //if (Ext.isObject(b)) {
 						if (typeof(b)=='object') {
                 midasCmdButton = {
+										tabIndex:-1,
                     iconCls: 'x-edit-' + b.cmd,
                     handler: function(){
                         this.cmp.relayCmd(b.cmd);
@@ -190,6 +191,7 @@ Ext.ux.form.HtmlEditor.SpecialCharacters = Ext.extend(Ext.util.Observable, {
         var cmp = this.cmp;
         var btn = this.cmp.getToolbar().addButton({
             iconCls: 'x-edit-char',
+						tabIndex:-1,
             handler: function(){
                 if (this.specialChars.length) {
                     Ext.each(this.specialChars, function(c, i){
@@ -286,6 +288,7 @@ Ext.ux.form.HtmlEditor.Table = Ext.extend(Ext.util.Observable, {
         var cmp = this.cmp;
         var btn = this.cmp.getToolbar().addButton({
             iconCls: 'x-edit-table',
+						tabIndex:-1,
             handler: function(){
                 if (!this.tableWindow){
                     this.tableWindow = new Ext.Window({
@@ -481,6 +484,7 @@ Ext.ux.form.HtmlEditor.Word = Ext.extend(Ext.util.Observable, {
         this.cmp.getToolbar().add({
             iconCls: 'x-edit-wordpaste',
             pressed: true,
+						tabIndex:-1,
             handler: function(t){
                 t.toggle(!t.pressed);
                 this.wordPasteEnabled = !this.wordPasteEnabled;
@@ -511,6 +515,7 @@ Ext.ux.form.HtmlEditor.HR = Ext.extend(Ext.util.Observable, {
         var cmp = this.cmp;
         var btn = this.cmp.getToolbar().addButton({
             iconCls: 'x-edit-hr',
+						tabIndex:-1,
             handler: function(){
                 if (!this.hrWindow){
 										
