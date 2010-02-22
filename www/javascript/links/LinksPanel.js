@@ -126,6 +126,8 @@ GO.grid.LinksPanel = function(config){
 		var activeNode = this.linksTree.getNodeById('lt-folder-'+this.folder_id);
 		if(activeNode)
 			sm.select(activeNode);
+		else
+			sm.select(this.linksTree.getRootNode());
 	}, this);
 	
 	this.linksGrid.on('folderDrop', function(grid, selections, dropRecord){
