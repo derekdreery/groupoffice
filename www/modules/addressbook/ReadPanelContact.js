@@ -47,15 +47,15 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 							'</table>'+
 						'</td>'+
 						'<tpl if="photo_src">'+
-							'<td class="photo" rowspan="2">' +
-								'<center><img src="{photo_src}" width="80" height="120" /></center>' +
+							'<td rowspan="2" width="90">' +
+								'<img src="{photo_src}" width="90" height="120" />' +
 							'</td>' +
 						'</tpl>'+
 					'</tr>' +
 
 					'<tr>' +
 						// COMPANY DETAILS
-						'<td valign="top" class="contactCompanyDetailsPanelKolom">'+
+						'<td valign="top">'+
 							'<table cellpadding="0" cellspacing="0" border="0">'+
 								
 								//INITIALS
@@ -85,7 +85,7 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 						
 						'<tr>'+
 							// CONTACT DETAILS+ 1e KOLOM
-							'<td valign="top" class="contactCompanyDetailsPanelKolom60">'+
+							'<td valign="top">'+
 								'<table cellpadding="0" cellspacing="0" border="0">'+
 									
 									//EMAIL							
@@ -140,7 +140,7 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 							'<tpl if="this.isWorkPhoneFieldset(values)">'+
 							
 								// CONTACT DETAILS+ 2e KOLOM
-								'<td valign="top" class="contactCompanyDetailsPanelKolom40">'+
+								'<td valign="top">'+
 									'<table cellpadding="0" cellspacing="0" border="0">'+
 										
 										//PHONE WORK							
