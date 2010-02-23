@@ -5,6 +5,7 @@
 $GO_THEME->add_stylesheet($GO_CONFIG->root_path.'ext/resources/css/ext-all.css', $GO_CONFIG->host.'ext/resources/css/');
 $GO_THEME->add_stylesheet($GO_CONFIG->root_path.'themes/Default/xtheme-groupoffice.css', $GO_CONFIG->host.'themes/Default/');
 $GO_THEME->add_stylesheet($GO_CONFIG->root_path.'themes/Default/style.css', $GO_CONFIG->host.'themes/Default/');
+$GO_THEME->add_stylesheet($GO_CONFIG->root_path.'javascript/SWFUpload/SwfUploadPanel.css', $GO_CONFIG->host.'javascript/SWFUpload/');
 $GO_THEME->load_module_stylesheets();
 $GO_THEME->get_cached_css();
 ?>

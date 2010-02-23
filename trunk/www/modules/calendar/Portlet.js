@@ -57,34 +57,12 @@ GO.calendar.SummaryGroupPanel = function(config)
 
 	config.store.on('load', function(){
 		//do layout on Startpage
-		this.ownerCt.ownerCt.ownerCt.doLayout();		
+		this.ownerCt.ownerCt.ownerCt.doLayout();
 	}, this);
-	  
-	/*config.store = new Ext.data.JsonStore({
-      totalProperty: "count",
-	    root: "results",
-	    id: "id",
-	    fields: [
-				'id',
-				'event_id',
-				'name',
-				'start_time',
-				'end_time',
-				'tooltip',
-				'private',
-				'repeats',
-				'day'			
-			],
-			baseParams: {task:'summary'},
-			url: GO.settings.modules.calendar.url+'json.php'
-		  
-	  });*/
-	
-	
+
 	config.paging=false,			
 	config.autoExpandColumn='summary-calendar-name-heading';
-	//config.enableColumnHide=false;
-	//config.enableColumnMove=false;
+
 
 	config.columns=[
 	{
@@ -172,7 +150,7 @@ GO.mainLayout.onReady(function(){
 	if(GO.summary)
 	{
 		var calGrid = new GO.calendar.SummaryGroupPanel({
-			id: 'summary-calendar-grid'
+			//state causes it to load: id: 'summary-calendar-grid'
 		});
 		
 		GO.summary.portlets['portlet-calendar']=new GO.summary.Portlet({
