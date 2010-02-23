@@ -386,47 +386,47 @@ GO.files.FileBrowser = function(config){
 					scope: this
 				});
 	this.deleteButton = new Ext.Button({
-					iconCls: 'btn-delete',
-					text: GO.lang.cmdDelete,
-					cls: 'x-btn-text-icon',
-					handler: function(){
-						this.onDelete('grid');
-					},
-					scope: this
-				});
+		iconCls: 'btn-delete',
+		text: GO.lang.cmdDelete,
+		cls: 'x-btn-text-icon',
+		handler: function(){
+			this.onDelete('grid');
+		},
+		scope: this
+	});
 	
 	this.cutButton= new Ext.Button({
-					iconCls: 'btn-cut',
-					text: GO.lang.cut,
-					cls: 'x-btn-text-icon',
-					handler: function(){
-						var records = this.getSelectedGridRecords();
-						this.onCutCopy('cut', records);
-					},
-					scope: this
-				});
+		iconCls: 'btn-cut',
+		text: GO.lang.cut,
+		cls: 'x-btn-text-icon',
+		handler: function(){
+			var records = this.getSelectedGridRecords();
+			this.onCutCopy('cut', records);
+		},
+		scope: this
+	});
 	this.copyButton = new Ext.Button({
-					iconCls: 'btn-copy',
-					text: GO.lang.copy,
-					cls: 'x-btn-text-icon',
-					handler: function(){
-						var records = this.getSelectedGridRecords();
-						this.onCutCopy('copy', records);
-					},
-					scope: this
-				});
+		iconCls: 'btn-copy',
+		text: GO.lang.copy,
+		cls: 'x-btn-text-icon',
+		handler: function(){
+			var records = this.getSelectedGridRecords();
+			this.onCutCopy('copy', records);
+		},
+		scope: this
+	});
 	this.emptyListButton = new Ext.Button({
-					iconCls: 'btn-refresh',
-					text: GO.files.lang.emptyList,
-					cls: 'x-btn-text-icon',
-					hidden:true,
-					handler: function(){
-						this.gridStore.baseParams.empty_new_files=true;
-						this.gridStore.load();
-						delete this.gridStore.baseParams.empty_new_files;
-					},
-					scope: this
-				});
+		iconCls: 'btn-refresh',
+		text: GO.files.lang.emptyList,
+		cls: 'x-btn-text-icon',
+		hidden:true,
+		handler: function(){
+			this.gridStore.baseParams.empty_new_files=true;
+			this.gridStore.load();
+			delete this.gridStore.baseParams.empty_new_files;
+		},
+		scope: this
+	});
 				
 	var tbar = [];
 	
@@ -434,6 +434,29 @@ GO.files.FileBrowser = function(config){
 	{
 		tbar.push(this.newButton);
 		tbar.push(this.uploadButton);
+		tbar.push({
+
+			text: 'SWF upload',
+			handler:function(){
+				var window = new Ext.Window({
+					title: 'SWF Upload (Max Filesize 1 MB)',
+					height:400,
+					width:600,
+					items:[new Ext.ux.SwfUploadPanel({							
+							frame: true,
+							post_params : {
+								"task" : 'upload'
+							},
+							upload_url : 'upload.php',
+							labelWidth: 110,
+							width: 600,
+							height: 400
+						})]
+				});
+
+				window.show();
+			}
+		});
 		tbar.push('-');
 	}
 	tbar.push(this.upButton);
