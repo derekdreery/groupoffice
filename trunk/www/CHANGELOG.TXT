@@ -1,4 +1,4 @@
-2010/02/?? 3.4.0
+2010/02/23 3.4.0
 General
 - Microsoft ActiveSync support for sync with iphone, android, Nokia etc.
 - Maximize window automatically when the window is larger then the current
