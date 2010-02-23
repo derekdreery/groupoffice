@@ -4,7 +4,7 @@ INSTALLATION
 To install Group-Office open a browser and go to the URL where you put the 
 Group-Office files and follow instructions.
 
-Also have a look at: http://www.group-office.com/wiki/Installation
+Also have a look at: http://www.group-office.com/wiki/Installation_manual
 
 UPGRADING FROM VERSION 3.0 TO FUTURE VERSIONS
 Take following steps:
