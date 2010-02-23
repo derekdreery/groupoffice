@@ -1,12 +1,8 @@
-/*
-* This file contains all the overrides for the ExtJS library.
-* Don't modify this file unless you are overriding styles from the ExtJS library
-*/
-
 .ext-el-mask{z-index:8000;} /*set it lower for windows to be on top */
 
 .ext-el-mask-msg{background:#d1d8db url(images/extjs/box/tb.gif) repeat-x 0 -16px !important;border: 1px solid #9c9f9d !important;}
 .ext-el-mask-msg div{border:1px solid #c1d1d6 !important;}
+
 
 
 .x-btn button{border:0 none;background:transparent;font:normal 11px tahoma,arial,helvetica,sans-serif;color:#fff;padding-left:3px;padding-right:3px;cursor:pointer;margin:0;overflow:visible;width:auto;-moz-outline:0 none;outline:0 none;}
@@ -16,8 +12,8 @@
 .x-btn-left{width:3px;height:21px;background:url(images/extjs/button/btn-sprite.gif) no-repeat 0 0;}
 .x-btn-right{width:3px;height:21px;background:url(images/extjs/button/btn-sprite.gif) no-repeat 0 -21px;}
 .x-btn-center{background:url(images/extjs/button/btn-sprite.gif) repeat-x 0 -42px;vertical-align:middle;text-align:center;padding:0 5px;cursor:pointer;white-space:nowrap;}
-.x-btn-text-icon .x-btn-with-menu .x-btn-center em {
-	background-image:url(images/extjs/toolbar/btn-arrow-light.gif) !important;
+.x-btn-text-icon .x-btn-with-menu .x-btn-center em, .x-btn-mc em.x-btn-arrow {
+	background-image:url(images/extjs/button/arrow.gif) !important;
 }
 	
 .x-btn-pressed .x-btn-left{background:url(images/extjs/button/btn-sprite.gif) no-repeat 0 -63px;}
@@ -25,8 +21,20 @@
 .x-btn-pressed .x-btn-center{background:url(images/extjs/button/btn-sprite.gif) repeat-x 0 -126px;}
 
 
+.x-toolbar .x-btn-tl, .x-toolbar .x-btn-tr, .x-toolbar .x-btn-tc, .x-toolbar .x-btn-ml, .x-toolbar .x-btn-mr, .x-toolbar .x-btn-mc, .x-toolbar .x-btn-bl, .x-toolbar .x-btn-br, .x-toolbar .x-btn-bc {
+	background-image:url(images/extjs/button/btn2.gif) !important;
+}
+
+.x-btn-tl, .x-btn-tr, .x-btn-tc, .x-btn-ml, .x-btn-mr, .x-btn-mc, .x-btn-bl, .x-btn-br, .x-btn-bc {
+	background-image:url(images/extjs/button/btn.gif) !important;
+}
+
 .x-grid3-hd-btn{display:none;position:absolute;width:14px;background:#c3daf9 url(images/extjs/grid/grid3-hd-btn.gif) no-repeat left center;right:0;top:0;z-index:2;cursor:pointer;}
-td.x-grid3-hd-over .x-grid3-hd-inner,td.sort-desc .x-grid3-hd-inner,td.sort-asc .x-grid3-hd-inner,td.x-grid3-hd-menu-open .x-grid3-hd-inner{background:#ebf3fd url(images/extjs/grid/grid3-hrow-over.gif) repeat-x left bottom;}
+td.x-grid3-hd-over .x-grid3-hd-inner,td.sort-desc .x-grid3-hd-inner,td.sort-asc .x-grid3-hd-inner,td.x-grid3-hd-menu-open .x-grid3-hd-inner{background:#ebf3fd url(images/extjs/grid/grid3-hrow-over.gif) repeat-x left bottom !important;}
+
+.x-toolbar .x-btn-text{
+	color:white !important;
+}
 
 .sort-asc .x-grid3-sort-icon{background-image:url(images/extjs/grid/sort_asc.gif);display:inline;}
 .sort-desc .x-grid3-sort-icon{background-image:url(images/extjs/grid/sort_desc.gif);display:inline;}
@@ -116,14 +124,14 @@ ul.x-tab-strip-top{padding-top:1px;background:#f7f6f1 repeat-x bottom;border-bot
 
 
 .x-toolbar td,.x-toolbar span,.x-toolbar div,.x-toolbar select,.x-toolbar label{white-space:nowrap;font:normal 12px tahoma,arial,helvetica,sans-serif;color:white}
-.x-toolbar .ytb-sep{background-image:url(images/extjs/grid/grid-blue-split.gif);background-position:center;background-repeat:no-repeat;display:block;font-size:1px;height:16px;width:20px;overflow:hidden;cursor:default;margin:0 2px 0;border:0;}
+.x-toolbar .ytb-sep, .x-toolbar .xtb-sep{background-image:url(images/extjs/grid/grid-blue-split.gif);background-position:center;background-repeat:no-repeat;display:block;font-size:1px;height:16px;width:4px;overflow:hidden;cursor:default;margin:0 2px 0;border:0;}
 .x-toolbar{border-color:#a9bfd3;border-style:solid;border-width:0 0 1px 0;display:block;padding:2px;background:#d0def0 url(images/extjs/toolbar/bg.gif) repeat-x top left;position:relative;zoom:1;}
-.x-toolbar .x-btn-over .x-btn-left{background:url(images/extjs/toolbar/tb-btn-sprite.gif) no-repeat 0 0;}
-.x-toolbar .x-btn-over .x-btn-right{background:url(images/extjs/toolbar/tb-btn-sprite.gif) no-repeat 0 -21px;}
-.x-toolbar .x-btn-over .x-btn-center{background:url(images/extjs/toolbar/tb-btn-sprite.gif) repeat-x 0 -42px;}
-.x-toolbar .x-btn-click .x-btn-left,.x-toolbar .x-btn-pressed .x-btn-left,.x-toolbar .x-btn-menu-active .x-btn-left{background:url(images/extjs/toolbar/tb-btn-sprite.gif) no-repeat 0 -63px;}
-.x-toolbar .x-btn-click .x-btn-right,.x-toolbar .x-btn-pressed .x-btn-right,.x-toolbar .x-btn-menu-active .x-btn-right{background:url(images/extjs/toolbar/tb-btn-sprite.gif) no-repeat 0 -84px;}
-.x-toolbar .x-btn-click .x-btn-center,.x-toolbar .x-btn-pressed .x-btn-center,.x-toolbar .x-btn-menu-active .x-btn-center{background:url(images/extjs/toolbar/tb-btn-sprite.gif) repeat-x 0 -105px;}
+.x-toolbar .x-btn-over .x-btn-left{background:url(images/extjs/toolbar/tb-btn-sprite.gif) no-repeat 0 0 !important;}
+.x-toolbar .x-btn-over .x-btn-right{background:url(images/extjs/toolbar/tb-btn-sprite.gif) no-repeat 0 -21px !important;}
+.x-toolbar .x-btn-over .x-btn-center{background:url(images/extjs/toolbar/tb-btn-sprite.gif) repeat-x 0 -42px!important;}
+.x-toolbar .x-btn-click .x-btn-left,.x-toolbar .x-btn-pressed .x-btn-left,.x-toolbar .x-btn-menu-active .x-btn-left{background:url(images/extjs/toolbar/tb-btn-sprite.gif) no-repeat 0 -63px !important;}
+.x-toolbar .x-btn-click .x-btn-right,.x-toolbar .x-btn-pressed .x-btn-right,.x-toolbar .x-btn-menu-active .x-btn-right{background:url(images/extjs/toolbar/tb-btn-sprite.gif) no-repeat 0 -84px !important;}
+.x-toolbar .x-btn-click .x-btn-center,.x-toolbar .x-btn-pressed .x-btn-center,.x-toolbar .x-btn-menu-active .x-btn-center{background:url(images/extjs/toolbar/tb-btn-sprite.gif) repeat-x 0 -105px !important;}
 
 .x-toolbar .x-item-disabled{color:#e4eff4;}
 .x-toolbar .x-item-disabled *{color:#e4eff4!important;}
@@ -174,8 +182,8 @@ td.x-grid3-hd-over,td.sort-desc,td.sort-asc,td.x-grid3-hd-menu-open{border-left:
 */
 .x-menu{border:1px solid #c0c0c0;z-index:15000;zoom:1;background:#f0f0f0 url(images/extjs/menu/menu.gif) repeat-y;padding:2px;}
 .x-menu-list-item{font:normal 12px tahoma,arial,helvetica,sans-serif;white-space:nowrap;-moz-user-select:none;-khtml-user-select:none;display:block;padding:1px;}
-.x-menu-item-active{background:#ebf3fd url(images/extjs/menu/item-over.gif) repeat-x left bottom;border:1px solid #c0c0c0;padding:0;}
-.x-menu-item-active a.x-menu-item{color:#333;}
+.x-menu-item-active{background:#dfe9ed url(images/extjs/menu/item-over.gif) repeat-x left bottom;border:1px solid #c0c0c0 !important;padding:0;margin:0;border-color: #c0c0c0 !important;}
+.x-menu-item-active a.x-menu-item{color:#333;border-style:none !important;border-width:0 !important;margin:0 !important;}
 .x-menu-item-arrow{background:transparent url(images/extjs/menu/menu-parent.gif) no-repeat right;}
 
 .x-combo-list{border:1px solid #669900;background:#ebf1e2;zoom:1;overflow:hidden;}
@@ -310,4 +318,13 @@ body.x-body-masked .x-window-plain .x-window-mc{background:#d1d8db;}
 
 .x-grid-group-hd {
 border-bottom:2px solid #C1D1D6;
+}
+
+.x-btn-noicon .x-btn-small .x-btn-text {
+	padding: 0 10px !important;
+	height: inherit !important;
+}
+
+.x-btn-text-icon .x-btn-icon-small-left .x-btn-text {
+	height:inherit !important;
 }
