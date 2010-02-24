@@ -132,7 +132,7 @@ try
 					}
 				}
 			}
-			go_debug($response);
+			//go_debug($response);
 			
 			echo json_encode($response);
 			break;
@@ -215,7 +215,7 @@ try
 			
 			$advancedQuery = empty($_POST['advancedQuery']) ? '' : $_POST['advancedQuery'];
 				
-			$response['results']=array();
+			
 			$response['total']=$ab->search_contacts(
 			$GO_SECURITY->user_id,
 			$query,
@@ -239,6 +239,8 @@ try
 			{
 				$cf=false;
 			}
+
+			$response['results']=array();
 
 			while($record = $ab->next_record())
 			{
@@ -307,9 +309,8 @@ try
 				$query = !empty($query) ? '%'.$query.'%' : '';
 			}
 			
-			$advancedQuery = empty($_POST['advancedQuery']) ? '' : $_POST['advancedQuery'];
+			$advancedQuery = empty($_POST['advancedQuery']) ? '' : $_POST['advancedQuery'];			
 			
-			$response['results'] = array();
 			$response['total']=$ab->search_companies(
 			$GO_SECURITY->user_id,
 			$query,
@@ -325,6 +326,7 @@ try
 			$advancedQuery
 			);
 
+			$response['results'] = array();
 			while($record = $ab->next_record())
 			{
 				addressbook::format_company_record($record);
@@ -894,12 +896,11 @@ try
 			if(isset($_POST['delete_keys']))
 			{
 				try{
-					$delete_sqls = json_decode(($_POST['delete_keys']));
+					$delete_sqls = json_decode($_POST['delete_keys']);
 
 					foreach($delete_sqls as $id)
 					{
 						$ab->delete_sql($id);
-						//$GO_EVENTS->fire_event('contact_delete', array($contact));
 					}
 					$response['deleteSuccess'] = true;
 				}
@@ -910,10 +911,12 @@ try
 				}
 			}
 
-			$response['total'] = $ab->get_sqls();
+			$response['total'] = $ab->get_sqls($GO_SECURITY->user_id, $_POST['companies']);
 			$response['results'] = array();
+
 			while($ab->next_record())
 				$response['results'][] = $ab->record;
+			
 			$response['success'] = true;
 			echo json_encode($response);
 			break;

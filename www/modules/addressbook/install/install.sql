@@ -121,11 +121,15 @@ CREATE TABLE IF NOT EXISTS `ab_contacts` (
 
 
 DROP TABLE IF EXISTS `ab_sql`;
-CREATE TABLE `ab_sql` (
-  `id` int(11) NOT NULL default '0',
-  `name` varchar(32) default NULL,
+CREATE TABLE IF NOT EXISTS `ab_sql` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `user_id` int(11) NOT NULL,
+  `companies` tinyint(1) NOT NULL,
+  `name` varchar(32) DEFAULT NULL,
   `sql` text,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY (`id`),
+  KEY `companies` (`companies`),
+  KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 

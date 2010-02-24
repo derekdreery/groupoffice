@@ -1338,8 +1338,8 @@ class addressbook extends db {
 		return $this->insert_row('ab_sql',$sql);
 	}
 
-	function get_sqls() {
-		$this->query("SELECT * FROM ab_sql");
+	function get_sqls($user_id, $companies='0') {
+		$this->query("SELECT * FROM ab_sql WHERE user_id='".$this->escape($user_id)."' AND companies='".$this->escape($companies)."'");
 		return $this->num_rows();
 	}
 
