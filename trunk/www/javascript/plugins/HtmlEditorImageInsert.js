@@ -33,7 +33,6 @@ Ext.extend(GO.plugins.HtmlEditorImageInsert, Ext.util.Observable, {
 	root_folder_id : 0,
 	folder_id : 0,
 	onRender :  function() {
-		if (!Ext.isSafari) {
 			this.editor.tb.add({
 				itemId : 'htmlEditorImage',
 				cls : 'x-btn-icon go-edit-insertimage',
@@ -49,7 +48,6 @@ Ext.extend(GO.plugins.HtmlEditorImageInsert, Ext.util.Observable, {
 					text:GO.lang.insertImage
 					}
 			});
-		}
 	},
 	
 	showFileBrowser : function (){

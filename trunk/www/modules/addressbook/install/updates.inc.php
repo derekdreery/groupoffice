@@ -93,3 +93,6 @@ $updates[] = "CREATE TABLE IF NOT EXISTS `ab_sql` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
 $updates[] = "ALTER TABLE `ab_sql` CHANGE `sql` `sql` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci ";
+$updates[] = "ALTER TABLE `ab_sql` ADD `companies` BOOL NOT NULL AFTER `id`";
+$updates[] = "ALTER TABLE `ab_sql` ADD INDEX ( `companies` ) ";
+$updates[] = "ALTER TABLE `ab_sql` ADD `user_id` INT NOT NULL AFTER `id` , ADD INDEX ( `user_id` )";
