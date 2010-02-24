@@ -23,7 +23,7 @@ GO.addressbook.SearchQueryPanel = function(config)
 		config.defaults={hideLabel:true};
 		config.bodyStyle='padding:5px;';
 
-		this.typesStore.load();
+		//this.typesStore.load();
 
 		var comparators = this.getComparators();
 
@@ -126,7 +126,8 @@ GO.addressbook.SearchQueryPanel = function(config)
 							params:{
 								task:'save_sql',
 								sql: GO.addressbook.queryField.getValue(),
-								name: text
+								name: text,
+								companies:this.typesStore.baseParams.type=='companies' ? '1' : '0'
 							},
 							success: function(response, options)
 							{
@@ -136,11 +137,11 @@ GO.addressbook.SearchQueryPanel = function(config)
 									alert(responseParams.feedback);
 								}else
 								{
-							}
+								}
 							},
 							scope:this
 						})
-					})
+					},this)
 					},
 				text: GO.lang.cmdSave,
 				scope: this
