@@ -56,6 +56,8 @@ Ext.extend(GO.addressbook.AdvancedSearchWindow, GO.Window,{
 		{
 			GO.addressbook.searchQueryPanel.typesStore.baseParams.type=type;
 			GO.addressbook.searchQueryPanel.typesStore.load();
+
+			GO.addressbook.savedQueryGrid.store.baseParams.companies=type=='companies' ? '1' : '0';
 		}
 		GO.addressbook.AdvancedSearchWindow.superclass.show.call(this);
 	}

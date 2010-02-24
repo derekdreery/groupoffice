@@ -605,7 +605,7 @@ try
 
 				case 'save_sql':
 
-					$ab->save_sql(array('sql'=>$_POST['sql'],'name'=>$_POST['name']));
+					$ab->save_sql(array('user_id'=>$GO_SECURITY->user_id, 'sql'=>$_POST['sql'],'name'=>$_POST['name'], 'companies'=>$_POST['companies']));
 					$response['success']=true;
 					echo json_encode($response);
 
