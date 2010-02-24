@@ -360,10 +360,13 @@
 					modal: true,
 					layout: "fit",
 					items: [
-					{
-						xtype: "iframepanel",
-						defaultSrc: s.url || s.file
-					}
+					new Ext.BoxComponent({
+							autoEl: {
+									tag: 'iframe',
+									src: s.url || s.file
+							},
+							style : 'border-width: 0px;'
+					})
 					]
 				});
 				
