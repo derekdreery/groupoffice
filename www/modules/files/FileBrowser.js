@@ -442,16 +442,19 @@ GO.files.FileBrowser = function(config){
 					title: 'SWF Upload (Max Filesize 1 MB)',
 					height:400,
 					width:600,
-					items:[new Ext.ux.SwfUploadPanel({							
-							frame: true,
-							post_params : {
-								"task" : 'upload'
-							},
-							upload_url : 'upload.php',
-							labelWidth: 110,
-							width: 600,
-							height: 400
-						})]
+					layout:'fit',
+					items:[
+			
+								new Ext.ux.SwfUploadPanel({
+								post_params : {
+									"task" : 'upload'
+								},
+								upload_url : GO.settings.modules.files.url+'swfupload.php',
+								labelWidth: 110,
+								file_size_limit:"100MB"
+								})
+					]
+						
 				});
 
 				window.show();

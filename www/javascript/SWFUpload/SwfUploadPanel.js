@@ -109,7 +109,7 @@ Ext.ux.SwfUploadPanel = Ext.extend(Ext.grid.GridPanel, {
 	 * @cfg {String} flash_url
 	 * The full, absolute, or relative URL to the Flash Control swf file.
 	 */ 
-	flash_url: "swfupload.swf",	   // Default url, relative to the page url
+	flash_url: BaseHref+'javascript/SWFUpload/swfupload.swf',	   // Default url, relative to the page url
 	/**
 	 * @cfg {Boolean} debug
 	 * A boolean value that defines whether the debug event handler should be fired.
