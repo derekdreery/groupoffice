@@ -36,7 +36,9 @@ GO.form.UploadFile = function(config) {
 	
 	GO.form.UploadFile.superclass.constructor.call(this, config);
 	
-	this.addEvents({fileAdded:true});
+	this.addEvents({
+		fileAdded:true
+	});
 };
 
 
@@ -49,7 +51,9 @@ Ext.extend(GO.form.UploadFile, Ext.BoxComponent, {
 	 * @cfg {String} The class name of the base element
 	 */
 	cls : '',
-	defaultAutoCreate : {tag: "div"},
+	defaultAutoCreate : {
+		tag: "div"
+	},
 	fileCls: 'filetype',
 
 	/**
@@ -59,13 +63,19 @@ Ext.extend(GO.form.UploadFile, Ext.BoxComponent, {
 	
 	onRender : function(ct, position){
 		this.id=Ext.id();
-        this.el = ct.createChild({tag: 'div', id: this.id, cls: this.cls});   
-        
-        this.createButtons();
-               
-        this.createUploadInput();
-        
-    },
+		this.el = ct.createChild({
+			tag: 'div',
+			id: this.id,
+			cls: this.cls
+			});
+	},
+
+	afterRender : function(){
+		GO.form.UploadFile.superclass.afterRender.call(this);
+
+		this.createButtons();
+		this.createUploadInput();
+	},
 	
 	createUploadInput: function() {
 
@@ -78,11 +88,16 @@ Ext.extend(GO.form.UploadFile, Ext.BoxComponent, {
 		
 		var inp = this.inputWrap.createChild({
 			tag:'input'
-			, type:'file'
-			, cls:'x-uf-input'
-			, size:0			
-			, id:id
-			, name:this.inputName+'[]'
+			,
+			type:'file'
+			,
+			cls:'x-uf-input'
+			,
+			size:0
+			,
+			id:id
+			,
+			name:this.inputName+'[]'
 		});
 		inp.on('change', this.onFileAdded, this);
 		this.inputs.add(inp);
@@ -94,15 +109,30 @@ Ext.extend(GO.form.UploadFile, Ext.BoxComponent, {
 	createButtons: function() {
 
 		// create containers sturcture
+		//id's were needed since extjs 3.1.1 for IE 8
 		this.buttonsWrap = this.el.createChild({
-			tag:'div', cls:'x-uf-buttons-ct',
+			tag:'div',
+			cls:'x-uf-buttons-ct',
+			id:Ext.id(),
 			children:[
-				{ tag:'div', cls:'x-uf-input-ct'
-					, children: [
-							{tag:'div', cls:'x-uf-bbtn-ct'}
-						, {tag:'div', cls:'x-uf-input-wrap'}
-					]
+			{
+				tag:'div',
+				cls:'x-uf-input-ct',
+				id:Ext.id()
+				,
+				children: [
+				{
+					tag:'div',
+					cls:'x-uf-bbtn-ct',
+					id:Ext.id()
 				}
+				, {
+					tag:'div',
+					cls:'x-uf-input-wrap',
+					id:Ext.id()
+				}
+				]
+			}
 
 			]
 		});
@@ -113,14 +143,14 @@ Ext.extend(GO.form.UploadFile, Ext.BoxComponent, {
 
 		// add button
 		var bbtnCt = this.buttonsWrap.select('div.x-uf-bbtn-ct').item(0);
+
+
 		this.browseBtn = new Ext.Button({
 			renderTo: bbtnCt,
 			text:this.addText
-			//, cls: 'x-btn-text-icon'
-			//, iconCls: 'btn-add'
+		//, cls: 'x-btn-text-icon'
+		//, iconCls: 'btn-add'
 		});
-		
-
 	},
 	
 	/**
@@ -139,13 +169,21 @@ Ext.extend(GO.form.UploadFile, Ext.BoxComponent, {
 		// create table to hold the file queue list
 		if(!this.table) {
 			this.table =this.el.createChild({
-				tag:'table', cls:'x-uf-table'
-				, children: [ {tag:'tbody'} ]
+				tag:'table',
+				cls:'x-uf-table'
+				,
+				children: [ {
+					tag:'tbody'
+				} ]
 			});
 			this.tbody = this.table.select('tbody').item(0);
 
 			this.table.on({
-				click:{scope:this, fn:this.onDeleteFile, delegate:'a'}
+				click:{
+					scope:this,
+					fn:this.onDeleteFile,
+					delegate:'a'
+				}
 			});
 		}
 
@@ -177,9 +215,12 @@ Ext.extend(GO.form.UploadFile, Ext.BoxComponent, {
 		var filename = inp.getValue();
 		var o = {
 			id:inp.id
-			, fileCls: this.getFileCls(filename)
-			, fileName: Ext.util.Format.ellipsis(filename.split(/[\/\\]/).pop(), this.maxNameLength)
-			, fileQtip: filename
+			,
+			fileCls: this.getFileCls(filename)
+			,
+			fileName: Ext.util.Format.ellipsis(filename.split(/[\/\\]/).pop(), this.maxNameLength)
+			,
+			fileQtip: filename
 		}
 
 		var t = new Ext.Template([
@@ -190,7 +231,7 @@ Ext.extend(GO.form.UploadFile, Ext.BoxComponent, {
 			, '<td id="m-{id}" class="x-uf-filedelete"><a id="d-{id}" href="#"><div class="go-icon btn-delete"></div></a>'
 			, '</td>'
 			, '</tr>'
-		]);
+			]);
 
 		// save row reference for future
 		inp.row = t.append(this.tbody, o, true);
@@ -200,7 +241,7 @@ Ext.extend(GO.form.UploadFile, Ext.BoxComponent, {
 		this.removeFile(target.id.substr(2));
 	}, 
 	
-		/**
+	/**
 		* Removes file from the queue
 		* private
 		*
