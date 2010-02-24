@@ -20,18 +20,18 @@ GO.addressbook.ContactDialog = function(config)
 	this.personalPanel = new GO.addressbook.ContactProfilePanel();
 
 	GO.addressbook.ContactPhoto = Ext.extend(Ext.BoxComponent, {
-		onRender : function(ct, position){
-			this.el = ct.createChild({
-				tag: 'img'
-			});
-			this.setVisible(false);
-		},
+		autoEl : {
+				tag: 'img',
+				src:Ext.BLANK_IMAGE_URL
+			},
+	
 		setPhotoSrc : function(contact_id)
 		{
 			var now = new Date();
 			if (this.el)
+				var src = contact_id ? GO.settings.modules.addressbook.url+'photo.php?contact_id='+contact_id+'&mtime='+now.format('U') : Ext.BLANK_IMAGE_URL;
 				this.el.set({
-					src: GO.settings.modules.addressbook.url+'photo.php?contact_id='+contact_id+'&mtime='+now.format('U')
+					src: src
 				});
 			this.setVisible(true);
 		}
@@ -57,7 +57,7 @@ GO.addressbook.ContactDialog = function(config)
 		title : GO.addressbook.lang.photo,
 		layout: 'form',
 		border:false,
-		cls : 'go-form-panel',
+		cls : 'go-form-panel',		
 		autoScroll:true,
 		items:[	this.uploadFile,
 		this.contactPhoto
@@ -68,6 +68,7 @@ GO.addressbook.ContactDialog = function(config)
 	this.commentPanel = new Ext.Panel({
 		title: GO.addressbook.lang['cmdPanelComments'], 
 		layout: 'fit',
+		forceLayout:true,
 		border:false,
 		items: [ new Ext.form.TextArea({
 			name: 'comment',
@@ -195,7 +196,7 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 		{
 			this.render(Ext.getBody());
 		}
-		this.setPhoto(contact_id);
+		
 		if(GO.mailings && !GO.mailings.writableMailingsStore.loaded)
 		{
 			GO.mailings.writableMailingsStore.load({
