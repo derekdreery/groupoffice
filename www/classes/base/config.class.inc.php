@@ -888,10 +888,11 @@ class GO_CONFIG {
 		if($this->debug) {
 			$this->log=true;
 		}
-
-
-
+		
 		$this->set_full_url();
+
+		if(isset($this->session_config_file))
+			go_debug('Used config file from session', $this);
 	}
 
 	function __destruct() {
@@ -931,11 +932,13 @@ class GO_CONFIG {
 		if(defined('CONFIG_FILE'))
 			return CONFIG_FILE;
 
-		if(defined('NOTINSTALLED')){
+		//on start page always search for config
+		if(basename($_SERVER['PHP_SELF'])=='index.php'){
 			unset($_SESSION['GO_SESSION']['config_file']);
 		}
 
 		if(isset($_SESSION['GO_SESSION']['config_file'])) {
+			$this->session_config_file=true;
 			return $_SESSION['GO_SESSION']['config_file'];
 		}else {
 			$config_dir = $this->root_path;
