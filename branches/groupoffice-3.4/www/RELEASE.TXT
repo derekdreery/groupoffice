@@ -1,3 +1,14 @@
+2009/02/24 3.4.0
+In this release we bring you a lot of small improvements across all modules and
+also Microsoft ActiveSync support so you can sync with any phone that supports
+ActiveSync. This means you can sync with iPhones, Nokia's, Google Android and
+of course Windows Mobile. Setting up synchronization with contacts,
+appointments, tasks and e-mail is really easy now!
+We also improved the link browser and management of newsletters a lot. With the
+new advanced search in the addressbook you can select any dataset from the
+addressbook and save that search.
+Check out the changelog for a full list of changes.
+
 2009/12/01 3.3.0
 We've been working a lot on performance for this release. We're now using
 compression on the files so the startup time of Group-Office is much faster.
